@@ -234,8 +234,35 @@ abstract class CuePointBulkUploadXmlHandler implements IKalturaBulkUploadXmlHand
 		$this->operations[] = KalturaBulkUploadAction::ADD;
 		if($cuePoint->systemName)
 			$this->ingested[$cuePoint->systemName] = $ingestedCuePoint;
+		
+		if(isset($scene->fileAsset))
+			$this->addFileAssetAssociation($scene->fileAsset, $ingestedCuePoint->id);
 			
 		return true;
+	}
+	
+	/**
+	 * @param SimpleXMLElement $scene
+	 * @param strung		   $ingestedCuePointId 
+	 */
+	protected function addFileAssetAssociation(SimpleXMLElement $fileAssetElement, $ingestedCuePointId)
+	{
+		KalturaLog::debug("fileAsset Element [" . print_r($fileAssetElement->asXml(), true). "]");
+		
+		if(empty($fileAssetElement)) // if the content is empty skip
+		{
+			continue;
+		}
+		
+		$fileAsset = $this->getFileAsset($fileAssetElement, $ingestedCuePointId);
+		$fileAssetResource = $this->getResource($fileAssetElement, $ingestedCuePointId);
+	}
+	
+	protected function getFileAsset(SimpleXMLElement $fileAssetElement, $ingestedCuePointId)
+	{
+		$fileAsset = new KalturaFileAsset();
+		$fileAsset->objectId = $ingestedCuePointId;
+		//TO CONTINUE
 	}
 
 	/**

@@ -130,6 +130,11 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 					<xs:documentation>Cue point searchable keywords</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element ref="fileAsset" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>Cue point associated file asset</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		
 		<xs:attribute name="sceneId" use="required">
@@ -177,6 +182,14 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 				Base cue point element<br/>
 				Is abstract and cannot be used<br/>
 				Use the extended elements only
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	
+	<xs:element name="fileAsset" type="T_fileAsset">
+		<xs:annotation>
+			<xs:documentation>
+				Cue point associated file asset<br/>
 			</xs:documentation>
 		</xs:annotation>
 	</xs:element>

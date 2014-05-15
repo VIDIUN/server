@@ -103,6 +103,25 @@ class CuePointBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 		</xs:attribute>
 		
 	</xs:complexType>
+
+	<xs:complexType name="T_fileAsset">
+		<xs:sequence>
+        	<xs:choice maxOccurs="1" minOccurs="1">
+            	<xs:element maxOccurs="1" minOccurs="1" ref="serverFileContentResource"></xs:element>
+				<xs:element maxOccurs="1" minOccurs="1" ref="urlContentResource"></xs:element>
+				<xs:element maxOccurs="1" minOccurs="1" ref="sshUrlContentResource"></xs:element>
+				<xs:element maxOccurs="1" minOccurs="1" ref="remoteStorageContentResource"></xs:element>
+                <xs:element maxOccurs="1" minOccurs="1" ref="remoteStorageContentResources"></xs:element>
+				<xs:element maxOccurs="1" minOccurs="1" ref="entryContentResource"></xs:element>
+				<xs:element maxOccurs="1" minOccurs="1" ref="assetContentResource"></xs:element>
+				<xs:element maxOccurs="1" minOccurs="1" ref="contentResource-extension"></xs:element>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="objectId" type="xs:string" use="optional"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="systemName" type="xs:string" use="optional"/>
+		<xs:attribute name="fileExt" type="xs:string" use="optional"/>
+	</xs:complexType>
 	
 	<xs:element name="scenes" type="T_scenes" substitutionGroup="item-extension">
 		<xs:annotation>
@@ -125,6 +144,14 @@ class CuePointBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 		<xs:annotation>
 			<xs:documentation>
 				A base cue point element. This is an abstract element and cannot be used. Use only extended elements.
+			</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	
+	<xs:element name="fileAsset" type="T_fileAsset">
+    	<xs:annotation>
+        	<xs:documentation>
+            	A file asset element. Proived the ability to define file asset association to the created cue point
 			</xs:documentation>
 		</xs:annotation>
 	</xs:element>

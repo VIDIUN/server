@@ -1743,8 +1743,9 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable
 	
 	public function setMarkedForDeletion ( $v )	{	$this->putInCustomData ( "markedForDeletion" , (bool) $v );	}
 	public function getMarkedForDeletion (  )	{	return (bool) $this->getFromCustomData( "markedForDeletion" ,null, false );	}
-	
+
 	public function setRootEntryId($v)	{	$this->putInCustomData("rootEntryId", $v); }
+	public function setPartnerRootEntryId($v)	{ $this->setRootEntryId($v);	$this->putInCustomData("partnerRootEntryId", $v); }
 	
 	public function getSphinxMatchOptimizations() {
 		$objectName = $this->getIndexObjectName();

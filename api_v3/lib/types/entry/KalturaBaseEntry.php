@@ -314,9 +314,16 @@ class KalturaBaseEntry extends KalturaObject implements IFilterable
 	 *
 	 * @var string
 	 * @filter eq,in
-	 * @readonly
 	 */
 	public $rootEntryId;
+	
+	/**
+	 * ID of source root entry, used for defining entires dependency association
+	 *
+	 * @var string
+	 * @filter eq,in
+	 */
+	public $partnerParentEntryId;
 	
 	/**
 	 * clipping, skipping and cropping attributes that used to create this entry  
