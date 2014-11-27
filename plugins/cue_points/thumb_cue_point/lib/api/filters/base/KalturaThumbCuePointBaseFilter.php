@@ -16,10 +16,15 @@ abstract class KalturaThumbCuePointBaseFilter extends KalturaCuePointFilter
 		"titleMultiLikeAnd" => "_mlikeand_title",
 		"subTypeEqual" => "_eq_sub_type",
 		"subTypeIn" => "_in_sub_type",
+		"forceStopEqual" => "_eq_force_stop",
+		"triggeredAtGreaterThanOrEqual" => "_gte_triggered_at",
+		"triggeredAtLessThanOrEqual" => "_lte_triggered_at",
 	);
 
 	static private $order_by_map = array
 	(
+		"+triggeredAt" => "+triggered_at",
+		"-triggeredAt" => "-triggered_at",
 	);
 
 	public function getMapBetweenObjects()
@@ -71,4 +76,19 @@ abstract class KalturaThumbCuePointBaseFilter extends KalturaCuePointFilter
 	 * @var string
 	 */
 	public $subTypeIn;
+
+	/**
+	 * @var KalturaNullableBoolean
+	 */
+	public $forceStopEqual;
+
+	/**
+	 * @var time
+	 */
+	public $triggeredAtGreaterThanOrEqual;
+
+	/**
+	 * @var time
+	 */
+	public $triggeredAtLessThanOrEqual;
 }

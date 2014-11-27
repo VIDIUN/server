@@ -17,6 +17,9 @@ abstract class KalturaAnnotationBaseFilter extends KalturaCuePointFilter
 		"endTimeLessThanOrEqual" => "_lte_end_time",
 		"durationGreaterThanOrEqual" => "_gte_duration",
 		"durationLessThanOrEqual" => "_lte_duration",
+		"forceStopEqual" => "_eq_force_stop",
+		"triggeredAtGreaterThanOrEqual" => "_gte_triggered_at",
+		"triggeredAtLessThanOrEqual" => "_lte_triggered_at",
 	);
 
 	static private $order_by_map = array
@@ -25,6 +28,8 @@ abstract class KalturaAnnotationBaseFilter extends KalturaCuePointFilter
 		"-endTime" => "-end_time",
 		"+duration" => "+duration",
 		"-duration" => "-duration",
+		"+triggeredAt" => "+triggered_at",
+		"-triggeredAt" => "-triggered_at",
 	);
 
 	public function getMapBetweenObjects()
@@ -81,4 +86,19 @@ abstract class KalturaAnnotationBaseFilter extends KalturaCuePointFilter
 	 * @var int
 	 */
 	public $durationLessThanOrEqual;
+
+	/**
+	 * @var KalturaNullableBoolean
+	 */
+	public $forceStopEqual;
+
+	/**
+	 * @var time
+	 */
+	public $triggeredAtGreaterThanOrEqual;
+
+	/**
+	 * @var time
+	 */
+	public $triggeredAtLessThanOrEqual;
 }

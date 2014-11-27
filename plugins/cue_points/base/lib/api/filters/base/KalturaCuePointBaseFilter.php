@@ -20,8 +20,6 @@ abstract class KalturaCuePointBaseFilter extends KalturaFilter
 		"createdAtLessThanOrEqual" => "_lte_created_at",
 		"updatedAtGreaterThanOrEqual" => "_gte_updated_at",
 		"updatedAtLessThanOrEqual" => "_lte_updated_at",
-		"triggeredAtGreaterThanOrEqual" => "_gte_triggered_at",
-		"triggeredAtLessThanOrEqual" => "_lte_triggered_at",
 		"tagsLike" => "_like_tags",
 		"tagsMultiLikeOr" => "_mlikeor_tags",
 		"tagsMultiLikeAnd" => "_mlikeand_tags",
@@ -33,7 +31,6 @@ abstract class KalturaCuePointBaseFilter extends KalturaFilter
 		"partnerSortValueIn" => "_in_partner_sort_value",
 		"partnerSortValueGreaterThanOrEqual" => "_gte_partner_sort_value",
 		"partnerSortValueLessThanOrEqual" => "_lte_partner_sort_value",
-		"forceStopEqual" => "_eq_force_stop",
 		"systemNameEqual" => "_eq_system_name",
 		"systemNameIn" => "_in_system_name",
 	);
@@ -44,8 +41,6 @@ abstract class KalturaCuePointBaseFilter extends KalturaFilter
 		"-createdAt" => "-created_at",
 		"+updatedAt" => "+updated_at",
 		"-updatedAt" => "-updated_at",
-		"+triggeredAt" => "+triggered_at",
-		"-triggeredAt" => "-triggered_at",
 		"+startTime" => "+start_time",
 		"-startTime" => "-start_time",
 		"+partnerSortValue" => "+partner_sort_value",
@@ -124,16 +119,6 @@ abstract class KalturaCuePointBaseFilter extends KalturaFilter
 	public $updatedAtLessThanOrEqual;
 
 	/**
-	 * @var time
-	 */
-	public $triggeredAtGreaterThanOrEqual;
-
-	/**
-	 * @var time
-	 */
-	public $triggeredAtLessThanOrEqual;
-
-	/**
 	 * @var string
 	 */
 	public $tagsLike;
@@ -187,11 +172,6 @@ abstract class KalturaCuePointBaseFilter extends KalturaFilter
 	 * @var int
 	 */
 	public $partnerSortValueLessThanOrEqual;
-
-	/**
-	 * @var KalturaNullableBoolean
-	 */
-	public $forceStopEqual;
 
 	/**
 	 * @var string
