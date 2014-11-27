@@ -29,6 +29,23 @@ class KalturaThumbCuePoint extends KalturaCuePoint
 	 * @filter eq,in
 	 */
 	public $subType;
+	
+	/**
+	 * @var KalturaNullableBoolean
+	 * @filter eq
+	 */
+	public $forceStop;
+	
+	/**
+	 * @var int
+	 */
+	public $thumbOffset;
+	
+	/**
+	 * @var time
+	 * @filter gte,lte,order
+	 */
+	public $triggeredAt;
 
 	public function __construct()
 	{
@@ -40,6 +57,9 @@ class KalturaThumbCuePoint extends KalturaCuePoint
 		"assetId",
 		"title" => "name",
 		"description" => "text",
+		"forceStop",
+		"thumbOffset",
+		"triggeredAt",
 	);
 	
 	/* (non-PHPdoc)

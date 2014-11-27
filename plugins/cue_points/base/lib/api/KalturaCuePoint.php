@@ -53,12 +53,6 @@ abstract class KalturaCuePoint extends KalturaObject implements IFilterable
 	 * @readonly
 	 */
 	public $updatedAt;
-
-	/**
-	 * @var time
-	 * @filter gte,lte,order
-	 */
-	public $triggeredAt;
 	
 	/**
 	 * @var string
@@ -92,17 +86,6 @@ abstract class KalturaCuePoint extends KalturaObject implements IFilterable
 	public $partnerSortValue;
 	
 	/**
-	 * @var KalturaNullableBoolean
-	 * @filter eq
-	 */
-	public $forceStop;
-	
-	/**
-	 * @var int
-	 */
-	public $thumbOffset;
-	
-	/**
 	 * @var string
 	 * @filter eq,in
 	 */
@@ -121,10 +104,7 @@ abstract class KalturaCuePoint extends KalturaObject implements IFilterable
 		"startTime",
 		"partnerData",
 		"partnerSortValue",
-		"forceStop",
-		"thumbOffset",
 		"systemName",
-		"triggeredAt",
 	);
 	
 	public function getMapBetweenObjects()

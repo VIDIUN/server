@@ -56,6 +56,23 @@ class KalturaAnnotation extends KalturaCuePoint
 	 * @readonly
 	 */
 	public $directChildrenCount;
+	
+	/**
+	 * @var KalturaNullableBoolean
+	 * @filter eq
+	 */
+	public $forceStop;
+	
+	/**
+	 * @var int
+	 */
+	public $thumbOffset;
+	
+	/**
+	 * @var time
+	 * @filter gte,lte,order
+	 */
+	public $triggeredAt;
 
 	public function __construct()
 	{
@@ -71,6 +88,9 @@ class KalturaAnnotation extends KalturaCuePoint
 		"depth",
 		"childrenCount",
 		"directChildrenCount",
+		"forceStop",
+		"thumbOffset",
+		"triggeredAt",
 	);
 	
 	/* (non-PHPdoc)

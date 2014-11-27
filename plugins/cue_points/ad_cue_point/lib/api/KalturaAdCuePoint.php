@@ -45,6 +45,23 @@ class KalturaAdCuePoint extends KalturaCuePoint
 	 * @filter gte,lte,order
 	 */
 	public $duration;
+	
+	/**
+	 * @var KalturaNullableBoolean
+	 * @filter eq
+	 */
+	public $forceStop;
+	
+	/**
+	 * @var int
+	 */
+	public $thumbOffset;
+	
+	/**
+	 * @var time
+	 * @filter gte,lte,order
+	 */
+	public $triggeredAt;
 
 	public function __construct()
 	{
@@ -59,6 +76,9 @@ class KalturaAdCuePoint extends KalturaCuePoint
 		"title" => "name",
 		"endTime",
 		"duration",
+		"forceStop",
+		"thumbOffset",
+		"triggeredAt",
 	);
 	
 	/* (non-PHPdoc)
