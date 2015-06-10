@@ -116,6 +116,17 @@ class DeliveryProfileDynamicAttributes {
 	 * @var string
 	 */
 	protected $urlParams = '';
+	
+	/**
+	 * List of edge server ids content should b server from
+	 * @var array
+	 */
+	protected $edgeServerIds;
+	
+	/**
+	 * @var boolean
+	 */
+	protected $useCurrentDcOnly = false;
 
 	/**
 	 * @return the $deliveryProfileIds
@@ -415,6 +426,32 @@ class DeliveryProfileDynamicAttributes {
 	}
 	
 	/**
+	 * @param array edge server ids
+	 */
+	public function setEdgeServerIds($edgeServerIds)
+	{
+		$this->edgeServerIds = $edgeServerIds;
+	}
+	
+	/**
+	 * @return array edge server ids
+	 */
+	public function getEdgeServerIds()
+	{
+		return $this->edgeServerIds;
+	}
+	
+	public function setUseCurrentDcOnly($useCurrentDcOnly)
+	{
+		$this->useCurrentDcOnly = $useCurrentDcOnly;
+	}
+	
+	public function getUseCurrentDcOnly()
+	{
+		return $this->useCurrentDcOnly;
+	}
+	
+	/**
 	 * @param array<asset|assetParams> $flavors
 	 * @return array
 	 */
@@ -462,6 +499,7 @@ class DeliveryProfileDynamicAttributes {
 	
 	public function cloneAttributes(DeliveryProfileDynamicAttributes $newObj) {
 		$this->deliveryProfileIds = $newObj->getDeliveryProfileIds();
+		$this->edgeServerIds = $newObj->getEdgeServerIds();
 		$this->isDeliveryProfilesBlockedList = $newObj->getIsDeliveryProfilesBlockedList();
 		$this->format = $newObj->getFormat();
 		$this->extension = $newObj->getFileExtension();
@@ -481,6 +519,7 @@ class DeliveryProfileDynamicAttributes {
 		$this->usePlayServer = $newObj->getUsePlayServer();
 		$this->playerConfig = $newObj->getPlayerConfig();
 		$this->uiConfId = $newObj->getUiConfId();
+		$this->useCurrentDcOnly = $newObj->getUseCurrentDcOnly();
 	}
 }
 

@@ -49,7 +49,7 @@ class EdgeServer extends BaseEdgeServer {
 		return $playbackHostName;
 	}
 	
-	public function getPlaybackHost()
+	public function getPlaybackHost($urlTemplate = "{hostName}/kCache/")
 	{
 		$playbackHostName = '';
 		
@@ -68,6 +68,7 @@ class EdgeServer extends BaseEdgeServer {
 			$playbackHostName = $this->getPlaybackHostName();
 		}
 		
+		$playbackHostName = str_replace("{hostName}", $playbackHostName, $urlTemplate);
 		return $playbackHostName;
 	}
 

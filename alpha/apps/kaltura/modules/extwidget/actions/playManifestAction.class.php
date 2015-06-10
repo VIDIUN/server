@@ -766,10 +766,6 @@ class playManifestAction extends kalturaAction
 		if(count($tags) == 1) 
 			$tag = reset($tags);
 			
-		$protocol = $this->deliveryAttributes->getMediaProtocol(); 
-		if(in_array($this->deliveryAttributes->getFormat(), self::$httpFormats) && !in_array($protocol, self::$httpProtocols))
-			$protocol = requestUtils::getProtocol();
-		
 		$liveStreamConfig = $this->entry->getLiveStreamConfigurationByProtocol($this->deliveryAttributes->getFormat(), $protocol, $tag, false, $this->flavorParamsIds);
 		/* @var $liveStreamConfig kLiveStreamConfiguration */
 		if ($liveStreamConfig)
@@ -788,6 +784,16 @@ class playManifestAction extends kalturaAction
 				return array($this->entry->getHlsStreamUrl(), null); // TODO pass single tag
 		}
 		return array(null, null);
+	}
+	
+	private function setLiveDeliveryAttributes()
+	{
+		$this->deliveryAttributes->setUseCurrentDcOnly(false);
+		$this->deliveryAttributes->setFlavorParamsIds($this->flavorParamsIds);
+		
+		$protocol = $this->deliveryAttributes->getMediaProtocol();
+		if(in_array($this->deliveryAttributes->getFormat(), self::$httpFormats) && !in_array($protocol, self::$httpProtocols))
+			$this->deliveryAttributes->setMediaProtocol(requestUtils::getProtocol());
 	}
 	
 	private function serveLiveEntry()

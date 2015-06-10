@@ -252,12 +252,20 @@ class KSecureEntryHelper
 
 	public function updateDeliveryAttributes(DeliveryProfileDynamicAttributes $deliveryAttributes)
 	{
-		$actionList = $this->getActionList(RuleActionType::LIMIT_DELIVERY_PROFILES);
-		if ($actionList)
+		$limitDeliveryProfilesActionList = $this->getActionList(RuleActionType::LIMIT_DELIVERY_PROFILES);
+		if ($limitDeliveryProfilesActionList)
 		{
 			// take only the first LIMIT_DELIVERY_PROFILES action
-			$action = reset($actionList);
+			$action = reset($limitDeliveryProfilesActionList);
 			$deliveryAttributes->setDeliveryProfileIds($action->getDeliveryProfileIds(), $action->getIsBlockedList());
+		}
+		
+		$serveRemoteEdgeServerActionList = $this->getActionList(RuleActionType::SERVE_REMOTE_EDGE_SERVER);
+		if ($serveRemoteEdgeServerActionList)
+		{
+			// take only the first SERVE_REMOTE_EDGE_SERVER action
+			$action = reset($serveRemoteEdgeServerActionList);
+			$deliveryAttributes->setEdgeServerIds(explode(',', $action->getEdgeServerIds()));
 		}
 	}
 	
@@ -410,6 +418,7 @@ class KSecureEntryHelper
 	{
 		$this->hashes = $hashes;
 	}
+	
 	public function getContextResult()
 	{
 		return $this->contextResult;

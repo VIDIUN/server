@@ -21,6 +21,7 @@ class KalturaConditionType extends KalturaDynamicEnum implements ConditionType
 			ConditionType::FIELD_MATCH => 'Validate that the field text matches any of listed textual values.',
 			ConditionType::FIELD_COMPARE => 'Validate that the field number compared correctly to all listed numeric values.',
 			ConditionType::GEO_DISTANCE => 'Validate that request came from an IP within a certain geo distance .',
+			ConditionType::INTERNAL_IP_ADDRESS => 'Validate that request came from a specific internal IP range.',
 			);
 		
 		return self::mergeDescriptions(self::getEnumClass(), $descriptions);

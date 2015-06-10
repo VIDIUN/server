@@ -379,6 +379,45 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 		return $delivery;
 		
 	}
+	
+	/**
+	 * Returns the delivery profile by foramt & protocol (or returns one of the defaults)
+	 * @param DeliveryProfileDynamicAttributes $deliveryAttributes   
+	 * @return DeliveryProfile
+	 */
+	public static function getLiveDeliveryProfileByFormat(DeliveryProfileDynamicAttributes $deliveryAttributes) {
+		$entryId = $deliveryAttributes->getEntryId();
+		$entry = entryPeer::retrieveByPK($entryId);
+		
+		if(!$entry) {
+			KalturaLog::err('Failed to retrieve entryId: '. $entryId);
+			return null;
+		}
+		
+		$partnerId = $entry->getPartnerId();
+		$streamerType = $deliveryAttributes->getFormat();
+	
+		$c = new Criteria();
+		$c->add(DeliveryProfilePeer::PARTNER_ID, array(PartnerPeer::GLOBAL_PARTNER, $partnerId), Criteria::IN);
+		$c->add(DeliveryProfilePeer::TYPE, self::getAllLiveDeliveryProfileTypes(), Criteria::IN);
+		$c->add(DeliveryProfilePeer::STREAMER_TYPE, $streamerType);
+	
+		self::filterDeliveryProfilesCriteria($c, $deliveryAttributes);
+	
+		$c->addDescendingOrderByColumn("(" . DeliveryProfilePeer::PARTNER_ID . "<>{$partnerId})");
+			
+		$deliveries = self::doSelect($c);
+		
+		$delivery = self::selectByDeliveryAttributes($deliveries, $deliveryAttributes);
+		if($delivery) {
+			KalturaLog::debug("Delivery ID for Host Name: [$cdnHost] and streamer type: [$streamerType] is [" . $delivery->getId());
+			$delivery->setEntryId($entryId);
+		} else {
+			KalturaLog::err("Delivery ID can't be determined for Host Name [$cdnHost] and streamer type [$streamerType]");
+		}
+		return $delivery;
+	
+	}
 
 	/**
 	 * Checks whether a the current request is restricted by the partner.

@@ -52,6 +52,8 @@ class KalturaConditionArray extends KalturaTypedArray
 				return new KalturaGeoDistanceCondition();
 			case ConditionType::OR_OPERATOR:
 			    return new KalturaOrCondition();
+			case ConditionType::INTERNAL_IP_ADDRESS:
+				return new KalturaInternalIpAddressCondition();
 			default:
 			     return KalturaPluginManager::loadObject('KalturaCondition', $dbObject->getType());
 		}
