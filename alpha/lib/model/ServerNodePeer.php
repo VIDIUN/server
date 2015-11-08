@@ -57,6 +57,7 @@ class ServerNodePeer extends BaseServerNodePeer {
 			$criteria = new Criteria(ServerNodePeer::DATABASE_NAME);
 			$criteria->add(ServerNodePeer::ID, $pks, Criteria::IN);
 			$criteria->add(ServerNodePeer::STATUS, ServerNodeStatus::ACTIVE);
+			$criteria->add(ServerNodePeer::TYPE, serverNodeType::EDGE);
 			$orderBy = "FIELD (" . self::ID . "," . implode(",", $pks) . ")";  // first take the pattner_id and then the rest
 			$criteria->addAscendingOrderByColumn($orderBy);
 			$objs = ServerNodePeer::doSelect($criteria, $con);
