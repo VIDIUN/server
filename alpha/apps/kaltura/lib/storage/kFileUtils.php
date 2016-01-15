@@ -114,6 +114,10 @@ class kFileUtils extends kFile
 		
 		if(isset($_SERVER['CONTENT_TYPE']))
 		{
+			$contentType = $_SERVER['CONTENT_TYPE'];
+			if(strpos(strtolower($_SERVER['CONTENT_TYPE']), 'multipart/form-data') === 0)
+				$contentType = 'multipart/form-data';
+				
 			$httpHeader[] = "Content-Type: " . $_SERVER['CONTENT_TYPE'];
 				
 			if(strtolower($_SERVER['CONTENT_TYPE']) == 'application/json')
