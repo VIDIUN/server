@@ -350,5 +350,5 @@ class CuePointMetadataPlugin extends KalturaPlugin implements IKalturaPending, I
 		}
 					
 		return null;
-	}	
+	}
 }
