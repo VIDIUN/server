@@ -1296,7 +1296,51 @@ class playManifestAction extends kalturaAction
 		$renderer->setKsObject(kCurrentContext::$ks_object);
 		$renderer->setPlaybackContext($playbackContext);
 		$renderer->setDeliveryCode($deliveryCode);
-		
+
+		$playLocation = 'external';
+		if ($this->deliveryAttributes->getEdgeServerIds() && count($this->deliveryAttributes->getEdgeServerIds()))
+		{
+			$playLocation = implode(",", $this->deliveryAttributes->getEdgeServerIds());
+		}
+		else
+		{
+			$accessControl = $this->entry->getAccessControl();
+			foreach ($accessControl->getRulesArray() as $rule)
+			{
+				/** @var kRule $rule */
+				if ($rule->getRuleData() === '{"type":"ServeFromKESRule"}')
+				{
+					foreach ($rule->getConditions() as $cond)
+					{
+						/** @var kIpAddressCondition $cond */
+						if ($cond->getType() === ConditionType::IP_ADDRESS)
+						{
+							$scope = new accessControlScope();
+							$ipAddress = $cond->getFieldValue($scope);
+							$stringValues = $cond->getStringValues();
+							foreach ($stringValues as $currValue)
+							{
+								if (kIpAddressUtils::isIpInRanges($ipAddress, $currValue))
+								{
+									$playLocation = 'internal';
+									break;
+								}
+							}
+							if ($playLocation === 'internal')
+							{
+								break;
+							}
+						}
+					}
+					if ($playLocation === 'internal')
+					{
+						break;
+					}
+				}
+			}
+		}
+		$renderer->setPlayLocation($playLocation);
+
 		$renderer->output();
 	}
 
