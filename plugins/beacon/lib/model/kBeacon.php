@@ -11,6 +11,7 @@ class kBeacon
 			BeaconObjectTypes::ENTRY_SERVER_NODE_BEACON => "beacon_entry_server_node_index",
 			BeaconObjectTypes::SCHEDULE_RESOURCE_BEACON => "beacon_scheduled_resource_index",
 			BeaconObjectTypes::SERVER_NODE_BEACON => "beacon_server_node_index",
+			BeaconObjectTypes::WEBCAST_BEACON => "beacon_webcast",
 	);
 	
 	public static $searchIndexNameByBeaconObjectType = array(
