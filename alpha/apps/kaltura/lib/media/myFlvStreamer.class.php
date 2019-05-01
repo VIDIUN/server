@@ -274,17 +274,20 @@ class myFlvStreamer
 	// is common to both createMetadataForStreamFlv & streamFlv
 	private  static function iterateAssets ( $assets , $streamInfo , $addPadding, $echo )
 	{
-		if ( $assets == null ) return null;
+		$sizeList = array();
+		$timeList = array();
+		$filePositionsList = array();
+		
+		if ( $assets == null )
+		{
+			return array($sizeList, $timeList, $filePositionsList);
+		}
 
 		$total_bytes = 0;
 
 		list( $filePath, $timeline, $streamNum , $fileTimestamp ) = $streamInfo ;
 
 		$lastTimeStamp = 0;
-
-		$sizeList = array();
-		$timeList = array();
-		$filePositionsList = array();
 		$sizeListTime = 1000;
 		$dump_type = $echo ? myFlvHandler::GET_NEXT_TAG_ALL : myFlvHandler::GET_NEXT_TAG_META;
 		
