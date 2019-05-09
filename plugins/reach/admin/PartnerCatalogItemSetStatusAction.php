@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage Admin
  */
-class PartnerCatalogItemSetStatusAction extends KalturaApplicationPlugin
+class PartnerCatalogItemSetStatusAction extends VidiunApplicationPlugin
 {
 	/**
 	 * @return string - absolute file path of the phtml template
@@ -21,11 +21,11 @@ class PartnerCatalogItemSetStatusAction extends KalturaApplicationPlugin
 		$partnerId = $this->_getParam('partnerId');
 
 		$client = Infra_ClientHelper::getClient();
-		$reachPluginClient = Kaltura_Client_Reach_Plugin::get($client);
+		$reachPluginClient = Vidiun_Client_Reach_Plugin::get($client);
 		Infra_ClientHelper::impersonate($partnerId);
 		try
 		{
-			if ($newStatus == Kaltura_Client_Reach_Enum_VendorCatalogItemStatus::DELETED && trim($catalogItemIds) != '')
+			if ($newStatus == Vidiun_Client_Reach_Enum_VendorCatalogItemStatus::DELETED && trim($catalogItemIds) != '')
 			{
 				$catalogItemIdsArray = explode(',', $catalogItemIds);
 				foreach ($catalogItemIdsArray as $catalogItemId)
@@ -35,11 +35,11 @@ class PartnerCatalogItemSetStatusAction extends KalturaApplicationPlugin
 					$result = $client->doMultiRequest();
 				}
 			} else
-				KalturaLog::err("Error trying to set invalid partner catalog item status of [$newStatus]");
+				VidiunLog::err("Error trying to set invalid partner catalog item status of [$newStatus]");
 			echo $action->getHelper('json')->sendJson('ok', false);
 		} catch (Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			echo $action->getHelper('json')->sendJson($e->getMessage(), false);
 		}
 		Infra_ClientHelper::unimpersonate();

@@ -3,7 +3,7 @@
  * @package plugins.metroPcsDistribution
  * @subpackage api.objects
  */
-class KalturaMetroPcsDistributionProvider extends KalturaDistributionProvider
+class VidiunMetroPcsDistributionProvider extends VidiunDistributionProvider
 {
 	
 }

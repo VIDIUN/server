@@ -21,8 +21,8 @@ class LiveReportPartnerEngine extends LiveReportEngine {
 	public function run($fp, array $args = array()) {
 		$this->checkParams($args, array(LiveReportConstants::TIME_REFERENCE_PARAM, LiveReportConstants::IS_LIVE));
 		
-		$reportType = KalturaLiveReportType::PARTNER_TOTAL;
-		$filter = new KalturaLiveReportInputFilter();
+		$reportType = VidiunLiveReportType::PARTNER_TOTAL;
+		$filter = new VidiunLiveReportInputFilter();
 		$filter->live = $args[LiveReportConstants::IS_LIVE];
 		$filter->toTime = $args[LiveReportConstants::TIME_REFERENCE_PARAM];
 		$filter->fromTime = $args[LiveReportConstants::TIME_REFERENCE_PARAM] - $this->timeFrame;

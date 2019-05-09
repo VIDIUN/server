@@ -4,7 +4,7 @@
  * @subpackage objects
  * @relatedService ConversionProfileService
  */
-class KalturaConversionProfile extends KalturaObject implements IRelatedFilterable 
+class VidiunConversionProfile extends VidiunObject implements IRelatedFilterable 
 {
 	/**
 	 * The id of the Conversion Profile
@@ -22,13 +22,13 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 	public $partnerId;
 	
 	/**
-	 * @var KalturaConversionProfileStatus
+	 * @var VidiunConversionProfileStatus
 	 * @filter eq,in
 	 */
 	public $status;
 	
 	/**
-	 * @var KalturaConversionProfileType
+	 * @var VidiunConversionProfileType
 	 * @insertonly
 	 * @filter eq,in
 	 */
@@ -92,7 +92,7 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 	/**
 	 * Indicates that this conversion profile is system default
 	 *  
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isDefault;
 	
@@ -107,7 +107,7 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 	/**
 	 * Cropping dimensions
 	 * 
-	 * @var KalturaCropDimensions
+	 * @var VidiunCropDimensions
 	 * @deprecated
 	 */
 	public $cropDimensions;
@@ -145,14 +145,14 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 	/**
 	 * Media parser type to be used for extract media
 	 *  
-	 * @var KalturaMediaParserType
+	 * @var VidiunMediaParserType
 	 */
 	public $mediaParserType;
 	
 	/**
 	 * Should calculate file conversion complexity
 	 *
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $calculateComplexity;
 	
@@ -188,12 +188,12 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 	/**
 	 * Default replacement options to be applied to entries
 	 * 
-	 * @var KalturaEntryReplacementOptions
+	 * @var VidiunEntryReplacementOptions
 	 */
 	public $defaultReplacementOptions;
 
 	/**
-	 * @var KalturaLanguage
+	 * @var VidiunLanguage
 	 */
 	public $defaultAudioLang;
 
@@ -228,7 +228,7 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 		return array_merge ( parent::getMapBetweenObjects() , self::$map_between_objects );
 	}
 	
-	public function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($sourceObject, $responseProfile);
 		
@@ -237,7 +237,7 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 		
 		if($this->shouldGet('cropDimensions', $responseProfile))
 		{
-			$this->cropDimensions = new KalturaCropDimensions();
+			$this->cropDimensions = new VidiunCropDimensions();
 			$this->cropDimensions->fromObject($sourceObject);
 		}
 		
@@ -272,7 +272,7 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate()
+	 * @see VidiunObject::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -280,11 +280,11 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 	
 		if($this->systemName)
 		{
-			$c = KalturaCriteria::create(conversionProfile2Peer::OM_CLASS);
+			$c = VidiunCriteria::create(conversionProfile2Peer::OM_CLASS);
 			$c->add(conversionProfile2Peer::ID, $sourceObject->getId(), Criteria::NOT_EQUAL);
 			$c->add(conversionProfile2Peer::SYSTEM_NAME, $this->systemName);
 			if(conversionProfile2Peer::doCount($c))
-				throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+				throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 		}
 		
 		$this->validateFlavorParamsIds($sourceObject);
@@ -295,7 +295,7 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -305,10 +305,10 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 		
 		if($this->systemName)
 		{
-			$c = KalturaCriteria::create(conversionProfile2Peer::OM_CLASS);
+			$c = VidiunCriteria::create(conversionProfile2Peer::OM_CLASS);
 			$c->add(conversionProfile2Peer::SYSTEM_NAME, $this->systemName);
 			if(conversionProfile2Peer::doCount($c))
-				throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+				throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 		}
 		
 		return parent::validateForInsert($propertiesToSkip);
@@ -316,12 +316,12 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 	
 	public function validateDefaultEntry()
 	{
-		if(is_null($this->defaultEntryId) || $this->defaultEntryId instanceof KalturaNullField)
+		if(is_null($this->defaultEntryId) || $this->defaultEntryId instanceof VidiunNullField)
 			return;
 			
 		$entry = entryPeer::retrieveByPK($this->defaultEntryId);
 		if(!$entry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $this->defaultEntryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $this->defaultEntryId);
 	}
 	
 	public function validateFlavorParamsIds($sourceObject = null)
@@ -345,14 +345,14 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 			if($flavorParamsItem->hasTag(flavorParams::TAG_SOURCE))
 			{
 				if($sourceFound)
-					throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_SOURCE_DUPLICATE);
+					throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_SOURCE_DUPLICATE);
 					
 				$sourceFound = true;
 			}
 			
-			if($conversionProfileType == KalturaConversionProfileType::LIVE_STREAM && $flavorParamsItem->getType() != assetType::LIVE ||
-				$conversionProfileType == KalturaConversionProfileType::MEDIA && $flavorParamsItem->getType() == assetType::LIVE)
-				throw new KalturaAPIException(KalturaErrors::ASSET_PARAMS_INVALID_TYPE, $flavorParamsItem->getId(), $flavorParamsItem->getType());
+			if($conversionProfileType == VidiunConversionProfileType::LIVE_STREAM && $flavorParamsItem->getType() != assetType::LIVE ||
+				$conversionProfileType == VidiunConversionProfileType::MEDIA && $flavorParamsItem->getType() == assetType::LIVE)
+				throw new VidiunAPIException(VidiunErrors::ASSET_PARAMS_INVALID_TYPE, $flavorParamsItem->getId(), $flavorParamsItem->getType());
 			
 			$indexedFlavorParams[$flavorParamsItem->getId()] = $flavorParamsItem;
 		}
@@ -361,10 +361,10 @@ class KalturaConversionProfile extends KalturaObject implements IRelatedFilterab
 		foreach($flavorParamsIds as $id)
 		{
 			if(!isset($indexedFlavorParams[$id]))
-				throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
+				throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
 				
 			if(in_array($id, $foundFlavorParams))
-				throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_DUPLICATE, $id);
+				throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_DUPLICATE, $id);
 				
 			$foundFlavorParams[] = $id;
 		}

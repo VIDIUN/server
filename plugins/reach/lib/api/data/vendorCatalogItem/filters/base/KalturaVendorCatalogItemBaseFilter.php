@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaVendorCatalogItemBaseFilter extends KalturaRelatedFilter
+abstract class VidiunVendorCatalogItemBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -94,7 +94,7 @@ abstract class KalturaVendorCatalogItemBaseFilter extends KalturaRelatedFilter
 	public $updatedAtLessThanOrEqual;
 
 	/**
-	 * @var KalturaVendorCatalogItemStatus
+	 * @var VidiunVendorCatalogItemStatus
 	 */
 	public $statusEqual;
 
@@ -104,7 +104,7 @@ abstract class KalturaVendorCatalogItemBaseFilter extends KalturaRelatedFilter
 	public $statusIn;
 
 	/**
-	 * @var KalturaVendorServiceType
+	 * @var VidiunVendorServiceType
 	 */
 	public $serviceTypeEqual;
 
@@ -114,7 +114,7 @@ abstract class KalturaVendorCatalogItemBaseFilter extends KalturaRelatedFilter
 	public $serviceTypeIn;
 
 	/**
-	 * @var KalturaVendorServiceFeature
+	 * @var VidiunVendorServiceFeature
 	 */
 	public $serviceFeatureEqual;
 
@@ -124,7 +124,7 @@ abstract class KalturaVendorCatalogItemBaseFilter extends KalturaRelatedFilter
 	public $serviceFeatureIn;
 
 	/**
-	 * @var KalturaVendorServiceTurnAroundTime
+	 * @var VidiunVendorServiceTurnAroundTime
 	 */
 	public $turnAroundTimeEqual;
 

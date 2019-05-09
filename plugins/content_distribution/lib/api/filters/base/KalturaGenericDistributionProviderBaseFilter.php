@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaGenericDistributionProviderBaseFilter extends KalturaDistributionProviderFilter
+abstract class VidiunGenericDistributionProviderBaseFilter extends VidiunDistributionProviderFilter
 {
 	static private $map_between_objects = array
 	(
@@ -81,7 +81,7 @@ abstract class KalturaGenericDistributionProviderBaseFilter extends KalturaDistr
 	public $partnerIdIn;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isDefaultEqual;
 
@@ -91,7 +91,7 @@ abstract class KalturaGenericDistributionProviderBaseFilter extends KalturaDistr
 	public $isDefaultIn;
 
 	/**
-	 * @var KalturaGenericDistributionProviderStatus
+	 * @var VidiunGenericDistributionProviderStatus
 	 */
 	public $statusEqual;
 

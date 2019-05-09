@@ -18,17 +18,17 @@ class kIndexAdvancedFilter extends AdvancedSearchFilterItem
 	/* (non-PHPdoc)
 	 * @see AdvancedSearchFilterItem::applyCondition()
 	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
 		$this->applyConditionImpl($query, "id");
 	}
 	
-	public function applyConditionImpl(IKalturaDbQuery $query, $ColumnName)
+	public function applyConditionImpl(IVidiunDbQuery $query, $ColumnName)
 	{
 		if (is_null($this->indexIdGreaterThan))
 			return;
 		
-		if($query instanceof IKalturaIndexQuery)
+		if($query instanceof IVidiunIndexQuery)
 		{
 			if(is_null($this->depthGreaterThanEqual))
 				$query->addColumnWhere($ColumnName, $this->indexIdGreaterThan, Criteria::GREATER_THAN);

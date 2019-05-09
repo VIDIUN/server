@@ -4,7 +4,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.enum
  */
-class ESearchCaptionAssetItemFilterFields extends KalturaStringEnum
+class ESearchCaptionAssetItemFilterFields extends VidiunStringEnum
 {
 	const CAPTION_ASSET_ID = 'caption_asset_id';
 	const ENTRY_ID = 'entry_id';

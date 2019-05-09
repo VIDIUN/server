@@ -4,12 +4,12 @@
  * @package plugins.elasticSearch
  * @subpackage lib.entitlement
  */
-abstract class kBaseElasticEntitlement
+abstract class vBaseElasticEntitlement
 {
     public static $isInitialized = false;
     public static $partnerId;
-    public static $ks;
-    public static $kuserId = null;
+    public static $vs;
+    public static $vuserId = null;
 
     protected static $entitlementContributors = array();
 
@@ -21,9 +21,9 @@ abstract class kBaseElasticEntitlement
 
     protected static function initialize()
     {
-        self::$ks = ks::fromSecureString(kCurrentContext::$ks);
-        self::$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
-        self::$kuserId = self::getKuserIdForEntitlement(self::$partnerId, self::$kuserId, self::$ks);
+        self::$vs = vs::fromSecureString(vCurrentContext::$vs);
+        self::$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
+        self::$vuserId = self::getVuserIdForEntitlement(self::$partnerId, self::$vuserId, self::$vs);
     }
 
     public static function getEntitlementContributors()
@@ -31,16 +31,16 @@ abstract class kBaseElasticEntitlement
         return static::$entitlementContributors;
     }
 
-    protected static function getKuserIdForEntitlement($partnerId, $kuserId = null, $ks = null)
+    protected static function getVuserIdForEntitlement($partnerId, $vuserId = null, $vs = null)
     {
-        if($ks && !$kuserId)
+        if($vs && !$vuserId)
         {
-            $kuser = kuserPeer::getKuserByPartnerAndUid($partnerId, kCurrentContext::$ks_uid, true);
-            if ($kuser)
-                $kuserId = $kuser->getId();
+            $vuser = vuserPeer::getVuserByPartnerAndUid($partnerId, vCurrentContext::$vs_uid, true);
+            if ($vuser)
+                $vuserId = $vuser->getId();
         }
 
-        return $kuserId;
+        return $vuserId;
     }
 
 	public static function getEntitlementFilterQueries()

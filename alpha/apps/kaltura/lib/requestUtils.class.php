@@ -81,41 +81,41 @@ class requestUtils extends infraRequestUtils
 		if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')
 			$protocol .= 's';
 			
-		$host =  kConf::get("www_host");
+		$host =  vConf::get("www_host");
 		
 		return "$protocol://$host";
 	}
 	
 	public static function getPlayServerHost ($protocol = 'http')
 	{
-		if ($protocol == 'https' && kConf::hasParam('play_server_host_https'))
-			return "$protocol://" . kConf::get('play_server_host_https');
+		if ($protocol == 'https' && vConf::hasParam('play_server_host_https'))
+			return "$protocol://" . vConf::get('play_server_host_https');
 			
-		return "$protocol://" . kConf::get('play_server_host');
+		return "$protocol://" . vConf::get('play_server_host');
 	}
 	
 	public static function getCdnHost ($protocol = 'http')
 	{
 		if ($protocol == "https")
-			return "$protocol://".kConf::get("cdn_host_https");
-		return "$protocol://".kConf::get("cdn_host");
+			return "$protocol://".vConf::get("cdn_host_https");
+		return "$protocol://".vConf::get("cdn_host");
 	}
 	
 	public static function getThumbnailCdnHost ($protocol = 'http')
 	{
 		if ($protocol == "https")
-			return "$protocol://".kConf::get("cdn_thumbnail_host_https", 'local', kConf::get("cdn_host_https"));
-		return "$protocol://".kConf::get("cdn_thumbnail_host", 'local', kConf::get("cdn_host"));
+			return "$protocol://".vConf::get("cdn_thumbnail_host_https", 'local', vConf::get("cdn_host_https"));
+		return "$protocol://".vConf::get("cdn_thumbnail_host", 'local', vConf::get("cdn_host"));
 	}
 	
 	public static function getApiCdnHost()
 	{
 		$protocol = self::getProtocol();
 			
-		if ($protocol == "https" && kConf::hasParam('cdn_api_host_https'))
-			return "$protocol://" . kConf::get('cdn_api_host_https');
+		if ($protocol == "https" && vConf::hasParam('cdn_api_host_https'))
+			return "$protocol://" . vConf::get('cdn_api_host_https');
 			
-		return "$protocol://" . kConf::get('cdn_api_host');
+		return "$protocol://" . vConf::get('cdn_api_host');
 	}
 	
 	// TODO - see how can rewrite better code for the doc-root of the application !!
@@ -125,9 +125,9 @@ class requestUtils extends infraRequestUtils
 		if ( $include_host )
 		{
 			$url = self::getHost();
-			$url = preg_replace('/www\d\.kaltura\.com/', "www.kaltura.com", $url);
-			$url = preg_replace('/kaldev\d\.kaltura\.com/', "kaldev.kaltura.com", $url);
-			$url = preg_replace('/sandbox\d\.kaltura\.com/', "sandbox.kaltura.com", $url);
+			$url = preg_replace('/www\d\.vidiun\.com/', "www.vidiun.com", $url);
+			$url = preg_replace('/viddev\d\.vidiun\.com/', "viddev.vidiun.com", $url);
+			$url = preg_replace('/sandbox\d\.vidiun\.com/', "sandbox.vidiun.com", $url);
 		}
 
 		$request_url = self::requestUri();
@@ -218,7 +218,7 @@ class requestUtils extends infraRequestUtils
 		$name = null;
 		foreach ( $cookies as $name => $value )
 		{
-			if ( kString::beginsWith( $name , self::SECURE_COOKIE_PREFIX ) )
+			if ( vString::beginsWith( $name , self::SECURE_COOKIE_PREFIX ) )
 			{
 				self::removeSecureCookieByName ( $name );
 			}
@@ -255,20 +255,20 @@ class requestUtils extends infraRequestUtils
 	public static function getRequestHost()
 	{
 		$protocol = self::getRequestProtocol();
-		return "$protocol://".kConf::get("www_host");
+		return "$protocol://".vConf::get("www_host");
 	}
 	
 	public static function getRequestHostId()
 	{
-		$domainId = kConf::get("www_host");
+		$domainId = vConf::get("www_host");
 		
 		if ( $domainId == 'localhost')
 			$domainId = 2;
-		elseif ($domainId ==  'kaldev.kaltura.com')
+		elseif ($domainId ==  'viddev.vidiun.com')
 			$domainId = 0;
-		elseif ($domainId ==  'sandbox.kaltura.com')
+		elseif ($domainId ==  'sandbox.vidiun.com')
 			$domainId = 3;
-		elseif ($domainId ==  'www.kaltura.com')
+		elseif ($domainId ==  'www.vidiun.com')
 			$domainId = 1;
 			
 		return $domainId;

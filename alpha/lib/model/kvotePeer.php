@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Subclass for performing query and update operations on the 'kvote' table.
+ * Subclass for performing query and update operations on the 'vvote' table.
  *
  * 
  *
  * @package Core
  * @subpackage model
  */ 
-class kvotePeer extends BasekvotePeer
+class vvotePeer extends BasevvotePeer
 {
     public static function setDefaultCriteriaFilter()
     {
@@ -18,7 +18,7 @@ class kvotePeer extends BasekvotePeer
 		}
 
 		$c = new myCriteria();
-		$c->add ( kvotePeer::STATUS, KVoteStatus::REVOKED, Criteria::NOT_EQUAL );
+		$c->add ( vvotePeer::STATUS, VVoteStatus::REVOKED, Criteria::NOT_EQUAL );
 		
 		self::$s_criteria_filter->setFilter ( $c );
     }
@@ -26,71 +26,71 @@ class kvotePeer extends BasekvotePeer
     
     public static function doSelectByEntryIdAndPuserId ($entryId, $partnerId, $puserId)
     {
-        $kuser = self::getKuserFromPuserAndPartner($puserId, $partnerId);
-        if (!$kuser)
+        $vuser = self::getVuserFromPuserAndPartner($puserId, $partnerId);
+        if (!$vuser)
         {
             return null;
         }
         
         $c = new Criteria(); 
-        $c->addAnd(kvotePeer::KUSER_ID, $kuser->getId(), Criteria::EQUAL);
-        $c->addAnd(kvotePeer::ENTRY_ID, $entryId, Criteria::EQUAL);
+        $c->addAnd(vvotePeer::VUSER_ID, $vuser->getId(), Criteria::EQUAL);
+        $c->addAnd(vvotePeer::ENTRY_ID, $entryId, Criteria::EQUAL);
         
         return self::doSelectOne($c);
     }
     
-    protected static function getKuserFromPuserAndPartner($puserId, $partnerId, $shouldCreate = false)
+    protected static function getVuserFromPuserAndPartner($puserId, $partnerId, $shouldCreate = false)
 	{
-		$kuser = kuserPeer::getKuserByPartnerAndUid($partnerId, $puserId, true);
+		$vuser = vuserPeer::getVuserByPartnerAndUid($partnerId, $puserId, true);
     		
-		return $kuser;
+		return $vuser;
 	}
 	
-	public static function enableExistingKVote ($entryId, $partnerId, $puserId)
+	public static function enableExistingVVote ($entryId, $partnerId, $puserId)
 	{
 	    self::setUseCriteriaFilter(false);
 	    
-	    $kvote = self::doSelectByEntryIdAndPuserId($entryId, $partnerId, $puserId);
-	    if ($kvote)
+	    $vvote = self::doSelectByEntryIdAndPuserId($entryId, $partnerId, $puserId);
+	    if ($vvote)
 	    {
-	        $kvote->setStatus(KVoteStatus::VOTED);
-	        $affectedLines = $kvote->save();
+	        $vvote->setStatus(VVoteStatus::VOTED);
+	        $affectedLines = $vvote->save();
 	    }
 	    
 	    return isset($affectedLines) ? $affectedLines : 0;
 	}
 	
-    public static function disableExistingKVote ($entryId, $partnerId, $puserId)
+    public static function disableExistingVVote ($entryId, $partnerId, $puserId)
 	{
-	    $kvote = self::doSelectByEntryIdAndPuserId($entryId, $partnerId, $puserId);
-	    if ($kvote)
+	    $vvote = self::doSelectByEntryIdAndPuserId($entryId, $partnerId, $puserId);
+	    if ($vvote)
 	    {
-            $kvote->setStatus(KVoteStatus::REVOKED);
-    	    $affectedLines = $kvote->save();
+            $vvote->setStatus(VVoteStatus::REVOKED);
+    	    $affectedLines = $vvote->save();
 	    }
 	    
 	    return isset($affectedLines) ? $affectedLines : 0;
 	    
 	}
 	
-	public static function createKvote ($entryId, $partnerId, $puserId, $rank, $type=KVoteType::RANK)
+	public static function createVvote ($entryId, $partnerId, $puserId, $rank, $type=VVoteType::RANK)
 	{
-	    $kvote = new kvote();
-		$kvote->setEntryId($entryId);
-		$kvote->setStatus(KVoteStatus::VOTED);
-		$kvote->setPartnerId($partnerId);
-		$kvote->setKvoteType($type);
-		$kuser = self::getKuserFromPuserAndPartner($puserId, $partnerId);
-		if (!$kuser)
+	    $vvote = new vvote();
+		$vvote->setEntryId($entryId);
+		$vvote->setStatus(VVoteStatus::VOTED);
+		$vvote->setPartnerId($partnerId);
+		$vvote->setVvoteType($type);
+		$vuser = self::getVuserFromPuserAndPartner($puserId, $partnerId);
+		if (!$vuser)
 		{
-		    $kuser = new kuser();
-		    $kuser->setPuserId($puserId);
-		    $kuser->setStatus(KuserStatus::ACTIVE);
-		    $kuser->save();
+		    $vuser = new vuser();
+		    $vuser->setPuserId($puserId);
+		    $vuser->setStatus(VuserStatus::ACTIVE);
+		    $vuser->save();
 		}
-		$kvote->setPuserId($puserId);
-		$kvote->setKuserId($kuser->getId());
-		$kvote->setRank($rank);
-		$kvote->save();
+		$vvote->setPuserId($puserId);
+		$vvote->setVuserId($vuser->getId());
+		$vvote->setRank($rank);
+		$vvote->save();
 	}
 }

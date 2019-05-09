@@ -1,9 +1,9 @@
 <?php
 /**
  * @package    Core
- * @subpackage KMC
+ * @subpackage VMC
  */
-class termsOfUseAction extends kalturaAction
+class termsOfUseAction extends vidiunAction
 {
 	public function execute ( ) 
 	{

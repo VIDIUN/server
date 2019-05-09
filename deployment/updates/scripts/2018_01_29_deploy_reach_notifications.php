@@ -32,7 +32,7 @@ function deployTemplate($script, $config)
 {
 	if(!file_exists($config))
 	{
-		KalturaLog::err("Missing file [$config] will not deploy");
+		VidiunLog::err("Missing file [$config] will not deploy");
 		return;
 	}
 	
@@ -46,7 +46,7 @@ function deployTemplate($script, $config)
 function checkMandatoryPluginsEnabled()
 {
 	$pluginsFilePath = realpath(dirname(__FILE__) . "/../../../configurations/plugins.ini");
-	KalturaLog::debug("Loading Plugins config from [$pluginsFilePath]");
+	VidiunLog::debug("Loading Plugins config from [$pluginsFilePath]");
 
 
 	$pluginsData = file($pluginsFilePath);
@@ -55,6 +55,6 @@ function checkMandatoryPluginsEnabled()
 		if (trim($item) == "Reach")
 			return;
 	}
-	KalturaLog::debug("[Reach] plugin is disabled or not configured, aborting execution");
+	VidiunLog::debug("[Reach] plugin is disabled or not configured, aborting execution");
 	exit(-2);
 }

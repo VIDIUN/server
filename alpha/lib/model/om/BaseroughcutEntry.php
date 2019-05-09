@@ -38,10 +38,10 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 	protected $roughcut_version;
 
 	/**
-	 * The value for the roughcut_kshow_id field.
+	 * The value for the roughcut_vshow_id field.
 	 * @var        string
 	 */
-	protected $roughcut_kshow_id;
+	protected $roughcut_vshow_id;
 
 	/**
 	 * The value for the entry_id field.
@@ -79,9 +79,9 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 	protected $aentryRelatedByRoughcutId;
 
 	/**
-	 * @var        kshow
+	 * @var        vshow
 	 */
-	protected $akshow;
+	protected $avshow;
 
 	/**
 	 * @var        entry
@@ -164,13 +164,13 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [roughcut_kshow_id] column value.
+	 * Get the [roughcut_vshow_id] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getRoughcutKshowId()
+	public function getRoughcutVshowId()
 	{
-		return $this->roughcut_kshow_id;
+		return $this->roughcut_vshow_id;
 	}
 
 	/**
@@ -357,31 +357,31 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 	} // setRoughcutVersion()
 
 	/**
-	 * Set the value of [roughcut_kshow_id] column.
+	 * Set the value of [roughcut_vshow_id] column.
 	 * 
 	 * @param      string $v new value
 	 * @return     roughcutEntry The current object (for fluent API support)
 	 */
-	public function setRoughcutKshowId($v)
+	public function setRoughcutVshowId($v)
 	{
-		if(!isset($this->oldColumnsValues[roughcutEntryPeer::ROUGHCUT_KSHOW_ID]))
-			$this->oldColumnsValues[roughcutEntryPeer::ROUGHCUT_KSHOW_ID] = $this->roughcut_kshow_id;
+		if(!isset($this->oldColumnsValues[roughcutEntryPeer::ROUGHCUT_VSHOW_ID]))
+			$this->oldColumnsValues[roughcutEntryPeer::ROUGHCUT_VSHOW_ID] = $this->roughcut_vshow_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->roughcut_kshow_id !== $v) {
-			$this->roughcut_kshow_id = $v;
-			$this->modifiedColumns[] = roughcutEntryPeer::ROUGHCUT_KSHOW_ID;
+		if ($this->roughcut_vshow_id !== $v) {
+			$this->roughcut_vshow_id = $v;
+			$this->modifiedColumns[] = roughcutEntryPeer::ROUGHCUT_VSHOW_ID;
 		}
 
-		if ($this->akshow !== null && $this->akshow->getId() !== $v) {
-			$this->akshow = null;
+		if ($this->avshow !== null && $this->avshow->getId() !== $v) {
+			$this->avshow = null;
 		}
 
 		return $this;
-	} // setRoughcutKshowId()
+	} // setRoughcutVshowId()
 
 	/**
 	 * Set the value of [entry_id] column.
@@ -589,7 +589,7 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->roughcut_id = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
 			$this->roughcut_version = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-			$this->roughcut_kshow_id = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+			$this->roughcut_vshow_id = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->entry_id = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
 			$this->partner_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
 			$this->op_type = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
@@ -630,8 +630,8 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 		if ($this->aentryRelatedByRoughcutId !== null && $this->roughcut_id !== $this->aentryRelatedByRoughcutId->getId()) {
 			$this->aentryRelatedByRoughcutId = null;
 		}
-		if ($this->akshow !== null && $this->roughcut_kshow_id !== $this->akshow->getId()) {
-			$this->akshow = null;
+		if ($this->avshow !== null && $this->roughcut_vshow_id !== $this->avshow->getId()) {
+			$this->avshow = null;
 		}
 		if ($this->aentryRelatedByEntryId !== null && $this->entry_id !== $this->aentryRelatedByEntryId->getId()) {
 			$this->aentryRelatedByEntryId = null;
@@ -678,7 +678,7 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 		if ($deep) {  // also de-associate any related objects?
 
 			$this->aentryRelatedByRoughcutId = null;
-			$this->akshow = null;
+			$this->avshow = null;
 			$this->aentryRelatedByEntryId = null;
 		} // if (deep)
 	}
@@ -805,11 +805,11 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 				$this->setentryRelatedByRoughcutId($this->aentryRelatedByRoughcutId);
 			}
 
-			if ($this->akshow !== null) {
-				if ($this->akshow->isModified() || $this->akshow->isNew()) {
-					$affectedRows += $this->akshow->save($con);
+			if ($this->avshow !== null) {
+				if ($this->avshow->isModified() || $this->avshow->isNew()) {
+					$affectedRows += $this->avshow->save($con);
 				}
-				$this->setkshow($this->akshow);
+				$this->setvshow($this->avshow);
 			}
 
 			if ($this->aentryRelatedByEntryId !== null) {
@@ -883,7 +883,7 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -907,12 +907,12 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -930,8 +930,8 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1062,9 +1062,9 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 				}
 			}
 
-			if ($this->akshow !== null) {
-				if (!$this->akshow->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akshow->getValidationFailures());
+			if ($this->avshow !== null) {
+				if (!$this->avshow->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avshow->getValidationFailures());
 				}
 			}
 
@@ -1123,7 +1123,7 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 				return $this->getRoughcutVersion();
 				break;
 			case 3:
-				return $this->getRoughcutKshowId();
+				return $this->getRoughcutVshowId();
 				break;
 			case 4:
 				return $this->getEntryId();
@@ -1164,7 +1164,7 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getRoughcutId(),
 			$keys[2] => $this->getRoughcutVersion(),
-			$keys[3] => $this->getRoughcutKshowId(),
+			$keys[3] => $this->getRoughcutVshowId(),
 			$keys[4] => $this->getEntryId(),
 			$keys[5] => $this->getPartnerId(),
 			$keys[6] => $this->getOpType(),
@@ -1211,7 +1211,7 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 				$this->setRoughcutVersion($value);
 				break;
 			case 3:
-				$this->setRoughcutKshowId($value);
+				$this->setRoughcutVshowId($value);
 				break;
 			case 4:
 				$this->setEntryId($value);
@@ -1255,7 +1255,7 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setRoughcutId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setRoughcutVersion($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setRoughcutKshowId($arr[$keys[3]]);
+		if (array_key_exists($keys[3], $arr)) $this->setRoughcutVshowId($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setEntryId($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setPartnerId($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setOpType($arr[$keys[6]]);
@@ -1275,7 +1275,7 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(roughcutEntryPeer::ID)) $criteria->add(roughcutEntryPeer::ID, $this->id);
 		if ($this->isColumnModified(roughcutEntryPeer::ROUGHCUT_ID)) $criteria->add(roughcutEntryPeer::ROUGHCUT_ID, $this->roughcut_id);
 		if ($this->isColumnModified(roughcutEntryPeer::ROUGHCUT_VERSION)) $criteria->add(roughcutEntryPeer::ROUGHCUT_VERSION, $this->roughcut_version);
-		if ($this->isColumnModified(roughcutEntryPeer::ROUGHCUT_KSHOW_ID)) $criteria->add(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, $this->roughcut_kshow_id);
+		if ($this->isColumnModified(roughcutEntryPeer::ROUGHCUT_VSHOW_ID)) $criteria->add(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, $this->roughcut_vshow_id);
 		if ($this->isColumnModified(roughcutEntryPeer::ENTRY_ID)) $criteria->add(roughcutEntryPeer::ENTRY_ID, $this->entry_id);
 		if ($this->isColumnModified(roughcutEntryPeer::PARTNER_ID)) $criteria->add(roughcutEntryPeer::PARTNER_ID, $this->partner_id);
 		if ($this->isColumnModified(roughcutEntryPeer::OP_TYPE)) $criteria->add(roughcutEntryPeer::OP_TYPE, $this->op_type);
@@ -1351,7 +1351,7 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 
 		$copyObj->setRoughcutVersion($this->roughcut_version);
 
-		$copyObj->setRoughcutKshowId($this->roughcut_kshow_id);
+		$copyObj->setRoughcutVshowId($this->roughcut_vshow_id);
 
 		$copyObj->setEntryId($this->entry_id);
 
@@ -1476,24 +1476,24 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Declares an association between this object and a kshow object.
+	 * Declares an association between this object and a vshow object.
 	 *
-	 * @param      kshow $v
+	 * @param      vshow $v
 	 * @return     roughcutEntry The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkshow(kshow $v = null)
+	public function setvshow(vshow $v = null)
 	{
 		if ($v === null) {
-			$this->setRoughcutKshowId(NULL);
+			$this->setRoughcutVshowId(NULL);
 		} else {
-			$this->setRoughcutKshowId($v->getId());
+			$this->setRoughcutVshowId($v->getId());
 		}
 
-		$this->akshow = $v;
+		$this->avshow = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kshow object, it will not be re-added.
+		// If this object has already been added to the vshow object, it will not be re-added.
 		if ($v !== null) {
 			$v->addroughcutEntry($this);
 		}
@@ -1503,25 +1503,25 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kshow object
+	 * Get the associated vshow object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kshow The associated kshow object.
+	 * @return     vshow The associated vshow object.
 	 * @throws     PropelException
 	 */
-	public function getkshow(PropelPDO $con = null)
+	public function getvshow(PropelPDO $con = null)
 	{
-		if ($this->akshow === null && (($this->roughcut_kshow_id !== "" && $this->roughcut_kshow_id !== null))) {
-			$this->akshow = kshowPeer::retrieveByPk($this->roughcut_kshow_id);
+		if ($this->avshow === null && (($this->roughcut_vshow_id !== "" && $this->roughcut_vshow_id !== null))) {
+			$this->avshow = vshowPeer::retrieveByPk($this->roughcut_vshow_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akshow->addroughcutEntrys($this);
+			   $this->avshow->addroughcutEntrys($this);
 			 */
 		}
-		return $this->akshow;
+		return $this->avshow;
 	}
 
 	/**
@@ -1588,7 +1588,7 @@ abstract class BaseroughcutEntry extends BaseObject  implements Persistent {
 		} // if ($deep)
 
 			$this->aentryRelatedByRoughcutId = null;
-			$this->akshow = null;
+			$this->avshow = null;
 			$this->aentryRelatedByEntryId = null;
 	}
 

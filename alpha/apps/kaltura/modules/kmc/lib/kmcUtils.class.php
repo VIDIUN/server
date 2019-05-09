@@ -1,5 +1,5 @@
 <?php
-class kmcUtils
+class vmcUtils
 {
 	public static function getJWPlayerUIConfs($partnerId = null)
 	{
@@ -62,27 +62,27 @@ class kmcUtils
 		return $conf_playlist;
 	}
 
-	public static function redirectPartnerToCorrectKmc(Partner $partner, $ks, $uid=null, $screenName=null, $email=null, $validatingKmc)
+	public static function redirectPartnerToCorrectVmc(Partner $partner, $vs, $uid=null, $screenName=null, $email=null, $validatingVmc)
 	{
-		if($validatingKmc == $partner->getKmcVersion())
+		if($validatingVmc == $partner->getVmcVersion())
 		{
 			return true;
 		}
 		$subpId = $partner->getId()*100;
-		switch($partner->getKmcVersion())
+		switch($partner->getVmcVersion())
 		{
 		    case 1: 
-			$kmc1 = "/index.php/kmc/kmc1?partner_id=".$partner->getId()."&subp_id=".$subpId."&ks=".$ks."&uid=".$uid."&screen_name=".$screenName."&email=".$email ;
-			header("Location: ".$kmc1);
+			$vmc1 = "/index.php/vmc/vmc1?partner_id=".$partner->getId()."&subp_id=".$subpId."&vs=".$vs."&uid=".$uid."&screen_name=".$screenName."&email=".$email ;
+			header("Location: ".$vmc1);
 			die;
 			break;
 		    case 2:
 		    case 3:
 		    case 4:
 		    default:
-			$ver = $partner->getKmcVersion();
-			$kmc_url = "/index.php/kmc/kmc$ver";
-			header("Location: ".$kmc_url);
+			$ver = $partner->getVmcVersion();
+			$vmc_url = "/index.php/vmc/vmc$ver";
+			header("Location: ".$vmc_url);
 			die;
 			break;
 		}
@@ -92,7 +92,7 @@ class kmcUtils
 	{
 		$c = new Criteria();
 		$c->addAnd(uiConfPeer::PARTNER_ID, $partner_id);
-		$c->addAnd(uiConfPeer::OBJ_TYPE, array(uiConf::UI_CONF_TYPE_WIDGET, uiConf::UI_CONF_TYPE_KDP3), Criteria::IN);
+		$c->addAnd(uiConfPeer::OBJ_TYPE, array(uiConf::UI_CONF_TYPE_WIDGET, uiConf::UI_CONF_TYPE_VDP3), Criteria::IN);
 		$c->addAnd ( uiConfPeer::STATUS , uiConf::UI_CONF_STATUS_READY );
 		$c->addAnd ( uiConfPeer::TAGS, '%'.$tag.'%', Criteria::LIKE );
 		$c->addAnd ( uiConfPeer::TAGS, '%jw'.$tag.'%', Criteria::NOT_LIKE );
@@ -102,7 +102,7 @@ class kmcUtils
 		return $confs;
 	}
 
-	public static function getAllKMCUiconfs($module_tag, $module_version, $template_partner_id)
+	public static function getAllVMCUiconfs($module_tag, $module_version, $template_partner_id)
 	{
 		$c = new Criteria();
 		$c->addAnd(uiConfPeer::PARTNER_ID, $template_partner_id);
@@ -117,7 +117,7 @@ class kmcUtils
 	  foreach($confs as $uiconf)
 	  {
 	    $tags = explode(",", $uiconf->getTags());
-	    $trimmed_tags = kmcUtils::TrimArray($tags);
+	    $trimmed_tags = vmcUtils::TrimArray($tags);
 	    if(in_array($tag, $trimmed_tags))
 	    {
 		if($allow_array)
@@ -225,7 +225,7 @@ class kmcUtils
 	
 	    while (list($key, $value) = each($arr)){
 		if (is_array($value)){
-		    $arr[$key] = kmcUtils::TrimArray($value);
+		    $arr[$key] = vmcUtils::TrimArray($value);
 		}
 		else {
 		    $arr[$key] = trim($value);
@@ -241,9 +241,9 @@ class kmcUtils
 			return null;
 		}
 
-		if (kConf::hasMap("whitelabel"))
+		if (vConf::hasMap("whitelabel"))
 		{
-			$whitelabel = kConf::getMap("whitelabel");
+			$whitelabel = vConf::getMap("whitelabel");
 			$params = array();
 
 			// Search for partner Id

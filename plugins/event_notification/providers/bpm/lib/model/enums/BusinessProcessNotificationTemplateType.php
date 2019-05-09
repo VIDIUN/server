@@ -3,14 +3,14 @@
  * @package plugins.businessProcessNotification
  * @subpackage model.enum
  */
-class BusinessProcessNotificationTemplateType implements IKalturaPluginEnum, EventNotificationTemplateType
+class BusinessProcessNotificationTemplateType implements IVidiunPluginEnum, EventNotificationTemplateType
 {
 	const BPM_START = 'BusinessProcessStart';
 	const BPM_SIGNAL = 'BusinessProcessSignal';
 	const BPM_ABORT = 'BusinessProcessAbort';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalValues()
+	 * @see IVidiunPluginEnum::getAdditionalValues()
 	 */
 	public static function getAdditionalValues()
 	{
@@ -22,7 +22,7 @@ class BusinessProcessNotificationTemplateType implements IKalturaPluginEnum, Eve
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalDescriptions()
+	 * @see IVidiunPluginEnum::getAdditionalDescriptions()
 	 */
 	public static function getAdditionalDescriptions() 
 	{

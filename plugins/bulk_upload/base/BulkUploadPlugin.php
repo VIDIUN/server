@@ -5,12 +5,12 @@
  *@package plugins.bulkUpload
  *
  */
-class BulkUploadPlugin extends KalturaPlugin implements IKalturaServices, IKalturaEventConsumers
+class BulkUploadPlugin extends VidiunPlugin implements IVidiunServices, IVidiunEventConsumers
 {
     const PLUGIN_NAME = "bulkUpload";
 
 	/* (non-PHPdoc)
-     * @see IKalturaPlugin::getPluginName()
+     * @see IVidiunPlugin::getPluginName()
      */
     public static function getPluginName ()
     {
@@ -27,10 +27,10 @@ class BulkUploadPlugin extends KalturaPlugin implements IKalturaServices, IKaltu
 	}
 
 	/* (non-PHPdoc)
-     * @see IKalturaEventConsumers::getEventConsumers()
+     * @see IVidiunEventConsumers::getEventConsumers()
      */
     public static function getEventConsumers ()
     {
-        return array('kBatchJobLogManager');
+        return array('vBatchJobLogManager');
     }
 }

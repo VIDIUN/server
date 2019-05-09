@@ -17,7 +17,7 @@ require_once 'propel/engine/builder/om/php5/PHP5ExtensionPeerBuilder.php';
  * @package server-infra
  * @subpackage propel
  */
-class KalturaExtensionPeerBuilder extends PHP5ExtensionPeerBuilder
+class VidiunExtensionPeerBuilder extends PHP5ExtensionPeerBuilder
 {
 	/* (non-PHPdoc)
 	 * @see PHP5ExtensionPeerBuilder::addClassOpen()

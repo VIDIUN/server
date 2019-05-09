@@ -47,11 +47,11 @@ else
 	$flavorParams->setFormat(flavorParams::CONTAINER_FORMAT_SWF);
 }
 
-$swfOperator = new kOperator();
-$swfOperator->id = KalturaConversionEngineType::PDF2SWF;
-$pdfOperator = new kOperator();
-$pdfOperator->id = KalturaConversionEngineType::PDF_CREATOR;
-$operators = new kOperatorSets();
+$swfOperator = new vOperator();
+$swfOperator->id = VidiunConversionEngineType::PDF2SWF;
+$pdfOperator = new vOperator();
+$pdfOperator->id = VidiunConversionEngineType::PDF_CREATOR;
+$operators = new vOperatorSets();
 $operators->addSet(array($pdfOperator, $swfOperator));
 $operators->addSet(array($swfOperator));
 

@@ -2,10 +2,10 @@
 /**
  * @package plugins.bpmEventNotificationIntegration
  */
-class BpmEventNotificationIntegrationPlugin extends KalturaPlugin implements IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaEventConsumers
+class BpmEventNotificationIntegrationPlugin extends VidiunPlugin implements IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunEventConsumers
 {
 	const PLUGIN_NAME = 'bpmEventNotificationIntegration';
-	const FLOW_MANAGER = 'kBpmEventNotificationIntegrationFlowManager';
+	const FLOW_MANAGER = 'vBpmEventNotificationIntegrationFlowManager';
 	
 	const INTEGRATION_PLUGIN_VERSION_MAJOR = 1;
 	const INTEGRATION_PLUGIN_VERSION_MINOR = 0;
@@ -16,7 +16,7 @@ class BpmEventNotificationIntegrationPlugin extends KalturaPlugin implements IKa
 	const BPM_PLUGIN_VERSION_BUILD = 0;
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -24,29 +24,29 @@ class BpmEventNotificationIntegrationPlugin extends KalturaPlugin implements IKa
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$integrationVersion = new KalturaVersion(
+		$integrationVersion = new VidiunVersion(
 			self::INTEGRATION_PLUGIN_VERSION_MAJOR,
 			self::INTEGRATION_PLUGIN_VERSION_MINOR,
 			self::INTEGRATION_PLUGIN_VERSION_BUILD
 		);
-		$integrationDependency = new KalturaDependency(IntegrationPlugin::getPluginName(), $integrationVersion);
+		$integrationDependency = new VidiunDependency(IntegrationPlugin::getPluginName(), $integrationVersion);
 		
-		$bpmVersion = new KalturaVersion(
+		$bpmVersion = new VidiunVersion(
 			self::BPM_PLUGIN_VERSION_MAJOR,
 			self::BPM_PLUGIN_VERSION_MINOR,
 			self::BPM_PLUGIN_VERSION_BUILD
 		);
-		$bpmDependency = new KalturaDependency(BusinessProcessNotificationPlugin::getPluginName(), $bpmVersion);
+		$bpmDependency = new VidiunDependency(BusinessProcessNotificationPlugin::getPluginName(), $bpmVersion);
 		
 		return array($integrationDependency, $bpmDependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -56,7 +56,7 @@ class BpmEventNotificationIntegrationPlugin extends KalturaPlugin implements IKa
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -70,7 +70,7 @@ class BpmEventNotificationIntegrationPlugin extends KalturaPlugin implements IKa
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{			
@@ -92,19 +92,19 @@ class BpmEventNotificationIntegrationPlugin extends KalturaPlugin implements IKa
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'kIntegrationJobTriggerData' && $enumValue == self::getApiValue(BpmEventNotificationIntegrationTrigger::BPM_EVENT_NOTIFICATION))
+		if($baseClass == 'vIntegrationJobTriggerData' && $enumValue == self::getApiValue(BpmEventNotificationIntegrationTrigger::BPM_EVENT_NOTIFICATION))
 		{
-			return 'kBpmEventNotificationIntegrationJobTriggerData';
+			return 'vBpmEventNotificationIntegrationJobTriggerData';
 		}
 	
-		if($baseClass == 'KalturaIntegrationJobTriggerData')
+		if($baseClass == 'VidiunIntegrationJobTriggerData')
 		{
 			if($enumValue == self::getApiValue(BpmEventNotificationIntegrationTrigger::BPM_EVENT_NOTIFICATION) || $enumValue == self::getIntegrationTriggerCoreValue(BpmEventNotificationIntegrationTrigger::BPM_EVENT_NOTIFICATION))
-				return 'KalturaBpmEventNotificationIntegrationJobTriggerData';
+				return 'VidiunBpmEventNotificationIntegrationJobTriggerData';
 		}
 	}
 
@@ -113,8 +113,8 @@ class BpmEventNotificationIntegrationPlugin extends KalturaPlugin implements IKa
 	 */
 	public static function getIntegrationTriggerCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('IntegrationTriggerType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('IntegrationTriggerType', $value);
 	}
 	
 	/**
@@ -122,6 +122,6 @@ class BpmEventNotificationIntegrationPlugin extends KalturaPlugin implements IKa
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

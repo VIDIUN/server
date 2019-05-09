@@ -4,7 +4,7 @@
 
 <style type="text/css">
 	#partner-catalog-item-configure-dialog { width:auto ; left: auto}
-	#partner-catalog-item-configure-dialog #kmcHeader{ display:none}
+	#partner-catalog-item-configure-dialog #vmcHeader{ display:none}
 	#partner-catalog-item-configure-dialog #sub-header{ display:none}
 	#partner-catalog-item-configure-dialog #frmPartnerIdFilter{ display:none}
 
@@ -42,25 +42,25 @@
 			</tfoot>
 			<tbody>
 			<?php if($this->paginator)
-						foreach($this->paginator as /* Kaltura_Client_Reach_Type_VendorCatalogItem */ $catalogItem): ?>
+						foreach($this->paginator as /* Vidiun_Client_Reach_Type_VendorCatalogItem */ $catalogItem): ?>
 				<tr class="<?php echo $this->cycle(array('odd', 'even'))->next(); ?>">
 					<td><input type="checkbox" name="catalogItemsCheckBoxes[]" id="$catalogItemsCheckBoxes-<?php echo $catalogItem->id; ?>" value="<?php echo $catalogItem->id; ?>"/></td>
 					<td><?php echo $catalogItem->id; ?></td>
-					<td><?php echo $this->enumTranslate('Kaltura_Client_Reach_Enum_VendorCatalogItemStatus', $catalogItem->status); ?></td>
+					<td><?php echo $this->enumTranslate('Vidiun_Client_Reach_Enum_VendorCatalogItemStatus', $catalogItem->status); ?></td>
 					<td><?php echo $catalogItem->name; ?></td>
 					<td><?php echo $catalogItem->systemName; ?></td>
 					<td><?php echo $catalogItem->vendorPartnerId; ?></td>
-					<td><?php echo $this->enumTranslate('Kaltura_Client_Reach_Enum_VendorServiceFeature', $catalogItem->serviceFeature); ?></td>
-					<td><?php echo $this->enumTranslate('Kaltura_Client_Reach_Enum_VendorServiceType', $catalogItem->serviceType); ?></td>
-					<td><?php echo $this->enumTranslate('Kaltura_Client_Reach_Enum_VendorServiceTurnAroundTime', $catalogItem->turnAroundTime); ?></td>
-					<td><?php echo $this->enumTranslate('Kaltura_Client_Reach_Enum_CatalogItemLanguage', $catalogItem->sourceLanguage); ?></td>
+					<td><?php echo $this->enumTranslate('Vidiun_Client_Reach_Enum_VendorServiceFeature', $catalogItem->serviceFeature); ?></td>
+					<td><?php echo $this->enumTranslate('Vidiun_Client_Reach_Enum_VendorServiceType', $catalogItem->serviceType); ?></td>
+					<td><?php echo $this->enumTranslate('Vidiun_Client_Reach_Enum_VendorServiceTurnAroundTime', $catalogItem->turnAroundTime); ?></td>
+					<td><?php echo $this->enumTranslate('Vidiun_Client_Reach_Enum_CatalogItemLanguage', $catalogItem->sourceLanguage); ?></td>
 					<td><?php if (isset($catalogItem->targetLanguage))
-					    echo $this->enumTranslate('Kaltura_Client_Reach_Enum_CatalogItemLanguage', $catalogItem->targetLanguage);
+					    echo $this->enumTranslate('Vidiun_Client_Reach_Enum_CatalogItemLanguage', $catalogItem->targetLanguage);
 					else
 					    echo null;?>
 					</td>
 					<td><?php if (isset($catalogItem->outputFormat))
-					    echo $this->enumTranslate('Kaltura_Client_Reach_Enum_VendorCatalogItemOutputFormat', $catalogItem->outputFormat);
+					    echo $this->enumTranslate('Vidiun_Client_Reach_Enum_VendorCatalogItemOutputFormat', $catalogItem->outputFormat);
 					else
 					    echo null;?>
 					</td>

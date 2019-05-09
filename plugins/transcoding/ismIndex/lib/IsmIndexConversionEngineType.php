@@ -3,7 +3,7 @@
  * @package plugins.ismIndex
  * @subpackage lib
  */
-class IsmIndexConversionEngineType implements IKalturaPluginEnum, conversionEngineType
+class IsmIndexConversionEngineType implements IVidiunPluginEnum, conversionEngineType
 {
 	const ISMINDEX = 'IsmIndex';
 	const ISM_MANIFEST = 'IsmManifest';

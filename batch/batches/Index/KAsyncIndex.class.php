@@ -11,20 +11,20 @@
  * @package Scheduler
  * @subpackage Index
  */
-class KAsyncIndex extends KJobHandlerWorker
+class VAsyncIndex extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::INDEX;
+		return VidiunBatchJobType::INDEX;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->indexObjects($job, $job->data);
 	}
@@ -32,7 +32,7 @@ class KAsyncIndex extends KJobHandlerWorker
 	/**
 	 * Will take a single filter and call each item to be indexed 
 	 */
-	private function indexObjects(KalturaBatchJob $job, KalturaIndexJobData $data)
+	private function indexObjects(VidiunBatchJob $job, VidiunIndexJobData $data)
 	{
 		$engine = KIndexingEngine::getInstance($job->jobSubType);
 		$engine->configure($job->partnerId);
@@ -51,13 +51,13 @@ class KAsyncIndex extends KJobHandlerWorker
 			
 			$data->lastIndexId = $lastIndexId;
 			$data->lastIndexDepth = $lastIndexDepth;
-			$this->updateJob($job, "Indexed $indexedObjectsCount objects", KalturaBatchJobStatus::PROCESSING, $data);
+			$this->updateJob($job, "Indexed $indexedObjectsCount objects", VidiunBatchJobStatus::PROCESSING, $data);
 			
 			$advancedFilter->indexIdGreaterThan = $lastIndexId;
 			$advancedFilter->depthGreaterThanEqual = $lastIndexDepth;
 			$filter->advancedSearch = $advancedFilter;
 		}
 		
-		return $this->closeJob($job, null, null, "Index objects finished", KalturaBatchJobStatus::FINISHED);
+		return $this->closeJob($job, null, null, "Index objects finished", VidiunBatchJobStatus::FINISHED);
 	}
 }

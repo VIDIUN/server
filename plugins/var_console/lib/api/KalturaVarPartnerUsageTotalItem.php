@@ -3,13 +3,13 @@
  * @package plugins.varConsole
  * @subpackage api.objects
  */
-class KalturaVarPartnerUsageTotalItem extends KalturaVarPartnerUsageItem
+class VidiunVarPartnerUsageTotalItem extends VidiunVarPartnerUsageItem
 {
 	/**
 	 * Function which parses a report line into an object
 	 * @param string $header - comma separated fields names	
 	 * @param string $str - comma separated fields
-	 * @return KalturaVarPartnerUsageItem
+	 * @return VidiunVarPartnerUsageItem
 	 */
 	public function fromString ( $header , $arr )
 	{

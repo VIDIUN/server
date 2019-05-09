@@ -3,12 +3,12 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaBeaconScheduledResourceBaseItemArray extends KalturaTypedArray
+class VidiunBeaconScheduledResourceBaseItemArray extends VidiunTypedArray
 {
 
 	public function __construct()
 	{
-		return parent::__construct("KalturaBeaconScheduledResourceBaseItem");
+		return parent::__construct("VidiunBeaconScheduledResourceBaseItem");
 	}
 
 }

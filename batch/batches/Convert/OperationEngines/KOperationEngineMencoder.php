@@ -3,6 +3,6 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KOperationEngineMencoder  extends KSingleOutputOperationEngine
+class VOperationEngineMencoder  extends VSingleOutputOperationEngine
 {
 }

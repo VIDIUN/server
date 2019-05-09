@@ -4,11 +4,11 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaPlayManifestContributor extends IKalturaBase
+interface IVidiunPlayManifestContributor extends IVidiunBase
 {
 	/**
 	 * Function receives the manifest renderer and edits its output as it requires.
-	 * @param kManifestContributorConfig $config
+	 * @param vManifestContributorConfig $config
 	 * @returns array<BaseManifestEditor>
 	 */
 	public static function getManifestEditors ($config);

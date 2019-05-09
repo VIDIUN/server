@@ -4,17 +4,17 @@
  * @subpackage lib
  * 
  */
-class KDLOperatorWidevine extends KDLOperatorBase 
+class VDLOperatorWidevine extends VDLOperatorBase 
 {
  	/* ---------------------------
 	 * GenerateCommandLine
 	 */
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 		return '';
 	}
 	
-	public function CheckConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+	public function CheckConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
 	    return false;
 	}

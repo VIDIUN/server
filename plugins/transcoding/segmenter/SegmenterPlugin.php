@@ -2,7 +2,7 @@
 /**
  * @package plugins.segmenter
  */
-class SegmenterPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaEnumerator
+class SegmenterPlugin extends VidiunPlugin implements IVidiunObjectLoader, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'segmenter';
 	
@@ -19,18 +19,18 @@ class SegmenterPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKa
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::SEGMENTER)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::SEGMENTER)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 				
 			$params = $constructorArgs['params'];
-			return new KOperationEngineSegmenter($params->segmenterCmd, $constructorArgs['outFilePath']);
+			return new VOperationEngineSegmenter($params->segmenterCmd, $constructorArgs['outFilePath']);
 		}
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(SegmenterConversionEngineType::SEGMENTER))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(SegmenterConversionEngineType::SEGMENTER))
 		{
-			return new KDLOperatorSegmenter($enumValue);
+			return new VDLOperatorSegmenter($enumValue);
 		}
 		
 		return null;
@@ -43,11 +43,11 @@ class SegmenterPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKa
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == self::getApiValue(SegmenterConversionEngineType::SEGMENTER))
-			return 'KOperationEngineSegmenter';
+		if($baseClass == 'VOperationEngine' && $enumValue == self::getApiValue(SegmenterConversionEngineType::SEGMENTER))
+			return 'VOperationEngineSegmenter';
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(SegmenterConversionEngineType::SEGMENTER))
-			return 'KDLOperatorSegmenter';
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(SegmenterConversionEngineType::SEGMENTER))
+			return 'VDLOperatorSegmenter';
 		
 		return null;
 	}
@@ -71,8 +71,8 @@ class SegmenterPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKa
 	 */
 	public static function getConversionEngineCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('conversionEngineType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('conversionEngineType', $value);
 	}
 	
 	/**
@@ -80,6 +80,6 @@ class SegmenterPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKa
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

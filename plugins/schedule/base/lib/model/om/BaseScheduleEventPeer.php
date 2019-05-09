@@ -79,8 +79,8 @@ abstract class BaseScheduleEventPeer {
 	/** the column name for the ORGANIZER field */
 	const ORGANIZER = 'schedule_event.ORGANIZER';
 
-	/** the column name for the OWNER_KUSER_ID field */
-	const OWNER_KUSER_ID = 'schedule_event.OWNER_KUSER_ID';
+	/** the column name for the OWNER_VUSER_ID field */
+	const OWNER_VUSER_ID = 'schedule_event.OWNER_VUSER_ID';
 
 	/** the column name for the PRIORITY field */
 	const PRIORITY = 'schedule_event.PRIORITY';
@@ -128,10 +128,10 @@ abstract class BaseScheduleEventPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'ParentId', 'PartnerId', 'Summary', 'Description', 'Type', 'Status', 'OriginalStartDate', 'StartDate', 'EndDate', 'ReferenceId', 'ClassificationType', 'GeoLat', 'GeoLong', 'Location', 'Organizer', 'OwnerKuserId', 'Priority', 'Sequence', 'RecurrenceType', 'Duration', 'Contact', 'Comment', 'Tags', 'CreatedAt', 'UpdatedAt', 'CustomData', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'parentId', 'partnerId', 'summary', 'description', 'type', 'status', 'originalStartDate', 'startDate', 'endDate', 'referenceId', 'classificationType', 'geoLat', 'geoLong', 'location', 'organizer', 'ownerKuserId', 'priority', 'sequence', 'recurrenceType', 'duration', 'contact', 'comment', 'tags', 'createdAt', 'updatedAt', 'customData', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::PARENT_ID, self::PARTNER_ID, self::SUMMARY, self::DESCRIPTION, self::TYPE, self::STATUS, self::ORIGINAL_START_DATE, self::START_DATE, self::END_DATE, self::REFERENCE_ID, self::CLASSIFICATION_TYPE, self::GEO_LAT, self::GEO_LONG, self::LOCATION, self::ORGANIZER, self::OWNER_KUSER_ID, self::PRIORITY, self::SEQUENCE, self::RECURRENCE_TYPE, self::DURATION, self::CONTACT, self::COMMENT, self::TAGS, self::CREATED_AT, self::UPDATED_AT, self::CUSTOM_DATA, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'parent_id', 'partner_id', 'summary', 'description', 'type', 'status', 'original_start_date', 'start_date', 'end_date', 'reference_id', 'classification_type', 'geo_lat', 'geo_long', 'location', 'organizer', 'owner_kuser_id', 'priority', 'sequence', 'recurrence_type', 'duration', 'contact', 'comment', 'tags', 'created_at', 'updated_at', 'custom_data', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'ParentId', 'PartnerId', 'Summary', 'Description', 'Type', 'Status', 'OriginalStartDate', 'StartDate', 'EndDate', 'ReferenceId', 'ClassificationType', 'GeoLat', 'GeoLong', 'Location', 'Organizer', 'OwnerVuserId', 'Priority', 'Sequence', 'RecurrenceType', 'Duration', 'Contact', 'Comment', 'Tags', 'CreatedAt', 'UpdatedAt', 'CustomData', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'parentId', 'partnerId', 'summary', 'description', 'type', 'status', 'originalStartDate', 'startDate', 'endDate', 'referenceId', 'classificationType', 'geoLat', 'geoLong', 'location', 'organizer', 'ownerVuserId', 'priority', 'sequence', 'recurrenceType', 'duration', 'contact', 'comment', 'tags', 'createdAt', 'updatedAt', 'customData', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::PARENT_ID, self::PARTNER_ID, self::SUMMARY, self::DESCRIPTION, self::TYPE, self::STATUS, self::ORIGINAL_START_DATE, self::START_DATE, self::END_DATE, self::REFERENCE_ID, self::CLASSIFICATION_TYPE, self::GEO_LAT, self::GEO_LONG, self::LOCATION, self::ORGANIZER, self::OWNER_VUSER_ID, self::PRIORITY, self::SEQUENCE, self::RECURRENCE_TYPE, self::DURATION, self::CONTACT, self::COMMENT, self::TAGS, self::CREATED_AT, self::UPDATED_AT, self::CUSTOM_DATA, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'parent_id', 'partner_id', 'summary', 'description', 'type', 'status', 'original_start_date', 'start_date', 'end_date', 'reference_id', 'classification_type', 'geo_lat', 'geo_long', 'location', 'organizer', 'owner_vuser_id', 'priority', 'sequence', 'recurrence_type', 'duration', 'contact', 'comment', 'tags', 'created_at', 'updated_at', 'custom_data', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, )
 	);
 
@@ -142,10 +142,10 @@ abstract class BaseScheduleEventPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ParentId' => 1, 'PartnerId' => 2, 'Summary' => 3, 'Description' => 4, 'Type' => 5, 'Status' => 6, 'OriginalStartDate' => 7, 'StartDate' => 8, 'EndDate' => 9, 'ReferenceId' => 10, 'ClassificationType' => 11, 'GeoLat' => 12, 'GeoLong' => 13, 'Location' => 14, 'Organizer' => 15, 'OwnerKuserId' => 16, 'Priority' => 17, 'Sequence' => 18, 'RecurrenceType' => 19, 'Duration' => 20, 'Contact' => 21, 'Comment' => 22, 'Tags' => 23, 'CreatedAt' => 24, 'UpdatedAt' => 25, 'CustomData' => 26, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'parentId' => 1, 'partnerId' => 2, 'summary' => 3, 'description' => 4, 'type' => 5, 'status' => 6, 'originalStartDate' => 7, 'startDate' => 8, 'endDate' => 9, 'referenceId' => 10, 'classificationType' => 11, 'geoLat' => 12, 'geoLong' => 13, 'location' => 14, 'organizer' => 15, 'ownerKuserId' => 16, 'priority' => 17, 'sequence' => 18, 'recurrenceType' => 19, 'duration' => 20, 'contact' => 21, 'comment' => 22, 'tags' => 23, 'createdAt' => 24, 'updatedAt' => 25, 'customData' => 26, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PARENT_ID => 1, self::PARTNER_ID => 2, self::SUMMARY => 3, self::DESCRIPTION => 4, self::TYPE => 5, self::STATUS => 6, self::ORIGINAL_START_DATE => 7, self::START_DATE => 8, self::END_DATE => 9, self::REFERENCE_ID => 10, self::CLASSIFICATION_TYPE => 11, self::GEO_LAT => 12, self::GEO_LONG => 13, self::LOCATION => 14, self::ORGANIZER => 15, self::OWNER_KUSER_ID => 16, self::PRIORITY => 17, self::SEQUENCE => 18, self::RECURRENCE_TYPE => 19, self::DURATION => 20, self::CONTACT => 21, self::COMMENT => 22, self::TAGS => 23, self::CREATED_AT => 24, self::UPDATED_AT => 25, self::CUSTOM_DATA => 26, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'parent_id' => 1, 'partner_id' => 2, 'summary' => 3, 'description' => 4, 'type' => 5, 'status' => 6, 'original_start_date' => 7, 'start_date' => 8, 'end_date' => 9, 'reference_id' => 10, 'classification_type' => 11, 'geo_lat' => 12, 'geo_long' => 13, 'location' => 14, 'organizer' => 15, 'owner_kuser_id' => 16, 'priority' => 17, 'sequence' => 18, 'recurrence_type' => 19, 'duration' => 20, 'contact' => 21, 'comment' => 22, 'tags' => 23, 'created_at' => 24, 'updated_at' => 25, 'custom_data' => 26, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ParentId' => 1, 'PartnerId' => 2, 'Summary' => 3, 'Description' => 4, 'Type' => 5, 'Status' => 6, 'OriginalStartDate' => 7, 'StartDate' => 8, 'EndDate' => 9, 'ReferenceId' => 10, 'ClassificationType' => 11, 'GeoLat' => 12, 'GeoLong' => 13, 'Location' => 14, 'Organizer' => 15, 'OwnerVuserId' => 16, 'Priority' => 17, 'Sequence' => 18, 'RecurrenceType' => 19, 'Duration' => 20, 'Contact' => 21, 'Comment' => 22, 'Tags' => 23, 'CreatedAt' => 24, 'UpdatedAt' => 25, 'CustomData' => 26, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'parentId' => 1, 'partnerId' => 2, 'summary' => 3, 'description' => 4, 'type' => 5, 'status' => 6, 'originalStartDate' => 7, 'startDate' => 8, 'endDate' => 9, 'referenceId' => 10, 'classificationType' => 11, 'geoLat' => 12, 'geoLong' => 13, 'location' => 14, 'organizer' => 15, 'ownerVuserId' => 16, 'priority' => 17, 'sequence' => 18, 'recurrenceType' => 19, 'duration' => 20, 'contact' => 21, 'comment' => 22, 'tags' => 23, 'createdAt' => 24, 'updatedAt' => 25, 'customData' => 26, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PARENT_ID => 1, self::PARTNER_ID => 2, self::SUMMARY => 3, self::DESCRIPTION => 4, self::TYPE => 5, self::STATUS => 6, self::ORIGINAL_START_DATE => 7, self::START_DATE => 8, self::END_DATE => 9, self::REFERENCE_ID => 10, self::CLASSIFICATION_TYPE => 11, self::GEO_LAT => 12, self::GEO_LONG => 13, self::LOCATION => 14, self::ORGANIZER => 15, self::OWNER_VUSER_ID => 16, self::PRIORITY => 17, self::SEQUENCE => 18, self::RECURRENCE_TYPE => 19, self::DURATION => 20, self::CONTACT => 21, self::COMMENT => 22, self::TAGS => 23, self::CREATED_AT => 24, self::UPDATED_AT => 25, self::CUSTOM_DATA => 26, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'parent_id' => 1, 'partner_id' => 2, 'summary' => 3, 'description' => 4, 'type' => 5, 'status' => 6, 'original_start_date' => 7, 'start_date' => 8, 'end_date' => 9, 'reference_id' => 10, 'classification_type' => 11, 'geo_lat' => 12, 'geo_long' => 13, 'location' => 14, 'organizer' => 15, 'owner_vuser_id' => 16, 'priority' => 17, 'sequence' => 18, 'recurrence_type' => 19, 'duration' => 20, 'contact' => 21, 'comment' => 22, 'tags' => 23, 'created_at' => 24, 'updated_at' => 25, 'custom_data' => 26, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, )
 	);
 
@@ -232,7 +232,7 @@ abstract class BaseScheduleEventPeer {
 		$criteria->addSelectColumn(ScheduleEventPeer::GEO_LONG);
 		$criteria->addSelectColumn(ScheduleEventPeer::LOCATION);
 		$criteria->addSelectColumn(ScheduleEventPeer::ORGANIZER);
-		$criteria->addSelectColumn(ScheduleEventPeer::OWNER_KUSER_ID);
+		$criteria->addSelectColumn(ScheduleEventPeer::OWNER_VUSER_ID);
 		$criteria->addSelectColumn(ScheduleEventPeer::PRIORITY);
 		$criteria->addSelectColumn(ScheduleEventPeer::SEQUENCE);
 		$criteria->addSelectColumn(ScheduleEventPeer::RECURRENCE_TYPE);
@@ -276,11 +276,11 @@ abstract class BaseScheduleEventPeer {
 		
 		ScheduleEventPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'ScheduleEventPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -304,7 +304,7 @@ abstract class BaseScheduleEventPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -385,7 +385,7 @@ abstract class BaseScheduleEventPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -408,11 +408,11 @@ abstract class BaseScheduleEventPeer {
 	{		
 		$criteriaForSelect = ScheduleEventPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'ScheduleEventPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -428,12 +428,12 @@ abstract class BaseScheduleEventPeer {
 		
 		$queryResult = ScheduleEventPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -443,17 +443,17 @@ abstract class BaseScheduleEventPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -524,7 +524,7 @@ abstract class BaseScheduleEventPeer {
 		ScheduleEventPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -532,19 +532,19 @@ abstract class BaseScheduleEventPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -563,7 +563,7 @@ abstract class BaseScheduleEventPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -682,11 +682,11 @@ abstract class BaseScheduleEventPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('ScheduleEventPeer');
+				vMemoryManager::registerPeer('ScheduleEventPeer');
 			}
 		}
 	}

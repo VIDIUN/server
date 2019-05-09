@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchTermsQuery extends kESearchBaseFieldQuery
+class vESearchTermsQuery extends vESearchBaseFieldQuery
 {
 	const TERMS_KEY = 'terms';
 

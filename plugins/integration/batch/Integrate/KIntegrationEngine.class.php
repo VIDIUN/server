@@ -3,11 +3,11 @@
  * @package plugins.integration
  * @subpackage Scheduler
  */
-interface KIntegrationEngine
+interface VIntegrationEngine
 {	
 	/**
-	 * @param KalturaBatchJob $job
-	 * @param KalturaIntegrationJobData $data
+	 * @param VidiunBatchJob $job
+	 * @param VidiunIntegrationJobData $data
 	 */
-	public function dispatch(KalturaBatchJob $job, KalturaIntegrationJobData &$data);
+	public function dispatch(VidiunBatchJob $job, VidiunIntegrationJobData &$data);
 }

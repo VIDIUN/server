@@ -4,13 +4,13 @@
  * @subpackage lib.entitlement
  */
 
-class kElasticUserCategoryEntryEntitlementDecorator implements IKalturaESearchEntryEntitlementDecorator
+class vElasticUserCategoryEntryEntitlementDecorator implements IVidiunESearchEntryEntitlementDecorator
 {
 	const MAX_CATEGORIES = 512;
 
 	public static function shouldContribute()
 	{
-		if(kEntryElasticEntitlement::$userCategoryToEntryEntitlement || kEntryElasticEntitlement::$entryInSomeCategoryNoPC)
+		if(vEntryElasticEntitlement::$userCategoryToEntryEntitlement || vEntryElasticEntitlement::$entryInSomeCategoryNoPC)
 			return true;
 
 		return false;
@@ -18,24 +18,24 @@ class kElasticUserCategoryEntryEntitlementDecorator implements IKalturaESearchEn
 
 	public static function getEntitlementCondition(array $params = array(), $fieldPrefix = '')
 	{
-		$condition = new kESearchBoolQuery();
+		$condition = new vESearchBoolQuery();
 		//members
 		$ids = self::getFormattedCategoryIds($params['category_ids']);
 		$idsFieldName = ESearchBaseCategoryEntryItem::CATEGORY_IDS_MAPPING_FIELD;
-		$idsCondition = new kESearchTermsQuery("{$fieldPrefix}{$idsFieldName}", $ids);
+		$idsCondition = new vESearchTermsQuery("{$fieldPrefix}{$idsFieldName}", $ids);
 		$condition->addToShould($idsCondition);
 		//privacy_by_contexts
 		$privacyByContexts = array();
-		$privacyContexts = self::getPrivacyContexts(kEntryElasticEntitlement::$privacyContext);
+		$privacyContexts = self::getPrivacyContexts(vEntryElasticEntitlement::$privacyContext);
 		foreach ($privacyContexts as $privacyContext)
 		{
-			foreach (kEntryElasticEntitlement::$privacy as $privacyValue)
+			foreach (vEntryElasticEntitlement::$privacy as $privacyValue)
 			{
-				$privacyByContexts[] = elasticSearchUtils::formatSearchTerm($privacyContext . kEntitlementUtils::TYPE_SEPERATOR . $privacyValue);
+				$privacyByContexts[] = elasticSearchUtils::formatSearchTerm($privacyContext . vEntitlementUtils::TYPE_SEPERATOR . $privacyValue);
 			}
 		}
 		$pcFieldName = ESearchEntryFieldName::PRIVACY_BY_CONTEXTS;
-		$privacyByContextCondition = new kESearchTermsQuery("{$fieldPrefix}{$pcFieldName}", $privacyByContexts);
+		$privacyByContextCondition = new vESearchTermsQuery("{$fieldPrefix}{$pcFieldName}", $privacyByContexts);
 		$condition->addToShould($privacyByContextCondition);
 
 		return $condition;
@@ -43,14 +43,14 @@ class kElasticUserCategoryEntryEntitlementDecorator implements IKalturaESearchEn
 
 	public static function applyCondition(&$entryQuery, &$parentEntryQuery)
 	{
-		$kuserId = kEntryElasticEntitlement::$kuserId;
-		if(!$kuserId)
+		$vuserId = vEntryElasticEntitlement::$vuserId;
+		if(!$vuserId)
 		{
-			KalturaLog::log('cannot add userCategory to entry entitlement to elastic without a kuserId - setting kuser id to -1');
-			$kuserId = -1;
+			VidiunLog::log('cannot add userCategory to entry entitlement to elastic without a vuserId - setting vuser id to -1');
+			$vuserId = -1;
 		}
 		//get category ids with $privacyContext
-		$categories = self::getUserCategories($kuserId, kEntryElasticEntitlement::$privacyContext);
+		$categories = self::getUserCategories($vuserId, vEntryElasticEntitlement::$privacyContext);
 		if(count($categories) == 0)
 			$categories = array(category::CATEGORY_ID_THAT_DOES_NOT_EXIST);
 
@@ -71,21 +71,21 @@ class kElasticUserCategoryEntryEntitlementDecorator implements IKalturaESearchEn
 		$privacyContexts = null;
 		if (!$privacyContext || trim($privacyContext) == '')
 		{
-			$privacyContexts = array(kEntitlementUtils::getDefaultContextString(kEntryElasticEntitlement::$partnerId));
+			$privacyContexts = array(vEntitlementUtils::getDefaultContextString(vEntryElasticEntitlement::$partnerId));
 		}
 		else
 		{
 			$privacyContexts = explode(',', $privacyContext);
-			$privacyContexts = kEntitlementUtils::addPrivacyContextsPrefix($privacyContexts, kEntryElasticEntitlement::$partnerId);
+			$privacyContexts = vEntitlementUtils::addPrivacyContextsPrefix($privacyContexts, vEntryElasticEntitlement::$partnerId);
 		}
 
 		$privacyContexts = array_map('elasticSearchUtils::formatSearchTerm', $privacyContexts);
 		return $privacyContexts;
 	}
 
-	protected static function getUserCategories($kuserId, $privacyContext = null)
+	protected static function getUserCategories($vuserId, $privacyContext = null)
 	{
-		$maxUserCategories = kConf::get('maxUserCategories', 'elastic', self::MAX_CATEGORIES);
+		$maxUserCategories = vConf::get('maxUserCategories', 'elastic', self::MAX_CATEGORIES);
 
 		$params = array(
 			'index' => ElasticIndexMap::ELASTIC_CATEGORY_INDEX,
@@ -95,45 +95,45 @@ class kElasticUserCategoryEntryEntitlementDecorator implements IKalturaESearchEn
 		$body = array();
 		$body['_source'] = false;
 
-		$mainBool = new kESearchBoolQuery();
-		$partnerStatus = elasticSearchUtils::formatPartnerStatus(kEntryElasticEntitlement::$partnerId, CategoryStatus::ACTIVE);
-		$partnerStatusQuery = new kESearchTermQuery('partner_status', $partnerStatus);
+		$mainBool = new vESearchBoolQuery();
+		$partnerStatus = elasticSearchUtils::formatPartnerStatus(vEntryElasticEntitlement::$partnerId, CategoryStatus::ACTIVE);
+		$partnerStatusQuery = new vESearchTermQuery('partner_status', $partnerStatus);
 		$mainBool->addToFilter($partnerStatusQuery);
 
-		if (count(kEntryElasticEntitlement::$filteredCategoryIds))
+		if (count(vEntryElasticEntitlement::$filteredCategoryIds))
 		{
-			$filteredCategoryIdsQuery = new kESearchTermsQuery('_id', kEntryElasticEntitlement::$filteredCategoryIds);
+			$filteredCategoryIdsQuery = new vESearchTermsQuery('_id', vEntryElasticEntitlement::$filteredCategoryIds);
 			$mainBool->addToFilter($filteredCategoryIdsQuery);
 		}
 
-		$conditionsBoolQuery = new kESearchBoolQuery();
+		$conditionsBoolQuery = new vESearchBoolQuery();
 
-		$userGroupsQuery = new kESearchTermsQuery(ESearchCategoryFieldName::KUSER_IDS,array(
-			'index' => ElasticIndexMap::ELASTIC_KUSER_INDEX,
-			'type' => ElasticIndexMap::ELASTIC_KUSER_TYPE,
-			'id' => $kuserId,
+		$userGroupsQuery = new vESearchTermsQuery(ESearchCategoryFieldName::VUSER_IDS,array(
+			'index' => ElasticIndexMap::ELASTIC_VUSER_INDEX,
+			'type' => ElasticIndexMap::ELASTIC_VUSER_TYPE,
+			'id' => $vuserId,
 			'path' => 'group_ids'
 		));
 		$conditionsBoolQuery->addToShould($userGroupsQuery);
-		$userQuery = new kESearchTermQuery(ESearchCategoryFieldName::KUSER_IDS, $kuserId);
+		$userQuery = new vESearchTermQuery(ESearchCategoryFieldName::VUSER_IDS, $vuserId);
 		$conditionsBoolQuery->addToShould($userQuery);
 
-		if(kEntryElasticEntitlement::$entryInSomeCategoryNoPC)
+		if(vEntryElasticEntitlement::$entryInSomeCategoryNoPC)
 		{
-			$noPcQuery = new kESearchBoolQuery();
-			$pcExistQuery = new kESearchExistsQuery('privacy_context');
+			$noPcQuery = new vESearchBoolQuery();
+			$pcExistQuery = new vESearchExistsQuery('privacy_context');
 			$noPcQuery->addToMustNot($pcExistQuery);
 			$conditionsBoolQuery->addToShould($noPcQuery);
 		}
 
 		$privacyContexts = self::getPrivacyContexts($privacyContext);
-		$privacyContextsQuery = new kESearchTermsQuery('privacy_contexts',$privacyContexts);
+		$privacyContextsQuery = new vESearchTermsQuery('privacy_contexts',$privacyContexts);
 		$mainBool->addToFilter($privacyContextsQuery);
 
 		//fetch only categories with privacy MEMBERS_ONLY
 		//categories with privacy ALL/AUTHENTICATED_USERS will be handled with privacy_by_contexts
-		$privacy = category::formatPrivacy(PrivacyType::MEMBERS_ONLY, kEntryElasticEntitlement::$partnerId);
-		$privacyQuery = new kESearchTermQuery('privacy', elasticSearchUtils::formatSearchTerm($privacy));
+		$privacy = category::formatPrivacy(PrivacyType::MEMBERS_ONLY, vEntryElasticEntitlement::$partnerId);
+		$privacyQuery = new vESearchTermQuery('privacy', elasticSearchUtils::formatSearchTerm($privacy));
 		$mainBool->addToFilter($privacyQuery);
 
 		$mainBool->addToFilter($conditionsBoolQuery);
@@ -148,7 +148,7 @@ class kElasticUserCategoryEntryEntitlementDecorator implements IKalturaESearchEn
 		$categoriesCount = $results['hits']['total'];
 		if ($categoriesCount > $maxUserCategories)
 		{
-			KalturaLog::debug("More then max user categories found. userId[$kuserId] count[$categoriesCount]");
+			VidiunLog::debug("More then max user categories found. userId[$vuserId] count[$categoriesCount]");
 		}
 
 		$categoryIds = array();

@@ -2,27 +2,27 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaRule instead
+ * @deprecated use VidiunRule instead
  */
-class KalturaSessionRestriction extends KalturaBaseRestriction 
+class VidiunSessionRestriction extends VidiunBaseRestriction 
 {
 	/* (non-PHPdoc)
-	 * @see KalturaBaseRestriction::toRule()
+	 * @see VidiunBaseRestriction::toRule()
 	 */
-	public function toRule(KalturaRestrictionArray $restrictions)
+	public function toRule(VidiunRestrictionArray $restrictions)
 	{	
 		$rule = null;
 		
 		foreach($restrictions as $restriction)
 		{
-			if($restriction instanceof KalturaPreviewRestriction)
+			if($restriction instanceof VidiunPreviewRestriction)
 			{
-				$rule = $restriction->toObject(new kAccessControlPreviewRestriction());
+				$rule = $restriction->toObject(new vAccessControlPreviewRestriction());
 			}
 		}
 	
 		if(!$rule)
-			$rule = $this->toObject(new kAccessControlSessionRestriction());
+			$rule = $this->toObject(new vAccessControlSessionRestriction());
 		
 		return $rule;
 	}

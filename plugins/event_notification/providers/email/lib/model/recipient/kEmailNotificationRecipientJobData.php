@@ -5,7 +5,7 @@
  * @package plugins.emailNotification
  * @subpackage model.data 
  */
-abstract class kEmailNotificationRecipientJobData
+abstract class vEmailNotificationRecipientJobData
 {
 	/**
 	 * Type of the provider

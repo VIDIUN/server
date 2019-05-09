@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaRecalculateResponseProfileCacheJobData extends KalturaRecalculateCacheJobData
+class VidiunRecalculateResponseProfileCacheJobData extends VidiunRecalculateCacheJobData
 {
 	/**
 	 * http / https
@@ -12,12 +12,12 @@ class KalturaRecalculateResponseProfileCacheJobData extends KalturaRecalculateCa
 	public $protocol;
 
 	/**
-	 * @var KalturaSessionType
+	 * @var VidiunSessionType
 	 */
-	public $ksType;
+	public $vsType;
 
 	/**
-	 * @var KalturaIntegerValueArray
+	 * @var VidiunIntegerValueArray
 	 */
 	public $userRoles;
 
@@ -45,7 +45,7 @@ class KalturaRecalculateResponseProfileCacheJobData extends KalturaRecalculateCa
 	private static $map_between_objects = array
 	(
 		'protocol',
-		'ksType',
+		'vsType',
 		'userRoles',
 		'cachedObjectType' => 'objectType',
 		'objectId',
@@ -62,7 +62,7 @@ class KalturaRecalculateResponseProfileCacheJobData extends KalturaRecalculateCa
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kRecalculateResponseProfileCacheJobData();
+			$dbData = new vRecalculateResponseProfileCacheJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

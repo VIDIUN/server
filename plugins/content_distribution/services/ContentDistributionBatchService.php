@@ -4,7 +4,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.services
  */
-class ContentDistributionBatchService extends KalturaBaseService
+class ContentDistributionBatchService extends VidiunBaseService
 {
 	const FIVE_MINUTES_IN_SECONDS = 300;
 
@@ -17,15 +17,15 @@ class ContentDistributionBatchService extends KalturaBaseService
 	 */
 	function updateSunStatusAction()
 	{
-		kApiCache::setConditionalCacheExpiry(self::FIVE_MINUTES_IN_SECONDS);
+		vApiCache::setConditionalCacheExpiry(self::FIVE_MINUTES_IN_SECONDS);
 
 		$updatedEntries = array();
 		
 		// serach all records that their sun status changed to after sunset
-		$criteria = KalturaCriteria::create(EntryDistributionPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(EntryDistributionPeer::OM_CLASS);
 		$criteria->add(EntryDistributionPeer::STATUS, EntryDistributionStatus::READY);
 		$criteria->add(EntryDistributionPeer::SUN_STATUS, EntryDistributionSunStatus::AFTER_SUNSET , Criteria::NOT_EQUAL);
-		$crit1 = $criteria->getNewCriterion(EntryDistributionPeer::SUNSET, kApiCache::getTime(), Criteria::LESS_THAN);
+		$crit1 = $criteria->getNewCriterion(EntryDistributionPeer::SUNSET, vApiCache::getTime(), Criteria::LESS_THAN);
 		$criteria->add($crit1);
 		$entryDistributions = EntryDistributionPeer::doSelect($criteria);
 		foreach($entryDistributions as $entryDistribution)
@@ -36,18 +36,18 @@ class ContentDistributionBatchService extends KalturaBaseService
 				continue;
 				
 			$updatedEntries[$entryId] = true;
-			kEventsManager::raiseEvent(new kObjectUpdatedEvent($entryDistribution)); // raise the updated events to trigger index in search engine (sphinx)
-			kEventsManager::flushEvents(); // save entry changes to sphinx
-			kMemoryManager::clearMemory();
+			vEventsManager::raiseEvent(new vObjectUpdatedEvent($entryDistribution)); // raise the updated events to trigger index in search engine (sphinx)
+			vEventsManager::flushEvents(); // save entry changes to sphinx
+			vMemoryManager::clearMemory();
 		}
 
 		$updatedEntries = array();
 
 		// serach all records that their sun status changed to after sunrise
-		$criteria = KalturaCriteria::create(EntryDistributionPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(EntryDistributionPeer::OM_CLASS);
 		$criteria->add(EntryDistributionPeer::STATUS, EntryDistributionStatus::QUEUED);
 		$criteria->add(EntryDistributionPeer::SUN_STATUS, EntryDistributionSunStatus::BEFORE_SUNRISE);
-		$criteria->add(EntryDistributionPeer::SUNRISE, kApiCache::getTime(), Criteria::LESS_THAN);
+		$criteria->add(EntryDistributionPeer::SUNRISE, vApiCache::getTime(), Criteria::LESS_THAN);
 		$entryDistributions = EntryDistributionPeer::doSelect($criteria);
 		foreach($entryDistributions as $entryDistribution)
 		{
@@ -57,9 +57,9 @@ class ContentDistributionBatchService extends KalturaBaseService
 				continue;
 				
 			$updatedEntries[$entryId] = true;
-			kEventsManager::raiseEvent(new kObjectUpdatedEvent($entryDistribution)); // raise the updated events to trigger index in search engine (sphinx)
-			kEventsManager::flushEvents(); // save entry changes to sphinx
-			kMemoryManager::clearMemory();
+			vEventsManager::raiseEvent(new vObjectUpdatedEvent($entryDistribution)); // raise the updated events to trigger index in search engine (sphinx)
+			vEventsManager::flushEvents(); // save entry changes to sphinx
+			vMemoryManager::clearMemory();
 		}
 	}
 
@@ -72,21 +72,21 @@ class ContentDistributionBatchService extends KalturaBaseService
 	function createRequiredJobsAction()
 	{
 		// serach all records that their next report time arrived
-		$criteria = KalturaCriteria::create(EntryDistributionPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(EntryDistributionPeer::OM_CLASS);
 		$criteria->add(EntryDistributionPeer::NEXT_REPORT, time(), Criteria::LESS_EQUAL);
 		$entryDistributions = EntryDistributionPeer::doSelect($criteria);
 		foreach($entryDistributions as $entryDistribution)
 		{
 			$distributionProfile = DistributionProfilePeer::retrieveByPK($entryDistribution->getDistributionProfileId());
 			if($distributionProfile)
-				kContentDistributionManager::submitFetchEntryDistributionReport($entryDistribution, $distributionProfile);
+				vContentDistributionManager::submitFetchEntryDistributionReport($entryDistribution, $distributionProfile);
 			else
-				KalturaLog::err("Distribution profile [" . $entryDistribution->getDistributionProfileId() . "] not found for entry distribution [" . $entryDistribution->getId() . "]");
+				VidiunLog::err("Distribution profile [" . $entryDistribution->getDistributionProfileId() . "] not found for entry distribution [" . $entryDistribution->getId() . "]");
 		}
 
 
 		// serach all records that arrived their sunrise time and requires submittion
-		$criteria = KalturaCriteria::create(EntryDistributionPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(EntryDistributionPeer::OM_CLASS);
 		$criteria->add(EntryDistributionPeer::DIRTY_STATUS, EntryDistributionDirtyStatus::SUBMIT_REQUIRED);
 		$criteria->add(EntryDistributionPeer::SUNRISE, time(), Criteria::LESS_EQUAL);
 		$entryDistributions = EntryDistributionPeer::doSelect($criteria);
@@ -94,14 +94,14 @@ class ContentDistributionBatchService extends KalturaBaseService
 		{
 			$distributionProfile = DistributionProfilePeer::retrieveByPK($entryDistribution->getDistributionProfileId());
 			if($distributionProfile)
-				kContentDistributionManager::submitAddEntryDistribution($entryDistribution, $distributionProfile);
+				vContentDistributionManager::submitAddEntryDistribution($entryDistribution, $distributionProfile);
 			else
-				KalturaLog::err("Distribution profile [" . $entryDistribution->getDistributionProfileId() . "] not found for entry distribution [" . $entryDistribution->getId() . "]");
+				VidiunLog::err("Distribution profile [" . $entryDistribution->getDistributionProfileId() . "] not found for entry distribution [" . $entryDistribution->getId() . "]");
 		}
 
 
 		// serach all records that arrived their sunrise time and requires enable
-		$criteria = KalturaCriteria::create(EntryDistributionPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(EntryDistributionPeer::OM_CLASS);
 		$criteria->add(EntryDistributionPeer::DIRTY_STATUS, EntryDistributionDirtyStatus::ENABLE_REQUIRED);
 		$criteria->add(EntryDistributionPeer::SUNRISE, time(), Criteria::LESS_EQUAL);
 		$entryDistributions = EntryDistributionPeer::doSelect($criteria);
@@ -109,14 +109,14 @@ class ContentDistributionBatchService extends KalturaBaseService
 		{
 			$distributionProfile = DistributionProfilePeer::retrieveByPK($entryDistribution->getDistributionProfileId());
 			if($distributionProfile)
-				kContentDistributionManager::submitEnableEntryDistribution($entryDistribution, $distributionProfile);
+				vContentDistributionManager::submitEnableEntryDistribution($entryDistribution, $distributionProfile);
 			else
-				KalturaLog::err("Distribution profile [" . $entryDistribution->getDistributionProfileId() . "] not found for entry distribution [" . $entryDistribution->getId() . "]");
+				VidiunLog::err("Distribution profile [" . $entryDistribution->getDistributionProfileId() . "] not found for entry distribution [" . $entryDistribution->getId() . "]");
 		}
 
 
 		// serach all records that arrived their sunset time and requires deletion
-		$criteria = KalturaCriteria::create(EntryDistributionPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(EntryDistributionPeer::OM_CLASS);
 		$criteria->add(EntryDistributionPeer::DIRTY_STATUS, EntryDistributionDirtyStatus::DELETE_REQUIRED);
 		$criteria->add(EntryDistributionPeer::SUNSET, time(), Criteria::LESS_EQUAL);
 		$entryDistributions = EntryDistributionPeer::doSelect($criteria);
@@ -124,14 +124,14 @@ class ContentDistributionBatchService extends KalturaBaseService
 		{
 			$distributionProfile = DistributionProfilePeer::retrieveByPK($entryDistribution->getDistributionProfileId());
 			if($distributionProfile)
-				kContentDistributionManager::submitDeleteEntryDistribution($entryDistribution, $distributionProfile);
+				vContentDistributionManager::submitDeleteEntryDistribution($entryDistribution, $distributionProfile);
 			else
-				KalturaLog::err("Distribution profile [" . $entryDistribution->getDistributionProfileId() . "] not found for entry distribution [" . $entryDistribution->getId() . "]");
+				VidiunLog::err("Distribution profile [" . $entryDistribution->getDistributionProfileId() . "] not found for entry distribution [" . $entryDistribution->getId() . "]");
 		}
 
 
 		// serach all records that arrived their sunset time and requires disable
-		$criteria = KalturaCriteria::create(EntryDistributionPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(EntryDistributionPeer::OM_CLASS);
 		$criteria->add(EntryDistributionPeer::DIRTY_STATUS, EntryDistributionDirtyStatus::DISABLE_REQUIRED);
 		$criteria->add(EntryDistributionPeer::SUNSET, time(), Criteria::LESS_EQUAL);
 		$entryDistributions = EntryDistributionPeer::doSelect($criteria);
@@ -139,9 +139,9 @@ class ContentDistributionBatchService extends KalturaBaseService
 		{
 			$distributionProfile = DistributionProfilePeer::retrieveByPK($entryDistribution->getDistributionProfileId());
 			if($distributionProfile)
-				kContentDistributionManager::submitDisableEntryDistribution($entryDistribution, $distributionProfile);
+				vContentDistributionManager::submitDisableEntryDistribution($entryDistribution, $distributionProfile);
 			else
-				KalturaLog::err("Distribution profile [" . $entryDistribution->getDistributionProfileId() . "] not found for entry distribution [" . $entryDistribution->getId() . "]");
+				VidiunLog::err("Distribution profile [" . $entryDistribution->getDistributionProfileId() . "] not found for entry distribution [" . $entryDistribution->getId() . "]");
 		}
 	}
 
@@ -155,15 +155,15 @@ class ContentDistributionBatchService extends KalturaBaseService
 	 * @action getAssetUrl
 	 * @param string $assetId
 	 * @return string
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
-	 * @throws KalturaErrors::FLAVOR_ASSET_IS_NOT_READY
-	 * @throws KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::FLAVOR_ASSET_IS_NOT_READY
+	 * @throws VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND
 	 */
 	function getAssetUrlAction($assetId)
 	{
 		$asset = assetPeer::retrieveById($assetId);
 		if(!$asset)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $assetId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $assetId);
 
 		$ext = $asset->getFileExt();
 		if(is_null($ext))
@@ -172,12 +172,12 @@ class ContentDistributionBatchService extends KalturaBaseService
 		$fileName = $asset->getEntryId() . "_" . $asset->getId() . ".$ext";
 
 		$syncKey = $asset->getSyncKey(asset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		if(!kFileSyncUtils::fileSync_exists($syncKey))
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_IS_NOT_READY, $asset->getId());
+		if(!vFileSyncUtils::fileSync_exists($syncKey))
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_IS_NOT_READY, $asset->getId());
 
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false, false);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false, false);
 		if(!$fileSync)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $asset->getId());
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $asset->getId());
 
 		return $fileSync->getExternalUrl($asset->getEntryId());
 	}

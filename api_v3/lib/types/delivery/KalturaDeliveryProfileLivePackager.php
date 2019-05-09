@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDeliveryProfileLivePackager extends KalturaDeliveryProfile {
+class VidiunDeliveryProfileLivePackager extends VidiunDeliveryProfile {
 	
 	/**
 	 * Domain used to sign the live url

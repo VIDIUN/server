@@ -3,6 +3,6 @@
  * @package api
  * @subpackage enum
  */
-class KalturaTubeMogulSyndicationFeedOrderBy extends KalturaBaseSyndicationFeedOrderBy
+class VidiunTubeMogulSyndicationFeedOrderBy extends VidiunBaseSyndicationFeedOrderBy
 {
 }

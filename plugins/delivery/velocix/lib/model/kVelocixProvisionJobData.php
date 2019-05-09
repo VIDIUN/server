@@ -4,7 +4,7 @@
  * @package plugins.velocix
  * @subpackage lib.model
  */
-class kVelocixProvisionJobData extends kProvisionJobData
+class vVelocixProvisionJobData extends vProvisionJobData
 {
 	/**
 	 * @var array
@@ -29,14 +29,14 @@ class kVelocixProvisionJobData extends kProvisionJobData
 	const PUBLISH = 'publish';
 	
 	/**
-	 * @return KalturaKeyValueArray $provisioningParams
+	 * @return VidiunKeyValueArray $provisioningParams
 	 */
 	public function getProvisioningParams() {
 		return $this->provisioningParams;
 	}
 
 	/**
-	 * @param KalturaKeyValueArray $provisioningParams
+	 * @param VidiunKeyValueArray $provisioningParams
 	 */
 	public function setProvisioningParams($provisioningParams) {
 		$this->provisioningParams = $provisioningParams;
@@ -71,7 +71,7 @@ class kVelocixProvisionJobData extends kProvisionJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kProvisionJobData::populateFromPartner()
+	 * @see vProvisionJobData::populateFromPartner()
 	 */
 	public function populateFromPartner(Partner $partner){
 		$liveParams = json_decode($partner->getLiveStreamProvisionParams());
@@ -83,7 +83,7 @@ class kVelocixProvisionJobData extends kProvisionJobData
 	}
 
 	/* (non-PHPdoc)
-	 * @see kProvisionJobData::populateEntryFromData()
+	 * @see vProvisionJobData::populateEntryFromData()
 	 */
 	public function populateEntryFromData (LiveStreamEntry $entry)
 	{
@@ -92,7 +92,7 @@ class kVelocixProvisionJobData extends kProvisionJobData
 			switch ($key){
 				case self::HDS_URLS:
 					$urls = unserialize($provisioningParam);
-					$configuration = new kLiveStreamConfiguration();
+					$configuration = new vLiveStreamConfiguration();
 					$configuration->setProtocol(PlaybackProtocol::HDS);
 					$configuration->setUrl($urls[self::PLAYBACK]);
 					$configuration->setPublishUrl($urls[self::PUBLISH]);
@@ -100,7 +100,7 @@ class kVelocixProvisionJobData extends kProvisionJobData
 					break;
 				case self::APPLE_HTTP_URLS:
 					$urls = unserialize($provisioningParam);
-					$configuration = new kLiveStreamConfiguration();
+					$configuration = new vLiveStreamConfiguration();
 					$configuration->setProtocol(PlaybackProtocol::APPLE_HTTP);
 					$configuration->setUrl($urls[self::PLAYBACK]);
 					$configuration->setPublishUrl($urls[self::PUBLISH]);
@@ -108,7 +108,7 @@ class kVelocixProvisionJobData extends kProvisionJobData
 					break;
 				case self::SL_URLS:
 					$urls = unserialize($provisioningParam);
-					$configuration = new kLiveStreamConfiguration();
+					$configuration = new vLiveStreamConfiguration();
 					$configuration->setProtocol(PlaybackProtocol::SILVER_LIGHT);
 					$configuration->setUrl($urls[self::PLAYBACK]);
 					$configuration->setPublishUrl($urls[self::PUBLISH]);
@@ -120,7 +120,7 @@ class kVelocixProvisionJobData extends kProvisionJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kProvisionJobData::populateFromEntry()
+	 * @see vProvisionJobData::populateFromEntry()
 	 */
 	public function populateFromEntry(LiveStreamEntry $entry) 
 	{

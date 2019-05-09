@@ -6,7 +6,7 @@
  * @package api
  * @subpackage services
  */
-class ExportCsvService extends KalturaBaseService
+class ExportCsvService extends VidiunBaseService
 {
 	const SERVICE_NAME = "exportCsv";
 	
@@ -17,48 +17,48 @@ class ExportCsvService extends KalturaBaseService
 	 *
 	 * @action userExportToCsv
 	 * @actionAlias user.exportToCsv
-	 * @param KalturaUserFilter $filter A filter used to exclude specific types of users
+	 * @param VidiunUserFilter $filter A filter used to exclude specific types of users
 	 * @param int $metadataProfileId
-	 * @param KalturaCsvAdditionalFieldInfoArray $additionalFields
+	 * @param VidiunCsvAdditionalFieldInfoArray $additionalFields
 	 * @return string
 	 *
 	 * @throws APIErrors::USER_EMAIL_NOT_FOUND
 	 * @throws MetadataErrors::INVALID_METADATA_PROFILE
 	 * @throws MetadataErrors::METADATA_PROFILE_NOT_SPECIFIED
 	 */
-	public function userExportToCsvAction (KalturaUserFilter $filter = null, $metadataProfileId = null, $additionalFields = null)
+	public function userExportToCsvAction (VidiunUserFilter $filter = null, $metadataProfileId = null, $additionalFields = null)
 	{
 		if($metadataProfileId)
 		{
 			$metadataProfile = MetadataProfilePeer::retrieveByPK($metadataProfileId);
 			if (!$metadataProfile || ($metadataProfile->getPartnerId() != $this->getPartnerId()))
-				throw new KalturaAPIException(MetadataErrors::INVALID_METADATA_PROFILE, $metadataProfileId);
+				throw new VidiunAPIException(MetadataErrors::INVALID_METADATA_PROFILE, $metadataProfileId);
 		}
 		else
 		{
 			if($additionalFields->count)
-				throw new KalturaAPIException(MetadataErrors::METADATA_PROFILE_NOT_SPECIFIED, $metadataProfileId);
+				throw new VidiunAPIException(MetadataErrors::METADATA_PROFILE_NOT_SPECIFIED, $metadataProfileId);
 		}
 		
 		if (!$filter)
-			$filter = new KalturaUserFilter();
-		$dbFilter = new kuserFilter();
+			$filter = new VidiunUserFilter();
+		$dbFilter = new vuserFilter();
 		$filter->toObject($dbFilter);
 		
-		$kuser = $this->getKuser();
-		if(!$kuser || !$kuser->getEmail())
-			throw new KalturaAPIException(APIErrors::USER_EMAIL_NOT_FOUND, $kuser);
+		$vuser = $this->getVuser();
+		if(!$vuser || !$vuser->getEmail())
+			throw new VidiunAPIException(APIErrors::USER_EMAIL_NOT_FOUND, $vuser);
 		
-		$jobData = new kUsersCsvJobData();
+		$jobData = new vUsersCsvJobData();
 		$jobData->setFilter($dbFilter);
 		$jobData->setMetadataProfileId($metadataProfileId);
 		$jobData->setAdditionalFields($additionalFields);
-		$jobData->setUserMail($kuser->getEmail());
-		$jobData->setUserName($kuser->getPuserId());
+		$jobData->setUserMail($vuser->getEmail());
+		$jobData->setUserName($vuser->getPuserId());
 		
-		kJobsManager::addExportCsvJob($jobData, $this->getPartnerId(), ExportObjectType::USER);
+		vJobsManager::addExportCsvJob($jobData, $this->getPartnerId(), ExportObjectType::USER);
 		
-		return $kuser->getEmail();
+		return $vuser->getEmail();
 	}
 	
 	
@@ -73,7 +73,7 @@ class ExportCsvService extends KalturaBaseService
 	 */
 	public function serveCsvAction($id)
 	{
-		$file_path = self::generateCsvPath($id, $this->getKs());
+		$file_path = self::generateCsvPath($id, $this->getVs());
 		
 		return $this->dumpFile($file_path, 'text/csv');
 	}
@@ -82,20 +82,20 @@ class ExportCsvService extends KalturaBaseService
 	 * Generic CSV file path generator - used from any action which calls the generateCsvPath
 	 *
 	 * @param string $id
-	 * @param string $ks
+	 * @param string $vs
 	 * @return string
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
-	public static function generateCsvPath($id, $ks)
+	public static function generateCsvPath($id, $vs)
 	{
 		if(!preg_match('/^\w+\.csv$/', $id))
-			throw new KalturaAPIException(KalturaErrors::INVALID_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_ID, $id);
 		
-		// KS verification - we accept either admin session or download privilege of the file
-		if(!$ks->verifyPrivileges(ks::PRIVILEGE_DOWNLOAD, $id))
-			KExternalErrors::dieError(KExternalErrors::ACCESS_CONTROL_RESTRICTED);
+		// VS verification - we accept either admin session or download privilege of the file
+		if(!$vs->verifyPrivileges(vs::PRIVILEGE_DOWNLOAD, $id))
+			VExternalErrors::dieError(VExternalErrors::ACCESS_CONTROL_RESTRICTED);
 		
-		$partner_id = kCurrentContext::getCurrentPartnerId();
+		$partner_id = vCurrentContext::getCurrentPartnerId();
 		$folderPath = "/content/exportcsv/$partner_id";
 		$fullPath = myContentStorage::getFSContentRootPath() . $folderPath;
 		$file_path = "$fullPath/$id";

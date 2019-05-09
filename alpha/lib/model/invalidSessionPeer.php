@@ -16,30 +16,30 @@
 class invalidSessionPeer extends BaseinvalidSessionPeer {
 	
 	/**
-	 * @param      ks $ks
+	 * @param      vs $vs
 	 * @param	   int $limit
 	 * @return     invalidSession
 	 */
-	public static function actionsLimitKs(ks $ks, $limit)
+	public static function actionsLimitVs(vs $vs, $limit)
 	{
 		$invalidSession = new invalidSession();
-		$invalidSession->setKs($ks->getHash());
+		$invalidSession->setVs($vs->getHash());
 		$invalidSession->setActionsLimit($limit);
-		$invalidSession->setKsValidUntil($ks->valid_until);
-		$invalidSession->setType(invalidSession::INVALID_SESSION_TYPE_KS);
+		$invalidSession->setVsValidUntil($vs->valid_until);
+		$invalidSession->setType(invalidSession::INVALID_SESSION_TYPE_VS);
 		$invalidSession->save();
 		
 		return $invalidSession;
 	}
 	
 	/**
-	 * @param      ks $ks
+	 * @param      vs $vs
 	 * @return     invalidSession
 	 */
-	public static function invalidateKs(ks $ks, PropelPDO $con = null)
+	public static function invalidateVs(vs $vs, PropelPDO $con = null)
 	{
-		$result = self::invalidateByKey($ks->getHash(), invalidSession::INVALID_SESSION_TYPE_KS, $ks->valid_until, $con);
-		$sessionId = $ks->getSessionIdHash();
+		$result = self::invalidateByKey($vs->getHash(), invalidSession::INVALID_SESSION_TYPE_VS, $vs->valid_until, $con);
+		$sessionId = $vs->getSessionIdHash();
 		if($sessionId) {
 			self::invalidateByKey($sessionId, invalidSession::INVALID_SESSION_TYPE_SESSION_ID, time() + (24 * 60 * 60), $con);
 		}
@@ -49,15 +49,15 @@ class invalidSessionPeer extends BaseinvalidSessionPeer {
 	
 	public static function invalidateByKey($key, $type, $validUntil, PropelPDO $con = null) {
 		$criteria = new Criteria();
-		$criteria->add(invalidSessionPeer::KS, $key);
+		$criteria->add(invalidSessionPeer::VS, $key);
 		$criteria->add(invalidSessionPeer::TYPE, $type);
 		$invalidSession = invalidSessionPeer::doSelectOne($criteria, $con);
 		
 		if(!$invalidSession){
 			$invalidSession = new invalidSession();
-			$invalidSession->setKs($key);
+			$invalidSession->setVs($key);
 			$invalidSession->setType($type);
-			$invalidSession->setKsValidUntil($validUntil);
+			$invalidSession->setVsValidUntil($validUntil);
 		}
 		
 		$invalidSession->setActionsLimit(null);
@@ -68,7 +68,7 @@ class invalidSessionPeer extends BaseinvalidSessionPeer {
 	
 	public static function getCacheInvalidationKeys()
 	{
-		return array(array("invalidSession:ks=%s", self::KS));		
+		return array(array("invalidSession:vs=%s", self::VS));		
 	}
 	
 } // invalidSessionPeer

@@ -4,14 +4,14 @@
  * @subpackage objects
  * @deprecated
  */
-class KalturaSearchResultArray extends KalturaTypedArray
+class VidiunSearchResultArray extends VidiunTypedArray
 {
-	public static function fromSearchResultArray ( $arr , KalturaSearch $search )
+	public static function fromSearchResultArray ( $arr , VidiunSearch $search )
 	{
-		$newArr = new KalturaSearchResultArray();
+		$newArr = new VidiunSearchResultArray();
 		foreach ( $arr as $obj )
 		{
-			$nObj = new KalturaSearchResult();
+			$nObj = new VidiunSearchResult();
 			$nObj->fromSearchResult( $obj , $search );
 			$newArr[] = $nObj;
 		}
@@ -21,7 +21,7 @@ class KalturaSearchResultArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaSearchResult" );
+		return parent::__construct ( "VidiunSearchResult" );
 	}
 }
 ?>

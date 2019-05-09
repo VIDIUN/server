@@ -27,11 +27,11 @@ class UserEntryPeer extends BaseUserEntryPeer {
 		if(self::$s_criteria_filter == null)
 			self::$s_criteria_filter = new criteriaFilter();
 
-		$c = KalturaCriteria::create(UserEntryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(UserEntryPeer::OM_CLASS);
 		$c->addAnd ( UserEntryPeer::STATUS, array(UserEntryStatus::DELETED), Criteria::NOT_IN);
 		// when session is not admin, allow access to user's userEntries only
-		if (kCurrentContext::$ks && !kCurrentContext::$is_admin_session) {
-			$c->addAnd(UserEntryPeer::KUSER_ID, kCurrentContext::getCurrentKsKuserId());
+		if (vCurrentContext::$vs && !vCurrentContext::$is_admin_session) {
+			$c->addAnd(UserEntryPeer::VUSER_ID, vCurrentContext::getCurrentVsVuserId());
 		}
 		self::$s_criteria_filter->setFilter($c);
 	}
@@ -56,7 +56,7 @@ class UserEntryPeer extends BaseUserEntryPeer {
 			$userEntryType = $row[$typeField];
 			if(isset(self::$class_types_cache[$userEntryType]))
 				return self::$class_types_cache[$userEntryType];
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $userEntryType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $userEntryType);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$userEntryType] = $extendedCls;
@@ -80,7 +80,7 @@ class UserEntryPeer extends BaseUserEntryPeer {
 			$userEntryCriteria->add(self::ENTRY_ID, $entryIds, Criteria::IN);
 		}
 		
-		$userEntryCriteria->add(self::PARTNER_ID, kCurrentContext::$ks_partner_id);
+		$userEntryCriteria->add(self::PARTNER_ID, vCurrentContext::$vs_partner_id);
 		$userEntryCriteria->setLimit($limit);
 		$userEntryCriteria->setOffset($offset);
 		
@@ -92,13 +92,13 @@ class UserEntryPeer extends BaseUserEntryPeer {
 	
 	public static function getCacheInvalidationKeys()
 	{
-		return array(array("userEntry:kuserId=%s", self::KUSER_ID));		
+		return array(array("userEntry:vuserId=%s", self::VUSER_ID));		
 	}
 
-	public static function retriveUserEntriesSubmitted($kuserId, $entryId, $type)
+	public static function retriveUserEntriesSubmitted($vuserId, $entryId, $type)
 	{
 		$c = new Criteria();
-		$c->add(UserEntryPeer::KUSER_ID, $kuserId);
+		$c->add(UserEntryPeer::VUSER_ID, $vuserId);
 		$c->add(UserEntryPeer::ENTRY_ID, $entryId);
 		$c->add(UserEntryPeer::TYPE, $type);
 		$c->add(UserEntryPeer::STATUS, QuizPlugin::getCoreValue('UserEntryStatus', QuizUserEntryStatus::QUIZ_SUBMITTED));

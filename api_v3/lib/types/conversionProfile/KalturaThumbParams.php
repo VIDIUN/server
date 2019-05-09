@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaThumbParams extends KalturaAssetParams 
+class VidiunThumbParams extends VidiunAssetParams 
 {
 	/**
-	 * @var KalturaThumbCropType
+	 * @var VidiunThumbCropType
 	 */
 	public $cropType;
 	
@@ -75,7 +75,7 @@ class KalturaThumbParams extends KalturaAssetParams
 	/**
 	 * The container format of the Flavor Params
 	 *  
-	 * @var KalturaContainerFormat
+	 * @var VidiunContainerFormat
 	 * @filter eq
 	 */
 	public $format;
@@ -113,12 +113,12 @@ class KalturaThumbParams extends KalturaAssetParams
 //	Maybe support will be added in the future
 //	
 //	/**
-//	 * @var KalturaCropProvider
+//	 * @var VidiunCropProvider
 //	 */
 //	public $cropProvider;
 //	
 //	/**
-//	 * @var KalturaCropProviderData
+//	 * @var VidiunCropProviderData
 //	 */
 //	public $cropProviderData;
 
@@ -150,7 +150,7 @@ class KalturaThumbParams extends KalturaAssetParams
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaAssetParams::getMapBetweenObjects()
+	 * @see VidiunAssetParams::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -177,11 +177,11 @@ class KalturaThumbParams extends KalturaAssetParams
 
 		$this->validatePropertyMinMaxLength('backgroundColor', 1, 6, true);
 		if(!is_null($this->backgroundColor) && !preg_match('/^[0-9a-fA-F]{1,6}$/', $this->backgroundColor))
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_WRONG_FORMAT, $this->getFormattedPropertyNameWithClassName('backgroundColor'), 'six hexadecimal characters');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_WRONG_FORMAT, $this->getFormattedPropertyNameWithClassName('backgroundColor'), 'six hexadecimal characters');
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -192,7 +192,7 @@ class KalturaThumbParams extends KalturaAssetParams
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate()
+	 * @see VidiunObject::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -203,7 +203,7 @@ class KalturaThumbParams extends KalturaAssetParams
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaAssetParams::getExtraFilters()
+	 * @see VidiunAssetParams::getExtraFilters()
 	 */
 	public function getExtraFilters()
 	{
@@ -211,7 +211,7 @@ class KalturaThumbParams extends KalturaAssetParams
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaAssetParams::getFilterDocs()
+	 * @see VidiunAssetParams::getFilterDocs()
 	 */
 	public function getFilterDocs()
 	{
@@ -219,7 +219,7 @@ class KalturaThumbParams extends KalturaAssetParams
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($object = null, $skip = array())
 	{

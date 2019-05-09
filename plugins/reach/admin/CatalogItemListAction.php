@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage Admin
  */
-class CatalogItemListAction extends KalturaApplicationPlugin implements IKalturaAdminConsolePublisherAction
+class CatalogItemListAction extends VidiunApplicationPlugin implements IVidiunAdminConsolePublisherAction
 {
 	const ADMIN_CONSOLE_PARTNER = "-2";
 
@@ -46,11 +46,11 @@ class CatalogItemListAction extends KalturaApplicationPlugin implements IKaltura
 		$catalogItemProfileFilter->vendorPartnerIdEqual = $vendorPartnerId;
 		$catalogItemProfileFilter->sourceLanguageEqual = $sourceLanguage;
 
-		if($serviceFeature == Kaltura_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
+		if($serviceFeature == Vidiun_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
 			$catalogItemProfileFilter->targetLanguageEqual = $targetLanguage;
 
 		$client = Infra_ClientHelper::getClient();
-		$reachPluginClient = Kaltura_Client_Reach_Plugin::get($client);
+		$reachPluginClient = Vidiun_Client_Reach_Plugin::get($client);
 
 		// get results and paginate
 		$paginatorAdapter = new Infra_FilterPaginator($reachPluginClient->vendorCatalogItem, "listAction", $partnerId, $catalogItemProfileFilter);
@@ -79,16 +79,16 @@ class CatalogItemListAction extends KalturaApplicationPlugin implements IKaltura
 	
 	protected function getCatalogItemFilter($serviceFeature)
 	{
-		if ($serviceFeature == Kaltura_Client_Reach_Enum_VendorServiceFeature::CAPTIONS)
-			return new Kaltura_Client_Reach_Type_VendorCaptionsCatalogItemFilter();
-		elseif ($serviceFeature == Kaltura_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
-			return new Kaltura_Client_Reach_Type_VendorTranslationCatalogItemFilter();
-		elseif ($serviceFeature == Kaltura_Client_Reach_Enum_VendorServiceFeature::ALIGNMENT)
-			return new Kaltura_Client_Reach_Type_VendorAlignmentCatalogItemFilter();
-		elseif ($serviceFeature == Kaltura_Client_Reach_Enum_VendorServiceFeature::AUDIO_DESCRIPTION)
-			return new Kaltura_Client_Reach_Type_VendorAudioDescriptionCatalogItemFilter();
+		if ($serviceFeature == Vidiun_Client_Reach_Enum_VendorServiceFeature::CAPTIONS)
+			return new Vidiun_Client_Reach_Type_VendorCaptionsCatalogItemFilter();
+		elseif ($serviceFeature == Vidiun_Client_Reach_Enum_VendorServiceFeature::TRANSLATION)
+			return new Vidiun_Client_Reach_Type_VendorTranslationCatalogItemFilter();
+		elseif ($serviceFeature == Vidiun_Client_Reach_Enum_VendorServiceFeature::ALIGNMENT)
+			return new Vidiun_Client_Reach_Type_VendorAlignmentCatalogItemFilter();
+		elseif ($serviceFeature == Vidiun_Client_Reach_Enum_VendorServiceFeature::AUDIO_DESCRIPTION)
+			return new Vidiun_Client_Reach_Type_VendorAudioDescriptionCatalogItemFilter();
 		else
-			return new Kaltura_Client_Reach_Type_VendorCatalogItemFilter();
+			return new Vidiun_Client_Reach_Type_VendorCatalogItemFilter();
 	}
 
 	public function getInstance($interface)
@@ -103,8 +103,8 @@ class CatalogItemListAction extends KalturaApplicationPlugin implements IKaltura
 	{
 		$client = Infra_ClientHelper::getClient();
 		$client->setPartnerId($partnerId);
-		$filter = new Kaltura_Client_Type_PermissionFilter();
-		$filter->nameEqual = Kaltura_Client_Enum_PermissionName::REACH_PLUGIN_PERMISSION;
+		$filter = new Vidiun_Client_Type_PermissionFilter();
+		$filter->nameEqual = Vidiun_Client_Enum_PermissionName::REACH_PLUGIN_PERMISSION;
 		$filter->partnerIdEqual = $partnerId;
 		try
 		{
@@ -116,7 +116,7 @@ class CatalogItemListAction extends KalturaApplicationPlugin implements IKaltura
 		}
 		$client->setPartnerId(self::ADMIN_CONSOLE_PARTNER);
 
-		$isAllowed = ($result->totalCount > 0) && ($result->objects[0]->status == Kaltura_Client_Enum_PermissionStatus::ACTIVE);
+		$isAllowed = ($result->totalCount > 0) && ($result->objects[0]->status == Vidiun_Client_Enum_PermissionStatus::ACTIVE);
 		return $isAllowed;
 	}
 	

@@ -61,8 +61,8 @@ abstract class BasecategoryEntryPeer {
 	/** the column name for the PRIVACY_CONTEXT field */
 	const PRIVACY_CONTEXT = 'category_entry.PRIVACY_CONTEXT';
 
-	/** the column name for the CREATOR_KUSER_ID field */
-	const CREATOR_KUSER_ID = 'category_entry.CREATOR_KUSER_ID';
+	/** the column name for the CREATOR_VUSER_ID field */
+	const CREATOR_VUSER_ID = 'category_entry.CREATOR_VUSER_ID';
 
 	/**
 	 * An identiy map to hold any loaded instances of categoryEntry objects.
@@ -80,10 +80,10 @@ abstract class BasecategoryEntryPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'PartnerId', 'EntryId', 'CategoryId', 'CategoryFullIds', 'CreatedAt', 'UpdatedAt', 'CustomData', 'Status', 'PrivacyContext', 'CreatorKuserId', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'partnerId', 'entryId', 'categoryId', 'categoryFullIds', 'createdAt', 'updatedAt', 'customData', 'status', 'privacyContext', 'creatorKuserId', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::PARTNER_ID, self::ENTRY_ID, self::CATEGORY_ID, self::CATEGORY_FULL_IDS, self::CREATED_AT, self::UPDATED_AT, self::CUSTOM_DATA, self::STATUS, self::PRIVACY_CONTEXT, self::CREATOR_KUSER_ID, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'partner_id', 'entry_id', 'category_id', 'category_full_ids', 'created_at', 'updated_at', 'custom_data', 'status', 'privacy_context', 'creator_kuser_id', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'PartnerId', 'EntryId', 'CategoryId', 'CategoryFullIds', 'CreatedAt', 'UpdatedAt', 'CustomData', 'Status', 'PrivacyContext', 'CreatorVuserId', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'partnerId', 'entryId', 'categoryId', 'categoryFullIds', 'createdAt', 'updatedAt', 'customData', 'status', 'privacyContext', 'creatorVuserId', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::PARTNER_ID, self::ENTRY_ID, self::CATEGORY_ID, self::CATEGORY_FULL_IDS, self::CREATED_AT, self::UPDATED_AT, self::CUSTOM_DATA, self::STATUS, self::PRIVACY_CONTEXT, self::CREATOR_VUSER_ID, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'partner_id', 'entry_id', 'category_id', 'category_full_ids', 'created_at', 'updated_at', 'custom_data', 'status', 'privacy_context', 'creator_vuser_id', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
 
@@ -94,10 +94,10 @@ abstract class BasecategoryEntryPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'PartnerId' => 1, 'EntryId' => 2, 'CategoryId' => 3, 'CategoryFullIds' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'CustomData' => 7, 'Status' => 8, 'PrivacyContext' => 9, 'CreatorKuserId' => 10, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'partnerId' => 1, 'entryId' => 2, 'categoryId' => 3, 'categoryFullIds' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'customData' => 7, 'status' => 8, 'privacyContext' => 9, 'creatorKuserId' => 10, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PARTNER_ID => 1, self::ENTRY_ID => 2, self::CATEGORY_ID => 3, self::CATEGORY_FULL_IDS => 4, self::CREATED_AT => 5, self::UPDATED_AT => 6, self::CUSTOM_DATA => 7, self::STATUS => 8, self::PRIVACY_CONTEXT => 9, self::CREATOR_KUSER_ID => 10, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'partner_id' => 1, 'entry_id' => 2, 'category_id' => 3, 'category_full_ids' => 4, 'created_at' => 5, 'updated_at' => 6, 'custom_data' => 7, 'status' => 8, 'privacy_context' => 9, 'creator_kuser_id' => 10, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'PartnerId' => 1, 'EntryId' => 2, 'CategoryId' => 3, 'CategoryFullIds' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'CustomData' => 7, 'Status' => 8, 'PrivacyContext' => 9, 'CreatorVuserId' => 10, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'partnerId' => 1, 'entryId' => 2, 'categoryId' => 3, 'categoryFullIds' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'customData' => 7, 'status' => 8, 'privacyContext' => 9, 'creatorVuserId' => 10, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PARTNER_ID => 1, self::ENTRY_ID => 2, self::CATEGORY_ID => 3, self::CATEGORY_FULL_IDS => 4, self::CREATED_AT => 5, self::UPDATED_AT => 6, self::CUSTOM_DATA => 7, self::STATUS => 8, self::PRIVACY_CONTEXT => 9, self::CREATOR_VUSER_ID => 10, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'partner_id' => 1, 'entry_id' => 2, 'category_id' => 3, 'category_full_ids' => 4, 'created_at' => 5, 'updated_at' => 6, 'custom_data' => 7, 'status' => 8, 'privacy_context' => 9, 'creator_vuser_id' => 10, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
 
@@ -178,7 +178,7 @@ abstract class BasecategoryEntryPeer {
 		$criteria->addSelectColumn(categoryEntryPeer::CUSTOM_DATA);
 		$criteria->addSelectColumn(categoryEntryPeer::STATUS);
 		$criteria->addSelectColumn(categoryEntryPeer::PRIVACY_CONTEXT);
-		$criteria->addSelectColumn(categoryEntryPeer::CREATOR_KUSER_ID);
+		$criteria->addSelectColumn(categoryEntryPeer::CREATOR_VUSER_ID);
 	}
 
 	/**
@@ -212,11 +212,11 @@ abstract class BasecategoryEntryPeer {
 		
 		categoryEntryPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'categoryEntryPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -240,7 +240,7 @@ abstract class BasecategoryEntryPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -321,7 +321,7 @@ abstract class BasecategoryEntryPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -344,11 +344,11 @@ abstract class BasecategoryEntryPeer {
 	{		
 		$criteriaForSelect = categoryEntryPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'categoryEntryPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -364,12 +364,12 @@ abstract class BasecategoryEntryPeer {
 		
 		$queryResult = categoryEntryPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -379,17 +379,17 @@ abstract class BasecategoryEntryPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -460,7 +460,7 @@ abstract class BasecategoryEntryPeer {
 		categoryEntryPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -468,19 +468,19 @@ abstract class BasecategoryEntryPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -499,7 +499,7 @@ abstract class BasecategoryEntryPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -618,11 +618,11 @@ abstract class BasecategoryEntryPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('categoryEntryPeer');
+				vMemoryManager::registerPeer('categoryEntryPeer');
 			}
 		}
 	}

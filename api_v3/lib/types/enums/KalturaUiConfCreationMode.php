@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaUiConfCreationMode extends KalturaEnum
+class VidiunUiConfCreationMode extends VidiunEnum
 {
 	const WIZARD = 2;
 	const ADVANCED = 3;

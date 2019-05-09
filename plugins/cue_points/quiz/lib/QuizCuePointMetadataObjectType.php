@@ -3,7 +3,7 @@
  * @package plugins.quiz
  * @subpackage lib.enum
  */
-class QuizCuePointMetadataObjectType implements IKalturaPluginEnum, MetadataObjectType
+class QuizCuePointMetadataObjectType implements IVidiunPluginEnum, MetadataObjectType
 {
 	const ANSWER_CUE_POINT = 'AnswerCuePoint';
 	const QUESTION_CUE_POINT = 'QuestionCuePoint';

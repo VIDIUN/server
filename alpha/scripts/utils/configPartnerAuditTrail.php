@@ -6,11 +6,11 @@ chdir(dirname(__FILE__));
 require_once(dirname(__FILE__) . '/../bootstrap.php');
 
 $objectsToTrack = array(
-	KalturaAuditTrailObjectType::ACCESS_CONTROL => array(
+	VidiunAuditTrailObjectType::ACCESS_CONTROL => array(
 		'actions' => array(
-			KalturaAuditTrailAction::CREATED,
-			KalturaAuditTrailAction::CHANGED,
-			KalturaAuditTrailAction::DELETED,
+			VidiunAuditTrailAction::CREATED,
+			VidiunAuditTrailAction::CHANGED,
+			VidiunAuditTrailAction::DELETED,
 		),
 		'descriptors' => array(
 			accessControlPeer::NAME,
@@ -18,32 +18,32 @@ $objectsToTrack = array(
 			accessControlPeer::SITE_RESTRICT_LIST,
 			accessControlPeer::COUNTRY_RESTRICT_TYPE,
 			accessControlPeer::COUNTRY_RESTRICT_LIST,
-			accessControlPeer::KS_RESTRICT_PRIVILEGE,
+			accessControlPeer::VS_RESTRICT_PRIVILEGE,
 			accessControlPeer::PRV_RESTRICT_PRIVILEGE,
 			accessControlPeer::PRV_RESTRICT_LENGTH,
-			accessControlPeer::KDIR_RESTRICT_TYPE,
+			accessControlPeer::VDIR_RESTRICT_TYPE,
 		),
 	),
-	KalturaAuditTrailObjectType::CONVERSION_PROFILE_2 => array(
+	VidiunAuditTrailObjectType::CONVERSION_PROFILE_2 => array(
 		'actions' => array(
-			KalturaAuditTrailAction::CREATED,
-			KalturaAuditTrailAction::CHANGED,
-			KalturaAuditTrailAction::DELETED,
+			VidiunAuditTrailAction::CREATED,
+			VidiunAuditTrailAction::CHANGED,
+			VidiunAuditTrailAction::DELETED,
 		),
 		'descriptors' => array(
 			conversionProfile2Peer::NAME,
 		),
 	),
-	KalturaAuditTrailObjectType::ENTRY => array(
+	VidiunAuditTrailObjectType::ENTRY => array(
 		'actions' => array(
-			KalturaAuditTrailAction::CREATED,
-			KalturaAuditTrailAction::COPIED,
-			KalturaAuditTrailAction::CHANGED,
-			KalturaAuditTrailAction::DELETED,
-			KalturaAuditTrailAction::VIEWED,
-			KalturaAuditTrailAction::CONTENT_VIEWED,
-			KalturaAuditTrailAction::RELATION_ADDED,
-			KalturaAuditTrailAction::RELATION_REMOVED,
+			VidiunAuditTrailAction::CREATED,
+			VidiunAuditTrailAction::COPIED,
+			VidiunAuditTrailAction::CHANGED,
+			VidiunAuditTrailAction::DELETED,
+			VidiunAuditTrailAction::VIEWED,
+			VidiunAuditTrailAction::CONTENT_VIEWED,
+			VidiunAuditTrailAction::RELATION_ADDED,
+			VidiunAuditTrailAction::RELATION_REMOVED,
 		),
 		'descriptors' => array(
 			entryPeer::NAME,
@@ -62,7 +62,7 @@ $objectsToTrack = array(
 			entryPeer::FLAVOR_PARAMS_IDS,
 			entryPeer::AVAILABLE_FROM,
 			"conversion_quality",
-			"current_kshow_version",
+			"current_vshow_version",
 			"encodingIP1",
 			"encodingIP2",
 			"streamUsername",
@@ -79,15 +79,15 @@ $objectsToTrack = array(
 			"thumb_offset",
 		),
 	),
-	KalturaAuditTrailObjectType::FLAVOR_ASSET => array(
+	VidiunAuditTrailObjectType::FLAVOR_ASSET => array(
 		'actions' => array(
-			KalturaAuditTrailAction::CREATED,
-			KalturaAuditTrailAction::CHANGED,
-			KalturaAuditTrailAction::DELETED,
-			KalturaAuditTrailAction::VIEWED,
-			KalturaAuditTrailAction::CONTENT_VIEWED,
-			KalturaAuditTrailAction::RELATION_ADDED,
-			KalturaAuditTrailAction::RELATION_REMOVED,
+			VidiunAuditTrailAction::CREATED,
+			VidiunAuditTrailAction::CHANGED,
+			VidiunAuditTrailAction::DELETED,
+			VidiunAuditTrailAction::VIEWED,
+			VidiunAuditTrailAction::CONTENT_VIEWED,
+			VidiunAuditTrailAction::RELATION_ADDED,
+			VidiunAuditTrailAction::RELATION_REMOVED,
 		),
 		'descriptors' => array(
 			assetPeer::TAGS,
@@ -104,39 +104,39 @@ $objectsToTrack = array(
 			assetPeer::VIDEO_CODEC_ID,
 		),
 	),
-	KalturaAuditTrailObjectType::FLAVOR_PARAMS_CONVERSION_PROFILE => array(
+	VidiunAuditTrailObjectType::FLAVOR_PARAMS_CONVERSION_PROFILE => array(
 		'actions' => array(
-			KalturaAuditTrailAction::CREATED,
-			KalturaAuditTrailAction::CHANGED,
-			KalturaAuditTrailAction::DELETED,
+			VidiunAuditTrailAction::CREATED,
+			VidiunAuditTrailAction::CHANGED,
+			VidiunAuditTrailAction::DELETED,
 		),
 		'descriptors' => array(
 			flavorParamsConversionProfilePeer::READY_BEHAVIOR,
 			flavorParamsConversionProfilePeer::FORCE_NONE_COMPLIED,
 		),
 	),
-	KalturaAuditTrailObjectType::KSHOW_KUSER => array(
+	VidiunAuditTrailObjectType::VSHOW_VUSER => array(
 		'actions' => array(
-			KalturaAuditTrailAction::CREATED,
-			KalturaAuditTrailAction::CHANGED,
-			KalturaAuditTrailAction::DELETED,
+			VidiunAuditTrailAction::CREATED,
+			VidiunAuditTrailAction::CHANGED,
+			VidiunAuditTrailAction::DELETED,
 		),
 		'descriptors' => array(
-			KshowKuserPeer::SUBSCRIPTION_TYPE,
-			KshowKuserPeer::ALERT_TYPE,
+			VshowVuserPeer::SUBSCRIPTION_TYPE,
+			VshowVuserPeer::ALERT_TYPE,
 		),
 	),
-	KalturaAuditTrailObjectType::MEDIA_INFO => array(
+	VidiunAuditTrailObjectType::MEDIA_INFO => array(
 		'actions' => array(
-			KalturaAuditTrailAction::CREATED,
+			VidiunAuditTrailAction::CREATED,
 		),
 		'descriptors' => array(
 		),
 	),
-	KalturaAuditTrailObjectType::PARTNER => array(
+	VidiunAuditTrailObjectType::PARTNER => array(
 		'actions' => array(
-			KalturaAuditTrailAction::CHANGED,
-			KalturaAuditTrailAction::DELETED,
+			VidiunAuditTrailAction::CHANGED,
+			VidiunAuditTrailAction::DELETED,
 		),
 		'descriptors' => array(
 			PartnerPeer::PARTNER_NAME,
@@ -163,22 +163,22 @@ $objectsToTrack = array(
 			"userLandingPage",
 		),
 	),
-	KalturaAuditTrailObjectType::METADATA => array(
+	VidiunAuditTrailObjectType::METADATA => array(
 		'actions' => array(
-			KalturaAuditTrailAction::CREATED,
-			KalturaAuditTrailAction::CHANGED,
-			KalturaAuditTrailAction::DELETED,
+			VidiunAuditTrailAction::CREATED,
+			VidiunAuditTrailAction::CHANGED,
+			VidiunAuditTrailAction::DELETED,
 		),
 		'descriptors' => array(
 			MetadataPeer::VERSION,
 			MetadataPeer::STATUS,
 		),
 	),
-	KalturaAuditTrailObjectType::METADATA_PROFILE => array(
+	VidiunAuditTrailObjectType::METADATA_PROFILE => array(
 		'actions' => array(
-			KalturaAuditTrailAction::CREATED,
-			KalturaAuditTrailAction::CHANGED,
-			KalturaAuditTrailAction::DELETED,
+			VidiunAuditTrailAction::CREATED,
+			VidiunAuditTrailAction::CHANGED,
+			VidiunAuditTrailAction::DELETED,
 		),
 		'descriptors' => array(
 			MetadataProfilePeer::VERSION,
@@ -187,9 +187,9 @@ $objectsToTrack = array(
 	),
 );
 
-KalturaLog::setLogger(new KalturaStdoutLogger());
+VidiunLog::setLogger(new VidiunStdoutLogger());
 
-$dbConf = kConf::getDB();
+$dbConf = vConf::getDB();
 DbManager::setConfig($dbConf);
 DbManager::initialize();
 

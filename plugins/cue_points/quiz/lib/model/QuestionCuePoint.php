@@ -98,7 +98,7 @@ class QuestionCuePoint extends CuePoint implements IMetadataObject
 		$data = null;
 		foreach ($answers as $answer)
 		{
-			/* @var kOptionalAnswer $answer */
+			/* @var vOptionalAnswer $answer */
 			$data[] = $answer->getText();
 		}
 		return $data;

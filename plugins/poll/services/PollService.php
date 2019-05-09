@@ -8,9 +8,9 @@
  * @service poll
  * @package plugins.poll
  * @subpackage api.services
- * @throws KalturaErrors::SERVICE_FORBIDDEN
+ * @throws VidiunErrors::SERVICE_FORBIDDEN
  */
-class PollService extends KalturaBaseService
+class PollService extends VidiunBaseService
 {
 
 	/**
@@ -18,11 +18,11 @@ class PollService extends KalturaBaseService
 	 * @action add
 	 * @param string $pollType
 	 * @return string
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	public function addAction($pollType = 'SINGLE_ANONYMOUS')
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		try
 		{
 			$pollActions = new PollActions();
@@ -30,7 +30,7 @@ class PollService extends KalturaBaseService
 		}
 		catch (Exception $e)
 		{
-			throw new KalturaAPIException($e->getMessage());
+			throw new VidiunAPIException($e->getMessage());
 		}
 	}
 
@@ -40,12 +40,12 @@ class PollService extends KalturaBaseService
 	 * @param string $pollId
 	 * @param string $answerIds
 	 * @return string
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	public function getVotesAction($pollId, $answerIds)
 	{
 		$otherDcVotesKey='otherDCVotes';
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		try
 		{
 			$pollActions = new PollActions();
@@ -53,19 +53,19 @@ class PollService extends KalturaBaseService
 		}
 		catch (Exception $e)
 		{
-			throw new KalturaAPIException($e->getMessage());
+			throw new VidiunAPIException($e->getMessage());
 		}
 
-		if(!kFileUtils::isAlreadyInDumpApi())
+		if(!vFileUtils::isAlreadyInDumpApi())
 		{
-			$remoteDCIds = kDataCenterMgr::getAllDcs();
+			$remoteDCIds = vDataCenterMgr::getAllDcs();
 			if($remoteDCIds && count($remoteDCIds) > 0)
 			{
-				$remoteDCHost = kDataCenterMgr::getRemoteDcExternalUrlByDcId(1 - kDataCenterMgr::getCurrentDcId());
+				$remoteDCHost = vDataCenterMgr::getRemoteDcExternalUrlByDcId(1 - vDataCenterMgr::getCurrentDcId());
 				if ($remoteDCHost)
 				{
 					$_POST[$otherDcVotesKey] = json_encode($localDcVotes);
-					return kFileUtils::dumpApiRequest($remoteDCHost, true);
+					return vFileUtils::dumpApiRequest($remoteDCHost, true);
 				}
 			}
 		}
@@ -79,7 +79,7 @@ class PollService extends KalturaBaseService
 					$localDcVotes->merge($prevData);
 				} catch (Exception $e)
 				{
-					throw new KalturaAPIException($e->getMessage());
+					throw new VidiunAPIException($e->getMessage());
 				}
 			}
 		}
@@ -90,31 +90,31 @@ class PollService extends KalturaBaseService
 	 * Get resetVotes Action
 	 * @action resetVotes
 	 * @param string $pollId
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	public function resetVotesAction($pollId)
 	{
 
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		try
 		{
 			$pollActions = new PollActions();
 			$newVersion = $pollActions->resetVotes($pollId);
-			KalturaLog::debug("New cache version - {$newVersion} to PollId - {$pollId}");
+			VidiunLog::debug("New cache version - {$newVersion} to PollId - {$pollId}");
 		}
 		catch (Exception $e)
 		{
-			throw new KalturaAPIException($e->getMessage());
+			throw new VidiunAPIException($e->getMessage());
 		}
 
-		if(!kFileUtils::isAlreadyInDumpApi())
+		if(!vFileUtils::isAlreadyInDumpApi())
 		{
-			$remoteDCIds = kDataCenterMgr::getAllDcs();
+			$remoteDCIds = vDataCenterMgr::getAllDcs();
 			if ($remoteDCIds && count($remoteDCIds) > 0)
 			{
-				$remoteDCHost = kDataCenterMgr::getRemoteDcExternalUrlByDcId(1 - kDataCenterMgr::getCurrentDcId());
+				$remoteDCHost = vDataCenterMgr::getRemoteDcExternalUrlByDcId(1 - vDataCenterMgr::getCurrentDcId());
 				if ($remoteDCHost)
-					return kFileUtils::dumpApiRequest($remoteDCHost, true);
+					return vFileUtils::dumpApiRequest($remoteDCHost, true);
 			}
 		}
 	}
@@ -127,20 +127,20 @@ class PollService extends KalturaBaseService
 	 * @param string $userId
 	 * @param string $answerIds
 	 * @return string
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	public function voteAction($pollId, $userId, $answerIds)
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		try
 		{
 			$pollActions = new PollActions();
-			$ksUserId = kCurrentContext::$uid;
-			$pollActions->setVote($pollId, $userId,$ksUserId ,$answerIds);
+			$vsUserId = vCurrentContext::$uid;
+			$pollActions->setVote($pollId, $userId,$vsUserId ,$answerIds);
 		}
 		catch (Exception $e)
 		{
-			throw new KalturaAPIException($e->getMessage());
+			throw new VidiunAPIException($e->getMessage());
 		}
 	}
 
@@ -153,19 +153,19 @@ class PollService extends KalturaBaseService
 	 */
 	public function getVoteAction($pollId, $userId)
 	{
-		KalturaResponseCacher::disableCache();
-		$ksUserId = kCurrentContext::$uid;
+		VidiunResponseCacher::disableCache();
+		$vsUserId = vCurrentContext::$uid;
 		$pollActions = new PollActions();
-		return $pollActions->doGetVote($pollId, $userId, $ksUserId);
+		return $pollActions->doGetVote($pollId, $userId, $vsUserId);
 	}
 
 	/**
-	 * Should return true or false for allowing/disallowing kaltura network filter for the given action.
+	 * Should return true or false for allowing/disallowing vidiun network filter for the given action.
 	 * Can be extended to partner specific checks etc...
-	 * @return true if "kaltura network" is enabled for the given action or false otherwise
+	 * @return true if "vidiun network" is enabled for the given action or false otherwise
 	 * @param string $actionName action name
 	 */
-	protected function kalturaNetworkAllowed($actionName)
+	protected function vidiunNetworkAllowed($actionName)
 	{
 		return false;
 	}

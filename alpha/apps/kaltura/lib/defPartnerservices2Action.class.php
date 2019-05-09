@@ -1,22 +1,22 @@
 <?php
 /**
  * This class is NOT a symfony action any more.
- * It is the base class for all the kaltura servies.
+ * It is the base class for all the vidiun servies.
  * When used from an action, the action can pass itself to the ctor  so that at the end the response type will
  *
  * @package api
  * @subpackage ps2
  */
-abstract class defPartnerservices2Action //extends kalturaBaseWebserviceAction
+abstract class defPartnerservices2Action //extends vidiunBaseWebserviceAction
 {
 	const SIG_TYPE_POST = 1;
 	const SIG_TYPE_GET = 2;
 	const SIG_TYPE_COOKIE = 3;
 	const SIG_TYPE_REQUEST = 4;
 
-	const KUSER_DATA_NO_KUSER = 0;
-	const KUSER_DATA_KUSER_ID_ONLY = 1;
-	const KUSER_DATA_KUSER_DATA = 2;
+	const VUSER_DATA_NO_VUSER = 0;
+	const VUSER_DATA_VUSER_ID_ONLY = 1;
+	const VUSER_DATA_VUSER_DATA = 2;
 
 	const CREATE_USER_FALSE = 0;
 	const CREATE_USER_FROM_PARTNER_SETTINGS = 1;
@@ -30,13 +30,13 @@ abstract class defPartnerservices2Action //extends kalturaBaseWebserviceAction
 	const __TOTAL_TIME__ = "__TOTAL_TIME__";
 
 	const DEFAULT_FORMAT  = 2; // XML ?
-	//	protected $kshow_id;
-	//	protected $kshow;
+	//	protected $vshow_id;
+	//	protected $vshow;
 	private $msg;
 	private $error;
 	private $debug;
 
-	protected $ks;
+	protected $vs;
 
 	protected $response_context = null;
 
@@ -44,7 +44,7 @@ abstract class defPartnerservices2Action //extends kalturaBaseWebserviceAction
 	protected $benchmarks_names = array();
 	
 	protected $should_debug = true;
-	protected $response_type = kalturaWebserviceRenderer::RESPONSE_TYPE_XML;
+	protected $response_type = vidiunWebserviceRenderer::RESPONSE_TYPE_XML;
 
 	protected static $escape_text = true;
 
@@ -117,9 +117,9 @@ abstract class defPartnerservices2Action //extends kalturaBaseWebserviceAction
 
 	protected function isAdmin()
 	{
-		// in case there is no ks - return false
-		if ( $this->ks )
-			return $this->ks->isAdmin();
+		// in case there is no vs - return false
+		if ( $this->vs )
+			return $this->vs->isAdmin();
 		return false;
 	}
 	
@@ -148,12 +148,12 @@ abstract class defPartnerservices2Action //extends kalturaBaseWebserviceAction
 	
 	// the interface include 4 paramters
 	// the first 3 will not be empty
-	// $puser_kuser might be according to the method needKuserFromPuser()
-	abstract protected function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser );
+	// $puser_vuser might be according to the method needVuserFromPuser()
+	abstract protected function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser );
 
 public function INFO__ticketType () { return $this->ticketType(); }
 public function INFO__requiredPrivileges () { return $this->requiredPrivileges (); }
-public function INFO__needKuserFromPuser () { return $this->needKuserFromPuser (); }
+public function INFO__needVuserFromPuser () { return $this->needVuserFromPuser (); }
 public function INFO__addUserOnDemand () { return $this->addUserOnDemand (); }
 public function INFO__allowEmptyPuser () { return $this->allowEmptyPuser (); }
 	
@@ -167,20 +167,20 @@ public function INFO__allowEmptyPuser () { return $this->allowEmptyPuser (); }
 
 	protected function verifyPrivileges ( $priv_name , $priv_value = null  )
 	{
-		$matched_privs = $this->ks->verifyPrivileges ( $priv_name , $priv_value  );
+		$matched_privs = $this->vs->verifyPrivileges ( $priv_name , $priv_value  );
 		$this->logMessage( "verifyPrivileges name [$priv_name], priv [$priv_value] [$matched_privs]" );		
 
 		if ( ! $matched_privs )
 			throw new Exception ( "Did not match required privlieges [$priv_name:$priv_value]" );
 	}
 
-	// this can be overriden incase a service does not need the kuser.
+	// this can be overriden incase a service does not need the vuser.
 	// it has 3 levels:
-	// KUSER_DATA_NO_KUSER - will not fetch data about this puser
-	// KUSER_DATA_KUSER_ID_ONLY - will get data from puser_kuser but only the kuser_id
-	// KUSER_DATA_KUSER_DATA - will fetch data from puser_kuser & from kuser tables
-	protected function needKuserFromPuser ( )	{		return self::KUSER_DATA_KUSER_ID_ONLY;	}
-	protected function needKuserFromPuser2 ( )	{		return $this->getServiceConfig()->getNeedKuserFromPuser();	}
+	// VUSER_DATA_NO_VUSER - will not fetch data about this puser
+	// VUSER_DATA_VUSER_ID_ONLY - will get data from puser_vuser but only the vuser_id
+	// VUSER_DATA_VUSER_DATA - will fetch data from puser_vuser & from vuser tables
+	protected function needVuserFromPuser ( )	{		return self::VUSER_DATA_VUSER_ID_ONLY;	}
+	protected function needVuserFromPuser2 ( )	{		return $this->getServiceConfig()->getNeedVuserFromPuser();	}
 
 	protected function addUserOnDemand ( )	{		return self::CREATE_USER_FALSE;	}
 	protected function addUserOnDemand2 ( )	{		return $this->getServiceConfig()->getCreateUserOnDemand();	}
@@ -189,8 +189,8 @@ public function INFO__allowEmptyPuser () { return $this->allowEmptyPuser (); }
 	protected function allowEmptyPuser()	{		return true;	}
 	protected function allowEmptyPuser2 ()	{		return $this->getServiceConfig()->getAllowEmptyPuser();	}
 
-	// altough there was never kalturaNetwork - keep the 2 as a suffix
-	protected function kalturaNetwork2() { return $this->getServiceConfig()->getKalturaNetwork();	}
+	// altough there was never vidiunNetwork - keep the 2 as a suffix
+	protected function vidiunNetwork2() { return $this->getServiceConfig()->getVidiunNetwork();	}
 	
 	// altough there was never partnerGroup - keep the 2 as a suffix	
 	protected function partnerGroup2() { return $this->getServiceConfig()->getPartnerGroup();	}
@@ -215,7 +215,7 @@ public function INFO__allowEmptyPuser () { return $this->allowEmptyPuser (); }
 		$this->response_type = $this->getP ( "format" , self::DEFAULT_FORMAT ); //
 
 		$this->force_ticket_check = false; // HERE AND ONLY HERE !!
-		if ($this->response_type == kalturaWebserviceRenderer::RESPONSE_TYPE_PHP_OBJECT )
+		if ($this->response_type == vidiunWebserviceRenderer::RESPONSE_TYPE_PHP_OBJECT )
 		{
 			// 	return objects - NOT the wrapped objects
 			objectWrapperBase::shouldWrap( false );
@@ -226,10 +226,10 @@ public function INFO__allowEmptyPuser () { return $this->allowEmptyPuser (); }
 
 	public function execute( $add_extra_debug_data = true )
 	{
-		date_default_timezone_set( kConf::get ( "date_default_timezone" ) /*America/New_York*/ );
+		date_default_timezone_set( vConf::get ( "date_default_timezone" ) /*America/New_York*/ );
 		
 		// TODO - remove for production - use some configuration to determine
-		kConfigTable::$should_use_cache = false;
+		vConfigTable::$should_use_cache = false;
 		
 		$start_impl = $end_impl = 0;
 		
@@ -280,8 +280,8 @@ $this->benchmarkStart( "beforeImpl" );
 			$subp_id = $this->getP ( "subpId");
 			
 		$puser_id = $this->getP ( "uid" );
-		$ks_str = $this->getP ( "ks" );
-		if ( $ks_str == "{ks}" )  $ks_str = ""; // if the client DIDN'T replace the dynamic ks - ignore it 
+		$vs_str = $this->getP ( "vs" );
+		if ( $vs_str == "{vs}" )  $vs_str = ""; // if the client DIDN'T replace the dynamic vs - ignore it 
 		
 		// the $execution_cache_key can be used by services to cache the results depending on the inpu parameters
 		// if the $execution_cache_key is not null, the rendere will search for the result of the rendering depending on the $execution_cache_key
@@ -289,7 +289,7 @@ $this->benchmarkStart( "beforeImpl" );
 		$execution_cache_key = null;
 
 		// moved the renderer here to see if has the $execution_cache_key and if so - skip the implementation
-		$renderer = new kalturaWebserviceRenderer( $this->response_context );
+		$renderer = new vidiunWebserviceRenderer( $this->response_context );
 		
 		$private_partner_data = false;
 		
@@ -297,7 +297,7 @@ $this->benchmarkStart( "beforeImpl" );
 		{
 			try
 			{
-				$arr = list ( $partner_id , $subp_id , $uid , $private_partner_data ) = $this->validateTicketSetPartner ( $partner_id , $subp_id , $puser_id , $ks_str );
+				$arr = list ( $partner_id , $subp_id , $uid , $private_partner_data ) = $this->validateTicketSetPartner ( $partner_id , $subp_id , $puser_id , $vs_str );
 			}
 			catch (Exception $ex)
 			{
@@ -305,13 +305,13 @@ $this->benchmarkStart( "beforeImpl" );
 				throw $ex;
 			}
 			
-			// if PS2 permission validation is enabled for the current partner, only the actions defined in kConf's parameter "ps2_actions_not_blocked_by_permissions" will be allowed
+			// if PS2 permission validation is enabled for the current partner, only the actions defined in vConf's parameter "ps2_actions_not_blocked_by_permissions" will be allowed
 			$currentPartner = $this->getPartner();
 			if ($currentPartner && $currentPartner->getEnabledService(PermissionName::FEATURE_PS2_PERMISSIONS_VALIDATION))
 			{
-				if (!in_array(strtolower(get_class($this)), kConf::get('ps2_actions_not_blocked_by_permissions')))
+				if (!in_array(strtolower(get_class($this)), vConf::get('ps2_actions_not_blocked_by_permissions')))
 				{
-					KalturaLog::log('PS2 action '.get_class($this).' is being blocked for partner '.$currentPartner->getId().' defined with FEATURE_PS2_PERMISSIONS_VALIDATION enabled');
+					VidiunLog::log('PS2 action '.get_class($this).' is being blocked for partner '.$currentPartner->getId().' defined with FEATURE_PS2_PERMISSIONS_VALIDATION enabled');
 					$this->addException( APIErrors::SERVICE_FORBIDDEN, get_class($this) );
 				}
 			}
@@ -334,25 +334,25 @@ $this->benchmarkStart( "beforeImpl" );
 				$this->benchmarkStart( "applyPartnerFilters" );
 				
 				//init entitlement before set the default criteire by myPartnerUtils::applyPartnerFilters
-				kEntitlementUtils::initEntitlementEnforcement();
+				vEntitlementUtils::initEntitlementEnforcement();
 				
 				// apply filters for Criteria so there will be no chance of exposure of date from other partners !
-				// TODO - add the parameter for allowing kaltura network
-				myPartnerUtils::applyPartnerFilters ( $partner_id , $private_partner_data , $this->partnerGroup2() , $this->kalturaNetwork2()  );
+				// TODO - add the parameter for allowing vidiun network
+				myPartnerUtils::applyPartnerFilters ( $partner_id , $private_partner_data , $this->partnerGroup2() , $this->vidiunNetwork2()  );
 				
 				$this->benchmarkEnd( "applyPartnerFilters" );
-				$this->benchmarkStart( "puserKuser" );						
+				$this->benchmarkStart( "puserVuser" );						
 				list ( $partner_id , $subp_id , $puser_id , $partner_prefix ) = $this->preparePartnerPuserDetails ( $partner_id , $subp_id , $puser_id );
-				$puser_kuser = $this->getPuserKuser ( $partner_id , $subp_id, $puser_id );
-				$this->benchmarkEnd( "puserKuser" );		
+				$puser_vuser = $this->getPuserVuser ( $partner_id , $subp_id, $puser_id );
+				$this->benchmarkEnd( "puserVuser" );		
 				$this->benchmarkEnd( "beforeImpl" );
 			
 				// ----------------------------- impl --------------------------
 				
 				$start_impl = microtime( true );
-				$result = $this->executeImpl( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser );
+				$result = $this->executeImpl( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser );
 				$end_impl = microtime( true );
-				kEventsManager::flushEvents();
+				vEventsManager::flushEvents();
 			}
 			else
 			{
@@ -375,13 +375,13 @@ $this->benchmarkStart( "beforeImpl" );
 		}
 		catch ( PropelException $pex )
 		{
-			KalturaLog::alert($pex->getMessage());
+			VidiunLog::alert($pex->getMessage());
 			$this->addError(APIErrors::INTERNAL_DATABASE_ERROR);
 		}
 		catch ( Exception $ex )
 		{
 			$this->addError(APIErrors::INTERNAL_SERVERL_ERROR, $ex->getMessage());
-			KalturaLog::err($ex->getMessage());
+			VidiunLog::err($ex->getMessage());
 		}
 
 		$execute_impl_end_time = microtime(true);
@@ -413,7 +413,7 @@ $this->benchmarkStart( "beforeImpl" );
 		}
 
 		// ignore all the errors and debug - the first msg is the only html used
-		if ( $this->response_type == kalturaWebserviceRenderer::RESPONSE_TYPE_HTML )
+		if ( $this->response_type == vidiunWebserviceRenderer::RESPONSE_TYPE_HTML )
 		{
 			$res = "<html>";
 			foreach ( $this->msg as $html_bit )
@@ -422,7 +422,7 @@ $this->benchmarkStart( "beforeImpl" );
 			}
 			$res .= "</html>";
 		}
-		if ( $this->response_type == kalturaWebserviceRenderer::RESPONSE_TYPE_MRSS )
+		if ( $this->response_type == vidiunWebserviceRenderer::RESPONSE_TYPE_MRSS )
 		{
 			// in case of mRss - render only the result not the errors ot the debug
 			list ( $response , $content_type ) = $renderer->renderDataInRequestedFormat( $res['result'] , $this->response_type , true , self::$escape_text );
@@ -447,7 +447,7 @@ $this->benchmarkStart( "beforeImpl" );
 		{
 			// fix the total time including the render time
 			$str_time = (string)($end_time - $start_time );
-			if ( $this->response_type == kalturaWebserviceRenderer::RESPONSE_TYPE_PHP )
+			if ( $this->response_type == vidiunWebserviceRenderer::RESPONSE_TYPE_PHP )
 			{
 				// replcate the placehoder with the real execution time
 				// this is a nasty hack - we replace the serialized PHP value - the length of the placeholder is 14 characters
@@ -455,12 +455,12 @@ $this->benchmarkStart( "beforeImpl" );
 				$replace_string = 's:' . strlen ( $str_time ) .':"' . $str_time ;
 				$response = str_replace( 's:14:"' . self::__TOTAL_TIME__ , $replace_string , $response );
 			}
-			elseif ( $this->response_type == kalturaWebserviceRenderer::RESPONSE_TYPE_PHP_ARRAY || $this->response_type == kalturaWebserviceRenderer::RESPONSE_TYPE_PHP_OBJECT )
+			elseif ( $this->response_type == vidiunWebserviceRenderer::RESPONSE_TYPE_PHP_ARRAY || $this->response_type == vidiunWebserviceRenderer::RESPONSE_TYPE_PHP_OBJECT )
 			{
 				// the $response is not a string - we can't just replace it
 				$res["debug"]["total_time"] = $str_time;
 			}
-			elseif ( $this->response_type == kalturaWebserviceRenderer::RESPONSE_TYPE_MRSS )
+			elseif ( $this->response_type == vidiunWebserviceRenderer::RESPONSE_TYPE_MRSS )
 			{
 				// do nothing to the result
 			}
@@ -484,16 +484,16 @@ $this->benchmarkStart( "beforeImpl" );
 
 	 * validataTicketSetPartner
 	 * 
-	 * if the is a ks_str - 
+	 * if the is a vs_str - 
 	 * 1. crack down the ticket 
 	 * 2. extract partner_id
 	 * 3. retrieve partner
 	 * 4. validate ticket per service for the ticket's partner
 	 * 5. see partner is allowed to access the desired partner (if himself - easy, else - should appear in the partnerGroup)
-	 * 6. set the partner to be the desired partner and the operating_partner to be the one from the ks 
+	 * 6. set the partner to be the desired partner and the operating_partner to be the one from the vs 
 	 * 7. if ok - return the partner_id to be used from this point onwards 
 	 * 
-	 * if there is not a ks_str 
+	 * if there is not a vs_str 
 	 * 1. extract partner by partner_id
 	 * 2. retrieve partner
 	 * 3. make sure the service can be accessed with no ticket 
@@ -503,88 +503,88 @@ $this->benchmarkStart( "beforeImpl" );
 	 */
 	// TODO - what about the puser_id in this case ?? - shold create some 'guest-<operating_partner_id> ? 
 	// should take the uid as-is assuming it's from the partner_id that is being impostured ?? 
-	private function validateTicketSetPartner ( $partner_id , $subp_id , $puser_id , $ks_str )
+	private function validateTicketSetPartner ( $partner_id , $subp_id , $puser_id , $vs_str )
 	{
-		if ( $ks_str )
+		if ( $vs_str )
 		{
-			// 	1. crack the ks - 
-			$ks = kSessionUtils::crackKs ( $ks_str );
+			// 	1. crack the vs - 
+			$vs = vSessionUtils::crackVs ( $vs_str );
 			
 			// 2. extract partner_id
-			$ks_partner_id= $ks->partner_id;
-			$master_partner_id = $ks->master_partner_id;
+			$vs_partner_id= $vs->partner_id;
+			$master_partner_id = $vs->master_partner_id;
 			if(!$master_partner_id)
-				$master_partner_id = $ks_partner_id;
+				$master_partner_id = $vs_partner_id;
 
-			if ( ! $partner_id ) $partner_id = $ks_partner_id;
-			// use the user from the ks if not explicity set 
-			if ( ! $puser_id ) $puser_id = $ks->user;
+			if ( ! $partner_id ) $partner_id = $vs_partner_id;
+			// use the user from the vs if not explicity set 
+			if ( ! $puser_id ) $puser_id = $vs->user;
 			
-			kCurrentContext::$ks = $ks_str;
-			kCurrentContext::$partner_id = $partner_id;
-			kCurrentContext::$ks_partner_id = $ks_partner_id;
-			kCurrentContext::$master_partner_id = $master_partner_id;
-			kCurrentContext::$uid = $puser_id;
-			kCurrentContext::$ks_uid = $ks->user;
+			vCurrentContext::$vs = $vs_str;
+			vCurrentContext::$partner_id = $partner_id;
+			vCurrentContext::$vs_partner_id = $vs_partner_id;
+			vCurrentContext::$master_partner_id = $master_partner_id;
+			vCurrentContext::$uid = $puser_id;
+			vCurrentContext::$vs_uid = $vs->user;
 
 			// 3. retrieve partner
-			$ks_partner = PartnerPeer::retrieveByPK( $ks_partner_id );
-			// the service_confgi is assumed to be the one of the operating_partner == ks_partner
+			$vs_partner = PartnerPeer::retrieveByPK( $vs_partner_id );
+			// the service_confgi is assumed to be the one of the operating_partner == vs_partner
 
-			if ( ! $ks_partner )
+			if ( ! $vs_partner )
 			{
-				$this->addException( APIErrors::UNKNOWN_PARTNER_ID , $ks_partner_id );
+				$this->addException( APIErrors::UNKNOWN_PARTNER_ID , $vs_partner_id );
 			}
 			
-			$this->setServiceConfigFromPartner( $ks_partner );
-			if ( $ks_partner && ! $ks_partner->getStatus() )
+			$this->setServiceConfigFromPartner( $vs_partner );
+			if ( $vs_partner && ! $vs_partner->getStatus() )
 			{
 				$this->addException( APIErrors::SERVICE_FORBIDDEN_PARTNER_DELETED );
 			}
 			
 			// 4. validate ticket per service for the ticket's partner
 			$ticket_type = $this->ticketType2();
-			if ( $ticket_type == kSessionUtils::REQUIED_TICKET_NOT_ACCESSIBLE )
+			if ( $ticket_type == vSessionUtils::REQUIED_TICKET_NOT_ACCESSIBLE )
 			{
 				// partner cannot access this service
 				$this->addException( APIErrors::SERVICE_FORBIDDEN );
 			}
 			
-			if ( $this->force_ticket_check && $ticket_type != kSessionUtils::REQUIED_TICKET_NONE )
+			if ( $this->force_ticket_check && $ticket_type != vSessionUtils::REQUIED_TICKET_NONE )
 			{
-				// TODO - which user is this ? from the ks ? from the puser_id ? 
-				$ks_puser_id = $ks->user;
-				//$ks = null;
-				$res = kSessionUtils::validateKSession2 ( $ticket_type , $ks_partner_id , $ks_puser_id , $ks_str , $ks );
+				// TODO - which user is this ? from the vs ? from the puser_id ? 
+				$vs_puser_id = $vs->user;
+				//$vs = null;
+				$res = vSessionUtils::validateVSession2 ( $ticket_type , $vs_partner_id , $vs_puser_id , $vs_str , $vs );
 
 				if ( 0 >= $res )
 				{
 					// chaned this to be an exception rather than an error
-					$this->addException ( APIErrors::INVALID_KS , $ks_str , $res , ks::getErrorStr( $res ));
+					$this->addException ( APIErrors::INVALID_VS , $vs_str , $res , vs::getErrorStr( $res ));
 				}
-				$this->ks = $ks;
+				$this->vs = $vs;
 			}
-			elseif ($ticket_type == kSessionUtils::REQUIED_TICKET_NONE && $ks_str) // ticket is not required but we have ks
+			elseif ($ticket_type == vSessionUtils::REQUIED_TICKET_NONE && $vs_str) // ticket is not required but we have vs
 			{
-				$ks_puser_id = $ks->user;
-				$res = kSessionUtils::validateKSession2 ( $ticket_type , $ks_partner_id , $ks_puser_id , $ks_str , $ks );
+				$vs_puser_id = $vs->user;
+				$res = vSessionUtils::validateVSession2 ( $ticket_type , $vs_partner_id , $vs_puser_id , $vs_str , $vs );
 				if ( $res > 0)
 				{
-					$this->ks = $ks;
+					$this->vs = $vs;
 				}
 			}
 			// 5. see partner is allowed to access the desired partner (if himself - easy, else - should appear in the partnerGroup)
-			$allow_access = myPartnerUtils::allowPartnerAccessPartner ( $ks_partner_id , $this->partnerGroup2() , $partner_id );
+			$allow_access = myPartnerUtils::allowPartnerAccessPartner ( $vs_partner_id , $this->partnerGroup2() , $partner_id );
 			if ( ! $allow_access )
 			{
-				$this->addException( APIErrors::PARTNER_ACCESS_FORBIDDEN , $ks_partner_id , $partner_id ); 
+				$this->addException( APIErrors::PARTNER_ACCESS_FORBIDDEN , $vs_partner_id , $partner_id ); 
 			}
 			
-			// 6. set the partner to be the desired partner and the operating_partner to be the one from the ks
+			// 6. set the partner to be the desired partner and the operating_partner to be the one from the vs
 			$this->partner = PartnerPeer::retrieveByPK( $partner_id );
-			$this->operating_partner = $ks_partner;
-			// the config is that of the ks_partner NOT of the partner
-			// $this->setServiceConfigFromPartner( $ks_partner ); - was already set above to extract the ks
+			$this->operating_partner = $vs_partner;
+			// the config is that of the vs_partner NOT of the partner
+			// $this->setServiceConfigFromPartner( $vs_partner ); - was already set above to extract the vs
 			// TODO - should change  service_config to be the one of the partner_id ?? 
 
 			// 7. if ok - return the partner_id to be used from this point onwards 
@@ -592,7 +592,7 @@ $this->benchmarkStart( "beforeImpl" );
 		}
 		else
 		{
-			// no ks_str
+			// no vs_str
 	 		// 1. extract partner by partner_id +
 			// 2. retrieve partner
 	 		$this->partner = PartnerPeer::retrieveByPK( $partner_id );
@@ -614,34 +614,34 @@ $this->benchmarkStart( "beforeImpl" );
 				$this->addException( APIErrors::SERVICE_FORBIDDEN_PARTNER_DELETED );
 			}
 
-			kCurrentContext::$ks = null;
-			kCurrentContext::$partner_id = $partner_id;
-			kCurrentContext::$ks_partner_id = null;
-			kCurrentContext::$uid = $puser_id;
-			kCurrentContext::$ks_uid = null;
+			vCurrentContext::$vs = null;
+			vCurrentContext::$partner_id = $partner_id;
+			vCurrentContext::$vs_partner_id = null;
+			vCurrentContext::$uid = $puser_id;
+			vCurrentContext::$vs_uid = null;
 			
 			
 			// 3. make sure the service can be accessed with no ticket
  			$this->setServiceConfigFromPartner( $this->partner );
 			$ticket_type = $this->ticketType2();
-			if ( $ticket_type == kSessionUtils::REQUIED_TICKET_NOT_ACCESSIBLE )
+			if ( $ticket_type == vSessionUtils::REQUIED_TICKET_NOT_ACCESSIBLE )
 			{
 				// partner cannot access this service
 				$this->addException( APIErrors::SERVICE_FORBIDDEN );
 			}
-			if ( $this->force_ticket_check && $ticket_type != kSessionUtils::REQUIED_TICKET_NONE )
+			if ( $this->force_ticket_check && $ticket_type != vSessionUtils::REQUIED_TICKET_NONE )
 			{
 				// NEW: 2008-12-28
-				// Instead of throwing an exception, see if the service allows KN.
+				// Instead of throwing an exception, see if the service allows VN.
 				// If so - a relativly week partner access 
-				if ( $this->kalturaNetwork2() )
+				if ( $this->vidiunNetwork2() )
 				{
-					// if the service supports KN - continue without private data 
+					// if the service supports VN - continue without private data 
 					return array ( $partner_id , $subp_id , $puser_id , false ); // DONT allow private_partner_data
 				}
 				
 				// chaned this to be an exception rather than an error
-				$this->addException ( APIErrors::MISSING_KS  );
+				$this->addException ( APIErrors::MISSING_VS  );
 			}
 			
 			// 4. set the partner & operating_partner to be the one-and-only partner of this session
@@ -685,11 +685,11 @@ $this->benchmarkStart( "beforeImpl" );
 			$this->service_config = myPartnerUtils::getServiceConfig( $partner );			
 		}
 		
-		kCurrentContext::$host = (isset($_SERVER["HOSTNAME"]) ? $_SERVER["HOSTNAME"] : gethostname());
-		kCurrentContext::$user_ip = requestUtils::getRemoteAddress();
-		kCurrentContext::$ps_vesion = "ps2";
-		kCurrentContext::$service = "partnerservices2";
-		kCurrentContext::$action =  $service_name;
+		vCurrentContext::$host = (isset($_SERVER["HOSTNAME"]) ? $_SERVER["HOSTNAME"] : gethostname());
+		vCurrentContext::$user_ip = requestUtils::getRemoteAddress();
+		vCurrentContext::$ps_vesion = "ps2";
+		vCurrentContext::$service = "partnerservices2";
+		vCurrentContext::$action =  $service_name;
 		
 		
 		$this->service_config->setServiceName ( $service_name );
@@ -700,44 +700,44 @@ $this->benchmarkStart( "beforeImpl" );
 		return $this->service_config;
 	}
 	
-	protected function  securityViolation( $kshow_id )
+	protected function  securityViolation( $vshow_id )
 	{
-		$xml = "<xml><kshow id=\"$kshow_id\" securityViolation=\"true\"/></xml>";
+		$xml = "<xml><vshow id=\"$vshow_id\" securityViolation=\"true\"/></xml>";
 		$this->getResponse()->setHttpHeader ( "Content-Type" , "text/xml; charset=utf-8" );
 		$this->getController()->setRenderMode ( sfView::RENDER_NONE );
 		return $this->renderText( $xml );
 	}
 
 	// TODO - combine with preparePartnerPuserDetails and createUserOnDemand - no need for 3 functions
-	private function getPuserKuser ( $partner_id , $subp_id, $puser_id )
+	private function getPuserVuser ( $partner_id , $subp_id, $puser_id )
 	{
 		// TODO - remove dead code
-		//$fetch_kuser_data = $this->needKuserFromPuser();
-		$fetch_kuser_data = $this->needKuserFromPuser2();
+		//$fetch_vuser_data = $this->needVuserFromPuser();
+		$fetch_vuser_data = $this->needVuserFromPuser2();
 
-		if ( $fetch_kuser_data == self::KUSER_DATA_NO_KUSER )
+		if ( $fetch_vuser_data == self::VUSER_DATA_NO_VUSER )
 		{
-			$puser_kuser = null;
+			$puser_vuser = null;
 		}
 		else
 		{
-			$join_with_kuser = ( $fetch_kuser_data == self::KUSER_DATA_KUSER_DATA ); // decide if to fetch extra data about kuser
-			$puser_kuser = PuserKuserPeer::retrieveByPartnerAndUid ( $partner_id , null/*$subp_id*/,  $puser_id , $join_with_kuser );
+			$join_with_vuser = ( $fetch_vuser_data == self::VUSER_DATA_VUSER_DATA ); // decide if to fetch extra data about vuser
+			$puser_vuser = PuserVuserPeer::retrieveByPartnerAndUid ( $partner_id , null/*$subp_id*/,  $puser_id , $join_with_vuser );
 		}
-		// for forward compatibility with PS3 - try to get Kuser by puserID
-		$kuser = kuserPeer::getKuserByPartnerAndUid($partner_id, $puser_id);
-		if(!$kuser) $kuser = null;
-		// will create the user (puser_kuser + kuser) if necessary,
-		// if $kuser exists send it as well so only puser_kuser will be created for that kuser
-		$puser_kuser = $this->createUserOnDemand ($partner_id , $subp_id, $puser_id , $puser_kuser, $kuser );
+		// for forward compatibility with PS3 - try to get Vuser by puserID
+		$vuser = vuserPeer::getVuserByPartnerAndUid($partner_id, $puser_id);
+		if(!$vuser) $vuser = null;
+		// will create the user (puser_vuser + vuser) if necessary,
+		// if $vuser exists send it as well so only puser_vuser will be created for that vuser
+		$puser_vuser = $this->createUserOnDemand ($partner_id , $subp_id, $puser_id , $puser_vuser, $vuser );
 
-		// if $puser_kuser is still null after fetching it / creating it, and was supposed to be here - display error
-		if ( $fetch_kuser_data != self::KUSER_DATA_NO_KUSER && $puser_kuser === null  )
+		// if $puser_vuser is still null after fetching it / creating it, and was supposed to be here - display error
+		if ( $fetch_vuser_data != self::VUSER_DATA_NO_VUSER && $puser_vuser === null  )
 		{
 			$this->addError( APIErrors::INVALID_USER_ID ,$puser_id );
 		}
 
-		return $puser_kuser;
+		return $puser_vuser;
 	}
 	
 
@@ -770,63 +770,63 @@ $this->benchmarkStart( "beforeImpl" );
 	}
 
 	/**
-	 * Fetch data about the kuser puser (kuser) and the relevant kshow_id.
-	 * $verify_producer_only - set to true if want to make ssre the kuser is indeed the producer of the kshow
+	 * Fetch data about the vuser puser (vuser) and the relevant vshow_id.
+	 * $verify_producer_only - set to true if want to make ssre the vuser is indeed the producer of the vshow
 	 */
-	protected function getKshowAndKuser ( $partner_id , $puser_id , $verify_producer_only = false )
+	protected function getVshowAndVuser ( $partner_id , $puser_id , $verify_producer_only = false )
 	{
-		$kshow_id = $this->getP ( "kshow_id" );
+		$vshow_id = $this->getP ( "vshow_id" );
 
-		$kshow = kshowPeer::retrieveByPK( $kshow_id );
-		if ( !$kshow )
+		$vshow = vshowPeer::retrieveByPK( $vshow_id );
+		if ( !$vshow )
 		{
 			// TODO - error
-//			$this->addError ( "No such kshow [$kshow_id]" );
-			throw new Exception ( "No such kshow [$kshow_id]" );
+//			$this->addError ( "No such vshow [$vshow_id]" );
+			throw new Exception ( "No such vshow [$vshow_id]" );
 		}
 
-		$kuser = kuserPeer::getKuserByPartnerAndUid( $partner_id , $puser_id );
-		if ( ! $kuser )
+		$vuser = vuserPeer::getVuserByPartnerAndUid( $partner_id , $puser_id );
+		if ( ! $vuser )
 		{
 //			$this->addError ( "puser ($partner_id,$puser_id) does not exist" );
 			throw new Exception (  "puser ($partner_id,$puser_id) does not exist" );
 		}
 
-		$kuser_id = $kuser->getId();
+		$vuser_id = $vuser->getId();
 		if ( $verify_producer_only )
 		{
-			// make sure the puser (kuser) is the producer of the kshow
-			if ( $kshow->getProducerId() != $kuser_id )
+			// make sure the puser (vuser) is the producer of the vshow
+			if ( $vshow->getProducerId() != $vuser_id )
 			{
-//				$this->addError ( "puser ($partner_id,$puser_id) cannot publish kshow [$kshow_id]" );
-				throw new Exception ( "puser ($partner_id,$puser_id) cannot publish kshow [$kshow_id]" );
+//				$this->addError ( "puser ($partner_id,$puser_id) cannot publish vshow [$vshow_id]" );
+				throw new Exception ( "puser ($partner_id,$puser_id) cannot publish vshow [$vshow_id]" );
 			}
 		}
-		return array ( $kshow , $kuser );
+		return array ( $vshow , $vuser );
 	}
 
 
-	protected function forceProducerOnly ( $partner_id , $puser_id , $kshow_id )
+	protected function forceProducerOnly ( $partner_id , $puser_id , $vshow_id )
 	{
-		$kshow = kshowPeer::retrieveByPK( $kshow_id );
-		if ( ! $kshow )
+		$vshow = vshowPeer::retrieveByPK( $vshow_id );
+		if ( ! $vshow )
 		{
-			$this->addError ( APIErrors::INVALID_KSHOW_ID, $kshow_id );
+			$this->addError ( APIErrors::INVALID_VSHOW_ID, $vshow_id );
 			throw new Exception();
 		}
 
-		if ( $kshow->getProducerId() != $kshow_id )
+		if ( $vshow->getProducerId() != $vshow_id )
 		{
-			$this->addError ( APIErrors::INVALID_KSHOW_ID, $kshow_id );
+			$this->addError ( APIErrors::INVALID_VSHOW_ID, $vshow_id );
 			throw new Exception();
 		}
 	}
 
-	protected function getKsUniqueString()
+	protected function getVsUniqueString()
 	{
-		if ( $this->ks )
+		if ( $this->vs )
 		{
-			return $this->ks->getUniqueString();
+			return $this->vs->getUniqueString();
 		}
 		else
 		{
@@ -837,15 +837,15 @@ $this->benchmarkStart( "beforeImpl" );
 	}
 
 	// TODO - move to nyPartnerUtils
-	protected function createUserOnDemand ( $partner_id , $subp_id, $puser_id  , $puser_kuser , $kuser = null)
+	protected function createUserOnDemand ( $partner_id , $subp_id, $puser_id  , $puser_vuser , $vuser = null)
 	{
-		// make sure the user [puser_kuser + kuser] exists according to addUserOnDemand
+		// make sure the user [puser_vuser + vuser] exists according to addUserOnDemand
 		// TODO - remove dead code
 		//$create_user_on_demand = $this->addUserOnDemand();
 		$create_user_on_demand = $this->addUserOnDemand2();
 
 		$create_user = false;
-		if ( $puser_kuser == null )
+		if ( $puser_vuser == null )
 		{
 			if( $create_user_on_demand  ==  self::CREATE_USER_FALSE )
 			{
@@ -868,16 +868,16 @@ $this->benchmarkStart( "beforeImpl" );
 			$user_name = $this->getP ( "user_screenName" , $this->getP ( "user_name" ) );
 			if ( !$user_name )
 			{
-				$puser_name = $kuser_name = myPartnerUtils::getPrefix ( $partner_id ) . $puser_id;
+				$puser_name = $vuser_name = myPartnerUtils::getPrefix ( $partner_id ) . $puser_id;
 			}
 			else
 			{
-				$puser_name = $kuser_name = $user_name;
+				$puser_name = $vuser_name = $user_name;
 			}
-			$puser_kuser = PuserKuserPeer::createPuserKuser ( $partner_id , $subp_id, $puser_id , $kuser_name , $puser_name, false , $kuser );
+			$puser_vuser = PuserVuserPeer::createPuserVuser ( $partner_id , $subp_id, $puser_id , $vuser_name , $puser_name, false , $vuser );
 		}
 
-		return $puser_kuser;
+		return $puser_vuser;
 	}
 
 
@@ -981,22 +981,22 @@ $this->benchmarkStart( "beforeImpl" );
 	
 	protected static function validateSignature ( $params )
 	{
-		$kalsig = @$params["kalsig"];
-		if ( ! $kalsig ) return false;
+		$vidsig = @$params["vidsig"];
+		if ( ! $vidsig ) return false;
 
 		$parmas_to_validate =   $params;
-		return  ( $kalsig == self::signature($parmas_to_validate ) );
+		return  ( $vidsig == self::signature($parmas_to_validate ) );
 	}
 
 	protected static function signature ( $params , $add_hash = true )
 	{
 		ksort($params);
 		$str = "";
-		foreach ($params as $k => $v)
+		foreach ($params as $v => $v)
 		{
-			if ( $k == "kalsig" ) continue;
-			if ( $k == "raw_kalsig" ) continue;
-			$str .= $k.$v;
+			if ( $v == "vidsig" ) continue;
+			if ( $v == "raw_vidsig" ) continue;
+			$str .= $v.$v;
 		}
 		if  ( $add_hash )
 			return  md5($str);
@@ -1025,15 +1025,15 @@ $this->benchmarkStart( "beforeImpl" );
 	}
 
 
-	protected function isOwnedBy ( $obj , $kuser_id )
+	protected function isOwnedBy ( $obj , $vuser_id )
 	{
 		if ( $obj instanceof entry )
 		{
-			return ( $obj->getKuserId() == $kuser_id );
+			return ( $obj->getVuserId() == $vuser_id );
 		}
-		elseif ( $obj instanceof kshow )
+		elseif ( $obj instanceof vshow )
 		{
-			return ( $obj->getProducerId() == $kuser_id );
+			return ( $obj->getProducerId() == $vuser_id );
 		}
 		else
 		{
@@ -1048,7 +1048,7 @@ $this->benchmarkStart( "beforeImpl" );
 	
 	protected function applyPartnerFilterForClass ( $peer , $partner_id )
 	{
-		myPartnerUtils::addPartnerToCriteria ( $peer , $partner_id , $this->private_partner_data , $this->partnerGroup2() , $this->kalturaNetwork2()  );
+		myPartnerUtils::addPartnerToCriteria ( $peer , $partner_id , $this->private_partner_data , $this->partnerGroup2() , $this->vidiunNetwork2()  );
 	}
 	
 	protected function getPrivatePartnerData()

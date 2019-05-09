@@ -45,7 +45,7 @@
     </authMethodList>
     <moduleUrl>SearchView.swf</moduleUrl>
     <name>Flickr</name>
-    <logo>http://www.kaltura.com/images/wizard/logo_flickr.png</logo>
+    <logo>http://www.vidiun.com/images/wizard/logo_flickr.png</logo>
     <media>
       <type>image</type>
     </media>
@@ -58,7 +58,7 @@
     </authMethodList>
     <moduleUrl>SearchView.swf</moduleUrl>
     <name>NYPL</name>
-    <logo>http://www.kaltura.com/images/wizard/logo_nypl.png</logo>
+    <logo>http://www.vidiun.com/images/wizard/logo_nypl.png</logo>
     <media>
       <type>image</type>
     </media>
@@ -101,7 +101,7 @@
     </authMethodList>
     <moduleUrl>SearchView.swf</moduleUrl>
     <name>Any webpage</name>
-    <logo>http://www.kaltura.com/images/wizard/logo_url.gif</logo>
+    <logo>http://www.vidiun.com/images/wizard/logo_url.gif</logo>
     <media>
       <type>image</type>
     </media>
@@ -114,7 +114,7 @@
     <target>
 		ContributionWizard.swf
     </target>
-    <cssUrl>/content/uiconf/kaltura/wordpress/styles_ContributionWizard.swf</cssUrl>
+    <cssUrl>/content/uiconf/vidiun/wordpress/styles_ContributionWizard.swf</cssUrl>
   </UIConfig>
 
 </UIConfigList>

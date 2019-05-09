@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaResponseProfileType extends KalturaEnum implements ResponseProfileType
+class VidiunResponseProfileType extends VidiunEnum implements ResponseProfileType
 {
 
 }

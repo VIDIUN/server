@@ -10,7 +10,7 @@ class ESearchOperator extends ESearchBaseOperator
 
 	protected static function createSearchQueryForItems($categorizedSearchItems, $boolOperator, &$queryAttributes)
 	{
-		$outQuery = new kESearchBoolQuery();
+		$outQuery = new vESearchBoolQuery();
 		foreach ($categorizedSearchItems as $categorizedSearchItem)
 		{
 			list($itemClassName, $itemSearchItems, $operatorType) = self::getParamsFromCategorizedSearchItem($categorizedSearchItem);

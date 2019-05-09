@@ -3,7 +3,7 @@
 /**
  * Auto-generated enum class
 */
-class KalturaLiveChannelMatchAttribute extends KalturaLiveEntryMatchAttribute
+class VidiunLiveChannelMatchAttribute extends VidiunLiveEntryMatchAttribute
 {
 }
 

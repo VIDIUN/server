@@ -22,7 +22,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	
 	<title>Big-Red-Button Demo</title>
-	<link type="text/css" rel="stylesheet" href="/lib/css/kmc.css" />
+	<link type="text/css" rel="stylesheet" href="/lib/css/vmc.css" />
 	<style>
 		#main .content .title h1 { font-size: 24px; font-weight: bold; }
 		#main p { margin-bottom: 20px; font-size: 18px; }
@@ -33,7 +33,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 	<script type="text/javascript" src="swfobject.js"></script>
 	<script>
 		var partnerId = <?php echo $partnerId; ?>;
-		var ks = null;
+		var vs = null;
 		var lastSyncPointTime = null;
 		var lastSyncPointOffset = null;
 		var lastSyncPointTimestamp = null;
@@ -64,7 +64,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 			html += '<b>HDS URL:</b> <a href="' + hdsUrl + '" target="_tab">' + hdsUrl + '</a>';
 			$('#lblUrl').html(html);
 
-			 mw.setConfig('Kaltura.LeadWithHTML5', true);
+			 mw.setConfig('Vidiun.LeadWithHTML5', true);
 			loadAdminPlayer(entryId, uiConfId);
 			loadUserPlayer(entryId, uiConfId);
 			startSession();
@@ -90,13 +90,13 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 						return;
 					}
 						
-					ks = data;
+					vs = data;
 				}
 			});
 		}
 
 		function loadUserPlayer(entryId, uiConfId){
-            kWidget.embed({
+            vWidget.embed({
                     targetId: 'userPlayerContainer',
                     wid: '_' + partnerId,
                     "uiconf_id": uiConfId,
@@ -104,7 +104,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
                             "streamerType": "auto",
                             "autoPlay": true,
                             "LeadWithHLSOnFlash": true,
-							"Kaltura.Protocol":"http"
+							"Vidiun.Protocol":"http"
                     },
                     "cache_st": 1410340114,
                     "entry_id": entryId
@@ -112,7 +112,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 		}
 
 		function loadAdminPlayer(entryId, uiConfId){
-		     kWidget.embed({
+		     vWidget.embed({
 					 targetId: 'adminPlayerContainer',
 					 wid: '_' + partnerId,
 					 "uiconf_id": uiConfId,
@@ -126,9 +126,9 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 					 "cache_st": 1410340114,
 					 "entry_id": entryId,
 					 "readyCallback": function( playerId ){
-						var adminKdp = document.getElementById( playerId );
-						adminKdp.addJsListener( 'videoMetadataReceived', 'onSyncPoint' );
-						adminKdp.addJsListener( 'onId3Tag', 'onSyncPoint' );
+						var adminVdp = document.getElementById( playerId );
+						adminVdp.addJsListener( 'videoMetadataReceived', 'onSyncPoint' );
+						adminVdp.addJsListener( 'onId3Tag', 'onSyncPoint' );
 					}
 			 });
 		}
@@ -146,8 +146,8 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 		}
 		
 		function enableAds(){
-			if(!ks){
-				alert('kaltura API is not enabled');
+			if(!vs){
+				alert('vidiun API is not enabled');
 				return;
 			}
 
@@ -159,7 +159,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 				'/api_v3/index.php/service/liveStream/action/createPeriodicSyncPoints', {
 				data: {
 					format: 1,
-					ks: ks,
+					vs: vs,
 					entryId: entryId,
 					interval: interval,
 					duration: duration
@@ -190,8 +190,8 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 						'/api_v3/index.php/service/cuePoint_cuePoint/action/add', {
 						data: {
 							format: 1,
-							ks: ks,
-							'cuePoint:objectType': 'KalturaAdCuePoint',
+							vs: vs,
+							'cuePoint:objectType': 'VidiunAdCuePoint',
 							'cuePoint:entryId': entryId,
 							'cuePoint:startTime': startTime,
 							'cuePoint:protocolType': 'VPAID',
@@ -221,8 +221,8 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 					'/api_v3/index.php/service/cuePoint_cuePoint/action/add', {
 					data: {
 						format: 1,
-						ks: ks,
-						'cuePoint:objectType': 'KalturaAdCuePoint',
+						vs: vs,
+						'cuePoint:objectType': 'VidiunAdCuePoint',
 						'cuePoint:entryId': entryId,
 						'cuePoint:triggeredAt': triggeredAt,
 						'cuePoint:protocolType': 'VPAID',
@@ -325,7 +325,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 		</tr>
 		<tr>
 			<td>Ad URL:</td>
-			<td><input type="text" id="txtAdUrl" value="http://projects.kaltura.com/vast/vast10.xml" />
+			<td><input type="text" id="txtAdUrl" value="http://projects.vidiun.com/vast/vast10.xml" />
 		</td>
 		<tr>
 			<td>Ad Duration (milliseconds):</td>

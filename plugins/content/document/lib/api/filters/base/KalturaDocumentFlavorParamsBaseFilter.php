@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaDocumentFlavorParamsBaseFilter extends KalturaFlavorParamsFilter
+abstract class VidiunDocumentFlavorParamsBaseFilter extends VidiunFlavorParamsFilter
 {
 	static private $map_between_objects = array
 	(

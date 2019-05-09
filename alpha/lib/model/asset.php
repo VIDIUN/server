@@ -144,19 +144,19 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 		$newIsmSyncKey = $newFlavorAsset->getSyncKey(self::FILE_SYNC_ASSET_SUB_TYPE_ISM);
 		$newIsmcSyncKey = $newFlavorAsset->getSyncKey(self::FILE_SYNC_ASSET_SUB_TYPE_ISMC);
 
-		if(kFileSyncUtils::fileSync_exists($assetSyncKey))
-			kFileSyncUtils::softCopy($assetSyncKey, $newAssetSyncKey);
+		if(vFileSyncUtils::fileSync_exists($assetSyncKey))
+			vFileSyncUtils::softCopy($assetSyncKey, $newAssetSyncKey);
 
-		if(kFileSyncUtils::fileSync_exists($convertLogSyncKey))
-			kFileSyncUtils::softCopy($convertLogSyncKey, $newConvertLogSyncKey);
+		if(vFileSyncUtils::fileSync_exists($convertLogSyncKey))
+			vFileSyncUtils::softCopy($convertLogSyncKey, $newConvertLogSyncKey);
 		
-		if(kFileSyncUtils::fileSync_exists($ismSyncKey))
-			kFileSyncUtils::softCopy($ismSyncKey, $newIsmSyncKey);
+		if(vFileSyncUtils::fileSync_exists($ismSyncKey))
+			vFileSyncUtils::softCopy($ismSyncKey, $newIsmSyncKey);
 			
-		if(kFileSyncUtils::fileSync_exists($ismcSyncKey))
-			kFileSyncUtils::softCopy($ismcSyncKey, $newIsmcSyncKey);
+		if(vFileSyncUtils::fileSync_exists($ismcSyncKey))
+			vFileSyncUtils::softCopy($ismcSyncKey, $newIsmcSyncKey);
 
-		kEventsManager::raiseEvent(new kObjectAddedEvent($newFlavorAsset));
+		vEventsManager::raiseEvent(new vObjectAddedEvent($newFlavorAsset));
 		
 		return $newFlavorAsset;
 	}
@@ -203,7 +203,7 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 	  	$assetsCount = assetPeer::countByEntryId($this->entry_id);
 	  		
 	  	if($assetsCount+1 > $assetPerEntryLimitation)
-	    	throw new kCoreException("Max number of allowed assets per entry was reached", kCoreException::MAX_ASSETS_PER_ENTRY);
+	    	throw new vCoreException("Max number of allowed assets per entry was reached", vCoreException::MAX_ASSETS_PER_ENTRY);
 	    	
 	    return parent::preInsert();
 	}
@@ -256,7 +256,7 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 		$ret = parent::postUpdate($con);
 		
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		if ( $statusChangedToReady || $versionModified || $objectDeleted )
 		{
@@ -275,7 +275,7 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 	{
 		if(isset($this->version))
 			$this->setPreviousVersion($this->version);
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getVersion(), FileSyncObjectType::ASSET, asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getVersion(), FileSyncObjectType::ASSET, asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
 		
 		$this->setVersion($newVersion);
 	}
@@ -446,7 +446,7 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 		$v = trim($v);
 		if (preg_match('/[\s\t\n\r]/', $v)){
 			preg_match('/\w*/', $v, $v);
-			KalturaLog::err("File extension cannot contain spaces, saving only ".$v[0]);
+			VidiunLog::err("File extension cannot contain spaces, saving only ".$v[0]);
 			parent::setFileExt($v[0]);
 		}
 		else{
@@ -456,14 +456,14 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 	
 	private function calculateId()
 	{
-		$dc = kDataCenterMgr::getCurrentDc();
+		$dc = vDataCenterMgr::getCurrentDc();
 		for ($i = 0; $i < 10; $i++)
 		{
-			$id = $dc["id"].'_'.kString::generateStringId();
+			$id = $dc["id"].'_'.vString::generateStringId();
 			$existingObject = assetPeer::retrieveByIdNoFilter($id);
 			
 			if ($existingObject)
-				KalturaLog::log(__METHOD__ . ": id [$id] already exists");
+				VidiunLog::log(__METHOD__ . ": id [$id] already exists");
 			else
 				return $id;
 		}
@@ -483,7 +483,7 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 	public function getExternalUrl($storageId, $fileName = null)
 	{
 		$key = $this->getSyncKey(self::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($key, $storageId);
+		$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($key, $storageId);
 		if(!$fileSync || $fileSync->getStatus() != FileSync::FILE_SYNC_STATUS_READY)
 			return null;
 		
@@ -505,7 +505,7 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 		return $url;
 	}
 	
-	public function getDownloadUrl($useCdn = false, $forceProxy = false, $preview = null, $fileName = null, $includeKs = true)
+	public function getDownloadUrl($useCdn = false, $forceProxy = false, $preview = null, $fileName = null, $includeVs = true)
 	{
 		$syncKey = $this->getSyncKey(self::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
 		
@@ -517,40 +517,40 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 		{
 			case StorageProfile::STORAGE_SERVE_PRIORITY_EXTERNAL_ONLY:
 				$serveRemote = true;
-				$fileSync = kFileSyncUtils::getReadyPendingExternalFileSyncForKey($syncKey);
+				$fileSync = vFileSyncUtils::getReadyPendingExternalFileSyncForKey($syncKey);
 				if(!$fileSync)
 				{
-					throw new kCoreException("File sync not found: $syncKey", kCoreException::FILE_NOT_FOUND);
+					throw new vCoreException("File sync not found: $syncKey", vCoreException::FILE_NOT_FOUND);
 				} 
 				else if ($fileSync->getStatus() != FileSync::FILE_SYNC_STATUS_READY)
 				{
-					throw new kCoreException("File sync is pending: $syncKey",kCoreException::FILE_PENDING);
+					throw new vCoreException("File sync is pending: $syncKey",vCoreException::FILE_PENDING);
 				}
 				break;
 			
 			case StorageProfile::STORAGE_SERVE_PRIORITY_EXTERNAL_FIRST:
-				$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
+				$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
 				if($fileSync && $fileSync->getStatus() == FileSync::FILE_SYNC_STATUS_READY)
 				{
 					$serveRemote = true;
 					break;
 				}
 			
-			case StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY:
-				$fileSync = kFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
+			case StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY:
+				$fileSync = vFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
 				if(!$fileSync)
-				    throw new kCoreException("File sync not found: $syncKey", kCoreException::FILE_NOT_FOUND);
+				    throw new vCoreException("File sync not found: $syncKey", vCoreException::FILE_NOT_FOUND);
 				
 				break;
 			
-			case StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_FIRST:
-				$fileSync = kFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
+			case StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_FIRST:
+				$fileSync = vFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
 				if($fileSync)
 					break;
 					
-				$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
+				$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
 				if(!$fileSync || $fileSync->getStatus() != FileSync::FILE_SYNC_STATUS_READY)
-					throw new kCoreException("File sync not found: $syncKey", kCoreException::FILE_NOT_FOUND);
+					throw new vCoreException("File sync not found: $syncKey", vCoreException::FILE_NOT_FOUND);
 				
 				$serveRemote = true;
 				break;
@@ -560,7 +560,7 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 			$downloadUrl = $fileSync->getExternalUrl($this->getEntryId());
 		}
 		else {
-		    $downloadUrl = $this->getDownloadUrlWithExpiry(86400, $useCdn, $forceProxy, $preview, $includeKs);
+		    $downloadUrl = $this->getDownloadUrlWithExpiry(86400, $useCdn, $forceProxy, $preview, $includeVs);
 		}
 		
 		$downloadUrl = $this->finalizeDownloadUrl($fileSync, $downloadUrl, $fileName, $serveRemote);
@@ -581,7 +581,7 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 	    return $url;
 	}
 	
-	public function isKsNeededForDownload()
+	public function isVsNeededForDownload()
 	{
 		$entry = $this->getentry();
 		if(!$entry)
@@ -593,38 +593,38 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 		return $entry->isSecuredEntry();
 	}
 	
-	public function getDownloadUrlWithExpiry($expiry, $useCdn = false, $forceProxy = false, $preview = null, $includeKs = true)
+	public function getDownloadUrlWithExpiry($expiry, $useCdn = false, $forceProxy = false, $preview = null, $includeVs = true)
 	{
-		$ksStr = "";
+		$vsStr = "";
 		$partnerId = $this->getPartnerId();
 		
-		if ($this->isKsNeededForDownload() || $preview)
+		if ($this->isVsNeededForDownload() || $preview)
 		{
 			$partner = PartnerPeer::retrieveByPK($partnerId);
 			$secret = $partner->getSecret();
-			$privilege = ks::PRIVILEGE_DOWNLOAD.":".$this->getEntryId();
-			$privilege .= ",".kSessionBase::PRIVILEGE_DISABLE_ENTITLEMENT_FOR_ENTRY .":". $this->getEntryId();
-			$privilege .= "," . kSessionBase::PRIVILEGE_VIEW . ":" . $this->getEntryId();       
-			$privilege .= "," . kSessionBase::PRIVILEGE_DOWNLOAD_ASSET . ":" . $this->getId();
+			$privilege = vs::PRIVILEGE_DOWNLOAD.":".$this->getEntryId();
+			$privilege .= ",".vSessionBase::PRIVILEGE_DISABLE_ENTITLEMENT_FOR_ENTRY .":". $this->getEntryId();
+			$privilege .= "," . vSessionBase::PRIVILEGE_VIEW . ":" . $this->getEntryId();       
+			$privilege .= "," . vSessionBase::PRIVILEGE_DOWNLOAD_ASSET . ":" . $this->getId();
 			
 			if($preview)
-				$privilege .= "," . kSessionBase::PRIVILEGE_PREVIEW . ":" . $preview;
+				$privilege .= "," . vSessionBase::PRIVILEGE_PREVIEW . ":" . $preview;
 
-			$result = kSessionUtils::startKSession($partnerId, $secret, null, $ksStr, $expiry, false, "", $privilege);
+			$result = vSessionUtils::startVSession($partnerId, $secret, null, $vsStr, $expiry, false, "", $privilege);
 	
 			if ($result < 0)
 				throw new Exception("Failed to generate session for asset [".$this->getId()."] of type ". $this->getType());
 		}
 		
-		$finalPath = $this->getFinalDownloadUrlPathWithoutKs();
+		$finalPath = $this->getFinalDownloadUrlPathWithoutVs();
 		
-		if ($ksStr && $includeKs)
-			$finalPath .= "/ks/".$ksStr;
+		if ($vsStr && $includeVs)
+			$finalPath .= "/vs/".$vsStr;
 		
 		if ($forceProxy)
 			$finalPath .= "/relocate/".$this->getEntryId().".".$this->getFileExt();
 		// Gonen May 12 2010 - removing CDN URLs. see ticket 5135 in internal mantis
-		// in order to avoid conflicts with access_control (geo-location restriction), we always return the requestHost (www_host from kConf)
+		// in order to avoid conflicts with access_control (geo-location restriction), we always return the requestHost (www_host from vConf)
 		// and not the CDN host relevant for the partner.
 		
 		// Tan-Tan January 27 2011 - in some places we do need the cdn, I added a paramter useCdn to force it.
@@ -639,7 +639,7 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 		return $downloadUrl;
 	}
 	
-	public function getFinalDownloadUrlPathWithoutKs()
+	public function getFinalDownloadUrlPathWithoutVs()
 	{
 		$finalPath = myPartnerUtils::getUrlForPartner($this->getPartnerId(),$this->getPartnerId()*100).
 					"/download".
@@ -683,12 +683,12 @@ class asset extends Baseasset implements ISyncableFile, IRelatedObject
 	
 	public function getLogFileVersion()
 	{
-		return $this->getFromCustomData("logFileVersion", null, kDataCenterMgr::incrementVersion());
+		return $this->getFromCustomData("logFileVersion", null, vDataCenterMgr::incrementVersion());
 	}
 	
 	public function incLogFileVersion()
 	{
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getLogFileVersion(), FileSyncObjectType::ASSET, asset::FILE_SYNC_ASSET_SUB_TYPE_CONVERT_LOG);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getLogFileVersion(), FileSyncObjectType::ASSET, asset::FILE_SYNC_ASSET_SUB_TYPE_CONVERT_LOG);
 		$this->putInCustomData("logFileVersion", $newVersion);
 	}
 

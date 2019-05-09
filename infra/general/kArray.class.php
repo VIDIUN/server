@@ -5,7 +5,7 @@
  * @package infra
  * @subpackage utils
  */
-class kArray
+class vArray
 {
 	/**
 	 * Assums that the input array ($arr) is a flat non-associative array.

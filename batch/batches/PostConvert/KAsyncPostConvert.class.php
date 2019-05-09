@@ -17,26 +17,26 @@
  * @package Scheduler
  * @subpackage Post-Convert
  */
-class KAsyncPostConvert extends KJobHandlerWorker
+class VAsyncPostConvert extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::POSTCONVERT;
+		return VidiunBatchJobType::POSTCONVERT;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->postConvert($job, $job->data);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::getMaxJobsEachRun()
+	 * @see VJobHandlerWorker::getMaxJobsEachRun()
 	 */
 	protected function getMaxJobsEachRun()
 	{
@@ -44,14 +44,14 @@ class KAsyncPostConvert extends KJobHandlerWorker
 	}
 
 	/**
-	 * @param KalturaBatchJob $job
-	 * @param KalturaPostConvertJobData $data
-	 * @return KalturaBatchJob
+	 * @param VidiunBatchJob $job
+	 * @param VidiunPostConvertJobData $data
+	 * @return VidiunBatchJob
 	 */
-	private function postConvert(KalturaBatchJob $job, KalturaPostConvertJobData $data)
+	private function postConvert(VidiunBatchJob $job, VidiunPostConvertJobData $data)
 	{
 		if($data->flavorParamsOutputId)
-			$data->flavorParamsOutput = KBatchBase::$kClient->flavorParamsOutput->get($data->flavorParamsOutputId);
+			$data->flavorParamsOutput = VBatchBase::$vClient->flavorParamsOutput->get($data->flavorParamsOutputId);
 		
 		try
 		{
@@ -68,26 +68,26 @@ class KAsyncPostConvert extends KJobHandlerWorker
 			if(!$data->flavorParamsOutput || !$data->flavorParamsOutput->sourceRemoteStorageProfileId)
 			{
 				if(!$this->pollingFileExists($mediaFile))
-					return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, "Source file $mediaFile does not exist", KalturaBatchJobStatus::RETRY);
+					return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, "Source file $mediaFile does not exist", VidiunBatchJobStatus::RETRY);
 				
 				if(!is_file($mediaFile))
-					return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, "Source file $mediaFile is not a file", KalturaBatchJobStatus::FAILED);
+					return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, "Source file $mediaFile is not a file", VidiunBatchJobStatus::FAILED);
 			}
 			
-			$this->updateJob($job,"Extracting file media info on $mediaFile", KalturaBatchJobStatus::QUEUED);
+			$this->updateJob($job,"Extracting file media info on $mediaFile", VidiunBatchJobStatus::QUEUED);
 		}
 		catch(Exception $ex)
 		{
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::FAILED);
 		}
 		
 		$mediaInfo = null;
 		try
 		{
-			$engine = KBaseMediaParser::getParser($job->jobSubType, realpath($mediaFile), KBatchBase::$taskConfig, $job);
+			$engine = VBaseMediaParser::getParser($job->jobSubType, realpath($mediaFile), VBatchBase::$taskConfig, $job);
 			if($engine)
 			{
-				KalturaLog::info("Media info engine [" . get_class($engine) . "]");
+				VidiunLog::info("Media info engine [" . get_class($engine) . "]");
 				if (!$key)
 					$mediaInfo = $engine->getMediaInfo();
 				else 
@@ -101,19 +101,19 @@ class KAsyncPostConvert extends KJobHandlerWorker
 			else
 			{
 				$err = "Media info engine not found for job subtype [".$job->jobSubType."]";
-				KalturaLog::info($err);
-				return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::ENGINE_NOT_FOUND, $err, KalturaBatchJobStatus::FAILED);
+				VidiunLog::info($err);
+				return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::ENGINE_NOT_FOUND, $err, VidiunBatchJobStatus::FAILED);
 			}
 		}
 		catch(Exception $ex)
 		{
-			KalturaLog::err("Error: " . $ex->getMessage());
+			VidiunLog::err("Error: " . $ex->getMessage());
 			$mediaInfo = null;
 		}
 		
-		/* @var $mediaInfo KalturaMediaInfo */
+		/* @var $mediaInfo VidiunMediaInfo */
 		if(is_null($mediaInfo))
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::EXTRACT_MEDIA_FAILED, "Failed to extract media info: $mediaFile", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::EXTRACT_MEDIA_FAILED, "Failed to extract media info: $mediaFile", VidiunBatchJobStatus::FAILED);
 
 		/*
 		 * Look for silent/black conversions. Curently checked only for Webex/ARF products
@@ -123,7 +123,7 @@ class KAsyncPostConvert extends KJobHandlerWorker
 		&& strstr($data->flavorParamsOutput->operators, "webexNbrplayer.WebexNbrplayer")!=false) {
 			$rv = $this->checkForValidityOfWebexProduct($data, realpath($mediaFile), $mediaInfo, $detectMsg);
 			if($rv==false){
-				return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::BLACK_OR_SILENT_CONTENT, $detectMsg, KalturaBatchJobStatus::FAILED);
+				return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::BLACK_OR_SILENT_CONTENT, $detectMsg, VidiunBatchJobStatus::FAILED);
 			}
 		}
 
@@ -132,20 +132,20 @@ class KAsyncPostConvert extends KJobHandlerWorker
 		{
 			$mediaInfo->flavorAssetId = $data->flavorAssetId;
 			$createdMediaInfo = $this->getClient()->batch->addMediaInfo($mediaInfo);
-			/* @var $createdMediaInfo KalturaMediaInfo */
+			/* @var $createdMediaInfo VidiunMediaInfo */
 			
 			// must save the mediaInfoId before reporting that the task is finished
 			$msg = "Saving media info id $createdMediaInfo->id";
 			if(isset($detectMsg))
 				$msg.= "($detectMsg)";
-			$this->updateJob($job, $msg, KalturaBatchJobStatus::PROCESSED, $data);
+			$this->updateJob($job, $msg, VidiunBatchJobStatus::PROCESSED, $data);
 			
 			$data->thumbPath = null;
 			if(!$data->createThumb)
-				return $this->closeJob($job, null, null, "Media info id $createdMediaInfo->id saved", KalturaBatchJobStatus::FINISHED, $data);
+				return $this->closeJob($job, null, null, "Media info id $createdMediaInfo->id saved", VidiunBatchJobStatus::FINISHED, $data);
 			
 			// creates a temp file path
-			$rootPath = KBatchBase::$taskConfig->params->localTempPath;
+			$rootPath = VBatchBase::$taskConfig->params->localTempPath;
 			$this->createDir($rootPath);
 				
 			// creates the path
@@ -162,7 +162,7 @@ class KAsyncPostConvert extends KJobHandlerWorker
 				$data->thumbBitrate = $mediaInfo->videoBitRate;
 					
 			// generates the thumbnail
-			$thumbMaker = new KFFMpegThumbnailMaker($mediaFile, $thumbPath, KBatchBase::$taskConfig->params->FFMpegCmd);
+			$thumbMaker = new VFFMpegThumbnailMaker($mediaFile, $thumbPath, VBatchBase::$taskConfig->params->FFMpegCmd);
 			$params['dar'] = $mediaInfo->videoDar;
 			$params['scanType'] = $mediaInfo->scanType;
 			if( $data->flavorAssetEncryptionKey )
@@ -175,38 +175,38 @@ class KAsyncPostConvert extends KJobHandlerWorker
 			if(!$created || !file_exists($thumbPath))
 			{
 				$data->createThumb = false;
-				return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::THUMBNAIL_NOT_CREATED, 'Thumbnail not created', KalturaBatchJobStatus::FINISHED, $data);
+				return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::THUMBNAIL_NOT_CREATED, 'Thumbnail not created', VidiunBatchJobStatus::FINISHED, $data);
 			}
 			$data->thumbPath = $thumbPath;
 			
 			$job = $this->moveFile($job, $data);
 			
 			if($this->checkFileExists($job->data->thumbPath))
-				return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::FINISHED, $data);
+				return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::FINISHED, $data);
 			
 			$data->createThumb = false;
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'File not moved correctly', KalturaBatchJobStatus::FINISHED, $data);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'File not moved correctly', VidiunBatchJobStatus::FINISHED, $data);
 		}
 		catch(Exception $ex)
 		{
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::FAILED);
 		}
 	}
 	
 	/**
-	 * @param KalturaBatchJob $job
-	 * @param KalturaPostConvertJobData $data
-	 * @return KalturaBatchJob
+	 * @param VidiunBatchJob $job
+	 * @param VidiunPostConvertJobData $data
+	 * @return VidiunBatchJob
 	 */
-	private function moveFile(KalturaBatchJob $job, KalturaPostConvertJobData $data)
+	private function moveFile(VidiunBatchJob $job, VidiunPostConvertJobData $data)
 	{
 		// creates a temp file path
-		$rootPath = KBatchBase::$taskConfig->params->sharedTempPath;
+		$rootPath = VBatchBase::$taskConfig->params->sharedTempPath;
 		if(! is_dir($rootPath))
 		{
 			if(! file_exists($rootPath))
 			{
-				KalturaLog::info("Creating temp thumbnail directory [$rootPath]");
+				VidiunLog::info("Creating temp thumbnail directory [$rootPath]");
 				mkdir($rootPath);
 			}
 			else
@@ -221,9 +221,9 @@ class KAsyncPostConvert extends KJobHandlerWorker
 		$sharedFile = realpath($rootPath) . DIRECTORY_SEPARATOR . $uniqid;
 		
 		clearstatcache();
-		$fileSize = kFile::fileSize($data->thumbPath);
+		$fileSize = vFile::fileSize($data->thumbPath);
 		rename($data->thumbPath, $sharedFile);
-		if(!file_exists($sharedFile) || kFile::fileSize($sharedFile) != $fileSize)
+		if(!file_exists($sharedFile) || vFile::fileSize($sharedFile) != $fileSize)
 		{
 			$err = 'moving file failed';
 			throw new Exception($err, -1);
@@ -240,20 +240,20 @@ class KAsyncPostConvert extends KJobHandlerWorker
 	 * - Silent or black content for at least 50% of the total duration
 	 * - The detection duration - at least 2 sec
 	 * - Applicable only to Webex sources
-	 * @param KalturaBatchJob $job
-	 * @param KalturaPostConvertJobData $data
+	 * @param VidiunBatchJob $job
+	 * @param VidiunPostConvertJobData $data
 	 * $param $mediaFile
-	 * #param KalturaMediaInfo $mediaInfo
+	 * #param VidiunMediaInfo $mediaInfo
 	 * @return boolean
 	 */
-	private function checkForValidityOfWebexProduct(KalturaPostConvertJobData $data, $srcFileName, KalturaMediaInfo $mediaInfo, &$detectMsg)
+	private function checkForValidityOfWebexProduct(VidiunPostConvertJobData $data, $srcFileName, VidiunMediaInfo $mediaInfo, &$detectMsg)
 	{
 		$rv = true;
 		$detectMsg = null;
 		/*
 		 * Get silent and black portions
 		 *
-		list($silenceDetect, $blackDetect) = KFFMpegMediaParser::checkForSilentAudioAndBlackVideo(KBatchBase::$taskConfig->params->FFMpegCmd, $srcFileName, $mediaInfo);
+		list($silenceDetect, $blackDetect) = VFFMpegMediaParser::checkForSilentAudioAndBlackVideo(VBatchBase::$taskConfig->params->FFMpegCmd, $srcFileName, $mediaInfo);
 		
 		$detectMsg = $silenceDetect;
 		if(isset($blackDetect))
@@ -275,7 +275,7 @@ class KAsyncPostConvert extends KJobHandlerWorker
 		 */
 		$operators = json_decode($data->flavorParamsOutput->operators);
 		if($data->currentOperationSet<count($operators)-1) {
-			if(KFFMpegMediaParser::checkForGarbledAudio(KBatchBase::$taskConfig->params->FFMpegCmd, $srcFileName, $mediaInfo)==true) {
+			if(VFFMpegMediaParser::checkForGarbledAudio(VBatchBase::$taskConfig->params->FFMpegCmd, $srcFileName, $mediaInfo)==true) {
 				$detectMsg.= " Garbled Audio!";
 				$rv = false;
 			}

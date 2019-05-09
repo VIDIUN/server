@@ -1,6 +1,6 @@
 <?php
-require_once realpath(__DIR__ . '/../../') . '/lib/KalturaEnums.php';
-require_once realpath(__DIR__ . '/../') . '/KalturaMonitorResult.php';
+require_once realpath(__DIR__ . '/../../') . '/lib/VidiunEnums.php';
+require_once realpath(__DIR__ . '/../') . '/VidiunMonitorResult.php';
 
 $options = getopt('', array(
 	'debug',
@@ -58,7 +58,7 @@ $timestampText = date('Y-m-d H:i:s', $timestamp);
 
 // start
 $start = microtime(true);
-$monitorResult = new KalturaMonitorResult();
+$monitorResult = new VidiunMonitorResult();
 
 $config = parse_ini_file(__DIR__ . '/../config.ini', true);
 try
@@ -118,17 +118,17 @@ try
 	{
 		if($tableCount != $logCount)
 		{
-			$error = new KalturaMonitorError();
+			$error = new VidiunMonitorError();
 			$error->description = "Sphinx log contains $logCount records although $tableCount $objectType objects changed";
-			$error->level = KalturaMonitorError::CRIT;
+			$error->level = VidiunMonitorError::CRIT;
 			$monitorResult->errors[] = $error;
 		}
 		
 		if($tableCount != $sphinxCount)
 		{
-			$error = new KalturaMonitorError();
+			$error = new VidiunMonitorError();
 			$error->description = "Sphinx updated with $sphinxCount records although $tableCount $objectType objects changed";
-			$error->level = KalturaMonitorError::CRIT;
+			$error->level = VidiunMonitorError::CRIT;
 			$monitorResult->errors[] = $error;
 		}
 		
@@ -144,10 +144,10 @@ catch(PDOException $pdoe)
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $pdoe->getCode();
 	$error->description = $pdoe->getMessage();
-	$error->level = KalturaMonitorError::CRIT;
+	$error->level = VidiunMonitorError::CRIT;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = get_class($pdoe) . ": " . $pdoe->getMessage();
@@ -160,10 +160,10 @@ catch(Exception $e)
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $e->getCode();
 	$error->description = $e->getMessage();
-	$error->level = KalturaMonitorError::ERR;
+	$error->level = VidiunMonitorError::ERR;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = $e->getMessage();

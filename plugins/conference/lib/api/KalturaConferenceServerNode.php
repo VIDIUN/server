@@ -3,7 +3,7 @@
  * @package plugins.conference
  * @subpackage api.objects
  */
-class KalturaConferenceServerNode extends KalturaServerNode
+class VidiunConferenceServerNode extends VidiunServerNode
 {
 	/**
 	 * @var string
@@ -16,7 +16,7 @@ class KalturaConferenceServerNode extends KalturaServerNode
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -24,7 +24,7 @@ class KalturaConferenceServerNode extends KalturaServerNode
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -35,7 +35,7 @@ class KalturaConferenceServerNode extends KalturaServerNode
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{

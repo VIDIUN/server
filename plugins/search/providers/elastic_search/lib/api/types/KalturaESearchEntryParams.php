@@ -3,10 +3,10 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchEntryParams extends KalturaESearchParams
+class VidiunESearchEntryParams extends VidiunESearchParams
 {
 	/**
-	 * @var KalturaESearchEntryOperator
+	 * @var VidiunESearchEntryOperator
 	 */
 	public $searchOperator;
 
@@ -18,12 +18,12 @@ class KalturaESearchEntryParams extends KalturaESearchParams
 	protected function initStatuses()
 	{
 		$statuses = explode(',', $this->objectStatuses);
-		$enumType = KalturaEntryStatus::getEnumClass();
+		$enumType = VidiunEntryStatus::getEnumClass();
 
 		$finalStatuses = array();
 		foreach($statuses as $status)
 		{
-			$finalStatuses[] = kPluginableEnumsManager::apiToCore($enumType, $status);
+			$finalStatuses[] = vPluginableEnumsManager::apiToCore($enumType, $status);
 		}
 		return implode(',', $finalStatuses);
 	}

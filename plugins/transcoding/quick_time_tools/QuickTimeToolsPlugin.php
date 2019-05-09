@@ -2,7 +2,7 @@
 /**
  * @package plugins.quickTimeTools
  */
-class QuickTimeToolsPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaEnumerator
+class QuickTimeToolsPlugin extends VidiunPlugin implements IVidiunObjectLoader, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'quickTimeTools';
 	
@@ -19,18 +19,18 @@ class QuickTimeToolsPlugin extends KalturaPlugin implements IKalturaObjectLoader
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::QUICK_TIME_PLAYER_TOOLS)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::QUICK_TIME_PLAYER_TOOLS)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 				
 			$params = $constructorArgs['params'];
-			return new KOperationEngineQtTools($params->qtToolsCmd, $constructorArgs['outFilePath']);
+			return new VOperationEngineQtTools($params->qtToolsCmd, $constructorArgs['outFilePath']);
 		}
 			
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(QuickTimeToolsConversionEngineType::QUICK_TIME_PLAYER_TOOLS))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(QuickTimeToolsConversionEngineType::QUICK_TIME_PLAYER_TOOLS))
 		{
-			return new KDLTranscoderQTPTools($enumValue);
+			return new VDLTranscoderQTPTools($enumValue);
 		}
 		
 		return null;
@@ -43,11 +43,11 @@ class QuickTimeToolsPlugin extends KalturaPlugin implements IKalturaObjectLoader
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == self::getApiValue(QuickTimeToolsConversionEngineType::QUICK_TIME_PLAYER_TOOLS))
-			return 'KOperationEngineQtTools';
+		if($baseClass == 'VOperationEngine' && $enumValue == self::getApiValue(QuickTimeToolsConversionEngineType::QUICK_TIME_PLAYER_TOOLS))
+			return 'VOperationEngineQtTools';
 			
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(QuickTimeToolsConversionEngineType::QUICK_TIME_PLAYER_TOOLS))
-			return 'KDLTranscoderQTPTools';
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(QuickTimeToolsConversionEngineType::QUICK_TIME_PLAYER_TOOLS))
+			return 'VDLTranscoderQTPTools';
 		
 		return null;	
 	}
@@ -71,8 +71,8 @@ class QuickTimeToolsPlugin extends KalturaPlugin implements IKalturaObjectLoader
 	 */
 	public static function getConversionEngineCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('conversionEngineType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('conversionEngineType', $value);
 	}
 	
 	/**
@@ -80,6 +80,6 @@ class QuickTimeToolsPlugin extends KalturaPlugin implements IKalturaObjectLoader
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

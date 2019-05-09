@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchHighlightQuery extends kESearchBaseQuery
+class vESearchHighlightQuery extends vESearchBaseQuery
 {
 
 	const UNIFIED = 'unified';

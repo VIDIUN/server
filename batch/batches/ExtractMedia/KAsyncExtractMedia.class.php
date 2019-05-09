@@ -10,26 +10,26 @@
  * @package Scheduler
  * @subpackage Extract-Media
  */
-class KAsyncExtractMedia extends KJobHandlerWorker
+class VAsyncExtractMedia extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::EXTRACT_MEDIA;
+		return VidiunBatchJobType::EXTRACT_MEDIA;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->extract($job, $job->data);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::getMaxJobsEachRun()
+	 * @see VJobHandlerWorker::getMaxJobsEachRun()
 	 */
 	protected function getMaxJobsEachRun()
 	{
@@ -37,9 +37,9 @@ class KAsyncExtractMedia extends KJobHandlerWorker
 	}
 	
 	/**
-	 * Will take a single KalturaBatchJob and extract the media info for the given file
+	 * Will take a single VidiunBatchJob and extract the media info for the given file
 	 */
-	private function extract(KalturaBatchJob $job, KalturaExtractMediaJobData $data)
+	private function extract(VidiunBatchJob $job, VidiunExtractMediaJobData $data)
 	{
 		$srcFileSyncDescriptor = reset($data->srcFileSyncs);
 		$mediaFile = null;
@@ -47,18 +47,18 @@ class KAsyncExtractMedia extends KJobHandlerWorker
 			$mediaFile = trim($srcFileSyncDescriptor->fileSyncLocalPath);
 		
 		if(!$this->pollingFileExists($mediaFile))
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, "Source file $mediaFile does not exist", KalturaBatchJobStatus::RETRY);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, "Source file $mediaFile does not exist", VidiunBatchJobStatus::RETRY);
 		
 		if(!is_file($mediaFile))
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, "Source file $mediaFile is not a file", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, "Source file $mediaFile is not a file", VidiunBatchJobStatus::FAILED);
 		
-		$this->updateJob($job, "Extracting file media info on $mediaFile", KalturaBatchJobStatus::QUEUED);
+		$this->updateJob($job, "Extracting file media info on $mediaFile", VidiunBatchJobStatus::QUEUED);
 		
 		$mediaInfo = $this->extractMediaInfo($job, $mediaFile);
 		
 		if(is_null($mediaInfo))
 		{
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::EXTRACT_MEDIA_FAILED, "Failed to extract media info: $mediaFile", KalturaBatchJobStatus::RETRY);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::EXTRACT_MEDIA_FAILED, "Failed to extract media info: $mediaFile", VidiunBatchJobStatus::RETRY);
 		}
 		
 		if($data->calculateComplexity)
@@ -77,13 +77,13 @@ class KAsyncExtractMedia extends KJobHandlerWorker
 		if($data->extractId3Tags)
 			$this->extractId3Tags($mediaFile, $data, $duration);
 		
-		KalturaLog::debug("flavorAssetId [$data->flavorAssetId]");
+		VidiunLog::debug("flavorAssetId [$data->flavorAssetId]");
 		$mediaInfo->flavorAssetId = $data->flavorAssetId;
 		$mediaInfo = $this->getClient()->batch->addMediaInfo($mediaInfo);
 		$data->mediaInfoId = $mediaInfo->id;
 		
-		$this->updateJob($job, "Saving media info id $mediaInfo->id", KalturaBatchJobStatus::PROCESSED, $data);
-		$this->closeJob($job, null, null, null, KalturaBatchJobStatus::FINISHED);
+		$this->updateJob($job, "Saving media info id $mediaInfo->id", VidiunBatchJobStatus::PROCESSED, $data);
+		$this->closeJob($job, null, null, null, VidiunBatchJobStatus::FINISHED);
 		
 		return $job;
 	}
@@ -92,7 +92,7 @@ class KAsyncExtractMedia extends KJobHandlerWorker
 	 * extractMediaInfo extract the file info using mediainfo and parse the returned data
 	 *  
 	 * @param string $mediaFile file full path
-	 * @return KalturaMediaInfo or null for failure
+	 * @return VidiunMediaInfo or null for failure
 	 */
 	private function extractMediaInfo($job, $mediaFile)
 	{
@@ -101,7 +101,7 @@ class KAsyncExtractMedia extends KJobHandlerWorker
 		{
 			$mediaFile = realpath($mediaFile);
 			
-			$engine = KBaseMediaParser::getParser($job->jobSubType, $mediaFile, self::$taskConfig, $job);
+			$engine = VBaseMediaParser::getParser($job->jobSubType, $mediaFile, self::$taskConfig, $job);
 			if($engine)
 			{
 				$mediaInfo = $engine->getMediaInfo();
@@ -109,12 +109,12 @@ class KAsyncExtractMedia extends KJobHandlerWorker
 			else
 			{
 				$err = "No media info parser engine found for job sub type [$job->jobSubType]";
-				return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::ENGINE_NOT_FOUND, $err, KalturaBatchJobStatus::FAILED);
+				return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::ENGINE_NOT_FOUND, $err, VidiunBatchJobStatus::FAILED);
 			}
 		}
 		catch(Exception $ex)
 		{
-			KalturaLog::err($ex->getMessage());
+			VidiunLog::err($ex->getMessage());
 			$mediaInfo = null;
 		}
 		
@@ -133,15 +133,15 @@ class KAsyncExtractMedia extends KJobHandlerWorker
 			$ffmpegBin = isset(self::$taskConfig->params->ffmpegCmd)? self::$taskConfig->params->ffmpegCmd: null;
 			$ffprobeBin = isset(self::$taskConfig->params->ffprobeCmd)? self::$taskConfig->params->ffprobeCmd: null;
 			$mediaInfoBin = isset(self::$taskConfig->params->mediaInfoCmd)? self::$taskConfig->params->mediaInfoCmd: null;
-			$calcComplexity = new KMediaFileComplexity($ffmpegBin, $ffprobeBin, $mediaInfoBin);
+			$calcComplexity = new VMediaFileComplexity($ffmpegBin, $ffprobeBin, $mediaInfoBin);
 			
 			$baseOutputName = tempnam(self::$taskConfig->params->localTempPath, "/complexitySampled_".pathinfo($mediaFile, PATHINFO_FILENAME)).".mp4";
 			$stat = $calcComplexity->EvaluateSampled($mediaFile, $mediaInfo, $baseOutputName);
 			if(isset($stat->complexityValue))
 			{
-				KalturaLog::log("Complexity: value($stat->complexityValue)");
+				VidiunLog::log("Complexity: value($stat->complexityValue)");
 				if(isset($stat->y))
-					KalturaLog::log("Complexity: y($stat->y)");
+					VidiunLog::log("Complexity: y($stat->y)");
 				
 				$complexityValue = $stat->complexityValue;
 			}
@@ -151,12 +151,12 @@ class KAsyncExtractMedia extends KJobHandlerWorker
 			$mediaInfo->complexityValue = $complexityValue;
 	}
 	
-	private function extractId3Tags($filePath, KalturaExtractMediaJobData $data, $duration)
+	private function extractId3Tags($filePath, VidiunExtractMediaJobData $data, $duration)
 	{
 		try
 		{
-			$kalturaId3TagParser = new KSyncPointsMediaInfoParser($filePath);
-			$syncPointArray = $kalturaId3TagParser->getStreamSyncPointData();
+			$vidiunId3TagParser = new VSyncPointsMediaInfoParser($filePath);
+			$syncPointArray = $vidiunId3TagParser->getStreamSyncPointData();
 			
 			$outputFileName = pathinfo($filePath, PATHINFO_FILENAME) . ".data";
 			$localTempSyncPointsFilePath = self::$taskConfig->params->localTempPath . DIRECTORY_SEPARATOR . $outputFileName;
@@ -166,33 +166,33 @@ class KAsyncExtractMedia extends KJobHandlerWorker
 			$interval = (self::$taskConfig->fileSystemCommandInterval ? self::$taskConfig->fileSystemCommandInterval : self::DEFAULT_SLEEP_INTERVAL);
 			while ($retries-- > 0)
 			{
-				if (kFile::setFileContent($localTempSyncPointsFilePath, serialize($syncPointArray)) &&
+				if (vFile::setFileContent($localTempSyncPointsFilePath, serialize($syncPointArray)) &&
 					$this->moveDataFile($data, $localTempSyncPointsFilePath, $sharedTempSyncPointFilePath))
 						return true;
-				KalturaLog::log("Failed on moving syncPointArray to server, waiting $interval seconds");
+				VidiunLog::log("Failed on moving syncPointArray to server, waiting $interval seconds");
 				sleep($interval);
 			}
-			throw new kTemporaryException("Failed on moving syncPointArray to server. temp path: {$localTempSyncPointsFilePath}");
+			throw new vTemporaryException("Failed on moving syncPointArray to server. temp path: {$localTempSyncPointsFilePath}");
 		}
-		catch(kTemporaryException $ktex)
+		catch(vTemporaryException $vtex)
 		{
 			$this->unimpersonate();
-			throw $ktex;
+			throw $vtex;
 		}
 		catch(Exception $ex) 
 		{
 			$this->unimpersonate();
-			KalturaLog::warning("Failed to extract id3tags data or duration data with error: " . print_r($ex, true));
+			VidiunLog::warning("Failed to extract id3tags data or duration data with error: " . print_r($ex, true));
 		}
 		
 	}
 	
-	private function moveDataFile(KalturaExtractMediaJobData $data, $localTempSyncPointsFilePath, $sharedTempSyncPointFilePath)
+	private function moveDataFile(VidiunExtractMediaJobData $data, $localTempSyncPointsFilePath, $sharedTempSyncPointFilePath)
 	{
-		KalturaLog::debug("moving file from [$localTempSyncPointsFilePath] to [$sharedTempSyncPointFilePath]");
-		$fileSize = kFile::fileSize($localTempSyncPointsFilePath);
+		VidiunLog::debug("moving file from [$localTempSyncPointsFilePath] to [$sharedTempSyncPointFilePath]");
+		$fileSize = vFile::fileSize($localTempSyncPointsFilePath);
 		
-		$res = kFile::moveFile($localTempSyncPointsFilePath, $sharedTempSyncPointFilePath, true);
+		$res = vFile::moveFile($localTempSyncPointsFilePath, $sharedTempSyncPointFilePath, true);
 		if (!$res)
 			return false;
 		clearstatcache();
@@ -200,7 +200,7 @@ class KAsyncExtractMedia extends KJobHandlerWorker
 		$this->setFilePermissions($sharedTempSyncPointFilePath);
 		if(!$this->checkFileExists($sharedTempSyncPointFilePath, $fileSize))
 		{
-			KalturaLog::warning("Failed to move file to [$sharedTempSyncPointFilePath]");
+			VidiunLog::warning("Failed to move file to [$sharedTempSyncPointFilePath]");
 			return false;
 		}
 		else
@@ -213,9 +213,9 @@ class KAsyncExtractMedia extends KJobHandlerWorker
 	 */
 	 private function detectMediaFileGOP($mediaInfo, $mediaFile, $interval)
 	 {
-		KalturaLog::log("Detection interval($interval)");
-		list($minGOP,$maxGOP,$detectedGOP) = KFFMpegMediaParser::detectGOP((isset(self::$taskConfig->params->ffprobeCmd)? self::$taskConfig->params->ffprobeCmd: null), $mediaFile, 0, $interval);
-		KalturaLog::log("Detected - minGOP($minGOP),maxGOP($maxGOP),detectedGOP($detectedGOP)");
+		VidiunLog::log("Detection interval($interval)");
+		list($minGOP,$maxGOP,$detectedGOP) = VFFMpegMediaParser::detectGOP((isset(self::$taskConfig->params->ffprobeCmd)? self::$taskConfig->params->ffprobeCmd: null), $mediaFile, 0, $interval);
+		VidiunLog::log("Detected - minGOP($minGOP),maxGOP($maxGOP),detectedGOP($detectedGOP)");
 		if(isset($maxGOP)){
 			$mediaInfo->maxGOP = $maxGOP;
 		}

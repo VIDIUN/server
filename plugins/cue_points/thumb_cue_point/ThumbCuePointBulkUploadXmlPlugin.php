@@ -3,7 +3,7 @@
  * Enable thumb cue point ingestion from XML bulk upload
  * @package plugins.thumbCuePoint
  */
-class ThumbCuePointBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPending, IKalturaSchemaContributor
+class ThumbCuePointBulkUploadXmlPlugin extends VidiunPlugin implements IVidiunPending, IVidiunSchemaContributor
 {
 	const PLUGIN_NAME = 'ThumbCuePointBulkUploadXml';
 	const BULK_UPLOAD_XML_PLUGIN_NAME = 'bulkUploadXml';
@@ -13,21 +13,21 @@ class ThumbCuePointBulkUploadXmlPlugin extends KalturaPlugin implements IKaltura
 	const BULK_UPLOAD_XML_VERSION_BUILD = 0;
 
 	/* (non-PHPdoc)
-	 * @see KalturaPlugin::getInstance()
+	 * @see VidiunPlugin::getInstance()
 	 */
 	public function getInstance($interface)
 	{
 		if($this instanceof $interface)
 			return $this;
 			
-		if($interface == 'IKalturaBulkUploadXmlHandler')
+		if($interface == 'IVidiunBulkUploadXmlHandler')
 			return ThumbCuePointBulkUploadXmlHandler::get();
 			
 		return null;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -35,27 +35,27 @@ class ThumbCuePointBulkUploadXmlPlugin extends KalturaPlugin implements IKaltura
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$bulkUploadXmlVersion = new KalturaVersion(
+		$bulkUploadXmlVersion = new VidiunVersion(
 			self::BULK_UPLOAD_XML_VERSION_MAJOR,
 			self::BULK_UPLOAD_XML_VERSION_MINOR,
 			self::BULK_UPLOAD_XML_VERSION_BUILD);
 			
-		$bulkUploadXmlDependency = new KalturaDependency(self::BULK_UPLOAD_XML_PLUGIN_NAME, $bulkUploadXmlVersion);
-		$thumbCuePointDependency = new KalturaDependency(ThumbCuePointPlugin::getPluginName());
+		$bulkUploadXmlDependency = new VidiunDependency(self::BULK_UPLOAD_XML_PLUGIN_NAME, $bulkUploadXmlVersion);
+		$thumbCuePointDependency = new VidiunDependency(ThumbCuePointPlugin::getPluginName());
 		
 		return array($bulkUploadXmlDependency, $thumbCuePointDependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if(
 			$coreType != BulkUploadXmlPlugin::getSchemaTypeCoreValue(XmlSchemaType::BULK_UPLOAD_XML)
 			&&
@@ -63,8 +63,8 @@ class ThumbCuePointBulkUploadXmlPlugin extends KalturaPlugin implements IKaltura
 		)
 			return null;
 	
-		$xmlnsBase = "http://" . kConf::get('www_host') . "/$type";
-		$xmlnsPlugin = "http://" . kConf::get('www_host') . "/$type/" . self::getPluginName();
+		$xmlnsBase = "http://" . vConf::get('www_host') . "/$type";
+		$xmlnsPlugin = "http://" . vConf::get('www_host') . "/$type/" . self::getPluginName();
 		
 		$xsd = '
 		
@@ -76,7 +76,7 @@ class ThumbCuePointBulkUploadXmlPlugin extends KalturaPlugin implements IKaltura
 				<xs:sequence>
 					<xs:element name="title" minOccurs="1" maxOccurs="1" type="xs:string"> </xs:element>
 					<xs:element name="description" minOccurs="1" maxOccurs="1" type="xs:string"> </xs:element>
-					<xs:element name="subType" minOccurs="0" maxOccurs="1" type="KalturaThumbCuePointSubType">
+					<xs:element name="subType" minOccurs="0" maxOccurs="1" type="VidiunThumbCuePointSubType">
 						<xs:annotation>
 							<xs:documentation>Indicates the thumb cue point sub type 1 = Slide 2 = Chapter, defaults to Slide</xs:documentation>
 						</xs:annotation>

@@ -4,8 +4,8 @@ ini_set("memory_limit","700M");
 chdir(dirname(__FILE__));
 
 define('ROOT_DIR', realpath(dirname(__FILE__) . '/../../../../../'));
-require_once(ROOT_DIR . '/infra/KAutoloader.php');
-require_once(ROOT_DIR . '/alpha/config/kConf.php');
+require_once(ROOT_DIR . '/infra/VAutoloader.php');
+require_once(ROOT_DIR . '/alpha/config/vConf.php');
 
 // ------------------------------------------------------
 class OldLogRecordsFilter {
@@ -20,20 +20,20 @@ class OldLogRecordsFilter {
 	}
 }
 
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "propel", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "plugins", "*"));
-KAutoloader::setClassMapFilePath(kConf::get("cache_root_path") . '/sphinx/' . basename(__FILE__) . '.cache');
-KAutoloader::register();
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "propel", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "plugins", "*"));
+VAutoloader::setClassMapFilePath(vConf::get("cache_root_path") . '/sphinx/' . basename(__FILE__) . '.cache');
+VAutoloader::register();
 
 $skipExecutedUpdates = false;
 error_reporting(E_ALL);
-KalturaLog::setLogger(new KalturaStdoutLogger());
+VidiunLog::setLogger(new VidiunStdoutLogger());
 
 $hostname = (isset($_SERVER["HOSTNAME"]) ? $_SERVER["HOSTNAME"] : gethostname());
 $configFile = ROOT_DIR . "/configurations/sphinx/populate/$hostname.ini";
 if(!file_exists($configFile))
 {
-	KalturaLog::err("Configuration file [$configFile] not found.");
+	VidiunLog::err("Configuration file [$configFile] not found.");
 	exit(-1);
 }
 $config = parse_ini_file($configFile);
@@ -41,21 +41,21 @@ $sphinxServer = $config['sphinxServer'];
 $sphinxPort = (isset($config['sphinxPort']) ? $config['sphinxPort'] : 9312);
 $isSharded = isset($config['sharded']) ? $config['sharded'] : false;
 $processSqlUpdates = (isset($config['processSqlUpdates']) ? $config['processSqlUpdates'] : false);
-$systemSettings = kConf::getMap('system');
+$systemSettings = vConf::getMap('system');
 if(!$systemSettings || !$systemSettings['LOG_DIR'])
 {
-	KalturaLog::err("LOG_DIR not found in system configuration.");
+	VidiunLog::err("LOG_DIR not found in system configuration.");
 	exit(-1);
 }
 $pid = $systemSettings['LOG_DIR'] . '/populate.pid';
 if(file_exists($pid))
 {
-	KalturaLog::err("Scheduler already running - pid[" . file_get_contents($pid) . "]");
+	VidiunLog::err("Scheduler already running - pid[" . file_get_contents($pid) . "]");
 	exit(1);
 }
 file_put_contents($pid, getmypid());
 
-$dbConf = kConf::getDB();
+$dbConf = vConf::getDB();
 DbManager::setConfig($dbConf);
 DbManager::initialize();
 
@@ -93,7 +93,7 @@ while(true)
 	}
 	catch(Exception $e)
 	{
-		KalturaLog::err($e->getMessage());
+		VidiunLog::err($e->getMessage());
 		sleep(5);
 		continue;
 	}
@@ -128,7 +128,7 @@ while(true)
 		}
 		
 		$handledRecords[$dc][] = $sphinxLogId;
-		KalturaLog::log("Sphinx log id $sphinxLogId dc [$dc] executed server id [$executedServerId] Memory: [" . memory_get_usage() . "]");
+		VidiunLog::log("Sphinx log id $sphinxLogId dc [$dc] executed server id [$executedServerId] Memory: [" . memory_get_usage() . "]");
 
 		try
 		{
@@ -171,7 +171,7 @@ while(true)
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 		}
 	}
 	

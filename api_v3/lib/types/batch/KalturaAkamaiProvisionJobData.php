@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAkamaiProvisionJobData extends KalturaProvisionJobData
+class VidiunAkamaiProvisionJobData extends VidiunProvisionJobData
 {
 	/**
 	 * @var string
@@ -55,7 +55,7 @@ class KalturaAkamaiProvisionJobData extends KalturaProvisionJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kAkamaiProvisionJobData();
+			$dbData = new vAkamaiProvisionJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

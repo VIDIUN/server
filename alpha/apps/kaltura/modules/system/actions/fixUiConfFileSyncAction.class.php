@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class fixUiConfFileSyncAction extends kalturaSystemAction
+class fixUiConfFileSyncAction extends vidiunSystemAction
 {
 	public function execute()
 	{
@@ -34,7 +34,7 @@ class fixUiConfFileSyncAction extends kalturaSystemAction
 				echo ("Features:".PHP_EOL);
 				
 			$syncKey = $uiConf->getSyncKey($subType);
-			if (kFileSyncUtils::file_exists($syncKey))
+			if (vFileSyncUtils::file_exists($syncKey))
 			{
 				echo("File sync already exists.".PHP_EOL);
 			}
@@ -46,7 +46,7 @@ class fixUiConfFileSyncAction extends kalturaSystemAction
 
 				if (file_exists($fullPath))
 				{
-					kFileSyncUtils::createSyncFileForKey($rootPath, $filePath, $syncKey);
+					vFileSyncUtils::createSyncFileForKey($rootPath, $filePath, $syncKey);
 					echo("Created successfully.".PHP_EOL);
 				}
 				else

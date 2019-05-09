@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBatchJobFilterExt extends KalturaBatchJobFilter
+class VidiunBatchJobFilterExt extends VidiunBatchJobFilter
 {
 	static private $map_between_objects = array
 	(
@@ -38,7 +38,7 @@ class KalturaBatchJobFilterExt extends KalturaBatchJobFilter
 			if($jobSubTypes !== "") {
 				$jobSubTypes = $this->toDynamicJobSubTypeValues($jobType, $jobSubTypes);
 			}
-			$jobType = kPluginableEnumsManager::apiToCore('BatchJobType', $jobType);
+			$jobType = vPluginableEnumsManager::apiToCore('BatchJobType', $jobType);
 			
 			$finalTypesAndSubTypes[] = $jobType . BatchJobFilter::JOB_TYPE_AND_SUB_TYPE_TYPE_DELIMITER . $jobSubTypes;
 		}

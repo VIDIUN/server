@@ -8,5 +8,5 @@
  */
 
 $script = realpath(dirname(__FILE__) . '/../../../../') . '/alpha/scripts/utils/permissions/addPermissionsAndItems.php';
-$config = realpath(dirname(__FILE__)) . '/../../../permissions/object.KalturaEventNotificationTemplate.ini';
+$config = realpath(dirname(__FILE__)) . '/../../../permissions/object.VidiunEventNotificationTemplate.ini';
 passthru("php $script $config");

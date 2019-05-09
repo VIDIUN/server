@@ -3,6 +3,6 @@
  * @package plugins.reach
  * @subpackage api.filters.enum
  */
-class KalturaVendorTranslationCatalogItemOrderBy extends KalturaVendorCaptionsCatalogItemOrderBy
+class VidiunVendorTranslationCatalogItemOrderBy extends VidiunVendorCaptionsCatalogItemOrderBy
 {
 }

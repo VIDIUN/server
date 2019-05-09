@@ -19,30 +19,30 @@ ActivitiBusinessProcessNotification
 
 Add the following lines under `[template]` section:
 ```
-enabledWorkers.KAsyncIntegrate					= 1
-enabledWorkers.KAsyncIntegrateCloser				= 1
+enabledWorkers.VAsyncIntegrate					= 1
+enabledWorkers.VAsyncIntegrateCloser				= 1
 ```
 
 Add the following lines as new sections:
 ```
-[KAsyncIntegrate : JobHandlerWorker]
+[VAsyncIntegrate : JobHandlerWorker]
 id													= 570
 friendlyName										= Integrate
-type												= KAsyncIntegrate
+type												= VAsyncIntegrate
 maximumExecutionTime								= 12000
-scriptPath											= ../plugins/integration/batch/Integrate/KAsyncIntegrateExe.php
+scriptPath											= ../plugins/integration/batch/Integrate/VAsyncIntegrateExe.php
 
-[KAsyncIntegrateCloser : JobHandlerWorker]
+[VAsyncIntegrateCloser : JobHandlerWorker]
 id													= 580
 friendlyName										= Integrate Closer
-type												= KAsyncIntegrateCloser
+type												= VAsyncIntegrateCloser
 maximumExecutionTime								= 12000
-scriptPath											= ../plugins/integration/batch/Integrate/KAsyncIntegrateCloserExe.php
+scriptPath											= ../plugins/integration/batch/Integrate/VAsyncIntegrateCloserExe.php
 params.maxTimeBeforeFail							= 1000000
 ```
 
 #### Deployment Preparations ####
-*NOTE: all paths here are relative to /opt/kaltura/app*
+*NOTE: all paths here are relative to /opt/vidiun/app*
 
  - Reload configuration: `touch cache/base.reload` or, on a none production ENV, reload your Apache.
  - Clear cache: `rm -rf cache/*`.
@@ -52,12 +52,12 @@ params.maxTimeBeforeFail							= 1000000
 ```
 # php generator/generate.php pojo
 # php generator/generate.php bpmn
-# cd /opt/kaltura/web/content/clientlibs/pojo
+# cd /opt/vidiun/web/content/clientlibs/pojo
 # mvn -Dmaven.test.skip=true package
-# cd /opt/kaltura/web/content/clientlibs/bpmn
+# cd /opt/vidiun/web/content/clientlibs/bpmn
 # ant
 ```
- - Restart batch: `/etc/init.d/kaltura-batch restart`.
+ - Restart batch: `/etc/init.d/vidiun-batch restart`.
 
 
 #### Activiti Deployment Instructions ####
@@ -103,4 +103,4 @@ params.maxTimeBeforeFail							= 1000000
  - Deploy processes **(replace tokens)**:
 	 - `cd @WEB_DIR@/content/clientlibs/bpmn`
 	 - `ant`
- - Add Activiti server to Kaltura server using the API **(replace tokens)**: `php @APP_DIR@/tests/standAloneClient/exec.php @APP_DIR@/tests/standAloneClient/activitiServer.xml`
+ - Add Activiti server to Vidiun server using the API **(replace tokens)**: `php @APP_DIR@/tests/standAloneClient/exec.php @APP_DIR@/tests/standAloneClient/activitiServer.xml`

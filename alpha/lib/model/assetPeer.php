@@ -85,7 +85,7 @@ class assetPeer extends BaseassetPeer implements IRelatedObjectPeer
 			if(isset(self::$class_types_cache[$assetType]))
 				return self::$class_types_cache[$assetType];
 				
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $assetType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $assetType);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$assetType] = $extendedCls;
@@ -110,7 +110,7 @@ class assetPeer extends BaseassetPeer implements IRelatedObjectPeer
 			
 		if(!$class)
 		{
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $assetType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $assetType);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$assetType] = $extendedCls;
@@ -119,7 +119,7 @@ class assetPeer extends BaseassetPeer implements IRelatedObjectPeer
 		}
 		
 		if(!$class)
-			throw new kCoreException("Unable to instatiate asset of type [$assetType]", kCoreException::OBJECT_TYPE_NOT_FOUND);
+			throw new vCoreException("Unable to instatiate asset of type [$assetType]", vCoreException::OBJECT_TYPE_NOT_FOUND);
 				
 		return new $class();
 	}
@@ -222,7 +222,7 @@ class assetPeer extends BaseassetPeer implements IRelatedObjectPeer
 		$c = new Criteria();
 		$c->add(self::ENTRY_ID, $entryId);
 		$c->add(self::FLAVOR_PARAMS_ID, $paramsId);
-		// Gonen 10/05/10 - fixed bug when requesting download of original from KMC1 (pre-Andromeda)
+		// Gonen 10/05/10 - fixed bug when requesting download of original from VMC1 (pre-Andromeda)
 		// migrated entries had all flavors set with flavor_params_ID to 0
 		// all normal entries (not migrated) should have only the original with flavor params 0 (and is_original set to 1)
 		if($paramsId == 0)
@@ -275,7 +275,7 @@ class assetPeer extends BaseassetPeer implements IRelatedObjectPeer
 	
 	public static function retrieveAllFlavorsTypes()
 	{
-		$flavorTypes = KalturaPluginManager::getExtendedTypes(self::OM_CLASS, assetType::FLAVOR);
+		$flavorTypes = VidiunPluginManager::getExtendedTypes(self::OM_CLASS, assetType::FLAVOR);
 		$flavorTypes[] = assetType::LIVE;
 		return $flavorTypes;
 	}
@@ -304,7 +304,7 @@ class assetPeer extends BaseassetPeer implements IRelatedObjectPeer
 	 */
 	public static function retrieveThumbnailsByEntryId($entryId)
 	{
-		$thumbTypes = KalturaPluginManager::getExtendedTypes(self::OM_CLASS, assetType::THUMBNAIL);
+		$thumbTypes = VidiunPluginManager::getExtendedTypes(self::OM_CLASS, assetType::THUMBNAIL);
 		return self::retrieveByEntryId($entryId, $thumbTypes);
 	}
 	
@@ -330,7 +330,7 @@ class assetPeer extends BaseassetPeer implements IRelatedObjectPeer
 	 */
 	public static function countThumbnailsByEntryId($entryId)
 	{
-		$types = KalturaPluginManager::getExtendedTypes(self::OM_CLASS, assetType::THUMBNAIL);
+		$types = VidiunPluginManager::getExtendedTypes(self::OM_CLASS, assetType::THUMBNAIL);
 		return self::countByEntryId($entryId, $types);
 	}
 	
@@ -424,7 +424,7 @@ class assetPeer extends BaseassetPeer implements IRelatedObjectPeer
 		if(is_array($paramsIds) && count($paramsIds))
 			$c->add(assetPeer::FLAVOR_PARAMS_ID, $paramsIds, Criteria::IN);
 			
-		$flavorTypes = KalturaPluginManager::getExtendedTypes(self::OM_CLASS, assetType::THUMBNAIL);
+		$flavorTypes = VidiunPluginManager::getExtendedTypes(self::OM_CLASS, assetType::THUMBNAIL);
 		$c->add(assetPeer::TYPE, $flavorTypes, Criteria::IN);
 		
 		return self::doSelect($c);
@@ -595,9 +595,9 @@ class assetPeer extends BaseassetPeer implements IRelatedObjectPeer
 			if (!$ret || self::replaceCurrentFlavorWithCandidateFlavor($flavorAsset, $ret, $retrieveHighestBitrate)) {
 				$flavorSyncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 				if ($external)
-					$fileSync = kFileSyncUtils::getReadyPendingExternalFileSyncForKey($flavorSyncKey);
+					$fileSync = vFileSyncUtils::getReadyPendingExternalFileSyncForKey($flavorSyncKey);
 				else
-					list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($flavorSyncKey,false,false);
+					list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($flavorSyncKey,false,false);
 
 				if ($fileSync){
 					$ret = $flavorAsset;

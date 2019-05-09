@@ -3,10 +3,10 @@
  * @package plugins.sphinxSearch
  * @subpackage model.filters
  */
-class SphinxCategoryKuserCriteria extends SphinxCriteria
+class SphinxCategoryVuserCriteria extends SphinxCriteria
 {
 	public function getIndexObjectName() {
-		return "categoryKuserIndex";
+		return "categoryVuserIndex";
 	}
 	
 	/* (non-PHPdoc)
@@ -17,9 +17,9 @@ class SphinxCategoryKuserCriteria extends SphinxCriteria
 		switch ($fieldName)
 		{
 			case 'permission_names':
-				return categoryKuser::PERMISSION_NAME_FIELD_INDEX_PREFIX. kCurrentContext::getCurrentPartnerId();
-			case 'category_kuser_status':
-				return categoryKuser::STATUS_FIELD_PREFIX . kCurrentContext::getCurrentPartnerId();
+				return categoryVuser::PERMISSION_NAME_FIELD_INDEX_PREFIX. vCurrentContext::getCurrentPartnerId();
+			case 'category_vuser_status':
+				return categoryVuser::STATUS_FIELD_PREFIX . vCurrentContext::getCurrentPartnerId();
 		}
 
 		return parent::getFieldPrefix($fieldName);
@@ -33,31 +33,31 @@ class SphinxCategoryKuserCriteria extends SphinxCriteria
 		if ($filter->get('_in_status'))
 		{
 			$statusList = explode(',', $filter->get('_in_status'));
-			$statusList = $this->translateToSearchIndexFieldValue(categoryKuserPeer::STATUS, $statusList);
+			$statusList = $this->translateToSearchIndexFieldValue(categoryVuserPeer::STATUS, $statusList);
 			$filter->set('_in_status', implode(',', $statusList));
 		}
 		
 		if ($filter->get('_eq_status'))
 		{
-			$filter->set('_eq_status', categoryKuser::getSearchIndexFieldValue(categoryKuserPeer::STATUS, $filter->get('_eq_status'), kCurrentContext::getCurrentPartnerId()));
+			$filter->set('_eq_status', categoryVuser::getSearchIndexFieldValue(categoryVuserPeer::STATUS, $filter->get('_eq_status'), vCurrentContext::getCurrentPartnerId()));
 		}
 		
 		if ($filter->is_set('_in_update_method') && $filter->get('_in_update_method') != "")
 		{
 			$updateMethodList = explode(',', $filter->get('_in_update_method'));
-			$updateMethodList = $this->translateToSearchIndexFieldValue(categoryKuserPeer::UPDATE_METHOD, $updateMethodList);
+			$updateMethodList = $this->translateToSearchIndexFieldValue(categoryVuserPeer::UPDATE_METHOD, $updateMethodList);
 			$filter->set('_in_update_method', implode(',', $updateMethodList));
 		}
 		
 		if ($filter->get('_eq_update_method'))
 		{
-			$filter->set('_eq_update_method', categoryKuser::getSearchIndexFieldValue(categoryKuserPeer::UPDATE_METHOD, $filter->get('_eq_update_method'), kCurrentContext::getCurrentPartnerId()));
+			$filter->set('_eq_update_method', categoryVuser::getSearchIndexFieldValue(categoryVuserPeer::UPDATE_METHOD, $filter->get('_eq_update_method'), vCurrentContext::getCurrentPartnerId()));
 		}
 		
 		if (!is_null($filter->get('_eq_permission_level')))
 		{
 			$permissionLevel = $filter->get('_eq_permission_level');
-			$permissionNamesList = categoryKuser::getPermissionNamesByPermissionLevel($permissionLevel);
+			$permissionNamesList = categoryVuser::getPermissionNamesByPermissionLevel($permissionLevel);
 			$negativePermissionNamesList = $this->fixPermissionNamesListForSphinx($permissionLevel);
 			
 			if($negativePermissionNamesList)
@@ -65,8 +65,8 @@ class SphinxCategoryKuserCriteria extends SphinxCriteria
 			
 			if($filter->get('_matchand_permission_names'))
 			{
-				$permissionNamesList = $this->translateToSearchIndexFieldValue(categoryKuserPeer::PERMISSION_NAMES, $permissionNamesList);				
-				$criterion = $this->getNewCriterion(categoryKuserPeer::PERMISSION_NAMES, $permissionNamesList, baseObjectFilter::MATCH_AND);
+				$permissionNamesList = $this->translateToSearchIndexFieldValue(categoryVuserPeer::PERMISSION_NAMES, $permissionNamesList);				
+				$criterion = $this->getNewCriterion(categoryVuserPeer::PERMISSION_NAMES, $permissionNamesList, baseObjectFilter::MATCH_AND);
 				$this->addAnd($criterion);
 			}
 			else 
@@ -81,9 +81,9 @@ class SphinxCategoryKuserCriteria extends SphinxCriteria
 			$permissionLevels = explode(',', $permissionLevels);
 			foreach ($permissionLevels as $permissionLevel)
 			{
-				$permissionNamesList = categoryKuser::getPermissionNamesByPermissionLevel($permissionLevel);
-				$permissionNamesList = $this->translateToSearchIndexFieldValue(categoryKuserPeer::PERMISSION_NAMES, $permissionNamesList);
-				$criterion = $this->getNewCriterion(categoryKuserPeer::PERMISSION_NAMES, $permissionNamesList, baseObjectFilter::MATCH_AND);
+				$permissionNamesList = categoryVuser::getPermissionNamesByPermissionLevel($permissionLevel);
+				$permissionNamesList = $this->translateToSearchIndexFieldValue(categoryVuserPeer::PERMISSION_NAMES, $permissionNamesList);
+				$criterion = $this->getNewCriterion(categoryVuserPeer::PERMISSION_NAMES, $permissionNamesList, baseObjectFilter::MATCH_AND);
 				$this->addOr($criterion);
 			}
 			
@@ -93,21 +93,21 @@ class SphinxCategoryKuserCriteria extends SphinxCriteria
 		if ($filter->get('_matchor_permission_names'))
 		{
 			$permissionNamesList = explode(',', $filter->get('_matchor_permission_names'));
-			$permissionNamesList = $this->translateToSearchIndexFieldValue(categoryKuserPeer::PERMISSION_NAMES, $permissionNamesList);
+			$permissionNamesList = $this->translateToSearchIndexFieldValue(categoryVuserPeer::PERMISSION_NAMES, $permissionNamesList);
 			$filter->set('_matchor_permission_names', implode(',', $permissionNamesList));
 		}
 
 		if ($filter->get('_matchand_permission_names'))
 		{
 			$permissionNamesList = explode(',', $filter->get('_matchand_permission_names'));
-			$permissionNamesList = $this->translateToSearchIndexFieldValue(categoryKuserPeer::PERMISSION_NAMES, $permissionNamesList);
+			$permissionNamesList = $this->translateToSearchIndexFieldValue(categoryVuserPeer::PERMISSION_NAMES, $permissionNamesList);
 			$filter->set('_matchand_permission_names', implode(',', $permissionNamesList));
 		}
 		
 		if ($filter->get('_notcontains_permission_names'))
 		{
 			$permissionNamesList = explode(',', $filter->get('_notcontains_permission_names'));
-			$permissionNamesList = $this->translateToSearchIndexFieldValue(categoryKuserPeer::PERMISSION_NAMES, $permissionNamesList);
+			$permissionNamesList = $this->translateToSearchIndexFieldValue(categoryVuserPeer::PERMISSION_NAMES, $permissionNamesList);
 			$filter->set('_notcontains_permission_names', $permissionNamesList);
 		}
 		
@@ -123,13 +123,13 @@ class SphinxCategoryKuserCriteria extends SphinxCriteria
 	{
 		switch ($permissionLevel)
 	    {
-	      case CategoryKuserPermissionLevel::MODERATOR:
+	      case CategoryVuserPermissionLevel::MODERATOR:
 	        $negativePermissionNamesArr[] = PermissionName::CATEGORY_CONTRIBUTE;
 	        break;
-	      case CategoryKuserPermissionLevel::CONTRIBUTOR:
+	      case CategoryVuserPermissionLevel::CONTRIBUTOR:
 	        $negativePermissionNamesArr[] = PermissionName::CATEGORY_MODERATE;
 	        break;
-	      case CategoryKuserPermissionLevel::MEMBER:
+	      case CategoryVuserPermissionLevel::MEMBER:
 	        $negativePermissionNamesArr[] = PermissionName::CATEGORY_EDIT;
 	        $negativePermissionNamesArr[] = PermissionName::CATEGORY_MODERATE;
 	        $negativePermissionNamesArr[] = PermissionName::CATEGORY_CONTRIBUTE;
@@ -143,7 +143,7 @@ class SphinxCategoryKuserCriteria extends SphinxCriteria
 	{
 		foreach ($toTranslate as &$translate)
 		{
-			$translate = categoryKuser::getSearchIndexFieldValue($fieldName, $translate, kCurrentContext::getCurrentPartnerId());
+			$translate = categoryVuser::getSearchIndexFieldValue($fieldName, $translate, vCurrentContext::getCurrentPartnerId());
 		}
 		
 		return $toTranslate;
@@ -155,27 +155,27 @@ class SphinxCategoryKuserCriteria extends SphinxCriteria
 		$value = $crit->getValue();
 		
 		$fieldName = null;
-		if ($field == categoryKuserPeer::STATUS)
-			$fieldName = categoryKuserPeer::STATUS;
+		if ($field == categoryVuserPeer::STATUS)
+			$fieldName = categoryVuserPeer::STATUS;
 
 		if ($fieldName)
 		{
-			$partnerIdCrit = $this->getCriterion(categoryKuserPeer::PARTNER_ID);
+			$partnerIdCrit = $this->getCriterion(categoryVuserPeer::PARTNER_ID);
 			if ($partnerIdCrit && $partnerIdCrit->getComparison() == Criteria::EQUAL)
 				$partnerId = $partnerIdCrit->getValue();
 			else
-				$partnerId = kCurrentContext::getCurrentPartnerId();
+				$partnerId = vCurrentContext::getCurrentPartnerId();
 			
 			if (is_array($value))
 			{
 				foreach ($value as &$singleValue)
 				{
-					$singleValue = 	categoryKuser::getSearchIndexFieldValue($fieldName, $singleValue, $partnerId);
+					$singleValue = 	categoryVuser::getSearchIndexFieldValue($fieldName, $singleValue, $partnerId);
 				}
 			}
 			else 
 			{
-				$value = categoryKuser::getSearchIndexFieldValue($fieldName, $value, $partnerId);
+				$value = categoryVuser::getSearchIndexFieldValue($fieldName, $value, $partnerId);
 			}
 		}
 

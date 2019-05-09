@@ -3,28 +3,28 @@
  * 
  * Internal Tools Service
  * 
- * @service kalturaInternalToolsSystemHelper
- * @package plugins.KalturaInternalTools
+ * @service vidiunInternalToolsSystemHelper
+ * @package plugins.VidiunInternalTools
  * @subpackage api.services
  */
-class KalturaInternalToolsSystemHelperService extends KalturaBaseService
+class VidiunInternalToolsSystemHelperService extends VidiunBaseService
 {
 
 	/**
-	 * KS from Secure String
+	 * VS from Secure String
 	 * @action fromSecureString
 	 * @param string $str
-	 * @return KalturaInternalToolsSession
+	 * @return VidiunInternalToolsSession
 	 * 
 	 */
 	public function fromSecureStringAction($str)
 	{
-		$ks =  ks::fromSecureString ( $str );
+		$vs =  vs::fromSecureString ( $str );
 		
-		$ksFromSecureString = new KalturaInternalToolsSession();
-		$ksFromSecureString->fromObject($ks, $this->getResponseProfile());
+		$vsFromSecureString = new VidiunInternalToolsSession();
+		$vsFromSecureString->fromObject($vs, $this->getResponseProfile());
 		
-		return $ksFromSecureString;
+		return $vsFromSecureString;
 	}
 	
 	/**

@@ -3,7 +3,7 @@
  * @package plugins.facebookDistribution
  * @subpackage api.objects
  */
-class KalturaFacebookDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunFacebookDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -16,24 +16,24 @@ class KalturaFacebookDistributionJobProviderData extends KalturaConfigurableDist
 	public $thumbAssetId;
 
 	/**
-	 * @var KalturaFacebookCaptionDistributionInfoArray
+	 * @var VidiunFacebookCaptionDistributionInfoArray
 	 */
 	public $captionsInfo;
 
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	    
 		if( (!$distributionJobData) ||
-			!($distributionJobData->distributionProfile instanceof KalturaFacebookDistributionProfile) ){
-			KalturaLog::info("Distribution data given did not exist or was not facebook related, given: ".print_r($distributionJobData, true));
+			!($distributionJobData->distributionProfile instanceof VidiunFacebookDistributionProfile) ){
+			VidiunLog::info("Distribution data given did not exist or was not facebook related, given: ".print_r($distributionJobData, true));
 			return;
 		}
 
 		$this->videoAssetFilePath = $this->getValidVideoPath($distributionJobData);
 
 		if(!$this->videoAssetFilePath){
-			KalturaLog::err("Could not find a valid video asset");
+			VidiunLog::err("Could not find a valid video asset");
 			return;
 		}
 
@@ -57,48 +57,48 @@ class KalturaFacebookDistributionJobProviderData extends KalturaConfigurableDist
 		return array_merge ( parent::getMapBetweenObjects() , self::$map_between_objects );
 	}
 	
-	private function addCaptionsData(KalturaDistributionJobData $distributionJobData) 
+	private function addCaptionsData(VidiunDistributionJobData $distributionJobData) 
 	{
 		$assetIdsArray = explode ( ',', $distributionJobData->entryDistribution->assetIds );
 		if (empty($distributionJobData->entryDistribution->assetIds) || empty($assetIdsArray)) return;
-		$this->captionsInfo = new KalturaFacebookCaptionDistributionInfoArray();
+		$this->captionsInfo = new VidiunFacebookCaptionDistributionInfoArray();
 		
 		foreach ( $assetIdsArray as $assetId ) 
 		{
 			$asset = assetPeer::retrieveByIdNoFilter( $assetId );
 			if (!$asset)
 			{
-				KalturaLog::err("Asset [$assetId] not found");
+				VidiunLog::err("Asset [$assetId] not found");
 				continue;
 			}
 			if($asset->getType() != CaptionPlugin::getAssetTypeCoreValue ( CaptionAssetType::CAPTION ))
 			{
-				KalturaLog::debug("Asset [$assetId] is not a caption");
+				VidiunLog::debug("Asset [$assetId] is not a caption");
 				continue;				
 			}
 			if ($asset->getStatus() == asset::ASSET_STATUS_READY) 
 			{
 				$syncKey = $asset->getSyncKey ( asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET );
-				if (kFileSyncUtils::fileSync_exists ( $syncKey )) 
+				if (vFileSyncUtils::fileSync_exists ( $syncKey )) 
 				{
 					$captionInfo = $this->getCaptionInfo($asset);
 					if($captionInfo)
 					{
-						$captionInfo->filePath = kFileSyncUtils::getLocalFilePathForKey ( $syncKey, false );
+						$captionInfo->filePath = vFileSyncUtils::getLocalFilePathForKey ( $syncKey, false );
 						$this->captionsInfo [] = $captionInfo;
 					}					 
 				}						
 			}
 			else
 			{
-				KalturaLog::debug("Asset [$assetId] has status [".$asset->getStatus()."]. not added to provider data");
+				VidiunLog::debug("Asset [$assetId] has status [".$asset->getStatus()."]. not added to provider data");
 			}
 		}
 	}
 	
 	private function getCaptionInfo($asset)
 	{
-		$captionInfo = new KalturaFacebookCaptionDistributionInfo();
+		$captionInfo = new VidiunFacebookCaptionDistributionInfo();
 		$captionInfo->assetId = $asset->getId();
 		$captionInfo->version = $asset->getVersion();
 		$captionInfo->label = $asset->getLabel();
@@ -106,14 +106,14 @@ class KalturaFacebookDistributionJobProviderData extends KalturaConfigurableDist
 		
 		if(!$captionInfo->label && !$captionInfo->language)
 		{
-			KalturaLog::err('The caption ['.$asset->getId().'] has unrecognized language ['.$asset->getLanguage().'] and label ['.$asset->getLabel().']');
+			VidiunLog::err('The caption ['.$asset->getId().'] has unrecognized language ['.$asset->getLanguage().'] and label ['.$asset->getLabel().']');
 			return null;
 		}
 
 		return $captionInfo;
 	}
 	
-	private function getValidVideoPath(KalturaDistributionJobData $distributionJobData)
+	private function getValidVideoPath(VidiunDistributionJobData $distributionJobData)
 	{
 		$flavorAssets = array();
 		$videoAssetFilePath = null;
@@ -131,9 +131,9 @@ class KalturaFacebookDistributionJobProviderData extends KalturaConfigurableDist
 		foreach ($flavorAssets as $flavorAsset) 
 		{
 			$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-			if(kFileSyncUtils::fileSync_exists($syncKey))
+			if(vFileSyncUtils::fileSync_exists($syncKey))
 			{
-				$videoAssetFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+				$videoAssetFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 				$mediaInfo = mediaInfoPeer::retrieveByFlavorAssetId($flavorAsset->getId());
 				if($mediaInfo)
 				{
@@ -144,7 +144,7 @@ class KalturaFacebookDistributionJobProviderData extends KalturaConfigurableDist
 					}
 					catch(Exception $e)
 					{
-						KalturaLog::debug('Asset ['.$flavorAsset->getId().'] not valid for distribution: '.$e->getMessage());
+						VidiunLog::debug('Asset ['.$flavorAsset->getId().'] not valid for distribution: '.$e->getMessage());
 					}	
 				}
 				if($isValidVideo)

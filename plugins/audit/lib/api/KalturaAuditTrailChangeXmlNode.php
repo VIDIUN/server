@@ -3,10 +3,10 @@
  * @package plugins.audit
  * @subpackage api.objects
  */
-class KalturaAuditTrailChangeXmlNode extends KalturaAuditTrailChangeItem
+class VidiunAuditTrailChangeXmlNode extends VidiunAuditTrailChangeItem
 {
 	/**
-	 * @var KalturaAuditTrailChangeXmlNodeType
+	 * @var VidiunAuditTrailChangeXmlNodeType
 	 */
 	public $type;
 }

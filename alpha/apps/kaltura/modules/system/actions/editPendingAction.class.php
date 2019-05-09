@@ -4,42 +4,42 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class editPendingAction extends kalturaSystemAction
+class editPendingAction extends vidiunSystemAction
 {
 
 	public function execute()
 	{
 		$this->forceSystemAuthentication();
 		
-		$kshow_id = @$_REQUEST["kshow_id"];
-		$this->kshow_id = $kshow_id;
-		$this->kshow = NULL;
+		$vshow_id = @$_REQUEST["vshow_id"];
+		$this->vshow_id = $vshow_id;
+		$this->vshow = NULL;
 		
 		$entry_id = @$_REQUEST["entry_id"];
 		$this->entry_id = $entry_id;
 		$this->entry = NULL;
 		
 		$this->message =  "";
-		if ( !empty ( $kshow_id ))
+		if ( !empty ( $vshow_id ))
 		{
-			$this->kshow = kshowPeer::retrieveByPK( $kshow_id );
-			if (  ! $this->kshow )
+			$this->vshow = vshowPeer::retrieveByPK( $vshow_id );
+			if (  ! $this->vshow )
 			{
-				$this->message = "Cannot find kshow [$kshow_id]";
+				$this->message = "Cannot find vshow [$vshow_id]";
 			}
 			else
 			{
-				$this->entry = $this->kshow->getShowEntry();
+				$this->entry = $this->vshow->getShowEntry();
 			} 
 		}
-		elseif ( !empty ( $kshow_id ))
+		elseif ( !empty ( $vshow_id ))
 		{
 			$this->entry = entryPeer::retrieveByPK( $entry_id );
 			if ( ! $this->entry )
@@ -48,13 +48,13 @@ class editPendingAction extends kalturaSystemAction
 			}
 			else
 			{
-				$this->kshow = $this->$this->entry->getKshow();
+				$this->vshow = $this->$this->entry->getVshow();
 			}
 		}
 		
-		if ( $this->kshow )
+		if ( $this->vshow )
 		{
-			$this->metadata = $this->kshow->getMetadata();
+			$this->metadata = $this->vshow->getMetadata();
 		}
 		else
 		{
@@ -71,10 +71,10 @@ class editPendingAction extends kalturaSystemAction
 			
 			$xml_doc = new DOMDocument();
 			$xml_doc->loadXML( $this->metadata );
-			$metadata = kXml::getFirstElement( $xml_doc , "MetaData" );
-			$should_save = kXml::setChildElement( $xml_doc , $metadata , "Pending" , $pending_str , true );
+			$metadata = vXml::getFirstElement( $xml_doc , "MetaData" );
+			$should_save = vXml::setChildElement( $xml_doc , $metadata , "Pending" , $pending_str , true );
 			if  ( $remove_pending )
-				$should_save = kXml::setChildElement( $xml_doc , $metadata , "LastPendingTimeStamp" /*myMetadataUtils::LAST_PENDING_TIMESTAMP_ELEM_NAME*/ , "" , true );
+				$should_save = vXml::setChildElement( $xml_doc , $metadata , "LastPendingTimeStamp" /*myMetadataUtils::LAST_PENDING_TIMESTAMP_ELEM_NAME*/ , "" , true );
 			
 			if ( $should_save )
 			{
@@ -89,7 +89,7 @@ class editPendingAction extends kalturaSystemAction
 		
 		$this->pending = $pending_str;
 		
-		$this->kshow_id = $kshow_id;
+		$this->vshow_id = $vshow_id;
 		$this->entry_id = $entry_id;
 	}
 }

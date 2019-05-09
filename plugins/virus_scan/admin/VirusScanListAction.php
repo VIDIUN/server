@@ -3,7 +3,7 @@
  * @package plugins.virusScan
  * @subpackage Admin
  */
-class VirusScanListAction extends KalturaApplicationPlugin implements IKalturaAdminConsolePublisherAction
+class VirusScanListAction extends VidiunApplicationPlugin implements IVidiunAdminConsolePublisherAction
 {
 	
 	public function __construct()
@@ -23,13 +23,13 @@ class VirusScanListAction extends KalturaApplicationPlugin implements IKalturaAd
 	
 	public function getRequiredPermissions()
 	{
-		return array (Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_VIRUS_SCAN );
+		return array (Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_VIRUS_SCAN );
 	}
 	
 	public function doAction(Zend_Controller_Action $action)
 	{
 		$client = Infra_ClientHelper::getClient ();
-		$virusScanPlugin = Kaltura_Client_VirusScan_Plugin::get ( $client );
+		$virusScanPlugin = Vidiun_Client_VirusScan_Plugin::get ( $client );
 		
 		//create new form
 		$newForm = new Form_NewVirusScanProfile ();
@@ -65,7 +65,7 @@ class VirusScanListAction extends KalturaApplicationPlugin implements IKalturaAd
 	
 	private function getVirusScanFilterFromRequest(Zend_Controller_Request_Abstract $request)
 	{
-		$filter = new Kaltura_Client_VirusScan_Type_VirusScanProfileFilter ();
+		$filter = new Vidiun_Client_VirusScan_Type_VirusScanProfileFilter ();
 		$filterInput = $request->getParam ( 'filter_input' );
 		if (strlen ( $filterInput )) {
 			$filterType = $request->getParam ( 'filter_type' );

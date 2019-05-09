@@ -3,6 +3,6 @@
  * @package plugins.conference
  * @subpackage api.filters.enum
  */
-class KalturaConferenceServerNodeOrderBy extends KalturaServerNodeOrderBy
+class VidiunConferenceServerNodeOrderBy extends VidiunServerNodeOrderBy
 {
 }

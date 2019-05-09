@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDeliveryProfileAkamaiAppleHttpManifest extends KalturaDeliveryProfile {
+class VidiunDeliveryProfileAkamaiAppleHttpManifest extends VidiunDeliveryProfile {
 	
 	/**
 	 * Should we use timing parameters - clipTo / seekFrom

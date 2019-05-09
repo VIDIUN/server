@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Media
  */
-class kThumbnailUtils
+class vThumbnailUtils
 {
 	/**
 	 * Fit the smaller dimension to the required size.
@@ -49,7 +49,7 @@ class kThumbnailUtils
 	}
 
 	/**
-	 * Go over all KalturaThumbAsset thumbnails and look for an exact match.
+	 * Go over all VidiunThumbAsset thumbnails and look for an exact match.
 	 * If none is found, look for the one with the nearest aspect ratio (i.e. the one
 	 * with the smallest distance from the original). If there are several with the
 	 * same delta from original - the one with the largest dimensions will be picked.
@@ -57,7 +57,7 @@ class kThumbnailUtils
 	 * @param array $thumbAssets ThumbAsset objects array
 	 * @param int $requiredWidth Thumbnail's requested width
 	 * @param int $requiredHeight Thumbnail's requested height
-	 * @return kThumbnailDescriptor|null The thumbnail asset with exact/closest 
+	 * @return vThumbnailDescriptor|null The thumbnail asset with exact/closest 
 	 *                                   aspect ratio to the required, or null
 	 *                                   if the entry doesn't contain thumbnails.
 	 */
@@ -66,7 +66,7 @@ class kThumbnailUtils
 		// Calc aspect ratio + distance from requiredAspectRatio
 		$chosenThumbnailDescriptor = null;
 
-		kThumbnailDescriptor::initDimensions( $requiredWidth, $requiredHeight );
+		vThumbnailDescriptor::initDimensions( $requiredWidth, $requiredHeight );
 
 		if ( $fallbackThumbnailPath )
 		{
@@ -75,7 +75,7 @@ class kThumbnailUtils
 			$thumbWidth = $imageSizeArray[0];
 			$thumbHeight = $imageSizeArray[1];
 
-			$chosenThumbnailDescriptor = kThumbnailDescriptor::fromParams( $thumbWidth, $thumbHeight, $fallbackThumbnailPath, true );
+			$chosenThumbnailDescriptor = vThumbnailDescriptor::fromParams( $thumbWidth, $thumbHeight, $fallbackThumbnailPath, true );
 		}
 
 		if ( empty( $thumbAssets ) )
@@ -86,7 +86,7 @@ class kThumbnailUtils
 		// Loop all available thumb assets and choose the best match
 		foreach ( $thumbAssets as $thumbAsset )
 		{
-			$descriptor = kThumbnailDescriptor::fromThumbAsset( $thumbAsset );
+			$descriptor = vThumbnailDescriptor::fromThumbAsset( $thumbAsset );
 
 			if ( ! $chosenThumbnailDescriptor ) // First descriptor
 			{
@@ -113,8 +113,8 @@ class kThumbnailUtils
 	 *       Give priority to the thumbnail the exactly matches the required dimensions.
 	 *            If none exist - prefer the asset with larger dimensions.
 	 *  
-	 * @param kThumbnailDescriptor $a @see getNearestAspectRatioThumbnailDescriptorFromThumbAssets()
-	 * @param kThumbnailDescriptor $b @see getNearestAspectRatioThumbnailDescriptorFromThumbAssets()
+	 * @param vThumbnailDescriptor $a @see getNearestAspectRatioThumbnailDescriptorFromThumbAssets()
+	 * @param vThumbnailDescriptor $b @see getNearestAspectRatioThumbnailDescriptorFromThumbAssets()
 	 * @return int 	(-1) = a before b, (+1) = a after b, (0) = don't care (equal)
 	 */
 	private static function compareThumbnailDescriptors( $a, $b )
@@ -139,7 +139,7 @@ class kThumbnailUtils
 
 			if ( $aWidth != $bWidth ) // Dimensions don't match
 			{
-				$requiredWidth = kThumbnailDescriptor::getRequiredWidth();
+				$requiredWidth = vThumbnailDescriptor::getRequiredWidth();
 
 				// Give priority to exact-match dimensions
 				if ( $aWidth == $requiredWidth )

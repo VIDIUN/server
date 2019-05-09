@@ -2,7 +2,7 @@
 /**
  * @package Scheduler
  */
-class KalturaBatchException extends KalturaException 
+class VidiunBatchException extends VidiunException 
 {
 	public function __construct($message, $code, $arguments = null)
 	{

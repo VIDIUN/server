@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage events
  */
-class kEventsManager
+class vEventsManager
 {
-	const BASE_CONSUMER_INTERFACE = 'KalturaEventConsumer';
-	const GENERIC_CONSUMER_INTERFACE = 'kGenericEventConsumer';
+	const BASE_CONSUMER_INTERFACE = 'VidiunEventConsumer';
+	const GENERIC_CONSUMER_INTERFACE = 'vGenericEventConsumer';
 	
 	protected static $consumers = array();
 	
@@ -43,17 +43,17 @@ class kEventsManager
 	
 	protected static function loadConsumers()
 	{
-		$cachePath = kConf::get('cache_root_path') . '/EventConsumers.cache';
+		$cachePath = vConf::get('cache_root_path') . '/EventConsumers.cache';
 		if(file_exists($cachePath))
 		{
 			self::$consumers = unserialize(file_get_contents($cachePath));
 			return;
 		}
 		
-		$coreConsumers = kConf::get('event_consumers');
+		$coreConsumers = vConf::get('event_consumers');
 		
 		$pluginConsumers = array();
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaEventConsumers');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunEventConsumers');
 		foreach($pluginInstances as $pluginInstance)
 			foreach($pluginInstance->getEventConsumers() as $pluginConsumer)
 				$pluginConsumers[] = $pluginConsumer;
@@ -85,21 +85,21 @@ class kEventsManager
 		
 		foreach($consumersLists as $interfaceName => $interfaceConsumersArray)
 		{
-			usort($interfaceConsumersArray, array('kEventsManager', 'compareConsumers'));
+			usort($interfaceConsumersArray, array('vEventsManager', 'compareConsumers'));
 			self::$consumers[$interfaceName] = $interfaceConsumersArray;
 		}
 	
 		$cacheDir = dirname($cachePath);
 		if(!file_exists($cacheDir))
-			kFile::fullMkfileDir($cacheDir, 0777, true);
+			vFile::fullMkfileDir($cacheDir, 0777, true);
 			
 		@file_put_contents($cachePath, serialize(self::$consumers));
 	}
 	
 	protected static function compareConsumers($consumerA, $consumerB)
 	{
-		$priorities = kConf::get('event_consumers_priorities');
-		$a = $b = kConf::get('event_consumers_default_priority');
+		$priorities = vConf::get('event_consumers_priorities');
+		$a = $b = vConf::get('event_consumers_default_priority');
 		
 		if(isset($priorities[$consumerA]))
 			$a = $priorities[$consumerA];
@@ -179,7 +179,7 @@ class kEventsManager
 		if (!self::$deferredEvents && !$flushMultiDeferred)
 			return;
 		
-		KalturaLog::log("started flushing deferred events");
+		VidiunLog::log("started flushing deferred events");
 
 		while (count(self::$deferredEvents))
 		{
@@ -202,7 +202,7 @@ class kEventsManager
 			}
 		}
 		
-		KalturaLog::log("finished flushing deferred events");
+		VidiunLog::log("finished flushing deferred events");
 	}
 	
 	private static function popNextDeferredEvent(&$events)
@@ -223,7 +223,7 @@ class kEventsManager
 		return $deferredEvent;
 	}
 	
-	public static function raiseEventDeferred(KalturaEvent $event)
+	public static function raiseEventDeferred(VidiunEvent $event)
 	{
 		if (!self::$eventsEnabled)
 			return;
@@ -234,7 +234,7 @@ class kEventsManager
 			return self::raiseEvent($event);
 
 		$deferredEventsArray = &self::$deferredEvents;
-		if ( self::$multiDeferredEventsEnabled && ($event instanceof IKalturaMultiDeferredEvent) )
+		if ( self::$multiDeferredEventsEnabled && ($event instanceof IVidiunMultiDeferredEvent) )
 		{
 			$event->setPartnerCriteriaParams(myPartnerUtils::getAllPartnerCriteriaParams());
 			$deferredEventsArray = &self::$multiDeferredEvents;
@@ -246,7 +246,7 @@ class kEventsManager
 			$deferredEventsArray['unkeyed_'.count($deferredEventsArray)] = $event;
 	}
 	
-	public static function raiseEvent(KalturaEvent $event)
+	public static function raiseEvent(VidiunEvent $event)
 	{
 		if (!self::$eventsEnabled)
 			return;
@@ -264,28 +264,28 @@ class kEventsManager
 				continue;
 
 			try{
-				if($event->consume(new $consumerClass()) || !($event instanceof IKalturaCancelableEvent))
+				if($event->consume(new $consumerClass()) || !($event instanceof IVidiunCancelableEvent))
 					continue;
 			}
 			catch (Exception $e){
-				KalturaLog::err($e);
+				VidiunLog::err($e);
 			}
 				
-			KalturaLog::notice("Event [" . get_class($event) . "] paused by consumer [$consumerClass]");
+			VidiunLog::notice("Event [" . get_class($event) . "] paused by consumer [$consumerClass]");
 			break;
 		}
 	}
 
-	public static function continueEvent(KalturaEvent $event, $lastConsumerClass)
+	public static function continueEvent(VidiunEvent $event, $lastConsumerClass)
 	{
-		if(!($event instanceof IKalturaContinualEvent))
+		if(!($event instanceof IVidiunContinualEvent))
 		{
-			KalturaLog::debug("Event [" . get_class($event) . "] is not continual event");
+			VidiunLog::debug("Event [" . get_class($event) . "] is not continual event");
 			return;
 		}
 		
 		$consumerInterface = $event->getConsumerInterface();
-		KalturaLog::debug("Event [" . get_class($event) . "] continued by [$lastConsumerClass] looking for consumers [$consumerInterface]");
+		VidiunLog::debug("Event [" . get_class($event) . "] continued by [$lastConsumerClass] looking for consumers [$consumerInterface]");
 
 		$consumers = self::getConsumers($consumerInterface);
 		
@@ -303,18 +303,18 @@ class kEventsManager
 				continue;
 			}
 			
-//			KalturaLog::debug("Event consumer [$consumerClass] called");
+//			VidiunLog::debug("Event consumer [$consumerClass] called");
 			$continue = $event->consume(new $consumerClass());
 			
 			if(!$continue)
 			{
-				if($event instanceof IKalturaCancelableEvent)
+				if($event instanceof IVidiunCancelableEvent)
 				{
 					break;
 				}
 				else
 				{
-					KalturaLog::debug("Event [" . get_class($event) . "] is not cancelable event");
+					VidiunLog::debug("Event [" . get_class($event) . "] is not cancelable event");
 				}
 			}
 		}

@@ -16,7 +16,7 @@ abstract class ESearchNestedObjectItem extends ESearchItem
 		if($overrideInnerHitsSize)
 			return $overrideInnerHitsSize;
 
-		$innerHitsConfig = kConf::get('innerHits', 'elastic');
+		$innerHitsConfig = vConf::get('innerHits', 'elastic');
 		$innerHitsConfigKey = static::INNER_HITS_CONFIG_KEY;
 		$innerHitsSize = isset($innerHitsConfig[$innerHitsConfigKey]) ? $innerHitsConfig[$innerHitsConfigKey] : self::DEFAULT_INNER_HITS_SIZE;
 
@@ -41,8 +41,8 @@ abstract class ESearchNestedObjectItem extends ESearchItem
 		$allowedSearchTypes = static::getAllowedSearchTypesForField();
 		$numOfFragments = self::initializeNumOfFragments();
 		// must_not was already set in a higher level of the query inside ESearchOperator
-		if($boolOperator == kESearchBoolQuery::MUST_NOT_KEY)
-			$boolOperator = kESearchBoolQuery::MUST_KEY;
+		if($boolOperator == vESearchBoolQuery::MUST_NOT_KEY)
+			$boolOperator = vESearchBoolQuery::MUST_KEY;
 
 		$finalQuery = array();
 
@@ -54,7 +54,7 @@ abstract class ESearchNestedObjectItem extends ESearchItem
 		}
 		else//entry operator
 		{
-			if($boolOperator == kESearchBoolQuery::MUST_KEY)
+			if($boolOperator == vESearchBoolQuery::MUST_KEY)
 			{
 				//create single for each item with nested
 				foreach ($eSearchItemsArr as $eSearchItem)
@@ -86,7 +86,7 @@ abstract class ESearchNestedObjectItem extends ESearchItem
 	{
 		$queryName = $this->getNestedQueryName($queryAttributes);
 		$queryAttributes->setNestedQueryName($queryName);
-		$nestedQuery = kESearchQueryManager::getNestedQuery($boolQuery, $queryAttributes);
+		$nestedQuery = vESearchQueryManager::getNestedQuery($boolQuery, $queryAttributes);
 		$queryAttributes->setNestedQueryName(null);
 		$queryAttributes->incrementNestedQueryNameIndex();
 		return $nestedQuery;
@@ -94,7 +94,7 @@ abstract class ESearchNestedObjectItem extends ESearchItem
 
 	private static function createBoolQueryForNestedOperator($eSearchItemsArr, &$queryAttributes, $boolOperator, $allowedSearchTypes)
 	{
-		$boolQuery = new kESearchBoolQuery();
+		$boolQuery = new vESearchBoolQuery();
 		foreach ($eSearchItemsArr as $eSearchItem)
 		{
 			$eSearchItem->createSingleItemSearchQuery($boolOperator, $boolQuery, $allowedSearchTypes, $queryAttributes);
@@ -109,7 +109,7 @@ abstract class ESearchNestedObjectItem extends ESearchItem
 
 	public function createSingleNestedQueryForItem(&$queryAttributes, $boolOperator, $allowedSearchTypes)
 	{
-		$boolQuery = new kESearchBoolQuery();
+		$boolQuery = new vESearchBoolQuery();
 		$queryAttributes->getQueryHighlightsAttributes()->setScopeToInner();
 		$this->createSingleItemSearchQuery($boolOperator, $boolQuery, $allowedSearchTypes, $queryAttributes);
 		return $this->createNestedQuery($boolQuery, $queryAttributes);
@@ -117,7 +117,7 @@ abstract class ESearchNestedObjectItem extends ESearchItem
 
 	private static function createGroupedNestedQueryForItems($eSearchItemsArr, &$queryAttributes, $boolOperator, $allowedSearchTypes, $innerHitsSize, $numOfFragments)
 	{
-		$boolQuery = new kESearchBoolQuery();
+		$boolQuery = new vESearchBoolQuery();
 		$queryAttributes->getQueryHighlightsAttributes()->setScopeToInner();
 		foreach ($eSearchItemsArr as $eSearchItem)
 		{

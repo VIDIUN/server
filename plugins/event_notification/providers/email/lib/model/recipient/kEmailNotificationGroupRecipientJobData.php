@@ -5,7 +5,7 @@
  * @package plugins.emailNotification
  * @subpackage model.data 
  */
-class kEmailNotificationGroupRecipientJobData extends kEmailNotificationRecipientJobData
+class vEmailNotificationGroupRecipientJobData extends vEmailNotificationRecipientJobData
 {
 	/**
 	 * @var string

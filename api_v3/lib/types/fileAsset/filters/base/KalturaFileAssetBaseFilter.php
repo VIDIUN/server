@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaFileAssetBaseFilter extends KalturaRelatedFilter
+abstract class VidiunFileAssetBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -57,7 +57,7 @@ abstract class KalturaFileAssetBaseFilter extends KalturaRelatedFilter
 	public $partnerIdEqual;
 
 	/**
-	 * @var KalturaFileAssetObjectType
+	 * @var VidiunFileAssetObjectType
 	 */
 	public $fileAssetObjectTypeEqual;
 
@@ -92,12 +92,12 @@ abstract class KalturaFileAssetBaseFilter extends KalturaRelatedFilter
 	public $updatedAtLessThanOrEqual;
 
 	/**
-	 * @var KalturaFileAssetStatus
+	 * @var VidiunFileAssetStatus
 	 */
 	public $statusEqual;
 
 	/**
-	 * @dynamicType KalturaFileAssetStatus
+	 * @dynamicType VidiunFileAssetStatus
 	 * @var string
 	 */
 	public $statusIn;

@@ -2,7 +2,7 @@
 
 
 /**
- * This class defines the structure of the 'category_kuser' table.
+ * This class defines the structure of the 'category_vuser' table.
  *
  *
  *
@@ -14,12 +14,12 @@
  * @package Core
  * @subpackage model.map
  */
-class categoryKuserTableMap extends TableMap {
+class categoryVuserTableMap extends TableMap {
 
 	/**
 	 * The (dot-path) name of this class
 	 */
-	const CLASS_NAME = 'Core.categoryKuserTableMap';
+	const CLASS_NAME = 'Core.categoryVuserTableMap';
 
 	/**
 	 * Initialize the table attributes, columns and validators
@@ -31,15 +31,15 @@ class categoryKuserTableMap extends TableMap {
 	public function initialize()
 	{
 	  // attributes
-		$this->setName('category_kuser');
-		$this->setPhpName('categoryKuser');
-		$this->setClassname('categoryKuser');
+		$this->setName('category_vuser');
+		$this->setPhpName('categoryVuser');
+		$this->setClassname('categoryVuser');
 		$this->setPackage('Core');
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		$this->addForeignKey('CATEGORY_ID', 'CategoryId', 'INTEGER', 'category', 'ID', true, null, null);
-		$this->addForeignKey('KUSER_ID', 'KuserId', 'INTEGER', 'kuser', 'ID', true, null, null);
+		$this->addForeignKey('VUSER_ID', 'VuserId', 'INTEGER', 'vuser', 'ID', true, null, null);
 		$this->addColumn('PUSER_ID', 'PuserId', 'VARCHAR', true, 100, null);
 		$this->addColumn('SCREEN_NAME', 'ScreenName', 'VARCHAR', true, 100, null);
 		$this->addColumn('PARTNER_ID', 'PartnerId', 'INTEGER', true, null, null);
@@ -61,7 +61,7 @@ class categoryKuserTableMap extends TableMap {
 	public function buildRelations()
 	{
     $this->addRelation('category', 'category', RelationMap::MANY_TO_ONE, array('category_id' => 'id', ), null, null);
-    $this->addRelation('kuser', 'kuser', RelationMap::MANY_TO_ONE, array('kuser_id' => 'id', ), null, null);
+    $this->addRelation('vuser', 'vuser', RelationMap::MANY_TO_ONE, array('vuser_id' => 'id', ), null, null);
 	} // buildRelations()
 
-} // categoryKuserTableMap
+} // categoryVuserTableMap

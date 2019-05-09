@@ -3,10 +3,10 @@
  * @package plugins.schedule
  * @subpackage api.filters
  */
-class KalturaCameraScheduleResourceFilter extends KalturaCameraScheduleResourceBaseFilter
+class VidiunCameraScheduleResourceFilter extends VidiunCameraScheduleResourceBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaScheduleResourceFilter::getListResponseType()
+	 * @see VidiunScheduleResourceFilter::getListResponseType()
 	 */
 	protected function getListResponseType()
 	{

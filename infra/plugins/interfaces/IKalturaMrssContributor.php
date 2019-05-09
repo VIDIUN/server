@@ -4,18 +4,18 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaMrssContributor extends IKalturaBase
+interface IVidiunMrssContributor extends IVidiunBase
 {
 	/**
 	 * @param BaseObject $object
 	 * @param SimpleXMLElement $mrss
-	 * @param kMrssParameters $mrssParams
+	 * @param vMrssParameters $mrssParams
 	 * @return SimpleXMLElement
 	 */
-	public function contribute(BaseObject $object, SimpleXMLElement $mrss, kMrssParameters $mrssParams = null);	
+	public function contribute(BaseObject $object, SimpleXMLElement $mrss, vMrssParameters $mrssParams = null);	
 
 	/**
-	 * Function returns the object feature type for the use of the KmrssManager
+	 * Function returns the object feature type for the use of the VmrssManager
 	 * 
 	 * @return int
 	 */

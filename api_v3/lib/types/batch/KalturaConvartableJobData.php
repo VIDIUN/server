@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaConvartableJobData extends KalturaJobData
+class VidiunConvartableJobData extends VidiunJobData
 {
 	/**
 	 * @var string
@@ -26,7 +26,7 @@ class KalturaConvartableJobData extends KalturaJobData
 
 	/**
 	 * 
-	 * @var KalturaSourceFileSyncDescriptorArray
+	 * @var VidiunSourceFileSyncDescriptorArray
 	 */
 	public $srcFileSyncs;
 	
@@ -41,7 +41,7 @@ class KalturaConvartableJobData extends KalturaJobData
 	public $flavorParamsOutputId;
 	
 	/**
-	 * @var KalturaFlavorParamsOutput
+	 * @var VidiunFlavorParamsOutput
 	 */
 	public $flavorParamsOutput;
 	
@@ -61,7 +61,7 @@ class KalturaConvartableJobData extends KalturaJobData
 	public $currentOperationIndex;
 	
 	/**
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $pluginData;
 	
@@ -78,7 +78,7 @@ class KalturaConvartableJobData extends KalturaJobData
 
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -86,22 +86,22 @@ class KalturaConvartableJobData extends KalturaJobData
 	}
 	    
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject(  $dbConvartableJobData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbConvartableJobData))
-			$dbConvartableJobData = new kConvartableJobData();
+			$dbConvartableJobData = new vConvartableJobData();
 			
 		return parent::toObject($dbConvartableJobData, $props_to_skip);
 	}
 	    
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject($srcObj)
+	 * @see VidiunObject::fromObject($srcObj)
 	 */
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null) 
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null) 
 	{
-		/* @var $srcObj kConvartableJobData */
+		/* @var $srcObj vConvartableJobData */
 		$srcObj->migrateOldSerializedData();
 		parent::doFromObject($srcObj, $responseProfile);
 	}

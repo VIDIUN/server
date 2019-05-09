@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaEntryCapability extends KalturaDynamicEnum implements EntryCapability
+class VidiunEntryCapability extends VidiunDynamicEnum implements EntryCapability
 {
 	/**
 	 * @return string

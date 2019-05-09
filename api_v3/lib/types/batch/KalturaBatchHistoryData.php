@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBatchHistoryData extends KalturaObject 
+class VidiunBatchHistoryData extends VidiunObject 
 {
 	/**
 	 * @var int
@@ -76,7 +76,7 @@ class KalturaBatchHistoryData extends KalturaObject
 	
 	public function toObject($object_to_fill = null, $props_to_skip = array()) {
 		if(is_null($object_to_fill)) 
-			$object_to_fill = new kBatchHistoryData();
+			$object_to_fill = new vBatchHistoryData();
 		
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

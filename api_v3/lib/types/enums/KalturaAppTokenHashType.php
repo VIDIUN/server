@@ -3,6 +3,6 @@
  * @package api
  * @subpackage enum
  */
-class KalturaAppTokenHashType extends KalturaStringEnum implements AppTokenHashType
+class VidiunAppTokenHashType extends VidiunStringEnum implements AppTokenHashType
 {
 }

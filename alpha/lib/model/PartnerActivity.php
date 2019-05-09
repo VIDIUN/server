@@ -11,7 +11,7 @@
 class PartnerActivity extends BasePartnerActivity implements IBaseObject
 {
 	const PARTNER_ACTIVITY_TRAFFIC = 1;		// KB
-	const PARTNER_ACTIVITY_KDP = 2;
+	const PARTNER_ACTIVITY_VDP = 2;
 	const PARTNER_ACTIVITY_STORAGE = 3;		// MB
 	const PARTNER_ACTIVITY_MEDIA = 4;
 	const PARTNER_ACTIVITY_USER = 5;
@@ -23,8 +23,8 @@ class PartnerActivity extends BasePartnerActivity implements IBaseObject
 	const PARTNER_SUB_ACTIVITY_LEVEL3 = 3;
 	const PARTNER_SUB_ACTIVITY_AKAMAI = 4;
 	
-	const PARTNER_SUB_ACTIVITY_KDP_PLAYS = 201;
-	const PARTNER_SUB_ACTIVITY_KDP_VIEWS = 202;
+	const PARTNER_SUB_ACTIVITY_VDP_PLAYS = 201;
+	const PARTNER_SUB_ACTIVITY_VDP_VIEWS = 202;
 	
 	const PARTNER_SUB_ACTIVITY_STORAGE_SIZE = 301;
 	const PARTNER_SUB_ACTIVITY_STORAGE_COUNT = 302;

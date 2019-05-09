@@ -64,11 +64,11 @@ abstract class BasePartnerStatsPeer {
 	/** the column name for the RC_2 field */
 	const RC_2 = 'partner_stats.RC_2';
 
-	/** the column name for the KSHOWS_1 field */
-	const KSHOWS_1 = 'partner_stats.KSHOWS_1';
+	/** the column name for the VSHOWS_1 field */
+	const VSHOWS_1 = 'partner_stats.VSHOWS_1';
 
-	/** the column name for the KSHOWS_2 field */
-	const KSHOWS_2 = 'partner_stats.KSHOWS_2';
+	/** the column name for the VSHOWS_2 field */
+	const VSHOWS_2 = 'partner_stats.VSHOWS_2';
 
 	/** the column name for the CREATED_AT field */
 	const CREATED_AT = 'partner_stats.CREATED_AT';
@@ -98,10 +98,10 @@ abstract class BasePartnerStatsPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('PartnerId', 'Views', 'Plays', 'Videos', 'Audios', 'Images', 'Entries', 'Users1', 'Users2', 'Rc1', 'Rc2', 'Kshows1', 'Kshows2', 'CreatedAt', 'UpdatedAt', 'CustomData', 'Widgets', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('partnerId', 'views', 'plays', 'videos', 'audios', 'images', 'entries', 'users1', 'users2', 'rc1', 'rc2', 'kshows1', 'kshows2', 'createdAt', 'updatedAt', 'customData', 'widgets', ),
-		BasePeer::TYPE_COLNAME => array (self::PARTNER_ID, self::VIEWS, self::PLAYS, self::VIDEOS, self::AUDIOS, self::IMAGES, self::ENTRIES, self::USERS_1, self::USERS_2, self::RC_1, self::RC_2, self::KSHOWS_1, self::KSHOWS_2, self::CREATED_AT, self::UPDATED_AT, self::CUSTOM_DATA, self::WIDGETS, ),
-		BasePeer::TYPE_FIELDNAME => array ('partner_id', 'views', 'plays', 'videos', 'audios', 'images', 'entries', 'users_1', 'users_2', 'rc_1', 'rc_2', 'kshows_1', 'kshows_2', 'created_at', 'updated_at', 'custom_data', 'widgets', ),
+		BasePeer::TYPE_PHPNAME => array ('PartnerId', 'Views', 'Plays', 'Videos', 'Audios', 'Images', 'Entries', 'Users1', 'Users2', 'Rc1', 'Rc2', 'Vshows1', 'Vshows2', 'CreatedAt', 'UpdatedAt', 'CustomData', 'Widgets', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('partnerId', 'views', 'plays', 'videos', 'audios', 'images', 'entries', 'users1', 'users2', 'rc1', 'rc2', 'vshows1', 'vshows2', 'createdAt', 'updatedAt', 'customData', 'widgets', ),
+		BasePeer::TYPE_COLNAME => array (self::PARTNER_ID, self::VIEWS, self::PLAYS, self::VIDEOS, self::AUDIOS, self::IMAGES, self::ENTRIES, self::USERS_1, self::USERS_2, self::RC_1, self::RC_2, self::VSHOWS_1, self::VSHOWS_2, self::CREATED_AT, self::UPDATED_AT, self::CUSTOM_DATA, self::WIDGETS, ),
+		BasePeer::TYPE_FIELDNAME => array ('partner_id', 'views', 'plays', 'videos', 'audios', 'images', 'entries', 'users_1', 'users_2', 'rc_1', 'rc_2', 'vshows_1', 'vshows_2', 'created_at', 'updated_at', 'custom_data', 'widgets', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, )
 	);
 
@@ -112,10 +112,10 @@ abstract class BasePartnerStatsPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('PartnerId' => 0, 'Views' => 1, 'Plays' => 2, 'Videos' => 3, 'Audios' => 4, 'Images' => 5, 'Entries' => 6, 'Users1' => 7, 'Users2' => 8, 'Rc1' => 9, 'Rc2' => 10, 'Kshows1' => 11, 'Kshows2' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, 'CustomData' => 15, 'Widgets' => 16, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('partnerId' => 0, 'views' => 1, 'plays' => 2, 'videos' => 3, 'audios' => 4, 'images' => 5, 'entries' => 6, 'users1' => 7, 'users2' => 8, 'rc1' => 9, 'rc2' => 10, 'kshows1' => 11, 'kshows2' => 12, 'createdAt' => 13, 'updatedAt' => 14, 'customData' => 15, 'widgets' => 16, ),
-		BasePeer::TYPE_COLNAME => array (self::PARTNER_ID => 0, self::VIEWS => 1, self::PLAYS => 2, self::VIDEOS => 3, self::AUDIOS => 4, self::IMAGES => 5, self::ENTRIES => 6, self::USERS_1 => 7, self::USERS_2 => 8, self::RC_1 => 9, self::RC_2 => 10, self::KSHOWS_1 => 11, self::KSHOWS_2 => 12, self::CREATED_AT => 13, self::UPDATED_AT => 14, self::CUSTOM_DATA => 15, self::WIDGETS => 16, ),
-		BasePeer::TYPE_FIELDNAME => array ('partner_id' => 0, 'views' => 1, 'plays' => 2, 'videos' => 3, 'audios' => 4, 'images' => 5, 'entries' => 6, 'users_1' => 7, 'users_2' => 8, 'rc_1' => 9, 'rc_2' => 10, 'kshows_1' => 11, 'kshows_2' => 12, 'created_at' => 13, 'updated_at' => 14, 'custom_data' => 15, 'widgets' => 16, ),
+		BasePeer::TYPE_PHPNAME => array ('PartnerId' => 0, 'Views' => 1, 'Plays' => 2, 'Videos' => 3, 'Audios' => 4, 'Images' => 5, 'Entries' => 6, 'Users1' => 7, 'Users2' => 8, 'Rc1' => 9, 'Rc2' => 10, 'Vshows1' => 11, 'Vshows2' => 12, 'CreatedAt' => 13, 'UpdatedAt' => 14, 'CustomData' => 15, 'Widgets' => 16, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('partnerId' => 0, 'views' => 1, 'plays' => 2, 'videos' => 3, 'audios' => 4, 'images' => 5, 'entries' => 6, 'users1' => 7, 'users2' => 8, 'rc1' => 9, 'rc2' => 10, 'vshows1' => 11, 'vshows2' => 12, 'createdAt' => 13, 'updatedAt' => 14, 'customData' => 15, 'widgets' => 16, ),
+		BasePeer::TYPE_COLNAME => array (self::PARTNER_ID => 0, self::VIEWS => 1, self::PLAYS => 2, self::VIDEOS => 3, self::AUDIOS => 4, self::IMAGES => 5, self::ENTRIES => 6, self::USERS_1 => 7, self::USERS_2 => 8, self::RC_1 => 9, self::RC_2 => 10, self::VSHOWS_1 => 11, self::VSHOWS_2 => 12, self::CREATED_AT => 13, self::UPDATED_AT => 14, self::CUSTOM_DATA => 15, self::WIDGETS => 16, ),
+		BasePeer::TYPE_FIELDNAME => array ('partner_id' => 0, 'views' => 1, 'plays' => 2, 'videos' => 3, 'audios' => 4, 'images' => 5, 'entries' => 6, 'users_1' => 7, 'users_2' => 8, 'rc_1' => 9, 'rc_2' => 10, 'vshows_1' => 11, 'vshows_2' => 12, 'created_at' => 13, 'updated_at' => 14, 'custom_data' => 15, 'widgets' => 16, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, )
 	);
 
@@ -197,8 +197,8 @@ abstract class BasePartnerStatsPeer {
 		$criteria->addSelectColumn(PartnerStatsPeer::USERS_2);
 		$criteria->addSelectColumn(PartnerStatsPeer::RC_1);
 		$criteria->addSelectColumn(PartnerStatsPeer::RC_2);
-		$criteria->addSelectColumn(PartnerStatsPeer::KSHOWS_1);
-		$criteria->addSelectColumn(PartnerStatsPeer::KSHOWS_2);
+		$criteria->addSelectColumn(PartnerStatsPeer::VSHOWS_1);
+		$criteria->addSelectColumn(PartnerStatsPeer::VSHOWS_2);
 		$criteria->addSelectColumn(PartnerStatsPeer::CREATED_AT);
 		$criteria->addSelectColumn(PartnerStatsPeer::UPDATED_AT);
 		$criteria->addSelectColumn(PartnerStatsPeer::CUSTOM_DATA);
@@ -236,11 +236,11 @@ abstract class BasePartnerStatsPeer {
 		
 		PartnerStatsPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'PartnerStatsPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -264,7 +264,7 @@ abstract class BasePartnerStatsPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -345,7 +345,7 @@ abstract class BasePartnerStatsPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -368,11 +368,11 @@ abstract class BasePartnerStatsPeer {
 	{		
 		$criteriaForSelect = PartnerStatsPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'PartnerStatsPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -388,12 +388,12 @@ abstract class BasePartnerStatsPeer {
 		
 		$queryResult = PartnerStatsPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -403,17 +403,17 @@ abstract class BasePartnerStatsPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -484,7 +484,7 @@ abstract class BasePartnerStatsPeer {
 		PartnerStatsPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -492,19 +492,19 @@ abstract class BasePartnerStatsPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -523,7 +523,7 @@ abstract class BasePartnerStatsPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -642,11 +642,11 @@ abstract class BasePartnerStatsPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('PartnerStatsPeer');
+				vMemoryManager::registerPeer('PartnerStatsPeer');
 			}
 		}
 	}

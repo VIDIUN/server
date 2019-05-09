@@ -5,13 +5,13 @@
  * @package Scheduler
  * @subpackage Conversion.engines
  */
-abstract class KJobConversionEngine extends KConversionEngine
+abstract class VJobConversionEngine extends VConversionEngine
 {
 	/**
-	 * @param KalturaConvertJobData $data
-	 * @return array<KConversioEngineResult>
+	 * @param VidiunConvertJobData $data
+	 * @return array<VConversioEngineResult>
 	 */
-	protected function getExecutionCommandAndConversionString ( KalturaConvertJobData $data )
+	protected function getExecutionCommandAndConversionString ( VidiunConvertJobData $data )
 	{
 		$tempPath = dirname($data->destFileSyncLocalPath);
 		$this->logFilePath = $data->logFileSyncLocalPath;
@@ -61,7 +61,7 @@ abstract class KJobConversionEngine extends KConversionEngine
 				{
 					$exec_cmd = $this->getCmdLine ( $cmd , true );
 				}
-				$conversion_engine_result = new KConversioEngineResult( $exec_cmd , $cmd );
+				$conversion_engine_result = new VConversioEngineResult( $exec_cmd , $cmd );
 				$conversion_engine_result_list[] = $conversion_engine_result;
 			}	
 		}
@@ -69,22 +69,22 @@ abstract class KJobConversionEngine extends KConversionEngine
 		return $conversion_engine_result_list;			
 	}	
 	
-	public function simulate ( KalturaConvartableJobData $data )
+	public function simulate ( VidiunConvartableJobData $data )
 	{
 		return  $this->simulatejob ( $data );
 	}	
 	
-	private function simulatejob ( KalturaConvertJobData $data )
+	private function simulatejob ( VidiunConvertJobData $data )
 	{
 		return  $this->getExecutionCommandAndConversionString ( $data );
 	}
 	
-	public function convert ( KalturaConvartableJobData &$data )
+	public function convert ( VidiunConvartableJobData &$data )
 	{
 		return  $this->convertJob ( $data );
 	}
 	
-	public function convertJob ( KalturaConvertJobData &$data )
+	public function convertJob ( VidiunConvertJobData &$data )
 	{
 
 		$error_message = "";  
@@ -92,7 +92,7 @@ abstract class KJobConversionEngine extends KConversionEngine
 		if ( ! file_exists ( $actualFileSyncLocalPath ) )
 		{
 			$error_message = "File [{$actualFileSyncLocalPath}] does not exist";
-			KalturaLog::err(  $error_message );
+			VidiunLog::err(  $error_message );
 			return array ( false , $error_message );
 		}
 
@@ -122,7 +122,7 @@ abstract class KJobConversionEngine extends KConversionEngine
 			$this->addToLogFile ( $log_file , $execution_command_str ) ;
 			$this->addToLogFile ( $log_file , $conversion_str ) ;
 				
-			KalturaLog::info ( $execution_command_str );
+			VidiunLog::info ( $execution_command_str );
 	
 			$start = microtime(true);
 			// TODO add BatchEvent - before conversion + conversion engine 
@@ -133,7 +133,7 @@ abstract class KJobConversionEngine extends KConversionEngine
 			// 	TODO - find some place in the DB for the duration
 			$duration += ( $end - $start );
 						 
-			KalturaLog::info ( $this->getName() . ": [$return_value] took [$duration] seconds" );
+			VidiunLog::info ( $this->getName() . ": [$return_value] took [$duration] seconds" );
 			
 			$this->addToLogFile ( $log_file , $output ) ;
 			

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaControlPanelCommandTargetType extends KalturaEnum
+class VidiunControlPanelCommandTargetType extends VidiunEnum
 {
 	const DATA_CENTER = 1;
 	const SCHEDULER = 2;

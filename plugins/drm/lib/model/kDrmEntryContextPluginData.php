@@ -1,6 +1,6 @@
 <?php
 
-class kDrmEntryContextPluginData extends PluginData {
+class vDrmEntryContextPluginData extends PluginData {
 	/**
     * @var string
     */
@@ -16,4 +16,4 @@ class kDrmEntryContextPluginData extends PluginData {
 		$this->flavorData = $flavorData;
 	}
 
-} // kDrmEntryContextPluginData
+} // vDrmEntryContextPluginData

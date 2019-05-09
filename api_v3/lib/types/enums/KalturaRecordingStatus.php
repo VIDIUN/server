@@ -1,5 +1,5 @@
 <?php
-class KalturaRecordingStatus extends KalturaEnum implements RecordingStatus
+class VidiunRecordingStatus extends VidiunEnum implements RecordingStatus
 {
     
 }

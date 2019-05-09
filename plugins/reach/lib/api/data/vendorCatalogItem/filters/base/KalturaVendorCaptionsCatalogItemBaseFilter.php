@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaVendorCaptionsCatalogItemBaseFilter extends KalturaVendorCatalogItemFilter
+abstract class VidiunVendorCaptionsCatalogItemBaseFilter extends VidiunVendorCatalogItemFilter
 {
 	static private $map_between_objects = array
 	(
@@ -30,7 +30,7 @@ abstract class KalturaVendorCaptionsCatalogItemBaseFilter extends KalturaVendorC
 	}
 
 	/**
-	 * @var KalturaCatalogItemLanguage
+	 * @var VidiunCatalogItemLanguage
 	 */
 	public $sourceLanguageEqual;
 
@@ -40,7 +40,7 @@ abstract class KalturaVendorCaptionsCatalogItemBaseFilter extends KalturaVendorC
 	public $sourceLanguageIn;
 
 	/**
-	 * @var KalturaVendorCatalogItemOutputFormat
+	 * @var VidiunVendorCatalogItemOutputFormat
 	 */
 	public $outputFormatEqual;
 

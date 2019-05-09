@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage model.data
  */
-class kEventNotificationArrayParameter extends kEventNotificationParameter
+class vEventNotificationArrayParameter extends vEventNotificationParameter
 {
 	/**
 	 * @var array
@@ -12,19 +12,19 @@ class kEventNotificationArrayParameter extends kEventNotificationParameter
 	
 	/**
 	 * Used to restrict the values to close list
-	 * @var array<kStringValue>
+	 * @var array<vStringValue>
 	 */
 	protected $allowedValues;
 
 	/* (non-PHPdoc)
-	 * @see kEventNotificationParameter::getValue()
+	 * @see vEventNotificationParameter::getValue()
 	 */
 	public function getValue()
 	{
 		if(!$this->values)
 			return null;
 			
-		$value = new kStringValue();
+		$value = new vStringValue();
 		$value->setValue(implode(',', $this->values));
 		
 		return $value;

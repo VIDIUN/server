@@ -3,7 +3,7 @@
  * @package api
  * @subpackage v3
  */
-class KalturaServiceActionItem
+class VidiunServiceActionItem
 {
     /**
      * @var string
@@ -16,7 +16,7 @@ class KalturaServiceActionItem
     public $serviceClass;
     
     /**
-     * @var KalturaDocCommentParser
+     * @var VidiunDocCommentParser
      */
     public $serviceInfo;
     
@@ -25,9 +25,9 @@ class KalturaServiceActionItem
      */
     public $actionMap;
     
-    public static function cloneItem (KalturaServiceActionItem $item)
+    public static function cloneItem (VidiunServiceActionItem $item)
     {
-        $serviceActionItem = new KalturaServiceActionItem();
+        $serviceActionItem = new VidiunServiceActionItem();
         $serviceActionItem->serviceId = $item->serviceId;
         $serviceActionItem->serviceClass = $item->serviceClass;
         $serviceActionItem->serviceInfo = $item->serviceInfo;

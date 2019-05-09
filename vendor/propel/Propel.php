@@ -641,9 +641,9 @@ class Propel
 				break;
 			} catch (PDOException $e) {
 				$timeTook = microtime(true) - $startTime;
-				if (class_exists("KalturaLog"))
+				if (class_exists("VidiunLog"))
 				{
-					KalturaLog::Log("failed to connect [$i] [$timeTook] $dsn");
+					VidiunLog::Log("failed to connect [$i] [$timeTook] $dsn");
 				}
 				if ($i == $count || $timeTook < 1)
 					throw new PropelException("Unable to open PDO connection dsn[$dsn] user[$user] password[$password]", $e);
@@ -652,11 +652,11 @@ class Propel
 		
 		$totalConnTook = microtime(true) - $connStartTime;
 
-		if (class_exists("KalturaLog"))
-			KalturaLog::Log("total conn took $totalConnTook $dsn");
+		if (class_exists("VidiunLog"))
+			VidiunLog::Log("total conn took $totalConnTook $dsn");
 
-		if (class_exists("KalturaMonitorClient"))
-			KalturaMonitorClient::monitorConnTook($dsn, $totalConnTook);
+		if (class_exists("VidiunMonitorClient"))
+			VidiunMonitorClient::monitorConnTook($dsn, $totalConnTook);
 		
 		// load any connection options from the config file
 		// connection attributes are those PDO flags that have to be set on the initialized connection

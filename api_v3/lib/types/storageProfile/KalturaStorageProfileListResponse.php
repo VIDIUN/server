@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaStorageProfileListResponse extends KalturaListResponse
+class VidiunStorageProfileListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaStorageProfileArray
+	 * @var VidiunStorageProfileArray
 	 * @readonly
 	 */
 	public $objects;

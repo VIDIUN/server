@@ -57,13 +57,13 @@ class myConversionProfileUtils
 		return  (int)( $width / $aspect_ratio );
 	}
 	
-	private static function fixDimensionsByAspectRatio ( kConversionParams $conv_params, &$description )
+	private static function fixDimensionsByAspectRatio ( vConversionParams $conv_params, &$description )
 	{
 		// if should use "aspect_ratio" but have no width - act as if "original_size" 
 		if (
-				$conv_params->aspect_ratio == kConversionParams::CONV_PARAMS_ASPECT_RATIO_KEEP_ORIG_DIMENSIONS 
+				$conv_params->aspect_ratio == vConversionParams::CONV_PARAMS_ASPECT_RATIO_KEEP_ORIG_DIMENSIONS 
 				|| 
-			 	($conv_params->aspect_ratio == kConversionParams::CONV_PARAMS_ASPECT_RATIO_KEEP_ORIG_RATIO &&  $conv_params->width <= 0 ) 
+			 	($conv_params->aspect_ratio == vConversionParams::CONV_PARAMS_ASPECT_RATIO_KEEP_ORIG_RATIO &&  $conv_params->width <= 0 ) 
 			)
 		{
 			$description = 'Keeping original height';
@@ -72,7 +72,7 @@ class myConversionProfileUtils
 			return;
 		}
 
-		if ( $conv_params->aspect_ratio == kConversionParams::CONV_PARAMS_ASPECT_RATIO_IGNORE )
+		if ( $conv_params->aspect_ratio == vConversionParams::CONV_PARAMS_ASPECT_RATIO_IGNORE )
 		{
 			// use the width & heigth from the params - IGNORE all the external requests 
 		}
@@ -86,22 +86,22 @@ class myConversionProfileUtils
 					$conv_params->height == 0 
 					|| 
 					( 	
-						$conv_params->aspect_ratio != kConversionParams::CONV_PARAMS_ASPECT_RATIO_KEEP_HEIGHT 
+						$conv_params->aspect_ratio != vConversionParams::CONV_PARAMS_ASPECT_RATIO_KEEP_HEIGHT 
 						&&  
-						$conv_params->aspect_ratio != kConversionParams::CONV_PARAMS_ASPECT_RATIO_KEEP_ORIG_DIMENSIONS 
+						$conv_params->aspect_ratio != vConversionParams::CONV_PARAMS_ASPECT_RATIO_KEEP_ORIG_DIMENSIONS 
 					)
 			) // can be empty , null or 0
 		{
-			if ( $conv_params->aspect_ratio == kConversionParams::CONV_PARAMS_ASPECT_RATIO_KEEP_ORIG_RATIO )
+			if ( $conv_params->aspect_ratio == vConversionParams::CONV_PARAMS_ASPECT_RATIO_KEEP_ORIG_RATIO )
 			{
 				$conv_params->height = 0; 
 			}
-			elseif ( $conv_params->aspect_ratio == kConversionParams::CONV_PARAMS_ASPECT_RATIO_16_9 )
+			elseif ( $conv_params->aspect_ratio == vConversionParams::CONV_PARAMS_ASPECT_RATIO_16_9 )
 			{
 				$conv_params->height = self::calcHeight ( $conv_params->width , ( 16/9 ) );
 			}
 		
-			elseif( $conv_params->aspect_ratio == kConversionParams::CONV_PARAMS_ASPECT_RATIO_4_3 )
+			elseif( $conv_params->aspect_ratio == vConversionParams::CONV_PARAMS_ASPECT_RATIO_4_3 )
 			{
 				// default is CONV_PARAMS_ASPECT_RATIO_4_3
 				$conv_params->height = self::calcHeight ( $conv_params->width , ( 4/3 ) );
@@ -178,7 +178,7 @@ class myConversionProfileUtils
 		$new_profile->setInputTagsMap($map);
 		
 		// use the OLD code to simulate what was performed on the old_conversion_profile to retrieve the old_conversion_params list		
-		$conv_client = new kConversionClientBase ( "" , "" , "" , "" ); 
+		$conv_client = new vConversionClientBase ( "" , "" , "" , "" ); 
  
 		$old_conversion_command = $conv_client->createConversionCommandFromConverionProfile ( "src" , "target" , $old_conversion_profile );
 		$description = ''; 

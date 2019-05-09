@@ -3,12 +3,12 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAuthenticatedCondition extends KalturaCondition
+class VidiunAuthenticatedCondition extends VidiunCondition
 {
 	/**
 	 * The privelege needed to remove the restriction
 	 * 
-	 * @var KalturaStringValueArray
+	 * @var VidiunStringValueArray
 	 */
 	public $privileges;
 	
@@ -31,12 +31,12 @@ class KalturaAuthenticatedCondition extends KalturaCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kAuthenticatedCondition();
+			$dbObject = new vAuthenticatedCondition();
 			
 		return parent::toObject($dbObject, $skip);
 	}

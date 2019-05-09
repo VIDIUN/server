@@ -3,7 +3,7 @@
  * @package plugins.on2
  * @subpackage lib
  */
-class KDLOperatorOn2 extends KDLOperatorBase {
+class VDLOperatorOn2 extends VDLOperatorBase {
 /*
     public function __construct($id, $name=null, $sourceBlacklist=null, $targetBlacklist=null) {
     	parent::__construct($id, $name, $sourceBlacklist,$targetBlacklist);
@@ -12,11 +12,11 @@ class KDLOperatorOn2 extends KDLOperatorBase {
 	/* ---------------------------
 	 * GenerateCommandLine
 	 */
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 	$cmdStr = null;
 
-		$cmdStr.= "-i ".KDLCmdlinePlaceholders::InFileName;
+		$cmdStr.= "-i ".VDLCmdlinePlaceholders::InFileName;
 		
 		$cmdStr.= $this->generateVideoParams($design, $target);
 		$cmdStr.= $this->generateAudioParams($design, $target);
@@ -35,7 +35,7 @@ class KDLOperatorOn2 extends KDLOperatorBase {
 		if($extra)
 			$cmdStr.= " ".$extra;
 		
-		$cmdStr.= " -o ".KDLCmdlinePlaceholders::OutFileName;
+		$cmdStr.= " -o ".VDLCmdlinePlaceholders::OutFileName;
 
 		return $cmdStr;
 
@@ -44,7 +44,7 @@ class KDLOperatorOn2 extends KDLOperatorBase {
 	/* ---------------------------
 	 * generateVideoParams
 	 */
-    protected function generateVideoParams(KDLFlavor $design, KDLFlavor $target)
+    protected function generateVideoParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		if(!isset($target->_video)){
 			return null;
@@ -55,20 +55,20 @@ $cmdStr = null;
 $vid = $target->_video;
 
 		switch($vid->_id){
-			case KDLVideoTarget::H264:
+			case VDLVideoTarget::H264:
 				$cmdStr.= " -c H264";
 				break; 				
-			case KDLVideoTarget::H264B:
+			case VDLVideoTarget::H264B:
 				$cmdStr.= " -c H264 --FE2_H264_PROFILE=0";
 				break; 				
-			case KDLVideoTarget::H264M:
+			case VDLVideoTarget::H264M:
 				$cmdStr.= " -c H264 --FE2_H264_PROFILE=1";
 				break; 				
-			case KDLVideoTarget::H264H:
+			case VDLVideoTarget::H264H:
 				$cmdStr.= " -c H264 --FE2_H264_PROFILE=2";
 				break; 				
-			case KDLVideoTarget::VP6:
-			case KDLVideoTarget::H263:
+			case VDLVideoTarget::VP6:
+			case VDLVideoTarget::H263:
 			default:
 				$cmdStr.= " -c VP6";
 				break;
@@ -97,7 +97,7 @@ $vid = $target->_video;
 	/* ---------------------------
 	 * generateAudioParams
 	 */
-    protected function generateAudioParams(KDLFlavor $design, KDLFlavor $target)
+    protected function generateAudioParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		if(!isset($target->_audio)) {
 			return null;
@@ -116,7 +116,7 @@ $aud = $target->_audio;
 	/* ---------------------------
 	 * CheckConstraints
 	 */
-	public function CheckConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+	public function CheckConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
 	    if(parent::CheckConstraints($source, $target, $errors, $warnings)==true)
 			return true;
@@ -126,8 +126,8 @@ $aud = $target->_audio;
 		 * for audio only flavors
 		 */
 		if($target->_video==null) {
-			$warnings[KDLConstants::AudioIndex][] = //"The transcoder (".$key.") does not handle properly DAR<>PAR.";
-				KDLWarnings::ToString(KDLWarnings::TranscoderLimitation, $this->_id);
+			$warnings[VDLConstants::AudioIndex][] = //"The transcoder (".$key.") does not handle properly DAR<>PAR.";
+				VDLWarnings::ToString(VDLWarnings::TranscoderLimitation, $this->_id);
 			return true;
 		}
 
@@ -136,15 +136,15 @@ $aud = $target->_audio;
 		 * for 270 rotated videos
 		 */
 		if($target->_video && $target->_video->_rotation==270) {
-			$warnings[KDLConstants::VideoIndex][] = //"The transcoder (".$key.") does not handle properly DAR<>PAR.";
-				KDLWarnings::ToString(KDLWarnings::TranscoderLimitation, $this->_id);
+			$warnings[VDLConstants::VideoIndex][] = //"The transcoder (".$key.") does not handle properly DAR<>PAR.";
+				VDLWarnings::ToString(VDLWarnings::TranscoderLimitation, $this->_id);
 			return true;
 		}
 
 				// Encryption unsupported by On2
 		if($target->_isEncrypted==true){
-			$warnings[KDLConstants::ContainerIndex][] = 
-				KDLWarnings::ToString(KDLWarnings::TranscoderLimitation, $this->_id)."(encryption)";
+			$warnings[VDLConstants::ContainerIndex][] = 
+				VDLWarnings::ToString(VDLWarnings::TranscoderLimitation, $this->_id)."(encryption)";
 			return true;
 		}
 		return false;

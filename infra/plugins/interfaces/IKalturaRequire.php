@@ -4,12 +4,12 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaRequire extends IKalturaBase
+interface IVidiunRequire extends IVidiunBase
 {
 	/**
-	 * Returns string(s) of Kaltura Plugins which the plugin requires
+	 * Returns string(s) of Vidiun Plugins which the plugin requires
 	 * 
-	 * @return array<String> The Kaltura dependency object
+	 * @return array<String> The Vidiun dependency object
 	 */
 	public static function requires();
 }

@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage Killer
  */
-class KBatchKillerConfig
+class VBatchKillerConfig
 {
 	/**
 	 * @var int the batch process pid

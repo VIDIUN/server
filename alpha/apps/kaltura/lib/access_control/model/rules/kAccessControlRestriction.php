@@ -7,7 +7,7 @@
  * 
  * Old restriction for backward compatibility
  */
-abstract class kAccessControlRestriction extends kRule
+abstract class vAccessControlRestriction extends vRule
 {
 	const RESTRICTION_TYPE_RESTRICT_LIST = 0;
 	const RESTRICTION_TYPE_ALLOW_LIST = 1;
@@ -34,10 +34,10 @@ abstract class kAccessControlRestriction extends kRule
 			ContextType::PLAY, 
 			ContextType::DOWNLOAD, 
 		);
-		$partnerId = $accessControl ? $accessControl->getPartnerId() : kCurrentContext::$ks_partner_id;
+		$partnerId = $accessControl ? $accessControl->getPartnerId() : vCurrentContext::$vs_partner_id;
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		if($partner) {
-			if($partner->getRestrictThumbnailByKs())
+			if($partner->getRestrictThumbnailByVs())
 				$contexts[] = ContextType::THUMBNAIL;
 			if($partner->getShouldApplyAccessControlOnEntryMetadata())
 				$contexts[] = ContextType::METADATA;
@@ -55,15 +55,15 @@ abstract class kAccessControlRestriction extends kRule
 	}
 
 	/* (non-PHPdoc)
-	 * @see kRule::applyContext()
+	 * @see vRule::applyContext()
 	 */
-	public function applyContext(kContextDataResult $context)
+	public function applyContext(vContextDataResult $context)
 	{
 		$fulfilled = parent::applyContext($context);
 
 		if($fulfilled)
 			foreach($this->actions as $action)
-				if($action instanceof kAccessControlPreviewAction)
+				if($action instanceof vAccessControlPreviewAction)
 					$context->setPreviewLength($action->getLimit());
 			
 		return $fulfilled;
@@ -71,7 +71,7 @@ abstract class kAccessControlRestriction extends kRule
 	
 	public function __sleep()
 	{
-		$vars = get_class_vars('kAccessControlRestriction');
+		$vars = get_class_vars('vAccessControlRestriction');
 		unset($vars['accessControl']);
 		return array_keys($vars);
 	}

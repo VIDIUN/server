@@ -3,7 +3,7 @@
  * @package plugins.audit
  * @subpackage api.enums
  */
-class KalturaAuditTrailFileSyncSubType extends KalturaEnum 
+class VidiunAuditTrailFileSyncSubType extends VidiunEnum 
 {
 	const ENTRY_DATA = 11;
 	const ENTRY_DATA_EDIT = 12;

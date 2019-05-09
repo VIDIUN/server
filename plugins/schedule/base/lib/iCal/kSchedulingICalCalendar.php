@@ -1,23 +1,23 @@
 <?php
 
-class kSchedulingICalCalendar extends kSchedulingICalComponent
+class vSchedulingICalCalendar extends vSchedulingICalComponent
 {
 	/**
 	 * @param string $data
-	 * @param KalturaScheduleEventType $eventsType
+	 * @param VidiunScheduleEventType $eventsType
 	 */
 	public function __construct($data = null, $eventsType = null)
 	{
-		$this->setKalturaType($eventsType);
+		$this->setVidiunType($eventsType);
 		parent::__construct($data);
 	}
 	
 	/**
 	 * {@inheritDoc}
-	 * @see kSchedulingICalComponent::getType()
+	 * @see vSchedulingICalComponent::getType()
 	 */
 	protected function getType()
 	{
-		return kSchedulingICal::TYPE_CALENDAR;
+		return vSchedulingICal::TYPE_CALENDAR;
 	}
 }

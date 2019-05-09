@@ -7,7 +7,7 @@
  * @package api
  * @subpackage services
  */
-class ConversionProfileAssetParamsService extends KalturaBaseService
+class ConversionProfileAssetParamsService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -18,7 +18,7 @@ class ConversionProfileAssetParamsService extends KalturaBaseService
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::partnerGroup()
+	 * @see VidiunBaseService::partnerGroup()
 	 */
 	protected function partnerGroup($peer = null) 	
 	{
@@ -34,17 +34,17 @@ class ConversionProfileAssetParamsService extends KalturaBaseService
 	 * Lists asset parmas of conversion profile by ID
 	 * 
 	 * @action list
-	 * @param KalturaConversionProfileAssetParamsFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaConversionProfileAssetParamsListResponse
+	 * @param VidiunConversionProfileAssetParamsFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunConversionProfileAssetParamsListResponse
 	 */
-	public function listAction(KalturaConversionProfileAssetParamsFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunConversionProfileAssetParamsFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaConversionProfileAssetParamsFilter();
+			$filter = new VidiunConversionProfileAssetParamsFilter();
 			
 		if(!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		return $filter->getListResponse($pager, $this->getResponseProfile());
 	}
@@ -55,18 +55,18 @@ class ConversionProfileAssetParamsService extends KalturaBaseService
 	 * @action update
 	 * @param int $conversionProfileId
 	 * @param int $assetParamsId
-	 * @param KalturaConversionProfileAssetParams $conversionProfileAssetParams
-	 * @return KalturaConversionProfileAssetParams
+	 * @param VidiunConversionProfileAssetParams $conversionProfileAssetParams
+	 * @return VidiunConversionProfileAssetParams
 	 */
-	public function updateAction($conversionProfileId, $assetParamsId, KalturaConversionProfileAssetParams $conversionProfileAssetParams)
+	public function updateAction($conversionProfileId, $assetParamsId, VidiunConversionProfileAssetParams $conversionProfileAssetParams)
 	{
 		$conversionProfile = conversionProfile2Peer::retrieveByPK($conversionProfileId);
 		if(!$conversionProfile)
-			throw new KalturaAPIException(KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $conversionProfileId);
+			throw new VidiunAPIException(VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $conversionProfileId);
 			
 		$flavorParamsConversionProfile = flavorParamsConversionProfilePeer::retrieveByFlavorParamsAndConversionProfile($assetParamsId, $conversionProfileId);
 		if(!$flavorParamsConversionProfile)
-			throw new KalturaAPIException(KalturaErrors::CONVERSION_PROFILE_ASSET_PARAMS_NOT_FOUND, $conversionProfileId, $assetParamsId);
+			throw new VidiunAPIException(VidiunErrors::CONVERSION_PROFILE_ASSET_PARAMS_NOT_FOUND, $conversionProfileId, $assetParamsId);
 			
 		$conversionProfileAssetParams->toUpdatableObject($flavorParamsConversionProfile);
 		$flavorParamsConversionProfile->save();

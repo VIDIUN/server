@@ -20,7 +20,7 @@ class ReachProfilePeer extends BaseReachProfilePeer
 		if ( self::$s_criteria_filter == null )
 			self::$s_criteria_filter = new criteriaFilter ();
 		
-		$c = KalturaCriteria::create(VendorCatalogItemPeer::OM_CLASS);
+		$c = VidiunCriteria::create(VendorCatalogItemPeer::OM_CLASS);
 		$c->addAnd ( ReachProfilePeer::STATUS, ReachProfileStatus::DELETED, Criteria::NOT_EQUAL);
 		
 		self::$s_criteria_filter->setFilter($c);
@@ -54,7 +54,7 @@ class ReachProfilePeer extends BaseReachProfilePeer
 		
 		$stmt = $connection->prepare($updateSql);
 		$stmt->execute();
-		KalturaLog::debug("Successfully updated vendor credit for profile Id [$reachProfileId]");
+		VidiunLog::debug("Successfully updated vendor credit for profile Id [$reachProfileId]");
 		
 		$reachProfile = ReachProfilePeer::retrieveByPK($reachProfileId);
 		$reachProfile->syncCreditPercentageUsage();

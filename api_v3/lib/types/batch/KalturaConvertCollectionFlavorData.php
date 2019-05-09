@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaConvertCollectionFlavorData extends KalturaObject
+class VidiunConvertCollectionFlavorData extends VidiunObject
 {
 	/**
 	 * @var string
@@ -59,7 +59,7 @@ class KalturaConvertCollectionFlavorData extends KalturaObject
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kConvertCollectionFlavorData();
+			$dbData = new vConvertCollectionFlavorData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

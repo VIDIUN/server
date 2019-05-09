@@ -28,15 +28,15 @@ $liveIngestParams = getIngestLiveFlavorParams();
 
 foreach ($liveIngestParams as $ingestParam)
 {
-	KalturaLog::debug("Working on asst param with id [{$ingestParam->getId()}]");
+	VidiunLog::debug("Working on asst param with id [{$ingestParam->getId()}]");
 	
 	/* @var $ingestParam liveParams */
 	$currentTags = $ingestParam->getTagsArray();
-	KalturaLog::debug("Current assets tag are: " . print_r($currentTags, true));
+	VidiunLog::debug("Current assets tag are: " . print_r($currentTags, true));
 	$currentTags[] = "ipadnew";
 	$currentTags[] = "iphonenew";
 	$currentTags = array_unique($currentTags);
-	KalturaLog::debug("New assets tag are: " . print_r($currentTags, true));
+	VidiunLog::debug("New assets tag are: " . print_r($currentTags, true));
 	
 	if($executionMode == DEBUG)
 		continue;
@@ -46,4 +46,4 @@ foreach ($liveIngestParams as $ingestParam)
 }
 
 
-KalturaLog::debug("Done flavor params update");
+VidiunLog::debug("Done flavor params update");

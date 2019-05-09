@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaTaggedObjectType extends KalturaDynamicEnum implements taggedObjectType
+class VidiunTaggedObjectType extends VidiunDynamicEnum implements taggedObjectType
 {
 	public static function getEnumClass()
 	{

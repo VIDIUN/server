@@ -6,15 +6,15 @@ class WSLiveReportsClient extends nusoap_client
 	
 	function __construct()
 	{
-		$wsdlUrl = kConf::get('live_analytics_web_service_url');
+		$wsdlUrl = vConf::get('live_analytics_web_service_url');
 		parent::__construct($wsdlUrl, 'wsdl');
 		$this->keepType(true);
 	}
 	
 	/**
-	 * @param KalturaliveReportType $reportType
-	 * @param KalturaliveReportInputFilter $filter
-	 * @return KalturaLiveStatsListResponse 
+	 * @param VidiunliveReportType $reportType
+	 * @param VidiunliveReportInputFilter $filter
+	 * @return VidiunLiveStatsListResponse 
 	 **/
 	public function getReport($reportType, WSLiveReportInputFilter $filter, WSLiveReportInputPager $pager)
 	{
@@ -29,9 +29,9 @@ class WSLiveReportsClient extends nusoap_client
 	}
 	
 	/**
-	 * @param KalturaliveReportType $reportType
-	 * @param KalturaliveReportInputFilter $filter
-	 * @return KalturaLiveStatsListResponse
+	 * @param VidiunliveReportType $reportType
+	 * @param VidiunliveReportInputFilter $filter
+	 * @return VidiunLiveStatsListResponse
 	 **/
 	public function getEvents($reportType, WSLiveReportInputFilter $filter, WSLiveReportInputPager $pager)
 	{
@@ -76,11 +76,11 @@ class WSLiveReportsClient extends nusoap_client
 	
 	protected function doCall($operation, array $params = array(), $type = null)
 	{
-		kApiCache::disableConditionalCache();
+		vApiCache::disableConditionalCache();
 		$namespace = 'http://tempuri.org';
 		$soapAction = '';
 		$headers = array();
-		$headers["KALTURA_SESSION_ID"] = (string)(new UniqueId());
+		$headers["VIDIUN_SESSION_ID"] = (string)(new UniqueId());
 		$this->setDebugLevel(0);
 		
 		$result = $this->call($operation, $params, $namespace, $soapAction, $headers);
@@ -95,17 +95,17 @@ class WSLiveReportsClient extends nusoap_client
 	protected function throwError(array $result)
 	{
 		if ($this->getError()) {
-			KalturaLog::err("KalturaClient error calling operation: [".$this->operation."], error: [".$this->getError()."], request: [".$this->request."], response: [".$this->response."]");
+			VidiunLog::err("VidiunClient error calling operation: [".$this->operation."], error: [".$this->getError()."], request: [".$this->request."], response: [".$this->response."]");
 			if(array_key_exists("detail", $result) && is_array($result["detail"])) {
 				$exceptionArr = $result["detail"];
 				foreach($exceptionArr as $key => $value) {
 					if($key == "AnalyticsException") {
 						$ex = new WSAnalyticsException($value);
-						KalturaLog::err("Kaltura client failed with the following message : " . $ex->message);
+						VidiunLog::err("Vidiun client failed with the following message : " . $ex->message);
 					}
 				}
 			}
-			throw new KalturaAPIException(KalturaErrors::LIVE_REPORTS_WS_FAILURE);
+			throw new VidiunAPIException(VidiunErrors::LIVE_REPORTS_WS_FAILURE);
 		}
 	}
 }		

@@ -1,6 +1,6 @@
 <?php 
 /**
- * @package plugins.KalturaInternalTools
+ * @package plugins.VidiunInternalTools
  * @subpackage admin
  */
 class Form_SystemHelperResult extends Infra_Form

@@ -6,17 +6,17 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaAssetDistributionRulesArray extends KalturaTypedArray
+class VidiunAssetDistributionRulesArray extends VidiunTypedArray
 {
-	public static function fromDbArray(array $arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaAssetDistributionRulesArray();
+		$newArr = new VidiunAssetDistributionRulesArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-			$nObj = new KalturaAssetDistributionRule();
+			$nObj = new VidiunAssetDistributionRule();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -26,6 +26,6 @@ class KalturaAssetDistributionRulesArray extends KalturaTypedArray
 
 	public function __construct()
 	{
-		parent::__construct("KalturaAssetDistributionRule");
+		parent::__construct("VidiunAssetDistributionRule");
 	}
 }

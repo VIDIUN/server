@@ -3,18 +3,18 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUserEntryArray extends KalturaTypedArray
+class VidiunUserEntryArray extends VidiunTypedArray
 {
-	public static function fromDbArray(array $arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaUserEntryArray();
+		$newArr = new VidiunUserEntryArray();
 		foreach($arr as $obj)
 		{
 			/* @var $obj UserEntry */
-			$nObj = KalturaUserEntry::getInstanceByType($obj->getType());
+			$nObj = VidiunUserEntry::getInstanceByType($obj->getType());
 			if (!$nObj)
 			{
-				throw new KalturaAPIException(KalturaErrors::USER_ENTRY_OBJECT_TYPE_ERROR, $obj->getType(), $obj->getId());
+				throw new VidiunAPIException(VidiunErrors::USER_ENTRY_OBJECT_TYPE_ERROR, $obj->getType(), $obj->getId());
 			}
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
@@ -25,6 +25,6 @@ class KalturaUserEntryArray extends KalturaTypedArray
 
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaUserEntry" );
+		return parent::__construct ( "VidiunUserEntry" );
 	}
 }

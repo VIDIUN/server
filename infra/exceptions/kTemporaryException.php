@@ -4,9 +4,9 @@
  * @subpackage Exceptions
  * 
  * this calss is an exception calss represents a minor exception.
- * the concrete usage of this calss is to pass a batch_job retry request to KAsyncConvert.
+ * the concrete usage of this calss is to pass a batch_job retry request to VAsyncConvert.
  */
-class kTemporaryException extends kException
+class vTemporaryException extends vException
 {
 	/**
 	 * @var boolean
@@ -14,7 +14,7 @@ class kTemporaryException extends kException
 	protected $resetJobExecutionAttempts = false;
 	
 	/**
-	 * @var KalturaJobData
+	 * @var VidiunJobData
 	 */
 	protected $data = null;
 
@@ -49,9 +49,9 @@ class kTemporaryException extends kException
 	}
 
 	/**
-	 * @param KalturaJobData $data
+	 * @param VidiunJobData $data
 	 */
-	public function setData(KalturaJobData $data)
+	public function setData(VidiunJobData $data)
 	{
 		$this->data = $data;
 	}

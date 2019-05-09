@@ -3,7 +3,7 @@
  * @package plugins.booleanNotification
  * @subpackage api.objects
  */
-class KalturaBooleanNotificationTemplate extends KalturaEventNotificationTemplate
+class VidiunBooleanNotificationTemplate extends VidiunEventNotificationTemplate
 {
 	public function __construct()
 	{
@@ -11,7 +11,7 @@ class KalturaBooleanNotificationTemplate extends KalturaEventNotificationTemplat
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
@@ -21,7 +21,7 @@ class KalturaBooleanNotificationTemplate extends KalturaEventNotificationTemplat
 	}
 
 	/* (non-PHPdoc)
- 	* @see KalturaObject::validateForUpdate()
+ 	* @see VidiunObject::validateForUpdate()
  	*/
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{

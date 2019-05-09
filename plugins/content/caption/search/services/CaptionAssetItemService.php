@@ -7,7 +7,7 @@
  * @package plugins.captionSearch
  * @subpackage api.services
  */
-class CaptionAssetItemService extends KalturaBaseService
+class CaptionAssetItemService extends VidiunBaseService
 {
 
 	const SIZE_OF_ENTRIES_CHUNK = 150;
@@ -15,12 +15,12 @@ class CaptionAssetItemService extends KalturaBaseService
 	
 	public function initService($serviceId, $serviceName, $actionName)
 	{
-		$ks = kCurrentContext::$ks_object ? kCurrentContext::$ks_object : null;
+		$vs = vCurrentContext::$vs_object ? vCurrentContext::$vs_object : null;
 		
 		if (($actionName == 'search') &&
-		  (!$ks || (!$ks->isAdmin() && !$ks->verifyPrivileges(ks::PRIVILEGE_LIST, ks::PRIVILEGE_WILDCARD))))
+		  (!$vs || (!$vs->isAdmin() && !$vs->verifyPrivileges(vs::PRIVILEGE_LIST, vs::PRIVILEGE_WILDCARD))))
 		{
-			KalturaCriterion::enableTag(KalturaCriterion::TAG_WIDGET_SESSION);
+			VidiunCriterion::enableTag(VidiunCriterion::TAG_WIDGET_SESSION);
 			entryPeer::setUserContentOnly(true);
 		}
 
@@ -33,7 +33,7 @@ class CaptionAssetItemService extends KalturaBaseService
 		}
 		
 		if(!CaptionSearchPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, CaptionSearchPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, CaptionSearchPlugin::PLUGIN_NAME);
 	}
 	
     /**
@@ -41,7 +41,7 @@ class CaptionAssetItemService extends KalturaBaseService
      *
      * @action parse
      * @param string $captionAssetId
-     * @throws KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
+     * @throws VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
      */
     function parseAction($captionAssetId)
     {
@@ -52,21 +52,21 @@ class CaptionAssetItemService extends KalturaBaseService
 	 * Search caption asset items by filter, pager and free text
 	 *
 	 * @action search
-	 * @param KalturaBaseEntryFilter $entryFilter
-	 * @param KalturaCaptionAssetItemFilter $captionAssetItemFilter
-	 * @param KalturaFilterPager $captionAssetItemPager
-	 * @return KalturaCaptionAssetItemListResponse
+	 * @param VidiunBaseEntryFilter $entryFilter
+	 * @param VidiunCaptionAssetItemFilter $captionAssetItemFilter
+	 * @param VidiunFilterPager $captionAssetItemPager
+	 * @return VidiunCaptionAssetItemListResponse
 	 */
-	function searchAction(KalturaBaseEntryFilter $entryFilter = null, KalturaCaptionAssetItemFilter $captionAssetItemFilter = null, KalturaFilterPager $captionAssetItemPager = null)
+	function searchAction(VidiunBaseEntryFilter $entryFilter = null, VidiunCaptionAssetItemFilter $captionAssetItemFilter = null, VidiunFilterPager $captionAssetItemPager = null)
 	{
 		if (!$captionAssetItemPager)
 		{
-			$captionAssetItemPager = new KalturaFilterPager();
+			$captionAssetItemPager = new VidiunFilterPager();
 		}
 
 		if (!$captionAssetItemFilter)
 		{
-			$captionAssetItemFilter = new KalturaCaptionAssetItemFilter();
+			$captionAssetItemFilter = new VidiunCaptionAssetItemFilter();
 		}
 
 		$captionAssetItemFilter->validatePropertyNotNull(array("contentLike", "contentMultiLikeOr", "contentMultiLikeAnd"));
@@ -77,7 +77,7 @@ class CaptionAssetItemService extends KalturaBaseService
 		$captionItemQueryToFilter = new ESearchCaptionQueryFromFilter();
 
 		$filterOnEntryIds = false;
-		if($entryFilter || kEntitlementUtils::getEntitlementEnforcement())
+		if($entryFilter || vEntitlementUtils::getEntitlementEnforcement())
 		{
 			$entryCoreFilter = new entryFilter();
 			if($entryFilter)
@@ -87,7 +87,7 @@ class CaptionAssetItemService extends KalturaBaseService
 			$entryCoreFilter->setPartnerSearchScope($this->getPartnerId());
 			$this->addEntryAdvancedSearchFilter($captionAssetItemFilter, $entryCoreFilter);
 
-			$entryCriteria = KalturaCriteria::create(entryPeer::OM_CLASS);
+			$entryCriteria = VidiunCriteria::create(entryPeer::OM_CLASS);
 			$entryCoreFilter->attachToCriteria($entryCriteria);
 			$entryCriteria->applyFilters();
 
@@ -105,18 +105,18 @@ class CaptionAssetItemService extends KalturaBaseService
 			}
 		}
 
-		$captionAssetItemCorePager = new kFilterPager();
+		$captionAssetItemCorePager = new vFilterPager();
 		$captionAssetItemPager->toObject($captionAssetItemCorePager);
 		list($captionAssetItems, $objectsCount) = $captionItemQueryToFilter->retrieveElasticQueryCaptions($captionAssetItemCoreFilter, $captionAssetItemCorePager, $filterOnEntryIds);
 
-		$list = KalturaCaptionAssetItemArray::fromDbArray($captionAssetItems, $this->getResponseProfile());
-		$response = new KalturaCaptionAssetItemListResponse();
+		$list = VidiunCaptionAssetItemArray::fromDbArray($captionAssetItems, $this->getResponseProfile());
+		$response = new VidiunCaptionAssetItemListResponse();
 		$response->objects = $list;
 		$response->totalCount = $objectsCount;
 		return $response;
 	}
 	
-	private function addEntryAdvancedSearchFilter(KalturaCaptionAssetItemFilter $captionAssetItemFilter, entryFilter $entryCoreFilter)
+	private function addEntryAdvancedSearchFilter(VidiunCaptionAssetItemFilter $captionAssetItemFilter, entryFilter $entryCoreFilter)
 	{
 		//create advanced filter on entry caption
 		$entryCaptionAdvancedSearch = new EntryCaptionAssetSearchFilter();
@@ -142,20 +142,20 @@ class CaptionAssetItemService extends KalturaBaseService
 	 * Search caption asset items by filter, pager and free text
 	 *
 	 * @action searchEntries
-	 * @param KalturaBaseEntryFilter $entryFilter
-	 * @param KalturaCaptionAssetItemFilter $captionAssetItemFilter
-	 * @param KalturaFilterPager $captionAssetItemPager
-	 * @return KalturaBaseEntryListResponse
+	 * @param VidiunBaseEntryFilter $entryFilter
+	 * @param VidiunCaptionAssetItemFilter $captionAssetItemFilter
+	 * @param VidiunFilterPager $captionAssetItemPager
+	 * @return VidiunBaseEntryListResponse
 	 */
-	public function searchEntriesAction (KalturaBaseEntryFilter $entryFilter = null, KalturaCaptionAssetItemFilter $captionAssetItemFilter = null, KalturaFilterPager $captionAssetItemPager = null)
+	public function searchEntriesAction (VidiunBaseEntryFilter $entryFilter = null, VidiunCaptionAssetItemFilter $captionAssetItemFilter = null, VidiunFilterPager $captionAssetItemPager = null)
 	{
 		if (!$captionAssetItemPager)
 		{
-			$captionAssetItemPager = new KalturaFilterPager();
+			$captionAssetItemPager = new VidiunFilterPager();
 		}
 		if (!$captionAssetItemFilter)
 		{
-			$captionAssetItemFilter = new KalturaCaptionAssetItemFilter();
+			$captionAssetItemFilter = new VidiunCaptionAssetItemFilter();
 		}
 
 		$captionAssetItemFilter->validatePropertyNotNull(array("contentLike", "contentMultiLikeOr", "contentMultiLikeAnd"));
@@ -166,7 +166,7 @@ class CaptionAssetItemService extends KalturaBaseService
 		$entryIdChunks = array(NULL);
 		$shouldSortCaptionFiltering = false;
 
-		if($entryFilter || kEntitlementUtils::getEntitlementEnforcement())
+		if($entryFilter || vEntitlementUtils::getEntitlementEnforcement())
 		{
 			$entryCoreFilter = new entryFilter();
 			if($entryFilter)
@@ -176,7 +176,7 @@ class CaptionAssetItemService extends KalturaBaseService
 			$entryCoreFilter->setPartnerSearchScope($this->getPartnerId());
 			$this->addEntryAdvancedSearchFilter($captionAssetItemFilter, $entryCoreFilter);
 
-			$entryCriteria = KalturaCriteria::create(entryPeer::OM_CLASS);
+			$entryCriteria = VidiunCriteria::create(entryPeer::OM_CLASS);
 			$entryCoreFilter->attachToCriteria($entryCriteria);
 			$entryCriteria->setLimit(self::MAX_NUMBER_OF_ENTRIES);
 
@@ -195,7 +195,7 @@ class CaptionAssetItemService extends KalturaBaseService
 		$entries = array();
 		$counter = 0;
 
-		$captionAssetItemCorePager = new kPager();
+		$captionAssetItemCorePager = new vPager();
 		$captionAssetItemPager->toObject($captionAssetItemCorePager);
 
 		$captionItemQueryToFilter = new ESearchCaptionQueryFromFilter();
@@ -251,8 +251,8 @@ class CaptionAssetItemService extends KalturaBaseService
 				}
 			}
 		}
-		$list = KalturaBaseEntryArray::fromDbArray($dbList, $this->getResponseProfile());
-		$response = new KalturaBaseEntryListResponse();
+		$list = VidiunBaseEntryArray::fromDbArray($dbList, $this->getResponseProfile());
+		$response = new VidiunBaseEntryListResponse();
 		$response->objects = $list;
 		$response->totalCount = $counter;
 
@@ -265,18 +265,18 @@ class CaptionAssetItemService extends KalturaBaseService
 	 *
 	 * @action list
 	 * @param string $captionAssetId
-	 * @param KalturaCaptionAssetItemFilter $captionAssetItemFilter
-	 * @param KalturaFilterPager $captionAssetItemPager
-	 * @return KalturaCaptionAssetItemListResponse
+	 * @param VidiunCaptionAssetItemFilter $captionAssetItemFilter
+	 * @param VidiunFilterPager $captionAssetItemPager
+	 * @return VidiunCaptionAssetItemListResponse
 	 */
-	function listAction($captionAssetId, KalturaCaptionAssetItemFilter $captionAssetItemFilter = null, KalturaFilterPager $captionAssetItemPager = null)
+	function listAction($captionAssetId, VidiunCaptionAssetItemFilter $captionAssetItemFilter = null, VidiunFilterPager $captionAssetItemPager = null)
 	{
 
 		if (!$captionAssetItemPager)
-			$captionAssetItemPager = new KalturaFilterPager();
+			$captionAssetItemPager = new VidiunFilterPager();
 
 		if (!$captionAssetItemFilter)
-			$captionAssetItemFilter = new KalturaCaptionAssetItemFilter();
+			$captionAssetItemFilter = new VidiunCaptionAssetItemFilter();
 
 		$captionAssetItemCoreFilter = new CaptionAssetItemFilter();
 		$captionAssetItemFilter->toObject($captionAssetItemCoreFilter);
@@ -284,7 +284,7 @@ class CaptionAssetItemService extends KalturaBaseService
 
         	$captionAsset = assetPeer::retrieveById($captionAssetId);
 	        $entryId = $captionAsset->getEntryId();
-	        $entryFilter = new KalturaBaseEntryFilter();
+	        $entryFilter = new VidiunBaseEntryFilter();
 	        $entryFilter->idEqual = $entryId;
 
         	$response = CaptionAssetItemService::searchAction( $entryFilter , $captionAssetItemFilter , $captionAssetItemPager );

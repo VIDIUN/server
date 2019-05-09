@@ -45,7 +45,7 @@ while(!feof($f))
 		fprintf($stderr, "$i\r");
 
 	$s = fgets($f);
-	// collect statistics for old and new KDP
+	// collect statistics for old and new VDP
 	if ( strstr($s, "collectstats") ) $mode = 1;		// ps2 collectstats
 	elseif ( strstr($s, "action=collect") && strstr($s, "service=stats") )  $mode = 2;	// ps3 collect stats	
 	else $mode = 0;	// not a relevant line 

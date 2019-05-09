@@ -4,11 +4,11 @@
  * @package plugins.vendor
  * @subpackage api.services
  */
-class ZoomVendorService extends KalturaBaseService
+class ZoomVendorService extends VidiunBaseService
 {
 
 	/**
-	 * no partner will be provided by vendors as this called externally and not from kaltura
+	 * no partner will be provided by vendors as this called externally and not from vidiun
 	 * @param string $actionName
 	 * @return bool
 	 */
@@ -25,7 +25,7 @@ class ZoomVendorService extends KalturaBaseService
 	 * @param $serviceId
 	 * @param $serviceName
 	 * @param $actionName
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -40,12 +40,12 @@ class ZoomVendorService extends KalturaBaseService
 	 */
 	public function oauthValidationAction()
 	{
-		KalturaResponseCacher::disableCache();
-		if (!kConf::hasMap('vendor'))
+		VidiunResponseCacher::disableCache();
+		if (!vConf::hasMap('vendor'))
 		{
-			throw new KalturaAPIException("Vendor configuration file wasn't found!");
+			throw new VidiunAPIException("Vendor configuration file wasn't found!");
 		}
-		$zoomConfiguration = kConf::get('ZoomAccount', 'vendor');
+		$zoomConfiguration = vConf::get('ZoomAccount', 'vendor');
 		$clientId = $zoomConfiguration['clientId'];
 		$zoomBaseURL = $zoomConfiguration['ZoomBaseUrl'];
 		$redirectUrl = $zoomConfiguration['redirectUrl'];
@@ -74,7 +74,7 @@ class ZoomVendorService extends KalturaBaseService
 		{
 			ZoomHelper::loadLoginPage($tokens);
 		}
-		throw new KalturaAPIException('Only Zoom admins are allowed to access kaltura configuration page, please check your user account');
+		throw new VidiunAPIException('Only Zoom admins are allowed to access vidiun configuration page, please check your user account');
 	}
 
 
@@ -85,21 +85,21 @@ class ZoomVendorService extends KalturaBaseService
 	 */
 	public function deAuthorizationAction()
 	{
-		http_response_code(KCurlHeaderResponse::HTTP_STATUS_BAD_REQUEST);
-		KalturaResponseCacher::disableCache();
+		http_response_code(VCurlHeaderResponse::HTTP_STATUS_BAD_REQUEST);
+		VidiunResponseCacher::disableCache();
 		myPartnerUtils::resetAllFilters();
 		ZoomHelper::verifyHeaderToken();
 		$data = ZoomHelper::getPayloadData();
 		$accountId = ZoomHelper::extractAccountIdFromDeAuthPayload($data);
-		KalturaLog::info("Zoom changing account id: $accountId status to deleted , user de-authorized the app");
+		VidiunLog::info("Zoom changing account id: $accountId status to deleted , user de-authorized the app");
 		$zoomIntegration = VendorIntegrationPeer::retrieveSingleVendorPerPartner($accountId, VendorTypeEnum::ZOOM_ACCOUNT);
 		if (!$zoomIntegration)
 		{
-			throw new KalturaAPIException('Zoom Integration data Does Not Exist for current Partner');
+			throw new VidiunAPIException('Zoom Integration data Does Not Exist for current Partner');
 		}
 		$zoomIntegration->setStatus(VendorStatus::DELETED);
 		$zoomIntegration->save();
-		http_response_code(KCurlHeaderResponse::HTTP_STATUS_OK);
+		http_response_code(VCurlHeaderResponse::HTTP_STATUS_OK);
 		return true;
 	}
 
@@ -111,31 +111,31 @@ class ZoomVendorService extends KalturaBaseService
 	 */
 	public function fetchRegistrationPageAction($tokensData, $iv)
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		$tokensData = base64_decode($tokensData);
 		$iv = base64_decode($iv);
-		$zoomConfiguration = kConf::get('ZoomAccount', 'vendor');
+		$zoomConfiguration = vConf::get('ZoomAccount', 'vendor');
 		$verificationToken = $zoomConfiguration['verificationToken'];
 		$tokens = AESEncrypt::decrypt($verificationToken, $tokensData, $iv);
 		$tokens = json_decode($tokens, true);
-		$accessToken = $tokens[kZoomOauth::ACCESS_TOKEN];
+		$accessToken = $tokens[vZoomOauth::ACCESS_TOKEN];
 		list($tokens, $zoomUserData) = ZoomWrapper::retrieveZoomDataAsArray(ZoomHelper::API_USERS_ME, false, $tokens, null);
 		$accountId = $zoomUserData[ZoomHelper::ACCOUNT_ID];
 		/** @var ZoomVendorIntegration $zoomIntegration */
 		$zoomIntegration = VendorIntegrationPeer::retrieveSingleVendorPerPartner($accountId,
 			VendorTypeEnum::ZOOM_ACCOUNT);
-		if ($accessToken !== $tokens[kZoomOauth::ACCESS_TOKEN])
+		if ($accessToken !== $tokens[vZoomOauth::ACCESS_TOKEN])
 		{
 			// token changed -> refresh tokens
 			ZoomHelper::saveNewTokenData($tokens, $accountId, $zoomIntegration);
 		}
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 		if ($zoomIntegration && intval($partnerId) !==  $zoomIntegration->getPartnerId() && $partnerId !== 0)
 		{
 			$zoomIntegration->setPartnerId($partnerId);
 			$zoomIntegration->save();
 		}
-		ZoomHelper::loadSubmitPage($zoomIntegration, $accountId, $this->getKs());
+		ZoomHelper::loadSubmitPage($zoomIntegration, $accountId, $this->getVs());
 	}
 
 
@@ -152,9 +152,9 @@ class ZoomVendorService extends KalturaBaseService
 	 */
 	public function submitRegistrationAction($defaultUserId, $zoomCategory = null, $accountId, $enableRecordingUpload, $createUserIfNotExist)
 	{
-		KalturaResponseCacher::disableCache();
-		$partnerId = kCurrentContext::getCurrentPartnerId();
-		$dbUser = kuserPeer::createKuserForPartner($partnerId, $defaultUserId);
+		VidiunResponseCacher::disableCache();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
+		$dbUser = vuserPeer::createVuserForPartner($partnerId, $defaultUserId);
 
 		/** @var ZoomVendorIntegration $zoomIntegration */
 		$zoomIntegration = VendorIntegrationPeer::retrieveSingleVendorPerPartner($accountId, VendorTypeEnum::ZOOM_ACCOUNT);
@@ -203,7 +203,7 @@ class ZoomVendorService extends KalturaBaseService
 	 */
 	public function recordingCompleteAction()
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		myPartnerUtils::resetAllFilters();
 		ZoomHelper::verifyHeaderToken();
 		$data = ZoomHelper::getPayloadData();
@@ -212,23 +212,23 @@ class ZoomVendorService extends KalturaBaseService
 		$zoomIntegration = VendorIntegrationPeer::retrieveSingleVendorPerPartner($accountId, VendorTypeEnum::ZOOM_ACCOUNT);
 		if (!$zoomIntegration)
 		{
-			throw new KalturaAPIException('Zoom Integration data Does Not Exist for current Partner');
+			throw new VidiunAPIException('Zoom Integration data Does Not Exist for current Partner');
 		}
 		if($zoomIntegration->getStatus()==VendorStatus::DISABLED)
 		{
-			KalturaLog::info("Recieved recording complete event from Zoom account {$accountId} while upload is disabled.");
-			throw new KalturaAPIException('Uploads are disabled for current Partner');
+			VidiunLog::info("Recieved recording complete event from Zoom account {$accountId} while upload is disabled.");
+			throw new VidiunAPIException('Uploads are disabled for current Partner');
 		}
 		$emails = ZoomHelper::extractCoHosts($meetingId, $zoomIntegration, $accountId);
 		$emails = ZoomHelper::getValidatedUsers($emails, $zoomIntegration->getPartnerId(), $zoomIntegration->getCreateUserIfNotExist());
 		$dbUser = ZoomHelper::getEntryOwner($hostEmail, $zoomIntegration->getDefaultUserEMail(), $zoomIntegration->getPartnerId(), $zoomIntegration->getCreateUserIfNotExist());
-		// user logged in - need to re-init kPermissionManager in order to determine current user's permissions
-		$ks = null;
+		// user logged in - need to re-init vPermissionManager in order to determine current user's permissions
+		$vs = null;
 		$this->setPartnerFilters($zoomIntegration->getPartnerId());
-		kSessionUtils::createKSessionNoValidations($dbUser->getPartnerId() , $dbUser->getPuserId() , $ks, 86400 , false , "" , '*' );
-		kCurrentContext::initKsPartnerUser($ks);
-		kPermissionManager::init();
+		vSessionUtils::createVSessionNoValidations($dbUser->getPartnerId() , $dbUser->getPuserId() , $vs, 86400 , false , "" , '*' );
+		vCurrentContext::initVsPartnerUser($vs);
+		vPermissionManager::init();
 		$urls = ZoomHelper::parseDownloadUrls($downloadURLs, $downloadToken);
-		ZoomHelper::uploadToKaltura($urls, $dbUser, $zoomIntegration, $emails, $meetingId, $hostEmail, $topic);
+		ZoomHelper::uploadToVidiun($urls, $dbUser, $zoomIntegration, $emails, $meetingId, $hostEmail, $topic);
 	}
 }

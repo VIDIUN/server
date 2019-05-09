@@ -6,17 +6,17 @@
 class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 {
 	/**
-	 * @var KalturaDropFolder
+	 * @var VidiunDropFolder
 	 */
 	private $dropFolder = null;
 	
 	/**
-	 * @var int KalturaDropFolderFileId
+	 * @var int VidiunDropFolderFileId
 	 */
 	private $xmlDropFolderFileId = null;
 	
 	/**
-	 * @var kFileTransferMgr
+	 * @var vFileTransferMgr
 	 */
 	private $fileTransferMgr = null;
 	
@@ -27,27 +27,27 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 	private $contentResourceNameToIdMap = null;
 	
 	/**
-	 * XML provided KS info
-	 * @var KalturaSessionInfo
+	 * XML provided VS info
+	 * @var VidiunSessionInfo
 	 */
-	private $ksInfo = null;
+	private $vsInfo = null;
 	
-	public function __construct(KalturaBatchJob $job)
+	public function __construct(VidiunBatchJob $job)
 	{
 		parent::__construct($job);
 		
-		KBatchBase::impersonate($this->currentPartnerId);
-		$dropFolderPlugin = KalturaDropFolderClientPlugin::get(KBatchBase::$kClient);
+		VBatchBase::impersonate($this->currentPartnerId);
+		$dropFolderPlugin = VidiunDropFolderClientPlugin::get(VBatchBase::$vClient);
 		$this->xmlDropFolderFileId = $this->job->jobObjectId;
 		$this->dropFolder = $dropFolderPlugin->dropFolder->get($job->data->dropFolderId);
-		$this->fileTransferMgr = KDropFolderFileTransferEngine::getFileTransferManager($this->dropFolder);
+		$this->fileTransferMgr = VDropFolderFileTransferEngine::getFileTransferManager($this->dropFolder);
 		if(!$this->data->filePath)
 		{
 			$xmlDropFolderFile = $dropFolderPlugin->dropFolderFile->get($this->xmlDropFolderFileId);
 			$this->data->filePath = $this->getLocalFilePath($xmlDropFolderFile->fileName, $this->xmlDropFolderFileId);
 		}
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 	}
 	
 	/* (non-PHPdoc)
@@ -55,7 +55,7 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 	 */
 	protected function getSchemaType()
 	{
-		return KalturaSchemaType::DROP_FOLDER_XML;
+		return VidiunSchemaType::DROP_FOLDER_XML;
 	}
 	
 	/* (non-PHPdoc)
@@ -63,21 +63,21 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 	 */
 	public function handleBulkUpload()
 	{
-		KBatchBase::impersonate($this->currentPartnerId);
-		$dropFolderPlugin = KalturaDropFolderClientPlugin::get(KBatchBase::$kClient);
+		VBatchBase::impersonate($this->currentPartnerId);
+		$dropFolderPlugin = VidiunDropFolderClientPlugin::get(VBatchBase::$vClient);
 		$this->setContentResourceFilesMap($dropFolderPlugin);
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
 		parent::handleBulkUpload();
 	}
 	
-	private function setContentResourceFilesMap(KalturaDropFolderClientPlugin $dropFolderPlugin)
+	private function setContentResourceFilesMap(VidiunDropFolderClientPlugin $dropFolderPlugin)
 	{
-		$filter = new KalturaDropFolderFileFilter();
+		$filter = new VidiunDropFolderFileFilter();
 		$filter->dropFolderIdEqual = $this->dropFolder->id;
 		$filter->leadDropFolderFileIdEqual = $this->xmlDropFolderFileId;
 		
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
 		$pager->pageIndex = 1;
 		
@@ -107,7 +107,7 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 	{
 		if(isset($elementToSearchIn->dropFolderFileContentResource))
 		{
-			$resource = new KalturaDropFolderFileResource();
+			$resource = new VidiunDropFolderFileResource();
 			$attributes = $elementToSearchIn->dropFolderFileContentResource->attributes();
 			$filePath = (string)$attributes['filePath'];
 			$resource->dropFolderFileId = $this->contentResourceNameToIdMap[$filePath];
@@ -121,18 +121,18 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 	/* (non-PHPdoc)
 	 * @see BulkUploadEngineXml::validateResource()
 	 */
-	protected function validateResource(KalturaResource $resource = null, SimpleXMLElement $elementToSearchIn)
+	protected function validateResource(VidiunResource $resource = null, SimpleXMLElement $elementToSearchIn)
 	{
-		if($resource instanceof KalturaDropFolderFileResource)
+		if($resource instanceof VidiunDropFolderFileResource)
 		{
 			$fileId = $resource->dropFolderFileId;
 			if (is_null($fileId)) {
-				throw new KalturaBulkUploadXmlException("Drop folder id is null", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+				throw new VidiunBulkUploadXmlException("Drop folder id is null", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 			}
 						
 			$filePath = $this->getFilePath($elementToSearchIn);
 			$this->validateFileSize($elementToSearchIn, $filePath);
-			if($this->dropFolder->type == KalturaDropFolderType::LOCAL)
+			if($this->dropFolder->type == VidiunDropFolderType::LOCAL)
 			{
 				$this->validateChecksum($elementToSearchIn, $filePath);
 			}
@@ -149,13 +149,13 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 		if(isset($filePath))
 		{
 			$filePath = $this->dropFolder->path.'/'.$filePath;
-			if($this->dropFolder->type == KalturaDropFolderType::LOCAL)
+			if($this->dropFolder->type == VidiunDropFolderType::LOCAL)
 				$filePath = realpath($filePath);
 			return $filePath;
 		}
 		else
 		{
-			throw new KalturaBulkUploadXmlException("Can't validate file as file path is null", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+			throw new VidiunBulkUploadXmlException("Can't validate file as file path is null", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		}
 	}
 	
@@ -166,7 +166,7 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 			$fileSize = $this->fileTransferMgr->fileSize($filePath);
 			$xmlFileSize = (int)$elementToSearchIn->dropFolderFileContentResource->fileSize;
 			if($xmlFileSize != $fileSize)
-				throw new KalturaBulkUploadXmlException("File size is invalid for file [$filePath], Xml size [$xmlFileSize], actual size [$fileSize]", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+				throw new VidiunBulkUploadXmlException("File size is invalid for file [$filePath], Xml size [$xmlFileSize], actual size [$fileSize]", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		}
 	}
 	
@@ -186,9 +186,9 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 			$xmlChecksum = (string)$elementToSearchIn->dropFolderFileContentResource->fileChecksum;
 			if($xmlChecksum != $checksum)
 			{
-				throw new KalturaBulkUploadXmlException("File checksum is invalid for file [$filePath], Xml checksum [$xmlChecksum], actual checksum [$checksum]", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+				throw new VidiunBulkUploadXmlException("File checksum is invalid for file [$filePath], Xml checksum [$xmlChecksum], actual checksum [$checksum]", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 			}
-			KalturaLog::info("Checksum [$checksum] verified for local resource [$filePath]");
+			VidiunLog::info("Checksum [$checksum] verified for local resource [$filePath]");
 		}
 	}
 	
@@ -204,7 +204,7 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 		$dropFolderFilePath = $this->dropFolder->path.'/'.$fileName;
 	    
 	    // local drop folder
-	    if ($this->dropFolder->type == KalturaDropFolderType::LOCAL) 
+	    if ($this->dropFolder->type == VidiunDropFolderType::LOCAL) 
 	    {
 	        $dropFolderFilePath = realpath($dropFolderFilePath);
 	        return $dropFolderFilePath;
@@ -212,7 +212,7 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 	    else
 	    {
 	    	// remote drop folder	
-			$tempFilePath = tempnam(KBatchBase::$taskConfig->params->sharedTempPath, 'parse_dropFolderFileId_'.$fileId.'_');		
+			$tempFilePath = tempnam(VBatchBase::$taskConfig->params->sharedTempPath, 'parse_dropFolderFileId_'.$fileId.'_');		
 			$this->fileTransferMgr->getFile($dropFolderFilePath, $tempFilePath);
 			$this->setFilePermissions ($tempFilePath);
 			return $tempFilePath;
@@ -222,15 +222,15 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 	protected function setFilePermissions ($filepath)
 	{
 		$chmod = 0640;
-		if(KBatchBase::$taskConfig->getChmod())
-			$chmod = octdec(KBatchBase::$taskConfig->getChmod());
+		if(VBatchBase::$taskConfig->getChmod())
+			$chmod = octdec(VBatchBase::$taskConfig->getChmod());
 			
-		KalturaLog::info("chmod($filepath, $chmod)");
+		VidiunLog::info("chmod($filepath, $chmod)");
 		@chmod($filepath, $chmod);
 		
-		$chown_name = KBatchBase::$taskConfig->params->fileOwner;
+		$chown_name = VBatchBase::$taskConfig->params->fileOwner;
 		if ($chown_name) {
-			KalturaLog::info("Changing owner of file [$filepath] to [$chown_name]");
+			VidiunLog::info("Changing owner of file [$filepath] to [$chown_name]");
 			@chown($filepath, $chown_name);
 		}
 	}
@@ -239,48 +239,48 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 	{
 		$isValid = parent::validate();
 		
-		if($this->dropFolder->shouldValidateKS){
-			$this->validateKs();		
+		if($this->dropFolder->shouldValidateVS){
+			$this->validateVs();		
 		}
 		
 		return $isValid;
 	}
 	
-	protected function validateKs()
+	protected function validateVs()
 	{
-		//Retrieve the KS from within the XML
+		//Retrieve the VS from within the XML
 		$xdoc = new SimpleXMLElement($this->xslTransformedContent);
-		$xmlKs = $xdoc->ks;
+		$xmlVs = $xdoc->vs;
 		
 		//Get session info
-		KBatchBase::impersonate($this->currentPartnerId);
+		VBatchBase::impersonate($this->currentPartnerId);
 		try{
-			$this->ksInfo = KBatchBase::$kClient->session->get($xmlKs);	
+			$this->vsInfo = VBatchBase::$vClient->session->get($xmlVs);	
 		}
 		catch (Exception $e){
-			KBatchBase::unimpersonate();
-			throw new KalturaBatchException("KS [$xmlKs] validation failed for [{$this->job->id}], $errorMessage", KalturaBatchJobAppErrors::BULK_VALIDATION_FAILED);
+			VBatchBase::unimpersonate();
+			throw new VidiunBatchException("VS [$xmlVs] validation failed for [{$this->job->id}], $errorMessage", VidiunBatchJobAppErrors::BULK_VALIDATION_FAILED);
 		}
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
-		//validate ks is still valid
+		//validate vs is still valid
 		$currentTime = time();
-		if($currentTime > $this->ksInfo->expiry){
-			throw new KalturaBatchException("KS validation failed for [{$this->job->id}], ks provided in XML Expired", KalturaBatchJobAppErrors::BULK_VALIDATION_FAILED);
+		if($currentTime > $this->vsInfo->expiry){
+			throw new VidiunBatchException("VS validation failed for [{$this->job->id}], vs provided in XML Expired", VidiunBatchJobAppErrors::BULK_VALIDATION_FAILED);
 		}
 	}
 	
 	/**
-	 * Validates the given item's user id is identical to the user id on the KS
+	 * Validates the given item's user id is identical to the user id on the VS
 	 * @param SimpleXMLElement $item
 	 */
 	protected function validateItem(SimpleXMLElement $item)
 	{
-		if($this->dropFolder->shouldValidateKS){
-			if(!isset($item->userId) && $this->ksInfo->sessionType == KalturaSessionType::USER)
-				throw new KalturaBulkUploadXmlException("Drop Folder is set with KS validation but no user id was provided", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
-			if($item->userId != $this->ksInfo->userId && $this->ksInfo->sessionType == KalturaSessionType::USER)
-				throw new KalturaBulkUploadXmlException("Drop Folder is set with KS validation, KS user ID [" . $this->ksInfo->userId . "] does not match item user ID [" . $item->userId . "]", KalturaBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+		if($this->dropFolder->shouldValidateVS){
+			if(!isset($item->userId) && $this->vsInfo->sessionType == VidiunSessionType::USER)
+				throw new VidiunBulkUploadXmlException("Drop Folder is set with VS validation but no user id was provided", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
+			if($item->userId != $this->vsInfo->userId && $this->vsInfo->sessionType == VidiunSessionType::USER)
+				throw new VidiunBulkUploadXmlException("Drop Folder is set with VS validation, VS user ID [" . $this->vsInfo->userId . "] does not match item user ID [" . $item->userId . "]", VidiunBatchJobAppErrors::BULK_ITEM_VALIDATION_FAILED);
 		}
 			
 		parent::validateItem($item);
@@ -290,8 +290,8 @@ class DropFolderXmlBulkUploadEngine extends BulkUploadEngineXml
 	{
 		$entry = parent::createEntryFromItem($item, $type);
 		
-		if($this->dropFolder->shouldValidateKS && !isset($entry->userId))
-			$entry->userId = $this->ksInfo->userId;
+		if($this->dropFolder->shouldValidateVS && !isset($entry->userId))
+			$entry->userId = $this->vsInfo->userId;
 			
 		return $entry;
 	}

@@ -4,7 +4,7 @@
  * @subpackage api.objects
  * @relatedService AuditTrailService
  */
-class KalturaAuditTrail extends KalturaObject implements IRelatedFilterable
+class VidiunAuditTrail extends VidiunObject implements IRelatedFilterable
 {
 	/**
 	 * @var int
@@ -29,14 +29,14 @@ class KalturaAuditTrail extends KalturaObject implements IRelatedFilterable
 	public $parsedAt;
 
 	/**
-	 * @var KalturaAuditTrailStatus
+	 * @var VidiunAuditTrailStatus
 	 * @filter eq,in
 	 * @readonly
 	 */
 	public $status;
 
 	/**
-	 * @var KalturaAuditTrailObjectType
+	 * @var VidiunAuditTrailObjectType
 	 * @filter eq,in
 	 */
 	public $auditObjectType;
@@ -54,7 +54,7 @@ class KalturaAuditTrail extends KalturaObject implements IRelatedFilterable
 	public $relatedObjectId;
 
 	/**
-	 * @var KalturaAuditTrailObjectType
+	 * @var VidiunAuditTrailObjectType
 	 * @filter eq,in
 	 */
 	public $relatedObjectType;
@@ -93,13 +93,13 @@ class KalturaAuditTrail extends KalturaObject implements IRelatedFilterable
 	public $userId;
 
 	/**
-	 * @var KalturaAuditTrailAction
+	 * @var VidiunAuditTrailAction
 	 * @filter eq,in
 	 */
 	public $action;
 
 	/**
-	 * @var KalturaAuditTrailInfo
+	 * @var VidiunAuditTrailInfo
 	 */
 	public $data;
 
@@ -108,10 +108,10 @@ class KalturaAuditTrail extends KalturaObject implements IRelatedFilterable
 	 * @filter eq
 	 * @readonly
 	 */
-	public $ks;
+	public $vs;
 
 	/**
-	 * @var KalturaAuditTrailContext
+	 * @var VidiunAuditTrailContext
 	 * @filter eq,in
 	 * @readonly
 	 */
@@ -178,7 +178,7 @@ class KalturaAuditTrail extends KalturaObject implements IRelatedFilterable
 		"requestId",
 		"userId" => "puserId",
 		"action",
-		"ks",
+		"vs",
 		"context",
 		"entryPoint",
 		"serverName",
@@ -216,7 +216,7 @@ class KalturaAuditTrail extends KalturaObject implements IRelatedFilterable
 			
 		$dbAuditTrail = parent::toObject($dbAuditTrail, $propsToSkip);
 		
-		if($this->data && $this->data instanceof KalturaAuditTrailInfo)
+		if($this->data && $this->data instanceof VidiunAuditTrailInfo)
 			$dbAuditTrail->setData($this->data->toObject());
 			
 		return $dbAuditTrail;
@@ -225,7 +225,7 @@ class KalturaAuditTrail extends KalturaObject implements IRelatedFilterable
 	/**
 	 * @param AuditTrail $dbAuditTrail
 	 */
-	public function doFromObject($dbAuditTrail, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbAuditTrail, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($dbAuditTrail, $responseProfile);
 		
@@ -234,20 +234,20 @@ class KalturaAuditTrail extends KalturaObject implements IRelatedFilterable
 			$dbData = $dbAuditTrail->getData();
 			switch(get_class($dbData))
 			{
-				case 'kAuditTrailChangeInfo':
-					$this->data = new KalturaAuditTrailChangeInfo();
+				case 'vAuditTrailChangeInfo':
+					$this->data = new VidiunAuditTrailChangeInfo();
 					break;
 					
-				case 'kAuditTrailFileSyncCreateInfo':
-					$this->data = new KalturaAuditTrailFileSyncCreateInfo();
+				case 'vAuditTrailFileSyncCreateInfo':
+					$this->data = new VidiunAuditTrailFileSyncCreateInfo();
 					break;
 					
-				case 'kAuditTrailTextInfo':
-					$this->data = new KalturaAuditTrailTextInfo();
+				case 'vAuditTrailTextInfo':
+					$this->data = new VidiunAuditTrailTextInfo();
 					break;
 					
 				default:
-	//				$this->data = new KalturaAuditTrailInfo();
+	//				$this->data = new VidiunAuditTrailInfo();
 					$this->data = null;
 					break;
 			}

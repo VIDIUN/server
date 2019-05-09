@@ -3,7 +3,7 @@
  * @package plugins.httpNotification
  * @subpackage api.enum
  */
-class KalturaHttpNotificationMethod extends KalturaEnum
+class VidiunHttpNotificationMethod extends VidiunEnum
 {
 	const GET = 1;
 	const POST = 2;

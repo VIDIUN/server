@@ -3,7 +3,7 @@
  * @package plugins.comcastMrssDistribution
  * @subpackage model.data
  */
-class kComcastMrssDistributionJobProviderData extends kDistributionJobProviderData
+class vComcastMrssDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -20,7 +20,7 @@ class kComcastMrssDistributionJobProviderData extends kDistributionJobProviderDa
 	 */
 	private $distributionProfileId;
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

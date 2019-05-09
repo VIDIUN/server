@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaUserFilter extends KalturaUserBaseFilter
+class VidiunUserFilter extends VidiunUserBaseFilter
 {
 	
 	static private $map_between_objects = array
@@ -35,15 +35,15 @@ class KalturaUserFilter extends KalturaUserBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
-		return new kuserFilter();
+		return new vuserFilter();
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::toObject()
+	 * @see VidiunFilter::toObject()
 	 */
 	public function toObject ( $object_to_fill = null, $props_to_skip = array() )
 	{
@@ -60,7 +60,7 @@ class KalturaUserFilter extends KalturaUserBaseFilter
 		return $object_to_fill;		
 	}
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 		
@@ -91,7 +91,7 @@ class KalturaUserFilter extends KalturaUserBaseFilter
 	public $idIn;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $loginEnabledEqual;
 	
@@ -128,35 +128,35 @@ class KalturaUserFilter extends KalturaUserBaseFilter
 	public $permissionNamesMultiLikeAnd;
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$userFilter = $this->toObject();
 		
-		$c = KalturaCriteria::create(kuserPeer::OM_CLASS);
+		$c = VidiunCriteria::create(vuserPeer::OM_CLASS);
 		$userFilter->attachToCriteria($c);
 		
 		if (!is_null($this->roleIdEqual))
 		{
 			$roleCriteria = new Criteria();
-			$roleCriteria->add ( KuserToUserRolePeer::USER_ROLE_ID , $this->roleIdEqual );
-			$roleCriteria->addSelectColumn(KuserToUserRolePeer::KUSER_ID);
-			$rs = KuserToUserRolePeer::doSelectStmt($roleCriteria);
-			$kuserIds = $rs->fetchAll(PDO::FETCH_COLUMN);
+			$roleCriteria->add ( VuserToUserRolePeer::USER_ROLE_ID , $this->roleIdEqual );
+			$roleCriteria->addSelectColumn(VuserToUserRolePeer::VUSER_ID);
+			$rs = VuserToUserRolePeer::doSelectStmt($roleCriteria);
+			$vuserIds = $rs->fetchAll(PDO::FETCH_COLUMN);
 						
-			$c->add(kuserPeer::ID, $kuserIds, KalturaCriteria::IN);
+			$c->add(vuserPeer::ID, $vuserIds, VidiunCriteria::IN);
 		}
 
 		$c->addAnd(kuserPeer::PUSER_ID, NULL, KalturaCriteria::ISNOTNULL);
 		
 		$pager->attachToCriteria($c);
-		$list = kuserPeer::doSelect($c);
+		$list = vuserPeer::doSelect($c);
 		
 		$totalCount = $c->getRecordsCount();
 
-		$newList = KalturaUserArray::fromDbArray($list, $responseProfile);
-		$response = new KalturaUserListResponse();
+		$newList = VidiunUserArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunUserListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		

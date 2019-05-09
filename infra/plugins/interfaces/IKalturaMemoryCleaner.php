@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaMemoryCleaner extends IKalturaBase
+interface IVidiunMemoryCleaner extends IVidiunBase
 {
 	public static function cleanMemory();
 }

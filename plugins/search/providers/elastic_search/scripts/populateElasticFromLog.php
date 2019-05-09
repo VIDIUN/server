@@ -3,8 +3,8 @@ set_time_limit(0);
 chdir(dirname(__FILE__));
 
 define('ROOT_DIR', realpath(dirname(__FILE__) . '/../../../../../'));
-require_once(ROOT_DIR . '/infra/KAutoloader.php');
-require_once(ROOT_DIR . '/alpha/config/kConf.php');
+require_once(ROOT_DIR . '/infra/VAutoloader.php');
+require_once(ROOT_DIR . '/alpha/config/vConf.php');
 
 // ------------------------------------------------------
 class OldLogRecordsFilter {
@@ -19,20 +19,20 @@ class OldLogRecordsFilter {
     }
 }
 
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "propel", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "plugins", "*"));
-KAutoloader::setClassMapFilePath(kConf::get("cache_root_path") . '/elastic/' . basename(__FILE__) . '.cache');
-KAutoloader::register();
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "propel", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "plugins", "*"));
+VAutoloader::setClassMapFilePath(vConf::get("cache_root_path") . '/elastic/' . basename(__FILE__) . '.cache');
+VAutoloader::register();
 
 $skipExecutedUpdates = false;
 error_reporting(E_ALL);
-KalturaLog::setLogger(new KalturaStdoutLogger());
+VidiunLog::setLogger(new VidiunStdoutLogger());
 
 $hostname = (isset($_SERVER["HOSTNAME"]) ? $_SERVER["HOSTNAME"] : gethostname());
 $configFile = ROOT_DIR . "/configurations/elastic/populate/$hostname.ini";
 if(!file_exists($configFile))
 {
-    KalturaLog::err("Configuration file [$configFile] not found.");
+    VidiunLog::err("Configuration file [$configFile] not found.");
     exit(-1);
 }
 $config = parse_ini_file($configFile);
@@ -40,21 +40,21 @@ $elasticCluster = $config['elasticCluster'];
 $elasticServer = $config['elasticServer'];
 $elasticPort = (isset($config['elasticPort']) ? $config['elasticPort'] : 9200);
 $processScriptUpdates = (isset($config['processScriptUpdates']) ? $config['processScriptUpdates'] : false);
-$systemSettings = kConf::getMap('system');
+$systemSettings = vConf::getMap('system');
 if(!$systemSettings || !$systemSettings['LOG_DIR'])
 {
-    KalturaLog::err("LOG_DIR not found in system configuration.");
+    VidiunLog::err("LOG_DIR not found in system configuration.");
     exit(-1);
 }
 $pid = $systemSettings['LOG_DIR'] . '/populate_elastic.pid';
 if(file_exists($pid))
 {
-    KalturaLog::err("Scheduler already running - pid[" . file_get_contents($pid) . "]");
+    VidiunLog::err("Scheduler already running - pid[" . file_get_contents($pid) . "]");
     exit(1);
 }
 file_put_contents($pid, getmypid());
 
-$dbConf = kConf::getDB();
+$dbConf = vConf::getDB();
 DbManager::setConfig($dbConf);
 DbManager::initialize();
 
@@ -81,7 +81,7 @@ while(true)
 
     if(!elasticSearchUtils::isMaster($elasticClient, $hostname))
     {
-        KalturaLog::log('elastic server ['.$hostname.'] is not the master , sleeping for 30 seconds');
+        VidiunLog::log('elastic server ['.$hostname.'] is not the master , sleeping for 30 seconds');
         sleep(30);
         //update the last log ids
         $serverLastLogs = SphinxLogServerPeer::retrieveByServer($elasticCluster, $sphinxLogReadConn);
@@ -106,7 +106,7 @@ while(true)
 
     if(!$ping)
     {
-        KalturaLog::err('cannot connect to elastic cluster with client['.print_r($elasticClient, true).']');
+        VidiunLog::err('cannot connect to elastic cluster with client['.print_r($elasticClient, true).']');
         sleep(5);
         continue;
     }
@@ -131,13 +131,13 @@ while(true)
         }
 
         $handledRecords[$dc][] = $elasticLogId;
-        KalturaLog::log("Elastic log id $elasticLogId dc [$dc] executed server id [$executedServerId] Memory: [" . memory_get_usage() . "]");
+        VidiunLog::log("Elastic log id $elasticLogId dc [$dc] executed server id [$executedServerId] Memory: [" . memory_get_usage() . "]");
 
         try
         {
             if ($skipExecutedUpdates && $executedServerId == $serverLastLog->getId())
             {
-                KalturaLog::log ("Elastic server is initiated and the command already ran synchronously on this machine. Skipping");
+                VidiunLog::log ("Elastic server is initiated and the command already ran synchronously on this machine. Skipping");
             }
             else
             {
@@ -168,7 +168,7 @@ while(true)
         }
         catch(Exception $e)
         {
-            KalturaLog::err($e->getMessage());
+            VidiunLog::err($e->getMessage());
         }
     }
 
@@ -178,7 +178,7 @@ while(true)
     }
     
     SphinxLogPeer::clearInstancePool();
-    kMemoryManager::clearMemory();
+    vMemoryManager::clearMemory();
 }
 
-KalturaLog::log('Done');
+VidiunLog::log('Done');

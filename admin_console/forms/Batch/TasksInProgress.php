@@ -9,24 +9,24 @@ class Form_Batch_TasksInProgress extends Form_Base
 	{
 		$this->setTemplatePath('forms/in-progress-tasks.phtml');
 		
-		$oClass = new ReflectionClass('Kaltura_Client_Enum_ConversionEngineType');
+		$oClass = new ReflectionClass('Vidiun_Client_Enum_ConversionEngineType');
 		$convertSubTypes = $oClass->getConstants();
-		unset($convertSubTypes['Kaltura_COM']);
+		unset($convertSubTypes['Vidiun_COM']);
 		
-		$oClass = new ReflectionClass('Kaltura_Client_Enum_BatchJobType');
+		$oClass = new ReflectionClass('Vidiun_Client_Enum_BatchJobType');
 		$jobTypes = array_fill_keys($oClass->getConstants(), false);
 		
-		$jobTypes[Kaltura_Client_Enum_BatchJobType::CONVERT] = array_fill_keys($convertSubTypes, true);
-		$jobTypes[Kaltura_Client_Enum_BatchJobType::IMPORT] = true;
-		$jobTypes[Kaltura_Client_Enum_BatchJobType::BULKUPLOAD] = true;
-		$jobTypes[Kaltura_Client_Enum_BatchJobType::CONVERT_PROFILE] = true;
-		$jobTypes[Kaltura_Client_Enum_BatchJobType::POSTCONVERT] = true;
-		$jobTypes[Kaltura_Client_Enum_BatchJobType::EXTRACT_MEDIA] = true;
+		$jobTypes[Vidiun_Client_Enum_BatchJobType::CONVERT] = array_fill_keys($convertSubTypes, true);
+		$jobTypes[Vidiun_Client_Enum_BatchJobType::IMPORT] = true;
+		$jobTypes[Vidiun_Client_Enum_BatchJobType::BULKUPLOAD] = true;
+		$jobTypes[Vidiun_Client_Enum_BatchJobType::CONVERT_PROFILE] = true;
+		$jobTypes[Vidiun_Client_Enum_BatchJobType::POSTCONVERT] = true;
+		$jobTypes[Vidiun_Client_Enum_BatchJobType::EXTRACT_MEDIA] = true;
 		
-		unset($jobTypes[Kaltura_Client_Enum_BatchJobType::DVDCREATOR]);
-		unset($jobTypes[Kaltura_Client_Enum_BatchJobType::OOCONVERT]);
-		unset($jobTypes[Kaltura_Client_Enum_BatchJobType::CLEANUP]);
-		unset($jobTypes[Kaltura_Client_Enum_BatchJobType::SCHEDULER_HELPER]);
+		unset($jobTypes[Vidiun_Client_Enum_BatchJobType::DVDCREATOR]);
+		unset($jobTypes[Vidiun_Client_Enum_BatchJobType::OOCONVERT]);
+		unset($jobTypes[Vidiun_Client_Enum_BatchJobType::CLEANUP]);
+		unset($jobTypes[Vidiun_Client_Enum_BatchJobType::SCHEDULER_HELPER]);
 		
 		$this->addViewParam('jobTypes', $jobTypes);
 		

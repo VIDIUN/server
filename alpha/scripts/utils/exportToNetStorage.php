@@ -24,7 +24,7 @@ if(!$storageProfile)
 }
 
 $flavorParamsIds = $storageProfile->getFlavorParamsIds();
-KalturaLog::log("flavorParamsIds [$flavorParamsIds]");
+VidiunLog::log("flavorParamsIds [$flavorParamsIds]");
 
 $flavorParamsArr = null;
 if(!is_null($flavorParamsIds) && strlen(trim($flavorParamsIds)))
@@ -90,16 +90,16 @@ while ($moreEntries)
     	
     	foreach($keys as $index => $key)
     	{
-    		if(!kFileSyncUtils::fileSync_exists($key))
+    		if(!vFileSyncUtils::fileSync_exists($key))
     		{
     			unset($keys[$index]);			
     			continue;
     		}
     	
-    		if(kFileSyncUtils::getReadyExternalFileSyncForKey($key, $storageProfileId))
+    		if(vFileSyncUtils::getReadyExternalFileSyncForKey($key, $storageProfileId))
     			unset($keys[$index]);
     			
-    	    if (!kFileSyncUtils::getReadyInternalFileSyncForKey($key)) {
+    	    if (!vFileSyncUtils::getReadyInternalFileSyncForKey($key)) {
     	        echo 'file sync key does not have an internal file -'.serialize($key).PHP_EOL;
     	        unset($keys[$index]);
     	    }
@@ -114,12 +114,12 @@ while ($moreEntries)
     	
     	foreach($keys as $key)
     	{
-    		$fileSync = kFileSyncUtils::createPendingExternalSyncFileForKey($key, $storageProfile);
+    		$fileSync = vFileSyncUtils::createPendingExternalSyncFileForKey($key, $storageProfile);
 
-			$srcFileSync = kFileSyncUtils::getReadyInternalFileSyncForKey($key);
+			$srcFileSync = vFileSyncUtils::getReadyInternalFileSyncForKey($key);
     		
     		/* @var $srcFileSync FileSync */
-    		kJobsManager::addStorageExportJob(null, $entry->getId(), $partnerId, $storageProfile, $fileSync, $srcFileSync, true, $srcFileSync->getDc());
+    		vJobsManager::addStorageExportJob(null, $entry->getId(), $partnerId, $storageProfile, $fileSync, $srcFileSync, true, $srcFileSync->getDc());
     	}
     		
     	echo $entry->getId() . " - " . count($keys) . " keys exported\n\n";
@@ -138,7 +138,7 @@ while ($moreEntries)
         $moreEntries = false;
     }
     $entries = null;
-    kMemoryManager::clearMemory();
+    vMemoryManager::clearMemory();
 }
 
 echo "Done\n";

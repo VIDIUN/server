@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage model.data
  */
-class kMetadataField extends kStringField
+class vMetadataField extends vStringField
 {
 	/**
 	 * May contain the full xpath to the field in two formats
@@ -26,9 +26,9 @@ class kMetadataField extends kStringField
 	private $profileSystemName;
 	
 	/* (non-PHPdoc)
-	 * @see kIntegerField::getFieldValue()
+	 * @see vIntegerField::getFieldValue()
 	 */
-	protected function getFieldValue(kScope $scope = null)
+	protected function getFieldValue(vScope $scope = null)
 	{
 		if(!$scope || (is_null($this->profileId) && is_null($this->profileSystemName)))
 			return null;
@@ -36,28 +36,28 @@ class kMetadataField extends kStringField
 		$profileId = $this->profileId;
 		if(is_null($profileId))
 		{
-			$profile = MetadataProfilePeer::retrieveBySystemName($this->profileSystemName, array(kCurrentContext::getCurrentPartnerId(), PartnerPeer::GLOBAL_PARTNER));
+			$profile = MetadataProfilePeer::retrieveBySystemName($this->profileSystemName, array(vCurrentContext::getCurrentPartnerId(), PartnerPeer::GLOBAL_PARTNER));
 			if($profile)
 				$profileId = $profile->getId();
 		}
 		
 		if(is_null($profileId))
 		{
-			KalturaLog::err("No metadata profile found matching input values of profileId [{$this->profileId}] systemName [{$this->profileSystemName}]");
+			VidiunLog::err("No metadata profile found matching input values of profileId [{$this->profileId}] systemName [{$this->profileSystemName}]");
 			return null;
 		}
 		
 		$metadata = null;
-		if($scope instanceof accessControlScope || $scope instanceof kStorageProfileScope)
+		if($scope instanceof accessControlScope || $scope instanceof vStorageProfileScope)
 		{
 			$metadata = MetadataPeer::retrieveByObject($profileId, MetadataObjectType::ENTRY, $scope->getEntryId());
 		}
-		elseif($scope instanceof kEventScope)
+		elseif($scope instanceof vEventScope)
 		{
 			$object = $scope->getEvent()->getObject();
-			if(kMetadataManager::isMetadataObject($object))
+			if(vMetadataManager::isMetadataObject($object))
 			{
-				$objectType = kMetadataManager::getTypeNameFromObject($object);
+				$objectType = vMetadataManager::getTypeNameFromObject($object);
 				$metadata = MetadataPeer::retrieveByObject($profileId, $objectType, $object->getId());
 			}
 			elseif ($object instanceof Metadata)
@@ -66,9 +66,9 @@ class kMetadataField extends kStringField
 			}
 			elseif ($scope->getEvent()->getObject() instanceof categoryEntry)
 			{
-				$profileObject = kMetadataManager::getObjectTypeName($profile->getObjectType());
+				$profileObject = vMetadataManager::getObjectTypeName($profile->getObjectType());
 				$getter = "get{$profileObject}Id";
-				KalturaLog::info ("Using $getter in order to retrieve the metadata object ID");
+				VidiunLog::info ("Using $getter in order to retrieve the metadata object ID");
 				$categoryEntry = $scope->getEvent()->getObject();
 				$objectId = $categoryEntry->$getter();
 				$metadata = MetadataPeer::retrieveByObject($profileId, $profile->getObjectType(), $objectId);
@@ -81,14 +81,14 @@ class kMetadataField extends kStringField
 		
 		if($metadata)
 		{
-			$values = kMetadataManager::parseMetadataValues($metadata, $this->xPath);
+			$values = vMetadataManager::parseMetadataValues($metadata, $this->xPath);
 			if($values && count($values))
 			{
 				return reset($values);
 			}
 		}
 		
-		KalturaLog::notice("Metadata object not found for scope [" . get_class($scope) . "]");
+		VidiunLog::notice("Metadata object not found for scope [" . get_class($scope) . "]");
 		return null;
 	}
 	

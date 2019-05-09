@@ -3,9 +3,9 @@
  * @package plugins.cuePoints
  * @subpackage Scheduler
  */
-class KMultiClipCopyCuePointEngine extends KCopyCuePointEngine
+class VMultiClipCopyCuePointEngine extends VCopyCuePointEngine
 {
-	/** @var KalturaClipDescription $currentClip */
+	/** @var VidiunClipDescription $currentClip */
 	private $currentClip = null;
 
 	private $cuePointTypes = array(self::CUE_POINT_THUMB, self::CUE_POINT_EVENT, self::ANNOTATION, self::CUE_POINT_AD, self::CUE_POINT_CODE);
@@ -16,7 +16,7 @@ class KMultiClipCopyCuePointEngine extends KCopyCuePointEngine
 	public function copyCuePoints()
 	{
 		$res = true;
-		/** @var KalturaClipDescription $clipDescription */
+		/** @var VidiunClipDescription $clipDescription */
 		foreach ($this->data->clipsDescriptionArray as $clipDescription)
 		{
 			$this->currentClip = $clipDescription;
@@ -27,7 +27,7 @@ class KMultiClipCopyCuePointEngine extends KCopyCuePointEngine
 	}
 
 	/**
-	 * @param KalturaCuePoint $cuePoint
+	 * @param VidiunCuePoint $cuePoint
 	 * @return bool
 	 */
 	public function shouldCopyCuePoint($cuePoint)
@@ -68,7 +68,7 @@ class KMultiClipCopyCuePointEngine extends KCopyCuePointEngine
 
 	public function validateJobData()
 	{
-		if (!$this->data || !($this->data instanceof KalturaMultiClipCopyCuePointsJobData))
+		if (!$this->data || !($this->data instanceof VidiunMultiClipCopyCuePointsJobData))
 			return false;
 		if (is_null($this->data->clipsDescriptionArray))
 			return false;
@@ -107,7 +107,7 @@ class KMultiClipCopyCuePointEngine extends KCopyCuePointEngine
 		{
 			$cuePointSplitIntoType[$type] = array();
 		}
-		/** @var KalturaCuePoint $cuePoint */
+		/** @var VidiunCuePoint $cuePoint */
 		foreach ($cuePoints as $cuePoint)
 		{
 			$this->handleNextCuePoint($cuePointSplitIntoType,$cuePoint);
@@ -124,7 +124,7 @@ class KMultiClipCopyCuePointEngine extends KCopyCuePointEngine
 	{
 		$cuePoints = array();
 		do {
-			$listResponse = KBatchBase::tryExecuteApiCall(array('KCopyCuePointEngine', 'cuePointList'), array($filter, $pager));
+			$listResponse = VBatchBase::tryExecuteApiCall(array('VCopyCuePointEngine', 'cuePointList'), array($filter, $pager));
 			if (!$listResponse)
 				break;
 			$cuePointsPage = $listResponse->objects;
@@ -136,7 +136,7 @@ class KMultiClipCopyCuePointEngine extends KCopyCuePointEngine
 
 	/**
 	 * @param array $cuePointSplitIntoType
-	 * @param KalturaCuePoint $cuePoint
+	 * @param VidiunCuePoint $cuePoint
 	 */
 	private function handleNextCuePoint(&$cuePointSplitIntoType, &$cuePoint)
 	{
@@ -150,7 +150,7 @@ class KMultiClipCopyCuePointEngine extends KCopyCuePointEngine
 			$lastOfType = &$copiedFromArray[count($copiedFromArray)-1];
 			if (!property_exists($lastOfType, 'endTime') || $lastOfType->endTime >= $cuePoint->startTime)
 			{
-				KBatchBase::tryExecuteApiCall(array('KCopyCuePointEngine', 'mergeConsecutiveCuePoint'),
+				VBatchBase::tryExecuteApiCall(array('VCopyCuePointEngine', 'mergeConsecutiveCuePoint'),
 					array($lastOfType, $cuePoint));
 				if (property_exists($cuePoint, 'endTime'))
 					$lastOfType->endTime = $cuePoint->endTime;

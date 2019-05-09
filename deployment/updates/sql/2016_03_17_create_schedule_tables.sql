@@ -17,7 +17,7 @@ CREATE TABLE schedule_event
 	`geo_long` FLOAT,
 	`location` VARCHAR(256),
 	`organizer` VARCHAR(256),
-	`owner_kuser_id` INTEGER,
+	`owner_vuser_id` INTEGER,
 	`priority` INTEGER,
 	`sequence` INTEGER,
 	`recurrence_type` INTEGER  NOT NULL,

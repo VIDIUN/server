@@ -5,10 +5,10 @@
 // php SyncDropFolderWatcher.php 1 /web/content/drop_folder1/file1.flv 0 >> /var/log/SyncDropFolderWatcher.log
 // php SyncDropFolderWatcher.php 2 /web/content/drop_folder1/file1.flv 1595 >> /var/log/SyncDropFolderWatcher.log
 
-require_once(dirname(__file__).'/lib/KalturaClient.php');
-require_once(dirname(__file__).'/lib/KalturaPlugins/KalturaDropFolderClientPlugin.php');
+require_once(dirname(__file__).'/lib/VidiunClient.php');
+require_once(dirname(__file__).'/lib/VidiunPlugins/VidiunDropFolderClientPlugin.php');
 
-class SyncDropFolderWatcherLogger implements IKalturaLogger
+class SyncDropFolderWatcherLogger implements IVidiunLogger
 {
 	private $prefix = '';
 	
@@ -55,22 +55,22 @@ writeLog($logPrefix, 'file name:'.$fileName);
 writeLog($logPrefix, 'file size:'.$fileSize);
 
 
-$kClientConfig = new KalturaConfiguration();
-$kClientConfig->serviceUrl = $serviceUrl;
-$kClientConfig->curlTimeout = 180;
-$kClientConfig->setLogger(new SyncDropFolderWatcherLogger($logPrefix));
+$vClientConfig = new VidiunConfiguration();
+$vClientConfig->serviceUrl = $serviceUrl;
+$vClientConfig->curlTimeout = 180;
+$vClientConfig->setLogger(new SyncDropFolderWatcherLogger($logPrefix));
 
-$kClient = new KalturaClient($kClientConfig);
-$kClient->setPartnerId(-1);
-$dropFolderPlugin = KalturaDropFolderClientPlugin::get($kClient);
+$vClient = new VidiunClient($vClientConfig);
+$vClient->setPartnerId(-1);
+$dropFolderPlugin = VidiunDropFolderClientPlugin::get($vClient);
 
 try 
 {
 	$folder = null;
-	$filter = new KalturaDropFolderFilter();
+	$filter = new VidiunDropFolderFilter();
 	$filter->pathEqual = $folderPath;
-	$filter->typeEqual = KalturaDropFolderType::LOCAL;
-	$filter->statusIn = KalturaDropFolderStatus::ENABLED. ','. KalturaDropFolderStatus::ERROR;
+	$filter->typeEqual = VidiunDropFolderType::LOCAL;
+	$filter->statusIn = VidiunDropFolderStatus::ENABLED. ','. VidiunDropFolderStatus::ERROR;
 	$dropFolders = $dropFolderPlugin->dropFolder->listAction($filter);	
 	writeLog($logPrefix, 'found '.$dropFolders->totalCount.' folders');
 	if($dropFolders->totalCount == 1)
@@ -89,8 +89,8 @@ try
 		}
 		
 		//impersonate
-		$kClientConfig->partnerId = $folder->partnerId;
-		$kClient->setConfig($kClientConfig);
+		$vClientConfig->partnerId = $folder->partnerId;
+		$vClient->setConfig($vClientConfig);
 		
 		if($action == DETECTED)
 		{
@@ -129,7 +129,7 @@ try
 			else 
 				writeLog($logPrefix, 'file does not exists on the file system');
 
-			if ($file && ($file->status == KalturaDropFolderFileStatus::PARSED || $file->status == KalturaDropFolderFileStatus::UPLOADING))
+			if ($file && ($file->status == VidiunDropFolderFileStatus::PARSED || $file->status == VidiunDropFolderFileStatus::UPLOADING))
 			{
 				writeLog($logPrefix, 'found drop folder file in status PARSED or UPLOADING with id '.$file->id);
 				if ($fileExists) //file exists on the file system and in database
@@ -139,7 +139,7 @@ try
 				}
 				else //file does not exists on file system (temporary file), but exists in database
 				{
-					$dropFolderPlugin->dropFolderFile->updateStatus($file->id, KalturaDropFolderFileStatus::PURGED);
+					$dropFolderPlugin->dropFolderFile->updateStatus($file->id, VidiunDropFolderFileStatus::PURGED);
 					writeLog($logPrefix, 'file deleted from the file system, status updated to PURGED');
 				}
 			}
@@ -181,8 +181,8 @@ catch (Exception $e)
 }
 
 //unimpersonate
-$kClientConfig->partnerId = -1;
-$kClient->setConfig($kClientConfig);
+$vClientConfig->partnerId = -1;
+$vClient->setConfig($vClientConfig);
 
 writeLog($logPrefix, '---------------------------- Finish handling --------------------------');
 
@@ -193,7 +193,7 @@ function writeLog($prefix, $message)
 
 function addFile($folderId, $filePath, $fileSize, $dropFolderPlugin)
 {
-	$newDropFolderFile = new KalturaDropFolderFile();
+	$newDropFolderFile = new VidiunDropFolderFile();
 	$newDropFolderFile->dropFolderId = $folderId;
 	$newDropFolderFile->fileName = basename($filePath);
 	$newDropFolderFile->fileSize = $fileSize;
@@ -206,12 +206,12 @@ function addFile($folderId, $filePath, $fileSize, $dropFolderPlugin)
 
 function updateFile($fileId, $fileSize, $filePath, $dropFolderPlugin)
 {
-	$updateDropFolderFile = new KalturaDropFolderFile();				
+	$updateDropFolderFile = new VidiunDropFolderFile();				
 	$updateDropFolderFile->lastModificationTime = filemtime($filePath);
 	$updateDropFolderFile->uploadEndDetectedAt = time();
 	$updateDropFolderFile->fileSize = $fileSize;
 	$dropFolderPlugin->dropFolderFile->update($fileId, $updateDropFolderFile);
-	$dropFolderPlugin->dropFolderFile->updateStatus($fileId, KalturaDropFolderFileStatus::PENDING);	
+	$dropFolderPlugin->dropFolderFile->updateStatus($fileId, VidiunDropFolderFileStatus::PENDING);	
 }
 
 function addPendingFile($folderId, $filePath, $fileSize, $dropFolderPlugin)
@@ -223,7 +223,7 @@ function addPendingFile($folderId, $filePath, $fileSize, $dropFolderPlugin)
 
 function getFile($folderId, $fileName, $dropFolderPlugin)
 {
-	$filter = new KalturaDropFolderFileFilter();
+	$filter = new VidiunDropFolderFileFilter();
 	$filter->dropFolderIdEqual = $folderId;
 	$filter->fileNameEqual = $fileName;
 	$dropFolderFiles = $dropFolderPlugin->dropFolderFile->listAction($filter);

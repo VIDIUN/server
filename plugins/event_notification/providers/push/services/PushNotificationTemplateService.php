@@ -6,7 +6,7 @@
  * @package plugins.pushNotification
  * @subpackage api.services
  */
-class PushNotificationTemplateService extends KalturaBaseService
+class PushNotificationTemplateService extends VidiunBaseService
 {	
 	/**
 	 * Register to a queue from which event messages will be provided according to given template. Queue will be created if not already exists
@@ -14,10 +14,10 @@ class PushNotificationTemplateService extends KalturaBaseService
 	 * @action register
 	 * @actionAlias eventNotification_eventNotificationTemplate.register
 	 * @param string $notificationTemplateSystemName Existing push notification template system name
-	 * @param KalturaPushNotificationParams $pushNotificationParams
-	 * @return KalturaPushNotificationData
+	 * @param VidiunPushNotificationParams $pushNotificationParams
+	 * @return VidiunPushNotificationData
 	 */
-	function registerAction($notificationTemplateSystemName, KalturaPushNotificationParams $pushNotificationParams)
+	function registerAction($notificationTemplateSystemName, VidiunPushNotificationParams $pushNotificationParams)
 	{		
 		// find the template, according to its system name, on both current partner and partner 0
 		$partnerId = $this->getPartnerId();
@@ -25,15 +25,15 @@ class PushNotificationTemplateService extends KalturaBaseService
 
 		$dbEventNotificationTemplate = EventNotificationTemplatePeer::retrieveBySystemName($notificationTemplateSystemName, null, $partnersIds);
 		if (!$dbEventNotificationTemplate)
-			throw new KalturaAPIException(KalturaEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_SYSTEM_NAME_NOT_FOUND, $notificationTemplateSystemName);
+			throw new VidiunAPIException(VidiunEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_SYSTEM_NAME_NOT_FOUND, $notificationTemplateSystemName);
 
 		// verify template is push typed
 		if (!$dbEventNotificationTemplate instanceof PushNotificationTemplate)
-			throw new KalturaAPIException(KalturaEventNotificationErrors::EVENT_NOTIFICATION_WRONG_TYPE, $notificationTemplateSystemName, get_class($dbEventNotificationTemplate));
+			throw new VidiunAPIException(VidiunEventNotificationErrors::EVENT_NOTIFICATION_WRONG_TYPE, $notificationTemplateSystemName, get_class($dbEventNotificationTemplate));
 		
 		$postProcessor = new registerNotificationPostProcessor();
-		if(kApiCache::getEnableResponsePostProcessor() && !kApiCache::getResponsePostProcessor())
-			kApiCache::setResponsePostProcessor($postProcessor);
+		if(vApiCache::getEnableResponsePostProcessor() && !vApiCache::getResponsePostProcessor())
+			vApiCache::setResponsePostProcessor($postProcessor);
 
 		$missingParams = array();		
 		$userQueueNameParams = array();
@@ -58,9 +58,9 @@ class PushNotificationTemplateService extends KalturaBaseService
 			if(isset($queueKeyParams[$userParamKey]))
 			{
 				$valueToken = $queueKeyParams[$userParamKey]->getQueueKeyToken();
-				if($valueToken && kApiCache::getEnableResponsePostProcessor())
+				if($valueToken && vApiCache::getEnableResponsePostProcessor())
 				{
-					$userParam->setValue(new kStringValue($valueToken));
+					$userParam->setValue(new vStringValue($valueToken));
 					$postProcessor->addToken($userParamKey, $valueToken);
 				}
 				$userQueueKeyParams[] = $userParam;
@@ -74,10 +74,10 @@ class PushNotificationTemplateService extends KalturaBaseService
 		}
 		
 		if (!empty($missingParams))
-			throw new KalturaAPIException(KalturaErrors::MISSING_MANDATORY_PARAMETER, implode(",", $missingParams));
+			throw new VidiunAPIException(VidiunErrors::MISSING_MANDATORY_PARAMETER, implode(",", $missingParams));
 		
 		$queueName = $dbEventNotificationTemplate->getQueueName($userQueueNameParams, $partnerId, null);
-		$queueKey = $dbEventNotificationTemplate->getQueueKey($userQueueKeyParams, $partnerId, null, kApiCache::getEnableResponsePostProcessor());
+		$queueKey = $dbEventNotificationTemplate->getQueueKey($userQueueKeyParams, $partnerId, null, vApiCache::getEnableResponsePostProcessor());
 		
 		return $postProcessor->buildResponse($partnerId, $queueName, $queueKey);
 	}
@@ -88,23 +88,23 @@ class PushNotificationTemplateService extends KalturaBaseService
 	 * @action sendCommand
 	 * @actionAlias eventNotification_eventNotificationTemplate.sendCommand
 	 * @param string $notificationTemplateSystemName Existing push notification template system name
-	 * @param KalturaPushNotificationParams $pushNotificationParams
-	 * @param KalturaPushNotificationCommandType $command Command to be sent to push server
+	 * @param VidiunPushNotificationParams $pushNotificationParams
+	 * @param VidiunPushNotificationCommandType $command Command to be sent to push server
 	 */
-	function sendCommandAction($notificationTemplateSystemName, KalturaPushNotificationParams $pushNotificationParams, $command)
+	function sendCommandAction($notificationTemplateSystemName, VidiunPushNotificationParams $pushNotificationParams, $command)
 	{
-		kApiCache::disableCache();
+		vApiCache::disableCache();
 		// find the template, according to its system name, on both current partner and partner 0
 		$partnerId = $this->getPartnerId();
 		$partnersIds = array(PartnerPeer::GLOBAL_PARTNER, $partnerId);
 		
 		$dbEventNotificationTemplate = EventNotificationTemplatePeer::retrieveBySystemName($notificationTemplateSystemName, null, $partnersIds);
 		if (!$dbEventNotificationTemplate)
-			throw new KalturaAPIException(KalturaEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_SYSTEM_NAME_NOT_FOUND, $notificationTemplateSystemName);
+			throw new VidiunAPIException(VidiunEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_SYSTEM_NAME_NOT_FOUND, $notificationTemplateSystemName);
 		
 		// verify template is push typed
 		if (!$dbEventNotificationTemplate instanceof PushNotificationTemplate)
-			throw new KalturaAPIException(KalturaEventNotificationErrors::EVENT_NOTIFICATION_WRONG_TYPE, $notificationTemplateSystemName, get_class($dbEventNotificationTemplate));
+			throw new VidiunAPIException(VidiunEventNotificationErrors::EVENT_NOTIFICATION_WRONG_TYPE, $notificationTemplateSystemName, get_class($dbEventNotificationTemplate));
 		
 		$missingParams = array();
 		$queueNameParams = array();
@@ -128,7 +128,7 @@ class PushNotificationTemplateService extends KalturaBaseService
 		}
 		
 		if (!empty($missingParams))
-			throw new KalturaAPIException(KalturaErrors::MISSING_MANDATORY_PARAMETER, implode(",", $missingParams));
+			throw new VidiunAPIException(VidiunErrors::MISSING_MANDATORY_PARAMETER, implode(",", $missingParams));
 		
 		$queueName = $dbEventNotificationTemplate->getQueueName($queueNameParams, $partnerId, null);
 		

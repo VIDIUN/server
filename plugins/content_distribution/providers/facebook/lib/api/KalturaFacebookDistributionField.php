@@ -3,7 +3,7 @@
  * @package plugins.facebookDistribution
  * @subpackage api.enum
  */
-class KalturaFacebookDistributionField extends KalturaStringEnum implements FacebookDistributionField
+class VidiunFacebookDistributionField extends VidiunStringEnum implements FacebookDistributionField
 {
 	// see FacebookDistributionField interface
 }

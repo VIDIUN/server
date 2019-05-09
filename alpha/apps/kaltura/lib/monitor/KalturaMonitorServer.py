@@ -22,7 +22,7 @@ class IndexHandler(tornado.web.RequestHandler):
         self.render(path)
 #        print "Served path[%s]" % path
 
-class kMonitorQuery:
+class vMonitorQuery:
 	def __init__(self, data):
 			
 		# Unique identifier per TCP client
@@ -51,7 +51,7 @@ class kMonitorQuery:
 		self.filters = data['filters']
 	
 	
-class kMonitorQueryHandler(threading.Thread):
+class vMonitorQueryHandler(threading.Thread):
 	
 	def __init__(self,
 			name			= NotImplemented,
@@ -70,11 +70,11 @@ class kMonitorQueryHandler(threading.Thread):
 		self.name = name
 			
 		# Full query as received from the TCP client
-		# @var kMonitorQuery
+		# @var vMonitorQuery
 		self.query = query
 			
 		# Reference to the client socket
-		# @var kMonitorClient
+		# @var vMonitorClient
 		self.connection = connection
 			
 		# Queue of filtered requests
@@ -169,7 +169,7 @@ class kMonitorQueryHandler(threading.Thread):
 		return ret
 				
 				
-class kMonitorClient(tornadio2.SocketConnection):
+class vMonitorClient(tornadio2.SocketConnection):
 
 	def on_open(self, request):
 		print "Client connected [%s]" % (self.session.session_id)
@@ -201,7 +201,7 @@ class kMonitorClient(tornadio2.SocketConnection):
 		    
 	@tornadio2.event('applyQuery')
 	def applyQuery(self, query):
-		monitorQuery = kMonitorQuery(query);
+		monitorQuery = vMonitorQuery(query);
 		print "Queried name[%s], groupBy[%s], order[%s], limit[%s], units[%s]" % (monitorQuery.name, monitorQuery.groupBy, monitorQuery.order, monitorQuery.limit, monitorQuery.units)
 		for field in monitorQuery.filters:
 			print "Queried filter %s[%s]" % (field, monitorQuery.filters[field])
@@ -212,7 +212,7 @@ class kMonitorClient(tornadio2.SocketConnection):
 			if name in self.handlers:
 				self.handlers[name].stop()
 			# self.request is the TCP socket connected to the client
-			self.handlers[name] = kMonitorQueryHandler(name = name, query = monitorQuery, connection = self);
+			self.handlers[name] = vMonitorQueryHandler(name = name, query = monitorQuery, connection = self);
 			self.handlers[name].start();
 		finally:
 			self.handlersLock.release()
@@ -238,7 +238,7 @@ class kMonitorClient(tornadio2.SocketConnection):
 			status += self.handlers[name].getStatus() + ", "		
 		print "Client [%s] %s" % (self.session.session_id, status)
 		
-class kMonitorStatus(threading.Thread):
+class vMonitorStatus(threading.Thread):
 	
 	def __init__(self, interval):
 		self.interval = interval
@@ -281,16 +281,16 @@ def collectRequests():
 monitorClients = {}
 monitorClientsLock = threading.Lock()
 		
-monitorStatus = kMonitorStatus(60)
+monitorStatus = vMonitorStatus(60)
 monitorStatus.start();
 
-kMonitorRouter = tornadio2.TornadioRouter(kMonitorClient)
+vMonitorRouter = tornadio2.TornadioRouter(vMonitorClient)
 
 routes = [
    ('/', IndexHandler),
    ('/js/.*', IndexHandler) 
 ]
-routes.extend(kMonitorRouter.urls)
+routes.extend(vMonitorRouter.urls)
 
 application = tornado.web.Application(
     routes,
@@ -300,5 +300,5 @@ requestsListener = threading.Thread(target = collectRequests)
 requestsListener.setDaemon(True)
 requestsListener.start()
 
-kSocketServer = tornadio2.server.SocketServer(application)	
+vSocketServer = tornadio2.server.SocketServer(application)	
 		

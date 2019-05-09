@@ -3,7 +3,7 @@
  * @package plugins.group
  * @subpackage api.objects
  */
-abstract class KalturaESearchGroupBaseItem extends KalturaESearchBaseItem
+abstract class VidiunESearchGroupBaseItem extends VidiunESearchBaseItem
 {
 
 }

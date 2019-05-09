@@ -36,7 +36,7 @@ class ESearchUnifiedItem extends ESearchItem
 		foreach($eSearchItemsArr as $eSearchUnifiedItem)
 		{
 			self::validateUnifiedAllowedTypes($eSearchUnifiedItem);
-			$subQuery = new kESearchBoolQuery();
+			$subQuery = new vESearchBoolQuery();
 
 			self::addEntryFieldsToUnifiedQuery($eSearchUnifiedItem, $subQuery, $queryAttributes);
 			self::addCategoryEntryFieldsToUnifiedQuery($eSearchUnifiedItem, $subQuery, $queryAttributes);
@@ -214,7 +214,7 @@ class ESearchUnifiedItem extends ESearchItem
 		{
 			$data = array();
 			$data['itemType'] = $eSearchUnifiedItem->getItemType();
-			throw new kESearchException('Item type ['.$eSearchUnifiedItem->getItemType().']. is not allowed in Unified Search', kESearchException::SEARCH_TYPE_NOT_ALLOWED_ON_UNIFIED_SEARCH, $data);
+			throw new vESearchException('Item type ['.$eSearchUnifiedItem->getItemType().']. is not allowed in Unified Search', vESearchException::SEARCH_TYPE_NOT_ALLOWED_ON_UNIFIED_SEARCH, $data);
 		}
 	}
 

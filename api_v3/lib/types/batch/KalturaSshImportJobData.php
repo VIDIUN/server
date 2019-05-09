@@ -4,7 +4,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaSshImportJobData extends KalturaImportJobData
+class VidiunSshImportJobData extends VidiunImportJobData
 {    
 	/**
 	 * @var string
@@ -38,7 +38,7 @@ class KalturaSshImportJobData extends KalturaImportJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kSshImportJobData();
+			$dbData = new vSshImportJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

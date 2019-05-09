@@ -1,8 +1,8 @@
 <?php
 
-require_once(dirname(__FILE__).'/../config/kConf.php');
+require_once(dirname(__FILE__).'/../config/vConf.php');
 
-define('KALTURA_LOG', 		'ps2_dev');
+define('VIDIUN_LOG', 		'ps2_dev');
 define('SF_ENVIRONMENT',	'dev');
 define('SF_DEBUG',			true);
 

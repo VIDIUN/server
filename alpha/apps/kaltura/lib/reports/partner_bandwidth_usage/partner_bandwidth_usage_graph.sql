@@ -4,7 +4,7 @@ FROM (
 	SELECT
 		date_id, FLOOR(date_id/100) month_id, partner_id, ifnull(count_bandwidth_kb, 0)/1024 count_bandwidth
 	FROM
-		kalturadw.dwh_hourly_partner_usage
+		vidiundw.dwh_hourly_partner_usage
         WHERE
 		partner_id = {PARTNER_ID}
 		AND

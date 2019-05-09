@@ -5,7 +5,7 @@
  * @package plugins.integration
  * @subpackage api.services
  */
-class IntegrationService extends KalturaBaseService
+class IntegrationService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -13,7 +13,7 @@ class IntegrationService extends KalturaBaseService
 		
 		$partnerId = $this->getPartnerId();
 		if (!EventNotificationPlugin::isAllowedPartner($partnerId))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, EventNotificationPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, EventNotificationPlugin::PLUGIN_NAME);
 			
 		$this->applyPartnerFilterForClass('EventNotificationTemplate');
 	}
@@ -22,19 +22,19 @@ class IntegrationService extends KalturaBaseService
 	 * Dispatch integration task
 	 * 
 	 * @action dispatch
-	 * @param KalturaIntegrationJobData $data
-	 * @param KalturaBatchJobObjectType $objectType
+	 * @param VidiunIntegrationJobData $data
+	 * @param VidiunBatchJobObjectType $objectType
 	 * @param string $objectId
-	 * @throws KalturaIntegrationErrors::INTEGRATION_DISPATCH_FAILED
+	 * @throws VidiunIntegrationErrors::INTEGRATION_DISPATCH_FAILED
 	 * @return int
 	 */		
-	public function dispatchAction(KalturaIntegrationJobData $data, $objectType, $objectId)
+	public function dispatchAction(VidiunIntegrationJobData $data, $objectType, $objectId)
 	{
 		$jobData = $data->toObject();
-		$coreObjectType = kPluginableEnumsManager::apiToCore('BatchJobObjectType', $objectType);
-		$job = kIntegrationFlowManager::addintegrationJob($coreObjectType, $objectId, $jobData);
+		$coreObjectType = vPluginableEnumsManager::apiToCore('BatchJobObjectType', $objectType);
+		$job = vIntegrationFlowManager::addintegrationJob($coreObjectType, $objectId, $jobData);
 		if(!$job)
-			throw new KalturaAPIException(KalturaIntegrationErrors::INTEGRATION_DISPATCH_FAILED, $objectType);
+			throw new VidiunAPIException(VidiunIntegrationErrors::INTEGRATION_DISPATCH_FAILED, $objectType);
 			
 		return $job->getId();
 	}
@@ -49,55 +49,55 @@ class IntegrationService extends KalturaBaseService
 		$coreType = IntegrationPlugin::getBatchJobTypeCoreValue(IntegrationBatchJobType::INTEGRATION);
 		$batchJob = BatchJobPeer::retrieveByPK($id);
 		$invalidJobId = false;
-		$invalidKs = false;
+		$invalidVs = false;
 		
-		if(!self::validateKs($batchJob))
+		if(!self::validateVs($batchJob))
 		{
-			$invalidKs = true;
-			KalturaLog::err("ks not valid for notifying job [$id]");
+			$invalidVs = true;
+			VidiunLog::err("vs not valid for notifying job [$id]");
 		}
 		elseif(!$batchJob)
 		{
 			$invalidJobId = true;
-			KalturaLog::err("Job [$id] not found");
+			VidiunLog::err("Job [$id] not found");
 		}
 		elseif($batchJob->getJobType() != $coreType)
 		{
 			$invalidJobId = true;
-			KalturaLog::err("Job [$id] wrong type [" . $batchJob->getJobType() . "] expected [" . $coreType . "]");
+			VidiunLog::err("Job [$id] wrong type [" . $batchJob->getJobType() . "] expected [" . $coreType . "]");
 		}
-		elseif($batchJob->getStatus() != KalturaBatchJobStatus::ALMOST_DONE)
+		elseif($batchJob->getStatus() != VidiunBatchJobStatus::ALMOST_DONE)
 		{
 			$invalidJobId = true;
-			KalturaLog::err("Job [$id] wrong status [" . $batchJob->getStatus() . "] expected [" . KalturaBatchJobStatus::ALMOST_DONE . "]");
+			VidiunLog::err("Job [$id] wrong status [" . $batchJob->getStatus() . "] expected [" . VidiunBatchJobStatus::ALMOST_DONE . "]");
 		}
-		elseif($batchJob->getPartnerId() != kCurrentContext::getCurrentPartnerId())
+		elseif($batchJob->getPartnerId() != vCurrentContext::getCurrentPartnerId())
 		{
-			$invalidKs = true;
-			KalturaLog::err("Job [$id] of wrong partner [" . $batchJob->getPartnerId() . "] expected [" . kCurrentContext::getCurrentPartnerId() . "]");
+			$invalidVs = true;
+			VidiunLog::err("Job [$id] of wrong partner [" . $batchJob->getPartnerId() . "] expected [" . vCurrentContext::getCurrentPartnerId() . "]");
 		}
 
 		if($invalidJobId)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_BATCHJOB_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_BATCHJOB_ID, $id);
 		}
-		if($invalidKs)
+		if($invalidVs)
 		{
-			throw new KalturaAPIException(KalturaIntegrationErrors::INTEGRATION_NOTIFY_FAILED);
+			throw new VidiunAPIException(VidiunIntegrationErrors::INTEGRATION_NOTIFY_FAILED);
 		}
 			
-		kJobsManager::updateBatchJob($batchJob, KalturaBatchJobStatus::FINISHED);
+		vJobsManager::updateBatchJob($batchJob, VidiunBatchJobStatus::FINISHED);
 	}
 
-	public static function validateKs($job)
+	public static function validateVs($job)
 	{	
-		$dcParams = kDataCenterMgr::getCurrentDc();
+		$dcParams = vDataCenterMgr::getCurrentDc();
 		$token = $dcParams["secret"];
 		
 		$createdString = md5($job->getId() . $token);
 		
-		$ks = kCurrentContext::$ks_object;
-		if($createdString == $ks->additional_data)
+		$vs = vCurrentContext::$vs_object;
+		if($createdString == $vs->additional_data)
 			return true;
 		
 		return false;

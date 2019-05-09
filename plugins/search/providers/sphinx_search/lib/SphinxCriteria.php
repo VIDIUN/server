@@ -3,10 +3,10 @@
  * @package plugins.sphinxSearch
  * @subpackage model.filters
  */
-abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQuery
+abstract class SphinxCriteria extends VidiunCriteria implements IVidiunIndexQuery
 {
 	const RANKER_NONE = 'none';
-	const RANKER_BM25 = "expr('1000*bm25f(2.0,0.75,{privacy_by_contexts=0,categories=0,kuser_id=0,entitled_kusers=0,sphinx_match_optimizations=0})')";
+	const RANKER_BM25 = "expr('1000*bm25f(2.0,0.75,{privacy_by_contexts=0,categories=0,vuser_id=0,entitled_vusers=0,sphinx_match_optimizations=0})')";
 	const WEIGHT = '@weight';
 	const MAX_MATCHES = 10000;
 	
@@ -149,19 +149,19 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 		if (!$this->selectColumn)
 			$this->selectColumn = $objectClass::getSphinxIdField();
 		
-		$sql = "SELECT {$this->selectColumn} $conditions FROM $index $wheres " . ($this->groupByColumn ? "GROUP BY {$this->groupByColumn} " : "" ) . "$orderBy LIMIT $limit OPTION ranker={$this->ranker}, max_matches=$maxMatches, comment='".kApiCache::KALTURA_COMMENT_MARKER."'";
+		$sql = "SELECT {$this->selectColumn} $conditions FROM $index $wheres " . ($this->groupByColumn ? "GROUP BY {$this->groupByColumn} " : "" ) . "$orderBy LIMIT $limit OPTION ranker={$this->ranker}, max_matches=$maxMatches, comment='".vApiCache::VIDIUN_COMMENT_MARKER."'";
 
-		if (kConf::hasParam('sphinx_extra_options'))
-			$sql .= ', ' . kConf::get('sphinx_extra_options');
+		if (vConf::hasParam('sphinx_extra_options'))
+			$sql .= ', ' . vConf::get('sphinx_extra_options');
 
-		$badSphinxQueries = kConf::hasParam("sphinx_bad_queries") ? kConf::get("sphinx_bad_queries") : array();
+		$badSphinxQueries = vConf::hasParam("sphinx_bad_queries") ? vConf::get("sphinx_bad_queries") : array();
 
 		foreach($badSphinxQueries as $badQuery)
 		{
 			if (preg_match($badQuery, $sql))
 			{
-				KalturaLog::log("bad sphinx query: [$badQuery] $sql");
-				throw new kCoreException("Invalid sphinx query [$sql]\nMatched regular expression [$badQuery]", APIErrors::SEARCH_ENGINE_QUERY_FAILED);
+				VidiunLog::log("bad sphinx query: [$badQuery] $sql");
+				throw new vCoreException("Invalid sphinx query [$sql]\nMatched regular expression [$badQuery]", APIErrors::SEARCH_ENGINE_QUERY_FAILED);
 			}
 		}
 
@@ -172,12 +172,12 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 		if($ids === false)
 		{
 			list($sqlState, $errCode, $errDescription) = $pdo->errorInfo();
-			throw new kCoreException("Invalid sphinx query [$sql]\nSQLSTATE error code [$sqlState]\nDriver error code [$errCode]\nDriver error message [$errDescription]", APIErrors::SEARCH_ENGINE_QUERY_FAILED);
+			throw new vCoreException("Invalid sphinx query [$sql]\nSQLSTATE error code [$sqlState]\nDriver error code [$errCode]\nDriver error message [$errDescription]", APIErrors::SEARCH_ENGINE_QUERY_FAILED);
 		}
 		
 		$idsCount = count($ids);
 		$this->setFetchedIds($ids);
-		KalturaLog::info("Found $idsCount ids");
+		VidiunLog::info("Found $idsCount ids");
 
 		$this->sphinxRecordCount = false;
 
@@ -212,7 +212,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 		
 		foreach($this->keyToRemove as $key)
 		{
-			KalturaLog::debug("Removing key [$key] from criteria");
+			VidiunLog::debug("Removing key [$key] from criteria");
 			$this->remove($key);
 		}
 		
@@ -227,7 +227,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 			if ($this->sphinxRecordCount !== false)
 			{
 				$this->recordsCount = $this->sphinxRecordCount;
-				KalturaLog::info('Sphinx query total_found: ' . $this->recordsCount);
+				VidiunLog::info('Sphinx query total_found: ' . $this->recordsCount);
 			}
 			else
 			{
@@ -256,7 +256,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 		if($fieldA == $fieldB)
 			return 0;
 		
-		$fieldsWithPriorities = kConf::get("fields_with_priorities_in_sphinx");
+		$fieldsWithPriorities = vConf::get("fields_with_priorities_in_sphinx");
 		
 		$priorityA = 0;
 		$priorityB = 0;
@@ -404,14 +404,14 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 	{
 		$objectClass = $this->getIndexObjectName();
 		
-		if (KalturaLog::getEnableTests())
-			KalturaLog::debug('kaltura_entry_criteria ' . serialize($this));
+		if (VidiunLog::getEnableTests())
+			VidiunLog::debug('vidiun_entry_criteria ' . serialize($this));
 			
 		$this->criteriasLeft = 0;
 		
 		foreach($this->filters as $index => $filter)
 		{
-			KalturaLog::info("Applies filter $index");
+			VidiunLog::info("Applies filter $index");
 			$this->applyFilter(clone $filter);
 		}
 		
@@ -420,13 +420,13 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 		
 		if(!$this->hasAdvancedSearchFilter && !count($this->matchClause) && $this->shouldSkipSphinx() && !isset($this->groupByColumn) && !isset($this->selectColumn))
 		{
-			KalturaLog::log('Skip Sphinx');
+			VidiunLog::log('Skip Sphinx');
 			$this->sphinxSkipped = true;
 			return;
 		}
 
 		$cacheKey = null;
-		$cachedResult = kSphinxQueryCache::getCachedSphinxQueryResults($this, $objectClass, $cacheKey);
+		$cachedResult = vSphinxQueryCache::getCachedSphinxQueryResults($this, $objectClass, $cacheKey);
 		if ($cachedResult)
 		{
 			list($ids, $this->nonSphinxOrderColumns, $this->keyToRemove, $this->sphinxRecordCount, $setLimit, $this->applySortRequired) = $cachedResult;
@@ -443,25 +443,25 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 		{
 			if(!($criterion instanceof SphinxCriterion))
 			{
-				KalturaLog::debug("Criterion [" . $criterion->getColumn() . "] is not sphinx criteria");
+				VidiunLog::debug("Criterion [" . $criterion->getColumn() . "] is not sphinx criteria");
 				$this->criteriasLeft++;
 				continue;
 			}
 			
 			if($criterion->apply($this))
 			{
-				KalturaLog::debug("Criterion [" . $criterion->getColumn() . "] attached");
+				VidiunLog::debug("Criterion [" . $criterion->getColumn() . "] attached");
 				if(!in_array($field, $fieldsToKeep))
 					$this->keyToRemove[] = $field;
 			}
 			else
 			{
-				KalturaLog::debug("Criterion [" . $criterion->getColumn() . "] failed");
+				VidiunLog::debug("Criterion [" . $criterion->getColumn() . "] failed");
 				$this->criteriasLeft++;
 			}
 		}
 		
-		KalturaLog::debug("Applied " . count($this->matchClause) . " matches, " . count($this->whereClause) . " clauses, " . count($this->keyToRemove) . " keys removed, $this->criteriasLeft keys left");
+		VidiunLog::debug("Applied " . count($this->matchClause) . " matches, " . count($this->whereClause) . " clauses, " . count($this->keyToRemove) . " keys removed, $this->criteriasLeft keys left");
 		
 		// Adds special sphinx optimizations matches
 		$this->addSphinxOptimizationMatches($criterionsMap);
@@ -490,7 +490,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 		}
 		
 		$wheres = '';
-		KalturaLog::debug("Where clause: " . print_r($this->whereClause, true));
+		VidiunLog::debug("Where clause: " . print_r($this->whereClause, true));
 		$this->whereClause = array_unique($this->whereClause);
 		if(count($this->whereClause))
 			$wheres = 'WHERE ' . implode(' AND ', $this->whereClause);
@@ -526,11 +526,11 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 						$search = array_keys($replace);
 					}
 					
-					KalturaLog::debug("Add sort field[$orderField] copy from [$orderByColumn]");
+					VidiunLog::debug("Add sort field[$orderField] copy from [$orderByColumn]");
 					$orders[] = str_replace($search, $replace, $orderByColumn);
 				} else 
 				{
-					KalturaLog::debug("Skip sort field[$orderField] from [$orderByColumn] limit won't be used in sphinx query");
+					VidiunLog::debug("Skip sort field[$orderField] from [$orderByColumn] limit won't be used in sphinx query");
 					$setLimit = false;
 					$matches = null;
 					if(preg_match('/^\s*([^\s]+)\s+(ASC|DESC)\s*$/i', $orderByColumn, $matches))
@@ -584,7 +584,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 		{
 			if($this->getOffset() >= self::MAX_MATCHES)
 			{
-				throw new kCoreException("sphinx max matches limit was reached", kCoreException::SPHINX_CRITERIA_EXCEEDED_MAX_MATCHES_ALLOWED);
+				throw new vCoreException("sphinx max matches limit was reached", vCoreException::SPHINX_CRITERIA_EXCEEDED_MAX_MATCHES_ALLOWED);
 			}
 			$maxMatches = min($maxMatches, $this->getLimit());
 			$maxMatches += $this->getOffset();
@@ -597,7 +597,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 		list($pdo, $sqlConditions) = $this->executeSphinx($index, $wheres, $orderBy, $limit, $maxMatches, $setLimit, $conditions, $splitIndexName);
 
 		$queryResult = array($this->getFetchedIds(), $this->nonSphinxOrderColumns, $this->keyToRemove, $this->sphinxRecordCount, $setLimit, $this->applySortRequired);
-		kSphinxQueryCache::cacheSphinxQueryResults($pdo, $objectClass, $cacheKey, $queryResult, $sqlConditions);
+		vSphinxQueryCache::cacheSphinxQueryResults($pdo, $objectClass, $cacheKey, $queryResult, $sqlConditions);
 
 		$this->applySphinxResult($setLimit);
 	}
@@ -651,7 +651,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 			$fieldParts = explode(baseObjectFilter::FILTER_PREFIX, $field, 3);
 			if(count($fieldParts) != 3)
 			{
-				KalturaLog::debug("Skip field[$field] has [" . count($fieldParts) . "] parts");
+				VidiunLog::debug("Skip field[$field] has [" . count($fieldParts) . "] parts");
 				continue;
 			}
 			
@@ -667,7 +667,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 				{
 					if (!$objectClass::hasMatchableField($fieldName))
 					{
-						KalturaLog::debug("** Skip field[$field] has no matchable for name[$fieldName]");
+						VidiunLog::debug("** Skip field[$field] has no matchable for name[$fieldName]");
 						$skip = true;
 						break;
 					}	
@@ -684,7 +684,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 			}
 			elseif(!$objectClass::hasMatchableField($fieldName))
 			{
-				KalturaLog::debug("* Skip field[$field] has no matchable for name[$fieldName]");
+				VidiunLog::debug("* Skip field[$field] has no matchable for name[$fieldName]");
 				continue;
 			}
 			else
@@ -696,10 +696,10 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 			
 			$fieldsEscapeType = $objectClass::getSearchFieldsEscapeType($fieldName);
 			
-			KalturaLog::debug("Attach field[$fieldName] as sphinx field[$sphinxField] of type [$type] and comparison[$operator] for value[$valStr]");
+			VidiunLog::debug("Attach field[$fieldName] as sphinx field[$sphinxField] of type [$type] and comparison[$operator] for value[$valStr]");
 
-			$partnerId = kCurrentContext::getCurrentPartnerId();
-			$notEmpty = kSphinxSearchManager::HAS_VALUE . $partnerId;
+			$partnerId = vCurrentContext::getCurrentPartnerId();
+			$notEmpty = vSphinxSearchManager::HAS_VALUE . $partnerId;
 			
 			switch($operator)
 			{
@@ -792,7 +792,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 				case baseObjectFilter::IS_EMPTY:
 					if($val)
 					{
-						$isEmpty = kSphinxSearchManager::HAS_NO_VALUE . $partnerId;
+						$isEmpty = vSphinxSearchManager::HAS_NO_VALUE . $partnerId;
 						$this->addMatch("@$sphinxField $isEmpty");
 					}
 					else 
@@ -864,20 +864,20 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 					$filter->unsetByName($field);
 					break;
 				default:
-					KalturaLog::debug("Skip field[$field] has no opertaor[$operator]");
+					VidiunLog::debug("Skip field[$field] has no opertaor[$operator]");
 			}
 		}
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCriteria::applyFilter()
+	 * @see VidiunCriteria::applyFilter()
 	 */
 	protected function applyFilter(baseObjectFilter $filter)
 	{
 		$advancedSearch = $filter->getAdvancedSearch();
 		if(is_object($advancedSearch))
 		{
-			KalturaLog::debug('Apply advanced filter [' . get_class($advancedSearch) . ']');
+			VidiunLog::debug('Apply advanced filter [' . get_class($advancedSearch) . ']');
 			if($advancedSearch instanceof AdvancedSearchFilterItem)
 				$advancedSearch->apply($filter, $this);
 				
@@ -892,7 +892,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see KalturaCriteria::applyResultsSort()
+	 * @see VidiunCriteria::applyResultsSort()
 	 */
 	public function applyResultsSort(array &$objects)
 	{
@@ -907,7 +907,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 		$orderedIds = $this->fetchedIds;
 		if ($this->forcedOrderIds && count($this->forcedOrderIds))
 		{
-			KalturaLog::debug("Forced order imposed");
+			VidiunLog::debug("Forced order imposed");
 			$orderedIds = array_intersect($this->forcedOrderIds, $this->fetchedIds);
 		}
 			
@@ -1002,13 +1002,13 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 			}
 			elseif(!$this->hasPeerFieldName($field))
 			{
-				KalturaLog::debug('Peer does not have the field [' . print_r($field,true) .']');
+				VidiunLog::debug('Peer does not have the field [' . print_r($field,true) .']');
 				return false;
 			}
 			elseif($objectClass::getFieldType($fieldName) == IIndexable::FIELD_TYPE_STRING && 
 					array_diff($comparisons, array(Criteria::EQUAL, Criteria::IN)))
 			{
-				KalturaLog::debug('Field is textual [' . print_r($fieldName,true) .'] and using comparisons [' . implode(',', $comparisons), ']');
+				VidiunLog::debug('Field is textual [' . print_r($fieldName,true) .'] and using comparisons [' . implode(',', $comparisons), ']');
 				return false;
 			}
 		}
@@ -1032,7 +1032,7 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 		
 		if(!$this->doCount)
 		{
-			KalturaLog::log("doCountOnPeer for sphinx criteria is disabled, objectClass [$objectClass], service:action [".kCurrentContext::$service.":".kCurrentContext::$action."]");
+			VidiunLog::log("doCountOnPeer for sphinx criteria is disabled, objectClass [$objectClass], service:action [".vCurrentContext::$service.":".vCurrentContext::$action."]");
 			//return 0;
 		}
 
@@ -1050,42 +1050,42 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 	public function getTranslateIndexId($id)
 	{
 		if ($id != strtolower($id))
-			KalturaLog::debug("upper case id [$id] ");
+			VidiunLog::debug("upper case id [$id] ");
 		return sprintf('%u', crc32($id));
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaIndexQuery::addWhere()
+	 * @see IVidiunIndexQuery::addWhere()
 	 */
 	public function addWhere($statement)
 	{
 		if(strlen(trim($statement)))
 		{
 			$this->whereClause[] = $statement;
-			KalturaLog::debug("Added [$statement] count [" . count($this->whereClause) . "]");
+			VidiunLog::debug("Added [$statement] count [" . count($this->whereClause) . "]");
 		}
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaIndexQuery::addMatch()
+	 * @see IVidiunIndexQuery::addMatch()
 	 */
 	public function addMatch($match)
 	{
 		if(strlen(trim($match)))
 		{
 			$this->matchClause[] = $match;
-			KalturaLog::debug("Added [$match] count [" . count($this->matchClause) . "]");
+			VidiunLog::debug("Added [$match] count [" . count($this->matchClause) . "]");
 		}
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaIndexQuery::addCondition()
+	 * @see IVidiunIndexQuery::addCondition()
 	 */
 	public function addCondition($condition)
 	{
 		if(strlen(trim($condition)))
 		{
-			KalturaLog::debug("Added [$condition]");
+			VidiunLog::debug("Added [$condition]");
 			$this->conditionClause[] = $condition;
 		}
 	}
@@ -1098,13 +1098,13 @@ abstract class SphinxCriteria extends KalturaCriteria implements IKalturaIndexQu
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaIndexQuery::addOrderBy()
+	 * @see IVidiunIndexQuery::addOrderBy()
 	 */
 	public function addOrderBy($column, $orderByType = Criteria::ASC)
 	{
 		if(strlen(trim($column)))
 		{
-			KalturaLog::debug("Added [$column]");
+			VidiunLog::debug("Added [$column]");
 			$this->orderByClause[] = "$column $orderByType";
 		}
 	}

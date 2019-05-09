@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kNotificationJobData extends kJobData
+class vNotificationJobData extends vJobData
 {
 	const NOTIFICATION_MGR_NO_SEND = 0;
 	const NOTIFICATION_MGR_SEND_ASYNCH = 1;
@@ -19,12 +19,12 @@ class kNotificationJobData extends kJobData
 	const NOTIFICATION_TYPE_ENTRY_UPDATE_MODERATION = 7;
 	const NOTIFICATION_TYPE_ENTRY_REPORT = 8;
 	
-	const NOTIFICATION_TYPE_KSHOW_ADD = 11;
-	const NOTIFICATION_TYPE_KSHOW_UPDATE_INFO = 12;
-	const NOTIFICATION_TYPE_KSHOW_DELETE = 13;
-	const NOTIFICATION_TYPE_KSHOW_UPDATE_PERMISSIONS = 14;
-	const NOTIFICATION_TYPE_KSHOW_RANK = 15;
-	const NOTIFICATION_TYPE_KSHOW_BLOCK = 16;
+	const NOTIFICATION_TYPE_VSHOW_ADD = 11;
+	const NOTIFICATION_TYPE_VSHOW_UPDATE_INFO = 12;
+	const NOTIFICATION_TYPE_VSHOW_DELETE = 13;
+	const NOTIFICATION_TYPE_VSHOW_UPDATE_PERMISSIONS = 14;
+	const NOTIFICATION_TYPE_VSHOW_RANK = 15;
+	const NOTIFICATION_TYPE_VSHOW_BLOCK = 16;
 
 	const NOTIFICATION_TYPE_USER_ADD = 21;
 	const NOTIFICATION_TYPE_USER_BANNED = 26;
@@ -41,7 +41,7 @@ class kNotificationJobData extends kJobData
 	const NOTIFICATION_RESULT_ERROR_NO_RETRY = -2;
 		
 	const NOTIFICATION_OBJECT_TYPE_ENTRY = 1;
-	const NOTIFICATION_OBJECT_TYPE_KSHOW = 2;
+	const NOTIFICATION_OBJECT_TYPE_VSHOW = 2;
 	const NOTIFICATION_OBJECT_TYPE_USER = 3;	
 	const NOTIFICATION_OBJECT_TYPE_BATCH_JOB = 4;	
 	 
@@ -54,12 +54,12 @@ class kNotificationJobData extends kJobData
 		self::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL => self::NOTIFICATION_OBJECT_TYPE_ENTRY,
 		self::NOTIFICATION_TYPE_ENTRY_UPDATE_MODERATION => self::NOTIFICATION_OBJECT_TYPE_ENTRY,
 		self::NOTIFICATION_TYPE_ENTRY_REPORT => self::NOTIFICATION_OBJECT_TYPE_ENTRY,
-		self::NOTIFICATION_TYPE_KSHOW_ADD => self::NOTIFICATION_OBJECT_TYPE_KSHOW,
-		self::NOTIFICATION_TYPE_KSHOW_UPDATE_INFO => self::NOTIFICATION_OBJECT_TYPE_KSHOW,
-		self::NOTIFICATION_TYPE_KSHOW_UPDATE_PERMISSIONS => self::NOTIFICATION_OBJECT_TYPE_KSHOW,
-		self::NOTIFICATION_TYPE_KSHOW_DELETE => self::NOTIFICATION_OBJECT_TYPE_KSHOW,
-		self::NOTIFICATION_TYPE_KSHOW_RANK => self::NOTIFICATION_OBJECT_TYPE_KSHOW,
-		self::NOTIFICATION_TYPE_KSHOW_BLOCK => self::NOTIFICATION_OBJECT_TYPE_KSHOW,
+		self::NOTIFICATION_TYPE_VSHOW_ADD => self::NOTIFICATION_OBJECT_TYPE_VSHOW,
+		self::NOTIFICATION_TYPE_VSHOW_UPDATE_INFO => self::NOTIFICATION_OBJECT_TYPE_VSHOW,
+		self::NOTIFICATION_TYPE_VSHOW_UPDATE_PERMISSIONS => self::NOTIFICATION_OBJECT_TYPE_VSHOW,
+		self::NOTIFICATION_TYPE_VSHOW_DELETE => self::NOTIFICATION_OBJECT_TYPE_VSHOW,
+		self::NOTIFICATION_TYPE_VSHOW_RANK => self::NOTIFICATION_OBJECT_TYPE_VSHOW,
+		self::NOTIFICATION_TYPE_VSHOW_BLOCK => self::NOTIFICATION_OBJECT_TYPE_VSHOW,
 		self::NOTIFICATION_TYPE_USER_ADD => self::NOTIFICATION_OBJECT_TYPE_USER,
 		self::NOTIFICATION_TYPE_USER_BANNED => self::NOTIFICATION_OBJECT_TYPE_USER,
 		self::NOTIFICATION_TYPE_BATCH_JOB_STARTED => self::NOTIFICATION_OBJECT_TYPE_BATCH_JOB,
@@ -78,12 +78,12 @@ class kNotificationJobData extends kJobData
 		self::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL => "entry_update_thumbnail",
 		self::NOTIFICATION_TYPE_ENTRY_UPDATE_MODERATION => "entry_update_moderation",
 		self::NOTIFICATION_TYPE_ENTRY_REPORT => "entry_reported",
-		self::NOTIFICATION_TYPE_KSHOW_ADD => "kshow_add" ,
-		self::NOTIFICATION_TYPE_KSHOW_UPDATE_INFO => "kshow_update_info" ,
-		self::NOTIFICATION_TYPE_KSHOW_UPDATE_PERMISSIONS => "kshow_update_permissions" ,
-		self::NOTIFICATION_TYPE_KSHOW_DELETE => "kshow_delete" ,
-		self::NOTIFICATION_TYPE_KSHOW_RANK => "kshow_rank" ,
-		self::NOTIFICATION_TYPE_KSHOW_BLOCK => "kshow_block" ,
+		self::NOTIFICATION_TYPE_VSHOW_ADD => "vshow_add" ,
+		self::NOTIFICATION_TYPE_VSHOW_UPDATE_INFO => "vshow_update_info" ,
+		self::NOTIFICATION_TYPE_VSHOW_UPDATE_PERMISSIONS => "vshow_update_permissions" ,
+		self::NOTIFICATION_TYPE_VSHOW_DELETE => "vshow_delete" ,
+		self::NOTIFICATION_TYPE_VSHOW_RANK => "vshow_rank" ,
+		self::NOTIFICATION_TYPE_VSHOW_BLOCK => "vshow_block" ,
 		self::NOTIFICATION_TYPE_USER_ADD => "user_add" ,
 		self::NOTIFICATION_TYPE_USER_BANNED => "user_banned" ,
 		self::NOTIFICATION_TYPE_BATCH_JOB_STARTED => "job_started",
@@ -105,9 +105,9 @@ class kNotificationJobData extends kJobData
 		return ( $type >= self::NOTIFICATION_TYPE_ENTRY_ADD &&   $type <= 	self::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL );
 	}
 
-	public static function isKshowNotification  ( $type )
+	public static function isVshowNotification  ( $type )
 	{
-		return ( $type >= self::NOTIFICATION_TYPE_KSHOW_ADD &&   $type <= 	self::NOTIFICATION_TYPE_KSHOW_BLOCK );
+		return ( $type >= self::NOTIFICATION_TYPE_VSHOW_ADD &&   $type <= 	self::NOTIFICATION_TYPE_VSHOW_BLOCK );
 	}
 
 	public function getTypeAsString()
@@ -165,12 +165,12 @@ class kNotificationJobData extends kJobData
 	private $userId;
 
 	/**
-	 * @var KalturaNotificationType
+	 * @var VidiunNotificationType
 	 */
     private $type;
 
 	/**
-	 * @var KalturaNotificationSendType
+	 * @var VidiunNotificationSendType
 	 */
     private $sendType;
     
@@ -196,7 +196,7 @@ class kNotificationJobData extends kJobData
     private $notificationResult;
 
 	/**
-	 * @var KalturaNotificationObjectType
+	 * @var VidiunNotificationObjectType
 	 */    
     private $objType;
     

@@ -10,8 +10,8 @@
 class entryPeer extends BaseentryPeer
 {
 	const PRIVACY_BY_CONTEXTS = 'entry.PRIVACY_BY_CONTEXTS';
-	const ENTITLED_KUSERS = 'entry.ENTITLED_KUSERS';
-	const CREATOR_KUSER_ID = 'entry.CREATOR_KUSER_ID';
+	const ENTITLED_VUSERS = 'entry.ENTITLED_VUSERS';
+	const CREATOR_VUSER_ID = 'entry.CREATOR_VUSER_ID';
 	const ENTRY_ID = 'entry.ENTRY_ID';
 
 	const ENTRIES_PER_ACCESS_CONTROL_UPDATE_LIMIT = 1000;
@@ -24,9 +24,9 @@ class entryPeer extends BaseentryPeer
 
 	private static $accessControlScope;
 
-	private static $kuserBlongToMoreThanMaxCategoriesForSearch = false;
+	private static $vuserBlongToMoreThanMaxCategoriesForSearch = false;
 	
-	private static $lastInitializedContext = null; // last initialized security context (ks + partner id)
+	private static $lastInitializedContext = null; // last initialized security context (vs + partner id)
 	private static $validatedEntries = array();
 
 	// cache classes by their type
@@ -96,16 +96,16 @@ class entryPeer extends BaseentryPeer
 			$c->addAscendingOrderByColumn(entryPeer::NAME);
 			break;
 
-			case entry::ENTRY_SORT_KUSER_SCREEN_NAME:
-			$c->addAscendingOrderByColumn(kuserPeer::SCREEN_NAME);
+			case entry::ENTRY_SORT_VUSER_SCREEN_NAME:
+			$c->addAscendingOrderByColumn(vuserPeer::SCREEN_NAME);
 			break;
 		}
 	}
 
-	public static function getOrderedCriteria($kshowId, $order, $limit, $introId = null, $entryId = null)
+	public static function getOrderedCriteria($vshowId, $order, $limit, $introId = null, $entryId = null)
 	{
 		$c = new Criteria();
-		$c->add(entryPeer::KSHOW_ID, $kshowId);
+		$c->add(entryPeer::VSHOW_ID, $vshowId);
 		$c->add(entryPeer::TYPE, entryType::MEDIA_CLIP);
 
 		if ($introId)
@@ -115,7 +115,7 @@ class entryPeer extends BaseentryPeer
 			$c->addDescendingOrderByColumn('(' . entryPeer::ID . '="' . $entryId . '")');
 
 		entryPeer::setOrder($c, $order);
-		$c->addJoin(entryPeer::KUSER_ID, kuserPeer::ID, Criteria::INNER_JOIN);
+		$c->addJoin(entryPeer::VUSER_ID, vuserPeer::ID, Criteria::INNER_JOIN);
 
 	    $c->setLimit($limit);
 
@@ -123,22 +123,22 @@ class entryPeer extends BaseentryPeer
 	}
 
 	/**
-	 * This function returns a pager object holding the specified kshows' entries
+	 * This function returns a pager object holding the specified vshows' entries
 	 * sorted by a given sort order.
-	 * each entry holds the kuser object of its host.
+	 * each entry holds the vuser object of its host.
 	 *
-	 * @param int $kshowId = the requested sort order
+	 * @param int $vshowId = the requested sort order
 	 * @param int $order = the requested sort order
-	 * @param int $pageSize = number of kshows in each page
+	 * @param int $pageSize = number of vshows in each page
 	 * @param int $page = the requested page
 	 * @param int $firstEntries = an array of entries to be picked first (show entry, show intro,
 	 *	or an arbitrary entry that was pointed to by the url)
 	 * @return the pager object
 	 */
-	public static function getOrderedPager($kshowId, $order, $pageSize, $page, $firstEntries = null)
+	public static function getOrderedPager($vshowId, $order, $pageSize, $page, $firstEntries = null)
 	{
 		$c = new Criteria();
-		$c->add(entryPeer::KSHOW_ID, $kshowId);
+		$c->add(entryPeer::VSHOW_ID, $vshowId);
 		$c->add(entryPeer::TYPE, entryType::MEDIA_CLIP);
 
 		if ($firstEntries)
@@ -146,13 +146,13 @@ class entryPeer extends BaseentryPeer
 				$c->addDescendingOrderByColumn('(' . entryPeer::ID . '="' . $firstEntryId . '")');
 
 		entryPeer::setOrder($c, $order);
-		$c->addJoin(entryPeer::KUSER_ID, kuserPeer::ID, Criteria::INNER_JOIN);
+		$c->addJoin(entryPeer::VUSER_ID, vuserPeer::ID, Criteria::INNER_JOIN);
 
 		$pager = new sfPropelPager('entry', $pageSize);
 	    $pager->setCriteria($c);
 	    $pager->setPage($page);
-	    $pager->setPeerMethod('doSelectJoinkuser');
-	    $pager->setPeerCountMethod('doCountJoinkuser');
+	    $pager->setPeerMethod('doSelectJoinvuser');
+	    $pager->setPeerCountMethod('doCountJoinvuser');
 	    $pager->init();
 
 	    return $pager;
@@ -160,13 +160,13 @@ class entryPeer extends BaseentryPeer
 
 
 		/**
-	 * This function returns a pager object holding the specified kshows' entries
+	 * This function returns a pager object holding the specified vshows' entries
 	 * sorted by a given sort order.
-	 * each entry holds the kuser object of its host.
+	 * each entry holds the vuser object of its host.
 	 *
-	 * @param int $kshowId = the requested sort order
+	 * @param int $vshowId = the requested sort order
 	 * @param int $order = the requested sort order
-	 * @param int $pageSize = number of kshows in each page
+	 * @param int $pageSize = number of vshows in each page
 	 * @param int $page = the requested page
 	 * @param int $firstEntries = an array of entries to be picked first (show entry, show intro,
 	 *	or an arbitrary entry that was pointed to by the url)
@@ -177,17 +177,17 @@ class entryPeer extends BaseentryPeer
 		if( $favorites_flag ) return self::getUserFavorites($userid, favorite::SUBJECT_TYPE_ENTRY, favorite::PRIVACY_TYPE_USER, $pageSize, $page, $order );
 
 		$c = new Criteria();
-		$c->add(entryPeer::KUSER_ID, $userid);
+		$c->add(entryPeer::VUSER_ID, $userid);
 		$c->add(entryPeer::TYPE, entryType::MEDIA_CLIP);
 
 		entryPeer::setOrder($c, $order);
-		$c->addJoin(entryPeer::KUSER_ID, kuserPeer::ID, Criteria::INNER_JOIN);
+		$c->addJoin(entryPeer::VUSER_ID, vuserPeer::ID, Criteria::INNER_JOIN);
 
 		$pager = new sfPropelPager('entry', $pageSize);
 	    $pager->setCriteria($c);
 	    $pager->setPage($page);
-	    $pager->setPeerMethod('doSelectJoinkuser');
-	    $pager->setPeerCountMethod('doCountJoinkuser');
+	    $pager->setPeerMethod('doSelectJoinvuser');
+	    $pager->setPeerCountMethod('doCountJoinvuser');
 	    $pager->init();
 
 	    return $pager;
@@ -195,22 +195,22 @@ class entryPeer extends BaseentryPeer
 
 	/**
 	 * This function returns a pager object holding the given user's favorite entries
-	 * each entry holds the kuser object of its host.
+	 * each entry holds the vuser object of its host.
 	 *
-	 * @param int $kuserId = the requested user
+	 * @param int $vuserId = the requested user
 	 * @param int $type = the favorite type (currently only SUBJECT_TYPE_ENTRY will match)
 	 * @param int $privacy = the privacy filter
-	 * @param int $pageSize = number of kshows in each page
+	 * @param int $pageSize = number of vshows in each page
 	 * @param int $page = the requested page
 	 * @return the pager object
 	 */
-	public static function getUserFavorites($kuserId, $type, $privacy, $pageSize, $page, $order = entry::ENTRY_SORT_MOST_VIEWED )
+	public static function getUserFavorites($vuserId, $type, $privacy, $pageSize, $page, $order = entry::ENTRY_SORT_MOST_VIEWED )
 	{
 		$c = new Criteria();
 		entryPeer::setOrder($c, $order);
-		$c->addJoin(entryPeer::KUSER_ID, kuserPeer::ID, Criteria::INNER_JOIN);
+		$c->addJoin(entryPeer::VUSER_ID, vuserPeer::ID, Criteria::INNER_JOIN);
 		$c->addJoin(entryPeer::ID, favoritePeer::SUBJECT_ID, Criteria::INNER_JOIN);
-		$c->add(favoritePeer::KUSER_ID, $kuserId);
+		$c->add(favoritePeer::VUSER_ID, $vuserId);
 		$c->add(favoritePeer::SUBJECT_TYPE, $type);
 		$c->add(favoritePeer::PRIVACY, $privacy);
 		$c->setDistinct();
@@ -227,26 +227,26 @@ class entryPeer extends BaseentryPeer
 	    $pager = new sfPropelPager('entry', $pageSize);
 	    $pager->setCriteria($c);
 	    $pager->setPage($page);
-	    $pager->setPeerMethod('doSelectJoinkuser');
-	    $pager->setPeerCountMethod('doCountJoinkuser');
+	    $pager->setPeerMethod('doSelectJoinvuser');
+	    $pager->setPeerCountMethod('doCountJoinvuser');
 	    $pager->init();
 
 	    return $pager;
 	}
 
-	public static function getUserEntries($kuserId, $pageSize, $page)
+	public static function getUserEntries($vuserId, $pageSize, $page)
 	{
 		$c = new Criteria();
-		$c->addJoin(entryPeer::KUSER_ID, kuserPeer::ID, Criteria::INNER_JOIN);
-		$c->add(entryPeer::KUSER_ID, $kuserId);
+		$c->addJoin(entryPeer::VUSER_ID, vuserPeer::ID, Criteria::INNER_JOIN);
+		$c->add(entryPeer::VUSER_ID, $vuserId);
 		$c->add(entryPeer::TYPE, entryType::MEDIA_CLIP);
 		$c->addAscendingOrderByColumn(entryPeer::CREATED_AT);
 
 	    $pager = new sfPropelPager('entry', $pageSize);
 	    $pager->setCriteria($c);
 	    $pager->setPage($page);
-	    $pager->setPeerMethod('doSelectJoinkuser');
-	    $pager->setPeerCountMethod('doCountJoinkuser');
+	    $pager->setPeerMethod('doSelectJoinvuser');
+	    $pager->setPeerCountMethod('doCountJoinvuser');
 	    $pager->init();
 
 	    return $pager;
@@ -291,10 +291,10 @@ class entryPeer extends BaseentryPeer
 
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
-		KalturaCriterion::disableTags(array(KalturaCriterion::TAG_ENTITLEMENT_ENTRY, KalturaCriterion::TAG_WIDGET_SESSION));
+		VidiunCriterion::disableTags(array(VidiunCriterion::TAG_ENTITLEMENT_ENTRY, VidiunCriterion::TAG_WIDGET_SESSION));
 		self::$filterResults = true;
 		$res = parent::retrieveByPK($pk, $con);
-		KalturaCriterion::restoreTags(array(KalturaCriterion::TAG_ENTITLEMENT_ENTRY, KalturaCriterion::TAG_WIDGET_SESSION));
+		VidiunCriterion::restoreTags(array(VidiunCriterion::TAG_ENTITLEMENT_ENTRY, VidiunCriterion::TAG_WIDGET_SESSION));
 		self::$filterResults = false;
 
 		return $res;
@@ -302,25 +302,25 @@ class entryPeer extends BaseentryPeer
 
 	public static function retrieveByPKNoFilter ($pk, $con = null, $filterEntitlements = true)
 	{
-		KalturaCriterion::disableTags(array(KalturaCriterion::TAG_ENTITLEMENT_ENTRY, KalturaCriterion::TAG_WIDGET_SESSION));
+		VidiunCriterion::disableTags(array(VidiunCriterion::TAG_ENTITLEMENT_ENTRY, VidiunCriterion::TAG_WIDGET_SESSION));
 		self::$filterResults = $filterEntitlements;
 		self::setUseCriteriaFilter ( false );
 		$res = parent::retrieveByPK( $pk , $con );
 		self::setUseCriteriaFilter ( true );
 		self::$filterResults = false;
-		KalturaCriterion::restoreTags(array(KalturaCriterion::TAG_ENTITLEMENT_ENTRY, KalturaCriterion::TAG_WIDGET_SESSION));
+		VidiunCriterion::restoreTags(array(VidiunCriterion::TAG_ENTITLEMENT_ENTRY, VidiunCriterion::TAG_WIDGET_SESSION));
 		return $res;
 	}
 
 	public static function retrieveByPKsNoFilter ($pks, $con = null)
 	{
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 		self::$filterResults = true;
 		self::setUseCriteriaFilter ( false );
 		$res = parent::retrieveByPKs( $pks , $con );
 		self::setUseCriteriaFilter ( true );
 		self::$filterResults = false;
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 		return $res;
 	}
 
@@ -331,7 +331,7 @@ class entryPeer extends BaseentryPeer
 	 */
 	public static function retrieveByReferenceId ($v)
 	{
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$c->addAnd("referenceID", $v);
 		return entryPeer::doSelect($v);
 	}
@@ -352,7 +352,7 @@ class entryPeer extends BaseentryPeer
 	
 	public static function retrieveChildEntriesByEntryIdAndPartnerId ($parentId, $partnerId)
 	{
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 		
 		$filter = new entryFilter();
 		$filter->setParentEntryIdEqual($parentId);
@@ -362,10 +362,10 @@ class entryPeer extends BaseentryPeer
 
 		$parentEntry = entryPeer::retrieveByPK($parentId);
 		if($parentEntry)
-			KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+			VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 		$res = self::doSelect($c);
 		if($parentEntry)
-			KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+			VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 		return $res;
 	}
 
@@ -386,66 +386,66 @@ class entryPeer extends BaseentryPeer
 			self::$s_criteria_filter = new criteriaFilter ();
 		}
 
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$c->addAnd ( entryPeer::STATUS, entryStatus::DELETED, Criteria::NOT_EQUAL);
 
 		$critEntitled = null;
 
-		$ks = ks::fromSecureString(kCurrentContext::$ks);
+		$vs = vs::fromSecureString(vCurrentContext::$vs);
 
 		//when entitlement is enable and admin session or user session with list:* privilege
-		if (kEntitlementUtils::getEntitlementEnforcement() &&
-		   ((kCurrentContext::$is_admin_session || !self::$userContentOnly)))
+		if (vEntitlementUtils::getEntitlementEnforcement() &&
+		   ((vCurrentContext::$is_admin_session || !self::$userContentOnly)))
 		{
-			$privacyContexts = kEntitlementUtils::getPrivacyContextSearch();
-			$critEntitled = $c->getNewCriterion (self::PRIVACY_BY_CONTEXTS, $privacyContexts, KalturaCriteria::IN_LIKE);
-			$critEntitled->addTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+			$privacyContexts = vEntitlementUtils::getPrivacyContextSearch();
+			$critEntitled = $c->getNewCriterion (self::PRIVACY_BY_CONTEXTS, $privacyContexts, VidiunCriteria::IN_LIKE);
+			$critEntitled->addTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 
-			if(kCurrentContext::getCurrentKsKuserId())
+			if(vCurrentContext::getCurrentVsVuserId())
 			{
-				//ENTITLED_KUSERS field includes $this->entitledUserEdit, $this->entitledUserEdit, and users on work groups categories.
-				$entitledKuserByPrivacyContext = kEntitlementUtils::getEntitledKuserByPrivacyContext();
-				$critEntitledKusers = $c->getNewCriterion(self::ENTITLED_KUSERS, $entitledKuserByPrivacyContext, KalturaCriteria::IN_LIKE);
-				$critEntitledKusers->addTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+				//ENTITLED_VUSERS field includes $this->entitledUserEdit, $this->entitledUserEdit, and users on work groups categories.
+				$entitledVuserByPrivacyContext = vEntitlementUtils::getEntitledVuserByPrivacyContext();
+				$critEntitledVusers = $c->getNewCriterion(self::ENTITLED_VUSERS, $entitledVuserByPrivacyContext, VidiunCriteria::IN_LIKE);
+				$critEntitledVusers->addTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 
 				$categoriesIds = array();
-				$categoriesIds = categoryPeer::retrieveEntitledAndNonIndexedByKuser(kCurrentContext::getCurrentKsKuserId(), kConf::get('category_search_limit'));
-				if(count($categoriesIds) >= kConf::get('category_search_limit'))
-					self::$kuserBlongToMoreThanMaxCategoriesForSearch = true;
+				$categoriesIds = categoryPeer::retrieveEntitledAndNonIndexedByVuser(vCurrentContext::getCurrentVsVuserId(), vConf::get('category_search_limit'));
+				if(count($categoriesIds) >= vConf::get('category_search_limit'))
+					self::$vuserBlongToMoreThanMaxCategoriesForSearch = true;
 
 				if (count($categoriesIds))
 				{
 					sort($categoriesIds); // sort categories in order to later create identical queries which enable better caching
-					$critCategories = $c->getNewCriterion(self::CATEGORIES_IDS, $categoriesIds, KalturaCriteria::IN_LIKE);
-					$critCategories->addTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+					$critCategories = $c->getNewCriterion(self::CATEGORIES_IDS, $categoriesIds, VidiunCriteria::IN_LIKE);
+					$critCategories->addTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 					$critEntitled->addOr($critCategories);
 				}
 
-				$critEntitled->addOr($critEntitledKusers);
+				$critEntitled->addOr($critEntitledVusers);
 			}
 
 			//user should be able to get all entries s\he uploaded - outside the privacy context
-			$kuser = kCurrentContext::getCurrentKsKuserId();
-			if($kuser !== 0) {
-				$critKuser = $c->getNewCriterion(entryPeer::KUSER_ID , $kuser , Criteria::EQUAL);
-				$critKuser->addTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
-				$critEntitled->addOr($critKuser);
+			$vuser = vCurrentContext::getCurrentVsVuserId();
+			if($vuser !== 0) {
+				$critVuser = $c->getNewCriterion(entryPeer::VUSER_ID , $vuser , Criteria::EQUAL);
+				$critVuser->addTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
+				$critEntitled->addOr($critVuser);
 			}
 		}
 		elseif(self::$userContentOnly) // when session is not admin and without list:* privilege, allow access to user entries only
 		{
-			$critEntitled = $c->getNewCriterion(entryPeer::KUSER_ID , kCurrentContext::getCurrentKsKuserId(), Criteria::EQUAL);
-			$critEntitled->addTag(KalturaCriterion::TAG_WIDGET_SESSION);
+			$critEntitled = $c->getNewCriterion(entryPeer::VUSER_ID , vCurrentContext::getCurrentVsVuserId(), Criteria::EQUAL);
+			$critEntitled->addTag(VidiunCriterion::TAG_WIDGET_SESSION);
 		}
 
 		//we need to set the filter before getDisableEntitlementForEntry since otherwise the partner criteria will not be added to $c,
 		//it will be added to some other criteria object which will get disposed once setFilter is called
 		self::$s_criteria_filter->setFilter($c);
 
-		if($ks && count($ks->getDisableEntitlementForEntry()))
+		if($vs && count($vs->getDisableEntitlementForEntry()))
 		{
-			$entryCrit = $c->getNewCriterion(entryPeer::ENTRY_ID, $ks->getDisableEntitlementForEntry(), Criteria::IN);
-			$entryCrit->addTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+			$entryCrit = $c->getNewCriterion(entryPeer::ENTRY_ID, $vs->getDisableEntitlementForEntry(), Criteria::IN);
+			$entryCrit->addTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 
 			if($critEntitled)
 			{
@@ -470,8 +470,8 @@ class entryPeer extends BaseentryPeer
 	public static function doCount(Criteria $criteria, $distinct = false, PropelPDO $con = null)
 	{
 		//TODO - this is problematic! should fix this!
-		/*if (kEntitlementUtils::getEntitlementEnforcement())
-			throw new kCoreException('doCount is not supported for entitlement scope enable');
+		/*if (vEntitlementUtils::getEntitlementEnforcement())
+			throw new vCoreException('doCount is not supported for entitlement scope enable');
 		*/
 		return parent::doCount($criteria, $distinct, $con);
 	}
@@ -488,7 +488,7 @@ class entryPeer extends BaseentryPeer
 
 		$criteria->setLimit( self::$s_default_count_limit );
 
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 		{
 			$criteria->applyFilters();
 			return min(self::$s_default_count_limit,$criteria->getRecordsCount());
@@ -518,19 +518,19 @@ class entryPeer extends BaseentryPeer
 
 	// this function sets the status of an entry to entryStatus::DELETED
 	// users can only delete their own entries
-	public static function setStatusDeletedForEntry( $entry_id, $kuser_id  )
+	public static function setStatusDeletedForEntry( $entry_id, $vuser_id  )
 	{
 		//
 		$entry = self::retrieveByPK( $entry_id );
 		if( $entry == null ) return false;
-		if( $entry->getKuserId() == $kuser_id ) $entry->setStatus( entryStatus::DELETED ); else return false;
+		if( $entry->getVuserId() == $vuser_id ) $entry->setStatus( entryStatus::DELETED ); else return false;
 		$entry->save();
 		return true;
 	}
 
 	public static function updateAccessControl($partnerId, $oldAccessControlId, $newAccessControlId)
 	{
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 
 		//trying to fetch more entries than the $entryCount limit
 		$c->setMaxRecords(self::ENTRIES_PER_ACCESS_CONTROL_UPDATE_LIMIT + 1);
@@ -539,7 +539,7 @@ class entryPeer extends BaseentryPeer
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		$partnerEntitlement = $partner->getDefaultEntitlementEnforcement();
 
-		kEntitlementUtils::initEntitlementEnforcement($partnerId , false);
+		vEntitlementUtils::initEntitlementEnforcement($partnerId , false);
 		$entries = self::doSelect($c);
 		$entryCount = count($entries);
 
@@ -547,7 +547,7 @@ class entryPeer extends BaseentryPeer
 			return;
 
 		if ($entryCount > self::ENTRIES_PER_ACCESS_CONTROL_UPDATE_LIMIT)
-			throw new kCoreException("exceeded max entries per access control update limit",kCoreException::EXCEEDED_MAX_ENTRIES_PER_ACCESS_CONTROL_UPDATE_LIMIT);
+			throw new vCoreException("exceeded max entries per access control update limit",vCoreException::EXCEEDED_MAX_ENTRIES_PER_ACCESS_CONTROL_UPDATE_LIMIT);
 
 		$entryIds = array();
 		foreach($entries as $entry)
@@ -565,10 +565,10 @@ class entryPeer extends BaseentryPeer
 		BasePeer::doUpdate($selectCriteria, $updateValues, $con);
 
 		foreach($entries as $entry)
-			kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($entry));
+			vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($entry));
 
 		if ($partnerEntitlement)
-			kEntitlementUtils::initEntitlementEnforcement($partnerId , true);
+			vEntitlementUtils::initEntitlementEnforcement($partnerId , true);
 	}
 
 	/**
@@ -579,7 +579,7 @@ class entryPeer extends BaseentryPeer
 		if(isset(self::$class_types_cache[$entryType]))
 			return self::$class_types_cache[$entryType];
 
-		$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $entryType);
+		$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $entryType);
 		if($extendedCls)
 		{
 			self::$class_types_cache[$entryType] = $extendedCls;
@@ -610,11 +610,11 @@ class entryPeer extends BaseentryPeer
 	}
 
 
-	public static function doSelectJoinkuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$c = self::prepareEntitlementCriteriaAndFilters( $criteria );
 
-		$results = parent::doSelectJoinkuser($c, $con, $join_behavior);
+		$results = parent::doSelectJoinvuser($c, $con, $join_behavior);
 		self::$filterResults = false;
 
 		return $results;
@@ -630,7 +630,7 @@ class entryPeer extends BaseentryPeer
 
 		$queryResult =  parent::doSelect($c, $con);
 
-		if($c instanceof KalturaCriteria)
+		if($c instanceof VidiunCriteria)
 			$criteria->setRecordsCount($c->getRecordsCount());
 
 		self::$filterResults = false;
@@ -642,17 +642,17 @@ class entryPeer extends BaseentryPeer
 	{
 		$skipApplyFilters = false;
 
-		if(	kEntitlementUtils::getEntitlementEnforcement() &&
-			KalturaCriterion::isTagEnable(KalturaCriterion::TAG_ENTITLEMENT_ENTRY) &&
-			self::$kuserBlongToMoreThanMaxCategoriesForSearch &&
+		if(	vEntitlementUtils::getEntitlementEnforcement() &&
+			VidiunCriterion::isTagEnable(VidiunCriterion::TAG_ENTITLEMENT_ENTRY) &&
+			self::$vuserBlongToMoreThanMaxCategoriesForSearch &&
 			!$c->getOffset())
 		{
-			KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+			VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 
 			$entitlementCrit = clone $c;
 			$entitlementCrit->applyFilters();
 
-			KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+			VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 
 			if ($entitlementCrit->getRecordsCount() < $entitlementCrit->getLimit())
 			{
@@ -675,7 +675,7 @@ class entryPeer extends BaseentryPeer
 	{
 		$c = clone $criteria;
 
-		if($c instanceof KalturaCriteria)
+		if($c instanceof VidiunCriteria)
 		{
 			$skipApplyFilters = entryPeer::applyEntitlementCriteria($c);
 
@@ -729,13 +729,13 @@ class entryPeer extends BaseentryPeer
 
 		self::$accessControlScope->setEntryId($entry->getId());
 
-		$context = new kEntryContextDataResult();
+		$context = new vEntryContextDataResult();
 		$accessControl = $entry->getAccessControl();
 		$accessControl->applyContext($context, self::$accessControlScope);
 
 		$actions = $context->getActions();
 		foreach($actions as $action) {
-			/* @var $action kAccessControlAction */
+			/* @var $action vAccessControlAction */
 			if($action->getType() == RuleActionType::BLOCK) {
 				return false;
 			}
@@ -756,33 +756,33 @@ class entryPeer extends BaseentryPeer
 			return;
 
 
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 
-		if($partner && $partner->getShouldApplyAccessControlOnEntryMetadata() && !kCurrentContext::$is_admin_session) {
+		if($partner && $partner->getShouldApplyAccessControlOnEntryMetadata() && !vCurrentContext::$is_admin_session) {
 			if(is_null(self::$accessControlScope)) {
 				self::$accessControlScope = new accessControlScope();
 				self::$accessControlScope->setContexts(array(ContextType::METADATA));
 			}
 
 			$selectResults = array_filter($selectResults, array('entryPeer', 'filterByAccessControl'));
-			if($criteria instanceof KalturaCriteria)
+			if($criteria instanceof VidiunCriteria)
 				$criteria->setRecordsCount(count($selectResults));
 		}
 
 		$removedRecordsCount = 0;
-		if ((!kEntitlementUtils::getEntitlementEnforcement() && !is_null(kCurrentContext::$ks))||
+		if ((!vEntitlementUtils::getEntitlementEnforcement() && !is_null(vCurrentContext::$vs))||
 			!self::$filterResults ||
-			!kEntitlementUtils::getInitialized()) // if initEntitlement hasn't run - skip filters.
+			!vEntitlementUtils::getInitialized()) // if initEntitlement hasn't run - skip filters.
 			return parent::filterSelectResults($selectResults, $criteria);
 
-		if(is_null(kCurrentContext::$ks) && count($selectResults))
+		if(is_null(vCurrentContext::$vs) && count($selectResults))
 		{
 			$entry = $selectResults[0];
 			$partner = $entry->getPartner();
 
 			if(!$partner)
-				throw new kCoreException('entry partner not found');
+				throw new vCoreException('entry partner not found');
 
 			if(!$partner->getDefaultEntitlementEnforcement() || !PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENTITLEMENT, $partner->getId()))
 				return parent::filterSelectResults($selectResults, $criteria);
@@ -790,14 +790,14 @@ class entryPeer extends BaseentryPeer
 
 		foreach ($selectResults as $key => $entry)
 		{
-			if (!kEntitlementUtils::isEntryEntitled($entry))
+			if (!vEntitlementUtils::isEntryEntitled($entry))
 			{
 				unset($selectResults[$key]);
 				$removedRecordsCount++;
 			}
 		}
 
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 		{
 			$recordsCount = $criteria->getRecordsCount();
 			$criteria->setRecordsCount($recordsCount - $removedRecordsCount);
@@ -810,21 +810,21 @@ class entryPeer extends BaseentryPeer
 	/* (non-PHPdoc)
 	 * @see BaseentryPeer::retrieveByPKs()
 	 *
-	 * Override this function in order to use KalturaCriteria
+	 * Override this function in order to use VidiunCriteria
 	 */
 	public static function retrieveByPKs($pks, PropelPDO $con = null)
 	{
 		if (empty($pks))
 			return array();
 
-		$criteria = KalturaCriteria::create(self::OM_CLASS);
+		$criteria = VidiunCriteria::create(self::OM_CLASS);
 		$criteria->add(entryPeer::ID, $pks, Criteria::IN);
 		return entryPeer::doSelect($criteria, $con);
 	}
 
 	public static function addValidatedEntry($entryId)
 	{
-		$securityContext = array(kCurrentContext::$partner_id, kCurrentContext::$ks);
+		$securityContext = array(vCurrentContext::$partner_id, vCurrentContext::$vs);
 		if (self::$lastInitializedContext && self::$lastInitializedContext !== $securityContext) {
 			self::$validatedEntries = array();
 		}
@@ -832,7 +832,7 @@ class entryPeer extends BaseentryPeer
 		self::$validatedEntries[] = $entryId;
 	}
 
-	public static function filterEntriesByPartnerOrKalturaNetwork(array $entryIds, $partnerId)
+	public static function filterEntriesByPartnerOrVidiunNetwork(array $entryIds, $partnerId)
 	{
 		$validatedEntries = array_intersect($entryIds, self::$validatedEntries);
 		$entryIds = array_diff($entryIds, self::$validatedEntries);
@@ -840,13 +840,13 @@ class entryPeer extends BaseentryPeer
 		{
 			$entryIds = array_slice($entryIds, 0, baseObjectFilter::getMaxInValues());
 			
-			$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+			$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 			$c->addAnd(entryPeer::ID, $entryIds, Criteria::IN);
 			
 			if($partnerId >= 0)
 			{
 				$criterionPartnerOrKn = $c->getNewCriterion(entryPeer::PARTNER_ID, $partnerId);
-				$criterionPartnerOrKn->addOr($c->getNewCriterion(entryPeer::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK));
+				$criterionPartnerOrKn->addOr($c->getNewCriterion(entryPeer::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK));
 				$c->addAnd($criterionPartnerOrKn);
 			}
 	
@@ -868,7 +868,7 @@ class entryPeer extends BaseentryPeer
 			return;
 		}
 
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_PLAYS_VIEWS);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_PLAYS_VIEWS);
 		if (!$cache)
 		{
 			return;

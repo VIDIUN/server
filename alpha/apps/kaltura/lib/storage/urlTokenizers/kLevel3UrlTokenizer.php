@@ -1,8 +1,8 @@
 <?php
 
-require_once(dirname(__FILE__).'/../../kDeliveryUtils.php');
+require_once(dirname(__FILE__).'/../../vDeliveryUtils.php');
 
-class kLevel3UrlTokenizer extends kUrlTokenizer
+class vLevel3UrlTokenizer extends vUrlTokenizer
 {
 	/**
 	 * @var string
@@ -90,8 +90,8 @@ class kLevel3UrlTokenizer extends kUrlTokenizer
 		if ($this->window)
 		{
 			$expiry = "{$this->expiryName}=" . strftime("%Y%m%d%H%M%S", time() - date("Z") + $this->window);
-			$url = kDeliveryUtils::addQueryParameter($url, $expiry);
-			$fullUrl = kDeliveryUtils::addQueryParameter($fullUrl, $expiry);
+			$url = vDeliveryUtils::addQueryParameter($url, $expiry);
+			$fullUrl = vDeliveryUtils::addQueryParameter($fullUrl, $expiry);
 		}
 		
 		$parsedUrl = parse_url($fullUrl);
@@ -101,7 +101,7 @@ class kLevel3UrlTokenizer extends kUrlTokenizer
 		
 		$token = substr(self::hmac('sha1', $this->key, $pathString), 0, 20);
 		
-		$url = $url = kDeliveryUtils::addQueryParameter($url, "{$this->name}={$this->gen}".$token); 
+		$url = $url = vDeliveryUtils::addQueryParameter($url, "{$this->name}={$this->gen}".$token); 
 		return $url;
 	}
 	

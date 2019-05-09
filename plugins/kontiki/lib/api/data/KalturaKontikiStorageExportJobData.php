@@ -3,7 +3,7 @@
  * @package plugins.kontiki
  * @subpackage api.object
  */
- class KalturaKontikiStorageExportJobData extends KalturaStorageExportJobData
+ class VidiunKontikiStorageExportJobData extends VidiunStorageExportJobData
  {
 	/**
 	 * Holds the id of the exported asset
@@ -31,7 +31,7 @@
     );
 	
     /* (non-PHPdoc)
-     * @see KalturaObject::getMapBetweenObjects()
+     * @see VidiunObject::getMapBetweenObjects()
      */
     public function getMapBetweenObjects ( )
     {
@@ -41,7 +41,7 @@
  	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kKontikiStorageExportJobData();
+			$dbData = new vKontikiStorageExportJobData();
 			
 		return parent::toObject($dbData);
 	}

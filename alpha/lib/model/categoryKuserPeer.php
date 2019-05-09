@@ -2,7 +2,7 @@
 
 
 /**
- * Skeleton subclass for performing query and update operations on the 'category_kuser' table.
+ * Skeleton subclass for performing query and update operations on the 'category_vuser' table.
  *
  * 
  *
@@ -13,55 +13,55 @@
  * @package Core
  * @subpackage model
  */
-class categoryKuserPeer extends BasecategoryKuserPeer {
+class categoryVuserPeer extends BasecategoryVuserPeer {
 	
 	/**
 	 * 
 	 * @param int $categoryId
-	 * @param int $kuserId
+	 * @param int $vuserId
 	 * @param $con
 	 * 
-	 * @return categoryKuser
+	 * @return categoryVuser
 	 */
-	public static function retrieveByCategoryIdAndKuserId($categoryId, $kuserId, $con = null)
+	public static function retrieveByCategoryIdAndVuserId($categoryId, $vuserId, $con = null)
 	{
 		$criteria = new Criteria();
 
-		$criteria->add(categoryKuserPeer::CATEGORY_ID, $categoryId);
-		$criteria->add(categoryKuserPeer::KUSER_ID, $kuserId);
+		$criteria->add(categoryVuserPeer::CATEGORY_ID, $categoryId);
+		$criteria->add(categoryVuserPeer::VUSER_ID, $vuserId);
 
-		return categoryKuserPeer::doSelectOne($criteria, $con);
+		return categoryVuserPeer::doSelectOne($criteria, $con);
 	}
 
 	/**
 	 *
-	 * @param int $kuserId
+	 * @param int $vuserId
 	 * @param $con
 	 *
-	 * @return array Array of categoryKuser
+	 * @return array Array of categoryVuser
 	 */
-	public static function retrieveByKuserId($kuserId, $con = null)
+	public static function retrieveByVuserId($vuserId, $con = null)
 	{
 		$criteria = new Criteria();
-		$criteria->add(categoryKuserPeer::KUSER_ID, $kuserId);
+		$criteria->add(categoryVuserPeer::VUSER_ID, $vuserId);
 
-		return categoryKuserPeer::doSelect($criteria, $con);
+		return categoryVuserPeer::doSelect($criteria, $con);
 	}
 	
 	/**
 	 * 
-	 * @param int $kuserId
+	 * @param int $vuserId
 	 * @return bool - no need to fetch the objects
 	 */
-	public static function isCategroyKuserExistsForKuser($kuserId)
+	public static function isCategroyVuserExistsForVuser($vuserId)
 	{
 		$criteria = new Criteria();
 
-		$criteria->add(categoryKuserPeer::KUSER_ID, $kuserId);
+		$criteria->add(categoryVuserPeer::VUSER_ID, $vuserId);
 		
-		$categoryKuser = categoryKuserPeer::doSelectOne($criteria);
+		$categoryVuser = categoryVuserPeer::doSelectOne($criteria);
 		
-		if($categoryKuser)
+		if($categoryVuser)
 			return true;
 			
 		return false;
@@ -72,13 +72,13 @@ class categoryKuserPeer extends BasecategoryKuserPeer {
 	 *  this function return categoryUser if the user has explicit or implicit (by group) required permissions on the category
 	 *
 	 * @param int $categoryId
-	 * @param int $kuserId
+	 * @param int $vuserId
 	 * @param array $requiredPermissions
 	 * @param bool $supportGroups
 	 * @param null $con
-	 * @return categoryKuser|null
+	 * @return categoryVuser|null
 	 */
-	public static function retrievePermittedKuserInCategory($categoryId, $kuserId = null, $requiredPermissions = null, $supportGroups = true, $con = null){
+	public static function retrievePermittedVuserInCategory($categoryId, $vuserId = null, $requiredPermissions = null, $supportGroups = true, $con = null){
 		$category = categoryPeer::retrieveByPK($categoryId);
 		if(!$category)
 			return null;
@@ -86,90 +86,90 @@ class categoryKuserPeer extends BasecategoryKuserPeer {
 		if($category->getInheritedParentId())
 			$categoryId = $category->getInheritedParentId();
 
-		if(is_null($kuserId))
-			$kuserId = kCurrentContext::getCurrentKsKuserId();
+		if(is_null($vuserId))
+			$vuserId = vCurrentContext::getCurrentVsVuserId();
 
 		if(is_null($requiredPermissions))
 			$requiredPermissions = array(PermissionName::CATEGORY_VIEW);
 
-		$categoryKuser = self::retrieveByCategoryIdAndActiveKuserId($categoryId, $kuserId, $requiredPermissions, $con);
-		if (!is_null($categoryKuser)){
-			return $categoryKuser;
+		$categoryVuser = self::retrieveByCategoryIdAndActiveVuserId($categoryId, $vuserId, $requiredPermissions, $con);
+		if (!is_null($categoryVuser)){
+			return $categoryVuser;
 		}
 		
-		$permittedCategoryKuser = null;
-		//check if kuserId has permission in category by a junction group
+		$permittedCategoryVuser = null;
+		//check if vuserId has permission in category by a junction group
 		if($supportGroups)
 		{
-			$kgroupIds = KuserKgroupPeer::retrieveKgroupIdsByKuserId($kuserId);
-			if (count($kgroupIds) == 0)
+			$vgroupIds = VuserVgroupPeer::retrieveVgroupIdsByVuserId($vuserId);
+			if (count($vgroupIds) == 0)
 				return null;
 
 			$criteria = new Criteria();
-			$criteria->add(categoryKuserPeer::CATEGORY_ID, $categoryId);
-			$criteria->add(categoryKuserPeer::KUSER_ID, $kgroupIds, Criteria::IN);
-			$criteria->add(categoryKuserPeer::STATUS, CategoryKuserStatus::ACTIVE);
-			$categoryKusers = categoryKuserPeer::doSelect($criteria, $con);
-			if(!$categoryKusers)
+			$criteria->add(categoryVuserPeer::CATEGORY_ID, $categoryId);
+			$criteria->add(categoryVuserPeer::VUSER_ID, $vgroupIds, Criteria::IN);
+			$criteria->add(categoryVuserPeer::STATUS, CategoryVuserStatus::ACTIVE);
+			$categoryVusers = categoryVuserPeer::doSelect($criteria, $con);
+			if(!$categoryVusers)
 				return null;
 			
-			foreach( $categoryKusers as $categoryKuser)
+			foreach( $categoryVusers as $categoryVuser)
 			{
-				/* @var $categoryKuser categoryKuser */
+				/* @var $categoryVuser categoryVuser */
 				foreach($requiredPermissions as $requiredPermission)
 				{
-					if($categoryKuser->hasPermission($requiredPermission))
+					if($categoryVuser->hasPermission($requiredPermission))
 					{
 						//In case of multiple category users return the one with the highest permission level
-						if(!$permittedCategoryKuser || $categoryKuser->getPermissionLevel() < $permittedCategoryKuser->getPermissionLevel())
-							$permittedCategoryKuser = $categoryKuser;
+						if(!$permittedCategoryVuser || $categoryVuser->getPermissionLevel() < $permittedCategoryVuser->getPermissionLevel())
+							$permittedCategoryVuser = $categoryVuser;
 					}
 				}
 			}
 		}
-		return $permittedCategoryKuser;
+		return $permittedCategoryVuser;
 	}
 	
 	/**
 	 * 
 	 * @param int $categoryId
-	 * @param int $kuserId
+	 * @param int $vuserId
 	 * @param array $requiredPermissions
 	 * @param $con
 	 * 
-	 * @return categoryKuser
+	 * @return categoryVuser
 	 */
-	public static function retrieveByCategoryIdAndActiveKuserId($categoryId, $kuserId, $requiredPermissions, $con = null)
+	public static function retrieveByCategoryIdAndActiveVuserId($categoryId, $vuserId, $requiredPermissions, $con = null)
 	{
 		$criteria = new Criteria();
-		$criteria->add(categoryKuserPeer::CATEGORY_ID, $categoryId);
-		$criteria->add(categoryKuserPeer::KUSER_ID, $kuserId);
-		$criteria->add(categoryKuserPeer::STATUS, CategoryKuserStatus::ACTIVE);
+		$criteria->add(categoryVuserPeer::CATEGORY_ID, $categoryId);
+		$criteria->add(categoryVuserPeer::VUSER_ID, $vuserId);
+		$criteria->add(categoryVuserPeer::STATUS, CategoryVuserStatus::ACTIVE);
 
-		$categoryKuser = categoryKuserPeer::doSelectOne($criteria, $con);
-		if(!$categoryKuser)
+		$categoryVuser = categoryVuserPeer::doSelectOne($criteria, $con);
+		if(!$categoryVuser)
 			return null;
 			
 		foreach($requiredPermissions as $requiredPermission)
-			if(!$categoryKuser->hasPermission($requiredPermission))
+			if(!$categoryVuser->hasPermission($requiredPermission))
 				return null;
 				
-		return $categoryKuser;
+		return $categoryVuser;
 	}
 	
 	/**
 	 * 
 	 * @param array $categoriesIds
-	 * @param int $kuserId
+	 * @param int $vuserId
 	 * @param array $requiredPermissions
 	 * @param $con
 	 * 
-	 * @return categoryKuser
+	 * @return categoryVuser
 	 */
-	public static function areCategoriesAllowed(array $categoriesIds, $kuserId = null, $requiredPermissions = null, $con = null)
+	public static function areCategoriesAllowed(array $categoriesIds, $vuserId = null, $requiredPermissions = null, $con = null)
 	{
-		if(is_null($kuserId))
-			$kuserId = kCurrentContext::getCurrentKsKuserId();
+		if(is_null($vuserId))
+			$vuserId = vCurrentContext::getCurrentVsVuserId();
 			
 		if(is_null($requiredPermissions))
 			$requiredPermissions = array(PermissionName::CATEGORY_VIEW);
@@ -187,17 +187,17 @@ class categoryKuserPeer extends BasecategoryKuserPeer {
 		$categoriesIds = array_unique($categoriesIds);
 		
 		$criteria = new Criteria();
-		$criteria->add(categoryKuserPeer::CATEGORY_ID, $categoriesIds, Criteria::IN);
-		$criteria->add(categoryKuserPeer::KUSER_ID, $kuserId);
-		$criteria->add(categoryKuserPeer::STATUS, CategoryKuserStatus::ACTIVE);
+		$criteria->add(categoryVuserPeer::CATEGORY_ID, $categoriesIds, Criteria::IN);
+		$criteria->add(categoryVuserPeer::VUSER_ID, $vuserId);
+		$criteria->add(categoryVuserPeer::STATUS, CategoryVuserStatus::ACTIVE);
 
-		$categoryKusers = categoryKuserPeer::doSelectOne($criteria, $con);
-		if(count($categoryKusers) < count($categoriesIds))
+		$categoryVusers = categoryVuserPeer::doSelectOne($criteria, $con);
+		if(count($categoryVusers) < count($categoriesIds))
 			return false;
 			
-		foreach($categoryKusers as $categoryKuser)
+		foreach($categoryVusers as $categoryVuser)
 		{
-			$permissions = explode(',', $categoryKuser->getPermissionNames());
+			$permissions = explode(',', $categoryVuser->getPermissionNames());
 			foreach($requiredPermissions as $requiredPermission)
 				if(!in_array($requiredPermission, $permissions))
 					return false;
@@ -208,22 +208,22 @@ class categoryKuserPeer extends BasecategoryKuserPeer {
 	/**
 	 * 
 	 * @param int $categoryId
-	 * @param int $kuserId
+	 * @param int $vuserId
 	 * @param $con
 	 * 
 	 * @return array
 	 */
-	public static function retrieveActiveKusersByCategoryId($categoryId, $con = null)
+	public static function retrieveActiveVusersByCategoryId($categoryId, $con = null)
 	{
 		$criteria = new Criteria();
 
-		$criteria->add(categoryKuserPeer::CATEGORY_ID, $categoryId);
-		$criteria->add(categoryKuserPeer::STATUS, CategoryKuserStatus::ACTIVE);
+		$criteria->add(categoryVuserPeer::CATEGORY_ID, $categoryId);
+		$criteria->add(categoryVuserPeer::STATUS, CategoryVuserStatus::ACTIVE);
 
 		self::setUseCriteriaFilter(false);
-		$categoryKusers = categoryKuserPeer::doSelect($criteria, $con);
+		$categoryVusers = categoryVuserPeer::doSelect($criteria, $con);
 		self::setUseCriteriaFilter(true);
-		return $categoryKusers;
+		return $categoryVusers;
 	}
 	
 	
@@ -234,17 +234,17 @@ class categoryKuserPeer extends BasecategoryKuserPeer {
 			self::$s_criteria_filter = new criteriaFilter ();
 		}
 		
-		$c =  KalturaCriteria::create(categoryKuserPeer::OM_CLASS); 
-		$c->addAnd ( categoryKuserPeer::STATUS, array(CategoryKuserStatus::DELETED), Criteria::NOT_IN);
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$c =  VidiunCriteria::create(categoryVuserPeer::OM_CLASS); 
+		$c->addAnd ( categoryVuserPeer::STATUS, array(CategoryVuserStatus::DELETED), Criteria::NOT_IN);
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 		if($partnerId)
-			$c->add(categoryKuserPeer::PARTNER_ID,$partnerId);
+			$c->add(categoryVuserPeer::PARTNER_ID,$partnerId);
 
 		self::$s_criteria_filter->setFilter($c);
 	}
 	
 	public static function getCacheInvalidationKeys()
 	{
-		return array(array("categoryKuser:id=%s", self::ID), array("categoryKuser:categoryId=%s", self::CATEGORY_ID));		
+		return array(array("categoryVuser:id=%s", self::ID), array("categoryVuser:categoryId=%s", self::CATEGORY_ID));		
 	}
-} // categoryKuserPeer
+} // categoryVuserPeer

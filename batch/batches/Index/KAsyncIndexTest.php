@@ -10,35 +10,35 @@ require_once(__DIR__ . "/../../bootstrap.php");
  * @package Scheduler
  * @subpackage Debug
  */
-class KAsyncIndexTest extends PHPUnit_Framework_TestCase
+class VAsyncIndexTest extends PHPUnit_Framework_TestCase
 {
-	const JOB_NAME = 'KAsyncIndex';
+	const JOB_NAME = 'VAsyncIndex';
 	
 	public function testMediaEntryFilter()
 	{
-		$filter = new KalturaMediaEntryFilter();
+		$filter = new VidiunMediaEntryFilter();
 		// TODO define the filter
 		
-		$this->doTestEntry($filter, KalturaBatchJobStatus::FINISHED);
+		$this->doTestEntry($filter, VidiunBatchJobStatus::FINISHED);
 	}
 
 	public function testDocumentEntryFilter()
 	{
-		$filter = new KalturaDocumentEntryFilter();
+		$filter = new VidiunDocumentEntryFilter();
 		// TODO define the filter
 		
-		$this->doTestEntry($filter, KalturaBatchJobStatus::FINISHED);
+		$this->doTestEntry($filter, VidiunBatchJobStatus::FINISHED);
 	}
 	
-	public function doTestEntry(KalturaBaseEntryFilter $filter, $expectedStatus)
+	public function doTestEntry(VidiunBaseEntryFilter $filter, $expectedStatus)
 	{
-		$this->doTest(KalturaIndexObjectType::ENTRY, $filter, $expectedStatus);
+		$this->doTest(VidiunIndexObjectType::ENTRY, $filter, $expectedStatus);
 	}
 	
-	public function doTest($objectType, KalturaFilter $filter, $expectedStatus)
+	public function doTest($objectType, VidiunFilter $filter, $expectedStatus)
 	{
 		$iniFile = "batch_config.ini";
-		$schedulerConfig = new KSchedulerConfig($iniFile);
+		$schedulerConfig = new VSchedulerConfig($iniFile);
 	
 		$taskConfigs = $schedulerConfig->getTaskConfigList();
 		$config = null;
@@ -61,15 +61,15 @@ class KAsyncIndexTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals($expectedStatus, $job->status);
 	}
 	
-	private function prepareJobs($objectType, KalturaFilter $filter)
+	private function prepareJobs($objectType, VidiunFilter $filter)
 	{
-		$data = new KalturaIndexJobData();
+		$data = new VidiunIndexJobData();
 		$data->filter = $filter;
 		
-		$job = new KalturaBatchJob();
+		$job = new VidiunBatchJob();
 		$job->id = 1;
 		$job->jobSubType = $objectType;
-		$job->status = KalturaBatchJobStatus::PENDING;
+		$job->status = VidiunBatchJobStatus::PENDING;
 		$job->data = $data;
 		
 		return array($job);

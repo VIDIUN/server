@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaPushNotificationTemplateBaseFilter extends KalturaEventNotificationTemplateFilter
+abstract class VidiunPushNotificationTemplateBaseFilter extends VidiunEventNotificationTemplateFilter
 {
 	static private $map_between_objects = array
 	(

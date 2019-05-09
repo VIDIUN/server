@@ -43,7 +43,7 @@ class liveAsset extends flavorAsset
 			$subType = self::FILE_SYNC_ASSET_SUB_TYPE_LIVE_SECONDARY;
 		}
 			
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getLiveSegmentVersion($index), FileSyncObjectType::ASSET, $subType);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getLiveSegmentVersion($index), FileSyncObjectType::ASSET, $subType);
 		$this->putInCustomData("liveSegmentVersion-$index", $newVersion);
 	}
 	
@@ -57,7 +57,7 @@ class liveAsset extends flavorAsset
 			return true;
 		}
 		
-		KalturaLog::log("Sub type provided [$sub_type] is not one of known live-asset sub types validating from parent");
+		VidiunLog::log("Sub type provided [$sub_type] is not one of known live-asset sub types validating from parent");
 		return parent::validateFileSyncSubType($sub_type);
 	}
 	

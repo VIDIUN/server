@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaCaptureThumbJobData extends KalturaJobData
+class VidiunCaptureThumbJobData extends VidiunJobData
 {
 	/**
-	 * @var KalturaFileContainer
+	 * @var VidiunFileContainer
 	 */
 	public $fileContainer;
 	
@@ -42,7 +42,7 @@ class KalturaCaptureThumbJobData extends KalturaJobData
 	public $srcAssetEncryptionKey;
 
 	/**
-	 * @var KalturaAssetType
+	 * @var VidiunAssetType
 	 */
 	public $srcAssetType;
 	
@@ -73,7 +73,7 @@ class KalturaCaptureThumbJobData extends KalturaJobData
 	public function toObject(  $dbCaptureThumbJobData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbCaptureThumbJobData))
-			$dbCaptureThumbJobData = new kCaptureThumbJobData();
+			$dbCaptureThumbJobData = new vCaptureThumbJobData();
 			
 		return parent::toObject($dbCaptureThumbJobData, $props_to_skip);
 	}

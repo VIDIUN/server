@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaDropFolderBaseFilter extends KalturaFilter
+abstract class VidiunDropFolderBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -87,18 +87,18 @@ abstract class KalturaDropFolderBaseFilter extends KalturaFilter
 	public $nameLike;
 
 	/**
-	 * @var KalturaDropFolderType
+	 * @var VidiunDropFolderType
 	 */
 	public $typeEqual;
 
 	/**
-	 * @dynamicType KalturaDropFolderType
+	 * @dynamicType VidiunDropFolderType
 	 * @var string
 	 */
 	public $typeIn;
 
 	/**
-	 * @var KalturaDropFolderStatus
+	 * @var VidiunDropFolderStatus
 	 */
 	public $statusEqual;
 
@@ -138,12 +138,12 @@ abstract class KalturaDropFolderBaseFilter extends KalturaFilter
 	public $pathLike;
 
 	/**
-	 * @var KalturaDropFolderFileHandlerType
+	 * @var VidiunDropFolderFileHandlerType
 	 */
 	public $fileHandlerTypeEqual;
 
 	/**
-	 * @dynamicType KalturaDropFolderFileHandlerType
+	 * @dynamicType VidiunDropFolderFileHandlerType
 	 * @var string
 	 */
 	public $fileHandlerTypeIn;
@@ -179,12 +179,12 @@ abstract class KalturaDropFolderBaseFilter extends KalturaFilter
 	public $tagsMultiLikeAnd;
 
 	/**
-	 * @var KalturaDropFolderErrorCode
+	 * @var VidiunDropFolderErrorCode
 	 */
 	public $errorCodeEqual;
 
 	/**
-	 * @dynamicType KalturaDropFolderErrorCode
+	 * @dynamicType VidiunDropFolderErrorCode
 	 * @var string
 	 */
 	public $errorCodeIn;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Will run KAsyncConvertLiveSegment.class.php 
+ * Will run VAsyncConvertLiveSegment.class.php 
  * 
  *
  * @package Scheduler
@@ -8,6 +8,6 @@
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncConvertLiveSegment();
+$instance = new VAsyncConvertLiveSegment();
 $instance->run(); 
 $instance->done();

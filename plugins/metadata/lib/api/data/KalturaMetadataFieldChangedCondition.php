@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.objects
  */
-class KalturaMetadataFieldChangedCondition extends KalturaMatchCondition
+class VidiunMetadataFieldChangedCondition extends VidiunMatchCondition
 {
 	/**
 	 * May contain the full xpath to the field in three formats
@@ -55,7 +55,7 @@ class KalturaMetadataFieldChangedCondition extends KalturaMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaMatchCondition::getMapBetweenObjects()
+	 * @see VidiunMatchCondition::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -63,7 +63,7 @@ class KalturaMetadataFieldChangedCondition extends KalturaMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage()
+	 * @see VidiunObject::validateForUsage()
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -76,12 +76,12 @@ class KalturaMetadataFieldChangedCondition extends KalturaMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kMetadataFieldChangedCondition();
+			$dbObject = new vMetadataFieldChangedCondition();
 			
 		return parent::toObject($dbObject, $skip);
 	}

@@ -3,7 +3,7 @@
  * @package plugins.quickPlayDistribution
  * @subpackage lib
  */
-class QuickPlayDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class QuickPlayDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const QUICKPLAY = 'QUICKPLAY';
 	

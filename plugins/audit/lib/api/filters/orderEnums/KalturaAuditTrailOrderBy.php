@@ -3,7 +3,7 @@
  * @package plugins.audit
  * @subpackage api.filters.enum
  */
-class KalturaAuditTrailOrderBy extends KalturaStringEnum
+class VidiunAuditTrailOrderBy extends VidiunStringEnum
 {
 	const CREATED_AT_ASC = "+createdAt";
 	const CREATED_AT_DESC = "-createdAt";

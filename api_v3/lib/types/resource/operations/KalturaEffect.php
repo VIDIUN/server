@@ -6,11 +6,11 @@
  * @subpackage objects
  */
 
-class KalturaEffect extends KalturaObject
+class VidiunEffect extends VidiunObject
 {
 
 	/**
-	 * @var KalturaEffectType
+	 * @var VidiunEffectType
 	 */
 	public $effectType;
 
@@ -37,7 +37,7 @@ class KalturaEffect extends KalturaObject
 	public function toObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		if(is_null($object_to_fill))
-			$object_to_fill = new kEffect();
+			$object_to_fill = new vEffect();
 
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

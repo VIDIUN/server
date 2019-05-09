@@ -19,5 +19,5 @@ passthru("php $script $config");
 $config = realpath(dirname(__FILE__) . '/../../../') . '/permissions/service.businessProcessNotification.businessProcessCase.ini';
 passthru("php $script $config");
 
-$config = realpath(dirname(__FILE__) . '/../../../') . '/permissions/object.KalturaBusinessProcessNotificationTemplate.ini';
+$config = realpath(dirname(__FILE__) . '/../../../') . '/permissions/object.VidiunBusinessProcessNotificationTemplate.ini';
 passthru("php $script $config");

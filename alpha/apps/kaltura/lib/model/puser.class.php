@@ -5,7 +5,7 @@
  */
 class puser
 {
-	private /*kuser*/ $kuser ;
-	private /*puser_kuser*/ $puser_kuser ;
+	private /*vuser*/ $vuser ;
+	private /*puser_vuser*/ $puser_vuser ;
 	
 }

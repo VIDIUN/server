@@ -1,6 +1,6 @@
 <?php
 
-class KalturaMonitorError
+class VidiunMonitorError
 {
     const EMERG   = 'EMERG';
     const ALERT   = 'ALERT';
@@ -16,7 +16,7 @@ class KalturaMonitorError
 	public $description;
 }
 
-class KalturaMonitorResult
+class VidiunMonitorResult
 {
 	public $value;
 	public $executionTime;
@@ -34,7 +34,7 @@ class KalturaMonitorResult
 		$xml->addChild('description', $this->description);
 		foreach($this->errors as $error)
 		{
-			if($error instanceof KalturaMonitorError && $error->level != null)
+			if($error instanceof VidiunMonitorError && $error->level != null)
 			{
 				$errorXml = $xml->addChild('error', $error->description);
 				$errorXml->addAttribute('level', $error->level);
@@ -56,13 +56,13 @@ class KalturaMonitorResult
 	
 	/**
 	 * @param string $xmlString
-	 * @return KalturaMonitorResult
+	 * @return VidiunMonitorResult
 	 */
 	public static function fromXml($xmlString)
 	{
 		$xml = new SimpleXMLElement($xmlString);
 		
-		$monitorResult = new KalturaMonitorResult();
+		$monitorResult = new VidiunMonitorResult();
 		$monitorResult->value = floatval($xml->value);
 		$monitorResult->executionTime = strval($xml->executionTime);
 		$monitorResult->description = strval($xml->description);
@@ -71,7 +71,7 @@ class KalturaMonitorResult
 		{
 			foreach($xml->error as $error)
 			{
-				$monitorErr = new KalturaMonitorError();
+				$monitorErr = new VidiunMonitorError();
 				$monitorErr->level = strval($error['level']);
 				$monitorErr->code = strval($error['code']);
 				$monitorErr->description = strval($error);

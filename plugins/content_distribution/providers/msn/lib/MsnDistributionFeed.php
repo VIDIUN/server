@@ -18,17 +18,17 @@ class MsnDistributionFeed
 	protected $_xpath;
 	
 	/**
-	 * @var KalturaDistributionJobData
+	 * @var VidiunDistributionJobData
 	 */
 	protected $_distributionJobData;
 	
 	/**
-	 * @var KalturaMsnDistributionProfile
+	 * @var VidiunMsnDistributionProfile
 	 */
 	protected $_distributionProfile;
 	
 	/**
-	 * @var KalturaMsnDistributionJobProviderData
+	 * @var VidiunMsnDistributionJobProviderData
 	 */
 	protected $_providerData;
 	
@@ -39,16 +39,16 @@ class MsnDistributionFeed
 	
 	/**
 	 * @param string $templateName
-	 * @param KalturaMsnDistributionProfile $distributionProfile
-	 * @param KalturaMsnDistributionJobProviderData $providerData
+	 * @param VidiunMsnDistributionProfile $distributionProfile
+	 * @param VidiunMsnDistributionJobProviderData $providerData
 	 */
-	public function __construct(KalturaDistributionJobData $distributionJobData, KalturaMsnDistributionJobProviderData $providerData)
+	public function __construct(VidiunDistributionJobData $distributionJobData, VidiunMsnDistributionJobProviderData $providerData)
 	{
 		$this->_distributionJobData = $distributionJobData;
 		$this->_distributionProfile = $distributionJobData->distributionProfile;
 		$this->_providerData = $providerData;
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml/' . self::TEMPLATE_XML;
-		$this->_doc = new KDOMDocument();
+		$this->_doc = new VDOMDocument();
 		$this->_doc->load($xmlTemplate);
 		$this->_xpath = new DOMXPath($this->_doc);
 		$this->_xpath->registerNamespace('msn', 'urn:schemas-microsoft-com:msnvideo:catalog');
@@ -57,54 +57,54 @@ class MsnDistributionFeed
 		if (!$this->_fieldValues) 
 			$this->_fieldValues = array();
 		
-		$this->setNodeValueFieldConfigId('/msn:video/msn:providerId', KalturaMsnDistributionField::PROVIDER_ID);
-		$this->setNodeValueFieldConfigId('/msn:video/msn:csId', KalturaMsnDistributionField::CSID);
-		$this->setNodeValueFieldConfigId('/msn:video/msn:source', KalturaMsnDistributionField::SOURCE);
-		$this->setNodeValueFieldConfigId('/msn:video/msn:source/@friendlyName', KalturaMsnDistributionField::SOURCE_FRIENDLY_NAME);
-		$this->setNodeValueFieldConfigId('/msn:video/msn:pageGroup', KalturaMsnDistributionField::PAGE_GROUP);
-		$this->setNodeValueFieldConfigId('/msn:video/msn:title', KalturaMsnDistributionField::TITLE);
-		$this->setNodeValueFieldConfigId('/msn:video/msn:description', KalturaMsnDistributionField::DESCRIPTION);
-		$this->setNodeValueDateFieldConfigIdOrRemove('/msn:video/msn:startDate', KalturaMsnDistributionField::START_DATE);
-		$this->setNodeValueDateFieldConfigIdOrRemove('/msn:video/msn:activeEndDate', KalturaMsnDistributionField::ACTIVATE_END_DATE);
-		$this->setNodeValueDateFieldConfigIdOrRemove('/msn:video/msn:searchableEndDate', KalturaMsnDistributionField::SEARCHABLE_END_DATE);
-		$this->setNodeValueDateFieldConfigIdOrRemove('/msn:video/msn:archiveEndDate', KalturaMsnDistributionField::ARCHIVE_END_DATE);
+		$this->setNodeValueFieldConfigId('/msn:video/msn:providerId', VidiunMsnDistributionField::PROVIDER_ID);
+		$this->setNodeValueFieldConfigId('/msn:video/msn:csId', VidiunMsnDistributionField::CSID);
+		$this->setNodeValueFieldConfigId('/msn:video/msn:source', VidiunMsnDistributionField::SOURCE);
+		$this->setNodeValueFieldConfigId('/msn:video/msn:source/@friendlyName', VidiunMsnDistributionField::SOURCE_FRIENDLY_NAME);
+		$this->setNodeValueFieldConfigId('/msn:video/msn:pageGroup', VidiunMsnDistributionField::PAGE_GROUP);
+		$this->setNodeValueFieldConfigId('/msn:video/msn:title', VidiunMsnDistributionField::TITLE);
+		$this->setNodeValueFieldConfigId('/msn:video/msn:description', VidiunMsnDistributionField::DESCRIPTION);
+		$this->setNodeValueDateFieldConfigIdOrRemove('/msn:video/msn:startDate', VidiunMsnDistributionField::START_DATE);
+		$this->setNodeValueDateFieldConfigIdOrRemove('/msn:video/msn:activeEndDate', VidiunMsnDistributionField::ACTIVATE_END_DATE);
+		$this->setNodeValueDateFieldConfigIdOrRemove('/msn:video/msn:searchableEndDate', VidiunMsnDistributionField::SEARCHABLE_END_DATE);
+		$this->setNodeValueDateFieldConfigIdOrRemove('/msn:video/msn:archiveEndDate', VidiunMsnDistributionField::ARCHIVE_END_DATE);
 		
-		$this->addTagFieldConfig(KalturaMsnDistributionField::TAGS_MSNVIDEO_CAT, 'MSNVideo_Cat', 'us');
-		$this->addTagFieldConfig(KalturaMsnDistributionField::TAGS_MSNVIDEO_TOP, 'MSNVideo_Top', 'us');
-		$this->addTagFieldConfig(KalturaMsnDistributionField::TAGS_MSNVIDEO_TOP_CAT, 'MSNVideo_Top_Cat', 'us');
+		$this->addTagFieldConfig(VidiunMsnDistributionField::TAGS_MSNVIDEO_CAT, 'MSNVideo_Cat', 'us');
+		$this->addTagFieldConfig(VidiunMsnDistributionField::TAGS_MSNVIDEO_TOP, 'MSNVideo_Top', 'us');
+		$this->addTagFieldConfig(VidiunMsnDistributionField::TAGS_MSNVIDEO_TOP_CAT, 'MSNVideo_Top_Cat', 'us');
 		
-		$tags = explode(',', $this->_fieldValues[KalturaMsnDistributionField::TAGS_PUBLIC]);
+		$tags = explode(',', $this->_fieldValues[VidiunMsnDistributionField::TAGS_PUBLIC]);
 		$this->addPublicTags($tags);
 		
 		// premium tags
 		$dynamicPremiumTags = $this->getDynamicFieldValuesGrouped(
-			KalturaMsnDistributionField::TAGS_PREMIUM_N_MARKET, 
-			KalturaMsnDistributionField::TAGS_PREMIUM_N_NAMESPACE, 
-			KalturaMsnDistributionField::TAGS_PREMIUM_N_VALUE);
+			VidiunMsnDistributionField::TAGS_PREMIUM_N_MARKET, 
+			VidiunMsnDistributionField::TAGS_PREMIUM_N_NAMESPACE, 
+			VidiunMsnDistributionField::TAGS_PREMIUM_N_VALUE);
 		foreach($dynamicPremiumTags as $dynamicPremiumTag)
 		{
 			$this->addTag(
-				$dynamicPremiumTag[KalturaMsnDistributionField::TAGS_PREMIUM_N_VALUE], 
-				$dynamicPremiumTag[KalturaMsnDistributionField::TAGS_PREMIUM_N_NAMESPACE],
-				$dynamicPremiumTag[KalturaMsnDistributionField::TAGS_PREMIUM_N_MARKET]);
+				$dynamicPremiumTag[VidiunMsnDistributionField::TAGS_PREMIUM_N_VALUE], 
+				$dynamicPremiumTag[VidiunMsnDistributionField::TAGS_PREMIUM_N_NAMESPACE],
+				$dynamicPremiumTag[VidiunMsnDistributionField::TAGS_PREMIUM_N_MARKET]);
 		}
 		
 		// related links
 		$relatedLinks = $this->getDynamicFieldValuesGrouped(
-			KalturaMsnDistributionField::RELATED_LINK_N_URL, 
-			KalturaMsnDistributionField::RELATED_LINK_N_TITLE);
+			VidiunMsnDistributionField::RELATED_LINK_N_URL, 
+			VidiunMsnDistributionField::RELATED_LINK_N_TITLE);
 			 
 		foreach($relatedLinks as $relatedLink)
 		{
 			$this->addRelatedLink(
-				$relatedLink[KalturaMsnDistributionField::RELATED_LINK_N_URL],
-				$relatedLink[KalturaMsnDistributionField::RELATED_LINK_N_TITLE]); 
+				$relatedLink[VidiunMsnDistributionField::RELATED_LINK_N_URL],
+				$relatedLink[VidiunMsnDistributionField::RELATED_LINK_N_TITLE]); 
 		}
 	}
 	
 	public function setUUID($uuid)
 	{
-		kXml::setNodeValue($this->_xpath,'/msn:video/msn:uuid', $uuid);
+		vXml::setNodeValue($this->_xpath,'/msn:video/msn:uuid', $uuid);
 	}
 	
 	public function addFlavorAssetsByMsnId(array $flavorAssetsByMsnId)
@@ -151,7 +151,7 @@ class MsnDistributionFeed
 		$groupedValues = array();
 		foreach($fieldConfigArray as $fieldConfig)
 		{
-			/* @var $fieldConfig KalturaDistributionFieldConfig */
+			/* @var $fieldConfig VidiunDistributionFieldConfig */
 			
 			foreach($dynamicFields as $dynamicField)
 			{
@@ -219,7 +219,7 @@ class MsnDistributionFeed
 	public function setNodeValueFieldConfigId($xpath, $fieldConfigId, DOMNode $contextnode = null)
 	{
 		if (isset($this->_fieldValues[$fieldConfigId]))
-			kXml::setNodeValue($this->_xpath,$xpath, $this->_fieldValues[$fieldConfigId], $contextnode);
+			vXml::setNodeValue($this->_xpath,$xpath, $this->_fieldValues[$fieldConfigId], $contextnode);
 	}
 	
 	/**
@@ -283,7 +283,7 @@ class MsnDistributionFeed
 		$dateTime->setTimezone(new DateTimeZone('GMT'));
 		$date = $dateTime->format('c');
 		$date = str_replace('+00:00', 'Z', $date);
-		kXml::setNodeValue($this->_xpath,$xpath, $date, $contextnode);
+		vXml::setNodeValue($this->_xpath,$xpath, $date, $contextnode);
 	}
 	
 	/**

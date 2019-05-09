@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kIndexJobData extends kJobData
+class kIndexJobData extends vJobData
 {
 	/**
 	 * The filter should return the list of objects that need to be reindexed.
@@ -32,7 +32,7 @@ class kIndexJobData extends kJobData
 	
 	/**
 	 * Indicates that the job locked .
-	 * @var kFeatureStatus
+	 * @var vFeatureStatus
 	 */
 	private $featureStatusesToRemove = array();
 	

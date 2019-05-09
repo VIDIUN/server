@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kCaptureThumbJobData extends kJobData
+class vCaptureThumbJobData extends vJobData
 {
 	/**
 	 * @var FileContainer

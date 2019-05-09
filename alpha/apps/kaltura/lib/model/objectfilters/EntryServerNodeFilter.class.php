@@ -10,7 +10,7 @@ class EntryServerNodeFilter extends baseObjectFilter {
 	 */
 	public function init()
 	{
-		$this->fields = kArray::makeAssociativeDefaultValue(array(
+		$this->fields = vArray::makeAssociativeDefaultValue(array(
 			'_gte_created_at',
 			'_lte_created_at',
 			'_gte_updated_at',

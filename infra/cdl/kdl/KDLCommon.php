@@ -1,5 +1,5 @@
 <?php
-	class KDLSanityLimits {
+	class VDLSanityLimits {
 		const MinDuration = 100;
 		const MaxDuration = 360000000;	// 100h
 		const MinBitrate = 10;			// 10Kbps
@@ -17,7 +17,7 @@
 		const MaxDurationFactor = 1.5;
 	}
 
-	class KDLVideoBitrateNormalize {
+	class VDLVideoBitrateNormalize {
 					/*
 					 * Ratios that represent quaility/efficency diffrences beween various 
 					 * codecs/codec groups per given bitrate. 
@@ -36,18 +36,18 @@
 					 */
 		const TranscodingFactor = 1.2;	
 		
-		static $BitrateFactorCategory1 = array(KDLVideoTarget::H263,KDLVideoTarget::FLV, "h263", "h.263", "s263", "flv1", "theora");
-		static $BitrateFactorCategory2 = array(KDLVideoTarget::VP6, "vp6", "vp6e", "vp6s", "flv4");
-		static $BitrateFactorCategory3 = array(KDLVideoTarget::H264, KDLVideoTarget::H264B, 
-											   KDLVideoTarget::H264M,KDLVideoTarget::H264H,
-											   KDLVideoTarget::WMV3, KDLVideoTarget::WVC1A,
-											   KDLVideoTarget::VP8,
+		static $BitrateFactorCategory1 = array(VDLVideoTarget::H263,VDLVideoTarget::FLV, "h263", "h.263", "s263", "flv1", "theora");
+		static $BitrateFactorCategory2 = array(VDLVideoTarget::VP6, "vp6", "vp6e", "vp6s", "flv4");
+		static $BitrateFactorCategory3 = array(VDLVideoTarget::H264, VDLVideoTarget::H264B, 
+											   VDLVideoTarget::H264M,VDLVideoTarget::H264H,
+											   VDLVideoTarget::WMV3, VDLVideoTarget::WVC1A,
+											   VDLVideoTarget::VP8,
 											   "h264", "h.264", "x264", "avc1", "wvc1",
 											   "avc", "wmv3", "wmva", "rv40", "realvideo4", "rv30", "realvideo3");
 		static $BitrateFactorCategory4 = array("g2m3", "g2m4", "gotomeeting3", "gotomeeting4", "gotomeeting", 
 												"tsc2", "tscc", "techsmith", "mss1", "mss2");
-		static $BitrateFactorCategory5 = array(KDLVideoTarget::H265, "hevc", "hev1", "h.evc", "h.265", "v_mpegh/iso/hevc", 
-											   KDLVideoTarget::VP9, "v_vp9");
+		static $BitrateFactorCategory5 = array(VDLVideoTarget::H265, "hevc", "hev1", "h.evc", "h.265", "v_mpegh/iso/hevc", 
+											   VDLVideoTarget::VP9, "v_vp9");
 		
 		public static function NormalizeSourceToTarget($sourceCodec, $sourceBitrate, $targetCodec, $transcodingFactor=self::TranscodingFactor)
 		{
@@ -77,7 +77,7 @@
 			return round($brSrcNorm, 0);								   		}
 		}
 	
-	class KDLConstants {
+	class VDLConstants {
 				/* FlavorBitrateRedundencyFactor - 
 				 * The ratio between the current and prev flavors 
 				 * should be at most of that value (curr/prev=ratio).
@@ -98,41 +98,41 @@
 				 * TranscodersSourceBlackList
 				 */
 		static $TranscodersSourceBlackList = array(
-			KDLTranscoders::ON2 => array(
-				KDLConstants::VideoIndex=>array("icod","intermediate codec","apcn","apch"),
+			VDLTranscoders::ON2 => array(
+				VDLConstants::VideoIndex=>array("icod","intermediate codec","apcn","apch"),
 			),
-			KDLTranscoders::FFMPEG => array(
-//				KDLConstants::ContainerIndex=>array("ogg", "ogv"),
-//				KDLConstants::VideoIndex=>array("iv41","iv50"), //"icod","intermediate codec"),
-//				KDLConstants::AudioIndex=>array("vorbis"),
+			VDLTranscoders::FFMPEG => array(
+//				VDLConstants::ContainerIndex=>array("ogg", "ogv"),
+//				VDLConstants::VideoIndex=>array("iv41","iv50"), //"icod","intermediate codec"),
+//				VDLConstants::AudioIndex=>array("vorbis"),
 			),
-			KDLTranscoders::FFMPEG_AUX => array(
-//				KDLConstants::ContainerIndex=>array("ogg", "ogv"),
-				KDLConstants::VideoIndex=>array("iv41","iv50","icod","intermediate codec"),
-//				KDLConstants::AudioIndex=>array("vorbis"),
+			VDLTranscoders::FFMPEG_AUX => array(
+//				VDLConstants::ContainerIndex=>array("ogg", "ogv"),
+				VDLConstants::VideoIndex=>array("iv41","iv50","icod","intermediate codec"),
+//				VDLConstants::AudioIndex=>array("vorbis"),
 			),
-			KDLTranscoders::MENCODER => array(
-				KDLConstants::VideoIndex=>array("icod","intermediate codec","apcn","apch"),
-				KDLConstants::AudioIndex=>array("a"), // MS Speach/Voice codec
+			VDLTranscoders::MENCODER => array(
+				VDLConstants::VideoIndex=>array("icod","intermediate codec","apcn","apch"),
+				VDLConstants::AudioIndex=>array("a"), // MS Speach/Voice codec
 			),
 		);
 				/*
 				 * TranscodersTargetBlackList
 				 */
 		static $TranscodersTargetBlackList = array(
-			KDLTranscoders::ON2 => array(
-				KDLConstants::ContainerIndex=>array(KDLContainerTarget::WMV, KDLContainerTarget::ISMV, KDLContainerTarget::ISMA),
-				KDLConstants::VideoIndex=>array("wvc1", KDLVideoTarget::WMV2,KDLVideoTarget::WMV3)),
-			KDLTranscoders::EE3 => array(
-				KDLConstants::ContainerIndex=>array(KDLContainerTarget::FLV, KDLContainerTarget::MP4)),
-			KDLTranscoders::FFMPEG => array(),
-//				KDLConstants::ContainerIndex=>array(KDLContainerTarget::ISMV)),
-			KDLTranscoders::FFMPEG_AUX => array(
-				KDLConstants::ContainerIndex=>array(KDLContainerTarget::ISMV, KDLContainerTarget::ISMA)),
-			KDLTranscoders::ENCODING_COM => array(
-				KDLConstants::ContainerIndex=>array(KDLContainerTarget::ISMV, KDLContainerTarget::ISMA)),
-			KDLTranscoders::MENCODER => array(
-				KDLConstants::ContainerIndex=>array(KDLContainerTarget::ISMV, KDLContainerTarget::ISMA)),
+			VDLTranscoders::ON2 => array(
+				VDLConstants::ContainerIndex=>array(VDLContainerTarget::WMV, VDLContainerTarget::ISMV, VDLContainerTarget::ISMA),
+				VDLConstants::VideoIndex=>array("wvc1", VDLVideoTarget::WMV2,VDLVideoTarget::WMV3)),
+			VDLTranscoders::EE3 => array(
+				VDLConstants::ContainerIndex=>array(VDLContainerTarget::FLV, VDLContainerTarget::MP4)),
+			VDLTranscoders::FFMPEG => array(),
+//				VDLConstants::ContainerIndex=>array(VDLContainerTarget::ISMV)),
+			VDLTranscoders::FFMPEG_AUX => array(
+				VDLConstants::ContainerIndex=>array(VDLContainerTarget::ISMV, VDLContainerTarget::ISMA)),
+			VDLTranscoders::ENCODING_COM => array(
+				VDLConstants::ContainerIndex=>array(VDLContainerTarget::ISMV, VDLContainerTarget::ISMA)),
+			VDLTranscoders::MENCODER => array(
+				VDLConstants::ContainerIndex=>array(VDLContainerTarget::ISMV, VDLContainerTarget::ISMA)),
 		);
 		
 		const MaxFramerate = 30.0;
@@ -152,8 +152,8 @@
 		
 	}
 
-	class KDLTranscoders {
-		const KALTURA 		= "kaltura.com";
+	class VDLTranscoders {
+		const VIDIUN 		= "vidiun.com";
 		const FFMPEG 		= "ffmpeg";
 		const MENCODER 		= "mencoder";
 		const ON2 			= "cli_encode";
@@ -169,7 +169,7 @@
 		const PDF_CREATOR = "pdf_creator";
 	};
 
-	class KDLVideoAspectRatio {
+	class VDLVideoAspectRatio {
 		const AR_LOW = "LOW";
 		const AR_5_4 = "5:4";
 		const AR_4_3 = "4:3";
@@ -188,21 +188,21 @@
 		public static function ConvertFrameSize($wid, $hgt)
 		{
 		$arr=array(
-			1280/1024*1000=>KDLVideoAspectRatio::AR_5_4,
-			1280/960*1000=>KDLVideoAspectRatio::AR_4_3,1392./1040*1000=>KDLVideoAspectRatio::AR_4_3,
-			1280/854*1000=>KDLVideoAspectRatio::AR_3_2,1152/768*1000=>KDLVideoAspectRatio::AR_3_2,1280./848*1000=>KDLVideoAspectRatio::AR_3_2,
-			320/200*1000=>KDLVideoAspectRatio::AR_8_5,1440./896*1000=>KDLVideoAspectRatio::AR_8_5,
-			1680./1040*1000=>KDLVideoAspectRatio::AR_8_5,320./192*1000=>KDLVideoAspectRatio::AR_8_5,
-			1024/600*1000=>KDLVideoAspectRatio::AR_1024_600,1024/592*1000=>KDLVideoAspectRatio::AR_1024_600,
-			1360/768*1000=>KDLVideoAspectRatio::AR_16_9,848/480*1000=>KDLVideoAspectRatio::AR_16_9,
-			1920/1080*1000=>KDLVideoAspectRatio::AR_16_9,1366/768*1000=>KDLVideoAspectRatio::AR_16_9,
-			854/480*1000=>KDLVideoAspectRatio::AR_16_9,1920/1072*1000=>KDLVideoAspectRatio::AR_16_9,
-			1850=>KDLVideoAspectRatio::AR_185,
-			2048/1080*1000=>KDLVideoAspectRatio::AR_2048_1080,2048/1072*1000=>KDLVideoAspectRatio::AR_2048_1080,
-			2350=>KDLVideoAspectRatio::AR_235,
-			2370=>KDLVideoAspectRatio::AR_237,
-			2390=>KDLVideoAspectRatio::AR_239,
-			2550=>KDLVideoAspectRatio::AR_255,
+			1280/1024*1000=>VDLVideoAspectRatio::AR_5_4,
+			1280/960*1000=>VDLVideoAspectRatio::AR_4_3,1392./1040*1000=>VDLVideoAspectRatio::AR_4_3,
+			1280/854*1000=>VDLVideoAspectRatio::AR_3_2,1152/768*1000=>VDLVideoAspectRatio::AR_3_2,1280./848*1000=>VDLVideoAspectRatio::AR_3_2,
+			320/200*1000=>VDLVideoAspectRatio::AR_8_5,1440./896*1000=>VDLVideoAspectRatio::AR_8_5,
+			1680./1040*1000=>VDLVideoAspectRatio::AR_8_5,320./192*1000=>VDLVideoAspectRatio::AR_8_5,
+			1024/600*1000=>VDLVideoAspectRatio::AR_1024_600,1024/592*1000=>VDLVideoAspectRatio::AR_1024_600,
+			1360/768*1000=>VDLVideoAspectRatio::AR_16_9,848/480*1000=>VDLVideoAspectRatio::AR_16_9,
+			1920/1080*1000=>VDLVideoAspectRatio::AR_16_9,1366/768*1000=>VDLVideoAspectRatio::AR_16_9,
+			854/480*1000=>VDLVideoAspectRatio::AR_16_9,1920/1072*1000=>VDLVideoAspectRatio::AR_16_9,
+			1850=>VDLVideoAspectRatio::AR_185,
+			2048/1080*1000=>VDLVideoAspectRatio::AR_2048_1080,2048/1072*1000=>VDLVideoAspectRatio::AR_2048_1080,
+			2350=>VDLVideoAspectRatio::AR_235,
+			2370=>VDLVideoAspectRatio::AR_237,
+			2390=>VDLVideoAspectRatio::AR_239,
+			2550=>VDLVideoAspectRatio::AR_255,
 		);
 		$ratio = (int)($wid*1000/$hgt);
 //print_r($arr);	
@@ -223,10 +223,10 @@
 			end($arr);
 			$last = key(($arr));
 			if($first*0.9>$ratio) {
-				$res = KDLVideoAspectRatio::AR_LOW;
+				$res = VDLVideoAspectRatio::AR_LOW;
 			}
 			else if($last*1.1<$ratio) {
-				$res = KDLVideoAspectRatio::AR_HIGH;
+				$res = VDLVideoAspectRatio::AR_HIGH;
 			}
 			else if(abs($ratio-$prev)<abs($ratio-$key)){
 				$res=$arr[$prev];
@@ -240,7 +240,7 @@
 		}	
 	};
 
-	class KDLCmdlinePlaceholders {
+	class VDLCmdlinePlaceholders {
 		const InFileName	= "__inFileName__";
 		const OutFileName	= "__outFileName__";
 		const OutDir		= "__outDir__";
@@ -253,7 +253,7 @@
 		const SubTitlesFileName = "__subTitlesFileName__";
 	};
 	
-	class KDLContainerTarget {
+	class VDLContainerTarget {
 		const FLV = "flv";
 		const MP4 = "mp4";
 		const MOV = "mov";
@@ -279,7 +279,7 @@
 		const COPY = "copy";
 	};
 
-	class KDLVideoTarget {
+	class VDLVideoTarget {
 		const FLV  = "flv";
 		const H263 = "h263";
 		const VP6  = "vp6";
@@ -307,7 +307,7 @@
 		const COPY = "copy";
 	}
 
-	class KDLAudioTarget {
+	class VDLAudioTarget {
 		const MP3 = "mp3";
 		const AAC = "aac";
 		const AACHE = "aache";
@@ -323,11 +323,11 @@
 	};
 	
 	/**
-	 * KDLAudioLayouts
+	 * VDLAudioLayouts
 	 * 
 	 *
 	 */
-	class KDLAudioLayouts {
+	class VDLAudioLayouts {
 		const FL = "fl";
 		const FR = "fr";
 		const FC = "fc";
@@ -450,12 +450,12 @@
 		 * - Bitrate (default) - assets with bitrates higher than the source (+factor/threshold), will not be generated
 		 * - FrameSize - assets with frame size that are larger than the source, will not be generated 
 		 */
-	class KDLOptimizationPolicy {
+	class VDLOptimizationPolicy {
 		const BitrateFlagBit = 1;
 		const FrameSizeFlagBit = 2;
 	}
 	
-	class KDLErrors {
+	class VDLErrors {
 		const SanityInvalidFileSize = 1000;
 		const SanityInvalidFrameDim = 1001;
 		const NoValidTranscoders = 1102;
@@ -517,7 +517,7 @@
 		}
 	}
 
-	class KDLWarnings {
+	class VDLWarnings {
 		const SanityInvalidDuration = 2000;
 		const SanityInvalidBitrate = 2001;
 		const SanityInvalidFarmerate = 2002;

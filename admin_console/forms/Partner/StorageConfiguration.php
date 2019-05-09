@@ -19,9 +19,9 @@ class Form_Partner_StorageConfiguration extends Form_Partner_BaseStorageConfigur
 		$this->addElement('select', 'pathManagerClass', array(
 			'label'			=> 'Path Manager:',
 			'filters'		=> array('StringTrim'),
-			'multiOptions'  => array('kPathManager' => 'Kaltura Path',
-									'kExternalPathManager' => 'External Path',
-		    						'kXslPathManager' => 'XSL Path',
+			'multiOptions'  => array('vPathManager' => 'Vidiun Path',
+									'vExternalPathManager' => 'External Path',
+		    						'vXslPathManager' => 'XSL Path',
 									),	
 		));
 		$this->getElement('pathManagerClass')->setRegisterInArrayValidator(false);
@@ -50,17 +50,17 @@ class Form_Partner_StorageConfiguration extends Form_Partner_BaseStorageConfigur
 				'label'			=> 'Server-Side Encryption(SSE) Type:',
 				'filters'		=> array('StringTrim'),
 				'multiOptions'	=> array('None' => 'None',
-									'KMS' => 'KMS',
+									'VMS' => 'VMS',
 									'AES256' => 'AES256'
 									),
 		));
 		$this->addElementToDisplayGroup('storage_info', 'sseType');
 		
-		$this->addElement('text', 'sseKmsKeyId', array(
-				'label'			=> 'SSE KMS Key ID:',
+		$this->addElement('text', 'sseVmsKeyId', array(
+				'label'			=> 'SSE VMS Key ID:',
 				'filters'		=> array('StringTrim'),
 		));
-		$this->addElementToDisplayGroup('storage_info', 'sseKmsKeyId');
+		$this->addElementToDisplayGroup('storage_info', 'sseVmsKeyId');
 
 		$this->addElement('select', 'signatureType', array(
 				'label'			=> 'Signature Type:',
@@ -125,8 +125,8 @@ class Form_Partner_StorageConfiguration extends Form_Partner_BaseStorageConfigur
 		$this->addElement('select', 'filesPermissionInS3', array(
 			'label'			=> 'Files Permission In S3:',
 			'filters'		=> array('StringTrim'),
-			'multiOptions'  => array(Kaltura_Client_Enum_AmazonS3StorageProfileFilesPermissionLevel::ACL_PRIVATE => 'Private',
-									 Kaltura_Client_Enum_AmazonS3StorageProfileFilesPermissionLevel::ACL_PUBLIC_READ => 'Public Read',
+			'multiOptions'  => array(Vidiun_Client_Enum_AmazonS3StorageProfileFilesPermissionLevel::ACL_PRIVATE => 'Private',
+									 Vidiun_Client_Enum_AmazonS3StorageProfileFilesPermissionLevel::ACL_PUBLIC_READ => 'Public Read',
 									),	
 		));
 		

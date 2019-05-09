@@ -23,27 +23,27 @@ $con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 //$sphinxCon = DbManager::getSphinxConnection();
 
 $entries = CuePointPeer::doSelect($c, $con);
-$sphinx = new kSphinxSearchManager();
+$sphinx = new vSphinxSearchManager();
 while(count($entries))
 {
 	foreach($entries as $entry)
 	{
 	    /* @var $entry CuePoint */
-		KalturaLog::log('cue point id ' . $entry->getId() . ' updated at '. $entry->getUpdatedAt(null));
+		VidiunLog::log('cue point id ' . $entry->getId() . ' updated at '. $entry->getUpdatedAt(null));
 		
 		try {
 			$ret = $sphinx->saveToSphinx($entry, true);
 		}
 		catch(Exception $e){
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			exit -1;
 		}
 	}
 	
 	$c->setOffset($c->getOffset() + count($entries));
-	kMemoryManager::clearMemory();
+	vMemoryManager::clearMemory();
 	$entries = CuePointPeer::doSelect($c, $con);
 }
 
-KalturaLog::log('Done. Cureent time: ' . time());
+VidiunLog::log('Done. Cureent time: ' . time());
 exit(0);

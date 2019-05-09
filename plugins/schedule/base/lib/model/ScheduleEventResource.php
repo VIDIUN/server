@@ -22,7 +22,7 @@ class ScheduleEventResource extends BaseScheduleEventResource implements IRelate
 	 */
 	public function preInsert(PropelPDO $con = null)
 	{
-		$this->setPartnerId(kCurrentContext::getCurrentPartnerId());
+		$this->setPartnerId(vCurrentContext::getCurrentPartnerId());
     	
 		return parent::preInsert($con);
 	}

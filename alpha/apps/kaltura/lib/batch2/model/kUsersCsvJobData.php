@@ -3,12 +3,12 @@
  * @package Core
  * @subpackage model.data
  */
-class kUsersCsvJobData extends kExportCsvJobData
+class vUsersCsvJobData extends vExportCsvJobData
 {
 	
 	/**
 	 * The filter should return the list of users that need to be specified in the csv.
-	 * @var kuserFilter
+	 * @var vuserFilter
 	 */
 	private $filter;
 
@@ -59,7 +59,7 @@ class kUsersCsvJobData extends kExportCsvJobData
 	
 	/**
 	 *
-	 * @return kuserFilter $filter
+	 * @return vuserFilter $filter
 	 */
 	public function getFilter()
 	{
@@ -67,7 +67,7 @@ class kUsersCsvJobData extends kExportCsvJobData
 	}
 	
 	/**
-	 * @param kuserFilter $filter
+	 * @param vuserFilter $filter
 	 */
 	public function setFilter($filter)
 	{

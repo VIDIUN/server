@@ -99,7 +99,7 @@ class ESearchGroupUserItem extends ESearchItem
 				$groupUserQuery[] = $this->getUserExactMatchQuery($allowedSearchTypes, $queryAttributes);
 				break;
 			default:
-				KalturaLog::log("Undefined item type['.$this->getItemType().']");
+				VidiunLog::log("Undefined item type['.$this->getItemType().']");
 		}
 	}
 
@@ -110,7 +110,7 @@ class ESearchGroupUserItem extends ESearchItem
 			return $this->getGroupIdExactMatchWithCreationMode($allowedSearchTypes, $queryAttributes);
 		}
 
-		return kESearchQueryManager::getExactMatchQuery($this,ESearchUserFieldName::GROUP_IDS, $allowedSearchTypes, $queryAttributes);
+		return vESearchQueryManager::getExactMatchQuery($this,ESearchUserFieldName::GROUP_IDS, $allowedSearchTypes, $queryAttributes);
 	}
 
 	protected function shouldAddCreationModeSearch()
@@ -130,7 +130,7 @@ class ESearchGroupUserItem extends ESearchItem
 		$creationMode = $this->getCreationMode();
 
 		$this->setSearchTerm(elasticSearchUtils::formatGroupIdCreationMode($originalTerm, $creationMode));
-		$creationModeQuery = kESearchQueryManager::getExactMatchQuery($this,  $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+		$creationModeQuery = vESearchQueryManager::getExactMatchQuery($this,  $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 		$this->setSearchTerm($originalTerm);
 
 		return $creationModeQuery;

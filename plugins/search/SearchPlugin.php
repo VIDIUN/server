@@ -3,7 +3,7 @@
  * @package plugins.Search
  */
 
-class SearchPlugin extends KalturaPlugin
+class SearchPlugin extends VidiunPlugin
 {
 
     const PLUGIN_NAME = 'search';

@@ -3,7 +3,7 @@
  * @package plugins.youtubeApiDistribution
  * @subpackage api.objects
  */
-class KalturaYoutubeApiDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunYoutubeApiDistributionProfile extends VidiunConfigurableDistributionProfile
 {
 	/**
 	 * @var string
@@ -92,15 +92,15 @@ class KalturaYoutubeApiDistributionProfile extends KalturaConfigurableDistributi
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::doFromObject($srcObj, $responseProfile)
+	 * @see VidiunObject::doFromObject($srcObj, $responseProfile)
 	 */
-	protected function doFromObject($distributionProfile, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($distributionProfile, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		/* @var $distributionProfile YoutubeApiDistributionProfile */
 		parent::doFromObject($distributionProfile, $responseProfile);
 		
 		$appId = YoutubeApiDistributionPlugin::GOOGLE_APP_ID;
-		$authConfig = kConf::get($appId, 'google_auth', null);
+		$authConfig = vConf::get($appId, 'google_auth', null);
 		
 		$this->googleClientId = isset($authConfig['clientId']) ? $authConfig['clientId'] : null;
 		$this->googleClientSecret = isset($authConfig['clientSecret']) ? $authConfig['clientSecret'] : null;

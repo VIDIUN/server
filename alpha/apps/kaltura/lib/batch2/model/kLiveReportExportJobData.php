@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kLiveReportExportJobData extends kJobData
+class vLiveReportExportJobData extends vJobData
 {
 	public $entryIds;
 	

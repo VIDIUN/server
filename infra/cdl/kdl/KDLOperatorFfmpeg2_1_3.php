@@ -3,13 +3,13 @@
  * @package plugins.ffmpeg
  * @subpackage lib
  */
-class KDLOperatorFfmpeg2_1_3 extends KDLOperatorFfmpeg1_1_1 {
+class VDLOperatorFfmpeg2_1_3 extends VDLOperatorFfmpeg1_1_1 {
 
 	/* ---------------------------
 	 * generateSinglePassCommandLine
 	 */
 
-	public function generateSinglePassCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+	public function generateSinglePassCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 		/*
 		 * Disable any multistream processing if 'extra' setting contains
@@ -51,14 +51,14 @@ class KDLOperatorFfmpeg2_1_3 extends KDLOperatorFfmpeg1_1_1 {
 		
 		$cmdStr = implode(" ", $cmdValsArr);
 
-		KalturaLog::log("CmdLine==>".$cmdStr);
+		VidiunLog::log("CmdLine==>".$cmdStr);
 		return $cmdStr;
 	}
 	
 	/* ---------------------------
 	 * processClipping
 	 */
-	protected function processClipping(KDLFlavor $target, $cmdStr)
+	protected function processClipping(VDLFlavor $target, $cmdStr)
 	{
 
 		$startStr=null;
@@ -102,7 +102,7 @@ class KDLOperatorFfmpeg2_1_3 extends KDLOperatorFfmpeg1_1_1 {
 				 */
 		if($target->_fastSeekTo==true){
 			$cmdStr = $startStr.$cmdStr ;
-			if(isset($startStr) && !$target->_container->IsFormatOf(array(KDLContainerTarget::WEBM))){
+			if(isset($startStr) && !$target->_container->IsFormatOf(array(VDLContainerTarget::WEBM))){
 				$durStr.= ' -ss 0.01';
 			}
 		}
@@ -118,7 +118,7 @@ class KDLOperatorFfmpeg2_1_3 extends KDLOperatorFfmpeg1_1_1 {
 	/* ---------------------------
 	 * generateAudioParams
 	 */
-	protected function generateAudioParams(KDLFlavor $design, KDLFlavor $target)
+	protected function generateAudioParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		$cmdStr = parent::generateAudioParams($design, $target);
 		if(!isset($target->_audio))
@@ -129,7 +129,7 @@ class KDLOperatorFfmpeg2_1_3 extends KDLOperatorFfmpeg1_1_1 {
 			 * therefore - skip it.
 			 * Handle AAC-ADTS case 
 			 */
-		if($target->_audio->IsFormatOf(array(KDLAudioTarget::COPY))){
+		if($target->_audio->IsFormatOf(array(VDLAudioTarget::COPY))){
 			if(isset($target->_audio->_aac_adtstoasc_filter) && $target->_audio->_aac_adtstoasc_filter==true)
 				$cmdStr.= " -bsf:a aac_adtstoasc";
 			return $cmdStr;
@@ -185,7 +185,7 @@ class KDLOperatorFfmpeg2_1_3 extends KDLOperatorFfmpeg1_1_1 {
 	/* ---------------------------
 	 * generateVideoParams
 	 */
-	protected function generateVideoParams(KDLFlavor $design, KDLFlavor $target)
+	protected function generateVideoParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		$cmdStr = parent::generateVideoParams($design, $target);
 		if(!isset($target->_video)){// || !isset($target->_video->_watermarkData))
@@ -264,15 +264,15 @@ class KDLOperatorFfmpeg2_1_3 extends KDLOperatorFfmpeg1_1_1 {
 							 * Sample style json - {"Alignment":1,"FontSize":20,"MarginL":65}}
 							 */ 
 						$styleArr = array();
-						foreach ($fld as $kStl=>$style){
-							$styleArr[] = "$kStl=$style";
+						foreach ($fld as $vStl=>$style){
+							$styleArr[] = "$vStl=$style";
 						}
 						$params[] = "$k=".implode('\,', $styleArr);
 						break;
 				}
 			}
 			if(!isset($vid->_subtitlesData->filename))
-				array_unshift($params, "filename=".KDLCmdlinePlaceholders::SubTitlesFileName);
+				array_unshift($params, "filename=".VDLCmdlinePlaceholders::SubTitlesFileName);
 			
 			if(count($params)>0){
 				if(count($filters)>0){
@@ -289,9 +289,9 @@ class KDLOperatorFfmpeg2_1_3 extends KDLOperatorFfmpeg1_1_1 {
 	/* ---------------------------
 	 * getVideoCodecSpecificParams
 	 */
-	protected function getVideoCodecSpecificParams(KDLFlavor $design, KDLFlavor $target)
+	protected function getVideoCodecSpecificParams(VDLFlavor $design, VDLFlavor $target)
 	{
-		if($target->_video->_id==KDLVideoTarget::VP9) {
+		if($target->_video->_id==VDLVideoTarget::VP9) {
 			return "libvpx-vp9";
 		}
 		return parent::getVideoCodecSpecificParams($design, $target);
@@ -300,13 +300,13 @@ class KDLOperatorFfmpeg2_1_3 extends KDLOperatorFfmpeg1_1_1 {
 	/* ---------------------------
 	 * generateContainerParams
 	 */
-	protected function generateContainerParams(KDLFlavor $design, KDLFlavor $target)
+	protected function generateContainerParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		if(!isset($target->_container))
 			return null;
 		
 		$con = $target->_container;
-		if($con->_id==KDLContainerTarget::HLS){
+		if($con->_id==VDLContainerTarget::HLS){
 			$cmdStr = " -hls_list_size 100000 -hls_time 10 -f hls";
 			return $cmdStr;
 		}
@@ -315,7 +315,7 @@ class KDLOperatorFfmpeg2_1_3 extends KDLOperatorFfmpeg1_1_1 {
 		if(!isset($target->_container))
 			return $cmdStr;
 		
-		if(in_array($target->_container->_id, array(KDLContainerTarget::MKV,KDLContainerTarget::WEBM))){
+		if(in_array($target->_container->_id, array(VDLContainerTarget::MKV,VDLContainerTarget::WEBM))){
 			$cmdStr.= " -sn";
 		}
 		return $cmdStr;
@@ -388,7 +388,7 @@ Disabled 'amix', for better stereo by 'amerge'
 	 */
 	protected static function adjustVideoCodecSpecificParams($targetVid, array &$cmdValsArr)
 	{
-		if(isset($targetVid) && in_array($targetVid->_id, array(KDLVideoTarget::H264,KDLVideoTarget::H264B,KDLVideoTarget::H264M,KDLVideoTarget::H264H))){
+		if(isset($targetVid) && in_array($targetVid->_id, array(VDLVideoTarget::H264,VDLVideoTarget::H264B,VDLVideoTarget::H264M,VDLVideoTarget::H264H))){
 			self::adjustH264Level($targetVid, $cmdValsArr);
 			self::mergeOpts("-x264opts", $cmdValsArr);
 		}	
@@ -420,7 +420,7 @@ Disabled 'amix', for better stereo by 'amerge'
 
 	/**
 	 * (non-PHPdoc)
-	 * @see KDLOperatorFfmpeg0_10::generateH264params()
+	 * @see VDLOperatorFfmpeg0_10::generateH264params()
 	 */
 	protected function generateH264params($videoObject)
 	{
@@ -684,8 +684,8 @@ ffmpeg -threads 1 -i VIDEO -i WM1.jpg -loop 1 -t 30 -i WM2.jpg
 	 */
 	protected static function generateSingleWatermark($watermarkData, $vidInIdx, &$maxFadeDuration, $wmImgIdx, $rotation,$watermarkDataArr)
 	{
-		$wmHgtPfx=KDLCmdlinePlaceholders::WaterMarkHeight."_";
-		$wmWidPfx=KDLCmdlinePlaceholders::WaterMarkWidth."_";
+		$wmHgtPfx=VDLCmdlinePlaceholders::WaterMarkHeight."_";
+		$wmWidPfx=VDLCmdlinePlaceholders::WaterMarkWidth."_";
 		
 		$wmHgt=$wmHgtPfx.$wmImgIdx;
 		$wmWid=$wmWidPfx.$wmImgIdx;
@@ -702,7 +702,7 @@ ffmpeg -threads 1 -i VIDEO -i WM1.jpg -loop 1 -t 30 -i WM2.jpg
 				$prepArr[]="transpose=1";
 		}
 		
-		KalturaLog::log("Watermark data:\n".print_r($watermarkData,1));
+		VidiunLog::log("Watermark data:\n".print_r($watermarkData,1));
 			// Scaling
 		if(isset($watermarkData->scale)) {
 			$watermarkData->scale = explode("x",$watermarkData->scale);
@@ -883,10 +883,10 @@ ffmpeg -threads 1 -i VIDEO -i WM1.jpg -loop 1 -t 30 -i WM2.jpg
 	
 	/**
 	 * 
-	 * @param KDLFlavor $target
+	 * @param VDLFlavor $target
 	 * @param array $cmdValsArr
 	 */
-	private function getMappingsForMultiStream(KDLFlavor $target, array &$cmdValsArr)
+	private function getMappingsForMultiStream(VDLFlavor $target, array &$cmdValsArr)
 	{
 		if(!isset($target->_audio))
 			return;
@@ -954,14 +954,14 @@ ffmpeg -threads 1 -i VIDEO -i WM1.jpg -loop 1 -t 30 -i WM2.jpg
 			foreach ($watermarkDataArr as $watermarkData){
 				if(isset($loopTime))
 					array_push($auxArr, "-loop", 1, "-t", $loopTime);
-				array_push($auxArr, "-i",KDLCmdlinePlaceholders::WaterMarkFileName."_$wmImgIdx");
+				array_push($auxArr, "-i",VDLCmdlinePlaceholders::WaterMarkFileName."_$wmImgIdx");
 				$wmImgIdx++;
 			}
 		}
 		else {
 			if(isset($loopTime))
 				array_push($auxArr, "-loop", 1, "-t", $loopTime);
-			array_push($auxArr, "-i",KDLCmdlinePlaceholders::WaterMarkFileName);
+			array_push($auxArr, "-i",VDLCmdlinePlaceholders::WaterMarkFileName);
 		}
 		$tmpArr=array_keys($cmdValsArr, '-i');
 		$insertHere = end($tmpArr)+2;
@@ -985,7 +985,7 @@ ffmpeg -threads 1 -i VIDEO -i WM1.jpg -loop 1 -t 30 -i WM2.jpg
 		if(isset($subsData->filename))
 			$subsFilename = $subsData->filename;
 		else
-			$subsFilename = KDLCmdlinePlaceholders::SubTitlesFileName;
+			$subsFilename = VDLCmdlinePlaceholders::SubTitlesFileName;
 		$auxArr = array('-i', $subsFilename, '-c:s','mov_text');
 		if(isset($subsData->language)){
 			$auxArr[] = "-metadata:s";
@@ -998,7 +998,7 @@ ffmpeg -threads 1 -i VIDEO -i WM1.jpg -loop 1 -t 30 -i WM2.jpg
 	/* ---------------------------
 	 * CheckConstraints
 	 */
-	public function CheckConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+	public function CheckConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
 		$vidCodecArr = array("g2m3", "g2m4", "gotomeeting3", "gotomeeting4", "gotomeeting","icod","intermediate codec");
 		if(isset($source->_video) && $source->_video->IsFormatOf($vidCodecArr)){

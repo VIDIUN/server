@@ -2,7 +2,7 @@
 /**
  * @package plugins.booleanNotification
  */
-class BooleanNotificationPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaPending, IKalturaObjectLoader, IKalturaEnumerator
+class BooleanNotificationPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunPending, IVidiunObjectLoader, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'booleanNotification';
 
@@ -12,7 +12,7 @@ class BooleanNotificationPlugin extends KalturaPlugin implements IKalturaPermiss
 	const EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD = 0;
 
 	/* (non-PHPdoc)
-	* @see IKalturaPlugin::getPluginName()
+	* @see IVidiunPlugin::getPluginName()
 	*/
 	public static function getPluginName()
 	{
@@ -20,7 +20,7 @@ class BooleanNotificationPlugin extends KalturaPlugin implements IKalturaPermiss
 	}
 
 	/* (non-PHPdoc)
-	* @see IKalturaPermissions::isAllowedPartner()
+	* @see IVidiunPermissions::isAllowedPartner()
 	*/
 	public static function isAllowedPartner($partnerId)
 	{
@@ -33,7 +33,7 @@ class BooleanNotificationPlugin extends KalturaPlugin implements IKalturaPermiss
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -50,7 +50,7 @@ class BooleanNotificationPlugin extends KalturaPlugin implements IKalturaPermiss
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
@@ -70,32 +70,32 @@ class BooleanNotificationPlugin extends KalturaPlugin implements IKalturaPermiss
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		if($baseClass == 'EventNotificationTemplate' && $enumValue == self::getBooleanNotificationTemplateTypeCoreValue(BooleanNotificationTemplateType::BOOLEAN))
 			return 'BooleanNotificationTemplate';
-		if($baseClass == 'KalturaEventNotificationTemplate' && $enumValue == self::getBooleanNotificationTemplateTypeCoreValue(BooleanNotificationTemplateType::BOOLEAN))
-			return 'KalturaBooleanNotificationTemplate';
-		if($baseClass == 'Form_EventNotificationTemplateConfiguration' && $enumValue == Kaltura_Client_EventNotification_Enum_EventNotificationTemplateType::BOOLEAN)
+		if($baseClass == 'VidiunEventNotificationTemplate' && $enumValue == self::getBooleanNotificationTemplateTypeCoreValue(BooleanNotificationTemplateType::BOOLEAN))
+			return 'VidiunBooleanNotificationTemplate';
+		if($baseClass == 'Form_EventNotificationTemplateConfiguration' && $enumValue == Vidiun_Client_EventNotification_Enum_EventNotificationTemplateType::BOOLEAN)
 			return 'Form_BooleanNotificationTemplateConfiguration';
-		if($baseClass == 'Kaltura_Client_EventNotification_Type_EventNotificationTemplate' && $enumValue == Kaltura_Client_EventNotification_Enum_EventNotificationTemplateType::BOOLEAN)
-			return 'Kaltura_Client_BooleanNotification_Type_BooleanNotificationTemplate';
+		if($baseClass == 'Vidiun_Client_EventNotification_Type_EventNotificationTemplate' && $enumValue == Vidiun_Client_EventNotification_Enum_EventNotificationTemplateType::BOOLEAN)
+			return 'Vidiun_Client_BooleanNotification_Type_BooleanNotificationTemplate';
 		return null;
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$minVersion = new KalturaVersion(
+		$minVersion = new VidiunVersion(
 			self::EVENT_NOTIFICATION_PLUGIN_VERSION_MAJOR,
 			self::EVENT_NOTIFICATION_PLUGIN_VERSION_MINOR,
 			self::EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD
 		);
-		$dependency = new KalturaDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $minVersion);
+		$dependency = new VidiunDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $minVersion);
 		return array($dependency);
 	}
 
@@ -104,8 +104,8 @@ class BooleanNotificationPlugin extends KalturaPlugin implements IKalturaPermiss
 	 */
 	public static function getBooleanNotificationTemplateTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('EventNotificationTemplateType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('EventNotificationTemplateType', $value);
 	}
 
 	/**
@@ -113,6 +113,6 @@ class BooleanNotificationPlugin extends KalturaPlugin implements IKalturaPermiss
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

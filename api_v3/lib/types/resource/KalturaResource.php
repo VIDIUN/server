@@ -6,7 +6,7 @@
  * @subpackage objects
  * @abstract
  */
-abstract class KalturaResource extends KalturaObject 
+abstract class VidiunResource extends VidiunObject 
 {
 	public function validateEntry(entry $dbEntry, $validateLocalExist = false)
 	{

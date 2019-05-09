@@ -7,7 +7,7 @@
  * @subpackage Batch
  *
  */
-class kJobsSuspender {
+class vJobsSuspender {
 	
 	/** The maximum number of jobs we will handle for each (dc,partner_id,job_type,job_sub_type) */
 	const MAX_PROCESSED_ROWS = 500;
@@ -23,7 +23,7 @@ class kJobsSuspender {
 		$minPendingJobs = self::getSuspenderMinPendingJobs();
 		$maxPendingJobs = self::getSuspenderMaxPendingJobs();
 		
-		$dcId = kDataCenterMgr::getCurrentDcId();
+		$dcId = vDataCenterMgr::getCurrentDcId();
 		$loadedKeys = array();
 	
 		// Suspend Jobs
@@ -132,8 +132,8 @@ class kJobsSuspender {
 		$res = self::setJobsStatus($jobIds, BatchJob::BATCHJOB_STATUS_SUSPEND, BatchJob::BATCHJOB_STATUS_PENDING, true);
 		$rootJobIds = self::suspendRootJobs($jobIds);
 		self::moveToSuspendedJobsTable(array_merge($jobIds, $rootJobIds));
-		KalturaLog::info("$res jobs of partner ($partnerId) job type ($jobType / $jobSubType) on DC ($dc) were suspended");
-		KalturaLog::info("As a result, ". count($rootJobIds) . " root jobs were suspended.");
+		VidiunLog::info("$res jobs of partner ($partnerId) job type ($jobType / $jobSubType) on DC ($dc) were suspended");
+		VidiunLog::info("As a result, ". count($rootJobIds) . " root jobs were suspended.");
 	}
 	
 	/**
@@ -166,13 +166,13 @@ class kJobsSuspender {
 		// Update the jobs status to pending
 		$res = self::setJobsStatus($jobIds, BatchJob::BATCHJOB_STATUS_PENDING, BatchJob::BATCHJOB_STATUS_SUSPEND, false);
 		$resRoot = self::setJobsStatus($rootJobIds, BatchJob::BATCHJOB_STATUS_ALMOST_DONE, BatchJob::BATCHJOB_STATUS_SUSPEND_ALMOST_DONE, false);
-		KalturaLog::info("$res jobs of partner ($partnerId) job type ($jobType / $jobSubType) on DC ($dc) were unsuspended");
-		KalturaLog::info("As a result $resRoot were unsuspended.");
+		VidiunLog::info("$res jobs of partner ($partnerId) job type ($jobType / $jobSubType) on DC ($dc) were unsuspended");
+		VidiunLog::info("As a result $resRoot were unsuspended.");
 	}
 	
 	/**
 	 * This function sets the status of the given $jobIds to the given $status.
-	 * We're saved from the kFlowManager::updatedJob callback since we work directly through the DB. 
+	 * We're saved from the vFlowManager::updatedJob callback since we work directly through the DB. 
 	 * No callbacks are called.
 	 * Returns the number of the affected rows.
 	 */
@@ -342,7 +342,7 @@ class kJobsSuspender {
 	 */
 	private static function getSuspenderUpdateChunk()
 	{
-		return kConf::get('suspender_update_chunk');
+		return vConf::get('suspender_update_chunk');
 	}
 	
 	/**
@@ -351,7 +351,7 @@ class kJobsSuspender {
 	 */
 	private static function getSuspenderMaxPendingJobs()
 	{
-		return kConf::get('suspender_max_pending_jobs');
+		return vConf::get('suspender_max_pending_jobs');
 	}
 	
 	/**
@@ -361,7 +361,7 @@ class kJobsSuspender {
 	 */
 	private static function getSuspenderMinPendingJobs()
 	{
-		return kConf::get('suspender_min_pending_jobs');
+		return vConf::get('suspender_min_pending_jobs');
 	}
 }
 

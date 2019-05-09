@@ -3,7 +3,7 @@
  * @package plugins.document
  * @subpackage lib
  */
-class KOperationEngineImageMagick extends KOperationEngineDocument
+class VOperationEngineImageMagick extends VOperationEngineDocument
 {
 	const PDF_FORMAT = 'PDF document';
 	const JPG_FORMAT = 'JPEG image data';
@@ -44,20 +44,20 @@ class KOperationEngineImageMagick extends KOperationEngineDocument
 	public function __construct($cmd, $outFilePath)
 	{
 		parent::__construct($cmd,$outFilePath);
-		KalturaLog::info("cmd [$cmd], outFilePath [$outFilePath]");
+		VidiunLog::info("cmd [$cmd], outFilePath [$outFilePath]");
 	}
 
 	protected function getCmdLine()
 	{
 		putenv("MAGICK_THREAD_LIMIT=1");
 		$exeCmd =  parent::getCmdLine();
-		KalturaLog::info("command line: [$exeCmd]");
+		VidiunLog::info("command line: [$exeCmd]");
 		return $exeCmd;
 	}
 
-	public function operate(kOperator $operator = null, $inFilePath, $configFilePath = null)
+	public function operate(vOperator $operator = null, $inFilePath, $configFilePath = null)
 	{
-		if(kFile::fullMkfileDir($this->outFilePath)){
+		if(vFile::fullMkfileDir($this->outFilePath)){
 			//outFilePath will be the path to the directory in which the images will be saved.
 			$outDirPath = $this->outFilePath;
 			//imageMagick decides the format of the output file according to the outFilePath's extension.so the format need to be added.
@@ -65,16 +65,16 @@ class KOperationEngineImageMagick extends KOperationEngineDocument
 		}
 		else
 		{
-			throw new KOperationEngineException('failed to create ['.$this->outFilePath.'] directory');
+			throw new VOperationEngineException('failed to create ['.$this->outFilePath.'] directory');
 		}
 		
 		$ext = strtolower(pathinfo($inFilePath, PATHINFO_EXTENSION));
 		$inputFormat = $this->getInputFormat();
 		
-		if($inputFormat == self::PDF_FORMAT && $ext != 'pdf' && kFile::linkFile($inFilePath, "$inFilePath.pdf"))
+		if($inputFormat == self::PDF_FORMAT && $ext != 'pdf' && vFile::linkFile($inFilePath, "$inFilePath.pdf"))
 			$inFilePath = "$inFilePath.pdf";
 		
-		if($inputFormat == self::JPG_FORMAT && $ext != 'jpg' && kFile::linkFile($inFilePath, "$inFilePath.jpg"))
+		if($inputFormat == self::JPG_FORMAT && $ext != 'jpg' && vFile::linkFile($inFilePath, "$inFilePath.jpg"))
 			$inFilePath = "$inFilePath.jpg";
 		
 		$realInFilePath = realpath($inFilePath);
@@ -83,7 +83,7 @@ class KOperationEngineImageMagick extends KOperationEngineDocument
 		$errorMsg = $this->checkFileType($realInFilePath, $this->SUPPORTED_FILE_TYPES);
 		if(!is_null($errorMsg)){
 			$this->data->engineMessage = $errorMsg;
-			throw new KOperationEngineException($errorMsg);
+			throw new VOperationEngineException($errorMsg);
 		}
 		
 		// Test password required
@@ -93,10 +93,10 @@ class KOperationEngineImageMagick extends KOperationEngineDocument
 		
 		parent::operate($operator, $realInFilePath, $configFilePath);
 		
-		$imagesList = kFile::dirList($outDirPath,false);
+		$imagesList = vFile::dirList($outDirPath,false);
 		// Test output
 		// - Test black Image
-		$identifyExe = KBatchBase::$taskConfig->params->identify;
+		$identifyExe = VBatchBase::$taskConfig->params->identify;
 		$firstImage = $outDirPath . DIRECTORY_SEPARATOR . $imagesList[0];
 		$errorMsg = $this->testBlackImage($identifyExe, $firstImage, $errorMsg);
 		if(!is_null($errorMsg)) {
@@ -104,8 +104,8 @@ class KOperationEngineImageMagick extends KOperationEngineDocument
 		}
 		
 		$imagesListXML = $this->createImagesListXML($imagesList);
-	    kFile::setFileContent($outDirPath.DIRECTORY_SEPARATOR.self::IMAGES_LIST_XML_NAME, $imagesListXML->asXML());
-	    KalturaLog::info('images list xml ['.$outDirPath.DIRECTORY_SEPARATOR.self::IMAGES_LIST_XML_NAME.'] created');
+	    vFile::setFileContent($outDirPath.DIRECTORY_SEPARATOR.self::IMAGES_LIST_XML_NAME, $imagesListXML->asXML());
+	    VidiunLog::info('images list xml ['.$outDirPath.DIRECTORY_SEPARATOR.self::IMAGES_LIST_XML_NAME.'] created');
 	    return true;
 	}
 	
@@ -148,7 +148,7 @@ class KOperationEngineImageMagick extends KOperationEngineDocument
 		$returnValue = null;
 		$output = null;
 		$command = $identifyExe . " -verbose '{$filePath}' 2>&1";
-		KalturaLog::info("Executing: $command");
+		VidiunLog::info("Executing: $command");
 		exec($command, $output, $returnValue);
 	
 		$std = -1;

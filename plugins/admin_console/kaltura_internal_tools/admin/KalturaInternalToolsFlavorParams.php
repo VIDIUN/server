@@ -1,15 +1,15 @@
 <?php
 
 /**
- * @package plugins.KalturaInternalTools
+ * @package plugins.VidiunInternalTools
  * @subpackage admin
  */
-class KalturaInternalToolsPluginFlavorParams extends KalturaApplicationPlugin
+class VidiunInternalToolsPluginFlavorParams extends VidiunApplicationPlugin
 {
 
     public function __construct()
     {
-        $this -> action = 'KalturaInternalToolsPluginFlavorParams';
+        $this -> action = 'VidiunInternalToolsPluginFlavorParams';
         $this -> label = 'Flavor Params';
         $this -> rootLabel = 'Developer';
 
@@ -42,13 +42,13 @@ class KalturaInternalToolsPluginFlavorParams extends KalturaApplicationPlugin
 
             $client = Infra_ClientHelper::getClient();
 
-            $fp = new Kaltura_Client_Type_FlavorParams();
+            $fp = new Vidiun_Client_Type_FlavorParams();
 
             if ($form -> isValid($params))
             {
                 $fp -> name = $params['name'];
                 $fp -> systemName = $params['name'];
-                $fp -> isSystemDefault = Kaltura_Client_Enum_NullableBoolean::TRUE_VALUE;
+                $fp -> isSystemDefault = Vidiun_Client_Enum_NullableBoolean::TRUE_VALUE;
                 $fp -> description = $params['description'];
                 $fp -> tags = $params['tags'];
                 $fp -> partnerId = $params['partner_id'];
@@ -67,18 +67,18 @@ class KalturaInternalToolsPluginFlavorParams extends KalturaApplicationPlugin
                 try
                 {
 
-                    $systemPartnerPlugin = Kaltura_Client_SystemPartner_Plugin::get($client);
-                    $filter = new Kaltura_Client_SystemPartner_Type_SystemPartnerFilter();
+                    $systemPartnerPlugin = Vidiun_Client_SystemPartner_Plugin::get($client);
+                    $filter = new Vidiun_Client_SystemPartner_Type_SystemPartnerFilter();
                     $partner = $systemPartnerPlugin -> systemPartner -> get($fp -> partnerId);
 
-                    $oldKs = $client -> getKs();
+                    $oldVs = $client -> getVs();
 
-                    $newKs = $client -> generateSession($partner -> adminSecret, "", Kaltura_Client_Enum_SessionType::ADMIN, $fp -> partnerId, 86400, "");
-                    $client -> setKs($newKs);
+                    $newVs = $client -> generateSession($partner -> adminSecret, "", Vidiun_Client_Enum_SessionType::ADMIN, $fp -> partnerId, 86400, "");
+                    $client -> setVs($newVs);
 
                     $result = $client -> flavorParams -> add($fp);
 
-                    $client -> setKs($oldKs);
+                    $client -> setVs($oldVs);
 
                     $action -> view -> resultString = 'Flavor named \'' . $result -> name . '\' successfully created ID is: ' . $result -> id;
                 }

@@ -3,15 +3,15 @@
  * @package api
  * @subpackage objects
  */
-class KalturaExtendingItemMrssParameterArray extends KalturaTypedArray
+class VidiunExtendingItemMrssParameterArray extends VidiunTypedArray
 {
 	
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaExtendingItemMrssParameterArray();
+		$newArr = new VidiunExtendingItemMrssParameterArray();
 		foreach($arr as $obj)
 		{
-			$nObj = new KalturaExtendingItemMrssParameter();
+			$nObj = new VidiunExtendingItemMrssParameter();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -21,6 +21,6 @@ class KalturaExtendingItemMrssParameterArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaExtendingItemMrssParameter");
+		return parent::__construct("VidiunExtendingItemMrssParameter");
 	}
 }

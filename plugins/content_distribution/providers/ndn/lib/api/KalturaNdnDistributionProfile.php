@@ -3,7 +3,7 @@
  * @package plugins.ndnDistribution
  * @subpackage api.objects
  */
-class KalturaNdnDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunNdnDistributionProfile extends VidiunConfigurableDistributionProfile
 {		
 	/**
 	 * @readonly

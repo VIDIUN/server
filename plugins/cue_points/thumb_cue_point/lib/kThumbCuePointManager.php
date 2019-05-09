@@ -2,10 +2,10 @@
 /**
  * @package plugins.cuePoint
  */
-class kThumbCuePointManager implements kObjectDeletedEventConsumer, kObjectChangedEventConsumer, kObjectAddedEventConsumer
+class vThumbCuePointManager implements vObjectDeletedEventConsumer, vObjectChangedEventConsumer, vObjectAddedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeAddedEvent()
+	 * @see vObjectAddedEventConsumer::shouldConsumeAddedEvent()
 	 */
 	public function shouldConsumeAddedEvent(BaseObject $object)
 	{
@@ -16,7 +16,7 @@ class kThumbCuePointManager implements kObjectDeletedEventConsumer, kObjectChang
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{			
@@ -30,7 +30,7 @@ class kThumbCuePointManager implements kObjectDeletedEventConsumer, kObjectChang
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	*/
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
@@ -43,7 +43,7 @@ class kThumbCuePointManager implements kObjectDeletedEventConsumer, kObjectChang
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::objectAdded()
+	 * @see vObjectAddedEventConsumer::objectAdded()
 	 */
 	public function objectAdded(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -63,7 +63,7 @@ class kThumbCuePointManager implements kObjectDeletedEventConsumer, kObjectChang
 	
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -82,7 +82,7 @@ class kThumbCuePointManager implements kObjectDeletedEventConsumer, kObjectChang
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null) 
 	{					
@@ -139,14 +139,14 @@ class kThumbCuePointManager implements kObjectDeletedEventConsumer, kObjectChang
 		$cuePointId = $timedThumbAsset->getCuePointID();
 		if(!$cuePointId)
 		{
-			KalturaLog::info("CuePoint Id not found on object");
+			VidiunLog::info("CuePoint Id not found on object");
 			return null;
 		}
 			
 		$cuePoint = CuePointPeer::retrieveByPK($cuePointId);
 		if(!$cuePoint)
 		{
-			KalturaLog::info("CuePoint with ID [$cuePointId] not found");
+			VidiunLog::info("CuePoint with ID [$cuePointId] not found");
 			return null;
 		}
 		

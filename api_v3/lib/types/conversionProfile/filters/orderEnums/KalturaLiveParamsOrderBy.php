@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaLiveParamsOrderBy extends KalturaFlavorParamsOrderBy
+class VidiunLiveParamsOrderBy extends VidiunFlavorParamsOrderBy
 {
 }

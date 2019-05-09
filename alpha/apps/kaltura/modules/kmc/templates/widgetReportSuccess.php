@@ -52,7 +52,7 @@ This page will create an Excel output for the widget report
 <br><br>
 <form>
 	<input type="hidden" name="act" value="report">
-	<input type="hidden" name="ks_str" value="<?php echo $ks_str ?>">
+	<input type="hidden" name="vs_str" value="<?php echo $vs_str ?>">
 		FROM (YYYY-MM-DD): <input id="from_date" name="from_date" type="text" size=10 value="<?php echo $from_date ?>" >
 		TO (YYYY-MM-DD): <input id="to_date" name="to_date" type="text" size=10 value="<?php echo $to_date ?>" > 
 		<span style="font-weight:bold;">*INCLUSIVE*</span>

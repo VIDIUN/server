@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class kCategoryEntryAdvancedFilter extends AdvancedSearchFilterItem
+class vCategoryEntryAdvancedFilter extends AdvancedSearchFilterItem
 {
 	const CREATED_AT = 'createdAt';
 
@@ -41,7 +41,7 @@ class kCategoryEntryAdvancedFilter extends AdvancedSearchFilterItem
 	/* (non-PHPdoc)
 	 * @see AdvancedSearchFilterItem::applyCondition()
 	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
 		if ( is_null( $this->categoriesMatchOr ) && is_null( $this->categoryIdEqual ) )
 		{
@@ -67,7 +67,7 @@ class kCategoryEntryAdvancedFilter extends AdvancedSearchFilterItem
 
 		$categoryEntries = explode( ',', $categoryEntries );
 
-		if($query instanceof IKalturaIndexQuery)
+		if($query instanceof IVidiunIndexQuery)
 		{
 			$categoriesStrs = array();
 			foreach($categoryEntries as $categoryId)
@@ -78,7 +78,7 @@ class kCategoryEntryAdvancedFilter extends AdvancedSearchFilterItem
 		}
 		else
 		{
-			$query->addColumnWhere(entryPeer::CATEGORIES_IDS, $categoryEntries, KalturaCriteria::IN_LIKE);
+			$query->addColumnWhere(entryPeer::CATEGORIES_IDS, $categoryEntries, VidiunCriteria::IN_LIKE);
 		}
 
 		if ( $this->orderBy )
@@ -88,7 +88,7 @@ class kCategoryEntryAdvancedFilter extends AdvancedSearchFilterItem
 
 			if ( $orderByField != self::CREATED_AT )
 			{
-				throw new kCoreException( "Unsupported orderBy criteria [$orderByField]" );
+				throw new vCoreException( "Unsupported orderBy criteria [$orderByField]" );
 			}
 
 			$dynAttribCriteriaFieldName = entryIndex::DYNAMIC_ATTRIBUTES . '.' . self::getCategoryCreatedAtDynamicAttributeName( $this->categoryIdEqual );

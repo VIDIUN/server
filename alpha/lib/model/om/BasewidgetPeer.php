@@ -49,8 +49,8 @@ abstract class BasewidgetPeer {
 	/** the column name for the SUBP_ID field */
 	const SUBP_ID = 'widget.SUBP_ID';
 
-	/** the column name for the KSHOW_ID field */
-	const KSHOW_ID = 'widget.KSHOW_ID';
+	/** the column name for the VSHOW_ID field */
+	const VSHOW_ID = 'widget.VSHOW_ID';
 
 	/** the column name for the ENTRY_ID field */
 	const ENTRY_ID = 'widget.ENTRY_ID';
@@ -92,10 +92,10 @@ abstract class BasewidgetPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'IntId', 'SourceWidgetId', 'RootWidgetId', 'PartnerId', 'SubpId', 'KshowId', 'EntryId', 'UiConfId', 'CustomData', 'SecurityType', 'SecurityPolicy', 'CreatedAt', 'UpdatedAt', 'PartnerData', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'intId', 'sourceWidgetId', 'rootWidgetId', 'partnerId', 'subpId', 'kshowId', 'entryId', 'uiConfId', 'customData', 'securityType', 'securityPolicy', 'createdAt', 'updatedAt', 'partnerData', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::INT_ID, self::SOURCE_WIDGET_ID, self::ROOT_WIDGET_ID, self::PARTNER_ID, self::SUBP_ID, self::KSHOW_ID, self::ENTRY_ID, self::UI_CONF_ID, self::CUSTOM_DATA, self::SECURITY_TYPE, self::SECURITY_POLICY, self::CREATED_AT, self::UPDATED_AT, self::PARTNER_DATA, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'int_id', 'source_widget_id', 'root_widget_id', 'partner_id', 'subp_id', 'kshow_id', 'entry_id', 'ui_conf_id', 'custom_data', 'security_type', 'security_policy', 'created_at', 'updated_at', 'partner_data', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'IntId', 'SourceWidgetId', 'RootWidgetId', 'PartnerId', 'SubpId', 'VshowId', 'EntryId', 'UiConfId', 'CustomData', 'SecurityType', 'SecurityPolicy', 'CreatedAt', 'UpdatedAt', 'PartnerData', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'intId', 'sourceWidgetId', 'rootWidgetId', 'partnerId', 'subpId', 'vshowId', 'entryId', 'uiConfId', 'customData', 'securityType', 'securityPolicy', 'createdAt', 'updatedAt', 'partnerData', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::INT_ID, self::SOURCE_WIDGET_ID, self::ROOT_WIDGET_ID, self::PARTNER_ID, self::SUBP_ID, self::VSHOW_ID, self::ENTRY_ID, self::UI_CONF_ID, self::CUSTOM_DATA, self::SECURITY_TYPE, self::SECURITY_POLICY, self::CREATED_AT, self::UPDATED_AT, self::PARTNER_DATA, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'int_id', 'source_widget_id', 'root_widget_id', 'partner_id', 'subp_id', 'vshow_id', 'entry_id', 'ui_conf_id', 'custom_data', 'security_type', 'security_policy', 'created_at', 'updated_at', 'partner_data', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
 	);
 
@@ -106,10 +106,10 @@ abstract class BasewidgetPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'IntId' => 1, 'SourceWidgetId' => 2, 'RootWidgetId' => 3, 'PartnerId' => 4, 'SubpId' => 5, 'KshowId' => 6, 'EntryId' => 7, 'UiConfId' => 8, 'CustomData' => 9, 'SecurityType' => 10, 'SecurityPolicy' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, 'PartnerData' => 14, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'intId' => 1, 'sourceWidgetId' => 2, 'rootWidgetId' => 3, 'partnerId' => 4, 'subpId' => 5, 'kshowId' => 6, 'entryId' => 7, 'uiConfId' => 8, 'customData' => 9, 'securityType' => 10, 'securityPolicy' => 11, 'createdAt' => 12, 'updatedAt' => 13, 'partnerData' => 14, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::INT_ID => 1, self::SOURCE_WIDGET_ID => 2, self::ROOT_WIDGET_ID => 3, self::PARTNER_ID => 4, self::SUBP_ID => 5, self::KSHOW_ID => 6, self::ENTRY_ID => 7, self::UI_CONF_ID => 8, self::CUSTOM_DATA => 9, self::SECURITY_TYPE => 10, self::SECURITY_POLICY => 11, self::CREATED_AT => 12, self::UPDATED_AT => 13, self::PARTNER_DATA => 14, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'int_id' => 1, 'source_widget_id' => 2, 'root_widget_id' => 3, 'partner_id' => 4, 'subp_id' => 5, 'kshow_id' => 6, 'entry_id' => 7, 'ui_conf_id' => 8, 'custom_data' => 9, 'security_type' => 10, 'security_policy' => 11, 'created_at' => 12, 'updated_at' => 13, 'partner_data' => 14, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'IntId' => 1, 'SourceWidgetId' => 2, 'RootWidgetId' => 3, 'PartnerId' => 4, 'SubpId' => 5, 'VshowId' => 6, 'EntryId' => 7, 'UiConfId' => 8, 'CustomData' => 9, 'SecurityType' => 10, 'SecurityPolicy' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, 'PartnerData' => 14, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'intId' => 1, 'sourceWidgetId' => 2, 'rootWidgetId' => 3, 'partnerId' => 4, 'subpId' => 5, 'vshowId' => 6, 'entryId' => 7, 'uiConfId' => 8, 'customData' => 9, 'securityType' => 10, 'securityPolicy' => 11, 'createdAt' => 12, 'updatedAt' => 13, 'partnerData' => 14, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::INT_ID => 1, self::SOURCE_WIDGET_ID => 2, self::ROOT_WIDGET_ID => 3, self::PARTNER_ID => 4, self::SUBP_ID => 5, self::VSHOW_ID => 6, self::ENTRY_ID => 7, self::UI_CONF_ID => 8, self::CUSTOM_DATA => 9, self::SECURITY_TYPE => 10, self::SECURITY_POLICY => 11, self::CREATED_AT => 12, self::UPDATED_AT => 13, self::PARTNER_DATA => 14, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'int_id' => 1, 'source_widget_id' => 2, 'root_widget_id' => 3, 'partner_id' => 4, 'subp_id' => 5, 'vshow_id' => 6, 'entry_id' => 7, 'ui_conf_id' => 8, 'custom_data' => 9, 'security_type' => 10, 'security_policy' => 11, 'created_at' => 12, 'updated_at' => 13, 'partner_data' => 14, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
 	);
 
@@ -186,7 +186,7 @@ abstract class BasewidgetPeer {
 		$criteria->addSelectColumn(widgetPeer::ROOT_WIDGET_ID);
 		$criteria->addSelectColumn(widgetPeer::PARTNER_ID);
 		$criteria->addSelectColumn(widgetPeer::SUBP_ID);
-		$criteria->addSelectColumn(widgetPeer::KSHOW_ID);
+		$criteria->addSelectColumn(widgetPeer::VSHOW_ID);
 		$criteria->addSelectColumn(widgetPeer::ENTRY_ID);
 		$criteria->addSelectColumn(widgetPeer::UI_CONF_ID);
 		$criteria->addSelectColumn(widgetPeer::CUSTOM_DATA);
@@ -228,11 +228,11 @@ abstract class BasewidgetPeer {
 		
 		widgetPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'widgetPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -256,7 +256,7 @@ abstract class BasewidgetPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -337,7 +337,7 @@ abstract class BasewidgetPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -360,11 +360,11 @@ abstract class BasewidgetPeer {
 	{		
 		$criteriaForSelect = widgetPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'widgetPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -380,12 +380,12 @@ abstract class BasewidgetPeer {
 		
 		$queryResult = widgetPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -395,17 +395,17 @@ abstract class BasewidgetPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -476,7 +476,7 @@ abstract class BasewidgetPeer {
 		widgetPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -484,19 +484,19 @@ abstract class BasewidgetPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -515,7 +515,7 @@ abstract class BasewidgetPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -634,11 +634,11 @@ abstract class BasewidgetPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('widgetPeer');
+				vMemoryManager::registerPeer('widgetPeer');
 			}
 		}
 	}
@@ -763,7 +763,7 @@ abstract class BasewidgetPeer {
 	}
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kshow table
+	 * Returns the number of rows matching criteria, joining the related vshow table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -771,7 +771,7 @@ abstract class BasewidgetPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinkshow(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinvshow(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -795,7 +795,7 @@ abstract class BasewidgetPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(widgetPeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(widgetPeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$stmt = widgetPeer::doCountStmt($criteria, $con);
 
@@ -904,7 +904,7 @@ abstract class BasewidgetPeer {
 
 
 	/**
-	 * Selects a collection of widget objects pre-filled with their kshow objects.
+	 * Selects a collection of widget objects pre-filled with their vshow objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -912,7 +912,7 @@ abstract class BasewidgetPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinkshow(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvshow(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -923,9 +923,9 @@ abstract class BasewidgetPeer {
 
 		widgetPeer::addSelectColumns($criteria);
 		$startcol = (widgetPeer::NUM_COLUMNS - widgetPeer::NUM_LAZY_LOAD_COLUMNS);
-		kshowPeer::addSelectColumns($criteria);
+		vshowPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(widgetPeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(widgetPeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$stmt = widgetPeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -945,19 +945,19 @@ abstract class BasewidgetPeer {
 				widgetPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = kshowPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = vshowPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = kshowPeer::getInstanceFromPool($key2);
+				$obj2 = vshowPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kshowPeer::getOMClass(false);
+					$cls = vshowPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					kshowPeer::addInstanceToPool($obj2, $key2);
+					vshowPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (widget) to $obj2 (kshow)
+				// Add the $obj1 (widget) to $obj2 (vshow)
 				$obj2->addwidget($obj1);
 
 			} // if joined row was not null
@@ -966,7 +966,7 @@ abstract class BasewidgetPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1037,7 +1037,7 @@ abstract class BasewidgetPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1107,7 +1107,7 @@ abstract class BasewidgetPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1147,7 +1147,7 @@ abstract class BasewidgetPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(widgetPeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(widgetPeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$criteria->addJoin(widgetPeer::ENTRY_ID, entryPeer::ID, $join_behavior);
 
@@ -1186,8 +1186,8 @@ abstract class BasewidgetPeer {
 		widgetPeer::addSelectColumns($criteria);
 		$startcol2 = (widgetPeer::NUM_COLUMNS - widgetPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kshowPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kshowPeer::NUM_COLUMNS - kshowPeer::NUM_LAZY_LOAD_COLUMNS);
+		vshowPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vshowPeer::NUM_COLUMNS - vshowPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		entryPeer::addSelectColumns($criteria);
 		$startcol4 = $startcol3 + (entryPeer::NUM_COLUMNS - entryPeer::NUM_LAZY_LOAD_COLUMNS);
@@ -1195,7 +1195,7 @@ abstract class BasewidgetPeer {
 		uiConfPeer::addSelectColumns($criteria);
 		$startcol5 = $startcol4 + (uiConfPeer::NUM_COLUMNS - uiConfPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(widgetPeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(widgetPeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$criteria->addJoin(widgetPeer::ENTRY_ID, entryPeer::ID, $join_behavior);
 
@@ -1218,21 +1218,21 @@ abstract class BasewidgetPeer {
 				widgetPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined kshow rows
+			// Add objects for joined vshow rows
 
-			$key2 = kshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = vshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = kshowPeer::getInstanceFromPool($key2);
+				$obj2 = vshowPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kshowPeer::getOMClass(false);
+					$cls = vshowPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kshowPeer::addInstanceToPool($obj2, $key2);
+					vshowPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (widget) to the collection in $obj2 (kshow)
+				// Add the $obj1 (widget) to the collection in $obj2 (vshow)
 				$obj2->addwidget($obj1);
 			} // if joined row not null
 
@@ -1281,7 +1281,7 @@ abstract class BasewidgetPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kshow table
+	 * Returns the number of rows matching criteria, joining the related vshow table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1289,7 +1289,7 @@ abstract class BasewidgetPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptkshow(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptvshow(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1362,7 +1362,7 @@ abstract class BasewidgetPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(widgetPeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(widgetPeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$criteria->addJoin(widgetPeer::UI_CONF_ID, uiConfPeer::ID, $join_behavior);
 
@@ -1411,7 +1411,7 @@ abstract class BasewidgetPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(widgetPeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(widgetPeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$criteria->addJoin(widgetPeer::ENTRY_ID, entryPeer::ID, $join_behavior);
 
@@ -1428,7 +1428,7 @@ abstract class BasewidgetPeer {
 
 
 	/**
-	 * Selects a collection of widget objects pre-filled with all related objects except kshow.
+	 * Selects a collection of widget objects pre-filled with all related objects except vshow.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -1437,7 +1437,7 @@ abstract class BasewidgetPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptkshow(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptvshow(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1549,13 +1549,13 @@ abstract class BasewidgetPeer {
 		widgetPeer::addSelectColumns($criteria);
 		$startcol2 = (widgetPeer::NUM_COLUMNS - widgetPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kshowPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kshowPeer::NUM_COLUMNS - kshowPeer::NUM_LAZY_LOAD_COLUMNS);
+		vshowPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vshowPeer::NUM_COLUMNS - vshowPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		uiConfPeer::addSelectColumns($criteria);
 		$startcol4 = $startcol3 + (uiConfPeer::NUM_COLUMNS - uiConfPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(widgetPeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(widgetPeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$criteria->addJoin(widgetPeer::UI_CONF_ID, uiConfPeer::ID, $join_behavior);
 
@@ -1577,21 +1577,21 @@ abstract class BasewidgetPeer {
 				widgetPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined kshow rows
+				// Add objects for joined vshow rows
 
-				$key2 = kshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				$key2 = vshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 				if ($key2 !== null) {
-					$obj2 = kshowPeer::getInstanceFromPool($key2);
+					$obj2 = vshowPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$cls = kshowPeer::getOMClass(false);
+						$cls = vshowPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kshowPeer::addInstanceToPool($obj2, $key2);
+					vshowPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (widget) to the collection in $obj2 (kshow)
+				// Add the $obj1 (widget) to the collection in $obj2 (vshow)
 				$obj2->addwidget($obj1);
 
 			} // if joined row is not null
@@ -1646,13 +1646,13 @@ abstract class BasewidgetPeer {
 		widgetPeer::addSelectColumns($criteria);
 		$startcol2 = (widgetPeer::NUM_COLUMNS - widgetPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kshowPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kshowPeer::NUM_COLUMNS - kshowPeer::NUM_LAZY_LOAD_COLUMNS);
+		vshowPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vshowPeer::NUM_COLUMNS - vshowPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		entryPeer::addSelectColumns($criteria);
 		$startcol4 = $startcol3 + (entryPeer::NUM_COLUMNS - entryPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(widgetPeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(widgetPeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$criteria->addJoin(widgetPeer::ENTRY_ID, entryPeer::ID, $join_behavior);
 
@@ -1674,21 +1674,21 @@ abstract class BasewidgetPeer {
 				widgetPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined kshow rows
+				// Add objects for joined vshow rows
 
-				$key2 = kshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				$key2 = vshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 				if ($key2 !== null) {
-					$obj2 = kshowPeer::getInstanceFromPool($key2);
+					$obj2 = vshowPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$cls = kshowPeer::getOMClass(false);
+						$cls = vshowPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kshowPeer::addInstanceToPool($obj2, $key2);
+					vshowPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (widget) to the collection in $obj2 (kshow)
+				// Add the $obj1 (widget) to the collection in $obj2 (vshow)
 				$obj2->addwidget($obj1);
 
 			} // if joined row is not null

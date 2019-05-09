@@ -32,8 +32,8 @@ class Form_MediaRepurposingTaskDataSubForm extends ConfigureSubForm
 	
 	public function populateFromObject($object, $add_underscore = true)
 	{
-		/* @var $object Kaltura_Client_ScheduledTask_Type_ObjectTask */
-		KalturaLog::info(print_r($object,true));
+		/* @var $object Vidiun_Client_ScheduledTask_Type_ObjectTask */
+		VidiunLog::info(print_r($object,true));
 
 		$reflectClass = new ReflectionClass(get_class($object));
 		$properties = $reflectClass	->getProperties(ReflectionProperty::IS_PUBLIC);

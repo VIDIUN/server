@@ -2,7 +2,7 @@
 /**
  * @package plugins.webex
  */
-class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
+class WebexPlugin extends VidiunPlugin implements IVidiunImportHandler
 {
 	const PLUGIN_NAME = 'webex';
 	
@@ -11,7 +11,7 @@ class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
 	private static $container_formats_to_file_extensions = array("arf"=>"arf", "mpeg-4" => "mp4");
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName() {
 		return self::PLUGIN_NAME;
@@ -19,24 +19,24 @@ class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaImportHandler::handleImportData()
+	 * @see IVidiunImportHandler::handleImportData()
 	 */
 	public static function handleImportContent($curlInfo,  $importData, $params) {
 		if(!self::checkIfValidWebexHeader($curlInfo))
 			return $importData;
 		
-		KalturaLog::debug('content-length [' . $curlInfo->headers['content-length'] . '] content-type [' . $curlInfo->headers['content-type'] . ']');
-		KalturaLog::info('Handle Import data: Webex Plugin');
+		VidiunLog::debug('content-length [' . $curlInfo->headers['content-length'] . '] content-type [' . $curlInfo->headers['content-type'] . ']');
+		VidiunLog::info('Handle Import data: Webex Plugin');
 
 		$downloadUrl = self::retrieveWebexDownloadFilePath($curlInfo, $params, $importData->destFileLocalPath, null);
 		$fileSize = self::getFileSizeFromWebexDownloadUrl($downloadUrl);
 
-		$curlWrapper = new KCurlWrapper();
+		$curlWrapper = new VCurlWrapper();
 		$curlWrapper->setOpt(CURLOPT_COOKIE, 'DetectionBrowserStatus=3|1|32|1|11|2;');
 		$curlWrapper->setOpt(CURLOPT_RETURNTRANSFER, false);
 		$fileName = pathinfo($importData->destFileLocalPath, PATHINFO_FILENAME);
 		
-		KalturaLog::info('destination: ' . $importData->destFileLocalPath);
+		VidiunLog::info('destination: ' . $importData->destFileLocalPath);
 		$tmpPath = tempnam(sys_get_temp_dir(), "webex");
 		$result = $curlWrapper->exec($downloadUrl, $tmpPath);
 		
@@ -48,7 +48,7 @@ class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
 		}
 
 		$mediaInfoBin = isset($params->mediaInfoCmd)? $params->mediaInfoCmd: "mediainfo";
-		$mediaInfoParser = new KMediaInfoMediaParser($tmpPath, $mediaInfoBin);
+		$mediaInfoParser = new VMediaInfoMediaParser($tmpPath, $mediaInfoBin);
 		$mediaInfo = $mediaInfoParser->getMediaInfo();
 		if ($mediaInfo && isset(self::$container_formats_to_file_extensions[$mediaInfo->containerFormat]) )
 		{
@@ -64,16 +64,16 @@ class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
 		
 		$curlWrapper->close();
 
-		$actualFileSize = kFile::fileSize($importData->destFileLocalPath);
+		$actualFileSize = vFile::fileSize($importData->destFileLocalPath);
 		if($actualFileSize < $fileSize )
 		{
 			$percent = floor($actualFileSize * 100 / $fileSize);
-			throw new kTemporaryException("Downloaded size: $actualFileSize($percent%)");
+			throw new vTemporaryException("Downloaded size: $actualFileSize($percent%)");
 		}
 
 		$importData->fileSize = $actualFileSize;
 		if (!$importData->fileSize)
-			throw new kTemporaryException("File size download from WEBEX was 0");
+			throw new vTemporaryException("File size download from WEBEX was 0");
 		
 		return $importData;
 	}
@@ -97,7 +97,7 @@ class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
 			throw new Exception('set-cookie was not found in header');
 		}
 
-		$curlWrapper = new KCurlWrapper();
+		$curlWrapper = new VCurlWrapper();
 		$curlWrapper->setOpt(CURLOPT_COOKIE, 'DetectionBrowserStatus=3|1|32|1|11|2;');
 
 		if($destFileLocalPath)
@@ -106,7 +106,7 @@ class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
 		{
 			$data = $curlWrapper->exec($srcFilePath);
 		}
-		KalturaLog::info("data:\n\n$data\n\n");
+		VidiunLog::info("data:\n\n$data\n\n");
 		if(!preg_match("/href='([^']+)';/", $data, $matches))
 		{
 			throw new Exception('Starting URL not found');
@@ -114,7 +114,7 @@ class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
 		$url2 = $matches[1];
 
 		$result = $curlWrapper->exec($url2);
-		KalturaLog::info("result:\n\n$result\n\n");
+		VidiunLog::info("result:\n\n$result\n\n");
 
 		if(!preg_match("/var prepareTicket = '([^']+)';/", $result, $matches))
 		{
@@ -146,11 +146,11 @@ class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
 		for($i = 0; $i < $iterations; $i++)
 		{
 			$result = $curlWrapper->exec($url3);
-			KalturaLog::info("result ($i):\n\n$result\n\n");
+			VidiunLog::info("result ($i):\n\n$result\n\n");
 
 			if(!preg_match("/window\\.parent\\.func_prepare\\('([^']+)','([^']*)','([^']*)'\\);/", $result, $matches))
 			{
-				KalturaLog::err("Invalid result returned for prepareTicket request - should contain call to the func_prepare method\n $result");
+				VidiunLog::err("Invalid result returned for prepareTicket request - should contain call to the func_prepare method\n $result");
 				throw new Exception('Invalid result: func_prepare function not found');
 			}
 			$status = $matches[1];
@@ -167,8 +167,8 @@ class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
 
 		if($status != 'OKOK')
 		{
-			KalturaLog::info("Invalid result returned for prepareTicket request. Last result:\n " . $result);
-			throw new kTemporaryException('Invalid result returned for prepareTicket request');
+			VidiunLog::info("Invalid result returned for prepareTicket request. Last result:\n " . $result);
+			throw new vTemporaryException('Invalid result returned for prepareTicket request');
 		}
 
 		$ticket = $matches[3];
@@ -181,11 +181,11 @@ class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
 
 	public static function getFileSizeFromWebexDownloadUrl($downloadUrl)
 	{
-		$curlHeaderWrapper = new KCurlWrapper();
+		$curlHeaderWrapper = new VCurlWrapper();
 		$curlHeaderResponse = $curlHeaderWrapper->getHeader($downloadUrl, true);
 
 		if(!$curlHeaderResponse || $curlHeaderWrapper->getError())
-			throw new kTemporaryException("Couldn't retrieve webex file headers, curl returned with the following error: [".$curlHeaderWrapper->getError()."]" );
+			throw new vTemporaryException("Couldn't retrieve webex file headers, curl returned with the following error: [".$curlHeaderWrapper->getError()."]" );
 
 		$fileSize = null;
 		if(isset($curlHeaderResponse->headers['content-length']))
@@ -193,9 +193,9 @@ class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
 		$curlHeaderWrapper->close();
 
 		if(!$fileSize)
-			throw new kTemporaryException("File size is missing from header");
+			throw new vTemporaryException("File size is missing from header");
 
-		KalturaLog::info("Webex file headers: " . print_r($curlHeaderResponse,true));
+		VidiunLog::info("Webex file headers: " . print_r($curlHeaderResponse,true));
 		return $fileSize;
 	}
 
@@ -214,15 +214,15 @@ class WebexPlugin extends KalturaPlugin implements IKalturaImportHandler
 	 */
 	public static function getSizeFromWebexContentUrl($webexFileUrl)
 	{
-		$curlHeaderWrapper = new KCurlWrapper();
+		$curlHeaderWrapper = new VCurlWrapper();
 		$curlHeaderResponse = $curlHeaderWrapper->getHeader($webexFileUrl, true);
 		$curlHeaderWrapper->close();
 		if(!WebexPlugin::checkIfValidWebexHeader($curlHeaderResponse))
-			throw new kTemporaryException('Webex header is not valid');
+			throw new vTemporaryException('Webex header is not valid');
 
 		$params = null;
-		if(kBatchBase::$taskConfig)
-			$params = KBatchBase::$taskConfig->params;
+		if(vBatchBase::$taskConfig)
+			$params = VBatchBase::$taskConfig->params;
 
 		$downloadUrl = WebexPlugin::retrieveWebexDownloadFilePath($curlHeaderResponse, $params, null, $webexFileUrl);
 		$currentFileSize = WebexPlugin::getFileSizeFromWebexDownloadUrl($downloadUrl);

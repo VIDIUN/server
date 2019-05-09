@@ -4,7 +4,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEntryContextDataParams extends KalturaAccessControlScope
+class VidiunEntryContextDataParams extends VidiunAccessControlScope
 {
 	/**
 	 * Id of the current flavor.

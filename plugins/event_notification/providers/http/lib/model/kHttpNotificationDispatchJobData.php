@@ -3,7 +3,7 @@
  * @package plugins.httpNotification
  * @subpackage model.data
  */
-class kHttpNotificationDispatchJobData extends kEventNotificationDispatchJobData
+class vHttpNotificationDispatchJobData extends vEventNotificationDispatchJobData
 {
 	/**
 	 * Remote server URL
@@ -20,7 +20,7 @@ class kHttpNotificationDispatchJobData extends kEventNotificationDispatchJobData
 	/**
 	 * Data to send.
 	 * 
-	 * @var kHttpNotificationData
+	 * @var vHttpNotificationData
 	 */
 	protected $dataObject;
 	
@@ -161,7 +161,7 @@ class kHttpNotificationDispatchJobData extends kEventNotificationDispatchJobData
 	}
 
 	/**
-	 * @return kHttpNotificationData $dataObject
+	 * @return vHttpNotificationData $dataObject
 	 */
 	public function getDataObject()
 	{
@@ -313,9 +313,9 @@ class kHttpNotificationDispatchJobData extends kEventNotificationDispatchJobData
 	}
 
 	/**
-	 * @param kHttpNotificationData $dataObject
+	 * @param vHttpNotificationData $dataObject
 	 */
-	public function setDataObject(kHttpNotificationData $dataObject = null)
+	public function setDataObject(vHttpNotificationData $dataObject = null)
 	{
 		$this->data = null;
 		$this->dataObject = $dataObject;

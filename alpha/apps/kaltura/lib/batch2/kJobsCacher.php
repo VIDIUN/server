@@ -1,6 +1,6 @@
 <?php
 
-class kJobsCacher
+class vJobsCacher
 {
 	CONST TIME_IN_CACHE = 10;
 	CONST TIME_IN_CACHE_FOR_QUEUE = 3;
@@ -51,7 +51,7 @@ class kJobsCacher
 	/**
 	 * will return BatchJob objects.
 	 *@param Criteria $c
-	 * @param kExclusiveLockKey $lockKey
+	 * @param vExclusiveLockKey $lockKey
 	 * @param int $numOfJobsToPull
 	 * @param int $jobType
 	 * @param int $maxJobToPull
@@ -61,11 +61,11 @@ class kJobsCacher
 	public static function getJobs($c, $lockKey, $numOfJobsToPull, $jobType, $maxJobToPull)
 	{
 
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_BATCH_JOBS);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_BATCH_JOBS);
 		if (!$maxJobToPull || !$cache) //skip cache and get jobs from DB
-			return kBatchExclusiveLock::getJobs($c, $numOfJobsToPull, $jobType);
+			return vBatchExclusiveLock::getJobs($c, $numOfJobsToPull, $jobType);
 
-		kApiCache::disableConditionalCache();
+		vApiCache::disableConditionalCache();
 		$workerId = $lockKey->getWorkerId();
 		$workerLockKey = self::getCacheKeyForDBLock($workerId);
 
@@ -88,7 +88,7 @@ class kJobsCacher
 
 	/**
 	 * will return BatchJob from cache if exist
-	 * @param kBaseCacheWrapper $cache
+	 * @param vBaseCacheWrapper $cache
 	 * @param int $workerId
 	 * @param int $numOfJobsToPull
 	 *
@@ -112,13 +112,13 @@ class kJobsCacher
 				$allocated[] = $jobs[$index];
 			}
 		}
-		KalturaLog::debug("Allocated " .count($allocated). " jobs from cache for workerId [$workerId]");
+		VidiunLog::debug("Allocated " .count($allocated). " jobs from cache for workerId [$workerId]");
 		return $allocated;
 	}
 
 	/**
 	 * check if there are available jobs on cache
-	 * @param kBaseCacheWrapper $cache
+	 * @param vBaseCacheWrapper $cache
 	 * @param int $workerId
 	 *
 	 * @return int
@@ -142,7 +142,7 @@ class kJobsCacher
 
 	/**
 	 * will return BatchJob and insert bulk of jobs to the cache
-	 * @param kBaseCacheWrapper $cache
+	 * @param vBaseCacheWrapper $cache
 	 * @param int $workerId
 	 * @param Criteria $c
 	 * @param int $maxJobToPull
@@ -157,12 +157,12 @@ class kJobsCacher
 		$workerKey = self::getCacheKeyForWorkerJobs($workerId);
 		$indexKey = self::getCacheKeyForIndex($workerId);
 
-		$jobsFromDB = kBatchExclusiveLock::getJobs($c, $maxJobToPull, $jobType);
+		$jobsFromDB = vBatchExclusiveLock::getJobs($c, $maxJobToPull, $jobType);
 		$cache->add($indexKey, 0, self::TIME_IN_CACHE); //init as 0 if key is not exist
 		$cache->set($workerKey, $jobsFromDB, self::TIME_IN_CACHE);
 
 		$numOfJobsFromDB = count($jobsFromDB);
-		KalturaLog::info("Got $numOfJobsFromDB jobs to insert to cache for workerId [$workerId]");
+		VidiunLog::info("Got $numOfJobsFromDB jobs to insert to cache for workerId [$workerId]");
 		if ($numOfJobsFromDB == 0)
 			return array(); // without delete the lock key to avoid calling the DB again for the next TIME_IN_CACHE_FOR_LOCK seconds
 
@@ -182,11 +182,11 @@ class kJobsCacher
 	 */
 	public static function getQueue($c, $workerId, $max_exe_attempts)
 	{
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_BATCH_JOBS);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_BATCH_JOBS);
 		if (!$cache) //skip cache and get jobs from DB
-			return kBatchExclusiveLock::getQueue($c, $max_exe_attempts);
+			return vBatchExclusiveLock::getQueue($c, $max_exe_attempts);
 
-		kApiCache::disableConditionalCache();
+		vApiCache::disableConditionalCache();
 
 		$NumberOfJobsInCache = self::getNumberOfAvailableJobsInCache($cache, $workerId);
 		if ($NumberOfJobsInCache)
@@ -196,16 +196,16 @@ class kJobsCacher
 		$queueSizeFromCache = $cache->get($workerKey);
 		if ($queueSizeFromCache !== false)
 		{
-			KalturaLog::info("Got cached queue size for worker Id [$workerId] as [$queueSizeFromCache]");
+			VidiunLog::info("Got cached queue size for worker Id [$workerId] as [$queueSizeFromCache]");
 			return $queueSizeFromCache;
 		}
-		KalturaLog::info("No cached queue for worker Id [$workerId]");
+		VidiunLog::info("No cached queue for worker Id [$workerId]");
 		return self::getQueueFromDB($cache, $workerKey, $c, $max_exe_attempts);
 	}
 
 	/**
 	 * will return BatchJob and insert bulk of jobs to the cache
-	 * @param kBaseCacheWrapper $cache
+	 * @param vBaseCacheWrapper $cache
 	 * @param string $workerKey
 	 * @param Criteria $c
 	 * @param int $max_exe_attempts
@@ -214,7 +214,7 @@ class kJobsCacher
 	 */
 	private static function getQueueFromDB($cache, $workerKey, $c, $max_exe_attempts)
 	{
-		$queueSize = kBatchExclusiveLock::getQueue($c, $max_exe_attempts);
+		$queueSize = vBatchExclusiveLock::getQueue($c, $max_exe_attempts);
 		$cache->set($workerKey, $queueSize, self::TIME_IN_CACHE_FOR_QUEUE);
 		return $queueSize;
 	}

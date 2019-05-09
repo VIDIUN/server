@@ -9,7 +9,7 @@ SELECT
 	( SUM(count_plays) / SUM(count_loads) ) load_play_ratio,
 	(SUM(IFNULL(count_plays_25,0)) + SUM(IFNULL(count_plays_50,0)) + SUM(IFNULL(count_plays_75,0)) + SUM(IFNULL(count_plays_100,0)))/4/SUM(count_plays) avg_view_drop_off
 FROM 
-	dwh_hourly_events_entry ev, kalturadw.dwh_dim_entries en
+	dwh_hourly_events_entry ev, vidiundw.dwh_dim_entries en
 WHERE
 	en.entry_id=ev.entry_id
 	AND {OBJ_ID_CLAUSE}

@@ -1,14 +1,14 @@
 <?php
 /**
  * @package    Core
- * @subpackage KMC
+ * @subpackage VMC
  */
-class varloginAction extends kalturaAction
+class varloginAction extends vidiunAction
 {
 	public function execute ( ) 
 	{
 		$this->beta = $this->getRequestParameter( "beta" );
-		$this->kmc_login_version 	= kConf::get('kmc_login_version');
+		$this->vmc_login_version 	= vConf::get('vmc_login_version');
 				
 		sfView::SUCCESS;
 	}

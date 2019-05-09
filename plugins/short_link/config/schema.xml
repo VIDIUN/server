@@ -7,7 +7,7 @@
 		<column primaryKey="false" required="false" lazyLoad="false" name="updated_at" type="timestamp" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="expires_at" type="timestamp" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="partner_id" type="integer" />
-		<column primaryKey="false" required="false" lazyLoad="false" name="kuser_id" type="integer" />
+		<column primaryKey="false" required="false" lazyLoad="false" name="vuser_id" type="integer" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="name" type="varchar" size="63" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="system_name" type="varchar" size="63" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="full_url" type="varchar" size="255" />
@@ -18,9 +18,9 @@
 		<index name="partner_id">
 			<index-column name="partner_id" />
 		</index>
-		<index name="kuser_partner_name">
+		<index name="vuser_partner_name">
 			<index-column name="partner_id" />
-			<index-column name="kuser_id" />
+			<index-column name="vuser_id" />
 			<index-column name="system_name" />
 		</index>
 	</table>

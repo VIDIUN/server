@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDetachedResponseProfile extends KalturaBaseResponseProfile
+class VidiunDetachedResponseProfile extends VidiunBaseResponseProfile
 {
 	/**
 	 * Friendly name
@@ -13,7 +13,7 @@ class KalturaDetachedResponseProfile extends KalturaBaseResponseProfile
 	public $name;
 	
 	/**
-	 * @var KalturaResponseProfileType
+	 * @var VidiunResponseProfileType
 	 */
 	public $type;
 	
@@ -25,22 +25,22 @@ class KalturaDetachedResponseProfile extends KalturaBaseResponseProfile
 	public $fields;
 	
 	/**
-	 * @var KalturaRelatedFilter
+	 * @var VidiunRelatedFilter
 	 */
 	public $filter;
 	
 	/**
-	 * @var KalturaFilterPager
+	 * @var VidiunFilterPager
 	 */
 	public $pager;
 	
 	/**
-	 * @var KalturaDetachedResponseProfileArray
+	 * @var VidiunDetachedResponseProfileArray
 	 */
 	public $relatedProfiles;
 	
 	/**
-	 * @var KalturaResponseProfileMappingArray
+	 * @var VidiunResponseProfileMappingArray
 	 */
 	public $mappings;
 	
@@ -54,7 +54,7 @@ class KalturaDetachedResponseProfile extends KalturaBaseResponseProfile
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -62,7 +62,7 @@ class KalturaDetachedResponseProfile extends KalturaBaseResponseProfile
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -94,19 +94,19 @@ class KalturaDetachedResponseProfile extends KalturaBaseResponseProfile
 	
 		if(is_null($maxPageSize))
 		{
-			$maxPageSize = kConf::get('response_profile_max_page_size', 'local', 100);
+			$maxPageSize = vConf::get('response_profile_max_page_size', 'local', 100);
 		}
 		
 		if(is_null($maxNestingLevel))
 		{
-			$maxNestingLevel = kConf::get('response_profile_max_nesting_level', 'local', 2);
+			$maxNestingLevel = vConf::get('response_profile_max_nesting_level', 'local', 2);
 		}
 		
 		if($maxNestingLevel > 0)
 		{
 			foreach($relatedProfiles as $relatedProfile)
 			{
-				/* @var $relatedProfile KalturaDetachedResponseProfile */
+				/* @var $relatedProfile VidiunDetachedResponseProfile */
 				$relatedProfile->validateNestedObjects($maxPageSize, $maxNestingLevel - 1);
 				
 				$pager = $relatedProfile->pager;
@@ -118,16 +118,16 @@ class KalturaDetachedResponseProfile extends KalturaBaseResponseProfile
 		}
 		elseif(count($relatedProfiles))
 		{
-			throw new KalturaAPIException(KalturaErrors::RESPONSE_PROFILE_MAX_NESTING_LEVEL);
+			throw new VidiunAPIException(VidiunErrors::RESPONSE_PROFILE_MAX_NESTING_LEVEL);
 		}
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject($srcObj, $responseProfile)
+	 * @see VidiunObject::fromObject($srcObj, $responseProfile)
 	 */
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $srcObj kResponseProfile */
+		/* @var $srcObj vResponseProfile */
 		parent::doFromObject($srcObj, $responseProfile);
 		
 		if($srcObj->getFilter() && $this->shouldGet('filter', $responseProfile))
@@ -139,13 +139,13 @@ class KalturaDetachedResponseProfile extends KalturaBaseResponseProfile
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object = null, $propertiesToSkip = array())
 	{
 		if(!$object)
 		{
-			$object = new kResponseProfile();
+			$object = new vResponseProfile();
 		}
 		
 		if($this->filter)

@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.enum
  */
-class KalturaDistributionProtocol extends KalturaEnum
+class VidiunDistributionProtocol extends VidiunEnum
 {
 	const FTP = 1;
 	const SCP = 2;

@@ -3,7 +3,7 @@
  * @package plugins.thumbCuePoint
  * @subpackage api.objects
  */
-class KalturaTimedThumbAsset extends KalturaThumbAsset  
+class VidiunTimedThumbAsset extends VidiunThumbAsset  
 {
 	/**
 	 * Associated thumb cue point ID
@@ -32,7 +32,7 @@ class KalturaTimedThumbAsset extends KalturaThumbAsset
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -47,12 +47,12 @@ class KalturaTimedThumbAsset extends KalturaThumbAsset
 		
 		$dbCuePoint = CuePointPeer::retrieveByPK($this->cuePointId);
 		if (!$dbCuePoint)
-			throw new KalturaAPIException(KalturaCuePointErrors::CUE_POINT_NOT_FOUND, $this->cuePointId);
+			throw new VidiunAPIException(VidiunCuePointErrors::CUE_POINT_NOT_FOUND, $this->cuePointId);
 			
 		if(!($dbCuePoint instanceof ThumbCuePoint))
-			throw new KalturaAPIException(KalturaCuePointErrors::CUE_POINT_PROVIDED_NOT_OF_TYPE_THUMB_CUE_POINT, $this->cuePointId);
+			throw new VidiunAPIException(VidiunCuePointErrors::CUE_POINT_PROVIDED_NOT_OF_TYPE_THUMB_CUE_POINT, $this->cuePointId);
 			
 		if($dbCuePoint->getAssetId() != null)
-			throw new KalturaAPIException(KalturaCuePointErrors::CUE_POINT_ALREADY_ASSOCIATED_WITH_ASSET, $dbCuePoint->getAssetId());
+			throw new VidiunAPIException(VidiunCuePointErrors::CUE_POINT_ALREADY_ASSOCIATED_WITH_ASSET, $dbCuePoint->getAssetId());
 	}
 }

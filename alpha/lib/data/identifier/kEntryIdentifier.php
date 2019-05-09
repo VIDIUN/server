@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model
  */
-class kEntryIdentifier extends kObjectIdentifier
+class vEntryIdentifier extends vObjectIdentifier
 {
 	/* (non-PHPdoc)
-	 * @see KObjectIdentifier::retrieveByIdentifier()
+	 * @see VObjectIdentifier::retrieveByIdentifier()
 	 */
 	public function retrieveByIdentifier($value, $partnerId = null)
 	{

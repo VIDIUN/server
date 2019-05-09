@@ -8,9 +8,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/****************************
-	 * KChunkedEncodeDistrExecInterface
+	 * VChunkedEncodeDistrExecInterface
 	 */
-	interface KChunkedEncodeDistrExecInterface
+	interface VChunkedEncodeDistrExecInterface
 	{
 		/* ---------------------------
 		 *
@@ -39,13 +39,13 @@
 		public function GetActiveSessions();
 	}
 	/*****************************
-	 * End of KChunkedEncodeDistrExecInterface
+	 * End of VChunkedEncodeDistrExecInterface
 	 *****************************/
 
 	/****************************
-	 * KChunkedEncodeDistrSchedInterface
+	 * VChunkedEncodeDistrSchedInterface
 	 */
-	interface  KChunkedEncodeDistrSchedInterface extends KChunkedEncodeDistrExecInterface
+	interface  VChunkedEncodeDistrSchedInterface extends VChunkedEncodeDistrExecInterface
 	{
 		/* ---------------------------
 		 *
@@ -63,5 +63,5 @@
 		public function ExecuteJob($job);
 	}
 	/*****************************
-	 * End of KChunkedEncodeDistrSchedInterface
+	 * End of VChunkedEncodeDistrSchedInterface
 	 *****************************/

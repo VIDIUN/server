@@ -1,49 +1,49 @@
 <?php
 
-class KAsyncDropFolderContentProcessor extends KJobHandlerWorker
+class VAsyncDropFolderContentProcessor extends VJobHandlerWorker
 {
 	/**
-	 * @var KalturaDropFolderClientPlugin
+	 * @var VidiunDropFolderClientPlugin
 	 */
 	protected $dropFolderPlugin = null;
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::DROP_FOLDER_CONTENT_PROCESSOR;
+		return VidiunBatchJobType::DROP_FOLDER_CONTENT_PROCESSOR;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		try 
 		{
 			return $this->process($job, $job->data);
 		}
-		catch(kTemporaryException $e)
+		catch(vTemporaryException $e)
 		{
 			$this->unimpersonate();
 			if($e->getResetJobExecutionAttempts())
 				throw $e;
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $e->getCode(), "Error: " . $e->getMessage(), KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $e->getCode(), "Error: " . $e->getMessage(), VidiunBatchJobStatus::FAILED);
 		}
-		catch(KalturaClientException $e)
+		catch(VidiunClientException $e)
 		{
 			$this->unimpersonate();
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::KALTURA_CLIENT, $e->getCode(), "Error: " . $e->getMessage(), KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::VIDIUN_CLIENT, $e->getCode(), "Error: " . $e->getMessage(), VidiunBatchJobStatus::FAILED);
 		}
 	}
 
-	protected function process(KalturaBatchJob $job, KalturaDropFolderContentProcessorJobData $data)
+	protected function process(VidiunBatchJob $job, VidiunDropFolderContentProcessorJobData $data)
 	{
-		$job = $this->updateJob($job, "Start processing drop folder files [$data->dropFolderFileIds]", KalturaBatchJobStatus::QUEUED);
-		$engine = KDropFolderEngine::getInstance($job->jobSubType);
+		$job = $this->updateJob($job, "Start processing drop folder files [$data->dropFolderFileIds]", VidiunBatchJobStatus::QUEUED);
+		$engine = VDropFolderEngine::getInstance($job->jobSubType);
 		$engine->processFolder($job, $data);
-		return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::FINISHED);
+		return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::FINISHED);
 	}
 		
 }

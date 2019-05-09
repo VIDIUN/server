@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model
  */ 
-class kUrlRecognizer
+class vUrlRecognizer
 {
 	/**
 	 * @var array

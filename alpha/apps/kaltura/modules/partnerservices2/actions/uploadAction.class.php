@@ -26,20 +26,20 @@ class uploadAction extends defPartnerservices2Action
 			); 
 	}
 	
-	// ask to fetch the kuser from puser_kuser 
-	public function needKuserFromPuser ( )
+	// ask to fetch the vuser from puser_vuser 
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_NO_KUSER;
+		return self::VUSER_DATA_NO_VUSER;
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		if(!isset($_FILES['Filedata'])) 
 			$this->addException(APIErrors::MANDATORY_PARAMETER_MISSING, 'Filedata');
 		
   		$filename = $this->getPM ('filename');
 		// strip the filename from invalid characters
-		$token = $this->getKsUniqueString();
+		$token = $this->getVsUniqueString();
 		
 		// should upload the file with the token as the prefix
 		$res = myUploadUtils::uploadFileByToken ( $_FILES['Filedata'] , $token , $filename ,null , true );

@@ -43,7 +43,7 @@ class ShortLinkTableMap extends TableMap {
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('EXPIRES_AT', 'ExpiresAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('PARTNER_ID', 'PartnerId', 'INTEGER', false, null, null);
-		$this->addColumn('KUSER_ID', 'KuserId', 'INTEGER', false, null, null);
+		$this->addColumn('VUSER_ID', 'VuserId', 'INTEGER', false, null, null);
 		$this->addColumn('NAME', 'Name', 'VARCHAR', false, 63, null);
 		$this->addColumn('SYSTEM_NAME', 'SystemName', 'VARCHAR', false, 63, null);
 		$this->addColumn('FULL_URL', 'FullUrl', 'VARCHAR', false, 255, null);

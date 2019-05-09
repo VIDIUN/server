@@ -43,7 +43,7 @@ class getplayliststatsfromcontentAction extends defPartnerservices2Action
 
 	protected function getObjectPrefix () { return "entries"; } 
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		// TODO -  verify permissions for viewing lists
 

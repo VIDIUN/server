@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage model.data
  */
-class kEventNotificationDispatchJobData extends kJobData
+class vEventNotificationDispatchJobData extends vJobData
 {
 	/**
 	 * @var int

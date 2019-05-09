@@ -3,7 +3,7 @@
  * @package plugins.captureSpace
  * @subpackage lib
  */
-class kCaptureSpaceVersionManager{
+class vCaptureSpaceVersionManager{
     const INI_FILE_NAME = 'collaajClientUpdate.ini';
     
     private static $osUpdateTypes = array(
@@ -62,7 +62,7 @@ class kCaptureSpaceVersionManager{
 		if (!$actualPath)
 			return null;
 		$cacheKey = "capture-space-file-hash-key-os".$os."-version-".$version."-hash-algo-".$hashAlgorithm;
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_API_V3);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_API_V3);
 		$hash = null;
 		if (!$cache)
 			$hash = hash_file($hashAlgorithm, $actualPath);

@@ -46,16 +46,16 @@ class HttpNotificationTemplate extends BatchEventNotificationTemplate implements
 	/* (non-PHPdoc)
 	 * @see BatchEventNotificationTemplate::getJobData()
 	 */
-	protected function getJobData(kScope $scope = null)
+	protected function getJobData(vScope $scope = null)
 	{
 		$contentParametersValues = array();
 		
 		$userParameters = $this->getUserParameters();
 		foreach($userParameters as $userParameter)
 		{
-			/* @var $userParameter kEventNotificationParameter */
+			/* @var $userParameter vEventNotificationParameter */
 			$value = $userParameter->getValue();
-			if($scope && $value instanceof kStringField)
+			if($scope && $value instanceof vStringField)
 				$value->setScope($scope);
 				
 			$key = $userParameter->getKey();
@@ -66,9 +66,9 @@ class HttpNotificationTemplate extends BatchEventNotificationTemplate implements
 		$contentParameters = $this->getContentParameters();
 		foreach($contentParameters as $contentParameter)
 		{
-			/* @var $contentParameter kEventNotificationParameter */
+			/* @var $contentParameter vEventNotificationParameter */
 			$value = $contentParameter->getValue();
-			if($scope && $value instanceof kStringField)
+			if($scope && $value instanceof vStringField)
 				$value->setScope($scope);
 				
 			$key = $contentParameter->getKey();
@@ -80,9 +80,9 @@ class HttpNotificationTemplate extends BatchEventNotificationTemplate implements
 		if($data)
 			$data->setScope($scope);
 		
-		$jobData = new kHttpNotificationDispatchJobData();
+		$jobData = new vHttpNotificationDispatchJobData();
 		$jobData->setTemplateId($this->getId());
-		$url = str_replace('{DC}',kDataCenterMgr::getCurrentDcName(), $this->getUrl());
+		$url = str_replace('{DC}',vDataCenterMgr::getCurrentDcName(), $this->getUrl());
 		$jobData->setUrl($url);
 		$jobData->setDataObject($data);
 		$jobData->setMethod($this->getMethod());
@@ -228,7 +228,7 @@ class HttpNotificationTemplate extends BatchEventNotificationTemplate implements
 			return $this->cachedPost;
 			
 		$key = $this->getSyncKey(self::FILE_SYNC_POST);
-		$this->cachedPost = kFileSyncUtils::file_get_contents($key, true, false);
+		$this->cachedPost = vFileSyncUtils::file_get_contents($key, true, false);
 		return $this->cachedPost;
 	}
 
@@ -258,18 +258,18 @@ class HttpNotificationTemplate extends BatchEventNotificationTemplate implements
 		if($this->wasObjectSaved() && $this->setPost)
 		{
 			$key = $this->getSyncKey(self::FILE_SYNC_POST);
-			kFileSyncUtils::file_put_contents($key, $this->setPost);
+			vFileSyncUtils::file_put_contents($key, $this->setPost);
 			$this->cachedPost = $this->setPost;
 			$this->setPost = null;
 			
-			kEventsManager::raiseEvent(new kObjectDataChangedEvent($this, $this->postPreviousVersion));	
+			vEventsManager::raiseEvent(new vObjectDataChangedEvent($this, $this->postPreviousVersion));	
 		}
 		
 		return parent::postSave($con);
 	}
 
 	/**
-	 * @return kHttpNotificationData
+	 * @return vHttpNotificationData
 	 */
 	public function getData()									{return $this->getFromCustomData(self::CUSTOM_DATA_DATA);}
 	
@@ -294,11 +294,11 @@ class HttpNotificationTemplate extends BatchEventNotificationTemplate implements
 
 	public function incrementPostFileVersion()
 	{
-		$version = kDataCenterMgr::incrementVersion($this->getPostFileVersion());
+		$version = vDataCenterMgr::incrementVersion($this->getPostFileVersion());
 		return $this->putInCustomData(self::CUSTOM_DATA_POST_FILE_VERSION, $version);
 	}
 	
-	public function setData(kHttpNotificationData $v = null)	{return $this->putInCustomData(self::CUSTOM_DATA_DATA, $v);}
+	public function setData(vHttpNotificationData $v = null)	{return $this->putInCustomData(self::CUSTOM_DATA_DATA, $v);}
 	public function setUrl($v)									{return $this->putInCustomData(self::CUSTOM_DATA_URL, $v);}
 	public function setMethod($v)								{return $this->putInCustomData(self::CUSTOM_DATA_METHOD, $v);}
 	public function setTimeout($v)								{return $this->putInCustomData(self::CUSTOM_DATA_TIMEOUT, $v);}

@@ -5,7 +5,7 @@
 * @subpackage model.enums
 */
 
-class WidevineSchemeName implements IKalturaPluginEnum, DrmSchemeName
+class WidevineSchemeName implements IVidiunPluginEnum, DrmSchemeName
 {
 	const WIDEVINE = 'WIDEVINE';
 

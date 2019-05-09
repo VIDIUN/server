@@ -12,7 +12,7 @@ function clearCustomDataByEntryIds(array $entryIds, $dryRun)
     $c = new Criteria();
     entryPeer::setUseCriteriaFilter(false);
     $c->add(entryPeer::TYPE, entryType::LIVE_STREAM);
-    $c->add(entryPeer::STATUS, entryStatus::DELETED, KalturaCriteria::NOT_EQUAL);
+    $c->add(entryPeer::STATUS, entryStatus::DELETED, VidiunCriteria::NOT_EQUAL);
     $c->add(entryPeer::ID, $entryIds, Criteria::IN);
     $entries = entryPeer::doSelect($c);
 

@@ -4,7 +4,7 @@
  * @subpackage model.search
  */
 
-abstract class kBaseSearch
+abstract class vBaseSearch
 {
 	protected $elasticClient;
 	protected $query;
@@ -18,12 +18,12 @@ abstract class kBaseSearch
 	{
 		$this->elasticClient = new elasticClient();
 		$this->queryAttributes = new ESearchQueryAttributes();
-		$this->mainBoolQuery = new kESearchBoolQuery();
+		$this->mainBoolQuery = new vESearchBoolQuery();
 		$this->filterOnlyContext = false;
 		$this->forceInnerHitsSizeOverride = false;
 	}
 
-	public abstract function doSearch(ESearchOperator $eSearchOperator, kPager $pager = null, $statuses = array(), $objectId = null, ESearchOrderBy $order = null);
+	public abstract function doSearch(ESearchOperator $eSearchOperator, vPager $pager = null, $statuses = array(), $objectId = null, ESearchOrderBy $order = null);
 
 	/**
 	 * @return ESearchQueryAttributes
@@ -39,9 +39,9 @@ abstract class kBaseSearch
 
 	protected abstract function execSearch(ESearchOperator $eSearchOperator);
 
-	protected abstract function initQuery(array $statuses, $objectId, kPager $pager = null, ESearchOrderBy $order = null);
+	protected abstract function initQuery(array $statuses, $objectId, vPager $pager = null, ESearchOrderBy $order = null);
 
-	protected function initPager(kPager $pager = null)
+	protected function initPager(vPager $pager = null)
 	{
 		if ($pager)
 		{
@@ -74,7 +74,7 @@ abstract class kBaseSearch
 			$field = $orderItem->getSortField();
 			if(isset($fields[$field]))
 			{
-				KalturaLog::log("Order by condition already set for field [$field]" );
+				VidiunLog::log("Order by condition already set for field [$field]" );
 				continue;
 			}
 
@@ -97,13 +97,13 @@ abstract class kBaseSearch
 			$partnerStatus[] = elasticSearchUtils::formatPartnerStatus($partnerId, $status);
 		}
 
-		$partnerStatusQuery = new kESearchTermsQuery('partner_status', $partnerStatus);
+		$partnerStatusQuery = new vESearchTermsQuery('partner_status', $partnerStatus);
 		$this->mainBoolQuery->addToFilter($partnerStatusQuery);
 
 		if($objectId)
 		{
 			$id = elasticSearchUtils::formatSearchTerm($objectId);
-			$idQuery = new kESearchTermQuery('_id', $id);
+			$idQuery = new vESearchTermQuery('_id', $id);
 			$this->mainBoolQuery->addToFilter($idQuery);
 		}
 
@@ -148,7 +148,7 @@ abstract class kBaseSearch
 			return;
 		}
 
-		$innerHitsConfig = kConf::get('innerHits', 'elastic');
+		$innerHitsConfig = vConf::get('innerHits', 'elastic');
 		$overrideInnerHitsSize = isset($innerHitsConfig['innerHitsWithObjectId']) ? $innerHitsConfig['innerHitsWithObjectId'] : null;
 		$this->queryAttributes->setOverrideInnerHitsSize($overrideInnerHitsSize);
 	}

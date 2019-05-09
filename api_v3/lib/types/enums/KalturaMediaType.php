@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaMediaType extends KalturaEnum
+class VidiunMediaType extends VidiunEnum
 {
 	const VIDEO = 1;
 	const IMAGE = 2;

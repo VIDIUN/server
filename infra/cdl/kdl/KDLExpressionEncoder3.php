@@ -3,10 +3,10 @@
  * @package plugins.expressionEncoder3
  */
 
-class KDLExpressionEncoder3  extends KDLOperatorBase {
+class VDLExpressionEncoder3  extends VDLOperatorBase {
 	
 const jobXml = '<?xml version="1.0"?>
-<!--Created with Kaltura Decision Layer module-->
+<!--Created with Vidiun Decision Layer module-->
 <Preset
   Version="3.0">
   <Job
@@ -140,7 +140,7 @@ const clippedSourcesXml = '<Sources>
       </Source>
     </Sources>
 ';
-    public function GenerateConfigData(KDLFlavor $design, KDLFlavor $target)
+    public function GenerateConfigData(VDLFlavor $design, VDLFlavor $target)
 	{
 				// Remove slaches that were added to solve
 				// JSON serialization issue
@@ -149,15 +149,15 @@ const clippedSourcesXml = '<Sources>
 		return $xmlStr;
 	}
 
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
     {
-    	return KDLCmdlinePlaceholders::InFileName . ' ' . KDLCmdlinePlaceholders::ConfigFileName;
+    	return VDLCmdlinePlaceholders::InFileName . ' ' . VDLCmdlinePlaceholders::ConfigFileName;
     }
     
 	/* ---------------------------
 	 * CheckConstraints
 	 */
-	public function CheckConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+	public function CheckConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
 	    return parent::CheckConstraints($source, $target, $errors, $warnings);
 	}
@@ -174,27 +174,27 @@ $vidObj = $target->_video;
 			$videoProfileElem = new SimpleXMLElement('<?xml version="1.0"?><VideoProfile></VideoProfile>');
 			$videoCodec=$videoProfileElem->addChild('VideoProfile');
 			switch($vidObj->_id){
-				case KDLVideoTarget::WMV2:
-				case KDLVideoTarget::WMV3:
-				case KDLVideoTarget::WVC1A:
+				case VDLVideoTarget::WMV2:
+				case VDLVideoTarget::WMV3:
+				case VDLVideoTarget::WVC1A:
 				default:
 					$videoCodec = new SimpleXMLElement(self::vc1CodecXml);
 					$fileFormat = 'wmv';
 					break;
-				case KDLVideoTarget::H264:
-				case KDLVideoTarget::H264B:
-				case KDLVideoTarget::H264M:
+				case VDLVideoTarget::H264:
+				case VDLVideoTarget::H264B:
+				case VDLVideoTarget::H264M:
 					$videoCodec = new SimpleXMLElement(self::h264CodecXml);
 					$fileFormat = 'mp4';
 					$cbr = 1;
 					break;
-				case KDLVideoTarget::H264H:				
+				case VDLVideoTarget::H264H:				
 					$videoCodec = new SimpleXMLElement(self::h264hCodecXml);
 					$fileFormat = 'mp4';
 					$cbr = 1;
 					break;
 			}
-			if($target->_container->_id==KDLContainerTarget::ISMV) {
+			if($target->_container->_id==VDLContainerTarget::ISMV) {
 				$videoCodec['SmoothStreaming'] = 'True';
 					/*
 					 * The 'AutoSize' option is not valid with ConstantBR (cbr).
@@ -225,7 +225,7 @@ $vidObj = $target->_video;
 					$cbr = 0;
 			}
 			if($vidObj->_bitRate){
-				if($target->_container->_id==KDLContainerTarget::ISMV)
+				if($target->_container->_id==VDLContainerTarget::ISMV)
 					$vbr=max(100,$vidObj->_bitRate); // The minimum video br for the SL is 100
 				else
 					$vbr=$vidObj->_bitRate;
@@ -233,7 +233,7 @@ $vidObj = $target->_video;
 					$videoBitrateElem = new SimpleXMLElement(self::videoVariableBitrateXml);
 					$videoBitrateElem->VariableConstrainedBitrate['PeakBitrate'] = round($vbr*1.3);
 					$videoBitrateElem->VariableConstrainedBitrate['AverageBitrate'] = $vbr;
-					KDLUtils::AddXMLElement($videoCodec->Streams->StreamInfo, $videoBitrateElem);
+					VDLUtils::AddXMLElement($videoCodec->Streams->StreamInfo, $videoBitrateElem);
 				}
 				else {
 					$videoBitrateElem = new SimpleXMLElement(self::videoConstantBitrateXml);
@@ -241,7 +241,7 @@ $vidObj = $target->_video;
 					if(isset($target->_isTwoPass) && $target->_isTwoPass==1){
 						$videoBitrateElem->ConstantBitrate['IsTwoPass'] = 'True';
 					}
-					KDLUtils::AddXMLElement($videoCodec->Streams->StreamInfo, $videoBitrateElem);
+					VDLUtils::AddXMLElement($videoCodec->Streams->StreamInfo, $videoBitrateElem);
 				}
 			}
 			if($vidObj->_width!=null && $vidObj->_height!=null){
@@ -270,7 +270,7 @@ $vidObj = $target->_video;
 
  
 //			$strmInfo = clone ($vidProfile->Streams->StreamInfo[0]);
-			KDLUtils::AddXMLElement($videoProfileElem->VideoProfile, $videoCodec);
+			VDLUtils::AddXMLElement($videoProfileElem->VideoProfile, $videoCodec);
 			
 		}
 
@@ -284,21 +284,21 @@ $audObj = $target->_audio;
 			
 			$audioProfileElem = new SimpleXMLElement('<?xml version="1.0"?><AudioProfile></AudioProfile>');
 			switch($audObj->_id){
-				case KDLAudioTarget::AAC:
+				case VDLAudioTarget::AAC:
 					$audioCodec=$audioProfileElem->addChild('AacAudioProfile');
 					$audioCodec['Codec'] = 'AAC';
 					$codecBitrates = $aacBitrates;
 					$codecSampleRates = $aacSampleRates;
 					if(!isset($fileFormat)) $fileFormat = 'mp4';
 					break;
-				case KDLAudioTarget::WMAPRO:
+				case VDLAudioTarget::WMAPRO:
 					$audioCodec=$audioProfileElem->addChild('WmaAudioProfile');
 					$audioCodec['Codec'] = 'WmaProfessional';
 					$codecBitrates = $wmaBitrates;
 					$codecSampleRates = $wmaSampleRates;
 					if(!isset($fileFormat)) $fileFormat = 'wmv';
 					break;
-				case KDLAudioTarget::WMA:
+				case VDLAudioTarget::WMA:
 				default:
 					$audioCodec=$audioProfileElem->addChild('WmaAudioProfile');
 					$audioCodec['Codec'] = 'Wma';
@@ -325,7 +325,7 @@ $audObj = $target->_audio;
 				$sr = 44100;
 			$audioBitrateElem->ConstantBitrate['Bitrate'] = (string)$br;
 			
-			KDLUtils::AddXMLElement($audioCodec, $audioBitrateElem);
+			VDLUtils::AddXMLElement($audioCodec, $audioBitrateElem);
 
             $audioCodec['BitsPerSample']="16";
             $audioCodec['SamplesPerSecond']=(string)$sr;
@@ -333,21 +333,21 @@ $audObj = $target->_audio;
 
 $jobElem = null;
 $outputFormat=null;
-$defaultMediaOutputFileName = KDLCmdlinePlaceholders::OutFileName; // suits MP4/WMV targets. ISMV requires '{DefaultExtension}' as well
+$defaultMediaOutputFileName = VDLCmdlinePlaceholders::OutFileName; // suits MP4/WMV targets. ISMV requires '{DefaultExtension}' as well
 		if(isset($target->_container)) {
 $contObj = $target->_container;
 			switch($contObj->_id){
-				case KDLContainerTarget::ISMV:
+				case VDLContainerTarget::ISMV:
 					if(isset($fileFormat) && $fileFormat=='mp4')
 						$formatName='MP4OutputFormat';
 					else
 						$formatName='WindowsMediaOutputFormat';
-					$defaultMediaOutputFileName = KDLCmdlinePlaceholders::OutFileName.".{DefaultExtension}";
+					$defaultMediaOutputFileName = VDLCmdlinePlaceholders::OutFileName.".{DefaultExtension}";
 					break;
-				case KDLContainerTarget::MP4:
+				case VDLContainerTarget::MP4:
 					$formatName='MP4OutputFormat';
 					break;
-				case KDLContainerTarget::WMV:
+				case VDLContainerTarget::WMV:
 				default:
 					$formatName='WindowsMediaOutputFormat';
 					break;
@@ -377,17 +377,17 @@ $contObj = $target->_container;
 			$clipElem['EndTime'] = $clipEndStr;
 		}
 		if(isset($clipElem)){
-			KDLUtils::AddXMLElement($jobElem->MediaFile, $sourcesElem);
+			VDLUtils::AddXMLElement($jobElem->MediaFile, $sourcesElem);
 		}
 		
 		if(isset($audioProfileElem)) {
-			KDLUtils::AddXMLElement($outputFormat, $audioProfileElem);
+			VDLUtils::AddXMLElement($outputFormat, $audioProfileElem);
 		}
 		if(isset($videoProfileElem)) {
-			KDLUtils::AddXMLElement($outputFormat, $videoProfileElem->VideoProfile);
+			VDLUtils::AddXMLElement($outputFormat, $videoProfileElem->VideoProfile);
 		}
 		
-		$jobElem->Job['OutputDirectory']=KDLCmdlinePlaceholders::OutDir;
+		$jobElem->Job['OutputDirectory']=VDLCmdlinePlaceholders::OutDir;
 		if(isset($outFileName)){
 			$jobElem->Job['DefaultMediaOutputFileName']=$outFileName;
 		}
@@ -412,7 +412,7 @@ $contObj = $target->_container;
 
 //$stream = clone $streams->StreamInfo;
 //		$streams[1] = $stream;
-KalturaLog::log($jobElem->asXML());
+VidiunLog::log($jobElem->asXML());
 		return $jobElem->asXML();
 	}
 	
@@ -426,14 +426,14 @@ KalturaLog::log($jobElem->asXML());
 		 	*/
 		$flavorInColl = array();
 		foreach ($flavors as $flavor){
-			$eeId = KDLOperationParams::SearchInArray(KDLTranscoders::EE3, $flavor->_transcoders);
+			$eeId = VDLOperationParams::SearchInArray(VDLTranscoders::EE3, $flavor->_transcoders);
 			if(is_null($eeId)) {
 				continue;
 			}
 		$transcoderParams = $flavor->_transcoders[$eeId];
-KalturaLog::log("transcoder==>\n".print_r($transcoderParams,true)."\n<--");
+VidiunLog::log("transcoder==>\n".print_r($transcoderParams,true)."\n<--");
 			if(is_null($transcoderParams->_cmd)){
-				KalturaLog::log("ee3 cmd is null");
+				VidiunLog::log("ee3 cmd is null");
 				continue;
 			}
 			/*
@@ -464,9 +464,9 @@ KalturaLog::log("transcoder==>\n".print_r($transcoderParams,true)."\n<--");
 			 */
 			if(isset($prevK)) {
 				$ratio = $flavor->_video->_bitRate/$flavorInColl[$prevK]->_video->_bitRate;
-				if($ratio<KDLConstants::IsmvMinimalFlavorRatio){
-					$flavor->_video->_bitRate = round($flavorInColl[$prevK]->_video->_bitRate*KDLConstants::IsmvMinimalFlavorRatio);
-					$flavor->_video->_peakBitRate = round($flavor->_video->_bitRate * KDLConstants::IsmvPeakBitrateRatio * 1.1);
+				if($ratio<VDLConstants::IsmvMinimalFlavorRatio){
+					$flavor->_video->_bitRate = round($flavorInColl[$prevK]->_video->_bitRate*VDLConstants::IsmvMinimalFlavorRatio);
+					$flavor->_video->_peakBitRate = round($flavor->_video->_bitRate * VDLConstants::IsmvPeakBitrateRatio * 1.1);
 				}
 			}
 			$prevK = $k;
@@ -483,7 +483,7 @@ KalturaLog::log("transcoder==>\n".print_r($transcoderParams,true)."\n<--");
 		$rootFlavorXml=null;
 		$rootStreamsXml=null;
 		foreach ($flavorInColl as $k=>$flavor){
-			$eeId = KDLOperationParams::SearchInArray(KDLTranscoders::EE3, $flavor->_transcoders);
+			$eeId = VDLOperationParams::SearchInArray(VDLTranscoders::EE3, $flavor->_transcoders);
 				
 			$transcoderParams = $flavor->_transcoders[$eeId];
 			$presetXml = new SimpleXMLElement($transcoderParams->_cmd);
@@ -494,13 +494,13 @@ KalturaLog::log("transcoder==>\n".print_r($transcoderParams,true)."\n<--");
 				$rootStreamsXml = $streamsXml;
 			}
 			else if($streamsXml && isset($streamsXml->StreamInfo) && $rootStreamsXml/*&& is_array($streams->StreamInfo)*/) {
-				KDLUtils::AddXMLElement($rootStreamsXml, $streamsXml->StreamInfo);
+				VDLUtils::AddXMLElement($rootStreamsXml, $streamsXml->StreamInfo);
 			}
 		}
 		
 		
 		if($rootFlavorXml){
-			$rootFlavorXml->Job['DefaultMediaOutputFileName']=KDLCmdlinePlaceholders::OutFileName.".{DefaultExtension}";
+			$rootFlavorXml->Job['DefaultMediaOutputFileName']=VDLCmdlinePlaceholders::OutFileName.".{DefaultExtension}";
 			return $rootFlavorXml->asXML();
 		}
 		else
@@ -522,17 +522,17 @@ KalturaLog::log("transcoder==>\n".print_r($transcoderParams,true)."\n<--");
 			return null;
 		}
 		switch($flavor->_video->_id){
-			case KDLVideoTarget::WVC1A:
+			case VDLVideoTarget::WVC1A:
 				$videoCodec = $videoProfile->AdvancedVC1VideoProfile;
 				break;
-			case KDLVideoTarget::H264:
-			case KDLVideoTarget::H264M:
+			case VDLVideoTarget::H264:
+			case VDLVideoTarget::H264M:
 				$videoCodec = $videoProfile->MainH264VideoProfile;
 				break;
-			case KDLVideoTarget::H264H:
+			case VDLVideoTarget::H264H:
 				$videoCodec = $videoProfile->HighH264VideoProfile;
 				break;
-			case KDLVideoTarget::H264B:
+			case VDLVideoTarget::H264B:
 				//					$videoCodec = $videoProfile->BaselineH264VideoProfile;
 				$videoCodec = $videoProfile->MainH264VideoProfile;
 				break;
@@ -551,19 +551,19 @@ KalturaLog::log("transcoder==>\n".print_r($transcoderParams,true)."\n<--");
 		$br = $streams->StreamInfo->Bitrate;
 		if(isset($br->ConstantBitrate)) {
 			if($br->ConstantBitrate['Bitrate']!=$flavorVideoBr){
-				KalturaLog::log("-->xmlBR=".$br->ConstantBitrate['Bitrate'].", flavorBR=".$flavorVideoBr);
+				VidiunLog::log("-->xmlBR=".$br->ConstantBitrate['Bitrate'].", flavorBR=".$flavorVideoBr);
 				$br->ConstantBitrate['Bitrate']=$flavorVideoBr;
 			}
 		}
 		else if(isset($br->VariableConstrainedBitrate)) {
 			if($br->VariableConstrainedBitrate['AverageBitrate']!=$flavorVideoBr){
-				KalturaLog::log("-->xmlBR=".$br->VariableConstrainedBitrate['AverageBitrate'].", flavorBR=".$flavorVideoBr);
+				VidiunLog::log("-->xmlBR=".$br->VariableConstrainedBitrate['AverageBitrate'].", flavorBR=".$flavorVideoBr);
 				$br->VariableConstrainedBitrate['AverageBitrate']=$flavorVideoBr;
 				if(isset($flavor->_video->_peakBitRate)){
 					$br->VariableConstrainedBitrate['PeakBitrate']=round($flavor->_video->_peakBitRate);
 				}
 				else {
-					$br->VariableConstrainedBitrate['PeakBitrate']=round($flavorVideoBr*KDLConstants::IsmvPeakBitrateRatio);
+					$br->VariableConstrainedBitrate['PeakBitrate']=round($flavorVideoBr*VDLConstants::IsmvPeakBitrateRatio);
 				}
 			}
 				/*

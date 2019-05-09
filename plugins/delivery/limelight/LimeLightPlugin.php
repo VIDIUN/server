@@ -2,10 +2,10 @@
 /**
  * @package plugins.limeLight
  */
-class LimeLightPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaEventConsumers
+class LimeLightPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunEventConsumers
 {
 	const PLUGIN_NAME = 'limeLight';
-	const LIMELIGHT_LIVE_EVENT_CONSUMER = 'kLimeLightLiveFlowManager';
+	const LIMELIGHT_LIVE_EVENT_CONSUMER = 'vLimeLightLiveFlowManager';
 	
 	public static function getPluginName()
 	{
@@ -42,7 +42,7 @@ class LimeLightPlugin extends KalturaPlugin implements IKalturaPermissions, IKal
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	//get real source_type_value from DB. 
@@ -52,12 +52,12 @@ class LimeLightPlugin extends KalturaPlugin implements IKalturaPermissions, IKal
 	public static function getEntrySourceTypeCoreValue($valueName)
 	{
 		$apiValue = self::getApiValue($valueName);
-		return kPluginableEnumsManager::apiToCore('EntrySourceType', $apiValue);
+		return vPluginableEnumsManager::apiToCore('EntrySourceType', $apiValue);
 	}
 	
 	
 	/**
-	 * @return kLimeLightLiveParams
+	 * @return vLimeLightLiveParams
 	 */
 	public static function getLimeLightLiveParams($partner)
 	{

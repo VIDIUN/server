@@ -3,10 +3,10 @@
  * @package plugins.schedule
  * @subpackage api.objects
  */
-class KalturaScheduleEventListResponse extends KalturaListResponse
+class VidiunScheduleEventListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaScheduleEventArray
+	 * @var VidiunScheduleEventArray
 	 * @readonly
 	 */
 	public $objects;

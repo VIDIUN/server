@@ -49,7 +49,7 @@ class bulkuploadfileAction extends sfAction
 						$bulkUploadResult->getContentType(),
 					);
 					
-					if($data instanceof kBulkUploadCsvJobData && $data->getCsvVersion() > 1)
+					if($data instanceof vBulkUploadCsvJobData && $data->getCsvVersion() > 1)
 					{
 						$values[] = $bulkUploadResult->getConversionProfileId();
 						$values[] = $bulkUploadResult->getAccessControlProfileId();
@@ -63,13 +63,13 @@ class bulkuploadfileAction extends sfAction
 					$values[] = $bulkUploadResult->getEntryStatus();
 					$values[] = $bulkUploadResult->getErrorDescription();
 
-					KCsvWrapper::sanitizedFputCsv($STDOUT, $values);
+					VCsvWrapper::sanitizedFputCsv($STDOUT, $values);
 				}
 	    		
 	    		if(count($bulkUploadResults) < $criteria->getLimit())
 	    			break;
 	    			
-	    		kMemoryManager::clearMemory();
+	    		vMemoryManager::clearMemory();
 	    		$criteria->setOffset($handledResults);
 				$bulkUploadResults = BulkUploadResultPeer::doSelect($criteria);
 			}
@@ -79,9 +79,9 @@ class bulkuploadfileAction extends sfAction
 		{
 			$syncKey = $batchJob->getSyncKey(BatchJob::FILE_SYNC_BATCHJOB_SUB_TYPE_BULKUPLOAD);
 
-			if (kFileSyncUtils::file_exists($syncKey, true))
+			if (vFileSyncUtils::file_exists($syncKey, true))
 			{
-				$content = kFileSyncUtils::file_get_contents($syncKey, true);
+				$content = vFileSyncUtils::file_get_contents($syncKey, true);
 				echo $content;
 				die;
 			}

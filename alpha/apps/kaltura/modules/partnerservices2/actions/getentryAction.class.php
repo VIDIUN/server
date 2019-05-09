@@ -29,7 +29,7 @@ class getentryAction extends defPartnerservices2Action
 			); 
 	}
 
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER;	}
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER;	}
 		
 	protected function addData ( $entry ) {}
 	
@@ -42,7 +42,7 @@ class getentryAction extends defPartnerservices2Action
 	
 	protected function getObjectPrefix () { return "entry"; }
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$prefix = $this->getObjectPrefix();
 		$entry_id = $this->getPM ( "{$prefix}_id" );

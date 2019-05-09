@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaObjectLoader extends IKalturaBase
+interface IVidiunObjectLoader extends IVidiunBase
 {
 	/**
 	 * Returns an object that is known only to the plugin, and extends the baseClass.

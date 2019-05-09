@@ -6,44 +6,44 @@
  * @package Core
  * @subpackage model
  */
-abstract class kshowCustomData extends myBaseObject
+abstract class vshowCustomData extends myBaseObject
 {
-	//const KSHOW_CUSTOM_DATA_FIELD = "custom_data";
+	//const VSHOW_CUSTOM_DATA_FIELD = "custom_data";
 
-	protected $m_kshow = NULL;
+	protected $m_vshow = NULL;
 
-	// when this ctor is called - if the kshow is not NULL, initialize from it
-	public function __construct( kshow $kshow = NULL , $attach_policy = NULL )
+	// when this ctor is called - if the vshow is not NULL, initialize from it
+	public function __construct( vshow $vshow = NULL , $attach_policy = NULL )
 	{
-		if ( $kshow != NULL )
+		if ( $vshow != NULL )
 		{
-			$this->m_kshow = $kshow;
+			$this->m_vshow = $vshow;
 			$this->deserializeFromString( $this->getCustomData());
 		}
 
 	}
 
-	protected function attachToKshow ( kshow $kshow , $attach_policy )
+	protected function attachToVshow ( vshow $vshow , $attach_policy )
 	{
-		$this->m_kshow = $kshow;
+		$this->m_vshow = $vshow;
 		$this->deserializeFromString( $this->getCustomData());
 		
 	}
 
 
-	protected function updateKshow ()
+	protected function updateVshow ()
 	{
 		$this->setCustomeData ( $this->serializeToString() );
 	}
 
 	private  function getCustomData ()
 	{
-		return $this->m_kshow->getCustomData();
+		return $this->m_vshow->getCustomData();
 	}
 
 	private function setCustomData ( $value )
 	{
-		return $this->m_kshow->setCustomData( $value );
+		return $this->m_vshow->setCustomData( $value );
 	}
 
 }

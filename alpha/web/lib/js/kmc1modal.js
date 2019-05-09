@@ -1,9 +1,9 @@
 /*
-This file is part of the Kaltura Collaborative Media Suite which allows users 
+This file is part of the Vidiun Collaborative Media Suite which allows users 
 to do with audio, video, and animation what Wiki platfroms allow them to do with 
 text.
 
-Copyright (C) 2006-2008  Kaltura Inc.
+Copyright (C) 2006-2008  Vidiun Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -37,9 +37,9 @@ function setDivToHide ( div_id )
 
 // initModalBox called from gotoCW - to open the contribution wizard as an iFrame in the 
 // widget page
-function kalturaInitModalBox ( url, options )
+function vidiunInitModalBox ( url, options )
 {
-	kalturaCloseModalBox();
+	vidiunCloseModalBox();
 	
 	var width = 680;
 	var height = 360;
@@ -95,7 +95,7 @@ function kalturaInitModalBox ( url, options )
 }
 
 
-function kalturaCloseModalBox ()
+function vidiunCloseModalBox ()
 {
 	if ( div_id_to_hide )
 	{
@@ -134,11 +134,11 @@ try
 function $id(x){ return document.getElementById(x); }
 
 
-function kalturaRefreshTop ()
+function vidiunRefreshTop ()
 {
 	if ( this != window.top )
 	{
-		window.top.kalturaRefreshTop();
+		window.top.vidiunRefreshTop();
 		return false;
 	}	
 	window.location = new String(window.location).replace("&__temp=1", "").replace("/__temp/1", "");

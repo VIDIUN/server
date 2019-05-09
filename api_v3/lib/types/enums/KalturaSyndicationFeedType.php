@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaSyndicationFeedType extends KalturaEnum implements syndicationFeedType
+class VidiunSyndicationFeedType extends VidiunEnum implements syndicationFeedType
 {
 
 }

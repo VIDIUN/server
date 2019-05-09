@@ -5,9 +5,9 @@
  * @package Core
  * @subpackage events
  */
-class kObjectSavedEvent extends KalturaEvent implements IKalturaDatabaseEvent, IKalturaObjectRelatedEvent
+class vObjectSavedEvent extends VidiunEvent implements IVidiunDatabaseEvent, IVidiunObjectRelatedEvent
 {
-	const EVENT_CONSUMER = 'kObjectSavedEventConsumer';
+	const EVENT_CONSUMER = 'vObjectSavedEventConsumer';
 	
 	/**
 	 * @var BaseObject
@@ -25,7 +25,7 @@ class kObjectSavedEvent extends KalturaEvent implements IKalturaDatabaseEvent, I
 		if(method_exists($object, 'getId'))
 			$additionalLog .= ' id [' . $object->getId() . ']';
 			
-		KalturaLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "]" . $additionalLog);
+		VidiunLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "]" . $additionalLog);
 	}
 	
 	public function getConsumerInterface()
@@ -34,10 +34,10 @@ class kObjectSavedEvent extends KalturaEvent implements IKalturaDatabaseEvent, I
 	}
 	
 	/**
-	 * @param kObjectSavedEventConsumer $consumer
+	 * @param vObjectSavedEventConsumer $consumer
 	 * @return bool true if should continue to the next consumer
 	 */
-	protected function doConsume(KalturaEventConsumer $consumer)
+	protected function doConsume(VidiunEventConsumer $consumer)
 	{
 		if(!$consumer->shouldConsumeSavedEvent($this->object))
 			return true;
@@ -46,9 +46,9 @@ class kObjectSavedEvent extends KalturaEvent implements IKalturaDatabaseEvent, I
 		if(method_exists($this->object, 'getId'))
 			$additionalLog .= 'id [' . $this->object->getId() . ']';
 			
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		$result = $consumer->objectSaved($this->object);
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		return $result;
 	}
 	
@@ -61,7 +61,7 @@ class kObjectSavedEvent extends KalturaEvent implements IKalturaDatabaseEvent, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaEvent::getScope()
+	 * @see VidiunEvent::getScope()
 	 */
 	public function getScope()
 	{

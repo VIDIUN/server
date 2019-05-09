@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDataEntry extends KalturaBaseEntry
+class VidiunDataEntry extends VidiunBaseEntry
 {
 	/**
 	 * The data of the entry
@@ -26,7 +26,7 @@ class KalturaDataEntry extends KalturaBaseEntry
 	
 	public function __construct()
 	{
-		$this->type = KalturaEntryType::DATA;
+		$this->type = VidiunEntryType::DATA;
 	}
 	
 	public function getMapBetweenObjects()
@@ -49,7 +49,7 @@ class KalturaDataEntry extends KalturaBaseEntry
 		return parent::toObject($dbDataEntry, $propsToSkip);
 	}
 	
-	public function doFromObject($dbDataEntry, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbDataEntry, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($dbDataEntry, $responseProfile);
 		//$retrieveDataContentByGet = $dbDataEntry->getFromCustomData('retrieveDataContentByGet');
@@ -61,6 +61,6 @@ class KalturaDataEntry extends KalturaBaseEntry
 		if($retrieveDataContentByGet != true && $this->shouldGet('dataContent', $responseProfile))
 			$this->dataContent = '';
 
-		//$this->dataContent = kString::stringToSafeXml($this->dataContent);
+		//$this->dataContent = vString::stringToSafeXml($this->dataContent);
 	}
 }

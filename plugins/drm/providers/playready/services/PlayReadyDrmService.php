@@ -5,7 +5,7 @@
  * @package plugins.playReady
  * @subpackage api.services
  */
-class PlayReadyDrmService extends KalturaBaseService
+class PlayReadyDrmService extends VidiunBaseService
 {	
 	const PLAY_READY_BEGIN_DATE_PARAM = 'playReadyBeginDate';
 	const PLAY_READY_EXPIRATION_DATE_PARAM = 'playReadyExpirationDate';
@@ -15,7 +15,7 @@ class PlayReadyDrmService extends KalturaBaseService
 	{
 		parent::initService($serviceId, $serviceName, $actionName);
 		if (!PlayReadyPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
+			throw new VidiunAPIException(VidiunErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
 			
 		$this->applyPartnerFilterForClass('DrmPolicy');
 		$this->applyPartnerFilterForClass('DrmProfile');	
@@ -27,15 +27,15 @@ class PlayReadyDrmService extends KalturaBaseService
 	 * Generate key id and content key for PlayReady encryption
 	 * 
 	 * @action generateKey 
-	 * @return KalturaPlayReadyContentKey $response
+	 * @return VidiunPlayReadyContentKey $response
 	 * 
 	 */
 	public function generateKeyAction()
 	{
 		$keySeed = $this->getPartnerKeySeed();
-		$keyId = kPlayReadyAESContentKeyGenerator::generatePlayReadyKeyId();		
+		$keyId = vPlayReadyAESContentKeyGenerator::generatePlayReadyKeyId();		
 		$contentKey = $this->createContentKeyObject($keySeed, $keyId);
-		$response = new KalturaPlayReadyContentKey();
+		$response = new VidiunPlayReadyContentKey();
 		$response->fromObject($contentKey, $this->getResponseProfile());
 		return $response;
 	}
@@ -45,7 +45,7 @@ class PlayReadyDrmService extends KalturaBaseService
 	 * 
 	 * @action getContentKeys
 	 * @param string $keyIds - comma separated key id's 
-	 * @return KalturaPlayReadyContentKeyArray $response
+	 * @return VidiunPlayReadyContentKeyArray $response
 	 * 
 	 */
 	public function getContentKeysAction($keyIds)
@@ -57,7 +57,7 @@ class PlayReadyDrmService extends KalturaBaseService
 		{
 			$contentKeysArr[] = $this->createContentKeyObject($keySeed, $keyId);
 		}	
-		$response = KalturaPlayReadyContentKeyArray::fromDbArray($contentKeysArr, $this->getResponseProfile());	
+		$response = VidiunPlayReadyContentKeyArray::fromDbArray($contentKeysArr, $this->getResponseProfile());	
 		return $response;
 	}
 
@@ -67,14 +67,14 @@ class PlayReadyDrmService extends KalturaBaseService
 	 * @action getEntryContentKey
 	 * @param string $entryId 
 	 * @param bool $createIfMissing
-	 * @return KalturaPlayReadyContentKey $response
+	 * @return VidiunPlayReadyContentKey $response
 	 * 
 	 */
 	public function getEntryContentKeyAction($entryId, $createIfMissing = false)
 	{
 		$entry = entryPeer::retrieveByPK($entryId);
 		if(!$entry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 			
 		$keySeed = $this->getPartnerKeySeed();
 		
@@ -86,7 +86,7 @@ class PlayReadyDrmService extends KalturaBaseService
 			$drmKey->setObjectId($entryId);
 			$drmKey->setObjectType(DrmKeyObjectType::ENTRY);
 			$drmKey->setProvider(PlayReadyPlugin::getPlayReadyProviderCoreValue());
-			$keyId = kPlayReadyAESContentKeyGenerator::generatePlayReadyKeyId();
+			$keyId = vPlayReadyAESContentKeyGenerator::generatePlayReadyKeyId();
 			$drmKey->setDrmKey($keyId);
 			try 
 			{
@@ -108,10 +108,10 @@ class PlayReadyDrmService extends KalturaBaseService
 		}
 		
 		if(!$keyId)
-			throw new KalturaAPIException(KalturaPlayReadyErrors::FAILED_TO_GET_ENTRY_KEY_ID, $entryId);
+			throw new VidiunAPIException(VidiunPlayReadyErrors::FAILED_TO_GET_ENTRY_KEY_ID, $entryId);
 			
 		$contentKey = $this->createContentKeyObject($keySeed, $keyId);
-		$response = new KalturaPlayReadyContentKey();
+		$response = new VidiunPlayReadyContentKey();
 		$response->fromObject($contentKey, $this->getResponseProfile());
 		
 		return $response;				
@@ -126,16 +126,16 @@ class PlayReadyDrmService extends KalturaBaseService
 	 * @param int $deviceType
 	 * @param string $entryId
 	 * @param string $referrer 64base encoded  
-	 * @return KalturaPlayReadyLicenseDetails $response
+	 * @return VidiunPlayReadyLicenseDetails $response
 	 * 
-	 * @throws KalturaErrors::MISSING_MANDATORY_PARAMETER
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaPlayReadyErrors::ENTRY_NOT_FOUND_BY_KEY_ID
-	 * @throws KalturaPlayReadyErrors::PLAYREADY_POLICY_NOT_FOUND
+	 * @throws VidiunErrors::MISSING_MANDATORY_PARAMETER
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunPlayReadyErrors::ENTRY_NOT_FOUND_BY_KEY_ID
+	 * @throws VidiunPlayReadyErrors::PLAYREADY_POLICY_NOT_FOUND
 	 */
 	public function getLicenseDetailsAction($keyId, $deviceId, $deviceType, $entryId = null, $referrer = null)
 	{
-		KalturaLog::debug('Get Play Ready license details for keyID: '.$keyId);
+		VidiunLog::debug('Get Play Ready license details for keyID: '.$keyId);
 		
 		$entry = $this->getLicenseRequestEntry($keyId, $entryId);
 
@@ -145,20 +145,20 @@ class PlayReadyDrmService extends KalturaBaseService
         $drmLU = new DrmLicenseUtils($entry, $referrerDecoded);
         $policyId = $drmLU->getPolicyId();
         if ( !isset($policyId) )
-            throw new KalturaAPIException(KalturaPlayReadyErrors::PLAYREADY_POLICY_NOT_FOUND, $entry->getId());
+            throw new VidiunAPIException(VidiunPlayReadyErrors::PLAYREADY_POLICY_NOT_FOUND, $entry->getId());
 
 		$dbPolicy = DrmPolicyPeer::retrieveByPK($policyId);
 		if(!$dbPolicy)
-			throw new KalturaAPIException(KalturaPlayReadyErrors::PLAYREADY_POLICY_OBJECT_NOT_FOUND, $policyId);
+			throw new VidiunAPIException(VidiunPlayReadyErrors::PLAYREADY_POLICY_OBJECT_NOT_FOUND, $policyId);
 			
 		list($beginDate, $expirationDate, $removalDate) = $this->calculateLicenseDates($dbPolicy, $entry);
 
-		$policy = new KalturaPlayReadyPolicy();
+		$policy = new VidiunPlayReadyPolicy();
 		$policy->fromObject($dbPolicy, $this->getResponseProfile());
 		
 		$this->registerDevice($deviceId, $deviceType);
 		
-		$response = new KalturaPlayReadyLicenseDetails();
+		$response = new VidiunPlayReadyLicenseDetails();
 		$response->policy = $policy;
 		$response->beginDate = $beginDate;
 		$response->expirationDate = $expirationDate;
@@ -169,11 +169,11 @@ class PlayReadyDrmService extends KalturaBaseService
 
 	private function registerDevice($deviceId, $deviceType)
 	{
-		KalturaLog::debug("device id: ".$deviceId." device type: ".$deviceType);
+		VidiunLog::debug("device id: ".$deviceId." device type: ".$deviceType);
 		//TODO: log for BI
 		if($deviceType != 1 && $deviceType != 7) //TODO: verify how to identify the silverlight client
 		{
-			throw new KalturaAPIException(KalturaPlayReadyErrors::DRM_DEVICE_NOT_SUPPORTED, $deviceType);
+			throw new VidiunAPIException(VidiunPlayReadyErrors::DRM_DEVICE_NOT_SUPPORTED, $deviceType);
 		}
 	}
 
@@ -184,24 +184,24 @@ class PlayReadyDrmService extends KalturaBaseService
 		$keyId = strtolower($keyId);
 		
 		if(!$keyId)
-			throw new KalturaAPIException(KalturaErrors::MISSING_MANDATORY_PARAMETER, "keyId");
+			throw new VidiunAPIException(VidiunErrors::MISSING_MANDATORY_PARAMETER, "keyId");
 		
 		if($entryId)
 		{
 			 $entry = entryPeer::retrieveByPK($entryId); 
 			 if(!$entry)
-				throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);	
+				throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);	
 				
 			$entryKeyId = $this->getEntryKeyId($entry->getId());
 			if($entryKeyId != $keyId)
-				throw new KalturaAPIException(KalturaPlayReadyErrors::KEY_ID_DONT_MATCH, $keyId, $entryKeyId);	
+				throw new VidiunAPIException(VidiunPlayReadyErrors::KEY_ID_DONT_MATCH, $keyId, $entryKeyId);	
 		}
 		else 
 		{
 			$entryFilter = new entryFilter();
 			$entryFilter->fields['_like_plugins_data'] = PlayReadyPlugin::getPlayReadyKeyIdSearchData($keyId);
-			$entryFilter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);
-			$c = KalturaCriteria::create(entryPeer::OM_CLASS);				
+			$entryFilter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);
+			$c = VidiunCriteria::create(entryPeer::OM_CLASS);				
 			$entryFilter->attachToCriteria($c);	
 			$c->applyFilters();
 			$entries = entryPeer::doSelect($c);
@@ -209,7 +209,7 @@ class PlayReadyDrmService extends KalturaBaseService
 			if($entries && count($entries) > 0)
 				$entry = $entries[0];
 			if(!$entry)
-				throw new KalturaAPIException(KalturaPlayReadyErrors::ENTRY_NOT_FOUND_BY_KEY_ID, $keyId);			 				
+				throw new VidiunAPIException(VidiunPlayReadyErrors::ENTRY_NOT_FOUND_BY_KEY_ID, $keyId);			 				
 		}
 		
 		return $entry;
@@ -217,19 +217,19 @@ class PlayReadyDrmService extends KalturaBaseService
 	
 	private function getPartnerKeySeed()
 	{
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 		$profile = DrmProfilePeer::retrieveByProvider(PlayReadyPlugin::getPlayReadyProviderCoreValue());
 		if(!$profile)
-			throw new KalturaAPIException(KalturaPlayReadyErrors::PLAYREADY_PROFILE_NOT_FOUND);
+			throw new VidiunAPIException(VidiunPlayReadyErrors::PLAYREADY_PROFILE_NOT_FOUND);
 		return $profile->getKeySeed();
 	}
 	
 	private function createContentKeyObject($keySeed, $keyId)
 	{
 		if(!$keyId)
-			throw new KalturaAPIException(KalturaErrors::MISSING_MANDATORY_PARAMETER, "keyId");
+			throw new VidiunAPIException(VidiunErrors::MISSING_MANDATORY_PARAMETER, "keyId");
 			
-		$contentKeyVal = kPlayReadyAESContentKeyGenerator::generatePlayReadyContentKey($keySeed, $keyId);
+		$contentKeyVal = vPlayReadyAESContentKeyGenerator::generatePlayReadyContentKey($keySeed, $keyId);
 		$contentKey = new PlayReadyContentKey();
 		$contentKey->setKeyId($keyId);
 		$contentKey->setContentKey($contentKeyVal);	
@@ -254,10 +254,10 @@ class PlayReadyDrmService extends KalturaBaseService
                 break;
         }
 
-        //override begin and expiration dates from ks if passed
-        if(kCurrentContext::$ks_object)
+        //override begin and expiration dates from vs if passed
+        if(vCurrentContext::$vs_object)
         {
-            $privileges = kCurrentContext::$ks_object->getPrivileges();
+            $privileges = vCurrentContext::$vs_object->getPrivileges();
             $allParams = explode(',', $privileges);
             foreach($allParams as $param)
             {

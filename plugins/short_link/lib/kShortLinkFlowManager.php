@@ -1,23 +1,23 @@
 <?php
-class kShortLinkFlowManager implements kObjectDeletedEventConsumer
+class vShortLinkFlowManager implements vObjectDeletedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{
-		if($object instanceof kuser)
+		if($object instanceof vuser)
 			return true;
 			
 		return false;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null)
 	{
-		$shortLinks = ShortLinkPeer::retrieveByKuserId($object->getId(), $object->getPartnerId());
+		$shortLinks = ShortLinkPeer::retrieveByVuserId($object->getId(), $object->getPartnerId());
 		foreach($shortLinks as $shortLink)
 		{
 			$shortLink->setStatus(ShortLinkStatus::DELETED);

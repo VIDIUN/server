@@ -5,23 +5,23 @@
  * @package Core
  * @subpackage model.data
  */
-class kIpAddressContextField extends kStringField
+class vIpAddressContextField extends vStringField
 {
 	/* (non-PHPdoc)
-	 * @see kIntegerField::getFieldValue()
+	 * @see vIntegerField::getFieldValue()
 	 */
-	protected function getFieldValue(kScope $scope = null)
+	protected function getFieldValue(vScope $scope = null)
 	{
-		kApiCache::addExtraField(kApiCache::ECF_IP);
+		vApiCache::addExtraField(vApiCache::ECF_IP);
 
 		if(!$scope)
-			$scope = new kScope();
+			$scope = new vScope();
 
 		return $scope->getIp();
 	}
 
 	/* (non-PHPdoc)
-	 * @see kStringValue::shouldDisableCache()
+	 * @see vStringValue::shouldDisableCache()
 	 */
 	public function shouldDisableCache($scope)
 	{

@@ -4,7 +4,7 @@
  * @package api
  * @subpackage model.enum
  */
-class KalturaLiveReportExportParams extends KalturaObject
+class VidiunLiveReportExportParams extends VidiunObject
 {	
 	/**
 	 * @var string

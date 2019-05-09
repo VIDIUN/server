@@ -3,14 +3,14 @@
  * @package plugins.metadata
  * @subpackage model
  */
-class MetadataKuserPeer extends kuserPeer implements IMetadataPeer
+class MetadataVuserPeer extends vuserPeer implements IMetadataPeer
 {
     public static function validateMetadataObjects($profileField, $objectIds, &$errorMessage)
     {
         /** @var MetadataProfileField $profileField */
         
-        $partnerId = kCurrentContext::getCurrentPartnerId();
-        $dbObjects = kuserPeer::getKuserByPartnerAndUids($partnerId, $objectIds);
+        $partnerId = vCurrentContext::getCurrentPartnerId();
+        $dbObjects = vuserPeer::getVuserByPartnerAndUids($partnerId, $objectIds);
         
         if(count($dbObjects) != count($objectIds))
         {
@@ -28,10 +28,10 @@ class MetadataKuserPeer extends kuserPeer implements IMetadataPeer
     
     public static function validateMetadataObjectAccess($objectId)
     {
-    	$kuser = self::retrieveByPK($objectId);
-    	if(!$kuser)
+    	$vuser = self::retrieveByPK($objectId);
+    	if(!$vuser)
     	{
-    		KalturaLog::debug("Metadata object id with id [$objectId] not found");
+    		VidiunLog::debug("Metadata object id with id [$objectId] not found");
     		return false;
     	}
     

@@ -18,13 +18,13 @@
 	</session>
 
 	<request service="playlist" action="add">
-		<playlist objectType="KalturaPlaylist">
+		<playlist objectType="VidiunPlaylist">
 			<playlistType>10</playlistType>
 			<name>Recent Sea Videos</name>
 			<userId>template</userId>
 			<totalResults>20</totalResults>
 			<filters objectType="array">
-				<item objectType="KalturaMediaEntryFilterForPlaylist">
+				<item objectType="VidiunMediaEntryFilterForPlaylist">
 					<limit>10</limit>
 					<tagsMultiLikeOr>fish</tagsMultiLikeOr>
 					<mediaTypeEqual>1</mediaTypeEqual>
@@ -35,14 +35,14 @@
 	</request>
 
 	<request service="playlist" action="add">
-		<playlist objectType="KalturaPlaylist">
+		<playlist objectType="VidiunPlaylist">
 			<playlistType>10</playlistType>
 			<name>My images</name>
 			<description>All my images 2</description>
 			<userId>template</userId>
 			<totalResults>20</totalResults>
 			<filters objectType="array">
-				<item objectType="KalturaMediaEntryFilterForPlaylist">
+				<item objectType="VidiunMediaEntryFilterForPlaylist">
 					<limit>50</limit>
 					<tagsMultiLikeOr>image</tagsMultiLikeOr>
 					<mediaTypeEqual>2</mediaTypeEqual>
@@ -53,14 +53,14 @@
 	</request>
 
 	<request service="playlist" action="add">
-		<playlist objectType="KalturaPlaylist">
+		<playlist objectType="VidiunPlaylist">
 			<playlistType>10</playlistType>
 			<name>Most recent videos</name>
 			<description>10 most  recent videos</description>
 			<userId>template</userId>
 			<totalResults>20</totalResults>
 			<filters objectType="array">
-				<item objectType="KalturaMediaEntryFilterForPlaylist">
+				<item objectType="VidiunMediaEntryFilterForPlaylist">
 					<limit>10</limit>
 					<mediaTypeEqual>1</mediaTypeEqual>
 					<orderBy>-created_at</orderBy>
@@ -70,14 +70,14 @@
 	</request>
 
 	<request service="playlist" action="add">
-		<playlist objectType="KalturaPlaylist">
+		<playlist objectType="VidiunPlaylist">
 			<playlistType>10</playlistType>
 			<name>Most popular videos</name>
 			<description>Most Popular videos (top 30)</description>
 			<userId>template</userId>
 			<totalResults>20</totalResults>
 			<filters objectType="array">
-				<item objectType="KalturaMediaEntryFilterForPlaylist">
+				<item objectType="VidiunMediaEntryFilterForPlaylist">
 					<limit>30</limit>
 					<mediaTypeEqual>1</mediaTypeEqual>
 					<orderBy>-views</orderBy>

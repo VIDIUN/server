@@ -3,7 +3,7 @@
 /**
  * @package plugins.queue
  */
-class QueuePlugin extends KalturaPlugin implements IKalturaVersion, IKalturaRequire
+class QueuePlugin extends VidiunPlugin implements IVidiunVersion, IVidiunRequire
 {
 	const PLUGIN_NAME = 'queue';
 	const PLUGIN_VERSION_MAJOR = 1;
@@ -11,7 +11,7 @@ class QueuePlugin extends KalturaPlugin implements IKalturaVersion, IKalturaRequ
 	const PLUGIN_VERSION_BUILD = 0;
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -19,11 +19,11 @@ class QueuePlugin extends KalturaPlugin implements IKalturaVersion, IKalturaRequ
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaVersion::getVersion()
+	 * @see IVidiunVersion::getVersion()
 	 */
 	public static function getVersion()
 	{
-		return new KalturaVersion(
+		return new VidiunVersion(
 			self::PLUGIN_VERSION_MAJOR,
 			self::PLUGIN_VERSION_MINOR,
 			self::PLUGIN_VERSION_BUILD
@@ -31,10 +31,10 @@ class QueuePlugin extends KalturaPlugin implements IKalturaVersion, IKalturaRequ
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaRequire::requires()
+	 * @see IVidiunRequire::requires()
 	 */	
 	public static function requires()
 	{
-	    return array("IKalturaQueuePlugin");
+	    return array("IVidiunQueuePlugin");
 	}
 }

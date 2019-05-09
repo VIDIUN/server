@@ -3,7 +3,7 @@
  * @package plugins.dropFolder
  * @subpackage api.objects
  */
-class KalturaDropFolderContentProcessorJobData extends KalturaJobData
+class VidiunDropFolderContentProcessorJobData extends VidiunJobData
 {
 	
 	/**
@@ -22,7 +22,7 @@ class KalturaDropFolderContentProcessorJobData extends KalturaJobData
 	public $parsedSlug;
 	
 	/**
-	 * @var KalturaDropFolderContentFileHandlerMatchPolicy
+	 * @var VidiunDropFolderContentFileHandlerMatchPolicy
 	 */
 	public $contentMatchPolicy;
 	
@@ -55,7 +55,7 @@ class KalturaDropFolderContentProcessorJobData extends KalturaJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kDropFolderContentProcessorJobData();
+			$dbData = new vDropFolderContentProcessorJobData();
 		
 		return parent::toObject($dbData, $props_to_skip);
 	}
@@ -68,13 +68,13 @@ class KalturaDropFolderContentProcessorJobData extends KalturaJobData
 	public function toSubType($subType)
 	{
 		switch ($subType) {
-			case KalturaDropFolderType::FTP:
-            case KalturaDropFolderType::SFTP:
-            case KalturaDropFolderType::SCP:
-            case KalturaDropFolderType::S3:
+			case VidiunDropFolderType::FTP:
+            case VidiunDropFolderType::SFTP:
+            case VidiunDropFolderType::SCP:
+            case VidiunDropFolderType::S3:
                 return $subType;                  	
 			default:
-				return kPluginableEnumsManager::apiToCore('KalturaDropFolderType', $subType);
+				return vPluginableEnumsManager::apiToCore('VidiunDropFolderType', $subType);
 		}
 	}
 	
@@ -91,7 +91,7 @@ class KalturaDropFolderContentProcessorJobData extends KalturaJobData
             case DropFolderType::S3:
                 return $subType;                    
             default:
-                return kPluginableEnumsManager::coreToApi('DropFolderType', $subType);
+                return vPluginableEnumsManager::coreToApi('DropFolderType', $subType);
         }
 	}
 }

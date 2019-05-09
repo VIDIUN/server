@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaUserRoleFilter extends KalturaUserRoleBaseFilter
+class VidiunUserRoleFilter extends VidiunUserRoleBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -14,9 +14,9 @@ class KalturaUserRoleFilter extends KalturaUserRoleBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$userRoleFilter = $this->toObject();
 
@@ -27,8 +27,8 @@ class KalturaUserRoleFilter extends KalturaUserRoleBaseFilter
 		$pager->attachToCriteria ( $c );
 		$list = UserRolePeer::doSelect($c);
 		
-		$response = new KalturaUserRoleListResponse();
-		$response->objects = KalturaUserRoleArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunUserRoleListResponse();
+		$response->objects = VidiunUserRoleArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $count;
 		
 		return $response;

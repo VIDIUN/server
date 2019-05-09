@@ -4,7 +4,7 @@
  * @package server-infra
  * @subpackage renderers
  */
-interface kRendererBase
+interface vRendererBase
 {
 	public function validate();
 	

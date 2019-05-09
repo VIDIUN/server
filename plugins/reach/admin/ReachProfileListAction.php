@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage Admin
  */
-class ReachProfileListAction extends KalturaApplicationPlugin
+class ReachProfileListAction extends VidiunApplicationPlugin
 {
 	const ADMIN_CONSOLE_PARTNER = "-2";
 
@@ -32,11 +32,11 @@ class ReachProfileListAction extends KalturaApplicationPlugin
 		$action->view->allowed = $this->isAllowedForPartner($partnerId);
 
 		// init filter
-		$reachProfileFilter = new Kaltura_Client_Reach_Type_ReachProfileFilter();
+		$reachProfileFilter = new Vidiun_Client_Reach_Type_ReachProfileFilter();
 		$reachProfileFilter->orderBy = "-createdAt";
 
 		$client = Infra_ClientHelper::getClient();
-		$reachPluginClient = Kaltura_Client_Reach_Plugin::get($client);
+		$reachPluginClient = Vidiun_Client_Reach_Plugin::get($client);
 
 		// get results and paginate
 		$paginatorAdapter = new Infra_FilterPaginator($reachPluginClient->reachProfile, "listAction", $partnerId, $reachProfileFilter);
@@ -85,8 +85,8 @@ class ReachProfileListAction extends KalturaApplicationPlugin
 	{
 		$client = Infra_ClientHelper::getClient();
 		$client->setPartnerId($partnerId);
-		$filter = new Kaltura_Client_Type_PermissionFilter();
-		$filter->nameEqual = Kaltura_Client_Enum_PermissionName::REACH_PLUGIN_PERMISSION;
+		$filter = new Vidiun_Client_Type_PermissionFilter();
+		$filter->nameEqual = Vidiun_Client_Enum_PermissionName::REACH_PLUGIN_PERMISSION;
 		$filter->partnerIdEqual = $partnerId;
 		try
 		{
@@ -98,7 +98,7 @@ class ReachProfileListAction extends KalturaApplicationPlugin
 		}
 		$client->setPartnerId(self::ADMIN_CONSOLE_PARTNER);
 
-		$isAllowed = ($result->totalCount > 0) && ($result->objects[0]->status == Kaltura_Client_Enum_PermissionStatus::ACTIVE);
+		$isAllowed = ($result->totalCount > 0) && ($result->objects[0]->status == Vidiun_Client_Enum_PermissionStatus::ACTIVE);
 		return $isAllowed;
 	}
 }

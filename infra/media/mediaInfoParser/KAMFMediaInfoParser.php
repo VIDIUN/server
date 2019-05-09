@@ -1,36 +1,36 @@
 <?php
 
-class KAMFMediaInfoParser{
+class VAMFMediaInfoParser{
 
     const timestampHexVal = "74696d657374616d70"; // hax representation of the string "timestamp"
-    const KalturaSyncPointHexVal = '4b616c7475726153796e63506f696e74'; //hax representation of the string "KalturaSyncPoint"
+    const VidiunSyncPointHexVal = '4b616c7475726153796e63506f696e74'; //hax representation of the string "VidiunSyncPoint"
     const AMFNumberDataTypePrefix ="00";
     const IEEE754DoubleFloatInHexLength = 16;
     const MinAMFSizeToTryParse = 205;
     const MaxAMFDiscontinuanceMS = 1000;
     const MinDistanceBetweenAMFsInMS = 60000;
 
-    protected $ffprobeBin = 'ffprobeKAMFMediaInfoParser';
+    protected $ffprobeBin = 'ffprobeVAMFMediaInfoParser';
     protected $filePath;
 
     public function __construct($filePath, $ffprobeBin=null)
     {
         if (is_null($ffprobeBin)) {
 
-            if (kConf::hasParam('bin_path_ffprobeKAMFMediaInfoParser')) {
-                $this->ffprobeBin = kConf::get('bin_path_ffprobeKAMFMediaInfoParser');
+            if (vConf::hasParam('bin_path_ffprobeVAMFMediaInfoParser')) {
+                $this->ffprobeBin = vConf::get('bin_path_ffprobeVAMFMediaInfoParser');
             }
         }
         else{
             $this->ffprobeBin = $ffprobeBin;
         }
         if (!file_exists($filePath))
-            throw new kApplicativeException(KBaseMediaParser::ERROR_NFS_FILE_DOESNT_EXIST, "File not found at [$filePath]");
+            throw new vApplicativeException(VBaseMediaParser::ERROR_NFS_FILE_DOESNT_EXIST, "File not found at [$filePath]");
 
         $this->filePath = $filePath;
     }
 
-    // returns an array of KAMFData
+    // returns an array of VAMFData
     public function getAMFInfo()
     {
         $output = $this->getRawMediaInfo();
@@ -41,10 +41,10 @@ class KAMFMediaInfoParser{
     public function getRawMediaInfo()
     {
         $cmd = $this->getCommand();
-        KalturaLog::debug("Executing '$cmd'");
+        VidiunLog::debug("Executing '$cmd'");
         $output = shell_exec($cmd);
         if (trim($output) === "")
-            throw new kApplicativeException(KBaseMediaParser::ERROR_EXTRACT_MEDIA_FAILED, "Failed to parse media using " . get_class($this));
+            throw new vApplicativeException(VBaseMediaParser::ERROR_EXTRACT_MEDIA_FAILED, "Failed to parse media using " . get_class($this));
 
         return $output;
     }
@@ -79,10 +79,10 @@ class KAMFMediaInfoParser{
                     }
                 }
             }
-            KalturaLog::debug('amf array: ' . print_r($amf, true));
+            VidiunLog::debug('amf array: ' . print_r($amf, true));
         }
         else{
-            KalturaLog::warning('failed to json_decode. returning an empty AMF array');
+            VidiunLog::warning('failed to json_decode. returning an empty AMF array');
         }
 
         return $amf;
@@ -91,7 +91,7 @@ class KAMFMediaInfoParser{
     private function shouldSaveAMF($amfArray, $amfTs, $amfPts){
 
         if (count($amfArray) == 0) {
-            KalturaLog::debug('adding AMF - first in the segment ts= ' . $amfTs . ' pts= ' . $amfPts);
+            VidiunLog::debug('adding AMF - first in the segment ts= ' . $amfTs . ' pts= ' . $amfPts);
             return true;
         }
 
@@ -103,26 +103,26 @@ class KAMFMediaInfoParser{
 
         if (abs($tsDelta - $ptsDelta) >=  self::MaxAMFDiscontinuanceMS){
             if ($tsDelta > self::MinDistanceBetweenAMFsInMS) {
-                KalturaLog::debug('got discontinuance - adding AMF. ' . 'tsDelta= ' . $tsDelta . ' ptsDelta= ' . $ptsDelta);
+                VidiunLog::debug('got discontinuance - adding AMF. ' . 'tsDelta= ' . $tsDelta . ' ptsDelta= ' . $ptsDelta);
                 return true;
             }
             else{
-                KalturaLog::debug('got discontinuance, but not adding AMF since time from last AMF is less than ' . self::MinDistanceBetweenAMFsInMS . 'ms. tsDelta= ' . $tsDelta . ' ptsDelta= ' . $ptsDelta);
+                VidiunLog::debug('got discontinuance, but not adding AMF since time from last AMF is less than ' . self::MinDistanceBetweenAMFsInMS . 'ms. tsDelta= ' . $tsDelta . ' ptsDelta= ' . $ptsDelta);
             }
         }
         else{
-            KalturaLog::debug('NOT adding AMF. ' . 'tsDelta= ' . $tsDelta . ' ptsDelta= ' . $ptsDelta);
+            VidiunLog::debug('NOT adding AMF. ' . 'tsDelta= ' . $tsDelta . ' ptsDelta= ' . $ptsDelta);
         }
         return false;
     }
 
-    // get the timestamp field of the KalturaSyncPoint.
-    // if failed, for example, not a KalturaSyncPoint, return -1
+    // get the timestamp field of the VidiunSyncPoint.
+    // if failed, for example, not a VidiunSyncPoint, return -1
     private function getTimestampFromAMF($AMFData){
         $AMFDataStream = $this->getByteStreamFromFFProbeAMFData($AMFData);
 
-        if (strpos($AMFDataStream, self::KalturaSyncPointHexVal) === false){
-            KalturaLog::debug('got AMF not containing KalturaSyncPointHexVal string');
+        if (strpos($AMFDataStream, self::VidiunSyncPointHexVal) === false){
+            VidiunLog::debug('got AMF not containing VidiunSyncPointHexVal string');
             return -1;
         }
 

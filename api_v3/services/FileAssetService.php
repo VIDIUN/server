@@ -5,7 +5,7 @@
  *
  * @service fileAsset
  */
-class FileAssetService extends KalturaBaseService
+class FileAssetService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -18,17 +18,17 @@ class FileAssetService extends KalturaBaseService
 	 * Add new file asset
 	 * 
 	 * @action add
-	 * @param KalturaFileAsset $fileAsset
-	 * @return KalturaFileAsset
+	 * @param VidiunFileAsset $fileAsset
+	 * @return VidiunFileAsset
 	 */
-	function addAction(KalturaFileAsset $fileAsset)
+	function addAction(VidiunFileAsset $fileAsset)
 	{
 		$dbFileAsset = $fileAsset->toInsertableObject();
 		$dbFileAsset->setPartnerId($this->getPartnerId());
-		$dbFileAsset->setStatus(KalturaFileAssetStatus::PENDING);
+		$dbFileAsset->setStatus(VidiunFileAssetStatus::PENDING);
 		$dbFileAsset->save();
 		
-		$fileAsset = new KalturaFileAsset();
+		$fileAsset = new VidiunFileAsset();
 		$fileAsset->fromObject($dbFileAsset, $this->getResponseProfile());
 		return $fileAsset;
 	}
@@ -38,18 +38,18 @@ class FileAssetService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param bigint $id
-	 * @return KalturaFileAsset
-	 * @ksIgnored
+	 * @return VidiunFileAsset
+	 * @vsIgnored
 	 * 
-	 * @throws KalturaErrors::FILE_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::FILE_ASSET_ID_NOT_FOUND
 	 */
 	function getAction($id)
 	{
 		$dbFileAsset = FileAssetPeer::retrieveByPK($id);
 		if (!$dbFileAsset)
-			throw new KalturaAPIException(KalturaErrors::FILE_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FILE_ASSET_ID_NOT_FOUND, $id);
 			
-		$fileAsset = new KalturaFileAsset();
+		$fileAsset = new VidiunFileAsset();
 		$fileAsset->fromObject($dbFileAsset, $this->getResponseProfile());
 		return $fileAsset;
 	}
@@ -59,21 +59,21 @@ class FileAssetService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param bigint $id
-	 * @param KalturaFileAsset $fileAsset
-	 * @return KalturaFileAsset
+	 * @param VidiunFileAsset $fileAsset
+	 * @return VidiunFileAsset
 	 * 
-	 * @throws KalturaErrors::FILE_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::FILE_ASSET_ID_NOT_FOUND
 	 */
-	function updateAction($id, KalturaFileAsset $fileAsset)
+	function updateAction($id, VidiunFileAsset $fileAsset)
 	{
 		$dbFileAsset = FileAssetPeer::retrieveByPK($id);
 		if (!$dbFileAsset)
-			throw new KalturaAPIException(KalturaErrors::FILE_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FILE_ASSET_ID_NOT_FOUND, $id);
 		
 		$fileAsset->toUpdatableObject($dbFileAsset);
 		$dbFileAsset->save();
 		
-		$fileAsset = new KalturaFileAsset();
+		$fileAsset = new VidiunFileAsset();
 		$fileAsset->fromObject($dbFileAsset, $this->getResponseProfile());
 		return $fileAsset;
 	}
@@ -84,15 +84,15 @@ class FileAssetService extends KalturaBaseService
 	 * @action delete
 	 * @param bigint $id
 	 * 
-	 * @throws KalturaErrors::FILE_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::FILE_ASSET_ID_NOT_FOUND
 	 */
 	function deleteAction($id)
 	{
 		$dbFileAsset = FileAssetPeer::retrieveByPK($id);
 		if (!$dbFileAsset)
-			throw new KalturaAPIException(KalturaErrors::FILE_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FILE_ASSET_ID_NOT_FOUND, $id);
 
-		$dbFileAsset->setStatus(KalturaFileAssetStatus::DELETED);
+		$dbFileAsset->setStatus(VidiunFileAssetStatus::DELETED);
 		$dbFileAsset->save();
 	}
 
@@ -102,16 +102,16 @@ class FileAssetService extends KalturaBaseService
 	 * @action serve
 	 * @param bigint $id
 	 * @return file
-	 * @ksIgnored
+	 * @vsIgnored
 	 *  
-	 * @throws KalturaErrors::FILE_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::FILE_DOESNT_EXIST
+	 * @throws VidiunErrors::FILE_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::FILE_DOESNT_EXIST
 	 */
 	public function serveAction($id)
 	{
 		$dbFileAsset = FileAssetPeer::retrieveByPK($id);
 		if (!$dbFileAsset)
-			throw new KalturaAPIException(KalturaErrors::FILE_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FILE_ASSET_ID_NOT_FOUND, $id);
 		
 		return $this->serveFile($dbFileAsset, FileAsset::FILE_SYNC_ASSET, $dbFileAsset->getName());
 	}
@@ -121,60 +121,60 @@ class FileAssetService extends KalturaBaseService
      *
      * @action setContent
      * @param bigint $id
-     * @param KalturaContentResource $contentResource
-     * @return KalturaFileAsset
-	 * @throws KalturaErrors::FILE_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
-	 * @throws KalturaErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
-	 * @throws KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED 
+     * @param VidiunContentResource $contentResource
+     * @return VidiunFileAsset
+	 * @throws VidiunErrors::FILE_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
+	 * @throws VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED 
      */
-    function setContentAction($id, KalturaContentResource $contentResource)
+    function setContentAction($id, VidiunContentResource $contentResource)
     {
 		$dbFileAsset = FileAssetPeer::retrieveByPK($id);
 		if (!$dbFileAsset)
-			throw new KalturaAPIException(KalturaErrors::FILE_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FILE_ASSET_ID_NOT_FOUND, $id);
 		
-		$kContentResource = $contentResource->toObject();
-    	$this->attachContentResource($dbFileAsset, $kContentResource);
+		$vContentResource = $contentResource->toObject();
+    	$this->attachContentResource($dbFileAsset, $vContentResource);
 		
-		$fileAsset = new KalturaFileAsset();
+		$fileAsset = new VidiunFileAsset();
 		$fileAsset->fromObject($dbFileAsset, $this->getResponseProfile());
 		return $fileAsset;
     }
     
 	/**
 	 * @param FileAsset $dbFileAsset
-	 * @param kContentResource $contentResource
-	 * @throws KalturaErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
-	 * @throws KalturaErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
-	 * @throws KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED
+	 * @param vContentResource $contentResource
+	 * @throws VidiunErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
+	 * @throws VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED
 	 */
-	protected function attachContentResource(FileAsset $dbFileAsset, kContentResource $contentResource)
+	protected function attachContentResource(FileAsset $dbFileAsset, vContentResource $contentResource)
 	{
     	switch($contentResource->getType())
     	{
-			case 'kLocalFileResource':
+			case 'vLocalFileResource':
 				return $this->attachLocalFileResource($dbFileAsset, $contentResource);
 				
-			case 'kFileSyncResource':
+			case 'vFileSyncResource':
 				return $this->attachFileSyncResource($dbFileAsset, $contentResource);
 				
 			default:
 				$msg = "Resource of type [" . get_class($contentResource) . "] is not supported";
-				KalturaLog::err($msg);
+				VidiunLog::err($msg);
 				
-				throw new KalturaAPIException(KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($contentResource));
+				throw new VidiunAPIException(VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($contentResource));
     	}
     }
     
 	/**
 	 * @param FileAsset $dbFileAsset
-	 * @param kLocalFileResource $contentResource
+	 * @param vLocalFileResource $contentResource
 	 */
-	protected function attachLocalFileResource(FileAsset $dbFileAsset, kLocalFileResource $contentResource)
+	protected function attachLocalFileResource(FileAsset $dbFileAsset, vLocalFileResource $contentResource)
 	{
 		if($contentResource->getIsReady())
 			return $this->attachFile($dbFileAsset, $contentResource->getLocalFilePath(), $contentResource->getKeepOriginalFile());
@@ -187,11 +187,11 @@ class FileAssetService extends KalturaBaseService
     
 	/**
 	 * @param FileAsset $dbFileAsset
-	 * @param kFileSyncResource $contentResource
+	 * @param vFileSyncResource $contentResource
 	 */
-	protected function attachFileSyncResource(FileAsset $dbFileAsset, kFileSyncResource $contentResource)
+	protected function attachFileSyncResource(FileAsset $dbFileAsset, vFileSyncResource $contentResource)
 	{
-    	$syncable = kFileSyncObjectManager::retrieveObject($contentResource->getFileSyncObjectType(), $contentResource->getObjectId());
+    	$syncable = vFileSyncObjectManager::retrieveObject($contentResource->getFileSyncObjectType(), $contentResource->getObjectId());
     	$srcSyncKey = $syncable->getSyncKey($contentResource->getObjectSubType(), $contentResource->getVersion());
     	
         return $this->attachFileSync($dbFileAsset, $srcSyncKey);
@@ -209,13 +209,13 @@ class FileAssetService extends KalturaBaseService
 			$ext = pathinfo($fullPath, PATHINFO_EXTENSION);
 			$dbFileAsset->setFileExt($ext);
 		}
-		$dbFileAsset->setSize(kFile::fileSize($fullPath));
+		$dbFileAsset->setSize(vFile::fileSize($fullPath));
 		$dbFileAsset->incrementVersion();
 		$dbFileAsset->save();
 		
 		$syncKey = $dbFileAsset->getSyncKey(FileAsset::FILE_SYNC_ASSET);
 		
-		kFileSyncUtils::moveFromFile($fullPath, $syncKey, true, $copyOnly);
+		vFileSyncUtils::moveFromFile($fullPath, $syncKey, true, $copyOnly);
 		
 		$dbFileAsset->setStatus(FileAssetStatus::READY);
 		$dbFileAsset->save();
@@ -231,10 +231,10 @@ class FileAssetService extends KalturaBaseService
 		$dbFileAsset->save();
 		
         $newSyncKey = $dbFileAsset->getSyncKey(FileAsset::FILE_SYNC_ASSET);
-        kFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $srcSyncKey);
+        vFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $srcSyncKey);
                 
-        $fileSync = kFileSyncUtils::getLocalFileSyncForKey($newSyncKey, false);
-        $fileSync = kFileSyncUtils::resolve($fileSync);
+        $fileSync = vFileSyncUtils::getLocalFileSyncForKey($newSyncKey, false);
+        $fileSync = vFileSyncUtils::resolve($fileSync);
         
 		$dbFileAsset->setStatus(FileAssetStatus::READY);
 		$dbFileAsset->setSize($fileSync->getFileSize());
@@ -245,18 +245,18 @@ class FileAssetService extends KalturaBaseService
 	 * List file assets by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaFilterPager $filter
-	 * @param KalturaFileAssetFilter $pager
-	 * @return KalturaFileAssetListResponse
-	 * @ksIgnored
+	 * @param VidiunFilterPager $filter
+	 * @param VidiunFileAssetFilter $pager
+	 * @return VidiunFileAssetListResponse
+	 * @vsIgnored
 	 */
-	function listAction(KalturaFileAssetFilter $filter, KalturaFilterPager $pager = null)
+	function listAction(VidiunFileAssetFilter $filter, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaFileAssetFilter();
+			$filter = new VidiunFileAssetFilter();
 			
 		if(!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		return $filter->getListResponse($pager, $this->getResponseProfile());   
 	}

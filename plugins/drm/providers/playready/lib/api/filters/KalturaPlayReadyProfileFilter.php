@@ -3,6 +3,6 @@
  * @package plugins.playReady
  * @subpackage api.filters
  */
-class KalturaPlayReadyProfileFilter extends KalturaPlayReadyProfileBaseFilter
+class VidiunPlayReadyProfileFilter extends VidiunPlayReadyProfileBaseFilter
 {
 }

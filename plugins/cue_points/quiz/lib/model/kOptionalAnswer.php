@@ -7,7 +7,7 @@
  *
  */
 
-class kOptionalAnswer {
+class vOptionalAnswer {
 
 	/**
 	 * @var string

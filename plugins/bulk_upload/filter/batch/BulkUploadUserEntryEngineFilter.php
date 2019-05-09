@@ -13,43 +13,43 @@ class BulkUploadUserEntryEngineFilter extends BulkUploadEngineFilter
 	 *
 	 * @see BulkUploadEngineFilter::listObjects()
 	 */
-	protected function listObjects(KalturaFilter $filter, KalturaFilterPager $pager = null)
+	protected function listObjects(VidiunFilter $filter, VidiunFilterPager $pager = null)
 	{
-		if($filter instanceof KalturaUserEntryFilter)
+		if($filter instanceof VidiunUserEntryFilter)
 		{
-			return KBatchBase::$kClient->userEntry->listAction($filter, $pager);
+			return VBatchBase::$vClient->userEntry->listAction($filter, $pager);
 		}
 
 		else
 		{
-			throw new KalturaBatchException("Unsupported filter: {get_class($filter)}", KalturaBatchJobAppErrors::BULK_VALIDATION_FAILED);
+			throw new VidiunBatchException("Unsupported filter: {get_class($filter)}", VidiunBatchJobAppErrors::BULK_VALIDATION_FAILED);
 		}
 	}
 
-	protected function createObjectFromResultAndJobData (KalturaBulkUploadResult $bulkUploadResult)
+	protected function createObjectFromResultAndJobData (VidiunBulkUploadResult $bulkUploadResult)
 	{
 		//in bulk delete, there is no need to create objects from bulk upload result.
 		return;
 	}
 
-	protected function deleteObjectFromResult (KalturaBulkUploadResult $bulkUploadResult)
+	protected function deleteObjectFromResult (VidiunBulkUploadResult $bulkUploadResult)
 	{
-		return KBatchBase::$kClient->userEntry->delete($bulkUploadResult->userEntryId);
+		return VBatchBase::$vClient->userEntry->delete($bulkUploadResult->userEntryId);
 	}
 
 	/**
 	 * create specific instance of BulkUploadResult and set it's properties
-	 * @param $object - Result is being created from KalturaUserEntry
+	 * @param $object - Result is being created from VidiunUserEntry
 	 *
 	 * @see BulkUploadEngineFilter::fillUploadResultInstance()
 	 */
 	protected function fillUploadResultInstance ($object)
 	{
-		$bulkUploadResult = new KalturaBulkUploadResultUserEntry();
-		if($object instanceof KalturaUserEntry)
+		$bulkUploadResult = new VidiunBulkUploadResultUserEntry();
+		if($object instanceof VidiunUserEntry)
 		{
 			//get user entry object based on the entry details
-			$filter = new KalturaUserEntryFilter();
+			$filter = new VidiunUserEntryFilter();
 			$filter->idEqual = $object->id;
 			$filter->userIdEqual = $object->userId;
 			$filter->partnerId = $object->partnerId;
@@ -64,14 +64,14 @@ class BulkUploadUserEntryEngineFilter extends BulkUploadEngineFilter
 			$bulkUploadResult->objectId = $userEntry->id;
 			$bulkUploadResult->objectStatus = $userEntry->status;
 			$bulkUploadResult->userEntryId = $userEntry->id;
-			$bulkUploadResult->action = KalturaBulkUploadAction::DELETE;
+			$bulkUploadResult->action = VidiunBulkUploadAction::DELETE;
 		}
 		return $bulkUploadResult;
 	}
 
 	protected function getBulkUploadResultObjectType()
 	{
-		return KalturaBulkUploadObjectType::USER_ENTRY;
+		return VidiunBulkUploadObjectType::USER_ENTRY;
 	}
 
 	public function getObjectTypeTitle()

@@ -48,7 +48,7 @@ class DeliveryController extends Zend_Controller_Action
 			$newForm->getElement('newPartnerId')->setValue($partnerId);
 		}
 		
-		$filter = new Kaltura_Client_Type_DeliveryProfileFilter();
+		$filter = new Vidiun_Client_Type_DeliveryProfileFilter();
 		$filter->partnerIdEqual = $partnerId;
 	
 		// get results and paginate
@@ -70,10 +70,10 @@ class DeliveryController extends Zend_Controller_Action
 	protected function getDeliveryProfiles($client, $partnerId, $streamerType, $dpIds = null, $deliveryType = 'VOD') {
 	
 		$options = array();
-		$deliveryProfileService = new Kaltura_Client_DeliveryProfileService($client);
+		$deliveryProfileService = new Vidiun_Client_DeliveryProfileService($client);
 	
 		Infra_ClientHelper::impersonate($partnerId);
-		$filter = new Kaltura_Client_Type_DeliveryProfileFilter();
+		$filter = new Vidiun_Client_Type_DeliveryProfileFilter();
 		if($dpIds) {
 			if(empty($dpIds))
 				return $options;
@@ -82,9 +82,9 @@ class DeliveryController extends Zend_Controller_Action
 		
 		$filter->streamerTypeEqual = $streamerType;
 		$filter->isLive = $deliveryType === "Live" ? true : false;
-		$filter->statusIn = Kaltura_Client_Enum_DeliveryStatus::ACTIVE . "," . Kaltura_Client_Enum_DeliveryStatus::STAGING_OUT;
+		$filter->statusIn = Vidiun_Client_Enum_DeliveryStatus::ACTIVE . "," . Vidiun_Client_Enum_DeliveryStatus::STAGING_OUT;
 		
-		$pager = new Kaltura_Client_Type_FilterPager();
+		$pager = new Vidiun_Client_Type_FilterPager();
 		$pager->pageSize = 500;
 		
 		$dpsResponse = $deliveryProfileService->listAction($filter, $pager);
@@ -115,41 +115,41 @@ class DeliveryController extends Zend_Controller_Action
 	
 	protected function getDeliveryProfileForm($type) {
 		switch ($type) {
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_HLS:
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_HLS_MANIFEST:
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_HLS:
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_HLS_MANIFEST:
 				return new Form_Delivery_DeliveryProfileGenericAppleHttp();
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_HDS:
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_HDS_MANIFEST:
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_HDS:
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_HDS_MANIFEST:
 				return new Form_Delivery_DeliveryProfileGenericHds();
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_HTTP:
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_HTTP:
 					return new Form_Delivery_DeliveryProfileGenericHttp();
-			case Kaltura_Client_Enum_DeliveryProfileType::RTMP:
-			case Kaltura_Client_Enum_DeliveryProfileType::LIVE_RTMP:
+			case Vidiun_Client_Enum_DeliveryProfileType::RTMP:
+			case Vidiun_Client_Enum_DeliveryProfileType::LIVE_RTMP:
 				return new Form_Delivery_DeliveryProfileRtmp();
-			case Kaltura_Client_Enum_DeliveryProfileType::AKAMAI_HTTP:
+			case Vidiun_Client_Enum_DeliveryProfileType::AKAMAI_HTTP:
 				return new Form_Delivery_DeliveryProfileAkamaiHttp();
-			case Kaltura_Client_Enum_DeliveryProfileType::AKAMAI_HDS:
+			case Vidiun_Client_Enum_DeliveryProfileType::AKAMAI_HDS:
 				return new Form_Delivery_DeliveryProfileAkamaiHds();
-			case Kaltura_Client_Enum_DeliveryProfileType::AKAMAI_HLS_MANIFEST:
+			case Vidiun_Client_Enum_DeliveryProfileType::AKAMAI_HLS_MANIFEST:
 				return new Form_Delivery_DeliveryProfileAkamaiAppleHttpManifest();
-			case Kaltura_Client_Enum_DeliveryProfileType::LIVE_HLS:
+			case Vidiun_Client_Enum_DeliveryProfileType::LIVE_HLS:
 				return new Form_Delivery_DeliveryProfileLiveAppleHttp();
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_SS:
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_SS:
 				return new Form_Delivery_DeliveryProfileGenericSilverLight();
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_RTMP:
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_RTMP:
 				return new Form_Delivery_DeliveryProfileGenericRtmp();
-			case Kaltura_Client_Enum_DeliveryProfileType::VOD_PACKAGER_HLS_MANIFEST:
-			case Kaltura_Client_Enum_DeliveryProfileType::VOD_PACKAGER_HLS:
+			case Vidiun_Client_Enum_DeliveryProfileType::VOD_PACKAGER_HLS_MANIFEST:
+			case Vidiun_Client_Enum_DeliveryProfileType::VOD_PACKAGER_HLS:
 				return new Form_Delivery_DeliveryProfileVodPackagerHls();
-			case Kaltura_Client_Enum_DeliveryProfileType::VOD_PACKAGER_DASH:
+			case Vidiun_Client_Enum_DeliveryProfileType::VOD_PACKAGER_DASH:
 				return new Form_Delivery_DeliveryProfileVodPackagerPlayServer();
-			case Kaltura_Client_Enum_DeliveryProfileType::VOD_PACKAGER_MSS:
+			case Vidiun_Client_Enum_DeliveryProfileType::VOD_PACKAGER_MSS:
 				return new Form_Delivery_DeliveryProfileVodPackagerPlayServer();
-			case Kaltura_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_HLS:
+			case Vidiun_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_HLS:
 				return new Form_Delivery_DeliveryProfileLivePackagerHls();
-			case Kaltura_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_HDS:
-			case Kaltura_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_DASH:
-			case Kaltura_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_MSS:
+			case Vidiun_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_HDS:
+			case Vidiun_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_DASH:
+			case Vidiun_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_MSS:
 				return new Form_Delivery_DeliveryProfileLivePackager();
 			default:
 				return new Form_Delivery_DeliveryProfileConfiguration();
@@ -158,44 +158,44 @@ class DeliveryController extends Zend_Controller_Action
 	
 	protected function getDeliveryProfileClass($type) {
 		switch ($type) {
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_HLS:
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_HLS_MANIFEST:
-				return 'Kaltura_Client_Type_DeliveryProfileGenericAppleHttp';
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_HDS:
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_HDS_MANIFEST:
-				return 'Kaltura_Client_Type_DeliveryProfileGenericHds';
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_HTTP:
-				return 'Kaltura_Client_Type_DeliveryProfileGenericHttp';
-			case Kaltura_Client_Enum_DeliveryProfileType::RTMP:
-			case Kaltura_Client_Enum_DeliveryProfileType::LIVE_RTMP:
-				return 'Kaltura_Client_Type_DeliveryProfileRtmp';
-			case Kaltura_Client_Enum_DeliveryProfileType::AKAMAI_HTTP:
-				return 'Kaltura_Client_Type_DeliveryProfileAkamaiHttp';
-			case Kaltura_Client_Enum_DeliveryProfileType::AKAMAI_HDS:
-				return 'Kaltura_Client_Type_DeliveryProfileAkamaiHds';
-			case Kaltura_Client_Enum_DeliveryProfileType::AKAMAI_HLS_MANIFEST:
-				return 'Kaltura_Client_Type_DeliveryProfileAkamaiAppleHttpManifest';
-			case Kaltura_Client_Enum_DeliveryProfileType::LIVE_HLS:
-				return 'Kaltura_Client_Type_DeliveryProfileLiveAppleHttp';
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_SS:
-				return 'Kaltura_Client_Type_DeliveryProfileGenericSilverLight';
-			case Kaltura_Client_Enum_DeliveryProfileType::GENERIC_RTMP:
-				return 'Kaltura_Client_Type_DeliveryProfileGenericRtmp';
-			case Kaltura_Client_Enum_DeliveryProfileType::VOD_PACKAGER_HLS_MANIFEST:
-			case Kaltura_Client_Enum_DeliveryProfileType::VOD_PACKAGER_HLS:
-				return 'Kaltura_Client_Type_DeliveryProfileVodPackagerHls';
-			case Kaltura_Client_Enum_DeliveryProfileType::VOD_PACKAGER_DASH:
-				return 'Kaltura_Client_Type_DeliveryProfileVodPackagerPlayServer';
-			case Kaltura_Client_Enum_DeliveryProfileType::VOD_PACKAGER_MSS:
-				return 'Kaltura_Client_Type_DeliveryProfileVodPackagerPlayServer';
-			case Kaltura_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_HLS:
-				return "Kaltura_Client_Type_DeliveryProfileLivePackagerHls";
-			case Kaltura_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_HDS:
-			case Kaltura_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_DASH:
-			case Kaltura_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_MSS:
-				return 'Kaltura_Client_Type_DeliveryProfileLivePackager';
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_HLS:
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_HLS_MANIFEST:
+				return 'Vidiun_Client_Type_DeliveryProfileGenericAppleHttp';
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_HDS:
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_HDS_MANIFEST:
+				return 'Vidiun_Client_Type_DeliveryProfileGenericHds';
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_HTTP:
+				return 'Vidiun_Client_Type_DeliveryProfileGenericHttp';
+			case Vidiun_Client_Enum_DeliveryProfileType::RTMP:
+			case Vidiun_Client_Enum_DeliveryProfileType::LIVE_RTMP:
+				return 'Vidiun_Client_Type_DeliveryProfileRtmp';
+			case Vidiun_Client_Enum_DeliveryProfileType::AKAMAI_HTTP:
+				return 'Vidiun_Client_Type_DeliveryProfileAkamaiHttp';
+			case Vidiun_Client_Enum_DeliveryProfileType::AKAMAI_HDS:
+				return 'Vidiun_Client_Type_DeliveryProfileAkamaiHds';
+			case Vidiun_Client_Enum_DeliveryProfileType::AKAMAI_HLS_MANIFEST:
+				return 'Vidiun_Client_Type_DeliveryProfileAkamaiAppleHttpManifest';
+			case Vidiun_Client_Enum_DeliveryProfileType::LIVE_HLS:
+				return 'Vidiun_Client_Type_DeliveryProfileLiveAppleHttp';
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_SS:
+				return 'Vidiun_Client_Type_DeliveryProfileGenericSilverLight';
+			case Vidiun_Client_Enum_DeliveryProfileType::GENERIC_RTMP:
+				return 'Vidiun_Client_Type_DeliveryProfileGenericRtmp';
+			case Vidiun_Client_Enum_DeliveryProfileType::VOD_PACKAGER_HLS_MANIFEST:
+			case Vidiun_Client_Enum_DeliveryProfileType::VOD_PACKAGER_HLS:
+				return 'Vidiun_Client_Type_DeliveryProfileVodPackagerHls';
+			case Vidiun_Client_Enum_DeliveryProfileType::VOD_PACKAGER_DASH:
+				return 'Vidiun_Client_Type_DeliveryProfileVodPackagerPlayServer';
+			case Vidiun_Client_Enum_DeliveryProfileType::VOD_PACKAGER_MSS:
+				return 'Vidiun_Client_Type_DeliveryProfileVodPackagerPlayServer';
+			case Vidiun_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_HLS:
+				return "Vidiun_Client_Type_DeliveryProfileLivePackagerHls";
+			case Vidiun_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_HDS:
+			case Vidiun_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_DASH:
+			case Vidiun_Client_Enum_DeliveryProfileType::LIVE_PACKAGER_MSS:
+				return 'Vidiun_Client_Type_DeliveryProfileLivePackager';
 			default:
-				return 'Kaltura_Client_Type_DeliveryProfile';
+				return 'Vidiun_Client_Type_DeliveryProfile';
 		}
 	}
 	
@@ -203,33 +203,33 @@ class DeliveryController extends Zend_Controller_Action
 		switch($type) {
 			case 'Null':
 				return new Form_Delivery_DeliveryProfileNullTokenizer();
-			case 'Kaltura_Client_Type_UrlTokenizerAkamaiSecureHd':
+			case 'Vidiun_Client_Type_UrlTokenizerAkamaiSecureHd':
 				return new Form_Delivery_UrlTokenizerAkamaiSecureHd();
-			case 'Kaltura_Client_Type_UrlTokenizerLevel3':
+			case 'Vidiun_Client_Type_UrlTokenizerLevel3':
 				return new Form_Delivery_UrlTokenizerLevel3();
-			case 'Kaltura_Client_Type_UrlTokenizerLimeLight':
+			case 'Vidiun_Client_Type_UrlTokenizerLimeLight':
 				return new Form_Delivery_UrlTokenizerLimeLight();
-			case 'Kaltura_Client_Type_UrlTokenizerAkamaiHttp':
+			case 'Vidiun_Client_Type_UrlTokenizerAkamaiHttp':
 				return new Form_Delivery_UrlTokenizerAkamaiHttp();
-			case 'Kaltura_Client_Type_UrlTokenizerAkamaiRtmp':
+			case 'Vidiun_Client_Type_UrlTokenizerAkamaiRtmp':
 				return new Form_Delivery_UrlTokenizerAkamaiRtmp();
-			case 'Kaltura_Client_Type_UrlTokenizerAkamaiRtsp':
+			case 'Vidiun_Client_Type_UrlTokenizerAkamaiRtsp':
 				return new Form_Delivery_UrlTokenizerAkamaiRtsp();
-			case 'Kaltura_Client_Type_UrlTokenizerBitGravity':
+			case 'Vidiun_Client_Type_UrlTokenizerBitGravity':
 				return new Form_Delivery_UrlTokenizerBitGravity();
-			case 'Kaltura_Client_Type_UrlTokenizerCloudFront':
+			case 'Vidiun_Client_Type_UrlTokenizerCloudFront':
 					return new Form_Delivery_UrlTokenizerCloudFront();
-			case 'Kaltura_Client_Type_UrlTokenizerVnpt':
+			case 'Vidiun_Client_Type_UrlTokenizerVnpt':
 					return new Form_Delivery_UrlTokenizerVnpt();
-			case 'Kaltura_Client_Type_UrlTokenizerCht':
+			case 'Vidiun_Client_Type_UrlTokenizerCht':
 					return new Form_Delivery_UrlTokenizerLimeLight();
-			case 'Kaltura_Client_Type_UrlTokenizerChinaCache':
+			case 'Vidiun_Client_Type_UrlTokenizerChinaCache':
 					return new Form_Delivery_UrlTokenizerChinaCache();
-			case 'Kaltura_Client_Type_UrlTokenizerWowzaSecureToken':
+			case 'Vidiun_Client_Type_UrlTokenizerWowzaSecureToken':
 					return new Form_Delivery_UrlTokenizerWowzaSecureToken();
 				
 			default:
-				return KalturaPluginManager::loadObject('Form_Delivery_DeliveryProfileTokenizer', $type, array());
+				return VidiunPluginManager::loadObject('Form_Delivery_DeliveryProfileTokenizer', $type, array());
 		}
 	}
 	
@@ -246,22 +246,22 @@ class DeliveryController extends Zend_Controller_Action
 	
 		$tokenizer = array();
 		$tokenizer['Null'] = $this->view->translate('No Tokenizer');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerLevel3'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerLevel3');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerLimeLight'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerLimeLight');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerAkamaiHttp'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerAkamaiHttp');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerAkamaiRtmp'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerAkamaiRtmp');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerAkamaiRtsp'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerAkamaiRtsp');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerBitGravity'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerBitGravity');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerAkamaiSecureHd'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerAkamaiSecureHd');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerCloudFront'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerCloudFront');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerVnpt'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerVnpt');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerCht'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerCht');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerChinaCache'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerChinaCache');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerWowzaSecureToken'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerWowzaSecureToken');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerLevel3'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerLevel3');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerLimeLight'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerLimeLight');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerAkamaiHttp'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerAkamaiHttp');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerAkamaiRtmp'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerAkamaiRtmp');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerAkamaiRtsp'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerAkamaiRtsp');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerBitGravity'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerBitGravity');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerAkamaiSecureHd'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerAkamaiSecureHd');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerCloudFront'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerCloudFront');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerVnpt'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerVnpt');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerCht'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerCht');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerChinaCache'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerChinaCache');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerWowzaSecureToken'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerWowzaSecureToken');
 		
 		// Plugins
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerUplynk'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerUplynk');
-		$tokenizer['Kaltura_Client_Type_UrlTokenizerVelocix'] = $this->view->translate('Kaltura_Client_Type_UrlTokenizerVelocix');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerUplynk'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerUplynk');
+		$tokenizer['Vidiun_Client_Type_UrlTokenizerVelocix'] = $this->view->translate('Vidiun_Client_Type_UrlTokenizerVelocix');
 		
 		return $tokenizer;
 	}
@@ -269,7 +269,7 @@ class DeliveryController extends Zend_Controller_Action
 	protected function getRecognizerClasses() {
 		$recognizer = array();
 		$recognizer['Null'] = $this->view->translate('No Recognizer');
-		$recognizer['Kaltura_Client_Type_UrlRecognizer'] = $this->view->translate('Kaltura_Client_Type_UrlRecognizer');
+		$recognizer['Vidiun_Client_Type_UrlRecognizer'] = $this->view->translate('Vidiun_Client_Type_UrlRecognizer');
 		return $recognizer;
 	}
 	
@@ -322,7 +322,7 @@ class DeliveryController extends Zend_Controller_Action
 	
 		$request = $this->getRequest();
 	
-		$pager = new Kaltura_Client_Type_FilterPager();
+		$pager = new Vidiun_Client_Type_FilterPager();
 		$pager->pageSize = 500;
 		if (!$deliveryProfileId) //new
 		{
@@ -405,11 +405,11 @@ class DeliveryController extends Zend_Controller_Action
 		$deliveryProfileId =  $request->getParam('deliveryProfileId');
 		
 		$client = Infra_ClientHelper::getClient();
-		$deliveryProfileService = new Kaltura_Client_DeliveryProfileService($client);
+		$deliveryProfileService = new Vidiun_Client_DeliveryProfileService($client);
 		
 		Infra_ClientHelper::impersonate($partnerId);
 		
-		$deliveryProfile = new Kaltura_Client_Type_DeliveryProfile();
+		$deliveryProfile = new Vidiun_Client_Type_DeliveryProfile();
 		$deliveryProfile->status = $status;
 		$deliveryProfileService->update($deliveryProfileId, $deliveryProfile);
 		

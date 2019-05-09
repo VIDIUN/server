@@ -3,7 +3,7 @@
  * @package plugins.comcastMrssDistribution
  * @subpackage api.objects
  */
-class KalturaComcastMrssDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunComcastMrssDistributionProfile extends VidiunConfigurableDistributionProfile
 {	
 	/**
 	 * @var int
@@ -42,7 +42,7 @@ class KalturaComcastMrssDistributionProfile extends KalturaConfigurableDistribut
 	public $itemLink;
 
 	/**
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $cPlatformTvSeries;
 	
@@ -90,18 +90,18 @@ class KalturaComcastMrssDistributionProfile extends KalturaConfigurableDistribut
 		return array_merge(parent::getMapBetweenObjects(), self::$map_between_objects);
 	}
 	
-	public function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		/* @var $sourceObject ComcastMrssDistributionProfile */
 		parent::doFromObject($sourceObject, $responseProfile);
 		
-		$keyValArray = new KalturaKeyValueArray();
+		$keyValArray = new VidiunKeyValueArray();
 		$array = $sourceObject->getcPlatformTvSeries();
 		if (is_array($array))
 		{
 			foreach($array as $key => $val)
 			{
-				$keyVal = new KalturaKeyValue();
+				$keyVal = new VidiunKeyValue();
 				$keyVal->key = $key;
 				$keyVal->value = $val;
 				$keyValArray[] = $keyVal;
@@ -119,11 +119,11 @@ class KalturaComcastMrssDistributionProfile extends KalturaConfigurableDistribut
 		$object = parent::toObject($object, $skip);
 		
 		$array = array();
-		if ($this->cPlatformTvSeries instanceof KalturaKeyValueArray)
+		if ($this->cPlatformTvSeries instanceof VidiunKeyValueArray)
 		{
 			foreach($this->cPlatformTvSeries as $keyVal)
 			{
-				/* @var $keyVal KalturaKeyValue */
+				/* @var $keyVal VidiunKeyValue */
 				$array[$keyVal->key] = $keyVal->value; 
 			}
 		}

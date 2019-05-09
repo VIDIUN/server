@@ -2,7 +2,7 @@
 /**
  * @package plugins.adminConsole
  */
-class AdminConsolePlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaServices, IKalturaPending
+class AdminConsolePlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunServices, IVidiunPending
 {
 	const PLUGIN_NAME = 'adminConsole';
 	
@@ -13,7 +13,7 @@ class AdminConsolePlugin extends KalturaPlugin implements IKalturaPermissions, I
 	
 	public static function dependsOn()
 	{			
-		$dependency = new KalturaDependency(FileSyncPlugin::getPluginName());
+		$dependency = new VidiunDependency(FileSyncPlugin::getPluginName());
 		return array($dependency);
 	}
 	

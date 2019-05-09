@@ -3,7 +3,7 @@
  * @package plugins.webexNbrplayer
  * @subpackage lib
  */
-class KOperationEngineWebexNbrplayer  extends KSingleOutputOperationEngine
+class VOperationEngineWebexNbrplayer  extends VSingleOutputOperationEngine
 {
 
 	/**
@@ -64,7 +64,7 @@ public function buildCfgFile($inputFile, $outputFile, $format=null,
 		array("inputfile=".$inputFile,"outputfile=".$outputFile,"media=".$format,$format,"width=".$width,"height=".$height,
 				"videocodec=".$videoCodec,"audiocodec=".$audioCodec,"videokeyframes=".$keyFramesInSec,"maxstream=".$bitrate),
 		self::WebexCfgTemplate);
-	KalturaLog::log($cfg);
+	VidiunLog::log($cfg);
 	return $cfg;
 }
 
@@ -81,7 +81,7 @@ public function buildCfgFile($inputFile, $outputFile, $format=null,
 	public function __construct($cmd, $outFilePath)
 	{
 		parent::__construct($cmd,$outFilePath);
-		KalturaLog::info(": cmd($cmd), outFilePath($outFilePath)");
+		VidiunLog::info(": cmd($cmd), outFilePath($outFilePath)");
 	}
 
 	protected function getCmdLine()
@@ -92,18 +92,18 @@ public function buildCfgFile($inputFile, $outputFile, $format=null,
 		$this->addToLogFile("Webex CFG:\n*******\n$cfgStr\n*******\n");
 
 		$exeCmd =  parent::getCmdLine();
-		KalturaLog::info("command line: $exeCmd");
-		KalturaLog::info(print_r($this,true));
+		VidiunLog::info("command line: $exeCmd");
+		VidiunLog::info(print_r($this,true));
 		return $exeCmd;
 	}
 
-	public function configure(KalturaConvartableJobData $data, KalturaBatchJob $job)
+	public function configure(VidiunConvartableJobData $data, VidiunBatchJob $job)
 	{
 		parent::configure($data, $job);
-		KalturaLog::info("taskConfig-->".print_r(KBatchBase::$taskConfig,true)."\ndata->".print_r($data,true));
+		VidiunLog::info("taskConfig-->".print_r(VBatchBase::$taskConfig,true)."\ndata->".print_r($data,true));
 	}
 	
-	public function operate(kOperator $operator = null, $inFilePath, $configFilePath = null)
+	public function operate(vOperator $operator = null, $inFilePath, $configFilePath = null)
 	{
 			/*
 			 * Creating unique output folder for nbrPlay/Webex sessions.
@@ -135,16 +135,16 @@ public function buildCfgFile($inputFile, $outputFile, $format=null,
 			 * Restore the original
 			 */
 		if(file_exists($tempOutPath)){
-			$outFilelist = kFile::dirList($tempFolder);
+			$outFilelist = vFile::dirList($tempFolder);
 			if(isset($outFilelist) && count($outFilelist)>0){
 				foreach ($outFilelist as $fileName){
 					for($tries=0; $tries<5; $tries++){
 						$toFile = "$outDir/".pathinfo($fileName, PATHINFO_BASENAME);
-						$rv = kFile::moveFile($fileName, $toFile);
+						$rv = vFile::moveFile($fileName, $toFile);
 						if(!file_exists($fileName)){
 							break;
 						}
-						KalturaLog::err("Failed to move ($fileName) to ($toFile)");
+						VidiunLog::err("Failed to move ($fileName) to ($toFile)");
 						Sleep(60);
 					}
 				}

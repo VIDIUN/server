@@ -4,9 +4,9 @@
  * @package Core
  * @subpackage events
  */
-class kBatchJobStatusEvent extends KalturaEvent implements IKalturaContinualEvent, IKalturaObjectRelatedEvent, IKalturaBatchJobRelatedEvent
+class vBatchJobStatusEvent extends VidiunEvent implements IVidiunContinualEvent, IVidiunObjectRelatedEvent, IVidiunBatchJobRelatedEvent
 {
-	const EVENT_CONSUMER = 'kBatchJobStatusEventConsumer';
+	const EVENT_CONSUMER = 'vBatchJobStatusEventConsumer';
 	
 	/**
 	 * @var BatchJob
@@ -20,7 +20,7 @@ class kBatchJobStatusEvent extends KalturaEvent implements IKalturaContinualEven
 	{
 		$this->dbBatchJob = $dbBatchJob;
 		
-		KalturaLog::debug("Event [" . get_class($this) . "] job id [" . $dbBatchJob->getId() . "] type [" . $dbBatchJob->getJobType() . "] sub type [" . $dbBatchJob->getJobSubType() . "] status [" . $dbBatchJob->getStatus() . "]");
+		VidiunLog::debug("Event [" . get_class($this) . "] job id [" . $dbBatchJob->getId() . "] type [" . $dbBatchJob->getJobType() . "] sub type [" . $dbBatchJob->getJobSubType() . "] status [" . $dbBatchJob->getStatus() . "]");
 	}
 	
 	public function getConsumerInterface()
@@ -29,17 +29,17 @@ class kBatchJobStatusEvent extends KalturaEvent implements IKalturaContinualEven
 	}
 	
 	/**
-	 * @param kBatchJobStatusEventConsumer $consumer
+	 * @param vBatchJobStatusEventConsumer $consumer
 	 * @return bool true if should continue to the next consumer
 	 */
-	protected function doConsume(KalturaEventConsumer $consumer)
+	protected function doConsume(VidiunEventConsumer $consumer)
 	{
 		if(!$consumer->shouldConsumeJobStatusEvent($this->dbBatchJob))
 			return true;
 
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] job id [' . $this->dbBatchJob->getId() . '] type [' . $this->dbBatchJob->getJobType() . '] sub type [' . $this->dbBatchJob->getJobSubType() . '] status [' . $this->dbBatchJob->getStatus() . ']');
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] job id [' . $this->dbBatchJob->getId() . '] type [' . $this->dbBatchJob->getJobType() . '] sub type [' . $this->dbBatchJob->getJobSubType() . '] status [' . $this->dbBatchJob->getStatus() . ']');
 		$result = $consumer->updatedJob($this->dbBatchJob);
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] job id [' . $this->dbBatchJob->getId() . '] type [' . $this->dbBatchJob->getJobType() . '] sub type [' . $this->dbBatchJob->getJobSubType() . '] status [' . $this->dbBatchJob->getStatus() . ']');
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] job id [' . $this->dbBatchJob->getId() . '] type [' . $this->dbBatchJob->getJobType() . '] sub type [' . $this->dbBatchJob->getJobSubType() . '] status [' . $this->dbBatchJob->getStatus() . ']');
 		return $result;
 	}
 
@@ -52,7 +52,7 @@ class kBatchJobStatusEvent extends KalturaEvent implements IKalturaContinualEven
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaEvent::getScope()
+	 * @see VidiunEvent::getScope()
 	 */
 	public function getScope()
 	{
@@ -63,7 +63,7 @@ class kBatchJobStatusEvent extends KalturaEvent implements IKalturaContinualEven
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectBasedEvent::getObject()
+	 * @see IVidiunObjectBasedEvent::getObject()
 	 */
 	public function getObject() 
 	{

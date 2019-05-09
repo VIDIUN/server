@@ -8,7 +8,7 @@ class ExclusiveScriptExecutor
     private $ttl;
     private $pathToScript;
     private $cacheHandler;
-    private $cacheName=kCacheManager::CACHE_TYPE_LOCK_KEYS;
+    private $cacheName=vCacheManager::CACHE_TYPE_LOCK_KEYS;
 
     public function __construct($lockingTag,$ttl=3600)
     {
@@ -48,7 +48,7 @@ class ExclusiveScriptExecutor
 
     private function initCache()
     {
-        $cache = kCacheManager::getSingleLayerCache($this->cacheName);
+        $cache = vCacheManager::getSingleLayerCache($this->cacheName);
         if(!$cache)
             throw new Exception ("\nCould not allocate cache named - ".$this->cacheName."\n");
 

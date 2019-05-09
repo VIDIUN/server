@@ -3,7 +3,7 @@
  * @package plugins.beacon
  * @subpackage model.items
  */
-class kBeaconScheduledResourceItem extends ESearchItem
+class vBeaconScheduledResourceItem extends ESearchItem
 {
 	/**
 	 * @var BeaconScheduledResourceFieldName
@@ -80,7 +80,7 @@ class kBeaconScheduledResourceItem extends ESearchItem
 	public static function createSearchQuery($eSearchItemsArr, $boolOperator, &$queryAttributes, $eSearchOperatorType = null)
 	{
 		$scheduledResourceQuery = array();
-		$allowedSearchTypes = kBeaconScheduledResourceItem::getAllowedSearchTypesForField();
+		$allowedSearchTypes = vBeaconScheduledResourceItem::getAllowedSearchTypesForField();
 		foreach ($eSearchItemsArr as $scheduledResourceSearchItem)
 		{
 			$scheduledResourceSearchItem->getSingleItemSearchQuery($scheduledResourceQuery, $allowedSearchTypes, $queryAttributes);
@@ -101,25 +101,25 @@ class kBeaconScheduledResourceItem extends ESearchItem
 		switch ($this->getItemType())
 		{
 			case ESearchItemType::EXACT_MATCH:
-				$subQuery = kESearchQueryManager::getExactMatchQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+				$subQuery = vESearchQueryManager::getExactMatchQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 				break;
 			case ESearchItemType::PARTIAL:
-				$subQuery = kESearchQueryManager::getPartialQuery($this, $this->getFieldName(), $queryAttributes);
+				$subQuery = vESearchQueryManager::getPartialQuery($this, $this->getFieldName(), $queryAttributes);
 				break;
 			case ESearchItemType::STARTS_WITH:
-				$subQuery = kESearchQueryManager::getPrefixQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+				$subQuery = vESearchQueryManager::getPrefixQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 				break;
 			case ESearchItemType::EXISTS:
-				$subQuery = kESearchQueryManager::getExistsQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+				$subQuery = vESearchQueryManager::getExistsQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 				break;
 			case ESearchItemType::RANGE:
-				$subQuery = kESearchQueryManager::getRangeQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+				$subQuery = vESearchQueryManager::getRangeQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 				break;
 			default:
-				KalturaLog::log("Undefined item type[" . $this->getItemType() . "]");
+				VidiunLog::log("Undefined item type[" . $this->getItemType() . "]");
 				$data = array('itemType' => $this->getItemType(), 'fieldName' => $this->getFieldName());
-				throw new kESearchException('Type of search [' . $this->getItemType() . '] not allowed on specific field 
-				[' . $this->getFieldName() . ']', kESearchException::SEARCH_TYPE_NOT_ALLOWED_ON_FIELD, $data);
+				throw new vESearchException('Type of search [' . $this->getItemType() . '] not allowed on specific field 
+				[' . $this->getFieldName() . ']', vESearchException::SEARCH_TYPE_NOT_ALLOWED_ON_FIELD, $data);
 		}
 
 		if($subQuery)

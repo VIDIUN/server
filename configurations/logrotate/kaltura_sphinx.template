@@ -1,5 +1,5 @@
 
-@LOG_DIR@/sphinx/kaltura_sphinx_query.log{
+@LOG_DIR@/sphinx/vidiun_sphinx_query.log{
  rotate 5
  daily
  missingok
@@ -8,12 +8,12 @@
  notifempty
  sharedscripts
  postrotate
- service kaltura-sphinx restart
+ service vidiun-sphinx restart
  endscript
- su root kaltura
+ su root vidiun
 }
 
-@LOG_DIR@/sphinx/kaltura_sphinx_searchd.log{
+@LOG_DIR@/sphinx/vidiun_sphinx_searchd.log{
  rotate 5
  daily
  missingok
@@ -22,7 +22,7 @@
  notifempty
  sharedscripts
  postrotate
- service kaltura-sphinx restart
+ service vidiun-sphinx restart
  endscript
- su root kaltura
+ su root vidiun
 }

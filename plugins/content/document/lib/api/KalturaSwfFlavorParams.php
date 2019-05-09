@@ -3,7 +3,7 @@
  * @package plugins.document
  * @subpackage api.objects
  */
-class KalturaSwfFlavorParams extends KalturaFlavorParams 
+class VidiunSwfFlavorParams extends VidiunFlavorParams 
 {
 	public function toObject($object = null, $skip = array())
 	{

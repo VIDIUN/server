@@ -1,9 +1,9 @@
-<kcw>
+<vcw>
   <UIConfigList>
     <UIConfig>
       <target>ContributionWizard.swf</target>
-      <cssUrl id="light" name="Default Light">/content/uiconf/kcweditor/styles/light/default.swf?R=13977.195017901598</cssUrl>
-      <localeUrl id="" name="">/content/uiconf/moodle/kcw/dark/kcw_en_US.swf?R=13977.195017901598</localeUrl>
+      <cssUrl id="light" name="Default Light">/content/uiconf/vcweditor/styles/light/default.swf?R=13977.195017901598</cssUrl>
+      <localeUrl id="" name="">/content/uiconf/moodle/vcw/dark/vcw_en_US.swf?R=13977.195017901598</localeUrl>
     </UIConfig>
   </UIConfigList>
   <webcamParams>
@@ -89,4 +89,4 @@
       <mediaProviderName>upload</mediaProviderName>
     </gotoScreen>
   </StartupDefaults>
-</kcw>
+</vcw>

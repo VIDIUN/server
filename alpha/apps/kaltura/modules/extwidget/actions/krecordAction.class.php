@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage externalWidgets
  */
-class krecordAction extends sfAction
+class vrecordAction extends sfAction
 {
 	/**
 	 * Will forward to the uploader swf according to the ui_conf_id 
@@ -30,7 +30,7 @@ class krecordAction extends sfAction
 			die();
 		}
 			
-		if( kString::beginsWith( $ui_conf_swf_url , "http") )
+		if( vString::beginsWith( $ui_conf_swf_url , "http") )
 		{
 			$swf_url = 	$ui_conf_swf_url; // absolute URL 
 		}

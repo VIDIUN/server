@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.filters
  */
-abstract class KalturaCriterion extends Criterion implements IKalturaDbQuery
+abstract class VidiunCriterion extends Criterion implements IVidiunDbQuery
 {
 	const TAG_ENTITLEMENT_ENTRY = 'TAG_ENTITLEMENT_ENTRY';
 	const TAG_ENTITLEMENT_CATEGORY = 'TAG_ENTITLEMENT_CATEGORY';
@@ -12,12 +12,12 @@ abstract class KalturaCriterion extends Criterion implements IKalturaDbQuery
 	const TAG_USER_SESSION = 'TAG_USER_SESSION';
 	
 	/**
-	 * @var KalturaCriterion
+	 * @var VidiunCriterion
 	 */
 	protected $parentCriterion = null;
 	
 	/**
-	 * @var KalturaCriteria
+	 * @var VidiunCriteria
 	 */
 	protected $criteria = false;
 	
@@ -120,18 +120,18 @@ abstract class KalturaCriterion extends Criterion implements IKalturaDbQuery
 	}
 
 	/**
-	 * @param IKalturaIndexQuery $query
+	 * @param IVidiunIndexQuery $query
 	 * @param int $depth
 	 * @param bool $queryHasOr
 	 */
-	abstract public function apply(IKalturaIndexQuery $query);
+	abstract public function apply(IVidiunIndexQuery $query);
 	
 	/* (non-PHPdoc)
 	 * @see Criterion::addAnd()
 	 */
 	public function addAnd(Criterion $criterion)
 	{
-		if($criterion instanceof KalturaCriterion)
+		if($criterion instanceof VidiunCriterion)
 		{
 			$criterion->setParentCriterion($this);
 			$criterion->setSelfConjunction(self::UND);
@@ -145,7 +145,7 @@ abstract class KalturaCriterion extends Criterion implements IKalturaDbQuery
 	 */
 	public function addOr(Criterion $criterion)
 	{
-		if($criterion instanceof KalturaCriterion)
+		if($criterion instanceof VidiunCriterion)
 		{
 			$criterion->setSelfConjunction(self::ODER);
 			$criterion->setParentCriterion($this);
@@ -155,7 +155,7 @@ abstract class KalturaCriterion extends Criterion implements IKalturaDbQuery
 	}
 	
 	/**
-	 * @return KalturaCriterion $parentCriterion
+	 * @return VidiunCriterion $parentCriterion
 	 */
 	protected function getParentCriterion()
 	{
@@ -163,9 +163,9 @@ abstract class KalturaCriterion extends Criterion implements IKalturaDbQuery
 	}
 
 	/**
-	 * @param KalturaCriterion $parentCriterion
+	 * @param VidiunCriterion $parentCriterion
 	 */
-	protected function setParentCriterion(KalturaCriterion $parentCriterion)
+	protected function setParentCriterion(VidiunCriterion $parentCriterion)
 	{
 		$this->parentCriterion = $parentCriterion;
 	}
@@ -187,7 +187,7 @@ abstract class KalturaCriterion extends Criterion implements IKalturaDbQuery
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaDbQuery::addColumnWhere()
+	 * @see IVidiunDbQuery::addColumnWhere()
 	 */
 	public function addColumnWhere($column, $value, $comparison)
 	{

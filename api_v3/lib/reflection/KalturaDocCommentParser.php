@@ -3,7 +3,7 @@
  * @package api
  * @subpackage v3
  */
-class KalturaDocCommentParser
+class VidiunDocCommentParser
 {
     const DOCCOMMENT_READONLY = "/\\@readonly/i";
     const DOCCOMMENT_INSERTONLY = "/\\@insertonly/i";
@@ -54,9 +54,9 @@ class KalturaDocCommentParser
 
     const DOCCOMMENT_DISABLE_RELATIVE_TIME = "/\\@disableRelativeTime \\$(\\w*)/";
 
-    const DOCCOMMENT_KS_OPTIONAL = "/\\@ksOptional/i";
+    const DOCCOMMENT_VS_OPTIONAL = "/\\@vsOptional/i";
 
-    const DOCCOMMENT_KS_IGNORED = "/\\@ksIgnored/i";
+    const DOCCOMMENT_VS_IGNORED = "/\\@vsIgnored/i";
 
     const DOCCOMMENT_BETA = "/\\@beta/i";
 
@@ -229,7 +229,7 @@ class KalturaDocCommentParser
      * Null - optional
      * @var bool
      */
-    public $ksNeeded = true;
+    public $vsNeeded = true;
 
     /**
      * @var bool
@@ -254,13 +254,13 @@ class KalturaDocCommentParser
         $this->serverOnly = preg_match( self::DOCCOMMENT_SERVER_ONLY, $comment);
         $this->beta = preg_match( self::DOCCOMMENT_BETA, $comment);
 
-        if(preg_match( self::DOCCOMMENT_KS_IGNORED, $comment))
+        if(preg_match( self::DOCCOMMENT_VS_IGNORED, $comment))
         {
-            $this->ksNeeded = false;
+            $this->vsNeeded = false;
         }
-        elseif(preg_match( self::DOCCOMMENT_KS_OPTIONAL, $comment))
+        elseif(preg_match( self::DOCCOMMENT_VS_OPTIONAL, $comment))
         {
-            $this->ksNeeded = null;
+            $this->vsNeeded = null;
         }
 
         $result = null;
@@ -378,7 +378,7 @@ class KalturaDocCommentParser
                 }
                 else
                 {
-                    KalturaLog::err("Constant [$error] not found in class [$errorClass]");
+                    VidiunLog::err("Constant [$error] not found in class [$errorClass]");
                 }
             }
         }
@@ -401,7 +401,7 @@ class KalturaDocCommentParser
             return null;
         //if not
         $hierarchyClass = $reflectClass->getParentClass();
-        while ($hierarchyClass  && $hierarchyClass->getName() !== 'KalturaObject')
+        while ($hierarchyClass  && $hierarchyClass->getName() !== 'VidiunObject')
         {
             if (preg_match(self::RELATED_SERVICE, $hierarchyClass->getDocComment(),$result))
             {

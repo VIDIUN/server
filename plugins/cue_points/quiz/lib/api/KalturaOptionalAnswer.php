@@ -5,7 +5,7 @@
  * @package plugins.quiz
  * @subpackage api.objects
  */
-class KalturaOptionalAnswer extends KalturaObject {
+class VidiunOptionalAnswer extends VidiunObject {
 
 	/**
 	 * @var string
@@ -23,7 +23,7 @@ class KalturaOptionalAnswer extends KalturaObject {
 	public $weight = 1.0;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isCorrect;
 
@@ -41,13 +41,13 @@ class KalturaOptionalAnswer extends KalturaObject {
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
 		{
-			$dbObject = new kOptionalAnswer();
+			$dbObject = new vOptionalAnswer();
 		}
 
 		return parent::toObject($dbObject, $propsToSkip);

@@ -53,7 +53,7 @@ class myBatchFlattenClient
 
 class myBatchFlattenServer extends myBatchBase
 {
-	const KALTURAS_FLATTEN_READY = 60;
+	const VIDIUNS_FLATTEN_READY = 60;
 	
 	public static function getBatchStatus( $args )	
 	{	
@@ -88,8 +88,8 @@ class myBatchFlattenServer extends myBatchBase
 		$iteration = 0;
 		
 		$c = new Criteria();
-		$currentDc = kDataCenterMgr::getCurrentDc();
-		$c->add(BatchJobPeer::DC, kDataCenterMgr::getCurrentDcId() );
+		$currentDc = vDataCenterMgr::getCurrentDc();
+		$c->add(BatchJobPeer::DC, vDataCenterMgr::getCurrentDcId() );
 		$c->add(BatchJobPeer::JOB_TYPE, BatchJobType::FLATTEN);
 		$c->add(BatchJobPeer::STATUS, BatchJob::BATCHJOB_STATUS_PROCESSED);
 
@@ -119,37 +119,37 @@ class myBatchFlattenServer extends myBatchBase
 						// close job as failed
 						$job->setStatus(BatchJob::BATCHJOB_STATUS_FAILED);
 						$job->setDescription("could not retrieve entry, probably deleted");
-						KalturaLog::debug("could not retrieve entry $entry_id , probably deleted");
+						VidiunLog::debug("could not retrieve entry $entry_id , probably deleted");
 						$job->save();
 						continue;
 					}
 					
 					$fileSyncKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DOWNLOAD, $file_format);
-					$fullFinalPath = kFileSyncUtils::getLocalFilePathForKey($fileSyncKey);
+					$fullFinalPath = vFileSyncUtils::getLocalFilePathForKey($fileSyncKey);
 					$finalPathNoExt = substr($fullFinalPath, 0 , strlen($fullFinalPath)-strlen($file_format));
 
-					kFile::fullMkdir($fullFinalPath);
+					vFile::fullMkdir($fullFinalPath);
 					
 					$wildcardFinalPath = $finalPathNoExt."*";
 					$older_files = glob($wildcardFinalPath);
 					foreach($older_files as $older_file)
 					{
-						KalturaLog::debug("removing old file: [$older_file]");
+						VidiunLog::debug("removing old file: [$older_file]");
 						@unlink($older_file);
 					}
 					
-					KalturaLog::debug("Downloading: $fullFinalPath");
-					KCurlWrapper::getDataFromFile($data["serverUrl"], $fullFinalPath);
+					VidiunLog::debug("Downloading: $fullFinalPath");
+					VCurlWrapper::getDataFromFile($data["serverUrl"], $fullFinalPath);
 					if (!file_exists($fullFinalPath))
 					{
-						KalturaLog::debug("file doesnt exist: ". $data["serverUrl"]);
+						VidiunLog::debug("file doesnt exist: ". $data["serverUrl"]);
 						$job->setDescription("file doesnt exist: ". $data["serverUrl"]);
 						$job->setStatus(BatchJob::BATCHJOB_STATUS_FAILED);
 					}
 					else if (filesize($fullFinalPath) < 100000)
 					{
 						@unlink($fullFinalPath);
-						KalturaLog::debug("file too small: ". $data["serverUrl"]);
+						VidiunLog::debug("file too small: ". $data["serverUrl"]);
 						$job->setDescription("file too small: ". $data["serverUrl"]);
 						$job->setStatus(BatchJob::BATCHJOB_STATUS_FAILED);
 					}
@@ -158,53 +158,53 @@ class myBatchFlattenServer extends myBatchBase
 						if ($data['email'])
 						{
 							$downloadLink = $entry->getDownloadUrl().'/format/'.$file_format;
-							kJobsManager::addMailJob(
+							vJobsManager::addMailJob(
 								null, 
 								$entry_id,
 								$entry->getPartnerId(),
-								self::KALTURAS_FLATTEN_READY, 
-								kMailJobData::MAIL_PRIORITY_NORMAL, 
-								kConf::get ( "batch_flatten_video_sender_email" ), 
-								kConf::get ( "batch_flatten_video_sender_name" ), 
+								self::VIDIUNS_FLATTEN_READY, 
+								vMailJobData::MAIL_PRIORITY_NORMAL, 
+								vConf::get ( "batch_flatten_video_sender_email" ), 
+								vConf::get ( "batch_flatten_video_sender_name" ), 
 								$data['email'], 
 								array($data['email'] , $downloadLink));
 						}
 						
-						KalturaLog::debug("Deleting: ".$data["deleteUrl"]);
-						kFile::downloadUrlToString($data["deleteUrl"]);
+						VidiunLog::debug("Deleting: ".$data["deleteUrl"]);
+						vFile::downloadUrlToString($data["deleteUrl"]);
 						
-						myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry );
+						myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry );
 						
 						$job->setStatus(BatchJob::BATCHJOB_STATUS_FINISHED);
 						
-						list($rootPath, $filePath) = kFileSyncUtils::getLocalFilePathArrForKey($fileSyncKey);
+						list($rootPath, $filePath) = vFileSyncUtils::getLocalFilePathArrForKey($fileSyncKey);
 						$fileFullPath = $rootPath . $filePath; 
 						if (file_exists($fileFullPath))
 						{
 							try {
-								kFileSyncUtils::createSyncFileForKey($rootPath, $filePath, $fileSyncKey);
+								vFileSyncUtils::createSyncFileForKey($rootPath, $filePath, $fileSyncKey);
 							}
 							catch(Exception $ex) // hack for the case where the file sync already exists and we re-flattened a mix
 							{
-								KalturaLog::debug ( "ignore ERROR: " . $ex->getMessage() );
+								VidiunLog::debug ( "ignore ERROR: " . $ex->getMessage() );
 							}
 						}							
 						else
-							KalturaLog::debug("The file [$fileFullPath] doesn't exists, not creating FileSync");
+							VidiunLog::debug("The file [$fileFullPath] doesn't exists, not creating FileSync");
 					}
 					$job->save();
 				}
 			}	
 			catch ( Exception $ex )
 			{
-				KalturaLog::debug ( "ERROR: " . $ex->getMessage() );
+				VidiunLog::debug ( "ERROR: " . $ex->getMessage() );
 				self::initDb( true );
 				self::failed();
 			}
 			
 			if ( $temp_count == 0 )
 			{
-				KalturaLog::debug ( "Ended conversion. sleeping for a while (" . $sleep_between_cycles .
+				VidiunLog::debug ( "Ended conversion. sleeping for a while (" . $sleep_between_cycles .
 				" seconds). Will write to the log in (" . ( $sleep_between_cycles * $number_of_times_to_skip_writing_sleeping ) . ") seconds" );
 			}
 

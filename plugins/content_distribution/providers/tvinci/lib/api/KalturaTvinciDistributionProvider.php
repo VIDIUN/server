@@ -3,7 +3,7 @@
  * @package plugins.tvinciDistribution
  * @subpackage api.objects
  */
-class KalturaTvinciDistributionProvider extends KalturaDistributionProvider
+class VidiunTvinciDistributionProvider extends VidiunDistributionProvider
 {
 	
 }

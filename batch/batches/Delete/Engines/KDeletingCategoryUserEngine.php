@@ -3,35 +3,35 @@
  * @package Scheduler
  * @subpackage Delete
  */
-class KDeletingCategoryUserEngine extends KDeletingEngine
+class VDeletingCategoryUserEngine extends VDeletingEngine
 {
 	/* (non-PHPdoc)
-	 * @see KDeletingEngine::delete()
+	 * @see VDeletingEngine::delete()
 	 */
-	protected function delete(KalturaFilter $filter)
+	protected function delete(VidiunFilter $filter)
 	{
 		return $this->deleteCategoryUsers($filter);
 	}
 	
 	/**
-	 * @param KalturaCategoryUserFilter $filter The filter should return the list of category users that need to be deleted
+	 * @param VidiunCategoryUserFilter $filter The filter should return the list of category users that need to be deleted
 	 * @return int the number of deleted category users
 	 */
-	protected function deleteCategoryUsers(KalturaCategoryUserFilter $filter)
+	protected function deleteCategoryUsers(VidiunCategoryUserFilter $filter)
 	{
-		$filter->orderBy = KalturaCategoryUserOrderBy::CREATED_AT_ASC;
+		$filter->orderBy = VidiunCategoryUserOrderBy::CREATED_AT_ASC;
 		
-		$categoryUsersList = KBatchBase::$kClient->categoryUser->listAction($filter, $this->pager);
+		$categoryUsersList = VBatchBase::$vClient->categoryUser->listAction($filter, $this->pager);
 		if(!$categoryUsersList->objects || !count($categoryUsersList->objects))
 			return 0;
 			
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($categoryUsersList->objects as $categoryUser)
 		{
-			/* @var $categoryUser KalturaCategoryUser */
-			KBatchBase::$kClient->categoryUser->delete($categoryUser->categoryId, $categoryUser->userId);
+			/* @var $categoryUser VidiunCategoryUser */
+			VBatchBase::$vClient->categoryUser->delete($categoryUser->categoryId, $categoryUser->userId);
 		}
-		$results = KBatchBase::$kClient->doMultiRequest();
+		$results = VBatchBase::$vClient->doMultiRequest();
 		foreach($results as $index => $result)
 			if(is_array($result) && isset($result['code']))
 				unset($results[$index]);

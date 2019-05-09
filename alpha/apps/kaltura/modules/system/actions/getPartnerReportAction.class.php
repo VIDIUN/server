@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class getPartnerReportAction extends kalturaSystemAction
+class getPartnerReportAction extends vidiunSystemAction
 {
 	public function execute()
 	{
@@ -45,7 +45,7 @@ class getPartnerReportAction extends kalturaSystemAction
 		// gather partner's play and view stats for the last 14 days
 		
 		$connection = Propel::getConnection();
-	    $query = "SELECT ID, KSHOW_ID, NAME from entry where partner_id=$partner_id and type=$entry_type";
+	    $query = "SELECT ID, VSHOW_ID, NAME from entry where partner_id=$partner_id and type=$entry_type";
 		
 	    $statement = $connection->prepareStatement($query);
 	    $resultset = $statement->executeQuery();
@@ -55,11 +55,11 @@ class getPartnerReportAction extends kalturaSystemAction
 	    while ($resultset->next())
 	    {
 	    	$entry_id = $resultset->getString('ID');
-	    	$kshow_id = $resultset->getString('KSHOW_ID');
+	    	$vshow_id = $resultset->getString('VSHOW_ID');
 	    	$name = $resultset->getString('NAME');
 	    	
-	    	//echo "$entry_id $kshow_id $name<br/>\n";
-        	$all_entries[$entry_id] = array("kshow_id" => $kshow_id, "name" => str_replace(',',' ',$name));
+	    	//echo "$entry_id $vshow_id $name<br/>\n";
+        	$all_entries[$entry_id] = array("vshow_id" => $vshow_id, "name" => str_replace(',',' ',$name));
 	    }
 	    
 		$query = "SELECT ENTRY_ID, DATE_FORMAT(date,'%y-%m-%d') as DAY,sum(command='play') as PLAYS,sum(command='view') as VIEWS from collect_stats ".
@@ -103,7 +103,7 @@ class getPartnerReportAction extends kalturaSystemAction
 		
 		for($i = 0; $i < 2; $i++)
 		{
-			$s = "entry_id,kshow_id,name,";
+			$s = "entry_id,vshow_id,name,";
 			foreach($dates as $date => $val)
 			        $s .= "20".$date.",";
 		
@@ -111,7 +111,7 @@ class getPartnerReportAction extends kalturaSystemAction
 		
 			foreach($entries as $entry_id => $estats)
 			{
-		        $s = $entry_id.",".$all_entries[$entry_id]["kshow_id"].",".$all_entries[$entry_id]["name"].",";
+		        $s = $entry_id.",".$all_entries[$entry_id]["vshow_id"].",".$all_entries[$entry_id]["name"].",";
 		        foreach($dates as $date => $val2)
 		        {
 		                if (!array_key_exists($date, $estats))

@@ -21,7 +21,7 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 	protected function writeAfterServices(){}
 	protected function writeBeforeTypes(){}
 	protected function writeAfterTypes(){}
-	protected function writeType(KalturaTypeReflector $type){}
+	protected function writeType(VidiunTypeReflector $type){}
 
 	/**
 	 * (non-PHPdoc)
@@ -33,7 +33,7 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 
 		foreach($this->_services as $serviceId => $serviceActionItem)
 		{
-		    /* @var $serviceActionItem KalturaServiceActionItem */
+		    /* @var $serviceActionItem VidiunServiceActionItem */
 			if($serviceActionItem->serviceInfo->deprecated)
 			    continue;
 
@@ -47,7 +47,7 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 	 * (non-PHPdoc)
 	 * @see ClientGeneratorFromPhp::writeBeforeService()
 	 */
-	protected function writeBeforeService(KalturaServiceActionItem $serviceActionItem)
+	protected function writeBeforeService(VidiunServiceActionItem $serviceActionItem)
 	{
 		$serviceName = $serviceActionItem->serviceInfo->serviceName;
 		$serviceClass = $serviceActionItem->serviceClass;
@@ -66,7 +66,7 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 		$this->writeBase("/**");
 		$this->writeBase(" * $serviceName service base test case.");
 		$this->writeBase(" */");
-		$this->writeBase("abstract class {$serviceClass}TestBase extends KalturaApiTestCase");
+		$this->writeBase("abstract class {$serviceClass}TestBase extends VidiunApiTestCase");
 		$this->writeBase("{");
 			
 		$this->writeTest("<?php");
@@ -101,9 +101,9 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 	/**
 	 *
 	 * Add the set up function for the service
-	 * @param KalturaServiceReflector $serviceReflector
+	 * @param VidiunServiceReflector $serviceReflector
 	 */
-	protected function writeSetUpServiceFunction(KalturaServiceActionItem $serviceReflector)
+	protected function writeSetUpServiceFunction(VidiunServiceActionItem $serviceReflector)
 	{
 		$this->writeTest("	/**");
 		$this->writeTest("	 * Set up the test initial data");
@@ -147,32 +147,32 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 	/**
 	 *
 	 * Writes the service to the test and data files
-	 * @param KalturaServiceReflector $serviceReflector
+	 * @param VidiunServiceReflector $serviceReflector
 	 */
-	protected function writeService(KalturaServiceActionItem $serviceReflector)
+	protected function writeService(VidiunServiceActionItem $serviceReflector)
 	{
 		$serviceName = $serviceReflector->serviceInfo->serviceName;
 		$serviceId = $serviceReflector->serviceId;
 		$serviceClass = $serviceReflector->serviceClass;
 		$actions = $serviceReflector->actionMap;
 
-		KalturaLog::debug("Service name [$serviceName] id [$serviceId] class [$serviceClass]");
+		VidiunLog::debug("Service name [$serviceName] id [$serviceId] class [$serviceClass]");
 		
 		foreach($actions as $action => $actionReflector)
 		{
-		    /* @var $actionReflector KalturaActionReflector */
+		    /* @var $actionReflector VidiunActionReflector */
 			$actionInfo = $actionReflector->getActionInfo();
-			KalturaLog::debug("Action name [" . $actionReflector->getActionName() . "]");
+			VidiunLog::debug("Action name [" . $actionReflector->getActionName() . "]");
 				
 			if($actionInfo->serverOnly)
 			{
-				KalturaLog::debug("Action name [" . $actionReflector->getActionName() . "] server only");
+				VidiunLog::debug("Action name [" . $actionReflector->getActionName() . "] server only");
 				continue;
 			}
 
 			if (strpos($actionInfo->clientgenerator, "ignore") !== false)
 			{
-				KalturaLog::debug("Action name [" . $actionReflector->getActionName() . "] ignored");
+				VidiunLog::debug("Action name [" . $actionReflector->getActionName() . "] ignored");
 				continue;
 			}
 
@@ -187,7 +187,7 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 	 * (non-PHPdoc)
 	 * @see ClientGeneratorFromPhp::writeAfterService()
 	 */
-	protected function writeAfterService(KalturaServiceActionItem $serviceReflector)
+	protected function writeAfterService(VidiunServiceActionItem $serviceReflector)
 	{
 		//Close the test file
 		$this->writeTest("}");
@@ -204,7 +204,7 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 
 		if(strpos($serviceReflector->serviceId, "_"))
 		{
-			$testPath = realpath(dirname(__FILE__) . '/../') . "/tests/api/KalturaPlugins/{$serviceClass}_{$serviceName}";
+			$testPath = realpath(dirname(__FILE__) . '/../') . "/tests/api/VidiunPlugins/{$serviceClass}_{$serviceName}";
 		}
 
 		$this->writeToFile("$testPath/{$serviceClass}TestBase.php", $this->_txtBase);
@@ -215,9 +215,9 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 	/**
 	 *
 	 * Write the outpur data for the test
-	 * @param KalturaParamInfo $outputTypeReflector
+	 * @param VidiunParamInfo $outputTypeReflector
 	 */
-	protected function setOutputData(KalturaParamInfo $outputTypeReflector, &$testParams, &$testValues, $isBase = false, &$validateValues = null)
+	protected function setOutputData(VidiunParamInfo $outputTypeReflector, &$testParams, &$testValues, $isBase = false, &$validateValues = null)
 	{
 		$paramType = $outputTypeReflector->getType();
 		$paramName = $outputTypeReflector->getName();
@@ -242,7 +242,7 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 			$actionParamProperties = $outputTypeReflector->getTypeReflector()->getProperties();
 			foreach($actionParamProperties as $actionParamProperty)
 			{
-				/* @var $actionParamProperty KalturaPropertyInfo */
+				/* @var $actionParamProperty VidiunPropertyInfo */
 				if($actionParamProperty->isReadOnly())
 					continue;
 					
@@ -323,11 +323,11 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 	 * @param array $validateValues - passed by reference
 	 * @param boolean $isBase
 	 */
-	protected function setTestParamsAndValues(KalturaParamInfo $actionParam, &$testParams, &$testValues, &$validateValues, $isBase)
+	protected function setTestParamsAndValues(VidiunParamInfo $actionParam, &$testParams, &$testValues, &$validateValues, $isBase)
 	{
 		$paramType = $actionParam->getType();
 		$paramName = $actionParam->getName();
-		KalturaLog::debug("paramName [$paramName] paramType [$paramType]");
+		VidiunLog::debug("paramName [$paramName] paramType [$paramType]");
 			
 		$isParamContainsId = (substr_count($paramName, "id") > 0) || (substr_count($paramName, "Id") > 0);
 
@@ -454,19 +454,19 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 	 */
 	protected function writeServiceAction($serviceId, $serviceName, $action, $actionParams, $outputTypeReflector)
 	{
-		KalturaLog::debug("Service id [$serviceId] name [$serviceName] action [$action]");
+		VidiunLog::debug("Service id [$serviceId] name [$serviceName] action [$action]");
 		
-		/* @var $outputTypeReflector KalturaParamInfo */
+		/* @var $outputTypeReflector VidiunParamInfo */
 		if($outputTypeReflector && $outputTypeReflector->isFile())
 		{
-			KalturaLog::debug("Service id [$serviceId] name [$serviceName] action [$action] is file");
+			VidiunLog::debug("Service id [$serviceId] name [$serviceName] action [$action] is file");
 			return;
 		}
 			
 		if(in_array($action, array("list", "clone", "goto")))
 			$action = "{$action}Action";
 
-		//KalturaLog::info("Generates action [$serviceName.$action]");
+		//VidiunLog::info("Generates action [$serviceName.$action]");
 
 		$isBase = false;
 		$testReturnedType = null;
@@ -542,7 +542,7 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 			$this->writeBase("	protected function validate{$actionName}($outputType \$resultObject){}");
 			$this->writeBase("");
 
-			$serviceReflector = KalturaServiceReflector::constructFromServiceId($serviceId);
+			$serviceReflector = VidiunServiceReflector::constructFromServiceId($serviceId);
 			$serviceClass = $serviceReflector->getServiceClass();
 		
 			$this->writeTest("	/* (non-PHPdoc)");
@@ -669,7 +669,7 @@ class UnitTestsGenerator extends ClientGeneratorFromPhp
 	{
 		if(file_exists($fileName) && !$overwrite)
 		{
-			//KalturaLog::info("File [$fileName] already exists not writing data");
+			//VidiunLog::info("File [$fileName] already exists not writing data");
 			return;
 		}
 			

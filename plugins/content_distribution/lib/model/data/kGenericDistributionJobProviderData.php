@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage model.data
  */
-class kGenericDistributionJobProviderData extends kDistributionJobProviderData
+class vGenericDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -16,11 +16,11 @@ class kGenericDistributionJobProviderData extends kDistributionJobProviderData
 	private $resultParseData;
 	
 	/**
-	 * @var KalturaGenericDistributionProviderParser
+	 * @var VidiunGenericDistributionProviderParser
 	 */
 	private $resultParserType;
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}
@@ -66,7 +66,7 @@ class kGenericDistributionJobProviderData extends kDistributionJobProviderData
 	}
 
 	/**
-	 * @param KalturaGenericDistributionProviderParser $resultParserType
+	 * @param VidiunGenericDistributionProviderParser $resultParserType
 	 */
 	public function setResultParserType($resultParserType)
 	{

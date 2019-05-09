@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaLiveStreamAdminEntryFilter extends KalturaLiveStreamAdminEntryBaseFilter
+class VidiunLiveStreamAdminEntryFilter extends VidiunLiveStreamAdminEntryBaseFilter
 {
 }

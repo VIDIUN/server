@@ -1,6 +1,6 @@
 <?php
-require_once realpath(__DIR__ . '/../../') . '/lib/KalturaEnums.php';
-require_once realpath(__DIR__ . '/../') . '/KalturaMonitorResult.php';
+require_once realpath(__DIR__ . '/../../') . '/lib/VidiunEnums.php';
+require_once realpath(__DIR__ . '/../') . '/VidiunMonitorResult.php';
 
 $options = getopt('', array(
 	'debug',
@@ -19,7 +19,7 @@ $hours = $options['hours'];
 
 // start
 $start = microtime(true);
-$monitorResult = new KalturaMonitorResult();
+$monitorResult = new VidiunMonitorResult();
 
 $config = parse_ini_file(__DIR__ . '/../config.ini', true);
 try
@@ -32,7 +32,7 @@ try
 	SELECT  aggr_name,
 	        DATE(date_id) DATE,
 	        MAX(data_insert_time) latest_data_insert_time
-	FROM kalturadw.aggr_managment
+	FROM vidiundw.aggr_managment
 	WHERE   (IFNULL(start_time,DATE(19700101)) < data_insert_time
 	                        OR
 	                        start_time > end_time /* Handle Failed aggregations*/)
@@ -49,9 +49,9 @@ try
 	
 	foreach($aggregations as $aggregation)
 	{
-		$error = new KalturaMonitorError();
+		$error = new VidiunMonitorError();
 		$error->description = "$aggregation aggregation did not complete";
-		$error->level = KalturaMonitorError::CRIT;
+		$error->level = VidiunMonitorError::CRIT;
 		$monitorResult->errors[] = $error;
 	}
 	
@@ -70,10 +70,10 @@ catch(PDOException $pdoe)
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $pdoe->getCode();
 	$error->description = $pdoe->getMessage();
-	$error->level = KalturaMonitorError::CRIT;
+	$error->level = VidiunMonitorError::CRIT;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = get_class($pdoe) . ": " . $pdoe->getMessage();
@@ -86,10 +86,10 @@ catch(Exception $e)
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $e->getCode();
 	$error->description = $e->getMessage();
-	$error->level = KalturaMonitorError::ERR;
+	$error->level = VidiunMonitorError::ERR;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = $e->getMessage();

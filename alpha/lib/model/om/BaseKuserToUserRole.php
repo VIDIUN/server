@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Base class that represents a row from the 'kuser_to_user_role' table.
+ * Base class that represents a row from the 'vuser_to_user_role' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
+abstract class BaseVuserToUserRole extends BaseObject  implements Persistent {
 
 
 	/**
 	 * The Peer class.
 	 * Instance provides a convenient way of calling static methods on a class
 	 * that calling code may not be able to identify.
-	 * @var        KuserToUserRolePeer
+	 * @var        VuserToUserRolePeer
 	 */
 	protected static $peer;
 
@@ -26,10 +26,10 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	protected $id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the user_role_id field.
@@ -50,9 +50,9 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	protected $updated_at;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuser;
+	protected $avuser;
 
 	/**
 	 * @var        UserRole
@@ -115,13 +115,13 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -218,12 +218,12 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KuserToUserRole The current object (for fluent API support)
+	 * @return     VuserToUserRole The current object (for fluent API support)
 	 */
 	public function setId($v)
 	{
-		if(!isset($this->oldColumnsValues[KuserToUserRolePeer::ID]))
-			$this->oldColumnsValues[KuserToUserRolePeer::ID] = $this->id;
+		if(!isset($this->oldColumnsValues[VuserToUserRolePeer::ID]))
+			$this->oldColumnsValues[VuserToUserRolePeer::ID] = $this->id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -231,49 +231,49 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 
 		if ($this->id !== $v) {
 			$this->id = $v;
-			$this->modifiedColumns[] = KuserToUserRolePeer::ID;
+			$this->modifiedColumns[] = VuserToUserRolePeer::ID;
 		}
 
 		return $this;
 	} // setId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KuserToUserRole The current object (for fluent API support)
+	 * @return     VuserToUserRole The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[KuserToUserRolePeer::KUSER_ID]))
-			$this->oldColumnsValues[KuserToUserRolePeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[VuserToUserRolePeer::VUSER_ID]))
+			$this->oldColumnsValues[VuserToUserRolePeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = KuserToUserRolePeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = VuserToUserRolePeer::VUSER_ID;
 		}
 
-		if ($this->akuser !== null && $this->akuser->getId() !== $v) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->avuser->getId() !== $v) {
+			$this->avuser = null;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [user_role_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KuserToUserRole The current object (for fluent API support)
+	 * @return     VuserToUserRole The current object (for fluent API support)
 	 */
 	public function setUserRoleId($v)
 	{
-		if(!isset($this->oldColumnsValues[KuserToUserRolePeer::USER_ROLE_ID]))
-			$this->oldColumnsValues[KuserToUserRolePeer::USER_ROLE_ID] = $this->user_role_id;
+		if(!isset($this->oldColumnsValues[VuserToUserRolePeer::USER_ROLE_ID]))
+			$this->oldColumnsValues[VuserToUserRolePeer::USER_ROLE_ID] = $this->user_role_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -281,7 +281,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 
 		if ($this->user_role_id !== $v) {
 			$this->user_role_id = $v;
-			$this->modifiedColumns[] = KuserToUserRolePeer::USER_ROLE_ID;
+			$this->modifiedColumns[] = VuserToUserRolePeer::USER_ROLE_ID;
 		}
 
 		if ($this->aUserRole !== null && $this->aUserRole->getId() !== $v) {
@@ -296,7 +296,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     KuserToUserRole The current object (for fluent API support)
+	 * @return     VuserToUserRole The current object (for fluent API support)
 	 */
 	public function setCreatedAt($v)
 	{
@@ -333,7 +333,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 					)
 			{
 				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = KuserToUserRolePeer::CREATED_AT;
+				$this->modifiedColumns[] = VuserToUserRolePeer::CREATED_AT;
 			}
 		} // if either are not null
 
@@ -345,7 +345,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     KuserToUserRole The current object (for fluent API support)
+	 * @return     VuserToUserRole The current object (for fluent API support)
 	 */
 	public function setUpdatedAt($v)
 	{
@@ -382,7 +382,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 					)
 			{
 				$this->updated_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = KuserToUserRolePeer::UPDATED_AT;
+				$this->modifiedColumns[] = VuserToUserRolePeer::UPDATED_AT;
 			}
 		} // if either are not null
 
@@ -422,7 +422,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 		try {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->kuser_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+			$this->vuser_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->user_role_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
 			$this->created_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->updated_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
@@ -435,10 +435,10 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 5; // 5 = KuserToUserRolePeer::NUM_COLUMNS - KuserToUserRolePeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 5; // 5 = VuserToUserRolePeer::NUM_COLUMNS - VuserToUserRolePeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
-			throw new PropelException("Error populating KuserToUserRole object", $e);
+			throw new PropelException("Error populating VuserToUserRole object", $e);
 		}
 	}
 
@@ -458,8 +458,8 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akuser !== null && $this->kuser_id !== $this->akuser->getId()) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->vuser_id !== $this->avuser->getId()) {
+			$this->avuser = null;
 		}
 		if ($this->aUserRole !== null && $this->user_role_id !== $this->aUserRole->getId()) {
 			$this->aUserRole = null;
@@ -487,15 +487,15 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(KuserToUserRolePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(VuserToUserRolePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		// We don't need to alter the object instance pool; we're just modifying this instance
 		// already in the pool.
 
-		KuserToUserRolePeer::setUseCriteriaFilter(false);
-		$stmt = KuserToUserRolePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
-		KuserToUserRolePeer::setUseCriteriaFilter(true);
+		VuserToUserRolePeer::setUseCriteriaFilter(false);
+		$stmt = VuserToUserRolePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+		VuserToUserRolePeer::setUseCriteriaFilter(true);
 		$row = $stmt->fetch(PDO::FETCH_NUM);
 		$stmt->closeCursor();
 		if (!$row) {
@@ -505,7 +505,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akuser = null;
+			$this->avuser = null;
 			$this->aUserRole = null;
 		} // if (deep)
 	}
@@ -526,14 +526,14 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(KuserToUserRolePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VuserToUserRolePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
 			$ret = $this->preDelete($con);
 			if ($ret) {
-				KuserToUserRolePeer::doDelete($this, $con);
+				VuserToUserRolePeer::doDelete($this, $con);
 				$this->postDelete($con);
 				$this->setDeleted(true);
 				$con->commit();
@@ -566,7 +566,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(KuserToUserRolePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VuserToUserRolePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
@@ -586,7 +586,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 					$this->postUpdate($con);
 				}
 				$this->postSave($con);
-				KuserToUserRolePeer::addInstanceToPool($this);
+				VuserToUserRolePeer::addInstanceToPool($this);
 			} else {
 				$affectedRows = 0;
 			}
@@ -625,11 +625,11 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if ($this->akuser->isModified() || $this->akuser->isNew()) {
-					$affectedRows += $this->akuser->save($con);
+			if ($this->avuser !== null) {
+				if ($this->avuser->isModified() || $this->avuser->isNew()) {
+					$affectedRows += $this->avuser->save($con);
 				}
-				$this->setkuser($this->akuser);
+				$this->setvuser($this->avuser);
 			}
 
 			if ($this->aUserRole !== null) {
@@ -640,14 +640,14 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 			}
 
 			if ($this->isNew() ) {
-				$this->modifiedColumns[] = KuserToUserRolePeer::ID;
+				$this->modifiedColumns[] = VuserToUserRolePeer::ID;
 			}
 
 			// If this object has been modified, then save it to the database.
 			$this->objectSaved = false;
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = KuserToUserRolePeer::doInsert($this, $con);
+					$pk = VuserToUserRolePeer::doInsert($this, $con);
 					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
 										 // should always be true here (even though technically
 										 // BasePeer::doInsert() can insert multiple rows).
@@ -657,7 +657,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 					$this->setNew(false);
 					$this->objectSaved = true;
 				} else {
-					$affectedObjects = KuserToUserRolePeer::doUpdate($this, $con);
+					$affectedObjects = VuserToUserRolePeer::doUpdate($this, $con);
 					if($affectedObjects)
 						$this->objectSaved = true;
 						
@@ -703,7 +703,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -727,12 +727,12 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -750,8 +750,8 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -876,9 +876,9 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if (!$this->akuser->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuser->getValidationFailures());
+			if ($this->avuser !== null) {
+				if (!$this->avuser->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuser->getValidationFailures());
 				}
 			}
 
@@ -889,7 +889,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 			}
 
 
-			if (($retval = KuserToUserRolePeer::doValidate($this, $columns)) !== true) {
+			if (($retval = VuserToUserRolePeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
@@ -912,7 +912,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = KuserToUserRolePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = VuserToUserRolePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		$field = $this->getByPosition($pos);
 		return $field;
 	}
@@ -931,7 +931,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 				return $this->getId();
 				break;
 			case 1:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 2:
 				return $this->getUserRoleId();
@@ -961,10 +961,10 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
-		$keys = KuserToUserRolePeer::getFieldNames($keyType);
+		$keys = VuserToUserRolePeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
-			$keys[1] => $this->getKuserId(),
+			$keys[1] => $this->getVuserId(),
 			$keys[2] => $this->getUserRoleId(),
 			$keys[3] => $this->getCreatedAt(),
 			$keys[4] => $this->getUpdatedAt(),
@@ -984,7 +984,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 */
 	public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = KuserToUserRolePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = VuserToUserRolePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->setByPosition($pos, $value);
 	}
 
@@ -1003,7 +1003,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 				$this->setId($value);
 				break;
 			case 1:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 2:
 				$this->setUserRoleId($value);
@@ -1036,10 +1036,10 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 */
 	public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
 	{
-		$keys = KuserToUserRolePeer::getFieldNames($keyType);
+		$keys = VuserToUserRolePeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setKuserId($arr[$keys[1]]);
+		if (array_key_exists($keys[1], $arr)) $this->setVuserId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setUserRoleId($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setCreatedAt($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setUpdatedAt($arr[$keys[4]]);
@@ -1052,13 +1052,13 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 */
 	public function buildCriteria()
 	{
-		$criteria = new Criteria(KuserToUserRolePeer::DATABASE_NAME);
+		$criteria = new Criteria(VuserToUserRolePeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(KuserToUserRolePeer::ID)) $criteria->add(KuserToUserRolePeer::ID, $this->id);
-		if ($this->isColumnModified(KuserToUserRolePeer::KUSER_ID)) $criteria->add(KuserToUserRolePeer::KUSER_ID, $this->kuser_id);
-		if ($this->isColumnModified(KuserToUserRolePeer::USER_ROLE_ID)) $criteria->add(KuserToUserRolePeer::USER_ROLE_ID, $this->user_role_id);
-		if ($this->isColumnModified(KuserToUserRolePeer::CREATED_AT)) $criteria->add(KuserToUserRolePeer::CREATED_AT, $this->created_at);
-		if ($this->isColumnModified(KuserToUserRolePeer::UPDATED_AT)) $criteria->add(KuserToUserRolePeer::UPDATED_AT, $this->updated_at);
+		if ($this->isColumnModified(VuserToUserRolePeer::ID)) $criteria->add(VuserToUserRolePeer::ID, $this->id);
+		if ($this->isColumnModified(VuserToUserRolePeer::VUSER_ID)) $criteria->add(VuserToUserRolePeer::VUSER_ID, $this->vuser_id);
+		if ($this->isColumnModified(VuserToUserRolePeer::USER_ROLE_ID)) $criteria->add(VuserToUserRolePeer::USER_ROLE_ID, $this->user_role_id);
+		if ($this->isColumnModified(VuserToUserRolePeer::CREATED_AT)) $criteria->add(VuserToUserRolePeer::CREATED_AT, $this->created_at);
+		if ($this->isColumnModified(VuserToUserRolePeer::UPDATED_AT)) $criteria->add(VuserToUserRolePeer::UPDATED_AT, $this->updated_at);
 
 		return $criteria;
 	}
@@ -1073,18 +1073,18 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 */
 	public function buildPkeyCriteria()
 	{
-		$criteria = new Criteria(KuserToUserRolePeer::DATABASE_NAME);
+		$criteria = new Criteria(VuserToUserRolePeer::DATABASE_NAME);
 
-		$criteria->add(KuserToUserRolePeer::ID, $this->id);
+		$criteria->add(VuserToUserRolePeer::ID, $this->id);
 		
-		if($this->alreadyInSave && count($this->modifiedColumns) == 2 && $this->isColumnModified(KuserToUserRolePeer::UPDATED_AT))
+		if($this->alreadyInSave && count($this->modifiedColumns) == 2 && $this->isColumnModified(VuserToUserRolePeer::UPDATED_AT))
 		{
 			$theModifiedColumn = null;
 			foreach($this->modifiedColumns as $modifiedColumn)
-				if($modifiedColumn != KuserToUserRolePeer::UPDATED_AT)
+				if($modifiedColumn != VuserToUserRolePeer::UPDATED_AT)
 					$theModifiedColumn = $modifiedColumn;
 					
-			$atomicColumns = KuserToUserRolePeer::getAtomicColumns();
+			$atomicColumns = VuserToUserRolePeer::getAtomicColumns();
 			if(in_array($theModifiedColumn, $atomicColumns))
 				$criteria->add($theModifiedColumn, $this->getByName($theModifiedColumn, BasePeer::TYPE_COLNAME), Criteria::NOT_EQUAL);
 		}
@@ -1118,14 +1118,14 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 * If desired, this method can also make copies of all associated (fkey referrers)
 	 * objects.
 	 *
-	 * @param      object $copyObj An object of KuserToUserRole (or compatible) type.
+	 * @param      object $copyObj An object of VuserToUserRole (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
 	 * @throws     PropelException
 	 */
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setUserRoleId($this->user_role_id);
 
@@ -1149,7 +1149,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 * objects.
 	 *
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-	 * @return     KuserToUserRole Clone of current object.
+	 * @return     VuserToUserRole Clone of current object.
 	 * @throws     PropelException
 	 */
 	public function copy($deepCopy = false)
@@ -1165,16 +1165,16 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @var     KuserToUserRole Clone of current object.
+	 * @var     VuserToUserRole Clone of current object.
 	 */
 	protected $copiedFrom = null;
 	
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @param      KuserToUserRole $copiedFrom Clone of current object.
+	 * @param      VuserToUserRole $copiedFrom Clone of current object.
 	 */
-	public function setCopiedFrom(KuserToUserRole $copiedFrom)
+	public function setCopiedFrom(VuserToUserRole $copiedFrom)
 	{
 		$this->copiedFrom = $copiedFrom;
 	}
@@ -1186,37 +1186,37 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 	 * same instance for all member of this class. The method could therefore
 	 * be static, but this would prevent one from overriding the behavior.
 	 *
-	 * @return     KuserToUserRolePeer
+	 * @return     VuserToUserRolePeer
 	 */
 	public function getPeer()
 	{
 		if (self::$peer === null) {
-			self::$peer = new KuserToUserRolePeer();
+			self::$peer = new VuserToUserRolePeer();
 		}
 		return self::$peer;
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
-	 * @return     KuserToUserRole The current object (for fluent API support)
+	 * @param      vuser $v
+	 * @return     VuserToUserRole The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuser(kuser $v = null)
+	public function setvuser(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setKuserId(NULL);
+			$this->setVuserId(NULL);
 		} else {
-			$this->setKuserId($v->getId());
+			$this->setVuserId($v->getId());
 		}
 
-		$this->akuser = $v;
+		$this->avuser = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
-			$v->addKuserToUserRole($this);
+			$v->addVuserToUserRole($this);
 		}
 
 		return $this;
@@ -1224,32 +1224,32 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuser(PropelPDO $con = null)
+	public function getvuser(PropelPDO $con = null)
 	{
-		if ($this->akuser === null && ($this->kuser_id !== null)) {
-			$this->akuser = kuserPeer::retrieveByPk($this->kuser_id);
+		if ($this->avuser === null && ($this->vuser_id !== null)) {
+			$this->avuser = vuserPeer::retrieveByPk($this->vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuser->addKuserToUserRoles($this);
+			   $this->avuser->addVuserToUserRoles($this);
 			 */
 		}
-		return $this->akuser;
+		return $this->avuser;
 	}
 
 	/**
 	 * Declares an association between this object and a UserRole object.
 	 *
 	 * @param      UserRole $v
-	 * @return     KuserToUserRole The current object (for fluent API support)
+	 * @return     VuserToUserRole The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
 	public function setUserRole(UserRole $v = null)
@@ -1265,7 +1265,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 		// Add binding for other direction of this n:n relationship.
 		// If this object has already been added to the UserRole object, it will not be re-added.
 		if ($v !== null) {
-			$v->addKuserToUserRole($this);
+			$v->addVuserToUserRole($this);
 		}
 
 		return $this;
@@ -1288,7 +1288,7 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->aUserRole->addKuserToUserRoles($this);
+			   $this->aUserRole->addVuserToUserRoles($this);
 			 */
 		}
 		return $this->aUserRole;
@@ -1308,8 +1308,8 @@ abstract class BaseKuserToUserRole extends BaseObject  implements Persistent {
 		if ($deep) {
 		} // if ($deep)
 
-			$this->akuser = null;
+			$this->avuser = null;
 			$this->aUserRole = null;
 	}
 
-} // BaseKuserToUserRole
+} // BaseVuserToUserRole

@@ -3,7 +3,7 @@
  * @package plugins.metadataEventNotifications
  * @subpackage lib
  */
-class MetadataEventNotificationEventObjectType implements IKalturaPluginEnum, EventNotificationEventObjectType
+class MetadataEventNotificationEventObjectType implements IVidiunPluginEnum, EventNotificationEventObjectType
 {
 	const METADATA = 'Metadata';
 	

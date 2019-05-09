@@ -3,7 +3,7 @@
  * @package plugins.tvinciDistribution
  * @subpackage api.enum
  */
-class KalturaTvinciDistributionField extends KalturaStringEnum implements TvinciDistributionField
+class VidiunTvinciDistributionField extends VidiunStringEnum implements TvinciDistributionField
 {
 	// see TvinciDistributionField interface
 }

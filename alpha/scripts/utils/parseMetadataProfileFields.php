@@ -17,4 +17,4 @@ if(!$metadataProfile)
 	exit;
 }
 
-kMetadataManager::parseProfileSearchFields($metadataProfile);
+vMetadataManager::parseProfileSearchFields($metadataProfile);

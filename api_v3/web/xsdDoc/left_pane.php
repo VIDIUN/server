@@ -1,5 +1,5 @@
 <?php 
-	$schemaReflector = KalturaTypeReflectorCacher::get('KalturaSchemaType');
+	$schemaReflector = VidiunTypeReflectorCacher::get('VidiunSchemaType');
 	$schemas = $schemaReflector->getConstants();
 ?>
 <div class="left">

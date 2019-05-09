@@ -3,7 +3,7 @@
  * @package plugins.exampleIntegration
  * @subpackage model.data
  */
-class kExampleIntegrationJobProviderData extends kIntegrationJobProviderData
+class vExampleIntegrationJobProviderData extends vIntegrationJobProviderData
 {
 	/**
 	 * @var string

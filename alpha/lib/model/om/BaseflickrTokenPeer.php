@@ -31,8 +31,8 @@ abstract class BaseflickrTokenPeer {
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
-	/** the column name for the KALT_TOKEN field */
-	const KALT_TOKEN = 'flickr_token.KALT_TOKEN';
+	/** the column name for the VIDI_TOKEN field */
+	const VIDI_TOKEN = 'flickr_token.VIDI_TOKEN';
 
 	/** the column name for the FROB field */
 	const FROB = 'flickr_token.FROB';
@@ -71,10 +71,10 @@ abstract class BaseflickrTokenPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('KaltToken', 'Frob', 'Token', 'Nsid', 'Response', 'IsValid', 'CreatedAt', 'UpdatedAt', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('kaltToken', 'frob', 'token', 'nsid', 'response', 'isValid', 'createdAt', 'updatedAt', ),
-		BasePeer::TYPE_COLNAME => array (self::KALT_TOKEN, self::FROB, self::TOKEN, self::NSID, self::RESPONSE, self::IS_VALID, self::CREATED_AT, self::UPDATED_AT, ),
-		BasePeer::TYPE_FIELDNAME => array ('kalt_token', 'frob', 'token', 'nsid', 'response', 'is_valid', 'created_at', 'updated_at', ),
+		BasePeer::TYPE_PHPNAME => array ('VidiToken', 'Frob', 'Token', 'Nsid', 'Response', 'IsValid', 'CreatedAt', 'UpdatedAt', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('vidiToken', 'frob', 'token', 'nsid', 'response', 'isValid', 'createdAt', 'updatedAt', ),
+		BasePeer::TYPE_COLNAME => array (self::VIDI_TOKEN, self::FROB, self::TOKEN, self::NSID, self::RESPONSE, self::IS_VALID, self::CREATED_AT, self::UPDATED_AT, ),
+		BasePeer::TYPE_FIELDNAME => array ('vidi_token', 'frob', 'token', 'nsid', 'response', 'is_valid', 'created_at', 'updated_at', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
 	);
 
@@ -85,10 +85,10 @@ abstract class BaseflickrTokenPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('KaltToken' => 0, 'Frob' => 1, 'Token' => 2, 'Nsid' => 3, 'Response' => 4, 'IsValid' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('kaltToken' => 0, 'frob' => 1, 'token' => 2, 'nsid' => 3, 'response' => 4, 'isValid' => 5, 'createdAt' => 6, 'updatedAt' => 7, ),
-		BasePeer::TYPE_COLNAME => array (self::KALT_TOKEN => 0, self::FROB => 1, self::TOKEN => 2, self::NSID => 3, self::RESPONSE => 4, self::IS_VALID => 5, self::CREATED_AT => 6, self::UPDATED_AT => 7, ),
-		BasePeer::TYPE_FIELDNAME => array ('kalt_token' => 0, 'frob' => 1, 'token' => 2, 'nsid' => 3, 'response' => 4, 'is_valid' => 5, 'created_at' => 6, 'updated_at' => 7, ),
+		BasePeer::TYPE_PHPNAME => array ('VidiToken' => 0, 'Frob' => 1, 'Token' => 2, 'Nsid' => 3, 'Response' => 4, 'IsValid' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('vidiToken' => 0, 'frob' => 1, 'token' => 2, 'nsid' => 3, 'response' => 4, 'isValid' => 5, 'createdAt' => 6, 'updatedAt' => 7, ),
+		BasePeer::TYPE_COLNAME => array (self::VIDI_TOKEN => 0, self::FROB => 1, self::TOKEN => 2, self::NSID => 3, self::RESPONSE => 4, self::IS_VALID => 5, self::CREATED_AT => 6, self::UPDATED_AT => 7, ),
+		BasePeer::TYPE_FIELDNAME => array ('vidi_token' => 0, 'frob' => 1, 'token' => 2, 'nsid' => 3, 'response' => 4, 'is_valid' => 5, 'created_at' => 6, 'updated_at' => 7, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
 	);
 
@@ -159,7 +159,7 @@ abstract class BaseflickrTokenPeer {
 	 */
 	public static function addSelectColumns(Criteria $criteria)
 	{
-		$criteria->addSelectColumn(flickrTokenPeer::KALT_TOKEN);
+		$criteria->addSelectColumn(flickrTokenPeer::VIDI_TOKEN);
 		$criteria->addSelectColumn(flickrTokenPeer::FROB);
 		$criteria->addSelectColumn(flickrTokenPeer::TOKEN);
 		$criteria->addSelectColumn(flickrTokenPeer::NSID);
@@ -200,11 +200,11 @@ abstract class BaseflickrTokenPeer {
 		
 		flickrTokenPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'flickrTokenPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -228,7 +228,7 @@ abstract class BaseflickrTokenPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -309,7 +309,7 @@ abstract class BaseflickrTokenPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -332,11 +332,11 @@ abstract class BaseflickrTokenPeer {
 	{		
 		$criteriaForSelect = flickrTokenPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'flickrTokenPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -352,12 +352,12 @@ abstract class BaseflickrTokenPeer {
 		
 		$queryResult = flickrTokenPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -367,17 +367,17 @@ abstract class BaseflickrTokenPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -448,7 +448,7 @@ abstract class BaseflickrTokenPeer {
 		flickrTokenPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 	}
 	
@@ -543,15 +543,15 @@ abstract class BaseflickrTokenPeer {
 		{
 			if ( $key === null )
 			{
-				$key = (string) $obj->getKaltToken();
+				$key = (string) $obj->getVidiToken();
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('flickrTokenPeer');
+				vMemoryManager::registerPeer('flickrTokenPeer');
 			}
 		}
 	}
@@ -570,7 +570,7 @@ abstract class BaseflickrTokenPeer {
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
 			if (is_object($value) && $value instanceof flickrToken) {
-				$key = (string) $value->getKaltToken();
+				$key = (string) $value->getVidiToken();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
@@ -773,8 +773,8 @@ abstract class BaseflickrTokenPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(flickrTokenPeer::KALT_TOKEN);
-			$selectCriteria->add(flickrTokenPeer::KALT_TOKEN, $criteria->remove(flickrTokenPeer::KALT_TOKEN), $comparison);
+			$comparison = $criteria->getComparison(flickrTokenPeer::VIDI_TOKEN);
+			$selectCriteria->add(flickrTokenPeer::VIDI_TOKEN, $criteria->remove(flickrTokenPeer::VIDI_TOKEN), $comparison);
 
 		} else { // $values is flickrToken object
 			$criteria = $values->buildCriteria(); // gets full criteria
@@ -856,7 +856,7 @@ abstract class BaseflickrTokenPeer {
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(flickrTokenPeer::KALT_TOKEN, (array) $values, Criteria::IN);
+			$criteria->add(flickrTokenPeer::VIDI_TOKEN, (array) $values, Criteria::IN);
 			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
 				flickrTokenPeer::removeInstanceFromPool($singleval);
@@ -935,7 +935,7 @@ abstract class BaseflickrTokenPeer {
 		}
 
 		$criteria = new Criteria(flickrTokenPeer::DATABASE_NAME);
-		$criteria->add(flickrTokenPeer::KALT_TOKEN, $pk);
+		$criteria->add(flickrTokenPeer::VIDI_TOKEN, $pk);
 
 		$v = flickrTokenPeer::doSelect($criteria, $con);
 
@@ -957,7 +957,7 @@ abstract class BaseflickrTokenPeer {
 			$objs = array();
 		} else {
 			$criteria = new Criteria(flickrTokenPeer::DATABASE_NAME);
-			$criteria->add(flickrTokenPeer::KALT_TOKEN, $pks, Criteria::IN);
+			$criteria->add(flickrTokenPeer::VIDI_TOKEN, $pks, Criteria::IN);
 			$objs = flickrTokenPeer::doSelect($criteria, $con);
 		}
 		return $objs;

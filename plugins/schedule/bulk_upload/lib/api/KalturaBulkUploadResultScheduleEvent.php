@@ -3,7 +3,7 @@
  * @package plugins.scheduleBulkUpload
  * @subpackage api.objects
  */
-class KalturaBulkUploadResultScheduleEvent extends KalturaBulkUploadResult
+class VidiunBulkUploadResultScheduleEvent extends VidiunBulkUploadResult
 {
     
     /**
@@ -22,7 +22,7 @@ class KalturaBulkUploadResultScheduleEvent extends KalturaBulkUploadResult
 	}
 	
     /* (non-PHPdoc)
-     * @see KalturaBulkUploadResult::toInsertableObject()
+     * @see VidiunBulkUploadResult::toInsertableObject()
      */
     public function toInsertableObject ( $object_to_fill = null , $props_to_skip = array() )
 	{

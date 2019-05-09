@@ -1,6 +1,6 @@
 <?php
 
-class KOperationEngineIsmManifest extends KSingleOutputOperationEngine
+class VOperationEngineIsmManifest extends VSingleOutputOperationEngine
 {
 	public function __construct($cmd, $outFilePath)
 	{
@@ -8,13 +8,13 @@ class KOperationEngineIsmManifest extends KSingleOutputOperationEngine
 	}
 		
 	/* (non-PHPdoc)
-	 * @see KOperationEngine::getCmdLine()
+	 * @see VOperationEngine::getCmdLine()
 	 */
 	protected function getCmdLine() {}
 
 	/*
 	 * (non-PHPdoc)
-	 * @see KOperationEngine::doOperation()
+	 * @see VOperationEngine::doOperation()
 	 * 
 	 * 
 	 */
@@ -33,12 +33,12 @@ class KOperationEngineIsmManifest extends KSingleOutputOperationEngine
 		file_put_contents($ismFilePath, $ismStr);
 		
 		$destFileSyncDescArr = array();
-		$fileSyncDesc = new KalturaDestFileSyncDescriptor();
+		$fileSyncDesc = new VidiunDestFileSyncDescriptor();
 		$fileSyncDesc->fileSyncLocalPath = $ismFilePath;
 		$fileSyncDesc->fileSyncObjectSubType = 1; //".ism";
 		$destFileSyncDescArr[] = $fileSyncDesc;
 		
-		$fileSyncDesc = new KalturaDestFileSyncDescriptor();
+		$fileSyncDesc = new VidiunDestFileSyncDescriptor();
 		$fileSyncDesc->fileSyncLocalPath = $ismcFilePath;
 		$fileSyncDesc->fileSyncObjectSubType = 4; //".ismc";
 		$destFileSyncDescArr[] = $fileSyncDesc;
@@ -82,7 +82,7 @@ class KOperationEngineIsmManifest extends KSingleOutputOperationEngine
 			list($ismFilePath, $ismvFilePath, $key) = $filePathTuple;
 			if($ismFilePath)
 			{
-				$str = kEncryptFileUtils::getEncryptedFileContent($ismFilePath, $key, KBatchBase::getIV());
+				$str = vEncryptFileUtils::getEncryptedFileContent($ismFilePath, $key, VBatchBase::getIV());
 				$xml = new SimpleXMLElement($str);
 				if(isset($xml->body->switch->video)) $xml->body->switch->video['src'] = basename($ismvFilePath);
   				if(isset($xml->body->switch->audio)) $xml->body->switch->audio['src'] = basename($ismvFilePath);
@@ -117,7 +117,7 @@ class KOperationEngineIsmManifest extends KSingleOutputOperationEngine
 		$root = null;
 		foreach ($srcFileSyncs as $srcFileSync) {
 			if($srcFileSync->fileSyncObjectSubType == 4) {
-				$str = kEncryptFileUtils::getEncryptedFileContent($srcFileSync->fileSyncLocalPath, $srcFileSync->fileEncryptionKey, KBatchBase::getIV());
+				$str = vEncryptFileUtils::getEncryptedFileContent($srcFileSync->fileSyncLocalPath, $srcFileSync->fileEncryptionKey, VBatchBase::getIV());
 				$xml = new SimpleXMLElement($str);
 
 				/*

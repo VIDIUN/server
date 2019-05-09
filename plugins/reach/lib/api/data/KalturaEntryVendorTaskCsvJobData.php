@@ -3,13 +3,13 @@
  * @package plugins.reach
  * @subpackage api.objects
  */
-class KalturaEntryVendorTaskCsvJobData extends KalturaExportCsvJobData
+class VidiunEntryVendorTaskCsvJobData extends VidiunExportCsvJobData
 {
 	
 	/**
 	 * The filter should return the list of users that need to be specified in the csv.
 	 *
-	 * @var KalturaEntryVendorTaskFilter
+	 * @var VidiunEntryVendorTaskFilter
 	 */
 	public $filter;
 	
@@ -19,7 +19,7 @@ class KalturaEntryVendorTaskCsvJobData extends KalturaExportCsvJobData
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -27,12 +27,12 @@ class KalturaEntryVendorTaskCsvJobData extends KalturaExportCsvJobData
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbData = null, $props_to_skip = array())
 	{
 		if(is_null($dbData))
-			$dbData = new kEntryVendorTaskCsvJobData();
+			$dbData = new vEntryVendorTaskCsvJobData();
 
 		return parent::toObject($dbData, $props_to_skip);
 	}

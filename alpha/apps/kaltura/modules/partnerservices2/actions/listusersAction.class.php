@@ -19,7 +19,7 @@ class listusersAction extends defPartnerservices2Action
 						)
 					),
 				"out" => array (
-					"users" => array ("type" => "*PuserKuser", "desc" => "")
+					"users" => array ("type" => "*PuserVuser", "desc" => "")
 					),
 				"errors" => array (
 					APIErrors::INVALID_USER_ID ,
@@ -28,26 +28,26 @@ class listusersAction extends defPartnerservices2Action
 	}
 	
 	protected function ticketType()	{		return self::REQUIED_TICKET_ADMIN;	}
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER;	}
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER;	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		// the relevant puser_kuser is the one from the user_id NOT the uid (which is the logged in user investigationg
-		//$target_puser_kuser = PuserKuserPeer::retrieveByPartnerAndUid($partner_id , null , $user_id , true );
+		// the relevant puser_vuser is the one from the user_id NOT the uid (which is the logged in user investigationg
+		//$target_puser_vuser = PuserVuserPeer::retrieveByPartnerAndUid($partner_id , null , $user_id , true );
 		$page = $this->getP("page");
 		$page_size = $this->getP("page_size");
 		$detailed = $this->getP ( "detailed" , false );
 		
 		$c = new Criteria();
-		$c->addAnd(kuserPeer::PARTNER_ID, $partner_id, Criteria::EQUAL );
+		$c->addAnd(vuserPeer::PARTNER_ID, $partner_id, Criteria::EQUAL );
 		$c->setLimit($page_size);
 		$c->setOffset(($page-1)*$page_size);
-		$users = kuserPeer::doSelect($c);
+		$users = vuserPeer::doSelect($c);
 
 		$extra_fields = array();
 		if ($detailed)
 		{
-			$extra_fields = array ( "country" , "state" , "city"  , "zip" , "urlList" , "networkHighschool" , "networkCollege" , "views" , "fans" , "entries" , "producedKshows" );
+			$extra_fields = array ( "country" , "state" , "city"  , "zip" , "urlList" , "networkHighschool" , "networkCollege" , "views" , "fans" , "entries" , "producedVshows" );
 		}
 		$level = objectWrapperBase::DETAIL_LEVEL_REGULAR;
 		

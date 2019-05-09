@@ -3,17 +3,17 @@
  * @package plugins.attachment
  * @subpackage api.objects
  */
-class KalturaAttachmentAssetArray extends KalturaTypedArray
+class VidiunAttachmentAssetArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaAttachmentAssetArray();
+		$newArr = new VidiunAttachmentAssetArray();
 		if ($arr == null)
 			return $newArr;
 	
 		foreach ($arr as $obj)
 		{
-			$nObj = KalturaAsset::getInstance($obj);
+			$nObj = VidiunAsset::getInstance($obj);
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaAttachmentAssetArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaAttachmentAsset");	
+		parent::__construct("VidiunAttachmentAsset");	
 	}
 }

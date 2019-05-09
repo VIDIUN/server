@@ -20,7 +20,7 @@ class updateuseridAction extends defPartnerservices2Action
 						)
 					),
 				"out" => array (
-					"user" => array ("type" => "PuserKuser", "desc" => "")
+					"user" => array ("type" => "PuserVuser", "desc" => "")
 					),
 				"errors" => array (
 					APIErrors::INVALID_USER_ID , 
@@ -31,42 +31,42 @@ class updateuseridAction extends defPartnerservices2Action
 
 	protected function ticketType()	{		return self::REQUIED_TICKET_ADMIN;	}
 
-	// ask to fetch the kuser from puser_kuser
-	public function needKuserFromPuser ( ) 	{ 		return self::KUSER_DATA_NO_KUSER; 	}
+	// ask to fetch the vuser from puser_vuser
+	public function needVuserFromPuser ( ) 	{ 		return self::VUSER_DATA_NO_VUSER; 	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$user_id = $this->getPM ( "user_id" );
 		$new_user_id = $this->getPM ( "new_user_id" );
 		
-		$target_puser_kuser = PuserKuserPeer::retrieveByPartnerAndUid($partner_id , null /* $subp_id */, $user_id , true );
+		$target_puser_vuser = PuserVuserPeer::retrieveByPartnerAndUid($partner_id , null /* $subp_id */, $user_id , true );
 		
-		if ( ! $target_puser_kuser )
+		if ( ! $target_puser_vuser )
 		{
 			$this->addError ( APIErrors::INVALID_USER_ID , $user_id );
 			return;
 		}
 		
-		$new_puser_kuser = PuserKuserPeer::retrieveByPartnerAndUid($partner_id , null /* $subp_id */ , $new_user_id , true );
-		$kuser = kuserPeer::getKuserByPartnerAndUid($partner_id, $new_user_id);
+		$new_puser_vuser = PuserVuserPeer::retrieveByPartnerAndUid($partner_id , null /* $subp_id */ , $new_user_id , true );
+		$vuser = vuserPeer::getVuserByPartnerAndUid($partner_id, $new_user_id);
 		
-		if ( $new_puser_kuser || $kuser)
+		if ( $new_puser_vuser || $vuser)
 		{
 			$this->addError ( APIErrors::DUPLICATE_USER_BY_ID , $new_user_id );
 			return;
 		}
 		
-		$target_puser_kuser->setPuserId( $new_user_id );
-		$target_puser_kuser->save();
+		$target_puser_vuser->setPuserId( $new_user_id );
+		$target_puser_vuser->save();
 		
-		PuserKuserPeer::removeFromCache($target_puser_kuser);
+		PuserVuserPeer::removeFromCache($target_puser_vuser);
 		
-		$kuser = $target_puser_kuser->getKuser();
-		$kuser->setPuserId($target_puser_kuser->getPuserId());
-		$kuser->save();
+		$vuser = $target_puser_vuser->getVuser();
+		$vuser->setPuserId($target_puser_vuser->getPuserId());
+		$vuser->save();
 		
-		$wrapper = objectWrapperBase::getWrapperClass( $target_puser_kuser , objectWrapperBase::DETAIL_LEVEL_DETAILED);
-		$wrapper->removeFromCache( "PuserKuser" , $target_puser_kuser->getId() );
+		$wrapper = objectWrapperBase::getWrapperClass( $target_puser_vuser , objectWrapperBase::DETAIL_LEVEL_DETAILED);
+		$wrapper->removeFromCache( "PuserVuser" , $target_puser_vuser->getId() );
 		
 		$this->addMsg ( "user" , $wrapper );
 	}

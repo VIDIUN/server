@@ -3,18 +3,18 @@
  * @package plugins.reach
  * @subpackage Scheduler
  */
-class KSyncReachCreditTaskRunner extends KPeriodicWorker
+class VSyncReachCreditTaskRunner extends VPeriodicWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::SYNC_REACH_CREDIT_TASK;
+		return VidiunBatchJobType::SYNC_REACH_CREDIT_TASK;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getJobType()
+	 * @see VBatchBase::getJobType()
 	 */
 	public function getJobType()
 	{
@@ -22,14 +22,14 @@ class KSyncReachCreditTaskRunner extends KPeriodicWorker
 	}
 
 	/* (non-PHPdoc)
-	 * @see KBatchBase::run()
+	 * @see VBatchBase::run()
 	*/
 	public function run($jobs = null)
 	{
 		$reachClient = $this->SyncReachClient();
-		$filter = new KalturaReachProfileFilter();
-		$filter->statusEqual = KalturaReachProfileStatus::ACTIVE;
-		$pager = new KalturaFilterPager();
+		$filter = new VidiunReachProfileFilter();
+		$filter->statusEqual = VidiunReachProfileStatus::ACTIVE;
+		$pager = new VidiunFilterPager();
 		$pager->pageIndex = 1;
 		$pager->pageSize = 500;
 		
@@ -44,7 +44,7 @@ class KSyncReachCreditTaskRunner extends KPeriodicWorker
 				}
 				catch (Exception $ex)
 				{
-					KalturaLog::err($ex);
+					VidiunLog::err($ex);
 				}
 			}
 			
@@ -53,9 +53,9 @@ class KSyncReachCreditTaskRunner extends KPeriodicWorker
 	}
 
 	/**
-	 * @param KalturaReachProfile $reachProfile
+	 * @param VidiunReachProfile $reachProfile
 	 */
-	protected function syncReachProfileCredit(KalturaReachProfile $reachProfile)
+	protected function syncReachProfileCredit(VidiunReachProfile $reachProfile)
 	{
 		$reachClient = $this->SyncReachClient();
 		$this->impersonate($reachProfile->partnerId);
@@ -72,11 +72,11 @@ class KSyncReachCreditTaskRunner extends KPeriodicWorker
 	}
 
 	/**
-	 * @return KalturaReachClientPlugin
+	 * @return VidiunReachClientPlugin
 	 */
 	protected function SyncReachClient()
 	{
 		$client = $this->getClient();
-		return KalturaReachClientPlugin::get($client);
+		return VidiunReachClientPlugin::get($client);
 	}
 }

@@ -3,7 +3,7 @@
  * @package plugins.attachment
  * @subpackage lib.enum
  */
-class AttachmentAssetType implements IKalturaPluginEnum, assetType
+class AttachmentAssetType implements IVidiunPluginEnum, assetType
 {
 	const ATTACHMENT = 'Attachment';
 	

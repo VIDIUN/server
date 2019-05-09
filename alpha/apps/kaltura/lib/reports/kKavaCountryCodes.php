@@ -1,6 +1,6 @@
 <?php
 
-class kKavaCountryCodes
+class vKavaCountryCodes
 {
 	public static $shortToLong = array(
 		'AD' => 'Andorra',

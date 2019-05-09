@@ -17,21 +17,21 @@
 	<multirequest>
 
 		<request service="responseProfile" action="add" partnerId="0">
-			<responseProfile objectType="KalturaResponseProfile">
+			<responseProfile objectType="VidiunResponseProfile">
 				<type>1</type>
 				<name>pollVoteResponseProfile</name>
 				<systemName>pollVoteResponseProfile</systemName>
 				<fields>id,name,createdAt,updatedAt,parentId,partnerData,text,tags,userId,startTime,endTime</fields>
 				<relatedProfiles objectType="array">
-					<item objectType="KalturaDetachedResponseProfile">
+					<item objectType="VidiunDetachedResponseProfile">
 						<name>pollVoteResponseProfile</name>
 						<type>1</type>
 						<fields>id,objectId,createdAt,xml</fields>
-						<filter objectType="KalturaMetadataFilter">
+						<filter objectType="VidiunMetadataFilter">
 							<metadataObjectTypeEqual>annotationMetadata.Annotation</metadataObjectTypeEqual>
 						</filter>
 						<mappings objectType="array">
-							<item objectType="KalturaResponseProfileMapping">
+							<item objectType="VidiunResponseProfileMapping">
 								<parentProperty>id</parentProperty>
 								<filterProperty>objectIdEqual</filterProperty>
 							</item>

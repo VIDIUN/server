@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model.data
  */
-class kDeliveryProfileCondition extends kCondition
+class vDeliveryProfileCondition extends vCondition
 {
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -38,9 +38,9 @@ class kDeliveryProfileCondition extends kCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
 		$profileIds = array();
 		foreach ($this->deliveryProfileIds as $profileId)
@@ -48,7 +48,7 @@ class kDeliveryProfileCondition extends kCondition
 			$profileIds[] = $profileId->getValue();
 		}
 
-		KalturaLog::debug("Delivery profile ids [".print_r($profileIds, true)."]");
+		VidiunLog::debug("Delivery profile ids [".print_r($profileIds, true)."]");
 		$requestOrigin = @$_SERVER['HTTP_X_FORWARDED_HOST'];
 		if(!$requestOrigin)
 			$requestOrigin = @$_SERVER['HTTP_HOST'];

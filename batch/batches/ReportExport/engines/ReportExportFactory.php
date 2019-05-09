@@ -9,12 +9,12 @@ class ReportExportFactory
 	{
 		switch ($reportItem->action)
 		{
-			case KalturaReportExportItemType::TABLE:
-				return new kReportExportTableEngine($reportItem, $outputPath);
-			case KalturaReportExportItemType::GRAPH:
-				return new kReportExportGraphEngine($reportItem, $outputPath);
-			case KalturaReportExportItemType::TOTAL:
-				return new kReportExportTotalEngine($reportItem, $outputPath);
+			case VidiunReportExportItemType::TABLE:
+				return new vReportExportTableEngine($reportItem, $outputPath);
+			case VidiunReportExportItemType::GRAPH:
+				return new vReportExportGraphEngine($reportItem, $outputPath);
+			case VidiunReportExportItemType::TOTAL:
+				return new vReportExportTotalEngine($reportItem, $outputPath);
 			default:
 				return null;
 		}

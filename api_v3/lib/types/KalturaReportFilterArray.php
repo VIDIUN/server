@@ -4,10 +4,10 @@
  * @subpackage objects
  *
  */
-class KalturaReportFilterArray extends KalturaTypedArray
+class VidiunReportFilterArray extends VidiunTypedArray
 {
 	public function __construct()
 	{
-		return parent::__construct("KalturaReportFilter");
+		return parent::__construct("VidiunReportFilter");
 	}
 }

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaExtendingItemMrssParameter extends KalturaObject
+class VidiunExtendingItemMrssParameter extends VidiunObject
 {
 	/**
 	 * XPath for the extending item
@@ -13,13 +13,13 @@ class KalturaExtendingItemMrssParameter extends KalturaObject
 	
 	/**
 	 * Object identifier
-	 * @var KalturaObjectIdentifier
+	 * @var VidiunObjectIdentifier
 	 */
 	public $identifier;
 	
 	/**
 	 * Mode of extension - append to MRSS or replace the xpath content.
-	 * @var KalturaMrssExtensionMode
+	 * @var VidiunMrssExtensionMode
 	 */
 	public $extensionMode;
 	
@@ -31,7 +31,7 @@ class KalturaExtendingItemMrssParameter extends KalturaObject
 		);
 		
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -39,36 +39,36 @@ class KalturaExtendingItemMrssParameter extends KalturaObject
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		$this->validate();
 		if (!$dbObject)
-			$dbObject = new kExtendingItemMrssParameter();
+			$dbObject = new vExtendingItemMrssParameter();
 
 		return parent::toObject($dbObject, $propsToSkip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject($source_object)
+	 * @see VidiunObject::fromObject($source_object)
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($dbObject, $responseProfile);
 		
-		/* @var $dbObject kExtendingItemMrssParameter */
+		/* @var $dbObject vExtendingItemMrssParameter */
 		if($this->shouldGet('identifier', $responseProfile))
 		{
 			$identifierType = get_class($dbObject->getIdentifier());
-			KalturaLog::info("Creating identifier for DB identifier type $identifierType");
+			VidiunLog::info("Creating identifier for DB identifier type $identifierType");
 			switch ($identifierType)
 			{
-				case 'kEntryIdentifier':
-					$this->identifier = new KalturaEntryIdentifier();
+				case 'vEntryIdentifier':
+					$this->identifier = new VidiunEntryIdentifier();
 					break;
-				case 'kCategoryIdentifier':
-					$this->identifier = new KalturaCategoryIdentifier();
+				case 'vCategoryIdentifier':
+					$this->identifier = new VidiunCategoryIdentifier();
 			}
 			
 			if ($this->identifier)
@@ -79,14 +79,14 @@ class KalturaExtendingItemMrssParameter extends KalturaObject
 	protected function validate ()
 	{
 		//Should not allow any extending object but entries to be added in APPEND mode
-		if ($this->extensionMode == KalturaMrssExtensionMode::APPEND && get_class($this->identifier) !== 'KalturaEntryIdentifier')
+		if ($this->extensionMode == VidiunMrssExtensionMode::APPEND && get_class($this->identifier) !== 'VidiunEntryIdentifier')
 		{
-			throw new KalturaAPIException(KalturaErrors::EXTENDING_ITEM_INCOMPATIBLE_COMBINATION);
+			throw new VidiunAPIException(VidiunErrors::EXTENDING_ITEM_INCOMPATIBLE_COMBINATION);
 		}
 		
 		if (!$this->xpath)
 		{
-			throw new KalturaAPIException(KalturaErrors::EXTENDING_ITEM_MISSING_XPATH);
+			throw new VidiunAPIException(VidiunErrors::EXTENDING_ITEM_MISSING_XPATH);
 		}
 	}
 }

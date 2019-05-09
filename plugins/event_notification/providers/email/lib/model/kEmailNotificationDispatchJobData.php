@@ -3,7 +3,7 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class kEmailNotificationDispatchJobData extends kEventNotificationDispatchJobData
+class vEmailNotificationDispatchJobData extends vEventNotificationDispatchJobData
 {
 	/**
 	 * Define the email sender email
@@ -22,28 +22,28 @@ class kEmailNotificationDispatchJobData extends kEventNotificationDispatchJobDat
 	/**
 	 * Email recipient emails and names, key is mail address and value is the name
 	 * 
-	 * @var kEmailNotificationRecipientJobData
+	 * @var vEmailNotificationRecipientJobData
 	 */
 	private $to;
 	
 	/**
 	 * Email cc emails and names, key is mail address and value is the name
 	 * 
-	 * @var kEmailNotificationRecipientJobData
+	 * @var vEmailNotificationRecipientJobData
 	 */
 	private $cc;
 	
 	/**
 	 * Email bcc emails and names, key is mail address and value is the name
 	 * 
-	 * @var kEmailNotificationRecipientJobData
+	 * @var vEmailNotificationRecipientJobData
 	 */
 	private $bcc;
 	
 	/**
 	 * Email addresses that a reading confirmation will be sent to
 	 * 
-	 * @var kEmailNotificationRecipientJobData
+	 * @var vEmailNotificationRecipientJobData
 	 */
 	private $replyTo;
 	
@@ -133,7 +133,7 @@ class kEmailNotificationDispatchJobData extends kEventNotificationDispatchJobDat
 	}
 	
 	/**
-	 * @return kEmailNotificationRecipientJobData $to
+	 * @return vEmailNotificationRecipientJobData $to
 	 */
 	public function getTo()
 	{
@@ -141,7 +141,7 @@ class kEmailNotificationDispatchJobData extends kEventNotificationDispatchJobDat
 	}
 
 	/**
-	 * @return kEmailNotificationRecipientJobData $cc
+	 * @return vEmailNotificationRecipientJobData $cc
 	 */
 	public function getCc()
 	{
@@ -149,7 +149,7 @@ class kEmailNotificationDispatchJobData extends kEventNotificationDispatchJobDat
 	}
 
 	/**
-	 * @return kEmailNotificationRecipientJobData $bcc
+	 * @return vEmailNotificationRecipientJobData $bcc
 	 */
 	public function getBcc()
 	{
@@ -157,25 +157,25 @@ class kEmailNotificationDispatchJobData extends kEventNotificationDispatchJobDat
 	}
 
 	/**
-	 * @param kEmailNotificationRecipientJobData $to
+	 * @param vEmailNotificationRecipientJobData $to
 	 */
-	public function setTo(kEmailNotificationRecipientJobData $to)
+	public function setTo(vEmailNotificationRecipientJobData $to)
 	{
 		$this->to = $to;
 	}
 
 	/**
-	 * @param kEmailNotificationRecipientJobData $cc
+	 * @param vEmailNotificationRecipientJobData $cc
 	 */
-	public function setCc(kEmailNotificationRecipientJobData $cc)
+	public function setCc(vEmailNotificationRecipientJobData $cc)
 	{
 		$this->cc = $cc;
 	}
 
 	/**
-	 * @param kEmailNotificationRecipientJobData $bcc
+	 * @param vEmailNotificationRecipientJobData $bcc
 	 */
-	public function setBcc(kEmailNotificationRecipientJobData $bcc)
+	public function setBcc(vEmailNotificationRecipientJobData $bcc)
 	{
 		$this->bcc = $bcc;
 	}
@@ -189,7 +189,7 @@ class kEmailNotificationDispatchJobData extends kEventNotificationDispatchJobDat
 	}
 
 	/**
-	 * @return kEmailNotificationRecipientJobData $replyTo
+	 * @return vEmailNotificationRecipientJobData $replyTo
 	 */
 	public function getReplyTo()
 	{
@@ -229,9 +229,9 @@ class kEmailNotificationDispatchJobData extends kEventNotificationDispatchJobDat
 	}
 
 	/**
-	 * @param kEmailNotificationRecipientJobData $replyTo
+	 * @param vEmailNotificationRecipientJobData $replyTo
 	 */
-	public function setReplyTo(kEmailNotificationRecipientJobData $replyTo)
+	public function setReplyTo(vEmailNotificationRecipientJobData $replyTo)
 	{
 		$this->replyTo = $replyTo;
 	}

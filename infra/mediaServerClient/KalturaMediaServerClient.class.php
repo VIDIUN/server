@@ -1,11 +1,11 @@
 <?php
-require_once( __DIR__ . '/KalturaMediaServerClientException.class.php');
+require_once( __DIR__ . '/VidiunMediaServerClientException.class.php');
 
 /**
  * @package External
  * @subpackage WSDL
  */
-class KalturaMediaServerClient extends nusoap_client
+class VidiunMediaServerClient extends nusoap_client
 {
 	const PARAM_TYPE_TIMESTAMP = 'xsd:dateTime';
 	
@@ -71,6 +71,6 @@ class KalturaMediaServerClient extends nusoap_client
 	function throwError()
 	{
 		if ($this->getError())
-			throw new KalturaMediaServerClientException("KalturaMediaServerClient error calling operation: [".$this->operation."], error: [".$this->getError()."], request: [".$this->request."], response: [".$this->response."]");
+			throw new VidiunMediaServerClientException("VidiunMediaServerClient error calling operation: [".$this->operation."], error: [".$this->getError()."], request: [".$this->request."], response: [".$this->response."]");
 	}
 }

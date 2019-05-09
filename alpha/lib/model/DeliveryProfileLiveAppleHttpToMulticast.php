@@ -4,7 +4,7 @@ class DeliveryProfileLiveAppleHttpToMulticast extends DeliveryProfileLiveAppleHt
 	
 	function __construct() {
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kF4MManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vF4MManifestRenderer';
 	}
 	
 	public function getDeliveryServerNodeUrl($removeAfterUse = false)

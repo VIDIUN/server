@@ -1,5 +1,5 @@
 <?php
-class KFileTransferExportEngine extends KExportEngine
+class VFileTransferExportEngine extends VExportEngine
 {
 	protected $srcFile;
 	
@@ -10,7 +10,7 @@ class KFileTransferExportEngine extends KExportEngine
 	protected $encryptionKey;
 	
 	/* (non-PHPdoc)
-	 * @see KExportEngine::init()
+	 * @see VExportEngine::init()
 	 */
 	function __construct($data, $jobSubType) {
 		parent::__construct($data);
@@ -22,38 +22,38 @@ class KFileTransferExportEngine extends KExportEngine
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KExportEngine::export()
+	 * @see VExportEngine::export()
 	 */
 	function export() 
 	{
-		if(!KBatchBase::pollingFileExists($this->srcFile))
-			throw new kTemporaryException("Source file {$this->srcFile} does not exist");
+		if(!VBatchBase::pollingFileExists($this->srcFile))
+			throw new vTemporaryException("Source file {$this->srcFile} does not exist");
 							
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
 		$engineOptions['passiveMode'] = $this->data->ftpPassiveMode;
 		$engineOptions['createLink'] = $this->data->createLink;
-		if($this->data instanceof KalturaAmazonS3StorageExportJobData)
+		if($this->data instanceof VidiunAmazonS3StorageExportJobData)
 		{
 			$engineOptions['filesAcl'] = $this->data->filesPermissionInS3;
 			$engineOptions['s3Region'] = $this->data->s3Region;
 			$engineOptions['sseType'] = $this->data->sseType;
-			$engineOptions['sseKmsKeyId'] = $this->data->sseKmsKeyId;
+			$engineOptions['sseVmsKeyId'] = $this->data->sseVmsKeyId;
 			$engineOptions['signatureType'] = $this->data->signatureType;
 			$engineOptions['endPoint'] = $this->data->endPoint;
 		}
 			
-		$engine = kFileTransferMgr::getInstance($this->protocol, $engineOptions);
+		$engine = vFileTransferMgr::getInstance($this->protocol, $engineOptions);
 		
 		try
 		{
 			$keyPairLogin = false;
-			if($this->protocol == KalturaStorageProfileProtocol::SFTP) {
+			if($this->protocol == VidiunStorageProfileProtocol::SFTP) {
 				$keyPairLogin = ($this->data->serverPrivateKey || $this->data->serverPublicKey);
 			}
 			
 			if($keyPairLogin) {
-				$privateKeyFile = $this->data->serverPrivateKey ? kFile::createTempFile($this->data->serverPrivateKey, 'privateKey', 0600) : null;
-				$publicKeyFile = $this->data->serverPublicKey ? kFile::createTempFile($this->data->serverPublicKey, 'publicKey', 0600) : null;
+				$privateKeyFile = $this->data->serverPrivateKey ? vFile::createTempFile($this->data->serverPrivateKey, 'privateKey', 0600) : null;
+				$publicKeyFile = $this->data->serverPublicKey ? vFile::createTempFile($this->data->serverPublicKey, 'publicKey', 0600) : null;
 				$engine->loginPubKey($this->data->serverUrl, $this->data->serverUsername, $publicKeyFile, $privateKeyFile, $this->data->serverPassPhrase);
 			} else {	
 				$engine->login($this->data->serverUrl, $this->data->serverUsername, $this->data->serverPassword);
@@ -61,7 +61,7 @@ class KFileTransferExportEngine extends KExportEngine
 		}
 		catch(Exception $e)
 		{
-			throw new kTemporaryException($e->getMessage());
+			throw new vTemporaryException($e->getMessage());
 		}
 	
 		try
@@ -72,7 +72,7 @@ class KFileTransferExportEngine extends KExportEngine
 			}
 			else if (is_dir($this->srcFile))
 			{
-				$filesPaths = kFile::dirList($this->srcFile);
+				$filesPaths = vFile::dirList($this->srcFile);
 				$destDir = $this->destFile;
 				foreach ($filesPaths as $filePath)
 				{
@@ -81,10 +81,10 @@ class KFileTransferExportEngine extends KExportEngine
 				}
 			}
 		}
-		catch(kFileTransferMgrException $e)
+		catch(vFileTransferMgrException $e)
 		{
-			if($e->getCode() == kFileTransferMgrException::remoteFileExists)
-				throw new kApplicativeException(KalturaBatchJobAppErrors::FILE_ALREADY_EXISTS, $e->getMessage());
+			if($e->getCode() == vFileTransferMgrException::remoteFileExists)
+				throw new vApplicativeException(VidiunBatchJobAppErrors::FILE_ALREADY_EXISTS, $e->getMessage());
 			
 			throw new Exception($e->getMessage(), $e->getCode());
 		}
@@ -93,7 +93,7 @@ class KFileTransferExportEngine extends KExportEngine
 	}
 
 	/* (non-PHPdoc)
-	 * @see KExportEngine::verifyExportedResource()
+	 * @see VExportEngine::verifyExportedResource()
 	 */
 	function verifyExportedResource() {
 		// TODO Auto-generated method stub
@@ -101,40 +101,40 @@ class KFileTransferExportEngine extends KExportEngine
 	}
     
     /* (non-PHPdoc)
-     * @see KExportEngine::delete()
+     * @see VExportEngine::delete()
      */
     function delete()
     {
-        $engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
+        $engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
         $engineOptions['passiveMode'] = $this->data->ftpPassiveMode;
-        $engine = kFileTransferMgr::getInstance($this->protocol, $engineOptions);
+        $engine = vFileTransferMgr::getInstance($this->protocol, $engineOptions);
         
         try{
             $engine->login($this->data->serverUrl, $this->data->serverUsername, $this->data->serverPassword);
             $engine->delFile($this->destFile);
         }
-        catch(kFileTransferMgrException $ke)
+        catch(vFileTransferMgrException $ke)
         {
-            throw new kApplicativeException($ke->getCode(), $ke->getMessage());
+            throw new vApplicativeException($ke->getCode(), $ke->getMessage());
         }
         
         return true;
     }
 
-	private function putFile(kFileTransferMgr $engine, $destFilePath, $srcFilePath, $force)
+	private function putFile(vFileTransferMgr $engine, $destFilePath, $srcFilePath, $force)
 	{
 		if (!$this->encryptionKey)
 			$engine->putFile($destFilePath, $srcFilePath, $force);
 		else
 		{
-			$tempPath = KBatchBase::createTempClearFile($srcFilePath, $this->encryptionKey);
+			$tempPath = VBatchBase::createTempClearFile($srcFilePath, $this->encryptionKey);
 			$engine->putFile($destFilePath, $tempPath, $force);
 			unlink($tempPath);
 		}
-		if(KBatchBase::$taskConfig->params->chmod)
+		if(VBatchBase::$taskConfig->params->chmod)
 		{
 			try {
-				$engine->chmod($destFilePath, KBatchBase::$taskConfig->params->chmod);
+				$engine->chmod($destFilePath, VBatchBase::$taskConfig->params->chmod);
 			}
 			catch(Exception $e){}
 		}

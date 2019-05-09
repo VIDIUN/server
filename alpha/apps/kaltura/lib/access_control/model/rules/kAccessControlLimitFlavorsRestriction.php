@@ -5,10 +5,10 @@
  * 
  * Old preview restriction for backward compatibility
  */
-class kAccessControlLimitFlavorsRestriction extends kAccessControlRestriction
+class vAccessControlLimitFlavorsRestriction extends vAccessControlRestriction
 {
 	/**
-	 * @var kAccessControlLimitFlavorsAction
+	 * @var vAccessControlLimitFlavorsAction
 	 */
 	private $action;
 	
@@ -19,12 +19,12 @@ class kAccessControlLimitFlavorsRestriction extends kAccessControlRestriction
 	{
 		parent::__construct($accessControl);
 		
-		$this->action = new kAccessControlLimitFlavorsAction();
+		$this->action = new vAccessControlLimitFlavorsAction();
 		$this->setActions(array($this->getAction()));
 	}
 
 	/**
-	 * @return kAccessControlLimitFlavorsAction
+	 * @return vAccessControlLimitFlavorsAction
 	 */
 	private function getAction()
 	{
@@ -57,7 +57,7 @@ class kAccessControlLimitFlavorsRestriction extends kAccessControlRestriction
 	 */
 	function getLimitFlavorsRestrictionType()
 	{
-		return $this->getAction()->getIsBlockedList() ? kAccessControlRestriction::RESTRICTION_TYPE_RESTRICT_LIST : kAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST;	
+		return $this->getAction()->getIsBlockedList() ? vAccessControlRestriction::RESTRICTION_TYPE_RESTRICT_LIST : vAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST;	
 	}
 	
 	/**
@@ -65,11 +65,11 @@ class kAccessControlLimitFlavorsRestriction extends kAccessControlRestriction
 	 */
 	function setLimitFlavorsRestrictionType($type)
 	{
-		$this->getAction()->setIsBlockedList($type == kAccessControlRestriction::RESTRICTION_TYPE_RESTRICT_LIST);
+		$this->getAction()->setIsBlockedList($type == vAccessControlRestriction::RESTRICTION_TYPE_RESTRICT_LIST);
 	}
 
 	/* (non-PHPdoc)
-	 * @see kRule::shouldDisableCache()
+	 * @see vRule::shouldDisableCache()
 	 */
 	public function shouldDisableCache()
 	{

@@ -18,73 +18,73 @@ dwhPath												= @LOG_DIR@/dwh.log
 dwhEnabled											= 0
 timezone											= @TIME_ZONE@
 logWorkerInterval									= 60
-enabledWorkers.KScheduleHelper						= 1
+enabledWorkers.VScheduleHelper						= 1
 enabledWorkers.DirectoryCleanupLocal				= 1
 enabledWorkers.DirectoryCleanupBatchLogs			= 1
-enabledWorkers.KAsyncImport							= 4
-enabledWorkers.KAsyncNotifier						= 1
-enabledWorkers.KAsyncMailer							= 1
-enabledWorkers.KAsyncExtractMedia					= 1
-enabledWorkers.KAsyncConvert						= 1
-enabledWorkers.KAsyncPostConvert					= 1
-enabledWorkers.KAsyncBulkUpload						= 1
-enabledWorkers.KAsyncProvisionProvide				= 1
-enabledWorkers.KAsyncProvisionDelete				= 1
-enabledWorkers.KAsyncProvisionProvideCloser			= 1
-enabledWorkers.KAsyncStorageExport					= 3
-enabledWorkers.KAsyncStorageExportCloser			= 1
-enabledWorkers.KAsyncStorageDelete					= 1
-enabledWorkers.KAsyncCaptureThumb					= 1
-enabledWorkers.KAsyncDistributeSubmit				= 1
-enabledWorkers.KAsyncDistributeUpdate				= 1
-enabledWorkers.KAsyncDistributeDelete				= 1
-enabledWorkers.KAsyncDistributeFetchReport			= 1
-enabledWorkers.KAsyncDistributeEnable				= 1
-enabledWorkers.KAsyncDistributeDisable				= 1 
-enabledWorkers.KAsyncSynchronizeDistribution		= 1
-enabledWorkers.KAsyncDropFolderWatcher				= 1
-enabledWorkers.KAsyncDropFolderContentProcessor		= 1
-enabledWorkers.KAsyncTransformMetadata				= 1
-enabledWorkers.KAsyncDispatchEventNotification		= 1
-enabledWorkers.KAsyncIndex							= 4
-enabledWorkers.KAsyncDelete							= 4
-enabledWorkers.KAsyncDeleteFile						= 1
-enabledWorkers.KAsyncMoveCategoryEntries			= 4
-enabledWorkers.KAsyncCopy							= 4
-enabledWorkers.KAsyncParseCaptionAsset				= 1
-enabledWorkers.KScheduledTaskRunner					= 1
-enabledWorkers.KScheduledTaskDryRunner				= 1
-enabledWorkers.KAsyncConvertLiveSegment				= 1
-enabledWorkers.KAsyncConcat							= 1
-enabledWorkers.KAsyncValidateLiveMediaServers		= 1
-enabledWorkers.KAsyncSyncCategoryPrivacyContext		= 1
-enabledWorkers.KAsyncTagIndex						= 1
-enabledWorkers.KAsyncIntegrate						= 1
-enabledWorkers.KAsyncIntegrateCloser				= 1
-enabledWorkers.KAsyncClearCuePoints					= 1
-enabledWorkers.KAsyncConvertThumbAssetsGenerator	= 1
-enabledWorkers.KAsyncLiveToVod      				= 1
-enabledWorkers.KAsyncCopyCaptions					= 1
-enabledWorkers.KAsyncCopyCuePoints                   = 1
-enabledWorkers.KSyncReachCreditTaskRunner	    = 0
-enabledWorkers.KAsyncExportCsv                      = 0
+enabledWorkers.VAsyncImport							= 4
+enabledWorkers.VAsyncNotifier						= 1
+enabledWorkers.VAsyncMailer							= 1
+enabledWorkers.VAsyncExtractMedia					= 1
+enabledWorkers.VAsyncConvert						= 1
+enabledWorkers.VAsyncPostConvert					= 1
+enabledWorkers.VAsyncBulkUpload						= 1
+enabledWorkers.VAsyncProvisionProvide				= 1
+enabledWorkers.VAsyncProvisionDelete				= 1
+enabledWorkers.VAsyncProvisionProvideCloser			= 1
+enabledWorkers.VAsyncStorageExport					= 3
+enabledWorkers.VAsyncStorageExportCloser			= 1
+enabledWorkers.VAsyncStorageDelete					= 1
+enabledWorkers.VAsyncCaptureThumb					= 1
+enabledWorkers.VAsyncDistributeSubmit				= 1
+enabledWorkers.VAsyncDistributeUpdate				= 1
+enabledWorkers.VAsyncDistributeDelete				= 1
+enabledWorkers.VAsyncDistributeFetchReport			= 1
+enabledWorkers.VAsyncDistributeEnable				= 1
+enabledWorkers.VAsyncDistributeDisable				= 1 
+enabledWorkers.VAsyncSynchronizeDistribution		= 1
+enabledWorkers.VAsyncDropFolderWatcher				= 1
+enabledWorkers.VAsyncDropFolderContentProcessor		= 1
+enabledWorkers.VAsyncTransformMetadata				= 1
+enabledWorkers.VAsyncDispatchEventNotification		= 1
+enabledWorkers.VAsyncIndex							= 4
+enabledWorkers.VAsyncDelete							= 4
+enabledWorkers.VAsyncDeleteFile						= 1
+enabledWorkers.VAsyncMoveCategoryEntries			= 4
+enabledWorkers.VAsyncCopy							= 4
+enabledWorkers.VAsyncParseCaptionAsset				= 1
+enabledWorkers.VScheduledTaskRunner					= 1
+enabledWorkers.VScheduledTaskDryRunner				= 1
+enabledWorkers.VAsyncConvertLiveSegment				= 1
+enabledWorkers.VAsyncConcat							= 1
+enabledWorkers.VAsyncValidateLiveMediaServers		= 1
+enabledWorkers.VAsyncSyncCategoryPrivacyContext		= 1
+enabledWorkers.VAsyncTagIndex						= 1
+enabledWorkers.VAsyncIntegrate						= 1
+enabledWorkers.VAsyncIntegrateCloser				= 1
+enabledWorkers.VAsyncClearCuePoints					= 1
+enabledWorkers.VAsyncConvertThumbAssetsGenerator	= 1
+enabledWorkers.VAsyncLiveToVod      				= 1
+enabledWorkers.VAsyncCopyCaptions					= 1
+enabledWorkers.VAsyncCopyCuePoints                   = 1
+enabledWorkers.VSyncReachCreditTaskRunner	    = 0
+enabledWorkers.VAsyncExportCsv                      = 0
 
 
 [mainTemplate : template]
 enabledWorkers.DirectoryCleanupShared				= 1
-enabledWorkers.KAsyncDbCleanup						= 1
-enabledWorkers.KAsyncPartnerLoadCleanup				= 1
-enabledWorkers.KAsyncJobSuspender                   = 1
-enabledWorkers.KAsyncConvertCloser					= 1
-enabledWorkers.KAsyncConvertProfileCloser			= 1
-enabledWorkers.KAsyncBulkDownloadCloser				= 1
-enabledWorkers.KAsyncBulkUploadCloser				= 1
-enabledWorkers.KAsyncDistributeSubmitCloser			= 1
-enabledWorkers.KAsyncDistributeUpdateCloser			= 1
-enabledWorkers.KAsyncDistributeDeleteCloser			= 1
-enabledWorkers.KAsyncDistributeFetchReportCloser	= 1
-enabledWorkers.KAsyncValidateLiveMediaServers		= 1
-enabledWorkers.KAsyncCopyPartner					= 1
+enabledWorkers.VAsyncDbCleanup						= 1
+enabledWorkers.VAsyncPartnerLoadCleanup				= 1
+enabledWorkers.VAsyncJobSuspender                   = 1
+enabledWorkers.VAsyncConvertCloser					= 1
+enabledWorkers.VAsyncConvertProfileCloser			= 1
+enabledWorkers.VAsyncBulkDownloadCloser				= 1
+enabledWorkers.VAsyncBulkUploadCloser				= 1
+enabledWorkers.VAsyncDistributeSubmitCloser			= 1
+enabledWorkers.VAsyncDistributeUpdateCloser			= 1
+enabledWorkers.VAsyncDistributeDeleteCloser			= 1
+enabledWorkers.VAsyncDistributeFetchReportCloser	= 1
+enabledWorkers.VAsyncValidateLiveMediaServers		= 1
+enabledWorkers.VAsyncCopyPartner					= 1
 
 
 [Worker]
@@ -106,9 +106,9 @@ params.maxTimeBeforeFail = 10000
 sleepBetweenStopStart								= 60
 
 [DirectoryCleanup : PeriodicWorker]
-type												= KAsyncDirectoryCleanup
+type												= VAsyncDirectoryCleanup
 maximumExecutionTime								= 600
-scriptPath											= batches/Cleanup/KAsyncDirectoryCleanupExe.php
+scriptPath											= batches/Cleanup/VAsyncDirectoryCleanupExe.php
 sleepBetweenStopStart								= 3600
 params.minutesOld 									= 720
 
@@ -155,58 +155,58 @@ params.path											= @WOWZA_DIR@/content/
 params.pattern										= *.*
 params.minutesOld 									= 2880
 
-[KAsyncDbCleanup : PeriodicWorker]
+[VAsyncDbCleanup : PeriodicWorker]
 id													= 17
 friendlyName										= DB Cleanup
-type												= KAsyncDbCleanup
-scriptPath											= batches/Cleanup/KAsyncDbCleanupExe.php
+type												= VAsyncDbCleanup
+scriptPath											= batches/Cleanup/VAsyncDbCleanupExe.php
 
-[KAsyncPartnerLoadCleanup : PeriodicWorker]
+[VAsyncPartnerLoadCleanup : PeriodicWorker]
 id													= 18
 friendlyName										= Partner Load Cleanup
-type												= KAsyncPartnerLoadCleanup
-scriptPath											= batches/Cleanup/KAsyncPartnerLoadCleanupExe.php
+type												= VAsyncPartnerLoadCleanup
+scriptPath											= batches/Cleanup/VAsyncPartnerLoadCleanupExe.php
 
-[KAsyncJobSuspender : PeriodicWorker]
+[VAsyncJobSuspender : PeriodicWorker]
 id						= 19
 friendlyName			= Job suspender
-type					= KAsyncJobSuspender
-scriptPath				= batches/Cleanup/KAsyncJobSuspenderExe.php
+type					= VAsyncJobSuspender
+scriptPath				= batches/Cleanup/VAsyncJobSuspenderExe.php
 
 
-[KAsyncImport : JobHandlerWorker]
+[VAsyncImport : JobHandlerWorker]
 id													= 20
 friendlyName										= Import
-type												= KAsyncImport
+type												= VAsyncImport
 maximumExecutionTime								= 46800
-scriptPath											= batches/Import/KAsyncImportExe.php
+scriptPath											= batches/Import/VAsyncImportExe.php
 params.localTempPath 								= @TMP_DIR@/imports 
 params.sharedTempPath 								= @WEB_DIR@/tmp/imports
 params.curlTimeout	 								= 43200
 
 
-[KAsyncNotifier : JobHandlerWorker]
+[VAsyncNotifier : JobHandlerWorker]
 id													= 30
 friendlyName										= Notifier
-type												= KAsyncNotifier
+type												= VAsyncNotifier
 maxJobsEachRun										= 10	
-scriptPath											= batches/Notifier/KAsyncNotifierExe.php
+scriptPath											= batches/Notifier/VAsyncNotifierExe.php
 
 
-[KAsyncMailer : JobHandlerWorker]
+[VAsyncMailer : JobHandlerWorker]
 id													= 40
 friendlyName										= Mailer
-type												= KAsyncMailer
+type												= VAsyncMailer
 maxJobsEachRun										= 10	
-scriptPath											= batches/Mailer/KAsyncMailerExe.php
+scriptPath											= batches/Mailer/VAsyncMailerExe.php
 params.forumUrl										= @FORUMS_URLS@
 params.unsubscribeUrl								= "@UNSUBSCRIBE_EMAIL_URL@"
 
-[KAsyncExtractMedia : JobHandlerWorker]
+[VAsyncExtractMedia : JobHandlerWorker]
 id													= 60
 friendlyName										= Extract Media
-type												= KAsyncExtractMedia
-scriptPath											= batches/ExtractMedia/KAsyncExtractMediaExe.php
+type												= VAsyncExtractMedia
+scriptPath											= batches/ExtractMedia/VAsyncExtractMediaExe.php
 params.mediaInfoCmd									= @BIN_DIR@/mediainfo
 params.ffprobeCmd									= @BIN_DIR@/ffprobe
 params.ffmpegCmd                                                                        = @BIN_DIR@/ffmpeg
@@ -215,9 +215,9 @@ params.localTempPath 								= @TMP_DIR@/convert
 ;The path for finished products, acessable from the apache
 params.sharedTempPath 								= @WEB_DIR@/tmp/convert
 
-[KAsyncConvertWorker : JobHandlerWorker]
-type												= KAsyncConvert
-scriptPath											= batches/Convert/KAsyncConvertExe.php
+[VAsyncConvertWorker : JobHandlerWorker]
+type												= VAsyncConvert
+scriptPath											= batches/Convert/VAsyncConvertExe.php
 maximumExecutionTime								= 36000
 
 params.ffmpegCmd									= @BIN_DIR@/ffmpeg
@@ -245,7 +245,7 @@ params.localTempPath 								= @TMP_DIR@/convert
 params.sharedTempPath 								= @WEB_DIR@/tmp/convert
 
 
-[KAsyncConvert : KAsyncConvertWorker]
+[VAsyncConvert : VAsyncConvertWorker]
 id													= 70
 friendlyName										= Convert
 filter.jobSubTypeIn	= 1,2,99,3,fastStart.FastStart,segmenter.Segmenter,mp4box.Mp4box,vlc.Vlc,document.ImageMagick,201,202,quickTimeTools.QuickTimeTools,ismIndex.IsmIndex,ismIndex.IsmManifest
@@ -254,7 +254,7 @@ filter.jobSubTypeIn	= 1,2,99,3,fastStart.FastStart,segmenter.Segmenter,mp4box.Mp
 ;params.minFileSize									= 
 ;params.maxFileSize									= 
 
-[KAsyncConvertWidevine : KAsyncConvertWorker]
+[VAsyncConvertWidevine : VAsyncConvertWorker]
 id													= 71
 friendlyName										= Convert Widevine
 filter.jobSubTypeIn									= widevine.Widevine
@@ -266,7 +266,7 @@ params.localTempPath 								= /web/tmp/encrypt
 ;The path for finished products, acessable from the apache
 params.sharedTempPath 								= /web/tmp/encrypt
 
-[KAsyncDistributedConvert : KAsyncConvertWorker]
+[VAsyncDistributedConvert : VAsyncConvertWorker]
 id													= 72
 friendlyName										= Distributed Convert
 ;affinity											= 
@@ -294,24 +294,24 @@ params.localFileRoot								= @TMP_DIR@/convert
 ;The remote URL, replacing params.localFileRoot
 params.remoteUrlDirectory							= /mypath
 
-[KAsyncConvertCollection : KAsyncDistributedConvert]
+[VAsyncConvertCollection : VAsyncDistributedConvert]
 id													= 77
 friendlyName										= Convert Collection
-type												= KAsyncConvertCollection
-scriptPath											= batches/Convert/KAsyncConvertCollectionExe.php
+type												= VAsyncConvertCollection
+scriptPath											= batches/Convert/VAsyncConvertCollectionExe.php
 
-params.expEncoderCmd								= "C:\My\expressionencoder\RunAffinityCmd.exe 1 36000000 powershell -file C:\web\kaltura\batch\batches\Convert\scripts\runee3.ps1 C:\My\expressionencoder\ExpressionEncoder.dll"
+params.expEncoderCmd								= "C:\My\expressionencoder\RunAffinityCmd.exe 1 36000000 powershell -file C:\web\vidiun\batch\batches\Convert\scripts\runee3.ps1 C:\My\expressionencoder\ExpressionEncoder.dll"
 
 params.isRemoteInput								= 1
 params.isRemoteOutput								= 1
 ;params.minFileSize									= 
 ;params.maxFileSize									= 
 
-[KAsyncConvertCloser : JobCloserWorker]
+[VAsyncConvertCloser : JobCloserWorker]
 id													= 80
 friendlyName										= Convert Closer
-type												= KAsyncConvertCloser
-scriptPath											= batches/Convert/KAsyncConvertCloserExe.php
+type												= VAsyncConvertCloser
+scriptPath											= batches/Convert/VAsyncConvertCloserExe.php
 params.localTempPath 								= @TMP_DIR@/convert 
 params.sharedTempPath 								= @WEB_DIR@/tmp/convert
 
@@ -319,70 +319,70 @@ params.EncodingComUserId							= should-fail
 params.EncodingComUserKey							= should-fail
 params.EncodingComUrl								= http://manage.encoding.com/index.php
 
-[KAsyncConvertCollectionCloser : JobCloserWorker]
+[VAsyncConvertCollectionCloser : JobCloserWorker]
 id													= 81
 friendlyName										= Convert Collection Closer
-type												= KAsyncConvertCollectionCloser
-scriptPath											= batches/Convert/KAsyncConvertCollectionCloserExe.php
+type												= VAsyncConvertCollectionCloser
+scriptPath											= batches/Convert/VAsyncConvertCollectionCloserExe.php
 curlTimeout											= 18000
 params.localTempPath 								= @TMP_DIR@/convert 
 params.sharedTempPath 								= @WEB_DIR@/tmp/convert
 
-[KAsyncConvertProfileCloser : JobCloserWorker]
+[VAsyncConvertProfileCloser : JobCloserWorker]
 id													= 90
 friendlyName										= Convert Profile Closer
-type												= KAsyncConvertProfileCloser
-scriptPath											= batches/Convert/KAsyncConvertProfileCloserExe.php
+type												= VAsyncConvertProfileCloser
+scriptPath											= batches/Convert/VAsyncConvertProfileCloserExe.php
 params.maxTimeBeforeFail 							= 100000 
 
-[KAsyncPostConvert : JobHandlerWorker]
+[VAsyncPostConvert : JobHandlerWorker]
 id													= 100
 friendlyName										= Post Convert
-type												= KAsyncPostConvert
-scriptPath											= batches/PostConvert/KAsyncPostConvertExe.php
+type												= VAsyncPostConvert
+scriptPath											= batches/PostConvert/VAsyncPostConvertExe.php
 params.mediaInfoCmd									= @BIN_DIR@/mediainfo
 params.FFMpegCmd									= @BIN_DIR@/ffmpeg
 params.localTempPath 								= @TMP_DIR@/thumb 
 params.sharedTempPath 								= @WEB_DIR@/tmp/thumb
 
 
-[KAsyncBulkUpload : JobHandlerWorker]
+[VAsyncBulkUpload : JobHandlerWorker]
 id													= 120
 friendlyName										= Bulk Upload
-type												= KAsyncBulkUpload
-scriptPath											= batches/BulkUpload/KAsyncBulkUploadExe.php
+type												= VAsyncBulkUpload
+scriptPath											= batches/BulkUpload/VAsyncBulkUploadExe.php
 params.multiRequestSize								= 20
 params.maxRecords									= 1000
 params.localTempPath 								= @TMP_DIR@/bulk
 
-[KAsyncBulkUploadCloser : JobCloserWorker]
+[VAsyncBulkUploadCloser : JobCloserWorker]
 id													= 130
 friendlyName										= Bulk Upload Closer
-type												= KAsyncBulkUploadCloser
-scriptPath											= batches/BulkUpload/KAsyncBulkUploadCloserExe.php
+type												= VAsyncBulkUploadCloser
+scriptPath											= batches/BulkUpload/VAsyncBulkUploadCloserExe.php
 params.maxTimeBeforeFail 							= 1000000 
 
 
-[KScheduleHelper : PeriodicWorker]
+[VScheduleHelper : PeriodicWorker]
 id													= 140
 friendlyName										= Schedule Helper
-type												= KScheduleHelper
-scriptPath											= batches/KScheduleHelperExe.php
+type												= VScheduleHelper
+scriptPath											= batches/VScheduleHelperExe.php
 sleepBetweenStopStart								= 15
 
 
-[KAsyncBulkDownloadCloser : JobCloserWorker]
+[VAsyncBulkDownloadCloser : JobCloserWorker]
 id													= 150
 friendlyName										= Bulk Download Closer
-type												= KAsyncBulkDownloadCloser
-scriptPath											= batches/BulkDownload/KAsyncBulkDownloadCloserExe.php
+type												= VAsyncBulkDownloadCloser
+scriptPath											= batches/BulkDownload/VAsyncBulkDownloadCloserExe.php
 
 
-[KAsyncProvisionProvide : JobHandlerWorker]
+[VAsyncProvisionProvide : JobHandlerWorker]
 id													= 160
 friendlyName										= Provision Provide
-type												= KAsyncProvisionProvide
-scriptPath											= batches/Provision/KAsyncProvisionProvideExe.php
+type												= VAsyncProvisionProvide
+scriptPath											= batches/Provision/VAsyncProvisionProvideExe.php
 params.wsdlUsername									= @PROVISION_PROVIDE_USER@
 params.wsdlPassword									= @PROVISION_PROVIDE_PASS@
 params.cpcode										= @PROVISION_PROVIDE_CPCODE@
@@ -398,11 +398,11 @@ params.restapi.secondaryContact						= @AKAMAI_UNIVERSAL_STREAM_SECONDARY_CONTAC
 params.restapi.notificationEmail					= @AKAMAI_UNIVERSAL_STREAM_NOTIFICATION_EMAIL@
 
 
-[KAsyncProvisionDelete : JobHandlerWorker]
+[VAsyncProvisionDelete : JobHandlerWorker]
 id													= 170
 friendlyName										= Provision Delete
-type												= KAsyncProvisionDelete
-scriptPath											= batches/Provision/KAsyncProvisionDeleteExe.php
+type												= VAsyncProvisionDelete
+scriptPath											= batches/Provision/VAsyncProvisionDeleteExe.php
 minCreatedAtMinutes									= 10080
 params.wsdlUsername									= @PROVISION_PROVIDE_USER@
 params.wsdlPassword									= @PROVISION_PROVIDE_PASS@
@@ -411,39 +411,39 @@ params.restapi.systemUserName							= @AKAMAI_UNIVERSAL_STREAM_USER_NAME@
 params.restapi.systemPassword						= @AKAMAI_UNIVERSAL_STREAM_USER_PASSWORD@
 params.restapi.domainName							= @AKAMAI_UNIVERSAL_STREAM_DOMAIN_NAME@
 
-[KAsyncProvisionProvideCloser : JobCloserWorker]
+[VAsyncProvisionProvideCloser : JobCloserWorker]
 id													= 161
 friendlyName										= Provision provide Closer
-type												= KAsyncProvisionProvideCloser
-scriptPath											= batches/Provision/KAsyncProvisionProvideCloserExe.php
+type												= VAsyncProvisionProvideCloser
+scriptPath											= batches/Provision/VAsyncProvisionProvideCloserExe.php
 params.pingTimeout									= 1
 
-[KAsyncStorageExport : JobHandlerWorker]
+[VAsyncStorageExport : JobHandlerWorker]
 id													= 180
 friendlyName										= Storage Export
-type												= KAsyncStorageExport
+type												= VAsyncStorageExport
 maximumExecutionTime								= 1800
-scriptPath											= batches/Storage/KAsyncStorageExportExe.php
+scriptPath											= batches/Storage/VAsyncStorageExportExe.php
 params.chmod										= 755
 	
-[KAsyncStorageExportCloser : JobCloserWorker]
+[VAsyncStorageExportCloser : JobCloserWorker]
 id													= 181
 friendlyName										= storage export closer
-type												= KAsyncStorageExportCloser
-scriptPath											= batches/Storage/KAsyncStorageExportCloserExe.php
+type												= VAsyncStorageExportCloser
+scriptPath											= batches/Storage/VAsyncStorageExportCloserExe.php
 		
-[KAsyncStorageDelete : JobHandlerWorker]
+[VAsyncStorageDelete : JobHandlerWorker]
 id													= 380
-name												= KAsyncStorageDelete
+name												= VAsyncStorageDelete
 friendlyName										= Storage Delete
-type												= KAsyncStorageDelete
-scriptPath											= batches/Storage/KAsyncStorageDeleteExe.php
+type												= VAsyncStorageDelete
+scriptPath											= batches/Storage/VAsyncStorageDeleteExe.php
 
-[KAsyncEmailIngestion : PeriodicWorker]
+[VAsyncEmailIngestion : PeriodicWorker]
 id													= 190
 friendlyName 										= Email Ingestion
-type		 										= KAsyncEmailIngestion
-scriptPath											= batches/EmailIngestion/KAsyncEmailIngestionExe.php
+type		 										= VAsyncEmailIngestion
+scriptPath											= batches/EmailIngestion/VAsyncEmailIngestionExe.php
 sleepBetweenStopStart								= 600
 params.localTempPath 								= @TMP_DIR@/emailIngestion
 ; the string "mailbox.user@mailbox.hostname" must equal to the mailboxid set for the email ingestion profile 
@@ -461,21 +461,21 @@ params.mailbox2.options								= /novalidate-cert
 params.mailbox1.maxMailsPerRun	 					= 0
 
 
-[KAsyncVirusScan : JobHandlerWorker]
+[VAsyncVirusScan : JobHandlerWorker]
 id													= 240
 friendlyName										= VirusScan
-type												= KAsyncVirusScan
+type												= VAsyncVirusScan
 maximumExecutionTime								= 1200
-scriptPath											= ../plugins/virus_scan/batch/VirusScan/KAsyncVirusScanExe.php
+scriptPath											= ../plugins/virus_scan/batch/VirusScan/VAsyncVirusScanExe.php
 params.symantecScanEngineBin 						= /opt/SYMCScan/ssecls/ssecls
 params.clamAvScanEngineBin 							= /usr/bin/clamscan
 
 
-[KAsyncCaptureThumb : JobHandlerWorker]
+[VAsyncCaptureThumb : JobHandlerWorker]
 id													= 250
 friendlyName										= Capture Thumbnail
-type												= KAsyncCaptureThumb
-scriptPath											= batches/CaptureThumb/KAsyncCaptureThumbExe.php
+type												= VAsyncCaptureThumb
+scriptPath											= batches/CaptureThumb/VAsyncCaptureThumbExe.php
 params.localTempPath 								= @TMP_DIR@/thumb 
 params.sharedTempPath 								= @WEB_DIR@/tmp/thumb
 params.FFMpegCmd	 								= @BIN_DIR@/ffmpeg
@@ -483,82 +483,82 @@ params.ImageMagickCmd								= convert
 maximumExecutionTime								= 3600
 
 
-[KAsyncDistribute : JobHandlerWorker]
+[VAsyncDistribute : JobHandlerWorker]
 params.tempXmlPath									= @WEB_DIR@/tmp/xml
 
 
-[KAsyncDistributeSubmit : KAsyncDistribute]
+[VAsyncDistributeSubmit : VAsyncDistribute]
 id													= 260
 friendlyName										= Distribute Submit
-type												= KAsyncDistributeSubmit
-scriptPath											= ../plugins/content_distribution/batch/Distribute/KAsyncDistributeSubmitExe.php
+type												= VAsyncDistributeSubmit
+scriptPath											= ../plugins/content_distribution/batch/Distribute/VAsyncDistributeSubmitExe.php
 maximumExecutionTime								= 5400
 
-[KAsyncDistributeUpdate : KAsyncDistribute]
+[VAsyncDistributeUpdate : VAsyncDistribute]
 id													= 270
 friendlyName										= Distribute Update
-type												= KAsyncDistributeUpdate
-scriptPath											= ../plugins/content_distribution/batch/Distribute/KAsyncDistributeUpdateExe.php
+type												= VAsyncDistributeUpdate
+scriptPath											= ../plugins/content_distribution/batch/Distribute/VAsyncDistributeUpdateExe.php
 
 
-[KAsyncDistributeDelete : KAsyncDistribute]
+[VAsyncDistributeDelete : VAsyncDistribute]
 id													= 280
 friendlyName										= Distribute Delete
-type												= KAsyncDistributeDelete
-scriptPath											= ../plugins/content_distribution/batch/Distribute/KAsyncDistributeDeleteExe.php
+type												= VAsyncDistributeDelete
+scriptPath											= ../plugins/content_distribution/batch/Distribute/VAsyncDistributeDeleteExe.php
 
 
-[KAsyncDistributeFetchReport : KAsyncDistribute]
+[VAsyncDistributeFetchReport : VAsyncDistribute]
 id													= 290
 friendlyName										= Distribute FetchReport
-type												= KAsyncDistributeFetchReport
-scriptPath											= ../plugins/content_distribution/batch/Distribute/KAsyncDistributeFetchReportExe.php
+type												= VAsyncDistributeFetchReport
+scriptPath											= ../plugins/content_distribution/batch/Distribute/VAsyncDistributeFetchReportExe.php
 
 
-[KAsyncDistributeCloser : JobCloserWorker]
+[VAsyncDistributeCloser : JobCloserWorker]
 params.tempXmlPath									= @WEB_DIR@/tmp/xml
 
-[KAsyncDistributeSubmitCloser : KAsyncDistributeCloser]
+[VAsyncDistributeSubmitCloser : VAsyncDistributeCloser]
 id													= 300
 friendlyName										= Distribute Submit Closer
-type												= KAsyncDistributeSubmitCloser
-scriptPath											= ../plugins/content_distribution/batch/Distribute/KAsyncDistributeSubmitCloserExe.php
+type												= VAsyncDistributeSubmitCloser
+scriptPath											= ../plugins/content_distribution/batch/Distribute/VAsyncDistributeSubmitCloserExe.php
 
 
-[KAsyncDistributeUpdateCloser : KAsyncDistributeCloser]
+[VAsyncDistributeUpdateCloser : VAsyncDistributeCloser]
 id													= 310
 friendlyName										= Distribute Update Closer
-type												= KAsyncDistributeUpdateCloser
-scriptPath											= ../plugins/content_distribution/batch/Distribute/KAsyncDistributeUpdateCloserExe.php
+type												= VAsyncDistributeUpdateCloser
+scriptPath											= ../plugins/content_distribution/batch/Distribute/VAsyncDistributeUpdateCloserExe.php
 
 
-[KAsyncDistributeDeleteCloser : KAsyncDistributeCloser]
+[VAsyncDistributeDeleteCloser : VAsyncDistributeCloser]
 id													= 320
 friendlyName										= Distribute Delete Closer
-type												= KAsyncDistributeDeleteCloser
-scriptPath											= ../plugins/content_distribution/batch/Distribute/KAsyncDistributeDeleteCloserExe.php
+type												= VAsyncDistributeDeleteCloser
+scriptPath											= ../plugins/content_distribution/batch/Distribute/VAsyncDistributeDeleteCloserExe.php
 
 
-[KAsyncDistributeFetchReportCloser : KAsyncDistributeCloser]
+[VAsyncDistributeFetchReportCloser : VAsyncDistributeCloser]
 id													= 330
 friendlyName										= Distribute Fetch Report Closer
-type												= KAsyncDistributeFetchReportCloser
-scriptPath											= ../plugins/content_distribution/batch/Distribute/KAsyncDistributeFetchReportCloserExe.php
+type												= VAsyncDistributeFetchReportCloser
+scriptPath											= ../plugins/content_distribution/batch/Distribute/VAsyncDistributeFetchReportCloserExe.php
  
 
-[KAsyncSynchronizeDistribution : PeriodicWorker]
+[VAsyncSynchronizeDistribution : PeriodicWorker]
 id													= 340
 friendlyName										= Synchronize Entry Distributions
-type												= KAsyncSynchronizeDistribution
-scriptPath											= ../plugins/content_distribution/batch/Distribute/KAsyncSynchronizeDistributionExe.php
+type												= VAsyncSynchronizeDistribution
+scriptPath											= ../plugins/content_distribution/batch/Distribute/VAsyncSynchronizeDistributionExe.php
 sleepBetweenStopStart								= 600
 
-[KAsyncDropFolderWatcher : PeriodicWorker]
+[VAsyncDropFolderWatcher : PeriodicWorker]
 id													= 350
 friendlyName										= Drop Folder Watcher
-type												= KAsyncDropFolderWatcher
+type												= VAsyncDropFolderWatcher
 maximumExecutionTime								= 3000
-scriptPath											= ../plugins/drop_folder/batch/DropFolderWatcher/KAsyncDropFolderWatcherExe.php
+scriptPath											= ../plugins/drop_folder/batch/DropFolderWatcher/VAsyncDropFolderWatcherExe.php
 params.tags											= *
 params.maxTimeForFolder                             = 3000
 numberOfFoldersEachRun                              = 20
@@ -566,213 +566,213 @@ params.mrss.xmlPath									= @WEB_DIR@/tmp/dropFolderFiles
 params.mrss.limitProcessEachRun						= 20
 
 
-[KAsyncDropFolderContentProcessor : JobHandlerWorker]
+[VAsyncDropFolderContentProcessor : JobHandlerWorker]
 id													= 355
 friendlyName										= Drop Folder Content Processor
-type												= KAsyncDropFolderContentProcessor
+type												= VAsyncDropFolderContentProcessor
 maximumExecutionTime								= 3000
 curlTimeout											= 3000
-scriptPath											= ../plugins/drop_folder/batch/DropFolderContentProcessor/KAsyncDropFolderContentProcessorExe.php
+scriptPath											= ../plugins/drop_folder/batch/DropFolderContentProcessor/VAsyncDropFolderContentProcessorExe.php
 params.maxTimeBeforeFail 							= 1000000
 
-[KAsyncTransformMetadata : JobHandlerWorker]
+[VAsyncTransformMetadata : JobHandlerWorker]
 id													= 220
 friendlyName										= Transform Metadata
-type												= KAsyncTransformMetadata
-scriptPath											= ../plugins/metadata/batch/Transform/KAsyncTransformMetadataExe.php
+type												= VAsyncTransformMetadata
+scriptPath											= ../plugins/metadata/batch/Transform/VAsyncTransformMetadataExe.php
 params.maxObjectsEachRun							= 40
 
 
-[KAsyncDispatchEventNotification : JobHandlerWorker]
+[VAsyncDispatchEventNotification : JobHandlerWorker]
 id													= 400
 friendlyName										= Dispatch Event Notification
-type												= KAsyncDispatchEventNotification
+type												= VAsyncDispatchEventNotification
 maxJobsEachRun										= 10
-scriptPath											= ../plugins/event_notification/batch/DispatchEventNotification/KAsyncDispatchEventNotificationExe.php
+scriptPath											= ../plugins/event_notification/batch/DispatchEventNotification/VAsyncDispatchEventNotificationExe.php
 params.forumUrl										= @FORUMS_URLS@
 
-[KAsyncIndex : JobHandlerWorker]
+[VAsyncIndex : JobHandlerWorker]
 id													= 420
 friendlyName										= Index
-type												= KAsyncIndex
+type												= VAsyncIndex
 maximumExecutionTime								= 1200
-scriptPath											= batches/Index/KAsyncIndexExe.php
+scriptPath											= batches/Index/VAsyncIndexExe.php
 
-[KAsyncDelete : JobHandlerWorker]
+[VAsyncDelete : JobHandlerWorker]
 id													= 430
 friendlyName										= Delete
-type												= KAsyncDelete
+type												= VAsyncDelete
 maximumExecutionTime								= 1200
-scriptPath											= batches/Delete/KAsyncDeleteExe.php
+scriptPath											= batches/Delete/VAsyncDeleteExe.php
 
 
 
-[KAsyncMoveCategoryEntries : JobHandlerWorker]
+[VAsyncMoveCategoryEntries : JobHandlerWorker]
 id													= 440
 friendlyName										= Move Categories Entries
-type												= KAsyncMoveCategoryEntries
+type												= VAsyncMoveCategoryEntries
 maximumExecutionTime								= 1200
-scriptPath											= batches/MoveCategoryEntries/KAsyncMoveCategoryEntriesExe.php
+scriptPath											= batches/MoveCategoryEntries/VAsyncMoveCategoryEntriesExe.php
 
-[KAsyncCopy : JobHandlerWorker]
+[VAsyncCopy : JobHandlerWorker]
 id													= 450
 friendlyName										= Copy
-type												= KAsyncCopy
+type												= VAsyncCopy
 maximumExecutionTime								= 1200
-scriptPath											= batches/Copy/KAsyncCopyExe.php
+scriptPath											= batches/Copy/VAsyncCopyExe.php
 
-[KAsyncParseCaptionAsset : JobHandlerWorker]
+[VAsyncParseCaptionAsset : JobHandlerWorker]
 id													= 460
-name												= KAsyncParseCaptionAsset
+name												= VAsyncParseCaptionAsset
 friendlyName										= Parse caption asset
-type												= KAsyncParseCaptionAsset
+type												= VAsyncParseCaptionAsset
 maximumExecutionTime								= 3000
-scriptPath             								= ../plugins/content/caption/search/batch/ParseCaptionAsset/KAsyncParseCaptionAssetExe.php
+scriptPath             								= ../plugins/content/caption/search/batch/ParseCaptionAsset/VAsyncParseCaptionAssetExe.php
 
 
 
-[KAsyncTagResolve : PeriodicWorker]
+[VAsyncTagResolve : PeriodicWorker]
 id													= 470
-name												= KAsyncTagResolve
+name												= VAsyncTagResolve
 friendlyName										= Resolve tags which are pending deletion
-type												= KAsyncTagResolve
+type												= VAsyncTagResolve
 maximumExecutionTime								= 3000
 sleepBetweenStopStart							    = 3600
-scriptPath											= ../plugins/tag_search/lib/batch/tag_resolve/KAsyncTagResolveExe.php
+scriptPath											= ../plugins/tag_search/lib/batch/tag_resolve/VAsyncTagResolveExe.php
 
 
 
-[KAsyncWidevineRepositorySync : JobHandlerWorker]
+[VAsyncWidevineRepositorySync : JobHandlerWorker]
 id													= 480
-name												= KAsyncWidevineRepositorySync
+name												= VAsyncWidevineRepositorySync
 friendlyName										= Syncronize Widevine assets
-type												= KAsyncWidevineRepositorySync
+type												= VAsyncWidevineRepositorySync
 maximumExecutionTime								= 3000
-scriptPath             								= ../plugins/drm/providers/widevine/batch/widevineRepositorySync/KAsyncWidevineRepositorySyncExe.php
+scriptPath             								= ../plugins/drm/providers/widevine/batch/widevineRepositorySync/VAsyncWidevineRepositorySyncExe.php
 
 
 
-[KAsyncConvertLiveSegment : KAsyncConvertWorker]
+[VAsyncConvertLiveSegment : VAsyncConvertWorker]
 id													= 490
-type												= KAsyncConvertLiveSegment
-scriptPath											= batches/ConvertLiveSegment/KAsyncConvertLiveSegmentExe.php
+type												= VAsyncConvertLiveSegment
+scriptPath											= batches/ConvertLiveSegment/VAsyncConvertLiveSegmentExe.php
 params.ffprobeCmd									= @BIN_DIR@/ffprobe
 params.mediaInfoCmd									= @BIN_DIR@/mediainfo
 
-[KAsyncConcat : KAsyncConvertWorker]
+[VAsyncConcat : VAsyncConvertWorker]
 id													= 500
-type												= KAsyncConcat
-scriptPath											= batches/Concat/KAsyncConcatExe.php
+type												= VAsyncConcat
+scriptPath											= batches/Concat/VAsyncConcatExe.php
 params.ffprobeCmd									= @BIN_DIR@/ffprobe
 params.mediaInfoCmd									= @BIN_DIR@/mediainfo
 
-[KAsyncValidateLiveMediaServers : PeriodicWorker]
+[VAsyncValidateLiveMediaServers : PeriodicWorker]
 id													= 510
 friendlyName										= Validate Live Media Servers
-type												= KAsyncValidateLiveMediaServers
-scriptPath											= batches/ValidateLiveMediaServers/KAsyncValidateLiveMediaServersExe.php
+type												= VAsyncValidateLiveMediaServers
+scriptPath											= batches/ValidateLiveMediaServers/VAsyncValidateLiveMediaServersExe.php
 sleepBetweenStopStart								= 30
 params.minCreationTime								= 120
 
 
 
-[KAsyncCopyPartner : JobHandlerWorker]
+[VAsyncCopyPartner : JobHandlerWorker]
 id													= 520
 friendlyName										= CopyPartner
-type												= KAsyncCopyPartner
+type												= VAsyncCopyPartner
 maximumExecutionTime								= 12000
-scriptPath											= batches/CopyPartner/KAsyncCopyPartnerExe.php
+scriptPath											= batches/CopyPartner/VAsyncCopyPartnerExe.php
 
-[KAsyncDeleteFile : JobHandlerWorker]
+[VAsyncDeleteFile : JobHandlerWorker]
 id													= 530
-name												= KAsyncDeleteFile
+name												= VAsyncDeleteFile
 friendlyName										= Delete
-type												= KAsyncDeleteFile
+type												= VAsyncDeleteFile
 maximumExecutionTime								= 1200
-scriptPath											= batches/DeleteFile/KAsyncDeleteFileExe.php
+scriptPath											= batches/DeleteFile/VAsyncDeleteFileExe.php
 maxInstances										= 1
 
-[KScheduledTaskDryRunner : JobHandlerWorker]
+[VScheduledTaskDryRunner : JobHandlerWorker]
 id													= 540
-type												= KScheduledTaskDryRunner
-scriptPath											= ../plugins/scheduled_task/batch/ScheduledTaskDryRunner/KScheduledTaskDryRunnerExe.php
+type												= VScheduledTaskDryRunner
+scriptPath											= ../plugins/scheduled_task/batch/ScheduledTaskDryRunner/VScheduledTaskDryRunnerExe.php
 params.sharedTempPath 								= @TMP_DIR@/scheduledtasks
 
-[KScheduledTaskRunner : PeriodicWorker]
+[VScheduledTaskRunner : PeriodicWorker]
 id													= 610
-type												= KScheduledTaskRunner
+type												= VScheduledTaskRunner
 maximumExecutionTime								= 600
-scriptPath											= ../plugins/scheduled_task/batch/ScheduledTaskRunner/KScheduledTaskRunnerExe.php
+scriptPath											= ../plugins/scheduled_task/batch/ScheduledTaskRunner/VScheduledTaskRunnerExe.php
 sleepBetweenStopStart								= 21600
 maxTotalCountAllowed								= 50
 
-[KAsyncSyncCategoryPrivacyContext : JobHandlerWorker]
+[VAsyncSyncCategoryPrivacyContext : JobHandlerWorker]
 id													= 550
 friendlyName										= Sync Category Privacy Context
-type												= KAsyncSyncCategoryPrivacyContext
+type												= VAsyncSyncCategoryPrivacyContext
 maximumExecutionTime								= 12000
-scriptPath											= batches/SyncCategoryPrivacyContext/KAsyncSyncCategoryPrivacyContextExe.php
+scriptPath											= batches/SyncCategoryPrivacyContext/VAsyncSyncCategoryPrivacyContextExe.php
 
-[KAsyncTagIndex : JobHandlerWorker]
+[VAsyncTagIndex : JobHandlerWorker]
 id													= 560
 friendlyName										= Re-index tags
-type												= KAsyncTagIndex
+type												= VAsyncTagIndex
 maximumExecutionTime								= 12000
-scriptPath											= ../plugins/tag_search/lib/batch/tag_index/KAsyncTagIndexExe.php
+scriptPath											= ../plugins/tag_search/lib/batch/tag_index/VAsyncTagIndexExe.php
 
-[KAsyncLiveReportExport : JobHandlerWorker]
+[VAsyncLiveReportExport : JobHandlerWorker]
 id													= 600
 friendlyName										= Live reports export
-type												= KAsyncLiveReportExport
+type												= VAsyncLiveReportExport
 maximumExecutionTime								= 12000
-scriptPath											= batches/LiveReportExport/KAsyncLiveReportExportExe.php
+scriptPath											= batches/LiveReportExport/VAsyncLiveReportExportExe.php
 params.localTempPath								= @TMP_DIR@/reports
 params.sharedPath									= @WEB_DIR@/tmp/reports
 
-[KAsyncIntegrate : JobHandlerWorker]
+[VAsyncIntegrate : JobHandlerWorker]
 id													= 570
 friendlyName										= Integrate
-type												= KAsyncIntegrate
+type												= VAsyncIntegrate
 maximumExecutionTime								= 12000
-scriptPath											= ../plugins/integration/batch/Integrate/KAsyncIntegrateExe.php
+scriptPath											= ../plugins/integration/batch/Integrate/VAsyncIntegrateExe.php
 
-[KAsyncIntegrateCloser : JobHandlerWorker]
+[VAsyncIntegrateCloser : JobHandlerWorker]
 id													= 580
 friendlyName										= Integrate Closer
-type												= KAsyncIntegrateCloser
+type												= VAsyncIntegrateCloser
 maximumExecutionTime								= 12000
-scriptPath											= ../plugins/integration/batch/Integrate/KAsyncIntegrateCloserExe.php
+scriptPath											= ../plugins/integration/batch/Integrate/VAsyncIntegrateCloserExe.php
 params.maxTimeBeforeFail							= 1000000
 
-[KAsyncDistributeEnable : KAsyncDistribute]
+[VAsyncDistributeEnable : VAsyncDistribute]
 id													= 590
 friendlyName										= Distribute Enable
-type												= KAsyncDistributeEnable
-scriptPath											= ../plugins/content_distribution/batch/Distribute/KAsyncDistributeEnableExe.php
+type												= VAsyncDistributeEnable
+scriptPath											= ../plugins/content_distribution/batch/Distribute/VAsyncDistributeEnableExe.php
 
-[KAsyncDistributeDisable : KAsyncDistribute]
+[VAsyncDistributeDisable : VAsyncDistribute]
 id													= 600
 friendlyName										= Distribute Disable
-type												= KAsyncDistributeDisable
-scriptPath											= ../plugins/content_distribution/batch/Distribute/KAsyncDistributeDisableExe.php
+type												= VAsyncDistributeDisable
+scriptPath											= ../plugins/content_distribution/batch/Distribute/VAsyncDistributeDisableExe.php
 
-[KAsyncRecalculateCache : JobHandlerWorker]
+[VAsyncRecalculateCache : JobHandlerWorker]
 id													= 610
 friendlyName										= Recalculate Cache
-type												= KAsyncRecalculateCache
-scriptPath											= batches/Cache/KAsyncRecalculateCacheExe.php
+type												= VAsyncRecalculateCache
+scriptPath											= batches/Cache/VAsyncRecalculateCacheExe.php
 
-[KAsyncClearCuePoints : PeriodicWorker]
+[VAsyncClearCuePoints : PeriodicWorker]
 id																	= 620
 friendlyName                                        				= Clear old cue points from live entry
-type                                                				= KAsyncClearCuePoints
-scriptPath                                          				= ../plugins/cue_points/base/batch/clearCuePonts/KAsyncClearCuePointsExe.php
-advancedFilter.KalturaCuePointFilter.cuePointTypeIn							= "thumbCuePoint.Thumb,adCuePoint.Ad,codeCuePoint.Code"
-advancedFilter.KalturaCuePointFilter.orderBy								= "+createdAt"
-advancedFilter.KalturaCuePointFilter.createdAtLessThanOrEqual				= "-86400"
-advancedFilter.KalturaCuePointFilter.statusEqual							= 1
+type                                                				= VAsyncClearCuePoints
+scriptPath                                          				= ../plugins/cue_points/base/batch/clearCuePonts/VAsyncClearCuePointsExe.php
+advancedFilter.VidiunCuePointFilter.cuePointTypeIn							= "thumbCuePoint.Thumb,adCuePoint.Ad,codeCuePoint.Code"
+advancedFilter.VidiunCuePointFilter.orderBy								= "+createdAt"
+advancedFilter.VidiunCuePointFilter.createdAtLessThanOrEqual				= "-86400"
+advancedFilter.VidiunCuePointFilter.statusEqual							= 1
 
-[KAsyncConvertThumbAssetsGenerator : KAsyncConvertWorker]
+[VAsyncConvertThumbAssetsGenerator : VAsyncConvertWorker]
 id                                      = 630
 friendlyName                            = Convert Thumb Assets
 maximumExecutionTime                    = 36000
@@ -780,54 +780,54 @@ maxJobsEachRun                          = 1
 filter.jobSubTypeIn                     = document.thumbAssets
 params.skipSourceValidation             = 1
 
-[KAsyncLiveToVod : KAsyncConvertWorker]
+[VAsyncLiveToVod : VAsyncConvertWorker]
 id													= 640
-type												= KAsyncLiveToVod
-scriptPath											= batches/LiveToVod/KAsyncLiveToVodExe.php
+type												= VAsyncLiveToVod
+scriptPath											= batches/LiveToVod/VAsyncLiveToVodExe.php
 
-[KAsyncCopyCaptions : JobHandlerWorker]
+[VAsyncCopyCaptions : JobHandlerWorker]
 id													= 650
 friendlyName										= Copy Caption Assets
-type												= KAsyncCopyCaptions
-scriptPath											= ../plugins/content/caption/base/batch/CopyCaptions/KAsyncCopyCaptionsExe.php
+type												= VAsyncCopyCaptions
+scriptPath											= ../plugins/content/caption/base/batch/CopyCaptions/VAsyncCopyCaptionsExe.php
 
-[KAsyncServerNodeMonitor : PeriodicWorker]
+[VAsyncServerNodeMonitor : PeriodicWorker]
 id                                                  = 670
 sleepBetweenStopStart                               = 900
 friendlyName                                        = Server node monitor
-type                                                = KAsyncServerNodeMonitor
-scriptPath                                          = batches/ServerNodeMonitor/KAsyncServerNodeMonitorExe.php
+type                                                = VAsyncServerNodeMonitor
+scriptPath                                          = batches/ServerNodeMonitor/VAsyncServerNodeMonitorExe.php
 params.serverNodeTTL                                = 120
 params.typesToMonitor                               = 1
 
-[KAsyncExportCsv : JobHandlerWorker]
+[VAsyncExportCsv : JobHandlerWorker]
 id													= 690
 friendlyName										= Export Csv
-type												= KAsyncExportCsv
+type												= VAsyncExportCsv
 params.localTempPath                                = @TMP_DIR@/exportcsv
 params.sharedTempPath                                   = @WEB_DIR@/tmp/exportcsv
-scriptPath											= batches/ExportCsv/kAsyncExportCsvExe.php
+scriptPath											= batches/ExportCsv/vAsyncExportCsvExe.php
 maximumExecutionTime			                    = 3600
 
-[KAsyncCopyCuePoints : JobHandlerWorker]
+[VAsyncCopyCuePoints : JobHandlerWorker]
 id                                                  = 700
 friendlyName                                        = Copy Cue Point
-type                                                = KAsyncCopyCuePoints
-scriptPath                                          = ../plugins/cue_points/base/batch/copyCuePoints/KAsyncCopyCuePointsExe.php
+type                                                = VAsyncCopyCuePoints
+scriptPath                                          = ../plugins/cue_points/base/batch/copyCuePoints/VAsyncCopyCuePointsExe.php
 
 
-[KSyncReachCreditTaskRunner : PeriodicWorker]
+[VSyncReachCreditTaskRunner : PeriodicWorker]
 id                                                  = 720
-type                                                = KSyncReachCreditTaskRunner
+type                                                = VSyncReachCreditTaskRunner
 maximumExecutionTime                                = 3600
-scriptPath                                          = ../plugins/reach/batch/KSyncReachCreditTaskRunner/KSyncReachCreditTaskRunnerExe.php
+scriptPath                                          = ../plugins/reach/batch/VSyncReachCreditTaskRunner/VSyncReachCreditTaskRunnerExe.php
 sleepBetweenStopStart                               = 21600
 
-[KAsyncReportExport : JobHandlerWorker]
+[VAsyncReportExport : JobHandlerWorker]
 id													= 730
 friendlyName										= Reports export
-type												= KAsyncReportExport
+type												= VAsyncReportExport
 maximumExecutionTime								= 12000
-scriptPath											= batches/ReportExport/KAsyncReportExportExe.php
+scriptPath											= batches/ReportExport/VAsyncReportExportExe.php
 params.localTempPath								= @TMP_DIR@/reports
 params.sharedTempPath								= @WEB_DIR@/apptemp-shared/reports

@@ -1,6 +1,6 @@
 <?php
 
-require_once KALTURA_ROOT_PATH.'/vendor/facebook-sdk-php-v5-customized/autoload.php';
+require_once VIDIUN_ROOT_PATH.'/vendor/facebook-sdk-php-v5-customized/autoload.php';
 
 /**
  *  This class is a helper class for the use of Facebook's PHP client (see location in the require php file)
@@ -32,7 +32,7 @@ class FacebookGraphSdkUtils
 		if (!$userAccessToken->isLongLived())
 		{
 			// Exchanges a short-lived access token for a long-lived one
-			KalturaLog::debug('Getting long lived access token for '.$accessTokenValue);
+			VidiunLog::debug('Getting long lived access token for '.$accessTokenValue);
 			$oAuth2Client = $fb->getOAuth2Client();
 			$longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken($userAccessToken);
 			if(isset($longLivedAccessToken))
@@ -94,14 +94,14 @@ class FacebookGraphSdkUtils
 		$fb = self::createFacebookInstance($appId, $appSecret, $dataHandler);
 
 		$response = $fb->get('/me/accounts?fields=id,access_token', $userAccessToken);
-		KalturaLog::debug("page token response:".print_r($response, true));
+		VidiunLog::debug("page token response:".print_r($response, true));
 
 		$pages = $response->getGraphEdge();
 		foreach ($pages as $page)
 		{
 			if($page['id'] == $pageId)
 			{
-				KalturaLog::debug('Found token for page Id: '.$pageId);
+				VidiunLog::debug('Found token for page Id: '.$pageId);
 				return $page['access_token'];
 			}
 		}
@@ -227,7 +227,7 @@ class FacebookGraphSdkUtils
 	{
 		//create file name in format: filename.locale.srt. videoId + $locale are unique for each caption file
 		$tempCaptionFilePath = $tempDirectory.'/caption_'. $videoId .'.'.$locale.'.srt';
-		kFileBase::setFileContent($tempCaptionFilePath, $captionAssetContent);
+		vFileBase::setFileContent($tempCaptionFilePath, $captionAssetContent);
 		$data = array (
 			'captions_file' => new FacebookCaptionsFile($tempCaptionFilePath),
 		);
@@ -279,9 +279,9 @@ class FacebookGraphSdkUtils
 
 	}
 
-	public static function getKalturaRedirectUrl()
+	public static function getVidiunRedirectUrl()
 	{
-		$url = kDataCenterMgr::getCurrentDcUrl()."/index.php/extservices/facebookoauth2?" .
+		$url = vDataCenterMgr::getCurrentDcUrl()."/index.php/extservices/facebookoauth2?" .
 			http_build_query(array(FacebookConstants::FACEBOOK_NEXT_ACTION_REQUEST_PARAM =>  base64_encode(FacebookConstants::SUB_ACTION_PROCESS_OAUTH2_RESPONSE)),
 				null, '&');
 		$url = str_replace("http:", "https:", $url);
@@ -299,7 +299,7 @@ class FacebookGraphSdkUtils
 	private static function doGetUserAccessToken($fb, $appId, $permissions = array())
 	{
 		$loginHelper = $fb->getRedirectLoginHelper();
-		$accessToken = $loginHelper->getAccessToken(self::getKalturaRedirectUrl());
+		$accessToken = $loginHelper->getAccessToken(self::getVidiunRedirectUrl());
 		if (! isset($accessToken))
 		{
 			$errorMessage = 'Failed to get access token';
@@ -311,11 +311,11 @@ class FacebookGraphSdkUtils
 			}
 			else
 			{
-				KalturaLog::err($errorMessage);
+				VidiunLog::err($errorMessage);
 				throw new Exception($errorMessage);
 			}
 		}
-		KalturaLog::debug('User access token: '.$accessToken->getValue().' expiration: '.print_r($accessToken->getExpiresAt(),true));
+		VidiunLog::debug('User access token: '.$accessToken->getValue().' expiration: '.print_r($accessToken->getExpiresAt(),true));
 		self::doValidateAccessToken($fb, $appId, $accessToken, $permissions);
 		return $accessToken;
 	}
@@ -331,11 +331,11 @@ class FacebookGraphSdkUtils
 	 */
 	private static function doValidateAccessToken($fb, $appId, $accessToken, $permissions = array())
 	{
-		KalturaLog::debug('Validating user access token: '.$accessToken->getValue());
+		VidiunLog::debug('Validating user access token: '.$accessToken->getValue());
 
 		$oAuth2Client = $fb->getOAuth2Client();
 		$tokenMetadata = $oAuth2Client->debugToken($accessToken);
-		KalturaLog::debug('token metadata: '.print_r($tokenMetadata, true));
+		VidiunLog::debug('token metadata: '.print_r($tokenMetadata, true));
 
 		$tokenMetadata->validateAppId($appId);
 		$grantedPermissions = $tokenMetadata->getScopes();
@@ -344,11 +344,11 @@ class FacebookGraphSdkUtils
 			if(!in_array($permission, $grantedPermissions))
 			{
 				$errorMessage = 'Token missing required permission ['.$permission.']';
-				KalturaLog::debug($errorMessage);
+				VidiunLog::debug($errorMessage);
 				throw new Exception($errorMessage);
 			}
 		}
-		KalturaLog::debug('Token is valid');
+		VidiunLog::debug('Token is valid');
 		return true;
 	}
 
@@ -366,9 +366,9 @@ class FacebookGraphSdkUtils
 
 	private static function transferVideoChunk($fb, $accessToken, $sessionId, $startOffset, $endOffset, $filePath, $workingDir, $pageId)
 	{
-		$chunkContent = kFile::getFileContent($filePath, $startOffset, $endOffset);
+		$chunkContent = vFile::getFileContent($filePath, $startOffset, $endOffset);
 		$chunkFilePath = $workingDir.DIRECTORY_SEPARATOR.'file_'.$startOffset;
-		kFile::setFileContent($chunkFilePath, $chunkContent);
+		vFile::setFileContent($chunkFilePath, $chunkContent);
 
 		$data = array(
 			'upload_phase' => 'transfer',
@@ -502,7 +502,7 @@ class FacebookConstants
 	const SUB_ACTION_PROCESS_OAUTH2_RESPONSE = 'process-oauth2-response';
 	const SUB_ACTION_REDIRECT_SCREEN = 'redirect-screen';
 	const SUB_ACTION_LOGIN_SCREEN = 'login-screen';
-	const FACEBOOK_KS_REQUEST_PARAM = 'ks';
+	const FACEBOOK_VS_REQUEST_PARAM = 'vs';
 	const FACEBOOK_USER_ALREADY_TAGGED_ERROR = 355;
 	const FACEBOOK_LOGIN_STATE = "state";
 }

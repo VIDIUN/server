@@ -49,8 +49,8 @@ class PartnerTableMap extends TableMap {
 		$this->addColumn('DEBUG_LEVEL', 'DebugLevel', 'INTEGER', false, null, 0);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-		$this->addForeignKey('ANONYMOUS_KUSER_ID', 'AnonymousKuserId', 'INTEGER', 'kuser', 'ID', false, null, null);
-		$this->addColumn('KS_MAX_EXPIRY_IN_SECONDS', 'KsMaxExpiryInSeconds', 'INTEGER', false, null, 86400);
+		$this->addForeignKey('ANONYMOUS_VUSER_ID', 'AnonymousVuserId', 'INTEGER', 'vuser', 'ID', false, null, null);
+		$this->addColumn('VS_MAX_EXPIRY_IN_SECONDS', 'VsMaxExpiryInSeconds', 'INTEGER', false, null, 86400);
 		$this->addColumn('CREATE_USER_ON_DEMAND', 'CreateUserOnDemand', 'TINYINT', false, null, 1);
 		$this->addColumn('PREFIX', 'Prefix', 'VARCHAR', false, 32, null);
 		$this->addColumn('ADMIN_NAME', 'AdminName', 'VARCHAR', false, 50, null);
@@ -76,7 +76,7 @@ class PartnerTableMap extends TableMap {
 		$this->addColumn('PRIORITY_GROUP_ID', 'PriorityGroupId', 'INTEGER', false, null, null);
 		$this->addColumn('PARTNER_GROUP_TYPE', 'PartnerGroupType', 'SMALLINT', false, null, 1);
 		$this->addColumn('PARTNER_PARENT_ID', 'PartnerParentId', 'INTEGER', false, null, null);
-		$this->addColumn('KMC_VERSION', 'KmcVersion', 'VARCHAR', false, 15, '1');
+		$this->addColumn('VMC_VERSION', 'VmcVersion', 'VARCHAR', false, 15, '1');
 		// validators
 	} // initialize()
 
@@ -85,7 +85,7 @@ class PartnerTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('kuser', 'kuser', RelationMap::MANY_TO_ONE, array('anonymous_kuser_id' => 'id', ), null, null);
+    $this->addRelation('vuser', 'vuser', RelationMap::MANY_TO_ONE, array('anonymous_vuser_id' => 'id', ), null, null);
     $this->addRelation('LiveChannelSegment', 'LiveChannelSegment', RelationMap::ONE_TO_MANY, array('id' => 'partner_id', ), null, null);
 	} // buildRelations()
 

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaMixEntry extends KalturaPlayableEntry
+class VidiunMixEntry extends VidiunPlayableEntry
 {
 	/**
 	 * Indicates whether the user has submited a real thumbnail to the mix (Not the one that was generated automaticaly)
@@ -16,7 +16,7 @@ class KalturaMixEntry extends KalturaPlayableEntry
 	/**
 	 * The editor type used to edit the metadata
 	 * 
-	 * @var KalturaEditorType
+	 * @var VidiunEditorType
 	 */
 	public $editorType;
 
@@ -29,7 +29,7 @@ class KalturaMixEntry extends KalturaPlayableEntry
 	
 	public function __construct()
 	{
-		$this->type = KalturaEntryType::MIX;
+		$this->type = VidiunEntryType::MIX;
 	}
 	
 	private static $map_between_objects = array
@@ -44,16 +44,16 @@ class KalturaMixEntry extends KalturaPlayableEntry
 		return array_merge ( parent::getMapBetweenObjects() , self::$map_between_objects );
 	}
 	
-    public function doFromObject($entry, KalturaDetachedResponseProfile $responseProfile = null)
+    public function doFromObject($entry, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($entry, $responseProfile);
 
 		if($this->shouldGet('editorType', $responseProfile))
 		{
-			if ($entry->getEditorType() == "kalturaAdvancedEditor" || $entry->getEditorType() == "Keditor")
-			    $this->editorType = KalturaEditorType::ADVANCED;
+			if ($entry->getEditorType() == "vidiunAdvancedEditor" || $entry->getEditorType() == "Veditor")
+			    $this->editorType = VidiunEditorType::ADVANCED;
 			else
-			    $this->editorType = KalturaEditorType::SIMPLE;
+			    $this->editorType = VidiunEditorType::SIMPLE;
 		}
 	}
 	
@@ -61,10 +61,10 @@ class KalturaMixEntry extends KalturaPlayableEntry
 	{
 		$entry = parent::toObject($entry, $skip);
 		
-		if ($this->editorType === KalturaEditorType::ADVANCED)
-			$entry->setEditorType("kalturaAdvancedEditor");
+		if ($this->editorType === VidiunEditorType::ADVANCED)
+			$entry->setEditorType("vidiunAdvancedEditor");
 		else
-			$entry->setEditorType("kalturaSimpleEditor");
+			$entry->setEditorType("vidiunSimpleEditor");
 			
 		return $entry;
 	}

@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage events
  */
-interface IKalturaMultiDeferredEvent
+interface IVidiunMultiDeferredEvent
 {
 
 	/**

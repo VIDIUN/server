@@ -3,7 +3,7 @@
  * @package plugins.cue_points
  * @subpackage model.data
  */
-class kCopyCuePointsJobData extends kJobData
+class vCopyCuePointsJobData extends vJobData
 {
 	/** source entry Id
 	 * @var string

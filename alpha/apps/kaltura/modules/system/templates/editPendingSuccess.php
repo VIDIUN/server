@@ -7,8 +7,8 @@
 <form>
 	Entry Id: <input type="text" name="entry_id" value="<?php echo $entry_id ?>">
 	
-	Kshow Id: <input type="text" name="kshow_id" value="<?php echo $kshow_id ?>">
-	<a href="./investigate?kshow_id=<?php echo $kshow_id ?>&entry_id=<?php echo $entry_id ?>">investigate</a>
+	Vshow Id: <input type="text" name="vshow_id" value="<?php echo $vshow_id ?>">
+	<a href="./investigate?vshow_id=<?php echo $vshow_id ?>&entry_id=<?php echo $entry_id ?>">investigate</a>
 <br>	
 <?php if ( !empty ( $metadata ) ) { ?>
 
@@ -24,5 +24,5 @@ Remove Pending all together: <input type="checkbox" id="remove_pending" name="re
 </div>
 
 <pre style="background-color: lightyellow; width: 80%;">
-<?php echo kString::xmlEncode( $metadata ) ?>
+<?php echo vString::xmlEncode( $metadata ) ?>
 </pre>

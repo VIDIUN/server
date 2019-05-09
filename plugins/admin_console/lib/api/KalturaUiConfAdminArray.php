@@ -3,14 +3,14 @@
  * @package plugins.adminConsole
  * @subpackage api.objects
  */
-class KalturaUiConfAdminArray extends KalturaTypedArray
+class VidiunUiConfAdminArray extends VidiunTypedArray
 {
-	public static function fromDbArray(array $arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaUiConfAdminArray();
+		$newArr = new VidiunUiConfAdminArray();
 		foreach ( $arr as $obj )
 		{
-			$nObj = new KalturaUiConfAdmin();
+			$nObj = new VidiunUiConfAdmin();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -20,6 +20,6 @@ class KalturaUiConfAdminArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaUiConfAdmin");
+		return parent::__construct("VidiunUiConfAdmin");
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Will run KAsyncNotifier 
+ * Will run VAsyncNotifier 
  * 
  * 
  * @package Scheduler
@@ -8,6 +8,6 @@
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncNotifier ( );
+$instance = new VAsyncNotifier ( );
 $instance->run(); 
 $instance->done();

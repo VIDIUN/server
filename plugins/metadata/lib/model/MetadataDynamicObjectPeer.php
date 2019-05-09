@@ -33,6 +33,6 @@ class MetadataDynamicObjectPeer extends MetadataPeer implements IMetadataPeer
 	
 	public static function validateMetadataObjectAccess($objectId)
 	{
-		return kCurrentContext::$is_admin_session;
+		return vCurrentContext::$is_admin_session;
 	}
 }

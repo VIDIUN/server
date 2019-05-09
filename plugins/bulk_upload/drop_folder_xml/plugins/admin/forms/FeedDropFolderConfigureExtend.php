@@ -24,7 +24,7 @@ class Form_FeedDropFolderConfigureExtend_SubForm extends Form_DropFolderConfigur
 	{
 		parent::populateFromObject($dropFolder, false);
 		
-		/* @var $dropFolder Kaltura_Client_DropFolder_Type_FeedDropFolder */
+		/* @var $dropFolder Vidiun_Client_DropFolder_Type_FeedDropFolder */
 		$feedItemInfoForm = $this->getSubForm('feedItemInfo');
 		/* @var $feedItemInfoForm Form_FeedItemInfoConfigureExtend */
 		$feedItemInfoForm->populateFromObject($dropFolder->feedItemInfo, false);
@@ -33,11 +33,11 @@ class Form_FeedDropFolderConfigureExtend_SubForm extends Form_DropFolderConfigur
 	
 	public function getObject($object, $objectType, array $properties, $add_underscore = true, $include_empty_fields = false)
 	{
-		/* @var $object Kaltura_Client_DropFolder_Type_FeedDropFolder */
+		/* @var $object Vidiun_Client_DropFolder_Type_FeedDropFolder */
 		$feedItemInfoForm = $this->getSubForm('feedItemInfo');
 		
 		/* @var $feedItemInfoForm Form_FeedItemInfoConfigureExtend */
-		$object->feedItemInfo = $feedItemInfoForm->getObject ('Kaltura_Client_FeedDropFolder_Type_FeedItemInfo',$properties, false );
+		$object->feedItemInfo = $feedItemInfoForm->getObject ('Vidiun_Client_FeedDropFolder_Type_FeedItemInfo',$properties, false );
 		
 	    return $object;
 	}

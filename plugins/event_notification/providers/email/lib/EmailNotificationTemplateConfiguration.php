@@ -8,7 +8,7 @@ class Form_EmailNotificationTemplateConfiguration extends Form_EventNotification
 	{
 		$object = parent::getObject($objectType, $properties, $add_underscore, $include_empty_fields);
 		
-		if($object instanceof Kaltura_Client_EmailNotification_Type_EmailNotificationTemplate)
+		if($object instanceof Vidiun_Client_EmailNotification_Type_EmailNotificationTemplate)
 		{			
 			$headerNames = array('to','cc','bcc');
 
@@ -25,7 +25,7 @@ class Form_EmailNotificationTemplateConfiguration extends Form_EventNotification
 	{
 		parent::populateFromObject($object, $add_underscore);
 		
-		if(!($object instanceof Kaltura_Client_EmailNotification_Type_EmailNotificationTemplate))
+		if(!($object instanceof Vidiun_Client_EmailNotification_Type_EmailNotificationTemplate))
 			return;
 
 		$headerNames = array('to','cc','bcc');
@@ -37,10 +37,10 @@ class Form_EmailNotificationTemplateConfiguration extends Form_EventNotification
 	/* (non-PHPdoc)
 	 * @see Form_EventNotificationTemplateConfiguration::addTypeElements()
 	 */
-	protected function addTypeElements(Kaltura_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate)
+	protected function addTypeElements(Vidiun_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate)
 	{
-		$format = new Kaltura_Form_Element_EnumSelect('format', array(
-			'enum' => 'Kaltura_Client_EmailNotification_Enum_EmailNotificationFormat',
+		$format = new Vidiun_Form_Element_EnumSelect('format', array(
+			'enum' => 'Vidiun_Client_EmailNotification_Enum_EmailNotificationFormat',
 			'label'			=> 'Format:',
 			'filters'		=> array('StringTrim'),
 			'required'		=> true,
@@ -81,21 +81,21 @@ class Form_EmailNotificationTemplateConfiguration extends Form_EventNotification
 
 			if (strlen(trim($properties[$headerEmailProperty])))
 			{
-				$email = new Kaltura_Client_Type_StringValue();
+				$email = new Vidiun_Client_Type_StringValue();
 				$email->value = $properties[$headerEmailProperty];
 
 				$name = null;
 				if (isset($properties[$headerNameProperty]) && strlen(trim($properties[$headerNameProperty])))
 				{
-					$name = new Kaltura_Client_Type_StringValue();
+					$name = new Vidiun_Client_Type_StringValue();
 					$name->value = $properties[$headerNameProperty];
 				}
 
-				$recipient = new Kaltura_Client_EmailNotification_Type_EmailNotificationRecipient();
+				$recipient = new Vidiun_Client_EmailNotification_Type_EmailNotificationRecipient();
 				$recipient->email = $email;
 				$recipient->name = $name;
 
-				$recipientProvider = new Kaltura_Client_EmailNotification_Type_EmailNotificationStaticRecipientProvider();
+				$recipientProvider = new Vidiun_Client_EmailNotification_Type_EmailNotificationStaticRecipientProvider();
 				$recipientProvider->emailRecipients = array();
 				$recipientProvider->emailRecipients[] = $recipient;
 
@@ -103,14 +103,14 @@ class Form_EmailNotificationTemplateConfiguration extends Form_EventNotification
 			}
 			else //return special null so we can update to null
 			{
-				return  Kaltura_Client_ClientBase::getKalturaNullValue();
+				return  Vidiun_Client_ClientBase::getVidiunNullValue();
 			}
 		}
 	}
 	
 	protected function populateHeaderField($object , $headerName)
 	{
-		if (!$object->$headerName || ($object->$headerName instanceof Kaltura_Client_EmailNotification_Type_EmailNotificationStaticRecipientProvider &&  count($object->$headerName->emailRecipients) == 1 &&  get_class($object->$headerName->emailRecipients[0]->email) == 'Kaltura_Client_Type_StringValue'))
+		if (!$object->$headerName || ($object->$headerName instanceof Vidiun_Client_EmailNotification_Type_EmailNotificationStaticRecipientProvider &&  count($object->$headerName->emailRecipients) == 1 &&  get_class($object->$headerName->emailRecipients[0]->email) == 'Vidiun_Client_Type_StringValue'))
 		{
 			$headerObject = null;
 			if ($object->$headerName)
@@ -122,7 +122,7 @@ class Form_EmailNotificationTemplateConfiguration extends Form_EventNotification
 				elseif(count($object->$headerName->emailRecipients))
 				{
 					$headerObject = reset($object->$headerName->emailRecipients);
-					/* @var $headerObject Kaltura_Client_EmailNotification_Type_EmailNotificationRecipient */
+					/* @var $headerObject Vidiun_Client_EmailNotification_Type_EmailNotificationRecipient */
 				}
 			}
 

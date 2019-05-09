@@ -2,19 +2,19 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaContextTypeHolderArray
+ * @deprecated use VidiunContextTypeHolderArray
  */
-class KalturaAccessControlContextTypeHolderArray extends KalturaTypedArray
+class VidiunAccessControlContextTypeHolderArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaAccessControlContextTypeHolderArray();
+		$newArr = new VidiunAccessControlContextTypeHolderArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $type)
 		{
-    		$nObj = new KalturaAccessControlContextTypeHolder();
+    		$nObj = new VidiunAccessControlContextTypeHolder();
 			$nObj->type = $type;
 			$newArr[] = $nObj;
 		}
@@ -24,6 +24,6 @@ class KalturaAccessControlContextTypeHolderArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		parent::__construct("KalturaAccessControlContextTypeHolder");	
+		parent::__construct("VidiunAccessControlContextTypeHolder");	
 	}
 }

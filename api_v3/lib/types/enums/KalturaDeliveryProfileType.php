@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaDeliveryProfileType extends KalturaDynamicEnum implements DeliveryProfileType
+class VidiunDeliveryProfileType extends VidiunDynamicEnum implements DeliveryProfileType
 {
 	/**
 	 * @return string

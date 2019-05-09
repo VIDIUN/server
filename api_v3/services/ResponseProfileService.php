@@ -5,7 +5,7 @@
  *
  * @service responseProfile
  */
-class ResponseProfileService extends KalturaBaseService
+class ResponseProfileService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -17,7 +17,7 @@ class ResponseProfileService extends KalturaBaseService
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::partnerGroup()
+	 * @see VidiunBaseService::partnerGroup()
 	 */
 	protected function partnerGroup($peer = null)
 	{
@@ -28,7 +28,7 @@ class ResponseProfileService extends KalturaBaseService
 				return $this->partnerGroup . ',0';
 			//When requesting response profiles allow default once in case requesting partner is internal
 			case 'list':
-				if(kCurrentContext::$ks_partner_id <= 0)
+				if(vCurrentContext::$vs_partner_id <= 0)
 					return $this->partnerGroup . ',0';
 		}
 			
@@ -39,10 +39,10 @@ class ResponseProfileService extends KalturaBaseService
 	 * Add new response profile
 	 * 
 	 * @action add
-	 * @param KalturaResponseProfile $addResponseProfile
-	 * @return KalturaResponseProfile
+	 * @param VidiunResponseProfile $addResponseProfile
+	 * @return VidiunResponseProfile
 	 */
-	function addAction(KalturaResponseProfile $addResponseProfile)
+	function addAction(VidiunResponseProfile $addResponseProfile)
 	{
 		$dbResponseProfile = $addResponseProfile->toInsertableObject();
 		/* @var $dbResponseProfile ResponseProfile */
@@ -50,7 +50,7 @@ class ResponseProfileService extends KalturaBaseService
 		$dbResponseProfile->setStatus(ResponseProfileStatus::ENABLED);
 		$dbResponseProfile->save();
 		
-		$addResponseProfile = new KalturaResponseProfile();
+		$addResponseProfile = new VidiunResponseProfile();
 		$addResponseProfile->fromObject($dbResponseProfile, $this->getResponseProfile());
 		return $addResponseProfile;
 	}
@@ -60,17 +60,17 @@ class ResponseProfileService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param bigint $id
-	 * @return KalturaResponseProfile
+	 * @return VidiunResponseProfile
 	 * 
-	 * @throws KalturaErrors::RESPONSE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESPONSE_PROFILE_ID_NOT_FOUND
 	 */
 	function getAction($id)
 	{
 		$dbResponseProfile = ResponseProfilePeer::retrieveByPK($id);
 		if (!$dbResponseProfile)
-			throw new KalturaAPIException(KalturaErrors::RESPONSE_PROFILE_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::RESPONSE_PROFILE_ID_NOT_FOUND, $id);
 			
-		$responseProfile = new KalturaResponseProfile();
+		$responseProfile = new VidiunResponseProfile();
 		$responseProfile->fromObject($dbResponseProfile, $this->getResponseProfile());
 		return $responseProfile;
 	}
@@ -80,21 +80,21 @@ class ResponseProfileService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param bigint $id
-	 * @param KalturaResponseProfile $updateResponseProfile
-	 * @return KalturaResponseProfile
+	 * @param VidiunResponseProfile $updateResponseProfile
+	 * @return VidiunResponseProfile
 	 * 
-	 * @throws KalturaErrors::RESPONSE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESPONSE_PROFILE_ID_NOT_FOUND
 	 */
-	function updateAction($id, KalturaResponseProfile $updateResponseProfile)
+	function updateAction($id, VidiunResponseProfile $updateResponseProfile)
 	{
 		$dbResponseProfile = ResponseProfilePeer::retrieveByPK($id);
 		if (!$dbResponseProfile)
-			throw new KalturaAPIException(KalturaErrors::RESPONSE_PROFILE_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::RESPONSE_PROFILE_ID_NOT_FOUND, $id);
 		
 		$updateResponseProfile->toUpdatableObject($dbResponseProfile);
 		$dbResponseProfile->save();
 		
-		$updateResponseProfile = new KalturaResponseProfile();
+		$updateResponseProfile = new VidiunResponseProfile();
 		$updateResponseProfile->fromObject($dbResponseProfile, $this->getResponseProfile());
 		return $updateResponseProfile;
 	}
@@ -104,29 +104,29 @@ class ResponseProfileService extends KalturaBaseService
 	 * 
 	 * @action updateStatus
 	 * @param bigint $id
-	 * @param KalturaResponseProfileStatus $status
-	 * @return KalturaResponseProfile
+	 * @param VidiunResponseProfileStatus $status
+	 * @return VidiunResponseProfile
 	 * 
-	 * @throws KalturaErrors::RESPONSE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESPONSE_PROFILE_ID_NOT_FOUND
 	 */
 	function updateStatusAction($id, $status)
 	{
 		$dbResponseProfile = ResponseProfilePeer::retrieveByPK($id);
 		if (!$dbResponseProfile)
-			throw new KalturaAPIException(KalturaErrors::RESPONSE_PROFILE_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::RESPONSE_PROFILE_ID_NOT_FOUND, $id);
 
-		if($status == KalturaResponseProfileStatus::ENABLED)
+		if($status == VidiunResponseProfileStatus::ENABLED)
 		{
 			//Check uniqueness of new object's system name
 			$systemNameProfile = ResponseProfilePeer::retrieveBySystemName($dbResponseProfile->getSystemName(), $id);
 			if ($systemNameProfile)
-				throw new KalturaAPIException(KalturaErrors::RESPONSE_PROFILE_DUPLICATE_SYSTEM_NAME, $dbResponseProfile->getSystemName());
+				throw new VidiunAPIException(VidiunErrors::RESPONSE_PROFILE_DUPLICATE_SYSTEM_NAME, $dbResponseProfile->getSystemName());
 		}	
 		
 		$dbResponseProfile->setStatus($status);
 		$dbResponseProfile->save();
 	
-		$responseProfile = new KalturaResponseProfile();
+		$responseProfile = new VidiunResponseProfile();
 		$responseProfile->fromObject($dbResponseProfile, $this->getResponseProfile());
 		return $responseProfile;
 	}
@@ -137,13 +137,13 @@ class ResponseProfileService extends KalturaBaseService
 	 * @action delete
 	 * @param bigint $id
 	 * 
-	 * @throws KalturaErrors::RESPONSE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESPONSE_PROFILE_ID_NOT_FOUND
 	 */
 	function deleteAction($id)
 	{
 		$dbResponseProfile = ResponseProfilePeer::retrieveByPK($id);
 		if (!$dbResponseProfile)
-			throw new KalturaAPIException(KalturaErrors::RESPONSE_PROFILE_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::RESPONSE_PROFILE_ID_NOT_FOUND, $id);
 
 		$dbResponseProfile->setStatus(ResponseProfileStatus::DELETED);
 		$dbResponseProfile->save();
@@ -153,14 +153,14 @@ class ResponseProfileService extends KalturaBaseService
 	 * List response profiles by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaFilterPager $filter
-	 * @param KalturaResponseProfileFilter $pager
-	 * @return KalturaResponseProfileListResponse
+	 * @param VidiunFilterPager $filter
+	 * @param VidiunResponseProfileFilter $pager
+	 * @return VidiunResponseProfileListResponse
 	 */
-	function listAction(KalturaResponseProfileFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunResponseProfileFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaResponseProfileFilter();
+			$filter = new VidiunResponseProfileFilter();
 		
 		//Add partner 0 to filter only in case systemNmae or Id are provided in the filter to avoid returning it by default
 		if(isset($filter->systemNameEqual) || isset($filter->idEqual)) {
@@ -169,7 +169,7 @@ class ResponseProfileService extends KalturaBaseService
 		$this->applyPartnerFilterForClass('ResponseProfile');
 
 		if (!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		$responseProfileFilter = new ResponseProfileFilter();
 		$filter->toObject($responseProfileFilter);
@@ -182,8 +182,8 @@ class ResponseProfileService extends KalturaBaseService
 		$pager->attachToCriteria($c);
 		$dbList = ResponseProfilePeer::doSelect($c);
 		
-		$list = KalturaResponseProfileArray::fromDbArray($dbList, $this->getResponseProfile());
-		$response = new KalturaResponseProfileListResponse();
+		$list = VidiunResponseProfileArray::fromDbArray($dbList, $this->getResponseProfile());
+		$response = new VidiunResponseProfileListResponse();
 		$response->objects = $list;
 		$response->totalCount = $totalCount;
 		return $response;
@@ -193,12 +193,12 @@ class ResponseProfileService extends KalturaBaseService
 	 * Recalculate response profile cached objects
 	 * 
 	 * @action recalculate
-	 * @param KalturaResponseProfileCacheRecalculateOptions $options
-	 * @return KalturaResponseProfileCacheRecalculateResults
+	 * @param VidiunResponseProfileCacheRecalculateOptions $options
+	 * @return VidiunResponseProfileCacheRecalculateResults
 	 */
-	function recalculateAction(KalturaResponseProfileCacheRecalculateOptions $options)
+	function recalculateAction(VidiunResponseProfileCacheRecalculateOptions $options)
 	{
-		return KalturaResponseProfileCacher::recalculateCacheBySessionType($options);
+		return VidiunResponseProfileCacher::recalculateCacheBySessionType($options);
 	}
 	
 	/**
@@ -206,16 +206,16 @@ class ResponseProfileService extends KalturaBaseService
 	 * 
 	 * @action clone
 	 * @param bigint $id
-	 * @param KalturaResponseProfile $profile
-	 * @throws KalturaErrors::RESPONSE_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::RESPONSE_PROFILE_DUPLICATE_SYSTEM_NAME
-	 * @return KalturaResponseProfile
+	 * @param VidiunResponseProfile $profile
+	 * @throws VidiunErrors::RESPONSE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESPONSE_PROFILE_DUPLICATE_SYSTEM_NAME
+	 * @return VidiunResponseProfile
 	 */
-	function cloneAction ($id, KalturaResponseProfile $profile)
+	function cloneAction ($id, VidiunResponseProfile $profile)
 	{
 		$origResponseProfileDbObject = ResponseProfilePeer::retrieveByPK($id);
 		if (!$origResponseProfileDbObject)
-			throw new KalturaAPIException(KalturaErrors::RESPONSE_PROFILE_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::RESPONSE_PROFILE_ID_NOT_FOUND, $id);
 			
 		$newResponseProfileDbObject = $origResponseProfileDbObject->copy();
 		
@@ -224,7 +224,7 @@ class ResponseProfileService extends KalturaBaseService
 				
 		$newResponseProfileDbObject->save();
 		
-		$newResponseProfile = new KalturaResponseProfile();
+		$newResponseProfile = new VidiunResponseProfile();
 		$newResponseProfile->fromObject($newResponseProfileDbObject, $this->getResponseProfile());
 		return $newResponseProfile;
 	}

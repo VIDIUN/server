@@ -1,9 +1,9 @@
 <?php
 
-require_once KALTURA_ROOT_PATH.'/vendor/webex/xml/WebexXmlClient.class.php';
-require_once KALTURA_ROOT_PATH.'/vendor/webex/xml/WebexXmlEpListControlType.class.php';
-require_once KALTURA_ROOT_PATH.'/vendor/webex/xml/WebexXmlListRecordingRequest.class.php';
-require_once KALTURA_ROOT_PATH.'/vendor/webex/xml/WebexXmlDelRecordingRequest.class.php';
+require_once VIDIUN_ROOT_PATH.'/vendor/webex/xml/WebexXmlClient.class.php';
+require_once VIDIUN_ROOT_PATH.'/vendor/webex/xml/WebexXmlEpListControlType.class.php';
+require_once VIDIUN_ROOT_PATH.'/vendor/webex/xml/WebexXmlListRecordingRequest.class.php';
+require_once VIDIUN_ROOT_PATH.'/vendor/webex/xml/WebexXmlDelRecordingRequest.class.php';
 
 /**
  *  This class is a helper class for the use of web xml client

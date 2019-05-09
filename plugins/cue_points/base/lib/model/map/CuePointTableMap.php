@@ -53,7 +53,7 @@ class CuePointTableMap extends TableMap {
 		$this->addColumn('STATUS', 'Status', 'INTEGER', true, null, null);
 		$this->addColumn('TYPE', 'Type', 'INTEGER', true, null, null);
 		$this->addColumn('SUB_TYPE', 'SubType', 'INTEGER', true, null, null);
-		$this->addColumn('KUSER_ID', 'KuserId', 'INTEGER', true, null, null);
+		$this->addColumn('VUSER_ID', 'VuserId', 'INTEGER', true, null, null);
 		$this->addColumn('CUSTOM_DATA', 'CustomData', 'LONGVARCHAR', false, null, null);
 		$this->addColumn('PARTNER_DATA', 'PartnerData', 'LONGVARCHAR', false, null, null);
 		$this->addColumn('PARTNER_SORT_VALUE', 'PartnerSortValue', 'INTEGER', false, null, null);

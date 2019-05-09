@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage Admin
  */
-class ReachProfileSetStatusAction extends KalturaApplicationPlugin
+class ReachProfileSetStatusAction extends VidiunApplicationPlugin
 {
 
 	/**
@@ -22,18 +22,18 @@ class ReachProfileSetStatusAction extends KalturaApplicationPlugin
 		$partnerId = $this->_getParam('partnerId');
 
 		$client = Infra_ClientHelper::getClient();
-		$reachPluginClient = Kaltura_Client_Reach_Plugin::get($client);
+		$reachPluginClient = Vidiun_Client_Reach_Plugin::get($client);
 		Infra_ClientHelper::impersonate($partnerId);
 		try
 		{
-			if  ( $newStatus == Kaltura_Client_Reach_Enum_ReachProfileStatus::DELETED )
+			if  ( $newStatus == Vidiun_Client_Reach_Enum_ReachProfileStatus::DELETED )
 				$res = $reachPluginClient->reachProfile->delete($reachProfileId);
 			else
 				$res = $reachPluginClient->reachProfile->updateStatus($reachProfileId, $newStatus);
 			echo $action->getHelper('json')->sendJson('ok', false);
 		} catch (Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			echo $action->getHelper('json')->sendJson($e->getMessage(), false);
 		}
 		Infra_ClientHelper::unimpersonate();

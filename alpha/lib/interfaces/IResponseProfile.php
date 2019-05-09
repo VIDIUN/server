@@ -38,7 +38,7 @@ interface IResponseProfile
 	public function getFilterApiClassName();
 
 	/**
-	 * @return kFilterPager
+	 * @return vFilterPager
 	 */
 	public function getPager();
 	
@@ -73,9 +73,9 @@ interface IResponseProfile
 	public function setFilterApiClassName($filterApiClassName);
 
 	/**
-	 * @param kFilterPager $pager
+	 * @param vFilterPager $pager
 	 */
-	public function setPager(kFilterPager $pager);
+	public function setPager(vFilterPager $pager);
 	
 	/**
 	 * @return array
@@ -83,7 +83,7 @@ interface IResponseProfile
 	public function getMappings();
 
 	/**
-	 * @param array<kResponseProfileMapping> $mappings
+	 * @param array<vResponseProfileMapping> $mappings
 	 */
 	public function setMappings(array $mappings);
 }

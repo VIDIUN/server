@@ -3,7 +3,7 @@
  * @package plugins.uverseDistribution
  * @subpackage model.data
  */
-class kUverseDistributionJobProviderData extends kDistributionJobProviderData
+class vUverseDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -35,7 +35,7 @@ class kUverseDistributionJobProviderData extends kDistributionJobProviderData
 		$this->remoteAssetFileName = $remoteAssetFileName;
 	}
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

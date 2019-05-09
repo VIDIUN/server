@@ -2,9 +2,9 @@
 /**
  * Applicative event that raised by the developer when indexed object is ready for indexing in the index server
  */
-class kObjectReadyForIndexEvent extends kApplicativeEvent
+class vObjectReadyForIndexEvent extends vApplicativeEvent
 {
-	const EVENT_CONSUMER = 'kObjectReadyForIndexEventConsumer';
+	const EVENT_CONSUMER = 'vObjectReadyForIndexEventConsumer';
 	
 	public function getConsumerInterface()
 	{
@@ -12,10 +12,10 @@ class kObjectReadyForIndexEvent extends kApplicativeEvent
 	}
 	
 	/**
-	 * @param kObjectAddedEventConsumer $consumer
+	 * @param vObjectAddedEventConsumer $consumer
 	 * @return bool true if should continue to the next consumer
 	 */
-	protected function doConsume(KalturaEventConsumer $consumer)
+	protected function doConsume(VidiunEventConsumer $consumer)
 	{
 		if(!$consumer->shouldConsumeReadyForIndexEvent($this->object))
 			return true;
@@ -24,9 +24,9 @@ class kObjectReadyForIndexEvent extends kApplicativeEvent
 		if(method_exists($this->object, 'getId'))
 			$additionalLog .= 'id [' . $this->object->getId() . ']';
 			
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		$result = $consumer->objectReadyForIndex($this->object, $this->raisedJob);
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		return $result;
 	}
 

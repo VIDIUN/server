@@ -4,7 +4,7 @@
  * @package plugins.beacon
  * @subpackage api.enum
  */
-class KalturaBeaconObjectTypes extends KalturaDynamicEnum implements BeaconObjectTypes
+class VidiunBeaconObjectTypes extends VidiunDynamicEnum implements BeaconObjectTypes
 {
 	public static function getEnumClass()
 	{

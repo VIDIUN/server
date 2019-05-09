@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaUiConfFilter extends KalturaUiConfBaseFilter
+class VidiunUiConfFilter extends VidiunUiConfBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

@@ -3,34 +3,34 @@
  * @package plugins.quiz
  * @subpackage api.filters
  */
-class KalturaAnswerCuePointFilter extends KalturaAnswerCuePointBaseFilter
+class VidiunAnswerCuePointFilter extends VidiunAnswerCuePointBaseFilter
 {
     /* (non-PHPdoc)
-     * @see KalturaCuePointFilter::getCriteria()
+     * @see VidiunCuePointFilter::getCriteria()
      */
     protected function getCriteria()
     {
-        return KalturaCriteria::create('AnswerCuePoint');
+        return VidiunCriteria::create('AnswerCuePoint');
     }
     
 	/* (non-PHPdoc)
-	 * @see KalturaCuePointFilter::getTypeListResponse()
+	 * @see VidiunCuePointFilter::getTypeListResponse()
 	 */
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, $type = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, $type = null)
 	{
 		if ($this->quizUserEntryIdIn || $this->quizUserEntryIdEqual)
 		{
-			KalturaCriterion::disableTag(KalturaCriterion::TAG_WIDGET_SESSION);
+			VidiunCriterion::disableTag(VidiunCriterion::TAG_WIDGET_SESSION);
 		}
 		return parent::getTypeListResponse($pager, $responseProfile, QuizPlugin::getCoreValue('CuePointType',QuizCuePointType::QUIZ_ANSWER));
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
-		kApiCache::disableCache();
+		vApiCache::disableCache();
 		return new AnswerCuePointFilter();
 	}	
 }

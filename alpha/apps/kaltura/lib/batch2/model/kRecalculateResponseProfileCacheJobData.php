@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kRecalculateResponseProfileCacheJobData extends kRecalculateCacheJobData
+class vRecalculateResponseProfileCacheJobData extends vRecalculateCacheJobData
 {
 	/**
 	 * http / https
@@ -14,7 +14,7 @@ class kRecalculateResponseProfileCacheJobData extends kRecalculateCacheJobData
 	/**
 	 * @var int
 	 */
-	private $ksType;
+	private $vsType;
 
 	/**
 	 * @var array
@@ -93,17 +93,17 @@ class kRecalculateResponseProfileCacheJobData extends kRecalculateCacheJobData
 	/**
 	 * @return string
 	 */
-	public function getKsType()
+	public function getVsType()
 	{
-		return $this->ksType;
+		return $this->vsType;
 	}
 	
 	/**
-	 * @param string $ksType
+	 * @param string $vsType
 	 */
-	public function setKsType($ksType)
+	public function setVsType($vsType)
 	{
-		$this->ksType = $ksType;
+		$this->vsType = $vsType;
 	}
 	
 	/**

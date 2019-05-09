@@ -15,7 +15,7 @@ FROM (SELECT DISTINCT(IF('{GROUP_COLUMN}' = 'date_id',day_id,t.month_id)) AS {GR
 	partner_name, 
 	partner_id,
 	UNIX_TIMESTAMP(created_at) created_at
-FROM kalturadw.dwh_dim_time t, kalturadw.dwh_dim_partners
+FROM vidiundw.dwh_dim_time t, vidiundw.dwh_dim_partners
 WHERE {OBJ_ID_CLAUSE}
 AND day_id BETWEEN {FROM_DATE_ID} AND {TO_DATE_ID}) partner_date LEFT JOIN
 (SELECT
@@ -39,7 +39,7 @@ FROM  (
 	SELECT
 		date_id, FLOOR(date_id/100) month_id, partner_id, IFNULL(count_bandwidth_kb, 0)/1024 count_bandwidth, IFNULL(count_transcoding_mb, 0) count_transcoding, IFNULL(aggr_storage_mb, 0) aggr_storage_mb, IFNULL(added_storage_mb, 0) added_storage_mb, IFNULL(deleted_storage_mb, 0) deleted_storage_mb
 	FROM
-		kalturadw.dwh_hourly_partner_usage
+		vidiundw.dwh_hourly_partner_usage
         WHERE
 		{OBJ_ID_CLAUSE}
 		AND

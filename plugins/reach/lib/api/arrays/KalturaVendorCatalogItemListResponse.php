@@ -3,10 +3,10 @@
  * @package plugins.reach
  * @subpackage api.objects
  */
-class KalturaVendorCatalogItemListResponse extends KalturaListResponse
+class VidiunVendorCatalogItemListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaVendorCatalogItemArray
+	 * @var VidiunVendorCatalogItemArray
 	 * @readonly
 	 */
 	public $objects;

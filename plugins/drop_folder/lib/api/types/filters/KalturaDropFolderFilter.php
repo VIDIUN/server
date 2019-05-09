@@ -3,15 +3,15 @@
  * @package plugins.dropFolder
  * @subpackage api.filters
  */
-class KalturaDropFolderFilter extends KalturaDropFolderBaseFilter
+class VidiunDropFolderFilter extends VidiunDropFolderBaseFilter
 {
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $currentDc;
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -19,12 +19,12 @@ class KalturaDropFolderFilter extends KalturaDropFolderBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::toObject()
+	 * @see VidiunFilter::toObject()
 	 */
 	public function toObject ( $object_to_fill = null, $props_to_skip = array() )
 	{
 		if(!$this->isNull('currentDc'))
-			$this->dcEqual = kDataCenterMgr::getCurrentDcId();
+			$this->dcEqual = vDataCenterMgr::getCurrentDcId();
 			
 		return parent::toObject($object_to_fill, $props_to_skip);		
 	}	

@@ -17,12 +17,12 @@ class FreewheelGenericFeedHelper
 	protected $_xpath;
 	
 	/**
-	 * @var KalturaFreewheelGenericDistributionProfile
+	 * @var VidiunFreewheelGenericDistributionProfile
 	 */
 	protected $_distributionProfile;
 	
 	/**
-	 * @var KalturaFreewheelGenericDistributionJobProviderData
+	 * @var VidiunFreewheelGenericDistributionJobProviderData
 	 */
 	protected $_providerData;
 	
@@ -33,15 +33,15 @@ class FreewheelGenericFeedHelper
 	
 	/**
 	 * @param string $templateName
-	 * @param KalturaFreewheelGenericDistributionProfile $distributionProfile
-	 * @param KalturaFreewheelGenericDistributionJobProviderData $providerData
+	 * @param VidiunFreewheelGenericDistributionProfile $distributionProfile
+	 * @param VidiunFreewheelGenericDistributionJobProviderData $providerData
 	 */
-	public function __construct($templateName, KalturaFreewheelGenericDistributionProfile $distributionProfile, KalturaFreewheelGenericDistributionJobProviderData $providerData)
+	public function __construct($templateName, VidiunFreewheelGenericDistributionProfile $distributionProfile, VidiunFreewheelGenericDistributionJobProviderData $providerData)
 	{
 		$this->_distributionProfile = $distributionProfile;
 		$this->_providerData = $providerData;
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml/' . $templateName;
-		$this->_doc = new KDOMDocument();
+		$this->_doc = new VDOMDocument();
 		$this->_doc->load($xmlTemplate);
 		$this->_xpath = new DOMXPath($this->_doc);
 
@@ -76,40 +76,40 @@ class FreewheelGenericFeedHelper
 		}
 		$this->appendElement('/FWCoreContainer/FWVideoDocument/fwContentOwner', $contentOwner);
 		
-		kXml::setNodeValue($this->_xpath,'/FWCoreContainer/@contact_email', $this->_distributionProfile->email);
-		kXml::setNodeValue($this->_xpath,'/FWCoreContainer/FWVideoDocument/@video_id', $this->_fieldValues[KalturaFreewheelGenericDistributionField::VIDEO_ID]);
+		vXml::setNodeValue($this->_xpath,'/FWCoreContainer/@contact_email', $this->_distributionProfile->email);
+		vXml::setNodeValue($this->_xpath,'/FWCoreContainer/FWVideoDocument/@video_id', $this->_fieldValues[VidiunFreewheelGenericDistributionField::VIDEO_ID]);
 		
-		$this->addTitleItem('Episode Title1', KalturaFreewheelGenericDistributionField::FWTITLES_EPISODE_TITLE1);
-		$this->addTitleItem('Episode Title2', KalturaFreewheelGenericDistributionField::FWTITLES_EPISODE_TITLE2);
-		$this->addTitleItem('Series', KalturaFreewheelGenericDistributionField::FWTITLES_SERIES);
-		$this->addTitleItem('Season', KalturaFreewheelGenericDistributionField::FWTITLES_SEASON);
-		$this->addTitleItem('Group', KalturaFreewheelGenericDistributionField::FWTITLES_GROUP1);
-		$this->addTitleItem('Group', KalturaFreewheelGenericDistributionField::FWTITLES_GROUP2);
-		$this->addTitleItem('Group', KalturaFreewheelGenericDistributionField::FWTITLES_GROUP3);
-		$this->addTitleItem('Group', KalturaFreewheelGenericDistributionField::FWTITLES_GROUP4);
-		$this->addTitleItem('Group', KalturaFreewheelGenericDistributionField::FWTITLES_GROUP5);
-		$this->addTitleItem('Group', KalturaFreewheelGenericDistributionField::FWTITLES_GROUP6);
-		$this->addTitleItem('Group', KalturaFreewheelGenericDistributionField::FWTITLES_GROUP7);
-		$this->addTitleItem('Group', KalturaFreewheelGenericDistributionField::FWTITLES_GROUP8);
-		$this->addTitleItem('Group', KalturaFreewheelGenericDistributionField::FWTITLES_GROUP9);
-		$this->addTitleItem('Group', KalturaFreewheelGenericDistributionField::FWTITLES_GROUP10);
+		$this->addTitleItem('Episode Title1', VidiunFreewheelGenericDistributionField::FWTITLES_EPISODE_TITLE1);
+		$this->addTitleItem('Episode Title2', VidiunFreewheelGenericDistributionField::FWTITLES_EPISODE_TITLE2);
+		$this->addTitleItem('Series', VidiunFreewheelGenericDistributionField::FWTITLES_SERIES);
+		$this->addTitleItem('Season', VidiunFreewheelGenericDistributionField::FWTITLES_SEASON);
+		$this->addTitleItem('Group', VidiunFreewheelGenericDistributionField::FWTITLES_GROUP1);
+		$this->addTitleItem('Group', VidiunFreewheelGenericDistributionField::FWTITLES_GROUP2);
+		$this->addTitleItem('Group', VidiunFreewheelGenericDistributionField::FWTITLES_GROUP3);
+		$this->addTitleItem('Group', VidiunFreewheelGenericDistributionField::FWTITLES_GROUP4);
+		$this->addTitleItem('Group', VidiunFreewheelGenericDistributionField::FWTITLES_GROUP5);
+		$this->addTitleItem('Group', VidiunFreewheelGenericDistributionField::FWTITLES_GROUP6);
+		$this->addTitleItem('Group', VidiunFreewheelGenericDistributionField::FWTITLES_GROUP7);
+		$this->addTitleItem('Group', VidiunFreewheelGenericDistributionField::FWTITLES_GROUP8);
+		$this->addTitleItem('Group', VidiunFreewheelGenericDistributionField::FWTITLES_GROUP9);
+		$this->addTitleItem('Group', VidiunFreewheelGenericDistributionField::FWTITLES_GROUP10);
 		
-		$this->addDescriptionItem('Episode', KalturaFreewheelGenericDistributionField::FWDESCRIPTIONS_EPISODE);
-		$this->addDescriptionItem('Series', KalturaFreewheelGenericDistributionField::FWDESCRIPTIONS_SERIES);
+		$this->addDescriptionItem('Episode', VidiunFreewheelGenericDistributionField::FWDESCRIPTIONS_EPISODE);
+		$this->addDescriptionItem('Series', VidiunFreewheelGenericDistributionField::FWDESCRIPTIONS_SERIES);
 		
-		$this->addGenreItem(KalturaFreewheelGenericDistributionField::GENRE);
+		$this->addGenreItem(VidiunFreewheelGenericDistributionField::GENRE);
 		
-		$this->createAndSetByXPathDate('/FWCoreContainer/FWVideoDocument/fwDateAvailable', 'dateAvailableStart', KalturaFreewheelGenericDistributionField::DATE_AVAILABLE_START);
-		$this->createAndSetByXPathDate('/FWCoreContainer/FWVideoDocument/fwDateAvailable', 'dateAvailableEnd', KalturaFreewheelGenericDistributionField::DATE_AVAILABLE_END);
-		$this->createAndSetByXPathDate('/FWCoreContainer/FWVideoDocument/fwAirDates', 'dateLastAired', KalturaFreewheelGenericDistributionField::DATE_LAST_AIRED);
-		$this->createAndSetByXPathDate('/FWCoreContainer/FWVideoDocument', 'fwDateIssued', KalturaFreewheelGenericDistributionField::DATE_ISSUED);
+		$this->createAndSetByXPathDate('/FWCoreContainer/FWVideoDocument/fwDateAvailable', 'dateAvailableStart', VidiunFreewheelGenericDistributionField::DATE_AVAILABLE_START);
+		$this->createAndSetByXPathDate('/FWCoreContainer/FWVideoDocument/fwDateAvailable', 'dateAvailableEnd', VidiunFreewheelGenericDistributionField::DATE_AVAILABLE_END);
+		$this->createAndSetByXPathDate('/FWCoreContainer/FWVideoDocument/fwAirDates', 'dateLastAired', VidiunFreewheelGenericDistributionField::DATE_LAST_AIRED);
+		$this->createAndSetByXPathDate('/FWCoreContainer/FWVideoDocument', 'fwDateIssued', VidiunFreewheelGenericDistributionField::DATE_ISSUED);
 		
-		$this->createAndSetByXPath('/FWCoreContainer/FWVideoDocument', 'fwRating', KalturaFreewheelGenericDistributionField::RATING);
+		$this->createAndSetByXPath('/FWCoreContainer/FWVideoDocument', 'fwRating', VidiunFreewheelGenericDistributionField::RATING);
 		
-		kXml::setNodeValue($this->_xpath,'/FWCoreContainer/FWVideoDocument/fwDuration', $this->_fieldValues[KalturaFreewheelGenericDistributionField::DURATION]);
+		vXml::setNodeValue($this->_xpath,'/FWCoreContainer/FWVideoDocument/fwDuration', $this->_fieldValues[VidiunFreewheelGenericDistributionField::DURATION]);
 		$this->addDynamicMetadata();
 		
-		$this->addCuePoints($this->_providerData->cuePoints, $this->_fieldValues[KalturaFreewheelGenericDistributionField::DURATION]);
+		$this->addCuePoints($this->_providerData->cuePoints, $this->_fieldValues[VidiunFreewheelGenericDistributionField::DURATION]);
 	}
 	
 	/**
@@ -125,7 +125,7 @@ class FreewheelGenericFeedHelper
 		}
 	}
 	
-	protected function createCuePointNode(KalturaAdCuePoint $cuePoint, $videoDuration)
+	protected function createCuePointNode(VidiunAdCuePoint $cuePoint, $videoDuration)
 	{
 		$seconds = floor($cuePoint->startTime / 1000);
 		$cuePointNode = $this->_doc->createElement('cuePoint');
@@ -134,7 +134,7 @@ class FreewheelGenericFeedHelper
 		$cuePointNode->appendChild($contentTimePositionNode);
 		
 		$type = 'MIDROLL';
-		if ($cuePoint->adType == KalturaAdType::OVERLAY)
+		if ($cuePoint->adType == VidiunAdType::OVERLAY)
 		{
 			$type = 'OVERLAY';
 		}
@@ -155,17 +155,17 @@ class FreewheelGenericFeedHelper
 	protected function setReplaceGroup()
 	{
 		if ($this->_distributionProfile->replaceGroup === false)
-			kXml::setNodeValue($this->_xpath,'/FWCoreContainer/FWVideoDocument/fwReplaceGroup', 'false');
+			vXml::setNodeValue($this->_xpath,'/FWCoreContainer/FWVideoDocument/fwReplaceGroup', 'false');
 		else
-			kXml::setNodeValue($this->_xpath,'/FWCoreContainer/FWVideoDocument/fwReplaceGroup', 'true');
+			vXml::setNodeValue($this->_xpath,'/FWCoreContainer/FWVideoDocument/fwReplaceGroup', 'true');
 	}
 	
 	protected function setReplaceAirDates()
 	{
 		if ($this->_distributionProfile->replaceAirDates === false)
-			kXml::setNodeValue($this->_xpath,'/FWCoreContainer/FWVideoDocument/fwReplaceAirDates', 'false');
+			vXml::setNodeValue($this->_xpath,'/FWCoreContainer/FWVideoDocument/fwReplaceAirDates', 'false');
 		else
-			kXml::setNodeValue($this->_xpath,'/FWCoreContainer/FWVideoDocument/fwReplaceAirDates', 'true');
+			vXml::setNodeValue($this->_xpath,'/FWCoreContainer/FWVideoDocument/fwReplaceAirDates', 'true');
 	}
 	
 	protected function addTitleItem($titleType, $fieldConfigId)
@@ -259,7 +259,7 @@ class FreewheelGenericFeedHelper
 		$fieldConfigArray = $this->_distributionProfile->fieldConfigArray;
 		foreach($fieldConfigArray as $fieldConfig)
 		{
-			/* @var $fieldConfig KalturaDistributionFieldConfig */
+			/* @var $fieldConfig VidiunDistributionFieldConfig */
 			if (strpos($fieldConfig->fieldName, 'FWMETADATA_') !== 0)
 				continue;
 				

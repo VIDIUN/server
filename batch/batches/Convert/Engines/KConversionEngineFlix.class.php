@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage Conversion.engines
  */
-class KConversionEngineFlix  extends KJobConversionEngine
+class VConversionEngineFlix  extends VJobConversionEngine
 {
 	const FLIX = "cli_encode";
 	
@@ -14,12 +14,12 @@ class KConversionEngineFlix  extends KJobConversionEngine
 	
 	public function getType()
 	{
-		return KalturaConversionEngineType::ON2;
+		return VidiunConversionEngineType::ON2;
 	}
 
 	public function getCmd ()
 	{
-		return KBatchBase::$taskConfig->params->on2Cmd;
+		return VBatchBase::$taskConfig->params->on2Cmd;
 	}
 
 }

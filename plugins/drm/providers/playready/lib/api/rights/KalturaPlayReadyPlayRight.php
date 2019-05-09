@@ -3,40 +3,40 @@
  * @package plugins.playReady
  * @subpackage api.objects
  */
-class KalturaPlayReadyPlayRight extends KalturaPlayReadyRight
+class VidiunPlayReadyPlayRight extends VidiunPlayReadyRight
 {
     /**
-	 * @var KalturaPlayReadyAnalogVideoOPL
+	 * @var VidiunPlayReadyAnalogVideoOPL
 	 */
 	public $analogVideoOPL ;
 	
 	/**
-	 * @var KalturaPlayReadyAnalogVideoOPIdHolderArray
+	 * @var VidiunPlayReadyAnalogVideoOPIdHolderArray
 	 */
 	public $analogVideoOutputProtectionList ;
 	
     /**
-	 * @var KalturaPlayReadyDigitalAudioOPL
+	 * @var VidiunPlayReadyDigitalAudioOPL
 	 */
 	public $compressedDigitalAudioOPL ;
 	
     /**
-	 * @var KalturaPlayReadyCompressedDigitalVideoOPL
+	 * @var VidiunPlayReadyCompressedDigitalVideoOPL
 	 */
 	public $compressedDigitalVideoOPL ;
 
 	/**
-	 * @var KalturaPlayReadyDigitalAudioOPIdHolderArray
+	 * @var VidiunPlayReadyDigitalAudioOPIdHolderArray
 	 */
 	public $digitalAudioOutputProtectionList; 
 	
 	/**
-	 * @var KalturaPlayReadyDigitalAudioOPL
+	 * @var VidiunPlayReadyDigitalAudioOPL
 	 */	
 	public $uncompressedDigitalAudioOPL;
 
     /**
-	 * @var KalturaPlayReadyUncompressedDigitalVideoOPL
+	 * @var VidiunPlayReadyUncompressedDigitalVideoOPL
 	 */
 	public $uncompressedDigitalVideoOPL; 
 	
@@ -46,7 +46,7 @@ class KalturaPlayReadyPlayRight extends KalturaPlayReadyRight
 	public $firstPlayExpiration;
 	
     /**
-	 * @var KalturaPlayReadyPlayEnablerHolderArray
+	 * @var VidiunPlayReadyPlayEnablerHolderArray
 	 */
 	public $playEnablers; 
 	

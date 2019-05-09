@@ -20,16 +20,16 @@ class MetadataCategoryPeer extends categoryPeer implements IMetadataPeer
     	$categoryDb = self::retrieveByPK($objectId);
     	if(!$categoryDb)
     	{
-    		KalturaLog::debug("Metadata object id with id [$objectId] not found");
+    		VidiunLog::debug("Metadata object id with id [$objectId] not found");
     		return false;
     	}
     	
-    	if (kEntitlementUtils::getEntitlementEnforcement())
+    	if (vEntitlementUtils::getEntitlementEnforcement())
     	{
-    		$currentKuserCategoryKuser = categoryKuserPeer::retrievePermittedKuserInCategory($categoryDb->getId(), kCurrentContext::getCurrentKsKuserId(), array(PermissionName::CATEGORY_EDIT));
-    		if(!$currentKuserCategoryKuser || $currentKuserCategoryKuser->getPermissionLevel() != CategoryKuserPermissionLevel::MANAGER)
+    		$currentVuserCategoryVuser = categoryVuserPeer::retrievePermittedVuserInCategory($categoryDb->getId(), vCurrentContext::getCurrentVsVuserId(), array(PermissionName::CATEGORY_EDIT));
+    		if(!$currentVuserCategoryVuser || $currentVuserCategoryVuser->getPermissionLevel() != CategoryVuserPermissionLevel::MANAGER)
     		{
-    			KalturaLog::debug("Current user is not permitted to access category with id [$objectId]");
+    			VidiunLog::debug("Current user is not permitted to access category with id [$objectId]");
     			return false;
     		}
     	}

@@ -1,9 +1,9 @@
 <?php
 
-class kObjectCreatedHandler implements kObjectCreatedEventConsumer
+class vObjectCreatedHandler implements vObjectCreatedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+	 * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $object)
 	{
@@ -17,7 +17,7 @@ class kObjectCreatedHandler implements kObjectCreatedEventConsumer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::objectCreated()
+	 * @see vObjectCreatedEventConsumer::objectCreated()
 	 */
 	public function objectCreated(BaseObject $object)
 	{
@@ -29,7 +29,7 @@ class kObjectCreatedHandler implements kObjectCreatedEventConsumer
 		$liveEntry = entryPeer::retrieveByPK($rootEntryId);
 		if(!$liveEntry)
 		{
-			KalturaLog::info("Live entry with id [{$object->getRootEntryId()}] not found, categories will not be copied");
+			VidiunLog::info("Live entry with id [{$object->getRootEntryId()}] not found, categories will not be copied");
 			return true;
 		}
 		
@@ -38,7 +38,7 @@ class kObjectCreatedHandler implements kObjectCreatedEventConsumer
 		if(!$recordingOptions)
 			return true;
 
-		/* @var $recordingOptions kLiveEntryRecordingOptions */
+		/* @var $recordingOptions vLiveEntryRecordingOptions */
 		if($recordingOptions->getShouldCopyEntitlement())
 		{
 			$this->syncEntryEntitlementInfo($object, $liveEntry);

@@ -4,7 +4,7 @@
  * @package plugins.quiz
  * @subpackage lib.enum
  */
-class QuizReportType implements IKalturaPluginEnum, ReportType
+class QuizReportType implements IVidiunPluginEnum, ReportType
 {
 	const QUIZ = 'QUIZ';
 	const QUIZ_USER_PERCENTAGE = 'QUIZ_USER_PERCENTAGE';

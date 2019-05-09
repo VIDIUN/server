@@ -2,7 +2,7 @@
 /**
  * @package plugins.captureSpace
  */
-class CaptureSpacePlugin extends KalturaPlugin implements IKalturaServices {
+class CaptureSpacePlugin extends VidiunPlugin implements IVidiunServices {
 
     const PLUGIN_NAME = "captureSpace";
 

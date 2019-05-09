@@ -7,8 +7,8 @@ function retrieveSubject( $type, $id )
 {
 	switch( $type )
 	{
-		case flag::SUBJECT_TYPE_ENTRY: { $entry = entryPeer::retrieveByPK( $id ); return 'entry id:'.$id.'<br/>kshow:'.returnKshowLink($entry->getKshowId()).'<br/>Name:'.$entry->getName(); }
-		case flag::SUBJECT_TYPE_USER: { $user = kuserPeer::retrieveByPK( $id ); return returnUserLink( $user->getScreenName()); }
+		case flag::SUBJECT_TYPE_ENTRY: { $entry = entryPeer::retrieveByPK( $id ); return 'entry id:'.$id.'<br/>vshow:'.returnVshowLink($entry->getVshowId()).'<br/>Name:'.$entry->getName(); }
+		case flag::SUBJECT_TYPE_USER: { $user = vuserPeer::retrieveByPK( $id ); return returnUserLink( $user->getScreenName()); }
 		case flag::SUBJECT_TYPE_COMMENT: { $comment = commentPeer::retrieveByPK( $id ); return 'comment id:'.$id.'<br/>Commnet:'.$comment->getComment(); }
 		default: return 'Unknown';
 	}
@@ -16,35 +16,35 @@ function retrieveSubject( $type, $id )
 
 function returnUserLink( $username )
 {
-	return "<a href='/index.php/mykaltura/viewprofile?screenname=".$username."'>".$username."</a>";
+	return "<a href='/index.php/myvidiun/viewprofile?screenname=".$username."'>".$username."</a>";
 }
 
-function returnEntryLink( $kshow_id, $entry_id )
+function returnEntryLink( $vshow_id, $entry_id )
 {
-	return "<a href='/index.php/browse?kshow_id=".$kshow_id."&entry_id=".$entry_id."'>".$entry_id."</a>";
+	return "<a href='/index.php/browse?vshow_id=".$vshow_id."&entry_id=".$entry_id."'>".$entry_id."</a>";
 }
 
-function returnKshowLink( $kshow_id )
+function returnVshowLink( $vshow_id )
 {
-	return "<a href='/index.php/browse?kshow_id=".$kshow_id."'>".$kshow_id."</a>";
+	return "<a href='/index.php/browse?vshow_id=".$vshow_id."'>".$vshow_id."</a>";
 }
 
-function returnShowThumbnailLink( $path, $kshow_id )
+function returnShowThumbnailLink( $path, $vshow_id )
 {
-	return "<a href='/index.php/browse?kshow_id=".$kshow_id."'><img src='".$path."' alt='' /></a>";
+	return "<a href='/index.php/browse?vshow_id=".$vshow_id."'><img src='".$path."' alt='' /></a>";
 }
 
-function returnEntryThumbnailLink( $kshow_id, $path, $entry_id, $media_type )
+function returnEntryThumbnailLink( $vshow_id, $path, $entry_id, $media_type )
 {
 	if ($media_type == entry::ENTRY_MEDIA_TYPE_AUDIO)
 		$path = "/images/main/ico_sound.gif";
 		
-	return "<a href='/index.php/browse?".$kshow_id."&entry_id=".$entry_id."'><img src='".$path."' alt='' /></a>";
+	return "<a href='/index.php/browse?".$vshow_id."&entry_id=".$entry_id."'><img src='".$path."' alt='' /></a>";
 }
 
 function returnUserThumbnailLink( $path, $screenname )
 {
-	return "<a href='/index.php/mykaltura/viewprofile?screenname=".$screenname."'><img src='".$path."' alt='' /></a>";
+	return "<a href='/index.php/myvidiun/viewprofile?screenname=".$screenname."'><img src='".$path."' alt='' /></a>";
 }
 
 function getEntryTypeText( $type )
@@ -84,7 +84,7 @@ echo <<<EOT
 	<div class="top">
 		<a href="/index.php/system/login?exit=true">logout</a>
 	</div>
-	<h1>Kaltura System Dashboard $bands_only_str</h1>
+	<h1>Vidiun System Dashboard $bands_only_str</h1>
 	<span>Updated: $now</span>
 </div>
 
@@ -101,8 +101,8 @@ echo <<<EOT
 	<tbody>
 		<tr>
 			<td><a href="#shows">Shows</a></td>
-			<td>$kshow_count</td><td>$kshow_count7</td>
-			<td>$kshow_count1</td>
+			<td>$vshow_count</td><td>$vshow_count7</td>
+			<td>$vshow_count1</td>
 		</tr>
 		<tr class="even">
 			<td><a href="#entries">Entries</a></td>
@@ -110,8 +110,8 @@ echo <<<EOT
 		</tr>
 		<tr>
 			<td><a href="#users">Users</a></td>
-			<td>$kuser_count</td><td>$kuser_count7</td>
-			<td>$kuser_count1</td>
+			<td>$vuser_count</td><td>$vuser_count7</td>
+			<td>$vuser_count1</td>
 		</tr>
 	</tbody>
 </table>
@@ -121,16 +121,16 @@ echo '<a name="shows"></a>';
 $flip = 1;
 echo '<h2>Recently created shows</h2>'; 
 echo '<table border="0" cellspacing="0" cellpadding="10">';
-if( !$kshows ) echo '<h1>No shows found</h1>';
+if( !$vshows ) echo '<h1>No shows found</h1>';
 	else 
 	{
 	echo '<thead><tr><td>ID</td><td>Thumbnail</td><td>Created</td><td>Produer</td><td>Data</td><td >Name</td><td width="40%">Description</td></tr></thead>';
-		foreach ( $kshows as $kshow )
+		foreach ( $vshows as $vshow )
 		{
 			if ( $modified_only ) 
 			{
-				$has_new_entries = key_exists( $kshow->getId() , $kshows_with_new_entries ) ;
-				$new_entries =  $has_new_entries ? " (" . $kshows_with_new_entries[$kshow->getId() ] . ")" : "";
+				$has_new_entries = key_exists( $vshow->getId() , $vshows_with_new_entries ) ;
+				$new_entries =  $has_new_entries ? " (" . $vshows_with_new_entries[$vshow->getId() ] . ")" : "";
 			}
 			else
 			{
@@ -145,14 +145,14 @@ if( !$kshows ) echo '<h1>No shows found</h1>';
 			 	( '<tr '. ( $flip > 0 ? 'class="even"' : '' ) .'>' )
 			 ).				
 	
-			'<td>'.returnKshowLink( $kshow->getId()).'</td>'.
-			'<td class="image">'.returnShowThumbnailLink( $kshow->getThumbnailPath(), $kshow->getId() ).'</td>'.
-			'<td>'.$kshow->getFormattedCreatedAt().'</td>'.
-			'<td>'.returnUserLink( $kshow->getkuser()->getScreenName()).'</td>'.
-			'<td>'.$kshow->getTypeText().'<br/>Views:'.$kshow->getViews().'<br/>Roughcuts:' . $kshow->getRoughcutCount(). 
-				'<br/>Entries:'.( $kshow->getEntries() - 1 ) . $new_entries .'<br/>Comments:' . $kshow->getComments() . '</td>'.
-			'<td>'.$kshow->getName().'</td>'.
-			'<td>'.$kshow->getdescription().'</td>'.
+			'<td>'.returnVshowLink( $vshow->getId()).'</td>'.
+			'<td class="image">'.returnShowThumbnailLink( $vshow->getThumbnailPath(), $vshow->getId() ).'</td>'.
+			'<td>'.$vshow->getFormattedCreatedAt().'</td>'.
+			'<td>'.returnUserLink( $vshow->getvuser()->getScreenName()).'</td>'.
+			'<td>'.$vshow->getTypeText().'<br/>Views:'.$vshow->getViews().'<br/>Roughcuts:' . $vshow->getRoughcutCount(). 
+				'<br/>Entries:'.( $vshow->getEntries() - 1 ) . $new_entries .'<br/>Comments:' . $vshow->getComments() . '</td>'.
+			'<td>'.$vshow->getName().'</td>'.
+			'<td>'.$vshow->getdescription().'</td>'.
 			'</tr>'.
 			'</tbody>';
 		}
@@ -165,20 +165,20 @@ echo '<table border="0" cellspacing="0" cellpadding="10">';
 if( !$entries ) echo '<h3>No entries found</h3>';
 	else 
 	{
-	echo '<thead><tr><td>ID</td><td>Thumbnail</td><td>Created</td><td>Contributor</td><td>Media Type</td><td >Name</td><td width="40%">Part of kaltura</td></tr></thead>';
+	echo '<thead><tr><td>ID</td><td>Thumbnail</td><td>Created</td><td>Contributor</td><td>Media Type</td><td >Name</td><td width="40%">Part of vidiun</td></tr></thead>';
 		foreach ( $entries as $entry )
 		{
-			$kshow = $entry->getkshow();
+			$vshow = $entry->getvshow();
 			$flip = $flip * -1;
 			echo '<tbody>'.
 			'<tr '.( $flip > 0 ? 'class="even"' : '').'>'.		
-			'<td>'.returnEntryLink( $kshow->getId(), $entry->getId()).'</td>'.
-			'<td class="image">'.returnEntryThumbnailLink( $kshow->getId(),$entry->getThumbnailPath(), $entry->getId(), $entry->getMediaType() ).'</td>'.
+			'<td>'.returnEntryLink( $vshow->getId(), $entry->getId()).'</td>'.
+			'<td class="image">'.returnEntryThumbnailLink( $vshow->getId(),$entry->getThumbnailPath(), $entry->getId(), $entry->getMediaType() ).'</td>'.
 			'<td>'.$entry->getFormattedCreatedAt().'</td>'.
-			'<td>'.returnUserLink( $entry->getkuser()->getScreenName()).'</td>'.
+			'<td>'.returnUserLink( $entry->getvuser()->getScreenName()).'</td>'.
 			'<td>'.getEntryTypeText($entry->getMediaType()).'</td>'.
 			'<td>'.$entry->getName().'</td>'.
-			'<td class="image">'.returnShowThumbnailLink( $kshow->getThumbnailPath(), $kshow->getId() ).' '.$kshow->getName().'</td>'.
+			'<td class="image">'.returnShowThumbnailLink( $vshow->getThumbnailPath(), $vshow->getId() ).' '.$vshow->getName().'</td>'.
 			'</tr>'.
 			'</tbody>';
 		}
@@ -188,21 +188,21 @@ echo '</table>';
 echo '<a name="users"></a>';
 echo '<h2>Recent Users</h2>'; 
 echo '<table border="0" cellspacing="0" cellpadding="10">';
-if( !$kusers ) echo '<h3>No users found</h3>';
+if( !$vusers ) echo '<h3>No users found</h3>';
 	else 
 	{
 	echo '<thead><tr><td>ID</td><td>Thumbnail</td><td>Created</td><td>Screenname</td><td>Data</td><td>Demographics</td></tr></thead>';
-		foreach ( $kusers as $kuser )
+		foreach ( $vusers as $vuser )
 		{
 			$flip = $flip * -1;
 			echo '<tbody>'.
 			'<tr '.( $flip > 0 ? 'class="even"' : '').'>'.	
-			'<td>'.$kuser->getId().'</td>'.
-			'<td class="image">'.returnUserThumbnailLink( $kuser->getPicturePath(), $kuser->getScreenName() ).'</td>'.
-			'<td>'.$kuser->getFormattedCreatedAt().'</td>'.
-			'<td>'.returnUserLink( $kuser->getScreenName()).'</td>'.
-			'<td>Kalturas:' .$kuser->getProducedKshows() . "<br/>Roughcuts:" . $kuser->getRoughcutCount() .'</td>'.
-			'<td class="country">'.($kuser->getCountry() ? image_tag('flags/'.strtolower($kuser->getCountry()).'.gif') : '').' '.$kuser->getCity().' '.$kuser->getState().'<br/>'.($kuser->getGender() == 1 ? 'Male' : ($kuser->getGender() == 2 ? 'Female' : '')).'<br/>'.$kuser->getAboutMe().'</td>'.
+			'<td>'.$vuser->getId().'</td>'.
+			'<td class="image">'.returnUserThumbnailLink( $vuser->getPicturePath(), $vuser->getScreenName() ).'</td>'.
+			'<td>'.$vuser->getFormattedCreatedAt().'</td>'.
+			'<td>'.returnUserLink( $vuser->getScreenName()).'</td>'.
+			'<td>Vidiuns:' .$vuser->getProducedVshows() . "<br/>Roughcuts:" . $vuser->getRoughcutCount() .'</td>'.
+			'<td class="country">'.($vuser->getCountry() ? image_tag('flags/'.strtolower($vuser->getCountry()).'.gif') : '').' '.$vuser->getCity().' '.$vuser->getState().'<br/>'.($vuser->getGender() == 1 ? 'Male' : ($vuser->getGender() == 2 ? 'Female' : '')).'<br/>'.$vuser->getAboutMe().'</td>'.
 			'</tr>'.
 			'</tbody>';
 		}

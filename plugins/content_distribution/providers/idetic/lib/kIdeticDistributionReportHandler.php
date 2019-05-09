@@ -3,10 +3,10 @@
  * @package plugins.ideticDistribution
  * @subpackage lib
  */
-class kIdeticDistributionReportHandler implements kBatchJobStatusEventConsumer
+class vIdeticDistributionReportHandler implements vBatchJobStatusEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -17,7 +17,7 @@ class kIdeticDistributionReportHandler implements kBatchJobStatusEventConsumer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
@@ -28,10 +28,10 @@ class kIdeticDistributionReportHandler implements kBatchJobStatusEventConsumer
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kDistributionFetchReportJobData $data
+	 * @param vDistributionFetchReportJobData $data
 	 * @return BatchJob
 	 */
-	public static function onDistributionFetchReportJobUpdated(BatchJob $dbBatchJob, kDistributionFetchReportJobData $data)
+	public static function onDistributionFetchReportJobUpdated(BatchJob $dbBatchJob, vDistributionFetchReportJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
@@ -44,20 +44,20 @@ class kIdeticDistributionReportHandler implements kBatchJobStatusEventConsumer
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kDistributionFetchReportJobData $data
+	 * @param vDistributionFetchReportJobData $data
 	 * @return BatchJob
 	 */
-	public static function onDistributionFetchReportJobFinished(BatchJob $dbBatchJob, kDistributionFetchReportJobData $data)
+	public static function onDistributionFetchReportJobFinished(BatchJob $dbBatchJob, vDistributionFetchReportJobData $data)
 	{
 		$entryDistribution = EntryDistributionPeer::retrieveByPK($data->getEntryDistributionId());
 		if(!$entryDistribution)
 		{
-			KalturaLog::err("Entry distribution [" . $data->getEntryDistributionId() . "] not found");
+			VidiunLog::err("Entry distribution [" . $data->getEntryDistributionId() . "] not found");
 			return $dbBatchJob;
 		}
 		
 		$providerData = $data->getProviderData();
-/*		if($providerData instanceof kIdeticDistributionJobProviderData)
+/*		if($providerData instanceof vIdeticDistributionJobProviderData)
 		{
 			$entryDistribution->putInCustomData('emailed', $providerData->getEmailed());
 			$entryDistribution->putInCustomData('rated', $providerData->getRated());

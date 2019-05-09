@@ -95,10 +95,10 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 	protected $country_restrict_list;
 
 	/**
-	 * The value for the ks_restrict_privilege field.
+	 * The value for the vs_restrict_privilege field.
 	 * @var        string
 	 */
-	protected $ks_restrict_privilege;
+	protected $vs_restrict_privilege;
 
 	/**
 	 * The value for the prv_restrict_privilege field.
@@ -113,10 +113,10 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 	protected $prv_restrict_length;
 
 	/**
-	 * The value for the kdir_restrict_type field.
+	 * The value for the vdir_restrict_type field.
 	 * @var        int
 	 */
-	protected $kdir_restrict_type;
+	protected $vdir_restrict_type;
 
 	/**
 	 * The value for the custom_data field.
@@ -409,13 +409,13 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [ks_restrict_privilege] column value.
+	 * Get the [vs_restrict_privilege] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getKsRestrictPrivilege()
+	public function getVsRestrictPrivilege()
 	{
-		return $this->ks_restrict_privilege;
+		return $this->vs_restrict_privilege;
 	}
 
 	/**
@@ -439,13 +439,13 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kdir_restrict_type] column value.
+	 * Get the [vdir_restrict_type] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKdirRestrictType()
+	public function getVdirRestrictType()
 	{
-		return $this->kdir_restrict_type;
+		return $this->vdir_restrict_type;
 	}
 
 	/**
@@ -826,27 +826,27 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 	} // setCountryRestrictList()
 
 	/**
-	 * Set the value of [ks_restrict_privilege] column.
+	 * Set the value of [vs_restrict_privilege] column.
 	 * 
 	 * @param      string $v new value
 	 * @return     accessControl The current object (for fluent API support)
 	 */
-	public function setKsRestrictPrivilege($v)
+	public function setVsRestrictPrivilege($v)
 	{
-		if(!isset($this->oldColumnsValues[accessControlPeer::KS_RESTRICT_PRIVILEGE]))
-			$this->oldColumnsValues[accessControlPeer::KS_RESTRICT_PRIVILEGE] = $this->ks_restrict_privilege;
+		if(!isset($this->oldColumnsValues[accessControlPeer::VS_RESTRICT_PRIVILEGE]))
+			$this->oldColumnsValues[accessControlPeer::VS_RESTRICT_PRIVILEGE] = $this->vs_restrict_privilege;
 
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->ks_restrict_privilege !== $v) {
-			$this->ks_restrict_privilege = $v;
-			$this->modifiedColumns[] = accessControlPeer::KS_RESTRICT_PRIVILEGE;
+		if ($this->vs_restrict_privilege !== $v) {
+			$this->vs_restrict_privilege = $v;
+			$this->modifiedColumns[] = accessControlPeer::VS_RESTRICT_PRIVILEGE;
 		}
 
 		return $this;
-	} // setKsRestrictPrivilege()
+	} // setVsRestrictPrivilege()
 
 	/**
 	 * Set the value of [prv_restrict_privilege] column.
@@ -895,27 +895,27 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 	} // setPrvRestrictLength()
 
 	/**
-	 * Set the value of [kdir_restrict_type] column.
+	 * Set the value of [vdir_restrict_type] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     accessControl The current object (for fluent API support)
 	 */
-	public function setKdirRestrictType($v)
+	public function setVdirRestrictType($v)
 	{
-		if(!isset($this->oldColumnsValues[accessControlPeer::KDIR_RESTRICT_TYPE]))
-			$this->oldColumnsValues[accessControlPeer::KDIR_RESTRICT_TYPE] = $this->kdir_restrict_type;
+		if(!isset($this->oldColumnsValues[accessControlPeer::VDIR_RESTRICT_TYPE]))
+			$this->oldColumnsValues[accessControlPeer::VDIR_RESTRICT_TYPE] = $this->vdir_restrict_type;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kdir_restrict_type !== $v) {
-			$this->kdir_restrict_type = $v;
-			$this->modifiedColumns[] = accessControlPeer::KDIR_RESTRICT_TYPE;
+		if ($this->vdir_restrict_type !== $v) {
+			$this->vdir_restrict_type = $v;
+			$this->modifiedColumns[] = accessControlPeer::VDIR_RESTRICT_TYPE;
 		}
 
 		return $this;
-	} // setKdirRestrictType()
+	} // setVdirRestrictType()
 
 	/**
 	 * Set the value of [custom_data] column.
@@ -1019,10 +1019,10 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 			$this->site_restrict_list = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
 			$this->country_restrict_type = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
 			$this->country_restrict_list = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-			$this->ks_restrict_privilege = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+			$this->vs_restrict_privilege = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
 			$this->prv_restrict_privilege = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
 			$this->prv_restrict_length = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
-			$this->kdir_restrict_type = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
+			$this->vdir_restrict_type = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
 			$this->custom_data = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
 			$this->rules = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
 			$this->resetModified();
@@ -1177,13 +1177,13 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 				return 0;
 			}
 			
-			for ($retries = 1; $retries < KalturaPDO::SAVE_MAX_RETRIES; $retries++)
+			for ($retries = 1; $retries < VidiunPDO::SAVE_MAX_RETRIES; $retries++)
 			{
                $affectedRows = $this->doSave($con);
                 if ($affectedRows || !$this->isColumnModified(accessControlPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug("was unable to save! retrying for the $retries time");
+                VidiunLog::debug("was unable to save! retrying for the $retries time");
                 $criteria = $this->buildPkeyCriteria();
 				$criteria->addSelectColumn(accessControlPeer::CUSTOM_DATA);
                 $stmt = BasePeer::doSelect($criteria, $con);
@@ -1345,7 +1345,7 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1370,12 +1370,12 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1393,10 +1393,10 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1591,7 +1591,7 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 				return $this->getCountryRestrictList();
 				break;
 			case 12:
-				return $this->getKsRestrictPrivilege();
+				return $this->getVsRestrictPrivilege();
 				break;
 			case 13:
 				return $this->getPrvRestrictPrivilege();
@@ -1600,7 +1600,7 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 				return $this->getPrvRestrictLength();
 				break;
 			case 15:
-				return $this->getKdirRestrictType();
+				return $this->getVdirRestrictType();
 				break;
 			case 16:
 				return $this->getCustomData();
@@ -1641,10 +1641,10 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 			$keys[9] => $this->getSiteRestrictList(),
 			$keys[10] => $this->getCountryRestrictType(),
 			$keys[11] => $this->getCountryRestrictList(),
-			$keys[12] => $this->getKsRestrictPrivilege(),
+			$keys[12] => $this->getVsRestrictPrivilege(),
 			$keys[13] => $this->getPrvRestrictPrivilege(),
 			$keys[14] => $this->getPrvRestrictLength(),
-			$keys[15] => $this->getKdirRestrictType(),
+			$keys[15] => $this->getVdirRestrictType(),
 			$keys[16] => $this->getCustomData(),
 			$keys[17] => $this->getRules(),
 		);
@@ -1715,7 +1715,7 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 				$this->setCountryRestrictList($value);
 				break;
 			case 12:
-				$this->setKsRestrictPrivilege($value);
+				$this->setVsRestrictPrivilege($value);
 				break;
 			case 13:
 				$this->setPrvRestrictPrivilege($value);
@@ -1724,7 +1724,7 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 				$this->setPrvRestrictLength($value);
 				break;
 			case 15:
-				$this->setKdirRestrictType($value);
+				$this->setVdirRestrictType($value);
 				break;
 			case 16:
 				$this->setCustomData($value);
@@ -1768,10 +1768,10 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[9], $arr)) $this->setSiteRestrictList($arr[$keys[9]]);
 		if (array_key_exists($keys[10], $arr)) $this->setCountryRestrictType($arr[$keys[10]]);
 		if (array_key_exists($keys[11], $arr)) $this->setCountryRestrictList($arr[$keys[11]]);
-		if (array_key_exists($keys[12], $arr)) $this->setKsRestrictPrivilege($arr[$keys[12]]);
+		if (array_key_exists($keys[12], $arr)) $this->setVsRestrictPrivilege($arr[$keys[12]]);
 		if (array_key_exists($keys[13], $arr)) $this->setPrvRestrictPrivilege($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setPrvRestrictLength($arr[$keys[14]]);
-		if (array_key_exists($keys[15], $arr)) $this->setKdirRestrictType($arr[$keys[15]]);
+		if (array_key_exists($keys[15], $arr)) $this->setVdirRestrictType($arr[$keys[15]]);
 		if (array_key_exists($keys[16], $arr)) $this->setCustomData($arr[$keys[16]]);
 		if (array_key_exists($keys[17], $arr)) $this->setRules($arr[$keys[17]]);
 	}
@@ -1797,10 +1797,10 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(accessControlPeer::SITE_RESTRICT_LIST)) $criteria->add(accessControlPeer::SITE_RESTRICT_LIST, $this->site_restrict_list);
 		if ($this->isColumnModified(accessControlPeer::COUNTRY_RESTRICT_TYPE)) $criteria->add(accessControlPeer::COUNTRY_RESTRICT_TYPE, $this->country_restrict_type);
 		if ($this->isColumnModified(accessControlPeer::COUNTRY_RESTRICT_LIST)) $criteria->add(accessControlPeer::COUNTRY_RESTRICT_LIST, $this->country_restrict_list);
-		if ($this->isColumnModified(accessControlPeer::KS_RESTRICT_PRIVILEGE)) $criteria->add(accessControlPeer::KS_RESTRICT_PRIVILEGE, $this->ks_restrict_privilege);
+		if ($this->isColumnModified(accessControlPeer::VS_RESTRICT_PRIVILEGE)) $criteria->add(accessControlPeer::VS_RESTRICT_PRIVILEGE, $this->vs_restrict_privilege);
 		if ($this->isColumnModified(accessControlPeer::PRV_RESTRICT_PRIVILEGE)) $criteria->add(accessControlPeer::PRV_RESTRICT_PRIVILEGE, $this->prv_restrict_privilege);
 		if ($this->isColumnModified(accessControlPeer::PRV_RESTRICT_LENGTH)) $criteria->add(accessControlPeer::PRV_RESTRICT_LENGTH, $this->prv_restrict_length);
-		if ($this->isColumnModified(accessControlPeer::KDIR_RESTRICT_TYPE)) $criteria->add(accessControlPeer::KDIR_RESTRICT_TYPE, $this->kdir_restrict_type);
+		if ($this->isColumnModified(accessControlPeer::VDIR_RESTRICT_TYPE)) $criteria->add(accessControlPeer::VDIR_RESTRICT_TYPE, $this->vdir_restrict_type);
 		if ($this->isColumnModified(accessControlPeer::CUSTOM_DATA)) $criteria->add(accessControlPeer::CUSTOM_DATA, $this->custom_data);
 		if ($this->isColumnModified(accessControlPeer::RULES)) $criteria->add(accessControlPeer::RULES, $this->rules);
 
@@ -1903,13 +1903,13 @@ abstract class BaseaccessControl extends BaseObject  implements Persistent {
 
 		$copyObj->setCountryRestrictList($this->country_restrict_list);
 
-		$copyObj->setKsRestrictPrivilege($this->ks_restrict_privilege);
+		$copyObj->setVsRestrictPrivilege($this->vs_restrict_privilege);
 
 		$copyObj->setPrvRestrictPrivilege($this->prv_restrict_privilege);
 
 		$copyObj->setPrvRestrictLength($this->prv_restrict_length);
 
-		$copyObj->setKdirRestrictType($this->kdir_restrict_type);
+		$copyObj->setVdirRestrictType($this->vdir_restrict_type);
 
 		$copyObj->setCustomData($this->custom_data);
 

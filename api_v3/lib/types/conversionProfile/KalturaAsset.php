@@ -4,7 +4,7 @@
  * @subpackage objects
  * @relatedService ignore
  */
-class KalturaAsset extends KalturaObject implements IRelatedFilterable, IApiObjectFactory
+class VidiunAsset extends VidiunObject implements IRelatedFilterable, IApiObjectFactory
 {
 	/**
 	 * The ID of the Flavor Asset
@@ -149,33 +149,33 @@ class KalturaAsset extends KalturaObject implements IRelatedFilterable, IApiObje
 		return array();
 	}
 	
-	public static function getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 	     $type = $sourceObject->getType();
 	     $object = null;
 	     switch ($type)
 	     {
-	         case KalturaAssetType::FLAVOR:
-	             $object = new KalturaFlavorAsset();
+	         case VidiunAssetType::FLAVOR:
+	             $object = new VidiunFlavorAsset();
 	             break;
-	         case KalturaAssetType::LIVE:
-	             $object = new KalturaLiveAsset();
+	         case VidiunAssetType::LIVE:
+	             $object = new VidiunLiveAsset();
 	             break;
-	         case KalturaAssetType::THUMBNAIL:
-	             $object = new KalturaThumbAsset();
+	         case VidiunAssetType::THUMBNAIL:
+	             $object = new VidiunThumbAsset();
 	             break;
 	         default:
 	             if($sourceObject instanceof thumbAsset)
                      {
-	                 $object = KalturaPluginManager::loadObject('KalturaThumbAsset', $type);
+	                 $object = VidiunPluginManager::loadObject('VidiunThumbAsset', $type);
 	             }
 	             elseif($sourceObject instanceof flavorAsset)
                      {
-	                 $object = KalturaPluginManager::loadObject('KalturaFlavorAsset', $type);
+	                 $object = VidiunPluginManager::loadObject('VidiunFlavorAsset', $type);
 	             }
 	             else
 	             {
-	                 $object = KalturaPluginManager::loadObject('KalturaAsset', $type);
+	                 $object = VidiunPluginManager::loadObject('VidiunAsset', $type);
 	             }
 	     }
 	     

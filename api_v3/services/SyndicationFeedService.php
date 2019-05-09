@@ -6,7 +6,7 @@
  * @package api
  * @subpackage services
  */
-class SyndicationFeedService extends KalturaBaseService 
+class SyndicationFeedService extends VidiunBaseService 
 {
 	
 	public function initService($serviceId, $serviceName, $actionName)
@@ -28,7 +28,7 @@ class SyndicationFeedService extends KalturaBaseService
 		return parent::partnerGroup();
 	}
 	
-	protected function kalturaNetworkAllowed($actionName)
+	protected function vidiunNetworkAllowed($actionName)
 	{
 		if ($actionName === 'get') {
 			return true;
@@ -37,19 +37,19 @@ class SyndicationFeedService extends KalturaBaseService
 			return true;
 		}
 
-		return parent::kalturaNetworkAllowed($actionName);
+		return parent::vidiunNetworkAllowed($actionName);
 	}
 	
 	/**
 	 * Add new Syndication Feed
 	 * 
 	 * @action add
-	 * @param KalturaBaseSyndicationFeed $syndicationFeed
-	 * @return KalturaBaseSyndicationFeed
+	 * @param VidiunBaseSyndicationFeed $syndicationFeed
+	 * @return VidiunBaseSyndicationFeed
 	 *
 	 * @disableRelativeTime $syndicationFeed
 	 */
-	public function addAction(KalturaBaseSyndicationFeed $syndicationFeed)
+	public function addAction(VidiunBaseSyndicationFeed $syndicationFeed)
 	{
 		$syndicationFeed->validatePlaylistId();
 		$syndicationFeed->validateStorageId($this->getPartnerId());
@@ -62,7 +62,7 @@ class SyndicationFeedService extends KalturaBaseService
 			
 		$syndicationFeedDB = $syndicationFeed->toInsertableObject();
 		$syndicationFeedDB->setPartnerId($this->getPartnerId());
-		$syndicationFeedDB->setStatus(KalturaSyndicationFeedStatus::ACTIVE);
+		$syndicationFeedDB->setStatus(VidiunSyndicationFeedStatus::ACTIVE);
 		$syndicationFeedDB->save();
 		
 		if($syndicationFeed->addToDefaultConversionProfile)
@@ -98,9 +98,9 @@ class SyndicationFeedService extends KalturaBaseService
 			}
 		}
 		
-		if ($syndicationFeed instanceof KalturaGenericXsltSyndicationFeed ){
+		if ($syndicationFeed instanceof VidiunGenericXsltSyndicationFeed ){
 			$key = $syndicationFeedDB->getSyncKey(genericSyndicationFeed::FILE_SYNC_SYNDICATION_FEED_XSLT);
-			kFileSyncUtils::file_put_contents($key, $syndicationFeed->xslt);
+			vFileSyncUtils::file_put_contents($key, $syndicationFeed->xslt);
 		}
 		
 		$syndicationFeed->fromObject($syndicationFeedDB, $this->getResponseProfile());
@@ -113,16 +113,16 @@ class SyndicationFeedService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param string $id
-	 * @return KalturaBaseSyndicationFeed
-	 * @throws KalturaErrors::INVALID_FEED_ID
+	 * @return VidiunBaseSyndicationFeed
+	 * @throws VidiunErrors::INVALID_FEED_ID
 	 */
 	public function getAction($id)
 	{
 		$syndicationFeedDB = syndicationFeedPeer::retrieveByPK($id);
 		if (!$syndicationFeedDB)
-			throw new KalturaAPIException(KalturaErrors::INVALID_FEED_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_FEED_ID, $id);
 			
-		$syndicationFeed = KalturaSyndicationFeedFactory::getInstanceByType($syndicationFeedDB->getType());
+		$syndicationFeed = VidiunSyndicationFeedFactory::getInstanceByType($syndicationFeedDB->getType());
 		//echo $syndicationFeed->feedUrl; die;
 		$syndicationFeed->fromObject($syndicationFeedDB, $this->getResponseProfile());
 		return $syndicationFeed;
@@ -133,38 +133,38 @@ class SyndicationFeedService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param string $id
-	 * @param KalturaBaseSyndicationFeed $syndicationFeed
-	 * @return KalturaBaseSyndicationFeed
-	 * @throws KalturaErrors::INVALID_FEED_ID
+	 * @param VidiunBaseSyndicationFeed $syndicationFeed
+	 * @return VidiunBaseSyndicationFeed
+	 * @throws VidiunErrors::INVALID_FEED_ID
 	 *
 	 * @disableRelativeTime $syndicationFeed
 	 */
-	public function updateAction($id, KalturaBaseSyndicationFeed $syndicationFeed)
+	public function updateAction($id, VidiunBaseSyndicationFeed $syndicationFeed)
 	{
 		$syndicationFeedDB = syndicationFeedPeer::retrieveByPK($id);
 		if (!$syndicationFeedDB)
-			throw new KalturaAPIException(KalturaErrors::INVALID_FEED_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_FEED_ID, $id);
 		
 		$syndicationFeed->validateStorageId($this->getPartnerId());
 		$syndicationFeed->toUpdatableObject($syndicationFeedDB, array('type'));	
 		
-		if (($syndicationFeed instanceof KalturaGenericXsltSyndicationFeed) && ($syndicationFeed->xslt != null)){
+		if (($syndicationFeed instanceof VidiunGenericXsltSyndicationFeed) && ($syndicationFeed->xslt != null)){
 			if(!($syndicationFeedDB instanceof genericSyndicationFeed))
-				throw new KalturaAPIException(KalturaErrors::INVALID_FEED_TYPE, get_class($syndicationFeedDB));
+				throw new VidiunAPIException(VidiunErrors::INVALID_FEED_TYPE, get_class($syndicationFeedDB));
 				
 			$syndicationFeedDB->incrementVersion();
 		}
 		$syndicationFeedDB->save();		
 		
 		
-		if (($syndicationFeed instanceof KalturaGenericXsltSyndicationFeed) && ($syndicationFeed->xslt != null)){			
+		if (($syndicationFeed instanceof VidiunGenericXsltSyndicationFeed) && ($syndicationFeed->xslt != null)){			
 			$key = $syndicationFeedDB->getSyncKey(genericSyndicationFeed::FILE_SYNC_SYNDICATION_FEED_XSLT);
-			kFileSyncUtils::file_put_contents($key, $syndicationFeed->xslt);
+			vFileSyncUtils::file_put_contents($key, $syndicationFeed->xslt);
 		}
 		
         $syndicationFeed->type = null;
         
-		$syndicationFeed = KalturaSyndicationFeedFactory::getInstanceByType($syndicationFeedDB->getType());
+		$syndicationFeed = VidiunSyndicationFeedFactory::getInstanceByType($syndicationFeedDB->getType());
 		$syndicationFeed->fromObject($syndicationFeedDB, $this->getResponseProfile());
 		return $syndicationFeed;
 	}
@@ -174,16 +174,16 @@ class SyndicationFeedService extends KalturaBaseService
 	 * 
 	 * @action delete
 	 * @param string $id
-	 * @throws KalturaErrors::INVALID_FEED_ID
+	 * @throws VidiunErrors::INVALID_FEED_ID
 	 */
 	public function deleteAction($id)
 	{
 		$syndicationFeedDB = syndicationFeedPeer::retrieveByPK($id);
 		if (!$syndicationFeedDB)
-			throw new KalturaAPIException(KalturaErrors::INVALID_FEED_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_FEED_ID, $id);
 		
 		
-		$syndicationFeedDB->setStatus(KalturaSyndicationFeedStatus::DELETED);
+		$syndicationFeedDB->setStatus(VidiunSyndicationFeedStatus::DELETED);
 		$syndicationFeedDB->save();
 	}
 	
@@ -191,17 +191,17 @@ class SyndicationFeedService extends KalturaBaseService
 	 * List Syndication Feeds by filter with paging support
 	 * 
 	 * @action list
-	 * @param KalturaBaseSyndicationFeedFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaBaseSyndicationFeedListResponse
+	 * @param VidiunBaseSyndicationFeedFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunBaseSyndicationFeedListResponse
 	 */
-	public function listAction(KalturaBaseSyndicationFeedFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunBaseSyndicationFeedFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if ($filter === null)
-			$filter = new KalturaBaseSyndicationFeedFilter();
+			$filter = new VidiunBaseSyndicationFeedFilter();
 			
 		if ($filter->orderBy === null)
-			$filter->orderBy = KalturaBaseSyndicationFeedOrderBy::CREATED_AT_DESC;
+			$filter->orderBy = VidiunBaseSyndicationFeedOrderBy::CREATED_AT_DESC;
 			
 		$syndicationFilter = new syndicationFeedFilter();
 		
@@ -214,13 +214,13 @@ class SyndicationFeedService extends KalturaBaseService
 		$totalCount = syndicationFeedPeer::doCount($c);
                 
         if($pager === null)
-        	$pager = new KalturaFilterPager();
+        	$pager = new VidiunFilterPager();
                 
         $pager->attachToCriteria($c);
 		$dbList = syndicationFeedPeer::doSelect($c);
 		
-		$list = KalturaBaseSyndicationFeedArray::fromDbArray($dbList, $this->getResponseProfile());
-		$response = new KalturaBaseSyndicationFeedListResponse();
+		$list = VidiunBaseSyndicationFeedArray::fromDbArray($dbList, $this->getResponseProfile());
+		$response = new VidiunBaseSyndicationFeedListResponse();
 		$response->objects = $list;
 		$response->totalCount = $totalCount;
 		return $response;
@@ -232,40 +232,40 @@ class SyndicationFeedService extends KalturaBaseService
 	 *
 	 * @action getEntryCount
 	 * @param string $feedId
-	 * @return KalturaSyndicationFeedEntryCount
-	 * @throws KalturaErrors::INVALID_FEED_ID
+	 * @return VidiunSyndicationFeedEntryCount
+	 * @throws VidiunErrors::INVALID_FEED_ID
 	 */
 	public function getEntryCountAction($feedId)
 	{
 		$syndicationFeedDB = syndicationFeedPeer::retrieveByPK($feedId);
 		if (!$syndicationFeedDB)
-			throw new KalturaAPIException(KalturaErrors::INVALID_FEED_ID, $feedId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_FEED_ID, $feedId);
 		
-		$feedCount = new KalturaSyndicationFeedEntryCount();
+		$feedCount = new VidiunSyndicationFeedEntryCount();
 		
 		try
 		{
-			$feedRenderer = new KalturaSyndicationFeedRenderer($feedId);
+			$feedRenderer = new VidiunSyndicationFeedRenderer($feedId);
 			$feedCount->totalEntryCount = $feedRenderer->getEntriesCount();
 
-			$feedRenderer = new KalturaSyndicationFeedRenderer($feedId);
+			$feedRenderer = new VidiunSyndicationFeedRenderer($feedId);
 			$feedRenderer->addFlavorParamsAttachedFilter();
 			$feedCount->actualEntryCount = $feedRenderer->getEntriesCount();
 		}
-		catch (kCoreException $exception)
+		catch (vCoreException $exception)
 		{
 			$code = $exception->getCode();
 			$data = $exception->getData();
 			switch ($code)
 			{
-				case kCoreException::INVALID_ENTRY_ID:
+				case vCoreException::INVALID_ENTRY_ID:
 					$id = isset($data['playlistId']) ? $data['playlistId'] : '';
-					throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_ID, $id);
-				case kCoreException::INVALID_ENTRY_TYPE:
+					throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_ID, $id);
+				case vCoreException::INVALID_ENTRY_TYPE:
 					$id = isset($data['playlistId']) ? $data['playlistId'] : '';
 					$wrongType = isset($data['wrongType']) ? $data['wrongType'] : '';
 					$correctType = isset($data['correctType']) ? $data['correctType'] : '';
-					throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_TYPE, $id, $wrongType, $correctType);
+					throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_TYPE, $id, $wrongType, $correctType);
 				default:
 					throw $exception;
 			}
@@ -283,16 +283,16 @@ class SyndicationFeedService extends KalturaBaseService
 	 *  @action requestConversion
 	 *  @param string $feedId
 	 *  @return string
-	 * @throws KalturaErrors::INVALID_FEED_ID
+	 * @throws VidiunErrors::INVALID_FEED_ID
 	 */
 	public function requestConversionAction($feedId)
 	{
 		$syndicationFeedDB = syndicationFeedPeer::retrieveByPK($feedId);
 		if (!$syndicationFeedDB)
-			throw new KalturaAPIException(KalturaErrors::INVALID_FEED_ID, $feedId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_FEED_ID, $feedId);
 			
 		// find entry ids that already converted to the flavor
-		$feedRendererWithTheFlavor = new KalturaSyndicationFeedRenderer($feedId);
+		$feedRendererWithTheFlavor = new VidiunSyndicationFeedRenderer($feedId);
 		$feedRendererWithTheFlavor->addFlavorParamsAttachedFilter();
 		$entriesWithTheFlavor = $feedRendererWithTheFlavor->getEntriesIds();
 		
@@ -301,7 +301,7 @@ class SyndicationFeedService extends KalturaBaseService
 		$entryFilter->setIdNotIn($entriesWithTheFlavor);
 		
 		// create feed with the new filter
-		$feedRendererToConvert = new KalturaSyndicationFeedRenderer($feedId);
+		$feedRendererToConvert = new VidiunSyndicationFeedRenderer($feedId);
 		$feedRendererToConvert->addFilter($entryFilter);
 		
 		$createdJobsIds = array();
@@ -313,7 +313,7 @@ class SyndicationFeedService extends KalturaBaseService
 			if (!is_null($originalFlavorAsset))
 			{
 				$err = "";
-				$job = kBusinessPreConvertDL::decideAddEntryFlavor(null, $entry->getId(), $flavorParamsId, $err);
+				$job = vBusinessPreConvertDL::decideAddEntryFlavor(null, $entry->getId(), $flavorParamsId, $err);
 				if($job && is_object($job))
 					$createdJobsIds[] = $job->getId();
 			}

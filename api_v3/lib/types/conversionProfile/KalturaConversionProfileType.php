@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaConversionProfileType extends KalturaDynamicEnum implements ConversionProfileType
+class VidiunConversionProfileType extends VidiunDynamicEnum implements ConversionProfileType
 {
 	public static function getEnumClass()
 	{

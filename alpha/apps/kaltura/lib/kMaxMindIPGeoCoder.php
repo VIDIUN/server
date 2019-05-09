@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'kGeoCoder.php');
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'vGeoCoder.php');
 
 $baseDir = dirname(__FILE__) . '/../../../../vendor/MaxMind';
 
@@ -27,14 +27,14 @@ require_once("$baseDir/GeoIP2/Record/Continent.php");
 
 use GeoIp2\Database\Reader;
 
-class kMaxMindIPGeocoder extends kGeoCoder
+class vMaxMindIPGeocoder extends vGeoCoder
 {
 	
 	static $readerAnonymous = null;
 	static $readerCountry = null;
 	
 	/* (non-PHPdoc)
-	 * @see kGeoCoder::getCountry()
+	 * @see vGeoCoder::getCountry()
 	 */
 	public function getCountry($ip)
 	{
@@ -42,7 +42,7 @@ class kMaxMindIPGeocoder extends kGeoCoder
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kGeoCoder::getCoordinates()
+	 * @see vGeoCoder::getCoordinates()
 	 */
 	public function getCoordinates($ip)
 	{

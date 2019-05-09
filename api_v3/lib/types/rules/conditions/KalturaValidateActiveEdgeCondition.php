@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaValidateActiveEdgeCondition extends KalturaCondition
+class VidiunValidateActiveEdgeCondition extends VidiunCondition
 {	
 	/**
 	 * Comma separated list of edge servers to validate are active
@@ -31,12 +31,12 @@ class KalturaValidateActiveEdgeCondition extends KalturaCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kValidateActiveEdgeCondition();
+			$dbObject = new vValidateActiveEdgeCondition();
 			
 		return parent::toObject($dbObject, $skip);
 	}

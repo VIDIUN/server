@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaLiveChannelSegmentTriggerType extends KalturaDynamicEnum implements LiveChannelSegmentTriggerType
+class VidiunLiveChannelSegmentTriggerType extends VidiunDynamicEnum implements LiveChannelSegmentTriggerType
 {
 	public static function getEnumClass()
 	{

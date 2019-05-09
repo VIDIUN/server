@@ -2,8 +2,8 @@
 /**
  * @package Core
  * @subpackage model.data
- * @deprecated use kRuleAction
+ * @deprecated use vRuleAction
  */
-class kAccessControlAction extends kRuleAction
+class vAccessControlAction extends vRuleAction
 {
 }

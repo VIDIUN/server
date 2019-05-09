@@ -3,7 +3,7 @@
  * @package Admin
  * @subpackage forms
  */
-class Kaltura_Validate_PartnerEmail extends Zend_Validate_Abstract 
+class Vidiun_Validate_PartnerEmail extends Zend_Validate_Abstract 
 {
 	const PARTNER_EMAIL_ALREADY_EXISTS = 'Email Address already exists';
 	
@@ -14,8 +14,8 @@ class Kaltura_Validate_PartnerEmail extends Zend_Validate_Abstract
 		
 		$client = Infra_ClientHelper::getClient();
 		// get results and paginate
-		$systemPartnerPlugin = Kaltura_Client_SystemPartner_Plugin::get($client);
-		$filter = new Kaltura_Client_Type_UserLoginDataFilter();
+		$systemPartnerPlugin = Vidiun_Client_SystemPartner_Plugin::get($client);
+		$filter = new Vidiun_Client_Type_UserLoginDataFilter();
 		$filter->loginEmailEqual = $value;
 		
 		$otherUsersWithTheSameEmail = $systemPartnerPlugin->systemPartner->listUserLoginData($filter);

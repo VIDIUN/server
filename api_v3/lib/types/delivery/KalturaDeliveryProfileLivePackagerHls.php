@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDeliveryProfileLivePackagerHls extends KalturaDeliveryProfileLivePackager
+class VidiunDeliveryProfileLivePackagerHls extends VidiunDeliveryProfileLivePackager
 {
 	/**
 	 * @var bool

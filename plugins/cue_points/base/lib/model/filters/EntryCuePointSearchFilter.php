@@ -11,7 +11,7 @@ class EntryCuePointSearchFilter extends AdvancedSearchFilterItem
 	protected  $cuePointsFreeText;
 	
 	/**
-	 * @dynamicType KalturaCuePointType
+	 * @dynamicType VidiunCuePointType
 	 * @var string
 	 */
 	protected  $cuePointTypeIn;
@@ -76,7 +76,7 @@ class EntryCuePointSearchFilter extends AdvancedSearchFilterItem
 		return $res;
 	}
 	
-	private function applyMatchCondition($conditionStr, IKalturaIndexQuery $query)
+	private function applyMatchCondition($conditionStr, IVidiunIndexQuery $query)
 	{			
 		$matchCondition = $this->createSphinxMatchPhrase($conditionStr); 
 		
@@ -85,7 +85,7 @@ class EntryCuePointSearchFilter extends AdvancedSearchFilterItem
 	
 	private function createSphinxMatchPhrase($conditionStr) 
 	{	
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 		
 		if(isset($this->cuePointTypeIn))
 		{
@@ -118,9 +118,9 @@ class EntryCuePointSearchFilter extends AdvancedSearchFilterItem
 	/* (non-PHPdoc)
 	 * @see AdvancedSearchFilterItem::applyCondition()
 	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
-		if ($query instanceof IKalturaIndexQuery){
+		if ($query instanceof IVidiunIndexQuery){
 			if(!$this->getCuePointsFreeText())
 				return;
 			

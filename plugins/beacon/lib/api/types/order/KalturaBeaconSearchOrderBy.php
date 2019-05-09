@@ -3,7 +3,7 @@
  * @package plugins.beacon
  * @subpackage api.objects
  */
-abstract class KalturaBeaconSearchOrderBy extends KalturaObject
+abstract class VidiunBeaconSearchOrderBy extends VidiunObject
 {
 	public function getMapBetweenObjects()
 	{

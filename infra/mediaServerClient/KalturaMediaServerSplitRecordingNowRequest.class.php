@@ -1,11 +1,11 @@
 <?php
 
 
-class KalturaMediaServerSplitRecordingNowRequest extends SoapObject
+class VidiunMediaServerSplitRecordingNowRequest extends SoapObject
 {				
 	public function getType()
 	{
-		return 'http://services.api.server.media.kaltura.com/:SplitRecordingNowRequest';
+		return 'http://services.api.server.media.vidiun.com/:SplitRecordingNowRequest';
 	}
 					
 	protected function getAttributeType($attributeName)

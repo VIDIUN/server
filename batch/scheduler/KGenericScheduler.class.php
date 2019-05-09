@@ -1,11 +1,11 @@
 <?php
 /**
  * Will schedual execution of external commands
- * Copied base functionality from KScheduler
+ * Copied base functionality from VScheduler
  *
  * @package Scheduler
  */
-class KGenericScheduler
+class VGenericScheduler
 {
 	/**
 	 * @var bool
@@ -13,7 +13,7 @@ class KGenericScheduler
 	private $enableDebug = true;
 
 	/**
-	 * @var KSchedulerConfig
+	 * @var VSchedulerConfig
 	 */
 	private $schedulerConfig = null;
 
@@ -22,7 +22,7 @@ class KGenericScheduler
 	 */
 	private $keepRunning = true;
 
-	private $logDir = "opt/kaltura/log";
+	private $logDir = "opt/vidiun/log";
 	private $phpPath = null;
 	private $statusInterval;
 	private $schedulerStatusInterval;
@@ -85,18 +85,18 @@ class KGenericScheduler
 		$firstLoad = is_null($this->schedulerConfig);
 		if($firstLoad)
 		{
-			$this->schedulerConfig = new KSchedulerConfig($configFileName);
+			$this->schedulerConfig = new VSchedulerConfig($configFileName);
 			date_default_timezone_set($this->schedulerConfig->getTimezone());
 
 			$pid = $this->schedulerConfig->getPidFileDir() . '/batch.pid';
 			if(file_exists($pid))
 			{
-				KalturaLog::err("Scheduler already running - pid[" . file_get_contents($pid) . "]");
+				VidiunLog::err("Scheduler already running - pid[" . file_get_contents($pid) . "]");
 				exit(1);
 			}
 			file_put_contents($pid, getmypid());
 
-			KalturaLog::info(file_get_contents('VERSION.txt'));
+			VidiunLog::info(file_get_contents('VERSION.txt'));
 			
 			$this->loadRunningTasks();
 		}
@@ -109,10 +109,10 @@ class KGenericScheduler
 			$this->schedulerConfig->load();
 		}
 
-		KScheduleHelperManager::clearFilters();
+		VScheduleHelperManager::clearFilters();
 		$this->queueSizes = array();
 
-		KalturaLog::info("Loading configuration file at: " . date('Y-m-d H:i'));
+		VidiunLog::info("Loading configuration file at: " . date('Y-m-d H:i'));
 
 		$configItems = $this->createConfigItem($this->schedulerConfig->toArray());
 		$taskConfigs = $this->schedulerConfig->getTaskConfigList();
@@ -120,28 +120,28 @@ class KGenericScheduler
 		$this->logDir = $this->schedulerConfig->getLogDir();
 		$this->statusInterval = $this->schedulerConfig->getStatusInterval();
 		$this->schedulerStatusInterval = $this->schedulerConfig->getSchedulerStatusInterval();
-		KDwhClient::setEnabled($this->schedulerConfig->getDwhEnabled());
-		KDwhClient::setFileName($this->schedulerConfig->getDwhPath());
+		VDwhClient::setEnabled($this->schedulerConfig->getDwhEnabled());
+		VDwhClient::setFileName($this->schedulerConfig->getDwhPath());
 		$this->logWorkerInterval = $this->schedulerConfig->getLogWorkerInterval();
 
 		$taskConfigsValidations = array();
 		foreach($taskConfigs as $taskConfig)
 		{
-			/* @var $taskConfig KSchedularTaskConfig */
+			/* @var $taskConfig VSchedularTaskConfig */
 
 			if(is_null($taskConfig->type)) // is the scheduler itself
 				continue;
 
 			if(isset($taskConfigsValidations[$taskConfig->id]))
 			{
-				KalturaLog::err("Duplicated worker id [$taskConfig->id] in worker names [$taskConfig->name] and [" . $taskConfigsValidations[$taskConfig->id] . "]");
+				VidiunLog::err("Duplicated worker id [$taskConfig->id] in worker names [$taskConfig->name] and [" . $taskConfigsValidations[$taskConfig->id] . "]");
 				$this->keepRunning = false;
 				return;
 			}
 
 			if(in_array($taskConfig->name, $taskConfigsValidations))
 			{
-				KalturaLog::err("Duplicated worker name [$taskConfig->name] in worker ids [$taskConfig->id] and [" . array_search($taskConfig->name, $taskConfigsValidations) . "]");
+				VidiunLog::err("Duplicated worker name [$taskConfig->name] in worker ids [$taskConfig->id] and [" . array_search($taskConfig->name, $taskConfigsValidations) . "]");
 				$this->keepRunning = false;
 				return;
 			}
@@ -150,14 +150,14 @@ class KGenericScheduler
 			$subConfigItems = $this->createConfigItem($taskConfig->toArray(), $taskConfig->id, $taskConfig->name);
 			$configItems = array_merge($configItems, $subConfigItems);
 		}
-		KScheduleHelperManager::saveConfigItems($configItems);
+		VScheduleHelperManager::saveConfigItems($configItems);
 	}
 	
 	/**
 	 * Initializes a single worker, and register it in runningTasks
-	 * @param KSchedularTaskConfig $taskConfig
+	 * @param VSchedularTaskConfig $taskConfig
 	 */
-	private function initSingleWorker(KSchedularTaskConfig $taskConfig)
+	private function initSingleWorker(VSchedularTaskConfig $taskConfig)
 	{
 		$taskIndex = $this->getNextAvailableIndex($taskConfig->name, $taskConfig->maxInstances);
 		if(is_null($taskIndex))
@@ -169,9 +169,9 @@ class KGenericScheduler
 		$tmpConfig = clone $taskConfig;
 		$tmpConfig->setInitOnly(true);
 	
-		KalturaLog::info('Initilizing ' . $tmpConfig->name);
+		VidiunLog::info('Initilizing ' . $tmpConfig->name);
 		$tasksetPath = $this->schedulerConfig->getTasksetPath();
-		$proc = new KProcessWrapper($tmpConfig, $taskIndex);
+		$proc = new VProcessWrapper($tmpConfig, $taskIndex);
 		$proc->init($this->logDir, $this->phpPath, $tasksetPath);
 
 		$this->runningTasks[$taskConfig->name][$taskIndex] = &$proc;
@@ -195,7 +195,7 @@ class KGenericScheduler
 			$this->loop();
 		}
 
-		KalturaLog::debug("Ended after [" . (time() - $startTime) . "] seconds");
+		VidiunLog::debug("Ended after [" . (time() - $startTime) . "] seconds");
 	}
 
 	public function loop()
@@ -210,7 +210,7 @@ class KGenericScheduler
 			$fullCycle = true;
 
 			$this->nextStatusTime = time() + $this->statusInterval;
-			KalturaLog::debug("Next Status Time: " . date('H:i:s', $this->nextStatusTime));
+			VidiunLog::debug("Next Status Time: " . date('H:i:s', $this->nextStatusTime));
 		}
 
 		if($this->nextSchedulerStatusTime < time())
@@ -218,7 +218,7 @@ class KGenericScheduler
 			$sendSchedulerStatus = true;
 
 			$this->nextSchedulerStatusTime = time() + $this->schedulerStatusInterval;
-			KalturaLog::debug("Next Scheduler Status Time: " . date('H:i:s', $this->nextSchedulerStatusTime));
+			VidiunLog::debug("Next Scheduler Status Time: " . date('H:i:s', $this->nextSchedulerStatusTime));
 		}
 
 		$indexedTaskConfigs = $this->handleConfigurations($fullCycle, $sendSchedulerStatus);
@@ -235,7 +235,7 @@ class KGenericScheduler
 	 * Otherwise - Cleanup the process. 
 	 */
 	private function handleRunningBatches($indexedTaskConfigs) {
-		$runningBatches = KScheduleHelperManager::loadRunningBatches();
+		$runningBatches = VScheduleHelperManager::loadRunningBatches();
 		
 		foreach($this->runningTasks as $taskName => &$tasks)
 		{
@@ -244,7 +244,7 @@ class KGenericScheduler
 
 			foreach($tasks as $index => &$proc)
 			{
-				/* @var $proc KProcessWrapper */
+				/* @var $proc VProcessWrapper */
 				if($proc->isRunning())
 				{
 					if(isset($runningBatches[$proc->getName()][$proc->getIndex()]))
@@ -302,39 +302,39 @@ class KGenericScheduler
 			{
 				$this->initSingleWorker($taskConfig);
 				if ($lastRunTime)
-					$statuses[] = $this->createStatus($taskConfig, KalturaSchedulerStatusType::RUNNING_BATCHES_LAST_EXECUTION_TIME, $lastRunTime);
+					$statuses[] = $this->createStatus($taskConfig, VidiunSchedulerStatusType::RUNNING_BATCHES_LAST_EXECUTION_TIME, $lastRunTime);
 			}
 
 		
 			$runningTasksCount = $this->numberOfRunningTasks($taskConfig->name);
 			if($fullCycle) {
-				$statuses[] = $this->createStatus($taskConfig, KalturaSchedulerStatusType::RUNNING_BATCHES_COUNT, $runningTasksCount);
-				$statuses[] = $this->createStatus($taskConfig, KalturaSchedulerStatusType::RUNNING_BATCHES_IS_RUNNING, 1);
+				$statuses[] = $this->createStatus($taskConfig, VidiunSchedulerStatusType::RUNNING_BATCHES_COUNT, $runningTasksCount);
+				$statuses[] = $this->createStatus($taskConfig, VidiunSchedulerStatusType::RUNNING_BATCHES_IS_RUNNING, 1);
 			}
 		
 			if($this->shouldExecute($taskConfig))
 			{
 				$this->spawn($taskConfig);
 				if ($lastRunTime)
-					$statuses[] = $this->createStatus($taskConfig, KalturaSchedulerStatusType::RUNNING_BATCHES_LAST_EXECUTION_TIME,  $lastRunTime);
+					$statuses[] = $this->createStatus($taskConfig, VidiunSchedulerStatusType::RUNNING_BATCHES_LAST_EXECUTION_TIME,  $lastRunTime);
 			}
 
 		}
 		
 		if($sendSchedulerStatus)
-			$statuses[] = $this->createSchedulerStatus(KalturaSchedulerStatusType::RUNNING_BATCHES_IS_RUNNING, 1);
+			$statuses[] = $this->createSchedulerStatus(VidiunSchedulerStatusType::RUNNING_BATCHES_IS_RUNNING, 1);
 		
 		if(count($statuses))
-			KScheduleHelperManager::saveStatuses($statuses);
+			VScheduleHelperManager::saveStatuses($statuses);
 		
 		return $indexedTaskConfigs;
 	}
 	
 	/**
-	 * @param KSchedularTaskConfig $taskConfig
+	 * @param VSchedularTaskConfig $taskConfig
 	 * @return boolean
 	 */
-	private function shouldExecute(KSchedularTaskConfig $taskConfig)
+	private function shouldExecute(VSchedularTaskConfig $taskConfig)
 	{
 		$runningBatches = $this->numberOfRunningTasks($taskConfig->name);
 
@@ -346,7 +346,7 @@ class KGenericScheduler
 
 		if ($this->shouldPrintWorkerLog($taskConfig->id))
 		{
-			KalturaLog::debug("Worker [{$taskConfig->name}] id [{$taskConfig->id}] running batches [$runningBatches] max instances [{$taskConfig->maxInstances}]");
+			VidiunLog::debug("Worker [{$taskConfig->name}] id [{$taskConfig->id}] running batches [$runningBatches] max instances [{$taskConfig->maxInstances}]");
 			$this->lastWorkerLog[$taskConfig->id] = time();
 		}
 		if($runningBatches >= $taskConfig->maxInstances)
@@ -377,18 +377,18 @@ class KGenericScheduler
 		return $this->lastRunTime[$taskName];
 	}
 	
-	private function isInitialized(KSchedularTaskConfig $taskConfig)
+	private function isInitialized(VSchedularTaskConfig $taskConfig)
 	{
-		$isJobHandlerWorker = is_subclass_of($taskConfig->type, 'KJobHandlerWorker');
+		$isJobHandlerWorker = is_subclass_of($taskConfig->type, 'VJobHandlerWorker');
 		
 		// If it isn't a job handling worker - there is no need to check for filter
 		if(!$isJobHandlerWorker)
 			return true;
 		
-		return KScheduleHelperManager::checkForFilter($taskConfig->name);
+		return VScheduleHelperManager::checkForFilter($taskConfig->name);
 	}
 	
-	private function spawn(KSchedularTaskConfig $taskConfig)
+	private function spawn(VSchedularTaskConfig $taskConfig)
 	{
 		$taskIndex = $this->getNextAvailableIndex($taskConfig->name, $taskConfig->maxInstances);
 		$taskIndex = intval($taskIndex);
@@ -396,7 +396,7 @@ class KGenericScheduler
 		
 		$this->lastRunTime[$taskConfig->name] = time();
 		
-		KalturaLog::info("Executing $taskConfig->name [$taskIndex]");
+		VidiunLog::info("Executing $taskConfig->name [$taskIndex]");
 		$tasksetPath = $this->schedulerConfig->getTasksetPath();
 		$taskConf = clone $taskConfig;
 		if(array_key_exists($taskConfig->id, $this->queueSizes))
@@ -404,7 +404,7 @@ class KGenericScheduler
 		else 
 			$taskConf->setQueueSize(0);
 		
-		$proc = new KProcessWrapper($taskConfig, $taskIndex);
+		$proc = new VProcessWrapper($taskConfig, $taskIndex);
 		$proc ->init($this->logDir, $this->phpPath, $tasksetPath);
 
 		$this->runningTasks[$taskConfig->name][$taskIndex] = &$proc;
@@ -416,7 +416,7 @@ class KGenericScheduler
 	 * @param int $workerConfiguredId
 	 * @param string $workerName
 	 * @param string $parentVariable
-	 * @return array<KalturaSchedulerConfig>
+	 * @return array<VidiunSchedulerConfig>
 	 */
 	public function createConfigItem(array $data, $workerConfiguredId = null, $workerName = null, $parentVariable = null)
 	{
@@ -435,7 +435,7 @@ class KGenericScheduler
 				continue;
 			}
 
-			$configItem = new KalturaSchedulerConfig();
+			$configItem = new VidiunSchedulerConfig();
 			$configItem->schedulerConfiguredId = $this->schedulerConfig->getId();
 			$configItem->schedulerName = $this->schedulerConfig->getName();
 
@@ -460,16 +460,16 @@ class KGenericScheduler
 	}
 
 	/**
-	 * @param KSchedularTaskConfig $taskConfig
+	 * @param VSchedularTaskConfig $taskConfig
 	 * @param int $type
 	 * @param int $value
-	 * @return KalturaSchedulerStatus
+	 * @return VidiunSchedulerStatus
 	 */
-	private function createStatus(KSchedularTaskConfig $taskConfig, $type, $value)
+	private function createStatus(VSchedularTaskConfig $taskConfig, $type, $value)
 	{
 		$clazz = $taskConfig->type;
 
-		$status = new KalturaSchedulerStatus();
+		$status = new VidiunSchedulerStatus();
 		$status->schedulerConfiguredId = $this->schedulerConfig->getId();
 		$status->workerConfiguredId = $taskConfig->id;
 		$status->type = $type;
@@ -482,11 +482,11 @@ class KGenericScheduler
 	/**
 	 * @param int $type
 	 * @param int $value
-	 * @return KalturaSchedulerStatus
+	 * @return VidiunSchedulerStatus
 	 */
 	private function createSchedulerStatus($type, $value)
 	{
-		$status = new KalturaSchedulerStatus();
+		$status = new VidiunSchedulerStatus();
 		$status->schedulerConfiguredId = $this->schedulerConfig->getId();
 		$status->type = $type;
 		$status->value = $value;
@@ -563,7 +563,7 @@ class KGenericScheduler
 	
 	private function loadRunningTasks() {
 		$taskConfigs = $this->schedulerConfig->getTaskConfigList();
-		$runningBatches = KScheduleHelperManager::loadRunningBatches();
+		$runningBatches = VScheduleHelperManager::loadRunningBatches();
 		
 		foreach($runningBatches as $workerName => $indexes)
 		{
@@ -572,7 +572,7 @@ class KGenericScheduler
 			
 			foreach ($indexes as $taskIndex => $procId) {
 
-				$proc = new KProcessWrapper($taskConfigs[$workerName], $taskIndex);
+				$proc = new VProcessWrapper($taskConfigs[$workerName], $taskIndex);
 				$proc->initMockedProcess($procId);
 				if($proc->isRunning()) {
 					$this->runningTasks[$workerName][$taskIndex] = &$proc;
@@ -585,35 +585,35 @@ class KGenericScheduler
 
 	private function loadCommands()
 	{
-		$commands = KScheduleHelperManager::loadCommands();
+		$commands = VScheduleHelperManager::loadCommands();
 		if(!$commands || !is_array($commands) || !count($commands))
 			return;
 
-//		KalturaLog::info(count($commands) . " commands found");
+//		VidiunLog::info(count($commands) . " commands found");
 
 		$command_results = array();
 		foreach($commands as $command)
 		{
-			if($command instanceof KalturaBatchQueuesStatus)
+			if($command instanceof VidiunBatchQueuesStatus)
 			{
 				$this->handleQueueStatus($command->workerId, $command->size);
 			}
-			elseif($command instanceof KalturaControlPanelCommand)
+			elseif($command instanceof VidiunControlPanelCommand)
 			{
 				$command_results[] = $this->handleCommand($command);
 			}
 			else
 			{
-				KalturaLog::err("command of type " . get_class($command) . " could not be handled");
-				$command_results[] = KalturaControlPanelCommandStatus::FAILED;
+				VidiunLog::err("command of type " . get_class($command) . " could not be handled");
+				$command_results[] = VidiunControlPanelCommandStatus::FAILED;
 			}
 		}
 
 		$cnt = count($command_results);
 		if($cnt)
 		{
-			KalturaLog::info("Sending $cnt command results to the server");
-			KScheduleHelperManager::saveCommandsResults($command_results);
+			VidiunLog::info("Sending $cnt command results to the server");
+			VScheduleHelperManager::saveCommandsResults($command_results);
 		}
 	}
 
@@ -637,38 +637,38 @@ class KGenericScheduler
 				self::onQueueEvent($taskConfig, $size);
 
 				if($size)
-					KalturaLog::info("Worker $taskConfig->name, queue size: $size");
+					VidiunLog::info("Worker $taskConfig->name, queue size: $size");
 			}
 
 			return;
 		}
-		KalturaLog::err("Worker id not found [$workerId]");
+		VidiunLog::err("Worker id not found [$workerId]");
 	}
 
 	/***
 	 * handleCommand
-	 * @param KalturaControlPanelCommand $command
-	 * @return KalturaControlPanelCommand
+	 * @param VidiunControlPanelCommand $command
+	 * @return VidiunControlPanelCommand
 	 */
-	private function handleCommand(KalturaControlPanelCommand $command)
+	private function handleCommand(VidiunControlPanelCommand $command)
 	{
-		KalturaLog::info("Handling command id " . $command->id);
+		VidiunLog::info("Handling command id " . $command->id);
 
 		$description = null;
 		$success = false;
 
 		switch($command->type)
 		{
-			case KalturaControlPanelCommandType::KILL:
+			case VidiunControlPanelCommandType::KILL:
 
-				if(intval($command->targetType) != KalturaControlPanelCommandTargetType::SCHEDULER)
+				if(intval($command->targetType) != VidiunControlPanelCommandTargetType::SCHEDULER)
 				{
-					KalturaLog::info("Scheduler stopping...");
+					VidiunLog::info("Scheduler stopping...");
 					$this->keepRunning = false;
 					$success = true;
 				}
 
-				if(intval($command->targetType) != KalturaControlPanelCommandTargetType::BATCH)
+				if(intval($command->targetType) != VidiunControlPanelCommandTargetType::BATCH)
 				{
 					$description = 'Target type not supported for kill command';
 					$success = $this->killBatch($command->workerName, $command->batchIndex, $description);
@@ -682,13 +682,13 @@ class KGenericScheduler
 
 		if($success)
 		{
-			$command->status = KalturaControlPanelCommandStatus::DONE;
+			$command->status = VidiunControlPanelCommandStatus::DONE;
 			$this->sendStatusNow();
 		}
 		else
 		{
-			KalturaLog::err("Error handling commnad id $command->id: $description");
-			$command->status = KalturaControlPanelCommandStatus::FAILED;
+			VidiunLog::err("Error handling commnad id $command->id: $description");
+			$command->status = VidiunControlPanelCommandStatus::FAILED;
 			$command->errorDescription = $description;
 		}
 
@@ -717,30 +717,30 @@ class KGenericScheduler
 
 		self::onRunningInstancesEvent($taskConfig, count($this->runningTasks[$name]));
 
-		KalturaLog::info("$name [$batchIndex] killed");
+		VidiunLog::info("$name [$batchIndex] killed");
 
 		return true;
 	}
 
-	protected function onQueueEvent(KSchedularTaskConfig $taskConfig, $queueSize)
+	protected function onQueueEvent(VSchedularTaskConfig $taskConfig, $queueSize)
 	{
-		$event = new KBatchEvent();
-		$event->batch_event_type_id = KBatchEvent::EVENT_BATCH_QUEUE;
+		$event = new VBatchEvent();
+		$event->batch_event_type_id = VBatchEvent::EVENT_BATCH_QUEUE;
 		$event->value_1 = $queueSize;
 
 		self::onEvent($event, $taskConfig);
 	}
 
-	protected function onRunningInstancesEvent(KSchedularTaskConfig $taskConfig, $runningInstances)
+	protected function onRunningInstancesEvent(VSchedularTaskConfig $taskConfig, $runningInstances)
 	{
-		$event = new KBatchEvent();
-		$event->batch_event_type_id = KBatchEvent::EVENT_BATCH_RUNNING;
+		$event = new VBatchEvent();
+		$event->batch_event_type_id = VBatchEvent::EVENT_BATCH_RUNNING;
 		$event->value_1 = $runningInstances;
 
 		self::onEvent($event, $taskConfig);
 	}
 
-	protected function onEvent(KBatchEvent $event, KSchedularTaskConfig $taskConfig)
+	protected function onEvent(VBatchEvent $event, VSchedularTaskConfig $taskConfig)
 	{
 		$event->batch_client_version = "1.0";
 		$event->batch_event_time = time();
@@ -751,7 +751,7 @@ class KGenericScheduler
 		$event->location_id = $this->schedulerConfig->getId();
 		$event->host_name = $this->schedulerConfig->getName();
 
-		KDwhClient::send($event);
+		VDwhClient::send($event);
 	}
 
 	private function shouldPrintWorkerLog($taskConfigId)

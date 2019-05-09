@@ -4,7 +4,7 @@
  * @subpackage objects
  */
 
-class KalturaExportCsvJobData extends KalturaJobData
+class VidiunExportCsvJobData extends VidiunJobData
 {
 	/**
 	 * The users name
@@ -33,7 +33,7 @@ class KalturaExportCsvJobData extends KalturaJobData
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -41,13 +41,13 @@ class KalturaExportCsvJobData extends KalturaJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if (is_null($object_to_fill))
 		{
-			throw new KalturaAPIException(KalturaErrors::OBJECT_TYPE_ABSTRACT, "KalturaExportCsvJobData");
+			throw new VidiunAPIException(VidiunErrors::OBJECT_TYPE_ABSTRACT, "VidiunExportCsvJobData");
 		}
 		
 		return parent::toObject($object_to_fill, $props_to_skip);
@@ -62,7 +62,7 @@ class KalturaExportCsvJobData extends KalturaJobData
 		if(is_null($subType))
 			return null;
 		
-		return kPluginableEnumsManager::apiToCore('ExportObjectType', $subType);
+		return vPluginableEnumsManager::apiToCore('ExportObjectType', $subType);
 	}
 	
 	/**
@@ -74,7 +74,7 @@ class KalturaExportCsvJobData extends KalturaJobData
 		if(is_null($subType))
 			return null;
 		
-		return kPluginableEnumsManager::coreToApi('ExportObjectType', $subType);
+		return vPluginableEnumsManager::coreToApi('ExportObjectType', $subType);
 	}
 	
 }

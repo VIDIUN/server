@@ -1,12 +1,12 @@
 <?php
 /**
- * Will run KAsyncConvertCloser
+ * Will run VAsyncConvertCloser
  *
  * @package Scheduler
  * @subpackage Conversion
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncConvertCloser();
+$instance = new VAsyncConvertCloser();
 $instance->run(); 
 $instance->done();

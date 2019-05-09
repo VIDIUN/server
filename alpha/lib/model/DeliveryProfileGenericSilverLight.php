@@ -17,7 +17,7 @@ class DeliveryProfileGenericSilverLight extends DeliveryProfileSilverLight {
 		$pattern = $this->getPattern();
 		if(is_null($pattern))
 			$pattern = '{url}';
-		return kDeliveryUtils::formatGenericUrl($url, $pattern, $this->params);
+		return vDeliveryUtils::formatGenericUrl($url, $pattern, $this->params);
 	}
 }
 

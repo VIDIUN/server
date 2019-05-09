@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage events
  */
-interface kObjectInvalidateCacheEventConsumer extends KalturaEventConsumer
+interface vObjectInvalidateCacheEventConsumer extends VidiunEventConsumer
 {
 	/**
 	 * @param $object

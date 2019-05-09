@@ -4,12 +4,12 @@
  * @subpackage api.objects
  */
 
-class KalturaMediaEsearchExportToCsvJobData extends KalturaExportCsvJobData
+class VidiunMediaEsearchExportToCsvJobData extends VidiunExportCsvJobData
 {
 	/**
 	 * Esearch parameters for the entry search
 	 *
-	 * @var KalturaESearchEntryParams
+	 * @var VidiunESearchEntryParams
 	 */
 	public $searchParams;
 	
@@ -19,7 +19,7 @@ class KalturaMediaEsearchExportToCsvJobData extends KalturaExportCsvJobData
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -27,13 +27,13 @@ class KalturaMediaEsearchExportToCsvJobData extends KalturaExportCsvJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if (is_null($object_to_fill))
 		{
-			throw new KalturaAPIException(KalturaErrors::OBJECT_TYPE_ABSTRACT, "KalturaExportCsvJobData");
+			throw new VidiunAPIException(VidiunErrors::OBJECT_TYPE_ABSTRACT, "VidiunExportCsvJobData");
 		}
 		
 		return parent::toObject($object_to_fill, $props_to_skip);

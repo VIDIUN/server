@@ -4,8 +4,8 @@
  * @subpackage Conversion
  */
 
-require_once '../kOperator.php';
-require_once '../kOperatorSets.php';
+require_once '../vOperator.php';
+require_once '../vOperatorSets.php';
 
 $json = '
 [
@@ -36,7 +36,7 @@ $json = '
 ]';
 
 
-$obj = new kOperatorSets();
+$obj = new vOperatorSets();
 $obj->setSerialized($json);
 
 var_dump($obj);

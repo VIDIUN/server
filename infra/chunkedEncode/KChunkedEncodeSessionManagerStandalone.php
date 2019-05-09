@@ -8,7 +8,7 @@
 	/********************
 	 * Chunked Encoding Session Manager module
 	 */
-	class KChunkedEncodeSessionManagerStandalone extends KBaseChunkedEncodeSessionManager 
+	class VChunkedEncodeSessionManagerStandalone extends VBaseChunkedEncodeSessionManager 
 	{
 		public $processArr = array();	// Chunk process ids array
 		public $audioProcess = null;	// Audio porcess id
@@ -18,13 +18,13 @@
 		 */
 		public static function LoadFromCmdLineArgs(array $argv)
 		{
-			$setup = new KChunkedEncodeSetup();
+			$setup = new VChunkedEncodeSetup();
 			self::parseArgsToSetup($argv,$setup);
 
 				/*
 				 * Otherwise - start Chunked Encode session
 				 */
-			$sessionManager = new KChunkedEncodeSessionManagerStandalone($setup);
+			$sessionManager = new VChunkedEncodeSessionManagerStandalone($setup);
 			return $sessionManager;
 		}
 		
@@ -37,9 +37,9 @@
 				return null;
 			}
 			$sessionData =  unserialize(file_get_contents($sessionFilename));
-			KalturaLog::log("sessionData:".print_r($sessionData,1));
-			$setup = new KChunkedEncodeSetup();
-			$sessionManager = new KChunkedEncodeSessionManagerStandalone($setup);
+			VidiunLog::log("sessionData:".print_r($sessionData,1));
+			$setup = new VChunkedEncodeSetup();
+			$sessionManager = new VChunkedEncodeSessionManagerStandalone($setup);
 			$fldsArr = get_object_vars($sessionData);
 			foreach($fldsArr as $fld=>$val){
 				$sessionManager->$fld = $val;
@@ -61,15 +61,15 @@
 					$this->$fld = $val;
 				}
 
-				KalturaLog::log("sessionData:".print_r($this,1));
-				KalturaLog::log("duration(".$this->chunker->params->duration."), frameDuration(".$this->chunker->params->frameDuration.")\n");
+				VidiunLog::log("sessionData:".print_r($this,1));
+				VidiunLog::log("duration(".$this->chunker->params->duration."), frameDuration(".$this->chunker->params->frameDuration.")\n");
 				return true;
 			}
 
 			$rv = parent::Initialize();
 			if($rv!==true){
 //				$this->SerializeSession();
-//				$this->returnStatus = KChunkedEncodeReturnStatus::InitializeError;
+//				$this->returnStatus = VChunkedEncodeReturnStatus::InitializeError;
 				return $rv;
 			}
 			
@@ -114,9 +114,9 @@
 				}
 				$rv = $this->waitForChunksCompletion();
 				if($rv==false){
-					KalturaLog::log($msgStr="Failed to convert chunks 1(".serialize($this->processArr).")!");
+					VidiunLog::log($msgStr="Failed to convert chunks 1(".serialize($this->processArr).")!");
 					$this->returnMessages[] = $msgStr;
-					$this->returnStatus = KChunkedEncodeReturnStatus::GenerateVideoError;
+					$this->returnStatus = VChunkedEncodeReturnStatus::GenerateVideoError;
 					return false;
 				}
 			}
@@ -135,12 +135,12 @@
 			$chunkData = $this->chunker->GetChunk($chunkIdx);
 			$start = $chunkData->start;
 
-			KalturaLog::log("chunk $chunkIdx:".date("Y-m-d H:i:s"));
+			VidiunLog::log("chunk $chunkIdx:".date("Y-m-d H:i:s"));
 			$rv = $this->startVideoChunkConvert($start, $chunkIdx);
 			if($rv==false) {
-				KalturaLog::log($msgStr="Failed to convert chunk $chunkIdx!");
+				VidiunLog::log($msgStr="Failed to convert chunk $chunkIdx!");
 				$this->returnMessages[] = $msgStr;
-				$this->returnStatus = KChunkedEncodeReturnStatus::GenerateVideoError;
+				$this->returnStatus = VChunkedEncodeReturnStatus::GenerateVideoError;
 				return false;
 			}
 
@@ -154,13 +154,13 @@
 		 */
 		protected function generateVideoFinish() 
 		{
-			KalturaLog::log("Inside");
+			VidiunLog::log("Inside");
 			if(count($this->processArr)!=0) {
 				$rv = $this->waitForChunksCompletion();
 				if($rv==false){
-					KalturaLog::log($msgStr="Failed to convert chunks 2(".serialize($this->processArr).")!");
+					VidiunLog::log($msgStr="Failed to convert chunks 2(".serialize($this->processArr).")!");
 					$this->returnMessages[] = $msgStr;
-					$this->returnStatus = KChunkedEncodeReturnStatus::GenerateVideoError;
+					$this->returnStatus = VChunkedEncodeReturnStatus::GenerateVideoError;
 					return false;
 				}
 			}
@@ -191,9 +191,9 @@
 			if($rv) {
 				$this->audioProcess = $this->generateAudioStream();
 				if($this->audioProcess==false) {
-					KalturaLog::log($msgStr="Audio convert: FAILED!");
+					VidiunLog::log($msgStr="Audio convert: FAILED!");
 					$this->returnMessages[] = $msgStr;
-					$this->returnStatus = KChunkedEncodeReturnStatus::GenerateAudioError;
+					$this->returnStatus = VChunkedEncodeReturnStatus::GenerateAudioError;
 					return false;
 				}
 			}
@@ -208,18 +208,18 @@
 			if(!(isset($this->audioProcess) && $this->audioProcess!=0))
 				return true;
 
-			KalturaLog::log("Audio convert: waiting ...");
+			VidiunLog::log("Audio convert: waiting ...");
 			$mergedFilenameAudio = $this->chunker->getSessionName("audio");
-			KProcessExecutionData::waitForCompletion($this->audioProcess);
-			$execData = new KProcessExecutionData($this->audioProcess, $mergedFilenameAudio.".log");
+			VProcessExecutionData::waitForCompletion($this->audioProcess);
+			$execData = new VProcessExecutionData($this->audioProcess, $mergedFilenameAudio.".log");
 			if($execData->exitCode!=0) {
-				KalturaLog::log($msgStr="Audio convert: FAILED, exitCode($execData->exitCode)!");
+				VidiunLog::log($msgStr="Audio convert: FAILED, exitCode($execData->exitCode)!");
 				$this->returnMessages[] = $msgStr;
-				$this->returnStatus = KChunkedEncodeReturnStatus::GenerateAudioError;
+				$this->returnStatus = VChunkedEncodeReturnStatus::GenerateAudioError;
 				return false;
 			}
 			$this->audioProcess = 0;
-			KalturaLog::log("Audio convert: OK!");
+			VidiunLog::log("Audio convert: OK!");
 			
 			$this->SerializeSession();
 			
@@ -250,7 +250,7 @@
 
 			$lastLine=exec($cmdLine , $outputArr, $rv);
 			if($rv!=0) {
-				KalturaLog::log("No other chunk sessions (rv:$rv).");
+				VidiunLog::log("No other chunk sessions (rv:$rv).");
 			}
 			$chunkedSesssionsArr = array();
 			$fallbackSesssionsArr = array();
@@ -344,7 +344,7 @@
 			$msgStr = "maxConcurrent($newConcurrency),sessions($chunkedSesssionsCnt),chunks($allChunks),this($thisChunks),fallbacks($fallbackSesssionsCnt),".serialize($chunkedSesssionsArr);
 			if(isset($additional))
 				$msgStr.=",added";
-			KalturaLog::log($msgStr);
+			VidiunLog::log($msgStr);
 			return $newConcurrency;
 		}
 
@@ -372,7 +372,7 @@
 				if($processCnt<$this->chunker->GetMaxChunks()) {
 					$concurrent = $this->evaluateConcurrency();
 					if($runningCnt<$concurrent) {
-						KalturaLog::log("Available(".($concurrent-$runningCnt).") processing slots (runningCnt:$runningCnt, maxConcurrent:$concurrent)");
+						VidiunLog::log("Available(".($concurrent-$runningCnt).") processing slots (runningCnt:$runningCnt, maxConcurrent:$concurrent)");
 						break;
 					}
 				}
@@ -384,14 +384,14 @@
 					// If none of the processes got finished and there are still running process - sleep for a while ...
 					// otherwise - get out to run a new chunk;
 				if($runningCnt==0) {
-					KalturaLog::log("Finished - No running processes!!");
+					VidiunLog::log("Finished - No running processes!!");
 					break;
 				}
-				KalturaLog::log("Running($runningCnt=>".implode(',',$runningArr)."),Pending(".$this->pendingChunksCount().")");
+				VidiunLog::log("Running($runningCnt=>".implode(',',$runningArr)."),Pending(".$this->pendingChunksCount().")");
 				if($this->getChunkArrFileStatData()==0)
 					sleep($sleepTime);
 			}
-			KalturaLog::log("Running($runningCnt=>".implode(',',$runningArr)."),Pending(".$this->pendingChunksCount().")");
+			VidiunLog::log("Running($runningCnt=>".implode(',',$runningArr)."),Pending(".$this->pendingChunksCount().")");
 			$this->processArr = $runningArr;
 			return true;
 		}
@@ -402,7 +402,7 @@
 		protected function monitorFinished(&$runningArr)
 		{
 			foreach($runningArr as $idx=>$process) {
-				if(KProcessExecutionData::isProcessRunning($process)==true){
+				if(VProcessExecutionData::isProcessRunning($process)==true){
 					continue;
 				}
 				
@@ -410,15 +410,15 @@
 				{
 					$logFileName = $this->chunker->getChunkName($idx,".log");
 					$executionData->parseLogFile($logFileName);
-					KalturaLog::log(print_r($executionData,1));
+					VidiunLog::log(print_r($executionData,1));
 				}
 				unset($runningArr[$idx]);
 				if($executionData->exitCode!=0) {
-					KalturaLog::log("Failed to convert chunk($idx),process($process)==>exitCode($executionData->exitCode)!");
+					VidiunLog::log("Failed to convert chunk($idx),process($process)==>exitCode($executionData->exitCode)!");
 					$this->processArr = $runningArr;
 					return false;
 				}
-				KalturaLog::log("chunk($idx),process($process)==>exitCode($executionData->exitCode)");
+				VidiunLog::log("chunk($idx),process($process)==>exitCode($executionData->exitCode)");
 				break;
 			}
 			return true;
@@ -434,7 +434,7 @@
 			$cmdLine = "$executionScript \"time $cmdLine \" >> $logFile 2>&1 ";
 			$started = time();
 			file_put_contents($logFile, "Started:".date('Y-m-d H:i:s', $started)."\n");
-			KalturaLog::log("cmdLine:\n$cmdLine\n");
+			VidiunLog::log("cmdLine:\n$cmdLine\n");
 			return parent::executeCmdline($cmdLine);
 		}
 
@@ -444,7 +444,7 @@
 		protected function startVideoChunkConvert($start, $chunkIdx)
 		{
 			$chunkFilename = $this->chunker->getChunkName($chunkIdx,"base");
-			KalturaLog::log("start($start), chunkIdx($chunkIdx), chunkFilename($chunkFilename) :".date("Y-m-d H:i:s"));
+			VidiunLog::log("start($start), chunkIdx($chunkIdx), chunkFilename($chunkFilename) :".date("Y-m-d H:i:s"));
 
 			$cmdLine = $this->chunker->BuildVideoCommandLine($start, $chunkIdx);
 			$cmdLine = $this->videoCmdLines[$chunkIdx];
@@ -453,10 +453,10 @@
 			$cmdLine = str_replace("&& ", "&& time ", $cmdLine);
 			
 			$process = $this->executeCmdline($cmdLine, "$chunkFilename.log");
-			$execData = new KProcessExecutionData($process);
+			$execData = new VProcessExecutionData($process);
 			$this->chunkExecutionDataArr[$chunkIdx] = $execData;
 			if($process===false) {
-				KalturaLog::log("Failed to convert chunk $chunkIdx!");
+				VidiunLog::log("Failed to convert chunk $chunkIdx!");
 				return false;
 			}
 
@@ -470,14 +470,14 @@
 		 */
 		protected function generateAudioStream()
 		{
-			KalturaLog::log(date("Y-m-d H:i:s"));
+			VidiunLog::log(date("Y-m-d H:i:s"));
 			$cmdLine = $this->audioCmdLines[0];
 			if(!isset($cmdLine))
 				return null;
 
 			$mergedFilenameAudio = $this->chunker->getSessionName("audio");
 			$process = $this->executeCmdline($cmdLine, "$mergedFilenameAudio.log");
-			KalturaLog::log("pid:".print_r($process,1));
+			VidiunLog::log("pid:".print_r($process,1));
 			return $process;
 		}
 
@@ -511,7 +511,7 @@
 			$chunkFileName = $this->chunker->getChunkName($idx);
 			$statFileName = "$chunkFileName.stat";
 
-			$stat = new KChunkFramesStat($chunkFileName, $this->chunker->setup->ffprobeBin, $this->chunker->setup->ffmpegBin);
+			$stat = new VChunkFramesStat($chunkFileName, $this->chunker->setup->ffprobeBin, $this->chunker->setup->ffmpegBin);
 			$this->chunker->updateChunkFileStatData($idx, $stat); 
 			$jsonStr = json_encode($stat);
 			if(!file_exists($statFileName)){
@@ -572,14 +572,14 @@
 					unset($argv[$idx]);
 				}
 			}
-			KalturaLog::log($setup);
+			VidiunLog::log($setup);
 
 			if(!isset($setup->startFrom)) 		$setup->startFrom = 0;
 			if(!isset($setup->createFolder))	$setup->createFolder = 1;
 			
 			$setup->cmd = implode(' ',$argv);
 			
-			KalturaLog::log("Setup:".print_r($setup,1));
+			VidiunLog::log("Setup:".print_r($setup,1));
 		}
 
 		/* ---------------------------
@@ -591,14 +591,14 @@
 //				$argv[$idx] = '&&';
 //			}
 
-			KalturaLog::log("concurrent:$concurrent, concurrentMin:$concurrentMin, sessionName:$sessionName, cmdLine:$cmdLine");
+			VidiunLog::log("concurrent:$concurrent, concurrentMin:$concurrentMin, sessionName:$sessionName, cmdLine:$cmdLine");
 			
-			$setup = new KChunkedEncodeSetup;
+			$setup = new VChunkedEncodeSetup;
 			$setup->concurrent = $concurrent;
 			$setup->cleanUp = 0;
 			$setup->cmd = $cmdLine;
 			
-			$session = new KChunkedEncodeSessionManagerStandalone($setup, $sessionName);
+			$session = new VChunkedEncodeSessionManagerStandalone($setup, $sessionName);
 			
 			if(($rv=$session->Initialize())!=true) {
 				$session->Report();

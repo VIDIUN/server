@@ -3,7 +3,7 @@
  * @package plugins.dropFolder
  * @subpackage api.enum
  */
-class KalturaDropFolderType extends KalturaDynamicEnum implements DropFolderType
+class VidiunDropFolderType extends VidiunDynamicEnum implements DropFolderType
 {
 	public static function getEnumClass()
 	{

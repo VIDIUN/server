@@ -5,16 +5,16 @@
  * @package Scheduler
  * @subpackage Conversion.engines
  */
-class KOperationEngineOldVersionWrapper extends KOperationEngine
+class VOperationEngineOldVersionWrapper extends VOperationEngine
 {
 	/**
-	 * @var KConversionEngine
+	 * @var VConversionEngine
 	 */
 	protected $convertor;
 	
-	public function __construct($type, KalturaConvartableJobData $data)
+	public function __construct($type, VidiunConvartableJobData $data)
 	{
-		$this->convertor = KConversionEngine::getInstance($type);
+		$this->convertor = VConversionEngine::getInstance($type);
 		$this->logFilePath = $data->destFileSyncLocalPath . ".log";
 	}
 
@@ -22,7 +22,7 @@ class KOperationEngineOldVersionWrapper extends KOperationEngine
 	{
 		list($ok, $errorMessage) = $this->convertor->convert($this->data);
 		if(!$ok)
-			throw new KOperationEngineException($errorMessage);
+			throw new VOperationEngineException($errorMessage);
 	}
 	
 	/**
@@ -34,7 +34,7 @@ class KOperationEngineOldVersionWrapper extends KOperationEngine
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KOperationEngine::getLogFilePath()
+	 * @see VOperationEngine::getLogFilePath()
 	 */
 	public function getLogFilePath()
 	{
@@ -42,7 +42,7 @@ class KOperationEngineOldVersionWrapper extends KOperationEngine
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KOperationEngine::getLogData()
+	 * @see VOperationEngine::getLogData()
 	 */
 	public function getLogData()
 	{

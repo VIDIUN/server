@@ -14,17 +14,17 @@
   </session>
   <multirequest>
     <request service="metadataProfile" action="listAction" plugin="metadata" partnerId="-2">
-      <filter objectType="KalturaMetadataProfileFilter">
+      <filter objectType="VidiunMetadataProfileFilter">
         <partnerIdEqual>0</partnerIdEqual>
-        <systemNameEqual>Kaltura-QnA</systemNameEqual>
+        <systemNameEqual>Vidiun-QnA</systemNameEqual>
       </filter>
-      <pager objectType="KalturaFilterPager">
+      <pager objectType="VidiunFilterPager">
         <pageSize>1</pageSize>
       </pager>
     </request>
     <request service="metadataProfile" action="update" plugin="metadata" partnerId="-2">
       <id>{1:result:objects:0:id}</id>
-      <metadataProfile objectType="KalturaMetadataProfile"></metadataProfile>
+      <metadataProfile objectType="VidiunMetadataProfile"></metadataProfile>
       <xsdData path="../../../base/scripts/init_data/metadata_profile_schemas/QandA_default_schema.xml">
       </xsdData>
     </request>

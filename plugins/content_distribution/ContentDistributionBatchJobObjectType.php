@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class ContentDistributionBatchJobObjectType implements IKalturaPluginEnum, BatchJobObjectType
+class ContentDistributionBatchJobObjectType implements IVidiunPluginEnum, BatchJobObjectType
 {
 	const ENTRY_DISTRIBUTION		= "EntryDistribution";
 	

@@ -3,6 +3,6 @@
  * @package plugins.httpNotification
  * @subpackage api.filters
  */
-class KalturaHttpNotificationTemplateFilter extends KalturaHttpNotificationTemplateBaseFilter
+class VidiunHttpNotificationTemplateFilter extends VidiunHttpNotificationTemplateBaseFilter
 {
 }

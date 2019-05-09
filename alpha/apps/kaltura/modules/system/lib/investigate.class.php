@@ -54,12 +54,12 @@ class investigate
 		"4" => "ENTRY_BLOCK",
 		"5" => "ENTRY_UPDATE",
 		"6" => "ENTRY_UPDATE_THUMBNAIL",
-		"11" => "KSHOW_ADD",
-		"12" => "KSHOW_UPDATE_INFO",
-		"13" => "KSHOW_DELETE",
-		"14" => "KSHOW_UPDATE_PERMISSIONS",
-		"15" => "KSHOW_RANK",
-		"16" => "KSHOW_BLOCK");
+		"11" => "VSHOW_ADD",
+		"12" => "VSHOW_UPDATE_INFO",
+		"13" => "VSHOW_DELETE",
+		"14" => "VSHOW_UPDATE_PERMISSIONS",
+		"15" => "VSHOW_RANK",
+		"16" => "VSHOW_BLOCK");
 	
 	private static $not_result_texts = array(
 		"0" => "OK", 
@@ -236,8 +236,8 @@ class investigate
 			"<td width='50px'>Tags</td>" . 
 			"<td width='50px'>Admin tags</td>" .
 			"<td title='plays / views'>P/V</td>".
-			"<td width='50px'>Kshow Id</td>".
-			"<td>Kuser Id</td>".
+			"<td width='50px'>Vshow Id</td>".
+			"<td>Vuser Id</td>".
 			"<td title='" . self::printEntryStatusStr() . "'>Status</td>".
 			"<td title='" . self::printEntryTypeStr() . "'>Type</td>".
 			"<td width='40px'>Media Type</td>".
@@ -260,21 +260,21 @@ class investigate
 	}
 	
 	
-	public static function printEntry ( $entry , $create_link = false , $kshow = null , $text = null )
+	public static function printEntry ( $entry , $create_link = false , $vshow = null , $text = null )
 	{
 		if ( $entry === NULL )	{	return ""; 	}
 		
-		if ( $kshow != null )
+		if ( $vshow != null )
 		{
 			if ( $entry instanceof entry )
 			{
-				$entry->setKshow ( $kshow );
+				$entry->setVshow ( $vshow );
 			}
 			else if ( $entry instanceof genericObjectWrapper ) 
 			{
-				$entry->getWrappedObj()->setKshow ( $kshow );
+				$entry->getWrappedObj()->setVshow ( $vshow );
 			}
-			//$entry->setKshowId ( $kshow->getId() );
+			//$entry->setVshowId ( $vshow->getId() );
 		}
 		
 		if ( $entry instanceof entry )
@@ -282,7 +282,7 @@ class investigate
 		
 		$id_partner_id = $entry->id . "(" . $entry->partnerId . ")<br>" . $entry->intId;
 			
-		$kshow_name = (  $entry->kshow ? $entry->kshow->name : "" );
+		$vshow_name = (  $entry->vshow ? $entry->vshow->name : "" );
 		
 		$thumb_url = $entry->thumbnailUrl; 
 		$str = "" .
@@ -293,8 +293,8 @@ class investigate
 			'<td>' . htmlentities( $entry->Tags , ENT_COMPAT  , "UTF-8" ). ' </td>'.
 			'<td>' . htmlentities( $entry->AdminTags , ENT_COMPAT  , "UTF-8" ). ' </td>'.
 			'<td>' . "p:" . $entry->plays . "<br>v: " . $entry->views . ' </td>'.
-			'<td >' . "<a href='" . url_for ( "/system" ) . "/investigate?kshow_id=" . $entry->KshowId  . "'>" . $entry->KshowId . " , " . $kshow_name . '</a></td>' .
-			'<td>' . $entry->KuserId . ", " . ( $entry->kuser ? $entry->kuser->screenName : "" ). '</td>'.
+			'<td >' . "<a href='" . url_for ( "/system" ) . "/investigate?vshow_id=" . $entry->VshowId  . "'>" . $entry->VshowId . " , " . $vshow_name . '</a></td>' .
+			'<td>' . $entry->VuserId . ", " . ( $entry->vuser ? $entry->vuser->screenName : "" ). '</td>'.
 			'<td style="background-color:' . self::entryStatusColor ( $entry->Status) . '">' . self::formatEntryStatus ( $entry->Status ) . '</td>'.
 			'<td>' . self::formatEntryType(  $entry->type  ) . '</td>'.
 			'<td>' . $entry->mediaType .'</td>'.
@@ -372,7 +372,7 @@ file_sizeint(11)
 
 	public static function printFileSync ( $fs )
 	{
-		$local_file = $fs->getDc() == kDataCenterMgr::getCurrentDcId() ;
+		$local_file = $fs->getDc() == vDataCenterMgr::getCurrentDcId() ;
 		 
 		$link_id = $fs->getLinkedId();
 		$link_str = $link_id ? "style='cursor:pointer' title='click to view fileSync for link' onclick='toggleFileSyncLink($link_id,event)'" : "";
@@ -486,7 +486,7 @@ file_sizeint(11)
 	
 	private static $trackEntryParams =  array ( 
     "id",    "track_event_type_id",   "created_at",    "updated_at",   "ps_version",    "context",    "partner_id",    "entry_id",    "host_name",    "uid",
-    "track_event_status_id",    "changed_properties",    "param_1_str",    "param_2_str",    "param_3_str",    "ks",
+    "track_event_status_id",    "changed_properties",    "param_1_str",    "param_2_str",    "param_3_str",    "vs",
     "description",  "user_ip" ,
 	);
 	
@@ -562,7 +562,7 @@ file_sizeint(11)
 		return $trs;		
 	}	
 	
-	public static function printKshowHeader (  )
+	public static function printVshowHeader (  )
 	{
 		$str = "<tr><td>Id(pid)</td>" .
 			"<td>Name</td>" . 
@@ -589,36 +589,36 @@ file_sizeint(11)
 		return $str;
 	}	
 	
-	public static function printKshow ( $kshow )
+	public static function printVshow ( $vshow )
 	{
-		if ( $kshow === NULL )	{	return ""; 	}
+		if ( $vshow === NULL )	{	return ""; 	}
 		
-		if ( $kshow instanceof kshow )
-			$kshow = new genericObjectWrapper ( $kshow  , true );
+		if ( $vshow instanceof vshow )
+			$vshow = new genericObjectWrapper ( $vshow  , true );
 			
-		$id_partner_id = $kshow->id . "(" . $kshow->partnerId . ")";
+		$id_partner_id = $vshow->id . "(" . $vshow->partnerId . ")";
 			
 		$str = "" .
 			"<td>" . $id_partner_id . "</td>".
-			"<td>" . $kshow->name . "</td>" . 
-			"<td>" . $kshow->producerId . "</td>".
-			"<td>" . htmlentities( $kshow->tags ). "</td>".
-			"<td>" . self::formatEntryType( $kshow->type ). "</td>".
-			"<td>" . $kshow->mediaType . "</td>".
-			'<td><img width="100" height="80"	src="' . $kshow->ThumbnailPath . '"></td>'.
-			"<td>" . $kshow->status . "</td>" .
-			"<td>" . $kshow->views . "</td>".	
-			"<td>" . $kshow->votes . "</td>".
-			"<td>" . $kshow->comments . "</td>".
-			"<td>" . $kshow->favorites . "</td>".
-			"<td>@@" . $kshow->rank . "</td>".
-			"<td>" . $kshow->entries . "</td>".
-			"<td>" . $kshow->lengthInMsecs . "</td>".
-			"<td>" . $kshow->viewPermissions . "(" . $kshow->viewPassword . ")</td>".
-			"<td>" . $kshow->contribPermissions . "(" . $kshow->contribPassword . ")</td>".
-			"<td>" . $kshow->editPermissions . "(" . $kshow->editPassword . ")</td>".
-			"<td>" . $kshow->createdAt . "</td>".
-			"<td>" . $kshow->updatedAt . "</td>";
+			"<td>" . $vshow->name . "</td>" . 
+			"<td>" . $vshow->producerId . "</td>".
+			"<td>" . htmlentities( $vshow->tags ). "</td>".
+			"<td>" . self::formatEntryType( $vshow->type ). "</td>".
+			"<td>" . $vshow->mediaType . "</td>".
+			'<td><img width="100" height="80"	src="' . $vshow->ThumbnailPath . '"></td>'.
+			"<td>" . $vshow->status . "</td>" .
+			"<td>" . $vshow->views . "</td>".	
+			"<td>" . $vshow->votes . "</td>".
+			"<td>" . $vshow->comments . "</td>".
+			"<td>" . $vshow->favorites . "</td>".
+			"<td>@@" . $vshow->rank . "</td>".
+			"<td>" . $vshow->entries . "</td>".
+			"<td>" . $vshow->lengthInMsecs . "</td>".
+			"<td>" . $vshow->viewPermissions . "(" . $vshow->viewPassword . ")</td>".
+			"<td>" . $vshow->contribPermissions . "(" . $vshow->contribPassword . ")</td>".
+			"<td>" . $vshow->editPermissions . "(" . $vshow->editPassword . ")</td>".
+			"<td>" . $vshow->createdAt . "</td>".
+			"<td>" . $vshow->updatedAt . "</td>";
 		
 		return $str;
 	}	

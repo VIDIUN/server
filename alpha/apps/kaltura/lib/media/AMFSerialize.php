@@ -56,9 +56,9 @@ class FLV_Util_AMFSerialize {
         {
             // find out if the array is numeric or associative
             $numeric = true;
-            foreach ( $var as $k=>$v )
+            foreach ( $var as $v=>$v )
             {
-                if (!is_numeric($k))
+                if (!is_numeric($v))
                 {
                     $numeric = false;
                     break;
@@ -75,9 +75,9 @@ class FLV_Util_AMFSerialize {
             } else {
 
                 $data = ($skipMark?'':"\x08") . pack('N', count($var));             
-                foreach ( $var as $k=>$v )
+                foreach ( $var as $v=>$v )
                 {
-                    $data .= $this->serialize((string)$k, true);
+                    $data .= $this->serialize((string)$v, true);
                     $data .= $this->serialize($v);
                 }
                 // end of sequence mark : empty string and 0x09 byte

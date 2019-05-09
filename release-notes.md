@@ -158,8 +158,8 @@ None
 	In case your local.ini file contains a section named "skip_sphinx_repetitive_updates" & "skip_elastic_repetitive_updates" it now needs to moved to a new map.
 	Please make sure to move the values under those section to new map's called "skip_sphinx_repetitive_updates" & "skip_elastic_repetitive_updates".
 	New file names should be: 
-		/opt/kaltura/app/configurations/skip_sphinx_repetitive_updates.ini
-		/opt/kaltura/app/configurations/skip_elastic_repetitive_updates.ini
+		/opt/vidiun/app/configurations/skip_sphinx_repetitive_updates.ini
+		/opt/vidiun/app/configurations/skip_elastic_repetitive_updates.ini
 
 ### Deployment scripts ###
 	None.
@@ -174,7 +174,7 @@ None.
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/2019_04_17_deploy_audio_description_flavor_params.php
+	  php /opt/vidiun/app/deployment/updates/scripts/2019_04_17_deploy_audio_description_flavor_params.php
 
 #### Known Issues & Limitations ####
 None
@@ -191,11 +191,11 @@ None
 
 First replace all tokens in the XML file below and remove ".template" from the fle name:
 
-    /opt/kaltura/app/deployment/updates/scripts/xml/2019_04_11_updateQNAResponseProfile_addDeleted.template.xml
+    /opt/vidiun/app/deployment/updates/scripts/xml/2019_04_11_updateQNAResponseProfile_addDeleted.template.xml
 
 Run deployment script:
 
-    php /opt/kaltura/app/deployment/updates/scripts/2019_04_11_update_qna_metadata_profile_add_deleted.php
+    php /opt/vidiun/app/deployment/updates/scripts/2019_04_11_update_qna_metadata_profile_add_deleted.php
 
 
 # Naos 14.18.0 #
@@ -211,15 +211,15 @@ Run deployment script:
 
 #### Deployment Scripts ####
 
-		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2019_04_10_alter_batch_job_lock_index.sql
+		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2019_04_10_alter_batch_job_lock_index.sql
 		
-		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2019_04_10_alter_drop_folder_index.sql
+		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2019_04_10_alter_drop_folder_index.sql
 		
-		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2019_04_10_alter_entry_vendor_task_index.sql
+		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2019_04_10_alter_entry_vendor_task_index.sql
 		
-		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2019_04_10_alter_schedule_event_index.sql
+		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2019_04_10_alter_schedule_event_index.sql
 		
-		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2019_04_10_alter_server_node_index.sql
+		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2019_04_10_alter_server_node_index.sql
     
 
 ## Allowing capture application use list-feature-status action ##
@@ -232,7 +232,7 @@ None
 ### Deployment scripts ###
 Run deployment scripts:
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2019_04_10_update_capture_permission.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2019_04_10_update_capture_permission.php
 
 ## making userEntry bulk delete work with bulk batch job ##
  - Issue Type: Task
@@ -258,9 +258,9 @@ None
 
 Run deployment script:
 
-    php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2019_04_01_update_annotation_permission.php
+    php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2019_04_01_update_annotation_permission.php
 
-## Update "comment added" KMS notification body - fix the link ##
+## Update "comment added" VMS notification body - fix the link ##
  - Issue Type: Bugfix
  - Issue IDs: PSVAMB-6933
 
@@ -271,11 +271,11 @@ None
 
 First replace all tokens in the XML file below and remove ".template" from the fle name:
 
-    /opt/kaltura/app/deployment/updates/scripts/xml/notifications/2019_04_01_fix_comment_notification_template.template.xml
+    /opt/vidiun/app/deployment/updates/scripts/xml/notifications/2019_04_01_fix_comment_notification_template.template.xml
 
 Run deployment script:
 
-    php /opt/kaltura/app/deployment/updates/scripts/2019_04_01_fix_comment_notification_template.php
+    php /opt/vidiun/app/deployment/updates/scripts/2019_04_01_fix_comment_notification_template.php
 
 # Naos 14.17.0 #
 
@@ -285,14 +285,14 @@ Run deployment script:
 
 ### Configuration ###
  Add the following enabled workers and worker configuration:
-	enabledWorkers.KAsyncReportExport = XXXX (Where XXX is the amount of workers you want to run)
+	enabledWorkers.VAsyncReportExport = XXXX (Where XXX is the amount of workers you want to run)
 	
-	[KAsyncReportExport : JobHandlerWorker]
+	[VAsyncReportExport : JobHandlerWorker]
 	id                    = 730
 	friendlyName          = Reports export
-	type                  = KAsyncReportExport
+	type                  = VAsyncReportExport
 	maximumExecutionTime  = 12000
-	scriptPath		     = batches/ReportExport/KAsyncReportExportExe.php
+	scriptPath		     = batches/ReportExport/VAsyncReportExportExe.php
 	params.localTempPath  = @TMP_DIR@/reports
 	params.sharedTempPath = @WEB_DIR@/apptemp-shared/reports
 	
@@ -335,29 +335,29 @@ php deployment/updates/scripts/add_permissions/2019_03_10_add_group_permission.p
  Update batch.ini file with the following changes:
 	
 	Remove the following enabled workers and worker configuration:
-	KAsyncUsersCsv
-	KAsyncEntryVendorTasksCsv
+	VAsyncUsersCsv
+	VAsyncEntryVendorTasksCsv
 	
 	Add the following enabled workers and worker configuration:
-	enabledWorkers.KAsyncExportCsv = XXXX (Where XXX is the amount of workers you want to run)
+	enabledWorkers.VAsyncExportCsv = XXXX (Where XXX is the amount of workers you want to run)
 	
-	[KAsyncExportCsv : JobHandlerWorker]
+	[VAsyncExportCsv : JobHandlerWorker]
 	id                      = 690
 	friendlyName            = Export Csv
-	type                    = KAsyncExportCsv
+	type                    = VAsyncExportCsv
 	params.localTempPath    = @TMP_DIR@/exportcsv
 	params.sharedTempPath   = @WEB_DIR@/tmp/exportcsv
-	scriptPath              = batches/ExportCsv/kAsyncExportCsvExe.php
+	scriptPath              = batches/ExportCsv/vAsyncExportCsvExe.php
 	maximumExecutionTime    = 3600
 	
 	Make sure to modify @TMP_DIR@ && @WEB_DIR@ settings
 
 ### Deployment Scripts ### 
-     php /opt/kaltura/app/deployment/base/scripts/installPlugins.php 
-     php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2019_03_17_add_exportcsv_permissions_and_items.php
+     php /opt/vidiun/app/deployment/base/scripts/installPlugins.php 
+     php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2019_03_17_add_exportcsv_permissions_and_items.php
      php deployment/updates/scripts/add_permissions/2019_03_17_add_esearch_permissions_and_items.php
 
-## Change wording and support empty instance_id metadata in KMS email notifications ##
+## Change wording and support empty instance_id metadata in VMS email notifications ##
  - Issue Type: Task
  - Issue IDs: PSVAMB-4944, PSVAMB-4967
 
@@ -365,7 +365,7 @@ php deployment/updates/scripts/add_permissions/2019_03_10_add_group_permission.p
 None
 
 ### Deployment scripts ###
-php /opt/kaltura/app/deployment/updates/scripts/2019_01_15_update_unique_mediaspace_notifications_templates.php
+php /opt/vidiun/app/deployment/updates/scripts/2019_01_15_update_unique_mediaspace_notifications_templates.php
 
 
 ## eSearch - partial search for User::FirstName and User::LastName ##
@@ -376,10 +376,10 @@ php /opt/kaltura/app/deployment/updates/scripts/2019_01_15_update_unique_mediasp
 None
 
 ### Deployment scripts ###
-OnPrem - reindex kusers index in elastic:
-1) Remove old index - delete kaltura_kuser
-2) Create the index - curl -XPUT '{elasticHost}:{elasticPort}/kaltura_kuser' --data-binary "@kuser_mapping.json"
-3) Index the users - php /opt/kaltura/app/deployment/base/scripts/elastic/populateElasticKusers.php
+OnPrem - reindex vusers index in elastic:
+1) Remove old index - delete vidiun_vuser
+2) Create the index - curl -XPUT '{elasticHost}:{elasticPort}/vidiun_vuser' --data-binary "@vuser_mapping.json"
+3) Index the users - php /opt/vidiun/app/deployment/base/scripts/elastic/populateElasticVusers.php
 	 
 ## keep user search in recent searches ##
  - Issue Type: Task
@@ -387,7 +387,7 @@ OnPrem - reindex kusers index in elastic:
 
 ### Configuration ###
 add to elastic.ini under [search_history_collect_objects]:
-2 = kuser
+2 = vuser
 
 # Naos 14.16.0 #
 ## GroupUser - Count number of users in group on the group object ##
@@ -408,7 +408,7 @@ Run deployment script:
 Add BooleanNotification to your plugins.ini
 
 ### Deployment scripts ###
-php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
+php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
 
 
 ## Reach - Support extending accessKey##
@@ -422,7 +422,7 @@ None
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2019_03_05_add_reach_extendAccessKey_action.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2019_03_05_add_reach_extendAccessKey_action.php
 
 #### Known Issues & Limitations ####
 
@@ -441,7 +441,7 @@ None
 			
 Run deployment script:
 		
-		- php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2019_02_28_update_groupuser_permission.php
+		- php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2019_02_28_update_groupuser_permission.php
 
 # Naos 14.14.0 #
 
@@ -458,11 +458,11 @@ None
 	
 First replace all tokens in the XML file below and remove ".template" from the fle name:
 		
-		- /opt/kaltura/app/deployment/updates/scripts/xml/responseProfiles/2019_02_14_update_reach_vendor_response_profiles.template.xml
+		- /opt/vidiun/app/deployment/updates/scripts/xml/responseProfiles/2019_02_14_update_reach_vendor_response_profiles.template.xml
 		
 Run deployment script:
 		
-		- php /opt/kaltura/app/deployment/updates/scripts/2019_02_14_update_reach_vendor_response_profile.php
+		- php /opt/vidiun/app/deployment/updates/scripts/2019_02_14_update_reach_vendor_response_profile.php
 
 #### Known Issues & Limitations ####
 
@@ -474,12 +474,12 @@ None.
  - Issue ID: No-Plat
 
 ### Configuration ###
-update configurations/sphinx/kaltura.conf file and add the following to kaltura_schedule_event:
+update configurations/sphinx/vidiun.conf file and add the following to vidiun_schedule_event:
 rt_field = sphinx_match_optimizations
 
 ### Deployment scripts ###
 	
-ReIndex and repopulate kaltura_schedule_event table in sphinx.
+ReIndex and repopulate vidiun_schedule_event table in sphinx.
 
 #### Known Issues & Limitations ####
 
@@ -492,7 +492,7 @@ None.
 - Issue ID: PLAT-9596
 
 ### Deployment scripts ###
-php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_12_11_confmaps_service.php
+php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_12_11_confmaps_service.php
 
 
 ## Move maps to dynamic configuration ##
@@ -526,10 +526,10 @@ ScheduleEventResource list will filter by default events the have conflict with 
 
 ### Configuration ###
     First replcae all tokens from the XML files below and remove ".template" from the file name:
-	/opt/kaltura/app/deployment/updates/scripts/xml/2019_01_20_bulkUploadHttpNotification.template.xml
+	/opt/vidiun/app/deployment/updates/scripts/xml/2019_01_20_bulkUploadHttpNotification.template.xml
 
 ### Deployment scripts ###
-	php /opt/kaltura/app/deployment/updates/scripts/2019_01_20_deploy_bulk_upload_http_notification.php
+	php /opt/vidiun/app/deployment/updates/scripts/2019_01_20_deploy_bulk_upload_http_notification.php
 
 
 ## Add new type of filter bulk upload engine ##
@@ -538,8 +538,8 @@ ScheduleEventResource list will filter by default events the have conflict with 
 - Issue ID: PSVAMB-5604
     
 ### Deployment scripts ###
-    - php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
-    - php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2019_01_10_add_media_addbulkupload_to_batch_partner.php
+    - php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
+    - php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2019_01_10_add_media_addbulkupload_to_batch_partner.php
 
 ## Add permission in Admin Console for forcing https protocol in http notifications ##
 
@@ -569,9 +569,9 @@ It is based on Plat-8932 that is described in this notes below.
     Add ConfMaps to your plugins.ini
 
 ### Deployment scripts ###
-    php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
-    php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_12_19_add_conf_maps_role_and_permissions.php
-    php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_12_11_confmaps_service.php
+    php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
+    php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_12_19_add_conf_maps_role_and_permissions.php
+    php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_12_11_confmaps_service.php
 
 # Naos 14.11.0 #
 
@@ -601,12 +601,12 @@ The indexes name should be in the following format for the script to work {index
 #### Deployment Scripts ####
 
     1. Run deployment scripts:
-        php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_11_22_add_beacon_service_permissions.php
+        php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_11_22_add_beacon_service_permissions.php
     
     2. Stop logstash process to avoid re-creating the old beacon index.
     
     3. Create new indexes in elastic by runing:
-    	curl -XPUT 'ELASTIC_HOST:ELASTIC_PORT/beacon_scheduled_resource_index_2018_12_10' --data-binary "@/opt/kaltura/app/plugins/beacon/config/mapping/beacon_scheduled_resource_index.json"
+    	curl -XPUT 'ELASTIC_HOST:ELASTIC_PORT/beacon_scheduled_resource_index_2018_12_10' --data-binary "@/opt/vidiun/app/plugins/beacon/config/mapping/beacon_scheduled_resource_index.json"
     
     4. Delete all old beacon_scheduled_resource elastic aliases.
     
@@ -633,8 +633,8 @@ The indexes name should be in the following format for the script to work {index
 #### Deployment Scripts ####
 
     Run deployment scripts:
-        php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_11_12_add_bulk_update_category_entries_status_permissions.php
-        php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_11_12_update_category_entry_permissions.php
+        php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_11_12_add_bulk_update_category_entries_status_permissions.php
+        php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_11_12_update_category_entry_permissions.php
 
 # Naos 14.8.0 #
 
@@ -646,7 +646,7 @@ The indexes name should be in the following format for the script to work {index
     N/A
 
 ### Deployment scripts ###
-    php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_11_08_update_media_addfromuploadedfile.php
+    php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_11_08_update_media_addfromuploadedfile.php
 
 ## Add permission in Admin Console for New Analytics ##
 
@@ -676,9 +676,9 @@ The indexes name should be in the following format for the script to work {index
 
 #### Deployment Scripts ####
 
-		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /deployment/updates/sql/2018_10_23_alter_server_node_table_add_environment_column.sql
+		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /deployment/updates/sql/2018_10_23_alter_server_node_table_add_environment_column.sql
 
-## Add permission to use playlist service with user ks ##
+## Add permission to use playlist service with user vs ##
 - Issue Type: Task
 - Issue ID: PLAT-9230
 
@@ -688,7 +688,7 @@ The indexes name should be in the following format for the script to work {index
 #### Deployment Scripts ####
 
     Run deployment script:
-        php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_01_11_update_playlist_service_permissions.php
+        php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_01_11_update_playlist_service_permissions.php
 
 
 # Naos 14.7.0 #
@@ -704,23 +704,23 @@ The indexes name should be in the following format for the script to work {index
     2. Rename 'FileSystem' inside cache.ini to 'InfraFileSystem'
     
     The following is optional - 
-    3. Add kLocalMemCacheConf.ini file to your configurations/ directory , the file sould containt 2 values - 
+    3. Add vLocalMemCacheConf.ini file to your configurations/ directory , the file sould containt 2 values - 
         a. IP\host of local memcache
         b. Port number of local memcache
-    4.  Add kRemoteMemCacheConf.ini file to your configuration/ directory , the file sould containt 2 values - 
+    4.  Add vRemoteMemCacheConf.ini file to your configuration/ directory , the file sould containt 2 values - 
         a. IP\host of remote (central) memcache
         b. Port number of remote memcache
 
 ### Deployment scripts ###
     
     run mysql script that adds new table     
-    - mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2018_08_19_create_config_maps_table.sql 
+    - mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2018_08_19_create_config_maps_table.sql 
 
 ### How to add new maps? ###
     
     1. Using alpha/scripts/utils/insertConfigMapToDb.php you can add new maps to the DB
     2. Using alpha/scripts/utils/syncDbConfigMapsToCache.phpthe new maps will be inserted into the central memcach
-    Once this is done , calling kConf::getMap(<mapName>) will retrive the values from the memcache
+    Once this is done , calling vConf::getMap(<mapName>) will retrive the values from the memcache
 
 #### Known Issues & Limitations ####
     
@@ -737,12 +737,12 @@ The indexes name should be in the following format for the script to work {index
 ### Deployment scripts ###
 
 	First replace all tokens from the XML files below and remove ".template" from the file name:
-        /opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_10_22_split_firebase_ios_and_android_notifications.template.xml
+        /opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_10_22_split_firebase_ios_and_android_notifications.template.xml
         
 	*** Please note this file contains the following token {FIRE_BASE_AUTHORIZATION_KEY}, this should be replaced with the authorization token from your firebase account (example key=XXXX).
 
     Run deployment script:
-        php /opt/kaltura/app/deployment/updates/scripts/2018_10_22_deploy_split_firebase_ios_and_android_notifications.php
+        php /opt/vidiun/app/deployment/updates/scripts/2018_10_22_deploy_split_firebase_ios_and_android_notifications.php
 
 #### Known Issues & Limitations ####
 
@@ -783,7 +783,7 @@ The indexes name should be in the following format for the script to work {index
 	None
 
 ### Deployment scripts ###
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_15_10_add_partner_catalog_item_service_permissions.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_15_10_add_partner_catalog_item_service_permissions.php
 
 #### Known Issues & Limitations ####
 	None
@@ -814,7 +814,7 @@ Enable SearchHistory plugin:
 
 Configure logstash:
 
-	- Copy configurations/logstash/kaltura_search_history.template.conf to logstash config dir and update the necessary tokens.
+	- Copy configurations/logstash/vidiun_search_history.template.conf to logstash config dir and update the necessary tokens.
 
 Configure rabbitMq:
 	- Add new exchange called: history_exchange (Type=fanout, durable=true, Policy=ha-all)
@@ -822,8 +822,8 @@ Configure rabbitMq:
 	- Bind queue to exchange.
 
 ### Deployment scripts ###
-    1. php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
-    2. php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_08_19_add_searchhistory_permissions.php
+    1. php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
+    2. php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_08_19_add_searchhistory_permissions.php
 
 
 ## Support volume map and thumb serving with encrypted at rest ##
@@ -847,7 +847,7 @@ Configure rabbitMq:
 #### Deployment Scripts ####
 
 	Re-Index entryVendorTask sphinx table:
-	php opt/kaltura/app/deployment/base/scripts/populateSphinxEntryVendorTasks.php
+	php opt/vidiun/app/deployment/base/scripts/populateSphinxEntryVendorTasks.php
 
 ## Improve group user sync + move group user sync action to GroupUserService ##
 - Issue Type: Task
@@ -859,10 +859,10 @@ Configure rabbitMq:
 #### Deployment Scripts ####
 
 	Run deployment script:
-  	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_10_03_update_groupuser_sync_action.php
+  	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_10_03_update_groupuser_sync_action.php
 
 	Run after deployment:
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_10_09_update_bulk_sync_group_users_permissions.php 
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_10_09_update_bulk_sync_group_users_permissions.php 
 
 
  
@@ -872,9 +872,9 @@ Configure rabbitMq:
 
 #### Deployment Scripts ####
 	Run:
-  	- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2018_08_28_create_vendor_integration_table.sql
+  	- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2018_08_28_create_vendor_integration_table.sql
 	Run deployment script:
-  		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_08_29_zoom_vendor_Integration_permissions.php   
+  		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_08_29_zoom_vendor_Integration_permissions.php   
 
 ## Add event notification for Reach credit expiry ##
 - Issue Type: Task
@@ -886,10 +886,10 @@ Configure rabbitMq:
 #### Deployment Scripts ####
 
 	First replcae all tokens from the XML files below and remove ".template" from the fle name:
-        /opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_09_01_reach_credit_expired.template.xml
+        /opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_09_01_reach_credit_expired.template.xml
 
     Run deployment script:
-        php /opt/kaltura/app/deployment/updates/scripts/2018_09_01_deploy_reach_credit_expired_email_notification.php
+        php /opt/vidiun/app/deployment/updates/scripts/2018_09_01_deploy_reach_credit_expired_email_notification.php
 
 ## Add ability to get server node path ##
 - Issue Type: Task
@@ -901,7 +901,7 @@ Configure rabbitMq:
 #### Deployment Scripts ####
 
     Run deployment script:
-        php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_09_06_server_node_getServerNodePath.php
+        php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_09_06_server_node_getServerNodePath.php
 
 ## limit reset password attempts to avoid flooding ##
 - Issue Type: Bug
@@ -918,14 +918,14 @@ Configure rabbitMq:
 
 ## create CAPTIONS_EDITOR_ROLE for partner 0 ##
 - Issue Type: Task
-- Issue ID: KMS-18227
+- Issue ID: VMS-18227
 
 ### Configuration ###
 	None.
 
 #### Deployment Scripts ####
 
-	Run 'php /opt/kaltura/app/deployment/updates/scripts/2018_08_06_create_captions_editor_application_role.php'
+	Run 'php /opt/vidiun/app/deployment/updates/scripts/2018_08_06_create_captions_editor_application_role.php'
 
 # Naos 14.3.0 #
 
@@ -937,7 +937,7 @@ Issue ID: PLAT-9120
 None.
 
 ### Deployment scripts ###
-php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_07_24_add_mediaServer_reports_permissions.php
+php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_07_24_add_mediaServer_reports_permissions.php
 
 ## Modify reach_profile used_crdit column type  ##
 - Issue Type: Bug
@@ -945,7 +945,7 @@ php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_07_24_add_m
 
 ### Deployment scripts ###
 	
-	- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2018_07_19_reach_profile_alter_used_credit_datatype.sql
+	- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2018_07_19_reach_profile_alter_used_credit_datatype.sql
 		
 ### Configuration ###
 	None.
@@ -972,11 +972,11 @@ Issue ID: PLAT-8908
         @DB_HOST@ - the host
         @DB_USER@ - mysql user name
         @DB_PASSWORD@ - mysql password 
-        @DC_ID@ - The ID of the DC (ID can be found in /opt/kaltura/app/configurations/hosts/dc_config/*.ini files)
+        @DC_ID@ - The ID of the DC (ID can be found in /opt/vidiun/app/configurations/hosts/dc_config/*.ini files)
     The script needs to be run on all Master DB's.
 
 ### Deployment command ###
-    Run mysql -h@DB_HOST@ -u@DB_USER@ -p@DB_PASSWORD@ -P3306 kaltura -e "set sql_log_bin=0; DROP FUNCTION IF EXISTS getDC; create function getDC() Returns int DETERMINISTIC Return '@DC_ID@'"
+    Run mysql -h@DB_HOST@ -u@DB_USER@ -p@DB_PASSWORD@ -P3306 vidiun -e "set sql_log_bin=0; DROP FUNCTION IF EXISTS getDC; create function getDC() Returns int DETERMINISTIC Return '@DC_ID@'"
 
 # Naos 14.2.0 #
 
@@ -988,7 +988,7 @@ Issue ID: PLAT-8484
 None.
 
 ### Deployment scripts ###
-php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_07_02_add_permission_wowza_conversionprofile.php
+php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_07_02_add_permission_wowza_conversionprofile.php
 
 # Naos 14.1.0 #
 
@@ -1008,9 +1008,9 @@ None.
 - Issue ID: PLAT-9041
 
 ### Deployment scripts ###
-	- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2018_06_24_update_entry_vendor_task_table.sql
+	- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2018_06_24_update_entry_vendor_task_table.sql
 	
-	- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2018_06_24_update_reach_profile_table.sql
+	- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2018_06_24_update_reach_profile_table.sql
 		
 ### Configuration ###
 	None.
@@ -1024,10 +1024,10 @@ None.
 
 ### Deployment scripts ###
 	First replcae all tokens from the XML files below and remove ".template" from the fle name:
-		/opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_06_21_update_player_slide_module_notifications.template.xml
+		/opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_06_21_update_player_slide_module_notifications.template.xml
 
 	Run deployment script:
-		php /opt/kaltura/app/deployment/updates/scripts/2018_06_21_update_player_slides_module_notifications.php
+		php /opt/vidiun/app/deployment/updates/scripts/2018_06_21_update_player_slides_module_notifications.php
 		
 ### Configuration ###
 	None.
@@ -1036,14 +1036,14 @@ None.
 	None.
 
 
-## kmc-ng: update the link provided in the email as part of reset password process of KMC user  ##
+## vmc-ng: update the link provided in the email as part of reset password process of VMC user  ##
 - Issue type : new feature
 - Issue ID: PLAT-8969
 
 ### Configuration ###
 	- Change the following to local.ini:
         [password_reset_links]
-        default = @SERVICE_URL@/index.php/kmcng/actions/restore-password/
+        default = @SERVICE_URL@/index.php/vmcng/actions/restore-password/
 
 ### Deployment scripts ###
 None.
@@ -1058,7 +1058,7 @@ None.
 	- Add the following to Admin.ini:
         moduls.SelfServe.enabled = true
         moduls.SelfServe.permissionType = 2
-        moduls.SelfServe.label = "Kaltura Live - Self Serve enabled"
+        moduls.SelfServe.label = "Vidiun Live - Self Serve enabled"
         moduls.SelfServe.permissionName = FEATURE_SELF_SERVE
         moduls.SelfServe.group = GROUP_ENABLE_DISABLE_FEATURES
 
@@ -1066,7 +1066,7 @@ None.
 ### Deployment scripts ###
 None.
 
-## KMS Go: change firebase notification template ##
+## VMS Go: change firebase notification template ##
 - Issue type : new template
 - Issue ID: PLAT-8980
 
@@ -1076,7 +1076,7 @@ None.
 ### Deployment scripts ###
 Disable current "EntryCategory added FireBase" event notification template
 
-php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/entryAddedToCategoryFireBaseHttpNotification.xml
+php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/entryAddedToCategoryFireBaseHttpNotification.xml
 
 ## Enable RTC tokenization ##
 - Issue Type: New Feature
@@ -1097,16 +1097,16 @@ Add
 ### Deployment scripts ###
 
 	First replace all tokens from the XML files below and remove ".template" from the fle name:
-		/opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_06_03_update_entry_vendor_pending_moderation.template.xml
+		/opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_06_03_update_entry_vendor_pending_moderation.template.xml
 		
-		/opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_06_03_update_entry_vendor_rejected_moderation.template.xml
+		/opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_06_03_update_entry_vendor_rejected_moderation.template.xml
 
-		/opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_06_03_update_entry_vendor_task_approved_moderation.template.xml
+		/opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_06_03_update_entry_vendor_task_approved_moderation.template.xml
 		
-		/opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_06_03_update_entry_vendor_task_done.template.xml
+		/opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_06_03_update_entry_vendor_task_done.template.xml
 
 	Run deployment script:
-		php /opt/kaltura/app/deployment/updates/scripts/2018_06_03_deploy_updated_reach_notifications.php
+		php /opt/vidiun/app/deployment/updates/scripts/2018_06_03_deploy_updated_reach_notifications.php
 
 
 # Mercury 13.20.0 #
@@ -1117,10 +1117,10 @@ Add
 
 ### Deployment scripts ###
 	First replcae all tokens from the XML files below and remove ".template" from the fle name:
-		/opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_05_27_player_slide_module_notifications.template.xml
+		/opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_05_27_player_slide_module_notifications.template.xml
 
 	Run deployment script:
-		php /opt/kaltura/app/deployment/updates/scripts/2018_05_24_deploy_player_slides_module_notifications.php
+		php /opt/vidiun/app/deployment/updates/scripts/2018_05_24_deploy_player_slides_module_notifications.php
 		
 ### Configuration ###
 	- Get the dynamic enum value for thumb cue point object by runing the following query:
@@ -1150,15 +1150,15 @@ Add
 	None.
 ### Deployment scripts ###
 	Reindex category and entry tables to sphinx
-    php /opt/kaltura/app/deployment/base/scripts/populateSphinxCategories.php
-    php /opt/kaltura/app/deployment/base/scripts/populateSphinxEntries.php
+    php /opt/vidiun/app/deployment/base/scripts/populateSphinxCategories.php
+    php /opt/vidiun/app/deployment/base/scripts/populateSphinxEntries.php
 
 # Reach In-House Support #
 - Issue Type: Feature
 - Issue ID: PLAT-7596
 
 ### Configuration ###
-	- Copy "index kaltura_entry_vendor_task:kaltura_base" section from /opt/kaltura/app/configurations/sphinx/kaltura.conf.template to /opt/kaltura/app/configurations/sphinx/kaltura.conf modifiy path to appropriate directory.
+	- Copy "index vidiun_entry_vendor_task:vidiun_base" section from /opt/vidiun/app/configurations/sphinx/vidiun.conf.template to /opt/vidiun/app/configurations/sphinx/vidiun.conf modifiy path to appropriate directory.
 	- restart sphinx service
 	- Add the following to plugins.ini: Reach, EntryVendorTaskSphinx
 	- In generator.ini add reach services (to public and batch section).
@@ -1177,64 +1177,64 @@ Add
 		moduls.ReachVendorProfile.group = GROUP_ENABLE_DISABLE_FEATURES 
 		
 	- Add the following to emails_en.ini:
-		KALTURA_ENTRY_VENDOR_TASKS_CSV_MAIL = 134;
+		VIDIUN_ENTRY_VENDOR_TASKS_CSV_MAIL = 134;
 		134 = "Your REACH requests Csv is ready for download"
-		134 = "Hello %s,<BR><BR>Following is the download link to your REACH requests csv: %s<BR>Please notice that the link will be available only for 24 hours. <BR><BR> Kaltura Customer Service"\
+		134 = "Hello %s,<BR><BR>Following is the download link to your REACH requests csv: %s<BR>Please notice that the link will be available only for 24 hours. <BR><BR> Vidiun Customer Service"\
 	
 	- Add the following to batch & workers.ini:
-		enabledWorkers.KAsyncEntryVendorTasksCsv = 1
-		enabledWorkers.KSyncReachCreditTaskRunner = 1
+		enabledWorkers.VAsyncEntryVendorTasksCsv = 1
+		enabledWorkers.VSyncReachCreditTaskRunner = 1
 		
-		[KAsyncEntryVendorTasksCsv : JobHandlerWorker]
+		[VAsyncEntryVendorTasksCsv : JobHandlerWorker]
 		id								= XXXXX
 		friendlyName  				= Entry Vendor Tasks Csv
-		type							= KAsyncEntryVendorTasksCsv
+		type							= VAsyncEntryVendorTasksCsv
 		params.localTempPath		= @TMP_DIR@/entryVendorTasksCsv
 		params.sharedTempPath		= @WEB_DIR@/tmp/entryVendorTasksCsv
-		scriptPath					= ../plugins/reach/batch/EntryVendorTasksCsv/kAsyncEntryVendorTasksCsvExe.php
+		scriptPath					= ../plugins/reach/batch/EntryVendorTasksCsv/vAsyncEntryVendorTasksCsvExe.php
 		maximumExecutionTime		= 3600
 		
-		[KSyncReachCreditTaskRunner : PeriodicWorker]
+		[VSyncReachCreditTaskRunner : PeriodicWorker]
 		id  = 							XXXXX
-		type  = 						KSyncReachCreditTaskRunner
+		type  = 						VSyncReachCreditTaskRunner
 		maximumExecutionTime  = 	3600
-		scriptPath  = 				../plugins/reach/batch/KSyncReachCreditTaskRunner/KSyncReachCreditTaskRunnerExe.php
+		scriptPath  = 				../plugins/reach/batch/VSyncReachCreditTaskRunner/VSyncReachCreditTaskRunnerExe.php
 		sleepBetweenStopStart = 	21600
 
 
 ### Deployment scripts ###
 	
 	Mysql deployment scripts:
-		- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2017_11_21_create_vendor_catalog_item_table.sql
-		- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2017_11_21_create_partner_catalog_item_table.sql
-		- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2017_12_14_create_entry_vendor_task_table.sql
-		- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2017_12_14_create_reach_profile_table.sql
+		- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2017_11_21_create_vendor_catalog_item_table.sql
+		- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2017_11_21_create_partner_catalog_item_table.sql
+		- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2017_12_14_create_entry_vendor_task_table.sql
+		- mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2017_12_14_create_reach_profile_table.sql
 		
 	Run Permissions scripts script:
-		- php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_11_20_add_reach_vendor_role_and_permissions.php
-		- php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_11_20_add_reach_permissions.php
-		- php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
-		- php /opt/kaltura/app/alpha/scripts/utils/permissions/addPermissionToRole.php -2 "@DESIRED_ROLE@" REACH_ADMIN_PERMISSION realrun/dryrun
+		- php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_11_20_add_reach_vendor_role_and_permissions.php
+		- php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_11_20_add_reach_permissions.php
+		- php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
+		- php /opt/vidiun/app/alpha/scripts/utils/permissions/addPermissionToRole.php -2 "@DESIRED_ROLE@" REACH_ADMIN_PERMISSION realrun/dryrun
 		
 	Response profiles:
 		First replace all tokens in the XML file below and remove ".template" from the fle name:
-		- /opt/kaltura/app/deployment/updates/scripts/xml/responseProfiles/reach_vendor_response_profiles.template.xml
+		- /opt/vidiun/app/deployment/updates/scripts/xml/responseProfiles/reach_vendor_response_profiles.template.xml
 		
 	Run deployment script:
-		- php /opt/kaltura/app/deployment/updates/scripts/2018_01_29_deploy_reach_vendor_related_response_profiles.php
+		- php /opt/vidiun/app/deployment/updates/scripts/2018_01_29_deploy_reach_vendor_related_response_profiles.php
 			
 	Email notifications:
 		First replace all tokens from the XML files below and remove ".template" from the fle 
-		- /opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_02_22_entry_vendor_task_approved_moderation.template.xml
-		- /opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_02_22_entry_vendor_task_done.template.xml
-		- /opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_02_22_entry_vendor_task_pending_moderation.template.xml
-		- /opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_02_22_entry_vendor_task_rejected_moderation.template.xml
-		- /opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_02_22_reach_credit_usage_over_75_percent.template.xml
-		- /opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_02_22_reach_credit_usage_over_90_percent.template.xml
-		- /opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_02_22_reach_credit_usage_over_100_percent.template.xml
+		- /opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_02_22_entry_vendor_task_approved_moderation.template.xml
+		- /opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_02_22_entry_vendor_task_done.template.xml
+		- /opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_02_22_entry_vendor_task_pending_moderation.template.xml
+		- /opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_02_22_entry_vendor_task_rejected_moderation.template.xml
+		- /opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_02_22_reach_credit_usage_over_75_percent.template.xml
+		- /opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_02_22_reach_credit_usage_over_90_percent.template.xml
+		- /opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_02_22_reach_credit_usage_over_100_percent.template.xml
 		
 	Run deployment script:
-		- php /opt/kaltura/app/deployment/updates/scripts/2018_01_29_deploy_reach_notifications.php
+		- php /opt/vidiun/app/deployment/updates/scripts/2018_01_29_deploy_reach_notifications.php
 			    
 	
 #### Known Issues & Limitations ####
@@ -1256,27 +1256,27 @@ Add
 ### Deployment scripts ###
 	None
 
-## Send http registration request to KMS when registering partner##
+## Send http registration request to VMS when registering partner##
 PLAT-7514 
 
 ### Deployment scripts ###
--Add kms registration http request on partner creation:
+-Add vms registration http request on partner creation:
         
         	First replcae all tokens from the XML files below and remove ".template" from the fle name:
-        		/opt/kaltura/app/deployment/updates/scripts/xml/notifications/2018_05_29_partner_Added_Media_Space_Http_Notification.template.xml
+        		/opt/vidiun/app/deployment/updates/scripts/xml/notifications/2018_05_29_partner_Added_Media_Space_Http_Notification.template.xml
         
         	Run deployment script:
-        		php /opt/kaltura/app/deployment/updates/scripts/2018_05_29_partner_Added_Media_Space.php
+        		php /opt/vidiun/app/deployment/updates/scripts/2018_05_29_partner_Added_Media_Space.php
         		
-## Allow KMC user change account functionality ##
+## Allow VMC user change account functionality ##
 Issue Type:  New Feature
-Issue ID: KMCNG-1683
+Issue ID: VMCNG-1683
 
 ### Configuration ###
 None.
 
 ### Deployment scripts ###
-php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_15_05_add_change_account_required_permissions.php
+php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_15_05_add_change_account_required_permissions.php
 
 ## Add bulk groupUser sync ##
 Issue Type:  New Feature
@@ -1286,7 +1286,7 @@ Issue ID: PLAT-8564
 None.
 
 ### Deployment scripts ###
-php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_05_07_add_bulk_sync_group_users_permissions.php
+php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_05_07_add_bulk_sync_group_users_permissions.php
 
 ## Live thumbnails ##
 Issue Type: Enable live thumb
@@ -1307,7 +1307,7 @@ Issue ID: PLAT-8885
 None.
 
 ### Deployment scripts ###
-php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_05_08_playlist_update.php
+php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_05_08_playlist_update.php
 
 
 ## Media repurposing serve dry run ## 
@@ -1318,7 +1318,7 @@ Issue ID: PLAT-8881
 None.
 
 ### Deployment scripts ###
-php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_05_06_add_scheduleTask_permission.php
+php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_05_06_add_scheduleTask_permission.php
 
 # Mercury 13.19.0 #
 
@@ -1330,33 +1330,33 @@ Issue ID: PLAT-8885
 None.
 
 ### Deployment scripts ###
-php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_05_08_playlist_update.php
+php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_05_08_playlist_update.php
 
-## KMC-NG ##
-- Issue Type: KMC-NG deployment configuration
+## VMC-NG ##
+- Issue Type: VMC-NG deployment configuration
 - Issue ID: PLAT-8844
 
-### Install KMC-NG application ###
-1. Get the relevant version 'kmc-ng' from `opt/kaltura/app/configuration/base.ini` key `kmcng_version`
-2. Open [kmc-ng releases](https://github.com/kaltura/kmc-ng/releases) and navigate to the release notes of the relevant version from previous step
-3. Download the zip file and extract content into `/opt/kaltura/apps/kmcng/vX.X.X` (replace X.X.X with actual version.
-4. From within the version folder (`/opt/kaltura/apps/kmcng/vX.X.X`) execute the following command `php /opt/kaltura/app/deployment/uiconf/deploy_v2.php --user=www-data --group=www-data --ini=./deploy/config.ini`
-5. Optional, update `opt/kaltura/app/configuration/local.ini` with additional information used by the KMC-NG application. 
+### Install VMC-NG application ###
+1. Get the relevant version 'vmc-ng' from `opt/vidiun/app/configuration/base.ini` key `vmcng_version`
+2. Open [vmc-ng releases](https://github.com/vidiun/vmc-ng/releases) and navigate to the release notes of the relevant version from previous step
+3. Download the zip file and extract content into `/opt/vidiun/apps/vmcng/vX.X.X` (replace X.X.X with actual version.
+4. From within the version folder (`/opt/vidiun/apps/vmcng/vX.X.X`) execute the following command `php /opt/vidiun/app/deployment/uiconf/deploy_v2.php --user=www-data --group=www-data --ini=./deploy/config.ini`
+5. Optional, update `opt/vidiun/app/configuration/local.ini` with additional information used by the VMC-NG application. 
 
 > All keys here are optional, add them if applicable to your server.
  
 ```
-[kmcng]
+[vmcng]
 previewAndEmbed[embedTypes] = URL to documentation about "Share & Embed > Embed Code Types"
 previewAndEmbed[deliveryProtocols] = URL to documentation about "Delivery type enforcement"
-kaltura[kmcOverview] = URL to "KMCng Overview"
-kaltura[mediaManagement] = URL to "Media Management"
-kaltura[userManual] = URL to "KMCng User Manual"
-kaltura[support] = Support email address
-kaltura[signUp] = URL to free trial signup page
-kaltura[contactUs] = URL to contact us form page
-kaltura[upgradeAccount] = URL to upgrade account form page
-kaltura[contactSalesforce] = URL to salesforce contact form page
+vidiun[vmcOverview] = URL to "VMCng Overview"
+vidiun[mediaManagement] = URL to "Media Management"
+vidiun[userManual] = URL to "VMCng User Manual"
+vidiun[support] = Support email address
+vidiun[signUp] = URL to free trial signup page
+vidiun[contactUs] = URL to contact us form page
+vidiun[upgradeAccount] = URL to upgrade account form page
+vidiun[contactSalesforce] = URL to salesforce contact form page
 entitlements[manage] = URL to documentation about "Managing Content Entitlement"
 uploads[needHighSpeedUpload] = URL to "High-Speed Upload Powered by Aspera" registration form 
 uploads[highSpeedUpload] = URL to "Aspera" page
@@ -1364,14 +1364,14 @@ uploads[bulkUploadSamples] = URL to download bulk upload sample zip file
 live[akamaiEdgeServerIpURL] = URL to akamai server ip list page
 ```
 
-### Running old versions of KMC-NG  ###
-If you need to run KMC-NG version that is not the one specified in `base.ini`, you will need configure your `opt/kaltura/app/configuration/local.ini` with the relevant version.
+### Running old versions of VMC-NG  ###
+If you need to run VMC-NG version that is not the one specified in `base.ini`, you will need configure your `opt/vidiun/app/configuration/local.ini` with the relevant version.
 ```
-[kmcng]
-kmcng_version = vY.Y.Y
+[vmcng]
+vmcng_version = vY.Y.Y
 ```
 replace `vY.Y.Y` with the relevant version number.
-> Old versions might not be compatible as there are dependencies between KMC-NG and kaltura server API.
+> Old versions might not be compatible as there are dependencies between VMC-NG and vidiun server API.
 
 ## Live Clipping ##
 - Issue Type: live clipping
@@ -1379,15 +1379,15 @@ replace `vY.Y.Y` with the relevant version number.
 
 ### Configuration ###
 First replace all tokens from the XML files below and remove ".template" from the file name:
-/opt/kaltura/app/deployment/updates/scripts/xml/notifications/clippingTaskEntryServerNode_created_notification.template.xml
+/opt/vidiun/app/deployment/updates/scripts/xml/notifications/clippingTaskEntryServerNode_created_notification.template.xml
 
 ### Deployment scripts ###
 Add permission to new updateStatus action in entryServerNode service and add the push notification template:
 
- php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_04_12_add_action_entryservernode_service.php
- php /opt/kaltura/app/deployment/updates/scripts/2018_04_23_deploy_created_clippingTaskEntryServerNode_push_notifications.php
+ php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_04_12_add_action_entryservernode_service.php
+ php /opt/vidiun/app/deployment/updates/scripts/2018_04_23_deploy_created_clippingTaskEntryServerNode_push_notifications.php
 
-## KMS GO: Push Notification specific Message ##
+## VMS GO: Push Notification specific Message ##
 - Issue Type: new template
 - Issue ID: PLAT-8792
 
@@ -1397,7 +1397,7 @@ None.
 ### Deployment scripts ###
 Disable current "EntryCategory added FireBase" event notification template
 
-php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/entryAddedToCategoryFireBaseHttpNotification.xml    
+php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/entryAddedToCategoryFireBaseHttpNotification.xml    
  
     
 # Mercury 13.18.0 #
@@ -1425,8 +1425,8 @@ php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/stan
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_30_01_add_conference_service.php
+	php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_30_01_add_conference_service.php
 
 # Mercury 13.17.0 #
 
@@ -1436,7 +1436,7 @@ php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/stan
  
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_04_03_update_file_asset_permission.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_04_03_update_file_asset_permission.php
 	
 ## Add new batch job for Copy Cue Points ##
  - Issue Type: Story
@@ -1445,17 +1445,17 @@ php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/stan
  ### Configuration ###
 
 	Requires adding a new worker to batch.ini:
-	- enabledWorkers.KAsyncCopyCuePoints = 1
+	- enabledWorkers.VAsyncCopyCuePoints = 1
 
-	- [KAsyncCopyCuePoints : JobHandlerWorker]
+	- [VAsyncCopyCuePoints : JobHandlerWorker]
       id                                                  = 700
       friendlyName                                        = Copy Cue Point
-      type                                                = KAsyncCopyCuePoints
-      scriptPath                                          = ../plugins/cue_points/base/batch/copyCuePoints/KAsyncCopyCuePointsExe.php
+      type                                                = VAsyncCopyCuePoints
+      scriptPath                                          = ../plugins/cue_points/base/batch/copyCuePoints/VAsyncCopyCuePointsExe.php
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_03_28_cuePoint_update_cue_point_times.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_03_28_cuePoint_update_cue_point_times.php
 	
 ## Remove use of partner 0 in sphinx queries ##
 - Issue Type: Task
@@ -1476,8 +1476,8 @@ php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/stan
 add "Konference" to plugins.ini 
 
 ### Deployment scripts ###
-      php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
-      php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_30_01_add_conference_service.php
+      php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
+      php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_30_01_add_conference_service.php
 
 # Mercury 13.16.0 #
 
@@ -1487,8 +1487,8 @@ add "Konference" to plugins.ini
 
 ### Configuration ###
 Update batch.ini/workers.ini:
-- add "params.youtubeApi.processedTimeout	= 600" to [KAsyncDistributeSubmit : KAsyncDistribute]
-- add "params.youtubeApi.processedTimeout	= 600" to [KAsyncDistributeUpdate : KAsyncDistribute]
+- add "params.youtubeApi.processedTimeout	= 600" to [VAsyncDistributeSubmit : VAsyncDistribute]
+- add "params.youtubeApi.processedTimeout	= 600" to [VAsyncDistributeUpdate : VAsyncDistribute]
 
 ## Media repurposing dry run improvements ##
 - Issue Type: Bug
@@ -1498,7 +1498,7 @@ Update batch.ini/workers.ini:
 None.
 
 ### Deployment scripts ###
-php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_03_22_add_adminConsole_scheduleTask_permission
+php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_03_22_add_adminConsole_scheduleTask_permission
 
 ## Add ability to set default audio language in live streams ##
 - Issue Type: New Feature
@@ -1508,7 +1508,7 @@ php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_03_22_add_a
 None.
 
 ### Deployment scripts ###
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_03_12_allow_media_server_to_get_conversionprofile.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_03_12_allow_media_server_to_get_conversionprofile.php
 
 ## Workers allocation for full-scale Chunked Encoding deployment ##
 - Issue Type: Configuration update 
@@ -1517,7 +1517,7 @@ None.
 ### Configuration ###
 - server-saas-config/configurations/batch/workers.ini
 - server-saas-config/configurations/batch/encoder.ini
-- https://github.com/kaltura/server-saas-config/compare/Mercury-13.16.0-CE-resources-allocation
+- https://github.com/vidiun/server-saas-config/compare/Mercury-13.16.0-CE-resources-allocation
 
 ## Handle chunks split edge conditions ##
 - Issue Type: Support
@@ -1536,7 +1536,7 @@ None.
 None.
 
 ### Deployment scripts ###
-php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/entryAddedToCategoryFireBaseHttpNotification.xml
+php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/entryAddedToCategoryFireBaseHttpNotification.xml
 
 ## Update eSearch permissions ##
 
@@ -1547,7 +1547,7 @@ php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/stan
 None.
 
 ### Deployment scripts ###
-      php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_02_28_update_esearch_permissions.php
+      php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_02_28_update_esearch_permissions.php
 
 ## Add new Drop Folder Type ##
 
@@ -1558,7 +1558,7 @@ None.
 None. 
 
 ### Deployment scripts ###
-      php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
+      php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
 
 ## Taking a break with explicit-live feature breaks player playback ##
 
@@ -1569,7 +1569,7 @@ None.
 None. 
 
 ### Deployment scripts ###
-      php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_02_04_add_is_playable_user_configurations_KalturaLiveEntryServerNode.php
+      php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_02_04_add_is_playable_user_configurations_VidiunLiveEntryServerNode.php
 
 # Mercury 13.14.0 #
 ## Add Parameters to Recorded Entry replaced EMAIL template ##
@@ -1579,10 +1579,10 @@ None.
 
 ### Configuration ###
 First replace all tokens from the XML files below and remove ".template" from the file name:
-	/opt/kaltura/app/deployment/updates/scripts/xml/2018_01_15_RecordedEntryReplaced_emailNotification.template.xml
+	/opt/vidiun/app/deployment/updates/scripts/xml/2018_01_15_RecordedEntryReplaced_emailNotification.template.xml
 
 ### Deployment scripts ###
-      php /opt/kaltura/app/deployment/updates/scripts/2018_01_15_deploy_recorded_entry_replaced_email_notification.php
+      php /opt/vidiun/app/deployment/updates/scripts/2018_01_15_deploy_recorded_entry_replaced_email_notification.php
 
 ## fix Add-Media-Entry ready email template ##
 
@@ -1591,11 +1591,11 @@ First replace all tokens from the XML files below and remove ".template" from th
 
 ### Configuration ###
 First replace all tokens from the XML files below and remove ".template" from the file name:
-	/opt/kaltura/app/deployment/updates/scripts/xml/2017_06_20_AddMediaEntryReadyTemplate.template.xml
+	/opt/vidiun/app/deployment/updates/scripts/xml/2017_06_20_AddMediaEntryReadyTemplate.template.xml
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/2017_06_20_deploy_new_event_notification_template.php
+	  php /opt/vidiun/app/deployment/updates/scripts/2017_06_20_deploy_new_event_notification_template.php
       	
 # Mercury 13.13.0 #
 ## Update File-Sync version field type ##
@@ -1608,7 +1608,7 @@ None.
 
 ### Deployment scripts ###
 
-	mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2018_02_04_alter_file_sync_version_from_varchar_to_int.sql
+	mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2018_02_04_alter_file_sync_version_from_varchar_to_int.sql
 	
 #### Known Issues & Limitations ####
 
@@ -1623,8 +1623,8 @@ None.
     Update the plugins.ini, admin.ini, batch.ini config files from the SaaS tag.
     
 ### Deployment scripts ###  
-    php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
-    php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_01_12_allow_batch_partner_to_delete_metadata.php
+    php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
+    php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_01_12_allow_batch_partner_to_delete_metadata.php
 
 ## Base Upload Permission and User-role ##
 
@@ -1636,8 +1636,8 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_02_11_add_base_upload_permission_and_role.php
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_02_11_update_base_upload_permission.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_02_11_add_base_upload_permission_and_role.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_02_11_update_base_upload_permission.php
 	
 #### Known Issues & Limitations ####
 
@@ -1650,11 +1650,11 @@ None.
 
 ### Configuration ###
 	First replcae all tokens from the XML files below and remove ".template" from the file name:
-	/opt/kaltura/app/deployment/updates/scripts/xml/2018_01_30_UpdateServerNodeDownTemplate_toServerNodeStatusChanged.template.xml
+	/opt/vidiun/app/deployment/updates/scripts/xml/2018_01_30_UpdateServerNodeDownTemplate_toServerNodeStatusChanged.template.xml
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/2018_01_30_update_server_node_offline_email_notification_to_server_node_status_changed.php
+	  php /opt/vidiun/app/deployment/updates/scripts/2018_01_30_update_server_node_offline_email_notification_to_server_node_status_changed.php
 
 #### Known Issues & Limitations ####
 None.
@@ -1666,20 +1666,20 @@ None.
  ### Configuration ###
 
 	Requires adding a new worker to batch.ini:
-	- enabledWorkers.KAsyncUsersCsv = 1
+	- enabledWorkers.VAsyncUsersCsv = 1
 
-	- [KAsyncUsersCsv : JobHandlerWorker]
+	- [VAsyncUsersCsv : JobHandlerWorker]
           id						= XXXXX
           friendlyName					= Users Csv
-          type						= KAsyncUsersCsv
+          type						= VAsyncUsersCsv
           params.localTempPath				= @TMP_DIR@/userscsv
           params.sharedTempPath				= @WEB_DIR@/tmp/userscsv
-          scriptPath					= batches/UsersCsv/kAsyncUsersCsvExe.php
+          scriptPath					= batches/UsersCsv/vAsyncUsersCsvExe.php
           maximumExecutionTime			= 3600
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2018_01_23_getCsv_user_permissions.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2018_01_23_getCsv_user_permissions.php
 	
 # Mercury 13.12.0 #
 
@@ -1701,10 +1701,10 @@ None.
 	3. Delete old beaconIndex.
 	
 	4. Create new indexes in elastic by runing: 
-		curl -XPUT 'ELASTIC_HOST:ELASTIC_PORT/beacon_entry_index_2017_01_21' --data-binary "@/opt/kaltura/app/plugins/beacon/config/mapping/beacon_entry_index.json"
-		curl -XPUT 'ELASTIC_HOST:ELASTIC_PORT/beacon_entry_server_node_index_2017_01_21' --data-binary "@/opt/kaltura/app/plugins/beacon/config/mapping/beacon_entry_server_node_index.json" 
-		curl -XPUT 'ELASTIC_HOST:ELASTIC_PORT/beacon_scheduled_resource_index_2017_01_21' --data-binary "@/opt/kaltura/app/plugins/beacon/config/mapping/beacon_scheduled_resource_index.json"
-		curl -XPUT 'ELASTIC_HOST:ELASTIC_PORT/beacon_server_node_index_2017_01_21' --data-binary "@/opt/kaltura/app/plugins/beacon/config/mapping/beacon_server_node_index.json"
+		curl -XPUT 'ELASTIC_HOST:ELASTIC_PORT/beacon_entry_index_2017_01_21' --data-binary "@/opt/vidiun/app/plugins/beacon/config/mapping/beacon_entry_index.json"
+		curl -XPUT 'ELASTIC_HOST:ELASTIC_PORT/beacon_entry_server_node_index_2017_01_21' --data-binary "@/opt/vidiun/app/plugins/beacon/config/mapping/beacon_entry_server_node_index.json" 
+		curl -XPUT 'ELASTIC_HOST:ELASTIC_PORT/beacon_scheduled_resource_index_2017_01_21' --data-binary "@/opt/vidiun/app/plugins/beacon/config/mapping/beacon_scheduled_resource_index.json"
+		curl -XPUT 'ELASTIC_HOST:ELASTIC_PORT/beacon_server_node_index_2017_01_21' --data-binary "@/opt/vidiun/app/plugins/beacon/config/mapping/beacon_server_node_index.json"
 	
 	5. Create new alises in elastic:
 		curl -XPOST 'ELASTIC_HOST:ELASTIC_PORT/_aliases?pretty' -H 'Content-Type: application/json' -d'{
@@ -1747,17 +1747,17 @@ None.
 
 		None.
 
-## Add Entry replaced EMAIL template which excludes kaltura recorded entries ##
+## Add Entry replaced EMAIL template which excludes vidiun recorded entries ##
 
 - Issue Type: Support
 - Issue ID: SUP-13175
 
 ### Configuration ###
 First replcae all tokens from the XML files below and remove ".template" from the fle name:
-	/opt/kaltura/app/deployment/updates/scripts/xml/2018_01_15_notRecordedEntryReplaced_emailNotification.template.xml
+	/opt/vidiun/app/deployment/updates/scripts/xml/2018_01_15_notRecordedEntryReplaced_emailNotification.template.xml
 
 ### Deployment scripts ###
-      php /opt/kaltura/app/deployment/updates/scripts/2018_01_15_deploy_not_recorded_entry_replaced_email_notification.php 
+      php /opt/vidiun/app/deployment/updates/scripts/2018_01_15_deploy_not_recorded_entry_replaced_email_notification.php 
 
 
 ## Add Recorded Entry replaced EMAIL template ##
@@ -1767,10 +1767,10 @@ First replcae all tokens from the XML files below and remove ".template" from th
 
 ### Configuration ###
 First replcae all tokens from the XML files below and remove ".template" from the fle name:
-	/opt/kaltura/app/deployment/updates/scripts/xml/2018_01_15_RecordedEntryReplaced_emailNotification.template.xml
+	/opt/vidiun/app/deployment/updates/scripts/xml/2018_01_15_RecordedEntryReplaced_emailNotification.template.xml
 
 ### Deployment scripts ###
-      php /opt/kaltura/app/deployment/updates/scripts/2018_01_15_deploy_recorded_entry_replaced_email_notification.php
+      php /opt/vidiun/app/deployment/updates/scripts/2018_01_15_deploy_recorded_entry_replaced_email_notification.php
 ## Add notification for server node going offline ##
 
 - Issue Type: Feature
@@ -1778,12 +1778,12 @@ First replcae all tokens from the XML files below and remove ".template" from th
 
 ### Configuration ###
 	First replcae all tokens from the XML files below and remove ".template" from the file name:
-	/opt/kaltura/app/deployment/updates/scripts/xml/2018_01_14_AddServerNodeDownTemplate.template.xml
+	/opt/vidiun/app/deployment/updates/scripts/xml/2018_01_14_AddServerNodeDownTemplate.template.xml
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/add_permissions/201810_01_server_node_markOffline.php
-	  php /opt/kaltura/app/deployment/updates/scripts/2018_01_14_deploy_server_node_offline_email_notification.php
+	  php /opt/vidiun/app/deployment/updates/scripts/add_permissions/201810_01_server_node_markOffline.php
+	  php /opt/vidiun/app/deployment/updates/scripts/2018_01_14_deploy_server_node_offline_email_notification.php
 
 #### Known Issues & Limitations ####
 None.
@@ -1800,23 +1800,23 @@ None.
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/2017_12_20_deploy_new_live_params.php
+	  php /opt/vidiun/app/deployment/updates/scripts/2017_12_20_deploy_new_live_params.php
 
 #### Known Issues & Limitations ####
 None.
 
-## Add Entry replaced HTTP template which excludes kaltura recorded entries ##
+## Add Entry replaced HTTP template which excludes vidiun recorded entries ##
 
 - Issue Type: Support
 - Issue ID: SUP-13055
 
 ### Configuration ###
 First replcae all tokens from the XML files below and remove ".template" from the fle name:
-	/opt/kaltura/app/deployment/updates/scripts/xml/2017_12_19_notRecordedEntryReplaced.template.xml
+	/opt/vidiun/app/deployment/updates/scripts/xml/2017_12_19_notRecordedEntryReplaced.template.xml
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/2017_12_19_deploy_not_recorded_entry_replaced_http_notification.php
+	  php /opt/vidiun/app/deployment/updates/scripts/2017_12_19_deploy_not_recorded_entry_replaced_http_notification.php
 
 #### Known Issues & Limitations ####
 None.
@@ -1832,11 +1832,11 @@ None.
 	Deploy Explicit Live Push notification:
 	1. Push notitifications:
 	   First replacae all tokens from in the XML file below and remove ".template" from the fle name:
-	   	/opt/kaltura/app/deployment/updates/scripts/xml/notifications/explicit_live_notification.template.xml
+	   	/opt/vidiun/app/deployment/updates/scripts/xml/notifications/explicit_live_notification.template.xml
 	
 	   Run deployment script:
 		1. remove existing notification template, through admin console, with system name EXPLICIT_LIVE_PUSH_NOTIFICATIONS if it exists	   
-		2. php /opt/kaltura/app/deployment/updates/scripts/2017_10_22_deploy_explicit_live_push_notifications.php
+		2. php /opt/vidiun/app/deployment/updates/scripts/2017_10_22_deploy_explicit_live_push_notifications.php
 	
 #### Known Issues & Limitations ####
 
@@ -1848,7 +1848,7 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_12_14_allow_webcast_producer_to_change_cue_point_status.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_12_14_allow_webcast_producer_to_change_cue_point_status.php
 	
 #### Known Issues & Limitations ####
 
@@ -1863,11 +1863,11 @@ None.
 
 ### Configuration ###
 First replcae all tokens from the XML files below and remove ".template" from the fle name:
-	/opt/kaltura/app/deployment/updates/scripts/xml/2017_11_27_recordedEntryReplaced.template.xml
+	/opt/vidiun/app/deployment/updates/scripts/xml/2017_11_27_recordedEntryReplaced.template.xml
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/2017_11_27_deploy_recorded_entry_replaced_http_notification.php
+	  php /opt/vidiun/app/deployment/updates/scripts/2017_11_27_deploy_recorded_entry_replaced_http_notification.php
 
 #### Known Issues & Limitations ####
 None.
@@ -1887,7 +1887,7 @@ None.
 - Issue ID: TR-1693
 
 ### Deployment script ### 
-    cd /opt/kaltura/app/tests/standAloneClient
+    cd /opt/vidiun/app/tests/standAloneClient
     php exec.php entryChangesSubscriberNotifications.xml    
 
 ## Add eSearch highlight ##
@@ -1895,7 +1895,7 @@ None.
 - Issue ID: PLAT-8090
 
 ### Configuration ###
-	Configure elasticSearch Kaltura configuration:
+	Configure elasticSearch Vidiun configuration:
 	- Add the following to your elastic.ini file:
 	[highlights]
 	globalMaxNumberOfFragments = 7
@@ -1914,7 +1914,7 @@ None.
 	None
 
 ### Deployment scripts ###
-	 mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < deployment/updates/sql/2017_11_12_alter_app_token_table_add_kuser_id_column.sql
+	 mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < deployment/updates/sql/2017_11_12_alter_app_token_table_add_vuser_id_column.sql
 
 #### Known Issues & Limitations ####
 	None
@@ -1928,7 +1928,7 @@ None.
 
 ### Deployment scripts ###
 	php alpha/scripts/utils/permissions/addPermissionToRole.php null "WEbcast producer device role" LIVE_STREAM_UPDATE realrun
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_11_21_allow_webcast_to_list_beacons_and_conversionprofileassetparams.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_11_21_allow_webcast_to_list_beacons_and_conversionprofileassetparams.php
 
 #### Known Issues & Limitations ####
 	None
@@ -1988,10 +1988,10 @@ None.
 	Deploy Explicit Live Push notification:
 	1. Push notitifications:
 	   First replacae all tokens from in the XML file below and remove ".template" from the fle name:
-	   	/opt/kaltura/app/deployment/updates/scripts/xml/notifications/explicit_live_notification.template.xml
+	   	/opt/vidiun/app/deployment/updates/scripts/xml/notifications/explicit_live_notification.template.xml
 	
 	   Run deployment script:
-		1. php /opt/kaltura/app/deployment/updates/scripts/2017_10_22_deploy_explicit_live_push_notifications.php
+		1. php /opt/vidiun/app/deployment/updates/scripts/2017_10_22_deploy_explicit_live_push_notifications.php
 	
 #### Known Issues & Limitations ####
 
@@ -1999,7 +1999,7 @@ None.
 			
 ## eSearch Languages support  ##
  - Issue Type: Task
-- Issue ID: KMS-14857
+- Issue ID: VMS-14857
 
 ### Configuration ###
 	-Add the following to Admin.ini:
@@ -2017,7 +2017,7 @@ None.
 
 ### Configuration ###
 	-Add the following to base.ini:
-	event_consumers[] = kAssetPropertiesManager
+	event_consumers[] = vAssetPropertiesManager
 
 ### Deployment scripts ###
 		None.
@@ -2075,7 +2075,7 @@ None.
 
 ### Deployment scripts ###
 
-		mysql -h{HOSTNAME} -u{USER} -p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2017_10_20_alter_access_control_table_rules.sql
+		mysql -h{HOSTNAME} -u{USER} -p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2017_10_20_alter_access_control_table_rules.sql
 
 #### Known Issues & Limitations ####
 
@@ -2089,7 +2089,7 @@ None.
 
 ### Configuration ###
 	- Edit admin.ini
-        'moduls.liveStreamRecordShouldCopyEntitelment.label = Kaltura Live Streams - Copy entitelment' change to 'moduls.liveStreamRecordShouldCopyEntitelment.label = Kaltura Live Streams - Copy collaboration'
+        'moduls.liveStreamRecordShouldCopyEntitelment.label = Vidiun Live Streams - Copy entitelment' change to 'moduls.liveStreamRecordShouldCopyEntitelment.label = Vidiun Live Streams - Copy collaboration'
 
 ### Deployment scripts ###
 
@@ -2108,7 +2108,7 @@ None.
 - Issue ID: PLAT-7410
 
 ### Deployment scripts ###
-    php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_05_24_eSearch_service.php
+    php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_05_24_eSearch_service.php
 
 
 ## Add getVolumeMap action to flavorAsset service ##
@@ -2126,7 +2126,7 @@ None.
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_10_11_add_flavorasset_getvolumemap_permissions.php
+	  php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_10_11_add_flavorasset_getvolumemap_permissions.php
 
 #### Known Issues & Limitations ####
 
@@ -2149,7 +2149,7 @@ None.
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_09_26_add_media_getvolumemap_permissions.php
+	  php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_09_26_add_media_getvolumemap_permissions.php
 
 #### Known Issues & Limitations ####
 
@@ -2164,8 +2164,8 @@ None.
 
 - Add upload domain in dc_config.ini 
 example:
-0.uploadUrl = dc0-upload.kaltura.com       
-1.uploadUrl = dc1-host-upload.kaltura.com       
+0.uploadUrl = dc0-upload.vidiun.com       
+1.uploadUrl = dc1-host-upload.vidiun.com       
 
 ## Support unlimited recording duration as feature flip ##
 
@@ -2180,7 +2180,7 @@ example:
         moduls.liveStreamUnlimitedRecording.label = Enable Unlimited Recording Duration
         moduls.liveStreamUnlimitedRecording.permissionName = FEATURE_UNLIMITED_RECORDING_DURATION
         moduls.liveStreamUnlimitedRecording.basePermissionType = 2
-        moduls.liveStreamUnlimitedRecording.basePermissionName = FEATURE_KALTURA_LIVE_STREAM
+        moduls.liveStreamUnlimitedRecording.basePermissionName = FEATURE_VIDIUN_LIVE_STREAM
         moduls.liveStreamUnlimitedRecording.group = GROUP_ENABLE_DISABLE_FEATURES
 
 ## Add permission to restore-deleted-entry action ##
@@ -2194,9 +2194,9 @@ example:
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_10_02_update_adminconsole_entryadmin_permissions.php
+	  php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_10_02_update_adminconsole_entryadmin_permissions.php
 	  
-## Add co-viewers field to the KalturaBaseEntry object ##
+## Add co-viewers field to the VidiunBaseEntry object ##
 
 - Issue Type: Feature
 - Issue ID: PLAT-7951
@@ -2215,7 +2215,7 @@ None.
 
 # Mercury 13.3.0 #
 
-## Expose new API for login by KS ##
+## Expose new API for login by VS ##
 
 - Issue Type: Feature
 - Issue ID: PLAT-7952
@@ -2226,7 +2226,7 @@ None.
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_09_07_add_user_loginByKs_permissions.php
+	  php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_09_07_add_user_loginByVs_permissions.php
 
 #### Known Issues & Limitations ####
 
@@ -2252,7 +2252,7 @@ Enable beacon plugin:
 		1. Add the following to plugins.ini file: "Beacon"
 		2. Make sure the following plugins are enabled since they are required for beacon service to work: ElasticSearch, RabbitMQ, Queue.
 
-Configure elasticSearch Kaltura configuration:
+Configure elasticSearch Vidiun configuration:
 		  
 	- Add the following to your elastic.ini file:
 	elasticClientCurlTimeout = CURL_TIMEOUT_IN_SEC
@@ -2261,11 +2261,11 @@ Configure elasticSearch Kaltura configuration:
 	elasticHost = "ELASTIC_HOST"
 	elasticPort = "ELASTIC_PORT"
 	
-	- Create new beaconindes in elastic by runing: curl -XPUT '"ELASTIC_HOST":"ELASTIC_PORT"/beaconindex' --data-binary "@/opt/kaltura/app/plugins/beacon/config/mapping/beacon_mapping.json"
+	- Create new beaconindes in elastic by runing: curl -XPUT '"ELASTIC_HOST":"ELASTIC_PORT"/beaconindex' --data-binary "@/opt/vidiun/app/plugins/beacon/config/mapping/beacon_mapping.json"
 
-Configure logstash Kaltura configuration:
+Configure logstash Vidiun configuration:
 
-	- Copy configurations/logstash/kaltura_beacons.template.conf to configurations/logstash/kaltura_beacons.conf and update the folloiwng tokens:
+	- Copy configurations/logstash/vidiun_beacons.template.conf to configurations/logstash/vidiun_beacons.conf and update the folloiwng tokens:
 		@RABBIT_MQ_SERVER@ = rabbitMQ server
 		@RABBIT_MQ_PASSWORD@ = rabbitMQ server Password
 		@RABBIT_MQ_USERNAME@ = rabbitMQ server User Name
@@ -2274,7 +2274,7 @@ Configure logstash Kaltura configuration:
 		@ELASTIC_SEARCH_HOST@ = elasticSearch server host
 		@ELASTIC_SEARCH_PORT@ = elasticSearch server port
 		
-	- Add new symlink in /etc/logstash/conf.d/kaltura_beacons to point to /opt/kaltura/app/configurations/logstash/kaltura_beacons.conf
+	- Add new symlink in /etc/logstash/conf.d/vidiun_beacons to point to /opt/vidiun/app/configurations/logstash/vidiun_beacons.conf
 
 Configure rabbitMq:
 	- Add new exchange called: beacon_exchange (Type=fanout, durable=true, Policy=ha-all)
@@ -2282,8 +2282,8 @@ Configure rabbitMq:
 	- Bind queue to exchange.
 
 ### Deployment scripts ###
-    1. php /opt/kaltura/app/deployment/base/scripts/installPlugins.php (New clients will be required after this step)
-    2. php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_09_04_add_beacon_service_permissions.php
+    1. php /opt/vidiun/app/deployment/base/scripts/installPlugins.php (New clients will be required after this step)
+    2. php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_09_04_add_beacon_service_permissions.php
 
 ## Add new ElasticSearch plugin ##
 
@@ -2294,10 +2294,10 @@ Configure rabbitMq:
 Add the following to plugins.ini file: "ElasticSearch"
 
 ### Deployment scripts ###
-    1. php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
+    1. php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
     2. create configurations/elastic.ini from configurations/elastic.ini.template and update placeholders with the elastic cluster information.
 
-## Add user permission for kclip attributes ##
+## Add user permission for vclip attributes ##
 
 - Issue Type: Feature
 - Issue ID: PLAT-7929
@@ -2306,7 +2306,7 @@ Add the following to plugins.ini file: "ElasticSearch"
 None
 
 ### Deployment scripts ###
-	php deployment/updates/scripts/add_permissions/2017_08_24_add_kClip_Attribute_user_permission.php
+	php deployment/updates/scripts/add_permissions/2017_08_24_add_vClip_Attribute_user_permission.php
 
 ## Add create recorded entry action ##
 
@@ -2328,19 +2328,19 @@ None
 ### Configuration ###
  - The batch.ini has been changed, make sure to add the following to your batch.ini:
 
-	enabledWorkers.KAsyncCopyCaptions					= 1
+	enabledWorkers.VAsyncCopyCaptions					= 1
 
  - The workers.ini has been change, make sure to add the following to your workers.ini:
 
-	[KAsyncCopyCaptions : JobHandlerWorker]
+	[VAsyncCopyCaptions : JobHandlerWorker]
 
 	id													= 650
 
 	friendlyName										= Copy Caption Assets
 
-	type												= KAsyncCopyCaptions
+	type												= VAsyncCopyCaptions
 
-	scriptPath											= ../plugins/content/caption/base/batch/CopyCaptions/KAsyncCopyCaptionsExe.php
+	scriptPath											= ../plugins/content/caption/base/batch/CopyCaptions/VAsyncCopyCaptionsExe.php
 
  - The generator.ini has been change for the clients-generator, make sure to add the following to your generator.ini:
 
@@ -2348,7 +2348,7 @@ None
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_08_20_list_captionAssetItem_permissions.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_08_20_list_captionAssetItem_permissions.php
 
 
 # Mercury 13.1.0 #
@@ -2362,8 +2362,8 @@ None
 Add the following to plugins.ini file: "Search"
 
 ### Deployment scripts ###
-    1. php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
-    2. mysql -h{HOSTNAME} -u{USER} -p{PASSWORD} kaltura_sphinx_log < /opt/kaltura/app/deployment/updates/sql/2017_05_15_add_type_column_sphinx_log.sql
+    1. php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
+    2. mysql -h{HOSTNAME} -u{USER} -p{PASSWORD} vidiun_sphinx_log < /opt/vidiun/app/deployment/updates/sql/2017_05_15_add_type_column_sphinx_log.sql
 
 
 ## Preserve Aspect Ratio accurately  ##
@@ -2376,26 +2376,26 @@ New mode (5) for flavorParams::AspectRatioMode field
 
 # Mercury 13.0.0 #
 
-## Fix deleting users on KMS ##
+## Fix deleting users on VMS ##
 
 - Issue Type: Bug
-- Issue ID: KMS-14633
+- Issue ID: VMS-14633
 
 ### configuration ###
 None
 
 ### Deployment scripts ###
-Re-index Kuser sphinx table (php deployment/base/scripts/populateSphinxKusers.php)
+Re-index Vuser sphinx table (php deployment/base/scripts/populateSphinxVusers.php)
 
-## Update Apache headers to support Kea Access-Control-Allow-Origin ##
+## Update Apache headers to support Vea Access-Control-Allow-Origin ##
  - Issue type: Feature
  - Issue ID : PLAT-7758
  
 ### configuration ###
-Need to add the following section to apache config files /etc/apache2/sites-enabled/kaltura & /etc/apache2/sites-enabled/kaltura-ssl
+Need to add the following section to apache config files /etc/apache2/sites-enabled/vidiun & /etc/apache2/sites-enabled/vidiun-ssl
 
-	Alias /apps/kea "/opt/kaltura/apps/kea"
-	<Directory "/opt/kaltura/apps/kea">
+	Alias /apps/vea "/opt/vidiun/apps/vea"
+	<Directory "/opt/vidiun/apps/vea">
 	    DirectoryIndex index.php
 	    Options ExecCGI -Indexes FollowSymLinks Includes
 	    Order allow,deny
@@ -2419,7 +2419,7 @@ None
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_07_11_addContent_data_permissions.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_07_11_addContent_data_permissions.php
 
 ## Add support for Thumbnail and Thumbnail Stripes for Stitched Playlist ##
 
@@ -2447,20 +2447,20 @@ None
 ### Configuration ###
 First replcae all tokens from the XML files below and remove ".template" from the fle name:
 
-	/opt/kaltura/app/deployment/base/scripts/init_data/07.DeliveryProfileLivePackagerDash.template.ini
-	/opt/kaltura/app/deployment/base/scripts/init_data/07.DeliveryProfileLivePackagerHds.template.ini
-	/opt/kaltura/app/deployment/base/scripts/init_data/07.DeliveryProfileLivePackagerHls.template.ini
-	/opt/kaltura/app/deployment/base/scripts/init_data/07.DeliveryProfileLivePackagerMss.template.ini
+	/opt/vidiun/app/deployment/base/scripts/init_data/07.DeliveryProfileLivePackagerDash.template.ini
+	/opt/vidiun/app/deployment/base/scripts/init_data/07.DeliveryProfileLivePackagerHds.template.ini
+	/opt/vidiun/app/deployment/base/scripts/init_data/07.DeliveryProfileLivePackagerHls.template.ini
+	/opt/vidiun/app/deployment/base/scripts/init_data/07.DeliveryProfileLivePackagerMss.template.ini
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/2017_07_11_create_live_packager_delivery_profiles.php
+	php /opt/vidiun/app/deployment/updates/scripts/2017_07_11_create_live_packager_delivery_profiles.php
 
 #### Known Issues & Limitations ####
 The followign modules need to be insatlled and correctly configured for this to work:
 
-- Please note that for live packaging to work you need to have the  [nginx-vod-module](https://github.com/kaltura/nginx-vod-module) correctly installed and configured to support live packaging.
-- This also requires your Kaltura live platform to work with Kaltura's [liveDvr](https://github.com/kaltura/liveDVR) 
+- Please note that for live packaging to work you need to have the  [nginx-vod-module](https://github.com/vidiun/nginx-vod-module) correctly installed and configured to support live packaging.
+- This also requires your Vidiun live platform to work with Vidiun's [liveDvr](https://github.com/vidiun/liveDVR) 
 
 
 ## Add Media-Entry ready email template ##
@@ -2470,11 +2470,11 @@ The followign modules need to be insatlled and correctly configured for this to 
 
 ### Configuration ###
 First replcae all tokens from the XML files below and remove ".template" from the fle name:
-	/opt/kaltura/app/deployment/updates/scripts/xml/2017_06_20_AddMediaEntryReadyTemplate.template.xml
+	/opt/vidiun/app/deployment/updates/scripts/xml/2017_06_20_AddMediaEntryReadyTemplate.template.xml
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/2017_06_20_deploy_new_event_notification_template.php
+	  php /opt/vidiun/app/deployment/updates/scripts/2017_06_20_deploy_new_event_notification_template.php
 
 #### Known Issues & Limitations ####
 None.
@@ -2489,7 +2489,7 @@ None.
 	None
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_07_09_allow_capture_space_to_add_cue_points_and_thumbs.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_07_09_allow_capture_space_to_add_cue_points_and_thumbs.php
 
 #### Known Issues & Limitations ####
 
@@ -2505,7 +2505,7 @@ None.
 	None
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_05_15_add_poll_service.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_05_15_add_poll_service.php
 
 #### Known Issues & Limitations ####
 
@@ -2559,36 +2559,36 @@ None.
 	Please note that for webcast to work you will need to have rabbit and pub-sub-server installed and correctly configured. For refernce view:
 	1. Install rabbit_mq (for reference view, https://www.rabbitmq.com/download.html)
 	2. Update configurations/rabbit_mq.ini placeholders with the rabbit information.
-	3. Install pub-sub-server (for reference view: https://github.com/kaltura/pub-sub-server/blob/Lynx-12.18.0/pub_sub_server_deployment.md)
+	3. Install pub-sub-server (for reference view: https://github.com/vidiun/pub-sub-server/blob/Lynx-12.18.0/pub_sub_server_deployment.md)
 
 ### Deployment scripts ###
 
 	Deploy new live HD flavors + Live Language package:
-	1. php /opt/kaltura/app/deployment/updates/scripts/2017_06_05_deploy_latest_live_params.php
+	1. php /opt/vidiun/app/deployment/updates/scripts/2017_06_05_deploy_latest_live_params.php
 	
 	Deploy Lecture_Capture conversion profile & flavors:
-	1. php /opt/kaltura/app/deployment/updates/scripts/2017_06_05_deploy_lecture_capture_data.php
+	1. php /opt/vidiun/app/deployment/updates/scripts/2017_06_05_deploy_lecture_capture_data.php
 
 	Deploy Webcast Push notification and response profiles:
 	1. Response profiles:
 	   First replcae all tokens from the XML files below and remove ".template" from the fle name:
-	   1. /opt/kaltura/app/deployment/updates/scripts/xml/responseProfiles/polls_response_profile.template.xml
-	   2. /opt/kaltura/app/deployment/updates/scripts/xml/responseProfiles/qna_response_profiles.template.xml
+	   1. /opt/vidiun/app/deployment/updates/scripts/xml/responseProfiles/polls_response_profile.template.xml
+	   2. /opt/vidiun/app/deployment/updates/scripts/xml/responseProfiles/qna_response_profiles.template.xml
 	   
 	   Run deployment script:
-	   1. 	php /opt/kaltura/app/deployment/updates/scripts/2017_05_24_deploy_webcast_related_response_profiles.php
+	   1. 	php /opt/vidiun/app/deployment/updates/scripts/2017_05_24_deploy_webcast_related_response_profiles.php
 
 	2. Push notitifications:
 	   First replcae all tokens from the XML files below and remove ".template" from the fle name:
-	   	1. /opt/kaltura/app/deployment/updates/scripts/xml/notifications/polls_qna_notification.template.xml
-		2. /opt/kaltura/app/deployment/updates/scripts/xml/notifications/user_qna_notification.template.xml
-		3. /opt/kaltura/app/deployment/updates/scripts/xml/notifications/code_qna_notification.template.xml
-		4. /opt/kaltura/app/deployment/updates/scripts/xml/notifications/public_qna_notification.template.xml
+	   	1. /opt/vidiun/app/deployment/updates/scripts/xml/notifications/polls_qna_notification.template.xml
+		2. /opt/vidiun/app/deployment/updates/scripts/xml/notifications/user_qna_notification.template.xml
+		3. /opt/vidiun/app/deployment/updates/scripts/xml/notifications/code_qna_notification.template.xml
+		4. /opt/vidiun/app/deployment/updates/scripts/xml/notifications/public_qna_notification.template.xml
 	
 	   Run deployment script:
-		1. php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
-		2. php /opt/kaltura/app/generator/generate.php
-		3. php /opt/kaltura/app/deployment/updates/scripts/2017_06_14_deploy_webcast_push_notifications.php
+		1. php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
+		2. php /opt/vidiun/app/generator/generate.php
+		3. php /opt/vidiun/app/deployment/updates/scripts/2017_06_14_deploy_webcast_push_notifications.php
 	
 #### Known Issues & Limitations ####
 
@@ -2605,7 +2605,7 @@ None.
 
 ### Deployment scripts ###
 
-	  mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /opt/kaltura/app/deployment/updates/sql/2017_06_07_alter_server_node_table_parent_id.sql
+	  mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /opt/vidiun/app/deployment/updates/sql/2017_06_07_alter_server_node_table_parent_id.sql
 
 #### Known Issues & Limitations ####
 
@@ -2623,7 +2623,7 @@ None.
 
 ### Deployment scripts ###
 
-    php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_05_15_add_poll_service.php
+    php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_05_15_add_poll_service.php
 
 ## missing enum in quiz plugin ##
 
@@ -2660,8 +2660,8 @@ Add to admin.ini:
 
 ### Deployment scripts ###
 
-	  php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_03_22_add_adminConsole_scheduleTask_permission.php
-	  php /opt/kaltura/app/deployment/updates/scripts/addMediaRepurposingProfiles.php
+	  php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_03_22_add_adminConsole_scheduleTask_permission.php
+	  php /opt/vidiun/app/deployment/updates/scripts/addMediaRepurposingProfiles.php
 
 #### Known Issues & Limitations ####
 
@@ -2707,7 +2707,7 @@ None.
   
 ### Deployment scripts ###
 
-    php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_05_15_add_poll_service.php
+    php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_05_15_add_poll_service.php
 
 ## ViewHistory Feature Add missing permission item ##
 
@@ -2719,7 +2719,7 @@ None.
 
 ### Deployment scripts ###
 
-  php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_05_23_add_userentry_udpate_to_PLAYBACK_BASE_PERMISSION.php
+  php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_05_23_add_userentry_udpate_to_PLAYBACK_BASE_PERMISSION.php
 
 #### Known Issues & Limitations ####
 
@@ -2752,7 +2752,7 @@ None.
 
 ### Deployment scripts ###
 
-    php /opt/kaltura/app/deployment/base/scripts/createQueryCacheTriggers.php create <myql-server> <mysql-user> <mysql-pass> realrun
+    php /opt/vidiun/app/deployment/base/scripts/createQueryCacheTriggers.php create <myql-server> <mysql-user> <mysql-pass> realrun
 
 #### Known Issues & Limitations ####
 
@@ -2777,8 +2777,8 @@ None.
 
 #### Deployment Scripts ####
 
-		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /deployment/updates/sql/2017_03_21_alter_user_entry_table_extended_status_add_keys.sql
-		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} kaltura < /deployment/updates/sql/2017_04_24_alter_user_entry_table_privacy_context_add_keys.sql
+		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /deployment/updates/sql/2017_03_21_alter_user_entry_table_extended_status_add_keys.sql
+		mysql –h{HOSTNAME}  –u{USER} –p{PASSWORD} vidiun < /deployment/updates/sql/2017_04_24_alter_user_entry_table_privacy_context_add_keys.sql
 		php /deployment/updates/scripts/add_permissions/2017_04_01_add_user_entry_service_permissions.php
 		php /deployment/base/scripts/installPlugins.php
 
@@ -2790,8 +2790,8 @@ None.
 Beta version, activated for the internal Kino account.
 
 ### Configuration ###
-- /opt/kaltura/app/configurations/batch/workers.ini
-- /opt/kaltura/app/configurations/batch/encoder.ini
+- /opt/vidiun/app/configurations/batch/workers.ini
+- /opt/vidiun/app/configurations/batch/encoder.ini
 
 ### Deployment scripts ###
 
@@ -2815,7 +2815,7 @@ None
 
 #### Deployment Scripts ####
 
-php /opt/kaltura/app/deployment/updates/scripts/2017_04_27_clear_rtsp_broadcast_url_from_custom_data.php
+php /opt/vidiun/app/deployment/updates/scripts/2017_04_27_clear_rtsp_broadcast_url_from_custom_data.php
 
 ## Add permission for capture device to do scheduleResource->get ##
 
@@ -2827,7 +2827,7 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_04_27_add_capture_device_permission_to_schedule_resource_get.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_04_27_add_capture_device_permission_to_schedule_resource_get.php
 
 #### Known Issues & Limitations ####
 
@@ -2835,7 +2835,7 @@ None.
 
 # Lynx 12.14.0 #
 
-## Change permissions for admin_console and KalturaPartner ##
+## Change permissions for admin_console and VidiunPartner ##
 
  - Issue Type: Bug
  - Issue ID: PLAT-7167
@@ -2845,7 +2845,7 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_03_30_partner_parent_partner_packager_permission.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_03_30_partner_parent_partner_packager_permission.php
 
 #### Known Issues & Limitations ####
 
@@ -2861,7 +2861,7 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_04_05_add_schedule_and_schedule_resource_permissions_for_capture_device.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_04_05_add_schedule_and_schedule_resource_permissions_for_capture_device.php
 
 #### Known Issues & Limitations ####
 
@@ -2877,7 +2877,7 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_04_18_add_uploadtoken_get_permission_for_capture_device.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_04_18_add_uploadtoken_get_permission_for_capture_device.php
 
 #### Known Issues & Limitations ####
 
@@ -2928,7 +2928,7 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_03_20_add_media_server_permission_get_permission.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_03_20_add_media_server_permission_get_permission.php
 
 #### Known Issues & Limitations ####
 
@@ -2970,10 +2970,10 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_03_05_add_batch_thumbasset_delete_permission.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_03_05_add_batch_thumbasset_delete_permission.php
 
 
-## User KS allow specific permission to approveReplace ##
+## User VS allow specific permission to approveReplace ##
 
  - Issue Type: New Feature
  - Issue ID: PLAT-6663
@@ -2983,7 +2983,7 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_03_01_add_kms_user_permission_and_role.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_03_01_add_vms_user_permission_and_role.php
 	
 #### Known Issues & Limitations ####
 
@@ -3001,7 +3001,7 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_02_06_add_send_command_permissons_to_push_notification_tempalte.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_02_06_add_send_command_permissons_to_push_notification_tempalte.php
 	
 #### Known Issues & Limitations ####
 
@@ -3019,7 +3019,7 @@ reduce dropfolder watcher to single for each type
 None.
 
 ### Deployment scripts ###
-php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_02_08_add_actions_drop_folder_permissions.php
+php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_02_08_add_actions_drop_folder_permissions.php
 
 ## Conditional conversion porfiles ##
 
@@ -3070,7 +3070,7 @@ None.
 
 ### Deployment scripts ###
 
-php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_02_01_user_list_for_capture_role_permissions.php
+php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_02_01_user_list_for_capture_role_permissions.php
 
 ## Added dynamic segment duration feature ## 
 
@@ -3083,7 +3083,7 @@ php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_02_01_user_
 
 		moduls.liveStreamSegmentDuration.enabled = true
 		moduls.liveStreamSegmentDuration.permissionType = 2
-		moduls.liveStreamSegmentDuration.label = Kaltura Live Dynamic Segment Duration
+		moduls.liveStreamSegmentDuration.label = Vidiun Live Dynamic Segment Duration
 		moduls.liveStreamSegmentDuration.permissionName = FEATURE_DYNAMIC_SEGMENT_DURATION
 		moduls.liveStreamSegmentDuration.basePermissionType = 2
 		moduls.liveStreamSegmentDuration.basePermissionName = FEATURE_LIVE_STREAM
@@ -3123,7 +3123,7 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2017_01_30_expend_capture_role_permissions.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2017_01_30_expend_capture_role_permissions.php
 	
 #### Known Issues & Limitations ####
 
@@ -3139,7 +3139,7 @@ None.
 
 ### Deployment scripts ###
 
-    php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/contentUpdateNotifications.xml
+    php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/contentUpdateNotifications.xml
 
 ## Transcription engines operation changes ##
 
@@ -3151,7 +3151,7 @@ None.
 
 ### Deployment scripts ###
 	
-	php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
+	php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
 
 ## File type restriction for uploading files ##
 
@@ -3182,7 +3182,7 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/playServerFlavorHttpEventNotification.xml
+	php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/playServerFlavorHttpEventNotification.xml
 
 ## Add temporary flag for new live recording LA ##
 
@@ -3192,13 +3192,13 @@ None.
 ### Configuration ###
 - Add new permission to admin.ini:
 
-		moduls.kalturaLiveStreamRecording.enabled = true
-		moduls.kalturaLiveStreamRecording.permissionType = 2
-		moduls.kalturaLiveStreamRecording.label = Kaltura Live Stream Recording
-		moduls.kalturaLiveStreamRecording.permissionName = FEATURE_LIVE_STREAM_KALTURA_RECORDING
-		moduls.kalturaLiveStreamRecording.basePermissionType = 2
-		moduls.kalturaLiveStreamRecording.basePermissionName = FEATURE_LIVE_STREAM
-		moduls.kalturaLiveStreamRecording.group = GROUP_ENABLE_DISABLE_FEATURES
+		moduls.vidiunLiveStreamRecording.enabled = true
+		moduls.vidiunLiveStreamRecording.permissionType = 2
+		moduls.vidiunLiveStreamRecording.label = Vidiun Live Stream Recording
+		moduls.vidiunLiveStreamRecording.permissionName = FEATURE_LIVE_STREAM_VIDIUN_RECORDING
+		moduls.vidiunLiveStreamRecording.basePermissionType = 2
+		moduls.vidiunLiveStreamRecording.basePermissionName = FEATURE_LIVE_STREAM
+		moduls.vidiunLiveStreamRecording.group = GROUP_ENABLE_DISABLE_FEATURES
 
 ### Deployment scripts ###
 	
@@ -3217,7 +3217,7 @@ None.
 None.
 
 ### Deployment scripts ###
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_12_20_update_schedule_event_permissions.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_12_20_update_schedule_event_permissions.php
 	                
 ## Need to verify ability to list occurrences by resource of their parent for Extron ##
 
@@ -3239,7 +3239,7 @@ None.
 None.
 
 ### Deployment scripts ###
-	php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/deployment/updates/scripts/xml/2016_12_23_updateEntryReadyTemplateForLive.xml
+	php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/deployment/updates/scripts/xml/2016_12_23_updateEntryReadyTemplateForLive.xml
 
 ## Add new bpm_process_case table to the DB ##
 
@@ -3315,7 +3315,7 @@ None
 None.
 
 ### Deployment scripts ###
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_12_06_update_base_entry_get_playing_data_permissions.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_12_06_update_base_entry_get_playing_data_permissions.php
 	
 ## Ad cue points and flavor changed http notifications ##
 
@@ -3327,20 +3327,20 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/adCuePointHttpNotification.xml
-	php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/playServerFlavorHttpEventNotification.xml
+	php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/adCuePointHttpNotification.xml
+	php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/playServerFlavorHttpEventNotification.xml
 
-## support for Kaltura liveRecording - Full Live to Vod flow ##
+## support for Vidiun liveRecording - Full Live to Vod flow ##
 
  - Issue Type: New Feature
  - Issue ID: PLAT-5807
 
 ### Configuration ###
 
-Add the following to workers.ini under KAsyncExtractMedia:
+Add the following to workers.ini under VAsyncExtractMedia:
 
 	;The path for finished products, acessable from the apache
-	params.sharedTempPath	= (should be identical to the shared path configurued on KAsyncConvertWorker)
+	params.sharedTempPath	= (should be identical to the shared path configurued on VAsyncConvertWorker)
 
 ### Deployment scripts ###
 	
@@ -3378,7 +3378,7 @@ None.
 
 # Lynx 12.6.0 #
 
-## support for Kaltura liveRecording - Full Live to Vod flow ##
+## support for Vidiun liveRecording - Full Live to Vod flow ##
 
  - Issue Type: New Feature
  - Issue ID: PLAT-5807
@@ -3390,11 +3390,11 @@ None.
 	
 Add live flavor params tag to include hls required tags:
 
-	php /opt/kaltura/app/deployment/updates/scripts/2016_10_30_update_live_flavor_tags.php
+	php /opt/vidiun/app/deployment/updates/scripts/2016_10_30_update_live_flavor_tags.php
 
 Add new permissions to mediaServer partner for media->update:
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_11_22_media_server_media_update.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_11_22_media_server_media_update.php
 	
 #### Known Issues & Limitations ####
 
@@ -3411,7 +3411,7 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/adCuePointHttpNotification.xml
+	php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/adCuePointHttpNotification.xml
 
 ## Allow entryServerNode get and list actions for partners ##
 
@@ -3425,7 +3425,7 @@ None.
 
 Add additional permissions to liveEntryServerNode service: 	
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_11_21_entry_server_node_allow_partner_list.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_11_21_entry_server_node_allow_partner_list.php
 
 #### Known Issues & Limitations ####
 
@@ -3445,7 +3445,7 @@ None.
 
 Add a new column to the category_entry table:
 
-			mysql -hHOST_NAME -uUSER -pPASS DB_NAME < deployment/updates/sql/2016_11_11_alter_category_entry_table_add_creator_kuser_id_table.sql
+			mysql -hHOST_NAME -uUSER -pPASS DB_NAME < deployment/updates/sql/2016_11_11_alter_category_entry_table_add_creator_vuser_id_table.sql
 
 # Lynx 12.5.0 #
 
@@ -3455,12 +3455,12 @@ Add a new column to the category_entry table:
  - Issue ID: PLAT-6327
 
 ### Configuration ###
-update app/configurations/sphinx/kaltura.conf file and remove the following from kaltura_caption_item:
+update app/configurations/sphinx/vidiun.conf file and remove the following from vidiun_caption_item:
 rt_attr_uint = int_id 
 
 ### Deployment scripts ###
 	
-ReIndex and repopulate kaltura_caption tabel in sphinx.
+ReIndex and repopulate vidiun_caption tabel in sphinx.
 
 #### Known Issues & Limitations ####
 
@@ -3468,7 +3468,7 @@ None.
 
 # Lynx 12.4.0 #
 
-## Initial support for Kaltura liveRecording ##
+## Initial support for Vidiun liveRecording ##
 
  - Issue Type: New Feature
  - Issue ID: PLAT-5809
@@ -3480,11 +3480,11 @@ None.
 	
 Add new liveStream service setRecordedContent Action:
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_10_20_live_stream_service_set_recorded_content.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_10_20_live_stream_service_set_recorded_content.php
 
 Add new permissions to mediaServer partner:
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_09_21_media_Server_upload_token_list.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_09_21_media_Server_upload_token_list.php
 
 #### Known Issues & Limitations ####
 
@@ -3496,7 +3496,7 @@ None.
 - Issue ID: PLAT-6093
 
 ### Deployment scripts ###
-- Run 'mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura < /opt/kaltura/app/deployment/updates/sql/2016_10_20_alter_business_process_server_table_add_dc_column.sql'
+- Run 'mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun < /opt/vidiun/app/deployment/updates/sql/2016_10_20_alter_business_process_server_table_add_dc_column.sql'
 
 
 ## Allow Play Server to Run Flavor Asset List ##
@@ -3525,8 +3525,8 @@ None.
  - Issue ID: PLAT-6164
 
 ### Configuration ###
- - update sphinx kaltura.conf:
-	 Add index to kaltura_schedule_event:
+ - update sphinx vidiun.conf:
+	 Add index to vidiun_schedule_event:
 	- rt_attr_string = summary
 
 ### Deployment scripts ###
@@ -3546,7 +3546,7 @@ None.
 ### Deployment scripts ###
 	run:
 	 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_10_10_add_regenerate_secure_token_liveStream.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_10_10_add_regenerate_secure_token_liveStream.php
 
 #### Known Issues & Limitations ####
 
@@ -3561,7 +3561,7 @@ None.
 
 ### Configuration ###
  - update OVP push servers to latest version
- - add an exchange on each server named "kaltura_exchange"
+ - add an exchange on each server named "vidiun_exchange"
 
 ### Deployment scripts ###
 None.
@@ -3578,7 +3578,7 @@ None.
  
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/attachmentAssetHttpNotifications.xml
+	php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/attachmentAssetHttpNotifications.xml
 
 ## Add new batch job for handling copy cue-point from live to VOD ##
 
@@ -3588,21 +3588,21 @@ None.
 ### Configuration ###
  - The batch.ini has been change, make sure to add the follow to your batch.ini:
 	
-	enabledWorkers.KAsyncLiveToVod		= 1
+	enabledWorkers.VAsyncLiveToVod		= 1
 	
  - The workers.ini has been change, make sure to add the follow to your workers.ini:
 	
-	[KAsyncLiveToVod : KAsyncConvertWorker]
+	[VAsyncLiveToVod : VAsyncConvertWorker]
 	
 	id							= 640
 	
-	type							= KAsyncLiveToVod
+	type							= VAsyncLiveToVod
 	
-	scriptPath			 			= batches/LiveToVod/KAsyncLiveToVodExe.php
+	scriptPath			 			= batches/LiveToVod/VAsyncLiveToVodExe.php
 ### Deployment scripts ###
 	run:
 	 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_08_22_add_action_plugin_cuepoint.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_08_22_add_action_plugin_cuepoint.php
 
 ## New category HTTP event notifications ##
 
@@ -3614,7 +3614,7 @@ None.
  
 ### Deployment scripts ###
 
-	cd /opt/kaltura/app/tests/standAloneClient
+	cd /opt/vidiun/app/tests/standAloneClient
 	php exec.php categoryHttpNotifications.xml  
 
 ## Sphinx improvement - add partnerId to privacy_by_contextsx ##
@@ -3642,7 +3642,7 @@ None.
  
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/bpmNotificationTemplatesForBurntSubtitles.xml
+	php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/bpmNotificationTemplatesForBurntSubtitles.xml
 
 ## Live Delivery profile - enable overiding live delivery profiles per partner similar to how we work with VOD ##
 
@@ -3656,11 +3656,11 @@ None.
 	
 Import partner mediaServerConfiguration and set the new liveDeliveryProfile ovveride option:
 
-	php /opt/kaltura/app/deployment/updates/scripts/2016_08_30_migrate_partner_media_server_configurations.php execute
+	php /opt/vidiun/app/deployment/updates/scripts/2016_08_30_migrate_partner_media_server_configurations.php execute
 
 For current eCDN partners set the default empty deliveryProfile on the serverNode config to avoid configuring new deliveryProfle per machine:
 
-	php /opt/kaltura/app/deployment/updates/scripts/2016_08_25_updateExternalServerNodes.php execute
+	php /opt/vidiun/app/deployment/updates/scripts/2016_08_25_updateExternalServerNodes.php execute
 	
 ###### Note: the execute required param will be removed before the actual deployemnt.
 
@@ -3673,17 +3673,17 @@ None.
 
 # Kajam 11.21.0 #
 
-## Modify kaltura_cue_point sphinx index columns from int to text field (for better sphinx querying) ##
+## Modify vidiun_cue_point sphinx index columns from int to text field (for better sphinx querying) ##
 
  - Issue Type: Bug
  - Issue ID: PLAT-5742
 
 ### Configuration ###
-- update sphinx kaltura.conf:
+- update sphinx vidiun.conf:
 	
-		Make sure that to kaltura_cue_point index is modified from rt_attr_uint to rt_field :
+		Make sure that to vidiun_cue_point index is modified from rt_attr_uint to rt_field :
 		- rt_field = cue_point_type
-		- rt_field = kuser_id
+		- rt_field = vuser_id
 		- rt_field = is_public
 
 ### Deployment scripts ###
@@ -3705,7 +3705,7 @@ None.
 
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/deployment/updates/scripts/2016_08_01_create_polls_default_schecma.php
+	php /opt/vidiun/app/deployment/updates/scripts/2016_08_01_create_polls_default_schecma.php
 
 #### Known Issues & Limitations ####
 
@@ -3723,7 +3723,7 @@ None.
  
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/bpmNotificationTemplatesForBurntSubtitles.xml
+	php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/bpmNotificationTemplatesForBurntSubtitles.xml
 
 # Kajam 11.19.0 #
 
@@ -3736,7 +3736,7 @@ None.
 
 #### Deployment Scripts ####
 
-- Run mysql -ukaltura -p -P3306 kaltura < 2016_07_07_alter_schedule_event_table_add_updated_at_key.sql
+- Run mysql -uvidiun -p -P3306 vidiun < 2016_07_07_alter_schedule_event_table_add_updated_at_key.sql
 
 #### Known Issues & Limitations ####
 
@@ -3799,7 +3799,7 @@ None.
  
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/bpmNotificationTemplatesForBurntSubtitles.xml
+	php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/bpmNotificationTemplatesForBurntSubtitles.xml
 
 #### Known Issues & Limitations ####
 
@@ -3848,9 +3848,9 @@ None.
 - Issue ID: PLAT-5488 PLAT-5484
 
 ### Configuration ###
-- update sphinx kaltura.conf:
+- update sphinx vidiun.conf:
 	
-		Add the following to kaltura_schedule_event index:
+		Add the following to vidiun_schedule_event index:
 		- rt_field = template_entry_categories_ids
 		- rt_field = resource_system_names
 		- rt_field = template_entry_id
@@ -3875,7 +3875,7 @@ IP, userId and password (of your admin-console account), partner (insert -2 for 
 
 #### Deployment Scripts ####
 
-		php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/deployment/updates/scripts/xml/2016_05_31_updateEntryReadyTemplateForReplace.xml
+		php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/deployment/updates/scripts/xml/2016_05_31_updateEntryReadyTemplateForReplace.xml
 		
 #### Known Issues & Limitations ####
 
@@ -3887,7 +3887,7 @@ None.
 - Issue ID: PLAT-5640
 
 ### Configuration ###
-[KAsyncExtractMedia : JobHandlerWorker]
+[VAsyncExtractMedia : JobHandlerWorker]
 .
 .
 params.localTempPath = @TMP_DIR@/convert
@@ -3909,7 +3909,7 @@ None.
 
 #### Deployment Scripts ####
 
-		- Run 'php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_05_31_add_additional_actions_to_entryServerNode.php'
+		- Run 'php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_05_31_add_additional_actions_to_entryServerNode.php'
 		
 #### Known Issues & Limitations ####
 
@@ -3926,7 +3926,7 @@ None.
 
 #### Deployment Scripts ####
 
-		php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/bpmNotificationTemplatesForBurntSubtitles.xml
+		php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/bpmNotificationTemplatesForBurntSubtitles.xml
 
 #### Known Issues & Limitations ####
 
@@ -3941,7 +3941,7 @@ None.
 - None.
  
 #### Deployment Scripts ####
-php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_01_17_flavorasset_service_add_play_server_permission.php
+php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_01_17_flavorasset_service_add_play_server_permission.php
 
 #### Known Issues & Limitations ####
 
@@ -3958,7 +3958,7 @@ None.
 
 #### Deployment Scripts ####
 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_05_05_add_additional_actions_to_entryServerNode.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_05_05_add_additional_actions_to_entryServerNode.php
 
 #### Known Issues & Limitations ####
 
@@ -3971,13 +3971,13 @@ None.
 
 #### Configuration ####
 
-- configurations/sphinx/kaltura.conf -  add the following line to the kaltura_category index:  
+- configurations/sphinx/vidiun.conf -  add the following line to the vidiun_category index:  
 rt_field = aggregation_categories  
 
 #### Deployment Scripts ####
 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_05_29_enable_category_update_to_partner_-2.php  
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_05_29_limit_access_to_isAggregationChannel_property.php  
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_05_29_enable_category_update_to_partner_-2.php  
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_05_29_limit_access_to_isAggregationChannel_property.php  
 
 # Kajam 11.15.0 #
 
@@ -3992,7 +3992,7 @@ rt_field = aggregation_categories
 
 #### Deployment Scripts ####
 
-		php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/contentUpdateNotifications.xml
+		php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/contentUpdateNotifications.xml
 
 #### Known Issues & Limitations ####
 
@@ -4017,12 +4017,12 @@ Install plugins:
  - Issue ID: PLAT-5401
  
 #### Configuration ####
-Added the following to batch.ini file under KAsyncValidateLiveMediaServers:
+Added the following to batch.ini file under VAsyncValidateLiveMediaServers:
  
  - params.minCreationTime = 120
  
 #### Deployment scripts####
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_04_26_add_batch_to_entryServerNode.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_04_26_add_batch_to_entryServerNode.php
 	
 ## Added the new analytics service ##
  
@@ -4035,7 +4035,7 @@ Added the following to local.ini in server-saas-config:
  - analytics_internal_API_url = http://dataretrieval-access-stg-491967709.us-west-2.elb.amazonaws.com:9000/query 
 
 #### Deployment scripts####
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_04_17_analytics.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_04_17_analytics.php
  
 #### Known Issues & Limitations ####
  - None.
@@ -4049,7 +4049,7 @@ Added the following to local.ini in server-saas-config:
 - None.
  
 #### Deployment scripts####
-	php /opt/kaltura/app/deployment/updates/scripts/2016_04_05_migrate_tvinci_distribution_tags_to_be_dynamic.php <partner_id> realrun
+	php /opt/vidiun/app/deployment/updates/scripts/2016_04_05_migrate_tvinci_distribution_tags_to_be_dynamic.php <partner_id> realrun
  
 #### Known Issues & Limitations ####
  - None.
@@ -4067,7 +4067,7 @@ Added the following to local.ini in server-saas-config:
 
 #### Deployment scripts####
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_04_14_update_batch_service.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_04_14_update_batch_service.php
 
 #### Known Issues & Limitations ####
 - None.
@@ -4077,8 +4077,8 @@ Added the following to local.ini in server-saas-config:
 - Issue ID: PLAT-5245
 
 #### Configuration ####
-- copy "index kaltura_schedule_event:kaltura_base" section from /opt/kaltura/app/configurations/sphinx/kaltura.conf.template
-to /opt/kaltura/app/configurations/sphinx/kaltura.conf
+- copy "index vidiun_schedule_event:vidiun_base" section from /opt/vidiun/app/configurations/sphinx/vidiun.conf.template
+to /opt/vidiun/app/configurations/sphinx/vidiun.conf
 modifiy path to appropriate directory.
 - restart sphinx service
 
@@ -4093,7 +4093,7 @@ modifiy path to appropriate directory.
 
 #### Deployment scripts####
 
-	php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/deployment/updates/scripts/xml/updateCommentWasAddedToEntryEmailNotificationTemplateCode.xml
+	php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/deployment/updates/scripts/xml/updateCommentWasAddedToEntryEmailNotificationTemplateCode.xml
 
 #### Known Issues & Limitations ####
 - None.
@@ -4115,7 +4115,7 @@ modifiy path to appropriate directory.
 		php deployment/base/scripts/installPlugins.php
 	
 	Create new tables:
-		mysql -ukaltura -p -P3306 kaltura < deployment/updates/sql/2016_03_17_create_schedule_tables.sql
+		mysql -uvidiun -p -P3306 vidiun < deployment/updates/sql/2016_03_17_create_schedule_tables.sql
 
 #### Known Issues & Limitations ####
 - None.
@@ -4142,7 +4142,7 @@ modifiy path to appropriate directory.
 
 #### Deployment Scripts ####
 	Update permissions: 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_03_22_media_server_live_stream_list.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_03_22_media_server_live_stream_list.php
 	
 #### Known Issues & Limitations ####
 - None.
@@ -4156,7 +4156,7 @@ modifiy path to appropriate directory.
 
 #### Deployment Scripts ####
 	Update permissions: 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2013_03_24_update_content_docs_action.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2013_03_24_update_content_docs_action.php
 	
 #### Known Issues & Limitations ####
 - None.
@@ -4170,13 +4170,13 @@ modifiy path to appropriate directory.
 
 #### Deployment Scripts ####
 	Update permissions: 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_02_10_entry_server_node_service.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_02_10_entry_server_node_service.php
 	
 	Create new entry_server_node table:
-		mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura < /opt/kaltura/app/deployment/updates/sql/2016_02_10_create_entry_server_node_table.sql
+		mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun < /opt/vidiun/app/deployment/updates/sql/2016_02_10_create_entry_server_node_table.sql
 		
 	Import all live entries to the new table:
-		php /opt/kaltura/app/deployment/updates/scripts/2016_02_17_move_live_entry_to_entry_server_node.php
+		php /opt/vidiun/app/deployment/updates/scripts/2016_02_17_move_live_entry_to_entry_server_node.php
 
 #### Known Issues & Limitations ####
 - None.
@@ -4191,9 +4191,9 @@ modifiy path to appropriate directory.
 	[[{"id":"document.ppt2Img","extra":null,"command":null},{"id":"document.thumbAssets","extra":null,"command":null}]]
 
 	Requires adding a new worker to batch.ini:
-	- enabledWorkers.KAsyncConvertThumbAssetsGenerator = 1
+	- enabledWorkers.VAsyncConvertThumbAssetsGenerator = 1
 
-	- [KAsyncConvertThumbAssetsGenerator : KAsyncConvertWorker]
+	- [VAsyncConvertThumbAssetsGenerator : VAsyncConvertWorker]
 	  id                                      = XXXX
 	  friendlyName                            = Convert Thumb Assets
 	  maximumExecutionTime                    = 36000
@@ -4217,23 +4217,23 @@ None.
  
 ### Configuration ###
 		Added the following to batch.ini file:
-		- enabledWorkers.KAsyncClearCuePoints = 1
+		- enabledWorkers.VAsyncClearCuePoints = 1
 		
-		- [KAsyncClearCuePoints : PeriodicWorker]
+		- [VAsyncClearCuePoints : PeriodicWorker]
 		  id = LAST_USED_ID + 10
 		  friendlyName = Clear old cue points from live entry
-		  type = KAsyncClearCuePoints
-		  scriptPath = ../plugins/cue_points/base/batch/clearCuePonts/KAsyncClearCuePointsExe.php
-		  filter.KalturaCuePointFilter.cuePointTypeIn = "thumbCuePoint.Thumb,adCuePoint.Ad,codeCuePoint.Code"
-		  filter.KalturaCuePointFilter.orderBy = "+createdAt"
-		  filter.KalturaCuePointFilter.createdAtLessThanOrEqual = "-86400"
-		  filter.KalturaCuePointFilter.statusEqual = 1
+		  type = VAsyncClearCuePoints
+		  scriptPath = ../plugins/cue_points/base/batch/clearCuePonts/VAsyncClearCuePointsExe.php
+		  filter.VidiunCuePointFilter.cuePointTypeIn = "thumbCuePoint.Thumb,adCuePoint.Ad,codeCuePoint.Code"
+		  filter.VidiunCuePointFilter.orderBy = "+createdAt"
+		  filter.VidiunCuePointFilter.createdAtLessThanOrEqual = "-86400"
+		  filter.VidiunCuePointFilter.statusEqual = 1
 
 #### Known Issues & Limitations ####
 - None.
 
 #### Deployment scripts ####
- - php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2016_02_29_batch_cue_point.php
+ - php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2016_02_29_batch_cue_point.php
 
 ## Avoid API caching of anonymous users base on widget role unless found in blacklist ##
  - Issue Type:bug\feature
@@ -4285,7 +4285,7 @@ None.
 
 Add the following line to the the event_consumers[] list
 
-		event_consumers[] = kObjectReadyForIndexInheritedTreeHandler
+		event_consumers[] = vObjectReadyForIndexInheritedTreeHandler
 
 #### Deployment Scripts ####
 
@@ -4301,9 +4301,9 @@ None.
 ### Installation ###
 None.
 #### Configuration ####
-Copy the file '/opt/kaltura/app/batch/kaltura_batch.sh' to /etc/init.d/kaltura-batch and overwrite.
-Edit file '/opt/kaltura/app/configurations/monit/monit.avail/batch.rc'. Set the value 'with pidfile "/opt/kaltura/var/run/batch.pid"'
-Edit file '/opt/kaltura/app/configurations/batch/batch.ini' and set 'pidFileDir = /opt/kaltura/var/run/'
+Copy the file '/opt/vidiun/app/batch/vidiun_batch.sh' to /etc/init.d/vidiun-batch and overwrite.
+Edit file '/opt/vidiun/app/configurations/monit/monit.avail/batch.rc'. Set the value 'with pidfile "/opt/vidiun/var/run/batch.pid"'
+Edit file '/opt/vidiun/app/configurations/batch/batch.ini' and set 'pidFileDir = /opt/vidiun/var/run/'
 #### Known Issues & Limitations ####
 None.
 #### Deployment scripts ####
@@ -4337,7 +4337,7 @@ None.
 
 #### Deployment Scripts ####
 
-		php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/flavorAssetChangedHttpNotificationTemplate.xml
+		php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/flavorAssetChangedHttpNotificationTemplate.xml
 
 #### Known Issues & Limitations ####
 
@@ -4393,7 +4393,7 @@ None.
 #### Known Issues & Limitations ####
 None.
 #### Deployment scripts ####
- - mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura < /opt/kaltura/app/deployment/updates/sql/2016_02_03_add_default_duration_to_drm_policies.sql
+ - mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun < /opt/vidiun/app/deployment/updates/sql/2016_02_03_add_default_duration_to_drm_policies.sql
 
 
 # Kajam-11.7.0 #
@@ -4422,14 +4422,14 @@ None.
  - Issue Type: New Feature
  - Issue ID: WEBC-629
 #### Installation ####
- - deploy new jars to Wowza - new jars can be found in the ticket https://kaltura.atlassian.net/browse/WEBC-629
+ - deploy new jars to Wowza - new jars can be found in the ticket https://vidiun.atlassian.net/browse/WEBC-629
 #### Configuration ####
  - Validate facebook.ini exists in the configuration directory
  - Added FacebookDistribution to plugins.ini
 #### Known Issues & Limitations ####
 None.
 #### Deployment scripts ####
- - php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
+ - php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
 
 ## Usage dashboard ##
 
@@ -4438,9 +4438,9 @@ None.
 
 #### Installation ####
 
-- Download latest Usage Dashboard package from https://github.com/kaltura/usage-dashboard/releases/
-- Extract the zip to `/opt/kaltura/apps/usage-dashboard/`
-- If the app version is v1.0.0, make sure that `/opt/kaltura/apps/usage-dashboard/v1.0.0/index.html` exists
+- Download latest Usage Dashboard package from https://github.com/vidiun/usage-dashboard/releases/
+- Extract the zip to `/opt/vidiun/apps/usage-dashboard/`
+- If the app version is v1.0.0, make sure that `/opt/vidiun/apps/usage-dashboard/v1.0.0/index.html` exists
 
 #### Configuration ####
 
@@ -4478,8 +4478,8 @@ None.
 
 #### Configuration ####
 	- in batch.ini, add:
-		KAsyncConvertLiveSegment: params.mediaInfoCmd = @BIN_DIR@/mediainfo
-		KAsyncConcat: params.mediaInfoCmd = @BIN_DIR@/mediainfo
+		VAsyncConvertLiveSegment: params.mediaInfoCmd = @BIN_DIR@/mediainfo
+		VAsyncConcat: params.mediaInfoCmd = @BIN_DIR@/mediainfo
 #### Known Issues & Limitations ####
 None.
 #### Deployment scripts ####
@@ -4516,12 +4516,12 @@ None.
 - task: WEBC-631
 #### Configuration ####
  - configure ffprobe on API / BATCH servers - used to parse AMF data from mp4 files generated by wowza.
-to do so: add bin_path_ffprobeKAMFMediaInfoParser to local.ini to be a symbolic link to /opt/kaltura/bin/ffmpeg-2.7.2-bin/ffprobe.sh
-the symbolic link should be named ffprobeKAMFMediaInfoParser
+to do so: add bin_path_ffprobeVAMFMediaInfoParser to local.ini to be a symbolic link to /opt/vidiun/bin/ffmpeg-2.7.2-bin/ffprobe.sh
+the symbolic link should be named ffprobeVAMFMediaInfoParser
 
 ## Update permissions ##
  - Issue type: Bug
- - KMS-3890
+ - VMS-3890
 
 ### Deployment scripts ##
 
@@ -4539,19 +4539,19 @@ the symbolic link should be named ffprobeKAMFMediaInfoParser
  - Issue ID: PLAT-3634 
 
 ### Deployment scripts (note the order of the scripts is important run them as listed ) ###
-	 - php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
+	 - php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
 
-	 - php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_09_08_server_node_service.php
+	 - php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_09_08_server_node_service.php
 	 
-	 - php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_09_16_media_server_server_node.php
+	 - php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_09_16_media_server_server_node.php
 
-	 - mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura < /opt/kaltura/app/deployment/updates/sql/2015_09_08_alter_edge_server_table.sql
+	 - mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun < /opt/vidiun/app/deployment/updates/sql/2015_09_08_alter_edge_server_table.sql
 
-	 - mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura < /opt/kaltura/app/deployment/updates/sql/2015_09_08_rename_edge_server_table.sql
+	 - mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun < /opt/vidiun/app/deployment/updates/sql/2015_09_08_rename_edge_server_table.sql
 	 
-	 - php /opt/kaltura/app/deployment/updates/scripts/2015_09_21_migrateMediaServerTableToServerNodeTable.php
+	 - php /opt/vidiun/app/deployment/updates/scripts/2015_09_21_migrateMediaServerTableToServerNodeTable.php
 	 
-	 - php /opt/kaltura/app/deployment/updates/scripts/2015_10_29_migrate_edge_server_permissions.php
+	 - php /opt/vidiun/app/deployment/updates/scripts/2015_10_29_migrate_edge_server_permissions.php
 	 
 #### Configuration ####
 
@@ -4579,8 +4579,8 @@ the symbolic link should be named ffprobeKAMFMediaInfoParser
 		domain-hls = SAME_AS_THE_DOMAIN_VALUE
 
 	- Edited Wowza Server.xml:
-		- property: "KalturaServerManagers"
-		  Remove the value "com.kaltura.media.server.wowza.StatusManager"
+		- property: "VidiunServerManagers"
+		  Remove the value "com.vidiun.media.server.wowza.StatusManager"
 
 #### Known Issues & Limitations ####
 
@@ -4609,11 +4609,11 @@ None.
   
 ### Deployment scripts ###
 
-	php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/scheduledTaskProfiles/30DayDeleteAfterScheduleEnd.xml  
+	php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/scheduledTaskProfiles/30DayDeleteAfterScheduleEnd.xml  
 	Input: 
 	- partner ID - 1956791
 	- Max total count allowed per execution: 500
-	- Host name: www.kaltura.com
+	- Host name: www.vidiun.com
 	- Partner email address: admin console admin user
 	- Partner password: user's password
 	- Partner ID: -2
@@ -4628,11 +4628,11 @@ None.
 None.
 
 #### Deployment Scripts ####
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_10_25_add_like_list_permission.php
-	php /opt/kaltura/app/alpha/scripts/utils/permissions/addPermissionToRole.php 0 Basic\ User\ Session\ Role LIKE_LIST_USER realrun (please use copy-paste carefully here)
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_10_25_add_like_list_permission.php
+	php /opt/vidiun/app/alpha/scripts/utils/permissions/addPermissionToRole.php 0 Basic\ User\ Session\ Role LIKE_LIST_USER realrun (please use copy-paste carefully here)
 
 	(only for on-prem/CE environments)
-	mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura < deployment/updates/sql/2015_10_25_alter_kvote_table_puser_id_table.sql
+	mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun < deployment/updates/sql/2015_10_25_alter_vvote_table_puser_id_table.sql
 	php deployment/updates/scripts/2015_10_25_populate_like_table_puser_id_field.php
 	
 #### Known Issues & Limitations ####
@@ -4652,9 +4652,9 @@ None.
 - Added 'Cielo24' module to the admin-console in admin.ini.
 
 #### Deployment Scripts ####
-	php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_09_20_update_integration_notify_permission_name.php
-	(developer's responsibility) php /opt/kaltura/app/alpha/scripts/utils/addPartnerToCielo24.php /opt/kaltura/app {PID} {cielo24-api-username} {cielo24-api-password} 
+	php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_09_20_update_integration_notify_permission_name.php
+	(developer's responsibility) php /opt/vidiun/app/alpha/scripts/utils/addPartnerToCielo24.php /opt/vidiun/app {PID} {cielo24-api-username} {cielo24-api-password} 
 	
 #### Known Issues & Limitations ####
 
@@ -4715,18 +4715,18 @@ None.
 
 ### Configuration ###
 
-## Changed kaltura.scheduler_status.id from int(11) to bigint(20) ##
+## Changed vidiun.scheduler_status.id from int(11) to bigint(20) ##
 
 - Run the following permission script:
 
-  mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura <  deployment/updates/sql/2015_09_06_alter_scheduler_status_bigint.sql
+  mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun <  deployment/updates/sql/2015_09_06_alter_scheduler_status_bigint.sql
 
 # Jupiter-10.18.0 #
 
 ## Allow answer cue points to be added by player and anonymous users ##
 
 - Issue Type: New Feature
-- Issue ID: KMS-8423
+- Issue ID: VMS-8423
 
 #### Configuration ####
 
@@ -4734,7 +4734,7 @@ None.
 
 #### Deployment Scripts ####
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_08_16_allow_adding_answer_cue_points_with_widget_ks.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_08_16_allow_adding_answer_cue_points_with_widget_vs.php
 	 
 #### Known Issues & Limitations ####
 
@@ -4748,12 +4748,12 @@ None.
 ### Installation ###
 
 - Run the installPlugins.php script:
-	php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
+	php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
 
 ### Configuration ###
 
 - Run the following permission script:
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_08_12_add_metadata_profile_get_action_for_partner_-1.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_08_12_add_metadata_profile_get_action_for_partner_-1.php
 
 ## Voicebase plugin ##
 
@@ -4766,9 +4766,9 @@ None.
 - Added 'Voicebase' module to the admin-console in admin.ini.
 
 #### Deployment Scripts ####
-	php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_08_23_add_integration_notify_permission.php
-	(developer's responsibility) php /opt/kaltura/app/alpha/scripts/utils/addPartnerToVoicebase.php /opt/kaltura/app {PID} {voicebase-api-key} {voicebase-api-password} 
+	php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_08_23_add_integration_notify_permission.php
+	(developer's responsibility) php /opt/vidiun/app/alpha/scripts/utils/addPartnerToVoicebase.php /opt/vidiun/app {PID} {voicebase-api-key} {voicebase-api-password} 
 	
 #### Known Issues & Limitations ####
 
@@ -4822,7 +4822,7 @@ None.
 #### Deployment Scripts ####
 
 Run:
- 	- php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
+ 	- php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
 
 #### Known Issues & Limitations ####
 
@@ -4859,7 +4859,7 @@ None.
 
 #### Deployment Scripts ####
 
- 	- (Already executed on production) php /opt/kaltura/app/deployment/updates/scripts/2015_07_20_create_applehttp_to_multicast_delivery_profile.php
+ 	- (Already executed on production) php /opt/vidiun/app/deployment/updates/scripts/2015_07_20_create_applehttp_to_multicast_delivery_profile.php
 
 #### Known Issues & Limitations ####
 
@@ -4876,7 +4876,7 @@ None.
 
 #### Deployment Scripts ####
 
- - mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura < deployment/updates/sql/2015_07_26_alter_edge_server_column_name.sql
+ - mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun < deployment/updates/sql/2015_07_26_alter_edge_server_column_name.sql
 
 #### Known Issues & Limitations ####
 
@@ -4973,11 +4973,11 @@ Download Couchbase server and install according to [official instructions](http:
  - Add new worker into configurations/batch/batch.ini:
 
 ```ini
-[KAsyncRecalculateCache : JobHandlerWorker]
+[VAsyncRecalculateCache : JobHandlerWorker]
 id													= 590
 friendlyName										= Recalculate Cache
-type												= KAsyncRecalculateCache
-scriptPath											= batch/batches/Cache/KAsyncRecalculateCacheExe.php
+type												= VAsyncRecalculateCache
+scriptPath											= batch/batches/Cache/VAsyncRecalculateCacheExe.php
 ```
  - Add new module to the admin-console in admin.ini:
 
@@ -5009,7 +5009,7 @@ None.
 ### Configuration ###
 
  - Added new e-mail configuration in /batch/batches/Mailer/emails_en.ini
- - Remark for production configuration: add /alpha/crond/kaltura/monthly_quota_storage_update.sh script to kaltura.daily cron jobs 
+ - Remark for production configuration: add /alpha/crond/vidiun/monthly_quota_storage_update.sh script to vidiun.daily cron jobs 
  
 ### Deployment Scripts ###
 
@@ -5024,27 +5024,27 @@ None.
 
  - Update the file sync import worker configuration, sample config:
  
-[KAsyncFileSyncImport : PeriodicWorker]
-type                            = KAsyncFileSyncImport
-scriptPath                      = ../plugins/multi_centers/batch/FileSyncImport/KAsyncFileSyncImportExe.php
+[VAsyncFileSyncImport : PeriodicWorker]
+type                            = VAsyncFileSyncImport
+scriptPath                      = ../plugins/multi_centers/batch/FileSyncImport/VAsyncFileSyncImportExe.php
 params.curlTimeout              = 180
 params.fileChmod                = 755
 params.fileOwner                = apache
 
-[KAsyncFileSyncImportSmall : KAsyncFileSyncImport]
+[VAsyncFileSyncImportSmall : VAsyncFileSyncImport]
 id                      = 27020
 friendlyName            = FileSyncImportSmall
 filter.estimatedEffortLessThan = 5000000
 params.maxCount         = 100
 params.maxSize          = 10000000
 
-[KAsyncFileSyncImportBig : KAsyncFileSyncImport]
+[VAsyncFileSyncImportBig : VAsyncFileSyncImport]
 id                      = 27030
 friendlyName            = FileSyncImportBig
 filter.estimatedEffortGreaterThan = 4999999
 params.maxCount         = 1
 
-[KAsyncFileSyncImportDelayed : KAsyncFileSyncImport]
+[VAsyncFileSyncImportDelayed : VAsyncFileSyncImport]
 id                      = 27040
 friendlyName            = FileSyncImportDelayed
 params.maxCount         = 1
@@ -5067,7 +5067,7 @@ filter.createdAtLessThanOrEqual = -39600	; now() - 11 hours
 ### Deployment Scripts ###
 
 - run the following deployment script:  
-		php exec.php /opt/kaltura/app/tests/standAloneClient/entryCustomMetadataChangedHttpNotification.xml  
+		php exec.php /opt/vidiun/app/tests/standAloneClient/entryCustomMetadataChangedHttpNotification.xml  
 
 
 ## Application authentication token ##
@@ -5082,22 +5082,22 @@ None.
 #### Deployment Scripts ####
 
  - php deployment/updates/scripts/add_permissions/2015_06_22_app_token_service.php
- - mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura < deployment/updates/sql/2015_06_22_create_app_token_table.sql
+ - mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun < deployment/updates/sql/2015_06_22_create_app_token_table.sql
 
 #### Known Issues & Limitations ####
 
 None.
 
 
-## Update KMC docs  ##
+## Update VMC docs  ##
 
 -- Issue Type: Doc change
 -- Issue ID: SUP-3117
 
 #### Configuration ####
 
-Need to update the following doc on the SAAS server under location /web/content/docs/kaltura_batch_upload_falcon.zip
-from repository kmc-docs.
+Need to update the following doc on the SAAS server under location /web/content/docs/vidiun_batch_upload_falcon.zip
+from repository vmc-docs.
 
 #### Deployment Scripts ####
 
@@ -5172,16 +5172,16 @@ None.
 - run the Following deployemnt scripts:
         
 		Create new user_entry table:
-        mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura < deployment/updates/sql/2015_15_06_create_user_entry_table.sql
+        mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun < deployment/updates/sql/2015_15_06_create_user_entry_table.sql
         
 
 		Update new services permissions:
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_04_11_update_quiz_permissions.php
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_05_07_update_userentry_permissions.php
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_06_07_update_quiz_analytics_permissions.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_04_11_update_quiz_permissions.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_05_07_update_userentry_permissions.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_06_07_update_quiz_analytics_permissions.php
 
 		Install Plugins:
-		php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
+		php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
 
 		
 		
@@ -5213,10 +5213,10 @@ None.
 - run the Following deployemnt scripts:
 
 		Update new servcie permissions: 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_05_28_edge_server_service.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_05_28_edge_server_service.php
 
 		create new edge_Server table:
-		mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura < deployment/updates/sql/2015_27_05_create_edge_server_table.sql
+		mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun < deployment/updates/sql/2015_27_05_create_edge_server_table.sql
 
 #### Known Issues & Limitations ####
 
@@ -5228,11 +5228,11 @@ None.
 
 #### Configuration ####
 
-- allocate worker/s for KAsyncParseMultiLanguageCaptionAsset.
+- allocate worker/s for VAsyncParseMultiLanguageCaptionAsset.
 
 #### Deployment Scripts ####
 
-	php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
+	php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
 
 - deploy server-saas-config to update batch client.
 
@@ -5281,7 +5281,7 @@ None.
 
 #### Deployment Script ####
 
-- Run php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/emailDropFolderFailedStatusMessage.xml  
+- Run php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/emailDropFolderFailedStatusMessage.xml  
 
 ## Server ingestion of chapter cue points without slides ##
 
@@ -5291,7 +5291,7 @@ None.
 ### Configuration ###
 - **workers.ini**
 
-under 'KAsyncBulkUpload'
+under 'VAsyncBulkUpload'
 
 		params.xmlSchemaVersion		= 7
 
@@ -5310,7 +5310,7 @@ None.
 
 #### Deployment Script ####
 
-- Run php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/metadataObjectChanged.xml  
+- Run php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/metadataObjectChanged.xml  
 
 ## "Entry flagged for review" Email Notification missing on production ##
 
@@ -5319,7 +5319,7 @@ None.
 
 #### Deployment Script ####
 
-- Run php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/kmcModerationNotificationsTemplates.xml  
+- Run php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/vmcModerationNotificationsTemplates.xml  
 
 ## uDRM on the fly encryption ##
 
@@ -5351,9 +5351,9 @@ None.
 
 #### Deployment Scripts ####
 
-		- run php /opt/kaltura/app/deployment/updates/scripts/2015_05_17_update_DRM_access_control.php
+		- run php /opt/vidiun/app/deployment/updates/scripts/2015_05_17_update_DRM_access_control.php
 		- run php deployment/updates/scripts/add_permissions/2015_05_17_update_drm_license_access_permissions.php
-        - run php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
+        - run php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
 
 #### Known Issues & Limitations ####
 
@@ -5368,16 +5368,16 @@ None.
 - Issue ID: PLAT-2850
 
 ### Configuration ###
-- update sphinx kaltura.conf:
+- update sphinx vidiun.conf:
 	
-		Add the following to kaltura_cue_point index:
+		Add the following to vidiun_cue_point index:
 		- rt_attr_uint = is_public
 		- rt_field = plugins_data
 
 #### Deployment Scripts ####
 
 		- Need to re-build & re-index the cue point sphinx table.
-		- run php /opt/kaltura/app/deployment/updates/scripts/2015_05_11_create_qAndA_default_schema.php
+		- run php /opt/vidiun/app/deployment/updates/scripts/2015_05_11_create_qAndA_default_schema.php
 
 #### Known Issues & Limitations ####
 
@@ -5407,7 +5407,7 @@ None.
 ### Deployment ###
 
 - Run the following script:  
-			cd /opt/kaltura/app/tests/standAloneClient  
+			cd /opt/vidiun/app/tests/standAloneClient  
 			php exec.php commentAddedEnabledForManualDispatch.xml    
 - Delete older email notification from partner 0.
 
@@ -5441,7 +5441,7 @@ None.
 
 #### Deployment Scripts ####
 
-- Run mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura < deployment/updates/sql/2014_11_06_metadata_profile_file_sync_version.sql
+- Run mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun < deployment/updates/sql/2014_11_06_metadata_profile_file_sync_version.sql
 
 #### Known Issues & Limitations ####
 
@@ -5461,7 +5461,7 @@ None.
   
 ### Deployment ###
  
- - Run mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 kaltura < deployment/updates/sql/2015_04_28_alter_file_sync_table_custom_data_field.sql
+ - Run mysql -h@db_host@ -u@db_user@ -p@db_pass@ -P3306 vidiun < deployment/updates/sql/2015_04_28_alter_file_sync_table_custom_data_field.sql
 	
 		Please verify this column does not exist propir to running.
 
@@ -5489,7 +5489,7 @@ Add the following parameters to the batch.ini DropFolderWatcher worker configura
 ### Deployment ###
  
  - clear the cache
- - run php /opt/kaltura/app/deployment/base/scripts/installPlugins.php
+ - run php /opt/vidiun/app/deployment/base/scripts/installPlugins.php
  - Create new folder : @WEB_DIR@/tmp/dropFolderFiles
 
 ## Time Based Playlist Filters ##
@@ -5523,7 +5523,7 @@ Add the following lines from admin.template.ini to admin.ini:
 
     moduls.liveStreamRecordShouldCopyEntitelment.enabled = true
     moduls.liveStreamRecordShouldCopyEntitelment.permissionType = 2
-    moduls.liveStreamRecordShouldCopyEntitelment.label = Kaltura Live Streams - Copy entitelment
+    moduls.liveStreamRecordShouldCopyEntitelment.label = Vidiun Live Streams - Copy entitelment
     moduls.liveStreamRecordShouldCopyEntitelment.permissionName = FEATURE_LIVE_STREAM_COPY_ENTITELMENTS
     moduls.liveStreamRecordShouldCopyEntitelment.basePermissionType = 2
     moduls.liveStreamRecordShouldCopyEntitelment.basePermissionName = FEATURE_LIVE_STREAM
@@ -5681,9 +5681,9 @@ None.
 
 #### Configuration ####
 
-**sphinx/kaltura.conf**
+**sphinx/vidiun.conf**
 
-Added the following attribute to the kaltura_tag sphinx table. please re-index.
+Added the following attribute to the vidiun_tag sphinx table. please re-index.
 
 	rt_attr_string = tag
 
@@ -5726,12 +5726,12 @@ Add `MetadataSphinx` to the end of `Mandatory plugins` section (after `SphinxSea
 
 **sphinx**
 
-Update `configurations/sphinx/kaltura.conf` according to template (a new index `kaltura_metadata` was added).
+Update `configurations/sphinx/vidiun.conf` according to template (a new index `vidiun_metadata` was added).
 
 
 #### Deployment Scripts ####
 
-		mysql -uroot -p kaltura < deployment/updates/sql/2015_03_18_alter_metadata_profile_field_with_custom_data_field.sql
+		mysql -uroot -p vidiun < deployment/updates/sql/2015_03_18_alter_metadata_profile_field_with_custom_data_field.sql
 		php deployment/updates/scripts/add_permissions/2015_03_18_update_metadata_permissions.php
 		php deployment/base/scripts/installPlugins.php
 		php deployment/base/scripts/populateSphinxMetadata.php
@@ -5757,7 +5757,7 @@ None
 
 #### Deployment Scripts ####
 
-	mysql -uroot -p kaltura < deployment/updates/sql/2015_02_23_response_profile_table.sql
+	mysql -uroot -p vidiun < deployment/updates/sql/2015_02_23_response_profile_table.sql
 	php deployment/updates/scripts/add_permissions/2015_02_23_response_profile.php  
 
 #### Known Issues & Limitations ####
@@ -5774,8 +5774,8 @@ Deploy an up-to-date version of batch/batches/Mailer/emails_en.ini
 
 #### Deployment Scripts ####
 
-Run on the Cassandra cluster: **live_analytics**/KalturaLiveModel/conf/migrations/2015-03-01-000000-update_dvr_kaltura_live_keyspace.cql
-Deploy KalturaLiveAnalyics.war
+Run on the Cassandra cluster: **live_analytics**/VidiunLiveModel/conf/migrations/2015-03-01-000000-update_dvr_vidiun_live_keyspace.cql
+Deploy VidiunLiveAnalyics.war
 
 #### Known Issues & Limitations ####
 
@@ -5788,7 +5788,7 @@ None.
 - Issue ID: PLAT-2540
 
 ### Configuration ###
-- Add "params.ffprobeCmd = ffprobe" to configurations/batch/live.workers.ini - KAsyncConvertLiveSegment
+- Add "params.ffprobeCmd = ffprobe" to configurations/batch/live.workers.ini - VAsyncConvertLiveSegment
 
 ----------
 # Jupiter-10.5.0 #
@@ -5802,7 +5802,7 @@ None
 
 ###Installation  
 - Run:  
-php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/flavorAssetHttpNotifications.xml  
+php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/flavorAssetHttpNotifications.xml  
 
 #### Known Issues & Limitations ####
 
@@ -5829,8 +5829,8 @@ No client side (player) failover support.
 
 ### Configuration ###
 - Add "params.ffprobeCmd = ffprobe" to 
-- - configurations/batch/workers.ini - KAsyncExtractMedia
-- - configurations/batch/live.workers.ini - KAsyncConcat
+- - configurations/batch/workers.ini - VAsyncExtractMedia
+- - configurations/batch/live.workers.ini - VAsyncConcat
 
 
 ## Business Process Management Integration ##
@@ -5854,24 +5854,24 @@ Add the following line:
 
 Add the following lines under `[template]` section:
 
-		enabledWorkers.KAsyncIntegrate						= 1
-		enabledWorkers.KAsyncIntegrateCloser				= 1
+		enabledWorkers.VAsyncIntegrate						= 1
+		enabledWorkers.VAsyncIntegrateCloser				= 1
 
 Add the following lines as new sections:
 
-		[KAsyncIntegrate : JobHandlerWorker]
+		[VAsyncIntegrate : JobHandlerWorker]
 		id													= 570
 		friendlyName										= Integrate
-		type												= KAsyncIntegrate
+		type												= VAsyncIntegrate
 		maximumExecutionTime								= 12000
-		scriptPath											= ../plugins/integration/batch/Integrate/KAsyncIntegrateExe.php
+		scriptPath											= ../plugins/integration/batch/Integrate/VAsyncIntegrateExe.php
 		
-		[KAsyncIntegrateCloser : JobHandlerWorker]
+		[VAsyncIntegrateCloser : JobHandlerWorker]
 		id													= 580
 		friendlyName										= Integrate Closer
-		type												= KAsyncIntegrateCloser
+		type												= VAsyncIntegrateCloser
 		maximumExecutionTime								= 12000
-		scriptPath											= ../plugins/integration/batch/Integrate/KAsyncIntegrateCloserExe.php
+		scriptPath											= ../plugins/integration/batch/Integrate/VAsyncIntegrateCloserExe.php
 		params.maxTimeBeforeFail							= 1000000
 
 
@@ -5881,11 +5881,11 @@ Add the following lines as new sections:
  - Clear cache: `rm -rf cache/*`.
  - Install plugins: `php deployment/base/scripts/installPlugins.php`.
  - Generate clients: `php generator/generate.php`.
- - Restart batch: `/etc/init.d/kaltura-batch restart`.
+ - Restart batch: `/etc/init.d/vidiun-batch restart`.
 
 #### Deployment Scripts ####
 
-		mysql -uroot -p kaltura < deployment/updates/sql/2014_11_20_business_process_server.sql
+		mysql -uroot -p vidiun < deployment/updates/sql/2014_11_20_business_process_server.sql
 		php deployment/updates/scripts/add_permissions/2014_11_20_business_process_server_permissions.php
 		php deployment/updates/scripts/add_permissions/2015_01_20_dispatch_integration_job.php
 		php tests/standAloneClient/exec.php tests/standAloneClient/bpmNotificationsTemplates.xml
@@ -5933,7 +5933,7 @@ Add the following lines as new sections:
  - Deploy processes **(replace tokens)**:
 	 - `cd @WEB_DIR@/content/clientlibs/bpmn`
 	 - `ant`
- - Add Activiti server to Kaltura server using the API **(replace tokens)**: `php @APP_DIR@/tests/standAloneClient/exec.php @APP_DIR@/tests/standAloneClient/activitiServer.xml`
+ - Add Activiti server to Vidiun server using the API **(replace tokens)**: `php @APP_DIR@/tests/standAloneClient/exec.php @APP_DIR@/tests/standAloneClient/activitiServer.xml`
 
 ##Caption added HTTP Notifications##
 - Issue Type: new feature
@@ -5944,7 +5944,7 @@ None
 
 ###Installation  
 - Run:  
-php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/captionAssetHttpNotifications.xml  
+php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/captionAssetHttpNotifications.xml  
 
 #### Known Issues & Limitations ####
 
@@ -5964,9 +5964,9 @@ DropFolderEventNotifications
 ###Installation  
 
 - Run:  
-php /opt/kaltura/app/deployment/base/scripts/installPlugins.php  
+php /opt/vidiun/app/deployment/base/scripts/installPlugins.php  
 - Run:  
-php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/standAloneClient/emailDropFolderFileFailedStatus.xml  
+php /opt/vidiun/app/tests/standAloneClient/exec.php /opt/vidiun/app/tests/standAloneClient/emailDropFolderFileFailedStatus.xml  
 
 
 ----------
@@ -5979,7 +5979,7 @@ php /opt/kaltura/app/tests/standAloneClient/exec.php /opt/kaltura/app/tests/stan
 
 *batch.ini* 
 
-Add the following to the KAsyncImport worker configuartion:
+Add the following to the VAsyncImport worker configuartion:
 
 params.webex.iterations                                                                 = 30  
 params.webex.sleep 
@@ -6009,7 +6009,7 @@ None.
 
 #### Deployment Scripts ####
 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_01_11_add_externalmedia_add_permissions.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_01_11_add_externalmedia_add_permissions.php
 
 #### Known Issues & Limitations ####
 
@@ -6017,7 +6017,7 @@ None.
 
 ##add flavorasset->getwebplayablebyentryid permission to basic playback role##
 - Issue Type: Back-End Request
-- Issue ID: KMS-5334
+- Issue ID: VMS-5334
 
 #### Configuration ####
 
@@ -6025,7 +6025,7 @@ None.
 
 #### Deployment Scripts ####
 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2015_01_11_add_base_playback_role_flavorasset_getwebplayablebyentryid_permission.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2015_01_11_add_base_playback_role_flavorasset_getwebplayablebyentryid_permission.php
 
 #### Known Issues & Limitations ####
 
@@ -6041,7 +6041,7 @@ None.
 
 Add the following line to the the event_consumers[] list
 
-		event_consumers[] = kObjectCreatedHandler
+		event_consumers[] = vObjectCreatedHandler
 
 #### Deployment Scripts ####
 
@@ -6065,7 +6065,7 @@ Add the following plugin to the list of plugins
 
 #### Deployment Scripts ####
 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2014_11_25_scheduled_task_update.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2014_11_25_scheduled_task_update.php
 
 #### Known Issues & Limitations ####
 
@@ -6083,7 +6083,7 @@ None.
 
 Add the following line to the end of the settings.uiConfTypes[] list
 
-		settings.uiConfTypes[] = Kaltura_Client_Enum_UiConfObjType::WEBCASTING
+		settings.uiConfTypes[] = Vidiun_Client_Enum_UiConfObjType::WEBCASTING
 
 #### Deployment Scripts ####
 
@@ -6137,9 +6137,9 @@ None.
 
 #### Configuration ####
 
-** sphinx/kaltura.conf **
+** sphinx/vidiun.conf **
 
-Add the following line to the kaltura_entry class in configurations/sphinx/kaltura.conf (or merged from configurations/sphinx/kaltura.conf.template)
+Add the following line to the vidiun_entry class in configurations/sphinx/vidiun.conf (or merged from configurations/sphinx/vidiun.conf.template)
 
 	rt_attr_uint = source
 
@@ -6181,7 +6181,7 @@ Create the following directory for the generated reports -
 requires the configuration of 'live_report_sender_email' and 'live_report_sender_name'.
 
 **workers.ini**
-Requires the addition of 'KAsyncLiveReportExport' worker definition and enabling.
+Requires the addition of 'VAsyncLiveReportExport' worker definition and enabling.
 a template can be found at batch.ini.template
 
 #### Deployment Scripts ####
@@ -6204,7 +6204,7 @@ None.
 
 **workers.ini**
 
-under 'KAsyncBulkUpload'
+under 'VAsyncBulkUpload'
 
 		params.xmlSchemaVersion		= 3
 
@@ -6224,7 +6224,7 @@ None.
 
 **workers.ini**
 
-under 'KScheduledTaskRunner' add
+under 'VScheduledTaskRunner' add
 
 		maxProfiles = 50
 		maxTotalCountAllowed = 10
@@ -6287,7 +6287,7 @@ None.
 
 **workers.ini**
 
-under 'KAsyncBulkUpload'
+under 'VAsyncBulkUpload'
 
 		params.xmlSchemaVersion		= 3
 
@@ -6313,11 +6313,11 @@ In order to use, requires adding a new flavor_params such as: [Assuming 10025 ==
 	INSERT INTO flavor_params VALUES (581230,0,0,'PPT 2 Image','',NULL,'PPT 2 Image',0,'0000-00-00 00:00:00','0000-00-00 00:00:00',NULL,0,'jpg','',1,'',0,0,0,0,0,0,0,0,0,NULL,NULL,'a:3:{s:18:\"FlavorVideoBitrate\";i:1;s:19:\"requiredPermissions\";a:0:{}s:9:"sizeWidth";i:940;}',0,NULL,1,0,0,'[[{\"id\":\"document.ppt2Img\",\"extra\":null,\"command\":null}]]',NULL,10025);
 
 Place PowerPointConvertor.exe and PowerPointConvertor.exe.config in the same directory on your windows machine.
-f.i. /opt/kaltura/exe
+f.i. /opt/vidiun/exe
 
 Requires adding a new windows worker. Sample configuration - 
 
-	[KAsyncConvertPpt : KAsyncConvert]
+	[VAsyncConvertPpt : VAsyncConvert]
 	id = XXXXX
 	friendlyName = Convert ppt
 	params.isRemoteInput = 1
@@ -6325,14 +6325,14 @@ Requires adding a new windows worker. Sample configuration -
 	maximumExecutionTime = 36000
 	maxJobsEachRun = 1
 	filter.jobSubTypeIn = document.ppt2Img
-	params.ppt2ImgCmd = C:\opt\kaltura\exe\PowerPointConvertor.exe
+	params.ppt2ImgCmd = C:\opt\vidiun\exe\PowerPointConvertor.exe
 	baseLocalPath = C:\web\
-	baseTempSharedPath = /opt/kaltura/web/tmp/convert/
+	baseTempSharedPath = /opt/vidiun/web/tmp/convert/
 	baseTempLocalPath = W:\tmp\convert\
 	params.localFileRoot = C:/output
 	params.remoteUrlDirectory = /output
 	params.fileCacheExpire = 36000
-	params.localTempPath = C:\opt\kaltura\tmp\convert
+	params.localTempPath = C:\opt\vidiun\tmp\convert
 	params.sharedTempPath = W:\tmp\convert\ 
 
 #### Deployment Scripts ####
@@ -6362,7 +6362,7 @@ None.
 
 None.
 
-##add new XML drop folder configuration - KS validation##
+##add new XML drop folder configuration - VS validation##
 - Issue Type: Back-End Request
 - Issue ID: PLAT-1978
 
@@ -6370,7 +6370,7 @@ None.
 
 **workers.ini**
 
-under 'KAsyncBulkUpload'
+under 'VAsyncBulkUpload'
 
 		params.xmlSchemaVersion		= 2
 
@@ -6382,20 +6382,20 @@ under 'KAsyncBulkUpload'
 
 None.
 
-##Added user names column to Kaltura_entry table on sphinx##
+##Added user names column to Vidiun_entry table on sphinx##
 - Issue Type: Customer request
 - Issue ID: PLAT-1973
 
 #### Configuration ####
 
-Make sure configurations\sphinx\kaltura.conf is updated and the line - 
+Make sure configurations\sphinx\vidiun.conf is updated and the line - 
 rt_field = user_names
-is added under kaltura_entry part
+is added under vidiun_entry part
 
 #### Deployment Scripts ####
 
 None.
-As it requires adding a sphinx column, kaltura_entry must be re-populated.
+As it requires adding a sphinx column, vidiun_entry must be re-populated.
 
 #### Known Issues & Limitations ####
 
@@ -6413,7 +6413,7 @@ None.
 
 #### Deployment Scripts ####
 
-	php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2014_10_19_base_playback_role_add_widevine_Attachment_permissions.php
+	php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2014_10_19_base_playback_role_add_widevine_Attachment_permissions.php
 
 #### Known Issues & Limitations ####
 
@@ -6427,7 +6427,7 @@ None.
 
 #### Deployment Scripts ####
 
-	php /opt/kaltura/app/deployment/updates/scripts/2014_06_10_update_remove_user_from_category_notification_template.php
+	php /opt/vidiun/app/deployment/updates/scripts/2014_06_10_update_remove_user_from_category_notification_template.php
 
 #### Known Issues & Limitations ####
 
@@ -6435,7 +6435,7 @@ None.
 
 # IX-9.19.4 #
 
-## KS invalidation : PLAT-1556 ##
+## VS invalidation : PLAT-1556 ##
 
 - Issue Type: Bug fix
 - Issue ID: PLAT-1556
@@ -6526,10 +6526,10 @@ None.
 
 
 #### Known Issues & Limitations ####
-Requires validating all the partners with ks_max_expiry_in_seconds different than 86400 and either nullify them or set them to 86400.
+Requires validating all the partners with vs_max_expiry_in_seconds different than 86400 and either nullify them or set them to 86400.
 
-	mysql> select id, partner_name, status, ks_max_expiry_in_seconds from partner where ks_max_expiry_in_seconds != 86400 and status = 1;
-	mysql> select id, partner_name, status, ks_max_expiry_in_seconds from partner where ks_max_expiry_in_seconds is null and status = 1;
+	mysql> select id, partner_name, status, vs_max_expiry_in_seconds from partner where vs_max_expiry_in_seconds != 86400 and status = 1;
+	mysql> select id, partner_name, status, vs_max_expiry_in_seconds from partner where vs_max_expiry_in_seconds is null and status = 1;
 
 ## BOA - PLAT-1649 ##
 
@@ -6635,8 +6635,8 @@ Added php support for live analytics
 
 #### Prerequisites ####
 
-- Player version: v2.17.rc7 or higher. (http://kgit.html5video.org/tags/v2.17.rc7/mwEmbedLoader.php)
-- KMC version: V5.38
+- Player version: v2.17.rc7 or higher. (http://vgit.html5video.org/tags/v2.17.rc7/mwEmbedLoader.php)
+- VMC version: V5.38
 
 #### Configuration ####
 
@@ -6645,7 +6645,7 @@ Added php support for live analytics
 Should verify the following:
 
 - live analytics version v0.1
-- kmc version v5.38 
+- vmc version v5.38 
 
 **local.ini**
 
@@ -6667,10 +6667,10 @@ Permission script execution:
 #### Apps installation ####
 Install live analytics app by downloading _dist.zip from
 
-	https://github.com/kaltura/LiveAnalytics/releases/tag/0.1
+	https://github.com/vidiun/LiveAnalytics/releases/tag/0.1
 and unzipping it into 
 
-	/opt/Kaltura/apps/liveanalytics/v0.1/
+	/opt/Vidiun/apps/liveanalytics/v0.1/
 
 (discard "_dist" folder)
 Deploy uiconf: 
@@ -6699,7 +6699,7 @@ reverting the current encoder to the old one
 **Local.ini**
 
 - bin_path_ffmpeg = ffmpeg
-- ;bin_path_ffmpeg = /opt/kaltura/bin/x64/run/run-ffmpeg-0.10.sh
+- ;bin_path_ffmpeg = /opt/vidiun/bin/x64/run/run-ffmpeg-0.10.sh
 
 
 #### Deployment Scripts ####
@@ -6720,7 +6720,7 @@ None
 
 #### Deployment Scripts ####
 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2014_08_21_base_playback_role_add_widevine_permission.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2014_08_21_base_playback_role_add_widevine_permission.php
 
 #### Known Issues & Limitations ####
 None
@@ -6736,14 +6736,14 @@ None
 
 #### Deployment Scripts ####
 
-		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2014_08_03_add_base_playback_role_permissions.php
+		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2014_08_03_add_base_playback_role_permissions.php
 
 #### Known Issues & Limitations ####
 None
 
 ## Image entry plays/views ##
 - Issue Type: Change Request
-- Issue ID: KMS-3488
+- Issue ID: VMS-3488
 
 Match the number of plays to the number of views in image entries.
 
@@ -6857,7 +6857,7 @@ Record all live assets and manage the recording on the API server side.
 - `base.ini` already changed to support `max_live_recording_duration_hours` of 24 hours.
 
 #### Media-Server version ####
-- New media-server version [3.0.9](https://github.com/kaltura/media-server/releases/download/rel-3.0.9/KalturaWowzaServer-3.0.9.jar "3.0.9") required. 
+- New media-server version [3.0.9](https://github.com/vidiun/media-server/releases/download/rel-3.0.9/VidiunWowzaServer-3.0.9.jar "3.0.9") required. 
 
 #### Deployment Scripts ####
 None
@@ -6878,7 +6878,7 @@ None
 +
 +#### Deployment Scripts ####
 +
-+		php /opt/kaltura/app/deployment/updates/scripts/add_permissions/2014_08_03_add_base_playback_role_permissions.php
++		php /opt/vidiun/app/deployment/updates/scripts/add_permissions/2014_08_03_add_base_playback_role_permissions.php
 +
 +#### Known Issues & Limitations ####
 +None
@@ -6889,7 +6889,7 @@ None
 
 #### Configuration Files ####
 
-The following rewrite rules should be added to kaltura's apache configuration file:
+The following rewrite rules should be added to vidiun's apache configuration file:
 
 In `^p/[-0-9]+/sp/[-0-9]+/` section:
 
@@ -6977,7 +6977,7 @@ In `^s/p/[-0-9]+/serveManifest/` section:
 
 # IX-9.15.0 #
 
-## Disable email notification for new KMC user creation ##
+## Disable email notification for new VMC user creation ##
 
 ## Live streaming provision should exclude cloud transcode where not available ##
 
@@ -6995,7 +6995,7 @@ Update admin.ini:
 
         settings.cookieNameSpace = Zend_Auth_AdminConsole"
 
-- Add the following block right under the "settings.enableKCWVisualEditor" line:
+- Add the following block right under the "settings.enableVCWVisualEditor" line:
 
         ; cookie options
         settings.cookieNameSpace = Zend_Auth_AdminConsole
@@ -7006,7 +7006,7 @@ Update admin.ini:
 * Enable TagIndex job
 
 *Configuartion Changes*
-- Update batch.ini and workers.ini, done on saas tag (added KAsyncTagIndex)
+- Update batch.ini and workers.ini, done on saas tag (added VAsyncTagIndex)
 
 *Data update*
 - Before applying the batch configuration delete all pending jobs from batch_job_lock, will be done by Eran K. 
@@ -7022,7 +7022,7 @@ Update admin.ini:
 # IX-9.13.0 #
 
 ## Live sync points ##
-Enable sending periodic live sync points on Kaltura live stream.
+Enable sending periodic live sync points on Vidiun live stream.
 
 *Permissions*
 
@@ -7030,7 +7030,7 @@ Enable sending periodic live sync points on Kaltura live stream.
 
 *Media Server*
 
-- Version 3.0.3 [KalturaWowzaServer.jar](https://github.com/kaltura/media-server/releases/download/rel-3.0.3/KalturaWowzaServer-3.0.3.jar "KalturaWowzaServer.jar")
+- Version 3.0.3 [VidiunWowzaServer.jar](https://github.com/vidiun/media-server/releases/download/rel-3.0.3/VidiunWowzaServer-3.0.3.jar "VidiunWowzaServer.jar")
  
 ## Play Ready ##
 - 1. upgrade PR license server to v2.9
@@ -7040,17 +7040,17 @@ Enable sending periodic live sync points on Kaltura live stream.
 - /deployment/updates/sql/2014_03_04_update_drm_device_table.sql
 
 *PR license server update*
-- 1. clone git repository: https://github.com/kaltura/playready-server
+- 1. clone git repository: https://github.com/vidiun/playready-server
 - 2. copy dll's from PlayReadyLicenseServer/vdir/bin to the license server under: C:\Program Files\PlayReady Server SDK 2.9\vdir\bin
 - 3.  update web.xml - add <add key="RemoteAddrHeaderSalt" value="@REMOTE_ADDR_HEADER_SALT_LOCAL_INI@" /> under appSettings. Change @REMOTE_ADDR_HEADER_SALT_LOCAL_INI@ to the value of remote_addr_header_salt in local.ini
 - 4. restart IIS
 
 *Configuartion Changes*
 - update batch.ini/worker.ini
-	- add under KAsyncConvertWorker params.ismIndexCmd = @BIN_DIR@/ismindex
-	- update under KAsyncConvert filter.jobSubTypeIn = 1,2,99,3,fastStart.FastStart,segmenter.Segmenter,mp4box.Mp4box,vlc.Vlc,document.ImageMagick,201,202,quickTimeTools.QuickTimeTools,ismIndex.IsmIndex,ismIndex.IsmManifest
-	- Add KAsyncConvertSmoothProtect worker section, place it following other Windows transcoding workers.
-		- [KAsyncConvertSmoothProtect: KAsyncDistributedConvert] 
+	- add under VAsyncConvertWorker params.ismIndexCmd = @BIN_DIR@/ismindex
+	- update under VAsyncConvert filter.jobSubTypeIn = 1,2,99,3,fastStart.FastStart,segmenter.Segmenter,mp4box.Mp4box,vlc.Vlc,document.ImageMagick,201,202,quickTimeTools.QuickTimeTools,ismIndex.IsmIndex,ismIndex.IsmManifest
+	- Add VAsyncConvertSmoothProtect worker section, place it following other Windows transcoding workers.
+		- [VAsyncConvertSmoothProtect: VAsyncDistributedConvert] 
 		- id = $WORKER_ID 
 		- baseLocalPath = $BASE_LOACL_PATH 
 		- params.sharedTempPath = $SHARED_TEMP_PATH 
@@ -7061,13 +7061,13 @@ Enable sending periodic live sync points on Kaltura live stream.
 	- $WORKER_ID – set to match existing Testing QA settings 
 	- $BASE_LOACL_PATH – follow other windows workers (aka Webex worker) 
 	- $SHARED_TEMP_PATH – follow other windows workers (aka Webex worker) 
-	- $SMOOTHPROTECT_BIN – full path to the 'smoothprotect.exe', typically '/opt/kaltura/bin/smoothprotect' 
+	- $SMOOTHPROTECT_BIN – full path to the 'smoothprotect.exe', typically '/opt/vidiun/bin/smoothprotect' 
 	- $IS_REMOTE_OUTPUT – should match other Windows workers (aka Webex worker) 
 	- $IS_REMOTE_INPUT – should match other Windows workers (aka Webex worker)
 
 *Binaries*
 - Linux
-	- Install ffmpeg binary and ismindex binary from - http://ny-www.kaltura.com/content/shared/bin/ffmpeg-2.1.3-bin.tar.gz
+	- Install ffmpeg binary and ismindex binary from - http://ny-www.vidiun.com/content/shared/bin/ffmpeg-2.1.3-bin.tar.gz
 	- Switch the ffmpeg allias to work with the new ffmpeg-2.1.3
 	- The ffmpeg-aux remains unchanged. 
 - Windows
@@ -7076,7 +7076,7 @@ Enable sending periodic live sync points on Kaltura live stream.
 ## H265/FFmpeg 2.2 ##
 
 *Binaries*
-- Install ffmpeg-2.2 from http://ny-www.kaltura.com/content/shared/bin/ffmpeg-2.2-bin.tar.gz
+- Install ffmpeg-2.2 from http://ny-www.vidiun.com/content/shared/bin/ffmpeg-2.2-bin.tar.gz
 - Don't assign ffmpeg-2.2 to neither 'ffmpeg' nor to 'ffmpeg-aux'
 
 ## Multicast ##
@@ -7134,22 +7134,22 @@ moduls.categoryLimit.group = GROUP_ENABLE_DISABLE_FEATURES
  
 - update batch.ini
 add 
-enabledWorkers.KAsyncSyncCategoryPrivacyContext		= 1
-enabledWorkers.KAsyncTagIndex						= 1
+enabledWorkers.VAsyncSyncCategoryPrivacyContext		= 1
+enabledWorkers.VAsyncTagIndex						= 1
   
-[KAsyncSyncCategoryPrivacyContext : JobHandlerWorker]
+[VAsyncSyncCategoryPrivacyContext : JobHandlerWorker]
 id													= 530
 friendlyName										= Sync Category Privacy Context
-type												= KAsyncSyncCategoryPrivacyContext
+type												= VAsyncSyncCategoryPrivacyContext
 maximumExecutionTime								= 12000
-scriptPath											= batches/SyncCategoryPrivacyContext/KAsyncSyncCategoryPrivacyContextExe.php
+scriptPath											= batches/SyncCategoryPrivacyContext/VAsyncSyncCategoryPrivacyContextExe.php
 
-[KAsyncTagIndex : JobHandlerWorker]
+[VAsyncTagIndex : JobHandlerWorker]
 id													= 500
 friendlyName										= Re-index tags
-type												= KAsyncTagIndex
+type												= VAsyncTagIndex
 maximumExecutionTime								= 12000
-scriptPath											= ../plugins/tag_search/lib/batch/tag_index/KAsyncTagIndexExe.php
+scriptPath											= ../plugins/tag_search/lib/batch/tag_index/VAsyncTagIndexExe.php
 
 *Permissions*
 
@@ -7161,7 +7161,7 @@ scriptPath											= ../plugins/tag_search/lib/batch/tag_index/KAsyncTagIndexE
 ## New FFMpeg 2.1.3##
  *Binaries*
   - Linux
- -- -Install the new ffmpeg 2.1.3 as a 'main' ffmpeg - http://ny-www.kaltura.com/content/shared/bin/ffmpeg-2.1.3-bin.tar.gz
+ -- -Install the new ffmpeg 2.1.3 as a 'main' ffmpeg - http://ny-www.vidiun.com/content/shared/bin/ffmpeg-2.1.3-bin.tar.gz
  -- -The ffmpeg-aux remains unchanged.
 
 ## Create Draft Entries as Ready ##
@@ -7171,7 +7171,7 @@ Assign a Ready status to draft entries that were created using a conversion prof
 
 	moduls.draftEntryConversionProfileSelection.enabled = true
 	moduls.draftEntryConversionProfileSelection.permissionType = 2
-	moduls.draftEntryConversionProfileSelection.label = Enable KMC transcoding profile selection for draft entries
+	moduls.draftEntryConversionProfileSelection.label = Enable VMC transcoding profile selection for draft entries
 	moduls.draftEntryConversionProfileSelection.permissionName = FEATURE_DRAFT_ENTRY_CONV_PROF_SELECTION
 	moduls.draftEntryConversionProfileSelection.basePermissionType =
 	moduls.draftEntryConversionProfileSelection.basePermissionName =
@@ -7187,11 +7187,11 @@ The monitor's View History permission is lowered from System Admin user to any A
 
 - Update scripts
 	
-	/opt/kaltura/app/deployment/updates/scripts/add_permissions/2014_01_26_add_media_server_partner_level_permission.php
-	/opt/kaltura/app/deployment/updates/scripts/add_permissions/2014_02_25_add_push_publish_permission_to_partner_0.php
-	/opt/kaltura/app/deployment/updates/scripts/add_permissions/2014_01_26_update_live_stream_service_permissions.php
-	/opt/kaltura/app/deployment/updates/scripts/add_permissions/2014_02_25_add_push_publish_permission_to_live_asset_parameters.php
-	/opt/kaltura/app/deployment/updates/scripts/add_permissions/2014_02_25_add_push_publish_permission_to_live_entry_parameters.php
+	/opt/vidiun/app/deployment/updates/scripts/add_permissions/2014_01_26_add_media_server_partner_level_permission.php
+	/opt/vidiun/app/deployment/updates/scripts/add_permissions/2014_02_25_add_push_publish_permission_to_partner_0.php
+	/opt/vidiun/app/deployment/updates/scripts/add_permissions/2014_01_26_update_live_stream_service_permissions.php
+	/opt/vidiun/app/deployment/updates/scripts/add_permissions/2014_02_25_add_push_publish_permission_to_live_asset_parameters.php
+	/opt/vidiun/app/deployment/updates/scripts/add_permissions/2014_02_25_add_push_publish_permission_to_live_entry_parameters.php
 
 - Update admin.ini
 
@@ -7200,7 +7200,7 @@ The monitor's View History permission is lowered from System Admin user to any A
 	moduls.hybridCdn.label = Hybrid CDN
 	moduls.hybridCdn.permissionName = FEATURE_HYBRID_ECDN
 	moduls.hybridCdn.basePermissionType = 2
-	moduls.hybridCdn.basePermissionName = FEATURE_KALTURA_LIVE_STREAM
+	moduls.hybridCdn.basePermissionName = FEATURE_VIDIUN_LIVE_STREAM
 	moduls.hybridCdn.group = GROUP_ENABLE_DISABLE_FEATURES
 	
 	moduls.pushPublish.enabled = true
@@ -7247,12 +7247,12 @@ moduls.drmPlayReady.basePermissionName = DRM_PLUGIN_PERMISSION
 moduls.drmPlayReady.group = GROUP_ENABLE_DISABLE_FEATURES
 
 - update batch.ini
-1. add under KAsyncConvertWorker 
+1. add under VAsyncConvertWorker 
 params.ismIndexCmd									= @BIN_DIR@/ismindex
-2. update under KAsyncConvert
+2. update under VAsyncConvert
 filter.jobSubTypeIn	= 1,2,99,3,fastStart.FastStart,segmenter.Segmenter,mp4box.Mp4box,vlc.Vlc,document.ImageMagick,201,202,quickTimeTools.QuickTimeTools,ismIndex.IsmIndex,ismIndex.IsmManifest
-3. Add KAsyncConvertSmoothProtect  worker section, place it following other Windows  transcoding workers.
-	[KAsyncConvertSmoothProtect: KAsyncDistributedConvert]
+3. Add VAsyncConvertSmoothProtect  worker section, place it following other Windows  transcoding workers.
+	[VAsyncConvertSmoothProtect: VAsyncDistributedConvert]
 	id                       = $WORKER_ID
 	baseLocalPath            = $BASE_LOACL_PATH
 	params.sharedTempPath    = $SHARED_TEMP_PATH
@@ -7263,11 +7263,11 @@ filter.jobSubTypeIn	= 1,2,99,3,fastStart.FastStart,segmenter.Segmenter,mp4box.Mp
 	• $WORKER_ID – set to match existing Testing QA settings
 	• $BASE_LOACL_PATH – follow other windows workers (aka Webex worker)
 	• $SHARED_TEMP_PATH – follow other windows workers (aka Webex worker)
-	• $SMOOTHPROTECT_BIN – full path to the 'smoothprotect.exe', typically '/opt/kaltura/bin/smoothprotect'
+	• $SMOOTHPROTECT_BIN – full path to the 'smoothprotect.exe', typically '/opt/vidiun/bin/smoothprotect'
 	• $IS_REMOTE_OUTPUT – should match other Windows workers (aka Webex worker)
 	• $IS_REMOTE_INPUT – should match other Windows workers (aka Webex worker)
 4. Add 'worker enabler' to template section of your Windows server:  
-	• enabledWorkers.KAsyncConvertSmoothProtect  = 1
+	• enabledWorkers.VAsyncConvertSmoothProtect  = 1
 
 - create playReady.ini from playReady.template.ini
 change @PLAYREADY_LICENSE_SERVER_HOST@ to the relevant host 
@@ -7280,7 +7280,7 @@ change @PLAYREADY_LICENSE_SERVER_HOST@ to the relevant host
 
 *Binaries*
 - Linux
-- -Install ismindex  from - http://ny-www.kaltura.com/content/shared/bin/ffmpeg-2.1.3-bin.tar.gz
+- -Install ismindex  from - http://ny-www.vidiun.com/content/shared/bin/ffmpeg-2.1.3-bin.tar.gz
 - -The ffmpeg and ffmpeg-aux remains unchanged. The ffmpeg will be switched to the new version on the next deployment.
 - Windows
 - -Install 'SmoothProtect.exe' binary
@@ -7299,8 +7299,8 @@ change @PLAYREADY_LICENSE_SERVER_HOST@ to the relevant host
 *Edit @WOWZA_DIR@/conf/log4j.properties:*
 
  - Change `log4j.rootCategory` = `INFO, stdout, serverAccess, serverError` 
- - Remove `log4j.category.KalturaServer.class`
- - Add `log4j.logger.com.kaltura` = `DEBUG`
+ - Remove `log4j.category.VidiunServer.class`
+ - Add `log4j.logger.com.vidiun` = `DEBUG`
  - Change `log4j.appender.serverAccess.layout.ConversionPattern` = `[%d{yyyy-MM-dd HH:mm:ss}][%t][%C:%M] %p - %m - (%F:%L) %n` 
  - Change `log4j.appender.serverError.layout.ConversionPattern` = `[%d{yyyy-MM-dd HH:mm:ss}][%t][%C:%M] %p - %m - (%F:%L) %n` 
 
@@ -7406,7 +7406,7 @@ Demo version only, enables broadcasting a live-channel base on playlist.
 
 
 *Media Server*
-- Update  [KalturaWowzaServer.jar](https://github.com/kaltura/server-bin-linux-64bit/raw/master/wowza/KalturaWowzaServer-2.0.1.jar "KalturaWowzaServer.jar")
+- Update  [VidiunWowzaServer.jar](https://github.com/vidiun/server-bin-linux-64bit/raw/master/wowza/VidiunWowzaServer-2.0.1.jar "VidiunWowzaServer.jar")
 
 
 *Configuration*
@@ -7436,7 +7436,7 @@ Demo version only, enables broadcasting a live-channel base on playlist.
 
 *Media Server*
 
-- Redeploy [KalturaWowzaServer.jar](https://github.com/kaltura/server-bin-linux-64bit/raw/master/wowza/KalturaWowzaServer.jar "KalturaWowzaServer.jar") to @WOWZA_DIR@/lib/
+- Redeploy [VidiunWowzaServer.jar](https://github.com/vidiun/server-bin-linux-64bit/raw/master/wowza/VidiunWowzaServer.jar "VidiunWowzaServer.jar") to @WOWZA_DIR@/lib/
 
 
 
@@ -7455,7 +7455,7 @@ A new button was added to the Admin page which allows you to boost the jobs of t
 
 
 
-## KAsyncFileSyncImport - use HTTP keep-alive ##
+## VAsyncFileSyncImport - use HTTP keep-alive ##
 By adding this optimization we now can use the same curl handle to import multiple files.
 There is no creation of new handle per file as before.
 
@@ -7488,11 +7488,11 @@ Add support for intermediate flow to on-prem installations as well.
 
 *API:*
 
-- New field `lastPlayedAt` for `KalturaPlayableEntry`
+- New field `lastPlayedAt` for `VidiunPlayableEntry`
 
 *Sphinx:*
 
-- New date attribute `last_played_at` for `kaltura_entry`
+- New date attribute `last_played_at` for `vidiun_entry`
 
 
 **Deployment:**
@@ -7503,7 +7503,7 @@ Add support for intermediate flow to on-prem installations as well.
 
 *Sphinx*
 
-- Update configurations/sphinx/kaltura.conf according to template.
+- Update configurations/sphinx/vidiun.conf according to template.
 - Repopulate sphinx entries
 
 
@@ -7521,12 +7521,12 @@ Deployment instructions:
 
 ## HTML5 Studio Deployment ##
 * Located the studio directory: @BASE_DIR@/apps/studio/ (create it if it doesn't exist)
-	* The directory owner should be apache and its group should be kaltura.
+	* The directory owner should be apache and its group should be vidiun.
 * Create a sub directory within the studio folder. Name it by the version of the studio (for example: v0.1)
-* Fetch latest studio project files into apps/studio/v0.1 from https://github.com/kaltura/player-studio/releases.
+* Fetch latest studio project files into apps/studio/v0.1 from https://github.com/vidiun/player-studio/releases.
 * Open the file studio.ini (within the studio project files) and update "html5_version" to include the rc version.
 * Execute deployment script on studio.ini file (located in studio project root):
-From studio root, run: php /opt/kaltura/app/deployment/uiconf/deploy_v2.php --ini=studio.ini
+From studio root, run: php /opt/vidiun/app/deployment/uiconf/deploy_v2.php --ini=studio.ini
 
 ## Fixed a security hole in media.addFromUploaded file ##
 Restricting webcam and uploaded to their designated directories and blocking attempts to access outer directories, with ../../some_sensitive_data_file for example.
@@ -7567,14 +7567,14 @@ Merged into the code changes that were hot-fixed at the beginning of the sprint.
 
 - #PLAT-526: Sort the event consumers alphabetically if not requested otherwise.
 - #PLAT-681: In case an empty ui-conf filter is used, filter at least by the partner
-- #PLAT-489: Extract delayed job types to kconf. <b><u> requires updateding base.ini </u></b>
+- #PLAT-489: Extract delayed job types to vconf. <b><u> requires updateding base.ini </u></b>
 
 ---------
  
 # IX-9.7.0 #
 
-## Kaltura live platform ##
-- Kaltura live stream
+## Vidiun live platform ##
+- Vidiun live stream
 - Live Transcoding
 - DVR
 - Recording
@@ -7584,7 +7584,7 @@ Merged into the code changes that were hot-fixed at the beginning of the sprint.
 
 - New `liveStream.appendRecording` action
 - New `mediaServer` service.
-- New enum `KalturaConversionProfileType` for `KalturaConversionProfile.type`
+- New enum `VidiunConversionProfileType` for `VidiunConversionProfile.type`
 
 
 
@@ -7603,9 +7603,9 @@ Add new file sync exclusions to dc_config.ini based on dc_config.template.ini.
 Add new workers to batch.ini based on batch.ini.template.
 
 - DirectoryCleanupRecordedMedia
-- KAsyncConvertLiveSegment
-- KAsyncConcat
-- KAsyncValidateLiveMediaServers
+- VAsyncConvertLiveSegment
+- VAsyncConcat
+- VAsyncValidateLiveMediaServers
 
 
 **Deployment:**

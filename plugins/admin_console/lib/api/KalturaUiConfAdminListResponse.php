@@ -3,10 +3,10 @@
  * @package plugins.adminConsole
  * @subpackage api.objects
  */
-class KalturaUiConfAdminListResponse extends KalturaListResponse
+class VidiunUiConfAdminListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaUiConfAdminArray
+	 * @var VidiunUiConfAdminArray
 	 * @readonly
 	 */
 	public $objects;

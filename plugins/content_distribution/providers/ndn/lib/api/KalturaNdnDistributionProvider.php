@@ -3,6 +3,6 @@
  * @package plugins.ndnDistribution
  * @subpackage api.objects
  */
-class KalturaNdnDistributionProvider extends KalturaDistributionProvider
+class VidiunNdnDistributionProvider extends VidiunDistributionProvider
 {
 }

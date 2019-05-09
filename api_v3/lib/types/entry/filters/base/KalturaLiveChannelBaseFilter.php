@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaLiveChannelBaseFilter extends KalturaLiveEntryFilter
+abstract class VidiunLiveChannelBaseFilter extends VidiunLiveEntryFilter
 {
 	static private $map_between_objects = array
 	(

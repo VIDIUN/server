@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage api.enum
  */
-class KalturaEntryVendorTaskCreationMode extends KalturaEnum implements EntryVendorTaskCreationMode
+class VidiunEntryVendorTaskCreationMode extends VidiunEnum implements EntryVendorTaskCreationMode
 {
 
 }

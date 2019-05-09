@@ -3,6 +3,6 @@
  * @package plugins.uverseClickToOrderDistribution
  * @subpackage api.objects
  */
-class KalturaUverseClickToOrderDistributionProvider extends KalturaDistributionProvider
+class VidiunUverseClickToOrderDistributionProvider extends VidiunDistributionProvider
 {
 }

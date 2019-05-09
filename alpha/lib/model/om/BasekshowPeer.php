@@ -1,29 +1,29 @@
 <?php
 
 /**
- * Base static class for performing query and update operations on the 'kshow' table.
+ * Base static class for performing query and update operations on the 'vshow' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class BasekshowPeer {
+abstract class BasevshowPeer {
 
 	/** the default database name for this class */
 	const DATABASE_NAME = 'propel';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'kshow';
+	const TABLE_NAME = 'vshow';
 
 	/** the related Propel class for this table */
-	const OM_CLASS = 'kshow';
+	const OM_CLASS = 'vshow';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'Core.kshow';
+	const CLASS_DEFAULT = 'Core.vshow';
 
 	/** the related TableMap class for this table */
-	const TM_CLASS = 'kshowTableMap';
+	const TM_CLASS = 'vshowTableMap';
 	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 51;
@@ -32,163 +32,163 @@ abstract class BasekshowPeer {
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** the column name for the ID field */
-	const ID = 'kshow.ID';
+	const ID = 'vshow.ID';
 
 	/** the column name for the PRODUCER_ID field */
-	const PRODUCER_ID = 'kshow.PRODUCER_ID';
+	const PRODUCER_ID = 'vshow.PRODUCER_ID';
 
 	/** the column name for the EPISODE_ID field */
-	const EPISODE_ID = 'kshow.EPISODE_ID';
+	const EPISODE_ID = 'vshow.EPISODE_ID';
 
 	/** the column name for the NAME field */
-	const NAME = 'kshow.NAME';
+	const NAME = 'vshow.NAME';
 
 	/** the column name for the SUBDOMAIN field */
-	const SUBDOMAIN = 'kshow.SUBDOMAIN';
+	const SUBDOMAIN = 'vshow.SUBDOMAIN';
 
 	/** the column name for the DESCRIPTION field */
-	const DESCRIPTION = 'kshow.DESCRIPTION';
+	const DESCRIPTION = 'vshow.DESCRIPTION';
 
 	/** the column name for the STATUS field */
-	const STATUS = 'kshow.STATUS';
+	const STATUS = 'vshow.STATUS';
 
 	/** the column name for the TYPE field */
-	const TYPE = 'kshow.TYPE';
+	const TYPE = 'vshow.TYPE';
 
 	/** the column name for the MEDIA_TYPE field */
-	const MEDIA_TYPE = 'kshow.MEDIA_TYPE';
+	const MEDIA_TYPE = 'vshow.MEDIA_TYPE';
 
 	/** the column name for the FORMAT_TYPE field */
-	const FORMAT_TYPE = 'kshow.FORMAT_TYPE';
+	const FORMAT_TYPE = 'vshow.FORMAT_TYPE';
 
 	/** the column name for the LANGUAGE field */
-	const LANGUAGE = 'kshow.LANGUAGE';
+	const LANGUAGE = 'vshow.LANGUAGE';
 
 	/** the column name for the START_DATE field */
-	const START_DATE = 'kshow.START_DATE';
+	const START_DATE = 'vshow.START_DATE';
 
 	/** the column name for the END_DATE field */
-	const END_DATE = 'kshow.END_DATE';
+	const END_DATE = 'vshow.END_DATE';
 
 	/** the column name for the SKIN field */
-	const SKIN = 'kshow.SKIN';
+	const SKIN = 'vshow.SKIN';
 
 	/** the column name for the THUMBNAIL field */
-	const THUMBNAIL = 'kshow.THUMBNAIL';
+	const THUMBNAIL = 'vshow.THUMBNAIL';
 
 	/** the column name for the SHOW_ENTRY_ID field */
-	const SHOW_ENTRY_ID = 'kshow.SHOW_ENTRY_ID';
+	const SHOW_ENTRY_ID = 'vshow.SHOW_ENTRY_ID';
 
 	/** the column name for the INTRO_ID field */
-	const INTRO_ID = 'kshow.INTRO_ID';
+	const INTRO_ID = 'vshow.INTRO_ID';
 
 	/** the column name for the VIEWS field */
-	const VIEWS = 'kshow.VIEWS';
+	const VIEWS = 'vshow.VIEWS';
 
 	/** the column name for the VOTES field */
-	const VOTES = 'kshow.VOTES';
+	const VOTES = 'vshow.VOTES';
 
 	/** the column name for the COMMENTS field */
-	const COMMENTS = 'kshow.COMMENTS';
+	const COMMENTS = 'vshow.COMMENTS';
 
 	/** the column name for the FAVORITES field */
-	const FAVORITES = 'kshow.FAVORITES';
+	const FAVORITES = 'vshow.FAVORITES';
 
 	/** the column name for the RANK field */
-	const RANK = 'kshow.RANK';
+	const RANK = 'vshow.RANK';
 
 	/** the column name for the ENTRIES field */
-	const ENTRIES = 'kshow.ENTRIES';
+	const ENTRIES = 'vshow.ENTRIES';
 
 	/** the column name for the CONTRIBUTORS field */
-	const CONTRIBUTORS = 'kshow.CONTRIBUTORS';
+	const CONTRIBUTORS = 'vshow.CONTRIBUTORS';
 
 	/** the column name for the SUBSCRIBERS field */
-	const SUBSCRIBERS = 'kshow.SUBSCRIBERS';
+	const SUBSCRIBERS = 'vshow.SUBSCRIBERS';
 
 	/** the column name for the NUMBER_OF_UPDATES field */
-	const NUMBER_OF_UPDATES = 'kshow.NUMBER_OF_UPDATES';
+	const NUMBER_OF_UPDATES = 'vshow.NUMBER_OF_UPDATES';
 
 	/** the column name for the TAGS field */
-	const TAGS = 'kshow.TAGS';
+	const TAGS = 'vshow.TAGS';
 
 	/** the column name for the CUSTOM_DATA field */
-	const CUSTOM_DATA = 'kshow.CUSTOM_DATA';
+	const CUSTOM_DATA = 'vshow.CUSTOM_DATA';
 
 	/** the column name for the INDEXED_CUSTOM_DATA_1 field */
-	const INDEXED_CUSTOM_DATA_1 = 'kshow.INDEXED_CUSTOM_DATA_1';
+	const INDEXED_CUSTOM_DATA_1 = 'vshow.INDEXED_CUSTOM_DATA_1';
 
 	/** the column name for the INDEXED_CUSTOM_DATA_2 field */
-	const INDEXED_CUSTOM_DATA_2 = 'kshow.INDEXED_CUSTOM_DATA_2';
+	const INDEXED_CUSTOM_DATA_2 = 'vshow.INDEXED_CUSTOM_DATA_2';
 
 	/** the column name for the INDEXED_CUSTOM_DATA_3 field */
-	const INDEXED_CUSTOM_DATA_3 = 'kshow.INDEXED_CUSTOM_DATA_3';
+	const INDEXED_CUSTOM_DATA_3 = 'vshow.INDEXED_CUSTOM_DATA_3';
 
 	/** the column name for the REOCCURENCE field */
-	const REOCCURENCE = 'kshow.REOCCURENCE';
+	const REOCCURENCE = 'vshow.REOCCURENCE';
 
 	/** the column name for the LICENSE_TYPE field */
-	const LICENSE_TYPE = 'kshow.LICENSE_TYPE';
+	const LICENSE_TYPE = 'vshow.LICENSE_TYPE';
 
 	/** the column name for the LENGTH_IN_MSECS field */
-	const LENGTH_IN_MSECS = 'kshow.LENGTH_IN_MSECS';
+	const LENGTH_IN_MSECS = 'vshow.LENGTH_IN_MSECS';
 
 	/** the column name for the VIEW_PERMISSIONS field */
-	const VIEW_PERMISSIONS = 'kshow.VIEW_PERMISSIONS';
+	const VIEW_PERMISSIONS = 'vshow.VIEW_PERMISSIONS';
 
 	/** the column name for the VIEW_PASSWORD field */
-	const VIEW_PASSWORD = 'kshow.VIEW_PASSWORD';
+	const VIEW_PASSWORD = 'vshow.VIEW_PASSWORD';
 
 	/** the column name for the CONTRIB_PERMISSIONS field */
-	const CONTRIB_PERMISSIONS = 'kshow.CONTRIB_PERMISSIONS';
+	const CONTRIB_PERMISSIONS = 'vshow.CONTRIB_PERMISSIONS';
 
 	/** the column name for the CONTRIB_PASSWORD field */
-	const CONTRIB_PASSWORD = 'kshow.CONTRIB_PASSWORD';
+	const CONTRIB_PASSWORD = 'vshow.CONTRIB_PASSWORD';
 
 	/** the column name for the EDIT_PERMISSIONS field */
-	const EDIT_PERMISSIONS = 'kshow.EDIT_PERMISSIONS';
+	const EDIT_PERMISSIONS = 'vshow.EDIT_PERMISSIONS';
 
 	/** the column name for the EDIT_PASSWORD field */
-	const EDIT_PASSWORD = 'kshow.EDIT_PASSWORD';
+	const EDIT_PASSWORD = 'vshow.EDIT_PASSWORD';
 
 	/** the column name for the SALT field */
-	const SALT = 'kshow.SALT';
+	const SALT = 'vshow.SALT';
 
 	/** the column name for the CREATED_AT field */
-	const CREATED_AT = 'kshow.CREATED_AT';
+	const CREATED_AT = 'vshow.CREATED_AT';
 
 	/** the column name for the UPDATED_AT field */
-	const UPDATED_AT = 'kshow.UPDATED_AT';
+	const UPDATED_AT = 'vshow.UPDATED_AT';
 
 	/** the column name for the PARTNER_ID field */
-	const PARTNER_ID = 'kshow.PARTNER_ID';
+	const PARTNER_ID = 'vshow.PARTNER_ID';
 
 	/** the column name for the DISPLAY_IN_SEARCH field */
-	const DISPLAY_IN_SEARCH = 'kshow.DISPLAY_IN_SEARCH';
+	const DISPLAY_IN_SEARCH = 'vshow.DISPLAY_IN_SEARCH';
 
 	/** the column name for the SUBP_ID field */
-	const SUBP_ID = 'kshow.SUBP_ID';
+	const SUBP_ID = 'vshow.SUBP_ID';
 
 	/** the column name for the PERMISSIONS field */
-	const PERMISSIONS = 'kshow.PERMISSIONS';
+	const PERMISSIONS = 'vshow.PERMISSIONS';
 
 	/** the column name for the GROUP_ID field */
-	const GROUP_ID = 'kshow.GROUP_ID';
+	const GROUP_ID = 'vshow.GROUP_ID';
 
 	/** the column name for the PLAYS field */
-	const PLAYS = 'kshow.PLAYS';
+	const PLAYS = 'vshow.PLAYS';
 
 	/** the column name for the PARTNER_DATA field */
-	const PARTNER_DATA = 'kshow.PARTNER_DATA';
+	const PARTNER_DATA = 'vshow.PARTNER_DATA';
 
 	/** the column name for the INT_ID field */
-	const INT_ID = 'kshow.INT_ID';
+	const INT_ID = 'vshow.INT_ID';
 
 	/**
-	 * An identiy map to hold any loaded instances of kshow objects.
+	 * An identiy map to hold any loaded instances of vshow objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
 	 * queries.
-	 * @var        array kshow[]
+	 * @var        array vshow[]
 	 */
 	public static $instances = array();
 
@@ -267,12 +267,12 @@ abstract class BasekshowPeer {
 	 *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
 	 * </code>
 	 * @param      string $alias The alias for the current table.
-	 * @param      string $column The column name for current table. (i.e. kshowPeer::COLUMN_NAME).
+	 * @param      string $column The column name for current table. (i.e. vshowPeer::COLUMN_NAME).
 	 * @return     string
 	 */
 	public static function alias($alias, $column)
 	{
-		return str_replace(kshowPeer::TABLE_NAME.'.', $alias.'.', $column);
+		return str_replace(vshowPeer::TABLE_NAME.'.', $alias.'.', $column);
 	}
 
 	/**
@@ -288,57 +288,57 @@ abstract class BasekshowPeer {
 	 */
 	public static function addSelectColumns(Criteria $criteria)
 	{
-		$criteria->addSelectColumn(kshowPeer::ID);
-		$criteria->addSelectColumn(kshowPeer::PRODUCER_ID);
-		$criteria->addSelectColumn(kshowPeer::EPISODE_ID);
-		$criteria->addSelectColumn(kshowPeer::NAME);
-		$criteria->addSelectColumn(kshowPeer::SUBDOMAIN);
-		$criteria->addSelectColumn(kshowPeer::DESCRIPTION);
-		$criteria->addSelectColumn(kshowPeer::STATUS);
-		$criteria->addSelectColumn(kshowPeer::TYPE);
-		$criteria->addSelectColumn(kshowPeer::MEDIA_TYPE);
-		$criteria->addSelectColumn(kshowPeer::FORMAT_TYPE);
-		$criteria->addSelectColumn(kshowPeer::LANGUAGE);
-		$criteria->addSelectColumn(kshowPeer::START_DATE);
-		$criteria->addSelectColumn(kshowPeer::END_DATE);
-		$criteria->addSelectColumn(kshowPeer::SKIN);
-		$criteria->addSelectColumn(kshowPeer::THUMBNAIL);
-		$criteria->addSelectColumn(kshowPeer::SHOW_ENTRY_ID);
-		$criteria->addSelectColumn(kshowPeer::INTRO_ID);
-		$criteria->addSelectColumn(kshowPeer::VIEWS);
-		$criteria->addSelectColumn(kshowPeer::VOTES);
-		$criteria->addSelectColumn(kshowPeer::COMMENTS);
-		$criteria->addSelectColumn(kshowPeer::FAVORITES);
-		$criteria->addSelectColumn(kshowPeer::RANK);
-		$criteria->addSelectColumn(kshowPeer::ENTRIES);
-		$criteria->addSelectColumn(kshowPeer::CONTRIBUTORS);
-		$criteria->addSelectColumn(kshowPeer::SUBSCRIBERS);
-		$criteria->addSelectColumn(kshowPeer::NUMBER_OF_UPDATES);
-		$criteria->addSelectColumn(kshowPeer::TAGS);
-		$criteria->addSelectColumn(kshowPeer::CUSTOM_DATA);
-		$criteria->addSelectColumn(kshowPeer::INDEXED_CUSTOM_DATA_1);
-		$criteria->addSelectColumn(kshowPeer::INDEXED_CUSTOM_DATA_2);
-		$criteria->addSelectColumn(kshowPeer::INDEXED_CUSTOM_DATA_3);
-		$criteria->addSelectColumn(kshowPeer::REOCCURENCE);
-		$criteria->addSelectColumn(kshowPeer::LICENSE_TYPE);
-		$criteria->addSelectColumn(kshowPeer::LENGTH_IN_MSECS);
-		$criteria->addSelectColumn(kshowPeer::VIEW_PERMISSIONS);
-		$criteria->addSelectColumn(kshowPeer::VIEW_PASSWORD);
-		$criteria->addSelectColumn(kshowPeer::CONTRIB_PERMISSIONS);
-		$criteria->addSelectColumn(kshowPeer::CONTRIB_PASSWORD);
-		$criteria->addSelectColumn(kshowPeer::EDIT_PERMISSIONS);
-		$criteria->addSelectColumn(kshowPeer::EDIT_PASSWORD);
-		$criteria->addSelectColumn(kshowPeer::SALT);
-		$criteria->addSelectColumn(kshowPeer::CREATED_AT);
-		$criteria->addSelectColumn(kshowPeer::UPDATED_AT);
-		$criteria->addSelectColumn(kshowPeer::PARTNER_ID);
-		$criteria->addSelectColumn(kshowPeer::DISPLAY_IN_SEARCH);
-		$criteria->addSelectColumn(kshowPeer::SUBP_ID);
-		$criteria->addSelectColumn(kshowPeer::PERMISSIONS);
-		$criteria->addSelectColumn(kshowPeer::GROUP_ID);
-		$criteria->addSelectColumn(kshowPeer::PLAYS);
-		$criteria->addSelectColumn(kshowPeer::PARTNER_DATA);
-		$criteria->addSelectColumn(kshowPeer::INT_ID);
+		$criteria->addSelectColumn(vshowPeer::ID);
+		$criteria->addSelectColumn(vshowPeer::PRODUCER_ID);
+		$criteria->addSelectColumn(vshowPeer::EPISODE_ID);
+		$criteria->addSelectColumn(vshowPeer::NAME);
+		$criteria->addSelectColumn(vshowPeer::SUBDOMAIN);
+		$criteria->addSelectColumn(vshowPeer::DESCRIPTION);
+		$criteria->addSelectColumn(vshowPeer::STATUS);
+		$criteria->addSelectColumn(vshowPeer::TYPE);
+		$criteria->addSelectColumn(vshowPeer::MEDIA_TYPE);
+		$criteria->addSelectColumn(vshowPeer::FORMAT_TYPE);
+		$criteria->addSelectColumn(vshowPeer::LANGUAGE);
+		$criteria->addSelectColumn(vshowPeer::START_DATE);
+		$criteria->addSelectColumn(vshowPeer::END_DATE);
+		$criteria->addSelectColumn(vshowPeer::SKIN);
+		$criteria->addSelectColumn(vshowPeer::THUMBNAIL);
+		$criteria->addSelectColumn(vshowPeer::SHOW_ENTRY_ID);
+		$criteria->addSelectColumn(vshowPeer::INTRO_ID);
+		$criteria->addSelectColumn(vshowPeer::VIEWS);
+		$criteria->addSelectColumn(vshowPeer::VOTES);
+		$criteria->addSelectColumn(vshowPeer::COMMENTS);
+		$criteria->addSelectColumn(vshowPeer::FAVORITES);
+		$criteria->addSelectColumn(vshowPeer::RANK);
+		$criteria->addSelectColumn(vshowPeer::ENTRIES);
+		$criteria->addSelectColumn(vshowPeer::CONTRIBUTORS);
+		$criteria->addSelectColumn(vshowPeer::SUBSCRIBERS);
+		$criteria->addSelectColumn(vshowPeer::NUMBER_OF_UPDATES);
+		$criteria->addSelectColumn(vshowPeer::TAGS);
+		$criteria->addSelectColumn(vshowPeer::CUSTOM_DATA);
+		$criteria->addSelectColumn(vshowPeer::INDEXED_CUSTOM_DATA_1);
+		$criteria->addSelectColumn(vshowPeer::INDEXED_CUSTOM_DATA_2);
+		$criteria->addSelectColumn(vshowPeer::INDEXED_CUSTOM_DATA_3);
+		$criteria->addSelectColumn(vshowPeer::REOCCURENCE);
+		$criteria->addSelectColumn(vshowPeer::LICENSE_TYPE);
+		$criteria->addSelectColumn(vshowPeer::LENGTH_IN_MSECS);
+		$criteria->addSelectColumn(vshowPeer::VIEW_PERMISSIONS);
+		$criteria->addSelectColumn(vshowPeer::VIEW_PASSWORD);
+		$criteria->addSelectColumn(vshowPeer::CONTRIB_PERMISSIONS);
+		$criteria->addSelectColumn(vshowPeer::CONTRIB_PASSWORD);
+		$criteria->addSelectColumn(vshowPeer::EDIT_PERMISSIONS);
+		$criteria->addSelectColumn(vshowPeer::EDIT_PASSWORD);
+		$criteria->addSelectColumn(vshowPeer::SALT);
+		$criteria->addSelectColumn(vshowPeer::CREATED_AT);
+		$criteria->addSelectColumn(vshowPeer::UPDATED_AT);
+		$criteria->addSelectColumn(vshowPeer::PARTNER_ID);
+		$criteria->addSelectColumn(vshowPeer::DISPLAY_IN_SEARCH);
+		$criteria->addSelectColumn(vshowPeer::SUBP_ID);
+		$criteria->addSelectColumn(vshowPeer::PERMISSIONS);
+		$criteria->addSelectColumn(vshowPeer::GROUP_ID);
+		$criteria->addSelectColumn(vshowPeer::PLAYS);
+		$criteria->addSelectColumn(vshowPeer::PARTNER_DATA);
+		$criteria->addSelectColumn(vshowPeer::INT_ID);
 	}
 
 	/**
@@ -357,27 +357,27 @@ abstract class BasekshowPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(kshowPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(vshowPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			kshowPeer::addSelectColumns($criteria);
+			vshowPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 		$criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
 		
-		kshowPeer::attachCriteriaFilter($criteria);
+		vshowPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
-			'kshowPeer', 
+			vQueryCache::QUERY_TYPE_COUNT,
+			'vshowPeer', 
 			$cacheKey, 
 			$queryDB);
 		if ($cachedResult !== null)
@@ -386,7 +386,7 @@ abstract class BasekshowPeer {
 		}
 		
 		// select the connection for the query
-		$con = kshowPeer::alternativeCon ($con, $queryDB);
+		$con = vshowPeer::alternativeCon ($con, $queryDB);
 		
 		// BasePeer returns a PDOStatement
 		$stmt = BasePeer::doCount($criteria, $con);
@@ -400,7 +400,7 @@ abstract class BasekshowPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -410,7 +410,7 @@ abstract class BasekshowPeer {
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
-	 * @return     kshow
+	 * @return     vshow
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -418,7 +418,7 @@ abstract class BasekshowPeer {
 	{
 		$critcopy = clone $criteria;
 		$critcopy->setLimit(1);
-		$objects = kshowPeer::doSelect($critcopy, $con);
+		$objects = vshowPeer::doSelect($critcopy, $con);
 		if ($objects) {
 			return $objects[0];
 		}
@@ -460,10 +460,10 @@ abstract class BasekshowPeer {
 	{
 		foreach ($queryResult as $curIndex => $curObject)
 		{
-			$objFromPool = kshowPeer::getInstanceFromPool($curObject->getPrimaryKey());
+			$objFromPool = vshowPeer::getInstanceFromPool($curObject->getPrimaryKey());
 			if ($objFromPool === null)
 			{
-				kshowPeer::addInstanceToPool($curObject);
+				vshowPeer::addInstanceToPool($curObject);
 			}
 			else
 			{
@@ -481,11 +481,11 @@ abstract class BasekshowPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
-					kshowPeer::addInstanceToPool($curResult);
+					vshowPeer::addInstanceToPool($curResult);
 				}
 			}
 		}
@@ -502,54 +502,54 @@ abstract class BasekshowPeer {
 	 */
 	public static function doSelect(Criteria $criteria, PropelPDO $con = null)
 	{		
-		$criteriaForSelect = kshowPeer::prepareCriteriaForSelect($criteria);
+		$criteriaForSelect = vshowPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
-			'kshowPeer', 
+			vQueryCache::QUERY_TYPE_SELECT,
+			'vshowPeer', 
 			$cacheKey, 
 			$queryDB);
 		if ($cachedResult !== null)
 		{
 			$cacheKey = null;
-			kshowPeer::filterSelectResults($cachedResult, $criteriaForSelect);
-			kshowPeer::updateInstancePool($cachedResult);
+			vshowPeer::filterSelectResults($cachedResult, $criteriaForSelect);
+			vshowPeer::updateInstancePool($cachedResult);
 			return $cachedResult;
 		}
 		
-		$con = kshowPeer::alternativeCon($con, $queryDB);
+		$con = vshowPeer::alternativeCon($con, $queryDB);
 		
-		$queryResult = kshowPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
+		$queryResult = vshowPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
-		kshowPeer::filterSelectResults($queryResult, $criteria);
+		vshowPeer::filterSelectResults($queryResult, $criteria);
 		
-		kshowPeer::addInstancesToPool($queryResult);
+		vshowPeer::addInstancesToPool($queryResult);
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -559,7 +559,7 @@ abstract class BasekshowPeer {
 			$con = myDbHelper::alternativeCon($con);
 			
 		if($con === null)
-			$con = Propel::getConnection(kshowPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(vshowPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		
 		return $con;
 	}
@@ -571,7 +571,7 @@ abstract class BasekshowPeer {
 	
 	public static function  setUseCriteriaFilter ( $use )
 	{
-		$criteria_filter = kshowPeer::getCriteriaFilter();
+		$criteria_filter = vshowPeer::getCriteriaFilter();
 		
 		if ( $use )  $criteria_filter->enable(); 
 		else $criteria_filter->disable();
@@ -585,12 +585,12 @@ abstract class BasekshowPeer {
 	public static function &getCriteriaFilter()
 	{
 		if(self::$s_criteria_filter == null)
-			kshowPeer::setDefaultCriteriaFilter();
+			vshowPeer::setDefaultCriteriaFilter();
 		
-		$partnerCriteria = myPartnerUtils::getPartnerCriteriaParams('kshow');
+		$partnerCriteria = myPartnerUtils::getPartnerCriteriaParams('vshow');
 		if ($partnerCriteria)
 		{
-			call_user_func_array(array('kshowPeer','addPartnerToCriteria'), $partnerCriteria);
+			call_user_func_array(array('vshowPeer','addPartnerToCriteria'), $partnerCriteria);
 		}
 		
 		return self::$s_criteria_filter;
@@ -617,10 +617,10 @@ abstract class BasekshowPeer {
 	 */
 	protected static function attachCriteriaFilter(Criteria $criteria)
 	{
-		kshowPeer::getCriteriaFilter()->applyFilter($criteria);
+		vshowPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -628,21 +628,21 @@ abstract class BasekshowPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
-				$criteria->addAnd(self::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+				// allow only the vidiun netword stuff
+				$criteria->addAnd(self::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 				
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -661,7 +661,7 @@ abstract class BasekshowPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -677,9 +677,9 @@ abstract class BasekshowPeer {
 				else 
 				{
 					$criterion = $criteria->getNewCriterion(self::PARTNER_ID, $partners, Criteria::IN);
-					if($kalturaNetwork)
+					if($vidiunNetwork)
 					{
-						$criterionNetwork = $criteria->getNewCriterion(self::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+						$criterionNetwork = $criteria->getNewCriterion(self::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 						$criterion->addOr($criterionNetwork);
 					}
 					$criteria->addAnd($criterion);
@@ -706,10 +706,10 @@ abstract class BasekshowPeer {
 	public static function doCountStmt(Criteria $criteria, PropelPDO $con = null)
 	{
 		// attach default criteria
-		kshowPeer::attachCriteriaFilter($criteria);
+		vshowPeer::attachCriteriaFilter($criteria);
 		
 		// select the connection for the query
-		$con = kshowPeer::alternativeCon ( $con );
+		$con = vshowPeer::alternativeCon ( $con );
 		
 		// BasePeer returns a PDOStatement
 		return BasePeer::doCount($criteria, $con);
@@ -723,20 +723,20 @@ abstract class BasekshowPeer {
 			if(count($asColumns) == 1 && isset($asColumns['_score']))
 			{
 				$criteria = clone $criteria;
-				kshowPeer::addSelectColumns($criteria);
+				vshowPeer::addSelectColumns($criteria);
 			}
 		}
 		else
 		{
 			$criteria = clone $criteria;
-			kshowPeer::addSelectColumns($criteria);
+			vshowPeer::addSelectColumns($criteria);
 		}
 		
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		// attach default criteria
-		kshowPeer::attachCriteriaFilter($criteria);
+		vshowPeer::attachCriteriaFilter($criteria);
 
 		return $criteria;
 	}
@@ -756,9 +756,9 @@ abstract class BasekshowPeer {
 	 */
 	public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
 	{
-		$con = kshowPeer::alternativeCon($con);
+		$con = vshowPeer::alternativeCon($con);
 		
-		$criteria = kshowPeer::prepareCriteriaForSelect($criteria);
+		$criteria = vshowPeer::prepareCriteriaForSelect($criteria);
 		
 		// BasePeer returns a PDOStatement
 		return BasePeer::doSelect($criteria, $con);
@@ -772,10 +772,10 @@ abstract class BasekshowPeer {
 	 * to the cache in order to ensure that the same objects are always returned by doSelect*()
 	 * and retrieveByPK*() calls.
 	 *
-	 * @param      kshow $value A kshow object.
+	 * @param      vshow $value A vshow object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(kshow $obj, $key = null)
+	public static function addInstanceToPool(vshow $obj, $key = null)
 	{
 		if ( Propel::isInstancePoolingEnabled() )
 		{
@@ -785,11 +785,11 @@ abstract class BasekshowPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('kshowPeer');
+				vMemoryManager::registerPeer('vshowPeer');
 			}
 		}
 	}
@@ -802,18 +802,18 @@ abstract class BasekshowPeer {
 	 * methods in your stub classes -- you may need to explicitly remove objects
 	 * from the cache in order to prevent returning objects that no longer exist.
 	 *
-	 * @param      mixed $value A kshow object or a primary key value.
+	 * @param      mixed $value A vshow object or a primary key value.
 	 */
 	public static function removeInstanceFromPool($value)
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
-			if (is_object($value) && $value instanceof kshow) {
+			if (is_object($value) && $value instanceof vshow) {
 				$key = (string) $value->getId();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
 			} else {
-				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or kshow object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or vshow object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
 			}
 
@@ -828,7 +828,7 @@ abstract class BasekshowPeer {
 	 * a multi-column primary key, a serialize()d version of the primary key will be returned.
 	 *
 	 * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-	 * @return     kshow Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+	 * @return     vshow Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
 	 * @see        getPrimaryKeyHash()
 	 */
 	public static function getInstanceFromPool($key)
@@ -856,7 +856,7 @@ abstract class BasekshowPeer {
 	}
 	
 	/**
-	 * Method to invalidate the instance pool of all tables related to kshow
+	 * Method to invalidate the instance pool of all tables related to vshow
 	 * by a foreign key with ON DELETE CASCADE
 	 */
 	public static function clearRelatedInstancePool()
@@ -894,11 +894,11 @@ abstract class BasekshowPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = kshowPeer::getOMClass(false);
+		$cls = vshowPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key = kshowPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj = kshowPeer::getInstanceFromPool($key))) {
+			$key = vshowPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj = vshowPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
@@ -914,7 +914,7 @@ abstract class BasekshowPeer {
 	}
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuser table
+	 * Returns the number of rows matching criteria, joining the related vuser table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -922,7 +922,7 @@ abstract class BasekshowPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinkuser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinvuser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -930,14 +930,14 @@ abstract class BasekshowPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(kshowPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(vshowPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			kshowPeer::addSelectColumns($criteria);
+			vshowPeer::addSelectColumns($criteria);
 		}
 		
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -946,9 +946,9 @@ abstract class BasekshowPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(kshowPeer::PRODUCER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(vshowPeer::PRODUCER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = kshowPeer::doCountStmt($criteria, $con);
+		$stmt = vshowPeer::doCountStmt($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$count = (int) $row[0];
@@ -961,15 +961,15 @@ abstract class BasekshowPeer {
 
 
 	/**
-	 * Selects a collection of kshow objects pre-filled with their kuser objects.
+	 * Selects a collection of vshow objects pre-filled with their vuser objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of kshow objects.
+	 * @return     array Array of vshow objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinkuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -978,44 +978,44 @@ abstract class BasekshowPeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		kshowPeer::addSelectColumns($criteria);
-		$startcol = (kshowPeer::NUM_COLUMNS - kshowPeer::NUM_LAZY_LOAD_COLUMNS);
-		kuserPeer::addSelectColumns($criteria);
+		vshowPeer::addSelectColumns($criteria);
+		$startcol = (vshowPeer::NUM_COLUMNS - vshowPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(kshowPeer::PRODUCER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(vshowPeer::PRODUCER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = kshowPeer::doSelectStmt($criteria, $con);
+		$stmt = vshowPeer::doSelectStmt($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = kshowPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = kshowPeer::getInstanceFromPool($key1))) {
+			$key1 = vshowPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = vshowPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$cls = kshowPeer::getOMClass(false);
+				$cls = vshowPeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				kshowPeer::addInstanceToPool($obj1, $key1);
+				vshowPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (kshow) to $obj2 (kuser)
-				$obj2->addkshow($obj1);
+				// Add the $obj1 (vshow) to $obj2 (vuser)
+				$obj2->addvshow($obj1);
 
 			} // if joined row was not null
 
@@ -1023,7 +1023,7 @@ abstract class BasekshowPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1047,14 +1047,14 @@ abstract class BasekshowPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(kshowPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(vshowPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			kshowPeer::addSelectColumns($criteria);
+			vshowPeer::addSelectColumns($criteria);
 		}
 		
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -1063,9 +1063,9 @@ abstract class BasekshowPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(kshowPeer::PRODUCER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(vshowPeer::PRODUCER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = kshowPeer::doCountStmt($criteria, $con);
+		$stmt = vshowPeer::doCountStmt($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$count = (int) $row[0];
@@ -1077,12 +1077,12 @@ abstract class BasekshowPeer {
 	}
 
 	/**
-	 * Selects a collection of kshow objects pre-filled with all related objects.
+	 * Selects a collection of vshow objects pre-filled with all related objects.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of kshow objects.
+	 * @return     array Array of vshow objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -1095,47 +1095,47 @@ abstract class BasekshowPeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		kshowPeer::addSelectColumns($criteria);
-		$startcol2 = (kshowPeer::NUM_COLUMNS - kshowPeer::NUM_LAZY_LOAD_COLUMNS);
+		vshowPeer::addSelectColumns($criteria);
+		$startcol2 = (vshowPeer::NUM_COLUMNS - vshowPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kuserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kuserPeer::NUM_COLUMNS - kuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vuserPeer::NUM_COLUMNS - vuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(kshowPeer::PRODUCER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(vshowPeer::PRODUCER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = kshowPeer::doSelectStmt($criteria, $con);
+		$stmt = vshowPeer::doSelectStmt($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = kshowPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = kshowPeer::getInstanceFromPool($key1))) {
+			$key1 = vshowPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = vshowPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$cls = kshowPeer::getOMClass(false);
+				$cls = vshowPeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				kshowPeer::addInstanceToPool($obj1, $key1);
+				vshowPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined kuser rows
+			// Add objects for joined vuser rows
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (kshow) to the collection in $obj2 (kuser)
-				$obj2->addkshow($obj1);
+				// Add the $obj1 (vshow) to the collection in $obj2 (vuser)
+				$obj2->addvshow($obj1);
 			} // if joined row not null
 
 			$results[] = $obj1;
@@ -1161,10 +1161,10 @@ abstract class BasekshowPeer {
 	 */
 	public static function buildTableMap()
 	{
-	  $dbMap = Propel::getDatabaseMap(BasekshowPeer::DATABASE_NAME);
-	  if (!$dbMap->hasTable(BasekshowPeer::TABLE_NAME))
+	  $dbMap = Propel::getDatabaseMap(BasevshowPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BasevshowPeer::TABLE_NAME))
 	  {
-	    $dbMap->addTableObject(new kshowTableMap());
+	    $dbMap->addTableObject(new vshowTableMap());
 	  }
 	}
 
@@ -1181,13 +1181,13 @@ abstract class BasekshowPeer {
 	 */
 	public static function getOMClass($withPrefix = true)
 	{
-		return $withPrefix ? kshowPeer::CLASS_DEFAULT : kshowPeer::OM_CLASS;
+		return $withPrefix ? vshowPeer::CLASS_DEFAULT : vshowPeer::OM_CLASS;
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a kshow or Criteria object.
+	 * Method perform an INSERT on the database, given a vshow or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or kshow object containing data that is used to create the INSERT statement.
+	 * @param      mixed $values Criteria or vshow object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
 	 * @return     mixed The new primary key.
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -1196,13 +1196,13 @@ abstract class BasekshowPeer {
 	public static function doInsert($values, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(kshowPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(vshowPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 		} else {
-			$criteria = $values->buildCriteria(); // build Criteria from kshow object
+			$criteria = $values->buildCriteria(); // build Criteria from vshow object
 		}
 
 
@@ -1224,9 +1224,9 @@ abstract class BasekshowPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a kshow or Criteria object.
+	 * Method perform an UPDATE on the database, given a vshow or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or kshow object containing data that is used to create the UPDATE statement.
+	 * @param      mixed $values Criteria or vshow object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -1235,7 +1235,7 @@ abstract class BasekshowPeer {
 	public static function doUpdate($values, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(kshowPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(vshowPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$selectCriteria = new Criteria(self::DATABASE_NAME);
@@ -1243,10 +1243,10 @@ abstract class BasekshowPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(kshowPeer::ID);
-			$selectCriteria->add(kshowPeer::ID, $criteria->remove(kshowPeer::ID), $comparison);
+			$comparison = $criteria->getComparison(vshowPeer::ID);
+			$selectCriteria->add(vshowPeer::ID, $criteria->remove(vshowPeer::ID), $comparison);
 
-		} else { // $values is kshow object
+		} else { // $values is vshow object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
 		}
@@ -1276,26 +1276,26 @@ abstract class BasekshowPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the kshow table.
+	 * Method to DELETE all rows from the vshow table.
 	 *
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
 	public static function doDeleteAll($con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(kshowPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(vshowPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		$affectedRows = 0; // initialize var to track total num of affected rows
 		try {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(kshowPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(vshowPeer::TABLE_NAME, $con);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
 			// instances get re-added by the select statement contained therein).
-			kshowPeer::clearInstancePool();
-			kshowPeer::clearRelatedInstancePool();
+			vshowPeer::clearInstancePool();
+			vshowPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1305,9 +1305,9 @@ abstract class BasekshowPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a kshow or Criteria object OR a primary key value.
+	 * Method perform a DELETE on the database, given a vshow or Criteria object OR a primary key value.
 	 *
-	 * @param      mixed $values Criteria or kshow object or primary key or array of primary keys
+	 * @param      mixed $values Criteria or vshow object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
 	 * @param      PropelPDO $con the connection to use
 	 * @return     int 	The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -1318,27 +1318,27 @@ abstract class BasekshowPeer {
 	 public static function doDelete($values, PropelPDO $con = null)
 	 {
 		if ($con === null) {
-			$con = Propel::getConnection(kshowPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(vshowPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			// invalidate the cache for all objects of this type, since we have no
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
-			kshowPeer::clearInstancePool();
+			vshowPeer::clearInstancePool();
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof kshow) { // it's a model object
+		} elseif ($values instanceof vshow) { // it's a model object
 			// invalidate the cache for this single object
-			kshowPeer::removeInstanceFromPool($values);
+			vshowPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(kshowPeer::ID, (array) $values, Criteria::IN);
+			$criteria->add(vshowPeer::ID, (array) $values, Criteria::IN);
 			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				kshowPeer::removeInstanceFromPool($singleval);
+				vshowPeer::removeInstanceFromPool($singleval);
 			}
 		}
 
@@ -1353,7 +1353,7 @@ abstract class BasekshowPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-			kshowPeer::clearRelatedInstancePool();
+			vshowPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1363,24 +1363,24 @@ abstract class BasekshowPeer {
 	}
 
 	/**
-	 * Validates all modified columns of given kshow object.
+	 * Validates all modified columns of given vshow object.
 	 * If parameter $columns is either a single column name or an array of column names
 	 * than only those columns are validated.
 	 *
 	 * NOTICE: This does not apply to primary or foreign keys for now.
 	 *
-	 * @param      kshow $obj The object to validate.
+	 * @param      vshow $obj The object to validate.
 	 * @param      mixed $cols Column name or array of column names.
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(kshow $obj, $cols = null)
+	public static function doValidate(vshow $obj, $cols = null)
 	{
 		$columns = array();
 
 		if ($cols) {
-			$dbMap = Propel::getDatabaseMap(kshowPeer::DATABASE_NAME);
-			$tableMap = $dbMap->getTable(kshowPeer::TABLE_NAME);
+			$dbMap = Propel::getDatabaseMap(vshowPeer::DATABASE_NAME);
+			$tableMap = $dbMap->getTable(vshowPeer::TABLE_NAME);
 
 			if (! is_array($cols)) {
 				$cols = array($cols);
@@ -1396,7 +1396,7 @@ abstract class BasekshowPeer {
 
 		}
 
-		return BasePeer::doValidate(kshowPeer::DATABASE_NAME, kshowPeer::TABLE_NAME, $columns);
+		return BasePeer::doValidate(vshowPeer::DATABASE_NAME, vshowPeer::TABLE_NAME, $columns);
 	}
 
 	/**
@@ -1404,19 +1404,19 @@ abstract class BasekshowPeer {
 	 *
 	 * @param      string $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
-	 * @return     kshow
+	 * @return     vshow
 	 */
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
 
-		if (null !== ($obj = kshowPeer::getInstanceFromPool((string) $pk))) {
+		if (null !== ($obj = vshowPeer::getInstanceFromPool((string) $pk))) {
 			return $obj;
 		}
 
-		$criteria = new Criteria(kshowPeer::DATABASE_NAME);
-		$criteria->add(kshowPeer::ID, $pk);
+		$criteria = new Criteria(vshowPeer::DATABASE_NAME);
+		$criteria->add(vshowPeer::ID, $pk);
 
-		$v = kshowPeer::doSelect($criteria, $con);
+		$v = vshowPeer::doSelect($criteria, $con);
 
 		return !empty($v) > 0 ? $v[0] : null;
 	}
@@ -1435,16 +1435,16 @@ abstract class BasekshowPeer {
 		if (empty($pks)) {
 			$objs = array();
 		} else {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
-			$criteria->add(kshowPeer::ID, $pks, Criteria::IN);
-			$objs = kshowPeer::doSelect($criteria, $con);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
+			$criteria->add(vshowPeer::ID, $pks, Criteria::IN);
+			$objs = vshowPeer::doSelect($criteria, $con);
 		}
 		return $objs;
 	}
 
-} // BasekshowPeer
+} // BasevshowPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BasekshowPeer::buildTableMap();
+BasevshowPeer::buildTableMap();
 

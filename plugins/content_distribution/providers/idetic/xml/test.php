@@ -1,33 +1,33 @@
 <?php
 
-define('KALTURA_ROOT_PATH', realpath(dirname(__FILE__) . '/../../../../..'));
-require_once(KALTURA_ROOT_PATH . '/infra/KAutoloader.php');
+define('VIDIUN_ROOT_PATH', realpath(dirname(__FILE__) . '/../../../../..'));
+require_once(VIDIUN_ROOT_PATH . '/infra/VAutoloader.php');
 
-define("KALTURA_API_PATH", KALTURA_ROOT_PATH . "/api_v3");
+define("VIDIUN_API_PATH", VIDIUN_ROOT_PATH . "/api_v3");
 
-require_once(KALTURA_ROOT_PATH . '/alpha/config/kConf.php');
+require_once(VIDIUN_ROOT_PATH . '/alpha/config/vConf.php');
 // Autoloader
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "propel", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_API_PATH, "lib", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_API_PATH, "services", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "alpha", "plugins", "*")); // needed for testmeDoc
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "plugins", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "generator")); // needed for testmeDoc
-KAutoloader::setClassMapFilePath(kConf::get("cache_root_path") . '/plugins/' . basename(__FILE__) . '.cache');
-//KAutoloader::dumpExtra();
-KAutoloader::register();
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "propel", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_API_PATH, "lib", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_API_PATH, "services", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "alpha", "plugins", "*")); // needed for testmeDoc
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "plugins", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "generator")); // needed for testmeDoc
+VAutoloader::setClassMapFilePath(vConf::get("cache_root_path") . '/plugins/' . basename(__FILE__) . '.cache');
+//VAutoloader::dumpExtra();
+VAutoloader::register();
 
 // Timezone
-date_default_timezone_set(kConf::get("date_default_timezone")); // America/New_York
+date_default_timezone_set(vConf::get("date_default_timezone")); // America/New_York
 
 error_reporting(E_ALL);
-KalturaLog::setLogger(new KalturaStdoutLogger());
+VidiunLog::setLogger(new VidiunStdoutLogger());
 
-$dbConf = kConf::getDB();
+$dbConf = vConf::getDB();
 DbManager::setConfig($dbConf);
 DbManager::initialize();
 
-kCurrentContext::$ps_vesion = 'ps3';
+vCurrentContext::$ps_vesion = 'ps3';
 
 $entryId = '0_kntco0ij';
 
@@ -55,7 +55,7 @@ foreach($argv as $arg)
 	}
 }
 
-		$fileTransferMgr = kFileTransferMgr::getInstance(kFileTransferMgrType::FTP);
+		$fileTransferMgr = vFileTransferMgr::getInstance(vFileTransferMgrType::FTP);
 		if(!$fileTransferMgr)
 			throw new Exception("SFTP manager not loaded");
 			
@@ -65,19 +65,19 @@ foreach($argv as $arg)
 
 		return;*/
 $entry = entryPeer::retrieveByPKNoFilter($entryId);
-$mrss = kMrssManager::getEntryMrss($entry);
+$mrss = vMrssManager::getEntryMrss($entry);
 $allParts = explode('</item>', $mrss);
 $add  = '<customData metadataProfileId="1"><metadata><ShortTitle>Tan-Tan test 1 long title</ShortTitle> <StatskeysFull> <statskeys><statskey>  <statskeyId>230</statskeyId> <statskeyName>More Sports</statskeyName>   <statskeyType>Sport</statskeyType>   <parentId>0</parentId> </statskey> <statskey>  <statskeyId>220</statskeyId> <statskeyName>Golf</statskeyName> <statskeyType>Sport</statskeyType>   <parentId>230</parentId>   </statskey> <statskey> <statskeyId>222</statskeyId> <statskeyName>LPGA</statskeyName>   <statskeyType>League</statskeyType>   <parentId>220</parentId> </statskey> <statskey>  <statskeyId>2241</statskeyId>   <statskeyName>Annika Sorenstam</statskeyName> <statskeyType>Player</statskeyType> <parentId>222</parentId> </statskey><statskey>  <statskeyId>433</statskeyId> <statskeyName>Premier League</statskeyName> <statskeyType>League</statskeyType> <parentId>177</parentId> </statskey> <statskey><statskeyId>568</statskeyId><statskeyName>Manchester United</statskeyName> <statskeyType>Team</statskeyType> <parentId>433</parentId></statskey></statskeys></StatskeysFull></metadata></customData>';
 $mrss = $allParts[0] . $add . '</item>';
 
 file_put_contents('mrss.xml', $mrss);
-KalturaLog::debug("MRSS [$mrss]");
+VidiunLog::debug("MRSS [$mrss]");
 
-$distributionJobData = new KalturaDistributionSubmitJobData();
-$delData = new KalturaDistributionDeleteJobData();
+$distributionJobData = new VidiunDistributionSubmitJobData();
+$delData = new VidiunDistributionDeleteJobData();
 
 $dbDistributionProfile = DistributionProfilePeer::retrieveByPK(7);
-$distributionProfile = new KalturaIdeticDistributionProfile();
+$distributionProfile = new VidiunIdeticDistributionProfile();
 $distributionProfile->fromObject($dbDistributionProfile);
 $distributionJobData->distributionProfileId = $distributionProfile->id;
 $delData->distributionProfileId = $distributionProfile->id;
@@ -87,7 +87,7 @@ $distributionJobData->distributionProfile = $distributionProfile;
 $delData->distributionProfile = $distributionProfile;
 
 $dbEntryDistribution = EntryDistributionPeer::retrieveByPK(38);
-$entryDistribution = new KalturaEntryDistribution();
+$entryDistribution = new VidiunEntryDistribution();
 $entryDistribution->fromObject($dbEntryDistribution);
 $distributionJobData->entryDistributionId = $entryDistribution->id;
 $distributionJobData->entryDistribution = $entryDistribution;
@@ -98,12 +98,12 @@ $delData->entryDistribution = $entryDistribution;
 //print_r($myp->validateForSubmission($dbEntryDistribution, "submit"));
 //return;
 
-$providerData = new KalturaIdeticDistributionJobProviderData($distributionJobData);
+$providerData = new VidiunIdeticDistributionJobProviderData($distributionJobData);
 $distributionJobData->providerData = $providerData;
 $delData->providerData = $providerData;
 
 file_put_contents('out.xml', $providerData->xml);
-KalturaLog::debug("XML [$providerData->xml]");
+VidiunLog::debug("XML [$providerData->xml]");
 
 return;
 $engine = new IdeticDistributionEngine();
@@ -116,15 +116,15 @@ $delData->remoteId = $distributionJobData->remoteId;
 echo $engine->delete($delData);
 
 
-//$xml = new KDOMDocument();
+//$xml = new VDOMDocument();
 //if(!$xml->loadXML($mrss))
 //{
-//	KalturaLog::err("MRSS not is not valid XML:\n$mrss\n");
+//	VidiunLog::err("MRSS not is not valid XML:\n$mrss\n");
 //	exit;
 //}
 //
 //$xslPath = 'submit.xsl';
-//$xsl = new KDOMDocument();
+//$xsl = new VDOMDocument();
 //$xsl->load($xslPath);
 //			
 //// set variables in the xsl
@@ -140,7 +140,7 @@ echo $engine->delete($delData);
 //	{
 //		$varNode->textContent = $distributionJobData->$name;
 //		$varNode->appendChild($xsl->createTextNode($distributionJobData->$name));
-//		KalturaLog::debug("Set variable [$name] to [{$distributionJobData->$name}]");
+//		VidiunLog::debug("Set variable [$name] to [{$distributionJobData->$name}]");
 //	}
 //}
 //
@@ -151,12 +151,12 @@ echo $engine->delete($delData);
 //$xml = $proc->transformToDoc($xml);
 //if(!$xml)
 //{
-//	KalturaLog::err("Transform returned false");
+//	VidiunLog::err("Transform returned false");
 //	exit;
 //}
 //
 //$xml = $xml->saveXML();
 //
 //file_put_contents('out.xml', $xml);
-//KalturaLog::debug("XML [$xml]");
+//VidiunLog::debug("XML [$xml]");
 

@@ -31,7 +31,7 @@ class Form_HuluProfileConfiguration extends Form_ConfigurableProfileConfiguratio
 		$additionalCategories = isset($properties['series_additional_categories']) && is_array($properties['itemXpathsToExtend']) ? $properties['series_additional_categories'] : array();
 		foreach($additionalCategories as &$val)
 		{
-			$temp = new Kaltura_Client_Type_String();
+			$temp = new Vidiun_Client_Type_String();
 			$temp->value = $val;
 			$val = $temp;
 		}
@@ -75,8 +75,8 @@ class Form_HuluProfileConfiguration extends Form_ConfigurableProfileConfiguratio
 			'label'			=> 'Protocol:',
 			'filters'		=> array('StringTrim'),
 			'multiOptions' 		=> array(
-				Kaltura_Client_ContentDistribution_Enum_DistributionProtocol::SFTP=> 'SFTP',
-				Kaltura_Client_ContentDistribution_Enum_DistributionProtocol::ASPERA => 'ASPERA',
+				Vidiun_Client_ContentDistribution_Enum_DistributionProtocol::SFTP=> 'SFTP',
+				Vidiun_Client_ContentDistribution_Enum_DistributionProtocol::ASPERA => 'ASPERA',
 			),
 			'required'		=> true,
 		));

@@ -33,20 +33,20 @@ class MetadataEntryPeer extends entryPeer implements IMetadataPeer
     	$entryDb = self::retrieveByPK($objectId);
     	if(!$entryDb)
     	{
-    		KalturaLog::debug("Metadata object id with id [$objectId] not found");
+    		VidiunLog::debug("Metadata object id with id [$objectId] not found");
     		return false;
     	}
     	
     	// check if all ids are privileged
-    	if (kCurrentContext::$ks_object->hasPrivilege(ks::PRIVILEGE_WILDCARD) ||
-    			kCurrentContext::$ks_object->verifyPrivileges(kSessionBase::PRIVILEGE_EDIT, $objectId))
+    	if (vCurrentContext::$vs_object->hasPrivilege(vs::PRIVILEGE_WILDCARD) ||
+    			vCurrentContext::$vs_object->verifyPrivileges(vSessionBase::PRIVILEGE_EDIT, $objectId))
     	{
     		return true;
     	}
     	
     	/* @var $entryDb entry */
-    	if(!kCurrentContext::$is_admin_session && strtolower($entryDb->getPuserId()) != strtolower(kCurrentContext::$ks_uid) &&
-    			!$entryDb->isEntitledKuserEdit(kCurrentContext::getCurrentKsKuserId())
+    	if(!vCurrentContext::$is_admin_session && strtolower($entryDb->getPuserId()) != strtolower(vCurrentContext::$vs_uid) &&
+    			!$entryDb->isEntitledVuserEdit(vCurrentContext::getCurrentVsVuserId())
     	)
     	{
     		return false;

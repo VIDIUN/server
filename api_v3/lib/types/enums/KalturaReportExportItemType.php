@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaReportExportItemType extends KalturaEnum implements ReportExportItemType
+class VidiunReportExportItemType extends VidiunEnum implements ReportExportItemType
 {
 
 }

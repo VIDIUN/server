@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Subclass for performing query and update operations on the 'kshow_kuser' table.
+ * Subclass for performing query and update operations on the 'vshow_vuser' table.
  *
  * 
  *
  * @package Core
  * @subpackage model
  */ 
-class KshowKuserPeer extends BaseKshowKuserPeer
+class VshowVuserPeer extends BaseVshowVuserPeer
 {
 }

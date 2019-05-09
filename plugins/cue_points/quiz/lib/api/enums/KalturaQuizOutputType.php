@@ -3,7 +3,7 @@
  * @package plugins.cuePoint
  * @subpackage api.en
  */
-class KalturaQuizOutputType extends KalturaEnum
+class VidiunQuizOutputType extends VidiunEnum
 {
     const PDF = 1;
 }

@@ -6,7 +6,7 @@
  * @package plugins.dropFolder
  * @subpackage api.services
  */
-class DropFolderFileService extends KalturaBaseService
+class DropFolderFileService extends VidiunBaseService
 {
 	const MYSQL_CODE_DUPLICATE_KEY = 23000;
 	
@@ -15,45 +15,45 @@ class DropFolderFileService extends KalturaBaseService
 		parent::initService($serviceId, $serviceName, $actionName);
 		
 		if (!DropFolderPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, DropFolderPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, DropFolderPlugin::PLUGIN_NAME);
 		
 		$this->applyPartnerFilterForClass('DropFolder');
 		$this->applyPartnerFilterForClass('DropFolderFile');
 	}
 		
 	/**
-	 * Allows you to add a new KalturaDropFolderFile object
+	 * Allows you to add a new VidiunDropFolderFile object
 	 * 
 	 * @action add
-	 * @param KalturaDropFolderFile $dropFolderFile
-	 * @return KalturaDropFolderFile
+	 * @param VidiunDropFolderFile $dropFolderFile
+	 * @return VidiunDropFolderFile
 	 * 
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
-	 * @throws KalturaDropFolderErrors::DROP_FOLDER_NOT_FOUND
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
+	 * @throws VidiunDropFolderErrors::DROP_FOLDER_NOT_FOUND
 	 */
-	public function addAction(KalturaDropFolderFile $dropFolderFile)
+	public function addAction(VidiunDropFolderFile $dropFolderFile)
 	{
 		return $this->newFileAddedOrDetected($dropFolderFile, DropFolderFileStatus::UPLOADING);
 	}
 	
 	/**
-	 * Retrieve a KalturaDropFolderFile object by ID
+	 * Retrieve a VidiunDropFolderFile object by ID
 	 * 
 	 * @action get
 	 * @param int $dropFolderFileId 
-	 * @return KalturaDropFolderFile
+	 * @return VidiunDropFolderFile
 	 * 
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */		
 	public function getAction($dropFolderFileId)
 	{
 		$dbDropFolderFile = DropFolderFilePeer::retrieveByPK($dropFolderFileId);
 		
 		if (!$dbDropFolderFile) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $dropFolderFileId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $dropFolderFileId);
 		}
 			
-		$dropFolderFile = KalturaDropFolderFile::getInstanceByType($dbDropFolderFile->getType());
+		$dropFolderFile = VidiunDropFolderFile::getInstanceByType($dbDropFolderFile->getType());
 		$dropFolderFile->fromObject($dbDropFolderFile, $this->getResponseProfile());
 		
 		return $dropFolderFile;
@@ -61,21 +61,21 @@ class DropFolderFileService extends KalturaBaseService
 	
 
 	/**
-	 * Update an existing KalturaDropFolderFile object
+	 * Update an existing VidiunDropFolderFile object
 	 * 
 	 * @action update
 	 * @param int $dropFolderFileId
-	 * @param KalturaDropFolderFile $dropFolderFile
-	 * @return KalturaDropFolderFile
+	 * @param VidiunDropFolderFile $dropFolderFile
+	 * @return VidiunDropFolderFile
 	 *
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */	
-	public function updateAction($dropFolderFileId, KalturaDropFolderFile $dropFolderFile)
+	public function updateAction($dropFolderFileId, VidiunDropFolderFile $dropFolderFile)
 	{
 		$dbDropFolderFile = DropFolderFilePeer::retrieveByPK($dropFolderFileId);
 		
 		if (!$dbDropFolderFile) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $dropFolderFileId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $dropFolderFileId);
 		}
 		
 		if (!is_null($dropFolderFile->fileSize)) {
@@ -85,7 +85,7 @@ class DropFolderFileService extends KalturaBaseService
 		$dbDropFolderFile = $dropFolderFile->toUpdatableObject($dbDropFolderFile);
 		$dbDropFolderFile->save();
 	
-		$dropFolderFile = new KalturaDropFolderFile();
+		$dropFolderFile = new VidiunDropFolderFile();
 		$dropFolderFile->fromObject($dbDropFolderFile, $this->getResponseProfile());
 		
 		return $dropFolderFile;
@@ -93,77 +93,77 @@ class DropFolderFileService extends KalturaBaseService
 	
 
 	/**
-	 * Update status of KalturaDropFolderFile
+	 * Update status of VidiunDropFolderFile
 	 * 
 	 * @action updateStatus
 	 * @param int $dropFolderFileId
-	 * @param KalturaDropFolderFileStatus $status
-	 * @return KalturaDropFolderFile
+	 * @param VidiunDropFolderFileStatus $status
+	 * @return VidiunDropFolderFile
 	 *
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */	
 	public function updateStatusAction($dropFolderFileId, $status)
 	{
 		$dbDropFolderFile = DropFolderFilePeer::retrieveByPK($dropFolderFileId);
 		if (!$dbDropFolderFile)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $dropFolderFileId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $dropFolderFileId);
 			
-		if ($status != KalturaDropFolderFileStatus::PURGED && $dbDropFolderFile->getStatus() == KalturaDropFolderFileStatus::DELETED)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $dropFolderFileId);
+		if ($status != VidiunDropFolderFileStatus::PURGED && $dbDropFolderFile->getStatus() == VidiunDropFolderFileStatus::DELETED)
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $dropFolderFileId);
 		
 		$dbDropFolderFile->setStatus($status);
 		$dbDropFolderFile->save();
 	
-		$dropFolderFile = KalturaDropFolderFile::getInstanceByType($dbDropFolderFile->getType());
+		$dropFolderFile = VidiunDropFolderFile::getInstanceByType($dbDropFolderFile->getType());
 		$dropFolderFile->fromObject($dbDropFolderFile, $this->getResponseProfile());
 		
 		return $dropFolderFile;
 	}
 
 	/**
-	 * Mark the KalturaDropFolderFile object as deleted
+	 * Mark the VidiunDropFolderFile object as deleted
 	 * 
 	 * @action delete
 	 * @param int $dropFolderFileId 
-	 * @return KalturaDropFolderFile
+	 * @return VidiunDropFolderFile
 	 *
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */		
 	public function deleteAction($dropFolderFileId)
 	{
 		$dbDropFolderFile = DropFolderFilePeer::retrieveByPK($dropFolderFileId);
 
 		if (!$dbDropFolderFile) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $dropFolderFileId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $dropFolderFileId);
 		}
 		
 		$dbDropFolderFile->setStatus(DropFolderFileStatus::DELETED);
 		$dbDropFolderFile->save();
 			
-		$dropFolderFile = KalturaDropFolderFile::getInstanceByType($dbDropFolderFile->getType());
+		$dropFolderFile = VidiunDropFolderFile::getInstanceByType($dbDropFolderFile->getType());
 		$dropFolderFile->fromObject($dbDropFolderFile, $this->getResponseProfile());
 		
 		return $dropFolderFile;
 	}
 	
 	/**
-	 * List KalturaDropFolderFile objects
+	 * List VidiunDropFolderFile objects
 	 * 
 	 * @action list
-	 * @param KalturaDropFolderFileFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaDropFolderFileListResponse
+	 * @param VidiunDropFolderFileFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunDropFolderFileListResponse
 	 */
-	public function listAction(KalturaDropFolderFileFilter  $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunDropFolderFileFilter  $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
 		{
-			$filter = new KalturaDropFolderFileFilter();
+			$filter = new VidiunDropFolderFileFilter();
 		}
 		
 		if(!$pager)
 		{
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		}
 		
 		return $filter->getListResponse($pager, $this->getResponseProfile());
@@ -171,32 +171,32 @@ class DropFolderFileService extends KalturaBaseService
 	
 	
 	/**
-	 * Set the KalturaDropFolderFile status to ignore (KalturaDropFolderFileStatus::IGNORE)
+	 * Set the VidiunDropFolderFile status to ignore (VidiunDropFolderFileStatus::IGNORE)
 	 * 
 	 * @action ignore
 	 * @param int $dropFolderFileId 
-	 * @return KalturaDropFolderFile
+	 * @return VidiunDropFolderFile
 	 *
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */		
 	public function ignoreAction($dropFolderFileId)
 	{
 		$dbDropFolderFile = DropFolderFilePeer::retrieveByPK($dropFolderFileId);
 		
 		if (!$dbDropFolderFile) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $dropFolderFileId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $dropFolderFileId);
 		}
 
 		$dbDropFolderFile->setStatus(DropFolderFileStatus::IGNORE);
 		$dbDropFolderFile->save();
 			
-		$dropFolderFile = new KalturaDropFolderFile();
+		$dropFolderFile = new VidiunDropFolderFile();
 		$dropFolderFile->fromObject($dbDropFolderFile, $this->getResponseProfile());
 		
 		return $dropFolderFile;
 	}
 	
-	private function newFileAddedOrDetected(KalturaDropFolderFile $dropFolderFile, $fileStatus)
+	private function newFileAddedOrDetected(VidiunDropFolderFile $dropFolderFile, $fileStatus)
 	{
 		// check for required parameters
 		$dropFolderFile->validatePropertyNotNull('dropFolderId');
@@ -206,7 +206,7 @@ class DropFolderFileService extends KalturaBaseService
 		// check that drop folder id exists in the system
 		$dropFolder = DropFolderPeer::retrieveByPK($dropFolderFile->dropFolderId);
 		if (!$dropFolder) {
-			throw new KalturaAPIException(KalturaDropFolderErrors::DROP_FOLDER_NOT_FOUND, $dropFolderFile->dropFolderId);
+			throw new VidiunAPIException(VidiunDropFolderErrors::DROP_FOLDER_NOT_FOUND, $dropFolderFile->dropFolderId);
 		}
 				
 		// save in database
@@ -228,14 +228,14 @@ class DropFolderFileService extends KalturaBaseService
 				switch($existingDropFolderFile->getStatus())
 				{					
 					case DropFolderFileStatus::PARSED:
-						KalturaLog::info('Exisiting file status is PARSED, updating status to ['.$fileStatus.']');
+						VidiunLog::info('Exisiting file status is PARSED, updating status to ['.$fileStatus.']');
 						$existingDropFolderFile = $dropFolderFile->toUpdatableObject($existingDropFolderFile);
 						$existingDropFolderFile->setStatus($fileStatus);						
 						$existingDropFolderFile->save();
 						$dbDropFolderFile = $existingDropFolderFile;
 						break;
 					case DropFolderFileStatus::DETECTED:
-						KalturaLog::info('Exisiting file status is DETECTED, updating status to ['.$fileStatus.']');
+						VidiunLog::info('Exisiting file status is DETECTED, updating status to ['.$fileStatus.']');
 						$existingDropFolderFile = $dropFolderFile->toUpdatableObject($existingDropFolderFile);
 						if($existingDropFolderFile->getStatus() != $fileStatus)
 							$existingDropFolderFile->setStatus($fileStatus);
@@ -245,14 +245,14 @@ class DropFolderFileService extends KalturaBaseService
 					case DropFolderFileStatus::UPLOADING:
 						if($fileStatus == DropFolderFileStatus::UPLOADING)
 						{
-							KalturaLog::log('Exisiting file status is UPLOADING, updating properties');
+							VidiunLog::log('Exisiting file status is UPLOADING, updating properties');
 							$existingDropFolderFile = $dropFolderFile->toUpdatableObject($existingDropFolderFile);
 							$existingDropFolderFile->save();
 							$dbDropFolderFile = $existingDropFolderFile;
 							break;							
 						}
 					default:
-						KalturaLog::log('Setting current file to PURGED ['.$existingDropFolderFile->getId().']');
+						VidiunLog::log('Setting current file to PURGED ['.$existingDropFolderFile->getId().']');
 						$existingDropFolderFile->setStatus(DropFolderFileStatus::PURGED);				
 						$existingDropFolderFile->save();
 						
@@ -260,7 +260,7 @@ class DropFolderFileService extends KalturaBaseService
 						if(	$existingDropFolderFile->getLeadDropFolderFileId() && 
 							$existingDropFolderFile->getLeadDropFolderFileId() != $existingDropFolderFile->getId())
 						{
-							KalturaLog::info('Updating lead id ['.$existingDropFolderFile->getLeadDropFolderFileId().']');							
+							VidiunLog::info('Updating lead id ['.$existingDropFolderFile->getLeadDropFolderFileId().']');							
 							$newDropFolderFile->setLeadDropFolderFileId($existingDropFolderFile->getLeadDropFolderFileId());	
 						}
 						$newDropFolderFile->save();
@@ -273,7 +273,7 @@ class DropFolderFileService extends KalturaBaseService
 			}
 		}	
 		// return the saved object
-		$dropFolderFile = KalturaDropFolderFile::getInstanceByType($dbDropFolderFile->getType());
+		$dropFolderFile = VidiunDropFolderFile::getInstanceByType($dbDropFolderFile->getType());
 		$dropFolderFile->fromObject($dbDropFolderFile, $this->getResponseProfile());
 		return $dropFolderFile;		
 		

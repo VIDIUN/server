@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFeatureStatusListResponse extends KalturaListResponse
+class VidiunFeatureStatusListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaFeatureStatusArray
+	 * @var VidiunFeatureStatusArray
 	 * @readonly
 	 */
 	public $objects;

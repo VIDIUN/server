@@ -3,10 +3,10 @@
  * @package plugins.adminConsole
  * @subpackage api.objects
  */
-class KalturaTrackEntryListResponse extends KalturaListResponse
+class VidiunTrackEntryListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaTrackEntryArray
+	 * @var VidiunTrackEntryArray
 	 * @readonly
 	 */
 	public $objects;

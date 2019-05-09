@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaStorageProfileProtocol extends KalturaDynamicEnum implements StorageProfileProtocol
+class VidiunStorageProfileProtocol extends VidiunDynamicEnum implements StorageProfileProtocol
 {
 	public static function getEnumClass()
 	{

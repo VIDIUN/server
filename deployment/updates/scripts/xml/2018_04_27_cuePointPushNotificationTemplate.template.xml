@@ -13,7 +13,7 @@
         <sessionType>2</sessionType>
     </session>
     <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-        <template objectType="KalturaPushNotificationTemplate">
+        <template objectType="VidiunPushNotificationTemplate">
             <name>New Cue Point Created</name>
             <systemName>Push_New_Cue_Point_Created</systemName>
             <description>Push notification template to be sent when a new cue-point is created.</description>
@@ -22,26 +22,26 @@
             <!-- EventNotificationEventType::OBJECT_CREATED -->
             <eventObjectType>cuePointEventNotifications.CuePoint</eventObjectType> 
             <eventConditions objectType="array">
-                <item objectType="KalturaOrCondition">
+                <item objectType="VidiunOrCondition">
                     <conditions objectType="array">
-                        <item objectType="KalturaFieldMatchCondition">
+                        <item objectType="VidiunFieldMatchCondition">
                             <description>Cue-point type equals</description>
-                            <field objectType="KalturaEvalStringField">
+                            <field objectType="VidiunEvalStringField">
                                 <code>$scope->getObject()->getType()</code>
                             </field>
                             <values objectType="array">
-                                <item objectType="KalturaStringValue">
+                                <item objectType="VidiunStringValue">
                                     <value>{trigger_cuepoint}</value>
                                 </item>
                             </values>
                         </item>
-                        <item objectType="KalturaFieldMatchCondition">
+                        <item objectType="VidiunFieldMatchCondition">
                             <description>all types</description>
-                            <field objectType="KalturaEvalStringField">
+                            <field objectType="VidiunEvalStringField">
                                 <code>'*'</code>
                             </field>
                             <values objectType="array">
-                                <item objectType="KalturaStringValue">
+                                <item objectType="VidiunStringValue">
                                     <value>{trigger_cuepoint}</value>
                                 </item>
                             </values>
@@ -50,19 +50,19 @@
                 </item>
             </eventConditions>		
             <contentParameters objectType="array">
-                <item objectType="KalturaEventNotificationParameter">
+                <item objectType="VidiunEventNotificationParameter">
                     <key>entryId</key>
                     <description/>
-                    <value objectType="KalturaEvalStringField">
+                    <value objectType="VidiunEvalStringField">
                         <code>$scope->getObject()->getEntryId()</code>
                     </value>
                 </item>
             </contentParameters>	
             <userParameters objectType="array">
-                <item objectType="KalturaEventNotificationParameter">
+                <item objectType="VidiunEventNotificationParameter">
                     <key>trigger_cuepoint</key>
-                    <description>Cue-point type that triggers the event (use asterisk to all types), See:KalturaCuePointType:/api_v3/testmeDoc/?object=KalturaCuePointType</description>
-                    <value objectType="KalturaStringValue">
+                    <description>Cue-point type that triggers the event (use asterisk to all types), See:VidiunCuePointType:/api_v3/testmeDoc/?object=VidiunCuePointType</description>
+                    <value objectType="VidiunStringValue">
                         <value>*</value>
                     </value>
                 </item>

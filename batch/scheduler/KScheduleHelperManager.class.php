@@ -4,7 +4,7 @@
  *
  * @package Scheduler
  */
-class KScheduleHelperManager
+class VScheduleHelperManager
 {
 	/**
 	 * @return array
@@ -107,7 +107,7 @@ class KScheduleHelperManager
 	}
 	
 	/**
-	 * @return array<KalturaWorkerQueueFilter>
+	 * @return array<VidiunWorkerQueueFilter>
 	 */
 	public static function loadFilters()
 	{
@@ -201,9 +201,9 @@ class KScheduleHelperManager
 
 	/**
 	 * @param string $filtersFileName
-	 * @param KalturaWorkerQueueFilter $filter
+	 * @param VidiunWorkerQueueFilter $filter
 	 */
-	public static function saveFilter($filtersFileName, KalturaWorkerQueueFilter $filter)
+	public static function saveFilter($filtersFileName, VidiunWorkerQueueFilter $filter)
 	{
 		$data = base64_encode(serialize($filter));
 
@@ -259,9 +259,9 @@ class KScheduleHelperManager
 	 */
 	protected static function getCachePath()
 	{
-		$path = kEnvironment::get("cache_root_path") . DIRECTORY_SEPARATOR . 'batch';
+		$path = vEnvironment::get("cache_root_path") . DIRECTORY_SEPARATOR . 'batch';
 		if(!file_exists($path))
-			kFile::fullMkdir($path);
+			vFile::fullMkdir($path);
 			
 		return $path;
 	}
@@ -297,7 +297,7 @@ class KScheduleHelperManager
 	{
 		$path = self::getCachePath() . DIRECTORY_SEPARATOR . 'controls';
 		if(!file_exists($path)) {
-			kFile::fullMkfileDir($path);
+			vFile::fullMkfileDir($path);
 		}
 			
 		return $path;
@@ -310,13 +310,13 @@ class KScheduleHelperManager
 	{
 		$path = self::getCachePath() . DIRECTORY_SEPARATOR . 'filters';
 		if(!file_exists($path))
-			kFile::fullMkfileDir($path);
+			vFile::fullMkfileDir($path);
 			
 		return $path;
 	}
 
 	/**
-	 * @return array<KalturaSchedulerStatus>
+	 * @return array<VidiunSchedulerStatus>
 	 */
 	public static function loadStatuses()
 	{
@@ -341,7 +341,7 @@ class KScheduleHelperManager
 	}
 
 	/**
-	 * @param array<KalturaSchedulerStatus> $statuses
+	 * @param array<VidiunSchedulerStatus> $statuses
 	 */
 	public static function saveStatuses(array $statuses)
 	{
@@ -356,7 +356,7 @@ class KScheduleHelperManager
 	}
 
 	/**
-	 * @return array<KalturaSchedulerConfig>
+	 * @return array<VidiunSchedulerConfig>
 	 */
 	public static function loadConfigItems()
 	{
@@ -382,7 +382,7 @@ class KScheduleHelperManager
 	}
 
 	/**
-	 * @param array<KalturaSchedulerConfig> $configItems
+	 * @param array<VidiunSchedulerConfig> $configItems
 	 */
 	public static function saveConfigItems(array $configItems)
 	{

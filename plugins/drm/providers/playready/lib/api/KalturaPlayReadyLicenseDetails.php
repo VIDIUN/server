@@ -3,12 +3,12 @@
  * @package plugins.playReady
  * @subpackage api.objects
  */
-class KalturaPlayReadyLicenseDetails extends KalturaObject 
+class VidiunPlayReadyLicenseDetails extends VidiunObject 
 {
 	/**
 	 * PlayReady policy object
 	 * 
-	 * @var KalturaPlayReadyPolicy
+	 * @var VidiunPlayReadyPolicy
 	 */
 	public $policy;
 	

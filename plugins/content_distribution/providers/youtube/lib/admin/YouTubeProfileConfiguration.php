@@ -25,7 +25,7 @@ class Form_YouTubeProfileConfiguration extends Form_ConfigurableProfileConfigura
 	{
 		$object = parent::getObject($objectType, $properties, $add_underscore, $include_empty_fields);
 		
-		if($object instanceof Kaltura_Client_YouTubeDistribution_Type_YouTubeDistributionProfile)
+		if($object instanceof Vidiun_Client_YouTubeDistribution_Type_YouTubeDistributionProfile)
 		{
 			$upload = new Zend_File_Transfer_Adapter_Http();
 			$files = $upload->getFileInfo();
@@ -59,20 +59,20 @@ class Form_YouTubeProfileConfiguration extends Form_ConfigurableProfileConfigura
 
 		$order = $this->_order[self::FORM_PLACEHOLDER_ELEMENT_ID];
 		$this->resetOrderOfLastElements();
-		/** @var $object Kaltura_Client_YouTubeDistribution_Type_YouTubeDistributionProfile */
+		/** @var $object Vidiun_Client_YouTubeDistribution_Type_YouTubeDistributionProfile */
 		switch($object->feedSpecVersion)
 		{
-			case Kaltura_Client_YouTubeDistribution_Enum_YouTubeDistributionFeedSpecVersion::VERSION_1:
+			case Vidiun_Client_YouTubeDistribution_Enum_YouTubeDistributionFeedSpecVersion::VERSION_1:
 			{
 				$this->setV1Mode($order++);
 				break;
 			}
-			case Kaltura_Client_YouTubeDistribution_Enum_YouTubeDistributionFeedSpecVersion::VERSION_2:
+			case Vidiun_Client_YouTubeDistribution_Enum_YouTubeDistributionFeedSpecVersion::VERSION_2:
 			{
 				$this->setV2Mode($order++);
 				break;
 			}
-			case Kaltura_Client_YouTubeDistribution_Enum_YouTubeDistributionFeedSpecVersion::VERSION_3:
+			case Vidiun_Client_YouTubeDistribution_Enum_YouTubeDistributionFeedSpecVersion::VERSION_3:
 			{
 				$this->setV3Mode($order++);
 				break;

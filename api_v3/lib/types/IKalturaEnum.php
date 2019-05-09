@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-interface IKalturaEnum 
+interface IVidiunEnum 
 {
 	/**
 	 * @return array

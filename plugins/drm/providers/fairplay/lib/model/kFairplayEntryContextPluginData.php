@@ -1,6 +1,6 @@
 <?php
 
-class kFairplayEntryContextPluginData extends PluginData {
+class vFairplayEntryContextPluginData extends PluginData {
 
 	/**
     * @var string
@@ -22,4 +22,4 @@ class kFairplayEntryContextPluginData extends PluginData {
 	{
 		$this->publicCertificate = $publicCertificate;
 	}
-} // kFairplayEntryContextPluginData
+} // vFairplayEntryContextPluginData

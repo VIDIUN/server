@@ -3,7 +3,7 @@
  * @package plugins.viewHistory
  * @subpackage api.filters
  */
-class KalturaViewHistoryUserEntryAdvancedFilter extends KalturaSearchItem
+class VidiunViewHistoryUserEntryAdvancedFilter extends VidiunSearchItem
 {
 	/**
 	 * @var string
@@ -36,12 +36,12 @@ class KalturaViewHistoryUserEntryAdvancedFilter extends KalturaSearchItem
 	public $updatedAtLessThanOrEqual;
 	
 	/**
-	 * @var KalturaUserEntryExtendedStatus
+	 * @var VidiunUserEntryExtendedStatus
 	 */
 	public $extendedStatusEqual;
 	
 	/**
-	 * @dynamicType KalturaUserEntryExtendedStatus
+	 * @dynamicType VidiunUserEntryExtendedStatus
 	 * @var string
 	 */
 	public $extendedStatusIn;
@@ -50,7 +50,7 @@ class KalturaViewHistoryUserEntryAdvancedFilter extends KalturaSearchItem
 	public function toObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kViewHistoryUserEntryAdvancedFilter();
+			$object_to_fill = new vViewHistoryUserEntryAdvancedFilter();
 		
 		$object_to_fill->filter = $this->getBaseFilter();
 			
@@ -59,14 +59,14 @@ class KalturaViewHistoryUserEntryAdvancedFilter extends KalturaSearchItem
 	
 	public function getBaseFilter ()
 	{
-		$userEntryFilter = new KalturaViewHistoryUserEntryFilter();
+		$userEntryFilter = new VidiunViewHistoryUserEntryFilter();
 		foreach ($this as $key=>$value)
 		{
 			$userEntryFilter->$key = $value;
 		}
 		
 		$userEntryFilter->typeEqual = ViewHistoryPlugin::getApiValue(ViewHistoryUserEntryType::VIEW_HISTORY);
-		$userEntryFilter->orderBy = KalturaUserEntryOrderBy::UPDATED_AT_DESC;
+		$userEntryFilter->orderBy = VidiunUserEntryOrderBy::UPDATED_AT_DESC;
 		
 		return $userEntryFilter->toObject();
 	}

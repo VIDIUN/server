@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage storage
  */
-class kXslPathManager extends kPathManager
+class vXslPathManager extends vPathManager
 {
 	/**
 	 * will return a pair of file_root and file_path
@@ -21,7 +21,7 @@ class kXslPathManager extends kPathManager
 		    return parent::generateFilePathArr($object, $subType, $version, $storageProfileId);
 		}
 		
-		$storageProfile = kPathManager::getStorageProfile($storageProfileId);
+		$storageProfile = vPathManager::getStorageProfile($storageProfileId);
 		$pathXsl = $storageProfile->getPathFormat();
 		$entry = $object->getEntry();
 		$xslVariables = $this->getXslVariables($storageProfile, $object, $subType, $version, $entry);
@@ -31,16 +31,16 @@ class kXslPathManager extends kPathManager
 		    $path = $this->getPathValue($entry, $xslStr);
 		}
 		catch (Exception $e) {
-		    KalturaLog::err('Error executing XSL - '.$e->getMessage());
+		    VidiunLog::err('Error executing XSL - '.$e->getMessage());
 		    $path = null;
 		}
 		if (empty($path)) {
-		    KalturaLog::log('Empty path recieved - using parent\'s path instead');
+		    VidiunLog::log('Empty path recieved - using parent\'s path instead');
 		    return parent::generateFilePathArr($object, $subType, $version, $storageProfileId);
 		}
 		$path = trim($path);
 		
-		KalturaLog::debug('Path value ['.$path.']');
+		VidiunLog::debug('Path value ['.$path.']');
 		
 		$root = '/';
 		return array($root, $path);
@@ -115,7 +115,7 @@ class kXslPathManager extends kPathManager
         </xsl:stylesheet>
         ';
       
-        KalturaLog::debug('Result XSL: '. $xsl);
+        VidiunLog::debug('Result XSL: '. $xsl);
         return $xsl;
     }
     
@@ -128,15 +128,15 @@ class kXslPathManager extends kPathManager
 	protected function getPathValue(entry $entry, $xslStr)
 	{
 		// set the default criteria to use the current entry distribution partner id (it is restored later)
-		// this is needed for related entries under kMetadataMrssManager which is using retrieveByPK without the correct partner id filter
+		// this is needed for related entries under vMetadataMrssManager which is using retrieveByPK without the correct partner id filter
 		$oldEntryCriteria = entryPeer::getCriteriaFilter()->getFilter();
 		myPartnerUtils::resetPartnerFilter('entry');
 		myPartnerUtils::addPartnerToCriteria('entry', $entry->getPartnerId(), true);
 		
 		$mrss = null;
-		$mrssParams = new kMrssParameters();
+		$mrssParams = new vMrssParameters();
 		$mrssParams->setStatuses(array(flavorAsset::ASSET_STATUS_READY, flavorAsset::ASSET_STATUS_EXPORTING));
-		$mrss = kMrssManager::getEntryMrssXml($entry, $mrss, $mrssParams);
+		$mrss = vMrssManager::getEntryMrssXml($entry, $mrss, $mrssParams);
 		$mrssStr = $mrss->asXML();
 		
 		// restore the original criteria
@@ -144,14 +144,14 @@ class kXslPathManager extends kPathManager
 		
 		if(!$mrssStr)
 		{
-			KalturaLog::err('No MRSS returned for entry ['.$entry->getId().']');
+			VidiunLog::err('No MRSS returned for entry ['.$entry->getId().']');
 			return null;
 		}
 		
 		$mrssObj = new DOMDocument();
 		if(!$mrssObj->loadXML($mrssStr))
 		{
-		    KalturaLog::err('Error loading MRSS XML object for entry ['.$entry->getId().']');
+		    VidiunLog::err('Error loading MRSS XML object for entry ['.$entry->getId().']');
 			return null;
 		}
 		
@@ -160,32 +160,32 @@ class kXslPathManager extends kPathManager
 		
 		if(!$xslObj->loadXML($xslStr))
 		{
-		    KalturaLog::err('Error loading XSL');
+		    VidiunLog::err('Error loading XSL');
 			return null;
 		}
 		
 		$proc = new XSLTProcessor;
-		$proc->registerPHPFunctions(kXml::getXslEnabledPhpFunctions());
+		$proc->registerPHPFunctions(vXml::getXslEnabledPhpFunctions());
 		$proc->importStyleSheet($xslObj);
 		
 		$resultXmlObj = $proc->transformToDoc($mrssObj);
 		if (!$resultXmlObj) {
-		    KalturaLog::err('Error transforming XML for entry id ['.$entry->getId().']');
+		    VidiunLog::err('Error transforming XML for entry id ['.$entry->getId().']');
 		    return null;
 		}
 		
         /* DEBUG logs
-		KalturaLog::log('entry mrss = '.$mrssStr);
-		KalturaLog::log('profile xslt = '.$xslStr);
+		VidiunLog::log('entry mrss = '.$mrssStr);
+		VidiunLog::log('profile xslt = '.$xslStr);
 		*/
 		
-		KalturaLog::debug('Result XML: '.$resultXmlObj->saveXML());
+		VidiunLog::debug('Result XML: '.$resultXmlObj->saveXML());
 
 		$xpath = new DOMXPath($resultXmlObj);
         $fieldElement = $xpath->query("//path_value")->item(0);
 	    
 	    if (!$fieldElement) {
-	        KalturaLog::err('Cannot find element <path_value> in XML');
+	        VidiunLog::err('Cannot find element <path_value> in XML');
 	        return null;
 	    }
 	    $fieldValue = $fieldElement->nodeValue;

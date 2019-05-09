@@ -3,7 +3,7 @@
  * @package plugins.searchHistory
  * @subpackage model.errors
  */
-class kESearchHistoryException extends kESearchException
+class vESearchHistoryException extends vESearchException
 {
 
 }

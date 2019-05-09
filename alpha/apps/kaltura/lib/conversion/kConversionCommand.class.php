@@ -1,12 +1,12 @@
 <?php
 /**
- *  will hold an object that represents a conversion command for the kConversionServer / conversion manager.
+ *  will hold an object that represents a conversion command for the vConversionServer / conversion manager.
  *  
  * @package Core
  * @subpackage Conversion
  * @deprecated
  */
-class kConversionCommand
+class vConversionCommand
 {
 	const INDICATOR_SUFFIX = ".indicator";
 	
@@ -22,7 +22,7 @@ class kConversionCommand
 	
 	public static function fromFile ( $file_name )
 	{
-		if ( ! $file_name ) throw new Exception ( "Cannot create kConversionCommand from non-existing file [$file_name]" );
+		if ( ! $file_name ) throw new Exception ( "Cannot create vConversionCommand from non-existing file [$file_name]" );
 		return self::fromString( file_get_contents( $file_name));
 	}
 	public static function fromString ( $cmd_str )
@@ -32,7 +32,7 @@ class kConversionCommand
 	
 	public function toFile ( $file_name , $create_indicator = false )
 	{
-KalturaLog::debug ( "Setting file [$file_name] indicator [$create_indicator]" )	;	
+VidiunLog::debug ( "Setting file [$file_name] indicator [$create_indicator]" )	;	
 		if ( file_exists ( $file_name ) ) { @unlink( $file_name ); }
 		file_put_contents( $file_name , $this->toString() ); // sync - OK
 		if ( $create_indicator ) $this->createIndicator( $file_name );

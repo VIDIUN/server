@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage api.objects
  */
-class KalturaAddEntryVendorTaskAction extends KalturaRuleAction
+class VidiunAddEntryVendorTaskAction extends VidiunRuleAction
 {
 	/**
 	 * Catalog Item Id
@@ -31,12 +31,12 @@ class KalturaAddEntryVendorTaskAction extends KalturaRuleAction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kAddEntryVendorTaskAction();
+			$dbObject = new vAddEntryVendorTaskAction();
 			
 		return parent::toObject($dbObject, $skip);
 	}

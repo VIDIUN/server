@@ -40,7 +40,7 @@ function handleDirectory($dirName)
 		if($fileName[0] == '.' || is_dir($filePath) || !preg_match('/^\d+\.\w+\.ini$/', $fileName))
 			continue;
 	
-		KalturaLog::debug("Validate file [$filePath]");
+		VidiunLog::debug("Validate file [$filePath]");
 		$objectConfigurations = parse_ini_file($filePath, true);
 		if(!is_array($objectConfigurations))
 			$errors[] = "Content file [$filePath] is not a valid ini file";
@@ -56,12 +56,12 @@ function handleDirectory($dirName)
 	$dir->close();
 	if(count($errors))
 	{
-		KalturaLog::err(implode("\n\n", $errors));
+		VidiunLog::err(implode("\n\n", $errors));
 		exit(-3);
 	}
 	
 	sort($fileNames);
-	KalturaLog::info("Handling files [" . print_r($fileNames, true) . "]");
+	VidiunLog::info("Handling files [" . print_r($fileNames, true) . "]");
 	
 
 	foreach($fileNames as $fileName)
@@ -76,7 +76,7 @@ function handleFile($filePath)
 	$con = Propel::getConnection(PartnerPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 	
 	$fileName = basename($filePath);
-	KalturaLog::info("Handling file [$fileName]");
+	VidiunLog::info("Handling file [$fileName]");
 	list($order, $objectType, $fileExtension) = explode('.', $fileName, 3);
 	$objectConfigurations = parse_ini_file($filePath, true);
 
@@ -160,11 +160,11 @@ function handleFile($filePath)
 			if (preg_match('/eval\((?P<evalString>.+)\)/', $value, $matches))
 			{
 				$evalString = $matches["evalString"];
-				$evaluator = new kEvalStringField();
-				$evaluator->setScope(new kScope());
+				$evaluator = new vEvalStringField();
+				$evaluator->setScope(new vScope());
 				$evaluator->setCode($evalString);
 				$value = $evaluator->getValue();
-				KalturaLog::info("Evaluated property value: $value");
+				VidiunLog::info("Evaluated property value: $value");
 			}
 
 			$setter = "set{$attributeName}";
@@ -182,7 +182,7 @@ function handleFile($filePath)
 			
 			if(preg_match('/^#[^#]+$/', $value))
 			{
-			    $value = kPluginableEnumsManager::genericApiToCore(substr($value, 1));
+			    $value = vPluginableEnumsManager::genericApiToCore(substr($value, 1));
 			}
 
 			$setters[$setter] = $value;
@@ -208,7 +208,7 @@ function handleFile($filePath)
 		
 		if($existingObject)
 		{
-			KalturaLog::info ('existing objects will not be re-written');
+			VidiunLog::info ('existing objects will not be re-written');
 			continue;
 		}
 
@@ -220,9 +220,9 @@ function handleFile($filePath)
 		if(!is_null($pkCriteria))
 			BasePeer::doUpdate($object->buildPkeyCriteria(), $pkCriteria, $con);
 			
-		kMemoryManager::clearMemory();
+		vMemoryManager::clearMemory();
 	}
 }
 
-KalturaLog::log('Done.');
+VidiunLog::log('Done.');
 exit(0);

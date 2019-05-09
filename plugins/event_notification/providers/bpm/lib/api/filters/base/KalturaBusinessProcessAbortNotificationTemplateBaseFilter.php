@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaBusinessProcessAbortNotificationTemplateBaseFilter extends KalturaBusinessProcessNotificationTemplateFilter
+abstract class VidiunBusinessProcessAbortNotificationTemplateBaseFilter extends VidiunBusinessProcessNotificationTemplateFilter
 {
 	static private $map_between_objects = array
 	(

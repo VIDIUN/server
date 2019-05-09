@@ -3,7 +3,7 @@
  * @package plugins.systemPartner
  * @subpackage errors
  */
-class SystemPartnerErrors extends KalturaErrors
+class SystemPartnerErrors extends VidiunErrors
 {
 	/**
 	 * System Partner Service

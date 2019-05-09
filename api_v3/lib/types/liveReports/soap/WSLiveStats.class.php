@@ -3,8 +3,8 @@
 
 class WSLiveStats extends WSBaseObject
 {				
-	function getKalturaObject() {
-		return new KalturaLiveStats();
+	function getVidiunObject() {
+		return new VidiunLiveStats();
 	}
 	
 	/**

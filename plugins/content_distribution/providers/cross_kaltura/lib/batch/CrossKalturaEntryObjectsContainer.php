@@ -1,62 +1,62 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage lib.batch
  */
-class CrossKalturaEntryObjectsContainer
+class CrossVidiunEntryObjectsContainer
 {
     /**
-     * @var KalturaBaseEntry
+     * @var VidiunBaseEntry
      */
     public $entry;
         
     /**
-     * @var array<KalturaMetadata>
+     * @var array<VidiunMetadata>
      */
     public $metadataObjects;
     
     /**
-     * @var array<KalturaFlavorAsset>
+     * @var array<VidiunFlavorAsset>
      */
     public $flavorAssets;
     
     /**
-     * @var array<KalturaContentResource>
+     * @var array<VidiunContentResource>
      */
     public $flavorAssetsContent;
     
     /**
-     * @var array<KalturaThumbAsset>
+     * @var array<VidiunThumbAsset>
      */
     public $thumbAssets;
     
     /**
-     * @var array<KalturaContentResource>
+     * @var array<VidiunContentResource>
      */
     public $thumbAssetsContent;
 
     /**
-     * @var array<KalturaTimedThumbAsset>
+     * @var array<VidiunTimedThumbAsset>
      */
     public $timedThumbAssets;
 
     /**
-     * @var array<KalturaCaptionAsset>
+     * @var array<VidiunCaptionAsset>
      */
     public $captionAssets;
     
     /**
-     * @var array<KalturaContentResource>
+     * @var array<VidiunContentResource>
      */
     public $captionAssetsContent;
     
     /**
-     * @var array<KalturaCuePoint>
+     * @var array<VidiunCuePoint>
      */
     public $cuePoints;
 
     /**
-     * @var array<KalturaThumbCuePoint>
+     * @var array<VidiunThumbCuePoint>
      */
     public $thumbCuePoints;
 

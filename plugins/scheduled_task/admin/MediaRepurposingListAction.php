@@ -4,7 +4,7 @@
  * @package plugins.schedule_task
  * @subpackage Admin
  */
-class MediaRepurposingListAction extends KalturaApplicationPlugin implements IKalturaAdminConsolePublisherAction
+class MediaRepurposingListAction extends VidiunApplicationPlugin implements IVidiunAdminConsolePublisherAction
 {
 	public function __construct()
 	{
@@ -42,7 +42,7 @@ class MediaRepurposingListAction extends KalturaApplicationPlugin implements IKa
 
 		$action->view->allowed = MediaRepurposingUtils::isAllowMrToPartner($partnerId);
 		
-		$paginatorAdapter = new Kaltura_FilterPaginatorForMediaRepurposing($partnerId, $mrId);
+		$paginatorAdapter = new Vidiun_FilterPaginatorForMediaRepurposing($partnerId, $mrId);
 		$paginator = new Infra_Paginator($paginatorAdapter, $request);
 		$paginator->setCurrentPageNumber($page);
 		$paginator->setItemCountPerPage($pageSize);

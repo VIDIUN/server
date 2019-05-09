@@ -3,14 +3,14 @@
  * @package api
  * @subpackage objects
  */
-class KalturaControlPanelCommandArray extends KalturaTypedArray
+class VidiunControlPanelCommandArray extends VidiunTypedArray
 {
-	public static function fromDbArray(array $arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaControlPanelCommandArray();
+		$newArr = new VidiunControlPanelCommandArray();
 		foreach ( $arr as $obj )
 		{
-			$nObj = new KalturaControlPanelCommand();
+			$nObj = new VidiunControlPanelCommand();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -20,6 +20,6 @@ class KalturaControlPanelCommandArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaControlPanelCommand" );
+		return parent::__construct ( "VidiunControlPanelCommand" );
 	}
 }

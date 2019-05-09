@@ -15,7 +15,7 @@
 	<multirequest>
 		<!-- Entry Vendor Task Approved -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>Reach - Account credit usage is over 90%</name>
 				<systemName>Reach_Account_Credit_Over_90_percent</systemName>
 				<description>Email notification template to be sent when reach credit usage is over 90%</description>
@@ -23,44 +23,44 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>41</eventObjectType> <!-- EventNotificationEventObjectType::REACH_PROFILE -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof ReachProfile &amp;&amp; $scope->getEvent()->isCustomDataModified('credit_usage_percentage')</code>
 						</field>
 					</item>
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>ceil($scope->getObject()->getCreditUsagePercentage()) &gt;= 90 &amp;&amp; ceil($scope->getEvent()->getCustomDataOldValue('credit_usage_percentage')) &lt;= 90 &amp;&amp; ceil($scope->getObject()->getCreditUsagePercentage()) &lt; 100</code>
 						</field>
 					</item>
 				</eventConditions>
 				<format>1</format>
 				<subject>[AppTitle] - Reach Credit usage has passed 90%</subject>
-				<body>Your reach credit usage has passed 90%, please contact you Kaltura contact if you wish to increase your credit</body>
+				<body>Your reach credit usage has passed 90%, please contact you Vidiun contact if you wish to increase your credit</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<to objectType="KalturaEmailNotificationGroupRecipientProvider">
+				<to objectType="VidiunEmailNotificationGroupRecipientProvider">
 					<groupId>{group_id_equal}</groupId>
 				</to>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
 				</contentParameters>
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>group_id_equal</key>
 						<description>The group id to send to</description>
-						<value objectType="KalturaStringValue">
+						<value objectType="VidiunStringValue">
 							<value></value>
 						</value>
 					</item>

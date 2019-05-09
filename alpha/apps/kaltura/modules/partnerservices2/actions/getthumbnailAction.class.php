@@ -26,13 +26,13 @@ class getthumbnailAction extends defPartnerservices2Action
 			); 
 	}
 	
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER;	}
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER;	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
   		$filename = $this->getPM ('filename');
 		// strip the filename from invalid characters
-		$token = $this->getKsUniqueString();
+		$token = $this->getVsUniqueString();
 		
 		// should upload the file with the token as the prefix
 		$res = myUploadUtils::uploadFileByToken ( $_FILES['Filedata'] , $token , $filename ,null , true );

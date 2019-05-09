@@ -3,7 +3,7 @@
  * @package plugins.varConsole
  * @subpackage api.objects
  */
-class KalturaVarPartnerUsageItem extends KalturaObject
+class VidiunVarPartnerUsageItem extends VidiunObject
 {
 	/**
 	 * Partner ID
@@ -22,7 +22,7 @@ class KalturaVarPartnerUsageItem extends KalturaObject
 	/**
 	 * Partner status
 	 * 
-	 * @var KalturaPartnerStatus
+	 * @var VidiunPartnerStatus
 	 */
 	public $partnerStatus;
 	
@@ -157,13 +157,13 @@ class KalturaVarPartnerUsageItem extends KalturaObject
 	 * Function which parses a report line into an object
 	 * @param string $header - comma separated fields names	
 	 * @param string $str - comma separated fields
-	 * @return KalturaVarPartnerUsageItem
+	 * @return VidiunVarPartnerUsageItem
 	 */
 	public function fromString ( $header , $arr )
 	{
 		if ( ! $arr ) return null ;
 		
-		//$item = new KalturaVarPartnerUsageItem();
+		//$item = new VidiunVarPartnerUsageItem();
 		
 		$this->dateId         = @$arr[0];
 		$this->partnerStatus 	= @$arr[1];
@@ -182,7 +182,7 @@ class KalturaVarPartnerUsageItem extends KalturaObject
 	
 	public function fromPartner(Partner $partner)
 	{
-		//$item = new KalturaVarPartnerUsageItem();
+		//$item = new VidiunVarPartnerUsageItem();
 		if ($partner)
 		{
 			$this->partnerStatus 	= $partner->getStatus();

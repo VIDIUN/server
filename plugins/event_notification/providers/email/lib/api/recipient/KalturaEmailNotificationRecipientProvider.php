@@ -4,26 +4,26 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-abstract class KalturaEmailNotificationRecipientProvider extends KalturaObject
+abstract class VidiunEmailNotificationRecipientProvider extends VidiunObject
 {
 	public static function getProviderInstance ($dbObject)
 	{
 		switch (get_class($dbObject))
 		{
-			case 'kEmailNotificationStaticRecipientProvider':
-				$instance = new KalturaEmailNotificationStaticRecipientProvider();
+			case 'vEmailNotificationStaticRecipientProvider':
+				$instance = new VidiunEmailNotificationStaticRecipientProvider();
 				break;
-			case 'kEmailNotificationCategoryRecipientProvider':
-				$instance = new KalturaEmailNotificationCategoryRecipientProvider();
+			case 'vEmailNotificationCategoryRecipientProvider':
+				$instance = new VidiunEmailNotificationCategoryRecipientProvider();
 				break;
-			case 'kEmailNotificationUserRecipientProvider':
-				$instance = new KalturaEmailNotificationUserRecipientProvider();
+			case 'vEmailNotificationUserRecipientProvider':
+				$instance = new VidiunEmailNotificationUserRecipientProvider();
 				break;
-			case 'kEmailNotificationGroupRecipientProvider':
-				$instance = new KalturaEmailNotificationGroupRecipientProvider();
+			case 'vEmailNotificationGroupRecipientProvider':
+				$instance = new VidiunEmailNotificationGroupRecipientProvider();
 				break;
 			default:
-				$instance = KalturaPluginManager::loadObject('kEmailNotificationRecipientProvider', get_class($dbObject));
+				$instance = VidiunPluginManager::loadObject('vEmailNotificationRecipientProvider', get_class($dbObject));
 				break;
 		}
 		

@@ -3,10 +3,10 @@
  * @package plugins.velocix
  * @subpackage lib
  */
-class kVelocixLiveFlowManager implements kObjectCreatedEventConsumer
+class vVelocixLiveFlowManager implements vObjectCreatedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::objectCreated()
+	 * @see vObjectCreatedEventConsumer::objectCreated()
 	 */
 	public function objectCreated(BaseObject $object)
 	{
@@ -29,7 +29,7 @@ class kVelocixLiveFlowManager implements kObjectCreatedEventConsumer
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+	 * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $object) 
 	{

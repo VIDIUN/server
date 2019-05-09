@@ -11,7 +11,7 @@ class myEntryUtils
 	static private $liveSourceType = array
 	(
 		EntrySourceType::RECORDED_LIVE,
-		EntrySourceType::KALTURA_RECORDED_LIVE,
+		EntrySourceType::VIDIUN_RECORDED_LIVE,
 		EntrySourceType::LECTURE_CAPTURE,
 	);
 
@@ -23,7 +23,7 @@ class myEntryUtils
 
 		$dbEntry->reload();
 		$fileSyncKey = $dbEntry->getSyncKey($fileSyncType);
-		kFileSyncUtils::file_put_contents($fileSyncKey, $content);
+		vFileSyncUtils::file_put_contents($fileSyncKey, $content);
 
 		try
 		{
@@ -32,16 +32,16 @@ class myEntryUtils
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e);
+			VidiunLog::err($e);
 		}
 
-		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL, $dbEntry);
+		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL, $dbEntry);
 	}
 	
 	public static function createThumbnailAssetFromFile(entry $entry, $filePath)
 	{	
 		$fileLocation = tempnam(sys_get_temp_dir(), $entry->getId());
-		$res = KCurlWrapper::getDataFromFile($filePath, $fileLocation, kConf::get('thumb_size_limit'));
+		$res = VCurlWrapper::getDataFromFile($filePath, $fileLocation, vConf::get('thumb_size_limit'));
 		if (!$res){
 			throw new Exception("thumbnail cannot be created from $filePath " . error_get_last());
 		}	
@@ -59,7 +59,7 @@ class myEntryUtils
 		$size = filesize($fileLocation);
 		
 		$fileSyncKey = $thumbAsset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-		kFileSyncUtils::moveFromFile($fileLocation, $fileSyncKey);
+		vFileSyncUtils::moveFromFile($fileLocation, $fileSyncKey);
 
 		$thumbAsset->setWidth($width);
 		$thumbAsset->setHeight($height);
@@ -68,11 +68,11 @@ class myEntryUtils
 		$thumbAsset->setStatus(thumbAsset::ASSET_STATUS_READY);
 		$thumbAsset->save();
 		
-		kBusinessConvertDL::setAsDefaultThumbAsset($thumbAsset);
-		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL, $entry);
+		vBusinessConvertDL::setAsDefaultThumbAsset($thumbAsset);
+		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL, $entry);
 	}
 	
-	public static function deepClone ( entry $source , $kshow_id , $override_fields, $echo = false)
+	public static function deepClone ( entry $source , $vshow_id , $override_fields, $echo = false)
 	{
 		if ($echo)
 			echo "Copying entry: " . $source->getId() . "\n";
@@ -88,7 +88,7 @@ class myEntryUtils
 				$override_fields , $target , baseObjectUtils::CLONE_POLICY_PREFER_NEW , array  ("id") );
 		}
 
-		$target->setKshowId ( $kshow_id );
+		$target->setVshowId ( $vshow_id );
 		// set all statistics to 0
 		$target->setComments ( 0 );
 		$target->setTotalRank ( 0 );
@@ -105,7 +105,7 @@ class myEntryUtils
 		$target_data_path = null;
 		
 		if ($echo)
-			echo "Copied " . $source->getId() . " (from kshow [" . $source->getKshowId() . "]) -> " . $target->getId() . "\n";
+			echo "Copied " . $source->getId() . " (from vshow [" . $source->getVshowId() . "]) -> " . $target->getId() . "\n";
 
 		if ( myContentStorage::isTemplate($source->getData()))
 		{
@@ -117,10 +117,10 @@ class myEntryUtils
 			if ($echo)
 				echo ( "Copying file: " . $content . $source_thumbnail_path . " -> " .  $content . $target_thumbnail_path ."\n");
 			$sourceThumbFileKey = $source->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB);
-			if(kFileSyncUtils::file_exists($sourceThumbFileKey))
+			if(vFileSyncUtils::file_exists($sourceThumbFileKey))
 			{
 				$targetThumbFileKey = $target->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB);
-				kFileSyncUtils::softCopy($sourceThumbFileKey, $targetThumbFileKey);
+				vFileSyncUtils::softCopy($sourceThumbFileKey, $targetThumbFileKey);
 			}
 			//myContentStorage::moveFile( $content . $source_thumbnail_path , $content . $target_thumbnail_path , false , true );
 		}
@@ -136,7 +136,7 @@ class myEntryUtils
 				echo ( "Copying file: " . $content . $source_data_path . " -> " .  $content . $target_data_path . "\n");
 			$sourceDataFileKey = $source->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
 			$targetDataFileKey = $target->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
-			kFileSyncUtils::softCopy($sourceDataFileKey, $targetDataFileKey);
+			vFileSyncUtils::softCopy($sourceDataFileKey, $targetDataFileKey);
 			//myContentStorage::moveFile( $content . $source_data_path , $content . $target_data_path , false , true );
 		}
 		// save second time to
@@ -150,7 +150,7 @@ class myEntryUtils
 	public static function copyData ( $source_entry_id , entry $target )
 	{
 		// the source_entry can be from any partner - not only of the current context
-		entryPeer::getCriteriaFilter()->disable();  // TODO - should not be switched of - it sohuld work ok with the new ks/kn mechanism and only public entries should be copied
+		entryPeer::getCriteriaFilter()->disable();  // TODO - should not be switched of - it sohuld work ok with the new vs/vn mechanism and only public entries should be copied
 
 		$source_entry = entryPeer::retrieveByPK( $source_entry_id );
 		if ( ! $source_entry ) return false;
@@ -197,14 +197,14 @@ class myEntryUtils
 
 //		echo "[$content] [$source_thumbnail_path]->[$target_thumbnail_path] [$source_data_path]->[$target_data_path]";
 
-		if(kFileSyncUtils::file_exists($sourceDataKey, true))
-			kFileSyncUtils::softCopy($sourceDataKey, $targetDataKey);
+		if(vFileSyncUtils::file_exists($sourceDataKey, true))
+			vFileSyncUtils::softCopy($sourceDataKey, $targetDataKey);
 			
-		if(kFileSyncUtils::file_exists($sourceThumbKey, true))
-			kFileSyncUtils::softCopy($sourceThumbKey, $targetThumbKey);
+		if(vFileSyncUtils::file_exists($sourceThumbKey, true))
+			vFileSyncUtils::softCopy($sourceThumbKey, $targetThumbKey);
 			
-		if(kFileSyncUtils::file_exists($sourceDataEditKey, true))
-			kFileSyncUtils::softCopy($sourceDataEditKey, $targetDataEditKey);
+		if(vFileSyncUtils::file_exists($sourceDataEditKey, true))
+			vFileSyncUtils::softCopy($sourceDataEditKey, $targetDataEditKey);
 			
 		
 		// added by Tan-Tan 12/01/2010 to support falvors copy
@@ -219,7 +219,7 @@ class myEntryUtils
 	public static function createWidgetImage($entry, $create)
 	{
 		$contentPath = myContentStorage::getFSContentRootPath();
-		$path = kFile::fixPath( $contentPath.$entry->getWidgetImagePath() );
+		$path = vFile::fixPath( $contentPath.$entry->getWidgetImagePath() );
 
 		// if the create flag is not set and the file doesnt exist exit
 		// e.g. the roughcut name has change, we update the image only if it was already in some widget
@@ -233,7 +233,7 @@ class myEntryUtils
 
 		imagettftext($im, 12, 0, 10, 21, $color, $font, $entry->getName());
 
-		kFile::fullMkdir($path);
+		vFile::fullMkdir($path);
 
 		imagegif($im, $path);
 		imagedestroy($im);
@@ -243,7 +243,7 @@ class myEntryUtils
 
 	public static function modifyEntryMetadataWithText ( $entry , $text , $duration=6 , $override=false)
 	{
-		KalturaLog::log ( "modifyEntryMetadataWithText:\n$text");
+		VidiunLog::log ( "modifyEntryMetadataWithText:\n$text");
 		$content = myContentStorage::getFSContentRootPath() ;
 		if ( ! $override )
 		{
@@ -252,21 +252,21 @@ class myEntryUtils
 		}
 		$targetFileSyncKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
 		
-		// doesn't require kFileSyncUtils change - this is a static template that should not be represented as row in the table
+		// doesn't require vFileSyncUtils change - this is a static template that should not be represented as row in the table
 		$source = $content . myContentStorage::getGeneralEntityPath ( "entry/data" , 0, 0 , "&metadata_text.xml" );
 
-		if ( $override || !kFileSyncUtils::file_exists($targetFileSyncKey))
+		if ( $override || !vFileSyncUtils::file_exists($targetFileSyncKey))
 		{
-//			KalturaLog::log ( "modifyEntryMetadataWithText\n$str_before\n$str_after\n" );
+//			VidiunLog::log ( "modifyEntryMetadataWithText\n$str_before\n$str_after\n" );
 
 			$template_str = file_get_contents( $source ) ;
 			$template_str = str_replace(
 				array ( "__TEXT_PLACEHOLDER__" , "__SLIDE_LENGTH_IN_SECS_PLACEHOLDER__"  ) ,
 				array ( $text , $duration  ) ,
 				$template_str );
-			kFileSyncUtils::file_put_contents($targetFileSyncKey , $template_str);
+			vFileSyncUtils::file_put_contents($targetFileSyncKey , $template_str);
 
-//	 		KalturaLog::log ( "modifyEntryMetadataWithText:\n$text");
+//	 		VidiunLog::log ( "modifyEntryMetadataWithText:\n$text");
 
 			$entry->save();
 		}
@@ -336,7 +336,7 @@ class myEntryUtils
 			$dbEntryBatchJobLocks = BatchJobLockPeer::retrieveByEntryId($entry->getId());
 			foreach($dbEntryBatchJobLocks as $jobLock) {
 				/* @var $jobLock BatchJobLock */
-				KalturaLog::info("Entry [". $entry->getId() ."] still has an unhandled batchjob [". $jobLock->getId()."] with status [". $jobLock->getStatus()."] - aborting deletion process.");
+				VidiunLog::info("Entry [". $entry->getId() ."] still has an unhandled batchjob [". $jobLock->getId()."] with status [". $jobLock->getStatus()."] - aborting deletion process.");
 				//mark entry for later deletion
 				$entry->setMarkedForDeletion(true);
 				$entry->save();
@@ -349,8 +349,8 @@ class myEntryUtils
 			$connectedEntryServerNodes = EntryServerNodePeer::retrieveByEntryIdAndStatuses($entry->getId(), EntryServerNodePeer::$connectedServerNodeStatuses);
 			if(count($connectedEntryServerNodes))
 			{
-				KalturaLog::info("Live Entry [". $entry->getId() ."] cannot be deleted, while streaming");
-				throw new KalturaAPIException(KalturaErrors::CANNOT_DELETE_LIVE_ENTRY_WHILE_STREAMING, $entry->getId());
+				VidiunLog::info("Live Entry [". $entry->getId() ."] cannot be deleted, while streaming");
+				throw new VidiunAPIException(VidiunErrors::CANNOT_DELETE_LIVE_ENTRY_WHILE_STREAMING, $entry->getId());
 			}
 			
 			if($entry->getRecordedEntryId())
@@ -363,27 +363,27 @@ class myEntryUtils
 					{
 						if(in_array($recordedEntry->getStatus(), array(entryStatus::PENDING, entryStatus::NO_CONTENT, entryStatus::PRECONVERT)))
 						{
-							KalturaLog::info("Live Entry [". $entry->getId() ."] cannot be deleted, associated VOD entry still not in ready status");
-							throw new KalturaAPIException(KalturaErrors::RECORDED_NOT_READY, $entry->getId());
+							VidiunLog::info("Live Entry [". $entry->getId() ."] cannot be deleted, associated VOD entry still not in ready status");
+							throw new VidiunAPIException(VidiunErrors::RECORDED_NOT_READY, $entry->getId());
 						}
 						
 						if(myEntryUtils::shouldServeVodFromLive($recordedEntry))
 						{
-							KalturaLog::info("Live Entry [". $entry->getId() ."] cannot be deleted, entry still beeing handled by recordign engien");
-							throw new KalturaAPIException(KalturaErrors::RECORDING_FLOW_NOT_COMPLETE, $entry->getId());
+							VidiunLog::info("Live Entry [". $entry->getId() ."] cannot be deleted, entry still beeing handled by recordign engien");
+							throw new VidiunAPIException(VidiunErrors::RECORDING_FLOW_NOT_COMPLETE, $entry->getId());
 						}
 					}
 				}	
 			}
 		}
 		
-		if($entry->getSourceType() == EntrySourceType::KALTURA_RECORDED_LIVE)
+		if($entry->getSourceType() == EntrySourceType::VIDIUN_RECORDED_LIVE)
 		{
 			//Check if recorded entry flavors are still not ready to be played, this means set recorded content was not yet called
 			if($entry->isInsideDeleteGracePeriod() && myEntryUtils::shouldServeVodFromLive($entry, false) && !$entry->getIsTemporary())
 			{
-				KalturaLog::info("Recorded Entry [". $entry->getId() ."] cannot be deleted until recorded content is set");
-				throw new KalturaAPIException(KalturaErrors::RECORDING_CONTENT_NOT_YET_SET, $entry->getId());
+				VidiunLog::info("Recorded Entry [". $entry->getId() ."] cannot be deleted until recorded content is set");
+				throw new VidiunAPIException(VidiunErrors::RECORDING_CONTENT_NOT_YET_SET, $entry->getId());
 			}
 			
 			//Check if the recorded entry is the current recorded entry of the live, in that case validate there are not any active server nodes
@@ -394,20 +394,20 @@ class myEntryUtils
 				$connectedEntryServerNodes = EntryServerNodePeer::retrieveByEntryIdAndStatuses($liveEntry->getId(), EntryServerNodePeer::$connectedServerNodeStatuses);
 				if(count($connectedEntryServerNodes))
 				{
-					KalturaLog::info("Recorded Entry [". $entry->getId() ."] cannot be deleted, active server nodes detected");
-					throw new KalturaAPIException(KalturaErrors::RECORDING_CONTENT_NOT_YET_SET, $entry->getId());
+					VidiunLog::info("Recorded Entry [". $entry->getId() ."] cannot be deleted, active server nodes detected");
+					throw new VidiunAPIException(VidiunErrors::RECORDING_CONTENT_NOT_YET_SET, $entry->getId());
 				} 
 			}
 		}
 
-		KalturaLog::log("delete Entry [" . $entry->getId() . "] Partner [" . $entry->getPartnerId() . "]");
+		VidiunLog::log("delete Entry [" . $entry->getId() . "] Partner [" . $entry->getPartnerId() . "]");
 
-		kJobsManager::abortEntryJobs($entry->getId());
+		vJobsManager::abortEntryJobs($entry->getId());
 		
 		$media_type = $entry->getMediaType();
 		$need_to_fix_roughcut = false;
 		$thumb_template_file = "&deleted_image.jpg";
-		KalturaLog::log("media type [$media_type]");
+		VidiunLog::log("media type [$media_type]");
 		switch ( $media_type )
 		{
 			case entry::ENTRY_MEDIA_TYPE_AUDIO:
@@ -433,7 +433,7 @@ class myEntryUtils
 		}
 
 		if ($entry->getType() == entryType::LIVE_STREAM)
-			kJobsManager::addProvisionDeleteJob(null, $entry);
+			vJobsManager::addProvisionDeleteJob(null, $entry);
 			
 		// in this case we'll need some batch job to fix all related roughcuts for this entry
 		// use the batch_job mechanism to indicate there is a deleted entry to handle
@@ -449,7 +449,7 @@ class myEntryUtils
 		$content_path = myContentStorage::getFSContentRootPath();
 
 //		Remarked by Tan-Tan 27/09/2010
-//		Handled by kObjectDeleteHandler
+//		Handled by vObjectDeleteHandler
 //		$currentDataKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA); // replaced__getDataPath
 //		$currentDataEditKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA_EDIT); // replaced__getDataPathEdit
 //		$currentThumbKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB); // replaced__getThumbnailPath
@@ -460,11 +460,11 @@ class myEntryUtils
 		$entry->setThumbnail( $thumb_template_file );		// the other to set the template
 		
 //		Remarked by Tan-Tan 27/09/2010
-//		Handled by kObjectDeleteHandler
+//		Handled by vObjectDeleteHandler
 //		// move file so there will be no access to it
-//		$deleted_content = kFileSyncUtils::deleteSyncFileForKey($currentDataKey);
-//		$deleted_content .= "|" . kFileSyncUtils::deleteSyncFileForKey($currentDataEditKey,false); // for some entries there may not be an edit version
-//		$deleted_content .= "|" . kFileSyncUtils::deleteSyncFileForKey($currentThumbKey,false); // for some entries (empty mix / audio) there may not be a thumb FileSync
+//		$deleted_content = vFileSyncUtils::deleteSyncFileForKey($currentDataKey);
+//		$deleted_content .= "|" . vFileSyncUtils::deleteSyncFileForKey($currentDataEditKey,false); // for some entries there may not be an edit version
+//		$deleted_content .= "|" . vFileSyncUtils::deleteSyncFileForKey($currentThumbKey,false); // for some entries (empty mix / audio) there may not be a thumb FileSync
 		
 //		Remarked by Tan-Tan 27/09/2010
 //		$deleted_content is always null anyway
@@ -479,7 +479,7 @@ class myEntryUtils
 		$entry->setModifiedAt( time() ) ;
 		$entry->save();
 		
-		myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_DELETE , $entry, null , null , null , null, $entry->getId());
+		myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_DELETE , $entry, null , null , null , null, $entry->getId());
 	}
 
 	// will handle deletion of entries -
@@ -514,10 +514,10 @@ class myEntryUtils
 		{
 			$original_play = @$deleted_paths[0];
 			$dataKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA, @$deleted_paths[0]);
-			kFileSyncUtils::undeleteSyncFile($dataKey);
+			vFileSyncUtils::undeleteSyncFile($dataKey);
 			//$original = myContentStorage::moveFromDeleted ( @$deleted_paths[0] );
 			$dataEditKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA_EDIT, @$deleted_paths[1]);
-			kFileSyncUtils::undeleteSyncFile($dataEditKey);
+			vFileSyncUtils::undeleteSyncFile($dataEditKey);
 			//$original = myContentStorage::moveFromDeleted ( @$deleted_paths[1] );
 			
 			//figure out the thumb's path from the deleted path  and the property deleted_original_thumb
@@ -535,7 +535,7 @@ class myEntryUtils
 				$entry->setThumbnail( null ); // reset the thumb before setting - it won't increment the version count
 				$entry->setThumbnail( $entry->getFromCustomData( "deleted_original_thumb" ) , true ); // force the value that was set beforehand
 				$thumbKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB, @$deleted_paths[2]);
-				kFileSyncUtils::undeleteSyncFile($thumbKey);
+				vFileSyncUtils::undeleteSyncFile($thumbKey);
 				//$original = myContentStorage::moveFromDeleted ( @$deleted_paths[2] ); // 
 			}	
 		}
@@ -550,19 +550,19 @@ class myEntryUtils
 
 	public static function createRoughcutThumbnailFromEntry ( $source_entry , $should_force = false )
 	{
-		$kshow = kshowPeer::retrieveByPK( $source_entry->getKshowId() );
-		if ( ! $kshow )
+		$vshow = vshowPeer::retrieveByPK( $source_entry->getVshowId() );
+		if ( ! $vshow )
 		{
-			KalturaLog::log( "Error: entry [" . $source_entry->getId() . "] does not have a kshow" );	
+			VidiunLog::log( "Error: entry [" . $source_entry->getId() . "] does not have a vshow" );	
 			return false;
 		}
 	
-		if ( $kshow )
+		if ( $vshow )
 		{
-			$roughcut = $kshow->getShowEntry();
+			$roughcut = $vshow->getShowEntry();
 			if ( ! $roughcut )
 			{
-				KalturaLog::log( "Error: entry [" . $source_entry->getId() . "] from kshow " . $kshow->getId() . "] does not have a roughcut " );
+				VidiunLog::log( "Error: entry [" . $source_entry->getId() . "] from vshow " . $vshow->getId() . "] does not have a roughcut " );
 				return false;	
 			}
 			
@@ -634,7 +634,7 @@ class myEntryUtils
 			$flavorSyncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 			if (!$flavorSyncKey)
 				return false;
-			$dataPath = kFileSyncUtils::getReadyLocalFilePathForKey($flavorSyncKey);
+			$dataPath = vFileSyncUtils::getReadyLocalFilePathForKey($flavorSyncKey);
 			
 			$tempPath = myContentStorage::getFSUploadsPath();
 
@@ -658,13 +658,13 @@ class myEntryUtils
 			
 			// create new thumb file for entry
 			$newThumbKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB);
-			kFileSyncUtils::moveFromFile($thumbBigFullPath, $newThumbKey);
+			vFileSyncUtils::moveFromFile($thumbBigFullPath, $newThumbKey);
 		}
 		else if ($media_type == entry::ENTRY_MEDIA_TYPE_VIDEO && $time_offset == -1 ||
 			$media_type == entry::ENTRY_MEDIA_TYPE_SHOW) // not time offset - copying existing thumb
 		{
 			$thumbBigFullKey = $source_entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB);
-			if(!kFileSyncUtils::fileSync_exists($thumbBigFullKey))
+			if(!vFileSyncUtils::fileSync_exists($thumbBigFullKey))
 			{
 				return false;
 			}
@@ -674,18 +674,18 @@ class myEntryUtils
 			$entry->save();
 			// copy existing thumb
 			$newThumbKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB);
-			kFileSyncUtils::softCopy($thumbBigFullKey, $newThumbKey);
+			vFileSyncUtils::softCopy($thumbBigFullKey, $newThumbKey);
 		}
 		elseif($media_type == entry::ENTRY_MEDIA_TYPE_IMAGE)
 		{
 			$thumb_key = $source_entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
-			$thumb_path = kFileSyncUtils::getLocalFilePathForKey($thumb_key);
+			$thumb_path = vFileSyncUtils::getLocalFilePathForKey($thumb_key);
 			$entry->setThumbnail ( ".jpg");
 			$entry->setCreateThumb(false);
 			$entry->save();
 			// copy existing thumb
 			$newThumbKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB);
-			kFileSyncUtils::copyFromFile($thumb_path, $newThumbKey);
+			vFileSyncUtils::copyFromFile($thumb_path, $newThumbKey);
 		}
 		else
 		{
@@ -699,8 +699,8 @@ class myEntryUtils
 		$src_x = 0, $src_y = 0, $src_w = 0, $src_h = 0, $vid_sec = -1, $vid_slice = 0, $vid_slices = -1, $orig_image_path = null, $density = 0, $stripProfiles = false, $thumbParams = null, $format = null, $fileSync = null,
 		$start_sec = -1, $end_sec = -1)
 	{
-		if (is_null($thumbParams) || !($thumbParams instanceof kThumbnailParameters))
-			$thumbParams = new kThumbnailParameters();
+		if (is_null($thumbParams) || !($thumbParams instanceof vThumbnailParameters))
+			$thumbParams = new vThumbnailParameters();
 
 		$contentPath = myContentStorage::getFSContentRootPath();
 			
@@ -710,8 +710,8 @@ class myEntryUtils
 		if ($servingVODfromLive)
 		{
 			$dc = self::getLiveEntryDcId($entry->getRootEntryId(), EntryServerNodeType::LIVE_PRIMARY);
-			if ($dc != kDataCenterMgr::getCurrentDcId ())
-				kFileUtils::dumpApiRequest ( kDataCenterMgr::getRemoteDcExternalUrlByDcId ( $dc ) );
+			if ($dc != vDataCenterMgr::getCurrentDcId ())
+				vFileUtils::dumpApiRequest ( vDataCenterMgr::getRemoteDcExternalUrlByDcId ( $dc ) );
 		}
 		$isStaticPlaylist = ($entry->getType() == entryType::PLAYLIST && $entry->getMediaType() == entry::ENTRY_MEDIA_TYPE_TEXT);
 		if ($isStaticPlaylist)
@@ -766,13 +766,13 @@ class myEntryUtils
 		
 		if(!is_null($format))
 		{
-			$finalThumbPath = kFile::replaceExt($finalThumbPath, $format);
-			$processingThumbPath = kFile::replaceExt($processingThumbPath, $format);
+			$finalThumbPath = vFile::replaceExt($finalThumbPath, $format);
+			$processingThumbPath = vFile::replaceExt($processingThumbPath, $format);
 		}
 		
 		if (file_exists($finalThumbPath) && @filesize($finalThumbPath))
 		{
-			header("X-Kaltura:cached-thumb-exists,".md5($finalThumbPath));
+			header("X-Vidiun:cached-thumb-exists,".md5($finalThumbPath));
 			return $finalThumbPath;
 		}
 
@@ -790,7 +790,7 @@ class myEntryUtils
 		
 		// remark added so ffmpeg will try to load the thumbnail from the original source
 		if ($entry->getMediaType() == entry::ENTRY_MEDIA_TYPE_IMAGE && !file_exists($orig_image_path))
-			throw new kFileSyncException('no ready filesync on current DC', kFileSyncException::FILE_DOES_NOT_EXIST_ON_CURRENT_DC);
+			throw new vFileSyncException('no ready filesync on current DC', vFileSyncException::FILE_DOES_NOT_EXIST_ON_CURRENT_DC);
 		
 		// check a request for animated thumbs without a concrete vid_slice
 		// in which case we'll create all the frames as one wide image
@@ -798,7 +798,7 @@ class myEntryUtils
 		$count = $multi ? $vid_slices : 1;
 		$im = null;
 		
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_PS2);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_PS2);
 		
 		if ($multi)
 			$vid_slice = 0;
@@ -806,12 +806,12 @@ class myEntryUtils
 		$cacheLockKey = "thumb-processing-resize".$finalThumbPath;
 		// creating the thumbnail is a very heavy operation prevent calling it in parallel for the same thumbnail for 5 minutes
 		if ($cache && !$cache->add($cacheLockKey, true, 5 * 60))
-			KExternalErrors::dieError(KExternalErrors::PROCESSING_CAPTURE_THUMBNAIL);
+			VExternalErrors::dieError(VExternalErrors::PROCESSING_CAPTURE_THUMBNAIL);
 
 		// limit creation of more than XX Imagemagick processes
-		if (kConf::hasParam("resize_thumb_max_processes_imagemagick") &&
-			trim(exec("ps -e -ocmd|awk '{print $1}'|grep -c ".kConf::get("bin_path_imagemagick") )) > kConf::get("resize_thumb_max_processes_imagemagick"))
-			KExternalErrors::dieError(KExternalErrors::TOO_MANY_PROCESSES);
+		if (vConf::hasParam("resize_thumb_max_processes_imagemagick") &&
+			trim(exec("ps -e -ocmd|awk '{print $1}'|grep -c ".vConf::get("bin_path_imagemagick") )) > vConf::get("resize_thumb_max_processes_imagemagick"))
+			VExternalErrors::dieError(VExternalErrors::TOO_MANY_PROCESSES);
 								    
 		$flavorAssetId = null;
 		$packagerRetries = 3;
@@ -836,7 +836,7 @@ class myEntryUtils
 			$thumbCaptureByPackager = false;
 			$forceRotation = ($vid_slices > -1) ? self::getRotate($flavorAssetId) : 0;
 			$params = array($density, $quality, $forceRotation, $src_x, $src_y, $src_w, $src_h, $stripProfiles);
-			$shouldResizeByPackager = KThumbnailCapture::shouldResizeByPackager($params, $type, array($width, $height));
+			$shouldResizeByPackager = VThumbnailCapture::shouldResizeByPackager($params, $type, array($width, $height));
 			if (
 				// need to create a thumb if either:
 				// 1. entry is a video and a specific second was requested OR a slices were requested
@@ -883,7 +883,7 @@ class myEntryUtils
 
 					$cacheLockKeyProcessing = "thumb-processing".$orig_image_path;
 					if ($cache && !$cache->add($cacheLockKeyProcessing, true, 5 * 60))
-						KExternalErrors::dieError(KExternalErrors::PROCESSING_CAPTURE_THUMBNAIL);
+						VExternalErrors::dieError(VExternalErrors::PROCESSING_CAPTURE_THUMBNAIL);
 
 					$success = false;
 					if(($multi || $servingVODfromLive || $isStaticPlaylist) && $packagerRetries)
@@ -892,7 +892,7 @@ class myEntryUtils
 						$destPath = $shouldResizeByPackager ? $capturedThumbPath . uniqid() : $capturedThumbPath;
 						$success = self::captureThumbUsingPackager($entry, $destPath, $calc_vid_sec, $flavorAssetId, $picWidth, $picHeight);
 						$packagerResizeFullPath = $destPath . self::TEMP_FILE_POSTFIX;
-						KalturaLog::debug("Packager capture is [$success] with dimension [$picWidth,$picHeight] and packagerResize [$shouldResizeByPackager] in path [$packagerResizeFullPath]");
+						VidiunLog::debug("Packager capture is [$success] with dimension [$picWidth,$picHeight] and packagerResize [$shouldResizeByPackager] in path [$packagerResizeFullPath]");
 						if(!$success)
 							$packagerRetries--;
 						$thumbCaptureByPackager = $success;
@@ -916,27 +916,27 @@ class myEntryUtils
 					{
 						// since this is not really being processed on this server, and will probably cause redirect in thumbnailAction
 						// remove from cache so later requests will still get redirected and will not fail on PROCESSING_CAPTURE_THUMBNAIL
-						throw new kFileSyncException('no ready filesync on current DC', kFileSyncException::FILE_DOES_NOT_EXIST_ON_CURRENT_DC);
+						throw new vFileSyncException('no ready filesync on current DC', vFileSyncException::FILE_DOES_NOT_EXIST_ON_CURRENT_DC);
 					}
 				}
 			}
 
 			// close db connections as we won't be requiring the database anymore and image manipulation may take a long time
-			kFile::closeDbConnections();
+			vFile::closeDbConnections();
 
 			if (!self::isTempFile($orig_image_path) && $isEncryptionNeeded)
 			{
 				$orig_image_path = $fileSync->createTempClear(); //will be deleted after the conversion
-				KalturaLog::debug("Creating Clear file at [$orig_image_path] for image conversion");
+				VidiunLog::debug("Creating Clear file at [$orig_image_path] for image conversion");
 			}
 
-			kFile::fullMkdir($processingThumbPath);
+			vFile::fullMkdir($processingThumbPath);
 
 			if ($thumbCaptureByPackager && $shouldResizeByPackager)
 			{
 				$processingThumbPath = $packagerResizeFullPath;
 				$convertedImagePath = $packagerResizeFullPath;
-				KalturaLog::debug("Image was resize in the packager -  setting path [$processingThumbPath]");
+				VidiunLog::debug("Image was resize in the packager -  setting path [$processingThumbPath]");
 			}
 			else //need to crop the image
 			{
@@ -947,13 +947,13 @@ class myEntryUtils
 				else
 				{
 					if (!file_exists($orig_image_path) || !filesize($orig_image_path))
-						KExternalErrors::dieError(KExternalErrors::IMAGE_RESIZE_FAILED);
+						VExternalErrors::dieError(VExternalErrors::IMAGE_RESIZE_FAILED);
 
 					$imageSizeArray = getimagesize($orig_image_path);
 					if ($thumbParams->getSupportAnimatedThumbnail() && is_array($imageSizeArray) && $imageSizeArray[2] === IMAGETYPE_GIF)
 					{
-						$processingThumbPath = kFile::replaceExt($processingThumbPath, "gif");
-						$finalThumbPath = kFile::replaceExt($finalThumbPath, "gif");
+						$processingThumbPath = vFile::replaceExt($processingThumbPath, "gif");
+						$finalThumbPath = vFile::replaceExt($finalThumbPath, "gif");
 					}
 
 					$convertedImagePath = myFileConverter::convertImage($orig_image_path, $processingThumbPath, $width, $height, $type, $bgcolor, true, $quality, $src_x, $src_y, $src_w, $src_h, $density, $stripProfiles, $thumbParams, $format,$forceRotation);
@@ -968,7 +968,7 @@ class myEntryUtils
 
 			// die if resize operation failed
 			if ($convertedImagePath === null || !@filesize($convertedImagePath)) {
-				KExternalErrors::dieError(KExternalErrors::IMAGE_RESIZE_FAILED);
+				VExternalErrors::dieError(VExternalErrors::IMAGE_RESIZE_FAILED);
 			}
 			
 			if ($multi)
@@ -1004,8 +1004,8 @@ class myEntryUtils
 			imagedestroy($im);
 		}
 		
-		kFile::fullMkdir($finalThumbPath);
-		kFile::moveFile($processingThumbPath, $finalThumbPath);
+		vFile::fullMkdir($finalThumbPath);
+		vFile::moveFile($processingThumbPath, $finalThumbPath);
 		
 		if ($cache)
 			$cache->delete($cacheLockKey);
@@ -1020,15 +1020,15 @@ class myEntryUtils
 
 	private static function isTempFile($filePath)
 	{
-		return kString::endsWith($filePath, self::TEMP_FILE_POSTFIX);
+		return vString::endsWith($filePath, self::TEMP_FILE_POSTFIX);
 	}
 	
 	private static function encryptThumb($thumbPath, $key, $iv)
 	{
-		$encryptedPath = kFileUtils::addEncryptToFileName($thumbPath);
-		if (!kEncryptFileUtils::encryptFile($thumbPath, $key, $iv, $encryptedPath))
+		$encryptedPath = vFileUtils::addEncryptToFileName($thumbPath);
+		if (!vEncryptFileUtils::encryptFile($thumbPath, $key, $iv, $encryptedPath))
 			return $thumbPath;
-		KalturaLog::debug("Data for entry should encrypted. Encrypted data at [$encryptedPath] with key [$key] and iv [$iv]");
+		VidiunLog::debug("Data for entry should encrypted. Encrypted data at [$encryptedPath] with key [$key] and iv [$iv]");
 		return $encryptedPath;
 	}
 
@@ -1037,7 +1037,7 @@ class myEntryUtils
 	{
 		$entry = myPlaylistUtils::getFirstEntryFromPlaylist($playlist);
 		if (!$entry)
-			KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		$success = self::captureLocalThumb($entry, $capturedThumbPath, $calc_vid_sec, $cache, $cacheLockKey, $cacheLockKeyProcessing, $flavorAssetId) || self::captureRemoteThumb($entry, $orig_image_path, $calc_vid_sec, $flavorAssetId);
 		return $success;
 	}
@@ -1081,7 +1081,7 @@ class myEntryUtils
 
 	private static function captureLiveThumbUsingPackager(entry $entry, $liveType, $destThumbPath, $calc_vid_sec, $width = null, $height = null)
 	{
-		$packagerCaptureUrl = kConf::get('packager_local_live_thumb_capture_url', 'local', null);
+		$packagerCaptureUrl = vConf::get('packager_local_live_thumb_capture_url', 'local', null);
 		if (!$packagerCaptureUrl)
 			return false;
 
@@ -1105,7 +1105,7 @@ class myEntryUtils
 
 	private static function captureMappedThumbUsingPackager($entry, $flavorAsset, $capturedThumbPath, $calc_vid_sec, &$flavorAssetId, $width, $height)
 	{
-		$packagerCaptureUrl = kConf::get('packager_mapped_thumb_capture_url', 'local', null);
+		$packagerCaptureUrl = vConf::get('packager_mapped_thumb_capture_url', 'local', null);
 		if (!$packagerCaptureUrl)
 			return false;
 
@@ -1153,7 +1153,7 @@ class myEntryUtils
 			if($flavorAsset)
 			{
 				$flavorSyncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-				list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($flavorSyncKey,false,false);
+				list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($flavorSyncKey,false,false);
 				if (!$fileSync)
 				{
 					$flavorAsset = null;
@@ -1174,18 +1174,18 @@ class myEntryUtils
 		}
 
 		if (is_null($flavorAsset))
-			KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 
 		$flavorAssetId = $flavorAsset->getId();
 		$flavorSyncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		$entry_data_path = kFileSyncUtils::getReadyLocalFilePathForKey($flavorSyncKey);
+		$entry_data_path = vFileSyncUtils::getReadyLocalFilePathForKey($flavorSyncKey);
 		
 		if (!$entry_data_path)
 			return false;
 
 		// limit creation of more than XX ffmpeg image extraction processes
-		if (kConf::hasParam("resize_thumb_max_processes_ffmpeg") &&
-			trim(exec("ps -e -ocmd|awk '{print $1}'|grep -c ".kConf::get("bin_path_ffmpeg") )) > kConf::get("resize_thumb_max_processes_ffmpeg"))
+		if (vConf::hasParam("resize_thumb_max_processes_ffmpeg") &&
+			trim(exec("ps -e -ocmd|awk '{print $1}'|grep -c ".vConf::get("bin_path_ffmpeg") )) > vConf::get("resize_thumb_max_processes_ffmpeg"))
 		{
 			if ($cache)
 			{
@@ -1193,11 +1193,11 @@ class myEntryUtils
 				$cache->delete($cacheLockKeyProcessing);
 			}
 			
-			KExternalErrors::dieError(KExternalErrors::TOO_MANY_PROCESSES);
+			VExternalErrors::dieError(VExternalErrors::TOO_MANY_PROCESSES);
 		}
 		
 		// close db connections as we won't be requiring the database anymore and capturing a thumbnail may take a long time
-		kFile::closeDbConnections();
+		vFile::closeDbConnections();
 		$decryptionKey = $flavorAsset->getEncryptionKey() ? bin2hex(base64_decode($flavorAsset->getEncryptionKey())) : null;
 		myFileConverter::autoCaptureFrame($entry_data_path, $capturedThumbPath."temp_", $calc_vid_sec, -1, -1, false, $decryptionKey);
 		return true;
@@ -1205,13 +1205,13 @@ class myEntryUtils
 
 	protected static function captureLocalThumbUsingPackager($flavorAsset, $capturedThumbPath, $calc_vid_sec, &$flavorAssetId, $width, $height)
 	{
-		$packagerCaptureUrl = kConf::get('packager_local_thumb_capture_url', 'local', null);
+		$packagerCaptureUrl = vConf::get('packager_local_thumb_capture_url', 'local', null);
 		if (!$packagerCaptureUrl)
 			return false;
 
 		$flavorAssetId = $flavorAsset->getId();
 		$fileSyncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-		$entry_data_path = kFileSyncUtils::getRelativeFilePathForKey($fileSyncKey);
+		$entry_data_path = vFileSyncUtils::getRelativeFilePathForKey($fileSyncKey);
 		$entry_data_path = ltrim($entry_data_path, "/");
 
 		if (!$entry_data_path)
@@ -1263,7 +1263,7 @@ class myEntryUtils
 
 	public static function captureRemoteThumb($entry, $orig_image_path, $calc_vid_sec, &$flavorAssetId)
 	{
-		$packagerCaptureUrl = kConf::get('packager_thumb_capture_url', 'local', null);
+		$packagerCaptureUrl = vConf::get('packager_thumb_capture_url', 'local', null);
 		if (!$packagerCaptureUrl)
 			return false;
 		
@@ -1274,7 +1274,7 @@ class myEntryUtils
 
 		$flavorAssetId = $flavorAsset->getId();
 		$flavorSyncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		$remoteFS = kFileSyncUtils::getReadyExternalFileSyncForKey($flavorSyncKey);
+		$remoteFS = vFileSyncUtils::getReadyExternalFileSyncForKey($flavorSyncKey);
 		if (!$remoteFS)
 			return false;
 
@@ -1296,8 +1296,8 @@ class myEntryUtils
 		if ($queryString)
 			$remoteThumbCapture .= "?$queryString";
 				
-		kFile::closeDbConnections();
-		KCurlWrapper::getDataFromFile($remoteThumbCapture, $orig_image_path, null, true);
+		vFile::closeDbConnections();
+		VCurlWrapper::getDataFromFile($remoteThumbCapture, $orig_image_path, null, true);
 		return true;
 	}
 
@@ -1315,7 +1315,7 @@ class myEntryUtils
 	{
 		$sub_type = $entry->getMediaType() == entry::ENTRY_MEDIA_TYPE_IMAGE ? entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA : entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB;
 		$entryImageKey = $entry->getSyncKey($sub_type, $version);
-		list ( $file_sync , $local )= kFileSyncUtils::getReadyFileSyncForKey($entryImageKey, false, false);
+		list ( $file_sync , $local )= vFileSyncUtils::getReadyFileSyncForKey($entryImageKey, false, false);
 		return ($local ? $file_sync : null);
 	}
 	
@@ -1323,11 +1323,11 @@ class myEntryUtils
 	{
 		$sub_type = $entry->getMediaType() == entry::ENTRY_MEDIA_TYPE_IMAGE ? entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA : entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB;
 		$entry_image_key = $entry->getSyncKey($sub_type, $version);
-		$entry_image_path = kFileSyncUtils::getReadyLocalFilePathForKey($entry_image_key);
+		$entry_image_path = vFileSyncUtils::getReadyLocalFilePathForKey($entry_image_key);
 		if (!$entry_image_path && $version == 100000)
 		{
 			$entry_image_key = $entry->getSyncKey($sub_type);
-			$entry_image_path = kFileSyncUtils::getReadyLocalFilePathForKey($entry_image_key);
+			$entry_image_path = vFileSyncUtils::getReadyLocalFilePathForKey($entry_image_key);
 		}
 		
 		return $entry_image_path;
@@ -1366,53 +1366,53 @@ class myEntryUtils
 	/*
 	 * When there is a big list of entries that we know the getPuser will be called - 
 	 * Use this to fetch the whole list rather than one-by-on
-	 * TODO - not relevant once merge puser_kuser in kuser table
+	 * TODO - not relevant once merge puser_vuser in vuser table
 	 */
 	public static function updatePuserIdsForEntries ( $entries )
 	{
 		if ( ! $entries ) return;
-		// get the whole list of kuser_ids	
-		$partner_kuser_list = array();
-kuserPeer::getCriteriaFilter()->disable(); 			
-PuserKuserPeer::getCriteriaFilter()->disable();
+		// get the whole list of vuser_ids	
+		$partner_vuser_list = array();
+vuserPeer::getCriteriaFilter()->disable(); 			
+PuserVuserPeer::getCriteriaFilter()->disable();
 		foreach ( $entries as &$entry )
 		{
 			$pid = $entry->getPartnerId() ;
-			if (!isset($partner_kuser_list[$pid]))
+			if (!isset($partner_vuser_list[$pid]))
 			{
-				 $partner_kuser_ids = array();
+				 $partner_vuser_ids = array();
 			}
 			else
 			{
-				$partner_kuser_ids = $partner_kuser_list[$pid];
+				$partner_vuser_ids = $partner_vuser_list[$pid];
 			}
 //print_r ( $entry );			
-			$kuser_id = $entry->getKuserId();
+			$vuser_id = $entry->getVuserId();
 
-			$partner_kuser_ids[$kuser_id] = $kuser_id;
-			$partner_kuser_list[$pid] = $partner_kuser_ids;
+			$partner_vuser_ids[$vuser_id] = $vuser_id;
+			$partner_vuser_list[$pid] = $partner_vuser_ids;
 		}
 
-		// the kuser_id is unique across partners
-		$kuser_list = array();	
+		// the vuser_id is unique across partners
+		$vuser_list = array();	
 		$puser_id = null;	
-		foreach ( $partner_kuser_list as $pid => $kuser_ids )
+		foreach ( $partner_vuser_list as $pid => $vuser_ids )
 		{
-			$puser_kuser_list = PuserKuserPeer::getPuserIdFromKuserIds( $pid , $kuser_ids );
+			$puser_vuser_list = PuserVuserPeer::getPuserIdFromVuserIds( $pid , $vuser_ids );
 			
-			// builf a map where the key is kuser_id for fast fetch 
-			foreach ( $puser_kuser_list as $puser_kuser )
+			// builf a map where the key is vuser_id for fast fetch 
+			foreach ( $puser_vuser_list as $puser_vuser )
 			{
-				$kuser_id = $puser_kuser->getKuserId();
-				$puser_id = $puser_kuser->getPuserId();
-				$kuser_list[$kuser_id]=$puser_id;
+				$vuser_id = $puser_vuser->getVuserId();
+				$puser_id = $puser_vuser->getPuserId();
+				$vuser_list[$vuser_id]=$puser_id;
 			}
 		}
 		foreach ( $entries as $entry )
 		{
-			$kuser_id = $entry->getKuserId();
-			if(isset($kuser_list[$kuser_id]))
-				$puser_id = $kuser_list[$kuser_id];
+			$vuser_id = $entry->getVuserId();
+			if(isset($vuser_list[$vuser_id]))
+				$puser_id = $vuser_list[$vuser_id];
 			
 			if ( $puser_id )
 			{
@@ -1420,8 +1420,8 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 			}
 		}
 		
-		kuserPeer::getCriteriaFilter()->enable(); 			
-		PuserKuserPeer::getCriteriaFilter()->enable();
+		vuserPeer::getCriteriaFilter()->enable(); 			
+		PuserVuserPeer::getCriteriaFilter()->enable();
 	}
 	
 	//
@@ -1460,7 +1460,7 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 		
 		foreach($entrySyncKeys as $syncKey)
 		{
-			$fileSync = kFileSyncUtils::getOriginFileSyncForKey($syncKey, false);
+			$fileSync = vFileSyncUtils::getOriginFileSyncForKey($syncKey, false);
 			if(!$fileSync || $fileSync->getStatus() != FileSync::FILE_SYNC_STATUS_READY)
 				continue;
 			
@@ -1506,24 +1506,24 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 			// copy the data
 			$from = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA); // replaced__getDataPath
 			$to = $targetEntry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA); // replaced__getDataPath
-			KalturaLog::log("copyEntriesByType - copying entry data [".$from."] to [".$to."]");
-			kFileSyncUtils::softCopy($from, $to);
+			VidiunLog::log("copyEntriesByType - copying entry data [".$from."] to [".$to."]");
+			vFileSyncUtils::softCopy($from, $to);
 		}
 
 		$ismFrom = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_ISM);
-		if(kFileSyncUtils::fileSync_exists($ismFrom))
+		if(vFileSyncUtils::fileSync_exists($ismFrom))
 		{
 			$ismTo = $targetEntry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_ISM);
-			KalturaLog::log("copying entry ism [".$ismFrom."] to [".$ismTo."]");
-			kFileSyncUtils::softCopy($ismFrom, $ismTo);
+			VidiunLog::log("copying entry ism [".$ismFrom."] to [".$ismTo."]");
+			vFileSyncUtils::softCopy($ismFrom, $ismTo);
 		}
 
 		$ismcFrom = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_ISMC);
-		if(kFileSyncUtils::fileSync_exists($ismcFrom))
+		if(vFileSyncUtils::fileSync_exists($ismcFrom))
 		{
 			$ismcTo = $targetEntry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_ISMC);
-			KalturaLog::log("copying entry ism [".$ismcFrom."] to [".$ismcTo."]");
-			kFileSyncUtils::softCopy($ismcFrom, $ismcTo);
+			VidiunLog::log("copying entry ism [".$ismcFrom."] to [".$ismcTo."]");
+			vFileSyncUtils::softCopy($ismcFrom, $ismcTo);
 		}
 
 		$from = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB); // replaced__getThumbnailPath
@@ -1532,7 +1532,7 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 		if($entry->getMediaType() == entry::ENTRY_MEDIA_TYPE_IMAGE)
 			$considerCopyThumb = false;
 		// if entry is not clip, and there is no file in both DCs - nothing to copy
-		if($entry->getType() != entryType::MEDIA_CLIP && !kFileSyncUtils::file_exists($from, true))
+		if($entry->getType() != entryType::MEDIA_CLIP && !vFileSyncUtils::file_exists($from, true))
 			$considerCopyThumb = false;
 		if ( $considerCopyThumb )
 		{
@@ -1541,7 +1541,7 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 			if($entry->getMediaType() == entry::ENTRY_MEDIA_TYPE_AUDIO)
 			{
 				// check if audio entry has real thumb, if not - don't copy thumb.
-				$originalFileSync = kFileSyncUtils::getOriginFileSyncForKey($from, false);
+				$originalFileSync = vFileSyncUtils::getOriginFileSyncForKey($from, false);
 				if(!$originalFileSync)
 				{
 					$skipThumb = true;
@@ -1550,8 +1550,8 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 			if(!$skipThumb)
 			{
 				$to = $targetEntry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB); // replaced__getThumbnailPath
-				KalturaLog::log("copyEntriesByType - copying entry thumbnail [".$from."] to [".$to."]");
-				kFileSyncUtils::softCopy($from, $to);
+				VidiunLog::log("copyEntriesByType - copying entry thumbnail [".$from."] to [".$to."]");
+				vFileSyncUtils::softCopy($from, $to);
 			}
 		}
 
@@ -1576,7 +1576,7 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 	/**
 	 * @param entry $entry
 	 * @param Partner|null $toPartner
-	 * @param array kBaseEntryCloneOptionItem $cloneOptions Array - an array of enumerator of a subset of entry properties.
+	 * @param array vBaseEntryCloneOptionItem $cloneOptions Array - an array of enumerator of a subset of entry properties.
 	 * 													For each subset the user sets
 	 * 													whether the subset is included or excluded from the copy.
 	 * 													The default action for each subset is 'include'.
@@ -1586,12 +1586,12 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 	 * @return entry
 	 * @throws Exception
 	 * @throws PropelException
-	 * @throws kCoreException
+	 * @throws vCoreException
      */
 	public static function copyEntry(entry $entry, Partner $toPartner = null,
 									 array $cloneOptions)
  	{
- 		KalturaLog::log("copyEntry - Copying entry [".$entry->getId()."] to partner [".$toPartner->getId().
+ 		VidiunLog::log("copyEntry - Copying entry [".$entry->getId()."] to partner [".$toPartner->getId().
 			" ] with clone options [ ".print_r($cloneOptions, true)." ]");
 
 		$copyUsers = true;
@@ -1602,7 +1602,7 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 		$copyFlavors  = true;
 		$copyCaptions  = true;
 
-		/* @var kBaseEntryCloneOptionComponent $cloneOption */
+		/* @var vBaseEntryCloneOptionComponent $cloneOption */
 		foreach ($cloneOptions as $cloneOption)
 		{
 			$currentOption = $cloneOption->getItemType();
@@ -1660,41 +1660,41 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 				$newEntry->setAccessControlId($toPartner->getDefaultAccessControlId());
  		}
  		
-		$kuserForNewEntry = null;
+		$vuserForNewEntry = null;
 		if ($copyUsers)
 		{
-			// copy the kuser (if the same puser id exists its kuser will be used)
-			kuserPeer::setUseCriteriaFilter(false);
-			$kuser = $entry->getKuser();
-			$kuserForNewEntry = kuserPeer::createKuserForPartner($newEntry->getPartnerId(), $kuser->getPuserId());
-			kuserPeer::setUseCriteriaFilter(true);
+			// copy the vuser (if the same puser id exists its vuser will be used)
+			vuserPeer::setUseCriteriaFilter(false);
+			$vuser = $entry->getVuser();
+			$vuserForNewEntry = vuserPeer::createVuserForPartner($newEntry->getPartnerId(), $vuser->getPuserId());
+			vuserPeer::setUseCriteriaFilter(true);
 		}
 		else
-			$kuserForNewEntry = kCurrentContext::getCurrentKsKuser();
+			$vuserForNewEntry = vCurrentContext::getCurrentVsVuser();
 
-		if($kuserForNewEntry)
+		if($vuserForNewEntry)
 		{
-			$newEntry->setKuserId($kuserForNewEntry->getId());
-			$newEntry->setCreatorKuserId($kuserForNewEntry->getId());
+			$newEntry->setVuserId($vuserForNewEntry->getId());
+			$newEntry->setCreatorVuserId($vuserForNewEntry->getId());
 		}
  		
- 		// copy the kshow
- 		kshowPeer::setUseCriteriaFilter(false);
- 		$kshow = $entry->getKshow();
- 		if ($kshow)
+ 		// copy the vshow
+ 		vshowPeer::setUseCriteriaFilter(false);
+ 		$vshow = $entry->getVshow();
+ 		if ($vshow)
  		{
- 			$newKshow = $kshow->copy();
- 			$newKshow->setIntId(null);
- 			$newKshow->setPartnerId($toPartner->getId());
- 			$newKshow->setSubpId($toPartner->getId() * 100);
- 			if ($kuserForNewEntry) {
- 				$newKshow->setProducerId($kuserForNewEntry->getId());
+ 			$newVshow = $vshow->copy();
+ 			$newVshow->setIntId(null);
+ 			$newVshow->setPartnerId($toPartner->getId());
+ 			$newVshow->setSubpId($toPartner->getId() * 100);
+ 			if ($vuserForNewEntry) {
+ 				$newVshow->setProducerId($vuserForNewEntry->getId());
  			}
- 			$newKshow->save();
+ 			$newVshow->save();
  			
- 			$newEntry->setKshowId($newKshow->getId());
+ 			$newEntry->setVshowId($newVshow->getId());
  		}
- 		kshowPeer::setUseCriteriaFilter(true);
+ 		vshowPeer::setUseCriteriaFilter(true);
  		
  		// reset the statistics
  		myEntryUtils::resetEntryStatistics($newEntry);
@@ -1725,7 +1725,7 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 		$defaultCategoryFilter->remove(categoryPeer::PARTNER_ID);
  		$defaultCategoryFilter->addAnd(categoryPeer::PARTNER_ID, $oldPartnerId);
  		
- 		KalturaLog::log("copyEntry - New entry [".$newEntry->getId()."] was created");
+ 		VidiunLog::log("copyEntry - New entry [".$newEntry->getId()."] was created");
 
 		if ( $entry->getStatus() != entryStatus::READY ) {
 			$entry->addClonePendingEntry($newEntry->getId());
@@ -1741,12 +1741,12 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 		    {
 		        case entry::ENTRY_MEDIA_TYPE_TEXT:
         		    $from = $entry->getDataContent();
-        		    KalturaLog::debug("Entries to copy from source static playlist: [$from]");
+        		    VidiunLog::debug("Entries to copy from source static playlist: [$from]");
                     $fromEntryIds = explode(",", $from);
                     $toEntryIds = array();
                     foreach ($fromEntryIds as $fromEntryId)
                     {
-                        $toEntryIds[] = kObjectCopyHandler::getMappedId(entryPeer::OM_CLASS, $fromEntryId);
+                        $toEntryIds[] = vObjectCopyHandler::getMappedId(entryPeer::OM_CLASS, $fromEntryId);
                     }
                     
                     $newEntry->setDataContent(implode(",", $toEntryIds));
@@ -1766,7 +1766,7 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 			                $newCategoriesIds = array();
 			                foreach ($categoriesIds as $categoryId)
 			                {
-			                    $newCategoriesIds[] = kObjectCopyHandler::getMappedId(categoryPeer::OM_CLASS, $categoryId);
+			                    $newCategoriesIds[] = vObjectCopyHandler::getMappedId(categoryPeer::OM_CLASS, $categoryId);
 			                }
 			                $entryFilter->fields["_matchand_categories_ids"] = implode (",", $newCategoriesIds);
 			            }
@@ -1776,7 +1776,7 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 			                $newCategoriesIds = array();
 			                foreach ($categoriesIds as $categoryId)
 			                {
-			                    $newCategoriesIds[] = kObjectCopyHandler::getMappedId(categoryPeer::OM_CLASS, $categoryId);
+			                    $newCategoriesIds[] = vObjectCopyHandler::getMappedId(categoryPeer::OM_CLASS, $categoryId);
 			                }
 			                $entryFilter->fields["_matchor_categories_ids"] = implode (",", $newCategoriesIds);
 			            }
@@ -1786,7 +1786,7 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 			                $newCategoriesIds = array();
 			                foreach ($categoriesIds as $categoryId)
 			                {
-			                    $newCategoriesIds[] = kObjectCopyHandler::getMappedId(categoryPeer::OM_CLASS, $categoryId);
+			                    $newCategoriesIds[] = vObjectCopyHandler::getMappedId(categoryPeer::OM_CLASS, $categoryId);
 			                }
 			                $entryFilter->fields["_in_category_ancestor_id"] = implode (",", $newCategoriesIds);
 			            }
@@ -1802,8 +1802,8 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 		if ($copyCategories)
 		{
 			// copy relationships to categories
-			KalturaLog::debug('Copy relationships to categories from entry [' . $entry->getId() . '] to entry [' . $newEntry->getId() . ']');
-			$c = KalturaCriteria::create(categoryEntryPeer::OM_CLASS);
+			VidiunLog::debug('Copy relationships to categories from entry [' . $entry->getId() . '] to entry [' . $newEntry->getId() . ']');
+			$c = VidiunCriteria::create(categoryEntryPeer::OM_CLASS);
 			$c->addAnd(categoryEntryPeer::ENTRY_ID, $entry->getId());
 			$c->addAnd(categoryEntryPeer::STATUS, CategoryEntryStatus::ACTIVE, Criteria::EQUAL);
 			$c->addAnd(categoryEntryPeer::PARTNER_ID, $entry->getPartnerId());
@@ -1824,7 +1824,7 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 			$illegalCategoryStatus = array( CategoryStatus::DELETED, CategoryStatus::PURGED );
 
 			// Get src category objects
-			$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+			$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 			$c->add(categoryPeer::ID, $srcCategoryIdSet, Criteria::IN);
 			$c->addAnd(categoryPeer::PARTNER_ID, $entry->getPartnerId());
 			$c->addAnd(categoryPeer::STATUS, $illegalCategoryStatus, Criteria::NOT_IN);
@@ -1840,8 +1840,8 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 			}
 
 			// Get dst. partner categories based on src. category full-names
-			$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
-			$c->add(categoryPeer::FULL_NAME, array_keys( $fullNamesToSrcCategoryIdMap ), KalturaCriteria::IN);
+			$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
+			$c->add(categoryPeer::FULL_NAME, array_keys( $fullNamesToSrcCategoryIdMap ), VidiunCriteria::IN);
 			$c->addAnd(categoryPeer::PARTNER_ID, $newEntry->getPartnerId());
 			$c->addAnd(categoryPeer::STATUS, $illegalCategoryStatus, Criteria::NOT_IN);
 			categoryPeer::setUseCriteriaFilter(false);
@@ -1960,7 +1960,7 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 	 */
 	public static function shouldServeVodFromLive(entry $entry, $validateStatus = true)
 	{
-		if ($entry->getType() != entryType::MEDIA_CLIP || $entry->getSource() != EntrySourceType::KALTURA_RECORDED_LIVE)
+		if ($entry->getType() != entryType::MEDIA_CLIP || $entry->getSource() != EntrySourceType::VIDIUN_RECORDED_LIVE)
 			return false;
 
 		if($validateStatus && $entry->getStatus() != entryStatus::READY)
@@ -2011,10 +2011,10 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 			$protocol = infraRequestUtils::PROTOCOL_HTTP;
 
 		$cdnApiHost = null;
-		if ($protocol == infraRequestUtils::PROTOCOL_HTTPS && kConf::hasParam('cdn_api_host_https'))
-			$cdnApiHost = "$protocol://" . kConf::get('cdn_api_host_https');
+		if ($protocol == infraRequestUtils::PROTOCOL_HTTPS && vConf::hasParam('cdn_api_host_https'))
+			$cdnApiHost = "$protocol://" . vConf::get('cdn_api_host_https');
 		else
-			$cdnApiHost =  "$protocol://" . kConf::get('cdn_api_host');
+			$cdnApiHost =  "$protocol://" . vConf::get('cdn_api_host');
 
 		$flavorIds = array();
 		$fileExtension = null;
@@ -2171,10 +2171,10 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 			$packagerRetries--;
 		}
 		if(!$content)
-			throw new KalturaAPIException(KalturaErrors::RETRIEVE_VOLUME_MAP_FAILED);
+			throw new VidiunAPIException(VidiunErrors::RETRIEVE_VOLUME_MAP_FAILED);
 
 		header("Content-Disposition: attachment; filename=".$entryId.'_'.$flavorId."_volumeMap.csv");
-		return new kRendererString($content, 'text/csv');
+		return new vRendererString($content, 'text/csv');
 	}
 
 	private static function retrieveVolumeMapFromPackager($flavorAsset)
@@ -2188,16 +2188,16 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 
 	private static function retrieveMappedVolumeMapFromPackager($flavorAsset)
 	{
-		$packagerVolumeMapUrlPattern = kConf::get('packager_mapped_volume_map_url', 'local', null);
+		$packagerVolumeMapUrlPattern = vConf::get('packager_mapped_volume_map_url', 'local', null);
 		if (!$packagerVolumeMapUrlPattern)
 		{
-			throw new KalturaAPIException(KalturaErrors::VOLUME_MAP_NOT_CONFIGURED);
+			throw new VidiunAPIException(VidiunErrors::VOLUME_MAP_NOT_CONFIGURED);
 		}
 
 		$entry = entryPeer::retrieveByPK($flavorAsset->getEntryId());
 		if (!$entry)
 		{
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND);
 		}
 
 		$volumeMapUrl = self::buildVolumeMapPath($entry, $flavorAsset);
@@ -2213,12 +2213,12 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 
 	private static function retrieveLocalVolumeMapFromPackager($flavorAsset)
 	{
-		$packagerVolumeMapUrlPattern = kConf::get('packager_local_volume_map_url', 'local', null);
+		$packagerVolumeMapUrlPattern = vConf::get('packager_local_volume_map_url', 'local', null);
 		if (!$packagerVolumeMapUrlPattern)
-			throw new KalturaAPIException(KalturaErrors::VOLUME_MAP_NOT_CONFIGURED);
+			throw new VidiunAPIException(VidiunErrors::VOLUME_MAP_NOT_CONFIGURED);
 
 		$fileSyncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-		$entry_data_path = kFileSyncUtils::getRelativeFilePathForKey($fileSyncKey);
+		$entry_data_path = vFileSyncUtils::getRelativeFilePathForKey($fileSyncKey);
 		$entry_data_path = ltrim($entry_data_path, "/");
 		if (!$entry_data_path)
 			return null;
@@ -2233,8 +2233,8 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 	private static function curlVolumeMapUrl($url, $packagerVolumeMapUrlPattern)
 	{
 		$packagerVolumeMapUrl = str_replace(array("{url}"), array($url), $packagerVolumeMapUrlPattern);
-		kFile::closeDbConnections();
-		$content = KCurlWrapper::getDataFromFile($packagerVolumeMapUrl, null, null, true);
+		vFile::closeDbConnections();
+		$content = VCurlWrapper::getDataFromFile($packagerVolumeMapUrl, null, null, true);
 		return $content;
 	}
 
@@ -2262,41 +2262,41 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 
 	public static function verifyEntryType($entry)
 	{
-		$blockedTypes = array('KalturaPlaylist');
+		$blockedTypes = array('VidiunPlaylist');
 		foreach ($blockedTypes as $type)
 		{
 			if ($entry instanceof $type)
 			{
-				KalturaLog::debug("Entry type [$type] is not allowed");
-				//throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_TYPE, $type);
+				VidiunLog::debug("Entry type [$type] is not allowed");
+				//throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_TYPE, $type);
 			}
 		}
 	}
 
 	public static function curlThumbUrlWithOffset($url, $calc_vid_sec, $packagerCaptureUrl, $capturedThumbPath, $width = null, $height = null, $offsetPrefix = '')
 	{
-		list($packagerThumbCapture, $tempThumbPath) = KThumbnailCapture::generateThumbUrlWithOffset($url, $calc_vid_sec, $packagerCaptureUrl, $capturedThumbPath, $width, $height, $offsetPrefix);
-		kFile::closeDbConnections();
-		$success = KCurlWrapper::getDataFromFile($packagerThumbCapture, $tempThumbPath, null, true);
+		list($packagerThumbCapture, $tempThumbPath) = VThumbnailCapture::generateThumbUrlWithOffset($url, $calc_vid_sec, $packagerCaptureUrl, $capturedThumbPath, $width, $height, $offsetPrefix);
+		vFile::closeDbConnections();
+		$success = VCurlWrapper::getDataFromFile($packagerThumbCapture, $tempThumbPath, null, true);
 		return $success;
 	}
 
 	public static function verifyThumbSrcExist($entry, $destThumbParams)
 	{
-		$srcAsset = kBusinessPreConvertDL::getSourceAssetForGenerateThumbnail(null, $destThumbParams->getSourceParamsId(), $entry->getId());
+		$srcAsset = vBusinessPreConvertDL::getSourceAssetForGenerateThumbnail(null, $destThumbParams->getSourceParamsId(), $entry->getId());
 		if (is_null($srcAsset))
 		{
-			throw new KalturaAPIException(KalturaErrors::NO_FLAVORS_FOUND);
+			throw new VidiunAPIException(VidiunErrors::NO_FLAVORS_FOUND);
 		}
 		$srcSyncKey = $srcAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
 		if ($fileSync && !$local)
 		{
 			$fileSyncDc = $fileSync->getDc();
-			if (in_array($fileSyncDc, kDataCenterMgr::getDcIds()))
+			if (in_array($fileSyncDc, vDataCenterMgr::getDcIds()))
 			{
-				KalturaLog::info("Source file wasn't found on current DC. Dumping the request to DC ID [$fileSyncDc]");
-				return kFileUtils::dumpApiRequest(kDataCenterMgr::getRemoteDcExternalUrlByDcId($fileSyncDc), true);
+				VidiunLog::info("Source file wasn't found on current DC. Dumping the request to DC ID [$fileSyncDc]");
+				return vFileUtils::dumpApiRequest(vDataCenterMgr::getRemoteDcExternalUrlByDcId($fileSyncDc), true);
 			}
 		}
 	}
@@ -2308,14 +2308,14 @@ PuserKuserPeer::getCriteriaFilter()->disable();
 		{
 			$syncKey = $dbObject->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
 		}
-		else if (($dbObject instanceof entry) && ($dbObject->getMediaType() == KalturaMediaType::IMAGE))
+		else if (($dbObject instanceof entry) && ($dbObject->getMediaType() == VidiunMediaType::IMAGE))
 		{
 			$syncKey = $dbObject->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
 		}
 
 		if($syncKey)
 		{
-			$filePath = kAssetUtils::getLocalImagePath($syncKey);
+			$filePath = vAssetUtils::getLocalImagePath($syncKey);
 			$validContent = myThumbUtils::validateImageContent($filePath);
 			if(!$validContent)
 			{

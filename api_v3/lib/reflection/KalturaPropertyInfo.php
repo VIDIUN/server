@@ -3,7 +3,7 @@
  * @package api
  * @subpackage v3
  */
-class KalturaPropertyInfo
+class VidiunPropertyInfo
 {
 	/**
 	 * @var string class name
@@ -21,12 +21,12 @@ class KalturaPropertyInfo
 	private $_defaultValue;
 	
 	/**
-	 * @var KalturaTypeReflector
+	 * @var VidiunTypeReflector
 	 */
 	private $_typeReflector;
 	
 	/**
-	 * @var KalturaTypeReflector
+	 * @var VidiunTypeReflector
 	 */
 	private $_arrayTypeReflector;
 	
@@ -161,28 +161,28 @@ class KalturaPropertyInfo
 	}
 	
 	/**
-	 * @return KalturaTypeReflector
+	 * @return VidiunTypeReflector
 	 */
 	public function getTypeReflector()
 	{
 		if ($this->_typeReflector === null)
 		{
 			if (!$this->isSimpleType() && $this->_type != "file")
-				$this->_typeReflector = KalturaTypeReflectorCacher::get($this->_type);
+				$this->_typeReflector = VidiunTypeReflectorCacher::get($this->_type);
 		}
 		
 		return $this->_typeReflector;
 	}
 	
 	/**
-	 * @return KalturaTypeReflector
+	 * @return VidiunTypeReflector
 	 */
 	public function getArrayTypeReflector()
 	{
 		if ($this->_arrayTypeReflector === null)
 		{
 			if (!$this->isSimpleType())
-				$this->_arrayTypeReflector = KalturaTypeReflectorCacher::get($this->getArrayType());
+				$this->_arrayTypeReflector = VidiunTypeReflectorCacher::get($this->getArrayType());
 		}
 		
 		return $this->_arrayTypeReflector;
@@ -605,7 +605,7 @@ class KalturaPropertyInfo
 		
 		if ($this->isArray())
 		{
-			$propInfo = new KalturaPropertyInfo($this->getArrayType(), "1");
+			$propInfo = new VidiunPropertyInfo($this->getArrayType(), "1");
 			$array["arrayType"]	= $propInfo->toArray(false, $returnedTypes);
 		}
 		$array["isReadOnly"] 	= $this->isReadOnly();
@@ -624,7 +624,7 @@ class KalturaPropertyInfo
 				$subTypes = $typeReflector->getSubTypesNames();
 				foreach($subTypes as $subType)
 				{
-					$subTypeInfo = new KalturaPropertyInfo($subType, $this->_name);
+					$subTypeInfo = new VidiunPropertyInfo($subType, $this->_name);
 					$array["subTypes"][] = $subTypeInfo->toArray(false, $returnedTypes);
 				}
 			}

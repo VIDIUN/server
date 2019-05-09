@@ -49,25 +49,25 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 		if (self::$s_criteria_filter == null)
 			self::$s_criteria_filter = new criteriaFilter();
 
-		$c = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$c = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		$c->addAnd(CuePointPeer::STATUS, CuePointStatus::DELETED, Criteria::NOT_EQUAL);
 
 		if (self::$userContentOnly)
 		{
-			$puserId = kCurrentContext::$ks_uid;
-			$partnerId = kCurrentContext::$ks_partner_id;
+			$puserId = vCurrentContext::$vs_uid;
+			$partnerId = vCurrentContext::$vs_partner_id;
 			if ($puserId && $partnerId)
 			{
-				$kuser = kuserPeer::getKuserByPartnerAndUid($partnerId, $puserId);
-				if (!$kuser)
-					$kuser = kuserPeer::createKuserForPartner($partnerId, $puserId);
+				$vuser = vuserPeer::getVuserByPartnerAndUid($partnerId, $puserId);
+				if (!$vuser)
+					$vuser = vuserPeer::createVuserForPartner($partnerId, $puserId);
 
-				// Temporarily change user filter to (user==kuser OR cuepoint of type THUMB/CODE). Long term fix will be accomplished
-				// by adding a public property on the cuepoint object and checking (user==kuser OR is public)
-//				$c->addAnd(CuePointPeer::KUSER_ID, $kuser->getId());
-				$criteria = $c->getNewCriterion(self::KUSER_ID, $kuser->getId());
+				// Temporarily change user filter to (user==vuser OR cuepoint of type THUMB/CODE). Long term fix will be accomplished
+				// by adding a public property on the cuepoint object and checking (user==vuser OR is public)
+//				$c->addAnd(CuePointPeer::VUSER_ID, $vuser->getId());
+				$criteria = $c->getNewCriterion(self::VUSER_ID, $vuser->getId());
 				$criteria->addOr($c->getNewCriterion(self::IS_PUBLIC, CuePoint::getIndexPrefix($partnerId).true, Criteria::EQUAL));
-				$criteria->addTag(KalturaCriterion::TAG_USER_SESSION);
+				$criteria->addTag(VidiunCriterion::TAG_USER_SESSION);
 				$criteria->addOr(
 					$c->getNewCriterion(
 						CuePointPeer::TYPE,
@@ -79,10 +79,10 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 						Criteria::IN
 					)
 				);
-				$ks = kCurrentContext::$ks_object;
-				if ($ks)
+				$vs = vCurrentContext::$vs_object;
+				if ($vs)
 				{
-					$values = $ks->getPrivilegeValues(ks::PRIVILEGE_LIST);
+					$values = $vs->getPrivilegeValues(vs::PRIVILEGE_LIST);
 					if ($values && count($values) > 0)
 						$criteria->addOr($c->getNewCriterion(CuePointPeer::ENTRY_ID, $values[0], Criteria::EQUAL));
 				}
@@ -92,7 +92,7 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 			else if (!$puserId)
 			{
 				$criterionIsPublic = $c->getNewCriterion(self::IS_PUBLIC, CuePoint::getIndexPrefix($partnerId).true, Criteria::EQUAL);
-				$criterionIsPublic->addTag(KalturaCriterion::TAG_WIDGET_SESSION);
+				$criterionIsPublic->addTag(VidiunCriterion::TAG_WIDGET_SESSION);
 				$c->add($criterionIsPublic);
 			}
 		}
@@ -113,7 +113,7 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 			if (isset(self::$class_types_cache[$assetType]))
 				return self::$class_types_cache[$assetType];
 
-			$extendedCls = KalturaPluginManager::getObjectClass(self::OM_CLASS, $assetType);
+			$extendedCls = VidiunPluginManager::getObjectClass(self::OM_CLASS, $assetType);
 			if ($extendedCls)
 			{
 				self::$class_types_cache[$assetType] = $extendedCls;
@@ -134,11 +134,11 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 	{
 		if (!empty($selectResults) && self::$userContentOnly)
 		{
-			$ks = kCurrentContext::$ks_object;
+			$vs = vCurrentContext::$vs_object;
 			$privilagedEntryId = null;
-			if ($ks)
+			if ($vs)
 			{
-				$values = $ks->getPrivilegeValues(ks::PRIVILEGE_LIST);
+				$values = $vs->getPrivilegeValues(vs::PRIVILEGE_LIST);
 				if ($values && count($values) > 0)
 					$privilagedEntryId = $values[0];
 			}
@@ -147,18 +147,18 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 			foreach ($selectResults as $key => $cuePoint)
 			{
 				/* @var $cuePoint CuePoint */
-				if	(kCurrentContext::$ks_uid &&
-					strtolower($cuePoint->getPuserId()) !== strtolower(kCurrentContext::$ks_uid) &&
+				if	(vCurrentContext::$vs_uid &&
+					strtolower($cuePoint->getPuserId()) !== strtolower(vCurrentContext::$vs_uid) &&
 					!$cuePoint->getIsPublic() &&
 					$cuePoint->getEntryId() != $privilagedEntryId)
 				{
-					KalturaLog::warning("Filtering cuePoint select result with the following: [ks_uid -" . kCurrentContext::$ks_uid . "] [puserId - " . $cuePoint->getPuserId() . "] [isPublic - " . $cuePoint->getIsPublicStr() . "] [cuepointEntryId -  " . $cuePoint->getEntryId() . "] [privilagedEntryId - " . $privilagedEntryId . "] ");
+					VidiunLog::warning("Filtering cuePoint select result with the following: [vs_uid -" . vCurrentContext::$vs_uid . "] [puserId - " . $cuePoint->getPuserId() . "] [isPublic - " . $cuePoint->getIsPublicStr() . "] [cuepointEntryId -  " . $cuePoint->getEntryId() . "] [privilagedEntryId - " . $privilagedEntryId . "] ");
 					unset($selectResults[$key]);
 					$removedRecordsCount++;
 				}
 			}
 
-			if ($criteria instanceof KalturaCriteria)
+			if ($criteria instanceof VidiunCriteria)
 			{
 				$recordsCount = $criteria->getRecordsCount();
 				$criteria->setRecordsCount($recordsCount - $removedRecordsCount);
@@ -170,9 +170,9 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
-		KalturaCriterion::disableTags(array(KalturaCriterion::TAG_USER_SESSION, KalturaCriterion::TAG_WIDGET_SESSION));
+		VidiunCriterion::disableTags(array(VidiunCriterion::TAG_USER_SESSION, VidiunCriterion::TAG_WIDGET_SESSION));
 		$res = parent::retrieveByPK($pk, $con);
-		KalturaCriterion::restoreTags(array(KalturaCriterion::TAG_USER_SESSION, KalturaCriterion::TAG_WIDGET_SESSION));
+		VidiunCriterion::restoreTags(array(VidiunCriterion::TAG_USER_SESSION, VidiunCriterion::TAG_WIDGET_SESSION));
 
 		return $res;
 	}
@@ -184,7 +184,7 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 	{
 		$c = clone $criteria;
 
-		if ($c instanceof KalturaCriteria)
+		if ($c instanceof VidiunCriteria)
 		{
 			$c->applyFilters();
 			$criteria->setRecordsCount($c->getRecordsCount());
@@ -204,7 +204,7 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 	 */
 	public static function retrieveBySystemName($entryId, $systemName, PropelPDO $con = null)
 	{
-		$criteria = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		$criteria->add(CuePointPeer::ENTRY_ID, $entryId);
 		$criteria->add(CuePointPeer::SYSTEM_NAME, $systemName);
 
@@ -221,7 +221,7 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 	 */
 	public static function retrieveByEntryId($entryId, $types = null, PropelPDO $con = null)
 	{
-		$criteria = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		$criteria->add(CuePointPeer::ENTRY_ID, $entryId);
 		$criteria->add(CuePointPeer::STATUS, CuePointStatus::DELETED, Criteria::NOT_EQUAL);
 
@@ -240,7 +240,7 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 	 */
 	public static function countByEntryIdAndTypes($entryId, array $types = null, PropelPDO $con = null)
 	{
-		$criteria = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		$criteria->add(CuePointPeer::ENTRY_ID, $entryId);
 		$criteria->add(CuePointPeer::STATUS, CuePointStatus::DELETED, Criteria::NOT_EQUAL);
 		
@@ -257,7 +257,7 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 	 */
 	public static function hasReadyCuePointOnEntry($entryId, PropelPDO $con = null)
 	{
-		$criteria = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		$criteria->add( CuePointPeer::ENTRY_ID, $entryId );
 		$criteria->add( CuePointPeer::STATUS, CuePointStatus::READY ); // READY, but not yet HANDLED
 		$cuePoint = CuePointPeer::doSelectOne($criteria, $con);
@@ -278,7 +278,7 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 	 */
 	public static function retrieveByEntryIdTypeAndLimit($partnerId, $entryId, $limit, $offset, $types = array(), PropelPDO $con = null)
 	{
-		$criteria = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		$criteria->add(CuePointPeer::ENTRY_ID, $entryId);
 		$criteria->add(CuePointPeer::PARTNER_ID, $partnerId);
 		$criteria->add(CuePointPeer::STATUS, CuePointStatus::DELETED, Criteria::NOT_EQUAL);
@@ -352,16 +352,16 @@ class CuePointPeer extends BaseCuePointPeer implements IMetadataPeer, IRelatedOb
 		$cuePointDb = self::retrieveByPK($objectId);
 		if(!$cuePointDb)
 		{
-			KalturaLog::debug("Metadata object id with id [$objectId] not found");
+			VidiunLog::debug("Metadata object id with id [$objectId] not found");
 			return false;
 		}
 		
 		/* @var $cuePointDb CuePoint */
-		//check if we have a limitEntry set on the KS, and if so verify that it is the same entry we work on
-		$limitEntry = kCurrentContext::$ks_object->getLimitEntry();
+		//check if we have a limitEntry set on the VS, and if so verify that it is the same entry we work on
+		$limitEntry = vCurrentContext::$vs_object->getLimitEntry();
 		if ($limitEntry && $limitEntry != $cuePointDb->getEntryId())
 		{
-			throw new KalturaAPIException(KalturaCuePointErrors::NO_PERMISSION_ON_ENTRY, $cuePointDb->getEntryId());
+			throw new VidiunAPIException(VidiunCuePointErrors::NO_PERMISSION_ON_ENTRY, $cuePointDb->getEntryId());
 		}
 	
 		return true;

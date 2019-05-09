@@ -5,8 +5,8 @@
  */
 class getallentriesAction extends defPartnerservices2Action
 {
-	const LIST_TYPE_KSHOW = 1 ;
-	const LIST_TYPE_KUSER = 2 ;
+	const LIST_TYPE_VSHOW = 1 ;
+	const LIST_TYPE_VUSER = 2 ;
 	const LIST_TYPE_ROUGHCUT = 4 ;
 	const LIST_TYPE_EPISODE = 8 ;
 	const LIST_TYPE_ALL = 15;
@@ -20,7 +20,7 @@ class getallentriesAction extends defPartnerservices2Action
 				"in" => array (
 					"mandatory" => array ( 
 						"entry_id" => array ("type" => "string", "desc" => ""),
-						"kshow_id" => array ("type" => "string", "desc" => "")
+						"vshow_id" => array ("type" => "string", "desc" => "")
 						),
 					"optional" => array (
 						"list_type" => array ("type" => "integer", "desc" => ""), // TODO: describe enum
@@ -40,12 +40,12 @@ class getallentriesAction extends defPartnerservices2Action
 	
 	protected function ticketType ()	{		return self::REQUIED_TICKET_REGULAR;	}
 
-	protected function needKuserFromPuser ( )	
+	protected function needVuserFromPuser ( )	
 	{	
-			return self::KUSER_DATA_NO_KUSER;
+			return self::VUSER_DATA_NO_VUSER;
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		if (!$partner_id)
 			die;
@@ -60,8 +60,8 @@ class getallentriesAction extends defPartnerservices2Action
 			return; 
 		}
 		
-		$kshow_id =  $this->getP ( "kshow_id" );
-		list ( $kshow , $entry , $error , $error_obj ) = myKshowUtils::getKshowAndEntry( $kshow_id  , $entry_id );
+		$vshow_id =  $this->getP ( "vshow_id" );
+		list ( $vshow , $entry , $error , $error_obj ) = myVshowUtils::getVshowAndEntry( $vshow_id  , $entry_id );
 
 		if ( $error_obj )
 		{
@@ -69,7 +69,7 @@ class getallentriesAction extends defPartnerservices2Action
 			return ;
 		}
 
-		KalturaLog::log ( __METHOD__ . " kshow_id [$kshow_id] entry_id [$entry_id]" );
+		VidiunLog::log ( __METHOD__ . " vshow_id [$vshow_id] entry_id [$entry_id]" );
 
 
 		$list_type = $this->getP ( "list_type" , self::LIST_TYPE_ROUGHCUT );
@@ -77,7 +77,7 @@ class getallentriesAction extends defPartnerservices2Action
 		if ((int)$version == -1)
 			$version = null; // will retrieve the latest
 		$disable_roughcut_entry_data = $this->getP ( "disable_roughcut_entry_data" , false  );
-		$disable_user_data = $this->getP ( "disable_user_data" , false  ); // will allow to optimize the cals and NOT join with the kuser table
+		$disable_user_data = $this->getP ( "disable_user_data" , false  ); // will allow to optimize the cals and NOT join with the vuser table
 		
 		$merge_entry_lists = false;
 		if ( $this->getPartner() )
@@ -85,62 +85,62 @@ class getallentriesAction extends defPartnerservices2Action
 			$merge_entry_lists = $this->getPartner()->getMergeEntryLists();
 		}
 		
-		$kshow_entry_list = array();
-		$kuser_entry_list = array();
+		$vshow_entry_list = array();
+		$vuser_entry_list = array();
 
 		$aggrigate_id_list = array();
-$this->benchmarkStart( "list_type_kshow" );		
-		if ( ($list_type & self::LIST_TYPE_KSHOW) && $kshow_id)
+$this->benchmarkStart( "list_type_vshow" );		
+		if ( ($list_type & self::LIST_TYPE_VSHOW) && $vshow_id)
 		{
 			$c = new Criteria();
 			$c->addAnd ( entryPeer::TYPE , entryType::MEDIA_CLIP );
 //			$c->addAnd ( entryPeer::MEDIA_TYPE , entry::ENTRY_MEDIA_TYPE_SHOW , Criteria::NOT_EQUAL );
-			$c->addAnd ( entryPeer::KSHOW_ID , $kshow_id );
+			$c->addAnd ( entryPeer::VSHOW_ID , $vshow_id );
 			$this->addIgnoreIdList ($c , $aggrigate_id_list);
 			
-//			$this->addOffsetAndLimit ( $c ); // fetch as many as the kshow has
+//			$this->addOffsetAndLimit ( $c ); // fetch as many as the vshow has
 			if ( $disable_user_data )
-				$kshow_entry_list = entryPeer::doSelect( $c );
+				$vshow_entry_list = entryPeer::doSelect( $c );
 			else
-				$kshow_entry_list = entryPeer::doSelectJoinkuser( $c );
+				$vshow_entry_list = entryPeer::doSelectJoinvuser( $c );
 				
-			$this->updateAggrigatedIdList( $aggrigate_id_list , $kshow_entry_list );
+			$this->updateAggrigatedIdList( $aggrigate_id_list , $vshow_entry_list );
 		}
 		
-$this->benchmarkEnd ( "list_type_kshow" );
-$this->benchmarkStart( "list_type_kuser" );
-		if ( $list_type & self::LIST_TYPE_KUSER )
+$this->benchmarkEnd ( "list_type_vshow" );
+$this->benchmarkStart( "list_type_vuser" );
+		if ( $list_type & self::LIST_TYPE_VUSER )
 		{
-			// try to get puserKuser - PS2
-			$puser_kuser = PuserKuserPeer::retrieveByPartnerAndUid ( $partner_id , null /*$subp_id*/,  $puser_id , false );
-			// try to get kuser by partnerId & puserId - PS3 - backward compatibility
-			$apiv3Kuser = kuserPeer::getKuserByPartnerAndUid($partner_id, $puser_id, true);
+			// try to get puserVuser - PS2
+			$puser_vuser = PuserVuserPeer::retrieveByPartnerAndUid ( $partner_id , null /*$subp_id*/,  $puser_id , false );
+			// try to get vuser by partnerId & puserId - PS3 - backward compatibility
+			$apiv3Vuser = vuserPeer::getVuserByPartnerAndUid($partner_id, $puser_id, true);
 			
-			if ( ($puser_kuser && $puser_kuser->getKuserId()) || $apiv3Kuser )
+			if ( ($puser_vuser && $puser_vuser->getVuserId()) || $apiv3Vuser )
 			{
 				$c = new Criteria();
 				$c->addAnd ( entryPeer::TYPE , entryType::MEDIA_CLIP );
 //				$c->addAnd ( entryPeer::MEDIA_TYPE , entry::ENTRY_MEDIA_TYPE_SHOW , Criteria::NOT_EQUAL );
-				$kuserIds = array();
-				if($puser_kuser && $puser_kuser->getKuserId())
+				$vuserIds = array();
+				if($puser_vuser && $puser_vuser->getVuserId())
 				{
-					$kuserIds[] = $puser_kuser->getKuserId();
+					$vuserIds[] = $puser_vuser->getVuserId();
 				}
-				if($apiv3Kuser)
+				if($apiv3Vuser)
 				{
-					if(!$puser_kuser || ($puser_kuser->getKuserId() != $apiv3Kuser->getId()))
+					if(!$puser_vuser || ($puser_vuser->getVuserId() != $apiv3Vuser->getId()))
 					{
-						$kuserIds[] = $apiv3Kuser->getId();
+						$vuserIds[] = $apiv3Vuser->getId();
 					}
 				}
 /*
-				if(count($kuserIds) > 1)
+				if(count($vuserIds) > 1)
 				{
-					$c->addAnd ( entryPeer::KUSER_ID , $kuserIds, Criteria::IN );
+					$c->addAnd ( entryPeer::VUSER_ID , $vuserIds, Criteria::IN );
 				}
 				else
 				{
-					$c->addAnd ( entryPeer::KUSER_ID , $kuserIds[0] );
+					$c->addAnd ( entryPeer::VUSER_ID , $vuserIds[0] );
 				}
 				if ( $merge_entry_lists )
 				{
@@ -149,9 +149,9 @@ $this->benchmarkStart( "list_type_kuser" );
 				}
 				$this->addOffsetAndLimit ( $c ); // limit the number of the user's clips
 				if ( $disable_user_data )
-					$kuser_entry_list = entryPeer::doSelect( $c );
+					$vuser_entry_list = entryPeer::doSelect( $c );
 				else
-					$kuser_entry_list = entryPeer::doSelectJoinkuser( $c );
+					$vuser_entry_list = entryPeer::doSelectJoinvuser( $c );
 */
 				$this->addOffsetAndLimit ( $c ); // limit the number of the user's clips
 				if ( $merge_entry_lists )
@@ -160,36 +160,36 @@ $this->benchmarkStart( "list_type_kuser" );
 					$this->addIgnoreIdList ($c , $aggrigate_id_list);
 				}
 				
-				$kuser_entry_list = array(); 
-				$kuserIds = array_unique($kuserIds);
-				foreach($kuserIds as $kuserId)
+				$vuser_entry_list = array(); 
+				$vuserIds = array_unique($vuserIds);
+				foreach($vuserIds as $vuserId)
 				{
 					$newC = clone $c;
-					$newC->addAnd ( entryPeer::KUSER_ID , $kuserId );
+					$newC->addAnd ( entryPeer::VUSER_ID , $vuserId );
 
 					if ( $disable_user_data )
-						$one_kuser_list = entryPeer::doSelect( $newC );
+						$one_vuser_list = entryPeer::doSelect( $newC );
 					else
-						$one_kuser_list = entryPeer::doSelectJoinkuser( $newC );
+						$one_vuser_list = entryPeer::doSelectJoinvuser( $newC );
 					
-					$kuser_entry_list = array_merge($kuser_entry_list, $one_kuser_list);
+					$vuser_entry_list = array_merge($vuser_entry_list, $one_vuser_list);
 				}
 					
-				// Since we are using 2 potential kusers, we might not have the obvious kuser from $puser_kuser
+				// Since we are using 2 potential vusers, we might not have the obvious vuser from $puser_vuser
 				$strEntries = "";
-				if($puser_kuser)
+				if($puser_vuser)
 				{	
-					$kuser = kuserPeer::retrieveByPk($puser_kuser->getKuserId());
-					if ($kuser)
+					$vuser = vuserPeer::retrieveByPk($puser_vuser->getVuserId());
+					if ($vuser)
 					{
-						$strEntriesTemp = @unserialize($kuser->getPartnerData());
+						$strEntriesTemp = @unserialize($vuser->getPartnerData());
 						if ($strEntriesTemp)
 							$strEntries .= $strEntriesTemp;
 					}
 				}
-				if ($apiv3Kuser)
+				if ($apiv3Vuser)
 				{
-					$strEntriesTemp = @unserialize($apiv3Kuser->getPartnerData());
+					$strEntriesTemp = @unserialize($apiv3Vuser->getPartnerData());
 					if ($strEntriesTemp)
 							$strEntries .= $strEntriesTemp;
 				}
@@ -212,58 +212,58 @@ $this->benchmarkStart( "list_type_kuser" );
 					if ( $disable_user_data )
 						$extra_user_entries = entryPeer::doSelect( $c );
 					else
-						$extra_user_entries = entryPeer::doSelectJoinkuser( $c );
+						$extra_user_entries = entryPeer::doSelectJoinvuser( $c );
 										
 					if (count($extra_user_entries))
 					{
-						$kuser_entry_list = array_merge($extra_user_entries, $kuser_entry_list);
+						$vuser_entry_list = array_merge($extra_user_entries, $vuser_entry_list);
 					}
 				}
 			}
 			else
 			{
-				$kuser_entry_list = array();
+				$vuser_entry_list = array();
 			}	
 			
 			if ( $merge_entry_lists )
 			{
-				$kshow_entry_list = kArray::append  ( $kshow_entry_list , $kuser_entry_list );
-				$kuser_entry_list = array();
+				$vshow_entry_list = vArray::append  ( $vshow_entry_list , $vuser_entry_list );
+				$vuser_entry_list = array();
 			}
 		}
-$this->benchmarkEnd( "list_type_kuser" );
+$this->benchmarkEnd( "list_type_vuser" );
 $this->benchmarkStart( "list_type_episode" );
 		if ( $list_type & self::LIST_TYPE_EPISODE )
 		{
-			if ( $kshow && $kshow->getEpisodeId() )
+			if ( $vshow && $vshow->getEpisodeId() )
 			{
-				// episode_id will point to the "parent" kshow
-				// fetch the entries of the parent kshow
+				// episode_id will point to the "parent" vshow
+				// fetch the entries of the parent vshow
 				$c = new Criteria();
 				$c->addAnd ( entryPeer::TYPE , entryType::MEDIA_CLIP );
 //				$c->addAnd ( entryPeer::MEDIA_TYPE , entry::ENTRY_MEDIA_TYPE_SHOW , Criteria::NOT_EQUAL );
-				$c->addAnd ( entryPeer::KSHOW_ID , $kshow->getEpisodeId() );
+				$c->addAnd ( entryPeer::VSHOW_ID , $vshow->getEpisodeId() );
 				$this->addIgnoreIdList ($c , $aggrigate_id_list);
 //				$this->addOffsetAndLimit ( $c ); // limit the number of the inherited entries from the episode
 				if ( $disable_user_data )
-					$parent_kshow_entries = entryPeer::doSelect( $c );
+					$parent_vshow_entries = entryPeer::doSelect( $c );
 				else
-					$parent_kshow_entries = entryPeer::doSelectJoinkuser( $c );
+					$parent_vshow_entries = entryPeer::doSelectJoinvuser( $c );
 				
-				if ( count ( $parent_kshow_entries) )
+				if ( count ( $parent_vshow_entries) )
 				{
-					$kshow_entry_list = kArray::append  ( $kshow_entry_list , $parent_kshow_entries );
+					$vshow_entry_list = vArray::append  ( $vshow_entry_list , $parent_vshow_entries );
 				}
 			}
 		}
 $this->benchmarkEnd( "list_type_episode" );
-		// fetch all entries that were used in the roughcut - those of other kusers
-		// - appeared under kuser_entry_list when someone else logged in
+		// fetch all entries that were used in the roughcut - those of other vusers
+		// - appeared under vuser_entry_list when someone else logged in
 $this->benchmarkStart( "list_type_roughcut" );
 		$entry_data_from_roughcut_map = array(); // will hold an associative array where the id is the key
 		if ( $list_type & self::LIST_TYPE_ROUGHCUT )
 		{
-			if ( $entry->getType() == entryType::MIX ) //&& $kshow->getHasRoughcut() )
+			if ( $entry->getType() == entryType::MIX ) //&& $vshow->getHasRoughcut() )
 			{
 				$sync_key = $entry->getSyncKey ( entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA , $version );
 				$entry_data_from_roughcut = myFlvStreamer::getAllAssetsData ( $sync_key );
@@ -274,7 +274,7 @@ $this->benchmarkStart( "list_type_roughcut" );
 					$id = $data["id"]; // first element is the id
 					$entry_data_from_roughcut_map[] = $data;
 					$found = false;
-					foreach ( $kshow_entry_list as $entry )
+					foreach ( $vshow_entry_list as $entry )
 					{
 						// see we are not fetching duplicate entries
 						if ( $entry->getId() == $id )
@@ -301,27 +301,27 @@ $this->benchmarkStart( "list_type_roughcut" );
 					if ( $disable_user_data )
 						$extra_entries = entryPeer::doSelect( $c );
 					else
-						$extra_entries = entryPeer::doSelectJoinkuser( $c );
+						$extra_entries = entryPeer::doSelectJoinvuser( $c );
 		
 					// return the status to the criteriaFilter
 					entryPeer::blockDeletedInCriteriaFilter();
 						
 					// merge the 2 lists into 1:
-					$kshow_entry_list = kArray::append  ( $kshow_entry_list , $extra_entries );
+					$vshow_entry_list = vArray::append  ( $vshow_entry_list , $extra_entries );
 				}
 			}
 		}
 $this->benchmarkEnd( "list_type_roughcut" );
 $this->benchmarkStart( "create_wrapper" );
-		$entry_wrapper =  objectWrapperBase::getWrapperClass( $kshow_entry_list , objectWrapperBase::DETAIL_LEVEL_REGULAR , -3 ,0 ,array ( "contributorScreenName" ) );
-		//$entry_wrapper->addFields ( array ( "kuser.screenName" ) );
+		$entry_wrapper =  objectWrapperBase::getWrapperClass( $vshow_entry_list , objectWrapperBase::DETAIL_LEVEL_REGULAR , -3 ,0 ,array ( "contributorScreenName" ) );
+		//$entry_wrapper->addFields ( array ( "vuser.screenName" ) );
 		$this->addMsg ( "show" , $entry_wrapper );
 		// if ! $disable_roughcut_entry_data - add the roughcut_entry_data
 		if ( ! $disable_roughcut_entry_data )
 			$this->addMsg ( "roughcut_entry_data" , $entry_data_from_roughcut_map );
-		if ( count ( $kuser_entry_list ) > 0 ) 
+		if ( count ( $vuser_entry_list ) > 0 ) 
 		{
-			$this->addMsg ( "user" ,  objectWrapperBase::getWrapperClass( $kuser_entry_list , objectWrapperBase::DETAIL_LEVEL_REGULAR ) );
+			$this->addMsg ( "user" ,  objectWrapperBase::getWrapperClass( $vuser_entry_list , objectWrapperBase::DETAIL_LEVEL_REGULAR ) );
 		}
 		else
 		{

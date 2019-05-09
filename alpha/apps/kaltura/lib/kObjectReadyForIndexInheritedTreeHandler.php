@@ -1,10 +1,10 @@
 <?php
 
-class kObjectReadyForIndexInheritedTreeHandler implements kObjectReadyForIndexInheritedTreeEventConsumer
+class vObjectReadyForIndexInheritedTreeHandler implements vObjectReadyForIndexInheritedTreeEventConsumer
 {
 	
 	/* (non-PHPdoc)
-	 * @see kObjectReadyForIndexInheritedTreeEventConsumer::shouldConsumeReadyForIndexInheritedTreeEvent()
+	 * @see vObjectReadyForIndexInheritedTreeEventConsumer::shouldConsumeReadyForIndexInheritedTreeEvent()
 	 */
 	public function shouldConsumeReadyForIndexInheritedTreeEvent(BaseObject $object)
 	{
@@ -17,7 +17,7 @@ class kObjectReadyForIndexInheritedTreeHandler implements kObjectReadyForIndexIn
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectReadyForIndexInheritedTreeEventConsumer::objectReadyForIndexInheritedTreeEvent()
+	 * @see vObjectReadyForIndexInheritedTreeEventConsumer::objectReadyForIndexInheritedTreeEvent()
 	 */
 	public function objectReadyForIndexInheritedTreeEvent(BaseObject $object, $partnerCriteriaParams, BatchJob $raisedJob = null)
 	{

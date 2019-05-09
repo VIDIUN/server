@@ -4,7 +4,7 @@
  * @subpackage filters
  * @abstract
  */
-abstract class KalturaSearchItem extends KalturaObject
+abstract class VidiunSearchItem extends VidiunObject
 {
 	public function toObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
@@ -12,7 +12,7 @@ abstract class KalturaSearchItem extends KalturaObject
 			return null;
 			
 		$object_to_fill = parent::toObject($object_to_fill, $props_to_skip);
-		$object_to_fill->setKalturaClass(get_class($this));
+		$object_to_fill->setVidiunClass(get_class($this));
 		
 		return $object_to_fill;		
 	}

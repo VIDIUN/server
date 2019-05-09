@@ -5,10 +5,10 @@
  * @package plugins.dropFolder
  * @subpackage Scheduler
  */
-class KAsyncDropFolderWatcher extends KPeriodicWorker
+class VAsyncDropFolderWatcher extends VPeriodicWorker
 {
 	/**
-	 * @var KalturaDropFolderClientPlugin
+	 * @var VidiunDropFolderClientPlugin
 	 */
 	protected $dropFolderPlugin = null;
 
@@ -16,64 +16,64 @@ class KAsyncDropFolderWatcher extends KPeriodicWorker
 	
 			
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::DROP_FOLDER_WATCHER;
+		return VidiunBatchJobType::DROP_FOLDER_WATCHER;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::run()
+	 * @see VBatchBase::run()
 	*/
 	public function run($jobs = null)
 	{
-		$this->dropFolderPlugin = KalturaDropFolderClientPlugin::get(self::$kClient);
+		$this->dropFolderPlugin = VidiunDropFolderClientPlugin::get(self::$vClient);
 		
 		if(self::$taskConfig->isInitOnly())
 			return $this->init();
 		$folder = null;
 
 		$numberOfFoldersEachRun = self::$taskConfig->numberOfFoldersEachRun;
-		KalturaLog::log("Start running to watch $numberOfFoldersEachRun folders");
+		VidiunLog::log("Start running to watch $numberOfFoldersEachRun folders");
 		for ($i = 0; $i < $numberOfFoldersEachRun; $i++)
 		{
 			try 
 			{
-				/* @var $folder KalturaDropFolder */
+				/* @var $folder VidiunDropFolder */
 				$folder = $this->getExclusiveDropFolder();
 				if (!$folder)
 					continue;
 				$this->impersonate($folder->partnerId);
-				$engine = KDropFolderEngine::getInstance($folder->type);
+				$engine = VDropFolderEngine::getInstance($folder->type);
 				$engine->setMaximumExecutionTime(self::$taskConfig->maximumExecutionTime);
 				$engine->watchFolder($folder);
 				$this->unimpersonate();
 				$this->freeExclusiveDropFolder($folder->id);		
 									    
 			}
-			catch (kFileTransferMgrException $e)
+			catch (vFileTransferMgrException $e)
 			{
 				$this->unimpersonate();
-				if($e->getCode() == kFileTransferMgrException::cantConnect)
-					$this->freeExclusiveDropFolder($folder->id,KalturaDropFolderErrorCode::ERROR_CONNECT, DropFolderPlugin::ERROR_CONNECT_MESSAGE);
-				else if($e->getCode() == kFileTransferMgrException::cantAuthenticate)
-					$this->freeExclusiveDropFolder($folder->id,KalturaDropFolderErrorCode::ERROR_AUTENTICATE, DropFolderPlugin::ERROR_AUTENTICATE_MESSAGE);
+				if($e->getCode() == vFileTransferMgrException::cantConnect)
+					$this->freeExclusiveDropFolder($folder->id,VidiunDropFolderErrorCode::ERROR_CONNECT, DropFolderPlugin::ERROR_CONNECT_MESSAGE);
+				else if($e->getCode() == vFileTransferMgrException::cantAuthenticate)
+					$this->freeExclusiveDropFolder($folder->id,VidiunDropFolderErrorCode::ERROR_AUTENTICATE, DropFolderPlugin::ERROR_AUTENTICATE_MESSAGE);
 				else
-					$this->freeExclusiveDropFolder($folder->id,KalturaDropFolderErrorCode::ERROR_GET_PHISICAL_FILE_LIST, DropFolderPlugin::ERROR_GET_PHISICAL_FILE_LIST_MESSAGE);
+					$this->freeExclusiveDropFolder($folder->id,VidiunDropFolderErrorCode::ERROR_GET_PHISICAL_FILE_LIST, DropFolderPlugin::ERROR_GET_PHISICAL_FILE_LIST_MESSAGE);
 
 			}
-			catch (KalturaException $e)
+			catch (VidiunException $e)
 			{
 				$this->unimpersonate();
-				$this->freeExclusiveDropFolder($folder->id,KalturaDropFolderErrorCode::ERROR_GET_DB_FILE_LIST, DropFolderPlugin::ERROR_GET_DB_FILE_LIST_MESSAGE);
+				$this->freeExclusiveDropFolder($folder->id,VidiunDropFolderErrorCode::ERROR_GET_DB_FILE_LIST, DropFolderPlugin::ERROR_GET_DB_FILE_LIST_MESSAGE);
 
 			}
 			catch (Exception $e) 
 			{
 				$this->unimpersonate();
 				if ($folder)
-					$this->freeExclusiveDropFolder($folder->id,KalturaDropFolderErrorCode::DROP_FOLDER_APP_ERROR, DropFolderPlugin::DROP_FOLDER_APP_ERROR_MESSAGE.$e->getMessage());
+					$this->freeExclusiveDropFolder($folder->id,VidiunDropFolderErrorCode::DROP_FOLDER_APP_ERROR, DropFolderPlugin::DROP_FOLDER_APP_ERROR_MESSAGE.$e->getMessage());
 			}
 		}
 		
@@ -85,7 +85,7 @@ class KAsyncDropFolderWatcher extends KPeriodicWorker
 		$folderTag = self::$taskConfig->params->tags;
 		$maxTimeForFolder = self::$taskConfig->params->maxTimeForFolder;
 		if (strlen($folderTag) == 0)
-			throw new KalturaException('Tags must be specify in configuration - cannot continue');
+			throw new VidiunException('Tags must be specify in configuration - cannot continue');
 
 		$dropFolder = $this->dropFolderPlugin->dropFolder->getExclusiveDropFolder($folderTag, $maxTimeForFolder);
 		if (!is_null($dropFolder))
@@ -98,21 +98,21 @@ class KAsyncDropFolderWatcher extends KPeriodicWorker
 		if (!$dropFolderId)
 			return;
 		if ($errorDescription)
-			KalturaLog::err("Error with folder id [$dropFolderId] - $errorDescription");
+			VidiunLog::err("Error with folder id [$dropFolderId] - $errorDescription");
 		try 
 		{
 	    	$this->dropFolderPlugin->dropFolder->freeExclusiveDropFolder($dropFolderId, $errorCode, $errorDescription);
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err("Error when trying to free drop folder [$dropFolderId] - ".$e->getMessage());
+			VidiunLog::err("Error when trying to free drop folder [$dropFolderId] - ".$e->getMessage());
 		}	
 	}	
 			
 	function log($message)
 	{
-		if(!strstr($message, 'KalturaDropFolderListResponse') && !strstr($message, 'KalturaDropFolderFileListResponse'))
-			KalturaLog::info($message);
+		if(!strstr($message, 'VidiunDropFolderListResponse') && !strstr($message, 'VidiunDropFolderFileListResponse'))
+			VidiunLog::info($message);
 	}
 
 	public function preKill()

@@ -4,7 +4,7 @@ FROM
     partner_id,
     MAX(IFNULL(aggr_storage_mb,0)) peak_storage
 FROM
-    kalturadw.dwh_hourly_partner_usage
+    vidiundw.dwh_hourly_partner_usage
 WHERE
     {OBJ_ID_CLAUSE}
 AND

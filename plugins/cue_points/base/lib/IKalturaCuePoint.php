@@ -2,7 +2,7 @@
 /**
  * @package plugins.cuePoint
  */
-interface IKalturaCuePoint extends IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaSchemaContributor
+interface IVidiunCuePoint extends IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunSchemaContributor
 {
 	/**
 	 * @param string $valueName the name of the value

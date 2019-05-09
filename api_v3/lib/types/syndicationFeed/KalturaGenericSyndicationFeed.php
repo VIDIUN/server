@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaGenericSyndicationFeed extends KalturaBaseSyndicationFeed
+class VidiunGenericSyndicationFeed extends VidiunBaseSyndicationFeed
 {
     /**
     * feed description
@@ -22,7 +22,7 @@ class KalturaGenericSyndicationFeed extends KalturaBaseSyndicationFeed
 	/**
 	 * entry filter
 	 *
-	 * @var KalturaBaseEntryFilter
+	 * @var VidiunBaseEntryFilter
 	 */
 	public $entryFilter;
 
@@ -35,7 +35,7 @@ class KalturaGenericSyndicationFeed extends KalturaBaseSyndicationFeed
         
     function __construct()
 	{
-		$this->type = KalturaSyndicationFeedType::KALTURA;
+		$this->type = VidiunSyndicationFeedType::VIDIUN;
 	}
 	
 	private static $mapBetweenObjects = array

@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaDeliveryProfileGenericSilverLightFilter extends KalturaDeliveryProfileGenericSilverLightBaseFilter
+class VidiunDeliveryProfileGenericSilverLightFilter extends VidiunDeliveryProfileGenericSilverLightBaseFilter
 {
 }

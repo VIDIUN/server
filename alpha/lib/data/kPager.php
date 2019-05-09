@@ -4,7 +4,7 @@
  * @subpackage model.data
  */
 
-class kPager
+class vPager
 {
 
     /**

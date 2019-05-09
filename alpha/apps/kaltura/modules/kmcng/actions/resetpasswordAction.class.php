@@ -1,9 +1,9 @@
 <?php
 /**
  * @package    Core
- * @subpackage KMCNG
+ * @subpackage VMCNG
  */
-class resetpasswordAction extends kalturaAction
+class resetpasswordAction extends vidiunAction
 {
 	const BASE64_ENCODE_CHARS_REGEX = "/^[a-zA-Z0-9\/\+\=]+$/";
 
@@ -16,17 +16,17 @@ class resetpasswordAction extends kalturaAction
 		if ($passHashparam) {
 
 			if (!preg_match(self::BASE64_ENCODE_CHARS_REGEX , $passHashparam))
-                $hashKeyErrorCode = KExternalErrors::INVALID_HASH;
+                $hashKeyErrorCode = VExternalErrors::INVALID_HASH;
 			try {
 				if (!UserLoginDataPeer::isHashKeyValid($passHashparam)) {
-					$hashKeyErrorCode = kUserException::NEW_PASSWORD_HASH_KEY_INVALID;
+					$hashKeyErrorCode = vUserException::NEW_PASSWORD_HASH_KEY_INVALID;
 				}
 			}
-			catch (kCoreException $e) {
+			catch (vCoreException $e) {
 				$hashKeyErrorCode = $e->getCode();
 			}
 		} else {
-            $hashKeyErrorCode = KExternalErrors::INVALID_HASH;
+            $hashKeyErrorCode = VExternalErrors::INVALID_HASH;
 		}
 
 		echo json_encode(array('errorCode' =>  $hashKeyErrorCode));

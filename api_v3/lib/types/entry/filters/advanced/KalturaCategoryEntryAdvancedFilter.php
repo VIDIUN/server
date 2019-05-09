@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaCategoryEntryAdvancedFilter extends KalturaSearchItem
+class VidiunCategoryEntryAdvancedFilter extends VidiunSearchItem
 {
 	/**
 	 * @var string
@@ -16,7 +16,7 @@ class KalturaCategoryEntryAdvancedFilter extends KalturaSearchItem
 	public $categoryEntryStatusIn;
 	
 	/**
-	 * @var KalturaCategoryEntryAdvancedOrderBy
+	 * @var VidiunCategoryEntryAdvancedOrderBy
 	 */
 	public $orderBy;
 	
@@ -41,13 +41,13 @@ class KalturaCategoryEntryAdvancedFilter extends KalturaSearchItem
 	public function toObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kCategoryEntryAdvancedFilter();
+			$object_to_fill = new vCategoryEntryAdvancedFilter();
 			
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -64,12 +64,12 @@ class KalturaCategoryEntryAdvancedFilter extends KalturaSearchItem
 		}
 		else if ( !$categoriesMatchOrIsNull && !$categoryIdEqualIsNull )
 		{
-			throw new KalturaAPIException( KalturaErrors::PROPERTY_VALIDATION_ALL_MUST_BE_NULL_BUT_ONE, "categoriesMatchOr / categoryIdEqual" );
+			throw new VidiunAPIException( VidiunErrors::PROPERTY_VALIDATION_ALL_MUST_BE_NULL_BUT_ONE, "categoriesMatchOr / categoryIdEqual" );
 		}
 		else if ( !$orderByIsNull && !$categoriesMatchOrIsNull )
 		{
 			// categoriesMatchOr may yield a hierarchy of category entries, thus may not be used in conjunction with orderBy
-			throw new KalturaAPIException( KalturaErrors::PROPERTY_VALIDATION_ALL_MUST_BE_NULL_BUT_ONE, "categoriesMatchOr / orderBy" );
+			throw new VidiunAPIException( VidiunErrors::PROPERTY_VALIDATION_ALL_MUST_BE_NULL_BUT_ONE, "categoriesMatchOr / orderBy" );
 		}
 	}
 }

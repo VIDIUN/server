@@ -2,7 +2,7 @@
 /**
  * @package plugins.integration
  */
-abstract class IntegrationProviderPlugin extends KalturaPlugin implements IIntegrationProviderPlugin, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader
+abstract class IntegrationProviderPlugin extends VidiunPlugin implements IIntegrationProviderPlugin, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader
 {
 	const INTEGRATION_PLUGIN_NAME = 'integration';
 	
@@ -11,19 +11,19 @@ abstract class IntegrationProviderPlugin extends KalturaPlugin implements IInteg
 	abstract function getProvider();
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
 		$class = get_called_class();
 		$integrationVersion = $class::getRequiredIntegrationPluginVersion();
-		$dependency = new KalturaDependency(IntegrationPlugin::getPluginName(), $integrationVersion);
+		$dependency = new VidiunDependency(IntegrationPlugin::getPluginName(), $integrationVersion);
 		
 		return array($dependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -39,7 +39,7 @@ abstract class IntegrationProviderPlugin extends KalturaPlugin implements IInteg
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{			
@@ -67,8 +67,8 @@ abstract class IntegrationProviderPlugin extends KalturaPlugin implements IInteg
 	public static function getIntegrationProviderCoreValue($valueName)
 	{
 		$class = get_called_class();
-		$value = $class::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('IntegrationProviderType', $value);
+		$value = $class::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('IntegrationProviderType', $value);
 	}
 	
 	/**
@@ -77,6 +77,6 @@ abstract class IntegrationProviderPlugin extends KalturaPlugin implements IInteg
 	public static function getApiValue($valueName)
 	{
 		$class = get_called_class();
-		return $class::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return $class::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

@@ -4,10 +4,10 @@
  * @subpackage api.objects
  * @requiresPermission insert,update
  */
-class KalturaEventCuePoint extends KalturaCuePoint
+class VidiunEventCuePoint extends VidiunCuePoint
 {
 	/**
-	 * @var KalturaEventType 
+	 * @var VidiunEventType 
 	 * @filter eq,in
 	 * @requiresPermission insert,update
 	 */
@@ -24,7 +24,7 @@ class KalturaEventCuePoint extends KalturaCuePoint
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::getMapBetweenObjects()
+	 * @see VidiunCuePoint::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -32,7 +32,7 @@ class KalturaEventCuePoint extends KalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBulkUploadResultUserEntry extends KalturaBulkUploadResult
+class VidiunBulkUploadResultUserEntry extends VidiunBulkUploadResult
 {
 	/**
 	 * @var int

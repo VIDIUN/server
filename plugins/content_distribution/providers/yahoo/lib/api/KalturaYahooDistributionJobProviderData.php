@@ -3,7 +3,7 @@
  * @package plugins.yahooDistribution
  * @subpackage api.objects
  */
-class KalturaYahooDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunYahooDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -20,14 +20,14 @@ class KalturaYahooDistributionJobProviderData extends KalturaConfigurableDistrib
 	 */
 	public $videoAssetFilePath;
 	
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{		
 	    parent::__construct($distributionJobData);
 	    
 		if(!$distributionJobData)
 			return;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaYahooDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunYahooDistributionProfile))
 			return;
 		//Flavor Assets
 		$flavorAssets = assetPeer::retrieveByIds(explode(',', $distributionJobData->entryDistribution->flavorAssetIds));
@@ -39,10 +39,10 @@ class KalturaYahooDistributionJobProviderData extends KalturaConfigurableDistrib
 				{
 					/* @var $flavorAsset flavorAsset */
 					$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-					if(kFileSyncUtils::fileSync_exists($syncKey)){
+					if(vFileSyncUtils::fileSync_exists($syncKey)){
 						$id = $flavorAsset->getId();
-					    //$this->videoAssetFilePath[$id] = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
-						$videoAssetFilePathArray[$id] = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+					    //$this->videoAssetFilePath[$id] = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+						$videoAssetFilePathArray[$id] = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 					}
 				}
 			}
@@ -67,12 +67,12 @@ class KalturaYahooDistributionJobProviderData extends KalturaConfigurableDistrib
 				$largeThumbAsset = $thumbAssets[0];		
 			}
 			$syncKey = $smallThumbAsset->getSyncKey(thumbAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-			if(kFileSyncUtils::fileSync_exists($syncKey)){
-			    $this->smallThumbPath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			if(vFileSyncUtils::fileSync_exists($syncKey)){
+			    $this->smallThumbPath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 			}
 			$syncKey = $largeThumbAsset->getSyncKey(thumbAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-			if(kFileSyncUtils::fileSync_exists($syncKey)){
-			     $this->largeThumbPath= kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			if(vFileSyncUtils::fileSync_exists($syncKey)){
+			     $this->largeThumbPath= vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 			}
 		}	
 	}

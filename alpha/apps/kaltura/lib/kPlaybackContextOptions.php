@@ -1,6 +1,6 @@
 <?php
 
-class kPlaybackContextOptions
+class vPlaybackContextOptions
 {
 
 }

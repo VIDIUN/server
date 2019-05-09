@@ -45,7 +45,7 @@ class VendorCatalogItem extends BaseVendorCatalogItem implements IRelatedObject
 	}
 	
 	/**
-	 * @return kCatalogItemPricing
+	 * @return vCatalogItemPricing
 	 */
 	public function getPricing()
 	{
@@ -62,12 +62,12 @@ class VendorCatalogItem extends BaseVendorCatalogItem implements IRelatedObject
 		return 0;
 	}
 	
-	public function getKsExpiry()
+	public function getVsExpiry()
 	{
-		$ksExpiry = $this->getTurnAroundTime() * 2;
+		$vsExpiry = $this->getTurnAroundTime() * 2;
 		
-		//Minimum KS expiry should be set 7 days
-		return max($ksExpiry, dateUtils::DAY * 7);
+		//Minimum VS expiry should be set 7 days
+		return max($vsExpiry, dateUtils::DAY * 7);
 	}
 	
 	public function calculatePriceForEntry(entry $entry)

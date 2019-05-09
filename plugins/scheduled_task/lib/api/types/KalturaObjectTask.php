@@ -4,11 +4,11 @@
  * @package plugins.scheduledTask
  * @subpackage api.objects
  */
-abstract class KalturaObjectTask extends KalturaObject
+abstract class VidiunObjectTask extends VidiunObject
 {
 	/**
 	 * @readonly
-	 * @var KalturaObjectTaskType
+	 * @var VidiunObjectTaskType
 	 */
 	public $type;
 
@@ -25,7 +25,7 @@ abstract class KalturaObjectTask extends KalturaObject
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -35,7 +35,7 @@ abstract class KalturaObjectTask extends KalturaObject
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kObjectTask();
+			$dbObject = new vObjectTask();
 
 		return parent::toObject($dbObject, $skip);
 	}
@@ -48,28 +48,28 @@ abstract class KalturaObjectTask extends KalturaObject
 		$this->validatePropertyNotNull('stopProcessingOnError');
 	}
 
-	static function getInstanceByDbObject(kObjectTask $dbObject)
+	static function getInstanceByDbObject(vObjectTask $dbObject)
 	{
 		switch($dbObject->getType())
 		{
 			case ObjectTaskType::DELETE_ENTRY:
-				return new KalturaDeleteEntryObjectTask();
+				return new VidiunDeleteEntryObjectTask();
 			case ObjectTaskType::MODIFY_CATEGORIES:
-				return new KalturaModifyCategoriesObjectTask();
+				return new VidiunModifyCategoriesObjectTask();
 			case ObjectTaskType::DELETE_ENTRY_FLAVORS:
-				return new KalturaDeleteEntryFlavorsObjectTask();
+				return new VidiunDeleteEntryFlavorsObjectTask();
 			case ObjectTaskType::CONVERT_ENTRY_FLAVORS:
-				return new KalturaConvertEntryFlavorsObjectTask();
+				return new VidiunConvertEntryFlavorsObjectTask();
 			case ObjectTaskType::DELETE_LOCAL_CONTENT:
-				return new KalturaDeleteLocalContentObjectTask();
+				return new VidiunDeleteLocalContentObjectTask();
 			case ObjectTaskType::STORAGE_EXPORT:
-				return new KalturaStorageExportObjectTask();
+				return new VidiunStorageExportObjectTask();
 			case ObjectTaskType::MODIFY_ENTRY:
-				return new KalturaModifyEntryObjectTask();
+				return new VidiunModifyEntryObjectTask();
 			case ObjectTaskType::MAIL_NOTIFICATION:
-				return new KalturaMailNotificationObjectTask();
+				return new VidiunMailNotificationObjectTask();
 			default:
-				return KalturaPluginManager::loadObject('KalturaObjectTask', $dbObject->getType());
+				return VidiunPluginManager::loadObject('VidiunObjectTask', $dbObject->getType());
 		}
 	}
 }

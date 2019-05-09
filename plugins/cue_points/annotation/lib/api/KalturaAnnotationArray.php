@@ -3,17 +3,17 @@
  * @package plugins.annotation
  * @subpackage api.objects
  */
-class KalturaAnnotationArray extends KalturaTypedArray
+class VidiunAnnotationArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaAnnotationArray();
+		$newArr = new VidiunAnnotationArray();
 		if ($arr == null)
 			return $newArr;
 		
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaAnnotation();
+    		$nObj = new VidiunAnnotation();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaAnnotationArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaAnnotation");	
+		parent::__construct("VidiunAnnotation");	
 	}
 }

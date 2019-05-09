@@ -11,7 +11,7 @@
 	<field name="description" indexName="description" type="string" nullable="yes" matchable="yes" />
 	<field name="tags" indexName="tags" type="string" nullable="yes" matchable="yes" />
 	<field name="status" indexName="category_status" getter="status" type="int" orderable="yes" />
-	<field name="kuser_id" indexName="kuser_id" type="int" orderable="yes" />
+	<field name="vuser_id" indexName="vuser_id" type="int" orderable="yes" />
 	<field name="display_in_search" indexName="display_in_search" getter="optimizedDisplayInSearchIndex" type="string" orderable="yes" />
 	<field name="free_text" indexName="(str_category_id,name,tags,description,reference_id)" type="null" searchableonly="yes" matchable="yes" />
 	<field name="name_reference_id" indexName="(name,reference_id)" type="null" searchableonly="yes" />
@@ -53,14 +53,14 @@
 		<value field="partner_id" />
 	</cacheInvalidationKey>
 </object>
-<object name="categoryKuser">
+<object name="categoryVuser">
 	<field name="category_id" indexName="category_id" type="string" matchable="yes" />
-	<field name="kuser_id" indexName="kuser_id" type="string" matchable="yes" />
+	<field name="vuser_id" indexName="vuser_id" type="string" matchable="yes" />
 	<field name="category_full_ids" indexName="category_full_ids" getter="searchIndexCategoryFullIds" type="string" indexEscapeType="2" searchEscapeType="3" matchable="yes" />
 	<field name="permission_names" indexName="permission_names" getter="searchIndexPermissionNames" type="string" matchable="yes" />
 	<field name="puser_id" indexName="puser_id" type="string" matchable="yes" />
 	<field name="screen_name" indexName="screen_name" type="string" matchable="yes" />
-	<field name="status" indexName="category_kuser_status" getter="searchIndexStatus" type="string" matchable="yes" />
+	<field name="status" indexName="category_vuser_status" getter="searchIndexStatus" type="string" matchable="yes" />
 	<field name="partner_id" indexName="partner_id" type="string" />
 	<field name="update_method" indexName="update_method" getter="searchIndexUpdateMethod" type="string" matchable="yes" />
 	<field name="created_at" indexName="created_at" type="datetime" orderable="yes" />
@@ -77,7 +77,7 @@
 	<field name="tags" indexName="@name" apiName="@name" type="string" nullable="yes" matchable="yes" />
 	<field name="categories_ids" indexName="categories" apiName="@name" getter="categoriesEntryIds" type="string" nullable="yes" matchable="yes" />
 	<field name="flavor_params_ids" indexName="flavor_params" apiName="@name" getter="flavorParamsIds" type="string" nullable="yes" matchable="yes" />
-	<field name="kshow_id" indexName="@name" type="string" nullable="yes" />
+	<field name="vshow_id" indexName="@name" type="string" nullable="yes" />
 	<field name="group_id" indexName="@name" apiName="@name" type="string" nullable="yes" />
 	<field name="description" indexName="@name" apiName="@name" type="string" nullable="yes" matchable="yes" />
 	<field name="admin_tags" indexName="@name" apiName="@name" type="string" nullable="yes" matchable="yes" />
@@ -86,7 +86,7 @@
 	<field name="replacing_entry_id" indexName="@name" apiName="@name" type="string" nullable="yes" matchable="yes" />
 	<field name="replaced_entry_id" indexName="@name" apiName="@name" type="string" nullable="yes" matchable="yes" />
 	<field name="roots" indexName="@name" type="string" nullable="yes" matchable="yes" />
-	<field name="kuser_id" indexName="@name" type="string" orderable="yes" />
+	<field name="vuser_id" indexName="@name" type="string" orderable="yes" />
 	<field name="puser_id" indexName="@name" apiName="userId" type="string" />
 	<field name="status" indexName="entry_status" apiName="@name" getter="status" type="bint" orderable="yes" />
 	<field name="type" indexName="@name" apiName="@name" type="int" orderable="yes" />
@@ -112,12 +112,12 @@
 	<field name="end_date" indexName="@name" apiName="@name" type="datetime" orderable="yes" />
 	<field name="available_from" indexName="@name" type="datetime" orderable="yes" />
 	<field name="last_played_at" indexName="@name" apiName="@name" type="datetime" orderable="yes" />
-	<field name="entitled_kusers_publish" indexName="@name" type="string" nullable="yes" matchable="yes" />
-	<field name="entitled_kusers_edit" indexName="@name" type="string" nullable="yes" matchable="yes" />
-	<field name="entitled_kusers" indexName="@name" type="string" nullable="yes" />
-	<field name="entitled_kusers_view" indexName="@name" type="string" nullable="yes" matchable="yes" />
+	<field name="entitled_vusers_publish" indexName="@name" type="string" nullable="yes" matchable="yes" />
+	<field name="entitled_vusers_edit" indexName="@name" type="string" nullable="yes" matchable="yes" />
+	<field name="entitled_vusers" indexName="@name" type="string" nullable="yes" />
+	<field name="entitled_vusers_view" indexName="@name" type="string" nullable="yes" matchable="yes" />
 	<field name="privacy_by_contexts" indexName="@name" type="string" nullable="yes" />
-	<field name="creator_kuser_id" indexName="@name" type="string" />
+	<field name="creator_vuser_id" indexName="@name" type="string" />
 	<field name="creator_puser_id" indexName="@name" apiName="creatorId" type="string" />
 	<field name="dynamic_attributes" indexName="@name" type="json" matchable="yes" />
 	<field name="first_broadcast" indexName="dynamic_attributes.first_broadcast" type="null" searchableonly="yes" orderable="yes" />
@@ -140,7 +140,7 @@
 		<value field="partner_id" />
 	</cacheInvalidationKey>
 </object>
-<object name="kuser">
+<object name="vuser">
 	<field name="login_data_id" indexName="login_data_id" type="int" orderable="yes" />
 	<field name="is_admin" indexName="is_admin" type="int" orderable="yes" />
 	<field name="screen_name" indexName="screen_name" type="string" matchable="yes" />
@@ -152,7 +152,7 @@
 	<field name="tags" indexName="tags" type="string" matchable="yes" />
 	<field name="entries" indexName="entries" type="int" />
 	<field name="storage_size" indexName="storage_size" type="int" />
-	<field name="status" indexName="kuser_status" getter="status" type="int" />
+	<field name="status" indexName="vuser_status" getter="status" type="int" />
 	<field name="created_at" indexName="created_at" type="datetime" orderable="yes" />
 	<field name="updated_at" indexName="updated_at" type="datetime" orderable="yes" />
 	<field name="partner_id" indexName="partner_id" type="bint" />

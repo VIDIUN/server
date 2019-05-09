@@ -37,7 +37,7 @@ class EntryServerNodePeer extends BaseEntryServerNodePeer {
 			if(isset(self::$class_types_cache[$entryServerNodeServerType]))
 				return self::$class_types_cache[$entryServerNodeServerType];
 
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $entryServerNodeServerType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $entryServerNodeServerType);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$entryServerNodeServerType] = $extendedCls;
@@ -56,7 +56,7 @@ class EntryServerNodePeer extends BaseEntryServerNodePeer {
 	 * @param      EntryServerNodeType $serverType .
 	 * @param      PropelPDO $con the connection to use
 	 * @return 	   EntryServerNode of matching EntryServerNode
-	 * @throws     kCoreException
+	 * @throws     vCoreException
 	 */
 	public static function retrieveByEntryIdAndServerType($entryId, $serverType, PropelPDO $con = null)
 	{
@@ -74,7 +74,7 @@ class EntryServerNodePeer extends BaseEntryServerNodePeer {
 	 * @param      EntryServerNodeType $serverType .
 	 * @param      PropelPDO $con the connection to use
 	 * @return 	   int of EntryServerNodes under partnerId
-	 * @throws     kCoreException
+	 * @throws     vCoreException
 	 */
 	public static function retrieveByPartnerIdAndServerType($partnerId, $serverType, PropelPDO $con = null)
 	{
@@ -144,7 +144,7 @@ class EntryServerNodePeer extends BaseEntryServerNodePeer {
 	
 	public static function retrieveConnectedEntryServerNodesByPartner($partnerId, $excludeEntryId)
 	{		
-		$c = KalturaCriteria::create(EntryServerNodePeer::OM_CLASS);
+		$c = VidiunCriteria::create(EntryServerNodePeer::OM_CLASS);
 		$c->add(EntryServerNodePeer::PARTNER_ID, $partnerId);
 		$c->add(EntryServerNodePeer::ENTRY_ID, $excludeEntryId, Criteria::NOT_EQUAL);
 		$c->add(EntryServerNodePeer::STATUS, self::$connectedServerNodeStatuses, Criteria::IN);
@@ -155,7 +155,7 @@ class EntryServerNodePeer extends BaseEntryServerNodePeer {
 
 	public static function retrieveByServerNodeIdAndType($serverNodeId, $type)
 	{
-		$c = KalturaCriteria::create(EntryServerNodePeer::OM_CLASS);
+		$c = VidiunCriteria::create(EntryServerNodePeer::OM_CLASS);
 		$c->add(EntryServerNodePeer::SERVER_NODE_ID, $serverNodeId);
 		$c->add(EntryServerNodePeer::SERVER_TYPE, $type);
 		return EntryServerNodePeer::doSelect($c);

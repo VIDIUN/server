@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaLiveChannelSegmentBaseFilter extends KalturaRelatedFilter
+abstract class VidiunLiveChannelSegmentBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -62,12 +62,12 @@ abstract class KalturaLiveChannelSegmentBaseFilter extends KalturaRelatedFilter
 	public $updatedAtLessThanOrEqual;
 
 	/**
-	 * @var KalturaLiveChannelSegmentStatus
+	 * @var VidiunLiveChannelSegmentStatus
 	 */
 	public $statusEqual;
 
 	/**
-	 * @dynamicType KalturaLiveChannelSegmentStatus
+	 * @dynamicType VidiunLiveChannelSegmentStatus
 	 * @var string
 	 */
 	public $statusIn;

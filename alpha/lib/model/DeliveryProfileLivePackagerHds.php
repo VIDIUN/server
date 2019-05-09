@@ -14,7 +14,7 @@ class DeliveryProfileLivePackagerHds extends DeliveryProfileLiveHds {
 		
 		$httpUrl .= ".f4m";
 		
-		KalturaLog::debug("Live Stream url [$httpUrl]");
+		VidiunLog::debug("Live Stream url [$httpUrl]");
 		return $httpUrl;
 	}
 }

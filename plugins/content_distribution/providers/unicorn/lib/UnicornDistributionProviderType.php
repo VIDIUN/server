@@ -3,7 +3,7 @@
  * @package plugins.unicornDistribution
  * @subpackage lib
  */
-class UnicornDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class UnicornDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const UNICORN = 'UNICORN';
 	

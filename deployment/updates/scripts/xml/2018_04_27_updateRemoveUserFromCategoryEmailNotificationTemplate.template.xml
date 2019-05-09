@@ -16,17 +16,17 @@
     <multirequest>
         <!-- Entry was added to channel -->
         <request service="eventNotificationTemplate" action="listTemplates" plugin="eventNotification">
-            <filter objectType="KalturaEventNotificationTemplateFilter">
+            <filter objectType="VidiunEventNotificationTemplateFilter">
                 <partnerId>0</partnerId>
                 <systemNameEqual>User_Was_Removed_From_Category</systemNameEqual>
             </filter>
-            <pager objectType="KalturaFilterPager">
+            <pager objectType="VidiunFilterPager">
                 <pageSize>1</pageSize>
             </pager>
         </request>
         <request service="eventNotificationTemplate" action="update" plugin="eventNotification" partnerId="0">
             <id>{1:result:objects:0:id}</id>
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <eventType>7</eventType>
             </template>
         </request>

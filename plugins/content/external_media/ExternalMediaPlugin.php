@@ -2,7 +2,7 @@
 /**
  * @package plugins.externalMedia
  */
-class ExternalMediaPlugin extends KalturaPlugin implements IKalturaServices, IKalturaObjectLoader, IKalturaEnumerator, IKalturaTypeExtender, IKalturaSearchDataContributor, IKalturaEventConsumers, IKalturaMrssContributor
+class ExternalMediaPlugin extends VidiunPlugin implements IVidiunServices, IVidiunObjectLoader, IVidiunEnumerator, IVidiunTypeExtender, IVidiunSearchDataContributor, IVidiunEventConsumers, IVidiunMrssContributor
 {
 	const PLUGIN_NAME = 'externalMedia';
 	const EXTERNAL_MEDIA_CREATED_HANDLER = 'ExternalMediaCreatedHandler';
@@ -14,7 +14,7 @@ class ExternalMediaPlugin extends KalturaPlugin implements IKalturaServices, IKa
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -24,7 +24,7 @@ class ExternalMediaPlugin extends KalturaPlugin implements IKalturaServices, IKa
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaTypeExtender::getExtendedTypes()
+	 * @see IVidiunTypeExtender::getExtendedTypes()
 	 */
 	public static function getExtendedTypes($baseClass, $enumValue)
 	{
@@ -39,7 +39,7 @@ class ExternalMediaPlugin extends KalturaPlugin implements IKalturaServices, IKa
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
@@ -51,7 +51,7 @@ class ExternalMediaPlugin extends KalturaPlugin implements IKalturaServices, IKa
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -60,9 +60,9 @@ class ExternalMediaPlugin extends KalturaPlugin implements IKalturaServices, IKa
 			return 'ExternalMediaEntry';
 		}
 		
-		if($baseClass == 'KalturaBaseEntry' && $enumValue == ExternalMediaPlugin::getEntryTypeCoreValue(ExternalMediaEntryType::EXTERNAL_MEDIA))
+		if($baseClass == 'VidiunBaseEntry' && $enumValue == ExternalMediaPlugin::getEntryTypeCoreValue(ExternalMediaEntryType::EXTERNAL_MEDIA))
 		{
-			return 'KalturaExternalMediaEntry';
+			return 'VidiunExternalMediaEntry';
 		}
 		
 		return null;
@@ -84,8 +84,8 @@ class ExternalMediaPlugin extends KalturaPlugin implements IKalturaServices, IKa
 	 */
 	public static function getEntryTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('entryType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('entryType', $value);
 	}
 	
 	/**
@@ -93,7 +93,7 @@ class ExternalMediaPlugin extends KalturaPlugin implements IKalturaServices, IKa
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/**
@@ -116,7 +116,7 @@ class ExternalMediaPlugin extends KalturaPlugin implements IKalturaServices, IKa
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaSearchDataContributor::getSearchData()
+	 * @see IVidiunSearchDataContributor::getSearchData()
 	 */
 	public static function getSearchData(BaseObject $object)
 	{
@@ -129,9 +129,9 @@ class ExternalMediaPlugin extends KalturaPlugin implements IKalturaServices, IKa
 	}
 	
 		/* (non-PHPdoc)
-         * @see IKalturaMrssContributor::contribute()
+         * @see IVidiunMrssContributor::contribute()
          */
-        public function contribute(BaseObject $object, SimpleXMLElement $mrss, kMrssParameters $mrssParams = null)
+        public function contribute(BaseObject $object, SimpleXMLElement $mrss, vMrssParameters $mrssParams = null)
         {
                 if(!($object instanceof entry) || $object->getType() != self::getEntryTypeCoreValue(ExternalMediaEntryType::EXTERNAL_MEDIA))
                         return;
@@ -141,7 +141,7 @@ class ExternalMediaPlugin extends KalturaPlugin implements IKalturaServices, IKa
         }
 
         /* (non-PHPdoc)
-         * @see IKalturaMrssContributor::getObjectFeatureType()
+         * @see IVidiunMrssContributor::getObjectFeatureType()
          */
         public function getObjectFeatureType()
         {

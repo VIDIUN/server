@@ -3,38 +3,38 @@
  * @package api
  * @subpackage objects.factory
  */
-class KalturaSyndicationFeedFactory
+class VidiunSyndicationFeedFactory
 {
 	static function getInstanceByType ($type)
 	{
 		switch ($type) 
 		{
-			case KalturaSyndicationFeedType::GOOGLE_VIDEO:
-				$obj = new KalturaGoogleVideoSyndicationFeed();
+			case VidiunSyndicationFeedType::GOOGLE_VIDEO:
+				$obj = new VidiunGoogleVideoSyndicationFeed();
 				break;
-			case KalturaSyndicationFeedType::YAHOO:
-				$obj = new KalturaYahooSyndicationFeed();
+			case VidiunSyndicationFeedType::YAHOO:
+				$obj = new VidiunYahooSyndicationFeed();
 				break;
-			case KalturaSyndicationFeedType::ITUNES:
-				$obj = new KalturaITunesSyndicationFeed();
+			case VidiunSyndicationFeedType::ITUNES:
+				$obj = new VidiunITunesSyndicationFeed();
 				break;
-			case KalturaSyndicationFeedType::TUBE_MOGUL:
-				$obj = new KalturaTubeMogulSyndicationFeed();
+			case VidiunSyndicationFeedType::TUBE_MOGUL:
+				$obj = new VidiunTubeMogulSyndicationFeed();
 				break;
-			case KalturaSyndicationFeedType::KALTURA:
-				$obj = new KalturaGenericSyndicationFeed();
+			case VidiunSyndicationFeedType::VIDIUN:
+				$obj = new VidiunGenericSyndicationFeed();
 				break;
-			case KalturaSyndicationFeedType::KALTURA_XSLT:
-				$obj = new KalturaGenericXsltSyndicationFeed();
+			case VidiunSyndicationFeedType::VIDIUN_XSLT:
+				$obj = new VidiunGenericXsltSyndicationFeed();
 				break;
-			case KalturaSyndicationFeedType::OPERA_TV_SNAP:
-				$obj = new KalturaOperaSyndicationFeed();
+			case VidiunSyndicationFeedType::OPERA_TV_SNAP:
+				$obj = new VidiunOperaSyndicationFeed();
 				break;
-			case KalturaSyndicationFeedType::ROKU_DIRECT_PUBLISHER:
-				$obj = new KalturaRokuSyndicationFeed();
+			case VidiunSyndicationFeedType::ROKU_DIRECT_PUBLISHER:
+				$obj = new VidiunRokuSyndicationFeed();
 				break;
 			default:
-				$obj = new KalturaBaseSyndicationFeed();
+				$obj = new VidiunBaseSyndicationFeed();
 				break;
 		}
 		
@@ -45,24 +45,24 @@ class KalturaSyndicationFeedFactory
 	{
 		switch ($type)
 		{
-			case KalturaSyndicationFeedType::GOOGLE_VIDEO:
+			case VidiunSyndicationFeedType::GOOGLE_VIDEO:
 				$obj = new GoogleVideoFeedRenderer();
 				break;
-			case KalturaSyndicationFeedType::YAHOO:
+			case VidiunSyndicationFeedType::YAHOO:
 				$obj = new YahooFeedRenderer();
 				break;
-			case KalturaSyndicationFeedType::ITUNES:
+			case VidiunSyndicationFeedType::ITUNES:
 				$obj = new ITunesFeedRenderer();
 				break;
-			case KalturaSyndicationFeedType::TUBE_MOGUL:
+			case VidiunSyndicationFeedType::TUBE_MOGUL:
 				$obj = new TubeMogulFeedRenderer();
 				break;
-			case KalturaSyndicationFeedType::KALTURA:
-			case KalturaSyndicationFeedType::KALTURA_XSLT:
-			case KalturaSyndicationFeedType::OPERA_TV_SNAP:
-			case KalturaSyndicationFeedType::ROKU_DIRECT_PUBLISHER:
+			case VidiunSyndicationFeedType::VIDIUN:
+			case VidiunSyndicationFeedType::VIDIUN_XSLT:
+			case VidiunSyndicationFeedType::OPERA_TV_SNAP:
+			case VidiunSyndicationFeedType::ROKU_DIRECT_PUBLISHER:
 			default:
-				return new KalturaFeedRenderer();
+				return new VidiunFeedRenderer();
 				break;
 		}
 		return $obj;

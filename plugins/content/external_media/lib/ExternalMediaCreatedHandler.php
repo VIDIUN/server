@@ -3,10 +3,10 @@
  * @package plugins.externalMedia
  * @subpackage lib
  */
-class ExternalMediaCreatedHandler implements kObjectAddedEventConsumer
+class ExternalMediaCreatedHandler implements vObjectAddedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeAddedEvent()
+	 * @see vObjectAddedEventConsumer::shouldConsumeAddedEvent()
 	 */
 	public function shouldConsumeAddedEvent(BaseObject $object)
 	{
@@ -17,7 +17,7 @@ class ExternalMediaCreatedHandler implements kObjectAddedEventConsumer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::objectAdded()
+	 * @see vObjectAddedEventConsumer::objectAdded()
 	 */
 	public function objectAdded(BaseObject $object, BatchJob $raisedJob = null)
 	{

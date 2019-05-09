@@ -2,7 +2,7 @@
 
 
 /**
- * This class defines the structure of the 'kshow_kuser' table.
+ * This class defines the structure of the 'vshow_vuser' table.
  *
  *
  *
@@ -14,12 +14,12 @@
  * @package Core
  * @subpackage model.map
  */
-class KshowKuserTableMap extends TableMap {
+class VshowVuserTableMap extends TableMap {
 
 	/**
 	 * The (dot-path) name of this class
 	 */
-	const CLASS_NAME = 'Core.KshowKuserTableMap';
+	const CLASS_NAME = 'Core.VshowVuserTableMap';
 
 	/**
 	 * Initialize the table attributes, columns and validators
@@ -31,14 +31,14 @@ class KshowKuserTableMap extends TableMap {
 	public function initialize()
 	{
 	  // attributes
-		$this->setName('kshow_kuser');
-		$this->setPhpName('KshowKuser');
-		$this->setClassname('KshowKuser');
+		$this->setName('vshow_vuser');
+		$this->setPhpName('VshowVuser');
+		$this->setClassname('VshowVuser');
 		$this->setPackage('Core');
 		$this->setUseIdGenerator(true);
 		// columns
-		$this->addForeignKey('KSHOW_ID', 'KshowId', 'VARCHAR', 'kshow', 'ID', false, 20, null);
-		$this->addForeignKey('KUSER_ID', 'KuserId', 'INTEGER', 'kuser', 'ID', false, null, null);
+		$this->addForeignKey('VSHOW_ID', 'VshowId', 'VARCHAR', 'vshow', 'ID', false, 20, null);
+		$this->addForeignKey('VUSER_ID', 'VuserId', 'INTEGER', 'vuser', 'ID', false, null, null);
 		$this->addColumn('SUBSCRIPTION_TYPE', 'SubscriptionType', 'INTEGER', false, null, null);
 		$this->addColumn('ALERT_TYPE', 'AlertType', 'INTEGER', false, null, null);
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
@@ -50,8 +50,8 @@ class KshowKuserTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('kshow', 'kshow', RelationMap::MANY_TO_ONE, array('kshow_id' => 'id', ), null, null);
-    $this->addRelation('kuser', 'kuser', RelationMap::MANY_TO_ONE, array('kuser_id' => 'id', ), null, null);
+    $this->addRelation('vshow', 'vshow', RelationMap::MANY_TO_ONE, array('vshow_id' => 'id', ), null, null);
+    $this->addRelation('vuser', 'vuser', RelationMap::MANY_TO_ONE, array('vuser_id' => 'id', ), null, null);
 	} // buildRelations()
 
-} // KshowKuserTableMap
+} // VshowVuserTableMap

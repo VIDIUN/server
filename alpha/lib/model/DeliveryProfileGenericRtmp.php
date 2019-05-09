@@ -30,7 +30,7 @@ class DeliveryProfileGenericRtmp extends DeliveryProfileRtmp {
 		$pattern = $this->getPattern();
 		if(is_null($pattern))
 			$pattern = '{$url}';
-		return kDeliveryUtils::formatGenericUrl($url, $pattern, $this->params);
+		return vDeliveryUtils::formatGenericUrl($url, $pattern, $this->params);
 	}
 	
 	protected function doGetFileSyncUrl(FileSync $fileSync)
@@ -39,7 +39,7 @@ class DeliveryProfileGenericRtmp extends DeliveryProfileRtmp {
 		$pattern = $this->getPattern();
 		if(is_null($pattern))
 			$pattern = '{url}';
-		return kDeliveryUtils::formatGenericUrl($url, $pattern, $this->params);
+		return vDeliveryUtils::formatGenericUrl($url, $pattern, $this->params);
 	}
 	
 	protected function formatByExtension($url, $addPostfix = true) {

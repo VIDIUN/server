@@ -1,6 +1,6 @@
 <?php
 
-abstract class kObjectDeleteHandlerBase {
+abstract class vObjectDeleteHandlerBase {
     /**
      * @param string $id
      * @param int $type
@@ -15,8 +15,8 @@ abstract class kObjectDeleteHandlerBase {
         $fileSyncs = FileSyncPeer::doSelect($c);
         foreach($fileSyncs as $fileSync)
         {
-            $key = kFileSyncUtils::getKeyForFileSync($fileSync);
-            kFileSyncUtils::deleteSyncFileForKey($key);
+            $key = vFileSyncUtils::getKeyForFileSync($fileSync);
+            vFileSyncUtils::deleteSyncFileForKey($key);
         }
     }
 }

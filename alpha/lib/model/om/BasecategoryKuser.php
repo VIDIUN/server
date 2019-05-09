@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Base class that represents a row from the 'category_kuser' table.
+ * Base class that represents a row from the 'category_vuser' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class BasecategoryKuser extends BaseObject  implements Persistent {
+abstract class BasecategoryVuser extends BaseObject  implements Persistent {
 
 
 	/**
 	 * The Peer class.
 	 * Instance provides a convenient way of calling static methods on a class
 	 * that calling code may not be able to identify.
-	 * @var        categoryKuserPeer
+	 * @var        categoryVuserPeer
 	 */
 	protected static $peer;
 
@@ -32,10 +32,10 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	protected $category_id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the puser_id field.
@@ -115,9 +115,9 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	protected $acategory;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuser;
+	protected $avuser;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -185,13 +185,13 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -378,12 +378,12 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setId($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryKuserPeer::ID]))
-			$this->oldColumnsValues[categoryKuserPeer::ID] = $this->id;
+		if(!isset($this->oldColumnsValues[categoryVuserPeer::ID]))
+			$this->oldColumnsValues[categoryVuserPeer::ID] = $this->id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -391,7 +391,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		if ($this->id !== $v) {
 			$this->id = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::ID;
+			$this->modifiedColumns[] = categoryVuserPeer::ID;
 		}
 
 		return $this;
@@ -401,12 +401,12 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * Set the value of [category_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setCategoryId($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryKuserPeer::CATEGORY_ID]))
-			$this->oldColumnsValues[categoryKuserPeer::CATEGORY_ID] = $this->category_id;
+		if(!isset($this->oldColumnsValues[categoryVuserPeer::CATEGORY_ID]))
+			$this->oldColumnsValues[categoryVuserPeer::CATEGORY_ID] = $this->category_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -414,7 +414,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		if ($this->category_id !== $v) {
 			$this->category_id = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::CATEGORY_ID;
+			$this->modifiedColumns[] = categoryVuserPeer::CATEGORY_ID;
 		}
 
 		if ($this->acategory !== null && $this->acategory->getId() !== $v) {
@@ -425,42 +425,42 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	} // setCategoryId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryKuserPeer::KUSER_ID]))
-			$this->oldColumnsValues[categoryKuserPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[categoryVuserPeer::VUSER_ID]))
+			$this->oldColumnsValues[categoryVuserPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = categoryVuserPeer::VUSER_ID;
 		}
 
-		if ($this->akuser !== null && $this->akuser->getId() !== $v) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->avuser->getId() !== $v) {
+			$this->avuser = null;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [puser_id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setPuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryKuserPeer::PUSER_ID]))
-			$this->oldColumnsValues[categoryKuserPeer::PUSER_ID] = $this->puser_id;
+		if(!isset($this->oldColumnsValues[categoryVuserPeer::PUSER_ID]))
+			$this->oldColumnsValues[categoryVuserPeer::PUSER_ID] = $this->puser_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -468,7 +468,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		if ($this->puser_id !== $v) {
 			$this->puser_id = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::PUSER_ID;
+			$this->modifiedColumns[] = categoryVuserPeer::PUSER_ID;
 		}
 
 		return $this;
@@ -478,12 +478,12 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * Set the value of [screen_name] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setScreenName($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryKuserPeer::SCREEN_NAME]))
-			$this->oldColumnsValues[categoryKuserPeer::SCREEN_NAME] = $this->screen_name;
+		if(!isset($this->oldColumnsValues[categoryVuserPeer::SCREEN_NAME]))
+			$this->oldColumnsValues[categoryVuserPeer::SCREEN_NAME] = $this->screen_name;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -491,7 +491,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		if ($this->screen_name !== $v) {
 			$this->screen_name = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::SCREEN_NAME;
+			$this->modifiedColumns[] = categoryVuserPeer::SCREEN_NAME;
 		}
 
 		return $this;
@@ -501,12 +501,12 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * Set the value of [partner_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setPartnerId($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryKuserPeer::PARTNER_ID]))
-			$this->oldColumnsValues[categoryKuserPeer::PARTNER_ID] = $this->partner_id;
+		if(!isset($this->oldColumnsValues[categoryVuserPeer::PARTNER_ID]))
+			$this->oldColumnsValues[categoryVuserPeer::PARTNER_ID] = $this->partner_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -514,7 +514,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		if ($this->partner_id !== $v) {
 			$this->partner_id = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::PARTNER_ID;
+			$this->modifiedColumns[] = categoryVuserPeer::PARTNER_ID;
 		}
 
 		return $this;
@@ -524,12 +524,12 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * Set the value of [permission_level] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setPermissionLevel($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryKuserPeer::PERMISSION_LEVEL]))
-			$this->oldColumnsValues[categoryKuserPeer::PERMISSION_LEVEL] = $this->permission_level;
+		if(!isset($this->oldColumnsValues[categoryVuserPeer::PERMISSION_LEVEL]))
+			$this->oldColumnsValues[categoryVuserPeer::PERMISSION_LEVEL] = $this->permission_level;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -537,7 +537,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		if ($this->permission_level !== $v) {
 			$this->permission_level = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::PERMISSION_LEVEL;
+			$this->modifiedColumns[] = categoryVuserPeer::PERMISSION_LEVEL;
 		}
 
 		return $this;
@@ -547,12 +547,12 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * Set the value of [status] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setStatus($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryKuserPeer::STATUS]))
-			$this->oldColumnsValues[categoryKuserPeer::STATUS] = $this->status;
+		if(!isset($this->oldColumnsValues[categoryVuserPeer::STATUS]))
+			$this->oldColumnsValues[categoryVuserPeer::STATUS] = $this->status;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -560,7 +560,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		if ($this->status !== $v) {
 			$this->status = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::STATUS;
+			$this->modifiedColumns[] = categoryVuserPeer::STATUS;
 		}
 
 		return $this;
@@ -570,12 +570,12 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * Set the value of [inherit_from_category] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setInheritFromCategory($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryKuserPeer::INHERIT_FROM_CATEGORY]))
-			$this->oldColumnsValues[categoryKuserPeer::INHERIT_FROM_CATEGORY] = $this->inherit_from_category;
+		if(!isset($this->oldColumnsValues[categoryVuserPeer::INHERIT_FROM_CATEGORY]))
+			$this->oldColumnsValues[categoryVuserPeer::INHERIT_FROM_CATEGORY] = $this->inherit_from_category;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -583,7 +583,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		if ($this->inherit_from_category !== $v) {
 			$this->inherit_from_category = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::INHERIT_FROM_CATEGORY;
+			$this->modifiedColumns[] = categoryVuserPeer::INHERIT_FROM_CATEGORY;
 		}
 
 		return $this;
@@ -593,12 +593,12 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * Set the value of [update_method] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setUpdateMethod($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryKuserPeer::UPDATE_METHOD]))
-			$this->oldColumnsValues[categoryKuserPeer::UPDATE_METHOD] = $this->update_method;
+		if(!isset($this->oldColumnsValues[categoryVuserPeer::UPDATE_METHOD]))
+			$this->oldColumnsValues[categoryVuserPeer::UPDATE_METHOD] = $this->update_method;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -606,7 +606,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		if ($this->update_method !== $v) {
 			$this->update_method = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::UPDATE_METHOD;
+			$this->modifiedColumns[] = categoryVuserPeer::UPDATE_METHOD;
 		}
 
 		return $this;
@@ -617,7 +617,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setCreatedAt($v)
 	{
@@ -654,7 +654,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 					)
 			{
 				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = categoryKuserPeer::CREATED_AT;
+				$this->modifiedColumns[] = categoryVuserPeer::CREATED_AT;
 			}
 		} // if either are not null
 
@@ -666,7 +666,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setUpdatedAt($v)
 	{
@@ -703,7 +703,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 					)
 			{
 				$this->updated_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = categoryKuserPeer::UPDATED_AT;
+				$this->modifiedColumns[] = categoryVuserPeer::UPDATED_AT;
 			}
 		} // if either are not null
 
@@ -714,7 +714,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * Set the value of [custom_data] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setCustomData($v)
 	{
@@ -724,7 +724,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		if ($this->custom_data !== $v) {
 			$this->custom_data = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::CUSTOM_DATA;
+			$this->modifiedColumns[] = categoryVuserPeer::CUSTOM_DATA;
 		}
 
 		return $this;
@@ -734,12 +734,12 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * Set the value of [category_full_ids] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setCategoryFullIds($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryKuserPeer::CATEGORY_FULL_IDS]))
-			$this->oldColumnsValues[categoryKuserPeer::CATEGORY_FULL_IDS] = $this->category_full_ids;
+		if(!isset($this->oldColumnsValues[categoryVuserPeer::CATEGORY_FULL_IDS]))
+			$this->oldColumnsValues[categoryVuserPeer::CATEGORY_FULL_IDS] = $this->category_full_ids;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -747,7 +747,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		if ($this->category_full_ids !== $v) {
 			$this->category_full_ids = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::CATEGORY_FULL_IDS;
+			$this->modifiedColumns[] = categoryVuserPeer::CATEGORY_FULL_IDS;
 		}
 
 		return $this;
@@ -757,12 +757,12 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * Set the value of [permission_names] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 */
 	public function setPermissionNames($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryKuserPeer::PERMISSION_NAMES]))
-			$this->oldColumnsValues[categoryKuserPeer::PERMISSION_NAMES] = $this->permission_names;
+		if(!isset($this->oldColumnsValues[categoryVuserPeer::PERMISSION_NAMES]))
+			$this->oldColumnsValues[categoryVuserPeer::PERMISSION_NAMES] = $this->permission_names;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -770,7 +770,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		if ($this->permission_names !== $v) {
 			$this->permission_names = $v;
-			$this->modifiedColumns[] = categoryKuserPeer::PERMISSION_NAMES;
+			$this->modifiedColumns[] = categoryVuserPeer::PERMISSION_NAMES;
 		}
 
 		return $this;
@@ -810,7 +810,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->category_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-			$this->kuser_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+			$this->vuser_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
 			$this->puser_id = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->screen_name = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
 			$this->partner_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
@@ -832,10 +832,10 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 15; // 15 = categoryKuserPeer::NUM_COLUMNS - categoryKuserPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 15; // 15 = categoryVuserPeer::NUM_COLUMNS - categoryVuserPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
-			throw new PropelException("Error populating categoryKuser object", $e);
+			throw new PropelException("Error populating categoryVuser object", $e);
 		}
 	}
 
@@ -858,8 +858,8 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 		if ($this->acategory !== null && $this->category_id !== $this->acategory->getId()) {
 			$this->acategory = null;
 		}
-		if ($this->akuser !== null && $this->kuser_id !== $this->akuser->getId()) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->vuser_id !== $this->avuser->getId()) {
+			$this->avuser = null;
 		}
 	} // ensureConsistency
 
@@ -884,15 +884,15 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(categoryKuserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(categoryVuserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		// We don't need to alter the object instance pool; we're just modifying this instance
 		// already in the pool.
 
-		categoryKuserPeer::setUseCriteriaFilter(false);
-		$stmt = categoryKuserPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
-		categoryKuserPeer::setUseCriteriaFilter(true);
+		categoryVuserPeer::setUseCriteriaFilter(false);
+		$stmt = categoryVuserPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+		categoryVuserPeer::setUseCriteriaFilter(true);
 		$row = $stmt->fetch(PDO::FETCH_NUM);
 		$stmt->closeCursor();
 		if (!$row) {
@@ -903,7 +903,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 		if ($deep) {  // also de-associate any related objects?
 
 			$this->acategory = null;
-			$this->akuser = null;
+			$this->avuser = null;
 		} // if (deep)
 	}
 
@@ -923,14 +923,14 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(categoryKuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(categoryVuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
 			$ret = $this->preDelete($con);
 			if ($ret) {
-				categoryKuserPeer::doDelete($this, $con);
+				categoryVuserPeer::doDelete($this, $con);
 				$this->postDelete($con);
 				$this->setDeleted(true);
 				$con->commit();
@@ -963,7 +963,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(categoryKuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(categoryVuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
@@ -983,7 +983,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 					$this->postUpdate($con);
 				}
 				$this->postSave($con);
-				categoryKuserPeer::addInstanceToPool($this);
+				categoryVuserPeer::addInstanceToPool($this);
 			} else {
 				$affectedRows = 0;
 			}
@@ -1029,22 +1029,22 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 				$this->setcategory($this->acategory);
 			}
 
-			if ($this->akuser !== null) {
-				if ($this->akuser->isModified() || $this->akuser->isNew()) {
-					$affectedRows += $this->akuser->save($con);
+			if ($this->avuser !== null) {
+				if ($this->avuser->isModified() || $this->avuser->isNew()) {
+					$affectedRows += $this->avuser->save($con);
 				}
-				$this->setkuser($this->akuser);
+				$this->setvuser($this->avuser);
 			}
 
 			if ($this->isNew() ) {
-				$this->modifiedColumns[] = categoryKuserPeer::ID;
+				$this->modifiedColumns[] = categoryVuserPeer::ID;
 			}
 
 			// If this object has been modified, then save it to the database.
 			$this->objectSaved = false;
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = categoryKuserPeer::doInsert($this, $con);
+					$pk = categoryVuserPeer::doInsert($this, $con);
 					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
 										 // should always be true here (even though technically
 										 // BasePeer::doInsert() can insert multiple rows).
@@ -1054,7 +1054,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 					$this->setNew(false);
 					$this->objectSaved = true;
 				} else {
-					$affectedObjects = categoryKuserPeer::doUpdate($this, $con);
+					$affectedObjects = categoryVuserPeer::doUpdate($this, $con);
 					if($affectedObjects)
 						$this->objectSaved = true;
 						
@@ -1102,7 +1102,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1128,12 +1128,12 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1151,8 +1151,8 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1165,7 +1165,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 */
 	public function postDelete(PropelPDO $con = null)
 	{
-		kEventsManager::raiseEvent(new kObjectErasedEvent($this));
+		vEventsManager::raiseEvent(new vObjectErasedEvent($this));
 		
 		parent::postDelete($con);
 	}
@@ -1294,14 +1294,14 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 				}
 			}
 
-			if ($this->akuser !== null) {
-				if (!$this->akuser->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuser->getValidationFailures());
+			if ($this->avuser !== null) {
+				if (!$this->avuser->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuser->getValidationFailures());
 				}
 			}
 
 
-			if (($retval = categoryKuserPeer::doValidate($this, $columns)) !== true) {
+			if (($retval = categoryVuserPeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
@@ -1324,7 +1324,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = categoryKuserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = categoryVuserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		$field = $this->getByPosition($pos);
 		return $field;
 	}
@@ -1346,7 +1346,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 				return $this->getCategoryId();
 				break;
 			case 2:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 3:
 				return $this->getPuserId();
@@ -1403,11 +1403,11 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
-		$keys = categoryKuserPeer::getFieldNames($keyType);
+		$keys = categoryVuserPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getCategoryId(),
-			$keys[2] => $this->getKuserId(),
+			$keys[2] => $this->getVuserId(),
 			$keys[3] => $this->getPuserId(),
 			$keys[4] => $this->getScreenName(),
 			$keys[5] => $this->getPartnerId(),
@@ -1436,7 +1436,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 */
 	public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = categoryKuserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = categoryVuserPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->setByPosition($pos, $value);
 	}
 
@@ -1458,7 +1458,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 				$this->setCategoryId($value);
 				break;
 			case 2:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 3:
 				$this->setPuserId($value);
@@ -1518,11 +1518,11 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 */
 	public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
 	{
-		$keys = categoryKuserPeer::getFieldNames($keyType);
+		$keys = categoryVuserPeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setCategoryId($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setKuserId($arr[$keys[2]]);
+		if (array_key_exists($keys[2], $arr)) $this->setVuserId($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setPuserId($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setScreenName($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setPartnerId($arr[$keys[5]]);
@@ -1544,23 +1544,23 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 */
 	public function buildCriteria()
 	{
-		$criteria = new Criteria(categoryKuserPeer::DATABASE_NAME);
+		$criteria = new Criteria(categoryVuserPeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(categoryKuserPeer::ID)) $criteria->add(categoryKuserPeer::ID, $this->id);
-		if ($this->isColumnModified(categoryKuserPeer::CATEGORY_ID)) $criteria->add(categoryKuserPeer::CATEGORY_ID, $this->category_id);
-		if ($this->isColumnModified(categoryKuserPeer::KUSER_ID)) $criteria->add(categoryKuserPeer::KUSER_ID, $this->kuser_id);
-		if ($this->isColumnModified(categoryKuserPeer::PUSER_ID)) $criteria->add(categoryKuserPeer::PUSER_ID, $this->puser_id);
-		if ($this->isColumnModified(categoryKuserPeer::SCREEN_NAME)) $criteria->add(categoryKuserPeer::SCREEN_NAME, $this->screen_name);
-		if ($this->isColumnModified(categoryKuserPeer::PARTNER_ID)) $criteria->add(categoryKuserPeer::PARTNER_ID, $this->partner_id);
-		if ($this->isColumnModified(categoryKuserPeer::PERMISSION_LEVEL)) $criteria->add(categoryKuserPeer::PERMISSION_LEVEL, $this->permission_level);
-		if ($this->isColumnModified(categoryKuserPeer::STATUS)) $criteria->add(categoryKuserPeer::STATUS, $this->status);
-		if ($this->isColumnModified(categoryKuserPeer::INHERIT_FROM_CATEGORY)) $criteria->add(categoryKuserPeer::INHERIT_FROM_CATEGORY, $this->inherit_from_category);
-		if ($this->isColumnModified(categoryKuserPeer::UPDATE_METHOD)) $criteria->add(categoryKuserPeer::UPDATE_METHOD, $this->update_method);
-		if ($this->isColumnModified(categoryKuserPeer::CREATED_AT)) $criteria->add(categoryKuserPeer::CREATED_AT, $this->created_at);
-		if ($this->isColumnModified(categoryKuserPeer::UPDATED_AT)) $criteria->add(categoryKuserPeer::UPDATED_AT, $this->updated_at);
-		if ($this->isColumnModified(categoryKuserPeer::CUSTOM_DATA)) $criteria->add(categoryKuserPeer::CUSTOM_DATA, $this->custom_data);
-		if ($this->isColumnModified(categoryKuserPeer::CATEGORY_FULL_IDS)) $criteria->add(categoryKuserPeer::CATEGORY_FULL_IDS, $this->category_full_ids);
-		if ($this->isColumnModified(categoryKuserPeer::PERMISSION_NAMES)) $criteria->add(categoryKuserPeer::PERMISSION_NAMES, $this->permission_names);
+		if ($this->isColumnModified(categoryVuserPeer::ID)) $criteria->add(categoryVuserPeer::ID, $this->id);
+		if ($this->isColumnModified(categoryVuserPeer::CATEGORY_ID)) $criteria->add(categoryVuserPeer::CATEGORY_ID, $this->category_id);
+		if ($this->isColumnModified(categoryVuserPeer::VUSER_ID)) $criteria->add(categoryVuserPeer::VUSER_ID, $this->vuser_id);
+		if ($this->isColumnModified(categoryVuserPeer::PUSER_ID)) $criteria->add(categoryVuserPeer::PUSER_ID, $this->puser_id);
+		if ($this->isColumnModified(categoryVuserPeer::SCREEN_NAME)) $criteria->add(categoryVuserPeer::SCREEN_NAME, $this->screen_name);
+		if ($this->isColumnModified(categoryVuserPeer::PARTNER_ID)) $criteria->add(categoryVuserPeer::PARTNER_ID, $this->partner_id);
+		if ($this->isColumnModified(categoryVuserPeer::PERMISSION_LEVEL)) $criteria->add(categoryVuserPeer::PERMISSION_LEVEL, $this->permission_level);
+		if ($this->isColumnModified(categoryVuserPeer::STATUS)) $criteria->add(categoryVuserPeer::STATUS, $this->status);
+		if ($this->isColumnModified(categoryVuserPeer::INHERIT_FROM_CATEGORY)) $criteria->add(categoryVuserPeer::INHERIT_FROM_CATEGORY, $this->inherit_from_category);
+		if ($this->isColumnModified(categoryVuserPeer::UPDATE_METHOD)) $criteria->add(categoryVuserPeer::UPDATE_METHOD, $this->update_method);
+		if ($this->isColumnModified(categoryVuserPeer::CREATED_AT)) $criteria->add(categoryVuserPeer::CREATED_AT, $this->created_at);
+		if ($this->isColumnModified(categoryVuserPeer::UPDATED_AT)) $criteria->add(categoryVuserPeer::UPDATED_AT, $this->updated_at);
+		if ($this->isColumnModified(categoryVuserPeer::CUSTOM_DATA)) $criteria->add(categoryVuserPeer::CUSTOM_DATA, $this->custom_data);
+		if ($this->isColumnModified(categoryVuserPeer::CATEGORY_FULL_IDS)) $criteria->add(categoryVuserPeer::CATEGORY_FULL_IDS, $this->category_full_ids);
+		if ($this->isColumnModified(categoryVuserPeer::PERMISSION_NAMES)) $criteria->add(categoryVuserPeer::PERMISSION_NAMES, $this->permission_names);
 
 		return $criteria;
 	}
@@ -1575,18 +1575,18 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 */
 	public function buildPkeyCriteria()
 	{
-		$criteria = new Criteria(categoryKuserPeer::DATABASE_NAME);
+		$criteria = new Criteria(categoryVuserPeer::DATABASE_NAME);
 
-		$criteria->add(categoryKuserPeer::ID, $this->id);
+		$criteria->add(categoryVuserPeer::ID, $this->id);
 		
-		if($this->alreadyInSave && count($this->modifiedColumns) == 2 && $this->isColumnModified(categoryKuserPeer::UPDATED_AT))
+		if($this->alreadyInSave && count($this->modifiedColumns) == 2 && $this->isColumnModified(categoryVuserPeer::UPDATED_AT))
 		{
 			$theModifiedColumn = null;
 			foreach($this->modifiedColumns as $modifiedColumn)
-				if($modifiedColumn != categoryKuserPeer::UPDATED_AT)
+				if($modifiedColumn != categoryVuserPeer::UPDATED_AT)
 					$theModifiedColumn = $modifiedColumn;
 					
-			$atomicColumns = categoryKuserPeer::getAtomicColumns();
+			$atomicColumns = categoryVuserPeer::getAtomicColumns();
 			if(in_array($theModifiedColumn, $atomicColumns))
 				$criteria->add($theModifiedColumn, $this->getByName($theModifiedColumn, BasePeer::TYPE_COLNAME), Criteria::NOT_EQUAL);
 		}
@@ -1620,7 +1620,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * If desired, this method can also make copies of all associated (fkey referrers)
 	 * objects.
 	 *
-	 * @param      object $copyObj An object of categoryKuser (or compatible) type.
+	 * @param      object $copyObj An object of categoryVuser (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
 	 * @throws     PropelException
 	 */
@@ -1629,7 +1629,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 		$copyObj->setCategoryId($this->category_id);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setPuserId($this->puser_id);
 
@@ -1671,7 +1671,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * objects.
 	 *
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-	 * @return     categoryKuser Clone of current object.
+	 * @return     categoryVuser Clone of current object.
 	 * @throws     PropelException
 	 */
 	public function copy($deepCopy = false)
@@ -1687,16 +1687,16 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @var     categoryKuser Clone of current object.
+	 * @var     categoryVuser Clone of current object.
 	 */
 	protected $copiedFrom = null;
 	
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @param      categoryKuser $copiedFrom Clone of current object.
+	 * @param      categoryVuser $copiedFrom Clone of current object.
 	 */
-	public function setCopiedFrom(categoryKuser $copiedFrom)
+	public function setCopiedFrom(categoryVuser $copiedFrom)
 	{
 		$this->copiedFrom = $copiedFrom;
 	}
@@ -1708,12 +1708,12 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * same instance for all member of this class. The method could therefore
 	 * be static, but this would prevent one from overriding the behavior.
 	 *
-	 * @return     categoryKuserPeer
+	 * @return     categoryVuserPeer
 	 */
 	public function getPeer()
 	{
 		if (self::$peer === null) {
-			self::$peer = new categoryKuserPeer();
+			self::$peer = new categoryVuserPeer();
 		}
 		return self::$peer;
 	}
@@ -1722,7 +1722,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	 * Declares an association between this object and a category object.
 	 *
 	 * @param      category $v
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @return     categoryVuser The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
 	public function setcategory(category $v = null)
@@ -1738,7 +1738,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 		// Add binding for other direction of this n:n relationship.
 		// If this object has already been added to the category object, it will not be re-added.
 		if ($v !== null) {
-			$v->addcategoryKuser($this);
+			$v->addcategoryVuser($this);
 		}
 
 		return $this;
@@ -1761,33 +1761,33 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->acategory->addcategoryKusers($this);
+			   $this->acategory->addcategoryVusers($this);
 			 */
 		}
 		return $this->acategory;
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
-	 * @return     categoryKuser The current object (for fluent API support)
+	 * @param      vuser $v
+	 * @return     categoryVuser The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuser(kuser $v = null)
+	public function setvuser(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setKuserId(NULL);
+			$this->setVuserId(NULL);
 		} else {
-			$this->setKuserId($v->getId());
+			$this->setVuserId($v->getId());
 		}
 
-		$this->akuser = $v;
+		$this->avuser = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
-			$v->addcategoryKuser($this);
+			$v->addcategoryVuser($this);
 		}
 
 		return $this;
@@ -1795,25 +1795,25 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuser(PropelPDO $con = null)
+	public function getvuser(PropelPDO $con = null)
 	{
-		if ($this->akuser === null && ($this->kuser_id !== null)) {
-			$this->akuser = kuserPeer::retrieveByPk($this->kuser_id);
+		if ($this->avuser === null && ($this->vuser_id !== null)) {
+			$this->avuser = vuserPeer::retrieveByPk($this->vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuser->addcategoryKusers($this);
+			   $this->avuser->addcategoryVusers($this);
 			 */
 		}
-		return $this->akuser;
+		return $this->avuser;
 	}
 
 	/**
@@ -1831,7 +1831,7 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 		} // if ($deep)
 
 			$this->acategory = null;
-			$this->akuser = null;
+			$this->avuser = null;
 	}
 
 	/* ---------------------- CustomData functions ------------------------- */
@@ -1951,4 +1951,4 @@ abstract class BasecategoryKuser extends BaseObject  implements Persistent {
 	
 	/* ---------------------- CustomData functions ------------------------- */
 	
-} // BasecategoryKuser
+} // BasecategoryVuser

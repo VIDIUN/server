@@ -3,7 +3,7 @@
  * @package plugins.systemPartner
  * @subpackage api.objects
  */
-class KalturaSystemPartnerUsageFilter extends KalturaFilter
+class VidiunSystemPartnerUsageFilter extends VidiunFilter
 {
 	/**
 	 * Date range from
@@ -26,7 +26,7 @@ class KalturaSystemPartnerUsageFilter extends KalturaFilter
 	public $timezoneOffset;
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

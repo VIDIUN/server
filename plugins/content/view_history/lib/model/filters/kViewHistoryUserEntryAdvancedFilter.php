@@ -3,7 +3,7 @@
  * @package plugins.viewHistory
  * @subpackage model.filters
  */
-class kViewHistoryUserEntryAdvancedFilter extends AdvancedSearchFilterItem
+class vViewHistoryUserEntryAdvancedFilter extends AdvancedSearchFilterItem
 {
 	/**
 	 * @var UserEntryFilter
@@ -57,9 +57,9 @@ class kViewHistoryUserEntryAdvancedFilter extends AdvancedSearchFilterItem
 		}
 	}
 	
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
-		/* @var $query KalturaCriteria */
+		/* @var $query VidiunCriteria */
 		if ($this->disable)
 		{
 			return;
@@ -70,7 +70,7 @@ class kViewHistoryUserEntryAdvancedFilter extends AdvancedSearchFilterItem
 		$query->setLimit(self::ENTRIES_COUNT);
 		if ($this->filterLimit)
 		{
-			KalturaLog::info ("Overriding filter limit to " . self::ENTRIES_COUNT);
+			VidiunLog::info ("Overriding filter limit to " . self::ENTRIES_COUNT);
 			$this->overrideFilterLimit = self::ENTRIES_COUNT;
 		}
 		
@@ -86,7 +86,7 @@ class kViewHistoryUserEntryAdvancedFilter extends AdvancedSearchFilterItem
 		
 		if ($totalCountEntries <= self::ENTRIES_COUNT)
 		{
-			KalturaLog::info("Few entries found - merge with query");
+			VidiunLog::info("Few entries found - merge with query");
 			$ids = array();
 			foreach ($entries as $entry)
 			{
@@ -98,7 +98,7 @@ class kViewHistoryUserEntryAdvancedFilter extends AdvancedSearchFilterItem
 	
 		else 
 		{
-			KalturaLog::info("Too many entries found - query userEntries instead");
+			VidiunLog::info("Too many entries found - query userEntries instead");
 			$userEntryOffset = 0;
 			$chunkSize = max(min($limit * 2, self::MAX_USER_ENTRY_CHUNK_SIZE), self::MIN_USER_ENTRY_CHUNK_SIZE);
 			if ($this->filterLimit)
@@ -110,12 +110,12 @@ class kViewHistoryUserEntryAdvancedFilter extends AdvancedSearchFilterItem
 			{
 				if (count($entryIds) >= $limit)
 				{
-					KalturaLog::info("Enough entry IDs retrieved");
+					VidiunLog::info("Enough entry IDs retrieved");
 					break;
 				}
 				if ($userEntryOffset > self::USER_ENTRIES_LIMIT)
 				{
-					KalturaLog::info("Not all objects will return from the search - consider narrowing the search criteria");
+					VidiunLog::info("Not all objects will return from the search - consider narrowing the search criteria");
 					break;
 				}
 				
@@ -125,7 +125,7 @@ class kViewHistoryUserEntryAdvancedFilter extends AdvancedSearchFilterItem
 	                    break;
 	            }
 				
-				$query->addColumnWhere(entryPeer::ID, $currEntryIds, KalturaCriteria::IN);
+				$query->addColumnWhere(entryPeer::ID, $currEntryIds, VidiunCriteria::IN);
 				$query->forcedOrderIds = $currEntryIds;
 				$query->setLimit($chunkSize);
 				$entries = entryPeer::doSelect($query);
@@ -144,7 +144,7 @@ class kViewHistoryUserEntryAdvancedFilter extends AdvancedSearchFilterItem
 				}
 				
 				$userEntryOffset += $chunkSize;
-				kMemoryManager::clearMemory();
+				vMemoryManager::clearMemory();
 			}
 			
 			$query->setLimit($limit);
@@ -153,7 +153,7 @@ class kViewHistoryUserEntryAdvancedFilter extends AdvancedSearchFilterItem
 		
 		if (!count($entryIds))
 		{
-			KalturaLog::err("No user entries found - returning empty result");
+			VidiunLog::err("No user entries found - returning empty result");
 			$entryIds = array (entry::ENTRY_ID_THAT_DOES_NOT_EXIST);
 		}
 		
@@ -163,7 +163,7 @@ class kViewHistoryUserEntryAdvancedFilter extends AdvancedSearchFilterItem
 		}
 		
 		$this->disable = false;
-		$query->addColumnWhere(entryPeer::ID, $entryIds, KalturaCriteria::IN);
+		$query->addColumnWhere(entryPeer::ID, $entryIds, VidiunCriteria::IN);
 		
 	}
 }

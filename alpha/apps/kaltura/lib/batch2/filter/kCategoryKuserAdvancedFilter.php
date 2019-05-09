@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class kCategoryKuserAdvancedFilter extends AdvancedSearchFilterItem
+class vCategoryVuserAdvancedFilter extends AdvancedSearchFilterItem
 {
 	/**
 	 * @var array
@@ -63,7 +63,7 @@ class kCategoryKuserAdvancedFilter extends AdvancedSearchFilterItem
 	/* (non-PHPdoc)
 	 * @see AdvancedSearchFilterItem::applyCondition()
 	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
 		if ($this->memberIdIn)
 		{

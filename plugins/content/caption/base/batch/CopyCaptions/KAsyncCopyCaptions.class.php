@@ -3,74 +3,74 @@
  * @package plugins.caption
  * @subpackage Scheduler
  */
-class KAsyncCopyCaptions extends KJobHandlerWorker
+class VAsyncCopyCaptions extends VJobHandlerWorker
 {
 
 	const START_TIME_ASC = "+startTime";
 
 	/*
-	 * @var KalturaCaptionSearchClientPlugin
+	 * @var VidiunCaptionSearchClientPlugin
 	 */
 	private $captionSearchClientPlugin = null;
 
 	/*
-	* @var KalturaCaptionClientPlugin
+	* @var VidiunCaptionClientPlugin
 	*/
 	private $captionClientPlugin = null;
 
 	/**
-	 * @param KSchedularTaskConfig $taskConfig
+	 * @param VSchedularTaskConfig $taskConfig
 	 */
 	public function __construct($taskConfig = null)
 	{
 		parent::__construct($taskConfig);
 
-		$this->captionSearchClientPlugin = KalturaCaptionSearchClientPlugin::get(self::$kClient);
-		$this->captionClientPlugin = KalturaCaptionClientPlugin::get(self::$kClient);
+		$this->captionSearchClientPlugin = VidiunCaptionSearchClientPlugin::get(self::$vClient);
+		$this->captionClientPlugin = VidiunCaptionClientPlugin::get(self::$vClient);
 	}
 
 
 	public static function getType()
 	{
-		return KalturaBatchJobType::COPY_CAPTIONS;
+		return VidiunBatchJobType::COPY_CAPTIONS;
 	}
 	/**
 	 * (non-PHPdoc)
-	 * @see KBatchBase::getJobType()
+	 * @see VBatchBase::getJobType()
 	 */
 	protected function getJobType()
 	{
-		return KalturaBatchJobType::COPY_CAPTIONS;
+		return VidiunBatchJobType::COPY_CAPTIONS;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->copyCaptions($job, $job->data);
 	}
 
 	/**
 	 * copy captions on specific time frame
-	 * @throws kApplicativeException
+	 * @throws vApplicativeException
 	 */
-	private function copyCaptions(KalturaBatchJob $job, KalturaCopyCaptionsJobData $data)
+	private function copyCaptions(VidiunBatchJob $job, VidiunCopyCaptionsJobData $data)
 	{
 		$firstClip = $data->clipsDescriptionArray[0];
-		$this->updateJob($job, "Start copying captions from [$firstClip->sourceEntryId] to [$data->entryId]", KalturaBatchJobStatus::PROCESSING);
+		$this->updateJob($job, "Start copying captions from [$firstClip->sourceEntryId] to [$data->entryId]", VidiunBatchJobStatus::PROCESSING);
 		self::impersonate($job->partnerId);
 		$this->copyFromClipToDestination($data, $data->clipsDescriptionArray);
 		self::unimpersonate();
-		$this->closeJob($job, null, null, 'Finished copying captions', KalturaBatchJobStatus::FINISHED);
+		$this->closeJob($job, null, null, 'Finished copying captions', VidiunBatchJobStatus::FINISHED);
 		return $job;
 	}
 
 
 	private function getAllCaptionAsset($entryId)
 	{
-		KalturaLog::info("Retrieve all caption assets for: [$entryId]");
-		$filter = new KalturaAssetFilter();
+		VidiunLog::info("Retrieve all caption assets for: [$entryId]");
+		$filter = new VidiunAssetFilter();
 		$filter->entryIdEqual = $entryId;
 		try
 		{
@@ -78,7 +78,7 @@ class KAsyncCopyCaptions extends KJobHandlerWorker
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::info("Can't list caption assets for entry id [$entryId] " . $e->getMessage());
+			VidiunLog::info("Can't list caption assets for entry id [$entryId] " . $e->getMessage());
 		}
 		return $captionAssetsList->objects;
 	}
@@ -93,7 +93,7 @@ class KAsyncCopyCaptions extends KJobHandlerWorker
 				array_push($originalCaptionAssetsFiltered, $originalCaptionAsset);
 		}
 		$objectsNum = count($originalCaptionAssetsFiltered);
-		KalturaLog::info("[$objectsNum] caption assets left after filtering");
+		VidiunLog::info("[$objectsNum] caption assets left after filtering");
 		return $originalCaptionAssetsFiltered;
 	}
 
@@ -106,8 +106,8 @@ class KAsyncCopyCaptions extends KJobHandlerWorker
 
 	private function cloneCaption($targetEntryId, $originalCaptionAsset)
 	{
-		KalturaLog::info("Start copying properties from caption asset: [{$originalCaptionAsset->id}] to new caption asset on entryId: [$targetEntryId]");
-		$captionAsset = new KalturaCaptionAsset();
+		VidiunLog::info("Start copying properties from caption asset: [{$originalCaptionAsset->id}] to new caption asset on entryId: [$targetEntryId]");
+		$captionAsset = new VidiunCaptionAsset();
 		$propertiesToCopy = array("tags", "fileExt", "language", "label", "format","isDefault");
 		foreach ($propertiesToCopy as $property)
 			$captionAsset->$property = $originalCaptionAsset->$property;
@@ -117,7 +117,7 @@ class KAsyncCopyCaptions extends KJobHandlerWorker
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::info("Couldn't create new caption asset for entry id: [$targetEntryId]" . $e->getMessage());
+			VidiunLog::info("Couldn't create new caption asset for entry id: [$targetEntryId]" . $e->getMessage());
 		}
 		return $newCaption;
 	}
@@ -130,7 +130,7 @@ class KAsyncCopyCaptions extends KJobHandlerWorker
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::info("Can't set content to caption asset id: [$captionAssetId]" . $e->getMessage());
+			VidiunLog::info("Can't set content to caption asset id: [$captionAssetId]" . $e->getMessage());
 			return null;
 		}
 		return $updatedCaption;
@@ -138,29 +138,29 @@ class KAsyncCopyCaptions extends KJobHandlerWorker
 
 
 	private function createNewCaptionsFile($captionAssetId, $offset, $duration , $format, $fullCopy, $globalOffset){
-		KalturaLog::info("Create new caption file based on captionAssetId:[$captionAssetId] in format: [$format] with offset: [$offset] and duration: [$duration]");
+		VidiunLog::info("Create new caption file based on captionAssetId:[$captionAssetId] in format: [$format] with offset: [$offset] and duration: [$duration]");
 		$captionContent = "";
 
 		$unsupported_formats = $this->getUnsupportedFormats();
 
 		if($fullCopy)
 		{
-			KalturaLog::info("fullCopy mode - copy the content of captionAssetId: [$captionAssetId] without editing");
+			VidiunLog::info("fullCopy mode - copy the content of captionAssetId: [$captionAssetId] without editing");
 			$captionContent = $this->getCaptionContent($captionAssetId);
 		}
 		else
 		{
-			KalturaLog::info("Copy only the relevant content of captionAssetId: [$captionAssetId]");
+			VidiunLog::info("Copy only the relevant content of captionAssetId: [$captionAssetId]");
 			$endTime = $offset + $duration;
 
 			if (!in_array($format, $unsupported_formats))
 			{
 				$captionContent = $this->getCaptionContent($captionAssetId);
-				$captionsContentManager = kCaptionsContentManager::getCoreContentManager($format);
+				$captionsContentManager = vCaptionsContentManager::getCoreContentManager($format);
 				$captionContent = $captionsContentManager->buildFile($captionContent, $offset, $endTime, $globalOffset);
 			}
 			else
-				KalturaLog::info("copying captions for format: [$format] is not supported");
+				VidiunLog::info("copying captions for format: [$format] is not supported");
 		}
 
 		return $captionContent;
@@ -169,26 +169,26 @@ class KAsyncCopyCaptions extends KJobHandlerWorker
 
 	private function getCaptionContent($captionAssetId)
 	{
-		KalturaLog::info("Retrieve caption assets content for captionAssetId: [$captionAssetId]");
+		VidiunLog::info("Retrieve caption assets content for captionAssetId: [$captionAssetId]");
 
 		try
 		{
 			$captionAssetContentUrl= $this->captionClientPlugin->captionAsset->serve($captionAssetId);
-			$captionAssetContent = KCurlWrapper::getContent($captionAssetContentUrl);
+			$captionAssetContent = VCurlWrapper::getContent($captionAssetContentUrl);
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::info("Can't serve caption asset id [$captionAssetId] " . $e->getMessage());
+			VidiunLog::info("Can't serve caption asset id [$captionAssetId] " . $e->getMessage());
 		}
 		return $captionAssetContent;
 	}
 
 	/**
-	 * @param KalturaCopyCaptionsJobData $data
-	 * @param KalturaClipDescriptionArray $clipDescriptionArray
-	 * @throws kApplicativeException
+	 * @param VidiunCopyCaptionsJobData $data
+	 * @param VidiunClipDescriptionArray $clipDescriptionArray
+	 * @throws vApplicativeException
 	 */
-	private function copyFromClipToDestination(KalturaCopyCaptionsJobData $data, $clipDescriptionArray)
+	private function copyFromClipToDestination(VidiunCopyCaptionsJobData $data, $clipDescriptionArray)
 	{
 		$errorMsg = '';
 		//currently only one source
@@ -197,21 +197,21 @@ class KAsyncCopyCaptions extends KJobHandlerWorker
 			$originalCaptionAssets = $this->retrieveCaptionAssetsOnlyFromSupportedTypes($originalCaptionAssets);
 		foreach ($originalCaptionAssets as $originalCaptionAsset)
 		{
-			if ($originalCaptionAsset->status != KalturaCaptionAssetStatus::READY)
+			if ($originalCaptionAsset->status != VidiunCaptionAssetStatus::READY)
 				continue;
 			$newCaptionAsset = $this->cloneCaption($data->entryId, $originalCaptionAsset);
-			$newCaptionAssetResource = new KalturaStringResource();
+			$newCaptionAssetResource = new VidiunStringResource();
 			$this->clipAndConcatSub($data, $clipDescriptionArray, $originalCaptionAsset, $newCaptionAsset, $newCaptionAssetResource,$errorMsg);
 			$updatedCaption = $this->loadNewCaptionAssetFile($newCaptionAsset->id, $newCaptionAssetResource);
 			if (!$updatedCaption)
-				throw new kApplicativeException(KalturaBatchJobAppErrors::MISSING_ASSETS, "Created caption asset with id: [$newCaptionAsset->id], but couldn't load the new captions file to it");
+				throw new vApplicativeException(VidiunBatchJobAppErrors::MISSING_ASSETS, "Created caption asset with id: [$newCaptionAsset->id], but couldn't load the new captions file to it");
 		}
 		if ($errorMsg)
-			throw new kApplicativeException(KalturaBatchJobAppErrors::MISSING_ASSETS, $errorMsg);
+			throw new vApplicativeException(VidiunBatchJobAppErrors::MISSING_ASSETS, $errorMsg);
 	}
 
 	/**
-	 * @param KalturaCopyCaptionsJobData $data
+	 * @param VidiunCopyCaptionsJobData $data
 	 * @param $clipDescriptionArray
 	 * @param $originalCaptionAsset
 	 * @param $newCaptionAsset
@@ -219,7 +219,7 @@ class KAsyncCopyCaptions extends KJobHandlerWorker
 	 * @param string $errorMsg
 	 * @return string
 	 */
-	private function clipAndConcatSub(KalturaCopyCaptionsJobData $data, $clipDescriptionArray, $originalCaptionAsset, $newCaptionAsset, $newCaptionAssetResource, &$errorMsg)
+	private function clipAndConcatSub(VidiunCopyCaptionsJobData $data, $clipDescriptionArray, $originalCaptionAsset, $newCaptionAsset, $newCaptionAssetResource, &$errorMsg)
 	{
 		foreach ($clipDescriptionArray as $clipDescription)
 		{
@@ -227,7 +227,7 @@ class KAsyncCopyCaptions extends KJobHandlerWorker
 				$newCaptionAsset->format, $data->fullCopy, $clipDescription->offsetInDestination);
 			if ($toAppend && $newCaptionAssetResource->content)
 			{
-				$captionsContentManager = kCaptionsContentManager::getCoreContentManager($newCaptionAsset->format);
+				$captionsContentManager = vCaptionsContentManager::getCoreContentManager($newCaptionAsset->format);
 				$newCaptionAssetResource->content = $captionsContentManager->merge($newCaptionAssetResource->content, $toAppend);
 			}
 			elseif(!$newCaptionAssetResource->content)

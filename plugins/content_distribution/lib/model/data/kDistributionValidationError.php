@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage model.data
  */
-class kDistributionValidationError
+class vDistributionValidationError
 {
 	/**
 	 * enum from DistributionAction

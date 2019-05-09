@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kReportExportJobData extends kJobData
+class vReportExportJobData extends vJobData
 {
 
 	/**

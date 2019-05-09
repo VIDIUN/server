@@ -4,7 +4,7 @@
  * @subpackage api.objects
  *
  */
-class KalturaDailymotionDistributionCaptionInfo extends KalturaObject{
+class VidiunDailymotionDistributionCaptionInfo extends VidiunObject{
 
 	/**
 	 * @var string
@@ -22,7 +22,7 @@ class KalturaDailymotionDistributionCaptionInfo extends KalturaObject{
 	public $remoteId;
 	
 	/**
-	 * @var KalturaDailymotionDistributionCaptionAction
+	 * @var VidiunDailymotionDistributionCaptionAction
 	 */
 	public $action;	
 	
@@ -37,7 +37,7 @@ class KalturaDailymotionDistributionCaptionInfo extends KalturaObject{
 	public $assetId;
 	
 	/**
-	 * @var KalturaDailymotionDistributionCaptionFormat
+	 * @var VidiunDailymotionDistributionCaptionFormat
 	 */
 	public $format;
 		

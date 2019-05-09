@@ -3,7 +3,7 @@
  * @package plugins.widevine
  * @subpackage model.enum
  */
-class WidevineProviderType implements IKalturaPluginEnum, DrmProviderType
+class WidevineProviderType implements IVidiunPluginEnum, DrmProviderType
 {
 	const WIDEVINE = 'WIDEVINE';
 	

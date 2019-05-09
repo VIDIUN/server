@@ -3,7 +3,7 @@
  * @package plugins.cuePoint
  * @subpackage api.en
  */
-interface kEffectType extends BaseEnum
+interface vEffectType extends BaseEnum
 {
 	const VIDEO_FADE_IN = 1;
 	const VIDEO_FADE_OUT = 2;

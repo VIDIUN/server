@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model.data
  */
-class kAuthenticatedCondition extends kCondition
+class vAuthenticatedCondition extends vCondition
 {
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -19,7 +19,7 @@ class kAuthenticatedCondition extends kCondition
 	 * 
 	 * @var array
 	 */
-	protected $privileges = array(ks::PRIVILEGE_VIEW, ks::PRIVILEGE_VIEW_ENTRY_OF_PLAYLIST);
+	protected $privileges = array(vs::PRIVILEGE_VIEW, vs::PRIVILEGE_VIEW_ENTRY_OF_PLAYLIST);
 	
 	/**
 	 * @param array $privileges
@@ -38,40 +38,40 @@ class kAuthenticatedCondition extends kCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
-		if (!$scope->getKs() || (!$scope->getKs() instanceof ks))
+		if (!$scope->getVs() || (!$scope->getVs() instanceof vs))
 			return false;
 		
-		if ($scope->getKs()->isAdmin())
+		if ($scope->getVs()->isAdmin())
 			return true;
 		
-		KalturaLog::debug(print_r($this->privileges, true));
+		VidiunLog::debug(print_r($this->privileges, true));
 		foreach($this->privileges as $privilege)
 		{
 			if(is_object($privilege))
 				$privilege = $privilege->getValue();
 				
-			KalturaLog::debug("Checking privilege [$privilege] with entry [".$scope->getEntryId()."]");
-			if($scope->getKs()->verifyPrivileges($privilege, $scope->getEntryId()))
+			VidiunLog::debug("Checking privilege [$privilege] with entry [".$scope->getEntryId()."]");
+			if($scope->getVs()->verifyPrivileges($privilege, $scope->getEntryId()))
 			{
-				KalturaLog::debug("Privilege [$privilege] verified");
+				VidiunLog::debug("Privilege [$privilege] verified");
 				return true;
 			}
 		}
 
-		KalturaLog::debug("No privilege verified");
+		VidiunLog::debug("No privilege verified");
 		return false;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kCondition::shouldDisableCache()
+	 * @see vCondition::shouldDisableCache()
 	 */
 	public function shouldDisableCache($scope)
 	{
-		// the KS type and privileges are part of the cache key
+		// the VS type and privileges are part of the cache key
 		return false;
 	}
 }

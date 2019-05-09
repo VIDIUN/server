@@ -3,10 +3,10 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaDistributionValidationErrorMissingThumbnail extends KalturaDistributionValidationError
+class VidiunDistributionValidationErrorMissingThumbnail extends VidiunDistributionValidationError
 {
 	/**
-	 * @var KalturaDistributionThumbDimensions
+	 * @var VidiunDistributionThumbDimensions
 	 */
 	public $dimensions;
 
@@ -26,7 +26,7 @@ class KalturaDistributionValidationErrorMissingThumbnail extends KalturaDistribu
 		return $dbObject;
 	}
 	
-	public function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if(!$sourceObject)
 			return;
@@ -39,7 +39,7 @@ class KalturaDistributionValidationErrorMissingThumbnail extends KalturaDistribu
 			$matches = null;
 			if(preg_match('/(\d+)x(\d+)/', $data, $matches))
 			{
-				$this->dimensions = new KalturaDistributionThumbDimensions();
+				$this->dimensions = new VidiunDistributionThumbDimensions();
 				$this->dimensions->width = $matches[1];
 				$this->dimensions->height = $matches[2];
 			}

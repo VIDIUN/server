@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-abstract class KalturaDeliveryServerNode extends KalturaServerNode
+abstract class VidiunDeliveryServerNode extends VidiunServerNode
 {
 	/**
 	 * Delivery profile ids
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $deliveryProfileIds;
 
@@ -24,7 +24,7 @@ abstract class KalturaDeliveryServerNode extends KalturaServerNode
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{

@@ -3,6 +3,6 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KOperationEngineFfmpegVp8  extends KOperationEngineFfmpeg
+class VOperationEngineFfmpegVp8  extends VOperationEngineFfmpeg
 {
 }

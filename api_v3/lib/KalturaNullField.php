@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaNullField
+class VidiunNullField
 {
 
 }

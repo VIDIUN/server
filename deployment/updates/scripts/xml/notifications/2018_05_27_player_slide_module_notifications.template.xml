@@ -14,7 +14,7 @@
 	</session>
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaPushNotificationTemplate">
+			<template objectType="VidiunPushNotificationTemplate">
 				<name>THUMB_CUE_POINT_READY_NOTIFICATION</name>
 				<systemName>THUMB_CUE_POINT_READY_NOTIFICATION</systemName>
 				<description>Push notification template when thumb cue points changes it status to ready</description>
@@ -22,37 +22,37 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>cuePointEventNotifications.CuePoint</eventObjectType>
 				<eventConditions objectType="array">
-					<item objectType="KalturaFieldMatchCondition">
+					<item objectType="VidiunFieldMatchCondition">
 						<description>Cue-point type equals</description>
-						<field objectType="KalturaEvalStringField">
+						<field objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getType()</code>
 						</field>
 						<values objectType="array">
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>{trigger_cuepoint}</value>
 							</item>
 						</values>
 					</item>
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>in_array(CuePointPeer::STATUS, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getStatus() == CuePointStatus::READY</code>
 						</field>
 					</item>
 				</eventConditions>
 				<queueNameParameters objectType="array">
-					<item objectType="KalturaPushEventNotificationParameter">
+					<item objectType="VidiunPushEventNotificationParameter">
 						<key>entryId</key>
 						<description></description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getEntryId()</code>
 						</value>
 					</item>
 				</queueNameParameters>
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>trigger_cuepoint</key>
-						<description>Cue-point type that triggers the event (Thumb type only), See:KalturaCuePointType:/api_v3/testmeDoc/enums/KalturaCuePointType.html</description>
-						<value objectType="KalturaStringValue">
+						<description>Cue-point type that triggers the event (Thumb type only), See:VidiunCuePointType:/api_v3/testmeDoc/enums/VidiunCuePointType.html</description>
+						<value objectType="VidiunStringValue">
 							<value></value>
 						</value>
 					</item>
@@ -64,7 +64,7 @@
 			<status>1</status><!-- EventNotificationTemplateStatus::DISABLED -->
 		</request>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaPushNotificationTemplate">
+			<template objectType="VidiunPushNotificationTemplate">
 				<name>SLIDE_VIEW_CHANGE_CODE_CUE_POINT</name>
 				<systemName>SLIDE_VIEW_CHANGE_CODE_CUE_POINT</systemName>
 				<description>Push notification template player slide view code cue point is added</description>
@@ -72,47 +72,47 @@
 				<eventType>5</eventType> <!-- EventNotificationEventType::OBJECT_CREATED -->
 				<eventObjectType>cuePointEventNotifications.CuePoint</eventObjectType>
 				<eventConditions objectType="array">
-					<item objectType="KalturaOrCondition">
+					<item objectType="VidiunOrCondition">
 						<conditions objectType="array">
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>Cue-point type equals</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>$scope->getObject()->getType()</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_cuepoint}</value>
 									</item>
 								</values>
 							</item>
 						</conditions>
 					</item>
-					<item objectType="KalturaFieldMatchCondition">
+					<item objectType="VidiunFieldMatchCondition">
 						<description>Tags_Like</description>
-						<field objectType="KalturaEvalStringField">
+						<field objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getTags() ? ( count(array_intersect(array("remove-selected-thumb","change-view-mode"), explode(",", $scope->getObject()->getTags()))) ? 1 : 0 ) : 0</code>
 						</field>
 						<values objectType="array">
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>1</value>
 							</item>
 						</values>
 					</item>
 				</eventConditions>
 				<queueNameParameters objectType="array">
-					<item objectType="KalturaPushEventNotificationParameter">
+					<item objectType="VidiunPushEventNotificationParameter">
 						<key>entryId</key>
 						<description></description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getEntryId()</code>
 						</value>
 					</item>
 				</queueNameParameters>
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>trigger_cuepoint</key>
-						<description>Cue-point type that triggers the event (Code type only), See:KalturaCuePointType:/api_v3/testmeDoc/enums/KalturaCuePointType.html</description>
-						<value objectType="KalturaStringValue">
+						<description>Cue-point type that triggers the event (Code type only), See:VidiunCuePointType:/api_v3/testmeDoc/enums/VidiunCuePointType.html</description>
+						<value objectType="VidiunStringValue">
 							<value></value>
 						</value>
 					</item>

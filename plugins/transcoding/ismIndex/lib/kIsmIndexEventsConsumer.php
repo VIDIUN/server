@@ -1,8 +1,8 @@
 <?php
-class kIsmIndexEventsConsumer implements kObjectChangedEventConsumer
+class vIsmIndexEventsConsumer implements vObjectChangedEventConsumer
 {	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
@@ -20,34 +20,34 @@ class kIsmIndexEventsConsumer implements kObjectChangedEventConsumer
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{	
 		// replacing the ismc file name in the ism file
 		$ismPrevVersionFileSyncKey = $object->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-		$ismContents = kFileSyncUtils::file_get_contents($ismPrevVersionFileSyncKey);
+		$ismContents = vFileSyncUtils::file_get_contents($ismPrevVersionFileSyncKey);
 		
 		$ismcPrevVersionFileSyncKey = $object->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ISMC);
-		$ismcContents = kFileSyncUtils::file_get_contents($ismcPrevVersionFileSyncKey);
-		$ismcPrevVersionFilePath = kFileSyncUtils::getLocalFilePathForKey($ismcPrevVersionFileSyncKey);
+		$ismcContents = vFileSyncUtils::file_get_contents($ismcPrevVersionFileSyncKey);
+		$ismcPrevVersionFilePath = vFileSyncUtils::getLocalFilePathForKey($ismcPrevVersionFileSyncKey);
 		
 		$object->incrementVersion();
 		$object->save();
 		
 		$ismcFileSyncKey = $object->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ISMC);
-		kFileSyncUtils::moveFromFile($ismcPrevVersionFilePath, $ismcFileSyncKey);			
-		$ismcNewName = basename(kFileSyncUtils::getLocalFilePathForKey($ismcFileSyncKey));
+		vFileSyncUtils::moveFromFile($ismcPrevVersionFilePath, $ismcFileSyncKey);			
+		$ismcNewName = basename(vFileSyncUtils::getLocalFilePathForKey($ismcFileSyncKey));
 		
-		KalturaLog::info("Editing ISM set content to [$ismcNewName]");
+		VidiunLog::info("Editing ISM set content to [$ismcNewName]");
 			
 		$ismXml = new SimpleXMLElement($ismContents);
 		$ismXml->head->meta['content'] = $ismcNewName;
 		
-		$tmpPath = kFileSyncUtils::getLocalFilePathForKey($ismPrevVersionFileSyncKey).'.tmp';
+		$tmpPath = vFileSyncUtils::getLocalFilePathForKey($ismPrevVersionFileSyncKey).'.tmp';
 		file_put_contents($tmpPath, $ismXml->asXML());
 		
-		kFileSyncUtils::moveFromFile($tmpPath, $object->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET));
+		vFileSyncUtils::moveFromFile($tmpPath, $object->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET));
 					
 		return true;
 	}

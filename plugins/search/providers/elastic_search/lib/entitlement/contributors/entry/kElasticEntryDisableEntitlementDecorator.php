@@ -4,11 +4,11 @@
  * @subpackage lib.entitlement
  */
 
-class kElasticEntryDisableEntitlementDecorator implements IKalturaESearchEntryEntitlementDecorator
+class vElasticEntryDisableEntitlementDecorator implements IVidiunESearchEntryEntitlementDecorator
 {
 	public static function shouldContribute()
 	{
-		if(kEntryElasticEntitlement::$entriesDisabledEntitlement && count(kEntryElasticEntitlement::$entriesDisabledEntitlement))
+		if(vEntryElasticEntitlement::$entriesDisabledEntitlement && count(vEntryElasticEntitlement::$entriesDisabledEntitlement))
 			return true;
 
 		return false;
@@ -16,13 +16,13 @@ class kElasticEntryDisableEntitlementDecorator implements IKalturaESearchEntryEn
 	
 	public static function getEntitlementCondition(array $params = array(), $fieldPrefix = '')
 	{
-		$conditions = new kESearchTermsQuery("{$fieldPrefix}_id", $params['entryIds']);
+		$conditions = new vESearchTermsQuery("{$fieldPrefix}_id", $params['entryIds']);
 		return $conditions;
 	}
 	
 	public static function applyCondition(&$entryQuery, &$parentEntryQuery)
 	{
-		$params['entryIds'] = kEntryElasticEntitlement::$entriesDisabledEntitlement;
+		$params['entryIds'] = vEntryElasticEntitlement::$entriesDisabledEntitlement;
 		if($parentEntryQuery)
 		{
 			$conditions = self::getEntitlementCondition($params, 'parent_entry.entry');

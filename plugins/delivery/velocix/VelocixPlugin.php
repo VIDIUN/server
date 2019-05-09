@@ -2,10 +2,10 @@
 /**
  * @package plugins.velocix
  */
-class VelocixPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaEventConsumers, IKalturaObjectLoader, IKalturaTypeExtender
+class VelocixPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunEventConsumers, IVidiunObjectLoader, IVidiunTypeExtender
 {
 	const PLUGIN_NAME = 'velocix';
-	const VELOCIX_LIVE_EVENT_CONSUMER = 'kVelocixLiveFlowManager';
+	const VELOCIX_LIVE_EVENT_CONSUMER = 'vVelocixLiveFlowManager';
 	const TASK_CONFIG = 0;
 	
 	public static function getPluginName()
@@ -45,7 +45,7 @@ class VelocixPlugin extends KalturaPlugin implements IKalturaPermissions, IKaltu
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	//get real source_type_value from DB. 
@@ -55,7 +55,7 @@ class VelocixPlugin extends KalturaPlugin implements IKalturaPermissions, IKaltu
 	public static function getEntrySourceTypeCoreValue($valueName)
 	{
 		$apiValue = self::getApiValue($valueName);
-		return kPluginableEnumsManager::apiToCore('EntrySourceType', $apiValue);
+		return vPluginableEnumsManager::apiToCore('EntrySourceType', $apiValue);
 	}
 	
 	public static function getEventConsumers(){
@@ -63,23 +63,23 @@ class VelocixPlugin extends KalturaPlugin implements IKalturaPermissions, IKaltu
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null) {
 		// for batch
-		if ($baseClass == 'KalturaJobData' && $constructorArgs['coreJobSubType'] == self::getEntrySourceTypeCoreValue(VelocixLiveEntrySourceType::VELOCIX_LIVE))
-			return new KalturaVelocixProvisionJobData();
+		if ($baseClass == 'VidiunJobData' && $constructorArgs['coreJobSubType'] == self::getEntrySourceTypeCoreValue(VelocixLiveEntrySourceType::VELOCIX_LIVE))
+			return new VidiunVelocixProvisionJobData();
 		
-		if ($baseClass == 'kProvisionJobData' && $enumValue == self::getEntrySourceTypeCoreValue(VelocixLiveEntrySourceType::VELOCIX_LIVE))
-			return new kVelocixProvisionJobData();  
+		if ($baseClass == 'vProvisionJobData' && $enumValue == self::getEntrySourceTypeCoreValue(VelocixLiveEntrySourceType::VELOCIX_LIVE))
+			return new vVelocixProvisionJobData();  
 		
-		if ($baseClass == 'KProvisionEngine' && $enumValue == KalturaSourceType::VELOCIX_LIVE)
-			return new KProvisionEngineVelocix();
+		if ($baseClass == 'VProvisionEngine' && $enumValue == VidiunSourceType::VELOCIX_LIVE)
+			return new VProvisionEngineVelocix();
 		
-		if(($baseClass == 'KalturaTokenizer') && ($enumValue == 'kVelocixUrlTokenizer'))
-			return new KalturaUrlTokenizerVelocix();
+		if(($baseClass == 'VidiunTokenizer') && ($enumValue == 'vVelocixUrlTokenizer'))
+			return new VidiunUrlTokenizerVelocix();
 		
-		if(($baseClass == 'Form_Delivery_DeliveryProfileTokenizer') && ($enumValue == 'Kaltura_Client_Type_UrlTokenizerVelocix'))
+		if(($baseClass == 'Form_Delivery_DeliveryProfileTokenizer') && ($enumValue == 'Vidiun_Client_Type_UrlTokenizerVelocix'))
 			return new Form_Delivery_UrlTokenizerVelocix();
 		
 		return null;
@@ -91,11 +91,11 @@ class VelocixPlugin extends KalturaPlugin implements IKalturaPermissions, IKaltu
 	public static function getDeliveryProfileType($valueName)
 	{
 		$apiValue = self::getApiValue($valueName);
-		return kPluginableEnumsManager::apiToCore('DeliveryProfileType', $apiValue);
+		return vPluginableEnumsManager::apiToCore('DeliveryProfileType', $apiValue);
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue) {
 		if ($baseClass == 'DeliveryProfile') {

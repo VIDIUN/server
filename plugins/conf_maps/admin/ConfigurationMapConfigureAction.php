@@ -3,7 +3,7 @@
  * @package plugins.confMaps
  * @subpackage Admin
  */
-class ConfigurationMapConfigureAction extends KalturaApplicationPlugin
+class ConfigurationMapConfigureAction extends VidiunApplicationPlugin
 {
 	/**
 	 * @return string - absolute file path of the phtml template
@@ -39,13 +39,13 @@ class ConfigurationMapConfigureAction extends KalturaApplicationPlugin
 				$form = $this->handleExistingConfigurationItem($action, $mapName, $mapHost,$version, $isView);
 		} catch (Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			$action->view->errMessage = $e->getMessage();
 			if ($form)
 			{
 				$formData = $action->getRequest()->getPost();
 				$form->populate($formData);
-				$form->getObject('Kaltura_Client_ConfMaps_Type_ConfMaps', $formData, false, true);
+				$form->getObject('Vidiun_Client_ConfMaps_Type_ConfMaps', $formData, false, true);
 			}
 		}
 		$action->view->form = $form;
@@ -65,8 +65,8 @@ class ConfigurationMapConfigureAction extends KalturaApplicationPlugin
 	{
 		$form = null;
 		$request = $action->getRequest();
-		$configurationPluginClient = Kaltura_Client_ConfMaps_Plugin::get($this->client);
-		$configurationMapFilter = new Kaltura_Client_ConfMaps_Type_ConfMapsFilter();
+		$configurationPluginClient = Vidiun_Client_ConfMaps_Plugin::get($this->client);
+		$configurationMapFilter = new Vidiun_Client_ConfMaps_Type_ConfMapsFilter();
 		$configurationMapFilter->nameEqual= $configurationMapName;
 		$configurationMapFilter->relatedHostEqual = $configurationMapHost;
 		if ($isView)
@@ -92,7 +92,7 @@ class ConfigurationMapConfigureAction extends KalturaApplicationPlugin
 			$results = $configurationPluginClient->confMaps->listAction($configurationMapFilter);
 			foreach ($results->objects as $configurationMap )
 			{
-				/* @var Kaltura_Client_ConfMaps_Type_ConfigMap $configurationMap */
+				/* @var Vidiun_Client_ConfMaps_Type_ConfigMap $configurationMap */
 				if ( $configurationMap->name == $configurationMapName && $configurationMap->relatedHost== $configurationMapHost )
 				{
 					$form = $this->initForm($action, $configurationMap);
@@ -170,13 +170,13 @@ class ConfigurationMapConfigureAction extends KalturaApplicationPlugin
 	 */
 	protected function handlePost($action, ConfigureForm $form, $isUpdate = false)
 	{
-		$configurationPluginClient = Kaltura_Client_ConfMaps_Plugin::get($this->client);
+		$configurationPluginClient = Vidiun_Client_ConfMaps_Plugin::get($this->client);
 		$formData = $action->getRequest()->getPost();
 		$form->populate($formData);
 		if ($form->isValid($formData))
 		{
 			$formData['content'] = json_encode(parse_ini_string($formData['content'],true));
-			$configurationMap = $form->getObject('Kaltura_Client_ConfMaps_Type_ConfMaps', $formData, false, true);
+			$configurationMap = $form->getObject('Vidiun_Client_ConfMaps_Type_ConfMaps', $formData, false, true);
 
 			$form->resetUnUpdatebleAttributes($configurationMap);
 			if($isUpdate)
@@ -198,7 +198,7 @@ class ConfigurationMapConfigureAction extends KalturaApplicationPlugin
 
 	/***
 	 * @param Zend_Controller_Action $action
-	 * @param Kaltura_Client_ConfMaps_Type_ConfMaps $configurationMap
+	 * @param Vidiun_Client_ConfMaps_Type_ConfMaps $configurationMap
 	 * @return Form_ConfigurationMapConfigure
 	 */
 	protected function initForm(Zend_Controller_Action $action, $configurationMap = null)

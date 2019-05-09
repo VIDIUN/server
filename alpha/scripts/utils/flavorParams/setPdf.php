@@ -43,9 +43,9 @@ else
 	$flavorParams->setVideoBitrate(1);
 }
 
-$pdfOperator = new kOperator();
+$pdfOperator = new vOperator();
 $pdfOperator->id = conversionEngineType::PDF_CREATOR;
-$operators = new kOperatorSets();
+$operators = new vOperatorSets();
 $operators->addSet(array($pdfOperator));
 
 $flavorParams->setPartnerId($partnerId);

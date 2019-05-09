@@ -7,7 +7,7 @@
  * @package api
  * @subpackage services
  */
-class LiveStatsService extends KalturaBaseService 
+class LiveStatsService extends VidiunBaseService 
 {
 	protected function partnerRequired($actionName)
 	{
@@ -25,12 +25,12 @@ class LiveStatsService extends KalturaBaseService
 	 * 
  	* 
  
-	 * KalturaStatsEvent $event
+	 * VidiunStatsEvent $event
 	 * 
 	 * @action collect
 	 * @return bool
 	 */
-	function collectAction( KalturaLiveStatsEvent $event )
+	function collectAction( VidiunLiveStatsEvent $event )
 	{
 		return true;
 	}

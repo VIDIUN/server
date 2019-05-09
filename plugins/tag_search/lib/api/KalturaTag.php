@@ -3,7 +3,7 @@
  * @package plugins.tagSearch
  * @subpackage api.objects
  */
-class KalturaTag extends KalturaObject
+class VidiunTag extends VidiunObject
 {
     /**
      * @var int
@@ -18,7 +18,7 @@ class KalturaTag extends KalturaObject
     public $tag;
     
     /**
-     * @var KalturaTaggedObjectType
+     * @var VidiunTaggedObjectType
      * @readonly
      */
     public $taggedObjectType;

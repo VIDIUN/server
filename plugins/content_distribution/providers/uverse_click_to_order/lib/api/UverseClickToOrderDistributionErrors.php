@@ -3,7 +3,7 @@
  * @package plugins.uverseCliclToOrderDistribution
  * @subpackage api
  */
-class UverseClickToOrderDistributionErrors extends KalturaErrors
+class UverseClickToOrderDistributionErrors extends VidiunErrors
 {
 	const INVALID_FEED_URL = "INVALID_FEED_URL;;Invalid feed URL";
 }

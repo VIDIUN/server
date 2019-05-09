@@ -1,6 +1,6 @@
 <?php
 
-class kDropFolderFileResource extends kLocalFileResource
+class vDropFolderFileResource extends vLocalFileResource
 {
     /**
 	 * @var int
@@ -26,7 +26,7 @@ class kDropFolderFileResource extends kLocalFileResource
 
 	function getType()
     {
-        return 'kLocalFileResource';
+        return 'vLocalFileResource';
     }
     
 	/**
@@ -63,7 +63,7 @@ class kDropFolderFileResource extends kLocalFileResource
     	    	$jobData->setDropFolderFileId($this->getDropFolderFileId());
     	    
     	    // add job
-    	    kJobsManager::addImportJob(
+    	    vJobsManager::addImportJob(
     	        null,
     	        $entryId,
     	        $dropFolderFile->getPartnerId(),

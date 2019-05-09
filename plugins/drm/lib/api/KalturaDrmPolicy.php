@@ -3,7 +3,7 @@
  * @package plugins.drm
  * @subpackage api.objects
  */
-class KalturaDrmPolicy extends KalturaObject implements IFilterable
+class VidiunDrmPolicy extends VidiunObject implements IFilterable
 {	
 	/**
 	 * @var int
@@ -37,30 +37,30 @@ class KalturaDrmPolicy extends KalturaObject implements IFilterable
 	public $description;
 	
 	/**
-	 * @var KalturaDrmProviderType
+	 * @var VidiunDrmProviderType
 	 * @filter eq,in
 	 */
 	public $provider;
 	
 	/**
-	 * @var KalturaDrmPolicyStatus
+	 * @var VidiunDrmPolicyStatus
 	 * @filter eq,in
 	 */
 	public $status;
 	
 	/**
-	 * @var KalturaDrmLicenseScenario
+	 * @var VidiunDrmLicenseScenario
 	 * @filter eq,in
 	 */
 	public $scenario;
 	
 	/**
-	 * @var KalturaDrmLicenseType
+	 * @var VidiunDrmLicenseType
 	 */
 	public $licenseType;
 	
 	/**
-	 * @var KalturaDrmLicenseExpirationPolicy
+	 * @var VidiunDrmLicenseExpirationPolicy
 	 */
 	public $licenseExpirationPolicy;
 	
@@ -83,7 +83,7 @@ class KalturaDrmPolicy extends KalturaObject implements IFilterable
 	public $updatedAt;
 
 	/**
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $licenseParams;
 
@@ -122,13 +122,13 @@ class KalturaDrmPolicy extends KalturaObject implements IFilterable
 		
 	/**
 	 * @param int $type
-	 * @return KalturaDrmPolicy
+	 * @return VidiunDrmPolicy
 	 */
 	static function getInstanceByType ($provider)
 	{
-		$obj = KalturaPluginManager::loadObject('KalturaDrmPolicy', $provider);		
+		$obj = VidiunPluginManager::loadObject('VidiunDrmPolicy', $provider);		
 		if(!$obj)
-			$obj = new KalturaDrmPolicy();
+			$obj = new VidiunDrmPolicy();
 		return $obj;
 	}
 	

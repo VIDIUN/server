@@ -66,7 +66,7 @@ class categoryEntry extends BasecategoryEntry implements IRelatedObject
 			$entry->indexToSearchIndex();
 			
 		if (!$this->alreadyInSave)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($this));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($this));
 	}
 	
 	/* (non-PHPdoc)
@@ -80,11 +80,11 @@ class categoryEntry extends BasecategoryEntry implements IRelatedObject
 		$category = categoryPeer::retrieveByPK($this->getCategoryId());
 		categoryPeer::setUseCriteriaFilter(true);
 		if(!$category)
-			throw new kCoreException('category id [' . $this->getCategoryId() . 'was not found', kCoreException::ID_NOT_FOUND);
+			throw new vCoreException('category id [' . $this->getCategoryId() . 'was not found', vCoreException::ID_NOT_FOUND);
 			
 		$entry = entryPeer::retrieveByPK($this->getEntryId());
 		if(!$entry && $this->getStatus() != CategoryEntryStatus::DELETED)
-			throw new kCoreException('entry id [' . $this->getEntryId() . 'was not found', kCoreException::ID_NOT_FOUND);
+			throw new vCoreException('entry id [' . $this->getEntryId() . 'was not found', vCoreException::ID_NOT_FOUND);
 		
 		
 		if($entry && $this->getStatus() == CategoryEntryStatus::ACTIVE &&
@@ -136,7 +136,7 @@ class categoryEntry extends BasecategoryEntry implements IRelatedObject
 					$entry->setCategoriesIds(implode(entry::ENTRY_CATEGORY_SEPARATOR, $categoriesIds));
 					$entry->save();
 				}
-				kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+				vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			}
 			
 			if($this->getColumnsOldValue(categoryEntryPeer::STATUS) == CategoryEntryStatus::PENDING)
@@ -195,7 +195,7 @@ class categoryEntry extends BasecategoryEntry implements IRelatedObject
 	{
 		$category = categoryPeer::retrieveByPK($this->getCategoryId());
 		if(!$category)
-			throw new kCoreException('category id [' . $this->getCategoryId() . 'was not found', kCoreException::ID_NOT_FOUND);
+			throw new vCoreException('category id [' . $this->getCategoryId() . 'was not found', vCoreException::ID_NOT_FOUND);
 			
 		$this->setCategoryFullIds($category->getFullIds());
 	}

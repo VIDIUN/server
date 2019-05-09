@@ -1,24 +1,24 @@
 <?php
-class KAsyncStorageExportCloser extends KJobCloserWorker
+class VAsyncStorageExportCloser extends VJobCloserWorker
 {
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job) {
+	protected function exec(VidiunBatchJob $job) {
 		$this->closeStorageExport($job);
 		
 	}
 
 	public static function getType()
 	{
-		return KalturaBatchJobType::STORAGE_EXPORT;
+		return VidiunBatchJobType::STORAGE_EXPORT;
 	}
 	
-	protected function closeStorageExport (KalturaBatchJob $job)
+	protected function closeStorageExport (VidiunBatchJob $job)
 	{
-		$storageExportEngine = KExportEngine::getInstance($job->jobSubType, $job->partnerId, $job->data);
+		$storageExportEngine = VExportEngine::getInstance($job->jobSubType, $job->partnerId, $job->data);
 		
 		$closeResult = $storageExportEngine->verifyExportedResource();
-		$this->closeJob($job, null, null, null, $closeResult ? KalturaBatchJobStatus::FINISHED : KalturaBatchJobStatus::ALMOST_DONE);
+		$this->closeJob($job, null, null, null, $closeResult ? VidiunBatchJobStatus::FINISHED : VidiunBatchJobStatus::ALMOST_DONE);
 	}
 }

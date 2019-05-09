@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveStreamListResponse extends KalturaListResponse
+class VidiunLiveStreamListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaLiveStreamEntryArray
+	 * @var VidiunLiveStreamEntryArray
 	 * @readonly
 	 */
 	public $objects;

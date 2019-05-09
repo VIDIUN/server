@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBooleanEventNotificationCondition  extends KalturaCondition
+class VidiunBooleanEventNotificationCondition  extends VidiunCondition
 {
 	/**
 	 * The boolean event notification ids
@@ -23,12 +23,12 @@ class KalturaBooleanEventNotificationCondition  extends KalturaCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kBooleanEventNotificationCondition();
+			$dbObject = new vBooleanEventNotificationCondition();
 		return parent::toObject($dbObject, $skip);
 	}
 

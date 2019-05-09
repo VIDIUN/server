@@ -5,7 +5,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaSshUrlResource extends KalturaUrlResource
+class VidiunSshUrlResource extends VidiunUrlResource
 {
 	
 	/**
@@ -29,7 +29,7 @@ class KalturaSshUrlResource extends KalturaUrlResource
 	private static $map_between_objects = array('privateKey', 'publicKey', 'keyPassphrase');
 	
 	/* (non-PHPdoc)
-	 * @see KalturaUrlResource::getMapBetweenObjects()
+	 * @see VidiunUrlResource::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -37,21 +37,21 @@ class KalturaSshUrlResource extends KalturaUrlResource
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaContentResource::validateAsset()
+	 * @see VidiunContentResource::validateAsset()
 	 */
 	public function validateAsset(asset $dbAsset)
 	{
 		if(!($dbAsset instanceof flavorAsset))
-			throw new KalturaAPIException(KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($this));
+			throw new VidiunAPIException(VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($this));
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaUrlResource::toObject()
+	 * @see VidiunUrlResource::toObject()
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kSshUrlResource();
+			$object_to_fill = new vSshUrlResource();
 		
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

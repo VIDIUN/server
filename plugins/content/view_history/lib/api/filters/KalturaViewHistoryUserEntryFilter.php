@@ -3,9 +3,9 @@
  * @package plugins.viewHistory
  * @subpackage api.filters
  */
-class KalturaViewHistoryUserEntryFilter extends KalturaUserEntryFilter
+class VidiunViewHistoryUserEntryFilter extends VidiunUserEntryFilter
 {
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$this->typeEqual = ViewHistoryPlugin::getApiValue(ViewHistoryUserEntryType::VIEW_HISTORY);
 		$response = parent::getListResponse($pager, $responseProfile);
@@ -15,15 +15,15 @@ class KalturaViewHistoryUserEntryFilter extends KalturaUserEntryFilter
 	
 	public function toObject ($object_to_fill = null, $props_to_skip = array())
 	{
-		if (kCurrentContext::getCurrentSessionType() == SessionType::USER)
+		if (vCurrentContext::getCurrentSessionType() == SessionType::USER)
 		{
-			$this->userIdEqual = kCurrentContext::getCurrentKsKuser()->getPuserId();
+			$this->userIdEqual = vCurrentContext::getCurrentVsVuser()->getPuserId();
 			$this->userIdIn = null;
 			$this->userIdNotIn = null;
 		}
 		elseif (!$this->userIdEqual && !$this->userIdIn && !$this->userIdNotIn)
 		{
-			$this->userIdEqual = kCurrentContext::getCurrentKsKuser() ? kCurrentContext::getCurrentKsKuser()->getPuserId() : null;
+			$this->userIdEqual = vCurrentContext::getCurrentVsVuser() ? vCurrentContext::getCurrentVsVuser()->getPuserId() : null;
 		}
 		
 		

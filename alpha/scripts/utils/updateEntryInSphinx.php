@@ -18,11 +18,11 @@ if ($argc > 3)
 if (!in_array($mode, $availModes))
 	die('Invalid mode, should be one of ' . implode(',', $availModes) . PHP_EOL);
 
-$dbConf = kConf::getDB();
+$dbConf = vConf::getDB();
 DbManager::setConfig($dbConf);
 DbManager::initialize();
 
-$sphinx = new kSphinxSearchManager();
+$sphinx = new vSphinxSearchManager();
 
 call_user_func(array($peerName, 'setUseCriteriaFilter'), false);
 $entry = call_user_func(array($peerName, 'retrieveByPK'), $entryId);

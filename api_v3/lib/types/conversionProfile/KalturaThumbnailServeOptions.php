@@ -3,6 +3,6 @@
  * @package api
  * @subpackage objects
  */
-class KalturaThumbnailServeOptions extends KalturaAssetServeOptions 
+class VidiunThumbnailServeOptions extends VidiunAssetServeOptions 
 {
 }

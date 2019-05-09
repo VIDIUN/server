@@ -3,6 +3,6 @@
  * @package plugins.ideticDistribution
  * @subpackage api.filters
  */
-class KalturaIdeticDistributionProviderFilter extends KalturaIdeticDistributionProviderBaseFilter
+class VidiunIdeticDistributionProviderFilter extends VidiunIdeticDistributionProviderBaseFilter
 {
 }

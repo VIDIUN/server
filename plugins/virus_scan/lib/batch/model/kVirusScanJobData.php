@@ -3,7 +3,7 @@
  * @package plugins.virusScan
  * @subpackage model.data
  */
-class kVirusScanJobData extends kJobData
+class vVirusScanJobData extends vJobData
 {
 	/**
 	 * @var FileContainer
@@ -16,12 +16,12 @@ class kVirusScanJobData extends kJobData
 	private $flavorAssetId;
 	
 	/**
-	 * @var KalturaVirusScanJobResult
+	 * @var VidiunVirusScanJobResult
 	 */
 	private $scanResult;
 	
 	/**
-	 * @var KalturaVirusFoundAction
+	 * @var VidiunVirusFoundAction
 	 */
 	private $virusFoundAction;
 	

@@ -3,7 +3,7 @@
 * @package plugins.conference
 * @subpackage api.objects
 */
-class KalturaRoomDetails extends KalturaObject
+class VidiunRoomDetails extends VidiunObject
 {
 	/**
 	 * @var string

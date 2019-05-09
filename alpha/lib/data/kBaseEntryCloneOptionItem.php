@@ -4,7 +4,7 @@
  * @subpackage model.data
  * @abstract
  */
-abstract class kBaseEntryCloneOptionItem
+abstract class vBaseEntryCloneOptionItem
 {
 
 }

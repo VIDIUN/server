@@ -3,10 +3,10 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchGroupOrderByItem extends KalturaESearchOrderByItem
+class VidiunESearchGroupOrderByItem extends VidiunESearchOrderByItem
 {
 	/**
-	 *  @var KalturaESearchGroupOrderByFieldName
+	 *  @var VidiunESearchGroupOrderByFieldName
 	 */
 	public $sortField;
 
@@ -15,11 +15,11 @@ class KalturaESearchGroupOrderByItem extends KalturaESearchOrderByItem
 	);
 
 	private static $map_field_enum = array(
-		KalturaESearchGroupOrderByFieldName::CREATED_AT => ESearchGroupOrderByFieldName::CREATED_AT,
-		KalturaESearchGroupOrderByFieldName::UPDATED_AT => ESearchGroupOrderByFieldName::UPDATED_AT,
-		KalturaESearchGroupOrderByFieldName::SCREEN_NAME => ESearchGroupOrderByFieldName::SCREEN_NAME,
-		KalturaESearchGroupOrderByFieldName::USER_ID => ESearchGroupOrderByFieldName::USER_ID,
-		KalturaESearchGroupOrderByFieldName::MEMBERS_COUNT => ESearchGroupOrderByFieldName::MEMBERS_COUNT,
+		VidiunESearchGroupOrderByFieldName::CREATED_AT => ESearchGroupOrderByFieldName::CREATED_AT,
+		VidiunESearchGroupOrderByFieldName::UPDATED_AT => ESearchGroupOrderByFieldName::UPDATED_AT,
+		VidiunESearchGroupOrderByFieldName::SCREEN_NAME => ESearchGroupOrderByFieldName::SCREEN_NAME,
+		VidiunESearchGroupOrderByFieldName::USER_ID => ESearchGroupOrderByFieldName::USER_ID,
+		VidiunESearchGroupOrderByFieldName::MEMBERS_COUNT => ESearchGroupOrderByFieldName::MEMBERS_COUNT,
 	);
 
 	public function getMapBetweenObjects()

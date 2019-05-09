@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage model.data
  */
-class kAssetDistributionRule
+class vAssetDistributionRule
 {
 	/**
 	 * @var string
@@ -11,7 +11,7 @@ class kAssetDistributionRule
 	private $validationError;
 
 	/**
-	 * @var array<kAssetDistributionCondition>
+	 * @var array<vAssetDistributionCondition>
 	 */
 	private $assetDistributionConditions;
 	
@@ -23,7 +23,7 @@ class kAssetDistributionRule
 	{	
 		foreach ($this->assetDistributionConditions as $distributionCondition)
 		{
-			/* @var $distributionCondition kAssetDistributionCondition */
+			/* @var $distributionCondition vAssetDistributionCondition */
 			if (!$distributionCondition->fulfilled($asset))
 			{
 				return false;
@@ -34,7 +34,7 @@ class kAssetDistributionRule
 	}
 	
 	/**
-	 * @param array<kAssetDistributionCondition> $conditions
+	 * @param array<vAssetDistributionCondition> $conditions
 	 */
 	public function setAssetDistributionConditions(array $conditions)
 	{
@@ -42,7 +42,7 @@ class kAssetDistributionRule
 	}
 	
 	/**
-	 * @return array<kAssetDistributionCondition>
+	 * @return array<vAssetDistributionCondition>
 	 */
 	public function getAssetDistributionConditions()
 	{

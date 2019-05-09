@@ -1,5 +1,5 @@
 <?php
-class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDeletedEventConsumer, kObjectAddedEventConsumer
+class vResponseProfileCacher implements vObjectChangedEventConsumer, vObjectDeletedEventConsumer, vObjectAddedEventConsumer
 {
 	const VIEW_RESPONSE_PROFILE_OBJECT_SPECIFIC = 'objectSpecific';
 	const VIEW_RESPONSE_PROFILE_RELATED_OBJECT_SESSIONS = 'relatedObjectSessions';
@@ -19,7 +19,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 	
 	const CACHE_VALUE_HOSTNAME = 'X-Me';
 	const CACHE_VALUE_TIME = 'X-Time';
-	const CACHE_VALUE_SESSION = 'X-Kaltura-Session';
+	const CACHE_VALUE_SESSION = 'X-Vidiun-Session';
 	const CACHE_VALUE_VERSION = 'X-Cache-Version';
 	
 	/**
@@ -38,20 +38,20 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 	private $queryCache = array();
 	
 	/**
-	 * @return array<kBaseCacheWrapper>
+	 * @return array<vBaseCacheWrapper>
 	 */
-	protected static function getStores($cacheType = kCacheManager::CACHE_TYPE_RESPONSE_PROFILE)
+	protected static function getStores($cacheType = vCacheManager::CACHE_TYPE_RESPONSE_PROFILE)
 	{
 		if(isset(self::$cacheStores[$cacheType]))
 			return self::$cacheStores[$cacheType];
 			
 		self::$cacheStores[$cacheType] = array();
-		$cacheSections = kCacheManager::getCacheSectionNames($cacheType);
+		$cacheSections = vCacheManager::getCacheSectionNames($cacheType);
 		if(is_array($cacheSections))
 		{
 			foreach ($cacheSections as $cacheSection)
 			{
-				$cacheStore = kCacheManager::getCache($cacheSection);
+				$cacheStore = vCacheManager::getCache($cacheSection);
 				if ($cacheStore)
 					self::$cacheStores[$cacheType][] = $cacheStore;
 			}
@@ -61,17 +61,17 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 	}
 	
 	/**
-	 * @return array<kBaseCacheWrapper>
+	 * @return array<vBaseCacheWrapper>
 	 */
 	protected static function getInvalidationStores()
 	{
-		return self::getStores(kCacheManager::CACHE_TYPE_RESPONSE_PROFILE_INVALIDATION);
+		return self::getStores(vCacheManager::CACHE_TYPE_RESPONSE_PROFILE_INVALIDATION);
 	}
 	
 	protected static function getCacheVersion()
 	{
 		if(is_null(self::$cacheVersion))
-			self::$cacheVersion = kConf::get('response_profile_cache_version', 'local', 1);
+			self::$cacheVersion = vConf::get('response_profile_cache_version', 'local', 1);
 			
 		return self::$cacheVersion;
 	}
@@ -89,7 +89,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 	
 	protected static function invalidateRelated(IRelatedObject $object)
 	{
-		KalturaLog::debug('Invalidating object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] related objects');
+		VidiunLog::debug('Invalidating object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] related objects');
 		
 		$partnerId = $object->getPartnerId();
 		$triggerKey = self::getRelatedObjectKey($object);
@@ -110,15 +110,15 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		);
 		
 		$invalidationKey = self::addCacheVersion($invalidationKey);
-		KalturaLog::debug("Invalidating key [$invalidationKey] now [" . date('Y-m-d H:i:s', $value[self::CACHE_VALUE_TIME]) . "]");
+		VidiunLog::debug("Invalidating key [$invalidationKey] now [" . date('Y-m-d H:i:s', $value[self::CACHE_VALUE_TIME]) . "]");
 		
 		$cacheStores = self::getInvalidationStores();
 		foreach ($cacheStores as $cacheStore)
 		{
-			/* @var $cacheStore kBaseCacheWrapper */
+			/* @var $cacheStore vBaseCacheWrapper */
 			$queryStart = microtime(true);
 			$cacheStore->set($invalidationKey, $value);
-			KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds key=$invalidationKey");
+			VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds key=$invalidationKey");
 		}
 	}
 	
@@ -130,28 +130,28 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		$value[self::CACHE_VALUE_VERSION] = self::getCacheVersion();
 		
 		$key = self::addCacheVersion($key);
-		//KalturaLog::debug("Key [$key]");
+		//VidiunLog::debug("Key [$key]");
 		
 		$cacheStores = self::getStores();
 		foreach ($cacheStores as $cacheStore)
 		{
-			/* @var $cacheStore kBaseCacheWrapper */
+			/* @var $cacheStore vBaseCacheWrapper */
 			$queryStart = microtime(true);
 			$cacheStore->set($key, $value);
-			KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds key=$key");
+			VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds key=$key");
 		}
 	}
 	
 	protected static function delete($key)
 	{
 		$key = self::addCacheVersion($key);
-		//KalturaLog::debug("Key [$key]");
+		//VidiunLog::debug("Key [$key]");
 		$cacheStores = self::getStores();
 		foreach ($cacheStores as $cacheStore)
 		{
 			$queryStart = microtime(true);
 			$cacheStore->delete($key);
-			KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds key=$key");
+			VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds key=$key");
 		}
 	}
 	
@@ -163,7 +163,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		foreach ($cacheStores as $cacheStore)
 		{
 			$queryStart = microtime(true);
-			if($touch && $cacheStore instanceof kCouchbaseCacheWrapper)
+			if($touch && $cacheStore instanceof vCouchbaseCacheWrapper)
 			{
 				$value = is_array($keys) ? $cacheStore->multiGetAndTouch($keys) : $cacheStore->getAndTouch($keys);
 			}
@@ -171,7 +171,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 			{
 				$value = is_array($keys) ? $cacheStore->multiGet($keys) : $cacheStore->get($keys);
 			}
-			KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds keys=".print_r($keys, true));
+			VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds keys=".print_r($keys, true));
 
 			if($value)
 			{
@@ -180,20 +180,20 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 					foreach($value as $key => $item)
 					{
 						if($item)
-							KalturaLog::debug("Key [$key] Server[" . $item->{self::CACHE_VALUE_HOSTNAME} . "] Session[" . $item->{self::CACHE_VALUE_SESSION} . "] Time[" . date('Y-m-d H:i:s', $item->{self::CACHE_VALUE_TIME}) . "]");
+							VidiunLog::debug("Key [$key] Server[" . $item->{self::CACHE_VALUE_HOSTNAME} . "] Session[" . $item->{self::CACHE_VALUE_SESSION} . "] Time[" . date('Y-m-d H:i:s', $item->{self::CACHE_VALUE_TIME}) . "]");
 						else
-							KalturaLog::debug("Could not extract value for key [$key]");
+							VidiunLog::debug("Could not extract value for key [$key]");
 					}
 				}
 				else
 				{
-					KalturaLog::debug("Key [$keys] Server[" . $value->{self::CACHE_VALUE_HOSTNAME} . "] Session[" . $value->{self::CACHE_VALUE_SESSION} . "] Time[" . date('Y-m-d H:i:s', $value->{self::CACHE_VALUE_TIME}) . "]");
+					VidiunLog::debug("Key [$keys] Server[" . $value->{self::CACHE_VALUE_HOSTNAME} . "] Session[" . $value->{self::CACHE_VALUE_SESSION} . "] Time[" . date('Y-m-d H:i:s', $value->{self::CACHE_VALUE_TIME}) . "]");
 				}
 				
 				return $value;
 			}
 		}
-		KalturaLog::debug("Key [" . print_r($keys, true) . "] not found");
+		VidiunLog::debug("Key [" . print_r($keys, true) . "] not found");
 			
 		return null;
 	}
@@ -207,9 +207,9 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		$invalidationCacheStores = self::getInvalidationStores();
 		foreach ($invalidationCacheStores as $store)
 		{
-			/* @var $store kBaseCacheWrapper */
+			/* @var $store vBaseCacheWrapper */
 		
-			if($store instanceof kCouchbaseCacheWrapper)
+			if($store instanceof vCouchbaseCacheWrapper)
 			{
 				$invalidationCaches = $store->multiGetAndTouch($invalidationKeys, true);
 			}
@@ -226,20 +226,20 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 					if(isset($invalidationCaches[$invalidationKey]))
 					{
 						$value = $invalidationCaches[$invalidationKey];
-						KalturaLog::debug("Invalidation key [$invalidationKey] Server[" . $value->{self::CACHE_VALUE_HOSTNAME} . "] Session[" . $value->{self::CACHE_VALUE_SESSION} . "] Time[" . date('Y-m-d H:i:s', $value->{self::CACHE_VALUE_TIME}) . "]");
+						VidiunLog::debug("Invalidation key [$invalidationKey] Server[" . $value->{self::CACHE_VALUE_HOSTNAME} . "] Session[" . $value->{self::CACHE_VALUE_SESSION} . "] Time[" . date('Y-m-d H:i:s', $value->{self::CACHE_VALUE_TIME}) . "]");
 						$invalidationTimes[] = $value->{self::CACHE_VALUE_TIME};
 					}
 					else
 					{
-						KalturaLog::debug("Invalidation key [$invalidationKey] not found");
+						VidiunLog::debug("Invalidation key [$invalidationKey] not found");
 					}
 				}
 				
 				$invalidationTime = count($invalidationTimes) ? max($invalidationTimes) : 0;
-				$invalidationTime += kConf::get('cache_invalidation_threshold', 'local', 10);
+				$invalidationTime += vConf::get('cache_invalidation_threshold', 'local', 10);
 				if(intval($invalidationTime) >= intval($time))
 				{
-					KalturaLog::debug("Invalidation times [" . implode(', ', $invalidationTimes) . "] >= [{$time}]");
+					VidiunLog::debug("Invalidation times [" . implode(', ', $invalidationTimes) . "] >= [{$time}]");
 					return false;
 				}
 			}	
@@ -248,12 +248,12 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		return true;
 	}
 	
-	protected static function query(kCouchbaseCacheQuery $query)
+	protected static function query(vCouchbaseCacheQuery $query)
 	{
 		$cacheStores = self::getStores();
 		foreach ($cacheStores as $cacheStore)
 		{
-			if($cacheStore instanceof kCouchbaseCacheWrapper)
+			if($cacheStore instanceof vCouchbaseCacheWrapper)
 			{
 				return $cacheStore->query($query);
 			}
@@ -262,20 +262,20 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		return array();
 	}
 
-	protected static function getSessionKey($protocol = null, $ksType = null, array $userRoles = null, $host = null)
+	protected static function getSessionKey($protocol = null, $vsType = null, array $userRoles = null, $host = null)
 	{
 		if(!$protocol)
 			$protocol = infraRequestUtils::getProtocol();
-		if(!$ksType)
-			$ksType = kCurrentContext::getCurrentSessionType();
+		if(!$vsType)
+			$vsType = vCurrentContext::getCurrentSessionType();
 		if(!$userRoles)
-			$userRoles = kPermissionManager::getCurrentRoleIds();
+			$userRoles = vPermissionManager::getCurrentRoleIds();
 		if(!$host)
 			$host = (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
 			
 		sort($userRoles);
 		$userRole = implode('-', $userRoles);
-		return "{$protocol}_{$ksType}_{$host}_{$userRole}";
+		return "{$protocol}_{$vsType}_{$host}_{$userRole}";
 	}
 	
 	protected static function getObjectKey(IRelatedObject $object)
@@ -297,7 +297,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -307,19 +307,19 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		/* @var $object IRelatedObject */
 		if($this->isCachedObject($object))
 		{
-			KalturaLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] is cached object');
+			VidiunLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] is cached object');
 			$this->invalidateCachedObject($object);
 		}
 			
 		if($this->hasCachedRootObjects($object))
 		{
-			KalturaLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] has cached root objects');
+			VidiunLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] has cached root objects');
 			$this->invalidateCachedRootObjects($object);
 		}
 			
 		if($this->hasCachedRelatedObjects($object))
 		{
-			KalturaLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] has cached related objects');
+			VidiunLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] has cached related objects');
 			$this->invalidateCachedRelatedObjects($object);
 		}
 			
@@ -327,7 +327,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
@@ -353,7 +353,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -364,19 +364,19 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		
 		if($this->isCachedObject($object))
 		{
-			KalturaLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] is cached object');
+			VidiunLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] is cached object');
 			$this->invalidateCachedObject($object);
 		}
 					
 		if($this->hasCachedRelatedObjects($object))
 		{
-			KalturaLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] has cached related objects');
+			VidiunLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] has cached related objects');
 			$this->invalidateCachedRelatedObjects($object);
 		}
 			
 		if($this->hasCachedRootObjects($object))
 		{
-			KalturaLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] has cached root objects');
+			VidiunLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] has cached root objects');
 			$this->invalidateCachedRootObjects($object);
 		}
 			
@@ -384,7 +384,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{
@@ -410,20 +410,20 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::objectAdded()
+	 * @see vObjectAddedEventConsumer::objectAdded()
 	 */
 	public function objectAdded(BaseObject $object, BatchJob $raisedJob = null)
 	{
 		/* @var $object IRelatedObject */
 		if($this->hasCachedRelatedObjects($object))
 		{
-			KalturaLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] has cached related objects');
+			VidiunLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] has cached related objects');
 			$this->invalidateCachedRelatedObjects($object);
 		}
 			
 		if($this->hasCachedRootObjects($object))
 		{
-			KalturaLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] has cached root objects');
+			VidiunLog::debug('Object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] has cached root objects');
 			$this->invalidateCachedRootObjects($object);
 		}
 			
@@ -431,7 +431,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeAddedEvent()
+	 * @see vObjectAddedEventConsumer::shouldConsumeAddedEvent()
 	 */
 	public function shouldConsumeAddedEvent(BaseObject $object)
 	{
@@ -460,25 +460,25 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		$cacheStores = self::getStores();
 		foreach ($cacheStores as $cacheStore)
 		{
-			if(!($cacheStore instanceof kCouchbaseCacheWrapper))
+			if(!($cacheStore instanceof vCouchbaseCacheWrapper))
 			{
 				continue;
 			}
 
-			$query = $cacheStore->getNewQuery(kResponseProfileCacher::VIEW_RESPONSE_PROFILE_RELATED_OBJECT_SESSIONS);
+			$query = $cacheStore->getNewQuery(vResponseProfileCacher::VIEW_RESPONSE_PROFILE_RELATED_OBJECT_SESSIONS);
 			if(!$query)
 			{
 				continue;
 			}
 			
-			$query->addStartKey(kResponseProfileCacher::VIEW_KEY_TRIGGER_KEY, self::getRelatedObjectKey($object));
-			$query->addStartKey(kResponseProfileCacher::VIEW_KEY_OBJECT_TYPE, 'A');
-			$query->addStartKey(kResponseProfileCacher::VIEW_KEY_SESSION_KEY, 'A');
+			$query->addStartKey(vResponseProfileCacher::VIEW_KEY_TRIGGER_KEY, self::getRelatedObjectKey($object));
+			$query->addStartKey(vResponseProfileCacher::VIEW_KEY_OBJECT_TYPE, 'A');
+			$query->addStartKey(vResponseProfileCacher::VIEW_KEY_SESSION_KEY, 'A');
 			$query->setLimit(1);
 
 			$queryStart = microtime(true);
 			$list = $cacheStore->query($query);
-			KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds objectClass=".get_class($object));
+			VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds objectClass=".get_class($object));
 			if($list->getCount())
 			{
 				$this->queryCache[__METHOD__] = true;
@@ -502,7 +502,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 			return false;
 		}
 	
-		if(isset($this->queryCache[kResponseProfileCacher::CACHE_ROOT_OBJECTS]))
+		if(isset($this->queryCache[vResponseProfileCacher::CACHE_ROOT_OBJECTS]))
 		{
 			return true;
 		}
@@ -516,7 +516,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		
 		if(count($roots))
 		{
-			$this->queryCache[kResponseProfileCacher::CACHE_ROOT_OBJECTS] = $roots;
+			$this->queryCache[vResponseProfileCacher::CACHE_ROOT_OBJECTS] = $roots;
 			return true;
 		}
 				
@@ -533,12 +533,12 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		$cacheStores = self::getStores();
 		foreach ($cacheStores as $cacheStore)
 		{
-			if(!($cacheStore instanceof kCouchbaseCacheWrapper))
+			if(!($cacheStore instanceof vCouchbaseCacheWrapper))
 			{
 				continue;
 			}
 			
-			$query = $cacheStore->getNewQuery(kResponseProfileCacher::VIEW_RESPONSE_PROFILE_OBJECT_SPECIFIC);
+			$query = $cacheStore->getNewQuery(vResponseProfileCacher::VIEW_RESPONSE_PROFILE_OBJECT_SPECIFIC);
 			if(!$query)
 			{
 				continue;
@@ -549,7 +549,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 			
 			$queryStart = microtime(true);
 			$list = $cacheStore->query($query);
-			KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds objectClass=".get_class($object));
+			VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds objectClass=".get_class($object));
 			if($list->getCount())
 			{
 				$this->queryCache[__METHOD__] = true;
@@ -575,28 +575,28 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 	
 	protected function listObjectKeys($objectType, $sessionKey)
 	{
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 		$objectKey = "{$partnerId}_{$objectType}_";
 		$cacheStores = self::getStores();
 		foreach ($cacheStores as $cacheStore)
 		{
-			if(!($cacheStore instanceof kCouchbaseCacheWrapper))
+			if(!($cacheStore instanceof vCouchbaseCacheWrapper))
 			{
 				continue;
 			}
 			
 			// TODO optimize using elastic search query
-			$query = $cacheStore->getNewQuery(kResponseProfileCacher::VIEW_RESPONSE_PROFILE_SESSION_TYPE);
+			$query = $cacheStore->getNewQuery(vResponseProfileCacher::VIEW_RESPONSE_PROFILE_SESSION_TYPE);
 			if(!$query)
 				continue;
 				
-			$query->addStartKey(kResponseProfileCacher::VIEW_KEY_SESSION_KEY, $sessionKey);
-			$query->addStartKey(kResponseProfileCacher::VIEW_KEY_OBJECT_KEY, $objectKey);
+			$query->addStartKey(vResponseProfileCacher::VIEW_KEY_SESSION_KEY, $sessionKey);
+			$query->addStartKey(vResponseProfileCacher::VIEW_KEY_OBJECT_KEY, $objectKey);
 			$query->setLimit(1);
 
 			$queryStart = microtime(true);
 			$list = $cacheStore->query($query);
-			KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds objectType=".$objectType);
+			VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds objectType=".$objectType);
 			$query->setLimit(2);
 			$offset = -1;
 			$array = array();
@@ -607,15 +607,15 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 				if(count($objects) == 1)
 				{
 					$startCacheObject = reset($objects);
-					/* @var $startCacheObject kCouchbaseCacheListItem */
+					/* @var $startCacheObject vCouchbaseCacheListItem */
 					list($cachedSessionKey, $cachedObjectKey) = $startCacheObject->getKey();
 					$startKey = $cachedObjectKey;
 				}
 				else
 				{
 					list($endCacheObject, $startCacheObject) = $objects;
-					/* @var $endCacheObject kCouchbaseCacheListItem */
-					/* @var $startCacheObject kCouchbaseCacheListItem */
+					/* @var $endCacheObject vCouchbaseCacheListItem */
+					/* @var $startCacheObject vCouchbaseCacheListItem */
 					list($cachedSessionKey, $cachedEndObjectKey) = $endCacheObject->getKey();
 					list($cachedSessionKey, $cachedStartObjectKey) = $startCacheObject->getKey();
 					$array[] = array($startKey, $cachedEndObjectKey);
@@ -625,7 +625,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 				$query->setOffset($offset);
 				$queryStart = microtime(true);
 				$list = $cacheStore->query($query);
-				KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds objectType=".$objectType);
+				VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds objectType=".$objectType);
 			}
 			return $array;
 		}
@@ -638,38 +638,38 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		$cacheStores = self::getStores();
 		foreach ($cacheStores as $cacheStore)
 		{
-			if(!($cacheStore instanceof kCouchbaseCacheWrapper))
+			if(!($cacheStore instanceof vCouchbaseCacheWrapper))
 			{
 				continue;
 			}
 			
 			// TODO optimize using elastic search query
-			$query = $cacheStore->getNewQuery(kResponseProfileCacher::VIEW_RESPONSE_PROFILE_RELATED_OBJECT_SESSIONS);
+			$query = $cacheStore->getNewQuery(vResponseProfileCacher::VIEW_RESPONSE_PROFILE_RELATED_OBJECT_SESSIONS);
 			if(!$query)
 			{
 				continue;
 			}
 			
-			$query->addStartKey(kResponseProfileCacher::VIEW_KEY_TRIGGER_KEY, $triggerKey);
-			$query->addStartKey(kResponseProfileCacher::VIEW_KEY_OBJECT_TYPE, 'A');
-			$query->addStartKey(kResponseProfileCacher::VIEW_KEY_SESSION_KEY, 'A');
-			$query->addEndKey(kResponseProfileCacher::VIEW_KEY_TRIGGER_KEY, $triggerKey);
-			$query->addEndKey(kResponseProfileCacher::VIEW_KEY_OBJECT_TYPE, 'z');
-			$query->addEndKey(kResponseProfileCacher::VIEW_KEY_SESSION_KEY, 'z');
+			$query->addStartKey(vResponseProfileCacher::VIEW_KEY_TRIGGER_KEY, $triggerKey);
+			$query->addStartKey(vResponseProfileCacher::VIEW_KEY_OBJECT_TYPE, 'A');
+			$query->addStartKey(vResponseProfileCacher::VIEW_KEY_SESSION_KEY, 'A');
+			$query->addEndKey(vResponseProfileCacher::VIEW_KEY_TRIGGER_KEY, $triggerKey);
+			$query->addEndKey(vResponseProfileCacher::VIEW_KEY_OBJECT_TYPE, 'z');
+			$query->addEndKey(vResponseProfileCacher::VIEW_KEY_SESSION_KEY, 'z');
 			$query->setLimit(self::MAX_CACHE_KEYS_PER_JOB);
 
 			$offset = 0;
 			$array = array();
 			$queryStart = microtime(true);
 			$list = $cacheStore->query($query);
-			KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds triggerKey=".$triggerKey);
+			VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds triggerKey=".$triggerKey);
 
-			KalturaLog::debug('Found [' . count($list->getObjects()) . '/' . $list->getCount() . '] items');
+			VidiunLog::debug('Found [' . count($list->getObjects()) . '/' . $list->getCount() . '] items');
 			while(count($list->getObjects()))
 			{
 				foreach ($list->getObjects() as $cacheObject)
 				{
-					/* @var $cacheObject kCouchbaseCacheListItem */
+					/* @var $cacheObject vCouchbaseCacheListItem */
 					list($cacheTriggerKey, $cacheObjectType, $cacheSessionKey) = $cacheObject->getKey();
 					if(!isset($array[$cacheObjectType]))
 					{
@@ -689,9 +689,9 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 				$query->setOffset($offset);
 				$queryStart = microtime(true);
 				$list = $cacheStore->query($query);
-				KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds triggerKey=".$triggerKey);
+				VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds triggerKey=".$triggerKey);
 
-				KalturaLog::debug('Found [' . count($list->getObjects()) . '/' . $list->getCount() . '] items');
+				VidiunLog::debug('Found [' . count($list->getObjects()) . '/' . $list->getCount() . '] items');
 			}
 			return $array;
 		}
@@ -704,36 +704,36 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		$cacheStores = self::getStores();
 		foreach ($cacheStores as $cacheStore)
 		{
-			if(!($cacheStore instanceof kCouchbaseCacheWrapper))
+			if(!($cacheStore instanceof vCouchbaseCacheWrapper))
 			{
 				continue;
 			}
 		
 			// TODO optimize using elastic search query
-			$query = $cacheStore->getNewQuery(kResponseProfileCacher::VIEW_RESPONSE_PROFILE_RELATED_OBJECTS_TYPES);
+			$query = $cacheStore->getNewQuery(vResponseProfileCacher::VIEW_RESPONSE_PROFILE_RELATED_OBJECTS_TYPES);
 			if(!$query)
 			{
 				continue;
 			}
 			
-			$query->addStartKey(kResponseProfileCacher::VIEW_KEY_TRIGGER_KEY, $triggerKey);
-			$query->addStartKey(kResponseProfileCacher::VIEW_KEY_OBJECT_TYPE, 'A');
-			$query->addEndKey(kResponseProfileCacher::VIEW_KEY_TRIGGER_KEY, $triggerKey);
-			$query->addEndKey(kResponseProfileCacher::VIEW_KEY_OBJECT_TYPE, 'z');
+			$query->addStartKey(vResponseProfileCacher::VIEW_KEY_TRIGGER_KEY, $triggerKey);
+			$query->addStartKey(vResponseProfileCacher::VIEW_KEY_OBJECT_TYPE, 'A');
+			$query->addEndKey(vResponseProfileCacher::VIEW_KEY_TRIGGER_KEY, $triggerKey);
+			$query->addEndKey(vResponseProfileCacher::VIEW_KEY_OBJECT_TYPE, 'z');
 			$query->setLimit(self::MAX_CACHE_KEYS_PER_JOB);
 
 			$offset = 0;
 			$array = array();
 			$queryStart = microtime(true);
 			$list = $cacheStore->query($query);
-			KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds triggerKey=".$triggerKey);
+			VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds triggerKey=".$triggerKey);
 
-			KalturaLog::debug('Found [' . count($list->getObjects()) . '/' . $list->getCount() . '] items');
+			VidiunLog::debug('Found [' . count($list->getObjects()) . '/' . $list->getCount() . '] items');
 			while(count($list->getObjects()))
 			{
 				foreach ($list->getObjects() as $cacheObject)
 				{
-					/* @var $cacheObject kCouchbaseCacheListItem */
+					/* @var $cacheObject vCouchbaseCacheListItem */
 					list($cacheTriggerKey, $cacheObjectType) = $cacheObject->getKey();
 					$array[$cacheObjectType] = true;
 				}
@@ -742,9 +742,9 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 				$query->setOffset($offset);
 				$queryStart = microtime(true);
 				$list = $cacheStore->query($query);
-				KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds triggerKey=".$triggerKey);
+				VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds triggerKey=".$triggerKey);
 
-				KalturaLog::debug('Found [' . count($list->getObjects()) . '/' . $list->getCount() . '] items');
+				VidiunLog::debug('Found [' . count($list->getObjects()) . '/' . $list->getCount() . '] items');
 			}
 			return array_keys($array);
 		}
@@ -760,33 +760,33 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 			$cacheStores = self::getStores();
 			foreach ($cacheStores as $cacheStore)
 			{
-				if(!($cacheStore instanceof kCouchbaseCacheWrapper))
+				if(!($cacheStore instanceof vCouchbaseCacheWrapper))
 				{
 					continue;
 				}
 			
 				// TODO optimize using elastic search query
-				$query = $cacheStore->getNewQuery(kResponseProfileCacher::VIEW_RESPONSE_PROFILE_OBJECT_SESSIONS);
+				$query = $cacheStore->getNewQuery(vResponseProfileCacher::VIEW_RESPONSE_PROFILE_OBJECT_SESSIONS);
 				if(!$query)
 				{
 					continue;
 				}
 				
-				$query->addStartKey(kResponseProfileCacher::VIEW_KEY_OBJECT_KEY, $objectKey);
-				$query->addStartKey(kResponseProfileCacher::VIEW_KEY_SESSION_KEY, 'A');
-				$query->addEndKey(kResponseProfileCacher::VIEW_KEY_OBJECT_KEY, $objectKey);
-				$query->addEndKey(kResponseProfileCacher::VIEW_KEY_SESSION_KEY, 'z');
+				$query->addStartKey(vResponseProfileCacher::VIEW_KEY_OBJECT_KEY, $objectKey);
+				$query->addStartKey(vResponseProfileCacher::VIEW_KEY_SESSION_KEY, 'A');
+				$query->addEndKey(vResponseProfileCacher::VIEW_KEY_OBJECT_KEY, $objectKey);
+				$query->addEndKey(vResponseProfileCacher::VIEW_KEY_SESSION_KEY, 'z');
 				$query->setLimit(self::MAX_CACHE_KEYS_PER_JOB);
 
 				$queryStart = microtime(true);
 				$list = $cacheStore->query($query);
-				KalturaLog::debug("query took " . (microtime(true) - $queryStart) . " seconds objectKey = " . $objectKey);
+				VidiunLog::debug("query took " . (microtime(true) - $queryStart) . " seconds objectKey = " . $objectKey);
 
-				KalturaLog::debug('Found [' . count($list->getObjects()) . '/' . $list->getCount() . '] items');
+				VidiunLog::debug('Found [' . count($list->getObjects()) . '/' . $list->getCount() . '] items');
 				$array = array();
 				foreach ($list->getObjects() as $cacheObject)
 				{
-					/* @var $cacheObject kCouchbaseCacheListItem */
+					/* @var $cacheObject vCouchbaseCacheListItem */
 					list($cacheObjectKey, $cacheSessionKey) = $cacheObject->getKey();
 					$array[$cacheSessionKey] = $cacheSessionKey;
 				}
@@ -799,7 +799,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 
 	protected function addRecalculateRelatedObjectsCacheJob(IRelatedObject $object)
 	{
-		KalturaLog::debug('Recalculating object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] related objects');
+		VidiunLog::debug('Recalculating object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] related objects');
 		
 		$partnerId = $object->getPartnerId();
 		$triggerKey = self::getRelatedObjectKey($object);
@@ -808,7 +808,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		{
 			foreach($sessionKeys as $sessionKey => $count)
 			{
-				list($protocol, $ksType, $host, $userRoles) = explode('_', $sessionKey, 4);
+				list($protocol, $vsType, $host, $userRoles) = explode('_', $sessionKey, 4);
 				$userRoles = explode('-', $userRoles);
 				if($count > self::MAX_CACHE_KEYS_PER_JOB)
 				{
@@ -816,12 +816,12 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 					foreach($startEndObjectKeys as $startEndObjectKey)
 					{
 						list($startObjectKey, $endObjectKey) = $startEndObjectKey;
-						kJobsManager::addRecalculateResponseProfileCacheJob($partnerId, $protocol, $ksType, $userRoles, $objectType, null, $startObjectKey, $endObjectKey);
+						vJobsManager::addRecalculateResponseProfileCacheJob($partnerId, $protocol, $vsType, $userRoles, $objectType, null, $startObjectKey, $endObjectKey);
 					}
 				}
 				else
 				{
-					kJobsManager::addRecalculateResponseProfileCacheJob($partnerId, $protocol, $ksType, $userRoles, $objectType);
+					vJobsManager::addRecalculateResponseProfileCacheJob($partnerId, $protocol, $vsType, $userRoles, $objectType);
 				}
 			}
 		}
@@ -830,7 +830,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 	
 	protected function addRecalculateObjectCacheJob(IRelatedObject $object)
 	{
-		KalturaLog::debug('Recalculating object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] cache');
+		VidiunLog::debug('Recalculating object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] cache');
 		$objectType = get_class($object);
 		$objectKey = self::getObjectKey($object);
 		$partnerId = $object->getPartnerId();
@@ -838,21 +838,21 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 		$sessionTypes = self::listObjectSessionTypes($object);
 		foreach($sessionTypes as $sessionKey)
 		{
-			list($protocol, $ksType, $host, $userRoles) = explode('_', $sessionKey, 4);
+			list($protocol, $vsType, $host, $userRoles) = explode('_', $sessionKey, 4);
 			$userRoles = explode('-', $userRoles);
-			kJobsManager::addRecalculateResponseProfileCacheJob($partnerId, $protocol, $ksType, $userRoles, $objectType, $object->getPrimaryKey());
+			vJobsManager::addRecalculateResponseProfileCacheJob($partnerId, $protocol, $vsType, $userRoles, $objectType, $object->getPrimaryKey());
 		}
 		return true;
 	}
 	
 	protected function invalidateCachedRootObjects(IRelatedObject $object)
 	{
-		KalturaLog::debug('Invalidating object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] roots');
+		VidiunLog::debug('Invalidating object [' . get_class($object) . '] id [' . $object->getPrimaryKey() . '] roots');
 		
 		$roots = null;
-		if(isset($this->queryCache[kResponseProfileCacher::CACHE_ROOT_OBJECTS]))
+		if(isset($this->queryCache[vResponseProfileCacher::CACHE_ROOT_OBJECTS]))
 		{
-			$roots = $this->queryCache[kResponseProfileCacher::CACHE_ROOT_OBJECTS];
+			$roots = $this->queryCache[vResponseProfileCacher::CACHE_ROOT_OBJECTS];
 		}
 		else
 		{
@@ -903,7 +903,7 @@ class kResponseProfileCacher implements kObjectChangedEventConsumer, kObjectDele
 
 	protected static function avoidInvalidation()
 	{
-		if(in_array(kCurrentContext::getCurrentPartnerId(), kConf::get('skip_cb_invalidation_partners', 'local', array())))
+		if(in_array(vCurrentContext::getCurrentPartnerId(), vConf::get('skip_cb_invalidation_partners', 'local', array())))
 			return true;
 		return false;
 	}

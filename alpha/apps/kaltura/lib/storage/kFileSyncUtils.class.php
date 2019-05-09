@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage storage
  */
-class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventConsumer
+class vFileSyncUtils implements vObjectChangedEventConsumer, vObjectAddedEventConsumer
 {
 	const MAX_FILES_IN_CATEGORY = 5000;
 	const MAX_CACHED_FILE_SIZE = 2097152;		// 2MB
@@ -30,11 +30,11 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 
 	public static function file_exists ( FileSyncKey $key , $fetch_from_remote_if_no_local = false )
 	{
-		KalturaLog::debug("key [$key], fetch_from_remote_if_no_local [$fetch_from_remote_if_no_local]");
+		VidiunLog::debug("key [$key], fetch_from_remote_if_no_local [$fetch_from_remote_if_no_local]");
 		list ( $file_sync , $local ) = self::getReadyFileSyncForKey( $key , $fetch_from_remote_if_no_local , false  );
 		if ( ! $file_sync )
 		{
-			KalturaLog::info("FileSync not found");
+			VidiunLog::info("FileSync not found");
 			return false;
 		}
 		else
@@ -46,18 +46,18 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 
 		$file_exists = file_exists ( $file_sync->getFullPath() );
 
-		KalturaLog::info("file_exists? [$file_exists] took [".(microtime(true)-$startTime)."] path [".$file_sync->getFullPath()."]");
+		VidiunLog::info("file_exists? [$file_exists] took [".(microtime(true)-$startTime)."] path [".$file_sync->getFullPath()."]");
 
 		return $file_exists;
 	}
 
 	public static function fileSync_exists ( FileSyncKey $key )
 	{
-		KalturaLog::debug("key [$key]");
+		VidiunLog::debug("key [$key]");
 		list ( $file_sync , $local ) = self::getReadyFileSyncForKey( $key , true , false  );
 		if ( ! $file_sync )
 		{
-			KalturaLog::info("FileSync not found");
+			VidiunLog::info("FileSync not found");
 			return false;
 		}
 		return true;
@@ -74,19 +74,19 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 				$contents = file_get_contents( $real_path);
 			else
 				$contents = file_get_contents( $real_path, $use_include_path, $context, $offset, $maxlen);
-			KalturaLog::info("file was found locally at [$real_path] fgc took [".(microtime(true) - $startTime)."]");
+			VidiunLog::info("file was found locally at [$real_path] fgc took [".(microtime(true) - $startTime)."]");
 			if ($file_sync->isEncrypted())
 			{
 				$key = $file_sync->getEncryptionKey();
 				$iv = $file_sync->getIv();
-				$contents = kEncryptFileUtils::decryptData($contents, $key,$iv);
+				$contents = vEncryptFileUtils::decryptData($contents, $key,$iv);
 			}
 			return $contents;
 		}
 		else
 		{
-			KalturaLog::info("file was not found locally [$full_path]");
-			throw new kFileSyncException("Cannot find file on local disk [$full_path] for file sync [" . $file_sync->getId() . "]", kFileSyncException::FILE_DOES_NOT_EXIST_ON_DISK);
+			VidiunLog::info("file was not found locally [$full_path]");
+			throw new vFileSyncException("Cannot find file on local disk [$full_path] for file sync [" . $file_sync->getId() . "]", vFileSyncException::FILE_DOES_NOT_EXIST_ON_DISK);
 		}
 	}
 
@@ -98,7 +98,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 
 		if ( $fetch_from_remote_if_no_local )
 		{
-			if (!in_array($file_sync->getDc(), kDataCenterMgr::getDcIds()))
+			if (!in_array($file_sync->getDc(), vDataCenterMgr::getDcIds()))
 			{
 				if ( $strict )
 				{
@@ -111,7 +111,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 			}
 			// if $fetch_from_remote_if_no_local is false - $file_sync shoule be null , this if is in fact redundant
 			// TODO - curl to the remote
-			$content = kDataCenterMgr::retrieveFileFromRemoteDataCenter( $file_sync );
+			$content = vDataCenterMgr::retrieveFileFromRemoteDataCenter( $file_sync );
 			return $content;
 		}
 	}
@@ -120,13 +120,13 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	 * @param FileSyncKey $key
 	 * @param boolean $fetch_from_remote_if_no_local
 	 * @param boolean $strict
-	 * @throws kFileSyncException
+	 * @throws vFileSyncException
 	 * @throws Exception
 	 * @return array
 	 */
 	public static function dir_get_files(FileSyncKey $key, $strict = true)
 	{
-		KalturaLog::debug("key [$key], strict [$strict]");
+		VidiunLog::debug("key [$key], strict [$strict]");
 		list($file_sync, $local) = self::getReadyFileSyncForKey($key, false, $strict);
 		if($file_sync)
 		{
@@ -136,20 +136,20 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		if(!$file_sync || !$local)
 		{
 			if($strict)
-				throw new kFileSyncException("Cannot find directory file sync for key [$key]", kFileSyncException::FILE_SYNC_DOES_NOT_EXIST);
+				throw new vFileSyncException("Cannot find directory file sync for key [$key]", vFileSyncException::FILE_SYNC_DOES_NOT_EXIST);
 				
-			KalturaLog::err("FileSync not found");
+			VidiunLog::err("FileSync not found");
 			return null;
 		}
 
 		$real_path = realpath($file_sync->getFullPath());
 		if(!is_dir($real_path))
 		{
-			KalturaLog::info("directory was not found locally [$real_path]");
-			throw new kFileSyncException("Cannot find directory on local disk [$real_path] for file sync [" . $file_sync->getId() . "]", kFileSyncException::FILE_DOES_NOT_EXIST_ON_DISK);
+			VidiunLog::info("directory was not found locally [$real_path]");
+			throw new vFileSyncException("Cannot find directory on local disk [$real_path] for file sync [" . $file_sync->getId() . "]", vFileSyncException::FILE_DOES_NOT_EXIST_ON_DISK);
 		}
 		
-		KalturaLog::info("directory was found locally at [$real_path]");
+		VidiunLog::info("directory was found locally at [$real_path]");
 		
 		$dir = dir($real_path);
 		$files = array();
@@ -165,19 +165,19 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 
 	public static function file_get_contents ( FileSyncKey $key , $fetch_from_remote_if_no_local = true , $strict = true , $max_file_size = 0 )
 	{
-		$cacheStore = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_FILE_SYNC);
+		$cacheStore = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_FILE_SYNC);
 		if ($cacheStore)
 		{
 			$cacheKey = self::CACHE_KEY_PREFIX . "{$key->object_id}_{$key->object_type}_{$key->object_sub_type}_{$key->version}";
 			$result = $cacheStore->get($cacheKey);
 			if ($result)
 			{
-				KalturaLog::info("returning from cache, key [$cacheKey] size [".strlen($result)."]");
+				VidiunLog::info("returning from cache, key [$cacheKey] size [".strlen($result)."]");
 				return $result;
 			}
 		}
 
-		KalturaLog::debug("key [$key], fetch_from_remote_if_no_local [$fetch_from_remote_if_no_local], strict [$strict]");
+		VidiunLog::debug("key [$key], fetch_from_remote_if_no_local [$fetch_from_remote_if_no_local], strict [$strict]");
 		list ( $file_sync , $local ) = self::getReadyFileSyncForKey( $key , $fetch_from_remote_if_no_local , $strict );
 		if($file_sync)
 		{
@@ -188,7 +188,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		{
 			if ($max_file_size && $file_sync->getFileSize() > $max_file_size)
 			{
-				KalturaLog::err('FileSync size [' . $file_sync->getFileSize() . '] exceeds the limit [' . $max_file_size . ']');
+				VidiunLog::err('FileSync size [' . $file_sync->getFileSize() . '] exceeds the limit [' . $max_file_size . ']');
 				return null;
 			}
 			
@@ -196,13 +196,13 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 			if ($cacheStore && $result && strlen($result) < self::MAX_CACHED_FILE_SIZE &&
 				!in_array($key->object_type, self::$uncachedObjectTypes))
 			{
-				KalturaLog::info("saving to cache, key [$cacheKey] size [".strlen($result)."]");
+				VidiunLog::info("saving to cache, key [$cacheKey] size [".strlen($result)."]");
 				$cacheStore->set($cacheKey, $result, self::FILE_SYNC_CACHE_EXPIRY);
 			}
 			return $result;
 		}
 
-		KalturaLog::info("FileSync not found");
+		VidiunLog::info("FileSync not found");
 		return null;
 	}
 
@@ -214,7 +214,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	 */
 	public static function file_put_contents ( FileSyncKey $key , $content , $strict = true )
 	{
-		KalturaLog::debug("key [$key], strict [$strict]");
+		VidiunLog::debug("key [$key], strict [$strict]");
 
 		// make sure that there is not yet a record for the key
 		$c = FileSyncPeer::getCriteriaForFileSyncKey( $key );
@@ -222,13 +222,13 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		if($res)
 		{
 			if($strict)
-				throw new kFileSyncException("key $key already exists", kFileSyncException::FILE_SYNC_ALREADY_EXISTS);
+				throw new vFileSyncException("key $key already exists", vFileSyncException::FILE_SYNC_ALREADY_EXISTS);
 
-			KalturaLog::err("File Sync key $key already exists");
+			VidiunLog::err("File Sync key $key already exists");
 		}
 		else
 		{
-			KalturaLog::info("File Sync doesn't exist");
+			VidiunLog::info("File Sync doesn't exist");
 		}
 
 		list($rootPath, $filePath) = self::getLocalFilePathArrForKey($key);
@@ -251,7 +251,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	protected static function setPermissions($filePath)
 	{
 
-		$contentGroup = kConf::get('content_group');
+		$contentGroup = vConf::get('content_group');
 		if(is_numeric($contentGroup))
 			$contentGroup = intval($contentGroup);
 			
@@ -279,9 +279,9 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		$filePath = str_replace(array('/', '\\'), array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), $filePath);
 	
 		if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN')
-			return kFile::fullMkdir($filePath, 0770);
+			return vFile::fullMkdir($filePath, 0770);
 			
-		$contentGroup = kConf::get('content_group');
+		$contentGroup = vConf::get('content_group');
 		if(is_numeric($contentGroup))
 			$contentGroup = intval($contentGroup);
 				
@@ -293,7 +293,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	        if (is_dir($path))
 	        	continue;
 	        	
-	        if(!kFile::fullMkfileDir($path, 0770))
+	        if(!vFile::fullMkfileDir($path, 0770))
 	        	return false;
 	        	
 	        chgrp($path, $contentGroup);
@@ -311,17 +311,17 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		}
 		catch(Exception $ex)
 		{
-			KalturaLog::notice('could not load ready file sync for key '.$source_key);
+			VidiunLog::notice('could not load ready file sync for key '.$source_key);
 			return false;
 		}
 		$file_path = $fileSync->getFullPath();
 
 		if(file_exists($target_file_path))
 		{
-			KalturaLog::debug("Target file [$target_file_path] exists");
+			VidiunLog::debug("Target file [$target_file_path] exists");
 			if(!$overwrite)
 			{
-				KalturaLog::notice("target [$target_file_path] exists, not overwriting");
+				VidiunLog::notice("target [$target_file_path] exists, not overwriting");
 				return false;
 			}
 			elseif($target_file_path != $fileSync->getFullPath())
@@ -336,7 +336,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		}
 		else
 		{
-			KalturaLog::info("$target_file_path file doesnt exist");
+			VidiunLog::info("$target_file_path file doesnt exist");
 		}
 
 		// make sure folder exists
@@ -367,23 +367,23 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 				// delete the source file, if fails - do not output error
 				@unlink($file_path);
 			}
-			KalturaLog::info("successfully copied file to [$target_file_path] and updated fileSync");
+			VidiunLog::info("successfully copied file to [$target_file_path] and updated fileSync");
 			return true;
 		}
 		else
 		{
-			KalturaLog::info("copy failed - not changing filesync");
+			VidiunLog::info("copy failed - not changing filesync");
 			return false;
 		}
 	}
 
 	public static function moveFromFileToDirectory(FileSyncKey $directory_key, $temp_file_path, $base_file_name = null)
 	{
-		KalturaLog::debug("move file to directory: [$temp_file_path] to key [$directory_key]");
+		VidiunLog::debug("move file to directory: [$temp_file_path] to key [$directory_key]");
 
 		$c = FileSyncPeer::getCriteriaForFileSyncKey( $directory_key );
 		$c->add(FileSyncPeer::FILE_TYPE, array(FileSync::FILE_SYNC_FILE_TYPE_FILE, FileSync::FILE_SYNC_FILE_TYPE_LINK), Criteria::IN);
-		$c->add(FileSyncPeer::DC, kDataCenterMgr::getCurrentDcId());
+		$c->add(FileSyncPeer::DC, vDataCenterMgr::getCurrentDcId());
 
 		$fileSync = FileSyncPeer::doSelectOne( $c );
 		$dirFullPath = null;
@@ -397,8 +397,8 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 			$dirFullPath = $rootPath . $filePath; 
 			if(!$dirFullPath)
 			{
-				$dirFullPath = kPathManager::getFilePath($directory_key);
-				KalturaLog::info("Generated new path [$dirFullPath]");
+				$dirFullPath = vPathManager::getFilePath($directory_key);
+				VidiunLog::info("Generated new path [$dirFullPath]");
 			}
 			
 			$dirFullPath = str_replace(array('/', '\\'), array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), $dirFullPath);
@@ -411,15 +411,15 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 			}
 			else
 			{
-				KalturaLog::info("Creating directory [$dirFullPath] for file");
-				kFile::fullMkfileDir($dirFullPath);
+				VidiunLog::info("Creating directory [$dirFullPath] for file");
+				vFile::fullMkfileDir($dirFullPath);
 			}
 			self::createSyncFileForKey($rootPath, $filePath, $directory_key);
 		}
 		
 		$existing_files = glob($dirFullPath . DIRECTORY_SEPARATOR . '*');
 		if(count($existing_files) >= self::MAX_FILES_IN_CATEGORY)
-			throw new kFileSyncException("Exceeded max number of files [" . self::MAX_FILES_IN_CATEGORY . "] in category [$dirFullPath]");
+			throw new vFileSyncException("Exceeded max number of files [" . self::MAX_FILES_IN_CATEGORY . "] in category [$dirFullPath]");
 			
 		if($base_file_name)
 		{
@@ -437,17 +437,17 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		}
 		
 		$destination_file_path = $dirFullPath . DIRECTORY_SEPARATOR . $base_file_name;
-		$success = kFile::moveFile($temp_file_path, $destination_file_path);
+		$success = vFile::moveFile($temp_file_path, $destination_file_path);
 		self::setPermissions($dirFullPath);
-		KalturaLog::debug("temp_file_path [$temp_file_path](" . filesize($temp_file_path) . ") destination_file_path [$destination_file_path](" . filesize($destination_file_path) . ")");
+		VidiunLog::debug("temp_file_path [$temp_file_path](" . filesize($temp_file_path) . ") destination_file_path [$destination_file_path](" . filesize($destination_file_path) . ")");
 
 		if(!$success)
-			throw new kFileSyncException("Could not move file from [$temp_file_path] to [{$destination_file_path}]");
+			throw new vFileSyncException("Could not move file from [$temp_file_path] to [{$destination_file_path}]");
 	}
 
 	public static function moveFromFile ( $temp_file_path , FileSyncKey $target_key , $strict = true, $copyOnly = false, $cacheOnly = false)
 	{
-		KalturaLog::debug("move file: [$temp_file_path] to key [$target_key], ");
+		VidiunLog::debug("move file: [$temp_file_path] to key [$target_key], ");
 
 		$c = FileSyncPeer::getCriteriaForFileSyncKey( $target_key );
 
@@ -465,7 +465,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 			}
 			else
 			{
-				KalturaLog::err("file already exists");
+				VidiunLog::err("file already exists");
 			}
 		}
 
@@ -473,8 +473,8 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		$targetFullPath = $rootPath . $filePath; 
 		if(!$targetFullPath)
 		{
-			$targetFullPath = kPathManager::getFilePath($target_key);
-			KalturaLog::info("Generated new path [$targetFullPath]");
+			$targetFullPath = vPathManager::getFilePath($target_key);
+			VidiunLog::info("Generated new path [$targetFullPath]");
 		}
 		
 		$targetFullPath = str_replace(array('/', '\\'), array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), $targetFullPath);
@@ -486,11 +486,11 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 
 		if ( file_exists( $temp_file_path ))
 		{
-			KalturaLog::info("$temp_file_path file exists");
+			VidiunLog::info("$temp_file_path file exists");
 		}
 		else
 		{
-			KalturaLog::info("$temp_file_path file doesnt exist");
+			VidiunLog::info("$temp_file_path file doesnt exist");
 		}
 		
 		if (file_exists($targetFullPath))
@@ -506,7 +506,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		}
 		else
 		{
-			$success = kFile::moveFile($temp_file_path, $targetFullPath);
+			$success = vFile::moveFile($temp_file_path, $targetFullPath);
 		}
 
 		if($success)
@@ -518,7 +518,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		}
 		else
 		{
-			KalturaLog::err("could not move file from [$temp_file_path] to [{$targetFullPath}]");
+			VidiunLog::err("could not move file from [$temp_file_path] to [{$targetFullPath}]");
 			throw new Exception ( "Could not move file from [$temp_file_path] to [{$targetFullPath}]");
 		}
 
@@ -526,8 +526,8 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 
 	public static function copyFromFile ($temp_file_path , FileSyncKey $target_key , $strict = true)
 	{
-		KalturaLog::debug("copy file: [$temp_file_path] to key [$target_key], ");
-		kFileSyncUtils::moveFromFile($temp_file_path, $target_key, $strict, true);
+		VidiunLog::debug("copy file: [$temp_file_path] to key [$target_key], ");
+		vFileSyncUtils::moveFromFile($temp_file_path, $target_key, $strict, true);
 	}
 
 
@@ -614,7 +614,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	 */
 	public static function getLocalFileSyncForKey ( FileSyncKey $key , $strict = true )
 	{
-		$dc = kDataCenterMgr::getCurrentDc();
+		$dc = vDataCenterMgr::getCurrentDc();
 		$dc_id = $dc["id"];
 		$c = new Criteria();
 		$c = FileSyncPeer::getCriteriaForFileSyncKey( $key );
@@ -644,7 +644,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	public static function getAllReadyExternalFileSyncsForKey(FileSyncKey $key)
 	{
 		if(is_null($key->partner_id))
-			throw new kFileSyncException("partner id not defined for key [$key]", kFileSyncException::FILE_SYNC_PARTNER_ID_NOT_DEFINED);
+			throw new vFileSyncException("partner id not defined for key [$key]", vFileSyncException::FILE_SYNC_PARTNER_ID_NOT_DEFINED);
 
 		self::prepareStorageProfilesForSort($key->partner_id);
 
@@ -702,7 +702,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	protected static function getExternalFileSyncForKeyByStatus(FileSyncKey $key, $externalStorageId = null, $statuses = array())
 	{
 		if(is_null($key->partner_id))
-			throw new kFileSyncException("partner id not defined for key [$key]", kFileSyncException::FILE_SYNC_PARTNER_ID_NOT_DEFINED);
+			throw new vFileSyncException("partner id not defined for key [$key]", vFileSyncException::FILE_SYNC_PARTNER_ID_NOT_DEFINED);
 
 		self::prepareStorageProfilesForSort($key->partner_id);
 
@@ -780,7 +780,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	}
 
 	/**
-	 * Get the internal from kaltura data centers only FileSync object by its key
+	 * Get the internal from vidiun data centers only FileSync object by its key
 	 *
 	 * @param FileSyncKey $key
 	 * @return FileSync
@@ -796,7 +796,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	}
 
 	/**
-	 * Get the internal from kaltura data centers only FileSync object by its key
+	 * Get the internal from vidiun data centers only FileSync object by its key
 	 *
 	 * @param FileSyncKey $key
 	 * @return FileSync
@@ -824,14 +824,14 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		$file_sync = self::getLocalFileSyncForKey ( $key , $strict );
 		if ( $file_sync )
 		{
-			list($file_root, $real_path) = kPathManager::getFilePathArr($key);
+			list($file_root, $real_path) = vPathManager::getFilePathArr($key);
 			$file_sync->setFileRoot ( $file_root );
 			$file_sync->setFilePath ( $real_path );
 		}
 		else
 		{
 			$error = "Cannot find object type [" . $key->getObjectType() . "] with object_id [" . $key->getObjectId() . "] for FileSync id [" . $key->getId() . "]";
-			KalturaLog::err($error);
+			VidiunLog::err($error);
 			throw new Exception ( $error );
 		}
 
@@ -875,8 +875,8 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	 */
 	public static function getReadyFileSyncForKey ( FileSyncKey $key , $fetch_from_remote_if_no_local = false , $strict = true , $resolve = true )
 	{
-		KalturaLog::debug("key [$key], fetch_from_remote_if_no_local [$fetch_from_remote_if_no_local], strict [$strict]");
-		$dc = kDataCenterMgr::getCurrentDc();
+		VidiunLog::debug("key [$key], fetch_from_remote_if_no_local [$fetch_from_remote_if_no_local], strict [$strict]");
+		$dc = vDataCenterMgr::getCurrentDc();
 		$dc_id = $dc["id"];
 		$c = new Criteria();
 		$c = FileSyncPeer::getCriteriaForFileSyncKey( $key );
@@ -898,7 +898,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 			}
 			else
 			{
-				KalturaLog::notice("FileSync was not found");
+				VidiunLog::notice("FileSync was not found");
 				return array ( null , false );
 			}
 		}
@@ -934,9 +934,9 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		if ( $desired_file_sync )
 		{
 			if ($local)
-				KalturaLog::info("FileSync was found locally");
+				VidiunLog::info("FileSync was found locally");
 			else
-				KalturaLog::info("FileSync was found but doesn't exists locally");
+				VidiunLog::info("FileSync was found but doesn't exists locally");
 
 			return array ( $desired_file_sync , $local );
 		}
@@ -947,7 +947,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		}
 		else
 		{
-			KalturaLog::info("exact FileSync was not found");
+			VidiunLog::info("exact FileSync was not found");
 			return array ( null , false );
 		}
 	}
@@ -960,7 +960,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	public static function getLocalFilePathForKey ( FileSyncKey $key , $strict = false )
 	{
 		$path = implode('', self::getLocalFilePathArrForKey ($key, $strict));
-		KalturaLog::info("path [$path]");
+		VidiunLog::info("path [$path]");
 		return $path; 
 	}
 	
@@ -971,7 +971,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	 */
 	public static function getLocalFilePathArrForKey ( FileSyncKey $key , $strict = false )
 	{
-		KalturaLog::debug("key [$key], strict [$strict]");
+		VidiunLog::debug("key [$key], strict [$strict]");
 		$file_sync = self::getLocalFileSyncForKey( $key , $strict );
 		if ( $file_sync )
 		{
@@ -981,7 +981,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		}
 
 		// TODO - should return null if doesn't exists
-		return kPathManager::getFilePathArr($key);
+		return vPathManager::getFilePathArr($key);
 	}
 
 	/**
@@ -991,26 +991,26 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	 */
 	public static function getRelativeFilePathForKey ( FileSyncKey $key , $strict = false )
 	{
-		KalturaLog::debug("key [$key], strict [$strict]");
+		VidiunLog::debug("key [$key], strict [$strict]");
 		$file_sync = self::getLocalFileSyncForKey( $key , $strict );
 		if ( $file_sync )
 		{
 			$parent_file_sync = self::resolve($file_sync);
 			$path = $parent_file_sync->getFilePath();
-			KalturaLog::info("path [$path]");
+			VidiunLog::info("path [$path]");
 			return $path;
 		}
 	}
 
 	public static function getReadyLocalFilePathForKey( FileSyncKey $key , $strict = false )
 	{
-		KalturaLog::debug("key [$key], strict [$strict]");
+		VidiunLog::debug("key [$key], strict [$strict]");
 		list ( $file_sync , $local )= self::getReadyFileSyncForKey( $key , false , $strict );
 		if ( $file_sync )
 		{
 			$parent_file_sync = self::resolve($file_sync);
 			$path = $parent_file_sync->getFullPath();
-			KalturaLog::info("path [$path]");
+			VidiunLog::info("path [$path]");
 			return $path;
 		}
 	}
@@ -1025,9 +1025,9 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	 */
 	public static function createSyncFileForKey ( $rootPath, $filePath, FileSyncKey $key , $strict = true , $alreadyExists = false, $cacheOnly = false, $md5 = null)
 	{
-		KalturaLog::debug("key [$key], strict[$strict], already_exists[$alreadyExists]");
+		VidiunLog::debug("key [$key], strict[$strict], already_exists[$alreadyExists]");
 		// TODO - see that if in strict mode - there are no duplicate keys -> update existing records AND set the other DC's records to PENDING
-		$dc = kDataCenterMgr::getCurrentDc();
+		$dc = vDataCenterMgr::getCurrentDc();
 		$dcId = $dc["id"];
 
 		// create a FileSync for the current DC with status READY
@@ -1099,7 +1099,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		{
 			if (self::shouldSyncFileObjectType($currentDCFileSync))
 			{
-				$otherDCs = kDataCenterMgr::getAllDcs( );
+				$otherDCs = vDataCenterMgr::getAllDcs( );
 				foreach ( $otherDCs as $remoteDC )
 				{
 					$remoteDCFileSync = FileSync::createForFileSyncKey( $key );
@@ -1114,10 +1114,10 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 					$remoteDCFileSync->setOriginalDc($currentDCFileSync->getDc());
 					$remoteDCFileSync->save();
 
-					kEventsManager::raiseEvent(new kObjectAddedEvent($remoteDCFileSync));
+					vEventsManager::raiseEvent(new vObjectAddedEvent($remoteDCFileSync));
 				}
 			}
-			kEventsManager::raiseEvent(new kObjectAddedEvent($currentDCFileSync));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($currentDCFileSync));
 		}
 
 		return $currentDCFileSync;
@@ -1131,9 +1131,9 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	public static function createPendingExternalSyncFileForKey(FileSyncKey $key, StorageProfile $externalStorage, $isDir = false)
 	{
 		$externalStorageId = $externalStorage->getId();
-		KalturaLog::debug("key [$key], externalStorage [$externalStorageId]");
+		VidiunLog::debug("key [$key], externalStorage [$externalStorageId]");
 
-		list($fileRoot, $realPath) = kPathManager::getFilePathArr($key, $externalStorageId);
+		list($fileRoot, $realPath) = vPathManager::getFilePathArr($key, $externalStorageId);
 
 		$c = FileSyncPeer::getCriteriaForFileSyncKey( $key );
 		$c->add(FileSyncPeer::DC, $externalStorageId);
@@ -1150,7 +1150,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		$fileSync->setOriginal ( false );
 		$fileSync->setIsDir($isDir);
 
-		if($externalStorage->getProtocol() == StorageProfile::STORAGE_KALTURA_DC)
+		if($externalStorage->getProtocol() == StorageProfile::STORAGE_VIDIUN_DC)
 		{
 			$fileSync->setFileType ( FileSync::FILE_SYNC_FILE_TYPE_FILE );
 		}
@@ -1160,7 +1160,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		}
 		$fileSync->save();
 
-		kEventsManager::raiseEvent(new kObjectAddedEvent($fileSync));
+		vEventsManager::raiseEvent(new vObjectAddedEvent($fileSync));
 
 		return $fileSync;
 	}
@@ -1174,7 +1174,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	public static function createReadyExternalSyncFileForKey(FileSyncKey $key, $url, StorageProfile $externalStorage)
 	{
 		$externalStorageId = $externalStorage->getId();
-		KalturaLog::debug("key [$key], externalStorage [$externalStorageId]");
+		VidiunLog::debug("key [$key], externalStorage [$externalStorageId]");
 
 		$fileRoot = '';
 		$deliveryProfile = DeliveryProfilePeer::getRemoteDeliveryByStorageId(DeliveryProfileDynamicAttributes::init($externalStorageId, ''));
@@ -1199,7 +1199,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		$fileSync->setFileType	( FileSync::FILE_SYNC_FILE_TYPE_URL );
 		$fileSync->save();
 
-		kEventsManager::raiseEvent(new kObjectAddedEvent($fileSync));
+		vEventsManager::raiseEvent(new vObjectAddedEvent($fileSync));
 
 		return $fileSync;
 	}
@@ -1212,9 +1212,9 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	 */
 	public static function createSyncFileLinkForKey ( FileSyncKey $target_key , FileSyncKey $source_key )
 	{
-		KalturaLog::debug("target_key [$target_key], source_key [$source_key]");
+		VidiunLog::debug("target_key [$target_key], source_key [$source_key]");
 		// TODO - see that if in strict mode - there are no duplicate keys -> update existing records AND set the other DC's records to PENDING
-		$dc = kDataCenterMgr::getCurrentDc();
+		$dc = vDataCenterMgr::getCurrentDc();
 		$dc_id = $dc["id"];
 
 		// load all source file syncs
@@ -1223,7 +1223,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		$file_sync_list = FileSyncPeer::doSelect( $c );
 		if (!$file_sync_list)
 		{
-			KalturaLog::notice("Warning: no source. target_key [$target_key], source_key [$source_key] ");
+			VidiunLog::notice("Warning: no source. target_key [$target_key], source_key [$source_key] ");
 			return null;
 		}
 
@@ -1272,9 +1272,9 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 			if ($current_dc_source_file == $source_file_sync)
 				$current_dc_target_file = $remote_dc_file_sync;		// throw the added event for the current dc last
 			else
-				kEventsManager::raiseEvent(new kObjectAddedEvent($remote_dc_file_sync));
+				vEventsManager::raiseEvent(new vObjectAddedEvent($remote_dc_file_sync));
 		}
-		kEventsManager::raiseEvent(new kObjectAddedEvent($current_dc_target_file));
+		vEventsManager::raiseEvent(new vObjectAddedEvent($current_dc_target_file));
 	}
 
 	/**
@@ -1310,10 +1310,10 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	 * mark file as deleted, return deleted version
 	 * @param FileSyncKey $key
 	 * @param bool $strict
-	 * @param bool $fromKalturaDcsOnly
+	 * @param bool $fromVidiunDcsOnly
 	 * @return string
 	 */
-	public static function deleteSyncFileForKey( FileSyncKey $key , $strict = false , $fromKalturaDcsOnly = false)
+	public static function deleteSyncFileForKey( FileSyncKey $key , $strict = false , $fromVidiunDcsOnly = false)
 	{
 		if ( !$key )
 		{
@@ -1325,7 +1325,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		//Retrieve all file sync for key
 		$c = new Criteria();
 		$c = FileSyncPeer::getCriteriaForFileSyncKey( $key );
-		if($fromKalturaDcsOnly)
+		if($fromVidiunDcsOnly)
 			$c->add(FileSyncPeer::FILE_TYPE, FileSync::FILE_SYNC_FILE_TYPE_URL, Criteria::NOT_EQUAL);
 		$file_sync_list = FileSyncPeer::doSelect( $c );
 		
@@ -1345,7 +1345,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 				}
 				elseif($file_sync->getLinkCount() > 100)
 				{
-					KalturaLog::notice("The file sync [" . $file_sync->getId() . "] is associated with [" . $file_sync->getLinkCount() . "] links and won't be deleted");
+					VidiunLog::notice("The file sync [" . $file_sync->getId() . "] is associated with [" . $file_sync->getLinkCount() . "] links and won't be deleted");
 					return null;
 				}
 				else
@@ -1449,8 +1449,8 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	 */
 	public static function retrieveObjectForFileSync ( FileSync $file_sync )
 	{
-		KalturaLog::debug("FileSync id [" . $file_sync->getId() . "]" );
-		return kFileSyncObjectManager::retrieveObject( $file_sync->getObjectType(), $file_sync->getObjectId() );
+		VidiunLog::debug("FileSync id [" . $file_sync->getId() . "]" );
+		return vFileSyncObjectManager::retrieveObject( $file_sync->getObjectType(), $file_sync->getObjectId() );
 	}
 
 	/**
@@ -1460,18 +1460,18 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	 */
 	public static function retrieveObjectForSyncKey ( FileSyncKey  $sync_key )
 	{
-		return kFileSyncObjectManager::retrieveObject( $sync_key->object_type, $sync_key->object_id );
+		return vFileSyncObjectManager::retrieveObject( $sync_key->object_type, $sync_key->object_id );
 	}
 	
 	public static function calcObjectNewVersion($object_id, $version, $object_type, $object_sub_type)
 	{
 		if(self::wasFileSyncLimitationReached($object_id, $version, $object_type, $object_sub_type))
 		{
-			throw new kCoreException("File sync limitation per single object per day was reached for object id " . $object_id
-									, kCoreException::MAX_FILE_SYNCS_FOR_OBJECT_PER_DAY_REACHED, $object_id);
+			throw new vCoreException("File sync limitation per single object per day was reached for object id " . $object_id
+									, vCoreException::MAX_FILE_SYNCS_FOR_OBJECT_PER_DAY_REACHED, $object_id);
 		}
 
-		return kDataCenterMgr::incrementVersion($version);
+		return vDataCenterMgr::incrementVersion($version);
 	}
 	
 	public static function wasFileSyncLimitationReached($object_id, $version, $object_type, $object_sub_type)
@@ -1501,7 +1501,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -1529,7 +1529,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
@@ -1549,7 +1549,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::objectAdded()
+	 * @see vObjectAddedEventConsumer::objectAdded()
 	 */
 	public function objectAdded(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -1558,7 +1558,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeAddedEvent()
+	 * @see vObjectAddedEventConsumer::shouldConsumeAddedEvent()
 	 */
 	public function shouldConsumeAddedEvent(BaseObject $object) {
 		if(	$object instanceof FileSync && $this->hasOldVersionsForDelete($object) )
@@ -1571,9 +1571,9 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	{
 		if(!is_numeric($fileSync->getVersion()))
 			return false;
-		if (kConf::hasParam('num_of_old_file_sync_versions_to_keep'))
+		if (vConf::hasParam('num_of_old_file_sync_versions_to_keep'))
 		{
-			$keepCount = kConf::get('num_of_old_file_sync_versions_to_keep');
+			$keepCount = vConf::get('num_of_old_file_sync_versions_to_keep');
 			$intVersion = intval($fileSync->getVersion());
 			if($intVersion - $keepCount > 0)
 				return true;
@@ -1583,10 +1583,10 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 
 	private function deleteOldFileSyncVersions(FileSync $newFileSync)
 	{
-		KalturaLog::debug('Deleting old file_sync versions for ['.$newFileSync->getId().']');
-		if (kConf::hasParam('num_of_old_file_sync_versions_to_keep'))
+		VidiunLog::debug('Deleting old file_sync versions for ['.$newFileSync->getId().']');
+		if (vConf::hasParam('num_of_old_file_sync_versions_to_keep'))
 		{
-			$keepCount = kConf::get('num_of_old_file_sync_versions_to_keep');
+			$keepCount = vConf::get('num_of_old_file_sync_versions_to_keep');
 			if(!is_numeric($newFileSync->getVersion()))
 				return;
 			$intVersion = intval($newFileSync->getVersion());
@@ -1603,7 +1603,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 			$fileSyncs = FileSyncPeer::doSelect($c);
 			foreach ($fileSyncs as $fileSync)
 			{
-				$key = kFileSyncUtils::getKeyForFileSync($fileSync);
+				$key = vFileSyncUtils::getKeyForFileSync($fileSync);
 				self::deleteSyncFileForKey($key);
 			}
 		}
@@ -1617,7 +1617,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	 */
 	public static function compareContent ($syncKey, $contentMd5, $isFile = false)
 	{
-		list ($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, false, false);
+		list ($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, false, false);
 		if (!$fileSync || !$fileSync->getContentMd5())
 		{
 			return false;
@@ -1636,13 +1636,13 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 	{
 		$resolveFileSync = self::resolve($fileSync);
 		$path = $resolveFileSync->getFullPath();
-		KalturaLog::info("Resolve path [$path]");
-		kFileUtils::dumpFile($path, null, null, 0, $fileSync->getEncryptionKey(), $fileSync->getIv(), $fileSync->getFileSize());
+		VidiunLog::info("Resolve path [$path]");
+		vFileUtils::dumpFile($path, null, null, 0, $fileSync->getEncryptionKey(), $fileSync->getIv(), $fileSync->getFileSize());
 	}
 
 	public static function dumpFileByFileSyncKey( FileSyncKey $key , $strict = false )
 	{
-		KalturaLog::debug("Dumping File: key [$key], strict [$strict]");
+		VidiunLog::debug("Dumping File: key [$key], strict [$strict]");
 		list ( $file_sync , $local )= self::getReadyFileSyncForKey( $key , false , $strict );
 		if ( $file_sync )
 			self::dumpFileByFileSync($file_sync);
@@ -1671,7 +1671,7 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 		if(is_null(self::$excludedSyncFileFromDcSynchronization))
 		{
 			self::$excludedSyncFileFromDcSynchronization = array();
-			$dcConfig = kConf::getMap("dc_config");
+			$dcConfig = vConf::getMap("dc_config");
 			if(isset($dcConfig['sync_exclude_types']))
 			{
 				foreach($dcConfig['sync_exclude_types'] as $syncExcludeType)
@@ -1684,13 +1684,13 @@ class kFileSyncUtils implements kObjectChangedEventConsumer, kObjectAddedEventCo
 
 					// translate api dynamic enum, such as contentDistribution.EntryDistribution - {plugin name}.{object name}
 					if(!is_numeric($configObjectType))
-						$configObjectType = kPluginableEnumsManager::apiToCore('FileSyncObjectType', $configObjectType);
+						$configObjectType = vPluginableEnumsManager::apiToCore('FileSyncObjectType', $configObjectType);
 
 					// translate api dynamic enum, including the enum type, such as conversionEngineType.mp4box.Mp4box - {enum class name}.{plugin name}.{object name}
 					if(!is_null($configObjectSubType) && !is_numeric($configObjectSubType))
 					{
 						list($enumType, $configObjectSubType) = explode('.', $configObjectSubType);
-						$configObjectSubType = kPluginableEnumsManager::apiToCore($enumType, $configObjectSubType);
+						$configObjectSubType = vPluginableEnumsManager::apiToCore($enumType, $configObjectSubType);
 					}
 
 					if(!isset(self::$excludedSyncFileFromDcSynchronization[$configObjectType]))

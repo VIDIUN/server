@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaResponseProfileFilter extends KalturaResponseProfileBaseFilter
+class VidiunResponseProfileFilter extends VidiunResponseProfileBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.enum
  */
-class KalturaESearchCaptionFieldName extends KalturaStringEnum
+class VidiunESearchCaptionFieldName extends VidiunStringEnum
 {
 	const CONTENT = 'content';
 	const START_TIME = 'start_time';

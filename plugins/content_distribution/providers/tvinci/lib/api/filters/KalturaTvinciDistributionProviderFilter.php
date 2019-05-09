@@ -3,6 +3,6 @@
  * @package plugins.tvinciDistribution
  * @subpackage api.filters
  */
-class KalturaTvinciDistributionProviderFilter extends KalturaTvinciDistributionProviderBaseFilter
+class VidiunTvinciDistributionProviderFilter extends VidiunTvinciDistributionProviderBaseFilter
 {
 }

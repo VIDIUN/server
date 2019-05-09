@@ -2,7 +2,7 @@
 /**
  * @package plugins.activitiBusinessProcessNotification
  */
-class ActivitiBusinessProcessNotificationPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaPending, IKalturaObjectLoader, IKalturaEnumerator
+class ActivitiBusinessProcessNotificationPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunPending, IVidiunObjectLoader, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'activitiBusinessProcessNotification';
 	
@@ -12,7 +12,7 @@ class ActivitiBusinessProcessNotificationPlugin extends KalturaPlugin implements
 	const BPM_NOTIFICATION_PLUGIN_VERSION_BUILD = 0;
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -20,7 +20,7 @@ class ActivitiBusinessProcessNotificationPlugin extends KalturaPlugin implements
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -32,7 +32,7 @@ class ActivitiBusinessProcessNotificationPlugin extends KalturaPlugin implements
 	}
 			
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -46,7 +46,7 @@ class ActivitiBusinessProcessNotificationPlugin extends KalturaPlugin implements
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
@@ -66,48 +66,48 @@ class ActivitiBusinessProcessNotificationPlugin extends KalturaPlugin implements
 	}
 		
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'kBusinessProcessProvider')
+		if($baseClass == 'vBusinessProcessProvider')
 		{
-			if(class_exists('KalturaClient') && defined('KalturaBusinessProcessProvider::ACTIVITI'))
+			if(class_exists('VidiunClient') && defined('VidiunBusinessProcessProvider::ACTIVITI'))
 			{
-				if($enumValue == KalturaBusinessProcessProvider::ACTIVITI)
-					return 'kActivitiBusinessProcessProvider';
+				if($enumValue == VidiunBusinessProcessProvider::ACTIVITI)
+					return 'vActivitiBusinessProcessProvider';
 			}
-			elseif(class_exists('Kaltura_Client_Client') && defined('Kaltura_Client_BusinessProcessNotification_Enum_BusinessProcessProvider::ACTIVITI'))
+			elseif(class_exists('Vidiun_Client_Client') && defined('Vidiun_Client_BusinessProcessNotification_Enum_BusinessProcessProvider::ACTIVITI'))
 			{
-				if($enumValue == Kaltura_Client_BusinessProcessNotification_Enum_BusinessProcessProvider::ACTIVITI)
-					return 'kActivitiBusinessProcessProvider';
+				if($enumValue == Vidiun_Client_BusinessProcessNotification_Enum_BusinessProcessProvider::ACTIVITI)
+					return 'vActivitiBusinessProcessProvider';
 			}
 			elseif($enumValue == self::getApiValue(ActivitiBusinessProcessProvider::ACTIVITI))
 			{
-				return 'kActivitiBusinessProcessProvider';
+				return 'vActivitiBusinessProcessProvider';
 			}
 		}
 			
 		if($baseClass == 'BusinessProcessServer' && $enumValue == self::getActivitiBusinessProcessProviderCoreValue(ActivitiBusinessProcessProvider::ACTIVITI))
 			return 'ActivitiBusinessProcessServer';
 			
-		if($baseClass == 'KalturaBusinessProcessServer' && $enumValue == self::getActivitiBusinessProcessProviderCoreValue(ActivitiBusinessProcessProvider::ACTIVITI))
-			return 'KalturaActivitiBusinessProcessServer';
+		if($baseClass == 'VidiunBusinessProcessServer' && $enumValue == self::getActivitiBusinessProcessProviderCoreValue(ActivitiBusinessProcessProvider::ACTIVITI))
+			return 'VidiunActivitiBusinessProcessServer';
 					
 		return null;
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn() 
 	{
-		$minVersion = new KalturaVersion(
+		$minVersion = new VidiunVersion(
 			self::BPM_NOTIFICATION_PLUGIN_VERSION_MAJOR,
 			self::BPM_NOTIFICATION_PLUGIN_VERSION_MINOR,
 			self::BPM_NOTIFICATION_PLUGIN_VERSION_BUILD
 		);
-		$dependency = new KalturaDependency(self::BPM_NOTIFICATION_PLUGIN_NAME, $minVersion);
+		$dependency = new VidiunDependency(self::BPM_NOTIFICATION_PLUGIN_NAME, $minVersion);
 		
 		return array($dependency);
 	}
@@ -117,8 +117,8 @@ class ActivitiBusinessProcessNotificationPlugin extends KalturaPlugin implements
 	 */
 	public static function getActivitiBusinessProcessProviderCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BusinessProcessProvider', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BusinessProcessProvider', $value);
 	}
 	
 	/**
@@ -126,6 +126,6 @@ class ActivitiBusinessProcessNotificationPlugin extends KalturaPlugin implements
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

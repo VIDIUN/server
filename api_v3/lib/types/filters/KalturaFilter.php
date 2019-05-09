@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-abstract class KalturaFilter extends KalturaObject
+abstract class VidiunFilter extends VidiunObject
 {
 	const LT = "lt";
 	const LTE = "lte";
@@ -40,7 +40,7 @@ abstract class KalturaFilter extends KalturaObject
 	public $orderBy;
 	
 	/**
-	 * @var KalturaSearchItem
+	 * @var VidiunSearchItem
 	 */
 	public $advancedSearch;
 	
@@ -75,7 +75,7 @@ abstract class KalturaFilter extends KalturaObject
 		
 		$this->orderBy = $newOrderBy;
 		
-		$typeReflector = KalturaTypeReflectorCacher::get(get_class($this));
+		$typeReflector = VidiunTypeReflectorCacher::get(get_class($this));
 		
 		foreach ( $this->getMapBetweenObjects() as $this_prop => $object_prop )
 		{
@@ -89,7 +89,7 @@ abstract class KalturaFilter extends KalturaObject
 			$propertyInfo = $typeReflector->getProperty($this_prop);
 			if(!$propertyInfo)
 			{
-				KalturaLog::alert("Cannot load property info for attribute [$this_prop] in object [" . get_class($this) . "] try delete the cache");
+				VidiunLog::alert("Cannot load property info for attribute [$this_prop] in object [" . get_class($this) . "] try delete the cache");
 				continue;
 			}
 			
@@ -97,7 +97,7 @@ abstract class KalturaFilter extends KalturaObject
 			{
 				$propertyType = $propertyInfo->getType();
 				$enumType = call_user_func(array($propertyType, 'getEnumClass'));
-				$value = kPluginableEnumsManager::apiToCore($enumType, $value);
+				$value = vPluginableEnumsManager::apiToCore($enumType, $value);
 			}
 			elseif($propertyInfo->getDynamicType()&& strlen($value))
 			{
@@ -107,7 +107,7 @@ abstract class KalturaFilter extends KalturaObject
 				$values = explode(',', $value);
 				$finalValues = array();
 				foreach($values as $val)
-					$finalValues[] = kPluginableEnumsManager::apiToCore($enumType, $val);
+					$finalValues[] = vPluginableEnumsManager::apiToCore($enumType, $val);
 				$value = implode(',', $finalValues);
 			}
 			
@@ -118,7 +118,7 @@ abstract class KalturaFilter extends KalturaObject
 		 		
 		if(is_object($this->advancedSearch))
 		{
-			if($this->advancedSearch instanceof KalturaSearchItem)
+			if($this->advancedSearch instanceof VidiunSearchItem)
 			{
 				$advancedSearch = $this->advancedSearch->toObject();
 				if($advancedSearch)
@@ -129,9 +129,9 @@ abstract class KalturaFilter extends KalturaObject
 		return $object_to_fill;		
 	}	
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$reflector = KalturaTypeReflectorCacher::get(get_class($this));
+		$reflector = VidiunTypeReflectorCacher::get(get_class($this));
 		
 		foreach ($this->getMapBetweenObjects() as $this_prop => $object_prop )
 		{
@@ -146,7 +146,7 @@ abstract class KalturaFilter extends KalturaObject
                 {
 					$propertyType = $property->getType();
 					$enumType = call_user_func(array($propertyType, 'getEnumClass'));
-                	$value = kPluginableEnumsManager::coreToApi($enumType, $value);
+                	$value = vPluginableEnumsManager::coreToApi($enumType, $value);
                 }
                 elseif($property->getDynamicType())
                 {
@@ -157,7 +157,7 @@ abstract class KalturaFilter extends KalturaObject
 	                	$values = explode(',', $value);
 	                	$finalValues = array();
 	                	foreach($values as $val)
-	                		$finalValues[] = kPluginableEnumsManager::coreToApi($enumType, $val);
+	                		$finalValues[] = vPluginableEnumsManager::coreToApi($enumType, $val);
 	                	$value = implode(',', $finalValues);
 					}
                 }
@@ -166,7 +166,7 @@ abstract class KalturaFilter extends KalturaObject
 		    }
 		    else
 		    {
-		    	KalturaLog::alert("field [$object_prop] was not found on filter object class [" . get_class($source_object) . "]");
+		    	VidiunLog::alert("field [$object_prop] was not found on filter object class [" . get_class($source_object) . "]");
 		    }
 		}
 		
@@ -192,10 +192,10 @@ abstract class KalturaFilter extends KalturaObject
 	    $advancedSearch = $source_object->getAdvancedSearch();
 		if(is_object($advancedSearch) && $advancedSearch instanceof AdvancedSearchFilterItem)
 		{
-			$apiClass = $advancedSearch->getKalturaClass();
+			$apiClass = $advancedSearch->getVidiunClass();
 			if(!class_exists($apiClass))
 			{
-				KalturaLog::err("Class [$apiClass] not found");
+				VidiunLog::err("Class [$apiClass] not found");
 			}
 			else 
 			{
@@ -213,34 +213,34 @@ abstract class KalturaFilter extends KalturaObject
 //		return "_{$operator}_"
 	}
 	
-	protected function preparePusersToKusersFilter( $puserIdsCsv )
+	protected function preparePusersToVusersFilter( $puserIdsCsv )
 	{
-		$kuserIdsArr = array();
+		$vuserIdsArr = array();
 		$puserIdsArr = explode(',',$puserIdsCsv);
-		$kuserArr = kuserPeer::getKuserByPartnerAndUids(kCurrentContext::getCurrentPartnerId(), $puserIdsArr);
+		$vuserArr = vuserPeer::getVuserByPartnerAndUids(vCurrentContext::getCurrentPartnerId(), $puserIdsArr);
 
-		foreach($kuserArr as $kuser)
+		foreach($vuserArr as $vuser)
 		{
-			$kuserIdsArr[] = $kuser->getId();
+			$vuserIdsArr[] = $vuser->getId();
 		}
 
-		if(!empty($kuserIdsArr))
+		if(!empty($vuserIdsArr))
 		{
-			return implode(',',$kuserIdsArr);
+			return implode(',',$vuserIdsArr);
 		}
 
 		return -1; // no result will be returned if no puser exists
 	}
 	
-	protected function prepareKusersToPusersFilter( $kuserIdsCsv )
+	protected function prepareVusersToPusersFilter( $vuserIdsCsv )
 	{
 		$puserIdsArr = array();
-		$kuserIdsArr = explode(',',$kuserIdsCsv);
-		$kuserArr = kuserPeer::retrieveByPKs($kuserIdsArr);
+		$vuserIdsArr = explode(',',$vuserIdsCsv);
+		$vuserArr = vuserPeer::retrieveByPKs($vuserIdsArr);
 
-		foreach($kuserArr as $kuser)
+		foreach($vuserArr as $vuser)
 		{
-			$puserIdsArr[] = $kuser->getPuserId();
+			$puserIdsArr[] = $vuser->getPuserId();
 		}
 
 		if(!empty($puserIdsArr))

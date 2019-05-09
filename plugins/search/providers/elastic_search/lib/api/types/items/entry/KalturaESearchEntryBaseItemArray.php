@@ -3,18 +3,18 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchEntryBaseItemArray extends KalturaTypedArray
+class VidiunESearchEntryBaseItemArray extends VidiunTypedArray
 {
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaESearchEntryBaseItem");
+		return parent::__construct("VidiunESearchEntryBaseItem");
 	}
 	
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		KalturaLog::debug(print_r($arr, true));
-		$newArr = new KalturaESearchEntryBaseItemArray();
+		VidiunLog::debug(print_r($arr, true));
+		$newArr = new VidiunESearchEntryBaseItemArray();
 		if ($arr == null)
 			return $newArr;
 		
@@ -23,39 +23,39 @@ class KalturaESearchEntryBaseItemArray extends KalturaTypedArray
 			switch (get_class($obj))
 			{
 				case 'ESearchEntryItem':
-					$nObj = new KalturaESearchEntryItem();
+					$nObj = new VidiunESearchEntryItem();
 					break;
 				
 				case 'ESearchOperator':
-					$nObj = new KalturaESearchEntryOperator();
+					$nObj = new VidiunESearchEntryOperator();
 					break;
 				
 				case 'ESearchMetadataItem':
-					$nObj = new KalturaESearchEntryMetadataItem();
+					$nObj = new VidiunESearchEntryMetadataItem();
 					break;
 				
 				case 'ESearchCuePointItem':
-					$nObj = new KalturaESearchCuePointItem();
+					$nObj = new VidiunESearchCuePointItem();
 					break;
 				
 				case 'ESearchCaptionItem':
-					$nObj = new KalturaESearchCaptionItem();
+					$nObj = new VidiunESearchCaptionItem();
 					break;
 				
 				case 'ESearchCategoryEntryNameItem':
-					$nObj = new KalturaESearchCategoryEntryItem();
+					$nObj = new VidiunESearchCategoryEntryItem();
 					break;
 				
 				case 'ESearchUnifiedItem':
-					$nObj = new KalturaESearchUnifiedItem();
+					$nObj = new VidiunESearchUnifiedItem();
 					break;
 				
 				case 'ESearchNestedOperator':
-					$nObj = new KalturaESearchNestedOperator();
+					$nObj = new VidiunESearchNestedOperator();
 					break;
 					
 				default:
-					$nObj = KalturaPluginManager::loadObject('KalturaESearchEntryBaseItem', get_class($obj));
+					$nObj = VidiunPluginManager::loadObject('VidiunESearchEntryBaseItem', get_class($obj));
 					break;
 			}
 			

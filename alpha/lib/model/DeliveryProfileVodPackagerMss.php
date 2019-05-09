@@ -4,7 +4,7 @@ class DeliveryProfileVodPackagerMss extends DeliveryProfileSilverLight {
 	
 	function __construct() {
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kRedirectManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vRedirectManifestRenderer';
 	}
 	
 	protected function doGetFlavorAssetUrl(asset $flavorAsset)

@@ -3,7 +3,7 @@
  * @package plugins.cuePoint
  * @subpackage model.enum
  */
-class BaseEntryThumbCuePointCloneOptions implements IKalturaPluginEnum, BaseEntryCloneOptions
+class BaseEntryThumbCuePointCloneOptions implements IVidiunPluginEnum, BaseEntryCloneOptions
 {
 	const THUMB_CUE_POINTS = "THUMB_CUE_POINTS";
 

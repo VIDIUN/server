@@ -35,32 +35,32 @@ abstract class Form_ConfigurableProfileConfiguration extends Form_ProviderProfil
 		foreach($itemXpathsToExtend as $key => $val)
 		{
 			if ((string)$key == 'includeCategoryInMrss'){
-				$categoryFeaturesToExtend[] = Kaltura_Client_Enum_ObjectFeatureType::METADATA;
+				$categoryFeaturesToExtend[] = Vidiun_Client_Enum_ObjectFeatureType::METADATA;
 				continue;
 			}
 			else if ((string)$key == 'includeCategoryParentInMrss'){
-				$categoryFeaturesToExtend[] = Kaltura_Client_Enum_ObjectFeatureType::ANCESTOR_RECURSIVE;
+				$categoryFeaturesToExtend[] = Vidiun_Client_Enum_ObjectFeatureType::ANCESTOR_RECURSIVE;
 				continue;
 			}
 			else if ($val){	
-				$temp = new Kaltura_Client_Type_ExtendingItemMrssParameter();
+				$temp = new Vidiun_Client_Type_ExtendingItemMrssParameter();
 				$temp->xpath = $val;
-				$temp->identifier = new Kaltura_Client_Type_EntryIdentifier();
-				$temp->identifier->identifier = Kaltura_Client_Enum_EntryIdentifierField::ID;
+				$temp->identifier = new Vidiun_Client_Type_EntryIdentifier();
+				$temp->identifier->identifier = Vidiun_Client_Enum_EntryIdentifierField::ID;
 				$temp->identifier->extendedFeatures = "";
-				$temp->extensionMode = Kaltura_Client_Enum_MrssExtensionMode::APPEND;
+				$temp->extensionMode = Vidiun_Client_Enum_MrssExtensionMode::APPEND;
 				$object->itemXpathsToExtend [] = $temp;
 			}
 		}
 		
 		if (count($categoryFeaturesToExtend)){
-			$categoryFeaturesToExtend[] = Kaltura_Client_Enum_ObjectFeatureType::CUSTOM_DATA;
-			$temp = new Kaltura_Client_Type_ExtendingItemMrssParameter();
+			$categoryFeaturesToExtend[] = Vidiun_Client_Enum_ObjectFeatureType::CUSTOM_DATA;
+			$temp = new Vidiun_Client_Type_ExtendingItemMrssParameter();
 			$temp->xpath = '//category';
-			$temp->identifier = new Kaltura_Client_Type_CategoryIdentifier();
-			$temp->identifier->identifier = Kaltura_Client_Enum_CategoryIdentifierField::FULL_NAME;
+			$temp->identifier = new Vidiun_Client_Type_CategoryIdentifier();
+			$temp->identifier->identifier = Vidiun_Client_Enum_CategoryIdentifierField::FULL_NAME;
 			$temp->identifier->extendedFeatures = implode(',', $categoryFeaturesToExtend);
-			$temp->extensionMode = Kaltura_Client_Enum_MrssExtensionMode::REPLACE;
+			$temp->extensionMode = Vidiun_Client_Enum_MrssExtensionMode::REPLACE;
 			$object->itemXpathsToExtend [] = $temp;
 		}
 		return $object;
@@ -90,7 +90,7 @@ abstract class Form_ConfigurableProfileConfiguration extends Form_ProviderProfil
 	protected function addItemXpathsToExtend($itemXpathsToExtend)
 	{
 		if (count($itemXpathsToExtend) == 0)
-			$itemXpathsToExtend = array(new Kaltura_Client_Type_ExtendingItemMrssParameter());
+			$itemXpathsToExtend = array(new Vidiun_Client_Type_ExtendingItemMrssParameter());
 			
 		$mainSubForm = new Zend_Form_SubForm();
 		$mainSubForm->setLegend('Item XPaths To Extend');
@@ -109,19 +109,19 @@ abstract class Form_ConfigurableProfileConfiguration extends Form_ProviderProfil
 		
 		foreach($itemXpathsToExtend as $itemXPath)
 		{
-			/* @var $itemXPath Kaltura_Client_Type_ExtendingItemMrssParameter */
+			/* @var $itemXPath Vidiun_Client_Type_ExtendingItemMrssParameter */
 			//if it a category identifier
-			if ($itemXPath->identifier instanceof Kaltura_Client_Type_CategoryIdentifier){
-				/* @var $identifier Kaltura_Client_Type_CategoryIdentifier */
+			if ($itemXPath->identifier instanceof Vidiun_Client_Type_CategoryIdentifier){
+				/* @var $identifier Vidiun_Client_Type_CategoryIdentifier */
 				$identifier = $itemXPath->identifier;
 				//if the parameters are set exactly as the admin console sets.
-				if ($itemXPath->xpath == '//category' && $itemXPath->extensionMode == Kaltura_Client_Enum_MrssExtensionMode::REPLACE
-					&& $identifier->identifier == Kaltura_Client_Enum_CategoryIdentifierField::FULL_NAME){
+				if ($itemXPath->xpath == '//category' && $itemXPath->extensionMode == Vidiun_Client_Enum_MrssExtensionMode::REPLACE
+					&& $identifier->identifier == Vidiun_Client_Enum_CategoryIdentifierField::FULL_NAME){
 					foreach (explode(',', $identifier->extendedFeatures) as $extendedFeature){
-						if ($extendedFeature == Kaltura_Client_Enum_ObjectFeatureType::METADATA){
+						if ($extendedFeature == Vidiun_Client_Enum_ObjectFeatureType::METADATA){
 							$extendCategory = true;
 						}
-						elseif ($extendedFeature == Kaltura_Client_Enum_ObjectFeatureType::ANCESTOR_RECURSIVE){
+						elseif ($extendedFeature == Vidiun_Client_Enum_ObjectFeatureType::ANCESTOR_RECURSIVE){
 							$extendParentCategory = true;
 						}
 					}

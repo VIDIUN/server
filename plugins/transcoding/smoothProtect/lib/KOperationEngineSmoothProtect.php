@@ -3,13 +3,13 @@
  * @package plugins.smoothProtect
  * @subpackage lib
  */
-class KOperationEngineSmoothProtect  extends KSingleOutputOperationEngine
+class VOperationEngineSmoothProtect  extends VSingleOutputOperationEngine
 {
 
 	public function __construct($cmd, $outFilePath)
 	{
 		parent::__construct($cmd,$outFilePath);
-		KalturaLog::info(": cmd($cmd), outFilePath($outFilePath)");
+		VidiunLog::info(": cmd($cmd), outFilePath($outFilePath)");
 	}
 
 	/* ---------------------------
@@ -28,14 +28,14 @@ class KOperationEngineSmoothProtect  extends KSingleOutputOperationEngine
 		$ismFilePath = str_replace("/", "\\", $ismFilePath);
 		$paramsStr = " -input $ismFilePath -output $outFilePath ".$this->getLicenseParamsStr();
 		$exeCmd = str_replace(SmoothProtectPlugin::PARAMS_STUB, $paramsStr, $exeCmd);
-		KalturaLog::info($exeCmd);
+		VidiunLog::info($exeCmd);
 		return $exeCmd;
 	}
 
 	/* ---------------------------
 	 * operate
 	 */
-	public function operate(kOperator $operator = null, $inFilePath, $configFilePath = null)
+	public function operate(vOperator $operator = null, $inFilePath, $configFilePath = null)
 	{
 		$res = parent::operate($operator, $inFilePath, $configFilePath);
 		if($res==false) {
@@ -56,7 +56,7 @@ class KOperationEngineSmoothProtect  extends KSingleOutputOperationEngine
 		 * Update ISM manifest file with correct output file names
 		 */
 		$ismStr = file_get_contents($auxOutName.".ism");
-		KalturaLog::info("Before file name update:\n$ismStr");
+		VidiunLog::info("Before file name update:\n$ismStr");
 		$ismXml = new SimpleXMLElement($ismStr);
 		$ismXml->head->meta['content'] = $outFileName.".ismc";
 		if(isset($ismXml->body->switch->video)) {
@@ -68,7 +68,7 @@ class KOperationEngineSmoothProtect  extends KSingleOutputOperationEngine
 			$ismXml->body->switch->audio['src'] = $outBaseName;
 		}
 		$ismStr = $ismXml->asXML();
-		KalturaLog::info("After file name update:\n$ismStr");
+		VidiunLog::info("After file name update:\n$ismStr");
 		file_put_contents($auxOutName.".ism", $ismStr);
 		
 		/*
@@ -87,11 +87,11 @@ class KOperationEngineSmoothProtect  extends KSingleOutputOperationEngine
 		 * Notify batch job flow to bind the ISM/ISMC files to the asset
 		 */
 		$fsDescArr = array();
-		$fsDesc = new KalturaDestFileSyncDescriptor();
+		$fsDesc = new VidiunDestFileSyncDescriptor();
 		$fsDesc->fileSyncLocalPath = "$outFolderName//$outFileName.ism";
 		$fsDesc->fileSyncObjectSubType = 3; //".ism";
 		$fsDescArr[] = $fsDesc;
-		$fsDesc = new KalturaDestFileSyncDescriptor();
+		$fsDesc = new VidiunDestFileSyncDescriptor();
 		$fsDesc->fileSyncLocalPath = "$outFolderName//$outFileName.ismc";
 		$fsDesc->fileSyncObjectSubType = 4; //".ismc";
 		$fsDescArr[] = $fsDesc;
@@ -105,34 +105,34 @@ class KOperationEngineSmoothProtect  extends KSingleOutputOperationEngine
 	private function getLicenseParamsStr()
 	{
 		// impersonite
-		KBatchBase::impersonate($this->job->partnerId);
+		VBatchBase::impersonate($this->job->partnerId);
 		
-		$drmPlugin = KalturaDrmClientPlugin::get(KBatchBase::$kClient);
+		$drmPlugin = VidiunDrmClientPlugin::get(VBatchBase::$vClient);
 		if(!isset($drmPlugin)) {
-			KalturaLog::err("FAILED to get drmPlugin");
+			VidiunLog::err("FAILED to get drmPlugin");
 			return false;
 		}
-		$profile=$drmPlugin->drmProfile->getByProvider(KalturaDrmProviderType::PLAY_READY);
+		$profile=$drmPlugin->drmProfile->getByProvider(VidiunDrmProviderType::PLAY_READY);
 		if(!isset($profile)) {
-			KalturaLog::err("FAILED to get profile");
+			VidiunLog::err("FAILED to get profile");
 			return false;
 		}
-		$playReadyPlugin = KalturaPlayReadyClientPlugin::get(KBatchBase::$kClient);
+		$playReadyPlugin = VidiunPlayReadyClientPlugin::get(VBatchBase::$vClient);
 		if(!isset($playReadyPlugin)) {
-			KalturaLog::err("FAILED to get playReadyPlugin");
+			VidiunLog::err("FAILED to get playReadyPlugin");
 			return false;
 		}
 		$playReadyData = $playReadyPlugin->playReadyDrm->getEntryContentKey($this->job->entryId, true);
 		if(!isset($playReadyData)) {
-			KalturaLog::err("FAILED to get playReadyData");
+			VidiunLog::err("FAILED to get playReadyData");
 			return false;
 		}
 
 		// un-impersonite
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 			
 		$paramsStr = " -keyId $playReadyData->keyId -contentKey $playReadyData->contentKey -laUrl $profile->licenseServerUrl";
-		KalturaLog::info($paramsStr);
+		VidiunLog::info($paramsStr);
 		return $paramsStr;
 
 /*

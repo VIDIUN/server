@@ -24,7 +24,7 @@ class myCache
 	{
 		$this->m_namespace = $namespace;
 		$this->m_expiry = $expiry ? $expiry : self::DEFAULT_EXPIRY_IN_SECONDS;
-		$this->m_cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_PS2);
+		$this->m_cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_PS2);
 	}
 		
 	public function put ( $obj_name , $obj , $expiry = NULL )
@@ -42,7 +42,7 @@ class myCache
 	{
 		if ( ! $this->m_cache ) return NULL;
 
-		kApiCache::disableConditionalCache();
+		vApiCache::disableConditionalCache();
 		
 		$value = $this->m_cache->get ( $this->m_namespace . $obj_name );
 		if ( !isset ( $value ) )

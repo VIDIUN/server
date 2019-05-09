@@ -3,7 +3,7 @@
  * @package plugins.dropFolder
  * @subpackage Admin
  */
-class DropFolderSetStatusAction extends KalturaApplicationPlugin
+class DropFolderSetStatusAction extends VidiunApplicationPlugin
 {
 	
 	/**
@@ -16,7 +16,7 @@ class DropFolderSetStatusAction extends KalturaApplicationPlugin
 	
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_DROP_FOLDER_MODIFY);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_DROP_FOLDER_MODIFY);
 	}
 	
 	public function doAction(Zend_Controller_Action $action)
@@ -26,9 +26,9 @@ class DropFolderSetStatusAction extends KalturaApplicationPlugin
 		$newStatus = $this->_getParam('dropFolderStatus');
 		
 		$client = Infra_ClientHelper::getClient();
-		$dropFolderPluginClient = Kaltura_Client_DropFolder_Plugin::get($client);
+		$dropFolderPluginClient = Vidiun_Client_DropFolder_Plugin::get($client);
 		
-		$updatedDropFolder = new Kaltura_Client_DropFolder_Type_DropFolder();
+		$updatedDropFolder = new Vidiun_Client_DropFolder_Type_DropFolder();
 		$updatedDropFolder->status = $newStatus;
 		
 		try
@@ -38,7 +38,7 @@ class DropFolderSetStatusAction extends KalturaApplicationPlugin
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			echo $action->getHelper('json')->sendJson($e->getMessage(), false);
 		}
 	}

@@ -5,10 +5,10 @@
  * @service reachProfile
  * @package plugins.reach
  * @subpackage api.services
- * @throws KalturaErrors::SERVICE_FORBIDDEN
+ * @throws VidiunErrors::SERVICE_FORBIDDEN
  */
 
-class ReachProfileService extends KalturaBaseService
+class ReachProfileService extends VidiunBaseService
 {
 
 	public function initService($serviceId, $serviceName, $actionName)
@@ -16,7 +16,7 @@ class ReachProfileService extends KalturaBaseService
 		parent::initService($serviceId, $serviceName, $actionName);
 
 		if (!ReachPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, ReachPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, ReachPlugin::PLUGIN_NAME);
 
 		$this->applyPartnerFilterForClass('reachProfile');
 	}
@@ -25,20 +25,20 @@ class ReachProfileService extends KalturaBaseService
 	 * Allows you to add a partner specific reach profile
 	 *
 	 * @action add
-	 * @param KalturaReachProfile $reachProfile
-	 * @return KalturaReachProfile
+	 * @param VidiunReachProfile $reachProfile
+	 * @return VidiunReachProfile
 	 */
-	public function addAction(KalturaReachProfile $reachProfile)
+	public function addAction(VidiunReachProfile $reachProfile)
 	{
 		$dbReachProfile = $reachProfile->toInsertableObject();
 
 		/* @var $dbReachProfile ReachProfile */
-		$dbReachProfile->setPartnerId(kCurrentContext::getCurrentPartnerId());
-		$dbReachProfile->setStatus(KalturaReachProfileStatus::ACTIVE);
+		$dbReachProfile->setPartnerId(vCurrentContext::getCurrentPartnerId());
+		$dbReachProfile->setStatus(VidiunReachProfileStatus::ACTIVE);
 		$credit = $dbReachProfile->getCredit();
-		if ( $credit && $credit instanceof kReoccurringVendorCredit)
+		if ( $credit && $credit instanceof vReoccurringVendorCredit)
 		{
-			/* @var $credit kReoccurringVendorCredit */
+			/* @var $credit vReoccurringVendorCredit */
 			$credit->setPeriodDates();
 			$dbReachProfile->setCredit($credit);
 		}
@@ -55,35 +55,35 @@ class ReachProfileService extends KalturaBaseService
 	 *
 	 * @action get
 	 * @param int $id
-	 * @return KalturaReachProfile
-	 * @throws KalturaReachErrors::REACH_PROFILE_NOT_FOUND
+	 * @return VidiunReachProfile
+	 * @throws VidiunReachErrors::REACH_PROFILE_NOT_FOUND
 	 */
 	function getAction($id)
 	{
 		$dbReachProfile = ReachProfilePeer::retrieveByPK($id);
 		if (!$dbReachProfile)
-			throw new KalturaAPIException(KalturaReachErrors::REACH_PROFILE_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunReachErrors::REACH_PROFILE_NOT_FOUND, $id);
 		
-		$reachProfile = new KalturaReachProfile();
+		$reachProfile = new VidiunReachProfile();
 		$reachProfile->fromObject($dbReachProfile, $this->getResponseProfile());
 		return $reachProfile;
 	}
 
 	/**
-	 * List KalturaReachProfile objects
+	 * List VidiunReachProfile objects
 	 *
 	 * @action list
-	 * @param KalturaReachProfileFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaReachProfileListResponse
+	 * @param VidiunReachProfileFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunReachProfileListResponse
 	 */
-	public function listAction(KalturaReachProfileFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunReachProfileFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaReachProfileFilter();
+			$filter = new VidiunReachProfileFilter();
 
 		if (!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 
 		return $filter->getListResponse($pager, $this->getResponseProfile());
 	}
@@ -93,24 +93,24 @@ class ReachProfileService extends KalturaBaseService
 	 *
 	 * @action update
 	 * @param int $id
-	 * @param KalturaReachProfile $reachProfile
-	 * @return KalturaReachProfile
+	 * @param VidiunReachProfile $reachProfile
+	 * @return VidiunReachProfile
 	 *
-	 * @throws KalturaReachErrors::REACH_PROFILE_NOT_FOUND
+	 * @throws VidiunReachErrors::REACH_PROFILE_NOT_FOUND
 	 */
-	public function updateAction($id, KalturaReachProfile $reachProfile)
+	public function updateAction($id, VidiunReachProfile $reachProfile)
 	{
 		// get the object
 		$dbReachProfile = ReachProfilePeer::retrieveByPK($id);
 		if (!$dbReachProfile)
-			throw new KalturaAPIException(KalturaReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
 
 		// save the object
 		$dbReachProfile = $reachProfile->toUpdatableObject($dbReachProfile);
 		$credit = $dbReachProfile->getCredit();
-		if ($credit && $credit instanceof kReoccurringVendorCredit)
+		if ($credit && $credit instanceof vReoccurringVendorCredit)
 		{
-			/* @var $credit kReoccurringVendorCredit */
+			/* @var $credit vReoccurringVendorCredit */
 			$credit->setPeriodDates();
 			$dbReachProfile->setCredit($credit);
 		}
@@ -118,7 +118,7 @@ class ReachProfileService extends KalturaBaseService
 		$dbReachProfile->save();
 
 		// return the saved object
-		$reachProfile = new KalturaReachProfile();
+		$reachProfile = new VidiunReachProfile();
 		$reachProfile->fromObject($dbReachProfile, $this->getResponseProfile());
 		return $reachProfile;
 	}
@@ -128,23 +128,23 @@ class ReachProfileService extends KalturaBaseService
 	 *
 	 * @action updateStatus
 	 * @param int $id
-	 * @param KalturaReachProfileStatus $status
-	 * @return KalturaReachProfile
+	 * @param VidiunReachProfileStatus $status
+	 * @return VidiunReachProfile
 	 *
-	 * @throws KalturaReachErrors::REACH_PROFILE_NOT_FOUND
+	 * @throws VidiunReachErrors::REACH_PROFILE_NOT_FOUND
 	 */
 	function updateStatusAction($id, $status)
 	{
 		// get the object
 		$dbReachProfile = ReachProfilePeer::retrieveByPK($id);
 		if (!$dbReachProfile)
-			throw new KalturaAPIException(KalturaReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunReachErrors::CATALOG_ITEM_NOT_FOUND, $id);
 		
 		$dbReachProfile->setStatus($status);
 		$credit = $dbReachProfile->getCredit();
-		if ($status == KalturaReachProfileStatus::ACTIVE && $credit && $credit instanceof kReoccurringVendorCredit)
+		if ($status == VidiunReachProfileStatus::ACTIVE && $credit && $credit instanceof vReoccurringVendorCredit)
         {
-	        /* @var $credit kReoccurringVendorCredit */
+	        /* @var $credit vReoccurringVendorCredit */
 			$credit->setPeriodDates();
 			$dbReachProfile->setCredit($credit);
 		}
@@ -153,7 +153,7 @@ class ReachProfileService extends KalturaBaseService
 		$dbReachProfile->save();
 
 		// return the saved object
-		$reachProfile = new KalturaReachProfile();
+		$reachProfile = new VidiunReachProfile();
 		$reachProfile->fromObject($dbReachProfile, $this->getResponseProfile());
 		return $reachProfile;
 	}
@@ -164,17 +164,17 @@ class ReachProfileService extends KalturaBaseService
 	 * @action delete
 	 * @param int $id
 	 *
-	 * @throws KalturaReachErrors::REACH_PROFILE_NOT_FOUND
+	 * @throws VidiunReachErrors::REACH_PROFILE_NOT_FOUND
 	 */
 	public function deleteAction($id)
 	{
 		// get the object
 		$dbReachProfile = ReachProfilePeer::retrieveByPK($id);
 		if (!$dbReachProfile)
-			throw new KalturaAPIException(KalturaReachErrors::REACH_PROFILE_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunReachErrors::REACH_PROFILE_NOT_FOUND, $id);
 
 		// set the object status to deleted
-		$dbReachProfile->setStatus(KalturaReachProfileStatus::DELETED);
+		$dbReachProfile->setStatus(VidiunReachProfileStatus::DELETED);
 		$dbReachProfile->save();
 	}
 
@@ -183,14 +183,14 @@ class ReachProfileService extends KalturaBaseService
 	 *
 	 * @action syncCredit
 	 * @param int $reachProfileId
-	 * @return KalturaReachProfile
-	 * @throws KalturaReachErrors::REACH_PROFILE_NOT_FOUND
+	 * @return VidiunReachProfile
+	 * @throws VidiunReachErrors::REACH_PROFILE_NOT_FOUND
 	 */
 	public function syncCredit($reachProfileId)
 	{
 		$dbReachProfile = ReachProfilePeer::retrieveByPK($reachProfileId);
 		if (!$dbReachProfile)
-			throw new KalturaAPIException(KalturaReachErrors::REACH_PROFILE_NOT_FOUND, $reachProfileId);
+			throw new VidiunAPIException(VidiunReachErrors::REACH_PROFILE_NOT_FOUND, $reachProfileId);
 
 		// set the object status to deleted
 		if( $dbReachProfile->shouldSyncCredit())
@@ -200,7 +200,7 @@ class ReachProfileService extends KalturaBaseService
 		}
 
 		// return the saved object
-		$reachProfile = new KalturaReachProfile();
+		$reachProfile = new VidiunReachProfile();
 		$reachProfile->fromObject($dbReachProfile, $this->getResponseProfile());
 		return $reachProfile;
 	}

@@ -3,15 +3,15 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KOperationManager
+class VOperationManager
 {
 	/**
 	 * @param int $type
-	 * @param KalturaConvartableJobData $data
-	 * @param KalturaBatchJob $job
-	 * @return KOperationEngine
+	 * @param VidiunConvartableJobData $data
+	 * @param VidiunBatchJob $job
+	 * @return VOperationEngine
 	 */
-	public static function getEngine($type, KalturaConvartableJobData $data, KalturaBatchJob $job)
+	public static function getEngine($type, VidiunConvartableJobData $data, VidiunBatchJob $job)
 	{
 		$engine = self::createNewEngine($type, $data);
 		if(!$engine)
@@ -23,10 +23,10 @@ class KOperationManager
 	
 	/**
 	 * @param int $type
-	 * @param KalturaConvartableJobData $data
-	 * @return KOperationEngine
+	 * @param VidiunConvartableJobData $data
+	 * @return VOperationEngine
 	 */
-	protected static function createNewEngine($type, KalturaConvartableJobData $data)
+	protected static function createNewEngine($type, VidiunConvartableJobData $data)
 	{
 		// TODO - remove after old version deprecated
 		/*
@@ -34,50 +34,50 @@ class KOperationManager
 		 */		
 		if(!isset($data->flavorParamsOutput) || !$data->flavorParamsOutput->engineVersion)
 		{
-			return new KOperationEngineOldVersionWrapper($type, $data);
+			return new VOperationEngineOldVersionWrapper($type, $data);
 		}
 		
 		switch($type)
 		{ 
-			case KalturaConversionEngineType::MENCODER:
-				return new KOperationEngineMencoder(KBatchBase::$taskConfig->params->mencderCmd, $data->destFileSyncLocalPath);
+			case VidiunConversionEngineType::MENCODER:
+				return new VOperationEngineMencoder(VBatchBase::$taskConfig->params->mencderCmd, $data->destFileSyncLocalPath);
 				
-			case KalturaConversionEngineType::ON2:
-				return new KOperationEngineFlix(KBatchBase::$taskConfig->params->on2Cmd, $data->destFileSyncLocalPath);
+			case VidiunConversionEngineType::ON2:
+				return new VOperationEngineFlix(VBatchBase::$taskConfig->params->on2Cmd, $data->destFileSyncLocalPath);
 				
-			case KalturaConversionEngineType::FFMPEG:
-				return new KOperationEngineFfmpeg(KBatchBase::$taskConfig->params->ffmpegCmd, $data->destFileSyncLocalPath);
+			case VidiunConversionEngineType::FFMPEG:
+				return new VOperationEngineFfmpeg(VBatchBase::$taskConfig->params->ffmpegCmd, $data->destFileSyncLocalPath);
 				
-			case KalturaConversionEngineType::FFMPEG_AUX:
-				return new KOperationEngineFfmpegAux(KBatchBase::$taskConfig->params->ffmpegAuxCmd, $data->destFileSyncLocalPath);
+			case VidiunConversionEngineType::FFMPEG_AUX:
+				return new VOperationEngineFfmpegAux(VBatchBase::$taskConfig->params->ffmpegAuxCmd, $data->destFileSyncLocalPath);
 				
-			case KalturaConversionEngineType::FFMPEG_VP8:
-				return new KOperationEngineFfmpegVp8(KBatchBase::$taskConfig->params->ffmpegVp8Cmd, $data->destFileSyncLocalPath);
+			case VidiunConversionEngineType::FFMPEG_VP8:
+				return new VOperationEngineFfmpegVp8(VBatchBase::$taskConfig->params->ffmpegVp8Cmd, $data->destFileSyncLocalPath);
 				
-			case KalturaConversionEngineType::ENCODING_COM :
-				return new KOperationEngineEncodingCom(
-					KBatchBase::$taskConfig->params->EncodingComUserId, 
-					KBatchBase::$taskConfig->params->EncodingComUserKey, 
-					KBatchBase::$taskConfig->params->EncodingComUrl);
+			case VidiunConversionEngineType::ENCODING_COM :
+				return new VOperationEngineEncodingCom(
+					VBatchBase::$taskConfig->params->EncodingComUserId, 
+					VBatchBase::$taskConfig->params->EncodingComUserKey, 
+					VBatchBase::$taskConfig->params->EncodingComUrl);
 		}
 		
-		if($data instanceof KalturaConvertCollectionJobData)
+		if($data instanceof VidiunConvertCollectionJobData)
 		{
 			$engine = self::getCollectionEngine($type, $data);
 			if($engine)
 				return $engine;
 		}
-		$engine = KalturaPluginManager::loadObject('KOperationEngine', $type, array('params' => KBatchBase::$taskConfig->params, 'outFilePath' => $data->destFileSyncLocalPath));
+		$engine = VidiunPluginManager::loadObject('VOperationEngine', $type, array('params' => VBatchBase::$taskConfig->params, 'outFilePath' => $data->destFileSyncLocalPath));
 		
 		return $engine;
 	}
 	
-	protected static function getCollectionEngine($type, KalturaConvertCollectionJobData $data)
+	protected static function getCollectionEngine($type, VidiunConvertCollectionJobData $data)
 	{
 		switch($type)
 		{
-			case KalturaConversionEngineType::EXPRESSION_ENCODER3:
-				return new KOperationEngineExpressionEncoder3(KBatchBase::$taskConfig->params->expEncoderCmd, $data->destFileName, $data->destDirLocalPath);
+			case VidiunConversionEngineType::EXPRESSION_ENCODER3:
+				return new VOperationEngineExpressionEncoder3(VBatchBase::$taskConfig->params->expEncoderCmd, $data->destFileName, $data->destDirLocalPath);
 		}
 		
 		return  null;

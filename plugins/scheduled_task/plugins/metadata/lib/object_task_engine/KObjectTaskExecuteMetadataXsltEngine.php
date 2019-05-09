@@ -4,14 +4,14 @@
  * @package plugins.scheduledTaskMetadata
  * @subpackage lib.objectTaskEngine
  */
-class KObjectTaskExecuteMetadataXsltEngine extends KObjectTaskEntryEngineBase
+class VObjectTaskExecuteMetadataXsltEngine extends VObjectTaskEntryEngineBase
 {
 	/**
-	 * @param KalturaBaseEntry $object
+	 * @param VidiunBaseEntry $object
 	 */
 	function processObject($object)
 	{
-		/** @var KalturaExecuteMetadataXsltObjectTask $objectTask */
+		/** @var VidiunExecuteMetadataXsltObjectTask $objectTask */
 		$objectTask = $this->getObjectTask();
 		if (is_null($objectTask))
 			return;
@@ -21,9 +21,9 @@ class KObjectTaskExecuteMetadataXsltEngine extends KObjectTaskEntryEngineBase
 		$metadataObjectType = $objectTask->metadataObjectType;
 		$xslt = $objectTask->xslt;
 		$client = $this->getClient();
-		$metadataPlugin = KalturaMetadataClientPlugin::get($client);
+		$metadataPlugin = VidiunMetadataClientPlugin::get($client);
 
-		$filter = new KalturaMetadataFilter();
+		$filter = new VidiunMetadataFilter();
 		$filter->objectIdEqual = $entryId;
 		$filter->metadataProfileIdEqual = $metadataProfileId;
 		$filter->metadataObjectTypeEqual = $metadataObjectType;
@@ -31,7 +31,7 @@ class KObjectTaskExecuteMetadataXsltEngine extends KObjectTaskEntryEngineBase
 
 		if (!count($metadataResult->objects))
 		{
-			KalturaLog::info(sprintf('Metadata object was not found for entry %s, profile id %s and object type %s', $entryId, $metadataProfileId, $metadataObjectType));
+			VidiunLog::info(sprintf('Metadata object was not found for entry %s, profile id %s and object type %s', $entryId, $metadataProfileId, $metadataObjectType));
 			return;
 		}
 

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kStorageProfileScope extends kScope
+class vStorageProfileScope extends vScope
 {
 	/**
 	 * Storage profile id that is passed as part of the scope

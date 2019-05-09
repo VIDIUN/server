@@ -36,7 +36,7 @@ class AkamaiClient extends nusoap_client
 	{
 		if ($this->getError())
 		{
-			KalturaLog::err("AkamaiClient error calling operation: [".$this->operation."], error: [".$this->getError()."], request: [".$this->request."], response: [".$this->response."]");
+			VidiunLog::err("AkamaiClient error calling operation: [".$this->operation."], error: [".$this->getError()."], request: [".$this->request."], response: [".$this->response."]");
 		}
 	}
 }

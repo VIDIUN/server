@@ -4,12 +4,12 @@
  * @subpackage lib.entitlement
  */
 
-class kElasticUserEntitlementDecorator implements IKalturaESearchEntryEntitlementDecorator
+class vElasticUserEntitlementDecorator implements IVidiunESearchEntryEntitlementDecorator
 {
 
 	public static function shouldContribute()
 	{
-		if(kEntryElasticEntitlement::$userEntitlement)
+		if(vEntryElasticEntitlement::$userEntitlement)
 			return true;
 
 		return false;
@@ -19,45 +19,45 @@ class kElasticUserEntitlementDecorator implements IKalturaESearchEntryEntitlemen
 	{
 		$conditions = array();
 
-		$userEditPreFetchGroupCondition = new kESearchTermsQuery("{$fieldPrefix}entitled_kusers_edit",
-			array('index' => ElasticIndexMap::ELASTIC_KUSER_INDEX,'type' => ElasticIndexMap::ELASTIC_KUSER_TYPE,
-				'id' => $params['kuserId'],	'path' => 'group_ids'));
+		$userEditPreFetchGroupCondition = new vESearchTermsQuery("{$fieldPrefix}entitled_vusers_edit",
+			array('index' => ElasticIndexMap::ELASTIC_VUSER_INDEX,'type' => ElasticIndexMap::ELASTIC_VUSER_TYPE,
+				'id' => $params['vuserId'],	'path' => 'group_ids'));
 		$conditions[] = $userEditPreFetchGroupCondition;
-		$userEditCondition = new kESearchTermQuery("{$fieldPrefix}entitled_kusers_edit",$params['kuserId']);
+		$userEditCondition = new vESearchTermQuery("{$fieldPrefix}entitled_vusers_edit",$params['vuserId']);
 		$conditions[] = $userEditCondition;
 
-		$userPublishPreFetchGroupCondition = new kESearchTermsQuery("{$fieldPrefix}entitled_kusers_publish",
-			array('index' => ElasticIndexMap::ELASTIC_KUSER_INDEX,'type' => ElasticIndexMap::ELASTIC_KUSER_TYPE,
-				'id' => $params['kuserId'],	'path' => 'group_ids'));
+		$userPublishPreFetchGroupCondition = new vESearchTermsQuery("{$fieldPrefix}entitled_vusers_publish",
+			array('index' => ElasticIndexMap::ELASTIC_VUSER_INDEX,'type' => ElasticIndexMap::ELASTIC_VUSER_TYPE,
+				'id' => $params['vuserId'],	'path' => 'group_ids'));
 		$conditions[] = $userPublishPreFetchGroupCondition;
-		$userPublishCondition = new kESearchTermQuery("{$fieldPrefix}entitled_kusers_publish",$params['kuserId']);
+		$userPublishCondition = new vESearchTermQuery("{$fieldPrefix}entitled_vusers_publish",$params['vuserId']);
 		$conditions[] = $userPublishCondition;
 
-		$userViewPreFetchGroupCondition = new kESearchTermsQuery("{$fieldPrefix}entitled_kusers_view",
-			array('index' => ElasticIndexMap::ELASTIC_KUSER_INDEX,'type' => ElasticIndexMap::ELASTIC_KUSER_TYPE,
-				'id' => $params['kuserId'],	'path' => 'group_ids'));
+		$userViewPreFetchGroupCondition = new vESearchTermsQuery("{$fieldPrefix}entitled_vusers_view",
+			array('index' => ElasticIndexMap::ELASTIC_VUSER_INDEX,'type' => ElasticIndexMap::ELASTIC_VUSER_TYPE,
+				'id' => $params['vuserId'],	'path' => 'group_ids'));
 		$conditions[] = $userViewPreFetchGroupCondition;
-		$userViewCondition = new kESearchTermQuery("{$fieldPrefix}entitled_kusers_view",$params['kuserId']);
+		$userViewCondition = new vESearchTermQuery("{$fieldPrefix}entitled_vusers_view",$params['vuserId']);
 		$conditions[] = $userViewCondition;
 
-		$userPreFetchGroupCondition = new kESearchTermsQuery("{$fieldPrefix}kuser_id",
-			array('index' => ElasticIndexMap::ELASTIC_KUSER_INDEX,'type' => ElasticIndexMap::ELASTIC_KUSER_TYPE,
-				'id' => $params['kuserId'],	'path' => 'group_ids'));
+		$userPreFetchGroupCondition = new vESearchTermsQuery("{$fieldPrefix}vuser_id",
+			array('index' => ElasticIndexMap::ELASTIC_VUSER_INDEX,'type' => ElasticIndexMap::ELASTIC_VUSER_TYPE,
+				'id' => $params['vuserId'],	'path' => 'group_ids'));
 		$conditions[] = $userPreFetchGroupCondition;
-		$userCondition = new kESearchTermQuery("{$fieldPrefix}kuser_id",$params['kuserId']);
+		$userCondition = new vESearchTermQuery("{$fieldPrefix}vuser_id",$params['vuserId']);
 		$conditions[] = $userCondition;
 		return $conditions;
 	}
 
 	public static function applyCondition(&$entryQuery, &$parentEntryQuery)
 	{
-		$kuserId = kEntryElasticEntitlement::$kuserId;
-		if(!$kuserId)
+		$vuserId = vEntryElasticEntitlement::$vuserId;
+		if(!$vuserId)
 		{
-			KalturaLog::log('cannot add user entitlement to elastic without a kuserId - setting kuser id to -1');
-			$kuserId = -1;
+			VidiunLog::log('cannot add user entitlement to elastic without a vuserId - setting vuser id to -1');
+			$vuserId = -1;
 		}
-		$params['kuserId'] = $kuserId;
+		$params['vuserId'] = $vuserId;
 
 		if($parentEntryQuery)
 		{

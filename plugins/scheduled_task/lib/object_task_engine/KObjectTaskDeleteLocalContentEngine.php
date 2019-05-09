@@ -4,17 +4,17 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectTaskEngine
  */
-class KObjectTaskDeleteLocalContentEngine extends KObjectTaskEntryEngineBase
+class VObjectTaskDeleteLocalContentEngine extends VObjectTaskEntryEngineBase
 {
 
 	/**
-	 * @param KalturaBaseEntry $object
+	 * @param VidiunBaseEntry $object
 	 */
 	function processObject($object)
 	{
 		$client = $this->getClient();
 		$entryId = $object->id;
-		KalturaLog::info("Deleting local content for entry [$entryId]");
+		VidiunLog::info("Deleting local content for entry [$entryId]");
 		$flavors = $this->getEntryFlavors($object, $client);
 		if (!count($flavors))
 			return;
@@ -27,9 +27,9 @@ class KObjectTaskDeleteLocalContentEngine extends KObjectTaskEntryEngineBase
 
 	protected function getEntryFlavors($object){
 		$client = $this->getClient();
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500; // use max size, throw exception in case we got more than 500 flavors where pagination is not supported
-		$filter = new KalturaFlavorAssetFilter();
+		$filter = new VidiunFlavorAssetFilter();
 		$filter->entryIdEqual = $object->id;
 		$flavorsResponse = $client->flavorAsset->listAction($filter);
 
@@ -37,7 +37,7 @@ class KObjectTaskDeleteLocalContentEngine extends KObjectTaskEntryEngineBase
 			throw new Exception('Too many flavors were found where pagination is not supported');
 
 		$flavors = $flavorsResponse->objects;
-		KalturaLog::info('Found '.count($flavors). ' flavors');
+		VidiunLog::info('Found '.count($flavors). ' flavors');
 		return $flavors;
 	}
 
@@ -52,12 +52,12 @@ class KObjectTaskDeleteLocalContentEngine extends KObjectTaskEntryEngineBase
 		try
 		{
 			$client->flavorAsset->deleteLocalContent($id);
-			KalturaLog::info("Local content of flavor id [$id] was deleted");
+			VidiunLog::info("Local content of flavor id [$id] was deleted");
 		}
 		catch(Exception $ex)
 		{
-			KalturaLog::err($ex->getMessage());
-			KalturaLog::err("Failed to delete local content of flavor id [$id]");
+			VidiunLog::err($ex->getMessage());
+			VidiunLog::err("Failed to delete local content of flavor id [$id]");
 		}
 	}
 }

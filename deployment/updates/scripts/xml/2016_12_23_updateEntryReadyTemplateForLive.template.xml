@@ -16,31 +16,31 @@
     <multirequest>
         <!-- Entry Ready -->
         <request service="eventNotificationTemplate" action="listTemplates" plugin="eventNotification">
-            <filter objectType="KalturaEventNotificationTemplateFilter">
+            <filter objectType="VidiunEventNotificationTemplateFilter">
                 <systemNameEqual>Entry_Ready</systemNameEqual>
             </filter>
-            <pager objectType="KalturaFilterPager">
+            <pager objectType="VidiunFilterPager">
                 <pageSize>1</pageSize>
             </pager>
         </request>
         <request service="eventNotificationTemplate" action="update" plugin="eventNotification" partnerId="0">
             <id>{1:result:objects:0:id}</id>
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
-                        <field objectType="KalturaEvalBooleanField">
+                    <item objectType="VidiunEventFieldCondition">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getObject() instanceof entry &amp;&amp; in_array(entryPeer::STATUS, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getStatus() == entryStatus::READY</code>
                         </field>
                     </item>
-                    <item objectType="KalturaOrCondition">
+                    <item objectType="VidiunOrCondition">
                         <conditions objectType="array">
-                            <item objectType="KalturaEventFieldCondition">
-                                <field objectType="KalturaEvalBooleanField">
+                            <item objectType="VidiunEventFieldCondition">
+                                <field objectType="VidiunEvalBooleanField">
                                     <code>!$scope->getObject()->getReplacedEntryId()</code>
                                 </field>
                             </item>
-                            <item objectType="KalturaEventFieldCondition">
-                                <field objectType="KalturaEvalBooleanField">
+                            <item objectType="VidiunEventFieldCondition">
+                                <field objectType="VidiunEvalBooleanField">
                                     <code>$scope->getObject()->getReplacedEntryId() &amp;&amp; entryPeer::retrieveByPK($scope->getObject()->getReplacedEntryId())->getSourceType()!= EntrySourceType::RECORDED_LIVE</code>
                                 </field>
                             </item>

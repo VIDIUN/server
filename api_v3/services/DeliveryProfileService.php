@@ -7,25 +7,25 @@
  * @package api
  * @subpackage services
  */
-class DeliveryProfileService extends KalturaBaseService
+class DeliveryProfileService extends VidiunBaseService
 {
 	
 	/**
 	 * Add new delivery.
 	 *
 	 * @action add
-	 * @param KalturaDeliveryProfile $delivery
-	 * @return KalturaDeliveryProfile
+	 * @param VidiunDeliveryProfile $delivery
+	 * @return VidiunDeliveryProfile
 	 */
-	function addAction(KalturaDeliveryProfile $delivery)
+	function addAction(VidiunDeliveryProfile $delivery)
 	{
-		$dbKalturaDelivery = $delivery->toInsertableObject();
-		$dbKalturaDelivery->setPartnerId($this->getPartnerId());
-		$dbKalturaDelivery->setParentId(0);
-		$dbKalturaDelivery->save();
+		$dbVidiunDelivery = $delivery->toInsertableObject();
+		$dbVidiunDelivery->setPartnerId($this->getPartnerId());
+		$dbVidiunDelivery->setParentId(0);
+		$dbVidiunDelivery->save();
 		
-		$delivery = KalturaDeliveryProfileFactory::getDeliveryProfileInstanceByType($dbKalturaDelivery->getType());
-		$delivery->fromObject($dbKalturaDelivery, $this->getResponseProfile());
+		$delivery = VidiunDeliveryProfileFactory::getDeliveryProfileInstanceByType($dbVidiunDelivery->getType());
+		$delivery->fromObject($dbVidiunDelivery, $this->getResponseProfile());
 		return $delivery;
 	}
 	
@@ -34,25 +34,25 @@ class DeliveryProfileService extends KalturaBaseService
 	 *
 	 * @action update
 	 * @param string $id
-	 * @param KalturaDeliveryProfile $delivery
-	 * @return KalturaDeliveryProfile
+	 * @param VidiunDeliveryProfile $delivery
+	 * @return VidiunDeliveryProfile
 	 */
-	function updateAction( $id , KalturaDeliveryProfile $delivery )
+	function updateAction( $id , VidiunDeliveryProfile $delivery )
 	{
 		DeliveryProfilePeer::setUseCriteriaFilter(false);
 		$dbDelivery = DeliveryProfilePeer::retrieveByPK($id);
 		DeliveryProfilePeer::setUseCriteriaFilter(true);
 		if (!$dbDelivery)
-			throw new KalturaAPIException(KalturaErrors::DELIVERY_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::DELIVERY_ID_NOT_FOUND, $id);
 		
 		// Don't allow to update default delivery profiles from the outside
 		if($dbDelivery->getIsDefault())
-			throw new KalturaAPIException(KalturaErrors::DELIVERY_UPDATE_ISNT_ALLOWED, $id);
+			throw new VidiunAPIException(VidiunErrors::DELIVERY_UPDATE_ISNT_ALLOWED, $id);
 		
 		$delivery->toUpdatableObject($dbDelivery);
 		$dbDelivery->save();
 		
-		$delivery = KalturaDeliveryProfileFactory::getDeliveryProfileInstanceByType($dbDelivery->getType());
+		$delivery = VidiunDeliveryProfileFactory::getDeliveryProfileInstanceByType($dbDelivery->getType());
 		$delivery->fromObject($dbDelivery, $this->getResponseProfile());
 		return $delivery;
 	}
@@ -62,7 +62,7 @@ class DeliveryProfileService extends KalturaBaseService
 	*
 	* @action get
 	* @param string $id
-	* @return KalturaDeliveryProfile
+	* @return VidiunDeliveryProfile
 	*/
 	function getAction( $id )
 	{
@@ -71,9 +71,9 @@ class DeliveryProfileService extends KalturaBaseService
 		DeliveryProfilePeer::setUseCriteriaFilter(true);
 		
 		if (!$dbDelivery)
-			throw new KalturaAPIException(KalturaErrors::DELIVERY_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::DELIVERY_ID_NOT_FOUND, $id);
 			
-		$delivery = KalturaDeliveryProfileFactory::getDeliveryProfileInstanceByType($dbDelivery->getType());
+		$delivery = VidiunDeliveryProfileFactory::getDeliveryProfileInstanceByType($dbDelivery->getType());
 		$delivery->fromObject($dbDelivery, $this->getResponseProfile());
 		return $delivery;
 	}
@@ -84,22 +84,22 @@ class DeliveryProfileService extends KalturaBaseService
 	*
 	* @action clone
 	* @param int $deliveryId
-	* @return KalturaDeliveryProfile
+	* @return VidiunDeliveryProfile
 	*/
 	function cloneAction( $deliveryId )
 	{
 		$dbDelivery = DeliveryProfilePeer::retrieveByPK( $deliveryId );
 		
 		if ( ! $dbDelivery )
-			throw new KalturaAPIException ( APIErrors::DELIVERY_ID_NOT_FOUND , $deliveryId );
+			throw new VidiunAPIException ( APIErrors::DELIVERY_ID_NOT_FOUND , $deliveryId );
 		
 		$className = get_class($dbDelivery);
 		$class = new ReflectionClass($className);
-		$dbKalturaDelivery = $class->newInstanceArgs(array());
-		$dbKalturaDelivery = $dbDelivery->cloneToNew ( $dbKalturaDelivery );
+		$dbVidiunDelivery = $class->newInstanceArgs(array());
+		$dbVidiunDelivery = $dbDelivery->cloneToNew ( $dbVidiunDelivery );
 		
-		$delivery = KalturaDeliveryProfileFactory::getDeliveryProfileInstanceByType($dbKalturaDelivery->getType());
-		$delivery->fromObject($dbKalturaDelivery, $this->getResponseProfile());
+		$delivery = VidiunDeliveryProfileFactory::getDeliveryProfileInstanceByType($dbVidiunDelivery->getType());
+		$delivery->fromObject($dbVidiunDelivery, $this->getResponseProfile());
 		return $delivery;
 	}
 	
@@ -107,17 +107,17 @@ class DeliveryProfileService extends KalturaBaseService
 	* Retrieve a list of available delivery depends on the filter given
 	*
 	* @action list
-	* @param KalturaDeliveryProfileFilter $filter
-	* @param KalturaFilterPager $pager
-	* @return KalturaDeliveryProfileListResponse
+	* @param VidiunDeliveryProfileFilter $filter
+	* @param VidiunFilterPager $pager
+	* @return VidiunDeliveryProfileListResponse
 	*/
-	function listAction( KalturaDeliveryProfileFilter $filter=null , KalturaFilterPager $pager=null)
+	function listAction( VidiunDeliveryProfileFilter $filter=null , VidiunFilterPager $pager=null)
 	{
 		if (!$filter)
-			$filter = new KalturaDeliveryProfileFilter();
+			$filter = new VidiunDeliveryProfileFilter();
 
 		if (!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		$delivery = new DeliveryProfileFilter();
 		$filter->toObject($delivery);
@@ -125,7 +125,7 @@ class DeliveryProfileService extends KalturaBaseService
 		DeliveryProfilePeer::setUseCriteriaFilter(false);
 		
 		$c = new Criteria();
-		$c->add(DeliveryProfilePeer::PARTNER_ID, array(0, kCurrentContext::getCurrentPartnerId()), Criteria::IN);
+		$c->add(DeliveryProfilePeer::PARTNER_ID, array(0, vCurrentContext::getCurrentPartnerId()), Criteria::IN);
 		$delivery->attachToCriteria($c);
 		
 		$totalCount = DeliveryProfilePeer::doCount($c);
@@ -135,8 +135,8 @@ class DeliveryProfileService extends KalturaBaseService
 		
 		DeliveryProfilePeer::setUseCriteriaFilter(true);
 		
-		$objects = KalturaDeliveryProfileArray::fromDbArray($dbList, $this->getResponseProfile());
-		$response = new KalturaDeliveryProfileListResponse();
+		$objects = VidiunDeliveryProfileArray::fromDbArray($dbList, $this->getResponseProfile());
+		$response = new VidiunDeliveryProfileListResponse();
 		$response->objects = $objects;
 		$response->totalCount = $totalCount;
 		return $response;    

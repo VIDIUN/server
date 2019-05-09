@@ -3,9 +3,9 @@
  * @package plugins.sphinxSearch
  * @subpackage lib
  */
-class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedEventConsumer, kObjectReadyForIndexEventConsumer, kObjectErasedEventConsumer
+class vSphinxSearchManager implements vObjectUpdatedEventConsumer, vObjectAddedEventConsumer, vObjectReadyForIndexEventConsumer, vObjectErasedEventConsumer
 {
-	const SPHINX_INDEX_NAME = 'kaltura';
+	const SPHINX_INDEX_NAME = 'vidiun';
 
 	const HAS_VALUE = 'HASVALUE';
 
@@ -106,7 +106,7 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectUpdatedEventConsumer::shouldConsumeUpdatedEvent()
+	 * @see vObjectUpdatedEventConsumer::shouldConsumeUpdatedEvent()
 	 */
 	public function shouldConsumeUpdatedEvent(BaseObject $object)
 	{
@@ -117,7 +117,7 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectReadyForIndexEventConsumer::shouldConsumeReadyForIndexEvent()
+	 * @see vObjectReadyForIndexEventConsumer::shouldConsumeReadyForIndexEvent()
 	 */
     public function shouldConsumeReadyForIndexEvent(BaseObject $object)
 	{
@@ -128,7 +128,7 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectUpdatedEventConsumer::objectUpdated()
+	 * @see vObjectUpdatedEventConsumer::objectUpdated()
 	 */
 	public function objectUpdated(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -138,7 +138,7 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectReadyForIndexEventConsumer::objectReadyForIndex()
+	 * @see vObjectReadyForIndexEventConsumer::objectReadyForIndex()
 	 */
 	public function objectReadyForIndex(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -147,7 +147,7 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeAddedEvent()
+	 * @see vObjectAddedEventConsumer::shouldConsumeAddedEvent()
 	 */
 	public function shouldConsumeAddedEvent(BaseObject $object)
 	{
@@ -158,11 +158,11 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::objectAdded()
+	 * @see vObjectAddedEventConsumer::objectAdded()
 	 */
 	public function objectAdded(BaseObject $object, BatchJob $raisedJob = null)
 	{
-		KalturaLog::info("Raising deferred event for object of type: ". get_class($object));
+		VidiunLog::info("Raising deferred event for object of type: ". get_class($object));
 		/** @var IIndexable $object */
 		$object->indexToSearchIndex();
 		return true;
@@ -195,7 +195,7 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 		$id = $object->getIntId();
 		if(!$id)
 		{
-			KalturaLog::err("Object [" . get_class($object) . "] id [" . $object->getId() . "] could not be saved to sphinx, int_id is empty");
+			VidiunLog::err("Object [" . get_class($object) . "] id [" . $object->getId() . "] could not be saved to sphinx, int_id is empty");
 			return false;
 		}
 		
@@ -260,11 +260,11 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 		}
 		
 		// TODO - remove after solving the replace bug that removes all fields
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaSearchDataContributor');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunSearchDataContributor');
 		$sphinxPluginsData = array();
 		foreach($pluginInstances as $pluginName => $pluginInstance)
 		{
-			KalturaLog::debug("Loading $pluginName sphinx texts");
+			VidiunLog::debug("Loading $pluginName sphinx texts");
 			$sphinxPluginData = null;
 			try
 			{
@@ -272,12 +272,12 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 			}
 			catch(Exception $e)
 			{
-				KalturaLog::err($e->getMessage());
+				VidiunLog::err($e->getMessage());
 				continue;
 			}
 			
 			if($sphinxPluginData){
-				KalturaLog::debug("Sphinx data for $pluginName [" . print_r($sphinxPluginData,true) . "]");
+				VidiunLog::debug("Sphinx data for $pluginName [" . print_r($sphinxPluginData,true) . "]");
 				
 				foreach ($sphinxPluginData as $fieldName => $fieldValue){
 					if (isset($sphinxPluginsData[$fieldName]))
@@ -404,10 +404,10 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 	 */
 	public function execSphinx($sql, IIndexable $object, $splitIndexName = null)
 	{
-		$disabledPartnerIds = kConf::get('disable_sphinx_indexing_partners', 'local', array());
+		$disabledPartnerIds = vConf::get('disable_sphinx_indexing_partners', 'local', array());
 		if (in_array($object->getPartnerId(), $disabledPartnerIds))
 		{
-			KalturaLog::log('skipping sphinx update for partner ' . $object->getPartnerId());
+			VidiunLog::log('skipping sphinx update for partner ' . $object->getPartnerId());
 			return;
 		}
 		
@@ -418,22 +418,22 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 		if (strlen($sql) > 128 * 1024 && strlen($sql) < 1000000)
 		{
 			$lockKey = 'large_sql_lock_' . get_class($object) . '_' . $object->getId();
-			$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_SPHINX_STICKY_SESSIONS);
+			$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_SPHINX_STICKY_SESSIONS);
 			if ($cache && !$cache->add($lockKey, true, 60))
 			{
-				KalturaLog::log('skipping sql for key ' . $lockKey);
+				VidiunLog::log('skipping sql for key ' . $lockKey);
 				return;
 			}
 		}
 		
-		KalturaLog::debug($sql);
+		VidiunLog::debug($sql);
 		if (is_callable(array($object, "getUpdatedAt")))
 		{
 			$now = time();
 			$objectUpdatedAt = $object->getUpdatedAt(null);
 			if ($objectUpdatedAt < $now)
 			{
-				KalturaLog::log('sphinx update for non-updated object '.($now - $objectUpdatedAt).' '.get_class($object).' '.$object->getId().' '.kCurrentContext::$ks_partner_id.' '.kCurrentContext::$service.' '.kCurrentContext::$action);
+				VidiunLog::log('sphinx update for non-updated object '.($now - $objectUpdatedAt).' '.get_class($object).' '.$object->getId().' '.vCurrentContext::$vs_partner_id.' '.vCurrentContext::$service.' '.vCurrentContext::$action);
 			}
 		}
 		
@@ -449,19 +449,19 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 		$sphinxLog->setIndexName($splitIndexName);
 		$sphinxLog->save(myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_SPHINX_LOG));
 
-		kSphinxQueryCache::invalidateQueryCache($object);
+		vSphinxQueryCache::invalidateQueryCache($object);
 
 		// Skip sphinx if partner action configured as skipped.
 		// key = pid_service_action eg - 2341115_thumbAsset_add
-		$key = kCurrentContext::$ks_partner_id . "_" . kCurrentContext::$service . "_" . kCurrentContext::$action . "_" . $object->getIndexObjectName();
-		$map = kConf::get('partner_actions_to_skip_sphinx_map', 'local', array());
+		$key = vCurrentContext::$vs_partner_id . "_" . vCurrentContext::$service . "_" . vCurrentContext::$action . "_" . $object->getIndexObjectName();
+		$map = vConf::get('partner_actions_to_skip_sphinx_map', 'local', array());
 		if (isset($map[$key]))
 		{
-			KalturaLog::log("Specific partner action to skip sphinx detected $key. skipping sphinx.");
+			VidiunLog::log("Specific partner action to skip sphinx detected $key. skipping sphinx.");
 			return true;
 		}
 
-		if(!kConf::get('exec_sphinx', 'local', 0))
+		if(!vConf::get('exec_sphinx', 'local', 0))
 			return true;
 					
 		$sphinxConnection = DbManager::getSphinxConnection(false, $splitIndexName);
@@ -473,14 +473,14 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 			return true;
 			
 		$arr = $sphinxConnection->errorInfo();
-		KalturaLog::err($arr[2]);
+		VidiunLog::err($arr[2]);
 		return false;
 	}
 
 	private function retrieveSphinxConnectionId ($indexName = null)
 	{
 		$sphinxConnectionId = null;
-		if(kConf::hasParam('exec_sphinx') && kConf::get('exec_sphinx'))
+		if(vConf::hasParam('exec_sphinx') && vConf::get('exec_sphinx'))
         {
         	$sphinxConnection = DbManager::getSphinxConnection(false, $indexName);
 			$sphinxServerCacheStore = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_SPHINX_EXECUTED_SERVER);
@@ -515,7 +515,7 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 		$splitIndexName = kSphinxSearchManager::getSphinxIndexName($objectIndexClass, $objectIndexName);
 		$id = $object->getIntId();
 		
-		KalturaLog::debug('Deleting sphinx document for object [' . get_class($object) . '] [' . $object->getId() . ']');
+		VidiunLog::debug('Deleting sphinx document for object [' . get_class($object) . '] [' . $object->getId() . ']');
 		$sql = "delete from $index where id = $id";
 		
 		return $this->execSphinx($sql, $object, $splitIndexName);
@@ -537,9 +537,9 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 
 		// track repetitive udpates of the same object (e.g. adding many annotations which cause updates of the entry)
 		// once hitting a threshold, we will avoid more than one update per minute
-		// threshold is defined by kConf parameter skip_sphinx_repetitive_updates using lowercase of {className}_{service}_{action}={threshold}
+		// threshold is defined by vConf parameter skip_sphinx_repetitive_updates using lowercase of {className}_{service}_{action}={threshold}
 		$saveCounter = 0;
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_LOCK_KEYS);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_LOCK_KEYS);
 		if ($cache)
 		{
 			$cacheKey = "SPHSave:$className:" . ($entryId ? $entryId : $objectId);
@@ -547,16 +547,16 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 			$saveCounter = $cache->increment($cacheKey);
 		}
 		
-		list($skipSphinxRepetitiveUpdatesValue, $matchKey) = kSearchUtils::getSkipRepetitiveUpdatesValue('skip_sphinx_repetitive_updates', $className);
+		list($skipSphinxRepetitiveUpdatesValue, $matchKey) = vSearchUtils::getSkipRepetitiveUpdatesValue('skip_sphinx_repetitive_updates', $className);
 		$skipSave = isset($skipSphinxRepetitiveUpdatesValue) && $saveCounter > $skipSphinxRepetitiveUpdatesValue;
 		
 		if($skipSave)
 		{
-			KalturaLog::debug("Skipping save sphinx for object [$className] [$entryId] [$objectId] count [$saveCounter] max allowed [$skipSphinxRepetitiveUpdatesValue] with match key [$matchKey]");
+			VidiunLog::debug("Skipping save sphinx for object [$className] [$entryId] [$objectId] count [$saveCounter] max allowed [$skipSphinxRepetitiveUpdatesValue] with match key [$matchKey]");
 			return true;
 		}
 		
-		KalturaLog::debug("Updating sphinx for object [$className] [$entryId] [$objectId] count [$saveCounter] service info [" . kCurrentContext::$service . ' ' . kCurrentContext::$action . "]");
+		VidiunLog::debug("Updating sphinx for object [$className] [$entryId] [$objectId] count [$saveCounter] service info [" . vCurrentContext::$service . ' ' . vCurrentContext::$action . "]");
 		$sql = $this->getSphinxSaveSql($object, $isInsert, $force);
 		if(!$sql)
 			return true;
@@ -564,7 +564,7 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
 		return $this->execSphinx($sql, $object, $object->getSphinxIndexName());
 	}
     /* (non-PHPdoc)
-     * @see kObjectErasedEventConsumer::objectErased()
+     * @see vObjectErasedEventConsumer::objectErased()
      */
     public function objectErased (BaseObject $object)
     {
@@ -573,7 +573,7 @@ class kSphinxSearchManager implements kObjectUpdatedEventConsumer, kObjectAddedE
     }
 
     /* (non-PHPdoc)
-     * @see kObjectErasedEventConsumer::shouldConsumeErasedEvent()
+     * @see vObjectErasedEventConsumer::shouldConsumeErasedEvent()
      */
     public function shouldConsumeErasedEvent (BaseObject $object)
     {

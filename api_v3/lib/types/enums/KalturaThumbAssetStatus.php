@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaThumbAssetStatus extends KalturaAssetStatus
+class VidiunThumbAssetStatus extends VidiunAssetStatus
 {
 	const CAPTURING = 1;
 }

@@ -13,7 +13,7 @@
 
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>New Caption Asset Added To Entry</name>
 				<systemName>HTTP_New_Caption_Asset_Added_To_Entry</systemName>
 				<description>HTTP notification template to be sent when a new caption asset is added to an entry.</description>
@@ -21,52 +21,52 @@
 				<eventType>2</eventType> <!-- EventNotificationEventType::OBJECT_ADDED -->
 				<eventObjectType>captionAssetEventNotifications.CaptionAsset</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaOrCondition">
+					<item objectType="VidiunOrCondition">
 						<conditions objectType="array">
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>language equals</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>$scope->getObject()->getLanguage()</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_language}</value>
 									</item>
 								</values>
 							</item>
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>all languages</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>'*'</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_language}</value>
 									</item>
 								</values>
 							</item>
 						</conditions>
 					</item>
-					<item objectType="KalturaOrCondition">
+					<item objectType="VidiunOrCondition">
 						<conditions objectType="array">
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>format equals</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>$scope->getObject()->getContainerFormat()</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_format}</value>
 									</item>
 								</values>
 							</item>
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>all formats</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>'*'</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_format}</value>
 									</item>
 								</values>
@@ -75,22 +75,22 @@
 					</item>
 				</eventConditions>		
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>trigger_language</key>
-						<description>Language that triggers the event (use asterisk to all languages), See:KalturaLanguage:/api_v3/testmeDoc/?object=KalturaLanguage</description>
-						<value objectType="KalturaStringValue">
+						<description>Language that triggers the event (use asterisk to all languages), See:VidiunLanguage:/api_v3/testmeDoc/?object=VidiunLanguage</description>
+						<value objectType="VidiunStringValue">
 							<value>*</value>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>trigger_format</key>
-						<description>Captions format that triggers the event (use asterisk to all formats), See:KalturaCaptionType:/api_v3/testmeDoc/?object=KalturaCaptionType</description>
-						<value objectType="KalturaStringValue">
+						<description>Captions format that triggers the event (use asterisk to all formats), See:VidiunCaptionType:/api_v3/testmeDoc/?object=VidiunCaptionType</description>
+						<value objectType="VidiunStringValue">
 							<value>*</value>
 						</value>
 					</item>
 				</userParameters>		
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -102,7 +102,7 @@
 
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>Caption Asset Changed</name>
 				<systemName>HTTP_Caption_Asset_Changed</systemName>
 				<description>HTTP notification template to be sent when a new caption asset changed.</description>
@@ -110,56 +110,56 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>captionAssetEventNotifications.CaptionAsset</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventObjectChangedCondition">
+					<item objectType="VidiunEventObjectChangedCondition">
 						<description>Asset metadata changed, columns defined in modified_columns parameter</description>
 						<modifiedColumns>{modified_columns}</modifiedColumns>
 					</item>
-					<item objectType="KalturaOrCondition">
+					<item objectType="VidiunOrCondition">
 						<conditions objectType="array">
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>language equals</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>$scope->getObject()->getLanguage()</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_language}</value>
 									</item>
 								</values>
 							</item>
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>all languages</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>'*'</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_language}</value>
 									</item>
 								</values>
 							</item>
 						</conditions>
 					</item>
-					<item objectType="KalturaOrCondition">
+					<item objectType="VidiunOrCondition">
 						<conditions objectType="array">
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>format equals</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>$scope->getObject()->getContainerFormat()</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_format}</value>
 									</item>
 								</values>
 							</item>
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>all formats</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>'*'</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_format}</value>
 									</item>
 								</values>
@@ -168,65 +168,65 @@
 					</item>
 				</eventConditions>		
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>trigger_language</key>
-						<description>Language that triggers the event (use asterisk to all languages), See:KalturaLanguage:/api_v3/testmeDoc/?object=KalturaLanguage</description>
-						<value objectType="KalturaStringValue">
+						<description>Language that triggers the event (use asterisk to all languages), See:VidiunLanguage:/api_v3/testmeDoc/?object=VidiunLanguage</description>
+						<value objectType="VidiunStringValue">
 							<value>*</value>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>trigger_format</key>
-						<description>Captions format that triggers the event (use asterisk to all formats), See:KalturaCaptionType:/api_v3/testmeDoc/?object=KalturaCaptionType</description>
-						<value objectType="KalturaStringValue">
+						<description>Captions format that triggers the event (use asterisk to all formats), See:VidiunCaptionType:/api_v3/testmeDoc/?object=VidiunCaptionType</description>
+						<value objectType="VidiunStringValue">
 							<value>*</value>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationArrayParameter">
+					<item objectType="VidiunEventNotificationArrayParameter">
 						<key>modified_columns</key>
 						<description>Caption-asset metadata columns that will trigger the event</description>
 						<allowedValues objectType="array">
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>flavor_asset.TAGS</value>
 								<description>tags</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>flavor_asset.STATUS</value>
 								<description>status</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>flavor_asset.VERSION</value>
 								<description>version</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>flavor_asset.DESCRIPTION</value>
 								<description>description</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>flavor_asset.SIZE</value>
 								<description>size</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>language</value>
 								<description>language</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>default</value>
 								<description>is default</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>label</value>
 								<description>label</description>
 							</item>
 						</allowedValues>
 						<values objectType="array">
-							<item objectType="KalturaString">
+							<item objectType="VidiunString">
 								<value>flavor_asset.VERSION</value>
 							</item>
 						</values>
 					</item>
 				</userParameters>		
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">

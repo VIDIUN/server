@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kExtractMediaJobData extends kConvartableJobData
+class vExtractMediaJobData extends vConvartableJobData
 {
 	/**
 	 * @var string

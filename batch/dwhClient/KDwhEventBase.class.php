@@ -6,7 +6,7 @@
  * @subpackage DWH
  * @abstract
  */
-abstract class KDwhEventBase
+abstract class VDwhEventBase
 {
 	const EVENT_FIELD_SEPARATOR = ",";
 	const EVENT_LINE_DELIMITER = "\n";
@@ -18,7 +18,7 @@ abstract class KDwhEventBase
 	
 	/**
 	 *
-	 * $return  KDwhEventBase
+	 * $return  VDwhEventBase
 	 */
 	public static function fromEventLine ( $event_line )
 	{

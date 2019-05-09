@@ -21,12 +21,12 @@ class Form_NewStorage extends Infra_Form
 		));
 		
 		$newProtocolType =
-			new Kaltura_Form_Element_EnumSelect(
+			new Vidiun_Form_Element_EnumSelect(
 					'newProtocolType',
 					array(
-						'enum' => 'Kaltura_Client_Enum_StorageProfileProtocol',
+						'enum' => 'Vidiun_Client_Enum_StorageProfileProtocol',
 						'excludes' => array (
-											Kaltura_Client_Enum_StorageProfileProtocol::KALTURA_DC,
+											Vidiun_Client_Enum_StorageProfileProtocol::VIDIUN_DC,
 										),
 					)
 				);

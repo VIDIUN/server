@@ -6,7 +6,7 @@
  * @relatedService CuePointService
  * @requiresPermission insert,update 
  */
-abstract class KalturaCuePoint extends KalturaObject implements IRelatedFilterable, IApiObjectFactory
+abstract class VidiunCuePoint extends VidiunObject implements IRelatedFilterable, IApiObjectFactory
 {
 	/**
 	 * @var string
@@ -23,14 +23,14 @@ abstract class KalturaCuePoint extends KalturaObject implements IRelatedFilterab
 	public $intId;
 
 	/**
-	 * @var KalturaCuePointType
+	 * @var VidiunCuePointType
 	 * @filter eq,in
 	 * @readonly
 	 */
 	public $cuePointType;
 	
 	/**
-	 * @var KalturaCuePointStatus
+	 * @var VidiunCuePointStatus
 	 * @filter eq,in
 	 * @readonly
 	 */
@@ -101,7 +101,7 @@ abstract class KalturaCuePoint extends KalturaObject implements IRelatedFilterab
 	public $partnerSortValue;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 * @filter eq
 	 */
 	public $forceStop;
@@ -167,17 +167,17 @@ abstract class KalturaCuePoint extends KalturaObject implements IRelatedFilterab
 		return array();
 	}
 	
-	public function doFromObject($dbCuePoint, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbCuePoint, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($dbCuePoint, $responseProfile);
 		
 		if($this->shouldGet('userId', $responseProfile))
 		{
-			if($dbCuePoint->getKuserId() !== null){
-				$dbKuser = kuserPeer::retrieveByPK($dbCuePoint->getKuserId());
-				if($dbKuser){
-					if (!kConf::hasParam('protect_userid_in_api') || !in_array($dbCuePoint->getPartnerId(), kConf::get('protect_userid_in_api')) || !in_array(kCurrentContext::getCurrentSessionType(), array(kSessionBase::SESSION_TYPE_NONE,kSessionBase::SESSION_TYPE_WIDGET)))
-						$this->userId = $dbKuser->getPuserId();
+			if($dbCuePoint->getVuserId() !== null){
+				$dbVuser = vuserPeer::retrieveByPK($dbCuePoint->getVuserId());
+				if($dbVuser){
+					if (!vConf::hasParam('protect_userid_in_api') || !in_array($dbCuePoint->getPartnerId(), vConf::get('protect_userid_in_api')) || !in_array(vCurrentContext::getCurrentSessionType(), array(vSessionBase::SESSION_TYPE_NONE,vSessionBase::SESSION_TYPE_WIDGET)))
+						$this->userId = $dbVuser->getPuserId();
 				}
 			}
 		}
@@ -185,21 +185,21 @@ abstract class KalturaCuePoint extends KalturaObject implements IRelatedFilterab
 	
 	/*
 	 * @param string $cuePointId
-	 * @throw KalturaAPIException
+	 * @throw VidiunAPIException
 	 */
 	public function validateEntryId($cuePointId = null)
 	{	
 		$dbEntry = entryPeer::retrieveByPK($this->entryId);
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $this->entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $this->entryId);
 			
 		if($cuePointId !== null){ // update
 			$dbCuePoint = CuePointPeer::retrieveByPK($cuePointId);
 			if(!$dbCuePoint)
-				throw new KalturaAPIException(KalturaCuePointErrors::INVALID_OBJECT_ID, $cuePointId);
+				throw new VidiunAPIException(VidiunCuePointErrors::INVALID_OBJECT_ID, $cuePointId);
 				
 			if($this->entryId !== null && $this->entryId != $dbCuePoint->getEntryId())
-				throw new KalturaAPIException(KalturaCuePointErrors::CANNOT_UPDATE_ENTRY_ID);
+				throw new VidiunAPIException(VidiunCuePointErrors::CANNOT_UPDATE_ENTRY_ID);
 		}
 	}
 	
@@ -207,7 +207,7 @@ abstract class KalturaCuePoint extends KalturaObject implements IRelatedFilterab
 	
 	/*
 	 * @param CuePoint $cuePoint
-	 * @throw KalturaAPIException
+	 * @throw VidiunAPIException
 	 */
 	public function validateEndTime(CuePoint $cuePoint = null)
 	{
@@ -226,10 +226,10 @@ abstract class KalturaCuePoint extends KalturaObject implements IRelatedFilterab
 
         //validate end time
 		if(!is_null($this->endTime) && $this->endTime < $this->startTime)
-			throw new KalturaAPIException(KalturaCuePointErrors::END_TIME_CANNOT_BE_LESS_THAN_START_TIME, $this->parentId);
+			throw new VidiunAPIException(VidiunCuePointErrors::END_TIME_CANNOT_BE_LESS_THAN_START_TIME, $this->parentId);
 
 		if($this->duration && $this->duration < 0)
-			throw new KalturaAPIException(KalturaCuePointErrors::END_TIME_CANNOT_BE_LESS_THAN_START_TIME, $this->parentId);
+			throw new VidiunAPIException(VidiunCuePointErrors::END_TIME_CANNOT_BE_LESS_THAN_START_TIME, $this->parentId);
 		
 		if($cuePoint)
 		{
@@ -240,38 +240,38 @@ abstract class KalturaCuePoint extends KalturaObject implements IRelatedFilterab
 			$dbEntry = entryPeer::retrieveByPK($this->entryId);
 		}
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $this->entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $this->entryId);
 		
 		if($dbEntry->getType() != entryType::LIVE_STREAM
 			&& $dbEntry->getLengthInMsecs())
 		{
 			if($this->endTime && $dbEntry->getLengthInMsecs() < $this->endTime)
-				throw new KalturaAPIException(KalturaCuePointErrors::END_TIME_IS_BIGGER_THAN_ENTRY_END_TIME, $this->endTime, $dbEntry->getLengthInMsecs());
+				throw new VidiunAPIException(VidiunCuePointErrors::END_TIME_IS_BIGGER_THAN_ENTRY_END_TIME, $this->endTime, $dbEntry->getLengthInMsecs());
 				
 			if($this->duration && $dbEntry->getLengthInMsecs() < $this->duration)
-				throw new KalturaAPIException(KalturaCuePointErrors::END_TIME_IS_BIGGER_THAN_ENTRY_END_TIME, $this->duration, $dbEntry->getLengthInMsecs());
+				throw new VidiunAPIException(VidiunCuePointErrors::END_TIME_IS_BIGGER_THAN_ENTRY_END_TIME, $this->duration, $dbEntry->getLengthInMsecs());
 		}	
 	}
 	
 	/*
 	 * @param string $cuePointId
-	 * @throw KalturaAPIException
+	 * @throw VidiunAPIException
 	 */
 	public function validateStartTime($cuePointId = null)
 	{
 		if ($this->startTime === null) {
 			if((!$this->triggeredAt && !$this->isNull('duration')) || !$this->isNull('endTime'))
-				throw new KalturaAPIException(KalturaCuePointErrors::END_TIME_WITHOUT_START_TIME);
+				throw new VidiunAPIException(VidiunCuePointErrors::END_TIME_WITHOUT_START_TIME);
 			$this->startTime = 0;
 		}
 		
 		if($this->startTime < 0)
-			throw new KalturaAPIException(KalturaCuePointErrors::START_TIME_CANNOT_BE_LESS_THAN_0);
+			throw new VidiunAPIException(VidiunCuePointErrors::START_TIME_CANNOT_BE_LESS_THAN_0);
 		
 		if($cuePointId !== null){ //update
 			$dbCuePoint = CuePointPeer::retrieveByPK($cuePointId);
 			if(!$dbCuePoint)
-				throw new KalturaAPIException(KalturaCuePointErrors::INVALID_OBJECT_ID, $cuePointId);
+				throw new VidiunAPIException(VidiunCuePointErrors::INVALID_OBJECT_ID, $cuePointId);
 				
 			$dbEntry = entryPeer::retrieveByPK($dbCuePoint->getEntryId());
 		}
@@ -279,12 +279,12 @@ abstract class KalturaCuePoint extends KalturaObject implements IRelatedFilterab
 		{ 
 			$dbEntry = entryPeer::retrieveByPK($this->entryId);
 			if (!$dbEntry)
-				throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $this->entryId);
+				throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $this->entryId);
 		}
 		if($dbEntry->getType() != entryType::LIVE_STREAM 
-			&& !in_array($dbEntry->getSourceType(), array(EntrySourceType::KALTURA_RECORDED_LIVE, EntrySourceType::RECORDED_LIVE))
+			&& !in_array($dbEntry->getSourceType(), array(EntrySourceType::VIDIUN_RECORDED_LIVE, EntrySourceType::RECORDED_LIVE))
 			&& $dbEntry->getLengthInMsecs() && $dbEntry->getLengthInMsecs() < $this->startTime)
-			throw new KalturaAPIException(KalturaCuePointErrors::START_TIME_IS_BIGGER_THAN_ENTRY_END_TIME, $this->startTime, $dbEntry->getLengthInMsecs());
+			throw new VidiunAPIException(VidiunCuePointErrors::START_TIME_IS_BIGGER_THAN_ENTRY_END_TIME, $this->startTime, $dbEntry->getLengthInMsecs());
 	}
 	
 	public function validateForInsert($propertiesToSkip = array())
@@ -317,11 +317,11 @@ abstract class KalturaCuePoint extends KalturaObject implements IRelatedFilterab
 
 	/**
 	 * @param int $type
-	 * @return KalturaCuePoint
+	 * @return VidiunCuePoint
 	 */
-	public static function getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$object = KalturaPluginManager::loadObject('KalturaCuePoint', $sourceObject->getType());
+		$object = VidiunPluginManager::loadObject('VidiunCuePoint', $sourceObject->getType());
 		if (!$object)
 		    return null;
 		

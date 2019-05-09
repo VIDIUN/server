@@ -4,7 +4,7 @@ class DeliveryProfileAkamaiAppleHttpManifest extends DeliveryProfileAkamaiAppleH
 	
 	function __construct() {
       	parent::__construct();
-      	$this->DEFAULT_RENDERER_CLASS = 'kRedirectManifestRenderer';
+      	$this->DEFAULT_RENDERER_CLASS = 'vRedirectManifestRenderer';
    }
    
    public function setSupportClipping($v)
@@ -66,7 +66,7 @@ class DeliveryProfileAkamaiAppleHttpManifest extends DeliveryProfileAkamaiAppleH
 		$flavor = AkamaiDeliveryUtils::getHDN2ManifestUrl($flavors, $this->params->getMediaProtocol(), $this->getUrl(), '/master.m3u8', '/i', $params);
 		if (!$flavor)
 		{
-			KalturaLog::info(get_class() . ' failed to find flavor');
+			VidiunLog::info(get_class() . ' failed to find flavor');
 			return null;
 		}
 	

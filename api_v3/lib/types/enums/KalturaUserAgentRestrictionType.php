@@ -2,9 +2,9 @@
 /**
  * @package api
  * @subpackage enum
- * @deprecated use KalturaRule instead
+ * @deprecated use VidiunRule instead
  */
-class KalturaUserAgentRestrictionType extends KalturaEnum implements accessControlListRestrictionType
+class VidiunUserAgentRestrictionType extends VidiunEnum implements accessControlListRestrictionType
 {
 	// see interface "accessControlListRestrictionType" for values
 }

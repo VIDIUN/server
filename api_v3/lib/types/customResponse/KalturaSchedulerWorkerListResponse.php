@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaSchedulerWorkerListResponse extends KalturaListResponse
+class VidiunSchedulerWorkerListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaSchedulerWorkerArray
+	 * @var VidiunSchedulerWorkerArray
 	 * @readonly
 	 */
 	public $objects;

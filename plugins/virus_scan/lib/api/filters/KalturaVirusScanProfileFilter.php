@@ -3,10 +3,10 @@
  * @package plugins.virusScan
  * @subpackage api.filters
  */
-class KalturaVirusScanProfileFilter extends KalturaVirusScanProfileBaseFilter
+class VidiunVirusScanProfileFilter extends VidiunVirusScanProfileBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

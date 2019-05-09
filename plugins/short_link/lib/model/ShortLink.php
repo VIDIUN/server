@@ -24,22 +24,22 @@ class ShortLink extends BaseShortLink implements IBaseObject {
 	{
 		if(!$this->puserId)
 		{
-			if(!$this->getKuserId())
+			if(!$this->getVuserId())
 				return null;
 				
-			$kuser = kuserPeer::retrieveByPK($this->getKuserId());
-			if(!$kuser)
+			$vuser = vuserPeer::retrieveByPK($this->getVuserId());
+			if(!$vuser)
 				return null;
 				
-			$this->puserId = $kuser->getPuserId();
+			$this->puserId = $vuser->getPuserId();
 		}
 		
 		return $this->puserId;
 	}
 
 	/**
-	 * Set the puser id and the kuser id
-	 * If the kuser doesn't exist it will be created
+	 * Set the puser id and the vuser id
+	 * If the vuser doesn't exist it will be created
 	 * @param string $puserId
 	 */
 	public function setPuserId($puserId)
@@ -48,16 +48,16 @@ class ShortLink extends BaseShortLink implements IBaseObject {
 			throw new Exception("Partner id must be set in order to load puser [$puserId]");
 			
 		$this->puserId = $puserId;
-		$kuser = kuserPeer::getKuserByPartnerAndUid($this->getPartnerId(), $puserId, true);
-		if(!$kuser)
+		$vuser = vuserPeer::getVuserByPartnerAndUid($this->getPartnerId(), $puserId, true);
+		if(!$vuser)
 		{
 			$isAdmin = false;
-//			if($puserId == kCurrentContext::$uid)
-//				$isAdmin = kCurrentContext::$is_admin_session;
+//			if($puserId == vCurrentContext::$uid)
+//				$isAdmin = vCurrentContext::$is_admin_session;
 				
-			$kuser = kuserPeer::createKuserForPartner($this->getPartnerId(), $puserId, $isAdmin);
+			$vuser = vuserPeer::createVuserForPartner($this->getPartnerId(), $puserId, $isAdmin);
 		}
-		$this->setKuserId($kuser->getId());
+		$this->setVuserId($vuser->getId());
 	}
 
 	/* (non-PHPdoc)
@@ -75,7 +75,7 @@ class ShortLink extends BaseShortLink implements IBaseObject {
 		$ret = parent::postUpdate($con);
 		
 		if ($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		return $ret;
 	}
@@ -83,9 +83,9 @@ class ShortLink extends BaseShortLink implements IBaseObject {
 	protected function calculateId()
 	{
 		$allChars = '0123456789abcdefghijklmnopqrstuvwxyz';
-		$dcChars = str_split($allChars, strlen($allChars) / count(kDataCenterMgr::getAllDcs(true)));
+		$dcChars = str_split($allChars, strlen($allChars) / count(vDataCenterMgr::getAllDcs(true)));
 		
-		$dc = kDataCenterMgr::getCurrentDc();
+		$dc = vDataCenterMgr::getCurrentDc();
 		$dcId = (int) $dc["id"];
 		$currentDcChars = $dcChars[$dcId];
 		
@@ -95,13 +95,13 @@ class ShortLink extends BaseShortLink implements IBaseObject {
 			if(!$dcChar)
 				$dcChar = '0';
 				
-			$id = $dcChar . kString::generateStringId(4);
+			$id = $dcChar . vString::generateStringId(4);
 			ShortLinkPeer::setUseCriteriaFilter(false);
 			$existingObject = ShortLinkPeer::retrieveByPK($id);
 			ShortLinkPeer::setUseCriteriaFilter(true);
 			
 			if ($existingObject)
-				KalturaLog::log("id [$id] already exists");
+				VidiunLog::log("id [$id] already exists");
 			else
 				return $id;
 		}

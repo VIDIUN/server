@@ -4,6 +4,6 @@
  * @subpackage objects
  * @abstract
  */
-abstract class KalturaGenericDataCenterContentResource extends KalturaDataCenterContentResource
+abstract class VidiunGenericDataCenterContentResource extends VidiunDataCenterContentResource
 {
 }

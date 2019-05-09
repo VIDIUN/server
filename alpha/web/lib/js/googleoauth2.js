@@ -33,7 +33,7 @@
 			var partnerId = getQueryVariable("partnerId");
 			if (partnerId == false)
 			{
-				$el.find('.error').text('partnerId param not found, please contact Kaltura Support');
+				$el.find('.error').text('partnerId param not found, please contact Vidiun Support');
 			}
 			else
 			{

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaGroupUserCreationMode extends KalturaEnum implements GroupUserCreationMode
+class VidiunGroupUserCreationMode extends VidiunEnum implements GroupUserCreationMode
 {
 
 }

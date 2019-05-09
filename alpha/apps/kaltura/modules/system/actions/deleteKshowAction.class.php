@@ -4,20 +4,20 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class deleteKshowAction extends kalturaSystemAction
+class deleteVshowAction extends vidiunSystemAction
 {
 	/**
 	 * 
-select kshow.id,concat('http://www.kaltura.com/index.php/browse/bands?band_id=',indexed_custom_data_1),concat('http://profile.myspace.com/index.cfm?fuseaction=user.viewpr
-ofile&friendID=',indexed_custom_data_1) ,  kuser.screen_name , indexed_custom_data_1  from kshow ,kuser where kshow.partner_id=5 AND kuser.id=kshow.producer_id AND kshow.
-id>=10815  order by kshow.id ;
+select vshow.id,concat('http://www.vidiun.com/index.php/browse/bands?band_id=',indexed_custom_data_1),concat('http://profile.myspace.com/index.cfm?fuseaction=user.viewpr
+ofile&friendID=',indexed_custom_data_1) ,  vuser.screen_name , indexed_custom_data_1  from vshow ,vuser where vshow.partner_id=5 AND vuser.id=vshow.producer_id AND vshow.
+id>=10815  order by vshow.id ;
 ~
 
 	 */
@@ -25,86 +25,86 @@ id>=10815  order by kshow.id ;
 	{
 		$this->forceSystemAuthentication();
 		
-		$kshow_id = $this->getRequestParameter( "kshow_id" , null );
+		$vshow_id = $this->getRequestParameter( "vshow_id" , null );
 		$band_id = $this->getRequestParameter( "band_id" , null );
-		$kuser_name = $this->getRequestParameter( "kuser_name" , null );
+		$vuser_name = $this->getRequestParameter( "vuser_name" , null );
 		
-		$this->other_kshows_by_producer = null;
+		$this->other_vshows_by_producer = null;
 		
 		$error = "";
 		
-		$kshow = null;
-		$kuser = null;
+		$vshow = null;
+		$vuser = null;
 		$entries = null;
 		
-		$this->kuser_count = 0;
+		$this->vuser_count = 0;
 		
 		$should_delete = $this->getRequestParameter( "deleteme" , "false" ) == "true" ;
-		if ( $kuser_name )
+		if ( $vuser_name )
 		{
 			$c = new Criteria();
-			$c->add ( kuserPeer::SCREEN_NAME , "%" . $kuser_name . "%" , Criteria::LIKE );
-			$this->kuser_count = kuserPeer::doCount ( $c );
-			$kuser = kuserPeer::doSelectOne ( $c );
+			$c->add ( vuserPeer::SCREEN_NAME , "%" . $vuser_name . "%" , Criteria::LIKE );
+			$this->vuser_count = vuserPeer::doCount ( $c );
+			$vuser = vuserPeer::doSelectOne ( $c );
 			
-			if ( $kuser )
+			if ( $vuser )
 			{
-				$this->other_kshows_by_producer = $this->getKshowsForKuser ( $kuser , null );
+				$this->other_vshows_by_producer = $this->getVshowsForVuser ( $vuser , null );
 			}
 			else
 			{
-				$error .= "Cannot find kuser with name [$kuser_name]<br>";
+				$error .= "Cannot find vuser with name [$vuser_name]<br>";
 			}
 			
-			$other_kshow_count = count ( $this->other_kshows_by_producer );
-			if (  $other_kshow_count < 1 )
+			$other_vshow_count = count ( $this->other_vshows_by_producer );
+			if (  $other_vshow_count < 1 )
 			{
-				// kuser has no kshow - delete him !
+				// vuser has no vshow - delete him !
 				if ( $should_delete )
 				{
-					$kuser->delete();
+					$vuser->delete();
 				}
 			}
-			else if ( $other_kshow_count == 1 )
+			else if ( $other_vshow_count == 1 )
 			{
-				$kshow_id = $this->other_kshows_by_producer[0]->getId();
+				$vshow_id = $this->other_vshows_by_producer[0]->getId();
 			}
 			else
 			{
-				// kuser has more than one kshow - let user choose 
-				$error .= "[$kuser_name] has ($other_kshow_count) shows.<br>";
+				// vuser has more than one vshow - let user choose 
+				$error .= "[$vuser_name] has ($other_vshow_count) shows.<br>";
 			}
 		}
 		
 		if ( $band_id )
 		{
 			$c = new Criteria();
-			$c->add ( kshowPeer::INDEXED_CUSTOM_DATA_1 , $band_id );
-			$c->add ( kshowPeer::PARTNER_ID , 5 );
-			$kshow = kshowPeer::doSelectOne( $c );
+			$c->add ( vshowPeer::INDEXED_CUSTOM_DATA_1 , $band_id );
+			$c->add ( vshowPeer::PARTNER_ID , 5 );
+			$vshow = vshowPeer::doSelectOne( $c );
 		}
-		else if ( $kshow_id )
+		else if ( $vshow_id )
 		{
-			$kshow = kshowPeer::retrieveByPK( $kshow_id ); 
+			$vshow = vshowPeer::retrieveByPK( $vshow_id ); 
 		}
 		
-		if ( $kshow )
+		if ( $vshow )
 		{
-			if ( ! $kuser )		$kuser = kuserPeer::retrieveByPK( $kshow->getProducerId() );
-			if ( $kuser )
+			if ( ! $vuser )		$vuser = vuserPeer::retrieveByPK( $vshow->getProducerId() );
+			if ( $vuser )
 			{
-				$this->other_kshows_by_producer = $this->getKshowsForKuser ( $kuser , $kshow );
+				$this->other_vshows_by_producer = $this->getVshowsForVuser ( $vuser , $vshow );
 				
 				if ( $should_delete )
 				{
-					if ( count ( $this->other_kshows_by_producer ) == 0 )
+					if ( count ( $this->other_vshows_by_producer ) == 0 )
 					{
-						$kuser->delete();
+						$vuser->delete();
 					}
 				}
 			}
 			
-			$entries = $kshow->getEntrys ();
+			$entries = $vshow->getEntrys ();
 			
 			if ( $should_delete )
 			{
@@ -124,35 +124,35 @@ id>=10815  order by kshow.id ;
 			
 			if ( $should_delete )
 			{
-				$kshow->delete();
+				$vshow->delete();
 			}
 			
 		}
 		else
 		{
-			$error .= "Cannot find kshow [$kshow_id]<br>";
+			$error .= "Cannot find vshow [$vshow_id]<br>";
 		}
 		
 		
-		$this->kshow_id = $kshow_id;
-		$this->kuser_name = $kuser_name;
-		$this->kshow = $kshow;
-		$this->kuser = $kuser;
+		$this->vshow_id = $vshow_id;
+		$this->vuser_name = $vuser_name;
+		$this->vshow = $vshow;
+		$this->vuser = $vuser;
 		$this->entries = $entries; 	
 		$this->should_delete = $should_delete;	
 
 		$this->error = $error; 
 	}
 	
-	private function getKshowsForKuser ( $kuser , $kshow )
+	private function getVshowsForVuser ( $vuser , $vshow )
 	{
 		
 		$c = new Criteria();
-		$c->add ( kshowPeer::PRODUCER_ID , $kuser->getId() );
-		if ( $kshow ) $c->add ( kshowPeer::ID , $kshow->getId(), Criteria::NOT_EQUAL );
-		$other_kshows_by_producer = kshowPeer::doSelect( $c );
+		$c->add ( vshowPeer::PRODUCER_ID , $vuser->getId() );
+		if ( $vshow ) $c->add ( vshowPeer::ID , $vshow->getId(), Criteria::NOT_EQUAL );
+		$other_vshows_by_producer = vshowPeer::doSelect( $c );
 		
-		return $other_kshows_by_producer;
+		return $other_vshows_by_producer;
 						
 	}
 }

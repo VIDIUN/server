@@ -9,7 +9,7 @@ class myMediaCommonsServices extends myBaseMediaSource implements IMediaSource
 	protected $source_name = "MediaCommons";
 //	protected $auth_method = self::AUTH_METHOD_NONE;
 	protected $search_in_user = false; 
-	protected $logo = "http://www.kaltura.com/images/wizard/logo_phototbucket.png";
+	protected $logo = "http://www.vidiun.com/images/wizard/logo_phototbucket.png";
 	protected $id = entry::ENTRY_MEDIA_SOURCE_MEDIA_COMMONS;
 		
 	private static $NEED_MEDIA_INFO = "1";
@@ -49,7 +49,7 @@ class myMediaCommonsServices extends myBaseMediaSource implements IMediaSource
 	}
 		
 
-	public function getAuthData( $kuserId, $userName, $password, $token)
+	public function getAuthData( $vuserId, $userName, $password, $token)
 	{
 		return ""; // empty value
 	}
@@ -153,7 +153,7 @@ class myMediaCommonsServices extends myBaseMediaSource implements IMediaSource
 				{
 					$url = $entryData[1]; // 1
 					$thumbnail = urldecode( $entryData[2] );  //2
-					$title = kFile::getFileNameNoExtension( $entryData[3] );
+					$title = vFile::getFileNameNoExtension( $entryData[3] );
 					if ( $title )
 						$title = str_replace( "_" , " " , $title );
 					

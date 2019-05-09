@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaReportGraph extends KalturaObject 
+class VidiunReportGraph extends VidiunObject 
 {
 	/**
 	 * @var string

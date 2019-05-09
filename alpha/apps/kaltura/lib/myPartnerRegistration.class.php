@@ -5,11 +5,11 @@ class myPartnerRegistration
 
 	public function __construct( $partnerParentId = null )
 	{
-	    set_time_limit(kConf::get('partner_registration_timeout'));
+	    set_time_limit(vConf::get('partner_registration_timeout'));
 		$this->partnerParentId = $partnerParentId;	
 	}
 	
-	const KALTURA_SUPPORT = "wikisupport@kaltura.com";
+	const VIDIUN_SUPPORT = "wikisupport@vidiun.com";
 	  
 	private function str_makerand ($minlength, $maxlength, $useupper, $usespecial, $usenumbers)
 	{
@@ -36,27 +36,27 @@ class myPartnerRegistration
 		return $key;
 	}
 
-	const KALTURAS_CMS_REGISTRATION_CONFIRMATION = 50;
-	const KALTURAS_DEFAULT_REGISTRATION_CONFIRMATION = 54;
-	const KALTURAS_EXISTING_USER_REGISTRATION_CONFIRMATION = 55;
-	const KALTURAS_DEFAULT_EXISTING_USER_REGISTRATION_CONFIRMATION = 56;
-	const KALTURAS_BLACKBOARD_DEFAULT_REGISTRATION_CONFIRMATION = 57;
-	const KALTURAS_DEVELOPER_REGISTRATION_CONFIRMATION = 220;
-	const KALTURAS_DEVELOPER_EXISTING_USER_REGISTRATION_CONFIRMATION = 221;
+	const VIDIUNS_CMS_REGISTRATION_CONFIRMATION = 50;
+	const VIDIUNS_DEFAULT_REGISTRATION_CONFIRMATION = 54;
+	const VIDIUNS_EXISTING_USER_REGISTRATION_CONFIRMATION = 55;
+	const VIDIUNS_DEFAULT_EXISTING_USER_REGISTRATION_CONFIRMATION = 56;
+	const VIDIUNS_BLACKBOARD_DEFAULT_REGISTRATION_CONFIRMATION = 57;
+	const VIDIUNS_DEVELOPER_REGISTRATION_CONFIRMATION = 220;
+	const VIDIUNS_DEVELOPER_EXISTING_USER_REGISTRATION_CONFIRMATION = 221;
 	
 	public function sendRegistrationInformationForPartner ($partner, $skip_emails, $existingUser, $silent = false )
 	{
 		// email the client with this info
-		$adminKuser = kuserPeer::retrieveByPK($partner->getAccountOwnerKuserId());
+		$adminVuser = vuserPeer::retrieveByPK($partner->getAccountOwnerVuserId());
 		if(!$silent)
 		{
-			$this->sendRegistrationInformation($partner, $adminKuser, $existingUser, null, $partner->getType());
+			$this->sendRegistrationInformation($partner, $adminVuser, $existingUser, null, $partner->getType());
 		}
 											
-		if ( !$skip_emails && kConf::hasParam("report_partner_registration") && kConf::get("report_partner_registration")) 
+		if ( !$skip_emails && vConf::hasParam("report_partner_registration") && vConf::get("report_partner_registration")) 
 		{											
-			// email the wikisupport@kaltura.com  with this info
-			$this->sendRegistrationInformation($partner, $adminKuser, $existingUser, self::KALTURA_SUPPORT );
+			// email the wikisupport@vidiun.com  with this info
+			$this->sendRegistrationInformation($partner, $adminVuser, $existingUser, self::VIDIUN_SUPPORT );
 
 			// if need to hook into SalesForce - this is the place
 			if ( include_once ( "mySalesForceUtils.class.php" ) )
@@ -74,30 +74,30 @@ class myPartnerRegistration
 	
 
 
-	private  function sendRegistrationInformation(Partner $partner, kuser $adminKuser, $existingUser, $recipient_email = null , $partner_type = 1 )
+	private  function sendRegistrationInformation(Partner $partner, vuser $adminVuser, $existingUser, $recipient_email = null , $partner_type = 1 )
 	{
 		$mailType = null;
 		$bodyParams = array();
 		$partnerId = $partner->getId();
-		$userName = $adminKuser->getFullName();
-		if (!$userName) { $userName = $adminKuser->getPuserId(); }
-		$loginEmail = $adminKuser->getEmail();
-		$loginData = $adminKuser->getLoginData();
+		$userName = $adminVuser->getFullName();
+		if (!$userName) { $userName = $adminVuser->getPuserId(); }
+		$loginEmail = $adminVuser->getEmail();
+		$loginData = $adminVuser->getLoginData();
 		$hashKey = $loginData->getNewHashKeyIfCurrentInvalid();
 		$resetPasswordLink = UserLoginDataPeer::getPassResetLink($hashKey);
-		$kmcLink = trim(kConf::get('apphome_url'), '/').'/kmc';
-		$contactLink = kConf::get('contact_url');
-		$contactPhone = kConf::get('contact_phone_number');		
-		$beginnersGuideLink = kConf::get('beginners_tutorial_url');
-		$quickStartGuideLink = kConf::get('quick_start_guide_url');
-		$uploadMediaVideoLink = kConf::get('upload_media_video_url');
-		$howToPublishVideoLink = kConf::get('how_to_publish_video_url');
-		$freeTrialResourceLink = kConf::get('free_trial_resource_url', 'local', '');
+		$vmcLink = trim(vConf::get('apphome_url'), '/').'/vmc';
+		$contactLink = vConf::get('contact_url');
+		$contactPhone = vConf::get('contact_phone_number');		
+		$beginnersGuideLink = vConf::get('beginners_tutorial_url');
+		$quickStartGuideLink = vConf::get('quick_start_guide_url');
+		$uploadMediaVideoLink = vConf::get('upload_media_video_url');
+		$howToPublishVideoLink = vConf::get('how_to_publish_video_url');
+		$freeTrialResourceLink = vConf::get('free_trial_resource_url', 'local', '');
 		if ( $recipient_email == null ) $recipient_email = $loginEmail;
 
 		
 	 	// send the $cms_email,$cms_password, TWICE !
-	 	if(kConf::get('kaltura_installation_type') == 'CE')	{
+	 	if(vConf::get('vidiun_installation_type') == 'CE')	{
 			$partner_type = 1;
 		}
 
@@ -106,59 +106,59 @@ class myPartnerRegistration
 		{
 			if ($existingUser) {
 				return; // emails will be sent via external system 
-				//$mailType = self::KALTURAS_DEVELOPER_EXISTING_USER_REGISTRATION_CONFIRMATION;
+				//$mailType = self::VIDIUNS_DEVELOPER_EXISTING_USER_REGISTRATION_CONFIRMATION;
 				//$bodyParams = array($loginEmail, $partnerId);
 			}
 			else {
 				return; // emails will be sent via external system
-				//$mailType = self::KALTURAS_DEVELOPER_REGISTRATION_CONFIRMATION;
+				//$mailType = self::VIDIUNS_DEVELOPER_REGISTRATION_CONFIRMATION;
 				//$bodyParams = array($resetPasswordLink, $resetPasswordLink);
 			}
 		}
 		else {
 			switch($partner_type) { // send different email for different partner types
-				case Partner::PARTNER_TYPE_KMC: // KMC signup
+				case Partner::PARTNER_TYPE_VMC: // VMC signup
 					if ($existingUser) {
-						$mailType = self::KALTURAS_DEFAULT_EXISTING_USER_REGISTRATION_CONFIRMATION;
+						$mailType = self::VIDIUNS_DEFAULT_EXISTING_USER_REGISTRATION_CONFIRMATION;
 						$bodyParams = array($userName, $loginEmail, $partnerId, $contactLink, $contactPhone, $freeTrialResourceLink);
 					}
 					else {
-						$mailType = self::KALTURAS_CMS_REGISTRATION_CONFIRMATION;
-						$bodyParams = array($userName, $loginEmail, $resetPasswordLink, $partnerId, $kmcLink, $quickStartGuideLink, $uploadMediaVideoLink, $howToPublishVideoLink, $contactLink, $contactPhone);
+						$mailType = self::VIDIUNS_CMS_REGISTRATION_CONFIRMATION;
+						$bodyParams = array($userName, $loginEmail, $resetPasswordLink, $partnerId, $vmcLink, $quickStartGuideLink, $uploadMediaVideoLink, $howToPublishVideoLink, $contactLink, $contactPhone);
 					}
 					break;
 				//blackboard
 				case Partner::PARTNER_TYPE_BLACKBOARD:
 					if ($existingUser) {
-						$mailType = self::KALTURAS_DEFAULT_EXISTING_USER_REGISTRATION_CONFIRMATION;
+						$mailType = self::VIDIUNS_DEFAULT_EXISTING_USER_REGISTRATION_CONFIRMATION;
 						$bodyParams = array($userName, $loginEmail, $partnerId, $contactLink, $contactPhone, $freeTrialResourceLink);
 					}
 					else {
-						$mailType = self::KALTURAS_BLACKBOARD_DEFAULT_REGISTRATION_CONFIRMATION;
-						$bodyParams = array($resetPasswordLink, $loginEmail, $partnerId, $kmcLink);
+						$mailType = self::VIDIUNS_BLACKBOARD_DEFAULT_REGISTRATION_CONFIRMATION;
+						$bodyParams = array($resetPasswordLink, $loginEmail, $partnerId, $vmcLink);
 					}
 					break;	
 				default: // all others
 				 	if ($existingUser) {
-						$mailType = self::KALTURAS_DEFAULT_EXISTING_USER_REGISTRATION_CONFIRMATION;
+						$mailType = self::VIDIUNS_DEFAULT_EXISTING_USER_REGISTRATION_CONFIRMATION;
 						$bodyParams = array($userName, $loginEmail, $partnerId, $contactLink, $contactPhone, $freeTrialResourceLink);
 					}
 					else {
-						$mailType = self::KALTURAS_DEFAULT_REGISTRATION_CONFIRMATION;
-						$bodyParams = array($userName, $loginEmail, $partnerId, $resetPasswordLink, $kmcLink, $contactLink, $contactPhone, $beginnersGuideLink, $quickStartGuideLink);
+						$mailType = self::VIDIUNS_DEFAULT_REGISTRATION_CONFIRMATION;
+						$bodyParams = array($userName, $loginEmail, $partnerId, $resetPasswordLink, $vmcLink, $contactLink, $contactPhone, $beginnersGuideLink, $quickStartGuideLink);
 					}
 					break;
 			}
 		}
 		
-		kJobsManager::addMailJob(
+		vJobsManager::addMailJob(
 			null, 
 			0, 
 			$partnerId, 
 			$mailType, 
-			kMailJobData::MAIL_PRIORITY_NORMAL, 
-			kConf::get ("partner_registration_confirmation_email" ), 
-			kConf::get ("partner_registration_confirmation_name" ), 
+			vMailJobData::MAIL_PRIORITY_NORMAL, 
+			vConf::get ("partner_registration_confirmation_email" ), 
+			vConf::get ("partner_registration_confirmation_name" ), 
 			$recipient_email, 
 			$bodyParams);
 	}
@@ -179,8 +179,8 @@ class myPartnerRegistration
 	 */
 	private function createNewPartner( $partner_name , $contact, $email, $ID_is_for, $SDK_terms_agreement, $description, $website_url , $password = null , $newPartner = null, $templatePartnerId = null )
 	{
-		$secret = md5(KCryptoWrapper::random_pseudo_bytes(16));
-		$admin_secret = md5(KCryptoWrapper::random_pseudo_bytes(16));
+		$secret = md5(VCryptoWrapper::random_pseudo_bytes(16));
+		$admin_secret = md5(VCryptoWrapper::random_pseudo_bytes(16));
 
 		if (!$newPartner)
 			$newPartner = new Partner();
@@ -197,7 +197,7 @@ class myPartnerRegistration
 		else //($ID_is_for == "non-commercial_use") || $ID_is_for === CommercialUseType::NON_COMMERCIAL_USE)
 			$newPartner->setCommercialUse(false);
 		$newPartner->setDescription($description);
-		$newPartner->setKsMaxExpiryInSeconds(86400);
+		$newPartner->setVsMaxExpiryInSeconds(86400);
 		$newPartner->setModerateContent(false);
 		$newPartner->setNotify(false);
 		$newPartner->setAppearInSearch(mySearchUtils::DISPLAY_IN_SEARCH_PARTNER_ONLY);
@@ -228,10 +228,10 @@ class myPartnerRegistration
 		if ( ! $partner_name ) $partner_name = $newPartner->getId();
 		$newPartner->setPartnerName( $partner_name );
 		$newPartner->setPrefix($newPartner->getId());
-		$newPartner->setPartnerAlias(md5($newPartner->getId().'kaltura partner'));
+		$newPartner->setPartnerAlias(md5($newPartner->getId().'vidiun partner'));
 
 		// set default conversion profile for trial accounts
-		if ($newPartner->getType() == Partner::PARTNER_TYPE_KMC)
+		if ($newPartner->getType() == Partner::PARTNER_TYPE_VMC)
 		{
 			$newPartner->setDefConversionProfileType( ConversionProfile::DEFAULT_TRIAL_COVERSION_PROFILE_TYPE );
 		}
@@ -245,9 +245,9 @@ class myPartnerRegistration
 		$partner_id = $newPartner->getId();
 		widget::createDefaultWidgetForPartner( $partner_id , $this->createNewSubPartner ( $newPartner ) );
 		
-		$fromPartner = PartnerPeer::retrieveByPK($templatePartnerId ? $templatePartnerId : kConf::get("template_partner_id"));
+		$fromPartner = PartnerPeer::retrieveByPK($templatePartnerId ? $templatePartnerId : vConf::get("template_partner_id"));
 	 	if (!$fromPartner)
-	 		KalturaLog::log("Template content partner was not found!");
+	 		VidiunLog::log("Template content partner was not found!");
  		else
  		{
  			$newPartner->setI18nTemplatePartnerId($templatePartnerId);
@@ -255,9 +255,9 @@ class myPartnerRegistration
  		}
 	 		
 	 	if ($newPartner->getType() == Partner::PARTNER_TYPE_WORDPRESS)
-	 		kPermissionManager::setPs2Permission($newPartner);
+	 		vPermissionManager::setPs2Permission($newPartner);
 		
-		$newPartner->setKmcVersion(kConf::get('new_partner_kmc_version'));
+		$newPartner->setVmcVersion(vConf::get('new_partner_vmc_version'));
 		$newPartner->save();
 		
 		return $newPartner;
@@ -273,8 +273,8 @@ class myPartnerRegistration
 		return $subpid;
 	}
 
-	// if the adminKuser already exists - use his password - it should always be the same one for a given email !!
-	private function createNewAdminKuser($newPartner , $existing_password )
+	// if the adminVuser already exists - use his password - it should always be the same one for a given email !!
+	private function createNewAdminVuser($newPartner , $existing_password )
 	{		
 		// generate a new password if not given
 		if ( $existing_password != null ) {
@@ -285,22 +285,22 @@ class myPartnerRegistration
 		}
 		
 		// create the user
-		$kuser = new kuser();
-		$kuser->setEmail($newPartner->getAdminEmail());
+		$vuser = new vuser();
+		$vuser->setEmail($newPartner->getAdminEmail());
 		
-		list($firstName, $lastName) = kString::nameSplit($newPartner->getAdminName());
-		$kuser->setFirstName($firstName);
-		$kuser->setLastName($lastName);
+		list($firstName, $lastName) = vString::nameSplit($newPartner->getAdminName());
+		$vuser->setFirstName($firstName);
+		$vuser->setLastName($lastName);
 
-		$kuser->setPartnerId($newPartner->getId());
-		$kuser->setIsAdmin(true);
-		$kuser->setPuserId($newPartner->getAdminEmail());
+		$vuser->setPartnerId($newPartner->getId());
+		$vuser->setIsAdmin(true);
+		$vuser->setPuserId($newPartner->getAdminEmail());
 
-		$kuser = kuserPeer::addUser($kuser, $password, false, false); //this also saves the kuser and adds a user_login_data record
+		$vuser = vuserPeer::addUser($vuser, $password, false, false); //this also saves the vuser and adds a user_login_data record
 		
-		$loginData = UserLoginDataPeer::retrieveByPK($kuser->getLoginDataId());
+		$loginData = UserLoginDataPeer::retrieveByPK($vuser->getLoginDataId());
 	
-		return array($password, $loginData->getPasswordHashKey(), $kuser->getId());
+		return array($password, $loginData->getPasswordHashKey(), $vuser->getId());
 	}
 
 	public function initNewPartner($partner_name , $contact, $email, $ID_is_for, $SDK_terms_agreement, $description, $website_url , $password = null , $partner = null, $ignorePassword = false, $templatePartnerId = null)
@@ -316,7 +316,7 @@ class myPartnerRegistration
 			throw new SignupException('Please fill in Administrator\'s Email Address', SignupException::INVALID_FIELD_VALUE);
 		
 			
-		if(!kString::isEmailString($email))
+		if(!vString::isEmailString($email))
 			throw new SignupException('Invalid email address', SignupException::INVALID_FIELD_VALUE);
 
 		if ($description == "")
@@ -332,7 +332,7 @@ class myPartnerRegistration
 
 		if ($partner->getPartnerPackage() == PartnerPackages::PARTNER_PACKAGE_INTERNAL_TRIAL)
 		{
-			$internalTrialAllowedDomains = kConf::get('internal_trial_allowed_domains', 'local', null);
+			$internalTrialAllowedDomains = vConf::get('internal_trial_allowed_domains', 'local', null);
 			if($internalTrialAllowedDomains)
 			{
 				$domain = substr(strrchr($email, "@"), 1);
@@ -353,7 +353,7 @@ class myPartnerRegistration
 			}
 			else if ($existingLoginData->isPasswordValid($password))
 			{
-				KalturaLog::log('Login id ['.$email.'] already used, and given password is valid. Creating new partner with this same login id');
+				VidiunLog::log('Login id ['.$email.'] already used, and given password is valid. Creating new partner with this same login id');
 			}
 			else
 			{
@@ -372,7 +372,7 @@ class myPartnerRegistration
 		$newSubPartner = NULL;
 		try {
 		    //validate that the template partner object counts do not exceed the limits stated in the local.ini
-		    $templatePartner = PartnerPeer::retrieveByPK($templatePartnerId ? $templatePartnerId : kConf::get('template_partner_id'));
+		    $templatePartner = PartnerPeer::retrieveByPK($templatePartnerId ? $templatePartnerId : vConf::get('template_partner_id'));
 		    $this->validateTemplatePartner($templatePartner);
 			// create the new partner
 			$newPartner = $this->createNewPartner($partner_name , $contact, $email, $ID_is_for, $SDK_terms_agreement, $description, $website_url , $password , $partner , $templatePartnerId);
@@ -382,15 +382,15 @@ class myPartnerRegistration
 			// a random value, being passed to the user, and never saved
 			$newSubPartnerId = $this->createNewSubPartner($newPartner);
 
-			// create a new admin_kuser for the user,
+			// create a new admin_vuser for the user,
 			// so he will be able to login to the system (including permissions)
-			list($newAdminKuserPassword, $newPassHashKey, $kuserId) = $this->createNewAdminKuser($newPartner , $password );
-			$newPartner->setAccountOwnerKuserId($kuserId);
+			list($newAdminVuserPassword, $newPassHashKey, $vuserId) = $this->createNewAdminVuser($newPartner , $password );
+			$newPartner->setAccountOwnerVuserId($vuserId);
 			$newPartner->save();
 			
 			$this->configurePartnerByPackage($newPartner);
 					
-			$this->setAllTemplateEntriesToAdminKuser($newPartner->getId(), $kuserId);
+			$this->setAllTemplateEntriesToAdminVuser($newPartner->getId(), $vuserId);
 
 			if ($partner->getPartnerPackage() == PartnerPackages::PARTNER_PACKAGE_INTERNAL_TRIAL)
 				$this->addMarketoCampaignId($newPartner, myPartnerUtils::MARKETO_NEW_INTERNAL_TRIAL_ACCOUNT, $newPartner);
@@ -404,9 +404,9 @@ class myPartnerRegistration
 
 			}
 
-			kEventsManager::raiseEvent(new kObjectAddedEvent($newPartner));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($newPartner));
 
-			return array($newPartner->getId(), $newSubPartnerId, $newAdminKuserPassword, $newPassHashKey);
+			return array($newPartner->getId(), $newSubPartnerId, $newAdminVuserPassword, $newPassHashKey);
 		}
 		catch (Exception $e) {
 			//TODO: revert all changes, depending where and why we failed
@@ -423,9 +423,9 @@ class myPartnerRegistration
 		$freeTrialPackages = array(PartnerPackages::PARTNER_PACKAGE_FREE, PartnerPackages::PARTNER_PACKAGE_INTERNAL_TRIAL);
 		if(in_array($partnerToCheck->getPartnerPackage(), $freeTrialPackages) && isset($additionalParams['freetrialaccounttype']))
 		{
-			if (kConf::hasParam($campaignName))
+			if (vConf::hasParam($campaignName))
 			{
-				$campaignId = kConf::get($campaignName);
+				$campaignId = vConf::get($campaignName);
 				$partnerToUpdate->setMarketoCampaignId($campaignId);
 				$partnerToUpdate->save();
 			}
@@ -462,7 +462,7 @@ class myPartnerRegistration
 			
 		if($partner->getPartnerPackage() == 100) //Developer partner
 		{
-			$permissionNames = array(PermissionName::FEATURE_LIVE_STREAM, PermissionName::FEATURE_KALTURA_LIVE_STREAM, PermissionName::FEATURE_KALTURA_LIVE_STREAM_TRANSCODE);
+			$permissionNames = array(PermissionName::FEATURE_LIVE_STREAM, PermissionName::FEATURE_VIDIUN_LIVE_STREAM, PermissionName::FEATURE_VIDIUN_LIVE_STREAM_TRANSCODE);
 			foreach ($permissionNames as $permissionName) 
 			{
 				$permission = PermissionPeer::getByNameAndPartner ( $permissionName, $partner->getId() );
@@ -491,9 +491,9 @@ class myPartnerRegistration
  		$c->add(accessControlPeer::PARTNER_ID, $templatePartner->getId());
  		$count = accessControlPeer::doCount($c);
  		
-        if ($count > kConf::get('copy_partner_limit_ac_profiles'))
+        if ($count > vConf::get('copy_partner_limit_ac_profiles'))
         {
-            throw new kCoreException("Template partner's number of [accessControlProfiles] objects exceed allowed limit", kCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
+            throw new vCoreException("Template partner's number of [accessControlProfiles] objects exceed allowed limit", vCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
         }
         
         //categories
@@ -502,9 +502,9 @@ class myPartnerRegistration
  		$c->addAnd(categoryPeer::PARTNER_ID, $templatePartner->getId());
  		$c->addAnd(categoryPeer::STATUS, CategoryStatus::ACTIVE);
  		$count = categoryPeer::doCount($c);
- 	    if ($count > kConf::get('copy_partner_limit_categories'))
+ 	    if ($count > vConf::get('copy_partner_limit_categories'))
         {
-            throw new kCoreException("Template partner's number of [category] objects exceed allowed limit", kCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
+            throw new vCoreException("Template partner's number of [category] objects exceed allowed limit", vCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
         }
         
  		categoryPeer::setUseCriteriaFilter(true);
@@ -513,9 +513,9 @@ class myPartnerRegistration
 	    $c = new Criteria();
  		$c->add(conversionProfile2Peer::PARTNER_ID, $templatePartner->getId());
  		$count = conversionProfile2Peer::doCount($c);
- 		if ($count > kConf::get('copy_partner_limit_conversion_profiles'))
+ 		if ($count > vConf::get('copy_partner_limit_conversion_profiles'))
  		{
- 		    throw new kCoreException("Template partner's number of [conversionProfile] objects exceeds allowed limit", kCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
+ 		    throw new vCoreException("Template partner's number of [conversionProfile] objects exceeds allowed limit", vCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
  		}
  		//entries
  		entryPeer::setUseCriteriaFilter ( false ); 
@@ -524,9 +524,9 @@ class myPartnerRegistration
  		$c->addAnd(entryPeer::TYPE, entryType::MEDIA_CLIP);
  		$c->addAnd(entryPeer::STATUS, entryStatus::READY);
  		$count = entryPeer::doCount($c);
- 		if ($count > kConf::get('copy_partner_limit_entries'))
+ 		if ($count > vConf::get('copy_partner_limit_entries'))
  		{
- 		    throw new kCoreException("Template partner's number of MEDIA_CLIP objects exceed allowed limit", kCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
+ 		    throw new vCoreException("Template partner's number of MEDIA_CLIP objects exceed allowed limit", vCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
  		}
  		entryPeer::setUseCriteriaFilter ( true );
  		
@@ -537,9 +537,9 @@ class myPartnerRegistration
  		$c->addAnd(entryPeer::TYPE, entryType::PLAYLIST);
  		$c->addAnd(entryPeer::STATUS, entryStatus::READY);
  		$count = entryPeer::doCount($c);
- 		if ($count > kConf::get('copy_partner_limit_playlists'))
+ 		if ($count > vConf::get('copy_partner_limit_playlists'))
  		{
- 		    throw new kCoreException("Template partner's number of PLAYLIST objects exceed allowed limit", kCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
+ 		    throw new vCoreException("Template partner's number of PLAYLIST objects exceed allowed limit", vCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
  		}
  		
  		entryPeer::setUseCriteriaFilter ( true );
@@ -548,21 +548,21 @@ class myPartnerRegistration
 	    $c = new Criteria();
  		$c->add(assetParamsPeer::PARTNER_ID, $templatePartner->getId());
  		$count = assetParamsPeer::doCount($c);
- 		if ($count > kConf::get('copy_partner_limit_flavor_params'))
+ 		if ($count > vConf::get('copy_partner_limit_flavor_params'))
  		{
- 		    throw new kCoreException("Template partner's number of [flavorParams] objects exceeds allowed limit", kCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
+ 		    throw new vCoreException("Template partner's number of [flavorParams] objects exceeds allowed limit", vCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
  		}
  		
  		//uiconfs
  		uiConfPeer::setUseCriteriaFilter(false);
  		$c = new Criteria();
  		$c->addAnd(uiConfPeer::PARTNER_ID, $templatePartner->getId());
- 		$c->addAnd(uiConfPeer::OBJ_TYPE, array (uiConf::UI_CONF_TYPE_KDP3, uiConf::UI_CONF_TYPE_WIDGET), Criteria::IN);
+ 		$c->addAnd(uiConfPeer::OBJ_TYPE, array (uiConf::UI_CONF_TYPE_VDP3, uiConf::UI_CONF_TYPE_WIDGET), Criteria::IN);
  		$c->addAnd(uiConfPeer::STATUS, uiConf::UI_CONF_STATUS_READY);
  		$count = uiConfPeer::doCount($c);
- 		if ($count > kConf::get('copy_partner_limit_ui_confs'))
+ 		if ($count > vConf::get('copy_partner_limit_ui_confs'))
  		{
- 		    throw new kCoreException("Template partner's number of [uiconf] objects exceeds allowed limit", kCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
+ 		    throw new vCoreException("Template partner's number of [uiconf] objects exceeds allowed limit", vCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
  		}
  		uiConfPeer::setUseCriteriaFilter ( true );
  		
@@ -572,21 +572,21 @@ class myPartnerRegistration
  		$c->addAnd(UserRolePeer::PARTNER_ID, $templatePartner->getId(), Criteria::EQUAL);
  		$c->addAnd(UserRolePeer::STATUS, UserRoleStatus::ACTIVE, Criteria::EQUAL);
  		$count = UserRolePeer::doCount($c);
- 		if ($count > kConf::get('copy_partner_limit_user_roles'))
+ 		if ($count > vConf::get('copy_partner_limit_user_roles'))
  		{
- 		    throw new kCoreException("Template partner's number of [userRole] objects exceed allowed limit", kCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
+ 		    throw new vCoreException("Template partner's number of [userRole] objects exceed allowed limit", vCoreException::TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED);
  		}
  		UserRolePeer::setUseCriteriaFilter ( true );
  		
- 		$validatorPlugins = KalturaPluginManager::getPluginInstances('IKalturaObjectValidator');
+ 		$validatorPlugins = VidiunPluginManager::getPluginInstances('IVidiunObjectValidator');
  		foreach ($validatorPlugins as $validatorPlugins)
  		{
- 		    $validatorPlugins->validateObject ($templatePartner, IKalturaObjectValidator::OPERATION_COPY);
+ 		    $validatorPlugins->validateObject ($templatePartner, IVidiunObjectValidator::OPERATION_COPY);
  		}
         
 	}
 	
-	private function setAllTemplateEntriesToAdminKuser($partnerId, $kuserId)
+	private function setAllTemplateEntriesToAdminVuser($partnerId, $vuserId)
 	{
 		$c = new Criteria();
 		$c->addAnd(entryPeer::PARTNER_ID, $partnerId, Criteria::EQUAL);
@@ -596,8 +596,8 @@ class myPartnerRegistration
 			
 		foreach ($allEntries as $entry)
 		{
-			$entry->setKuserId($kuserId);
-			$entry->setCreatorKuserId($kuserId);
+			$entry->setVuserId($vuserId);
+			$entry->setCreatorVuserId($vuserId);
 			$entry->save();
 		}
 	}

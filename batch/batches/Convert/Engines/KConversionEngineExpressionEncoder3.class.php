@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage Conversion.engines
  */
-class KConversionEngineExpressionEncoder3 extends KCollectionConversionEngine
+class VConversionEngineExpressionEncoder3 extends VCollectionConversionEngine
 {
 	const EXPRESSION_ENCODER_3 = "Expression Encoder 3";
 	
@@ -14,15 +14,15 @@ class KConversionEngineExpressionEncoder3 extends KCollectionConversionEngine
 	
 	public function getType()
 	{
-		return KalturaConversionEngineType::EXPRESSION_ENCODER3;
+		return VidiunConversionEngineType::EXPRESSION_ENCODER3;
 	}
 	
 	public function getCmd ()
 	{
-		return KBatchBase::$taskConfig->params->expEncoderCmd;
+		return VBatchBase::$taskConfig->params->expEncoderCmd;
 	}
 	
-	protected function convertCollection ( KalturaConvertCollectionJobData &$data )
+	protected function convertCollection ( VidiunConvertCollectionJobData &$data )
 	{
 		$error_message = "";
 		$actualFileSyncLocalPath = $this->getSrcActualPathFromData($data);
@@ -30,7 +30,7 @@ class KConversionEngineExpressionEncoder3 extends KCollectionConversionEngine
 		if ( ! file_exists ( $actualFileSyncLocalPath ) )
 		{
 			$error_message = "File [{$actualFileSyncLocalPath}] does not exist";
-			KalturaLog::err(  $error_message );
+			VidiunLog::err(  $error_message );
 			return array ( false , $error_message );
 		}
 
@@ -55,7 +55,7 @@ class KConversionEngineExpressionEncoder3 extends KCollectionConversionEngine
 			$this->addToLogFile ( $log_file , $execution_command_str ) ;
 			$this->addToLogFile ( $log_file , $conversion_str ) ;
 				
-			KalturaLog::info ( $execution_command_str );
+			VidiunLog::info ( $execution_command_str );
 	
 			$start = microtime(true);
 			// TODO add BatchEvent - before conversion + conversion engine 
@@ -67,7 +67,7 @@ class KConversionEngineExpressionEncoder3 extends KCollectionConversionEngine
 			// 	TODO - find some place in the DB for the duration
 			$duration += ( $end - $start );
 						 
-			KalturaLog::info ( $this->getName() . ": [$return_value] took [$duration] seconds" );
+			VidiunLog::info ( $this->getName() . ": [$return_value] took [$duration] seconds" );
 			
 			$this->addToLogFile ( $log_file , $output ) ;
 			
@@ -86,19 +86,19 @@ class KConversionEngineExpressionEncoder3 extends KCollectionConversionEngine
 		return array ( true , $error_message );// indicate all was converted properly
 	}
 	
-	protected function parseCreatedFiles(KalturaConvertCollectionJobData &$data)
+	protected function parseCreatedFiles(VidiunConvertCollectionJobData &$data)
 	{
 		$xmlPath = $data->destDirLocalPath . DIRECTORY_SEPARATOR . $data->destFileName . '.ism';
-		KalturaLog::info("Parse created files from ism[$xmlPath]");
+		VidiunLog::info("Parse created files from ism[$xmlPath]");
 		
 		// in case of wma
 		if(!file_exists($xmlPath))
 		{
-			KalturaLog::info("ism file[$xmlPath] doesn't exist");
+			VidiunLog::info("ism file[$xmlPath] doesn't exist");
 			$wmaPath = $data->destDirLocalPath . DIRECTORY_SEPARATOR . $data->destFileName . '.wma';
 			if(file_exists($wmaPath) && count($data->flavors) == 1) // only one audio flavor
 			{
-				KalturaLog::info("wma file[$wmaPath] found");
+				VidiunLog::info("wma file[$wmaPath] found");
 				foreach($data->flavors as $index => $flavor)
 					$data->flavors[$index]->destFileSyncLocalPath = $wmaPath;
 			}
@@ -123,12 +123,12 @@ class KConversionEngineExpressionEncoder3 extends KCollectionConversionEngine
 			$src = $data->destDirLocalPath . DIRECTORY_SEPARATOR . $videoEntity->getAttribute("src");
 			$bitrate = $videoEntity->getAttribute("systemBitrate") / 1000;
 			
-			KalturaLog::info("Media found in ism bitrate[$bitrate] source[$src]");
+			VidiunLog::info("Media found in ism bitrate[$bitrate] source[$src]");
 			foreach($data->flavors as $index => $flavor)
 			{
 				if($flavor->videoBitrate == $bitrate)
 				{
-					KalturaLog::info("Source[$src] assigned to flavor[" . $data->flavors[$index]->flavorAssetId . "]");
+					VidiunLog::info("Source[$src] assigned to flavor[" . $data->flavors[$index]->flavorAssetId . "]");
 					$data->flavors[$index]->destFileSyncLocalPath = $src;
 				}
 			}

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaThumbParamsOutput extends KalturaThumbParams
+class VidiunThumbParamsOutput extends VidiunThumbParams
 {
 	/**
 	 * @var int
@@ -74,7 +74,7 @@ class KalturaThumbParamsOutput extends KalturaThumbParams
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($object = null, $skip = array())
 	{

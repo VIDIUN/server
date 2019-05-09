@@ -3,7 +3,7 @@
  * @package plugins.integration
  * @subpackage model.data
  */
-class kIntegrationJobData extends kJobData
+class vIntegrationJobData extends vJobData
 {
 	/**
 	 * @var string
@@ -11,7 +11,7 @@ class kIntegrationJobData extends kJobData
 	private $callbackNotificationUrl;
 
 	/**
-	 * @var kIntegrationJobProviderData
+	 * @var vIntegrationJobProviderData
 	 */
 	private $providerData;
 	
@@ -21,7 +21,7 @@ class kIntegrationJobData extends kJobData
 	private $providerType;
 	
 	/**
-	 * @var kIntegrationJobTriggerData
+	 * @var vIntegrationJobTriggerData
 	 */
 	private $triggerData;
 	
@@ -63,7 +63,7 @@ class kIntegrationJobData extends kJobData
 	}
 
 	/**
-	 * @return kIntegrationJobProviderData
+	 * @return vIntegrationJobProviderData
 	 */
 	public function getProviderData()
 	{
@@ -71,9 +71,9 @@ class kIntegrationJobData extends kJobData
 	}
 
 	/**
-	 * @param kIntegrationJobProviderData $providerData
+	 * @param vIntegrationJobProviderData $providerData
 	 */
-	public function setProviderData(kIntegrationJobProviderData $providerData)
+	public function setProviderData(vIntegrationJobProviderData $providerData)
 	{
 		$this->providerData = $providerData;
 	}
@@ -95,7 +95,7 @@ class kIntegrationJobData extends kJobData
 	}
 
 	/**
-	 * @return kIntegrationJobTriggerData
+	 * @return vIntegrationJobTriggerData
 	 */
 	public function getTriggerData()
 	{
@@ -103,9 +103,9 @@ class kIntegrationJobData extends kJobData
 	}
 
 	/**
-	 * @param kIntegrationJobTriggerData $triggerData
+	 * @param vIntegrationJobTriggerData $triggerData
 	 */
-	public function setTriggerData(kIntegrationJobTriggerData $triggerData)
+	public function setTriggerData(vIntegrationJobTriggerData $triggerData)
 	{
 		$this->triggerData = $triggerData;
 	}

@@ -13,7 +13,7 @@ class TvinciDistributionFeedHelper
 	const DELETE_XML = "<feed><export><media co_guid=\"COGUID\" entry_id=\"ENTRYID\" action=\"delete\" is_active=\"true\" erase=\"true\"/></export></feed>";
 
 	/**
-	 * var KalturaTvinciDistributionProfile
+	 * var VidiunTvinciDistributionProfile
 	 */
 	protected $distributionProfile;
 
@@ -28,7 +28,7 @@ class TvinciDistributionFeedHelper
 	 */
 	protected $_doc;
 
-	public function __construct(KalturaTvinciDistributionProfile $distributionProfile, BaseEntry $entry)
+	public function __construct(VidiunTvinciDistributionProfile $distributionProfile, BaseEntry $entry)
 	{
 		$this->distributionProfile = $distributionProfile;
 		$this->entry = $entry;
@@ -65,7 +65,7 @@ class TvinciDistributionFeedHelper
 		foreach($this->distributionProfile->tags as $tag)
 		{
 			/**
-			 * @var KalturaTvinciDistributionTag $tag
+			 * @var VidiunTvinciDistributionTag $tag
 			 */
 			$tagXML = $tagsDoc->createElement('tag');
 
@@ -136,7 +136,7 @@ class TvinciDistributionFeedHelper
 			$this->_doc->encoding = "UTF-8";
 		}
 
-		$feedAsXml = kMrssManager::getEntryMrssXml($this->entry);
+		$feedAsXml = vMrssManager::getEntryMrssXml($this->entry);
 		self::addEmptyValueInMetadataObjects($feedAsXml);
 
 		if ( $action != self::ACTION_DELETE )
@@ -148,7 +148,7 @@ class TvinciDistributionFeedHelper
 			} else {
 				$xslt = file_get_contents(__DIR__."/../xml/tvinci_default.xslt");
 			}
-			$feedAsString = kXml::transformXmlUsingXslt($feedAsXml->saveXML(), $xslt, $this->createArgumentsForXSLT());
+			$feedAsString = vXml::transformXmlUsingXslt($feedAsXml->saveXML(), $xslt, $this->createArgumentsForXSLT());
 		}
 		else {
 			$coguid = $this->entry->getReferenceID();
@@ -240,7 +240,7 @@ class TvinciDistributionFeedHelper
 
 	private static function addEmptyValueInMetadataObject($metadataObject)
 	{
-		$metadataProfileId = kXml::getXmlAttributeAsInt($metadataObject, 'metadataProfileId');
+		$metadataProfileId = vXml::getXmlAttributeAsInt($metadataObject, 'metadataProfileId');
 		$metadataProfile = MetadataProfilePeer::retrieveByPK($metadataProfileId);
 		if (!$metadataProfile)
 			return;
@@ -252,7 +252,7 @@ class TvinciDistributionFeedHelper
 
 		if (count($diffKeys) > 0)
 		{
-			KalturaLog::debug("Adding fields to metadata with profileID [$metadataProfileId] with the keys: " .print_r($diffKeys, true));
+			VidiunLog::debug("Adding fields to metadata with profileID [$metadataProfileId] with the keys: " .print_r($diffKeys, true));
 			foreach($diffKeys as $key => $val)
 				$metadataObject->metadata->addChild($key, self::EMPTY_PLACE_HOLDER);
 		}

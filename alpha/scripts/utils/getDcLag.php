@@ -11,28 +11,28 @@ if ($argc >= 3)
 }
 else
 {
-	$sourceDc = kDataCenterMgr::getCurrentDcId();
+	$sourceDc = vDataCenterMgr::getCurrentDcId();
 	$targetDc = 1 - $sourceDc;
 }
 
-$keysCache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS . $targetDc);
+$keysCache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS . $targetDc);
 if (!$keysCache)
 {
-	KalturaLog::log('failed to get keys cache');
+	VidiunLog::log('failed to get keys cache');
 	exit(1);
 }
 
 $maxId = $keysCache->get(MAX_FILESYNC_ID_PREFIX . $sourceDc);
 if (!$maxId)
 {
-	KalturaLog::log('failed to get max file sync id');
+	VidiunLog::log('failed to get max file sync id');
 	exit(1);
 }
 
 $fileSync = FileSyncPeer::retrieveByPK($maxId);
 if (!$fileSync)
 {
-	KalturaLog::log('failed to get the file sync');
+	VidiunLog::log('failed to get the file sync');
 	exit(1);
 }
 

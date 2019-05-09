@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBulkDownloadJobData extends KalturaJobData
+class VidiunBulkDownloadJobData extends VidiunJobData
 {
 	/**
 	 * Comma separated list of entry ids
@@ -42,7 +42,7 @@ class KalturaBulkDownloadJobData extends KalturaJobData
 	public function toObject($dbData = null, $propsToSkip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kBulkDownloadJobData();
+			$dbData = new vBulkDownloadJobData();
 			
 		return parent::toObject($dbData);
 	}

@@ -3,10 +3,10 @@
  * @package plugins.metadata
  * @subpackage api.objects
  */
-class KalturaTransformMetadataResponse extends KalturaObject
+class VidiunTransformMetadataResponse extends VidiunObject
 {
 	/**
-	 * @var KalturaMetadataArray
+	 * @var VidiunMetadataArray
 	 * @readonly
 	 */
 	public $objects;

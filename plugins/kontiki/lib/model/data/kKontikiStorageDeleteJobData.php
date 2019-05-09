@@ -4,7 +4,7 @@
  * @package plugins.kontiki
  * @subpackage model
  * */
-class kKontikiStorageDeleteJobData extends kStorageDeleteJobData
+class vKontikiStorageDeleteJobData extends vStorageDeleteJobData
 {
     /**
      * Unique Kontiki MOID for the content uploaded to Kontiki
@@ -44,7 +44,7 @@ class kKontikiStorageDeleteJobData extends kStorageDeleteJobData
         $this->setServerUrl($storage->getStorageUrl()); 
         $this->setServiceToken($storage->getServiceToken()); 
         if ($fileSync->getObjectType() != FileSyncObjectType::ASSET)
-            throw new kCoreException("Incompatible filesync type", kCoreException::INTERNAL_SERVER_ERROR);
+            throw new vCoreException("Incompatible filesync type", vCoreException::INTERNAL_SERVER_ERROR);
         
         $this->setContentMoid($fileSync->getFilePath());
     }

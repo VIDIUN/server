@@ -9,7 +9,7 @@ class AuditTrailFilter extends baseObjectFilter
 	{
 		// TODO - should separate the schema of the fields from the actual values
 		// or can use this to set default valuse
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 				"_eq_id",
 				"_gte_created_at",
 				"_lte_created_at",
@@ -45,14 +45,14 @@ class AuditTrailFilter extends baseObjectFilter
 				"_in_server_name",
 				"_eq_ip_address",
 				"_in_ip_address",
-				"_eq_ks", 
+				"_eq_vs", 
 				"_eq_client_tag", 
 			) , NULL );
 
 		$this->allowed_order_fields = array ("created_at" , "parsed_at");
 			
 		$this->aliases = array ( 
-			"user_id" => "kuser_id",
+			"user_id" => "vuser_id",
 		);
 	}
 

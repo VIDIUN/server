@@ -52,7 +52,7 @@ if ($oldParameterItemsCfg) {
 	}
 }
 
-KalturaLog::log('Done');
+VidiunLog::log('Done');
 
 // ------------------------------------------------------
 
@@ -100,8 +100,8 @@ function removeActionPermissionItem($itemCfg)
 		
 	// check if item already exists in db
 	$c = new Criteria();
-	$c->addAnd(kApiActionPermissionItem::SERVICE_COLUMN_NAME, strtolower($itemCfg->service));
-	$c->addAnd(kApiActionPermissionItem::ACTION_COLUMN_NAME, strtolower($itemCfg->action));
+	$c->addAnd(vApiActionPermissionItem::SERVICE_COLUMN_NAME, strtolower($itemCfg->service));
+	$c->addAnd(vApiActionPermissionItem::ACTION_COLUMN_NAME, strtolower($itemCfg->action));
 	$c->addAnd(PermissionItemPeer::PARTNER_ID, array(PartnerPeer::GLOBAL_PARTNER, $itemCfg->partnerId), Criteria::IN);
 	$c->addAnd(PermissionItemPeer::TYPE, PermissionItemType::API_ACTION_ITEM);
 	$permissionItem = PermissionItemPeer::doSelectOne($c);
@@ -142,9 +142,9 @@ function removeParameterPermissionItem($itemCfg)
 	
 	// check if item already exists in db
 	$c = new Criteria();
-	$c->addAnd(kApiParameterPermissionItem::OBJECT_COLUMN_NAME, $itemCfg->object);
-	$c->addAnd(kApiParameterPermissionItem::PARAMETER_COLUMN_NAME, $itemCfg->parameter);
-	$c->addAnd(kApiParameterPermissionItem::ACTION_COLUMN_NAME, $itemCfg->action);
+	$c->addAnd(vApiParameterPermissionItem::OBJECT_COLUMN_NAME, $itemCfg->object);
+	$c->addAnd(vApiParameterPermissionItem::PARAMETER_COLUMN_NAME, $itemCfg->parameter);
+	$c->addAnd(vApiParameterPermissionItem::ACTION_COLUMN_NAME, $itemCfg->action);
 	$c->addAnd(PermissionItemPeer::PARTNER_ID, array(PartnerPeer::GLOBAL_PARTNER, $itemCfg->partnerId), Criteria::IN);
 	$c->addAnd(PermissionItemPeer::TYPE, PermissionItemType::API_PARAMETER_ITEM);
 	$permissionItem = PermissionItemPeer::doSelectOne($c);

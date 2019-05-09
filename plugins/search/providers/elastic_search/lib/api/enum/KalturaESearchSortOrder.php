@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.enum
  */
-class KalturaESearchSortOrder extends KalturaStringEnum implements ESearchSortOrder
+class VidiunESearchSortOrder extends VidiunStringEnum implements ESearchSortOrder
 {
 
 }

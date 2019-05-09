@@ -3,7 +3,7 @@
  * @package plugins.segmenter
  * @subpackage lib
  */
-class SegmenterConversionEngineType implements IKalturaPluginEnum, conversionEngineType
+class SegmenterConversionEngineType implements IVidiunPluginEnum, conversionEngineType
 {
 	const SEGMENTER = 'Segmenter';
 	

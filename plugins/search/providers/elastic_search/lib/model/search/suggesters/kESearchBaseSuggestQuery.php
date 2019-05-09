@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-abstract class kESearchBaseSuggestQuery
+abstract class vESearchBaseSuggestQuery
 {
 	const SUGGEST_KEY = 'suggest';
 

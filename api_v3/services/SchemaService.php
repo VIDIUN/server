@@ -6,13 +6,13 @@
  * @package api
  * @subpackage services
  */
-class SchemaService extends KalturaBaseService 
+class SchemaService extends VidiunBaseService 
 {
 	const CORE_SCHEMA_NAME = 'core';
 	const ENUM_SCHEMA_NAME = 'enum';
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::partnerRequired()
+	 * @see VidiunBaseService::partnerRequired()
 	 */
 	protected function partnerRequired($actionName)
 	{
@@ -20,7 +20,7 @@ class SchemaService extends KalturaBaseService
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::isPermitted()
+	 * @see VidiunBaseService::isPermitted()
 	 */
 	protected function isPermitted(&$allowPrivatePartnerData)
 	{
@@ -31,7 +31,7 @@ class SchemaService extends KalturaBaseService
 	 * Serves the requested XSD according to the type and name. 
 	 * 
 	 * @action serve
-	 * @param KalturaSchemaType $type  
+	 * @param VidiunSchemaType $type  
 	 * @return file 
 	 */
 	function serveAction($type)
@@ -41,8 +41,8 @@ class SchemaService extends KalturaBaseService
 			return $this->dumpFile(realpath($cachedXsdFilePath), 'application/xml');
 		
 		$resultXsd = self::buildSchemaByType($type);
-		kFile::safeFilePutContents($cachedXsdFilePath, $resultXsd, 0644);
-		return new kRendererString($resultXsd, 'application/xml');
+		vFile::safeFilePutContents($cachedXsdFilePath, $resultXsd, 0644);
+		return new vRendererString($resultXsd, 'application/xml');
 	}
 	
 	public static function getSchemaPath($type)
@@ -52,13 +52,13 @@ class SchemaService extends KalturaBaseService
 			return realpath($cachedXsdFilePath);
 		
 		$resultXsd = self::buildSchemaByType($type);
-		kFile::safeFilePutContents($cachedXsdFilePath, $resultXsd, 0644);
+		vFile::safeFilePutContents($cachedXsdFilePath, $resultXsd, 0644);
 		return realpath($cachedXsdFilePath);
 	}
 	
 	private static function getCachedXsdFilePath($type)
 	{
-		$cachedXsdFilePath = kConf::get("cache_root_path") . "/$type.xsd";
+		$cachedXsdFilePath = vConf::get("cache_root_path") . "/$type.xsd";
 		return $cachedXsdFilePath;
 	}
 	
@@ -69,12 +69,12 @@ class SchemaService extends KalturaBaseService
 		$baseXsdElement = new SimpleXMLElement('<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"/>');
 		if($type == SchemaType::SYNDICATION)
 		{
-			$baseXsdElement = new SimpleXMLElement(file_get_contents(kConf::get("syndication_core_xsd_path")));
+			$baseXsdElement = new SimpleXMLElement(file_get_contents(vConf::get("syndication_core_xsd_path")));
 		}
 		else
 		{
-			$plugin = kPluginableEnumsManager::getPlugin($type);
-			if($plugin instanceof IKalturaSchemaDefiner)
+			$plugin = vPluginableEnumsManager::getPlugin($type);
+			if($plugin instanceof IVidiunSchemaDefiner)
 			{
 				$baseXsdElement = $plugin->getPluginSchema($type);
 			}
@@ -99,10 +99,10 @@ class SchemaService extends KalturaBaseService
 	' . $xsd;
 		}
 		
-		$schemaContributors = KalturaPluginManager::getPluginInstances('IKalturaSchemaContributor');
+		$schemaContributors = VidiunPluginManager::getPluginInstances('IVidiunSchemaContributor');
 		foreach($schemaContributors as $key => $schemaContributor)
 		{
-			/* @var $schemaContributor IKalturaSchemaContributor */
+			/* @var $schemaContributor IVidiunSchemaContributor */
 			$elements = $schemaContributor->contributeToSchema($type);
 			if($elements)
 			{
@@ -112,25 +112,25 @@ class SchemaService extends KalturaBaseService
 		}
 		
 		$resultXsd .= '
-	<!-- Kaltura enum types -->
+	<!-- Vidiun enum types -->
 	';
 		
 		$enumClasses = array();
 		$matches = null;
-		if(preg_match_all('/type="(Kaltura[^"]+)"/', $elementsXSD, $matches))
+		if(preg_match_all('/type="(Vidiun[^"]+)"/', $elementsXSD, $matches))
 			$enumClasses = $matches[1];
 		
 		$enumTypes = array();
 		foreach($enumClasses as $class)
 		{
-			$classTypeReflector = KalturaTypeReflectorCacher::get($class);
+			$classTypeReflector = VidiunTypeReflectorCacher::get($class);
 			if($classTypeReflector)
 				self::loadClassRecursively($classTypeReflector, $enumTypes);
 		}
 		
 		foreach($enumTypes as $class => $classTypeReflector)
 		{
-			if(!is_subclass_of($class, 'KalturaEnum') && !is_subclass_of($class, 'KalturaStringEnum')) // class must be enum
+			if(!is_subclass_of($class, 'VidiunEnum') && !is_subclass_of($class, 'VidiunStringEnum')) // class must be enum
 				continue;
 			
 			$xsdType = 'int';
@@ -139,7 +139,7 @@ class SchemaService extends KalturaBaseService
 			
 			$xsd = '
 	<xs:simpleType name="' . $class . '">
-		<xs:annotation><xs:documentation>http://' . kConf::get('www_host') . '/api_v3/testmeDoc/index.php?object=' . $class . '</xs:documentation></xs:annotation>
+		<xs:annotation><xs:documentation>http://' . vConf::get('www_host') . '/api_v3/testmeDoc/index.php?object=' . $class . '</xs:documentation></xs:annotation>
 		<xs:restriction base="xs:' . $xsdType . '">';
 			
 			$contants = $classTypeReflector->getConstants();
@@ -164,15 +164,15 @@ class SchemaService extends KalturaBaseService
 		return $resultXsd;
 	}
 	
-	private static function loadClassRecursively(KalturaTypeReflector $classTypeReflector, &$enumClasses)
+	private static function loadClassRecursively(VidiunTypeReflector $classTypeReflector, &$enumClasses)
 	{
 		$class = $classTypeReflector->getType();
 		if(
-			$class == 'KalturaEnum'
+			$class == 'VidiunEnum'
 			||
-			$class == 'KalturaStringEnum'
+			$class == 'VidiunStringEnum'
 			||
-			$class == 'KalturaObject'
+			$class == 'VidiunObject'
 		)
 			return;
 			

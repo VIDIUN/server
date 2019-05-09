@@ -5,7 +5,7 @@
  * @package api
  * @subpackage v3
  */
-class KalturaServiceReflector extends KalturaReflector
+class VidiunServiceReflector extends VidiunReflector
 {
 	/**
 	 * @var string
@@ -18,7 +18,7 @@ class KalturaServiceReflector extends KalturaReflector
 	private $_serviceClass = null;
 	
 	/**
-	 * @var array<KalturaServiceActionItem>
+	 * @var array<VidiunServiceActionItem>
 	 */
 	private $_servicesMap = null;
 	
@@ -28,12 +28,12 @@ class KalturaServiceReflector extends KalturaReflector
 	private $_actions = array();
 	
 	/**
-	 * @var KalturaDocCommentParser
+	 * @var VidiunDocCommentParser
 	 */
 	private $_serviceInfo = null;
 	
 	/**
-	 * @var KalturaBaseService
+	 * @var VidiunBaseService
 	 */
 	private $_serviceInstance = null;
 	
@@ -53,26 +53,26 @@ class KalturaServiceReflector extends KalturaReflector
 	 * Static instantiator - create the reflector with serviceId and optional action name
 	 * @param string $service
 	 * @param string $action
-	 * @return KalturaServiceReflector
+	 * @return VidiunServiceReflector
 	 */
 	public static function constructFromServiceId ($service)
 	{
-	    $newInstance = new KalturaServiceReflector();
+	    $newInstance = new VidiunServiceReflector();
 	    $newInstance->_serviceId = strtolower($service);
-		$newInstance->_servicesMap = KalturaServicesMap::getMap();
+		$newInstance->_servicesMap = VidiunServicesMap::getMap();
 		
 		if (!$newInstance->isServiceExists($newInstance->_serviceId))
 			throw new Exception("Service [$service] does not exists in service list [" . print_r(array_keys($newInstance->_servicesMap), true) . "]");
 			
 		$serviceActionItem = $newInstance->_servicesMap[$newInstance->_serviceId];
-		/* @var $serviceActionItem KalturaServiceActionItem */
+		/* @var $serviceActionItem VidiunServiceActionItem */
 		$newInstance->_serviceClass = $serviceActionItem->serviceClass;
 		
 		if (!class_exists($newInstance->_serviceClass))
 			throw new Exception("Service class [$newInstance->_serviceClass] for service [$service] does not exists");
 		
 		$reflectionClass = new ReflectionClass($newInstance->_serviceClass);
-		$newInstance->_serviceInfo = new KalturaDocCommentParser($reflectionClass->getDocComment());
+		$newInstance->_serviceInfo = new VidiunDocCommentParser($reflectionClass->getDocComment());
 		
 		return $newInstance;
 	}
@@ -81,20 +81,20 @@ class KalturaServiceReflector extends KalturaReflector
 	 * 
 	 * Static instantiator - create the reflector with service class name
 	 * @param string $serviceClass
-	 * @return KalturaServiceReflector
+	 * @return VidiunServiceReflector
 	 */
 	public static function constructFromClassName ($serviceClass)
 	{
-	   $newInstance = new KalturaServiceReflector();
-	   if ( !class_exists( $serviceClass ) || !in_array("KalturaBaseService", class_parents($serviceClass)))
+	   $newInstance = new VidiunServiceReflector();
+	   if ( !class_exists( $serviceClass ) || !in_array("VidiunBaseService", class_parents($serviceClass)))
         {
-            throw new Exception("Service class [$serviceClass] does not exists, or is not an instance of KalturaBaseService");
+            throw new Exception("Service class [$serviceClass] does not exists, or is not an instance of VidiunBaseService");
         }
         
         $newInstance->_serviceClass = $serviceClass;
         
         $reflectionClass = new ReflectionClass($serviceClass);
-        $newInstance->_serviceInfo = new KalturaDocCommentParser($reflectionClass->getDocComment());
+        $newInstance->_serviceInfo = new VidiunDocCommentParser($reflectionClass->getDocComment());
         $newInstance->_serviceId = $newInstance->_serviceInfo->serviceName;
         return $newInstance;
 	}
@@ -163,7 +163,7 @@ class KalturaServiceReflector extends KalturaReflector
 		$serviceId = strtolower($serviceId);
 		list($servicePlugin, $serviceName) = explode('_', $serviceId);
 		
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaServices');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunServices');
 		if(!isset($pluginInstances[$servicePlugin]))
 			return false;
 			
@@ -174,8 +174,8 @@ class KalturaServiceReflector extends KalturaReflector
 			if(strtolower($name) == $serviceName)
 			{
 				$class = $servicesMap[$name];
-				KalturaServicesMap::addService($serviceId, $class);
-				$this->_servicesMap = KalturaServicesMap::getMap();
+				VidiunServicesMap::addService($serviceId, $class);
+				$this->_servicesMap = VidiunServicesMap::getMap();
 				return true;
 			}
 		}
@@ -217,7 +217,7 @@ class KalturaServiceReflector extends KalturaReflector
 		foreach($reflectionMethods as $reflectionMethod)
 		{
 			$docComment = $reflectionMethod->getDocComment();
-			$parsedDocComment = new KalturaDocCommentParser( $docComment );
+			$parsedDocComment = new VidiunDocCommentParser( $docComment );
 			if ($parsedDocComment->action)
 			{
 			    if($ignoreDeprecated && $parsedDocComment->deprecated)
@@ -258,7 +258,7 @@ class KalturaServiceReflector extends KalturaReflector
 	
 	/**
 	 * @param string $actionName
-	 * @return KalturaDocCommentParser
+	 * @return VidiunDocCommentParser
 	 */
 	public function getActionInfo($actionName, $ignoreAliasActions = true)
 	{
@@ -271,7 +271,7 @@ class KalturaServiceReflector extends KalturaReflector
 		$reflectionMethod = $reflectionClass->getMethod($methodName);
 		
 		$docComment = $reflectionMethod->getDocComment();
-		$parsedDocComment = new KalturaDocCommentParser( $docComment );
+		$parsedDocComment = new VidiunDocCommentParser( $docComment );
 		return $parsedDocComment;
 	}
 	
@@ -295,8 +295,8 @@ class KalturaServiceReflector extends KalturaReflector
 			if (in_array($name, $this->_reservedKeys))
 				throw new Exception("Param [$name] in action [$actionName] is a reserved key");
 				
-			$parsedDocComment = new KalturaDocCommentParser( $docComment, array(
-				KalturaDocCommentParser::DOCCOMMENT_REPLACENET_PARAM_NAME => $name , ) );
+			$parsedDocComment = new VidiunDocCommentParser( $docComment, array(
+				VidiunDocCommentParser::DOCCOMMENT_REPLACENET_PARAM_NAME => $name , ) );
 			$paramClass = $reflectionParam->getClass(); // type hinting for objects  
 			if ($paramClass)
 			{
@@ -313,7 +313,7 @@ class KalturaServiceReflector extends KalturaReflector
 				}
 			}
 			
-			$paramInfo = new KalturaParamInfo($type, $name);
+			$paramInfo = new VidiunParamInfo($type, $name);
 			$paramInfo->setDescription($parsedDocComment->paramDescription);
 			
 			if ($reflectionParam->isOptional()) // for normal parameters
@@ -334,7 +334,7 @@ class KalturaServiceReflector extends KalturaReflector
 	
 	/**
 	 * @param unknown_type $actionName
-	 * @return KalturaParamInfo
+	 * @return VidiunParamInfo
 	 */
 	public function getActionOutputType($actionName)
 	{
@@ -348,9 +348,9 @@ class KalturaServiceReflector extends KalturaReflector
 		$reflectionMethod = $reflectionClass->getMethod($methodName);
 		
 		$docComment = $reflectionMethod->getDocComment();
-		$parsedDocComment = new KalturaDocCommentParser($docComment);
+		$parsedDocComment = new VidiunDocCommentParser($docComment);
 		if ($parsedDocComment->returnType)
-			return new KalturaParamInfo($parsedDocComment->returnType, "output");
+			return new VidiunParamInfo($parsedDocComment->returnType, "output");
 		
 		return null;
 	}

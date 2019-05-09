@@ -4,10 +4,10 @@
  * @subpackage objects
  * @deprecated
  */
-class KalturaSearchResultResponse extends KalturaObject
+class VidiunSearchResultResponse extends VidiunObject
 {
 	/**
-	 * @var KalturaSearchResultArray
+	 * @var VidiunSearchResultArray
 	 * @readonly
 	 */
 	public $objects;

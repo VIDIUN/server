@@ -3,10 +3,10 @@
  * @package plugins.httpNotification
  * @subpackage model.data
  */
-class kHttpNotificationDataText extends kHttpNotificationData
+class vHttpNotificationDataText extends vHttpNotificationData
 {
 	/**
-	 * @var kStringValue
+	 * @var vStringValue
 	 */
 	protected $content;
 	
@@ -17,7 +17,7 @@ class kHttpNotificationDataText extends kHttpNotificationData
 	protected $data;
 	
 	/**
-	 * @return kStringValue $content
+	 * @return vStringValue $content
 	 */
 	public function getContent()
 	{
@@ -25,19 +25,19 @@ class kHttpNotificationDataText extends kHttpNotificationData
 	}
 
 	/**
-	 * @param kStringValue $content
+	 * @param vStringValue $content
 	 */
-	public function setContent(kStringValue $content)
+	public function setContent(vStringValue $content)
 	{
 		$this->content = $content;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kHttpNotificationData::setScope()
+	 * @see vHttpNotificationData::setScope()
 	 */
-	public function setScope(kScope $scope)
+	public function setScope(vScope $scope)
 	{
-		if($this->content instanceof kStringField)
+		if($this->content instanceof vStringField)
 			$this->content->setScope($scope);
 			
 		$this->data = $this->content->getValue();

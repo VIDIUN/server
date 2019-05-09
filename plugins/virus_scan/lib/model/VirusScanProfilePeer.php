@@ -41,7 +41,7 @@ class VirusScanProfilePeer extends BaseVirusScanProfilePeer
 		$entry = entryPeer::retrieveByPK($entryId);
 		if (!$entry)
 		{
-			KalturaLog::err('Cannot find entry with id ['.$entryId.']');
+			VidiunLog::err('Cannot find entry with id ['.$entryId.']');
 			return null;
 		}
 
@@ -54,7 +54,7 @@ class VirusScanProfilePeer extends BaseVirusScanProfilePeer
 		
 		if (!$profiles)
 		{
-			KalturaLog::info('No virus scan profiles found for partner ['.$entry->getPartnerId().']');
+			VidiunLog::info('No virus scan profiles found for partner ['.$entry->getPartnerId().']');
 			return null;
 		}
 		
@@ -65,7 +65,7 @@ class VirusScanProfilePeer extends BaseVirusScanProfilePeer
 			
 			if ($virusEntryFilter->matches($entry))
 			{
-				KalturaLog::info('Returning profile with id ['.$profile->getId().']');
+				VidiunLog::info('Returning profile with id ['.$profile->getId().']');
 				return $profile;
 			}
 				

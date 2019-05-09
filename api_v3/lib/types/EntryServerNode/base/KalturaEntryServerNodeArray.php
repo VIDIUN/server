@@ -3,18 +3,18 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEntryServerNodeArray extends KalturaTypedArray
+class VidiunEntryServerNodeArray extends VidiunTypedArray
 {
 	public static function fromDbArray($arr)
 	{
-		$newArr = new KalturaEntryServerNodeArray();
+		$newArr = new VidiunEntryServerNodeArray();
 		foreach($arr as $obj)
 		{
-			/* @var $obj KalturaEntryServerNode */
-			$nObj = KalturaEntryServerNode::getInstance($obj);
+			/* @var $obj VidiunEntryServerNode */
+			$nObj = VidiunEntryServerNode::getInstance($obj);
 			if (!$nObj)
 			{
-				throw new KalturaAPIException(KalturaErrors::ENTRY_SERVER_NODE_OBJECT_TYPE_ERROR, $obj->getServerType(), $obj->getId());
+				throw new VidiunAPIException(VidiunErrors::ENTRY_SERVER_NODE_OBJECT_TYPE_ERROR, $obj->getServerType(), $obj->getId());
 			}
 			$nObj->fromObject($obj);
 			$newArr[] = $nObj;
@@ -25,7 +25,7 @@ class KalturaEntryServerNodeArray extends KalturaTypedArray
 
 	public function __construct()
 	{
-		return parent::__construct("KalturaEntryServerNode");
+		return parent::__construct("VidiunEntryServerNode");
 	}
 
 }

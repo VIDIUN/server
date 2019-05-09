@@ -16,7 +16,7 @@
  * @package Scheduler
  * @subpackage Import
  */
-class KAsyncImport extends KJobHandlerWorker
+class VAsyncImport extends VJobHandlerWorker
 {
 
 	static $startTime;
@@ -40,23 +40,23 @@ class KAsyncImport extends KJobHandlerWorker
 	}
 
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::IMPORT;
+		return VidiunBatchJobType::IMPORT;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->fetchFile($job, $job->data);
 	}
 
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::getMaxJobsEachRun()
+	 * @see VJobHandlerWorker::getMaxJobsEachRun()
 	 */
 	protected function getMaxJobsEachRun()
 	{
@@ -69,35 +69,35 @@ class KAsyncImport extends KJobHandlerWorker
 		self::$startTime			= time();
 		self::$downloadedSoFar		= 0;
 		$progressCallBack			= null;
-		$curlWrapper				= new KCurlWrapper(self::$taskConfig->params);
+		$curlWrapper				= new VCurlWrapper(self::$taskConfig->params);
 		self::$currentResource  	= $curlWrapper->ch;
 		if($resumeOffset)
 			$curlWrapper->setResumeOffset($resumeOffset);
 		$protocol					= $curlWrapper->getSourceUrlProtocol($sourceUrl);
-		if($protocol				== KCurlWrapper::HTTP_PROTOCOL_HTTP)
+		if($protocol				== VCurlWrapper::HTTP_PROTOCOL_HTTP)
 		{
 			$curlWrapper->setTimeout(self::IMPORT_TIMEOUT);
-			$progressCallBack 		= array('KAsyncImport', 'progressWatchDog');
+			$progressCallBack 		= array('VAsyncImport', 'progressWatchDog');
 		}
 		$res 						= $curlWrapper->exec($sourceUrl, $localPath,$progressCallBack);
 		$responseStatusCode			= $curlWrapper->getHttpCode();
 		$errorMessage				= $curlWrapper->getError();
 		$errorNumber				= $curlWrapper->getErrorNumber();
 		$curlWrapper->close();
-		KalturaLog::debug("Curl results: [$res] responseStatusCode [$responseStatusCode] error [$errorMessage] error number [$errorNumber]");
+		VidiunLog::debug("Curl results: [$res] responseStatusCode [$responseStatusCode] error [$errorMessage] error number [$errorNumber]");
 		return array($res,$responseStatusCode,$errorMessage,$errorNumber);
 	}
 
 	/*
-	 * Will take a single KalturaBatchJob and fetch the URL to the job's destFile
+	 * Will take a single VidiunBatchJob and fetch the URL to the job's destFile
 	 */
-	private function fetchFile(KalturaBatchJob $job, KalturaImportJobData $data)
+	private function fetchFile(VidiunBatchJob $job, VidiunImportJobData $data)
 	{
 		$jobSubType = $job->jobSubType;
 
 		$sshProtocols = array(
-			kFileTransferMgrType::SCP,
-			kFileTransferMgrType::SFTP,
+			vFileTransferMgrType::SCP,
+			vFileTransferMgrType::SFTP,
 		);
 
 		if (in_array($jobSubType, $sshProtocols))
@@ -110,13 +110,13 @@ class KAsyncImport extends KJobHandlerWorker
 		{
 			$sourceUrl = $data->srcFileUrl;
 
-			$this->updateJob($job, 'Downloading file header', KalturaBatchJobStatus::QUEUED);
+			$this->updateJob($job, 'Downloading file header', VidiunBatchJobStatus::QUEUED);
 			$fileSize = null;
 			$resumeOffset = 0;
 			$contentType = null;
 			if ($data->destFileLocalPath && file_exists($data->destFileLocalPath) )
 			{
-				$curlWrapper = new KCurlWrapper(self::$taskConfig->params);
+				$curlWrapper = new VCurlWrapper(self::$taskConfig->params);
 				$useNoBody = ($job->executionAttempts > 1); // if the process crashed first time, tries with no body instead of range 0-0
 				$curlWrapper->setTimeout(self::HEADERS_TIMEOUT);
 				$curlHeaderResponse = $curlWrapper->getHeader($sourceUrl, $useNoBody);
@@ -127,19 +127,19 @@ class KAsyncImport extends KJobHandlerWorker
 
 				if($curlErrorNumber)
 				{
-					KalturaLog::err("Headers error: " . $curlErrorMessage);
-					KalturaLog::err("Headers error number: " . $curlErrorNumber);
+					VidiunLog::err("Headers error: " . $curlErrorMessage);
+					VidiunLog::err("Headers error number: " . $curlErrorNumber);
 				}
 
 				if(!$curlHeaderResponse || !count($curlHeaderResponse->headers))
 				{
-					$this->closeJob($job, KalturaBatchJobErrorTypes::CURL, $curlErrorNumber, "Couldn't read file. Error: " .$curlErrorMessage, KalturaBatchJobStatus::FAILED);
+					$this->closeJob($job, VidiunBatchJobErrorTypes::CURL, $curlErrorNumber, "Couldn't read file. Error: " .$curlErrorMessage, VidiunBatchJobStatus::FAILED);
 					return $job;
 				}
 
 				if(!$curlHeaderResponse->isGoodCode())
 				{
-					$this->closeJob($job, KalturaBatchJobErrorTypes::HTTP, $curlHeaderResponse->code, "Failed while reading file. HTTP Error: " . $curlHeaderResponse->code . " " . $curlHeaderResponse->codeName, KalturaBatchJobStatus::FAILED);
+					$this->closeJob($job, VidiunBatchJobErrorTypes::HTTP, $curlHeaderResponse->code, "Failed while reading file. HTTP Error: " . $curlHeaderResponse->code . " " . $curlHeaderResponse->codeName, VidiunBatchJobStatus::FAILED);
 					return $job;
 				}
 				if(isset($curlHeaderResponse->headers['content-type']))
@@ -150,10 +150,10 @@ class KAsyncImport extends KJobHandlerWorker
 				if( $fileSize )
 				{
 					clearstatcache();
-					$actualFileSize = kFile::fileSize($data->destFileLocalPath);
+					$actualFileSize = vFile::fileSize($data->destFileLocalPath);
 					if($actualFileSize >= $fileSize)
 					{
-						$this->updateJob($job, 'File imported, copy to shared folder', KalturaBatchJobStatus::PROCESSED);
+						$this->updateJob($job, 'File imported, copy to shared folder', VidiunBatchJobStatus::PROCESSED);
 						return $this->moveFile($job, $data->destFileLocalPath, $fileSize);
 					}
 					else
@@ -163,7 +163,7 @@ class KAsyncImport extends KJobHandlerWorker
 				}
 			}
 
-			$curlWrapper = new KCurlWrapper(self::$taskConfig->params);
+			$curlWrapper = new VCurlWrapper(self::$taskConfig->params);
 
 			if(is_null($fileSize)) {
 				// Read file size
@@ -183,69 +183,69 @@ class KAsyncImport extends KJobHandlerWorker
 
 			if($resumeOffset)
 			{
-				$this->updateJob($job, "Resuming download, from ".$resumeOffset ." size: $fileSize", KalturaBatchJobStatus::PROCESSING, $data);
+				$this->updateJob($job, "Resuming download, from ".$resumeOffset ." size: $fileSize", VidiunBatchJobStatus::PROCESSING, $data);
 			}
 			else
 			{
 				// creates a temp file path
 				$data->destFileLocalPath = $this->getTempFilePath($sourceUrl);;
-				KalturaLog::debug("destFile [$data->destFileLocalPath]");
+				VidiunLog::debug("destFile [$data->destFileLocalPath]");
 				$data->fileSize = is_null($fileSize) ? -1 : $fileSize;
-				$this->updateJob($job, "Downloading file, size: $fileSize", KalturaBatchJobStatus::PROCESSING, $data);
+				$this->updateJob($job, "Downloading file, size: $fileSize", VidiunBatchJobStatus::PROCESSING, $data);
 			}
 
 			list($res,$responseStatusCode,$errorMessage,$errNumber) = $this->curlExec($sourceUrl, $data->destFileLocalPath,$resumeOffset);
 
-			if($responseStatusCode && KCurlHeaderResponse::isError($responseStatusCode))
+			if($responseStatusCode && VCurlHeaderResponse::isError($responseStatusCode))
 			{
 				if(!$resumeOffset && file_exists($data->destFileLocalPath))
 					unlink($data->destFileLocalPath);
-				$this->closeJob($job, KalturaBatchJobErrorTypes::HTTP, KalturaBatchJobAppErrors::REMOTE_DOWNLOAD_FAILED, "Failed while reading file. HTTP Error: [$responseStatusCode]", KalturaBatchJobStatus::RETRY);
+				$this->closeJob($job, VidiunBatchJobErrorTypes::HTTP, VidiunBatchJobAppErrors::REMOTE_DOWNLOAD_FAILED, "Failed while reading file. HTTP Error: [$responseStatusCode]", VidiunBatchJobStatus::RETRY);
 				return $job;
 			}
 			
 			if(!$res || $errNumber)
 			{
 				clearstatcache();
-				$actualFileSize = kFile::fileSize($data->destFileLocalPath);
-				KalturaLog::debug("errNumber: $errNumber ,Actual file size: $actualFileSize ,Expected file size: $fileSize, Resume offset :$resumeOffset");
+				$actualFileSize = vFile::fileSize($data->destFileLocalPath);
+				VidiunLog::debug("errNumber: $errNumber ,Actual file size: $actualFileSize ,Expected file size: $fileSize, Resume offset :$resumeOffset");
 				if($errNumber == CURLE_PARTIAL_FILE)
 				{
 					if( $actualFileSize >= $fileSize)
 					{
-						$this->updateJob($job, 'File imported, copy to shared folder', KalturaBatchJobStatus::PROCESSED);
+						$this->updateJob($job, 'File imported, copy to shared folder', VidiunBatchJobStatus::PROCESSED);
 						return $this->moveFile($job, $data->destFileLocalPath, $fileSize);
 					}
 					else
 					{
 						$percent = floor($actualFileSize/$fileSize*100);
-						$e = new kTemporaryException("Downloaded size: $actualFileSize($percent%)");
+						$e = new vTemporaryException("Downloaded size: $actualFileSize($percent%)");
 						$e->setResetJobExecutionAttempts(true);
 						throw $e;
 					}
 				}
 				if($errNumber != CURLE_OPERATION_TIMEOUTED)
 				{
-					$this->closeJob($job, KalturaBatchJobErrorTypes::CURL, $errNumber, "Error: " . $errorMessage , KalturaBatchJobStatus::RETRY);
+					$this->closeJob($job, VidiunBatchJobErrorTypes::CURL, $errNumber, "Error: " . $errorMessage , VidiunBatchJobStatus::RETRY);
 					return $job;
 				}
 				else
 				{
 					if($actualFileSize == $resumeOffset)
 					{
-						$this->closeJob($job, KalturaBatchJobErrorTypes::CURL, $errNumber, "No new information. Error: " . $errorMessage, KalturaBatchJobStatus::RETRY);
+						$this->closeJob($job, VidiunBatchJobErrorTypes::CURL, $errNumber, "No new information. Error: " . $errorMessage, VidiunBatchJobStatus::RETRY);
 						return $job;
 					}
 					if(!$fileSize)
 					{
-						$this->closeJob($job, KalturaBatchJobErrorTypes::CURL, $errNumber, "Received timeout, but no filesize available. Completed size [$actualFileSize]" . $errorMessage, KalturaBatchJobStatus::RETRY);
+						$this->closeJob($job, VidiunBatchJobErrorTypes::CURL, $errNumber, "Received timeout, but no filesize available. Completed size [$actualFileSize]" . $errorMessage, VidiunBatchJobStatus::RETRY);
 						return $job;
 					}
 				}
 			}
 			if(!file_exists($data->destFileLocalPath))
 			{
-				$this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::OUTPUT_FILE_DOESNT_EXIST, "Error: output file doesn't exist", KalturaBatchJobStatus::RETRY);
+				$this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::OUTPUT_FILE_DOESNT_EXIST, "Error: output file doesn't exist", VidiunBatchJobStatus::RETRY);
 				return $job;
 			}
 
@@ -254,50 +254,50 @@ class KAsyncImport extends KJobHandlerWorker
 			if($fileSize)
 			{
 				clearstatcache();
-				$actualFileSize = kFile::fileSize($data->destFileLocalPath);
+				$actualFileSize = vFile::fileSize($data->destFileLocalPath);
 
 				//Ignore file size check based on content.
 				$shouldCheckFileSize = ($contentType!='text/html');
-				KalturaLog::debug("shouldCheckFileSize:{$shouldCheckFileSize} actualFileSize:{$actualFileSize} fileSize:{$fileSize}");
+				VidiunLog::debug("shouldCheckFileSize:{$shouldCheckFileSize} actualFileSize:{$actualFileSize} fileSize:{$fileSize}");
 				if($actualFileSize < $fileSize && $shouldCheckFileSize)
 				{
 					$percent = floor($actualFileSize * 100 / $fileSize);
-					$this->closeJob($job, KalturaBatchJobErrorTypes::CURL, $errNumber, "DDownloaded size: $actualFileSize($percent%) " . $curlWrapper->getError(), KalturaBatchJobStatus::RETRY);
+					$this->closeJob($job, VidiunBatchJobErrorTypes::CURL, $errNumber, "DDownloaded size: $actualFileSize($percent%) " . $curlWrapper->getError(), VidiunBatchJobStatus::RETRY);
 					return job;
 				}
 				
-				KalturaLog::info("headers " . print_r($curlHeaderResponse, true));
-				$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaImportHandler');
+				VidiunLog::info("headers " . print_r($curlHeaderResponse, true));
+				$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunImportHandler');
 				foreach ($pluginInstances as $pluginInstance)
 				{
-					/* @var $pluginInstance IKalturaImportHandler */
-					$data = $pluginInstance->handleImportContent($curlHeaderResponse, $data, KBatchBase::$taskConfig->params);
+					/* @var $pluginInstance IVidiunImportHandler */
+					$data = $pluginInstance->handleImportContent($curlHeaderResponse, $data, VBatchBase::$taskConfig->params);
 				}
 			}
 
-			$this->updateJob($job, 'File imported, copy to shared folder', KalturaBatchJobStatus::PROCESSED);
+			$this->updateJob($job, 'File imported, copy to shared folder', VidiunBatchJobStatus::PROCESSED);
 			$job = $this->moveFile($job, $data->destFileLocalPath);
 		}
-		catch(kTemporaryException $tex)
+		catch(vTemporaryException $tex)
 		{
 			$tex->setData($data);
 			throw $tex;
 		}
 		catch(Exception $ex)
 		{
-			$data->destFileLocalPath = KalturaClient::getKalturaNullValue();
-			if($ex->getMessage() == KCurlWrapper::COULD_NOT_CONNECT_TO_HOST_ERROR)
+			$data->destFileLocalPath = VidiunClient::getVidiunNullValue();
+			if($ex->getMessage() == VCurlWrapper::COULD_NOT_CONNECT_TO_HOST_ERROR)
 			{
-				throw new kTemporaryException($ex->getMessage(), $ex->getCode(), $data);
+				throw new vTemporaryException($ex->getMessage(), $ex->getCode(), $data);
 			}
-			$this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::FAILED, $data);
+			$this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::FAILED, $data);
 		}
 		return $job;
 	}
 
 
 	/*
-	 * Will take a single KalturaBatchJob and fetch the URL to the job's destFile
+	 * Will take a single VidiunBatchJob and fetch the URL to the job's destFile
 	 */
 	private function fetchFileSsh(KalturaBatchJob $job, KalturaImportJobData $data)
 	{
@@ -326,28 +326,28 @@ class KAsyncImport extends KJobHandlerWorker
 			$publicKey  = isset($data->publicKey) ? $data->publicKey : null;
 			$passPhrase = isset($data->passPhrase) ? $data->passPhrase : null;
 
-			KalturaLog::debug("host [$host] remotePath [$remotePath] username [$username] password [$password] port [$port]");
+			VidiunLog::debug("host [$host] remotePath [$remotePath] username [$username] password [$password] port [$port]");
 			if ($privateKey || $publicKey) {
-			    KalturaLog::debug("Private Key: $privateKey");
-			    KalturaLog::debug("Public Key: $publicKey");
+			    VidiunLog::debug("Private Key: $privateKey");
+			    VidiunLog::debug("Public Key: $publicKey");
 			}
 
 			if (!$host) {
-			    $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::MISSING_PARAMETERS, 'Error: missing host', KalturaBatchJobStatus::FAILED);
+			    $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::MISSING_PARAMETERS, 'Error: missing host', VidiunBatchJobStatus::FAILED);
 			    return $job;
 			}
 			if (!$remotePath) {
-			    $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::MISSING_PARAMETERS, 'Error: missing path', KalturaBatchJobStatus::FAILED);
+			    $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::MISSING_PARAMETERS, 'Error: missing path', VidiunBatchJobStatus::FAILED);
 			    return $job;
 			}
 
 			// create suitable file transfer manager object
 			$subType = $job->jobSubType;
 			$engineOptions = isset(self::$taskConfig->engineOptions) ? self::$taskConfig->engineOptions->toArray() : array();
-			$fileTransferMgr = kFileTransferMgr::getInstance($subType, $engineOptions);
+			$fileTransferMgr = vFileTransferMgr::getInstance($subType, $engineOptions);
 
 			if (!$fileTransferMgr) {
-			    $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::ENGINE_NOT_FOUND, "Error: file transfer manager not found for type [$subType]", KalturaBatchJobStatus::FAILED);
+			    $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::ENGINE_NOT_FOUND, "Error: file transfer manager not found for type [$subType]", VidiunBatchJobStatus::FAILED);
 			    return $job;
 			}
 			
@@ -357,15 +357,15 @@ class KAsyncImport extends KJobHandlerWorker
 				    $fileTransferMgr->login($host, $username, $password, $port);
 				}
 				else {
-					$privateKeyFile = kFile::createTempFile($privateKey, 'privateKey');
-					$publicKeyFile = kFile::createTempFile($publicKey, 'publicKey');
+					$privateKeyFile = vFile::createTempFile($privateKey, 'privateKey');
+					$publicKeyFile = vFile::createTempFile($publicKey, 'publicKey');
 				    $fileTransferMgr->loginPubKey($host, $username, $publicKeyFile, $privateKeyFile, $passPhrase);
 				}
 			
 				// check if file exists
 				$fileExists = $fileTransferMgr->fileExists($remotePath);
 				if (!$fileExists) {
-				    $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::MISSING_PARAMETERS, "Error: remote file [$remotePath] does not exist", KalturaBatchJobStatus::FAILED);
+				    $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::MISSING_PARAMETERS, "Error: remote file [$remotePath] does not exist", VidiunBatchJobStatus::FAILED);
 				    return $job;
 				}
 	
@@ -376,22 +376,22 @@ class KAsyncImport extends KJobHandlerWorker
 				$destFile = $this->getTempFilePath($remotePath);
 				$data->destFileLocalPath = $destFile;
 				$data->fileSize = is_null($fileSize) ? -1 : $fileSize;
-				KalturaLog::debug("destFile [$destFile]");
+				VidiunLog::debug("destFile [$destFile]");
 	
 				// download file - overwrite local if exists
-				$this->updateJob($job, "Downloading file, size: $fileSize", KalturaBatchJobStatus::PROCESSING, $data);
-				KalturaLog::info("Downloading remote file [$remotePath] to local path [$destFile]");
+				$this->updateJob($job, "Downloading file, size: $fileSize", VidiunBatchJobStatus::PROCESSING, $data);
+				VidiunLog::info("Downloading remote file [$remotePath] to local path [$destFile]");
 				$res = $fileTransferMgr->getFile($remotePath, $destFile);
 				
 			}
-			catch (kFileTransferMgrException $ex){
-				$this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::RETRY);
+			catch (vFileTransferMgrException $ex){
+				$this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::RETRY);
 				return $job;
 			}
 
 			if(!file_exists($data->destFileLocalPath))
 			{
-				$this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::OUTPUT_FILE_DOESNT_EXIST, "Error: output file doesn't exist", KalturaBatchJobStatus::RETRY);
+				$this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::OUTPUT_FILE_DOESNT_EXIST, "Error: output file doesn't exist", VidiunBatchJobStatus::RETRY);
 				return $job;
 			}
 
@@ -400,34 +400,34 @@ class KAsyncImport extends KJobHandlerWorker
 			if($fileSize)
 			{
 				clearstatcache();
-				$actualFileSize = kFile::fileSize($data->destFileLocalPath);
+				$actualFileSize = vFile::fileSize($data->destFileLocalPath);
 				if($actualFileSize < $fileSize)
 				{
 					$percent = floor($actualFileSize * 100 / $fileSize);
-					$e = new kTemporaryException("Downloaded size: $actualFileSize($percent%)");
+					$e = new vTemporaryException("Downloaded size: $actualFileSize($percent%)");
 					$e->setResetJobExecutionAttempts(true);
 					throw $e;
 				}
 			}
 
-			$this->updateJob($job, 'File imported, copy to shared folder', KalturaBatchJobStatus::PROCESSED);
+			$this->updateJob($job, 'File imported, copy to shared folder', VidiunBatchJobStatus::PROCESSED);
 
 			$job = $this->moveFile($job, $data->destFileLocalPath);
 		}
 		catch(Exception $ex)
 		{
-			$this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::FAILED);
+			$this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::FAILED);
 		}
 		return $job;
 	}
 
 	/**
-	 * @param KalturaBatchJob $job
+	 * @param VidiunBatchJob $job
 	 * @param string $destFile
 	 * @param int $fileSize
-	 * @return KalturaBatchJob
+	 * @return VidiunBatchJob
 	 */
-	private function moveFile(KalturaBatchJob $job, $destFile)
+	private function moveFile(VidiunBatchJob $job, $destFile)
 	{
 		try
 		{
@@ -437,7 +437,7 @@ class KAsyncImport extends KJobHandlerWorker
 			$res = self::createDir( $rootPath );
 			if ( !$res )
 			{
-				KalturaLog::err( "Cannot continue import without shared directory");
+				VidiunLog::err( "Cannot continue import without shared directory");
 				die();
 			}
 			$uniqid = uniqid('import_');
@@ -447,17 +447,17 @@ class KAsyncImport extends KJobHandlerWorker
 			if(strlen($ext))
 				$sharedFile .= ".$ext";
 
-			KalturaLog::debug("rename('$destFile', '$sharedFile')");
+			VidiunLog::debug("rename('$destFile', '$sharedFile')");
 			rename($destFile, $sharedFile);
 			if(!file_exists($sharedFile))
 			{
-				KalturaLog::err("Error: renamed file doesn't exist");
+				VidiunLog::err("Error: renamed file doesn't exist");
 				die();
 			}
 
 			clearstatcache();
 
-			$fileSize = kFile::fileSize($sharedFile);
+			$fileSize = vFile::fileSize($sharedFile);
 
 			$this->setFilePermissions($sharedFile);
 
@@ -467,16 +467,16 @@ class KAsyncImport extends KJobHandlerWorker
 
 			if($this->checkFileExists($sharedFile, $fileSize))
 			{
-				$this->closeJob($job, null, null, 'Succesfully moved file', KalturaBatchJobStatus::FINISHED, $data);
+				$this->closeJob($job, null, null, 'Succesfully moved file', VidiunBatchJobStatus::FINISHED, $data);
 			}
 			else
 			{
-				$this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'File not moved correctly', KalturaBatchJobStatus::RETRY);
+				$this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'File not moved correctly', VidiunBatchJobStatus::RETRY);
 			}
 		}
 		catch(Exception $ex)
 		{
-			$this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::FAILED);
+			$this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::FAILED);
 		}
 		return $job;
 	}
@@ -491,7 +491,7 @@ class KAsyncImport extends KJobHandlerWorker
 		$res = self::createDir( $rootPath );
 		if ( !$res )
 		{
-			KalturaLog::err( "Cannot continue import without temp directory");
+			VidiunLog::err( "Cannot continue import without temp directory");
 			die();
 		}
 

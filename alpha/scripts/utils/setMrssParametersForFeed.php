@@ -15,9 +15,9 @@ $metadataFieldNames = array(
 
 
 require_once(dirname(__FILE__).'/../bootstrap.php');
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "plugins", "*"));
-KAutoloader::setClassMapFilePath(kConf::get("cache_root_path") . '/scripts/' . basename(__FILE__) . '.cache');
-KAutoloader::register();
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "plugins", "*"));
+VAutoloader::setClassMapFilePath(vConf::get("cache_root_path") . '/scripts/' . basename(__FILE__) . '.cache');
+VAutoloader::register();
 
 // don't add to database if one of the parameters is missing or is an empty string
 if (!$syndicationFeedId) {
@@ -38,7 +38,7 @@ foreach($metadataFieldNames as $fieldName)
 	$itemXpathsToExtend[] = "/*[local-name()='metadata']/*[local-name()='".$fieldName."']";
 }
 
-$mrssParams = new kMrssParameters();
+$mrssParams = new vMrssParameters();
 $mrssParams->setItemXpathsToExtend($itemXpathsToExtend);
 $syndicationFeed->setMrssParameters($mrssParams);
 $syndicationFeed->save();

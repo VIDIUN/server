@@ -1,5 +1,5 @@
 <?php
-class kTagFlowManager implements kObjectCreatedEventConsumer, kObjectDeletedEventConsumer, kObjectChangedEventConsumer
+class vTagFlowManager implements vObjectCreatedEventConsumer, vObjectDeletedEventConsumer, vObjectChangedEventConsumer
 {
     const TAGS_FIELD_NAME = "tags";
     
@@ -11,7 +11,7 @@ class kTagFlowManager implements kObjectCreatedEventConsumer, kObjectDeletedEven
     const NULL_PC = "NO_PC";
     
 	/* (non-PHPdoc)
-     * @see kObjectDeletedEventConsumer::objectDeleted()
+     * @see vObjectDeletedEventConsumer::objectDeleted()
      */
     public function objectDeleted (BaseObject $object, BatchJob $raisedJob = null)
     {
@@ -23,7 +23,7 @@ class kTagFlowManager implements kObjectCreatedEventConsumer, kObjectDeletedEven
     	{
     		$privacyContexts = $object->getPrivacyContext() != "" ? explode(",", $object->getPrivacyContext()) : array();
     		if (!count($privacyContexts))
-    				$privacyContexts[] = kEntitlementUtils::DEFAULT_CONTEXT; 
+    				$privacyContexts[] = vEntitlementUtils::DEFAULT_CONTEXT; 
 			$entry = $this->getEntryByIdNoFilter($object->getEntryId());
     		self::decrementExistingTagsInstanceCount($entry->getTags(), $entry->getPartnerId(), get_class($entry), $privacyContexts);
     	}  
@@ -31,7 +31,7 @@ class kTagFlowManager implements kObjectCreatedEventConsumer, kObjectDeletedEven
     }
 
 	/* (non-PHPdoc)
-     * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+     * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
      */
     public function shouldConsumeDeletedEvent (BaseObject $object)
     {
@@ -58,7 +58,7 @@ class kTagFlowManager implements kObjectCreatedEventConsumer, kObjectDeletedEven
     
 
 	/* (non-PHPdoc)
-     * @see kObjectCreatedEventConsumer::objectCreated()
+     * @see vObjectCreatedEventConsumer::objectCreated()
      */
     public function objectCreated (BaseObject $object)
     {
@@ -73,19 +73,19 @@ class kTagFlowManager implements kObjectCreatedEventConsumer, kObjectDeletedEven
     			/* @var $object categoryEntry */
      			$privacyContexts = $object->getPrivacyContext() != "" ? self::trimObjectTags($object->getPrivacyContext()) : array();
     			if (!count($privacyContexts))
-    				$privacyContexts[] = kEntitlementUtils::DEFAULT_CONTEXT; 
+    				$privacyContexts[] = vEntitlementUtils::DEFAULT_CONTEXT; 
     			$entry = $this->getEntryByIdNoFilter($object->getEntryId());
     			self::addOrIncrementTags($entry->getTags(), $entry->getPartnerId(), get_class($entry), $privacyContexts);
     		}
     	}
     	catch(Exception $e)
     	{
-    		KalturaLog::err($e);
+    		VidiunLog::err($e);
     	}
     }
 
 	/* (non-PHPdoc)
-     * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+     * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
      */
     public function shouldConsumeCreatedEvent (BaseObject $object)
     {
@@ -110,7 +110,7 @@ class kTagFlowManager implements kObjectCreatedEventConsumer, kObjectDeletedEven
         
     }
 	/* (non-PHPdoc)
-     * @see kObjectChangedEventConsumer::objectChanged()
+     * @see vObjectChangedEventConsumer::objectChanged()
      */
     public function objectChanged (BaseObject $object, array $modifiedColumns)
     {
@@ -133,7 +133,7 @@ class kTagFlowManager implements kObjectCreatedEventConsumer, kObjectDeletedEven
 	        		}
 	        		else 
 	        		{
-	        			$privacyContexts[] = kEntitlementUtils::DEFAULT_CONTEXT; 
+	        			$privacyContexts[] = vEntitlementUtils::DEFAULT_CONTEXT; 
 	        		}
 	        	}
 	        	$privacyContexts = array_unique($privacyContexts);
@@ -151,7 +151,7 @@ class kTagFlowManager implements kObjectCreatedEventConsumer, kObjectDeletedEven
     }
 
 	/* (non-PHPdoc)
-     * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+     * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
      */
     public function shouldConsumeChangedEvent (BaseObject $object, array $modifiedColumns)
     {
@@ -340,14 +340,14 @@ class kTagFlowManager implements kObjectCreatedEventConsumer, kObjectDeletedEven
 	 * @param array $tagStrings
 	 * @param int $objectType
 	 * @param int $partnerId
-	 * @return KalturaCriteria
+	 * @return VidiunCriteria
 	 */
 	public static function getTagObjectsByTagStringsCriteria ($tagStrings, $objectType, $partnerId)
 	{
-	    $c = KalturaCriteria::create(TagPeer::OM_CLASS);
-	    $c->addAnd(TagPeer::TAG, $tagStrings, KalturaCriteria::IN);
-	    $c->addAnd(TagPeer::PARTNER_ID, $partnerId, KalturaCriteria::EQUAL);
-	    $c->addAnd(TagPeer::OBJECT_TYPE, $objectType, KalturaCriteria::EQUAL);
+	    $c = VidiunCriteria::create(TagPeer::OM_CLASS);
+	    $c->addAnd(TagPeer::TAG, $tagStrings, VidiunCriteria::IN);
+	    $c->addAnd(TagPeer::PARTNER_ID, $partnerId, VidiunCriteria::EQUAL);
+	    $c->addAnd(TagPeer::OBJECT_TYPE, $objectType, VidiunCriteria::EQUAL);
 	    return $c;
 	}
 	
@@ -389,11 +389,11 @@ class kTagFlowManager implements kObjectCreatedEventConsumer, kObjectDeletedEven
 		$batchJob->setObjectId($categoryId);
 		$batchJob->setObjectType(BatchJobObjectType::CATEGORY);
 		if (!$partnerId)
-			$partnerId = kCurrentContext::getCurrentPartnerId();
+			$partnerId = vCurrentContext::getCurrentPartnerId();
 		
 		$batchJob->setPartnerId($partnerId);
-		KalturaLog::log("Creating tag re-index job for categoryId [" . $data->getChangedCategoryId() . "] ");
-		return kJobsManager::addJob($batchJob, $data, $jobType);
+		VidiunLog::log("Creating tag re-index job for categoryId [" . $data->getChangedCategoryId() . "] ");
+		return vJobsManager::addJob($batchJob, $data, $jobType);
 	}
 	
 	private function getEntryByIdNoFilter($entryId)

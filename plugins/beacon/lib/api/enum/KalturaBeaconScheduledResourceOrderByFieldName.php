@@ -3,7 +3,7 @@
  * @package plugins.beacon
  * @subpackage api.enum
  */
-class KalturaBeaconScheduledResourceOrderByFieldName extends KalturaStringEnum
+class VidiunBeaconScheduledResourceOrderByFieldName extends VidiunStringEnum
 {
 	const STATUS = 'app_status';
 	const RECORDING = 'recording_phase';

@@ -71,7 +71,7 @@ class assetParams extends BaseassetParams implements IBaseObject
 	const SYSTEM_DEFAULT = 1; 
 	
 	const FLAVOR_PARAMS_CREATION_MODE_MANUAL = 1;
-	const FLAVOR_PARAMS_CREATION_MODE_KMC = 2;
+	const FLAVOR_PARAMS_CREATION_MODE_VMC = 2;
 	const FLAVOR_PARAMS_CREATION_MODE_AUTOMATIC = 3;
 	
 	private static $validTags = array(
@@ -98,7 +98,7 @@ class assetParams extends BaseassetParams implements IBaseObject
 		$ret = parent::postUpdate($con);
 		
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		return $ret;
 	}
@@ -154,7 +154,7 @@ class assetParams extends BaseassetParams implements IBaseObject
 		{
 			if(is_array($value))
 				$this->setDynamicAttributes($value);
-			elseif($value instanceof kOperationAttributes)
+			elseif($value instanceof vOperationAttributes)
 				$this->setDynamicAttributes($value->toArray());
 			else
 				$this->setDynamicAttribute($attributeName, $value);
@@ -190,7 +190,7 @@ class assetParams extends BaseassetParams implements IBaseObject
 	
 	public function getSourceRemoteStorageProfileId()
 	{
-		return $this->getFromCustomData('sourceRemoteStorageProfileId', null, StorageProfile::STORAGE_KALTURA_DC);
+		return $this->getFromCustomData('sourceRemoteStorageProfileId', null, StorageProfile::STORAGE_VIDIUN_DC);
 	}
 	
 	public function setRemoteStorageProfileIds($remoteStorageProfileIds)
@@ -254,12 +254,12 @@ class assetParams extends BaseassetParams implements IBaseObject
 	 * @param PropelPDO|null $con
 	 * @return int|void
 	 * @throws PropelException
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 */
 	public function save(PropelPDO $con = null)
 	{
 		if ($this->getId() === assetParamsPeer::TEMP_FLAVOR_PARAM_ID)
-			throw new kCoreException('Cannot Save the Temp ID: ' . assetParamsPeer::TEMP_FLAVOR_PARAM_ID . ' flavor parameter to DB, it is for temporary use only');
+			throw new vCoreException('Cannot Save the Temp ID: ' . assetParamsPeer::TEMP_FLAVOR_PARAM_ID . ' flavor parameter to DB, it is for temporary use only');
 		parent::save($con);
 	}
 

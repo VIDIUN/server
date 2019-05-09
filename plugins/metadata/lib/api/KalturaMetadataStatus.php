@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.enum
  */
-class KalturaMetadataStatus extends KalturaEnum 
+class VidiunMetadataStatus extends VidiunEnum 
 {
 	const VALID = 1;
 	const INVALID = 2;

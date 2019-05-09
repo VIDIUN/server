@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kIntegerValue extends kValue
+class vIntegerValue extends vValue
 {
 	/**
 	 * @param int $value
@@ -32,7 +32,7 @@ class kIntegerValue extends kValue
 	}
 	
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @return bool
 	 */
 	public function shouldDisableCache($scope)

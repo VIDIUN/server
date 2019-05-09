@@ -4,7 +4,7 @@
 * @subpackage objects
 * @relatedService UserService
 */
-class KalturaBaseUser extends KalturaObject implements IRelatedFilterable
+class VidiunBaseUser extends VidiunObject implements IRelatedFilterable
 {
 	/**
 	 * @var string
@@ -81,7 +81,7 @@ class KalturaBaseUser extends KalturaObject implements IRelatedFilterable
 	public $adminTags;
 
 	/**
-	 * @var KalturaUserStatus
+	 * @var VidiunUserStatus
 	 * @filter eq,in
 	 */
 	public $status;
@@ -125,7 +125,7 @@ class KalturaBaseUser extends KalturaObject implements IRelatedFilterable
 
 
 	/**
-	 * @var KalturaLanguageCode
+	 * @var VidiunLanguageCode
 	 */
 	public $language;
 
@@ -161,7 +161,7 @@ class KalturaBaseUser extends KalturaObject implements IRelatedFilterable
 	public $allowedPartnerPackages;
 
 	/**
-	 * @var KalturaUserMode
+	 * @var VidiunUserMode
 	 */
 	public $userMode;
 
@@ -211,15 +211,15 @@ class KalturaBaseUser extends KalturaObject implements IRelatedFilterable
 	/**
 	 * @param $object The object to validate
 	 * @param $names array of names
-	 * @throws KalturaErrors::INVALID_FIELD_VALUE
+	 * @throws VidiunErrors::INVALID_FIELD_VALUE
 	 */
 	protected function validateNames($object , array $names)
 	{
 		foreach ($names as $name)
 		{
-			if (!is_null($object->$name) && strpos($object->$name, kuser::URL_PATTERN) !== false)
+			if (!is_null($object->$name) && strpos($object->$name, vuser::URL_PATTERN) !== false)
 			{
-				throw new KalturaAPIException(KalturaErrors::INVALID_FIELD_VALUE, $name);
+				throw new VidiunAPIException(VidiunErrors::INVALID_FIELD_VALUE, $name);
 			}
 		}
 	}

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaApiParameterPermissionItem extends KalturaPermissionItem
+class VidiunApiParameterPermissionItem extends VidiunPermissionItem
 {
 	
 	/**
@@ -17,7 +17,7 @@ class KalturaApiParameterPermissionItem extends KalturaPermissionItem
 	public $parameter;
 	
 	/**
-	 * @var KalturaApiParameterPermissionItemAction
+	 * @var VidiunApiParameterPermissionItemAction
 	 */
 	public $action;
 	
@@ -41,7 +41,7 @@ class KalturaApiParameterPermissionItem extends KalturaPermissionItem
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kApiParameterPermissionItem();
+			$dbObject = new vApiParameterPermissionItem();
 			
 		parent::toObject($dbObject, $skip);
 					

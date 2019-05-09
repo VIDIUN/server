@@ -3,12 +3,12 @@
  * Plugin enabling the storage of user view history
  * @package plugins.viewHistory
  */
- class ViewHistoryPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaObjectLoader
+ class ViewHistoryPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunObjectLoader
  {
  	const PLUGIN_NAME = "viewHistory";
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -16,7 +16,7 @@
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -28,7 +28,7 @@
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -44,8 +44,8 @@
 	
 	public static function getViewHistoryUserEntryTypeCoreValue ($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('UserEntryType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('UserEntryType', $value);
 	}
 	
 	/**
@@ -53,14 +53,14 @@
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if ( ($baseClass == "KalturaUserEntry") && ($enumValue == self::getViewHistoryUserEntryTypeCoreValue(ViewHistoryUserEntryType::VIEW_HISTORY)))
+		if ( ($baseClass == "VidiunUserEntry") && ($enumValue == self::getViewHistoryUserEntryTypeCoreValue(ViewHistoryUserEntryType::VIEW_HISTORY)))
 		{
-			return new KalturaViewHistoryUserEntry();
+			return new VidiunViewHistoryUserEntry();
 		}
 		if ( ($baseClass == "UserEntry") && ($enumValue == self::getViewHistoryUserEntryTypeCoreValue(ViewHistoryUserEntryType::VIEW_HISTORY)))
 		{

@@ -3,7 +3,7 @@
  * @package plugins.huluDistribution
  * @subpackage api.objects
  */
-class KalturaHuluDistributionProvider extends KalturaDistributionProvider
+class VidiunHuluDistributionProvider extends VidiunDistributionProvider
 {
 	
 }

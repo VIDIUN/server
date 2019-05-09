@@ -1,8 +1,8 @@
 <?php
-class kPlayReadyEventsConsumer implements kObjectReplacedEventConsumer
+class vPlayReadyEventsConsumer implements vObjectReplacedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectReplacedEventConsumer::objectReplaced()
+	 * @see vObjectReplacedEventConsumer::objectReplaced()
 	 */
 	public function objectReplaced(BaseObject $object, BaseObject $replacingObject, BatchJob $raisedJob = null) 
 	{
@@ -13,7 +13,7 @@ class kPlayReadyEventsConsumer implements kObjectReplacedEventConsumer
 			{
 				$newKeyId = $replacingDrmKey->getDrmKey();
 				
-				KalturaLog::info("replacing drm key with: ".$newKeyId);
+				VidiunLog::info("replacing drm key with: ".$newKeyId);
 				
 				$entryDrmKey = $this->getDrmKey($object);
 				if(!$entryDrmKey)
@@ -33,7 +33,7 @@ class kPlayReadyEventsConsumer implements kObjectReplacedEventConsumer
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::err("Failed to update drm key for entry ".$object->getId());
+			VidiunLog::err("Failed to update drm key for entry ".$object->getId());
 		}
 		
 		return true;
@@ -41,7 +41,7 @@ class kPlayReadyEventsConsumer implements kObjectReplacedEventConsumer
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectReplacedEventConsumer::shouldConsumeReplacedEvent()
+	 * @see vObjectReplacedEventConsumer::shouldConsumeReplacedEvent()
 	 */
 	public function shouldConsumeReplacedEvent(BaseObject $object) 
 	{

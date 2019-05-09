@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaApiExceptionArg extends KalturaObject
+class VidiunApiExceptionArg extends VidiunObject
 {
 	/**
 	 * @var string

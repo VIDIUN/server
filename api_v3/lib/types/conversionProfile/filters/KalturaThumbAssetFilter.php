@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaThumbAssetFilter extends KalturaThumbAssetBaseFilter
+class VidiunThumbAssetFilter extends VidiunThumbAssetBaseFilter
 {	
 	static private $map_between_objects = array
 	(
@@ -17,24 +17,24 @@ class KalturaThumbAssetFilter extends KalturaThumbAssetBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaAssetFilter::getTypeListResponse()
+	 * @see VidiunAssetFilter::getTypeListResponse()
 	 */
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, array $types = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, array $types = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager, $types);
 		
-		$response = new KalturaThumbAssetListResponse();
-		$response->objects = KalturaThumbAssetArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunThumbAssetListResponse();
+		$response->objects = VidiunThumbAssetArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 		return $response;  
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaAssetFilter::getListResponse()
+	 * @see VidiunAssetFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$types = KalturaPluginManager::getExtendedTypes(assetPeer::OM_CLASS, assetType::THUMBNAIL);
+		$types = VidiunPluginManager::getExtendedTypes(assetPeer::OM_CLASS, assetType::THUMBNAIL);
 		return $this->getTypeListResponse($pager, $responseProfile, $types);
 	}
 }

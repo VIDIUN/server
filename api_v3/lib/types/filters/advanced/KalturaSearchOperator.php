@@ -3,15 +3,15 @@
  * @package api
  * @subpackage filters
  */
-class KalturaSearchOperator extends KalturaSearchItem
+class VidiunSearchOperator extends VidiunSearchItem
 {
 	/**
-	 * @var KalturaSearchOperatorType
+	 * @var VidiunSearchOperatorType
 	 */
 	public $type;
 	
 	/**
-	 * @var KalturaSearchItemArray
+	 * @var VidiunSearchItemArray
 	 */
 	public $items;
 

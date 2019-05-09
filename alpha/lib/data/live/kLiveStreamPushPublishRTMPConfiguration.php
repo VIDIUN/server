@@ -6,7 +6,7 @@
  * @subpackage model
  *
  */
-class kLiveStreamPushPublishRTMPConfiguration extends kLiveStreamPushPublishConfiguration
+class vLiveStreamPushPublishRTMPConfiguration extends vLiveStreamPushPublishConfiguration
 {
 	/**
 	 * @var string

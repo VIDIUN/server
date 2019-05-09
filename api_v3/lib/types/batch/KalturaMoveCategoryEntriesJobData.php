@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaMoveCategoryEntriesJobData extends KalturaJobData
+class VidiunMoveCategoryEntriesJobData extends VidiunJobData
 {
 	/**
 	 * Source category id
@@ -70,7 +70,7 @@ class KalturaMoveCategoryEntriesJobData extends KalturaJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kMoveCategoryEntriesJobData();
+			$dbData = new vMoveCategoryEntriesJobData();
 			
 		return parent::toObject($dbData);
 	}

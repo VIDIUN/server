@@ -20,9 +20,9 @@ class PushNotificationTemplate extends EventNotificationTemplate
         parent::__construct();
     }
 
-    public function fulfilled(kEventScope $scope)
+    public function fulfilled(vEventScope $scope)
     {
-        if(!kCurrentContext::$serializeCallback)
+        if(!vCurrentContext::$serializeCallback)
             return false;
         
         if(!parent::fulfilled($scope))
@@ -103,7 +103,7 @@ class PushNotificationTemplate extends EventNotificationTemplate
 		return $keyValueArray;
 	}
     
-    public function getQueueKey($contentParameters, $partnerId = null, kScope $scope = null, $returnRaw = false)
+    public function getQueueKey($contentParameters, $partnerId = null, vScope $scope = null, $returnRaw = false)
     {
         $templateId = $this->getId();
         if ($scope)
@@ -112,9 +112,9 @@ class PushNotificationTemplate extends EventNotificationTemplate
         // currently contentParams contains only one param (entryId), but for further support
         foreach ($contentParameters as $contentParameter)
         {        	
-            /* @var $contentParameter kEventNotificationParameter */
+            /* @var $contentParameter vEventNotificationParameter */
             $value = $contentParameter->getValue();
-            if (($value instanceof kStringField) && ($scope) )
+            if (($value instanceof vStringField) && ($scope) )
                 $value->setScope($scope);
         
             $key = $contentParameter->getKey();
@@ -131,14 +131,14 @@ class PushNotificationTemplate extends EventNotificationTemplate
         	return $queueKey . md5($queueContentParams);
     }
     
-    public function getQueueName($queueNameParams, $partnerId = null, kScope $scope = null)
+    public function getQueueName($queueNameParams, $partnerId = null, vScope $scope = null)
     {
 		return $this->getQueueKey($queueNameParams, $partnerId, $scope);
     }
     
-    protected function getMessage(kScope $scope)
+    protected function getMessage(vScope $scope)
     {
-        if ($scope instanceof kEventScope)
+        if ($scope instanceof vEventScope)
         {
             $object = $scope->getObject();
         }
@@ -153,15 +153,15 @@ class PushNotificationTemplate extends EventNotificationTemplate
         	$responseProfile = ResponseProfilePeer::retrieveByPK($this->getResponseProfileId());
         }
         
-        return call_user_func(kCurrentContext::$serializeCallback, $object, $objectType, $format, $responseProfile);
+        return call_user_func(vCurrentContext::$serializeCallback, $object, $objectType, $format, $responseProfile);
     }
     
-    public function dispatch(kScope $scope) 
+    public function dispatch(vScope $scope) 
     {
-    	KalturaLog::debug("Dispatching event notification with name [{$this->getName()}] systemName [{$this->getSystemName()}]");
-        if (!$scope || !($scope instanceof kEventScope))
+    	VidiunLog::debug("Dispatching event notification with name [{$this->getName()}] systemName [{$this->getSystemName()}]");
+        if (!$scope || !($scope instanceof vEventScope))
         {
-            KalturaLog::err('Failed to dispatch due to incorrect scope [' .$scope . ']');
+            VidiunLog::err('Failed to dispatch due to incorrect scope [' .$scope . ']');
             return;
         }
         
@@ -207,7 +207,7 @@ class PushNotificationTemplate extends EventNotificationTemplate
     	$notificationParameters = $this->getQueueKeyParameters();
     	foreach($notificationParameters as $notificationParameter)
     	{
-    		/* @var $notificationParameter kEventNotificationParameter */
+    		/* @var $notificationParameter vEventNotificationParameter */
     		if(!is_null($notificationParameter->getValue()))
     			$scope->addDynamicValue($notificationParameter->getKey(), $notificationParameter->getValue());
     	}

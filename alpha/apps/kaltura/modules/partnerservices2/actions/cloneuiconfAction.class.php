@@ -30,7 +30,7 @@ class cloneuiconfAction extends defPartnerservices2Action
 	}
 	
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$this->applyPartnerFilterForClass('uiConf', $partner_id );
 		
@@ -66,7 +66,7 @@ class cloneuiconfAction extends defPartnerservices2Action
 				$level = ( $detailed ? objectWrapperBase::DETAIL_LEVEL_DETAILED : objectWrapperBase::DETAIL_LEVEL_REGULAR );
 				$wrapper = objectWrapperBase::getWrapperClass( $new_ui_conf , $level );
 				// TODO - remove this code when cache works properly when saving objects (in their save method)
-//				$wrapper->removeFromCache( "kshow" , $new_ui_conf->getId() );
+//				$wrapper->removeFromCache( "vshow" , $new_ui_conf->getId() );
 				$this->addMsg ( "uiconf" , $wrapper ) ;
 			}
 		}

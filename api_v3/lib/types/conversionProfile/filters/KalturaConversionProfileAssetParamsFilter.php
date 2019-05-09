@@ -3,20 +3,20 @@
  * @package api
  * @subpackage filters
  */
-class KalturaConversionProfileAssetParamsFilter extends KalturaConversionProfileAssetParamsBaseFilter
+class VidiunConversionProfileAssetParamsFilter extends VidiunConversionProfileAssetParamsBaseFilter
 {
 	/**
-	 * @var KalturaConversionProfileFilter
+	 * @var VidiunConversionProfileFilter
 	 */
 	public $conversionProfileIdFilter;
 	
 	/**
-	 * @var KalturaAssetParamsFilter
+	 * @var VidiunAssetParamsFilter
 	 */
 	public $assetParamsIdFilter;
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -24,7 +24,7 @@ class KalturaConversionProfileAssetParamsFilter extends KalturaConversionProfile
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::toObject()
+	 * @see VidiunFilter::toObject()
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -73,9 +73,9 @@ class KalturaConversionProfileAssetParamsFilter extends KalturaConversionProfile
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$assetParamsConversionProfileFilter = $this->toObject();
 
@@ -87,8 +87,8 @@ class KalturaConversionProfileAssetParamsFilter extends KalturaConversionProfile
 		$pager->attachToCriteria($c);
 		$dbList = flavorParamsConversionProfilePeer::doSelect($c);
 		
-		$list = KalturaConversionProfileAssetParamsArray::fromDbArray($dbList, $responseProfile);
-		$response = new KalturaConversionProfileAssetParamsListResponse();
+		$list = VidiunConversionProfileAssetParamsArray::fromDbArray($dbList, $responseProfile);
+		$response = new VidiunConversionProfileAssetParamsListResponse();
 		$response->objects = $list;
 		$response->totalCount = $totalCount;
 		return $response; 

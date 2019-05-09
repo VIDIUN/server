@@ -2,7 +2,7 @@
 /**
  * @package plugins.drm
  */
-class BaseDrmPlugin extends KalturaPlugin
+class BaseDrmPlugin extends VidiunPlugin
 {
 	const BASE_PLUGIN_NAME = 'drm';
 	/**
@@ -11,14 +11,14 @@ class BaseDrmPlugin extends KalturaPlugin
 	public static function getPluginName(){}
 
 	/**
-	 * @param array<kRuleAction> $actions
+	 * @param array<vRuleAction> $actions
 	 * @return bool
 	 */
     public static function shouldContributeToPlaybackContext(array $actions)
     {
 	    foreach ($actions as $action)
 	    {
-		    /*** @var kRuleAction $action */
+		    /*** @var vRuleAction $action */
 		    if ($action->getType() == DrmAccessControlActionType::DRM_POLICY)
 			    return true;
 	    }

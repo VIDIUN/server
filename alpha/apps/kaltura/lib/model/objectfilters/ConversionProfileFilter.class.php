@@ -9,7 +9,7 @@ class ConversionProfileFilter extends baseObjectFilter
 	{
 		// TODO - should separate the schema of the fields from the actual values
 		// or can use this to set default valuse
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 			"_eq_id" , 
 			"_gte_id" ,
 			"_eq_status" ,

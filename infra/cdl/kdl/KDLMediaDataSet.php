@@ -1,12 +1,12 @@
 <?php
 
-//include_once("KDLCommon.php");
-//include_once("KDLMediaObjectData.php");
+//include_once("VDLCommon.php");
+//include_once("VDLMediaObjectData.php");
 
 	/* ---------------------------
-	 * KDLMediaDataSet
+	 * VDLMediaDataSet
 	 */
-class KDLMediaDataSet  {
+class VDLMediaDataSet  {
 	
 	/* ---------------------
 	 * Data
@@ -50,8 +50,8 @@ class KDLMediaDataSet  {
 					$this->_video->_bitRate = $br;
 				else {
 					$this->_video->_bitRate = 100;
-					$this->_warnings[KDLConstants::VideoIndex][] = //"Invalid bitrate value. Set to defualt ".$this->_video->_bitRate;
-						KDLWarnings::ToString(KDLWarnings::SetDefaultBitrate, $this->_video->_bitRate);
+					$this->_warnings[VDLConstants::VideoIndex][] = //"Invalid bitrate value. Set to defualt ".$this->_video->_bitRate;
+						VDLWarnings::ToString(VDLWarnings::SetDefaultBitrate, $this->_video->_bitRate);
 				}
 			}
 		}
@@ -84,7 +84,7 @@ class KDLMediaDataSet  {
 			$this->_container->Validate($this->_errors, $this->_warnings);
 		if($this->_video=="" && $this->_audio=="" && $this->_image==""){
 				// "Invalid File - No media content";
-			$this->_errors[KDLConstants::ContainerIndex][] = KDLErrors::ToString(KDLErrors::NoValidMediaStream);
+			$this->_errors[VDLConstants::ContainerIndex][] = VDLErrors::ToString(VDLErrors::NoValidMediaStream);
 		}
 		if(count($this->_errors)>0)
 			return false;
@@ -124,12 +124,12 @@ class KDLMediaDataSet  {
 		}
 		/*
 		 * The format/codec names used here are both real-life media-info meta data
-		 *  and KDL constants.
+		 *  and VDL constants.
 		 */
 		$flashContainerFormats = array("flash video", "flv", "f4v","flash","flashvideo");
-		$mp4ContainerFormats = array("mpeg-4",KDLContainerTarget::MP4,KDLContainerTarget::MOV);
+		$mp4ContainerFormats = array("mpeg-4",VDLContainerTarget::MP4,VDLContainerTarget::MOV);
 		$mp4VideoFormats = array("avc","avc1","h264","h.264",
-						KDLVideoTarget::H264,KDLVideoTarget::H264B,KDLVideoTarget::H264M,KDLVideoTarget::H264H);
+						VDLVideoTarget::H264,VDLVideoTarget::H264B,VDLVideoTarget::H264M,VDLVideoTarget::H264H);
 		$mp4AudioFormats = array("mpeg audio","mp3","aac");
 		$wmvContainerFormats = array("windows media");
 		$itunesContainerFormats = array("mpeg-4","mpeg audio", "aiff", "wave");
@@ -194,7 +194,7 @@ class KDLMediaDataSet  {
 	 * 
 	 * @param unknown_type $condition
 	 * 
-	 * Check whether the KDLMediaDataSet object comply with provided condtion string.
+	 * Check whether the VDLMediaDataSet object comply with provided condtion string.
 	 * The condition string can contain - 
 	 * - numbers
 	 * - signs
@@ -202,7 +202,7 @@ class KDLMediaDataSet  {
 	 * -- aritmetic operators - '/+-*'
 	 * -- brackets '()'
 	 * -- space
-	 * - 'Variables' that repsent KDLMediaDataSet fields -
+	 * - 'Variables' that repsent VDLMediaDataSet fields -
 	 * -- containerFormat, containerDuration, containerBitRate, fileSize
 	 * -- videoFormat, videoDuration, videoBitRate, videoWidth, videoHeight, videoFrameRate, videoDar, videoRotation, scanType, contentAwareness, videoGop
 	 * -- audioFormat, audioDuration, audioBitRate, audioChannels, audioSampleRate, audioResolution
@@ -229,7 +229,7 @@ class KDLMediaDataSet  {
 	 */
 	public function IsCondition($condition)
 	{
-		KalturaLog::log("Input condition - $condition");
+		VidiunLog::log("Input condition - $condition");
 		$valsArr = array();
 			/*
 			 *  Set conatiner related fields
@@ -372,11 +372,11 @@ class KDLMediaDataSet  {
 		$valsArr["isMbr"] = in_array("mbr", $tagsOut)? 1: 0;
 		
 			/*
-			 * Assign the 'variables' with KDLMediaDataSet values
+			 * Assign the 'variables' with VDLMediaDataSet values
 			 */
 		$opsArr = array_keys($valsArr);
 		$condition = str_replace($opsArr, $valsArr, $condition);
-		KalturaLog::log("After assignment - $condition");
+		VidiunLog::log("After assignment - $condition");
 
 			/*
 			 * Verify that the condition statement contains ONLY allowed strings (see decription in the func header)
@@ -390,7 +390,7 @@ class KDLMediaDataSet  {
 		$tok = strtok($condition, $allowedChars);
 		while ($tok !== false) {
 			if(!(is_numeric($tok)||in_array($tok,$allowedFormats))){
-				KalturaLog::log("Invalid token - $tok. Leaving");
+				VidiunLog::log("Invalid token - $tok. Leaving");
 				return null;
 			}
 			$tok = strtok($allowedChars);
@@ -404,14 +404,14 @@ class KDLMediaDataSet  {
 			$strArr[] = "\"$aux\"";
 		}
 		$condition = str_replace($allowedFormats, $strArr, $condition).";";
-		KalturaLog::log("Final - $condition");
+		VidiunLog::log("Final - $condition");
 		
 			/*
 			 * The precautions to ensure the harmlessness of the condition string are described in the func header.
 			 */
 		$rv = eval("return ".$condition);
 
-		KalturaLog::log("RV - ".($rv? "true":"false"));
+		VidiunLog::log("RV - ".($rv? "true":"false"));
 		return $rv;
 	}
 		

@@ -2,7 +2,7 @@
 
 
 /**
- * Skeleton subclass for representing a row from the 'kuser_to_user_role' table.
+ * Skeleton subclass for representing a row from the 'vuser_to_user_role' table.
  *
  * 
  *
@@ -13,11 +13,11 @@
  * @package Core
  * @subpackage model
  */
-class KuserToUserRole extends BaseKuserToUserRole {
+class VuserToUserRole extends BaseVuserToUserRole {
 
 	public function getCacheInvalidationKeys()
 	{
-		return array("kuserToUserRole:kuserId=".strtolower($this->getKuserId()));
+		return array("vuserToUserRole:vuserId=".strtolower($this->getVuserId()));
 	}
 	
-} // KuserToUserRole
+} // VuserToUserRole

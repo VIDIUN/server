@@ -26,9 +26,9 @@ class getadmintagsAction extends defPartnerservices2Action
 	}
 	
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		$admin_tags = ktagword::getAdminTags( $partner_id );
+		$admin_tags = vtagword::getAdminTags( $partner_id );
 		$this->addMsg ( "adminTags" , $admin_tags );
 	}
 }

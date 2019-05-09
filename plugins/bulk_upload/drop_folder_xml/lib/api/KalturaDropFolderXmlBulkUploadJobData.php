@@ -7,7 +7,7 @@
  * @subpackage api.objects
  *
  */
-class KalturaDropFolderXmlBulkUploadJobData extends KalturaBulkUploadXmlJobData
+class VidiunDropFolderXmlBulkUploadJobData extends VidiunBulkUploadXmlJobData
 {
 
 	/**
@@ -33,7 +33,7 @@ class KalturaDropFolderXmlBulkUploadJobData extends KalturaBulkUploadXmlJobData
 	public function toObject($dbData = null, $props_to_skip = array())
 	{
 		if(is_null($dbData))
-			$dbData = new kDropFolderBulkUploadXmlJobData();
+			$dbData = new vDropFolderBulkUploadXmlJobData();
 
 		return parent::toObject($dbData);
 	}

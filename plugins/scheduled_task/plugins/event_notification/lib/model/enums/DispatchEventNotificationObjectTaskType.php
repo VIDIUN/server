@@ -3,7 +3,7 @@
  * @package plugins.scheduledTaskEventNotification
  * @subpackage model.enum
  */
-class DispatchEventNotificationObjectTaskType implements IKalturaPluginEnum, ObjectTaskType
+class DispatchEventNotificationObjectTaskType implements IVidiunPluginEnum, ObjectTaskType
 {
 	const DISPATCH_EVENT_NOTIFICATION = 'DispatchEventNotification';
 	

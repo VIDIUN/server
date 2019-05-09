@@ -10,7 +10,7 @@ class ExampleIntegrationPlugin extends IntegrationProviderPlugin
 	const INTEGRATION_PLUGIN_VERSION_BUILD = 0;
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -22,7 +22,7 @@ class ExampleIntegrationPlugin extends IntegrationProviderPlugin
 	 */
 	public static function getRequiredIntegrationPluginVersion()
 	{
-		return new KalturaVersion(
+		return new VidiunVersion(
 			self::INTEGRATION_PLUGIN_VERSION_MAJOR,
 			self::INTEGRATION_PLUGIN_VERSION_MINOR,
 			self::INTEGRATION_PLUGIN_VERSION_BUILD
@@ -46,25 +46,25 @@ class ExampleIntegrationPlugin extends IntegrationProviderPlugin
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'kIntegrationJobProviderData' && $enumValue == self::getApiValue(ExampleIntegrationProviderType::EXAMPLE))
+		if($baseClass == 'vIntegrationJobProviderData' && $enumValue == self::getApiValue(ExampleIntegrationProviderType::EXAMPLE))
 		{
-			return 'kExampleIntegrationJobProviderData';
+			return 'vExampleIntegrationJobProviderData';
 		}
 	
-		if($baseClass == 'KalturaIntegrationJobProviderData')
+		if($baseClass == 'VidiunIntegrationJobProviderData')
 		{
 			if($enumValue == self::getApiValue(ExampleIntegrationProviderType::EXAMPLE) || $enumValue == self::getIntegrationProviderCoreValue(ExampleIntegrationProviderType::EXAMPLE))
-				return 'KalturaExampleIntegrationJobProviderData';
+				return 'VidiunExampleIntegrationJobProviderData';
 		}
 	
-		if($baseClass == 'KIntegrationEngine' || $baseClass == 'KIntegrationCloserEngine')
+		if($baseClass == 'VIntegrationEngine' || $baseClass == 'VIntegrationCloserEngine')
 		{
-			if($enumValue == KalturaIntegrationProviderType::EXAMPLE)
-				return 'KExampleIntegrationEngine';
+			if($enumValue == VidiunIntegrationProviderType::EXAMPLE)
+				return 'VExampleIntegrationEngine';
 		}
 		if($baseClass == 'IIntegrationProvider' && $enumValue == self::getIntegrationProviderCoreValue(ExampleIntegrationProviderType::EXAMPLE))
 		{

@@ -10,13 +10,13 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaUnicornDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaUnicornDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunUnicornDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunUnicornDistributionProfile");
 		
-		if(!$data->providerData || !($data->providerData instanceof KalturaUnicornDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaUnicornDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunUnicornDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunUnicornDistributionJobProviderData");
 		
 		$this->handleSubmit($data, $data->distributionProfile, $data->providerData);
 		
@@ -26,13 +26,13 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaUnicornDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaUnicornDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunUnicornDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunUnicornDistributionProfile");
 		
-		if(!$data->providerData || !($data->providerData instanceof KalturaUnicornDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaUnicornDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunUnicornDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunUnicornDistributionJobProviderData");
 		
 		return $this->handleSubmit($data, $data->distributionProfile, $data->providerData);
 	}
@@ -40,13 +40,13 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaUnicornDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaUnicornDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunUnicornDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunUnicornDistributionProfile");
 		
-		if(!$data->providerData || !($data->providerData instanceof KalturaUnicornDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaUnicornDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunUnicornDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunUnicornDistributionJobProviderData");
 		
 		$this->handleDelete($data, $data->distributionProfile, $data->providerData);
 		
@@ -56,7 +56,7 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		// will be closed by the callback notification
 		return false;
@@ -65,7 +65,7 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseUpdate::closeUpdate()
 	 */
-	public function closeUpdate(KalturaDistributionUpdateJobData $data)
+	public function closeUpdate(VidiunDistributionUpdateJobData $data)
 	{
 		// will be closed by the callback notification
 		return false;
@@ -74,15 +74,15 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseDelete::closeDelete()
 	 */
-	public function closeDelete(KalturaDistributionDeleteJobData $data)
+	public function closeDelete(VidiunDistributionDeleteJobData $data)
 	{
 		// will be closed by the callback notification
 		return false;
 	}
 	
-	protected function getNotificationUrl(KalturaUnicornDistributionJobProviderData $providerData)
+	protected function getNotificationUrl(VidiunUnicornDistributionJobProviderData $providerData)
 	{
-		$job = KJobHandlerWorker::getCurrentJob();
+		$job = VJobHandlerWorker::getCurrentJob();
 		$serviceUrl = trim($providerData->notificationBaseUrl, '/');
 		return "$serviceUrl/api_v3/index.php/service/unicornDistribution_unicorn/action/notify/partnerId/{$job->partnerId}/id/{$job->id}";
 	}
@@ -91,32 +91,32 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 	 * @param int $partnerId
 	 * @param string $entryId
 	 * @param string $assetIds comma seperated
-	 * @return array<KalturaCaptionAsset>
+	 * @return array<VidiunCaptionAsset>
 	 */
 	protected function getCaptionAssets($partnerId, $entryId, $assetIds)
 	{
-		KBatchBase::impersonate($partnerId);
-		$filter = new KalturaCaptionAssetFilter();
+		VBatchBase::impersonate($partnerId);
+		$filter = new VidiunCaptionAssetFilter();
 		$filter->entryIdEqual = $entryId;
 		$filter->idIn = $assetIds;
 		
-		$captionPlugin = KalturaCaptionClientPlugin::get(KBatchBase::$kClient);
+		$captionPlugin = VidiunCaptionClientPlugin::get(VBatchBase::$vClient);
 		$assetsList = $captionPlugin->captionAsset->listAction($filter);
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
 		return $assetsList->objects;
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaUnicornDistributionProfile $distributionProfile
-	 * @param KalturaUnicornDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunUnicornDistributionProfile $distributionProfile
+	 * @param VidiunUnicornDistributionJobProviderData $providerData
 	 * @return string
 	 */
-	protected function buildXml(KalturaDistributionJobData $data, KalturaUnicornDistributionProfile $distributionProfile, KalturaUnicornDistributionJobProviderData $providerData)
+	protected function buildXml(VidiunDistributionJobData $data, VidiunUnicornDistributionProfile $distributionProfile, VidiunUnicornDistributionJobProviderData $providerData)
 	{
 		$entryDistribution = $data->entryDistribution;
-		/* @var $entryDistribution KalturaEntryDistribution */
+		/* @var $entryDistribution VidiunEntryDistribution */
 		
 		$flavorAssetIds = explode(',', $entryDistribution->flavorAssetIds);
 		$flavorAssetId = reset($flavorAssetIds);
@@ -144,7 +144,7 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 			$captions = $this->getCaptionAssets($entryDistribution->partnerId, $entryDistribution->entryId, $entryDistribution->assetIds);
 			foreach($captions as $caption)
 			{
-				/* @var $caption KalturaCaptionAsset */
+				/* @var $caption VidiunCaptionAsset */
 				$captionXml = $captionsXml->addChild('Caption');
 				$captionXml->addChild('ForeignKey', $caption->id);
 				
@@ -162,7 +162,7 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 		$publicationRuleXml->addChild('ChannelGUID', $distributionProfile->channelGuid);
 		$publicationRuleXml->addChild('StartDate', date($format, $data->entryDistribution->sunrise));
 		
-		if($data instanceof KalturaDistributionDeleteJobData)
+		if($data instanceof VidiunDistributionDeleteJobData)
 		{
 			$publicationRuleXml->addChild('EndDate', date($format, time()));
 		}
@@ -182,18 +182,18 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaUnicornDistributionProfile $distributionProfile
-	 * @param KalturaUnicornDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunUnicornDistributionProfile $distributionProfile
+	 * @param VidiunUnicornDistributionJobProviderData $providerData
 	 */
-	protected function handleSubmit(KalturaDistributionJobData $data, KalturaUnicornDistributionProfile $distributionProfile, KalturaUnicornDistributionJobProviderData $providerData)
+	protected function handleSubmit(VidiunDistributionJobData $data, VidiunUnicornDistributionProfile $distributionProfile, VidiunUnicornDistributionJobProviderData $providerData)
 	{
 		$xml = $this->buildXml($data, $distributionProfile, $providerData);
 		$data->sentData = $xml;
 		$remoteId = $this->send($distributionProfile, $xml);
 		if($remoteId)
 		{
-			KalturaLog::info("Remote ID [$remoteId]");
+			VidiunLog::info("Remote ID [$remoteId]");
 			$data->remoteId = $remoteId;
 		}
 		
@@ -201,11 +201,11 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaUnicornDistributionProfile $distributionProfile
-	 * @param KalturaUnicornDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunUnicornDistributionProfile $distributionProfile
+	 * @param VidiunUnicornDistributionJobProviderData $providerData
 	 */
-	protected function handleDelete(KalturaDistributionJobData $data, KalturaUnicornDistributionProfile $distributionProfile, KalturaUnicornDistributionJobProviderData $providerData)
+	protected function handleDelete(VidiunDistributionJobData $data, VidiunUnicornDistributionProfile $distributionProfile, VidiunUnicornDistributionJobProviderData $providerData)
 	{
 		$xml = $this->buildXml($data, $distributionProfile, $providerData);
 		$data->sentData = $xml;
@@ -213,11 +213,11 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaUnicornDistributionProfile $distributionProfile
-	 * @param KalturaUnicornDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunUnicornDistributionProfile $distributionProfile
+	 * @param VidiunUnicornDistributionJobProviderData $providerData
 	 */
-	protected function send(KalturaUnicornDistributionProfile $distributionProfile, $xml)
+	protected function send(VidiunUnicornDistributionProfile $distributionProfile, $xml)
 	{
 		$ch = curl_init($distributionProfile->apiHostUrl);
 		curl_setopt($ch, CURLOPT_POST, true);
@@ -233,10 +233,10 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 			$curlError = curl_error($ch);
 			$curlErrorNumber = curl_errno($ch);
 			curl_close($ch);
-			throw new KalturaDispatcherException("HTTP request failed: $curlError", $curlErrorNumber);
+			throw new VidiunDispatcherException("HTTP request failed: $curlError", $curlErrorNumber);
 		}
 		curl_close($ch);
-		KalturaLog::info("Response [$response]");
+		VidiunLog::info("Response [$response]");
 	
 		$matches = null;
 		if(preg_match_all('/HTTP\/?[\d.]{0,3} ([\d]{3}) ([^\n\r]+)/', $response, $matches))
@@ -246,12 +246,12 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 				$code = intval($matches[1][$index]);
 				$message = $matches[2][$index];
 			
-				if($code == KCurlHeaderResponse::HTTP_STATUS_CONTINUE)
+				if($code == VCurlHeaderResponse::HTTP_STATUS_CONTINUE)
 				{
 					continue;
 				}
 				
-				if($code != KCurlHeaderResponse::HTTP_STATUS_OK)
+				if($code != VCurlHeaderResponse::HTTP_STATUS_OK)
 				{
 					throw new Exception("HTTP response code [$code] error: $message", $code);
 				}
@@ -265,6 +265,6 @@ class UnicornDistributionEngine extends DistributionEngine implements IDistribut
 			}
 		}
 
-		throw new KalturaDistributionException("Unexpected HTTP response");
+		throw new VidiunDistributionException("Unexpected HTTP response");
 	}
 }

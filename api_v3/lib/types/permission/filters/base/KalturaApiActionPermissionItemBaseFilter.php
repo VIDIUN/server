@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaApiActionPermissionItemBaseFilter extends KalturaPermissionItemFilter
+abstract class VidiunApiActionPermissionItemBaseFilter extends VidiunPermissionItemFilter
 {
 	static private $map_between_objects = array
 	(

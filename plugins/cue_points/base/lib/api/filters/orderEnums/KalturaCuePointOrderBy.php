@@ -3,7 +3,7 @@
  * @package plugins.cuePoint
  * @subpackage api.filters.enum
  */
-class KalturaCuePointOrderBy extends KalturaStringEnum
+class VidiunCuePointOrderBy extends VidiunStringEnum
 {
 	const INT_ID_ASC = "+intId";
 	const INT_ID_DESC = "-intId";

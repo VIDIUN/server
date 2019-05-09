@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaDistributionValidationErrorMissingFlavor extends KalturaDistributionValidationError
+class VidiunDistributionValidationErrorMissingFlavor extends VidiunDistributionValidationError
 {
 	/**
 	 * @var string

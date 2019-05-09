@@ -49,15 +49,15 @@ class ESearchQueryFromFilter
 		return $operator;
 	}
 
-	public function retrieveElasticQueryEntryIds(baseObjectFilter $filter, kPager $pager)
+	public function retrieveElasticQueryEntryIds(baseObjectFilter $filter, vPager $pager)
 	{
 		$query = $this->createElasticQueryFromFilter($filter);
 
-		$entrySearch = new kEntrySearch();
+		$entrySearch = new vEntrySearch();
 		$entrySearch->setFilterOnlyContext();
 		$elasticResults = $entrySearch->doSearch($query, $pager, self::$validStatuses);
 
-		list($coreResults, $objectOrder, $objectCount, $objectHighlight) = kESearchCoreAdapter::getElasticResultAsArray($elasticResults,
+		list($coreResults, $objectOrder, $objectCount, $objectHighlight) = vESearchCoreAdapter::getElasticResultAsArray($elasticResults,
 			$entrySearch->getQueryAttributes()->getQueryHighlightsAttributes());
 
 		$entryIds = array_keys($coreResults);
@@ -103,7 +103,7 @@ class ESearchQueryFromFilter
 				break;
 
 			default:
-				KalturaLog::debug("Skip field [$elasticFieldName] as it has no search item type [$searchItemType]");
+				VidiunLog::debug("Skip field [$elasticFieldName] as it has no search item type [$searchItemType]");
 		}
 	}
 

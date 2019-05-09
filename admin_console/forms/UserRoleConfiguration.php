@@ -34,21 +34,21 @@ class Form_UserRoleConfiguration extends Infra_Form
 		$element = $this->getElement('role');
 		
 		$client = Infra_ClientHelper::getClient();
-		$filter = new Kaltura_Client_Type_PermissionFilter();
-		$filter->statusEqual = Kaltura_Client_Enum_PermissionStatus::ACTIVE;
-		$filter->typeEqual = Kaltura_Client_Enum_PermissionType::NORMAL;
-		$filter->orderBy = Kaltura_Client_Enum_PermissionOrderBy::NAME_ASC;
+		$filter = new Vidiun_Client_Type_PermissionFilter();
+		$filter->statusEqual = Vidiun_Client_Enum_PermissionStatus::ACTIVE;
+		$filter->typeEqual = Vidiun_Client_Enum_PermissionType::NORMAL;
+		$filter->orderBy = Vidiun_Client_Enum_PermissionOrderBy::NAME_ASC;
 		
-		$pager = new Kaltura_Client_Type_FilterPager();
+		$pager = new Vidiun_Client_Type_FilterPager();
 		$pager->pageSize = 1000;
 		
 		$permissions = $client->permission->listAction($filter, $pager);
-		/* @var $permissions Kaltura_Client_Type_PermissionListResponse */
+		/* @var $permissions Vidiun_Client_Type_PermissionListResponse */
 		if ($permissions && isset($permissions->objects) && count($permissions->objects)) 
 		{
 			foreach($permissions->objects as $index => $permission)
 			{
-				/* @var $permission Kaltura_Client_Type_Permission */
+				/* @var $permission Vidiun_Client_Type_Permission */
 				
 				$permissionId = str_replace(".", "___", $permission->name);
 				$this->addElement('checkbox', $permissionId, array(

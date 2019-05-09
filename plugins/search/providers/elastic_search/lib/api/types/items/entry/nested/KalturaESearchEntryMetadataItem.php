@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchEntryMetadataItem extends KalturaESearchEntryAbstractNestedItem
+class VidiunESearchEntryMetadataItem extends VidiunESearchEntryAbstractNestedItem
 {
 	/**
 	 * @var string

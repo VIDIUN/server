@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaConversionProfileAssetParamsBaseFilter extends KalturaRelatedFilter
+abstract class VidiunConversionProfileAssetParamsBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -56,7 +56,7 @@ abstract class KalturaConversionProfileAssetParamsBaseFilter extends KalturaRela
 	public $assetParamsIdIn;
 
 	/**
-	 * @var KalturaFlavorReadyBehaviorType
+	 * @var VidiunFlavorReadyBehaviorType
 	 */
 	public $readyBehaviorEqual;
 
@@ -66,7 +66,7 @@ abstract class KalturaConversionProfileAssetParamsBaseFilter extends KalturaRela
 	public $readyBehaviorIn;
 
 	/**
-	 * @var KalturaAssetParamsOrigin
+	 * @var VidiunAssetParamsOrigin
 	 */
 	public $originEqual;
 

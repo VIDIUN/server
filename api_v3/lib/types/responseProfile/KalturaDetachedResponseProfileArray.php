@@ -3,20 +3,20 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDetachedResponseProfileArray extends KalturaTypedArray
+class VidiunDetachedResponseProfileArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaDetachedResponseProfileArray();
+		$newArr = new VidiunDetachedResponseProfileArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-			$nObj = new KalturaDetachedResponseProfile();
+			$nObj = new VidiunDetachedResponseProfile();
 			if(!$nObj)
 			{
-				KalturaLog::alert("Object [" . get_class($obj) . "] type [" . $obj->getType() . "] could not be translated to API object");
+				VidiunLog::alert("Object [" . get_class($obj) . "] type [" . $obj->getType() . "] could not be translated to API object");
 				continue;
 			}
 			$nObj->fromObject($obj, $responseProfile);
@@ -28,6 +28,6 @@ class KalturaDetachedResponseProfileArray extends KalturaTypedArray
 
 	public function __construct()
 	{
-		parent::__construct("KalturaDetachedResponseProfile");	
+		parent::__construct("VidiunDetachedResponseProfile");	
 	}
 }

@@ -1,14 +1,14 @@
 <?php
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-class getRelatedKshowsAction extends kalturaAction
+class getRelatedVshowsAction extends vidiunAction
 {
 	public function execute ( )
 	{ 		
-		$kshow_id = $this->getRequestParameter( 'kshow_id' , '');
-		$this->kshowdataarray = myKshowUtils::getRelatedShowsData( $kshow_id, null, 12 );
+		$vshow_id = $this->getRequestParameter( 'vshow_id' , '');
+		$this->vshowdataarray = myVshowUtils::getRelatedShowsData( $vshow_id, null, 12 );
 		$this->getResponse()->setHttpHeader ( "Content-Type" , "text/xml; charset=utf-8" );
 		$this->getController()->setRenderMode ( sfView::RENDER_CLIENT );
 	}

@@ -1,12 +1,12 @@
 <?php
 
-require_once KALTURA_ROOT_PATH . '/vendor/htmlpurifier/library/HTMLPurifier.auto.php';
+require_once VIDIUN_ROOT_PATH . '/vendor/htmlpurifier/library/HTMLPurifier.auto.php';
 
 /**
  * @package infra
  * @subpackage utils
  */
-class kHtmlPurifier
+class vHtmlPurifier
 {
 	private static $purifier = null;
 	private static $AllowedProperties = null;
@@ -14,19 +14,19 @@ class kHtmlPurifier
 
 	public static function purify( $className, $propertyName, $value )
 	{
-		if ( ! is_string($value)								// Skip objects like KalturaNullField, for example
+		if ( ! is_string($value)								// Skip objects like VidiunNullField, for example
 			|| self::isMarkupAllowed($className, $propertyName)	// Skip fields that are allowed to contain HTML/XML tags
 		)
 		{
 			return $value;
 		}
 
-		$tokenMapper = new kRegExTokenMapper();
+		$tokenMapper = new vRegExTokenMapper();
 		$tokenizedValue = $tokenMapper->tokenize($value, self::$allowedTokenPatterns);
 		$purifiedValue = self::$purifier->purify( $tokenizedValue );
 		$modifiedValue = $tokenMapper->unTokenize($purifiedValue);
 
-		if (kCurrentContext::$HTMLPurifierBehaviour == HTMLPurifierBehaviourType::SANITIZE)
+		if (vCurrentContext::$HTMLPurifierBehaviour == HTMLPurifierBehaviourType::SANITIZE)
 			return $modifiedValue;
 
 		if ( $modifiedValue != $value )
@@ -36,15 +36,15 @@ class kHtmlPurifier
 					. "\nMODIFIED VALUE: [" . $modifiedValue . "]"
 				;
 
-			KalturaLog::err( $msg );
+			VidiunLog::err( $msg );
 
-			if (kCurrentContext::$HTMLPurifierBehaviour == HTMLPurifierBehaviourType::NOTIFY)
+			if (vCurrentContext::$HTMLPurifierBehaviour == HTMLPurifierBehaviourType::NOTIFY)
 			{
 //			$this->notifyAboutHtmlPurification($className, $propertyName, $value);
-				KalturaLog::debug("should send notification");
+				VidiunLog::debug("should send notification");
 				return $value;
 			}
-			// If we reach here kCurrentContext::$HTMLPurifierBehaviour must be BLOCK
+			// If we reach here vCurrentContext::$HTMLPurifierBehaviour must be BLOCK
 
 			$errorMessage = "UNSAFE_HTML_TAGS;Potential Unsafe HTML tags found in [$className]::[$propertyName]";
 			throw new Exception($errorMessage);
@@ -76,7 +76,7 @@ class kHtmlPurifier
 		$cacheKey = null;
 		if ( function_exists('apc_fetch') && function_exists('apc_store') )
 		{
-			$cacheKey = 'kHtmlPurifierPurifier-' . kConf::getCachedVersionId();
+			$cacheKey = 'vHtmlPurifierPurifier-' . vConf::getCachedVersionId();
 			self::$purifier = apc_fetch($cacheKey);
 		}
 		
@@ -97,17 +97,17 @@ class kHtmlPurifier
 		$cacheKey = null;
 		if ( function_exists('apc_fetch') && function_exists('apc_store') )
 		{
-			$cacheKey = 'kHtmlPurifierAllowedProperties-' . kConf::getCachedVersionId();
+			$cacheKey = 'vHtmlPurifierAllowedProperties-' . vConf::getCachedVersionId();
 			self::$AllowedProperties = apc_fetch($cacheKey);
 		}
 
 		
 		if ( ! self::$AllowedProperties )
 		{
-			$allowedProperties = kConf::get("xss_allowed_object_properties");
+			$allowedProperties = vConf::get("xss_allowed_object_properties");
 			self::$AllowedProperties = $allowedProperties['base_list'];
 			
-			if (!kCurrentContext::$HTMLPurifierBaseListOnlyUsage)
+			if (!vCurrentContext::$HTMLPurifierBaseListOnlyUsage)
 				self::$AllowedProperties = array_merge($allowedProperties['base_list'], $allowedProperties['extend_list']);
 
 			// Convert values to keys (we don't care about the values) in order to test via array_key_exists.
@@ -125,13 +125,13 @@ class kHtmlPurifier
 		$cacheKey = null;
 		if ( function_exists('apc_fetch') && function_exists('apc_store') )
 		{
-			$cacheKey = 'kHtmlPurifierAllowedTokenPatterns-' . kConf::getCachedVersionId();
+			$cacheKey = 'vHtmlPurifierAllowedTokenPatterns-' . vConf::getCachedVersionId();
 			self::$allowedTokenPatterns = apc_fetch($cacheKey);
 		}
 
 		if ( ! self::$allowedTokenPatterns )
 		{
-			self::$allowedTokenPatterns = kConf::get("xss_allowed_token_patterns");
+			self::$allowedTokenPatterns = vConf::get("xss_allowed_token_patterns");
 			self::$allowedTokenPatterns = preg_replace("/\\\\/", "\\", self::$allowedTokenPatterns);
 
 			if ( $cacheKey )
@@ -142,4 +142,4 @@ class kHtmlPurifier
 	}
 }
 
-kHtmlPurifier::init();
+vHtmlPurifier::init();

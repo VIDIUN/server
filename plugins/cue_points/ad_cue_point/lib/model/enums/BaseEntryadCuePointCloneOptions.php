@@ -3,7 +3,7 @@
  * @package plugins.cuePoint
  * @subpackage model.enum
  */
-class BaseEntryAdCuePointCloneOptions implements IKalturaPluginEnum, BaseEntryCloneOptions
+class BaseEntryAdCuePointCloneOptions implements IVidiunPluginEnum, BaseEntryCloneOptions
 {
 	const AD_CUE_POINTS = "AD_CUE_POINTS";
 

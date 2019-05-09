@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class investigateAction extends kalturaSystemAction
+class investigateAction extends vidiunSystemAction
 {
 	/**
 	 * Will investigate a single entry
@@ -28,9 +28,9 @@ class investigateAction extends kalturaSystemAction
 		$fast = ( $this->getRequestParameter("fast", "") != "" );
 	 	$this->fast = $fast;
 	 	
-		$kshow_id = $this->getRequestParameter("kshow_id");
-		$this->kshow_id = $kshow_id;
-		$this->kshow = NULL;
+		$vshow_id = $this->getRequestParameter("vshow_id");
+		$this->vshow_id = $vshow_id;
+		$this->vshow = NULL;
 		
 		$entry_id = $this->getRequestParameter("entry_id");
 		$this->entry_id = $entry_id;
@@ -40,33 +40,33 @@ class investigateAction extends kalturaSystemAction
 		
 		$this->bg_entry = NULL;
 		
-		if ( !empty ( $kshow_id ))
+		if ( !empty ( $vshow_id ))
 		{
 			
 			$c = new Criteria();
-			$c->add ( kshowPeer::ID , $kshow_id );
-			$kshows = kshowPeer::doSelect ( $c );
+			$c->add ( vshowPeer::ID , $vshow_id );
+			$vshows = vshowPeer::doSelect ( $c );
 			
-			$kshow = new kshow();
+			$vshow = new vshow();
 			
-			if ( ! $kshows )
+			if ( ! $vshows )
 			{
-				$this->result = "No kshow [$kshow_id] in DB";
+				$this->result = "No vshow [$vshow_id] in DB";
 				return;
 			}
 	
-			$kshow_original = $kshows[0];
-			$kshow_original->getShowEntry() ; // pre fetch
-			$kshow_original->getIntro(); // pre fetch
+			$vshow_original = $vshows[0];
+			$vshow_original->getShowEntry() ; // pre fetch
+			$vshow_original->getIntro(); // pre fetch
 
-			$this->kshow_original =$kshows[0];
-			$this->kshow =  new genericObjectWrapper ($this->kshow_original , true );
+			$this->vshow_original =$vshows[0];
+			$this->vshow =  new genericObjectWrapper ($this->vshow_original , true );
 
 			$alredy_exist_entries = array ( );
-			$alredy_exist_entries[] = $kshow_original->getShowEntryId();
-			if( $kshow_original->getIntroId()) $alredy_exist_entries[] = $kshow_original->getIntroId();
+			$alredy_exist_entries[] = $vshow_original->getShowEntryId();
+			if( $vshow_original->getIntroId()) $alredy_exist_entries[] = $vshow_original->getIntroId();
 			
-			$skin_obj = $this->kshow_original->getSkinObj();
+			$skin_obj = $this->vshow_original->getSkinObj();
 			$bg_entry_id = $skin_obj->get ( "bg_entry_id");
 			if ( $bg_entry_id )
 			{
@@ -77,10 +77,10 @@ class investigateAction extends kalturaSystemAction
 			$c = new Criteria();
 			$c->add ( entryPeer::ID , $alredy_exist_entries  , Criteria::NOT_IN );
 			$c->setLimit ( 100 );
-			$this->kshow_entries = $this->kshow_original->getEntrysJoinKuser( $c );
+			$this->vshow_entries = $this->vshow_original->getEntrysJoinVuser( $c );
 			
 			return;
-			//return "KshowSuccess";
+			//return "VshowSuccess";
 		}
 		
 		if ( empty ( $entry_id ))
@@ -124,8 +124,8 @@ class investigateAction extends kalturaSystemAction
 //		myBatchFileConverterServer::init( true );
 		
 		$entry_patttern = "/" . $entry_id . "\\..*/";
-		$getFileData_method = array ( 'kFile' , 'getFileData' );
-		$getFileDataWithContent_method = array ( 'kFile' , 'getFileDataWithContent' );
+		$getFileData_method = array ( 'vFile' , 'getFileData' );
+		$getFileDataWithContent_method = array ( 'vFile' , 'getFileDataWithContent' );
 
 		// find all relevant files on disk
 		$c = new Criteria();

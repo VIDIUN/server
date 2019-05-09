@@ -1,6 +1,6 @@
 <?php
 /** copied from sfActions */
-abstract class kalturaActions extends kalturaAction
+abstract class vidiunActions extends vidiunAction
 {
 	/**
 	 * Dispatches to the action defined by the 'action' parameter of the sfRequest object.
@@ -12,7 +12,7 @@ abstract class kalturaActions extends kalturaAction
 	 *
 	 * @throws sfInitializationException
 	 *
-	 * @see kalturaAction
+	 * @see vidiunAction
 	 */
 	public function execute()
 	{
@@ -21,14 +21,14 @@ abstract class kalturaActions extends kalturaAction
 		if (!is_callable(array($this, $actionToRun)))
 		{
 			// action not found
-			$error = 'kalturaAction initialization failed for module "%s", action "%s". You must create a "%s" method.';
+			$error = 'vidiunAction initialization failed for module "%s", action "%s". You must create a "%s" method.';
 			$error = sprintf($error, $this->getModuleName(), $this->getActionName(), $actionToRun);
 			throw new sfInitializationException($error);
 		}
 
 		if (sfConfig::get('sf_logging_enabled'))
 		{
-			$this->getContext()->getLogger()->info('{kalturaAction} call "'.get_class($this).'->'.$actionToRun.'()'.'"');
+			$this->getContext()->getLogger()->info('{vidiunAction} call "'.get_class($this).'->'.$actionToRun.'()'.'"');
 		}
 
 		// run action

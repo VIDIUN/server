@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaCopyJobData extends KalturaJobData
+class VidiunCopyJobData extends VidiunJobData
 {
 	/**
 	 * The filter should return the list of objects that need to be copied.
-	 * @var KalturaFilter
+	 * @var VidiunFilter
 	 */
 	public $filter;
 	
@@ -19,7 +19,7 @@ class KalturaCopyJobData extends KalturaJobData
 	
 	/**
 	 * Template object to overwrite attributes on the copied object
-	 * @var KalturaObject
+	 * @var VidiunObject
 	 */
 	public $templateObject;
 	
@@ -29,7 +29,7 @@ class KalturaCopyJobData extends KalturaJobData
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -37,12 +37,12 @@ class KalturaCopyJobData extends KalturaJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kCopyJobData();
+			$dbData = new vCopyJobData();
 			
 		$dbData->setTemplateObject($this->templateObject->toObject());
 		
@@ -50,37 +50,37 @@ class KalturaCopyJobData extends KalturaJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbData, KalturaDetachedResponseProfile $responseProfile = null) 
+	public function doFromObject($dbData, VidiunDetachedResponseProfile $responseProfile = null) 
 	{
-		/* @var $dbData kCopyJobData */
+		/* @var $dbData vCopyJobData */
 		$filter = $dbData->getFilter();
 		$filterType = get_class($filter);
 		switch($filterType)
 		{
 			case 'entryFilter':
-				$this->filter = new KalturaBaseEntryFilter();
-				$this->templateObject = new KalturaBaseEntry();
+				$this->filter = new VidiunBaseEntryFilter();
+				$this->templateObject = new VidiunBaseEntry();
 				break;
 				
 			case 'categoryFilter':
-				$this->filter = new KalturaCategoryFilter();
-				$this->templateObject = new KalturaCategory();
+				$this->filter = new VidiunCategoryFilter();
+				$this->templateObject = new VidiunCategory();
 				break;
 				
 			case 'categoryEntryFilter':
-				$this->filter = new KalturaCategoryEntryFilter();
-				$this->templateObject = new KalturaCategoryEntry();
+				$this->filter = new VidiunCategoryEntryFilter();
+				$this->templateObject = new VidiunCategoryEntry();
 				break;
 				
-			case 'categoryKuserFilter':
-				$this->filter = new KalturaCategoryUserFilter();
-				$this->templateObject = new KalturaCategoryUser();
+			case 'categoryVuserFilter':
+				$this->filter = new VidiunCategoryUserFilter();
+				$this->templateObject = new VidiunCategoryUser();
 				break;
 				
 			default:
-				$this->filter = KalturaPluginManager::loadObject('KalturaFilter', $filterType);
+				$this->filter = VidiunPluginManager::loadObject('VidiunFilter', $filterType);
 		}
 		if($this->filter)
 			$this->filter->fromObject($filter);

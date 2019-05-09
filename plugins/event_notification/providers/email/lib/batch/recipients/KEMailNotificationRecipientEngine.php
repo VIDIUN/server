@@ -5,15 +5,15 @@
  * @package plugins.emailNotification
  * @subpackage Scheduler
  */
-abstract class KEmailNotificationRecipientEngine
+abstract class VEmailNotificationRecipientEngine
 {
 	/**
 	 * Job data for the email notification recipients
-	 * @var KalturaEmailNotificationRecipientJobData
+	 * @var VidiunEmailNotificationRecipientJobData
 	 */
 	protected $recipientJobData;
 	
-	public function __construct(KalturaEmailNotificationRecipientJobData $recipientJobData)
+	public function __construct(VidiunEmailNotificationRecipientJobData $recipientJobData)
 	{
 		$this->recipientJobData = $recipientJobData;
 		
@@ -21,13 +21,13 @@ abstract class KEmailNotificationRecipientEngine
 	
 	/**
 	 * Function retrieves instance of recipient job data
-	 * @param KalturaEmailNotificationRecipientJobData $recipientJobData
-	 * @param KalturaClient $kClient
-	 * @return KEmailNotificationRecipientEngine
+	 * @param VidiunEmailNotificationRecipientJobData $recipientJobData
+	 * @param VidiunClient $vClient
+	 * @return VEmailNotificationRecipientEngine
 	 */
-	public static function getEmailNotificationRecipientEngine(KalturaEmailNotificationRecipientJobData $recipientJobData)
+	public static function getEmailNotificationRecipientEngine(VidiunEmailNotificationRecipientJobData $recipientJobData)
 	{
-		return KalturaPluginManager::loadObject('KEmailNotificationRecipientEngine', $recipientJobData->providerType, array($recipientJobData));
+		return VidiunPluginManager::loadObject('VEmailNotificationRecipientEngine', $recipientJobData->providerType, array($recipientJobData));
 	}
 
 	

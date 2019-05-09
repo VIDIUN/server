@@ -3,16 +3,16 @@
  * @package plugins.document
  * @subpackage api.objects
  */
-class KalturaDocumentEntryArray extends KalturaTypedArray
+class VidiunDocumentEntryArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaDocumentEntryArray();
+		$newArr = new VidiunDocumentEntryArray();
 		if ($arr == null)
 			return $newArr;		
 		foreach ($arr as $obj)
 		{
-    		$nObj = KalturaEntryFactory::getInstanceByType($obj->getType());
+    		$nObj = VidiunEntryFactory::getInstanceByType($obj->getType());
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -22,6 +22,6 @@ class KalturaDocumentEntryArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaDocumentEntry");	
+		parent::__construct("VidiunDocumentEntry");	
 	}
 }

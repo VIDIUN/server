@@ -5,7 +5,7 @@
  *
  * @service appToken
  */
-class AppTokenService extends KalturaBaseService
+class AppTokenService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -17,15 +17,15 @@ class AppTokenService extends KalturaBaseService
 	 * Add new application authentication token
 	 * 
 	 * @action add
-	 * @param KalturaAppToken $appToken
-	 * @return KalturaAppToken
+	 * @param VidiunAppToken $appToken
+	 * @return VidiunAppToken
 	 */
-	function addAction(KalturaAppToken $appToken)
+	function addAction(VidiunAppToken $appToken)
 	{
 		$dbAppToken = $appToken->toInsertableObject();
 		$dbAppToken->save();
 		
-		$appToken = new KalturaAppToken();
+		$appToken = new VidiunAppToken();
 		$appToken->fromObject($dbAppToken, $this->getResponseProfile());
 		return $appToken;
 	}
@@ -35,17 +35,17 @@ class AppTokenService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param string $id
-	 * @return KalturaAppToken
+	 * @return VidiunAppToken
 	 * 
-	 * @throws KalturaErrors::APP_TOKEN_ID_NOT_FOUND
+	 * @throws VidiunErrors::APP_TOKEN_ID_NOT_FOUND
 	 */
 	function getAction($id)
 	{
 		$dbAppToken = AppTokenPeer::retrieveByPK($id);
 		if(!$dbAppToken)
-			throw new KalturaAPIException(KalturaErrors::APP_TOKEN_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::APP_TOKEN_ID_NOT_FOUND, $id);
 		
-		$appToken = new KalturaAppToken();
+		$appToken = new VidiunAppToken();
 		$appToken->fromObject($dbAppToken, $this->getResponseProfile());
 		return $appToken;
 	}
@@ -55,21 +55,21 @@ class AppTokenService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param string $id
-	 * @param KalturaAppToken $appToken
-	 * @return KalturaAppToken
+	 * @param VidiunAppToken $appToken
+	 * @return VidiunAppToken
 	 * 
-	 * @throws KalturaErrors::APP_TOKEN_ID_NOT_FOUND
+	 * @throws VidiunErrors::APP_TOKEN_ID_NOT_FOUND
 	 */
-	function updateAction($id, KalturaAppToken $appToken)
+	function updateAction($id, VidiunAppToken $appToken)
 	{
 		$dbAppToken = AppTokenPeer::retrieveByPK($id);
 		if(!$dbAppToken)
-			throw new KalturaAPIException(KalturaErrors::APP_TOKEN_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::APP_TOKEN_ID_NOT_FOUND, $id);
 		
 		$appToken->toUpdatableObject($dbAppToken);
 		$dbAppToken->save();
 		
-		$appToken = new KalturaAppToken();
+		$appToken = new VidiunAppToken();
 		$appToken->fromObject($dbAppToken, $this->getResponseProfile());
 		return $appToken;
 	}
@@ -80,15 +80,15 @@ class AppTokenService extends KalturaBaseService
 	 * @action delete
 	 * @param string $id
 	 * 
-	 * @throws KalturaErrors::APP_TOKEN_ID_NOT_FOUND
+	 * @throws VidiunErrors::APP_TOKEN_ID_NOT_FOUND
 	 */
 	function deleteAction($id)
 	{
 		$dbAppToken = AppTokenPeer::retrieveByPK($id);
 		if(!$dbAppToken)
-			throw new KalturaAPIException(KalturaErrors::APP_TOKEN_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::APP_TOKEN_ID_NOT_FOUND, $id);
 		
-		$invalidSessionKey = ks::buildSessionIdHash($this->getPartnerId(), $id); 
+		$invalidSessionKey = vs::buildSessionIdHash($this->getPartnerId(), $id); 
 		invalidSessionPeer::invalidateByKey($invalidSessionKey, invalidSession::INVALID_SESSION_TYPE_SESSION_ID, $dbAppToken->getExpiry());
 		$dbAppToken->setStatus(AppTokenStatus::DELETED);
 		$dbAppToken->save();
@@ -98,27 +98,27 @@ class AppTokenService extends KalturaBaseService
 	 * List application authentication tokens by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaFilterPager $filter
-	 * @param KalturaAppTokenFilter $pager
-	 * @return KalturaAppTokenListResponse
+	 * @param VidiunFilterPager $filter
+	 * @param VidiunAppTokenFilter $pager
+	 * @return VidiunAppTokenListResponse
 	 */
-	function listAction(KalturaAppTokenFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunAppTokenFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if(!$filter)
-			$filter = new KalturaAppTokenFilter();
+			$filter = new VidiunAppTokenFilter();
 		
 		if(!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 
 
 		if ($filter->sessionUserIdEqual)
 		{
-			$kuser = kuserPeer::getKuserByPartnerAndUid ($this->getPartnerId() , $filter->sessionUserIdEqual );
-			if($kuser)
-				$filter->sessionUserIdEqual = $kuser->getId();
+			$vuser = vuserPeer::getVuserByPartnerAndUid ($this->getPartnerId() , $filter->sessionUserIdEqual );
+			if($vuser)
+				$filter->sessionUserIdEqual = $vuser->getId();
 			else
 			{
-				$response = new KalturaAppTokenListResponse();
+				$response = new VidiunAppTokenListResponse();
 				$response->totalCount = 0;
 				return $response;
 			}
@@ -139,50 +139,50 @@ class AppTokenService extends KalturaBaseService
 		}
 		else
 		{
-			KalturaFilterPager::detachFromCriteria($c);
+			VidiunFilterPager::detachFromCriteria($c);
 			$totalCount = AppTokenPeer::doCount($c);
 		}
 		
-		$response = new KalturaAppTokenListResponse();
+		$response = new VidiunAppTokenListResponse();
 		$response->totalCount = $totalCount;
-		$response->objects = KalturaAppTokenArray::fromDbArray($list, $this->getResponseProfile());
+		$response->objects = VidiunAppTokenArray::fromDbArray($list, $this->getResponseProfile());
 		return $response;
 	}
 	
 	/**
-	 * Starts a new KS (kaltura Session) based on an application authentication token ID
+	 * Starts a new VS (vidiun Session) based on an application authentication token ID
 	 * 
 	 * @action startSession
 	 * @param string $id application token ID
-	 * @param string $tokenHash a hash [MD5, SHA1, SHA256 and SHA512 are supported] of the current KS concatenated with the application token 
+	 * @param string $tokenHash a hash [MD5, SHA1, SHA256 and SHA512 are supported] of the current VS concatenated with the application token 
 	 * @param string $userId session user ID, will be ignored if a different user ID already defined on the application token
-	 * @param KalturaSessionType $type session type, will be ignored if a different session type is already defined on the application token
+	 * @param VidiunSessionType $type session type, will be ignored if a different session type is already defined on the application token
 	 * @param int $expiry session expiry (in seconds), could be overridden by shorter expiry of the application token
 	 * @param string $sessionPrivileges session privileges, will be ignored if a similar privilege is already defined on the application token or the privilege is server reserved
-	 * @throws KalturaErrors::APP_TOKEN_ID_NOT_FOUND
-	 * @return KalturaSessionInfo
+	 * @throws VidiunErrors::APP_TOKEN_ID_NOT_FOUND
+	 * @return VidiunSessionInfo
 	 */
 	function startSessionAction($id, $tokenHash, $userId = null, $type = null, $expiry = null, $sessionPrivileges = null)
 	{
 		$dbAppToken = AppTokenPeer::retrieveByPK($id);
 		if(!$dbAppToken)
-			throw new KalturaAPIException(KalturaErrors::APP_TOKEN_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::APP_TOKEN_ID_NOT_FOUND, $id);
 		
 		if($dbAppToken->getStatus() != AppTokenStatus::ACTIVE)
-			throw new KalturaAPIException(KalturaErrors::APP_TOKEN_NOT_ACTIVE, $id);
+			throw new VidiunAPIException(VidiunErrors::APP_TOKEN_NOT_ACTIVE, $id);
 		
 		$appTokenHash = $dbAppToken->calcHash();
 		if($appTokenHash !== $tokenHash)
-			throw new KalturaAPIException(KalturaErrors::INVALID_APP_TOKEN_HASH);
+			throw new VidiunAPIException(VidiunErrors::INVALID_APP_TOKEN_HASH);
 		
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		
 		$tokenExpiry = $dbAppToken->getSessionDuration();
 		if(!is_null($dbAppToken->getExpiry()))
 		{
 			$tokenExpiry = min($tokenExpiry, $dbAppToken->getExpiry() - time());
 			if($tokenExpiry < 0)
-				throw new KalturaAPIException(KalturaErrors::APP_TOKEN_EXPIRED, $id);
+				throw new VidiunAPIException(VidiunErrors::APP_TOKEN_EXPIRED, $id);
 		}
 		if(!$expiry)
 		{
@@ -198,37 +198,37 @@ class AppTokenService extends KalturaBaseService
 		if(!is_null($dbAppToken->getSessionUserId()))
 			$userId = $dbAppToken->getSessionUserId();
 			
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		$secret = $type == SessionType::ADMIN ? $partner->getAdminSecret() : $partner->getSecret();
 		
 		$privilegesArray = array(
-			ks::PRIVILEGE_SESSION_ID => array($id),
-			ks::PRIVILEGE_APP_TOKEN => array($id)
+			vs::PRIVILEGE_SESSION_ID => array($id),
+			vs::PRIVILEGE_APP_TOKEN => array($id)
 		);
 		if($dbAppToken->getSessionPrivileges())
 		{
-			$privilegesArray = array_merge_recursive($privilegesArray, ks::parsePrivileges($dbAppToken->getSessionPrivileges()));
+			$privilegesArray = array_merge_recursive($privilegesArray, vs::parsePrivileges($dbAppToken->getSessionPrivileges()));
 		}
 
 		if($sessionPrivileges)
 		{
-			$parsedAppSessionPrivilegesArray = ks::parsePrivileges($sessionPrivileges);
-			$additionalAllowedSessionPrivliges = ks::retrieveAllowedAppSessionPrivileges($privilegesArray, $parsedAppSessionPrivilegesArray);
+			$parsedAppSessionPrivilegesArray = vs::parsePrivileges($sessionPrivileges);
+			$additionalAllowedSessionPrivliges = vs::retrieveAllowedAppSessionPrivileges($privilegesArray, $parsedAppSessionPrivilegesArray);
 			$privilegesArray = array_merge_recursive($privilegesArray, $additionalAllowedSessionPrivliges);
 		}
 
-		$privileges = ks::buildPrivileges($privilegesArray);
+		$privileges = vs::buildPrivileges($privilegesArray);
 		
-		$ks = kSessionUtils::createKSession($partnerId, $secret, $userId, $expiry, $type, $privileges);
-		if(!$ks)
-			throw new KalturaAPIException(APIErrors::START_SESSION_ERROR, $partnerId);
+		$vs = vSessionUtils::createVSession($partnerId, $secret, $userId, $expiry, $type, $privileges);
+		if(!$vs)
+			throw new VidiunAPIException(APIErrors::START_SESSION_ERROR, $partnerId);
 			
-		$sessionInfo = new KalturaSessionInfo();
-		$sessionInfo->ks = $ks->toSecureString();
+		$sessionInfo = new VidiunSessionInfo();
+		$sessionInfo->vs = $vs->toSecureString();
 		$sessionInfo->partnerId = $partnerId;
 		$sessionInfo->userId = $userId;
-		$sessionInfo->expiry = $ks->valid_until;
+		$sessionInfo->expiry = $vs->valid_until;
 		$sessionInfo->sessionType = $type;
 		$sessionInfo->privileges = $privileges;
 		

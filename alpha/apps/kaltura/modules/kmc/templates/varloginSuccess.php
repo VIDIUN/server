@@ -1,10 +1,10 @@
 <?php
 $service_url = requestUtils::getHost();
 $host = str_replace ( "http://" , "" , $service_url );
-if ( $host == "www.kaltura.com" ) $host = "1";
+if ( $host == "www.vidiun.com" ) $host = "1";
 
-$www_host = kConf::get('www_host');
-if (kConf::get('kmc_secured_login')) {
+$www_host = vConf::get('www_host');
+if (vConf::get('vmc_secured_login')) {
 	$flash_dir = 'https://';
 }
 else {
@@ -19,7 +19,7 @@ $beta_str = $beta ? "/beta/{$beta}" : "";
 // -----------------------------------------------------------------------------
 var _partner_id, _subp_id, _uid;
 
-function loginF( remMe , partner_id , subp_id ,  uid  ,  ks , screen_name , email  )
+function loginF( remMe , partner_id , subp_id ,  uid  ,  vs , screen_name , email  )
 {
 	var has_cookie = false;
 	if ( partner_id == null )
@@ -27,10 +27,10 @@ function loginF( remMe , partner_id , subp_id ,  uid  ,  ks , screen_name , emai
 		partner_id = getCookie ( "varpid" );
 		subp_id = getCookie ( "varsubpid" );
 		uid = getCookie ( "varuid" );
-		ks = getCookie ( "vplks" );
+		vs = getCookie ( "vplvs" );
 		screen_name = getCookie ("varscreen_name" );
 		// if any of the required params is null - return false and the login page will be displayed
-		if ( empty(partner_id) || empty(subp_id) || empty(uid) || empty(ks) ) return false;
+		if ( empty(partner_id) || empty(subp_id) || empty(uid) || empty(vs) ) return false;
 		
 		has_cookie = true;
 		
@@ -38,7 +38,7 @@ function loginF( remMe , partner_id , subp_id ,  uid  ,  ks , screen_name , emai
 	else
 	{
 	}	
-//	alert( partner_id + " | " +  subp_id + " | " +   uid + " | " + ks + " | " + remMe);
+//	alert( partner_id + " | " +  subp_id + " | " +   uid + " | " + vs + " | " + remMe);
 	_partner_id = partner_id;
 	_subp_id = subp_id;
 	_uid = uid;
@@ -51,11 +51,11 @@ function loginF( remMe , partner_id , subp_id ,  uid  ,  ks , screen_name , emai
 		setCookie ( "varpid" , partner_id , exp, path);
 		setCookie ( "varsubpid" , subp_id , exp, path);
 		setCookie ( "varuid" , uid , exp, path);
-		setCookie ( "vplks" , ks , exp, path);
+		setCookie ( "vplvs" , vs , exp, path);
 		setCookie ( "varscreen_name" , screen_name , exp, path);
 	}
-	url = "<?php echo $service_url ?>/index.php/kmc/varpartnerlist<?php echo $beta_str ?>?partner_id=" + partner_id + "&subp_id=" + subp_id + "&uid=" + 
-		uid + "&ks=" + ks + "&screen_name=" + screen_name + "&email=" + email  ;
+	url = "<?php echo $service_url ?>/index.php/vmc/varpartnerlist<?php echo $beta_str ?>?partner_id=" + partner_id + "&subp_id=" + subp_id + "&uid=" + 
+		uid + "&vs=" + vs + "&screen_name=" + screen_name + "&email=" + email  ;
 //	alert ( url );
 	window.location = url;
 
@@ -70,14 +70,14 @@ function closeLoginF()
 
 function gotoSignup()
 {
-	window.location = "<?php echo $service_url ?>/index.php/kmc/signup";
+	window.location = "<?php echo $service_url ?>/index.php/vmc/signup";
 }
 
 // -->
 </script>
 
 <style>
-#kmcHeader img { width:162px; height: 32px; }
+#vmcHeader img { width:162px; height: 32px; }
    body { background-color:#272929 !important; background-image:none !important;}
    div.loginDesc { text-align:center; font-size:16px; font-weight:bold; color:white;}
 #login { width:458px; }
@@ -90,24 +90,24 @@ body { background-image:none !important; }
  */
 </style>
 
-<form id="form1" action="<?php echo $service_url ?>/index.php/kmc/varpartnerlist<?php echo $beta_str ?>" method="post">
+<form id="form1" action="<?php echo $service_url ?>/index.php/vmc/varpartnerlist<?php echo $beta_str ?>" method="post">
 	<input type="hidden" name="_partner_id">
 	<input type="hidden" name="_subp_id">
 	<input type="hidden" name="_uid">
-	<input type="hidden" name="_ks">
+	<input type="hidden" name="_vs">
 </form>	
 
 <div class="login">
-	<div id="kmcHeader">
-     <img src="<?php echo $service_url; ?>/lib/images/kmc/varpages_logo.png" alt="Kaltura CMS" />
-	</div><!-- end kmcHeader -->
+	<div id="vmcHeader">
+     <img src="<?php echo $service_url; ?>/lib/images/vmc/varpages_logo.png" alt="Vidiun CMS" />
+	</div><!-- end vmcHeader -->
 	<div id="login">
 		<div class="loginDesc">
 			Here you can login to your publisher management console and access your sub-publisher accounts	
 		</div>
 		
 		<div class="wrapper">
-			<div id="kaltura_flash_obj"></div>
+			<div id="vidiun_flash_obj"></div>
 		</div><!-- end wrapper -->
 	</div><!-- end #login -->
 </div>	
@@ -132,10 +132,10 @@ body { background-image:none !important; }
 			bgcolor: "#272929",
 			quality: "high",
 			wmode: "window" ,
-			movie: "<?php echo $flash_dir ?>/kmc/login/<?php echo $kmc_login_version ?>/login.swf"
+			movie: "<?php echo $flash_dir ?>/vmc/login/<?php echo $vmc_login_version ?>/login.swf"
 		};
-		swfobject.embedSWF("<?php echo $flash_dir ?>/kmc/login/<?php echo $kmc_login_version ?>/login.swf", 
-			"kaltura_flash_obj", "358", "350", "9.0.0", false, flashVars , params);
+		swfobject.embedSWF("<?php echo $flash_dir ?>/vmc/login/<?php echo $vmc_login_version ?>/login.swf", 
+			"vidiun_flash_obj", "358", "350", "9.0.0", false, flashVars , params);
 	}
 
 </script>

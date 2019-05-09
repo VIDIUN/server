@@ -3,22 +3,22 @@
  * @package plugins.audit
  * @subpackage api.objects
  */
-class KalturaAuditTrailChangeInfo extends KalturaAuditTrailInfo
+class VidiunAuditTrailChangeInfo extends VidiunAuditTrailInfo
 {
 	/**
-	 * @var KalturaAuditTrailChangeItemArray
+	 * @var VidiunAuditTrailChangeItemArray
 	 */
 	public $changedItems;
 
 	/**
-	 * @param kAuditTrailChangeInfo $dbAuditTrail
+	 * @param vAuditTrailChangeInfo $dbAuditTrail
 	 * @param array $propsToSkip
-	 * @return kAuditTrailInfo
+	 * @return vAuditTrailInfo
 	 */
 	public function toObject($auditTrailInfo = null, $propsToSkip = array())
 	{
 		if(is_null($auditTrailInfo))
-			$auditTrailInfo = new kAuditTrailChangeInfo();
+			$auditTrailInfo = new vAuditTrailChangeInfo();
 			
 		$auditTrailInfo = parent::toObject($auditTrailInfo, $propsToSkip);
 		$auditTrailInfo->setChangedItems($this->changedItems->toObjectArray());
@@ -27,13 +27,13 @@ class KalturaAuditTrailChangeInfo extends KalturaAuditTrailInfo
 	}
 
 	/**
-	 * @param kAuditTrailChangeInfo $auditTrailInfo
+	 * @param vAuditTrailChangeInfo $auditTrailInfo
 	 */
-	public function doFromObject($auditTrailInfo, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($auditTrailInfo, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($auditTrailInfo, $responseProfile);
 		
 		if($this->shouldGet('changedItems', $responseProfile))
-			$this->changedItems = KalturaAuditTrailChangeItemArray::fromDbArray($auditTrailInfo->getChangedItems());
+			$this->changedItems = VidiunAuditTrailChangeItemArray::fromDbArray($auditTrailInfo->getChangedItems());
 	}
 }

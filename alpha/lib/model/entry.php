@@ -14,7 +14,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	protected $old_categories;
 	protected $is_categories_modified = false;
 	protected $is_categories_names_modified = false;
-	protected $creator_kuser_id = null;
+	protected $creator_vuser_id = null;
 	protected $playsViewsData = null;
 	protected $playsViewsDataInitialized = false;
 	
@@ -34,7 +34,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	const ENTRY_SORT_RANK = 4;
 	const ENTRY_SORT_MEDIA_TYPE = 5;
 	const ENTRY_SORT_NAME = 6;
-	const ENTRY_SORT_KUSER_SCREEN_NAME = 7;
+	const ENTRY_SORT_VUSER_SCREEN_NAME = 7;
 
 	// NOTE - CHANGES MUST BE MADE TO LAYOUT.PHP JS PART AS WELL
 	const ENTRY_MEDIA_TYPE_AUTOMATIC = -1;
@@ -45,7 +45,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	const ENTRY_MEDIA_TYPE_HTML = 4;
 	const ENTRY_MEDIA_TYPE_AUDIO = 5;
 	const ENTRY_MEDIA_TYPE_SHOW = 6;
-	const ENTRY_MEDIA_TYPE_SHOW_XML = 7; // for the kplayer: the data contains the xml itself and not a url
+	const ENTRY_MEDIA_TYPE_SHOW_XML = 7; // for the vplayer: the data contains the xml itself and not a url
 	const ENTRY_MEDIA_TYPE_BUBBLES = 9;
 	const ENTRY_MEDIA_TYPE_XML = 10;
 	const ENTRY_MEDIA_TYPE_DOCUMENT = 11;
@@ -76,14 +76,14 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	const ENTRY_MEDIA_SOURCE_NYPL = 11;
 	const ENTRY_MEDIA_SOURCE_CURRENT = 12;
 	const ENTRY_MEDIA_SOURCE_MEDIA_COMMONS = 13;
-	const ENTRY_MEDIA_SOURCE_KALTURA = 20;
-	const ENTRY_MEDIA_SOURCE_KALTURA_USER_CLIPS = 21;
+	const ENTRY_MEDIA_SOURCE_VIDIUN = 20;
+	const ENTRY_MEDIA_SOURCE_VIDIUN_USER_CLIPS = 21;
 	const ENTRY_MEDIA_SOURCE_ARCHIVE_ORG = 22;
-	const ENTRY_MEDIA_SOURCE_KALTURA_PARTNER = 23;
+	const ENTRY_MEDIA_SOURCE_VIDIUN_PARTNER = 23;
 	const ENTRY_MEDIA_SOURCE_METACAFE = 24;
-	const ENTRY_MEDIA_SOURCE_KALTURA_QA = 25;
-	const ENTRY_MEDIA_SOURCE_KALTURA_KSHOW = 26;
-	const ENTRY_MEDIA_SOURCE_KALTURA_PARTNER_KSHOW = 27;
+	const ENTRY_MEDIA_SOURCE_VIDIUN_QA = 25;
+	const ENTRY_MEDIA_SOURCE_VIDIUN_VSHOW = 26;
+	const ENTRY_MEDIA_SOURCE_VIDIUN_PARTNER_VSHOW = 27;
 	const ENTRY_MEDIA_SOURCE_SEARCH_PROXY = 28;
 	const ENTRY_MEDIA_SOURCE_AKAMAI_LIVE = 29;
 	const ENTRY_MEDIA_SOURCE_MANUAL_LIVE_STREAM = 30;
@@ -217,10 +217,10 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	// don't stop until a unique hash is created for this object
 	private static function calculateId ( )
 	{
-		$dc = kDataCenterMgr::getCurrentDc();
+		$dc = vDataCenterMgr::getCurrentDc();
 		for ( $i = 0 ; $i < 10 ; ++$i)
 		{
-			$id = $dc["id"].'_'.kString::generateStringId();
+			$id = $dc["id"].'_'.vString::generateStringId();
 			$existing_object = entryPeer::retrieveByPKNoFilter( $id );
 			
 			if ( ! $existing_object ) return $id;
@@ -260,27 +260,27 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 
 		if ( $this->type == entryType::MIX )
 		{
-			// some of the properties should be copied to the kshow
-			$kshow = $this->getkshow();
-			if ( $kshow )
+			// some of the properties should be copied to the vshow
+			$vshow = $this->getvshow();
+			if ( $vshow )
 			{
 				$modified  = false;
-				if ( $kshow->getRank() != $this->getRank() )
+				if ( $vshow->getRank() != $this->getRank() )
 				{
-					$kshow->setRank( $this->getRank() );
+					$vshow->setRank( $this->getRank() );
 					$modified = true;
 				}
-				if ( $kshow->getLengthInMsecs() != $this->getLengthInMsecs() )
+				if ( $vshow->getLengthInMsecs() != $this->getLengthInMsecs() )
 				{
-					$kshow->setLengthInMsecs ( $this->getLengthInMsecs() );
+					$vshow->setLengthInMsecs ( $this->getLengthInMsecs() );
 					$modified = true;
 				}
 
-				if ( $modified ) $kshow->save();
+				if ( $modified ) $vshow->save();
 			}
 			else
 			{
-				$this->log( "entry [" . $this->getId() . "] does not have a real kshow with id [" . $this->getKshowId() . "]", Propel::LOG_WARNING );
+				$this->log( "entry [" . $this->getId() . "] does not have a real vshow with id [" . $this->getVshowId() . "]", Propel::LOG_WARNING );
 			}
 		}
 
@@ -291,7 +291,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			mySearchUtils::setDisplayInSearch($this);
 		}
 			
-		ktagword::updateAdminTags($this);
+		vtagword::updateAdminTags($this);
 		
 		// same for puserId ...
 		$this->getPuserId();
@@ -330,7 +330,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 				}
 				catch(Exception $e)
 				{
-					KalturaLog::err($e->getMessage());
+					VidiunLog::err($e->getMessage());
 				}
 			}
 		}
@@ -437,7 +437,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		for ($version = 100000; $version <= $current_version; $version++ )
 		{
 			$version_sync_key = $this->getSyncKey( self::FILE_SYNC_ENTRY_SUB_TYPE_DATA , $version);
-			$local_file_sync = kFileSyncUtils::getLocalFileSyncForKey($version_sync_key, false);
+			$local_file_sync = vFileSyncUtils::getLocalFileSyncForKey($version_sync_key, false);
 			if ($local_file_sync)
 			{
 				$result = array();
@@ -448,7 +448,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 				// third - time
 				$result[] = file_exists($local_file_sync->getFullPath()) ? filemtime ( $local_file_sync->getFullPath()) : false;
 				// forth - version
-				$result[] = substr( kFile::getFileNameNoExtension ( $local_file_sync->getFilePath() ) , strlen ($this->getId().'_') );
+				$result[] = substr( vFile::getFileNameNoExtension ( $local_file_sync->getFilePath() ) , strlen ($this->getId().'_') );
 				$results[] = $result;
 			}
 		}
@@ -476,7 +476,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 
 	public function getLastVersion()
 	{
-		$version = kFile::getFileNameNoExtension ( $this->getData() );
+		$version = vFile::getFileNameNoExtension ( $this->getData() );
 		return $version;
 	}
 
@@ -603,7 +603,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		elseif ( $sub_type == self::FILE_SYNC_ENTRY_SUB_TYPE_DOWNLOAD )
 		{
 			// in this case the $version  is used as the format
-			$basename = kFile::getFileNameNoExtension ( $this->getData() );
+			$basename = vFile::getFileNameNoExtension ( $this->getData() );
 			$path = myContentStorage::getGeneralEntityPath("entry/download", $this->getIntId(), $this->getId(), $basename);
 			$download_path = $path.".$version";
 			 $res =  $download_path;
@@ -840,7 +840,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		if(!$sync_key)
 			return null;
 			
-		return kFileSyncUtils::getReadyFileSyncForKey ( $sync_key , true , false );
+		return vFileSyncUtils::getReadyFileSyncForKey ( $sync_key , true , false );
 	}
 	
 	// return the file
@@ -891,7 +891,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		// if did not return anything, probably due to missing fileSync
 		// missing fileSync - if conversion was not done yet
 		$key = $this->getSyncKey(self::FILE_SYNC_ENTRY_SUB_TYPE_DOWNLOAD, $format);
-		return kFileSyncUtils::getLocalFilePathForKey($key);
+		return vFileSyncUtils::getLocalFilePathForKey($key);
 	}
 	
 /*
@@ -928,7 +928,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	/**
 	 * The method returns the var_dumpd_options, in case the entry was created via clone operation.
 	 * Otherwise; it returns null
-	 * @return null|array kBaseEntryCloneOptionComponent
+	 * @return null|array vBaseEntryCloneOptionComponent
      */
 	public function getCloneOptions()
 	{
@@ -960,7 +960,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			if ( ! $version || $version == -1 ) $version = null;
 			
 			$sync_key = $this->getSyncKey( self::FILE_SYNC_ENTRY_SUB_TYPE_DATA , $version );
-			$content = kFileSyncUtils::file_get_contents( $sync_key , true , false ); // don't be strict when fetching this content
+			$content = vFileSyncUtils::file_get_contents( $sync_key , true , false ); // don't be strict when fetching this content
 				
 			if ( $content )
 			{
@@ -1023,7 +1023,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 				$this->save();
 				
 				$sync_key = $this->getSyncKey( self::FILE_SYNC_ENTRY_SUB_TYPE_DATA );
-				kFileSyncUtils::file_put_contents( $sync_key , $v , $strict );
+				vFileSyncUtils::file_put_contents( $sync_key , $v , $strict );
 			}
 		}
 	}
@@ -1070,7 +1070,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 
 	public function getThumbnailUrl($version = null, $protocol = null)
 	{
-		if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_DISABLE_KMC_DRILL_DOWN_THUMB_RESIZE, $this->getPartnerId()))
+		if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_DISABLE_VMC_DRILL_DOWN_THUMB_RESIZE, $this->getPartnerId()))
 		{
 			$subType = entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA;
 			if($this->getType() == entryType::MEDIA_CLIP && $this->getMediaType() != entry::ENTRY_MEDIA_TYPE_IMAGE)
@@ -1086,33 +1086,33 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			{
 				case StorageProfile::STORAGE_SERVE_PRIORITY_EXTERNAL_ONLY:
 					$serveRemote = true;
-					$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
+					$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
 					if(!$fileSync)
 						return null;
 					
 					break;
 				
 				case StorageProfile::STORAGE_SERVE_PRIORITY_EXTERNAL_FIRST:
-					$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
+					$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
 					if($fileSync)
 						$serveRemote = true;
 					
 					break;
 				
-				case StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_FIRST:
-					$fileSync = kFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
+				case StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_FIRST:
+					$fileSync = vFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
 					if($fileSync)
 						break;
 						
-					$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
+					$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
 					if(!$fileSync)
 						return null;
 					
 					$serveRemote = true;
 					break;
 				
-				case StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY:
-					$fileSync = kFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
+				case StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY:
+					$fileSync = vFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
 					if(!$fileSync)
 						return null;
 					
@@ -1200,7 +1200,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	public function setTags($tags , $update_db = true )
 	{
 		if ($this->tags !== $tags) {
-			$tags = ktagword::updateTags($this->tags, $tags , $update_db );
+			$tags = vtagword::updateTags($this->tags, $tags , $update_db );
 			parent::setTags( trim($tags));
 		}
 	}
@@ -1210,7 +1210,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		if ( $tags === null ) return ;
 		
 		if ( $tags == "" || $this->getAdminTags() !== $tags ) {
-			parent::setAdminTags(trim(ktagword::fixAdminTags( $tags)));
+			parent::setAdminTags(trim(vtagword::fixAdminTags( $tags)));
 		}
 	}
 	
@@ -1219,7 +1219,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	 */
 	public function indexToSearchIndex()
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($this));
 	}
 	
 	/**
@@ -1236,17 +1236,17 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			$createdAt = $categoryEntry->getCreatedAt( null ); // Passing null in order to get a numerical Unix Time Stamp instead of a string
 			
 			// Get the dyn. attrib. name in the format of: cat_{cat id}_createdAt (e.g.: cat_123_createdAt)
-			$dynAttribName = kCategoryEntryAdvancedFilter::getCategoryCreatedAtDynamicAttributeName( $categoryEntry->getCategoryId() );
+			$dynAttribName = vCategoryEntryAdvancedFilter::getCategoryCreatedAtDynamicAttributeName( $categoryEntry->getCategoryId() );
 			
 			$dynamicAttributes[$dynAttribName] = $createdAt;
 		}
 
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaDynamicAttributesContributer');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunDynamicAttributesContributer');
 		foreach($pluginInstances as $pluginName => $pluginInstance) {
 			try {
 				$dynamicAttributes += $pluginInstance->getDynamicAttributes($this);
 			} catch (Exception $e) {
-				KalturaLog::err($e->getMessage());
+				VidiunLog::err($e->getMessage());
 				continue;
 			}
 		}
@@ -1261,9 +1261,9 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			$maxCategoriesPerEntry = entry::MAX_CATEGORIES_PER_ENTRY_DISABLE_LIMIT_FEATURE;
 			
 		// When batch move entry between categories it's adding the new category before deleting the old one
-		if(kCurrentContext::$ks_partner_id == Partner::BATCH_PARTNER_ID && kCurrentContext::$ks_object)
+		if(vCurrentContext::$vs_partner_id == Partner::BATCH_PARTNER_ID && vCurrentContext::$vs_object)
 		{
-			$batchJobType = kCurrentContext::$ks_object->getPrivilegeValue(ks::PRIVILEGE_BATCH_JOB_TYPE);
+			$batchJobType = vCurrentContext::$vs_object->getPrivilegeValue(vs::PRIVILEGE_BATCH_JOB_TYPE);
 			if(intval($batchJobType) == BatchJobType::MOVE_CATEGORY_ENTRIES)
 			{
 				$maxCategoriesPerEntry *= 2;
@@ -1289,7 +1289,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		
 		$maxCategoriesPerEntry = $this->getMaxCategoriesPerEntry();
 		if (count($newCats) > $maxCategoriesPerEntry)
-			throw new kCoreException("Max number of allowed entries per category was reached", kCoreException::MAX_CATEGORIES_PER_ENTRY, $maxCategoriesPerEntry);
+			throw new vCoreException("Max number of allowed entries per category was reached", vCoreException::MAX_CATEGORIES_PER_ENTRY, $maxCategoriesPerEntry);
 
 		// remove duplicates
 		$newCats = array_unique($newCats);
@@ -1311,7 +1311,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		
 		$maxCategoriesPerEntry = $this->getMaxCategoriesPerEntry();
 		if (count($newCats) > $maxCategoriesPerEntry)
-			throw new kCoreException("Max number of allowed entries per category was reached", kCoreException::MAX_CATEGORIES_PER_ENTRY, $maxCategoriesPerEntry);
+			throw new vCoreException("Max number of allowed entries per category was reached", vCoreException::MAX_CATEGORIES_PER_ENTRY, $maxCategoriesPerEntry);
 
 		// remove duplicates
 		$newCats = array_unique($newCats);
@@ -1400,27 +1400,27 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		return $this->getUpdatedAt( null );
 	}
 
-	public function getFormattedCreatedAt( $format = dateUtils::KALTURA_FORMAT )
+	public function getFormattedCreatedAt( $format = dateUtils::VIDIUN_FORMAT )
 	{
-		return dateUtils::formatKalturaDate( $this , 'getCreatedAt' , $format );
+		return dateUtils::formatVidiunDate( $this , 'getCreatedAt' , $format );
 	}
 
-	public function getFormattedUpdatedAt( $format = dateUtils::KALTURA_FORMAT )
+	public function getFormattedUpdatedAt( $format = dateUtils::VIDIUN_FORMAT )
 	{
-		return dateUtils::formatKalturaDate( $this , 'getUpdatedAt' , $format );
+		return dateUtils::formatVidiunDate( $this , 'getUpdatedAt' , $format );
 	}
 
 	public function getAppearsIn ( )
 	{
 		if ( $this->appears_in == NULL )
 		{
-			if ( $this->getkshow() )
+			if ( $this->getvshow() )
 			{
-				$this->setAppearsIn ( $this->getkshow()->getName() );
+				$this->setAppearsIn ( $this->getvshow()->getName() );
 			}
 			else
 			{
-				return ""; // strange - no kshow ! must be a dangling entry
+				return ""; // strange - no vshow ! must be a dangling entry
 			}
 		}
 
@@ -1471,7 +1471,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 
 		if ( $version <= 0  ) $version=null;
 		$sync_key = $this->getSyncKey( self::FILE_SYNC_ENTRY_SUB_TYPE_DATA , $version );
-		$content = kFileSyncUtils::file_get_contents( $sync_key , true , false ); // don't be strict when fetching metadata
+		$content = vFileSyncUtils::file_get_contents( $sync_key , true , false ); // don't be strict when fetching metadata
 		if ( $content )
 			return $content;
 		else
@@ -1488,7 +1488,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	Returns the number of bytes written to disk
  */
 	// TODO - is this really what should be returned ??
-	public function setMetadata ( $kshow , $content , $override_existing=true , $total_duration = null , $specific_version = null )
+	public function setMetadata ( $vshow , $content , $override_existing=true , $total_duration = null , $specific_version = null )
 	{
 		if ( $this->getMediaType() != entry::ENTRY_MEDIA_TYPE_SHOW )
 		{
@@ -1496,7 +1496,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		}
 
 		// TODO - better to call this with slight modifications
-		//myMetadataUtils::setMetadata ($content, $kshow, $this , $override_existing );
+		//myMetadataUtils::setMetadata ($content, $vshow, $this , $override_existing );
 		if ( $specific_version == null )
 		{
 			// 	increment the counter of the file
@@ -1508,13 +1508,13 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 
 		$sync_key = $this->getSyncKey ( self::FILE_SYNC_ENTRY_SUB_TYPE_DATA , $specific_version );
 		
-		if ( $override_existing || ! kFileSyncUtils::file_exists( $sync_key ,false )  )
+		if ( $override_existing || ! vFileSyncUtils::file_exists( $sync_key ,false )  )
 		{
 			$duration = $total_duration ? $total_duration : myMetadataUtils::getDuration ( $content );
 			$this->setLengthInMsecs ( $duration * 1000 );
 			$total_duration = null;
 			$editor_type = null;
-			$version = myContentStorage::getVersion( kFileSyncUtils::getReadyLocalFilePathForKey ( $sync_key ) );
+			$version = myContentStorage::getVersion( vFileSyncUtils::getReadyLocalFilePathForKey ( $sync_key ) );
 			$fixed_content = myFlvStreamer::fixMetadata( $content , $version, $total_duration , $editor_type);
 			
 			$this->setModifiedAt(time());		// update the modified_at date
@@ -1522,14 +1522,14 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			
 			$sync_key = $this->getSyncKey ( self::FILE_SYNC_ENTRY_SUB_TYPE_DATA , $version );
 			// TODO: here we assume we are UPDATING an exising version of the file - make sure all the following functions are tolerant.
-			kFileSyncUtils::file_put_contents( $sync_key , $fixed_content , false ); // replaced__setFileContent
+			vFileSyncUtils::file_put_contents( $sync_key , $fixed_content , false ); // replaced__setFileContent
 
 			// update the roughcut_entry table
-			if  ( $kshow != null ) $kshow_id = $kshow->getId();
-			else $kshow_id = $this->getKshowId();
+			if  ( $vshow != null ) $vshow_id = $vshow->getId();
+			else $vshow_id = $this->getVshowId();
 
 			$all_entries_for_roughcut = myMetadataUtils::getAllEntries ( $fixed_content );
-			roughcutEntry::updateRoughcut( $this->getId() , $version , $kshow_id  , $all_entries_for_roughcut );
+			roughcutEntry::updateRoughcut( $this->getId() , $version , $vshow_id  , $all_entries_for_roughcut );
 
 			return ;
 		}
@@ -1552,7 +1552,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			$this->setData ( parent::getData() );
 		}
 
-		$file_name = kFileSyncUtils::getLocalFilePathForKey($this->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA, $specific_version)); // replaced__getDataPath
+		$file_name = vFileSyncUtils::getLocalFilePathForKey($this->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA, $specific_version)); // replaced__getDataPath
 		
 		$duration = $total_duration ? $total_duration : myMetadataUtils::getDuration ( $content );
 		$this->setLengthInMsecs ( $duration * 1000 );
@@ -1564,7 +1564,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		$this->save();
 		
 		$sync_key = $this->getSyncKey ( self::FILE_SYNC_ENTRY_SUB_TYPE_DATA , $version );
-		kFileSyncUtils::file_put_contents( $sync_key , $fixed_content , false ); // replaced__setFileContent
+		vFileSyncUtils::file_put_contents( $sync_key , $fixed_content , false ); // replaced__setFileContent
 		
 		return $fixed_content;
 	}
@@ -1642,9 +1642,9 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		$new_path = $content . $this->getDataPath( ); //replaced__getDataPath
 
 		// make a copy
-		kFile::moveFile( $path , $new_path , true , true );
+		vFile::moveFile( $path , $new_path , true , true );
 */
-		kFileSyncUtils::copy( $source_syc_key , $target_syc_key );
+		vFileSyncUtils::copy( $source_syc_key , $target_syc_key );
 		
 		$this->save();
 		// return the new version
@@ -1676,8 +1676,8 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		}
 		else
 		{
-			$kuser = $this->getkuser();
-			return ( $kuser ? $kuser->getScreenName() : "" );
+			$vuser = $this->getvuser();
+			return ( $vuser ? $vuser->getScreenName() : "" );
 		}
 	}
 
@@ -1688,15 +1688,15 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		{
 			case moderation::MODERATION_STATUS_APPROVED:
 				// a new notification that is sent when an entry was founc to be ok after moderation
-				myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE , $this );
+				myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE , $this );
 				break;
 			case moderation::MODERATION_STATUS_BLOCK:
-				myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_BLOCK , $this->getid());
+				myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_BLOCK , $this->getid());
 				break;
 			case moderation::MODERATION_STATUS_DELETE:
 				// physical disk deletion
 				myEntryUtils::deleteEntry($this);
-				myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_BLOCK , $this->getid());
+				myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_BLOCK , $this->getid());
 				break;
 			case moderation::MODERATION_STATUS_PENDING:
 //				$this->setStatus(entryStatus::MODERATE);
@@ -1727,7 +1727,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	{
 		if ( $this->getType() != entryType::MIX ) return null;
 		$res = $this->getFromCustomData( "editor_type" );
-		if ( $res == null ) return "Keditor"; // no value means Keditor == advanced
+		if ( $res == null ) return "Veditor"; // no value means Veditor == advanced
 		return $res;
 	}
 	
@@ -1748,10 +1748,10 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	public function setModerate ( $should_moderate )	{		$this->putInCustomData ( "moderate" , $should_moderate );	}
 	public function getModerate (  )	{		return $this->getFromCustomData( "moderate" );	}
 	
-	public function resetUpdateWhenReady ( )	{		$this->putInCustomData ( "current_kshow_version" , null );	}
-	public function setUpdateWhenReady ( $current_kshow_version )	{		$this->putInCustomData ( "current_kshow_version" , $current_kshow_version );	}
+	public function resetUpdateWhenReady ( )	{		$this->putInCustomData ( "current_vshow_version" , null );	}
+	public function setUpdateWhenReady ( $current_vshow_version )	{		$this->putInCustomData ( "current_vshow_version" , $current_vshow_version );	}
 
-	public function getUpdateWhenReady (  )	{		return $this->getFromCustomData( "current_kshow_version" );	}
+	public function getUpdateWhenReady (  )	{		return $this->getFromCustomData( "current_vshow_version" );	}
 
 	// will be set if the entry has a real download path (
 	public function setHasDownload ( $v )	{	$this->putInCustomData ( "hasDownload" , $v);	}
@@ -1786,7 +1786,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	public function getIsTemporary (  )		{	return $this->getFromCustomData( "isTemporary", null, false );	}
 
 	public function setReplacementOptions ($v)  {	$this->putInCustomData ( "replacementOptions" , $v );	}
-	public function getReplacementOptions (  )	{	return $this->getFromCustomData( "replacementOptions", null, new kEntryReplacementOptions() );	}
+	public function getReplacementOptions (  )	{	return $this->getFromCustomData( "replacementOptions", null, new vEntryReplacementOptions() );	}
 
 	public function setIsRecordedEntry( $v )                { $this->putInCustomData( "isRecordedEntry" , $v ); }
 	public function getIsRecordedEntry()                    { return $this->getFromCustomData( "isRecordedEntry", null, false ); }
@@ -1848,7 +1848,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	{
 		if(!$this->getParentEntryId())
 		{
-			KalturaLog::info("Attempting to get parent entry of entry " . $this->getId() . " but parent does not exist, returning original entry");
+			VidiunLog::info("Attempting to get parent entry of entry " . $this->getId() . " but parent does not exist, returning original entry");
 			return $this;
 		}
 		
@@ -1905,14 +1905,14 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		return $creatorPuserId;
 	}
 	
-	public function getCreatorKuserId ( )
+	public function getCreatorVuserId ( )
 	{
-		$creatorKuserId = $this->getFromCustomData( "creatorKuserId", null, null );
+		$creatorVuserId = $this->getFromCustomData( "creatorVuserId", null, null );
 
-		if(is_null($creatorKuserId))
-			return $this->getKuserId();
+		if(is_null($creatorVuserId))
+			return $this->getVuserId();
 		else
-			return $creatorKuserId;
+			return $creatorVuserId;
 	}
 	
 	public function setEntitledPusersEdit($v)
@@ -1936,33 +1936,33 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 				continue;
 			}
 
-			$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
-			$kuser = kuserPeer::getActiveKuserByPartnerAndUid($partnerId, $puserId);
-			if (!$kuser)
-				throw new kCoreException('Invalid user id', kCoreException::INVALID_USER_ID);
+			$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
+			$vuser = vuserPeer::getActiveVuserByPartnerAndUid($partnerId, $puserId);
+			if (!$vuser)
+				throw new vCoreException('Invalid user id', vCoreException::INVALID_USER_ID);
 
-			$entitledUserPuserEdit[$kuser->getId()] = $kuser->getPuserId();
+			$entitledUserPuserEdit[$vuser->getId()] = $vuser->getPuserId();
 		}
 
 		$this->putInCustomData ( "entitledUserPuserEdit" , serialize($entitledUserPuserEdit) );
 	}
 	
-	public function getEntitledKusersEdit()
+	public function getEntitledVusersEdit()
 	{
 		return implode(',', array_keys($this->getEntitledUserPuserEditArray()));
 	}
 
-	public function getEntitledKusersEditArray()
+	public function getEntitledVusersEditArray()
 	{
 		return array_keys($this->getEntitledUserPuserEditArray());
 	}
 	
-	public function getEntitledKusersView()
+	public function getEntitledVusersView()
 	{
 		return implode(',', array_keys($this->getEntitledPusersViewArray()));
 	}
 
-	public function getEntitledKusersViewArray()
+	public function getEntitledVusersViewArray()
 	{
 		return array_keys($this->getEntitledPusersViewArray());
 	}
@@ -1985,7 +1985,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		
 		$entitledPusersView = explode(',',$v);
 				
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 		foreach ($entitledPusersView as $puserId)
 		{
 			$puserId = trim($puserId);
@@ -1994,52 +1994,52 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 				continue;
 			}
 
-			$kuser = kuserPeer::getActiveKuserByPartnerAndUid($partnerId, $puserId);
-			if (!$kuser)
-				throw new kCoreException('Invalid user id', kCoreException::INVALID_USER_ID);
+			$vuser = vuserPeer::getActiveVuserByPartnerAndUid($partnerId, $puserId);
+			if (!$vuser)
+				throw new vCoreException('Invalid user id', vCoreException::INVALID_USER_ID);
 			
-			$entitledUserPuserView[$kuser->getId()] = $kuser->getPuserId();
+			$entitledUserPuserView[$vuser->getId()] = $vuser->getPuserId();
 		}
 				
 		$this->putInCustomData ( "entitledUserPuserView" , serialize($entitledUserPuserView) );
 	}
 	
-	public function isOwnerActionsAllowed($kuserId)
+	public function isOwnerActionsAllowed($vuserId)
 	{
-		$ownerKuserId = $this->getKuserId();
-		if($kuserId == $ownerKuserId)
+		$ownerVuserId = $this->getVuserId();
+		if($vuserId == $ownerVuserId)
 			return true;
 
-		$kuserKGroupIds = KuserKgroupPeer::retrieveKgroupIdsByKuserIds(array($kuserId));
-		return in_array($ownerKuserId, $kuserKGroupIds);
+		$vuserVGroupIds = VuserVgroupPeer::retrieveVgroupIdsByVuserIds(array($vuserId));
+		return in_array($ownerVuserId, $vuserVGroupIds);
 	}
 	
 	
-	private function isEntitledKuser ($kuserId, $entitledKuserArray)
+	private function isEntitledVuser ($vuserId, $entitledVuserArray)
 	{
-		if(in_array(trim($kuserId), $entitledKuserArray))
+		if(in_array(trim($vuserId), $entitledVuserArray))
 			return true;
 
-		$kuserKGroupIds = KuserKgroupPeer::retrieveKgroupIdsByKuserIds(array($kuserId));
-		foreach($kuserKGroupIds as $groupKId)
-			if(in_array($groupKId, $entitledKuserArray))
+		$vuserVGroupIds = VuserVgroupPeer::retrieveVgroupIdsByVuserIds(array($vuserId));
+		foreach($vuserVGroupIds as $groupVId)
+			if(in_array($groupVId, $entitledVuserArray))
 				return true;
 
-		return $this->isOwnerActionsAllowed($kuserId);
+		return $this->isOwnerActionsAllowed($vuserId);
 	}
 	
-	public function isEntitledKuserEdit($kuserId)
+	public function isEntitledVuserEdit($vuserId)
 	{
-		$entitledKuserArray = array_keys($this->getEntitledUserPuserEditArray());
+		$entitledVuserArray = array_keys($this->getEntitledUserPuserEditArray());
 		
-		return $this->isEntitledKuser($kuserId, $entitledKuserArray);
+		return $this->isEntitledVuser($vuserId, $entitledVuserArray);
 	}
 	
-	public function isEntitledKuserView($kuserId)
+	public function isEntitledVuserView($vuserId)
 	{
-		$entitledKuserArray = array_keys($this->getEntitledPusersViewArray());
+		$entitledVuserArray = array_keys($this->getEntitledPusersViewArray());
 
-		return $this->isEntitledKuser($kuserId, $entitledKuserArray);
+		return $this->isEntitledVuser($vuserId, $entitledVuserArray);
 	}
 
 	private function getEntitledUserPuserEditArray()
@@ -2053,7 +2053,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 
 	public function setEntitledPusersPublish($v)
 	{
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 		$entitledUserPuserPublish = array();
 	
 		$v = trim($v);
@@ -2075,11 +2075,11 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 				continue;
 			}
 			
-			$kuser = kuserPeer::getActiveKuserByPartnerAndUid($partnerId, $puserId);
-			if (!$kuser)
-				throw new kCoreException('Invalid user id', kCoreException::INVALID_USER_ID);
+			$vuser = vuserPeer::getActiveVuserByPartnerAndUid($partnerId, $puserId);
+			if (!$vuser)
+				throw new vCoreException('Invalid user id', vCoreException::INVALID_USER_ID);
 			
-			$entitledUserPuserPublish[$kuser->getId()] = $kuser->getPuserId();
+			$entitledUserPuserPublish[$vuser->getId()] = $vuser->getPuserId();
 		}
 		$this->putInCustomData ( "entitledUserPuserPublish" , serialize($entitledUserPuserPublish) );
 	}
@@ -2102,12 +2102,12 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		return unserialize($entitledUserPuserView);
 	}
 	
-	public function getEntitledKusersPublish()
+	public function getEntitledVusersPublish()
 	{
 		return implode(',', array_keys($this->getEntitledPusersPublishArray()));
 	}
 
-	public function getEntitledKusersPublishArray()
+	public function getEntitledVusersPublishArray()
 	{
 		$entitledUserPuserPublish = $this->getFromCustomData( "entitledUserPuserPublish", null, 0 );
 		if(!$entitledUserPuserPublish)
@@ -2126,18 +2126,18 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		return implode(',', $this->getEntitledPusersViewArray());
 	}
 	
-	public function isEntitledKuserPublish($kuserId, $useUserGroups = true)
+	public function isEntitledVuserPublish($vuserId, $useUserGroups = true)
 	{
-		$entitledKusersArray = explode(',', $this->getEntitledKusersPublish());
-		if(in_array(trim($kuserId), $entitledKusersArray))
+		$entitledVusersArray = explode(',', $this->getEntitledVusersPublish());
+		if(in_array(trim($vuserId), $entitledVusersArray))
 			return true;
 
 		if($useUserGroups == true)
 		{
-			$kuserKGroupIds = KuserKgroupPeer::retrieveKgroupIdsByKuserIds(array($kuserId));
-			foreach($kuserKGroupIds as $groupKId)
+			$vuserVGroupIds = VuserVgroupPeer::retrieveVgroupIdsByVuserIds(array($vuserId));
+			foreach($vuserVGroupIds as $groupVId)
 			{
-				if(in_array($groupKId, $entitledKusersArray))
+				if(in_array($groupVId, $entitledVusersArray))
 					return true;
 			}
 		}
@@ -2236,7 +2236,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 
 	public function incrementIsmVersion (  )
 	{
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getIsmVersion(), FileSyncObjectType::ENTRY, self::FILE_SYNC_ENTRY_SUB_TYPE_ISM);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getIsmVersion(), FileSyncObjectType::ENTRY, self::FILE_SYNC_ENTRY_SUB_TYPE_ISM);
 
 		$this->setIsmVersion($newVersion);
 		
@@ -2289,7 +2289,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	
 	public function updateImageDimensions ( )
 	{
-		$data = kFileSyncUtils::file_get_contents($this->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA));
+		$data = vFileSyncUtils::file_get_contents($this->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA));
 		list ($width, $height) = myFileConverter::getImageDimensionsFromString($data);
 		if ( $width )
 		{
@@ -2306,7 +2306,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			return array($this->getFromCustomData('width'), $this->getFromCustomData('height'));
 			
 		$syncKey = $asset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-		$dataPath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
+		$dataPath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
 		list ( $width , $height ) = $arr = myFileConverter::getVideoDimensions( $dataPath );
 		
 		if ( $width )
@@ -2418,7 +2418,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	}
 	public function getPuserId()
 	{
-		if (kCurrentContext::isApiV3Context())
+		if (vCurrentContext::isApiV3Context())
 			return parent::getPuserId();
 			
 		$puser_id = $this->getFromCustomData( "puserId" );
@@ -2428,9 +2428,9 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		}
 		else
 		{
-			if (  $this->getKuserId() )
+			if (  $this->getVuserId() )
 			{
-				$puser_id =	PuserKuserPeer::getPuserIdFromKuserId ( $this->getPartnerId(), $this->getKuserId() );
+				$puser_id =	PuserVuserPeer::getPuserIdFromVuserId ( $this->getPartnerId(), $this->getVuserId() );
 				$this->putInCustomData( "puserId" , $puser_id );
 				$this->m_puser_id = $puser_id;
 			}
@@ -2451,9 +2451,9 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	// will return the user's screen name - not the credit even if exists
 	public function getUserScreenName()
 	{
-		$kuser = $this->getkuser();
+		$vuser = $this->getvuser();
 		
-		return ( $kuser ? $kuser->getScreenName() : "" );
+		return ( $vuser ? $vuser->getScreenName() : "" );
 	}
 		
 	public function getSearchText()
@@ -2480,7 +2480,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			
 		$partner_id = $this->getPartnerId();
 		
-		// if res == 1 - only for partner , if == 2 - also for kaltura network
+		// if res == 1 - only for partner , if == 2 - also for vidiun network
 		return mySearchUtils::addPartner($partner_id, $prepared_text, $displayInSearch, $extra_invisible_data);
 	}
 	
@@ -2490,7 +2490,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		
 //		$dataPath = myContentStorage::getFSContentRootPath() . $this->getDataPath(); // replaced__getDataPath
 		
-//		kFileUtils::dumpFile($dataPath);
+//		vFileUtils::dumpFile($dataPath);
 
 		$sync_key = $this->getSyncKey( self::FILE_SYNC_ENTRY_SUB_TYPE_DATA );
 		
@@ -2511,7 +2511,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	{
 		return 0; // temp fix
 		$dataFileKey = $this->getSyncKey(self::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
-		$fileSync = kFileSyncUtils::getLocalFileSyncForKey($dataFileKey);
+		$fileSync = vFileSyncUtils::getLocalFileSyncForKey($dataFileKey);
 		if($fileSync && $fileSync->getStatus() == FileSync::FILE_SYNC_STATUS_READY) return $fileSync->getFileSize();
 		return "";
 	}
@@ -2572,7 +2572,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			
 		$offset = $this->getThumbOffset();
 		$duration = $this->getLengthInMsecs();
-		if (!$duration && $this->getSourceType() == EntrySourceType::KALTURA_RECORDED_LIVE)
+		if (!$duration && $this->getSourceType() == EntrySourceType::VIDIUN_RECORDED_LIVE)
 			$duration = $this->getRecordedLengthInMsecs();
 		
 		if(!$offset || $offset < 0)
@@ -2587,47 +2587,47 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		return myContentStorage::isTemplate( $thumb );
 	}
 	
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		// if we set the kuserId when not needed - this causes the kuser object to be reset (even if the joinKuser was done properly)
-		if ( self::getKuserId() == $v )  // same value - don't set for nothing
+		// if we set the vuserId when not needed - this causes the vuser object to be reset (even if the joinVuser was done properly)
+		if ( self::getVuserId() == $v )  // same value - don't set for nothing
 			return;
 
-		$this->setCreatorKuserPuserIdMigration();
+		$this->setCreatorVuserPuserIdMigration();
 		
-		parent::setKuserId($v);
+		parent::setVuserId($v);
 		
-		$kuser = $this->getKuser();
-		if ($kuser)
-			$this->setPuserId($kuser->getPuserId());
+		$vuser = $this->getVuser();
+		if ($vuser)
+			$this->setPuserId($vuser->getPuserId());
 	}
 	
 	/**
 	 *
-	 * Lazy migration for old entries for cases where creator Kuser and Puser id
+	 * Lazy migration for old entries for cases where creator Vuser and Puser id
 	 * wasn't initialized
 	 */
-	private function setCreatorKuserPuserIdMigration()
+	private function setCreatorVuserPuserIdMigration()
 	{
-		$creatorKuserId = $this->getFromCustomData( "creatorKuserId", null, null );
-		if (is_null($creatorKuserId) && !is_null($this->getKuserId()))
+		$creatorVuserId = $this->getFromCustomData( "creatorVuserId", null, null );
+		if (is_null($creatorVuserId) && !is_null($this->getVuserId()))
 		{
-			$this->setCreatorKuserId($this->getKuserId());
+			$this->setCreatorVuserId($this->getVuserId());
 		}
 	}
 	
-	public function setCreatorKuserId($v)
+	public function setCreatorVuserId($v)
 	{
-		$this->creator_kuser_id = $v;
-		// if we set the kuserId when not needed - this causes the kuser object to be reset (even if the joinKuser was done properly)
-		if ( $this->getFromCustomData( "creatorKuserId", null, null ) == $v )  // same value - don't set for nothing
+		$this->creator_vuser_id = $v;
+		// if we set the vuserId when not needed - this causes the vuser object to be reset (even if the joinVuser was done properly)
+		if ( $this->getFromCustomData( "creatorVuserId", null, null ) == $v )  // same value - don't set for nothing
 			return;
 
-		$this->putInCustomData ( "creatorKuserId" , $v );
-		$kuser = kuserPeer::retrieveByPk($v);
-		if ($kuser)
+		$this->putInCustomData ( "creatorVuserId" , $v );
+		$vuser = vuserPeer::retrieveByPk($v);
+		if ($vuser)
 		{
-			$this->setCreatorPuserId($kuser->getPuserId());
+			$this->setCreatorPuserId($vuser->getPuserId());
 		}
 	}
 	
@@ -2651,7 +2651,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		if (!$this->is_categories_modified)
 			return;
 		
-		if(!kEntitlementUtils::getEntitlementEnforcement() || !kEntitlementUtils::isKsPrivacyContextSet())
+		if(!vEntitlementUtils::getEntitlementEnforcement() || !vEntitlementUtils::isVsPrivacyContextSet())
 			categoryEntryPeer::syncEntriesCategories($this, $this->is_categories_names_modified);
 		
 		parent::save ();
@@ -2678,15 +2678,15 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			if (($this->getStartDate() && abs($this->getStartDate(null) - time()) <= 86400) ||
 				($this->getEndDate() &&   abs($this->getEndDate(null) - time())   <= 86400))
 			{
-				kApiCache::setConditionalCacheExpiry(600);
+				vApiCache::setConditionalCacheExpiry(600);
 			}
 			
 			// entry scheduling status changes within 10 min
 			if (($this->getStartDate() && abs($this->getStartDate(null) - time()) <= 600) ||
 				($this->getEndDate() &&   abs($this->getEndDate(null) - time())   <= 600))
 			{
-				kApiCache::setExpiry(60);
-				kApiCache::setConditionalCacheExpiry(60);
+				vApiCache::setExpiry(60);
+				vApiCache::setConditionalCacheExpiry(60);
 			}
 		}
 			
@@ -2820,8 +2820,8 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	
 	public function getRoughcutId()
 	{
-		$kshow = $this->getKshow();
-		return $kshow ? $kshow->getShowEntryId() : null;
+		$vshow = $this->getVshow();
+		return $vshow ? $vshow->getShowEntryId() : null;
 	}
 	
 	// get all related roughcuts where this entry appears
@@ -2952,7 +2952,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	
 		if($objectDeleted)
 		{
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			myStatisticsMgr::deleteEntry($this);
 			
 			$trackEntry = new TrackEntry();
@@ -2972,7 +2972,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			
 		if($objectUpdated)
 		{
-			kEventsManager::raiseEvent(new kObjectUpdatedEvent($this));
+			vEventsManager::raiseEvent(new vObjectUpdatedEvent($this));
 
 			if(!$objectDeleted && count($changedProperties))
 			{
@@ -3032,7 +3032,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		parent::postInsert($con);
 	
 		if (!$this->alreadyInSave)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($this));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($this));
 	}
 	
 	/*************** Bulk download functions - start ******************/
@@ -3071,12 +3071,12 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		
 		if ($this->getType() == entryType::MIX)
 		{
-			KalturaLog::err("Entry ID [".$this->getId()."] is of type mix. The batch job for flattening a mix is no longer supported");
+			VidiunLog::err("Entry ID [".$this->getId()."] is of type mix. The batch job for flattening a mix is no longer supported");
 		}
 		else
 		{
 			$err = '';
-			$job = kBusinessPreConvertDL::decideAddEntryFlavor($parentJob, $this->getId(), $flavorParamsId, $err);
+			$job = vBusinessPreConvertDL::decideAddEntryFlavor($parentJob, $this->getId(), $flavorParamsId, $err);
 		}
 		
 		if($job)
@@ -3109,7 +3109,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	 */
 	public function getSortName()
 	{
-		return kUTF8::str2int64($this->getName());
+		return vUTF8::str2int64($this->getName());
 	}
 		
 	/**
@@ -3298,52 +3298,52 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	
 	public function getPrivacyByContexts()
 	{
-		$privacyContextForEntry = kEntitlementUtils::getPrivacyContextForEntry($this);
-		$privacyContextForEntry = kEntitlementUtils::addPrivacyContextsPrefix( $privacyContextForEntry, $this->getPartnerId() );
+		$privacyContextForEntry = vEntitlementUtils::getPrivacyContextForEntry($this);
+		$privacyContextForEntry = vEntitlementUtils::addPrivacyContextsPrefix( $privacyContextForEntry, $this->getPartnerId() );
 
 		return implode(' ',$privacyContextForEntry);
 	}
 	
 	
-	public function getEntitledKusers()
+	public function getEntitledVusers()
 	{
-		$entitledKusersPublish = explode(',', $this->getEntitledKusersPublish());
-		$entitledKusersEdit = explode(',', $this->getEntitledKusersEdit());
-		$entitledKusersView = explode(',', $this->getEntitledKusersView());
+		$entitledVusersPublish = explode(',', $this->getEntitledVusersPublish());
+		$entitledVusersEdit = explode(',', $this->getEntitledVusersEdit());
+		$entitledVusersView = explode(',', $this->getEntitledVusersView());
 		
-		$entitledKusersNoPrivacyContext = array_merge($entitledKusersPublish, $entitledKusersEdit, $entitledKusersView);
-		$entitledKusersNoPrivacyContext[] = $this->getKuserId();
+		$entitledVusersNoPrivacyContext = array_merge($entitledVusersPublish, $entitledVusersEdit, $entitledVusersView);
+		$entitledVusersNoPrivacyContext[] = $this->getVuserId();
 		
-		foreach ($entitledKusersNoPrivacyContext as $key => $value)
+		foreach ($entitledVusersNoPrivacyContext as $key => $value)
 		{
 			if(!$value)
-				unset($entitledKusersNoPrivacyContext[$key]);
+				unset($entitledVusersNoPrivacyContext[$key]);
 		}
 				
-		$entitledKusers = array();
+		$entitledVusers = array();
 		
-		if(count(array_unique($entitledKusersNoPrivacyContext)))
-			$entitledKusers[kEntitlementUtils::ENTRY_PRIVACY_CONTEXT] = array_unique($entitledKusersNoPrivacyContext);
+		if(count(array_unique($entitledVusersNoPrivacyContext)))
+			$entitledVusers[vEntitlementUtils::ENTRY_PRIVACY_CONTEXT] = array_unique($entitledVusersNoPrivacyContext);
 		
 		$allCategoriesIds = $this->getAllCategoriesIds(true);
 		if (!count($allCategoriesIds))
-			return kEntitlementUtils::ENTRY_PRIVACY_CONTEXT . '_' . implode(' ' . kEntitlementUtils::ENTRY_PRIVACY_CONTEXT . '_', $entitledKusersNoPrivacyContext);
+			return vEntitlementUtils::ENTRY_PRIVACY_CONTEXT . '_' . implode(' ' . vEntitlementUtils::ENTRY_PRIVACY_CONTEXT . '_', $entitledVusersNoPrivacyContext);
 		
-		$categoryGroupSize = kConf::get('max_number_of_memebrs_to_be_indexed_on_entry');
+		$categoryGroupSize = vConf::get('max_number_of_memebrs_to_be_indexed_on_entry');
 		$partner = $this->getPartner();
 		if($partner && $partner->getCategoryGroupSize())
 			$categoryGroupSize = $partner->getCategoryGroupSize();
 			
 		//get categories for this entry that have small amount of members.
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 		$c->add(categoryPeer::ID, $allCategoriesIds, Criteria::IN);
 		$c->add(categoryPeer::MEMBERS_COUNT, $categoryGroupSize, Criteria::LESS_EQUAL);
-		$c->add(categoryPeer::ENTRIES_COUNT, kConf::get('category_entries_count_limit_to_be_indexed'), Criteria::LESS_EQUAL);
+		$c->add(categoryPeer::ENTRIES_COUNT, vConf::get('category_entries_count_limit_to_be_indexed'), Criteria::LESS_EQUAL);
 		$c->dontCount();
 		
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$categories	= categoryPeer::doSelect($c);
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		
 		//get all memebrs
 		foreach ($categories as $category)
@@ -3353,24 +3353,24 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 				
 			$privacyContexts = explode(',', $category->getPrivacyContexts());
 			if(!count($privacyContexts))
-				$privacyContexts = array(kEntitlementUtils::DEFAULT_CONTEXT . $this->getPartnerId());
+				$privacyContexts = array(vEntitlementUtils::DEFAULT_CONTEXT . $this->getPartnerId());
 							
 			foreach ($privacyContexts as $privacyContext)
 			{
 				$privacyContext = trim($privacyContext);
-				if(isset($entitledKusers[$privacyContext]))
-					$entitledKusers[$privacyContext] = array_merge($entitledKusers[$privacyContext], $category->getMembers());
+				if(isset($entitledVusers[$privacyContext]))
+					$entitledVusers[$privacyContext] = array_merge($entitledVusers[$privacyContext], $category->getMembers());
 				else
-					$entitledKusers[$privacyContext] = $category->getMembers();
+					$entitledVusers[$privacyContext] = $category->getMembers();
 			}
 		}
 		
-		$entitledKusersByContexts = array();
+		$entitledVusersByContexts = array();
 		
-		foreach($entitledKusers as $privacyContext => $kusers)
-			$entitledKusersByContexts[] =  $privacyContext . '_' . implode(' ' . $privacyContext . '_', $kusers);
+		foreach($entitledVusers as $privacyContext => $vusers)
+			$entitledVusersByContexts[] =  $privacyContext . '_' . implode(' ' . $privacyContext . '_', $vusers);
 			
-		return implode(' ', $entitledKusersByContexts);
+		return implode(' ', $entitledVusersByContexts);
 	}
 	
 	public function getAllCategoriesIds($includePending = false)
@@ -3409,7 +3409,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		if (in_array($source, array_values($coreConstants)))
 			return false;
 	
-		$typeMap = kPluginableEnumsManager::getCoreMap('EntrySourceType');
+		$typeMap = vPluginableEnumsManager::getCoreMap('EntrySourceType');
 		if (isset($typeMap[$source]))
 			return false;
 	
@@ -3445,7 +3445,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	
 	public function setSource($v , $forceSet=false)
 	{
-		if($forceSet || !in_array($this->getSource(), array(EntrySourceType::KALTURA_RECORDED_LIVE, EntrySourceType::LECTURE_CAPTURE)) || $v == EntrySourceType::RECORDED_LIVE)
+		if($forceSet || !in_array($this->getSource(), array(EntrySourceType::VIDIUN_RECORDED_LIVE, EntrySourceType::LECTURE_CAPTURE)) || $v == EntrySourceType::RECORDED_LIVE)
 			parent::setSource($v);
 	}
 	
@@ -3480,8 +3480,8 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		return array(
 			entryPeer::STATUS,
 			entryPeer::MODERATION_STATUS,
-			entryPeer::KUSER_ID,
-			entryPeer::CREATOR_KUSER_ID,
+			entryPeer::VUSER_ID,
+			entryPeer::CREATOR_VUSER_ID,
 			entryPeer::ACCESS_CONTROL_ID,
 			'' => array(
 				'replacementStatus',
@@ -3508,8 +3508,8 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		// if entry type is audio - serve generic thumb:
 		if ($this->getMediaType () == entry::ENTRY_MEDIA_TYPE_AUDIO) {
 			if ($this->getStatus () == entryStatus::DELETED || $this->getModerationStatus () == moderation::MODERATION_STATUS_BLOCK) {
-				KalturaLog::log ( "rejected audio entry - not serving thumbnail" );
-				KExternalErrors::dieError ( KExternalErrors::ENTRY_DELETED_MODERATED );
+				VidiunLog::log ( "rejected audio entry - not serving thumbnail" );
+				VExternalErrors::dieError ( VExternalErrors::ENTRY_DELETED_MODERATED );
 			}
 			
 			$audioEntryExist = false;
@@ -3526,14 +3526,14 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			{
 				$fileSyncVersion = $partner->getAudioThumbEntryVersion();
 				$audioEntryKey = $audioThumbEntry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA,$fileSyncVersion);
-				$contentPath = kFileSyncUtils::getLocalFilePathForKey($audioEntryKey);
+				$contentPath = vFileSyncUtils::getLocalFilePathForKey($audioEntryKey);
 				if ($contentPath)
 				{
 					$msgPath = $contentPath;
 					$audioEntryExist = true;
 				}
 				else
-					KalturaLog::err('no local file sync for entry id');
+					VidiunLog::err('no local file sync for entry id');
 			}
 
 			if (!$audioEntryExist)
@@ -3551,23 +3551,23 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 				$msgPath = $this->getDefaultThumbPath($this->getType());
 				return myEntryUtils::resizeEntryImage ( $this, $version, $width, $height, $type, $bgcolor, $crop_provider, $quality, $src_x, $src_y, $src_w, $src_h, $vid_sec, $vid_slice, $vid_slices, $msgPath, 0, false, null, null, null, $start_sec, $end_sec);
 			} catch ( Exception $ex ) {
-				if ($ex->getCode () == kFileSyncException::FILE_DOES_NOT_EXIST_ON_CURRENT_DC) {
+				if ($ex->getCode () == vFileSyncException::FILE_DOES_NOT_EXIST_ON_CURRENT_DC) {
 					// get original flavor asset
 					$origFlavorAsset = assetPeer::retrieveOriginalByEntryId ( $this->getId() );
 					if ($origFlavorAsset) {
 						$syncKey = $origFlavorAsset->getSyncKey ( flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET );
 						
-						list ( $readyFileSync, $isLocal ) = kFileSyncUtils::getReadyFileSyncForKey ( $syncKey, TRUE, FALSE );
+						list ( $readyFileSync, $isLocal ) = vFileSyncUtils::getReadyFileSyncForKey ( $syncKey, TRUE, FALSE );
 						if ($readyFileSync) {
 							if ($isLocal) {
-								KalturaLog::err ( 'Trying to redirect to myself - stop here.' );
-								KExternalErrors::dieError ( KExternalErrors::MISSING_THUMBNAIL_FILESYNC );
+								VidiunLog::err ( 'Trying to redirect to myself - stop here.' );
+								VExternalErrors::dieError ( VExternalErrors::MISSING_THUMBNAIL_FILESYNC );
 							}
 							//Ready fileSync is on the other DC - dumping
-							kFileUtils::dumpApiRequest ( kDataCenterMgr::getRemoteDcExternalUrlByDcId ( 1 - kDataCenterMgr::getCurrentDcId () ) );
+							vFileUtils::dumpApiRequest ( vDataCenterMgr::getRemoteDcExternalUrlByDcId ( 1 - vDataCenterMgr::getCurrentDcId () ) );
 						}
-						KalturaLog::err ( 'No ready fileSync found on any DC.' );
-						KExternalErrors::dieError ( KExternalErrors::MISSING_THUMBNAIL_FILESYNC );
+						VidiunLog::err ( 'No ready fileSync found on any DC.' );
+						VExternalErrors::dieError ( VExternalErrors::MISSING_THUMBNAIL_FILESYNC );
 					}
 				}
 			}
@@ -3625,10 +3625,10 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	
 	public function getUserNames()
 	{
-		$kuser = $this->getkuser();
-		if($kuser)
+		$vuser = $this->getvuser();
+		if($vuser)
 		{
-			$userNames = $this->getUserNamesAsArray($kuser);
+			$userNames = $this->getUserNamesAsArray($vuser);
 			if ($userNames)
 				return implode(" ", $userNames);
 		}
@@ -3660,34 +3660,34 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 
 	private function getAllUsers()
 	{
-		$kUsersIds = array();
+		$vUsersIds = array();
 
-		if($this->getKuserId())
-			$kUsersIds[] = $this->getKuserId();
+		if($this->getVuserId())
+			$vUsersIds[] = $this->getVuserId();
 
-		if($this->getCreatorKuserId())
-			$kUsersIds[] = $this->getCreatorKuserId();
+		if($this->getCreatorVuserId())
+			$vUsersIds[] = $this->getCreatorVuserId();
 
-		$entitledKusersIds = $this->getEntitledKusersEditArray();
-		$kUsersIds = array_merge($kUsersIds, $entitledKusersIds);
+		$entitledVusersIds = $this->getEntitledVusersEditArray();
+		$vUsersIds = array_merge($vUsersIds, $entitledVusersIds);
 
-		$entitledKusersIds = $this->getEntitledKusersPublishArray();
-		$kUsersIds = array_merge($kUsersIds, $entitledKusersIds);
+		$entitledVusersIds = $this->getEntitledVusersPublishArray();
+		$vUsersIds = array_merge($vUsersIds, $entitledVusersIds);
 
-		return  kuserPeer::retrieveByPKs($kUsersIds);
+		return  vuserPeer::retrieveByPKs($vUsersIds);
 	}
 
-	private function getUserNamesAsArray($kuser, $includeNullValues = true)
+	private function getUserNamesAsArray($vuser, $includeNullValues = true)
 	{
 		$userNames = array();
-		if($includeNullValues || $kuser->getFirstName())
-			$userNames[] = $kuser->getFirstName();
+		if($includeNullValues || $vuser->getFirstName())
+			$userNames[] = $vuser->getFirstName();
 
-		if($includeNullValues || $kuser->getLastName())
-			$userNames[] = $kuser->getLastName();
+		if($includeNullValues || $vuser->getLastName())
+			$userNames[] = $vuser->getLastName();
 
-		if($includeNullValues || $kuser->getScreenName())
-			$userNames[] = $kuser->getScreenName();
+		if($includeNullValues || $vuser->getScreenName())
+			$userNames[] = $vuser->getScreenName();
 
 		return $userNames;
 	}
@@ -3724,16 +3724,16 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			$copyObj->setEntitledPusersEdit($this->getEntitledPusersEdit());
 			$copyObj->setEntitledPusersPublish($this->getEntitledPusersPublish());
 		}
-		catch(kCoreException $e)
+		catch(vCoreException $e)
 		{
-			KalturaLog::warning($e->getMessage());
+			VidiunLog::warning($e->getMessage());
 		}
 		$copyObj->setPartnerSortValue($this->getPartnerSortValue());
 	}
 	
-	public function getkshow(PropelPDO $con = null)
+	public function getvshow(PropelPDO $con = null)
 	{
-		return kshowPeer::retrieveByPK($this->kshow_id, $con);
+		return vshowPeer::retrieveByPK($this->vshow_id, $con);
 	}
 	
 	public function getconversionProfile2(PropelPDO $con = null)
@@ -3865,11 +3865,11 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		$body = array(
 			'parent_id' => $this->getParentEntryId(),
 			'status' => $this->getStatus(),
-			'entitled_kusers_edit' => $this->getEntitledKusersEditArray(),
-			'entitled_kusers_publish' => $this->getEntitledKusersPublishArray(),
-			'entitled_kusers_view' => $this->getEntitledKusersViewArray(),
-			'kuser_id' => $this->getKuserId(),
-			'creator_kuser_id' => $this->getCreatorKuserId(),
+			'entitled_vusers_edit' => $this->getEntitledVusersEditArray(),
+			'entitled_vusers_publish' => $this->getEntitledVusersPublishArray(),
+			'entitled_vusers_view' => $this->getEntitledVusersViewArray(),
+			'vuser_id' => $this->getVuserId(),
+			'creator_vuser_id' => $this->getCreatorVuserId(),
 			'name' => $this->getName(),
 			'description' => $this->getDescription(),
 			'tags' => explode(',', $this->getTags()),
@@ -3939,7 +3939,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	 */
 	public function indexToElastic($params = null)
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForElasticIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForElasticIndexEvent($this));
 	}
 	
 	protected function addParentEntryToObjectParams(&$body)
@@ -3967,11 +3967,11 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			'entry_id' => $parentEntry->getId(),
 			'status' => $parentEntry->getStatus(),
 			'partner_status' => elasticSearchUtils::formatPartnerStatus($parentEntry->getPartnerId(), $parentEntry->getStatus()),
-			'entitled_kusers_edit' => $parentEntry->getEntitledKusersEditArray(),
-			'entitled_kusers_publish' => $parentEntry->getEntitledKusersPublishArray(),
-			'entitled_kusers_view' => $parentEntry->getEntitledKusersViewArray(),
-			'kuser_id' => $parentEntry->getKuserId(),
-			'creator_kuser_id' => $parentEntry->getCreatorKuserId(),
+			'entitled_vusers_edit' => $parentEntry->getEntitledVusersEditArray(),
+			'entitled_vusers_publish' => $parentEntry->getEntitledVusersPublishArray(),
+			'entitled_vusers_view' => $parentEntry->getEntitledVusersViewArray(),
+			'vuser_id' => $parentEntry->getVuserId(),
+			'creator_vuser_id' => $parentEntry->getCreatorVuserId(),
 			'categories_ids' => $parentCategoryIdsSearchData,
 			'privacy_by_contexts' => $parentEntryPrivacyContexts
 		);
@@ -4065,7 +4065,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 	protected function getDefaultThumbPath()
 	{
 		//// in case of a recorded entry from live that doesn't have flavors yet nor thumbs we will use the live default thumb.
-		if ((($this->getSourceType() == EntrySourceType::RECORDED_LIVE || $this->getSourceType() == EntrySourceType::KALTURA_RECORDED_LIVE) && !assetPeer::countByEntryId($this->getId(), array(assetType::FLAVOR, assetType::THUMBNAIL)))
+		if ((($this->getSourceType() == EntrySourceType::RECORDED_LIVE || $this->getSourceType() == EntrySourceType::VIDIUN_RECORDED_LIVE) && !assetPeer::countByEntryId($this->getId(), array(assetType::FLAVOR, assetType::THUMBNAIL)))
 				|| (myEntryUtils::shouldServeVodFromLive($this)))
 			return myContentStorage::getFSContentRootPath() . self::LIVE_THUMB_PATH;
 		return null;
@@ -4099,7 +4099,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 			{
 				if (trim($categoryPrivacyContext) == '')
 				{
-					$categoryPrivacyContext = kEntitlementUtils::DEFAULT_CONTEXT;
+					$categoryPrivacyContext = vEntitlementUtils::DEFAULT_CONTEXT;
 				}
 
 				if (!isset($categoryPrivacyByContextSearchData[$categoryPrivacyContext]) || $categoryPrivacyByContextSearchData[$categoryPrivacyContext] > $categoryPrivacy)
@@ -4110,7 +4110,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		}
 		else
 		{
-			$categoryPrivacyByContextSearchData[kEntitlementUtils::DEFAULT_CONTEXT] = PrivacyType::ALL;
+			$categoryPrivacyByContextSearchData[vEntitlementUtils::DEFAULT_CONTEXT] = PrivacyType::ALL;
 		}
 	}
 
@@ -4119,10 +4119,10 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 		$entryPrivacyContexts = array();
 		foreach ($categoryPrivacyByContextSearchData as $categoryPrivacyContext => $privacy)
 		{
-			$entryPrivacyContexts[] = $categoryPrivacyContext . kEntitlementUtils::TYPE_SEPERATOR . $privacy;
+			$entryPrivacyContexts[] = $categoryPrivacyContext . vEntitlementUtils::TYPE_SEPERATOR . $privacy;
 		}
 
-		return kEntitlementUtils::addPrivacyContextsPrefix($entryPrivacyContexts, $partnerId);
+		return vEntitlementUtils::addPrivacyContextsPrefix($entryPrivacyContexts, $partnerId);
 	}
 
 	protected static function getCategoryNamesSearchData($categoryFullName, $categoryEntryStatus, $categoryName, &$categoryNameSearchArr)
@@ -4183,7 +4183,7 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 
 	public function getEncryptionIv()
 	{
-		return kConf::get("encryption_iv");
+		return vConf::get("encryption_iv");
 	}
 
 	/**
@@ -4200,12 +4200,12 @@ class entry extends Baseentry implements ISyncableFile, IIndexable, IOwnable, IR
 
 	protected function usePlaysViewsCache()
 	{
-		return $this->playsViewsDataInitialized || kCacheManager::getCacheSectionNames(kCacheManager::CACHE_TYPE_PLAYS_VIEWS);
+		return $this->playsViewsDataInitialized || vCacheManager::getCacheSectionNames(vCacheManager::CACHE_TYPE_PLAYS_VIEWS);
 	}
 
 	protected function fetchPlaysViewsData()
 	{
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_PLAYS_VIEWS);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_PLAYS_VIEWS);
 		if (!$cache)
 		{
 			return;

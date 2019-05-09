@@ -1,6 +1,6 @@
 <?php
 
-class kBusinessPostConvertDL
+class vBusinessPostConvertDL
 {
 	public static function getReadyBehavior(flavorAsset $flavorAsset, conversionProfile2 $profile = null)
 	{
@@ -15,7 +15,7 @@ class kBusinessPostConvertDL
 			}
 			catch(Exception $e)
 			{
-				KalturaLog::err($e->getMessage());
+				VidiunLog::err($e->getMessage());
 			}
 		}
 	
@@ -51,7 +51,7 @@ class kBusinessPostConvertDL
 //		// happens in case of post convert on the original (in case of bypass)
 //		if($rootBatchJob && $currentFlavorAsset->getIsOriginal())
 //		{
-//			kJobsManager::updateBatchJob($rootBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
+//			vJobsManager::updateBatchJob($rootBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
 //			return $dbBatchJob;
 //		}
 					
@@ -66,7 +66,7 @@ class kBusinessPostConvertDL
 			$entry = $dbBatchJob->getEntry();
 			if (!$entry)
 			{
-				KalturaLog::err("Entry not found [" . $dbBatchJob->getEntryId() . "]");
+				VidiunLog::err("Entry not found [" . $dbBatchJob->getEntryId() . "]");
 				throw new APIException(APIErrors::ENTRY_ID_NOT_FOUND, $dbBatchJob->getEntryId());
 			}
 			$operationAttributes = $entry->getOperationAttributes();
@@ -76,7 +76,7 @@ class kBusinessPostConvertDL
 
 			$sourceMediaInfo = mediaInfoPeer::retrieveByFlavorAssetId($flavorAssetId, $ascending);
 
-			KalturaLog::log("Intermediate source generation - assetId(".$flavorAssetId."),src MdInf id(".$sourceMediaInfo->getId()."),product MdInf id(".$productMediaInfo->getId()).")";
+			VidiunLog::log("Intermediate source generation - assetId(".$flavorAssetId."),src MdInf id(".$sourceMediaInfo->getId()."),product MdInf id(".$productMediaInfo->getId()).")";
 		}
 		else {
 			$productMediaInfo = mediaInfoPeer::retrieveByFlavorAssetId($currentFlavorAsset->getId());
@@ -93,7 +93,7 @@ class kBusinessPostConvertDL
 		
 		$postConvertData = $dbBatchJob->getData();
 		$postConvertAssetType = BatchJob::POSTCONVERT_ASSET_TYPE_FLAVOR;
-		if($postConvertData instanceof kPostConvertJobData)
+		if($postConvertData instanceof vPostConvertJobData)
 			$postConvertAssetType = $postConvertData->getPostConvertAssetType();
 		
 		// don't validate in case of bypass, in case target flavor or media info are null
@@ -102,13 +102,13 @@ class kBusinessPostConvertDL
 		&& !$targetFlavor->hasTag(assetParams::TAG_ISM_MANIFEST))
 		{
 			try{
-				$productFlavor = KDLWrap::CDLValidateProduct($sourceMediaInfo, $targetFlavor, $productMediaInfo, $convertEngineType);
+				$productFlavor = VDLWrap::CDLValidateProduct($sourceMediaInfo, $targetFlavor, $productMediaInfo, $convertEngineType);
 			}
 			catch(Exception $e){
-				KalturaLog::err('KDL Error: ' . print_r($e, true));
+				VidiunLog::err('VDL Error: ' . print_r($e, true));
 			}
 			
-			$err = kBusinessConvertDL::parseFlavorDescription($productFlavor);
+			$err = vBusinessConvertDL::parseFlavorDescription($productFlavor);
 
 			if(!$productFlavor->IsValid())
 			{
@@ -119,9 +119,9 @@ class kBusinessPostConvertDL
 				$currentFlavorAsset->setStatus(flavorAsset::FLAVOR_ASSET_STATUS_ERROR);
 				$currentFlavorAsset->save();
 				
-				if(!kConf::get('ignore_cdl_failure'))
+				if(!vConf::get('ignore_cdl_failure'))
 				{
-					kJobsManager::failBatchJob($dbBatchJob, $err);
+					vJobsManager::failBatchJob($dbBatchJob, $err);
 					return null;
 				}
 			}
@@ -140,17 +140,17 @@ class kBusinessPostConvertDL
 				$parentJob = $dbBatchJob->getParentJob();
 			else 
 				$parentJob = $dbBatchJob;
-			kBusinessPreConvertDL::decideFlavorConvert($waitingFlavorAsset, $flavor, $originalFlavorAsset, null, null, $parentJob);
+			vBusinessPreConvertDL::decideFlavorConvert($waitingFlavorAsset, $flavor, $originalFlavorAsset, null, null, $parentJob);
 		}
 		
-		kFlowHelper::generateThumbnailsFromFlavor($dbBatchJob->getEntryId(), $dbBatchJob, $currentFlavorAsset->getFlavorParamsId());
+		vFlowHelper::generateThumbnailsFromFlavor($dbBatchJob->getEntryId(), $dbBatchJob, $currentFlavorAsset->getFlavorParamsId());
 		
 		if($currentFlavorAsset->getIsOriginal())
 		{
 			$entry = $currentFlavorAsset->getentry();
 			if($entry)
 			{
-				kBusinessConvertDL::checkForPendingLiveClips($entry);
+				vBusinessConvertDL::checkForPendingLiveClips($entry);
 			}
 		}
 		
@@ -170,11 +170,11 @@ class kBusinessPostConvertDL
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 		}
 		
 		$currentReadyBehavior = self::getReadyBehavior($currentFlavorAsset, $profile);
-		KalturaLog::info("Current ready behavior [$currentReadyBehavior]");
+		VidiunLog::info("Current ready behavior [$currentReadyBehavior]");
 		if($currentReadyBehavior == flavorParamsConversionProfile::READY_BEHAVIOR_IGNORE)
 			return $dbBatchJob;
 		
@@ -182,7 +182,7 @@ class kBusinessPostConvertDL
 		if($dbBatchJob)
 			$rootBatchJob = $dbBatchJob->getRootJob();
 		if($rootBatchJob)
-			KalturaLog::info("root batch job id [" . $rootBatchJob->getId() . "] type [" . $rootBatchJob->getJobType() . "]");
+			VidiunLog::info("root batch job id [" . $rootBatchJob->getId() . "] type [" . $rootBatchJob->getJobType() . "]");
 		
 		// update the root job end exit
 		if($rootBatchJob && $rootBatchJob->getJobType() == BatchJobType::BULKDOWNLOAD)
@@ -193,12 +193,12 @@ class kBusinessPostConvertDL
 			$siblingJobs = $rootBatchJob->getOpenStatusChildJobs($c);
 			if($siblingJobs)
 			{
-				KalturaLog::info("job ids [" . $siblingJobs[0]->getId() . "] status [" . $siblingJobs[0]->getStatus() . "]");
+				VidiunLog::info("job ids [" . $siblingJobs[0]->getId() . "] status [" . $siblingJobs[0]->getStatus() . "]");
 				return $dbBatchJob;
 			}
 
 			// all child jobs completed
-			kJobsManager::updateBatchJob($rootBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
+			vJobsManager::updateBatchJob($rootBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
 			return $dbBatchJob;
 		}
 		
@@ -212,7 +212,7 @@ class kBusinessPostConvertDL
 			if($flavorParamsConversionProfile->getReadyBehavior() == flavorParamsConversionProfile::READY_BEHAVIOR_REQUIRED)
 				$requiredFlavorParamsIds[$flavorParamsConversionProfile->getFlavorParamsId()] = true;
 		}
-		KalturaLog::info("required flavor params ids [" . print_r($requiredFlavorParamsIds, true) . "]");
+		VidiunLog::info("required flavor params ids [" . print_r($requiredFlavorParamsIds, true) . "]");
 		
 		// go over all the flavor assets of the entry
 		$entry = $currentFlavorAsset->getentry();
@@ -221,12 +221,12 @@ class kBusinessPostConvertDL
 		$siblingFlavorAssets = assetPeer::retrieveFlavorsByEntryId($currentFlavorAsset->getEntryId());
 		foreach($siblingFlavorAssets as $siblingFlavorAsset)
 		{
-			KalturaLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] flavor params id [" . $siblingFlavorAsset->getFlavorParamsId() . "]");
+			VidiunLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] flavor params id [" . $siblingFlavorAsset->getFlavorParamsId() . "]");
 							
 			// don't mark any incomplete flag
 			if($siblingFlavorAsset->getStatus() == flavorAsset::FLAVOR_ASSET_STATUS_READY)
 			{
-				KalturaLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] is ready");
+				VidiunLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] is ready");
 				if(isset($requiredFlavorParamsIds[$siblingFlavorAsset->getFlavorParamsId()]))
 					unset($requiredFlavorParamsIds[$siblingFlavorAsset->getFlavorParamsId()]);
 					
@@ -235,7 +235,7 @@ class kBusinessPostConvertDL
 			
 			if($entry && $entry->getReplacedEntryId() && $siblingFlavorAsset->getStatus() == flavorAsset::ASSET_STATUS_QUEUED)
 			{
-				KalturaLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] is incomplete and in replacement");
+				VidiunLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] is incomplete and in replacement");
 				$inCompleteFlavorIds[] = $siblingFlavorAsset->getFlavorParamsId();
 			}
 				
@@ -249,14 +249,14 @@ class kBusinessPostConvertDL
 			    }
 			    else if ($readyBehavior != flavorParamsConversionProfile::READY_BEHAVIOR_IGNORE)
 			    {
-			        KalturaLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] is incomplete");
+			        VidiunLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] is incomplete");
 				    $inCompleteFlavorIds[] = $siblingFlavorAsset->getFlavorParamsId();
 			    }
 			}		
 
 			if($readyBehavior == flavorParamsConversionProfile::READY_BEHAVIOR_IGNORE)
 			{
-				KalturaLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] is ignored");
+				VidiunLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] is ignored");
 				continue;
 			}
 			
@@ -267,19 +267,19 @@ class kBusinessPostConvertDL
 				||	$siblingFlavorAsset->getStatus() == flavorAsset::FLAVOR_ASSET_STATUS_VALIDATING
 				||  $siblingFlavorAsset->getStatus() == flavorAsset::ASSET_STATUS_WAIT_FOR_CONVERT)
 			{
-				KalturaLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] is incomplete");
+				VidiunLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] is incomplete");
 				$inCompleteFlavorIds[] = $siblingFlavorAsset->getFlavorParamsId();
 			}
 						
 			if($readyBehavior == flavorParamsConversionProfile::READY_BEHAVIOR_REQUIRED)
 			{
-				KalturaLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] is required");
+				VidiunLog::info("sibling flavor asset id [" . $siblingFlavorAsset->getId() . "] is required");
 				$requiredFlavorParamsIds[$siblingFlavorAsset->getFlavorParamsId()] = true;
 			}
 		}
 				
-		KalturaLog::info("left required flavor params ids [" . print_r($requiredFlavorParamsIds, true) . "]");				
-		KalturaLog::info("left incomplete flavor ids [" . print_r($inCompleteFlavorIds, true) . "]");
+		VidiunLog::info("left required flavor params ids [" . print_r($requiredFlavorParamsIds, true) . "]");				
+		VidiunLog::info("left incomplete flavor ids [" . print_r($inCompleteFlavorIds, true) . "]");
 		
 		if(count($requiredFlavorParamsIds))
 		{
@@ -287,18 +287,18 @@ class kBusinessPostConvertDL
 			foreach($inCompleteRequiredFlavorParamsIds as $inCompleteFlavorId)
 				$inCompleteFlavorIds[] = $inCompleteFlavorId;
 				
-			KalturaLog::info('Convert Finished - has In-Complete Required flavors [[' . print_r($inCompleteRequiredFlavorParamsIds, true) . ']');
+			VidiunLog::info('Convert Finished - has In-Complete Required flavors [[' . print_r($inCompleteRequiredFlavorParamsIds, true) . ']');
 		} 
 		elseif($currentFlavorAsset->getStatus() == asset::ASSET_STATUS_READY && ($currentReadyBehavior == flavorParamsConversionProfile::READY_BEHAVIOR_OPTIONAL || $currentReadyBehavior == flavorParamsConversionProfile::READY_BEHAVIOR_REQUIRED))
 		{
 			// mark the entry as ready if all required conversions completed or any of the optionals
 			if($currentFlavorAsset->getentry()->getReplacedEntryId())
 			{
-				KalturaLog::info('Entry is temporary replacement and requires all flavors to complete');
+				VidiunLog::info('Entry is temporary replacement and requires all flavors to complete');
 			}
 			else
 			{
-				kBatchManager::updateEntry($currentFlavorAsset->getEntryId(), entryStatus::READY);
+				vBatchManager::updateEntry($currentFlavorAsset->getEntryId(), entryStatus::READY);
 			}
 		}
 		
@@ -308,32 +308,32 @@ class kBusinessPostConvertDL
 		
 		if(!count($inCompleteFlavorIds))
 		{
-			KalturaLog::info('Convert Finished');
+			VidiunLog::info('Convert Finished');
 			
 			if($origianlAssetFlavorId && $rootBatchJob && $rootBatchJob->getJobType() == BatchJobType::CONVERT_PROFILE)
 			{
-        		kStorageExporter::exportSourceAssetFromJob($rootBatchJob);
+        		vStorageExporter::exportSourceAssetFromJob($rootBatchJob);
 			}
 			else
 			{
 			    // mark the context root job as finished only if all conversion jobs are completed
-    			kBatchManager::updateEntry($currentFlavorAsset->getEntryId(), entryStatus::READY);
+    			vBatchManager::updateEntry($currentFlavorAsset->getEntryId(), entryStatus::READY);
 				
     			if($rootBatchJob && $rootBatchJob->getJobType() == BatchJobType::CONVERT_PROFILE)
-    				kJobsManager::updateBatchJob($rootBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
+    				vJobsManager::updateBatchJob($rootBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
 			}
 			return $dbBatchJob;	
 		}
 		
-		KalturaLog::info('Convert Finished - has In-Complete flavors [' . print_r($inCompleteFlavorIds, true) . ']');
+		VidiunLog::info('Convert Finished - has In-Complete flavors [' . print_r($inCompleteFlavorIds, true) . ']');
 	
 		if(!$rootBatchJob || $rootBatchJob->getJobType() != BatchJobType::CONVERT_PROFILE)
 			return $dbBatchJob;
 			
 		$childJobs = $rootBatchJob->getChildJobs();
-		KalturaLog::info('Child jobs found [' . count($childJobs) . ']');
+		VidiunLog::info('Child jobs found [' . count($childJobs) . ']');
 		$waitingFlavorAssets = assetPeer::retrieveByEntryIdAndStatus($currentFlavorAsset->getEntryId(), flavorAsset::FLAVOR_ASSET_STATUS_WAIT_FOR_CONVERT);
-		KalturaLog::info('Waiting assets found [' . count($waitingFlavorAssets) . ']');
+		VidiunLog::info('Waiting assets found [' . count($waitingFlavorAssets) . ']');
 		
 		if(count($childJobs) > 1 && count($waitingFlavorAssets) < 1)
 		{
@@ -342,14 +342,14 @@ class kBusinessPostConvertDL
 			{
 				if($childJob->getId() != $rootBatchJob->getId() && $childJob->getStatus() != BatchJob::BATCHJOB_STATUS_FINISHED)
 				{
-					KalturaLog::info('Child job id [' . $childJob->getId() . '] status [' . $childJob->getStatus() . ']');
+					VidiunLog::info('Child job id [' . $childJob->getId() . '] status [' . $childJob->getStatus() . ']');
 					$allDone = false;
 				}
 			}
 					
 			if($allDone)
 			{
-				kJobsManager::updateBatchJob($rootBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
+				vJobsManager::updateBatchJob($rootBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
 			}
 		}
 		
@@ -358,11 +358,11 @@ class kBusinessPostConvertDL
 	
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConvertCollectionJobData $data
+	 * @param vConvertCollectionJobData $data
 	 * @param int $engineType
 	 * @return boolean
 	 */
-	public static function handleConvertCollectionFailed(BatchJob $dbBatchJob, kConvertCollectionJobData $data, $engineType)
+	public static function handleConvertCollectionFailed(BatchJob $dbBatchJob, vConvertCollectionJobData $data, $engineType)
 	{
 		$collectionFlavors = array();
 		foreach($data->getFlavors() as $flavor)
@@ -409,7 +409,7 @@ class kBusinessPostConvertDL
 			return false;
 			
 		if($shouldFailProfile || !$hasIncomplete)
-			kJobsManager::failBatchJob($rootBatchJob, "Job " . $dbBatchJob->getId() . " failed");
+			vJobsManager::failBatchJob($rootBatchJob, "Job " . $dbBatchJob->getId() . " failed");
 		
 		return false;
 	}
@@ -428,14 +428,14 @@ class kBusinessPostConvertDL
 		if($dbBatchJob->getErrNumber()==BatchJobAppErrors::BLACK_OR_SILENT_CONTENT) {
 			$prevVer = $flavorAsset->getPreviousVersion();
 			$currVer = $flavorAsset->getVersion();
-			KalturaLog::log("Webex conversion - Garbled Audio or Black frame or Silence. Rolling back asset/file-sync version - curr($currVer), prev($prevVer)");
+			VidiunLog::log("Webex conversion - Garbled Audio or Black frame or Silence. Rolling back asset/file-sync version - curr($currVer), prev($prevVer)");
 			if(isset($prevVer)) {
 				$syncKey = $flavorAsset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET, $currVer);
 				if(isset($syncKey)){
-					kFileSyncUtils::deleteSyncFileForKey($syncKey, false, true);
+					vFileSyncUtils::deleteSyncFileForKey($syncKey, false, true);
 					$flavorAsset->setVersion($prevVer);
 					$flavorAsset->setPreviousVersion(null);
-					KalturaLog::log("Webex conversion - Rolled back");
+					VidiunLog::log("Webex conversion - Rolled back");
 				}
 			}
 		}
@@ -448,14 +448,14 @@ class kBusinessPostConvertDL
 		if(!is_null($engineType))
 		{
 			$data = $dbBatchJob->getData();
-			if($data instanceof kConvartableJobData)
+			if($data instanceof vConvartableJobData)
 			{
 				$data->incrementOperationSet();
 				$dbBatchJob->setData($data);
 				$dbBatchJob->save();
 			}
 			
-			$newDbBatchJob = kBusinessPreConvertDL::redecideFlavorConvert($flavorAssetId, $flavorParamsOutputId, $mediaInfoId, $dbBatchJob, $engineType);
+			$newDbBatchJob = vBusinessPreConvertDL::redecideFlavorConvert($flavorAssetId, $flavorParamsOutputId, $mediaInfoId, $dbBatchJob, $engineType);
 			if($newDbBatchJob)
 				return true;
 		}
@@ -472,22 +472,22 @@ class kBusinessPostConvertDL
 		// bulk download root job no need to handle 
 		if($rootBatchJob->getJobType() == BatchJobType::BULKDOWNLOAD)
 		{
-			kJobsManager::failBatchJob($rootBatchJob, "Convert job " . $dbBatchJob->getId() . " failed");
+			vJobsManager::failBatchJob($rootBatchJob, "Convert job " . $dbBatchJob->getId() . " failed");
 			return false;
 		}
 			
 		if(is_null($flavorParamsOutputId))
 		{
-			kJobsManager::failBatchJob($rootBatchJob, "Job " . $dbBatchJob->getId() . " failed");
-			kBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
+			vJobsManager::failBatchJob($rootBatchJob, "Job " . $dbBatchJob->getId() . " failed");
+			vBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
 			return false;
 		}
 		
 		$readyBehavior = $dbBatchJob->getData()->getReadyBehavior();
 		if($readyBehavior == flavorParamsConversionProfile::READY_BEHAVIOR_REQUIRED)
 		{
-			kJobsManager::failBatchJob($rootBatchJob, "Job " . $dbBatchJob->getId() . " failed");
-			kBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
+			vJobsManager::failBatchJob($rootBatchJob, "Job " . $dbBatchJob->getId() . " failed");
+			vBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
 			return false;
 		}
 		
@@ -505,9 +505,9 @@ class kBusinessPostConvertDL
 				continue;
 		
 			$jobData = $siblingJob->getData();
-			if(!$jobData || (!($jobData instanceof kConvertJobData) && !($jobData instanceof kPostConvertJobData)))
+			if(!$jobData || (!($jobData instanceof vConvertJobData) && !($jobData instanceof vPostConvertJobData)))
 			{
-				KalturaLog::err("Job id [" . $siblingJob->getId() . "] has no valid job data");
+				VidiunLog::err("Job id [" . $siblingJob->getId() . "] has no valid job data");
 				continue;
 			}
 			
@@ -524,8 +524,8 @@ class kBusinessPostConvertDL
 		}
 				
 		// all conversions failed, should fail the root job
-		kJobsManager::failBatchJob($rootBatchJob, "All conversions failed");
-		kBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
+		vJobsManager::failBatchJob($rootBatchJob, "All conversions failed");
+		vBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
 		return false;
 	}
 	

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUserRoleCondition extends KalturaCondition
+class VidiunUserRoleCondition extends VidiunCondition
 {
 	/**
 	 * Comma separated list of role ids
@@ -31,12 +31,12 @@ class KalturaUserRoleCondition extends KalturaCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kUserRoleCondition();
+			$dbObject = new vUserRoleCondition();
 			
 		return parent::toObject($dbObject, $skip);
 	}

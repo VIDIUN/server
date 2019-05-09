@@ -177,7 +177,7 @@ function simulateStartSession ( url )
 	jQuery.ajax({
 			url: fixed_url ,
 			async: true , 
-			complete: fillKs
+			complete: fillVs
 		} );	
 }
 
@@ -195,14 +195,14 @@ function gv ( elem_name )
 	return elem.value;
 }
 
-function fillKs ( res  )
+function fillVs ( res  )
 {
-	m = res.responseText.match ( "<ks>(.*)</ks>");
+	m = res.responseText.match ( "<vs>(.*)</vs>");
 	if ( m != null  ) 
 	{
-		ks = m[1];
-		el = jQuery ( "input[@name=ks]" );
-		el[0].value = ks ;
+		vs = m[1];
+		el = jQuery ( "input[@name=vs]" );
+		el[0].value = vs ;
 		admin = gv ("admin" );
 		if ( admin == "1" )
 			el[0].style.color = "red";
@@ -213,18 +213,18 @@ function fillKs ( res  )
 	
 }
 
-function switchKs ()
+function switchVs ()
 {
-	ks1_elem = jQuery ( "input[@name=ks]" )[0];
-	ks2_elem = jQuery ( "input[@name=ks2]" )[0];
-	ks1 = ks1_elem.value;
-	ks2 = ks2_elem.value;
-	ks1_elem.value = ks2;
-	ks2_elem.value = ks1;
+	vs1_elem = jQuery ( "input[@name=vs]" )[0];
+	vs2_elem = jQuery ( "input[@name=vs2]" )[0];
+	vs1 = vs1_elem.value;
+	vs2 = vs2_elem.value;
+	vs1_elem.value = vs2;
+	vs2_elem.value = vs1;
 
-	color = ks1_elem.style.color;
-	ks1_elem.style.color = ks2_elem.style.color;
-	ks2_elem.style.color = color;
+	color = vs1_elem.style.color;
+	vs1_elem.style.color = vs2_elem.style.color;
+	vs2_elem.style.color = color;
 	return false;
 }
 

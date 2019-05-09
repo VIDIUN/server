@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model.data
  */
-class kCountryCondition extends kMatchCondition
+class vCountryCondition extends vMatchCondition
 {
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -18,9 +18,9 @@ class kCountryCondition extends kMatchCondition
 	 * The ip geo coder engine to be used
 	 * 
 	 * @var int of enum geoCoderType
-	 * TODO take the default from kConf for on-prem
+	 * TODO take the default from vConf for on-prem
 	 */
-	protected $geoCoderType = geoCoderType::KALTURA;
+	protected $geoCoderType = geoCoderType::VIDIUN;
 	
 	/**
 	 * @param int $geoCoderType of enum geoCoderType
@@ -39,9 +39,9 @@ class kCountryCondition extends kMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::getFieldValue()
+	 * @see vCondition::getFieldValue()
 	 */
-	public function getFieldValue(kScope $scope)
+	public function getFieldValue(vScope $scope)
 	{
 		$refValues = $this->getStringValues($scope);
 		//Get trimmed lower case values of all configured allowed country codes.
@@ -54,12 +54,12 @@ class kCountryCondition extends kMatchCondition
 			kApiCache::COND_COUNTRY_MATCH, $refValues);
 		
 		$ip = $scope->getIp();
-		$ipGeo = kGeoCoderManager::getGeoCoder($this->getGeoCoderType());
+		$ipGeo = vGeoCoderManager::getGeoCoder($this->getGeoCoderType());
 		return $ipGeo->getCountry($ip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::matches()
+	 * @see vMatchCondition::matches()
 	 */
 	protected function matches($field, $value)
 	{
@@ -67,7 +67,7 @@ class kCountryCondition extends kMatchCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::shouldFieldDisableCache()
+	 * @see vMatchCondition::shouldFieldDisableCache()
 	 */
 	public function shouldFieldDisableCache($scope)
 	{

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class KalturaAccessControlScope extends KalturaObject
+class VidiunAccessControlScope extends VidiunObject
 {
 	/**
 	 * URL to be used to test domain conditions.
@@ -18,10 +18,10 @@ class KalturaAccessControlScope extends KalturaObject
 	public $ip;
 	
 	/**
-	 * Kaltura session to be used to test session and user conditions.
+	 * Vidiun session to be used to test session and user conditions.
 	 * @var string
 	 */
-	public $ks;
+	public $vs;
 	
 	/**
 	 * Browser or client application to be used to test agent conditions.
@@ -38,13 +38,13 @@ class KalturaAccessControlScope extends KalturaObject
 	/**
 	 * Indicates what contexts should be tested. No contexts means any context.
 	 * 
-	 * @var KalturaAccessControlContextTypeHolderArray
+	 * @var VidiunAccessControlContextTypeHolderArray
 	 */
 	public $contexts;
 	
 	/**
 	 * Array of hashes to pass to the access control profile scope
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $hashes;
 
@@ -52,7 +52,7 @@ class KalturaAccessControlScope extends KalturaObject
 	(
 		'referrer',
 		'ip',
-		'ks',
+		'vs',
 		'userAgent',
 		'time',
 		'contexts',
@@ -60,7 +60,7 @@ class KalturaAccessControlScope extends KalturaObject
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{

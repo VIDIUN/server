@@ -2,9 +2,9 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaRule instead
+ * @deprecated use VidiunRule instead
  */
-class KalturaPreviewRestriction extends KalturaSessionRestriction 
+class VidiunPreviewRestriction extends VidiunSessionRestriction 
 {
 	/**
 	 * The preview restriction length 
@@ -24,9 +24,9 @@ class KalturaPreviewRestriction extends KalturaSessionRestriction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseRestriction::toRule()
+	 * @see VidiunBaseRestriction::toRule()
 	 */
-	public function toRule(KalturaRestrictionArray $restrictions)
+	public function toRule(VidiunRestrictionArray $restrictions)
 	{
 		// Preview restriction became a rule action, it's not a rule.
 		return null;

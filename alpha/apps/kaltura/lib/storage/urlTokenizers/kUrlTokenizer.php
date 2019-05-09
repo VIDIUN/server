@@ -1,6 +1,6 @@
 <?php
 
-abstract class kUrlTokenizer
+abstract class vUrlTokenizer
 {
 	
 	/**
@@ -19,9 +19,9 @@ abstract class kUrlTokenizer
 	protected $playbackContext;
 	
 	/**
-	 * @var kSessionBase
+	 * @var vSessionBase
 	 */
-	protected $ksObject;
+	protected $vsObject;
 	
 	/**
 	 * @var bool
@@ -105,10 +105,10 @@ abstract class kUrlTokenizer
 	}
 
 	/**
-	 * @param kSessionBase $ksObject
+	 * @param vSessionBase $vsObject
 	 */
-	public function setKsObject($ksObject) {
-		$this->ksObject = $ksObject;
+	public function setVsObject($vsObject) {
+		$this->vsObject = $vsObject;
 	}
 
 	/**

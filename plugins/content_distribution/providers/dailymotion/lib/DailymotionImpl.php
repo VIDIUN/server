@@ -27,9 +27,9 @@ class DailyMotionImpl
 	}
 	
 	private function call($method, $args = array()) {
-		KalturaLog::info ( "Call [$method] args [" . print_r ( $args, true ) . "]" );
+		VidiunLog::info ( "Call [$method] args [" . print_r ( $args, true ) . "]" );
 		$result = $this->api->call ( $method, $args );
-		KalturaLog::info ( "Result [" . print_r ( $result, true ) . "]" );
+		VidiunLog::info ( "Result [" . print_r ( $result, true ) . "]" );
 		
 		return $result;
 	}
@@ -81,7 +81,7 @@ class DailyMotionImpl
 		return self::$categoriesMap;
 	}
 	
-	public function uploadSubtitle($remoteVideoId, KalturaDailymotionDistributionCaptionInfo $captionInfo) {
+	public function uploadSubtitle($remoteVideoId, VidiunDailymotionDistributionCaptionInfo $captionInfo) {
 		$url = $this->api->uploadFile ( $captionInfo->filePath );
 		$args = array ();
 		$args ['url'] = $url;
@@ -94,7 +94,7 @@ class DailyMotionImpl
 		return $response['id'];
 	}
 	
-	public function updateSubtitle($remoteSubtitleId, KalturaDailymotionDistributionCaptionInfo $captionInfo) {
+	public function updateSubtitle($remoteSubtitleId, VidiunDailymotionDistributionCaptionInfo $captionInfo) {
 		$url = $this->api->uploadFile ( $captionInfo->filePath );
 		$args = array ();
 		$args ['url'] = $url;
@@ -115,11 +115,11 @@ class DailyMotionImpl
 	
 	private function getCaptionFormate($format) {
 		switch ($format) {
-			case KalturaDailymotionDistributionCaptionFormat::TT :
+			case VidiunDailymotionDistributionCaptionFormat::TT :
 				return 'TT';
-			case KalturaDailymotionDistributionCaptionFormat::SRT :
+			case VidiunDailymotionDistributionCaptionFormat::SRT :
 				return 'SRT';
-			case KalturaDailymotionDistributionCaptionFormat::STL :
+			case VidiunDailymotionDistributionCaptionFormat::STL :
 				return 'STL';
 		}
 	}

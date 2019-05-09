@@ -2,10 +2,10 @@
 /**
  * @package plugins.voicebase
  */
-class VoicebasePlugin extends IntegrationProviderPlugin implements IKalturaEventConsumers
+class VoicebasePlugin extends IntegrationProviderPlugin implements IVidiunEventConsumers
 {
 	const PLUGIN_NAME = 'voicebase';
-	const FLOW_MANAGER = 'kVoicebaseFlowManager';
+	const FLOW_MANAGER = 'vVoicebaseFlowManager';
 	
 	const INTEGRATION_PLUGIN_VERSION_MAJOR = 1;
 	const INTEGRATION_PLUGIN_VERSION_MINOR = 0;
@@ -16,7 +16,7 @@ class VoicebasePlugin extends IntegrationProviderPlugin implements IKalturaEvent
 	const TRANSCRIPT_PLUGIN_VERSION_BUILD = 0;
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -24,16 +24,16 @@ class VoicebasePlugin extends IntegrationProviderPlugin implements IKalturaEvent
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$transcriptVersion = new KalturaVersion(
+		$transcriptVersion = new VidiunVersion(
 			self::TRANSCRIPT_PLUGIN_VERSION_MAJOR,
 			self::TRANSCRIPT_PLUGIN_VERSION_MINOR,
 			self::TRANSCRIPT_PLUGIN_VERSION_BUILD
 		);
-		$transcriptDependency = new KalturaDependency(TranscriptPlugin::getPluginName(), $transcriptVersion);
+		$transcriptDependency = new VidiunDependency(TranscriptPlugin::getPluginName(), $transcriptVersion);
 
 		return array_merge(parent::dependsOn(), array($transcriptDependency));
 	}
@@ -43,7 +43,7 @@ class VoicebasePlugin extends IntegrationProviderPlugin implements IKalturaEvent
 	 */
 	public static function getRequiredIntegrationPluginVersion()
 	{
-		return new KalturaVersion(
+		return new VidiunVersion(
 			self::INTEGRATION_PLUGIN_VERSION_MAJOR,
 			self::INTEGRATION_PLUGIN_VERSION_MINOR,
 			self::INTEGRATION_PLUGIN_VERSION_BUILD
@@ -51,7 +51,7 @@ class VoicebasePlugin extends IntegrationProviderPlugin implements IKalturaEvent
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -78,25 +78,25 @@ class VoicebasePlugin extends IntegrationProviderPlugin implements IKalturaEvent
 	
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'kIntegrationJobProviderData' && $enumValue == self::getApiValue(VoicebaseIntegrationProviderType::VOICEBASE))
+		if($baseClass == 'vIntegrationJobProviderData' && $enumValue == self::getApiValue(VoicebaseIntegrationProviderType::VOICEBASE))
 		{
-			return 'kVoicebaseJobProviderData';
+			return 'vVoicebaseJobProviderData';
 		}
 	
-		if($baseClass == 'KalturaIntegrationJobProviderData')
+		if($baseClass == 'VidiunIntegrationJobProviderData')
 		{
 			if($enumValue == self::getApiValue(VoicebaseIntegrationProviderType::VOICEBASE) || $enumValue == self::getIntegrationProviderCoreValue(VoicebaseIntegrationProviderType::VOICEBASE))
-				return 'KalturaVoicebaseJobProviderData';
+				return 'VidiunVoicebaseJobProviderData';
 		}
 	
-		if($baseClass == 'KIntegrationEngine' || $baseClass == 'KIntegrationCloserEngine')
+		if($baseClass == 'VIntegrationEngine' || $baseClass == 'VIntegrationCloserEngine')
 		{
-			if($enumValue == KalturaIntegrationProviderType::VOICEBASE)
-				return 'KVoicebaseIntegrationEngine';
+			if($enumValue == VidiunIntegrationProviderType::VOICEBASE)
+				return 'VVoicebaseIntegrationEngine';
 		}
 		if($baseClass == 'IIntegrationProvider' && $enumValue == self::getIntegrationProviderCoreValue(VoicebaseIntegrationProviderType::VOICEBASE))
 		{
@@ -109,8 +109,8 @@ class VoicebasePlugin extends IntegrationProviderPlugin implements IKalturaEvent
 	 */
 	public static function getProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('IntegrationProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('IntegrationProviderType', $value);
 	}
 
 	/**
@@ -118,8 +118,8 @@ class VoicebasePlugin extends IntegrationProviderPlugin implements IKalturaEvent
 	 */
 	public static function getTranscriptProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('TranscriptProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('TranscriptProviderType', $value);
 	}
 	
 	public static function getClientHelper($apiKey, $apiPassword, $additionalParams = null)
@@ -148,7 +148,7 @@ class VoicebasePlugin extends IntegrationProviderPlugin implements IKalturaEvent
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{

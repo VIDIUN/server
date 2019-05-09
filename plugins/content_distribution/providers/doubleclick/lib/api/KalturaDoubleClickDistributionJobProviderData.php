@@ -3,9 +3,9 @@
 * @package plugins.doubleClickDistribution
  * @subpackage api.objects
  */
-class KalturaDoubleClickDistributionJobProviderData extends KalturaDistributionJobProviderData
+class VidiunDoubleClickDistributionJobProviderData extends VidiunDistributionJobProviderData
 {
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 	}
 

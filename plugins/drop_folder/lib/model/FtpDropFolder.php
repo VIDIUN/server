@@ -100,11 +100,11 @@ class FtpDropFolder extends RemoteDropFolder
 	}
 		
 	/**
-	 * @return kDropFolderImportJobData
+	 * @return vDropFolderImportJobData
 	 */
 	public function getImportJobData()
 	{
-	    $jobData = new kDropFolderImportJobData();
+	    $jobData = new vDropFolderImportJobData();
 	    $jobData->setPrivateKey(null);
 	    $jobData->setPublicKey(null);
 	    $jobData->setPassPhrase(null);
@@ -113,10 +113,10 @@ class FtpDropFolder extends RemoteDropFolder
 	
 	protected function getRemoteFileTransferMgrType()
 	{
-	    return kFileTransferMgrType::FTP;
+	    return vFileTransferMgrType::FTP;
 	}
 	
-	public function loginByCredentialsType(kFileTransferMgr $fileTransferMgr)
+	public function loginByCredentialsType(vFileTransferMgr $fileTransferMgr)
 	{
 		return $fileTransferMgr->login($this->getFtpHost(), $this->getFtpUsername(), $this->getFtpPassword(), $this->getFtpPort());
 	}

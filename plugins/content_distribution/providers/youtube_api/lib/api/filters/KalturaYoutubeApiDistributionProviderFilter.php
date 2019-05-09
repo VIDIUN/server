@@ -3,6 +3,6 @@
  * @package plugins.youtubeApiDistribution
  * @subpackage api.filters
  */
-class KalturaYoutubeApiDistributionProviderFilter extends KalturaYoutubeApiDistributionProviderBaseFilter
+class VidiunYoutubeApiDistributionProviderFilter extends VidiunYoutubeApiDistributionProviderBaseFilter
 {
 }

@@ -3,7 +3,7 @@
  * @package plugins.facebookDistribution
  * @subpackage model.data
  */
-class kFacebookDistributionJobProviderData extends kConfigurableDistributionJobProviderData
+class vFacebookDistributionJobProviderData extends vConfigurableDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -16,7 +16,7 @@ class kFacebookDistributionJobProviderData extends kConfigurableDistributionJobP
 	private $thumbAssetId;
 	
 	/**
-	 * @var KalturaFacebookCaptionDistributionInfoArray
+	 * @var VidiunFacebookCaptionDistributionInfoArray
 	 */
 	private $captionsInfo;
 	
@@ -74,7 +74,7 @@ class kFacebookDistributionJobProviderData extends kConfigurableDistributionJobP
 	}	
 	
 	/**
-	 * @return KalturaFacebookCaptionDistributionInfoArray $captionsInfo
+	 * @return VidiunFacebookCaptionDistributionInfoArray $captionsInfo
 	 */
 	public function getCaptionsInfo()
 	{
@@ -82,7 +82,7 @@ class kFacebookDistributionJobProviderData extends kConfigurableDistributionJobP
 	}
 
 	/**
-	 * @param KalturaFacebookCaptionDistributionInfoArray $captionsInfo
+	 * @param VidiunFacebookCaptionDistributionInfoArray $captionsInfo
 	 */
 	public function setCaptionsInfo($captionsInfo)
 	{
@@ -90,7 +90,7 @@ class kFacebookDistributionJobProviderData extends kConfigurableDistributionJobP
 	}	
 	
     
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

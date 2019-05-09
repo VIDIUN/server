@@ -37,7 +37,7 @@ function xml_load_for_xslt($xmlStr)
  * @package infra
  * @subpackage utils
  */
-class kXml
+class vXml
 {
 	public static function getXslEnabledPhpFunctions()
 	{
@@ -341,17 +341,17 @@ class kXml
 	public static function transformXmlUsingXslt($xmlStr, $xslt, $xsltParams = array(), &$xsltErrors = array())
 	{
 					
-		$xml = new KDOMDocument();
+		$xml = new VDOMDocument();
 		if(!$xml->loadXML($xmlStr))
 		{
-			KalturaLog::err("Could not load xmlStr");
+			VidiunLog::err("Could not load xmlStr");
 			return null;
 		}
 		
-		$xsl = new KDOMDocument();
+		$xsl = new VDOMDocument();
 		if(!$xsl->loadXML($xslt))
 		{
-			KalturaLog::err("Could not load xslt");
+			VidiunLog::err("Could not load xslt");
 			return null;
 		}
 		
@@ -360,7 +360,7 @@ class kXml
 		{
 			$proc->setParameter( '', $key, $value);
 		}		
-	    $proc->registerPHPFunctions(kXml::getXslEnabledPhpFunctions());
+	    $proc->registerPHPFunctions(vXml::getXslEnabledPhpFunctions());
 		@$proc->importStyleSheet($xsl);
 		
 		$errorHandler = new XSLTErrorCollector();
@@ -372,7 +372,7 @@ class kXml
 
 		if(!$xml)
 		{
-			KalturaLog::err("XML Transformation failed");
+			VidiunLog::err("XML Transformation failed");
 			return null;
 		}
 		
@@ -441,8 +441,8 @@ class kXml
 		$compareJson = json_encode($compareXml);
 		$compareArray = json_decode($compareJson, true);
 		
-		$added = array_udiff_assoc($baseArray, $compareArray, array ('kXml', 'compareValues'));
-		$removed = array_udiff_assoc ($compareArray, $baseArray, array ('kXml', 'compareValues'));
+		$added = array_udiff_assoc($baseArray, $compareArray, array ('vXml', 'compareValues'));
+		$removed = array_udiff_assoc ($compareArray, $baseArray, array ('vXml', 'compareValues'));
 		
 		//Some values may have been removed, and exist in compare and not in base - these are also changes
 		$diffKeys = array_diff(array_keys($removed), array_keys($added));

@@ -3,15 +3,15 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFeatureStatusArray extends KalturaTypedArray
+class VidiunFeatureStatusArray extends VidiunTypedArray
 {
-	public static function fromDbArray(array $arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaFeatureStatusArray();
+		$newArr = new VidiunFeatureStatusArray();
 		foreach($arr as $obj)
 		{
 			if ($obj){
-				$nObj = new KalturaFeatureStatus();
+				$nObj = new VidiunFeatureStatus();
 				$nObj->fromObject($obj, $responseProfile);
 				$newArr[] = $nObj;
 			}
@@ -22,6 +22,6 @@ class KalturaFeatureStatusArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaFeatureStatus" );
+		return parent::__construct ( "VidiunFeatureStatus" );
 	}
 }

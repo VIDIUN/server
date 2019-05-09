@@ -32,7 +32,7 @@ class MetadataPeer extends BaseMetadataPeer implements IRelatedObjectPeer
 	{
 		$c = clone $criteria;
 
-		if($c instanceof KalturaCriteria)
+		if($c instanceof VidiunCriteria)
 		{
 			$c->applyFilters();
 			$criteria->setRecordsCount($c->getRecordsCount());
@@ -157,7 +157,7 @@ class MetadataPeer extends BaseMetadataPeer implements IRelatedObjectPeer
 	 */
 	public function getRootObjects(IRelatedObject $object)
 	{
-		$parentObject = kMetadataManager::getObjectFromPeer($object);
+		$parentObject = vMetadataManager::getObjectFromPeer($object);
 		$roots = array();
 		if($parentObject && $parentObject instanceof IRelatedObjectPeer) 
 		{

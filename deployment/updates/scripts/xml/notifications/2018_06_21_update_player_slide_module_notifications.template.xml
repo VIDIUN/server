@@ -16,40 +16,40 @@
 	<multirequest>
 
 		<request service="eventNotificationTemplate" action="listTemplates" plugin="eventNotification" partnerId="0">
-			<filter objectType="KalturaEventNotificationTemplateFilter">
+			<filter objectType="VidiunEventNotificationTemplateFilter">
 				<systemNameEqual>SLIDE_VIEW_CHANGE_CODE_CUE_POINT</systemNameEqual>
 			</filter>
-			<pager objectType="KalturaFilterPager">
+			<pager objectType="VidiunFilterPager">
 				<pageSize>1</pageSize>
 			</pager>
 		</request>
 
 		<request service="eventNotificationTemplate" action="update" plugin="eventNotification" partnerId="0">
 			<id>{1:result:objects:0:id}</id>
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<eventConditions objectType="array">
-					<item objectType="KalturaOrCondition">
+					<item objectType="VidiunOrCondition">
 						<conditions objectType="array">
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>Cue-point type equals</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>$scope->getObject()->getType()</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_cuepoint}</value>
 									</item>
 								</values>
 							</item>
 						</conditions>
 					</item>
-					<item objectType="KalturaFieldMatchCondition">
+					<item objectType="VidiunFieldMatchCondition">
 						<description>Tags_Like</description>
-						<field objectType="KalturaEvalStringField">
+						<field objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getTags() ? ( count(array_intersect(array("select-poll-state","remove-selected-thumb","change-view-mode"), explode(",", $scope->getObject()->getTags()))) ? 1 : 0 ) : 0</code>
 						</field>
 						<values objectType="array">
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>1</value>
 							</item>
 						</values>

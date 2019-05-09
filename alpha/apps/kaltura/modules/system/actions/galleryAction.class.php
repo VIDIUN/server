@@ -4,7 +4,7 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 require_once(MODULES . 'partnerservices2/actions/listentriesAction.class.php' );
 
 /**
@@ -12,7 +12,7 @@ require_once(MODULES . 'partnerservices2/actions/listentriesAction.class.php' );
  * @subpackage system
  * @deprecated
  */
-class galleryAction extends kalturaSystemAction
+class galleryAction extends vidiunSystemAction
 {
 	/**
 	 * Will investigate a single entry

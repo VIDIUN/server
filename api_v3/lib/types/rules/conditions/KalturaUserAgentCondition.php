@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUserAgentCondition extends KalturaRegexCondition
+class VidiunUserAgentCondition extends VidiunRegexCondition
 {
 	/**
 	 * Init object type
@@ -14,12 +14,12 @@ class KalturaUserAgentCondition extends KalturaRegexCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kUserAgentCondition();
+			$dbObject = new vUserAgentCondition();
 			
 		return parent::toObject($dbObject, $skip);
 	}

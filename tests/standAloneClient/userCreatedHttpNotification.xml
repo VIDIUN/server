@@ -12,15 +12,15 @@
 	</session>
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>User created</name>
 				<systemName>USER_CREATED</systemName>
 				<description>HTTP notification template to be sent when a new user is created</description>
 				<automaticDispatchEnabled>1</automaticDispatchEnabled>
 				<eventType>5</eventType> <!-- EventNotificationEventType::OBJECT_CREATED -->
-				<eventObjectType>8</eventObjectType> <!-- EventNotificationEventObjectType::KUSER -->
+				<eventObjectType>8</eventObjectType> <!-- EventNotificationEventObjectType::VUSER -->
 				<contentParameters objectType="array" />
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">

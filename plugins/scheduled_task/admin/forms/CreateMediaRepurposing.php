@@ -22,7 +22,7 @@ class Form_CreateMediaRepurposing extends ConfigureSubForm
 			'oninput'	=> 'checkNumValid(this.value)',
 		));
 
-		$options = array('Kaltura_Client_Type_MediaEntryFilter' => 'media filter', 'Kaltura_Client_Reach_Type_EntryVendorTaskFilter' => 'entry vendor task', "N/A" => "NONE");
+		$options = array('Vidiun_Client_Type_MediaEntryFilter' => 'media filter', 'Vidiun_Client_Reach_Type_EntryVendorTaskFilter' => 'entry vendor task', "N/A" => "NONE");
 		$this->addElement('select', 'filterType', array(
 			'label'			=> 'Filter Type:',
 			'filters'		=> array('StringTrim'),
@@ -30,7 +30,7 @@ class Form_CreateMediaRepurposing extends ConfigureSubForm
 			'value'			=> 'N/A',
 		));
 
-		$this->addEnumElement('Filter','newMR','Kaltura_Client_ScheduledTask_Enum_ObjectFilterEngineType');
+		$this->addEnumElement('Filter','newMR','Vidiun_Client_ScheduledTask_Enum_ObjectFilterEngineType');
 		
 		// submit button
 		$this->addElement('button', 'submit', array(

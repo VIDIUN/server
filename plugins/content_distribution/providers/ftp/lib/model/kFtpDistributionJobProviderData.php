@@ -3,9 +3,9 @@
  * @package plugins.ftpDistribution
  * @subpackage model.data
  */
-class kFtpDistributionJobProviderData extends kDistributionJobProviderData
+class vFtpDistributionJobProviderData extends vDistributionJobProviderData
 {
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

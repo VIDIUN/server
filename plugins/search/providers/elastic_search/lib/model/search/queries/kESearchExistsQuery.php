@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchExistsQuery extends kESearchBaseFieldQuery
+class vESearchExistsQuery extends vESearchBaseFieldQuery
 {
 	const EXISTS_KEY = 'exists';
 	const FIELD_KEY = 'field';

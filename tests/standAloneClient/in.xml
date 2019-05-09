@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml>
 	<config>
-		<serviceUrl>http://prod.kaltura.co.cc/</serviceUrl>
+		<serviceUrl>http://prod.vidiun.co.cc/</serviceUrl>
 		<partnerId>1141</partnerId>
 		<clientTag>Stand alone php 1.0.0</clientTag>
 		<curlTimeout>30</curlTimeout>
@@ -16,39 +16,39 @@
 		<privileges></privileges> 
 	</session>
 	<request service="accessControlProfile" action="add">
-		<accessControl objectType="KalturaAccessControlProfile">
+		<accessControl objectType="VidiunAccessControlProfile">
 			<name>tan-tan xml test</name>
 			<isDefault>0</isDefault>
 			<rules objectType="array">
-				<item objectType="KalturaRule">
+				<item objectType="VidiunRule">
 					<actions objectType="array">
-						<item objectType="KalturaAccessControlBlockAction">
+						<item objectType="VidiunAccessControlBlockAction">
 							<type>1</type>
 						</item>
 					</actions>
 					<conditions objectType="array">
-						<item objectType="KalturaCompareMetadataCondition">
+						<item objectType="VidiunCompareMetadataCondition">
 							<type>metadata.FieldCompare</type>
 							<not>0</not>
-							<value objectType="KalturaTimeContextField"/>
+							<value objectType="VidiunTimeContextField"/>
 							<comparison>5</comparison>
 							<xPath>SiteSunrise</xPath>
 							<profileId>341</profileId>
 						</item>
-						<item objectType="KalturaCompareMetadataCondition">
+						<item objectType="VidiunCompareMetadataCondition">
 							<type>metadata.FieldCompare</type>
 							<not>0</not>
-							<value objectType="KalturaTimeContextField"/>
+							<value objectType="VidiunTimeContextField"/>
 							<comparison>3</comparison>
 							<xPath>SiteSunset</xPath>
 							<profileId>341</profileId>
 						</item>
 					</conditions>
 					<contexts objectType="array">
-						<item objectType="KalturaAccessControlContextTypeHolder">
+						<item objectType="VidiunAccessControlContextTypeHolder">
 							<type>1</type>
 						</item>
-						<item objectType="KalturaAccessControlContextTypeHolder">
+						<item objectType="VidiunAccessControlContextTypeHolder">
 							<type>2</type>
 						</item>
 					</contexts>

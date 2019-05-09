@@ -3,12 +3,12 @@
 /**
  * Auto-generated class.
  * 
- * Used to search KalturaMixEntry attributes. Use KalturaMixEntryCompareAttribute enum to provide attribute name.
+ * Used to search VidiunMixEntry attributes. Use VidiunMixEntryCompareAttribute enum to provide attribute name.
 */
-class KalturaMixEntryCompareAttributeCondition extends KalturaSearchComparableAttributeCondition
+class VidiunMixEntryCompareAttributeCondition extends VidiunSearchComparableAttributeCondition
 {
 	/**
-	 * @var KalturaMixEntryCompareAttribute
+	 * @var VidiunMixEntryCompareAttribute
 	 */
 	public $attribute;
 

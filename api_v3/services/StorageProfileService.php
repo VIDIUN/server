@@ -1,13 +1,13 @@
 <?php
 /**
- * The Storage Profile service allows you to export your Kaltura content to external storage volumes.
+ * The Storage Profile service allows you to export your Vidiun content to external storage volumes.
  * This service is disabled by default, please contact your account manager if you wish to enable it for your partner.
  *
  * @service storageProfile
  * @package api
  * @subpackage services
  */
-class StorageProfileService extends KalturaBaseService
+class StorageProfileService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -15,29 +15,29 @@ class StorageProfileService extends KalturaBaseService
 
 		$partnerId = $this->getPartnerId();
 		if(!$this->getPartner()->getEnabledService(PermissionName::FEATURE_REMOTE_STORAGE))
-			throw new KalturaAPIException(KalturaErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
+			throw new VidiunAPIException(VidiunErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
 			
 		$this->applyPartnerFilterForClass('StorageProfile');
 	}
 	
 	/**
-	 * Adds a storage profile to the Kaltura DB.
+	 * Adds a storage profile to the Vidiun DB.
 	 *
 	 * @action add
-	 * @param KalturaStorageProfile $storageProfile 
-	 * @return KalturaStorageProfile
+	 * @param VidiunStorageProfile $storageProfile 
+	 * @return VidiunStorageProfile
 	 */
-	function addAction(KalturaStorageProfile $storageProfile)
+	function addAction(VidiunStorageProfile $storageProfile)
 	{
 		if(!$storageProfile->status)
-			$storageProfile->status = KalturaStorageProfileStatus::DISABLED;
+			$storageProfile->status = VidiunStorageProfileStatus::DISABLED;
 			
 		$dbStorageProfile = $storageProfile->toInsertableObject();
 		/* @var $dbStorageProfile StorageProfile */
 		$dbStorageProfile->setPartnerId($this->impersonatedPartnerId);
 		$dbStorageProfile->save();
 		
-		$storageProfile = KalturaStorageProfile::getInstanceByType($dbStorageProfile->getProtocol());
+		$storageProfile = VidiunStorageProfile::getInstanceByType($dbStorageProfile->getProtocol());
 				
 		$storageProfile->fromObject($dbStorageProfile, $this->getResponseProfile());
 		return $storageProfile;
@@ -46,13 +46,13 @@ class StorageProfileService extends KalturaBaseService
 	/**
 	 * @action updateStatus
 	 * @param int $storageId
-	 * @param KalturaStorageProfileStatus $status
+	 * @param VidiunStorageProfileStatus $status
 	 */
 	public function updateStatusAction($storageId, $status)
 	{
 		$dbStorage = StorageProfilePeer::retrieveByPK($storageId);
 		if (!$dbStorage)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $storageId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $storageId);
 			
 		$dbStorage->setStatus($status);
 		$dbStorage->save();
@@ -63,7 +63,7 @@ class StorageProfileService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $storageProfileId
-	 * @return KalturaStorageProfile
+	 * @return VidiunStorageProfile
 	 */
 	function getAction($storageProfileId)
 	{
@@ -72,7 +72,7 @@ class StorageProfileService extends KalturaBaseService
 			return null;
 
 		$protocol = $dbStorageProfile->getProtocol();
-		$storageProfile = KalturaStorageProfile::getInstanceByType($protocol);
+		$storageProfile = VidiunStorageProfile::getInstanceByType($protocol);
 		
 		$storageProfile->fromObject($dbStorageProfile, $this->getResponseProfile());
 		return $storageProfile;
@@ -83,20 +83,20 @@ class StorageProfileService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $storageProfileId
-	 * @param KalturaStorageProfile $storageProfile
-	 * @return KalturaStorageProfile
+	 * @param VidiunStorageProfile $storageProfile
+	 * @return VidiunStorageProfile
 	 */
-	function updateAction($storageProfileId, KalturaStorageProfile $storageProfile)
+	function updateAction($storageProfileId, VidiunStorageProfile $storageProfile)
 	{
 		$dbStorageProfile = StorageProfilePeer::retrieveByPK($storageProfileId);
 		if (!$dbStorageProfile)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $storageProfileId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $storageProfileId);
 			
 		$dbStorageProfile = $storageProfile->toUpdatableObject($dbStorageProfile);
 		$dbStorageProfile->save();
 		
 		$protocol = $dbStorageProfile->getProtocol();
-		$storageProfile = KalturaStorageProfile::getInstanceByType($protocol);
+		$storageProfile = VidiunStorageProfile::getInstanceByType($protocol);
 		
 		$storageProfile->fromObject($dbStorageProfile, $this->getResponseProfile());
 		return $storageProfile;
@@ -104,16 +104,16 @@ class StorageProfileService extends KalturaBaseService
 	
 	/**	
 	 * @action list
-	 * @param KalturaStorageProfileFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaStorageProfileListResponse
+	 * @param VidiunStorageProfileFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunStorageProfileListResponse
 	 */
-	public function listAction(KalturaStorageProfileFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunStorageProfileFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		$c = new Criteria();
 		
 		if (!$filter)
-			$filter = new KalturaStorageProfileFilter();
+			$filter = new VidiunStorageProfileFilter();
 		
 		$storageProfileFilter = new StorageProfileFilter();
 		$filter->toObject($storageProfileFilter);
@@ -121,13 +121,13 @@ class StorageProfileService extends KalturaBaseService
 		$list = StorageProfilePeer::doSelect($c);
 			
 		if (!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		$pager->attachToCriteria($c);
 		
-		$response = new KalturaStorageProfileListResponse();
+		$response = new VidiunStorageProfileListResponse();
 		$response->totalCount = StorageProfilePeer::doCount($c);
-		$response->objects = KalturaStorageProfileArray::fromDbArray($list, $this->getResponseProfile());
+		$response->objects = VidiunStorageProfileArray::fromDbArray($list, $this->getResponseProfile());
 		return $response;
 	}
 	

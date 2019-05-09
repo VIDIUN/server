@@ -7,7 +7,7 @@
  * @package api
  * @subpackage services
  */
-class ThumbParamsService extends KalturaBaseService
+class ThumbParamsService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -20,7 +20,7 @@ class ThumbParamsService extends KalturaBaseService
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::partnerGroup()
+	 * @see VidiunBaseService::partnerGroup()
 	 */
 	protected function partnerGroup($peer = null)
 	{
@@ -48,10 +48,10 @@ class ThumbParamsService extends KalturaBaseService
 	 * Add new Thumb Params
 	 * 
 	 * @action add
-	 * @param KalturaThumbParams $thumbParams
-	 * @return KalturaThumbParams
+	 * @param VidiunThumbParams $thumbParams
+	 * @return VidiunThumbParams
 	 */
-	public function addAction(KalturaThumbParams $thumbParams)
+	public function addAction(VidiunThumbParams $thumbParams)
 	{	
 		$thumbParamsDb = new thumbParams();
 		$thumbParams->toInsertableObject($thumbParamsDb);
@@ -68,16 +68,16 @@ class ThumbParamsService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id
-	 * @return KalturaThumbParams
+	 * @return VidiunThumbParams
 	 */
 	public function getAction($id)
 	{
 		$thumbParamsDb = assetParamsPeer::retrieveByPK($id);
 		
 		if (!$thumbParamsDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
 			
-		$thumbParams = KalturaFlavorParamsFactory::getFlavorParamsInstance($thumbParamsDb->getType());
+		$thumbParams = VidiunFlavorParamsFactory::getFlavorParamsInstance($thumbParamsDb->getType());
 		$thumbParams->fromObject($thumbParamsDb, $this->getResponseProfile());
 		
 		return $thumbParams;
@@ -88,14 +88,14 @@ class ThumbParamsService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id
-	 * @param KalturaThumbParams $thumbParams
-	 * @return KalturaThumbParams
+	 * @param VidiunThumbParams $thumbParams
+	 * @return VidiunThumbParams
 	 */
-	public function updateAction($id, KalturaThumbParams $thumbParams)
+	public function updateAction($id, VidiunThumbParams $thumbParams)
 	{
 		$thumbParamsDb = assetParamsPeer::retrieveByPK($id);
 		if (!$thumbParamsDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
 			
 		$thumbParams->toUpdatableObject($thumbParamsDb);
 		$thumbParamsDb->save();
@@ -114,7 +114,7 @@ class ThumbParamsService extends KalturaBaseService
 	{
 		$thumbParamsDb = assetParamsPeer::retrieveByPK($id);
 		if (!$thumbParamsDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
 			
 		$thumbParamsDb->setDeletedAt(time());
 		$thumbParamsDb->save();
@@ -124,21 +124,21 @@ class ThumbParamsService extends KalturaBaseService
 	 * List Thumb Params by filter with paging support (By default - all system default params will be listed too)
 	 * 
 	 * @action list
-	 * @param KalturaThumbParamsFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaThumbParamsListResponse
+	 * @param VidiunThumbParamsFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunThumbParamsListResponse
 	 */
-	public function listAction(KalturaThumbParamsFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunThumbParamsFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaThumbParamsFilter();
+			$filter = new VidiunThumbParamsFilter();
 			
 		if(!$pager)
 		{
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		}
 
-		$types = KalturaPluginManager::getExtendedTypes(assetParamsPeer::OM_CLASS, assetType::THUMBNAIL);
+		$types = VidiunPluginManager::getExtendedTypes(assetParamsPeer::OM_CLASS, assetType::THUMBNAIL);
 		return $filter->getTypeListResponse($pager, $this->getResponseProfile(), $types);
 	}
 	
@@ -147,13 +147,13 @@ class ThumbParamsService extends KalturaBaseService
 	 * 
 	 * @action getByConversionProfileId
 	 * @param int $conversionProfileId
-	 * @return KalturaThumbParamsArray
+	 * @return VidiunThumbParamsArray
 	 */
 	public function getByConversionProfileIdAction($conversionProfileId)
 	{
 		$conversionProfileDb = conversionProfile2Peer::retrieveByPK($conversionProfileId);
 		if (!$conversionProfileDb)
-			throw new KalturaAPIException(KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $conversionProfileId);
+			throw new VidiunAPIException(VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $conversionProfileId);
 			
 		$thumbParamsConversionProfilesDb = $conversionProfileDb->getflavorParamsConversionProfilesJoinflavorParams();
 		$thumbParamsDb = array();
@@ -163,7 +163,7 @@ class ThumbParamsService extends KalturaBaseService
 			$thumbParamsDb[] = $item->getassetParams();
 		}
 		
-		$thumbParams = KalturaThumbParamsArray::fromDbArray($thumbParamsDb, $this->getResponseProfile());
+		$thumbParams = VidiunThumbParamsArray::fromDbArray($thumbParamsDb, $this->getResponseProfile());
 		
 		return $thumbParams; 
 	}

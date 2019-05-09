@@ -23,7 +23,7 @@ class SphinxCuePointCriteria extends SphinxCriteria
 	
 	public function applyFilters()
 	{
-		if(kCurrentContext::getCurrentPartnerId() < 0)
+		if(vCurrentContext::getCurrentPartnerId() < 0)
 		{
 			$partnerId = $this->getValue("cue_point.PARTNER_ID");
 			if(!$partnerId)
@@ -41,7 +41,7 @@ class SphinxCuePointCriteria extends SphinxCriteria
 			}
 			
 			if($partnerId)
-				kCurrentContext::$partner_id = $partnerId;
+				vCurrentContext::$partner_id = $partnerId;
 		}
 		
 		return parent::applyFilters();
@@ -60,7 +60,7 @@ class SphinxCuePointCriteria extends SphinxCriteria
 			$entry = entryPeer::retrieveByPK($entryId);
 			if ( $entry && $entry->getType() == entryType::LIVE_STREAM )
 			{
-				kApiCache::setExpiry( self::LIVE_ENTRY_CUE_POINT_CACHE_EXPIRY_SECONDS );
+				vApiCache::setExpiry( self::LIVE_ENTRY_CUE_POINT_CACHE_EXPIRY_SECONDS );
 			}
 		}
 		
@@ -76,7 +76,7 @@ class SphinxCuePointCriteria extends SphinxCriteria
 		{
 		    $this->sphinxSkipped = false;
 		    $isPublic = $filter->get('_eq_is_public');
-		    $this->addAnd(CuePointPeer::IS_PUBLIC, CuePoint::getIndexPrefix(kCurrentContext::getCurrentPartnerId()).$isPublic, Criteria::EQUAL);	
+		    $this->addAnd(CuePointPeer::IS_PUBLIC, CuePoint::getIndexPrefix(vCurrentContext::getCurrentPartnerId()).$isPublic, Criteria::EQUAL);	
 		}
 		$filter->unsetByName('_eq_is_public');
 
@@ -91,13 +91,13 @@ class SphinxCuePointCriteria extends SphinxCriteria
 			return array(
 				CuePointPeer::TYPE,
 				Criteria::LIKE,
-				CuePoint::getIndexPrefix(kCurrentContext::getCurrentPartnerId()) . $crit->getValue());
+				CuePoint::getIndexPrefix(vCurrentContext::getCurrentPartnerId()) . $crit->getValue());
 		} else if ($field == CuePointPeer::TYPE && $crit->getComparison() == Criteria::IN)
 		{
 			return array(
 				CuePointPeer::TYPE,
 				Criteria::IN,
-				$this::addPrefixToArray($crit->getValue(), CuePoint::getIndexPrefix(kCurrentContext::getCurrentPartnerId())));
+				$this::addPrefixToArray($crit->getValue(), CuePoint::getIndexPrefix(vCurrentContext::getCurrentPartnerId())));
 		}
 		return parent::translateSphinxCriterion($crit);
 	}

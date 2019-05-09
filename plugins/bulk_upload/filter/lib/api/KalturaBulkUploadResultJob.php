@@ -3,7 +3,7 @@
  * @package plugins.bulkUploadFilter
  * @subpackage api.objects
  */
-class KalturaBulkUploadResultJob extends KalturaBulkUploadResult
+class VidiunBulkUploadResultJob extends VidiunBulkUploadResult
 {
 	
 	/**
@@ -23,7 +23,7 @@ class KalturaBulkUploadResultJob extends KalturaBulkUploadResult
 	}
 	
 	/* (non-PHPdoc)
-     * @see KalturaBulkUploadResult::toInsertableObject()
+     * @see VidiunBulkUploadResult::toInsertableObject()
      */
 	public function toInsertableObject ( $object_to_fill = null , $props_to_skip = array() )
 	{

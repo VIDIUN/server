@@ -4,7 +4,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaEntryServerNodeBaseFilter extends KalturaFilter
+abstract class VidiunEntryServerNodeBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -75,7 +75,7 @@ abstract class KalturaEntryServerNodeBaseFilter extends KalturaFilter
 	public $updatedAtLessThanOrEqual;
 
 	/**
-	 * @var KalturaEntryServerNodeStatus
+	 * @var VidiunEntryServerNodeStatus
 	 */
 	public $statusEqual;
 
@@ -85,12 +85,12 @@ abstract class KalturaEntryServerNodeBaseFilter extends KalturaFilter
 	public $statusIn;
 
 	/**
-	 * @var KalturaEntryServerNodeType
+	 * @var VidiunEntryServerNodeType
 	 */
 	public $serverTypeEqual;
 
 	/**
-	 * @dynamicType KalturaEntryServerNodeType
+	 * @dynamicType VidiunEntryServerNodeType
 	 * @var string
 	 */
 	public $serverTypeIn;

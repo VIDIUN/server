@@ -2,7 +2,7 @@
 /**
  * @package plugins.metroPcsDistribution
  */
-class MetroPcsDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider
+class MetroPcsDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider
 {
 	const PLUGIN_NAME = 'metroPcsDistribution';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
@@ -16,12 +16,12 @@ class MetroPcsDistributionPlugin extends KalturaPlugin implements IKalturaPermis
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -57,7 +57,7 @@ class MetroPcsDistributionPlugin extends KalturaPlugin implements IKalturaPermis
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::METRO_PCS)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::METRO_PCS)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return new MetroPcsDistributionEngine();
@@ -77,14 +77,14 @@ class MetroPcsDistributionPlugin extends KalturaPlugin implements IKalturaPermis
 			if($baseClass == 'IDistributionEngineUpdate')
 				return new MetroPcsDistributionEngine();
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaMetroPcsDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunMetroPcsDistributionProfile();
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return new KalturaMetroPcsDistributionJobProviderData();
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return new VidiunMetroPcsDistributionJobProviderData();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::METRO_PCS)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::METRO_PCS)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -94,23 +94,23 @@ class MetroPcsDistributionPlugin extends KalturaPlugin implements IKalturaPermis
 		}
 		
 		// content distribution does not work in partner services 2 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || kCurrentContext::$ps_vesion != 'ps3')
+		if (!class_exists('vCurrentContext') || vCurrentContext::$ps_vesion != 'ps3')
 			return null;
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(MetroPcsDistributionProviderType::METRO_PCS))
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(MetroPcsDistributionProviderType::METRO_PCS))
 		{
-			$reflect = new ReflectionClass('KalturaMetroPcsDistributionJobProviderData');
+			$reflect = new ReflectionClass('VidiunMetroPcsDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(MetroPcsDistributionProviderType::METRO_PCS))
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(MetroPcsDistributionProviderType::METRO_PCS))
 		{
-			$reflect = new ReflectionClass('kMetroPcsDistributionJobProviderData');
+			$reflect = new ReflectionClass('vMetroPcsDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(MetroPcsDistributionProviderType::METRO_PCS))
-			return new KalturaMetroPcsDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(MetroPcsDistributionProviderType::METRO_PCS))
+			return new VidiunMetroPcsDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(MetroPcsDistributionProviderType::METRO_PCS))
 			return new MetroPcsDistributionProfile();
@@ -126,7 +126,7 @@ class MetroPcsDistributionPlugin extends KalturaPlugin implements IKalturaPermis
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::METRO_PCS)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::METRO_PCS)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return 'MetroPcsDistributionEngine';
@@ -146,34 +146,34 @@ class MetroPcsDistributionPlugin extends KalturaPlugin implements IKalturaPermis
 			if($baseClass == 'IDistributionEngineUpdate')
 				return 'MetroPcsDistributionEngine';
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaMetroPcsDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunMetroPcsDistributionProfile';
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaMetroPcsDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunMetroPcsDistributionJobProviderData';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::METRO_PCS)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::METRO_PCS)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_MetroPcsProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_MetroPcsDistribution_Type_MetroPcsDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_MetroPcsDistribution_Type_MetroPcsDistributionProfile';
 		}
 		
 		// content distribution does not work in partner services 2 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || kCurrentContext::$ps_vesion != 'ps3')
+		if (!class_exists('vCurrentContext') || vCurrentContext::$ps_vesion != 'ps3')
 			return null;
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(MetroPcsDistributionProviderType::METRO_PCS))
-			return 'KalturaMetroPcsDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(MetroPcsDistributionProviderType::METRO_PCS))
+			return 'VidiunMetroPcsDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(MetroPcsDistributionProviderType::METRO_PCS))
-			return 'kMetroPcsDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(MetroPcsDistributionProviderType::METRO_PCS))
+			return 'vMetroPcsDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(MetroPcsDistributionProviderType::METRO_PCS))
-			return 'KalturaMetroPcsDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(MetroPcsDistributionProviderType::METRO_PCS))
+			return 'VidiunMetroPcsDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(MetroPcsDistributionProviderType::METRO_PCS))
 			return 'MetroPcsDistributionProfile';
@@ -194,11 +194,11 @@ class MetroPcsDistributionPlugin extends KalturaPlugin implements IKalturaPermis
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaMetroPcsDistributionProvider();
+		$distributionProvider = new VidiunMetroPcsDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -226,8 +226,8 @@ class MetroPcsDistributionPlugin extends KalturaPlugin implements IKalturaPermis
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -235,6 +235,6 @@ class MetroPcsDistributionPlugin extends KalturaPlugin implements IKalturaPermis
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

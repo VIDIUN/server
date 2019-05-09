@@ -4,14 +4,14 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectTaskEngine
  */
-class KObjectTaskModifyCategoriesEngine extends KObjectTaskEntryEngineBase
+class VObjectTaskModifyCategoriesEngine extends VObjectTaskEntryEngineBase
 {
 	/**
-	 * @param KalturaBaseEntry $object
+	 * @param VidiunBaseEntry $object
 	 */
 	function processObject($object)
 	{
-		/** @var KalturaModifyCategoriesObjectTask $objectTask */
+		/** @var VidiunModifyCategoriesObjectTask $objectTask */
 		$objectTask = $this->getObjectTask();
 		if (is_null($objectTask))
 			return;
@@ -23,18 +23,18 @@ class KObjectTaskModifyCategoriesEngine extends KObjectTaskEntryEngineBase
 			$objectTask->categoryIds = array();
 		foreach($objectTask->categoryIds as $categoryIntValue)
 		{
-			/** @var KalturaString $categoryIntValue */
+			/** @var VidiunString $categoryIntValue */
 			$taskCategoryIds[] = $categoryIntValue->value;
 		}
 
-		if ($addRemoveType == KalturaScheduledTaskAddOrRemoveType::MOVE)
+		if ($addRemoveType == VidiunScheduledTaskAddOrRemoveType::MOVE)
 		{
 			$this->removeAllCategories($entryId, $object->partnerId);
-			$addRemoveType = KalturaScheduledTaskAddOrRemoveType::ADD;
+			$addRemoveType = VidiunScheduledTaskAddOrRemoveType::ADD;
 		}
 
 		// remove all categories if nothing was configured in the list
-		if (count($taskCategoryIds) == 0 && $addRemoveType == KalturaScheduledTaskAddOrRemoveType::REMOVE)
+		if (count($taskCategoryIds) == 0 && $addRemoveType == VidiunScheduledTaskAddOrRemoveType::REMOVE)
 		{
 			$this->removeAllCategories($entryId, $object->partnerId);
 		}
@@ -48,7 +48,7 @@ class KObjectTaskModifyCategoriesEngine extends KObjectTaskEntryEngineBase
 				}
 				catch(Exception $ex)
 				{
-					KalturaLog::err($ex);
+					VidiunLog::err($ex);
 				}
 			}
 		}
@@ -63,22 +63,22 @@ class KObjectTaskModifyCategoriesEngine extends KObjectTaskEntryEngineBase
 	{
 		$client = $this->getClient();
 		$categoryEntry = null;
-		$filter = new KalturaCategoryEntryFilter();
+		$filter = new VidiunCategoryEntryFilter();
 		$filter->entryIdEqual = $entryId;
 		$filter->categoryIdEqual = $categoryId;
 		$categoryEntryListResponse = $client->categoryEntry->listAction($filter);
-		/** @var KalturaCategoryEntry $categoryEntry */
+		/** @var VidiunCategoryEntry $categoryEntry */
 		if (count($categoryEntryListResponse->objects))
 			$categoryEntry = $categoryEntryListResponse->objects[0];
 
-		if (is_null($categoryEntry) && $addRemoveType == KalturaScheduledTaskAddOrRemoveType::ADD)
+		if (is_null($categoryEntry) && $addRemoveType == VidiunScheduledTaskAddOrRemoveType::ADD)
 		{
-			$categoryEntry = new KalturaCategoryEntry();
+			$categoryEntry = new VidiunCategoryEntry();
 			$categoryEntry->entryId = $entryId;
 			$categoryEntry->categoryId = $categoryId;
 			$client->categoryEntry->add($categoryEntry);
 		}
-		elseif (!is_null($categoryEntry) && $addRemoveType == KalturaScheduledTaskAddOrRemoveType::REMOVE)
+		elseif (!is_null($categoryEntry) && $addRemoveType == VidiunScheduledTaskAddOrRemoveType::REMOVE)
 		{
 			$client->categoryEntry->delete($entryId, $categoryId);
 		}
@@ -96,7 +96,7 @@ class KObjectTaskModifyCategoriesEngine extends KObjectTaskEntryEngineBase
 		}
 		catch(Exception $ex)
 		{
-			KalturaLog::err($ex);
+			VidiunLog::err($ex);
 		}
 	}
 
@@ -106,12 +106,12 @@ class KObjectTaskModifyCategoriesEngine extends KObjectTaskEntryEngineBase
 	public function doRemoveAllCategories($entryId)
 	{
 		$client = $this->getClient();
-		$filter = new KalturaCategoryEntryFilter();
+		$filter = new VidiunCategoryEntryFilter();
 		$filter->entryIdEqual = $entryId;
 		$categoryEntryListResponse = $client->categoryEntry->listAction($filter);
 		foreach($categoryEntryListResponse->objects as $categoryEntry)
 		{
-			/** @var $categoryEntry KalturaCategoryEntry */
+			/** @var $categoryEntry VidiunCategoryEntry */
 			$client->categoryEntry->delete($entryId, $categoryEntry->categoryId);
 		}
 	}

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kStorageExportJobData extends kStorageJobData
+class vStorageExportJobData extends vStorageJobData
 {
 	/**
 	 * @var bool
@@ -21,14 +21,14 @@ class kStorageExportJobData extends kStorageJobData
 		switch($protocol)
 		{
 			case StorageProfile::STORAGE_PROTOCOL_S3:
-				$data = new kAmazonS3StorageExportJobData();
+				$data = new vAmazonS3StorageExportJobData();
 				break;
 			default:
-				$data = KalturaPluginManager::loadObject('kStorageExportJobData', $protocol);
+				$data = VidiunPluginManager::loadObject('vStorageExportJobData', $protocol);
 				break;
 		}
 		if (!$data)
-			$data = new kStorageExportJobData();
+			$data = new vStorageExportJobData();
 		
 		return $data;
 	}

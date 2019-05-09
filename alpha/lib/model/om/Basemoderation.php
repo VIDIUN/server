@@ -50,10 +50,10 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 	protected $object_type;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the puser_id field.
@@ -98,9 +98,9 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 	protected $report_code;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuser;
+	protected $avuser;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -198,13 +198,13 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -453,31 +453,31 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 	} // setObjectType()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     moderation The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[moderationPeer::KUSER_ID]))
-			$this->oldColumnsValues[moderationPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[moderationPeer::VUSER_ID]))
+			$this->oldColumnsValues[moderationPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = moderationPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = moderationPeer::VUSER_ID;
 		}
 
-		if ($this->akuser !== null && $this->akuser->getId() !== $v) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->avuser->getId() !== $v) {
+			$this->avuser = null;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [puser_id] column.
@@ -729,7 +729,7 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 			$this->subp_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
 			$this->object_id = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->object_type = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-			$this->kuser_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+			$this->vuser_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
 			$this->puser_id = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
 			$this->status = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
 			$this->created_at = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
@@ -769,8 +769,8 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akuser !== null && $this->kuser_id !== $this->akuser->getId()) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->vuser_id !== $this->avuser->getId()) {
+			$this->avuser = null;
 		}
 	} // ensureConsistency
 
@@ -813,7 +813,7 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akuser = null;
+			$this->avuser = null;
 		} // if (deep)
 	}
 
@@ -932,11 +932,11 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if ($this->akuser->isModified() || $this->akuser->isNew()) {
-					$affectedRows += $this->akuser->save($con);
+			if ($this->avuser !== null) {
+				if ($this->avuser->isModified() || $this->avuser->isNew()) {
+					$affectedRows += $this->avuser->save($con);
 				}
-				$this->setkuser($this->akuser);
+				$this->setvuser($this->avuser);
 			}
 
 			if ($this->isNew() ) {
@@ -1003,7 +1003,7 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -1027,12 +1027,12 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1050,8 +1050,8 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1176,9 +1176,9 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if (!$this->akuser->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuser->getValidationFailures());
+			if ($this->avuser !== null) {
+				if (!$this->avuser->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuser->getValidationFailures());
 				}
 			}
 
@@ -1237,7 +1237,7 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 				return $this->getObjectType();
 				break;
 			case 5:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 6:
 				return $this->getPuserId();
@@ -1286,7 +1286,7 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 			$keys[2] => $this->getSubpId(),
 			$keys[3] => $this->getObjectId(),
 			$keys[4] => $this->getObjectType(),
-			$keys[5] => $this->getKuserId(),
+			$keys[5] => $this->getVuserId(),
 			$keys[6] => $this->getPuserId(),
 			$keys[7] => $this->getStatus(),
 			$keys[8] => $this->getCreatedAt(),
@@ -1341,7 +1341,7 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 				$this->setObjectType($value);
 				break;
 			case 5:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 6:
 				$this->setPuserId($value);
@@ -1393,7 +1393,7 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[2], $arr)) $this->setSubpId($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setObjectId($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setObjectType($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setKuserId($arr[$keys[5]]);
+		if (array_key_exists($keys[5], $arr)) $this->setVuserId($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setPuserId($arr[$keys[6]]);
 		if (array_key_exists($keys[7], $arr)) $this->setStatus($arr[$keys[7]]);
 		if (array_key_exists($keys[8], $arr)) $this->setCreatedAt($arr[$keys[8]]);
@@ -1417,7 +1417,7 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(moderationPeer::SUBP_ID)) $criteria->add(moderationPeer::SUBP_ID, $this->subp_id);
 		if ($this->isColumnModified(moderationPeer::OBJECT_ID)) $criteria->add(moderationPeer::OBJECT_ID, $this->object_id);
 		if ($this->isColumnModified(moderationPeer::OBJECT_TYPE)) $criteria->add(moderationPeer::OBJECT_TYPE, $this->object_type);
-		if ($this->isColumnModified(moderationPeer::KUSER_ID)) $criteria->add(moderationPeer::KUSER_ID, $this->kuser_id);
+		if ($this->isColumnModified(moderationPeer::VUSER_ID)) $criteria->add(moderationPeer::VUSER_ID, $this->vuser_id);
 		if ($this->isColumnModified(moderationPeer::PUSER_ID)) $criteria->add(moderationPeer::PUSER_ID, $this->puser_id);
 		if ($this->isColumnModified(moderationPeer::STATUS)) $criteria->add(moderationPeer::STATUS, $this->status);
 		if ($this->isColumnModified(moderationPeer::CREATED_AT)) $criteria->add(moderationPeer::CREATED_AT, $this->created_at);
@@ -1499,7 +1499,7 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 
 		$copyObj->setObjectType($this->object_type);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setPuserId($this->puser_id);
 
@@ -1579,24 +1579,24 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
+	 * @param      vuser $v
 	 * @return     moderation The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuser(kuser $v = null)
+	public function setvuser(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setKuserId(NULL);
+			$this->setVuserId(NULL);
 		} else {
-			$this->setKuserId($v->getId());
+			$this->setVuserId($v->getId());
 		}
 
-		$this->akuser = $v;
+		$this->avuser = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
 			$v->addmoderation($this);
 		}
@@ -1606,25 +1606,25 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuser(PropelPDO $con = null)
+	public function getvuser(PropelPDO $con = null)
 	{
-		if ($this->akuser === null && ($this->kuser_id !== null)) {
-			$this->akuser = kuserPeer::retrieveByPk($this->kuser_id);
+		if ($this->avuser === null && ($this->vuser_id !== null)) {
+			$this->avuser = vuserPeer::retrieveByPk($this->vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuser->addmoderations($this);
+			   $this->avuser->addmoderations($this);
 			 */
 		}
-		return $this->akuser;
+		return $this->avuser;
 	}
 
 	/**
@@ -1641,7 +1641,7 @@ abstract class Basemoderation extends BaseObject  implements Persistent {
 		if ($deep) {
 		} // if ($deep)
 
-			$this->akuser = null;
+			$this->avuser = null;
 	}
 
 } // Basemoderation

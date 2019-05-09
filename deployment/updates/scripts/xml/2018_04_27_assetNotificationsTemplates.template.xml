@@ -14,7 +14,7 @@
     </session>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Caption Asset Created Email Metadata Field Equals</name>
                 <systemName>CAPTION_ASSET_CREATED_METADATA_FIELD_EQUALS</systemName>
                 <description>Email notification template to be sent when a custom metadata field changed to specific value.</description>
@@ -24,12 +24,12 @@
                 <eventObjectType>captionAssetEventNotifications.CaptionAsset</eventObjectType>
                 <!-- EventNotificationEventObjectType::CAPTION_ASSET -->
                 <eventConditions objectType="array">
-                    <item objectType="KalturaMatchMetadataCondition">
+                    <item objectType="VidiunMatchMetadataCondition">
                         <description>Metadata field equals</description>
                         <xPath>{metadata_field}</xPath>
                         <profileSystemName>{metadata_profile_system_name}</profileSystemName>
                         <values objectType="array">
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>{metadata_value}</value>
                             </item>
                         </values>
@@ -42,128 +42,128 @@
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">			
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{owner_email}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{owner_name}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
-                <cc objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <cc objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">			
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{creator_email}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{creator_name}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </cc>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("partner_notification_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("partner_notification_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("partner_notification_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("partner_notification_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>creator_name</key>
                         <description>Entry creator name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()->getFirstName() . ' ' . entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()->getLastName() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()->getFirstName() . ' ' . entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()->getLastName() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>creator_id</key>
                         <description>Entry creator ID</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getKuserId() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getVuserId() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>creator_email</key>
                         <description>Entry creator email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()->getEmail() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>owner_name</key>
                         <description>Account owner name</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getPartner()->getPartnerName() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>owner_email</key>
                         <description>Account owner email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>entry_id</key>
                         <description>entry id</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getEntryId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>entry_name</key>
                         <description>entry name</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ?  entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getName() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>file_name</key>
                         <description>Captions file name</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getLabel() ? $scope->getObject()->getLabel() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>language</key>
                         <description>Language</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getLanguage()</code>
                         </value>
                     </item>
                 </contentParameters>
                 <userParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>metadata_field</key>
                         <description>Custom metadata field to be compared</description>
-                        <value objectType="KalturaStringValue">
+                        <value objectType="VidiunStringValue">
                             <value/>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>metadata_profile_system_name</key>
                         <description>Custom metadata profile system name to be compared</description>
-                        <value objectType="KalturaStringValue">
+                        <value objectType="VidiunStringValue">
                             <value/>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>metadata_value</key>
                         <description>Custom metadata field value that triggers the event</description>
-                        <value objectType="KalturaStringValue">
+                        <value objectType="VidiunStringValue">
                             <value/>
                         </value>
                     </item>

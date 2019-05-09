@@ -3,10 +3,10 @@
  * @package api
  * @subpackage v3
  */
-class KalturaServicesMap
+class VidiunServicesMap
 {
 	/**
-	 * @var array <KalturaServiceActionItem>
+	 * @var array <VidiunServiceActionItem>
 	 */
 	private static $services = array();
 	
@@ -31,11 +31,11 @@ class KalturaServicesMap
 	{
 		if(!count(self::$services))
 		{
-			$cacheFilePathArray = array(kConf::get("cache_root_path"), 'api_v3', 'KalturaServicesMap.cache');
+			$cacheFilePathArray = array(vConf::get("cache_root_path"), 'api_v3', 'VidiunServicesMap.cache');
 			$cacheFilePath = implode(DIRECTORY_SEPARATOR, $cacheFilePathArray);
 			if (!file_exists($cacheFilePath))
 			{
-				$servicesPathArray = array(KALTURA_API_PATH, 'services',);
+				$servicesPathArray = array(VIDIUN_API_PATH, 'services',);
 				$servicesPath = implode(DIRECTORY_SEPARATOR, $servicesPathArray);
 				self::cacheMap($servicesPath, $cacheFilePath);
 				if (!file_exists($cacheFilePath))
@@ -84,7 +84,7 @@ class KalturaServicesMap
 			
 		$servicePath = realpath($servicePath);
 		$serviceMap = array();
-		$classMap = KAutoloader::getClassMap();
+		$classMap = VAutoloader::getClassMap();
 		$checkedClasses = array();
 		
 		//Retrieve all service classes from the classMap.
@@ -97,16 +97,16 @@ class KalturaServicesMap
 				$reflectionClass = new ReflectionClass($class);
 				
 				
-				if ($reflectionClass->isSubclassOf('KalturaBaseService'))
+				if ($reflectionClass->isSubclassOf('VidiunBaseService'))
 				{
-				    $serviceDoccomment = new KalturaDocCommentParser($reflectionClass->getDocComment());
+				    $serviceDoccomment = new VidiunDocCommentParser($reflectionClass->getDocComment());
 				    $serviceClasses[$serviceDoccomment->serviceName] = $class;
 				}
 			}
 		}
 		
 		//Retrieve all plugin service classes.
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaServices');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunServices');
 		foreach($pluginInstances as $pluginName => $pluginInstance)
 		{
 			$pluginServices = $pluginInstance->getServicesMap();
@@ -122,8 +122,8 @@ class KalturaServicesMap
 		$aliasActions = array();
 		foreach($serviceClasses as $serviceId => $serviceClass)
 		{
-			$serviceReflectionClass = KalturaServiceReflector::constructFromClassName($serviceClass);
-			$serviceMapEntry = new KalturaServiceActionItem();
+			$serviceReflectionClass = VidiunServiceReflector::constructFromClassName($serviceClass);
+			$serviceMapEntry = new VidiunServiceActionItem();
 			$serviceMapEntry->serviceId = $serviceId;
 			$serviceMapEntry->serviceClass = $serviceClass;
 			$serviceMapEntry->serviceInfo = $serviceReflectionClass->getServiceInfo();
@@ -159,29 +159,29 @@ class KalturaServicesMap
 		}
 		
 		// filter out services that have no actions
-		$serviceMap = array_filter($serviceMap, array('KalturaServicesMap', 'filterEmptyServices'));
+		$serviceMap = array_filter($serviceMap, array('VidiunServicesMap', 'filterEmptyServices'));
 
 		if (!is_dir(dirname($cacheFilePath))) {
 			mkdir(dirname($cacheFilePath));
 			chmod(dirname($cacheFilePath), 0755);
 		}
-		kFile::safeFilePutContents($cacheFilePath, serialize($serviceMap), 0644);
+		vFile::safeFilePutContents($cacheFilePath, serialize($serviceMap), 0644);
 	}
 	
 	public static function getServiceMapModificationTime ()
 	{
-	    $cacheFilePathArray = array(kConf::get("cache_root_path"), 'api_v3', 'KalturaServicesMap.cache');
+	    $cacheFilePathArray = array(vConf::get("cache_root_path"), 'api_v3', 'VidiunServicesMap.cache');
 		$cacheFilePath = implode(DIRECTORY_SEPARATOR, $cacheFilePathArray);
 	    return filemtime($cacheFilePath);
 	}
 	
     /**
-     * Function tpo retrieve a specific KalturaServiceActionItem from the cache by a service ID and action ID.
+     * Function tpo retrieve a specific VidiunServiceActionItem from the cache by a service ID and action ID.
      * If the item was not found, it is retrieved from the services map and cached.
      * @param string $serviceId
      * @param string $actionId
-     * @throws KalturaAPIException
-     * @return KalturaServiceActionItem
+     * @throws VidiunAPIException
+     * @return VidiunServiceActionItem
      */
     public static function retrieveServiceActionItem($serviceId, $actionId)
 	{
@@ -190,7 +190,7 @@ class KalturaServicesMap
             $apcFetchSuccess = null;
             $serviceItemFromCache = apc_fetch($serviceId, $apcFetchSuccess);
             $serviceClassToIdFileCachePath = self::getServiceClassToIdCacheFilePath();
-            if ($apcFetchSuccess && $serviceItemFromCache[KalturaServicesMap::SERVICES_MAP_MODIFICATION_TIME] == self::getServiceMapModificationTime()
+            if ($apcFetchSuccess && $serviceItemFromCache[VidiunServicesMap::SERVICES_MAP_MODIFICATION_TIME] == self::getServiceMapModificationTime()
 				 && file_exists($serviceClassToIdFileCachePath))
             {
             	self::populateServiceClassToId();
@@ -203,22 +203,22 @@ class KalturaServicesMap
 		
 		if(!isset($serviceMap[$serviceId]))
 		{
-			KalturaLog::crit("Service [$serviceId] does not exist!");
-			throw new KalturaAPIException(KalturaErrors::SERVICE_DOES_NOT_EXISTS, $serviceId);
+			VidiunLog::crit("Service [$serviceId] does not exist!");
+			throw new VidiunAPIException(VidiunErrors::SERVICE_DOES_NOT_EXISTS, $serviceId);
 		}
 		
 		// check if action exists
 		if(!$actionId)
 		{
-			KalturaLog::crit("Action not specified!");
-			throw new KalturaAPIException(KalturaErrors::ACTION_NOT_SPECIFIED, $serviceId);
+			VidiunLog::crit("Action not specified!");
+			throw new VidiunAPIException(VidiunErrors::ACTION_NOT_SPECIFIED, $serviceId);
 		}
 		$reflector = $serviceMap[$serviceId];
 		
 		if(function_exists('apc_store'))
 		{
 			$servicesMapLastModTime = self::getServiceMapModificationTime();
-			$success = apc_store($serviceId, array("serviceActionItem" => $serviceMap[$serviceId], KalturaServicesMap::SERVICES_MAP_MODIFICATION_TIME => $servicesMapLastModTime));
+			$success = apc_store($serviceId, array("serviceActionItem" => $serviceMap[$serviceId], VidiunServicesMap::SERVICES_MAP_MODIFICATION_TIME => $servicesMapLastModTime));
 		}
 		
 		return $reflector;
@@ -247,14 +247,14 @@ class KalturaServicesMap
 		$serviceClassToIdFileCachePath = self::getServiceClassToIdCacheFilePath();
 		if(file_exists($serviceClassToIdFileCachePath))
 		{
-			self::$serviceClassToIdAndName = unserialize(kFile::getFileContent($serviceClassToIdFileCachePath));
+			self::$serviceClassToIdAndName = unserialize(vFile::getFileContent($serviceClassToIdFileCachePath));
 			return;
 		}
 		
 		if(!$services)
 			throw new Exception('Failed to load service class to id map');
 		
-		/** @var KalturaServiceActionItem $service */
+		/** @var VidiunServiceActionItem $service */
 		foreach($services as $service)
 		{
 			self::$serviceClassToIdAndName[$service->serviceClass] = array($service->serviceId,$service->serviceInfo->serviceName);
@@ -265,11 +265,11 @@ class KalturaServicesMap
 			mkdir(dirname($serviceClassToIdFileCachePath));
 			chmod(dirname($serviceClassToIdFileCachePath), 0755);
 		}
-		kFile::safeFilePutContents($serviceClassToIdFileCachePath, serialize(self::$serviceClassToIdAndName), 0644);
+		vFile::safeFilePutContents($serviceClassToIdFileCachePath, serialize(self::$serviceClassToIdAndName), 0644);
 	}
 	
 	private static function getServiceClassToIdCacheFilePath()
 	{
-		return implode(DIRECTORY_SEPARATOR, array(kConf::get("cache_root_path"), 'api_v3', 'KalturaServiceClassToId.cache'));;
+		return implode(DIRECTORY_SEPARATOR, array(vConf::get("cache_root_path"), 'api_v3', 'VidiunServiceClassToId.cache'));;
 	}
 }

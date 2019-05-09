@@ -3,7 +3,7 @@
  * @package server-infra
  * @subpackage Media
  */
-class KImageMagickCropper extends KBaseCropper
+class VImageMagickCropper extends VBaseCropper
 {
 	const RESIZE = 1;
 	const RESIZE_WITH_PADDING = 2;
@@ -300,7 +300,7 @@ class KImageMagickCropper extends KBaseCropper
 		if ($bgcolor != self::DEFAULT_BGCOLOR)
 		{
 			$bgcolor = sprintf('%06x', $bgcolor);
-			KalturaLog::debug('bgcolor is ' . $bgcolor);
+			VidiunLog::debug('bgcolor is ' . $bgcolor);
 			$attributes[] = "-fill \"#{$bgcolor}\" -opaque none";
 		}
 		if(!count($attributes))

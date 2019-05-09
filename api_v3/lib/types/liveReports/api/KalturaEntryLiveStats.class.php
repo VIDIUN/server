@@ -4,7 +4,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEntryLiveStats extends KalturaLiveStats
+class VidiunEntryLiveStats extends VidiunLiveStats
 {				
 	/**
 	 * @var string
@@ -23,7 +23,7 @@ class KalturaEntryLiveStats extends KalturaLiveStats
 	
 	public function getWSObject() {
 		$obj = new WSEntryLiveStats();
-		$obj->fromKalturaObject($this);
+		$obj->fromVidiunObject($this);
 		return $obj;
 	}
 	

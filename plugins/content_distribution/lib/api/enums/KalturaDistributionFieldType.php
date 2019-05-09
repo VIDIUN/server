@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.enum
  */
-class KalturaDistributionFieldType extends KalturaEnum implements DistributionFieldType
+class VidiunDistributionFieldType extends VidiunEnum implements DistributionFieldType
 {
 	// see DistributionFieldType interface
 }

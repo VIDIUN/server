@@ -1,5 +1,5 @@
 <?php
-class kBitGravityUrlTokenizer extends kUrlTokenizer
+class vBitGravityUrlTokenizer extends vUrlTokenizer
 {
 	/**
 	 * Regex pattern to find the part of the URL that should be hashed

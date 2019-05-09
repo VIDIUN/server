@@ -152,7 +152,7 @@ abstract class DeliveryProfileVod extends DeliveryProfile {
 					$hostName = $scheme.$this->getHostName();
 
 					$url = $tokenizer->tokenizeSingleUrl($url, $hostName);
-					kApiCache::disableCache();
+					vApiCache::disableCache();
 				}
 			}
 		}
@@ -177,7 +177,7 @@ abstract class DeliveryProfileVod extends DeliveryProfile {
 	
 	protected function addSeekFromBytes($flavorAsset, $url, $prefix) {
 		$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		$seekFromBytes = $this->getSeekFromBytes(kFileSyncUtils::getLocalFilePathForKey($syncKey));
+		$seekFromBytes = $this->getSeekFromBytes(vFileSyncUtils::getLocalFilePathForKey($syncKey));
 		if($seekFromBytes)
 			$url .= '&' . $prefix . '=' . $seekFromBytes;
 		return $url;
@@ -218,7 +218,7 @@ abstract class DeliveryProfileVod extends DeliveryProfile {
 	 */
 	public function getFileSyncUrl(FileSync $fileSync, $tokenizeUrl = true)
 	{
-		$fileSync = kFileSyncUtils::resolve($fileSync);
+		$fileSync = vFileSyncUtils::resolve($fileSync);
 		$url = $this->doGetFileSyncUrl($fileSync);
 		$url = str_replace('\\', '/', $url);
 		if ($tokenizeUrl)
@@ -230,7 +230,7 @@ abstract class DeliveryProfileVod extends DeliveryProfile {
 			        $url = "/".ltrim($url,"/");
 
 				$url = $tokenizer->tokenizeSingleUrl($url, $this->getUrlPrefix());
-				kApiCache::disableCache();
+				vApiCache::disableCache();
 			}
 		}
 		return $url;
@@ -298,8 +298,8 @@ abstract class DeliveryProfileVod extends DeliveryProfile {
 		if (strpos($url, "/") === 0)
 		{
 			$flavorSizeKB = $flavorAsset->getSize();
-			if ($flavorSizeKB > kConf::get("max_file_size_downloadable_from_cdn_in_KB"))
-				KalturaLog::log("flavor size $flavorSizeKB > max_file_size_downloadable_from_cdn_in_KB, deliveryProfileId=".$this->getId()." url=".$this->getUrl()." flavorId=".$flavorAsset->getId()." flavorExt=".$flavorAsset->getFileExt());
+			if ($flavorSizeKB > vConf::get("max_file_size_downloadable_from_cdn_in_KB"))
+				VidiunLog::log("flavor size $flavorSizeKB > max_file_size_downloadable_from_cdn_in_KB, deliveryProfileId=".$this->getId()." url=".$this->getUrl()." flavorId=".$flavorAsset->getId()." flavorExt=".$flavorAsset->getFileExt());
 			$urlPrefix = $this->getUrlPrefix();
 		}
 	

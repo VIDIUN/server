@@ -10,7 +10,7 @@ class fileAssetFilter extends baseObjectFilter
 	 */
 	public function init()
 	{
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 			"_eq_id",
 			"_in_id",
 			"_eq_partner_id",

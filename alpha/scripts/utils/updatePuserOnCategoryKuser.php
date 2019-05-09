@@ -1,52 +1,52 @@
 <?php
 
-require_once('/opt/kaltura/app/alpha/scripts/bootstrap.php');
+require_once('/opt/vidiun/app/alpha/scripts/bootstrap.php');
 if ($argc < 3)
-	die("Usage: php $argv[0] partnerId kusersFilePath <realrun | dryrun>"."\n");
+	die("Usage: php $argv[0] partnerId vusersFilePath <realrun | dryrun>"."\n");
 
 $partnerId = $argv[1] ;
-$kusersPath = $argv[2];
+$vusersPath = $argv[2];
 $dryrun = true;
 if($argc == 4 && $argv[3] == 'realrun')
 	$dryrun = false;
-KalturaStatement::setDryRun($dryrun);
-KalturaLog::debug('dryrun value: ['.$dryrun.']');
-$kusers = file ($kusersPath) or die ('Could not read file'."\n");
+VidiunStatement::setDryRun($dryrun);
+VidiunLog::debug('dryrun value: ['.$dryrun.']');
+$vusers = file ($vusersPath) or die ('Could not read file'."\n");
 
-foreach ($kusers as $kuserId)
+foreach ($vusers as $vuserId)
 {
-	$kuserId = trim($kuserId);
-	$puserIdFromKuserTable = getPuserIdFromKuserTable ($partnerId, $kuserId);
-	if($puserIdFromKuserTable)
+	$vuserId = trim($vuserId);
+	$puserIdFromVuserTable = getPuserIdFromVuserTable ($partnerId, $vuserId);
+	if($puserIdFromVuserTable)
 	{
-		$categoryList = getCategoryListByKuser($partnerId, $kuserId);
-		foreach ($categoryList as $categoryKuserItem)
+		$categoryList = getCategoryListByVuser($partnerId, $vuserId);
+		foreach ($categoryList as $categoryVuserItem)
 		{
-			$puserIdFromCategoryKuser = $categoryKuserItem->getPuserId();
-			if (strcmp(trim($puserIdFromKuserTable),trim($puserIdFromCategoryKuser)))
+			$puserIdFromCategoryVuser = $categoryVuserItem->getPuserId();
+			if (strcmp(trim($puserIdFromVuserTable),trim($puserIdFromCategoryVuser)))
 			{
-				KalturaLog::debug('kuserId ['.$kuserId.'] : update puser_id on categoryKuser table from ['.$puserIdFromCategoryKuser.'] to ['.$puserIdFromKuserTable.']');
-				kCurrentContext::$partner_id = $partnerId;
-				$categoryKuserItem->setPuserId($puserIdFromKuserTable);
-				$categoryKuserItem->save();
+				VidiunLog::debug('vuserId ['.$vuserId.'] : update puser_id on categoryVuser table from ['.$puserIdFromCategoryVuser.'] to ['.$puserIdFromVuserTable.']');
+				vCurrentContext::$partner_id = $partnerId;
+				$categoryVuserItem->setPuserId($puserIdFromVuserTable);
+				$categoryVuserItem->save();
 			}
 		}
 	}
 }
 
-function getPuserIdFromKuserTable($partnerId, $kuserId)
+function getPuserIdFromVuserTable($partnerId, $vuserId)
 {
 	$Critiria = new Criteria();
-	$Critiria->add(kuserPeer::PARTNER_ID, $partnerId);
-	$Critiria->add(kuserPeer::ID, $kuserId);
-	$kuser = kuserPeer::doSelectOne($Critiria);
-	return $kuser->getPuserId();
+	$Critiria->add(vuserPeer::PARTNER_ID, $partnerId);
+	$Critiria->add(vuserPeer::ID, $vuserId);
+	$vuser = vuserPeer::doSelectOne($Critiria);
+	return $vuser->getPuserId();
 }
 
-function getCategoryListByKuser($partnerId, $kuserId)
+function getCategoryListByVuser($partnerId, $vuserId)
 {
 	$Critiria = new Criteria();
-	$Critiria->add(categoryKuserPeer::PARTNER_ID, $partnerId);
-	$Critiria->add(categoryKuserPeer::KUSER_ID, $kuserId);
-	return categoryKuserPeer::doSelect($Critiria);
+	$Critiria->add(categoryVuserPeer::PARTNER_ID, $partnerId);
+	$Critiria->add(categoryVuserPeer::VUSER_ID, $vuserId);
+	return categoryVuserPeer::doSelect($Critiria);
 }

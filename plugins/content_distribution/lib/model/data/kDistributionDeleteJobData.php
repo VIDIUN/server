@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage model.data
  */
-class kDistributionDeleteJobData extends kDistributionJobData
+class vDistributionDeleteJobData extends vDistributionJobData
 {
 	/**
 	 * Flag signifying that the associated distribution item should not be moved to 'removed' status

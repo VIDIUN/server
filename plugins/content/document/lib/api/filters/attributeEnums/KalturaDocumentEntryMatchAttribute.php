@@ -3,7 +3,7 @@
 /**
  * Auto-generated enum class
 */
-class KalturaDocumentEntryMatchAttribute extends KalturaBaseEntryMatchAttribute
+class VidiunDocumentEntryMatchAttribute extends VidiunBaseEntryMatchAttribute
 {
 }
 

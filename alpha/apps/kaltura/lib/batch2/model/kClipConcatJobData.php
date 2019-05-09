@@ -4,7 +4,7 @@
  * @subpackage model.data
  */
 
-class kClipConcatJobData extends kJobData
+class vClipConcatJobData extends vJobData
 {
 	/**$destEntryId
 	 * @var string
@@ -158,7 +158,7 @@ class kClipConcatJobData extends kJobData
 	}
 
 	/**
-	 * @return kOperationAttributes[] $operationAttributes
+	 * @return vOperationAttributes[] $operationAttributes
 	 */
 	public function getOperationAttributes()
 	{
@@ -166,7 +166,7 @@ class kClipConcatJobData extends kJobData
 	}
 
 	/**
-	 * @param kOperationAttributes[] $operationAttributes
+	 * @param vOperationAttributes[] $operationAttributes
 	 */
 	public function setOperationAttributes($operationAttributes)
 	{

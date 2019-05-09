@@ -1,7 +1,7 @@
 <?php
 $config = null;
 $client = null;
-/* @var $client KalturaClient */
+/* @var $client VidiunClient */
 
 require_once __DIR__ . '/lib/init.php';
 
@@ -13,7 +13,7 @@ require_once __DIR__ . '/lib/init.php';
  */
 $partnerId = $config['session']['partnerId'];
 $adminSecretForSigning = $config['session']['adminSecret'];
-$client->setKs($client->generateSessionV2($adminSecretForSigning, 'sanity-user', KalturaSessionType::ADMIN, $partnerId, 86400, ''));
+$client->setVs($client->generateSessionV2($adminSecretForSigning, 'sanity-user', VidiunSessionType::ADMIN, $partnerId, 86400, ''));
 
 
 
@@ -21,10 +21,10 @@ $client->setKs($client->generateSessionV2($adminSecretForSigning, 'sanity-user',
 /**
  * Get all the FLV flavor params
  */
-$flavorParamsfilter = new KalturaFlavorParamsFilter();
-$flavorParamsfilter->formatEqual = KalturaContainerFormat::MP4;
+$flavorParamsfilter = new VidiunFlavorParamsFilter();
+$flavorParamsfilter->formatEqual = VidiunContainerFormat::MP4;
 $flavorParamsList = $client->flavorParams->listAction($flavorParamsfilter);
-/* @var $flavorParamsList KalturaFlavorParamsListResponse */
+/* @var $flavorParamsList VidiunFlavorParamsListResponse */
 
 
 
@@ -35,7 +35,7 @@ $flavorParamsId = null;
 $flavorParamsBitrate = null;
 foreach($flavorParamsList->objects as $flavorParams)
 {
-	/* @var $flavorParams KalturaFlavorParams */
+	/* @var $flavorParams VidiunFlavorParams */
 	if($flavorParams->id > 0 && (is_null($flavorParamsBitrate) || $flavorParamsBitrate > $flavorParams->videoBitrate))
 	{
 		$flavorParamsId = $flavorParams->id;
@@ -49,15 +49,15 @@ foreach($flavorParamsList->objects as $flavorParams)
 /**
  * Create default conversion profile
  */
-$conversionProfile = new KalturaConversionProfile();
-$conversionProfile->isDefault = KalturaNullableBoolean::TRUE_VALUE;
+$conversionProfile = new VidiunConversionProfile();
+$conversionProfile->isDefault = VidiunNullableBoolean::TRUE_VALUE;
 $conversionProfile->name = 'sanity-test';
 $conversionProfile->systemName = 'SANITY_TEST';
 $conversionProfile->description = 'sanity-test';
 $conversionProfile->flavorParamsIds = "0,$flavorParamsId";
 
 $createdConversionProfile = $client->conversionProfile->add($conversionProfile);
-/* @var $createdConversionProfile KalturaConversionProfile */
+/* @var $createdConversionProfile VidiunConversionProfile */
 
 if(!$createdConversionProfile || !$createdConversionProfile->id)
 {

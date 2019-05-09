@@ -27,7 +27,7 @@ class SynacorHboFeed
 	public function __construct($templateName)
 	{
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml/' . $templateName;
-		$this->doc = new KDOMDocument();
+		$this->doc = new VDOMDocument();
 		$this->doc->formatOutput = true;
 		$this->doc->preserveWhiteSpace = false;
 		$docLoadRes = $this->doc->load($xmlTemplate);
@@ -49,7 +49,7 @@ class SynacorHboFeed
 	 */
 	public function setNodeValue($xpath, $value, DOMNode $contextnode = null)
 	{
-		kXml::setNodeValue($this->xpath, $xpath, $value, $contextnode);
+		vXml::setNodeValue($this->xpath, $xpath, $value, $contextnode);
 	}
 	
 	public function removeNode($xpath, DOMNode $contextnode = null)
@@ -82,12 +82,12 @@ class SynacorHboFeed
 	
 	public function setDistributionProfile(SynacorHboDistributionProfile $profile)
 	{
-	    kXml::setNodeValue($this->xpath,'/atom:feed/atom:title', $profile->getFeedTitle());
-		kXml::setNodeValue($this->xpath,'/atom:feed/atom:link/@href', $profile->getFeedLink());
+	    vXml::setNodeValue($this->xpath,'/atom:feed/atom:title', $profile->getFeedTitle());
+		vXml::setNodeValue($this->xpath,'/atom:feed/atom:link/@href', $profile->getFeedLink());
 		
 		$feedSubtitleValue = $profile->getFeedSubtitle();
 		if (strlen($feedSubtitleValue) > 0) {
-		    kXml::setNodeValue($this->xpath,'/atom:feed/atom:subtitle', $feedSubtitleValue);
+		    vXml::setNodeValue($this->xpath,'/atom:feed/atom:subtitle', $feedSubtitleValue);
 		}
 		else {
 		    $this->removeNode('/atom:feed/atom:subtitle');
@@ -127,17 +127,17 @@ class SynacorHboFeed
 	{
 		$item = $this->item->cloneNode(true);
 		
-		kXml::setNodeValue($this->xpath,'atom:title', $values[SynacorHboDistributionField::ENTRY_TITLE], $item);
-		kXml::setNodeValue($this->xpath,'atom:summary', $values[SynacorHboDistributionField::ENTRY_SUMMARY], $item);
+		vXml::setNodeValue($this->xpath,'atom:title', $values[SynacorHboDistributionField::ENTRY_TITLE], $item);
+		vXml::setNodeValue($this->xpath,'atom:summary', $values[SynacorHboDistributionField::ENTRY_SUMMARY], $item);
 		
 		$updatedTime = $this->formatSynacorHboTime($values[SynacorHboDistributionField::ENTRY_UPDATED]);		
-		kXml::setNodeValue($this->xpath,'atom:updated', $updatedTime, $item);
+		vXml::setNodeValue($this->xpath,'atom:updated', $updatedTime, $item);
 		
-		kXml::setNodeValue($this->xpath,'atom:author/atom:name', $values[SynacorHboDistributionField::ENTRY_AUTHOR_NAME], $item);
+		vXml::setNodeValue($this->xpath,'atom:author/atom:name', $values[SynacorHboDistributionField::ENTRY_AUTHOR_NAME], $item);
 		
 	    $categoryValue = $values[SynacorHboDistributionField::ENTRY_CATEGORY_TERM];
 		if (strlen($categoryValue) > 0) {
-		    kXml::setNodeValue($this->xpath,'atom:category/@term', $categoryValue, $item);
+		    vXml::setNodeValue($this->xpath,'atom:category/@term', $categoryValue, $item);
 		}
 		else {
 		    $this->removeNode('atom:category', $item);
@@ -145,25 +145,25 @@ class SynacorHboFeed
 		
 	    $genreValue = $values[SynacorHboDistributionField::ENTRY_GENRE_TERM];
 		if (strlen($genreValue) > 0) {
-		    kXml::setNodeValue($this->xpath,'atom:genre/@term', $genreValue, $item);
+		    vXml::setNodeValue($this->xpath,'atom:genre/@term', $genreValue, $item);
 		}
 		else {
 		    $this->removeNode('atom:genre', $item);
 		}
 		
-		kXml::setNodeValue($this->xpath,'atom:assetType', $values[SynacorHboDistributionField::ENTRY_ASSET_TYPE], $item);
-		kXml::setNodeValue($this->xpath,'atom:assetId', $values[SynacorHboDistributionField::ENTRY_ASSET_ID], $item);
+		vXml::setNodeValue($this->xpath,'atom:assetType', $values[SynacorHboDistributionField::ENTRY_ASSET_TYPE], $item);
+		vXml::setNodeValue($this->xpath,'atom:assetId', $values[SynacorHboDistributionField::ENTRY_ASSET_ID], $item);
 		
 		$startTime = $this->formatSynacorHboTime($values[SynacorHboDistributionField::ENTRY_OFFERING_START]);
-		kXml::setNodeValue($this->xpath,'atom:offering/atom:start', $startTime, $item);
+		vXml::setNodeValue($this->xpath,'atom:offering/atom:start', $startTime, $item);
 		$endTime = $this->formatSynacorHboTime($values[SynacorHboDistributionField::ENTRY_OFFERING_END]);
-		kXml::setNodeValue($this->xpath,'atom:offering/atom:end', $endTime, $item);
+		vXml::setNodeValue($this->xpath,'atom:offering/atom:end', $endTime, $item);
 		
 	    $ratingValue = $values[SynacorHboDistributionField::ENTRY_RATING];
 		if (strlen($ratingValue) > 0) {
-		    kXml::setNodeValue($this->xpath,'atom:rating', $ratingValue, $item);
+		    vXml::setNodeValue($this->xpath,'atom:rating', $ratingValue, $item);
 		    $ratingType = stripos($ratingValue, 'tv') === '0' ? 'tv' : 'theatrical';
-		    kXml::setNodeValue($this->xpath,'atom:rating/@type', $ratingType, $item);
+		    vXml::setNodeValue($this->xpath,'atom:rating/@type', $ratingType, $item);
 		}
 		else {
 		    $this->removeNode('atom:rating', $item);
@@ -171,12 +171,12 @@ class SynacorHboFeed
 		
 		$durationInSeconds = ceil($entry->getDuration());
 		$durationInMinuesRoundedUp = ceil($durationInSeconds/60);
-		kXml::setNodeValue($this->xpath,'atom:runtime', $durationInMinuesRoundedUp, $item);
-		kXml::setNodeValue($this->xpath,'atom:runtime/@timeInSeconds', $durationInSeconds, $item);
+		vXml::setNodeValue($this->xpath,'atom:runtime', $durationInMinuesRoundedUp, $item);
+		vXml::setNodeValue($this->xpath,'atom:runtime/@timeInSeconds', $durationInSeconds, $item);
 		
-		kXml::setNodeValue($this->xpath,'go:series/go:title', $values[SynacorHboDistributionField::ENTRY_SERIES_TITLE], $item);
+		vXml::setNodeValue($this->xpath,'go:series/go:title', $values[SynacorHboDistributionField::ENTRY_SERIES_TITLE], $item);
 		
-		kXml::setNodeValue($this->xpath,'atom:brand', $values[SynacorHboDistributionField::ENTRY_BRAND], $item);		
+		vXml::setNodeValue($this->xpath,'atom:brand', $values[SynacorHboDistributionField::ENTRY_BRAND], $item);		
 		
 		if (!is_null($flavorAssets) && is_array($flavorAssets) && count($flavorAssets)>0)
 		{
@@ -203,15 +203,15 @@ class SynacorHboFeed
 					$mimeType = 'video/x-flv'; // default requested by synacor
 			}
 
-    		kXml::setNodeValue($this->xpath,'atom:link[@type=\'VIDEO_MIME_TYPE\']/@href', $flavorUrl, $item);
-    		kXml::setNodeValue($this->xpath,'atom:link[@type=\'VIDEO_MIME_TYPE\']/@type', $mimeType, $item);
+    		vXml::setNodeValue($this->xpath,'atom:link[@type=\'VIDEO_MIME_TYPE\']/@href', $flavorUrl, $item);
+    		vXml::setNodeValue($this->xpath,'atom:link[@type=\'VIDEO_MIME_TYPE\']/@type', $mimeType, $item);
 		}
 		if (!is_null($thumbAssets) && is_array($thumbAssets) && count($thumbAssets)>0)
 		{
 		    $thumbAsset = $thumbAssets[0];
     		/* @var $thumbAssets thumbAssets */
     		$thumbUrl = $this->getAssetUrl($thumbAsset);
-    		kXml::setNodeValue($this->xpath,'atom:link[@type=\'image/jpeg\']/@href', $thumbUrl, $item);
+    		vXml::setNodeValue($this->xpath,'atom:link[@type=\'image/jpeg\']/@href', $thumbUrl, $item);
 		}
 		
 		if(is_array($additionalAssets)){
@@ -221,7 +221,7 @@ class SynacorHboFeed
 				switch($assetType){
 					case CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION):
 						/* @var $captionPlugin CaptionPlugin */
-						$captionPlugin = KalturaPluginManager::getPluginInstance(CaptionPlugin::PLUGIN_NAME);
+						$captionPlugin = VidiunPluginManager::getPluginInstance(CaptionPlugin::PLUGIN_NAME);
 						$dummyElement = new SimpleXMLElement('<dummy/>');
 						$captionPlugin->contributeCaptionAssets($additionalAsset, $dummyElement);
 						$dummyDom = dom_import_simplexml($dummyElement);
@@ -231,7 +231,7 @@ class SynacorHboFeed
 						break;
 					case AttachmentPlugin::getAssetTypeCoreValue(AttachmentAssetType::ATTACHMENT):
 						/* @var $attachmentPlugin AttachmentPlugin */
-						$attachmentPlugin = KalturaPluginManager::getPluginInstance(AttachmentPlugin::PLUGIN_NAME);
+						$attachmentPlugin = VidiunPluginManager::getPluginInstance(AttachmentPlugin::PLUGIN_NAME);
 						$dummyElement = new SimpleXMLElement('<dummy/>');
 						$attachmentPlugin->contributeAttachmentAssets($additionalAsset, $dummyElement);
 						$dummyDom = dom_import_simplexml($dummyElement);

@@ -1,6 +1,6 @@
 <?php
 
-class myKuserUtils
+class myVuserUtils
 {
 	 
 }

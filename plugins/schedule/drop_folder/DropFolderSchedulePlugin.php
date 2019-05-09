@@ -2,10 +2,10 @@
 /**
  * @package plugins.scheduleDropFolder
  */
-class DropFolderSchedulePlugin extends KalturaPlugin implements IKalturaEnumerator, IKalturaObjectLoader, IKalturaEventConsumers, IKalturaBulkUpload, IKalturaPending
+class DropFolderSchedulePlugin extends VidiunPlugin implements IVidiunEnumerator, IVidiunObjectLoader, IVidiunEventConsumers, IVidiunBulkUpload, IVidiunPending
 {
 	const PLUGIN_NAME = 'scheduleDropFolder';
-	const DROP_FOLDER_EVENTS_CONSUMER = 'kDropFolderICalEventsConsumer';
+	const DROP_FOLDER_EVENTS_CONSUMER = 'vDropFolderICalEventsConsumer';
 	
 	/**
 	 * Returns the plugin name
@@ -17,12 +17,12 @@ class DropFolderSchedulePlugin extends KalturaPlugin implements IKalturaEnumerat
 	
 	/*
 	 * (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$bulkUploadDependency = new KalturaDependency(BulkUploadSchedulePlugin::PLUGIN_NAME);
-		$dropFolderDependency = new KalturaDependency(DropFolderPlugin::PLUGIN_NAME);
+		$bulkUploadDependency = new VidiunDependency(BulkUploadSchedulePlugin::PLUGIN_NAME);
+		$dropFolderDependency = new VidiunDependency(DropFolderPlugin::PLUGIN_NAME);
 		
 		return array($bulkUploadDependency, $dropFolderDependency);
 	}
@@ -47,39 +47,39 @@ class DropFolderSchedulePlugin extends KalturaPlugin implements IKalturaEnumerat
 
 	/**
 	 * {@inheritDoc}
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'Kaltura_Client_DropFolder_Type_DropFolderFileHandlerConfig' && $enumValue == Kaltura_Client_DropFolder_Enum_DropFolderFileHandlerType::ICAL)
+		if($baseClass == 'Vidiun_Client_DropFolder_Type_DropFolderFileHandlerConfig' && $enumValue == Vidiun_Client_DropFolder_Enum_DropFolderFileHandlerType::ICAL)
 		{
-			return new Kaltura_Client_ScheduleDropFolder_Type_DropFolderICalBulkUploadFileHandlerConfig();
+			return new Vidiun_Client_ScheduleDropFolder_Type_DropFolderICalBulkUploadFileHandlerConfig();
 		}
 		
-		if($baseClass == 'Form_BaseFileHandlerConfig' && $enumValue == Kaltura_Client_DropFolder_Enum_DropFolderFileHandlerType::ICAL)
+		if($baseClass == 'Form_BaseFileHandlerConfig' && $enumValue == Vidiun_Client_DropFolder_Enum_DropFolderFileHandlerType::ICAL)
 		{
 			return new Form_ICalFileHandlerConfig();
 		}
 		
-		if($baseClass == 'KalturaDropFolderFileHandlerConfig' && $enumValue == self::getFileHandlerTypeCoreValue(DropFolderFileHandlerScheduleType::ICAL))
+		if($baseClass == 'VidiunDropFolderFileHandlerConfig' && $enumValue == self::getFileHandlerTypeCoreValue(DropFolderFileHandlerScheduleType::ICAL))
 		{
-			return new KalturaDropFolderICalBulkUploadFileHandlerConfig();
+			return new VidiunDropFolderICalBulkUploadFileHandlerConfig();
 		}
 
-		if($baseClass == 'kBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(DropFolderScheduleType::DROP_FOLDER_ICAL))
+		if($baseClass == 'vBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(DropFolderScheduleType::DROP_FOLDER_ICAL))
 		{
-			return new kBulkUploadICalJobData();
+			return new vBulkUploadICalJobData();
 		}
 		
-		if($baseClass == 'KalturaBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(DropFolderScheduleType::DROP_FOLDER_ICAL))
+		if($baseClass == 'VidiunBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(DropFolderScheduleType::DROP_FOLDER_ICAL))
 		{
-			return new KalturaBulkUploadICalJobData();
+			return new VidiunBulkUploadICalJobData();
 		}
 				
-		if($baseClass == 'KBulkUploadEngine' && class_exists('KalturaClient'))
+		if($baseClass == 'VBulkUploadEngine' && class_exists('VidiunClient'))
 		{	
 			list($job) = $constructorArgs;
-			if($enumValue == KalturaBulkUploadType::DROP_FOLDER_ICAL)
+			if($enumValue == VidiunBulkUploadType::DROP_FOLDER_ICAL)
 			{
 				return new BulkUploadEngineDropFolderICal($job);
 			}
@@ -88,7 +88,7 @@ class DropFolderSchedulePlugin extends KalturaPlugin implements IKalturaEnumerat
 
 	/**
 	 * {@inheritDoc}
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -97,7 +97,7 @@ class DropFolderSchedulePlugin extends KalturaPlugin implements IKalturaEnumerat
 
 	/**
 	 * {@inheritDoc}
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -138,8 +138,8 @@ class DropFolderSchedulePlugin extends KalturaPlugin implements IKalturaEnumerat
 	 */
 	public static function getFileHandlerTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DropFolderFileHandlerType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DropFolderFileHandlerType', $value);
 	}
 	
 	/**
@@ -148,8 +148,8 @@ class DropFolderSchedulePlugin extends KalturaPlugin implements IKalturaEnumerat
 	 */
 	public static function getBulkUploadTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BulkUploadType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BulkUploadType', $value);
 	}
 	
 	/**
@@ -158,6 +158,6 @@ class DropFolderSchedulePlugin extends KalturaPlugin implements IKalturaEnumerat
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

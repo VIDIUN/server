@@ -27,7 +27,7 @@ class getpartnerAction extends defPartnerservices2Action
 					"html_message" => array ("type" => "string", "desc" => ""),
 					),
 				"errors" => array (
-				 	APIErrors::ADMIN_KUSER_NOT_FOUND,
+				 	APIErrors::ADMIN_VUSER_NOT_FOUND,
 				 	
 				)
 			);
@@ -37,13 +37,13 @@ class getpartnerAction extends defPartnerservices2Action
 
 	protected function addUserOnDemand ( )	{		return self::CREATE_USER_FALSE;	}
 
-	protected function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER;	}
+	protected function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER;	}
 
 	protected function allowEmptyPuser()	{		return true;	}
 		
 	// Becuase of the sensitive data that is returned from this service - there should be a way to force high security
 		
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		// make sure the secret fits the one in the partner's table
 		$partner_adminEmail = trim ( $this->getPM ( "partner_adminEmail" ) );
@@ -59,28 +59,28 @@ class getpartnerAction extends defPartnerservices2Action
 		
 		$login_data = UserLoginDataPeer::getByEmail($partner_adminEmail);
 		if (!$login_data) {
-			$this->addError ( APIErrors::ADMIN_KUSER_NOT_FOUND );	
+			$this->addError ( APIErrors::ADMIN_VUSER_NOT_FOUND );	
 			return;
 		}
 		if ( !$login_data->isPasswordValid ( $cms_password ))
 		{
-			$this->addError ( APIErrors::ADMIN_KUSER_NOT_FOUND );	
+			$this->addError ( APIErrors::ADMIN_VUSER_NOT_FOUND );	
 			return;			
 		}
 		
 		$c = new Criteria();
-		$c->add ( kuserPeer::EMAIL , $partner_adminEmail );
-		$c->add ( kuserPeer::PARTNER_ID , $partner_id );
-		$c->add ( kuserPeer::LOGIN_DATA_ID, $login_data->getId() );
-		$c->add ( kuserPeer::IS_ADMIN, true );
+		$c->add ( vuserPeer::EMAIL , $partner_adminEmail );
+		$c->add ( vuserPeer::PARTNER_ID , $partner_id );
+		$c->add ( vuserPeer::LOGIN_DATA_ID, $login_data->getId() );
+		$c->add ( vuserPeer::IS_ADMIN, true );
 		$c->setLimit ( 20 ); // just to limit the number of partners returned
-		$admin = kuserPeer::doSelectOne( $c );
+		$admin = vuserPeer::doSelectOne( $c );
 		
 		// be sure to return the same error if there are no admins in the list and when there are none matched -
 		// so no hint about existing admin will leak 
 		if ( count ( $admin ) < 1 )
 		{
-			$this->addError ( APIErrors::ADMIN_KUSER_NOT_FOUND );	
+			$this->addError ( APIErrors::ADMIN_VUSER_NOT_FOUND );	
 			return;
 		}
 		

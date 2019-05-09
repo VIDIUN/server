@@ -4,28 +4,28 @@
  * @subpackage objects
  * @abstract
  */
-abstract class KalturaDataCenterContentResource extends KalturaContentResource 
+abstract class VidiunDataCenterContentResource extends VidiunContentResource 
 {
 	public function getDc()
 	{
-		return kDataCenterMgr::getCurrentDcId();
+		return vDataCenterMgr::getCurrentDcId();
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
 		parent::validateForUsage($sourceObject, $propertiesToSkip);
 		
 		$dc = $this->getDc();
-		if($dc == kDataCenterMgr::getCurrentDcId())
+		if($dc == vDataCenterMgr::getCurrentDcId())
 			return;
 			
-		$remoteDCHost = kDataCenterMgr::getRemoteDcExternalUrlByDcId($dc);
+		$remoteDCHost = vDataCenterMgr::getRemoteDcExternalUrlByDcId($dc);
 		if($remoteDCHost)
-			kFileUtils::dumpApiRequest($remoteDCHost);
+			vFileUtils::dumpApiRequest($remoteDCHost);
 			
-		throw new KalturaAPIException(KalturaErrors::REMOTE_DC_NOT_FOUND, $dc);
+		throw new VidiunAPIException(VidiunErrors::REMOTE_DC_NOT_FOUND, $dc);
 	}
 }

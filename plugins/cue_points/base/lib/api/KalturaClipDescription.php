@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaClipDescription extends KalturaObject
+class VidiunClipDescription extends VidiunObject
 {
 	/**
 	 * @var string
@@ -38,7 +38,7 @@ class KalturaClipDescription extends KalturaObject
 
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -46,12 +46,12 @@ class KalturaClipDescription extends KalturaObject
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kClipDescription();
+			$dbObject = new vClipDescription();
 			
 		return parent::toObject($dbObject, $skip);
 	}

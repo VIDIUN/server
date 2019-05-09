@@ -1,7 +1,7 @@
 <?php
 
-print("Usage for specific partner(1234): php puser_kuser_consolidation 1234\n");
-print("Usage for all partners: php puser_kuser_consolidation\n");
+print("Usage for specific partner(1234): php puser_vuser_consolidation 1234\n");
+print("Usage for all partners: php puser_vuser_consolidation\n");
 print("In Order to run a real run just type realRun in the end\n");
 
 require_once(dirname(__FILE__).'/../bootstrap.php');
@@ -38,11 +38,11 @@ class puserDetails
 /**
  * 
  * Consolidates all the pusers in the system
- * Fixes the puser to kuser issues 
+ * Fixes the puser to vuser issues 
  * @author Roni
  *
  */
-class puserKuserConsolidator
+class puserVuserConsolidator
 {
 	/**
 	 * 
@@ -77,7 +77,7 @@ class puserKuserConsolidator
 	 * The log file name (for manual log rotation)
 	 * @var string
 	 */
-	private $logFileName = "c:/opt/kaltura/app/scripts/puser_kuser_deprecation/deprecation.log"; 
+	private $logFileName = "c:/opt/vidiun/app/scripts/puser_vuser_deprecation/deprecation.log"; 
 	
 	/**
 	 * 
@@ -112,7 +112,7 @@ class puserKuserConsolidator
 	 * The created users (used for dry run)
 	 * @var unknown_type
 	 */
-	private $createdKusers = array();
+	private $createdVusers = array();
 	
 	/**
 	 * 
@@ -126,21 +126,21 @@ class puserKuserConsolidator
 	 * The last created at date for the last entry
 	 * @var int
 	 */
-	private $lastEntryFile = 'puser_kuser_deprecation.last_entry';
+	private $lastEntryFile = 'puser_vuser_deprecation.last_entry';
 	
 	/**
 	 * 
 	 * The last id of the puser
 	 * @var string
 	 */
-	private $lastPuserFile = 'puser_kuser_deprecation.last_puser';
+	private $lastPuserFile = 'puser_vuser_deprecation.last_puser';
 	
 	/**
 	 * 
-	 * The last id of the kuser
+	 * The last id of the vuser
 	 * @var string
 	 */
-	private $lastKuserFile = 'puser_kuser_deprecation.last_kuser';
+	private $lastVuserFile = 'puser_vuser_deprecation.last_vuser';
 		
 	/**
 	 * 
@@ -183,96 +183,96 @@ class puserKuserConsolidator
 	
 	/**
 	 * 
-	 * Gets all the kusers from the puser_ kuser table by the given puser id and partner id
+	 * Gets all the vusers from the puser_ vuser table by the given puser id and partner id
 	 * @param string $puserId
 	 * @param int $partnerId
 	 */
-	private function getKusersFromPuserKuserTable($puserId, $partnerId)
+	private function getVusersFromPuserVuserTable($puserId, $partnerId)
 	{
-		PuserKuserPeer::clearInstancePool();
+		PuserVuserPeer::clearInstancePool();
 		$c = new Criteria();
-		$c->add(PuserKuserPeer::PUSER_ID, $puserId, Criteria::EQUAL);
-		$c->add(PuserKuserPeer::PARTNER_ID, $partnerId, Criteria::EQUAL);
-		$c->add(PuserKuserPeer::PARTNER_ID, $this->ignorePartners, Criteria::NOT_IN);
-		PuserKuserPeer::setUseCriteriaFilter(false);
-		$puserKusers = PuserKuserPeer::doSelect($c);
-		PuserKuserPeer::setUseCriteriaFilter(true);
+		$c->add(PuserVuserPeer::PUSER_ID, $puserId, Criteria::EQUAL);
+		$c->add(PuserVuserPeer::PARTNER_ID, $partnerId, Criteria::EQUAL);
+		$c->add(PuserVuserPeer::PARTNER_ID, $this->ignorePartners, Criteria::NOT_IN);
+		PuserVuserPeer::setUseCriteriaFilter(false);
+		$puserVusers = PuserVuserPeer::doSelect($c);
+		PuserVuserPeer::setUseCriteriaFilter(true);
 		
-		$kusers = array();
+		$vusers = array();
 		
-		foreach($puserKusers as $puserKuser) 
+		foreach($puserVusers as $puserVuser) 
 		{
-			// now we check that the puser_kuser table doesn't reference to a different puser in the kuser table
-			$kuser = kuserPeer::retrieveByPK($puserKuser->getKuserId());
+			// now we check that the puser_vuser table doesn't reference to a different puser in the vuser table
+			$vuser = vuserPeer::retrieveByPK($puserVuser->getVuserId());
 			
-			if(!is_null($kuser))
+			if(!is_null($vuser))
 			{
-				$kuserId = $kuser->getId();
-				$kuserTablePuserId = $kuser->getPuserId();
-				if(is_null($kuserTablePuserId))
+				$vuserId = $vuser->getId();
+				$vuserTablePuserId = $vuser->getPuserId();
+				if(is_null($vuserTablePuserId))
 				{
-					$kuser->setPuserId($puserId);
+					$vuser->setPuserId($puserId);
 										
-					$this->printToLog("puserId [$puserId] in the Kuser table is null for kuser [$kuserId]- Perfect Match just set the kuser puser id");
+					$this->printToLog("puserId [$puserId] in the Vuser table is null for vuser [$vuserId]- Perfect Match just set the vuser puser id");
 					if(!$this->isDryRun)
 					{
-						$kuser->save();
+						$vuser->save();
 					} 
 				}
 				
-				if($kuserTablePuserId == $puserId && $kuser->getPartnerId() == $partnerId) // if this is the same partner and user
+				if($vuserTablePuserId == $puserId && $vuser->getPartnerId() == $partnerId) // if this is the same partner and user
 				{
-					$kusers[] = $kuser; //add to the valid kusers
-					$this->printToLog("Kuser [$kuserId] was added to the users found in the puser kuser table");
+					$vusers[] = $vuser; //add to the valid vusers
+					$this->printToLog("Vuser [$vuserId] was added to the users found in the puser vuser table");
 				}
-				else // the puser on the ksuer are different from the kuser in the puser table
+				else // the puser on the vsuer are different from the vuser in the puser table
 				{
-					$kuserTablePuserId = $kuser->getPuserId();
-					$puserTableKuserId = $puserKuser->getKuserId();
+					$vuserTablePuserId = $vuser->getPuserId();
+					$puserTableVuserId = $puserVuser->getVuserId();
 					
-					$this->printToLog("We have a different kusers and pusers (Cross reference!!!)");
-					$this->printToLog("partnerId [$partnerId], table puser_kuser: given puserId[$puserId] -> kuserId[$puserTableKuserId ], table kuser puserId [$kuserTablePuserId]");
+					$this->printToLog("We have a different vusers and pusers (Cross reference!!!)");
+					$this->printToLog("partnerId [$partnerId], table puser_vuser: given puserId[$puserId] -> vuserId[$puserTableVuserId ], table vuser puserId [$vuserTablePuserId]");
 				}
 			}
-			else //No such kuser
+			else //No such vuser
 			{
-				$kuserId = $puserKuser->getKuserId(); // the kuser id on the puser table
-				$this->printToLog("Puser [$puserId], has kuser [$kuserId] and it can't be found on KUSER table");
+				$vuserId = $puserVuser->getVuserId(); // the vuser id on the puser table
+				$this->printToLog("Puser [$puserId], has vuser [$vuserId] and it can't be found on VUSER table");
 			}
 		}
 		 
-		return $kusers;
+		return $vusers;
 	}
 	
 	/**
 	 * 
-	 * Gets all the kusers from the kuser table
+	 * Gets all the vusers from the vuser table
 	 * @param string $puserId
 	 * @param int $partnerId
 	 */
-	private function getKusersFromKuserTable($puserId, $partnerId)
+	private function getVusersFromVuserTable($puserId, $partnerId)
 	{
-		kuserPeer::clearInstancePool();
+		vuserPeer::clearInstancePool();
 		$c = new Criteria();
-		$c->add(kuserPeer::PUSER_ID, $puserId, Criteria::EQUAL);
-		$c->add(kuserPeer::PARTNER_ID, $partnerId, Criteria::EQUAL);
-		$c->add(kuserPeer::PARTNER_ID, $this->ignorePartners, Criteria::NOT_IN);
-		kuserPeer::setUseCriteriaFilter(false);
-		$kusers =  kuserPeer::doSelect($c);
-		kuserPeer::setUseCriteriaFilter(true);
-		return $kusers;
+		$c->add(vuserPeer::PUSER_ID, $puserId, Criteria::EQUAL);
+		$c->add(vuserPeer::PARTNER_ID, $partnerId, Criteria::EQUAL);
+		$c->add(vuserPeer::PARTNER_ID, $this->ignorePartners, Criteria::NOT_IN);
+		vuserPeer::setUseCriteriaFilter(false);
+		$vusers =  vuserPeer::doSelect($c);
+		vuserPeer::setUseCriteriaFilter(true);
+		return $vusers;
 	}
 
 	/**
 	 * 
-	 * Gets all entries for the given kuser
-	 * @param int $kuserId - the kuser id
+	 * Gets all entries for the given vuser
+	 * @param int $vuserId - the vuser id
 	 */
-	private function getEntriesByKuser($kuserId)
+	private function getEntriesByVuser($vuserId)
 	{
 		entryPeer::clearInstancePool();
 		$c = new Criteria();
-		$c->add(entryPeer::KUSER_ID, $kuserId, Criteria::EQUAL);
+		$c->add(entryPeer::VUSER_ID, $vuserId, Criteria::EQUAL);
 		$c->addAnd(entryPeer::PUSER_ID, null, Criteria::NOT_EQUAL);
 		$c->addAnd(entryPeer::PUSER_ID, "", Criteria::NOT_EQUAL);
 		
@@ -286,34 +286,34 @@ class puserKuserConsolidator
 
 	/**
 	 * 
-	 * Consolidates a given array of kusers to the first member in the kusers array
-	 * @param array<kuser> $kusers
+	 * Consolidates a given array of vusers to the first member in the vusers array
+	 * @param array<vuser> $vusers
 	 */
-	private function consolidateKusers(array $kusers)
+	private function consolidateVusers(array $vusers)
 	{
-		//Set the new kuser to be the first in teh array 
-		$newKuser = $kusers[0];
-		$newKuserId = $newKuser->getId();
+		//Set the new vuser to be the first in teh array 
+		$newVuser = $vusers[0];
+		$newVuserId = $newVuser->getId();
 		
-		foreach ($kusers as $kuser)
+		foreach ($vusers as $vuser)
 		{
-			$kuserId = $kuser->getId();
-			$puserId = $kuser->getPuserId();
-			$partnerId = $kuser->getPartnerId();
+			$vuserId = $vuser->getId();
+			$puserId = $vuser->getPuserId();
+			$partnerId = $vuser->getPartnerId();
 			
-			if($kuserId == $newKuserId)
+			if($vuserId == $newVuserId)
 				continue;
 			
-			$entriesForKuser = $this->getEntriesByKuser($kuserId);
-			foreach ($entriesForKuser as $entry)
+			$entriesForVuser = $this->getEntriesByVuser($vuserId);
+			foreach ($entriesForVuser as $entry)
 			{
 				$entryId = $entry->getId();
 				$entryPuserId = $entry->getPuserId();
 				$entryPartnerId = $entry->getPartnerId();
 				if( $puserId == $entryPuserId && $partnerId == $entryPartnerId ) //if partner and puser are the same (as they should)
 				{
-					$entry->setKuserId($newKuserId);
-					$this->printToLog("Changed EntryId [$entryId] from Kuser [$kuserId] to new Ksuer [$newKuserId for puser [$puserId], partner [$partnerId]\n");
+					$entry->setVuserId($newVuserId);
+					$this->printToLog("Changed EntryId [$entryId] from Vuser [$vuserId] to new Vsuer [$newVuserId for puser [$puserId], partner [$partnerId]\n");
 					if(!$this->isDryRun)
 					{
 						$entry->save();
@@ -322,7 +322,7 @@ class puserKuserConsolidator
 				else
 				{
 					$this->printToLog("EntryId [$entryId], entryPuser [$entryPuserId], entryPartner [$entryPartnerId] NOT CHANGED ".
-					 				  "from Kuser [$kuserId] to new Ksuer [$newKuserId for puser [$puserId], partner [$partnerId]\n");
+					 				  "from Vuser [$vuserId] to new Vsuer [$newVuserId for puser [$puserId], partner [$partnerId]\n");
 				}
 			}
 		}
@@ -330,104 +330,104 @@ class puserKuserConsolidator
 
 	/**
 	 * 
-	 * Gets or creates a kuser for the given puser id and partner id
+	 * Gets or creates a vuser for the given puser id and partner id
 	 * @param string $puserId
 	 * @param int $partnerId
 	 */
-	private function getOrCreateKuser($puserId, $partnerId)
+	private function getOrCreateVuser($puserId, $partnerId)
 	{
-//	if kuser table contains the puser only once =>
-//		kuser = from kuser table
-//	if kuser table contains the puser more than once =>
-//		kuser = first kuser from table
+//	if vuser table contains the puser only once =>
+//		vuser = from vuser table
+//	if vuser table contains the puser more than once =>
+//		vuser = first vuser from table
 
-//function getkuser(puser) Main algorithm:
-//	if kuser table contains the puser =>
-//		kuser = first from kuser table
-//	else if kuserPuser contains the puser => 
-//		kuser = from kuserPuser
-//		if kuser table does not contain kuser
-//			add kuser to table
-//		else (Kuser contains)
-//			if this is the same puser on the kuser table or null
-//				Update the kuser table with the current puser id
+//function getvuser(puser) Main algorithm:
+//	if vuser table contains the puser =>
+//		vuser = first from vuser table
+//	else if vuserPuser contains the puser => 
+//		vuser = from vuserPuser
+//		if vuser table does not contain vuser
+//			add vuser to table
+//		else (Vuser contains)
+//			if this is the same puser on the vuser table or null
+//				Update the vuser table with the current puser id
 //			else
 //				//Print major conflict
 //	else
-//		create new kuser (+ optionally fix kuserPuser)
+//		create new vuser (+ optionally fix vuserPuser)
 
-		//$this->printToLog("Getting or creating kuser for puser [$puserId], partner [$partnerId]");
-		$kuser = null;
+		//$this->printToLog("Getting or creating vuser for puser [$puserId], partner [$partnerId]");
+		$vuser = null;
 		
-		$kusers = $this->getKusersFromKuserTable($puserId, $partnerId);
-		//$this->printParam("kusers from kuser are: ", count($kusers));
+		$vusers = $this->getVusersFromVuserTable($puserId, $partnerId);
+		//$this->printParam("vusers from vuser are: ", count($vusers));
 		
-		if($kusers && count($kusers) > 0)
+		if($vusers && count($vusers) > 0)
 		{
-			//$this->printToLog("Kuser was found in the kuser table (maybe update the puser_kuser table)");
+			//$this->printToLog("Vuser was found in the vuser table (maybe update the puser_vuser table)");
 			
-			$kuser = $kusers;
-			if(is_array($kusers) && count($kusers) != 1)
+			$vuser = $vusers;
+			if(is_array($vusers) && count($vusers) != 1)
 			{
-				$kuser = $kusers[0]; // gets the first kuser (if there are many)
-				if(count($kusers) > 1) //if there are more then 1 or less then 1 Kuser we need to consolidate  / Create the kuser them all
+				$vuser = $vusers[0]; // gets the first vuser (if there are many)
+				if(count($vusers) > 1) //if there are more then 1 or less then 1 Vuser we need to consolidate  / Create the vuser them all
 				{
-					$this->printToLog(count($kusers) . " were found in KUSER table for puser [$puserId], partner [$partnerId], needs to consolidate them all");
-					$this->consolidateKusers($kusers);
+					$this->printToLog(count($vusers) . " were found in VUSER table for puser [$puserId], partner [$partnerId], needs to consolidate them all");
+					$this->consolidateVusers($vusers);
 				}
 			}
 		}
-		else //Search the puser in puser_kuser table
+		else //Search the puser in puser_vuser table
 		{
-			//$this->printToLog(count($kusers) . " were found in KUSER table for puser [$puserId], partner [$partnerId], Searching in Puser Table");
+			//$this->printToLog(count($vusers) . " were found in VUSER table for puser [$puserId], partner [$partnerId], Searching in Puser Table");
 
-			$kusers = $this->getKusersFromPuserKuserTable($puserId, $partnerId);
+			$vusers = $this->getVusersFromPuserVuserTable($puserId, $partnerId);
 					
-			$kuser = $kusers;
-			if(is_array($kusers) && count($kusers) > 0)
+			$vuser = $vusers;
+			if(is_array($vusers) && count($vusers) > 0)
 			{
-				$this->printToLog(count($kusers) . " were found in PUSER table for puser [$puserId], partner [$partnerId], needs to consolidate them all");
-				$kuser = $kusers[0]; // gets the first kuser (if there are many)
+				$this->printToLog(count($vusers) . " were found in PUSER table for puser [$puserId], partner [$partnerId], needs to consolidate them all");
+				$vuser = $vusers[0]; // gets the first vuser (if there are many)
 			}
 			else
 			{
-				if(count($kusers) == 0)
+				if(count($vusers) == 0)
 				{
-					//$this->printToLog(count($kusers) . " kusers were found in PUSER table for puser [$puserId], partner [$partnerId]");
-					//No kusers were found
+					//$this->printToLog(count($vusers) . " vusers were found in PUSER table for puser [$puserId], partner [$partnerId]");
+					//No vusers were found
 				}
 			}
 		}
 		
-		if(is_null($kuser ) || (is_array($kuser) && count($kuser) == 0))
+		if(is_null($vuser ) || (is_array($vuser) && count($vuser) == 0))
 		{
-			$this->printToLog("Kuser was not found!!! Creating new kuser for puser [$puserId], partner [$partnerId]");
+			$this->printToLog("Vuser was not found!!! Creating new vuser for puser [$puserId], partner [$partnerId]");
 			
-			//no kuser found so we create one
-			$this->createKuser($puserId, $partnerId);
+			//no vuser found so we create one
+			$this->createVuser($puserId, $partnerId);
 		}
 		
-		return $kuser;
+		return $vuser;
 	}
 
 	/**
 	 * 
-	 * Creates a new kuser and insert it into the kuser table
+	 * Creates a new vuser and insert it into the vuser table
 	 * @param string $puserId
 	 * @param int $partnerId
 	 */
-	private function createKuser($puserId, $partnerId)
+	private function createVuser($puserId, $partnerId)
 	{
-		$kuser = new kuser();
-		$kuser->partnerId = $partnerId;
-		$kuser->puserId = $puserId;
+		$vuser = new vuser();
+		$vuser->partnerId = $partnerId;
+		$vuser->puserId = $puserId;
 		if($this->isDryRun)
 		{
-			$this->createdKusers["{$puserId}_{$partnerId}"] = $kuser;
+			$this->createdVusers["{$puserId}_{$partnerId}"] = $vuser;
 		}
 		else
 		{
-			$rowsAffected = $kuser->save();
+			$rowsAffected = $vuser->save();
 
 			if($rowsAffected != 1)
 			{
@@ -496,24 +496,24 @@ class puserKuserConsolidator
 	private function getAllPusersInPuser($lastPuserId, $limit)
 	{
 		$pusers = array();
-		PuserKuserPeer::clearInstancePool();
+		PuserVuserPeer::clearInstancePool();
 		$c = new Criteria();
-		$c->add(PuserKuserPeer::ID, $lastPuserId, Criteria::GREATER_THAN);// if case we have several entries in the same date (and we stop in the middle)
-		$c->addAnd(PuserKuserPeer::PUSER_ID, null, Criteria::NOT_EQUAL);
-		$c->addAnd(PuserKuserPeer::PUSER_ID, "", Criteria::NOT_EQUAL);
+		$c->add(PuserVuserPeer::ID, $lastPuserId, Criteria::GREATER_THAN);// if case we have several entries in the same date (and we stop in the middle)
+		$c->addAnd(PuserVuserPeer::PUSER_ID, null, Criteria::NOT_EQUAL);
+		$c->addAnd(PuserVuserPeer::PUSER_ID, "", Criteria::NOT_EQUAL);
 		
 		if($this->partnerId)
 		{
-			$c->addAnd(PuserKuserPeer::PARTNER_ID, $this->partnerId, Criteria::EQUAL);
+			$c->addAnd(PuserVuserPeer::PARTNER_ID, $this->partnerId, Criteria::EQUAL);
 		}
 		
-		$c->addAnd(PuserKuserPeer::PARTNER_ID, $this->ignorePartners, Criteria::NOT_IN);
+		$c->addAnd(PuserVuserPeer::PARTNER_ID, $this->ignorePartners, Criteria::NOT_IN);
 		
-		$c->addAscendingOrderByColumn(PuserKuserPeer::ID);
+		$c->addAscendingOrderByColumn(PuserVuserPeer::ID);
 		$c->setLimit($limit);
-		PuserKuserPeer::setUseCriteriaFilter(false);
-		$pusers1 = PuserKuserPeer::doSelect($c);
-		PuserKuserPeer::setUseCriteriaFilter(true);
+		PuserVuserPeer::setUseCriteriaFilter(false);
+		$pusers1 = PuserVuserPeer::doSelect($c);
+		PuserVuserPeer::setUseCriteriaFilter(true);
 				
 		foreach ($pusers1 as $puser)
 		{
@@ -528,37 +528,37 @@ class puserKuserConsolidator
 
 	/**
 	 * 
-	 * Gets all the pusers from the kuser table
-	 * @param int $lastKuserId - the last puser id 
+	 * Gets all the pusers from the vuser table
+	 * @param int $lastVuserId - the last puser id 
 	 * @param int $limit - the limit for the query
 	 */
-	private function getAllPusersInKuser($lastKuserId, $limit)
+	private function getAllPusersInVuser($lastVuserId, $limit)
 	{
 		$pusers = array();
-		kuserPeer::clearInstancePool();
+		vuserPeer::clearInstancePool();
 		$c = new Criteria();
-		$c->add(kuserPeer::ID, $lastKuserId, Criteria::GREATER_THAN);// if case we have several entries in the same date (and we stop in the middle)
-		$c->addAnd(kuserPeer::ID, null, Criteria::NOT_EQUAL);
-		$c->addAnd(kuserPeer::ID, "", Criteria::NOT_EQUAL);
+		$c->add(vuserPeer::ID, $lastVuserId, Criteria::GREATER_THAN);// if case we have several entries in the same date (and we stop in the middle)
+		$c->addAnd(vuserPeer::ID, null, Criteria::NOT_EQUAL);
+		$c->addAnd(vuserPeer::ID, "", Criteria::NOT_EQUAL);
 		
 		if($this->partnerId)
 		{
-			$c->addAnd(kuserPeer::PARTNER_ID, $this->partnerId, Criteria::EQUAL);
+			$c->addAnd(vuserPeer::PARTNER_ID, $this->partnerId, Criteria::EQUAL);
 		}
-		$c->addAnd(kuserPeer::PARTNER_ID, $this->ignorePartners, Criteria::NOT_IN);
+		$c->addAnd(vuserPeer::PARTNER_ID, $this->ignorePartners, Criteria::NOT_IN);
 		
-		$c->addAscendingOrderByColumn(kuserPeer::ID);
+		$c->addAscendingOrderByColumn(vuserPeer::ID);
 		$c->setLimit($limit);
-		kuserPeer::setUseCriteriaFilter(false);
-		$kusers = kuserPeer::doSelect($c);
-		kuserPeer::setUseCriteriaFilter(true);
+		vuserPeer::setUseCriteriaFilter(false);
+		$vusers = vuserPeer::doSelect($c);
+		vuserPeer::setUseCriteriaFilter(true);
 				
-		foreach ($kusers as $kuser)
+		foreach ($vusers as $vuser)
 		{
-	//		$this->printToLog("Found puser with id [{$kuser->getPuserId()}], partner [{$kuser->getPartnerId()}] on Kuser [{$kuser->getId()}]");
-			$pusers[] = new puserDetails($kuser->getPuserId(), $kuser->getPartnerId());
+	//		$this->printToLog("Found puser with id [{$vuser->getPuserId()}], partner [{$vuser->getPartnerId()}] on Vuser [{$vuser->getId()}]");
+			$pusers[] = new puserDetails($vuser->getPuserId(), $vuser->getPartnerId());
 			
-			file_put_contents($this->lastKuserFile, $kuser->getId());
+			file_put_contents($this->lastVuserFile, $vuser->getId());
 		}
 		
 		return $pusers;
@@ -567,29 +567,29 @@ class puserKuserConsolidator
 	/**
 	 * 
 	 * Returns a list of all available pusers in the system by the given limit
-	 * @param int $limit - the max number of entries / kusers / pusers to process
+	 * @param int $limit - the max number of entries / vusers / pusers to process
 	 * @return puserDetails
 	 */
 	private function getAllPusersInTheSystem($limit)
 	{
 		$lastEntryDate = $this->getLastDate($this->lastEntryFile);
-		$lastKuserId = $this->getLastId($this->lastKuserFile);
+		$lastVuserId = $this->getLastId($this->lastVuserFile);
 		$lastPuserId = $this->getLastId($this->lastPuserFile);
 				
 		$entryPusers = $this->getAllPusersInEntry($lastEntryDate, $limit);
 		$puserPusers = $this->getAllPusersInPuser($lastPuserId, $limit);
-		$kuserPusers = $this->getAllPusersInKuser($lastKuserId, $this->limit);
+		$vuserPusers = $this->getAllPusersInVuser($lastVuserId, $this->limit);
 	
 		$this->pusers = array_merge($this->pusers, $entryPusers);
 		$this->pusers = array_merge($this->pusers, $puserPusers);
-		$this->pusers = array_merge($this->pusers, $kuserPusers);
+		$this->pusers = array_merge($this->pusers, $vuserPusers);
 
 		return $this->pusers;
 	}
 	
 	/**
 	 * 
-	 * Gets the last id of the given file (for entry, kuser, puser_kuser)
+	 * Gets the last id of the given file (for entry, vuser, puser_vuser)
 	 * @param string $file - the file path
 	 */
 	private function getLastId($file)
@@ -609,7 +609,7 @@ class puserKuserConsolidator
 	
 	/**
 	 * 
-	 * Gets the last date int the given file (for entry, kuser, puser_kuser)
+	 * Gets the last date int the given file (for entry, vuser, puser_vuser)
 	 * @param string $file - the file path
 	 */
 	private function getLastDate($file)
@@ -629,7 +629,7 @@ class puserKuserConsolidator
 
 	/**
 	 * 
-	 * Consolidates all the pusers in the system (so each can have one kuser)
+	 * Consolidates all the pusers in the system (so each can have one vuser)
 	 */
 	public function consolidate()
 	{
@@ -650,27 +650,27 @@ class puserKuserConsolidator
 				
 				if(in_array("{$puserId}_{$partnerId}", $this->handledPusers)) //if puser was handled we skip him
 				{
-					$kusers = $this->getKusersFromKuserTable($puserId, $partnerId);
-					if(!is_null($kusers))
+					$vusers = $this->getVusersFromVuserTable($puserId, $partnerId);
+					if(!is_null($vusers))
 					{
-						//$this->printToLog("Kuser is!!! : " . print_r($kuser, true));
-						if(isset($this->createdKusers["{$puserId}_{$partnerId}"]))
+						//$this->printToLog("Vuser is!!! : " . print_r($vuser, true));
+						if(isset($this->createdVusers["{$puserId}_{$partnerId}"]))
 						{
-							//$this->printToLog("Puser [{$puserId}], partner [{$partnerId}] was handled KuserId [{$kuser->getId()}]");
+							//$this->printToLog("Puser [{$puserId}], partner [{$partnerId}] was handled VuserId [{$vuser->getId()}]");
 						}
-						elseif(is_array($kusers) && count($kusers) > 0)
+						elseif(is_array($vusers) && count($vusers) > 0)
 						{
-							$kuser = $kusers[0]; 
-							//$this->printToLog("Puser [{$puserId}], partner [{$partnerId}] was handled KuserId [{$kuser->getId()}]");
+							$vuser = $vusers[0]; 
+							//$this->printToLog("Puser [{$puserId}], partner [{$partnerId}] was handled VuserId [{$vuser->getId()}]");
 						}
-						else if(is_array($kusers) && count($kusers) == 0)
+						else if(is_array($vusers) && count($vusers) == 0)
 						{
-							$this->printToLog("Puser [{$puserId}], partner [{$partnerId}] has no Kuser");
+							$this->printToLog("Puser [{$puserId}], partner [{$partnerId}] has no Vuser");
 						}
 					}
 					else
 					{
-						$this->printToLog("Puser [{$puserId}], partner [{$partnerId}] was handled but Kuser is null");
+						$this->printToLog("Puser [{$puserId}], partner [{$partnerId}] was handled but Vuser is null");
 					}
 					
 					continue;
@@ -680,15 +680,15 @@ class puserKuserConsolidator
 				$this->handledPusers["{$puserId}_{$partnerId}"] = "{$puserId}_{$partnerId}"; 
 				
 				
-				$kuser = $this->getOrCreateKuser($puserId, $partnerId);
+				$vuser = $this->getOrCreateVuser($puserId, $partnerId);
 				
-				if(is_null($kuser))
+				if(is_null($vuser))
 				{
-					$this->printToLog("Kuser is null!!! for puser [{$puserId}], partner [{$partnerId}]");
+					$this->printToLog("Vuser is null!!! for puser [{$puserId}], partner [{$partnerId}]");
 					die(); // kill the script
 				}
 				
-				//TODO: save the added puser / kuser 
+				//TODO: save the added puser / vuser 
 				//file_put_contents($lastUserFile, $lastUser);
 			}
 			
@@ -705,7 +705,7 @@ class puserKuserConsolidator
 //Open issues:
 
 //distribution: ask T
-//	should use kuser_id or entry_id=>puser_id
+//	should use vuser_id or entry_id=>puser_id
 
 //DWH:
 //make sure that the updated at changes 
@@ -720,11 +720,11 @@ class puserKuserConsolidator
 	private function printToLog($message)
 	{
 //		print("In print To Log \n");
-		KalturaLog::debug($message);
+		VidiunLog::debug($message);
 //		$dirname = dirname(__FILE__);
 //		$logFilePath = "{$this->logFileName}.{$this->currentlogNumber}";
 //		print("Log file size: " . filesize($logFilePath) . "\n");
-//		if(filesize($logFilePath) > puserKuserConsolidator::MAX_LOG_FILE_SIZE)
+//		if(filesize($logFilePath) > puserVuserConsolidator::MAX_LOG_FILE_SIZE)
 //		{
 //			$this->rotateLog();
 //		}
@@ -750,10 +750,10 @@ class puserKuserConsolidator
 			$config = null;
 		}
 		
-		KalturaLog::initLog($config);
+		VidiunLog::initLog($config);
 	}
 }
 
-$puserKuserConsolidator = new puserKuserConsolidator();
-$puserKuserConsolidator->initArgs($argv);
-$puserKuserConsolidator->consolidate();
+$puserVuserConsolidator = new puserVuserConsolidator();
+$puserVuserConsolidator->initArgs($argv);
+$puserVuserConsolidator->consolidate();

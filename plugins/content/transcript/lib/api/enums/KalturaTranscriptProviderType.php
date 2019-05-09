@@ -3,7 +3,7 @@
  * @package plugins.transcript
  * @subpackage api.enum
  */
-class KalturaTranscriptProviderType extends KalturaDynamicEnum implements TranscriptProviderType
+class VidiunTranscriptProviderType extends VidiunDynamicEnum implements TranscriptProviderType
 {
 	public static function getEnumClass()
 	{

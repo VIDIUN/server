@@ -4,10 +4,10 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaAssetDistributionRule extends KalturaObject
+class VidiunAssetDistributionRule extends VidiunObject
 {
 	/**
-	 * The validation error description that will be set on the "data" property on KalturaDistributionValidationErrorMissingAsset if rule was not fulfilled
+	 * The validation error description that will be set on the "data" property on VidiunDistributionValidationErrorMissingAsset if rule was not fulfilled
 	 *
 	 * @var string
 	 */
@@ -16,7 +16,7 @@ class KalturaAssetDistributionRule extends KalturaObject
 	/**
 	 * An array of asset distribution conditions
 	 *
-	 * @var KalturaAssetDistributionConditionsArray
+	 * @var VidiunAssetDistributionConditionsArray
 	 */
 	public $assetDistributionConditions;
 	
@@ -37,7 +37,7 @@ class KalturaAssetDistributionRule extends KalturaObject
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kAssetDistributionRule();
+			$dbObject = new vAssetDistributionRule();
 			
 		return parent::toObject($dbObject, $skip);
 	}

@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage api.objects
  */
-class KalturaCaptionPlaybackPluginData extends KalturaObject{
+class VidiunCaptionPlaybackPluginData extends VidiunObject{
 
 	/**
 	 * @var string

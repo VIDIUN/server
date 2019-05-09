@@ -1,5 +1,5 @@
 SELECT COUNT( DISTINCT IFNULL(ev.referrer_id,"-")) count_all
-FROM kalturadw.dwh_hourly_events_domain_referrer  ev 
+FROM vidiundw.dwh_hourly_events_domain_referrer  ev 
 WHERE {OBJ_ID_CLAUSE} AND 
 ev.partner_id = {PARTNER_ID} /*PARTNER_ID*/
 AND date_id BETWEEN IF({TIME_SHIFT}>0,(DATE({FROM_DATE_ID}) - INTERVAL 1 DAY)*1, {FROM_DATE_ID})  

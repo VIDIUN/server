@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaPermissionBaseFilter extends KalturaRelatedFilter
+abstract class VidiunPermissionBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -64,7 +64,7 @@ abstract class KalturaPermissionBaseFilter extends KalturaRelatedFilter
 	public $idIn;
 
 	/**
-	 * @var KalturaPermissionType
+	 * @var VidiunPermissionType
 	 */
 	public $typeEqual;
 
@@ -94,7 +94,7 @@ abstract class KalturaPermissionBaseFilter extends KalturaRelatedFilter
 	public $descriptionLike;
 
 	/**
-	 * @var KalturaPermissionStatus
+	 * @var VidiunPermissionStatus
 	 */
 	public $statusEqual;
 

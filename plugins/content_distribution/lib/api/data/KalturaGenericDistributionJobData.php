@@ -3,13 +3,13 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaGenericDistributionJobProviderData extends KalturaDistributionJobProviderData
+class VidiunGenericDistributionJobProviderData extends VidiunDistributionJobProviderData
 {
 	private static $actionAttributes = array(
-		KalturaDistributionAction::SUBMIT => 'submitAction',
-		KalturaDistributionAction::UPDATE => 'updateAction',
-		KalturaDistributionAction::DELETE => 'deleteAction',
-		KalturaDistributionAction::FETCH_REPORT => 'fetchReportAction',
+		VidiunDistributionAction::SUBMIT => 'submitAction',
+		VidiunDistributionAction::UPDATE => 'updateAction',
+		VidiunDistributionAction::DELETE => 'deleteAction',
+		VidiunDistributionAction::FETCH_REPORT => 'fetchReportAction',
 	);
 	
 	/**
@@ -23,46 +23,46 @@ class KalturaGenericDistributionJobProviderData extends KalturaDistributionJobPr
 	public $resultParseData;
 	
 	/**
-	 * @var KalturaGenericDistributionProviderParser
+	 * @var VidiunGenericDistributionProviderParser
 	 */
 	public $resultParserType;
 	
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 		if(!$distributionJobData)
 			return;
 			
-		$action = KalturaDistributionAction::SUBMIT;
-		if($distributionJobData instanceof KalturaDistributionDeleteJobData)
-			$action = KalturaDistributionAction::DELETE;
-		if($distributionJobData instanceof KalturaDistributionUpdateJobData)
-			$action = KalturaDistributionAction::UPDATE;
-		if($distributionJobData instanceof KalturaDistributionFetchReportJobData)
-			$action = KalturaDistributionAction::FETCH_REPORT;
+		$action = VidiunDistributionAction::SUBMIT;
+		if($distributionJobData instanceof VidiunDistributionDeleteJobData)
+			$action = VidiunDistributionAction::DELETE;
+		if($distributionJobData instanceof VidiunDistributionUpdateJobData)
+			$action = VidiunDistributionAction::UPDATE;
+		if($distributionJobData instanceof VidiunDistributionFetchReportJobData)
+			$action = VidiunDistributionAction::FETCH_REPORT;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaGenericDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunGenericDistributionProfile))
 		{
-			KalturaLog::err("Distribution profile is not generic");
+			VidiunLog::err("Distribution profile is not generic");
 			return;
 		}
 		
 		$this->loadProperties($distributionJobData, $distributionJobData->distributionProfile, $action);
 	}
 	
-	public function loadProperties(KalturaDistributionJobData $distributionJobData, KalturaGenericDistributionProfile $distributionProfile, $action)
+	public function loadProperties(VidiunDistributionJobData $distributionJobData, VidiunGenericDistributionProfile $distributionProfile, $action)
 	{
 		$actionName = self::$actionAttributes[$action];
 		
 		$genericProviderAction = GenericDistributionProviderActionPeer::retrieveByProviderAndAction($distributionProfile->genericProviderId, $action);
 		if(!$genericProviderAction)
 		{
-			KalturaLog::err("Generic provider [{$distributionProfile->genericProviderId}] action [$actionName] not found");
+			VidiunLog::err("Generic provider [{$distributionProfile->genericProviderId}] action [$actionName] not found");
 			return;
 		}
 		
 		if(!$distributionJobData->entryDistribution)
 		{
-			KalturaLog::err("Entry Distribution object not provided");
+			VidiunLog::err("Entry Distribution object not provided");
 			return;
 		}
 		
@@ -86,31 +86,31 @@ class KalturaGenericDistributionJobProviderData extends KalturaDistributionJobPr
 		$entry = entryPeer::retrieveByPKNoFilter($distributionJobData->entryDistribution->entryId);
 		if(!$entry)
 		{
-			KalturaLog::err("Entry [" . $distributionJobData->entryDistribution->entryId . "] not found");
+			VidiunLog::err("Entry [" . $distributionJobData->entryDistribution->entryId . "] not found");
 			return;
 		}
 			
-		$mrss = kMrssManager::getEntryMrss($entry);
+		$mrss = vMrssManager::getEntryMrss($entry);
 		if(!$mrss)
 		{
-			KalturaLog::err("MRSS not returned for entry [" . $entry->getId() . "]");
+			VidiunLog::err("MRSS not returned for entry [" . $entry->getId() . "]");
 			return;
 		}
 			
-		$xml = new KDOMDocument();
+		$xml = new VDOMDocument();
 		if(!$xml->loadXML($mrss))
 		{
-			KalturaLog::err("MRSS not is not valid XML:\n$mrss\n");
+			VidiunLog::err("MRSS not is not valid XML:\n$mrss\n");
 			return;
 		}
 		
 		$key = $genericProviderAction->getSyncKey(GenericDistributionProviderAction::FILE_SYNC_DISTRIBUTION_PROVIDER_ACTION_MRSS_TRANSFORMER);
-		if(kFileSyncUtils::fileSync_exists($key))
+		if(vFileSyncUtils::fileSync_exists($key))
 		{
-			$xslPath = kFileSyncUtils::getLocalFilePathForKey($key);
+			$xslPath = vFileSyncUtils::getLocalFilePathForKey($key);
 			if($xslPath)
 			{
-				$xsl = new KDOMDocument();
+				$xsl = new VDOMDocument();
 				$xsl->load($xslPath);
 			
 				// set variables in the xsl
@@ -130,13 +130,13 @@ class KalturaGenericDistributionJobProviderData extends KalturaDistributionJobPr
 				}
 				
 				$proc = new XSLTProcessor;
-				$proc->registerPHPFunctions(kXml::getXslEnabledPhpFunctions());
+				$proc->registerPHPFunctions(vXml::getXslEnabledPhpFunctions());
 				$proc->importStyleSheet($xsl);
 				
 				$xml = $proc->transformToDoc($xml);
 				if(!$xml)
 				{
-					KalturaLog::err("Transform returned false");
+					VidiunLog::err("Transform returned false");
 					return;
 				}
 			}
@@ -144,15 +144,15 @@ class KalturaGenericDistributionJobProviderData extends KalturaDistributionJobPr
 	
 		$key = $genericProviderAction->getSyncKey(GenericDistributionProviderAction::FILE_SYNC_DISTRIBUTION_PROVIDER_ACTION_MRSS_VALIDATOR);
 		
-		list ($fileSync , $local) = kFileSyncUtils::getReadyFileSyncForKey( $key , true , false  );
+		list ($fileSync , $local) = vFileSyncUtils::getReadyFileSyncForKey( $key , true , false  );
 		if($fileSync)
 		{
 			/* @var $fileSync FileSync */
 			$xsdPath = $fileSync->getFullPath();
 			if($xsdPath && !$xml->schemaValidate($xsdPath, $fileSync->getEncryptionKey(), $fileSync->getIv()))
 			{
-				KalturaLog::err("Inavlid XML:\n" . $xml->saveXML());
-				KalturaLog::err("Schema [$xsdPath]:\n" . $fileSync->decrypt());	
+				VidiunLog::err("Inavlid XML:\n" . $xml->saveXML());
+				VidiunLog::err("Schema [$xsdPath]:\n" . $fileSync->decrypt());	
 				return;
 			}
 		}
@@ -160,8 +160,8 @@ class KalturaGenericDistributionJobProviderData extends KalturaDistributionJobPr
 		$this->xml = $xml->saveXML();
 		
 		$key = $genericProviderAction->getSyncKey(GenericDistributionProviderAction::FILE_SYNC_DISTRIBUTION_PROVIDER_ACTION_RESULTS_TRANSFORMER);
-		if(kFileSyncUtils::fileSync_exists($key))
-			$this->resultParseData = kFileSyncUtils::file_get_contents($key, true, false);
+		if(vFileSyncUtils::fileSync_exists($key))
+			$this->resultParseData = vFileSyncUtils::file_get_contents($key, true, false);
 			
 		$this->resultParserType = $genericProviderAction->getResultsParser();
 	}

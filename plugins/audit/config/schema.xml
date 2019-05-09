@@ -13,10 +13,10 @@
 		<column primaryKey="false" required="false" lazyLoad="false" name="master_partner_id" type="integer" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="partner_id" type="integer" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="request_id" type="varchar" size="31" />
-		<column primaryKey="false" required="false" lazyLoad="false" name="kuser_id" type="integer" />
+		<column primaryKey="false" required="false" lazyLoad="false" name="vuser_id" type="integer" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="action" type="varchar" size="31" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="data" type="longvarchar" />
-		<column primaryKey="false" required="false" lazyLoad="false" name="ks" type="varchar" size="511" />
+		<column primaryKey="false" required="false" lazyLoad="false" name="vs" type="varchar" size="511" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="context" type="tinyint" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="entry_point" type="varchar" size="127" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="server_name" type="varchar" size="63" />
@@ -33,8 +33,8 @@
 			<index-column name="partner_id" />
 			<index-column name="entry_id" />
 		</index>
-		<index name="kuser_index">
-			<index-column name="kuser_id" />
+		<index name="vuser_index">
+			<index-column name="vuser_id" />
 		</index>
 		<index name="status_index">
 			<index-column name="status" />

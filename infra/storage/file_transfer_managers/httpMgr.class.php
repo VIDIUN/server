@@ -1,12 +1,12 @@
 <?php
 /**
- * Extends the 'kFileTransferMgr' class & implements a file transfer manager using the FTP protocol.
- * For additional comments please look at the 'kFileTransferMgr' class.
+ * Extends the 'vFileTransferMgr' class & implements a file transfer manager using the FTP protocol.
+ * For additional comments please look at the 'vFileTransferMgr' class.
  * 
  * @package infra
  * @subpackage Storage
  */
-class httpMgr extends kFileTransferMgr
+class httpMgr extends vFileTransferMgr
 {
 	/**
 	 * @var string
@@ -33,7 +33,7 @@ class httpMgr extends kFileTransferMgr
 	 */
 	protected $fileName = null;
 
-	// instances of this class should be created usign the 'getInstance' of the 'kFileTransferMgr' class
+	// instances of this class should be created usign the 'getInstance' of the 'vFileTransferMgr' class
 	protected function __construct(array $options = null)
 	{
 		parent::__construct($options);
@@ -62,7 +62,7 @@ class httpMgr extends kFileTransferMgr
 	}
 
 	/**********************************************************************/
-	/* Implementation of abstract functions from class 'kFileTransferMgr' */
+	/* Implementation of abstract functions from class 'vFileTransferMgr' */
 	/**********************************************************************/
 
 	// ftp connect to server:port
@@ -80,7 +80,7 @@ class httpMgr extends kFileTransferMgr
 			{
 				if($url_parts["scheme"] != "http" && $url_parts["scheme"] != "https" )
 				{
-					KalturaLog::err("URL [$http_server] is not http");
+					VidiunLog::err("URL [$http_server] is not http");
 					return false;
 				}
 			}
@@ -165,7 +165,7 @@ class httpMgr extends kFileTransferMgr
 			$errDescription = curl_error($this->ch);
 		
 			if(!$results)
-				throw new kFileTransferMgrException($errDescription, $errNumber);
+				throw new vFileTransferMgrException($errDescription, $errNumber);
 		}
 		
 		return $results;
@@ -188,7 +188,7 @@ class httpMgr extends kFileTransferMgr
 		{
 			$errNumber = curl_errno($this->ch);
 			$errDescription = curl_error($this->ch);
-			throw new kFileTransferMgrException($errDescription, $errNumber);
+			throw new vFileTransferMgrException($errDescription, $errNumber);
 		}
 		
 		if($local_file)

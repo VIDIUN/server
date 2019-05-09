@@ -7,15 +7,15 @@ class Infra_UserIdentity
 {
 	/**
 	 * Current user object
-	 * @var Kaltura_Client_Type_User
+	 * @var Vidiun_Client_Type_User
 	 */
 	protected $user;
 	
 	/**
-	 * Current kaltura session string
+	 * Current vidiun session string
 	 * @var string
 	 */
-	protected $ks;
+	protected $vs;
 	
 	/**
 	 * Current user permissions
@@ -36,20 +36,20 @@ class Infra_UserIdentity
 	
 	/**
 	 * Init a new UserIdentity instance with the given parameters
-	 * @param Kaltura_Client_Type_User $user
-	 * @param string $ks
+	 * @param Vidiun_Client_Type_User $user
+	 * @param string $vs
 	 * @param int $partnerId
 	 */
-	public function __construct(Kaltura_Client_Type_User $user = null, $ks = null, $timezoneOffset = null, $partnerId = null)
+	public function __construct(Vidiun_Client_Type_User $user = null, $vs = null, $timezoneOffset = null, $partnerId = null)
 	{
 		$this->user = $user;
-		$this->ks = $ks;
+		$this->vs = $vs;
 		$this->timezoneOffset = $timezoneOffset;
 		$this->partnerId = $partnerId;
 	}
 	
 	/**
-	 * @return Kaltura_Client_Type_User saved user object
+	 * @return Vidiun_Client_Type_User saved user object
 	 */
 	public function getUser()
 	{
@@ -57,11 +57,11 @@ class Infra_UserIdentity
 	}
 	
 	/**
-	 * @return string ks string
+	 * @return string vs string
 	 */
-	public function getKs()
+	public function getVs()
 	{
-		return $this->ks;
+		return $this->vs;
 	}
 	
 	public function getPermissions()
@@ -82,8 +82,8 @@ class Infra_UserIdentity
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
-			$this->permissions = array(Kaltura_Client_Enum_PermissionName::ALWAYS_ALLOWED_ACTIONS);
+			VidiunLog::err($e->getMessage());
+			$this->permissions = array(Vidiun_Client_Enum_PermissionName::ALWAYS_ALLOWED_ACTIONS);
 		}
 	}
 	

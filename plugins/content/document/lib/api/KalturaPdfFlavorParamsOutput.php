@@ -3,7 +3,7 @@
  * @package plugins.document
  * @subpackage api.objects
  */
-class KalturaPdfFlavorParamsOutput extends KalturaFlavorParamsOutput 
+class VidiunPdfFlavorParamsOutput extends VidiunFlavorParamsOutput 
 {
 	public function toObject($object = null, $skip = array())
 	{
@@ -47,7 +47,7 @@ class KalturaPdfFlavorParamsOutput extends KalturaFlavorParamsOutput
 		return $map;
 	}
 	
-	public function doFromObject($dbPdfFlavorParamsOutput, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbPdfFlavorParamsOutput, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($dbPdfFlavorParamsOutput, $responseProfile);
 		

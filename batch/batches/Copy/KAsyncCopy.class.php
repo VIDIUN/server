@@ -11,20 +11,20 @@
  * @package Scheduler
  * @subpackage Copy
  */
-class KAsyncCopy extends KJobHandlerWorker
+class VAsyncCopy extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::COPY;
+		return VidiunBatchJobType::COPY;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->copyObjects($job, $job->data);
 	}
@@ -32,13 +32,13 @@ class KAsyncCopy extends KJobHandlerWorker
 	/**
 	 * Will take a single filter and call each item to be Copied 
 	 */
-	private function copyObjects(KalturaBatchJob $job, KalturaCopyJobData $data)
+	private function copyObjects(VidiunBatchJob $job, VidiunCopyJobData $data)
 	{
-		$engine = KCopyingEngine::getInstance($job->jobSubType);
+		$engine = VCopyingEngine::getInstance($job->jobSubType);
 		$engine->configure($job->partnerId);
 	
 		$filter = clone $data->filter;
-		$advancedFilter = new KalturaIndexAdvancedFilter();
+		$advancedFilter = new VidiunIndexAdvancedFilter();
 		
 		if($data->lastCopyId)
 		{
@@ -55,12 +55,12 @@ class KAsyncCopy extends KJobHandlerWorker
 			$lastCopyId = $engine->getLastCopyId();
 			
 			$data->lastCopyId = $lastCopyId;
-			$this->updateJob($job, "Copied $copiedObjectsCount objects", KalturaBatchJobStatus::PROCESSING, $data);
+			$this->updateJob($job, "Copied $copiedObjectsCount objects", VidiunBatchJobStatus::PROCESSING, $data);
 			
 			$advancedFilter->indexIdGreaterThan = $lastCopyId;
 			$filter->advancedSearch = $advancedFilter;
 		}
 		
-		return $this->closeJob($job, null, null, "Copy objects finished", KalturaBatchJobStatus::FINISHED);
+		return $this->closeJob($job, null, null, "Copy objects finished", VidiunBatchJobStatus::FINISHED);
 	}
 }

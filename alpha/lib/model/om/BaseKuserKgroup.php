@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Base class that represents a row from the 'kuser_kgroup' table.
+ * Base class that represents a row from the 'vuser_vgroup' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
+abstract class BaseVuserVgroup extends BaseObject  implements Persistent {
 
 
 	/**
 	 * The Peer class.
 	 * Instance provides a convenient way of calling static methods on a class
 	 * that calling code may not be able to identify.
-	 * @var        KuserKgroupPeer
+	 * @var        VuserVgroupPeer
 	 */
 	protected static $peer;
 
@@ -26,10 +26,10 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	protected $id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the puser_id field.
@@ -38,10 +38,10 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	protected $puser_id;
 
 	/**
-	 * The value for the kgroup_id field.
+	 * The value for the vgroup_id field.
 	 * @var        int
 	 */
-	protected $kgroup_id;
+	protected $vgroup_id;
 
 	/**
 	 * The value for the pgroup_id field.
@@ -80,14 +80,14 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	protected $custom_data;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuserRelatedByKgroupId;
+	protected $avuserRelatedByVgroupId;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuserRelatedByKuserId;
+	protected $avuserRelatedByVuserId;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -145,13 +145,13 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -165,13 +165,13 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kgroup_id] column value.
+	 * Get the [vgroup_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKgroupId()
+	public function getVgroupId()
 	{
-		return $this->kgroup_id;
+		return $this->vgroup_id;
 	}
 
 	/**
@@ -298,12 +298,12 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 * Set the value of [id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KuserKgroup The current object (for fluent API support)
+	 * @return     VuserVgroup The current object (for fluent API support)
 	 */
 	public function setId($v)
 	{
-		if(!isset($this->oldColumnsValues[KuserKgroupPeer::ID]))
-			$this->oldColumnsValues[KuserKgroupPeer::ID] = $this->id;
+		if(!isset($this->oldColumnsValues[VuserVgroupPeer::ID]))
+			$this->oldColumnsValues[VuserVgroupPeer::ID] = $this->id;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -311,49 +311,49 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 
 		if ($this->id !== $v) {
 			$this->id = $v;
-			$this->modifiedColumns[] = KuserKgroupPeer::ID;
+			$this->modifiedColumns[] = VuserVgroupPeer::ID;
 		}
 
 		return $this;
 	} // setId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KuserKgroup The current object (for fluent API support)
+	 * @return     VuserVgroup The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[KuserKgroupPeer::KUSER_ID]))
-			$this->oldColumnsValues[KuserKgroupPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[VuserVgroupPeer::VUSER_ID]))
+			$this->oldColumnsValues[VuserVgroupPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = KuserKgroupPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = VuserVgroupPeer::VUSER_ID;
 		}
 
-		if ($this->akuserRelatedByKuserId !== null && $this->akuserRelatedByKuserId->getId() !== $v) {
-			$this->akuserRelatedByKuserId = null;
+		if ($this->avuserRelatedByVuserId !== null && $this->avuserRelatedByVuserId->getId() !== $v) {
+			$this->avuserRelatedByVuserId = null;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [puser_id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KuserKgroup The current object (for fluent API support)
+	 * @return     VuserVgroup The current object (for fluent API support)
 	 */
 	public function setPuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[KuserKgroupPeer::PUSER_ID]))
-			$this->oldColumnsValues[KuserKgroupPeer::PUSER_ID] = $this->puser_id;
+		if(!isset($this->oldColumnsValues[VuserVgroupPeer::PUSER_ID]))
+			$this->oldColumnsValues[VuserVgroupPeer::PUSER_ID] = $this->puser_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -361,49 +361,49 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 
 		if ($this->puser_id !== $v) {
 			$this->puser_id = $v;
-			$this->modifiedColumns[] = KuserKgroupPeer::PUSER_ID;
+			$this->modifiedColumns[] = VuserVgroupPeer::PUSER_ID;
 		}
 
 		return $this;
 	} // setPuserId()
 
 	/**
-	 * Set the value of [kgroup_id] column.
+	 * Set the value of [vgroup_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KuserKgroup The current object (for fluent API support)
+	 * @return     VuserVgroup The current object (for fluent API support)
 	 */
-	public function setKgroupId($v)
+	public function setVgroupId($v)
 	{
-		if(!isset($this->oldColumnsValues[KuserKgroupPeer::KGROUP_ID]))
-			$this->oldColumnsValues[KuserKgroupPeer::KGROUP_ID] = $this->kgroup_id;
+		if(!isset($this->oldColumnsValues[VuserVgroupPeer::VGROUP_ID]))
+			$this->oldColumnsValues[VuserVgroupPeer::VGROUP_ID] = $this->vgroup_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kgroup_id !== $v) {
-			$this->kgroup_id = $v;
-			$this->modifiedColumns[] = KuserKgroupPeer::KGROUP_ID;
+		if ($this->vgroup_id !== $v) {
+			$this->vgroup_id = $v;
+			$this->modifiedColumns[] = VuserVgroupPeer::VGROUP_ID;
 		}
 
-		if ($this->akuserRelatedByKgroupId !== null && $this->akuserRelatedByKgroupId->getId() !== $v) {
-			$this->akuserRelatedByKgroupId = null;
+		if ($this->avuserRelatedByVgroupId !== null && $this->avuserRelatedByVgroupId->getId() !== $v) {
+			$this->avuserRelatedByVgroupId = null;
 		}
 
 		return $this;
-	} // setKgroupId()
+	} // setVgroupId()
 
 	/**
 	 * Set the value of [pgroup_id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KuserKgroup The current object (for fluent API support)
+	 * @return     VuserVgroup The current object (for fluent API support)
 	 */
 	public function setPgroupId($v)
 	{
-		if(!isset($this->oldColumnsValues[KuserKgroupPeer::PGROUP_ID]))
-			$this->oldColumnsValues[KuserKgroupPeer::PGROUP_ID] = $this->pgroup_id;
+		if(!isset($this->oldColumnsValues[VuserVgroupPeer::PGROUP_ID]))
+			$this->oldColumnsValues[VuserVgroupPeer::PGROUP_ID] = $this->pgroup_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -411,7 +411,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 
 		if ($this->pgroup_id !== $v) {
 			$this->pgroup_id = $v;
-			$this->modifiedColumns[] = KuserKgroupPeer::PGROUP_ID;
+			$this->modifiedColumns[] = VuserVgroupPeer::PGROUP_ID;
 		}
 
 		return $this;
@@ -421,12 +421,12 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 * Set the value of [status] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KuserKgroup The current object (for fluent API support)
+	 * @return     VuserVgroup The current object (for fluent API support)
 	 */
 	public function setStatus($v)
 	{
-		if(!isset($this->oldColumnsValues[KuserKgroupPeer::STATUS]))
-			$this->oldColumnsValues[KuserKgroupPeer::STATUS] = $this->status;
+		if(!isset($this->oldColumnsValues[VuserVgroupPeer::STATUS]))
+			$this->oldColumnsValues[VuserVgroupPeer::STATUS] = $this->status;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -434,7 +434,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 
 		if ($this->status !== $v) {
 			$this->status = $v;
-			$this->modifiedColumns[] = KuserKgroupPeer::STATUS;
+			$this->modifiedColumns[] = VuserVgroupPeer::STATUS;
 		}
 
 		return $this;
@@ -444,12 +444,12 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 * Set the value of [partner_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KuserKgroup The current object (for fluent API support)
+	 * @return     VuserVgroup The current object (for fluent API support)
 	 */
 	public function setPartnerId($v)
 	{
-		if(!isset($this->oldColumnsValues[KuserKgroupPeer::PARTNER_ID]))
-			$this->oldColumnsValues[KuserKgroupPeer::PARTNER_ID] = $this->partner_id;
+		if(!isset($this->oldColumnsValues[VuserVgroupPeer::PARTNER_ID]))
+			$this->oldColumnsValues[VuserVgroupPeer::PARTNER_ID] = $this->partner_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -457,7 +457,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 
 		if ($this->partner_id !== $v) {
 			$this->partner_id = $v;
-			$this->modifiedColumns[] = KuserKgroupPeer::PARTNER_ID;
+			$this->modifiedColumns[] = VuserVgroupPeer::PARTNER_ID;
 		}
 
 		return $this;
@@ -468,7 +468,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     KuserKgroup The current object (for fluent API support)
+	 * @return     VuserVgroup The current object (for fluent API support)
 	 */
 	public function setCreatedAt($v)
 	{
@@ -505,7 +505,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 					)
 			{
 				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = KuserKgroupPeer::CREATED_AT;
+				$this->modifiedColumns[] = VuserVgroupPeer::CREATED_AT;
 			}
 		} // if either are not null
 
@@ -517,7 +517,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     KuserKgroup The current object (for fluent API support)
+	 * @return     VuserVgroup The current object (for fluent API support)
 	 */
 	public function setUpdatedAt($v)
 	{
@@ -554,7 +554,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 					)
 			{
 				$this->updated_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = KuserKgroupPeer::UPDATED_AT;
+				$this->modifiedColumns[] = VuserVgroupPeer::UPDATED_AT;
 			}
 		} // if either are not null
 
@@ -565,7 +565,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 * Set the value of [custom_data] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KuserKgroup The current object (for fluent API support)
+	 * @return     VuserVgroup The current object (for fluent API support)
 	 */
 	public function setCustomData($v)
 	{
@@ -575,7 +575,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 
 		if ($this->custom_data !== $v) {
 			$this->custom_data = $v;
-			$this->modifiedColumns[] = KuserKgroupPeer::CUSTOM_DATA;
+			$this->modifiedColumns[] = VuserVgroupPeer::CUSTOM_DATA;
 		}
 
 		return $this;
@@ -617,9 +617,9 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 		try {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (string) $row[$startcol + 0] : null;
-			$this->kuser_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+			$this->vuser_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->puser_id = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-			$this->kgroup_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+			$this->vgroup_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->pgroup_id = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
 			$this->status = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
 			$this->partner_id = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
@@ -635,10 +635,10 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 10; // 10 = KuserKgroupPeer::NUM_COLUMNS - KuserKgroupPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 10; // 10 = VuserVgroupPeer::NUM_COLUMNS - VuserVgroupPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
-			throw new PropelException("Error populating KuserKgroup object", $e);
+			throw new PropelException("Error populating VuserVgroup object", $e);
 		}
 	}
 
@@ -658,11 +658,11 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akuserRelatedByKuserId !== null && $this->kuser_id !== $this->akuserRelatedByKuserId->getId()) {
-			$this->akuserRelatedByKuserId = null;
+		if ($this->avuserRelatedByVuserId !== null && $this->vuser_id !== $this->avuserRelatedByVuserId->getId()) {
+			$this->avuserRelatedByVuserId = null;
 		}
-		if ($this->akuserRelatedByKgroupId !== null && $this->kgroup_id !== $this->akuserRelatedByKgroupId->getId()) {
-			$this->akuserRelatedByKgroupId = null;
+		if ($this->avuserRelatedByVgroupId !== null && $this->vgroup_id !== $this->avuserRelatedByVgroupId->getId()) {
+			$this->avuserRelatedByVgroupId = null;
 		}
 	} // ensureConsistency
 
@@ -687,17 +687,17 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(KuserKgroupPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(VuserVgroupPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		// We don't need to alter the object instance pool; we're just modifying this instance
 		// already in the pool.
 
-		KuserKgroupPeer::setUseCriteriaFilter(false);
+		VuserVgroupPeer::setUseCriteriaFilter(false);
 		$criteria = $this->buildPkeyCriteria();
-		KuserKgroupPeer::addSelectColumns($criteria);
+		VuserVgroupPeer::addSelectColumns($criteria);
 		$stmt = BasePeer::doSelect($criteria, $con);
-		KuserKgroupPeer::setUseCriteriaFilter(true);
+		VuserVgroupPeer::setUseCriteriaFilter(true);
 		$row = $stmt->fetch(PDO::FETCH_NUM);
 		$stmt->closeCursor();
 		if (!$row) {
@@ -707,8 +707,8 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akuserRelatedByKgroupId = null;
-			$this->akuserRelatedByKuserId = null;
+			$this->avuserRelatedByVgroupId = null;
+			$this->avuserRelatedByVuserId = null;
 		} // if (deep)
 	}
 
@@ -728,14 +728,14 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(KuserKgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VuserVgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
 			$ret = $this->preDelete($con);
 			if ($ret) {
-				KuserKgroupPeer::doDelete($this, $con);
+				VuserVgroupPeer::doDelete($this, $con);
 				$this->postDelete($con);
 				$this->setDeleted(true);
 				$con->commit();
@@ -768,7 +768,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(KuserKgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VuserVgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
@@ -786,15 +786,15 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 				return 0;
 			}
 			
-			for ($retries = 1; $retries < KalturaPDO::SAVE_MAX_RETRIES; $retries++)
+			for ($retries = 1; $retries < VidiunPDO::SAVE_MAX_RETRIES; $retries++)
 			{
                $affectedRows = $this->doSave($con);
-                if ($affectedRows || !$this->isColumnModified(KuserKgroupPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
+                if ($affectedRows || !$this->isColumnModified(VuserVgroupPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug("was unable to save! retrying for the $retries time");
+                VidiunLog::debug("was unable to save! retrying for the $retries time");
                 $criteria = $this->buildPkeyCriteria();
-				$criteria->addSelectColumn(KuserKgroupPeer::CUSTOM_DATA);
+				$criteria->addSelectColumn(VuserVgroupPeer::CUSTOM_DATA);
                 $stmt = BasePeer::doSelect($criteria, $con);
                 $cutsomDataArr = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 $newCustomData = $cutsomDataArr[0];
@@ -806,7 +806,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 
 				//set custom data column values we wanted to change to
 				$validUpdate = true;
-				$atomicCustomDataFields = KuserKgroupPeer::getAtomicCustomDataFields();
+				$atomicCustomDataFields = VuserVgroupPeer::getAtomicCustomDataFields();
 			 	foreach ($this->oldCustomDataValues as $namespace => $namespaceValues){
                 	foreach($namespaceValues as $name => $oldValue)
 					{
@@ -856,7 +856,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 				$this->postUpdate($con);
 			}
 			$this->postSave($con);
-			KuserKgroupPeer::addInstanceToPool($this);
+			VuserVgroupPeer::addInstanceToPool($this);
 			
 			$con->commit();
 			return $affectedRows;
@@ -893,29 +893,29 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuserRelatedByKgroupId !== null) {
-				if ($this->akuserRelatedByKgroupId->isModified() || $this->akuserRelatedByKgroupId->isNew()) {
-					$affectedRows += $this->akuserRelatedByKgroupId->save($con);
+			if ($this->avuserRelatedByVgroupId !== null) {
+				if ($this->avuserRelatedByVgroupId->isModified() || $this->avuserRelatedByVgroupId->isNew()) {
+					$affectedRows += $this->avuserRelatedByVgroupId->save($con);
 				}
-				$this->setkuserRelatedByKgroupId($this->akuserRelatedByKgroupId);
+				$this->setvuserRelatedByVgroupId($this->avuserRelatedByVgroupId);
 			}
 
-			if ($this->akuserRelatedByKuserId !== null) {
-				if ($this->akuserRelatedByKuserId->isModified() || $this->akuserRelatedByKuserId->isNew()) {
-					$affectedRows += $this->akuserRelatedByKuserId->save($con);
+			if ($this->avuserRelatedByVuserId !== null) {
+				if ($this->avuserRelatedByVuserId->isModified() || $this->avuserRelatedByVuserId->isNew()) {
+					$affectedRows += $this->avuserRelatedByVuserId->save($con);
 				}
-				$this->setkuserRelatedByKuserId($this->akuserRelatedByKuserId);
+				$this->setvuserRelatedByVuserId($this->avuserRelatedByVuserId);
 			}
 
 			if ($this->isNew() ) {
-				$this->modifiedColumns[] = KuserKgroupPeer::ID;
+				$this->modifiedColumns[] = VuserVgroupPeer::ID;
 			}
 
 			// If this object has been modified, then save it to the database.
 			$this->objectSaved = false;
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = KuserKgroupPeer::doInsert($this, $con);
+					$pk = VuserVgroupPeer::doInsert($this, $con);
 					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
 										 // should always be true here (even though technically
 										 // BasePeer::doInsert() can insert multiple rows).
@@ -925,7 +925,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 					$this->setNew(false);
 					$this->objectSaved = true;
 				} else {
-					$affectedObjects = KuserKgroupPeer::doUpdate($this, $con);
+					$affectedObjects = VuserVgroupPeer::doUpdate($this, $con);
 					if($affectedObjects)
 						$this->objectSaved = true;
 						
@@ -973,7 +973,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -998,12 +998,12 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1021,10 +1021,10 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1149,20 +1149,20 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuserRelatedByKgroupId !== null) {
-				if (!$this->akuserRelatedByKgroupId->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuserRelatedByKgroupId->getValidationFailures());
+			if ($this->avuserRelatedByVgroupId !== null) {
+				if (!$this->avuserRelatedByVgroupId->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuserRelatedByVgroupId->getValidationFailures());
 				}
 			}
 
-			if ($this->akuserRelatedByKuserId !== null) {
-				if (!$this->akuserRelatedByKuserId->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuserRelatedByKuserId->getValidationFailures());
+			if ($this->avuserRelatedByVuserId !== null) {
+				if (!$this->avuserRelatedByVuserId->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuserRelatedByVuserId->getValidationFailures());
 				}
 			}
 
 
-			if (($retval = KuserKgroupPeer::doValidate($this, $columns)) !== true) {
+			if (($retval = VuserVgroupPeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
@@ -1185,7 +1185,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = KuserKgroupPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = VuserVgroupPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		$field = $this->getByPosition($pos);
 		return $field;
 	}
@@ -1204,13 +1204,13 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 				return $this->getId();
 				break;
 			case 1:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 2:
 				return $this->getPuserId();
 				break;
 			case 3:
-				return $this->getKgroupId();
+				return $this->getVgroupId();
 				break;
 			case 4:
 				return $this->getPgroupId();
@@ -1249,12 +1249,12 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
-		$keys = KuserKgroupPeer::getFieldNames($keyType);
+		$keys = VuserVgroupPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
-			$keys[1] => $this->getKuserId(),
+			$keys[1] => $this->getVuserId(),
 			$keys[2] => $this->getPuserId(),
-			$keys[3] => $this->getKgroupId(),
+			$keys[3] => $this->getVgroupId(),
 			$keys[4] => $this->getPgroupId(),
 			$keys[5] => $this->getStatus(),
 			$keys[6] => $this->getPartnerId(),
@@ -1277,7 +1277,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 */
 	public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = KuserKgroupPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = VuserVgroupPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->setByPosition($pos, $value);
 	}
 
@@ -1296,13 +1296,13 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 				$this->setId($value);
 				break;
 			case 1:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 2:
 				$this->setPuserId($value);
 				break;
 			case 3:
-				$this->setKgroupId($value);
+				$this->setVgroupId($value);
 				break;
 			case 4:
 				$this->setPgroupId($value);
@@ -1344,12 +1344,12 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 */
 	public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
 	{
-		$keys = KuserKgroupPeer::getFieldNames($keyType);
+		$keys = VuserVgroupPeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setKuserId($arr[$keys[1]]);
+		if (array_key_exists($keys[1], $arr)) $this->setVuserId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setPuserId($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setKgroupId($arr[$keys[3]]);
+		if (array_key_exists($keys[3], $arr)) $this->setVgroupId($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setPgroupId($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setStatus($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setPartnerId($arr[$keys[6]]);
@@ -1365,18 +1365,18 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 */
 	public function buildCriteria()
 	{
-		$criteria = new Criteria(KuserKgroupPeer::DATABASE_NAME);
+		$criteria = new Criteria(VuserVgroupPeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(KuserKgroupPeer::ID)) $criteria->add(KuserKgroupPeer::ID, $this->id);
-		if ($this->isColumnModified(KuserKgroupPeer::KUSER_ID)) $criteria->add(KuserKgroupPeer::KUSER_ID, $this->kuser_id);
-		if ($this->isColumnModified(KuserKgroupPeer::PUSER_ID)) $criteria->add(KuserKgroupPeer::PUSER_ID, $this->puser_id);
-		if ($this->isColumnModified(KuserKgroupPeer::KGROUP_ID)) $criteria->add(KuserKgroupPeer::KGROUP_ID, $this->kgroup_id);
-		if ($this->isColumnModified(KuserKgroupPeer::PGROUP_ID)) $criteria->add(KuserKgroupPeer::PGROUP_ID, $this->pgroup_id);
-		if ($this->isColumnModified(KuserKgroupPeer::STATUS)) $criteria->add(KuserKgroupPeer::STATUS, $this->status);
-		if ($this->isColumnModified(KuserKgroupPeer::PARTNER_ID)) $criteria->add(KuserKgroupPeer::PARTNER_ID, $this->partner_id);
-		if ($this->isColumnModified(KuserKgroupPeer::CREATED_AT)) $criteria->add(KuserKgroupPeer::CREATED_AT, $this->created_at);
-		if ($this->isColumnModified(KuserKgroupPeer::UPDATED_AT)) $criteria->add(KuserKgroupPeer::UPDATED_AT, $this->updated_at);
-		if ($this->isColumnModified(KuserKgroupPeer::CUSTOM_DATA)) $criteria->add(KuserKgroupPeer::CUSTOM_DATA, $this->custom_data);
+		if ($this->isColumnModified(VuserVgroupPeer::ID)) $criteria->add(VuserVgroupPeer::ID, $this->id);
+		if ($this->isColumnModified(VuserVgroupPeer::VUSER_ID)) $criteria->add(VuserVgroupPeer::VUSER_ID, $this->vuser_id);
+		if ($this->isColumnModified(VuserVgroupPeer::PUSER_ID)) $criteria->add(VuserVgroupPeer::PUSER_ID, $this->puser_id);
+		if ($this->isColumnModified(VuserVgroupPeer::VGROUP_ID)) $criteria->add(VuserVgroupPeer::VGROUP_ID, $this->vgroup_id);
+		if ($this->isColumnModified(VuserVgroupPeer::PGROUP_ID)) $criteria->add(VuserVgroupPeer::PGROUP_ID, $this->pgroup_id);
+		if ($this->isColumnModified(VuserVgroupPeer::STATUS)) $criteria->add(VuserVgroupPeer::STATUS, $this->status);
+		if ($this->isColumnModified(VuserVgroupPeer::PARTNER_ID)) $criteria->add(VuserVgroupPeer::PARTNER_ID, $this->partner_id);
+		if ($this->isColumnModified(VuserVgroupPeer::CREATED_AT)) $criteria->add(VuserVgroupPeer::CREATED_AT, $this->created_at);
+		if ($this->isColumnModified(VuserVgroupPeer::UPDATED_AT)) $criteria->add(VuserVgroupPeer::UPDATED_AT, $this->updated_at);
+		if ($this->isColumnModified(VuserVgroupPeer::CUSTOM_DATA)) $criteria->add(VuserVgroupPeer::CUSTOM_DATA, $this->custom_data);
 
 		return $criteria;
 	}
@@ -1391,29 +1391,29 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 */
 	public function buildPkeyCriteria()
 	{
-		$criteria = new Criteria(KuserKgroupPeer::DATABASE_NAME);
+		$criteria = new Criteria(VuserVgroupPeer::DATABASE_NAME);
 
-		$criteria->add(KuserKgroupPeer::ID, $this->id);
+		$criteria->add(VuserVgroupPeer::ID, $this->id);
 		
 		if($this->alreadyInSave)
 		{
-			if ($this->isColumnModified(KuserKgroupPeer::CUSTOM_DATA))
+			if ($this->isColumnModified(VuserVgroupPeer::CUSTOM_DATA))
 			{
 				if (!is_null($this->custom_data_md5))
-					$criteria->add(KuserKgroupPeer::CUSTOM_DATA, "MD5(cast(" . KuserKgroupPeer::CUSTOM_DATA . " as char character set latin1)) = '$this->custom_data_md5'", Criteria::CUSTOM);
+					$criteria->add(VuserVgroupPeer::CUSTOM_DATA, "MD5(cast(" . VuserVgroupPeer::CUSTOM_DATA . " as char character set latin1)) = '$this->custom_data_md5'", Criteria::CUSTOM);
 					//casting to latin char set to avoid mysql and php md5 difference
 				else 
-					$criteria->add(KuserKgroupPeer::CUSTOM_DATA, NULL, Criteria::ISNULL);
+					$criteria->add(VuserVgroupPeer::CUSTOM_DATA, NULL, Criteria::ISNULL);
 			}
 			
-			if (count($this->modifiedColumns) == 2 && $this->isColumnModified(KuserKgroupPeer::UPDATED_AT))
+			if (count($this->modifiedColumns) == 2 && $this->isColumnModified(VuserVgroupPeer::UPDATED_AT))
 			{
 				$theModifiedColumn = null;
 				foreach($this->modifiedColumns as $modifiedColumn)
-					if($modifiedColumn != KuserKgroupPeer::UPDATED_AT)
+					if($modifiedColumn != VuserVgroupPeer::UPDATED_AT)
 						$theModifiedColumn = $modifiedColumn;
 						
-				$atomicColumns = KuserKgroupPeer::getAtomicColumns();
+				$atomicColumns = VuserVgroupPeer::getAtomicColumns();
 				if(in_array($theModifiedColumn, $atomicColumns))
 					$criteria->add($theModifiedColumn, $this->getByName($theModifiedColumn, BasePeer::TYPE_COLNAME), Criteria::NOT_EQUAL);
 			}
@@ -1448,18 +1448,18 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 * If desired, this method can also make copies of all associated (fkey referrers)
 	 * objects.
 	 *
-	 * @param      object $copyObj An object of KuserKgroup (or compatible) type.
+	 * @param      object $copyObj An object of VuserVgroup (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
 	 * @throws     PropelException
 	 */
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setPuserId($this->puser_id);
 
-		$copyObj->setKgroupId($this->kgroup_id);
+		$copyObj->setVgroupId($this->vgroup_id);
 
 		$copyObj->setPgroupId($this->pgroup_id);
 
@@ -1489,7 +1489,7 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 * objects.
 	 *
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-	 * @return     KuserKgroup Clone of current object.
+	 * @return     VuserVgroup Clone of current object.
 	 * @throws     PropelException
 	 */
 	public function copy($deepCopy = false)
@@ -1505,16 +1505,16 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @var     KuserKgroup Clone of current object.
+	 * @var     VuserVgroup Clone of current object.
 	 */
 	protected $copiedFrom = null;
 	
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @param      KuserKgroup $copiedFrom Clone of current object.
+	 * @param      VuserVgroup $copiedFrom Clone of current object.
 	 */
-	public function setCopiedFrom(KuserKgroup $copiedFrom)
+	public function setCopiedFrom(VuserVgroup $copiedFrom)
 	{
 		$this->copiedFrom = $copiedFrom;
 	}
@@ -1526,37 +1526,37 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	 * same instance for all member of this class. The method could therefore
 	 * be static, but this would prevent one from overriding the behavior.
 	 *
-	 * @return     KuserKgroupPeer
+	 * @return     VuserVgroupPeer
 	 */
 	public function getPeer()
 	{
 		if (self::$peer === null) {
-			self::$peer = new KuserKgroupPeer();
+			self::$peer = new VuserVgroupPeer();
 		}
 		return self::$peer;
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
-	 * @return     KuserKgroup The current object (for fluent API support)
+	 * @param      vuser $v
+	 * @return     VuserVgroup The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuserRelatedByKgroupId(kuser $v = null)
+	public function setvuserRelatedByVgroupId(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setKgroupId(NULL);
+			$this->setVgroupId(NULL);
 		} else {
-			$this->setKgroupId($v->getId());
+			$this->setVgroupId($v->getId());
 		}
 
-		$this->akuserRelatedByKgroupId = $v;
+		$this->avuserRelatedByVgroupId = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
-			$v->addKuserKgroupRelatedByKgroupId($this);
+			$v->addVuserVgroupRelatedByVgroupId($this);
 		}
 
 		return $this;
@@ -1564,48 +1564,48 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuserRelatedByKgroupId(PropelPDO $con = null)
+	public function getvuserRelatedByVgroupId(PropelPDO $con = null)
 	{
-		if ($this->akuserRelatedByKgroupId === null && ($this->kgroup_id !== null)) {
-			$this->akuserRelatedByKgroupId = kuserPeer::retrieveByPk($this->kgroup_id);
+		if ($this->avuserRelatedByVgroupId === null && ($this->vgroup_id !== null)) {
+			$this->avuserRelatedByVgroupId = vuserPeer::retrieveByPk($this->vgroup_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuserRelatedByKgroupId->addKuserKgroupsRelatedByKgroupId($this);
+			   $this->avuserRelatedByVgroupId->addVuserVgroupsRelatedByVgroupId($this);
 			 */
 		}
-		return $this->akuserRelatedByKgroupId;
+		return $this->avuserRelatedByVgroupId;
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
-	 * @return     KuserKgroup The current object (for fluent API support)
+	 * @param      vuser $v
+	 * @return     VuserVgroup The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuserRelatedByKuserId(kuser $v = null)
+	public function setvuserRelatedByVuserId(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setKuserId(NULL);
+			$this->setVuserId(NULL);
 		} else {
-			$this->setKuserId($v->getId());
+			$this->setVuserId($v->getId());
 		}
 
-		$this->akuserRelatedByKuserId = $v;
+		$this->avuserRelatedByVuserId = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
-			$v->addKuserKgroupRelatedByKuserId($this);
+			$v->addVuserVgroupRelatedByVuserId($this);
 		}
 
 		return $this;
@@ -1613,25 +1613,25 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuserRelatedByKuserId(PropelPDO $con = null)
+	public function getvuserRelatedByVuserId(PropelPDO $con = null)
 	{
-		if ($this->akuserRelatedByKuserId === null && ($this->kuser_id !== null)) {
-			$this->akuserRelatedByKuserId = kuserPeer::retrieveByPk($this->kuser_id);
+		if ($this->avuserRelatedByVuserId === null && ($this->vuser_id !== null)) {
+			$this->avuserRelatedByVuserId = vuserPeer::retrieveByPk($this->vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuserRelatedByKuserId->addKuserKgroupsRelatedByKuserId($this);
+			   $this->avuserRelatedByVuserId->addVuserVgroupsRelatedByVuserId($this);
 			 */
 		}
-		return $this->akuserRelatedByKuserId;
+		return $this->avuserRelatedByVuserId;
 	}
 
 	/**
@@ -1648,8 +1648,8 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 		if ($deep) {
 		} // if ($deep)
 
-			$this->akuserRelatedByKgroupId = null;
-			$this->akuserRelatedByKuserId = null;
+			$this->avuserRelatedByVgroupId = null;
+			$this->avuserRelatedByVuserId = null;
 	}
 
 	/* ---------------------- CustomData functions ------------------------- */
@@ -1795,4 +1795,4 @@ abstract class BaseKuserKgroup extends BaseObject  implements Persistent {
 	
 	/* ---------------------- CustomData functions ------------------------- */
 	
-} // BaseKuserKgroup
+} // BaseVuserVgroup

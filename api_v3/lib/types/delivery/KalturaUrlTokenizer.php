@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlTokenizer extends KalturaObject
+class VidiunUrlTokenizer extends VidiunObject
 {
 
 	/**

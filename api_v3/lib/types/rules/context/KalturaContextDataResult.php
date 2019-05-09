@@ -3,17 +3,17 @@
  * @package api
  * @subpackage objects
  */
-class KalturaContextDataResult extends KalturaObject
+class VidiunContextDataResult extends VidiunObject
 {	
 	/**
 	 * Array of messages as received from the rules that invalidated
-	 * @var KalturaStringArray
+	 * @var VidiunStringArray
 	 */
 	public $messages;
 	
 	/**
 	 * Array of actions as received from the rules that invalidated
-	 * @var KalturaRuleActionArray
+	 * @var VidiunRuleActionArray
 	 */
 	public $actions;
 
@@ -24,7 +24,7 @@ class KalturaContextDataResult extends KalturaObject
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{

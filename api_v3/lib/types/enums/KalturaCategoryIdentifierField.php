@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaCategoryIdentifierField extends KalturaStringEnum implements CategoryIdentifierField
+class VidiunCategoryIdentifierField extends VidiunStringEnum implements CategoryIdentifierField
 {
 	
 }

@@ -4,7 +4,7 @@
  * @subpackage api.objects
  * @relatedService AttachmentAssetService
  */
-class KalturaAttachmentAsset extends KalturaAsset  
+class VidiunAttachmentAsset extends VidiunAsset  
 {
 	/**
 	 * The filename of the attachment asset content
@@ -20,7 +20,7 @@ class KalturaAttachmentAsset extends KalturaAsset
 	
 	/**
 	 * The attachment format
-	 * @var KalturaAttachmentType
+	 * @var VidiunAttachmentType
 	 * @filter eq,in
 	 */
 	public $format;
@@ -28,7 +28,7 @@ class KalturaAttachmentAsset extends KalturaAsset
 	/**
 	 * The status of the asset
 	 * 
-	 * @var KalturaAttachmentAssetStatus
+	 * @var VidiunAttachmentAssetStatus
 	 * @readonly 
 	 * @filter eq,in,notin
 	 */

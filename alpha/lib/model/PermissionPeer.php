@@ -42,7 +42,7 @@ class PermissionPeer extends BasePermissionPeer
 			PermissionPeer::setUseCriteriaFilter(true);
 			
 			if (!$hasPermission || $hasPermission->getStatus() == PermissionStatus::DELETED) {
-				throw new kPermissionException('Permission ['.$permission.'] was not found for partner ['.$partnerId.']', kPermissionException::PERMISSION_NOT_FOUND);
+				throw new vPermissionException('Permission ['.$permission.'] was not found for partner ['.$partnerId.']', vPermissionException::PERMISSION_NOT_FOUND);
 			}
 		}
 	}
@@ -62,11 +62,11 @@ class PermissionPeer extends BasePermissionPeer
 		$existingPermission = PermissionPeer::doSelectOne($c);
 		if (!$existingPermission) {
 			$permission->save();
-			KalturaLog::log('Adding permission ['.$permission->getName().'] to partner ['.$partnerId.'].');
+			VidiunLog::log('Adding permission ['.$permission->getName().'] to partner ['.$partnerId.'].');
 			return $permission;
 		}
 		else {
-			throw new kPermissionException('Permission ['.$permission->getName().'] already exists for partner ['.$partnerId.']', kPermissionException::PERMISSION_ALREADY_EXISTS);
+			throw new vPermissionException('Permission ['.$permission->getName().'] already exists for partner ['.$partnerId.']', vPermissionException::PERMISSION_ALREADY_EXISTS);
 		}
 	}
 	
@@ -88,9 +88,9 @@ class PermissionPeer extends BasePermissionPeer
 		$c->addAnd(PermissionPeer::NAME, $permissionName, Criteria::EQUAL);
 		$existingPermission = PermissionPeer::doSelectOne($c);
 		if (!$existingPermission) {
-			throw new kPermissionException('Permission ['.$permissionName.'] does not exist for partner ['.$partnerId.']', kPermissionException::PERMISSION_NOT_FOUND);
+			throw new vPermissionException('Permission ['.$permissionName.'] does not exist for partner ['.$partnerId.']', vPermissionException::PERMISSION_NOT_FOUND);
 		}
-		KalturaLog::log('Removing permission ['.$permissionName.'] from partner ['.$partnerId.'].');
+		VidiunLog::log('Removing permission ['.$permissionName.'] from partner ['.$partnerId.'].');
 		$existingPermission->setStatus(PermissionStatus::DELETED);
 	}
 	
@@ -98,7 +98,7 @@ class PermissionPeer extends BasePermissionPeer
 	public static function enableForPartner($permissionName, $permissionType, $partnerId = null, $friendlyName = null, $description = null)
 	{
 		if(is_null($partnerId))
-			$partnerId = (kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id);
+			$partnerId = (vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id);
 			
 		$permission = new Permission();
 		$permission->setName($permissionName);
@@ -112,13 +112,13 @@ class PermissionPeer extends BasePermissionPeer
 			self::addToPartner($permission, $partnerId, false);
 			return true;
 		}
-		catch (kPermissionException $e) {
+		catch (vPermissionException $e) {
 			$code = $e->getCode();
-			if ($code == kPermissionException::PERMISSION_ALREADY_EXISTS) {
+			if ($code == vPermissionException::PERMISSION_ALREADY_EXISTS) {
 				// permission already exists - set status to active
 				$permission = self::getByNameAndPartner($permissionName, array($partnerId));
 				if(!$permission)
-					throw new kCoreException("Permission [$permissionName] not found for partner [$partnerId]", kCoreException::INTERNAL_SERVER_ERROR);
+					throw new vCoreException("Permission [$permissionName] not found for partner [$partnerId]", vCoreException::INTERNAL_SERVER_ERROR);
 					
 				$permission->setStatus(PermissionStatus::ACTIVE);
 				$permission->save();
@@ -126,7 +126,7 @@ class PermissionPeer extends BasePermissionPeer
 			}
 			throw $e;
 		}
-		throw new kCoreException('Unknown error occured', kCoreException::INTERNAL_SERVER_ERROR);
+		throw new vCoreException('Unknown error occured', vCoreException::INTERNAL_SERVER_ERROR);
 	}
 
 	
@@ -236,10 +236,10 @@ class PermissionPeer extends BasePermissionPeer
 
 	public static function preFetchPermissions($permissionsNamesArray)
 	{
-		$preFetchPermissions = PermissionPeer::getByNamesAndPartner($permissionsNamesArray , array(kCurrentContext::$ks_partner_id, PartnerPeer::GLOBAL_PARTNER));
+		$preFetchPermissions = PermissionPeer::getByNamesAndPartner($permissionsNamesArray , array(vCurrentContext::$vs_partner_id, PartnerPeer::GLOBAL_PARTNER));
 		foreach ($preFetchPermissions as $permission)
 		{
-			PermissionPeer::validatePermission($permission->getName(), kCurrentContext::$ks_partner_id, true ,$permission);
+			PermissionPeer::validatePermission($permission->getName(), vCurrentContext::$vs_partner_id, true ,$permission);
 		}
 	}
 	

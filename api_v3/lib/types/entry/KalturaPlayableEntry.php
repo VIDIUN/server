@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPlayableEntry extends KalturaBaseEntry
+class VidiunPlayableEntry extends VidiunBaseEntry
 {
 	/**
 	 * Number of plays
@@ -68,7 +68,7 @@ class KalturaPlayableEntry extends KalturaBaseEntry
 	/**
 	 * The duration type (short for 0-4 mins, medium for 4-20 mins, long for 20+ mins)
 	 * 
-	 * @var KalturaDurationType
+	 * @var VidiunDurationType
 	 * @readonly
 	 * @filter matchor
 	 */
@@ -86,7 +86,7 @@ class KalturaPlayableEntry extends KalturaBaseEntry
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntry::getMapBetweenObjects()
+	 * @see VidiunBaseEntry::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -94,7 +94,7 @@ class KalturaPlayableEntry extends KalturaBaseEntry
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntry::toObject()
+	 * @see VidiunBaseEntry::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
@@ -107,7 +107,7 @@ class KalturaPlayableEntry extends KalturaBaseEntry
 		return $dbObject;
 	}
 
-	public function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($sourceObject, $responseProfile);
 		$recordedLengthInMs = $sourceObject->getRecordedLengthInMsecs();

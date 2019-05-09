@@ -3,7 +3,7 @@
  * @package plugins.drm
  * @subpackage Admin
  */
-class DrmProfileListAction extends KalturaApplicationPlugin implements IKalturaAdminConsolePublisherAction
+class DrmProfileListAction extends VidiunApplicationPlugin implements IVidiunAdminConsolePublisherAction
 {
 	public function __construct()
 	{
@@ -22,7 +22,7 @@ class DrmProfileListAction extends KalturaApplicationPlugin implements IKalturaA
 	
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_DRM_PROFILE_BASE);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_DRM_PROFILE_BASE);
 	}
 	
 	public function doAction(Zend_Controller_Action $action)
@@ -37,7 +37,7 @@ class DrmProfileListAction extends KalturaApplicationPlugin implements IKalturaA
 		$drmProfileFilter->orderBy = "-createdAt";
 		
 		$client = Infra_ClientHelper::getClient();
-		$drmPluginClient = Kaltura_Client_Drm_Plugin::get($client);
+		$drmPluginClient = Vidiun_Client_Drm_Plugin::get($client);
 		
 		// get results and paginate
 		$paginatorAdapter = new Infra_FilterPaginator($drmPluginClient->drmProfile, "listAction", null, $drmProfileFilter);
@@ -68,7 +68,7 @@ class DrmProfileListAction extends KalturaApplicationPlugin implements IKalturaA
 	
 	private function getDrmProfileFilterFromRequest(Zend_Controller_Request_Abstract $request)
 	{
-		$filter = new Kaltura_Client_Drm_Type_DrmProfileFilter();
+		$filter = new Vidiun_Client_Drm_Type_DrmProfileFilter();
 		$filterInput = $request->getParam('filter_input');
 		if(!strlen($filterInput))
 			return $filter;

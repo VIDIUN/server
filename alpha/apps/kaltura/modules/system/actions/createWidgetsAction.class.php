@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class createWidgetsAction extends kalturaSystemAction
+class createWidgetsAction extends vidiunSystemAction
 {
 	
 	/**
@@ -21,7 +21,7 @@ class createWidgetsAction extends kalturaSystemAction
 	{
 		$this->forceSystemAuthentication();
 		
-		$kshow_ids = $this->getP ( "kshow_ids") ;
+		$vshow_ids = $this->getP ( "vshow_ids") ;
 		$partner_id = $this->getP ( "partner_id") ;
 //		$subp_id = $this->getP ( "subp_id") ;
 		$source_widget_id= $this->getP ( "source_widget_id" , 201 ) ;
@@ -31,7 +31,7 @@ class createWidgetsAction extends kalturaSystemAction
 		$limit = $this->getP ( "limit" , 20 );
 		if ( $limit > 300 ) $limit = 300;
 		
-		$this->kshow_ids = $kshow_ids;
+		$this->vshow_ids = $vshow_ids;
 		$this->partner_id = $partner_id;
 //		$this->subp_id = $subp_id;
 		$this->source_widget_id = $source_widget_id;
@@ -45,91 +45,91 @@ class createWidgetsAction extends kalturaSystemAction
 		
 		if ( $submitted )
 		{
-			// fetch all kshows that don't have widgets
+			// fetch all vshows that don't have widgets
 			$c = new Criteria();
 			$c->setLimit ( $limit );
 			if ( $method == "list" )
 			{
-				$c->add ( kshowPeer::ID , @explode ( "," , $kshow_ids ) , Criteria::IN );				
+				$c->add ( vshowPeer::ID , @explode ( "," , $vshow_ids ) , Criteria::IN );				
 			}
 			else
 			{
-				$c->add ( kshowPeer::PARTNER_ID , $partner_id );
+				$c->add ( vshowPeer::PARTNER_ID , $partner_id );
 				if ( $create )
 				{
-					// because we want to create - select those kshows that are not marked as "have widgets"
-					$c->add ( kshowPeer::INDEXED_CUSTOM_DATA_3 , NULL , Criteria::EQUAL );
+					// because we want to create - select those vshows that are not marked as "have widgets"
+					$c->add ( vshowPeer::INDEXED_CUSTOM_DATA_3 , NULL , Criteria::EQUAL );
 				}
 			}
-			$c->addAscendingOrderByColumn( kshowPeer::CREATED_AT );
+			$c->addAscendingOrderByColumn( vshowPeer::CREATED_AT );
 			// start at a specific int_id
 			// TODO
-			$kshows = kshowPeer::doSelect( $c );
-			$kshow_id_list = $this->getIdList ( $kshows , $partner_id , $errors );
+			$vshows = vshowPeer::doSelect( $c );
+			$vshow_id_list = $this->getIdList ( $vshows , $partner_id , $errors );
 			
-			$fixed_kshows = array();
+			$fixed_vshows = array();
 			
-//			$res [] = print_r ( $kshow_id_list ,true );
+//			$res [] = print_r ( $vshow_id_list ,true );
 			$this->res = $res;			//return;
 			$this->errors = $errors;
 			
-			if ( $kshow_id_list )
+			if ( $vshow_id_list )
 			{
-			//	$kshow_id_list_copy = array_  $kshow_id_list ;
+			//	$vshow_id_list_copy = array_  $vshow_id_list ;
 				$widget_c = new Criteria();
 				$widget_c->add ( widgetPeer::PARTNER_ID , $partner_id );
-				$widget_c->add ( widgetPeer::KSHOW_ID , $kshow_id_list , Criteria::IN );
+				$widget_c->add ( widgetPeer::VSHOW_ID , $vshow_id_list , Criteria::IN );
 				$widgets = widgetPeer::doSelect( $widget_c );
 				
-				// - IMPORTANT - add the kshow->setIndexedCustomData3 ( $widget_id ) for wikis
+				// - IMPORTANT - add the vshow->setIndexedCustomData3 ( $widget_id ) for wikis
 
 				
 				foreach ( $widgets as $widget )
 				{
-					$kshow_id = $widget->getKshowId();
-					if ( in_array ( $kshow_id, $fixed_kshows ) ) continue;
-					// mark the kshow as one that has a widget
-					$kshow = $this->getKshow ( $kshows , $kshow_id );
-					$kshow->setIndexedCustomData3( $widget->getId());
-					$kshow->save();
-					unset ( $kshow_id_list[$kshow_id]);
-					$fixed_kshows[$kshow_id]=$kshow_id;
-//					print_r ( $kshow_id_list );
+					$vshow_id = $widget->getVshowId();
+					if ( in_array ( $vshow_id, $fixed_vshows ) ) continue;
+					// mark the vshow as one that has a widget
+					$vshow = $this->getVshow ( $vshows , $vshow_id );
+					$vshow->setIndexedCustomData3( $widget->getId());
+					$vshow->save();
+					unset ( $vshow_id_list[$vshow_id]);
+					$fixed_vshows[$vshow_id]=$vshow_id;
+//					print_r ( $vshow_id_list );
 				}
 
 			// create widgets for those who are still on the list === don't have a widget				
-				foreach ( $kshow_id_list as $kshow_id )
+				foreach ( $vshow_id_list as $vshow_id )
 				{
-					if ( in_array ( $kshow_id, $fixed_kshows ) ) continue;
-					$kshow = $this->getKshow ( $kshows , $kshow_id );
-					$widget = widget::createWidget( $kshow , null , $source_widget_id ,null);
-					$kshow->setIndexedCustomData3( $widget->getId());
-					$kshow->save();
-					$fixed_kshows[$kshow_id]=$kshow_id;
+					if ( in_array ( $vshow_id, $fixed_vshows ) ) continue;
+					$vshow = $this->getVshow ( $vshows , $vshow_id );
+					$widget = widget::createWidget( $vshow , null , $source_widget_id ,null);
+					$vshow->setIndexedCustomData3( $widget->getId());
+					$vshow->save();
+					$fixed_vshows[$vshow_id]=$vshow_id;
 				}
 			
 			}
 			
 					
-			// create a log file of the kaltura-widget tagss for wiki
+			// create a log file of the vidiun-widget tagss for wiki
 			$partner = PartnerPeer::retrieveByPK( $partner_id );
 			if  ( $partner )
 			{
 				$secret = $partner->getSecret ();	
-				foreach ( $kshows as $kshow )
+				foreach ( $vshows as $vshow )
 				{
-					$kshow_id = $kshow->getId();
-					$article_name = "Video $kshow_id";
-					$widget_id = $kshow->getIndexedCustomData3(); // by now this kshow should have the widget id 
-					$subp_id = $kshow->getSubpId();
-					$md5 = md5 ( $kshow_id  . $partner_id  .$subp_id . $article_name . $widget_id .  $secret );
+					$vshow_id = $vshow->getId();
+					$article_name = "Video $vshow_id";
+					$widget_id = $vshow->getIndexedCustomData3(); // by now this vshow should have the widget id 
+					$subp_id = $vshow->getSubpId();
+					$md5 = md5 ( $vshow_id  . $partner_id  .$subp_id . $article_name . $widget_id .  $secret );
 					$hash = substr ( $md5 , 1 , 10 );
-					$values = array ( $kshow_id , $partner_id , $subp_id , $article_name ,$widget_id , $hash);
+					$values = array ( $vshow_id , $partner_id , $subp_id , $article_name ,$widget_id , $hash);
 					
 					$str = implode ( "|" , $values);
 					$base64_str = base64_encode( $str );
 					
-					$res [] = "kalturaid='$kshow_id'	kwid='$base64_str'	'$str'\n";
+					$res [] = "vidiunid='$vshow_id'	vwid='$base64_str'	'$str'\n";
 				}
 			}
 		}
@@ -159,11 +159,11 @@ class createWidgetsAction extends kalturaSystemAction
 		return null;
 	}
 	
-	private function getKshow ( $kshows , $kshow_id )
+	private function getVshow ( $vshows , $vshow_id )
 	{
-		foreach ( $kshows as $kshow )
+		foreach ( $vshows as $vshow )
 		{
-			if( $kshow_id == $kshow->getId() ) return $kshow;
+			if( $vshow_id == $vshow->getId() ) return $vshow;
 		}
 		return null;
 	}

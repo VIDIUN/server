@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage api.filters.enum
  */
-class KalturaVendorCatalogItemOrderBy extends KalturaStringEnum
+class VidiunVendorCatalogItemOrderBy extends VidiunStringEnum
 {
 	const ID_ASC = "+id";
 	const ID_DESC = "-id";

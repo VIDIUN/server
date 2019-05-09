@@ -3,7 +3,7 @@
  * @package plugins.document
  * @subpackage lib
  */
-class KOperationEnginePpt2Image extends KOperationEngineDocument
+class VOperationEnginePpt2Image extends VOperationEngineDocument
 {
 	const IMAGES_LIST_XML_NAME = 'imagesList.xml';
 	const METADATA_XML_NAME = 'metadata.xml';
@@ -16,19 +16,19 @@ class KOperationEnginePpt2Image extends KOperationEngineDocument
 	
 	
 	protected function createOutputDirectory() {
-		if(!kFile::fullMkfileDir($this->outFilePath)){
-			throw new KOperationEngineException('failed to create ['.$this->outFilePath.'] directory');
+		if(!vFile::fullMkfileDir($this->outFilePath)){
+			throw new VOperationEngineException('failed to create ['.$this->outFilePath.'] directory');
 		}
 	}
 	
 	protected function createDirDescriber($outDir, $fileName) {
-		$fileList = kFile::dirList($outDir, false);
+		$fileList = vFile::dirList($outDir, false);
 		$fileListXml = $this->createImagesListXML($fileList);
-		kFile::setFileContent($outDir . DIRECTORY_SEPARATOR . $fileName, $fileListXml->asXML());
-		KalturaLog::info('file list xml [' .$outDir . DIRECTORY_SEPARATOR . $fileName . '] created');
+		vFile::setFileContent($outDir . DIRECTORY_SEPARATOR . $fileName, $fileListXml->asXML());
+		VidiunLog::info('file list xml [' .$outDir . DIRECTORY_SEPARATOR . $fileName . '] created');
 	}
 	
-	public function operate(kOperator $operator = null, $inFilePath, $configFilePath = null)
+	public function operate(vOperator $operator = null, $inFilePath, $configFilePath = null)
 	{
 		$this->createOutputDirectory();
 		$realInFilePath = realpath($inFilePath);

@@ -1,22 +1,22 @@
 <?php
 
-function addRow($kuser, $even_row )
+function addRow($vuser, $even_row )
 {
 	
-	$link = '/index.php/mykaltura/viewprofile?screenname=' .$kuser['screenname'];
+	$link = '/index.php/myvidiun/viewprofile?screenname=' .$vuser['screenname'];
 	
 	$s = '<tr ' . ( $even_row ? 'class="even" ' : '' ). '>'.
-	 	'<td class="imgHolder"><a href="'.$link.'"><img src="'.$kuser['image'].'" alt="'.$kuser['screenname'].'" /></a></td>'.
-	 	'<td class="info"><a href="'.$link.'">'.$kuser['fullname'].'</a></td>'.
-	 	'<td><img src="/images/flags/'.strtolower($kuser['country']).'.gif"></td>'.
-	 	'<td>'.$kuser['gender'].'</td>'.
-	 	'<td>'.$kuser['createdAt'].'</td>'.
-	 	'<td>'.$kuser['views'].'</td>'.
-	 	'<td>'.$kuser['fans'].'</td>'.
-	 	'<td>'.$kuser['shows'].'</td>'.
-	 	'<td>'.$kuser['roughcuts'].'</td>'.
-	 	'<td>'.$kuser['entries'].'</td>'.
-	 	'<td class="action"><span class="btn" title="Delete" onclick="onClickDeleteUser('.$kuser['id'].')"></span>Delete</td>'.
+	 	'<td class="imgHolder"><a href="'.$link.'"><img src="'.$vuser['image'].'" alt="'.$vuser['screenname'].'" /></a></td>'.
+	 	'<td class="info"><a href="'.$link.'">'.$vuser['fullname'].'</a></td>'.
+	 	'<td><img src="/images/flags/'.strtolower($vuser['country']).'.gif"></td>'.
+	 	'<td>'.$vuser['gender'].'</td>'.
+	 	'<td>'.$vuser['createdAt'].'</td>'.
+	 	'<td>'.$vuser['views'].'</td>'.
+	 	'<td>'.$vuser['fans'].'</td>'.
+	 	'<td>'.$vuser['shows'].'</td>'.
+	 	'<td>'.$vuser['roughcuts'].'</td>'.
+	 	'<td>'.$vuser['entries'].'</td>'.
+	 	'<td class="action"><span class="btn" title="Delete" onclick="onClickDeleteUser('.$vuser['id'].')"></span>Delete</td>'.
 	 '</tr>';
 	 
 	return $s;
@@ -27,16 +27,16 @@ function addRow($kuser, $even_row )
 function firstPage($text, $pagerHtml, $user_id , $partner_id)
 {
 	
-	$KUSER_SORT_MOST_VIEWED = kuser::KUSER_SORT_MOST_VIEWED;
-	$KUSER_SORT_MOST_RECENT = kuser::KUSER_SORT_MOST_RECENT;  
-	$KUSER_SORT_NAME = kuser::KUSER_SORT_NAME;
-	$KUSER_SORT_AGE = kuser::KUSER_SORT_AGE;
-	$KUSER_SORT_COUNTRY = kuser::KUSER_SORT_COUNTRY;
-	$KUSER_SORT_CITY = kuser::KUSER_SORT_CITY;
-	$KUSER_SORT_GENDER = kuser::KUSER_SORT_GENDER;
-	$KUSER_SORT_MOST_FANS = kuser::KUSER_SORT_MOST_FANS;
-	$KUSER_SORT_MOST_ENTRIES = kuser::KUSER_SORT_MOST_ENTRIES;
-	$KUSER_SORT_PRODUCED_KSHOWS = kuser::KUSER_SORT_PRODUCED_KSHOWS;
+	$VUSER_SORT_MOST_VIEWED = vuser::VUSER_SORT_MOST_VIEWED;
+	$VUSER_SORT_MOST_RECENT = vuser::VUSER_SORT_MOST_RECENT;  
+	$VUSER_SORT_NAME = vuser::VUSER_SORT_NAME;
+	$VUSER_SORT_AGE = vuser::VUSER_SORT_AGE;
+	$VUSER_SORT_COUNTRY = vuser::VUSER_SORT_COUNTRY;
+	$VUSER_SORT_CITY = vuser::VUSER_SORT_CITY;
+	$VUSER_SORT_GENDER = vuser::VUSER_SORT_GENDER;
+	$VUSER_SORT_MOST_FANS = vuser::VUSER_SORT_MOST_FANS;
+	$VUSER_SORT_MOST_ENTRIES = vuser::VUSER_SORT_MOST_ENTRIES;
+	$VUSER_SORT_PRODUCED_VSHOWS = vuser::VUSER_SORT_PRODUCED_VSHOWS;
 	
 	$options = dashboardUtils::partnerOptions ( $partner_id );
 	
@@ -44,7 +44,7 @@ echo <<<EOT
 <script type="text/javascript">
 
 jQuery(document).ready(function(){
-	mediaSortOrder = $KUSER_SORT_MOST_VIEWED;
+	mediaSortOrder = $VUSER_SORT_MOST_VIEWED;
 	var defaultMediaPageSize = 10;
 	mediaPager = new ObjectPager('media', defaultMediaPageSize, requestMediaPeople );
 	updatePagerAndRebind ( "media_pager" , null , requestMediaPagePeople );
@@ -53,7 +53,7 @@ jQuery(document).ready(function(){
 }); // end document ready
 
 </script>
-	<div class="mykaltura_viewAll mykaltura_media">
+	<div class="myvidiun_viewAll myvidiun_media">
 		<div class="content">
 			<div class="top">
 				<div class="clearfix" style="margin:10px 0;">
@@ -70,15 +70,15 @@ jQuery(document).ready(function(){
 						<thead>
 							<tr>
 								<td class="resource"></td>
-								<td class="info" onclick='changeMediaSortOrder(this, $KUSER_SORT_NAME)'><span>Screen Name</span></td>
-								<td class="type" onclick='changeMediaSortOrder(this, $KUSER_SORT_COUNTRY)'><span>Country</span></td>
-								<td class="rating" onclick='changeMediaSortOrder(this, $KUSER_SORT_GENDER)'><span>Gender</span></td>
-								<td class="date" onclick='changeMediaSortOrder(this, $KUSER_SORT_MOST_RECENT)'><span>Created</span></td>
-								<td class="views color2" onclick='changeMediaSortOrder(this, $KUSER_SORT_MOST_VIEWED)'><span>Views</span></td>
-								<td class="views" onclick='changeMediaSortOrder(this, $KUSER_SORT_MOST_FANS)'><span>Fans</span></td>
-								<td class="views" onclick='changeMediaSortOrder(this, $KUSER_SORT_PRODUCED_KSHOWS)'><span>Shows</span></td>
+								<td class="info" onclick='changeMediaSortOrder(this, $VUSER_SORT_NAME)'><span>Screen Name</span></td>
+								<td class="type" onclick='changeMediaSortOrder(this, $VUSER_SORT_COUNTRY)'><span>Country</span></td>
+								<td class="rating" onclick='changeMediaSortOrder(this, $VUSER_SORT_GENDER)'><span>Gender</span></td>
+								<td class="date" onclick='changeMediaSortOrder(this, $VUSER_SORT_MOST_RECENT)'><span>Created</span></td>
+								<td class="views color2" onclick='changeMediaSortOrder(this, $VUSER_SORT_MOST_VIEWED)'><span>Views</span></td>
+								<td class="views" onclick='changeMediaSortOrder(this, $VUSER_SORT_MOST_FANS)'><span>Fans</span></td>
+								<td class="views" onclick='changeMediaSortOrder(this, $VUSER_SORT_PRODUCED_VSHOWS)'><span>Shows</span></td>
 								<td class="date" style="width: 25px; cursor:default;">RC</td>
-								<td class="views" onclick='changeMediaSortOrder(this, $KUSER_SORT_MOST_ENTRIES)'><span>Entries</span></td>
+								<td class="views" onclick='changeMediaSortOrder(this, $VUSER_SORT_MOST_ENTRIES)'><span>Entries</span></td>
 								<td class="action" >Action</td>
 							</tr>
 						</thead>
@@ -101,9 +101,9 @@ EOT;
 
 $text = '';
 $i=0;
-foreach($kusersData as $kuser)
+foreach($vusersData as $vuser)
 {
-	$text .= addRow($kuser, ( $i % 2 == 0 ) );
+	$text .= addRow($vuser, ( $i % 2 == 0 ) );
 	++$i;
 }
 	
@@ -117,7 +117,7 @@ else {
 	$output = array(
 		".currentPage" => $page,
 		".maxPage" => $lastPage,
-		".objectsInPage" => count($kusersData),
+		".objectsInPage" => count($vusersData),
 		".totalObjects" => $numResults,
 		"media_content" => $text,
 		"media_pager" => $htmlPager,

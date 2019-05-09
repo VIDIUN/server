@@ -3,16 +3,16 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFreeJobResponse extends KalturaObject
+class VidiunFreeJobResponse extends VidiunObject
 {
 	/**
-	 * @var KalturaBatchJob
+	 * @var VidiunBatchJob
 	 * @readonly 
 	 */
 	public $job;
 
 	/**
-	 * @var KalturaBatchJobType
+	 * @var VidiunBatchJobType
 	 * @readonly 
 	 */
     public $jobType;

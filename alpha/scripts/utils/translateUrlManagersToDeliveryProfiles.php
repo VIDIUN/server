@@ -137,7 +137,7 @@ function createDelivery($key, $type, &$urlManager) {
 		case DeliveryProfileType::AKAMAI_HTTP:
 			$host = find("params.http_header_host", $urlManager);
 			if($host) {
-				$recognizer = new kUrlRecognizer();
+				$recognizer = new vUrlRecognizer();
 				$recognizer->setHosts(explode(",", $host));
 				$deliveryProfile->setRecognizer($recognizer);
 			}
@@ -189,7 +189,7 @@ function handleUrlManager($key, $urlManager) {
 	global $unsupportedToken, $dryRun;
 	
 	$clazz = find("class", $urlManager);
-	if(!in_array($clazz, array("kAkamaiUrlManager", "kUrlManager"))) {
+	if(!in_array($clazz, array("vAkamaiUrlManager", "vUrlManager"))) {
 		print "*** Error: Can't transform $key\n";
 		return;
 	}

@@ -15,7 +15,7 @@ class SphinxCategoryCriteria extends SphinxCriteria
 	protected function applyFilterFields(baseObjectFilter $filter)
 	{				
 		
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 		
 		$categories = $filter->get( "_matchor_likex_full_name");
 		if ($categories !== null)
@@ -58,7 +58,7 @@ class SphinxCategoryCriteria extends SphinxCriteria
 		{
 			if ($filter->get('_eq_privacy_context') == '*')
 			{
-				$this->addOr(categoryPeer::PRIVACY_CONTEXT, kEntitlementUtils::NOT_DEFAULT_CONTEXT, Criteria::LIKE);
+				$this->addOr(categoryPeer::PRIVACY_CONTEXT, vEntitlementUtils::NOT_DEFAULT_CONTEXT, Criteria::LIKE);
 				$filter->unsetByName('_eq_privacy_context');
 			}
 			elseif ($filter->get('_eq_privacy_context') != '')
@@ -71,11 +71,11 @@ class SphinxCategoryCriteria extends SphinxCriteria
 		if($filter->get('_eq_manager'))
 		{
 			$puserId = $filter->get('_eq_manager');
-			$kuser = kuserPeer::getKuserByPartnerAndUid($partnerId, $puserId);
-			if($kuser)
+			$vuser = vuserPeer::getVuserByPartnerAndUid($partnerId, $puserId);
+			if($vuser)
 			{
-				$manager = category::getPermissionLevelName(CategoryKuserPermissionLevel::MANAGER);
-				$this->matchClause[] = '(@(' . categoryFilter::MEMBERS . ') ' . $manager . '_' . $kuser->getid() . ')';
+				$manager = category::getPermissionLevelName(CategoryVuserPermissionLevel::MANAGER);
+				$this->matchClause[] = '(@(' . categoryFilter::MEMBERS . ') ' . $manager . '_' . $vuser->getid() . ')';
 			}
 		}
 		$filter->unsetByName('_eq_manager');
@@ -83,16 +83,16 @@ class SphinxCategoryCriteria extends SphinxCriteria
 		if($filter->get('_eq_member'))
 		{
 			$puserId = $filter->get('_eq_member');
-			$kuser = kuserPeer::getKuserByPartnerAndUid($partnerId, $puserId);
-			if($kuser)
+			$vuser = vuserPeer::getVuserByPartnerAndUid($partnerId, $puserId);
+			if($vuser)
 			{
-				$manager = category::getPermissionLevelName(CategoryKuserPermissionLevel::MANAGER);
-				$member = category::getPermissionLevelName(CategoryKuserPermissionLevel::MEMBER);
-				$moderator = category::getPermissionLevelName(CategoryKuserPermissionLevel::MODERATOR);
-				$contributor = category::getPermissionLevelName(CategoryKuserPermissionLevel::CONTRIBUTOR);
-				$kuserId = $kuser->getid();
+				$manager = category::getPermissionLevelName(CategoryVuserPermissionLevel::MANAGER);
+				$member = category::getPermissionLevelName(CategoryVuserPermissionLevel::MEMBER);
+				$moderator = category::getPermissionLevelName(CategoryVuserPermissionLevel::MODERATOR);
+				$contributor = category::getPermissionLevelName(CategoryVuserPermissionLevel::CONTRIBUTOR);
+				$vuserId = $vuser->getid();
 				$this->matchClause[] = '(@(' . categoryFilter::MEMBERS . ') ' . 
-					"({$member}_{$kuserId} | {$moderator}_{$kuserId} | {$contributor}_{$kuserId} ) !({$manager}_{$kuserId}))";
+					"({$member}_{$vuserId} | {$moderator}_{$vuserId} | {$contributor}_{$vuserId} ) !({$manager}_{$vuserId}))";
 			}
 		}
 		$filter->unsetByName('_eq_member');
@@ -191,7 +191,7 @@ class SphinxCategoryCriteria extends SphinxCriteria
 	public function translateSphinxCriterion(SphinxCriterion $crit)
 	{
 		$field = $crit->getTable() . '.' . $crit->getColumn();
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 
 		if ($field == categoryPeer::FULL_NAME && $crit->getComparison() == Criteria::EQUAL)
 		{
@@ -205,7 +205,7 @@ class SphinxCategoryCriteria extends SphinxCriteria
 			return array(
 					categoryPeer::FULL_NAME, 
 					Criteria::IN_LIKE,
-					kString::addSuffixToArray($crit->getValue(), category::FULL_NAME_EQUAL_MATCH_STRING));
+					vString::addSuffixToArray($crit->getValue(), category::FULL_NAME_EQUAL_MATCH_STRING));
 		} else if ($field == categoryPeer::DISPLAY_IN_SEARCH  && $crit->getComparison() == Criteria::EQUAL)
 		{
 			return array(
@@ -217,31 +217,31 @@ class SphinxCategoryCriteria extends SphinxCriteria
 			return array(
 				categoryPeer::PRIVACY_CONTEXT,
 				Criteria::EQUAL,
-				kEntitlementUtils::PARTNER_ID_PREFIX . $partnerId.$crit->getValue());
+				vEntitlementUtils::PARTNER_ID_PREFIX . $partnerId.$crit->getValue());
 		}else if ($field == categoryPeer::PRIVACY_CONTEXT  && $crit->getComparison() == Criteria::IN )
 		{
 			return array(
 				categoryPeer::PRIVACY_CONTEXT,
 				Criteria::IN_LIKE,
-				kEntitlementUtils::addPrivacyContextsPrefix($crit->getValue(),$partnerId));
+				vEntitlementUtils::addPrivacyContextsPrefix($crit->getValue(),$partnerId));
 		}else if ($field == categoryPeer::PRIVACY_CONTEXT && $crit->getComparison() == Criteria::LIKE)
 		{
 			return array(
 				categoryPeer::PRIVACY_CONTEXT,
 				Criteria::LIKE,
-				kEntitlementUtils::PARTNER_ID_PREFIX . $partnerId . $crit->getValue());
+				vEntitlementUtils::PARTNER_ID_PREFIX . $partnerId . $crit->getValue());
 		}else if ($field == categoryPeer::PRIVACY_CONTEXTS  && $crit->getComparison() == Criteria::EQUAL)
 		{
 			return array(
 				categoryPeer::PRIVACY_CONTEXTS,
 				Criteria::EQUAL,
-				kEntitlementUtils::PARTNER_ID_PREFIX . $partnerId.$crit->getValue());
+				vEntitlementUtils::PARTNER_ID_PREFIX . $partnerId.$crit->getValue());
 		}else if ($field == categoryPeer::PRIVACY_CONTEXTS  && $crit->getComparison() == Criteria::IN )
 		{
 			return array(
 				categoryPeer::PRIVACY_CONTEXTS,
 				Criteria::IN_LIKE,
-				kEntitlementUtils::addPrivacyContextsPrefix($crit->getValue(),$partnerId));
+				vEntitlementUtils::addPrivacyContextsPrefix($crit->getValue(),$partnerId));
 		}
 
 		return parent::translateSphinxCriterion($crit);

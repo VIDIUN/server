@@ -57,7 +57,7 @@ class Form_DrmProfileConfigure extends Infra_Form
 			'filters'		=> array('StringTrim'),
 		));
 
-		$providerForView = new Kaltura_Form_Element_EnumSelect('typeForView', array('enum' => 'Kaltura_Client_Drm_Enum_DrmProviderType'));
+		$providerForView = new Vidiun_Form_Element_EnumSelect('typeForView', array('enum' => 'Vidiun_Client_Drm_Enum_DrmProviderType'));
 		$providerForView->setLabel('Provider:');
 		$providerForView->setAttrib('readonly', true);
 		$providerForView->setAttrib('disabled', 'disabled');
@@ -87,7 +87,7 @@ class Form_DrmProfileConfigure extends Infra_Form
 
 		// --------------------------------
 
-		$extendTypeSubForm = KalturaPluginManager::loadObject('Form_DrmProfileConfigureExtend_SubForm', $this->drmProfileProvider);
+		$extendTypeSubForm = VidiunPluginManager::loadObject('Form_DrmProfileConfigureExtend_SubForm', $this->drmProfileProvider);
 		if ($extendTypeSubForm) {
     		$extendTypeSubForm->setDecorators(array(
     	        'FormElements',
@@ -109,7 +109,7 @@ class Form_DrmProfileConfigure extends Infra_Form
 		$allElements = $this->getElements();
 		foreach ($allElements as $element)
 		{
-			if ($element instanceof Kaltura_Form_Element_EnumSelect)
+			if ($element instanceof Vidiun_Form_Element_EnumSelect)
 			{
 				$elementName = $element->getName();
 				if (isset($props[$elementName])) {
@@ -132,7 +132,7 @@ class Form_DrmProfileConfigure extends Infra_Form
 		    $properties = array_merge($properties[self::EXTENSION_SUBFORM_NAME], $properties);
 		}
 
-	    $object = KalturaPluginManager::loadObject('Kaltura_Client_Drm_Type_DrmProfile', $properties['provider']);
+	    $object = VidiunPluginManager::loadObject('Vidiun_Client_Drm_Type_DrmProfile', $properties['provider']);
 
 	    $object = parent::loadObject($object, $properties, $add_underscore, $include_empty_fields);
 

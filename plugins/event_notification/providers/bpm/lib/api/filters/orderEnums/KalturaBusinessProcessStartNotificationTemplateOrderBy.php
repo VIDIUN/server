@@ -3,6 +3,6 @@
  * @package plugins.businessProcessNotification
  * @subpackage api.filters.enum
  */
-class KalturaBusinessProcessStartNotificationTemplateOrderBy extends KalturaBusinessProcessNotificationTemplateOrderBy
+class VidiunBusinessProcessStartNotificationTemplateOrderBy extends VidiunBusinessProcessNotificationTemplateOrderBy
 {
 }

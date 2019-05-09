@@ -5,10 +5,10 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class KalturaEmailNotificationUserRecipientProvider extends KalturaEmailNotificationRecipientProvider
+class VidiunEmailNotificationUserRecipientProvider extends VidiunEmailNotificationRecipientProvider
 {
 	/**
-	 * @var KalturaUserFilter
+	 * @var VidiunUserFilter
 	 */
 	public $filter;
 	
@@ -17,7 +17,7 @@ class KalturaEmailNotificationUserRecipientProvider extends KalturaEmailNotifica
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -25,25 +25,25 @@ class KalturaEmailNotificationUserRecipientProvider extends KalturaEmailNotifica
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kEmailNotificationUserRecipientProvider();
+			$dbObject = new vEmailNotificationUserRecipientProvider();
 			
 		return parent::toObject($dbObject, $propertiesToSkip);
 	}	
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject($source_object)
+	 * @see VidiunObject::fromObject($source_object)
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($dbObject, $responseProfile);
 		if ($dbObject->getFilter())
 		{
-			$this->filter = new KalturaUserFilter();
+			$this->filter = new VidiunUserFilter();
 			$this->filter->fromObject($dbObject->getFilter());
 		}
 	}

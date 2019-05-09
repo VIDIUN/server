@@ -3,7 +3,7 @@
  * @package plugins.conference
  * @subpackage lib.enum
  */
-class ConferenceServerNodeType implements IKalturaPluginEnum, serverNodeType
+class ConferenceServerNodeType implements IVidiunPluginEnum, serverNodeType
 {
 	const CONFERENCE_SERVER = 'CONFERENCE_SERVER';
 	

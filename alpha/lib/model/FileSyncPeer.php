@@ -51,7 +51,7 @@ class FileSyncPeer extends BaseFileSyncPeer
 	{
 		$c = self::getCriteriaForFileSyncKey($key);
 		if($current_dc_only)
-			$c->add(self::DC, kDataCenterMgr::getCurrentDcId());
+			$c->add(self::DC, vDataCenterMgr::getCurrentDcId());
 		return self::doSelectOne($c);
 	}
 	

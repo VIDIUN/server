@@ -1,6 +1,6 @@
 <?php
 
-class kMrssParameters
+class vMrssParameters
 {
 	//////////////// Persistent attributes ////////////////
 	

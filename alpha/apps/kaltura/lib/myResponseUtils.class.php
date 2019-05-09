@@ -44,10 +44,10 @@ class myResponseUtils
 	
 	static public function createRedirectUrl( $url )
 	{
-		if ($_SERVER["HTTP_HOST"] == kConf::get ( "apphome_url_no_protocol" ) )
+		if ($_SERVER["HTTP_HOST"] == vConf::get ( "apphome_url_no_protocol" ) )
 			return $url;
 		else
-			return kConf::get ( "apphome_url" ) . "/index.php/extservices/redirect?url=".urlencode($url)."&return_to=".$_SERVER["HTTP_HOST"];
+			return vConf::get ( "apphome_url" ) . "/index.php/extservices/redirect?url=".urlencode($url)."&return_to=".$_SERVER["HTTP_HOST"];
 	}
 }
 ?>

@@ -27,8 +27,8 @@ class InfraBootstrapper extends Zend_Application_Bootstrap_Bootstrap
 	protected function _initClient()
 	{
 		$this->bootstrap('autoloaders'); // "autoloaders" is the only bootstrap that is mandatory
-		if (!class_exists('Kaltura_Client_Client'))
-			throw new Infra_Exception('Kaltura client not found, maybe it wasn\'t generated', Infra_Exception::ERROR_CODE_MISSING_CLIENT_LIB);
+		if (!class_exists('Vidiun_Client_Client'))
+			throw new Infra_Exception('Vidiun client not found, maybe it wasn\'t generated', Infra_Exception::ERROR_CODE_MISSING_CLIENT_LIB);
 	}
 	
 	protected function _initLog()
@@ -47,7 +47,7 @@ class InfraBootstrapper extends Zend_Application_Bootstrap_Bootstrap
 		$loggerConfig = new Zend_Config_Ini($loggerConfigPath);
 		$loggerName = $configSettings->applicationName;
 		$appLogger = $loggerConfig->get($loggerName);
-		KalturaLog::initLog($appLogger);
+		VidiunLog::initLog($appLogger);
 		
 	}
 	
@@ -84,19 +84,19 @@ class InfraBootstrapper extends Zend_Application_Bootstrap_Bootstrap
 			$pluginInterface = $baseSettings->pluginInterface;
 					
 			$pluginPages = array();
-			$pluginInstances = KalturaPluginManager::getPluginInstances($pluginInterface);
+			$pluginInstances = VidiunPluginManager::getPluginInstances($pluginInterface);
 			foreach($pluginInstances as $pluginInstance)
 			{
-				/* @var $pluginInstance KalturaPlugin */
+				/* @var $pluginInstance VidiunPlugin */
 				foreach($pluginInstance->getApplicationPages() as $pluginPage)
 					$pluginPages[] = $pluginPage;
 			}
 			
 			foreach($pluginPages as $pluginPage)
 			{
-				if(!($pluginPage instanceof KalturaApplicationPlugin))
+				if(!($pluginPage instanceof VidiunApplicationPlugin))
 				{
-					KalturaLog::err("Class [" . get_class($pluginPage) . "] is not instance of KalturaApplicationPlugin");
+					VidiunLog::err("Class [" . get_class($pluginPage) . "] is not instance of VidiunApplicationPlugin");
 					continue;
 				}
 				
@@ -109,7 +109,7 @@ class InfraBootstrapper extends Zend_Application_Bootstrap_Bootstrap
 				if($currentPermissions && !($pluginPage->accessCheck($currentPermissions)))
 				{
 					$acl->deny(Infra_AclHelper::getCurrentRole(), $resource);
-					KalturaLog::err("Class [" . get_class($pluginPage) . "] requires permissions [" . print_r($pluginPage->getRequiredPermissions(), true) . "]");
+					VidiunLog::err("Class [" . get_class($pluginPage) . "] requires permissions [" . print_r($pluginPage->getRequiredPermissions(), true) . "]");
 					continue;
 				}
 				
@@ -173,7 +173,7 @@ class InfraBootstrapper extends Zend_Application_Bootstrap_Bootstrap
 		if(isset($config->settings->applicationName))
 			$pluginsCacheNamespace = $config->settings->applicationName;
 			
-		KalturaPluginManager::init($pluginsConfigPath, $pluginsCacheNamespace);
+		VidiunPluginManager::init($pluginsConfigPath, $pluginsCacheNamespace);
 	}
 	
 	protected function _initAutoloaders()
@@ -194,7 +194,7 @@ class InfraBootstrapper extends Zend_Application_Bootstrap_Bootstrap
 			'namespace' => '',
 			'basePath'  => APPLICATION_PATH,
 		));
-		$clientAutoloader->addResourceType('kaltura', 'lib/Kaltura', 'Kaltura');
+		$clientAutoloader->addResourceType('vidiun', 'lib/Vidiun', 'Vidiun');
 		$autoloader->pushAutoloader($clientAutoloader);
 	}
 	
@@ -213,7 +213,7 @@ class InfraBootstrapper extends Zend_Application_Bootstrap_Bootstrap
 		$config = $this->getConfig();
 		$configSettings = $config->settings;
 		$configName = $configSettings->applicationName;
-		$config = KalturaPluginManager::mergeConfigs($config, $configName, false);		
+		$config = VidiunPluginManager::mergeConfigs($config, $configName, false);		
 		Zend_Registry::set('config', $config);
 		return $config;
 	}

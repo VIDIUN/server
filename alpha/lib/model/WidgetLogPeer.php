@@ -24,7 +24,7 @@ class WidgetLogPeer extends BaseWidgetLogPeer
 				$order = substr($order ,1 );
 			}
 			$fixed_order = "widget_log." . strtoupper( $order );
-			$should_sort =  in_array ( $fixed_order , array ( WidgetLogPeer::ID , WidgetLogPeer::KSHOW_ID , WidgetLogPeer::ENTRY_ID , 
+			$should_sort =  in_array ( $fixed_order , array ( WidgetLogPeer::ID , WidgetLogPeer::VSHOW_ID , WidgetLogPeer::ENTRY_ID , 
 				WidgetLogPeer::REFERER , WidgetLogPeer::VIEWS , WidgetLogPeer::PLAYS , WidgetLogPeer::IP1_COUNT, WidgetLogPeer::CREATED_AT ) );
 
 			if ( $should_sort )

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaFileAssetObjectType extends KalturaDynamicEnum implements FileAssetObjectType
+class VidiunFileAssetObjectType extends VidiunDynamicEnum implements FileAssetObjectType
 {
 	public static function getEnumClass()
 	{

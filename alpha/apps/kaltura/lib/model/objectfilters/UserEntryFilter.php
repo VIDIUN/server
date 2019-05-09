@@ -8,7 +8,7 @@ class UserEntryFilter extends baseObjectFilter
 {
 	protected function init()
 	{
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 			"_eq_id",
 			"_in_id",
 			"_notin_id",
@@ -39,7 +39,7 @@ class UserEntryFilter extends baseObjectFilter
 		);
 
 		$this->aliases = array ( 
-			"user_id" => "kuser_id",
+			"user_id" => "vuser_id",
 			);
 	}
 

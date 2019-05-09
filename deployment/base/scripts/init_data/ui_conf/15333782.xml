@@ -1,9 +1,9 @@
-<kcw>
+<vcw>
 	<UIConfigList>
 		<UIConfig>
 			<target>ContributionWizard.swf</target>
-			<cssUrl id="blue" name="Default Light Blue">/content/uiconf/kaltura/kmc/kcw/v2.1.5/style.swf</cssUrl>
-			<localeUrl id="en_US_kaltura" name="English US">/content/uiconf/kaltura/kmc/kcw/v2.1.5/en_US_ContributionWizard_kaltura.swf</localeUrl>
+			<cssUrl id="blue" name="Default Light Blue">/content/uiconf/vidiun/vmc/vcw/v2.1.5/style.swf</cssUrl>
+			<localeUrl id="en_US_vidiun" name="English US">/content/uiconf/vidiun/vmc/vcw/v2.1.5/en_US_ContributionWizard_vidiun.swf</localeUrl>
 		</UIConfig>
 	</UIConfigList>
 	<ImportTypesConfig>
@@ -106,4 +106,4 @@
 			<mediaProviderName>webcam</mediaProviderName>
 		</gotoScreen>
 	</StartupDefaults>
-</kcw>
+</vcw>

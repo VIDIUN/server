@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaAssetFilter extends KalturaAssetBaseFilter
+class VidiunAssetFilter extends VidiunAssetBaseFilter
 {
 	/**
-	 * @dynamicType KalturaAssetType
+	 * @dynamicType VidiunAssetType
 	 * @var string
 	 */
 	public $typeIn;
@@ -24,24 +24,24 @@ class KalturaAssetFilter extends KalturaAssetBaseFilter
 	protected function validateEntryIdFiltered()
 	{
 		if(!$this->entryIdEqual && !$this->entryIdIn)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $this->getFormattedPropertyNameWithClassName('entryIdEqual') . '/' . $this->getFormattedPropertyNameWithClassName('entryIdIn'));
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $this->getFormattedPropertyNameWithClassName('entryIdEqual') . '/' . $this->getFormattedPropertyNameWithClassName('entryIdIn'));
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
 		return new AssetFilter();
 	}
 	
-	protected function doGetListResponse(KalturaFilterPager $pager, array $types = null)
+	protected function doGetListResponse(VidiunFilterPager $pager, array $types = null)
 	{
 		$this->validateEntryIdFiltered();
 		
 	    myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL2;
 	    
-		// verify access to the relevant entries - either same partner as the KS or kaltura network
+		// verify access to the relevant entries - either same partner as the VS or vidiun network
 		if ($this->entryIdEqual)
 		{
 			$entryIds = array($this->entryIdEqual);
@@ -52,10 +52,10 @@ class KalturaAssetFilter extends KalturaAssetBaseFilter
 		}
 		else
 		{
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'KalturaAssetFilter::entryIdEqual/KalturaAssetFilter::entryIdIn');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'VidiunAssetFilter::entryIdEqual/VidiunAssetFilter::entryIdIn');
 		}
 		
-		$entryIds = entryPeer::filterEntriesByPartnerOrKalturaNetwork($entryIds, kCurrentContext::getCurrentPartnerId());
+		$entryIds = entryPeer::filterEntriesByPartnerOrVidiunNetwork($entryIds, vCurrentContext::getCurrentPartnerId());
 		if (!$entryIds)
 		{
 			return array(array(), 0);
@@ -96,7 +96,7 @@ class KalturaAssetFilter extends KalturaAssetBaseFilter
 			$totalCount = ($pager->pageIndex - 1) * $pager->pageSize + $resultCount;
 		else
 		{
-			KalturaFilterPager::detachFromCriteria($c);
+			VidiunFilterPager::detachFromCriteria($c);
 			$totalCount = assetPeer::doCount($c);
 		}
 		
@@ -105,20 +105,20 @@ class KalturaAssetFilter extends KalturaAssetBaseFilter
 		return array($list, $totalCount);
 	}
 
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, array $types = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, array $types = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager, $types);
 		
-		$response = new KalturaFlavorAssetListResponse();
-		$response->objects = KalturaFlavorAssetArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunFlavorAssetListResponse();
+		$response->objects = VidiunFlavorAssetArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 		return $response;  
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		return $this->getTypeListResponse($pager, $responseProfile);  
 	}

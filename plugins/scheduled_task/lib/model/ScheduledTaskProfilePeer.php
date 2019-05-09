@@ -39,7 +39,7 @@ class ScheduledTaskProfilePeer extends BaseScheduledTaskProfilePeer
 	 */
 	public static function retrieveBySystemName($systemName, $partnerId = null, PropelPDO $con = null)
 	{
-		$criteria = KalturaCriteria::create(ScheduledTaskProfilePeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(ScheduledTaskProfilePeer::OM_CLASS);
 		$criteria->add(ScheduledTaskProfilePeer::SYSTEM_NAME, $systemName);
 		if($partnerId)
 			$criteria->add(ScheduledTaskProfilePeer::PARTNER_ID, $partnerId);

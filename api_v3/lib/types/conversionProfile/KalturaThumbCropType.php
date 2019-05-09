@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaThumbCropType extends KalturaEnum
+class VidiunThumbCropType extends VidiunEnum
 {
 	const RESIZE = 1;
 	const RESIZE_WITH_PADDING = 2;
@@ -12,7 +12,7 @@ class KalturaThumbCropType extends KalturaEnum
 	const RESIZE_WITH_FORCE= 5;
 	
 	/* (non-PHPdoc)
-     * @see KalturaEnum::getDescriptions()
+     * @see VidiunEnum::getDescriptions()
      */
     public static function getDescriptions ()
     {

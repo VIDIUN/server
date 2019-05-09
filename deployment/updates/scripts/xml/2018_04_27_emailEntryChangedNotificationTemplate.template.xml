@@ -15,7 +15,7 @@
 
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Entry Changed</name>
                 <systemName>EMAIL_ENTRY_CHANGED</systemName>
                 <description>EMAIL notification template to be sent when an entry metadata changed.</description>
@@ -25,210 +25,210 @@
                 <eventObjectType>1</eventObjectType>
                 <!-- EventNotificationEventObjectType::ENTRY -->
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventObjectChangedCondition">
+                    <item objectType="VidiunEventObjectChangedCondition">
                         <description>Entry metadata changed, columns defined in modified_columns parameter</description>
                         <modifiedColumns>{modified_columns}</modifiedColumns>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>only non-temporary entries</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getObject()->getDisplayInSearch() != mySearchUtils::DISPLAY_IN_SEARCH_SYSTEM </code>
                         </field>
                     </item>	
                 </eventConditions>
                 <format>1</format>
-                <subject>[Kaltura] - Entry metadata changed</subject>
+                <subject>[Vidiun] - Entry metadata changed</subject>
                 <body>Entry with ID {entry_id} NAME {entry_name} metadata changed.</body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">			
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{creator_email}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{creator_name}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
-                <cc objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <cc objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{owner_email}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{owner_name}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </cc>
-                <bcc objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <bcc objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaEvalStringField">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunEvalStringField">
                                 <code>!is_null($entry = entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? $entry->getPartner()->getAdminEmail() : ''</code>
                             </email>
-                            <name objectType="KalturaEvalStringField">
+                            <name objectType="VidiunEvalStringField">
                                 <code>!is_null($entry = entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? $entry->getPartner()->getPartnerName() : ''</code>
                             </name>
                         </item>
                     </emailRecipients>
                 </bcc>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>From email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("partner_notification_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("partner_notification_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>From name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("partner_notification_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("partner_notification_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>entry_id</key>
                         <description>Entry ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>entry_name</key>
                         <description>Entry name</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getName()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>owner_name</key>
                         <description>Account owner name</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($entry = entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? $entry->getPartner()->getPartnerName() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>owner_email</key>
                         <description>Account owner email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($entry = entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? $entry->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>creator_name</key>
                         <description>Entry creator name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($kuser = $scope->getObject()->getkuser()) ? $kuser->getFirstName() . ' ' . $kuser->getLastName() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($vuser = $scope->getObject()->getvuser()) ? $vuser->getFirstName() . ' ' . $vuser->getLastName() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>creator_email</key>
                         <description>Entry creator email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($kuser = $scope->getObject()->getkuser()) ? $kuser->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($vuser = $scope->getObject()->getvuser()) ? $vuser->getEmail() : ''</code>
                         </value>
                     </item>
                 </contentParameters>
                 <userParameters objectType="array">
-                    <item objectType="KalturaEventNotificationArrayParameter">
+                    <item objectType="VidiunEventNotificationArrayParameter">
                         <key>modified_columns</key>
                         <description>Entry metadata columns that will trigger the event</description>
                         <allowedValues objectType="array">
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.NAME</value>
                                 <description>name</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.DATA</value>
                                 <description>content</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.THUMBNAIL</value>
                                 <description>thumbnail</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.RANK</value>
                                 <description>rank</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.TAGS</value>
                                 <description>tags</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.STATUS</value>
                                 <description>status</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.LENGTH_IN_MSECS</value>
                                 <description>duration</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.PARTNER_DATA</value>
                                 <description>partner data</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.DESCRIPTION</value>
                                 <description>description</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.MODERATION_STATUS</value>
                                 <description>moderation status</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.PUSER_ID</value>
                                 <description>owner id</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.ACCESS_CONTROL_ID</value>
                                 <description>access control profile id</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.START_DATE</value>
                                 <description>start date</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.END_DATE</value>
                                 <description>end date</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entry.FLAVOR_PARAMS_IDS</value>
                                 <description>flavor params ids</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>referenceID</value>
                                 <description>reference id</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>partnerSortValue</value>
                                 <description>partner sort value</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>replacementStatus</value>
                                 <description>replacement status</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>replacingEntryId</value>
                                 <description>replacing entry id</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entitledUserPuserEdit</value>
                                 <description>entitled users - edit</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>entitledUserPuserPublish</value>
                                 <description>entitled users - publish</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>width</value>
                                 <description>width</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>height</value>
                                 <description>height</description>
                             </item>

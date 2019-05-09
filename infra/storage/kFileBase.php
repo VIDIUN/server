@@ -6,7 +6,7 @@
  * Date: 10/22/2017
  * Time: 5:10 PM
  */
-class kFileBase 
+class vFileBase 
 {
     /**
      * Lazy saving of file content to a temporary path, the file will exist in this location until the temp files are purged
@@ -147,7 +147,7 @@ class kFileBase
         curl_setopt($ch, CURLOPT_HEADER, true);
         $headers = curl_exec($ch);
         if(!$headers)
-            KalturaLog::err('Curl error: ' . curl_error($ch));
+            VidiunLog::err('Curl error: ' . curl_error($ch));
         curl_close($ch);
 
         if(!$headers)

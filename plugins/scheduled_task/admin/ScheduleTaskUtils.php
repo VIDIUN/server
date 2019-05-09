@@ -15,15 +15,15 @@ class ScheduleTaskUtils
 		{
 			$className = get_class($object);
 			$classObj = new $className();
-			if ($classObj instanceof Kaltura_Client_Reach_Type_EntryVendorTask)
+			if ($classObj instanceof Vidiun_Client_Reach_Type_EntryVendorTask)
 				return array("id", "entryId", "userId", "status", "createdAt", "queueTime");
-			if ($classObj instanceof Kaltura_Client_Type_BaseEntry)
+			if ($classObj instanceof Vidiun_Client_Type_BaseEntry)
 				return array("id", "name", "userId", "views", "createdAt", "lastPlayedAt");
 			return array();
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			return array();
 		}
 	}

@@ -3,20 +3,20 @@
  * @package plugins.group
  * @subpackage api.filters
  */
-class KalturaGroupFilter extends KalturaUserFilter
+class VidiunGroupFilter extends VidiunUserFilter
 {
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$c = KalturaCriteria::create(kuserPeer::OM_CLASS);
+		$c = VidiunCriteria::create(vuserPeer::OM_CLASS);
 		$groupFilter = $this->toObject();
 		$groupFilter->attachToCriteria($c);
-		$c->addAnd(kuserPeer::TYPE,KuserType::GROUP);
-		$c->addAnd(kuserPeer::PUSER_ID, NULL, KalturaCriteria::ISNOTNULL);
+		$c->addAnd(vuserPeer::TYPE,VuserType::GROUP);
+		$c->addAnd(vuserPeer::PUSER_ID, NULL, VidiunCriteria::ISNOTNULL);
 		$pager->attachToCriteria($c);
-		$list = kuserPeer::doSelect($c);
+		$list = vuserPeer::doSelect($c);
 		$totalCount = $c->getRecordsCount();
-		$newList = KalturaGroupArray::fromDbArray($list, $responseProfile);
-		$response = new KalturaGroupListResponse();
+		$newList = VidiunGroupArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunGroupListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		return $response;

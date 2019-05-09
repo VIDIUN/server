@@ -3,7 +3,7 @@
  * @package plugins.dropFolderXmlBulkUpload
  * @subpackage lib
  */
-class DropFolderXmlBulkUploadErrorCode implements IKalturaPluginEnum, DropFolderFileErrorCode
+class DropFolderXmlBulkUploadErrorCode implements IVidiunPluginEnum, DropFolderFileErrorCode
 {
 	const LOCAL_FILE_WRONG_SIZE = 'LOCAL_FILE_WRONG_SIZE';
 	const LOCAL_FILE_WRONG_CHECKSUM = 'LOCAL_FILE_WRONG_CHECKSUM';

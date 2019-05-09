@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaThumbParamsListResponse extends KalturaListResponse
+class VidiunThumbParamsListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaThumbParamsArray
+	 * @var VidiunThumbParamsArray
 	 * @readonly
 	 */
 	public $objects;

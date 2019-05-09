@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlTokenizerAkamaiSecureHd extends KalturaUrlTokenizer {
+class VidiunUrlTokenizerAkamaiSecureHd extends VidiunUrlTokenizer {
 
 	/**
 	 * @var string
@@ -47,7 +47,7 @@ class KalturaUrlTokenizerAkamaiSecureHd extends KalturaUrlTokenizer {
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kAkamaiSecureHDUrlTokenizer();
+			$dbObject = new vAkamaiSecureHDUrlTokenizer();
 			
 		parent::toObject($dbObject, $skip);
 	

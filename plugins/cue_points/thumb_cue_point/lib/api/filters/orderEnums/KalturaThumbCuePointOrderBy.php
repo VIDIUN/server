@@ -3,6 +3,6 @@
  * @package plugins.thumbCuePoint
  * @subpackage api.filters.enum
  */
-class KalturaThumbCuePointOrderBy extends KalturaCuePointOrderBy
+class VidiunThumbCuePointOrderBy extends VidiunCuePointOrderBy
 {
 }

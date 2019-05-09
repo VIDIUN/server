@@ -1,6 +1,6 @@
 <?php
 /**
- * Will run KAsyncStorageDelete.class.php 
+ * Will run VAsyncStorageDelete.class.php 
  * 
  *
  * @package Scheduler
@@ -8,6 +8,6 @@
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncDeleteFile();
+$instance = new VAsyncDeleteFile();
 $instance->run(); 
 $instance->done();

@@ -26,7 +26,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 			"thumbAsset" => objectType::THUMBASSET,
 			"uiconf" => objectType::UICONF,
 			"conversionProfile2" => objectType::CONVERSIONPROFILE2,
-			"kuser" => objectType::KUSER,
+			"vuser" => objectType::VUSER,
 			"permission" => objectType::PERMISSION,
 			"permissionItem" => objectType::PERMISSIONITEM,
 			"userRole" => objectType::USERROLE );
@@ -50,9 +50,9 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 	}
 
 	/* (non-PHPdoc)
- 	* @see kGenericEventConsumer::consumeEvent()
+ 	* @see vGenericEventConsumer::consumeEvent()
  	*/
-	public function consumeEvent(KalturaEvent $event)
+	public function consumeEvent(VidiunEvent $event)
 	{
 		$scope = $event->getScope();
 		$partnerId = $scope->getPartnerId();
@@ -65,7 +65,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 			$allowedCatalogItemIds = PartnerCatalogItemPeer::retrieveActiveCatalogItemIds($fullFieldCatalogItemIds, $partnerId);
 			if(!count($allowedCatalogItemIds))
 			{
-				KalturaLog::debug("None of the fullfield catalog item ids are active on partner, [" . implode(",", $fullFieldCatalogItemIds) . "]");
+				VidiunLog::debug("None of the fullfield catalog item ids are active on partner, [" . implode(",", $fullFieldCatalogItemIds) . "]");
 				continue;
 			}
 			$this->addingEntryVendorTaskByObjectIds($entryId, $allowedCatalogItemIds, $profileId, $object);
@@ -112,11 +112,11 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 	}
 
 	/* (non-PHPdoc)
- 	* @see kGenericEventConsumer::shouldConsumeEvent()
+ 	* @see vGenericEventConsumer::shouldConsumeEvent()
 	 * side effect: while checking if the rules are fulfilled, building an array:
  	* $booleanNotificationTemplatesFulfilled - contain array of (profileId, conditions (with boolean event notification that were fulfilled), actions)
  	*/
-	public function shouldConsumeEvent(KalturaEvent $event)
+	public function shouldConsumeEvent(VidiunEvent $event)
 	{
 		$scope = $event->getScope();
 		$partnerId = $scope->getPartnerId();
@@ -168,7 +168,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeAddedEvent()
+	 * @see vObjectAddedEventConsumer::shouldConsumeAddedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $object)
 	{
@@ -179,7 +179,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	*/
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
@@ -198,7 +198,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 
 		if($object instanceof entry && $object->getType() == entryType::MEDIA_CLIP)
 		{
-			$event = new kObjectChangedEvent($object,$modifiedColumns);
+			$event = new vObjectChangedEvent($object,$modifiedColumns);
 			if ($this->shouldConsumeEvent($event))
 				return true;
 			if (in_array(entryPeer::LENGTH_IN_MSECS, $modifiedColumns))
@@ -244,7 +244,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::objectAdded()
+	 * @see vObjectAddedEventConsumer::objectAdded()
 	 */
 	public function objectCreated(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -253,7 +253,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -281,7 +281,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 			$this->initReachProfileForPartner($object->getPartnerId());
 			if (count(self::$booleanNotificationTemplatesFulfilled))
 			{
-				$event = new kObjectChangedEvent($object,$modifiedColumns);
+				$event = new vObjectChangedEvent($object,$modifiedColumns);
 				$this->consumeEvent($event);
 			}
 			if (in_array(entryPeer::LENGTH_IN_MSECS, $modifiedColumns))
@@ -339,7 +339,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 			$pendingEntryReadyTask->setStatus($newStatus);
 			$pendingEntryReadyTask->setAccessKey(kReachUtils::generateReachVendorKs($pendingEntryReadyTask->getEntryId(), $pendingEntryReadyTask->getIsOutputModerated(), $pendingEntryReadyTask->getAccessKeyExpiry()));
 			if($pendingEntryReadyTask->getPrice() == 0)
-				$pendingEntryReadyTask->setPrice(kReachUtils::calculateTaskPrice($object, $pendingEntryReadyTask->getCatalogItem()));
+				$pendingEntryReadyTask->setPrice(vReachUtils::calculateTaskPrice($object, $pendingEntryReadyTask->getCatalogItem()));
 			$pendingEntryReadyTask->save();
 		}
 		return true;
@@ -363,18 +363,18 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 	
 	private function invalidateAccessKey(EntryVendorTask $entryVendorTask)
 	{
-		$ksString = $entryVendorTask->getAccessKey();
+		$vsString = $entryVendorTask->getAccessKey();
 		
 		try
 		{
-			$ksObj = kSessionUtils::crackKs($ksString);
+			$vsObj = vSessionUtils::crackVs($vsString);
 		}
 		catch(Exception $ex)
 		{
-			KalturaLog::debug("Failed to crackKs with error message [" . $ex->getMessage() . "], accessKey won't be invalidated");
+			VidiunLog::debug("Failed to crackVs with error message [" . $ex->getMessage() . "], accessKey won't be invalidated");
 		}
 		
-		$ksObj->kill();
+		$vsObj->kill();
 	}
 
 	private function handleEntryDurationChanged(entry $entry)
@@ -385,7 +385,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 		{
 			/* @var $pendingEntryVendorTask EntryVendorTask */
 			$oldPrice = $pendingEntryVendorTask->getPrice();
-			$newPrice = kReachUtils::calculateTaskPrice($entry, $pendingEntryVendorTask->getCatalogItem());
+			$newPrice = vReachUtils::calculateTaskPrice($entry, $pendingEntryVendorTask->getCatalogItem());
 			$priceDiff = $newPrice - $oldPrice;
 			
 			if(!$priceDiff)
@@ -395,7 +395,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 			if (!isset($addedCostByProfileId[$pendingEntryVendorTask->getReachProfileId()]))
 				$addedCostByProfileId[$pendingEntryVendorTask->getReachProfileId()] = 0;
 
-			if (kReachUtils::checkPriceAddon($pendingEntryVendorTask, $priceDiff))
+			if (vReachUtils::checkPriceAddon($pendingEntryVendorTask, $priceDiff))
 			{
 				$pendingEntryVendorTask->save();
 				if($pendingEntryVendorTask->getStatus() != EntryVendorTaskStatus::PENDING_MODERATION)
@@ -430,35 +430,35 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 		
 		if(!$entry || !$reachProfile || !$vendorCatalogItem)
 		{
-			KalturaLog::log("Not all mandatory objects were found, task will not be added");
+			VidiunLog::log("Not all mandatory objects were found, task will not be added");
 			return true;
 		}
 
 		$sourceFlavor = assetPeer::retrieveOriginalByEntryId($entry->getId());
 		$sourceFlavorVersion = $sourceFlavor != null ? $sourceFlavor->getVersion() : 0;
 
-		if (kReachUtils::isDuplicateTask($entryId, $vendorCatalogItemId, $entry->getPartnerId(), $sourceFlavorVersion))
+		if (vReachUtils::isDuplicateTask($entryId, $vendorCatalogItemId, $entry->getPartnerId(), $sourceFlavorVersion))
 		{
-			KalturaLog::log("Trying to insert a duplicate entry vendor task for entry [$entryId], catalog item [$vendorCatalogItemId] and entry version [$sourceFlavorVersion]");
+			VidiunLog::log("Trying to insert a duplicate entry vendor task for entry [$entryId], catalog item [$vendorCatalogItemId] and entry version [$sourceFlavorVersion]");
 			return true;
 		}
 
 		//check if credit has expired
-		if (kReachUtils::hasCreditExpired($reachProfile))
+		if (vReachUtils::hasCreditExpired($reachProfile))
 		{
-			KalturaLog::log("Credit cycle has expired, Task could not be added for entry [$entryId] and catalog item [$vendorCatalogItemId]");
+			VidiunLog::log("Credit cycle has expired, Task could not be added for entry [$entryId] and catalog item [$vendorCatalogItemId]");
 			return true;
 		}
 
-		if (!kReachUtils::isEnoughCreditLeft($entry, $vendorCatalogItem, $reachProfile))
+		if (!vReachUtils::isEnoughCreditLeft($entry, $vendorCatalogItem, $reachProfile))
 		{
-			KalturaLog::log("Exceeded max credit allowed, Task could not be added for entry [$entryId] and catalog item [$vendorCatalogItemId]");
+			VidiunLog::log("Exceeded max credit allowed, Task could not be added for entry [$entryId] and catalog item [$vendorCatalogItemId]");
 			return true;
 		}
 		
-		if(!kReachUtils::isEntryTypeSupported($entry->getType()))
+		if(!vReachUtils::isEntryTypeSupported($entry->getType()))
 		{
-			KalturaLog::log("Entry of type [{$entry->getType()}] is not supported by Reach");
+			VidiunLog::log("Entry of type [{$entry->getType()}] is not supported by Reach");
 			return true;
 		}
 
@@ -486,7 +486,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 		$entryVendorTask->setCatalogItemId($vendorCatalogItem->getId());
 		$entryVendorTask->setReachProfileId($reachProfile->getId());
 		$entryVendorTask->setPartnerId($entry->getPartnerId());
-		$entryVendorTask->setKuserId(self::getTaskKuserId($entry));
+		$entryVendorTask->setVuserId(self::getTaskVuserId($entry));
 		$entryVendorTask->setUserId(self::getTaskPuserId($entry));
 		$entryVendorTask->setVendorPartnerId($vendorCatalogItem->getVendorPartnerId());
 		$entryVendorTask->setVersion($version);
@@ -538,22 +538,22 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 	}
 	
 	//For automatic dispatched tasks make sure to set the entry creator user as the entry owner
-	protected static function getTaskKuserId(entry $entry)
+	protected static function getTaskVuserId(entry $entry)
 	{
-		$kuserId = kCurrentContext::getCurrentKsKuserId();
-		if(kCurrentContext::$ks_partner_id <= PartnerPeer::GLOBAL_PARTNER)
+		$vuserId = vCurrentContext::getCurrentVsVuserId();
+		if(vCurrentContext::$vs_partner_id <= PartnerPeer::GLOBAL_PARTNER)
 		{
-			$kuserId = $entry->getKuserId();
+			$vuserId = $entry->getVuserId();
 		}
 		
-		return $kuserId;
+		return $vuserId;
 	}
 	
 	//For automatic dispatched tasks make sure to set the entry creator user as the entry owner
 	protected static function getTaskPuserId(entry $entry)
 	{
-		$puserId = kCurrentContext::$ks_uid;
-		if(kCurrentContext::$ks_partner_id <= PartnerPeer::GLOBAL_PARTNER)
+		$puserId = vCurrentContext::$vs_uid;
+		if(vCurrentContext::$vs_partner_id <= PartnerPeer::GLOBAL_PARTNER)
 		{
 			$puserId = $entry->getPuserId();
 		}
@@ -563,7 +563,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 
 	private function checkAutomaticRules($object, $checkEmptyRulesOnly = false)
 	{
-		$scope = new kScope();
+		$scope = new vScope();
 		$entryId = $object->getEntryId();
 		$scope->setEntryId($entryId);
 		$this->initReachProfileForPartner($object->getPartnerId());
@@ -580,7 +580,7 @@ class kReachManager implements kObjectChangedEventConsumer, kObjectCreatedEventC
 				$allowedCatalogItemIds = PartnerCatalogItemPeer::retrieveActiveCatalogItemIds($fullFieldCatalogItemIds, $object->getPartnerId());
 				if(!count($allowedCatalogItemIds))
 				{
-					KalturaLog::debug("None of the fullfield catalog item ids are active on partner, [" . implode(",", $fullFieldCatalogItemIds) . "]");
+					VidiunLog::debug("None of the fullfield catalog item ids are active on partner, [" . implode(",", $fullFieldCatalogItemIds) . "]");
 					continue;
 				}
 				$this->addingEntryVendorTaskByObjectIds($entryId, $allowedCatalogItemIds, $profile->getId(), $object);

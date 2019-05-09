@@ -3,18 +3,18 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchOrderByItemArray extends KalturaTypedArray
+class VidiunESearchOrderByItemArray extends VidiunTypedArray
 {
 
     public function __construct()
     {
-        return parent::__construct("KalturaESearchOrderByItem");
+        return parent::__construct("VidiunESearchOrderByItem");
     }
 	
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		KalturaLog::debug(print_r($arr, true));
-		$newArr = new KalturaESearchOrderByItemArray();
+		VidiunLog::debug(print_r($arr, true));
+		$newArr = new VidiunESearchOrderByItemArray();
 		if ($arr == null)
 			return $newArr;
 		
@@ -23,23 +23,23 @@ class KalturaESearchOrderByItemArray extends KalturaTypedArray
 			switch (get_class($obj))
 			{
 				case 'ESearchEntryOrderByItem':
-					$nObj = new KalturaESearchEntryOrderByItem();
+					$nObj = new VidiunESearchEntryOrderByItem();
 					break;
 				
 				case 'ESearchCategoryOrderByItem':
-					$nObj = new KalturaESearchCategoryOrderByItem();
+					$nObj = new VidiunESearchCategoryOrderByItem();
 					break;
 				
 				case 'ESearchUserOrderByItem':
-					$nObj = new KalturaESearchUserOrderByItem();
+					$nObj = new VidiunESearchUserOrderByItem();
 					break;
 				
 				case 'ESearchUserOrderByItem':
-					$nObj = new KalturaESearchGrou();
+					$nObj = new VidiunESearchGrou();
 					break;
 				
 				default:
-					$nObj = KalturaPluginManager::loadObject('KalturaESearchOrderByItem', get_class($obj));
+					$nObj = VidiunPluginManager::loadObject('VidiunESearchOrderByItem', get_class($obj));
 					break;
 			}
 			

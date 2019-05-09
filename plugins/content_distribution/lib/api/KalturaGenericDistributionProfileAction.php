@@ -3,10 +3,10 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaGenericDistributionProfileAction extends KalturaObject
+class VidiunGenericDistributionProfileAction extends VidiunObject
 {
 	/**
-	 * @var KalturaDistributionProtocol
+	 * @var VidiunDistributionProtocol
 	 */
 	public $protocol;
 	

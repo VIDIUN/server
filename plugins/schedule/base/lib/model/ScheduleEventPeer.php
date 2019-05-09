@@ -63,7 +63,7 @@ class ScheduleEventPeer extends BaseScheduleEventPeer implements IRelatedObjectP
 			if(isset(self::$class_types_cache[$assetType]))
 				return self::$class_types_cache[$assetType];
 				
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $assetType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $assetType);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$assetType] = $extendedCls;
@@ -82,7 +82,7 @@ class ScheduleEventPeer extends BaseScheduleEventPeer implements IRelatedObjectP
 	{
 		$c = clone $criteria;
 		
-		if($c instanceof KalturaCriteria)
+		if($c instanceof VidiunCriteria)
 		{
 			$c->applyFilters();
 			$criteria->setRecordsCount($c->getRecordsCount());
@@ -100,7 +100,7 @@ class ScheduleEventPeer extends BaseScheduleEventPeer implements IRelatedObjectP
 	{
 		$criteria = new Criteria();
 		$criteria->add(ScheduleEventPeer::PARENT_ID, $parentId);
-		$criteria->add(ScheduleEventPeer::PARTNER_ID, kCurrentContext::getCurrentPartnerId());
+		$criteria->add(ScheduleEventPeer::PARTNER_ID, vCurrentContext::getCurrentPartnerId());
 		$criteria->add(ScheduleEventPeer::RECURRENCE_TYPE, ScheduleEventRecurrenceType::RECURRENCE);
 
 		if($exceptForIds)
@@ -130,7 +130,7 @@ class ScheduleEventPeer extends BaseScheduleEventPeer implements IRelatedObjectP
 		$criteria = new Criteria();
 		$criteria->add(ScheduleEventPeer::PARENT_ID, $parentId);
 		$criteria->add(ScheduleEventPeer::RECURRENCE_TYPE, ScheduleEventRecurrenceType::RECURRENCE);
-		$criteria->add(ScheduleEventPeer::START_DATE, kApiCache::getTime(), Criteria::GREATER_THAN);
+		$criteria->add(ScheduleEventPeer::START_DATE, vApiCache::getTime(), Criteria::GREATER_THAN);
 
 		if($exceptForDates)
 		{
@@ -221,7 +221,7 @@ class ScheduleEventPeer extends BaseScheduleEventPeer implements IRelatedObjectP
 	 */
 	public static function retrieveByTemplateEntryId($templateEntryId)
 	{
-		$c = KalturaCriteria::create(ScheduleEventPeer::OM_CLASS);
+		$c = VidiunCriteria::create(ScheduleEventPeer::OM_CLASS);
 		$filter = new ScheduleEventFilter();
 		$filter->setTemplateEntryIdEqual($templateEntryId);
 		$filter->attachToCriteria($c);
@@ -297,18 +297,18 @@ class ScheduleEventPeer extends BaseScheduleEventPeer implements IRelatedObjectP
 	 * @param date $startDate
 	 * @param date $endDate
 	 * @param string|null $scheduleEventIdToIgnore
-	 * @return KalturaCriteria
+	 * @return VidiunCriteria
 	 */
 	protected static function getRetrieveEventsByDateWindowCriteria($startDate, $endDate, $scheduleEventIdToIgnore = null)
 	{
-		$c = KalturaCriteria::create(ScheduleEventPeer::OM_CLASS);
+		$c = VidiunCriteria::create(ScheduleEventPeer::OM_CLASS);
 		$c->addAnd(ScheduleEventPeer::START_DATE, $endDate, Criteria::LESS_THAN);
 		$c->addAnd(ScheduleEventPeer::END_DATE, $startDate, Criteria::GREATER_THAN);
 		$c->addAnd(ScheduleEventPeer::STATUS, ScheduleEventStatus::ACTIVE, Criteria::EQUAL);
 		$c->addAnd(ScheduleEventPeer::RECURRENCE_TYPE, ScheduleEventRecurrenceType::RECURRING, Criteria::NOT_EQUAL);
 		if($scheduleEventIdToIgnore)
 		{
-			KalturaLog::info("Ignoring  scheduleEventId {$scheduleEventIdToIgnore}");
+			VidiunLog::info("Ignoring  scheduleEventId {$scheduleEventIdToIgnore}");
 			$c->addAnd(ScheduleEventPeer::ID, $scheduleEventIdToIgnore, Criteria::NOT_EQUAL);
 			$c->addAnd(ScheduleEventPeer::PARENT_ID, $scheduleEventIdToIgnore, Criteria::NOT_IN);
 		}

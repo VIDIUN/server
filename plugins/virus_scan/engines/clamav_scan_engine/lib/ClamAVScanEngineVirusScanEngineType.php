@@ -3,7 +3,7 @@
  * @package plugins.clamAvScanEngine
  * @subpackage api.enum
  */
-class ClamAVScanEngineVirusScanEngineType implements IKalturaPluginEnum, VirusScanEngineType
+class ClamAVScanEngineVirusScanEngineType implements IVidiunPluginEnum, VirusScanEngineType
 {
 	const CLAMAV_SCAN_ENGINE = 'ClamAV';
 	

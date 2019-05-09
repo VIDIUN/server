@@ -3,18 +3,18 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBaseEntryCloneOptionComponent extends KalturaBaseEntryCloneOptionItem
+class VidiunBaseEntryCloneOptionComponent extends VidiunBaseEntryCloneOptionItem
 {
     /**
      *
-     * @var KalturaBaseEntryCloneOptions
+     * @var VidiunBaseEntryCloneOptions
      */
     public $itemType;
 
     /**
      * condition rule (include/exclude)
      *
-     * @var KalturaCloneComponentSelectorType
+     * @var VidiunCloneComponentSelectorType
      */
     public $rule;
 
@@ -37,17 +37,17 @@ class KalturaBaseEntryCloneOptionComponent extends KalturaBaseEntryCloneOptionIt
     public function toObject($dbObject = null, $skip = array())
     {
         if(!$dbObject)
-            $dbObject = new kBaseEntryCloneOptionComponent();
+            $dbObject = new vBaseEntryCloneOptionComponent();
 
         return parent::toObject($dbObject, $skip);
     }
 
     /* (non-PHPdoc)
- * @see KalturaObject::fromObject()
+ * @see VidiunObject::fromObject()
  */
-    public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+    public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
     {
-        /** @var $dbObject kBaseEntryCloneOptionComponent */
+        /** @var $dbObject vBaseEntryCloneOptionComponent */
         parent::doFromObject($dbObject, $responseProfile);
     }
     public function __construct()

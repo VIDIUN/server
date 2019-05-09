@@ -3,17 +3,17 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPermissionArray extends KalturaTypedArray
+class VidiunPermissionArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaPermissionArray();
+		$newArr = new VidiunPermissionArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaPermission();
+    		$nObj = new VidiunPermission();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaPermissionArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct('KalturaPermission');	
+		parent::__construct('VidiunPermission');	
 	}
 }

@@ -3,7 +3,7 @@
  * @package plugins.emailNotification
  * @subpackage Scheduler
  */
-class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
+class VDispatchEmailNotificationEngine extends VDispatchEventNotificationEngine
 {
 	const TO_RECIPIENT_TYPE = 'Address';
 	
@@ -14,16 +14,16 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 	const REPLYTO_RECIPIENT_TYPE = 'ReplyTo';
 	
 	/**
-	 * Old kaltura default
+	 * Old vidiun default
 	 * @var strung
 	 */
-	protected $defaultFromMail = 'notifications@kaltura.com';
+	protected $defaultFromMail = 'notifications@vidiun.com';
 	 
 	/**
-	 * Old kaltura default
+	 * Old vidiun default
 	 * @var strung
 	 */
-	protected $defaultFromName = 'Kaltura Notification Service';
+	protected $defaultFromName = 'Vidiun Notification Service';
 	
 	/**
 	 * @var PHPMailer
@@ -33,15 +33,15 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 	static protected $emailFooterTemplate = null;
 	
 	/* (non-PHPdoc)
-	 * @see KDispatchEventNotificationEngine::__construct()
+	 * @see VDispatchEventNotificationEngine::__construct()
 	 */
 	public function __construct()
 	{
-		if(isset(KBatchBase::$taskConfig->params->defaultFromMail) && KBatchBase::$taskConfig->params->defaultFromMail)
-			$this->defaultFromMail = KBatchBase::$taskConfig->params->defaultFromMail;
+		if(isset(VBatchBase::$taskConfig->params->defaultFromMail) && VBatchBase::$taskConfig->params->defaultFromMail)
+			$this->defaultFromMail = VBatchBase::$taskConfig->params->defaultFromMail;
 			
-		if(isset(KBatchBase::$taskConfig->params->defaultFromName) && KBatchBase::$taskConfig->params->defaultFromName)
-			$this->defaultFromName = KBatchBase::$taskConfig->params->defaultFromName;
+		if(isset(VBatchBase::$taskConfig->params->defaultFromName) && VBatchBase::$taskConfig->params->defaultFromName)
+			$this->defaultFromName = VBatchBase::$taskConfig->params->defaultFromName;
 
 		if($this::$mailer)
 		{
@@ -57,84 +57,84 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 			$this::$mailer->CharSet = 'utf-8';
 			$this::$mailer->SMTPKeepAlive = true;
 		
-			if(isset(KBatchBase::$taskConfig->params->mailPriority) && KBatchBase::$taskConfig->params->mailPriority)
-				$this::$mailer->Priority = 	KBatchBase::$taskConfig->params->mailPriority;
+			if(isset(VBatchBase::$taskConfig->params->mailPriority) && VBatchBase::$taskConfig->params->mailPriority)
+				$this::$mailer->Priority = 	VBatchBase::$taskConfig->params->mailPriority;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailCharSet) && KBatchBase::$taskConfig->params->mailCharSet)
-				$this::$mailer->CharSet = KBatchBase::$taskConfig->params->mailCharSet;
+			if(isset(VBatchBase::$taskConfig->params->mailCharSet) && VBatchBase::$taskConfig->params->mailCharSet)
+				$this::$mailer->CharSet = VBatchBase::$taskConfig->params->mailCharSet;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailContentType) && KBatchBase::$taskConfig->params->mailContentType)
-				$this::$mailer->ContentType = KBatchBase::$taskConfig->params->mailContentType;
+			if(isset(VBatchBase::$taskConfig->params->mailContentType) && VBatchBase::$taskConfig->params->mailContentType)
+				$this::$mailer->ContentType = VBatchBase::$taskConfig->params->mailContentType;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailEncoding) && KBatchBase::$taskConfig->params->mailEncoding)
-				$this::$mailer->Encoding = 	KBatchBase::$taskConfig->params->mailEncoding;
+			if(isset(VBatchBase::$taskConfig->params->mailEncoding) && VBatchBase::$taskConfig->params->mailEncoding)
+				$this::$mailer->Encoding = 	VBatchBase::$taskConfig->params->mailEncoding;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailWordWrap) && KBatchBase::$taskConfig->params->mailWordWrap)
-				$this::$mailer->WordWrap = 	KBatchBase::$taskConfig->params->mailWordWrap;
+			if(isset(VBatchBase::$taskConfig->params->mailWordWrap) && VBatchBase::$taskConfig->params->mailWordWrap)
+				$this::$mailer->WordWrap = 	VBatchBase::$taskConfig->params->mailWordWrap;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailMailer) && KBatchBase::$taskConfig->params->mailMailer)
-				$this::$mailer->Mailer = 	KBatchBase::$taskConfig->params->mailMailer;
+			if(isset(VBatchBase::$taskConfig->params->mailMailer) && VBatchBase::$taskConfig->params->mailMailer)
+				$this::$mailer->Mailer = 	VBatchBase::$taskConfig->params->mailMailer;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailSendmail) && KBatchBase::$taskConfig->params->mailSendmail)
-				$this::$mailer->Sendmail = 	KBatchBase::$taskConfig->params->mailSendmail;
+			if(isset(VBatchBase::$taskConfig->params->mailSendmail) && VBatchBase::$taskConfig->params->mailSendmail)
+				$this::$mailer->Sendmail = 	VBatchBase::$taskConfig->params->mailSendmail;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailSmtpHost) && KBatchBase::$taskConfig->params->mailSmtpHost)
-				$this::$mailer->Host = 	KBatchBase::$taskConfig->params->mailSmtpHost;
+			if(isset(VBatchBase::$taskConfig->params->mailSmtpHost) && VBatchBase::$taskConfig->params->mailSmtpHost)
+				$this::$mailer->Host = 	VBatchBase::$taskConfig->params->mailSmtpHost;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailSmtpPort) && KBatchBase::$taskConfig->params->mailSmtpPort)
-				$this::$mailer->Port = 	KBatchBase::$taskConfig->params->mailSmtpPort;
+			if(isset(VBatchBase::$taskConfig->params->mailSmtpPort) && VBatchBase::$taskConfig->params->mailSmtpPort)
+				$this::$mailer->Port = 	VBatchBase::$taskConfig->params->mailSmtpPort;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailSmtpHeloMessage) && KBatchBase::$taskConfig->params->mailSmtpHeloMessage)
-				$this::$mailer->Helo = 	KBatchBase::$taskConfig->params->mailSmtpHeloMessage;
+			if(isset(VBatchBase::$taskConfig->params->mailSmtpHeloMessage) && VBatchBase::$taskConfig->params->mailSmtpHeloMessage)
+				$this::$mailer->Helo = 	VBatchBase::$taskConfig->params->mailSmtpHeloMessage;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailSmtpSecure) && KBatchBase::$taskConfig->params->mailSmtpSecure)
-				$this::$mailer->SMTPSecure = 	KBatchBase::$taskConfig->params->mailSmtpSecure;
+			if(isset(VBatchBase::$taskConfig->params->mailSmtpSecure) && VBatchBase::$taskConfig->params->mailSmtpSecure)
+				$this::$mailer->SMTPSecure = 	VBatchBase::$taskConfig->params->mailSmtpSecure;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailSmtpAuth) && KBatchBase::$taskConfig->params->mailSmtpAuth)
-				$this::$mailer->SMTPAuth = 	KBatchBase::$taskConfig->params->mailSmtpAuth;
+			if(isset(VBatchBase::$taskConfig->params->mailSmtpAuth) && VBatchBase::$taskConfig->params->mailSmtpAuth)
+				$this::$mailer->SMTPAuth = 	VBatchBase::$taskConfig->params->mailSmtpAuth;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailSmtpUsername) && KBatchBase::$taskConfig->params->mailSmtpUsername)
-				$this::$mailer->Username = 	KBatchBase::$taskConfig->params->mailSmtpUsername;
+			if(isset(VBatchBase::$taskConfig->params->mailSmtpUsername) && VBatchBase::$taskConfig->params->mailSmtpUsername)
+				$this::$mailer->Username = 	VBatchBase::$taskConfig->params->mailSmtpUsername;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailSmtpPassword) && KBatchBase::$taskConfig->params->mailSmtpPassword)
-				$this::$mailer->Password = 	KBatchBase::$taskConfig->params->mailSmtpPassword;
+			if(isset(VBatchBase::$taskConfig->params->mailSmtpPassword) && VBatchBase::$taskConfig->params->mailSmtpPassword)
+				$this::$mailer->Password = 	VBatchBase::$taskConfig->params->mailSmtpPassword;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailSmtpTimeout) && KBatchBase::$taskConfig->params->mailSmtpTimeout)
-				$this::$mailer->Timeout = 	KBatchBase::$taskConfig->params->mailSmtpTimeout;
+			if(isset(VBatchBase::$taskConfig->params->mailSmtpTimeout) && VBatchBase::$taskConfig->params->mailSmtpTimeout)
+				$this::$mailer->Timeout = 	VBatchBase::$taskConfig->params->mailSmtpTimeout;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailSmtpTimeout) && KBatchBase::$taskConfig->params->mailSmtpTimeout)
-				$this::$mailer->Timeout = 	KBatchBase::$taskConfig->params->mailSmtpTimeout;
+			if(isset(VBatchBase::$taskConfig->params->mailSmtpTimeout) && VBatchBase::$taskConfig->params->mailSmtpTimeout)
+				$this::$mailer->Timeout = 	VBatchBase::$taskConfig->params->mailSmtpTimeout;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailSmtpKeepAlive) && KBatchBase::$taskConfig->params->mailSmtpKeepAlive)
-				$this::$mailer->SMTPKeepAlive = 	KBatchBase::$taskConfig->params->mailSmtpKeepAlive;
+			if(isset(VBatchBase::$taskConfig->params->mailSmtpKeepAlive) && VBatchBase::$taskConfig->params->mailSmtpKeepAlive)
+				$this::$mailer->SMTPKeepAlive = 	VBatchBase::$taskConfig->params->mailSmtpKeepAlive;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailXMailerHeader) && KBatchBase::$taskConfig->params->mailXMailerHeader)
-				$this::$mailer->XMailer = 	KBatchBase::$taskConfig->params->mailXMailerHeader;
+			if(isset(VBatchBase::$taskConfig->params->mailXMailerHeader) && VBatchBase::$taskConfig->params->mailXMailerHeader)
+				$this::$mailer->XMailer = 	VBatchBase::$taskConfig->params->mailXMailerHeader;
 				
-			if(isset(KBatchBase::$taskConfig->params->mailErrorMessageLanguage) && KBatchBase::$taskConfig->params->mailErrorMessageLanguage)
-				$this::$mailer->SetLanguage(KBatchBase::$taskConfig->params->mailErrorMessageLanguage);
+			if(isset(VBatchBase::$taskConfig->params->mailErrorMessageLanguage) && VBatchBase::$taskConfig->params->mailErrorMessageLanguage)
+				$this::$mailer->SetLanguage(VBatchBase::$taskConfig->params->mailErrorMessageLanguage);
 		}
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KDispatchEventNotificationEngine::dispatch()
+	 * @see VDispatchEventNotificationEngine::dispatch()
 	 */
-	public function dispatch(KalturaEventNotificationTemplate $eventNotificationTemplate, KalturaEventNotificationDispatchJobData &$data)
+	public function dispatch(VidiunEventNotificationTemplate $eventNotificationTemplate, VidiunEventNotificationDispatchJobData &$data)
 	{
 		$this->sendEmail($eventNotificationTemplate, $data);
 	}
 
 	/**
-	 * @param KalturaEmailNotificationTemplate $emailNotificationTemplate
-	 * @param KalturaEmailNotificationDispatchJobData $data
+	 * @param VidiunEmailNotificationTemplate $emailNotificationTemplate
+	 * @param VidiunEmailNotificationDispatchJobData $data
 	 * @return boolean
 	 */
-	protected function sendEmail(KalturaEmailNotificationTemplate $emailNotificationTemplate, KalturaEmailNotificationDispatchJobData &$data)
+	protected function sendEmail(VidiunEmailNotificationTemplate $emailNotificationTemplate, VidiunEmailNotificationDispatchJobData &$data)
 	{
 		if(!$data->to && !$data->cc && !$data->bcc)
 			throw new Exception("Recipient e-mail address cannot be null");
 			
-		$this::$mailer->IsHTML($emailNotificationTemplate->format == KalturaEmailNotificationFormat::HTML);
+		$this::$mailer->IsHTML($emailNotificationTemplate->format == VidiunEmailNotificationFormat::HTML);
 		
 		if($data->priority)
 			$this::$mailer->Priority = 	$data->priority;
@@ -150,7 +150,7 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 		{
 			foreach($data->contentParameters as $contentParameter)
 			{
-				/* @var $contentParameter KalturaKeyValue */
+				/* @var $contentParameter VidiunKeyValue */
 				$contentParameters['{' .$contentParameter->key. '}'] = strip_tags($contentParameter->value);
 			}		
 		}
@@ -164,7 +164,7 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 				{
 					continue;
 				}
-				KalturaLog::info("Adding recipient to TO recipients $name<$email>");
+				VidiunLog::info("Adding recipient to TO recipients $name<$email>");
 				self::$mailer->AddAddress($email, $name);
 			}
 		}
@@ -178,7 +178,7 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 				{
 					continue;
 				}
-				KalturaLog::info("Adding recipient to CC recipients $name<$email>");
+				VidiunLog::info("Adding recipient to CC recipients $name<$email>");
 				self::$mailer->AddCC($email, $name);
 			}
 		}
@@ -192,7 +192,7 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 				{
 					continue;
 				}
-				KalturaLog::info("Adding recipient to BCC recipients $name<$email>");
+				VidiunLog::info("Adding recipient to BCC recipients $name<$email>");
 				self::$mailer->AddBCC($email, $name);
 			}
 		}
@@ -202,7 +202,7 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 			$recipients = $this->getRecipientArray($data->replyTo, $contentParameters);
 			foreach ($recipients as $email=>$name)
 			{
-				KalturaLog::info("Adding recipient to ReplyTo recipients $name<$email>");
+				VidiunLog::info("Adding recipient to ReplyTo recipients $name<$email>");
 				self::$mailer->AddReplyTo($email, $name);
 			}
 		}
@@ -227,7 +227,7 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 			$this::$mailer->From = $this->defaultFromMail;
 			$this::$mailer->FromName = $this->defaultFromName;
 		}
-		KalturaLog::info("Sender [{$this::$mailer->FromName}<{$this::$mailer->From}>]");
+		VidiunLog::info("Sender [{$this::$mailer->FromName}<{$this::$mailer->From}>]");
 		
 		$subject = $emailNotificationTemplate->subject;
 		$body = $emailNotificationTemplate->body;
@@ -244,8 +244,8 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 			$body = str_replace(array_keys($contentParameters), $contentParameters, $body);
 		}
 				
-		KalturaLog::info("Subject [$subject]");
-		KalturaLog::info("Body [$body]");
+		VidiunLog::info("Subject [$subject]");
+		VidiunLog::info("Body [$body]");
 		
 		$this::$mailer->Subject = $subject;
 		$this::$mailer->Body = $body;
@@ -254,10 +254,10 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 		{
 			foreach($data->customHeaders as $customHeader)
 			{
-				/* @var $customHeader KalturaKeyValue */
+				/* @var $customHeader VidiunKeyValue */
 				$key = $customHeader->key;
 				$value = $customHeader->value;
-				/* @var $customHeader KalturaKeyValue */
+				/* @var $customHeader VidiunKeyValue */
 				if(is_array($contentParameters) && count($contentParameters))
 				{
 					$key = str_replace(array_keys($contentParameters), $contentParameters, $key);
@@ -271,11 +271,11 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 		{
 			$success = $this::$mailer->Send();
 			if(!$success)
-				throw new kTemporaryException("Sending mail failed: " . $this::$mailer->ErrorInfo);
+				throw new vTemporaryException("Sending mail failed: " . $this::$mailer->ErrorInfo);
 		}
 		catch(Exception $e)
 		{
-			throw new kTemporaryException("Sending mail failed with exception: " . $e->getMessage(), $e->getCode());	
+			throw new vTemporaryException("Sending mail failed with exception: " . $e->getMessage(), $e->getCode());	
 		}
 			
 		return true;
@@ -293,19 +293,19 @@ class KDispatchEmailNotificationEngine extends KDispatchEventNotificationEngine
 			}
 		}
 		
-		$footer = vsprintf(self::$emailFooterTemplate, array(KBatchBase::$taskConfig->params->forumUrl));	
+		$footer = vsprintf(self::$emailFooterTemplate, array(VBatchBase::$taskConfig->params->forumUrl));	
 		return $footer;
 	} 
 	
 	/**
 	 * Function to retrieve array of recipients for the email notifiation based on the data.
-	 * @param KalturaEmailNotificationRecipientJobData $recipientJobData
+	 * @param VidiunEmailNotificationRecipientJobData $recipientJobData
 	 * @param array $contentParameters
 	 * @return array;
 	 */
-	protected function getRecipientArray (KalturaEmailNotificationRecipientJobData $recipientJobData, array $contentParameters)
+	protected function getRecipientArray (VidiunEmailNotificationRecipientJobData $recipientJobData, array $contentParameters)
 	{
-		$recipientEngine = KEmailNotificationRecipientEngine::getEmailNotificationRecipientEngine($recipientJobData);
+		$recipientEngine = VEmailNotificationRecipientEngine::getEmailNotificationRecipientEngine($recipientJobData);
 		$recipients = $recipientEngine->getRecipients($contentParameters);
 		
 		return $recipients;

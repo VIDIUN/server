@@ -3,7 +3,7 @@
  * @package plugins.schedule
  * @subpackage model.enum
  */
-interface kScheduleEventConflictType extends BaseEnum
+interface vScheduleEventConflictType extends BaseEnum
 {
 	const RESOURCE_CONFLICT = 1;
 	const BLACKOUT_CONFLICT = 2;

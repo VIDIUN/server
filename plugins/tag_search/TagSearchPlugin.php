@@ -2,7 +2,7 @@
 /**
  * @package plugins.tagSearch
  */
-class TagSearchPlugin extends KalturaPlugin implements  IKalturaCriteriaFactory, IKalturaSphinxConfiguration, IKalturaEventConsumers, IKalturaServices, IKalturaEnumerator, IKalturaObjectLoader
+class TagSearchPlugin extends VidiunPlugin implements  IVidiunCriteriaFactory, IVidiunSphinxConfiguration, IVidiunEventConsumers, IVidiunServices, IVidiunEnumerator, IVidiunObjectLoader
 {
     const PLUGIN_NAME = "tagSearch";
     
@@ -31,8 +31,8 @@ class TagSearchPlugin extends KalturaPlugin implements  IKalturaCriteriaFactory,
 	public static function getSphinxSchema ()
 	{
 	    return array(
-			kSphinxSearchManager::getSphinxIndexName(self::INDEX_NAME) => array (	
-				'path'		=> '/sphinx/kaltura_tag_rt',
+			vSphinxSearchManager::getSphinxIndexName(self::INDEX_NAME) => array (	
+				'path'		=> '/sphinx/vidiun_tag_rt',
 				'fields'	=> self::getSphinxSchemaFields(),
 			    'dict'      => 'keywords',
                 'min_prefix_len' => self::MIN_TAG_SEARCH_LENGTH,
@@ -44,10 +44,10 @@ class TagSearchPlugin extends KalturaPlugin implements  IKalturaCriteriaFactory,
     
 	public static function getEventConsumers()
 	{
-	    return array('kTagFlowManager');
+	    return array('vTagFlowManager');
 	}
 	
-	public static function getKalturaCriteria($objectType)
+	public static function getVidiunCriteria($objectType)
 	{
 	    if ($objectType == TagPeer::OM_CLASS)
 			return new SphinxTagCriteria();
@@ -64,7 +64,7 @@ class TagSearchPlugin extends KalturaPlugin implements  IKalturaCriteriaFactory,
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -82,8 +82,8 @@ class TagSearchPlugin extends KalturaPlugin implements  IKalturaCriteriaFactory,
 	 */
 	public static function getBatchJobTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BatchJobType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BatchJobType', $value);
 	}
 	
 	/**
@@ -91,34 +91,34 @@ class TagSearchPlugin extends KalturaPlugin implements  IKalturaCriteriaFactory,
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'kJobData' && $enumValue == self::getBatchJobTypeCoreValue(IndexTagsByPrivacyContextJobType::INDEX_TAGS))
+		if($baseClass == 'vJobData' && $enumValue == self::getBatchJobTypeCoreValue(IndexTagsByPrivacyContextJobType::INDEX_TAGS))
 			return new kIndexTagsByPrivacyContextJobData();
 	
-		if($baseClass == 'KalturaJobData' && $enumValue == self::getApiValue(IndexTagsByPrivacyContextJobType::INDEX_TAGS))
-			return new KalturaIndexTagsByPrivacyContextJobData();
+		if($baseClass == 'VidiunJobData' && $enumValue == self::getApiValue(IndexTagsByPrivacyContextJobType::INDEX_TAGS))
+			return new VidiunIndexTagsByPrivacyContextJobData();
 		
 		return null;
 	}
 	
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'kJobData' && $enumValue == self::getBatchJobTypeCoreValue(IndexTagsByPrivacyContextJobType::INDEX_TAGS))
+		if($baseClass == 'vJobData' && $enumValue == self::getBatchJobTypeCoreValue(IndexTagsByPrivacyContextJobType::INDEX_TAGS))
 			return new kIndexTagsByPrivacyContextJobData();
 	
-		if($baseClass == 'KalturaJobData' && $enumValue == self::getApiValue(IndexTagsByPrivacyContextJobType::INDEX_TAGS))
-			return new KalturaIndexTagsByPrivacyContextJobData();
+		if($baseClass == 'VidiunJobData' && $enumValue == self::getApiValue(IndexTagsByPrivacyContextJobType::INDEX_TAGS))
+			return new VidiunIndexTagsByPrivacyContextJobData();
 		
 		return null;
 	}

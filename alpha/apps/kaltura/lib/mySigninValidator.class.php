@@ -19,16 +19,16 @@ class mySigninValidator extends sfValidator
 		$login = $value; 
 
 		$c = new Criteria(); 
-		$c->add(kuserPeer::SCREEN_NAME, $login); 
-		$user = kuserPeer::doSelectOne($c);
+		$c->add(vuserPeer::SCREEN_NAME, $login); 
+		$user = vuserPeer::doSelectOne($c);
 		
-		$user = kuserPeer::doSelectOne($c);
+		$user = vuserPeer::doSelectOne($c);
 
 		if( !$user ) 
 		{
 			$c2 = new Criteria(); 
-			$c2->add( kuserPeer::EMAIL, $login );
-			$user = kuserPeer::doSelectOne($c2);
+			$c2->add( vuserPeer::EMAIL, $login );
+			$user = vuserPeer::doSelectOne($c2);
 		}
 			
 		// screenname exists? 

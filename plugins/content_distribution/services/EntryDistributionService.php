@@ -6,7 +6,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.services
  */
-class EntryDistributionService extends KalturaBaseService
+class EntryDistributionService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -14,43 +14,43 @@ class EntryDistributionService extends KalturaBaseService
 		$this->applyPartnerFilterForClass('EntryDistribution');
 		
 		if(!ContentDistributionPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, ContentDistributionPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, ContentDistributionPlugin::PLUGIN_NAME);
 	}
 	
 	/**
 	 * Add new Entry Distribution
 	 * 
 	 * @action add
-	 * @param KalturaEntryDistribution $entryDistribution
-	 * @return KalturaEntryDistribution
+	 * @param VidiunEntryDistribution $entryDistribution
+	 * @return VidiunEntryDistribution
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_ALREADY_EXISTS
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
-	function addAction(KalturaEntryDistribution $entryDistribution)
+	function addAction(VidiunEntryDistribution $entryDistribution)
 	{
 		$entryDistribution->validateForInsert();
 					
 		$dbDistributionProfile = DistributionProfilePeer::retrieveByPK($entryDistribution->distributionProfileId);
 		if (!$dbDistributionProfile)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $entryDistribution->distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $entryDistribution->distributionProfileId);
 		if ($dbDistributionProfile->getStatus() == DistributionProfileStatus::DISABLED)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $entryDistribution->distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $entryDistribution->distributionProfileId);
 		
 		$dbEntry = entryPeer::retrieveByPK($entryDistribution->entryId);
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryDistribution->entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryDistribution->entryId);
 		
 		$dbEntryDistribution = EntryDistributionPeer::retrieveByEntryAndProfileId($entryDistribution->entryId, $entryDistribution->distributionProfileId);
 		if($dbEntryDistribution)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_ALREADY_EXISTS, $entryDistribution->entryId, $entryDistribution->distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_ALREADY_EXISTS, $entryDistribution->entryId, $entryDistribution->distributionProfileId);
 
-		$dbEntryDistribution = kContentDistributionManager::addEntryDistribution($dbEntry, $dbDistributionProfile);
+		$dbEntryDistribution = vContentDistributionManager::addEntryDistribution($dbEntry, $dbDistributionProfile);
 		$entryDistribution->toInsertableObject($dbEntryDistribution);
 		$dbEntryDistribution->setPartnerId($this->getPartnerId());
 		$dbEntryDistribution->save();
 		
-		$entryDistribution = new KalturaEntryDistribution();
+		$entryDistribution = new VidiunEntryDistribution();
 		$entryDistribution->fromObject($dbEntryDistribution, $this->getResponseProfile());
 		return $entryDistribution;
 	}
@@ -60,16 +60,16 @@ class EntryDistributionService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id
-	 * @return KalturaEntryDistribution
+	 * @return VidiunEntryDistribution
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND
 	 */
 	function getAction($id)
 	{
 		$dbEntryDistribution = EntryDistributionPeer::retrieveByPK($id);
 		if (!$dbEntryDistribution)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
 			
-		$entryDistribution = new KalturaEntryDistribution();
+		$entryDistribution = new VidiunEntryDistribution();
 		$entryDistribution->fromObject($dbEntryDistribution, $this->getResponseProfile());
 		return $entryDistribution;
 	}
@@ -79,7 +79,7 @@ class EntryDistributionService extends KalturaBaseService
 	 * 
 	 * @action validate
 	 * @param int $id
-	 * @return KalturaEntryDistribution
+	 * @return VidiunEntryDistribution
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED
@@ -88,28 +88,28 @@ class EntryDistributionService extends KalturaBaseService
 	{
 		$dbEntryDistribution = EntryDistributionPeer::retrieveByPK($id);
 		if (!$dbEntryDistribution)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
 			
 		$distributionProfileId = $dbEntryDistribution->getDistributionProfileId();
 		$dbDistributionProfile = DistributionProfilePeer::retrieveByPK($distributionProfileId);
 		if(!$dbDistributionProfile)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
 		if ($dbDistributionProfile->getStatus() == DistributionProfileStatus::DISABLED)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
 		
 		$dbEntry = entryPeer::retrieveByPK($dbEntryDistribution->getEntryId());
 		if($dbEntry)
 		{
-			kContentDistributionManager::assignFlavorAssets($dbEntryDistribution, $dbEntry, $dbDistributionProfile);
-			kContentDistributionManager::assignThumbAssets($dbEntryDistribution, $dbEntry, $dbDistributionProfile);
-			kContentDistributionManager::assignAssets($dbEntryDistribution, $dbEntry, $dbDistributionProfile);
+			vContentDistributionManager::assignFlavorAssets($dbEntryDistribution, $dbEntry, $dbDistributionProfile);
+			vContentDistributionManager::assignThumbAssets($dbEntryDistribution, $dbEntry, $dbDistributionProfile);
+			vContentDistributionManager::assignAssets($dbEntryDistribution, $dbEntry, $dbDistributionProfile);
 		}
 		
 		$validationErrors = $dbDistributionProfile->validateForSubmission($dbEntryDistribution, DistributionAction::SUBMIT);
 		$dbEntryDistribution->setValidationErrorsArray($validationErrors);
 		$dbEntryDistribution->save();
 
-		$entryDistribution = new KalturaEntryDistribution();
+		$entryDistribution = new VidiunEntryDistribution();
 		$entryDistribution->fromObject($dbEntryDistribution, $this->getResponseProfile());
 		return $entryDistribution;
 	}
@@ -119,20 +119,20 @@ class EntryDistributionService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id
-	 * @param KalturaEntryDistribution $entryDistribution
-	 * @return KalturaEntryDistribution
+	 * @param VidiunEntryDistribution $entryDistribution
+	 * @return VidiunEntryDistribution
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND
 	 */
-	function updateAction($id, KalturaEntryDistribution $entryDistribution)
+	function updateAction($id, VidiunEntryDistribution $entryDistribution)
 	{
 		$dbEntryDistribution = EntryDistributionPeer::retrieveByPK($id);
 		if (!$dbEntryDistribution)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
 		
 		$entryDistribution->toUpdatableObject($dbEntryDistribution);
 		$dbEntryDistribution->save();
 		
-		$entryDistribution = new KalturaEntryDistribution();
+		$entryDistribution = new VidiunEntryDistribution();
 		$entryDistribution->fromObject($dbEntryDistribution, $this->getResponseProfile());
 		return $entryDistribution;
 	}
@@ -148,7 +148,7 @@ class EntryDistributionService extends KalturaBaseService
 	{
 		$dbEntryDistribution = EntryDistributionPeer::retrieveByPK($id);
 		if (!$dbEntryDistribution)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
 
 		$dbEntryDistribution->setStatus(EntryDistributionStatus::DELETED);
 		$dbEntryDistribution->save();
@@ -159,17 +159,17 @@ class EntryDistributionService extends KalturaBaseService
 	 * List all distribution providers
 	 * 
 	 * @action list
-	 * @param KalturaEntryDistributionFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaEntryDistributionListResponse
+	 * @param VidiunEntryDistributionFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunEntryDistributionListResponse
 	 */
-	function listAction(KalturaEntryDistributionFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunEntryDistributionFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaEntryDistributionFilter();
+			$filter = new VidiunEntryDistributionFilter();
 			
 		if (! $pager)
-			$pager = new KalturaFilterPager ();
+			$pager = new VidiunFilterPager ();
 			
 		return $filter->getListResponse($pager, $this->getResponseProfile());
 	}
@@ -180,7 +180,7 @@ class EntryDistributionService extends KalturaBaseService
 	 * @action submitAdd
 	 * @param int $id
 	 * @param bool $submitWhenReady
-	 * @return KalturaEntryDistribution
+	 * @return VidiunEntryDistribution
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED
@@ -190,7 +190,7 @@ class EntryDistributionService extends KalturaBaseService
 	{
 		$dbEntryDistribution = EntryDistributionPeer::retrieveByPK($id);
 		if (!$dbEntryDistribution)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
 		
 		$validStatus = array(
 			EntryDistributionStatus::ERROR_DELETING,
@@ -203,19 +203,19 @@ class EntryDistributionService extends KalturaBaseService
 		);
 		
 		if(!in_array($dbEntryDistribution->getStatus(), $validStatus))
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_STATUS, $id, $dbEntryDistribution->getStatus());
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_STATUS, $id, $dbEntryDistribution->getStatus());
 		
 		$distributionProfileId = $dbEntryDistribution->getDistributionProfileId();
 		$dbDistributionProfile = DistributionProfilePeer::retrieveByPK($distributionProfileId);
 		if(!$dbDistributionProfile)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
 		if ($dbDistributionProfile->getStatus() == DistributionProfileStatus::DISABLED || $dbDistributionProfile->getSubmitEnabled() == DistributionProfileActionStatus::DISABLED)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
 		
-		kContentDistributionManager::submitAddEntryDistribution($dbEntryDistribution, $dbDistributionProfile, $submitWhenReady);
+		vContentDistributionManager::submitAddEntryDistribution($dbEntryDistribution, $dbDistributionProfile, $submitWhenReady);
 
 		$dbEntryDistribution->reload();
-		$entryDistribution = new KalturaEntryDistribution();
+		$entryDistribution = new VidiunEntryDistribution();
 		$entryDistribution->fromObject($dbEntryDistribution, $this->getResponseProfile());
 		return $entryDistribution;
 	}
@@ -226,7 +226,7 @@ class EntryDistributionService extends KalturaBaseService
 	 * 
 	 * @action submitUpdate
 	 * @param int $id
-	 * @return KalturaEntryDistribution
+	 * @return VidiunEntryDistribution
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED
@@ -236,7 +236,7 @@ class EntryDistributionService extends KalturaBaseService
 	{
 		$dbEntryDistribution = EntryDistributionPeer::retrieveByPK($id);
 		if (!$dbEntryDistribution)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
 		
 		$validStatus = array(
 			EntryDistributionStatus::ERROR_DELETING,
@@ -245,19 +245,19 @@ class EntryDistributionService extends KalturaBaseService
 		);
 		
 		if(!in_array($dbEntryDistribution->getStatus(), $validStatus))
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_STATUS, $id, $dbEntryDistribution->getStatus());
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_STATUS, $id, $dbEntryDistribution->getStatus());
 		
 		$distributionProfileId = $dbEntryDistribution->getDistributionProfileId();
 		$dbDistributionProfile = DistributionProfilePeer::retrieveByPK($distributionProfileId);
 		if(!$dbDistributionProfile)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
 		if ($dbDistributionProfile->getStatus() == DistributionProfileStatus::DISABLED || $dbDistributionProfile->getUpdateEnabled() == DistributionProfileActionStatus::DISABLED)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
 		
-		kContentDistributionManager::submitUpdateEntryDistribution($dbEntryDistribution, $dbDistributionProfile);
+		vContentDistributionManager::submitUpdateEntryDistribution($dbEntryDistribution, $dbDistributionProfile);
 
 		$dbEntryDistribution->reload();
-		$entryDistribution = new KalturaEntryDistribution();
+		$entryDistribution = new VidiunEntryDistribution();
 		$entryDistribution->fromObject($dbEntryDistribution, $this->getResponseProfile());
 		return $entryDistribution;
 	}
@@ -268,7 +268,7 @@ class EntryDistributionService extends KalturaBaseService
 	 * 
 	 * @action submitFetchReport
 	 * @param int $id
-	 * @return KalturaEntryDistribution
+	 * @return VidiunEntryDistribution
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED
@@ -278,26 +278,26 @@ class EntryDistributionService extends KalturaBaseService
 	{
 		$dbEntryDistribution = EntryDistributionPeer::retrieveByPK($id);
 		if (!$dbEntryDistribution)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
 		
 		$validStatus = array(
 			EntryDistributionStatus::READY,
 		);
 		
 		if(!in_array($dbEntryDistribution->getStatus(), $validStatus))
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_STATUS, $id, $dbEntryDistribution->getStatus());
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_STATUS, $id, $dbEntryDistribution->getStatus());
 		
 		$distributionProfileId = $dbEntryDistribution->getDistributionProfileId();
 		$dbDistributionProfile = DistributionProfilePeer::retrieveByPK($distributionProfileId);
 		if(!$dbDistributionProfile)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
 		if ($dbDistributionProfile->getStatus() == DistributionProfileStatus::DISABLED || $dbDistributionProfile->getReportEnabled() == DistributionProfileActionStatus::DISABLED)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
 		
-		kContentDistributionManager::submitFetchEntryDistributionReport($dbEntryDistribution, $dbDistributionProfile);
+		vContentDistributionManager::submitFetchEntryDistributionReport($dbEntryDistribution, $dbDistributionProfile);
 
 		$dbEntryDistribution->reload();
-		$entryDistribution = new KalturaEntryDistribution();
+		$entryDistribution = new VidiunEntryDistribution();
 		$entryDistribution->fromObject($dbEntryDistribution, $this->getResponseProfile());
 		return $entryDistribution;
 	}
@@ -308,7 +308,7 @@ class EntryDistributionService extends KalturaBaseService
 	 * 
 	 * @action submitDelete
 	 * @param int $id
-	 * @return KalturaEntryDistribution
+	 * @return VidiunEntryDistribution
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED
@@ -318,7 +318,7 @@ class EntryDistributionService extends KalturaBaseService
 	{
 		$dbEntryDistribution = EntryDistributionPeer::retrieveByPK($id);
 		if (!$dbEntryDistribution)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
 		
 		$validStatus = array(
 			EntryDistributionStatus::ERROR_DELETING,
@@ -327,19 +327,19 @@ class EntryDistributionService extends KalturaBaseService
 		);
 		
 		if(!in_array($dbEntryDistribution->getStatus(), $validStatus))
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_STATUS, $id, $dbEntryDistribution->getStatus());
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_STATUS, $id, $dbEntryDistribution->getStatus());
 		
 		$distributionProfileId = $dbEntryDistribution->getDistributionProfileId();
 		$dbDistributionProfile = DistributionProfilePeer::retrieveByPK($distributionProfileId);
 		if(!$dbDistributionProfile)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
 		if ($dbDistributionProfile->getStatus() == DistributionProfileStatus::DISABLED || $dbDistributionProfile->getDeleteEnabled() == DistributionProfileActionStatus::DISABLED)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
 		
-		kContentDistributionManager::submitDeleteEntryDistribution($dbEntryDistribution, $dbDistributionProfile);
+		vContentDistributionManager::submitDeleteEntryDistribution($dbEntryDistribution, $dbDistributionProfile);
 
 		$dbEntryDistribution->reload();
-		$entryDistribution = new KalturaEntryDistribution();
+		$entryDistribution = new VidiunEntryDistribution();
 		$entryDistribution->fromObject($dbEntryDistribution, $this->getResponseProfile());
 		return $entryDistribution;
 	}
@@ -350,7 +350,7 @@ class EntryDistributionService extends KalturaBaseService
 	 * 
 	 * @action retrySubmit
 	 * @param int $id
-	 * @return KalturaEntryDistribution
+	 * @return VidiunEntryDistribution
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED
@@ -359,33 +359,33 @@ class EntryDistributionService extends KalturaBaseService
 	{
 		$dbEntryDistribution = EntryDistributionPeer::retrieveByPK($id);
 		if (!$dbEntryDistribution)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
 		
 		$distributionProfileId = $dbEntryDistribution->getDistributionProfileId();
 		$dbDistributionProfile = DistributionProfilePeer::retrieveByPK($distributionProfileId);
 		if(!$dbDistributionProfile)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
 		if ($dbDistributionProfile->getStatus() == DistributionProfileStatus::DISABLED)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
 		
 		switch($dbEntryDistribution->getStatus())
 		{
 			case EntryDistributionStatus::QUEUED:
 			case EntryDistributionStatus::SUBMITTING: 
 			case EntryDistributionStatus::ERROR_SUBMITTING:
-				kContentDistributionManager::submitAddEntryDistribution($dbEntryDistribution, $dbDistributionProfile, false);
+				vContentDistributionManager::submitAddEntryDistribution($dbEntryDistribution, $dbDistributionProfile, false);
 				$dbEntryDistribution->reload();
 				break;
 				
 			case EntryDistributionStatus::UPDATING:
 			case EntryDistributionStatus::ERROR_UPDATING:
-				kContentDistributionManager::submitUpdateEntryDistribution($dbEntryDistribution, $dbDistributionProfile);
+				vContentDistributionManager::submitUpdateEntryDistribution($dbEntryDistribution, $dbDistributionProfile);
 				$dbEntryDistribution->reload();
 				break;
 				
 			case EntryDistributionStatus::DELETING:
 			case EntryDistributionStatus::ERROR_DELETING:
-				kContentDistributionManager::submitDeleteEntryDistribution($dbEntryDistribution, $dbDistributionProfile);
+				vContentDistributionManager::submitDeleteEntryDistribution($dbEntryDistribution, $dbDistributionProfile);
 				$dbEntryDistribution->reload();
 				break;
 				
@@ -395,7 +395,7 @@ class EntryDistributionService extends KalturaBaseService
 				break;
 		}
 
-		$entryDistribution = new KalturaEntryDistribution();
+		$entryDistribution = new VidiunEntryDistribution();
 		$entryDistribution->fromObject($dbEntryDistribution, $this->getResponseProfile());
 		return $entryDistribution;
 	}
@@ -405,35 +405,35 @@ class EntryDistributionService extends KalturaBaseService
 	 *  
 	 * @action serveSentData
 	 * @param int $id
-	 * @param KalturaDistributionAction $actionType
+	 * @param VidiunDistributionAction $actionType
 	 * @return file
 	 *  
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_MISSING_LOG
-	 * @throws KalturaErrors::FILE_DOESNT_EXIST
+	 * @throws VidiunErrors::FILE_DOESNT_EXIST
 	 */
 	public function serveSentDataAction($id, $actionType)
 	{
 		$dbEntryDistribution = EntryDistributionPeer::retrieveByPK($id);
 		if (!$dbEntryDistribution)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
 		
 		$fileName = "{$id}_{$actionType}_sent.xml";
 		$fileSubType = null;
 		switch($actionType)
 		{
-			case KalturaDistributionAction::SUBMIT:
+			case VidiunDistributionAction::SUBMIT:
 				$fileSubType = EntryDistribution::FILE_SYNC_ENTRY_DISTRIBUTION_SUBMIT_DATA;
 				break;
-			case KalturaDistributionAction::UPDATE:
+			case VidiunDistributionAction::UPDATE:
 				$fileSubType = EntryDistribution::FILE_SYNC_ENTRY_DISTRIBUTION_UPDATE_DATA;
 				break;
-			case KalturaDistributionAction::DELETE:
+			case VidiunDistributionAction::DELETE:
 				$fileSubType = EntryDistribution::FILE_SYNC_ENTRY_DISTRIBUTION_DELETE_DATA;
 				break;
 		}
 		if(!$fileSubType)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_MISSING_LOG, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_MISSING_LOG, $id);
 		
 		header("Content-Disposition: attachment; filename=\"$fileName\"");
 		return $this->serveFile($dbEntryDistribution, $fileSubType, $fileName, $dbEntryDistribution->getEntryId());
@@ -444,35 +444,35 @@ class EntryDistributionService extends KalturaBaseService
 	 *  
 	 * @action serveReturnedData
 	 * @param int $id
-	 * @param KalturaDistributionAction $actionType
+	 * @param VidiunDistributionAction $actionType
 	 * @return file
 	 *  
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND
 	 * @throws ContentDistributionErrors::ENTRY_DISTRIBUTION_MISSING_LOG
-	 * @throws KalturaErrors::FILE_DOESNT_EXIST
+	 * @throws VidiunErrors::FILE_DOESNT_EXIST
 	 */
 	public function serveReturnedDataAction($id, $actionType)
 	{
 		$dbEntryDistribution = EntryDistributionPeer::retrieveByPK($id);
 		if (!$dbEntryDistribution)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_NOT_FOUND, $id);
 		
 		$fileName = "{$id}_{$actionType}_return.xml";
 		$fileSubType = null;
 		switch($actionType)
 		{
-			case KalturaDistributionAction::SUBMIT:
+			case VidiunDistributionAction::SUBMIT:
 				$fileSubType = EntryDistribution::FILE_SYNC_ENTRY_DISTRIBUTION_SUBMIT_RESULTS;
 				break;
-			case KalturaDistributionAction::UPDATE:
+			case VidiunDistributionAction::UPDATE:
 				$fileSubType = EntryDistribution::FILE_SYNC_ENTRY_DISTRIBUTION_UPDATE_RESULTS;
 				break;
-			case KalturaDistributionAction::DELETE:
+			case VidiunDistributionAction::DELETE:
 				$fileSubType = EntryDistribution::FILE_SYNC_ENTRY_DISTRIBUTION_DELETE_RESULTS;
 				break;
 		}
 		if(!$fileSubType)
-			throw new KalturaAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_MISSING_LOG, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::ENTRY_DISTRIBUTION_MISSING_LOG, $id);
 		
 		header("Content-Disposition: attachment; filename=\"$fileName\"");
 		return $this->serveFile($dbEntryDistribution, $fileSubType, $fileName, $dbEntryDistribution->getEntryId());

@@ -39,9 +39,9 @@ class ValidateAccessResponseProfile
 			return $clazz;
 		/** if Class is not found then do not allow the response profile filter to get the response  */
 		if (!class_exists($clazz)) {
-			$e = new KalturaAPIException (APIErrors::SERVICE_FORBIDDEN, 'Service class:  ' . $clazz . ' Not Found');
-			header("X-Kaltura:error-" . $e->getCode());
-			header("X-Kaltura-App: exiting on error " . $e->getCode() . " - " . $e->getMessage());
+			$e = new VidiunAPIException (APIErrors::SERVICE_FORBIDDEN, 'Service class:  ' . $clazz . ' Not Found');
+			header("X-Vidiun:error-" . $e->getCode());
+			header("X-Vidiun-App: exiting on error " . $e->getCode() . " - " . $e->getMessage());
 			throw $e;
 		}
 		return $clazz;
@@ -53,7 +53,7 @@ class ValidateAccessResponseProfile
 	 */
 	private static function getServiceClazz($relatedFilter)
 	{
-		$r = KalturaTypeReflectorCacher::get(get_class($relatedFilter));
+		$r = VidiunTypeReflectorCacher::get(get_class($relatedFilter));
 		$comments = $r->getComments();
 		preg_match_all(self::COMMENTS, $comments, $annotationsArray);
 		$annotations = $annotationsArray[1];
@@ -79,12 +79,12 @@ class ValidateAccessResponseProfile
 		if ($clazz === self::IGNORE)
 			return true;
 		try {
-			/** @var KalturaBaseService $service */
+			/** @var VidiunBaseService $service */
 			$service = new $clazz();
-			list($serviceId, $serviceName) = KalturaServicesMap::getServiceIdAndServiceNameByClass($clazz);
+			list($serviceId, $serviceName) = VidiunServicesMap::getServiceIdAndServiceNameByClass($clazz);
 			$service->initService($serviceId, $serviceName, 'list');
 		} catch (Exception $e) {
-			KalturaLog::INFO('Response Profile Validation Access Failed For Class: ' . $clazz);
+			VidiunLog::INFO('Response Profile Validation Access Failed For Class: ' . $clazz);
 			throw  $e;
 		}
 		return true;
@@ -96,8 +96,8 @@ class ValidateAccessResponseProfile
 	 */
 	private static function PartnerExcludedFromResponseProfile()
 	{
-		$partnerId = kCurrentContext::getCurrentPartnerId();
-		$partnersToSkip = kConf::get('skip_response_profile_validation_partners','local', array());
+		$partnerId = vCurrentContext::getCurrentPartnerId();
+		$partnersToSkip = vConf::get('skip_response_profile_validation_partners','local', array());
 		return in_array($partnerId,$partnersToSkip);
 	}
 

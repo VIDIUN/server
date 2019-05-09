@@ -9,7 +9,7 @@ class myArchiveOrgServices extends myBaseMediaSource implements IMediaSource
 	protected $source_name = "Archive.org";
 	protected $auth_method = array ( self::AUTH_METHOD_PUBLIC );
 	protected $search_in_user = false; 
-	protected $logo = "http://www.kaltura.com/images/wizard/logo_archiveorg.png";
+	protected $logo = "http://www.vidiun.com/images/wizard/logo_archiveorg.png";
 	protected $id = entry::ENTRY_MEDIA_SOURCE_ARCHIVE_ORG;
 	
 	private static $domain = "http://www.archive.org";
@@ -47,7 +47,7 @@ class myArchiveOrgServices extends myBaseMediaSource implements IMediaSource
 		
 	}
 
-	public function getAuthData( $kuserId, $userName, $password, $token)
+	public function getAuthData( $vuserId, $userName, $password, $token)
 	{
 		return;
 	}
@@ -126,7 +126,7 @@ class myArchiveOrgServices extends myBaseMediaSource implements IMediaSource
 	{
 		$url = self::$domain . $objectId;
 		
-		$htmlPage = kFile::downloadUrlToString($url);
+		$htmlPage = vFile::downloadUrlToString($url);
 
 		$status = 'error';
 		$message = '';

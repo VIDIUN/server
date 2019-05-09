@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaUpdateMethodType extends KalturaEnum implements UpdateMethodType
+class VidiunUpdateMethodType extends VidiunEnum implements UpdateMethodType
 {
 
 }

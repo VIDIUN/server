@@ -3,7 +3,7 @@
  * @package plugins.drm
  * @subpackage model.enum
  */
-class DrmAccessControlActionType implements IKalturaPluginEnum, RuleActionType
+class DrmAccessControlActionType implements IVidiunPluginEnum, RuleActionType
 {
 	const DRM_POLICY = 'DRM_POLICY';
 	

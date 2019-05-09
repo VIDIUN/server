@@ -7,11 +7,11 @@
  * @package plugins.caption
  * @subpackage api.services
  */
-class CaptionAssetService extends KalturaAssetService
+class CaptionAssetService extends VidiunAssetService
 {
 	const MAX_SERVE_WEBVTT_FILE_SIZE = 1048576;
 
-	protected function kalturaNetworkAllowed($actionName)
+	protected function vidiunNetworkAllowed($actionName)
 	{
 		if (
 			$actionName == 'get' ||
@@ -23,11 +23,11 @@ class CaptionAssetService extends KalturaAssetService
 			return true;
 		}
 
-		return parent::kalturaNetworkAllowed($actionName);
+		return parent::vidiunNetworkAllowed($actionName);
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::partnerRequired()
+	 * @see VidiunBaseService::partnerRequired()
 	 */
 	protected function partnerRequired($actionName)
 	{
@@ -45,35 +45,35 @@ class CaptionAssetService extends KalturaAssetService
 	 *
 	 * @action add
 	 * @param string $entryId
-	 * @param KalturaCaptionAsset $captionAsset
-	 * @return KalturaCaptionAsset
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_ALREADY_EXISTS
-	 * @throws KalturaErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
-	 * @throws KalturaErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED
+	 * @param VidiunCaptionAsset $captionAsset
+	 * @return VidiunCaptionAsset
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_ALREADY_EXISTS
+	 * @throws VidiunErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED
 	 * @validateUser entry entryId edit
 	 */
-	function addAction($entryId, KalturaCaptionAsset $captionAsset)
+	function addAction($entryId, VidiunCaptionAsset $captionAsset)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
-		if (!$dbEntry || !in_array($dbEntry->getType(), $this->getEnabledMediaTypes()) || !in_array($dbEntry->getMediaType(), array(KalturaMediaType::VIDEO, KalturaMediaType::AUDIO)))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+		if (!$dbEntry || !in_array($dbEntry->getType(), $this->getEnabledMediaTypes()) || !in_array($dbEntry->getMediaType(), array(VidiunMediaType::VIDEO, VidiunMediaType::AUDIO)))
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		if ($captionAsset->captionParamsId)
 		{
 			$dbCaptionAsset = assetPeer::retrieveByEntryIdAndParams($entryId, $captionAsset->captionParamsId);
 			if ($dbCaptionAsset)
-				throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_ALREADY_EXISTS, $dbCaptionAsset->getId(), $captionAsset->captionParamsId);
+				throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ALREADY_EXISTS, $dbCaptionAsset->getId(), $captionAsset->captionParamsId);
 		}
 
 		$dbCaptionAsset = new CaptionAsset();
 		$dbCaptionAsset = $captionAsset->toInsertableObject($dbCaptionAsset);
 		
-		if($this->getKs() && $this->getKs()->getPrivilegeByName(KSessionBase::PRIVILEGE_ENABLE_CAPTION_MODERATION))
+		if($this->getVs() && $this->getVs()->getPrivilegeByName(VSessionBase::PRIVILEGE_ENABLE_CAPTION_MODERATION))
 			$dbCaptionAsset->setDisplayOnPlayer(false);
 				
 		$dbCaptionAsset->setEntryId($entryId);
@@ -81,7 +81,7 @@ class CaptionAssetService extends KalturaAssetService
 		$dbCaptionAsset->setStatus(CaptionAsset::ASSET_STATUS_QUEUED);
 		$dbCaptionAsset->save();
 
-		$captionAsset = new KalturaCaptionAsset();
+		$captionAsset = new VidiunCaptionAsset();
 		$captionAsset->fromObject($dbCaptionAsset, $this->getResponseProfile());
 		return $captionAsset;
 	}
@@ -91,33 +91,33 @@ class CaptionAssetService extends KalturaAssetService
 	 *
 	 * @action setContent
 	 * @param string $id
-	 * @param KalturaContentResource $contentResource
-	 * @return KalturaCaptionAsset
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
-	 * @throws KalturaErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED
+	 * @param VidiunContentResource $contentResource
+	 * @return VidiunCaptionAsset
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED
 	 * @validateUser asset::entry id edit
 	 */
-	function setContentAction($id, KalturaContentResource $contentResource)
+	function setContentAction($id, VidiunContentResource $contentResource)
 	{
 		$dbCaptionAsset = assetPeer::retrieveById($id);
 		if (!$dbCaptionAsset || !($dbCaptionAsset instanceof CaptionAsset))
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $id);
 
 		$dbEntry = $dbCaptionAsset->getentry();
-		if (!$dbEntry || !in_array($dbEntry->getType(), $this->getEnabledMediaTypes()) || !in_array($dbEntry->getMediaType(), array(KalturaMediaType::VIDEO, KalturaMediaType::AUDIO)))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $dbCaptionAsset->getEntryId());
+		if (!$dbEntry || !in_array($dbEntry->getType(), $this->getEnabledMediaTypes()) || !in_array($dbEntry->getMediaType(), array(VidiunMediaType::VIDEO, VidiunMediaType::AUDIO)))
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $dbCaptionAsset->getEntryId());
 
 
 		$previousStatus = $dbCaptionAsset->getStatus();
 		$contentResource->validateEntry($dbCaptionAsset->getentry());
 		$contentResource->validateAsset($dbCaptionAsset);
-		$kContentResource = $contentResource->toObject();
-		$this->attachContentResource($dbCaptionAsset, $kContentResource);
+		$vContentResource = $contentResource->toObject();
+		$this->attachContentResource($dbCaptionAsset, $vContentResource);
 		$contentResource->entryHandled($dbCaptionAsset->getentry());
 		
     	$newStatuses = array(
@@ -127,15 +127,15 @@ class CaptionAssetService extends KalturaAssetService
     	);
     	
     	if($previousStatus == CaptionAsset::ASSET_STATUS_QUEUED && in_array($dbCaptionAsset->getStatus(), $newStatuses))
-   			kEventsManager::raiseEvent(new kObjectAddedEvent($dbCaptionAsset));
+   			vEventsManager::raiseEvent(new vObjectAddedEvent($dbCaptionAsset));
    		else
 	    {
-		    kEventsManager::raiseEvent(new kObjectDataChangedEvent($dbCaptionAsset));
+		    vEventsManager::raiseEvent(new vObjectDataChangedEvent($dbCaptionAsset));
 		    $dbEntry->setCacheFlavorVersion($dbEntry->getCacheFlavorVersion() + 1);
 		    $dbEntry->save();
 	    }
 
-		$captionAsset = new KalturaCaptionAsset();
+		$captionAsset = new VidiunCaptionAsset();
 		$captionAsset->fromObject($dbCaptionAsset, $this->getResponseProfile());
 		return $captionAsset;
 	}
@@ -145,20 +145,20 @@ class CaptionAssetService extends KalturaAssetService
 	 *
 	 * @action update
 	 * @param string $id
-	 * @param KalturaCaptionAsset $captionAsset
-	 * @return KalturaCaptionAsset
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @param VidiunCaptionAsset $captionAsset
+	 * @return VidiunCaptionAsset
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 * @validateUser asset::entry id edit
 	 */
-	function updateAction($id, KalturaCaptionAsset $captionAsset)
+	function updateAction($id, VidiunCaptionAsset $captionAsset)
 	{
 		$dbCaptionAsset = assetPeer::retrieveById($id);
 		if (!$dbCaptionAsset || !($dbCaptionAsset instanceof CaptionAsset))
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $id);
 
 		$dbEntry = $dbCaptionAsset->getentry();
-		if (!$dbEntry || !in_array($dbEntry->getType(), $this->getEnabledMediaTypes()) || !in_array($dbEntry->getMediaType(), array(KalturaMediaType::VIDEO, KalturaMediaType::AUDIO)))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $dbCaptionAsset->getEntryId());
+		if (!$dbEntry || !in_array($dbEntry->getType(), $this->getEnabledMediaTypes()) || !in_array($dbEntry->getMediaType(), array(VidiunMediaType::VIDEO, VidiunMediaType::AUDIO)))
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $dbCaptionAsset->getEntryId());
 
 
 		$dbCaptionAsset = $captionAsset->toUpdatableObject($dbCaptionAsset);
@@ -167,7 +167,7 @@ class CaptionAssetService extends KalturaAssetService
 		if ($dbCaptionAsset->getDefault())
 			$this->setAsDefaultAction($dbCaptionAsset->getId());
 
-		$captionAsset = new KalturaCaptionAsset();
+		$captionAsset = new VidiunCaptionAsset();
 		$captionAsset->fromObject($dbCaptionAsset, $this->getResponseProfile());
 		return $captionAsset;
 	}
@@ -183,7 +183,7 @@ class CaptionAssetService extends KalturaAssetService
 		list($width, $height, $type, $attr) = getimagesize($fullPath);
 
 		$captionAsset->incrementVersion();
-		if ($ext && $ext != kUploadTokenMgr::NO_EXTENSION_IDENTIFIER)
+		if ($ext && $ext != vUploadTokenMgr::NO_EXTENSION_IDENTIFIER)
 			$captionAsset->setFileExt($ext);
 
 		$captionAsset->setSize(filesize($fullPath));
@@ -193,7 +193,7 @@ class CaptionAssetService extends KalturaAssetService
 
 		try
 		{
-			kFileSyncUtils::moveFromFile($fullPath, $syncKey, true, $copyOnly);
+			vFileSyncUtils::moveFromFile($fullPath, $syncKey, true, $copyOnly);
 		} catch (Exception $e)
 		{
 
@@ -207,12 +207,12 @@ class CaptionAssetService extends KalturaAssetService
 		}
 
 
-		$fileSync = kFileSyncUtils::getLocalFileSyncForKey($syncKey);
+		$fileSync = vFileSyncUtils::getLocalFileSyncForKey($syncKey);
 		$finalPath = $fileSync->getFullPath();
 
-		if ($captionAsset->getLanguage() == KalturaLanguage::MU)
+		if ($captionAsset->getLanguage() == VidiunLanguage::MU)
 		{
-			kCaptionsContentManager::addParseMultiLanguageCaptionAssetJob($captionAsset, $finalPath, $fileSync->getEncryptionKey());
+			vCaptionsContentManager::addParseMultiLanguageCaptionAssetJob($captionAsset, $finalPath, $fileSync->getEncryptionKey());
 		}
 
 		$captionAsset->setWidth($width);
@@ -230,7 +230,7 @@ class CaptionAssetService extends KalturaAssetService
 	{
 		$destPath = md5($url);
 		$fullPath = myContentStorage::getFSUploadsPath() . '/' . $destPath;
-		if (KCurlWrapper::getDataFromFile($url, $fullPath))
+		if (VCurlWrapper::getDataFromFile($url, $fullPath))
 			return $this->attachFile($captionAsset, $fullPath);
 
 		if ($captionAsset->getStatus() == CaptionAsset::ASSET_STATUS_QUEUED || $captionAsset->getStatus() == CaptionAsset::ASSET_STATUS_NOT_APPLICABLE)
@@ -240,23 +240,23 @@ class CaptionAssetService extends KalturaAssetService
 			$captionAsset->save();
 		}
 
-		throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_DOWNLOAD_FAILED, $url);
+		throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_DOWNLOAD_FAILED, $url);
 	}
 
 	/**
 	 * @param CaptionAsset $captionAsset
-	 * @param kUrlResource $contentResource
+	 * @param vUrlResource $contentResource
 	 */
-	protected function attachUrlResource(CaptionAsset $captionAsset, kUrlResource $contentResource)
+	protected function attachUrlResource(CaptionAsset $captionAsset, vUrlResource $contentResource)
 	{
 		$this->attachUrl($captionAsset, $contentResource->getUrl());
 	}
 
 	/**
 	 * @param CaptionAsset $captionAsset
-	 * @param kLocalFileResource $contentResource
+	 * @param vLocalFileResource $contentResource
 	 */
-	protected function attachLocalFileResource(CaptionAsset $captionAsset, kLocalFileResource $contentResource)
+	protected function attachLocalFileResource(CaptionAsset $captionAsset, vLocalFileResource $contentResource)
 	{
 		if ($contentResource->getIsReady())
 			return $this->attachFile($captionAsset, $contentResource->getLocalFilePath(), $contentResource->getKeepOriginalFile());
@@ -277,10 +277,10 @@ class CaptionAssetService extends KalturaAssetService
 		$captionAsset->save();
 
 		$newSyncKey = $captionAsset->getSyncKey(CaptionAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-		kFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $srcSyncKey);
+		vFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $srcSyncKey);
 		
-		$fileSync = kFileSyncUtils::getLocalFileSyncForKey($newSyncKey, false);
-		list($width, $height, $type, $attr) = kImageUtils::getImageSize($fileSync);
+		$fileSync = vFileSyncUtils::getLocalFileSyncForKey($newSyncKey, false);
+		list($width, $height, $type, $attr) = vImageUtils::getImageSize($fileSync);
 
 		$captionAsset->setWidth($width);
 		$captionAsset->setHeight($height);
@@ -292,11 +292,11 @@ class CaptionAssetService extends KalturaAssetService
 
 	/**
 	 * @param CaptionAsset $captionAsset
-	 * @param kFileSyncResource $contentResource
+	 * @param vFileSyncResource $contentResource
 	 */
-	protected function attachFileSyncResource(CaptionAsset $captionAsset, kFileSyncResource $contentResource)
+	protected function attachFileSyncResource(CaptionAsset $captionAsset, vFileSyncResource $contentResource)
 	{
-		$syncable = kFileSyncObjectManager::retrieveObject($contentResource->getFileSyncObjectType(), $contentResource->getObjectId());
+		$syncable = vFileSyncObjectManager::retrieveObject($contentResource->getFileSyncObjectType(), $contentResource->getObjectId());
 		$srcSyncKey = $syncable->getSyncKey($contentResource->getObjectSubType(), $contentResource->getVersion());
 
 		return $this->attachFileSync($captionAsset, $srcSyncKey);
@@ -305,7 +305,7 @@ class CaptionAssetService extends KalturaAssetService
 	/**
 	 * @param CaptionAsset $captionAsset
 	 * @param IRemoteStorageResource $contentResource
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
 	 */
 	protected function attachRemoteStorageResource(CaptionAsset $captionAsset, IRemoteStorageResource $contentResource)
 	{
@@ -320,40 +320,40 @@ class CaptionAssetService extends KalturaAssetService
 		foreach ($resources as $currentResource)
 		{
 			$storageProfile = StorageProfilePeer::retrieveByPK($currentResource->getStorageProfileId());
-			$fileSync = kFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $currentResource->getUrl(), $storageProfile);
+			$fileSync = vFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $currentResource->getUrl(), $storageProfile);
 		}
 	}
 
 	/**
 	 * @param CaptionAsset $captionAsset
-	 * @param kContentResource $contentResource
-	 * @throws KalturaErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
-	 * @throws KalturaErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED
+	 * @param vContentResource $contentResource
+	 * @throws VidiunErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED
 	 */
-	protected function attachContentResource(CaptionAsset $captionAsset, kContentResource $contentResource)
+	protected function attachContentResource(CaptionAsset $captionAsset, vContentResource $contentResource)
 	{
     	switch($contentResource->getType())
     	{
-			case 'kUrlResource':
+			case 'vUrlResource':
 				return $this->attachUrlResource($captionAsset, $contentResource);
 				
-			case 'kLocalFileResource':
+			case 'vLocalFileResource':
 				return $this->attachLocalFileResource($captionAsset, $contentResource);
 				
-			case 'kFileSyncResource':
+			case 'vFileSyncResource':
 				return $this->attachFileSyncResource($captionAsset, $contentResource);
 				
-			case 'kRemoteStorageResource':
-			case 'kRemoteStorageResources':
+			case 'vRemoteStorageResource':
+			case 'vRemoteStorageResources':
 				return $this->attachRemoteStorageResource($captionAsset, $contentResource);
 				
 			default:
 				$msg = "Resource of type [" . get_class($contentResource) . "] is not supported";
-				KalturaLog::err($msg);
+				VidiunLog::err($msg);
 				
 				if($captionAsset->getStatus() == CaptionAsset::ASSET_STATUS_QUEUED || $captionAsset->getStatus() == CaptionAsset::ASSET_STATUS_NOT_APPLICABLE)
 				{
@@ -362,7 +362,7 @@ class CaptionAssetService extends KalturaAssetService
 					$captionAsset->save();
 				}
 				
-				throw new KalturaAPIException(KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($contentResource));
+				throw new VidiunAPIException(VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($contentResource));
     	}
     }
     
@@ -375,25 +375,25 @@ class CaptionAssetService extends KalturaAssetService
 	 * @param int $captionParamId if not set, default caption will be used.
 	 * @return file
 	 * 
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_PARAMS_ID_NOT_FOUND
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_PARAMS_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	public function serveByEntryIdAction($entryId, $captionParamId = null)
 	{
 		$entry = null;
-		if (!kCurrentContext::$ks)
+		if (!vCurrentContext::$vs)
 		{
-			$entry = kCurrentContext::initPartnerByEntryId($entryId);
+			$entry = vCurrentContext::initPartnerByEntryId($entryId);
 			
 			if (!$entry || $entry->getStatus() == entryStatus::DELETED)
-				throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+				throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 				
 			// enforce entitlement
-			$this->setPartnerFilters(kCurrentContext::getCurrentPartnerId());
-			kEntitlementUtils::initEntitlementEnforcement();
+			$this->setPartnerFilters(vCurrentContext::getCurrentPartnerId());
+			vEntitlementUtils::initEntitlementEnforcement();
 			
-			if(!kEntitlementUtils::isEntryEntitled($entry))
-				throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);				
+			if(!vEntitlementUtils::isEntryEntitled($entry))
+				throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);				
 		}
 		else 
 		{	
@@ -401,9 +401,9 @@ class CaptionAssetService extends KalturaAssetService
 		}
 		
 		if (!$entry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
-		$securyEntryHelper = new KSecureEntryHelper($entry, kCurrentContext::$ks, null, ContextType::DOWNLOAD);
+		$securyEntryHelper = new VSecureEntryHelper($entry, vCurrentContext::$vs, null, ContextType::DOWNLOAD);
 		$securyEntryHelper->validateForDownload();
 		
 		$captionAsset = null;
@@ -425,7 +425,7 @@ class CaptionAssetService extends KalturaAssetService
 		}
 		
 		if(!$captionAsset || !($captionAsset instanceof CaptionAsset))
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_PARAMS_ID_NOT_FOUND, $captionParamId);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_PARAMS_ID_NOT_FOUND, $captionParamId);
 		
 		$fileName = $captionAsset->getId() . '.' . $captionAsset->getFileExt();
 		
@@ -439,23 +439,23 @@ class CaptionAssetService extends KalturaAssetService
 	 * @param string $id
 	 * @param int $storageId
 	 * @return string
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_IS_NOT_READY
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_IS_NOT_READY
 	 */
 	public function getUrlAction($id, $storageId = null)
 	{
 		$assetDb = assetPeer::retrieveById($id);
 		if (!$assetDb || !($assetDb instanceof CaptionAsset))
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $id);
 
 		$this->validateEntryEntitlement($assetDb->getEntryId(), $id);
 		
 		if ($assetDb->getStatus() != asset::ASSET_STATUS_READY)
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_IS_NOT_READY);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_IS_NOT_READY);
 
 		$entryDb = $assetDb->getentry();
 		if(is_null($entryDb))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $assetDb->getEntryId());
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $assetDb->getEntryId());
 		
 		if($storageId)
 			return $assetDb->getExternalUrl($storageId);
@@ -468,18 +468,18 @@ class CaptionAssetService extends KalturaAssetService
 	 * 
 	 * @action getRemotePaths
 	 * @param string $id
-	 * @return KalturaRemotePathListResponse
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_IS_NOT_READY
+	 * @return VidiunRemotePathListResponse
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_IS_NOT_READY
 	 */
 	public function getRemotePathsAction($id)
 	{
 		$assetDb = assetPeer::retrieveById($id);
 		if (!$assetDb || !($assetDb instanceof CaptionAsset))
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $id);
 
 		if ($assetDb->getStatus() != asset::ASSET_STATUS_READY)
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_IS_NOT_READY);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_IS_NOT_READY);
 
 		$c = new Criteria();
 		$c->add(FileSyncPeer::OBJECT_TYPE, FileSyncObjectType::ASSET);
@@ -491,30 +491,30 @@ class CaptionAssetService extends KalturaAssetService
 		$c->add(FileSyncPeer::FILE_TYPE, FileSync::FILE_SYNC_FILE_TYPE_URL);
 		$fileSyncs = FileSyncPeer::doSelect($c);
 			
-		$listResponse = new KalturaRemotePathListResponse();
-		$listResponse->objects = KalturaRemotePathArray::fromDbArray($fileSyncs, $this->getResponseProfile());
+		$listResponse = new VidiunRemotePathListResponse();
+		$listResponse->objects = VidiunRemotePathArray::fromDbArray($fileSyncs, $this->getResponseProfile());
 		$listResponse->totalCount = count($listResponse->objects);
 		return $listResponse;
 	}
 	
 	/**
 	 * @param string $captionAssetId
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 * @return CaptionAsset
 	 */
 	protected function validateForDownload($captionAssetId)
 	{
 		$captionAsset = null;
-		if (!kCurrentContext::$ks)
+		if (!vCurrentContext::$vs)
 		{
-			$captionAsset = kCurrentContext::initPartnerByAssetId($captionAssetId);
+			$captionAsset = vCurrentContext::initPartnerByAssetId($captionAssetId);
 				
 			if (!$captionAsset || $captionAsset->getStatus() == asset::ASSET_STATUS_DELETED)
-				throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
+				throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
 		
 			// enforce entitlement
-			$this->setPartnerFilters(kCurrentContext::getCurrentPartnerId());
-			kEntitlementUtils::initEntitlementEnforcement();
+			$this->setPartnerFilters(vCurrentContext::getCurrentPartnerId());
+			vEntitlementUtils::initEntitlementEnforcement();
 		}
 		else
 		{
@@ -522,17 +522,17 @@ class CaptionAssetService extends KalturaAssetService
 		}
 		
 		if (!$captionAsset || !($captionAsset instanceof CaptionAsset))
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
 
-		if (kCurrentContext::$ks_object && 
-			kCurrentContext::$ks_object->verifyPrivileges(CaptionPlugin::KS_PRIVILEGE_CAPTION, $captionAsset->getEntryId()))
+		if (vCurrentContext::$vs_object && 
+			vCurrentContext::$vs_object->verifyPrivileges(CaptionPlugin::VS_PRIVILEGE_CAPTION, $captionAsset->getEntryId()))
 			return $captionAsset;
 		
 		$entry = entryPeer::retrieveByPK($captionAsset->getEntryId());
 		if(!$entry)
 		{
 			//we will throw caption asset not found, as the user is not entitled, and should not know that the entry exists.
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
 		}
 		
 		$securyEntryHelper = new KSecureEntryHelper($entry, kCurrentContext::$ks, null, ContextType::DOWNLOAD, array(), $captionAsset);
@@ -547,9 +547,9 @@ class CaptionAssetService extends KalturaAssetService
 	 * @action serve
 	 * @param string $captionAssetId
 	 * @return file
-	 * @ksOptional
+	 * @vsOptional
 	 *  
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
 	 */
 	public function serveAction($captionAssetId)
 	{
@@ -573,9 +573,9 @@ class CaptionAssetService extends KalturaAssetService
 	 * @param int $segmentIndex
 	 * @param int $localTimestamp
 	 * @return file
-	 * @ksOptional
+	 * @vsOptional
 	 *
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
 	 */
 	public function serveWebVTTAction($captionAssetId, $segmentDuration = 30, $segmentIndex = null, $localTimestamp = 10000)
 	{
@@ -586,37 +586,37 @@ class CaptionAssetService extends KalturaAssetService
 			entryPeer::setUseCriteriaFilter(false);
 			$entry = entryPeer::retrieveByPK($captionAsset->getEntryId());
 			if (!$entry)
-				throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_ENTRY_ID_NOT_FOUND, $captionAsset->getEntryId());
+				throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ENTRY_ID_NOT_FOUND, $captionAsset->getEntryId());
 			entryPeer::setUseCriteriaFilter(true);
 
-			return new kRendererString(kWebVTTGenerator::buildWebVTTM3U8File($segmentDuration, (int)$entry->getDuration()), 'application/x-mpegurl');
+			return new vRendererString(vWebVTTGenerator::buildWebVTTM3U8File($segmentDuration, (int)$entry->getDuration()), 'application/x-mpegurl');
 		}
 		$syncKey = $captionAsset->getSyncKey(asset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		$content = kFileSyncUtils::file_get_contents($syncKey, true, false, self::MAX_SERVE_WEBVTT_FILE_SIZE);
+		$content = vFileSyncUtils::file_get_contents($syncKey, true, false, self::MAX_SERVE_WEBVTT_FILE_SIZE);
 		if (!$content)
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_FILE_NOT_FOUND, $captionAssetId);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_FILE_NOT_FOUND, $captionAssetId);
 
 		$content = str_replace(
 			array(
-				kCaptionsContentManager::WINDOWS_LINE_ENDING,
-				kCaptionsContentManager::MAC_LINE_ENDING,
+				vCaptionsContentManager::WINDOWS_LINE_ENDING,
+				vCaptionsContentManager::MAC_LINE_ENDING,
 			),
-			kCaptionsContentManager::UNIX_LINE_ENDING,
+			vCaptionsContentManager::UNIX_LINE_ENDING,
 			$content
 		);
 
-		$captionsContentManager = kCaptionsContentManager::getCoreContentManager($captionAsset->getContainerFormat());
+		$captionsContentManager = vCaptionsContentManager::getCoreContentManager($captionAsset->getContainerFormat());
 		if (!$captionsContentManager)
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_INVALID_FORMAT, $captionAssetId);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_INVALID_FORMAT, $captionAssetId);
 
 		if ($captionAsset->getContainerFormat() == CaptionType::WEBVTT)
-			return new kRendererString(kWebVTTGenerator::getSegmentFromWebVTT($captionsContentManager, $content, $segmentIndex, $segmentDuration, $localTimestamp), 'text/vtt');
+			return new vRendererString(vWebVTTGenerator::getSegmentFromWebVTT($captionsContentManager, $content, $segmentIndex, $segmentDuration, $localTimestamp), 'text/vtt');
 		else
 		{
 			$parsedCaption = $captionsContentManager->parse($content);
 			if (!$parsedCaption)
-				throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_PARSING_FAILED, $captionAssetId);
-			return new kRendererString(kWebVTTGenerator::buildWebVTTSegment($parsedCaption, $segmentIndex, $segmentDuration, $localTimestamp), 'text/vtt');
+				throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_PARSING_FAILED, $captionAssetId);
+			return new vRendererString(vWebVTTGenerator::buildWebVTTSegment($parsedCaption, $segmentIndex, $segmentDuration, $localTimestamp), 'text/vtt');
 		}
 	}
 	
@@ -625,26 +625,26 @@ class CaptionAssetService extends KalturaAssetService
 	 *  
 	 * @action setAsDefault
 	 * @param string $captionAssetId
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
 	 * @validateUser asset::entry captionAssetId edit
 	 */
 	public function setAsDefaultAction($captionAssetId)
 	{
 		$captionAsset = assetPeer::retrieveById($captionAssetId);
 		if (!$captionAsset || !($captionAsset instanceof CaptionAsset))
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
 		
 		$entry = $captionAsset->getentry();
-    	if(!$entry || !in_array($entry->getType(), $this->getEnabledMediaTypes()) || !in_array($entry->getMediaType(), array(KalturaMediaType::VIDEO, KalturaMediaType::AUDIO)))
-    		throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $captionAsset->getEntryId());
+    	if(!$entry || !in_array($entry->getType(), $this->getEnabledMediaTypes()) || !in_array($entry->getMediaType(), array(VidiunMediaType::VIDEO, VidiunMediaType::AUDIO)))
+    		throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $captionAsset->getEntryId());
 		
 		
-		$entryKuserId = $entry->getKuserId();
-		$thisKuserId = $this->getKuser()->getId();
-		$isNotAdmin = !kCurrentContext::$ks_object->isAdmin();
+		$entryVuserId = $entry->getVuserId();
+		$thisVuserId = $this->getVuser()->getId();
+		$isNotAdmin = !vCurrentContext::$vs_object->isAdmin();
 		
-		if(!$entry || ($isNotAdmin && !is_null($entryKuserId) && $entryKuserId != $thisKuserId))  
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $captionAsset->getEntryId());
+		if(!$entry || ($isNotAdmin && !is_null($entryVuserId) && $entryVuserId != $thisVuserId))  
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $captionAsset->getEntryId());
 			
 		$entryCaptionAssets = assetPeer::retrieveByEntryId($captionAsset->getEntryId(), array(CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION)));
 		foreach($entryCaptionAssets as $entryCaptionAsset)
@@ -661,17 +661,17 @@ class CaptionAssetService extends KalturaAssetService
 	/**
 	 * @action get
 	 * @param string $captionAssetId
-	 * @return KalturaCaptionAsset
+	 * @return VidiunCaptionAsset
 	 * 
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
 	 */
 	public function getAction($captionAssetId)
 	{
 		$captionAssetsDb = assetPeer::retrieveById($captionAssetId);
 		if (!$captionAssetsDb || !($captionAssetsDb instanceof CaptionAsset))
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
 		
-		$captionAssets = new KalturaCaptionAsset();
+		$captionAssets = new VidiunCaptionAsset();
 		$captionAssets->fromObject($captionAssetsDb, $this->getResponseProfile());
 		return $captionAssets;
 	}
@@ -680,27 +680,27 @@ class CaptionAssetService extends KalturaAssetService
 	 * List caption Assets by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaAssetFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaCaptionAssetListResponse
+	 * @param VidiunAssetFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunCaptionAssetListResponse
 	 */
-	function listAction(KalturaAssetFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunAssetFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if(!$filter)
 		{
-			$filter = new KalturaCaptionAssetFilter();
+			$filter = new VidiunCaptionAssetFilter();
 		}
-		elseif(! $filter instanceof KalturaCaptionAssetFilter)
+		elseif(! $filter instanceof VidiunCaptionAssetFilter)
 		{
-			$filter = $filter->cast('KalturaCaptionAssetFilter');
+			$filter = $filter->cast('VidiunCaptionAssetFilter');
 		}
 			
 		if(!$pager)
 		{
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		}
 
-		$types = KalturaPluginManager::getExtendedTypes(assetPeer::OM_CLASS, CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION));
+		$types = VidiunPluginManager::getExtendedTypes(assetPeer::OM_CLASS, CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION));
 		return $filter->getTypeListResponse($pager, $this->getResponseProfile(), $types);
 	}
 	
@@ -708,21 +708,21 @@ class CaptionAssetService extends KalturaAssetService
 	 * @action delete
 	 * @param string $captionAssetId
 	 * 
-	 * @throws KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
+	 * @throws VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND
 	 * @validateUser asset::entry captionAssetId edit
 	 */
 	public function deleteAction($captionAssetId)
 	{
 		$captionAssetDb = assetPeer::retrieveById($captionAssetId);
 		if (!$captionAssetDb || !($captionAssetDb instanceof CaptionAsset))
-			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
+			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_ID_NOT_FOUND, $captionAssetId);
 	
 // 		if($captionAssetDb->getDefault())
-// 			throw new KalturaAPIException(KalturaCaptionErrors::CAPTION_ASSET_IS_DEFAULT, $captionAssetId);
+// 			throw new VidiunAPIException(VidiunCaptionErrors::CAPTION_ASSET_IS_DEFAULT, $captionAssetId);
 		
 		$dbEntry = $captionAssetDb->getentry();
-    	if(!$dbEntry || !in_array($dbEntry->getType(), $this->getEnabledMediaTypes()) || !in_array($dbEntry->getMediaType(), array(KalturaMediaType::VIDEO, KalturaMediaType::AUDIO)))
-    		throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $captionAssetDb->getEntryId());
+    	if(!$dbEntry || !in_array($dbEntry->getType(), $this->getEnabledMediaTypes()) || !in_array($dbEntry->getMediaType(), array(VidiunMediaType::VIDEO, VidiunMediaType::AUDIO)))
+    		throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $captionAssetDb->getEntryId());
 		
 		
 		$captionAssetDb->setStatus(CaptionAsset::ASSET_STATUS_DELETED);

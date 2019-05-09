@@ -6,6 +6,6 @@
 interface MetadataProfileCreateMode extends BaseEnum
 {
 	const API = 1;
-	const KMC = 2;
+	const VMC = 2;
 	const APP = 3;
 }

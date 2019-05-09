@@ -2,10 +2,10 @@
 /**
  * @package plugins.doubleClickDistribution
  */
-class DoubleClickDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider, IKalturaEventConsumers, IKalturaServices
+class DoubleClickDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider, IVidiunEventConsumers, IVidiunServices
 {
 	const PLUGIN_NAME = 'doubleClickDistribution';
-	const COMCAST_MRSS_EVENT_CONSUMER = "kDoubleClickFlowManager";
+	const COMCAST_MRSS_EVENT_CONSUMER = "vDoubleClickFlowManager";
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
 	const CONTENT_DSTRIBUTION_VERSION_MINOR = 0;
 	const CONTENT_DSTRIBUTION_VERSION_BUILD = 0;
@@ -19,13 +19,13 @@ class DoubleClickDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency1 = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
-		$dependency2 = new KalturaDependency(DoubleClickDistributionPlugin::DEPENDENTS_ON_PLUGIN_NAME_CUE_POINT);
+		$dependency1 = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency2 = new VidiunDependency(DoubleClickDistributionPlugin::DEPENDENTS_ON_PLUGIN_NAME_CUE_POINT);
 		return array($dependency1, $dependency2);
 	}
 	
@@ -61,13 +61,13 @@ class DoubleClickDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::DOUBLECLICK)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::DOUBLECLICK)
 		{
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaDoubleClickDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunDoubleClickDistributionProfile();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::DOUBLECLICK)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::DOUBLECLICK)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -76,20 +76,20 @@ class DoubleClickDistributionPlugin extends KalturaPlugin implements IKalturaPer
 			}
 		}
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(DoubleClickDistributionProviderType::DOUBLECLICK))
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(DoubleClickDistributionProviderType::DOUBLECLICK))
 		{
-			$reflect = new ReflectionClass('KalturaDoubleClickDistributionJobProviderData');
+			$reflect = new ReflectionClass('VidiunDoubleClickDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(DoubleClickDistributionProviderType::DOUBLECLICK))
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(DoubleClickDistributionProviderType::DOUBLECLICK))
 		{
-			$reflect = new ReflectionClass('kDoubleClickDistributionJobProviderData');
+			$reflect = new ReflectionClass('vDoubleClickDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(DoubleClickDistributionProviderType::DOUBLECLICK))
-			return new KalturaDoubleClickDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(DoubleClickDistributionProviderType::DOUBLECLICK))
+			return new VidiunDoubleClickDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(DoubleClickDistributionProviderType::DOUBLECLICK))
 			return new DoubleClickDistributionProfile();
@@ -105,7 +105,7 @@ class DoubleClickDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::DOUBLECLICK)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::DOUBLECLICK)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return 'DoubleClickDistributionEngine';
@@ -134,30 +134,30 @@ class DoubleClickDistributionPlugin extends KalturaPlugin implements IKalturaPer
 			if($baseClass == 'IDistributionEngineDisable')
 				return 'DoubleClickDistributionEngine';
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaDoubleClickDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunDoubleClickDistributionProfile';
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaDoubleClickDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunDoubleClickDistributionJobProviderData';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::DOUBLECLICK)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::DOUBLECLICK)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_DoubleClickProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_DoubleClickDistribution_Type_DoubleClickDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_DoubleClickDistribution_Type_DoubleClickDistributionProfile';
 		}
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(DoubleClickDistributionProviderType::DOUBLECLICK))
-			return 'KalturaDoubleClickDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(DoubleClickDistributionProviderType::DOUBLECLICK))
+			return 'VidiunDoubleClickDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(DoubleClickDistributionProviderType::DOUBLECLICK))
-			return 'kDoubleClickDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(DoubleClickDistributionProviderType::DOUBLECLICK))
+			return 'vDoubleClickDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(DoubleClickDistributionProviderType::DOUBLECLICK))
-			return 'KalturaDoubleClickDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(DoubleClickDistributionProviderType::DOUBLECLICK))
+			return 'VidiunDoubleClickDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(DoubleClickDistributionProviderType::DOUBLECLICK))
 			return 'DoubleClickDistributionProfile';
@@ -178,11 +178,11 @@ class DoubleClickDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaDoubleClickDistributionProvider();
+		$distributionProvider = new VidiunDoubleClickDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -207,8 +207,8 @@ class DoubleClickDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -216,11 +216,11 @@ class DoubleClickDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -230,7 +230,7 @@ class DoubleClickDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{

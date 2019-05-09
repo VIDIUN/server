@@ -118,7 +118,7 @@ if ($argc < 2)
 $stateFile = $argv[1];
 if ($argc < 3 || $argv[2] != 'real-run')
 {
-	KalturaStatement::setDryRun(true);
+	VidiunStatement::setDryRun(true);
 }
 
 // get last updated at
@@ -206,7 +206,7 @@ for (;;)
 			$fileSyncKey->version = $fileSync->getVersion();
 			$fileSyncKey->object_sub_type = $fileSync->getObjectSubType();
 			$fileSyncKey->partner_id = $fileSync->getPartnerId();					
-			kFileSyncUtils::deleteSyncFileForKey($fileSyncKey);
+			vFileSyncUtils::deleteSyncFileForKey($fileSyncKey);
 		}
 	}
 

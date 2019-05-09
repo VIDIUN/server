@@ -1,29 +1,29 @@
 <?php
 
 /**
- * Base static class for performing query and update operations on the 'category_kuser' table.
+ * Base static class for performing query and update operations on the 'category_vuser' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class BasecategoryKuserPeer {
+abstract class BasecategoryVuserPeer {
 
 	/** the default database name for this class */
 	const DATABASE_NAME = 'propel';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'category_kuser';
+	const TABLE_NAME = 'category_vuser';
 
 	/** the related Propel class for this table */
-	const OM_CLASS = 'categoryKuser';
+	const OM_CLASS = 'categoryVuser';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'Core.categoryKuser';
+	const CLASS_DEFAULT = 'Core.categoryVuser';
 
 	/** the related TableMap class for this table */
-	const TM_CLASS = 'categoryKuserTableMap';
+	const TM_CLASS = 'categoryVuserTableMap';
 	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 15;
@@ -32,55 +32,55 @@ abstract class BasecategoryKuserPeer {
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** the column name for the ID field */
-	const ID = 'category_kuser.ID';
+	const ID = 'category_vuser.ID';
 
 	/** the column name for the CATEGORY_ID field */
-	const CATEGORY_ID = 'category_kuser.CATEGORY_ID';
+	const CATEGORY_ID = 'category_vuser.CATEGORY_ID';
 
-	/** the column name for the KUSER_ID field */
-	const KUSER_ID = 'category_kuser.KUSER_ID';
+	/** the column name for the VUSER_ID field */
+	const VUSER_ID = 'category_vuser.VUSER_ID';
 
 	/** the column name for the PUSER_ID field */
-	const PUSER_ID = 'category_kuser.PUSER_ID';
+	const PUSER_ID = 'category_vuser.PUSER_ID';
 
 	/** the column name for the SCREEN_NAME field */
-	const SCREEN_NAME = 'category_kuser.SCREEN_NAME';
+	const SCREEN_NAME = 'category_vuser.SCREEN_NAME';
 
 	/** the column name for the PARTNER_ID field */
-	const PARTNER_ID = 'category_kuser.PARTNER_ID';
+	const PARTNER_ID = 'category_vuser.PARTNER_ID';
 
 	/** the column name for the PERMISSION_LEVEL field */
-	const PERMISSION_LEVEL = 'category_kuser.PERMISSION_LEVEL';
+	const PERMISSION_LEVEL = 'category_vuser.PERMISSION_LEVEL';
 
 	/** the column name for the STATUS field */
-	const STATUS = 'category_kuser.STATUS';
+	const STATUS = 'category_vuser.STATUS';
 
 	/** the column name for the INHERIT_FROM_CATEGORY field */
-	const INHERIT_FROM_CATEGORY = 'category_kuser.INHERIT_FROM_CATEGORY';
+	const INHERIT_FROM_CATEGORY = 'category_vuser.INHERIT_FROM_CATEGORY';
 
 	/** the column name for the UPDATE_METHOD field */
-	const UPDATE_METHOD = 'category_kuser.UPDATE_METHOD';
+	const UPDATE_METHOD = 'category_vuser.UPDATE_METHOD';
 
 	/** the column name for the CREATED_AT field */
-	const CREATED_AT = 'category_kuser.CREATED_AT';
+	const CREATED_AT = 'category_vuser.CREATED_AT';
 
 	/** the column name for the UPDATED_AT field */
-	const UPDATED_AT = 'category_kuser.UPDATED_AT';
+	const UPDATED_AT = 'category_vuser.UPDATED_AT';
 
 	/** the column name for the CUSTOM_DATA field */
-	const CUSTOM_DATA = 'category_kuser.CUSTOM_DATA';
+	const CUSTOM_DATA = 'category_vuser.CUSTOM_DATA';
 
 	/** the column name for the CATEGORY_FULL_IDS field */
-	const CATEGORY_FULL_IDS = 'category_kuser.CATEGORY_FULL_IDS';
+	const CATEGORY_FULL_IDS = 'category_vuser.CATEGORY_FULL_IDS';
 
 	/** the column name for the PERMISSION_NAMES field */
-	const PERMISSION_NAMES = 'category_kuser.PERMISSION_NAMES';
+	const PERMISSION_NAMES = 'category_vuser.PERMISSION_NAMES';
 
 	/**
-	 * An identiy map to hold any loaded instances of categoryKuser objects.
+	 * An identiy map to hold any loaded instances of categoryVuser objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
 	 * queries.
-	 * @var        array categoryKuser[]
+	 * @var        array categoryVuser[]
 	 */
 	public static $instances = array();
 
@@ -92,10 +92,10 @@ abstract class BasecategoryKuserPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'CategoryId', 'KuserId', 'PuserId', 'ScreenName', 'PartnerId', 'PermissionLevel', 'Status', 'InheritFromCategory', 'UpdateMethod', 'CreatedAt', 'UpdatedAt', 'CustomData', 'CategoryFullIds', 'PermissionNames', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'categoryId', 'kuserId', 'puserId', 'screenName', 'partnerId', 'permissionLevel', 'status', 'inheritFromCategory', 'updateMethod', 'createdAt', 'updatedAt', 'customData', 'categoryFullIds', 'permissionNames', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::CATEGORY_ID, self::KUSER_ID, self::PUSER_ID, self::SCREEN_NAME, self::PARTNER_ID, self::PERMISSION_LEVEL, self::STATUS, self::INHERIT_FROM_CATEGORY, self::UPDATE_METHOD, self::CREATED_AT, self::UPDATED_AT, self::CUSTOM_DATA, self::CATEGORY_FULL_IDS, self::PERMISSION_NAMES, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'category_id', 'kuser_id', 'puser_id', 'screen_name', 'partner_id', 'permission_level', 'status', 'inherit_from_category', 'update_method', 'created_at', 'updated_at', 'custom_data', 'category_full_ids', 'permission_names', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'CategoryId', 'VuserId', 'PuserId', 'ScreenName', 'PartnerId', 'PermissionLevel', 'Status', 'InheritFromCategory', 'UpdateMethod', 'CreatedAt', 'UpdatedAt', 'CustomData', 'CategoryFullIds', 'PermissionNames', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'categoryId', 'vuserId', 'puserId', 'screenName', 'partnerId', 'permissionLevel', 'status', 'inheritFromCategory', 'updateMethod', 'createdAt', 'updatedAt', 'customData', 'categoryFullIds', 'permissionNames', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::CATEGORY_ID, self::VUSER_ID, self::PUSER_ID, self::SCREEN_NAME, self::PARTNER_ID, self::PERMISSION_LEVEL, self::STATUS, self::INHERIT_FROM_CATEGORY, self::UPDATE_METHOD, self::CREATED_AT, self::UPDATED_AT, self::CUSTOM_DATA, self::CATEGORY_FULL_IDS, self::PERMISSION_NAMES, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'category_id', 'vuser_id', 'puser_id', 'screen_name', 'partner_id', 'permission_level', 'status', 'inherit_from_category', 'update_method', 'created_at', 'updated_at', 'custom_data', 'category_full_ids', 'permission_names', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
 	);
 
@@ -106,10 +106,10 @@ abstract class BasecategoryKuserPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'CategoryId' => 1, 'KuserId' => 2, 'PuserId' => 3, 'ScreenName' => 4, 'PartnerId' => 5, 'PermissionLevel' => 6, 'Status' => 7, 'InheritFromCategory' => 8, 'UpdateMethod' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, 'CustomData' => 12, 'CategoryFullIds' => 13, 'PermissionNames' => 14, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'categoryId' => 1, 'kuserId' => 2, 'puserId' => 3, 'screenName' => 4, 'partnerId' => 5, 'permissionLevel' => 6, 'status' => 7, 'inheritFromCategory' => 8, 'updateMethod' => 9, 'createdAt' => 10, 'updatedAt' => 11, 'customData' => 12, 'categoryFullIds' => 13, 'permissionNames' => 14, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::CATEGORY_ID => 1, self::KUSER_ID => 2, self::PUSER_ID => 3, self::SCREEN_NAME => 4, self::PARTNER_ID => 5, self::PERMISSION_LEVEL => 6, self::STATUS => 7, self::INHERIT_FROM_CATEGORY => 8, self::UPDATE_METHOD => 9, self::CREATED_AT => 10, self::UPDATED_AT => 11, self::CUSTOM_DATA => 12, self::CATEGORY_FULL_IDS => 13, self::PERMISSION_NAMES => 14, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'category_id' => 1, 'kuser_id' => 2, 'puser_id' => 3, 'screen_name' => 4, 'partner_id' => 5, 'permission_level' => 6, 'status' => 7, 'inherit_from_category' => 8, 'update_method' => 9, 'created_at' => 10, 'updated_at' => 11, 'custom_data' => 12, 'category_full_ids' => 13, 'permission_names' => 14, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'CategoryId' => 1, 'VuserId' => 2, 'PuserId' => 3, 'ScreenName' => 4, 'PartnerId' => 5, 'PermissionLevel' => 6, 'Status' => 7, 'InheritFromCategory' => 8, 'UpdateMethod' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, 'CustomData' => 12, 'CategoryFullIds' => 13, 'PermissionNames' => 14, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'categoryId' => 1, 'vuserId' => 2, 'puserId' => 3, 'screenName' => 4, 'partnerId' => 5, 'permissionLevel' => 6, 'status' => 7, 'inheritFromCategory' => 8, 'updateMethod' => 9, 'createdAt' => 10, 'updatedAt' => 11, 'customData' => 12, 'categoryFullIds' => 13, 'permissionNames' => 14, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::CATEGORY_ID => 1, self::VUSER_ID => 2, self::PUSER_ID => 3, self::SCREEN_NAME => 4, self::PARTNER_ID => 5, self::PERMISSION_LEVEL => 6, self::STATUS => 7, self::INHERIT_FROM_CATEGORY => 8, self::UPDATE_METHOD => 9, self::CREATED_AT => 10, self::UPDATED_AT => 11, self::CUSTOM_DATA => 12, self::CATEGORY_FULL_IDS => 13, self::PERMISSION_NAMES => 14, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'category_id' => 1, 'vuser_id' => 2, 'puser_id' => 3, 'screen_name' => 4, 'partner_id' => 5, 'permission_level' => 6, 'status' => 7, 'inherit_from_category' => 8, 'update_method' => 9, 'created_at' => 10, 'updated_at' => 11, 'custom_data' => 12, 'category_full_ids' => 13, 'permission_names' => 14, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
 	);
 
@@ -159,12 +159,12 @@ abstract class BasecategoryKuserPeer {
 	 *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
 	 * </code>
 	 * @param      string $alias The alias for the current table.
-	 * @param      string $column The column name for current table. (i.e. categoryKuserPeer::COLUMN_NAME).
+	 * @param      string $column The column name for current table. (i.e. categoryVuserPeer::COLUMN_NAME).
 	 * @return     string
 	 */
 	public static function alias($alias, $column)
 	{
-		return str_replace(categoryKuserPeer::TABLE_NAME.'.', $alias.'.', $column);
+		return str_replace(categoryVuserPeer::TABLE_NAME.'.', $alias.'.', $column);
 	}
 
 	/**
@@ -180,21 +180,21 @@ abstract class BasecategoryKuserPeer {
 	 */
 	public static function addSelectColumns(Criteria $criteria)
 	{
-		$criteria->addSelectColumn(categoryKuserPeer::ID);
-		$criteria->addSelectColumn(categoryKuserPeer::CATEGORY_ID);
-		$criteria->addSelectColumn(categoryKuserPeer::KUSER_ID);
-		$criteria->addSelectColumn(categoryKuserPeer::PUSER_ID);
-		$criteria->addSelectColumn(categoryKuserPeer::SCREEN_NAME);
-		$criteria->addSelectColumn(categoryKuserPeer::PARTNER_ID);
-		$criteria->addSelectColumn(categoryKuserPeer::PERMISSION_LEVEL);
-		$criteria->addSelectColumn(categoryKuserPeer::STATUS);
-		$criteria->addSelectColumn(categoryKuserPeer::INHERIT_FROM_CATEGORY);
-		$criteria->addSelectColumn(categoryKuserPeer::UPDATE_METHOD);
-		$criteria->addSelectColumn(categoryKuserPeer::CREATED_AT);
-		$criteria->addSelectColumn(categoryKuserPeer::UPDATED_AT);
-		$criteria->addSelectColumn(categoryKuserPeer::CUSTOM_DATA);
-		$criteria->addSelectColumn(categoryKuserPeer::CATEGORY_FULL_IDS);
-		$criteria->addSelectColumn(categoryKuserPeer::PERMISSION_NAMES);
+		$criteria->addSelectColumn(categoryVuserPeer::ID);
+		$criteria->addSelectColumn(categoryVuserPeer::CATEGORY_ID);
+		$criteria->addSelectColumn(categoryVuserPeer::VUSER_ID);
+		$criteria->addSelectColumn(categoryVuserPeer::PUSER_ID);
+		$criteria->addSelectColumn(categoryVuserPeer::SCREEN_NAME);
+		$criteria->addSelectColumn(categoryVuserPeer::PARTNER_ID);
+		$criteria->addSelectColumn(categoryVuserPeer::PERMISSION_LEVEL);
+		$criteria->addSelectColumn(categoryVuserPeer::STATUS);
+		$criteria->addSelectColumn(categoryVuserPeer::INHERIT_FROM_CATEGORY);
+		$criteria->addSelectColumn(categoryVuserPeer::UPDATE_METHOD);
+		$criteria->addSelectColumn(categoryVuserPeer::CREATED_AT);
+		$criteria->addSelectColumn(categoryVuserPeer::UPDATED_AT);
+		$criteria->addSelectColumn(categoryVuserPeer::CUSTOM_DATA);
+		$criteria->addSelectColumn(categoryVuserPeer::CATEGORY_FULL_IDS);
+		$criteria->addSelectColumn(categoryVuserPeer::PERMISSION_NAMES);
 	}
 
 	/**
@@ -213,27 +213,27 @@ abstract class BasecategoryKuserPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(categoryKuserPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(categoryVuserPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			categoryKuserPeer::addSelectColumns($criteria);
+			categoryVuserPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 		$criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
 		
-		categoryKuserPeer::attachCriteriaFilter($criteria);
+		categoryVuserPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
-			'categoryKuserPeer', 
+			vQueryCache::QUERY_TYPE_COUNT,
+			'categoryVuserPeer', 
 			$cacheKey, 
 			$queryDB);
 		if ($cachedResult !== null)
@@ -242,7 +242,7 @@ abstract class BasecategoryKuserPeer {
 		}
 		
 		// select the connection for the query
-		$con = categoryKuserPeer::alternativeCon ($con, $queryDB);
+		$con = categoryVuserPeer::alternativeCon ($con, $queryDB);
 		
 		// BasePeer returns a PDOStatement
 		$stmt = BasePeer::doCount($criteria, $con);
@@ -256,7 +256,7 @@ abstract class BasecategoryKuserPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -266,7 +266,7 @@ abstract class BasecategoryKuserPeer {
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
-	 * @return     categoryKuser
+	 * @return     categoryVuser
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -274,7 +274,7 @@ abstract class BasecategoryKuserPeer {
 	{
 		$critcopy = clone $criteria;
 		$critcopy->setLimit(1);
-		$objects = categoryKuserPeer::doSelect($critcopy, $con);
+		$objects = categoryVuserPeer::doSelect($critcopy, $con);
 		if ($objects) {
 			return $objects[0];
 		}
@@ -316,10 +316,10 @@ abstract class BasecategoryKuserPeer {
 	{
 		foreach ($queryResult as $curIndex => $curObject)
 		{
-			$objFromPool = categoryKuserPeer::getInstanceFromPool($curObject->getPrimaryKey());
+			$objFromPool = categoryVuserPeer::getInstanceFromPool($curObject->getPrimaryKey());
 			if ($objFromPool === null)
 			{
-				categoryKuserPeer::addInstanceToPool($curObject);
+				categoryVuserPeer::addInstanceToPool($curObject);
 			}
 			else
 			{
@@ -337,11 +337,11 @@ abstract class BasecategoryKuserPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
-					categoryKuserPeer::addInstanceToPool($curResult);
+					categoryVuserPeer::addInstanceToPool($curResult);
 				}
 			}
 		}
@@ -358,54 +358,54 @@ abstract class BasecategoryKuserPeer {
 	 */
 	public static function doSelect(Criteria $criteria, PropelPDO $con = null)
 	{		
-		$criteriaForSelect = categoryKuserPeer::prepareCriteriaForSelect($criteria);
+		$criteriaForSelect = categoryVuserPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
-			'categoryKuserPeer', 
+			vQueryCache::QUERY_TYPE_SELECT,
+			'categoryVuserPeer', 
 			$cacheKey, 
 			$queryDB);
 		if ($cachedResult !== null)
 		{
 			$cacheKey = null;
-			categoryKuserPeer::filterSelectResults($cachedResult, $criteriaForSelect);
-			categoryKuserPeer::updateInstancePool($cachedResult);
+			categoryVuserPeer::filterSelectResults($cachedResult, $criteriaForSelect);
+			categoryVuserPeer::updateInstancePool($cachedResult);
 			return $cachedResult;
 		}
 		
-		$con = categoryKuserPeer::alternativeCon($con, $queryDB);
+		$con = categoryVuserPeer::alternativeCon($con, $queryDB);
 		
-		$queryResult = categoryKuserPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
+		$queryResult = categoryVuserPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
-		categoryKuserPeer::filterSelectResults($queryResult, $criteria);
+		categoryVuserPeer::filterSelectResults($queryResult, $criteria);
 		
-		categoryKuserPeer::addInstancesToPool($queryResult);
+		categoryVuserPeer::addInstancesToPool($queryResult);
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -415,7 +415,7 @@ abstract class BasecategoryKuserPeer {
 			$con = myDbHelper::alternativeCon($con);
 			
 		if($con === null)
-			$con = Propel::getConnection(categoryKuserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(categoryVuserPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		
 		return $con;
 	}
@@ -427,7 +427,7 @@ abstract class BasecategoryKuserPeer {
 	
 	public static function  setUseCriteriaFilter ( $use )
 	{
-		$criteria_filter = categoryKuserPeer::getCriteriaFilter();
+		$criteria_filter = categoryVuserPeer::getCriteriaFilter();
 		
 		if ( $use )  $criteria_filter->enable(); 
 		else $criteria_filter->disable();
@@ -441,12 +441,12 @@ abstract class BasecategoryKuserPeer {
 	public static function &getCriteriaFilter()
 	{
 		if(self::$s_criteria_filter == null)
-			categoryKuserPeer::setDefaultCriteriaFilter();
+			categoryVuserPeer::setDefaultCriteriaFilter();
 		
-		$partnerCriteria = myPartnerUtils::getPartnerCriteriaParams('categoryKuser');
+		$partnerCriteria = myPartnerUtils::getPartnerCriteriaParams('categoryVuser');
 		if ($partnerCriteria)
 		{
-			call_user_func_array(array('categoryKuserPeer','addPartnerToCriteria'), $partnerCriteria);
+			call_user_func_array(array('categoryVuserPeer','addPartnerToCriteria'), $partnerCriteria);
 		}
 		
 		return self::$s_criteria_filter;
@@ -473,10 +473,10 @@ abstract class BasecategoryKuserPeer {
 	 */
 	protected static function attachCriteriaFilter(Criteria $criteria)
 	{
-		categoryKuserPeer::getCriteriaFilter()->applyFilter($criteria);
+		categoryVuserPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -484,19 +484,19 @@ abstract class BasecategoryKuserPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -515,7 +515,7 @@ abstract class BasecategoryKuserPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -555,10 +555,10 @@ abstract class BasecategoryKuserPeer {
 	public static function doCountStmt(Criteria $criteria, PropelPDO $con = null)
 	{
 		// attach default criteria
-		categoryKuserPeer::attachCriteriaFilter($criteria);
+		categoryVuserPeer::attachCriteriaFilter($criteria);
 		
 		// select the connection for the query
-		$con = categoryKuserPeer::alternativeCon ( $con );
+		$con = categoryVuserPeer::alternativeCon ( $con );
 		
 		// BasePeer returns a PDOStatement
 		return BasePeer::doCount($criteria, $con);
@@ -572,20 +572,20 @@ abstract class BasecategoryKuserPeer {
 			if(count($asColumns) == 1 && isset($asColumns['_score']))
 			{
 				$criteria = clone $criteria;
-				categoryKuserPeer::addSelectColumns($criteria);
+				categoryVuserPeer::addSelectColumns($criteria);
 			}
 		}
 		else
 		{
 			$criteria = clone $criteria;
-			categoryKuserPeer::addSelectColumns($criteria);
+			categoryVuserPeer::addSelectColumns($criteria);
 		}
 		
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		// attach default criteria
-		categoryKuserPeer::attachCriteriaFilter($criteria);
+		categoryVuserPeer::attachCriteriaFilter($criteria);
 
 		return $criteria;
 	}
@@ -605,9 +605,9 @@ abstract class BasecategoryKuserPeer {
 	 */
 	public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
 	{
-		$con = categoryKuserPeer::alternativeCon($con);
+		$con = categoryVuserPeer::alternativeCon($con);
 		
-		$criteria = categoryKuserPeer::prepareCriteriaForSelect($criteria);
+		$criteria = categoryVuserPeer::prepareCriteriaForSelect($criteria);
 		
 		// BasePeer returns a PDOStatement
 		return BasePeer::doSelect($criteria, $con);
@@ -621,10 +621,10 @@ abstract class BasecategoryKuserPeer {
 	 * to the cache in order to ensure that the same objects are always returned by doSelect*()
 	 * and retrieveByPK*() calls.
 	 *
-	 * @param      categoryKuser $value A categoryKuser object.
+	 * @param      categoryVuser $value A categoryVuser object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(categoryKuser $obj, $key = null)
+	public static function addInstanceToPool(categoryVuser $obj, $key = null)
 	{
 		if ( Propel::isInstancePoolingEnabled() )
 		{
@@ -634,11 +634,11 @@ abstract class BasecategoryKuserPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('categoryKuserPeer');
+				vMemoryManager::registerPeer('categoryVuserPeer');
 			}
 		}
 	}
@@ -651,18 +651,18 @@ abstract class BasecategoryKuserPeer {
 	 * methods in your stub classes -- you may need to explicitly remove objects
 	 * from the cache in order to prevent returning objects that no longer exist.
 	 *
-	 * @param      mixed $value A categoryKuser object or a primary key value.
+	 * @param      mixed $value A categoryVuser object or a primary key value.
 	 */
 	public static function removeInstanceFromPool($value)
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
-			if (is_object($value) && $value instanceof categoryKuser) {
+			if (is_object($value) && $value instanceof categoryVuser) {
 				$key = (string) $value->getId();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
 			} else {
-				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or categoryKuser object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or categoryVuser object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
 			}
 
@@ -677,7 +677,7 @@ abstract class BasecategoryKuserPeer {
 	 * a multi-column primary key, a serialize()d version of the primary key will be returned.
 	 *
 	 * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-	 * @return     categoryKuser Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+	 * @return     categoryVuser Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
 	 * @see        getPrimaryKeyHash()
 	 */
 	public static function getInstanceFromPool($key)
@@ -705,7 +705,7 @@ abstract class BasecategoryKuserPeer {
 	}
 	
 	/**
-	 * Method to invalidate the instance pool of all tables related to category_kuser
+	 * Method to invalidate the instance pool of all tables related to category_vuser
 	 * by a foreign key with ON DELETE CASCADE
 	 */
 	public static function clearRelatedInstancePool()
@@ -743,11 +743,11 @@ abstract class BasecategoryKuserPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = categoryKuserPeer::getOMClass(false);
+		$cls = categoryVuserPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key = categoryKuserPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj = categoryKuserPeer::getInstanceFromPool($key))) {
+			$key = categoryVuserPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj = categoryVuserPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
@@ -779,14 +779,14 @@ abstract class BasecategoryKuserPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(categoryKuserPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(categoryVuserPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			categoryKuserPeer::addSelectColumns($criteria);
+			categoryVuserPeer::addSelectColumns($criteria);
 		}
 		
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -795,9 +795,9 @@ abstract class BasecategoryKuserPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(categoryKuserPeer::CATEGORY_ID, categoryPeer::ID, $join_behavior);
+		$criteria->addJoin(categoryVuserPeer::CATEGORY_ID, categoryPeer::ID, $join_behavior);
 
-		$stmt = categoryKuserPeer::doCountStmt($criteria, $con);
+		$stmt = categoryVuserPeer::doCountStmt($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$count = (int) $row[0];
@@ -810,7 +810,7 @@ abstract class BasecategoryKuserPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuser table
+	 * Returns the number of rows matching criteria, joining the related vuser table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -818,7 +818,7 @@ abstract class BasecategoryKuserPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinkuser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinvuser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -826,14 +826,14 @@ abstract class BasecategoryKuserPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(categoryKuserPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(categoryVuserPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			categoryKuserPeer::addSelectColumns($criteria);
+			categoryVuserPeer::addSelectColumns($criteria);
 		}
 		
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -842,9 +842,9 @@ abstract class BasecategoryKuserPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(categoryKuserPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(categoryVuserPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = categoryKuserPeer::doCountStmt($criteria, $con);
+		$stmt = categoryVuserPeer::doCountStmt($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$count = (int) $row[0];
@@ -857,11 +857,11 @@ abstract class BasecategoryKuserPeer {
 
 
 	/**
-	 * Selects a collection of categoryKuser objects pre-filled with their category objects.
+	 * Selects a collection of categoryVuser objects pre-filled with their category objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of categoryKuser objects.
+	 * @return     array Array of categoryVuser objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -874,28 +874,28 @@ abstract class BasecategoryKuserPeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		categoryKuserPeer::addSelectColumns($criteria);
-		$startcol = (categoryKuserPeer::NUM_COLUMNS - categoryKuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		categoryVuserPeer::addSelectColumns($criteria);
+		$startcol = (categoryVuserPeer::NUM_COLUMNS - categoryVuserPeer::NUM_LAZY_LOAD_COLUMNS);
 		categoryPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(categoryKuserPeer::CATEGORY_ID, categoryPeer::ID, $join_behavior);
+		$criteria->addJoin(categoryVuserPeer::CATEGORY_ID, categoryPeer::ID, $join_behavior);
 
-		$stmt = categoryKuserPeer::doSelectStmt($criteria, $con);
+		$stmt = categoryVuserPeer::doSelectStmt($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = categoryKuserPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = categoryKuserPeer::getInstanceFromPool($key1))) {
+			$key1 = categoryVuserPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = categoryVuserPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$cls = categoryKuserPeer::getOMClass(false);
+				$cls = categoryVuserPeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				categoryKuserPeer::addInstanceToPool($obj1, $key1);
+				categoryVuserPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
 			$key2 = categoryPeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -910,8 +910,8 @@ abstract class BasecategoryKuserPeer {
 					categoryPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (categoryKuser) to $obj2 (category)
-				$obj2->addcategoryKuser($obj1);
+				// Add the $obj1 (categoryVuser) to $obj2 (category)
+				$obj2->addcategoryVuser($obj1);
 
 			} // if joined row was not null
 
@@ -919,7 +919,7 @@ abstract class BasecategoryKuserPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -927,15 +927,15 @@ abstract class BasecategoryKuserPeer {
 
 
 	/**
-	 * Selects a collection of categoryKuser objects pre-filled with their kuser objects.
+	 * Selects a collection of categoryVuser objects pre-filled with their vuser objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of categoryKuser objects.
+	 * @return     array Array of categoryVuser objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinkuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -944,44 +944,44 @@ abstract class BasecategoryKuserPeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		categoryKuserPeer::addSelectColumns($criteria);
-		$startcol = (categoryKuserPeer::NUM_COLUMNS - categoryKuserPeer::NUM_LAZY_LOAD_COLUMNS);
-		kuserPeer::addSelectColumns($criteria);
+		categoryVuserPeer::addSelectColumns($criteria);
+		$startcol = (categoryVuserPeer::NUM_COLUMNS - categoryVuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(categoryKuserPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(categoryVuserPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = categoryKuserPeer::doSelectStmt($criteria, $con);
+		$stmt = categoryVuserPeer::doSelectStmt($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = categoryKuserPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = categoryKuserPeer::getInstanceFromPool($key1))) {
+			$key1 = categoryVuserPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = categoryVuserPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$cls = categoryKuserPeer::getOMClass(false);
+				$cls = categoryVuserPeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				categoryKuserPeer::addInstanceToPool($obj1, $key1);
+				categoryVuserPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (categoryKuser) to $obj2 (kuser)
-				$obj2->addcategoryKuser($obj1);
+				// Add the $obj1 (categoryVuser) to $obj2 (vuser)
+				$obj2->addcategoryVuser($obj1);
 
 			} // if joined row was not null
 
@@ -989,7 +989,7 @@ abstract class BasecategoryKuserPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1013,14 +1013,14 @@ abstract class BasecategoryKuserPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(categoryKuserPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(categoryVuserPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			categoryKuserPeer::addSelectColumns($criteria);
+			categoryVuserPeer::addSelectColumns($criteria);
 		}
 		
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -1029,11 +1029,11 @@ abstract class BasecategoryKuserPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(categoryKuserPeer::CATEGORY_ID, categoryPeer::ID, $join_behavior);
+		$criteria->addJoin(categoryVuserPeer::CATEGORY_ID, categoryPeer::ID, $join_behavior);
 
-		$criteria->addJoin(categoryKuserPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(categoryVuserPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = categoryKuserPeer::doCountStmt($criteria, $con);
+		$stmt = categoryVuserPeer::doCountStmt($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$count = (int) $row[0];
@@ -1045,12 +1045,12 @@ abstract class BasecategoryKuserPeer {
 	}
 
 	/**
-	 * Selects a collection of categoryKuser objects pre-filled with all related objects.
+	 * Selects a collection of categoryVuser objects pre-filled with all related objects.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of categoryKuser objects.
+	 * @return     array Array of categoryVuser objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -1063,34 +1063,34 @@ abstract class BasecategoryKuserPeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		categoryKuserPeer::addSelectColumns($criteria);
-		$startcol2 = (categoryKuserPeer::NUM_COLUMNS - categoryKuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		categoryVuserPeer::addSelectColumns($criteria);
+		$startcol2 = (categoryVuserPeer::NUM_COLUMNS - categoryVuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		categoryPeer::addSelectColumns($criteria);
 		$startcol3 = $startcol2 + (categoryPeer::NUM_COLUMNS - categoryPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kuserPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (kuserPeer::NUM_COLUMNS - kuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (vuserPeer::NUM_COLUMNS - vuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(categoryKuserPeer::CATEGORY_ID, categoryPeer::ID, $join_behavior);
+		$criteria->addJoin(categoryVuserPeer::CATEGORY_ID, categoryPeer::ID, $join_behavior);
 
-		$criteria->addJoin(categoryKuserPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(categoryVuserPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = categoryKuserPeer::doSelectStmt($criteria, $con);
+		$stmt = categoryVuserPeer::doSelectStmt($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = categoryKuserPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = categoryKuserPeer::getInstanceFromPool($key1))) {
+			$key1 = categoryVuserPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = categoryVuserPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$cls = categoryKuserPeer::getOMClass(false);
+				$cls = categoryVuserPeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				categoryKuserPeer::addInstanceToPool($obj1, $key1);
+				categoryVuserPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
 			// Add objects for joined category rows
@@ -1107,26 +1107,26 @@ abstract class BasecategoryKuserPeer {
 					categoryPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (categoryKuser) to the collection in $obj2 (category)
-				$obj2->addcategoryKuser($obj1);
+				// Add the $obj1 (categoryVuser) to the collection in $obj2 (category)
+				$obj2->addcategoryVuser($obj1);
 			} // if joined row not null
 
-			// Add objects for joined kuser rows
+			// Add objects for joined vuser rows
 
-			$key3 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+			$key3 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
 			if ($key3 !== null) {
-				$obj3 = kuserPeer::getInstanceFromPool($key3);
+				$obj3 = vuserPeer::getInstanceFromPool($key3);
 				if (!$obj3) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
-					kuserPeer::addInstanceToPool($obj3, $key3);
+					vuserPeer::addInstanceToPool($obj3, $key3);
 				} // if obj3 loaded
 
-				// Add the $obj1 (categoryKuser) to the collection in $obj3 (kuser)
-				$obj3->addcategoryKuser($obj1);
+				// Add the $obj1 (categoryVuser) to the collection in $obj3 (vuser)
+				$obj3->addcategoryVuser($obj1);
 			} // if joined row not null
 
 			$results[] = $obj1;
@@ -1153,14 +1153,14 @@ abstract class BasecategoryKuserPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(categoryKuserPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(categoryVuserPeer::TABLE_NAME);
 		
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			categoryKuserPeer::addSelectColumns($criteria);
+			categoryVuserPeer::addSelectColumns($criteria);
 		}
 		
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
@@ -1169,9 +1169,9 @@ abstract class BasecategoryKuserPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(categoryKuserPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(categoryVuserPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = categoryKuserPeer::doCountStmt($criteria, $con);
+		$stmt = categoryVuserPeer::doCountStmt($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$count = (int) $row[0];
@@ -1184,7 +1184,7 @@ abstract class BasecategoryKuserPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuser table
+	 * Returns the number of rows matching criteria, joining the related vuser table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1192,7 +1192,7 @@ abstract class BasecategoryKuserPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptkuser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptvuser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1200,14 +1200,14 @@ abstract class BasecategoryKuserPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(categoryKuserPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(categoryVuserPeer::TABLE_NAME);
 		
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			categoryKuserPeer::addSelectColumns($criteria);
+			categoryVuserPeer::addSelectColumns($criteria);
 		}
 		
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
@@ -1216,9 +1216,9 @@ abstract class BasecategoryKuserPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(categoryKuserPeer::CATEGORY_ID, categoryPeer::ID, $join_behavior);
+		$criteria->addJoin(categoryVuserPeer::CATEGORY_ID, categoryPeer::ID, $join_behavior);
 
-		$stmt = categoryKuserPeer::doCountStmt($criteria, $con);
+		$stmt = categoryVuserPeer::doCountStmt($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$count = (int) $row[0];
@@ -1231,12 +1231,12 @@ abstract class BasecategoryKuserPeer {
 
 
 	/**
-	 * Selects a collection of categoryKuser objects pre-filled with all related objects except category.
+	 * Selects a collection of categoryVuser objects pre-filled with all related objects except category.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of categoryKuser objects.
+	 * @return     array Array of categoryVuser objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -1251,48 +1251,48 @@ abstract class BasecategoryKuserPeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		categoryKuserPeer::addSelectColumns($criteria);
-		$startcol2 = (categoryKuserPeer::NUM_COLUMNS - categoryKuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		categoryVuserPeer::addSelectColumns($criteria);
+		$startcol2 = (categoryVuserPeer::NUM_COLUMNS - categoryVuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kuserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kuserPeer::NUM_COLUMNS - kuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vuserPeer::NUM_COLUMNS - vuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(categoryKuserPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(categoryVuserPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = categoryKuserPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = categoryKuserPeer::getInstanceFromPool($key1))) {
+			$key1 = categoryVuserPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = categoryVuserPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$cls = categoryKuserPeer::getOMClass(false);
+				$cls = categoryVuserPeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				categoryKuserPeer::addInstanceToPool($obj1, $key1);
+				categoryVuserPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined kuser rows
+				// Add objects for joined vuser rows
 
-				$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 				if ($key2 !== null) {
-					$obj2 = kuserPeer::getInstanceFromPool($key2);
+					$obj2 = vuserPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$cls = kuserPeer::getOMClass(false);
+						$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (categoryKuser) to the collection in $obj2 (kuser)
-				$obj2->addcategoryKuser($obj1);
+				// Add the $obj1 (categoryVuser) to the collection in $obj2 (vuser)
+				$obj2->addcategoryVuser($obj1);
 
 			} // if joined row is not null
 
@@ -1304,16 +1304,16 @@ abstract class BasecategoryKuserPeer {
 
 
 	/**
-	 * Selects a collection of categoryKuser objects pre-filled with all related objects except kuser.
+	 * Selects a collection of categoryVuser objects pre-filled with all related objects except vuser.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of categoryKuser objects.
+	 * @return     array Array of categoryVuser objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptkuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptvuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1324,30 +1324,30 @@ abstract class BasecategoryKuserPeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		categoryKuserPeer::addSelectColumns($criteria);
-		$startcol2 = (categoryKuserPeer::NUM_COLUMNS - categoryKuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		categoryVuserPeer::addSelectColumns($criteria);
+		$startcol2 = (categoryVuserPeer::NUM_COLUMNS - categoryVuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		categoryPeer::addSelectColumns($criteria);
 		$startcol3 = $startcol2 + (categoryPeer::NUM_COLUMNS - categoryPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(categoryKuserPeer::CATEGORY_ID, categoryPeer::ID, $join_behavior);
+		$criteria->addJoin(categoryVuserPeer::CATEGORY_ID, categoryPeer::ID, $join_behavior);
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = categoryKuserPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = categoryKuserPeer::getInstanceFromPool($key1))) {
+			$key1 = categoryVuserPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = categoryVuserPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$cls = categoryKuserPeer::getOMClass(false);
+				$cls = categoryVuserPeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				categoryKuserPeer::addInstanceToPool($obj1, $key1);
+				categoryVuserPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
 				// Add objects for joined category rows
@@ -1364,8 +1364,8 @@ abstract class BasecategoryKuserPeer {
 					categoryPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (categoryKuser) to the collection in $obj2 (category)
-				$obj2->addcategoryKuser($obj1);
+				// Add the $obj1 (categoryVuser) to the collection in $obj2 (category)
+				$obj2->addcategoryVuser($obj1);
 
 			} // if joined row is not null
 
@@ -1392,10 +1392,10 @@ abstract class BasecategoryKuserPeer {
 	 */
 	public static function buildTableMap()
 	{
-	  $dbMap = Propel::getDatabaseMap(BasecategoryKuserPeer::DATABASE_NAME);
-	  if (!$dbMap->hasTable(BasecategoryKuserPeer::TABLE_NAME))
+	  $dbMap = Propel::getDatabaseMap(BasecategoryVuserPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BasecategoryVuserPeer::TABLE_NAME))
 	  {
-	    $dbMap->addTableObject(new categoryKuserTableMap());
+	    $dbMap->addTableObject(new categoryVuserTableMap());
 	  }
 	}
 
@@ -1412,13 +1412,13 @@ abstract class BasecategoryKuserPeer {
 	 */
 	public static function getOMClass($withPrefix = true)
 	{
-		return $withPrefix ? categoryKuserPeer::CLASS_DEFAULT : categoryKuserPeer::OM_CLASS;
+		return $withPrefix ? categoryVuserPeer::CLASS_DEFAULT : categoryVuserPeer::OM_CLASS;
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a categoryKuser or Criteria object.
+	 * Method perform an INSERT on the database, given a categoryVuser or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or categoryKuser object containing data that is used to create the INSERT statement.
+	 * @param      mixed $values Criteria or categoryVuser object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
 	 * @return     mixed The new primary key.
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -1427,17 +1427,17 @@ abstract class BasecategoryKuserPeer {
 	public static function doInsert($values, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(categoryKuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(categoryVuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 		} else {
-			$criteria = $values->buildCriteria(); // build Criteria from categoryKuser object
+			$criteria = $values->buildCriteria(); // build Criteria from categoryVuser object
 		}
 
-		if ($criteria->containsKey(categoryKuserPeer::ID) && $criteria->keyContainsValue(categoryKuserPeer::ID) ) {
-			throw new PropelException('Cannot insert a value for auto-increment primary key ('.categoryKuserPeer::ID.')');
+		if ($criteria->containsKey(categoryVuserPeer::ID) && $criteria->keyContainsValue(categoryVuserPeer::ID) ) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key ('.categoryVuserPeer::ID.')');
 		}
 
 
@@ -1459,9 +1459,9 @@ abstract class BasecategoryKuserPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a categoryKuser or Criteria object.
+	 * Method perform an UPDATE on the database, given a categoryVuser or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or categoryKuser object containing data that is used to create the UPDATE statement.
+	 * @param      mixed $values Criteria or categoryVuser object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -1470,7 +1470,7 @@ abstract class BasecategoryKuserPeer {
 	public static function doUpdate($values, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(categoryKuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(categoryVuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$selectCriteria = new Criteria(self::DATABASE_NAME);
@@ -1478,10 +1478,10 @@ abstract class BasecategoryKuserPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(categoryKuserPeer::ID);
-			$selectCriteria->add(categoryKuserPeer::ID, $criteria->remove(categoryKuserPeer::ID), $comparison);
+			$comparison = $criteria->getComparison(categoryVuserPeer::ID);
+			$selectCriteria->add(categoryVuserPeer::ID, $criteria->remove(categoryVuserPeer::ID), $comparison);
 
-		} else { // $values is categoryKuser object
+		} else { // $values is categoryVuser object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
 		}
@@ -1502,26 +1502,26 @@ abstract class BasecategoryKuserPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the category_kuser table.
+	 * Method to DELETE all rows from the category_vuser table.
 	 *
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
 	public static function doDeleteAll($con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(categoryKuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(categoryVuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		$affectedRows = 0; // initialize var to track total num of affected rows
 		try {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(categoryKuserPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(categoryVuserPeer::TABLE_NAME, $con);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
 			// instances get re-added by the select statement contained therein).
-			categoryKuserPeer::clearInstancePool();
-			categoryKuserPeer::clearRelatedInstancePool();
+			categoryVuserPeer::clearInstancePool();
+			categoryVuserPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1531,9 +1531,9 @@ abstract class BasecategoryKuserPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a categoryKuser or Criteria object OR a primary key value.
+	 * Method perform a DELETE on the database, given a categoryVuser or Criteria object OR a primary key value.
 	 *
-	 * @param      mixed $values Criteria or categoryKuser object or primary key or array of primary keys
+	 * @param      mixed $values Criteria or categoryVuser object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
 	 * @param      PropelPDO $con the connection to use
 	 * @return     int 	The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -1544,27 +1544,27 @@ abstract class BasecategoryKuserPeer {
 	 public static function doDelete($values, PropelPDO $con = null)
 	 {
 		if ($con === null) {
-			$con = Propel::getConnection(categoryKuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(categoryVuserPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			// invalidate the cache for all objects of this type, since we have no
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
-			categoryKuserPeer::clearInstancePool();
+			categoryVuserPeer::clearInstancePool();
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof categoryKuser) { // it's a model object
+		} elseif ($values instanceof categoryVuser) { // it's a model object
 			// invalidate the cache for this single object
-			categoryKuserPeer::removeInstanceFromPool($values);
+			categoryVuserPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(categoryKuserPeer::ID, (array) $values, Criteria::IN);
+			$criteria->add(categoryVuserPeer::ID, (array) $values, Criteria::IN);
 			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				categoryKuserPeer::removeInstanceFromPool($singleval);
+				categoryVuserPeer::removeInstanceFromPool($singleval);
 			}
 		}
 
@@ -1579,7 +1579,7 @@ abstract class BasecategoryKuserPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-			categoryKuserPeer::clearRelatedInstancePool();
+			categoryVuserPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1589,24 +1589,24 @@ abstract class BasecategoryKuserPeer {
 	}
 
 	/**
-	 * Validates all modified columns of given categoryKuser object.
+	 * Validates all modified columns of given categoryVuser object.
 	 * If parameter $columns is either a single column name or an array of column names
 	 * than only those columns are validated.
 	 *
 	 * NOTICE: This does not apply to primary or foreign keys for now.
 	 *
-	 * @param      categoryKuser $obj The object to validate.
+	 * @param      categoryVuser $obj The object to validate.
 	 * @param      mixed $cols Column name or array of column names.
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(categoryKuser $obj, $cols = null)
+	public static function doValidate(categoryVuser $obj, $cols = null)
 	{
 		$columns = array();
 
 		if ($cols) {
-			$dbMap = Propel::getDatabaseMap(categoryKuserPeer::DATABASE_NAME);
-			$tableMap = $dbMap->getTable(categoryKuserPeer::TABLE_NAME);
+			$dbMap = Propel::getDatabaseMap(categoryVuserPeer::DATABASE_NAME);
+			$tableMap = $dbMap->getTable(categoryVuserPeer::TABLE_NAME);
 
 			if (! is_array($cols)) {
 				$cols = array($cols);
@@ -1622,7 +1622,7 @@ abstract class BasecategoryKuserPeer {
 
 		}
 
-		return BasePeer::doValidate(categoryKuserPeer::DATABASE_NAME, categoryKuserPeer::TABLE_NAME, $columns);
+		return BasePeer::doValidate(categoryVuserPeer::DATABASE_NAME, categoryVuserPeer::TABLE_NAME, $columns);
 	}
 
 	/**
@@ -1630,19 +1630,19 @@ abstract class BasecategoryKuserPeer {
 	 *
 	 * @param      int $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
-	 * @return     categoryKuser
+	 * @return     categoryVuser
 	 */
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
 
-		if (null !== ($obj = categoryKuserPeer::getInstanceFromPool((string) $pk))) {
+		if (null !== ($obj = categoryVuserPeer::getInstanceFromPool((string) $pk))) {
 			return $obj;
 		}
 
-		$criteria = new Criteria(categoryKuserPeer::DATABASE_NAME);
-		$criteria->add(categoryKuserPeer::ID, $pk);
+		$criteria = new Criteria(categoryVuserPeer::DATABASE_NAME);
+		$criteria->add(categoryVuserPeer::ID, $pk);
 
-		$v = categoryKuserPeer::doSelect($criteria, $con);
+		$v = categoryVuserPeer::doSelect($criteria, $con);
 
 		return !empty($v) > 0 ? $v[0] : null;
 	}
@@ -1661,16 +1661,16 @@ abstract class BasecategoryKuserPeer {
 		if (empty($pks)) {
 			$objs = array();
 		} else {
-			$criteria = new Criteria(categoryKuserPeer::DATABASE_NAME);
-			$criteria->add(categoryKuserPeer::ID, $pks, Criteria::IN);
-			$objs = categoryKuserPeer::doSelect($criteria, $con);
+			$criteria = new Criteria(categoryVuserPeer::DATABASE_NAME);
+			$criteria->add(categoryVuserPeer::ID, $pks, Criteria::IN);
+			$objs = categoryVuserPeer::doSelect($criteria, $con);
 		}
 		return $objs;
 	}
 
-} // BasecategoryKuserPeer
+} // BasecategoryVuserPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BasecategoryKuserPeer::buildTableMap();
+BasecategoryVuserPeer::buildTableMap();
 

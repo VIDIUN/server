@@ -1,13 +1,13 @@
 <?php
 /**
  * @package    Core
- * @subpackage KMC
+ * @subpackage VMC
  */
-class signupAction extends kalturaAction
+class signupAction extends vidiunAction
 {
 	public function execute ( ) 
 	{
-		$this->redirect("http://corp.kaltura.com/about/signup");
+		$this->redirect("http://corp.vidiun.com/about/signup");
 		sfView::SUCCESS;
 	}
 }

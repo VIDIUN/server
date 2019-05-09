@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaExternalMediaEntryBaseFilter extends KalturaMediaEntryFilter
+abstract class VidiunExternalMediaEntryBaseFilter extends VidiunMediaEntryFilter
 {
 	static private $map_between_objects = array
 	(
@@ -30,12 +30,12 @@ abstract class KalturaExternalMediaEntryBaseFilter extends KalturaMediaEntryFilt
 	}
 
 	/**
-	 * @var KalturaExternalMediaSourceType
+	 * @var VidiunExternalMediaSourceType
 	 */
 	public $externalSourceTypeEqual;
 
 	/**
-	 * @dynamicType KalturaExternalMediaSourceType
+	 * @dynamicType VidiunExternalMediaSourceType
 	 * @var string
 	 */
 	public $externalSourceTypeIn;

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaNullableBoolean extends KalturaEnum
+class VidiunNullableBoolean extends VidiunEnum
 {
 	const NULL_VALUE = -1;
 	const FALSE_VALUE = 0;

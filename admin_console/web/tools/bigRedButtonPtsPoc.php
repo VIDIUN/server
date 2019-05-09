@@ -22,7 +22,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Kaltura</title>
+    <title>Vidiun</title>
 
     <!-- Bootstrap -->
     <link href="css/main.css" rel="stylesheet">	
@@ -33,7 +33,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 	<script type="text/javascript" src="swfobject.js"></script>
 	<script>
 		var partnerId = <?php echo $partnerId; ?>;
-		var ks = null;
+		var vs = null;
 		var currentTime = null;
 
 		function loadPlayer(){
@@ -41,7 +41,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 			var uiConfId = $('#txtUiConfId').val();
 			var adminUiConfId = $('#txtAdminUiConfId').val();
 
-			mw.setConfig('Kaltura.LeadWithHTML5', true);
+			mw.setConfig('Vidiun.LeadWithHTML5', true);
 			loadAdminPlayer(entryId, adminUiConfId);
 			loadUserPlayer(entryId, uiConfId);
 			startSession();
@@ -67,7 +67,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 						return;
 					}
 						
-					ks = data;
+					vs = data;
 				}
 			});
 		}
@@ -84,7 +84,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 		}
 		
 		function loadUserPlayer(entryId, uiConfId){
-            kWidget.embed({
+            vWidget.embed({
                     targetId: 'userPlayerContainer',
                     wid: '_' + partnerId,
                     "uiconf_id": uiConfId,
@@ -92,7 +92,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
                             "streamerType": "auto",
                             "autoPlay": true,
                             "LeadWithHLSOnFlash": true,
-							"Kaltura.Protocol":"http"
+							"Vidiun.Protocol":"http"
                     },
                     "cache_st": 1410340114,
                     "entry_id": entryId
@@ -100,7 +100,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 		}
 
 		function loadAdminPlayer(entryId, uiConfId){
-		     kWidget.embed({
+		     vWidget.embed({
 					 targetId: 'adminPlayerContainer',
 					 wid: '_' + partnerId,
 					 "uiconf_id": uiConfId,
@@ -134,8 +134,8 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 				'/api_v3/index.php/service/cuePoint_cuePoint/action/add', {
 				data: {
 					format: 1,
-					ks: ks,
-					'cuePoint:objectType': 'KalturaAdCuePoint',
+					vs: vs,
+					'cuePoint:objectType': 'VidiunAdCuePoint',
 					'cuePoint:entryId': entryId,
 					'cuePoint:startTime': startTime,
 					'cuePoint:protocolType': 'VPAID',
@@ -174,7 +174,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
             <span class="navbar-brand">BIG RED BUTTON</span>
           </div>
           <div class="col col-xs-4 text-right">
-            <img class="logo" src="images/kaltura.png">
+            <img class="logo" src="images/vidiun.png">
           </div>
         </div>
       </div>
@@ -236,7 +236,7 @@ $html5Version = safeGetInput('playerVersion', HTML_VERSION_PATTERN);
 		</tr>
 		<tr style="display: none; ">
 			<td>Ad URL:</td>
-			<td><input type="text" id="txtAdUrl" value="http://projects.kaltura.com/vast/vast11.xml" />
+			<td><input type="text" id="txtAdUrl" value="http://projects.vidiun.com/vast/vast11.xml" />
 		</td>
 		<tr style="display: none; ">
 			<td>Ad Duration (milliseconds):</td>

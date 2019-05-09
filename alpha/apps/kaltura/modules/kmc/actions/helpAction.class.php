@@ -1,9 +1,9 @@
 <?php
 /**
  * @package    Core
- * @subpackage KMC
+ * @subpackage VMC
  */
-class helpAction extends kalturaAction
+class helpAction extends vidiunAction
 {
 	public function execute ( ) 
 	{

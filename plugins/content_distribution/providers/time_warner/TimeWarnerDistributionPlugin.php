@@ -2,10 +2,10 @@
 /**
  * @package plugins.timeWarnerDistribution
  */
-class TimeWarnerDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider, IKalturaEventConsumers, IKalturaServices
+class TimeWarnerDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider, IVidiunEventConsumers, IVidiunServices
 {
 	const PLUGIN_NAME = 'timeWarnerDistribution';
-	const TIME_WARNER_EVENT_CONSUMER = "kTimeWarnerFlowManager";
+	const TIME_WARNER_EVENT_CONSUMER = "vTimeWarnerFlowManager";
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 1;
 	const CONTENT_DSTRIBUTION_VERSION_MINOR = 0;
 	const CONTENT_DSTRIBUTION_VERSION_BUILD = 0;
@@ -17,12 +17,12 @@ class TimeWarnerDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -85,23 +85,23 @@ class TimeWarnerDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::TIME_WARNER)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::TIME_WARNER)
 		{
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaTimeWarnerDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunTimeWarnerDistributionProfile';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::TIME_WARNER)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::TIME_WARNER)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_TimeWarnerProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_TimeWarnerDistribution_Type_TimeWarnerDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_TimeWarnerDistribution_Type_TimeWarnerDistributionProfile';
 		}
 		
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TimeWarnerDistributionProviderType::TIME_WARNER))
-			return 'KalturaTimeWarnerDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TimeWarnerDistributionProviderType::TIME_WARNER))
+			return 'VidiunTimeWarnerDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TimeWarnerDistributionProviderType::TIME_WARNER))
 			return 'TimeWarnerDistributionProfile';
@@ -122,11 +122,11 @@ class TimeWarnerDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaTimeWarnerDistributionProvider();
+		$distributionProvider = new VidiunTimeWarnerDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -147,8 +147,8 @@ class TimeWarnerDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -156,11 +156,11 @@ class TimeWarnerDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -170,7 +170,7 @@ class TimeWarnerDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{

@@ -28,7 +28,7 @@
 		 #login_info { display: block; }
 		   div#submit { text-align:center}
 		 button { height:24px; padding: 0 13px 1px; border: solid 1px #B7BABC; margin: 0 auto 5px; #margin-top:21px;
-				 background: url(/lib/images/kmc/kmc_sprite.png) no-repeat -57px -153px; /* -94px -152px */ cursor:pointer; color:#2B2B2B;}
+				 background: url(/lib/images/vmc/vmc_sprite.png) no-repeat -57px -153px; /* -94px -152px */ cursor:pointer; color:#2B2B2B;}
 		  button:hover { Xbackground-position: -94px -177px; color:#000; border-color:#5E5E5E;}
 
 		  div#thx { margin: 2px 20px 0 2px; font: normal 12px arial,sans-serif;}
@@ -124,12 +124,12 @@ $(function() {
 	<?php if($curlResult === true ) { ?>
 	<p>Thank you for your submission.</p>
 	<p>Your support request has been submitted and will be handled by one of our support specialists as soon as possible (you should receive a confirmation email with a ticket number shortly).</p>
-	<p>In the mean time, you may wish to <a href="http://www.kaltura.org/search" target="_blank">browse the forums, guides and documentation on&nbsp;kaltura.org</a></p>
+	<p>In the mean time, you may wish to <a href="http://www.vidiun.org/search" target="_blank">browse the forums, guides and documentation on&nbsp;vidiun.org</a></p>
 	<?php } else { ?>
 	<p>Ooops... an error occurred while submitting your support request.</p>
 	<p>Your support request has not been submitted.</p>
 	<p>Please try and submit your support request latter.</p>
-	<p>In the mean time, you may wish to <a href="http://www.kaltura.org/search" target="_blank">browse the forums, guides and documentation on&nbsp;kaltura.org</a></p>
+	<p>In the mean time, you may wish to <a href="http://www.vidiun.org/search" target="_blank">browse the forums, guides and documentation on&nbsp;vidiun.org</a></p>
 	<?php } ?>
 	<button onClick="<?php echo $closeFunction; ?>;">OK</button>
 </div>
@@ -144,10 +144,10 @@ $(function() {
 		<input type="hidden" name="description" id="description" value="" />
 		<fieldset>  
 			<legend>Your Info</legend> 
-			<p><label>* Partner Id: <input type="text" class="required" name="partner_id" id="partner_id" value="<?php echo $pid; ?>" /><img src="http://www.kaltura.com/lib/images/kmc/error.jpg" height="20" width="20" alt="error" /></label></p> 
-            <p><label>* Your Full Name: <input type="text" class="required" name="your_name" id="your_name" /><img src="http://www.kaltura.com/lib/images/kmc/error.jpg" height="20" width="20" alt="error" /></label></p> 
-            <p><label>* Email: <input type="text" class="required" name="email" id="email" value="<?php echo $email; ?>" /><img src="http://www.kaltura.com/lib/images/kmc/error.jpg" height="20" width="20" alt="error" /></label></p> 
-            <p><label id="checkbox">* Confirm email: <input type="checkbox" class="required" id="confirm_email" value="confirmed" /><em>&nbsp;This is the (only) email to which we will respond</em><img src="http://www.kaltura.com/lib/images/kmc/error.jpg" height="20" width="20" alt="error" /></label></p>
+			<p><label>* Partner Id: <input type="text" class="required" name="partner_id" id="partner_id" value="<?php echo $pid; ?>" /><img src="http://www.vidiun.com/lib/images/vmc/error.jpg" height="20" width="20" alt="error" /></label></p> 
+            <p><label>* Your Full Name: <input type="text" class="required" name="your_name" id="your_name" /><img src="http://www.vidiun.com/lib/images/vmc/error.jpg" height="20" width="20" alt="error" /></label></p> 
+            <p><label>* Email: <input type="text" class="required" name="email" id="email" value="<?php echo $email; ?>" /><img src="http://www.vidiun.com/lib/images/vmc/error.jpg" height="20" width="20" alt="error" /></label></p> 
+            <p><label id="checkbox">* Confirm email: <input type="checkbox" class="required" id="confirm_email" value="confirmed" /><em>&nbsp;This is the (only) email to which we will respond</em><img src="http://www.vidiun.com/lib/images/vmc/error.jpg" height="20" width="20" alt="error" /></label></p>
 		</fieldset> 
  
 		<fieldset> 
@@ -172,12 +172,12 @@ $(function() {
 						<option value="Entry - Metadata">Entry - Metadata</option>
 						<option value="Flash Player">Flash Player</option>
 						<option value="HTML5 Player">HTML5 Player</option>
-						<option value="KCW">KCW</option>
-						<option value="KMC User Interface">KMC User Interface</option>
-						<option value="KMS/MediaSpace">KMS/MediaSpace</option>
+						<option value="VCW">VCW</option>
+						<option value="VMC User Interface">VMC User Interface</option>
+						<option value="VMS/MediaSpace">VMS/MediaSpace</option>
 						<option value="Live Streaming">Live Streaming</option>
-						<option value="KSR">KSR</option>
-						<option value="KSU">KSU</option>
+						<option value="VSR">VSR</option>
+						<option value="VSU">VSU</option>
 						<option value="Moodle">Moodle</option>
 						<option value="OnPrem - Infrastructure/ Communication/ Network">OnPrem - Infrastructure/ Communication/ Network</option>
 						<option value="Playback">Playback</option>
@@ -189,7 +189,7 @@ $(function() {
 						<option value="Transcoding">Transcoding</option>
 						<option value="Other">Other</option>
 					</select> 
-					<img src="http://www.kaltura.com/lib/images/kmc/error.jpg" height="20" width="20" alt="error" /></label></p> 
+					<img src="http://www.vidiun.com/lib/images/vmc/error.jpg" height="20" width="20" alt="error" /></label></p> 
 			<p><label>* Affected Functionality:
 					<select name="00N70000002S7nb" id="00N70000002S7nb" class="required"> 
 						<option selected="selected" value="">Please select...</option> 
@@ -198,17 +198,17 @@ $(function() {
 						<option value="Not working at all">Not working at all</option> 
 						<option value="Other">Other</option> 
 					</select> 
-					<img src="http://www.kaltura.com/lib/images/kmc/error.jpg" height="20" width="20" alt="error" /></label></p> 
+					<img src="http://www.vidiun.com/lib/images/vmc/error.jpg" height="20" width="20" alt="error" /></label></p> 
 			<p> 
 				<label>* Subject:
 					<input type="text" name="subject" id="subject" class="required" />
-					<img src="http://www.kaltura.com/lib/images/kmc/error.jpg" height="20" width="20" alt="error" /> 
+					<img src="http://www.vidiun.com/lib/images/vmc/error.jpg" height="20" width="20" alt="error" /> 
 				</label> 
 			</p> 
 			<p> 
 				<label>* Description:
 					<textarea name="description_text" id="description_text" cols="45" rows="5" class="required"></textarea> 
-					<img src="http://www.kaltura.com/lib/images/kmc/error.jpg" height="20" width="20" alt="error" /> 
+					<img src="http://www.vidiun.com/lib/images/vmc/error.jpg" height="20" width="20" alt="error" /> 
 				</label> 
 			</p> 
 			<p> 
@@ -239,10 +239,10 @@ $(function() {
 				</label> 
 				&nbsp; <label>Password: <input type="text" name="00N70000002S7oP" id="00N70000002S7oP" maxlength="56" /></label> 
 			</div> 
-			<p><label>Kaltura CMS Extension:
+			<p><label>Vidiun CMS Extension:
 					<select name="00N70000002RZmb" id="00N70000002RZmb"> 
 						<option value="None" selected="selected">None</option> 
-						<option value="Kaltura Management Console">Kaltura Management Console</option> 
+						<option value="Vidiun Management Console">Vidiun Management Console</option> 
 						<option value="MediaSpace">MediaSpace</option> 
 						<option value="Drupal Module">Drupal Module</option> 
 						<option value="Elgg Extension">Elgg Extension</option> 
@@ -264,8 +264,8 @@ $(function() {
 } else { // free customer
 ?>
 <div id="free">
-	<p>Go to kaltura.org for <a target="_blank" href="http://www.kaltura.org/search">great community support</a></p>
-	<p><a target="_blank" href="http://corp.kaltura.com/about/contact?subject=Upgrade">Contact us</a> to learn more about our<br />paid Professional Services packages</p>
+	<p>Go to vidiun.org for <a target="_blank" href="http://www.vidiun.org/search">great community support</a></p>
+	<p><a target="_blank" href="http://corp.vidiun.com/about/contact?subject=Upgrade">Contact us</a> to learn more about our<br />paid Professional Services packages</p>
 	<button onClick="<?php echo $closeFunction; ?>;">OK</button>
 </div>
 <script type="text/javascript" >
@@ -278,7 +278,7 @@ $(function() {
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 try {
-	var pageTracker = _gat._getTracker("<?php echo kConf::get('ga_account'); ?>");
+	var pageTracker = _gat._getTracker("<?php echo vConf::get('ga_account'); ?>");
 	pageTracker._trackPageview();
 }
 catch(err) {}

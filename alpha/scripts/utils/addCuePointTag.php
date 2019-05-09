@@ -12,9 +12,9 @@ $type = null;
 
 try
 {
-	$type = $argv[3] != 'all' ? kPluginableEnumsManager::apiToCore ('CuePointType', $argv[3]) : null;
+	$type = $argv[3] != 'all' ? vPluginableEnumsManager::apiToCore ('CuePointType', $argv[3]) : null;
 }
-catch (kCoreException $e)
+catch (vCoreException $e)
 {
 	if ($argv[3] != 'all')
 		die ('Unrecognized cue point type');
@@ -22,7 +22,7 @@ catch (kCoreException $e)
 
 $dryRun = (!isset($argv[4]) || $argv[4] != 'realrun');
 
-KalturaStatement::setDryRun($dryRun);
+VidiunStatement::setDryRun($dryRun);
 
 if(file_exists($partnerIds))
 	$partnerIds = file($partnerIds);
@@ -60,15 +60,15 @@ foreach($partnerIds as $partnerId)
 				$cuePoint->setTags(implode(',', $tags));
 				$cuePoint->save();
 				
-				kEventsManager::flushEvents();
+				vEventsManager::flushEvents();
 			}
 		}
-		kMemoryManager::clearMemory();
+		vMemoryManager::clearMemory();
 		
 		$partnerCuePoints += count($cuePoints);
 		$criteria->setOffset($partnerCuePoints);
 		$cuePoints = CuePointPeer::doSelect($criteria);
 	}
-	KalturaLog::debug("Added tag [$tag] to $partnerCuePoints cue-points for partner $partnerId");
+	VidiunLog::debug("Added tag [$tag] to $partnerCuePoints cue-points for partner $partnerId");
 }
-KalturaLog::debug("Done!!!");
+VidiunLog::debug("Done!!!");

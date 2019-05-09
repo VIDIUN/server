@@ -1,7 +1,7 @@
 <?php
 	$domain = $widget_host;
 	if ( strpos ( $domain , "localhost"  ) !== false )		$host = 2;
-	elseif ( strpos ( $domain , "kaldev" ) !== false ) 		$host = 0;
+	elseif ( strpos ( $domain , "viddev" ) !== false ) 		$host = 0;
 	else													$host = 1;
 
 	$swf_url = "/swf/ContributionWizard.swf";
@@ -10,18 +10,18 @@
 	$height = 360;
 	$width = 680;
 	$flashvars = 		'userId=' . $uid .
-						'&sessionId=' . $ks. 
+						'&sessionId=' . $vs. 
 						'&partnerId=' . $partner_id .
 						'&subPartnerId=' . $subp_id . 
-						'&kshow_id=' . $kshow_id . 
+						'&vshow_id=' . $vshow_id . 
 						'&host=' . $host . //$domain; it's an enum
-						'&afterAddentry=Kaltura.onAfterAddEntry' .
-						'&close=Kaltura.onClose' .
+						'&afterAddentry=Vidiun.onAfterAddEntry' .
+						'&close=Vidiun.onClose' .
 						'&lang=' . $lang . 
-						'&terms_of_use=http://www.kaltura.com/index.php/static/tandc' ;
+						'&terms_of_use=http://www.vidiun.com/index.php/static/tandc' ;
 	$str = "";
 					
-    $widget = '<object id="kaltura_contribution_wizard" type="application/x-shockwave-flash" allowScriptAccess="always" allowNetworking="all" height="' . $height . '" width="' . $width . '" data="'.$domain. $swf_url . '">'.
+    $widget = '<object id="vidiun_contribution_wizard" type="application/x-shockwave-flash" allowScriptAccess="always" allowNetworking="all" height="' . $height . '" width="' . $width . '" data="'.$domain. $swf_url . '">'.
 			'<param name="allowScriptAccess" value="always" />'.
 			'<param name="allowNetworking" value="all" />'.
 			'<param name="bgcolor" value=#000000 />'.
@@ -30,7 +30,7 @@
 			'</object>';
 ?>
 
-Kaltura = {
+Vidiun = {
 	initModalBox: function(){
 		var objBody = document.getElementsByTagName("body").item(0);
 
@@ -38,7 +38,7 @@ Kaltura = {
 		var objOverlay = document.createElement("div");
 		objOverlay.setAttribute('id','overlay');
 		objOverlay.onclick = function(){ 
-			Kaltura.hideModalBox(); 
+			Vidiun.hideModalBox(); 
 			return false; 
 		}
 		objBody.appendChild(objOverlay, objBody.firstChild);
@@ -52,7 +52,7 @@ Kaltura = {
 		objCloseBtn.setAttribute('id','mbCloseBtn');
 		objCloseBtn.setAttribute('href','#');
 		objCloseBtn.onclick = function(){ 
-			Kaltura.hideModalBox(); 
+			Vidiun.hideModalBox(); 
 			return false; 
 		}
 		objModalbox.appendChild(objCloseBtn, objModalbox.firstChild);
@@ -72,11 +72,11 @@ Kaltura = {
 	},
 	
 	onAfterAddEntry: function () {
-		setTimeout('Kaltura.hideModalBox()', 0);
+		setTimeout('Vidiun.hideModalBox()', 0);
 	},
 	
 	onClose: function () {
-		setTimeout('Kaltura.hideModalBox()', 0);
+		setTimeout('Vidiun.hideModalBox()', 0);
 	},
 
 	loadJSCssFile: function(filename,filetype){
@@ -106,8 +106,8 @@ Kaltura = {
 	}
 };
 
-Kaltura.loadJSCssFile('/css/widget.css','css');
+Vidiun.loadJSCssFile('/css/widget.css','css');
 
-setTimeout('Kaltura.initModalBox()', 0);
+setTimeout('Vidiun.initModalBox()', 0);
 
 

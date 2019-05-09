@@ -3,10 +3,10 @@
  * @package plugins.ftpDistribution
  * @subpackage api.objects
  */
-class KalturaFtpDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunFtpDistributionProfile extends VidiunConfigurableDistributionProfile
 {
 	/**
-	 * @var KalturaDistributionProtocol
+	 * @var VidiunDistributionProtocol
 	 * @insertonly 
 	 */
 	 public $protocol;

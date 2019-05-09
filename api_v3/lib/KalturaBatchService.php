@@ -16,29 +16,29 @@
  * @package api
  * @subpackage services
  */
-class KalturaBatchService extends KalturaBaseService
+class VidiunBatchService extends VidiunBaseService
 {
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::initService()
+	 * @see VidiunBaseService::initService()
 	 */
 	public function initService($serviceId, $serviceName, $actionName)
 	{
 		parent::initService($serviceId, $serviceName, $actionName);
 
 		if($this->getPartnerId() != Partner::BATCH_PARTNER_ID)
-			throw new KalturaAPIException(KalturaErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
+			throw new VidiunAPIException(VidiunErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
 
 		myPartnerUtils::resetAllFilters();
 	}
 
-	protected function getExclusiveJobs(KalturaExclusiveLockKey $lockKey, $maxExecutionTime, $numberOfJobs, 
-			KalturaBatchJobFilter $filter = null, $jobType, $maxJobToPullForCache = 0)
+	protected function getExclusiveJobs(VidiunExclusiveLockKey $lockKey, $maxExecutionTime, $numberOfJobs, 
+			VidiunBatchJobFilter $filter = null, $jobType, $maxJobToPullForCache = 0)
 	{
-		$dbJobType = kPluginableEnumsManager::apiToCore('BatchJobType', $jobType);
+		$dbJobType = vPluginableEnumsManager::apiToCore('BatchJobType', $jobType);
 
 		if (!is_null($filter))
 			$jobsFilter = $filter->toFilter($dbJobType);
 		
-		return kBatchExclusiveLock::getExclusiveJobs($lockKey->toObject(), $maxExecutionTime, $numberOfJobs, $dbJobType, $jobsFilter, $maxJobToPullForCache);
+		return vBatchExclusiveLock::getExclusiveJobs($lockKey->toObject(), $maxExecutionTime, $numberOfJobs, $dbJobType, $jobsFilter, $maxJobToPullForCache);
 	}
 }

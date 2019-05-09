@@ -12,13 +12,13 @@ $dryRun = ($argv[3] != 'realrun');
 
 require_once(__DIR__ . '/../bootstrap.php');
 
-KalturaStatement::setDryRun($dryRun);
+VidiunStatement::setDryRun($dryRun);
 
 $feed = syndicationFeedPeer::retrieveByPK($feedId);
 $mrssParameters = $feed->getMrssParameters();
 if(!$mrssParameters)
 {
-	$mrssParameters = new kMrssParameters();
+	$mrssParameters = new vMrssParameters();
 	$mrssParameters->setItemXpathsToExtend(array());
 }
 	
@@ -26,4 +26,4 @@ $mrssParameters->setEncoding($encoding);
 $feed->setMrssParameters($mrssParameters);
 $feed->save();
 
-KalturaLog::debug('Done');
+VidiunLog::debug('Done');

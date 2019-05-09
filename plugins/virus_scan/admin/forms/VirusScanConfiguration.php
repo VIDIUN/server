@@ -23,13 +23,13 @@ class Form_Partner_VirusScanConfiguration extends Infra_Form
 			'filters'		=> array('StringTrim'),
 		));
 		
-		$engineType = new Kaltura_Form_Element_EnumSelect('engineType', array('enum' => 'Kaltura_Client_VirusScan_Enum_VirusScanEngineType'));
+		$engineType = new Vidiun_Form_Element_EnumSelect('engineType', array('enum' => 'Vidiun_Client_VirusScan_Enum_VirusScanEngineType'));
 		$engineType->setLabel('Engine Type:');
 		$engineType->setRequired(true);
 		$this->addElements(array($engineType));
 		
 		
-		$actionIfInfected = new Kaltura_Form_Element_EnumSelect('actionIfInfected', array('enum' => 'Kaltura_Client_VirusScan_Enum_VirusFoundAction'));
+		$actionIfInfected = new Vidiun_Form_Element_EnumSelect('actionIfInfected', array('enum' => 'Vidiun_Client_VirusScan_Enum_VirusFoundAction'));
 		$actionIfInfected->setLabel('Cleaning Policy:');
 		$actionIfInfected->setRequired(true);
 		$this->addElements(array($actionIfInfected));
@@ -44,9 +44,9 @@ class Form_Partner_VirusScanConfiguration extends Infra_Form
 		
 		//entry type to filter drop down list
 		$arr = array(
-			Kaltura_Client_Enum_EntryType::DATA => 'Data',
-			Kaltura_Client_Enum_EntryType::MEDIA_CLIP => 'Media Clip',
-			Kaltura_Client_Enum_EntryType::DOCUMENT => 'Document',
+			Vidiun_Client_Enum_EntryType::DATA => 'Data',
+			Vidiun_Client_Enum_EntryType::MEDIA_CLIP => 'Media Clip',
+			Vidiun_Client_Enum_EntryType::DOCUMENT => 'Document',
 		);
 		$this->getElement('entryTypeToFilter')->setMultiOptions($arr);
 	}

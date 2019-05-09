@@ -3,12 +3,12 @@
  * @package api
  * @subpackage v3
  */
-class KalturaRequestDeserializer
+class VidiunRequestDeserializer
 {
 	private $params = null;
 	private $paramsGrouped = array();
 	private $objects = array();
-	private $extraParams = array("format", "ks", "fullObjects");
+	private $extraParams = array("format", "vs", "fullObjects");
 	private $disableRelativeTime = false;
 
 	const PREFIX = ":";
@@ -59,7 +59,7 @@ class KalturaRequestDeserializer
 		$serviceArguments = array();
 		foreach($actionParams as &$actionParam)
 		{
-			/* @var KalturaParamInfo $actionParam */
+			/* @var VidiunParamInfo $actionParam */
 			$type = $actionParam->getType();
 			$name = $actionParam->getName();
 
@@ -70,8 +70,8 @@ class KalturaRequestDeserializer
 				if (array_key_exists($name, $this->paramsGrouped))
 				{
 					$value = $this->castSimpleType($type, $this->paramsGrouped[$name]);
-					if(!kXml::isXMLValidContent($value))
-						throw new KalturaAPIException(KalturaErrors::INVALID_PARAMETER_CHAR, $name);
+					if(!vXml::isXMLValidContent($value))
+						throw new VidiunAPIException(VidiunErrors::INVALID_PARAMETER_CHAR, $name);
 						
 					$this->validateParameter($name, $value, $actionParam);
 					$serviceArguments[] = $value;
@@ -113,11 +113,11 @@ class KalturaRequestDeserializer
 						$enumValue = 0;
 						
 					if (!$actionParam->getTypeReflector()->checkEnumValue($enumValue))
-						throw new KalturaAPIException(KalturaErrors::INVALID_ENUM_VALUE, $enumValue, $name, $actionParam->getType());
+						throw new VidiunAPIException(VidiunErrors::INVALID_ENUM_VALUE, $enumValue, $name, $actionParam->getType());
 					
-					if($type == 'KalturaNullableBoolean')
+					if($type == 'VidiunNullableBoolean')
 					{
-						$serviceArguments[] = KalturaNullableBoolean::toBoolean($enumValue);
+						$serviceArguments[] = VidiunNullableBoolean::toBoolean($enumValue);
 						continue;
 					}
 					
@@ -138,7 +138,7 @@ class KalturaRequestDeserializer
 				{
 					$enumValue = $this->paramsGrouped[$name];
 					if (!$actionParam->getTypeReflector()->checkStringEnumValue($enumValue))
-						throw new KalturaAPIException(KalturaErrors::INVALID_ENUM_VALUE, $enumValue, $name, $actionParam->getType());
+						throw new VidiunAPIException(VidiunErrors::INVALID_ENUM_VALUE, $enumValue, $name, $actionParam->getType());
 					
 					$serviceArguments[] = $enumValue;
 					continue;
@@ -188,20 +188,20 @@ class KalturaRequestDeserializer
 				continue;
 			}
 
-			throw new KalturaAPIException(KalturaErrors::MISSING_MANDATORY_PARAMETER, $name);
+			throw new VidiunAPIException(VidiunErrors::MISSING_MANDATORY_PARAMETER, $name);
 		}
 		return $serviceArguments;
 	}
 	
 	/**
-	 * @return KalturaDetachedResponseProfile
+	 * @return VidiunDetachedResponseProfile
 	 */
 	public function getResponseProfile($paramName = 'responseProfile') {
 		if(!isset($this->paramsGrouped[$paramName])){
 			return null;
 		}
 		
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 		myPartnerUtils::addPartnerToCriteria('ResponseProfile', $partnerId, true, "$partnerId,0");
 		
 		$responseProfile = null;
@@ -212,58 +212,58 @@ class KalturaRequestDeserializer
 			$responseProfile = ResponseProfilePeer::retrieveBySystemName($this->paramsGrouped[$paramName]['systemName']);
 		}
 		if($responseProfile){
-			return new KalturaResponseProfile($responseProfile);
+			return new VidiunResponseProfile($responseProfile);
 		}
 		
-		$typeReflector = KalturaTypeReflectorCacher::get('KalturaDetachedResponseProfile');
+		$typeReflector = VidiunTypeReflectorCacher::get('VidiunDetachedResponseProfile');
 		return $this->buildObject($typeReflector, $this->paramsGrouped[$paramName], $paramName);
 	}
 	
 	protected function validateParameter($name, $value, $constraintsObj) {
 		$constraints = $constraintsObj->getConstraints();
-		if(array_key_exists(KalturaDocCommentParser::MIN_LENGTH_CONSTRAINT, $constraints))
-			$this->validateMinLength($name, $value, $constraints[KalturaDocCommentParser::MIN_LENGTH_CONSTRAINT]);
-		if(array_key_exists(KalturaDocCommentParser::MAX_LENGTH_CONSTRAINT, $constraints))
-			$this->validateMaxLength($name, $value, $constraints[KalturaDocCommentParser::MAX_LENGTH_CONSTRAINT]);
-		if(array_key_exists(KalturaDocCommentParser::MIN_VALUE_CONSTRAINT, $constraints))
-			$this->validateMinValue($name, $value, $constraints[KalturaDocCommentParser::MIN_VALUE_CONSTRAINT]);
-		if(array_key_exists(KalturaDocCommentParser::MAX_VALUE_CONSTRAINT, $constraints))
-			$this->validateMaxValue($name, $value, $constraints[KalturaDocCommentParser::MAX_VALUE_CONSTRAINT]);
+		if(array_key_exists(VidiunDocCommentParser::MIN_LENGTH_CONSTRAINT, $constraints))
+			$this->validateMinLength($name, $value, $constraints[VidiunDocCommentParser::MIN_LENGTH_CONSTRAINT]);
+		if(array_key_exists(VidiunDocCommentParser::MAX_LENGTH_CONSTRAINT, $constraints))
+			$this->validateMaxLength($name, $value, $constraints[VidiunDocCommentParser::MAX_LENGTH_CONSTRAINT]);
+		if(array_key_exists(VidiunDocCommentParser::MIN_VALUE_CONSTRAINT, $constraints))
+			$this->validateMinValue($name, $value, $constraints[VidiunDocCommentParser::MIN_VALUE_CONSTRAINT]);
+		if(array_key_exists(VidiunDocCommentParser::MAX_VALUE_CONSTRAINT, $constraints))
+			$this->validateMaxValue($name, $value, $constraints[VidiunDocCommentParser::MAX_VALUE_CONSTRAINT]);
 	}
 	
 	protected function validateMinLength($name, $objectValue, $constraint) {
 		if(strlen($objectValue) < $constraint)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_MIN_LENGTH, $name, $constraint);
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_MIN_LENGTH, $name, $constraint);
 	}
 	
 	protected function validateMaxLength($name, $objectValue, $constraint) {
 		if(strlen($objectValue) > $constraint)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_MAX_LENGTH, $name, $constraint);
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_MAX_LENGTH, $name, $constraint);
 	}
 	
 	protected function validateMinValue($name, $objectValue, $constraint) {
 		if($objectValue < $constraint)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_MIN_VALUE, $name, $constraint);
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_MIN_VALUE, $name, $constraint);
 	}
 	
 	protected function validateMaxValue($name, $objectValue, $constraint) {
 		if($objectValue > $constraint)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_MAX_VALUE, $name, $constraint);
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_MAX_VALUE, $name, $constraint);
 	}
 	
 	private function validateFile($fileData) 
 	{
 		if (!isset($fileData['tmp_name']) || !is_uploaded_file($fileData['tmp_name'])) {
 			$msg = "An error occured while uploading file.";
-			KalturaLog::log($msg . ' ' . print_r($fileData, true));
-			throw new KalturaAPIException(KalturaErrors::UPLOAD_ERROR);
+			VidiunLog::log($msg . ' ' . print_r($fileData, true));
+			throw new VidiunAPIException(VidiunErrors::UPLOAD_ERROR);
 		}
 	}
 
-	private function buildObject(KalturaTypeReflector $typeReflector, &$params, $objectName)
+	private function buildObject(VidiunTypeReflector $typeReflector, &$params, $objectName)
 	{
 		if (!is_array($params))
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_WRONG_FORMAT, $objectName, 'array' );
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_WRONG_FORMAT, $objectName, 'array' );
 		// if objectType was specified, we will use it only if the anotation type is it's base type
 		if (array_key_exists("objectType", $params))
 		{
@@ -272,7 +272,7 @@ class KalturaRequestDeserializer
             {
                 if ($typeReflector->isParentOf($possibleType)) // we know that the objectType that came from the user is right, and we can use it to initiate the object\
                 {
-                    $newTypeReflector = KalturaTypeReflectorCacher::get($possibleType);
+                    $newTypeReflector = VidiunTypeReflectorCacher::get($possibleType);
                     if($newTypeReflector)
                     	$typeReflector = $newTypeReflector;
                 }
@@ -280,7 +280,7 @@ class KalturaRequestDeserializer
 		}
 		
 		if($typeReflector->isAbstract())
-			throw new KalturaAPIException(KalturaErrors::OBJECT_TYPE_ABSTRACT, $typeReflector->getType());
+			throw new VidiunAPIException(VidiunErrors::OBJECT_TYPE_ABSTRACT, $typeReflector->getType());
 		 
 	    $class = $typeReflector->getType();
 		$obj = new $class;
@@ -289,7 +289,7 @@ class KalturaRequestDeserializer
 		foreach($params as $name => $value)
 		{
 			$isNull = false;
-			if (kString::endsWith($name, '__null'))
+			if (vString::endsWith($name, '__null'))
 			{
 				$name = str_replace('__null', '', $name);
 				$isNull = true;
@@ -301,12 +301,12 @@ class KalturaRequestDeserializer
 			}
 			
 			$property = $properties[$name];
-			/* @var $property KalturaPropertyInfo */
+			/* @var $property VidiunPropertyInfo */
 			$type = $property->getType();
 			
 			if ($isNull && !$property->isArray())
 			{
-				$obj->$name = new KalturaNullField();
+				$obj->$name = new VidiunNullField();
 				continue;
 			}
 							
@@ -315,8 +315,8 @@ class KalturaRequestDeserializer
                 if ($property->isTime())
                     $type = "time";
 				$value = $this->castSimpleType($type, $value);
-				if(!kXml::isXMLValidContent($value))
-					throw new KalturaAPIException(KalturaErrors::INVALID_PARAMETER_CHAR, $name);
+				if(!vXml::isXMLValidContent($value))
+					throw new VidiunAPIException(VidiunErrors::INVALID_PARAMETER_CHAR, $name);
 				$this->validateParameter($name, $value, $property);
 				$obj->$name = $value;
 				continue;
@@ -329,11 +329,11 @@ class KalturaRequestDeserializer
 				if(strtolower($value) == 'false')
 					$value = 0;
 				if (!$property->getTypeReflector()->checkEnumValue($value))
-					throw new KalturaAPIException(KalturaErrors::INVALID_ENUM_VALUE, $value, $name, $property->getType());
+					throw new VidiunAPIException(VidiunErrors::INVALID_ENUM_VALUE, $value, $name, $property->getType());
 			
-				if($type == 'KalturaNullableBoolean')
+				if($type == 'VidiunNullableBoolean')
 				{
-					$obj->$name = KalturaNullableBoolean::toBoolean($value);
+					$obj->$name = VidiunNullableBoolean::toBoolean($value);
 					continue;
 				}
 				
@@ -344,11 +344,11 @@ class KalturaRequestDeserializer
 			if ($property->isStringEnum())
 			{
 				if (!$property->getTypeReflector()->checkStringEnumValue($value))
-					throw new KalturaAPIException(KalturaErrors::INVALID_ENUM_VALUE, $value, $name, $property->getType());
+					throw new VidiunAPIException(VidiunErrors::INVALID_ENUM_VALUE, $value, $name, $property->getType());
 					
 				$value = $this->castSimpleType("string", $value);
-				if(!kXml::isXMLValidContent($value))
-					throw new KalturaAPIException(KalturaErrors::INVALID_PARAMETER_CHAR, $name);
+				if(!vXml::isXMLValidContent($value))
+					throw new VidiunAPIException(VidiunErrors::INVALID_PARAMETER_CHAR, $name);
 				$obj->$name = $value;
 				continue;
 			}
@@ -401,7 +401,7 @@ class KalturaRequestDeserializer
 			case "int":
 				return (int)$var;
 			case "string":
-				return kString::stripUtf8InvalidChars((string)$var);
+				return vString::stripUtf8InvalidChars((string)$var);
 			case "bool":
 				if (strtolower($var) === "false")
 					return false;
@@ -413,7 +413,7 @@ class KalturaRequestDeserializer
 				return (double)$var;
 			case "time":
 				if (!$this->disableRelativeTime)
-					$var = kTime::getRelativeTime($var);
+					$var = vTime::getRelativeTime($var);
 
 				return $var;
 		}

@@ -3,7 +3,7 @@
  * @package plugins.conference
  * @subpackage api.filters
  */
-class KalturaConferenceEntryServerNodeFilter extends KalturaConferenceEntryServerNodeBaseFilter
+class VidiunConferenceEntryServerNodeFilter extends VidiunConferenceEntryServerNodeBaseFilter
 {
 	public function __construct()
 	{

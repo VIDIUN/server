@@ -67,7 +67,7 @@ class LiveEntryServerNode extends EntryServerNode
 			{
 				//TODO - move this logic into update event handler
 				//invalidateQueryCache is called only in postUpdate of base class so, Invalidate query cache to avoid getting stale response.
-				kQueryCache::invalidateQueryCache($this);
+				vQueryCache::invalidateQueryCache($this);
 				$playableServerNodes = EntryServerNodePeer::retrievePlayableByEntryId($this->getEntryId());
 				if(!count($playableServerNodes))
 				{
@@ -75,7 +75,7 @@ class LiveEntryServerNode extends EntryServerNode
 				}
 				
 				if($this->getServerType() === EntryServerNodeType::LIVE_PRIMARY)
-					$liveEntry->setLastBroadcastEndTime(kApiCache::getTime());
+					$liveEntry->setLastBroadcastEndTime(vApiCache::getTime());
 			}
 			
 			if(!$liveEntry->getCurrentBroadcastStartTime() && $this->isColumnModified(EntryServerNodePeer::STATUS) && $this->getStatus() === EntryServerNodeStatus::AUTHENTICATED && $this->getServerType() === EntryServerNodeType::LIVE_PRIMARY)
@@ -107,7 +107,7 @@ class LiveEntryServerNode extends EntryServerNode
 				$liveEntry->unsetMediaServer();
 			
 			if($this->getServerType() === EntryServerNodeType::LIVE_PRIMARY)
-					$liveEntry->setLastBroadcastEndTime(kApiCache::getTime());
+					$liveEntry->setLastBroadcastEndTime(vApiCache::getTime());
 			
 			if(!$liveEntry->save())
 				$liveEntry->indexToSearchIndex();
@@ -153,7 +153,7 @@ class LiveEntryServerNode extends EntryServerNode
 		$liveEntry = entryPeer::retrieveByPK($this->getEntryId());
 		if(!$liveEntry)
 		{
-			KalturaLog::debug("Live entry with id [" . $this->getEntryId() . "] not found, live entry data will not be updated");
+			VidiunLog::debug("Live entry with id [" . $this->getEntryId() . "] not found, live entry data will not be updated");
 			return null;
 		}
 		
@@ -165,16 +165,16 @@ class LiveEntryServerNode extends EntryServerNode
 		$liveEntry = entryPeer::retrieveByPK($this->getEntryId());
 		if(!$liveEntry)
 		{
-			KalturaLog::err("Entry with id [{$this->getEntryId()}] not found, clearing entry server node from db");
+			VidiunLog::err("Entry with id [{$this->getEntryId()}] not found, clearing entry server node from db");
 			$this->delete();
 			return;
 		}
 		
 		/* @var $liveEntry LiveEntry */
 		$timeFromLastUpdate = time() - $this->getUpdatedAt(null);
-		if($this->getDc() === kDataCenterMgr::getCurrentDcId() && !$liveEntry->isCacheValid($this) && $timeFromLastUpdate > LiveEntry::DEFAULT_CACHE_EXPIRY)
+		if($this->getDc() === vDataCenterMgr::getCurrentDcId() && !$liveEntry->isCacheValid($this) && $timeFromLastUpdate > LiveEntry::DEFAULT_CACHE_EXPIRY)
 		{
-			KalturaLog::info("Removing media server id [" . $this->getServerNodeId() . "] from liveEntry [" . $this->getEntryId() . "]");
+			VidiunLog::info("Removing media server id [" . $this->getServerNodeId() . "] from liveEntry [" . $this->getEntryId() . "]");
 			$this->deleteOrMarkForDeletion($liveEntry);
 		}
 	}
@@ -184,7 +184,7 @@ class LiveEntryServerNode extends EntryServerNode
 		$liveEntry = $entry ? $entry : entryPeer::retrieveByPK($this->getEntryId());
 		if(!$liveEntry)
 		{
-			KalturaLog::debug("Entry with id [{$this->getEntryId()}] not found, clearing entry server node from db");
+			VidiunLog::debug("Entry with id [{$this->getEntryId()}] not found, clearing entry server node from db");
 			$this->delete();
 			return;
 		}
@@ -196,14 +196,14 @@ class LiveEntryServerNode extends EntryServerNode
 			$recordedEntry = $recordedEntryId ? entryPeer::retrieveByPK($recordedEntryId) : null;
 			if(!$recordedEntry)
 			{
-				KalturaLog::debug("Recorded entry with id [{$this->getEntryId()}] not found, clearing entry server node from db");
+				VidiunLog::debug("Recorded entry with id [{$this->getEntryId()}] not found, clearing entry server node from db");
 				$this->delete();
 				return;
 			}
 			
-			if( (!myEntryUtils::shouldServeVodFromLive($recordedEntry, false) && $recordedEntry->getRecordedLengthInMsecs() == 0) || (time() - $this->getUpdatedAt(null)) > kConf::get('marked_for_deletion_entry_server_node_timeout'))
+			if( (!myEntryUtils::shouldServeVodFromLive($recordedEntry, false) && $recordedEntry->getRecordedLengthInMsecs() == 0) || (time() - $this->getUpdatedAt(null)) > vConf::get('marked_for_deletion_entry_server_node_timeout'))
 			{
-				KalturaLog::debug("Recorded entry with id [{$this->getEntryId()}] found and ready or recorded is of old source type, clearing entry server node from db");
+				VidiunLog::debug("Recorded entry with id [{$this->getEntryId()}] found and ready or recorded is of old source type, clearing entry server node from db");
 				$this->delete();
 				return;
 			}
@@ -213,7 +213,7 @@ class LiveEntryServerNode extends EntryServerNode
 			return;
 		}
 		
-		KalturaLog::debug("Live entry with id [{$liveEntry->getId()}], is set with recording disabled, clearing entry server node id [{$this->getId()}] from db");
+		VidiunLog::debug("Live entry with id [{$liveEntry->getId()}], is set with recording disabled, clearing entry server node id [{$this->getId()}] from db");
 		$this->delete();
 	}
 

@@ -3,10 +3,10 @@
  * @package plugins.adminConsole
  * @subpackage api.objects
  */
-class KalturaInvestigateFlavorAssetDataArray extends KalturaTypedArray
+class VidiunInvestigateFlavorAssetDataArray extends VidiunTypedArray
 {
 	public function __construct()
 	{
-		parent::__construct("KalturaInvestigateFlavorAssetData");	
+		parent::__construct("VidiunInvestigateFlavorAssetData");	
 	}
 }

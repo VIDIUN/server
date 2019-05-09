@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAccessControlLimitThumbnailCaptureAction extends KalturaRuleAction
+class VidiunAccessControlLimitThumbnailCaptureAction extends VidiunRuleAction
 {
 	/**
 	 * Init object type
@@ -14,12 +14,12 @@ class KalturaAccessControlLimitThumbnailCaptureAction extends KalturaRuleAction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kAccessControlLimitThumbnailCaptureAction();
+			$dbObject = new vAccessControlLimitThumbnailCaptureAction();
 			
 		return parent::toObject($dbObject, $skip);
 	}

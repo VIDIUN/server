@@ -12,7 +12,7 @@ chdir(__DIR__);
 require_once (__DIR__ . '/../bootstrap.php');
 
 $realRun = isset($argv[1]) && $argv[1] == 'realrun';
-KalturaStatement::setDryRun(!$realRun);
+VidiunStatement::setDryRun(!$realRun);
 
 const FEATURE_TVINCI_INGEST_BASE = 'FEATURE_TVINCI_INGEST_V';
 
@@ -31,9 +31,9 @@ function createMetadataProfile($version, $versionToXsdMap)
 	$xsdData = $versionToXsdMap[$version];
 	
 	$key = $metadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_DEFINITION);
-	kFileSyncUtils::file_put_contents($key, $xsdData);
+	vFileSyncUtils::file_put_contents($key, $xsdData);
 	
-	kMetadataManager::parseProfileSearchFields($metadataProfile->getPartnerId(), $metadataProfile);
+	vMetadataManager::parseProfileSearchFields($metadataProfile->getPartnerId(), $metadataProfile);
 }
 
 // Main

@@ -1,6 +1,6 @@
 <?php
 
-class KFFMpegMediaParserAdStitchHelper extends KFFMpegMediaParser
+class VFFMpegMediaParserAdStitchHelper extends VFFMpegMediaParser
 {
     public function __construct($rawData)
     {
@@ -19,13 +19,13 @@ class KFFMpegMediaParserAdStitchHelper extends KFFMpegMediaParser
     /**
      * @method
      * @param unknown_type $mediaInfo
-     * @return KDLMediaDataSet
+     * @return VDLMediaDataSet
      */
-    static public function mediaInfoToKDL($mediaInfo)
+    static public function mediaInfoToVDL($mediaInfo)
     {
-        $medSet = new KDLMediaDataSet();
+        $medSet = new VDLMediaDataSet();
 
-        $medSet->_container = new KDLContainerData();
+        $medSet->_container = new VDLContainerData();
 
         $contentStreams = $mediaInfo->contentStreams;
         if(isset($contentStreams)) {
@@ -42,7 +42,7 @@ class KFFMpegMediaParserAdStitchHelper extends KFFMpegMediaParser
         if($medSet->_container->IsDataSet()==false)
             $medSet->_container = null;
 
-        $medSet->_video = new KDLVideoData();
+        $medSet->_video = new VDLVideoData();
         $medSet->_video->_id = $mediaInfo->videoCodecId;
         $medSet->_video->_format = $mediaInfo->videoFormat;
         $medSet->_video->_duration = $mediaInfo->videoDuration;
@@ -56,7 +56,7 @@ class KFFMpegMediaParserAdStitchHelper extends KFFMpegMediaParser
         if($medSet->_video->IsDataSet()==false)
             $medSet->_video = null;
 
-        $medSet->_audio = new KDLAudioData();
+        $medSet->_audio = new VDLAudioData();
         $medSet->_audio->_id = $mediaInfo->audioCodecId;
         $medSet->_audio->_format = $mediaInfo->audioFormat;
         $medSet->_audio->_duration = $mediaInfo->audioDuration;

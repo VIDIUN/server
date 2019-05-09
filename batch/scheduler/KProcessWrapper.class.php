@@ -5,7 +5,7 @@
  * @package Scheduler
  *
  */
-class KProcessWrapper
+class VProcessWrapper
 {
 	/**
 	 * @var resource
@@ -13,7 +13,7 @@ class KProcessWrapper
 	public $handle;
 	
 	/**
-	 * @var KSchedularTaskConfig
+	 * @var VSchedularTaskConfig
 	 */
 	public $taskConfig;
 	
@@ -42,7 +42,7 @@ class KProcessWrapper
 	 */
 	private $isMockedProcess;
 	
-	public function __construct(KSchedularTaskConfig $taskConfig, $taskIndex) {
+	public function __construct(VSchedularTaskConfig $taskConfig, $taskIndex) {
 		$taskConfig->setTaskIndex($taskIndex);
 		$this->taskConfig = $taskConfig;
 		
@@ -60,12 +60,12 @@ class KProcessWrapper
 	 * @param string $logDir
 	 * @param string $phpPath
 	 * @param string $tasksetPath
-	 * @param KSchedularTaskConfig $taskConfig
+	 * @param VSchedularTaskConfig $taskConfig
 	 */
 	public function init($logDir, $phpPath, $tasksetPath)
 	{
 		$idx = $this->taskConfig->getTaskIndex();
-		$logName = str_replace('kasync', '', strtolower($this->taskConfig->name));
+		$logName = str_replace('vasync', '', strtolower($this->taskConfig->name));
 		$logDate = date('Y-m-d');
 		$logFileOut = "$logDir/$logName-$idx-$logDate.log";
 		$logFileErr = "$logDir/$logName-$idx-$logDate.err.log";
@@ -88,7 +88,7 @@ class KProcessWrapper
 		$descriptorspec = array(); // stdin is a pipe that the child will read from
 		$other_options = array('suppress_errors' => FALSE, 'bypass_shell' => FALSE);
 		
-		KalturaLog::debug("Now executing [$cmdLine]");
+		VidiunLog::debug("Now executing [$cmdLine]");
 		$process = proc_open($cmdLine, $descriptorspec, $pipes, null, null, $other_options);
 		$this->pipes = $pipes;
 		$this->handle = $process;
@@ -154,7 +154,7 @@ class KProcessWrapper
 		
 		if($this->isMockedProcess) {
 			$this->killProcess();
-			KScheduleHelperManager::unlinkRunningBatch($this->taskConfig->name, $this->taskConfig->getTaskIndex());
+			VScheduleHelperManager::unlinkRunningBatch($this->taskConfig->name, $this->taskConfig->getTaskIndex());
 			return;
 		}
 		
@@ -174,7 +174,7 @@ class KProcessWrapper
 	}
 	
 	private function killProcess() {
-		KalturaLog::notice("About to kill process " . $this->processId);
+		VidiunLog::notice("About to kill process " . $this->processId);
 		if ($this->processId) {
 			if(function_exists ( 'posix_kill' )){
 				posix_kill ( $this->processId, 9 );

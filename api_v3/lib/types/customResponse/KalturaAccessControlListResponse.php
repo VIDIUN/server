@@ -2,12 +2,12 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaAccessControlProfileListResponse instead
+ * @deprecated use VidiunAccessControlProfileListResponse instead
  */
-class KalturaAccessControlListResponse extends KalturaListResponse
+class VidiunAccessControlListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaAccessControlArray
+	 * @var VidiunAccessControlArray
 	 * @readonly
 	 */
 	public $objects;

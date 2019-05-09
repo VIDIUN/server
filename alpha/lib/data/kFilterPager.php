@@ -4,7 +4,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kFilterPager extends kPager
+class vFilterPager extends vPager
 {
 	public function calcPageSize()
 	{

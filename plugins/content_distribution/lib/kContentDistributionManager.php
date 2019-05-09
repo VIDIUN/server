@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage lib
  */
-class kContentDistributionManager
+class vContentDistributionManager
 {
 	/**
 	 * @param entry $entry
@@ -33,7 +33,7 @@ class kContentDistributionManager
 		$entryUrl = str_replace('//', '/', $entryUrl);
 		$entryUrl = preg_replace('/^((https?)|(ftp)|(scp)|(sftp)):\//', '$1://', $entryUrl);
 	
-		$jobData = new kImportJobData();
+		$jobData = new vImportJobData();
 		$jobData->setCacheOnly(true);
 		$jobData->setSrcFileUrl($entryUrl);
 		$jobData->setFlavorAssetId($asset->getId());
@@ -45,7 +45,7 @@ class kContentDistributionManager
 		$batchJob->setObjectId($asset->getId());
 		$batchJob->setObjectType(BatchJobObjectType::ASSET);
 		
-		return kJobsManager::addJob($batchJob, $jobData, BatchJobType::IMPORT);
+		return vJobsManager::addJob($batchJob, $jobData, BatchJobType::IMPORT);
 	}
 	
 	/**
@@ -84,7 +84,7 @@ class kContentDistributionManager
 
 		if(!$fileSyncs)
   		{
-   			KalturaLog::info("No file syncs to distribute");
+   			VidiunLog::info("No file syncs to distribute");
    			return true;
   		}
   		
@@ -103,7 +103,7 @@ class kContentDistributionManager
 			if($asset->getVersion() != $fileSync->getVersion()) // the file sync is not of the current asset version
 				continue;
 			
-			$fileSync = kFileSyncUtils::resolve($fileSync);
+			$fileSync = vFileSyncUtils::resolve($fileSync);
 			
 			// use the best URL as the source for download in case it will be needed
 			if($fileSync->getFileType() == FileSync::FILE_SYNC_FILE_TYPE_URL)
@@ -129,12 +129,12 @@ class kContentDistributionManager
 		
 		if(isset($dcs[$dc]) && count($dcs[$dc]) == count($assets))
 		{
-			KalturaLog::info("All files exist in the preferred dc [$dc]");
+			VidiunLog::info("All files exist in the preferred dc [$dc]");
 			return true;
 		}
 		
 		// check if all files exist on any of the remote dcs
-		$otherDcs = kDataCenterMgr::getAllDcs(true);
+		$otherDcs = vDataCenterMgr::getAllDcs(true);
 		foreach($otherDcs as $remoteDc)
 		{
 			$remoteDcId = $remoteDc['id'];
@@ -142,7 +142,7 @@ class kContentDistributionManager
 				continue;
 			
 			$dc = $remoteDcId;
-			KalturaLog::info("All files exist in none-preferred dc [$dc]");
+			VidiunLog::info("All files exist in none-preferred dc [$dc]");
 			return true;
 		}
 		
@@ -152,7 +152,7 @@ class kContentDistributionManager
 			$entryDistribution->getStatus() == EntryDistributionStatus::IMPORT_UPDATING
 		)
 		{
-			KalturaLog::info("Entry distribution already importing");
+			VidiunLog::info("Entry distribution already importing");
 			return false;
 		}
 		
@@ -167,7 +167,7 @@ class kContentDistributionManager
 		{
 			if(is_null($assetObject['downloadUrl']))
 			{
-				KalturaLog::info("Download URL not found for asset [$assetId]");
+				VidiunLog::info("Download URL not found for asset [$assetId]");
 				continue;
 			}
 			
@@ -177,7 +177,7 @@ class kContentDistributionManager
 			if(isset($dcExistingFiles[$assetId]))
 				continue;
 			
-			$jobData = new kImportJobData();
+			$jobData = new vImportJobData();
 			$jobData->setCacheOnly(true);
 			
 			self::addImportJob($destinationDc, $assetObject['downloadUrl'], $asset);
@@ -195,7 +195,7 @@ class kContentDistributionManager
 	{
 		if($entryDistribution->getStatus() == EntryDistributionStatus::SUBMITTING)
 		{
-			KalturaLog::info("Entry distribution [" . $entryDistribution->getId() . "] already submitting");
+			VidiunLog::info("Entry distribution [" . $entryDistribution->getId() . "] already submitting");
 			return null;
 		}
 		
@@ -203,7 +203,7 @@ class kContentDistributionManager
 		
 		if(!$entryDistribution->save())
 		{
-			KalturaLog::err("Unable to save entry distribution [" . $entryDistribution->getId() . "] status");
+			VidiunLog::err("Unable to save entry distribution [" . $entryDistribution->getId() . "] status");
 			$entryDistribution->reload();	//Reload in case object was chnaged
 			return null;
 		}
@@ -213,7 +213,7 @@ class kContentDistributionManager
 	
 		$dc = $distributionProfile->getRecommendedDcForExecute();
 		if(is_null($dc))
-			$dc = kDataCenterMgr::getCurrentDcId();
+			$dc = vDataCenterMgr::getCurrentDcId();
 			
 		$jobType = ContentDistributionPlugin::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_SUBMIT);
 		if($distributionProfile->getProvider()->isLocalFileRequired($jobType))
@@ -228,7 +228,7 @@ class kContentDistributionManager
 			}
 		}
 		
- 		$jobData = new kDistributionSubmitJobData();
+ 		$jobData = new vDistributionSubmitJobData();
  		$jobData->setDistributionProfileId($entryDistribution->getDistributionProfileId());
  		$jobData->setEntryDistributionId($entryDistribution->getId());
  		$jobData->setProviderType($distributionProfile->getProviderType());
@@ -238,11 +238,11 @@ class kContentDistributionManager
 		$batchJob->setEntryId($entryDistribution->getEntryId());
 		$batchJob->setPartnerId($entryDistribution->getPartnerId());
 		$batchJob->setObjectId($entryDistribution->getId());
-		$batchJob->setObjectType(kPluginableEnumsManager::apiToCore('BatchJobObjectType',ContentDistributionBatchJobObjectType::ENTRY_DISTRIBUTION));
+		$batchJob->setObjectType(vPluginableEnumsManager::apiToCore('BatchJobObjectType',ContentDistributionBatchJobObjectType::ENTRY_DISTRIBUTION));
 		
 		$jobSubType = $distributionProfile->getProviderType();
 	
-		return kJobsManager::addJob($batchJob, $jobData, $jobType, $jobSubType);
+		return vJobsManager::addJob($batchJob, $jobData, $jobType, $jobSubType);
 	}
 	
 	/**
@@ -256,7 +256,7 @@ class kContentDistributionManager
 		
 		if(!$entryDistribution->save())
 		{
-			KalturaLog::err("Unable to save entry distribution [" . $entryDistribution->getId() . "] status");
+			VidiunLog::err("Unable to save entry distribution [" . $entryDistribution->getId() . "] status");
 			$entryDistribution->reload();
 			return null;
 		}
@@ -264,7 +264,7 @@ class kContentDistributionManager
 		$entryDistribution->setDirtyStatus(null);	//Moved down to ensure previous save is done Atomically
 		$entryDistribution->save();
 		
- 		$jobData = new kDistributionDisableJobData();
+ 		$jobData = new vDistributionDisableJobData();
  		$jobData->setDistributionProfileId($entryDistribution->getDistributionProfileId());
  		$jobData->setEntryDistributionId($entryDistribution->getId());
  		$jobData->setProviderType($distributionProfile->getProviderType());
@@ -275,12 +275,12 @@ class kContentDistributionManager
 		$batchJob->setEntryId($entryDistribution->getEntryId());
 		$batchJob->setPartnerId($entryDistribution->getPartnerId());
 		$batchJob->setObjectId($entryDistribution->getId());
-		$batchJob->setObjectType(kPluginableEnumsManager::apiToCore('BatchJobObjectType',ContentDistributionBatchJobObjectType::ENTRY_DISTRIBUTION));
+		$batchJob->setObjectType(vPluginableEnumsManager::apiToCore('BatchJobObjectType',ContentDistributionBatchJobObjectType::ENTRY_DISTRIBUTION));
 		
 		$jobType = ContentDistributionPlugin::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_DISABLE);
 		$jobSubType = $distributionProfile->getProviderType();
 	
-		return kJobsManager::addJob($batchJob, $jobData, $jobType, $jobSubType);
+		return vJobsManager::addJob($batchJob, $jobData, $jobType, $jobSubType);
 	}
 	
 	/**
@@ -294,7 +294,7 @@ class kContentDistributionManager
 		
 		if(!$entryDistribution->save())
 		{
-			KalturaLog::err("Unable to save entry distribution [" . $entryDistribution->getId() . "] status");
+			VidiunLog::err("Unable to save entry distribution [" . $entryDistribution->getId() . "] status");
 			$entryDistribution->reload();
 			return null;
 		}
@@ -302,7 +302,7 @@ class kContentDistributionManager
 		$entryDistribution->setDirtyStatus(null);	//Moved down to ensure previous save is done Atomically
 		$entryDistribution->save();
 		
- 		$jobData = new kDistributionEnableJobData();
+ 		$jobData = new vDistributionEnableJobData();
  		$jobData->setDistributionProfileId($entryDistribution->getDistributionProfileId());
  		$jobData->setEntryDistributionId($entryDistribution->getId());
  		$jobData->setProviderType($distributionProfile->getProviderType());
@@ -313,12 +313,12 @@ class kContentDistributionManager
 		$batchJob->setEntryId($entryDistribution->getEntryId());
 		$batchJob->setPartnerId($entryDistribution->getPartnerId());
 		$batchJob->setObjectId($entryDistribution->getId());
-		$batchJob->setObjectType(kPluginableEnumsManager::apiToCore('BatchJobObjectType',ContentDistributionBatchJobObjectType::ENTRY_DISTRIBUTION));
+		$batchJob->setObjectType(vPluginableEnumsManager::apiToCore('BatchJobObjectType',ContentDistributionBatchJobObjectType::ENTRY_DISTRIBUTION));
 		
 		$jobType = ContentDistributionPlugin::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_ENABLE);
 		$jobSubType = $distributionProfile->getProviderType();
 	
-		return kJobsManager::addJob($batchJob, $jobData, $jobType, $jobSubType);
+		return vJobsManager::addJob($batchJob, $jobData, $jobType, $jobSubType);
 	}
 	
 	/**
@@ -335,7 +335,7 @@ class kContentDistributionManager
 		
 		if(!$entryDistribution->save())
 		{
-			KalturaLog::err("Unable to save entry distribution [" . $entryDistribution->getId() . "] status");
+			VidiunLog::err("Unable to save entry distribution [" . $entryDistribution->getId() . "] status");
 			$entryDistribution->reload();
 			return null;
 		}
@@ -345,7 +345,7 @@ class kContentDistributionManager
 		
 		$dc = $distributionProfile->getRecommendedDcForExecute();
 		if(is_null($dc))
-			$dc = kDataCenterMgr::getCurrentDcId();
+			$dc = vDataCenterMgr::getCurrentDcId();
 		
 		$jobType = ContentDistributionPlugin::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_UPDATE);
 		if($distributionProfile->getProvider()->isLocalFileRequired($jobType))
@@ -360,7 +360,7 @@ class kContentDistributionManager
 			}
 		}
 		
- 		$jobData = new kDistributionUpdateJobData();
+ 		$jobData = new vDistributionUpdateJobData();
  		$jobData->setDistributionProfileId($entryDistribution->getDistributionProfileId());
  		$jobData->setEntryDistributionId($entryDistribution->getId());
  		$jobData->setProviderType($distributionProfile->getProviderType());
@@ -372,11 +372,11 @@ class kContentDistributionManager
 		$batchJob->setEntryId($entryDistribution->getEntryId());
 		$batchJob->setPartnerId($entryDistribution->getPartnerId());
 		$batchJob->setObjectId($entryDistribution->getId());
-		$batchJob->setObjectType(kPluginableEnumsManager::apiToCore('BatchJobObjectType',ContentDistributionBatchJobObjectType::ENTRY_DISTRIBUTION));
+		$batchJob->setObjectType(vPluginableEnumsManager::apiToCore('BatchJobObjectType',ContentDistributionBatchJobObjectType::ENTRY_DISTRIBUTION));
 		
 		$jobSubType = $distributionProfile->getProviderType();
 	
-		return kJobsManager::addJob($batchJob, $jobData, $jobType, $jobSubType);
+		return vJobsManager::addJob($batchJob, $jobData, $jobType, $jobSubType);
 	}
 	
 	/**
@@ -386,7 +386,7 @@ class kContentDistributionManager
 	 */
 	protected static function addFetchReportJob(EntryDistribution $entryDistribution, DistributionProfile $distributionProfile)
 	{
- 		$jobData = new kDistributionFetchReportJobData();
+ 		$jobData = new vDistributionFetchReportJobData();
  		$jobData->setDistributionProfileId($entryDistribution->getDistributionProfileId());
  		$jobData->setEntryDistributionId($entryDistribution->getId());
  		$jobData->setProviderType($distributionProfile->getProviderType());
@@ -396,12 +396,12 @@ class kContentDistributionManager
 		$batchJob->setEntryId($entryDistribution->getEntryId());
 		$batchJob->setPartnerId($entryDistribution->getPartnerId());
 		$batchJob->setObjectId($entryDistribution->getId());
-		$batchJob->setObjectType(kPluginableEnumsManager::apiToCore('BatchJobObjectType',ContentDistributionBatchJobObjectType::ENTRY_DISTRIBUTION));
+		$batchJob->setObjectType(vPluginableEnumsManager::apiToCore('BatchJobObjectType',ContentDistributionBatchJobObjectType::ENTRY_DISTRIBUTION));
 		
 		$jobType = ContentDistributionPlugin::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_FETCH_REPORT);
 		$jobSubType = $distributionProfile->getProviderType();
 	
-		return kJobsManager::addJob($batchJob, $jobData, $jobType, $jobSubType);
+		return vJobsManager::addJob($batchJob, $jobData, $jobType, $jobSubType);
 	}
 	
 	/**
@@ -415,7 +415,7 @@ class kContentDistributionManager
 		
 		if(!$entryDistribution->save())
 		{
-			KalturaLog::err("Unable to save entry distribution [" . $entryDistribution->getId() . "] status");
+			VidiunLog::err("Unable to save entry distribution [" . $entryDistribution->getId() . "] status");
 			$entryDistribution->reload();
 			return null;
 		}
@@ -423,7 +423,7 @@ class kContentDistributionManager
 		$entryDistribution->setDirtyStatus(null);	//Moved down to ensure previous save is done Atomically
 		$entryDistribution->save();
 	
- 		$jobData = new kDistributionDeleteJobData();
+ 		$jobData = new vDistributionDeleteJobData();
  		$jobData->setDistributionProfileId($entryDistribution->getDistributionProfileId());
  		$jobData->setEntryDistributionId($entryDistribution->getId());
  		$jobData->setProviderType($distributionProfile->getProviderType());
@@ -435,12 +435,12 @@ class kContentDistributionManager
 		$batchJob->setEntryId($entryDistribution->getEntryId());
 		$batchJob->setPartnerId($entryDistribution->getPartnerId());
 		$batchJob->setObjectId($entryDistribution->getId());
-		$batchJob->setObjectType(kPluginableEnumsManager::apiToCore('BatchJobObjectType',ContentDistributionBatchJobObjectType::ENTRY_DISTRIBUTION));
+		$batchJob->setObjectType(vPluginableEnumsManager::apiToCore('BatchJobObjectType',ContentDistributionBatchJobObjectType::ENTRY_DISTRIBUTION));
 		
 		$jobType = ContentDistributionPlugin::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_DELETE);
 		$jobSubType = $distributionProfile->getProviderType();
 	
-		return kJobsManager::addJob($batchJob, $jobData, $jobType, $jobSubType);
+		return vJobsManager::addJob($batchJob, $jobData, $jobType, $jobSubType);
 	}
 	
 	/**
@@ -461,7 +461,7 @@ class kContentDistributionManager
 		
 		if(!in_array($entryDistribution->getStatus(), $validStatus))
 		{
-			KalturaLog::notice("Wrong entry distribution status [" . $entryDistribution->getStatus() . "]");
+			VidiunLog::notice("Wrong entry distribution status [" . $entryDistribution->getStatus() . "]");
 			return null;
 		}
 		
@@ -474,7 +474,7 @@ class kContentDistributionManager
 		
 		if(!$distributionProvider->isScheduleUpdateEnabled() || !$distributionProvider->isUpdateEnabled())
 		{
-			KalturaLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider [" . $distributionProfile->getProviderType() . "] doesn't support delete or update");
+			VidiunLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider [" . $distributionProfile->getProviderType() . "] doesn't support delete or update");
 			return null;
 		}
 			
@@ -503,7 +503,7 @@ class kContentDistributionManager
 		
 		if(!in_array($entryDistribution->getStatus(), $validStatus))
 		{
-			KalturaLog::notice("wrong entry distribution status [" . $entryDistribution->getStatus() . "]");
+			VidiunLog::notice("wrong entry distribution status [" . $entryDistribution->getStatus() . "]");
 			return null;
 		}
 		
@@ -511,7 +511,7 @@ class kContentDistributionManager
 		$validationErrors = $entryDistribution->getValidationErrors();
 		if(count($validationErrors))
 		{
-			KalturaLog::log("Validation errors found");
+			VidiunLog::log("Validation errors found");
 			return null;
 		}
 		self::addAssetIdsToEntryDistribution($entryDistribution, $distributionProfile);
@@ -549,7 +549,7 @@ class kContentDistributionManager
 		
 		if(!in_array($entryDistribution->getStatus(), $validStatus))
 		{
-			KalturaLog::notice("wrong entry distribution status [" . $entryDistribution->getStatus() . "]");
+			VidiunLog::notice("wrong entry distribution status [" . $entryDistribution->getStatus() . "]");
 			return null;
 		}
 		
@@ -557,7 +557,7 @@ class kContentDistributionManager
 		$validationErrors = $entryDistribution->getValidationErrors();
 		if(count($validationErrors))
 		{
-			KalturaLog::log("Validation errors found");
+			VidiunLog::log("Validation errors found");
 			return null;
 		}
 		
@@ -589,7 +589,7 @@ class kContentDistributionManager
 		
 		if(!in_array($entryDistribution->getStatus(), $validStatus))
 		{
-			KalturaLog::notice("wrong entry distribution status [" . $entryDistribution->getStatus() . "]");
+			VidiunLog::notice("wrong entry distribution status [" . $entryDistribution->getStatus() . "]");
 			return null;
 		}
 		
@@ -597,7 +597,7 @@ class kContentDistributionManager
 		$validationErrors = $entryDistribution->getValidationErrors();
 		if(count($validationErrors))
 		{
-			KalturaLog::log("Validation errors found");
+			VidiunLog::log("Validation errors found");
 			return null;
 		}
 		
@@ -627,7 +627,7 @@ class kContentDistributionManager
 		
 		if(!in_array($entryDistribution->getStatus(), $validStatus))
 		{
-			KalturaLog::notice("wrong entry distribution status [" . $entryDistribution->getStatus() . "]");
+			VidiunLog::notice("wrong entry distribution status [" . $entryDistribution->getStatus() . "]");
 			return null;
 		}
 		
@@ -664,7 +664,7 @@ class kContentDistributionManager
 		
 		if(!in_array($entryDistribution->getStatus(), $validStatus))
 		{
-			KalturaLog::notice("Wrong entry distribution status [" . $entryDistribution->getStatus() . "]");
+			VidiunLog::notice("Wrong entry distribution status [" . $entryDistribution->getStatus() . "]");
 			return null;
 		}
 
@@ -680,11 +680,11 @@ class kContentDistributionManager
 		self::updateStatusToQueued($entryDistribution);
 
 
-		KalturaLog::log("Validation errors found");
+		VidiunLog::log("Validation errors found");
 		$entry = entryPeer::retrieveByPK($entryDistribution->getEntryId());
 		if(!$entry)
 		{
-			KalturaLog::err("Entry [" . $entryDistribution->getEntryId() . "] not found");
+			VidiunLog::err("Entry [" . $entryDistribution->getEntryId() . "] not found");
 			return null;
 		}
 
@@ -697,10 +697,10 @@ class kContentDistributionManager
 			if($validationError->getErrorType() == DistributionErrorType::MISSING_FLAVOR && in_array($validationError->getData(), $autoCreateFlavors))
 			{
 				$errDescription = null;
-				KalturaLog::log("Adding flavor [" . $validationError->getData() . "] to entry [" . $entryDistribution->getEntryId() . "]");
-				kBusinessPreConvertDL::decideAddEntryFlavor(null, $entryDistribution->getEntryId(), $validationError->getData(), $errDescription);
+				VidiunLog::log("Adding flavor [" . $validationError->getData() . "] to entry [" . $entryDistribution->getEntryId() . "]");
+				vBusinessPreConvertDL::decideAddEntryFlavor(null, $entryDistribution->getEntryId(), $validationError->getData(), $errDescription);
 				if($errDescription)
-					KalturaLog::log($errDescription);
+					VidiunLog::log($errDescription);
 			}
 		
 		    if($validationError->getErrorType() == DistributionErrorType::MISSING_THUMBNAIL && count($autoCreateThumbs))
@@ -714,15 +714,15 @@ class kContentDistributionManager
 			        if ($thumbParams->getWidth() == intval($requiredWidth) && $thumbParams->getHeight() == intval($requiredHeight))
 			        {
 			            $foundThumbParams = true;
-			            KalturaLog::log("Adding thumbnail [" . $thumbParams->getId() . "] to entry [" . $entryDistribution->getEntryId() . "]");
-					    kBusinessPreConvertDL::decideThumbGenerate($entry, $thumbParams);
+			            VidiunLog::log("Adding thumbnail [" . $thumbParams->getId() . "] to entry [" . $entryDistribution->getEntryId() . "]");
+					    vBusinessPreConvertDL::decideThumbGenerate($entry, $thumbParams);
 					    break;
 			        }
 			    }
 			    
 			    if (!$foundThumbParams)
 			    {
-			        KalturaLog::err("Required thumbnail params not found [" . $validationError->getData() . "]");
+			        VidiunLog::err("Required thumbnail params not found [" . $validationError->getData() . "]");
 			    }
 			}
 		}
@@ -752,13 +752,13 @@ class kContentDistributionManager
 			$distributionProvider = $distributionProfile->getProvider();
 			if(!$distributionProvider)
 			{
-				KalturaLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider not found");
+				VidiunLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider not found");
 				return false;
 			}
 						
 			if(!$distributionProvider->isUpdateEnabled() || !$distributionProvider->isMediaUpdateEnabled())
 			{
-				KalturaLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider [" . $distributionProvider->getName() . "] does not support update");
+				VidiunLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider [" . $distributionProvider->getName() . "] does not support update");
 				return false;
 			}
 		}
@@ -813,13 +813,13 @@ class kContentDistributionManager
 			$distributionProvider = $distributionProfile->getProvider();
 			if(!$distributionProvider)
 			{
-				KalturaLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider not found");
+				VidiunLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider not found");
 				return false;
 			}
 						
 			if(!$distributionProvider->isUpdateEnabled() || !$distributionProvider->isMediaUpdateEnabled())
 			{
-				KalturaLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider [" . $distributionProvider->getName() . "] does not support update");
+				VidiunLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider [" . $distributionProvider->getName() . "] does not support update");
 				return false;
 			}
 		}
@@ -862,14 +862,14 @@ class kContentDistributionManager
 			if(in_array($thumbAsset->getFlavorParamsId(), $requiredThumbParamsIds))
 			{
 				$thumbAssetsIds[] = $thumbAsset->getId();
-				KalturaLog::log("Assign thumb asset [" . $thumbAsset->getId() . "] from required thumbnail params ids for entry Distribution [".$entryDistribution->getId()."]");
+				VidiunLog::log("Assign thumb asset [" . $thumbAsset->getId() . "] from required thumbnail params ids for entry Distribution [".$entryDistribution->getId()."]");
 				continue;
 			}
 			
 			//If defined dimension of 0x0 distribute all
 			if(isset($thumbDimensionsWithKeys["0x0"]))
 			{
-				KalturaLog::log("Thumb Dimensions 0x0 set adding [" . $thumbAsset->getId() . "] to entry Distribution [".$entryDistribution->getId()."]");
+				VidiunLog::log("Thumb Dimensions 0x0 set adding [" . $thumbAsset->getId() . "] to entry Distribution [".$entryDistribution->getId()."]");
 				$thumbAssetsIds[] = $thumbAsset->getId();
 				continue;
 			}
@@ -878,7 +878,7 @@ class kContentDistributionManager
 			if(isset($thumbDimensionsWithKeys[$key]))
 			{
 				unset($thumbDimensionsWithKeys[$key]);
-				KalturaLog::log("Assign thumb asset [" . $thumbAsset->getId() . "] from dimension [$key] for entry Distribution [".$entryDistribution->getId()."]");
+				VidiunLog::log("Assign thumb asset [" . $thumbAsset->getId() . "] from dimension [$key] for entry Distribution [".$entryDistribution->getId()."]");
 				$thumbAssetsIds[] = $thumbAsset->getId();
 			}
 		}
@@ -911,13 +911,13 @@ class kContentDistributionManager
 			$distributionProvider = $distributionProfile->getProvider();
 			if(!$distributionProvider)
 			{
-				KalturaLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider not found");
+				VidiunLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider not found");
 				return false;
 			}
 	
 			if(!$distributionProvider->isUpdateEnabled() || !$distributionProvider->isMediaUpdateEnabled())
 			{
-				KalturaLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider [" . $distributionProvider->getName() . "] does not support update");
+				VidiunLog::log("Entry distribution [" . $entryDistribution->getId() . "] provider [" . $distributionProvider->getName() . "] does not support update");
 				return false;
 			}
 		}
@@ -938,7 +938,7 @@ class kContentDistributionManager
 
 		foreach ($assetDistributionRules as $assetDistributionRule)
 		{
-			/* @var $assetDistributionRule kAssetDistributionRule */
+			/* @var $assetDistributionRule vAssetDistributionRule */
 			foreach ($entryAssets as $asset)
 			{
 				/* @var $asset asset */
@@ -974,7 +974,7 @@ class kContentDistributionManager
 		{
 			$entryDistribution = new EntryDistribution();
 		} else if(in_array($entryDistribution->getStatus(), $illegalEntryDistributionStatus)) {
-			KalturaLog::err("Entry distribution already exist. entry [" . $entry->getId() . "] distribution profile [" 
+			VidiunLog::err("Entry distribution already exist. entry [" . $entry->getId() . "] distribution profile [" 
 					. $distributionProfile->getId() . "] status [" . $entryDistribution->getStatus() . "]");
 			return null;
 		} 
@@ -1108,7 +1108,7 @@ class kContentDistributionManager
 		$dbEntry = entryPeer::retrieveByPK($entryDistribution->getEntryId());
 		if (!$dbEntry)
 		{
-			KalturaLog::log("EntryId not found [".$entryDistribution->getEntryId()."]");
+			VidiunLog::log("EntryId not found [".$entryDistribution->getEntryId()."]");
 			return false;
 		}
 		$ret_val = self::assignAssets($entryDistribution,  $dbEntry, $distributionProfile);
@@ -1140,7 +1140,7 @@ class kContentDistributionManager
 			$entryDistribution->setStatus(EntryDistributionStatus::QUEUED);
 			$entryDistribution->save();
 		}
-		KalturaLog::info("EntryDistribution id [".$entryDistribution->getIntId()."] on Entry [".$entryDistribution->getEntryId() 
+		VidiunLog::info("EntryDistribution id [".$entryDistribution->getIntId()."] on Entry [".$entryDistribution->getEntryId() 
 			."] has status [".$entryDistribution->getStatus() ."] and will be submitted when ready");
 	}
 

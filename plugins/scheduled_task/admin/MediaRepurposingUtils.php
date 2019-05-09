@@ -19,11 +19,11 @@ class MediaRepurposingUtils
 	/**
 	 * get all Media Repurposing of the partner
 	 * @param int $partnerId
-	 * @return array of KalturaScheduledTaskProfile
+	 * @return array of VidiunScheduledTaskProfile
 	 */
 	public static function getMrs($partnerId = null) {
-		$scheduledtaskPlugin = self::getPluginByName('Kaltura_Client_ScheduledTask_Plugin');
-		$filter = new Kaltura_Client_ScheduledTask_Type_ScheduledTaskProfileFilter();
+		$scheduledtaskPlugin = self::getPluginByName('Vidiun_Client_ScheduledTask_Plugin');
+		$filter = new Vidiun_Client_ScheduledTask_Type_ScheduledTaskProfileFilter();
 		if ($partnerId)
 			$filter->partnerIdEqual = $partnerId;
 		$filter->systemNameEqual = self::MEDIA_REPURPOSING_SYSTEM_NAME;
@@ -33,7 +33,7 @@ class MediaRepurposingUtils
 
 	public static function getMrById($MrId)
 	{
-		$scheduledtaskPlugin = self::getPluginByName('Kaltura_Client_ScheduledTask_Plugin');
+		$scheduledtaskPlugin = self::getPluginByName('Vidiun_Client_ScheduledTask_Plugin');
 		return $scheduledtaskPlugin->scheduledTaskProfile->get($MrId);
 	}
 
@@ -41,13 +41,13 @@ class MediaRepurposingUtils
 	{
 		$client = Infra_ClientHelper::getClient();
 		$client->setPartnerId($partnerId);
-		$filter = new Kaltura_Client_Type_PermissionFilter();
-		$filter->nameEqual = Kaltura_Client_Enum_PermissionName::FEATURE_MEDIA_REPURPOSING_PERMISSION;
+		$filter = new Vidiun_Client_Type_PermissionFilter();
+		$filter->nameEqual = Vidiun_Client_Enum_PermissionName::FEATURE_MEDIA_REPURPOSING_PERMISSION;
 		$filter->partnerIdEqual = $partnerId;
 		$result = $client->permission->listAction($filter, null);
 		$client->setPartnerId(self::ADMIN_CONSOLE_PARTNER);
 		
-		$isAllow = ($result->totalCount > 0) && ($result->objects[0]->status == Kaltura_Client_Enum_PermissionStatus::ACTIVE);
+		$isAllow = ($result->totalCount > 0) && ($result->objects[0]->status == Vidiun_Client_Enum_PermissionStatus::ACTIVE);
 		return $isAllow;
 	}
 
@@ -65,13 +65,13 @@ class MediaRepurposingUtils
 
 
 	public static function changeMrStatus($mr, $newStatus) {
-		$scheduledtaskPlugin = self::getPluginByName('Kaltura_Client_ScheduledTask_Plugin');
+		$scheduledtaskPlugin = self::getPluginByName('Vidiun_Client_ScheduledTask_Plugin');
 
-		$scheduledTaskProfile = new Kaltura_Client_ScheduledTask_Type_ScheduledTaskProfile();
+		$scheduledTaskProfile = new Vidiun_Client_ScheduledTask_Type_ScheduledTaskProfile();
 		$scheduledTaskProfile->status = $newStatus;
 
 		$scheduleTaskIds = explode(',', $mr->description);
-		KalturaLog::info("starting changing status of media repurpesing and its schedule tasks [$mr->description] to $newStatus");
+		VidiunLog::info("starting changing status of media repurpesing and its schedule tasks [$mr->description] to $newStatus");
 		foreach ($scheduleTaskIds as $scheduleTaskId)
 			if ($scheduleTaskId)
 				$result = $scheduledtaskPlugin->scheduledTaskProfile->update($scheduleTaskId, $scheduledTaskProfile);
@@ -84,13 +84,13 @@ class MediaRepurposingUtils
 	public static function createNewMr($name, $filterTypeEngine, $filter, $taskArray, $partnerId, $maxEntriesAllowed) {
 		$mr = self::createScheduleTask($partnerId, $name, $filterTypeEngine, $filter, $taskArray[0], $maxEntriesAllowed);
 		$mr->systemName = self::MEDIA_REPURPOSING_SYSTEM_NAME;
-		$scheduledTaskPlugin = self::getPluginByName('Kaltura_Client_ScheduledTask_Plugin', $partnerId);
+		$scheduledTaskPlugin = self::getPluginByName('Vidiun_Client_ScheduledTask_Plugin', $partnerId);
 		$result = $scheduledTaskPlugin->scheduledTaskProfile->add($mr);
 
 		$mrId = $result->id;
 		$mr->description = self::handleScheduleTasks($partnerId, $mrId, $name, $filterTypeEngine, $filter, $taskArray, $maxEntriesAllowed);
 		$mr->objectFilter->advancedSearch->items[0]->items[] = self::createMrConditionFilter($mrId);
-		$scheduledTaskPlugin = self::getPluginByName('Kaltura_Client_ScheduledTask_Plugin', $partnerId);
+		$scheduledTaskPlugin = self::getPluginByName('Vidiun_Client_ScheduledTask_Plugin', $partnerId);
 		return $scheduledTaskPlugin->scheduledTaskProfile->update($mrId, $mr);
 	}
 
@@ -103,19 +103,19 @@ class MediaRepurposingUtils
 		$mr->objectFilter->advancedSearch->items[0]->items[] = self::createMrConditionFilter($id);
 		$mr->description = self::handleScheduleTasks($partnerId, $id, $name, $filterTypeEngine, clone($filter), $taskArray, $maxEntriesAllowed);
 
-		$scheduledtaskPlugin = self::getPluginByName('Kaltura_Client_ScheduledTask_Plugin', $partnerId);
+		$scheduledtaskPlugin = self::getPluginByName('Vidiun_Client_ScheduledTask_Plugin', $partnerId);
 		return $scheduledtaskPlugin->scheduledTaskProfile->update($id, $mr);
 
 	}
 
 	public static function executeDryRun($mr) {
 		$max = $mr->maxTotalCountAllowed ? $mr->maxTotalCountAllowed : self::DRY_RUN_MAX_RESULT_DEFAULT;
-		$scheduledtaskPlugin = self::getPluginByName('Kaltura_Client_ScheduledTask_Plugin');
+		$scheduledtaskPlugin = self::getPluginByName('Vidiun_Client_ScheduledTask_Plugin');
 		return $scheduledtaskPlugin->scheduledTaskProfile->requestDryRun($mr->id, $max);
 	}
 
 	public static function getDryRunResult($dryRunId) {
-		$scheduledtaskPlugin = self::getPluginByName('Kaltura_Client_ScheduledTask_Plugin');
+		$scheduledtaskPlugin = self::getPluginByName('Vidiun_Client_ScheduledTask_Plugin');
 		return $scheduledtaskPlugin->scheduledTaskProfile->getDryRunResults($dryRunId);
 	}
 
@@ -133,11 +133,11 @@ class MediaRepurposingUtils
 			$scheduledTaskProfile->description = $timeAfterLast;
 			$scheduledTaskProfile->objectFilter->advancedSearch->items[0]->items[] = self::createMrStateConditionFilter($mrId, ($i/2));
 
-			KalturaLog::info("Handle Schedule Task [$sdId] who should run [$timeAfterLast] days after last Schedule Task:");
-			KalturaLog::info(print_r($scheduledTaskProfile, true));
+			VidiunLog::info("Handle Schedule Task [$sdId] who should run [$timeAfterLast] days after last Schedule Task:");
+			VidiunLog::info(print_r($scheduledTaskProfile, true));
 
 			//add task to API
-			$scheduledTaskPlugin = self::getPluginByName('Kaltura_Client_ScheduledTask_Plugin', $partnerId);
+			$scheduledTaskPlugin = self::getPluginByName('Vidiun_Client_ScheduledTask_Plugin', $partnerId);
 			if ($sdId)
 				$result = $scheduledTaskPlugin->scheduledTaskProfile->update($sdId, $scheduledTaskProfile);
 			else
@@ -153,11 +153,11 @@ class MediaRepurposingUtils
 
 	private static function createScheduleTask($partnerId, $name, $filterTypeEngine, $originalFilter, $task, $maxEntriesAllowed)
 	{
-		$scheduleTask = new Kaltura_Client_ScheduledTask_Type_ScheduledTaskProfile();
+		$scheduleTask = new Vidiun_Client_ScheduledTask_Type_ScheduledTaskProfile();
 		$scheduleTask->name = $name;
 		$scheduleTask->status = ScheduledTaskProfileStatus::DISABLED;
 
-		if (!$originalFilter->advancedSearch && get_class($originalFilter) != 'Kaltura_Client_Reach_Type_EntryVendorTaskFilter')
+		if (!$originalFilter->advancedSearch && get_class($originalFilter) != 'Vidiun_Client_Reach_Type_EntryVendorTaskFilter')
 			$originalFilter->advancedSearch = self::createSearchOperator();
 
 		// clone the advance search field and add the status-not-exclude filter
@@ -175,10 +175,10 @@ class MediaRepurposingUtils
 
 	private static function getMrMetadataProfile($partnerId)
 	{
-		$filter = new Kaltura_Client_Metadata_Type_MetadataProfileFilter();
+		$filter = new Vidiun_Client_Metadata_Type_MetadataProfileFilter();
 		$filter->systemNameEqual = 'MRP';
 		$filter->partnerIdEqual = $partnerId;
-		$metadataPlugin = self::getPluginByName('Kaltura_Client_Metadata_Plugin');
+		$metadataPlugin = self::getPluginByName('Vidiun_Client_Metadata_Plugin');
 		$res = $metadataPlugin->metadataProfile->listAction($filter, null);
 		if ($res->totalCount != 1)
 			return null;
@@ -200,8 +200,8 @@ class MediaRepurposingUtils
 
 	private static function createMRFilterForStatus($partnerId)
 	{
-		$searchItem = new Kaltura_Client_Metadata_Type_MetadataSearchItem();
-		$searchItem->type = Kaltura_Client_Enum_SearchOperatorType::SEARCH_AND;
+		$searchItem = new Vidiun_Client_Metadata_Type_MetadataSearchItem();
+		$searchItem->type = Vidiun_Client_Enum_SearchOperatorType::SEARCH_AND;
 
 		$profile = self::getMrMetadataProfile($partnerId);
 		if (!$profile)
@@ -209,7 +209,7 @@ class MediaRepurposingUtils
 		$searchItem->metadataProfileId = $profile->id;
 
 		$conditions = array();
-		$condition = new Kaltura_Client_Type_SearchMatchCondition();
+		$condition = new Vidiun_Client_Type_SearchMatchCondition();
 		$condition->field = self::STATUS_XPATH_NAME;
 		$condition->value = self::EXCLUDE;
 		$condition->not = 1;
@@ -221,7 +221,7 @@ class MediaRepurposingUtils
 
 	private static function createMrStateConditionFilter($mrId, $statusLevel)
 	{
-		$condition = new Kaltura_Client_Type_SearchMatchCondition();
+		$condition = new Vidiun_Client_Type_SearchMatchCondition();
 		$condition->field = self::MPRS_DATA_XPATH_NAME;
 		$condition->value = "$mrId,$statusLevel";
 		return $condition;
@@ -229,7 +229,7 @@ class MediaRepurposingUtils
 
 	private static function createMrConditionFilter($mrId)
 	{
-		$condition = new Kaltura_Client_Type_SearchMatchCondition();
+		$condition = new Vidiun_Client_Type_SearchMatchCondition();
 		$condition->field = self::MPRS_XPATH_NAME;
 		$condition->value = "MR_$mrId";
 		$condition->not = true;
@@ -237,8 +237,8 @@ class MediaRepurposingUtils
 	}
 	
 	public static function createSearchOperator($metadataSearchArray = array()) {
-		$searchOperator = new Kaltura_Client_Type_SearchOperator();
-		$searchOperator->type = Kaltura_Client_Enum_SearchOperatorType::SEARCH_AND;
+		$searchOperator = new Vidiun_Client_Type_SearchOperator();
+		$searchOperator->type = Vidiun_Client_Enum_SearchOperatorType::SEARCH_AND;
 		$searchOperator->items = $metadataSearchArray;
 		return $searchOperator;
 	}
@@ -247,38 +247,38 @@ class MediaRepurposingUtils
 	public static function objectTaskFactory($type) {
 		switch($type)
 		{
-			case Kaltura_Client_ScheduledTask_Enum_ObjectTaskType::DELETE_ENTRY_FLAVORS:
-				return new Kaltura_Client_ScheduledTask_Type_DeleteEntryFlavorsObjectTask();
+			case Vidiun_Client_ScheduledTask_Enum_ObjectTaskType::DELETE_ENTRY_FLAVORS:
+				return new Vidiun_Client_ScheduledTask_Type_DeleteEntryFlavorsObjectTask();
 
-			case Kaltura_Client_ScheduledTask_Enum_ObjectTaskType::CONVERT_ENTRY_FLAVORS:
-				return new Kaltura_Client_ScheduledTask_Type_ConvertEntryFlavorsObjectTask();
+			case Vidiun_Client_ScheduledTask_Enum_ObjectTaskType::CONVERT_ENTRY_FLAVORS:
+				return new Vidiun_Client_ScheduledTask_Type_ConvertEntryFlavorsObjectTask();
 
-			case Kaltura_Client_ScheduledTask_Enum_ObjectTaskType::DELETE_LOCAL_CONTENT:
-				return new Kaltura_Client_ScheduledTask_Type_DeleteLocalContentObjectTask();
+			case Vidiun_Client_ScheduledTask_Enum_ObjectTaskType::DELETE_LOCAL_CONTENT:
+				return new Vidiun_Client_ScheduledTask_Type_DeleteLocalContentObjectTask();
 
-			case Kaltura_Client_ScheduledTask_Enum_ObjectTaskType::STORAGE_EXPORT:
-				return new Kaltura_Client_ScheduledTask_Type_StorageExportObjectTask();
+			case Vidiun_Client_ScheduledTask_Enum_ObjectTaskType::STORAGE_EXPORT:
+				return new Vidiun_Client_ScheduledTask_Type_StorageExportObjectTask();
 
-			case Kaltura_Client_ScheduledTask_Enum_ObjectTaskType::MODIFY_CATEGORIES:
-				return new Kaltura_Client_ScheduledTask_Type_ModifyCategoriesObjectTask();
+			case Vidiun_Client_ScheduledTask_Enum_ObjectTaskType::MODIFY_CATEGORIES:
+				return new Vidiun_Client_ScheduledTask_Type_ModifyCategoriesObjectTask();
 
-			case Kaltura_Client_ScheduledTask_Enum_ObjectTaskType::MODIFY_ENTRY:
-				return new Kaltura_Client_ScheduledTask_Type_ModifyEntryObjectTask();
+			case Vidiun_Client_ScheduledTask_Enum_ObjectTaskType::MODIFY_ENTRY:
+				return new Vidiun_Client_ScheduledTask_Type_ModifyEntryObjectTask();
 
-			case Kaltura_Client_ScheduledTask_Enum_ObjectTaskType::DELETE_ENTRY:
-				return new Kaltura_Client_ScheduledTask_Type_DeleteEntryObjectTask();
+			case Vidiun_Client_ScheduledTask_Enum_ObjectTaskType::DELETE_ENTRY:
+				return new Vidiun_Client_ScheduledTask_Type_DeleteEntryObjectTask();
 
-			case Kaltura_Client_ScheduledTask_Enum_ObjectTaskType::EXECUTE_METADATA_XSLT:
-				return new Kaltura_Client_ScheduledTaskMetadata_Type_ExecuteMetadataXsltObjectTask();
+			case Vidiun_Client_ScheduledTask_Enum_ObjectTaskType::EXECUTE_METADATA_XSLT:
+				return new Vidiun_Client_ScheduledTaskMetadata_Type_ExecuteMetadataXsltObjectTask();
 
-			case Kaltura_Client_ScheduledTask_Enum_ObjectTaskType::DISPATCH_EVENT_NOTIFICATION:
-				return new Kaltura_Client_ScheduledTaskEventNotification_Type_DispatchEventNotificationObjectTask();
+			case Vidiun_Client_ScheduledTask_Enum_ObjectTaskType::DISPATCH_EVENT_NOTIFICATION:
+				return new Vidiun_Client_ScheduledTaskEventNotification_Type_DispatchEventNotificationObjectTask();
 
-			case Kaltura_Client_ScheduledTask_Enum_ObjectTaskType::DISTRIBUTE:
-				return new Kaltura_Client_ScheduledTaskContentDistribution_Type_DistributeObjectTask();
+			case Vidiun_Client_ScheduledTask_Enum_ObjectTaskType::DISTRIBUTE:
+				return new Vidiun_Client_ScheduledTaskContentDistribution_Type_DistributeObjectTask();
 
-			case Kaltura_Client_ScheduledTask_Enum_ObjectTaskType::MAIL_NOTIFICATION:
-				return new Kaltura_Client_ScheduledTask_Type_MailNotificationObjectTask();
+			case Vidiun_Client_ScheduledTask_Enum_ObjectTaskType::MAIL_NOTIFICATION:
+				return new Vidiun_Client_ScheduledTask_Type_MailNotificationObjectTask();
 
 			default:
 				return null;
@@ -306,7 +306,7 @@ class MediaRepurposingUtils
 		"scheduledTaskContentDistribution.Distribute" => 'DISTRIBUTE',
 		"scheduledTaskEventNotification.DispatchEventNotification" => 'DISPATCH_EVENT_NOTIFICATION',
 		"scheduledTaskMetadata.ExecuteMetadataXslt" => 'EXECUTE_METADATA_XSLT');
-	//as from Kaltura_Client_ScheduledTask_Enum_ObjectTaskType
+	//as from Vidiun_Client_ScheduledTask_Enum_ObjectTaskType
 	public static function getDescriptionForType($type) {
 		return self::$typeDescription[$type];
 	}
@@ -343,12 +343,12 @@ class MediaRepurposingUtils
 	private static function elementTypeCreator($type, $params)
 	{
 		switch ($type) {
-			case 'KalturaIntegerValue':
-				$elem = new Kaltura_Client_Type_IntegerValue();
+			case 'VidiunIntegerValue':
+				$elem = new Vidiun_Client_Type_IntegerValue();
 				$elem->value = intval($params[0]);
 				return $elem;
-			case 'KalturaKeyValue':
-				$elem = new Kaltura_Client_Type_KeyValue();
+			case 'VidiunKeyValue':
+				$elem = new Vidiun_Client_Type_KeyValue();
 				$elem->key = $params[0];
 				$elem->value = $params[1];
 				return $elem;
@@ -360,9 +360,9 @@ class MediaRepurposingUtils
 	private static function getValueFromElement($type, $elem)
 	{
 		switch ($type) {
-			case 'KalturaIntegerValue':
+			case 'VidiunIntegerValue':
 				return $elem->value;
-			case 'KalturaKeyValue':
+			case 'VidiunKeyValue':
 				return $elem->key . ":" . $elem->value;
 			default:
 				return null;

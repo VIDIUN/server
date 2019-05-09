@@ -3,18 +3,18 @@
  * @package api
  * @subpackage objects
  */
-class KalturaYahooSyndicationFeed extends KalturaBaseSyndicationFeed
+class VidiunYahooSyndicationFeed extends VidiunBaseSyndicationFeed
 {
         /**
          *
-         * @var KalturaYahooSyndicationFeedCategories
+         * @var VidiunYahooSyndicationFeedCategories
          * @readonly
          */
         public $category;
 
         /**
          *
-         * @var KalturaYahooSyndicationFeedAdultValues
+         * @var VidiunYahooSyndicationFeedAdultValues
          */
         public $adultContent;
         
@@ -45,6 +45,6 @@ class KalturaYahooSyndicationFeed extends KalturaBaseSyndicationFeed
 	}    
 	function __construct()
 	{
-		$this->type = KalturaSyndicationFeedType::YAHOO;
+		$this->type = VidiunSyndicationFeedType::YAHOO;
 	}
 }

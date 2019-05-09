@@ -3,6 +3,6 @@
  * @package plugins.ftpDistribution
  * @subpackage api.filters
  */
-class KalturaFtpDistributionProviderFilter extends KalturaFtpDistributionProviderBaseFilter
+class VidiunFtpDistributionProviderFilter extends VidiunFtpDistributionProviderBaseFilter
 {
 }

@@ -10,26 +10,26 @@
  * @package Scheduler
  * @subpackage Storage
  */
-class KAsyncStorageExport extends KJobHandlerWorker
+class VAsyncStorageExport extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::STORAGE_EXPORT;
+		return VidiunBatchJobType::STORAGE_EXPORT;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->export($job, $job->data);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::getMaxJobsEachRun()
+	 * @see VJobHandlerWorker::getMaxJobsEachRun()
 	 */
 	protected function getMaxJobsEachRun()
 	{
@@ -37,41 +37,41 @@ class KAsyncStorageExport extends KJobHandlerWorker
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::getFilter()
+	 * @see VJobHandlerWorker::getFilter()
 	 */
 	protected function getFilter()
 	{
 		$filter = parent::getFilter();
 		
-		if(KBatchBase::$taskConfig->params)
+		if(VBatchBase::$taskConfig->params)
 		{
-			if(KBatchBase::$taskConfig->params->minFileSize && is_numeric(KBatchBase::$taskConfig->params->minFileSize))
-				$filter->fileSizeGreaterThan = KBatchBase::$taskConfig->params->minFileSize;
+			if(VBatchBase::$taskConfig->params->minFileSize && is_numeric(VBatchBase::$taskConfig->params->minFileSize))
+				$filter->fileSizeGreaterThan = VBatchBase::$taskConfig->params->minFileSize;
 			
-			if(KBatchBase::$taskConfig->params->maxFileSize && is_numeric(KBatchBase::$taskConfig->params->maxFileSize))
-				$filter->fileSizeLessThan = KBatchBase::$taskConfig->params->maxFileSize;
+			if(VBatchBase::$taskConfig->params->maxFileSize && is_numeric(VBatchBase::$taskConfig->params->maxFileSize))
+				$filter->fileSizeLessThan = VBatchBase::$taskConfig->params->maxFileSize;
 		}
 			
 		return $filter;
 	}
 	
 	/**
-	 * Will take a single KalturaBatchJob and export the given file 
+	 * Will take a single VidiunBatchJob and export the given file 
 	 * 
-	 * @param KalturaBatchJob $job
-	 * @param KalturaStorageExportJobData $data
-	 * @return KalturaBatchJob
+	 * @param VidiunBatchJob $job
+	 * @param VidiunStorageExportJobData $data
+	 * @return VidiunBatchJob
 	 */
-	protected function export(KalturaBatchJob $job, KalturaStorageExportJobData $data)
+	protected function export(VidiunBatchJob $job, VidiunStorageExportJobData $data)
 	{
-		$engine = KExportEngine::getInstance($job->jobSubType, $job->partnerId, $data);
+		$engine = VExportEngine::getInstance($job->jobSubType, $job->partnerId, $data);
 		if(!$engine)
 		{
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::ENGINE_NOT_FOUND, "Engine not found", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::ENGINE_NOT_FOUND, "Engine not found", VidiunBatchJobStatus::FAILED);
 		}
-		$this->updateJob($job, null, KalturaBatchJobStatus::QUEUED);
+		$this->updateJob($job, null, VidiunBatchJobStatus::QUEUED);
 		$exportResult = $engine->export();
 
-		return $this->closeJob($job, null , null, null, $exportResult ? KalturaBatchJobStatus::FINISHED : KalturaBatchJobStatus::ALMOST_DONE, $data );
+		return $this->closeJob($job, null , null, null, $exportResult ? VidiunBatchJobStatus::FINISHED : VidiunBatchJobStatus::ALMOST_DONE, $data );
 	}
 }

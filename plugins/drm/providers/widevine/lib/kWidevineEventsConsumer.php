@@ -1,15 +1,15 @@
 <?php
-class kWidevineEventsConsumer implements kObjectChangedEventConsumer, kObjectDeletedEventConsumer, kObjectCreatedEventConsumer
+class vWidevineEventsConsumer implements vObjectChangedEventConsumer, vObjectDeletedEventConsumer, vObjectCreatedEventConsumer
 {	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns) 
 	{
 		try 
 		{
 			$wvFlavorAssets = $this->getWidevineFlavorAssetsForEntry($object->getId());
-			KalturaLog::info('Found '.count($wvFlavorAssets).' widevine flavors');	
+			VidiunLog::info('Found '.count($wvFlavorAssets).' widevine flavors');	
 
 			if(count($wvFlavorAssets))
 			{
@@ -18,13 +18,13 @@ class kWidevineEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Failed to process objectChangedEvent for entry ['.$object->getId().'] - '.$e->getMessage());
+			VidiunLog::err('Failed to process objectChangedEvent for entry ['.$object->getId().'] - '.$e->getMessage());
 		}		
 		return true;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns) 
 	{
@@ -37,7 +37,7 @@ class kWidevineEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null) 
 	{
@@ -49,13 +49,13 @@ class kWidevineEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Failed to process objectDeleted for widevine flavor asset ['.$object->getId().'] - '.$e->getMessage());
+			VidiunLog::err('Failed to process objectDeleted for widevine flavor asset ['.$object->getId().'] - '.$e->getMessage());
 		}
 		return true;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object) 
 	{
@@ -66,7 +66,7 @@ class kWidevineEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::objectCreated()
+	 * @see vObjectCreatedEventConsumer::objectCreated()
 	 */
 	public function objectCreated(BaseObject $object) 
 	{
@@ -86,7 +86,7 @@ class kWidevineEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+	 * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $object) 
 	{
@@ -108,7 +108,7 @@ class kWidevineEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
 		$batchJob->setObjectType(BatchJobObjectType::ENTRY);
 		$batchJob->setEntryId($entryId);
 					
-		$jobData = new kWidevineRepositorySyncJobData();
+		$jobData = new vWidevineRepositorySyncJobData();
 		$jobData->setSyncMode(WidevineRepositorySyncMode::MODIFY);
 		$jobData->setMonitorSyncCompletion($monitorSyncCompletion);
 		$wvAssetIds = array();
@@ -121,7 +121,7 @@ class kWidevineEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
 		
 		if(!count($wvAssetIds))
 		{
-			KalturaLog::info("No valid WV assets found, Widevine Sync job is not created");
+			VidiunLog::info("No valid WV assets found, Widevine Sync job is not created");
 			return;
 		}
 			
@@ -129,7 +129,7 @@ class kWidevineEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
 		$jobData->addModifiedAttribute('licenseStartDate', $entryStartDate);
 		$jobData->addModifiedAttribute('licenseEndDate', $entryEndDate);
 			
-		return kJobsManager::addJob($batchJob, $jobData, $batchJobType);		
+		return vJobsManager::addJob($batchJob, $jobData, $batchJobType);		
 	}
 
 	private function shouldSyncWidevineRepositoryForPartner($partnerId)
@@ -174,14 +174,14 @@ class kWidevineEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
 		$wvAssetId = $asset->getWidevineAssetId();
 		$entryFilter->fields['_like_plugins_data'] = WidevinePlugin::getWidevineAssetIdSearchData($wvAssetId);
 		$entryFilter->setPartnerSearchScope($asset->getPartnerId());
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);				
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);				
 		$entryFilter->attachToCriteria($c);	
 		$c->add(entryPeer::ID, $asset->getEntryId(), Criteria::NOT_EQUAL);
 		$c->applyFilters();
 		$entriesCount = $c->getRecordsCount();
 		if($entriesCount)
 		{
-			KalturaLog::info('Found active flavors for WV asset id ['.$wvAssetId.']');
+			VidiunLog::info('Found active flavors for WV asset id ['.$wvAssetId.']');
 			return true;
 		}
 		else					

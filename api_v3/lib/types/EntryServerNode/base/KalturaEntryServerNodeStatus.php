@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaEntryServerNodeStatus extends KalturaEnum implements EntryServerNodeStatus{
+class VidiunEntryServerNodeStatus extends VidiunEnum implements EntryServerNodeStatus{
 
 	public static function getEnumClass()
 	{

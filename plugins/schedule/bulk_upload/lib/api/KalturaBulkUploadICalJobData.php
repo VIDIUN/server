@@ -5,11 +5,11 @@
  * @package plugins.scheduleBulkUpload
  * @subpackage api.objects
  */
-class KalturaBulkUploadICalJobData extends KalturaBulkUploadJobData
+class VidiunBulkUploadICalJobData extends VidiunBulkUploadJobData
 {	
 	/**
 	 * The type of the events that ill be created by this upload
-	 * @var KalturaScheduleEventType
+	 * @var VidiunScheduleEventType
 	 */
 	public $eventsType = null;
 	
@@ -32,7 +32,7 @@ class KalturaBulkUploadICalJobData extends KalturaBulkUploadJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kBulkUploadICalJobData();
+			$dbData = new vBulkUploadICalJobData();
 			
 		return parent::toObject($dbData);
 	}
@@ -48,6 +48,6 @@ class KalturaBulkUploadICalJobData extends KalturaBulkUploadJobData
 	
 	public function setType ()
 	{
-	    $this->type = kPluginableEnumsManager::coreToApi("KalturaBulkUploadType", BulkUploadSchedulePlugin::getApiValue(BulkUploadScheduleType::ICAL));
+	    $this->type = vPluginableEnumsManager::coreToApi("VidiunBulkUploadType", BulkUploadSchedulePlugin::getApiValue(BulkUploadScheduleType::ICAL));
 	}
 }

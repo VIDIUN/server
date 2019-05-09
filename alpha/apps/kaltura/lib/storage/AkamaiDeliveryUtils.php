@@ -17,9 +17,9 @@ class AkamaiDeliveryUtils {
 			return '/' . ltrim($baseUrl, '/');
 		}
 	
-		$prefix = kString::getCommonPrefix($urls);
+		$prefix = vString::getCommonPrefix($urls);
 		$prefixLen = strlen($prefix);
-		$postfix = kString::getCommonPostfix($urls);
+		$postfix = vString::getCommonPostfix($urls);
 		$postfixLen = strlen($postfix);
 		$middlePart = ',';
 		foreach ($urls as $url)

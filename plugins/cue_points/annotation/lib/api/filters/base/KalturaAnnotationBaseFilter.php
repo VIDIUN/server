@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaAnnotationBaseFilter extends KalturaCuePointFilter
+abstract class VidiunAnnotationBaseFilter extends VidiunCuePointFilter
 {
 	static private $map_between_objects = array
 	(
@@ -85,7 +85,7 @@ abstract class KalturaAnnotationBaseFilter extends KalturaCuePointFilter
 	public $durationLessThanOrEqual;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isPublicEqual;
 }

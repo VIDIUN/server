@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveAsset extends KalturaFlavorAsset 
+class VidiunLiveAsset extends VidiunFlavorAsset 
 {
 	/**
 	 * @var string

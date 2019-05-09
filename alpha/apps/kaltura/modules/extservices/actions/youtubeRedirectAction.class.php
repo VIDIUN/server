@@ -3,7 +3,7 @@
  * @package    Core
  * @subpackage externalServices
  */
-class youtubeRedirectAction extends kalturaAction
+class youtubeRedirectAction extends vidiunAction
 {
 	public function execute()
 	{
@@ -19,7 +19,7 @@ class youtubeRedirectAction extends kalturaAction
 		$retries = 2;
 		while($retries--)
 		{
-			$content = kFile::downloadUrlToString($url, 3);
+			$content = vFile::downloadUrlToString($url, 3);
 			
 			if (preg_match('/swfArgs.*?\{.*?, "t":\s*"(.*?)"/s', $content, $timestampMatch))
 			//if (preg_match('/swfArgs.*?\{.*?,t:\'(.*?)\'/', $htmlPage, $timestampMatch))
@@ -41,14 +41,14 @@ class youtubeRedirectAction extends kalturaAction
 			}
 			else
 			{
-				KalturaLog::log ("youtubeRedirectAction $retries $url $content");
+				VidiunLog::log ("youtubeRedirectAction $retries $url $content");
 			}
 		}
 		
 		if ($sourceUrl)
 		{
 			if (!$retries)
-				KalturaLog::log ("youtubeRedirectAction retry successful $url");
+				VidiunLog::log ("youtubeRedirectAction retry successful $url");
 		}
 		else
 			die;

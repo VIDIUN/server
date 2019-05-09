@@ -2,5 +2,5 @@
 
 return array(
 
-    'Kaltura_Client_EventNotification_Enum_EventNotificationTemplateType::PUSH' => 'Push',
+    'Vidiun_Client_EventNotification_Enum_EventNotificationTemplateType::PUSH' => 'Push',
 );

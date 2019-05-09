@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class reportsAction extends kalturaSystemAction
+class reportsAction extends vidiunSystemAction
 {
 	
 	/**
@@ -39,41 +39,41 @@ class reportsAction extends kalturaSystemAction
 		}
 			
 		
-		$kuser_stats = $this->getKusersInPeriod( $period_in_seconds , "" , $limit );
-		$kshow_stats = $this->getKshowsInPeriod( $period_in_seconds , "" , $limit );
+		$vuser_stats = $this->getVusersInPeriod( $period_in_seconds , "" , $limit );
+		$vshow_stats = $this->getVshowsInPeriod( $period_in_seconds , "" , $limit );
 		$entry_stats = $this->getEntriesInPeriod ( $period_in_seconds , "" , $limit );
 
-//		print_r ( $kuser_stats ); 
+//		print_r ( $vuser_stats ); 
 		
 //		echo "<br><br>";
 		
 		$chart = array();
 		
 		$chart_x = array(""); // first one empty !!
-		$kuser_values = array ("Users");
-		$kshow_values = array ("Shows");
+		$vuser_values = array ("Users");
+		$vshow_values = array ("Shows");
 		$entry_values = array ("Entries");
 		
-		$count = count ( $kuser_stats );
+		$count = count ( $vuser_stats );
 		for ( $i=$count - 1  ; $i >= 0 ; $i-- )
 		{
-			$kuser_row = $kuser_stats[$i];
-			$kshow_row = @$kshow_stats[$i];
+			$vuser_row = $vuser_stats[$i];
+			$vshow_row = @$vshow_stats[$i];
 			$entry_row = @$entry_stats[$i];
 			
-			//$chart_x[] = strftime( "%d/%m" , ( $kuser_row[2] * $period_in_seconds  ) ) ; // period 
-			$chart_x[] = strftime( $date_format , ( $kuser_row[2] * $period_in_seconds ) ) ; // period
-			//$chart_x[] = $kuser_row[1];
-			$kuser_values[] = $kuser_row[3];
-			$kshow_values[] = $kshow_row ? $kshow_row[3] : 0;
+			//$chart_x[] = strftime( "%d/%m" , ( $vuser_row[2] * $period_in_seconds  ) ) ; // period 
+			$chart_x[] = strftime( $date_format , ( $vuser_row[2] * $period_in_seconds ) ) ; // period
+			//$chart_x[] = $vuser_row[1];
+			$vuser_values[] = $vuser_row[3];
+			$vshow_values[] = $vshow_row ? $vshow_row[3] : 0;
 			$entry_values[] = $entry_row ? $entry_row[3] : 0;
 		}			
 /*		
 		foreach ( $stats as $row )
 		{
 			$chart_x[] = strftime( "%d/%m" , ( $row[2] * $period_in_seconds ) ) ; // period 
-			$kuser_values[] = $row[3];
-			$kshow_values[] = $row[3] /3;
+			$vuser_values[] = $row[3];
+			$vshow_values[] = $row[3] /3;
 			$entry_values[] = $row[3] /2;
 		}
 	*/	
@@ -106,8 +106,8 @@ class reportsAction extends kalturaSystemAction
                                    
                                  
 		$chart [ 'chart_data' ] = array ( $chart_x ,
-                                  		  $kuser_values  ,
-                                  		  $kshow_values	, 
+                                  		  $vuser_values  ,
+                                  		  $vshow_values	, 
                                   		  $entry_values );
 		
 		//$chart [ 'chart_type' ] = "bar";
@@ -120,21 +120,21 @@ class reportsAction extends kalturaSystemAction
 	// TODO - this code has many duplicates - generalize !!
 	
 	
-	// select  id, created_at,floor(UNIX_TIMESTAMP(created_at)/600) as '10-minutes',count(1) as 'kuser count' from kuser 
+	// select  id, created_at,floor(UNIX_TIMESTAMP(created_at)/600) as '10-minutes',count(1) as 'vuser count' from vuser 
 	// where partner_id!=5 group by floor(UNIX_TIMESTAMP(created_at)/600) order by id desc limit 30;
-	private function getKusersInPeriod ( $period_in_seconds = 3600, $period_text = "1 hour" , $limit = 30 , $last_id = null )
+	private function getVusersInPeriod ( $period_in_seconds = 3600, $period_text = "1 hour" , $limit = 30 , $last_id = null )
 	{
-		return self::getObjectsInPeriod( new kuserPeer() , $period_in_seconds , $period_text , $limit  , $last_id );
+		return self::getObjectsInPeriod( new vuserPeer() , $period_in_seconds , $period_text , $limit  , $last_id );
 	}
 	
-	// select  id, created_at,floor(UNIX_TIMESTAMP(created_at)/600) as '10-minutes',count(1) as 'kuser count' from kuser 
+	// select  id, created_at,floor(UNIX_TIMESTAMP(created_at)/600) as '10-minutes',count(1) as 'vuser count' from vuser 
 	// where partner_id!=5 group by floor(UNIX_TIMESTAMP(created_at)/600) order by id desc limit 30;
-	private function getKshowsInPeriod ( $period_in_seconds = 3600, $period_text = "1 hour" , $limit = 30 , $last_id = null )
+	private function getVshowsInPeriod ( $period_in_seconds = 3600, $period_text = "1 hour" , $limit = 30 , $last_id = null )
 	{
-		return self::getObjectsInPeriod( new kshowPeer() , $period_in_seconds , $period_text , $limit  , $last_id );
+		return self::getObjectsInPeriod( new vshowPeer() , $period_in_seconds , $period_text , $limit  , $last_id );
 	}	
 	
-	// select  id, created_at,floor(UNIX_TIMESTAMP(created_at)/600) as '10-minutes',count(1) as 'kuser count' from kuser 
+	// select  id, created_at,floor(UNIX_TIMESTAMP(created_at)/600) as '10-minutes',count(1) as 'vuser count' from vuser 
 	// where partner_id!=5 group by floor(UNIX_TIMESTAMP(created_at)/600) order by id desc limit 30;
 	private function getEntriesInPeriod ( $period_in_seconds = 3600, $period_text = "1 hour" , $limit = 30 , $last_id = null )
 	{

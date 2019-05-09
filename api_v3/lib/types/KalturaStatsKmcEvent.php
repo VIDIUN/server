@@ -1,17 +1,17 @@
 <?php
 /**
- * Will hold data from the Kaltura UI components to be passed on to the reports and analytics system
+ * Will hold data from the Vidiun UI components to be passed on to the reports and analytics system
  * @package api
  * @subpackage objects
  */
-class KalturaStatsKmcEvent extends KalturaObject 
+class VidiunStatsVmcEvent extends VidiunObject 
 {
 /*
- * Bellow the definition of the event log line. The KalturaStatsEvent structure will strongly resemle this line but might differenciate slightly,
+ * Bellow the definition of the event log line. The VidiunStatsEvent structure will strongly resemle this line but might differenciate slightly,
  * due to data that will come from other resources such as the suser's IP (coming from the HTTP header)
  * 
 client version - will help interprete the line structure. different client versions might have slightly different data/data formats in the line
-kmc_event_id - number is the row number in yuval's excel
+vmc_event_id - number is the row number in yuval's excel
 datetime - same format as MySql's datetime - can change and should reflect the time zone
 session id - can be some big random number or guid
 partner id
@@ -33,13 +33,13 @@ process duration - in milliseconds
 	/**
 	 * @var string
 	 */
-	public $kmcEventActionPath;
+	public $vmcEventActionPath;
 	
 	
 	/**
-	 * @var KalturaStatsKmcEventType
+	 * @var VidiunStatsVmcEventType
 	 */
-	public $kmcEventType;
+	public $vmcEventType;
 	
 	/**
 	 * the client's timestamp of this event

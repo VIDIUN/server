@@ -37,7 +37,7 @@ class DeliveryProfileGenericAppleHttp extends DeliveryProfileAppleHttp {
 		if ($this->params->getFileExtension())
 			$url .= "/name/a." . $this->params->getFileExtension();
 		
-		return kDeliveryUtils::formatGenericUrl($url, $this->getPattern(), $this->params);
+		return vDeliveryUtils::formatGenericUrl($url, $this->getPattern(), $this->params);
 	}
 	
 	protected function doGetFileSyncUrl(FileSync $fileSync)
@@ -46,14 +46,14 @@ class DeliveryProfileGenericAppleHttp extends DeliveryProfileAppleHttp {
 		$pattern = $this->getPattern();
 		if(is_null($pattern))
 			$pattern = '/hls-vod/{url}.m3u8';
-		return kDeliveryUtils::formatGenericUrl($url, $pattern, $this->params);
+		return vDeliveryUtils::formatGenericUrl($url, $pattern, $this->params);
 	}
 	
 	public function buildServeFlavors()
 	{
 		if ($this->getManifestRedirect() && $this->getHostName() != $_SERVER['HTTP_HOST'])
 		{
-			kApiCache::setConditionalCacheExpiry(600);		// the result contains a KS so we shouldn't cache it for a long time
+			vApiCache::setConditionalCacheExpiry(600);		// the result contains a VS so we shouldn't cache it for a long time
 			$parsedUrl = parse_url($this->getUrl());
 			$flavor = array(
 				'urlPrefix' => $this->params->getMediaProtocol() . '://' . $parsedUrl['host'], 
@@ -69,7 +69,7 @@ class DeliveryProfileGenericAppleHttp extends DeliveryProfileAppleHttp {
 	{
 		if ($this->getManifestRedirect() && $this->getHostName() != $_SERVER['HTTP_HOST'])
 		{
-			return new kRedirectManifestRenderer($flavors, $this->params->getEntryId());
+			return new vRedirectManifestRenderer($flavors, $this->params->getEntryId());
 		}
 		
 		return parent::getRenderer($flavors);

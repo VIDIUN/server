@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPlaylist extends KalturaBaseEntry
+class VidiunPlaylist extends VidiunBaseEntry
 {
 	/**
 	 * Content of the playlist - 
@@ -16,7 +16,7 @@ class KalturaPlaylist extends KalturaBaseEntry
 	
 	/**
 	 * 
-	 * @var KalturaMediaEntryFilterForPlaylistArray
+	 * @var VidiunMediaEntryFilterForPlaylistArray
 	 */
 	public $filters;
 	
@@ -30,7 +30,7 @@ class KalturaPlaylist extends KalturaBaseEntry
 	/**
 	 * Type of playlist
 	 * @insertonly
-	 * @var KalturaPlaylistType
+	 * @var VidiunPlaylistType
 	 */	
 	public $playlistType;
 
@@ -92,12 +92,12 @@ class KalturaPlaylist extends KalturaBaseEntry
 		parent::validateForInsert($propertiesToSkip);
 		
 		$this->validatePropertyNotNull("playlistType");
-		if ($this->playlistType == KalturaPlaylistType::DYNAMIC)
+		if ($this->playlistType == VidiunPlaylistType::DYNAMIC)
 			$this->validatePropertyNotNull("totalResults");
 
-		if (!kPermissionManager::isPermitted(PermissionName::PLAYLIST_ADD) && $this->playlistType != KalturaPlaylistType::STATIC_LIST)
+		if (!vPermissionManager::isPermitted(PermissionName::PLAYLIST_ADD) && $this->playlistType != VidiunPlaylistType::STATIC_LIST)
 		{
-				throw new KalturaAPIException(KalturaErrors::INVALID_KS, "", ks::INVALID_TYPE, ks::getErrorStr(ks::INVALID_TYPE));
+				throw new VidiunAPIException(VidiunErrors::INVALID_VS, "", vs::INVALID_TYPE, vs::getErrorStr(vs::INVALID_TYPE));
 		}
 	}
 	
@@ -107,7 +107,7 @@ class KalturaPlaylist extends KalturaBaseEntry
 			$dbObject = new entry();
 		
 		// support filters array only if atleast one filters was specified
-		if ($this->playlistType == KalturaPlaylistType::DYNAMIC && $this->filters !== null)
+		if ($this->playlistType == VidiunPlaylistType::DYNAMIC && $this->filters !== null)
 			$this->filtersToPlaylistContentXml();
 		
 		$dbObject->setType ( entryType::PLAYLIST );
@@ -118,7 +118,7 @@ class KalturaPlaylist extends KalturaBaseEntry
 		return $dbObject;
 	}
 	
-	public function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if(!$sourceObject)
 			return;
@@ -128,7 +128,7 @@ class KalturaPlaylist extends KalturaBaseEntry
 		if($this->shouldGet('executeUrl', $responseProfile))
 			$this->executeUrl = myPlaylistUtils::toPlaylistUrl( $sourceObject , requestUtils::getHost() );
 		
-		if ($this->shouldGet('filters', $responseProfile) && $this->playlistType == KalturaPlaylistType::DYNAMIC)
+		if ($this->shouldGet('filters', $responseProfile) && $this->playlistType == VidiunPlaylistType::DYNAMIC)
 			$this->playlistContentXmlToFilters();
 	}
 	
@@ -137,7 +137,7 @@ class KalturaPlaylist extends KalturaBaseEntry
 		$playlistXml = new SimpleXMLElement("<playlist/>");
 		$playlistXml->addChild("total_results", $this->totalResults);
 		$filtersXml = $playlistXml->addChild("filters");
-		if ($this->filters instanceof KalturaMediaEntryFilterForPlaylistArray)
+		if ($this->filters instanceof VidiunMediaEntryFilterForPlaylistArray)
 		{
 			foreach($this->filters as $filter)
 			{
@@ -162,12 +162,12 @@ class KalturaPlaylist extends KalturaBaseEntry
 	{
 		list($totalResults, $listOfFilters) = myPlaylistUtils::getPlaylistFilterListStruct($this->playlistContent);
 		// $totalResults is SimpleXMLElement
-		$this->filters = new KalturaMediaEntryFilterForPlaylistArray();
+		$this->filters = new VidiunMediaEntryFilterForPlaylistArray();
 		foreach($listOfFilters as $entryFilterXml)
 		{
 			$entryFilter = new mediaEntryFilterForPlaylist();
 			$entryFilter->fillObjectFromXml($entryFilterXml, "_"); 
-			$filter = new KalturaMediaEntryFilterForPlaylist();
+			$filter = new VidiunMediaEntryFilterForPlaylist();
 			$filter->fromObject($entryFilter);
 			$this->filters[] = $filter;
 		}

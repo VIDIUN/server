@@ -1,40 +1,40 @@
 
-@LOG_DIR@/kaltura_api_v3.log {
+@LOG_DIR@/vidiun_api_v3.log {
  rotate 5
  daily
  missingok
  compress
  dateext
  notifempty
- su root kaltura
+ su root vidiun
 }
 
-@LOG_DIR@/kaltura_api_v3_analytics.log {
+@LOG_DIR@/vidiun_api_v3_analytics.log {
  rotate 5
  daily
  missingok
  compress
  dateext
  notifempty
- su root kaltura
+ su root vidiun
 }
 
-@LOG_DIR@/kaltura_api_v3_tests.log {
+@LOG_DIR@/vidiun_api_v3_tests.log {
  rotate 5
  daily
  missingok
  compress
  dateext
  notifempty
- su root kaltura
+ su root vidiun
 }
 
-@LOG_DIR@/kaltura_prod.log {
+@LOG_DIR@/vidiun_prod.log {
  rotate 5
  daily
  missingok
  compress
  dateext
  notifempty
- su root kaltura
+ su root vidiun
 }

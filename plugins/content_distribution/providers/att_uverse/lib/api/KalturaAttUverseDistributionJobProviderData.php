@@ -3,11 +3,11 @@
  * @package plugins.attUverseDistribution
  * @subpackage api.objects
  */
-class KalturaAttUverseDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunAttUverseDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 		
 	/**
-	 * @var KalturaAttUverseDistributionFileArray
+	 * @var VidiunAttUverseDistributionFileArray
 	 */
 	public $filesForDistribution;
 	
@@ -33,14 +33,14 @@ class KalturaAttUverseDistributionJobProviderData extends KalturaConfigurableDis
 	public $remoteCaptionFileUrls;
 	
 	
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{			   
 		parent::__construct($distributionJobData);
 	    
 		if(!$distributionJobData)
 			return;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaAttUverseDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunAttUverseDistributionProfile))
 			return;
 		
 		/* @var $distributionProfileDb AttUverseDistributionProfile */
@@ -48,7 +48,7 @@ class KalturaAttUverseDistributionJobProviderData extends KalturaConfigurableDis
 		$distributionProfileDb = DistributionProfilePeer::retrieveByPK($distributionJobData->distributionProfileId);
 		$distributedFlavorIds = null;
 		$distributedThumbIds = null;
-		$this->filesForDistribution = new KalturaAttUverseDistributionFileArray();
+		$this->filesForDistribution = new VidiunAttUverseDistributionFileArray();
 		$entryDistributionDb = EntryDistributionPeer::retrieveByPK($distributionJobData->entryDistributionId);
 		//Flavor Assets
 		$flavorAssets = assetPeer::retrieveByIds(explode(',', $distributionJobData->entryDistribution->flavorAssetIds));
@@ -56,14 +56,14 @@ class KalturaAttUverseDistributionJobProviderData extends KalturaConfigurableDis
 			$assetLocalIds = array();
 			foreach ($flavorAssets as $flavorAsset)
 			{
-				$file = new KalturaAttUverseDistributionFile();
-				$file->assetType = KalturaAssetType::FLAVOR;
+				$file = new VidiunAttUverseDistributionFile();
+				$file->assetType = VidiunAssetType::FLAVOR;
 				/* @var $flavorAsset flavorAsset */
 				$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-				if(kFileSyncUtils::fileSync_exists($syncKey)){
+				if(vFileSyncUtils::fileSync_exists($syncKey)){
 					$assetLocalIds[] = $flavorAsset->getId();
 					$file->assetId = $flavorAsset->getId();
-					$file->localFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+					$file->localFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 					$defaultFilename = pathinfo($file->localFilePath, PATHINFO_BASENAME);
 					$file->remoteFilename = $distributionProfileDb->getFlavorAssetFilename($entryDistributionDb,$defaultFilename,$flavorAsset->getId() );
 					$this->filesForDistribution[] = $file;
@@ -80,13 +80,13 @@ class KalturaAttUverseDistributionJobProviderData extends KalturaConfigurableDis
 			$thumbLocalIds = array();
 			foreach ($thumbAssets as $thumbAsset)
 			{							
-				$file = new KalturaAttUverseDistributionFile();
-				$file->assetType = KalturaAssetType::THUMBNAIL;	
+				$file = new VidiunAttUverseDistributionFile();
+				$file->assetType = VidiunAssetType::THUMBNAIL;	
 				$syncKey = $thumbAsset->getSyncKey(thumbAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-				if(kFileSyncUtils::fileSync_exists($syncKey)){
+				if(vFileSyncUtils::fileSync_exists($syncKey)){
 					$thumbLocalIds[] = $thumbAsset->getId();
 					$file->assetId = $thumbAsset->getId();
-					$file->localFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+					$file->localFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 					$defaultFilename = pathinfo($file->localFilePath, PATHINFO_BASENAME);
 					$file->remoteFilename = $distributionProfileDb->getThumbnailAssetFilename($entryDistributionDb, $defaultFilename, $thumbAsset->getId());
 					$this->filesForDistribution[] = $file;
@@ -102,16 +102,16 @@ class KalturaAttUverseDistributionJobProviderData extends KalturaConfigurableDis
 			$captionLocalIds = array();
 			foreach ($additionalAssets as $additionalAsset)
 			{	
-				$file = new KalturaAttUverseDistributionFile();
-				$file->assetType = kPluginableEnumsManager::coreToApi(KalturaAssetType::getEnumClass(),$additionalAsset->getType());
+				$file = new VidiunAttUverseDistributionFile();
+				$file->assetType = vPluginableEnumsManager::coreToApi(VidiunAssetType::getEnumClass(),$additionalAsset->getType());
 				$syncKey = $additionalAsset->getSyncKey(CaptionAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
 				$id = $additionalAsset->getId();
-				if(kFileSyncUtils::fileSync_exists($syncKey)){
+				if(vFileSyncUtils::fileSync_exists($syncKey)){
 					if (($file->assetType == CaptionPlugin::getApiValue(CaptionAssetType::CAPTION))||
 						($file->assetType == AttachmentPlugin::getApiValue(AttachmentAssetType::ATTACHMENT))){									
 						$captionLocalIds[] = $additionalAsset->getId();
 						$file->assetId = $additionalAsset->getId();
-						$file->localFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+						$file->localFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 						$defaultFilename = pathinfo($file->localFilePath, PATHINFO_BASENAME);
 						$file->remoteFilename = $distributionProfileDb->getAssetFilename($entryDistributionDb, $defaultFilename, $additionalAsset->getId());
 						$this->filesForDistribution[] = $file;
@@ -130,7 +130,7 @@ class KalturaAttUverseDistributionJobProviderData extends KalturaConfigurableDis
 			$entryDistributionDb->save();
 		}
 		else
-			KalturaLog::err('Entry distribution ['.$distributionJobData->entryDistributionId.'] not found');
+			VidiunLog::err('Entry distribution ['.$distributionJobData->entryDistributionId.'] not found');
 	}
 		
 	private static $map_between_objects = array

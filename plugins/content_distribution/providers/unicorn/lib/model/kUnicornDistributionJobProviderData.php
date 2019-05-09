@@ -3,7 +3,7 @@
  * @package plugins.unicornDistribution
  * @subpackage model.data
  */
-class kUnicornDistributionJobProviderData extends kDistributionJobProviderData
+class vUnicornDistributionJobProviderData extends vDistributionJobProviderData
 {
 	const CUSTOM_DATA_FLAVOR_ASSET_OLD_VERSION = 'flavorAssetOldVersion';
 	

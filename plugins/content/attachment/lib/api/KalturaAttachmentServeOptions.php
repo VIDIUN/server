@@ -5,6 +5,6 @@
  * @subpackage api.objects
  */
 
-class KalturaAttachmentServeOptions extends KalturaAssetServeOptions
+class VidiunAttachmentServeOptions extends VidiunAssetServeOptions
 {
 }

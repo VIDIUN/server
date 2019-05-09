@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage lib
  */
-class webVttCaptionsContentManager extends kCaptionsContentManager
+class webVttCaptionsContentManager extends vCaptionsContentManager
 {
 
 	const WEBVTT_TIMECODE_PATTERN = '#^((?:[0-9]{2}:)?[0-9]{2}:[0-9]{2}\.[0-9]{3}) --> ((?:[0-9]{2}:)?[0-9]{2}:[0-9]{2}\.[0-9]{3})( .*)?$#';
@@ -21,7 +21,7 @@ class webVttCaptionsContentManager extends kCaptionsContentManager
 	public $headerInfo = array();
 
 	/* (non-PHPdoc)
-	 * @see kCaptionsContentManager::parse()
+	 * @see vCaptionsContentManager::parse()
 	 */
 	public function parse($content)
 	{
@@ -96,7 +96,7 @@ class webVttCaptionsContentManager extends kCaptionsContentManager
 	 */
 	public function parseWebvttStrTTTime($timeStr)
 	{
-		list ($timeInMilliseconds, $error) = kCaptionsContentManager::parseStrTTTime($timeStr);
+		list ($timeInMilliseconds, $error) = vCaptionsContentManager::parseStrTTTime($timeStr);
 		if($error)
 			$this->parsingErrors[] = $error;
 		return $timeInMilliseconds;
@@ -104,7 +104,7 @@ class webVttCaptionsContentManager extends kCaptionsContentManager
 
 
 	/* (non-PHPdoc)
-	 * @see kCaptionsContentManager::getContent()
+	 * @see vCaptionsContentManager::getContent()
 	 */
 	public function getContent($content)
 	{
@@ -124,7 +124,7 @@ class webVttCaptionsContentManager extends kCaptionsContentManager
 			}
 		} catch (Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			return null;
 		}
 		return trim(preg_replace('/\s+/', ' ', $content));
@@ -153,7 +153,7 @@ class webVttCaptionsContentManager extends kCaptionsContentManager
 		$header = self::getNextValueFromArray($fileContentArray);
 		if (!$this->validateWebVttHeader($header))
 		{
-			KalturaLog::err("Error Parsing WebVTT file. The following errors were found while parsing the file: \n" . print_r($this->parsingErrors, true));
+			VidiunLog::err("Error Parsing WebVTT file. The following errors were found while parsing the file: \n" . print_r($this->parsingErrors, true));
 			return array();
 		}
 		$this->headerInfo[] = $header.self::UNIX_LINE_ENDING;
@@ -180,7 +180,7 @@ class webVttCaptionsContentManager extends kCaptionsContentManager
 		};
 		if (count($this->parsingErrors) > 0)
 		{
-			KalturaLog::err("Error Parsing WebVTT file. The following errors were found while parsing the file: \n" . print_r($this->parsingErrors, true));
+			VidiunLog::err("Error Parsing WebVTT file. The following errors were found while parsing the file: \n" . print_r($this->parsingErrors, true));
 			return array();
 		}
 		return $itemsData;
@@ -201,7 +201,7 @@ class webVttCaptionsContentManager extends kCaptionsContentManager
 		$adjustedStartTime = TimeOffsetUtils::getAdjustedStartTime($startCaption, $clipStartTime, $globalOffset);
 		$adjustedEndTime = TimeOffsetUtils::getAdjustedEndTime($endCaption, $clipStartTime, $clipEndTime, $globalOffset);
 		$settings = isset($matches[3]) ? trim($matches[3]) : '';
-		$timeLine = kWebVTTGenerator::formatWebVTTTimeStamp($adjustedStartTime) . ' --> ' . kWebVTTGenerator::formatWebVTTTimeStamp($adjustedEndTime). $settings . kCaptionsContentManager::UNIX_LINE_ENDING;
+		$timeLine = vWebVTTGenerator::formatWebVTTTimeStamp($adjustedStartTime) . ' --> ' . vWebVTTGenerator::formatWebVTTTimeStamp($adjustedEndTime). $settings . vCaptionsContentManager::UNIX_LINE_ENDING;
 		return $timeLine;
 	}
 
@@ -215,11 +215,11 @@ class webVttCaptionsContentManager extends kCaptionsContentManager
 		if (!$toAppend)
 			return $content;
 
-		$originalFileContentArray = kCaptionsContentManager::getFileContentAsArray($toAppend);
-		while (($line = kCaptionsContentManager::getNextValueFromArray($originalFileContentArray)) !== false)
+		$originalFileContentArray = vCaptionsContentManager::getFileContentAsArray($toAppend);
+		while (($line = vCaptionsContentManager::getNextValueFromArray($originalFileContentArray)) !== false)
 		{
 			if (strpos($line,self::WEBVTT_PATTERN) === false)
-				$content .= $line . kCaptionsContentManager::UNIX_LINE_ENDING;
+				$content .= $line . vCaptionsContentManager::UNIX_LINE_ENDING;
 		}
 		return $content;
 	}

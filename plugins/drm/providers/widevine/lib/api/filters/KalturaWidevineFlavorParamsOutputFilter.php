@@ -3,6 +3,6 @@
  * @package plugins.widevine
  * @subpackage api.filters
  */
-class KalturaWidevineFlavorParamsOutputFilter extends KalturaWidevineFlavorParamsOutputBaseFilter
+class VidiunWidevineFlavorParamsOutputFilter extends VidiunWidevineFlavorParamsOutputBaseFilter
 {
 }

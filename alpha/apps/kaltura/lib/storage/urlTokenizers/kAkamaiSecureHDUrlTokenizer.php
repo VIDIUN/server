@@ -219,7 +219,7 @@ class Akamai_EdgeAuth_Generate {
 	}
 }
 
-class kAkamaiSecureHDUrlTokenizer extends kUrlTokenizer
+class vAkamaiSecureHDUrlTokenizer extends vUrlTokenizer
 {
 	
 	const SECURE_HD_AUTH_ACL_REGEX = '/^[^,]*/';
@@ -255,9 +255,9 @@ class kAkamaiSecureHDUrlTokenizer extends kUrlTokenizer
 	 */
 	protected function getAcl(array $urls)
 	{
-		require_once( dirname(__FILE__). '/../../../../../../infra/general/kString.class.php');
+		require_once( dirname(__FILE__). '/../../../../../../infra/general/vString.class.php');
 		
-		$acl = kString::getCommonPrefix($urls);
+		$acl = vString::getCommonPrefix($urls);
 		
 		// the first comma in csmil denotes the beginning of the non-common URL part
 		$commaPos = strpos($acl, ',');

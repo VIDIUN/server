@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPermissionItemListResponse extends KalturaListResponse
+class VidiunPermissionItemListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaPermissionItemArray
+	 * @var VidiunPermissionItemArray
 	 * @readonly
 	 */
 	public $objects;

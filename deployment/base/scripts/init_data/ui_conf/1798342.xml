@@ -4,23 +4,23 @@
 		<UIConfigId>1798352</UIConfigId>
 	</ContributionWizard>
 
-	<Welcome>/content/uiconf/kaltura/generic/kse_2.1.6/welcome_light.swf</Welcome>
+	<Welcome>/content/uiconf/vidiun/generic/vse_2.1.6/welcome_light.swf</Welcome>
 
 	<DefaultTransition>None</DefaultTransition>
 	<enableCW>true</enableCW>
 	
-	<KPaint>
-		<target>/flash/kpaint/v1.0.4/Painter.swf</target>
-		<shapes>/flash/kpaint/v1.0.1/shapes</shapes>
-		<fonts>/flash/kpaint/v1.0.1/fonts</fonts>
-		<config>/flash/kpaint/v1.0.1/kpaint_config.xml</config>
-	</KPaint>
+	<VPaint>
+		<target>/flash/vpaint/v1.0.4/Painter.swf</target>
+		<shapes>/flash/vpaint/v1.0.1/shapes</shapes>
+		<fonts>/flash/vpaint/v1.0.1/fonts</fonts>
+		<config>/flash/vpaint/v1.0.1/vpaint_config.xml</config>
+	</VPaint>
 
 	<UIConfigList>
     	<UIConfig>
 			<target>simpleeditor.swf</target>
-		    <cssUrl>/content/uiconf/kaltura/generic/kse_2.1.6/styles_kse_light.swf</cssUrl>
-		    <localeUrl>/content/uiconf/kaltura/generic/kse_2.1.6/en_US_SimpleEditor.swf</localeUrl>
+		    <cssUrl>/content/uiconf/vidiun/generic/vse_2.1.6/styles_vse_light.swf</cssUrl>
+		    <localeUrl>/content/uiconf/vidiun/generic/vse_2.1.6/en_US_SimpleEditor.swf</localeUrl>
 		</UIConfig>
 	</UIConfigList>
 

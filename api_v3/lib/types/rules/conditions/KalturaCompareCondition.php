@@ -4,17 +4,17 @@
  * @subpackage objects
  * @abstract
  */
-abstract class KalturaCompareCondition extends KalturaCondition
+abstract class VidiunCompareCondition extends VidiunCondition
 {
 	/**
 	 * Value to evaluate against the field and operator
-	 * @var KalturaIntegerValue
+	 * @var VidiunIntegerValue
 	 */
 	public $value;
 	
 	/**
 	 * Comparing operator
-	 * @var KalturaSearchConditionComparison
+	 * @var VidiunSearchConditionComparison
 	 */
 	public $comparison;
 	
@@ -29,38 +29,38 @@ abstract class KalturaCompareCondition extends KalturaCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
-		/* @var $dbObject kCompareCondition */
+		/* @var $dbObject vCompareCondition */
 		$dbObject->setValue($this->value->toObject());
 			
 		return parent::toObject($dbObject, $skip);
 	}
 	 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $dbObject kFieldMatchCondition */
+		/* @var $dbObject vFieldMatchCondition */
 		parent::doFromObject($dbObject, $responseProfile);
 		
 		$valueType = get_class($dbObject->getValue());
-		KalturaLog::debug("Loading KalturaIntegerValue from type [$valueType]");
+		VidiunLog::debug("Loading VidiunIntegerValue from type [$valueType]");
 		switch ($valueType)
 		{
-			case 'kIntegerValue':
-				$this->value = new KalturaIntegerValue();
+			case 'vIntegerValue':
+				$this->value = new VidiunIntegerValue();
 				break;
 				
-			case 'kTimeContextField':
-				$this->value = new KalturaTimeContextField();
+			case 'vTimeContextField':
+				$this->value = new VidiunTimeContextField();
 				break;
 				
 			default:
-				$this->value = KalturaPluginManager::loadObject('KalturaIntegerValue', $valueType);
+				$this->value = VidiunPluginManager::loadObject('VidiunIntegerValue', $valueType);
 				break;
 		}
 		

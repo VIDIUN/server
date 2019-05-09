@@ -6,7 +6,7 @@
  * @subpackage DWH
  *
  */
-class KDwhClientException extends Exception
+class VDwhClientException extends Exception
 {
 	
 }

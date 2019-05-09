@@ -2,7 +2,7 @@
 define ( "EVENT_LOG_SEPARATOR" , "," );
 define ( "EVENT_LOG_LINE_SEPARATOR" , "\n" );
 
-class kArgs 
+class vArgs 
 {
 	private $prefix = "";
 	private $arr;
@@ -40,8 +40,8 @@ service
 action
 ps_version
 is_multi_request
-ks
-ks_type
+vs
+vs_type
 partner_id
 uid
 entry_id
@@ -56,7 +56,7 @@ result
 all_params
 exception
 */
-class kApiEvent 
+class vApiEvent 
 {
 	private $arr;
 	public function __construct (  )
@@ -75,8 +75,8 @@ class kApiEvent
 		$this->action . EVENT_LOG_SEPARATOR .
 		$this->ps_version . EVENT_LOG_SEPARATOR .
 		$this->is_multi_request . EVENT_LOG_SEPARATOR .
-		$this->ks . EVENT_LOG_SEPARATOR .
-		$this->ks_type . EVENT_LOG_SEPARATOR .
+		$this->vs . EVENT_LOG_SEPARATOR .
+		$this->vs_type . EVENT_LOG_SEPARATOR .
 		$this->partner_id . EVENT_LOG_SEPARATOR .
 		$this->uid . EVENT_LOG_SEPARATOR .
 		$this->entry_id . EVENT_LOG_SEPARATOR .
@@ -174,7 +174,7 @@ while(!feof($f))
 	// once flushed to disk - the api_event is removed from the array.
 	
 
-	// 125965956955.03, Dec 01 04:26:09 symfony [info] {sfRequest} request parameters array (  'entry_id' => '-1',  'kshow_id' => '292688',  'kdata' => 'YTo0OntzOjQ6ImJhc2UiO3M6MzQ6Imh0dHA6Ly93aWtpZWR1Y2F0b3Iub3JnL2luZGV4LnBocC8iO3M6MzoiYWRkIjtzOjQ5OiJTcGVjaWFsOkthbHR1cmFDb250cmlidXRpb25XaXphcmQ|02a3Nob3dfaWQ9MjkyNjg4IjtzOjQ6ImVkaXQiO3M6NDI6IlNwZWNpYWw6S2FsdHVyYVZpZGVvRWRpdG9yP2tzaG93X2lkPTI5MjY4OCI7czo1OiJzaGFyZSI7czo0NzoiaHR0cDovL3dpa2llZHVjYXRvci5vcmcvTGVzc29uXzg6X0Zvb2RfU3BvaWxhZ2UiO30=',  'referer' => 'http://wikieducator.org/Lesson_8:_Food_Spoilage',  'widget_type' => '3',  'module' => 'keditorservices',  'action' => 'getEntryInfo',)
+	// 125965956955.03, Dec 01 04:26:09 symfony [info] {sfRequest} request parameters array (  'entry_id' => '-1',  'vshow_id' => '292688',  'vdata' => 'YTo0OntzOjQ6ImJhc2UiO3M6MzQ6Imh0dHA6Ly93aWtpZWR1Y2F0b3Iub3JnL2luZGV4LnBocC8iO3M6MzoiYWRkIjtzOjQ5OiJTcGVjaWFsOkthbHR1cmFDb250cmlidXRpb25XaXphcmQ|02a3Nob3dfaWQ9MjkyNjg4IjtzOjQ6ImVkaXQiO3M6NDI6IlNwZWNpYWw6S2FsdHVyYVZpZGVvRWRpdG9yP2tzaG93X2lkPTI5MjY4OCI7czo1OiJzaGFyZSI7czo0NzoiaHR0cDovL3dpa2llZHVjYXRvci5vcmcvTGVzc29uXzg6X0Zvb2RfU3BvaWxhZ2UiO30=',  'referer' => 'http://wikieducator.org/Lesson_8:_Food_Spoilage',  'widget_type' => '3',  'module' => 'veditorservices',  'action' => 'getEntryInfo',)
 	// 2009-11-30 07:52:11
 	if ( preg_match ( "/([\d\.]*), ([a-zA-Z\d\- \:]*) symfony.*request parameters (.*)/" , $s , $matches ) )
 	{
@@ -194,7 +194,7 @@ while(!feof($f))
 			$multi_request=1;
 		}
 		
-		$kargs = new kArgs( $action_arr );
+		$vargs = new vArgs( $action_arr );
 		
 		while ( true )
 		{
@@ -202,7 +202,7 @@ while(!feof($f))
 			{
 				if ( isset ( $action_arr["request{$service_index}_service"] ) )
 				{
-					$kargs->setPrefix( "request{$service_index}_" ); 	
+					$vargs->setPrefix( "request{$service_index}_" ); 	
 				}
 				else
 				{
@@ -211,7 +211,7 @@ while(!feof($f))
 				}
 			}
 			
-			$api_e = new kApiEvent();
+			$api_e = new vApiEvent();
 			$api_e->datetime = $datetime;
 			$api_e->session_id=$session_id;
 			$api_e->ps_version="ps2";
@@ -220,58 +220,58 @@ while(!feof($f))
 
 			// extract data from following array
 			
-			$api_e->service=$kargs->module;
+			$api_e->service=$vargs->module;
 			if ( $multi_request )
 			{
-				$api_e->action=$kargs->service;
+				$api_e->action=$vargs->service;
 			}
 			else
 			{
-				$api_e->action=$kargs->myaction;
+				$api_e->action=$vargs->myaction;
 			}
 	
 			// complete the array and break
-		 	$api_e->ks = $kargs->ks;
+		 	$api_e->vs = $vargs->vs;
 	
-		 	$str = base64_decode( $api_e->ks , true ) ; // encode this string
+		 	$str = base64_decode( $api_e->vs , true ) ; // encode this string
 			@list ( $hash , $real_str) = @explode ( "|" , $str , 2 );
 					
 			$a = ""; // just a dummy to store stuff in 
-			@list ( $api_e->partner_id , $a , $a , $api_e->ks_type , $a , $api_e->uid , $a) =
+			@list ( $api_e->partner_id , $a , $a , $api_e->vs_type , $a , $api_e->uid , $a) =
 					@explode ( ";" , $real_str );
 						
-			$api_e->ks_type = 0 + $api_e->ks_type;
+			$api_e->vs_type = 0 + $api_e->vs_type;
 	
 			if ( ! $api_e->partner_id )
 			{
-				$api_e->partner_id = $kargs->partner_id;	
+				$api_e->partner_id = $vargs->partner_id;	
 			}
 			
 			if ( ! $api_e->uid )
 			{
-				$api_e->uid = $kargs->uid;	
+				$api_e->uid = $vargs->uid;	
 			}
 			
 			// set the entry_id
-			if (isset ( $kargs->entry_id))
+			if (isset ( $vargs->entry_id))
 			{
-				$api_e->entry_id = $kargs->entry_id;
+				$api_e->entry_id = $vargs->entry_id;
 			}
 			
 			// set the widget_id
-			if ( isset ( $kargs->widget_id ) )
+			if ( isset ( $vargs->widget_id ) )
 			{
-				$api_e->widget_id = $kargs->widget_id;
+				$api_e->widget_id = $vargs->widget_id;
 			}
 			
 			// set the ui_conf_id
-			if (isset ( $kargs->uiconf_id))
+			if (isset ( $vargs->uiconf_id))
 			{
-				$api_e->ui_conf_id = $kargs->uiconf_id;
+				$api_e->ui_conf_id = $vargs->uiconf_id;
 			}
-			elseif (isset ( $kargs->ui_conf_id))
+			elseif (isset ( $vargs->ui_conf_id))
 			{
-				$api_e->ui_conf_id = $kargs->ui_conf_id;
+				$api_e->ui_conf_id = $vargs->ui_conf_id;
 			}	
 				
 			if ( $multi_request )

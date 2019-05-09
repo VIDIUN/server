@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kRuleAction 
+class vRuleAction 
 {
 	/**
 	 * @var int RuleActionType

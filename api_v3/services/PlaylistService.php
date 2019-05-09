@@ -8,12 +8,12 @@
  * @package api
  * @subpackage services
  */
-class PlaylistService extends KalturaEntryService
+class PlaylistService extends VidiunEntryService
 {
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::globalPartnerAllowed()
+	 * @see VidiunBaseService::globalPartnerAllowed()
 	 */
-	protected function kalturaNetworkAllowed($actionName)
+	protected function vidiunNetworkAllowed($actionName)
 	{
 		if ($actionName === 'executeFromContent') {
 			return true;
@@ -24,7 +24,7 @@ class PlaylistService extends KalturaEntryService
 		if ($actionName === 'getStatsFromContent') {
 			return true;
 		}
-		return parent::kalturaNetworkAllowed($actionName);
+		return parent::vidiunNetworkAllowed($actionName);
 	}
 
 	protected function partnerRequired($actionName)
@@ -43,16 +43,16 @@ class PlaylistService extends KalturaEntryService
 	
 	/**
 	 * Add new playlist
-	 * Note that all entries used in a playlist will become public and may appear in KalturaNetwork
+	 * Note that all entries used in a playlist will become public and may appear in VidiunNetwork
 	 *
 	 * @action add
-	 * @param KalturaPlaylist $playlist
+	 * @param VidiunPlaylist $playlist
 	 * @param bool $updateStats indicates that the playlist statistics attributes should be updated synchronously now
-	 * @return KalturaPlaylist
+	 * @return VidiunPlaylist
 	 *
 	 * @disableRelativeTime $playlist
 	 */
-	function addAction( KalturaPlaylist $playlist , $updateStats = false)
+	function addAction( VidiunPlaylist $playlist , $updateStats = false)
 	{
 		$dbPlaylist = $playlist->toInsertableObject();
 
@@ -63,7 +63,7 @@ class PlaylistService extends KalturaEntryService
 		
 		$dbPlaylist->setPartnerId ( $this->getPartnerId() );
 		$dbPlaylist->setStatus ( entryStatus::READY );
-		$dbPlaylist->setKshowId ( null ); // this is brave !!
+		$dbPlaylist->setVshowId ( null ); // this is brave !!
 		$dbPlaylist->setType ( entryType::PLAYLIST );
 
 		myPlaylistUtils::validatePlaylist($dbPlaylist);
@@ -79,7 +79,7 @@ class PlaylistService extends KalturaEntryService
 		$trackEntry->setDescription(__METHOD__ . ":" . __LINE__ . "::ENTRY_PLAYLIST");
 		TrackEntry::addTrackEntry($trackEntry);
 		
-		$playlist = new KalturaPlaylist(); // start from blank
+		$playlist = new VidiunPlaylist(); // start from blank
 		$playlist->fromObject($dbPlaylist, $this->getResponseProfile());
 		
 		return $playlist;
@@ -92,7 +92,7 @@ class PlaylistService extends KalturaEntryService
 	 * @action get
 	 * @param string $id
 	 * @param int $version Desired version of the data
-	 * @return KalturaPlaylist
+	 * @return VidiunPlaylist
 	 *
 	 * @throws APIErrors::INVALID_ENTRY_ID
 	 * @throws APIErrors::INVALID_PLAYLIST_TYPE
@@ -102,14 +102,14 @@ class PlaylistService extends KalturaEntryService
 		$dbPlaylist = entryPeer::retrieveByPK( $id );
 		
 		if ( ! $dbPlaylist )
-			throw new KalturaAPIException ( APIErrors::INVALID_ENTRY_ID , "Playlist" , $id  );
+			throw new VidiunAPIException ( APIErrors::INVALID_ENTRY_ID , "Playlist" , $id  );
 		if ( $dbPlaylist->getType() != entryType::PLAYLIST )
-			throw new KalturaAPIException ( APIErrors::INVALID_PLAYLIST_TYPE );
+			throw new VidiunAPIException ( APIErrors::INVALID_PLAYLIST_TYPE );
 			
 		if ($version !== -1)
 			$dbPlaylist->setDesiredVersion($version);
 			
-		$playlist = new KalturaPlaylist(); // start from blank
+		$playlist = new VidiunPlaylist(); // start from blank
 		$playlist->fromObject($dbPlaylist, $this->getResponseProfile());
 		
 		return $playlist;
@@ -121,26 +121,26 @@ class PlaylistService extends KalturaEntryService
 	 *
 	 * @action update
 	 * @param string $id
-	 * @param KalturaPlaylist $playlist
+	 * @param VidiunPlaylist $playlist
 	 * @param bool $updateStats
-	 * @return KalturaPlaylist
-	 * @throws KalturaAPIException
+	 * @return VidiunPlaylist
+	 * @throws VidiunAPIException
 	 * @validateUser entry id edit
 	 *
 	 * @disableRelativeTime $playlist
 	 */
-	function updateAction($id , KalturaPlaylist $playlist , $updateStats = false )
+	function updateAction($id , VidiunPlaylist $playlist , $updateStats = false )
 	{
 		$dbPlaylist = entryPeer::retrieveByPK($id);
 
 		if(!$dbPlaylist)
 		{
-			throw new KalturaAPIException (APIErrors::INVALID_ENTRY_ID, "Playlist", $id);
+			throw new VidiunAPIException (APIErrors::INVALID_ENTRY_ID, "Playlist", $id);
 		}
 
 		if ($dbPlaylist->getType() != entryType::PLAYLIST )
 		{
-			throw new KalturaAPIException (APIErrors::INVALID_PLAYLIST_TYPE);
+			throw new VidiunAPIException (APIErrors::INVALID_PLAYLIST_TYPE);
 		}
 
 		$dbPlaylist = $playlist->toUpdatableObject($dbPlaylist);
@@ -176,16 +176,16 @@ class PlaylistService extends KalturaEntryService
 	 */
 	function deleteAction($id)
 	{
-		if (!kPermissionManager::isPermitted(PermissionName::PLAYLIST_DELETE))
+		if (!vPermissionManager::isPermitted(PermissionName::PLAYLIST_DELETE))
 		{
 			$entry = entryPeer::retrieveByPK($id);
-			if(!$entry || $entry->getMediaType() != KalturaPlaylistType::STATIC_LIST)
+			if(!$entry || $entry->getMediaType() != VidiunPlaylistType::STATIC_LIST)
 			{
-				throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_MEDIA_TYPE, $id, $entry->getMediaType(), KalturaPlaylistType::STATIC_LIST);
+				throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_MEDIA_TYPE, $id, $entry->getMediaType(), VidiunPlaylistType::STATIC_LIST);
 			}
 		}
 
-		$this->deleteEntry($id, KalturaEntryType::PLAYLIST);
+		$this->deleteEntry($id, VidiunEntryType::PLAYLIST);
 	}
 	
 	
@@ -194,30 +194,30 @@ class PlaylistService extends KalturaEntryService
 	 *
 	 * @action clone
 	 * @param string $id  Id of the playlist to clone
-	 * @param KalturaPlaylist $newPlaylist Parameters defined here will override the ones in the cloned playlist
-	 * @return KalturaPlaylist
+	 * @param VidiunPlaylist $newPlaylist Parameters defined here will override the ones in the cloned playlist
+	 * @return VidiunPlaylist
 	 *
 	 * @throws APIErrors::INVALID_ENTRY_ID
 	 * @throws APIErrors::INVALID_PLAYLIST_TYPE
 	 */
-	function cloneAction( $id, KalturaPlaylist $newPlaylist = null)
+	function cloneAction( $id, VidiunPlaylist $newPlaylist = null)
 	{
 		$dbPlaylist = entryPeer::retrieveByPK( $id );
 		
 		if ( !$dbPlaylist )
-			throw new KalturaAPIException ( APIErrors::INVALID_ENTRY_ID , "Playlist" , $id  );
+			throw new VidiunAPIException ( APIErrors::INVALID_ENTRY_ID , "Playlist" , $id  );
 			
 		if ( $dbPlaylist->getType() != entryType::PLAYLIST )
-			throw new KalturaAPIException ( APIErrors::INVALID_PLAYLIST_TYPE );
+			throw new VidiunAPIException ( APIErrors::INVALID_PLAYLIST_TYPE );
 			
 		if ($newPlaylist->playlistType && ($newPlaylist->playlistType != $dbPlaylist->getMediaType()))
-			throw new KalturaAPIException ( APIErrors::CANT_UPDATE_PARAMETER, 'playlistType' );
+			throw new VidiunAPIException ( APIErrors::CANT_UPDATE_PARAMETER, 'playlistType' );
 		
-		$oldPlaylist = new KalturaPlaylist();
+		$oldPlaylist = new VidiunPlaylist();
 		$oldPlaylist->fromObject($dbPlaylist, $this->getResponseProfile());
 			
 		if (!$newPlaylist) {
-			$newPlaylist = new KalturaPlaylist();
+			$newPlaylist = new VidiunPlaylist();
 		}
 		
 		$reflect = new ReflectionClass($newPlaylist);
@@ -244,23 +244,23 @@ class PlaylistService extends KalturaEntryService
 	 * List available playlists
 	 *
 	 * @action list
-	 * @param KalturaPlaylistFilter // TODO
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaPlaylistListResponse
+	 * @param VidiunPlaylistFilter // TODO
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunPlaylistListResponse
 	 */
-	function listAction( KalturaPlaylistFilter $filter=null, KalturaFilterPager $pager=null )
+	function listAction( VidiunPlaylistFilter $filter=null, VidiunFilterPager $pager=null )
 	{
 	    myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 		
 
 	    if (!$filter)
-			$filter = new KalturaPlaylistFilter();
+			$filter = new VidiunPlaylistFilter();
 			
-	    $filter->typeEqual = KalturaEntryType::PLAYLIST;
+	    $filter->typeEqual = VidiunEntryType::PLAYLIST;
 	    list($list, $totalCount) = parent::listEntriesByFilter($filter, $pager);
 	    
-	    $newList = KalturaPlaylistArray::fromDbArray($list, $this->getResponseProfile());
-		$response = new KalturaPlaylistListResponse();
+	    $newList = VidiunPlaylistArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunPlaylistListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		return $response;
@@ -273,26 +273,26 @@ class PlaylistService extends KalturaEntryService
 	 * @action execute
 	 * @param string $id
 	 * @param string $detailed
-	 * @param KalturaContext $playlistContext
-	 * @param KalturaMediaEntryFilterForPlaylist $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaBaseEntryArray
-	 * @ksOptional
+	 * @param VidiunContext $playlistContext
+	 * @param VidiunMediaEntryFilterForPlaylist $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunBaseEntryArray
+	 * @vsOptional
 	 */
-	function executeAction( $id , $detailed = false, KalturaContext $playlistContext = null, $filter = null, $pager = null )
+	function executeAction( $id , $detailed = false, VidiunContext $playlistContext = null, $filter = null, $pager = null )
 	{
 		myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 
-		if (in_array($id, kConf::get('partner_0_static_playlists', 'local', array())))
+		if (in_array($id, vConf::get('partner_0_static_playlists', 'local', array())))
 				$playlist = entryPeer::retrieveByPKNoFilter($id);
 		else
 			$playlist = entryPeer::retrieveByPK($id);
 
 		if (!$playlist)
-			throw new KalturaAPIException ( APIErrors::INVALID_ENTRY_ID , "Playlist" , $id  );
+			throw new VidiunAPIException ( APIErrors::INVALID_ENTRY_ID , "Playlist" , $id  );
 
 		if ($playlist->getType() != entryType::PLAYLIST)
-			throw new KalturaAPIException ( APIErrors::INVALID_PLAYLIST_TYPE );
+			throw new VidiunAPIException ( APIErrors::INVALID_PLAYLIST_TYPE );
 
 		$entryFilter = null;
 		if ($filter)
@@ -302,8 +302,8 @@ class PlaylistService extends KalturaEntryService
 			$entryFilter = $coreFilter;
 		}
 			
-		if ($this->getKs() && is_object($this->getKs()) && $this->getKs()->isAdmin())
-			myPlaylistUtils::setIsAdminKs(true);
+		if ($this->getVs() && is_object($this->getVs()) && $this->getVs()->isAdmin())
+			myPlaylistUtils::setIsAdminVs(true);
 
 	    $corePlaylistContext = null;
 	    if ($playlistContext)
@@ -320,14 +320,14 @@ class PlaylistService extends KalturaEntryService
 		{
 			$entryList = myPlaylistUtils::executePlaylist( $this->getPartnerId() , $playlist , $entryFilter , $detailed, $pager);
 		}
-		catch (kCoreException $ex)
+		catch (vCoreException $ex)
 		{   		
 			throw $ex;
 		}
 
 		myEntryUtils::updatePuserIdsForEntries ( $entryList );
 			
-		return KalturaBaseEntryArray::fromDbArray($entryList, $this->getResponseProfile());
+		return VidiunBaseEntryArray::fromDbArray($entryList, $this->getResponseProfile());
 	}
 	
 
@@ -336,46 +336,46 @@ class PlaylistService extends KalturaEntryService
 	 * @disableTags TAG_WIDGET_SESSION
 	 *
 	 * @action executeFromContent
-	 * @param KalturaPlaylistType $playlistType
+	 * @param VidiunPlaylistType $playlistType
 	 * @param string $playlistContent
 	 * @param string $detailed
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaBaseEntryArray
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunBaseEntryArray
 	 */
 	function executeFromContentAction($playlistType, $playlistContent, $detailed = false, $pager = null)
 	{
 	    myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 	    
-		if ($this->getKs() && is_object($this->getKs()) && $this->getKs()->isAdmin())
-			myPlaylistUtils::setIsAdminKs(true);
+		if ($this->getVs() && is_object($this->getVs()) && $this->getVs()->isAdmin())
+			myPlaylistUtils::setIsAdminVs(true);
 
 		$entryList = array();
-		if ($playlistType == KalturaPlaylistType::DYNAMIC)
+		if ($playlistType == VidiunPlaylistType::DYNAMIC)
 			$entryList = myPlaylistUtils::executeDynamicPlaylist($this->getPartnerId(), $playlistContent, null, true, $pager);
-		else if ($playlistType == KalturaPlaylistType::STATIC_LIST)
+		else if ($playlistType == VidiunPlaylistType::STATIC_LIST)
 			$entryList = myPlaylistUtils::executeStaticPlaylistFromEntryIdsString($playlistContent, null, true, $pager);
 			
 		myEntryUtils::updatePuserIdsForEntries($entryList);
 		
-		return KalturaBaseEntryArray::fromDbArray($entryList, $this->getResponseProfile());
+		return VidiunBaseEntryArray::fromDbArray($entryList, $this->getResponseProfile());
 	}
 	
 	/**
 	 * Retrieve playlist for playing purpose, based on media entry filters
 	 * @disableTags TAG_WIDGET_SESSION
 	 * @action executeFromFilters
-	 * @param KalturaMediaEntryFilterForPlaylistArray $filters
+	 * @param VidiunMediaEntryFilterForPlaylistArray $filters
 	 * @param int $totalResults
 	 * @param string $detailed
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaBaseEntryArray
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunBaseEntryArray
 	 */
-	function executeFromFiltersAction(KalturaMediaEntryFilterForPlaylistArray $filters, $totalResults, $detailed = true, $pager = null)
+	function executeFromFiltersAction(VidiunMediaEntryFilterForPlaylistArray $filters, $totalResults, $detailed = true, $pager = null)
 	{
 	    myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 	    
-		$tempPlaylist = new KalturaPlaylist();
-		$tempPlaylist->playlistType = KalturaPlaylistType::DYNAMIC;
+		$tempPlaylist = new VidiunPlaylist();
+		$tempPlaylist->playlistType = VidiunPlaylistType::DYNAMIC;
 		$tempPlaylist->filters = $filters;
 		$tempPlaylist->totalResults = $totalResults;
 		$tempPlaylist->filtersToPlaylistContentXml();
@@ -387,9 +387,9 @@ class PlaylistService extends KalturaEntryService
 	 * Retrieve playlist statistics
 	 * @deprecated
 	 * @action getStatsFromContent
-	 * @param KalturaPlaylistType $playlistType
+	 * @param VidiunPlaylistType $playlistType
 	 * @param string $playlistContent
-	 * @return KalturaPlaylist
+	 * @return VidiunPlaylist
 	 */
 	function getStatsFromContentAction( $playlistType , $playlistContent )
 	{
@@ -405,7 +405,7 @@ class PlaylistService extends KalturaEntryService
 				
 		myPlaylistUtils::updatePlaylistStatistics ( $this->getPartnerId() , $dbPlaylist );//, $extra_filters , $detailed );
 		
-		$playlist = new KalturaPlaylist(); // start from blank
+		$playlist = new VidiunPlaylist(); // start from blank
 		$playlist->fromObject($dbPlaylist, $this->getResponseProfile());
 		
 		return $playlist;

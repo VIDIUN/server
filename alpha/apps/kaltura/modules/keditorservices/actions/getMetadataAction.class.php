@@ -1,24 +1,24 @@
 <?php
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-require_once ( __DIR__ . "/defKeditorservicesAction.class.php");
+require_once ( __DIR__ . "/defVeditorservicesAction.class.php");
 
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-class getMetadataAction extends defKeditorservicesAction
+class getMetadataAction extends defVeditorservicesAction
 {
 	/**
 	 * Executes addComment action, which returns a form enabling the insertion of a comment
 	 * The request may include 1 fields: entry id.
 	 */
-	protected function executeImpl( kshow $kshow, entry &$entry )
+	protected function executeImpl( vshow $vshow, entry &$entry )
 	{
 		$version = @$_REQUEST["version"]; // it's a path on the disk
-		if ( kString::beginsWith( $version , "." ) )
+		if ( vString::beginsWith( $version , "." ) )
 		{
 			// someone is trying to hack in the system 
 			return sfView::ERROR;	
@@ -36,11 +36,11 @@ class getMetadataAction extends defKeditorservicesAction
 		
 		//echo "[$file_name]";
 		
-		if ( kString::endsWith( $file_name  , "xml" ))
+		if ( vString::endsWith( $file_name  , "xml" ))
 		{
 			if ( file_exists( $file_name ) )
 			{
-				$this->xml_content = kFile::getFileContent( $file_name );
+				$this->xml_content = vFile::getFileContent( $file_name );
 				
 			//	echo "[" . $this->xml_content . "]" ;
 				 
@@ -62,9 +62,9 @@ class getMetadataAction extends defKeditorservicesAction
 		$this->xml_content = "No such entry [$entry_id]";
 	}
 	
-	protected function noSuchKshow ( $kshow_id )
+	protected function noSuchVshow ( $vshow_id )
 	{
-		$this->xml_content = "No such show [$kshow_id]";
+		$this->xml_content = "No such show [$vshow_id]";
 	}
 }
 

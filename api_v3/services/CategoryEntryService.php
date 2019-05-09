@@ -5,7 +5,7 @@
  *
  * @service categoryEntry
  */
-class CategoryEntryService extends KalturaBaseService
+class CategoryEntryService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -18,56 +18,56 @@ class CategoryEntryService extends KalturaBaseService
 	 * Add new CategoryEntry
 	 * 
 	 * @action add
-	 * @param KalturaCategoryEntry $categoryEntry
-	 * @throws KalturaErrors::INVALID_ENTRY_ID
-	 * @throws KalturaErrors::CATEGORY_NOT_FOUND
-	 * @throws KalturaErrors::CANNOT_ASSIGN_ENTRY_TO_CATEGORY
-	 * @throws KalturaErrors::CATEGORY_ENTRY_ALREADY_EXISTS
-	 * @return KalturaCategoryEntry
+	 * @param VidiunCategoryEntry $categoryEntry
+	 * @throws VidiunErrors::INVALID_ENTRY_ID
+	 * @throws VidiunErrors::CATEGORY_NOT_FOUND
+	 * @throws VidiunErrors::CANNOT_ASSIGN_ENTRY_TO_CATEGORY
+	 * @throws VidiunErrors::CATEGORY_ENTRY_ALREADY_EXISTS
+	 * @return VidiunCategoryEntry
 	 */
-	function addAction(KalturaCategoryEntry $categoryEntry)
+	function addAction(VidiunCategoryEntry $categoryEntry)
 	{
 		$categoryEntry->validateForInsert();
 		
 		$entry = entryPeer::retrieveByPK($categoryEntry->entryId);
 		if (!$entry)
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_ID, $categoryEntry->entryId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_ID, $categoryEntry->entryId);
 			
 		$category = categoryPeer::retrieveByPK($categoryEntry->categoryId);
 		if (!$category)
-			throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $categoryEntry->categoryId);
+			throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $categoryEntry->categoryId);
 			
 		$categoryEntries = categoryEntryPeer::retrieveActiveAndPendingByEntryId($categoryEntry->entryId);
 		
 		$maxCategoriesPerEntry = $entry->getMaxCategoriesPerEntry();
 			
 		if (count($categoryEntries) >= $maxCategoriesPerEntry)
-			throw new KalturaAPIException(KalturaErrors::MAX_CATEGORIES_FOR_ENTRY_REACHED, $maxCategoriesPerEntry);
+			throw new VidiunAPIException(VidiunErrors::MAX_CATEGORIES_FOR_ENTRY_REACHED, $maxCategoriesPerEntry);
 			
 		//validate user is entiteld to assign entry to this category 
-		if (kEntitlementUtils::getEntitlementEnforcement() && $category->getContributionPolicy() != ContributionPolicyType::ALL)
+		if (vEntitlementUtils::getEntitlementEnforcement() && $category->getContributionPolicy() != ContributionPolicyType::ALL)
 		{
-			$categoryKuser = categoryKuserPeer::retrievePermittedKuserInCategory($categoryEntry->categoryId, kCurrentContext::getCurrentKsKuserId());
-			if(!$categoryKuser)
+			$categoryVuser = categoryVuserPeer::retrievePermittedVuserInCategory($categoryEntry->categoryId, vCurrentContext::getCurrentVsVuserId());
+			if(!$categoryVuser)
 			{
-				KalturaLog::err("User [" . kCurrentContext::getCurrentKsKuserId() . "] is not a member of the category [{$categoryEntry->categoryId}]");
-				throw new KalturaAPIException(KalturaErrors::CANNOT_ASSIGN_ENTRY_TO_CATEGORY);
+				VidiunLog::err("User [" . vCurrentContext::getCurrentVsVuserId() . "] is not a member of the category [{$categoryEntry->categoryId}]");
+				throw new VidiunAPIException(VidiunErrors::CANNOT_ASSIGN_ENTRY_TO_CATEGORY);
 			}
-			if($categoryKuser->getPermissionLevel() == CategoryKuserPermissionLevel::MEMBER)
+			if($categoryVuser->getPermissionLevel() == CategoryVuserPermissionLevel::MEMBER)
 			{
-				KalturaLog::err("User [" . kCurrentContext::getCurrentKsKuserId() . "] permission level [" . $categoryKuser->getPermissionLevel() . "] on category [{$categoryEntry->categoryId}] is not member [" . CategoryKuserPermissionLevel::MEMBER . "]");
-				throw new KalturaAPIException(KalturaErrors::CANNOT_ASSIGN_ENTRY_TO_CATEGORY);
+				VidiunLog::err("User [" . vCurrentContext::getCurrentVsVuserId() . "] permission level [" . $categoryVuser->getPermissionLevel() . "] on category [{$categoryEntry->categoryId}] is not member [" . CategoryVuserPermissionLevel::MEMBER . "]");
+				throw new VidiunAPIException(VidiunErrors::CANNOT_ASSIGN_ENTRY_TO_CATEGORY);
 			}
 				
-			if(!$categoryKuser->hasPermission(PermissionName::CATEGORY_EDIT) && !$categoryKuser->hasPermission(PermissionName::CATEGORY_CONTRIBUTE) &&
-				!$entry->isEntitledKuserEdit(kCurrentContext::getCurrentKsKuserId()) &&
-				$entry->getCreatorKuserId() != kCurrentContext::getCurrentKsKuserId())
-				throw new KalturaAPIException(KalturaErrors::CANNOT_ASSIGN_ENTRY_TO_CATEGORY);				
+			if(!$categoryVuser->hasPermission(PermissionName::CATEGORY_EDIT) && !$categoryVuser->hasPermission(PermissionName::CATEGORY_CONTRIBUTE) &&
+				!$entry->isEntitledVuserEdit(vCurrentContext::getCurrentVsVuserId()) &&
+				$entry->getCreatorVuserId() != vCurrentContext::getCurrentVsVuserId())
+				throw new VidiunAPIException(VidiunErrors::CANNOT_ASSIGN_ENTRY_TO_CATEGORY);				
 		}
 		
 		$categoryEntryExists = categoryEntryPeer::retrieveByCategoryIdAndEntryId($categoryEntry->categoryId, $categoryEntry->entryId);
 		if($categoryEntryExists && $categoryEntryExists->getStatus() == CategoryEntryStatus::ACTIVE)
-			throw new KalturaAPIException(KalturaErrors::CATEGORY_ENTRY_ALREADY_EXISTS);
+			throw new VidiunAPIException(VidiunErrors::CATEGORY_ENTRY_ALREADY_EXISTS);
 		
 		if(!$categoryEntryExists)
 		{
@@ -83,39 +83,39 @@ class CategoryEntryService extends KalturaBaseService
 		/* @var $dbCategoryEnry categoryEntry */
 		$dbCategoryEntry->setStatus(CategoryEntryStatus::ACTIVE);
 		
-		if (kEntitlementUtils::getEntitlementEnforcement() && $category->getModeration())
+		if (vEntitlementUtils::getEntitlementEnforcement() && $category->getModeration())
 		{
-			$categoryKuser = categoryKuserPeer::retrievePermittedKuserInCategory($categoryEntry->categoryId, kCurrentContext::getCurrentKsKuserId());
-			if(!$categoryKuser ||
-				($categoryKuser->getPermissionLevel() != CategoryKuserPermissionLevel::MANAGER && 
-				$categoryKuser->getPermissionLevel() != CategoryKuserPermissionLevel::MODERATOR))
+			$categoryVuser = categoryVuserPeer::retrievePermittedVuserInCategory($categoryEntry->categoryId, vCurrentContext::getCurrentVsVuserId());
+			if(!$categoryVuser ||
+				($categoryVuser->getPermissionLevel() != CategoryVuserPermissionLevel::MANAGER && 
+				$categoryVuser->getPermissionLevel() != CategoryVuserPermissionLevel::MODERATOR))
 				$dbCategoryEntry->setStatus(CategoryEntryStatus::PENDING);
 		}
 		
 		if ($category->getModeration() && 
-		   (kEntitlementUtils::getCategoryModeration() || $this->getPartner()->getEnabledService(KalturaPermissionName::FEATURE_BLOCK_CATEGORY_MODERATION_SELF_APPROVE)))
+		   (vEntitlementUtils::getCategoryModeration() || $this->getPartner()->getEnabledService(VidiunPermissionName::FEATURE_BLOCK_CATEGORY_MODERATION_SELF_APPROVE)))
 		{
 			$dbCategoryEntry->setStatus(CategoryEntryStatus::PENDING);
 		}
 		
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 		$dbCategoryEntry->setPartnerId($partnerId);
 		
-		$kuser = kCurrentContext::getCurrentKsKuser();
+		$vuser = vCurrentContext::getCurrentVsVuser();
 		
-		if ($kuser)
+		if ($vuser)
 		{
-			$dbCategoryEntry->setCreatorKuserId($kuser->getId());
-			$dbCategoryEntry->setCreatorPuserId($kuser->getPuserId());
+			$dbCategoryEntry->setCreatorVuserId($vuser->getId());
+			$dbCategoryEntry->setCreatorPuserId($vuser->getPuserId());
 		}
 		
 		$dbCategoryEntry->save();
 		
 		//need to select the entry again - after update
 		$entry = entryPeer::retrieveByPK($categoryEntry->entryId);		
-		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry);
+		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry);
 		
-		$categoryEntry = new KalturaCategoryEntry();
+		$categoryEntry = new VidiunCategoryEntry();
 		$categoryEntry->fromObject($dbCategoryEntry, $this->getResponseProfile());
 
 		return $categoryEntry;
@@ -127,10 +127,10 @@ class CategoryEntryService extends KalturaBaseService
 	 * @action delete
 	 * @param string $entryId
 	 * @param int $categoryId
-	 * @throws KalturaErrors::INVALID_ENTRY_ID
-	 * @throws KalturaErrors::CATEGORY_NOT_FOUND
-	 * @throws KalturaErrors::CANNOT_REMOVE_ENTRY_FROM_CATEGORY
-	 * @throws KalturaErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY
+	 * @throws VidiunErrors::INVALID_ENTRY_ID
+	 * @throws VidiunErrors::CATEGORY_NOT_FOUND
+	 * @throws VidiunErrors::CANNOT_REMOVE_ENTRY_FROM_CATEGORY
+	 * @throws VidiunErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY
 	 * 
 	 */
 	function deleteAction($entryId, $categoryId)
@@ -139,78 +139,78 @@ class CategoryEntryService extends KalturaBaseService
 
 		if (!$entry)
 		{
-			if (kCurrentContext::$master_partner_id != Partner::BATCH_PARTNER_ID)
-				throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_ID, $entryId);
+			if (vCurrentContext::$master_partner_id != Partner::BATCH_PARTNER_ID)
+				throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_ID, $entryId);
 		}
 			
 		$category = categoryPeer::retrieveByPK($categoryId);
-		if (!$category && kCurrentContext::$master_partner_id != Partner::BATCH_PARTNER_ID)
-			throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $categoryId);
+		if (!$category && vCurrentContext::$master_partner_id != Partner::BATCH_PARTNER_ID)
+			throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $categoryId);
 
 		//validate user is entitled to remove entry from category
-		if(kEntitlementUtils::getEntitlementEnforcement() &&
-			!$entry->isEntitledKuserEdit(kCurrentContext::getCurrentKsKuserId()) &&
-			$entry->getCreatorKuserId() != kCurrentContext::getCurrentKsKuserId())
+		if(vEntitlementUtils::getEntitlementEnforcement() &&
+			!$entry->isEntitledVuserEdit(vCurrentContext::getCurrentVsVuserId()) &&
+			$entry->getCreatorVuserId() != vCurrentContext::getCurrentVsVuserId())
 		{
-			$kuserIsEntitled = false;
-			$kuser = categoryKuserPeer::retrievePermittedKuserInCategory($categoryId, kCurrentContext::getCurrentKsKuserId());
+			$vuserIsEntitled = false;
+			$vuser = categoryVuserPeer::retrievePermittedVuserInCategory($categoryId, vCurrentContext::getCurrentVsVuserId());
 
-			// First pass: check if kuser is a manager
-			if ( $kuser )
+			// First pass: check if vuser is a manager
+			if ( $vuser )
 			{
-				if ( $kuser->getPermissionLevel() == CategoryKuserPermissionLevel::MANAGER )
+				if ( $vuser->getPermissionLevel() == CategoryVuserPermissionLevel::MANAGER )
 				{
-					$kuserIsEntitled = true;
+					$vuserIsEntitled = true;
 				}
 			}
 			else
 			{
-				$kuser = kuserPeer::retrieveByPK( kCurrentContext::getCurrentKsKuserId() );
+				$vuser = vuserPeer::retrieveByPK( vCurrentContext::getCurrentVsVuserId() );
 			}
 
-			// Second pass: check if kuser is a co-publisher
-			if ( ! $kuserIsEntitled
-					&& $kuser
-					&& $entry->isEntitledKuserPublish($kuser->getKuserId()))
+			// Second pass: check if vuser is a co-publisher
+			if ( ! $vuserIsEntitled
+					&& $vuser
+					&& $entry->isEntitledVuserPublish($vuser->getVuserId()))
 			{
-				$kuserIsEntitled = true;
+				$vuserIsEntitled = true;
 			}
 
-			if ( ! $kuserIsEntitled )
+			if ( ! $vuserIsEntitled )
 			{
-				throw new KalturaAPIException(KalturaErrors::CANNOT_REMOVE_ENTRY_FROM_CATEGORY);
+				throw new VidiunAPIException(VidiunErrors::CANNOT_REMOVE_ENTRY_FROM_CATEGORY);
 			}
 		}
 			
 		$dbCategoryEntry = categoryEntryPeer::retrieveByCategoryIdAndEntryId($categoryId, $entryId);
 		if(!$dbCategoryEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY);
 		
 		$dbCategoryEntry->setStatus(CategoryEntryStatus::DELETED);
 		$dbCategoryEntry->save();
 		
 		//need to select the entry again - after update
 		$entry = entryPeer::retrieveByPK($entryId);		
-		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry);
+		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry);
 	}
 	
 	/**
 	 * List all categoryEntry
 	 * 
 	 * @action list
-	 * @param KalturaCategoryEntryFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @throws KalturaErrors::MUST_FILTER_ENTRY_ID_EQUAL
-	 * @throws KalturaErrors::MUST_FILTER_ON_ENTRY_OR_CATEGORY
-	 * @return KalturaCategoryEntryListResponse
+	 * @param VidiunCategoryEntryFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @throws VidiunErrors::MUST_FILTER_ENTRY_ID_EQUAL
+	 * @throws VidiunErrors::MUST_FILTER_ON_ENTRY_OR_CATEGORY
+	 * @return VidiunCategoryEntryListResponse
 	 */
-	function listAction(KalturaCategoryEntryFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunCategoryEntryFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaCategoryEntryFilter();
+			$filter = new VidiunCategoryEntryFilter();
 			
 		if(!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		return $filter->getListResponse($pager, $this->getResponseProfile());
 	}
@@ -222,17 +222,17 @@ class CategoryEntryService extends KalturaBaseService
 	 * @param string $entryId
 	 * @param int $categoryId
 	 * @param bool $shouldUpdate
-	 * @throws KalturaErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY
+	 * @throws VidiunErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY
 	 * @return int
 	 */
 	function indexAction($entryId, $categoryId, $shouldUpdate = true)
 	{
-		if(kEntitlementUtils::getEntitlementEnforcement())
-			throw new KalturaAPIException(KalturaErrors::CANNOT_INDEX_OBJECT_WHEN_ENTITLEMENT_IS_ENABLE);
+		if(vEntitlementUtils::getEntitlementEnforcement())
+			throw new VidiunAPIException(VidiunErrors::CANNOT_INDEX_OBJECT_WHEN_ENTITLEMENT_IS_ENABLE);
 		
 		$dbCategoryEntry = categoryEntryPeer::retrieveByCategoryIdAndEntryId($categoryId, $entryId);
 		if(!$dbCategoryEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY);
 			
 		if (!$shouldUpdate)
 		{
@@ -299,44 +299,44 @@ class CategoryEntryService extends KalturaBaseService
 	 * @action activate
 	 * @param string $entryId
 	 * @param int $categoryId
-	 * @throws KalturaErrors::INVALID_ENTRY_ID
-	 * @throws KalturaErrors::CATEGORY_NOT_FOUND
-	 * @throws KalturaErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY
-	 * @throws KalturaErrors::CANNOT_ACTIVATE_CATEGORY_ENTRY
+	 * @throws VidiunErrors::INVALID_ENTRY_ID
+	 * @throws VidiunErrors::CATEGORY_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY
+	 * @throws VidiunErrors::CANNOT_ACTIVATE_CATEGORY_ENTRY
 	 */
 	function activateAction($entryId, $categoryId)
 	{
 		$entry = entryPeer::retrieveByPK($entryId);
 		if (!$entry)
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_ID, $entryId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_ID, $entryId);
 			
 		$category = categoryPeer::retrieveByPK($categoryId);
 		if (!$category)
-			throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $categoryId);
+			throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $categoryId);
 		
 		$dbCategoryEntry = categoryEntryPeer::retrieveByCategoryIdAndEntryIdNotRejected($categoryId, $entryId);
 		if(!$dbCategoryEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY);
 			
 		//validate user is entiteld to activate entry from category 
-		if(kEntitlementUtils::getEntitlementEnforcement())
+		if(vEntitlementUtils::getEntitlementEnforcement())
 		{
-			$categoryKuser = categoryKuserPeer::retrievePermittedKuserInCategory($categoryId, kCurrentContext::getCurrentKsKuserId());
-			if(!$categoryKuser || 
-				($categoryKuser->getPermissionLevel() != CategoryKuserPermissionLevel::MANAGER && 
-				 $categoryKuser->getPermissionLevel() != CategoryKuserPermissionLevel::MODERATOR))
-					throw new KalturaAPIException(KalturaErrors::CANNOT_ACTIVATE_CATEGORY_ENTRY);
+			$categoryVuser = categoryVuserPeer::retrievePermittedVuserInCategory($categoryId, vCurrentContext::getCurrentVsVuserId());
+			if(!$categoryVuser || 
+				($categoryVuser->getPermissionLevel() != CategoryVuserPermissionLevel::MANAGER && 
+				 $categoryVuser->getPermissionLevel() != CategoryVuserPermissionLevel::MODERATOR))
+					throw new VidiunAPIException(VidiunErrors::CANNOT_ACTIVATE_CATEGORY_ENTRY);
 					
 		}
 		
-		if (kCurrentContext::getCurrentKsKuserId() == $dbCategoryEntry->getCreatorKuserId() &&
-			$this->getPartner()->getEnabledService(KalturaPermissionName::FEATURE_BLOCK_CATEGORY_MODERATION_SELF_APPROVE))
+		if (vCurrentContext::getCurrentVsVuserId() == $dbCategoryEntry->getCreatorVuserId() &&
+			$this->getPartner()->getEnabledService(VidiunPermissionName::FEATURE_BLOCK_CATEGORY_MODERATION_SELF_APPROVE))
 		{
-			throw new KalturaAPIException(KalturaErrors::CANNOT_ACTIVATE_CATEGORY_ENTRY);
+			throw new VidiunAPIException(VidiunErrors::CANNOT_ACTIVATE_CATEGORY_ENTRY);
 		}
 
 		if($dbCategoryEntry->getStatus() != CategoryEntryStatus::PENDING)
-			throw new KalturaAPIException(KalturaErrors::CANNOT_ACTIVATE_CATEGORY_ENTRY_SINCE_IT_IS_NOT_PENDING);
+			throw new VidiunAPIException(VidiunErrors::CANNOT_ACTIVATE_CATEGORY_ENTRY_SINCE_IT_IS_NOT_PENDING);
 			
 		$dbCategoryEntry->setStatus(CategoryEntryStatus::ACTIVE);
 		$dbCategoryEntry->save();
@@ -350,44 +350,44 @@ class CategoryEntryService extends KalturaBaseService
 	 * @action reject
 	 * @param string $entryId
 	 * @param int $categoryId
-	 * @throws KalturaErrors::INVALID_ENTRY_ID
-	 * @throws KalturaErrors::CATEGORY_NOT_FOUND
-	 * @throws KalturaErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY
-	 * @throws KalturaErrors::CANNOT_ACTIVATE_CATEGORY_ENTRY
+	 * @throws VidiunErrors::INVALID_ENTRY_ID
+	 * @throws VidiunErrors::CATEGORY_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY
+	 * @throws VidiunErrors::CANNOT_ACTIVATE_CATEGORY_ENTRY
 	 */
 	function rejectAction($entryId, $categoryId)
 	{
 		$entry = entryPeer::retrieveByPK($entryId);
 		if (!$entry)
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_ID, $entryId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_ID, $entryId);
 			
 		$category = categoryPeer::retrieveByPK($categoryId);
 		if (!$category)
-			throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $categoryId);
+			throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $categoryId);
 		
 		$dbCategoryEntry = categoryEntryPeer::retrieveByCategoryIdAndEntryId($categoryId, $entryId);
 		if(!$dbCategoryEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY);
 			
 		//validate user is entiteld to reject entry from category 
-		if(kEntitlementUtils::getEntitlementEnforcement())
+		if(vEntitlementUtils::getEntitlementEnforcement())
 		{
-			$categoryKuser = categoryKuserPeer::retrievePermittedKuserInCategory($categoryId, kCurrentContext::getCurrentKsKuserId());
-			if(!$categoryKuser || 
-				($categoryKuser->getPermissionLevel() != CategoryKuserPermissionLevel::MANAGER && 
-				 $categoryKuser->getPermissionLevel() != CategoryKuserPermissionLevel::MODERATOR))
-					throw new KalturaAPIException(KalturaErrors::CANNOT_REJECT_CATEGORY_ENTRY);
+			$categoryVuser = categoryVuserPeer::retrievePermittedVuserInCategory($categoryId, vCurrentContext::getCurrentVsVuserId());
+			if(!$categoryVuser || 
+				($categoryVuser->getPermissionLevel() != CategoryVuserPermissionLevel::MANAGER && 
+				 $categoryVuser->getPermissionLevel() != CategoryVuserPermissionLevel::MODERATOR))
+					throw new VidiunAPIException(VidiunErrors::CANNOT_REJECT_CATEGORY_ENTRY);
 					
 		}
 			
-		if (kCurrentContext::getCurrentKsKuserId() == $dbCategoryEntry->getCreatorKuserId() &&
-			$this->getPartner()->getEnabledService(KalturaPermissionName::FEATURE_BLOCK_CATEGORY_MODERATION_SELF_APPROVE))
+		if (vCurrentContext::getCurrentVsVuserId() == $dbCategoryEntry->getCreatorVuserId() &&
+			$this->getPartner()->getEnabledService(VidiunPermissionName::FEATURE_BLOCK_CATEGORY_MODERATION_SELF_APPROVE))
 		{
-			throw new KalturaAPIException(KalturaErrors::CANNOT_REJECT_CATEGORY_ENTRY);
+			throw new VidiunAPIException(VidiunErrors::CANNOT_REJECT_CATEGORY_ENTRY);
 		}
 
 		if($dbCategoryEntry->getStatus() != CategoryEntryStatus::PENDING)
-			throw new KalturaAPIException(KalturaErrors::CANNOT_REJECT_CATEGORY_ENTRY_SINCE_IT_IS_NOT_PENDING);
+			throw new VidiunAPIException(VidiunErrors::CANNOT_REJECT_CATEGORY_ENTRY_SINCE_IT_IS_NOT_PENDING);
 			
 		$dbCategoryEntry->setStatus(CategoryEntryStatus::REJECTED);
 		$dbCategoryEntry->save();
@@ -401,23 +401,23 @@ class CategoryEntryService extends KalturaBaseService
 	 * @action syncPrivacyContext
 	 * @param string $entryId
 	 * @param int $categoryId
-	 * @throws KalturaErrors::INVALID_ENTRY_ID
-	 * @throws KalturaErrors::CATEGORY_NOT_FOUND
-	 * @throws KalturaErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY
+	 * @throws VidiunErrors::INVALID_ENTRY_ID
+	 * @throws VidiunErrors::CATEGORY_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY
 	 */
 	function syncPrivacyContextAction($entryId, $categoryId)
 	{
 		$entry = entryPeer::retrieveByPK($entryId);
 		if (!$entry)
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_ID, $entryId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_ID, $entryId);
 			
 		$category = categoryPeer::retrieveByPK($categoryId);
 		if (!$category)
-			throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $categoryId);
+			throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $categoryId);
 		
 		$dbCategoryEntry = categoryEntryPeer::retrieveByCategoryIdAndEntryId($categoryId, $entryId);
 		if(!$dbCategoryEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_IS_NOT_ASSIGNED_TO_CATEGORY);
 		
 		$dbCategoryEntry->setPrivacyContext($category->getPrivacyContexts());
 		$dbCategoryEntry->save();

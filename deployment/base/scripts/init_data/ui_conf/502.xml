@@ -11,8 +11,8 @@
 	<UIConfigList>	
     	<UIConfig>
 			<target>simpleeditor.swf</target>
-		    <cssUrl>/content/uiconf/kaltura/styles_SimpleEditor_default.swf</cssUrl>
-		    <localeUrl>/content/uiconf/kaltura/en_US_SimpleEditor.swf</localeUrl>
+		    <cssUrl>/content/uiconf/vidiun/styles_SimpleEditor_default.swf</cssUrl>
+		    <localeUrl>/content/uiconf/vidiun/en_US_SimpleEditor.swf</localeUrl>
 		</UIConfig>
 	</UIConfigList>
 	

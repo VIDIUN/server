@@ -25,27 +25,27 @@ $c->setLimit(10000);
 $con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 
 $metadatas = MetadataPeer::doSelect($c, $con);
-$sphinx = new kSphinxSearchManager();
+$sphinx = new vSphinxSearchManager();
 while(count($metadatas))
 {
 	foreach($metadatas as $metadata)
 	{
 	    /* @var $metadata Metadata */
-		KalturaLog::log('metadata id ' . $metadata->getId() . ' updated at '. $metadata->getUpdatedAt(null));
+		VidiunLog::log('metadata id ' . $metadata->getId() . ' updated at '. $metadata->getUpdatedAt(null));
 		
 		try {
 			$ret = $sphinx->saveToSphinx($metadata, true);
 		}
 		catch(Exception $e){
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			exit -1;
 		}
 	}
 	
 	$c->setOffset($c->getOffset() + count($metadatas));
-	kMemoryManager::clearMemory();
+	vMemoryManager::clearMemory();
 	$metadatas = MetadataPeer::doSelect($c, $con);
 }
 
-KalturaLog::log('Done. Curent time: ' . time());
+VidiunLog::log('Done. Curent time: ' . time());
 exit(0);

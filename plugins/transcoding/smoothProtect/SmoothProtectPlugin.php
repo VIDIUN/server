@@ -2,7 +2,7 @@
 /**
  * @package plugins.smoothProtect
  */
-class SmoothProtectPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaEnumerator, IKalturaPending, IKalturaBatchJobDataContributor
+class SmoothProtectPlugin extends VidiunPlugin implements IVidiunObjectLoader, IVidiunEnumerator, IVidiunPending, IVidiunBatchJobDataContributor
 {
 	const PLUGIN_NAME = 'smoothProtect';
 	const PARAMS_STUB = '__params__';
@@ -13,12 +13,12 @@ class SmoothProtectPlugin extends KalturaPlugin implements IKalturaObjectLoader,
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$playReadyDependency = new KalturaDependency(PlayReadyPlugin::getPluginName());
-		$ismIndexDependency = new KalturaDependency(IsmIndexPlugin::getPluginName());
+		$playReadyDependency = new VidiunDependency(PlayReadyPlugin::getPluginName());
+		$ismIndexDependency = new VidiunDependency(IsmIndexPlugin::getPluginName());
 		
 		return array($playReadyDependency, $ismIndexDependency);
 	}
@@ -31,18 +31,18 @@ class SmoothProtectPlugin extends KalturaPlugin implements IKalturaObjectLoader,
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::SMOOTHPROTECT)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::SMOOTHPROTECT)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 				
 			$params = $constructorArgs['params'];
-			return new KOperationEngineSmoothProtect($params->smoothProtectCmd, $constructorArgs['outFilePath']);
+			return new VOperationEngineSmoothProtect($params->smoothProtectCmd, $constructorArgs['outFilePath']);
 		}
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(SmoothProtectConversionEngineType::SMOOTHPROTECT))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(SmoothProtectConversionEngineType::SMOOTHPROTECT))
 		{
-			return new KDLOperatorSmoothProtect($enumValue);
+			return new VDLOperatorSmoothProtect($enumValue);
 		}
 		
 		return null;
@@ -55,11 +55,11 @@ class SmoothProtectPlugin extends KalturaPlugin implements IKalturaObjectLoader,
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == self::getApiValue(SmoothProtectConversionEngineType::SMOOTHPROTECT))
-			return 'KOperationEngineSmoothProtect';
+		if($baseClass == 'VOperationEngine' && $enumValue == self::getApiValue(SmoothProtectConversionEngineType::SMOOTHPROTECT))
+			return 'VOperationEngineSmoothProtect';
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(SmoothProtectConversionEngineType::SMOOTHPROTECT))
-			return 'KDLOperatorSmoothProtect';
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(SmoothProtectConversionEngineType::SMOOTHPROTECT))
+			return 'VDLOperatorSmoothProtect';
 		
 		return null;
 	}
@@ -83,8 +83,8 @@ class SmoothProtectPlugin extends KalturaPlugin implements IKalturaObjectLoader,
 	 */
 	public static function getConversionEngineCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('conversionEngineType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('conversionEngineType', $value);
 	}
 	
 	/**
@@ -92,10 +92,10 @@ class SmoothProtectPlugin extends KalturaPlugin implements IKalturaObjectLoader,
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
-	public static function contributeToConvertJobData ($jobType, $jobSubType, kConvertJobData $jobData)
+	public static function contributeToConvertJobData ($jobType, $jobSubType, vConvertJobData $jobData)
 	{
 		if($jobType == BatchJobType::CONVERT && $jobSubType == self::getApiValue(SmoothProtectConversionEngineType::SMOOTHPROTECT))
 			return IsmIndexPlugin::addIsmManifestsToSrcFileSyncDesc($jobData);

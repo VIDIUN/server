@@ -5,6 +5,6 @@
  */
 interface PlayerType extends BaseEnum
 {
-	const KDP = 1;
+	const VDP = 1;
 	const HTML5Player = 2;
 }

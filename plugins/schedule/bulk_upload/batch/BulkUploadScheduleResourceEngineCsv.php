@@ -31,7 +31,7 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 		if(!$bulkUploadResult)
 			return;
 		
-		$bulkUploadResult->bulkUploadResultObjectType = KalturaBulkUploadObjectType::SCHEDULE_RESOURCE;
+		$bulkUploadResult->bulkUploadResultObjectType = VidiunBulkUploadObjectType::SCHEDULE_RESOURCE;
 		
 		// trim the values
 		array_walk($values, array('BulkUploadScheduleResourceEngineCsv', 'trimArray'));
@@ -48,12 +48,12 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 			}
 		}
 		
-		$bulkUploadResult->objectStatus = KalturaScheduleResourceStatus::ACTIVE;
-		$bulkUploadResult->status = KalturaBulkUploadResultStatus::IN_PROGRESS;
+		$bulkUploadResult->objectStatus = VidiunScheduleResourceStatus::ACTIVE;
+		$bulkUploadResult->status = VidiunBulkUploadResultStatus::IN_PROGRESS;
 		
 		if(!$bulkUploadResult->action)
 		{
-			$bulkUploadResult->action = KalturaBulkUploadAction::ADD;
+			$bulkUploadResult->action = VidiunBulkUploadAction::ADD;
 		}
 		
 		$bulkUploadResult = $this->validateBulkUploadResult($bulkUploadResult);
@@ -61,20 +61,20 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 			$this->bulkUploadResults[] = $bulkUploadResult;
 	}
 	
-	protected function validateBulkUploadResult(KalturaBulkUploadResult $bulkUploadResult)
+	protected function validateBulkUploadResult(VidiunBulkUploadResult $bulkUploadResult)
 	{
-		/* @var $bulkUploadResult KalturaBulkUploadResultScheduleResource */
-		if(!$bulkUploadResult->resourceId && !$bulkUploadResult->systemName && ($bulkUploadResult->action == KalturaBulkUploadAction::UPDATE || $bulkUploadResult->action == KalturaBulkUploadAction::DELETE))
+		/* @var $bulkUploadResult VidiunBulkUploadResultScheduleResource */
+		if(!$bulkUploadResult->resourceId && !$bulkUploadResult->systemName && ($bulkUploadResult->action == VidiunBulkUploadAction::UPDATE || $bulkUploadResult->action == VidiunBulkUploadAction::DELETE))
 		{
-			$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-			$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::APP;
+			$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+			$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::APP;
 			$bulkUploadResult->errorDescription = "Mandatory Columns [resourceId or systemName] missing from CSV.";
 		}
 		
 		if($bulkUploadResult->type && !in_array($bulkUploadResult->type, self::$validTypes))
 		{
-			$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-			$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::APP;
+			$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+			$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::APP;
 			$bulkUploadResult->errorDescription = "Wrong value passed for property type [$bulkUploadResult->type]";
 		}
 		if(!$bulkUploadResult->type)
@@ -84,8 +84,8 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 		
 		if($bulkUploadResult->parentType && !in_array($bulkUploadResult->parentType, self::$validTypes))
 		{
-			$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-			$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::APP;
+			$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+			$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::APP;
 			$bulkUploadResult->errorDescription = "Wrong value passed for property parentType [$bulkUploadResult->parentType]";
 		}
 		if(!$bulkUploadResult->parentType)
@@ -95,12 +95,12 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 		
 		if($this->maxRecords && $this->lineNumber > $this->maxRecords) // check max records
 		{
-			$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-			$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::APP;
+			$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+			$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::APP;
 			$bulkUploadResult->errorDescription = "Exeeded max records count per bulk";
 		}
 		
-		if($bulkUploadResult->status == KalturaBulkUploadResultStatus::ERROR)
+		if($bulkUploadResult->status == VidiunBulkUploadResultStatus::ERROR)
 		{
 			$this->addBulkUploadResult($bulkUploadResult);
 			return null;
@@ -114,21 +114,21 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 	 */
 	protected function validateSystemNames($type, $filterSystemNames)
 	{
-		$schedulePlugin = KalturaScheduleClientPlugin::get(KBatchBase::$kClient);
+		$schedulePlugin = VidiunScheduleClientPlugin::get(VBatchBase::$vClient);
 		
-		KBatchBase::impersonate($this->currentPartnerId);
+		VBatchBase::impersonate($this->currentPartnerId);
 		switch($type)
 		{
 			case 'location':
-				$filter = new KalturaLocationScheduleResourceFilter();
+				$filter = new VidiunLocationScheduleResourceFilter();
 				break;
 
 			case 'camera':
-				$filter = new KalturaCameraScheduleResourceFilter();
+				$filter = new VidiunCameraScheduleResourceFilter();
 				break;
 
 			case 'live_entry':
-				$filter = new KalturaLiveEntryScheduleResourceFilter();
+				$filter = new VidiunLiveEntryScheduleResourceFilter();
 				break;
 						
 		}
@@ -141,7 +141,7 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 			
 			$this->existingSystemNames[$type][$scheduleResource->systemName] = $scheduleResource->id;
 		}
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 	}
 	
 	/**
@@ -149,12 +149,12 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 	 */
 	protected function createObjects()
 	{
-		$schedulePlugin = KalturaScheduleClientPlugin::get(KBatchBase::$kClient);
+		$schedulePlugin = VidiunScheduleClientPlugin::get(VBatchBase::$vClient);
 		
 		$filterSystemNames = array();
 		foreach($this->bulkUploadResults as $bulkUploadResult)
 		{
-			if($bulkUploadResult->systemName && !$bulkUploadResult->resourceId && $bulkUploadResult->action != KalturaBulkUploadAction::ADD)
+			if($bulkUploadResult->systemName && !$bulkUploadResult->resourceId && $bulkUploadResult->action != VidiunBulkUploadAction::ADD)
 			{
 				if(!isset($filterSystemNames[$bulkUploadResult->type]))
 					$filterSystemNames[$bulkUploadResult->type] = array();
@@ -187,15 +187,15 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 		}
 		
 		// start a multi request for add entries
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		
-		KalturaLog::info("job[{$this->job->id}] start creating resources");
+		VidiunLog::info("job[{$this->job->id}] start creating resources");
 		$bulkUploadResultChunk = array(); // store the results of the created entries
 		
 		foreach($this->bulkUploadResults as $bulkUploadResult)
 		{
-			/* @var $bulkUploadResult KalturaBulkUploadResultScheduleResource */
-			KalturaLog::info("Handling bulk upload result: [" . ($bulkUploadResult->resourceId ? $bulkUploadResult->resourceId : $bulkUploadResult->systemName) . "]");
+			/* @var $bulkUploadResult VidiunBulkUploadResultScheduleResource */
+			VidiunLog::info("Handling bulk upload result: [" . ($bulkUploadResult->resourceId ? $bulkUploadResult->resourceId : $bulkUploadResult->systemName) . "]");
 
 			if(!$bulkUploadResult->resourceId && $bulkUploadResult->systemName && isset($this->existingSystemNames[$bulkUploadResult->type]))
 			{
@@ -206,16 +206,16 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 				}
 			}
 			
-			if($bulkUploadResult->action == KalturaBulkUploadAction::ADD_OR_UPDATE)
+			if($bulkUploadResult->action == VidiunBulkUploadAction::ADD_OR_UPDATE)
 			{
-				$bulkUploadResult->action = $bulkUploadResult->resourceId ? KalturaBulkUploadAction::UPDATE : KalturaBulkUploadAction::ADD;
+				$bulkUploadResult->action = $bulkUploadResult->resourceId ? VidiunBulkUploadAction::UPDATE : VidiunBulkUploadAction::ADD;
 			}
 			
 			
-			KBatchBase::impersonate($this->currentPartnerId);
+			VBatchBase::impersonate($this->currentPartnerId);
 			switch($bulkUploadResult->action)
 			{
-				case KalturaBulkUploadAction::ADD:
+				case VidiunBulkUploadAction::ADD:
 					$scheduleResource = $this->createScheduleResourceFromResultAndJobData($bulkUploadResult);
 					$bulkUploadResultChunk[] = $bulkUploadResult;
 					if($scheduleResource)
@@ -231,17 +231,17 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 					}
 					else 
 					{
-						KBatchBase::$kClient->system->ping(); // just to increment the multi-request index
+						VBatchBase::$vClient->system->ping(); // just to increment the multi-request index
 					}
 					break;
 				
-				case KalturaBulkUploadAction::UPDATE:
+				case VidiunBulkUploadAction::UPDATE:
 				
 					$scheduleResource = null;
 					if(!$bulkUploadResult->resourceId)
 					{
-						$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-						$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::APP;
+						$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+						$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::APP;
 						$bulkUploadResult->errorDescription = "Unable to find {$bulkUploadResult->type} resource [$bulkUploadResult->systemName]";
 					}
 					else
@@ -262,15 +262,15 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 					}
 					else 
 					{
-						KBatchBase::$kClient->system->ping(); // just to increment the multi-request index
+						VBatchBase::$vClient->system->ping(); // just to increment the multi-request index
 					}
 					break;
 				
-				case KalturaBulkUploadAction::DELETE:
+				case VidiunBulkUploadAction::DELETE:
 					if(!$bulkUploadResult->resourceId)
 					{
-						$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-						$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::APP;
+						$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+						$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::APP;
 						$bulkUploadResult->errorDescription = "Unable to find {$bulkUploadResult->type} resource [$bulkUploadResult->systemName]";
 					}
 					$bulkUploadResultChunk[] = $bulkUploadResult;
@@ -280,58 +280,58 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 					}
 					else 
 					{
-						KBatchBase::$kClient->system->ping(); // just to increment the multi-request index
+						VBatchBase::$vClient->system->ping(); // just to increment the multi-request index
 					}
 					break;
 				
 				default:
-					$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
+					$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
 					$bulkUploadResult->errorDescription = "Unknown action passed: [" . $bulkUploadResult->action . "]";
 					break;
 			}
-			KBatchBase::unimpersonate();
+			VBatchBase::unimpersonate();
 			
-			if(KBatchBase::$kClient->getMultiRequestQueueSize() >= $this->multiRequestSize)
+			if(VBatchBase::$vClient->getMultiRequestQueueSize() >= $this->multiRequestSize)
 			{
 				// make all the media->add as the partner
-				$requestResults = KBatchBase::$kClient->doMultiRequest();
+				$requestResults = VBatchBase::$vClient->doMultiRequest();
 				
 				$this->updateObjectsResults($requestResults, $bulkUploadResultChunk);
 				$this->checkAborted();
-				KBatchBase::$kClient->startMultiRequest();
+				VBatchBase::$vClient->startMultiRequest();
 				$bulkUploadResultChunk = array();
 			}
 		}
 		
 		// make all the category actions as the partner
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
 		
 		if(count($requestResults))
 			$this->updateObjectsResults($requestResults, $bulkUploadResultChunk);
 		
-		KalturaLog::info("job[{$this->job->id}] finish modifying resources");
+		VidiunLog::info("job[{$this->job->id}] finish modifying resources");
 	}
 	
 	/**
 	 * Function to create a new schedule-resource from bulk upload result.
 	 * 
-	 * @param KalturaBulkUploadResultScheduleResource $bulkUploadResult   
-	 * @return KalturaScheduleResource
+	 * @param VidiunBulkUploadResultScheduleResource $bulkUploadResult   
+	 * @return VidiunScheduleResource
 	 */
-	protected function createScheduleResourceFromResultAndJobData(KalturaBulkUploadResultScheduleResource &$bulkUploadResult)
+	protected function createScheduleResourceFromResultAndJobData(VidiunBulkUploadResultScheduleResource &$bulkUploadResult)
 	{
 		switch($bulkUploadResult->type)
 		{
 			case 'location':
-				$scheduleResource = new KalturaLocationScheduleResource();
+				$scheduleResource = new VidiunLocationScheduleResource();
 				break;
 
 			case 'camera':
-				$scheduleResource = new KalturaCameraScheduleResource();
+				$scheduleResource = new VidiunCameraScheduleResource();
 				break;
 
 			case 'live_entry':
-				$scheduleResource = new KalturaLiveEntryScheduleResource();
+				$scheduleResource = new VidiunLiveEntryScheduleResource();
 				break;
 						
 		}
@@ -360,8 +360,8 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 			}
 			else
 			{
-				$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-				$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::APP;
+				$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+				$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::APP;
 				$bulkUploadResult->errorDescription = "Unable to find parent {$bulkUploadResult->parentType} resource [$bulkUploadResult->parentSystemName]";
 				return null;
 			}
@@ -391,11 +391,11 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 	
 	/**
 	 * {@inheritDoc}
-	 * @see KBulkUploadEngine::updateObjectsResults()
+	 * @see VBulkUploadEngine::updateObjectsResults()
 	 */
 	protected function updateObjectsResults(array $requestResults, array $bulkUploadResults)
 	{
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		
 		// checking the created entries
 		foreach($requestResults as $index => $requestResult)
@@ -404,8 +404,8 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 			
 			if(is_array($requestResult) && isset($requestResult['code']))
 			{
-				$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-				$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::KALTURA_API;
+				$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+				$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::VIDIUN_API;
 				$bulkUploadResult->objectStatus = $requestResult['code'];
 				$bulkUploadResult->errorDescription = $requestResult['message'];
 				$this->addBulkUploadResult($bulkUploadResult);
@@ -414,14 +414,14 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 			
 			if($requestResult instanceof Exception)
 			{
-				$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-				$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::KALTURA_API;
+				$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+				$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::VIDIUN_API;
 				$bulkUploadResult->errorDescription = $requestResult->getMessage();
 				$this->addBulkUploadResult($bulkUploadResult);
 				continue;
 			}
 			
-			if($requestResult instanceof KalturaScheduleResource)
+			if($requestResult instanceof VidiunScheduleResource)
 			{
 				if ($requestResult->id)
 				    $bulkUploadResult->objectId = $requestResult->id;
@@ -439,7 +439,7 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 			$this->addBulkUploadResult($bulkUploadResult);
 		}
 		
-		KBatchBase::$kClient->doMultiRequest();
+		VBatchBase::$vClient->doMultiRequest();
 	}
 	
 	/**
@@ -448,12 +448,12 @@ class BulkUploadScheduleResourceEngineCsv extends BulkUploadEngineCsv
 	 */
 	protected function getUploadResultInstance()
 	{
-		return new KalturaBulkUploadResultScheduleResource();
+		return new VidiunBulkUploadResultScheduleResource();
 	}
 	
 	/**
 	 * {@inheritDoc}
-	 * @see KBulkUploadEngine::getObjectTypeTitle()
+	 * @see VBulkUploadEngine::getObjectTypeTitle()
 	 */
 	public function getObjectTypeTitle()
 	{

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.enum
  */
-interface KVoteType extends BaseEnum
+interface VVoteType extends BaseEnum
 {
     const RANK = 1;
     

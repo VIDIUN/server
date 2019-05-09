@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaResponseType extends KalturaEnum
+class VidiunResponseType extends VidiunEnum
 {
 	const RESPONSE_TYPE_JSON = 1;
 	const RESPONSE_TYPE_XML = 2;

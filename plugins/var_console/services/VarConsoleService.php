@@ -7,7 +7,7 @@
  * @subpackage api.services
  *
  */
-class VarConsoleService extends KalturaBaseService
+class VarConsoleService extends VidiunBaseService
 {
     const MAX_SUB_PUBLISHERS = 2000;
     
@@ -17,7 +17,7 @@ class VarConsoleService extends KalturaBaseService
 		
 		if(!VarConsolePlugin::isAllowedPartner($this->getPartnerId()))
 		{
-		    throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, VarConsolePlugin::PLUGIN_NAME);
+		    throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, VarConsolePlugin::PLUGIN_NAME);
 		}	
     }
     
@@ -25,14 +25,14 @@ class VarConsoleService extends KalturaBaseService
      * Action which checks whther user login 
      * @action checkLoginDataExists
      * @actionAlias user.checkLoginDataExists
-     * @param KalturaUserLoginDataFilter $filter
+     * @param VidiunUserLoginDataFilter $filter
      * @return bool
      */
-    public function checkLoginDataExistsAction (KalturaUserLoginDataFilter $filter)
+    public function checkLoginDataExistsAction (VidiunUserLoginDataFilter $filter)
     {
         if (!$filter)
 	    {
-	        $filter = new KalturaUserLoginDataFilter();
+	        $filter = new VidiunUserLoginDataFilter();
 	        $filter->loginEmailEqual = $this->getPartner()->getAdminEmail();
 	    }
 	    
@@ -54,22 +54,22 @@ class VarConsoleService extends KalturaBaseService
      * Function which calulates partner usage of a group of a VAR's sub-publishers
      * 
      * @action getPartnerUsage
-     * @param KalturaPartnerFilter $partnerFilter
-     * @param KalturaReportInputFilter $usageFilter
-     * @param KalturaFilterPager $pager
-     * @return KalturaPartnerUsageListResponse
-     * @throws KalturaVarConsoleErrors::MAX_SUB_PUBLISHERS_EXCEEDED
+     * @param VidiunPartnerFilter $partnerFilter
+     * @param VidiunReportInputFilter $usageFilter
+     * @param VidiunFilterPager $pager
+     * @return VidiunPartnerUsageListResponse
+     * @throws VidiunVarConsoleErrors::MAX_SUB_PUBLISHERS_EXCEEDED
      */
-    public function getPartnerUsageAction (KalturaPartnerFilter $partnerFilter = null, KalturaReportInputFilter $usageFilter = null, KalturaFilterPager $pager = null)
+    public function getPartnerUsageAction (VidiunPartnerFilter $partnerFilter = null, VidiunReportInputFilter $usageFilter = null, VidiunFilterPager $pager = null)
     {
         if (is_null($partnerFilter))
         {
-            $partnerFilter = new KalturaPartnerFilter();
+            $partnerFilter = new VidiunPartnerFilter();
         }
         
         if (is_null($usageFilter))
         {
-            $usageFilter = new KalturaReportInputFilter();
+            $usageFilter = new VidiunReportInputFilter();
             $usageFilter->fromDate = time() - 60*60*24*30; // last 30 days
 			$usageFilter->toDate = time();
         }
@@ -79,12 +79,12 @@ class VarConsoleService extends KalturaBaseService
             if (!$usageFilter->fromDate)
                 $usageFilter->fromDate = time() - 60*60*24*30;
             if (!$usageFilter->interval)
-                $usageFilter->interval = KalturaReportInterval::MONTHS;
+                $usageFilter->interval = VidiunReportInterval::MONTHS;
         }
         
         if (is_null($pager))
         {
-            $pager = new KalturaFilterPager();
+            $pager = new VidiunFilterPager();
         }
         
         //Create a propel filter for the partner
@@ -98,7 +98,7 @@ class VarConsoleService extends KalturaBaseService
 		$partnersCount = PartnerPeer::doCount($c);
 		if ($partnersCount > self::MAX_SUB_PUBLISHERS)
 		{
-		    throw new KalturaAPIException(KalturaVarConsoleErrors::MAX_SUB_PUBLISHERS_EXCEEDED);
+		    throw new VidiunAPIException(VidiunVarConsoleErrors::MAX_SUB_PUBLISHERS_EXCEEDED);
 		}
 		
 		$partners = PartnerPeer::doSelect($c);
@@ -124,16 +124,16 @@ class VarConsoleService extends KalturaBaseService
 		
 		if ( ! count($partnerIds ) )
 		{
-		    $total = new KalturaVarPartnerUsageTotalItem();
+		    $total = new VidiunVarPartnerUsageTotalItem();
 			// no partners fit the filter - don't fetch data	
 			$totalCount = 0;
-			// the items are set to an empty KalturaSystemPartnerUsageArray
+			// the items are set to an empty VidiunSystemPartnerUsageArray
 		}
 		else
 		{
 		    $totalCount = 0;
 		    $orderBy = ($inputFilter->interval == reportInterval::MONTHS ? "+month_id" : "+date_id") . ",+partner_id";
-		    list ( $reportHeader , $reportData , $totalCount ) = kKavaReportsMgr::getTable(  
+		    list ( $reportHeader , $reportData , $totalCount ) = vKavaReportsMgr::getTable(  
     				null , 
     				myReportsMgr::REPORT_TYPE_VAR_USAGE , 
     				$inputFilter ,
@@ -143,7 +143,7 @@ class VarConsoleService extends KalturaBaseService
     				
 		    foreach ( $reportData as $line )
 			{
-    			$item = new KalturaVarPartnerUsageItem();
+    			$item = new VidiunVarPartnerUsageItem();
 				$item->fromString( $reportHeader , $line );
     			if ($item)
     			{
@@ -151,16 +151,16 @@ class VarConsoleService extends KalturaBaseService
     			}
 			}
 			
-			list ( $reportHeader , $reportData) = kKavaReportsMgr::getTotal( 
+			list ( $reportHeader , $reportData) = vKavaReportsMgr::getTotal( 
     				null , 
     				myReportsMgr::REPORT_TYPE_PARTNER_USAGE , 
     				$inputFilter ,
     				implode(",", $partnerIds));
 		
-    		$total = new KalturaVarPartnerUsageTotalItem();
+    		$total = new VidiunVarPartnerUsageTotalItem();
     		$total->fromString($reportHeader, $reportData);
 
-			list ( $peakStoragereportHeader , $peakStoragereportData) = kKavaReportsMgr::getTotal(
+			list ( $peakStoragereportHeader , $peakStoragereportData) = vKavaReportsMgr::getTotal(
 					null ,
 					myReportsMgr::REPORT_TYPE_PEAK_STORAGE ,
 					$inputFilter ,
@@ -170,7 +170,7 @@ class VarConsoleService extends KalturaBaseService
     			$total->peakStorage = ceil(@$peakStoragereportData[0]);
     		}
 
-		$response = new KalturaPartnerUsageListResponse();
+		$response = new VidiunPartnerUsageListResponse();
 		
 		//Sort according to dateId and partnerId
 		uasort($items, array($this, 'sortByDate'));
@@ -183,10 +183,10 @@ class VarConsoleService extends KalturaBaseService
     
     /**
      * Sorting function - returns array sorted first by dateId and secondly by partnerId
-     * @param KalturaVarPartnerUsageItem $item1
-     * @param KalturaVarPartnerUsageItem $item2
+     * @param VidiunVarPartnerUsageItem $item1
+     * @param VidiunVarPartnerUsageItem $item2
      */
-    private function sortByDate (KalturaVarPartnerUsageItem $item1, KalturaVarPartnerUsageItem $item2)
+    private function sortByDate (VidiunVarPartnerUsageItem $item1, VidiunVarPartnerUsageItem $item2)
     {
         $dateItem1 = strlen($item1->dateId) == 6 ? DateTime::createFromFormat( "Ym" , $item1->dateId)->getTimestamp() : DateTime::createFromFormat( "Ymd" , $item1->dateId)->getTimestamp();
         $dateItem2 = strlen($item2->dateId) == 6 ? DateTime::createFromFormat( "Ym" , $item2->dateId)->getTimestamp() : DateTime::createFromFormat( "Ymd" , $item2->dateId)->getTimestamp();
@@ -216,8 +216,8 @@ class VarConsoleService extends KalturaBaseService
 	 * Function to change a sub-publisher's status
 	 * @action updateStatus
 	 * @param int $id
-	 * @param KalturaPartnerStatus $status
-	 * @throws KalturaErrors::UNKNOWN_PARTNER_ID
+	 * @param VidiunPartnerStatus $status
+	 * @throws VidiunErrors::UNKNOWN_PARTNER_ID
 	 */
 	public function updateStatusAction($id, $status)
 	{
@@ -225,7 +225,7 @@ class VarConsoleService extends KalturaBaseService
         $c->addAnd(PartnerPeer::ID, $id);
         $dbPartner = PartnerPeer::doSelectOne($c);		
 		if (!$dbPartner)
-			throw new KalturaAPIException(KalturaErrors::UNKNOWN_PARTNER_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::UNKNOWN_PARTNER_ID, $id);
 			
 		$dbPartner->setStatus($status);
 		$dbPartner->save();

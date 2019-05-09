@@ -3,9 +3,9 @@
  * @package plugins.captureSpace
  * @subpackage api.objects
  */
-class KalturaCaptureSpaceUpdateResponseInfoHash extends KalturaObject {
+class VidiunCaptureSpaceUpdateResponseInfoHash extends VidiunObject {
     /**
-     * @var KalturaCaptureSpaceHashAlgorithm
+     * @var VidiunCaptureSpaceHashAlgorithm
      */
     public $algorithm;
 

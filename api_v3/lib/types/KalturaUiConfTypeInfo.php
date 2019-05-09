@@ -2,23 +2,23 @@
 /**
  * Info about uiconf type
  * 
- * @see KalturaStringArray
+ * @see VidiunStringArray
  * @package api
  * @subpackage objects
  */
-class KalturaUiConfTypeInfo extends KalturaObject
+class VidiunUiConfTypeInfo extends VidiunObject
 {
 	/**
 	 * UiConf Type
 	 * 
-	 * @var KalturaUiConfObjType
+	 * @var VidiunUiConfObjType
 	 */
     public $type;
     
     /**
      * Available versions
      *  
-     * @var KalturaStringArray
+     * @var VidiunStringArray
      */
     public $versions;
     

@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaUserLoginDataOrderBy extends KalturaStringEnum
+class VidiunUserLoginDataOrderBy extends VidiunStringEnum
 {
 }

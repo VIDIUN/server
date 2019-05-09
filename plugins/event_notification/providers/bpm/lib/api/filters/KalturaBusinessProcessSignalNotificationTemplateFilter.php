@@ -3,6 +3,6 @@
  * @package plugins.businessProcessNotification
  * @subpackage api.filters
  */
-class KalturaBusinessProcessSignalNotificationTemplateFilter extends KalturaBusinessProcessSignalNotificationTemplateBaseFilter
+class VidiunBusinessProcessSignalNotificationTemplateFilter extends VidiunBusinessProcessSignalNotificationTemplateBaseFilter
 {
 }

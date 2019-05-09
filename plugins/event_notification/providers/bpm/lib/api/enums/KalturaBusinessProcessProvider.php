@@ -4,7 +4,7 @@
  * @subpackage api.enum
  * @see BusinessProcessProvider
  */
-class KalturaBusinessProcessProvider extends KalturaDynamicEnum implements BusinessProcessProvider
+class VidiunBusinessProcessProvider extends VidiunDynamicEnum implements BusinessProcessProvider
 {
 	public static function getEnumClass()
 	{

@@ -232,7 +232,7 @@
 					</td>
 					<td>
 						<xsl:choose>
-							<xsl:when test="starts-with(@type, 'Kaltura')">
+							<xsl:when test="starts-with(@type, 'Vidiun')">
 								<a href="/api_v3/testmeDoc/index.php?object={@type}"><xsl:value-of select="@type"/></a>
 							</xsl:when>
 							<xsl:when test="contains(@type, ':')">
@@ -577,7 +577,7 @@
 							</td>
 							<td>
 								<xsl:choose>
-									<xsl:when test="starts-with(@type, 'Kaltura')">
+									<xsl:when test="starts-with(@type, 'Vidiun')">
 										<a href="/api_v3/testmeDoc/index.php?object={@type}"><xsl:value-of select="@type"/></a>
 									</xsl:when>
 									<xsl:when test="contains(@type, ':')">

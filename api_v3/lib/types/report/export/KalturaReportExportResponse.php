@@ -4,7 +4,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaReportExportResponse extends KalturaObject
+class VidiunReportExportResponse extends VidiunObject
 {
 	/**
 	 * @var bigint

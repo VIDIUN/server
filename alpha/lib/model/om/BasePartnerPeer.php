@@ -67,11 +67,11 @@ abstract class BasePartnerPeer {
 	/** the column name for the UPDATED_AT field */
 	const UPDATED_AT = 'partner.UPDATED_AT';
 
-	/** the column name for the ANONYMOUS_KUSER_ID field */
-	const ANONYMOUS_KUSER_ID = 'partner.ANONYMOUS_KUSER_ID';
+	/** the column name for the ANONYMOUS_VUSER_ID field */
+	const ANONYMOUS_VUSER_ID = 'partner.ANONYMOUS_VUSER_ID';
 
-	/** the column name for the KS_MAX_EXPIRY_IN_SECONDS field */
-	const KS_MAX_EXPIRY_IN_SECONDS = 'partner.KS_MAX_EXPIRY_IN_SECONDS';
+	/** the column name for the VS_MAX_EXPIRY_IN_SECONDS field */
+	const VS_MAX_EXPIRY_IN_SECONDS = 'partner.VS_MAX_EXPIRY_IN_SECONDS';
 
 	/** the column name for the CREATE_USER_ON_DEMAND field */
 	const CREATE_USER_ON_DEMAND = 'partner.CREATE_USER_ON_DEMAND';
@@ -148,8 +148,8 @@ abstract class BasePartnerPeer {
 	/** the column name for the PARTNER_PARENT_ID field */
 	const PARTNER_PARENT_ID = 'partner.PARTNER_PARENT_ID';
 
-	/** the column name for the KMC_VERSION field */
-	const KMC_VERSION = 'partner.KMC_VERSION';
+	/** the column name for the VMC_VERSION field */
+	const VMC_VERSION = 'partner.VMC_VERSION';
 
 	/**
 	 * An identiy map to hold any loaded instances of Partner objects.
@@ -167,10 +167,10 @@ abstract class BasePartnerPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'PartnerName', 'PartnerAlias', 'Url1', 'Url2', 'Secret', 'AdminSecret', 'MaxNumberOfHitsPerDay', 'AppearInSearch', 'DebugLevel', 'CreatedAt', 'UpdatedAt', 'AnonymousKuserId', 'KsMaxExpiryInSeconds', 'CreateUserOnDemand', 'Prefix', 'AdminName', 'AdminEmail', 'Description', 'CommercialUse', 'ModerateContent', 'Notify', 'CustomData', 'ServiceConfigId', 'Status', 'ContentCategories', 'Type', 'Phone', 'DescribeYourself', 'AdultContent', 'PartnerPackage', 'UsagePercent', 'StorageUsage', 'EightyPercentWarning', 'UsageLimitWarning', 'MonitorUsage', 'PriorityGroupId', 'PartnerGroupType', 'PartnerParentId', 'KmcVersion', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'partnerName', 'partnerAlias', 'url1', 'url2', 'secret', 'adminSecret', 'maxNumberOfHitsPerDay', 'appearInSearch', 'debugLevel', 'createdAt', 'updatedAt', 'anonymousKuserId', 'ksMaxExpiryInSeconds', 'createUserOnDemand', 'prefix', 'adminName', 'adminEmail', 'description', 'commercialUse', 'moderateContent', 'notify', 'customData', 'serviceConfigId', 'status', 'contentCategories', 'type', 'phone', 'describeYourself', 'adultContent', 'partnerPackage', 'usagePercent', 'storageUsage', 'eightyPercentWarning', 'usageLimitWarning', 'monitorUsage', 'priorityGroupId', 'partnerGroupType', 'partnerParentId', 'kmcVersion', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::PARTNER_NAME, self::PARTNER_ALIAS, self::URL1, self::URL2, self::SECRET, self::ADMIN_SECRET, self::MAX_NUMBER_OF_HITS_PER_DAY, self::APPEAR_IN_SEARCH, self::DEBUG_LEVEL, self::CREATED_AT, self::UPDATED_AT, self::ANONYMOUS_KUSER_ID, self::KS_MAX_EXPIRY_IN_SECONDS, self::CREATE_USER_ON_DEMAND, self::PREFIX, self::ADMIN_NAME, self::ADMIN_EMAIL, self::DESCRIPTION, self::COMMERCIAL_USE, self::MODERATE_CONTENT, self::NOTIFY, self::CUSTOM_DATA, self::SERVICE_CONFIG_ID, self::STATUS, self::CONTENT_CATEGORIES, self::TYPE, self::PHONE, self::DESCRIBE_YOURSELF, self::ADULT_CONTENT, self::PARTNER_PACKAGE, self::USAGE_PERCENT, self::STORAGE_USAGE, self::EIGHTY_PERCENT_WARNING, self::USAGE_LIMIT_WARNING, self::MONITOR_USAGE, self::PRIORITY_GROUP_ID, self::PARTNER_GROUP_TYPE, self::PARTNER_PARENT_ID, self::KMC_VERSION, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'partner_name', 'partner_alias', 'url1', 'url2', 'secret', 'admin_secret', 'max_number_of_hits_per_day', 'appear_in_search', 'debug_level', 'created_at', 'updated_at', 'anonymous_kuser_id', 'ks_max_expiry_in_seconds', 'create_user_on_demand', 'prefix', 'admin_name', 'admin_email', 'description', 'commercial_use', 'moderate_content', 'notify', 'custom_data', 'service_config_id', 'status', 'content_categories', 'type', 'phone', 'describe_yourself', 'adult_content', 'partner_package', 'usage_percent', 'storage_usage', 'eighty_percent_warning', 'usage_limit_warning', 'monitor_usage', 'priority_group_id', 'partner_group_type', 'partner_parent_id', 'kmc_version', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'PartnerName', 'PartnerAlias', 'Url1', 'Url2', 'Secret', 'AdminSecret', 'MaxNumberOfHitsPerDay', 'AppearInSearch', 'DebugLevel', 'CreatedAt', 'UpdatedAt', 'AnonymousVuserId', 'VsMaxExpiryInSeconds', 'CreateUserOnDemand', 'Prefix', 'AdminName', 'AdminEmail', 'Description', 'CommercialUse', 'ModerateContent', 'Notify', 'CustomData', 'ServiceConfigId', 'Status', 'ContentCategories', 'Type', 'Phone', 'DescribeYourself', 'AdultContent', 'PartnerPackage', 'UsagePercent', 'StorageUsage', 'EightyPercentWarning', 'UsageLimitWarning', 'MonitorUsage', 'PriorityGroupId', 'PartnerGroupType', 'PartnerParentId', 'VmcVersion', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'partnerName', 'partnerAlias', 'url1', 'url2', 'secret', 'adminSecret', 'maxNumberOfHitsPerDay', 'appearInSearch', 'debugLevel', 'createdAt', 'updatedAt', 'anonymousVuserId', 'vsMaxExpiryInSeconds', 'createUserOnDemand', 'prefix', 'adminName', 'adminEmail', 'description', 'commercialUse', 'moderateContent', 'notify', 'customData', 'serviceConfigId', 'status', 'contentCategories', 'type', 'phone', 'describeYourself', 'adultContent', 'partnerPackage', 'usagePercent', 'storageUsage', 'eightyPercentWarning', 'usageLimitWarning', 'monitorUsage', 'priorityGroupId', 'partnerGroupType', 'partnerParentId', 'vmcVersion', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::PARTNER_NAME, self::PARTNER_ALIAS, self::URL1, self::URL2, self::SECRET, self::ADMIN_SECRET, self::MAX_NUMBER_OF_HITS_PER_DAY, self::APPEAR_IN_SEARCH, self::DEBUG_LEVEL, self::CREATED_AT, self::UPDATED_AT, self::ANONYMOUS_VUSER_ID, self::VS_MAX_EXPIRY_IN_SECONDS, self::CREATE_USER_ON_DEMAND, self::PREFIX, self::ADMIN_NAME, self::ADMIN_EMAIL, self::DESCRIPTION, self::COMMERCIAL_USE, self::MODERATE_CONTENT, self::NOTIFY, self::CUSTOM_DATA, self::SERVICE_CONFIG_ID, self::STATUS, self::CONTENT_CATEGORIES, self::TYPE, self::PHONE, self::DESCRIBE_YOURSELF, self::ADULT_CONTENT, self::PARTNER_PACKAGE, self::USAGE_PERCENT, self::STORAGE_USAGE, self::EIGHTY_PERCENT_WARNING, self::USAGE_LIMIT_WARNING, self::MONITOR_USAGE, self::PRIORITY_GROUP_ID, self::PARTNER_GROUP_TYPE, self::PARTNER_PARENT_ID, self::VMC_VERSION, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'partner_name', 'partner_alias', 'url1', 'url2', 'secret', 'admin_secret', 'max_number_of_hits_per_day', 'appear_in_search', 'debug_level', 'created_at', 'updated_at', 'anonymous_vuser_id', 'vs_max_expiry_in_seconds', 'create_user_on_demand', 'prefix', 'admin_name', 'admin_email', 'description', 'commercial_use', 'moderate_content', 'notify', 'custom_data', 'service_config_id', 'status', 'content_categories', 'type', 'phone', 'describe_yourself', 'adult_content', 'partner_package', 'usage_percent', 'storage_usage', 'eighty_percent_warning', 'usage_limit_warning', 'monitor_usage', 'priority_group_id', 'partner_group_type', 'partner_parent_id', 'vmc_version', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, )
 	);
 
@@ -181,10 +181,10 @@ abstract class BasePartnerPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'PartnerName' => 1, 'PartnerAlias' => 2, 'Url1' => 3, 'Url2' => 4, 'Secret' => 5, 'AdminSecret' => 6, 'MaxNumberOfHitsPerDay' => 7, 'AppearInSearch' => 8, 'DebugLevel' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, 'AnonymousKuserId' => 12, 'KsMaxExpiryInSeconds' => 13, 'CreateUserOnDemand' => 14, 'Prefix' => 15, 'AdminName' => 16, 'AdminEmail' => 17, 'Description' => 18, 'CommercialUse' => 19, 'ModerateContent' => 20, 'Notify' => 21, 'CustomData' => 22, 'ServiceConfigId' => 23, 'Status' => 24, 'ContentCategories' => 25, 'Type' => 26, 'Phone' => 27, 'DescribeYourself' => 28, 'AdultContent' => 29, 'PartnerPackage' => 30, 'UsagePercent' => 31, 'StorageUsage' => 32, 'EightyPercentWarning' => 33, 'UsageLimitWarning' => 34, 'MonitorUsage' => 35, 'PriorityGroupId' => 36, 'PartnerGroupType' => 37, 'PartnerParentId' => 38, 'KmcVersion' => 39, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'partnerName' => 1, 'partnerAlias' => 2, 'url1' => 3, 'url2' => 4, 'secret' => 5, 'adminSecret' => 6, 'maxNumberOfHitsPerDay' => 7, 'appearInSearch' => 8, 'debugLevel' => 9, 'createdAt' => 10, 'updatedAt' => 11, 'anonymousKuserId' => 12, 'ksMaxExpiryInSeconds' => 13, 'createUserOnDemand' => 14, 'prefix' => 15, 'adminName' => 16, 'adminEmail' => 17, 'description' => 18, 'commercialUse' => 19, 'moderateContent' => 20, 'notify' => 21, 'customData' => 22, 'serviceConfigId' => 23, 'status' => 24, 'contentCategories' => 25, 'type' => 26, 'phone' => 27, 'describeYourself' => 28, 'adultContent' => 29, 'partnerPackage' => 30, 'usagePercent' => 31, 'storageUsage' => 32, 'eightyPercentWarning' => 33, 'usageLimitWarning' => 34, 'monitorUsage' => 35, 'priorityGroupId' => 36, 'partnerGroupType' => 37, 'partnerParentId' => 38, 'kmcVersion' => 39, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PARTNER_NAME => 1, self::PARTNER_ALIAS => 2, self::URL1 => 3, self::URL2 => 4, self::SECRET => 5, self::ADMIN_SECRET => 6, self::MAX_NUMBER_OF_HITS_PER_DAY => 7, self::APPEAR_IN_SEARCH => 8, self::DEBUG_LEVEL => 9, self::CREATED_AT => 10, self::UPDATED_AT => 11, self::ANONYMOUS_KUSER_ID => 12, self::KS_MAX_EXPIRY_IN_SECONDS => 13, self::CREATE_USER_ON_DEMAND => 14, self::PREFIX => 15, self::ADMIN_NAME => 16, self::ADMIN_EMAIL => 17, self::DESCRIPTION => 18, self::COMMERCIAL_USE => 19, self::MODERATE_CONTENT => 20, self::NOTIFY => 21, self::CUSTOM_DATA => 22, self::SERVICE_CONFIG_ID => 23, self::STATUS => 24, self::CONTENT_CATEGORIES => 25, self::TYPE => 26, self::PHONE => 27, self::DESCRIBE_YOURSELF => 28, self::ADULT_CONTENT => 29, self::PARTNER_PACKAGE => 30, self::USAGE_PERCENT => 31, self::STORAGE_USAGE => 32, self::EIGHTY_PERCENT_WARNING => 33, self::USAGE_LIMIT_WARNING => 34, self::MONITOR_USAGE => 35, self::PRIORITY_GROUP_ID => 36, self::PARTNER_GROUP_TYPE => 37, self::PARTNER_PARENT_ID => 38, self::KMC_VERSION => 39, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'partner_name' => 1, 'partner_alias' => 2, 'url1' => 3, 'url2' => 4, 'secret' => 5, 'admin_secret' => 6, 'max_number_of_hits_per_day' => 7, 'appear_in_search' => 8, 'debug_level' => 9, 'created_at' => 10, 'updated_at' => 11, 'anonymous_kuser_id' => 12, 'ks_max_expiry_in_seconds' => 13, 'create_user_on_demand' => 14, 'prefix' => 15, 'admin_name' => 16, 'admin_email' => 17, 'description' => 18, 'commercial_use' => 19, 'moderate_content' => 20, 'notify' => 21, 'custom_data' => 22, 'service_config_id' => 23, 'status' => 24, 'content_categories' => 25, 'type' => 26, 'phone' => 27, 'describe_yourself' => 28, 'adult_content' => 29, 'partner_package' => 30, 'usage_percent' => 31, 'storage_usage' => 32, 'eighty_percent_warning' => 33, 'usage_limit_warning' => 34, 'monitor_usage' => 35, 'priority_group_id' => 36, 'partner_group_type' => 37, 'partner_parent_id' => 38, 'kmc_version' => 39, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'PartnerName' => 1, 'PartnerAlias' => 2, 'Url1' => 3, 'Url2' => 4, 'Secret' => 5, 'AdminSecret' => 6, 'MaxNumberOfHitsPerDay' => 7, 'AppearInSearch' => 8, 'DebugLevel' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, 'AnonymousVuserId' => 12, 'VsMaxExpiryInSeconds' => 13, 'CreateUserOnDemand' => 14, 'Prefix' => 15, 'AdminName' => 16, 'AdminEmail' => 17, 'Description' => 18, 'CommercialUse' => 19, 'ModerateContent' => 20, 'Notify' => 21, 'CustomData' => 22, 'ServiceConfigId' => 23, 'Status' => 24, 'ContentCategories' => 25, 'Type' => 26, 'Phone' => 27, 'DescribeYourself' => 28, 'AdultContent' => 29, 'PartnerPackage' => 30, 'UsagePercent' => 31, 'StorageUsage' => 32, 'EightyPercentWarning' => 33, 'UsageLimitWarning' => 34, 'MonitorUsage' => 35, 'PriorityGroupId' => 36, 'PartnerGroupType' => 37, 'PartnerParentId' => 38, 'VmcVersion' => 39, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'partnerName' => 1, 'partnerAlias' => 2, 'url1' => 3, 'url2' => 4, 'secret' => 5, 'adminSecret' => 6, 'maxNumberOfHitsPerDay' => 7, 'appearInSearch' => 8, 'debugLevel' => 9, 'createdAt' => 10, 'updatedAt' => 11, 'anonymousVuserId' => 12, 'vsMaxExpiryInSeconds' => 13, 'createUserOnDemand' => 14, 'prefix' => 15, 'adminName' => 16, 'adminEmail' => 17, 'description' => 18, 'commercialUse' => 19, 'moderateContent' => 20, 'notify' => 21, 'customData' => 22, 'serviceConfigId' => 23, 'status' => 24, 'contentCategories' => 25, 'type' => 26, 'phone' => 27, 'describeYourself' => 28, 'adultContent' => 29, 'partnerPackage' => 30, 'usagePercent' => 31, 'storageUsage' => 32, 'eightyPercentWarning' => 33, 'usageLimitWarning' => 34, 'monitorUsage' => 35, 'priorityGroupId' => 36, 'partnerGroupType' => 37, 'partnerParentId' => 38, 'vmcVersion' => 39, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PARTNER_NAME => 1, self::PARTNER_ALIAS => 2, self::URL1 => 3, self::URL2 => 4, self::SECRET => 5, self::ADMIN_SECRET => 6, self::MAX_NUMBER_OF_HITS_PER_DAY => 7, self::APPEAR_IN_SEARCH => 8, self::DEBUG_LEVEL => 9, self::CREATED_AT => 10, self::UPDATED_AT => 11, self::ANONYMOUS_VUSER_ID => 12, self::VS_MAX_EXPIRY_IN_SECONDS => 13, self::CREATE_USER_ON_DEMAND => 14, self::PREFIX => 15, self::ADMIN_NAME => 16, self::ADMIN_EMAIL => 17, self::DESCRIPTION => 18, self::COMMERCIAL_USE => 19, self::MODERATE_CONTENT => 20, self::NOTIFY => 21, self::CUSTOM_DATA => 22, self::SERVICE_CONFIG_ID => 23, self::STATUS => 24, self::CONTENT_CATEGORIES => 25, self::TYPE => 26, self::PHONE => 27, self::DESCRIBE_YOURSELF => 28, self::ADULT_CONTENT => 29, self::PARTNER_PACKAGE => 30, self::USAGE_PERCENT => 31, self::STORAGE_USAGE => 32, self::EIGHTY_PERCENT_WARNING => 33, self::USAGE_LIMIT_WARNING => 34, self::MONITOR_USAGE => 35, self::PRIORITY_GROUP_ID => 36, self::PARTNER_GROUP_TYPE => 37, self::PARTNER_PARENT_ID => 38, self::VMC_VERSION => 39, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'partner_name' => 1, 'partner_alias' => 2, 'url1' => 3, 'url2' => 4, 'secret' => 5, 'admin_secret' => 6, 'max_number_of_hits_per_day' => 7, 'appear_in_search' => 8, 'debug_level' => 9, 'created_at' => 10, 'updated_at' => 11, 'anonymous_vuser_id' => 12, 'vs_max_expiry_in_seconds' => 13, 'create_user_on_demand' => 14, 'prefix' => 15, 'admin_name' => 16, 'admin_email' => 17, 'description' => 18, 'commercial_use' => 19, 'moderate_content' => 20, 'notify' => 21, 'custom_data' => 22, 'service_config_id' => 23, 'status' => 24, 'content_categories' => 25, 'type' => 26, 'phone' => 27, 'describe_yourself' => 28, 'adult_content' => 29, 'partner_package' => 30, 'usage_percent' => 31, 'storage_usage' => 32, 'eighty_percent_warning' => 33, 'usage_limit_warning' => 34, 'monitor_usage' => 35, 'priority_group_id' => 36, 'partner_group_type' => 37, 'partner_parent_id' => 38, 'vmc_version' => 39, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, )
 	);
 
@@ -267,8 +267,8 @@ abstract class BasePartnerPeer {
 		$criteria->addSelectColumn(PartnerPeer::DEBUG_LEVEL);
 		$criteria->addSelectColumn(PartnerPeer::CREATED_AT);
 		$criteria->addSelectColumn(PartnerPeer::UPDATED_AT);
-		$criteria->addSelectColumn(PartnerPeer::ANONYMOUS_KUSER_ID);
-		$criteria->addSelectColumn(PartnerPeer::KS_MAX_EXPIRY_IN_SECONDS);
+		$criteria->addSelectColumn(PartnerPeer::ANONYMOUS_VUSER_ID);
+		$criteria->addSelectColumn(PartnerPeer::VS_MAX_EXPIRY_IN_SECONDS);
 		$criteria->addSelectColumn(PartnerPeer::CREATE_USER_ON_DEMAND);
 		$criteria->addSelectColumn(PartnerPeer::PREFIX);
 		$criteria->addSelectColumn(PartnerPeer::ADMIN_NAME);
@@ -294,7 +294,7 @@ abstract class BasePartnerPeer {
 		$criteria->addSelectColumn(PartnerPeer::PRIORITY_GROUP_ID);
 		$criteria->addSelectColumn(PartnerPeer::PARTNER_GROUP_TYPE);
 		$criteria->addSelectColumn(PartnerPeer::PARTNER_PARENT_ID);
-		$criteria->addSelectColumn(PartnerPeer::KMC_VERSION);
+		$criteria->addSelectColumn(PartnerPeer::VMC_VERSION);
 	}
 
 	/**
@@ -328,11 +328,11 @@ abstract class BasePartnerPeer {
 		
 		PartnerPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'PartnerPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -356,7 +356,7 @@ abstract class BasePartnerPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -437,7 +437,7 @@ abstract class BasePartnerPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -460,11 +460,11 @@ abstract class BasePartnerPeer {
 	{		
 		$criteriaForSelect = PartnerPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'PartnerPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -480,12 +480,12 @@ abstract class BasePartnerPeer {
 		
 		$queryResult = PartnerPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -495,17 +495,17 @@ abstract class BasePartnerPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -576,7 +576,7 @@ abstract class BasePartnerPeer {
 		PartnerPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 	}
 	
@@ -675,11 +675,11 @@ abstract class BasePartnerPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('PartnerPeer');
+				vMemoryManager::registerPeer('PartnerPeer');
 			}
 		}
 	}
@@ -804,7 +804,7 @@ abstract class BasePartnerPeer {
 	}
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuser table
+	 * Returns the number of rows matching criteria, joining the related vuser table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -812,7 +812,7 @@ abstract class BasePartnerPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinkuser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinvuser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -836,7 +836,7 @@ abstract class BasePartnerPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(PartnerPeer::ANONYMOUS_KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(PartnerPeer::ANONYMOUS_VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = PartnerPeer::doCountStmt($criteria, $con);
 
@@ -851,7 +851,7 @@ abstract class BasePartnerPeer {
 
 
 	/**
-	 * Selects a collection of Partner objects pre-filled with their kuser objects.
+	 * Selects a collection of Partner objects pre-filled with their vuser objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -859,7 +859,7 @@ abstract class BasePartnerPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinkuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -870,9 +870,9 @@ abstract class BasePartnerPeer {
 
 		PartnerPeer::addSelectColumns($criteria);
 		$startcol = (PartnerPeer::NUM_COLUMNS - PartnerPeer::NUM_LAZY_LOAD_COLUMNS);
-		kuserPeer::addSelectColumns($criteria);
+		vuserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(PartnerPeer::ANONYMOUS_KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(PartnerPeer::ANONYMOUS_VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = PartnerPeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -892,19 +892,19 @@ abstract class BasePartnerPeer {
 				PartnerPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (Partner) to $obj2 (kuser)
+				// Add the $obj1 (Partner) to $obj2 (vuser)
 				$obj2->addPartner($obj1);
 
 			} // if joined row was not null
@@ -913,7 +913,7 @@ abstract class BasePartnerPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -953,7 +953,7 @@ abstract class BasePartnerPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(PartnerPeer::ANONYMOUS_KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(PartnerPeer::ANONYMOUS_VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = PartnerPeer::doCountStmt($criteria, $con);
 
@@ -988,10 +988,10 @@ abstract class BasePartnerPeer {
 		PartnerPeer::addSelectColumns($criteria);
 		$startcol2 = (PartnerPeer::NUM_COLUMNS - PartnerPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kuserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kuserPeer::NUM_COLUMNS - kuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vuserPeer::NUM_COLUMNS - vuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(PartnerPeer::ANONYMOUS_KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(PartnerPeer::ANONYMOUS_VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = PartnerPeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -1010,21 +1010,21 @@ abstract class BasePartnerPeer {
 				PartnerPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined kuser rows
+			// Add objects for joined vuser rows
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (Partner) to the collection in $obj2 (kuser)
+				// Add the $obj1 (Partner) to the collection in $obj2 (vuser)
 				$obj2->addPartner($obj1);
 			} // if joined row not null
 

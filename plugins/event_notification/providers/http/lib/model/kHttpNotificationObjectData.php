@@ -1,14 +1,14 @@
 <?php
 /**
- * Evaluates Kaltura API object, depends on the execution context
+ * Evaluates Vidiun API object, depends on the execution context
  *  
  * @package plugins.httpNotification
  * @subpackage model.data
  */
-class kHttpNotificationObjectData extends kHttpNotificationData
+class vHttpNotificationObjectData extends vHttpNotificationData
 {
 	/**
-	 * Kaltura API object type
+	 * Vidiun API object type
 	 * @var string
 	 */
 	protected $objectType;
@@ -44,12 +44,12 @@ class kHttpNotificationObjectData extends kHttpNotificationData
 	protected $dataStringReplacements;
 
 	/* (non-PHPdoc)
-	 * @see kHttpNotificationData::setScope()
+	 * @see vHttpNotificationData::setScope()
 	 */
-	public function setScope(kScope $scope) 
+	public function setScope(vScope $scope) 
 	{
 		if(strpos($this->code, ';') !== false)
-			throw new kCoreException("Evaluated code may be simple value only");
+			throw new vCoreException("Evaluated code may be simple value only");
 
 		$object = eval("return {$this->code};");
 

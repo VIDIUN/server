@@ -10,20 +10,20 @@
  * @package Scheduler
  * @subpackage SyncCategoryPrivacyContext
  */
-class KAsyncSyncCategoryPrivacyContext extends KJobHandlerWorker
+class VAsyncSyncCategoryPrivacyContext extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::SYNC_CATEGORY_PRIVACY_CONTEXT;
+		return VidiunBatchJobType::SYNC_CATEGORY_PRIVACY_CONTEXT;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->syncPrivacyContext($job, $job->data);
 	}
@@ -31,61 +31,61 @@ class KAsyncSyncCategoryPrivacyContext extends KJobHandlerWorker
 	/**
 	 * sync category privacy context on category entries
 	 * 
-	 * @param KalturaBatchJob $job
-	 * @param KalturaSyncCategoryPrivacyContextJobData $data
+	 * @param VidiunBatchJob $job
+	 * @param VidiunSyncCategoryPrivacyContextJobData $data
 	 * 
-	 * @return KalturaBatchJob
+	 * @return VidiunBatchJob
 	 */
-	protected function syncPrivacyContext(KalturaBatchJob $job, KalturaSyncCategoryPrivacyContextJobData $data)
+	protected function syncPrivacyContext(VidiunBatchJob $job, VidiunSyncCategoryPrivacyContextJobData $data)
 	{
-	    KBatchBase::impersonate($job->partnerId);
+	    VBatchBase::impersonate($job->partnerId);
 	    
 	    $this->syncCategoryPrivacyContext($job, $data, $data->categoryId);
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
-		$job = $this->closeJob($job, null, null, null, KalturaBatchJobStatus::FINISHED);
+		$job = $this->closeJob($job, null, null, null, VidiunBatchJobStatus::FINISHED);
 		
 		return $job;
 	}
 	
-	private function syncCategoryPrivacyContext(KalturaBatchJob $job, KalturaSyncCategoryPrivacyContextJobData $data, $categoryId)
+	private function syncCategoryPrivacyContext(VidiunBatchJob $job, VidiunSyncCategoryPrivacyContextJobData $data, $categoryId)
 	{
 			    
 		$categoryEntryPager = $this->getFilterPager();
-	    $categoryEntryFilter = new KalturaCategoryEntryFilter();
-		$categoryEntryFilter->orderBy = KalturaCategoryEntryOrderBy::CREATED_AT_ASC;
+	    $categoryEntryFilter = new VidiunCategoryEntryFilter();
+		$categoryEntryFilter->orderBy = VidiunCategoryEntryOrderBy::CREATED_AT_ASC;
 		$categoryEntryFilter->categoryIdEqual = $categoryId;
 		if($data->lastUpdatedCategoryEntryCreatedAt)
 			$categoryEntryFilter->createdAtGreaterThanOrEqual = $data->lastUpdatedCategoryEntryCreatedAt;		
-		$categoryEntryList = KBatchBase::$kClient->categoryEntry->listAction($categoryEntryFilter, $categoryEntryPager);
+		$categoryEntryList = VBatchBase::$vClient->categoryEntry->listAction($categoryEntryFilter, $categoryEntryPager);
 		
 		while($categoryEntryList->objects && count($categoryEntryList->objects))
 		{
-			KBatchBase::$kClient->startMultiRequest();
+			VBatchBase::$vClient->startMultiRequest();
 			foreach ($categoryEntryList->objects as $categoryEntry) 
 			{
-				KBatchBase::$kClient->categoryEntry->syncPrivacyContext($categoryEntry->entryId, $categoryEntry->categoryId);				
+				VBatchBase::$vClient->categoryEntry->syncPrivacyContext($categoryEntry->entryId, $categoryEntry->categoryId);				
 			}
 
-			KBatchBase::$kClient->doMultiRequest();	
+			VBatchBase::$vClient->doMultiRequest();	
 			$data->lastUpdatedCategoryEntryCreatedAt = $categoryEntry->createdAt;
 			$categoryEntryPager->pageIndex++;
 			
-			KBatchBase::unimpersonate();
-			$this->updateJob($job, null, KalturaBatchJobStatus::PROCESSING, $data);
-			KBatchBase::impersonate($job->partnerId);
+			VBatchBase::unimpersonate();
+			$this->updateJob($job, null, VidiunBatchJobStatus::PROCESSING, $data);
+			VBatchBase::impersonate($job->partnerId);
 							
-			$categoryEntryList = KBatchBase::$kClient->categoryEntry->listAction($categoryEntryFilter, $categoryEntryPager);
+			$categoryEntryList = VBatchBase::$vClient->categoryEntry->listAction($categoryEntryFilter, $categoryEntryPager);
 		}
 	}
 		
 	private function getFilterPager()
 	{
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 100;
-		if(KBatchBase::$taskConfig->params->pageSize)
-			$pager->pageSize = KBatchBase::$taskConfig->params->pageSize;
+		if(VBatchBase::$taskConfig->params->pageSize)
+			$pager->pageSize = VBatchBase::$taskConfig->params->pageSize;
 		return $pager;
 	}
 }

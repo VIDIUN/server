@@ -4,7 +4,7 @@
  * @package server-infra
  * @subpackage cache
  */
-class kCacheManager
+class vCacheManager
 {
 	// cache types
 	const CACHE_TYPE_PLAY_MANIFEST = 'playManifest';
@@ -20,7 +20,7 @@ class kCacheManager
 	const CACHE_TYPE_SPHINX_STICKY_SESSIONS = 'sphinxStickySessions';
 	const CACHE_TYPE_LOCK_KEYS = 'lockKeys';
 	const CACHE_TYPE_API_WARMUP = 'apiWarmup';
-	const CACHE_TYPE_KWIDGET_SWF = 'kwidgetSwf';
+	const CACHE_TYPE_VWIDGET_SWF = 'vwidgetSwf';
 	const CACHE_TYPE_LIVE_MEDIA_SERVER = 'liveMediaServer';
 	const CACHE_TYPE_PARTNER_SECRETS = 'partnerSecrets';
 	const CACHE_TYPE_SPHINX_EXECUTED_SERVER = 'sphinxExecutedServer';
@@ -30,8 +30,8 @@ class kCacheManager
 	const CACHE_TYPE_RESOURCE_RESERVATION = 'resourceReservation';
 	const CACHE_TYPE_ELASTIC_EXECUTED_CLUSTER = 'elasticExecutedCluster';
 	const CACHE_TYPE_CACHE_ONLY_ACTIONS = 'cacheOnlyActions';
-	const CACHE_TYPE_PLAYKIT_JS = 'playKitJs';
-	const CACHE_TYPE_PLAYKIT_JS_SOURCE_MAP = 'playKitJsSourceMap';
+	const CACHE_TYPE_PAKHSHKIT_JS = 'pakhshKitJs';
+	const CACHE_TYPE_PAKHSHKIT_JS_SOURCE_MAP = 'pakhshKitJsSourceMap';
 	const CACHE_TYPE_UPLOAD_TOKEN = 'uploadToken';
 	const CACHE_TYPE_REPORTS_COUNT = "reportsCount";
 	const CACHE_TYPE_GEO_COORDINATES = 'geoCoordinates';
@@ -48,7 +48,7 @@ class kCacheManager
 	 */
 	public static function getCacheSectionNames($cacheType)
 	{
-		$cacheMap = kConf::get('mapping', 'cache');		
+		$cacheMap = vConf::get('mapping', 'cache');		
 		if (!isset($cacheMap[$cacheType]))
 			return null;
 		
@@ -61,7 +61,7 @@ class kCacheManager
 
 	/**
 	 * @param string $cacheSection
-	 * @return kBaseCacheWrapper or null on error
+	 * @return vBaseCacheWrapper or null on error
 	 */
 	public static function getCache($cacheSection)
 	{
@@ -71,7 +71,7 @@ class kCacheManager
 		}
 		
 		// get configuration
-		$sectionConfig = kConf::get($cacheSection, 'cache', null);
+		$sectionConfig = vConf::get($cacheSection, 'cache', null);
 		if (!$sectionConfig)
 		{
 			return null;
@@ -79,7 +79,7 @@ class kCacheManager
 		
 		// create cache class
 		$className = $sectionConfig['class'];
-		$className = "k{$className}CacheWrapper";
+		$className = "v{$className}CacheWrapper";
 		
 		require_once(__DIR__ . '/../../../../../infra/cache/' . $className . '.php');
 		$cache = new $className;
@@ -96,7 +96,7 @@ class kCacheManager
 	
 	/**
 	 * @param string $cacheType
-	 * @return kBaseCacheWrapper or null on error
+	 * @return vBaseCacheWrapper or null on error
 	 */
 	public static function getSingleLayerCache($cacheType)
 	{

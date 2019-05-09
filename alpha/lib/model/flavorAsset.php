@@ -11,8 +11,8 @@
 class flavorAsset extends exportableAsset
 {
 
-	const KALTURA_TOKEN_MARKER = '{kt}';
-	const KALTURA_TOKEN_PARAM_NAME = '/kt/';
+	const VIDIUN_TOKEN_MARKER = '{kt}';
+	const VIDIUN_TOKEN_PARAM_NAME = '/kt/';
 	const CUSTOM_DATA_FIELD_LANGUAGE = "language";
 	const CUSTOM_DATA_FIELD_LABEL = "label";
 	const CUSTOM_DATA_FIELD_DEFAULT = "default";
@@ -148,7 +148,7 @@ class flavorAsset extends exportableAsset
 			$entry = $this->getentry();
 	    	if (!$entry)
 	    	{
-	        	KalturaLog::err('Cannot get entry object for flavor asset id ['.$this->getId().']');
+	        	VidiunLog::err('Cannot get entry object for flavor asset id ['.$this->getId().']');
 	    	}
 	    	elseif ($entry->getStatus() != entryStatus::DELETED)
 	    	{
@@ -181,7 +181,7 @@ class flavorAsset extends exportableAsset
 	{
 		$languageCode = $this->getFromCustomData(self::CUSTOM_DATA_FIELD_LANGUAGE);
 		$obj = languageCodeManager::getObjectFromTwoCode($languageCode);
-		return !is_null($obj) ? $obj[languageCodeManager::KALTURA_NAME] : $languageCode;
+		return !is_null($obj) ? $obj[languageCodeManager::VIDIUN_NAME] : $languageCode;
 	}
 	public function setLanguage($v)
 	{
@@ -205,7 +205,7 @@ class flavorAsset extends exportableAsset
 			$obj = new flavorAsset();
 		else
 		{
-			$obj = KalturaPluginManager::loadObject('flavorAsset', $type);
+			$obj = VidiunPluginManager::loadObject('flavorAsset', $type);
 			if(!$obj)
 				$obj = new flavorAsset();
 		}
@@ -224,14 +224,14 @@ class flavorAsset extends exportableAsset
 		if (!$entry || $entry->getType() != entryType::MEDIA_CLIP)
 		{
 			$id = $this->getId();
-			throw new kCoreException("asset $id belongs to an entry of a wrong type", kCoreException::INVALID_ENTRY_TYPE);
+			throw new vCoreException("asset $id belongs to an entry of a wrong type", vCoreException::INVALID_ENTRY_TYPE);
 		}
 
 		if (!$fileName)
 		{
-			list($fileName , $extension) = kAssetUtils::getFileName($entry , $this);
+			list($fileName , $extension) = vAssetUtils::getFileName($entry , $this);
 			$fileName = str_replace("\n", ' ', $fileName);
-			$fileName = kString::keepOnlyValidUrlChars($fileName);
+			$fileName = vString::keepOnlyValidUrlChars($fileName);
 	
 			if ($extension)
 				$fileName .= ".$extension";
@@ -243,13 +243,13 @@ class flavorAsset extends exportableAsset
 		if ($previewLength)
 			$urlParameters .= "/clipTo/$previewLength";
 
-		$url = kAssetUtils::getAssetUrl($this, false, null, null , $urlParameters);
+		$url = vAssetUtils::getAssetUrl($this, false, null, null , $urlParameters);
 		
 		return $url;
 	}
 	
 	
-	public function getPlayManifestUrl($clientTag, $storageProfileId = null, $mediaProtocol = PlaybackProtocol::HTTP, $addKtToken = false) {
+	public function getPlayManifestUrl($clientTag, $storageProfileId = null, $mediaProtocol = PlaybackProtocol::HTTP, $addVtToken = false) {
 		$entryId = $this->getEntryId();
 		$partnerId = $this->getPartnerId();
 		$subpId = $this->getentry()->getSubpId();
@@ -260,16 +260,16 @@ class flavorAsset extends exportableAsset
 		if($storageProfileId)
 			$url .= "/storageId/" . $storageProfileId;
 
-		if($addKtToken)
-			$url .= self::KALTURA_TOKEN_PARAM_NAME . self::KALTURA_TOKEN_MARKER;
+		if($addVtToken)
+			$url .= self::VIDIUN_TOKEN_PARAM_NAME . self::VIDIUN_TOKEN_MARKER;
 
 		if ($this->getFileExt())
 			$url .= "/a." . $this->getFileExt();
 
 		$url .= "?clientTag=$clientTag";
 
-		if($addKtToken)
-			$url = self::calculateKalturaToken($url);
+		if($addVtToken)
+			$url = self::calculateVidiunToken($url);
 
 		return $url;
 	}
@@ -281,10 +281,10 @@ class flavorAsset extends exportableAsset
 		return $size;
 	}
 	
-	static protected function calculateKalturaToken($url)
+	static protected function calculateVidiunToken($url)
 	{
-		$token = sha1(kConf::get('url_token_secret') . $url);
-		return str_replace(self::KALTURA_TOKEN_MARKER, $token, $url);
+		$token = sha1(vConf::get('url_token_secret') . $url);
+		return str_replace(self::VIDIUN_TOKEN_MARKER, $token, $url);
 	}
 
 	protected function getSyncKeysForExporting()
@@ -358,7 +358,7 @@ class flavorAsset extends exportableAsset
 			{
 				$entry = $this->getentry();
 				if (!$entry)
-					throw new kCoreException("Invalid entry id [" . $this->getEntryId() . "]", APIErrors::INVALID_ENTRY_ID);
+					throw new vCoreException("Invalid entry id [" . $this->getEntryId() . "]", APIErrors::INVALID_ENTRY_ID);
 				$conversionProfile = $entry->getconversionProfile2();
 				if ($conversionProfile->getDefaultAudioLang() == $flavorLang)
 				{

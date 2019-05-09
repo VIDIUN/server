@@ -7,7 +7,7 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
 define('SF_ROOT_DIR',    realpath(__DIR__ . '/../'));
-define('SF_APP',         'kaltura');
+define('SF_APP',         'vidiun');
 define('SF_ENVIRONMENT', 'batch');
 define('SF_DEBUG',       true);
 
@@ -23,7 +23,7 @@ sfCore::bootstrap($sf_symfony_lib_dir, $sf_symfony_data_dir);
 require_once(SF_ROOT_DIR.DIRECTORY_SEPARATOR.'apps'.DIRECTORY_SEPARATOR.SF_APP.DIRECTORY_SEPARATOR.'lib/batch/myBatchPartnerUsage.class.php');
 
 ini_set('memory_limit', '2048M');
-kCurrentContext::$ps_vesion = 'ps2';
+vCurrentContext::$ps_vesion = 'ps2';
 $batchClient = new myBatchPartnerUsage();
 
 ?>

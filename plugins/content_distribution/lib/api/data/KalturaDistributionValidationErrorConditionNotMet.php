@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaDistributionValidationErrorConditionNotMet extends KalturaDistributionValidationError
+class VidiunDistributionValidationErrorConditionNotMet extends VidiunDistributionValidationError
 {
 	/**
 	 * @var string

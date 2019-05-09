@@ -43,7 +43,7 @@ class DrmProfilePeer extends BaseDrmProfilePeer
 		{
 			$typeField = self::translateFieldName(DrmProfilePeer::PROVIDER, BasePeer::TYPE_COLNAME, BasePeer::TYPE_NUM);
 			$drmProfileType = $row[$typeField];				
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $drmProfileType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $drmProfileType);
 			if($extendedCls)
 			{
 				return $extendedCls;

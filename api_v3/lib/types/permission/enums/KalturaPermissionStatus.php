@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaPermissionStatus extends KalturaEnum implements PermissionStatus
+class VidiunPermissionStatus extends VidiunEnum implements PermissionStatus
 {
 	// see permissionStatus interface
 }

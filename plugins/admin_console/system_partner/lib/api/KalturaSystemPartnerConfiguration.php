@@ -3,7 +3,7 @@
  * @package plugins.systemPartner
  * @subpackage api.objects
  */
-class KalturaSystemPartnerConfiguration extends KalturaObject
+class VidiunSystemPartnerConfiguration extends VidiunObject
 {
 	/**
 	 * @var int
@@ -69,10 +69,10 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 	/**
 	 * @var bool
 	 */
-	public $storageDeleteFromKaltura;
+	public $storageDeleteFromVidiun;
 	
 	/**
-	 * @var KalturaStorageServePriority
+	 * @var VidiunStorageServePriority
 	 */
 	public $storageServePriority;
 	
@@ -80,13 +80,13 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 	 * 
 	 * @var int
 	 */
-	public $kmcVersion;
+	public $vmcVersion;
 	
 	/**
 	 * @var int
 	 * @deprecated
 	 */
-	public $restrictThumbnailByKs;
+	public $restrictThumbnailByVs;
 
 	/**
 	 * @var bool
@@ -124,7 +124,7 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 	public $importRemoteSourceForConvert;
 	
 	/**
-	 * @var KalturaPermissionArray
+	 * @var VidiunPermissionArray
 	 */
 	public $permissions;
 	
@@ -159,7 +159,7 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 	public $isFirstLogin;
 	
 	/**
-	 * @var KalturaPartnerGroupType
+	 * @var VidiunPartnerGroupType
 	 */
 	public $partnerGroupType;
 	
@@ -169,7 +169,7 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 	public $partnerParentId;
 	
 	/**
-	 * @var KalturaSystemPartnerLimitArray
+	 * @var VidiunSystemPartnerLimitArray
 	 */
 	public $limits;
 	
@@ -263,7 +263,7 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 	
 
 	/**
-	 * @var KalturaSourceType
+	 * @var VidiunSourceType
 	 */
 	public $defaultLiveStreamEntrySourceType;
 
@@ -276,7 +276,7 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 
 	/**
 	 * 
-	 * @var KalturaBaseEntryFilter
+	 * @var VidiunBaseEntryFilter
 	 */
 	public $autoModerateEntryFilter;
 	
@@ -311,7 +311,7 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 	public $defaultEmbedCodeType;
 	
 	/**
-	 * @var KalturaKeyBooleanValueArray
+	 * @var VidiunKeyBooleanValueArray
 	 */
 	public $customDeliveryTypes;
 	
@@ -321,7 +321,7 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 	public $restrictEntryByMetadata;
 	
 	/**
-	 * @var KalturaLanguageCode
+	 * @var VidiunLanguageCode
 	 */
 	public $language;
 	
@@ -395,9 +395,9 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 		"partnerPackage",
 		"monitorUsage",
 		"moderateContent",
-		"storageDeleteFromKaltura",
+		"storageDeleteFromVidiun",
 		"storageServePriority",
-		"kmcVersion",
+		"vmcVersion",
 		"defThumbOffset",
 		"defThumbDensity",
 	//"adminLoginUsersQuota",
@@ -420,7 +420,7 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 		"extendedFreeTrailExpiryDate",
 		"extendedFreeTrailExpiryReason",
 		"extendedFreeTrail",
-		"restrictThumbnailByKs",
+		"restrictThumbnailByVs",
 		"supportAnimatedThumbnails",
 		"crmLink",
 		"crmId",
@@ -460,13 +460,13 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 		return array_merge(parent::getMapBetweenObjects(), self::$map_between_objects);
 	}
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 		
 		$permissions = PermissionPeer::retrievePartnerLevelPermissions($source_object->getId());
-		$this->permissions = KalturaPermissionArray::fromDbArray($permissions);
-		$this->limits = KalturaSystemPartnerLimitArray::fromPartner($source_object);
+		$this->permissions = VidiunPermissionArray::fromDbArray($permissions);
+		$this->limits = VidiunSystemPartnerLimitArray::fromPartner($source_object);
 		
 		$this->restrictEntryByMetadata = $source_object->getShouldApplyAccessControlOnEntryMetadata();
 		$this->htmlPurifierBaseListUsage = $source_object->getHtmlPurifierBaseListUsage();
@@ -476,13 +476,13 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 		$dbAutoModerationEntryFilter = $source_object->getAutoModerateEntryFilter();
 		if ($dbAutoModerationEntryFilter)
 		{
-			$this->autoModerateEntryFilter = new KalturaBaseEntryFilter();
+			$this->autoModerateEntryFilter = new VidiunBaseEntryFilter();
 			$this->autoModerateEntryFilter->fromObject($dbAutoModerationEntryFilter);
 		}
 
-		$this->partnerName = kString::stripUtf8InvalidChars($this->partnerName);
-		$this->description = kString::stripUtf8InvalidChars($this->description);
-		$this->adminName = kString::stripUtf8InvalidChars($this->adminName);
+		$this->partnerName = vString::stripUtf8InvalidChars($this->partnerName);
+		$this->description = vString::stripUtf8InvalidChars($this->description);
+		$this->adminName = vString::stripUtf8InvalidChars($this->adminName);
 		if($this->deliveryProfileIds) {
 			$this->deliveryProfileIds = json_encode($this->deliveryProfileIds);
 		}
@@ -497,7 +497,7 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 	
 	private function copyMissingConversionProfiles(Partner $partner)
 	{
-		$templatePartner = PartnerPeer::retrieveByPK($partner->getI18nTemplatePartnerId() ? $partner->getI18nTemplatePartnerId() : kConf::get('template_partner_id'));
+		$templatePartner = PartnerPeer::retrieveByPK($partner->getI18nTemplatePartnerId() ? $partner->getI18nTemplatePartnerId() : vConf::get('template_partner_id'));
 		if($templatePartner)
 			myPartnerUtils::copyConversionProfiles($templatePartner, $partner, true);
 	}
@@ -509,7 +509,7 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 		{
 			$audioThumbEntry = entryPeer::retrieveByPK($audioThumbEntryId);
 			if (!$audioThumbEntry || $audioThumbEntry->getMediaType() != entry::ENTRY_MEDIA_TYPE_IMAGE)
-				throw new KalturaAPIException(SystemPartnerErrors::PARTNER_AUDIO_THUMB_ENTRY_ID_ERROR, $audioThumbEntryId);
+				throw new VidiunAPIException(SystemPartnerErrors::PARTNER_AUDIO_THUMB_ENTRY_ID_ERROR, $audioThumbEntryId);
 		}
 
 		$liveThumbEntryId = $this->liveThumbEntryId;
@@ -517,17 +517,17 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 		{
 			$liveThumbEntry = entryPeer::retrieveByPK($liveThumbEntryId);
 			if (!$liveThumbEntry || $liveThumbEntry->getMediaType() != entry::ENTRY_MEDIA_TYPE_IMAGE)
-				throw new KalturaAPIException(SystemPartnerErrors::PARTNER_LIVE_THUMB_ENTRY_ID_ERROR, $liveThumbEntryId);
+				throw new VidiunAPIException(SystemPartnerErrors::PARTNER_LIVE_THUMB_ENTRY_ID_ERROR, $liveThumbEntryId);
 		}
 		
 		if (!$this->isNull('defaultLiveStreamSegmentDuration'))
 		{
 			if (!PermissionPeer::isValidForPartner(PermissionName::FEATURE_DYNAMIC_SEGMENT_DURATION, $this->id)) {
-				throw new KalturaAPIException(KalturaErrors::DYNAMIC_SEGMENT_DURATION_DISABLED, $this->getFormattedPropertyNameWithClassName('defaultLiveStreamSegmentDuration'));
+				throw new VidiunAPIException(VidiunErrors::DYNAMIC_SEGMENT_DURATION_DISABLED, $this->getFormattedPropertyNameWithClassName('defaultLiveStreamSegmentDuration'));
 			}
 			
 			$this->validatePropertyNumeric('defaultLiveStreamSegmentDuration');
-			$this->validatePropertyMinMaxValue('defaultLiveStreamSegmentDuration', KalturaLiveEntry::MIN_ALLOWED_SEGMENT_DURATION_MILLISECONDS, KalturaLiveEntry::MAX_ALLOWED_SEGMENT_DURATION_MILLISECONDS);
+			$this->validatePropertyMinMaxValue('defaultLiveStreamSegmentDuration', VidiunLiveEntry::MIN_ALLOWED_SEGMENT_DURATION_MILLISECONDS, VidiunLiveEntry::MAX_ALLOWED_SEGMENT_DURATION_MILLISECONDS);
 		}
 	
 		return parent::validateForUpdate($sourceObject,$propertiesToSkip);
@@ -537,7 +537,7 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 	{
 		$object_to_fill = parent::toObject($object_to_fill, $props_to_skip);
 		if (!$object_to_fill) {
-			KalturaLog::err('Cannot find object to fill');
+			VidiunLog::err('Cannot find object to fill');
 			return null;
 		}
 		
@@ -563,10 +563,10 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 		{
 		    $parentPartnerDb = PartnerPeer::retrieveByPK($this->partnerParentId);
 		    
-		    if ($parentPartnerDb->getPartnerGroupType() != KalturaPartnerGroupType::GROUP 
-		        && $parentPartnerDb->getPartnerGroupType() != KalturaPartnerGroupType::VAR_GROUP)
+		    if ($parentPartnerDb->getPartnerGroupType() != VidiunPartnerGroupType::GROUP 
+		        && $parentPartnerDb->getPartnerGroupType() != VidiunPartnerGroupType::VAR_GROUP)
 		    {
-		        throw new KalturaAPIException(SystemPartnerErrors::UNABLE_TO_FORM_GROUP_ASSOCIATION, $this->partnerParentId, $parentPartnerDb->getPartnerGroupType());
+		        throw new VidiunAPIException(SystemPartnerErrors::UNABLE_TO_FORM_GROUP_ASSOCIATION, $this->partnerParentId, $parentPartnerDb->getPartnerGroupType());
 		    }
 		}
 		
@@ -625,7 +625,7 @@ class KalturaSystemPartnerConfiguration extends KalturaObject
 	{
 		if(strstr($permissionName, '_PLUGIN_PERMISSION'))
 		{
-			$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaPermissionsEnabler');
+			$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunPermissionsEnabler');
 			foreach($pluginInstances as $pluginInstance)
 			{
 				$pluginInstance->permissionEnabled($partnerId, $permissionName);

@@ -3,10 +3,10 @@
  * @package plugins.businessProcessNotification
  * @subpackage api.objects
  */
-class KalturaBusinessProcessNotificationDispatchJobData extends KalturaEventNotificationDispatchJobData
+class VidiunBusinessProcessNotificationDispatchJobData extends VidiunEventNotificationDispatchJobData
 {
 	/**
-	 * @var KalturaBusinessProcessServer
+	 * @var VidiunBusinessProcessServer
 	 */
 	public $server;
 	
@@ -21,7 +21,7 @@ class KalturaBusinessProcessNotificationDispatchJobData extends KalturaEventNoti
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -29,15 +29,15 @@ class KalturaBusinessProcessNotificationDispatchJobData extends KalturaEventNoti
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	protected function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $dbObject kBusinessProcessNotificationDispatchJobData */
+		/* @var $dbObject vBusinessProcessNotificationDispatchJobData */
 		parent::doFromObject($dbObject, $responseProfile);
 		
 		$server = $dbObject->getServer();
-		$this->server = KalturaBusinessProcessServer::getInstanceByType($server->getType());
+		$this->server = VidiunBusinessProcessServer::getInstanceByType($server->getType());
 		$this->server->fromObject($server);
 	}
 }

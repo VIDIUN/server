@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class viewLogsAction extends kalturaSystemAction
+class viewLogsAction extends vidiunSystemAction
 {
 	const LOG_DIR = "/web/logs/";
 	/**
@@ -36,15 +36,15 @@ class viewLogsAction extends kalturaSystemAction
 	private static function readLog ( $name , $size )
 	{
 		$pattern = "/" . $name . "$/";
-		$files = kFile::recursiveDirList( self::LOG_DIR , true , false , $pattern );
+		$files = vFile::recursiveDirList( self::LOG_DIR , true , false , $pattern );
 		
 		$result = array();
 		if ( $files )
 		{
 			foreach ( $files as $file )
 			{
-				$data = kFile::getFileData( $file );
-				$data->content = kFile::readLastBytesFromFile ( $file,  $size );
+				$data = vFile::getFileData( $file );
+				$data->content = vFile::readLastBytesFromFile ( $file,  $size );
 				$result[] = $data;
 			}
 		}

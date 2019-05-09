@@ -9,7 +9,7 @@ class myReportsSqlFileMgr
 	public static function getSqlFilePath ( $type_str , $flavor_str , $add_search_text , $object_ids, $input_filter )
 	{
 		$res = self::getSqlFilePathImpl( $type_str , $flavor_str , $add_search_text , $object_ids,  $input_filter );
-KalturaLog::log ( __METHOD__. ": [$type_str] [$flavor_str] [$add_search_text] [$object_ids] -> [$res]" );		
+VidiunLog::log ( __METHOD__. ": [$type_str] [$flavor_str] [$add_search_text] [$object_ids] -> [$res]" );		
 		return $res;
 	}
 	

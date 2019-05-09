@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaAuditTrailBaseFilter extends KalturaRelatedFilter
+abstract class VidiunAuditTrailBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -36,7 +36,7 @@ abstract class KalturaAuditTrailBaseFilter extends KalturaRelatedFilter
 		"userIdIn" => "_in_user_id",
 		"actionEqual" => "_eq_action",
 		"actionIn" => "_in_action",
-		"ksEqual" => "_eq_ks",
+		"vsEqual" => "_eq_vs",
 		"contextEqual" => "_eq_context",
 		"contextIn" => "_in_context",
 		"entryPointEqual" => "_eq_entry_point",
@@ -92,7 +92,7 @@ abstract class KalturaAuditTrailBaseFilter extends KalturaRelatedFilter
 	public $parsedAtLessThanOrEqual;
 
 	/**
-	 * @var KalturaAuditTrailStatus
+	 * @var VidiunAuditTrailStatus
 	 */
 	public $statusEqual;
 
@@ -102,7 +102,7 @@ abstract class KalturaAuditTrailBaseFilter extends KalturaRelatedFilter
 	public $statusIn;
 
 	/**
-	 * @var KalturaAuditTrailObjectType
+	 * @var VidiunAuditTrailObjectType
 	 */
 	public $auditObjectTypeEqual;
 
@@ -132,7 +132,7 @@ abstract class KalturaAuditTrailBaseFilter extends KalturaRelatedFilter
 	public $relatedObjectIdIn;
 
 	/**
-	 * @var KalturaAuditTrailObjectType
+	 * @var VidiunAuditTrailObjectType
 	 */
 	public $relatedObjectTypeEqual;
 
@@ -192,7 +192,7 @@ abstract class KalturaAuditTrailBaseFilter extends KalturaRelatedFilter
 	public $userIdIn;
 
 	/**
-	 * @var KalturaAuditTrailAction
+	 * @var VidiunAuditTrailAction
 	 */
 	public $actionEqual;
 
@@ -204,10 +204,10 @@ abstract class KalturaAuditTrailBaseFilter extends KalturaRelatedFilter
 	/**
 	 * @var string
 	 */
-	public $ksEqual;
+	public $vsEqual;
 
 	/**
-	 * @var KalturaAuditTrailContext
+	 * @var VidiunAuditTrailContext
 	 */
 	public $contextEqual;
 

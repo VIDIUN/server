@@ -3,10 +3,10 @@
  * @package plugins.avnDistribution
  * @subpackage lib
  */
-class kAvnFlowManager implements kBatchJobStatusEventConsumer, kObjectChangedEventConsumer, kObjectCreatedEventConsumer, kObjectDeletedEventConsumer
+class vAvnFlowManager implements vBatchJobStatusEventConsumer, vObjectChangedEventConsumer, vObjectCreatedEventConsumer, vObjectDeletedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -34,10 +34,10 @@ class kAvnFlowManager implements kBatchJobStatusEventConsumer, kObjectChangedEve
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
 		$data = $dbBatchJob->getData();
-		if (!$data instanceof kDistributionJobData)
+		if (!$data instanceof vDistributionJobData)
 			return true;
 			
-		$avnCoreValueType = kPluginableEnumsManager::apiToCore('DistributionProviderType', AvnDistributionPlugin::getApiValue(AvnDistributionProviderType::AVN));
+		$avnCoreValueType = vPluginableEnumsManager::apiToCore('DistributionProviderType', AvnDistributionPlugin::getApiValue(AvnDistributionProviderType::AVN));
 		if ($data->getProviderType() != $avnCoreValueType)
 			return true;
 			
@@ -54,13 +54,13 @@ class kAvnFlowManager implements kBatchJobStatusEventConsumer, kObjectChangedEve
 		);
 		
 		if (in_array($dbBatchJob->getJobType(), $jobTypesToFinish))
-			kJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
+			vJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
 		
 		return true;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
@@ -71,7 +71,7 @@ class kAvnFlowManager implements kBatchJobStatusEventConsumer, kObjectChangedEve
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -79,7 +79,7 @@ class kAvnFlowManager implements kBatchJobStatusEventConsumer, kObjectChangedEve
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+	 * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $object)
 	{
@@ -90,7 +90,7 @@ class kAvnFlowManager implements kBatchJobStatusEventConsumer, kObjectChangedEve
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::objectCreated()
+	 * @see vObjectCreatedEventConsumer::objectCreated()
 	 */
 	public function objectCreated(BaseObject $object)
 	{
@@ -99,7 +99,7 @@ class kAvnFlowManager implements kBatchJobStatusEventConsumer, kObjectChangedEve
 	
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{
@@ -110,7 +110,7 @@ class kAvnFlowManager implements kBatchJobStatusEventConsumer, kObjectChangedEve
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null)
 	{

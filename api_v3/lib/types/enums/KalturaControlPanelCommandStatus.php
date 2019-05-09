@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaControlPanelCommandStatus extends KalturaEnum
+class VidiunControlPanelCommandStatus extends VidiunEnum
 {
 	const PENDING = 1;
 	const HANDLED = 2;

@@ -1,9 +1,9 @@
 <?php
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-class flvclipperAction extends kalturaAction
+class flvclipperAction extends vidiunAction
 {
 	static private function hmac($hashfunc, $key, $data)
     {
@@ -27,7 +27,7 @@ class flvclipperAction extends kalturaAction
 		requestUtils::handleConditionalGet();
 
 		$entry_id = $this->getRequestParameter ( "entry_id" );
-		$ks_str = $this->getRequestParameter("ks");
+		$vs_str = $this->getRequestParameter("vs");
 		$base64_referrer = $this->getRequestParameter("referrer");
 		$referrer = base64_decode($base64_referrer);
 		if (!is_string($referrer)) // base64_decode can return binary data
@@ -40,28 +40,28 @@ class flvclipperAction extends kalturaAction
 		
 		// remove dynamic fields from the url so we'll request a single url from the cdn
 		$request = str_replace("/referrer/$base64_referrer", "", $request);
-		$request = str_replace("/ks/$ks_str", "", $request);
+		$request = str_replace("/vs/$vs_str", "", $request);
 		
 		$entry = null;
 		
-		if($ks_str)
+		if($vs_str)
 		{
 			try {
-				kCurrentContext::initKsPartnerUser($ks_str);
+				vCurrentContext::initVsPartnerUser($vs_str);
 			}
 			catch (Exception $ex)
 			{
-				KExternalErrors::dieError(KExternalErrors::INVALID_KS);	
+				VExternalErrors::dieError(VExternalErrors::INVALID_VS);	
 			}
 		}
 		else
 		{
-			$entry = kCurrentContext::initPartnerByEntryId($entry_id);
+			$entry = vCurrentContext::initPartnerByEntryId($entry_id);
 			if(!$entry)
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 		
-		kEntitlementUtils::initEntitlementEnforcement();
+		vEntitlementUtils::initEntitlementEnforcement();
 		
 		// workaround the filter which hides all the deleted entries - 
 		// now that deleted entries are part of xmls (they simply point to the 'deleted' templates), we should allow them here
@@ -72,22 +72,22 @@ class flvclipperAction extends kalturaAction
 		}
 		else
 		{
-			if(!kEntitlementUtils::isEntryEntitled($entry))
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+			if(!vEntitlementUtils::isEntryEntitled($entry))
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 		
 		if ( ! $entry )
 		{
-			KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 		
-		KalturaMonitorClient::initApiMonitor(false, 'keditorservices.flvclipper', $entry->getPartnerId());
+		VidiunMonitorClient::initApiMonitor(false, 'veditorservices.flvclipper', $entry->getPartnerId());
 		
 		myPartnerUtils::blockInactivePartner($entry->getPartnerId());
 		
 		if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_BLOCK_FLVCLIPPER_ACTION, $entry->getPartnerId()))
 		{
-			KExternalErrors::dieError(KExternalErrors::ACTION_BLOCKED);
+			VExternalErrors::dieError(VExternalErrors::ACTION_BLOCKED);
 		}
 		
 		// set the memory size to be able to serve big files in a single chunk
@@ -98,7 +98,7 @@ class flvclipperAction extends kalturaAction
 		if ( $entry->getType() == entryType::MIX && $entry->getStatus() == entryStatus::DELETED )
 		{
 			// because the fiter was turned off - a manual check for deleted entries must be done.
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 		else if ($entry->getMediaType() == entry::ENTRY_MEDIA_TYPE_IMAGE )
 		{
@@ -130,19 +130,19 @@ class flvclipperAction extends kalturaAction
 			$tempThumbPath = myEntryUtils::resizeEntryImage( $entry ,  $version , $width , $height , $type , $bgcolor , $crop_provider, $quality,
 			$src_x, $src_y, $src_w, $src_h, $vid_sec, $vid_slice, $vid_slices );
 
-			$entryKey = kFileUtils::isFileEncrypt($tempThumbPath) ? $entry->getGeneralEncryptionKey() : null;
+			$entryKey = vFileUtils::isFileEncrypt($tempThumbPath) ? $entry->getGeneralEncryptionKey() : null;
 			$iv = $entryKey ? $entry->getEncryptionIv() : null;
-			kFileUtils::dumpFile($tempThumbPath, null, strpos($tempThumbPath, "_NOCACHE_") === false ? null : 0, 0, $entryKey, $iv);
+			vFileUtils::dumpFile($tempThumbPath, null, strpos($tempThumbPath, "_NOCACHE_") === false ? null : 0, 0, $entryKey, $iv);
 		}
 
-		$securyEntryHelper = new KSecureEntryHelper($entry, $ks_str, $referrer, ContextType::PLAY);
+		$securyEntryHelper = new VSecureEntryHelper($entry, $vs_str, $referrer, ContextType::PLAY);
 		if ($securyEntryHelper->shouldPreview())
 		{
 			$this->checkForPreview($securyEntryHelper, $clip_to);
 		}
 		else
 		{
-			$securyEntryHelper->validateForPlay($entry, $ks_str);
+			$securyEntryHelper->validateForPlay($entry, $vs_str);
 		}
 		
 		$audio_only = $this->getRequestParameter ( "audio_only" ); // milliseconds
@@ -211,22 +211,22 @@ class flvclipperAction extends kalturaAction
 		}
 		
 		if (is_null($flavorAsset))
-			KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 
 		$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 		
-		if (kFileSyncUtils::file_exists($syncKey, false))
+		if (vFileSyncUtils::file_exists($syncKey, false))
 		{
-			$path = kFileSyncUtils::getReadyLocalFilePathForKey($syncKey);
+			$path = vFileSyncUtils::getReadyLocalFilePathForKey($syncKey);
 		}
 		else
 		{
-			list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
+			list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
 			
 			if (is_null($fileSync))
 			{
-				KalturaLog::log("Error - no FileSync for flavor [".$flavorAsset->getId()."]");
-				KExternalErrors::dieError(KExternalErrors::FILE_NOT_FOUND);
+				VidiunLog::log("Error - no FileSync for flavor [".$flavorAsset->getId()."]");
+				VExternalErrors::dieError(VExternalErrors::FILE_NOT_FOUND);
 			}
 			
 			if ($fileSync->getFileType() == FileSync::FILE_SYNC_FILE_TYPE_URL)
@@ -235,8 +235,8 @@ class flvclipperAction extends kalturaAction
 						DeliveryProfileDynamicAttributes::init($fileSync->getDc(), $flavorAsset->getEntryId()), null, $flavorAsset);
 				if (!$urlManager)
 				{
-					KalturaLog::log("Error - failed to find an HTTP delivery for storage profile [".$fileSync->getDc()."]");
-					KExternalErrors::dieError(KExternalErrors::FILE_NOT_FOUND);
+					VidiunLog::log("Error - failed to find an HTTP delivery for storage profile [".$fileSync->getDc()."]");
+					VExternalErrors::dieError(VExternalErrors::FILE_NOT_FOUND);
 				}
 
 				$url = rtrim($urlManager->getUrl(), '/') . '/' . ltrim($urlManager->getFileSyncUrl($fileSync), '/');
@@ -244,7 +244,7 @@ class flvclipperAction extends kalturaAction
 				die;
 			}
 			
-			$remoteUrl = kDataCenterMgr::getRedirectExternalUrl($fileSync);
+			$remoteUrl = vDataCenterMgr::getRedirectExternalUrl($fileSync);
 			$this->redirect($remoteUrl);
 		}
 		
@@ -271,9 +271,9 @@ class flvclipperAction extends kalturaAction
 			$seek_from_bytes = myFlvHandler::FLV_HEADER_SIZE + $flv_wrapper->getMetadataSize( $audio_only  ) + $from_byte - $first_tag_byte;
 		}
 
-		// the direct path without a cdn is "http://s3kaltura.s3.amazonaws.com".$entry->getDataPath();
+		// the direct path without a cdn is "http://s3vidiun.s3.amazonaws.com".$entry->getDataPath();
 		$extStorageUrl = $entry->getExtStorageUrl();
-		if ($extStorageUrl && substr_count($extStorageUrl, 's3kaltura'))
+		if ($extStorageUrl && substr_count($extStorageUrl, 's3vidiun'))
 		{
 			// if for some reason we didnt set our accurate $seek_from_timestamp reset it to the requested seek_from
 			if ($seek_from_timestamp == -1)
@@ -281,12 +281,12 @@ class flvclipperAction extends kalturaAction
 
 			$request_host = parse_url($extStorageUrl, PHP_URL_HOST);
 
-			$akamai_url = str_replace($request_host, "cdns3akmi.kaltura.com", $extStorageUrl);
+			$akamai_url = str_replace($request_host, "cdns3akmi.vidiun.com", $extStorageUrl);
 
 			$akamai_url .= $seek_from_bytes == -1 ? "" : "?aktimeoffset=".floor($seek_from_timestamp / 1000);
 
 			header("Location: $akamai_url");
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 		elseif($extStorageUrl)
 		{
@@ -297,7 +297,7 @@ class flvclipperAction extends kalturaAction
 			$extStorageUrl .= $seek_from_bytes == -1 ? "" : "?aktimeoffset=".floor($seek_from_timestamp / 1000);
 			
 			header("Location: $extStorageUrl");
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 		
 		// use headers to detect cdn
@@ -324,8 +324,8 @@ class flvclipperAction extends kalturaAction
 		{
 			// we have three options:
 			// arrived through limelight mediavault url - the url is secured
-			// arrived directly through limelight (not secured through mediavault) - enforce ks and redirect to mediavault url
-			// didnt use limelight - enforce ks
+			// arrived directly through limelight (not secured through mediavault) - enforce vs and redirect to mediavault url
+			// didnt use limelight - enforce vs
 			
 			// the cdns are configured to authenticate request for /s/....
 			// check if we're already in a redirected secure link using the "/s/" prefix
@@ -337,38 +337,38 @@ class flvclipperAction extends kalturaAction
 			}
 			else
 			{
-				// extract ks
-				$ks_str = $this->getRequestParameter ( "ks", "" );
+				// extract vs
+				$vs_str = $this->getRequestParameter ( "vs", "" );
 					
 				if ($entry->getSecurityPolicy())
 				{
-					if (!$ks_str)
+					if (!$vs_str)
 					{
-						$this->logMessage( "flvclipper - no KS" );
-						KExternalErrors::dieGracefully();
+						$this->logMessage( "flvclipper - no VS" );
+						VExternalErrors::dieGracefully();
 					}
 					
-					$ks = kSessionUtils::crackKs($ks_str);
-					if (!$ks)
+					$vs = vSessionUtils::crackVs($vs_str);
+					if (!$vs)
 					{
-						$this->logMessage( "flvclipper - invalid ks [$ks_str]" );		
-						KExternalErrors::dieGracefully();
+						$this->logMessage( "flvclipper - invalid vs [$vs_str]" );		
+						VExternalErrors::dieGracefully();
 					}
 				
-					$matched_privs = $ks->verifyPrivileges ( "sview" , $entry_id );
+					$matched_privs = $vs->verifyPrivileges ( "sview" , $entry_id );
 					$this->logMessage( "flvclipper - verifyPrivileges name [sview], priv [$entry_id] [$matched_privs]" );		
 	
 					if ( ! $matched_privs )
 					{
-						$this->logMessage( "flvclipper - doesnt not match required privlieges [$ks_str]" );		
-						KExternalErrors::dieGracefully();
+						$this->logMessage( "flvclipper - doesnt not match required privlieges [$vs_str]" );		
+						VExternalErrors::dieGracefully();
 					}
 				}
 				
 				if ($cdn_name == "limelight") // limelight request - secure it
 				{
 					$ll_url = requestUtils::getCdnHost()."/s$request".$flv_extension;
-					$secret = kConf::get("limelight_madiavault_password");
+					$secret = vConf::get("limelight_madiavault_password");
 					
 					$expire = "&e=".(time() + 120);
 					$ll_url .= $expire;
@@ -389,7 +389,7 @@ class flvclipperAction extends kalturaAction
 						$expire = "&nva=".strftime("%Y%m%d%H%M%S", time() - date("Z") + 30);
 						$level3_url .= $expire; 
 						
-						$secret = kConf::get("level3_authentication_key");
+						$secret = vConf::get("level3_authentication_key");
 						$hash = "0".substr(self::hmac('sha1', $secret, $level3_url),0, 20);
 						$level3_url .= "&h=$hash"; 
 					}
@@ -397,7 +397,7 @@ class flvclipperAction extends kalturaAction
 					$level3_url .= $seek_from_bytes == -1 ? "" : "&start=$seek_from_bytes";
 		        	
 					header("Location: $level3_url");
-					KExternalErrors::dieGracefully();
+					VExternalErrors::dieGracefully();
 		        }
 		        else if ($cdn_name == "akamai")
 		        {
@@ -410,7 +410,7 @@ class flvclipperAction extends kalturaAction
 					$akamai_url .= $seek_from_bytes == -1 ? "" : "&aktimeoffset=".floor($seek_from_timestamp / 1000);
 		        	
 		        	header("Location: $akamai_url");
-		        	KExternalErrors::dieGracefully();
+		        	VExternalErrors::dieGracefully();
 		        }
 		        
 		        // a seek request without a supporting cdn - we need to send the answer from our server
@@ -435,7 +435,7 @@ class flvclipperAction extends kalturaAction
 				
 			requestUtils::sendCdnHeaders("flv", 0);
 			header("Location: $request".$flv_extension);
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 
 		// mp4
@@ -449,11 +449,11 @@ class flvclipperAction extends kalturaAction
 				{
 					$duration = ($mediaInfo->getVideoDuration() ? $mediaInfo->getVideoDuration() : ($mediaInfo->getAudioDuration() ?
 					$mediaInfo->getAudioDuration() : $mediaInfo->getContainerDuration()));
-					$limit_file_size = floor((@kFile::fileSize($path) * ($clip_to / $duration))*1.2);
+					$limit_file_size = floor((@vFile::fileSize($path) * ($clip_to / $duration))*1.2);
 				}
 			}
-			KalturaLog::info("serving file [$path] entry id [$entry_id] limit file size [$limit_file_size] clip_to [$clip_to]");
-			kFileUtils::dumpFile($path, null, null, $limit_file_size);
+			VidiunLog::info("serving file [$path] entry id [$entry_id] limit file size [$limit_file_size] clip_to [$clip_to]");
+			vFileUtils::dumpFile($path, null, null, $limit_file_size);
 		}
 		
 		$this->logMessage( "flvclipperAction: serving file [$path] entry_id [$entry_id] clip_from [$clip_from] clip_to [$clip_to]" , "warning" );
@@ -512,11 +512,11 @@ class flvclipperAction extends kalturaAction
 			$this->logMessage( "flvclipperAction: error closing db $e");
 		}
 		
-		KExternalErrors::terminateDispatch();
+		VExternalErrors::terminateDispatch();
 		return sfView::SUCCESS;
 	}
 	
-	function checkForPreview(KSecureEntryHelper $securyEntryHelper, $clip_to)
+	function checkForPreview(VSecureEntryHelper $securyEntryHelper, $clip_to)
 	{
 		$request = $_SERVER["REQUEST_URI"];
 		$preview_length_msec = $securyEntryHelper->getPreviewLength() * 1000;
@@ -527,7 +527,7 @@ class flvclipperAction extends kalturaAction
 				if ($preview_length_msec === 0) // don't preview length 0, it will cause infinite loop because clip_to defaults to 2147483647
 				{
 					header("Content-Type: video/x-flv");
-					KExternalErrors::dieGracefully();
+					VExternalErrors::dieGracefully();
 				}
 					
 				$request = str_replace('/clip_to/'.$clip_to, '/clip_to/'.$preview_length_msec, $request);
@@ -546,7 +546,7 @@ class flvclipperAction extends kalturaAction
 					header("Location: $request/clip_to/$preview_length_msec");
 				}
 			}
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 	}
 }

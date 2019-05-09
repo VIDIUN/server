@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage externalWidgets
  */
-class kExtWidgetUtils {
+class vExtWidgetUtils {
 
     public static function parseObjectId($objectIdStr)
     {
@@ -33,7 +33,7 @@ class kExtWidgetUtils {
         $replacingFileName = null;
         $fileName = null;
         $syncKey = $asset->getSyncKey($fileSyncObjectSubType);
-        list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, $fetch_from_remote_if_no_local);
+        list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, $fetch_from_remote_if_no_local);
         if($fileSync)
         {
             $replacingFileName = basename($fileSync->getFilePath());
@@ -46,7 +46,7 @@ class kExtWidgetUtils {
 
     public static function fixIsmManifestForReplacedEntry($syncKey, entry $entry, $fetch_from_remote_if_no_local = false)
     {
-        $fileData = kFileSyncUtils::file_get_contents($syncKey);
+        $fileData = vFileSyncUtils::file_get_contents($syncKey);
         $xml = new SimpleXMLElement($fileData);
         $ismcFileName = $xml->head->meta['content'];
         list($ismcObjectId, $version, $subType, $isAsset, $entryId) = self::parseObjectId($ismcFileName);

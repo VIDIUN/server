@@ -3,10 +3,10 @@
  * @package plugins.beacon
  * @subpackage api.objects
  */
-class KalturaBeaconScheduledResourceItem extends KalturaBeaconAbstractScheduledResourceItem
+class VidiunBeaconScheduledResourceItem extends VidiunBeaconAbstractScheduledResourceItem
 {
 	/**
-	 * @var KalturaBeaconScheduledResourceFieldName
+	 * @var VidiunBeaconScheduledResourceFieldName
 	 */
 	public $fieldName;
 
@@ -17,13 +17,13 @@ class KalturaBeaconScheduledResourceItem extends KalturaBeaconAbstractScheduledR
 	private static $map_dynamic_enum = array();
 
 	private static $map_field_enum = array(
-		KalturaBeaconScheduledResourceFieldName::EVENT_TYPE => BeaconScheduledResourceFieldName::EVENT_TYPE,
-		KalturaBeaconScheduledResourceFieldName::OBJECT_ID => BeaconScheduledResourceFieldName::OBJECT_ID,
-		KalturaBeaconScheduledResourceFieldName::IS_LOG => BeaconScheduledResourceFieldName::IS_LOG,
-		KalturaBeaconScheduledResourceFieldName::STATUS => BeaconScheduledResourceFieldName::STATUS,
-		KalturaBeaconScheduledResourceFieldName::RECORDING => BeaconScheduledResourceFieldName::RECORDING,
-		KalturaBeaconScheduledResourceFieldName::RESOURCE_NAME => BeaconScheduledResourceFieldName::RESOURCE_NAME,
-		KalturaBeaconScheduledResourceFieldName::UPDATED_AT => BeaconScheduledResourceFieldName::UPDATED_AT,
+		VidiunBeaconScheduledResourceFieldName::EVENT_TYPE => BeaconScheduledResourceFieldName::EVENT_TYPE,
+		VidiunBeaconScheduledResourceFieldName::OBJECT_ID => BeaconScheduledResourceFieldName::OBJECT_ID,
+		VidiunBeaconScheduledResourceFieldName::IS_LOG => BeaconScheduledResourceFieldName::IS_LOG,
+		VidiunBeaconScheduledResourceFieldName::STATUS => BeaconScheduledResourceFieldName::STATUS,
+		VidiunBeaconScheduledResourceFieldName::RECORDING => BeaconScheduledResourceFieldName::RECORDING,
+		VidiunBeaconScheduledResourceFieldName::RESOURCE_NAME => BeaconScheduledResourceFieldName::RESOURCE_NAME,
+		VidiunBeaconScheduledResourceFieldName::UPDATED_AT => BeaconScheduledResourceFieldName::UPDATED_AT,
 	);
 
 	protected function getMapBetweenObjects()
@@ -35,7 +35,7 @@ class KalturaBeaconScheduledResourceItem extends KalturaBeaconAbstractScheduledR
 	{
 		if (!$object_to_fill)
 		{
-			$object_to_fill = new kBeaconScheduledResourceItem();
+			$object_to_fill = new vBeaconScheduledResourceItem();
 		}
 
 		return parent::toObject($object_to_fill, $props_to_skip);

@@ -5,21 +5,21 @@
  * @package Scheduler
  * @subpackage CopyPartner
  */
-class KAsyncCopyPartner extends KJobHandlerWorker
+class VAsyncCopyPartner extends VJobHandlerWorker
 {
 	protected $fromPartnerId;
 	protected $toPartnerId;
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::COPY_PARTNER;
+		return VidiunBatchJobType::COPY_PARTNER;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getJobType()
+	 * @see VBatchBase::getJobType()
 	 */
 	public function getJobType()
 	{
@@ -27,19 +27,19 @@ class KAsyncCopyPartner extends KJobHandlerWorker
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
-	 * @return KalturaBatchJob
+	 * @see VJobHandlerWorker::exec()
+	 * @return VidiunBatchJob
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->doCopyPartner($job, $job->data);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
-	 * @return KalturaBatchJob
+	 * @see VJobHandlerWorker::exec()
+	 * @return VidiunBatchJob
 	 */
-	protected function doCopyPartner(KalturaBatchJob $job, KalturaCopyPartnerJobData $jobData)
+	protected function doCopyPartner(VidiunBatchJob $job, VidiunCopyPartnerJobData $jobData)
 	{
 		$this->log( "doCopyPartner job id [$job->id], From PID: $jobData->fromPartnerId, To PID: $jobData->toPartnerId" );
 
@@ -49,7 +49,7 @@ class KAsyncCopyPartner extends KJobHandlerWorker
 		// copy permssions before trying to copy additional objects such as distribution profiles which are not enabled yet for the partner
  		$this->copyAllEntries();
 		
- 		return $this->closeJob($job, null, null, "doCopyPartner finished", KalturaBatchJobStatus::FINISHED);
+ 		return $this->closeJob($job, null, null, "doCopyPartner finished", VidiunBatchJobStatus::FINISHED);
 	}
 	
 	/**
@@ -57,14 +57,14 @@ class KAsyncCopyPartner extends KJobHandlerWorker
 	 */
 	protected function copyAllEntries()
 	{
-		$entryFilter = new KalturaBaseEntryFilter();
- 		$entryFilter->order = KalturaBaseEntryOrderBy::CREATED_AT_ASC;
+		$entryFilter = new VidiunBaseEntryFilter();
+ 		$entryFilter->order = VidiunBaseEntryOrderBy::CREATED_AT_ASC;
 		
-		$pageFilter = new KalturaFilterPager();
+		$pageFilter = new VidiunFilterPager();
 		$pageFilter->pageSize = 50;
 		$pageFilter->pageIndex = 1;
 		
-		/* @var $this->getClient() KalturaClient */
+		/* @var $this->getClient() VidiunClient */
 		do
 		{
 			// Get the source partner's entries list

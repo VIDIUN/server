@@ -3,31 +3,31 @@
  * @package Scheduler
  * @subpackage ReportExport
  */
-class KAsyncReportExport extends KJobHandlerWorker
+class VAsyncReportExport extends VJobHandlerWorker
 {
 
 	public static function getType()
 	{
-		return KalturaBatchJobType::REPORT_EXPORT;
+		return VidiunBatchJobType::REPORT_EXPORT;
 	}
 
 	/**
-	 * @param KalturaBatchJob $job
-	 * @return KalturaBatchJob
+	 * @param VidiunBatchJob $job
+	 * @return VidiunBatchJob
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
-		$this->updateJob($job, 'Creating CSV Export', KalturaBatchJobStatus::PROCESSING);
+		$this->updateJob($job, 'Creating CSV Export', VidiunBatchJobStatus::PROCESSING);
 		$job = $this->createCsv($job, $job->data);
 		return $job;
 	}
 
-	protected function createCsv(KalturaBatchJob $job, KalturaReportExportJobData $data)
+	protected function createCsv(VidiunBatchJob $job, VidiunReportExportJobData $data)
 	{
 		$partnerId = $job->partnerId;
 
 		$outputDir = self::$taskConfig->params->localTempPath . DIRECTORY_SEPARATOR . $partnerId;
-		KBatchBase::createDir($outputDir);
+		VBatchBase::createDir($outputDir);
 
 		$reportFiles = array();
 
@@ -37,21 +37,21 @@ class KAsyncReportExport extends KJobHandlerWorker
 			$engine = ReportExportFactory::getEngine($reportItem, $outputDir);
 			if (!$engine)
 			{
-				return $this->closeJob($job, null, null, 'Report export engine not found', KalturaBatchJobStatus::FAILED, $data);
+				return $this->closeJob($job, null, null, 'Report export engine not found', VidiunBatchJobStatus::FAILED, $data);
 			}
 
 			try
 			{
-				KBatchBase::impersonate($job->partnerId);
+				VBatchBase::impersonate($job->partnerId);
 				$reportFile = $engine->createReport($reportItem);
-				KBatchBase::unimpersonate();
+				VBatchBase::unimpersonate();
 				$reportFiles[] = $reportFile;
 				$this->setFilePermissions($reportFile);
 			}
 			catch (Exception $e)
 			{
-				KBatchBase::unimpersonate();
-				return $this->closeJob($job, null, null, 'Cannot create report', KalturaBatchJobStatus::RETRY, $data);
+				VBatchBase::unimpersonate();
+				return $this->closeJob($job, null, null, 'Cannot create report', VidiunBatchJobStatus::RETRY, $data);
 			}
 		}
 
@@ -59,22 +59,22 @@ class KAsyncReportExport extends KJobHandlerWorker
 		return $job;
 	}
 
-	protected function moveFiles($tmpFiles, KalturaBatchJob $job, KalturaReportExportJobData $data, $partnerId)
+	protected function moveFiles($tmpFiles, VidiunBatchJob $job, VidiunReportExportJobData $data, $partnerId)
 	{
-		KBatchBase::createDir(self::$taskConfig->params->sharedTempPath. DIRECTORY_SEPARATOR . $partnerId);
+		VBatchBase::createDir(self::$taskConfig->params->sharedTempPath. DIRECTORY_SEPARATOR . $partnerId);
 		$outFiles = array();
 		foreach ($tmpFiles as $filePath)
 		{
 			$res = $this->moveFile($filePath, $partnerId);
 			if (!$res)
 			{
-				return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'Failed to move report file', KalturaBatchJobStatus::RETRY);
+				return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'Failed to move report file', VidiunBatchJobStatus::RETRY);
 			}
 			$outFiles[] = $res;
 		}
 
 		$data->filePaths = implode(',', $outFiles);
-		return $this->closeJob($job, null, null, 'CSV files created successfully', KalturaBatchJobStatus::FINISHED, $data);
+		return $this->closeJob($job, null, null, 'CSV files created successfully', VidiunBatchJobStatus::FINISHED, $data);
 	}
 
 	protected function moveFile($filePath, $partnerId)
@@ -82,7 +82,7 @@ class KAsyncReportExport extends KJobHandlerWorker
 		$fileName =  basename($filePath);
 		$sharedLocation = self::$taskConfig->params->sharedTempPath . DIRECTORY_SEPARATOR . $partnerId . DIRECTORY_SEPARATOR . $partnerId . "_" . $fileName;
 
-		$fileSize = kFile::fileSize($filePath);
+		$fileSize = vFile::fileSize($filePath);
 		rename($filePath, $sharedLocation);
 
 		$this->setFilePermissions($sharedLocation);

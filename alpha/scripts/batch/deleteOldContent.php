@@ -7,7 +7,7 @@ require_once(__DIR__ . '/../bootstrap.php');
 
 // -------------------------------------------
 
-class kOldContentCleaner
+class vOldContentCleaner
 {
 	/**
 	 * Indicates that database will be readonly and update action will be logged but not executed.
@@ -110,7 +110,7 @@ class kOldContentCleaner
 	
 	protected static function init()
 	{
-		kEventsManager::enableDeferredEvents(false);
+		vEventsManager::enableDeferredEvents(false);
 		
 		MetadataProfilePeer::setUseCriteriaFilter(false);
 		MetadataPeer::setUseCriteriaFilter(false);
@@ -143,9 +143,9 @@ class kOldContentCleaner
 		if(isset($options['r']) || isset($options['real-run']))
 			self::$dryRun = false;
 			
-		KalturaStatement::setDryRun(self::$dryRun);
+		VidiunStatement::setDryRun(self::$dryRun);
 			
-		$cacheFilePath = kConf::get('cache_root_path') . '/scripts/deleteOldContent.cache';
+		$cacheFilePath = vConf::get('cache_root_path') . '/scripts/deleteOldContent.cache';
 		if(file_exists($cacheFilePath))
 		{
 			$cache = unserialize(file_get_contents($cacheFilePath));
@@ -159,7 +159,7 @@ class kOldContentCleaner
 		{
 			$criteria = new Criteria();
 			$criteria->add(FileSyncPeer::UPDATED_AT, 0, Criteria::GREATER_THAN);
-			$criteria->add(FileSyncPeer::DC, kDataCenterMgr::getCurrentDcId());
+			$criteria->add(FileSyncPeer::DC, vDataCenterMgr::getCurrentDcId());
 			$criteria->add(FileSyncPeer::STATUS, FileSync::FILE_SYNC_STATUS_DELETED);
 			$criteria->addSelectColumn('UNIX_TIMESTAMP(MIN(' . FileSyncPeer::UPDATED_AT . '))');
 			$stmt = FileSyncPeer::doSelectStmt($criteria);
@@ -229,17 +229,17 @@ class kOldContentCleaner
 			'purgeStartUpdatedAt' => self::$purgeNextStartUpdatedAt,
 		);
 	
-		$cacheFilePath = kConf::get('cache_root_path') . '/scripts/deleteOldContent.cache';
+		$cacheFilePath = vConf::get('cache_root_path') . '/scripts/deleteOldContent.cache';
 		file_put_contents($cacheFilePath, serialize($cache));
 		
 		if(isset(self::$sums['entry']))
-			KalturaLog::info('Deleted ' . self::$sums['entry'] . ' entries.');
+			VidiunLog::info('Deleted ' . self::$sums['entry'] . ' entries.');
 		if(isset(self::$sums['asset']))
-			KalturaLog::info('Deleted ' . self::$sums['asset'] . ' assets.');
+			VidiunLog::info('Deleted ' . self::$sums['asset'] . ' assets.');
 		if(isset(self::$sums['FileSync']))
-			KalturaLog::info('Deleted ' . self::$sums['FileSync'] . ' file sync objects.');
+			VidiunLog::info('Deleted ' . self::$sums['FileSync'] . ' file sync objects.');
 		if(isset(self::$sums['dirs']))
-			KalturaLog::info('Deleted ' . self::$sums['dirs'] . ' directories.');
+			VidiunLog::info('Deleted ' . self::$sums['dirs'] . ' directories.');
 		if(isset(self::$sums['files']))
 		{
 			if(isset(self::$sums['bytes']))
@@ -266,11 +266,11 @@ class kOldContentCleaner
 					$size = round($size / 1024, 2);
 					$units = 'TB';
 				}
-				KalturaLog::info("Deleted " . self::$sums['files'] . " files in total size of $size $units from the disc.");
+				VidiunLog::info("Deleted " . self::$sums['files'] . " files in total size of $size $units from the disc.");
 			}
 			else
 			{
-				KalturaLog::info('Deleted ' . self::$sums['files'] . ' files.');
+				VidiunLog::info('Deleted ' . self::$sums['files'] . ' files.');
 			}
 		}
 	}
@@ -325,7 +325,7 @@ class kOldContentCleaner
 		
 		self::finit();
 		
-		KalturaLog::debug('Done, execution time ' . date('H:i:s', time() - $time) . '.');
+		VidiunLog::debug('Done, execution time ' . date('H:i:s', time() - $time) . '.');
 	}
 	
 	/**
@@ -333,16 +333,16 @@ class kOldContentCleaner
 	 */
 	protected static function deleteFileSync(FileSync $fileSync)
 	{
-		KalturaLog::info("Deleting file sync [" . $fileSync->getId() . "]");
-		$key = kFileSyncUtils::getKeyForFileSync($fileSync);
+		VidiunLog::info("Deleting file sync [" . $fileSync->getId() . "]");
+		$key = vFileSyncUtils::getKeyForFileSync($fileSync);
 	
 		try
 		{
-			kFileSyncUtils::deleteSyncFileForKey($key);
+			vFileSyncUtils::deleteSyncFileForKey($key);
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::err($e);
+			VidiunLog::err($e);
 		}
 		
 		self::incrementSummary('FileSync');
@@ -356,7 +356,7 @@ class kOldContentCleaner
 		$deletedFileSyncs = self::getDeletedFileSyncs();
 		foreach ($deletedFileSyncs as $fileSync)
 			self::purgeFileSync($fileSync);
-		kMemoryManager::clearMemory();
+		vMemoryManager::clearMemory();
 	}
 	
 	/**
@@ -364,16 +364,16 @@ class kOldContentCleaner
 	 */
 	protected static function purgeFileSync(FileSync $fileSync)
 	{
-		KalturaLog::info("Purging file sync [" . $fileSync->getId() . "]");
+		VidiunLog::info("Purging file sync [" . $fileSync->getId() . "]");
 		
 		$fullPath = $fileSync->getFullPath();
 		if($fullPath && file_exists($fullPath))
 		{
-			KalturaLog::debug("Purging file sync [" . $fileSync->getId() . "] path [$fullPath]");
+			VidiunLog::debug("Purging file sync [" . $fileSync->getId() . "] path [$fullPath]");
 			if(is_dir($fullPath))
 			{
 				$command = "rm -fr $fullPath";
-				KalturaLog::debug("Executing: $command");
+				VidiunLog::debug("Executing: $command");
 				if(self::$dryRun)
 				{
 					self::incrementSummary('dirs');
@@ -388,7 +388,7 @@ class kOldContentCleaner
 					}
 					else
 					{
-						KalturaLog::err("Failed purging file sync [" . $fileSync->getId() . "] directory path [$fullPath]");
+						VidiunLog::err("Failed purging file sync [" . $fileSync->getId() . "] directory path [$fullPath]");
 						return;
 					}
 				}
@@ -403,14 +403,14 @@ class kOldContentCleaner
 				}
 				else
 				{
-					KalturaLog::err("Failed purging file sync [" . $fileSync->getId() . "] file path [$fullPath]");
+					VidiunLog::err("Failed purging file sync [" . $fileSync->getId() . "] file path [$fullPath]");
 					return;
 				}
 			}
 		}
 		else
 		{
-			KalturaLog::debug("File sync [" . $fileSync->getId() . "] path [$fullPath] does not exist");
+			VidiunLog::debug("File sync [" . $fileSync->getId() . "] path [$fullPath] does not exist");
 		}
 		
 		$fileSync->setStatus(FileSync::FILE_SYNC_STATUS_PURGED);
@@ -432,7 +432,7 @@ class kOldContentCleaner
 		
 		$criteria->add($linkCountCriterion);
 		$criteria->add($linkedIdCriterion);
-		$criteria->add(FileSyncPeer::DC, kDataCenterMgr::getCurrentDcId());
+		$criteria->add(FileSyncPeer::DC, vDataCenterMgr::getCurrentDcId());
 		$criteria->add(FileSyncPeer::STATUS, FileSync::FILE_SYNC_STATUS_DELETED);
 		$nextCriteria = clone $criteria;
 		
@@ -489,7 +489,7 @@ class kOldContentCleaner
 			foreach($fileSyncs as $fileSync)
 				self::deleteFileSync($fileSync);
 			
-			kMemoryManager::clearMemory();
+			vMemoryManager::clearMemory();
 			$offset += count($partnerIds);
 			$partnersCriteria->setOffset($offset);
 			$stmt = PartnerPeer::doSelectStmt($partnersCriteria);
@@ -525,19 +525,19 @@ class kOldContentCleaner
 		foreach($entries as $entry)
 		{
 			/* @var $entry entry */
-			KalturaLog::info("Deleting entry [" . $entry->getId() . "]");
+			VidiunLog::info("Deleting entry [" . $entry->getId() . "]");
 			try
 			{
 				myEntryUtils::deleteEntry($entry);
 			}
 			catch (Exception $e)
 			{
-				KalturaLog::err($e);
+				VidiunLog::err($e);
 			}
 		}
 			
 		self::incrementSummary('entry', count($entries));
-		kMemoryManager::clearMemory();
+		vMemoryManager::clearMemory();
 	}
 	
 	protected static function deleteErrorAssets()
@@ -568,7 +568,7 @@ class kOldContentCleaner
 		foreach($assets as $asset)
 		{
 			/* @var $asset asset */
-			KalturaLog::info("Deleting asset [" . $asset->getId() . "]");
+			VidiunLog::info("Deleting asset [" . $asset->getId() . "]");
 			$asset->setStatus(asset::ASSET_STATUS_DELETED);
 		
 			try
@@ -577,12 +577,12 @@ class kOldContentCleaner
 			}
 			catch (Exception $e)
 			{
-				KalturaLog::err($e);
+				VidiunLog::err($e);
 			}
 		}
 			
 		self::incrementSummary('asset', count($assets));
-		kMemoryManager::clearMemory();
+		vMemoryManager::clearMemory();
 	}
 	
 	protected static function deleteErrorObjects()
@@ -693,7 +693,7 @@ class kOldContentCleaner
 				return array();
 		}
 		
-		$criteria->add(FileSyncPeer::DC, kDataCenterMgr::getCurrentDcId());
+		$criteria->add(FileSyncPeer::DC, vDataCenterMgr::getCurrentDcId());
 		$criteria->add(FileSyncPeer::OBJECT_TYPE, $objectType);
 		$criteria->add(FileSyncPeer::OBJECT_SUB_TYPE, $objectSubType);
 		$criteria->add(FileSyncPeer::STATUS, array(FileSync::FILE_SYNC_STATUS_DELETED, FileSync::FILE_SYNC_STATUS_PURGED), Criteria::NOT_IN);
@@ -731,10 +731,10 @@ class kOldContentCleaner
 					self::$oldVersionsNextStartUpdatedAt[$objectType] = $oldVersionsNextStartUpdatedAt;
 			}
 		}
-		kMemoryManager::clearMemory();
+		vMemoryManager::clearMemory();
 	}
 }
 
 // -------------------------------------------
 
-kOldContentCleaner::clean();
+vOldContentCleaner::clean();

@@ -93,7 +93,7 @@ function createScheduleTask($name, $filter, $task)
 	$scheduleTask->setPartnerId(Partner::ADMIN_CONSOLE_PARTNER_ID);
 	$scheduleTask->setStatus(ScheduledTaskProfileStatus::DISABLED);
 	$scheduleTask->setObjectFilterEngineType(ObjectFilterEngineType::ENTRY);
-	$scheduleTask->setObjectFilterApiType('KalturaMediaEntryFilter');
+	$scheduleTask->setObjectFilterApiType('VidiunMediaEntryFilter');
 	$scheduleTask->setObjectFilter($filter);
 	$scheduleTask->setObjectTasks(array($task));
 	$scheduleTask->setMaxTotalCountAllowed(500);
@@ -102,7 +102,7 @@ function createScheduleTask($name, $filter, $task)
 
 function addTask($type, $name, $filter, $description, $isFirst = false)
 {
-	$task = new kObjectTask();
+	$task = new vObjectTask();
 	$task->setType($type);
 	$scheduleTask = createScheduleTask($name, $filter, $task);
 	$scheduleTask->setDescription($description);
@@ -114,7 +114,7 @@ function addTask($type, $name, $filter, $description, $isFirst = false)
 
 function addMailTask($name, $filter, $description, $isFirst = true)
 {
-	$task = new kObjectTask();
+	$task = new vObjectTask();
 	$task->setType(ObjectTaskType::MAIL_NOTIFICATION);
 	$task->setDataValue('message', "You have been identified as the owner of Media which is approaching its media retention deadline. 
 		Unless you take action in the next [notification interval] days, this entry will be [Action].  ");

@@ -37,14 +37,14 @@ class SymantecScanDirectEngine extends SymantecScanEngine
 		if (!$engineSocket)
 		{
 			$errorCode = socket_last_error();
-			KalturaLog::err("Failed to create socket: [$errorCode] " . socket_strerror($errorCode));
+			VidiunLog::err("Failed to create socket: [$errorCode] " . socket_strerror($errorCode));
 			return false;
 		}
 
 		if (!socket_connect($engineSocket, self::SCAN_ENGINE_HOST, self::SCAN_ENGINE_PORT))
 		{
 			$errorCode = socket_last_error($engineSocket);
-			KalturaLog::err("Failed to connect to scan engine: [$errorCode] " . socket_strerror($errorCode));
+			VidiunLog::err("Failed to connect to scan engine: [$errorCode] " . socket_strerror($errorCode));
 			socket_close($engineSocket);
 			return false;
 		}
@@ -53,7 +53,7 @@ class SymantecScanDirectEngine extends SymantecScanEngine
 		if ($commandLen != socket_send($engineSocket, $command, $commandLen, 0))
 		{
 			$errorCode = socket_last_error($engineSocket);
-			KalturaLog::err("Failed to send data to socket server: [$errorCode] " . socket_strerror($errorCode));
+			VidiunLog::err("Failed to send data to socket server: [$errorCode] " . socket_strerror($errorCode));
 			socket_close($engineSocket);
 			return false;
 		}
@@ -66,7 +66,7 @@ class SymantecScanDirectEngine extends SymantecScanEngine
 			if ($rcvdBytes === false)
 			{
 				$errorCode = socket_last_error($engineSocket);
-				KalturaLog::err("Failed to recv data from socket server: [$errorCode] " . socket_strerror($errorCode));
+				VidiunLog::err("Failed to recv data from socket server: [$errorCode] " . socket_strerror($errorCode));
 				break;
 			}
 			
@@ -94,7 +94,7 @@ class SymantecScanDirectEngine extends SymantecScanEngine
 		if (!file_exists($filePath))
 		{
 			$errorDescription = 'Source file does not exists ['.$filePath.']';
-			return KalturaVirusScanJobResult::SCAN_ERROR;
+			return VidiunVirusScanJobResult::SCAN_ERROR;
 		}
 		
 		$scanPolicy = $cleanIfInfected ? 'scanrepair' : 'scan';
@@ -116,11 +116,11 @@ Encapsulated: null-body=0
 				continue;		// don't count this as an attempt, since the command wasn't sent to the server
 			}
 		
-			KalturaLog::info("Buffer received from scan engine: $response");
+			VidiunLog::info("Buffer received from scan engine: $response");
 
-			if (!kString::beginsWith($response, 'ICAP/1.0 '))
+			if (!vString::beginsWith($response, 'ICAP/1.0 '))
 			{
-				KalturaLog::err("Response does not start with ICAP/1.0");
+				VidiunLog::err("Response does not start with ICAP/1.0");
 				$scanAttempts++;
 				continue;
 			}
@@ -132,31 +132,31 @@ Encapsulated: null-body=0
 			{
 			case '200':
 			case '204':
-				return KalturaVirusScanJobResult::FILE_IS_CLEAN;
+				return VidiunVirusScanJobResult::FILE_IS_CLEAN;
 				
 			case '201':
-				return KalturaVirusScanJobResult::FILE_WAS_CLEANED;
+				return VidiunVirusScanJobResult::FILE_WAS_CLEANED;
 
 			case '205':
 			case '403':
-				return KalturaVirusScanJobResult::FILE_INFECTED;
+				return VidiunVirusScanJobResult::FILE_INFECTED;
 				
 			case '502':
 				$errorDescription = 'Scan engine failed to access source file ['.$filePath.']';
-				return KalturaVirusScanJobResult::SCAN_ERROR;		// no reason to retry
+				return VidiunVirusScanJobResult::SCAN_ERROR;		// no reason to retry
 				
 			case '539':
 			case '558':
 				$errorDescription = 'No virus scan license';
-				return KalturaVirusScanJobResult::SCAN_ERROR;		// no reason to retry			
+				return VidiunVirusScanJobResult::SCAN_ERROR;		// no reason to retry			
 				
 			default:	// incl: 500 - internal error
-				KalturaLog::err("Got invalid scan status $statusCode");
+				VidiunLog::err("Got invalid scan status $statusCode");
 				$scanAttempts++;				
 				continue;
 			}
 		}
 		
-		return KalturaVirusScanJobResult::SCAN_ERROR;
+		return VidiunVirusScanJobResult::SCAN_ERROR;
 	}
 }

@@ -6,33 +6,33 @@
  * @package plugins.fileSync
  * @subpackage api.services
  */
-class FileSyncService extends KalturaBaseService
+class FileSyncService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
 		parent::initService($serviceId, $serviceName, $actionName);
 
-		// since plugin might be using KS impersonation, we need to validate the requesting
-		// partnerId from the KS and not with the $_POST one
+		// since plugin might be using VS impersonation, we need to validate the requesting
+		// partnerId from the VS and not with the $_POST one
 		if(!FileSyncPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, FileSyncPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, FileSyncPlugin::PLUGIN_NAME);
 	}
 	
 	/**
 	 * List file syce objects by filter and pager
 	 *
 	 * @action list
-	 * @param KalturaFileSyncFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaFileSyncListResponse
+	 * @param VidiunFileSyncFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunFileSyncListResponse
 	 */
-	function listAction(KalturaFileSyncFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunFileSyncFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaFileSyncFilter();
+			$filter = new VidiunFileSyncFilter();
 
 		if (!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		$fileSyncFilter = new FileSyncFilter();
 		
@@ -46,8 +46,8 @@ class FileSyncService extends KalturaBaseService
 		$pager->attachToCriteria($c);
 		$dbList = FileSyncPeer::doSelect($c);
 		
-		$list = KalturaFileSyncArray::fromDbArray($dbList, $this->getResponseProfile());
-		$response = new KalturaFileSyncListResponse();
+		$list = VidiunFileSyncArray::fromDbArray($dbList, $this->getResponseProfile());
+		$response = new VidiunFileSyncListResponse();
 		$response->objects = $list;
 		$response->totalCount = $totalCount;
 		return $response;
@@ -58,24 +58,24 @@ class FileSyncService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id
-	 * @param KalturaFileSync $fileSync
-	 * @return KalturaFileSync
+	 * @param VidiunFileSync $fileSync
+	 * @return VidiunFileSync
 	 * 
 	 * @throws FileSyncErrors::FILESYNC_ID_NOT_FOUND
 	 */
-	function updateAction($id, KalturaFileSync $fileSync)
+	function updateAction($id, VidiunFileSync $fileSync)
 	{
 		$dbFileSync = FileSyncPeer::retrieveByPK($id);
 		if (!$dbFileSync)
 		{
-			throw new KalturaAPIException(FileSyncErrors::FILESYNC_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(FileSyncErrors::FILESYNC_ID_NOT_FOUND, $id);
 		}
 
 		$fileSync->toUpdatableObject($dbFileSync);
 		$dbFileSync->save();
 		$dbFileSync->encrypt();
 		
-		$fileSync = new KalturaFileSync();
+		$fileSync = new VidiunFileSync();
 		$fileSync->fromObject($dbFileSync, $this->getResponseProfile());
 		return $fileSync;
 	}

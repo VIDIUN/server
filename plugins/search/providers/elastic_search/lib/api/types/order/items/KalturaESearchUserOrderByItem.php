@@ -3,10 +3,10 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchUserOrderByItem extends KalturaESearchOrderByItem
+class VidiunESearchUserOrderByItem extends VidiunESearchOrderByItem
 {
     /**
-     *  @var KalturaESearchUserOrderByFieldName
+     *  @var VidiunESearchUserOrderByFieldName
      */
     public $sortField;
 
@@ -15,10 +15,10 @@ class KalturaESearchUserOrderByItem extends KalturaESearchOrderByItem
     );
 
     private static $map_field_enum = array(
-        KalturaESearchUserOrderByFieldName::CREATED_AT => ESearchUserOrderByFieldName::CREATED_AT,
-        KalturaESearchUserOrderByFieldName::UPDATED_AT => ESearchUserOrderByFieldName::UPDATED_AT,
-	KalturaESearchUserOrderByFieldName::SCREEN_NAME => ESearchUserOrderByFieldName::SCREEN_NAME,
-	KalturaESearchUserOrderByFieldName::USER_ID => ESearchUserOrderByFieldName::USER_ID,
+        VidiunESearchUserOrderByFieldName::CREATED_AT => ESearchUserOrderByFieldName::CREATED_AT,
+        VidiunESearchUserOrderByFieldName::UPDATED_AT => ESearchUserOrderByFieldName::UPDATED_AT,
+	VidiunESearchUserOrderByFieldName::SCREEN_NAME => ESearchUserOrderByFieldName::SCREEN_NAME,
+	VidiunESearchUserOrderByFieldName::USER_ID => ESearchUserOrderByFieldName::USER_ID,
     );
 
     public function getMapBetweenObjects()

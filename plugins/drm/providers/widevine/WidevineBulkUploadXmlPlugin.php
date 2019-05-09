@@ -3,7 +3,7 @@
  * Enable widevine flavor ingestion from XML bulk upload
  * @package plugins.widevine
  */
-class WidevineBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPending, IKalturaSchemaContributor, IKalturaBulkUploadXmlHandler
+class WidevineBulkUploadXmlPlugin extends VidiunPlugin implements IVidiunPending, IVidiunSchemaContributor, IVidiunBulkUploadXmlHandler
 {
 	const PLUGIN_NAME = 'widevineBulkUploadXml';
 	const BULK_UPLOAD_XML_PLUGIN_NAME = 'bulkUploadXml';
@@ -14,7 +14,7 @@ class WidevineBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 	private $xmlBulkUploadEngine = null;
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -22,22 +22,22 @@ class WidevineBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$bulkUploadXmlDependency = new KalturaDependency(self::BULK_UPLOAD_XML_PLUGIN_NAME);
-		$widevineDependency = new KalturaDependency(WidevinePlugin::getPluginName());
+		$bulkUploadXmlDependency = new VidiunDependency(self::BULK_UPLOAD_XML_PLUGIN_NAME);
+		$widevineDependency = new VidiunDependency(WidevinePlugin::getPluginName());
 		
 		return array($bulkUploadXmlDependency, $widevineDependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if(
 			$coreType != BulkUploadXmlPlugin::getSchemaTypeCoreValue(XmlSchemaType::BULK_UPLOAD_XML)
 			&&
@@ -144,7 +144,7 @@ class WidevineBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUploadXmlHandler::configureBulkUploadXmlHandler()
+	 * @see IVidiunBulkUploadXmlHandler::configureBulkUploadXmlHandler()
 	 */
 	public function configureBulkUploadXmlHandler(BulkUploadEngineXml $xmlBulkUploadEngine)
 	{
@@ -152,11 +152,11 @@ class WidevineBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUploadXmlHandler::handleItemAdded()
+	 * @see IVidiunBulkUploadXmlHandler::handleItemAdded()
 	 */
-	public function handleItemAdded(KalturaObjectBase $object, SimpleXMLElement $item)
+	public function handleItemAdded(VidiunObjectBase $object, SimpleXMLElement $item)
 	{
-		if(!($object instanceof KalturaBaseEntry))
+		if(!($object instanceof VidiunBaseEntry))
 			return;
 		
 		if(!isset($item->widevineAssets))
@@ -169,11 +169,11 @@ class WidevineBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUploadXmlHandler::handleItemUpdated()
+	 * @see IVidiunBulkUploadXmlHandler::handleItemUpdated()
 	 */
-	public function handleItemUpdated(KalturaObjectBase $object, SimpleXMLElement $item)
+	public function handleItemUpdated(VidiunObjectBase $object, SimpleXMLElement $item)
 	{
-		if(!($object instanceof KalturaBaseEntry))
+		if(!($object instanceof VidiunBaseEntry))
 			return;
 		
 		if(!$item->widevineAssets)
@@ -182,31 +182,31 @@ class WidevineBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 		if(empty($item->widevineAssets->widevineAsset))
 			return;
 		
-		$action = KBulkUploadEngine::$actionsMap[KalturaBulkUploadAction::UPDATE];
+		$action = VBulkUploadEngine::$actionsMap[VidiunBulkUploadAction::UPDATE];
 		
 		if(isset($item->widevineAssets->action))
 			$action = strtolower($item->widevineAssets->action);
 			
 		switch ($action)
 		{
-			case KBulkUploadEngine::$actionsMap[KalturaBulkUploadAction::UPDATE]:
+			case VBulkUploadEngine::$actionsMap[VidiunBulkUploadAction::UPDATE]:
 				$this->handleWidevineAssets($object->id, $item);
 				break;
 			default:
-				throw new KalturaBatchException("widevineAssets->action: $action is not supported", KalturaBatchJobAppErrors::BULK_ACTION_NOT_SUPPORTED);
+				throw new VidiunBatchException("widevineAssets->action: $action is not supported", VidiunBatchJobAppErrors::BULK_ACTION_NOT_SUPPORTED);
 		}		
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUploadXmlHandler::handleItemDeleted()
+	 * @see IVidiunBulkUploadXmlHandler::handleItemDeleted()
 	 */
-	public function handleItemDeleted(KalturaObjectBase $object, SimpleXMLElement $item)
+	public function handleItemDeleted(VidiunObjectBase $object, SimpleXMLElement $item)
 	{
 		// No handling required
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaConfigurator::getContainerName()
+	 * @see IVidiunConfigurator::getContainerName()
 	*/
 	public function getContainerName()
 	{
@@ -215,11 +215,11 @@ class WidevineBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 	
 	private function handleWidevineAssets($entryId, SimpleXMLElement $item)
 	{	
-		KalturaLog::debug("Handling widevine assets for entry: ".$entryId);
+		VidiunLog::debug("Handling widevine assets for entry: ".$entryId);
 							
 		$pluginsErrorResults = array();
 		
-		KBatchBase::impersonate($this->xmlBulkUploadEngine->getCurrentPartnerId());
+		VBatchBase::impersonate($this->xmlBulkUploadEngine->getCurrentPartnerId());
 		
 		foreach($item->widevineAssets->widevineAsset as $widevineAsset)
 		{
@@ -229,12 +229,12 @@ class WidevineBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 			}
 			catch (Exception $e)
 			{
-				KalturaLog::err($this->getContainerName() . ' failed: ' . $e->getMessage());
+				VidiunLog::err($this->getContainerName() . ' failed: ' . $e->getMessage());
 				$pluginsErrorResults[] = $e->getMessage();
 			}
 		}	
 
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 						
 		if(count($pluginsErrorResults))
 			throw new Exception(implode(', ', $pluginsErrorResults));					
@@ -249,13 +249,13 @@ class WidevineBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 	 */
 	private function handleWidevineAsset($entryId, SimpleXMLElement $widevineAssetElm)
 	{		
-		$widevineAsset = new KalturaWidevineFlavorAsset();
+		$widevineAsset = new VidiunWidevineFlavorAsset();
 		$widevineAsset->widevineAssetId = $widevineAssetElm->widevineAssetId;
 		
 		if($widevineAssetElm->widevineDistributionStartDate)
-			$widevineAsset->widevineDistributionStartDate = KBulkUploadEngine::parseFormatedDate((string)$widevineAssetElm->widevineDistributionStartDate);
+			$widevineAsset->widevineDistributionStartDate = VBulkUploadEngine::parseFormatedDate((string)$widevineAssetElm->widevineDistributionStartDate);
 		if($widevineAssetElm->widevineDistributionEndDate)
-			$widevineAsset->widevineDistributionEndDate = KBulkUploadEngine::parseFormatedDate((string)$widevineAssetElm->widevineDistributionEndDate);
+			$widevineAsset->widevineDistributionEndDate = VBulkUploadEngine::parseFormatedDate((string)$widevineAssetElm->widevineDistributionEndDate);
 					 
 		$flavorAssetId = null;
 		if(isset($widevineAssetElm['flavorAssetId']))
@@ -264,9 +264,9 @@ class WidevineBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 		if(!$flavorAssetId)
 		{
 			$flavorParamsId = $widevineAssetElm->flavorParamsId;
-			$filter = new KalturaAssetFilter();
+			$filter = new VidiunAssetFilter();
 			$filter->entryIdEqual = $entryId;
-			$flavorAssetList = KBatchBase::$kClient->flavorAsset->listAction($filter);	
+			$flavorAssetList = VBatchBase::$vClient->flavorAsset->listAction($filter);	
 			if($flavorAssetList->objects)
 			{
 				foreach ($flavorAssetList->objects as $flavorAsset) 
@@ -279,7 +279,7 @@ class WidevineBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 
 		if($flavorAssetId)
 		{
-			KBatchBase::$kClient->flavorAsset->update($flavorAssetId, $widevineAsset);
+			VBatchBase::$vClient->flavorAsset->update($flavorAssetId, $widevineAsset);
 		}
 	}
 }

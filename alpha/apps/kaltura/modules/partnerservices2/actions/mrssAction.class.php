@@ -30,7 +30,7 @@ class mrssAction extends defPartnerservices2Action
 	// the ticket will be ignored and the security system will be implemented inside the function
 	protected function ticketType()	{		return self::REQUIED_TICKET_NONE;	}
 	
-	protected function needKuserFromPuser()	{		return self::KUSER_DATA_NO_KUSER;	}
+	protected function needVuserFromPuser()	{		return self::VUSER_DATA_NO_VUSER;	}
 
 	protected function setExtraFilters ( entryFilter &$fields_set )	
 	{
@@ -47,14 +47,14 @@ class mrssAction extends defPartnerservices2Action
 	 * Because the caller is not a partner but rather a 3rd party provider that wishs to query our system,
 	 * The security is slightly different and the respons is in the format of mRss which is related to entries only.
 	 */
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL2;
 		
 		header ( "Content-Type: text/xml; charset=utf-8" );
 		
 		// TODO -  verify permissions for viewing lists
-		// validate the ks of the caller 
+		// validate the vs of the caller 
 		$code = $this->getP ( "code" );
 		if ( $code != 'fsalh5423a43g' ) 
 		{	
@@ -72,7 +72,7 @@ class mrssAction extends defPartnerservices2Action
 
 		$offset = ($page-1)* $limit;
 
-//		kuserPeer::setUseCriteriaFilter( false );
+//		vuserPeer::setUseCriteriaFilter( false );
 		if ( $operated_partner_id )
 		{
 			entryPeer::setUseCriteriaFilter( true );
@@ -86,11 +86,11 @@ class mrssAction extends defPartnerservices2Action
 		// 2460 - dorimedia
 		$partner_list = array ( 593, 2460 );
 		 
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$c->addAnd ( entryPeer::STATUS , entryStatus::READY );
 		
-		// for now display only entries that are part of the kaltura network
-//		$c->addAnd ( entryPeer::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK );
+		// for now display only entries that are part of the vidiun network
+//		$c->addAnd ( entryPeer::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK );
 		
 		// filter
 		$filter = new entryFilter(  );
@@ -113,7 +113,7 @@ class mrssAction extends defPartnerservices2Action
 
 		if ( $detailed )
 		{
-			// for some entry types - there are no kshow or kusers - don't join even when detailed
+			// for some entry types - there are no vshow or vusers - don't join even when detailed
 			if ( $this->joinOnDetailed () )	$list = entryPeer::doSelectJoinAll( $c );
 			else $list = entryPeer::doSelect( $c );
 			$level = objectWrapperBase::DETAIL_LEVEL_DETAILED ;
@@ -127,16 +127,16 @@ class mrssAction extends defPartnerservices2Action
 		
 $end_1 = microtime ( true );
 
-		KalturaLog::log ( "benchmark db: [" . ( $end_1 - $start_1 ) . "]" );
+		VidiunLog::log ( "benchmark db: [" . ( $end_1 - $start_1 ) . "]" );
 		
 		$result_count = count ( $list );
 $start_2 = microtime ( true );
-		$mrss_renderer = new kalturaRssRenderer ( kalturaRssRenderer::TYPE_TABOOLA ); 
+		$mrss_renderer = new vidiunRssRenderer ( vidiunRssRenderer::TYPE_TABOOLA ); 
 		$str = $mrss_renderer->renderMrssFeed( $list , $page , $result_count );
 $end_2 = microtime ( true );
 
 
-		KalturaLog::log ( "benchmark render: [" . ( $end_2 - $start_2 ) . "]" );
+		VidiunLog::log ( "benchmark render: [" . ( $end_2 - $start_2 ) . "]" );
 		echo $str;
 		
 		// don't return to the rest of the implementation - the base class manipulates the content.

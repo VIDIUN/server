@@ -2,14 +2,14 @@
 /**
  * @package plugins.thumbCuePoint
  */
-class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint, IKalturaTypeExtender, IKalturaEventConsumers, IKalturaCuePointXmlParser
+class ThumbCuePointPlugin extends BaseCuePointPlugin implements IVidiunCuePoint, IVidiunTypeExtender, IVidiunEventConsumers, IVidiunCuePointXmlParser
 {
 	const PLUGIN_NAME = 'thumbCuePoint';
 	const CUE_POINT_VERSION_MAJOR = 1;
 	const CUE_POINT_VERSION_MINOR = 0;
 	const CUE_POINT_VERSION_BUILD = 0;
 	const CUE_POINT_NAME = 'cuePoint';
-	const THUMB_CUE_POINT_MANAGER_CLASS = 'kThumbCuePointManager';
+	const THUMB_CUE_POINT_MANAGER_CLASS = 'vThumbCuePointManager';
 	
 	public static function getPluginName()
 	{
@@ -17,7 +17,7 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -26,7 +26,7 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -46,7 +46,7 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -56,21 +56,21 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$cuePointVersion = new KalturaVersion(
+		$cuePointVersion = new VidiunVersion(
 			self::CUE_POINT_VERSION_MAJOR,
 			self::CUE_POINT_VERSION_MINOR,
 			self::CUE_POINT_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(self::CUE_POINT_NAME, $cuePointVersion);
+		$dependency = new VidiunDependency(self::CUE_POINT_NAME, $cuePointVersion);
 		return array($dependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaTypeExtender::getExtendedTypes()
+	 * @see IVidiunTypeExtender::getExtendedTypes()
 	 */
 	public static function getExtendedTypes($baseClass, $enumValue)
 	{
@@ -85,21 +85,21 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KalturaThumbAsset' && $enumValue == self::getAssetTypeCoreValue(timedThumbAssetType::TIMED_THUMB_ASSET))
-			return new KalturaTimedThumbAsset();
+		if($baseClass == 'VidiunThumbAsset' && $enumValue == self::getAssetTypeCoreValue(timedThumbAssetType::TIMED_THUMB_ASSET))
+			return new VidiunTimedThumbAsset();
 			
-		if($baseClass == 'KalturaCuePoint' && $enumValue == self::getCuePointTypeCoreValue(ThumbCuePointType::THUMB))
-			return new KalturaThumbCuePoint();
+		if($baseClass == 'VidiunCuePoint' && $enumValue == self::getCuePointTypeCoreValue(ThumbCuePointType::THUMB))
+			return new VidiunThumbCuePoint();
 		
 		return null;
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -113,12 +113,12 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 /* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
 		//TBD add thumb asset support to xsd
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if(
 			$coreType != SchemaType::SYNDICATION
 			&&
@@ -138,7 +138,7 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 				<xs:sequence>
 					<xs:element name="title" minOccurs="1" maxOccurs="1" type="xs:string"> </xs:element>
 					<xs:element name="description" minOccurs="1" maxOccurs="1" type="xs:string"> </xs:element>
-					<xs:element name="subType" minOccurs="0" maxOccurs="1" type="KalturaThumbCuePointSubType">
+					<xs:element name="subType" minOccurs="0" maxOccurs="1" type="VidiunThumbCuePointSubType">
 						<xs:annotation>
 							<xs:documentation>Indicates the thumb cue point sub type 1 = Slide 2 = Chapter</xs:documentation>
 						</xs:annotation>
@@ -170,12 +170,12 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePoint::getCuePointTypeCoreValue()
+	 * @see IVidiunCuePoint::getCuePointTypeCoreValue()
 	 */
 	public static function getCuePointTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('CuePointType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('CuePointType', $value);
 	}
 	
 	/**
@@ -183,8 +183,8 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	 */
 	public static function getAssetTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('assetType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('assetType', $value);
 	}
 
 	/**
@@ -192,8 +192,8 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	 */
 	public static function getBaseEntryCloneOptionsCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BaseEntryCloneOptions', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BaseEntryCloneOptions', $value);
 	}
 	
 	/**
@@ -201,11 +201,11 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::parseXml()
+	 * @see IVidiunCuePointXmlParser::parseXml()
 	 */
 	public static function parseXml(SimpleXMLElement $scene, $partnerId, CuePoint $cuePoint = null)
 	{
@@ -213,7 +213,7 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 			return $cuePoint;
 			
 		if(!$cuePoint)
-			$cuePoint = kCuePointManager::parseXml($scene, $partnerId, new ThumbCuePoint());
+			$cuePoint = vCuePointManager::parseXml($scene, $partnerId, new ThumbCuePoint());
 			
 		if(!($cuePoint instanceof ThumbCuePoint))
 			return null;
@@ -222,7 +222,7 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::generateXml()
+	 * @see IVidiunCuePointXmlParser::generateXml()
 	 */
 	public static function generateXml(CuePoint $cuePoint, SimpleXMLElement $scenes, SimpleXMLElement $scene = null)
 	{
@@ -230,13 +230,13 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 			return $scene;
 			
 		if(!$scene)
-			$scene = kCuePointManager::generateCuePointXml($cuePoint, $scenes->addChild('scene-thumb-cue-point'));
+			$scene = vCuePointManager::generateCuePointXml($cuePoint, $scenes->addChild('scene-thumb-cue-point'));
 		
 		if($cuePoint->getEndTime())
-			$scene->addChild('sceneEndTime', kXml::integerToTime($cuePoint->getEndTime()));
+			$scene->addChild('sceneEndTime', vXml::integerToTime($cuePoint->getEndTime()));
 	
-		$scene->addChild('title', kMrssManager::stringToSafeXml($cuePoint->getName()));
-		$scene->addChild('description', kMrssManager::stringToSafeXml($cuePoint->getText()));
+		$scene->addChild('title', vMrssManager::stringToSafeXml($cuePoint->getName()));
+		$scene->addChild('description', vMrssManager::stringToSafeXml($cuePoint->getText()));
 		$scene->addChild('subType', $cuePoint->getSubType());
 		$scene->addChild('thumbAssetId', $cuePoint->getAssetId());
 		
@@ -244,7 +244,7 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::syndicate()
+	 * @see IVidiunCuePointXmlParser::syndicate()
 	 */
 	public static function syndicate(CuePoint $cuePoint, SimpleXMLElement $scenes, SimpleXMLElement $scene = null)
 	{
@@ -252,13 +252,13 @@ class ThumbCuePointPlugin extends BaseCuePointPlugin implements IKalturaCuePoint
 			return $scene;
 			
 		if(!$scene)
-			$scene = kCuePointManager::syndicateCuePointXml($cuePoint, $scenes->addChild('scene-thumb-cue-point'));
+			$scene = vCuePointManager::syndicateCuePointXml($cuePoint, $scenes->addChild('scene-thumb-cue-point'));
 		
 		if($cuePoint->getEndTime())
-			$scene->addChild('sceneEndTime', kXml::integerToTime($cuePoint->getEndTime()));
+			$scene->addChild('sceneEndTime', vXml::integerToTime($cuePoint->getEndTime()));
 	
-		$scene->addChild('title', kMrssManager::stringToSafeXml($cuePoint->getName()));
-		$scene->addChild('description', kMrssManager::stringToSafeXml($cuePoint->getText()));
+		$scene->addChild('title', vMrssManager::stringToSafeXml($cuePoint->getName()));
+		$scene->addChild('description', vMrssManager::stringToSafeXml($cuePoint->getText()));
 		$scene->addChild('subType', $cuePoint->getSubType());
 		$scene->addChild('thumbAssetId', $cuePoint->getAssetId());
 			

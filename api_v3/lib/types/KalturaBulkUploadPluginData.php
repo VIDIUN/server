@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBulkUploadPluginData extends KalturaObject
+class VidiunBulkUploadPluginData extends VidiunObject
 {
     /**
      * @var string

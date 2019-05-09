@@ -3,7 +3,7 @@
  * @package plugins.externalMedia
  * @subpackage model.enum
  */
-class EsearchMediaEntryExportObjectType implements IKalturaPluginEnum, ExportObjectType
+class EsearchMediaEntryExportObjectType implements IVidiunPluginEnum, ExportObjectType
 {
 	const ESEARCH_MEDIA = 'esearchMedia';
 	

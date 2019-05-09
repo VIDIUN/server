@@ -3,7 +3,7 @@
  * @package plugins.voicebase
  * @subpackage lib.enum
  */
-class VoicebaseTranscriptProviderType implements IKalturaPluginEnum, TranscriptProviderType
+class VoicebaseTranscriptProviderType implements IVidiunPluginEnum, TranscriptProviderType
 {
 	const VOICEBASE = 'Voicebase';
 	

@@ -3,12 +3,12 @@
 /**
  * Auto-generated class.
  * 
- * Used to search KalturaPlaylist attributes. Use KalturaPlaylistMatchAttribute enum to provide attribute name.
+ * Used to search VidiunPlaylist attributes. Use VidiunPlaylistMatchAttribute enum to provide attribute name.
 */
-class KalturaPlaylistMatchAttributeCondition extends KalturaSearchMatchAttributeCondition
+class VidiunPlaylistMatchAttributeCondition extends VidiunSearchMatchAttributeCondition
 {
 	/**
-	 * @var KalturaPlaylistMatchAttribute
+	 * @var VidiunPlaylistMatchAttribute
 	 */
 	public $attribute;
 

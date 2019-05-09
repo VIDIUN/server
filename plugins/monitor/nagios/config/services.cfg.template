@@ -1,231 +1,145 @@
 
 define	service{
 		use						local-service
-		hostgroup_name					kaltura-api
-		service_description				Kaltura Host Ping - V2
-		check_command					kaltura-host-ping-ps2
+		hostgroup_name					vidiun-api
+		service_description				Vidiun Host Ping - V2
+		check_command					vidiun-host-ping-ps2
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		hostgroup_name					kaltura-api
-		service_description				Kaltura Host Ping - V3
-		check_command					kaltura-host-ping
+		hostgroup_name					vidiun-api
+		service_description				Vidiun Host Ping - V3
+		check_command					vidiun-host-ping
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		hostgroup_name					kaltura-api
-		service_description				Kaltura Host Ping Database
-		check_command					kaltura-host-ping-db
+		hostgroup_name					vidiun-api
+		service_description				Vidiun Host Ping Database
+		check_command					vidiun-host-ping-db
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Kaltura Playlist Execute
-		check_command					kaltura-host-execute-playlist
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Vidiun Playlist Execute
+		check_command					vidiun-host-execute-playlist
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Kaltura Session Start - V3
-		check_command					kaltura-host-start-session
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Vidiun Session Start - V3
+		check_command					vidiun-host-start-session
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Kaltura Widget Session Start - V2
-		check_command					kaltura-host-start-widget-session-ps2
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Vidiun Widget Session Start - V2
+		check_command					vidiun-host-start-widget-session-ps2
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Kaltura Dynamic Player Request - V3
-		check_command					kaltura-host-kdp-multi-request
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Vidiun Dynamic Player Request - V3
+		check_command					vidiun-host-vdp-multi-request
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Kaltura HTML5 Player Request - V3
-		check_command					kaltura-host-html5-multi-request
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Vidiun HTML5 Player Request - V3
+		check_command					vidiun-host-html5-multi-request
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		hostgroup_name					kaltura-batch
-		service_description				Kaltura Host Scheduler Status
-		check_command					kaltura-host-scheduler-status
+		hostgroup_name					vidiun-batch
+		service_description				Vidiun Host Scheduler Status
+		check_command					vidiun-host-scheduler-status
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		hostgroup_name					kaltura-sphinx
-		servicegroups					kaltura-host-sphinx
-		service_description				Kaltura Host Sphinx Update
-		check_command					kaltura-host-sphinx-update
+		hostgroup_name					vidiun-sphinx
+		servicegroups					vidiun-host-sphinx
+		service_description				Vidiun Host Sphinx Update
+		check_command					vidiun-host-sphinx-update
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		hostgroup_name					kaltura-sphinx
-		servicegroups					kaltura-host-sphinx
-		service_description				Kaltura Host Sphinx Inegrity Entry
-		check_command					kaltura-host-sphinx-inegrity-entry
+		hostgroup_name					vidiun-sphinx
+		servicegroups					vidiun-host-sphinx
+		service_description				Vidiun Host Sphinx Inegrity Entry
+		check_command					vidiun-host-sphinx-inegrity-entry
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		hostgroup_name					kaltura-sphinx
-		servicegroups					kaltura-host-sphinx
-		service_description				Kaltura Host Sphinx Inegrity Category
-		check_command					kaltura-host-sphinx-inegrity-category
+		hostgroup_name					vidiun-sphinx
+		servicegroups					vidiun-host-sphinx
+		service_description				Vidiun Host Sphinx Inegrity Category
+		check_command					vidiun-host-sphinx-inegrity-category
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		hostgroup_name					kaltura-sphinx
-		servicegroups					kaltura-host-sphinx
-		service_description				Kaltura Host Sphinx Inegrity User
-		check_command					kaltura-host-sphinx-inegrity-user
+		hostgroup_name					vidiun-sphinx
+		servicegroups					vidiun-host-sphinx
+		service_description				Vidiun Host Sphinx Inegrity User
+		check_command					vidiun-host-sphinx-inegrity-user
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		hostgroup_name					kaltura-sphinx
-		servicegroups					kaltura-host-sphinx
-		service_description				Kaltura Host Sphinx Inegrity Cue-Point
-		check_command					kaltura-host-sphinx-inegrity-cue-point
+		hostgroup_name					vidiun-sphinx
+		servicegroups					vidiun-host-sphinx
+		service_description				Vidiun Host Sphinx Inegrity Cue-Point
+		check_command					vidiun-host-sphinx-inegrity-cue-point
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		hostgroup_name					kaltura-sphinx
-		servicegroups					kaltura-host-sphinx
-		service_description				Kaltura Host Sphinx Inegrity Entry-Distribution
-		check_command					kaltura-host-sphinx-inegrity-entry-distribution
+		hostgroup_name					vidiun-sphinx
+		servicegroups					vidiun-host-sphinx
+		service_description				Vidiun Host Sphinx Inegrity Entry-Distribution
+		check_command					vidiun-host-sphinx-inegrity-entry-distribution
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		hostgroup_name					kaltura-sphinx
-		servicegroups					kaltura-host-sphinx
-		service_description				Kaltura Host Sphinx Inegrity Caption-Item
-		check_command					kaltura-host-sphinx-inegrity-caption_item
+		hostgroup_name					vidiun-sphinx
+		servicegroups					vidiun-host-sphinx
+		service_description				Vidiun Host Sphinx Inegrity Caption-Item
+		check_command					vidiun-host-sphinx-inegrity-caption_item
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		hostgroup_name					kaltura-sphinx
-		servicegroups					kaltura-host-sphinx
-		service_description				Kaltura Host Sphinx Inegrity Tag
-		check_command					kaltura-host-sphinx-inegrity-tag
-		notifications_enabled			1
-}
-
-
-		
-		
-		
-define	service{
-		use						local-service
-		hostgroup_name					kaltura-dwh
-		servicegroups					kaltura-host-dwh
-		service_description				Kaltura Host DWH File Events
-		check_command					kaltura-host-dwh-file-events
-		notifications_enabled			1
-}
-		
-define	service{
-		use						local-service
-		hostgroup_name					kaltura-dwh
-		servicegroups					kaltura-host-dwh
-		service_description				Kaltura Host DWH Aggregations Completed
-		check_command					kaltura-host-dwh-aggr-complete
-		notifications_enabled			1
-}
-		
-define	service{
-		use						local-service
-		hostgroup_name					kaltura-dwh
-		servicegroups					kaltura-host-dwh
-		service_description				Kaltura Host DWH Locked Processes
-		check_command					kaltura-host-dwh-proc-lock
-		notifications_enabled			1
-}
-		
-
-define	service{
-		use						local-service
-		hostgroup_name					kaltura-dwh
-		servicegroups					kaltura-host-dwh
-		service_description				Kaltura Host DWH Failed Cycle Generating Registered
-		check_command					kaltura-host-dwh-failed-cycle-generating-registered
-		notifications_enabled			1
-}
-
-define	service{
-		use						local-service
-		hostgroup_name					kaltura-dwh
-		servicegroups					kaltura-host-dwh
-		service_description				Kaltura Host DWH Failed Cycle Generated Processed Loaded
-		check_command					kaltura-host-dwh-failed-cycle-generated-processed-loaded
-		notifications_enabled			1
-}
-
-define	service{
-		use						local-service
-		hostgroup_name					kaltura-dwh
-		servicegroups					kaltura-host-dwh
-		service_description				Kaltura Host DWH Failed Cycle Running
-		check_command					kaltura-host-dwh-failed-cycle-running
-		notifications_enabled			1
-}
-
-define	service{
-		use						local-service
-		hostgroup_name					kaltura-dwh
-		servicegroups					kaltura-host-dwh
-		service_description				Kaltura Host DWH Failed Cycle Loading
-		check_command					kaltura-host-dwh-failed-cycle-loading
-		notifications_enabled			1
-}
-
-define	service{
-		use						local-service
-		hostgroup_name					kaltura-dwh
-		servicegroups					kaltura-host-dwh
-		service_description				Kaltura Host DWH Failed Cycle Transfering
-		check_command					kaltura-host-dwh-failed-cycle-transfering
-		notifications_enabled			1
-}
-
-define	service{
-		use						local-service
-		hostgroup_name					kaltura-dwh
-		servicegroups					kaltura-host-dwh
-		service_description				Kaltura Host DWH Failed Cycle Generating
-		check_command					kaltura-host-dwh-failed-cycle-generating
+		hostgroup_name					vidiun-sphinx
+		servicegroups					vidiun-host-sphinx
+		service_description				Vidiun Host Sphinx Inegrity Tag
+		check_command					vidiun-host-sphinx-inegrity-tag
 		notifications_enabled			1
 }
 
@@ -235,334 +149,420 @@ define	service{
 		
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Convert - on2
-		check_command					kaltura-batch-queue-size-convert-on2
+		hostgroup_name					vidiun-dwh
+		servicegroups					vidiun-host-dwh
+		service_description				Vidiun Host DWH File Events
+		check_command					vidiun-host-dwh-file-events
 		notifications_enabled			1
 }
+		
+define	service{
+		use						local-service
+		hostgroup_name					vidiun-dwh
+		servicegroups					vidiun-host-dwh
+		service_description				Vidiun Host DWH Aggregations Completed
+		check_command					vidiun-host-dwh-aggr-complete
+		notifications_enabled			1
+}
+		
+define	service{
+		use						local-service
+		hostgroup_name					vidiun-dwh
+		servicegroups					vidiun-host-dwh
+		service_description				Vidiun Host DWH Locked Processes
+		check_command					vidiun-host-dwh-proc-lock
+		notifications_enabled			1
+}
+		
+
+define	service{
+		use						local-service
+		hostgroup_name					vidiun-dwh
+		servicegroups					vidiun-host-dwh
+		service_description				Vidiun Host DWH Failed Cycle Generating Registered
+		check_command					vidiun-host-dwh-failed-cycle-generating-registered
+		notifications_enabled			1
+}
+
+define	service{
+		use						local-service
+		hostgroup_name					vidiun-dwh
+		servicegroups					vidiun-host-dwh
+		service_description				Vidiun Host DWH Failed Cycle Generated Processed Loaded
+		check_command					vidiun-host-dwh-failed-cycle-generated-processed-loaded
+		notifications_enabled			1
+}
+
+define	service{
+		use						local-service
+		hostgroup_name					vidiun-dwh
+		servicegroups					vidiun-host-dwh
+		service_description				Vidiun Host DWH Failed Cycle Running
+		check_command					vidiun-host-dwh-failed-cycle-running
+		notifications_enabled			1
+}
+
+define	service{
+		use						local-service
+		hostgroup_name					vidiun-dwh
+		servicegroups					vidiun-host-dwh
+		service_description				Vidiun Host DWH Failed Cycle Loading
+		check_command					vidiun-host-dwh-failed-cycle-loading
+		notifications_enabled			1
+}
+
+define	service{
+		use						local-service
+		hostgroup_name					vidiun-dwh
+		servicegroups					vidiun-host-dwh
+		service_description				Vidiun Host DWH Failed Cycle Transfering
+		check_command					vidiun-host-dwh-failed-cycle-transfering
+		notifications_enabled			1
+}
+
+define	service{
+		use						local-service
+		hostgroup_name					vidiun-dwh
+		servicegroups					vidiun-host-dwh
+		service_description				Vidiun Host DWH Failed Cycle Generating
+		check_command					vidiun-host-dwh-failed-cycle-generating
+		notifications_enabled			1
+}
+
+
+		
+		
+		
+define	service{
+		use						local-service
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Convert - on2
+		check_command					vidiun-batch-queue-size-convert-on2
+		notifications_enabled			1
+}
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Convert - ffmpeg
-		check_command					kaltura-batch-queue-size-convert-ffmpeg
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Convert - ffmpeg
+		check_command					vidiun-batch-queue-size-convert-ffmpeg
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Import
-		check_command					kaltura-batch-queue-size-import
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Import
+		check_command					vidiun-batch-queue-size-import
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Delete
-		check_command					kaltura-batch-queue-size-delete
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Delete
+		check_command					vidiun-batch-queue-size-delete
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Bulk Upload
-		check_command					kaltura-batch-queue-size-bulk-upload
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Bulk Upload
+		check_command					vidiun-batch-queue-size-bulk-upload
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Convert Profile
-		check_command					kaltura-batch-queue-size-convert-profile
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Convert Profile
+		check_command					vidiun-batch-queue-size-convert-profile
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Post Convert
-		check_command					kaltura-batch-queue-size-post-convert
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Post Convert
+		check_command					vidiun-batch-queue-size-post-convert
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Extract Media
-		check_command					kaltura-batch-queue-size-extract-media
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Extract Media
+		check_command					vidiun-batch-queue-size-extract-media
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Mail
-		check_command					kaltura-batch-queue-size-mail
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Mail
+		check_command					vidiun-batch-queue-size-mail
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Notification
-		check_command					kaltura-batch-queue-size-notification
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Notification
+		check_command					vidiun-batch-queue-size-notification
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Bulk Download
-		check_command					kaltura-batch-queue-size-bulk-download
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Bulk Download
+		check_command					vidiun-batch-queue-size-bulk-download
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Provision Provide
-		check_command					kaltura-batch-queue-size-provision-provide
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Provision Provide
+		check_command					vidiun-batch-queue-size-provision-provide
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Convert Collection
-		check_command					kaltura-batch-queue-size-convert-collection
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Convert Collection
+		check_command					vidiun-batch-queue-size-convert-collection
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Storage Export
-		check_command					kaltura-batch-queue-size-storage-export
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Storage Export
+		check_command					vidiun-batch-queue-size-storage-export
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Provision Delete
-		check_command					kaltura-batch-queue-size-provision-delete
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Provision Delete
+		check_command					vidiun-batch-queue-size-provision-delete
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Storage Delete
-		check_command					kaltura-batch-queue-size-storage-delete
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Storage Delete
+		check_command					vidiun-batch-queue-size-storage-delete
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Metadata Transform
-		check_command					kaltura-batch-queue-size-metadata-transform
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Metadata Transform
+		check_command					vidiun-batch-queue-size-metadata-transform
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size FileSync Import
-		check_command					kaltura-batch-queue-size-filesync-import
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size FileSync Import
+		check_command					vidiun-batch-queue-size-filesync-import
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Capture Thumbnail
-		check_command					kaltura-batch-queue-size-capture-thumbnail
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Capture Thumbnail
+		check_command					vidiun-batch-queue-size-capture-thumbnail
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Delete File
-		check_command					kaltura-batch-queue-size-delete-file
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Delete File
+		check_command					vidiun-batch-queue-size-delete-file
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Index Category
-		check_command					kaltura-batch-queue-size-index-category
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Index Category
+		check_command					vidiun-batch-queue-size-index-category
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Index Category Entry
-		check_command					kaltura-batch-queue-size-index-category-entry
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Index Category Entry
+		check_command					vidiun-batch-queue-size-index-category-entry
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Index Entry
-		check_command					kaltura-batch-queue-size-index-entry
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Index Entry
+		check_command					vidiun-batch-queue-size-index-entry
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Index Category User
-		check_command					kaltura-batch-queue-size-index-category-user
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Index Category User
+		check_command					vidiun-batch-queue-size-index-category-user
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Index User
-		check_command					kaltura-batch-queue-size-index-user
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Index User
+		check_command					vidiun-batch-queue-size-index-user
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Move Category Entries
-		check_command					kaltura-batch-queue-size-move-category-entries
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Move Category Entries
+		check_command					vidiun-batch-queue-size-move-category-entries
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Copy
-		check_command					kaltura-batch-queue-size-copy
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Copy
+		check_command					vidiun-batch-queue-size-copy
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Parse Caption Asset
-		check_command					kaltura-batch-queue-size-parse-caption-asset
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Parse Caption Asset
+		check_command					vidiun-batch-queue-size-parse-caption-asset
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Distribution Delete
-		check_command					kaltura-batch-queue-size-distribution-delete
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Distribution Delete
+		check_command					vidiun-batch-queue-size-distribution-delete
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Distribution Disable
-		check_command					kaltura-batch-queue-size-distribution-disable
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Distribution Disable
+		check_command					vidiun-batch-queue-size-distribution-disable
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Distribution Enable
-		check_command					kaltura-batch-queue-size-distribution-enable
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Distribution Enable
+		check_command					vidiun-batch-queue-size-distribution-enable
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Distribution Fetch Report
-		check_command					kaltura-batch-queue-size-distribution-fetch-report
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Distribution Fetch Report
+		check_command					vidiun-batch-queue-size-distribution-fetch-report
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Distribution Submit
-		check_command					kaltura-batch-queue-size-distribution-submit
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Distribution Submit
+		check_command					vidiun-batch-queue-size-distribution-submit
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Distribution Update
-		check_command					kaltura-batch-queue-size-distribution-update
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Distribution Update
+		check_command					vidiun-batch-queue-size-distribution-update
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Event Notification
-		check_command					kaltura-batch-queue-size-event-notification
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Event Notification
+		check_command					vidiun-batch-queue-size-event-notification
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Resolve Tags
-		check_command					kaltura-batch-queue-size-resolve-tags
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Resolve Tags
+		check_command					vidiun-batch-queue-size-resolve-tags
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-queue-size
-		service_description				Kaltura Batch Queue Size Virus Scan
-		check_command					kaltura-batch-queue-size-virus-scan
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-queue-size
+		service_description				Vidiun Batch Queue Size Virus Scan
+		check_command					vidiun-batch-queue-size-virus-scan
 		notifications_enabled			1
 }
 
@@ -579,334 +579,334 @@ define	service{
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Convert - on2
-		check_command					kaltura-batch-error-percent-convert-on2
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Convert - on2
+		check_command					vidiun-batch-error-percent-convert-on2
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Convert - ffmpeg
-		check_command					kaltura-batch-error-percent-convert-ffmpeg
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Convert - ffmpeg
+		check_command					vidiun-batch-error-percent-convert-ffmpeg
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Import
-		check_command					kaltura-batch-error-percent-import
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Import
+		check_command					vidiun-batch-error-percent-import
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Delete
-		check_command					kaltura-batch-error-percent-delete
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Delete
+		check_command					vidiun-batch-error-percent-delete
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Bulk Upload
-		check_command					kaltura-batch-error-percent-bulk-upload
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Bulk Upload
+		check_command					vidiun-batch-error-percent-bulk-upload
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Convert Profile
-		check_command					kaltura-batch-error-percent-convert-profile
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Convert Profile
+		check_command					vidiun-batch-error-percent-convert-profile
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Post Convert
-		check_command					kaltura-batch-error-percent-post-convert
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Post Convert
+		check_command					vidiun-batch-error-percent-post-convert
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Extract Media
-		check_command					kaltura-batch-error-percent-extract-media
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Extract Media
+		check_command					vidiun-batch-error-percent-extract-media
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Mail
-		check_command					kaltura-batch-error-percent-mail
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Mail
+		check_command					vidiun-batch-error-percent-mail
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Notification
-		check_command					kaltura-batch-error-percent-notification
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Notification
+		check_command					vidiun-batch-error-percent-notification
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Bulk Download
-		check_command					kaltura-batch-error-percent-bulk-download
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Bulk Download
+		check_command					vidiun-batch-error-percent-bulk-download
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Provision Provide
-		check_command					kaltura-batch-error-percent-provision-provide
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Provision Provide
+		check_command					vidiun-batch-error-percent-provision-provide
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Convert Collection
-		check_command					kaltura-batch-error-percent-convert-collection
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Convert Collection
+		check_command					vidiun-batch-error-percent-convert-collection
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Storage Export
-		check_command					kaltura-batch-error-percent-storage-export
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Storage Export
+		check_command					vidiun-batch-error-percent-storage-export
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Provision Delete
-		check_command					kaltura-batch-error-percent-provision-delete
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Provision Delete
+		check_command					vidiun-batch-error-percent-provision-delete
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Storage Delete
-		check_command					kaltura-batch-error-percent-storage-delete
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Storage Delete
+		check_command					vidiun-batch-error-percent-storage-delete
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Metadata Transform
-		check_command					kaltura-batch-error-percent-metadata-transform
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Metadata Transform
+		check_command					vidiun-batch-error-percent-metadata-transform
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent FileSync Import
-		check_command					kaltura-batch-error-percent-filesync-import
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent FileSync Import
+		check_command					vidiun-batch-error-percent-filesync-import
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Capture Thumbnail
-		check_command					kaltura-batch-error-percent-capture-thumbnail
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Capture Thumbnail
+		check_command					vidiun-batch-error-percent-capture-thumbnail
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Delete File
-		check_command					kaltura-batch-error-percent-delete-file
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Delete File
+		check_command					vidiun-batch-error-percent-delete-file
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Index Category
-		check_command					kaltura-batch-error-percent-index-category
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Index Category
+		check_command					vidiun-batch-error-percent-index-category
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Index Category Entry
-		check_command					kaltura-batch-error-percent-index-category-entry
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Index Category Entry
+		check_command					vidiun-batch-error-percent-index-category-entry
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Index Entry
-		check_command					kaltura-batch-error-percent-index-entry
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Index Entry
+		check_command					vidiun-batch-error-percent-index-entry
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Index Category User
-		check_command					kaltura-batch-error-percent-index-category-user
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Index Category User
+		check_command					vidiun-batch-error-percent-index-category-user
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Index User
-		check_command					kaltura-batch-error-percent-index-user
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Index User
+		check_command					vidiun-batch-error-percent-index-user
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Move Category Entries
-		check_command					kaltura-batch-error-percent-move-category-entries
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Move Category Entries
+		check_command					vidiun-batch-error-percent-move-category-entries
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Copy
-		check_command					kaltura-batch-error-percent-copy
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Copy
+		check_command					vidiun-batch-error-percent-copy
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Parse Caption Asset
-		check_command					kaltura-batch-error-percent-parse-caption-asset
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Parse Caption Asset
+		check_command					vidiun-batch-error-percent-parse-caption-asset
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Distribution Delete
-		check_command					kaltura-batch-error-percent-distribution-delete
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Distribution Delete
+		check_command					vidiun-batch-error-percent-distribution-delete
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Distribution Disable
-		check_command					kaltura-batch-error-percent-distribution-disable
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Distribution Disable
+		check_command					vidiun-batch-error-percent-distribution-disable
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Distribution Enable
-		check_command					kaltura-batch-error-percent-distribution-enable
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Distribution Enable
+		check_command					vidiun-batch-error-percent-distribution-enable
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Distribution Fetch Report
-		check_command					kaltura-batch-error-percent-distribution-fetch-report
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Distribution Fetch Report
+		check_command					vidiun-batch-error-percent-distribution-fetch-report
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Distribution Submit
-		check_command					kaltura-batch-error-percent-distribution-submit
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Distribution Submit
+		check_command					vidiun-batch-error-percent-distribution-submit
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Distribution Update
-		check_command					kaltura-batch-error-percent-distribution-update
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Distribution Update
+		check_command					vidiun-batch-error-percent-distribution-update
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Event Notification
-		check_command					kaltura-batch-error-percent-event-notification
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Event Notification
+		check_command					vidiun-batch-error-percent-event-notification
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Resolve Tags
-		check_command					kaltura-batch-error-percent-resolve-tags
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Resolve Tags
+		check_command					vidiun-batch-error-percent-resolve-tags
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-error-percent
-		service_description				Kaltura Batch Error Percent Virus Scan
-		check_command					kaltura-batch-error-percent-virus-scan
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-error-percent
+		service_description				Vidiun Batch Error Percent Virus Scan
+		check_command					vidiun-batch-error-percent-virus-scan
 		notifications_enabled			1
 }
 
@@ -921,334 +921,334 @@ define	service{
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Convert - on2
-		check_command					kaltura-batch-fatal-percent-convert-on2
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Convert - on2
+		check_command					vidiun-batch-fatal-percent-convert-on2
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Convert - ffmpeg
-		check_command					kaltura-batch-fatal-percent-convert-ffmpeg
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Convert - ffmpeg
+		check_command					vidiun-batch-fatal-percent-convert-ffmpeg
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Import
-		check_command					kaltura-batch-fatal-percent-import
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Import
+		check_command					vidiun-batch-fatal-percent-import
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Delete
-		check_command					kaltura-batch-fatal-percent-delete
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Delete
+		check_command					vidiun-batch-fatal-percent-delete
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Bulk Upload
-		check_command					kaltura-batch-fatal-percent-bulk-upload
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Bulk Upload
+		check_command					vidiun-batch-fatal-percent-bulk-upload
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Convert Profile
-		check_command					kaltura-batch-fatal-percent-convert-profile
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Convert Profile
+		check_command					vidiun-batch-fatal-percent-convert-profile
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Post Convert
-		check_command					kaltura-batch-fatal-percent-post-convert
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Post Convert
+		check_command					vidiun-batch-fatal-percent-post-convert
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Extract Media
-		check_command					kaltura-batch-fatal-percent-extract-media
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Extract Media
+		check_command					vidiun-batch-fatal-percent-extract-media
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Mail
-		check_command					kaltura-batch-fatal-percent-mail
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Mail
+		check_command					vidiun-batch-fatal-percent-mail
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Notification
-		check_command					kaltura-batch-fatal-percent-notification
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Notification
+		check_command					vidiun-batch-fatal-percent-notification
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Bulk Download
-		check_command					kaltura-batch-fatal-percent-bulk-download
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Bulk Download
+		check_command					vidiun-batch-fatal-percent-bulk-download
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Provision Provide
-		check_command					kaltura-batch-fatal-percent-provision-provide
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Provision Provide
+		check_command					vidiun-batch-fatal-percent-provision-provide
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Convert Collection
-		check_command					kaltura-batch-fatal-percent-convert-collection
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Convert Collection
+		check_command					vidiun-batch-fatal-percent-convert-collection
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Storage Export
-		check_command					kaltura-batch-fatal-percent-storage-export
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Storage Export
+		check_command					vidiun-batch-fatal-percent-storage-export
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Provision Delete
-		check_command					kaltura-batch-fatal-percent-provision-delete
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Provision Delete
+		check_command					vidiun-batch-fatal-percent-provision-delete
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Storage Delete
-		check_command					kaltura-batch-fatal-percent-storage-delete
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Storage Delete
+		check_command					vidiun-batch-fatal-percent-storage-delete
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Metadata Transform
-		check_command					kaltura-batch-fatal-percent-metadata-transform
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Metadata Transform
+		check_command					vidiun-batch-fatal-percent-metadata-transform
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent FileSync Import
-		check_command					kaltura-batch-fatal-percent-filesync-import
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent FileSync Import
+		check_command					vidiun-batch-fatal-percent-filesync-import
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Capture Thumbnail
-		check_command					kaltura-batch-fatal-percent-capture-thumbnail
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Capture Thumbnail
+		check_command					vidiun-batch-fatal-percent-capture-thumbnail
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Delete File
-		check_command					kaltura-batch-fatal-percent-delete-file
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Delete File
+		check_command					vidiun-batch-fatal-percent-delete-file
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Index Category
-		check_command					kaltura-batch-fatal-percent-index-category
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Index Category
+		check_command					vidiun-batch-fatal-percent-index-category
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Index Category Entry
-		check_command					kaltura-batch-fatal-percent-index-category-entry
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Index Category Entry
+		check_command					vidiun-batch-fatal-percent-index-category-entry
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Index Entry
-		check_command					kaltura-batch-fatal-percent-index-entry
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Index Entry
+		check_command					vidiun-batch-fatal-percent-index-entry
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Index Category User
-		check_command					kaltura-batch-fatal-percent-index-category-user
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Index Category User
+		check_command					vidiun-batch-fatal-percent-index-category-user
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Index User
-		check_command					kaltura-batch-fatal-percent-index-user
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Index User
+		check_command					vidiun-batch-fatal-percent-index-user
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Move Category Entries
-		check_command					kaltura-batch-fatal-percent-move-category-entries
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Move Category Entries
+		check_command					vidiun-batch-fatal-percent-move-category-entries
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Copy
-		check_command					kaltura-batch-fatal-percent-copy
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Copy
+		check_command					vidiun-batch-fatal-percent-copy
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Parse Caption Asset
-		check_command					kaltura-batch-fatal-percent-parse-caption-asset
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Parse Caption Asset
+		check_command					vidiun-batch-fatal-percent-parse-caption-asset
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Distribution Delete
-		check_command					kaltura-batch-fatal-percent-distribution-delete
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Distribution Delete
+		check_command					vidiun-batch-fatal-percent-distribution-delete
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Distribution Disable
-		check_command					kaltura-batch-fatal-percent-distribution-disable
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Distribution Disable
+		check_command					vidiun-batch-fatal-percent-distribution-disable
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Distribution Enable
-		check_command					kaltura-batch-fatal-percent-distribution-enable
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Distribution Enable
+		check_command					vidiun-batch-fatal-percent-distribution-enable
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Distribution Fetch Report
-		check_command					kaltura-batch-fatal-percent-distribution-fetch-report
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Distribution Fetch Report
+		check_command					vidiun-batch-fatal-percent-distribution-fetch-report
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Distribution Submit
-		check_command					kaltura-batch-fatal-percent-distribution-submit
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Distribution Submit
+		check_command					vidiun-batch-fatal-percent-distribution-submit
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Distribution Update
-		check_command					kaltura-batch-fatal-percent-distribution-update
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Distribution Update
+		check_command					vidiun-batch-fatal-percent-distribution-update
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Event Notification
-		check_command					kaltura-batch-fatal-percent-event-notification
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Event Notification
+		check_command					vidiun-batch-fatal-percent-event-notification
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Resolve Tags
-		check_command					kaltura-batch-fatal-percent-resolve-tags
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Resolve Tags
+		check_command					vidiun-batch-fatal-percent-resolve-tags
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-batch-fatal-percent
-		service_description				Kaltura Batch Fatal Percent Virus Scan
-		check_command					kaltura-batch-fatal-percent-virus-scan
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-batch-fatal-percent
+		service_description				Vidiun Batch Fatal Percent Virus Scan
+		check_command					vidiun-batch-fatal-percent-virus-scan
 		notifications_enabled			1
 }
 
@@ -1259,85 +1259,85 @@ define	service{
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Kaltura Import
-		check_command					kaltura-import
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Vidiun Import
+		check_command					vidiun-import
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Kaltura Convert
-		check_command					kaltura-convert
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Vidiun Convert
+		check_command					vidiun-convert
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Kaltura Capture Thumbnail
-		check_command					kaltura-capture-thumb
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Vidiun Capture Thumbnail
+		check_command					vidiun-capture-thumb
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Kaltura Ingest Single Resource
-		check_command					kaltura-ingest-single
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Vidiun Ingest Single Resource
+		check_command					vidiun-ingest-single
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Kaltura Ingest Multiple Flavors
-		check_command					kaltura-ingest-flavors
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Vidiun Ingest Multiple Flavors
+		check_command					vidiun-ingest-flavors
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Kaltura Ingest Multiple Flavors in Multirequest
-		check_command					kaltura-ingest-flavors-multirequest
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Vidiun Ingest Multiple Flavors in Multirequest
+		check_command					vidiun-ingest-flavors-multirequest
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-bulk-upload
-		service_description				Kaltura Bulk Upload Entries CSV
-		check_command					kaltura-bulk-upload-entries-csv
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-bulk-upload
+		service_description				Vidiun Bulk Upload Entries CSV
+		check_command					vidiun-bulk-upload-entries-csv
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-bulk-upload
-		service_description				Kaltura Bulk Upload Entries XML
-		check_command					kaltura-bulk-upload-entries-xml
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-bulk-upload
+		service_description				Vidiun Bulk Upload Entries XML
+		check_command					vidiun-bulk-upload-entries-xml
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-bulk-upload
-		service_description				Kaltura Bulk Upload Categories CSV
-		check_command					kaltura-bulk-upload-categories-csv
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-bulk-upload
+		service_description				Vidiun Bulk Upload Categories CSV
+		check_command					vidiun-bulk-upload-categories-csv
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-bulk-upload
-		service_description				Kaltura Bulk Upload Users CSV
-		check_command					kaltura-bulk-upload-users-csv
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-bulk-upload
+		service_description				Vidiun Bulk Upload Users CSV
+		check_command					vidiun-bulk-upload-users-csv
 		notifications_enabled			1
 }
 
@@ -1350,71 +1350,71 @@ define	service{
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-play
-		service_description				Kaltura Play RTMP
-		check_command					kaltura-play-rtmp
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-play
+		service_description				Vidiun Play RTMP
+		check_command					vidiun-play-rtmp
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-play
-		service_description				Kaltura Play Apple HTTP
-		check_command					kaltura-play-applehttp
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-play
+		service_description				Vidiun Play Apple HTTP
+		check_command					vidiun-play-applehttp
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-play
-		service_description				Kaltura Play HDS
-		check_command					kaltura-play-hds
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-play
+		service_description				Vidiun Play HDS
+		check_command					vidiun-play-hds
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-play
-		service_description				Kaltura Play RTSP
-		check_command					kaltura-play-rtsp
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-play
+		service_description				Vidiun Play RTSP
+		check_command					vidiun-play-rtsp
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-play
-		service_description				Kaltura Play URL
-		check_command					kaltura-play-url
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-play
+		service_description				Vidiun Play URL
+		check_command					vidiun-play-url
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-play
-		service_description				Kaltura Play HD Network
-		check_command					kaltura-play-hdnetwork
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-play
+		service_description				Vidiun Play HD Network
+		check_command					vidiun-play-hdnetwork
 		notifications_enabled			1
 }
 
 define	service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		servicegroups					kaltura-play
-		service_description				Kaltura Play HTTP
-		check_command					kaltura-play-http
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		servicegroups					vidiun-play
+		service_description				Vidiun Play HTTP
+		check_command					vidiun-play-http
 		notifications_enabled			1
 }
 
 
 define service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
 		service_description			        API v3 log check
 		check_command					check_api_v3_log
 		notifications_enabled			1
@@ -1422,24 +1422,24 @@ define service{
 
 define service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				kaltura Apache Vhost log check
-		check_command					check_kaltura_apache_log
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				vidiun Apache Vhost log check
+		check_command					check_vidiun_apache_log
 		notifications_enabled			1
 }
 
 define service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Check MySQL Connectivity to Kaltura DB
-		check_command					check_kaltura_mysql
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Check MySQL Connectivity to Vidiun DB
+		check_command					check_vidiun_mysql
 		notifications_enabled			1
 }
 
 define service{
 		use						local-service
-		host_name					@KALTURA_VIRTUAL_HOST_NAME@
-		service_description				Check MySQL Connectivity to Kaltura DWH DB
-		check_command					check_kaltura_dwh_mysql
+		host_name					@VIDIUN_VIRTUAL_HOST_NAME@
+		service_description				Check MySQL Connectivity to Vidiun DWH DB
+		check_command					check_vidiun_dwh_mysql
 		notifications_enabled			1
 }

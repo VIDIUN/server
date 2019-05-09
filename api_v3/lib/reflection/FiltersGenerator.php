@@ -18,7 +18,7 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 		
 	}
 	
-	protected function writeBeforeService(KalturaServiceActionItem $serviceReflector)
+	protected function writeBeforeService(VidiunServiceActionItem $serviceReflector)
 	{
 		
 	}
@@ -28,7 +28,7 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 		
 	}
 	
-	protected function writeAfterService(KalturaServiceActionItem $serviceReflector)
+	protected function writeAfterService(VidiunServiceActionItem $serviceReflector)
 	{
 		
 	}
@@ -43,7 +43,7 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 		
 	}
 
-	protected function writeType(KalturaTypeReflector $type)
+	protected function writeType(VidiunTypeReflector $type)
 	{
 		if ($type->isFilterable())
 		{
@@ -53,9 +53,9 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 		}
 	}
 	
-	private function writeFilterForType(KalturaTypeReflector $type)
+	private function writeFilterForType(VidiunTypeReflector $type)
 	{
-		$map = KAutoloader::getClassMap();
+		$map = VAutoloader::getClassMap();
 		if(!isset($map[$type->getType()]))
 			return;
 		
@@ -65,7 +65,7 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 		$filterPath = dirname($map[$type->getType()]) . "/filters/$filterClassName.php";
 		if(file_exists($filterPath))
 		{
-			KalturaLog::notice("Filter already exists [$filterPath]");
+			VidiunLog::notice("Filter already exists [$filterPath]");
 			return;
 		}
 		$this->_txt = "";
@@ -79,7 +79,7 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 				break;			
 		}
 		
-		$partnetClassName = ($parentType ? $parentType->getType() . "Filter" : "KalturaFilter");
+		$partnetClassName = ($parentType ? $parentType->getType() . "Filter" : "VidiunFilter");
 		
 		$subpackage = ($type->getPackage() == 'api' ? '' : 'api.') . 'filters';
 		$this->appendLine("<?php");
@@ -95,13 +95,13 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 	}
 
 	/**
-	 * @param KalturaTypeReflector $type
+	 * @param VidiunTypeReflector $type
 	 * @throws ReflectionException
 	 * @throws Exception
 	 */
-	private function writeBaseFilterForType(KalturaTypeReflector $type)
+	private function writeBaseFilterForType(VidiunTypeReflector $type)
 	{
-		$map = KAutoloader::getClassMap();
+		$map = VAutoloader::getClassMap();
 		if(!isset($map[$type->getType()]))
 			return;
 		
@@ -119,7 +119,7 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 				break;			
 		}
 		
-		$partnetClassName = ($parentType ? $parentType->getType() . "Filter" : ($type->isRelatedFilterable() ? "KalturaRelatedFilter" : "KalturaFilter"));
+		$partnetClassName = ($parentType ? $parentType->getType() . "Filter" : ($type->isRelatedFilterable() ? "VidiunRelatedFilter" : "VidiunFilter"));
 		$relatedService = $this->getRelatedService($type);
 
 		$subpackage = ($type->getPackage() == 'api' ? '' : 'api.') . 'filters.base';
@@ -186,7 +186,7 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 		$this->appendLine("	(");
 		foreach($type->getCurrentProperties() as $prop)
 		{
-			/* @var $prop KalturaPropertyInfo */
+			/* @var $prop VidiunPropertyInfo */
 			$filters = $prop->getFilters();
 			foreach($filters as $filter)
 			{
@@ -237,7 +237,7 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 					$filterProp = $this->formatFilterPropertyName($filter, $prop->getName());
 					$filterPropType = $prop->getType();
 					if($filterPropType == 'bool' || $filter == baseObjectFilter::IS_EMPTY)
-						$filterPropType = 'KalturaNullableBoolean';
+						$filterPropType = 'VidiunNullableBoolean';
 
 					if ($prop->isTime())
 						$filterPropType = 'time';
@@ -300,9 +300,9 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 		$this->writeToFile($filterPath, $this->_txt);
 	}
 	
-	private function writeOrderByEnumForType(KalturaTypeReflector $type)
+	private function writeOrderByEnumForType(VidiunTypeReflector $type)
 	{
-		$map = KAutoloader::getClassMap();
+		$map = VAutoloader::getClassMap();
 		if(!isset($map[$type->getType()]))
 			return;
 		
@@ -316,7 +316,7 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 				break;			
 		}
 		
-		$partnetClassName = ($parentType ? $parentType->getType() . "OrderBy" : "KalturaStringEnum");
+		$partnetClassName = ($parentType ? $parentType->getType() . "OrderBy" : "VidiunStringEnum");
 		
 		$enumName = $type->getType() . "OrderBy";
 		$enumPath = dirname($map[$type->getType()]) . "/filters/orderEnums/$enumName.php";
@@ -469,11 +469,11 @@ class FiltersGenerator extends ClientGeneratorFromPhp
 	}
 
 	/**
-	 * @param KalturaTypeReflector $type
+	 * @param VidiunTypeReflector $type
 	 * @return mixed
 	 * @throws Exception
 	 */
-	private function getRelatedService(KalturaTypeReflector $type)
+	private function getRelatedService(VidiunTypeReflector $type)
 	{
 		$relatedService = '';
 		$relatedServiceType = $type;

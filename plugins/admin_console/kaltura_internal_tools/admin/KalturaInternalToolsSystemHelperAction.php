@@ -1,14 +1,14 @@
 <?php
 /**
- * @package plugins.KalturaInternalTools
+ * @package plugins.VidiunInternalTools
  * @subpackage admin
  */
-class KalturaInternalToolsPluginSystemHelperAction extends KalturaApplicationPlugin
+class VidiunInternalToolsPluginSystemHelperAction extends VidiunApplicationPlugin
 {
 	
 	public function __construct()
 	{
-		$this->action = 'KalturaInternalToolsPluginSystemHelper';
+		$this->action = 'VidiunInternalToolsPluginSystemHelper';
 		$this->label = 'System Helper';
 		$this->rootLabel = 'Developer';
 	}
@@ -23,7 +23,7 @@ class KalturaInternalToolsPluginSystemHelperAction extends KalturaApplicationPlu
 	
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_INTERNAL);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_INTERNAL);
 	}
 
 	
@@ -62,54 +62,54 @@ class KalturaInternalToolsPluginSystemHelperAction extends KalturaApplicationPlu
 		}
 		elseif ( $algo == "base64_3des_encode" )
 		{
-			$encrypted_data = KCryptoWrapper::encrypt_3des($str, $key);
+			$encrypted_data = VCryptoWrapper::encrypt_3des($str, $key);
 			$res = base64_encode($encrypted_data)		;
 			$this->des_key = $key;
 		}
 		elseif ( $algo == "base64_3des_decode" )
 		{
 			$input = base64_decode ($str);
-	   		$decrypted_data = KCryptoWrapper::decrypt_3des($input, $key);
+	   		$decrypted_data = VCryptoWrapper::decrypt_3des($input, $key);
 			$res = ($decrypted_data);
 			$this->des_key = $key;
 		}
-		elseif ( $algo == "ks" )
+		elseif ( $algo == "vs" )
 		{			
-			//$ks = ks::fromSecureString ( $str ); // to do ->api Extension
+			//$vs = vs::fromSecureString ( $str ); // to do ->api Extension
 			$client = Infra_ClientHelper::getClient();
-			$internalToolsPlugin = Kaltura_Client_KalturaInternalTools_Plugin::get($client);
-			$ks = null;
+			$internalToolsPlugin = Vidiun_Client_VidiunInternalTools_Plugin::get($client);
+			$vs = null;
 			
 			try{
-				$ks = $internalToolsPlugin->kalturaInternalToolsSystemHelper->fromSecureString($str);
-				$res = print_r ( $ks , true );
+				$vs = $internalToolsPlugin->vidiunInternalToolsSystemHelper->fromSecureString($str);
+				$res = print_r ( $vs , true );
 			}
-			catch(Kaltura_Client_Exception $e){
+			catch(Vidiun_Client_Exception $e){
 				$res = $e->getMessage();
 			}
 			 
-			if (!is_null($ks))
+			if (!is_null($vs))
 			{
-				$expired = $ks->valid_until;
+				$expired = $vs->valid_until;
 				$expired_str = self::formatThisData($expired); 
 				$now = time();
 				$now_str = self::formatThisData($now);
-				$res .= "\n" . "KS valid until: " . $expired_str . "\nTime now: $now ($now_str)";
+				$res .= "\n" . "VS valid until: " . $expired_str . "\nTime now: $now ($now_str)";
 			} 
 		}
-		elseif ( $algo == "kwid" )
+		elseif ( $algo == "vwid" )
 		{
-			$kwid_str = @base64_decode( $str );
-			if ( ! $kwid_str)
+			$vwid_str = @base64_decode( $str );
+			if ( ! $vwid_str)
 			{
 				// invalid string
 				return "";
 			}
-			$cracked = @explode ( "|" , $kwid_str );
-			$names = array ( "kshow_id" , "partner_id" , "subp_id" , "article_name" , "widget_id" , "hash" );
+			$cracked = @explode ( "|" , $vwid_str );
+			$names = array ( "vshow_id" , "partner_id" , "subp_id" , "article_name" , "widget_id" , "hash" );
 			$combined = array_combine( $names , $cracked );
 			
-			$md5 = md5 ( $combined["kshow_id"]  . $combined["partner_id"]  . $combined["subp_id"] . $combined["article_name"] . 
+			$md5 = md5 ( $combined["vshow_id"]  . $combined["partner_id"]  . $combined["subp_id"] . $combined["article_name"] . 
 				$combined["widget_id"] .  $secret );
 				
 			$combined["secret"] = $secret;
@@ -121,14 +121,14 @@ class KalturaInternalToolsPluginSystemHelperAction extends KalturaApplicationPlu
 		{
 			//$ip_geo = new myIPGeocoder();// to do ->api Extension
 			$client = Infra_ClientHelper::getClient();
-			$internalToolsPlugin = Kaltura_Client_KalturaInternalTools_Plugin::get($client);
+			$internalToolsPlugin = Vidiun_Client_VidiunInternalTools_Plugin::get($client);
 			if ( $str )
 				$remote_addr = $str;
 			else
 			{
-				$remote_addr = $internalToolsPlugin->kalturaInternalToolsSystemHelper->getRemoteAddress();
+				$remote_addr = $internalToolsPlugin->vidiunInternalToolsSystemHelper->getRemoteAddress();
 			} 
-			$res = $internalToolsPlugin->kalturaInternalToolsSystemHelper->iptocountry($remote_addr);
+			$res = $internalToolsPlugin->vidiunInternalToolsSystemHelper->iptocountry($remote_addr);
 		}
 		
 				

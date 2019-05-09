@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage model.enum
  */
-class ReachRuleActionType implements IKalturaPluginEnum, RuleActionType
+class ReachRuleActionType implements IVidiunPluginEnum, RuleActionType
 {
 	const ADD_ENTRY_VENDOR_TASK = 'ADD_ENTRY_VENDOR_TASK';
 	

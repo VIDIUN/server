@@ -3,7 +3,7 @@
  * @package plugins.thumbCuePoint
  * @subpackage api.objects
  */
-class KalturaThumbCuePoint extends KalturaCuePoint
+class VidiunThumbCuePoint extends VidiunCuePoint
 {
 	const MAX_TITLE_LEN = 255;
 
@@ -27,7 +27,7 @@ class KalturaThumbCuePoint extends KalturaCuePoint
 	/**
 	 * The sub type of the ThumbCuePoint
 	 * 
-	 * @var KalturaThumbCuePointSubType
+	 * @var VidiunThumbCuePointSubType
 	 * @filter eq,in
 	 */
 	public $subType;
@@ -46,7 +46,7 @@ class KalturaThumbCuePoint extends KalturaCuePoint
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::getMapBetweenObjects()
+	 * @see VidiunCuePoint::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -54,7 +54,7 @@ class KalturaThumbCuePoint extends KalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -62,7 +62,7 @@ class KalturaThumbCuePoint extends KalturaCuePoint
 			$object_to_fill = new ThumbCuePoint();
 
 		if(strlen ($this->title) > self::MAX_TITLE_LEN)
-			$this->title = kString::alignUtf8String($this->title, self::MAX_TITLE_LEN);
+			$this->title = vString::alignUtf8String($this->title, self::MAX_TITLE_LEN);
 
 		return parent::toInsertableObject($object_to_fill, $props_to_skip);
 	}
@@ -70,7 +70,7 @@ class KalturaThumbCuePoint extends KalturaCuePoint
 
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::validateForInsert()
+	 * @see VidiunCuePoint::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{	
@@ -85,9 +85,9 @@ class KalturaThumbCuePoint extends KalturaCuePoint
 		$timedThumb = assetPeer::retrieveById($this->assetId);
 		
 		if(!$timedThumb)
-			throw new KalturaAPIException(KalturaErrors::ASSET_ID_NOT_FOUND, $this->assetId);
+			throw new VidiunAPIException(VidiunErrors::ASSET_ID_NOT_FOUND, $this->assetId);
 		
 		if($timedThumb->getType() != ThumbCuePointPlugin::getAssetTypeCoreValue(timedThumbAssetType::TIMED_THUMB_ASSET))
-			throw new KalturaAPIException(KalturaErrors::THUMB_ASSET_ID_IS_NOT_TIMED_THUMB_TYPE, $this->assetId);
+			throw new VidiunAPIException(VidiunErrors::THUMB_ASSET_ID_IS_NOT_TIMED_THUMB_TYPE, $this->assetId);
 	}
 }

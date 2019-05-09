@@ -4,7 +4,7 @@
  *  @package server-infra
  *  @subpackage cache
  */
- class kQueryCacheKey
+ class vQueryCacheKey
 {
 	static protected $exists = false;
 	
@@ -13,7 +13,7 @@
 	public function __construct($key)
 	{
 		if (self::$exists)
-			KalturaLog::crit('Unexpected - query cache key already exists');
+			VidiunLog::crit('Unexpected - query cache key already exists');
 		self::$exists = true;
 		$this->key = $key; 
 	}
@@ -34,7 +34,7 @@
 	} 
 }
 
-class kQueryCache 
+class vQueryCache 
 {
 	const CLOCK_SYNC_TIME_MARGIN_SEC = 10;			// When comparing the invalidation key timestamp to the query timestamp, 
 													// the query timestamp should be greater by this value to use the cache
@@ -79,14 +79,14 @@ class kQueryCache
 		
 		self::$s_memcacheInited = true;
 		
-		self::$s_memcacheKeys = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS);
+		self::$s_memcacheKeys = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS);
 		if (self::$s_memcacheKeys === null)
 		{
 			// no reason to init the queries server, the query cache won't be used anyway
 			return;
 		}
 
-		self::$s_memcacheQueries = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_QUERY_CACHE_QUERIES);
+		self::$s_memcacheQueries = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_QUERY_CACHE_QUERIES);
 	}
 	
 	protected static function replaceVariable($formatString, $variableValue)
@@ -191,7 +191,7 @@ class kQueryCache
 
 	public static function getCachedQueryResults(Criteria $criteria, $queryType, $peerClassName, &$cacheKey, &$queryDB)
 	{
-		if (!kConf::get("query_cache_enabled"))
+		if (!vConf::get("query_cache_enabled"))
 		{
 			return null;
 		}
@@ -206,7 +206,7 @@ class kQueryCache
 			
 			if ($criterion->getComparison() == Criteria::IN && !$criterion->getValue())
 			{
-				KalturaLog::debug("kQueryCache: criteria has empty IN, returning empty result set, peer=$peerClassName");
+				VidiunLog::debug("vQueryCache: criteria has empty IN, returning empty result set, peer=$peerClassName");
 				return array();
 			}
 		}
@@ -237,11 +237,11 @@ class kQueryCache
 		
 		$queryStart = microtime(true);
 		$cacheResult = self::$s_memcacheKeys->multiGet($keysToGet);
-		KalturaLog::debug("kQueryCache: keys query took " . (microtime(true) - $queryStart) . " seconds");
+		VidiunLog::debug("vQueryCache: keys query took " . (microtime(true) - $queryStart) . " seconds");
 		
 		if ($cacheResult === false)
 		{
-			KalturaLog::log("kQueryCache: failed to query keys memcache, not using query cache");
+			VidiunLog::log("vQueryCache: failed to query keys memcache, not using query cache");
 			return null;
 		}
 
@@ -263,7 +263,7 @@ class kQueryCache
 		if (array_key_exists(self::DONT_CACHE_KEY, $cacheResult) && 
 			$cacheResult[self::DONT_CACHE_KEY])
 		{
-			KalturaLog::log("kQueryCache: dontCache key is set -> not caching the result");
+			VidiunLog::log("vQueryCache: dontCache key is set -> not caching the result");
 			$cacheQuery = false;
 		}
 		unset($cacheResult[self::DONT_CACHE_KEY]);
@@ -283,7 +283,7 @@ class kQueryCache
 		if (!is_null($maxInvalidationTime) && 
 			$currentTime < $maxInvalidationTime + $queryMasterThreshold)
 		{
-			KalturaLog::debug("kQueryCache: changed recently -> query master, peer=$peerClassName, invkey=$maxInvalidationKey querytime=$currentTime invtime=$maxInvalidationTime threshold=$queryMasterThreshold");
+			VidiunLog::debug("vQueryCache: changed recently -> query master, peer=$peerClassName, invkey=$maxInvalidationKey querytime=$currentTime invtime=$maxInvalidationTime threshold=$queryMasterThreshold");
 			$queryDB = self::QUERY_DB_MASTER;
 			if ($currentTime < $maxInvalidationTime + self::CLOCK_SYNC_TIME_MARGIN_SEC)
 			{
@@ -295,7 +295,7 @@ class kQueryCache
 			!is_null($maxInvalidationTime) && 
 			$currentTime < $maxInvalidationTime + $maxSlaveLag)
 		{
-			KalturaLog::debug("kQueryCache: using an out of date slave -> not caching the result, peer=$peerClassName, invkey=$maxInvalidationKey querytime=$currentTime invtime=$maxInvalidationTime slavelag=$maxSlaveLag");
+			VidiunLog::debug("vQueryCache: using an out of date slave -> not caching the result, peer=$peerClassName, invkey=$maxInvalidationKey querytime=$currentTime invtime=$maxInvalidationTime slavelag=$maxSlaveLag");
 			$cacheQuery = false;
 		}
 					
@@ -303,22 +303,22 @@ class kQueryCache
 		$origCacheKey = self::CACHE_PREFIX_QUERY . $queryType . md5(serialize($criteria) . self::CACHE_VERSION);
 		if ($cacheQuery)
 		{
-			kApiCache::addInvalidationKeys($invalidationKeys, $maxInvalidationTime);
-			$cacheKey = new kQueryCacheKey($origCacheKey); 
+			vApiCache::addInvalidationKeys($invalidationKeys, $maxInvalidationTime);
+			$cacheKey = new vQueryCacheKey($origCacheKey); 
 		}
 		else 
 		{
-			kApiCache::disableConditionalCache();
+			vApiCache::disableConditionalCache();
 		}
 		
 		// check whether we have a valid cached query
 		$queryStart = microtime(true);
 		$queryResult = self::$s_memcacheQueries->get($origCacheKey);
-		KalturaLog::debug("kQueryCache: query took " . (microtime(true) - $queryStart) . " seconds");
+		VidiunLog::debug("vQueryCache: query took " . (microtime(true) - $queryStart) . " seconds");
 		
 		if (!$queryResult)
 		{	
-			KalturaLog::debug("kQueryCache: cache miss, peer=$peerClassName, key=$origCacheKey");
+			VidiunLog::debug("vQueryCache: cache miss, peer=$peerClassName, key=$origCacheKey");
 			return null;
 		}
 		
@@ -327,7 +327,7 @@ class kQueryCache
 		if (!is_null($maxInvalidationTime) && 
 			$queryTime < $maxInvalidationTime + self::CLOCK_SYNC_TIME_MARGIN_SEC)
 		{
-			KalturaLog::debug("kQueryCache: cached query invalid, peer=$peerClassName, key=$origCacheKey, invkey=$maxInvalidationKey querytime=$queryTime debugInfo=$debugInfo invtime=$maxInvalidationTime");
+			VidiunLog::debug("vQueryCache: cached query invalid, peer=$peerClassName, key=$origCacheKey, invkey=$maxInvalidationKey querytime=$queryTime debugInfo=$debugInfo invtime=$maxInvalidationTime");
 			return null;
 		}
 		
@@ -339,7 +339,7 @@ class kQueryCache
 		}
 		$existingInvKeys = implode(',', $existingInvKeys);
 		
-		KalturaLog::debug("kQueryCache: returning from memcache, peer=$peerClassName, key=$origCacheKey queryTime=$queryTime debugInfo=$debugInfo invkeys=[$existingInvKeys]");
+		VidiunLog::debug("vQueryCache: returning from memcache, peer=$peerClassName, key=$origCacheKey queryTime=$queryTime debugInfo=$debugInfo invkeys=[$existingInvKeys]");
 		return $queryResult;
 	}
 	
@@ -357,13 +357,13 @@ class kQueryCache
 		
 		$queryTime = time();
 		$key = $cacheKey->getKey();
-		KalturaLog::debug("kQueryCache: Updating memcache, key=$key queryTime=$queryTime");
+		VidiunLog::debug("vQueryCache: Updating memcache, key=$key queryTime=$queryTime");
 		self::$s_memcacheQueries->set($key, array($queryResult, $queryTime, $debugInfo), self::CACHED_QUERIES_EXPIRY_SEC);
 	}
 	
 	public static function invalidateQueryCache($object)
 	{
-		if (!kConf::get("query_cache_invalidate_on_change"))
+		if (!vConf::get("query_cache_invalidate_on_change"))
 		{
 			return;
 		}
@@ -384,17 +384,17 @@ class kQueryCache
 		foreach ($invalidationKeys as $invalidationKey)
 		{
 			$invalidationKey = self::CACHE_PREFIX_INVALIDATION_KEY . str_replace(' ', '_', $invalidationKey);
-			KalturaLog::debug("kQueryCache: updating invalidation key, invkey=$invalidationKey");
+			VidiunLog::debug("vQueryCache: updating invalidation key, invkey=$invalidationKey");
 			if (!self::$s_memcacheKeys->set($invalidationKey, $currentTime, 
 				self::CACHED_QUERIES_EXPIRY_SEC + self::INVALIDATION_KEYS_EXPIRY_MARGIN))
 			{
-				KalturaLog::err("kQueryCache: failed to update invalidation key");
+				VidiunLog::err("vQueryCache: failed to update invalidation key");
 			}
 		}
 	}
 	
 	public static function isCurrentQueryHandled()
 	{
-		return kQueryCacheKey::exists();
+		return vQueryCacheKey::exists();
 	}
 }

@@ -3,6 +3,6 @@
  * @package plugins.synacorHboDistribution
  * @subpackage api.objects
  */
-class KalturaSynacorHboDistributionProvider extends KalturaDistributionProvider
+class VidiunSynacorHboDistributionProvider extends VidiunDistributionProvider
 {
 }

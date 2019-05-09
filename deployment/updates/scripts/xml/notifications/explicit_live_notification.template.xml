@@ -14,7 +14,7 @@
     </session>
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaPushNotificationTemplate">
+			<template objectType="VidiunPushNotificationTemplate">
 				<name>EXPLICIT_LIVE_PUSH_NOTIFICATIONS</name>
 				<systemName>EXPLICIT_LIVE_PUSH_NOTIFICATIONS</systemName>
 				<description>Push notification template used by the explicit live feature</description>
@@ -23,25 +23,25 @@
 				<eventObjectType>38</eventObjectType><!-- EventNotificationEventObjectType::LIVE_STREAM -->
 
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventObjectChangedCondition">
+					<item objectType="VidiunEventObjectChangedCondition">
 						<description>Entry view mode or recording status changes</description>
 						<modifiedColumns>view_mode,recording_status</modifiedColumns>
-						<field objectType="KalturaEvalStringField">
+						<field objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getType()</code>
 						</field>
 					</item>
 				</eventConditions>
 				<queueNameParameters objectType="array">
-					<item objectType="KalturaPushEventNotificationParameter">
+					<item objectType="VidiunPushEventNotificationParameter">
 						<key>entryId</key>
 						<description></description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getId()</code>
 						</value>
 					</item>
 				</queueNameParameters>
-				<apiObjectType>KalturaLiveStreamEntry</apiObjectType>
-				<objectFormat>1</objectFormat> <!-- KalturaResponseType::RESPONSE_TYPE_JSON -->
+				<apiObjectType>VidiunLiveStreamEntry</apiObjectType>
+				<objectFormat>1</objectFormat> <!-- VidiunResponseType::RESPONSE_TYPE_JSON -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">

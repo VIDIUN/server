@@ -59,7 +59,7 @@ abstract class Form_SshDropFolderConfigureExtend_SubForm extends Form_DropFolder
 	
 	public function getObject($object, $objectType, array $properties, $add_underscore = true, $include_empty_fields = false)
 	{
-        if ($object instanceof Kaltura_Client_DropFolder_Type_SshDropFolder)
+        if ($object instanceof Vidiun_Client_DropFolder_Type_SshDropFolder)
 		{
 			$upload = new Zend_File_Transfer_Adapter_Http();
 			$files = $upload->getFileInfo();

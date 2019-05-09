@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveEntryServerNodeRecordingInfo extends KalturaObject
+class VidiunLiveEntryServerNodeRecordingInfo extends VidiunObject
 {
 	
 	/**
@@ -17,7 +17,7 @@ class KalturaLiveEntryServerNodeRecordingInfo extends KalturaObject
 	public $duration;
 
 	/**
-	 * @var KalturaEntryServerNodeRecordingStatus
+	 * @var VidiunEntryServerNodeRecordingStatus
 	 */
 	public $recordingStatus;
 	
@@ -29,14 +29,14 @@ class KalturaLiveEntryServerNodeRecordingInfo extends KalturaObject
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	*/
 	public function getMapBetweenObjects()
 	{
 		return array_merge(parent::getMapBetweenObjects(), self::$mapBetweenObjects);
 	}
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
@@ -45,7 +45,7 @@ class KalturaLiveEntryServerNodeRecordingInfo extends KalturaObject
 			$dbObject = new LiveEntryServerNodeRecordingInfo();
 		}
 		if (is_null($this->recordingStatus))
-			$this->recordingStatus = KalturaEntryServerNodeRecordingStatus::STOPPED;
+			$this->recordingStatus = VidiunEntryServerNodeRecordingStatus::STOPPED;
 	
 		return parent::toObject($dbObject, $propsToSkip);
 	}

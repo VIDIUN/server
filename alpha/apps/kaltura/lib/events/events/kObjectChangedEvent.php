@@ -4,10 +4,10 @@
  * @package Core
  * @subpackage events
  */
-class kObjectChangedEvent extends KalturaEvent implements IKalturaDatabaseEvent, IKalturaObjectRelatedEvent
+class vObjectChangedEvent extends VidiunEvent implements IVidiunDatabaseEvent, IVidiunObjectRelatedEvent
 {
 	const CUSTOM_DATA_OLD_VALUES = 'CUSTOM_DATA';
-	const EVENT_CONSUMER = 'kObjectChangedEventConsumer';
+	const EVENT_CONSUMER = 'vObjectChangedEventConsumer';
 	
 	/**
 	 * @var BaseObject
@@ -31,7 +31,7 @@ class kObjectChangedEvent extends KalturaEvent implements IKalturaDatabaseEvent,
 		if(method_exists($object, 'getId'))
 			$additionalLog .= 'id [' . $object->getId() . ']';
 			
-		KalturaLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "] $additionalLog modified columns [" . print_r($modifiedColumns, true) . "]");
+		VidiunLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "] $additionalLog modified columns [" . print_r($modifiedColumns, true) . "]");
 	}
 	
 	public function getConsumerInterface()
@@ -40,10 +40,10 @@ class kObjectChangedEvent extends KalturaEvent implements IKalturaDatabaseEvent,
 	}
 	
 	/**
-	 * @param kObjectChangedEventConsumer $consumer
+	 * @param vObjectChangedEventConsumer $consumer
 	 * @return bool true if should continue to the next consumer
 	 */
-	protected function doConsume(KalturaEventConsumer $consumer)
+	protected function doConsume(VidiunEventConsumer $consumer)
 	{
 		if(!$consumer->shouldConsumeChangedEvent($this->object, $this->modifiedColumns))
 			return true;
@@ -52,9 +52,9 @@ class kObjectChangedEvent extends KalturaEvent implements IKalturaDatabaseEvent,
 		if(method_exists($this->object, 'getId'))
 			$additionalLog .= 'id [' . $this->object->getId() . ']';
 			
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		$result = $consumer->objectChanged($this->object, $this->modifiedColumns);
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		return $result;
 	}
 	
@@ -83,7 +83,7 @@ class kObjectChangedEvent extends KalturaEvent implements IKalturaDatabaseEvent,
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaEvent::getScope()
+	 * @see VidiunEvent::getScope()
 	 */
 	public function getScope()
 	{

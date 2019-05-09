@@ -1,21 +1,21 @@
 <?php
 $config = null;
 $clientConfig = null;
-/* @var $clientConfig KalturaConfiguration */
+/* @var $clientConfig VidiunConfiguration */
 
 require_once __DIR__ . '/lib/init.php';
 
-$kmcUrl = $clientConfig->serviceUrl . 'kmc';
-$kmcHtmlContent = file_get_contents($kmcUrl);
-if(!$kmcHtmlContent)
+$vmcUrl = $clientConfig->serviceUrl . 'vmc';
+$vmcHtmlContent = file_get_contents($vmcUrl);
+if(!$vmcHtmlContent)
 {
-	echo "Fetching URL [$kmcUrl] failed\n";
+	echo "Fetching URL [$vmcUrl] failed\n";
 	exit(-1);
 }
 
 $swfPaths = array(
-	'/flash/kmc/login/' . $config['kmc']['login_version'] . '/login.swf',
-	'/flash/kmc/' . $config['kmc']['version'] . '/kmc.swf',
+	'/flash/vmc/login/' . $config['vmc']['login_version'] . '/login.swf',
+	'/flash/vmc/' . $config['vmc']['version'] . '/vmc.swf',
 );
 
 foreach($swfPaths as $swfPath)

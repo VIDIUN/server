@@ -3,7 +3,7 @@
  * @package plugins.group
  * @subpackage api.enum
  */
-class KalturaESearchGroupFieldName extends KalturaESearchBaseUserFieldName
+class VidiunESearchGroupFieldName extends VidiunESearchBaseUserFieldName
 {
 
 }

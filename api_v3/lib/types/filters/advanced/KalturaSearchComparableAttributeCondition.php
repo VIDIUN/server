@@ -4,10 +4,10 @@
  * @package api
  * @subpackage filters
  */
-abstract class KalturaSearchComparableAttributeCondition extends KalturaAttributeCondition
+abstract class VidiunSearchComparableAttributeCondition extends VidiunAttributeCondition
 {
 	/**
-	 * @var KalturaSearchConditionComparison
+	 * @var VidiunSearchConditionComparison
 	 */
 	public $comparison;
 
@@ -37,12 +37,12 @@ abstract class KalturaSearchComparableAttributeCondition extends KalturaAttribut
 		/** @var BaseIndexObject $indexClass */
 		$indexClass = $this->getIndexClass();
 		$field = $indexClass::getCompareFieldByApiName($this->attribute);
-		KalturaLog::debug("Mapping [$this->attribute] to [$field]");
+		VidiunLog::debug("Mapping [$this->attribute] to [$field]");
 		$objectToFill->setField($field);
 		return $objectToFill;
 	}
 
-	protected function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		/** @var $srcObj AdvancedSearchFilterComparableAttributeCondition) */
 		if ($this->shouldGet('attribute', $responseProfile))

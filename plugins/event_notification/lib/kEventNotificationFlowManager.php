@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage lib
  */
-class kEventNotificationFlowManager implements kGenericEventConsumer
+class vEventNotificationFlowManager implements vGenericEventConsumer
 {
 	static protected $allNotificationTemplates = null;
 	
@@ -13,9 +13,9 @@ class kEventNotificationFlowManager implements kGenericEventConsumer
 	protected $notificationTemplates;
 	
 	/* (non-PHPdoc)
-	 * @see kGenericEventConsumer::consumeEvent()
+	 * @see vGenericEventConsumer::consumeEvent()
 	 */
-	public function consumeEvent(KalturaEvent $event) 
+	public function consumeEvent(VidiunEvent $event) 
 	{
 		foreach($this->notificationTemplates as $notificationTemplate)
 		{
@@ -28,10 +28,10 @@ class kEventNotificationFlowManager implements kGenericEventConsumer
 
 	/**
 	 * Return single integer value that represents the event type
-	 * @param KalturaEvent $event
+	 * @param VidiunEvent $event
 	 * @return int
 	 */
-	public static function getEventType(KalturaEvent $event)
+	public static function getEventType(VidiunEvent $event)
 	{
 		$matches = null;
 		if(!preg_match('/k(\w+)Event/', get_class($event), $matches))
@@ -56,7 +56,7 @@ class kEventNotificationFlowManager implements kGenericEventConsumer
 	 */
 	public static function getObject($objectType, $objectId) 
 	{
-		$objectClass = KalturaPluginManager::getObjectClass('EventNotificationEventObjectType', $objectType);
+		$objectClass = VidiunPluginManager::getObjectClass('EventNotificationEventObjectType', $objectType);
 		$peerClass = $objectClass . 'Peer';
 		$peer = null;
 
@@ -75,12 +75,12 @@ class kEventNotificationFlowManager implements kGenericEventConsumer
 
 	/**
 	 * Return single integer value that represents the event object type
-	 * @param KalturaEvent $event
+	 * @param VidiunEvent $event
 	 * @return string class name
 	 */
-	public static function getEventObjectType(KalturaEvent $event)
+	public static function getEventObjectType(VidiunEvent $event)
 	{
-		if($event instanceof kBatchJobStatusEvent)
+		if($event instanceof vBatchJobStatusEvent)
 			return 'BatchJob';
 			
 		if(!method_exists($event, 'getObject'))
@@ -93,13 +93,13 @@ class kEventNotificationFlowManager implements kGenericEventConsumer
 	/**
 	 * Events that are excluded from isAllowedPartner are defined here,
 	 * specific event that needs to be activated regardless of partner affiliation
-	 * @param KalturaEvent $event
+	 * @param VidiunEvent $event
 	 * @return bool is new Partner Object
 	 */
 	protected function fireEventWithoutPartnerCheck($event, $partnerId)
 	{
-		/** event kObjectAddedEvent with partner object -> create new partner  */
-		if($event instanceof kObjectAddedEvent && $event->getObject() instanceof Partner &&  $partnerId > 0)
+		/** event vObjectAddedEvent with partner object -> create new partner  */
+		if($event instanceof vObjectAddedEvent && $event->getObject() instanceof Partner &&  $partnerId > 0)
 			return true;
 
 		return false;
@@ -116,7 +116,7 @@ class kEventNotificationFlowManager implements kGenericEventConsumer
 		if(is_null(self::$allNotificationTemplates))
 		{
 			self::$allNotificationTemplates = EventNotificationTemplatePeer::retrieveByPartnerId($partnerId);
-			KalturaLog::info("Found [" . count(self::$allNotificationTemplates) . "] templates");
+			VidiunLog::info("Found [" . count(self::$allNotificationTemplates) . "] templates");
 		}
 		
 		$notificationTemplates = array();
@@ -129,7 +129,7 @@ class kEventNotificationFlowManager implements kGenericEventConsumer
 			if($notificationTemplate->getEventType() != $eventType)
 				continue;				
 			
-			$templateObjectClassName = KalturaPluginManager::getObjectClass('EventNotificationEventObjectType', $notificationTemplate->getObjectType());
+			$templateObjectClassName = VidiunPluginManager::getObjectClass('EventNotificationEventObjectType', $notificationTemplate->getObjectType());
 			if(strcmp($eventObjectClassName, $templateObjectClassName) && !is_subclass_of($eventObjectClassName, $templateObjectClassName))
 				continue;				
 			
@@ -139,23 +139,23 @@ class kEventNotificationFlowManager implements kGenericEventConsumer
 	}
 		
 	/* (non-PHPdoc)
-	 * @see kGenericEventConsumer::shouldConsumeEvent()
+	 * @see vGenericEventConsumer::shouldConsumeEvent()
 	 */
-	public function shouldConsumeEvent(KalturaEvent $event) 
+	public function shouldConsumeEvent(VidiunEvent $event) 
 	{
 		$this->notificationTemplates = array();
 		
 		$scope = $event->getScope();
 		
 		$partnerId = $scope->getPartnerId();
-		$ksPartnerId = kCurrentContext::$ks_partner_id;
+		$vsPartnerId = vCurrentContext::$vs_partner_id;
 
 		$fireEventWithoutPartnerCheck = $this->fireEventWithoutPartnerCheck($event, $partnerId);
 		if (!$fireEventWithoutPartnerCheck)
 		{
-			if ( (($ksPartnerId && $ksPartnerId == Partner::MEDIA_SERVER_PARTNER_ID) || $partnerId <= 0 ||
+			if ( (($vsPartnerId && $vsPartnerId == Partner::MEDIA_SERVER_PARTNER_ID) || $partnerId <= 0 ||
 					!EventNotificationPlugin::isAllowedPartner($partnerId))
-				&& !in_array($partnerId, kConf::get('media_server_allowed_notifications','local', array()) ) )
+				&& !in_array($partnerId, vConf::get('media_server_allowed_notifications','local', array()) ) )
 				return false;
 		}
 		$eventType = self::getEventType($event);

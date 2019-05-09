@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-abstract class KalturaESearchResponse extends KalturaObject
+abstract class VidiunESearchResponse extends VidiunObject
 {
     /**
      * @var int

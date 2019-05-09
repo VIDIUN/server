@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaITunesSyndicationFeedCategories extends KalturaStringEnum
+class VidiunITunesSyndicationFeedCategories extends VidiunStringEnum
 {
 	const ARTS = "Arts";
 		const ARTS_DESIGN = "Arts/Design";

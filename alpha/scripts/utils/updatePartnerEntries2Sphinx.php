@@ -20,12 +20,12 @@ if ($argc > 3)
 if (!in_array($mode, $availModes))
 	die('Invalid mode, should be one of ' . implode(',', $availModes) . PHP_EOL);
 
-$dbConf = kConf::getDB();
+$dbConf = vConf::getDB();
 DbManager::setConfig($dbConf);
 DbManager::initialize();
 myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL2;
 
-$sphinx = new kSphinxSearchManager();
+$sphinx = new vSphinxSearchManager();
 
 $lastCreatedAt = null;
 
@@ -64,7 +64,7 @@ for (;;)
 	
 	sleep(10);
 	
-    kMemoryManager::clearMemory();
+    vMemoryManager::clearMemory();
 
 	if (count($items) < 500)
 		break;

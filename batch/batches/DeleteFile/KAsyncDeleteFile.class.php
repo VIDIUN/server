@@ -5,29 +5,29 @@
  * @package Scheduler
  * @subpackage Delete
  */
-class KAsyncDeleteFile extends KJobHandlerWorker
+class VAsyncDeleteFile extends VJobHandlerWorker
 {
 	public static function getType()
 	{
-		return KalturaBatchJobType::DELETE_FILE;
+		return VidiunBatchJobType::DELETE_FILE;
 	}
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
-		$this->updateJob($job, "File deletion started", KalturaBatchJobStatus::PROCESSING);
+		$this->updateJob($job, "File deletion started", VidiunBatchJobStatus::PROCESSING);
 		$jobData = $job->data;
 		
-		/* @var $jobData KalturaDeleteFileJobData */
+		/* @var $jobData VidiunDeleteFileJobData */
 		$result = unlink($jobData->localFileSyncPath);
 		
 		if (!$result)
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, null, "Failed to delete file from disk", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, null, "Failed to delete file from disk", VidiunBatchJobStatus::FAILED);
 		
-		return $this->closeJob($job, null, null, 'File deleted successfully', KalturaBatchJobStatus::FINISHED);
+		return $this->closeJob($job, null, null, 'File deleted successfully', VidiunBatchJobStatus::FINISHED);
 		
 	}
 

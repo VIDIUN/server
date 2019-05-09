@@ -3,7 +3,7 @@
  * @package plugins.youtubeApiDistribution
  * @subpackage api.objects
  */
-class KalturaYoutubeApiDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunYoutubeApiDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -16,18 +16,18 @@ class KalturaYoutubeApiDistributionJobProviderData extends KalturaConfigurableDi
 	public $thumbAssetFilePath;
 
 	/**
-	 * @var KalturaYouTubeApiCaptionDistributionInfoArray
+	 * @var VidiunYouTubeApiCaptionDistributionInfoArray
 	 */
 	public $captionsInfo;
 
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	    
 		if(!$distributionJobData)
 			return;
 		
-		if(!($distributionJobData->distributionProfile instanceof KalturaYoutubeApiDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunYoutubeApiDistributionProfile))
 			return;
 			
 		$flavorAssets = assetPeer::retrieveByIds(explode(',', $distributionJobData->entryDistribution->flavorAssetIds));
@@ -39,16 +39,16 @@ class KalturaYoutubeApiDistributionJobProviderData extends KalturaConfigurableDi
 		if($flavorAsset) 
 		{
 			$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			if(kFileSyncUtils::fileSync_exists($syncKey))
-				$this->videoAssetFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			if(vFileSyncUtils::fileSync_exists($syncKey))
+				$this->videoAssetFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 		}
 		
 		$thumbAssets = assetPeer::retrieveByIds(explode(',', $distributionJobData->entryDistribution->thumbAssetIds));
 		if(count($thumbAssets))
 		{
 			$syncKey = reset($thumbAssets)->getSyncKey(thumbAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			if(kFileSyncUtils::fileSync_exists($syncKey))
-				$this->thumbAssetFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			if(vFileSyncUtils::fileSync_exists($syncKey))
+				$this->thumbAssetFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 		}
 		
 		$this->addCaptionsData($distributionJobData);
@@ -66,25 +66,25 @@ class KalturaYoutubeApiDistributionJobProviderData extends KalturaConfigurableDi
 		return array_merge ( parent::getMapBetweenObjects() , self::$map_between_objects );
 	}
 	
-	private function addCaptionsData(KalturaDistributionJobData $distributionJobData) {
-		/* @var $mediaFile KalturaDistributionRemoteMediaFile */
+	private function addCaptionsData(VidiunDistributionJobData $distributionJobData) {
+		/* @var $mediaFile VidiunDistributionRemoteMediaFile */
 		$assetIdsArray = explode ( ',', $distributionJobData->entryDistribution->assetIds );
 		if (empty($assetIdsArray)) return;
 		$assets = array ();
-		$this->captionsInfo = new KalturaYouTubeApiCaptionDistributionInfoArray();
+		$this->captionsInfo = new VidiunYouTubeApiCaptionDistributionInfoArray();
 		
 		foreach ( $assetIdsArray as $assetId ) {
 			$asset = assetPeer::retrieveByIdNoFilter( $assetId );
 			if (!$asset){
-				KalturaLog::err("Asset [$assetId] not found");
+				VidiunLog::err("Asset [$assetId] not found");
 				continue;
 			}
 			if ($asset->getStatus() == asset::ASSET_STATUS_READY) {
 				$assets [] = $asset;
 			}
 			elseif($asset->getStatus()== asset::ASSET_STATUS_DELETED) {
-				$captionInfo = new KalturaYouTubeApiCaptionDistributionInfo ();
-				$captionInfo->action = KalturaYouTubeApiDistributionCaptionAction::DELETE_ACTION;
+				$captionInfo = new VidiunYouTubeApiCaptionDistributionInfo ();
+				$captionInfo->action = VidiunYouTubeApiDistributionCaptionAction::DELETE_ACTION;
 				$captionInfo->assetId = $assetId;
 				//getting the asset's remote id
 				foreach ( $distributionJobData->mediaFiles as $mediaFile ) {
@@ -96,7 +96,7 @@ class KalturaYoutubeApiDistributionJobProviderData extends KalturaConfigurableDi
 				}
 			}
 			else{
-				KalturaLog::err("Asset [$assetId] has status [".$asset->getStatus()."]. not added to provider data");
+				VidiunLog::err("Asset [$assetId] has status [".$asset->getStatus()."]. not added to provider data");
 			}
 		}
 
@@ -105,7 +105,7 @@ class KalturaYoutubeApiDistributionJobProviderData extends KalturaConfigurableDi
 			switch ($assetType) {
 				case CaptionPlugin::getAssetTypeCoreValue ( CaptionAssetType::CAPTION ):
 					$syncKey = $asset->getSyncKey ( asset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET );
-					if (kFileSyncUtils::fileSync_exists ( $syncKey )) {
+					if (vFileSyncUtils::fileSync_exists ( $syncKey )) {
 						$captionInfo = $this->getCaptionInfo($asset, $syncKey, $distributionJobData);
 						if ($captionInfo){
 							$captionInfo->label = $asset->getLabel();
@@ -115,26 +115,26 @@ class KalturaYoutubeApiDistributionJobProviderData extends KalturaConfigurableDi
 							if ($captionInfo->language)
 								$this->captionsInfo [] = $captionInfo;
 							else
-								KalturaLog::err('The caption ['.$asset->getId().'] has unrecognized language ['.$asset->getLanguage().']'); 
+								VidiunLog::err('The caption ['.$asset->getId().'] has unrecognized language ['.$asset->getLanguage().']'); 
 						}
 					}
 					break;
 				case AttachmentPlugin::getAssetTypeCoreValue ( AttachmentAssetType::ATTACHMENT ) :
 					/* @var $asset AttachmentAsset */
 					$syncKey = $asset->getSyncKey ( asset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET );
-					if (kFileSyncUtils::fileSync_exists ( $syncKey )) {
+					if (vFileSyncUtils::fileSync_exists ( $syncKey )) {
 						$captionInfo = $this->getCaptionInfo($asset, $syncKey, $distributionJobData);
 						if ($captionInfo){
 							//language code should be set in the attachments title
 							$captionInfo->label = $asset->getTitle();
 							$captionInfo->language = $asset->getTitle();
 							
-							$languageCodeReflector = KalturaTypeReflectorCacher::get('KalturaLanguageCode');
+							$languageCodeReflector = VidiunTypeReflectorCacher::get('VidiunLanguageCode');
 							//check if the language code exists 
 						    if($languageCodeReflector && $languageCodeReflector->getConstantName($captionInfo->language))
 								$this->captionsInfo [] = $captionInfo;
 							else
-								KalturaLog::err('The attachment ['.$asset->getId().'] has unrecognized language ['.$asset->getTitle().']'); 		    
+								VidiunLog::err('The attachment ['.$asset->getId().'] has unrecognized language ['.$asset->getTitle().']'); 		    
 						}
 					}
 					break;
@@ -143,8 +143,8 @@ class KalturaYoutubeApiDistributionJobProviderData extends KalturaConfigurableDi
 	}
 	
 	private function getLanguageCode($language = null){
-		$languageReflector = KalturaTypeReflectorCacher::get('KalturaLanguage');
-		$languageCodeReflector = KalturaTypeReflectorCacher::get('KalturaLanguageCode');
+		$languageReflector = VidiunTypeReflectorCacher::get('VidiunLanguage');
+		$languageCodeReflector = VidiunTypeReflectorCacher::get('VidiunLanguageCode');
 		if($languageReflector && $languageCodeReflector)
 		{
 			$languageCode = $languageReflector->getConstantName($language);
@@ -154,26 +154,26 @@ class KalturaYoutubeApiDistributionJobProviderData extends KalturaConfigurableDi
 		return null;
 	}
 	
-	private function getCaptionInfo($asset, $syncKey, KalturaDistributionJobData $distributionJobData) {
-		$captionInfo = new KalturaYouTubeApiCaptionDistributionInfo ();
-		$fileSync = kFileSyncUtils::getResolveLocalFileSyncForKey($syncKey);
+	private function getCaptionInfo($asset, $syncKey, VidiunDistributionJobData $distributionJobData) {
+		$captionInfo = new VidiunYouTubeApiCaptionDistributionInfo ();
+		$fileSync = vFileSyncUtils::getResolveLocalFileSyncForKey($syncKey);
 		$captionInfo->filePath = $fileSync->getFullPath();
 		$captionInfo->assetId = $asset->getId();
 		$captionInfo->version = $asset->getVersion();
-		/* @var $mediaFile KalturaDistributionRemoteMediaFile */
+		/* @var $mediaFile VidiunDistributionRemoteMediaFile */
 		$distributed = false;
 		foreach ( $distributionJobData->mediaFiles as $mediaFile ) {
 			if ($mediaFile->assetId == $asset->getId ()) {
 				$distributed = true;
 				if ($asset->getVersion () > $mediaFile->version) {
-					$captionInfo->action = KalturaYouTubeApiDistributionCaptionAction::UPDATE_ACTION;
+					$captionInfo->action = VidiunYouTubeApiDistributionCaptionAction::UPDATE_ACTION;
 				}
 				break;
 			}
 		}
 		if (! $distributed)
-			$captionInfo->action = KalturaYouTubeApiDistributionCaptionAction::SUBMIT_ACTION;
-		elseif ($captionInfo->action != KalturaYouTubeApiDistributionCaptionAction::UPDATE_ACTION) {
+			$captionInfo->action = VidiunYouTubeApiDistributionCaptionAction::SUBMIT_ACTION;
+		elseif ($captionInfo->action != VidiunYouTubeApiDistributionCaptionAction::UPDATE_ACTION) {
 			return;
 		}
 		return $captionInfo;

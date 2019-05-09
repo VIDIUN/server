@@ -51,7 +51,7 @@ if ($newParameterItemsCfg) {
 	}
 }
 
-KalturaLog::log('Done');
+VidiunLog::log('Done');
 
 // ------------------------------------------------------
 
@@ -128,16 +128,16 @@ function addPermissionToPartner($permissionCfg, $partnerId = null){
 	$permission->setStatus(PermissionStatus::ACTIVE);
 	
 	// add to database
-	KalturaLog::log('Adding new permission with name ['.$permission->getName().'] to partner id ['.$permission->getPartnerId().']');
+	VidiunLog::log('Adding new permission with name ['.$permission->getName().'] to partner id ['.$permission->getPartnerId().']');
 	try {
 		if($permission->getId())
 			$permission->save();
 		else
 			PermissionPeer::addToPartner($permission, $permission->getPartnerId());		
 	}
-	catch (kPermissionException $e)	{
-		if ($e->getCode() === kPermissionException::PERMISSION_ALREADY_EXISTS) {
-			KalturaLog::log('Permission name ['.$permission->getName().'] already exists for partner id ['.$permission->getPartnerId().']');
+	catch (vPermissionException $e)	{
+		if ($e->getCode() === vPermissionException::PERMISSION_ALREADY_EXISTS) {
+			VidiunLog::log('Permission name ['.$permission->getName().'] already exists for partner id ['.$permission->getPartnerId().']');
 		}
 		else {
 			throw $e;
@@ -160,8 +160,8 @@ function addActionPermissionItem($itemCfg)
 		
 	// check if item already exists in db
 	$c = new Criteria();
-	$c->addAnd(kApiActionPermissionItem::SERVICE_COLUMN_NAME, strtolower($itemCfg->service), Criteria::EQUAL);
-	$c->addAnd(kApiActionPermissionItem::ACTION_COLUMN_NAME, strtolower($itemCfg->action), Criteria::EQUAL);
+	$c->addAnd(vApiActionPermissionItem::SERVICE_COLUMN_NAME, strtolower($itemCfg->service), Criteria::EQUAL);
+	$c->addAnd(vApiActionPermissionItem::ACTION_COLUMN_NAME, strtolower($itemCfg->action), Criteria::EQUAL);
 	$c->addAnd(PermissionItemPeer::PARTNER_ID, array(PartnerPeer::GLOBAL_PARTNER, $itemCfg->partnerId), Criteria::IN);
 	$c->addAnd(PermissionItemPeer::TYPE, PermissionItemType::API_ACTION_ITEM, Criteria::EQUAL);
 	$existingItem = PermissionItemPeer::doSelectOne($c);
@@ -170,12 +170,12 @@ function addActionPermissionItem($itemCfg)
 	if ($existingItem)
 	{
 		$item = $existingItem;
-		KalturaLog::log('Permission item for ['.$item->getService().'->'.$item->getAction().'] partner id ['.$item->getPartnerId().'] already exists with id ['.$existingItem->getId().']');
+		VidiunLog::log('Permission item for ['.$item->getService().'->'.$item->getAction().'] partner id ['.$item->getPartnerId().'] already exists with id ['.$existingItem->getId().']');
 	}
 	else
 	{
 		// save new permission item object
-		$item = new kApiActionPermissionItem();	
+		$item = new vApiActionPermissionItem();	
 		foreach ($itemCfg as $key => $value)
 		{
 			if ($key === 'permissions') {
@@ -189,7 +189,7 @@ function addActionPermissionItem($itemCfg)
 		$item->setService(strtolower($item->getService()));
 		$item->setAction(strtolower($item->getAction()));
 		$item->save();
-		KalturaLog::log('New permission item id ['.$item->getId().'] added for ['.$item->getService().'->'.$item->getAction().'] partner id ['.$item->getPartnerId().']');
+		VidiunLog::log('New permission item id ['.$item->getId().'] added for ['.$item->getService().'->'.$item->getAction().'] partner id ['.$item->getPartnerId().']');
 	}
 	
 	// add item to each defined permission
@@ -223,9 +223,9 @@ function addParameterPermissionItem($itemCfg)
 	
 	// check if item already exists in db
 	$c = new Criteria();
-	$c->addAnd(kApiParameterPermissionItem::OBJECT_COLUMN_NAME, $itemCfg->object, Criteria::EQUAL);
-	$c->addAnd(kApiParameterPermissionItem::PARAMETER_COLUMN_NAME, $itemCfg->parameter, Criteria::EQUAL);
-	$c->addAnd(kApiParameterPermissionItem::ACTION_COLUMN_NAME, $itemCfg->action, Criteria::EQUAL);
+	$c->addAnd(vApiParameterPermissionItem::OBJECT_COLUMN_NAME, $itemCfg->object, Criteria::EQUAL);
+	$c->addAnd(vApiParameterPermissionItem::PARAMETER_COLUMN_NAME, $itemCfg->parameter, Criteria::EQUAL);
+	$c->addAnd(vApiParameterPermissionItem::ACTION_COLUMN_NAME, $itemCfg->action, Criteria::EQUAL);
 	$c->addAnd(PermissionItemPeer::PARTNER_ID, array(PartnerPeer::GLOBAL_PARTNER, $itemCfg->partnerId), Criteria::IN);
 	$c->addAnd(PermissionItemPeer::TYPE, PermissionItemType::API_PARAMETER_ITEM, Criteria::EQUAL);
 	$existingItem = PermissionItemPeer::doSelectOne($c);
@@ -234,12 +234,12 @@ function addParameterPermissionItem($itemCfg)
 	if ($existingItem)
 	{
 		$item = $existingItem;
-		KalturaLog::log('Permission item for ['.$item->getAction().'->'.$item->getObject().'->'.$item->getParameter().'] partner id ['.$item->getPartnerId().'] already exists with id ['.$item->getId().']');
+		VidiunLog::log('Permission item for ['.$item->getAction().'->'.$item->getObject().'->'.$item->getParameter().'] partner id ['.$item->getPartnerId().'] already exists with id ['.$item->getId().']');
 	}
 	else
 	{
 		// save new permission item object
-		$item = new kApiParameterPermissionItem();	
+		$item = new vApiParameterPermissionItem();	
 		foreach ($itemCfg as $key => $value)
 		{
 			if ($key === 'permissions') {
@@ -250,11 +250,11 @@ function addParameterPermissionItem($itemCfg)
 			if (method_exists($item,'set'.$key)){
 			    call_user_func_array( $setterCallback , array ($value ) );
 			}else{
-			    KalturaLog::err("Skipping call to set$key() since there is no such method.");
+			    VidiunLog::err("Skipping call to set$key() since there is no such method.");
 			}
 		}
 		$item->save();
-		KalturaLog::log('New permission item id ['.$item->getId().'] added for ['.$item->getAction().'->'.$item->getObject().'->'.$item->getParameter().'] partner id ['.$item->getPartnerId().']');
+		VidiunLog::log('New permission item id ['.$item->getId().'] added for ['.$item->getAction().'->'.$item->getObject().'->'.$item->getParameter().'] partner id ['.$item->getPartnerId().']');
 	}
 	
 	// add item to each defined permission
@@ -281,11 +281,11 @@ function addItemToPermissions($item, $permissionNames, $partnerId)
 		$permission = PermissionPeer::doSelectOne($c);
 		
 		if (!$permission) {
-			KalturaLog::alert('ERROR - Permission name ['.$permissionName.'] for partner ['.$item->getPartnerId().'] not found in database - skipping!');
+			VidiunLog::alert('ERROR - Permission name ['.$permissionName.'] for partner ['.$item->getPartnerId().'] not found in database - skipping!');
 			continue;
 		}
 		
-		KalturaLog::log('Adding permission item id ['.$item->getId().'] to permission id ['.$permission->getId().']');
+		VidiunLog::log('Adding permission item id ['.$item->getId().'] to permission id ['.$permission->getId().']');
 		$permission->addPermissionItem($item->getId(), true);
 	}
 }

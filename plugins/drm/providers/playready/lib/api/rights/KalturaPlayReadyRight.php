@@ -3,6 +3,6 @@
  * @package plugins.playReady
  * @subpackage api.objects
  */
-abstract class KalturaPlayReadyRight extends KalturaObject 
+abstract class VidiunPlayReadyRight extends VidiunObject 
 {
 }

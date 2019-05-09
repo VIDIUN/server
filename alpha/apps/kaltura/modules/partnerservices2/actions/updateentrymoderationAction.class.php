@@ -28,7 +28,7 @@ class updateentrymoderationAction extends defPartnerservices2Action
 	}
 	
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		
 		$entry_id = $this->getPM ( "entry_id" );
@@ -45,7 +45,7 @@ class updateentrymoderationAction extends defPartnerservices2Action
 	
 			// for  no wodn't add an extra notification - one is sent from within the entry->moderate()
 			// TODO - where is the best place to notify ??
-			myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE , $entry, null, null, null, null, $entry_id );
+			myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE , $entry, null, null, null, null, $entry_id );
 		}
 		
 		entryPeer::blockDeletedInCriteriaFilter();

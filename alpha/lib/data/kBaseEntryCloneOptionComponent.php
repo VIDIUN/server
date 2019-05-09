@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kBaseEntryCloneOptionComponent extends kBaseEntryCloneOptionItem
+class vBaseEntryCloneOptionComponent extends vBaseEntryCloneOptionItem
 {
     /**
      * @var int itemType - critera is a collection of properties of the entry. The list of properties of the same

@@ -82,7 +82,7 @@ class Form_ReachProfileCredit extends Zend_Form_SubForm
 	{
 		$objectClass = $properties["objectType"];
 		if ($objectClass == "Null")
-			return new Kaltura_Client_Type_UrlTokenizer();
+			return new Vidiun_Client_Type_UrlTokenizer();
 
 		$object = new $objectClass();
 		foreach ($properties as $prop => $value)

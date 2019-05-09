@@ -3,32 +3,32 @@
  * @package plugins.segmenter
  * @subpackage lib
  */
-class KOperationEngineSegmenter  extends KSingleOutputOperationEngine
+class VOperationEngineSegmenter  extends VSingleOutputOperationEngine
 {
 
 	public function __construct($cmd, $outFilePath)
 	{
 		parent::__construct($cmd,$outFilePath);
-		KalturaLog::info(": cmd($cmd), outFilePath($outFilePath)");
+		VidiunLog::info(": cmd($cmd), outFilePath($outFilePath)");
 	}
 
 	protected function getCmdLine()
 	{
 		$exeCmd =  parent::getCmdLine();
-		KalturaLog::info(print_r($this,true));
+		VidiunLog::info(print_r($this,true));
 		return $exeCmd;
 	}
 
-	public function operate(kOperator $operator = null, $inFilePath, $configFilePath = null)
+	public function operate(vOperator $operator = null, $inFilePath, $configFilePath = null)
 	{
 //$this->outFilePath = "k:".$this->outFilePath;
-		KalturaLog::debug("creating directory:".$this->outFilePath);
-		kFile::fullMkfileDir($this->outFilePath, 0777, true);
+		VidiunLog::debug("creating directory:".$this->outFilePath);
+		vFile::fullMkfileDir($this->outFilePath, 0777, true);
 		$res = parent::operate($operator, $inFilePath, $configFilePath);
 		rename("$this->outFilePath//playlist.m3u8", "$this->outFilePath//playlist.tmp");
 		self::parsePlayList("$this->outFilePath//playlist.tmp","$this->outFilePath//playlist.m3u8");
 //		rename("out_dummy.m3u8", "$this->outFilePath//out_dummy.m3u8");
-//		KalturaLog::info("operator($operator), inFilePath($inFilePath), configFilePath($configFilePath)");
+//		VidiunLog::info("operator($operator), inFilePath($inFilePath), configFilePath($configFilePath)");
 
 		return $res;
 	}

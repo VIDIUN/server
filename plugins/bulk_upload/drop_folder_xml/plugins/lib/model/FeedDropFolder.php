@@ -37,7 +37,7 @@ class FeedDropFolder extends RemoteDropFolder
 	 * @see RemoteDropFolder::getRemoteFileTransferMgrType()
 	 */
 	protected function getRemoteFileTransferMgrType() {
-		return kFileTransferMgrType::HTTP;
+		return vFileTransferMgrType::HTTP;
 	}
 
 	/* (non-PHPdoc)

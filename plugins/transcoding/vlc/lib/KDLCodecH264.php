@@ -1,22 +1,22 @@
 <?php
 
 	/* ===========================
-	 * KDLBaseCodec
+	 * VDLBaseCodec
 	 */
-abstract class KDLBaseCodec {
+abstract class VDLBaseCodec {
 	
-	public function __construct(KDLVideoData $vidObj=null){
+	public function __construct(VDLVideoData $vidObj=null){
 		if(isset($vidObj)){
 			$this->Evaluate($vidObj);
 		}
 	}
-	abstract public function Evaluate(KDLVideoData $vidObj);
+	abstract public function Evaluate(VDLVideoData $vidObj);
 }
 	
 	/* ===========================
-	 * KDLCodecH264
+	 * VDLCodecH264
 	 */
-class KDLCodecH264 extends KDLBaseCodec{
+class VDLCodecH264 extends VDLBaseCodec{
 	public	$_crf;			/*	"Constant quality mode (also known as constant ratefactor). 
 								Bitrate corresponds approximately to that of constant quantizer, 
 								but gives better quality overall at little speed cost."
@@ -122,9 +122,9 @@ class KDLCodecH264 extends KDLBaseCodec{
 	public	$_vidBr;
 	
 	/* ----------------------
-	 * Evaluate(KDLFlavor $target)
+	 * Evaluate(VDLFlavor $target)
 	 */
-	public function Evaluate(KDLVideoData $vidObj){
+	public function Evaluate(VDLVideoData $vidObj){
 
 			/*
 			 * Check for 'presentation-style' video mode
@@ -132,7 +132,7 @@ class KDLCodecH264 extends KDLBaseCodec{
 		$presentationStyleMode = 0;
 		if(isset($vidObj->_bitRate)){
 			$this->_vidBr = $vidObj->_bitRate;
-			if($vidObj->_bitRate<KDLConstants::LowBitrateThresHold) {
+			if($vidObj->_bitRate<VDLConstants::LowBitrateThresHold) {
 				$presentationStyleMode=1;
 				$this->_crf=10;
 			}
@@ -153,7 +153,7 @@ ffmp - -flags +loop+mv4 -cmp 256 -partitions +parti4x4+partp8x8+partb8x8 -trelli
  */
 		$h264params=null;
 		switch($vidObj->_id) {
-		case KDLVideoTarget::H264:
+		case VDLVideoTarget::H264:
 			$this->_refs = 2;
 			$this->_coder = 0;
 			$this->_subq = 2;
@@ -165,7 +165,7 @@ ffmp - -flags +loop+mv4 -cmp 256 -partitions +parti4x4+partp8x8+partb8x8 -trelli
 			$this->_dct8x8=null;
 
 			break;
-		case KDLVideoTarget::H264B:
+		case VDLVideoTarget::H264B:
 			$this->_refs = 6; // ffm - 2
 			$this->_coder = 0;
 			$this->_sws = 9; // ffm - none
@@ -182,7 +182,7 @@ ffmp - -flags +loop+mv4 -cmp 256 -partitions +parti4x4+partp8x8+partb8x8 -trelli
 			$this->_me="hex";
 			$this->_dct8x8=null;
 			break;
-		case KDLVideoTarget::H264M:
+		case VDLVideoTarget::H264M:
 			$this->_refs = 6;// ffm - 2
 			$this->_coder = 1;
 			$this->_sws = 9; // ffm - none
@@ -199,7 +199,7 @@ ffmp - -flags +loop+mv4 -cmp 256 -partitions +parti4x4+partp8x8+partb8x8 -trelli
 			$this->_me="hex";
 			$this->_dct8x8=null;
 			break;
-		case KDLVideoTarget::H264H:				
+		case VDLVideoTarget::H264H:				
 			$this->_refs = 6;// ffm - 2
 			$this->_coder = 1;
 			$this->_sws = 9; // ffm - none

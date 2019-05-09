@@ -28,7 +28,7 @@ class SftpDropFolder extends SshDropFolder
 		
 	protected function getRemoteFileTransferMgrType()
 	{
-	    return kFileTransferMgrType::SFTP;
+	    return vFileTransferMgrType::SFTP;
 	}
         
 }

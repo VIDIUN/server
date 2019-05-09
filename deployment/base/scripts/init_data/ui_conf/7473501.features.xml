@@ -1,162 +1,162 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <snapshot fullPlayerId="1912522">
   <featuresData>
-    <feature k_fullName="TopTitleScreen" k_value="false"/>
-    <feature k_fullName="watermark" k_value="false"/>
-    <feature k_fullName="watermark.watermarkPath" k_value="http://www.kaltura.com/content/uiconf/kaltura/kmc/appstudio/kdp3/exampleWatermark.png"/>
-    <feature k_fullName="watermark.watermarkClickPath" k_value="http://www.kaltura.com/"/>
-    <feature k_fullName="watermark.watermarkPosition" k_value="bottomLeft"/>
-    <feature k_fullName="watermark.padding" k_value="5"/>
-    <feature k_fullName="timerControllerScreen1" k_value="false"/>
-    <feature k_fullName="timerControllerScreen1.ControllerScreen" k_value="true"/>
-    <feature k_fullName="timerControllerScreen1.timerType" k_value="forwards"/>
-    <feature k_fullName="timerControllerScreen2" k_value="false"/>
-    <feature k_fullName="timerControllerScreen2.ControllerScreen" k_value="true"/>
-    <feature k_fullName="timerControllerScreen2.timerType" k_value="total"/>
-    <feature k_fullName="flavorComboControllerScreen" k_value="false"/>
-    <feature k_fullName="flavorComboControllerScreen.hdOn" k_value="HD On"/>
-    <feature k_fullName="flavorComboControllerScreen.hdOff" k_value="HD Off"/>
-    <feature k_fullName="flavorComboControllerScreen.autoMessage" k_value="Automatically switches between bitrates"/>
-    <feature k_fullName="fullScreenBtn" k_value="false"/>
-    <feature k_fullName="fullScreenBtn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="fullScreenBtn.showOnVideoControllers.StartScreen" k_value="false"/>
-    <feature k_fullName="fullScreenBtn.showOnVideoControllers.PlayScreen" k_value="false"/>
-    <feature k_fullName="fullScreenBtn.showOnVideoControllers.PauseScreen" k_value="false"/>
-    <feature k_fullName="fullScreenBtn.showOnVideoControllers.EndScreen" k_value="false"/>
-    <feature k_fullName="fullScreenBtn.ControllerScreen" k_value="true"/>
-    <feature k_fullName="fullScreenBtn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="fullScreenBtn.Label" k_value="fullscreen"/>
-    <feature k_fullName="fullScreenBtn.Tooltip" k_value="Toggle fullscreen"/>
-    <feature k_fullName="onVideoPlayBtn" k_value="false"/>
-    <feature k_fullName="onVideoPlayBtn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="onVideoPlayBtn.showOnVideoControllers.StartScreen" k_value="true"/>
-    <feature k_fullName="onVideoPlayBtn.showOnVideoControllers.PauseScreen" k_value="true"/>
-    <feature k_fullName="onVideoPlayBtn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="onVideoPlayBtn.Label" k_value="Play"/>
-    <feature k_fullName="onVideoPlayBtn.Tooltip" k_value="Play video"/>
-    <feature k_fullName="playBtn" k_value="false"/>
-    <feature k_fullName="playBtn.ControllerScreen" k_value="true"/>
-    <feature k_fullName="playBtn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="playBtn.Tooltip" k_value=""/>
-    <feature k_fullName="volumeBar" k_value="false"/>
-    <feature k_fullName="volumeBar.ControllerScreen" k_value="true"/>
-    <feature k_fullName="volumeBar.Tooltip" k_value="Change volume"/>
-    <feature k_fullName="scrubberContainer" k_value="false"/>
-    <feature k_fullName="scrubberContainer.ControllerScreen" k_value="true"/>
-    <feature k_fullName="replayBtn" k_value="false"/>
-    <feature k_fullName="replayBtn.EndScreen" k_value="true"/>
-    <feature k_fullName="replayBtn.Label" k_value="Replay"/>
-    <feature k_fullName="replayBtn.Tooltip" k_value="Replay"/>
-    <feature k_fullName="unmuteBtn" k_value="false"/>
-    <feature k_fullName="unmuteBtn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="unmuteBtn.showOnVideoControllers.StartScreen" k_value="true"/>
-    <feature k_fullName="unmuteBtn.showOnVideoControllers.PlayScreen" k_value="true"/>
-    <feature k_fullName="unmuteBtn.showOnVideoControllers.PauseScreen" k_value="true"/>
-    <feature k_fullName="unmuteBtn.showOnVideoControllers.EndScreen" k_value="true"/>
-    <feature k_fullName="unmuteBtn.Label" k_value="unmute"/>
-    <feature k_fullName="unmuteBtn.Tooltip" k_value="unmute sound"/>
-    <feature k_fullName="shareBtn" k_value="false"/>
-    <feature k_fullName="shareBtn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="shareBtn.showOnVideoControllers.StartScreen" k_value="true"/>
-    <feature k_fullName="shareBtn.showOnVideoControllers.PlayScreen" k_value="true"/>
-    <feature k_fullName="shareBtn.showOnVideoControllers.PauseScreen" k_value="true"/>
-    <feature k_fullName="shareBtn.showOnVideoControllers.EndScreen" k_value="true"/>
-    <feature k_fullName="shareBtn.ControllerScreen" k_value="true"/>
-    <feature k_fullName="shareBtn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="shareBtn.Label" k_value="Share"/>
-    <feature k_fullName="shareBtn.Tooltip" k_value="share with friends"/>
-    <feature k_fullName="shareBtn.uiconfId" k_value=""/>
-    <feature k_fullName="downloadBtn" k_value="false"/>
-    <feature k_fullName="downloadBtn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="downloadBtn.showOnVideoControllers.StartScreen" k_value="true"/>
-    <feature k_fullName="downloadBtn.showOnVideoControllers.PlayScreen" k_value="true"/>
-    <feature k_fullName="downloadBtn.showOnVideoControllers.PauseScreen" k_value="true"/>
-    <feature k_fullName="downloadBtn.showOnVideoControllers.EndScreen" k_value="true"/>
-    <feature k_fullName="downloadBtn.ControllerScreen" k_value="true"/>
-    <feature k_fullName="downloadBtn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="downloadBtn.Label" k_value="download"/>
-    <feature k_fullName="downloadBtn.Tooltip" k_value="download video"/>
-    <feature k_fullName="uploadBtn" k_value="false"/>
-    <feature k_fullName="uploadBtn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="uploadBtn.showOnVideoControllers.StartScreen" k_value="true"/>
-    <feature k_fullName="uploadBtn.showOnVideoControllers.PlayScreen" k_value="true"/>
-    <feature k_fullName="uploadBtn.showOnVideoControllers.PauseScreen" k_value="true"/>
-    <feature k_fullName="uploadBtn.showOnVideoControllers.EndScreen" k_value="true"/>
-    <feature k_fullName="uploadBtn.ControllerScreen" k_value="true"/>
-    <feature k_fullName="uploadBtn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="uploadBtn.Label" k_value="upload"/>
-    <feature k_fullName="uploadBtn.Tooltip" k_value="Add additional videos, images or audio files to this video"/>
-    <feature k_fullName="editBtn" k_value="false"/>
-    <feature k_fullName="editBtn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="editBtn.showOnVideoControllers.StartScreen" k_value="true"/>
-    <feature k_fullName="editBtn.showOnVideoControllers.PlayScreen" k_value="true"/>
-    <feature k_fullName="editBtn.showOnVideoControllers.PauseScreen" k_value="true"/>
-    <feature k_fullName="editBtn.showOnVideoControllers.EndScreen" k_value="true"/>
-    <feature k_fullName="editBtn.ControllerScreen" k_value="true"/>
-    <feature k_fullName="editBtn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="editBtn.Label" k_value="Edit"/>
-    <feature k_fullName="editBtn.Tooltip" k_value="Remix this video"/>
-    <feature k_fullName="captureThumbBtn" k_value="false"/>
-    <feature k_fullName="captureThumbBtn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="captureThumbBtn.showOnVideoControllers.StartScreen" k_value="true"/>
-    <feature k_fullName="captureThumbBtn.showOnVideoControllers.PlayScreen" k_value="true"/>
-    <feature k_fullName="captureThumbBtn.showOnVideoControllers.PauseScreen" k_value="true"/>
-    <feature k_fullName="captureThumbBtn.showOnVideoControllers.EndScreen" k_value="true"/>
-    <feature k_fullName="captureThumbBtn.ControllerScreen" k_value="true"/>
-    <feature k_fullName="captureThumbBtn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="captureThumbBtn.Label" k_value="Thumb"/>
-    <feature k_fullName="captureThumbBtn.Tooltip" k_value="Use current frame as the video thumbnail"/>
-    <feature k_fullName="plymedia" k_value="false"/>
-    <feature k_fullName="custom1Btn" k_value="false"/>
-    <feature k_fullName="custom1Btn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="custom1Btn.showOnVideoControllers.StartScreen" k_value="true"/>
-    <feature k_fullName="custom1Btn.showOnVideoControllers.PlayScreen" k_value="true"/>
-    <feature k_fullName="custom1Btn.showOnVideoControllers.PauseScreen" k_value="true"/>
-    <feature k_fullName="custom1Btn.showOnVideoControllers.EndScreen" k_value="true"/>
-    <feature k_fullName="custom1Btn.ControllerScreen" k_value="true"/>
-    <feature k_fullName="custom1Btn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="custom1Btn.Label" k_value="custom1"/>
-    <feature k_fullName="custom1Btn.Tooltip" k_value="Custom1 tooltip"/>
-    <feature k_fullName="custom2Btn" k_value="false"/>
-    <feature k_fullName="custom2Btn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="custom2Btn.showOnVideoControllers.StartScreen" k_value="true"/>
-    <feature k_fullName="custom2Btn.showOnVideoControllers.PlayScreen" k_value="true"/>
-    <feature k_fullName="custom2Btn.showOnVideoControllers.PauseScreen" k_value="true"/>
-    <feature k_fullName="custom2Btn.showOnVideoControllers.EndScreen" k_value="true"/>
-    <feature k_fullName="custom2Btn.ControllerScreen" k_value="true"/>
-    <feature k_fullName="custom2Btn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="custom2Btn.Label" k_value="custom2"/>
-    <feature k_fullName="custom2Btn.Tooltip" k_value="Custom2 tooltip"/>
-    <feature k_fullName="custom3Btn" k_value="false"/>
-    <feature k_fullName="custom3Btn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="custom3Btn.showOnVideoControllers.StartScreen" k_value="true"/>
-    <feature k_fullName="custom3Btn.showOnVideoControllers.PlayScreen" k_value="true"/>
-    <feature k_fullName="custom3Btn.showOnVideoControllers.PauseScreen" k_value="true"/>
-    <feature k_fullName="custom3Btn.showOnVideoControllers.EndScreen" k_value="true"/>
-    <feature k_fullName="custom3Btn.ControllerScreen" k_value="true"/>
-    <feature k_fullName="custom3Btn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="custom3Btn.Label" k_value="custom3"/>
-    <feature k_fullName="custom3Btn.Tooltip" k_value="Custom3 tooltip"/>
-    <feature k_fullName="custom4Btn" k_value="false"/>
-    <feature k_fullName="custom4Btn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="custom4Btn.showOnVideoControllers.StartScreen" k_value="true"/>
-    <feature k_fullName="custom4Btn.showOnVideoControllers.PlayScreen" k_value="true"/>
-    <feature k_fullName="custom4Btn.showOnVideoControllers.PauseScreen" k_value="true"/>
-    <feature k_fullName="custom4Btn.showOnVideoControllers.EndScreen" k_value="true"/>
-    <feature k_fullName="custom4Btn.ControllerScreen" k_value="true"/>
-    <feature k_fullName="custom4Btn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="custom4Btn.Label" k_value="custom4"/>
-    <feature k_fullName="custom4Btn.Tooltip" k_value="Custom4 tooltip"/>
-    <feature k_fullName="custom5Btn" k_value="false"/>
-    <feature k_fullName="custom5Btn.showOnVideoControllers" k_value="true"/>
-    <feature k_fullName="custom5Btn.showOnVideoControllers.StartScreen" k_value="true"/>
-    <feature k_fullName="custom5Btn.showOnVideoControllers.PlayScreen" k_value="true"/>
-    <feature k_fullName="custom5Btn.showOnVideoControllers.PauseScreen" k_value="true"/>
-    <feature k_fullName="custom5Btn.showOnVideoControllers.EndScreen" k_value="true"/>
-    <feature k_fullName="custom5Btn.ControllerScreen" k_value="true"/>
-    <feature k_fullName="custom5Btn.Display" k_value="buttonIconControllerArea"/>
-    <feature k_fullName="custom5Btn.Label" k_value="custom5"/>
-    <feature k_fullName="custom5Btn.Tooltip" k_value="Custom5 tooltip"/>
+    <feature v_fullName="TopTitleScreen" v_value="false"/>
+    <feature v_fullName="watermark" v_value="false"/>
+    <feature v_fullName="watermark.watermarkPath" v_value="http://www.vidiun.com/content/uiconf/vidiun/vmc/appstudio/vdp3/exampleWatermark.png"/>
+    <feature v_fullName="watermark.watermarkClickPath" v_value="http://www.vidiun.com/"/>
+    <feature v_fullName="watermark.watermarkPosition" v_value="bottomLeft"/>
+    <feature v_fullName="watermark.padding" v_value="5"/>
+    <feature v_fullName="timerControllerScreen1" v_value="false"/>
+    <feature v_fullName="timerControllerScreen1.ControllerScreen" v_value="true"/>
+    <feature v_fullName="timerControllerScreen1.timerType" v_value="forwards"/>
+    <feature v_fullName="timerControllerScreen2" v_value="false"/>
+    <feature v_fullName="timerControllerScreen2.ControllerScreen" v_value="true"/>
+    <feature v_fullName="timerControllerScreen2.timerType" v_value="total"/>
+    <feature v_fullName="flavorComboControllerScreen" v_value="false"/>
+    <feature v_fullName="flavorComboControllerScreen.hdOn" v_value="HD On"/>
+    <feature v_fullName="flavorComboControllerScreen.hdOff" v_value="HD Off"/>
+    <feature v_fullName="flavorComboControllerScreen.autoMessage" v_value="Automatically switches between bitrates"/>
+    <feature v_fullName="fullScreenBtn" v_value="false"/>
+    <feature v_fullName="fullScreenBtn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="fullScreenBtn.showOnVideoControllers.StartScreen" v_value="false"/>
+    <feature v_fullName="fullScreenBtn.showOnVideoControllers.PlayScreen" v_value="false"/>
+    <feature v_fullName="fullScreenBtn.showOnVideoControllers.PauseScreen" v_value="false"/>
+    <feature v_fullName="fullScreenBtn.showOnVideoControllers.EndScreen" v_value="false"/>
+    <feature v_fullName="fullScreenBtn.ControllerScreen" v_value="true"/>
+    <feature v_fullName="fullScreenBtn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="fullScreenBtn.Label" v_value="fullscreen"/>
+    <feature v_fullName="fullScreenBtn.Tooltip" v_value="Toggle fullscreen"/>
+    <feature v_fullName="onVideoPlayBtn" v_value="false"/>
+    <feature v_fullName="onVideoPlayBtn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="onVideoPlayBtn.showOnVideoControllers.StartScreen" v_value="true"/>
+    <feature v_fullName="onVideoPlayBtn.showOnVideoControllers.PauseScreen" v_value="true"/>
+    <feature v_fullName="onVideoPlayBtn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="onVideoPlayBtn.Label" v_value="Play"/>
+    <feature v_fullName="onVideoPlayBtn.Tooltip" v_value="Play video"/>
+    <feature v_fullName="playBtn" v_value="false"/>
+    <feature v_fullName="playBtn.ControllerScreen" v_value="true"/>
+    <feature v_fullName="playBtn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="playBtn.Tooltip" v_value=""/>
+    <feature v_fullName="volumeBar" v_value="false"/>
+    <feature v_fullName="volumeBar.ControllerScreen" v_value="true"/>
+    <feature v_fullName="volumeBar.Tooltip" v_value="Change volume"/>
+    <feature v_fullName="scrubberContainer" v_value="false"/>
+    <feature v_fullName="scrubberContainer.ControllerScreen" v_value="true"/>
+    <feature v_fullName="replayBtn" v_value="false"/>
+    <feature v_fullName="replayBtn.EndScreen" v_value="true"/>
+    <feature v_fullName="replayBtn.Label" v_value="Replay"/>
+    <feature v_fullName="replayBtn.Tooltip" v_value="Replay"/>
+    <feature v_fullName="unmuteBtn" v_value="false"/>
+    <feature v_fullName="unmuteBtn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="unmuteBtn.showOnVideoControllers.StartScreen" v_value="true"/>
+    <feature v_fullName="unmuteBtn.showOnVideoControllers.PlayScreen" v_value="true"/>
+    <feature v_fullName="unmuteBtn.showOnVideoControllers.PauseScreen" v_value="true"/>
+    <feature v_fullName="unmuteBtn.showOnVideoControllers.EndScreen" v_value="true"/>
+    <feature v_fullName="unmuteBtn.Label" v_value="unmute"/>
+    <feature v_fullName="unmuteBtn.Tooltip" v_value="unmute sound"/>
+    <feature v_fullName="shareBtn" v_value="false"/>
+    <feature v_fullName="shareBtn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="shareBtn.showOnVideoControllers.StartScreen" v_value="true"/>
+    <feature v_fullName="shareBtn.showOnVideoControllers.PlayScreen" v_value="true"/>
+    <feature v_fullName="shareBtn.showOnVideoControllers.PauseScreen" v_value="true"/>
+    <feature v_fullName="shareBtn.showOnVideoControllers.EndScreen" v_value="true"/>
+    <feature v_fullName="shareBtn.ControllerScreen" v_value="true"/>
+    <feature v_fullName="shareBtn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="shareBtn.Label" v_value="Share"/>
+    <feature v_fullName="shareBtn.Tooltip" v_value="share with friends"/>
+    <feature v_fullName="shareBtn.uiconfId" v_value=""/>
+    <feature v_fullName="downloadBtn" v_value="false"/>
+    <feature v_fullName="downloadBtn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="downloadBtn.showOnVideoControllers.StartScreen" v_value="true"/>
+    <feature v_fullName="downloadBtn.showOnVideoControllers.PlayScreen" v_value="true"/>
+    <feature v_fullName="downloadBtn.showOnVideoControllers.PauseScreen" v_value="true"/>
+    <feature v_fullName="downloadBtn.showOnVideoControllers.EndScreen" v_value="true"/>
+    <feature v_fullName="downloadBtn.ControllerScreen" v_value="true"/>
+    <feature v_fullName="downloadBtn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="downloadBtn.Label" v_value="download"/>
+    <feature v_fullName="downloadBtn.Tooltip" v_value="download video"/>
+    <feature v_fullName="uploadBtn" v_value="false"/>
+    <feature v_fullName="uploadBtn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="uploadBtn.showOnVideoControllers.StartScreen" v_value="true"/>
+    <feature v_fullName="uploadBtn.showOnVideoControllers.PlayScreen" v_value="true"/>
+    <feature v_fullName="uploadBtn.showOnVideoControllers.PauseScreen" v_value="true"/>
+    <feature v_fullName="uploadBtn.showOnVideoControllers.EndScreen" v_value="true"/>
+    <feature v_fullName="uploadBtn.ControllerScreen" v_value="true"/>
+    <feature v_fullName="uploadBtn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="uploadBtn.Label" v_value="upload"/>
+    <feature v_fullName="uploadBtn.Tooltip" v_value="Add additional videos, images or audio files to this video"/>
+    <feature v_fullName="editBtn" v_value="false"/>
+    <feature v_fullName="editBtn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="editBtn.showOnVideoControllers.StartScreen" v_value="true"/>
+    <feature v_fullName="editBtn.showOnVideoControllers.PlayScreen" v_value="true"/>
+    <feature v_fullName="editBtn.showOnVideoControllers.PauseScreen" v_value="true"/>
+    <feature v_fullName="editBtn.showOnVideoControllers.EndScreen" v_value="true"/>
+    <feature v_fullName="editBtn.ControllerScreen" v_value="true"/>
+    <feature v_fullName="editBtn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="editBtn.Label" v_value="Edit"/>
+    <feature v_fullName="editBtn.Tooltip" v_value="Remix this video"/>
+    <feature v_fullName="captureThumbBtn" v_value="false"/>
+    <feature v_fullName="captureThumbBtn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="captureThumbBtn.showOnVideoControllers.StartScreen" v_value="true"/>
+    <feature v_fullName="captureThumbBtn.showOnVideoControllers.PlayScreen" v_value="true"/>
+    <feature v_fullName="captureThumbBtn.showOnVideoControllers.PauseScreen" v_value="true"/>
+    <feature v_fullName="captureThumbBtn.showOnVideoControllers.EndScreen" v_value="true"/>
+    <feature v_fullName="captureThumbBtn.ControllerScreen" v_value="true"/>
+    <feature v_fullName="captureThumbBtn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="captureThumbBtn.Label" v_value="Thumb"/>
+    <feature v_fullName="captureThumbBtn.Tooltip" v_value="Use current frame as the video thumbnail"/>
+    <feature v_fullName="plymedia" v_value="false"/>
+    <feature v_fullName="custom1Btn" v_value="false"/>
+    <feature v_fullName="custom1Btn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="custom1Btn.showOnVideoControllers.StartScreen" v_value="true"/>
+    <feature v_fullName="custom1Btn.showOnVideoControllers.PlayScreen" v_value="true"/>
+    <feature v_fullName="custom1Btn.showOnVideoControllers.PauseScreen" v_value="true"/>
+    <feature v_fullName="custom1Btn.showOnVideoControllers.EndScreen" v_value="true"/>
+    <feature v_fullName="custom1Btn.ControllerScreen" v_value="true"/>
+    <feature v_fullName="custom1Btn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="custom1Btn.Label" v_value="custom1"/>
+    <feature v_fullName="custom1Btn.Tooltip" v_value="Custom1 tooltip"/>
+    <feature v_fullName="custom2Btn" v_value="false"/>
+    <feature v_fullName="custom2Btn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="custom2Btn.showOnVideoControllers.StartScreen" v_value="true"/>
+    <feature v_fullName="custom2Btn.showOnVideoControllers.PlayScreen" v_value="true"/>
+    <feature v_fullName="custom2Btn.showOnVideoControllers.PauseScreen" v_value="true"/>
+    <feature v_fullName="custom2Btn.showOnVideoControllers.EndScreen" v_value="true"/>
+    <feature v_fullName="custom2Btn.ControllerScreen" v_value="true"/>
+    <feature v_fullName="custom2Btn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="custom2Btn.Label" v_value="custom2"/>
+    <feature v_fullName="custom2Btn.Tooltip" v_value="Custom2 tooltip"/>
+    <feature v_fullName="custom3Btn" v_value="false"/>
+    <feature v_fullName="custom3Btn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="custom3Btn.showOnVideoControllers.StartScreen" v_value="true"/>
+    <feature v_fullName="custom3Btn.showOnVideoControllers.PlayScreen" v_value="true"/>
+    <feature v_fullName="custom3Btn.showOnVideoControllers.PauseScreen" v_value="true"/>
+    <feature v_fullName="custom3Btn.showOnVideoControllers.EndScreen" v_value="true"/>
+    <feature v_fullName="custom3Btn.ControllerScreen" v_value="true"/>
+    <feature v_fullName="custom3Btn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="custom3Btn.Label" v_value="custom3"/>
+    <feature v_fullName="custom3Btn.Tooltip" v_value="Custom3 tooltip"/>
+    <feature v_fullName="custom4Btn" v_value="false"/>
+    <feature v_fullName="custom4Btn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="custom4Btn.showOnVideoControllers.StartScreen" v_value="true"/>
+    <feature v_fullName="custom4Btn.showOnVideoControllers.PlayScreen" v_value="true"/>
+    <feature v_fullName="custom4Btn.showOnVideoControllers.PauseScreen" v_value="true"/>
+    <feature v_fullName="custom4Btn.showOnVideoControllers.EndScreen" v_value="true"/>
+    <feature v_fullName="custom4Btn.ControllerScreen" v_value="true"/>
+    <feature v_fullName="custom4Btn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="custom4Btn.Label" v_value="custom4"/>
+    <feature v_fullName="custom4Btn.Tooltip" v_value="Custom4 tooltip"/>
+    <feature v_fullName="custom5Btn" v_value="false"/>
+    <feature v_fullName="custom5Btn.showOnVideoControllers" v_value="true"/>
+    <feature v_fullName="custom5Btn.showOnVideoControllers.StartScreen" v_value="true"/>
+    <feature v_fullName="custom5Btn.showOnVideoControllers.PlayScreen" v_value="true"/>
+    <feature v_fullName="custom5Btn.showOnVideoControllers.PauseScreen" v_value="true"/>
+    <feature v_fullName="custom5Btn.showOnVideoControllers.EndScreen" v_value="true"/>
+    <feature v_fullName="custom5Btn.ControllerScreen" v_value="true"/>
+    <feature v_fullName="custom5Btn.Display" v_value="buttonIconControllerArea"/>
+    <feature v_fullName="custom5Btn.Label" v_value="custom5"/>
+    <feature v_fullName="custom5Btn.Tooltip" v_value="Custom5 tooltip"/>
   </featuresData>
   <advertising enabled="false">
     <adSources>

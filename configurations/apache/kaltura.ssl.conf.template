@@ -19,13 +19,13 @@ SSLCryptoDevice builtin
 SSLCertificateFile @SSL_CERTIFICATE_FILE@
 SSLCertificateKeyFile @SSL_CERTIFICATE_KEY_FILE@
 SSLCACertificateFile @SSL_CERTIFICATE_CHAIN_FILE@
-<VirtualHost @KALTURA_FULL_VIRTUAL_HOST_NAME@>
+<VirtualHost @VIDIUN_FULL_VIRTUAL_HOST_NAME@>
 	SSLEngine on
 	SSLProtocol all -SSLv2
 	SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
 	
-	ErrorLog "@LOG_DIR@/kaltura_apache_errors_ssl.log"
-	CustomLog @LOG_DIR@/kaltura_apache_access_ssl.log vhost_kalt
+	ErrorLog "@LOG_DIR@/vidiun_apache_errors_ssl.log"
+	CustomLog @LOG_DIR@/vidiun_apache_access_ssl.log vhost_vidi
 	
 	Include "@APP_DIR@/configurations/apache/conf.d/enabled.*.conf"
 </VirtualHost>

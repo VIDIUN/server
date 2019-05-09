@@ -1,6 +1,6 @@
 <?php
 /**
- * Will run KAsyncStorageDelete.class.php 
+ * Will run VAsyncStorageDelete.class.php 
  * 
  *
  * @package Scheduler
@@ -10,6 +10,6 @@
 chdir(dirname( __FILE__ ) . "/../../");
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncStorageExportCloser();
+$instance = new VAsyncStorageExportCloser();
 $instance->run(); 
 $instance->done();

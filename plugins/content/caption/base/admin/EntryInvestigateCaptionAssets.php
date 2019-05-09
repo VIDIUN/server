@@ -3,13 +3,13 @@
  * @package plugins.caption
  * @subpackage admin
  */
-class Kaltura_View_Helper_EntryInvestigateCaptionAssets extends Kaltura_View_Helper_PartialViewPlugin
+class Vidiun_View_Helper_EntryInvestigateCaptionAssets extends Vidiun_View_Helper_PartialViewPlugin
 {
 	private $entryId;
 	private $partnerId;
 	
 	/* (non-PHPdoc)
-	 * @see Kaltura_View_Helper_PartialViewPlugin::plug()
+	 * @see Vidiun_View_Helper_PartialViewPlugin::plug()
 	 */
 	public function plug(Zend_View_Interface $view)
 	{
@@ -20,7 +20,7 @@ class Kaltura_View_Helper_EntryInvestigateCaptionAssets extends Kaltura_View_Hel
 	}
 	
 	/* (non-PHPdoc)
-	 * @see Kaltura_View_Helper_PartialViewPlugin::getDataArray()
+	 * @see Vidiun_View_Helper_PartialViewPlugin::getDataArray()
 	 */
 	protected function getDataArray()
 	{
@@ -31,10 +31,10 @@ class Kaltura_View_Helper_EntryInvestigateCaptionAssets extends Kaltura_View_Hel
 			return;
 		}
 		
-		$captionPlugin = Kaltura_Client_Caption_Plugin::get($client);
-		$fileSyncPlugin = Kaltura_Client_FileSync_Plugin::get($client);
+		$captionPlugin = Vidiun_Client_Caption_Plugin::get($client);
+		$fileSyncPlugin = Vidiun_Client_FileSync_Plugin::get($client);
 		
-		$filter = new Kaltura_Client_Caption_Type_CaptionAssetFilter();
+		$filter = new Vidiun_Client_Caption_Type_CaptionAssetFilter();
 		$filter->entryIdEqual = $this->entryId;
 		
 		$captionAssets = array();
@@ -66,11 +66,11 @@ class Kaltura_View_Helper_EntryInvestigateCaptionAssets extends Kaltura_View_Hel
 		{
 			try
 			{
-				$filter = new Kaltura_Client_FileSync_Type_FileSyncFilter();
-				$filter->fileObjectTypeEqual = Kaltura_Client_Enum_FileSyncObjectType::FLAVOR_ASSET;
+				$filter = new Vidiun_Client_FileSync_Type_FileSyncFilter();
+				$filter->fileObjectTypeEqual = Vidiun_Client_Enum_FileSyncObjectType::FLAVOR_ASSET;
 				$filter->objectIdIn = implode(',', $captionAssetIds);
 				
-				$pager = new Kaltura_Client_Type_FilterPager();
+				$pager = new Vidiun_Client_Type_FilterPager();
 				$pager->pageSize = 100;
 				
 				$fileSyncList = $fileSyncPlugin->fileSync->listAction($filter, $pager);
@@ -92,7 +92,7 @@ class Kaltura_View_Helper_EntryInvestigateCaptionAssets extends Kaltura_View_Hel
 	}
 	
 	/* (non-PHPdoc)
-	 * @see Kaltura_View_Helper_PartialViewPlugin::getTemplatePath()
+	 * @see Vidiun_View_Helper_PartialViewPlugin::getTemplatePath()
 	 */
 	protected function getTemplatePath()
 	{
@@ -100,7 +100,7 @@ class Kaltura_View_Helper_EntryInvestigateCaptionAssets extends Kaltura_View_Hel
 	}
 	
 	/* (non-PHPdoc)
-	 * @see Kaltura_View_Helper_PartialViewPlugin::getPHTML()
+	 * @see Vidiun_View_Helper_PartialViewPlugin::getPHTML()
 	 */
 	protected function getPHTML()
 	{

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFileExistsResponse extends KalturaObject 
+class VidiunFileExistsResponse extends VidiunObject 
 {
 	/**
 	 * Indicates if the file exists

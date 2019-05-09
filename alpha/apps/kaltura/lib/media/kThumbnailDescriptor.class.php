@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Media
  */
-class kThumbnailDescriptor
+class vThumbnailDescriptor
 {
 	private static $requiredWidth;
 	private static $requiredHeight;
@@ -29,10 +29,10 @@ class kThumbnailDescriptor
 	{
 		if ( ! self::$initialized )
 		{
-			throw new kCoreException("kThumbnailDescriptor was not yet initialized");
+			throw new vCoreException("vThumbnailDescriptor was not yet initialized");
 		}
 
-		$descriptor = new kThumbnailDescriptor();
+		$descriptor = new vThumbnailDescriptor();
 
 		$thumbAspectRatio = $thumbHeight > 0 ? $thumbWidth / $thumbHeight : 0 ;
 
@@ -49,7 +49,7 @@ class kThumbnailDescriptor
 	{
 		$fileSyncKey = $thumbAsset->getSyncKey( asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET );
 
-		$thumbPath = kFileSyncUtils::getReadyLocalFilePathForKey( $fileSyncKey );
+		$thumbPath = vFileSyncUtils::getReadyLocalFilePathForKey( $fileSyncKey );
 
 		$thumbWidth = $thumbAsset->getWidth();
 		$thumbHeight = $thumbAsset->getHeight();

@@ -4,7 +4,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaSiteCondition extends KalturaMatchCondition
+class VidiunSiteCondition extends VidiunMatchCondition
 {
 	/**
 	 * Init object type
@@ -15,12 +15,12 @@ class KalturaSiteCondition extends KalturaMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kSiteCondition();
+			$dbObject = new vSiteCondition();
 			
 		return parent::toObject($dbObject, $skip);
 	}

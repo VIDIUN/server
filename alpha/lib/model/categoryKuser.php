@@ -2,7 +2,7 @@
 
 
 /**
- * Skeleton subclass for representing a row from the 'category_kuser' table.
+ * Skeleton subclass for representing a row from the 'category_vuser' table.
  *
  * 
  *
@@ -13,7 +13,7 @@
  * @package Core
  * @subpackage model
  */
-class categoryKuser extends BasecategoryKuser implements IIndexable
+class categoryVuser extends BasecategoryVuser implements IIndexable
 {
 	
 	private $old_status = null;
@@ -51,7 +51,7 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 		$this->setUpdateMethod(UpdateMethodType::MANUAL);
 	}
 
-	public function updateKuser($puserId = null, $screenName = null) {
+	public function updateVuser($puserId = null, $screenName = null) {
 		if ($puserId)
 			parent::setPuserId($puserId);
 		if ($screenName)
@@ -65,14 +65,14 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 
 		parent::setPuserId($puserId);
 		
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 			
-		$kuser = kuserPeer::getKuserByPartnerAndUid($partnerId, $puserId);
-		if (!$kuser)
-		    throw new kCoreException("Invalid user Id [{$puserId}]", kCoreException::INVALID_USER_ID );
+		$vuser = vuserPeer::getVuserByPartnerAndUid($partnerId, $puserId);
+		if (!$vuser)
+		    throw new vCoreException("Invalid user Id [{$puserId}]", vCoreException::INVALID_USER_ID );
 			
-		parent::setKuserId($kuser->getId());
-		parent::setScreenName($kuser->getScreenName());
+		parent::setVuserId($vuser->getId());
+		parent::setScreenName($vuser->getScreenName());
 	}
 	
 	/**
@@ -86,25 +86,25 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see BasecategoryKuser::setKuserId()
+	 * @see BasecategoryVuser::setVuserId()
 	 */
-	public function setKuserId($kuserId)
+	public function setVuserId($vuserId)
 	{
-		if ( $this->getKuserId() == $kuserId )  // same value - don't set for nothing 
+		if ( $this->getVuserId() == $vuserId )  // same value - don't set for nothing 
 			return;
 
-		parent::setKuserId($kuserId);
+		parent::setVuserId($vuserId);
 
-		$kuser = kuserPeer::retrieveByPK($kuserId);
-		if (!$kuser)
-			throw new kCoreException("Invalid kuser Id [$kuserId]", kCoreException::INVALID_USER_ID);
+		$vuser = vuserPeer::retrieveByPK($vuserId);
+		if (!$vuser)
+			throw new vCoreException("Invalid vuser Id [$vuserId]", vCoreException::INVALID_USER_ID);
 
-		parent::setPuserId($kuser->getPuserId());
-		parent::setScreenName($kuser->getScreenName());
+		parent::setPuserId($vuser->getPuserId());
+		parent::setScreenName($vuser->getScreenName());
 	}
 	
 	/* (non-PHPdoc)
-	 * @see BasecategoryKuser::setStatus()
+	 * @see BasecategoryVuser::setStatus()
 	 */
 	public function setStatus($v)
 	{
@@ -115,11 +115,11 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	
 	
 	/* (non-PHPdoc)
-	 * @see BasecategoryKuser::preUpdate()
+	 * @see BasecategoryVuser::preUpdate()
 	 */
 	public function preUpdate(PropelPDO $con = null)
 	{
-		// no need to update the category if the categoryKuser wasn't updated
+		// no need to update the category if the categoryVuser wasn't updated
 		if ($this->isModified())
 			$this->updateCategory();
 		
@@ -137,7 +137,7 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	}
 
 	/* (non-PHPdoc)
-	 * @see BasecategoryKuser::preInsert()
+	 * @see BasecategoryVuser::preInsert()
 	 */
 	public function preInsert(PropelPDO $con = null)
 	{
@@ -153,39 +153,39 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 		categoryPeer::setUseCriteriaFilter(true);
 		
 		if(!$category)
-			throw new kCoreException('category not found');
+			throw new vCoreException('category not found');
 			
 		if ($this->isInInsert)
 		{
-			if($this->status == CategoryKuserStatus::PENDING)
+			if($this->status == CategoryVuserStatus::PENDING)
 				$category->setPendingMembersCount($category->getPendingMembersCount() + 1);
 			
-			if($this->status == CategoryKuserStatus::ACTIVE)
+			if($this->status == CategoryVuserStatus::ACTIVE)
 				$category->setMembersCount($category->getMembersCount() + 1);
 
 		}
-		elseif($this->isColumnModified(categoryKuserPeer::STATUS))
+		elseif($this->isColumnModified(categoryVuserPeer::STATUS))
 		{
-			if($this->status == CategoryKuserStatus::PENDING)
+			if($this->status == CategoryVuserStatus::PENDING)
 				$category->setPendingMembersCount($category->getPendingMembersCount() + 1);
 			
-			if($this->status == CategoryKuserStatus::ACTIVE )
+			if($this->status == CategoryVuserStatus::ACTIVE )
 				$category->setMembersCount($category->getMembersCount() + 1);
 			
-			if($this->old_status == CategoryKuserStatus::PENDING)
+			if($this->old_status == CategoryVuserStatus::PENDING)
 				$category->setPendingMembersCount($category->getPendingMembersCount() - 1);
 			
-			if($this->old_status == CategoryKuserStatus::ACTIVE)
+			if($this->old_status == CategoryVuserStatus::ACTIVE)
 				$category->setMembersCount($category->getMembersCount() - 1);
 				
 		}
 		
 		if($isDelete)
 		{				
-			if($this->status == CategoryKuserStatus::PENDING)
+			if($this->status == CategoryVuserStatus::PENDING)
 				$category->setPendingMembersCount($category->getPendingMembersCount() - 1);
 				
-			if($this->status == CategoryKuserStatus::ACTIVE)
+			if($this->status == CategoryVuserStatus::ACTIVE)
 				$category->setMembersCount($category->getMembersCount() - 1);
 				
 		}
@@ -199,18 +199,18 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	{
 		$category = categoryPeer::retrieveByPK($this->getCategoryId());
 		if(!$category)
-			throw new kCoreException('category id [' . $this->getCategoryId() . 'was not found', kCoreException::ID_NOT_FOUND);
+			throw new vCoreException('category id [' . $this->getCategoryId() . 'was not found', vCoreException::ID_NOT_FOUND);
 			
 		$this->setCategoryFullIds($category->getFullIds());
 	}
 	
 	public function reSetScreenName()
 	{
-		$kuser = kuserPeer::retrieveByPK($this->getKuserId());
+		$vuser = vuserPeer::retrieveByPK($this->getVuserId());
 		
-		if($kuser)
+		if($vuser)
 		{
-			$this->setScreenName($kuser->getScreenName());
+			$this->setScreenName($vuser->getScreenName());
 		}
 	}
 	
@@ -232,7 +232,7 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	public function getEntryId() {}
 
 	public function getIndexObjectName() {
-		return "categoryKuserIndex";
+		return "categoryVuserIndex";
 	}
 	
 	/* (non-PHPdoc)
@@ -240,7 +240,7 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	 */
 	public function indexToSearchIndex() {
 		
-		kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($this));
 	}
 	
 	public function getSphinxIndexName()
@@ -256,7 +256,7 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	{
 		$permissionNames = explode(",", $this->getPermissionNames());
 		foreach ($permissionNames as &$permissionName)
-			$permissionName = self::getSearchIndexFieldValue(categoryKuserPeer::PERMISSION_NAMES, $permissionName, $this->getPartnerId());
+			$permissionName = self::getSearchIndexFieldValue(categoryVuserPeer::PERMISSION_NAMES, $permissionName, $this->getPartnerId());
 		
 		return self::PERMISSION_NAME_FIELD_INDEX_PREFIX.$this->getPartnerId()." ". implode(" ", $permissionNames);
 	}
@@ -267,7 +267,7 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	 */
 	public function getSearchIndexStatus ()
 	{
-		return self::STATUS_FIELD_PREFIX. $this->getPartnerId() ." ". self::getSearchIndexFieldValue(categoryKuserPeer::STATUS, $this->getStatus(), $this->getPartnerId());
+		return self::STATUS_FIELD_PREFIX. $this->getPartnerId() ." ". self::getSearchIndexFieldValue(categoryVuserPeer::STATUS, $this->getStatus(), $this->getPartnerId());
 	}
 	
 	/**
@@ -276,7 +276,7 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	 */
 	public function getSearchIndexUpdateMethod ()
 	{
-		return self::getSearchIndexFieldValue(categoryKuserPeer::UPDATE_METHOD, $this->getUpdateMethod(), $this->getPartnerId());
+		return self::getSearchIndexFieldValue(categoryVuserPeer::UPDATE_METHOD, $this->getUpdateMethod(), $this->getPartnerId());
 	}
 	
 	/**
@@ -314,13 +314,13 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	{
 		switch ($fieldName)
 		{
-			case categoryKuserPeer::STATUS:
+			case categoryVuserPeer::STATUS:
 				return $partnerId . self::STATUS_INDEX_PREFIX . $fieldValue;
 				break;
-			case categoryKuserPeer::UPDATE_METHOD:
+			case categoryVuserPeer::UPDATE_METHOD:
 				return $partnerId . self::UPDATE_METHOD_INDEX_PREFIX . $fieldValue;
 				break;
-			case categoryKuserPeer::PERMISSION_NAMES:
+			case categoryVuserPeer::PERMISSION_NAMES:
 				return $partnerId . self::PERMISSION_NAME_INDEX_PREFIX . $fieldValue;
 				break;
 			default:
@@ -338,7 +338,7 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	
 		if (!$this->alreadyInSave)
 		{
-			kEventsManager::raiseEvent(new kObjectAddedEvent($this));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($this));
 			
 			$category = $this->getcategory();
 			if($category && $category->getPrivacyContexts() && !PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENTITLEMENT_USED, $category->getPartnerId()))
@@ -351,18 +351,18 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see BasecategoryKuser::postUpdate()
+	 * @see BasecategoryVuser::postUpdate()
 	 */
 	public function postUpdate(PropelPDO $con = null)
 	{
 		parent::postUpdate($con);
 		
 		if (!$this->alreadyInSave)
-			kEventsManager::raiseEvent(new kObjectUpdatedEvent($this));
+			vEventsManager::raiseEvent(new vObjectUpdatedEvent($this));
 
-		if($this->getColumnsOldValue(categoryKuserPeer::STATUS) != CategoryKuserStatus::DELETED  && $this->getStatus() == CategoryKuserStatus::DELETED)
+		if($this->getColumnsOldValue(categoryVuserPeer::STATUS) != CategoryVuserStatus::DELETED  && $this->getStatus() == CategoryVuserStatus::DELETED)
 		{
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 		}
 	}
 	
@@ -389,21 +389,21 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 	{
 		switch ($permissionLevel)
 		{
-			case CategoryKuserPermissionLevel::MANAGER:
+			case CategoryVuserPermissionLevel::MANAGER:
 				$permissionNamesArr[] = PermissionName::CATEGORY_EDIT;
 				$permissionNamesArr[] = PermissionName::CATEGORY_MODERATE;
 				$permissionNamesArr[] = PermissionName::CATEGORY_CONTRIBUTE;
 				$permissionNamesArr[] = PermissionName::CATEGORY_VIEW;
 				break;
-			case CategoryKuserPermissionLevel::MODERATOR:
+			case CategoryVuserPermissionLevel::MODERATOR:
 				$permissionNamesArr[] = PermissionName::CATEGORY_MODERATE;
 				$permissionNamesArr[] = PermissionName::CATEGORY_VIEW;
 				break;
-			case CategoryKuserPermissionLevel::CONTRIBUTOR:
+			case CategoryVuserPermissionLevel::CONTRIBUTOR:
 				$permissionNamesArr[] = PermissionName::CATEGORY_CONTRIBUTE;
 				$permissionNamesArr[] = PermissionName::CATEGORY_VIEW;
 				break;
-			case CategoryKuserPermissionLevel::MEMBER:
+			case CategoryVuserPermissionLevel::MEMBER:
 				$permissionNamesArr[] = PermissionName::CATEGORY_VIEW;
 				break;
 		}
@@ -413,7 +413,7 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 
 	public function getCacheInvalidationKeys()
 	{
-		return array("categoryKuser:id=".strtolower($this->getId()), "categoryKuser:categoryId=".strtolower($this->getCategoryId()));
+		return array("categoryVuser:id=".strtolower($this->getId()), "categoryVuser:categoryId=".strtolower($this->getCategoryId()));
 	}
 
 	/**
@@ -424,4 +424,4 @@ class categoryKuser extends BasecategoryKuser implements IIndexable
 		return PartnerPeer::retrieveByPK( $this->getPartnerId() );
 	}
 
-} // categoryKuser
+} // categoryVuser

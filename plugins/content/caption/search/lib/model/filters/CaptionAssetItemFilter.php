@@ -7,7 +7,7 @@ class CaptionAssetItemFilter extends baseObjectFilter
 {
 	public function init ()
 	{
-		$this->fields = kArray::makeAssociativeDefaultValue(array(
+		$this->fields = vArray::makeAssociativeDefaultValue(array(
 			"_eq_caption_asset_id",
 			"_in_caption_asset_id",
 			"_eq_entry_id",

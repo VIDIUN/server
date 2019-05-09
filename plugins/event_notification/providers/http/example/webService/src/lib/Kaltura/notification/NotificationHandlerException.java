@@ -1,4 +1,4 @@
-package lib.Kaltura.notification;
+package lib.Vidiun.notification;
 
 /**
  * Thrown notification errors

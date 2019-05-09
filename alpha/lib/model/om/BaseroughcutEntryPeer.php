@@ -40,8 +40,8 @@ abstract class BaseroughcutEntryPeer {
 	/** the column name for the ROUGHCUT_VERSION field */
 	const ROUGHCUT_VERSION = 'roughcut_entry.ROUGHCUT_VERSION';
 
-	/** the column name for the ROUGHCUT_KSHOW_ID field */
-	const ROUGHCUT_KSHOW_ID = 'roughcut_entry.ROUGHCUT_KSHOW_ID';
+	/** the column name for the ROUGHCUT_VSHOW_ID field */
+	const ROUGHCUT_VSHOW_ID = 'roughcut_entry.ROUGHCUT_VSHOW_ID';
 
 	/** the column name for the ENTRY_ID field */
 	const ENTRY_ID = 'roughcut_entry.ENTRY_ID';
@@ -74,10 +74,10 @@ abstract class BaseroughcutEntryPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'RoughcutId', 'RoughcutVersion', 'RoughcutKshowId', 'EntryId', 'PartnerId', 'OpType', 'CreatedAt', 'UpdatedAt', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'roughcutId', 'roughcutVersion', 'roughcutKshowId', 'entryId', 'partnerId', 'opType', 'createdAt', 'updatedAt', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::ROUGHCUT_ID, self::ROUGHCUT_VERSION, self::ROUGHCUT_KSHOW_ID, self::ENTRY_ID, self::PARTNER_ID, self::OP_TYPE, self::CREATED_AT, self::UPDATED_AT, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'roughcut_id', 'roughcut_version', 'roughcut_kshow_id', 'entry_id', 'partner_id', 'op_type', 'created_at', 'updated_at', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'RoughcutId', 'RoughcutVersion', 'RoughcutVshowId', 'EntryId', 'PartnerId', 'OpType', 'CreatedAt', 'UpdatedAt', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'roughcutId', 'roughcutVersion', 'roughcutVshowId', 'entryId', 'partnerId', 'opType', 'createdAt', 'updatedAt', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::ROUGHCUT_ID, self::ROUGHCUT_VERSION, self::ROUGHCUT_VSHOW_ID, self::ENTRY_ID, self::PARTNER_ID, self::OP_TYPE, self::CREATED_AT, self::UPDATED_AT, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'roughcut_id', 'roughcut_version', 'roughcut_vshow_id', 'entry_id', 'partner_id', 'op_type', 'created_at', 'updated_at', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
 	);
 
@@ -88,10 +88,10 @@ abstract class BaseroughcutEntryPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'RoughcutId' => 1, 'RoughcutVersion' => 2, 'RoughcutKshowId' => 3, 'EntryId' => 4, 'PartnerId' => 5, 'OpType' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'roughcutId' => 1, 'roughcutVersion' => 2, 'roughcutKshowId' => 3, 'entryId' => 4, 'partnerId' => 5, 'opType' => 6, 'createdAt' => 7, 'updatedAt' => 8, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::ROUGHCUT_ID => 1, self::ROUGHCUT_VERSION => 2, self::ROUGHCUT_KSHOW_ID => 3, self::ENTRY_ID => 4, self::PARTNER_ID => 5, self::OP_TYPE => 6, self::CREATED_AT => 7, self::UPDATED_AT => 8, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'roughcut_id' => 1, 'roughcut_version' => 2, 'roughcut_kshow_id' => 3, 'entry_id' => 4, 'partner_id' => 5, 'op_type' => 6, 'created_at' => 7, 'updated_at' => 8, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'RoughcutId' => 1, 'RoughcutVersion' => 2, 'RoughcutVshowId' => 3, 'EntryId' => 4, 'PartnerId' => 5, 'OpType' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'roughcutId' => 1, 'roughcutVersion' => 2, 'roughcutVshowId' => 3, 'entryId' => 4, 'partnerId' => 5, 'opType' => 6, 'createdAt' => 7, 'updatedAt' => 8, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::ROUGHCUT_ID => 1, self::ROUGHCUT_VERSION => 2, self::ROUGHCUT_VSHOW_ID => 3, self::ENTRY_ID => 4, self::PARTNER_ID => 5, self::OP_TYPE => 6, self::CREATED_AT => 7, self::UPDATED_AT => 8, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'roughcut_id' => 1, 'roughcut_version' => 2, 'roughcut_vshow_id' => 3, 'entry_id' => 4, 'partner_id' => 5, 'op_type' => 6, 'created_at' => 7, 'updated_at' => 8, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
 	);
 
@@ -165,7 +165,7 @@ abstract class BaseroughcutEntryPeer {
 		$criteria->addSelectColumn(roughcutEntryPeer::ID);
 		$criteria->addSelectColumn(roughcutEntryPeer::ROUGHCUT_ID);
 		$criteria->addSelectColumn(roughcutEntryPeer::ROUGHCUT_VERSION);
-		$criteria->addSelectColumn(roughcutEntryPeer::ROUGHCUT_KSHOW_ID);
+		$criteria->addSelectColumn(roughcutEntryPeer::ROUGHCUT_VSHOW_ID);
 		$criteria->addSelectColumn(roughcutEntryPeer::ENTRY_ID);
 		$criteria->addSelectColumn(roughcutEntryPeer::PARTNER_ID);
 		$criteria->addSelectColumn(roughcutEntryPeer::OP_TYPE);
@@ -204,11 +204,11 @@ abstract class BaseroughcutEntryPeer {
 		
 		roughcutEntryPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'roughcutEntryPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -232,7 +232,7 @@ abstract class BaseroughcutEntryPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -313,7 +313,7 @@ abstract class BaseroughcutEntryPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -336,11 +336,11 @@ abstract class BaseroughcutEntryPeer {
 	{		
 		$criteriaForSelect = roughcutEntryPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'roughcutEntryPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -356,12 +356,12 @@ abstract class BaseroughcutEntryPeer {
 		
 		$queryResult = roughcutEntryPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -371,17 +371,17 @@ abstract class BaseroughcutEntryPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -452,7 +452,7 @@ abstract class BaseroughcutEntryPeer {
 		roughcutEntryPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -460,19 +460,19 @@ abstract class BaseroughcutEntryPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -491,7 +491,7 @@ abstract class BaseroughcutEntryPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -610,11 +610,11 @@ abstract class BaseroughcutEntryPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('roughcutEntryPeer');
+				vMemoryManager::registerPeer('roughcutEntryPeer');
 			}
 		}
 	}
@@ -786,7 +786,7 @@ abstract class BaseroughcutEntryPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kshow table
+	 * Returns the number of rows matching criteria, joining the related vshow table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -794,7 +794,7 @@ abstract class BaseroughcutEntryPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinkshow(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinvshow(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -818,7 +818,7 @@ abstract class BaseroughcutEntryPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$stmt = roughcutEntryPeer::doCountStmt($criteria, $con);
 
@@ -943,7 +943,7 @@ abstract class BaseroughcutEntryPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -951,7 +951,7 @@ abstract class BaseroughcutEntryPeer {
 
 
 	/**
-	 * Selects a collection of roughcutEntry objects pre-filled with their kshow objects.
+	 * Selects a collection of roughcutEntry objects pre-filled with their vshow objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -959,7 +959,7 @@ abstract class BaseroughcutEntryPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinkshow(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvshow(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -970,9 +970,9 @@ abstract class BaseroughcutEntryPeer {
 
 		roughcutEntryPeer::addSelectColumns($criteria);
 		$startcol = (roughcutEntryPeer::NUM_COLUMNS - roughcutEntryPeer::NUM_LAZY_LOAD_COLUMNS);
-		kshowPeer::addSelectColumns($criteria);
+		vshowPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$stmt = roughcutEntryPeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -992,19 +992,19 @@ abstract class BaseroughcutEntryPeer {
 				roughcutEntryPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = kshowPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = vshowPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = kshowPeer::getInstanceFromPool($key2);
+				$obj2 = vshowPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kshowPeer::getOMClass(false);
+					$cls = vshowPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					kshowPeer::addInstanceToPool($obj2, $key2);
+					vshowPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (roughcutEntry) to $obj2 (kshow)
+				// Add the $obj1 (roughcutEntry) to $obj2 (vshow)
 				$obj2->addroughcutEntry($obj1);
 
 			} // if joined row was not null
@@ -1013,7 +1013,7 @@ abstract class BaseroughcutEntryPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1084,7 +1084,7 @@ abstract class BaseroughcutEntryPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1126,7 +1126,7 @@ abstract class BaseroughcutEntryPeer {
 		
 		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_ID, entryPeer::ID, $join_behavior);
 
-		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$criteria->addJoin(roughcutEntryPeer::ENTRY_ID, entryPeer::ID, $join_behavior);
 
@@ -1166,15 +1166,15 @@ abstract class BaseroughcutEntryPeer {
 		entryPeer::addSelectColumns($criteria);
 		$startcol3 = $startcol2 + (entryPeer::NUM_COLUMNS - entryPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kshowPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (kshowPeer::NUM_COLUMNS - kshowPeer::NUM_LAZY_LOAD_COLUMNS);
+		vshowPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (vshowPeer::NUM_COLUMNS - vshowPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		entryPeer::addSelectColumns($criteria);
 		$startcol5 = $startcol4 + (entryPeer::NUM_COLUMNS - entryPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_ID, entryPeer::ID, $join_behavior);
 
-		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$criteria->addJoin(roughcutEntryPeer::ENTRY_ID, entryPeer::ID, $join_behavior);
 
@@ -1214,21 +1214,21 @@ abstract class BaseroughcutEntryPeer {
 				$obj2->addroughcutEntryRelatedByRoughcutId($obj1);
 			} // if joined row not null
 
-			// Add objects for joined kshow rows
+			// Add objects for joined vshow rows
 
-			$key3 = kshowPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+			$key3 = vshowPeer::getPrimaryKeyHashFromRow($row, $startcol3);
 			if ($key3 !== null) {
-				$obj3 = kshowPeer::getInstanceFromPool($key3);
+				$obj3 = vshowPeer::getInstanceFromPool($key3);
 				if (!$obj3) {
 
-					$cls = kshowPeer::getOMClass(false);
+					$cls = vshowPeer::getOMClass(false);
 
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
-					kshowPeer::addInstanceToPool($obj3, $key3);
+					vshowPeer::addInstanceToPool($obj3, $key3);
 				} // if obj3 loaded
 
-				// Add the $obj1 (roughcutEntry) to the collection in $obj3 (kshow)
+				// Add the $obj1 (roughcutEntry) to the collection in $obj3 (vshow)
 				$obj3->addroughcutEntry($obj1);
 			} // if joined row not null
 
@@ -1291,7 +1291,7 @@ abstract class BaseroughcutEntryPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$stmt = roughcutEntryPeer::doCountStmt($criteria, $con);
 
@@ -1306,7 +1306,7 @@ abstract class BaseroughcutEntryPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kshow table
+	 * Returns the number of rows matching criteria, joining the related vshow table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1314,7 +1314,7 @@ abstract class BaseroughcutEntryPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptkshow(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptvshow(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1387,7 +1387,7 @@ abstract class BaseroughcutEntryPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$stmt = roughcutEntryPeer::doCountStmt($criteria, $con);
 
@@ -1425,10 +1425,10 @@ abstract class BaseroughcutEntryPeer {
 		roughcutEntryPeer::addSelectColumns($criteria);
 		$startcol2 = (roughcutEntryPeer::NUM_COLUMNS - roughcutEntryPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kshowPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kshowPeer::NUM_COLUMNS - kshowPeer::NUM_LAZY_LOAD_COLUMNS);
+		vshowPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vshowPeer::NUM_COLUMNS - vshowPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
@@ -1448,21 +1448,21 @@ abstract class BaseroughcutEntryPeer {
 				roughcutEntryPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined kshow rows
+				// Add objects for joined vshow rows
 
-				$key2 = kshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				$key2 = vshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 				if ($key2 !== null) {
-					$obj2 = kshowPeer::getInstanceFromPool($key2);
+					$obj2 = vshowPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$cls = kshowPeer::getOMClass(false);
+						$cls = vshowPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kshowPeer::addInstanceToPool($obj2, $key2);
+					vshowPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (roughcutEntry) to the collection in $obj2 (kshow)
+				// Add the $obj1 (roughcutEntry) to the collection in $obj2 (vshow)
 				$obj2->addroughcutEntry($obj1);
 
 			} // if joined row is not null
@@ -1475,7 +1475,7 @@ abstract class BaseroughcutEntryPeer {
 
 
 	/**
-	 * Selects a collection of roughcutEntry objects pre-filled with all related objects except kshow.
+	 * Selects a collection of roughcutEntry objects pre-filled with all related objects except vshow.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -1484,7 +1484,7 @@ abstract class BaseroughcutEntryPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptkshow(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptvshow(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1597,10 +1597,10 @@ abstract class BaseroughcutEntryPeer {
 		roughcutEntryPeer::addSelectColumns($criteria);
 		$startcol2 = (roughcutEntryPeer::NUM_COLUMNS - roughcutEntryPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kshowPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kshowPeer::NUM_COLUMNS - kshowPeer::NUM_LAZY_LOAD_COLUMNS);
+		vshowPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vshowPeer::NUM_COLUMNS - vshowPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
@@ -1620,21 +1620,21 @@ abstract class BaseroughcutEntryPeer {
 				roughcutEntryPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined kshow rows
+				// Add objects for joined vshow rows
 
-				$key2 = kshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				$key2 = vshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 				if ($key2 !== null) {
-					$obj2 = kshowPeer::getInstanceFromPool($key2);
+					$obj2 = vshowPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$cls = kshowPeer::getOMClass(false);
+						$cls = vshowPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kshowPeer::addInstanceToPool($obj2, $key2);
+					vshowPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (roughcutEntry) to the collection in $obj2 (kshow)
+				// Add the $obj1 (roughcutEntry) to the collection in $obj2 (vshow)
 				$obj2->addroughcutEntry($obj1);
 
 			} // if joined row is not null

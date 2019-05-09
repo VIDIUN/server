@@ -3,7 +3,7 @@
  * @package plugins.exampleDistribution
  * @subpackage lib
  */
-class ExampleDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class ExampleDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const EXAMPLE = 'EXAMPLE';
 	

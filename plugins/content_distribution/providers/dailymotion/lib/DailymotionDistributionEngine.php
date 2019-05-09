@@ -33,62 +33,62 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 	{
 		parent::configure();
 		
-		if(KBatchBase::$taskConfig->params->tempXmlPath)
+		if(VBatchBase::$taskConfig->params->tempXmlPath)
 		{
-			$this->tempXmlPath = KBatchBase::$taskConfig->params->tempXmlPath;
+			$this->tempXmlPath = VBatchBase::$taskConfig->params->tempXmlPath;
 			if(!is_dir($this->tempXmlPath))
 				mkdir($this->tempXmlPath, 0777, true);
 		}
 		else
 		{
-			KalturaLog::err("params.tempXmlPath configuration not supplied");
+			VidiunLog::err("params.tempXmlPath configuration not supplied");
 			$this->tempXmlPath = sys_get_temp_dir();
 		}
 		
-		if (isset(KBatchBase::$taskConfig->params->dailymotion))
+		if (isset(VBatchBase::$taskConfig->params->dailymotion))
 		{
-			if (isset(KBatchBase::$taskConfig->params->dailymotion->requestTimeout))
-				$this->requestTimeout = KBatchBase::$taskConfig->params->dailymotion->requestTimeout;
+			if (isset(VBatchBase::$taskConfig->params->dailymotion->requestTimeout))
+				$this->requestTimeout = VBatchBase::$taskConfig->params->dailymotion->requestTimeout;
 				
-			if (isset(KBatchBase::$taskConfig->params->dailymotion->connectTimeout))
-				$this->connectTimeout = KBatchBase::$taskConfig->params->dailymotion->connectTimeout;
+			if (isset(VBatchBase::$taskConfig->params->dailymotion->connectTimeout))
+				$this->connectTimeout = VBatchBase::$taskConfig->params->dailymotion->connectTimeout;
 		}
 	}
 
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaDailymotionDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaDailymotionDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunDailymotionDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunDailymotionDistributionProfile");
 	
 		return $this->doSubmit($data, $data->distributionProfile);
 	}
 
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaDailymotionDistributionProfile $distributionProfile
-	 * @param KalturaDailymotionDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunDailymotionDistributionProfile $distributionProfile
+	 * @param VidiunDailymotionDistributionJobProviderData $providerData
 	 * @return array()
 	 */
 	public function getDailymotionProps($enabled = null, $distributionProfile = null, $providerData = null)
 	{
 		$props = array();
-		$props['tags'] = str_replace(',', ' , ', $this->getValueForField(KalturaDailymotionDistributionField::VIDEO_TAGS));
-		$props['title'] = $this->getValueForField(KalturaDailymotionDistributionField::VIDEO_TITLE);
-		$props['channel'] = $this->translateCategory($this->getValueForField(KalturaDailymotionDistributionField::VIDEO_CHANNEL));
-		$props['description'] = $this->getValueForField(KalturaDailymotionDistributionField::VIDEO_DESCRIPTION);
+		$props['tags'] = str_replace(',', ' , ', $this->getValueForField(VidiunDailymotionDistributionField::VIDEO_TAGS));
+		$props['title'] = $this->getValueForField(VidiunDailymotionDistributionField::VIDEO_TITLE);
+		$props['channel'] = $this->translateCategory($this->getValueForField(VidiunDailymotionDistributionField::VIDEO_CHANNEL));
+		$props['description'] = $this->getValueForField(VidiunDailymotionDistributionField::VIDEO_DESCRIPTION);
 		//$props['date'] = time();
-		$props['language'] = $this->getValueForField(KalturaDailymotionDistributionField::VIDEO_LANGUAGE);
-		$props['type'] = $this->getValueForField(KalturaDailymotionDistributionField::VIDEO_TYPE);
+		$props['language'] = $this->getValueForField(VidiunDailymotionDistributionField::VIDEO_LANGUAGE);
+		$props['type'] = $this->getValueForField(VidiunDailymotionDistributionField::VIDEO_TYPE);
 		$props['published']= true;
 		if(!is_null($enabled))
 			$props['private']= !$enabled;
 
 		$geoBlocking = $this->getGeoBlocking($distributionProfile, $providerData);
 
-		KalturaLog::info('Geo blocking array: '.print_r($geoBlocking, true));
+		VidiunLog::info('Geo blocking array: '.print_r($geoBlocking, true));
 		if (count($geoBlocking))
 			$props['geoblocking'] = $geoBlocking;
 
@@ -110,12 +110,12 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 	}
 	
 	
-	public function doSubmit(KalturaDistributionSubmitJobData $data, KalturaDailymotionDistributionProfile $distributionProfile)
+	public function doSubmit(VidiunDistributionSubmitJobData $data, VidiunDailymotionDistributionProfile $distributionProfile)
 	{	
 	    $this->fieldValues = unserialize($data->providerData->fieldValues);
 	    
 		$enabled = false;
-		if($data->entryDistribution->sunStatus == KalturaEntryDistributionSunStatus::AFTER_SUNRISE)
+		if($data->entryDistribution->sunStatus == VidiunEntryDistributionSunStatus::AFTER_SUNRISE)
 			$enabled = true;
 		
 		$needDel = false;
@@ -135,10 +135,10 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 		$videoFilePath = $data->providerData->videoAssetFilePath;
 		
 		if (!$videoFilePath)
-			throw new KalturaException('No video asset to distribute, the job will fail');
+			throw new VidiunException('No video asset to distribute, the job will fail');
 			
 		if (!file_exists($videoFilePath))
-			throw new KalturaDistributionException('The file ['.$videoFilePath.'] was not found (probably not synced yet), the job will retry');
+			throw new VidiunDistributionException('The file ['.$videoFilePath.'] was not found (probably not synced yet), the job will retry');
 		
 		if (FALSE === strstr($videoFilePath, "."))
 		{
@@ -163,9 +163,9 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 		
 		$data->remoteId = $remoteId;
 		$captionsInfo = $data->providerData->captionsInfo;
-		/* @var $captionInfo KalturaDailymotionDistributionCaptionInfo */
+		/* @var $captionInfo VidiunDailymotionDistributionCaptionInfo */
 		foreach ($captionsInfo as $captionInfo){
-			if ($captionInfo->action == KalturaDailymotionDistributionCaptionAction::SUBMIT_ACTION){
+			if ($captionInfo->action == VidiunDailymotionDistributionCaptionAction::SUBMIT_ACTION){
 				$data->mediaFiles[] = $this->submitCaption($dailyMotionImpl, $captionInfo, $data->remoteId);
 			}
 		}
@@ -175,7 +175,7 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		$distributionProfile = $data->distributionProfile;
 		$dailyMotionImpl = new DailyMotionImpl($distributionProfile->user, $distributionProfile->password);
@@ -203,10 +203,10 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaDailymotionDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaDailymotionDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunDailymotionDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunDailymotionDistributionProfile");
 	
 		return $this->doUpdate($data, $data->distributionProfile);
 	}
@@ -214,10 +214,10 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDisable::disable()
 	 */
-	public function disable(KalturaDistributionDisableJobData $data)
+	public function disable(VidiunDistributionDisableJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaDailymotionDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaDailymotionDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunDailymotionDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunDailymotionDistributionProfile");
 	
 		return $this->doUpdate($data, $data->distributionProfile, false);
 	}
@@ -225,15 +225,15 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineEnable::enable()
 	 */
-	public function enable(KalturaDistributionEnableJobData $data)
+	public function enable(VidiunDistributionEnableJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaDailymotionDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaDailymotionDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunDailymotionDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunDailymotionDistributionProfile");
 	
 		return $this->doUpdate($data, $data->distributionProfile, true);
 	}
 	
-	public function doUpdate(KalturaDistributionUpdateJobData $data, KalturaDailymotionDistributionProfile $distributionProfile, $enabled = null)
+	public function doUpdate(VidiunDistributionUpdateJobData $data, VidiunDailymotionDistributionProfile $distributionProfile, $enabled = null)
 	{
 	    $this->fieldValues = unserialize($data->providerData->fieldValues);
 	    
@@ -244,19 +244,19 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 		$dailyMotionImpl->update($data->remoteId, $props);
 		
 		$captionsInfo = $data->providerData->captionsInfo;
-		/* @var $captionInfo KalturaYouTubeApiCaptionDistributionInfo */
+		/* @var $captionInfo VidiunYouTubeApiCaptionDistributionInfo */
 		foreach ($captionsInfo as $captionInfo){
 			switch ($captionInfo->action){
-				case KalturaDailymotionDistributionCaptionAction::SUBMIT_ACTION:
+				case VidiunDailymotionDistributionCaptionAction::SUBMIT_ACTION:
 					$data->mediaFiles[] = $this->submitCaption($dailyMotionImpl,$captionInfo, $data->remoteId);
 					break;
-				case KalturaDailymotionDistributionCaptionAction::UPDATE_ACTION:
+				case VidiunDailymotionDistributionCaptionAction::UPDATE_ACTION:
 					if (!file_exists($captionInfo->filePath ))
-						throw new KalturaDistributionException('The caption file ['.$captionInfo->filePath.'] was not found (probably not synced yet), the job will retry');
+						throw new VidiunDistributionException('The caption file ['.$captionInfo->filePath.'] was not found (probably not synced yet), the job will retry');
 					$dailyMotionImpl->updateSubtitle($captionInfo->remoteId, $captionInfo);
 					$this->updateRemoteMediaFileVersion($data,$captionInfo);
 					break;
-				case KalturaDailymotionDistributionCaptionAction::DELETE_ACTION:
+				case VidiunDailymotionDistributionCaptionAction::DELETE_ACTION:
 					$dailyMotionImpl->deleteSubtitle($captionInfo->remoteId);
 					break;
 			}
@@ -270,7 +270,7 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
 		$distributionProfile = $data->distributionProfile;
 		$dailyMotionImpl = new DailyMotionImpl($distributionProfile->user, $distributionProfile->password);
@@ -284,16 +284,16 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineReport::fetchReport()
 	 */
-	public function fetchReport(KalturaDistributionFetchReportJobData $data)
+	public function fetchReport(VidiunDistributionFetchReportJobData $data)
 	{
 		// TODO
 	}
 	
 	protected function configureTimeouts(DailyMotionImpl $dailyMotionImpl)
 	{
-		KalturaLog::info('Setting connection timeout to ' . $this->connectTimeout . ' seconds');
+		VidiunLog::info('Setting connection timeout to ' . $this->connectTimeout . ' seconds');
 		$dailyMotionImpl->setOption('connectionTimeout', $this->connectTimeout);
-		KalturaLog::info('Setting request timeout to ' . $this->requestTimeout . ' seconds');
+		VidiunLog::info('Setting request timeout to ' . $this->requestTimeout . ' seconds');
 		$dailyMotionImpl->setOption('timeout', $this->requestTimeout);
 	}
 	
@@ -307,8 +307,8 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 	}
 
 	/**
-	 * @param KalturaDailymotionDistributionProfile $distributionProfile
-	 * @param KalturaDailymotionDistributionJobProviderData $providerData
+	 * @param VidiunDailymotionDistributionProfile $distributionProfile
+	 * @param VidiunDailymotionDistributionJobProviderData $providerData
 	 * @return array
 	 */
 	private function getGeoBlocking($distributionProfile = null, $providerData = null)
@@ -318,11 +318,11 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 			return $geoBlocking;
 		$geoBlockingOperation = null;
 		$geoBlockingCountryList = null;
-		if ($distributionProfile->geoBlockingMapping == KalturaDailymotionGeoBlockingMapping::METADATA) {
-			$geoBlockingOperation = $this->getValueForField(KalturaDailymotionDistributionField::VIDEO_GEO_BLOCKING_OPERATION);
-			$geoBlockingCountryList = $this->getValueForField(KalturaDailymotionDistributionField::VIDEO_GEO_BLOCKING_COUNTRY_LIST);
+		if ($distributionProfile->geoBlockingMapping == VidiunDailymotionGeoBlockingMapping::METADATA) {
+			$geoBlockingOperation = $this->getValueForField(VidiunDailymotionDistributionField::VIDEO_GEO_BLOCKING_OPERATION);
+			$geoBlockingCountryList = $this->getValueForField(VidiunDailymotionDistributionField::VIDEO_GEO_BLOCKING_COUNTRY_LIST);
 		}
-		elseif ($distributionProfile->geoBlockingMapping == KalturaDailymotionGeoBlockingMapping::ACCESS_CONTROL) {
+		elseif ($distributionProfile->geoBlockingMapping == VidiunDailymotionGeoBlockingMapping::ACCESS_CONTROL) {
 			$geoBlockingOperation = $providerData->accessControlGeoBlockingOperation;
 			$geoBlockingCountryList = $providerData->accessControlGeoBlockingCountryList;
 		}
@@ -338,14 +338,14 @@ class DailymotionDistributionEngine extends DistributionEngine implements
 	
 	private function submitCaption(DailymotionImpl $dailymotionImpl, $captionInfo, $remoteId) {
 		if (!file_exists($captionInfo->filePath ))
-			throw new KalturaDistributionException('The caption file ['.$captionInfo->filePath.'] was not found (probably not synced yet), the job will retry');
-		KalturaLog::info ( 'Submitting caption [' . $captionInfo->assetId . ']' );
+			throw new VidiunDistributionException('The caption file ['.$captionInfo->filePath.'] was not found (probably not synced yet), the job will retry');
+		VidiunLog::info ( 'Submitting caption [' . $captionInfo->assetId . ']' );
 		$captionRemoteId = $dailymotionImpl->uploadSubtitle($remoteId, $captionInfo);
 		return $this->getNewRemoteMediaFile ( $captionRemoteId, $captionInfo );
 	}
 	
 	private function getNewRemoteMediaFile($captionRemoteId , $captionInfo) {
-		$remoteMediaFile = new KalturaDistributionRemoteMediaFile ();
+		$remoteMediaFile = new VidiunDistributionRemoteMediaFile ();
 		$remoteMediaFile->remoteId = $captionRemoteId;
 		$remoteMediaFile->version = $captionInfo->version;
 		$remoteMediaFile->assetId = $captionInfo->assetId;

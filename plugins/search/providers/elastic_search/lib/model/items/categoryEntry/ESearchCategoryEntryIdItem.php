@@ -43,9 +43,9 @@
 		 $this->transformData();
 		 $categoryEntryStatus = $this->getCategoryEntryStatusSearchValue();
 		 if($categoryEntryStatus)
-			 return kESearchQueryManager::getExactMatchQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+			 return vESearchQueryManager::getExactMatchQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 
-		 return kESearchQueryManager::getExistsQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+		 return vESearchQueryManager::getExistsQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 	 }
 
 	 public function getFilteredCategoryId()

@@ -10,21 +10,21 @@
  * @package Scheduler
  * @subpackage Cleanup
  */
-class KAsyncJobSuspender extends KPeriodicWorker
+class VAsyncJobSuspender extends VPeriodicWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::CLEANUP;
+		return VidiunBatchJobType::CLEANUP;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::run()
+	 * @see VBatchBase::run()
 	*/
 	public function run($jobs = null)
 	{
-		self::$kClient->batch->suspendJobs();
+		self::$vClient->batch->suspendJobs();
 	}
 }

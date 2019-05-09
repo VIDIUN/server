@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution 
  * @subpackage admin
  */
-class GenericDistributionProviderConfigureAction extends KalturaApplicationPlugin
+class GenericDistributionProviderConfigureAction extends VidiunApplicationPlugin
 {
 	protected $client;
 	
@@ -22,21 +22,21 @@ class GenericDistributionProviderConfigureAction extends KalturaApplicationPlugi
 	
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_CONTENT_DISTRIBUTION_MODIFY);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_CONTENT_DISTRIBUTION_MODIFY);
 	}
 	
 	public function saveProviderActions($providerId, Form_GenericProviderConfiguration $form)
 	{
-		$this->saveProviderAction($providerId, $form, 'submit', Kaltura_Client_ContentDistribution_Enum_DistributionAction::SUBMIT);
-		$this->saveProviderAction($providerId, $form, 'update', Kaltura_Client_ContentDistribution_Enum_DistributionAction::UPDATE);
-		$this->saveProviderAction($providerId, $form, 'delete', Kaltura_Client_ContentDistribution_Enum_DistributionAction::DELETE);
-		$this->saveProviderAction($providerId, $form, 'fetchReport', Kaltura_Client_ContentDistribution_Enum_DistributionAction::FETCH_REPORT);
+		$this->saveProviderAction($providerId, $form, 'submit', Vidiun_Client_ContentDistribution_Enum_DistributionAction::SUBMIT);
+		$this->saveProviderAction($providerId, $form, 'update', Vidiun_Client_ContentDistribution_Enum_DistributionAction::UPDATE);
+		$this->saveProviderAction($providerId, $form, 'delete', Vidiun_Client_ContentDistribution_Enum_DistributionAction::DELETE);
+		$this->saveProviderAction($providerId, $form, 'fetchReport', Vidiun_Client_ContentDistribution_Enum_DistributionAction::FETCH_REPORT);
 	}
 	
 	public function saveProviderAction($providerId, Form_GenericProviderConfiguration $form, $action, $actionType)
 	{
 		$actionObject = null;
-		$contentDistributionPlugin = Kaltura_Client_ContentDistribution_Plugin::get($this->client);
+		$contentDistributionPlugin = Vidiun_Client_ContentDistribution_Plugin::get($this->client);
 		try
 		{
 			$actionObject = $contentDistributionPlugin->genericDistributionProviderAction->getByProviderId($providerId, $actionType);
@@ -50,7 +50,7 @@ class GenericDistributionProviderConfigureAction extends KalturaApplicationPlugi
 		}
 		else
 		{
-			$actionObject = new Kaltura_Client_ContentDistribution_Type_GenericDistributionProviderAction();
+			$actionObject = new Vidiun_Client_ContentDistribution_Type_GenericDistributionProviderAction();
 			$actionObject->genericDistributionProviderId = $providerId;
 			$actionObject->action = $actionType;
 		}
@@ -119,13 +119,13 @@ class GenericDistributionProviderConfigureAction extends KalturaApplicationPlugi
 		
 		$providerId = $this->_getParam('provider_id');
 		$this->client = Infra_ClientHelper::getClient();
-		$contentDistributionPlugin = Kaltura_Client_ContentDistribution_Plugin::get($this->client);
+		$contentDistributionPlugin = Vidiun_Client_ContentDistribution_Plugin::get($this->client);
 		$form = new Form_GenericProviderConfiguration();
 		$form->setAction($action->view->url(array('controller' => 'plugin', 'action' => 'GenericDistributionProviderConfigureAction')));
 		
 		$request = $action->getRequest();
 		
-		$pager = new Kaltura_Client_Type_FilterPager();
+		$pager = new Vidiun_Client_Type_FilterPager();
 		$pager->pageSize = 100;
 		$flavorParamsResponse = $this->client->flavorParams->listAction(null, $pager);
 			
@@ -140,7 +140,7 @@ class GenericDistributionProviderConfigureAction extends KalturaApplicationPlugi
 				{
 					$form->isValid($request->getPost());
 					$form->populate($request->getPost());
-					$genericDistributionProvider = $form->getObject("Kaltura_Client_ContentDistribution_Type_GenericDistributionProvider", $request->getPost());
+					$genericDistributionProvider = $form->getObject("Vidiun_Client_ContentDistribution_Type_GenericDistributionProvider", $request->getPost());
 					$genericDistributionProvider->partnerId = null;
 					$contentDistributionPlugin->genericDistributionProvider->update($providerId, $genericDistributionProvider);
 					$this->saveProviderActions($providerId, $form);
@@ -179,7 +179,7 @@ class GenericDistributionProviderConfigureAction extends KalturaApplicationPlugi
 				{
 					$form->isValid($request->getPost());
 					$form->populate($request->getPost());
-					$genericDistributionProvider = $form->getObject("Kaltura_Client_ContentDistribution_Type_GenericDistributionProvider", $request->getPost());
+					$genericDistributionProvider = $form->getObject("Vidiun_Client_ContentDistribution_Type_GenericDistributionProvider", $request->getPost());
 					
 					if(!$genericDistributionProvider->partnerId)
 						$genericDistributionProvider->partnerId = 0;
@@ -200,7 +200,7 @@ class GenericDistributionProviderConfigureAction extends KalturaApplicationPlugi
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			$action->view->errMessage = $e->getMessage();
 		}
 	}

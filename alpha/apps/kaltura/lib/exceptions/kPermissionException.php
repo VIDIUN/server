@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage errors
  */
-class kPermissionException extends kCoreException
+class vPermissionException extends vCoreException
 {
 	const PERMISSION_ITEM_NOT_FOUND = 'PERMISSION_ITEM_NOT_FOUND';
 	

@@ -5,10 +5,10 @@
  * @subpackage model.enum
  */
 
-class kCategoryEntryCondition extends kCondition
+class vCategoryEntryCondition extends vCondition
 {
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -26,7 +26,7 @@ class kCategoryEntryCondition extends kCondition
 	/**
 	 * The min category user permission level to chek for
 	 *
-	 * @var CategoryKuserPermissionLevel
+	 * @var CategoryVuserPermissionLevel
 	 */
 	protected $categoryUserPermission = null;
 	
@@ -86,11 +86,11 @@ class kCategoryEntryCondition extends kCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
-		KalturaLog::debug("Validate if category added is one of the ids defined in the rule [{$this->getCategoryId()}]");
+		VidiunLog::debug("Validate if category added is one of the ids defined in the rule [{$this->getCategoryId()}]");
 		
 		$matchingCategoryEntry = null;
 		$dbCategoryEntries = categoryEntryPeer::retrieveActiveByEntryId($scope->getEntryId());
@@ -106,7 +106,7 @@ class kCategoryEntryCondition extends kCondition
 		
 		if(!$matchingCategoryEntry)
 		{
-			KalturaLog::debug("No matching category entry found");
+			VidiunLog::debug("No matching category entry found");
 			return false;
 		}
 		
@@ -117,38 +117,38 @@ class kCategoryEntryCondition extends kCondition
 		{
 			//By definition if the rule does not provide comparison level and user permission than it mean that at task
 			// should be created without the restriction of the user being a member of the category
-			KalturaLog::debug("Comparison and permission level are not defined by rule, task should be created for all users");
+			VidiunLog::debug("Comparison and permission level are not defined by rule, task should be created for all users");
 			return true;
 		}
 		
-		$dbCategoryKuser = categoryKuserPeer::retrieveByCategoryIdAndKuserId($matchingCategoryEntry->getCategoryId(), $matchingCategoryEntry->getCreatorKuserId());
-		if(!$dbCategoryKuser)
+		$dbCategoryVuser = categoryVuserPeer::retrieveByCategoryIdAndVuserId($matchingCategoryEntry->getCategoryId(), $matchingCategoryEntry->getCreatorVuserId());
+		if(!$dbCategoryVuser)
 		{
-			KalturaLog::debug("User [{$matchingCategoryEntry->getCreatorKuserId()}] not found in category user table");
+			VidiunLog::debug("User [{$matchingCategoryEntry->getCreatorVuserId()}] not found in category user table");
 			return false;
 		}
 		
-		$dbUserPermission = $dbCategoryKuser->getPermissionLevel();
+		$dbUserPermission = $dbCategoryVuser->getPermissionLevel();
 		switch($comparisonOperator)
 		{
 			case searchConditionComparison::GREATER_THAN:
-				KalturaLog::debug("Compares field[$dbUserPermission] > value[$categoryUserPermission]");
+				VidiunLog::debug("Compares field[$dbUserPermission] > value[$categoryUserPermission]");
 				return ($dbUserPermission > $categoryUserPermission);
 			
 			case searchConditionComparison::GREATER_THAN_OR_EQUAL:
-				KalturaLog::debug("Compares field[$dbUserPermission] >= value[$categoryUserPermission]");
+				VidiunLog::debug("Compares field[$dbUserPermission] >= value[$categoryUserPermission]");
 				return ($dbUserPermission >= $categoryUserPermission);
 			
 			case searchConditionComparison::LESS_THAN:
-				KalturaLog::debug("Compares field[$dbUserPermission] < value[$categoryUserPermission]");
+				VidiunLog::debug("Compares field[$dbUserPermission] < value[$categoryUserPermission]");
 				return ($dbUserPermission < $categoryUserPermission);
 			
 			case searchConditionComparison::LESS_THAN_OR_EQUAL:
-				KalturaLog::debug("Compares field[$dbUserPermission] <= value[$categoryUserPermission]");
+				VidiunLog::debug("Compares field[$dbUserPermission] <= value[$categoryUserPermission]");
 				return ($dbUserPermission <= $categoryUserPermission);
 			
 			case searchConditionComparison::EQUAL:
-				KalturaLog::debug("Compares field[$dbUserPermission] == value[$categoryUserPermission]");
+				VidiunLog::debug("Compares field[$dbUserPermission] == value[$categoryUserPermission]");
 				return ($dbUserPermission == $categoryUserPermission);
 		}
 		

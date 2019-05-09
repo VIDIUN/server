@@ -3,7 +3,7 @@
  * @package plugins.scheduledTaskContentDistribution
  * @subpackage model.enum
  */
-class DistributeObjectTaskType implements IKalturaPluginEnum, ObjectTaskType
+class DistributeObjectTaskType implements IVidiunPluginEnum, ObjectTaskType
 {
 	const DISTRIBUTE = 'Distribute';
 	

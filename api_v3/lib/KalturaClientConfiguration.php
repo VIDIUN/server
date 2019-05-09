@@ -3,7 +3,7 @@
 /**
  * Define client optional configurations
  */
-class KalturaClientConfiguration extends KalturaObject
+class VidiunClientConfiguration extends VidiunObject
 {
 	/**
 	 * @var string

@@ -11,7 +11,7 @@ class mediaEntryFilterForPlaylist extends entryFilter
 	{
 		parent::init();
 
-		$extendedFields = kArray::makeAssociativeDefaultValue ( array (
+		$extendedFields = vArray::makeAssociativeDefaultValue ( array (
 			self::NAME,
 		) , NULL );
 

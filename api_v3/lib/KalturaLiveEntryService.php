@@ -7,13 +7,13 @@
  * @package api
  * @subpackage services
  */
-class KalturaLiveEntryService extends KalturaEntryService
+class VidiunLiveEntryService extends VidiunEntryService
 {
-	//amount of time for attempting to grab kLock
-	const KLOCK_CREATE_RECORDED_ENTRY_GRAB_TIMEOUT = 0.1;
+	//amount of time for attempting to grab vLock
+	const VLOCK_CREATE_RECORDED_ENTRY_GRAB_TIMEOUT = 0.1;
 
-	//amount of time for holding kLock
-	const KLOCK_CREATE_RECORDED_ENTRY_HOLD_TIMEOUT = 3;
+	//amount of time for holding vLock
+	const VLOCK_CREATE_RECORDED_ENTRY_HOLD_TIMEOUT = 3;
 
 	//Max time from recording created time before creating new recorded entry
 	const SEVEN_DAYS_IN_SECONDS = 604800;
@@ -33,7 +33,7 @@ class KalturaLiveEntryService extends KalturaEntryService
 
 		if (in_array($this->getPartner()->getStatus(), array(Partner::PARTNER_STATUS_CONTENT_BLOCK, Partner::PARTNER_STATUS_FULL_BLOCK)))
 		{
-			throw new kCoreException("Partner blocked", kCoreException::PARTNER_BLOCKED);
+			throw new vCoreException("Partner blocked", vCoreException::PARTNER_BLOCKED);
 		}
 	}
 
@@ -50,10 +50,10 @@ class KalturaLiveEntryService extends KalturaEntryService
 	function dumpApiRequest($entryId, $onlyIfAvailable = true)
 	{
 		$entryDc = substr($entryId, 0, 1);
-		if ($entryDc != kDataCenterMgr::getCurrentDcId())
+		if ($entryDc != vDataCenterMgr::getCurrentDcId())
 		{
-			$remoteDCHost = kDataCenterMgr::getRemoteDcExternalUrlByDcId($entryDc);
-			kFileUtils::dumpApiRequest($remoteDCHost, $onlyIfAvailable);
+			$remoteDCHost = vDataCenterMgr::getRemoteDcExternalUrlByDcId($entryDc);
+			vFileUtils::dumpApiRequest($remoteDCHost, $onlyIfAvailable);
 		}
 	}
 
@@ -63,43 +63,43 @@ class KalturaLiveEntryService extends KalturaEntryService
 	 * @action appendRecording
 	 * @param string $entryId Live entry id
 	 * @param string $assetId Live asset id
-	 * @param KalturaEntryServerNodeType $mediaServerIndex
-	 * @param KalturaDataCenterContentResource $resource
+	 * @param VidiunEntryServerNodeType $mediaServerIndex
+	 * @param VidiunDataCenterContentResource $resource
 	 * @param float $duration in seconds
 	 * @param bool $isLastChunk Is this the last recorded chunk in the current session (i.e. following a stream stop event)
-	 * @return KalturaLiveEntry The updated live entry
+	 * @return VidiunLiveEntry The updated live entry
 	 *
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
-	function appendRecordingAction($entryId, $assetId, $mediaServerIndex, KalturaDataCenterContentResource $resource, $duration, $isLastChunk = false)
+	function appendRecordingAction($entryId, $assetId, $mediaServerIndex, VidiunDataCenterContentResource $resource, $duration, $isLastChunk = false)
 	{
-		if (PermissionPeer::isValidForPartner(PermissionName::FEATURE_LIVE_STREAM_KALTURA_RECORDING, kCurrentContext::getCurrentPartnerId()))
+		if (PermissionPeer::isValidForPartner(PermissionName::FEATURE_LIVE_STREAM_VIDIUN_RECORDING, vCurrentContext::getCurrentPartnerId()))
 		{
-			throw new KalturaAPIException(KalturaErrors::KALTURA_RECORDING_ENABLED, kCurrentContext::$partner_id);
+			throw new VidiunAPIException(VidiunErrors::VIDIUN_RECORDING_ENABLED, vCurrentContext::$partner_id);
 		}
 
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbEntry || !($dbEntry instanceof LiveEntry))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		$dbAsset = assetPeer::retrieveById($assetId);
 		if (!$dbAsset || !($dbAsset instanceof liveAsset))
-			throw new KalturaAPIException(KalturaErrors::ASSET_ID_NOT_FOUND, $assetId);
+			throw new VidiunAPIException(VidiunErrors::ASSET_ID_NOT_FOUND, $assetId);
 
-		$maxRecordingDuration = (kConf::get('max_live_recording_duration_hours') + 1) * 60 * 60 * 1000;
+		$maxRecordingDuration = (vConf::get('max_live_recording_duration_hours') + 1) * 60 * 60 * 1000;
 		$currentDuration = $dbEntry->getCurrentDuration($duration, $maxRecordingDuration);
 		if ($currentDuration > $maxRecordingDuration)
 		{
-			throw new KalturaAPIException(KalturaErrors::LIVE_STREAM_EXCEEDED_MAX_RECORDED_DURATION, $entryId);
+			throw new VidiunAPIException(VidiunErrors::LIVE_STREAM_EXCEEDED_MAX_RECORDED_DURATION, $entryId);
 		}
 
-		$kResource = $resource->toObject();
-		$filename = $kResource->getLocalFilePath();
-		if (!($resource instanceof KalturaServerFileResource))
+		$vResource = $resource->toObject();
+		$filename = $vResource->getLocalFilePath();
+		if (!($resource instanceof VidiunServerFileResource))
 		{
-			$filename = kConf::get('uploaded_segment_destination') . basename($kResource->getLocalFilePath());
-			kFile::moveFile($kResource->getLocalFilePath(), $filename);
-			chgrp($filename, kConf::get('content_group'));
+			$filename = vConf::get('uploaded_segment_destination') . basename($vResource->getLocalFilePath());
+			vFile::moveFile($vResource->getLocalFilePath(), $filename);
+			chgrp($filename, vConf::get('content_group'));
 			chmod($filename, 0640);
 		}
 
@@ -116,7 +116,7 @@ class KalturaLiveEntryService extends KalturaEntryService
 			$dbEntry->save();
 		}
 
-		kJobsManager::addConvertLiveSegmentJob(null, $dbAsset, $mediaServerIndex, $filename, $currentDuration);
+		vJobsManager::addConvertLiveSegmentJob(null, $dbAsset, $mediaServerIndex, $filename, $currentDuration);
 
 		if ($mediaServerIndex == EntryServerNodeType::LIVE_PRIMARY)
 		{
@@ -137,7 +137,7 @@ class KalturaLiveEntryService extends KalturaEntryService
 			}
 		}
 
-		$entry = KalturaEntryFactory::getInstanceByType($dbEntry->getType());
+		$entry = VidiunEntryFactory::getInstanceByType($dbEntry->getType());
 		$entry->fromObject($dbEntry, $this->getResponseProfile());
 		return $entry;
 	}
@@ -152,7 +152,7 @@ class KalturaLiveEntryService extends KalturaEntryService
 		$recordedAsset = assetPeer::retrieveByEntryIdAndParams($entry->getId(), $flavorParamsId);
 		if ($recordedAsset)
 		{
-			KalturaLog::info("Asset [" . $recordedAsset->getId() . "] of flavor params id [$flavorParamsId] already exists");
+			VidiunLog::info("Asset [" . $recordedAsset->getId() . "] of flavor params id [$flavorParamsId] already exists");
 			return;
 		}
 
@@ -184,9 +184,9 @@ class KalturaLiveEntryService extends KalturaEntryService
 
 		// create file sync
 		$recordedAssetKey = $recordedAsset->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-		kFileSyncUtils::moveFromFile($filename, $recordedAssetKey, true, $shouldCopy);
+		vFileSyncUtils::moveFromFile($filename, $recordedAssetKey, true, $shouldCopy);
 
-		kEventsManager::raiseEvent(new kObjectAddedEvent($recordedAsset));
+		vEventsManager::raiseEvent(new vObjectAddedEvent($recordedAsset));
 	}
 
 	/**
@@ -195,24 +195,24 @@ class KalturaLiveEntryService extends KalturaEntryService
 	 * @action registerMediaServer
 	 * @param string $entryId Live entry id
 	 * @param string $hostname Media server host name
-	 * @param KalturaEntryServerNodeType $mediaServerIndex Media server index primary / secondary
+	 * @param VidiunEntryServerNodeType $mediaServerIndex Media server index primary / secondary
 	 * @param string $applicationName the application to which entry is being broadcast
-	 * @param KalturaEntryServerNodeStatus $liveEntryStatus the status KalturaEntryServerNodeStatus::PLAYABLE | KalturaEntryServerNodeStatus::BROADCASTING
+	 * @param VidiunEntryServerNodeStatus $liveEntryStatus the status VidiunEntryServerNodeStatus::PLAYABLE | VidiunEntryServerNodeStatus::BROADCASTING
 	 * @param bool $shouldCreateRecordedEntry
-	 * @return KalturaLiveEntry The updated live entry
+	 * @return VidiunLiveEntry The updated live entry
 	 *
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::SERVER_NODE_NOT_FOUND
-	 * @throws KalturaErrors::ENTRY_SERVER_NODE_MULTI_RESULT
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::SERVER_NODE_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_SERVER_NODE_MULTI_RESULT
 	 */
-	function registerMediaServerAction($entryId, $hostname, $mediaServerIndex, $applicationName = null, $liveEntryStatus = KalturaEntryServerNodeStatus::PLAYABLE, $shouldCreateRecordedEntry = true)
+	function registerMediaServerAction($entryId, $hostname, $mediaServerIndex, $applicationName = null, $liveEntryStatus = VidiunEntryServerNodeStatus::PLAYABLE, $shouldCreateRecordedEntry = true)
 	{
-		kApiCache::disableConditionalCache();
-		KalturaLog::debug("Entry [$entryId] from mediaServerIndex [$mediaServerIndex] with liveEntryStatus [$liveEntryStatus]");
+		vApiCache::disableConditionalCache();
+		VidiunLog::debug("Entry [$entryId] from mediaServerIndex [$mediaServerIndex] with liveEntryStatus [$liveEntryStatus]");
 
 		$dbLiveEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbLiveEntry || !($dbLiveEntry instanceof LiveEntry))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		$this->setMediaServerWrapper($dbLiveEntry, $mediaServerIndex, $hostname, $liveEntryStatus, $applicationName);
 
@@ -228,13 +228,13 @@ class KalturaLiveEntryService extends KalturaEntryService
 		try
 		{
 			$dbLiveEntry->setMediaServer($mediaServerIndex, $hostname, $liveEntryStatus, $applicationName);
-		} catch (kCoreException $ex)
+		} catch (vCoreException $ex)
 		{
 			$code = $ex->getCode();
 			switch ($code)
 			{
-				case kCoreException::MEDIA_SERVER_NOT_FOUND :
-					throw new KalturaAPIException(KalturaErrors::MEDIA_SERVER_NOT_FOUND, $hostname);
+				case vCoreException::MEDIA_SERVER_NOT_FOUND :
+					throw new VidiunAPIException(VidiunErrors::MEDIA_SERVER_NOT_FOUND, $hostname);
 				default:
 					throw $ex;
 			}
@@ -250,9 +250,9 @@ class KalturaLiveEntryService extends KalturaEntryService
 	 */
 	private function createRecordedEntry(LiveEntry $dbEntry, $mediaServerIndex)
 	{
-		$lock = kLock::create("live_record_" . $dbEntry->getId());
+		$lock = vLock::create("live_record_" . $dbEntry->getId());
 
-		if ($lock && !$lock->lock(self::KLOCK_CREATE_RECORDED_ENTRY_GRAB_TIMEOUT, self::KLOCK_CREATE_RECORDED_ENTRY_HOLD_TIMEOUT))
+		if ($lock && !$lock->lock(self::VLOCK_CREATE_RECORDED_ENTRY_GRAB_TIMEOUT, self::VLOCK_CREATE_RECORDED_ENTRY_HOLD_TIMEOUT))
 		{
 			return;
 		}
@@ -282,9 +282,9 @@ class KalturaLiveEntryService extends KalturaEntryService
 			$recordedEntry->setRootEntryId($dbEntry->getId());
 			$recordedEntry->setName($recordedEntryName);
 			$recordedEntry->setDescription($dbEntry->getDescription());
-			$recordedEntry->setSourceType(EntrySourceType::KALTURA_RECORDED_LIVE);
+			$recordedEntry->setSourceType(EntrySourceType::VIDIUN_RECORDED_LIVE);
 			$recordedEntry->setAccessControlId($dbEntry->getAccessControlId());
-			$recordedEntry->setKuserId($dbEntry->getKuserId());
+			$recordedEntry->setVuserId($dbEntry->getVuserId());
 			$recordedEntry->setPartnerId($dbEntry->getPartnerId());
 			$recordedEntry->setModerationStatus($dbEntry->getModerationStatus());
 			$recordedEntry->setIsRecordedEntry(true);
@@ -335,35 +335,35 @@ class KalturaLiveEntryService extends KalturaEntryService
 	 * @action unregisterMediaServer
 	 * @param string $entryId Live entry id
 	 * @param string $hostname Media server host name
-	 * @param KalturaEntryServerNodeType $mediaServerIndex Media server index primary / secondary
-	 * @return KalturaLiveEntry The updated live entry
+	 * @param VidiunEntryServerNodeType $mediaServerIndex Media server index primary / secondary
+	 * @return VidiunLiveEntry The updated live entry
 	 *
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::SERVER_NODE_NOT_FOUND
-	 * @throws KalturaErrors::ENTRY_SERVER_NODE_MULTI_RESULT
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::SERVER_NODE_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_SERVER_NODE_MULTI_RESULT
 	 */
 	function unregisterMediaServerAction($entryId, $hostname, $mediaServerIndex)
 	{
 		$this->dumpApiRequest($entryId, true);
 
-		KalturaLog::debug("Entry [$entryId] from mediaServerIndex [$mediaServerIndex] with hostname [$hostname]");
+		VidiunLog::debug("Entry [$entryId] from mediaServerIndex [$mediaServerIndex] with hostname [$hostname]");
 
 		/* @var $dbLiveEntry LiveEntry */
 		$dbLiveEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbLiveEntry || !($dbLiveEntry instanceof LiveEntry))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		$dbServerNode = ServerNodePeer::retrieveActiveMediaServerNode($hostname);
 		if (!$dbServerNode)
-			throw new KalturaAPIException(KalturaErrors::SERVER_NODE_NOT_FOUND, $hostname);
+			throw new VidiunAPIException(VidiunErrors::SERVER_NODE_NOT_FOUND, $hostname);
 
 		$dbLiveEntryServerNode = EntryServerNodePeer::retrieveByEntryIdAndServerType($entryId, $mediaServerIndex);
 		if (!$dbLiveEntryServerNode)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_SERVER_NODE_NOT_FOUND, $entryId, $mediaServerIndex);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_SERVER_NODE_NOT_FOUND, $entryId, $mediaServerIndex);
 
 		$dbLiveEntryServerNode->deleteOrMarkForDeletion();
 
-		$entry = KalturaEntryFactory::getInstanceByType($dbLiveEntry->getType());
+		$entry = VidiunEntryFactory::getInstanceByType($dbLiveEntry->getType());
 		$entry->fromObject($dbLiveEntry, $this->getResponseProfile());
 		return $entry;
 	}
@@ -374,15 +374,15 @@ class KalturaLiveEntryService extends KalturaEntryService
 	 * @action validateRegisteredMediaServers
 	 * @param string $entryId Live entry id
 	 *
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	function validateRegisteredMediaServersAction($entryId)
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbEntry || !($dbEntry instanceof LiveEntry))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		/* @var $dbEntry LiveEntry */
 		$dbEntry->validateMediaServers();
@@ -393,30 +393,30 @@ class KalturaLiveEntryService extends KalturaEntryService
 	 *
 	 * @action setRecordedContent
 	 * @param string $entryId Live entry id
-	 * @param KalturaEntryServerNodeType $mediaServerIndex
-	 * @param KalturaDataCenterContentResource $resource
+	 * @param VidiunEntryServerNodeType $mediaServerIndex
+	 * @param VidiunDataCenterContentResource $resource
 	 * @param float $duration in seconds
 	 * @param string $recordedEntryId Recorded entry Id
 	 * @param int $flavorParamsId Recorded entry Id
-	 * @return KalturaLiveEntry The updated live entry
+	 * @return VidiunLiveEntry The updated live entry
 	 *
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::RECORDED_ENTRY_LIVE_MISMATCH
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::RECORDED_ENTRY_LIVE_MISMATCH
 	 */
-	function setRecordedContentAction($entryId, $mediaServerIndex, KalturaDataCenterContentResource $resource, $duration, $recordedEntryId = null, $flavorParamsId = null)
+	function setRecordedContentAction($entryId, $mediaServerIndex, VidiunDataCenterContentResource $resource, $duration, $recordedEntryId = null, $flavorParamsId = null)
 	{
-		if (!PermissionPeer::isValidForPartner(PermissionName::FEATURE_LIVE_STREAM_KALTURA_RECORDING, kCurrentContext::getCurrentPartnerId()))
+		if (!PermissionPeer::isValidForPartner(PermissionName::FEATURE_LIVE_STREAM_VIDIUN_RECORDING, vCurrentContext::getCurrentPartnerId()))
 		{
-			throw new KalturaAPIException(KalturaErrors::KALTURA_RECORDING_DISABLED, kCurrentContext::$partner_id);
+			throw new VidiunAPIException(VidiunErrors::VIDIUN_RECORDING_DISABLED, vCurrentContext::$partner_id);
 		}
 
 		$dbLiveEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbLiveEntry || !($dbLiveEntry instanceof LiveEntry))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		if ($mediaServerIndex != EntryServerNodeType::LIVE_PRIMARY)
 		{
-			$entry = KalturaEntryFactory::getInstanceByType($dbLiveEntry->getType());
+			$entry = VidiunEntryFactory::getInstanceByType($dbLiveEntry->getType());
 			$entry->fromObject($dbLiveEntry, $this->getResponseProfile());
 			return $entry;
 		}
@@ -427,9 +427,9 @@ class KalturaLiveEntryService extends KalturaEntryService
 		{
 			$recordedEntry = entryPeer::retrieveByPK($recordedEntryId);
 			if ($recordedEntry && $recordedEntry->getRootEntryId() != $entryId)
-				throw new KalturaAPIException(KalturaErrors::RECORDED_ENTRY_LIVE_MISMATCH, $entryId, $recordedEntryId);
+				throw new VidiunAPIException(VidiunErrors::RECORDED_ENTRY_LIVE_MISMATCH, $entryId, $recordedEntryId);
 
-			if ($recordedEntry && $recordedEntry->getSourceType() != EntrySourceType::KALTURA_RECORDED_LIVE)
+			if ($recordedEntry && $recordedEntry->getSourceType() != EntrySourceType::VIDIUN_RECORDED_LIVE)
 			{
 				$recordedEntry = null;
 				$createRecordedEntry = true;
@@ -450,7 +450,7 @@ class KalturaLiveEntryService extends KalturaEntryService
 			$recordedEntry = $this->createRecordedEntry($dbLiveEntry, $mediaServerIndex);
 
 		if (!$recordedEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $recordedEntryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $recordedEntryId);
 
 		if ($recordedEntry->getFlowType() != EntryFlowType::LIVE_CLIPPING)
 		{
@@ -461,12 +461,12 @@ class KalturaLiveEntryService extends KalturaEntryService
 
 		$this->handleRecording($dbLiveEntry, $recordedEntry, $resource, $flavorParamsId);
 
-		$entry = KalturaEntryFactory::getInstanceByType($dbLiveEntry->getType());
+		$entry = VidiunEntryFactory::getInstanceByType($dbLiveEntry->getType());
 		$entry->fromObject($dbLiveEntry, $this->getResponseProfile());
 		return $entry;
 	}
 
-	private function handleRecording(LiveEntry $dbLiveEntry, entry $recordedEntry, KalturaDataCenterContentResource $resource, $flavorParamsId = null)
+	private function handleRecording(LiveEntry $dbLiveEntry, entry $recordedEntry, VidiunDataCenterContentResource $resource, $flavorParamsId = null)
 	{
 		if (!$flavorParamsId)
 		{
@@ -482,16 +482,16 @@ class KalturaLiveEntryService extends KalturaEntryService
 		{
 			$flavorParamConversionProfile = flavorParamsConversionProfilePeer::retrieveByFlavorParamsAndConversionProfile($flavorParamsId, $dbLiveEntry->getConversionProfileId());
 			if (!$flavorParamConversionProfile)
-				throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $flavorParamsId);
+				throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $flavorParamsId);
 		}
 
-		$kResource = $resource->toObject();
-		/* @var $kResource kLocalFileResource */
-		$filename = $kResource->getLocalFilePath();
-		$keepOriginalFile = $kResource->getKeepOriginalFile();
+		$vResource = $resource->toObject();
+		/* @var $vResource vLocalFileResource */
+		$filename = $vResource->getLocalFilePath();
+		$keepOriginalFile = $vResource->getKeepOriginalFile();
 
 		$lockKey = "create_replacing_entry_" . $recordedEntry->getId();
-		$replacingEntry = kLock::runLocked($lockKey, array('kFlowHelper', 'getReplacingEntry'), array($recordedEntry, $dbAsset, 0, $flavorParamsId));
+		$replacingEntry = vLock::runLocked($lockKey, array('vFlowHelper', 'getReplacingEntry'), array($recordedEntry, $dbAsset, 0, $flavorParamsId));
 		$this->ingestAsset($replacingEntry, $dbAsset, $filename, $keepOriginalFile, $flavorParamsId);
 	}
 
@@ -499,17 +499,17 @@ class KalturaLiveEntryService extends KalturaEntryService
 	 * Create recorded entry id if it doesn't exist and make sure it happens on the DC that the live entry was created on.
 	 * @action createRecordedEntry
 	 * @param string $entryId Live entry id
-	 * @param KalturaEntryServerNodeType $mediaServerIndex Media server index primary / secondary
-	 * @param KalturaEntryServerNodeStatus $liveEntryStatus the status KalturaEntryServerNodeStatus::PLAYABLE | KalturaEntryServerNodeStatus::BROADCASTING
-	 * @return KalturaLiveEntry The updated live entry
-	 * @throws KalturaAPIException
+	 * @param VidiunEntryServerNodeType $mediaServerIndex Media server index primary / secondary
+	 * @param VidiunEntryServerNodeStatus $liveEntryStatus the status VidiunEntryServerNodeStatus::PLAYABLE | VidiunEntryServerNodeStatus::BROADCASTING
+	 * @return VidiunLiveEntry The updated live entry
+	 * @throws VidiunAPIException
 	 */
 	public function createRecordedEntryAction($entryId, $mediaServerIndex, $liveEntryStatus)
 	{
 		$this->dumpApiRequest($entryId, true);
 		$dbLiveEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbLiveEntry || !($dbLiveEntry instanceof LiveEntry))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		return $this->checkAndCreateRecordedEntry($dbLiveEntry, $mediaServerIndex, $liveEntryStatus, false);
 
 	}
@@ -521,12 +521,12 @@ class KalturaLiveEntryService extends KalturaEntryService
 			$dbLiveEntry->getRecordStatus()
 		)
 		{
-			KalturaLog::info("Checking if recorded entry needs to be created for entry ".$dbLiveEntry->getId());
+			VidiunLog::info("Checking if recorded entry needs to be created for entry ".$dbLiveEntry->getId());
 			$createRecordedEntry = false;
 			if(!$dbLiveEntry->getRecordedEntryId())
 			{
 				$createRecordedEntry = true;
-				KalturaLog::info("Creating a new recorded entry for ".$dbLiveEntry->getId());
+				VidiunLog::info("Creating a new recorded entry for ".$dbLiveEntry->getId());
 			}
 			else {
 				$dbRecordedEntry = entryPeer::retrieveByPK($dbLiveEntry->getRecordedEntryId());
@@ -536,20 +536,20 @@ class KalturaLiveEntryService extends KalturaEntryService
 				else{
 					$recordedEntryCreationTime = $dbRecordedEntry->getCreatedAt(null);
 
-					$isNewSession = $dbLiveEntry->getLastBroadcastEndTime() + kConf::get('live_session_reconnect_timeout', 'local', 180) < $dbLiveEntry->getCurrentBroadcastStartTime();
+					$isNewSession = $dbLiveEntry->getLastBroadcastEndTime() + vConf::get('live_session_reconnect_timeout', 'local', 180) < $dbLiveEntry->getCurrentBroadcastStartTime();
 					$recordedEntryNotYetCreatedForCurrentSession = $recordedEntryCreationTime < $dbLiveEntry->getCurrentBroadcastStartTime();
 					$maxAppendTimeReached = ($recordedEntryCreationTime + self::SEVEN_DAYS_IN_SECONDS) < time();
 
-					KalturaLog::debug("isNewSession [$isNewSession] getLastBroadcastEndTime [{$dbLiveEntry->getLastBroadcastEndTime()}] getCurrentBroadcastStartTime [{$dbLiveEntry->getCurrentBroadcastStartTime()}]");
-					KalturaLog::debug("recordedEntryCreationTime [$recordedEntryNotYetCreatedForCurrentSession] recordedEntryCreationTime [$recordedEntryCreationTime] getCurrentBroadcastStartTime [{$dbLiveEntry->getCurrentBroadcastStartTime()}]");
-					KalturaLog::debug("maxAppendTimeReached [$maxAppendTimeReached] recordedEntryCreationTime [$recordedEntryCreationTime]");
+					VidiunLog::debug("isNewSession [$isNewSession] getLastBroadcastEndTime [{$dbLiveEntry->getLastBroadcastEndTime()}] getCurrentBroadcastStartTime [{$dbLiveEntry->getCurrentBroadcastStartTime()}]");
+					VidiunLog::debug("recordedEntryCreationTime [$recordedEntryNotYetCreatedForCurrentSession] recordedEntryCreationTime [$recordedEntryCreationTime] getCurrentBroadcastStartTime [{$dbLiveEntry->getCurrentBroadcastStartTime()}]");
+					VidiunLog::debug("maxAppendTimeReached [$maxAppendTimeReached] recordedEntryCreationTime [$recordedEntryCreationTime]");
 
 					if ($dbLiveEntry->getRecordStatus() == RecordStatus::PER_SESSION && $isNewSession && $recordedEntryNotYetCreatedForCurrentSession)
 					{
 						$createRecordedEntry = true;
 					}
 
-					if($dbLiveEntry->getRecordStatus() == RecordStatus::APPENDED && $dbRecordedEntry->getSourceType() == EntrySourceType::KALTURA_RECORDED_LIVE && $maxAppendTimeReached)
+					if($dbLiveEntry->getRecordStatus() == RecordStatus::APPENDED && $dbRecordedEntry->getSourceType() == EntrySourceType::VIDIUN_RECORDED_LIVE && $maxAppendTimeReached)
 					{
 						$createRecordedEntry = true;
 						$dbLiveEntry->setRecordedEntryId(null);
@@ -559,12 +559,12 @@ class KalturaLiveEntryService extends KalturaEntryService
 			}
 			if ($createRecordedEntry)
 			{
-				KalturaLog::info("Creating a recorded entry for ".$dbLiveEntry->getId());
+				VidiunLog::info("Creating a recorded entry for ".$dbLiveEntry->getId());
 				$this->createRecordedEntry($dbLiveEntry, $mediaServerIndex);
 			}
 		}
 
-		$entry = KalturaEntryFactory::getInstanceByType($dbLiveEntry->getType());
+		$entry = VidiunEntryFactory::getInstanceByType($dbLiveEntry->getType());
 		$entry->fromObject($dbLiveEntry, $this->getResponseProfile());
 		return $entry;
 	}

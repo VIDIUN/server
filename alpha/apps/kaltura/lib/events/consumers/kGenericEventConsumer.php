@@ -4,17 +4,17 @@
  * @package Core
  * @subpackage events
  */
-interface kGenericEventConsumer extends KalturaEventConsumer
+interface vGenericEventConsumer extends VidiunEventConsumer
 {
 	/**
-	 * @param KalturaEvent $event
+	 * @param VidiunEvent $event
 	 * @return bool true if should continue to the next consumer
 	 */
-	public function consumeEvent(KalturaEvent $event);
+	public function consumeEvent(VidiunEvent $event);
 	
 	/**
-	 * @param KalturaEvent $event
+	 * @param VidiunEvent $event
 	 * @return bool true if the consumer should handle the event
 	 */
-	public function shouldConsumeEvent(KalturaEvent $event);
+	public function shouldConsumeEvent(VidiunEvent $event);
 }

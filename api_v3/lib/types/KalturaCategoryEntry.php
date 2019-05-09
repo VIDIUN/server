@@ -4,7 +4,7 @@
  * @subpackage objects
  * @relatedService CategoryEntryService
  */
-class KalturaCategoryEntry extends KalturaObject implements IRelatedFilterable 
+class VidiunCategoryEntry extends VidiunObject implements IRelatedFilterable 
 {
 	/**
 	 * 
@@ -42,7 +42,7 @@ class KalturaCategoryEntry extends KalturaObject implements IRelatedFilterable
 	/**
 	 * 
 	 * CategroyEntry status
-	 * @var KalturaCategoryEntryStatus
+	 * @var VidiunCategoryEntryStatus
 	 * @readonly
 	 * @filter eq,in
 	 */
@@ -68,7 +68,7 @@ class KalturaCategoryEntry extends KalturaObject implements IRelatedFilterable
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -86,7 +86,7 @@ class KalturaCategoryEntry extends KalturaObject implements IRelatedFilterable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert($propertiesToSkip)
+	 * @see VidiunObject::validateForInsert($propertiesToSkip)
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{

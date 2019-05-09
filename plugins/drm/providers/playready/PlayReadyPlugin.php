@@ -2,17 +2,17 @@
 /**
  * @package plugins.playReady
  */
-class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalturaServices , IKalturaPermissionsEnabler, IKalturaObjectLoader, IKalturaSearchDataContributor, IKalturaPending, IKalturaApplicationPartialView, IKalturaEventConsumers, IKalturaPlaybackContextDataContributor
+class PlayReadyPlugin extends BaseDrmPlugin implements IVidiunEnumerator, IVidiunServices , IVidiunPermissionsEnabler, IVidiunObjectLoader, IVidiunSearchDataContributor, IVidiunPending, IVidiunApplicationPartialView, IVidiunEventConsumers, IVidiunPlaybackContextDataContributor
 {
 	const PLUGIN_NAME = 'playReady';
 	const SEARCH_DATA_SUFFIX = 's';
-	const PLAY_READY_EVENTS_CONSUMER = 'kPlayReadyEventsConsumer';
+	const PLAY_READY_EVENTS_CONSUMER = 'vPlayReadyEventsConsumer';
 	
 	const ENTRY_CUSTOM_DATA_PLAY_READY_KEY_ID = 'play_ready_key_id';
 	const PLAY_READY_TAG = 'playready';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -20,17 +20,17 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$drmDependency = new KalturaDependency(DrmPlugin::getPluginName());
+		$drmDependency = new VidiunDependency(DrmPlugin::getPluginName());
 		
 		return array($drmDependency);
 	}
 			
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{	
@@ -49,17 +49,17 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KalturaDrmProfile' && $enumValue == PlayReadyPlugin::getPlayReadyProviderCoreValue())
-			return new KalturaPlayReadyProfile();
-		if($baseClass == 'KalturaDrmProfile' && $enumValue == self::getApiValue(PlayReadyProviderType::PLAY_READY))
-			return new KalturaPlayReadyProfile();		
+		if($baseClass == 'VidiunDrmProfile' && $enumValue == PlayReadyPlugin::getPlayReadyProviderCoreValue())
+			return new VidiunPlayReadyProfile();
+		if($baseClass == 'VidiunDrmProfile' && $enumValue == self::getApiValue(PlayReadyProviderType::PLAY_READY))
+			return new VidiunPlayReadyProfile();		
 	
-		if($baseClass == 'KalturaDrmPolicy' && $enumValue == PlayReadyPlugin::getPlayReadyProviderCoreValue())
-			return new KalturaPlayReadyPolicy();
+		if($baseClass == 'VidiunDrmPolicy' && $enumValue == PlayReadyPlugin::getPlayReadyProviderCoreValue())
+			return new VidiunPlayReadyPolicy();
 		
 		if($baseClass == 'DrmProfile' && $enumValue == PlayReadyPlugin::getPlayReadyProviderCoreValue())
 			return new PlayReadyProfile();
@@ -67,13 +67,13 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 		if($baseClass == 'DrmPolicy' && $enumValue == PlayReadyPlugin::getPlayReadyProviderCoreValue())
 			return new PlayReadyPolicy();
 			
-		if (class_exists('Kaltura_Client_Client'))
+		if (class_exists('Vidiun_Client_Client'))
 		{
-			if ($baseClass == 'Kaltura_Client_Drm_Type_DrmProfile' && $enumValue == Kaltura_Client_Drm_Enum_DrmProviderType::PLAY_READY)
+			if ($baseClass == 'Vidiun_Client_Drm_Type_DrmProfile' && $enumValue == Vidiun_Client_Drm_Enum_DrmProviderType::PLAY_READY)
     		{
-    			return new Kaltura_Client_PlayReady_Type_PlayReadyProfile();
+    			return new Vidiun_Client_PlayReady_Type_PlayReadyProfile();
     		}
-    		if ($baseClass == 'Form_DrmProfileConfigureExtend_SubForm' && $enumValue == Kaltura_Client_Drm_Enum_DrmProviderType::PLAY_READY)
+    		if ($baseClass == 'Form_DrmProfileConfigureExtend_SubForm' && $enumValue == Vidiun_Client_Drm_Enum_DrmProviderType::PLAY_READY)
     		{
      			return new Form_PlayReadyProfileConfigureExtend_SubForm();
     		}	   		
@@ -83,17 +83,17 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{	
-		if($baseClass == 'KalturaDrmProfile' && $enumValue == PlayReadyPlugin::getPlayReadyProviderCoreValue())
-			return 'KalturaPlayReadyProfile';
-		if($baseClass == 'KalturaDrmProfile' && $enumValue == self::getApiValue(PlayReadyProviderType::PLAY_READY))
-			return 'KalturaPlayReadyProfile';		
+		if($baseClass == 'VidiunDrmProfile' && $enumValue == PlayReadyPlugin::getPlayReadyProviderCoreValue())
+			return 'VidiunPlayReadyProfile';
+		if($baseClass == 'VidiunDrmProfile' && $enumValue == self::getApiValue(PlayReadyProviderType::PLAY_READY))
+			return 'VidiunPlayReadyProfile';		
 			
-		if($baseClass == 'KalturaDrmPolicy' && $enumValue == PlayReadyPlugin::getPlayReadyProviderCoreValue())
-			return 'KalturaPlayReadyPolicy';
+		if($baseClass == 'VidiunDrmPolicy' && $enumValue == PlayReadyPlugin::getPlayReadyProviderCoreValue())
+			return 'VidiunPlayReadyPolicy';
 		
 		if($baseClass == 'DrmProfile' && $enumValue == PlayReadyPlugin::getPlayReadyProviderCoreValue())
 			return 'PlayReadyProfile';
@@ -101,13 +101,13 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 		if($baseClass == 'DrmPolicy' && $enumValue == PlayReadyPlugin::getPlayReadyProviderCoreValue())
 			return 'PlayReadyPolicy';
 			
-		if (class_exists('Kaltura_Client_Client'))
+		if (class_exists('Vidiun_Client_Client'))
 		{
-			if ($baseClass == 'Kaltura_Client_Drm_Type_DrmProfile' && $enumValue == Kaltura_Client_Drm_Enum_DrmProviderType::PLAY_READY)
+			if ($baseClass == 'Vidiun_Client_Drm_Type_DrmProfile' && $enumValue == Vidiun_Client_Drm_Enum_DrmProviderType::PLAY_READY)
     		{
-    			return 'Kaltura_Client_PlayReady_Type_PlayReadyProfile';
+    			return 'Vidiun_Client_PlayReady_Type_PlayReadyProfile';
     		}
-    		if ($baseClass == 'Form_DrmProfileConfigureExtend_SubForm' && $enumValue == Kaltura_Client_Drm_Enum_DrmProviderType::PLAY_READY)
+    		if ($baseClass == 'Form_DrmProfileConfigureExtend_SubForm' && $enumValue == Vidiun_Client_Drm_Enum_DrmProviderType::PLAY_READY)
     		{
      			return 'Form_PlayReadyProfileConfigureExtend_SubForm';
     		}	   		
@@ -118,14 +118,14 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaApplicationPartialView::getApplicationPartialViews()
+	 * @see IVidiunApplicationPartialView::getApplicationPartialViews()
 	 */
 	public static function getApplicationPartialViews($controller, $action)
 	{
 		if($controller == 'plugin' && $action == 'DrmProfileConfigureAction')
 		{
 			return array(
-				new Kaltura_View_Helper_PlayReadyProfileConfigure(),
+				new Vidiun_View_Helper_PlayReadyProfileConfigure(),
 			);
 		}
 		
@@ -137,7 +137,7 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 
 	/**
@@ -145,8 +145,8 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 	 */
 	public static function getCoreValue($type, $valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore($type, $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore($type, $value);
 	}
 	
 	/**
@@ -154,12 +154,12 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 	 */
 	public static function getPlayReadyProviderCoreValue()
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . PlayReadyProviderType::PLAY_READY;
-		return kPluginableEnumsManager::apiToCore('DrmProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . PlayReadyProviderType::PLAY_READY;
+		return vPluginableEnumsManager::apiToCore('DrmProviderType', $value);
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap() {
 		$map = array(
@@ -169,7 +169,7 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId) {	
 		if (in_array($partnerId, array(Partner::ADMIN_CONSOLE_PARTNER_ID, Partner::BATCH_PARTNER_ID)))
@@ -196,7 +196,7 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSearchDataContributor::getSearchData()
+	 * @see IVidiunSearchDataContributor::getSearchData()
 	 */
 	public static function getSearchData(BaseObject $object)
 	{
@@ -219,30 +219,30 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissionsEnabler::permissionEnabled()
+	 * @see IVidiunPermissionsEnabler::permissionEnabled()
 	 */
 	public static function permissionEnabled($partnerId, $permissionName) 
 	{
 		if($permissionName == 'PLAYREADY_PLUGIN_PERMISSION')
-			kPlayReadyPartnerSetup::setupPartner($partnerId);
+			vPlayReadyPartnerSetup::setupPartner($partnerId);
 		
 	}
 
-    public function contributeToPlaybackContextDataResult(entry $entry, kPlaybackContextDataParams $entryPlayingDataParams, kPlaybackContextDataResult $result, kContextDataHelper $contextDataHelper)
+    public function contributeToPlaybackContextDataResult(entry $entry, vPlaybackContextDataParams $entryPlayingDataParams, vPlaybackContextDataResult $result, vContextDataHelper $contextDataHelper)
 	{
 		if ($entryPlayingDataParams->getType() == self::BASE_PLUGIN_NAME && self::shouldContributeToPlaybackContext($contextDataHelper->getContextDataResult()->getActions()) && $this->isSupportStreamerTypes($entryPlayingDataParams->getDeliveryProfile()->getStreamerType()) )
 		{
-			$playReadyProfile = DrmProfilePeer::retrieveByProviderAndPartnerID(PlayReadyPlugin::getPlayReadyProviderCoreValue(), kCurrentContext::getCurrentPartnerId());
+			$playReadyProfile = DrmProfilePeer::retrieveByProviderAndPartnerID(PlayReadyPlugin::getPlayReadyProviderCoreValue(), vCurrentContext::getCurrentPartnerId());
 			if ($playReadyProfile)
 			{
 				/* @var PlayReadyProfile $playReadyProfile */
 
-				$signingKey = kConf::get('signing_key', 'drm', null);
+				$signingKey = vConf::get('signing_key', 'drm', null);
 				if ($signingKey)
 				{
 					$customDataJson = DrmLicenseUtils::createCustomDataForEntry($entry->getId(), $entryPlayingDataParams->getFlavors(), $signingKey);
 					$customDataObject = reset($customDataJson);
-					$data = new kDrmPlaybackPluginData();
+					$data = new vDrmPlaybackPluginData();
 					$data->setScheme($this->getDrmSchemeCoreValue());
 					$data->setLicenseURL($this->constructUrl($playReadyProfile, self::PLUGIN_NAME, $customDataObject));
 					$result->addToPluginData(self::PLUGIN_NAME, $data);
@@ -256,8 +256,8 @@ class PlayReadyPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalt
 	 */
 	public static function getDrmSchemeCoreValue()
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . PlayReadySchemeName::PLAYREADY;
-		return kPluginableEnumsManager::apiToCore('DrmSchemeName', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . PlayReadySchemeName::PLAYREADY;
+		return vPluginableEnumsManager::apiToCore('DrmSchemeName', $value);
 	}
 
 	public function isSupportStreamerTypes($streamerType)

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kAccessControlMessage {
+class vAccessControlMessage {
 
 	/**
 	 * @var string

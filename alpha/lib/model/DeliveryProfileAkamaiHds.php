@@ -4,7 +4,7 @@ class DeliveryProfileAkamaiHds extends DeliveryProfileHds {
 	
 	function __construct() {
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kF4MManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vF4MManifestRenderer';
 	}
 	
 	public function setSupportClipping($v)
@@ -32,7 +32,7 @@ class DeliveryProfileAkamaiHds extends DeliveryProfileHds {
 		$flavor = $this->getSecureHdUrl();
 		if (!$flavor)
 		{
-			KalturaLog::log('No flavor found');
+			VidiunLog::log('No flavor found');
 			return null;
 		}
 		
@@ -66,13 +66,13 @@ class DeliveryProfileAkamaiHds extends DeliveryProfileHds {
 		$flavor = AkamaiDeliveryUtils::getHDN2ManifestUrl($flavors, $this->params->getMediaProtocol(), $this->getUrl(), '/manifest.f4m', '/z', $params);
 		if (!$flavor)
 		{
-			KalturaLog::info(get_class() . ' failed to find flavor');
+			VidiunLog::info(get_class() . ' failed to find flavor');
 			return null;
 		}
 		
 		if ($this->getExtraParams())
 		{
-			$flavor['url'] = kDeliveryUtils::addQueryParameter($flavor['url'], $this->getExtraParams());
+			$flavor['url'] = vDeliveryUtils::addQueryParameter($flavor['url'], $this->getExtraParams());
 		}	 
 		
 		return $flavor;

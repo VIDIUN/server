@@ -1,25 +1,25 @@
 <?php
 /**
- * KSR - Kaltura Screencast Recorder
- * This action is used for integrating the KSR widget into web pages, by returning a JS code that provides everything the integrator needs in order to load the widget
- * the KSR widget is a JAVA applet that allows the user to record the screen, and then it uploads the recording to Kaltura.
- * the JS code which is returned to the page is constructed from a template which is part of a version of the widget (e.g. flash/ksr/v1.0.32/js/*) and it is constructed with values stored in the uiconf XML.
+ * VSR - Vidiun Screencast Recorder
+ * This action is used for integrating the VSR widget into web pages, by returning a JS code that provides everything the integrator needs in order to load the widget
+ * the VSR widget is a JAVA applet that allows the user to record the screen, and then it uploads the recording to Vidiun.
+ * the JS code which is returned to the page is constructed from a template which is part of a version of the widget (e.g. flash/vsr/v1.0.32/js/*) and it is constructed with values stored in the uiconf XML.
  *
  * @package Core
  * @subpackage externalWidgets
  */
 
-class ksrAction extends sfAction 
+class vsrAction extends sfAction 
 {
     const SOM_JS_FILENAME = 'som.js';
     const SOM_DETECT_JS_FILENAME = 'som-detect.js';
-    const KALTURA_LIB_JS_FILENAME = 'lib.js';
-    const KALTURA_LIB_API_JS_FILENAME = 'api.js';
+    const VIDIUN_LIB_JS_FILENAME = 'lib.js';
+    const VIDIUN_LIB_API_JS_FILENAME = 'api.js';
     const JS_PATH_IN_JARS_FOLDER = 'js';
     
     private $jsTemplateParams = array(
         /** environment options **/
-        'KALTURA_SERVER' => array( 'method' => '_getKalturaHost', ), // comes from local.ini
+        'VIDIUN_SERVER' => array( 'method' => '_getVidiunHost', ), // comes from local.ini
         'JAR_HOST_PATH' => array( 'method' => '_buildJarsHostPath' ), // CDN host + swf_url [ conf object +  ]
         'SOM_PARTNER_ID' => array( 'method' => '_getSomPartnerInfo', 'param' => 'id', ), // comes from local.ini
         'SOM_PARTNER_SITE' => array( 'method' => '_getSomPartnerInfo', 'param' => 'site', ), // comes from local.ini, empty by default
@@ -29,17 +29,17 @@ class ksrAction extends sfAction
         'SOM_JAR_RUN' => array( 'method' => '_getRunJarNameFromSwfUrl' ), // parse swf_url for filename.jar
 
         /** uiconf XML originated options **/
-        'KALTURA_VIDEOBITRATE' => array( 'value' => 0, 'method' => '_getFromXml', 'param' => '/uiconf/kaltura/videoBitRate', ),
-        'KALTURA_CATEGORY' => array( 'method' => '_getFromXml', 'param' => '/uiconf/kaltura/category', ),
-        'KALTURA_CONVERSIONPROFILEID' => array( 'method' => '_getFromXml', 'param' => '/uiconf/kaltura/conversionProfileId', ),
-        'KALTURA_SUBMIT_TITLE_VALUE' => array( 'method' => '_getFromXml', 'param' => '/uiconf/kaltura/submit/title/value', ),
-        'KALTURA_SUBMIT_DESCRIPTION_VALUE' => array( 'method' => '_getFromXml', 'param' => '/uiconf/kaltura/submit/description/value', ),
-        'KALTURA_SUBMIT_TAGS_VALUE' => array( 'method' => '_getFromXml', 'param' => '/uiconf/kaltura/submit/tags/value', ),
-        'KALTURA_SUBMIT_TITLE_ENABLED' => array( 'method' => '_getFromXml', 'param' => '/uiconf/kaltura/submit/title/enabled', ),
-        'KALTURA_SUBMIT_DESCRIPTION_ENABLED' => array( 'method' => '_getFromXml', 'param' => '/uiconf/kaltura/submit/description/enabled', ),
-        'KALTURA_SUBMIT_TAGS_ENABLED' => array( 'method' => '_getFromXml', 'param' => '/uiconf/kaltura/submit/tags/enabled', ),
+        'VIDIUN_VIDEOBITRATE' => array( 'value' => 0, 'method' => '_getFromXml', 'param' => '/uiconf/vidiun/videoBitRate', ),
+        'VIDIUN_CATEGORY' => array( 'method' => '_getFromXml', 'param' => '/uiconf/vidiun/category', ),
+        'VIDIUN_CONVERSIONPROFILEID' => array( 'method' => '_getFromXml', 'param' => '/uiconf/vidiun/conversionProfileId', ),
+        'VIDIUN_SUBMIT_TITLE_VALUE' => array( 'method' => '_getFromXml', 'param' => '/uiconf/vidiun/submit/title/value', ),
+        'VIDIUN_SUBMIT_DESCRIPTION_VALUE' => array( 'method' => '_getFromXml', 'param' => '/uiconf/vidiun/submit/description/value', ),
+        'VIDIUN_SUBMIT_TAGS_VALUE' => array( 'method' => '_getFromXml', 'param' => '/uiconf/vidiun/submit/tags/value', ),
+        'VIDIUN_SUBMIT_TITLE_ENABLED' => array( 'method' => '_getFromXml', 'param' => '/uiconf/vidiun/submit/title/enabled', ),
+        'VIDIUN_SUBMIT_DESCRIPTION_ENABLED' => array( 'method' => '_getFromXml', 'param' => '/uiconf/vidiun/submit/description/enabled', ),
+        'VIDIUN_SUBMIT_TAGS_ENABLED' => array( 'method' => '_getFromXml', 'param' => '/uiconf/vidiun/submit/tags/enabled', ),
         
-        'KALTURA_ERROR_MESSAGES' => array( 'value' => '', 'method' => '_getErrorMessagesFromXml'),
+        'VIDIUN_ERROR_MESSAGES' => array( 'value' => '', 'method' => '_getErrorMessagesFromXml'),
         'SOM_CAPTURE_ID' => array( 'method' => '_getFromXml', 'param' => '/uiconf/som/captureId', ),
         'SOM_MAC_NAME' => array( 'method' => '_getFromXml', 'param' => '/uiconf/som/macName', ),
         'SOM_SIDE_PANEL_ONLY' => array(
@@ -59,7 +59,7 @@ class ksrAction extends sfAction
     private $jsResult = '';
 
     /**
-     * Will return a JS library for integrating the KSR (similar to HTML5 in concept)
+     * Will return a JS library for integrating the VSR (similar to HTML5 in concept)
      * uiconfId specifies from which uiconf to fetch different settings that should be replaced in the JS
      */
     public function execute()
@@ -73,13 +73,13 @@ class ksrAction extends sfAction
         $this->uiconfObj = uiConfPeer::retrieveByPK($uiconfId);
 	if(!$this->uiconfObj)
 	{
-		KExternalErrors::dieError(KExternalErrors::UI_CONF_NOT_FOUND);
+		VExternalErrors::dieError(VExternalErrors::UI_CONF_NOT_FOUND);
 	}
 
 	$ui_conf_swf_url = $this->uiconfObj->getSwfUrl();
 	if (!$ui_conf_swf_url)
 	{
-		KExternalErrors::dieError(KExternalErrors::ILLEGAL_UI_CONF, "SWF URL not found in UI conf");
+		VExternalErrors::dieError(VExternalErrors::ILLEGAL_UI_CONF, "SWF URL not found in UI conf");
 	}
         
         @libxml_use_internal_errors(true);
@@ -89,7 +89,7 @@ class ksrAction extends sfAction
         }
         catch(Exception $e)
         {
-            KalturaLog::err("malformed uiconf XML - base64 encoded: [".base64_encode(trim($this->uiconfObj->getConfFile()))."]");
+            VidiunLog::err("malformed uiconf XML - base64 encoded: [".base64_encode(trim($this->uiconfObj->getConfFile()))."]");
         }
         if(!($this->uiconfXmlObj instanceof SimpleXMLElement))
         {
@@ -156,17 +156,17 @@ class ksrAction extends sfAction
         }
     }
 
-    private function _getKalturaHost()
+    private function _getVidiunHost()
     {
         $proto='http';
-        $kalturaHost = kConf::get('www_host');
+        $vidiunHost = vConf::get('www_host');
         if (infraRequestUtils::getProtocol() == infraRequestUtils::PROTOCOL_HTTPS){
             $proto='https';
-            if(kConf::hasParam('www_host_https')){
-                $kalturaHost = kConf::get('www_host_https');
+            if(vConf::hasParam('www_host_https')){
+                $vidiunHost = vConf::get('www_host_https');
             }
         }
-        $url = $proto .'://'. $kalturaHost;
+        $url = $proto .'://'. $vidiunHost;
         return $url;
     }
 
@@ -174,9 +174,9 @@ class ksrAction extends sfAction
     {
         switch($what)
         {
-            case 'id':   return kConf::get('ksr_id');
-            case 'site': return kConf::get('ksr_site');
-            case 'key':  return kConf::get('ksr_key');
+            case 'id':   return vConf::get('vsr_id');
+            case 'site': return vConf::get('vsr_site');
+            case 'key':  return vConf::get('vsr_key');
         }
     }
 
@@ -214,7 +214,7 @@ class ksrAction extends sfAction
     private function _getErrorMessagesFromXml()
     {
         $errormsgs = array();
-        $xpath = '/uiconf/kaltura/errorMessages/*';
+        $xpath = '/uiconf/vidiun/errorMessages/*';
 
         $xpathArr = $this->uiconfXmlObj->xpath($xpath);
         if (is_array($xpathArr) && count($xpathArr))
@@ -226,10 +226,10 @@ class ksrAction extends sfAction
                 {
                     $starts = $msgDetails['starts'];
                     $replace = $msgDetails['replace'];
-                    $errormsgs[] = 'name = "kaltura.error.messages.'.$key.'.starts";'.PHP_EOL;
-                    $errormsgs[] = "kalturaScreenRecord.errorMessages[name] = '".$starts."';".PHP_EOL;
-                    $errormsgs[] = 'name = "kaltura.error.messages.'.$key.'.replace";'.PHP_EOL;
-                    $errormsgs[] = "kalturaScreenRecord.errorMessages[name] = '".$replace."';".PHP_EOL;
+                    $errormsgs[] = 'name = "vidiun.error.messages.'.$key.'.starts";'.PHP_EOL;
+                    $errormsgs[] = "vidiunScreenRecord.errorMessages[name] = '".$starts."';".PHP_EOL;
+                    $errormsgs[] = 'name = "vidiun.error.messages.'.$key.'.replace";'.PHP_EOL;
+                    $errormsgs[] = "vidiunScreenRecord.errorMessages[name] = '".$replace."';".PHP_EOL;
                 }
             }
         }
@@ -255,10 +255,10 @@ class ksrAction extends sfAction
     
     private function _prepareLibJs()
     {
-	$filePath = $this->_getJsFilesPath(). self::KALTURA_LIB_JS_FILENAME;
+	$filePath = $this->_getJsFilesPath(). self::VIDIUN_LIB_JS_FILENAME;
 	if(!file_exists($filePath))
 	{
-		KExternalErrors::dieError(KExternalErrors::ILLEGAL_UI_CONF, "Required file is missing");
+		VExternalErrors::dieError(VExternalErrors::ILLEGAL_UI_CONF, "Required file is missing");
 	}
         $this->jsResult = file_get_contents($filePath);
 
@@ -274,11 +274,11 @@ class ksrAction extends sfAction
 	$baseFilePath = $this->_getJsFilesPath();
 	$somDetectJsPath = $baseFilePath. self::SOM_DETECT_JS_FILENAME;
 	$somJsPath = $baseFilePath. self::SOM_JS_FILENAME;
-	$apiJsPath = $baseFilePath. self::KALTURA_LIB_API_JS_FILENAME;
+	$apiJsPath = $baseFilePath. self::VIDIUN_LIB_API_JS_FILENAME;
 	
 	if(!file_exists($somDetectJsPath) || !file_exists($somJsPath) || !file_exists($apiJsPath))
 	{
-		KExternalErrors::dieError(KExternalErrors::ILLEGAL_UI_CONF, "Required file is missing");
+		VExternalErrors::dieError(VExternalErrors::ILLEGAL_UI_CONF, "Required file is missing");
 	}
 	
         $somDetectJs = file_get_contents($somDetectJsPath);

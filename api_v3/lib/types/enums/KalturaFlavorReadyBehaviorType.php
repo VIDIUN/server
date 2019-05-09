@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaFlavorReadyBehaviorType extends KalturaEnum
+class VidiunFlavorReadyBehaviorType extends VidiunEnum
 {
 	const NO_IMPACT = 0;
 	const REQUIRED = 1;

@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPluginDataArray extends KalturaAssociativeArray
+class VidiunPluginDataArray extends VidiunAssociativeArray
 {
 
     public function __construct()
     {
-        parent::__construct("KalturaPluginData");
+        parent::__construct("VidiunPluginData");
     }
 }

@@ -176,10 +176,10 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 	protected $default_permission_level;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the puser_id field.
@@ -232,14 +232,14 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 	protected $moderation;
 
 	/**
-	 * @var        array categoryKuser[] Collection to store aggregation of categoryKuser objects.
+	 * @var        array categoryVuser[] Collection to store aggregation of categoryVuser objects.
 	 */
-	protected $collcategoryKusers;
+	protected $collcategoryVusers;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collcategoryKusers.
+	 * @var        Criteria The criteria used to select the current contents of collcategoryVusers.
 	 */
-	private $lastcategoryKuserCriteria = null;
+	private $lastcategoryVuserCriteria = null;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -651,13 +651,13 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -1374,27 +1374,27 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 	} // setDefaultPermissionLevel()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     category The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryPeer::KUSER_ID]))
-			$this->oldColumnsValues[categoryPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[categoryPeer::VUSER_ID]))
+			$this->oldColumnsValues[categoryPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = categoryPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = categoryPeer::VUSER_ID;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [puser_id] column.
@@ -1689,7 +1689,7 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 			$this->inheritance_type = ($row[$startcol + 21] !== null) ? (int) $row[$startcol + 21] : null;
 			$this->user_join_policy = ($row[$startcol + 22] !== null) ? (int) $row[$startcol + 22] : null;
 			$this->default_permission_level = ($row[$startcol + 23] !== null) ? (int) $row[$startcol + 23] : null;
-			$this->kuser_id = ($row[$startcol + 24] !== null) ? (int) $row[$startcol + 24] : null;
+			$this->vuser_id = ($row[$startcol + 24] !== null) ? (int) $row[$startcol + 24] : null;
 			$this->puser_id = ($row[$startcol + 25] !== null) ? (string) $row[$startcol + 25] : null;
 			$this->reference_id = ($row[$startcol + 26] !== null) ? (string) $row[$startcol + 26] : null;
 			$this->contribution_policy = ($row[$startcol + 27] !== null) ? (int) $row[$startcol + 27] : null;
@@ -1771,8 +1771,8 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->collcategoryKusers = null;
-			$this->lastcategoryKuserCriteria = null;
+			$this->collcategoryVusers = null;
+			$this->lastcategoryVuserCriteria = null;
 
 		} // if (deep)
 	}
@@ -1915,8 +1915,8 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
 			}
 
-			if ($this->collcategoryKusers !== null) {
-				foreach ($this->collcategoryKusers as $referrerFK) {
+			if ($this->collcategoryVusers !== null) {
+				foreach ($this->collcategoryVusers as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
@@ -1961,7 +1961,7 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1987,12 +1987,12 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -2010,8 +2010,8 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -2024,7 +2024,7 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 	 */
 	public function postDelete(PropelPDO $con = null)
 	{
-		kEventsManager::raiseEvent(new kObjectErasedEvent($this));
+		vEventsManager::raiseEvent(new vObjectErasedEvent($this));
 		
 		parent::postDelete($con);
 	}
@@ -2147,8 +2147,8 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 			}
 
 
-				if ($this->collcategoryKusers !== null) {
-					foreach ($this->collcategoryKusers as $referrerFK) {
+				if ($this->collcategoryVusers !== null) {
+					foreach ($this->collcategoryVusers as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -2261,7 +2261,7 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 				return $this->getDefaultPermissionLevel();
 				break;
 			case 24:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 25:
 				return $this->getPuserId();
@@ -2332,7 +2332,7 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 			$keys[21] => $this->getInheritanceType(),
 			$keys[22] => $this->getUserJoinPolicy(),
 			$keys[23] => $this->getDefaultPermissionLevel(),
-			$keys[24] => $this->getKuserId(),
+			$keys[24] => $this->getVuserId(),
 			$keys[25] => $this->getPuserId(),
 			$keys[26] => $this->getReferenceId(),
 			$keys[27] => $this->getContributionPolicy(),
@@ -2445,7 +2445,7 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 				$this->setDefaultPermissionLevel($value);
 				break;
 			case 24:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 25:
 				$this->setPuserId($value);
@@ -2519,7 +2519,7 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[21], $arr)) $this->setInheritanceType($arr[$keys[21]]);
 		if (array_key_exists($keys[22], $arr)) $this->setUserJoinPolicy($arr[$keys[22]]);
 		if (array_key_exists($keys[23], $arr)) $this->setDefaultPermissionLevel($arr[$keys[23]]);
-		if (array_key_exists($keys[24], $arr)) $this->setKuserId($arr[$keys[24]]);
+		if (array_key_exists($keys[24], $arr)) $this->setVuserId($arr[$keys[24]]);
 		if (array_key_exists($keys[25], $arr)) $this->setPuserId($arr[$keys[25]]);
 		if (array_key_exists($keys[26], $arr)) $this->setReferenceId($arr[$keys[26]]);
 		if (array_key_exists($keys[27], $arr)) $this->setContributionPolicy($arr[$keys[27]]);
@@ -2563,7 +2563,7 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(categoryPeer::INHERITANCE_TYPE)) $criteria->add(categoryPeer::INHERITANCE_TYPE, $this->inheritance_type);
 		if ($this->isColumnModified(categoryPeer::USER_JOIN_POLICY)) $criteria->add(categoryPeer::USER_JOIN_POLICY, $this->user_join_policy);
 		if ($this->isColumnModified(categoryPeer::DEFAULT_PERMISSION_LEVEL)) $criteria->add(categoryPeer::DEFAULT_PERMISSION_LEVEL, $this->default_permission_level);
-		if ($this->isColumnModified(categoryPeer::KUSER_ID)) $criteria->add(categoryPeer::KUSER_ID, $this->kuser_id);
+		if ($this->isColumnModified(categoryPeer::VUSER_ID)) $criteria->add(categoryPeer::VUSER_ID, $this->vuser_id);
 		if ($this->isColumnModified(categoryPeer::PUSER_ID)) $criteria->add(categoryPeer::PUSER_ID, $this->puser_id);
 		if ($this->isColumnModified(categoryPeer::REFERENCE_ID)) $criteria->add(categoryPeer::REFERENCE_ID, $this->reference_id);
 		if ($this->isColumnModified(categoryPeer::CONTRIBUTION_POLICY)) $criteria->add(categoryPeer::CONTRIBUTION_POLICY, $this->contribution_policy);
@@ -2684,7 +2684,7 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 
 		$copyObj->setDefaultPermissionLevel($this->default_permission_level);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setPuserId($this->puser_id);
 
@@ -2708,9 +2708,9 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 			// the getter/setter methods for fkey referrer objects.
 			$copyObj->setNew(false);
 
-			foreach ($this->getcategoryKusers() as $relObj) {
+			foreach ($this->getcategoryVusers() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addcategoryKuser($relObj->copy($deepCopy));
+					$copyObj->addcategoryVuser($relObj->copy($deepCopy));
 				}
 			}
 
@@ -2780,47 +2780,47 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Clears out the collcategoryKusers collection (array).
+	 * Clears out the collcategoryVusers collection (array).
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
 	 *
 	 * @return     void
-	 * @see        addcategoryKusers()
+	 * @see        addcategoryVusers()
 	 */
-	public function clearcategoryKusers()
+	public function clearcategoryVusers()
 	{
-		$this->collcategoryKusers = null; // important to set this to NULL since that means it is uninitialized
+		$this->collcategoryVusers = null; // important to set this to NULL since that means it is uninitialized
 	}
 
 	/**
-	 * Initializes the collcategoryKusers collection (array).
+	 * Initializes the collcategoryVusers collection (array).
 	 *
-	 * By default this just sets the collcategoryKusers collection to an empty array (like clearcollcategoryKusers());
+	 * By default this just sets the collcategoryVusers collection to an empty array (like clearcollcategoryVusers());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
 	 * @return     void
 	 */
-	public function initcategoryKusers()
+	public function initcategoryVusers()
 	{
-		$this->collcategoryKusers = array();
+		$this->collcategoryVusers = array();
 	}
 
 	/**
-	 * Gets an array of categoryKuser objects which contain a foreign key that references this object.
+	 * Gets an array of categoryVuser objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
 	 * Otherwise if this category has previously been saved, it will retrieve
-	 * related categoryKusers from storage. If this category is new, it will return
+	 * related categoryVusers from storage. If this category is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
 	 * @param      Criteria $criteria
-	 * @return     array categoryKuser[]
+	 * @return     array categoryVuser[]
 	 * @throws     PropelException
 	 */
-	public function getcategoryKusers($criteria = null, PropelPDO $con = null)
+	public function getcategoryVusers($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(categoryPeer::DATABASE_NAME);
@@ -2830,15 +2830,15 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collcategoryKusers === null) {
+		if ($this->collcategoryVusers === null) {
 			if ($this->isNew()) {
-			   $this->collcategoryKusers = array();
+			   $this->collcategoryVusers = array();
 			} else {
 
-				$criteria->add(categoryKuserPeer::CATEGORY_ID, $this->id);
+				$criteria->add(categoryVuserPeer::CATEGORY_ID, $this->id);
 
-				categoryKuserPeer::addSelectColumns($criteria);
-				$this->collcategoryKusers = categoryKuserPeer::doSelect($criteria, $con);
+				categoryVuserPeer::addSelectColumns($criteria);
+				$this->collcategoryVusers = categoryVuserPeer::doSelect($criteria, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -2848,28 +2848,28 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 				// one, just return the collection.
 
 
-				$criteria->add(categoryKuserPeer::CATEGORY_ID, $this->id);
+				$criteria->add(categoryVuserPeer::CATEGORY_ID, $this->id);
 
-				categoryKuserPeer::addSelectColumns($criteria);
-				if (!isset($this->lastcategoryKuserCriteria) || !$this->lastcategoryKuserCriteria->equals($criteria)) {
-					$this->collcategoryKusers = categoryKuserPeer::doSelect($criteria, $con);
+				categoryVuserPeer::addSelectColumns($criteria);
+				if (!isset($this->lastcategoryVuserCriteria) || !$this->lastcategoryVuserCriteria->equals($criteria)) {
+					$this->collcategoryVusers = categoryVuserPeer::doSelect($criteria, $con);
 				}
 			}
 		}
-		$this->lastcategoryKuserCriteria = $criteria;
-		return $this->collcategoryKusers;
+		$this->lastcategoryVuserCriteria = $criteria;
+		return $this->collcategoryVusers;
 	}
 
 	/**
-	 * Returns the number of related categoryKuser objects.
+	 * Returns the number of related categoryVuser objects.
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct
 	 * @param      PropelPDO $con
-	 * @return     int Count of related categoryKuser objects.
+	 * @return     int Count of related categoryVuser objects.
 	 * @throws     PropelException
 	 */
-	public function countcategoryKusers(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	public function countcategoryVusers(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(categoryPeer::DATABASE_NAME);
@@ -2883,14 +2883,14 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 
 		$count = null;
 
-		if ($this->collcategoryKusers === null) {
+		if ($this->collcategoryVusers === null) {
 			if ($this->isNew()) {
 				$count = 0;
 			} else {
 
-				$criteria->add(categoryKuserPeer::CATEGORY_ID, $this->id);
+				$criteria->add(categoryVuserPeer::CATEGORY_ID, $this->id);
 
-				$count = categoryKuserPeer::doCount($criteria, false, $con);
+				$count = categoryVuserPeer::doCount($criteria, false, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -2900,35 +2900,35 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 				// one, just return count of the collection.
 
 
-				$criteria->add(categoryKuserPeer::CATEGORY_ID, $this->id);
+				$criteria->add(categoryVuserPeer::CATEGORY_ID, $this->id);
 
-				if (!isset($this->lastcategoryKuserCriteria) || !$this->lastcategoryKuserCriteria->equals($criteria)) {
-					$count = categoryKuserPeer::doCount($criteria, false, $con);
+				if (!isset($this->lastcategoryVuserCriteria) || !$this->lastcategoryVuserCriteria->equals($criteria)) {
+					$count = categoryVuserPeer::doCount($criteria, false, $con);
 				} else {
-					$count = count($this->collcategoryKusers);
+					$count = count($this->collcategoryVusers);
 				}
 			} else {
-				$count = count($this->collcategoryKusers);
+				$count = count($this->collcategoryVusers);
 			}
 		}
 		return $count;
 	}
 
 	/**
-	 * Method called to associate a categoryKuser object to this object
-	 * through the categoryKuser foreign key attribute.
+	 * Method called to associate a categoryVuser object to this object
+	 * through the categoryVuser foreign key attribute.
 	 *
-	 * @param      categoryKuser $l categoryKuser
+	 * @param      categoryVuser $l categoryVuser
 	 * @return     void
 	 * @throws     PropelException
 	 */
-	public function addcategoryKuser(categoryKuser $l)
+	public function addcategoryVuser(categoryVuser $l)
 	{
-		if ($this->collcategoryKusers === null) {
-			$this->initcategoryKusers();
+		if ($this->collcategoryVusers === null) {
+			$this->initcategoryVusers();
 		}
-		if (!in_array($l, $this->collcategoryKusers, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collcategoryKusers, $l);
+		if (!in_array($l, $this->collcategoryVusers, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collcategoryVusers, $l);
 			$l->setcategory($this);
 		}
 	}
@@ -2939,13 +2939,13 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 	 * an identical criteria, it returns the collection.
 	 * Otherwise if this category is new, it will return
 	 * an empty collection; or if this category has previously
-	 * been saved, it will retrieve related categoryKusers from storage.
+	 * been saved, it will retrieve related categoryVusers from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in category.
 	 */
-	public function getcategoryKusersJoinkuser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getcategoryVusersJoinvuser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(categoryPeer::DATABASE_NAME);
@@ -2955,29 +2955,29 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collcategoryKusers === null) {
+		if ($this->collcategoryVusers === null) {
 			if ($this->isNew()) {
-				$this->collcategoryKusers = array();
+				$this->collcategoryVusers = array();
 			} else {
 
-				$criteria->add(categoryKuserPeer::CATEGORY_ID, $this->id);
+				$criteria->add(categoryVuserPeer::CATEGORY_ID, $this->id);
 
-				$this->collcategoryKusers = categoryKuserPeer::doSelectJoinkuser($criteria, $con, $join_behavior);
+				$this->collcategoryVusers = categoryVuserPeer::doSelectJoinvuser($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(categoryKuserPeer::CATEGORY_ID, $this->id);
+			$criteria->add(categoryVuserPeer::CATEGORY_ID, $this->id);
 
-			if (!isset($this->lastcategoryKuserCriteria) || !$this->lastcategoryKuserCriteria->equals($criteria)) {
-				$this->collcategoryKusers = categoryKuserPeer::doSelectJoinkuser($criteria, $con, $join_behavior);
+			if (!isset($this->lastcategoryVuserCriteria) || !$this->lastcategoryVuserCriteria->equals($criteria)) {
+				$this->collcategoryVusers = categoryVuserPeer::doSelectJoinvuser($criteria, $con, $join_behavior);
 			}
 		}
-		$this->lastcategoryKuserCriteria = $criteria;
+		$this->lastcategoryVuserCriteria = $criteria;
 
-		return $this->collcategoryKusers;
+		return $this->collcategoryVusers;
 	}
 
 	/**
@@ -2992,14 +2992,14 @@ abstract class Basecategory extends BaseObject  implements Persistent {
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
-			if ($this->collcategoryKusers) {
-				foreach ((array) $this->collcategoryKusers as $o) {
+			if ($this->collcategoryVusers) {
+				foreach ((array) $this->collcategoryVusers as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
-		$this->collcategoryKusers = null;
+		$this->collcategoryVusers = null;
 	}
 
 	/* ---------------------- CustomData functions ------------------------- */

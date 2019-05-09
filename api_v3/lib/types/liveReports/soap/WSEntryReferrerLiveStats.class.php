@@ -3,8 +3,8 @@
 
 class WSEntryReferrerLiveStats extends WSEntryLiveStats
 {			
-	function getKalturaObject() {
-		return new KalturaEntryReferrerLiveStats();
+	function getVidiunObject() {
+		return new VidiunEntryReferrerLiveStats();
 	}
 	
 	/**

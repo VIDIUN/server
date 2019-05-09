@@ -33,9 +33,9 @@ FROM
 		SUM(ap.count_plays) count_plays,
 		SUM(ap.count_loads) count_loads		
 	FROM
-		kalturadw.dwh_aggr_partner ap,
-		kalturadw.dwh_dim_partners dp,
-		kalturadw.dwh_dim_partner_type pt
+		vidiundw.dwh_aggr_partner ap,
+		vidiundw.dwh_dim_partners dp,
+		vidiundw.dwh_dim_partner_type pt
 	WHERE 
 		ap.partner_id=dp.partner_id AND dp.partner_type_id=pt.partner_type_id
 		AND ap.partner_id IN ({PARTNER_IDS}) 

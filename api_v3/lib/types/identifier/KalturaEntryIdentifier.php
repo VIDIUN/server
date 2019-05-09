@@ -3,21 +3,21 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEntryIdentifier extends KalturaObjectIdentifier
+class VidiunEntryIdentifier extends VidiunObjectIdentifier
 {
 	/**
 	 * Identifier of the object
-	 * @var KalturaEntryIdentifierField
+	 * @var VidiunEntryIdentifierField
 	 */
 	public $identifier;
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObjectIdentifier::toObject()
+	 * @see VidiunObjectIdentifier::toObject()
 	 */
 	public function toObject ($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
-			$dbObject = new kEntryIdentifier();
+			$dbObject = new vEntryIdentifier();
 
 		return parent::toObject($dbObject, $propsToSkip);
 	}
@@ -27,7 +27,7 @@ class KalturaEntryIdentifier extends KalturaObjectIdentifier
 		);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{

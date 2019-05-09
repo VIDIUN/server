@@ -3,10 +3,10 @@
  * @package plugins.metadata
  * @subpackage api.objects
  */
-class KalturaTransformMetadataJobData extends KalturaJobData
+class VidiunTransformMetadataJobData extends VidiunJobData
 {
 	/**
-	 * @var KalturaFileContainer
+	 * @var VidiunFileContainer
 	 */
 	public $srcXsl;
 	
@@ -21,7 +21,7 @@ class KalturaTransformMetadataJobData extends KalturaJobData
 	public $destVersion;
 	
 	/**
-	 * @var KalturaFileContainer
+	 * @var VidiunFileContainer
 	 */
 	public $destXsd;
 	
@@ -48,7 +48,7 @@ class KalturaTransformMetadataJobData extends KalturaJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kTransformMetadataJobData();
+			$dbData = new vTransformMetadataJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

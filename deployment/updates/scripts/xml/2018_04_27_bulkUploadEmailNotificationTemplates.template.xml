@@ -14,7 +14,7 @@
     </session>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Categories CSV - Bulk Job Completed Successfully</name>
                 <systemName>Categories_CSV_Bulk_Success_Notification</systemName>
                 <description>Email notification template for Categories CSV Bulk Upload successful completion.</description>
@@ -22,26 +22,26 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadCsvPlugin::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
-                        <field objectType="KalturaEvalBooleanField">
+                    <item objectType="VidiunEventFieldCondition">
+                        <field objectType="VidiunEvalBooleanField">
                             <description>Category object uploaded</description>
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::CATEGORY</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
-                        <field objectType="KalturaEvalBooleanField">
+                    <item objectType="VidiunEventFieldCondition">
+                        <field objectType="VidiunEvalBooleanField">
                             <description>Bulk Upload finished successfully</description>
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FINISHED</code>
                         </field>
@@ -50,78 +50,78 @@
                 <format>1</format>
                 <subject>Categories CSV - Bulk Job Completed Successfully</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed successfully.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed successfully.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">			
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -135,7 +135,7 @@
     </multirequest>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Categories CSV - Bulk Job Completed with Errors</name>
                 <systemName>Categories_CSV_Bulk_Errors_Notification</systemName>
                 <description>Email notification template for Categories CSV Bulk Upload completion with errors.</description>
@@ -143,27 +143,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadCsvPlugin::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Category object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::CATEGORY</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload finished with errors</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FINISHED_PARTIALLY</code>
                         </field>
                     </item>
@@ -171,78 +171,78 @@
                 <format>1</format>
                 <subject>Categories CSV - Bulk Job Completed with some Errors</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed, but with some errors.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed, but with some errors.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -256,7 +256,7 @@
     </multirequest>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Categories CSV - Bulk Job Failed</name>
                 <systemName>Categories_CSV_Bulk_Failure_Notification</systemName>
                 <description>Email notification template for Categories CSV Bulk Upload failure.</description>
@@ -264,27 +264,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadCsvPlugin::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Category object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::CATEGORY</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload failed</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FAILED</code>
                         </field>
                     </item>
@@ -292,78 +292,78 @@
                 <format>1</format>
                 <subject>Categories CSV - Bulk Job Failed</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has failed.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has failed.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -377,7 +377,7 @@
     </multirequest>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>End-Users CSV - Bulk Job Completed Successfully</name>
                 <systemName>Users_CSV_Bulk_Success_Notification</systemName>
                 <description>Email notification template for End-Users CSV Bulk Upload successful completion.</description>
@@ -385,27 +385,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadCsvPlugin::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>User object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::USER</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload finished successfully</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FINISHED</code>
                         </field>
                     </item>
@@ -413,78 +413,78 @@
                 <format>1</format>
                 <subject>End-Users CSV - Bulk Job Completed Successfully</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed successfully.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed successfully.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -498,7 +498,7 @@
     </multirequest>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>End-Users CSV - Bulk Job Completed with Errors</name>
                 <systemName>Users_CSV_Bulk_Errors_Notification</systemName>
                 <description>Email notification template for End-Users CSV Bulk Upload completion with errors.</description>
@@ -506,27 +506,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadCsvPlugin::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>User object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::USER</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload finished with errors</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FINISHED_PARTIALLY</code>
                         </field>
                     </item>
@@ -534,78 +534,78 @@
                 <format>1</format>
                 <subject>End-Users CSV - Bulk Job Completed with Errors</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed, but with some errors.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed, but with some errors.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -619,7 +619,7 @@
     </multirequest>	
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>End-Users CSV - Bulk Job Failed</name>
                 <systemName>Users_CSV_Bulk_Failure_Notification</systemName>
                 <description>Email notification template for End-Users CSV Bulk Upload failure.</description>
@@ -627,27 +627,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadCsvPlugin::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>User object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::USER</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload failed</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FAILED</code>
                         </field>
                     </item>
@@ -655,77 +655,77 @@
                 <format>1</format>
                 <subject>End-Users CSV - Bulk Job Failed</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has failed.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has failed.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -739,7 +739,7 @@
     </multirequest>	
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>End-User Entitlements CSV - Bulk Job Completed Successfully</name>
                 <systemName>Users_Category_CSV_Bulk_Success_Notification</systemName>
                 <description>Email notification template for End-User Entitlements CSV Bulk Upload successful completion.</description>
@@ -747,27 +747,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadCsvPlugin::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Category User object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::CATEGORY_USER</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload finished successfully</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FINISHED</code>
                         </field>
                     </item>
@@ -775,78 +775,78 @@
                 <format>1</format>
                 <subject>End-User Entitlements CSV - Bulk Job Completed Successfully</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed successfully.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed successfully.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -860,7 +860,7 @@
     </multirequest>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>End-User Entitlements CSV - Bulk Job Completed with Errors</name>
                 <systemName>Users_Category_CSV_Bulk_Error_Notification</systemName>
                 <description>Email notification template for End-User Entitlements CSV Bulk Upload completion with errors.</description>
@@ -868,27 +868,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadCsvPlugin::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>User Entitlement object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::CATEGORY_USER</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload finished with errors</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FINISHED_PARTIALLY</code>
                         </field>
                     </item>
@@ -896,78 +896,78 @@
                 <format>1</format>
                 <subject>End-User Entitlements CSV - Bulk Job Completed with Errors</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed, but with some errors.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed, but with some errors.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -981,7 +981,7 @@
     </multirequest>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>End-User Entitlements CSV - Bulk Job Failed</name>
                 <systemName>Users_Category_CSV_Bulk_Failure_Notification</systemName>
                 <description>Email notification template for End-User Entitlements CSV Bulk Upload failure.</description>
@@ -989,27 +989,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadCsvPlugin::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>User Entitlement object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::CATEGORY_USER</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload failed</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FAILED</code>
                         </field>
                     </item>
@@ -1017,78 +1017,78 @@
                 <format>1</format>
                 <subject>End-User Entitlements CSV - Bulk Job Failed</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has failed.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has failed.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -1102,7 +1102,7 @@
     </multirequest>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Media CSV - Bulk Job Completed Successfully</name>
                 <systemName>Media_CSV_Bulk_Success_Notification</systemName>
                 <description>Email notification template for Media CSV Bulk Upload successful completion.</description>
@@ -1110,27 +1110,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadCsvPlugin::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Media object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::ENTRY</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload finished successfully</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FINISHED</code>
                         </field>
                     </item>
@@ -1138,78 +1138,78 @@
                 <format>1</format>
                 <subject>Media CSV - Bulk Job Completed Successfully</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed successfully.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed successfully.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -1223,7 +1223,7 @@
     </multirequest>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Media CSV - Bulk Job Completed with Errors</name>
                 <systemName>Media_CSV_Bulk_Error_Notification</systemName>
                 <description>Email notification template for Media CSV Bulk Upload completion with errors.</description>
@@ -1231,27 +1231,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadCsvPlugin::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Media object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::ENTRY</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload finished with errors</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FINISHED_PARTIALLY</code>
                         </field>
                     </item>
@@ -1259,78 +1259,78 @@
                 <format>1</format>
                 <subject>Media CSV - Bulk Job Completed with Errors</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed, but with some errors.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed, but with some errors.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -1344,7 +1344,7 @@
     </multirequest>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Media CSV - Bulk Job Failed</name>
                 <systemName>Media_CSV_Bulk_Failure_Notification</systemName>
                 <description>Email notification template for Media CSV Bulk Upload failure.</description>
@@ -1352,27 +1352,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadCsvPlugin::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Media object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::ENTRY</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload failed</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FAILED</code>
                         </field>
                     </item>
@@ -1380,78 +1380,78 @@
                 <format>1</format>
                 <subject>Media CSV - Bulk Job Failed</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has failed.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has failed.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -1465,7 +1465,7 @@
     </multirequest>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Media XML - Bulk Job Completed Successfully</name>
                 <systemName>Media_XML_Bulk_Success_Notification</systemName>
                 <description>Email notification template for Media XML Bulk Upload successful completion.</description>
@@ -1473,27 +1473,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description> 
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type XML</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadXmlPlugin::getBulkUploadTypeCoreValue(BulkUploadXmlType::XML)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Media object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::ENTRY</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload finished successfully</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FINISHED</code>
                         </field>
                     </item>
@@ -1501,78 +1501,78 @@
                 <format>1</format>
                 <subject>Media XML - Bulk Job Completed Successfully</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed successfully.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed successfully.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -1586,7 +1586,7 @@
     </multirequest>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Media XML - Bulk Job Completed with Errors</name>
                 <systemName>Media_XML_Bulk_Error_Notification</systemName>
                 <description>Email notification template for Media XML Bulk Upload completion with errors.</description>
@@ -1594,27 +1594,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type XML</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadXmlPlugin::getBulkUploadTypeCoreValue(BulkUploadXmlType::XML)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Media object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::ENTRY</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload finished with errors</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FINISHED_PARTIALLY</code>
                         </field>
                     </item>
@@ -1622,78 +1622,78 @@
                 <format>1</format>
                 <subject>Media XML - Bulk Job Completed with Errors</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed, but with some errors.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has been completed, but with some errors.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>					
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>
@@ -1707,7 +1707,7 @@
     </multirequest>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <name>Media XML - Bulk Job Failed</name>
                 <systemName>Media_XML_Bulk_Failure_Notification</systemName>
                 <description>Email notification template for Media XML Bulk Upload failure.</description>
@@ -1715,27 +1715,27 @@
                 <eventType>1</eventType> 
                 <eventObjectType>10</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Batch job of type Bulk Upload</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobType() == BatchJobType::BULKUPLOAD</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload type CSV</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getJobSubType() == BulkUploadXmlPlugin::getBulkUploadTypeCoreValue(BulkUploadXmlType::XML)</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Media object uploaded</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getData()->getBulkUploadObjectType() == BulkUploadObjectType::ENTRY</code>
                         </field>
                     </item>
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>Bulk Upload failed</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getEvent()->getBatchJob()->getStatus() == BatchJob::BATCHJOB_STATUS_FAILED</code>
                         </field>
                     </item>
@@ -1743,78 +1743,78 @@
                 <format>1</format>
                 <subject>Media XML - Bulk Job Failed</subject>
                 <body>
-                    <![CDATA[ Hello,<p>The processing of your bulk job has failed.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Kaltura Customer Service</p>]]>
+                    <![CDATA[ Hello,<p>The processing of your bulk job has failed.</p><p>Bulk Job ID = {job_id} <br>Job Submission Date/Time:  {date_time}</p><p>More details are available in the log file, at: <a href={log_url}>{log_url}</a></p><p>Vidiun Customer Service</p>]]>
                 </body>
                 <fromEmail>{from_email}</fromEmail>
                 <fromName>{from_name}</fromName>
-                <to objectType="KalturaEmailNotificationStaticRecipientProvider">
+                <to objectType="VidiunEmailNotificationStaticRecipientProvider">
                     <emailRecipients objectType="array">
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_admin}</value>
                             </name>
                         </item>
-                        <item objectType = "KalturaEmailNotificationRecipient">
-                            <email objectType="KalturaStringValue">
+                        <item objectType = "VidiunEmailNotificationRecipient">
+                            <email objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </email>
-                            <name objectType="KalturaStringValue">
+                            <name objectType="VidiunStringValue">
                                 <value>{to_email_user}</value>
                             </name>
                         </item>
                     </emailRecipients>
                 </to>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>job_id</key>
                         <description>Batch Job ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>log_url</key>
                         <description>Bulk upload log url</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>date_time</key>
                         <description>Bulk upload creation time</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getEvent()->getBatchJob()->getCreatedAt()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_email</key>
                         <description>Sender email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_email")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_email")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>from_name</key>
                         <description>Sender name</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>kConf::get("batch_alert_name")</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>vConf::get("batch_alert_name")</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_admin</key>
                         <description>Recepient admin email</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : ''</code>
                         </value>
                     </item>	
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>to_email_user</key>
                         <description>Recepient user email</description>
-                        <value objectType="KalturaEvalStringField">
-                            <code>!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
+                        <value objectType="VidiunEvalStringField">
+                            <code>!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : ''</code>
                         </value>
                     </item>	
                 </contentParameters>

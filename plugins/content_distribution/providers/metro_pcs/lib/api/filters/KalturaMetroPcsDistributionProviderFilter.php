@@ -3,6 +3,6 @@
  * @package plugins.metroPcsDistribution
  * @subpackage api.filters
  */
-class KalturaMetroPcsDistributionProviderFilter extends KalturaMetroPcsDistributionProviderBaseFilter
+class VidiunMetroPcsDistributionProviderFilter extends VidiunMetroPcsDistributionProviderBaseFilter
 {
 }

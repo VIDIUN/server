@@ -52,12 +52,12 @@ class assetParamsPeer extends BaseassetParamsPeer
 		$criteria->addAnd(self::ID, $id, Criteria::NOT_EQUAL);
 	}
 
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		self::$filterPartner = $partnerId;
 		
 		if(!self::$isDefaultInDefaultCriteria)
-			return parent::addPartnerToCriteria($partnerId, $privatePartnerData, $partnerGroup, $kalturaNetwork);
+			return parent::addPartnerToCriteria($partnerId, $privatePartnerData, $partnerGroup, $vidiunNetwork);
 		
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -65,19 +65,19 @@ class assetParamsPeer extends BaseassetParamsPeer
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura network stuff
+				// allow only the vidiun network stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -85,7 +85,7 @@ class assetParamsPeer extends BaseassetParamsPeer
 		else
 		{
 			// private data is allowed
-			if(empty($partnerGroup) && empty($kalturaNetwork))
+			if(empty($partnerGroup) && empty($vidiunNetwork))
 			{
 				// the default case
 				$criteria->addAnd(self::PARTNER_ID, $partnerId);
@@ -99,7 +99,7 @@ class assetParamsPeer extends BaseassetParamsPeer
 				$criterion = null;
 				if($partnerGroup)
 				{
-					// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+					// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 					$partners = explode(',', trim($partnerGroup));
 					$hasPartnerZero = false;
 					foreach($partners as $index => &$p)
@@ -154,7 +154,7 @@ class assetParamsPeer extends BaseassetParamsPeer
 			if(isset(self::$class_types_cache[$assetType]))
 				return self::$class_types_cache[$assetType];
 				
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $assetType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $assetType);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$assetType] = $extendedCls;
@@ -265,7 +265,7 @@ class assetParamsPeer extends BaseassetParamsPeer
 		$criteria = new Criteria(assetParamsPeer::DATABASE_NAME);
 		$criteria->add(assetParamsPeer::ID, $pks, Criteria::IN);
 		
-		$types = KalturaPluginManager::getExtendedTypes(assetParamsPeer::OM_CLASS, assetType::THUMBNAIL);
+		$types = VidiunPluginManager::getExtendedTypes(assetParamsPeer::OM_CLASS, assetType::THUMBNAIL);
 		$criteria->add(assetParamsPeer::TYPE, $types, Criteria::IN);
 		
 		return assetParamsPeer::doSelect($criteria, $con);
@@ -308,7 +308,7 @@ class assetParamsPeer extends BaseassetParamsPeer
 	}
 
 	public static function retrieveAllFlavorParamsTypes(){
-		$flavorTypes = KalturaPluginManager::getExtendedTypes(self::OM_CLASS, assetType::FLAVOR);
+		$flavorTypes = VidiunPluginManager::getExtendedTypes(self::OM_CLASS, assetType::FLAVOR);
 		$flavorTypes[] = assetType::LIVE;
 		return $flavorTypes;
 		
@@ -316,7 +316,7 @@ class assetParamsPeer extends BaseassetParamsPeer
 
 	/**
 	 * Following function will create a temp Asset with id = -2 , currently it is for clip concat flow only
-	 * note: you cannot save the temp asset to the DB! an kCoreException will be thrown if you do,
+	 * note: you cannot save the temp asset to the DB! an vCoreException will be thrown if you do,
 	 * this is a temporary flavor param that exist only during current api session to create the clip parameters with
 	 * the appropriate effects
 	 *
@@ -325,12 +325,12 @@ class assetParamsPeer extends BaseassetParamsPeer
 	 * @param  int $pk the primary key.
 	 * @param  PropelPDO $con the connection to use
 	 * @return assetParams the temporary object
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 */
 	public static function getTempAssetParamByPk($pk, PropelPDO $con = null)
 	{
 		if (!Propel::isInstancePoolingEnabled())
-			throw new kCoreException("Instance Pooling is not enabled, Cannot create temp flavor param");
+			throw new vCoreException("Instance Pooling is not enabled, Cannot create temp flavor param");
 		$asset = self::retrieveByPK($pk,$con);
 		if (isset($asset))
 		{

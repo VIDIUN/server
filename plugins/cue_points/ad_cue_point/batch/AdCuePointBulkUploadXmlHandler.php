@@ -27,7 +27,7 @@ class AdCuePointBulkUploadXmlHandler extends CuePointBulkUploadXmlHandler
 	 */
 	protected function getNewInstance()
 	{
-		return new KalturaAdCuePoint();
+		return new VidiunAdCuePoint();
 	}
 	
 	/* (non-PHPdoc)
@@ -39,11 +39,11 @@ class AdCuePointBulkUploadXmlHandler extends CuePointBulkUploadXmlHandler
 			return null;
 			
 		$cuePoint = parent::parseCuePoint($scene);
-		if(!($cuePoint instanceof KalturaAdCuePoint))
+		if(!($cuePoint instanceof VidiunAdCuePoint))
 			return null;
 		
 		if(isset($scene->sceneEndTime))
-			$cuePoint->endTime = kXml::timeToInteger($scene->sceneEndTime);
+			$cuePoint->endTime = vXml::timeToInteger($scene->sceneEndTime);
 		if(isset($scene->sceneTitle))
 			$cuePoint->title = "$scene->sceneTitle";
 		if(isset($scene->sourceUrl))
@@ -57,9 +57,9 @@ class AdCuePointBulkUploadXmlHandler extends CuePointBulkUploadXmlHandler
 	
 	/**
 	 * Removes all non updatble fields from the cuepoint
-	 * @param KalturaCuePoint $entry
+	 * @param VidiunCuePoint $entry
 	 */
-	protected function removeNonUpdatbleFields(KalturaCuePoint $cuePoint)
+	protected function removeNonUpdatbleFields(VidiunCuePoint $cuePoint)
 	{
 		$retCuePoint = clone $cuePoint;
 		$retCuePoint->protocolType = null;

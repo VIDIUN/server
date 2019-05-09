@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kClipDescription
+class vClipDescription
 {
 	/**
 	 * The Source

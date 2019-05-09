@@ -1,16 +1,16 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage lib
  */
-class CrossKalturaDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class CrossVidiunDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
-	const CROSS_KALTURA = 'CROSS_KALTURA';
+	const CROSS_VIDIUN = 'CROSS_VIDIUN';
 	
 	public static function getAdditionalValues()
 	{
 		return array(
-			'CROSS_KALTURA' => self::CROSS_KALTURA,
+			'CROSS_VIDIUN' => self::CROSS_VIDIUN,
 		);
 	}
 	

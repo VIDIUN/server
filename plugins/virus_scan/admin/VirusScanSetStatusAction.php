@@ -3,7 +3,7 @@
  * @package plugins.virusScan
  * @subpackage Admin
  */
-class VirusScanSetStatusAction extends KalturaApplicationPlugin
+class VirusScanSetStatusAction extends VidiunApplicationPlugin
 {
 	public function __construct()
 	{
@@ -22,7 +22,7 @@ class VirusScanSetStatusAction extends KalturaApplicationPlugin
 	
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_VIRUS_SCAN);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_VIRUS_SCAN);
 	}
 	
 		
@@ -32,17 +32,17 @@ class VirusScanSetStatusAction extends KalturaApplicationPlugin
 		$profileId = $this->_getParam('profileId');
 		$status = $this->_getParam('status');
 		$client = Infra_ClientHelper::getClient();
-		$virusScanPlugin = Kaltura_Client_VirusScan_Plugin::get($client);		
-		$newVirusScanProfile = new Kaltura_Client_VirusScan_Type_VirusScanProfile();
+		$virusScanPlugin = Vidiun_Client_VirusScan_Plugin::get($client);		
+		$newVirusScanProfile = new Vidiun_Client_VirusScan_Type_VirusScanProfile();
 		
 		if ($status == 'enable'){
-			$newVirusScanProfile->status = Kaltura_Client_VirusScan_Enum_VirusScanProfileStatus::ENABLED;
+			$newVirusScanProfile->status = Vidiun_Client_VirusScan_Enum_VirusScanProfileStatus::ENABLED;
 		}
 		elseif ($status == 'disable'){			
-			$newVirusScanProfile->status = Kaltura_Client_VirusScan_Enum_VirusScanProfileStatus::DISABLED;
+			$newVirusScanProfile->status = Vidiun_Client_VirusScan_Enum_VirusScanProfileStatus::DISABLED;
 		}
 		elseif ($status == 'delete'){
-			$newVirusScanProfile->status = Kaltura_Client_VirusScan_Enum_VirusScanProfileStatus::DELETED;
+			$newVirusScanProfile->status = Vidiun_Client_VirusScan_Enum_VirusScanProfileStatus::DELETED;
 		}
 		try
 		{
@@ -51,7 +51,7 @@ class VirusScanSetStatusAction extends KalturaApplicationPlugin
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			echo $action->getHelper('json')->sendJson($e->getMessage(), false);
 		}
 	}

@@ -101,7 +101,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 		if(isset(self::$class_types_cache[$deliveryType]))
 			return self::$class_types_cache[$deliveryType];
 		
-		$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $deliveryType);
+		$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $deliveryType);
 		if($extendedCls)
 		{
 			self::$class_types_cache[$deliveryType] = $extendedCls;
@@ -180,7 +180,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 		$entry = entryPeer::retrieveByPK($entryId);
 		if(!$entry)
 		{
-			KalturaLog::err('Failed to retrieve entryID: '. $entryId);
+			VidiunLog::err('Failed to retrieve entryID: '. $entryId);
 			return null;
 		}
 
@@ -188,7 +188,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		if(!$partner)
 		{
-			KalturaLog::err('Failed to retrieve partnerId: '. $partnerId);
+			VidiunLog::err('Failed to retrieve partnerId: '. $partnerId);
 			return null;
 		}
 
@@ -267,7 +267,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 				$customLiveStreamConfigurations = array();
 				if($entry->getHlsStreamUrl($deliveryAttributes->getMediaProtocol()))
 				{
-					$hlsLiveStreamConfig = new kLiveStreamConfiguration();
+					$hlsLiveStreamConfig = new vLiveStreamConfiguration();
 					$hlsLiveStreamConfig->setUrl($entry->getHlsStreamUrl($deliveryAttributes->getMediaProtocol()));
 					$hlsLiveStreamConfig->setProtocol(PlaybackProtocol::APPLE_HTTP);
 					$customLiveStreamConfigurations[] = $hlsLiveStreamConfig;
@@ -276,7 +276,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 				$customLiveStreamConfigurations = array_merge($entry->getCustomLiveStreamConfigurations(), $customLiveStreamConfigurations);
 				foreach($customLiveStreamConfigurations as $customLiveStreamConfiguration)
 				{
-					/* @var $customLiveStreamConfiguration kLiveStreamConfiguration */
+					/* @var $customLiveStreamConfiguration vLiveStreamConfiguration */
 					if($streamerType == $customLiveStreamConfiguration->getProtocol())
 					{
 						$cdnHost = parse_url($customLiveStreamConfiguration->getUrl(), PHP_URL_HOST);
@@ -304,11 +304,11 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 
 		if($delivery)
 		{
-			KalturaLog::info("Delivery ID for partnerId [$partnerId] and streamer type [$streamerType] is " . $delivery->getId());
+			VidiunLog::info("Delivery ID for partnerId [$partnerId] and streamer type [$streamerType] is " . $delivery->getId());
 		} else
 		{
 			$mediaProtocol = $deliveryAttributes ? $deliveryAttributes->getMediaProtocol() : null;
-			KalturaLog::err("Delivery ID can't be determined for partnerId [$partnerId] streamer type [$streamerType] and media protocol [$mediaProtocol]");
+			VidiunLog::err("Delivery ID can't be determined for partnerId [$partnerId] streamer type [$streamerType] and media protocol [$mediaProtocol]");
 		}
 
 		return $delivery;
@@ -371,7 +371,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 				$orderedDeliveryIds[] = $deliveryProfileId;
 			}
 		}
-		KalturaLog::debug("Delivery profile ids after ordering: " . print_r($orderedDeliveryIds, true));
+		VidiunLog::debug("Delivery profile ids after ordering: " . print_r($orderedDeliveryIds, true));
 		return $orderedDeliveryIds;
 	}
 
@@ -424,10 +424,10 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 	}
 
 	protected static function isSecured($partner, $entry) {
-		$ks = kCurrentContext::$ks_object;
+		$vs = vCurrentContext::$vs_object;
 		$isSecured = false;
 		if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENTITLEMENT, $partner->getId()) &&
-				($partner->getDefaultEntitlementEnforcement() || ($ks && $ks->getEnableEntitlement())))
+				($partner->getDefaultEntitlementEnforcement() || ($vs && $vs->getEnableEntitlement())))
 			$isSecured = true;
 		if(!$isSecured)
 			$isSecured = $entry->isSecuredEntry();
@@ -446,7 +446,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 		$storageId = $deliveryAttributes->getStorageId();
 		$storageProfile = StorageProfilePeer::retrieveByPK($storageId);
 		if(!$storageProfile) {
-			KalturaLog::err('Couldn\'t retrieve storageId: '. $storageId);
+			VidiunLog::err('Couldn\'t retrieve storageId: '. $storageId);
 			return null;
 		}
 
@@ -454,7 +454,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 		$deliveryIds = $storageProfile->getDeliveryProfileIds();
 
 		if(!array_key_exists($streamerType, $deliveryIds)) {
-			KalturaLog::err("Delivery ID can't be determined for storageId [$storageId] ( PartnerId [" .  $storageProfile->getPartnerId() . "] ) and streamer type [ $streamerType ]");
+			VidiunLog::err("Delivery ID can't be determined for storageId [$storageId] ( PartnerId [" .  $storageProfile->getPartnerId() . "] ) and streamer type [ $streamerType ]");
 			return null;
 		}
 
@@ -467,7 +467,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 				$deliveryIds = $intersectDeliveryProfileIds;
 			else
 			{
-				KalturaLog::err('Requested delivery profile ids ['. implode("|", $intersectDeliveryProfileIds)."], can't be determined for storageId [$storageId] ,PartnerId [".$storageProfile->getPartnerId()."] and streamer type [$streamerType]");
+				VidiunLog::err('Requested delivery profile ids ['. implode("|", $intersectDeliveryProfileIds)."], can't be determined for storageId [$storageId] ,PartnerId [".$storageProfile->getPartnerId()."] and streamer type [$streamerType]");
 				return null;
 			}
 		}
@@ -476,13 +476,13 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 		$deliveries = DeliveryProfilePeer::retrieveByPKs($deliveryIds);
 		$delivery = self::selectByDeliveryAttributes($deliveries, $deliveryAttributes);
 		if($delivery) {
-			KalturaLog::info("Delivery ID for storageId [$storageId] ( PartnerId [" . $storageProfile->getPartnerId() . "] ) and streamer type [$streamerType] is " . $delivery->getId());
+			VidiunLog::info("Delivery ID for storageId [$storageId] ( PartnerId [" . $storageProfile->getPartnerId() . "] ) and streamer type [$streamerType] is " . $delivery->getId());
 			$delivery->setEntryId($deliveryAttributes->getEntryId());
 			$delivery->setStorageId($storageId);
 			
 			$delivery->initDeliveryDynamicAttributes($fileSync, $asset);
 		} else {
-			KalturaLog::err("Delivery ID can't be determined for storageId [$storageId] ( PartnerId [" .  $storageProfile->getPartnerId() . "] ) streamer type [$streamerType] and media protocol [".$deliveryAttributes->getMediaProtocol()."]");
+			VidiunLog::err("Delivery ID can't be determined for storageId [$storageId] ( PartnerId [" .  $storageProfile->getPartnerId() . "] ) streamer type [$streamerType] and media protocol [".$deliveryAttributes->getMediaProtocol()."]");
 		}
 		
 		return $delivery;
@@ -528,7 +528,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 		if ($c == 1)
 			return reset($supportedDPs);
 
-		$region = kGeoUtils::getCDNRegionFromIP();
+		$region = vGeoUtils::getCDNRegionFromIP();
 		
 		$minWeight = PHP_INT_MAX;
 		$minDP = null;
@@ -546,7 +546,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 			}
 		}
 
-		kApiCache::addExtraField(kApiCache::ECF_CDN_REGION, kApiCache::COND_MATCH, array($region));
+		vApiCache::addExtraField(vApiCache::ECF_CDN_REGION, vApiCache::COND_MATCH, array($region));
 		
 		return $minDP ? $minDP : reset($supportedDPs);
 	}
@@ -590,7 +590,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 		$entryId = $deliveryAttributes->getEntryId();
 		$entry = entryPeer::retrieveByPK($entryId);
 		if(!$entry) {
-			KalturaLog::err('Failed to retrieve entryId: '. $entryId);
+			VidiunLog::err('Failed to retrieve entryId: '. $entryId);
 			return null;
 		}
 		$partnerId = $entry->getPartnerId();
@@ -616,10 +616,10 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 		
 		$delivery = self::selectByDeliveryAttributes($deliveries, $deliveryAttributes);
 		if($delivery) {
-			KalturaLog::info("Delivery ID for Host Name: [$cdnHost] and streamer type: [$streamerType] is [" . $delivery->getId());
+			VidiunLog::info("Delivery ID for Host Name: [$cdnHost] and streamer type: [$streamerType] is [" . $delivery->getId());
 			$delivery->setEntryId($entryId);
 		} else {
-			KalturaLog::err("Delivery ID can't be determined for Host Name [$cdnHost] and streamer type [$streamerType]");
+			VidiunLog::err("Delivery ID can't be determined for Host Name [$cdnHost] and streamer type [$streamerType]");
 		}
 		return $delivery;
 		
@@ -669,7 +669,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 	 */
 	public static function getAllLiveDeliveryProfileTypes()
 	{
-		$deliveryProfileTypes = KalturaPluginManager::getExtendedTypes(self::OM_CLASS, self::LIVE_DELIVERY_PROFILE);
+		$deliveryProfileTypes = VidiunPluginManager::getExtendedTypes(self::OM_CLASS, self::LIVE_DELIVERY_PROFILE);
 		$deliveryProfileTypes = array_merge($deliveryProfileTypes, self::$LIVE_DELIVERY_PROFILES);
 		
 		$key = array_search(self::LIVE_DELIVERY_PROFILE, $deliveryProfileTypes);
@@ -773,7 +773,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 				$customLiveStreamConfigurations = array();
 				if($entry->getHlsStreamUrl($deliveryAttributes->getMediaProtocol()))
 				{
-					$hlsLiveStreamConfig = new kLiveStreamConfiguration();
+					$hlsLiveStreamConfig = new vLiveStreamConfiguration();
 					$hlsLiveStreamConfig->setUrl($entry->getHlsStreamUrl($deliveryAttributes->getMediaProtocol()));
 					$hlsLiveStreamConfig->setProtocol(PlaybackProtocol::APPLE_HTTP);
 					$customLiveStreamConfigurations[] = $hlsLiveStreamConfig;
@@ -782,7 +782,7 @@ class DeliveryProfilePeer extends BaseDeliveryProfilePeer {
 				$customLiveStreamConfigurations = array_merge($entry->getCustomLiveStreamConfigurations(), $customLiveStreamConfigurations);
 				foreach($customLiveStreamConfigurations as $customLiveStreamConfiguration)
 				{
-					/* @var $customLiveStreamConfiguration kLiveStreamConfiguration */
+					/* @var $customLiveStreamConfiguration vLiveStreamConfiguration */
 					$cdnHost = parse_url($customLiveStreamConfiguration->getUrl(), PHP_URL_HOST);
 					$deliveryAttributes->setFormat($customLiveStreamConfiguration->getProtocol());
 					$customLiveDelivery = self::getLiveDeliveryProfileByHostName($cdnHost, $deliveryAttributes);

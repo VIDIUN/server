@@ -9,10 +9,10 @@ function getEventType ( $consts_map , $t )
 
 
 
-require_once ( SF_ROOT_DIR . "/../api_v3/lib/types/KalturaEnum.php");
-require_once ( SF_ROOT_DIR . "/../api_v3/lib/types/enums/KalturaStatsEventType.php");
-// build the map for the KalturaStatsEventType
-$ref = new ReflectionClass('KalturaStatsEventType');
+require_once ( SF_ROOT_DIR . "/../api_v3/lib/types/VidiunEnum.php");
+require_once ( SF_ROOT_DIR . "/../api_v3/lib/types/enums/VidiunStatsEventType.php");
+// build the map for the VidiunStatsEventType
+$ref = new ReflectionClass('VidiunStatsEventType');
 
 $consts = $ref->getConstants();
 
@@ -22,7 +22,7 @@ foreach ( $consts as $c => $val )
 	$consts_map[$val] = $c;
 }
 
-if ( $type == "kdp" )
+if ( $type == "vdp" )
 {
 $header = array ( "client version" , "event id" , "datetime" , "session id" , "partner id" , "entry id" ,
 	"uv" , "widget id" , "uiconf id" , "uid" , "current point" , "duration" , "user ip" , "process duration" ,
@@ -65,8 +65,8 @@ $header = array (
 	"action",
 	"ps_version",
 	"is_multi_request",
-	"ks",
-	"ks_type",
+	"vs",
+	"vs_type",
 	"partner_id",
 	"uid",
 	"entry_id",
@@ -82,20 +82,20 @@ $header = array (
 	"exception"
 	);	
 }
-elseif ( $type == "kmc" ) 
+elseif ( $type == "vmc" ) 
 {
 $header = array (
 	"apiClientVersion", 
-	"kmcEventType" ,
+	"vmcEventType" ,
 	"server time" ,
-	"kmcEventActionPath",
+	"vmcEventActionPath",
 	"eventTimestamp",
 	"partnerId",
 	"userId",
 	"entryId",
 	"widgetId",
 	"uiconfId",
-	"ks",
+	"vs",
 	"ip",
 	);	
 }
@@ -128,7 +128,7 @@ foreach ( $lines as $line )
 	$i =1;
 	echo "<tr>";
 	$line_arr = explode ( "," , $line );
-	if ( $type == "kdp" )
+	if ( $type == "vdp" )
 	{
 		foreach ( $line_arr as $td )
 		{
@@ -162,10 +162,10 @@ foreach ( $lines as $line )
 </textarea>
 <br/>
 Event types: 
-KDP: <input type='radio' name='type' value='kdp' <?php if ( $type == "kdp" ) echo "checked='checked'" ?>>
+VDP: <input type='radio' name='type' value='vdp' <?php if ( $type == "vdp" ) echo "checked='checked'" ?>>
 BATCH: <input type='radio' name='type' value='batch' <?php if ( $type == "batch" ) echo "checked='checked'" ?>>
 API: <input type='radio' name='type' value='api' <?php if ( $type == "api" ) echo "checked='checked'" ?>>
-KMC: <input type='radio' name='type' value='kmc' <?php if ( $type == "kmc" ) echo "checked='checked'" ?>>
+VMC: <input type='radio' name='type' value='vmc' <?php if ( $type == "vmc" ) echo "checked='checked'" ?>>
 <br/>
 
 Line separator: 

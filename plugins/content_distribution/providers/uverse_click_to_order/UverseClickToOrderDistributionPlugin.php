@@ -2,10 +2,10 @@
 /**
  * @package plugins.uverseClickToOrderDistribution
  */
-class UverseClickToOrderDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider, IKalturaEventConsumers, IKalturaServices
+class UverseClickToOrderDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider, IVidiunEventConsumers, IVidiunServices
 {
 	const PLUGIN_NAME = 'uverseClickToOrderDistribution';
-	const UVERSE_CLICK_TO_ORDER_EVENT_CONSUMER = "kUverseClickToOrderEventConsumer";
+	const UVERSE_CLICK_TO_ORDER_EVENT_CONSUMER = "vUverseClickToOrderEventConsumer";
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 1;
 	const CONTENT_DSTRIBUTION_VERSION_MINOR = 0;
 	const CONTENT_DSTRIBUTION_VERSION_BUILD = 0;
@@ -17,12 +17,12 @@ class UverseClickToOrderDistributionPlugin extends KalturaPlugin implements IKal
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -83,23 +83,23 @@ class UverseClickToOrderDistributionPlugin extends KalturaPlugin implements IKal
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::UVERSE_CLICK_TO_ORDER)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::UVERSE_CLICK_TO_ORDER)
 		{
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaUverseClickToOrderDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunUverseClickToOrderDistributionProfile';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::UVERSE_CLICK_TO_ORDER)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::UVERSE_CLICK_TO_ORDER)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_UverseClickToOrderProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_UverseClickToOrderDistribution_Type_UverseClickToOrderDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_UverseClickToOrderDistribution_Type_UverseClickToOrderDistributionProfile';
 		}
 		
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseClickToOrderDistributionProviderType::UVERSE_CLICK_TO_ORDER))
-			return 'KalturaUverseClickToOrderDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseClickToOrderDistributionProviderType::UVERSE_CLICK_TO_ORDER))
+			return 'VidiunUverseClickToOrderDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseClickToOrderDistributionProviderType::UVERSE_CLICK_TO_ORDER))
 			return 'UverseClickToOrderDistributionProfile';
@@ -120,11 +120,11 @@ class UverseClickToOrderDistributionPlugin extends KalturaPlugin implements IKal
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaUverseClickToOrderDistributionProvider();
+		$distributionProvider = new VidiunUverseClickToOrderDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -148,8 +148,8 @@ class UverseClickToOrderDistributionPlugin extends KalturaPlugin implements IKal
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -157,11 +157,11 @@ class UverseClickToOrderDistributionPlugin extends KalturaPlugin implements IKal
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -171,7 +171,7 @@ class UverseClickToOrderDistributionPlugin extends KalturaPlugin implements IKal
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{

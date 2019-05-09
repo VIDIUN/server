@@ -1,20 +1,20 @@
-package lib.Kaltura.notification;
+package lib.Vidiun.notification;
 
-import lib.Kaltura.config.SessionConfig;
-import lib.Kaltura.output.Console;
+import lib.Vidiun.config.SessionConfig;
+import lib.Vidiun.output.Console;
 
-import com.kaltura.client.KalturaApiException;
-import com.kaltura.client.KalturaClient;
-import com.kaltura.client.enums.KalturaSessionType;
-import com.kaltura.client.types.KalturaHttpNotification;
+import com.vidiun.client.VidiunApiException;
+import com.vidiun.client.VidiunClient;
+import com.vidiun.client.enums.VidiunSessionType;
+import com.vidiun.client.types.VidiunHttpNotification;
 
 /**
  * This class is a base class for all the notification handlers 
  */
 public abstract class BaseNotificationHandler {
 
-	/** Kaltura client */
-	private static KalturaClient apiClient = null;
+	/** Vidiun client */
+	private static VidiunClient apiClient = null;
 	
 	/** The console this handler use*/
 	protected Console console;
@@ -28,14 +28,14 @@ public abstract class BaseNotificationHandler {
 	}
 
 	/**
-	 * @return The Kaltura client
+	 * @return The Vidiun client
 	 * @throws Exception
 	 */
-	protected static KalturaClient getClient() {
+	protected static VidiunClient getClient() {
 		if (apiClient == null) {
-			// Generates the Kaltura client. The parameters can be changed according to the need
+			// Generates the Vidiun client. The parameters can be changed according to the need
 			try {
-				apiClient = SessionConfig.getClient(KalturaSessionType.ADMIN, "", 86400, "");
+				apiClient = SessionConfig.getClient(VidiunSessionType.ADMIN, "", 86400, "");
 			} catch (Exception e) {
 				throw new NotificationHandlerException("Failed to generate client : " + e.getMessage(), NotificationHandlerException.ERROR_PROCESSING);
 			}
@@ -48,14 +48,14 @@ public abstract class BaseNotificationHandler {
 	 * @param httpNotification The notification that is considered to be handled
 	 * @return Whether this handler should handle this notification
 	 */
-	abstract public boolean shouldHandle(KalturaHttpNotification httpNotification);
+	abstract public boolean shouldHandle(VidiunHttpNotification httpNotification);
 
 	/**
 	 * The handling function. 
 	 * @param httpNotification The notification that should be handled
-	 * @throws KalturaApiException In case something bad happened
+	 * @throws VidiunApiException In case something bad happened
 	 */
-	abstract public void handle(KalturaHttpNotification httpNotification);
+	abstract public void handle(VidiunHttpNotification httpNotification);
 
 	/**
 	 * @return The notification processing timing

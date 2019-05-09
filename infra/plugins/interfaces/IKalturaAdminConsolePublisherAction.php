@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaAdminConsolePublisherAction extends IKalturaBase
+interface IVidiunAdminConsolePublisherAction extends IVidiunBase
 {
 	/**
 	 * @return array<string, string> - array of <label, jsActionFunctionName> 

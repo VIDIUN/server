@@ -27,7 +27,7 @@ class VoicebaseClientHelper
 	
 	public function __construct($apiKey, $apiPassword, $additionalParams = null)
 	{
-		$voicebaseParamsMap = kConf::get('voicebase','integration');
+		$voicebaseParamsMap = vConf::get('voicebase','integration');
 		$this->supportedLanguages = $voicebaseParamsMap['languages'];
 		$version = $voicebaseParamsMap['version'];
 	
@@ -108,7 +108,7 @@ class VoicebaseClientHelper
 	private function sendAPICall($params, $options = null, $noDecoding = false)
 	{
 		$url = $this->addUrlParams($this->baseEndpointUrl, $params);
-		KalturaLog::debug("sending API call - $url");
+		VidiunLog::debug("sending API call - $url");
 
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -120,7 +120,7 @@ class VoicebaseClientHelper
 
 		if(($errString = curl_error($ch)) !== '' || ($errNum = curl_errno($ch)) !== 0)
 		{
-			KalturaLog::err('problem with curl - ' . $errString . ' error num - ' . $errNum);
+			VidiunLog::err('problem with curl - ' . $errString . ' error num - ' . $errNum);
 			curl_close($ch);
 			throw new Exception("curl error with url " . $url . " error num [$errNum] error message [$errString]");
 		}
@@ -137,7 +137,7 @@ class VoicebaseClientHelper
 			
 		}
 
-		KalturaLog::info('result is - ' . var_dump($result));
+		VidiunLog::info('result is - ' . var_dump($result));
 		curl_close($ch);
 		
 		return $result;

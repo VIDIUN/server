@@ -3,12 +3,12 @@
  * @package infra
  * @subpackage Plugins
  */
-class ParentObjectFeatureType implements IKalturaPluginEnum, ObjectFeatureType
+class ParentObjectFeatureType implements IVidiunPluginEnum, ObjectFeatureType
 {
     const PARENT = 'Parent';
 
     /* (non-PHPdoc)
-     * @see IKalturaPluginEnum::getAdditionalValues()
+     * @see IVidiunPluginEnum::getAdditionalValues()
      */
     public static function getAdditionalValues()
     {
@@ -20,7 +20,7 @@ class ParentObjectFeatureType implements IKalturaPluginEnum, ObjectFeatureType
     }
 
     /* (non-PHPdoc)
-     * @see IKalturaPluginEnum::getAdditionalDescriptions()
+     * @see IVidiunPluginEnum::getAdditionalDescriptions()
      */
     public static function getAdditionalDescriptions() {
         return array();

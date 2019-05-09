@@ -1,6 +1,6 @@
 <?php
 
-class kDeliveryUtils {
+class vDeliveryUtils {
 	
 	/*
 	 * retrieves the streamer type for a delivery type array 
@@ -35,21 +35,21 @@ class kDeliveryUtils {
 	
 	public static function getDeliveryTypeFromConfig($key)
 	{
-		$playersConfig = kConf::getMap('players');
+		$playersConfig = vConf::getMap('players');
 		if (!is_array($playersConfig))
 		{
-			KalturaLog::err('Players section is not defined');
+			VidiunLog::err('Players section is not defined');
 			return array();
 		}
 		if(!isset($playersConfig['delivery_types']))
 		{
-			KalturaLog::err('Delivery types section is not defined');
+			VidiunLog::err('Delivery types section is not defined');
 			return array();
 		}
 		$deliveryTypeConfig = $playersConfig['delivery_types'];
 		if (!isset($deliveryTypeConfig[$key]))
 		{
-			KalturaLog::err('The key '.$key.' was not found in the delivery types config section');
+			VidiunLog::err('The key '.$key.' was not found in the delivery types config section');
 			return array();
 		}
 
@@ -58,7 +58,7 @@ class kDeliveryUtils {
 	
 	public static function getForcedDeliveryTypeFromConfig($key)
 	{
-		$playersConfig = kConf::getMap('players');
+		$playersConfig = vConf::getMap('players');
 		if (is_array($playersConfig) && isset($playersConfig['forced_delivery_types']))
 		{
 			$deliveryTypeConfig = $playersConfig['forced_delivery_types'];

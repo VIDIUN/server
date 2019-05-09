@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage api.enum
  */
-class KalturaVendorCatalogItemPriceFunction extends KalturaStringEnum implements VendorCatalogItemPriceFunction
+class VidiunVendorCatalogItemPriceFunction extends VidiunStringEnum implements VendorCatalogItemPriceFunction
 {
 
 }

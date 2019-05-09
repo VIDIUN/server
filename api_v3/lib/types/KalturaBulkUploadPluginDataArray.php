@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBulkUploadPluginDataArray extends KalturaTypedArray
+class VidiunBulkUploadPluginDataArray extends VidiunTypedArray
 {
 	public function __construct()
 	{
-		return parent::__construct("KalturaBulkUploadPluginData");
+		return parent::__construct("VidiunBulkUploadPluginData");
 	}
 	
 	public function toValuesArray()

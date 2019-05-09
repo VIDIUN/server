@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaProvisionJobData extends KalturaJobData
+class VidiunProvisionJobData extends VidiunJobData
 {
 	/**
 	 * @var string
@@ -96,7 +96,7 @@ class KalturaProvisionJobData extends KalturaJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kProvisionJobData();
+			$dbData = new vProvisionJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}
@@ -119,35 +119,35 @@ class KalturaProvisionJobData extends KalturaJobData
 	{
 		switch ($subType)
 		{
-			case KalturaSourceType::AKAMAI_LIVE:
-			case KalturaSourceType::AKAMAI_UNIVERSAL_LIVE:
+			case VidiunSourceType::AKAMAI_LIVE:
+			case VidiunSourceType::AKAMAI_UNIVERSAL_LIVE:
 				return $subType;
 				break;
 			default:
-				return kPluginableEnumsManager::coreToApi('EntrySourceType', $subType);
+				return vPluginableEnumsManager::coreToApi('EntrySourceType', $subType);
 				break;
 		}
 	}
 	
 
 	/**
-	 * Return instance of KalturaProvisionJobData according to job sub-type
+	 * Return instance of VidiunProvisionJobData according to job sub-type
 	 * @param int $jobSubType
-	 * @return KalturaProvisionJobData
+	 * @return VidiunProvisionJobData
 	 */
 	public static function getJobDataInstance ($jobSubType)
 	{
-		KalturaLog::info ("Determining correct job data based on jobSubType $jobSubType");
+		VidiunLog::info ("Determining correct job data based on jobSubType $jobSubType");
 		switch ($jobSubType)
 		{
-			case KalturaSourceType::AKAMAI_LIVE:
-				return new KalturaAkamaiProvisionJobData();
+			case VidiunSourceType::AKAMAI_LIVE:
+				return new VidiunAkamaiProvisionJobData();
 				break;
-			case KalturaSourceType::AKAMAI_UNIVERSAL_LIVE:
-				return new KalturaAkamaiUniversalProvisionJobData();
+			case VidiunSourceType::AKAMAI_UNIVERSAL_LIVE:
+				return new VidiunAkamaiUniversalProvisionJobData();
 				break;
 			default:
-				return KalturaPluginManager::loadObject('KalturaProvisionJobData', $jobSubType);
+				return VidiunPluginManager::loadObject('VidiunProvisionJobData', $jobSubType);
 				break;
 		
 		}

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage externalWidgets
  */
-class kaeAction extends sfAction
+class vaeAction extends sfAction
 {
 	
 	/**
@@ -31,7 +31,7 @@ class kaeAction extends sfAction
 			die();
 		}
 			
-		if( kString::beginsWith( $ui_conf_swf_url , "http") )
+		if( vString::beginsWith( $ui_conf_swf_url , "http") )
 		{
 			$swf_url = 	$ui_conf_swf_url; // absolute URL 
 		}
@@ -45,9 +45,9 @@ class kaeAction extends sfAction
 		$params = "contentUrl=".urlencode($swf_url).
 			"&host=" . str_replace("http://", "", str_replace("https://", "", myPartnerUtils::getHost($partner_id))).
 			"&cdnHost=". str_replace("http://", "", str_replace("https://", "", myPartnerUtils::getCdnHost($partner_id))).
-			"&uiConfId=" . $ui_conf_id . "&disableurlhashing=".kConf::get('disable_url_hashing');
+			"&uiConfId=" . $ui_conf_id . "&disableurlhashing=".vConf::get('disable_url_hashing');
 		
-		$wrapper_swf = myContentStorage::getFSFlashRootPath ()."/flexwrapper/".kConf::get('editors_flex_wrapper_version')."/FlexWrapper.swf";
+		$wrapper_swf = myContentStorage::getFSFlashRootPath ()."/flexwrapper/".vConf::get('editors_flex_wrapper_version')."/FlexWrapper.swf";
 		$this->redirect(  $host . myPartnerUtils::getUrlForPartner( $partner_id , $subp_id ) . "$wrapper_swf?$params");
 	}
 }

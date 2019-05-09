@@ -10,9 +10,9 @@ require_once(__DIR__ . "/../../bootstrap.php");
  * @package Scheduler
  * @subpackage Debug
  */
-class KAsyncCaptureThumbTest extends PHPUnit_Framework_TestCase 
+class VAsyncCaptureThumbTest extends PHPUnit_Framework_TestCase 
 {
-	const JOB_NAME = 'KAsyncCaptureThumb';
+	const JOB_NAME = 'VAsyncCaptureThumb';
 	
 	private $outputFolder;
 	private $testsConfig;
@@ -34,7 +34,7 @@ class KAsyncCaptureThumbTest extends PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 		
-		$config = new Zend_Config_Ini(dirname(__FILE__) . "/KAsyncCaptureThumbTest.ini");
+		$config = new Zend_Config_Ini(dirname(__FILE__) . "/VAsyncCaptureThumbTest.ini");
 		$testConfig = $config->get('config');
 		$this->outputFolder = dirname(__FILE__) . '/' . $testConfig->outputFolder;
 		
@@ -50,7 +50,7 @@ class KAsyncCaptureThumbTest extends PHPUnit_Framework_TestCase
 	{
 		foreach($this->testsConfig as $testName => $config)
 		{
-			$thumbParamsOutput = new KalturaThumbParamsOutput();
+			$thumbParamsOutput = new VidiunThumbParamsOutput();
 			foreach(self::$thumbParamsAttributes as $attribute)
 			{
 				if(isset($config->$attribute))
@@ -65,7 +65,7 @@ class KAsyncCaptureThumbTest extends PHPUnit_Framework_TestCase
 		}
 	}
 	
-	public function doTest($filePath, KalturaThumbParamsOutput $thumbParamsOutput, $expectedStatus, $testName)
+	public function doTest($filePath, VidiunThumbParamsOutput $thumbParamsOutput, $expectedStatus, $testName)
 	{
 		$outputFileName = "$testName.jpg";
 		$finalPath = "$this->outputFolder/$outputFileName";
@@ -73,7 +73,7 @@ class KAsyncCaptureThumbTest extends PHPUnit_Framework_TestCase
 			unlink($finalPath);
 				
 		$iniFile = "batch_config.ini";
-		$schedulerConfig = new KSchedulerConfig($iniFile);
+		$schedulerConfig = new VSchedulerConfig($iniFile);
 	
 		$taskConfigs = $schedulerConfig->getTaskConfigList();
 		$config = null;
@@ -95,7 +95,7 @@ class KAsyncCaptureThumbTest extends PHPUnit_Framework_TestCase
 		foreach($jobs as $job)
 		{
 			$this->assertEquals($expectedStatus, $job->status, "test [$testName] expected status [$expectedStatus] actual status [$job->status] with message [$job->message]");
-			if($job->status != KalturaBatchJobStatus::FINISHED)
+			if($job->status != VidiunBatchJobStatus::FINISHED)
 				continue;
 				
 			$outPath = $job->data->thumbPath;
@@ -105,15 +105,15 @@ class KAsyncCaptureThumbTest extends PHPUnit_Framework_TestCase
 		}
 	}
 	
-	private function prepareJobs($filePath, KalturaThumbParamsOutput $thumbParamsOutput)
+	private function prepareJobs($filePath, VidiunThumbParamsOutput $thumbParamsOutput)
 	{
-		$data = new KalturaCaptureThumbJobData();
+		$data = new VidiunCaptureThumbJobData();
 		$data->srcFileSyncLocalPath = $filePath;
 		$data->thumbParamsOutput = $thumbParamsOutput;
 		
-		$job = new KalturaBatchJob();
+		$job = new VidiunBatchJob();
 		$job->id = 1;
-		$job->status = KalturaBatchJobStatus::PENDING;
+		$job->status = VidiunBatchJobStatus::PENDING;
 		$job->data = $data;
 		
 		return array($job);

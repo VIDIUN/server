@@ -3,7 +3,7 @@
  * @package plugins.bulkUploadXml
  * @subpackage model.data
  */
-class kBulkUploadXmlJobData extends kBulkUploadJobData
+class vBulkUploadXmlJobData extends vBulkUploadJobData
 {
 	
 }

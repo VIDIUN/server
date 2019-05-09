@@ -8,7 +8,7 @@
  * @package Core
  * @subpackage model.data
  */
-class ktagword {
+class vtagword {
 	const TAG_SEPARATOR = ",";
 	const MAXIMUM_TAG_LENGTH = 100;
 

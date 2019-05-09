@@ -22,7 +22,7 @@ if (!$partner)
 	die ("Partner with id {$partnerId} not found.");
 }
 
-$partner->setBroadcastUrlManager('kPartnerBroadcastUrlManager');
+$partner->setBroadcastUrlManager('vPartnerBroadcastUrlManager');
 $partner->setPrimaryBroadcastUrl($primaryBroadcatUrl);
 
 if($secondaryBroadcastUrl)

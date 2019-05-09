@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaConfigurator extends IKalturaBase
+interface IVidiunConfigurator extends IVidiunBase
 {
 	/**
 	 * Merge configuration data from the plugin

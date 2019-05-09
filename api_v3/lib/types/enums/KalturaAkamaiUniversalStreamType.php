@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaAkamaiUniversalStreamType extends KalturaStringEnum implements AkamaiUniversalStreamType
+class VidiunAkamaiUniversalStreamType extends VidiunStringEnum implements AkamaiUniversalStreamType
 {
 	 
 }

@@ -3,7 +3,7 @@
  * @package infra
  * @subpackage Exceptions
  */
-class kException extends Exception
+class vException extends Exception
 {
 	public $extra_data = null;
 	

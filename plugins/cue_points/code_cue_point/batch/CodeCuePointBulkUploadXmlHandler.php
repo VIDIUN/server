@@ -27,7 +27,7 @@ class CodeCuePointBulkUploadXmlHandler extends CuePointBulkUploadXmlHandler
 	 */
 	protected function getNewInstance()
 	{
-		return new KalturaCodeCuePoint();
+		return new VidiunCodeCuePoint();
 	}
 	
 	/* (non-PHPdoc)
@@ -39,11 +39,11 @@ class CodeCuePointBulkUploadXmlHandler extends CuePointBulkUploadXmlHandler
 			return null;
 			
 		$cuePoint = parent::parseCuePoint($scene);
-		if(!($cuePoint instanceof KalturaCodeCuePoint))
+		if(!($cuePoint instanceof VidiunCodeCuePoint))
 			return null;
 		
 		if(isset($scene->sceneEndTime))
-			$cuePoint->endTime = kXml::timeToInteger($scene->sceneEndTime);
+			$cuePoint->endTime = vXml::timeToInteger($scene->sceneEndTime);
 		if(isset($scene->code))
 			$cuePoint->code = "$scene->code";
 		if(isset($scene->description))

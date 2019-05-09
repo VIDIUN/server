@@ -4,7 +4,7 @@
  * @subpackage content
  */
 
-class kXsd
+class vXsd
 {
 	/**
 	 * @param DOMNode $from old node
@@ -12,26 +12,26 @@ class kXsd
 	 * @param string $xPath
 	 * @param int $level indentation level
 	 * @return bool|string true if no change required, or, xsl text if transform required
-	 * @throws kXsdException
+	 * @throws vXsdException
 	 */
 	public static function compareElement(DOMNode $from, DOMNode $to, $parentXPath = '', $level = 1)
 	{
 		$toName = $to->getAttribute('name');
 		$fromName = $from->getAttribute('name');
-		KalturaLog::debug("Compare elements [$fromName] [$toName]");
+		VidiunLog::debug("Compare elements [$fromName] [$toName]");
 		
 		$xPath = $parentXPath . "/*[local-name()='$fromName']";
 						
 		if($from->getAttribute('type') != $to->getAttribute('type'))
 		{
-			KalturaLog::debug("Elements types are different [" . $from->getAttribute('type') . "] [" . $to->getAttribute('type') . "]");
-			throw new kXsdException(kXsdException::CAN_NOT_CHANGE_ELEMENT_TYPE, $from->getAttribute('type'), $to->getAttribute('type'), $xPath);
+			VidiunLog::debug("Elements types are different [" . $from->getAttribute('type') . "] [" . $to->getAttribute('type') . "]");
+			throw new vXsdException(vXsdException::CAN_NOT_CHANGE_ELEMENT_TYPE, $from->getAttribute('type'), $to->getAttribute('type'), $xPath);
 		}
 			
 		if($from->getAttribute('maxOccurs') > $to->getAttribute('maxOccurs'))
 		{
-			KalturaLog::debug("Elements max occurs reduced [" . $from->getAttribute('maxOccurs') . "] [" . $to->getAttribute('maxOccurs') . "]");
-			throw new kXsdException(kXsdException::CAN_NOT_REDUCE_ELEMENT_MAX_OCCURS, $from->getAttribute('maxOccurs'), $to->getAttribute('maxOccurs'), $xPath);
+			VidiunLog::debug("Elements max occurs reduced [" . $from->getAttribute('maxOccurs') . "] [" . $to->getAttribute('maxOccurs') . "]");
+			throw new vXsdException(vXsdException::CAN_NOT_REDUCE_ELEMENT_MAX_OCCURS, $from->getAttribute('maxOccurs'), $to->getAttribute('maxOccurs'), $xPath);
 		}
 			
 		$tabs = str_repeat("\t", $level);
@@ -86,8 +86,8 @@ class kXsd
 		{
 			if(!$to->hasAttribute('default'))
 			{
-				KalturaLog::debug("Elements min occurs increased [" . $from->getAttribute('minOccurs') . "] [" . $to->getAttribute('minOccurs') . "]");
-				throw new kXsdException(kXsdException::CAN_NOT_INCREASE_ELEMENT_MIN_OCCURS, $from->getAttribute('minOccurs'), $to->getAttribute('minOccurs'), $xPath);
+				VidiunLog::debug("Elements min occurs increased [" . $from->getAttribute('minOccurs') . "] [" . $to->getAttribute('minOccurs') . "]");
+				throw new vXsdException(vXsdException::CAN_NOT_INCREASE_ELEMENT_MIN_OCCURS, $from->getAttribute('minOccurs'), $to->getAttribute('minOccurs'), $xPath);
 			}
 				
 			for($i = $from->getAttribute('minOccurs'); $i < $to->getAttribute('minOccurs'); $i++)
@@ -96,7 +96,7 @@ class kXsd
 			' . $tabs . '</xsl:element>';
 					
 			$isIdentical = false;
-			KalturaLog::info("Node [$toName] minimum occurs changed from [" . $from->getAttribute('minOccurs') . "] to [" . $to->getAttribute('minOccurs') . "]");
+			VidiunLog::info("Node [$toName] minimum occurs changed from [" . $from->getAttribute('minOccurs') . "] to [" . $to->getAttribute('minOccurs') . "]");
 		}
 		
 		if($isIdentical)
@@ -110,7 +110,7 @@ class kXsd
 		$xpath = new DOMXPath($doc);
 
 		$path = "//*[@id='$id']";
-		KalturaLog::debug("Query xpath [$path]");
+		VidiunLog::debug("Query xpath [$path]");
 		$elements = $xpath->query($path);
 		if(is_null($elements))
 			return null;
@@ -136,7 +136,7 @@ class kXsd
 					continue;
 					
 				if ($result)
-					throw new kXsdException(kXsdException::MATCHED_MORE_THAN_ONE_NODE, $element->getAttribute('id'));
+					throw new vXsdException(vXsdException::MATCHED_MORE_THAN_ONE_NODE, $element->getAttribute('id'));
 					
 				$index = $curIndex;
 				$result = $curChild;
@@ -163,7 +163,7 @@ class kXsd
 					continue;
 					
 				if ($result)
-					throw new kXsdException(kXsdException::MATCHED_MORE_THAN_ONE_NODE, $element->getAttribute('name'));
+					throw new vXsdException(vXsdException::MATCHED_MORE_THAN_ONE_NODE, $element->getAttribute('name'));
 					
 				$index = $curIndex;
 				$result = $curChild;
@@ -195,15 +195,15 @@ class kXsd
 	 * @param string $xPath
 	 * @param int $level indentation level
 	 * @return bool|string true if no change required, or, xsl text if transform required
-	 * @throws kXsdException
+	 * @throws vXsdException
 	 */
 	public static function compareNode(DOMNode $from, DOMNode $to, $xPath = '', $level = 1)
 	{
 		$toName = strtolower($to->localName);
 		$fromName = strtolower($from->localName);
-		KalturaLog::debug("Compare nodes [$toName] [$fromName]");
+		VidiunLog::debug("Compare nodes [$toName] [$fromName]");
 		if($toName != $fromName)
-			throw new kXsdException(kXsdException::CAN_NOT_CHANGE_NODE, $fromName, $toName, $xPath);
+			throw new vXsdException(vXsdException::CAN_NOT_CHANGE_NODE, $fromName, $toName, $xPath);
 		
 		$xsl = '';
 		
@@ -228,7 +228,7 @@ class kXsd
 				$fromChildrenArr[] = $child;
 			}
 		}
-		KalturaLog::debug("From nodes [" . count($fromChildrenArr) . "]");
+		VidiunLog::debug("From nodes [" . count($fromChildrenArr) . "]");
 		
 		// build an array of to children
 		$toChildren = $to->childNodes;
@@ -247,7 +247,7 @@ class kXsd
 				$toChildrenArr[] = $child;
 			}
 		}
-		KalturaLog::debug("To nodes [" . count($toChildrenArr) . "]");
+		VidiunLog::debug("To nodes [" . count($toChildrenArr) . "]");
 		
 		// detect new nodes + order change
 		$lastFromIndex = null;
@@ -256,7 +256,7 @@ class kXsd
 			$toChildName = strtolower($toChild->localName);
 			
 			if($toChildName == 'attribute')
-				throw new kXsdException(kXsdException::CAN_NOT_CHANGE_ATTRIBUTE, $xPath);
+				throw new vXsdException(vXsdException::CAN_NOT_CHANGE_ATTRIBUTE, $xPath);
 			
 			$fromIndex = null;
 			$fromChild = self::getMatchingElement($fromChildrenArr, $toChild, $fromIndex);
@@ -272,7 +272,7 @@ class kXsd
 						
 					$xsl .= $childXsl;
 					$isIdentical = false;
-					KalturaLog::info("Nodes [$fromName] [$toName] are different");
+					VidiunLog::info("Nodes [$fromName] [$toName] are different");
 					continue;
 				}
 				$fromChildName = strtolower($toChild->localName);
@@ -282,7 +282,7 @@ class kXsd
 				
 				if (!is_null($lastFromIndex) && $fromIndex < $lastFromIndex)
 				{
-					KalturaLog::info("Node id=[". $toChild->getAttribute('id') ."] name=[$toElementName] index changed from original schema");
+					VidiunLog::info("Node id=[". $toChild->getAttribute('id') ."] name=[$toElementName] index changed from original schema");
 					$isIdentical = false;
 				}
 				
@@ -292,7 +292,7 @@ class kXsd
 				$childXsl = self::compareElement($fromChild, $toChild, $xPath, $level);
 				if($childXsl === true)
 				{
-					KalturaLog::debug("Element [$fromElementName] is identical");
+					VidiunLog::debug("Element [$fromElementName] is identical");
 
 					$xsl .= '
 	' . $tabs . '<xsl:copy-of select="' . $xPath  .'/*[local-name()=\'' . $fromElementName . '\']"/>';
@@ -301,22 +301,22 @@ class kXsd
 				{
 					$xsl .= $childXsl;
 					$isIdentical = false;
-					KalturaLog::info("Elements [$toChildName] [$fromChildName] are different");
+					VidiunLog::info("Elements [$toChildName] [$fromChildName] are different");
 				}
 
 				continue;
 			}
 			else
 			{
-				KalturaLog::debug("Node [". $toChild->getAttribute('id') ."] is new");
+				VidiunLog::debug("Node [". $toChild->getAttribute('id') ."] is new");
 				
 				if($toChild->hasAttribute('minOccurs') && $toChild->getAttribute('minOccurs') > 0)
 				{
 					if(!$toChild->hasAttribute('default'))
-						throw new kXsdException(kXsdException::CAN_NOT_ADD_REQUIRED_ELEMENT, $toChild->hasAttribute('minOccurs'), $xPath);
+						throw new vXsdException(vXsdException::CAN_NOT_ADD_REQUIRED_ELEMENT, $toChild->hasAttribute('minOccurs'), $xPath);
 					
 					$isIdentical = false;
-					KalturaLog::info("Node [" . $toChild->getAttribute('name') . "] added with minimum occurs [" . $toChild->getAttribute('minOccurs') . "]");
+					VidiunLog::info("Node [" . $toChild->getAttribute('name') . "] added with minimum occurs [" . $toChild->getAttribute('minOccurs') . "]");
 						$xsl .= '
 			' . $tabs . '<xsl:element name="' . $toElementName . '">' . $toChild->getAttribute('default') . '</xsl:element>';
 				}
@@ -338,7 +338,7 @@ class kXsd
 			if (!$toChild)
 			{
 				$isIdentical = false;
-				KalturaLog::info("Node [". $fromChild->getAttribute('id') ."] deleted");
+				VidiunLog::info("Node [". $fromChild->getAttribute('id') ."] deleted");
 				continue;
 			}
 		}
@@ -395,21 +395,21 @@ class kXsd
 	 * @param string $fromXsd old xsd
 	 * @param string $toXsd new xsd
 	 * @return bool|string true if no change required, or, xsl text if transform required
-	 * @throws kXsdException
+	 * @throws vXsdException
 	 */
 	public static function compareXsd($fromXsd, $toXsd)
 	{
-		$from = new KDOMDocument();
+		$from = new VDOMDocument();
 		$from->loadXML($fromXsd);
 		
 		if(!$from || !$from->documentElement)
-			throw new kXsdException(kXsdException::INVALID_XSD_FILE, $fromXsd);
+			throw new vXsdException(vXsdException::INVALID_XSD_FILE, $fromXsd);
 			
-		$to = new KDOMDocument();
+		$to = new VDOMDocument();
 		$to->loadXML($toXsd);
 		
 		if(!$to || !$to->documentElement)
-			throw new kXsdException(kXsdException::INVALID_XSD_FILE, $toXsd);
+			throw new vXsdException(vXsdException::INVALID_XSD_FILE, $toXsd);
 			
 		$xsl = self::compareNode($from->documentElement, $to->documentElement);
 	
@@ -436,10 +436,10 @@ class kXsd
 	 */
 	public static function transformXmlFile($xmlPath, $xsdPath, $xslPath)
 	{
-		$from = new KDOMDocument();
+		$from = new VDOMDocument();
 		$from->load($xmlPath);
 		
-		$xsl = new KDOMDocument();
+		$xsl = new VDOMDocument();
 		$xsl->load($xslPath);
 		
 		$proc = new XSLTProcessor;
@@ -447,7 +447,7 @@ class kXsd
 		
 		$output = $proc->transformToXML($from);
 		
-		$to = new KDOMDocument();
+		$to = new VDOMDocument();
 		$to->loadXML($output);
 		if(!$to->schemaValidate($xsdPath))
 			return false;
@@ -457,16 +457,16 @@ class kXsd
 	
 	/**
 	 * @param string $xml
-	 * @param KalturaFileContainer $xsdFile
+	 * @param VidiunFileContainer $xsdFile
 	 * @param string $xslStr
 	 * @return bool:string false if failed, xml text if succeed
 	 */
 	public static function transformXmlData($xml, $xsdFile, $xslStr)
 	{
-		$from = new KDOMDocument();
+		$from = new VDOMDocument();
 		$from->loadXML($xml);
 		
-		$xsl = new KDOMDocument();
+		$xsl = new VDOMDocument();
 		$xsl->loadXML($xslStr);
 		
 		$proc = new XSLTProcessor;
@@ -474,9 +474,9 @@ class kXsd
 		
 		$output = $proc->transformToXML($from);
 		
-		$to = new KDOMDocument();
+		$to = new VDOMDocument();
 		$to->loadXML($output);
-		if(!$to->schemaValidate($xsdFile->filePath, $xsdFile->encryptionKey, KBatchBase::getIV()))
+		if(!$to->schemaValidate($xsdFile->filePath, $xsdFile->encryptionKey, VBatchBase::getIV()))
 			return false;
 		
 		return $output;
@@ -555,7 +555,7 @@ class kXsd
 	 */
 	public static function findXpathsByAppInfo($xsdPath, $appInfoField, $appInfoValue, $isPath = true)
 	{
-		$xsd = new KDOMDocument();
+		$xsd = new VDOMDocument();
 		
 		if ($isPath){
 			$xsd->load($xsdPath);

@@ -3,32 +3,32 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPlaybackContext extends KalturaObject{
+class VidiunPlaybackContext extends VidiunObject{
 
 	/**
-	 * @var KalturaPlaybackSourceArray
+	 * @var VidiunPlaybackSourceArray
 	 */
 	public $sources;
 
 	/**
-	 * @var KalturaCaptionPlaybackPluginDataArray
+	 * @var VidiunCaptionPlaybackPluginDataArray
 	 */
 	public $playbackCaptions;
 
 	/**
-	 * @var KalturaFlavorAssetArray
+	 * @var VidiunFlavorAssetArray
 	 */
 	public $flavorAssets;
 
 	/**
 	 * Array of actions as received from the rules that invalidated
-	 * @var KalturaRuleActionArray
+	 * @var VidiunRuleActionArray
 	 */
 	public $actions;
 
 	/**
 	 * Array of actions as received from the rules that invalidated
-	 * @var KalturaAccessControlMessageArray
+	 * @var VidiunAccessControlMessageArray
 	 */
 	public $messages;
 
@@ -41,7 +41,7 @@ class KalturaPlaybackContext extends KalturaObject{
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{

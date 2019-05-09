@@ -2,14 +2,14 @@
 /**
  * @package plugins.fairplay
  */
-class FairplayPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKalturaObjectLoader, IKalturaEntryContextDataContributor, IKalturaPending, IKalturaPlayManifestContributor, IKalturaPlaybackContextDataContributor
+class FairplayPlugin extends BaseDrmPlugin implements IVidiunEnumerator, IVidiunObjectLoader, IVidiunEntryContextDataContributor, IVidiunPending, IVidiunPlayManifestContributor, IVidiunPlaybackContextDataContributor
 {
 	const PLUGIN_NAME = 'fairplay';
 	const URL_NAME = 'fps';
 	const SEARCH_DATA_SUFFIX = 's';
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -17,7 +17,7 @@ class FairplayPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKaltu
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getUrlName()
 	{
@@ -25,7 +25,7 @@ class FairplayPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKaltu
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -39,56 +39,56 @@ class FairplayPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKaltu
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if ($baseClass == 'KalturaDrmProfile' && $enumValue == FairplayPlugin::getFairplayProviderCoreValue() )
-			return new KalturaFairplayDrmProfile();
+		if ($baseClass == 'VidiunDrmProfile' && $enumValue == FairplayPlugin::getFairplayProviderCoreValue() )
+			return new VidiunFairplayDrmProfile();
 		if ($baseClass == 'DrmProfile' && $enumValue ==  FairplayPlugin::getFairplayProviderCoreValue())
 			return new FairplayDrmProfile();
 
-		if (class_exists('Kaltura_Client_Client'))
+		if (class_exists('Vidiun_Client_Client'))
 		{
-			if ($baseClass == 'Kaltura_Client_Drm_Type_DrmProfile' && $enumValue == Kaltura_Client_Drm_Enum_DrmProviderType::FAIRPLAY)
+			if ($baseClass == 'Vidiun_Client_Drm_Type_DrmProfile' && $enumValue == Vidiun_Client_Drm_Enum_DrmProviderType::FAIRPLAY)
 			{
-				return new Kaltura_Client_Fairplay_Type_FairplayDrmProfile();
+				return new Vidiun_Client_Fairplay_Type_FairplayDrmProfile();
 			}
-			if ($baseClass == 'Form_DrmProfileConfigureExtend_SubForm' && $enumValue == Kaltura_Client_Drm_Enum_DrmProviderType::FAIRPLAY)
+			if ($baseClass == 'Form_DrmProfileConfigureExtend_SubForm' && $enumValue == Vidiun_Client_Drm_Enum_DrmProviderType::FAIRPLAY)
 			{
 				return new Form_FairplayProfileConfigureExtend_SubForm();
 			}
 		}
-		if ($baseClass == 'KalturaPluginData' && $enumValue == self::getPluginName())
-			return new KalturaFairplayEntryContextPluginData();
-		if ($baseClass == 'KalturaDrmPlaybackPluginData' && $enumValue == 'kFairPlayPlaybackPluginData')
-			return new KalturaFairPlayPlaybackPluginData();
+		if ($baseClass == 'VidiunPluginData' && $enumValue == self::getPluginName())
+			return new VidiunFairplayEntryContextPluginData();
+		if ($baseClass == 'VidiunDrmPlaybackPluginData' && $enumValue == 'vFairPlayPlaybackPluginData')
+			return new VidiunFairPlayPlaybackPluginData();
 		return null;
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if ($baseClass == 'KalturaDrmProfile' && $enumValue == FairplayPlugin::getFairplayProviderCoreValue() )
-			return 'KalturaFairplayDrmProfile';
+		if ($baseClass == 'VidiunDrmProfile' && $enumValue == FairplayPlugin::getFairplayProviderCoreValue() )
+			return 'VidiunFairplayDrmProfile';
 		if ($baseClass == 'DrmProfile' && $enumValue ==  FairplayPlugin::getFairplayProviderCoreValue())
 			return 'FairplayDrmProfile';
 
-		if (class_exists('Kaltura_Client_Client'))
+		if (class_exists('Vidiun_Client_Client'))
 		{
-			if ($baseClass == 'Kaltura_Client_Drm_Type_DrmProfile' && $enumValue == Kaltura_Client_Drm_Enum_DrmProviderType::FAIRPLAY)
+			if ($baseClass == 'Vidiun_Client_Drm_Type_DrmProfile' && $enumValue == Vidiun_Client_Drm_Enum_DrmProviderType::FAIRPLAY)
 			{
-				return 'Kaltura_Client_Fairplay_Type_FairplayDrmProfile';
+				return 'Vidiun_Client_Fairplay_Type_FairplayDrmProfile';
 			}
-			if ($baseClass == 'Form_DrmProfileConfigureExtend_SubForm' && $enumValue == Kaltura_Client_Drm_Enum_DrmProviderType::FAIRPLAY)
+			if ($baseClass == 'Form_DrmProfileConfigureExtend_SubForm' && $enumValue == Vidiun_Client_Drm_Enum_DrmProviderType::FAIRPLAY)
 			{
 				return 'Form_FairplayProfileConfigureExtend_SubForm';
 			}
 		}
-		if ($baseClass == 'KalturaPluginData' && $enumValue == self::getPluginName())
-			return 'KalturaFairplayEntryContextPluginData';
+		if ($baseClass == 'VidiunPluginData' && $enumValue == self::getPluginName())
+			return 'VidiunFairplayEntryContextPluginData';
 		return null;
 	}
 
@@ -97,23 +97,23 @@ class FairplayPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKaltu
 	 */
 	public static function getFairplayProviderCoreValue()
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . FairplayProviderType::FAIRPLAY;
-		return kPluginableEnumsManager::apiToCore('DrmProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . FairplayProviderType::FAIRPLAY;
+		return vPluginableEnumsManager::apiToCore('DrmProviderType', $value);
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId) {
 		return DrmPlugin::isAllowedPartner($partnerId);
 	}
 
-	public function contributeToEntryContextDataResult(entry $entry, accessControlScope $contextDataParams, kContextDataHelper $contextDataHelper)
+	public function contributeToEntryContextDataResult(entry $entry, accessControlScope $contextDataParams, vContextDataHelper $contextDataHelper)
 	{
 		if ($this->shouldContribute($entry))
 		{
-			$fairplayContextData = new kFairplayEntryContextPluginData();
-			$fairplayProfile = DrmProfilePeer::retrieveByProviderAndPartnerID(FairplayPlugin::getFairplayProviderCoreValue(), kCurrentContext::getCurrentPartnerId());
+			$fairplayContextData = new vFairplayEntryContextPluginData();
+			$fairplayProfile = DrmProfilePeer::retrieveByProviderAndPartnerID(FairplayPlugin::getFairplayProviderCoreValue(), vCurrentContext::getCurrentPartnerId());
 			if (!is_null($fairplayProfile))
 			{
 				/**
@@ -137,12 +137,12 @@ class FairplayPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKaltu
 			foreach ($entry->getAccessControl()->getRulesArray() as $rule)
 			{
 				/**
-				 * @var kRule $rule
+				 * @var vRule $rule
 				 */
 				foreach ($rule->getActions() as $action)
 				{
 					/**
-					 * @var kRuleAction $action
+					 * @var vRuleAction $action
 					 */
 					if ($action->getType() == DrmAccessControlActionType::DRM_POLICY)
 					{
@@ -155,13 +155,13 @@ class FairplayPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKaltu
 	}
 
 	/**
-	 * Returns a Kaltura dependency object that defines the relationship between two plugins.
+	 * Returns a Vidiun dependency object that defines the relationship between two plugins.
 	 *
-	 * @return array<KalturaDependency> The Kaltura dependency object
+	 * @return array<VidiunDependency> The Vidiun dependency object
 	 */
 	public static function dependsOn()
 	{
-		$drmDependency = new KalturaDependency(DrmPlugin::getPluginName());
+		$drmDependency = new VidiunDependency(DrmPlugin::getPluginName());
 
 		return array($drmDependency);
 	}
@@ -180,27 +180,27 @@ class FairplayPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKaltu
 
 	private static function shouldEditManifest($config)
 	{
-		if($config->rendererClass == 'kM3U8ManifestRenderer' && $config->deliveryProfile->getType() == DeliveryProfileType::VOD_PACKAGER_HLS && $config->deliveryProfile->getAllowFairplayOffline())
+		if($config->rendererClass == 'vM3U8ManifestRenderer' && $config->deliveryProfile->getType() == DeliveryProfileType::VOD_PACKAGER_HLS && $config->deliveryProfile->getAllowFairplayOffline())
 			return true;
 
 		return false;
 	}
 
-    public function contributeToPlaybackContextDataResult(entry $entry, kPlaybackContextDataParams $entryPlayingDataParams, kPlaybackContextDataResult $result, kContextDataHelper $contextDataHelper)
+    public function contributeToPlaybackContextDataResult(entry $entry, vPlaybackContextDataParams $entryPlayingDataParams, vPlaybackContextDataResult $result, vContextDataHelper $contextDataHelper)
 	{
 		if ($entryPlayingDataParams->getType() == self::BASE_PLUGIN_NAME && self::shouldContributeToPlaybackContext($contextDataHelper->getContextDataResult()->getActions()) && $this->isSupportStreamerTypes($entryPlayingDataParams->getDeliveryProfile()->getStreamerType()))
 		{
-			$fairplayProfile = DrmProfilePeer::retrieveByProviderAndPartnerID(FairplayPlugin::getFairplayProviderCoreValue(), kCurrentContext::getCurrentPartnerId());
+			$fairplayProfile = DrmProfilePeer::retrieveByProviderAndPartnerID(FairplayPlugin::getFairplayProviderCoreValue(), vCurrentContext::getCurrentPartnerId());
 			if ($fairplayProfile)
 			{
 				/* @var FairplayDrmProfile $fairplayProfile */
 
-				$signingKey = kConf::get('signing_key', 'drm', null);
+				$signingKey = vConf::get('signing_key', 'drm', null);
 				if ($signingKey)
 				{
 					$customDataJson = DrmLicenseUtils::createCustomDataForEntry($entry->getId(), $entryPlayingDataParams->getFlavors(), $signingKey);
 					$customDataObject = reset($customDataJson);
-					$data = new kFairPlayPlaybackPluginData();
+					$data = new vFairPlayPlaybackPluginData();
 					$data->setLicenseURL($this->constructUrl($fairplayProfile, self::getUrlName(), $customDataObject));
 					$data->setScheme($this->getDrmSchemeCoreValue());
 					$data->setCertificate($fairplayProfile->getPublicCertificate());
@@ -215,8 +215,8 @@ class FairplayPlugin extends BaseDrmPlugin implements IKalturaEnumerator, IKaltu
 	 */
 	public static function getDrmSchemeCoreValue()
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . FairplaySchemeName::FAIRPLAY;
-		return kPluginableEnumsManager::apiToCore('DrmSchemeName', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . FairplaySchemeName::FAIRPLAY;
+		return vPluginableEnumsManager::apiToCore('DrmSchemeName', $value);
 	}
 
 

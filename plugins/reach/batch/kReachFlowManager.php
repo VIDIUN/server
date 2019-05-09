@@ -1,10 +1,10 @@
 <?php
-class kReachFlowManager implements kBatchJobStatusEventConsumer
+class vReachFlowManager implements vBatchJobStatusEventConsumer
 {
 	const ADMIN_CONSOLE_RULE_PREFIX = "AutomaticAdminConsoleRule_";
 
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -15,7 +15,7 @@ class kReachFlowManager implements kBatchJobStatusEventConsumer
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
@@ -32,17 +32,17 @@ class kReachFlowManager implements kBatchJobStatusEventConsumer
 	 */
 	protected function handleCopyReachDataToPartner(BatchJob $dbBatchJob)
 	{
-		/** @var $dbBatchJob kCopyPartnerJobData */
+		/** @var $dbBatchJob vCopyPartnerJobData */
 		$fromPartnerId = $dbBatchJob->getData()->getFromPartnerId();
 		$toPartnerId = $dbBatchJob->getData()->getToPartnerId();
 
 		if (!ReachPlugin::isAllowedPartner($fromPartnerId) || !ReachPlugin::isAllowedPartner($toPartnerId))
 		{
-			KalturaLog::info("Skip copying reach data from partner [$fromPartnerId] to partner [$toPartnerId]. Reach plugin is not enabled");
+			VidiunLog::info("Skip copying reach data from partner [$fromPartnerId] to partner [$toPartnerId]. Reach plugin is not enabled");
 			return true;
 		}
 
-		KalturaLog::info("Start Copying Active ReachProfiles and PartnerCatalogItems from partner [$fromPartnerId]: to partner [$toPartnerId]");
+		VidiunLog::info("Start Copying Active ReachProfiles and PartnerCatalogItems from partner [$fromPartnerId]: to partner [$toPartnerId]");
 		$reachProfiles = ReachProfilePeer::retrieveByPartnerId($fromPartnerId);
 		foreach ($reachProfiles as $profile)
 		{
@@ -52,7 +52,7 @@ class kReachFlowManager implements kBatchJobStatusEventConsumer
 			$rules = $newReachProfiles->getRulesArray();
 			foreach ( $rules as $key => $rule )
 			{
-				/* @var krule $rule*/
+				/* @var vrule $rule*/
 				$description = $rule->getDescription();
 				if (empty($description)
 					|| substr($rule->getDescription(), 0, strlen(self::ADMIN_CONSOLE_RULE_PREFIX)) !== self::ADMIN_CONSOLE_RULE_PREFIX)

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kSyncCategoryPrivacyContextJobData extends kJobData
+class vSyncCategoryPrivacyContextJobData extends vJobData
 {
 	/**
 	 * Changed category id

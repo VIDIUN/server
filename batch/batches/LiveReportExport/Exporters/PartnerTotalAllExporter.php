@@ -2,22 +2,22 @@
 
 class PartnerTotalAllExporter extends LiveReportExporter {
 
-	public function __construct(KalturaLiveReportExportJobData $data) {
+	public function __construct(VidiunLiveReportExportJobData $data) {
 		parent::__construct($data, "all-entries-%s-%s.csv", LiveReportConstants::SECONDS_36_HOURS);
 	}
 	
-	public function init(KalturaLiveReportExportJobData $jobData) {
+	public function init(VidiunLiveReportExportJobData $jobData) {
 		
-		$filter = new KalturaLiveReportInputFilter();
+		$filter = new VidiunLiveReportInputFilter();
 		$filter->live =  false;
 		$filter->toTime = $jobData->timeReference;
 		$filter->fromTime = $jobData->timeReference - LiveReportConstants::SECONDS_36_HOURS;
 		
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageIndex = 0;
 		$pager->pageSize = LiveReportConstants::MAX_ENTRIES;
 		
-		$entryIds = LiveReportQueryHelper::retrieveFromReport(KalturaLiveReportType::ENTRY_TOTAL, $filter, $pager, null, "entryId");
+		$entryIds = LiveReportQueryHelper::retrieveFromReport(VidiunLiveReportType::ENTRY_TOTAL, $filter, $pager, null, "entryId");
 		$this->params[LiveReportConstants::ENTRY_IDS] = implode(",", $entryIds);
 	}
 	

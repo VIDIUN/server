@@ -3,7 +3,7 @@
  * @package server-infra
  * @subpackage Media
  */
-class KMediaInfoMediaParser extends KBaseMediaParser 
+class VMediaInfoMediaParser extends VBaseMediaParser 
 {
 	protected $cmdPath;
 	
@@ -20,35 +20,35 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 	{
 		$this->cmdPath = $cmdPath;
 		if (!file_exists($filePath))
-			throw new kApplicativeException(KBaseMediaParser::ERROR_NFS_FILE_DOESNT_EXIST, "File not found at [$filePath]");
+			throw new vApplicativeException(VBaseMediaParser::ERROR_NFS_FILE_DOESNT_EXIST, "File not found at [$filePath]");
 		parent::__construct($filePath);
 	}
 	
 	/**
-	 * @return KalturaMediaInfo
+	 * @return VidiunMediaInfo
 	 */
 	public function getMediaInfo()
 	{
 		/*
-		 * KFFMpegMediaParser is activated here as a fall back to mediainfo for M1S
+		 * VFFMpegMediaParser is activated here as a fall back to mediainfo for M1S
 		 * and for test reasons prior to switching from mediainfo to ffprobe
 		 */
-		$ffParser = new KFFMpegMediaParser($this->filePath);//, "ffmpeg-20140326", "ffprobe-20140326");
+		$ffParser = new VFFMpegMediaParser($this->filePath);//, "ffmpeg-20140326", "ffprobe-20140326");
 		$ffMi = null;
 		try {
 			$ffMi = $ffParser->getMediaInfo();
 		}
 		catch(Exception $ex)
 		{
-			KalturaLog::log(print_r($ex,1));
+			VidiunLog::log(print_r($ex,1));
 		}
 				
 		$output = $this->getRawMediaInfo();
-		$kMi = $this->parseOutput($output);
+		$vMi = $this->parseOutput($output);
 
-		if(!isset($kMi)) {
-			$compareStr = self::compareFields($kMi, $ffMi);
-			KalturaLog::log("compareFields(".(isset($compareStr)?$compareStr:"IDENTICAL")."), file($this->filePath)");
+		if(!isset($vMi)) {
+			$compareStr = self::compareFields($vMi, $ffMi);
+			VidiunLog::log("compareFields(".(isset($compareStr)?$compareStr:"IDENTICAL")."), file($this->filePath)");
 			return $ffMi;
 		}
 			/*
@@ -59,24 +59,24 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 			 /*
 			 * Interlaced mjpa sources - the height value is halved.
 			 */
-			if(isset($kMi->videoHeightTmp) 
+			if(isset($vMi->videoHeightTmp) 
 			// EBU case has the same issue with other codecs
-//			&& isset($kMi->videoCodecId) && $kMi->videoCodecId=="mjpa"
-			&& isset($kMi->scanType) && $kMi->scanType==1){
-				$kMi->videoHeight = $kMi->videoHeightTmp;
+//			&& isset($vMi->videoCodecId) && $vMi->videoCodecId=="mjpa"
+			&& isset($vMi->scanType) && $vMi->scanType==1){
+				$vMi->videoHeight = $vMi->videoHeightTmp;
 			}
 			/*
 			 * WebM/VP8 misses video duration
 			 */
-			if(isset($kMi->videoFormat) && $kMi->videoFormat=="vp8" // isset($kMi->videoCodecId) && $kMi->videoCodecId=="v_vp8"
-			&& (!isset($kMi->videoDuration) || $kMi->videoDuration==0)){
-				$kMi->videoDuration = $kMi->containerDuration;
+			if(isset($vMi->videoFormat) && $vMi->videoFormat=="vp8" // isset($vMi->videoCodecId) && $vMi->videoCodecId=="v_vp8"
+			&& (!isset($vMi->videoDuration) || $vMi->videoDuration==0)){
+				$vMi->videoDuration = $vMi->containerDuration;
 			}
 			/*
 			 * Fix bug in old mediainfo with encrypted sources
 			 */
-			if(isset($kMi->videoFormat) && strstr($kMi->videoFormat,"avc / avc")!==false
-			&& isset($kMi->videoCodecId) && $kMi->videoCodecId=="encv / avc1 / mp4a"
+			if(isset($vMi->videoFormat) && strstr($vMi->videoFormat,"avc / avc")!==false
+			&& isset($vMi->videoCodecId) && $vMi->videoCodecId=="encv / avc1 / mp4a"
 			&& isset($ffMi)){
 				$ffMi->videoCodecId = "encv / avc1";
 				return $ffMi;
@@ -85,38 +85,38 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 			/*
 			 * mediaInfo does not recognize duration in some MP3 cases
 			 */
-			 if(isset($kMi->containerFormat) && strstr($kMi->containerFormat,"mpeg audio")!==false
-			 && (!isset($kMi->audioDuration) || (isset($kMi->audioDuration) && $kMi->audioDuration==0))
+			 if(isset($vMi->containerFormat) && strstr($vMi->containerFormat,"mpeg audio")!==false
+			 && (!isset($vMi->audioDuration) || (isset($vMi->audioDuration) && $vMi->audioDuration==0))
 			 && (isset($ffMi->audioDuration) && $ffMi->audioDuration>0)) {
-				 $kMi->audioDuration = $ffMi->audioDuration;
+				 $vMi->audioDuration = $ffMi->audioDuration;
 			 }
 		}
 		
 		$durLimit=3600000;
-		if(get_class($this)=='KMediaInfoMediaParser'
-		&& ((isset($kMi->containerDuration) && $kMi->containerDuration>=$durLimit) 
-			|| (isset($kMi->videoDuration) && $kMi->videoDuration>=$durLimit)
-			|| (isset($kMi->audioDuration) && $kMi->audioDuration>=$durLimit))) {
+		if(get_class($this)=='VMediaInfoMediaParser'
+		&& ((isset($vMi->containerDuration) && $vMi->containerDuration>=$durLimit) 
+			|| (isset($vMi->videoDuration) && $vMi->videoDuration>=$durLimit)
+			|| (isset($vMi->audioDuration) && $vMi->audioDuration>=$durLimit))) {
 			$cmd = "{$this->cmdPath} \"--Inform=General;done %Duration%\" \"{$this->filePath}\"";
 			$output=0;
 			$output = shell_exec($cmd);
 			$aux = explode(" ", trim($output));
 			if(isset($aux) && count($aux)==2 && $aux[0]=='done'){
-				$kMi->containerDuration=(int)$aux[1];
+				$vMi->containerDuration=(int)$aux[1];
 			}
 			$cmd = "{$this->cmdPath} \"--Inform=Video;done %Duration%\" \"{$this->filePath}\"";
 			$output=0;
 			$output = shell_exec($cmd);
 			$aux = explode(" ", trim($output));
 			if(isset($aux) && count($aux)==2 && $aux[0]=='done'){
-				$kMi->videoDuration=(int)$aux[1];
+				$vMi->videoDuration=(int)$aux[1];
 			}
 			$cmd = "{$this->cmdPath} \"--Inform=Audio;done %Duration%\" \"{$this->filePath}\"";
 			$output=0;
 			$output = shell_exec($cmd);
 			$aux = explode(" ", trim($output));
 			if(isset($aux) && count($aux)==2 && $aux[0]=='done'){
-				$kMi->audioDuration=(int)$aux[1];
+				$vMi->audioDuration=(int)$aux[1];
 			}
 		}
 		
@@ -125,36 +125,36 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 			 * Media info's vid/aud streams are unset - use object that was generated by ffprobe,
 			 * unless it is an ARF source.
 			 */
-			if($kMi->containerFormat!="arf") {
-				if(!self::isAudioSet($kMi) && !self::isVideoSet($kMi)){
-					$compareStr = self::compareFields($kMi, $ffMi);
-					KalturaLog::log("compareFields(".(isset($compareStr)?$compareStr:"IDENTICAL")."), file($this->filePath)");
+			if($vMi->containerFormat!="arf") {
+				if(!self::isAudioSet($vMi) && !self::isVideoSet($vMi)){
+					$compareStr = self::compareFields($vMi, $ffMi);
+					VidiunLog::log("compareFields(".(isset($compareStr)?$compareStr:"IDENTICAL")."), file($this->filePath)");
 					return $ffMi;
 				}
 					// If mediainfo/audio params is not set, then fetch params from ffmpeg/ffprobe
-				else if(!self::isAudioSet($kMi) && self::isAudioSet($ffMi)){
-					self::setAudioParams($kMi,$ffMi);
+				else if(!self::isAudioSet($vMi) && self::isAudioSet($ffMi)){
+					self::setAudioParams($vMi,$ffMi);
 				}
 					// If mediainfo/video params is not set, then fetch params from ffmpeg/ffprobe
-				else if(!self::isVideoSet($kMi) && self::isVideoSet($ffMi)){
-					self::setVideoParams($kMi,$ffMi);
+				else if(!self::isVideoSet($vMi) && self::isVideoSet($ffMi)){
+					self::setVideoParams($vMi,$ffMi);
 				}
 			}
 			
-			self::adjustDurations($kMi, $ffMi);
+			self::adjustDurations($vMi, $ffMi);
 			
 			/*
 			 * On off-sanity wid/height - use ffprobe object vals (overwrite the dar too)
 			 */
-			if(isset($kMi->videoWidth) && isset($kMi->videoHeight) 
-				 &&($kMi->videoWidth>KDLSanityLimits::MaxDimension  || $kMi->videoWidth<KDLSanityLimits::MinDimension 
-				 || $kMi->videoHeight>KDLSanityLimits::MaxDimension || $kMi->videoHeight<KDLSanityLimits::MinDimension)){
+			if(isset($vMi->videoWidth) && isset($vMi->videoHeight) 
+				 &&($vMi->videoWidth>VDLSanityLimits::MaxDimension  || $vMi->videoWidth<VDLSanityLimits::MinDimension 
+				 || $vMi->videoHeight>VDLSanityLimits::MaxDimension || $vMi->videoHeight<VDLSanityLimits::MinDimension)){
 				if(isset($ffMi->videoWidth) && isset($ffMi->videoHeight) 
-				 && !($ffMi->videoWidth>KDLSanityLimits::MaxDimension  || $ffMi->videoWidth<KDLSanityLimits::MinDimension 
-				 || $ffMi->videoHeight>KDLSanityLimits::MaxDimension || $ffMi->videoHeight<KDLSanityLimits::MinDimension)) {
-					$kMi->videoWidth = $ffMi->videoWidth;
-					$kMi->videoHeight = $ffMi->videoHeight;
-					if(isset($ffMi->videoDar)) $kMi->videoDar = $ffMi->videoDar;
+				 && !($ffMi->videoWidth>VDLSanityLimits::MaxDimension  || $ffMi->videoWidth<VDLSanityLimits::MinDimension 
+				 || $ffMi->videoHeight>VDLSanityLimits::MaxDimension || $ffMi->videoHeight<VDLSanityLimits::MinDimension)) {
+					$vMi->videoWidth = $ffMi->videoWidth;
+					$vMi->videoHeight = $ffMi->videoHeight;
+					if(isset($ffMi->videoDar)) $vMi->videoDar = $ffMi->videoDar;
 				}
 			}
 			
@@ -162,9 +162,9 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 			 * On off-sanity dar or if the is AR ambiguity, due to 'original dar'
 			 * - use ffprobe object dar
 			 */
-			if(isset($kMi->videoDar) && ($kMi->videoDar>KDLSanityLimits::MaxDAR || $kMi->videoDar<KDLSanityLimits::MinDAR || isset($kMi->originalDar))){
-				if(isset($ffMi->videoDar) && !($ffMi->videoDar>KDLSanityLimits::MaxDAR || $ffMi->videoDar<KDLSanityLimits::MinDAR)){
-					$kMi->videoDar=$ffMi->videoDar;
+			if(isset($vMi->videoDar) && ($vMi->videoDar>VDLSanityLimits::MaxDAR || $vMi->videoDar<VDLSanityLimits::MinDAR || isset($vMi->originalDar))){
+				if(isset($ffMi->videoDar) && !($ffMi->videoDar>VDLSanityLimits::MaxDAR || $ffMi->videoDar<VDLSanityLimits::MinDAR)){
+					$vMi->videoDar=$ffMi->videoDar;
 				}
 			}
 			
@@ -172,9 +172,9 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 			 * On off-sanity frameRate or if it is not set by media info
 			 * - use ffprobe object frameRate
 			 */
-			if(!isset($kMi->videoFrameRate) || $kMi->videoFrameRate>KDLSanityLimits::MaxFramerate){
-				if(isset($ffMi->videoFrameRate) && $ffMi->videoFrameRate<=KDLSanityLimits::MaxFramerate){
-					$kMi->videoFrameRate=$ffMi->videoFrameRate;
+			if(!isset($vMi->videoFrameRate) || $vMi->videoFrameRate>VDLSanityLimits::MaxFramerate){
+				if(isset($ffMi->videoFrameRate) && $ffMi->videoFrameRate<=VDLSanityLimits::MaxFramerate){
+					$vMi->videoFrameRate=$ffMi->videoFrameRate;
 				}
 			}
 			
@@ -182,12 +182,12 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 			 * Update mediainfo generated object with fastStart and contentStreams fields 
 			 * that are available only on ffprobe
 			 */
-			$kMi->isFastStart = $ffMi->isFastStart;
-			$kMi->contentStreams = $ffMi->contentStreams;
+			$vMi->isFastStart = $ffMi->isFastStart;
+			$vMi->contentStreams = $ffMi->contentStreams;
 		}	
-		$compareStr = self::compareFields($kMi, $ffMi);
-		KalturaLog::log("compareFields(".(isset($compareStr)?$compareStr:"IDENTICAL")."), file($this->filePath)");
-		return $kMi;
+		$compareStr = self::compareFields($vMi, $ffMi);
+		VidiunLog::log("compareFields(".(isset($compareStr)?$compareStr:"IDENTICAL")."), file($this->filePath)");
+		return $vMi;
 	}
 	
 	protected function getCommand() 
@@ -197,9 +197,9 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 	
 	protected function parseOutput($output) 
 	{
-		$output = kXml::stripXMLInvalidChars($output);
-		$tokenizer = new KStringTokenizer ( $output, "\t\n" );
-		$mediaInfo = new KalturaMediaInfo();
+		$output = vXml::stripXMLInvalidChars($output);
+		$tokenizer = new VStringTokenizer ( $output, "\t\n" );
+		$mediaInfo = new VidiunMediaInfo();
 		$mediaInfo->rawData = $output;
 		
 		$fieldCnt = 0;
@@ -214,7 +214,7 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 			{
 				if(isset($streamMediaInfo))
 					$mediaInfo->streamArray[$section][]=$streamMediaInfo;
-				$streamMediaInfo = new KalturaMediaInfo();
+				$streamMediaInfo = new VidiunMediaInfo();
 				$sectionID = strchr($tok,"#");
 				if($sectionID) {
 					$sectionID = trim($sectionID,"#"); 
@@ -256,7 +256,7 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 				return $mediaInfo;
 			}
 			else {
-				$m = new KalturaMediaInfo();
+				$m = new VidiunMediaInfo();
 				$m->rawData = $mediaInfo->rawData;
 				$m->fileSize = $mediaInfo->fileSize;
 				$m->containerFormat = "arf";
@@ -276,7 +276,7 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 	 * @param string $section
 	 * @param string $tok
 	 */
-	private static function loadStreamMedia(KalturaMediaInfo $mediaInfo, $section, $tok) 
+	private static function loadStreamMedia(VidiunMediaInfo $mediaInfo, $section, $tok) 
 	{
 		$key = trim(substr($tok, 0, strpos($tok, ":")));
 		$val = trim(substr(strstr($tok, ":"), 1));
@@ -299,7 +299,7 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 	 * @param string $key
 	 * @param string $val
 	 */
-	private static function loadAudioSet(KalturaMediaInfo $mediaInfo, $key, $val) 
+	private static function loadAudioSet(VidiunMediaInfo $mediaInfo, $key, $val) 
 	{
 		switch($key) 
 		{
@@ -340,7 +340,7 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 	 * @param string $key
 	 * @param string $val
 	 */
-	private static function loadVideoSet(KalturaMediaInfo $mediaInfo, $key, $val) 
+	private static function loadVideoSet(VidiunMediaInfo $mediaInfo, $key, $val) 
 	{
 		switch($key) 
 		{
@@ -423,7 +423,7 @@ class KMediaInfoMediaParser extends KBaseMediaParser
 	 * @param $key
 	 * @param $val
 	 */
-	private static function loadContainerSet(KalturaMediaInfo $mediaInfo, $key, $val) 
+	private static function loadContainerSet(VidiunMediaInfo $mediaInfo, $key, $val) 
 	{
 		switch($key) 
 		{

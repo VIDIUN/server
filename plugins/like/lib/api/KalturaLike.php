@@ -4,7 +4,7 @@
  * @subpackage api.objects
  * @relatedService LikeService
  */
-class KalturaLike extends KalturaObject implements IRelatedFilterable
+class VidiunLike extends VidiunObject implements IRelatedFilterable
 {
 	/**
 	 * The id of the entry that the like belongs to
@@ -43,7 +43,7 @@ class KalturaLike extends KalturaObject implements IRelatedFilterable
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if (!$object_to_fill)
-			$object_to_fill = new KalturaLike();
+			$object_to_fill = new VidiunLike();
 	
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

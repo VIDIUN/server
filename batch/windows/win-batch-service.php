@@ -32,7 +32,7 @@ if(!file_exists($iniDir))
 require_once(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap_scheduler.php');
 require_once(__DIR__ . DIRECTORY_SEPARATOR . 'win-service-constants.php');
 
-$serviceName = 'kaltura_batch';
+$serviceName = 'vidiun_batch';
 
 //Windows Service Control 
 $serviceAction = 'status';
@@ -51,64 +51,64 @@ switch($serviceAction)
 		$ServiceStatus = win32_query_service_status($serviceName);
 		if($ServiceStatus['CurrentState'] == WIN32_SERVICE_STOPPED)
 		{
-			KalturaLog::info('Service Stopped');
+			VidiunLog::info('Service Stopped');
 		}
 		else if($ServiceStatus['CurrentState'] == WIN32_SERVICE_START_PENDING)
 		{
-			KalturaLog::info('Service Start Pending');
+			VidiunLog::info('Service Start Pending');
 		}
 		else if($ServiceStatus['CurrentState'] == WIN32_SERVICE_STOP_PENDING)
 		{
-			KalturaLog::info('Service Stop Pending');
+			VidiunLog::info('Service Stop Pending');
 		}
 		else if($ServiceStatus['CurrentState'] == WIN32_SERVICE_RUNNING)
 		{
-			KalturaLog::info('Service Running');
+			VidiunLog::info('Service Running');
 		}
 		else if($ServiceStatus['CurrentState'] == WIN32_SERVICE_CONTINUE_PENDING)
 		{
-			KalturaLog::info('Service Continue Pending');
+			VidiunLog::info('Service Continue Pending');
 		}
 		else if($ServiceStatus['CurrentState'] == WIN32_SERVICE_PAUSE_PENDING)
 		{
-			KalturaLog::info('Service Pause Pending');
+			VidiunLog::info('Service Pause Pending');
 		}
 		else if($ServiceStatus['CurrentState'] == WIN32_SERVICE_PAUSED)
 		{
-			KalturaLog::info('Service Paused');
+			VidiunLog::info('Service Paused');
 		}
 		else
 		{
-			KalturaLog::info('Service Status Unknown');
+			VidiunLog::info('Service Status Unknown');
 		}
 		exit(0);
 		
 	case 'install':
 		win32_create_service(array(
 			'service' => $serviceName, 
-			'display' => 'Kaltura asynchronous batch jobs scheduler',
-			'description' => 'Kaltura asynchronous batch jobs scheduler', 
+			'display' => 'Vidiun asynchronous batch jobs scheduler',
+			'description' => 'Vidiun asynchronous batch jobs scheduler', 
 			'params' => __FILE__ . " run $phpPath $iniDir", 
 			'path' => $phpPath,
 			'start_type' => WIN32_SERVICE_AUTO_START,
 			'error_control' => WIN32_SERVER_ERROR_NORMAL,
 		));
-		KalturaLog::info('Service Installed');
+		VidiunLog::info('Service Installed');
 		exit(0);
 		
 	case 'uninstall':
 		win32_delete_service($serviceName);
-		KalturaLog::info('Service Removed');
+		VidiunLog::info('Service Removed');
 		exit(0);
 		
 	case 'start': 
 		win32_start_service($serviceName);
-		KalturaLog::info('Service Started');
+		VidiunLog::info('Service Started');
 		exit(0);
 		
 	case 'stop': 
 		win32_stop_service($serviceName);
-		KalturaLog::info('Service Stopped');
+		VidiunLog::info('Service Stopped');
 		exit(0);
 		
 	case 'run':
@@ -121,11 +121,11 @@ switch($serviceAction)
 		break;
 		
 	default:
-		KalturaLog::info('Unkown action');
+		VidiunLog::info('Unkown action');
 		exit(-1);
 }
 
-$kscheduler = new KGenericScheduler($phpPath, $iniDir);
+$vscheduler = new VGenericScheduler($phpPath, $iniDir);
 while(1)
 {
 	//Handle Windows Service Request 
@@ -141,7 +141,7 @@ while(1)
 				break;
 				
 			case WIN32_SERVICE_CONTROL_STOP:
-				KalturaLog::info('Service stopped gracefully');
+				VidiunLog::info('Service stopped gracefully');
 				if(file_exists($pid))
 					unlink($pid);
 					
@@ -153,7 +153,7 @@ while(1)
 		}
 	}
 	
-	$kscheduler->loop();
+	$vscheduler->loop();
 }
 
 //Exit 

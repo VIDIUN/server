@@ -4,19 +4,19 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaPlaybackContextDataContributor
+interface IVidiunPlaybackContextDataContributor
 {
     /**
-     * Receives the context-data result and adds an instance of KalturaPluginData to the pluginData containing
+     * Receives the context-data result and adds an instance of VidiunPluginData to the pluginData containing
      * the specific plugins context-data.
      *
      * @param entry $entry
-     * @param kPlaybackContextDataParams $entryPlayingDataParams
-     * @param kPlaybackContextDataResult $result
-     * @param kContextDataHelper $contextDataHelper
+     * @param vPlaybackContextDataParams $entryPlayingDataParams
+     * @param vPlaybackContextDataResult $result
+     * @param vContextDataHelper $contextDataHelper
      * @param string $type
      */
-    public function contributeToPlaybackContextDataResult(entry $entry, kPlaybackContextDataParams $entryPlayingDataParams, kPlaybackContextDataResult $result, kContextDataHelper $contextDataHelper);
+    public function contributeToPlaybackContextDataResult(entry $entry, vPlaybackContextDataParams $entryPlayingDataParams, vPlaybackContextDataResult $result, vContextDataHelper $contextDataHelper);
 
     /**
      * @param $streamerType

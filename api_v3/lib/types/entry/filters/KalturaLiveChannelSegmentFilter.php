@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaLiveChannelSegmentFilter extends KalturaLiveChannelSegmentBaseFilter
+class VidiunLiveChannelSegmentFilter extends VidiunLiveChannelSegmentBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -14,9 +14,9 @@ class KalturaLiveChannelSegmentFilter extends KalturaLiveChannelSegmentBaseFilte
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$liveChannelSegmentFilter = $this->toObject();
 
@@ -28,8 +28,8 @@ class KalturaLiveChannelSegmentFilter extends KalturaLiveChannelSegmentBaseFilte
 		$pager->attachToCriteria($c);
 		$dbList = LiveChannelSegmentPeer::doSelect($c);
 		
-		$list = KalturaLiveChannelSegmentArray::fromDbArray($dbList, $responseProfile);
-		$response = new KalturaLiveChannelSegmentListResponse();
+		$list = VidiunLiveChannelSegmentArray::fromDbArray($dbList, $responseProfile);
+		$response = new VidiunLiveChannelSegmentListResponse();
 		$response->objects = $list;
 		$response->totalCount = $totalCount;
 		return $response;    

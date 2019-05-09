@@ -33,7 +33,7 @@
 			?>">
 				<td><?php echo $mediaRepurposing->id; ?></td>
 				<td><?php echo $mediaRepurposing->name; ?></td>
-				<td><?php echo $this->enumTranslate('Kaltura_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus', $mediaRepurposing->status); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus', $mediaRepurposing->status); ?></td>
 				<td><?php echo $mediaRepurposing->objectFilterEngineType; ?></td>
 				<td><?php echo get_class($mediaRepurposing->objectFilter); ?></td>
 				<td><?php echo $mediaRepurposing->description; ?></td>
@@ -42,9 +42,9 @@
 					<select class="options" onchange="doAction(this.value, '<?php echo $mediaRepurposing->id; ?>')">
 						<option value=""><?php echo $this->translate('Select Action'); ?></option>
 						<option value="configureMediaRepurposing" ><?php echo $this->translate('Configure'); ?></option>
-						<?php if ($mediaRepurposing->status === Kaltura_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DISABLED || $mediaRepurposing->status === Kaltura_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::SUSPENDED): ?>
+						<?php if ($mediaRepurposing->status === Vidiun_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DISABLED || $mediaRepurposing->status === Vidiun_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::SUSPENDED): ?>
 							<option value="enable" ><?php echo $this->translate('Enable'); ?></option>
-						<?php elseif ($mediaRepurposing->status === Kaltura_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::ACTIVE || $mediaRepurposing->status === Kaltura_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DRY_RUN_ONLY): ?>
+						<?php elseif ($mediaRepurposing->status === Vidiun_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::ACTIVE || $mediaRepurposing->status === Vidiun_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DRY_RUN_ONLY): ?>
 							<option value="disable" ><?php echo $this->translate('Disable'); ?></option>
 						<?php endif; ?>
 						<option value="dryRun" ><?php echo $this->translate('Execute Dry-Run'); ?></option>
@@ -94,7 +94,7 @@ function enable(mediaRepurposingId)
 {
 	changeStatus(
 		mediaRepurposingId,
-		<?php echo Kaltura_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::ACTIVE; ?>,
+		<?php echo Vidiun_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::ACTIVE; ?>,
 		function() {
 			alert('<?php echo $this->translate('Media Repurposing active');?>');
 		}
@@ -105,7 +105,7 @@ function disable(mediaRepurposingId)
 {
 	changeStatus(
 		mediaRepurposingId,
-		<?php echo Kaltura_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DISABLED; ?>,
+		<?php echo Vidiun_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DISABLED; ?>,
 		function() {
 			alert('<?php echo $this->translate('Media Repurposing disabled. NOTICE: disabling will not stop currently running process');?>');
 		}
@@ -116,7 +116,7 @@ function dryRun(mediaRepurposingId)
 {
 	changeStatus(
 		mediaRepurposingId,
-		<?php echo Kaltura_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DRY_RUN_ONLY; ?>,
+		<?php echo Vidiun_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DRY_RUN_ONLY; ?>,
 		function(batchJobId) {
 			alert("Dry run for MR profile id [" + mediaRepurposingId + "] has been Assign. This could take couple of minutes. Results will be save to file. The batch JobId is " + batchJobId);
 		}
@@ -130,7 +130,7 @@ function remove(mediaRepurposingId)
 	{
 		changeStatus(
 			mediaRepurposingId,
-			<?php echo Kaltura_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DELETED; ?>,
+			<?php echo Vidiun_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DELETED; ?>,
 			function() {
 				alert('<?php echo $this->translate('Media Repurposing removed');?>');
 			}

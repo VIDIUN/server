@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class viewPartnersAction extends kalturaSystemAction
+class viewPartnersAction extends vidiunSystemAction
 {
 	const MAX_PAGE_SIZE = 8000;
 	
@@ -25,9 +25,9 @@ class viewPartnersAction extends kalturaSystemAction
 		$this->partners_stat[$partner_id] = array(
 		"id" => $partner_id,
 		"name" => $partner_id,
-		"kusers" => 0,
+		"vusers" => 0,
 		"contributors" => 0,
-		"kshows" => 0,
+		"vshows" => 0,
 		"entries" => 0,
 		"ready_entries" => 0
 		);
@@ -217,7 +217,7 @@ die;
 
 	    // plays , views
 	    // see the plays & views are the same type but differenr sub types
-		$results  = self::executeQuery ( $connection , $ids_str , $dateFilter , PartnerActivity::PARTNER_ACTIVITY_KDP , true );
+		$results  = self::executeQuery ( $connection , $ids_str , $dateFilter , PartnerActivity::PARTNER_ACTIVITY_VDP , true );
 		
 		foreach($results as $resultset)
 	    {
@@ -226,8 +226,8 @@ die;
 	    	$sub_act = $resultset->getInt('SUB_ACTIVITY');
 	    	$value = $resultset->get ('S0');
 	    	
-	    	if ( $sub_act == PartnerActivity::PARTNER_SUB_ACTIVITY_KDP_PLAYS ) $stats[$partner_id]["plays"] = $value;
-	    	elseif ( $sub_act == PartnerActivity::PARTNER_SUB_ACTIVITY_KDP_VIEWS ) $stats[$partner_id]["views"] = $value;
+	    	if ( $sub_act == PartnerActivity::PARTNER_SUB_ACTIVITY_VDP_PLAYS ) $stats[$partner_id]["plays"] = $value;
+	    	elseif ( $sub_act == PartnerActivity::PARTNER_SUB_ACTIVITY_VDP_VIEWS ) $stats[$partner_id]["views"] = $value;
 	    }	  
 
 	    // bandwidth - for date
@@ -316,7 +316,7 @@ die;
 	private static function activeSite ( $connection , &$stats ,  $ids_str , $to_date , $delta , $title )
 	{
 		$dateFilter = self::createDateCriteria ( null, $to_date , $delta );
-		$results  = self::executeActiveSiteQuery ( $connection , $ids_str , $dateFilter , PartnerActivity::PARTNER_ACTIVITY_KDP );
+		$results  = self::executeActiveSiteQuery ( $connection , $ids_str , $dateFilter , PartnerActivity::PARTNER_ACTIVITY_VDP );
 		
 		foreach($results as $resultset)
 	    {
@@ -335,8 +335,8 @@ die;
 	{
 		$min_plays = 1;
 		$min_views = 10;
-		// PARTNER_SUB_ACTIVITY_KDP_PLAYS = 201
-		// PARTNER_SUB_ACTIVITY_KDP_VIEWS = 202
+		// PARTNER_SUB_ACTIVITY_VDP_PLAYS = 201
+		// PARTNER_SUB_ACTIVITY_VDP_VIEWS = 202
 		$group_by = "PARTNER_ID";
 		if ( $sub_activity ) $group_by .= ",SUB_ACTIVITY";
 		 
@@ -452,7 +452,7 @@ die;
 			$crit->addOr ( $c->getNewCriterion ( PartnerPeer::DESCRIPTION , $partner_filter_str , Criteria::LIKE ) );
 			$c->addAnd ( $crit );
 				
-			// remove from the list -  $partner_list & $kaltura_related
+			// remove from the list -  $partner_list & $vidiun_related
 			$list_of_ids = array();
 
 			// aggrigate all the lists of ids - they should not appear in the group of type text

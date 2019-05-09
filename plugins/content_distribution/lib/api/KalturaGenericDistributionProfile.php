@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaGenericDistributionProfile extends KalturaDistributionProfile
+class VidiunGenericDistributionProfile extends VidiunDistributionProfile
 {
 	/**
 	 * @insertonly
@@ -12,22 +12,22 @@ class KalturaGenericDistributionProfile extends KalturaDistributionProfile
 	public $genericProviderId;
 	
 	/**
-	 * @var KalturaGenericDistributionProfileAction
+	 * @var VidiunGenericDistributionProfileAction
 	 */
 	public $submitAction;
 	
 	/**
-	 * @var KalturaGenericDistributionProfileAction
+	 * @var VidiunGenericDistributionProfileAction
 	 */
 	public $updateAction;	
 	
 	/**
-	 * @var KalturaGenericDistributionProfileAction
+	 * @var VidiunGenericDistributionProfileAction
 	 */
 	public $deleteAction;	
 	
 	/**
-	 * @var KalturaGenericDistributionProfileAction
+	 * @var VidiunGenericDistributionProfileAction
 	 */
 	public $fetchReportAction;
 	
@@ -75,7 +75,7 @@ class KalturaGenericDistributionProfile extends KalturaDistributionProfile
 			if(!$this->$actionAttribute)
 				continue;
 				
-			$typeReflector = KalturaTypeReflectorCacher::get(get_class($this->$actionAttribute));
+			$typeReflector = VidiunTypeReflectorCacher::get(get_class($this->$actionAttribute));
 			
 			foreach ( $this->$actionAttribute->getMapBetweenObjects() as $this_prop => $object_prop )
 			{
@@ -88,13 +88,13 @@ class KalturaGenericDistributionProfile extends KalturaDistributionProfile
 					$propertyInfo = $typeReflector->getProperty($this_prop);
 					if (!$propertyInfo)
 					{
-			            KalturaLog::alert("property [$this_prop] was not found on object class [" . get_class($object) . "]");
+			            VidiunLog::alert("property [$this_prop] was not found on object class [" . get_class($object) . "]");
 					}
 					else if ($propertyInfo->isDynamicEnum())
 					{
 						$propertyType = $propertyInfo->getType();
 						$enumType = call_user_func(array($propertyType, 'getEnumClass'));
-						$value = kPluginableEnumsManager::apiToCore($enumType, $value);
+						$value = vPluginableEnumsManager::apiToCore($enumType, $value);
 					}
 					
 					if ($value !== null)
@@ -103,7 +103,7 @@ class KalturaGenericDistributionProfile extends KalturaDistributionProfile
 						if (is_callable($setter_callback))
 					 	    call_user_func_array($setter_callback, array($value, $action));
 				 	    else 
-			            	KalturaLog::alert("setter for property [$object_prop] was not found on object class [" . get_class($object) . "]");
+			            	VidiunLog::alert("setter for property [$object_prop] was not found on object class [" . get_class($object) . "]");
 					}
 				}
 			}
@@ -115,7 +115,7 @@ class KalturaGenericDistributionProfile extends KalturaDistributionProfile
 		return $object;		
 	}
 
-	public function doFromObject($object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($object, $responseProfile);
 		
@@ -127,9 +127,9 @@ class KalturaGenericDistributionProfile extends KalturaDistributionProfile
 			$actionAttribute = "{$action}Action";
 			
 			if(!$this->$actionAttribute)
-				$this->$actionAttribute = new KalturaGenericDistributionProfileAction();
+				$this->$actionAttribute = new VidiunGenericDistributionProfileAction();
 				
-			$reflector = KalturaTypeReflectorCacher::get(get_class($this->$actionAttribute));
+			$reflector = VidiunTypeReflectorCacher::get(get_class($this->$actionAttribute));
 			$properties = $reflector->getProperties();
 			
 			foreach ( $this->$actionAttribute->getMapBetweenObjects() as $this_prop => $object_prop )
@@ -148,14 +148,14 @@ class KalturaGenericDistributionProfile extends KalturaDistributionProfile
 	                {
 						$propertyType = $properties[$this_prop]->getType();
 						$enumType = call_user_func(array($propertyType, 'getEnumClass'));
-	                	$value = kPluginableEnumsManager::coreToApi($enumType, $value);
+	                	$value = vPluginableEnumsManager::coreToApi($enumType, $value);
 	                }
 	                	
 	                $this->$actionAttribute->$this_prop = $value;
 	            }
 	            else
 	            { 
-	            	KalturaLog::alert("getter for property [$object_prop] was not found on object class [" . get_class($object) . "]");
+	            	VidiunLog::alert("getter for property [$object_prop] was not found on object class [" . get_class($object) . "]");
 	            }
 			}
 		}
@@ -167,7 +167,7 @@ class KalturaGenericDistributionProfile extends KalturaDistributionProfile
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{

@@ -1,9 +1,9 @@
 <?php
 /**
  * @package    Core
- * @subpackage KMC
+ * @subpackage VMC
  */
-class kmc1Action extends kalturaAction
+class vmc1Action extends vidiunAction
 {
 	public function execute ( ) 
 	{
@@ -13,7 +13,7 @@ class kmc1Action extends kalturaAction
 		$this->partner_id = $this->getP ( "partner_id" );
 		$this->subp_id = $this->getP ( "subp_id" );
 		$this->uid = $this->getP ( "uid" );
-		$this->ks = $this->getP ( "ks" );
+		$this->vs = $this->getP ( "vs" );
 		$this->screen_name = $this->getP ( "screen_name" );
 		$this->email = $this->getP ( "email" );
 		
@@ -29,7 +29,7 @@ class kmc1Action extends kalturaAction
 			$widget = widgetPeer::retrieveByPK( "_" . $this->partner_id );
 			if ( $widget )
 			{
-				$this->embed_code = $widget->getWidgetHtml( "kaltura_player" );
+				$this->embed_code = $widget->getWidgetHtml( "vidiun_player" );
 				
 				$ui_conf = $widget->getuiConf();
 //				$this->ui_conf_width = 0; // $ui_conf->getWidth();
@@ -42,7 +42,7 @@ class kmc1Action extends kalturaAction
 		if ($this->partner_id !== NULL)
 		{
 			$this->partner = $partner = PartnerPeer::retrieveByPK($this->partner_id);
-			kmcUtils::redirectPartnerToCorrectKmc($partner, $this->ks, $this->uid, $this->screen_name, $this->email, 1);
+			vmcUtils::redirectPartnerToCorrectVmc($partner, $this->vs, $this->uid, $this->screen_name, $this->email, 1);
 			$this->templatePartnerId = $this->partner ? $this->partner->getTemplatePartnerId() : 0;
 		}
 
@@ -56,9 +56,9 @@ class kmc1Action extends kalturaAction
 				$this->payingPartner = 'true';
 			}
 	
-			if(kConf::get('kmc_content_enable_commercial_transcoding'))
+			if(vConf::get('vmc_content_enable_commercial_transcoding'))
 			{
-				// 2009-08-27 is the date we added ON2 to KMC trial account
+				// 2009-08-27 is the date we added ON2 to VMC trial account
 				if ($partner->getPartnerPackage() != PartnerPackages::PARTNER_PACKAGE_FREE ||
 				    ($partner->getType() == 1 && strtotime($partner->getCreatedAt()) >= strtotime('2009-08-27')) )
 				{
@@ -66,7 +66,7 @@ class kmc1Action extends kalturaAction
 				}
 			}
 			
-			// 2009-08-27 is the date we added ON2 to KMC trial account
+			// 2009-08-27 is the date we added ON2 to VMC trial account
 			// TODO - should be depracated
 			if(strtotime($partner->getCreatedAt()) >= strtotime('2009-08-27') ||
 			   $partner->getEnableAnalyticsTab())
@@ -80,12 +80,12 @@ class kmc1Action extends kalturaAction
 			}
 		}
 		
-		// set content kdp version according to partner id
+		// set content vdp version according to partner id
 		$moderated_partners = array( 31079, 28575, 32774 );
-		$this->content_kdp_version = 'v2.7.0';
+		$this->content_vdp_version = 'v2.7.0';
 		if(in_array($this->partner_id, $moderated_partners))
 		{
-			$this->content_kdp_version = 'v2.1.2.29057';
+			$this->content_vdp_version = 'v2.1.2.29057';
 		}
 		
 		/*
@@ -114,22 +114,22 @@ class kmc1Action extends kalturaAction
 			$this->jw_license = $partner->getLicensedJWPlayer();
 		}
 
-		// if the email is empty - it is an indication that the kaltura super user is logged in
+		// if the email is empty - it is an indication that the vidiun super user is logged in
 		if ( !$this->email) $this->allow_reports = true;   
 		
 		/* applications versioning */
-		$this->kmc_content_version 	= 'v1.1.11';
-		$this->kmc_account_version 	= 'v1.1.7';
-		$this->kmc_appstudio_version 	= 'v1.2.4';
-		$this->kmc_rna_version 		= 'v1.0.5';
-		$this->kmc_dashboard_version 	= 'v1.0.1';
+		$this->vmc_content_version 	= 'v1.1.11';
+		$this->vmc_account_version 	= 'v1.1.7';
+		$this->vmc_appstudio_version 	= 'v1.2.4';
+		$this->vmc_rna_version 		= 'v1.0.5';
+		$this->vmc_dashboard_version 	= 'v1.0.1';
 		
 		$this->jw_uiconfs_array = array();
 		$this->jw_uiconf_playlist = array();
 		
 		if ( ! $this->module )
 		{
-			$this->redirect( "kmc/kmc" );
+			$this->redirect( "vmc/vmc" );
 			die();
 		}
 	}
@@ -199,7 +199,7 @@ class kmc1Action extends kalturaAction
 		
 		// or belongs to the partner or a template  
 		$criterion = $c->getNewCriterion( uiConfPeer::PARTNER_ID , $this->partner_id ) ; // or belongs to partner
-		$criterion2 = $c->getNewCriterion( uiConfPeer::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK , Criteria::GREATER_EQUAL );	// or belongs to kaltura_network == templates
+		$criterion2 = $c->getNewCriterion( uiConfPeer::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK , Criteria::GREATER_EQUAL );	// or belongs to vidiun_network == templates
 		
 		$criterion2partnerId = $c->getNewCriterion(uiConfPeer::PARTNER_ID, $this->templatePartnerId);
 		$criterion2->addAnd($criterion2partnerId);  
@@ -222,10 +222,10 @@ class kmc1Action extends kalturaAction
 		$template_partner_id = (isset($this->templatePartnerId))? $this->templatePartnerId: 0;
 		$c = new Criteria();
 		$crit_partner = $c->getNewCriterion(uiConfPeer::PARTNER_ID, $this->partner_id);
-		$crit_default = $c->getNewCriterion(uiConfPeer::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK, Criteria::GREATER_EQUAL);
+		$crit_default = $c->getNewCriterion(uiConfPeer::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK, Criteria::GREATER_EQUAL);
 		
 		$crit_default_partner_id = $c->getNewCriterion(uiConfPeer::PARTNER_ID, $template_partner_id);
-		$crit_default_swf_url = $c->getNewCriterion(uiConfPeer::SWF_URL, '%/kdp3/%kdp3.swf', Criteria::NOT_LIKE);
+		$crit_default_swf_url = $c->getNewCriterion(uiConfPeer::SWF_URL, '%/vdp3/%vdp3.swf', Criteria::NOT_LIKE);
 		$crit_default->addAnd($crit_default_partner_id);
 		$crit_default->addAnd($crit_default_swf_url);
 		

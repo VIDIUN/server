@@ -3,10 +3,10 @@
  * @package plugins.cuePoint
  * @subpackage api.objects
  */
-class KalturaCuePointListResponse extends KalturaListResponse
+class VidiunCuePointListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaCuePointArray
+	 * @var VidiunCuePointArray
 	 * @readonly
 	 */
 	public $objects;

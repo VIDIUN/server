@@ -2,7 +2,7 @@
 /**
  * @package plugins.cuePoint
  */
-abstract class BaseCuePointPlugin extends KalturaPlugin
+abstract class BaseCuePointPlugin extends VidiunPlugin
 {
 	/**
 	 * @return array

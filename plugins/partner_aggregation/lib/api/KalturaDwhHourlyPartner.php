@@ -3,7 +3,7 @@
  * @package plugins.partnerAggregation
  * @subpackage api.objects
  */
-class KalturaDwhHourlyPartner extends KalturaObject implements IFilterable 
+class VidiunDwhHourlyPartner extends VidiunObject implements IFilterable 
 {
 	/**
 	 * @var int

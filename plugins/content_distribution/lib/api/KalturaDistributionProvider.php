@@ -4,11 +4,11 @@
  * @subpackage api.objects
  * @abstract
  */
-abstract class KalturaDistributionProvider extends KalturaObject implements IFilterable
+abstract class VidiunDistributionProvider extends VidiunObject implements IFilterable
 {
 	/**
 	 * @readonly
-	 * @var KalturaDistributionProviderType
+	 * @var VidiunDistributionProviderType
 	 * @filter eq,in
 	 */
 	public $type;
@@ -63,7 +63,7 @@ abstract class KalturaDistributionProvider extends KalturaObject implements IFil
 		'name',
 	);
 
-	public function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($sourceObject, $responseProfile);
 		

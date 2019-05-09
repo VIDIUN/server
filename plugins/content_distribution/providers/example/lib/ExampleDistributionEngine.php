@@ -30,8 +30,8 @@ class ExampleDistributionEngine extends DistributionEngine implements
 		$this->updateXmlTemplate = dirname(__FILE__) . '/../xml/update.template.xml';
 		
 		// load value from batch configuration
-		if(KBatchBase::$taskConfig->params->updateXmlTemplate)
-			$this->updateXmlTemplate = KBatchBase::$taskConfig->params->updateXmlTemplate;
+		if(VBatchBase::$taskConfig->params->updateXmlTemplate)
+			$this->updateXmlTemplate = VBatchBase::$taskConfig->params->updateXmlTemplate;
 	}
 
 	/* (non-PHPdoc)
@@ -39,15 +39,15 @@ class ExampleDistributionEngine extends DistributionEngine implements
 	 * 
 	 * Demonstrate asynchronous external API usage
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
 		// validates received object types
 				
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaExampleDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaExampleDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunExampleDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunExampleDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaExampleDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaExampleDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunExampleDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunExampleDistributionJobProviderData");
 		
 		// call the actual submit action
 		$this->handleSubmit($data, $data->distributionProfile, $data->providerData);
@@ -59,7 +59,7 @@ class ExampleDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		return ExampleExternalApiService::wasSubmitSucceed($data->remoteId);
 	}
@@ -67,15 +67,15 @@ class ExampleDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
 		// demonstrate asynchronous XML delivery usage from XSL
 		
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaExampleDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaExampleDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunExampleDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunExampleDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaExampleDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaExampleDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunExampleDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunExampleDistributionJobProviderData");
 		
 		$this->handleDelete($data, $data->distributionProfile, $data->providerData);
 		
@@ -87,13 +87,13 @@ class ExampleDistributionEngine extends DistributionEngine implements
 	 * 
 	 * demonstrate asynchronous XML delivery usage from template and uploading the media
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaExampleDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaExampleDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunExampleDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunExampleDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaExampleDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaExampleDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunExampleDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunExampleDistributionJobProviderData");
 		
 		$this->handleUpdate($data, $data->distributionProfile, $data->providerData);
 		
@@ -105,24 +105,24 @@ class ExampleDistributionEngine extends DistributionEngine implements
 	 * 
 	 * Demonstrate asynchronous http url parsing
 	 */
-	public function fetchReport(KalturaDistributionFetchReportJobData $data)
+	public function fetchReport(VidiunDistributionFetchReportJobData $data)
 	{
 		// TODO
 		return false;
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaExampleDistributionProfile $distributionProfile
-	 * @param KalturaExampleDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunExampleDistributionProfile $distributionProfile
+	 * @param VidiunExampleDistributionJobProviderData $providerData
 	 */
-	protected function handleSubmit(KalturaDistributionJobData $data, KalturaExampleDistributionProfile $distributionProfile, KalturaExampleDistributionJobProviderData $providerData)
+	protected function handleSubmit(VidiunDistributionJobData $data, VidiunExampleDistributionProfile $distributionProfile, VidiunExampleDistributionJobProviderData $providerData)
 	{
 		$entryId = $data->entryDistribution->entryId;
 		$partnerId = $distributionProfile->partnerId;
 		$entry = $this->getEntry($partnerId, $entryId);
 
-		// populate the external API object with the Kaltura entry data
+		// populate the external API object with the Vidiun entry data
 		$exampleExternalApiMediaItem = new ExampleExternalApiMediaItem();
 		$exampleExternalApiMediaItem->resourceId = $entry->id;
 		$exampleExternalApiMediaItem->title = $entry->name;
@@ -131,8 +131,8 @@ class ExampleDistributionEngine extends DistributionEngine implements
 		$exampleExternalApiMediaItem->height = $entry->height;
 				
 		// loads ftp manager
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$ftpManager = kFileTransferMgr::getInstance(kFileTransferMgrType::FTP, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$ftpManager = vFileTransferMgr::getInstance(vFileTransferMgrType::FTP, $engineOptions);
 		$ftpManager->login(self::FTP_SERVER_URL, $distributionProfile->username, $distributionProfile->password);
 		
 		// put the thumbnail on the FTP with the entry id as naming convention
@@ -155,27 +155,27 @@ class ExampleDistributionEngine extends DistributionEngine implements
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaExampleDistributionProfile $distributionProfile
-	 * @param KalturaExampleDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunExampleDistributionProfile $distributionProfile
+	 * @param VidiunExampleDistributionJobProviderData $providerData
 	 */
-	protected function handleDelete(KalturaDistributionJobData $data, KalturaExampleDistributionProfile $distributionProfile, KalturaExampleDistributionJobProviderData $providerData)
+	protected function handleDelete(VidiunDistributionJobData $data, VidiunExampleDistributionProfile $distributionProfile, VidiunExampleDistributionJobProviderData $providerData)
 	{
 		// TODO
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaExampleDistributionProfile $distributionProfile
-	 * @param KalturaExampleDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunExampleDistributionProfile $distributionProfile
+	 * @param VidiunExampleDistributionJobProviderData $providerData
 	 */
-	protected function handleUpdate(KalturaDistributionJobData $data, KalturaExampleDistributionProfile $distributionProfile, KalturaExampleDistributionJobProviderData $providerData)
+	protected function handleUpdate(VidiunDistributionJobData $data, VidiunExampleDistributionProfile $distributionProfile, VidiunExampleDistributionJobProviderData $providerData)
 	{
 		$entryId = $data->entryDistribution->entryId;
 		$partnerId = $distributionProfile->partnerId;
 		$entry = $this->getEntry($partnerId, $entryId);
 		
-		$feed = new KDOMDocument();
+		$feed = new VDOMDocument();
 		$feed->load($this->updateXmlTemplate);
 		$feed->documentElement->setAttribute('mediaId', $data->remoteId);
 		
@@ -203,7 +203,7 @@ class ExampleDistributionEngine extends DistributionEngine implements
 		$videosElement = reset($videosElements);
 	
 		$flavorAssets = $this->getFlavorAssets($partnerId, $data->entryDistribution->flavorAssetIds);
-		KBatchBase::impersonate($partnerId);
+		VBatchBase::impersonate($partnerId);
 		foreach($flavorAssets as $flavorAsset)
 		{
 			$url = $this->getAssetUrl($flavorAsset->id);
@@ -212,15 +212,15 @@ class ExampleDistributionEngine extends DistributionEngine implements
 			$videoElement->textContent = $url;
 			$videosElement->appendChild($videoElement);
 		}
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 			
 			
 		$localFile = tempnam(sys_get_temp_dir(), 'example-update-');
 		$feed->save($localFile);
 		
 		// loads ftp manager
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$ftpManager = kFileTransferMgr::getInstance(kFileTransferMgrType::FTP, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$ftpManager = vFileTransferMgr::getInstance(vFileTransferMgrType::FTP, $engineOptions);
 		$ftpManager->login(self::FTP_SERVER_URL, $distributionProfile->username, $distributionProfile->password);
 		
 		// put the XML file on the FTP

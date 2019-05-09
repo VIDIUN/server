@@ -6,7 +6,7 @@
  * @package plugins.partnerAggregation
  * @subpackage api.services
  */
-class PartnerAggregationService extends KalturaBaseService
+class PartnerAggregationService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -19,17 +19,17 @@ class PartnerAggregationService extends KalturaBaseService
 	 * List aggregated partner data
 	 * 
 	 * @action list
-	 * @param KalturaDwhHourlyPartnerFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaDwhHourlyPartnerListResponse
+	 * @param VidiunDwhHourlyPartnerFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunDwhHourlyPartnerListResponse
 	 */
-	function listAction(KalturaDwhHourlyPartnerFilter $filter, KalturaFilterPager $pager = null)
+	function listAction(VidiunDwhHourlyPartnerFilter $filter, VidiunFilterPager $pager = null)
 	{
 		$filter->validatePropertyNotNull('aggregatedTimeLessThanOrEqual');
 		$filter->validatePropertyNotNull('aggregatedTimeGreaterThanOrEqual');
 
 		if (!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		
 		$c = new Criteria();			
 		$dwhHourlyPartnerFilter = $filter->toObject();
@@ -38,8 +38,8 @@ class PartnerAggregationService extends KalturaBaseService
 		$pager->attachToCriteria($c);
 		$list = DwhHourlyPartnerPeer::doSelect($c);
 		
-		$response = new KalturaDwhHourlyPartnerListResponse();
-		$response->objects = KalturaDwhHourlyPartnerArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunDwhHourlyPartnerListResponse();
+		$response->objects = VidiunDwhHourlyPartnerArray::fromDbArray($list, $this->getResponseProfile());
 		$response->totalCount = $count;
 	
 		return $response;

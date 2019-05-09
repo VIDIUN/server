@@ -39,7 +39,7 @@ class StorageProfilePeer extends BaseStorageProfilePeer
 			if(isset(self::$class_types_cache[$storageProfileProtocol]))
 				return self::$class_types_cache[$storageProfileProtocol];
 				
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $storageProfileProtocol);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $storageProfileProtocol);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$storageProfileProtocol] = $extendedCls;

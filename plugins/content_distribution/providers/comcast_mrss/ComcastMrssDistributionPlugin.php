@@ -2,10 +2,10 @@
 /**
  * @package plugins.comcastMrssDistribution
  */
-class ComcastMrssDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider, IKalturaEventConsumers, IKalturaServices
+class ComcastMrssDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider, IVidiunEventConsumers, IVidiunServices
 {
 	const PLUGIN_NAME = 'comcastMrssDistribution';
-	const COMCAST_MRSS_EVENT_CONSUMER = "kComcastMrssFlowManager";
+	const COMCAST_MRSS_EVENT_CONSUMER = "vComcastMrssFlowManager";
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 1;
 	const CONTENT_DSTRIBUTION_VERSION_MINOR = 0;
 	const CONTENT_DSTRIBUTION_VERSION_BUILD = 0;
@@ -17,14 +17,14 @@ class ComcastMrssDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependencyDistribution = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
-		$dependencyCaptions = new KalturaDependency(CaptionPlugin::PLUGIN_NAME);
-		$dependencyCuePoints = new KalturaDependency(CuePointPlugin::PLUGIN_NAME);
+		$dependencyDistribution = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependencyCaptions = new VidiunDependency(CaptionPlugin::PLUGIN_NAME);
+		$dependencyCuePoints = new VidiunDependency(CuePointPlugin::PLUGIN_NAME);
 		
 		return array($dependencyDistribution, $dependencyCaptions, $dependencyCuePoints);
 	}
@@ -61,13 +61,13 @@ class ComcastMrssDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::COMCAST_MRSS)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::COMCAST_MRSS)
 		{
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaComcastMrssDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunComcastMrssDistributionProfile();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::COMCAST_MRSS)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::COMCAST_MRSS)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -76,8 +76,8 @@ class ComcastMrssDistributionPlugin extends KalturaPlugin implements IKalturaPer
 			}
 		}
 		
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(ComcastMrssDistributionProviderType::COMCAST_MRSS))
-			return new KalturaComcastMrssDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(ComcastMrssDistributionProviderType::COMCAST_MRSS))
+			return new VidiunComcastMrssDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(ComcastMrssDistributionProviderType::COMCAST_MRSS))
 			return new ComcastMrssDistributionProfile();
@@ -93,23 +93,23 @@ class ComcastMrssDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::COMCAST_MRSS)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::COMCAST_MRSS)
 		{
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaComcastMrssDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunComcastMrssDistributionProfile';
 		} 
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::COMCAST_MRSS)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::COMCAST_MRSS)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_ComcastMrssProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_ComcastMrssDistribution_Type_ComcastMrssDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_ComcastMrssDistribution_Type_ComcastMrssDistributionProfile';
 		}
 		
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(ComcastMrssDistributionProviderType::COMCAST_MRSS))
-			return 'KalturaComcastMrssDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(ComcastMrssDistributionProviderType::COMCAST_MRSS))
+			return 'VidiunComcastMrssDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(ComcastMrssDistributionProviderType::COMCAST_MRSS))
 			return 'ComcastMrssDistributionProfile';
@@ -130,11 +130,11 @@ class ComcastMrssDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaComcastMrssDistributionProvider();
+		$distributionProvider = new VidiunComcastMrssDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -159,8 +159,8 @@ class ComcastMrssDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -168,11 +168,11 @@ class ComcastMrssDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -182,7 +182,7 @@ class ComcastMrssDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{

@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaSyndicationDistributionProfile extends KalturaDistributionProfile
+class VidiunSyndicationDistributionProfile extends VidiunDistributionProfile
 {	
 	/**
 	 * @var string
@@ -40,7 +40,7 @@ class KalturaSyndicationDistributionProfile extends KalturaDistributionProfile
 		if(is_null($object_to_fill))
 			$object_to_fill = new SyndicationDistributionProfile();
 		
-		kSyndicationFeedManager::validateXsl($this->xsl);	
+		vSyndicationFeedManager::validateXsl($this->xsl);	
 		
 		return parent::toInsertableObject($object_to_fill, $props_to_skip);
 	}
@@ -55,7 +55,7 @@ class KalturaSyndicationDistributionProfile extends KalturaDistributionProfile
 		if(is_null($object_to_fill))
 			$object_to_fill = new SyndicationDistributionProfile();
 		
-		kSyndicationFeedManager::validateXsl($this->xsl);
+		vSyndicationFeedManager::validateXsl($this->xsl);
 		
 		return parent::toUpdatableObject($object_to_fill, $props_to_skip );
 	}
@@ -67,7 +67,7 @@ class KalturaSyndicationDistributionProfile extends KalturaDistributionProfile
 		
 		if ( count(explode(",", $this->requiredFlavorParamsIds)) > 1 )
 		{
-		    throw new KalturaAPIException( KalturaErrors::INVALID_FIELD_VALUE, "requiredFlavorParamsIds");
+		    throw new VidiunAPIException( VidiunErrors::INVALID_FIELD_VALUE, "requiredFlavorParamsIds");
 		}
 		
 			

@@ -4,7 +4,7 @@
  * @subpackage objects
  * @relatedService UserRoleService
  */
-class KalturaUserRole extends KalturaObject implements IRelatedFilterable
+class VidiunUserRole extends VidiunObject implements IRelatedFilterable
 {
 	/**
 	 * @var int
@@ -36,7 +36,7 @@ class KalturaUserRole extends KalturaObject implements IRelatedFilterable
 	
 
 	/**
-	 * @var KalturaUserRoleStatus
+	 * @var VidiunUserRoleStatus
 	 * @filter eq,in
 	 */
 	public $status;
@@ -109,7 +109,7 @@ class KalturaUserRole extends KalturaObject implements IRelatedFilterable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate()
+	 * @see VidiunObject::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -117,18 +117,18 @@ class KalturaUserRole extends KalturaObject implements IRelatedFilterable
 	
 		if($this->systemName)
 		{
-			$c = KalturaCriteria::create(UserRolePeer::OM_CLASS);
+			$c = VidiunCriteria::create(UserRolePeer::OM_CLASS);
 			$c->add(UserRolePeer::ID, $sourceObject->getId(), Criteria::NOT_EQUAL);
 			$c->add(UserRolePeer::SYSTEM_NAME, $this->systemName);
 			if(UserRolePeer::doCount($c))
-				throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+				throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 		}
 		
 		return parent::validateForUpdate($sourceObject, $propertiesToSkip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -136,10 +136,10 @@ class KalturaUserRole extends KalturaObject implements IRelatedFilterable
 		
 		if($this->systemName)
 		{
-			$c = KalturaCriteria::create(UserRolePeer::OM_CLASS);
+			$c = VidiunCriteria::create(UserRolePeer::OM_CLASS);
 			$c->add(UserRolePeer::SYSTEM_NAME, $this->systemName);
 			if(UserRolePeer::doCount($c))
-				throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+				throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 		}
 		
 		return parent::validateForInsert($propertiesToSkip);

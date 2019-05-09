@@ -4,7 +4,7 @@
  * @subpackage api.enum
  * @see EventNotificationTemplateType
  */
-class KalturaEventNotificationTemplateType extends KalturaDynamicEnum implements EventNotificationTemplateType
+class VidiunEventNotificationTemplateType extends VidiunDynamicEnum implements EventNotificationTemplateType
 {
 	public static function getEnumClass()
 	{

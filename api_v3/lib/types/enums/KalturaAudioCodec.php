@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaAudioCodec extends KalturaStringEnum
+class VidiunAudioCodec extends VidiunStringEnum
 {
 	const NONE = "";
 	

@@ -3,7 +3,7 @@
  * @package plugins.pushNotification
  * @subpackage api.objects
  */
-class KalturaPushNotificationData extends KalturaObject 
+class VidiunPushNotificationData extends VidiunObject 
 {
 	/**
 	 * @var string
@@ -26,7 +26,7 @@ class KalturaPushNotificationData extends KalturaObject
 	private static $map_between_objects = array('queueName', 'queueKey', 'url');
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -34,12 +34,12 @@ class KalturaPushNotificationData extends KalturaObject
 	}
 
 	/* (non-PHPdoc)
-   * @see KalturaObject::toObject()
+   * @see VidiunObject::toObject()
    */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
 		if(is_null($dbObject))
-			$dbObject = new kPushNotificationData();
+			$dbObject = new vPushNotificationData();
 
 		return parent::toObject($dbObject, $propertiesToSkip);
 	}

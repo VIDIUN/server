@@ -4,12 +4,12 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaBatchJobDataContributor extends IKalturaBase
+interface IVidiunBatchJobDataContributor extends IVidiunBase
 {
 	/**
 	 * Contribute to convert job data 
-	 * @param kConvertJobData $jobData
-	 * @returns kConvertJobData
+	 * @param vConvertJobData $jobData
+	 * @returns vConvertJobData
 	 */ 
-	public static function contributeToConvertJobData ($jobType, $jobSubType, kConvertJobData $jobData);
+	public static function contributeToConvertJobData ($jobType, $jobSubType, vConvertJobData $jobData);
 }

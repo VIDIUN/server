@@ -3,16 +3,16 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBatchJobArray extends KalturaTypedArray
+class VidiunBatchJobArray extends VidiunTypedArray
 {
 	public static function fromStatisticsBatchJobArray ( $arr )
 	{
-		$newArr = new KalturaBatchJobArray();
+		$newArr = new VidiunBatchJobArray();
 		if ( is_array ( $arr ) )
 		{
 			foreach ( $arr as $obj )
 			{
-				$nObj = new KalturaBatchJob();
+				$nObj = new VidiunBatchJob();
 				$nObj->fromStatisticsObject($obj);
 				$newArr[] = $nObj;
 			}
@@ -23,12 +23,12 @@ class KalturaBatchJobArray extends KalturaTypedArray
 	
 	public static function fromBatchJobArray ( $arr )
 	{
-		$newArr = new KalturaBatchJobArray();
+		$newArr = new VidiunBatchJobArray();
 		if ( is_array ( $arr ) )
 		{
 			foreach ( $arr as $obj )
 			{
-				$nObj = new KalturaBatchJob();
+				$nObj = new VidiunBatchJob();
 				$nObj->fromBatchJob($obj);
 				$newArr[] = $nObj;
 			}
@@ -39,7 +39,7 @@ class KalturaBatchJobArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaBatchJob" );
+		return parent::__construct ( "VidiunBatchJob" );
 	}
 }
 ?>

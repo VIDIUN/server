@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaElasticSearchDataContributor extends IKalturaBase
+interface IVidiunElasticSearchDataContributor extends IVidiunBase
 {
     /**
      * Return elasticsearch data to be associated with the object

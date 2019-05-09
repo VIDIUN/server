@@ -7,8 +7,8 @@
  * @subpackage api.objects
  *
  */
-abstract class KalturaBulkServiceData extends KalturaObject
+abstract class VidiunBulkServiceData extends VidiunObject
 {
 	abstract public function getType ();
-	abstract public function toBulkUploadJobData(KalturaBulkUploadJobData $jobData);
+	abstract public function toBulkUploadJobData(VidiunBulkUploadJobData $jobData);
 }

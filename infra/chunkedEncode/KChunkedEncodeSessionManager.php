@@ -6,9 +6,9 @@
 //ini_set("memory_limit","2048M");
 
 	/****************************
-	 * KChunkedEncodeJobData
+	 * VChunkedEncodeJobData
 	 */
-	class KChunkedEncodeJobData
+	class VChunkedEncodeJobData
 	{
 		const STATE_PENDING = 0;
 		const STATE_RUNNING = 1;
@@ -69,13 +69,13 @@
 		}
 	}
 	/*****************************
-	 * End of KChunkedEncodeJobData
+	 * End of VChunkedEncodeJobData
 	 *****************************/
 	
 	/****************************
-	 * KChunkedEncodeJobsContainer
+	 * VChunkedEncodeJobsContainer
 	 */
-	class KChunkedEncodeJobsContainer {
+	class VChunkedEncodeJobsContainer {
 		public $jobs = array();
 		public $failed = array();
 		public $states = array();
@@ -85,14 +85,14 @@
 		 */
 		public function sumJobsStates()
 		{
-			$states = array(KChunkedEncodeJobData::STATE_PENDING=>0,
-							KChunkedEncodeJobData::STATE_RUNNING=>0,
-							KChunkedEncodeJobData::STATE_SUCCESS=>0,
-							KChunkedEncodeJobData::STATE_FAIL=>0,
-							KChunkedEncodeJobData::STATE_RETRY=>0);
+			$states = array(VChunkedEncodeJobData::STATE_PENDING=>0,
+							VChunkedEncodeJobData::STATE_RUNNING=>0,
+							VChunkedEncodeJobData::STATE_SUCCESS=>0,
+							VChunkedEncodeJobData::STATE_FAIL=>0,
+							VChunkedEncodeJobData::STATE_RETRY=>0);
 			foreach($this->jobs as $job){
 				$states[$job->state] = $states[$job->state]+1;
-				if($job->state==KChunkedEncodeJobData::STATE_FAIL) {
+				if($job->state==VChunkedEncodeJobData::STATE_FAIL) {
 					if(!array_key_exists($job->id, $this->failed)){
 						$this->failed[$job->id] = $job->keyIdx;
 					}
@@ -135,7 +135,7 @@
 						 * when scheduler skips over a valid job in the queue
 						 */
 					if($job->keyIdx<$chunkedEncodeReadIdx-1) {
-						KalturaLog::log("Potential 'job skip' case - jobId:$job->id,state: $job->state,jobKeyIdx:$job->keyIdx,rdIdx:$chunkedEncodeReadIdx");
+						VidiunLog::log("Potential 'job skip' case - jobId:$job->id,state: $job->state,jobKeyIdx:$job->keyIdx,rdIdx:$chunkedEncodeReadIdx");
 
 						/*
 						 * Try 10 attempts to re-fetch the 'skipped' job -
@@ -147,7 +147,7 @@
 							if($job===false || !(($job->startTime==0 || $job->state==$job::STATE_RETRY))){
 								break;
 							}
-							KalturaLog::log("Attempt($try) to refetch job ($job->id)");
+							VidiunLog::log("Attempt($try) to refetch job ($job->id)");
 							sleep(1);
 						}
 						/*
@@ -155,14 +155,14 @@
 						 */
 						if($job===false) {
 							$job = $this->jobs[$idx];
-							KalturaLog::log("Retry chunk ($job->id) - failed to fetch job (jobKeyIdx:$job->keyIdx,state: $job->state,rdIdx:$chunkedEncodeReadIdx)");
+							VidiunLog::log("Retry chunk ($job->id) - failed to fetch job (jobKeyIdx:$job->keyIdx,state: $job->state,rdIdx:$chunkedEncodeReadIdx)");
 							$this->retryJob($manager, $this->jobs[$idx]);
 						}
 						/*
 						 * if the job still 'skipped' - push the job into the jobs queue
 						 */
 						else if($try==$maxTry) {
-							KalturaLog::log("Retry chunk ($job->id) - skipped by the chunk job scheduler (jobKeyIdx:$job->keyIdx,state: $job->state,rdIdx:$chunkedEncodeReadIdx)");
+							VidiunLog::log("Retry chunk ($job->id) - skipped by the chunk job scheduler (jobKeyIdx:$job->keyIdx,state: $job->state,rdIdx:$chunkedEncodeReadIdx)");
 							$this->retryJob($manager, $job);
 						}
 					}
@@ -172,7 +172,7 @@
 				if($elapsed>$maxExecutionTime) {
 					if(!array_key_exists($job->id, $this->failed)){
 						$this->retryJob($manager, $job);
-						KalturaLog::log("Retry chunk ($job->id) - failed on execution timeout ($elapsed sec, maxExecutionTime:$maxExecutionTime");
+						VidiunLog::log("Retry chunk ($job->id) - failed on execution timeout ($elapsed sec, maxExecutionTime:$maxExecutionTime");
 					}
 				}
 			}
@@ -191,13 +191,13 @@
 		
 	}
 	/*****************************
-	 * End of KChunkedEncodeJobsContainer
+	 * End of VChunkedEncodeJobsContainer
 	 *****************************/
 
 	 /****************************
-	 * KChunkedEncodeSessionManager
+	 * VChunkedEncodeSessionManager
 	 */
-	class KChunkedEncodeSessionManager extends KBaseChunkedEncodeSessionManager 
+	class VChunkedEncodeSessionManager extends VBaseChunkedEncodeSessionManager 
 	{
 			/*
 			 * Video/Audio chunk jobs, indexed with chunk id
@@ -210,7 +210,7 @@
 		/* ---------------------------
 		 * C'tor
 		 */
-		public function __construct(KChunkedEncodeSetup $setup, $storeManager, $name=null)
+		public function __construct(VChunkedEncodeSetup $setup, $storeManager, $name=null)
 		{
 			parent::__construct($setup, $name);
 			if(!isset($this->chunker->setup->concurrent))
@@ -218,8 +218,8 @@
 			
 			$this->storeManager = $storeManager;
 
-			$this->videoJobs = new KChunkedEncodeJobsContainer();	
-			$this->audioJobs = new KChunkedEncodeJobsContainer();
+			$this->videoJobs = new VChunkedEncodeJobsContainer();	
+			$this->audioJobs = new VChunkedEncodeJobsContainer();
 		}
 
 		/* ---------------------------
@@ -263,10 +263,10 @@
 		{
 			$videoStats = $this->videoJobs->states;
 			$audioStats = $this->audioJobs->states;
-			$finished = $videoStats[KChunkedEncodeJobData::STATE_SUCCESS] +
-						$videoStats[KChunkedEncodeJobData::STATE_FAIL] +
-						$audioStats[KChunkedEncodeJobData::STATE_SUCCESS] +
-						$audioStats[KChunkedEncodeJobData::STATE_FAIL];
+			$finished = $videoStats[VChunkedEncodeJobData::STATE_SUCCESS] +
+						$videoStats[VChunkedEncodeJobData::STATE_FAIL] +
+						$audioStats[VChunkedEncodeJobData::STATE_SUCCESS] +
+						$audioStats[VChunkedEncodeJobData::STATE_FAIL];
 			return ($finished==(count($this->videoCmdLines)+count($this->audioCmdLines)));
 		}
 		
@@ -289,8 +289,8 @@
 				sleep(2);
 				$tm = microtime(true);
 				
-				$running = $this->videoJobs->states[KChunkedEncodeJobData::STATE_RUNNING]
-						 + $this->audioJobs->states[KChunkedEncodeJobData::STATE_RUNNING];
+				$running = $this->videoJobs->states[VChunkedEncodeJobData::STATE_RUNNING]
+						 + $this->audioJobs->states[VChunkedEncodeJobData::STATE_RUNNING];
 				$elapsed = round(($tm-$curr)*1000);
 				if(!array_key_exists($running, $this->concurrencyHistogram)){
 					$this->concurrencyHistogram[$running] = $elapsed;
@@ -314,7 +314,7 @@
 			foreach($videoJobs as $job) {
 				$chunker->updateChunkFileStatData($job->id,$job->stat); 
 				$logFilename = $chunker->getChunkName($job->id,".log");
-				$execData = new KProcessExecutionData($job->process, $logFilename);
+				$execData = new VProcessExecutionData($job->process, $logFilename);
 				$execData->startedAt = $job->startTime;
 				$this->chunkExecutionDataArr[$job->id] = $execData;
 			}
@@ -351,12 +351,12 @@
 		protected function processFailed()
 		{
 			if(count($this->videoJobs->failed)>$this->maxFailures) {
-				KalturaLog::log("FAILED - too many failures per session (".count($this->videoJobs->failed)
+				VidiunLog::log("FAILED - too many failures per session (".count($this->videoJobs->failed)
 .", maxFailures:$this->maxFailures)");
 				return false;
 			}
 			if(count($this->videoJobs->failed)>0)
-				KalturaLog::log("Retrying failed chunks(".count($this->videoJobs->failed).")");
+				VidiunLog::log("Retrying failed chunks(".count($this->videoJobs->failed).")");
 
 			foreach($this->videoJobs->failed as $idx=>$keyIdx){
 				$job = $this->videoJobs->jobs[$idx];
@@ -390,38 +390,38 @@
 		protected function processVideoJobs()
 		{
 			if($this->fetch()==false) {
-				KalturaLog::log($msgStr="Session($this->name) - Result:FAILED to fetch chunk jobs!");
+				VidiunLog::log($msgStr="Session($this->name) - Result:FAILED to fetch chunk jobs!");
 				$this->returnMessages[] = $msgStr;
-				$this->returnStatus = KChunkedEncodeReturnStatus::GenerateVideoError;
+				$this->returnStatus = VChunkedEncodeReturnStatus::GenerateVideoError;
 				return false;			
 			}
 			
 			$writeIndex = $readIndex = null;
 			if($this->storeManager->fetchReadWriteIndexes($writeIndex, $readIndex)===false){
-				KalturaLog::log($msgStr="Session($this->name) - Result:FAILED could not get RD/WR indexes!");
+				VidiunLog::log($msgStr="Session($this->name) - Result:FAILED could not get RD/WR indexes!");
 				$this->returnMessages[] = $msgStr;
-				$this->returnStatus = KChunkedEncodeReturnStatus::GenerateVideoError;
+				$this->returnStatus = VChunkedEncodeReturnStatus::GenerateVideoError;
 				return false;
 			}
 			
 			if($this->detectErrors($readIndex)===false){
-				KalturaLog::log($msgStr="Session($this->name) - Result:FAILED could not get RD/WR indexes!");
+				VidiunLog::log($msgStr="Session($this->name) - Result:FAILED could not get RD/WR indexes!");
 				$this->returnMessages[] = $msgStr;
-				$this->returnStatus = KChunkedEncodeReturnStatus::GenerateVideoError;
+				$this->returnStatus = VChunkedEncodeReturnStatus::GenerateVideoError;
 				return false;			
 			}
 
 			$videoStats = $this->videoJobs->states;
 			$audioStats = $this->audioJobs->states;
 
-			$pending = $videoStats[KChunkedEncodeJobData::STATE_PENDING]
-					 + $audioStats[KChunkedEncodeJobData::STATE_PENDING];
-			$running = $videoStats[KChunkedEncodeJobData::STATE_RUNNING]
-					 + $audioStats[KChunkedEncodeJobData::STATE_RUNNING];
-			$succeed = $videoStats[KChunkedEncodeJobData::STATE_SUCCESS]
-					 + $audioStats[KChunkedEncodeJobData::STATE_SUCCESS];
-			$failed  = $videoStats[KChunkedEncodeJobData::STATE_FAIL]
-					 + $audioStats[KChunkedEncodeJobData::STATE_FAIL];
+			$pending = $videoStats[VChunkedEncodeJobData::STATE_PENDING]
+					 + $audioStats[VChunkedEncodeJobData::STATE_PENDING];
+			$running = $videoStats[VChunkedEncodeJobData::STATE_RUNNING]
+					 + $audioStats[VChunkedEncodeJobData::STATE_RUNNING];
+			$succeed = $videoStats[VChunkedEncodeJobData::STATE_SUCCESS]
+					 + $audioStats[VChunkedEncodeJobData::STATE_SUCCESS];
+			$failed  = $videoStats[VChunkedEncodeJobData::STATE_FAIL]
+					 + $audioStats[VChunkedEncodeJobData::STATE_FAIL];
 			
 			$concurrent = $pending+$running;
 			$finished   = $succeed+$failed;
@@ -439,18 +439,18 @@
 				$msgStr.= "vi.ld:$loaded, el:".($this->getElapsed())."s";
 				$msgStr.= ", conc:".round($this->concurrencyAccum/(microtime(true)-$this->createTime)/1000,2);
 				if(count($this->videoJobs->failed)>0) $msgStr.= ", failedJobs:".serialize($this->videoJobs->failed);
-				KalturaLog::log($msgStr);
+				VidiunLog::log($msgStr);
 			}
 			
 			if($this->IsFinished() && $failed==0) {
-				KalturaLog::log("Session($this->name) - Result:SUCCESS! (jobs:$succeed,elapsed:".($this->getElapsed())."sec)");
+				VidiunLog::log("Session($this->name) - Result:SUCCESS! (jobs:$succeed,elapsed:".($this->getElapsed())."sec)");
 				return true;
 			}
 
 			if($this->processFailed()==false){
-				KalturaLog::log($msgStr="Session($this->name) - Result:FAILED too many failed chunks!");
+				VidiunLog::log($msgStr="Session($this->name) - Result:FAILED too many failed chunks!");
 				$this->returnMessages[] = $msgStr;
-				$this->returnStatus = KChunkedEncodeReturnStatus::GenerateVideoError;
+				$this->returnStatus = VChunkedEncodeReturnStatus::GenerateVideoError;
 				return false;			
 			}
 
@@ -467,15 +467,15 @@
 					$newConcurrency = min(5,$this->chunker->setup->concurrent);
 				else 
 					$newConcurrency = min(2,$this->chunker->setup->concurrent);
-				KalturaLog::log("Session($this->name)-chkQu: Q:$globalChunkQueueSize,maxConcurr:".$this->chunker->setup->concurrent.",newConcurr:$newConcurrency, rdIdx:$readIndex, wrIdx:$writeIndex");
+				VidiunLog::log("Session($this->name)-chkQu: Q:$globalChunkQueueSize,maxConcurr:".$this->chunker->setup->concurrent.",newConcurr:$newConcurrency, rdIdx:$readIndex, wrIdx:$writeIndex");
 			}
 			
 			while($loaded<count($this->videoCmdLines)) {
 				$cnt = $this->addVideoJobs($concurrent,$newConcurrency);
 				if($cnt===false) {
-					KalturaLog::log($msgStr="Session($this->name) - Result:FAILED to add jobs");
+					VidiunLog::log($msgStr="Session($this->name) - Result:FAILED to add jobs");
 					$this->returnMessages[] = $msgStr;
-					$this->returnStatus = KChunkedEncodeReturnStatus::GenerateVideoError;
+					$this->returnStatus = VChunkedEncodeReturnStatus::GenerateVideoError;
 					return false;
 				}
 				if($cnt==0) {
@@ -492,13 +492,13 @@
 		 */
 		protected function addVideoJobs($concurrent,$newConcurrency)
 		{
-			KalturaLog::log("Session($this->name) - concurrent:$concurrent, newConcurrency:$newConcurrency");
+			VidiunLog::log("Session($this->name) - concurrent:$concurrent, newConcurrency:$newConcurrency");
 			
 			$startChunk = count($this->videoJobs->jobs);
 			$chunksToProcess = count($this->videoCmdLines)-$startChunk;
 			
 			if($chunksToProcess<1){
-				KalturaLog::log("Session($this->name) - Bad positioning/count settings");
+				VidiunLog::log("Session($this->name) - Bad positioning/count settings");
 				return false;
 			}
 
@@ -508,7 +508,7 @@
 			{
 				if(($concurrent+$chunksToProcess)>$newConcurrency) {
 					if($newConcurrency-$concurrent<1){
-						KalturaLog::log("Session($this->name) - Reached max concurrent jobs per session($newConcurrency), toProcess:$chunksToProcess,concurrent:$concurrent");
+						VidiunLog::log("Session($this->name) - Reached max concurrent jobs per session($newConcurrency), toProcess:$chunksToProcess,concurrent:$concurrent");
 						return 0;
 					}
 					else
@@ -533,7 +533,7 @@
 				$jobIdx = $idx;
 				$job = $this->addJob($jobIdx, $cmdLine);
 				if($job===false) {
-					KalturaLog::log("Session($this->name) - Failed to add job($jobIdx)");
+					VidiunLog::log("Session($this->name) - Failed to add job($jobIdx)");
 					return false;
 				}
 				$this->audioJobs->jobs[$idx] = $job;
@@ -549,17 +549,17 @@
 			if($job->state==$job::STATE_PENDING || $job->state==$job::STATE_RUNNING) {
 				return true;
 			}
-			KalturaLog::log("Job dump:".serialize($job));
+			VidiunLog::log("Job dump:".serialize($job));
 			if(array_key_exists($job->id, $this->audioJobs->jobs) && $this->audioJobs->jobs[$job->id]->process==$job->process)
 				$logFilename = $this->chunker->getSessionName("audio").".log";		
 			else 
 				$logFilename = $this->chunker->getChunkName($job->id,".log");
 			$logTail = self::getLogTail($logFilename);
 			if(isset($logTail))
-				KalturaLog::log("Log dump:\n".$logTail);
+				VidiunLog::log("Log dump:\n".$logTail);
 			
 			if(isset($job->attempt) && $job->attempt>$this->maxRetries){
-				KalturaLog::log("FAILED - job id($job->id) exeeded retry limit ($job->attempt, max:$this->maxRetries)");
+				VidiunLog::log("FAILED - job id($job->id) exeeded retry limit ($job->attempt, max:$this->maxRetries)");
 				return false;
 			}
 			$failedIdx = $job->keyIdx;
@@ -569,10 +569,10 @@
 			$job->state = $job::STATE_PENDING;
 			$job->attempt++;
 			if($this->storeManager->AddJob($job)===false) {
-				KalturaLog::log("FAILED to retry job($job->id)");
+				VidiunLog::log("FAILED to retry job($job->id)");
 				return false;
 			}
-			KalturaLog::log("Retry chunk ($job->id, failedKey:$failedIdx,newKey:$job->keyIdx, attempt:$job->attempt");
+			VidiunLog::log("Retry chunk ($job->id, failedKey:$failedIdx,newKey:$job->keyIdx, attempt:$job->attempt");
 			return true;
 		}
 
@@ -581,35 +581,35 @@
 		 */
 		protected function addJobs($startChunk, $countChunks, &$jobs)
 		{
-			KalturaLog::log("Session($this->name) - params:startChunk($startChunk), countChunks($countChunks)");
+			VidiunLog::log("Session($this->name) - params:startChunk($startChunk), countChunks($countChunks)");
 			
 			$cmdLines = $this->videoCmdLines;
 			if($countChunks>count($cmdLines)){
-				KalturaLog::log("Session($this->name) - Invalid countChunks($countChunks), larger than num of cmdlines (".count($cmdLines).")");
+				VidiunLog::log("Session($this->name) - Invalid countChunks($countChunks), larger than num of cmdlines (".count($cmdLines).")");
 				return false;
 			}
 			
 			if($startChunk+$countChunks>count($cmdLines)){
-				KalturaLog::log("Session($this->name) - Invalid startChunk($startChunk), final position larger than num of cmdlines (".count($cmdLines).")");
+				VidiunLog::log("Session($this->name) - Invalid startChunk($startChunk), final position larger than num of cmdlines (".count($cmdLines).")");
 				return false;
 			}
 			
 			for($jobIdx = $startChunk; $jobIdx<$startChunk+$countChunks; $jobIdx++) {
 				if(!array_key_exists($jobIdx, $cmdLines)){
-					KalturaLog::log("Session($this->name) - Bad cmd-lines index ($jobIdx)");
+					VidiunLog::log("Session($this->name) - Bad cmd-lines index ($jobIdx)");
 					return false;
 				}
 
 				$job = $this->addJob($jobIdx, $cmdLines[$jobIdx]);
 				if($job===false) {
-					KalturaLog::log("Session($this->name) - Failed to add job($jobIdx)");
+					VidiunLog::log("Session($this->name) - Failed to add job($jobIdx)");
 					return false;
 				}
 				$jobs[$job->id] = $job;
 			}
 
 			$cnt = $jobIdx - $startChunk;
-			KalturaLog::log("Session($this->name) - Added ($cnt) jobs");
+			VidiunLog::log("Session($this->name) - Added ($cnt) jobs");
 			
 			return $cnt;
 		}
@@ -619,7 +619,7 @@
 		 */
 		protected function addJob($jobIdx, $cmdLine)
 		{
-			$job = new KChunkedEncodeJobData($this->name, $jobIdx, $cmdLine, $this->createTime);
+			$job = new VChunkedEncodeJobData($this->name, $jobIdx, $cmdLine, $this->createTime);
 			if($this->storeManager->AddJob($job)===false) {
 				return false;
 			}
@@ -634,13 +634,13 @@
 			$cmdLine = "time $cmdLine >> $logFile 2>&1 ";
 			$started = time();
 			file_put_contents($logFile, "Started:".date('Y-m-d H:i:s', $started)."\n");
-			KalturaLog::log("cmdLine:\n$cmdLine\n");
+			VidiunLog::log("cmdLine:\n$cmdLine\n");
 			return parent::executeCmdline($cmdLine);
 		}
 
 
 	}
 	/*****************************
-	 * End of KChunkedEncodeSessionManager
+	 * End of VChunkedEncodeSessionManager
 	 *****************************/
 	

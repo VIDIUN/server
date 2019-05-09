@@ -3,19 +3,19 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveEntryServerNode extends KalturaEntryServerNode 
+class VidiunLiveEntryServerNode extends VidiunEntryServerNode 
 {
 	const MAX_BITRATE_PERCENTAGE_DIFF_ALLOWED = 10;
 	const MAX_FRAMERATE_PERCENTAGE_DIFF_ALLOWED = 15;
 	
 	/**
 	 * parameters of the stream we got
-	 * @var KalturaLiveStreamParamsArray
+	 * @var VidiunLiveStreamParamsArray
 	 */
 	public $streams;
 
 	/**
-	 * @var KalturaLiveEntryServerNodeRecordingInfoArray
+	 * @var VidiunLiveEntryServerNodeRecordingInfoArray
 	 */
 	public $recordingInfo;
 
@@ -33,7 +33,7 @@ class KalturaLiveEntryServerNode extends KalturaEntryServerNode
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -50,12 +50,12 @@ class KalturaLiveEntryServerNode extends KalturaEntryServerNode
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate()
+	 * @see VidiunObject::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
 		$dbStreamsInfo = $sourceObject ? $sourceObject->getStreams() : array();
-		$inputStreamsInfo = isset($this->streams) ? $this->streams : new KalturaLiveStreamParamsArray();
+		$inputStreamsInfo = isset($this->streams) ? $this->streams : new VidiunLiveStreamParamsArray();
 		
 		if(count($dbStreamsInfo) === count($inputStreamsInfo))
 		{
@@ -74,8 +74,8 @@ class KalturaLiveEntryServerNode extends KalturaEntryServerNode
 		foreach ($inputStreamsInfo as $flavorId => $flavorInfo)
 		{
 			$dbStreamInfo = $dbStreamsInfo[$flavorId] ? $dbStreamsInfo[$flavorId] : null;
-			/* @var $dbStreamInfo kLiveStreamParams */
-			/* @var $flavorInfo kLiveStreamParams */
+			/* @var $dbStreamInfo vLiveStreamParams */
+			/* @var $flavorInfo vLiveStreamParams */
 			if(!$dbStreamInfo)
 			{
 				$clearInputStreamInfo = false;
@@ -106,7 +106,7 @@ class KalturaLiveEntryServerNode extends KalturaEntryServerNode
 		$result = array();
 		foreach($streamInfo as $info)
 		{
-			/* @var $info kLiveStreamParams */
+			/* @var $info vLiveStreamParams */
 			$result[$info->getFlavorId()] = $info;
 		}
 		

@@ -4,12 +4,12 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaImportHandler extends IKalturaBase
+interface IVidiunImportHandler extends IVidiunBase
 {
 	/**
 	 * This method makes an intermediate change to the imported file or its related data under certain conditions.
-	 * @param KCurlHeaderResponse $curlInfo
-	 * @param KalturaImportJobData $importData
+	 * @param VCurlHeaderResponse $curlInfo
+	 * @param VidiunImportJobData $importData
 	 * @param Object $params
 	 */
 	public static function handleImportContent($curlInfo, $importData, $params);	

@@ -9,7 +9,7 @@ $config = realpath(dirname(__FILE__)) . '/xml/responseProfiles/2019_02_14_update
 
 if(!file_exists($config))
 {
-	KalturaLog::err("Missing update script file");
+	VidiunLog::err("Missing update script file");
 	return;
 }
 

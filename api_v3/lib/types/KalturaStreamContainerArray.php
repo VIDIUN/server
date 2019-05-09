@@ -3,17 +3,17 @@
  * @package api
  * @subpackage objects
  */
-class KalturaStreamContainerArray extends KalturaTypedArray
+class VidiunStreamContainerArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaStreamContainerArray();
+		$newArr = new VidiunStreamContainerArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-			$stream = new KalturaStreamContainer();
+			$stream = new VidiunStreamContainer();
 			$stream->fromObject( $obj, $responseProfile );
 			$newArr[] = $stream;
 		}
@@ -23,6 +23,6 @@ class KalturaStreamContainerArray extends KalturaTypedArray
 
 	public function __construct()
 	{
-		parent::__construct("KalturaStreamContainer");
+		parent::__construct("VidiunStreamContainer");
 	}
 }

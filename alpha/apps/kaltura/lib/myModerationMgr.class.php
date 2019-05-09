@@ -1,7 +1,7 @@
 <?php
 class myModerationMgr
 {
-	public static function addToModerationList ( $object , $moderator_kuser_id = null , $status = null )
+	public static function addToModerationList ( $object , $moderator_vuser_id = null , $status = null )
 	{
 		if ( $object instanceof entry)
 		{
@@ -17,9 +17,9 @@ class myModerationMgr
 			$moderation->save();
 			 
 		}
-		elseif ( $object instanceof kshow)
+		elseif ( $object instanceof vshow)
 		{
-			throw new Exception ( "TO BE IMPLEMENTED addToModerationList - for type kshow");
+			throw new Exception ( "TO BE IMPLEMENTED addToModerationList - for type vshow");
 		}
 		else
 		{
@@ -57,9 +57,9 @@ class myModerationMgr
 			return moderationPeer::doUpdateAllModerations($c, $new_status );
 					 
 		}
-		elseif ( $object instanceof kshow)
+		elseif ( $object instanceof vshow)
 		{
-			throw new Exception ( "TO BE IMPLEMENTED addToModerationList - for type kshow");
+			throw new Exception ( "TO BE IMPLEMENTED addToModerationList - for type vshow");
 		}
 		else
 		{

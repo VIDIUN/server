@@ -14,7 +14,7 @@ class getmetadataAction extends defPartnerservices2Action
 				"in" => array (
 					"mandatory" => array ( 
 						"entry_id" => array ("type" => "string", "desc" => ""),
-						"kshow_id" => array ("type" => "string", "desc" => ""),
+						"vshow_id" => array ("type" => "string", "desc" => ""),
 						"version"  => array ("type" => "string", "desc" => "")
 						),
 					"optional" => array (
@@ -24,25 +24,25 @@ class getmetadataAction extends defPartnerservices2Action
 					"metadata" => array ("type" => "xml", "desc" => "")
 					),
 				"errors" => array (
-					APIErrors::INVALID_KSHOW_ID , 
+					APIErrors::INVALID_VSHOW_ID , 
 					APIErrors::INVALID_ENTRY_ID ,
 					APIErrors::INVALID_FILE_NAME , 
 				)
 			); 		
 	}
 	
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER;	}
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER;	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$entry_id = $this->getP ( "entry_id" );
-		$kshow_id =  $this->getP ( "kshow_id" );
+		$vshow_id =  $this->getP ( "vshow_id" );
 		
 		// Make sure the request is for a ready roughcut
 		$c = entryPeer::getCriteriaFilter()->getFilter();
 		$c->addAnd ( entryPeer::STATUS, entryStatus::READY , Criteria::EQUAL);
 				
-		list ( $kshow , $entry , $error , $error_obj ) = myKshowUtils::getKshowAndEntry( $kshow_id  , $entry_id );
+		list ( $vshow , $entry , $error , $error_obj ) = myVshowUtils::getVshowAndEntry( $vshow_id  , $entry_id );
 
 		if ( $error_obj )
 		{
@@ -51,7 +51,7 @@ class getmetadataAction extends defPartnerservices2Action
 		}
 
 		$version = $this->getP ( "version" ); // it's a path on the disk
-		if ( kString::beginsWith( $version , "." ) )
+		if ( vString::beginsWith( $version , "." ) )
 		{
 			// someone is trying to hack in the system 
 			return sfView::ERROR;	
@@ -59,7 +59,7 @@ class getmetadataAction extends defPartnerservices2Action
 		elseif ( $version == "-1" ) $version = null;
 				
 			// in case we're making a roughcut out of a regular invite, we start from scratch
-		$entry_data_path = kFileSyncUtils::getLocalFilePathForKey($entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA, $version)); //replaced__getDataPath
+		$entry_data_path = vFileSyncUtils::getLocalFilePathForKey($entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA, $version)); //replaced__getDataPath
 		if ($entry->getMediaType() != entry::ENTRY_MEDIA_TYPE_SHOW || $entry_data_path === null)
 		{
 			$this->xml_content = "<xml></xml>"; 
@@ -67,12 +67,12 @@ class getmetadataAction extends defPartnerservices2Action
 		}
 
 		$sync_key = $entry->getSyncKey ( entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA , $version );
-		$file_name = kFileSyncUtils::getReadyLocalFilePathForKey( $sync_key , false );
+		$file_name = vFileSyncUtils::getReadyLocalFilePathForKey( $sync_key , false );
 			
 		// fetch content of file from disk - it should hold the XML
-		if ( kString::endsWith( $file_name  , "xml" ))
+		if ( vString::endsWith( $file_name  , "xml" ))
 		{
-			$xml_content = kFileSyncUtils::file_get_contents( $sync_key , false  , false );
+			$xml_content = vFileSyncUtils::file_get_contents( $sync_key , false  , false );
 			if ( ! $xml_content)
 			{
 				$xml_content = "<xml></xml>"; 

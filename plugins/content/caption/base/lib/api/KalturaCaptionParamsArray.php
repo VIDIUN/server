@@ -3,17 +3,17 @@
  * @package plugins.caption
  * @subpackage api.objects
  */
-class KalturaCaptionParamsArray extends KalturaTypedArray
+class VidiunCaptionParamsArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaCaptionParamsArray();
+		$newArr = new VidiunCaptionParamsArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-			$nObj = KalturaAssetParamsFactory::getAssetParamsInstance($obj->getType());
+			$nObj = VidiunAssetParamsFactory::getAssetParamsInstance($obj->getType());
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaCaptionParamsArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaCaptionParams");	
+		parent::__construct("VidiunCaptionParams");	
 	}
 }

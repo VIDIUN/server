@@ -3,6 +3,6 @@
  * @package api
  * @subpackage objects
  */
-class KalturaMediaFlavorParamsOutput extends KalturaFlavorParamsOutput 
+class VidiunMediaFlavorParamsOutput extends VidiunFlavorParamsOutput 
 {
 }

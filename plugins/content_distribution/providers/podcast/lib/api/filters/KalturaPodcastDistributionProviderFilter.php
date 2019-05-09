@@ -3,6 +3,6 @@
  * @package plugins.podcastDistribution
  * @subpackage api.filters
  */
-class KalturaPodcastDistributionProviderFilter extends KalturaPodcastDistributionProviderBaseFilter
+class VidiunPodcastDistributionProviderFilter extends VidiunPodcastDistributionProviderBaseFilter
 {
 }

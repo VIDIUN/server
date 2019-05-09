@@ -5,7 +5,7 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class KalturaEmailNotificationGroupRecipientProvider extends KalturaEmailNotificationRecipientProvider
+class VidiunEmailNotificationGroupRecipientProvider extends VidiunEmailNotificationRecipientProvider
 {
 	/**
 	 * @var string
@@ -17,7 +17,7 @@ class KalturaEmailNotificationGroupRecipientProvider extends KalturaEmailNotific
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -25,12 +25,12 @@ class KalturaEmailNotificationGroupRecipientProvider extends KalturaEmailNotific
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kEmailNotificationGroupRecipientProvider();
+			$dbObject = new vEmailNotificationGroupRecipientProvider();
 			
 		return parent::toObject($dbObject, $propertiesToSkip);
 	}

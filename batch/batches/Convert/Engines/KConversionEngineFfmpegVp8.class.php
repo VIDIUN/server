@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage Conversion.engines
  */
-class KConversionEngineFfmpegVp8  extends KConversionEngineFfmpeg
+class VConversionEngineFfmpegVp8  extends VConversionEngineFfmpeg
 {
 	const FFMPEG_VP8 = "ffmpeg_vp8";
 	
@@ -14,11 +14,11 @@ class KConversionEngineFfmpegVp8  extends KConversionEngineFfmpeg
 	
 	public function getType()
 	{
-		return KalturaConversionEngineType::FFMPEG_VP8;
+		return VidiunConversionEngineType::FFMPEG_VP8;
 	}
 	
 	public function getCmd ()
 	{
-		return KBatchBase::$taskConfig->params->ffmpegVp8Cmd;
+		return VBatchBase::$taskConfig->params->ffmpegVp8Cmd;
 	}
 }

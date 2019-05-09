@@ -3,7 +3,7 @@
  * @package plugins.attachment
  * @subpackage api.errors
  */
-class KalturaLikeErrors extends KalturaErrors
+class VidiunLikeErrors extends VidiunErrors
 {
 	const USER_LIKE_FOR_ENTRY_ALREADY_EXISTS = "USER_LIKE_FOR_ENTRY_ALREADY_EXISTS;;This user already likes this entry";
 	

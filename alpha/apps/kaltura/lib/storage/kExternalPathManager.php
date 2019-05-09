@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage storage
  */
-class kExternalPathManager extends kPathManager
+class vExternalPathManager extends vPathManager
 {
 	/**
 	 * will return a pair of file_root and file_path
@@ -15,7 +15,7 @@ class kExternalPathManager extends kPathManager
 	 */
 	public function generateFilePathArr(ISyncableFile $object, $subType, $version = null, $storageProfileId = null)
 	{
-		$storageProfile = kPathManager::getStorageProfile($storageProfileId);
+		$storageProfile = vPathManager::getStorageProfile($storageProfileId);
 		$path_format = $storageProfile->getPathFormat();
 		
 		if (is_null($path_format))

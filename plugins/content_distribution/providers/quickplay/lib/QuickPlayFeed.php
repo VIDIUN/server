@@ -18,17 +18,17 @@ class QuickPlayFeed
 	protected $_xpath;
 	
 	/**
-	 * @var KalturaDistributionJobData
+	 * @var VidiunDistributionJobData
 	 */
 	protected $_distributionJobData;
 	
 	/**
-	 * @var KalturaQuickPlayDistributionProfile
+	 * @var VidiunQuickPlayDistributionProfile
 	 */
 	protected $_distributionProfile;
 	
 	/**
-	 * @var KalturaQuickPlayDistributionJobProviderData
+	 * @var VidiunQuickPlayDistributionJobProviderData
 	 */
 	protected $_providerData;
 	
@@ -49,16 +49,16 @@ class QuickPlayFeed
 	
 	/**
 	 * @param string $templateName
-	 * @param KalturaQuickPlayDistributionProfile $distributionProfile
-	 * @param KalturaQuickPlayDistributionJobProviderData $providerData
+	 * @param VidiunQuickPlayDistributionProfile $distributionProfile
+	 * @param VidiunQuickPlayDistributionJobProviderData $providerData
 	 */
-	public function __construct(KalturaDistributionJobData $distributionJobData, KalturaQuickPlayDistributionJobProviderData $providerData, array $flavorAssets, array $thumbnailAssets, entry $entry)
+	public function __construct(VidiunDistributionJobData $distributionJobData, VidiunQuickPlayDistributionJobProviderData $providerData, array $flavorAssets, array $thumbnailAssets, entry $entry)
 	{
 		$this->_distributionJobData = $distributionJobData;
 		$this->_distributionProfile = $distributionJobData->distributionProfile;
 		$this->_providerData = $providerData;
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml/' . self::TEMPLATE_XML;
-		$this->_doc = new KDOMDocument();
+		$this->_doc = new VDOMDocument();
 		$this->_doc->load($xmlTemplate);
 		$this->_xpath = new DOMXPath($this->_doc);
 		$this->_xpath->registerNamespace('qpm', 'http://www.quickplaymedia.com');
@@ -72,47 +72,47 @@ class QuickPlayFeed
 		if (!$this->_fieldValues) 
 			$this->_fieldValues = array();
 		
-		kXml::setNodeValue($this->_xpath,'/rss/channel/title', $this->_distributionProfile->channelTitle);
-		kXml::setNodeValue($this->_xpath,'/rss/channel/link', $this->_distributionProfile->channelLink);
-		kXml::setNodeValue($this->_xpath,'/rss/channel/description', $this->_distributionProfile->channelDescription);
-		kXml::setNodeValue($this->_xpath,'/rss/channel/managingEditor', $this->_distributionProfile->channelManagingEditor);
-		kXml::setNodeValue($this->_xpath,'/rss/channel/language', $this->_distributionProfile->channelLanguage);
-		kXml::setNodeValue($this->_xpath,'/rss/channel/image/title', $this->_distributionProfile->channelImageTitle);
-		kXml::setNodeValue($this->_xpath,'/rss/channel/image/width', $this->_distributionProfile->channelImageWidth);
-		kXml::setNodeValue($this->_xpath,'/rss/channel/image/height', $this->_distributionProfile->channelImageHeight);
-		kXml::setNodeValue($this->_xpath,'/rss/channel/image/link', $this->_distributionProfile->channelImageLink);
-		kXml::setNodeValue($this->_xpath,'/rss/channel/image/url', $this->_distributionProfile->channelImageUrl);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/title', $this->_distributionProfile->channelTitle);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/link', $this->_distributionProfile->channelLink);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/description', $this->_distributionProfile->channelDescription);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/managingEditor', $this->_distributionProfile->channelManagingEditor);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/language', $this->_distributionProfile->channelLanguage);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/image/title', $this->_distributionProfile->channelImageTitle);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/image/width', $this->_distributionProfile->channelImageWidth);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/image/height', $this->_distributionProfile->channelImageHeight);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/image/link', $this->_distributionProfile->channelImageLink);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/image/url', $this->_distributionProfile->channelImageUrl);
 		
-		kXml::setNodeValue($this->_xpath,'/rss/channel/copyright', $this->_distributionProfile->channelCopyright);
-		$this->setNodeValueDateFieldConfigId('/rss/channel/pubDate', KalturaQuickPlayDistributionField::PUB_DATE);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/copyright', $this->_distributionProfile->channelCopyright);
+		$this->setNodeValueDateFieldConfigId('/rss/channel/pubDate', VidiunQuickPlayDistributionField::PUB_DATE);
 		$this->setNodeValueDate('/rss/channel/lastBuildDate', time());
-		kXml::setNodeValue($this->_xpath,'/rss/channel/generator', $this->_distributionProfile->channelGenerator);
-		kXml::setNodeValue($this->_xpath,'/rss/channel/rating', $this->_distributionProfile->channelRating);
-		kXml::setNodeValue($this->_xpath,'/rss/channel/language', $this->_distributionProfile->channelLanguage);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/generator', $this->_distributionProfile->channelGenerator);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/rating', $this->_distributionProfile->channelRating);
+		vXml::setNodeValue($this->_xpath,'/rss/channel/language', $this->_distributionProfile->channelLanguage);
 		
 
-		$this->setNodeValueFieldConfigId('/rss/channel/item/title', KalturaQuickPlayDistributionField::TITLE);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/description', KalturaQuickPlayDistributionField::DESCRIPTION);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/guid', KalturaQuickPlayDistributionField::GUID);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/category', KalturaQuickPlayDistributionField::CATEGORY);
-		$this->setNodeValueDateFieldConfigId('/rss/channel/item/pubDate', KalturaQuickPlayDistributionField::PUB_DATE);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:keywords', KalturaQuickPlayDistributionField::QPM_KEYWORDS);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:priceID', KalturaQuickPlayDistributionField::QPM_PRICE_ID);
-		$this->setNodeValueDateFieldConfigId('/rss/channel/item/qpm:updateDate', KalturaQuickPlayDistributionField::QPM_UPDATE_DATE);
-		$this->setNodeValueDateFieldConfigId('/rss/channel/item/qpm:expiryDate', KalturaQuickPlayDistributionField::QPM_EXPIRY_DATE);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:sortOrder', KalturaQuickPlayDistributionField::QPM_SORT_ORDER);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:genre', KalturaQuickPlayDistributionField::QPM_GENRE);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:copyright', KalturaQuickPlayDistributionField::QPM_COPYRIGHT);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:artist', KalturaQuickPlayDistributionField::QPM_ARTIST);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:director', KalturaQuickPlayDistributionField::QPM_DIRECTOR);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:producer', KalturaQuickPlayDistributionField::QPM_PRODUCER);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:expDatePadding', KalturaQuickPlayDistributionField::QPM_EXP_DATE_PADDING);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:onDeviceExpirationPadding', KalturaQuickPlayDistributionField::QPM_ON_DEVICE_EXPIRATION_PADDING);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:onDeviceExpiration', KalturaQuickPlayDistributionField::QPM_ON_DEVICE_EXPIRATION);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:groupCategory', KalturaQuickPlayDistributionField::QPM_GROUP_CATEGORY);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:notes', KalturaQuickPlayDistributionField::QPM_NOTES);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:rating/@scheme', KalturaQuickPlayDistributionField::QPM_RATING_SCHEMA);
-		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:rating/@value', KalturaQuickPlayDistributionField::QPM_RATING);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/title', VidiunQuickPlayDistributionField::TITLE);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/description', VidiunQuickPlayDistributionField::DESCRIPTION);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/guid', VidiunQuickPlayDistributionField::GUID);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/category', VidiunQuickPlayDistributionField::CATEGORY);
+		$this->setNodeValueDateFieldConfigId('/rss/channel/item/pubDate', VidiunQuickPlayDistributionField::PUB_DATE);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:keywords', VidiunQuickPlayDistributionField::QPM_KEYWORDS);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:priceID', VidiunQuickPlayDistributionField::QPM_PRICE_ID);
+		$this->setNodeValueDateFieldConfigId('/rss/channel/item/qpm:updateDate', VidiunQuickPlayDistributionField::QPM_UPDATE_DATE);
+		$this->setNodeValueDateFieldConfigId('/rss/channel/item/qpm:expiryDate', VidiunQuickPlayDistributionField::QPM_EXPIRY_DATE);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:sortOrder', VidiunQuickPlayDistributionField::QPM_SORT_ORDER);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:genre', VidiunQuickPlayDistributionField::QPM_GENRE);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:copyright', VidiunQuickPlayDistributionField::QPM_COPYRIGHT);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:artist', VidiunQuickPlayDistributionField::QPM_ARTIST);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:director', VidiunQuickPlayDistributionField::QPM_DIRECTOR);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:producer', VidiunQuickPlayDistributionField::QPM_PRODUCER);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:expDatePadding', VidiunQuickPlayDistributionField::QPM_EXP_DATE_PADDING);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:onDeviceExpirationPadding', VidiunQuickPlayDistributionField::QPM_ON_DEVICE_EXPIRATION_PADDING);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:onDeviceExpiration', VidiunQuickPlayDistributionField::QPM_ON_DEVICE_EXPIRATION);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:groupCategory', VidiunQuickPlayDistributionField::QPM_GROUP_CATEGORY);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:notes', VidiunQuickPlayDistributionField::QPM_NOTES);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:rating/@scheme', VidiunQuickPlayDistributionField::QPM_RATING_SCHEMA);
+		$this->setNodeValueFieldConfigId('/rss/channel/item/qpm:rating/@value', VidiunQuickPlayDistributionField::QPM_RATING);
 
 		$this->removeNodeIfEmpty('/rss/channel/generator');
 		$this->removeNodeIfEmpty('/rss/channel/rating');
@@ -159,7 +159,7 @@ class QuickPlayFeed
 	public function setNodeValueFieldConfigId($xpath, $fieldConfigId, DOMNode $contextnode = null)
 	{
 		if (isset($this->_fieldValues[$fieldConfigId]))
-			kXml::setNodeValue($this->_xpath,$xpath, $this->_fieldValues[$fieldConfigId], $contextnode);
+			vXml::setNodeValue($this->_xpath,$xpath, $this->_fieldValues[$fieldConfigId], $contextnode);
 	}
 	
 	/**
@@ -201,7 +201,7 @@ class QuickPlayFeed
 		// force time zone to GMT
 		$dateTime->setTimezone(new DateTimeZone('GMT'));
 		$date = $dateTime->format('r');
-		kXml::setNodeValue($this->_xpath,$xpath, $date, $contextnode);
+		vXml::setNodeValue($this->_xpath,$xpath, $date, $contextnode);
 	}
 
 	public function removeNodeIfEmpty($xpath)
@@ -261,7 +261,7 @@ class QuickPlayFeed
 		}
 		else
 		{
-			KalturaLog::alert('"Content-Type" header was not found for the following URL: '. $url);
+			VidiunLog::alert('"Content-Type" header was not found for the following URL: '. $url);
 			return null;
 		}
 	}
@@ -292,19 +292,19 @@ class QuickPlayFeed
 		 * We cannot set a namespace that was already defined with a prefix because DOMDocument will add the element
 		 * as "qpm:enclosure" and won't set the namespace explicitly.
 		 * 
-		 * The hack is to create a new KDOMDocument with default namespace "http://www.quickplaymedia.com" and then
+		 * The hack is to create a new VDOMDocument with default namespace "http://www.quickplaymedia.com" and then
 		 * add it to the xml manually (see getXml() method)
 		 * 
 		 */
 		$syncKey = $asset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		$fileSync = kFileSyncUtils::getLocalFileSyncForKey($syncKey);
+		$fileSync = vFileSyncUtils::getLocalFileSyncForKey($syncKey);
 			
 		$contentNode = $this->_enclosureNode->cloneNode(true);
-		kXml::setNodeValue($this->_xpath,'@encodingProfile', $encodingProfile, $contentNode);
+		vXml::setNodeValue($this->_xpath,'@encodingProfile', $encodingProfile, $contentNode);
 		$url = $this->getAssetUrl($asset);
 		$mimeType = $this->getContentTypeFromUrl($url);
 			
-		$enclosureDoc = new KDOMDocument();
+		$enclosureDoc = new VDOMDocument();
 		$enclosureElement = $enclosureDoc->createElementNS('http://www.quickplaymedia.com', 'enclosure');
 		$xmlElement = $enclosureDoc->createElement('xml');
 		$enclosureDoc->appendChild($xmlElement);

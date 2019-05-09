@@ -61,7 +61,7 @@ class AuditTrail extends BaseAuditTrail implements IBaseObject
 	 */
 	public function getDefaultContext() 
 	{
-		switch (kCurrentContext::$ps_vesion) 
+		switch (vCurrentContext::$ps_vesion) 
 		{
 			case 'ps2':
 				return self::AUDIT_TRAIL_CONTEXT_PS2;
@@ -80,7 +80,7 @@ class AuditTrail extends BaseAuditTrail implements IBaseObject
 	public function setObjectType($v)
 	{
 		if(!in_array($v, self::getAllwodObjectTypes()))
-			throw new kAuditTrailException("Object type [$v] not allowed", kAuditTrailException::OBJECT_TYPE_NOT_ALLOWED);
+			throw new vAuditTrailException("Object type [$v] not allowed", vAuditTrailException::OBJECT_TYPE_NOT_ALLOWED);
 		
 		return parent::setObjectType($v);
 	} // setObjectType()
@@ -91,7 +91,7 @@ class AuditTrail extends BaseAuditTrail implements IBaseObject
 	public function setRelatedObjectType($v)
 	{
 		if(!in_array($v, self::getAllwodObjectTypes()))
-			throw new kAuditTrailException("Object type [$v] not allowed", kAuditTrailException::OBJECT_TYPE_NOT_ALLOWED);
+			throw new vAuditTrailException("Object type [$v] not allowed", vAuditTrailException::OBJECT_TYPE_NOT_ALLOWED);
 		
 		return parent::setRelatedObjectType($v);
 	} // setRelatedObjectType()
@@ -99,13 +99,13 @@ class AuditTrail extends BaseAuditTrail implements IBaseObject
 	/**
 	 * Serialize the object and set the value of [data] column.
 	 * 
-	 * @param      kAuditTrailInfo $v new value
+	 * @param      vAuditTrailInfo $v new value
 	 * @return     AuditTrail The current object (for fluent API support)
 	 */
 	public function setData($v)
 	{
 		$data = null;
-		if($v instanceof kAuditTrailInfo)
+		if($v instanceof vAuditTrailInfo)
 			$data = serialize($v);
 		
 		return parent::setData($data);
@@ -114,7 +114,7 @@ class AuditTrail extends BaseAuditTrail implements IBaseObject
 	/**
 	 * Get the [data] column value and unserialize to object.
 	 * 
-	 * @return     kAuditTrailInfo
+	 * @return     vAuditTrailInfo
 	 */
 	public function getData()
 	{
@@ -134,9 +134,9 @@ class AuditTrail extends BaseAuditTrail implements IBaseObject
 	{
 		if(!$this->puserId)
 		{
-			$kuser = kuserPeer::retrieveByPK($this->getKuserId());
-			if($kuser)
-				$this->puserId = $kuser->getPuserId(); 
+			$vuser = vuserPeer::retrieveByPK($this->getVuserId());
+			if($vuser)
+				$this->puserId = $vuser->getPuserId(); 
 		}
 			
 		return $this->puserId;
@@ -145,19 +145,19 @@ class AuditTrail extends BaseAuditTrail implements IBaseObject
 	public function setPuserId($v)
 	{
 		$this->puserId = $v;
-		kuserPeer::setUseCriteriaFilter(false);
-		$kuser = kuserPeer::getKuserByPartnerAndUid($this->getPartnerId(), $this->puserId, true);
-		kuserPeer::setUseCriteriaFilter(true);
+		vuserPeer::setUseCriteriaFilter(false);
+		$vuser = vuserPeer::getVuserByPartnerAndUid($this->getPartnerId(), $this->puserId, true);
+		vuserPeer::setUseCriteriaFilter(true);
 		
-		if ( !$kuser )
+		if ( !$vuser )
 		{
-			// Associate new kuser for the specified partner
-			$kuser = kuserPeer::createKuserForPartner($this->getPartnerId(), $v);
+			// Associate new vuser for the specified partner
+			$vuser = vuserPeer::createVuserForPartner($this->getPartnerId(), $v);
 		}
 		
-		if($kuser)
+		if($vuser)
 		{
-			return $this->setKuserId($kuser->getId());
+			return $this->setVuserId($vuser->getId());
 		}
 	}
 	
@@ -166,28 +166,28 @@ class AuditTrail extends BaseAuditTrail implements IBaseObject
 	 */
 	public function save(PropelPDO $con = null)
 	{
-		if(!kAuditTrailManager::traceEnabled($this->getPartnerId(), $this))
+		if(!vAuditTrailManager::traceEnabled($this->getPartnerId(), $this))
 		{
 			return 0;
 		}
 
-		if(is_null($this->getKuserId()))
+		if(is_null($this->getVuserId()))
 		{
-			$this->setPuserId(kCurrentContext::$uid);
+			$this->setPuserId(vCurrentContext::$uid);
 			
-			if (kCurrentContext::$uid == '')
-				$this->setPuserId(kCurrentContext::$ks_uid);
+			if (vCurrentContext::$uid == '')
+				$this->setPuserId(vCurrentContext::$vs_uid);
 		}
 	
 		if(is_null($this->getClientTag()))
-			$this->setClientTag(kCurrentContext::$client_lang);
+			$this->setClientTag(vCurrentContext::$client_lang);
 		
 		$this->setRequestId(new UniqueId());
-		$this->setMasterPartnerId(kCurrentContext::$master_partner_id);
-		$this->setKs(kCurrentContext::$ks);
-		$this->setIpAddress(kCurrentContext::$user_ip);
-		$this->setServerName(kCurrentContext::$host);
-		$this->setEntryPoint(kCurrentContext::getEntryPoint());
+		$this->setMasterPartnerId(vCurrentContext::$master_partner_id);
+		$this->setVs(vCurrentContext::$vs);
+		$this->setIpAddress(vCurrentContext::$user_ip);
+		$this->setServerName(vCurrentContext::$host);
+		$this->setEntryPoint(vCurrentContext::getEntryPoint());
 		$this->setUserAgent(requestUtils::getRemoteUserAgent());
 		
 		return parent::save($con);

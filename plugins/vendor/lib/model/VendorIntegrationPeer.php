@@ -39,7 +39,7 @@ class VendorIntegrationPeer extends BaseVendorIntegrationPeer {
 			{
 				return self::$class_types_cache[$vendorType];
 			}
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $vendorType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $vendorType);
 			if ($extendedCls)
 			{
 				self::$class_types_cache[$vendorType] = $extendedCls;
@@ -56,7 +56,7 @@ class VendorIntegrationPeer extends BaseVendorIntegrationPeer {
 			self::$s_criteria_filter = new criteriaFilter();
 		}
 
-		$c = KalturaCriteria::create(VendorIntegrationPeer::OM_CLASS);
+		$c = VidiunCriteria::create(VendorIntegrationPeer::OM_CLASS);
 		$c->addAnd ( VendorIntegrationPeer::STATUS, VendorStatus::DELETED, Criteria::NOT_EQUAL);
 
 		self::$s_criteria_filter->setFilter($c);

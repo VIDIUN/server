@@ -1,6 +1,6 @@
 <?php
 
-class kCouchbaseCacheQuery
+class vCouchbaseCacheQuery
 {	
 	/**
 	 * @var string
@@ -296,7 +296,7 @@ class kCouchbaseCacheQuery
 }
 
 
-class kCouchbaseCacheListItem
+class vCouchbaseCacheListItem
 {
 	/**
 	 * @var string
@@ -348,7 +348,7 @@ class kCouchbaseCacheListItem
 }
 
 
-class kCouchbaseCacheList
+class vCouchbaseCacheList
 {
 	/**
 	 * @var int
@@ -356,7 +356,7 @@ class kCouchbaseCacheList
 	private $totalCount = 0;
 	
 	/**
-	 * @var array<kCouchbaseCacheListItem>
+	 * @var array<vCouchbaseCacheListItem>
 	 */
 	private $objects = array();
 	
@@ -372,7 +372,7 @@ class kCouchbaseCacheList
 		
 		foreach($meta['rows'] as $row)
 		{
-			$this->objects[] = new kCouchbaseCacheListItem($row);
+			$this->objects[] = new vCouchbaseCacheListItem($row);
 		}
 	}
 	
@@ -393,7 +393,7 @@ class kCouchbaseCacheList
 	}
 
 	/**
-	 * @return array<kCouchbaseCacheListItem>
+	 * @return array<vCouchbaseCacheListItem>
 	 */
 	public function getObjects()
 	{
@@ -401,7 +401,7 @@ class kCouchbaseCacheList
 	}
 }
 
-class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
+class vCouchbaseCacheWrapper extends vInfraBaseCacheWrapper
 {
 	const ERROR_CODE_THE_KEY_ALREADY_EXISTS_IN_THE_SERVER = 12;
 	const ERROR_CODE_THE_KEY_DOES_NOT_EXIST_IN_THE_SERVER = 13;
@@ -440,7 +440,7 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 	protected $dataSource;
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::doInit()
+	 * @see vBaseCacheWrapper::doInit()
 	 */
 	protected function doInit($config)
 	{
@@ -459,7 +459,7 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 			$this->dataSource = $config['dsn'];
 			
 			if($this->debug)
-				KalturaLog::debug("Bucket name [$this->name]");
+				VidiunLog::debug("Bucket name [$this->name]");
 				
 			$connStart = microtime(true);
 			$this->bucket = $cluster->openBucket($this->name);
@@ -469,11 +469,11 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 			
 			$connTook = microtime(true) - $connStart;
 			self::safeLog("connect took - {$connTook} seconds to {$config['dsn']} bucket {$this->name}");
-			KalturaMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name, self::CB_ACTION_BUCKET_CONNECTION, $connTook, strlen($this->name));
+			VidiunMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name, self::CB_ACTION_BUCKET_CONNECTION, $connTook, strlen($this->name));
 		}
 		catch(CouchbaseException $e)
 		{
-			KalturaLog::err($e);
+			VidiunLog::err($e);
 			return false;
 		}
 
@@ -499,7 +499,7 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::doGet()
+	 * @see vBaseCacheWrapper::doGet()
 	 */
 	protected function doGet($key, $retries = 1)
 	{
@@ -507,16 +507,16 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 		do
 		{
 			if ($this->debug)
-				KalturaLog::debug("Trying to get from couchbase. attempts left: $retries");
+				VidiunLog::debug("Trying to get from couchbase. attempts left: $retries");
 			try
 			{
 				$connStart = microtime(true);
 				$meta = $this->bucket->get($key);
 				$connTook = microtime(true) - $connStart;
-				KalturaMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_GET, $connTook, strlen($key));
+				VidiunMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_GET, $connTook, strlen($key));
 
 				if ($this->debug)
-					KalturaLog::debug("key [$key], meta [" . print_r($meta, true) . "]");
+					VidiunLog::debug("key [$key], meta [" . print_r($meta, true) . "]");
 
 				return $meta->value;
 			} catch (CouchbaseException $e)
@@ -529,12 +529,12 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 		}
 		while ($retries >= 0);
 
-		KalturaLog::err("No retries left for Couchbase get operation for key [$key]");
+		VidiunLog::err("No retries left for Couchbase get operation for key [$key]");
 		throw $couchbaseError;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::doMultiGet()
+	 * @see vBaseCacheWrapper::doMultiGet()
 	 */
 	protected function doMultiGet($keys)
 	{
@@ -543,10 +543,10 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 			$connStart = microtime(true);
 			$metas = $this->bucket->get($keys);
 			$connTook = microtime(true) - $connStart;
-			KalturaMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_GET, $connTook, strlen(implode('', $keys)));
+			VidiunMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_GET, $connTook, strlen(implode('', $keys)));
 
 			if($this->debug)
-				KalturaLog::debug("key [" . print_r($keys, true) . "], metas [" . print_r($metas, true) . "]");
+				VidiunLog::debug("key [" . print_r($keys, true) . "], metas [" . print_r($metas, true) . "]");
 				
 			$values = array();
 			foreach($metas as $meta)
@@ -570,32 +570,32 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::doIncrement()
+	 * @see vBaseCacheWrapper::doIncrement()
 	 */
 	protected function doIncrement($key, $delta = 1)
 	{
 		$meta = $this->bucket->counter($key, $delta);
 		
 		if($this->debug)
-			KalturaLog::debug("key [$key], meta [" . print_r($meta, true) . "]");
+			VidiunLog::debug("key [$key], meta [" . print_r($meta, true) . "]");
 			
 		return $meta->value;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::doSet()
+	 * @see vBaseCacheWrapper::doSet()
 	 */
 	protected function doSet($key, $var, $expiry = 0, $retries = 1)
 	{
 		$couchbaseError = null;
 
 		if ($this->debug)
-			KalturaLog::debug("Bucket name [$this->name] key [$key] var [" . print_r($var, true) . "]");
+			VidiunLog::debug("Bucket name [$this->name] key [$key] var [" . print_r($var, true) . "]");
 
 		do
 		{
 			if ($this->debug)
-				KalturaLog::debug("Trying to upsert to couchbase. attempts left: $retries");
+				VidiunLog::debug("Trying to upsert to couchbase. attempts left: $retries");
 			try
 			{
 				$connStart = microtime(true);
@@ -605,12 +605,12 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 				$connTook = microtime(true) - $connStart;
 				$varLength = is_array($var) ? strlen(implode('', $var)) : strlen($var);
 				$fullLength = strlen($key) + $varLength + strlen(strval($expiry));
-				KalturaMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_SET, $connTook, $fullLength);
+				VidiunMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_SET, $connTook, $fullLength);
 
 				return is_null($meta->error);
 			} catch (CouchbaseException $e)
 			{
-				KalturaLog::err($e);
+				VidiunLog::err($e);
 				$couchbaseError = $e;
 				if ($e->getCode() != self::ERROR_CODE_OPERATION_TIMEOUT_IN_THE_SERVER)
 					throw $e;
@@ -618,17 +618,17 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 			$retries--;
 		} while ($retries >= 0);
 
-		KalturaLog::err("No retries left for Couchbase upsert operation for key [$key]");
+		VidiunLog::err("No retries left for Couchbase upsert operation for key [$key]");
 		throw $couchbaseError;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::doAdd()
+	 * @see vBaseCacheWrapper::doAdd()
 	 */
 	protected function doAdd($key, $var, $expiry = 0)
 	{
 		if($this->debug)
-			KalturaLog::debug("key [$key], var [" . print_r($var, true) . "]");
+			VidiunLog::debug("key [$key], var [" . print_r($var, true) . "]");
 			
 		try
 		{
@@ -639,7 +639,7 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 			$connTook = microtime(true) - $connStart;
 			$varLength = is_array($var) ? strlen(implode('', $var)) : strlen($var);
 			$fullLength = strlen($key) + $varLength + strlen(strval($expiry));
-			KalturaMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name, self::CB_ACTION_SET, $connTook, $fullLength);
+			VidiunMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name, self::CB_ACTION_SET, $connTook, $fullLength);
 		}
 		catch(CouchbaseException $e)
 		{
@@ -653,19 +653,19 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::doDelete()
+	 * @see vBaseCacheWrapper::doDelete()
 	 */
 	protected function doDelete($key)
 	{
 		if($this->debug)
-			KalturaLog::debug("key [$key]");
+			VidiunLog::debug("key [$key]");
 			
 		try
 		{
 			$connStart = microtime(true);
 			$meta = $this->bucket->remove($key);
 			$connTook = microtime(true) - $connStart;
-			KalturaMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_DELETE, $connTook, strlen($key));
+			VidiunMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_DELETE, $connTook, strlen($key));
 			return is_null($meta->error);
 		}
 		catch(CouchbaseException $e)
@@ -689,7 +689,7 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 		));
 		
 		if($this->debug)
-			KalturaLog::debug("key [$key] var [" . print_r($var, true) . "] meta [" . print_r($meta, true) . "]");
+			VidiunLog::debug("key [$key] var [" . print_r($var, true) . "] meta [" . print_r($meta, true) . "]");
 		
 		return is_null($meta->error);
 	}
@@ -703,7 +703,7 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 		$meta = $this->bucket->append($key, $var);
 		
 		if($this->debug)
-			KalturaLog::debug("key [$key] var [" . print_r($var, true) . "] meta [" . print_r($meta, true) . "]");
+			VidiunLog::debug("key [$key] var [" . print_r($var, true) . "] meta [" . print_r($meta, true) . "]");
 			
 		return $meta->value;
 	}
@@ -717,7 +717,7 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 		$meta = $this->bucket->prepend($key, $var);
 		
 		if($this->debug)
-			KalturaLog::debug("key [$key] var [" . print_r($var, true) . "] meta [" . print_r($meta, true) . "]");
+			VidiunLog::debug("key [$key] var [" . print_r($var, true) . "] meta [" . print_r($meta, true) . "]");
 			
 		return $meta->value;
 	}
@@ -733,10 +733,10 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 			$connStart = microtime(true);
 			$meta = $this->bucket->get($key);
 			$connTook = microtime(true) - $connStart;
-			KalturaMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_GET, $connTook, strlen($key));
+			VidiunMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_GET, $connTook, strlen($key));
 			
 			if($this->debug)
-				KalturaLog::debug("key [$key]");
+				VidiunLog::debug("key [$key]");
 				
 			return $meta->value;
 		}
@@ -761,10 +761,10 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 			$connStart = microtime(true);
 			$metas = $this->bucket->remove($keys);
 			$connTook = microtime(true) - $connStart;
-			KalturaMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_DELETE, $connTook, strlen(implode('', $keys)));
+			VidiunMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_DELETE, $connTook, strlen(implode('', $keys)));
 			
 			if($this->debug)
-				KalturaLog::debug("key [" . print_r($keys, true) . "]");
+				VidiunLog::debug("key [" . print_r($keys, true) . "]");
 				
 			return true;
 		}
@@ -788,10 +788,10 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 			$connStart = microtime(true);
 			$metas = $this->bucket->get($keys);
 			$connTook = microtime(true) - $connStart;
-			KalturaMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_GET, $connTook, strlen(implode('', $keys)));
+			VidiunMonitorClient::monitorCouchBaseAccess($this->dataSource, $this->name,self::CB_ACTION_GET, $connTook, strlen(implode('', $keys)));
 			
 			if($this->debug)
-				KalturaLog::debug("key [" . implode(', ', $keys) . "], metas [" . print_r($metas, true) . "]");
+				VidiunLog::debug("key [" . implode(', ', $keys) . "], metas [" . print_r($metas, true) . "]");
 				
 			$values = array();
 			foreach($keys as $key)
@@ -799,7 +799,7 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 				$meta = $metas[$key];
 				if($meta->error)
 				{
-					KalturaLog::warning("Key: [$key] Error: " . $meta->error->getMessage());
+					VidiunLog::warning("Key: [$key] Error: " . $meta->error->getMessage());
 				}
 
 				if($associative)
@@ -821,30 +821,30 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 
 	/**
 	 * @param string $view
-	 * @return kCouchbaseCacheQuery
+	 * @return vCouchbaseCacheQuery
 	 */
 	public function getNewQuery($view)
 	{
 		if(!isset($this->views[$view]))
 		{
-			KalturaLog::err("Couchbase view [$view] not found");
+			VidiunLog::err("Couchbase view [$view] not found");
 			return null;
 		}
 			
 		if($this->debug)
-			KalturaLog::debug("Loads query [" . print_r($this->views[$view], true) . "]");
+			VidiunLog::debug("Loads query [" . print_r($this->views[$view], true) . "]");
 			
 		$designDocumentName = $this->views[$view]['designDocumentName'];
 		$viewName = $this->views[$view]['viewName'];
-		return new kCouchbaseCacheQuery($designDocumentName, $viewName);
+		return new vCouchbaseCacheQuery($designDocumentName, $viewName);
 	}
 
 	/**
 	 * @param array $keys
 	 * @param mixed $var
-	 * @return kCouchbaseCacheList
+	 * @return vCouchbaseCacheList
 	 */
-	public function query(kCouchbaseCacheQuery $query)
+	public function query(vCouchbaseCacheQuery $query)
 	{
 		$couchBaseQuery = $query->toQuery();
 		try
@@ -853,12 +853,12 @@ class kCouchbaseCacheWrapper extends kInfraBaseCacheWrapper
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::debug("Failed to query CouchBase bucket with error [" . $e->getMessage() . "]");
-			return new kCouchbaseCacheList(array());;
+			VidiunLog::debug("Failed to query CouchBase bucket with error [" . $e->getMessage() . "]");
+			return new vCouchbaseCacheList(array());;
 		}
 		
 		if(phpversion('couchbase') > '2.0.7')
 			$meta = json_decode(json_encode($meta), true);
-		return new kCouchbaseCacheList($meta);
+		return new vCouchbaseCacheList($meta);
 	}
 }

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBulkUpload extends KalturaObject implements IFilterable
+class VidiunBulkUpload extends VidiunObject implements IFilterable
 {
 	/**
 	 * @var bigint
@@ -33,7 +33,7 @@ class KalturaBulkUpload extends KalturaObject implements IFilterable
 	public $numOfEntries;
 	
 	/**
-	 * @var KalturaBatchJobStatus
+	 * @var VidiunBatchJobStatus
 	 * @filter in,eq
 	 */
 	public $status;
@@ -55,14 +55,14 @@ class KalturaBulkUpload extends KalturaObject implements IFilterable
 	public $bulkFileUrl;
 	
 	/**
-	 * @var KalturaBulkUploadType;
+	 * @var VidiunBulkUploadType;
 	 */
 	public $bulkUploadType;
 	
 	
 	
 	/**
-	 * @var KalturaBulkUploadResultArray;
+	 * @var VidiunBulkUploadResultArray;
 	 */
 	public $results;
 	
@@ -72,7 +72,7 @@ class KalturaBulkUpload extends KalturaObject implements IFilterable
 	public $error;
 	
 	/**
-	 * @var KalturaBatchJobErrorTypes
+	 * @var VidiunBatchJobErrorTypes
 	 */
 	public $errorType;
 	
@@ -98,7 +98,7 @@ class KalturaBulkUpload extends KalturaObject implements IFilterable
 	public $numOfObjects;
 	
 	/**
-	 * @var KalturaBulkUploadObjectType
+	 * @var VidiunBulkUploadObjectType
 	 * @filter eq,in
 	 */
 	public $bulkUploadObjectType;
@@ -122,7 +122,7 @@ class KalturaBulkUpload extends KalturaObject implements IFilterable
 		return array_merge(parent::getMapBetweenObjects(), self::$map_between_objects);
 	}
 	
-	public function doFromObject($batchJobObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($batchJobObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 	    /* @var $batchJobObject BatchJobLog */
 	    if (is_null($batchJobObject))
@@ -137,9 +137,9 @@ class KalturaBulkUpload extends KalturaObject implements IFilterable
 		
 		$this->uploadedOn = $batchJobObject->getCreatedAt(null);
 		
-		$this->logFileUrl = requestUtils::getHost() . "/api_v3/service/bulkUpload/action/serveLog/id/{$batchJobObject->getJobId()}/ks/" . kCurrentContext::$ks;
+		$this->logFileUrl = requestUtils::getHost() . "/api_v3/service/bulkUpload/action/serveLog/id/{$batchJobObject->getJobId()}/vs/" . vCurrentContext::$vs;
 //		$this->logFileUrl = requestUtils::getHost() . "/index.php/extwidget/bulkuploadfile/id/{$batchJob->getId()}/pid/{$batchJob->getPartnerId()}/type/log";
-		$this->bulkFileUrl = requestUtils::getHost() . "/api_v3/service/bulkUpload/action/serve/id/{$batchJobObject->getJobId()}/ks/" . kCurrentContext::$ks;
+		$this->bulkFileUrl = requestUtils::getHost() . "/api_v3/service/bulkUpload/action/serve/id/{$batchJobObject->getJobId()}/vs/" . vCurrentContext::$vs;
 //		$this->bulkFileUrl = requestUtils::getCdnHost() . "/index.php/extwidget/bulkuploadfile/id/{$batchJob->getId()}/pid/{$batchJob->getPartnerId()}/type/$type";
 		$this->csvFileUrl = $this->bulkFileUrl;
 		if (method_exists(get_class($batchJobObject), "getParam1"))
@@ -147,7 +147,7 @@ class KalturaBulkUpload extends KalturaObject implements IFilterable
 		
 	    //if (isset ())
 		$jobData = $batchJobObject->getData();
-		if($jobData && $jobData instanceof kBulkUploadJobData)
+		if($jobData && $jobData instanceof vBulkUploadJobData)
 		{
 			$this->uploadedBy = $jobData->getUploadedBy();
 			$this->uploadedByUserId = $jobData->getUserId();

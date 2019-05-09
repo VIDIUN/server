@@ -3,7 +3,7 @@
  * @package plugins.facebookDistribution
  * @subpackage lib
  */
-class FacebookDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class FacebookDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const FACEBOOK = 'FACEBOOK';
 	

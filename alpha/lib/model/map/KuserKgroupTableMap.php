@@ -2,7 +2,7 @@
 
 
 /**
- * This class defines the structure of the 'kuser_kgroup' table.
+ * This class defines the structure of the 'vuser_vgroup' table.
  *
  *
  *
@@ -14,12 +14,12 @@
  * @package Core
  * @subpackage model.map
  */
-class KuserKgroupTableMap extends TableMap {
+class VuserVgroupTableMap extends TableMap {
 
 	/**
 	 * The (dot-path) name of this class
 	 */
-	const CLASS_NAME = 'Core.KuserKgroupTableMap';
+	const CLASS_NAME = 'Core.VuserVgroupTableMap';
 
 	/**
 	 * Initialize the table attributes, columns and validators
@@ -31,16 +31,16 @@ class KuserKgroupTableMap extends TableMap {
 	public function initialize()
 	{
 	  // attributes
-		$this->setName('kuser_kgroup');
-		$this->setPhpName('KuserKgroup');
-		$this->setClassname('KuserKgroup');
+		$this->setName('vuser_vgroup');
+		$this->setPhpName('VuserVgroup');
+		$this->setClassname('VuserVgroup');
 		$this->setPackage('Core');
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'BIGINT', true, null, null);
-		$this->addForeignKey('KUSER_ID', 'KuserId', 'INTEGER', 'kuser', 'ID', true, null, null);
+		$this->addForeignKey('VUSER_ID', 'VuserId', 'INTEGER', 'vuser', 'ID', true, null, null);
 		$this->addColumn('PUSER_ID', 'PuserId', 'VARCHAR', true, 100, null);
-		$this->addForeignKey('KGROUP_ID', 'KgroupId', 'INTEGER', 'kuser', 'ID', true, null, null);
+		$this->addForeignKey('VGROUP_ID', 'VgroupId', 'INTEGER', 'vuser', 'ID', true, null, null);
 		$this->addColumn('PGROUP_ID', 'PgroupId', 'VARCHAR', true, 100, null);
 		$this->addColumn('STATUS', 'Status', 'TINYINT', true, null, null);
 		$this->addColumn('PARTNER_ID', 'PartnerId', 'INTEGER', true, null, null);
@@ -55,8 +55,8 @@ class KuserKgroupTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('kuserRelatedByKgroupId', 'kuser', RelationMap::MANY_TO_ONE, array('kgroup_id' => 'id', ), null, null);
-    $this->addRelation('kuserRelatedByKuserId', 'kuser', RelationMap::MANY_TO_ONE, array('kuser_id' => 'id', ), null, null);
+    $this->addRelation('vuserRelatedByVgroupId', 'vuser', RelationMap::MANY_TO_ONE, array('vgroup_id' => 'id', ), null, null);
+    $this->addRelation('vuserRelatedByVuserId', 'vuser', RelationMap::MANY_TO_ONE, array('vuser_id' => 'id', ), null, null);
 	} // buildRelations()
 
-} // KuserKgroupTableMap
+} // VuserVgroupTableMap

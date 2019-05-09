@@ -73,21 +73,21 @@ class Permission extends BasePermission implements IRelatedObject
 	/**
 	 * Add a permission item to the current permission
 	 * @param int $permissionItemId
-	 * @throws kPermissionException::PERMISSION_ITEM_NOT_FOUND
+	 * @throws vPermissionException::PERMISSION_ITEM_NOT_FOUND
 	 */
 	public function addPermissionItem($permissionItemId, $save = true)
 	{
 		// check if permission item exists
 		$permissionItem = PermissionItemPeer::retrieveByPK($permissionItemId);
 		if (!$permissionItem) {
-			throw new kPermissionException('', kPermissionException::PERMISSION_ITEM_NOT_FOUND);
+			throw new vPermissionException('', vPermissionException::PERMISSION_ITEM_NOT_FOUND);
 		}
 		
 		$itemIds = $this->getPermissionItemIds(); // init $this->permissionItemIds
 		
 		// check if item is already associated with the permission
 		if ($itemIds && in_array($permissionItemId, $itemIds)) {
-			KalturaLog::notice('Permission with name ['.$this->getName().'] already contains permission item with id ['.$permissionItemId.']');
+			VidiunLog::notice('Permission with name ['.$this->getName().'] already contains permission item with id ['.$permissionItemId.']');
 			return true;
 		}
 		
@@ -145,7 +145,7 @@ class Permission extends BasePermission implements IRelatedObject
 		// check if item is already associated to the permission
 		$itemIds = $this->getPermissionItemIds();
 		if (!in_array($permissionItemId, $itemIds)) {
-			KalturaLog::notice('Permission with name ['.$this->getName().'] does not contain permission item with id ['.$permissionItemId.']');
+			VidiunLog::notice('Permission with name ['.$this->getName().'] does not contain permission item with id ['.$permissionItemId.']');
 			return true;
 		}
 		

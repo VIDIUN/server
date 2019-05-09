@@ -2,11 +2,11 @@
 
 $config = null;
 $client = null;
-/* @var $client KalturaClient */
+/* @var $client VidiunClient */
 
 require_once __DIR__ . '/lib/init.php';
 
-$partner = new KalturaPartner();
+$partner = new VidiunPartner();
 $partner->name = 'sanity-test';
 $partner->website = 'sanity.example.com';
 $partner->adminName = 'sanity-test';
@@ -14,7 +14,7 @@ $partner->adminEmail = uniqid('sanity.') . '@example.com';
 $partner->description = 'sanity-test';
 $cmsPassword = uniqid('pW@4');
 $registeredPartner = $client->partner->register($partner, $cmsPassword);
-/* @var $registeredPartner KalturaPartner */
+/* @var $registeredPartner VidiunPartner */
 
 if(!$registeredPartner || !$registeredPartner->id)
 {
@@ -29,9 +29,9 @@ $config['session']['adminSecret'] = $registeredPartner->adminSecret;
 write_ini_file($config);
 
 $partnerSession = $client->user->loginByLoginId($registeredPartner->adminEmail, $cmsPassword, $registeredPartner->id, 86400, 'disableentitlement');
-$client->setKs($partnerSession);
+$client->setVs($partnerSession);
 $user = $client->user->getByLoginId($registeredPartner->adminEmail);
-/* @var $user KalturaUser */
+/* @var $user VidiunUser */
 if(!$user || !$user->id)
 {
 	echo "Unable to login\n";

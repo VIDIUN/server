@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kEvalStringField extends kStringField
+class vEvalStringField extends vStringField
 {
 	/**
 	 * PHP code
@@ -14,17 +14,17 @@ class kEvalStringField extends kStringField
 	protected $code;
 	
 	/* (non-PHPdoc)
-	 * @see kStringField::getFieldValue()
+	 * @see vStringField::getFieldValue()
 	 */
-	protected function getFieldValue(kScope $scope = null) 
+	protected function getFieldValue(vScope $scope = null) 
 	{
 		if(!$scope || !$this->code)
 			return null;
 		
 		if(strpos($this->code, ';') !== false)
-			throw new kCoreException("Evaluated code may be simple value only");
+			throw new vCoreException("Evaluated code may be simple value only");
 			
-		KalturaLog::debug("Evaluating code [$this->code]" . ($this->description ? " for description [$this->description]" : ''));
+		VidiunLog::debug("Evaluating code [$this->code]" . ($this->description ? " for description [$this->description]" : ''));
 		return eval("return strval({$this->code});");
 	}
 	

@@ -5,10 +5,10 @@
  * @abstract
  */
 
-class KalturaDictionary extends KalturaObject
+class VidiunDictionary extends VidiunObject
 {
 	/**
-	 * @var KalturaCatalogItemLanguage
+	 * @var VidiunCatalogItemLanguage
 	 */
 	public $language;
 
@@ -28,13 +28,13 @@ class KalturaDictionary extends KalturaObject
 	);
 
 	/* (non-PHPdoc)
- 	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+ 	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
  	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
 		{
-			$dbObject = new kDictionary();
+			$dbObject = new vDictionary();
 		}
 
 		return parent::toObject($dbObject, $propsToSkip);

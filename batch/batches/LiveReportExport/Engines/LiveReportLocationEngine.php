@@ -63,17 +63,17 @@ class LiveReportLocation1MinEngine extends LiveReportEngine {
 	// and the results are ordered from the oldest to the newest
 	protected function getRecords($fromTime, $toTime, $entryId) {
 		
-		$reportType = KalturaLiveReportType::ENTRY_GEO_TIME_LINE;
-		$filter = new KalturaLiveReportInputFilter();
+		$reportType = VidiunLiveReportType::ENTRY_GEO_TIME_LINE;
+		$filter = new VidiunLiveReportInputFilter();
 		$filter->toTime = $toTime;
 		$filter->fromTime = $fromTime;
 		$filter->entryIds = $entryId;
 		
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageIndex = 1;
 		$pager->pageSize = self::MAX_RECORDS_PER_CHUNK;
 		
-		return KBatchBase::$kClient->liveReports->getReport($reportType, $filter, $pager);
+		return VBatchBase::$vClient->liveReports->getReport($reportType, $filter, $pager);
 	}
 
 

@@ -1,11 +1,11 @@
 <?php
 
-class kAuthDataCache
+class vAuthDataCache
 {
 	const DEFAULT_TIME_IN_CACHE_FOR_AUTH_CACHED_DATA = 1800; //half an hour
 
 	/**
-	 * @var kBaseCacheWrapper $cache
+	 * @var vBaseCacheWrapper $cache
 	 */
 	private $cache;
 
@@ -16,8 +16,8 @@ class kAuthDataCache
 
 	function __construct()
 	{
-		$this->cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_AUTH_CACHED_DATA);
-		$this->ttl = kConf::get('AuthCachedDataDuration','local', self::DEFAULT_TIME_IN_CACHE_FOR_AUTH_CACHED_DATA);
+		$this->cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_AUTH_CACHED_DATA);
+		$this->ttl = vConf::get('AuthCachedDataDuration','local', self::DEFAULT_TIME_IN_CACHE_FOR_AUTH_CACHED_DATA);
 	}
 
 	/**
@@ -43,11 +43,11 @@ class kAuthDataCache
 			$key = self::getCacheKeyForAuthData($dataId);
 			if ($this->cache->add($key, $authData, $this->ttl))
 			{
-				KalturaLog::info("Auth data was stored successfully for id [$dataId]");
+				VidiunLog::info("Auth data was stored successfully for id [$dataId]");
 				return true;
 			}
 
-			KalturaLog::ERR("Could not store auth data id [$dataId]");
+			VidiunLog::ERR("Could not store auth data id [$dataId]");
 		}
 
 		return false;

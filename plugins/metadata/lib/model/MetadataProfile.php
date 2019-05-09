@@ -54,7 +54,7 @@ class MetadataProfile extends BaseMetadataProfile implements ISyncableFile
 		$ret = parent::postUpdate($con);
 		
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		return $ret;
 	}
@@ -84,21 +84,21 @@ class MetadataProfile extends BaseMetadataProfile implements ISyncableFile
     	if($this->xsdData)
     	{
         	$key = $this->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_DEFINITION);
-            kFileSyncUtils::file_put_contents($key, $this->xsdData);
+            vFileSyncUtils::file_put_contents($key, $this->xsdData);
                 
-            kMetadataManager::parseProfileSearchFields($this->getPartnerId(), $this);
+            vMetadataManager::parseProfileSearchFields($this->getPartnerId(), $this);
     	}
     	         
         if($this->viewsData)
     	{
 			$key = $this->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_VIEWS);
-			kFileSyncUtils::file_put_contents($key, $this->viewsData);
+			vFileSyncUtils::file_put_contents($key, $this->viewsData);
 		}
             
 		if($this->xsltData)
 		{
 			$key = $this->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_XSLT);
-			kFileSyncUtils::file_put_contents($key, $this->xsltData);
+			vFileSyncUtils::file_put_contents($key, $this->xsltData);
 		}
 	
 	    return parent::postSave($con);
@@ -110,20 +110,20 @@ class MetadataProfile extends BaseMetadataProfile implements ISyncableFile
 	}
 	
 	public function incrementFileSyncVersion() {
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getFileSyncVersion(), FileSyncObjectType::METADATA_PROFILE, self::FILE_SYNC_METADATA_DEFINITION);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getFileSyncVersion(), FileSyncObjectType::METADATA_PROFILE, self::FILE_SYNC_METADATA_DEFINITION);
 		$this->setFileSyncVersion($newVersion);
 	}
 
 	public function incrementViewsVersion()
 	{
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getViewsVersion(), FileSyncObjectType::METADATA_PROFILE, self::FILE_SYNC_METADATA_VIEWS);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getViewsVersion(), FileSyncObjectType::METADATA_PROFILE, self::FILE_SYNC_METADATA_VIEWS);
 		
 		$this->setViewsVersion($newVersion);
 	}
 	
     public function incrementXsltVersion()
 	{
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getXsltVersion(), FileSyncObjectType::METADATA_PROFILE, self::FILE_SYNC_METADATA_XSLT);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getXsltVersion(), FileSyncObjectType::METADATA_PROFILE, self::FILE_SYNC_METADATA_XSLT);
 		
 		$this->setXsltVersion($newVersion);
 	}
@@ -199,7 +199,7 @@ class MetadataProfile extends BaseMetadataProfile implements ISyncableFile
 	{
 		$version = $this->getFileSyncSubTypeVersion($sub_type, $version);
 		
-		return kMetadataManager::getObjectTypeName($this->getObjectType()) . "_" . $this->getId() . "_{$sub_type}_{$version}.xml";
+		return vMetadataManager::getObjectTypeName($this->getObjectType()) . "_" . $this->getId() . "_{$sub_type}_{$version}.xml";
 	}
 	
 	/**
@@ -330,7 +330,7 @@ class MetadataProfile extends BaseMetadataProfile implements ISyncableFile
 	{
 		$newMetaDataProfile = $this->copy(true);
 		$key = $this->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_DEFINITION);
-		$newMetaDataProfile->setXsdData(kFileSyncUtils::file_get_contents($key, true, false));
+		$newMetaDataProfile->setXsdData(vFileSyncUtils::file_get_contents($key, true, false));
 		$newMetaDataProfile->setPartnerId($partnerId);
 		return $newMetaDataProfile;
 	}

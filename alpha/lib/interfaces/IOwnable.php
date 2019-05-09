@@ -13,15 +13,15 @@ interface IOwnable extends IBaseObject
 	/**
 	 * @return int
 	 */
-	public function getKuserId();
+	public function getVuserId();
 
 	/**
 	 * @return boolean
 	 */
-	public function isEntitledKuserEdit( $kuserId );
+	public function isEntitledVuserEdit( $vuserId );
 	
 	/**
 	 * @return boolean
 	 */
-	public function isOwnerActionsAllowed( $kuserId );
+	public function isOwnerActionsAllowed( $vuserId );
 }

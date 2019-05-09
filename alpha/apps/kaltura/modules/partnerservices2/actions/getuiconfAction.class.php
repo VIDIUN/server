@@ -1,7 +1,7 @@
 <?php
 /**
- * 1. Will create a kshow with name and summary for a specific partner.
- * 2. Will generate widget-html for this kshow.
+ * 1. Will create a vshow with name and summary for a specific partner.
+ * 2. Will generate widget-html for this vshow.
  * 
  * @package api
  * @subpackage ps2
@@ -10,7 +10,7 @@ class getuiconfAction extends defPartnerservices2Action
 {
     protected function partnerGroup2() {return  '0';}
                 
-	protected function kalturaNetwork2() {return true;}
+	protected function vidiunNetwork2() {return true;}
 	
 	public function describe()
 	{
@@ -35,16 +35,16 @@ class getuiconfAction extends defPartnerservices2Action
 			); 
 	}
 	
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER;	}
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER;	}
 	
 	protected function ticketType ()	
 	{	
-		// validate for all partners that are not kaltura (partner_id=0)		
+		// validate for all partners that are not vidiun (partner_id=0)		
 		$partner_id = $this->getP ( "partner_id");		
 		return ( $partner_id != 0 ? self::REQUIED_TICKET_REGULAR : self::REQUIED_TICKET_NONE );
 	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$this->applyPartnerFilterForClass('uiConf', $partner_id );
 		

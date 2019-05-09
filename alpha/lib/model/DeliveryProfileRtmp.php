@@ -9,7 +9,7 @@ class DeliveryProfileRtmp extends DeliveryProfileVod {
 	
 	function __construct() {
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kF4MManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vF4MManifestRenderer';
 	}
 	
 	public function setEnforceRtmpe($v)
@@ -90,7 +90,7 @@ class DeliveryProfileRtmp extends DeliveryProfileVod {
 		$baseUrl = null;
 		$flavors = $this->buildRtmpFlavorsArray($baseUrl);		
 		if(!count($flavors))
-			KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 
 		$this->baseUrl = $baseUrl;
 		return $flavors;
@@ -130,7 +130,7 @@ class DeliveryProfileRtmp extends DeliveryProfileVod {
 		}
 		else
 		{
-			// get all flavors with kaltura urls
+			// get all flavors with vidiun urls
 			foreach($flavorAssets as $flavorAsset)
 			{
 				/* @var $flavorAsset flavorAsset */

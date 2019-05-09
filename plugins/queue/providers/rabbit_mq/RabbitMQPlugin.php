@@ -2,7 +2,7 @@
 /**
  * @package plugins.rabbitMQ
  */
-class RabbitMQPlugin extends KalturaPlugin implements IKalturaPending, IKalturaObjectLoader, IKalturaQueuePlugin
+class RabbitMQPlugin extends VidiunPlugin implements IVidiunPending, IVidiunObjectLoader, IVidiunQueuePlugin
 {
 	const PLUGIN_NAME = 'rabbitMQ';
 	const QUEUE_PLUGIN_NAME = 'queue';
@@ -12,7 +12,7 @@ class RabbitMQPlugin extends KalturaPlugin implements IKalturaPending, IKalturaO
 	
 	/*
 	 * (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -21,17 +21,17 @@ class RabbitMQPlugin extends KalturaPlugin implements IKalturaPending, IKalturaO
 	
 	/*
 	 * (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		if($baseClass == 'QueueProvider' && (is_null($enumValue) || $enumValue == self::getRabbitMQProviderTypeCoreValue(RabbitMQProviderType::RABBITMQ)))
 		{
-			if(!kConf::hasMap('rabbit_mq'))
+			if(!vConf::hasMap('rabbit_mq'))
 			{
-				throw new kCoreException("RabbitMQ configuration file (rabbit_mq.ini) wasn't found!");
+				throw new vCoreException("RabbitMQ configuration file (rabbit_mq.ini) wasn't found!");
 			}
-			$rabbitConfig = kConf::getMap('rabbit_mq');
+			$rabbitConfig = vConf::getMap('rabbit_mq');
 			
 			if(isset($rabbitConfig['multiple_dcs']) && $rabbitConfig['multiple_dcs'])
 			{
@@ -44,18 +44,18 @@ class RabbitMQPlugin extends KalturaPlugin implements IKalturaPending, IKalturaO
 	
 	/*
 	 * (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		if($baseClass == 'QueueProvider' && (is_null($enumValue) || $enumValue == self::getRabbitMQProviderTypeCoreValue(RabbitMQProviderType::RABBITMQ)))
 		{
-			if(!kConf::hasMap('rabbit_mq'))
+			if(!vConf::hasMap('rabbit_mq'))
 			{
-				throw new kCoreException("RabbitMQ configuration file (rabbit_mq.ini) wasn't found!");
+				throw new vCoreException("RabbitMQ configuration file (rabbit_mq.ini) wasn't found!");
 			}
 			
-			$rabbitConfig = kConf::getMap('rabbit_mq');
+			$rabbitConfig = vConf::getMap('rabbit_mq');
 			if(isset($rabbitConfig['multiple_dcs']) && $rabbitConfig['multiple_dcs'])
 			{
 				return new MultiCentersRabbitMQProvider($rabbitConfig, $constructorArgs);
@@ -73,18 +73,18 @@ class RabbitMQPlugin extends KalturaPlugin implements IKalturaPending, IKalturaO
 	 */
 	public static function getPushNotificationTemplateTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('QueueProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('QueueProviderType', $value);
 	}
 	
 	/*
 	 * (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$minVersion = new KalturaVersion(self::QUEUE_PLUGIN_VERSION_MAJOR, self::QUEUE_PLUGIN_VERSION_MINOR, self::QUEUE_PLUGIN_VERSION_BUILD);
-		$dependency = new KalturaDependency(self::QUEUE_PLUGIN_NAME, $minVersion);
+		$minVersion = new VidiunVersion(self::QUEUE_PLUGIN_VERSION_MAJOR, self::QUEUE_PLUGIN_VERSION_MINOR, self::QUEUE_PLUGIN_VERSION_BUILD);
+		$dependency = new VidiunDependency(self::QUEUE_PLUGIN_NAME, $minVersion);
 		
 		return array($dependency);
 	}

@@ -18,7 +18,7 @@ abstract class myBaseMediaSource implements IMediaSource
 	const SUPPORT_MEDIA_TYPE_AUDIO =2;
 	const SUPPORT_MEDIA_TYPE_IMAGE =4;
 
-	const AUDIO_THUMB_URL = "http://www.kaltura.com/images/search/img_sound.png";
+	const AUDIO_THUMB_URL = "http://www.vidiun.com/images/search/img_sound.png";
 	
 	protected static $partner_id;
 	protected static $subp_id;
@@ -31,7 +31,7 @@ abstract class myBaseMediaSource implements IMediaSource
 	protected $auth_method = array ( self::AUTH_METHOD_PUBLIC );
 	protected $allow_public_search = self::PUBLIC_SEARCH_TRUE;
 	protected $search_in_user = true; 
-	protected $logo = "http://www.kaltura.com";
+	protected $logo = "http://www.vidiun.com";
 	protected $module_url = "SearchView.swf";
 	protected $id = -1;
 	
@@ -106,7 +106,7 @@ abstract class myBaseMediaSource implements IMediaSource
 		return $arr;
 	}
 	
-	protected static function getKalturaMediaType ( $service_media_type )
+	protected static function getVidiunMediaType ( $service_media_type )
 	{
 		if( $service_media_type == self::SUPPORT_MEDIA_TYPE_AUDIO )
 			return entry::ENTRY_MEDIA_TYPE_AUDIO;
@@ -149,7 +149,7 @@ abstract class myBaseMediaSource implements IMediaSource
 		}
 		catch ( Exception $ex )
 		{
-			KalturaLog::log ( __METHOD__ . ": error hitting url [$url] with params:" . print_r ( $params ) );
+			VidiunLog::log ( __METHOD__ . ": error hitting url [$url] with params:" . print_r ( $params ) );
 		}	
 		curl_close($ch);	
 	}

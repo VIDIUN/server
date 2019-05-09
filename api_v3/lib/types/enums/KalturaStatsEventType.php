@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaStatsEventType extends KalturaEnum
+class VidiunStatsEventType extends VidiunEnum
 {
 	const WIDGET_LOADED = 1;
 	const MEDIA_LOADED = 2;

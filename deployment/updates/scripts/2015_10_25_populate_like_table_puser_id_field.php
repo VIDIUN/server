@@ -4,34 +4,34 @@
 
 	require_once(__dir__ . "/../../../alpha/scripts/bootstrap.php");
 	$c = new Criteria();
-	$c->addAscendingOrderByColumn(kvotePeer::CREATED_AT);
+	$c->addAscendingOrderByColumn(vvotePeer::CREATED_AT);
 	$c->setLimit(LIMIT);
 	
 	$createdAtValue = INITIAL_CREATED_AT_VALUE;
-	$kVotes = array(1);
-	while(!empty($kVotes))
+	$vVotes = array(1);
+	while(!empty($vVotes))
 	{
-		$c->add(kvotePeer::CREATED_AT, $createdAtValue, Criteria::GREATER_THAN);
-		kvotePeer::setUseCriteriaFilter(false);
-		$kVotes = kvotePeer::doSelect($c);
-		kvotePeer::setUseCriteriaFilter(true);
+		$c->add(vvotePeer::CREATED_AT, $createdAtValue, Criteria::GREATER_THAN);
+		vvotePeer::setUseCriteriaFilter(false);
+		$vVotes = vvotePeer::doSelect($c);
+		vvotePeer::setUseCriteriaFilter(true);
 
-		foreach($kVotes as $kVote)
+		foreach($vVotes as $vVote)
 		{
-			$kuserId = $kVote->getKuserId();
-			kuserPeer::setUseCriteriaFilter(false);
-			$kuser = kuserPeer::retrieveByPKNoFilter($kuserId);
-			kuserPeer::setUseCriteriaFilter(true);
+			$vuserId = $vVote->getVuserId();
+			vuserPeer::setUseCriteriaFilter(false);
+			$vuser = vuserPeer::retrieveByPKNoFilter($vuserId);
+			vuserPeer::setUseCriteriaFilter(true);
 
-			if(!$kuser)
+			if(!$vuser)
 			{
-				KalturaLog::err("no user found with id $kuserId");
+				VidiunLog::err("no user found with id $vuserId");
 				continue;
 			}
-			$puserId = $kuser->getPuserId();
-			$kVote->setPuserId($puserId);
-			$kVote->save();
+			$puserId = $vuser->getPuserId();
+			$vVote->setPuserId($puserId);
+			$vVote->save();
 		}
-		KalturaLog::debug("created is - " . $kVote->getCreatedAt());
-		$createdAtValue = $kVote->getCreatedAt();
+		VidiunLog::debug("created is - " . $vVote->getCreatedAt());
+		$createdAtValue = $vVote->getCreatedAt();
 	}

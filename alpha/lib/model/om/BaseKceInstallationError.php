@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Base class that represents a row from the 'kce_installation_error' table.
+ * Base class that represents a row from the 'vce_installation_error' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class BaseKceInstallationError extends BaseObject  implements Persistent {
+abstract class BaseVceInstallationError extends BaseObject  implements Persistent {
 
 
 	/**
 	 * The Peer class.
 	 * Instance provides a convenient way of calling static methods on a class
 	 * that calling code may not be able to identify.
-	 * @var        KceInstallationErrorPeer
+	 * @var        VceInstallationErrorPeer
 	 */
 	protected static $peer;
 
@@ -228,12 +228,12 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KceInstallationError The current object (for fluent API support)
+	 * @return     VceInstallationError The current object (for fluent API support)
 	 */
 	public function setId($v)
 	{
-		if(!isset($this->oldColumnsValues[KceInstallationErrorPeer::ID]))
-			$this->oldColumnsValues[KceInstallationErrorPeer::ID] = $this->id;
+		if(!isset($this->oldColumnsValues[VceInstallationErrorPeer::ID]))
+			$this->oldColumnsValues[VceInstallationErrorPeer::ID] = $this->id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -241,7 +241,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 
 		if ($this->id !== $v) {
 			$this->id = $v;
-			$this->modifiedColumns[] = KceInstallationErrorPeer::ID;
+			$this->modifiedColumns[] = VceInstallationErrorPeer::ID;
 		}
 
 		return $this;
@@ -251,12 +251,12 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * Set the value of [partner_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     KceInstallationError The current object (for fluent API support)
+	 * @return     VceInstallationError The current object (for fluent API support)
 	 */
 	public function setPartnerId($v)
 	{
-		if(!isset($this->oldColumnsValues[KceInstallationErrorPeer::PARTNER_ID]))
-			$this->oldColumnsValues[KceInstallationErrorPeer::PARTNER_ID] = $this->partner_id;
+		if(!isset($this->oldColumnsValues[VceInstallationErrorPeer::PARTNER_ID]))
+			$this->oldColumnsValues[VceInstallationErrorPeer::PARTNER_ID] = $this->partner_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -264,7 +264,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 
 		if ($this->partner_id !== $v) {
 			$this->partner_id = $v;
-			$this->modifiedColumns[] = KceInstallationErrorPeer::PARTNER_ID;
+			$this->modifiedColumns[] = VceInstallationErrorPeer::PARTNER_ID;
 		}
 
 		return $this;
@@ -274,12 +274,12 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * Set the value of [browser] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KceInstallationError The current object (for fluent API support)
+	 * @return     VceInstallationError The current object (for fluent API support)
 	 */
 	public function setBrowser($v)
 	{
-		if(!isset($this->oldColumnsValues[KceInstallationErrorPeer::BROWSER]))
-			$this->oldColumnsValues[KceInstallationErrorPeer::BROWSER] = $this->browser;
+		if(!isset($this->oldColumnsValues[VceInstallationErrorPeer::BROWSER]))
+			$this->oldColumnsValues[VceInstallationErrorPeer::BROWSER] = $this->browser;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -287,7 +287,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 
 		if ($this->browser !== $v) {
 			$this->browser = $v;
-			$this->modifiedColumns[] = KceInstallationErrorPeer::BROWSER;
+			$this->modifiedColumns[] = VceInstallationErrorPeer::BROWSER;
 		}
 
 		return $this;
@@ -297,12 +297,12 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * Set the value of [server_ip] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KceInstallationError The current object (for fluent API support)
+	 * @return     VceInstallationError The current object (for fluent API support)
 	 */
 	public function setServerIp($v)
 	{
-		if(!isset($this->oldColumnsValues[KceInstallationErrorPeer::SERVER_IP]))
-			$this->oldColumnsValues[KceInstallationErrorPeer::SERVER_IP] = $this->server_ip;
+		if(!isset($this->oldColumnsValues[VceInstallationErrorPeer::SERVER_IP]))
+			$this->oldColumnsValues[VceInstallationErrorPeer::SERVER_IP] = $this->server_ip;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -310,7 +310,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 
 		if ($this->server_ip !== $v) {
 			$this->server_ip = $v;
-			$this->modifiedColumns[] = KceInstallationErrorPeer::SERVER_IP;
+			$this->modifiedColumns[] = VceInstallationErrorPeer::SERVER_IP;
 		}
 
 		return $this;
@@ -320,12 +320,12 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * Set the value of [server_os] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KceInstallationError The current object (for fluent API support)
+	 * @return     VceInstallationError The current object (for fluent API support)
 	 */
 	public function setServerOs($v)
 	{
-		if(!isset($this->oldColumnsValues[KceInstallationErrorPeer::SERVER_OS]))
-			$this->oldColumnsValues[KceInstallationErrorPeer::SERVER_OS] = $this->server_os;
+		if(!isset($this->oldColumnsValues[VceInstallationErrorPeer::SERVER_OS]))
+			$this->oldColumnsValues[VceInstallationErrorPeer::SERVER_OS] = $this->server_os;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -333,7 +333,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 
 		if ($this->server_os !== $v) {
 			$this->server_os = $v;
-			$this->modifiedColumns[] = KceInstallationErrorPeer::SERVER_OS;
+			$this->modifiedColumns[] = VceInstallationErrorPeer::SERVER_OS;
 		}
 
 		return $this;
@@ -343,12 +343,12 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * Set the value of [php_version] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KceInstallationError The current object (for fluent API support)
+	 * @return     VceInstallationError The current object (for fluent API support)
 	 */
 	public function setPhpVersion($v)
 	{
-		if(!isset($this->oldColumnsValues[KceInstallationErrorPeer::PHP_VERSION]))
-			$this->oldColumnsValues[KceInstallationErrorPeer::PHP_VERSION] = $this->php_version;
+		if(!isset($this->oldColumnsValues[VceInstallationErrorPeer::PHP_VERSION]))
+			$this->oldColumnsValues[VceInstallationErrorPeer::PHP_VERSION] = $this->php_version;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -356,7 +356,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 
 		if ($this->php_version !== $v) {
 			$this->php_version = $v;
-			$this->modifiedColumns[] = KceInstallationErrorPeer::PHP_VERSION;
+			$this->modifiedColumns[] = VceInstallationErrorPeer::PHP_VERSION;
 		}
 
 		return $this;
@@ -366,12 +366,12 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * Set the value of [ce_admin_email] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KceInstallationError The current object (for fluent API support)
+	 * @return     VceInstallationError The current object (for fluent API support)
 	 */
 	public function setCeAdminEmail($v)
 	{
-		if(!isset($this->oldColumnsValues[KceInstallationErrorPeer::CE_ADMIN_EMAIL]))
-			$this->oldColumnsValues[KceInstallationErrorPeer::CE_ADMIN_EMAIL] = $this->ce_admin_email;
+		if(!isset($this->oldColumnsValues[VceInstallationErrorPeer::CE_ADMIN_EMAIL]))
+			$this->oldColumnsValues[VceInstallationErrorPeer::CE_ADMIN_EMAIL] = $this->ce_admin_email;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -379,7 +379,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 
 		if ($this->ce_admin_email !== $v) {
 			$this->ce_admin_email = $v;
-			$this->modifiedColumns[] = KceInstallationErrorPeer::CE_ADMIN_EMAIL;
+			$this->modifiedColumns[] = VceInstallationErrorPeer::CE_ADMIN_EMAIL;
 		}
 
 		return $this;
@@ -389,12 +389,12 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * Set the value of [type] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KceInstallationError The current object (for fluent API support)
+	 * @return     VceInstallationError The current object (for fluent API support)
 	 */
 	public function setType($v)
 	{
-		if(!isset($this->oldColumnsValues[KceInstallationErrorPeer::TYPE]))
-			$this->oldColumnsValues[KceInstallationErrorPeer::TYPE] = $this->type;
+		if(!isset($this->oldColumnsValues[VceInstallationErrorPeer::TYPE]))
+			$this->oldColumnsValues[VceInstallationErrorPeer::TYPE] = $this->type;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -402,7 +402,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 
 		if ($this->type !== $v) {
 			$this->type = $v;
-			$this->modifiedColumns[] = KceInstallationErrorPeer::TYPE;
+			$this->modifiedColumns[] = VceInstallationErrorPeer::TYPE;
 		}
 
 		return $this;
@@ -412,12 +412,12 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * Set the value of [description] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KceInstallationError The current object (for fluent API support)
+	 * @return     VceInstallationError The current object (for fluent API support)
 	 */
 	public function setDescription($v)
 	{
-		if(!isset($this->oldColumnsValues[KceInstallationErrorPeer::DESCRIPTION]))
-			$this->oldColumnsValues[KceInstallationErrorPeer::DESCRIPTION] = $this->description;
+		if(!isset($this->oldColumnsValues[VceInstallationErrorPeer::DESCRIPTION]))
+			$this->oldColumnsValues[VceInstallationErrorPeer::DESCRIPTION] = $this->description;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -425,7 +425,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 
 		if ($this->description !== $v) {
 			$this->description = $v;
-			$this->modifiedColumns[] = KceInstallationErrorPeer::DESCRIPTION;
+			$this->modifiedColumns[] = VceInstallationErrorPeer::DESCRIPTION;
 		}
 
 		return $this;
@@ -435,12 +435,12 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * Set the value of [data] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     KceInstallationError The current object (for fluent API support)
+	 * @return     VceInstallationError The current object (for fluent API support)
 	 */
 	public function setData($v)
 	{
-		if(!isset($this->oldColumnsValues[KceInstallationErrorPeer::DATA]))
-			$this->oldColumnsValues[KceInstallationErrorPeer::DATA] = $this->data;
+		if(!isset($this->oldColumnsValues[VceInstallationErrorPeer::DATA]))
+			$this->oldColumnsValues[VceInstallationErrorPeer::DATA] = $this->data;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -448,7 +448,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 
 		if ($this->data !== $v) {
 			$this->data = $v;
-			$this->modifiedColumns[] = KceInstallationErrorPeer::DATA;
+			$this->modifiedColumns[] = VceInstallationErrorPeer::DATA;
 		}
 
 		return $this;
@@ -505,10 +505,10 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 10; // 10 = KceInstallationErrorPeer::NUM_COLUMNS - KceInstallationErrorPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 10; // 10 = VceInstallationErrorPeer::NUM_COLUMNS - VceInstallationErrorPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
-			throw new PropelException("Error populating KceInstallationError object", $e);
+			throw new PropelException("Error populating VceInstallationError object", $e);
 		}
 	}
 
@@ -551,15 +551,15 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(KceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(VceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		// We don't need to alter the object instance pool; we're just modifying this instance
 		// already in the pool.
 
-		KceInstallationErrorPeer::setUseCriteriaFilter(false);
-		$stmt = KceInstallationErrorPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
-		KceInstallationErrorPeer::setUseCriteriaFilter(true);
+		VceInstallationErrorPeer::setUseCriteriaFilter(false);
+		$stmt = VceInstallationErrorPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+		VceInstallationErrorPeer::setUseCriteriaFilter(true);
 		$row = $stmt->fetch(PDO::FETCH_NUM);
 		$stmt->closeCursor();
 		if (!$row) {
@@ -588,14 +588,14 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(KceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
 			$ret = $this->preDelete($con);
 			if ($ret) {
-				KceInstallationErrorPeer::doDelete($this, $con);
+				VceInstallationErrorPeer::doDelete($this, $con);
 				$this->postDelete($con);
 				$this->setDeleted(true);
 				$con->commit();
@@ -628,7 +628,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(KceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
@@ -648,7 +648,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 					$this->postUpdate($con);
 				}
 				$this->postSave($con);
-				KceInstallationErrorPeer::addInstanceToPool($this);
+				VceInstallationErrorPeer::addInstanceToPool($this);
 			} else {
 				$affectedRows = 0;
 			}
@@ -683,14 +683,14 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 			$this->alreadyInSave = true;
 
 			if ($this->isNew() ) {
-				$this->modifiedColumns[] = KceInstallationErrorPeer::ID;
+				$this->modifiedColumns[] = VceInstallationErrorPeer::ID;
 			}
 
 			// If this object has been modified, then save it to the database.
 			$this->objectSaved = false;
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = KceInstallationErrorPeer::doInsert($this, $con);
+					$pk = VceInstallationErrorPeer::doInsert($this, $con);
 					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
 										 // should always be true here (even though technically
 										 // BasePeer::doInsert() can insert multiple rows).
@@ -700,7 +700,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 					$this->setNew(false);
 					$this->objectSaved = true;
 				} else {
-					$affectedObjects = KceInstallationErrorPeer::doUpdate($this, $con);
+					$affectedObjects = VceInstallationErrorPeer::doUpdate($this, $con);
 					if($affectedObjects)
 						$this->objectSaved = true;
 						
@@ -746,7 +746,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -767,12 +767,12 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -790,8 +790,8 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -908,7 +908,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 			$failureMap = array();
 
 
-			if (($retval = KceInstallationErrorPeer::doValidate($this, $columns)) !== true) {
+			if (($retval = VceInstallationErrorPeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
@@ -931,7 +931,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = KceInstallationErrorPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = VceInstallationErrorPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		$field = $this->getByPosition($pos);
 		return $field;
 	}
@@ -995,7 +995,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
-		$keys = KceInstallationErrorPeer::getFieldNames($keyType);
+		$keys = VceInstallationErrorPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getPartnerId(),
@@ -1023,7 +1023,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 */
 	public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = KceInstallationErrorPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = VceInstallationErrorPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->setByPosition($pos, $value);
 	}
 
@@ -1090,7 +1090,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 */
 	public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
 	{
-		$keys = KceInstallationErrorPeer::getFieldNames($keyType);
+		$keys = VceInstallationErrorPeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setPartnerId($arr[$keys[1]]);
@@ -1111,18 +1111,18 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 */
 	public function buildCriteria()
 	{
-		$criteria = new Criteria(KceInstallationErrorPeer::DATABASE_NAME);
+		$criteria = new Criteria(VceInstallationErrorPeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(KceInstallationErrorPeer::ID)) $criteria->add(KceInstallationErrorPeer::ID, $this->id);
-		if ($this->isColumnModified(KceInstallationErrorPeer::PARTNER_ID)) $criteria->add(KceInstallationErrorPeer::PARTNER_ID, $this->partner_id);
-		if ($this->isColumnModified(KceInstallationErrorPeer::BROWSER)) $criteria->add(KceInstallationErrorPeer::BROWSER, $this->browser);
-		if ($this->isColumnModified(KceInstallationErrorPeer::SERVER_IP)) $criteria->add(KceInstallationErrorPeer::SERVER_IP, $this->server_ip);
-		if ($this->isColumnModified(KceInstallationErrorPeer::SERVER_OS)) $criteria->add(KceInstallationErrorPeer::SERVER_OS, $this->server_os);
-		if ($this->isColumnModified(KceInstallationErrorPeer::PHP_VERSION)) $criteria->add(KceInstallationErrorPeer::PHP_VERSION, $this->php_version);
-		if ($this->isColumnModified(KceInstallationErrorPeer::CE_ADMIN_EMAIL)) $criteria->add(KceInstallationErrorPeer::CE_ADMIN_EMAIL, $this->ce_admin_email);
-		if ($this->isColumnModified(KceInstallationErrorPeer::TYPE)) $criteria->add(KceInstallationErrorPeer::TYPE, $this->type);
-		if ($this->isColumnModified(KceInstallationErrorPeer::DESCRIPTION)) $criteria->add(KceInstallationErrorPeer::DESCRIPTION, $this->description);
-		if ($this->isColumnModified(KceInstallationErrorPeer::DATA)) $criteria->add(KceInstallationErrorPeer::DATA, $this->data);
+		if ($this->isColumnModified(VceInstallationErrorPeer::ID)) $criteria->add(VceInstallationErrorPeer::ID, $this->id);
+		if ($this->isColumnModified(VceInstallationErrorPeer::PARTNER_ID)) $criteria->add(VceInstallationErrorPeer::PARTNER_ID, $this->partner_id);
+		if ($this->isColumnModified(VceInstallationErrorPeer::BROWSER)) $criteria->add(VceInstallationErrorPeer::BROWSER, $this->browser);
+		if ($this->isColumnModified(VceInstallationErrorPeer::SERVER_IP)) $criteria->add(VceInstallationErrorPeer::SERVER_IP, $this->server_ip);
+		if ($this->isColumnModified(VceInstallationErrorPeer::SERVER_OS)) $criteria->add(VceInstallationErrorPeer::SERVER_OS, $this->server_os);
+		if ($this->isColumnModified(VceInstallationErrorPeer::PHP_VERSION)) $criteria->add(VceInstallationErrorPeer::PHP_VERSION, $this->php_version);
+		if ($this->isColumnModified(VceInstallationErrorPeer::CE_ADMIN_EMAIL)) $criteria->add(VceInstallationErrorPeer::CE_ADMIN_EMAIL, $this->ce_admin_email);
+		if ($this->isColumnModified(VceInstallationErrorPeer::TYPE)) $criteria->add(VceInstallationErrorPeer::TYPE, $this->type);
+		if ($this->isColumnModified(VceInstallationErrorPeer::DESCRIPTION)) $criteria->add(VceInstallationErrorPeer::DESCRIPTION, $this->description);
+		if ($this->isColumnModified(VceInstallationErrorPeer::DATA)) $criteria->add(VceInstallationErrorPeer::DATA, $this->data);
 
 		return $criteria;
 	}
@@ -1137,9 +1137,9 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 */
 	public function buildPkeyCriteria()
 	{
-		$criteria = new Criteria(KceInstallationErrorPeer::DATABASE_NAME);
+		$criteria = new Criteria(VceInstallationErrorPeer::DATABASE_NAME);
 
-		$criteria->add(KceInstallationErrorPeer::ID, $this->id);
+		$criteria->add(VceInstallationErrorPeer::ID, $this->id);
 
 		return $criteria;
 	}
@@ -1170,7 +1170,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * If desired, this method can also make copies of all associated (fkey referrers)
 	 * objects.
 	 *
-	 * @param      object $copyObj An object of KceInstallationError (or compatible) type.
+	 * @param      object $copyObj An object of VceInstallationError (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
 	 * @throws     PropelException
 	 */
@@ -1211,7 +1211,7 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * objects.
 	 *
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-	 * @return     KceInstallationError Clone of current object.
+	 * @return     VceInstallationError Clone of current object.
 	 * @throws     PropelException
 	 */
 	public function copy($deepCopy = false)
@@ -1227,16 +1227,16 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @var     KceInstallationError Clone of current object.
+	 * @var     VceInstallationError Clone of current object.
 	 */
 	protected $copiedFrom = null;
 	
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @param      KceInstallationError $copiedFrom Clone of current object.
+	 * @param      VceInstallationError $copiedFrom Clone of current object.
 	 */
-	public function setCopiedFrom(KceInstallationError $copiedFrom)
+	public function setCopiedFrom(VceInstallationError $copiedFrom)
 	{
 		$this->copiedFrom = $copiedFrom;
 	}
@@ -1248,12 +1248,12 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 	 * same instance for all member of this class. The method could therefore
 	 * be static, but this would prevent one from overriding the behavior.
 	 *
-	 * @return     KceInstallationErrorPeer
+	 * @return     VceInstallationErrorPeer
 	 */
 	public function getPeer()
 	{
 		if (self::$peer === null) {
-			self::$peer = new KceInstallationErrorPeer();
+			self::$peer = new VceInstallationErrorPeer();
 		}
 		return self::$peer;
 	}
@@ -1274,4 +1274,4 @@ abstract class BaseKceInstallationError extends BaseObject  implements Persisten
 
 	}
 
-} // BaseKceInstallationError
+} // BaseVceInstallationError

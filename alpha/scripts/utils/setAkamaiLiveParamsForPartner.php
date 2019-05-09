@@ -29,7 +29,7 @@ if(!$partner)
     die("No such partner with id [$partnerId].".PHP_EOL);
 }
 //setting custom data fields of the partner
-$akamaiLiveParams = new kAkamaiLiveParams();
+$akamaiLiveParams = new vAkamaiLiveParams();
 $akamaiLiveParams->setAkamaiLiveWsdlUsername($akamaiLiveWsdlUsername);
 $akamaiLiveParams->setAkamaiLiveWsdlPassword($akamaiLiveWsdlPassword);
 $akamaiLiveParams->setAkamaiLiveCpcode($akamaiLiveCpCode);

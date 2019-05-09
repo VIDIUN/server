@@ -3,17 +3,17 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveEntryServerNodeRecordingInfoArray extends KalturaTypedArray
+class VidiunLiveEntryServerNodeRecordingInfoArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaLiveEntryServerNodeRecordingInfoArray();
+		$newArr = new VidiunLiveEntryServerNodeRecordingInfoArray();
 		if ($arr == null)
 			return $newArr;
 	
 		foreach ($arr as $obj)
 		{
-			$nObj = new KalturaLiveEntryServerNodeRecordingInfo();
+			$nObj = new VidiunLiveEntryServerNodeRecordingInfo();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaLiveEntryServerNodeRecordingInfoArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaLiveEntryServerNodeRecordingInfo");
+		return parent::__construct("VidiunLiveEntryServerNodeRecordingInfo");
 	}
 }

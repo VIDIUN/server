@@ -9,24 +9,24 @@ require_once( __DIR__ . '/AJAX_getObjectsAction.class.php');
  * @package Core
  * @subpackage ajax
  */ 
-class AJAX_getKusersAction extends AJAX_getObjectsAction
+class AJAX_getVusersAction extends AJAX_getObjectsAction
 {
-	public function getPagerName( ) 		{ return "kuser" ; }
-	public function getFiler () 			{ return new kuserFilter() ;	}
-	public function getComlumnNames () 		{ return kuser::getColumnNames(); } // alter table kuser add FULLTEXT ( screen_name , full_name , url_list , tags , about_me , network_highschool , network_college ,network_other ) ;
-	public function getSearchableColumnName () 		{   return kuser::getSearchableColumnName() ; } //  alter table entry add FULLTEXT ( name , tags );
-	public function getFilterPrefix ( ) 	{ return "kuser_filter_" ; }
+	public function getPagerName( ) 		{ return "vuser" ; }
+	public function getFiler () 			{ return new vuserFilter() ;	}
+	public function getComlumnNames () 		{ return vuser::getColumnNames(); } // alter table vuser add FULLTEXT ( screen_name , full_name , url_list , tags , about_me , network_highschool , network_college ,network_other ) ;
+	public function getSearchableColumnName () 		{   return vuser::getSearchableColumnName() ; } //  alter table entry add FULLTEXT ( name , tags );
+	public function getFilterPrefix ( ) 	{ return "vuser_filter_" ; }
 	public function getPeerMethod ()		{ return NULL ; }
 	public function getPeerCountMethod () 	{ return "doCountWithLimit" ; }
 
 	public function modifyCriteria ( Criteria $c )
 	{
 /*		
-		$c->addAnd ( kuserPeer::ID , kuser::MINIMUM_ID_TO_DISPLAY , Criteria::GREATER_THAN );
-		$c->addAnd ( kuserPeer::STATUS , KuserStatus::ACTIVE );
+		$c->addAnd ( vuserPeer::ID , vuser::MINIMUM_ID_TO_DISPLAY , Criteria::GREATER_THAN );
+		$c->addAnd ( vuserPeer::STATUS , VuserStatus::ACTIVE );
 
 		// always filter out all those partner_ids that are not null  
-		$c->addAnd ( kuserPeer::PARTNER_ID, myPartnerUtils::PUBLIC_PARTNER_INDEX , Criteria::LESS_EQUAL );
+		$c->addAnd ( vuserPeer::PARTNER_ID, myPartnerUtils::PUBLIC_PARTNER_INDEX , Criteria::LESS_EQUAL );
 */
 	}
 	
@@ -38,7 +38,7 @@ class AJAX_getKusersAction extends AJAX_getObjectsAction
 		 	"date" => "-updated_at" , 
 			"views" => "-views" ,
 			"num_of_media" => "-entries" ,
-			"num_of_kalturas" => "-produced_kshows" ,
+			"num_of_vidiuns" => "-produced_vshows" ,
 			"ids" => "+id" );
 		return $sort_aliases;			
 	}
@@ -50,7 +50,7 @@ class AJAX_getKusersAction extends AJAX_getObjectsAction
 /*
 	public function getTopImpl ()
 	{
-		return kuserPeer::getTopKusers ();
+		return vuserPeer::getTopVusers ();
 	}
 	*/
 }

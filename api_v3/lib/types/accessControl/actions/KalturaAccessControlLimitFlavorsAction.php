@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAccessControlLimitFlavorsAction extends KalturaRuleAction
+class VidiunAccessControlLimitFlavorsAction extends VidiunRuleAction
 {
 	/**
 	 * Comma separated list of flavor ids 
@@ -37,12 +37,12 @@ class KalturaAccessControlLimitFlavorsAction extends KalturaRuleAction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kAccessControlLimitFlavorsAction();
+			$dbObject = new vAccessControlLimitFlavorsAction();
 			
 		return parent::toObject($dbObject, $skip);
 	}

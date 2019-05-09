@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaNotificationJobData extends KalturaJobData
+class VidiunNotificationJobData extends VidiunJobData
 {
 	/**
 	 * @var string
@@ -11,7 +11,7 @@ class KalturaNotificationJobData extends KalturaJobData
 	public $userId;
 	
 	/**
-	 * @var KalturaNotificationType
+	 * @var VidiunNotificationType
 	 */
 	public $type;
 	
@@ -26,7 +26,7 @@ class KalturaNotificationJobData extends KalturaJobData
 	public $objectId;
 	
 	/**
-	 * @var KalturaNotificationStatus
+	 * @var VidiunNotificationStatus
 	 */
 	public $status;
 	
@@ -46,7 +46,7 @@ class KalturaNotificationJobData extends KalturaJobData
 	public $notificationResult;
 	
 	/**
-	 * @var KalturaNotificationObjectType
+	 * @var VidiunNotificationObjectType
 	 */
 	public $objType;
 	
@@ -60,7 +60,7 @@ class KalturaNotificationJobData extends KalturaJobData
 	public function toObject($dbData = null, $props_to_skip = array())
 	{
 		if(is_null($dbData))
-			$dbData = new kNotificationJobData();
+			$dbData = new vNotificationJobData();
 		
 		return parent::toObject($dbData, $props_to_skip);
 	}

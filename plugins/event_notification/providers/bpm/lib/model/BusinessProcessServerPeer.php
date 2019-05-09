@@ -36,7 +36,7 @@ class BusinessProcessServerPeer extends BaseBusinessProcessServerPeer {
 			if(isset(self::$class_types_cache[$type]))
 				return self::$class_types_cache[$type];
 				
-			$extendedCls = KalturaPluginManager::getObjectClass('BusinessProcessServer', $type);
+			$extendedCls = VidiunPluginManager::getObjectClass('BusinessProcessServer', $type);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$type] = $extendedCls;

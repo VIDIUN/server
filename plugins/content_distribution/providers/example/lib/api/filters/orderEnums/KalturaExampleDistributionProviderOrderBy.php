@@ -3,6 +3,6 @@
  * @package plugins.exampleDistribution
  * @subpackage api.filters.enum
  */
-class KalturaExampleDistributionProviderOrderBy extends KalturaDistributionProviderOrderBy
+class VidiunExampleDistributionProviderOrderBy extends VidiunDistributionProviderOrderBy
 {
 }

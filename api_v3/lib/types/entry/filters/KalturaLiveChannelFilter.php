@@ -3,22 +3,22 @@
  * @package api
  * @subpackage filters
  */
-class KalturaLiveChannelFilter extends KalturaLiveChannelBaseFilter
+class VidiunLiveChannelFilter extends VidiunLiveChannelBaseFilter
 {
 	public function __construct()
 	{
-		$this->typeIn = KalturaEntryType::LIVE_CHANNEL;
+		$this->typeIn = VidiunEntryType::LIVE_CHANNEL;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntryFilter::getListResponse()
+	 * @see VidiunBaseEntryFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager);
 		
-	    $newList = KalturaLiveChannelArray::fromDbArray($list, $responseProfile);
-		$response = new KalturaLiveChannelListResponse();
+	    $newList = VidiunLiveChannelArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunLiveChannelListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		

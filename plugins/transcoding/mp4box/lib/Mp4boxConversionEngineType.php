@@ -3,7 +3,7 @@
  * @package plugins.mp4box
  * @subpackage lib
  */
-class Mp4boxConversionEngineType implements IKalturaPluginEnum, conversionEngineType
+class Mp4boxConversionEngineType implements IVidiunPluginEnum, conversionEngineType
 {
 	const MP4BOX = 'Mp4box';
 	

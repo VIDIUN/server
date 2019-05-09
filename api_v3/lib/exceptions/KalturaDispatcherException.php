@@ -3,7 +3,7 @@
  * @package api
  * @subpackage errors
  */
-class KalturaDispatcherException extends Exception 
+class VidiunDispatcherException extends Exception 
 {
 
 }

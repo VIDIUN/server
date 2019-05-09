@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class ajaxGetSwfVersionsAction extends kalturaSystemAction
+class ajaxGetSwfVersionsAction extends vidiunSystemAction
 {
 	public function execute()
 	{

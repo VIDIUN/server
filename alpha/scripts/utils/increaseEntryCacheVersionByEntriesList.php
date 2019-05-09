@@ -11,7 +11,7 @@ $entries = file ( $argv[1] ) or die ( 'Could not read file!' );
 foreach ($entries as $entryId)
 	increaseEntryVersion(trim($entryId));
 
-KalturaLog::debug('Done');
+VidiunLog::debug('Done');
 
 
 
@@ -20,7 +20,7 @@ function increaseEntryVersion($entryId)
 	$entry = entryPeer::retrieveByPK($entryId);
 	if(!$entry)
 	{
-		KalturaLog::debug("Entry id [$entryId] not found" . PHP_EOL);
+		VidiunLog::debug("Entry id [$entryId] not found" . PHP_EOL);
 		return;
 	}
 	$entry->setCacheFlavorVersion($entry->getCacheFlavorVersion() + 1);

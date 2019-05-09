@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaCEError extends KalturaObject 
+class VidiunCEError extends VidiunObject 
 {
 	/**
 	 * @var string
@@ -76,9 +76,9 @@ class KalturaCEError extends KalturaObject
 		return array_merge ( parent::getMapBetweenObjects() , self::$map_between_objects );
 	}
 	
-	public function toKceInstallationError () 
+	public function toVceInstallationError () 
 	{
-		$kceError = new KceInstallationError();
-		return parent::toObject( $kceError );
+		$vceError = new VceInstallationError();
+		return parent::toObject( $vceError );
 	}
 }

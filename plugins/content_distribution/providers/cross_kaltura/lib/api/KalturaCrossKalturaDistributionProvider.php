@@ -1,9 +1,9 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage api.objects
  */
-class KalturaCrossKalturaDistributionProvider extends KalturaDistributionProvider
+class VidiunCrossVidiunDistributionProvider extends VidiunDistributionProvider
 {
 	// nothing special
 }

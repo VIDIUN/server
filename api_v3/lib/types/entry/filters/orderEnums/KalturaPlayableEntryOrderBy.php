@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaPlayableEntryOrderBy extends KalturaBaseEntryOrderBy
+class VidiunPlayableEntryOrderBy extends VidiunBaseEntryOrderBy
 {
 	const PLAYS_ASC = "+plays";
 	const PLAYS_DESC = "-plays";

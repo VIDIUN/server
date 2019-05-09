@@ -27,10 +27,10 @@ foreach($liveEntries as $liveEntry)
 	{
 		foreach ($mediaServers as $key => $mediaServer)
 		{
-			if(!$mediaServer instanceof kLiveMediaServer)
+			if(!$mediaServer instanceof vLiveMediaServer)
 				continue;
 			
-			/* @var $mediaServer kLiveMediaServer */
+			/* @var $mediaServer vLiveMediaServer */
 			$liveStatus = $liveEntry->getFromCustomData('live_status_'.$mediaServer->getIndex(), null, EntryServerNodeStatus::STOPPED);
 			if($liveStatus === EntryServerNodeStatus::STOPPED)
 				continue;
@@ -57,12 +57,12 @@ foreach($liveEntries as $liveEntry)
 			$liveEntryServerNode->setServerType($mediaServer->getIndex());
 			$liveEntryServerNode->save();
 			
-			KalturaLog::debug("entryId [".$liveEntryServerNode->getEntryId()."] server-node [".$liveEntryServerNode->getServerNodeId()."] server-type [".$liveEntryServerNode->getServerType()."] ");
+			VidiunLog::debug("entryId [".$liveEntryServerNode->getEntryId()."] server-node [".$liveEntryServerNode->getServerNodeId()."] server-type [".$liveEntryServerNode->getServerType()."] ");
 		}
 	}
 }
 
 if(count($liveEntries) === LIMIT && $liveEntry)
-	KalturaLog::warning("Live entries count equals script limit, please run script again with latest updated at value = ", $liveEntry->getUpdatedAt());
+	VidiunLog::warning("Live entries count equals script limit, please run script again with latest updated at value = ", $liveEntry->getUpdatedAt());
 
 ?>

@@ -73,7 +73,7 @@ class skinContainer extends myBaseObject
 
 	static public function getFieldNameFromHtmlFieldName ( $prefix , $html_field_name )
 	{
-		if ( kString::beginsWith( $html_field_name , $prefix ) )
+		if ( vString::beginsWith( $html_field_name , $prefix ) )
 		{
 			$field_name = substr( $html_field_name , strlen ( $prefix ) );
 			return str_replace ( ".cls" , "_cls" , $field_name );
@@ -96,7 +96,7 @@ class skinContainer extends myBaseObject
 	
 	public function setValueFromHtmlFieldName ( $prefix , $html_field_name , $value )
 	{
-		if ( kString::beginsWith( $html_field_name , $prefix ) )
+		if ( vString::beginsWith( $html_field_name , $prefix ) )
 		{
 			$field_name = substr( $html_field_name , strlen ( $prefix ) );
 			$this->setByName( $field_name , $value );
@@ -123,7 +123,7 @@ class skinContainer extends myBaseObject
 	 */
 	protected function isFieldValid ( $field_name , $field_value )
 	{
-/*		if ( ! kString::beginsWith( $field_name , skinContainer::FIELD_NAME_PREFIX ) )
+/*		if ( ! vString::beginsWith( $field_name , skinContainer::FIELD_NAME_PREFIX ) )
 		{
 			debugUtils::DEBUG( "Field [" . $field_name . "] invalid. Every field shouild start with the prefix "  , skinContainer::FIELD_NAME_PREFIX );
 			return false;

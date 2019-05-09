@@ -5,11 +5,11 @@
  * @package Core
  * @subpackage Batch
 	*/
-class kBatchExclusiveLock
+class vBatchExclusiveLock
 {
 	const UNLIMITED_QUOTA = 99999;
 	
-	private static function lockObjects(kExclusiveLockKey $lockKey, array $objects, $max_execution_time)
+	private static function lockObjects(vExclusiveLockKey $lockKey, array $objects, $max_execution_time)
 	{
 		
 		$exclusive_objects_ids = array();
@@ -42,7 +42,7 @@ class kBatchExclusiveLock
 			
 			$affectedRows = BasePeer::doUpdate( $criteria_for_exclusive_update, $update, $con);
 			
-			KalturaLog::log("Lock update affected rows [$affectedRows] on job id [" . $object->getId() . "] lock version [$lock_version]");
+			VidiunLog::log("Lock update affected rows [$affectedRows] on job id [" . $object->getId() . "] lock version [$lock_version]");
 			
 			if ( $affectedRows == 1 )
 			{
@@ -54,7 +54,7 @@ class kBatchExclusiveLock
 				$object->setBatchIndex ( $lockKey->getBatchIndex() );
 				$object->setExpiration ( $expiration );
 				
-				KalturaLog::log("Job id [" . $object->getId() . "] locked and returned");
+				VidiunLog::log("Job id [" . $object->getId() . "] locked and returned");
 				PartnerLoadPeer::updatePartnerLoad($object->getPartnerId(), $object->getJobType(), $object->getJobSubType(), $con);
 			
 				$exclusive_objects_ids[] = $object->getId();
@@ -62,7 +62,7 @@ class kBatchExclusiveLock
 			else
 			{
 				$not_exclusive_count++;
-				KalturaLog::log ( "Object not exclusive: [" . get_class ( $object ) . "] id [" . $object->getId() . "]" );
+				VidiunLog::log ( "Object not exclusive: [" . get_class ( $object ) . "] id [" . $object->getId() . "]" );
 			}
 		}
 		
@@ -73,7 +73,7 @@ class kBatchExclusiveLock
 	/**
 	 * will return BatchJob objects.
 	 *
-	 * @param kExclusiveLockKey $lockKey
+	 * @param vExclusiveLockKey $lockKey
 	 * @param int $max_execution_time
 	 * @param int $number_of_objects
 	 * @param int $jobType
@@ -81,14 +81,14 @@ class kBatchExclusiveLock
 	 * @param int $maxOffset
 	 * @param int $maxJobToPullForCache
 	 */
-	public static function getExclusiveJobs(kExclusiveLockKey $lockKey, $max_execution_time, $number_of_objects, $jobType,
+	public static function getExclusiveJobs(vExclusiveLockKey $lockKey, $max_execution_time, $number_of_objects, $jobType,
 			BatchJobFilter $filter, $maxJobToPullForCache = 0)
 	{
 		$c = new Criteria();
 		$filter->attachToCriteria($c);
 		
-		$objects = kJobsCacher::getJobs($c, $lockKey, $number_of_objects, $jobType, $maxJobToPullForCache);
-		KalturaLog::debug("Return allocated job with ids: " .print_r(array_map(function($job){return $job->getId();},$objects), true));
+		$objects = vJobsCacher::getJobs($c, $lockKey, $number_of_objects, $jobType, $maxJobToPullForCache);
+		VidiunLog::debug("Return allocated job with ids: " .print_r(array_map(function($job){return $job->getId();},$objects), true));
 		return self::lockObjects($lockKey, $objects, $max_execution_time);
 	}
 	
@@ -97,10 +97,10 @@ class kBatchExclusiveLock
 		$c->add ( BatchJobLockPeer::JOB_TYPE, $jobType );
 		
 		$max_exe_attempts = BatchJobLockPeer::getMaxExecutionAttempts($jobType);
-		return kJobsCacher::getQueue($c, $workerId, $max_exe_attempts);
+		return vJobsCacher::getQueue($c, $workerId, $max_exe_attempts);
 	}
 
-	public static function getExclusiveAlmostDone(Criteria $c, kExclusiveLockKey $lockKey, $max_execution_time, $number_of_objects, $jobType)
+	public static function getExclusiveAlmostDone(Criteria $c, vExclusiveLockKey $lockKey, $max_execution_time, $number_of_objects, $jobType)
 	{
 		$schd = BatchJobLockPeer::SCHEDULER_ID;
 		$work = BatchJobLockPeer::WORKER_ID;
@@ -118,7 +118,7 @@ class kBatchExclusiveLock
 		$now_str = date('Y-m-d H:i:s', $now);
 		
 		$c->add ( BatchJobLockPeer::JOB_TYPE, $jobType );
-		$c->addAnd($c->getNewCriterion(BatchJobLockPeer::DC, kDataCenterMgr::getCurrentDcId()));
+		$c->addAnd($c->getNewCriterion(BatchJobLockPeer::DC, vDataCenterMgr::getCurrentDcId()));
 		$c->add(BatchJobLockPeer::BATCH_VERSION, BatchJobLockPeer::getBatchVersion($jobType), Criteria::LESS_EQUAL);
 		
 		$prioritizers_ratio = BatchJobLockPeer::getPrioritizersRatio($jobType);
@@ -201,7 +201,7 @@ class kBatchExclusiveLock
 		
 		$c->addAnd($crit1);
 		$c->addAnd($c->getNewCriterion($atmp, $queryMaxAttempts, Criteria::CUSTOM));
-		$c->addAnd($c->getNewCriterion(BatchJobLockPeer::DC, kDataCenterMgr::getCurrentDcId()));
+		$c->addAnd($c->getNewCriterion(BatchJobLockPeer::DC, vDataCenterMgr::getCurrentDcId()));
 		
 		return BatchJobLockPeer::doCount( $c, false, myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2) );
 	}
@@ -227,18 +227,18 @@ class kBatchExclusiveLock
 		$now = time();
 		$now_str = date('Y-m-d H:i:s', $now);
 		
-		$delayedJobTypes = kConf::get('delayed_job_types');
-		$apiJobType = kPluginableEnumsManager::coreToApi('BatchJobType', $jobType);
+		$delayedJobTypes = vConf::get('delayed_job_types');
+		$apiJobType = vPluginableEnumsManager::coreToApi('BatchJobType', $jobType);
 		
 		// added to support nfs delay
 		if(in_array($apiJobType, $delayedJobTypes))
 		{
-			$interval = kConf::hasParam('nfs_safety_margin_sec') ? kConf::get('nfs_safety_margin_sec') : 5;
+			$interval = vConf::hasParam('nfs_safety_margin_sec') ? vConf::get('nfs_safety_margin_sec') : 5;
 			$c->add ( BatchJobLockPeer::CREATED_AT, (time() - $interval), Criteria::LESS_THAN);
 		}
 		
 		$c->add ( BatchJobLockPeer::JOB_TYPE, $jobType );
-		$c->add(BatchJobLockPeer::DC, kDataCenterMgr::getCurrentDcId());
+		$c->add(BatchJobLockPeer::DC, vDataCenterMgr::getCurrentDcId());
 		$c->add(BatchJobLockPeer::BATCH_VERSION, BatchJobLockPeer::getBatchVersion($jobType), Criteria::LESS_EQUAL);
 		
 		$prioritizers_ratio = BatchJobLockPeer::getPrioritizersRatio($jobType);
@@ -324,7 +324,7 @@ class kBatchExclusiveLock
 		$c->add(BatchJobLockPeer::STATUS, BatchJob::BATCHJOB_STATUS_RETRY, Criteria::EQUAL);
 		$c->addJoin(BatchJobLockPeer::BATCH_JOB_ID, BatchJobPeer::ID, Criteria::JOIN);
 		$c->add(BatchJobPeer::STATUS, BatchJob::BATCHJOB_STATUS_FATAL, Criteria::EQUAL);
-		$c->add(BatchJobLockPeer::DC, kDataCenterMgr::getCurrentDcId());
+		$c->add(BatchJobLockPeer::DC, vDataCenterMgr::getCurrentDcId());
 		
 		$jobs = BatchJobLockPeer::doSelect($c, myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2));
 		return $jobs;
@@ -332,7 +332,7 @@ class kBatchExclusiveLock
 	
 	public static function getExpiredJobs()
 	{
-		$jobTypes = kPluginableEnumsManager::coreValues('BatchJobType');
+		$jobTypes = vPluginableEnumsManager::coreValues('BatchJobType');
 		$executionAttempts2jobTypes = array();
 		
 		// Map between max execution attempts and job types
@@ -348,7 +348,7 @@ class kBatchExclusiveLock
 		// create query
 		$c = new Criteria();
 		$c->add(BatchJobLockPeer::STATUS, BatchJob::BATCHJOB_STATUS_FATAL, Criteria::NOT_EQUAL);
-		$c->add(BatchJobLockPeer::DC, kDataCenterMgr::getCurrentDcId()); // each DC should clean its own jobs
+		$c->add(BatchJobLockPeer::DC, vDataCenterMgr::getCurrentDcId()); // each DC should clean its own jobs
 		
 		// Query for each job type
 		$batchJobLocks = array();
@@ -370,11 +370,11 @@ class kBatchExclusiveLock
 	
 	/**
 	 * @param int $id
-	 * @param kExclusiveLockKey $lockKey
+	 * @param vExclusiveLockKey $lockKey
 	 * @param BatchJob $object
 	 * @return BatchJob
 	 */
-	public static function updateExclusive($id, kExclusiveLockKey $lockKey, BatchJob $object)
+	public static function updateExclusive($id, vExclusiveLockKey $lockKey, BatchJob $object)
 	{
 		$c = new Criteria();
 		$c->add(BatchJobLockPeer::ID, $id );
@@ -402,11 +402,11 @@ class kBatchExclusiveLock
 	/**
 	 *
 	 * @param $id
-	 * @param kExclusiveLockKey db_lock_object
+	 * @param vExclusiveLockKey db_lock_object
 	 * @param db_lock_objectstatus - optional. will be used to set the status once the object is free
 	 * @return BatchJob
 	 */
-	public static function freeExclusive($id, kExclusiveLockKey $lockKey, $resetExecutionAttempts = false)
+	public static function freeExclusive($id, vExclusiveLockKey $lockKey, $resetExecutionAttempts = false)
 	{
 		$c = new Criteria();
 		
@@ -437,7 +437,7 @@ class kBatchExclusiveLock
 		
 		if(($db_object->getStatus() != BatchJob::BATCHJOB_STATUS_ABORTED) &&
 				($db_object->getExecutionStatus() == BatchJobExecutionStatus::ABORTED))
-			$db_object = kJobsManager::abortDbBatchJob($db_object);
+			$db_object = vJobsManager::abortDbBatchJob($db_object);
 		
 		return $db_object;
 	}

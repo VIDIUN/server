@@ -24,7 +24,7 @@ function replaceTokensInString($string, $values)
 
 $config = array();
 $client = null;
-/* @var $client KalturaClient */
+/* @var $client VidiunClient */
 require_once __DIR__  . '/common.php';
 
 $options = getopt('', array(
@@ -40,15 +40,15 @@ if(!isset($options['timeout']))
 }
 $timeout = $options['timeout'];
 
-$monitorResult = new KalturaMonitorResult();
+$monitorResult = new VidiunMonitorResult();
 $apiCall = null;
 
 try
 {
 	$apiCall = 'session.start';
 	$start = microtime(true);
-	$ks = $client->session->start($config['monitor-partner']['adminSecret'], 'monitor-user', KalturaSessionType::ADMIN, $config['monitor-partner']['id']);
-	$client->setKs($ks);
+	$vs = $client->session->start($config['monitor-partner']['adminSecret'], 'monitor-user', VidiunSessionType::ADMIN, $config['monitor-partner']['id']);
+	$client->setVs($vs);
 	
 	$web_dir = $config['path']['web_dir'];
 	$app_dir = $config['path']['app_dir'];
@@ -57,8 +57,8 @@ try
 	$entry2_file = uniqid('entry2_file') . '.flv';
 	$entry1_path = $web_dir . DROP_FOLDER_DIR . "/" .  $entry1_file;
 	$entry2_path = $web_dir . DROP_FOLDER_DIR . "/" .  $entry2_file;
-	copy($web_dir . '/content/templates/entry/data/kaltura_logo_animated_green.flv' , $entry1_path);
-	copy($web_dir . '/content/templates/entry/data/kaltura_logo_animated_blue.flv' , $entry2_path);
+	copy($web_dir . '/content/templates/entry/data/vidiun_logo_animated_green.flv' , $entry1_path);
+	copy($web_dir . '/content/templates/entry/data/vidiun_logo_animated_blue.flv' , $entry2_path);
 	$entry1_filesize = filesize($entry1_path);
 	$entry2_filesize = filesize($entry2_path);
 	
@@ -87,10 +87,10 @@ try
 	*/
 	
 	
-	$dropFolderPlugin = KalturaDropFolderClientPlugin::get($client);
-	$dropFolderFileFilter = new KalturaDropFolderFileFilter();
+	$dropFolderPlugin = VidiunDropFolderClientPlugin::get($client);
+	$dropFolderFileFilter = new VidiunDropFolderFileFilter();
 	$dropFolderFileFilter->fileNameEqual = $bulkXmlFileName;
-	$dropFolderFilesPager = new KalturaFilterPager();
+	$dropFolderFilesPager = new VidiunFilterPager();
 	$dropFolderFilesPager->pageSize = 1;
 	
 	$dropFolderFilesList = $dropFolderPlugin->dropFolderFile->listAction($dropFolderFileFilter, $dropFolderFilesPager);
@@ -114,15 +114,15 @@ try
 		if(time() > $timeoutTime)
 			throw new Exception("timed out, drop folder file id: $dropFolderFile->id");
 			
-		if($dropFolderFile->status == KalturaDropFolderFileStatus::HANDLED ||
-			$dropFolderFile->status == KalturaDropFolderFileStatus::PURGED)
+		if($dropFolderFile->status == VidiunDropFolderFileStatus::HANDLED ||
+			$dropFolderFile->status == VidiunDropFolderFileStatus::PURGED)
 		{
 			$dropFolderStatus = JOB_STATUS_CODE_OK;
 			$monitorDescription = "Drop Folder Ingestion was finished successfully";
 			break;
 		}
 		
-		if($dropFolderFile->status == KalturaDropFolderFileStatus::ERROR_HANDLING)
+		if($dropFolderFile->status == VidiunDropFolderFileStatus::ERROR_HANDLING)
 		{
 			$dropFolderError =  "Drop Folder File [$dropFolderFile->id] failed";
 			break;
@@ -141,9 +141,9 @@ try
 	
 	if ($dropFolderError) {
 		$dropFolderStatus = JOB_STATUS_CODE_ERROR;
-		$error = new KalturaMonitorError();
+		$error = new VidiunMonitorError();
 		$error->description = $dropFolderError;
-		$error->level = KalturaMonitorError::ERR;
+		$error->level = VidiunMonitorError::ERR;
 	
 		$monitorResult->errors[] = $error;
 		$monitorDescription = $dropFolderError;
@@ -152,14 +152,14 @@ try
 	try
 	{
 		$apiCall = 'media.list';
-		$entriesFilter = new KalturaMediaEntryFilter();
+		$entriesFilter = new VidiunMediaEntryFilter();
 		$entriesFilter->categoriesFullNameIn = 'monitor>drop_folder';
-		$entriesPager = new KalturaFilterPager();
+		$entriesPager = new VidiunFilterPager();
 		$entriesPager->pageSize = 10;
 
 		$entriesList = $client->media->listAction($entriesFilter, $entriesPager);
 		foreach($entriesList->objects as $entry)
-		/*KalturaMediaEntry*/
+		/*VidiunMediaEntry*/
 		{
 			$apiCall = 'media.delete';
 			$client->media->delete($entry->id);
@@ -167,10 +167,10 @@ try
 	}
 	catch(Exception $ex)
 	{
-		$error = new KalturaMonitorError();
+		$error = new VidiunMonitorError();
 		$error->code = $ex->getCode();
 		$error->description = $ex->getMessage();
-		$error->level = KalturaMonitorError::WARN;
+		$error->level = VidiunMonitorError::WARN;
 		
 		$monitorResult->errors[] = $error;
 	}
@@ -180,28 +180,28 @@ try
 	$monitorResult->description = $monitorDescription;
 	
 }	
-catch(KalturaException $e)
+catch(VidiunException $e)
 {
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $e->getCode();
 	$error->description = $e->getMessage();
-	$error->level = KalturaMonitorError::ERR;
+	$error->level = VidiunMonitorError::ERR;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = "Exception: " . get_class($e) . ", API: $apiCall, Code: " . $e->getCode() . ", Message: " . $e->getMessage();
 }
-catch(KalturaClientException $ce)
+catch(VidiunClientException $ce)
 {
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $ce->getCode();
 	$error->description = $ce->getMessage();
-	$error->level = KalturaMonitorError::CRIT;
+	$error->level = VidiunMonitorError::CRIT;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = "Exception: " . get_class($ce) . ", API: $apiCall, Code: " . $ce->getCode() . ", Message: " . $ce->getMessage();

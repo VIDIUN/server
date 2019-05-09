@@ -3,7 +3,7 @@
  * @package plugins.metroPcsDistribution
  * @subpackage api.enum
  */
-class KalturaMetroPcsDistributionField extends KalturaStringEnum implements MetroPcsDistributionField
+class VidiunMetroPcsDistributionField extends VidiunStringEnum implements MetroPcsDistributionField
 {
 	// see MetroPcsDistributionField interface
 }

@@ -3,7 +3,7 @@
 /**
  * Define client request optional configurations
  */
-class KalturaRequestConfiguration extends KalturaObject
+class VidiunRequestConfiguration extends VidiunObject
 {
 	/**
 	 * Impersonated partner id
@@ -12,15 +12,15 @@ class KalturaRequestConfiguration extends KalturaObject
 	public $partnerId;
 	
 	/**
-	 * Kaltura API session
+	 * Vidiun API session
 	 * @alias sessionId
 	 * @var string
 	 */
-	public $ks;
+	public $vs;
 	
 	/**
 	 * Response profile - this attribute will be automatically unset after every API call.
-	 * @var KalturaBaseResponseProfile
+	 * @var VidiunBaseResponseProfile
 	 * @volatile
 	 */
 	public $responseProfile;

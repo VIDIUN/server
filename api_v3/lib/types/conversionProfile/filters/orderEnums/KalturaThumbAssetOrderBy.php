@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaThumbAssetOrderBy extends KalturaAssetOrderBy
+class VidiunThumbAssetOrderBy extends VidiunAssetOrderBy
 {
 }

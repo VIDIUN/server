@@ -5,43 +5,43 @@
  * @abstract
  */
 
-abstract class KalturaBaseVendorCredit extends KalturaObject implements IApiObjectFactory
+abstract class VidiunBaseVendorCredit extends VidiunObject implements IApiObjectFactory
 {
 	/* (non-PHPdoc)
- 	 * @see IApiObjectFactory::getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile)
+ 	 * @see IApiObjectFactory::getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile)
  	 */
-	public static function getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$creditType = get_class($sourceObject);
 		$credit = null;
 		switch ($creditType)
 		{
-			case 'kVendorCredit':
-				$credit = new KalturaVendorCredit();
+			case 'vVendorCredit':
+				$credit = new VidiunVendorCredit();
 				break;
 
-			case 'kTimeRangeVendorCredit':
-				$credit = new KalturaTimeRangeVendorCredit();
+			case 'vTimeRangeVendorCredit':
+				$credit = new VidiunTimeRangeVendorCredit();
 				break;
 
-			case 'kReoccurringVendorCredit':
-				$credit = new KalturaReoccurringVendorCredit();
+			case 'vReoccurringVendorCredit':
+				$credit = new VidiunReoccurringVendorCredit();
 				break;
 
-			case 'kUnlimitedVendorCredit':
-				$credit = new KalturaUnlimitedVendorCredit();
+			case 'vUnlimitedVendorCredit':
+				$credit = new VidiunUnlimitedVendorCredit();
 				break;
 		}
 
 		if ($credit)
-			/* @var $object KalturaBaseVendorCredit */
+			/* @var $object VidiunBaseVendorCredit */
 			$credit->fromObject($sourceObject, $responseProfile);
 
 		return $credit;
 	}
 
 		/* (non-PHPdoc)
-		* @see KalturaObject::validateForInsert()
+		* @see VidiunObject::validateForInsert()
 		*/
 	public function validateForInsert($propertiesToSkip = array())
   	{

@@ -1,11 +1,11 @@
 <?php
 
-class KalturaFeedRenderer extends SyndicationFeedRenderer{
+class VidiunFeedRenderer extends SyndicationFeedRenderer{
 	
 	const ITEMS_PLACEHOLDER = 'ITEMS_PLACEHOLDER';
 	
-	protected $kalturaXslt = null;
-	protected $kalturaXsltItem = null;
+	protected $vidiunXslt = null;
+	protected $vidiunXsltItem = null;
 
 	private $state = null;
 
@@ -15,9 +15,9 @@ class KalturaFeedRenderer extends SyndicationFeedRenderer{
 		$xslt = null;
 		if (isset($syndicationFeed->xslt))
 			$xslt = $syndicationFeed->xslt;
-		if (in_array($syndicationFeedDB->getType(), array(syndicationFeedType::KALTURA_XSLT, syndicationFeedType::ROKU_DIRECT_PUBLISHER, syndicationFeedType::OPERA_TV_SNAP)) && !is_null($xslt)) {
-			$this->kalturaXslt = $this->createKalturaMrssXslt($xslt);
-			$this->kalturaXsltItem = $this->createKalturaItemXslt($xslt);
+		if (in_array($syndicationFeedDB->getType(), array(syndicationFeedType::VIDIUN_XSLT, syndicationFeedType::ROKU_DIRECT_PUBLISHER, syndicationFeedType::OPERA_TV_SNAP)) && !is_null($xslt)) {
+			$this->vidiunXslt = $this->createVidiunMrssXslt($xslt);
+			$this->vidiunXsltItem = $this->createVidiunItemXslt($xslt);
 		}
 	}
 	
@@ -31,9 +31,9 @@ class KalturaFeedRenderer extends SyndicationFeedRenderer{
 
 	public function handleHeader() {
 		
-		$mrss = $this->getKalturaMrssXml($this->syndicationFeed->name, $this->syndicationFeed->feedLandingPage, $this->syndicationFeed->feedDescription);
-		if($this->kalturaXslt)
-			$mrss = kXml::transformXmlUsingXslt($mrss, $this->kalturaXslt);
+		$mrss = $this->getVidiunMrssXml($this->syndicationFeed->name, $this->syndicationFeed->feedLandingPage, $this->syndicationFeed->feedDescription);
+		if($this->vidiunXslt)
+			$mrss = vXml::transformXmlUsingXslt($mrss, $this->vidiunXslt);
 		
 		$divideHeaderFromFooter = strpos($mrss, self::ITEMS_PLACEHOLDER);
 		$mrss = substr($mrss,0,$divideHeaderFromFooter);
@@ -50,7 +50,7 @@ class KalturaFeedRenderer extends SyndicationFeedRenderer{
 		$entryMrss =  $this->getMrssEntryXml($entry, $this->syndicationFeedDB,  $this->syndicationFeed->landingPage);
 		
 		if(!$entryMrss) {
-			KalturaLog::err("No MRSS returned for entry [".$entry->getId()."]");
+			VidiunLog::err("No MRSS returned for entry [".$entry->getId()."]");
 			return null;
 		}
 		
@@ -58,15 +58,15 @@ class KalturaFeedRenderer extends SyndicationFeedRenderer{
 	}
 	
 	public function finalize($entryMrss, $moreItems) {
-		if ($this->kalturaXsltItem)
+		if ($this->vidiunXsltItem)
 		{
 			//syndication parameters to pass to XSLT
 			$xslParams = array();
-			$xslParams[XsltParameterName::KALTURA_HAS_NEXT_ITEM] = $moreItems;
-			$xslParams[XsltParameterName::KALTURA_SYNDICATION_FEED_FLAVOR_PARAM_ID] = $this->syndicationFeedDB->getFlavorParamId();
-			$xslParams[XsltParameterName::KALTURA_SYNDICATION_FEED_PARTNER_ID] = $this->syndicationFeed->partnerId;
+			$xslParams[XsltParameterName::VIDIUN_HAS_NEXT_ITEM] = $moreItems;
+			$xslParams[XsltParameterName::VIDIUN_SYNDICATION_FEED_FLAVOR_PARAM_ID] = $this->syndicationFeedDB->getFlavorParamId();
+			$xslParams[XsltParameterName::VIDIUN_SYNDICATION_FEED_PARTNER_ID] = $this->syndicationFeed->partnerId;
 
-			$entryMrss = kXml::transformXmlUsingXslt($entryMrss, $this->kalturaXsltItem, $xslParams);
+			$entryMrss = vXml::transformXmlUsingXslt($entryMrss, $this->vidiunXsltItem, $xslParams);
 			$entryMrss = $this->removeNamespaces($entryMrss);
 		}
 		$entryMrss = $this->removeXmlHeader($entryMrss);
@@ -75,10 +75,10 @@ class KalturaFeedRenderer extends SyndicationFeedRenderer{
 	}
 	
 	public function handleFooter() {
-		$mrss = $this->getKalturaMrssXml($this->syndicationFeed->name, $this->syndicationFeed->feedLandingPage, $this->syndicationFeed->feedDescription, true);
+		$mrss = $this->getVidiunMrssXml($this->syndicationFeed->name, $this->syndicationFeed->feedLandingPage, $this->syndicationFeed->feedDescription, true);
 	
-		if($this->kalturaXslt)
-			$mrss = kXml::transformXmlUsingXslt($mrss, $this->kalturaXslt);
+		if($this->vidiunXslt)
+			$mrss = vXml::transformXmlUsingXslt($mrss, $this->vidiunXslt);
 	
 		$divideHeaderFromFooter = strpos($mrss, self::ITEMS_PLACEHOLDER) + strlen(self::ITEMS_PLACEHOLDER);
 		$mrss = substr($mrss,$divideHeaderFromFooter);
@@ -86,9 +86,9 @@ class KalturaFeedRenderer extends SyndicationFeedRenderer{
 		return $mrss;
 	}
 
-	private function getKalturaMrssXml($title, $link = null, $description = null, $addNextLink = false)
+	private function getVidiunMrssXml($title, $link = null, $description = null, $addNextLink = false)
 	{
-		$mrss = kMrssManager::getMrssXml($title, $link, $description);
+		$mrss = vMrssManager::getMrssXml($title, $link, $description);
 	
 		foreach ($mrss->children() as $second_gen) {
 			if ($second_gen->getName() == 'channel')
@@ -100,15 +100,15 @@ class KalturaFeedRenderer extends SyndicationFeedRenderer{
 			$id = $this->syndicationFeed->id;
 			$partnerId = $this->syndicationFeed->partnerId;
 
-			$host = kConf::get('www_host');
+			$host = vConf::get('www_host');
 			if(is_null(parse_url($host ,PHP_URL_SCHEME)))
 			{
 				$host = infraRequestUtils::getProtocol() . "://" . $host;
 			}
 
 			$hrefLink = $host . "/api_v3/getFeed.php?partnerId=$partnerId&feedId=$id";
-			if(kCurrentContext::$ks)
-				$hrefLink .= "&ks=" . kCurrentContext::$ks;
+			if(vCurrentContext::$vs)
+				$hrefLink .= "&vs=" . vCurrentContext::$vs;
 			$hrefLink .= "&state=" . $this->state;
 
 			$nextLink = $mrss->addChild('link');
@@ -120,16 +120,16 @@ class KalturaFeedRenderer extends SyndicationFeedRenderer{
 	}
 	
 	/**
-	 * return xlts with item place holder only when given xslt compatible with kaltura feed
+	 * return xlts with item place holder only when given xslt compatible with vidiun feed
 	 * @param string $xslt
 	 * @return string $xslt
 	 */
-	private function createKalturaMrssXslt($xslt)
+	private function createVidiunMrssXslt($xslt)
 	{
 		$xsl = new DOMDocument();
 		if(!@$xsl->loadXML($xslt))
 		{
-			KalturaLog::err("Could not load xslt");
+			VidiunLog::err("Could not load xslt");
 			return null;
 		}
 	
@@ -149,16 +149,16 @@ class KalturaFeedRenderer extends SyndicationFeedRenderer{
 	}
 	
 	/**
-	 * return xlts with item template only when given xslt compatible with kaltura feed
+	 * return xlts with item template only when given xslt compatible with vidiun feed
 	 * @param string $xslt
 	 * @return string $xslt
 	 */
-	private function createKalturaItemXslt($xslt)
+	private function createVidiunItemXslt($xslt)
 	{
 		$xsl = new DOMDocument();
 		if(!@$xsl->loadXML($xslt))
 		{
-			KalturaLog::err("Could not load xslt");
+			VidiunLog::err("Could not load xslt");
 			return null;
 		}
 	
@@ -180,7 +180,7 @@ class KalturaFeedRenderer extends SyndicationFeedRenderer{
 		if ($syndicationFeed->getMrssParameters())
 			$mrssParams = clone $syndicationFeed->getMrssParameters();
 		else
-			$mrssParams = new kMrssParameters;
+			$mrssParams = new vMrssParameters;
 		$mrssParams->setLink($link);
 		$mrssParams->setFilterByFlavorParams($syndicationFeed->getFlavorParamId());
 		$mrssParams->setIncludePlayerTag(true);
@@ -192,15 +192,15 @@ class KalturaFeedRenderer extends SyndicationFeedRenderer{
 		$features = null;
 		if ($syndicationFeed->getUseCategoryEntries())
 		{
-			KalturaLog::info("Getting entry's associated categories from the category_entry table");
+			VidiunLog::info("Getting entry's associated categories from the category_entry table");
 			$features = array (ObjectFeatureType::CATEGORY_ENTRIES);
 		}
 		
-		$mrss = kMrssManager::getEntryMrssXml($entry, null, $mrssParams, $features);
+		$mrss = vMrssManager::getEntryMrssXml($entry, null, $mrssParams, $features);
 	
 		if(!$mrss)
 		{
-			KalturaLog::err("No MRSS returned for entry [".$entry->getId()."]");
+			VidiunLog::err("No MRSS returned for entry [".$entry->getId()."]");
 			return null;
 		}
 	

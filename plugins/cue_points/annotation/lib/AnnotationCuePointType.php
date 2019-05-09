@@ -3,7 +3,7 @@
  * @package plugins.annotation
  * @subpackage lib.enum
  */
-class AnnotationCuePointType implements IKalturaPluginEnum, CuePointType
+class AnnotationCuePointType implements IVidiunPluginEnum, CuePointType
 {
 	const ANNOTATION = 'Annotation';
 	

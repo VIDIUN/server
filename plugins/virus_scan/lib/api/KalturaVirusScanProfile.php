@@ -3,7 +3,7 @@
  * @package plugins.virusScan
  * @subpackage api.objects
  */
-class KalturaVirusScanProfile extends KalturaObject implements IFilterable
+class VidiunVirusScanProfile extends VidiunObject implements IFilterable
 {
 	/**
 	 * @var int
@@ -40,24 +40,24 @@ class KalturaVirusScanProfile extends KalturaObject implements IFilterable
 	public $name;
 
 	/**
-	 * @var KalturaVirusScanProfileStatus
+	 * @var VidiunVirusScanProfileStatus
 	 * @filter eq,in
 	 */
 	public $status;
 
 	/**
-	 * @var KalturaVirusScanEngineType
+	 * @var VidiunVirusScanEngineType
 	 * @filter eq,in
 	 */
 	public $engineType;
 
 	/**
-	 * @var KalturaBaseEntryFilter
+	 * @var VidiunBaseEntryFilter
 	 */
 	public $entryFilter;
 
 	/**
-	 * @var KalturaVirusFoundAction
+	 * @var VidiunVirusFoundAction
 	 */
 	public $actionIfInfected;
 	
@@ -97,7 +97,7 @@ class KalturaVirusScanProfile extends KalturaObject implements IFilterable
 		return $dbObject;
 	}
 	
-	public function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if(!$sourceObject)
 			return;
@@ -109,7 +109,7 @@ class KalturaVirusScanProfile extends KalturaObject implements IFilterable
 			$entryFilter = $sourceObject->getEntryFilterObject();
 			if($entryFilter)
 			{
-				$this->entryFilter = new KalturaBaseEntryFilter();
+				$this->entryFilter = new VidiunBaseEntryFilter();
 				$this->entryFilter->fromObject($entryFilter);
 			}
 		}

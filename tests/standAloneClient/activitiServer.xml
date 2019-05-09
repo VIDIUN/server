@@ -12,7 +12,7 @@
 	</session>
 	<multirequest>
 		<request service="businessProcessServer" action="add" plugin="businessProcessNotification" partnerId="0">
-			<template objectType="KalturaActivitiBusinessProcessServer">
+			<template objectType="VidiunActivitiBusinessProcessServer">
 				<name>{prompt:Activiti server name:}</name>
 				<systemName>{prompt:Activiti server system name:}</systemName>
 				<host>{prompt:Activiti server host:}</host>

@@ -3,12 +3,12 @@
  * @package plugins.viewHistory
  * @subpackage model.enum
  */
-class ViewHistoryUserEntryType implements IKalturaPluginEnum, UserEntryType
+class ViewHistoryUserEntryType implements IVidiunPluginEnum, UserEntryType
 {
 	const VIEW_HISTORY = "VIEW_HISTORY";
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalValues()
+	 * @see IVidiunPluginEnum::getAdditionalValues()
 	 */
 	public static function getAdditionalValues()
 	{
@@ -18,7 +18,7 @@ class ViewHistoryUserEntryType implements IKalturaPluginEnum, UserEntryType
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalDescriptions()
+	 * @see IVidiunPluginEnum::getAdditionalDescriptions()
 	 */
 	public static function getAdditionalDescriptions()
 	{

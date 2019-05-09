@@ -5,17 +5,17 @@
 * @package infra
 * @subpackage Plugins
 */
-abstract class KalturaParentContributedPlugin extends KalturaPlugin implements IKalturaMrssContributor{
+abstract class VidiunParentContributedPlugin extends VidiunPlugin implements IVidiunMrssContributor{
 
     /**
      * @param BaseObject $object
      * @param SimpleXMLElement $mrss
-     * @param kMrssParameters $mrssParams
+     * @param vMrssParameters $mrssParams
      * @return SimpleXMLElement
      */
-    public function contribute(BaseObject $object, SimpleXMLElement $mrss, kMrssParameters $mrssParams = null)
+    public function contribute(BaseObject $object, SimpleXMLElement $mrss, vMrssParameters $mrssParams = null)
     {
-		KalturaLog::debug("using ParentContributedPlugin");
+		VidiunLog::debug("using ParentContributedPlugin");
 		if(!($object instanceof entry)){
 			return;
 		}
@@ -28,7 +28,7 @@ abstract class KalturaParentContributedPlugin extends KalturaPlugin implements I
 		$childrenDom = dom_import_simplexml($childrenNode);
 		foreach ($children as $child)
 		{
-			$childXML = kMrssManager::getEntryMrssXml($child);
+			$childXML = vMrssManager::getEntryMrssXml($child);
 			$childDom = dom_import_simplexml($childXML);
 			$childDom = $childrenDom->ownerDocument->importNode($childDom, true);
 			$childrenDom->appendChild($childDom);
@@ -36,13 +36,13 @@ abstract class KalturaParentContributedPlugin extends KalturaPlugin implements I
     }
 
     /**
-     * Function returns the object feature type for the use of the KmrssManager
+     * Function returns the object feature type for the use of the VmrssManager
      *
      * @return int
      */
     public function getObjectFeatureType()
     {
-        $value = $this->getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . ParentObjectFeatureType::PARENT;
-        return kPluginableEnumsManager::apiToCore('ObjectFeatureType', $value);
+        $value = $this->getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . ParentObjectFeatureType::PARENT;
+        return vPluginableEnumsManager::apiToCore('ObjectFeatureType', $value);
     }
 }

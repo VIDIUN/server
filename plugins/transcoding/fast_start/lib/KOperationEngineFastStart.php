@@ -3,6 +3,6 @@
  * @package plugins.fastStart
  * @subpackage lib
  */
-class KOperationEngineFastStart  extends KSingleOutputOperationEngine
+class VOperationEngineFastStart  extends VSingleOutputOperationEngine
 {
 }

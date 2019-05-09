@@ -1,18 +1,18 @@
 <?php
 /**
- * Subclass for performing query and update operations on the 'kshow' table.
+ * Subclass for performing query and update operations on the 'vshow' table.
  *
  *
  *
  * @package Core
  * @subpackage model
  */
-class kshowPeer extends BasekshowPeer 
+class vshowPeer extends BasevshowPeer 
 {
 	private static $s_default_count_limit = 301;
 
 	/**
-	 * This function sets the requested order of kshows to the given criteria object.
+	 * This function sets the requested order of vshows to the given criteria object.
 	 * we can use an associative array to hold the ordering fields instead of the
 	 * switch statement being used now
 	 *
@@ -22,44 +22,44 @@ class kshowPeer extends BasekshowPeer
 	private static function setOrder($c, $order)
 	{
 		switch ($order) {
-		case kshow::KSHOW_SORT_MOST_VIEWED:
-			//$c->hints = array(kshowPeer::TABLE_NAME => "views_index");
+		case vshow::VSHOW_SORT_MOST_VIEWED:
+			//$c->hints = array(vshowPeer::TABLE_NAME => "views_index");
 			$c->addDescendingOrderByColumn(self::VIEWS);
 
 			break;
 
-		case kshow::KSHOW_SORT_MOST_RECENT:
-			//$c->hints = array(kshowPeer::TABLE_NAME => "created_at_index");
+		case vshow::VSHOW_SORT_MOST_RECENT:
+			//$c->hints = array(vshowPeer::TABLE_NAME => "created_at_index");
 			$c->addDescendingOrderByColumn(self::CREATED_AT);
 			break;
 
-		case kshow::KSHOW_SORT_MOST_COMMENTS:
+		case vshow::VSHOW_SORT_MOST_COMMENTS:
 			$c->addDescendingOrderByColumn(self::COMMENTS);
 			break;
 
-		case kshow::KSHOW_SORT_MOST_FAVORITES:
+		case vshow::VSHOW_SORT_MOST_FAVORITES:
 			$c->addDescendingOrderByColumn(self::FAVORITES);
 			break;
 
-		case kshow::KSHOW_SORT_END_DATE:
+		case vshow::VSHOW_SORT_END_DATE:
 			$c->addDescendingOrderByColumn(self::END_DATE);
 			break;
 
-		case kshow::KSHOW_SORT_MOST_ENTRIES:
+		case vshow::VSHOW_SORT_MOST_ENTRIES:
 			$c->addDescendingOrderByColumn(self::ENTRIES);
 			break;
 
-		case kshow::KSHOW_SORT_NAME:
+		case vshow::VSHOW_SORT_NAME:
 			$c->addAscendingOrderByColumn(self::NAME);
 			break;
 
-		case kshow::KSHOW_SORT_RANK:
+		case vshow::VSHOW_SORT_RANK:
 			$c->addDescendingOrderByColumn(self::RANK);
 			break;
-		case kshow::KSHOW_SORT_MOST_UPDATED:
+		case vshow::VSHOW_SORT_MOST_UPDATED:
 			$c->addDescendingOrderByColumn(self::UPDATED_AT);
 			break;
-		case kshow::KSHOW_SORT_MOST_CONTRIBUTORS:
+		case vshow::VSHOW_SORT_MOST_CONTRIBUTORS:
 			$c->addDescendingOrderByColumn(self::CONTRIBUTORS);
 			break;
 
@@ -67,32 +67,32 @@ class kshowPeer extends BasekshowPeer
 	}
 
 	/**
-	 * This function returns a pager object holding kshows sorted by a given sort order.
-	 * each kshow holds the kuser object of its host.
+	 * This function returns a pager object holding vshows sorted by a given sort order.
+	 * each vshow holds the vuser object of its host.
 	 *
 	 * @param int $order = the requested sort order
-	 * @param int $pageSize = number of kshows in each page
+	 * @param int $pageSize = number of vshows in each page
 	 * @param int $page = the requested page
 	 * @return the pager object
 	 */
-	public static function getOrderedPager($order, $pageSize, $page, $producer_id = null, $kaltura_part_of_flag = null )
+	public static function getOrderedPager($order, $pageSize, $page, $producer_id = null, $vidiun_part_of_flag = null )
 	{
 		$c = new Criteria();
 		self::setOrder($c, $order);
 
-		$c->addJoin(self::PRODUCER_ID, kuserPeer::ID, Criteria::INNER_JOIN);
+		$c->addJoin(self::PRODUCER_ID, vuserPeer::ID, Criteria::INNER_JOIN);
 
-		if( $kaltura_part_of_flag )
+		if( $vidiun_part_of_flag )
 		{
 			// in this case we get the user-id in the $producer_id field
-			$c->addJoin(self::ID, entryPeer::KSHOW_ID, Criteria::INNER_JOIN);
-			$c->add(entryPeer::KUSER_ID, $producer_id);
+			$c->addJoin(self::ID, entryPeer::VSHOW_ID, Criteria::INNER_JOIN);
+			$c->add(entryPeer::VUSER_ID, $producer_id);
 			$c->add( self::PRODUCER_ID, $producer_id, Criteria::NOT_EQUAL );
 			$c->setDistinct();
 		}
 		else if( $producer_id > 0 ) $c->add( self::PRODUCER_ID, $producer_id );
 
-		$pager = new sfPropelPager('kshow', $pageSize);
+		$pager = new sfPropelPager('vshow', $pageSize);
 	    $pager->setCriteria($c);
 	    $pager->setPage($page);
 	    $pager->setPeerMethod('doSelectJoinAll');
@@ -102,48 +102,48 @@ class kshowPeer extends BasekshowPeer
 	    return $pager;
 	}
 
-	public static function getKshowsByName( $name )
+	public static function getVshowsByName( $name )
 	{
 		$c = new Criteria();
-		$c->add ( kshowPeer::NAME , $name );
-		return kshowPeer::doSelect( $c );
+		$c->add ( vshowPeer::NAME , $name );
+		return vshowPeer::doSelect( $c );
 	}
 
-	public static function getFirstKshowByName( $name )
+	public static function getFirstVshowByName( $name )
 	{
-		$kshows = self::getKshowsByName ( $name );
-		if( $kshows != null )
-			return $kshows[0];
+		$vshows = self::getVshowsByName ( $name );
+		if( $vshows != null )
+			return $vshows[0];
 		return null;
 	}
 
 	public static function retrieveByIndexedCustomData3 ( $name )
 	{
 		$c = new Criteria();
-		$c->add ( kshowPeer::INDEXED_CUSTOM_DATA_3 , $name );
-		$kshows =  kshowPeer::doSelect( $c );
-		if( $kshows != null )
-			return $kshows[0];
+		$c->add ( vshowPeer::INDEXED_CUSTOM_DATA_3 , $name );
+		$vshows =  vshowPeer::doSelect( $c );
+		if( $vshows != null )
+			return $vshows[0];
 		return null;
 	}
 
 	/**
 	 * This function returns a pager object holding the given user's favorite entries
-	 * each entry holds the kuser object of its host.
+	 * each entry holds the vuser object of its host.
 	 *
-	 * @param int $kuserId = the requested user
+	 * @param int $vuserId = the requested user
 	 * @param int $type = the favorite type (currently only SUBJECT_TYPE_ENTRY will match)
 	 * @param int $privacy = the privacy filter
-	 * @param int $pageSize = number of kshows in each page
+	 * @param int $pageSize = number of vshows in each page
 	 * @param int $page = the requested page
 	 * @return the pager object
 	 */
-	public static function getUserFavorites($kuserId, $type, $privacy, $pageSize, $page)
+	public static function getUserFavorites($vuserId, $type, $privacy, $pageSize, $page)
 	{
 		$c = new Criteria();
-		$c->addJoin(self::PRODUCER_ID, kuserPeer::ID, Criteria::INNER_JOIN);
+		$c->addJoin(self::PRODUCER_ID, vuserPeer::ID, Criteria::INNER_JOIN);
 		$c->addJoin(self::ID, favoritePeer::SUBJECT_ID, Criteria::INNER_JOIN);
-		$c->add(favoritePeer::KUSER_ID, $kuserId);
+		$c->add(favoritePeer::VUSER_ID, $vuserId);
 		$c->add(favoritePeer::SUBJECT_TYPE, $type);
 		$c->add(favoritePeer::PRIVACY, $privacy);
 
@@ -158,11 +158,11 @@ class kshowPeer extends BasekshowPeer
 
 		$c->addAscendingOrderByColumn(self::NAME);
 
-	    $pager = new sfPropelPager('kshow', $pageSize);
+	    $pager = new sfPropelPager('vshow', $pageSize);
 	    $pager->setCriteria($c);
 	    $pager->setPage($page);
-	    $pager->setPeerMethod('doSelectJoinkuser');
-	    $pager->setPeerCountMethod('doCountJoinkuser');
+	    $pager->setPeerMethod('doSelectJoinvuser');
+	    $pager->setPeerCountMethod('doCountJoinvuser');
 	    $pager->init();
 
 	    return $pager;
@@ -173,30 +173,30 @@ class kshowPeer extends BasekshowPeer
 	/**
 	 * This function returns a pager object holding the given user's shows, for which he or she is the producer.
 	 *
-	 * @param int $kuserId = the requested user
-	 * @param int $pageSize = number of kshows in each page
+	 * @param int $vuserId = the requested user
+	 * @param int $pageSize = number of vshows in each page
 	 * @param int $page = the requested page
 	 * @param int $order = the requested sort order
-	 * @param int $currentKshowId = the current kshow id (e.g. in the browse page) not to be shown again in the other user shows
+	 * @param int $currentVshowId = the current vshow id (e.g. in the browse page) not to be shown again in the other user shows
 	 * @return the pager object
 	 */
-	public static function getUserShows($kuserId, $pageSize, $page, $order, $currentKshowId = 0)
+	public static function getUserShows($vuserId, $pageSize, $page, $order, $currentVshowId = 0)
 	{
 
 		$c = new Criteria();
 
-		$c->addJoin(self::PRODUCER_ID, kuserPeer::ID, Criteria::INNER_JOIN);
-		$c->add(self::PRODUCER_ID, $kuserId);
-		if ($currentKshowId)
-			$c->add(self::ID, $currentKshowId, Criteria::NOT_EQUAL);
+		$c->addJoin(self::PRODUCER_ID, vuserPeer::ID, Criteria::INNER_JOIN);
+		$c->add(self::PRODUCER_ID, $vuserId);
+		if ($currentVshowId)
+			$c->add(self::ID, $currentVshowId, Criteria::NOT_EQUAL);
 
 		self::setOrder($c, $order);
 
-	    $pager = new sfPropelPager('kshow', $pageSize);
+	    $pager = new sfPropelPager('vshow', $pageSize);
 	    $pager->setCriteria($c);
 	    $pager->setPage($page);
-	    $pager->setPeerMethod('doSelectJoinkuser');
-	    $pager->setPeerCountMethod('doCountJoinkuser');
+	    $pager->setPeerMethod('doSelectJoinvuser');
+	    $pager->setPeerCountMethod('doCountJoinvuser');
 	    $pager->init();
 
 	    return $pager;
@@ -206,27 +206,27 @@ class kshowPeer extends BasekshowPeer
 		/**
 	 * This function returns a pager object holding the set of shows for which given user contributed media.
 	 *
-	 * @param int $kuserId = the requested user
-	 * @param int $pageSize = number of kshows in each page
+	 * @param int $vuserId = the requested user
+	 * @param int $pageSize = number of vshows in each page
 	 * @param int $page = the requested page
 	 * @return the pager object
 	 */
-	public static function getUserShowsPartOf($kuserId, $pageSize, $page, $order)
+	public static function getUserShowsPartOf($vuserId, $pageSize, $page, $order)
 	{
 
 		$c = new Criteria();
 
-		$c->addJoin(self::ID, entryPeer::KSHOW_ID, Criteria::INNER_JOIN);
-		$c->add(entryPeer::KUSER_ID, $kuserId);
-		$c->add( self::PRODUCER_ID, $kuserId, Criteria::NOT_EQUAL );
+		$c->addJoin(self::ID, entryPeer::VSHOW_ID, Criteria::INNER_JOIN);
+		$c->add(entryPeer::VUSER_ID, $vuserId);
+		$c->add( self::PRODUCER_ID, $vuserId, Criteria::NOT_EQUAL );
 		self::setOrder($c, $order);
 		$c->setDistinct();
 
-	    $pager = new sfPropelPager('kshow', $pageSize);
+	    $pager = new sfPropelPager('vshow', $pageSize);
 	    $pager->setCriteria($c);
 	    $pager->setPage($page);
-	    $pager->setPeerMethod('doSelectJoinkuser');
-	    $pager->setPeerCountMethod('doCountJoinkuser');
+	    $pager->setPeerMethod('doSelectJoinvuser');
+	    $pager->setPeerCountMethod('doCountJoinvuser');
 	    $pager->init();
 
 	    return $pager;
@@ -249,35 +249,35 @@ class kshowPeer extends BasekshowPeer
 		return $id_list;
 	}
 
-	public static function getKshowsByEntryIds($entry_ids)
+	public static function getVshowsByEntryIds($entry_ids)
 	{
 		$c = new Criteria();
-		//$c->addSelectColumn(kshowPeer::ID);
-		//$c->addSelectColumn(kshowPeer::NAME);
-		kshowPeer::addSelectColumns($c);
-		$c->addJoin(kshowPeer::ID, roughcutEntryPeer::ROUGHCUT_KSHOW_ID);
+		//$c->addSelectColumn(vshowPeer::ID);
+		//$c->addSelectColumn(vshowPeer::NAME);
+		vshowPeer::addSelectColumns($c);
+		$c->addJoin(vshowPeer::ID, roughcutEntryPeer::ROUGHCUT_VSHOW_ID);
 		$c->add(roughcutEntryPeer::ENTRY_ID, $entry_ids, Criteria::IN);
-		$results = kshowPeer::populateObjects(self::doSelectStmt($c));
-		kshowPeer::addInstancesToPool($results);
+		$results = vshowPeer::populateObjects(self::doSelectStmt($c));
+		vshowPeer::addInstancesToPool($results);
 		return $results;
 	}
 
-	// this function deletes a KSHOW
+	// this function deletes a VSHOW
 	// users can only delete their own entries
-	public static function deleteKShow( $kshow_id, $kuser_id  )
+	public static function deleteVShow( $vshow_id, $vuser_id  )
 	{
-		$kshow = self::retrieveByPK( $kshow_id );
-		if( $kshow == null ) return false;
-		if( $kshow->getProducerId() != $kuser_id ) return false;
+		$vshow = self::retrieveByPK( $vshow_id );
+		if( $vshow == null ) return false;
+		if( $vshow->getProducerId() != $vuser_id ) return false;
 		else
 		{
-			$kshow->delete();
+			$vshow->delete();
 
 			// now delete the subscriptions
 			$c = new Criteria();
-			$c->add(KshowKuserPeer::KSHOW_ID, $kshow_id ); // the current user knows they just favorited
-			$c->add(KshowKuserPeer::SUBSCRIPTION_TYPE, KshowKuser::KSHOW_SUBSCRIPTION_NORMAL); // this table stores other relations too
-			$subscriptions = KshowKuserPeer::doSelect( $c );
+			$c->add(VshowVuserPeer::VSHOW_ID, $vshow_id ); // the current user knows they just favorited
+			$c->add(VshowVuserPeer::SUBSCRIPTION_TYPE, VshowVuser::VSHOW_SUBSCRIPTION_NORMAL); // this table stores other relations too
+			$subscriptions = VshowVuserPeer::doSelect( $c );
 			foreach ( $subscriptions as $subscription )
 			{
 					$subscription->delete();
@@ -293,9 +293,9 @@ class kshowPeer extends BasekshowPeer
 		$criteria = clone $criteria;
 		$criteria->clearSelectColumns()->clearOrderByColumns();
 		if ($distinct || in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-			$criteria->addSelectColumn("DISTINCT ".kshowPeer::ID);
+			$criteria->addSelectColumn("DISTINCT ".vshowPeer::ID);
 		} else {
-			$criteria->addSelectColumn(kshowPeer::ID);
+			$criteria->addSelectColumn(vshowPeer::ID);
 		}
 
 		$criteria->setLimit( self::$s_default_count_limit );
@@ -318,7 +318,7 @@ class kshowPeer extends BasekshowPeer
 	 *
 	 * @param      string $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
-	 * @return     kshow
+	 * @return     vshow
 	 */
 	public static function retrieveByPKNoFilter($pk, PropelPDO $con = null)
 	{

@@ -4,7 +4,7 @@
  * @package plugins.quiz
  * @subpackage lib.enum
  */
-class QuizEntryCapability implements IKalturaPluginEnum, EntryCapability
+class QuizEntryCapability implements IVidiunPluginEnum, EntryCapability
 {
 
 	const QUIZ = 'quiz';
@@ -15,7 +15,7 @@ class QuizEntryCapability implements IKalturaPluginEnum, EntryCapability
 	public static function getAdditionalValues()
 	{
 		return array(
-			'KALTURA_QUIZ_CAPABILITY_NAME' => self::QUIZ
+			'VIDIUN_QUIZ_CAPABILITY_NAME' => self::QUIZ
 		);
 	}
 

@@ -3,21 +3,21 @@
  * @package plugins.contentDistribution
  * @subpackage api
  */
-class KalturaDistributionProfileFactory
+class VidiunDistributionProfileFactory
 {	
 	/**
 	 * @param int $providerType
-	 * @return KalturaDistributionProfile
+	 * @return VidiunDistributionProfile
 	 */
-	public static function createKalturaDistributionProfile($providerType)
+	public static function createVidiunDistributionProfile($providerType)
 	{
-		if($providerType == KalturaDistributionProviderType::GENERIC)
-			return new KalturaGenericDistributionProfile();
+		if($providerType == VidiunDistributionProviderType::GENERIC)
+			return new VidiunGenericDistributionProfile();
 			
-		if($providerType == KalturaDistributionProviderType::SYNDICATION)
-			return new KalturaSyndicationDistributionProfile();
+		if($providerType == VidiunDistributionProviderType::SYNDICATION)
+			return new VidiunSyndicationDistributionProfile();
 			
-		$distributionProfile = KalturaPluginManager::loadObject('KalturaDistributionProfile', $providerType);
+		$distributionProfile = VidiunPluginManager::loadObject('VidiunDistributionProfile', $providerType);
 		if($distributionProfile)
 			return $distributionProfile;
 		

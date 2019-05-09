@@ -4,7 +4,7 @@
  *
  * @package plugins.scheduledTaskEventNotification
  */
-class ScheduledTaskEventNotificationPlugin extends KalturaPlugin implements IKalturaPending, IKalturaEnumerator, IKalturaObjectLoader
+class ScheduledTaskEventNotificationPlugin extends VidiunPlugin implements IVidiunPending, IVidiunEnumerator, IVidiunObjectLoader
 {
 	const PLUGIN_NAME = 'scheduledTaskEventNotification';
 	
@@ -16,7 +16,7 @@ class ScheduledTaskEventNotificationPlugin extends KalturaPlugin implements IKal
 	const EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD = 0;
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -24,20 +24,20 @@ class ScheduledTaskEventNotificationPlugin extends KalturaPlugin implements IKal
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$eventNotificationVersion = new KalturaVersion(self::EVENT_NOTIFICATION_PLUGIN_VERSION_MAJOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_MINOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD);
+		$eventNotificationVersion = new VidiunVersion(self::EVENT_NOTIFICATION_PLUGIN_VERSION_MAJOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_MINOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD);
 		
-		$scheduledTaskDependency = new KalturaDependency(self::SCHEDULED_TASK_PLUGIN_NAME);
-		$eventNotificationDependency = new KalturaDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $eventNotificationVersion);
+		$scheduledTaskDependency = new VidiunDependency(self::SCHEDULED_TASK_PLUGIN_NAME);
+		$eventNotificationDependency = new VidiunDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $eventNotificationVersion);
 		
 		return array($scheduledTaskDependency, $eventNotificationDependency);
 	}
 			
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -51,34 +51,34 @@ class ScheduledTaskEventNotificationPlugin extends KalturaPlugin implements IKal
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if (class_exists('Kaltura_Client_Client'))
+		if (class_exists('Vidiun_Client_Client'))
 			return null;
 
-		if (class_exists('KalturaClient'))
+		if (class_exists('VidiunClient'))
 		{
-			if ($baseClass == 'KObjectTaskEntryEngineBase' && $enumValue == KalturaObjectTaskType::DISPATCH_EVENT_NOTIFICATION)
-				return new KObjectTaskDispatchEventNotificationEngine();
+			if ($baseClass == 'VObjectTaskEntryEngineBase' && $enumValue == VidiunObjectTaskType::DISPATCH_EVENT_NOTIFICATION)
+				return new VObjectTaskDispatchEventNotificationEngine();
 		}
 		else
 		{
 			$apiValue = self::getApiValue(DispatchEventNotificationObjectTaskType::DISPATCH_EVENT_NOTIFICATION);
-			$dispatchEventNotificationObjectTaskCoreValue = kPluginableEnumsManager::apiToCore('ObjectTaskType', $apiValue);
-			if($baseClass == 'KalturaObjectTask' && $enumValue == $dispatchEventNotificationObjectTaskCoreValue)
-				return new KalturaDispatchEventNotificationObjectTask();
+			$dispatchEventNotificationObjectTaskCoreValue = vPluginableEnumsManager::apiToCore('ObjectTaskType', $apiValue);
+			if($baseClass == 'VidiunObjectTask' && $enumValue == $dispatchEventNotificationObjectTaskCoreValue)
+				return new VidiunDispatchEventNotificationObjectTask();
 
-			if ($baseClass == 'KObjectTaskEntryEngineBase' && $enumValue == $apiValue)
-				return new KObjectTaskDispatchEventNotificationEngine();
+			if ($baseClass == 'VObjectTaskEntryEngineBase' && $enumValue == $apiValue)
+				return new VObjectTaskDispatchEventNotificationEngine();
 		}
 
 		return null;
 	}
 		
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -90,6 +90,6 @@ class ScheduledTaskEventNotificationPlugin extends KalturaPlugin implements IKal
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

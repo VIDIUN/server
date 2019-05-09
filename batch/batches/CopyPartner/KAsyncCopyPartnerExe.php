@@ -1,12 +1,12 @@
 <?php
 /**
- * Executes the KAsyncCopyPartner
+ * Executes the VAsyncCopyPartner
  * 
  * @package Scheduler
  * @subpackage CopyPartner
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncCopyPartner();
+$instance = new VAsyncCopyPartner();
 $instance->run(); 
 $instance->done();

@@ -3,14 +3,14 @@
  * @package api
  * @subpackage objects
  */
-class KalturaReportBaseTotalArray extends KalturaTypedArray
+class VidiunReportBaseTotalArray extends VidiunTypedArray
 {
 	public static function fromReportDataArray ( $arr )
 	{
-		$newArr = new KalturaReportBaseTotalArray();
+		$newArr = new VidiunReportBaseTotalArray();
 		foreach ( $arr as $id => $data )
 		{
-			$nObj = new KalturaReportBaseTotal();
+			$nObj = new VidiunReportBaseTotal();
 			$nObj->fromReportData ( $id, $data );
 			$newArr[] = $nObj;
 		}
@@ -20,7 +20,7 @@ class KalturaReportBaseTotalArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaReportBaseTotal" );
+		return parent::__construct ( "VidiunReportBaseTotal" );
 	}
 }
 ?>

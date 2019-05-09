@@ -19,11 +19,11 @@ class DoubleClickService extends ContentDistributionServiceBase
 	 * @param bool $ignoreScheduling
 	 * @param int $version
 	 * @return file
-	 * @ksOptional
+	 * @vsOptional
 	 */
 	public function getFeedAction($distributionProfileId, $hash, $page = 1, $period = -1, $state = '', $ignoreScheduling = false, $version = 2)
 	{
-		if (kConf::hasParam('dfp_version_1_partners') && in_array($this->getPartnerId(), kConf::get('dfp_version_1_partners')))
+		if (vConf::hasParam('dfp_version_1_partners') && in_array($this->getPartnerId(), vConf::get('dfp_version_1_partners')))
 			$version = 1;
 		$context = new DoubleClickServiceContext($hash, $page, $period, $state, $ignoreScheduling, $version);
 		$context->keepScheduling = !$ignoreScheduling;
@@ -77,7 +77,7 @@ class DoubleClickService extends ContentDistributionServiceBase
 		
 		
 		// Dummy query to get the total count
-		$baseCriteria = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$baseCriteria = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$baseCriteria->add(entryPeer::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_SYSTEM, Criteria::NOT_EQUAL);
 		$baseCriteria->setLimit(1);
 		$entryFilter->attachToCriteria($baseCriteria);
@@ -162,7 +162,7 @@ class DoubleClickService extends ContentDistributionServiceBase
 	 * @param string $entryId
 	 * @param int $version
 	 * @return file
-	 * @ksOptional
+	 * @vsOptional
 	 */
 	public function getFeedByEntryIdAction($distributionProfileId, $hash, $entryId, $version = 2)
 	{
@@ -171,10 +171,10 @@ class DoubleClickService extends ContentDistributionServiceBase
 		// Creates entry filter with advanced filter
 		$entry = entryPeer::retrieveByPK($entryId);
 		if (!$entry || ($entry->getPartnerId() != $this->getPartnerId()))
-			throw new KalturaAPIException (KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException (VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		// Construct the feed
-		if (kConf::hasParam('dfp_version_1_partners') && in_array($this->getPartnerId(), kConf::get('dfp_version_1_partners')))
+		if (vConf::hasParam('dfp_version_1_partners') && in_array($this->getPartnerId(), vConf::get('dfp_version_1_partners')))
 			$version = 1;
 
 		$templateName = 'doubleclick_template.xml';
@@ -201,7 +201,7 @@ class DoubleClickService extends ContentDistributionServiceBase
 	 */
 	protected function getCuePoints($partnerId, $entryId)
 	{
-		$c = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$c = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		$c->add(CuePointPeer::PARTNER_ID, $partnerId);
 		$c->add(CuePointPeer::ENTRY_ID, $entryId);
 		$c->add(CuePointPeer::TYPE, AdCuePointPlugin::getCuePointTypeCoreValue(AdCuePointType::AD));

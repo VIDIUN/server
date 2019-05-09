@@ -3,12 +3,12 @@
  * @package plugins.externalMedia
  * @subpackage api.objects
  */
-class KalturaExternalMediaEntry extends KalturaMediaEntry
+class VidiunExternalMediaEntry extends VidiunMediaEntry
 {
 	/**
 	 * The source type of the external media
 	 *
-	 * @var KalturaExternalMediaSourceType
+	 * @var VidiunExternalMediaSourceType
 	 * @insertonly
 	 * @filter eq,in
 	 */
@@ -37,7 +37,7 @@ class KalturaExternalMediaEntry extends KalturaMediaEntry
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntry::getMapBetweenObjects()
+	 * @see VidiunBaseEntry::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -45,7 +45,7 @@ class KalturaExternalMediaEntry extends KalturaMediaEntry
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntry::toObject()
+	 * @see VidiunBaseEntry::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
@@ -56,7 +56,7 @@ class KalturaExternalMediaEntry extends KalturaMediaEntry
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntry::validateForInsert()
+	 * @see VidiunBaseEntry::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{

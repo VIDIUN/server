@@ -1,6 +1,6 @@
 <?php 
 
-require_once(dirname(__FILE__) . '/../../../alpha/config/kConf.php');
+require_once(dirname(__FILE__) . '/../../../alpha/config/vConf.php');
 
 $INPUT_PATTERN = "/^[a-zA-Z0-9_]*$/";
 $SCHEME_PATTERN = "/^[a-zA-Z0-9_.]*$/";
@@ -15,7 +15,7 @@ if ((preg_match ($INPUT_PATTERN, $inputPage) !== 1) || (preg_match ($SCHEME_PATT
 }
 
 // get cache file name
-$cachePath = kConf::get("cache_root_path").'/xsdDoc';
+$cachePath = vConf::get("cache_root_path").'/xsdDoc';
 $cacheKey = 'root';
 if($inputPage)
 	$cacheKey = $inputPage;
@@ -35,9 +35,9 @@ if (file_exists($cacheFilePath))
 require_once(__DIR__ . "/../../bootstrap.php");
 
 ActKeyUtils::checkCurrent();
-KalturaLog::setContext("XSD-DOC");
+VidiunLog::setContext("XSD-DOC");
 
-KalturaLog::debug(">------------------------------------- xsd doc -------------------------------------");
+VidiunLog::debug(">------------------------------------- xsd doc -------------------------------------");
 
 require_once(__DIR__ . "/header.php");
 
@@ -60,7 +60,7 @@ require_once(__DIR__ . "/left_pane.php");
 					catch (PropelException $e)
 					{
 						echo ("Wrong schema type: $schemaType");
-						KExternalErrors::dieError("Wrong schema type: $schemaType");
+						VExternalErrors::dieError("Wrong schema type: $schemaType");
 					}
 				}
 			?>
@@ -72,8 +72,8 @@ $out = ob_get_contents();
 ob_end_clean();
 print $out;
 
-kFile::setFileContent($cacheFilePath, $out);
+vFile::setFileContent($cacheFilePath, $out);
 
 require_once(__DIR__ . "/footer.php");
 
-KalturaLog::debug("<------------------------------------- xsd doc -------------------------------------");
+VidiunLog::debug("<------------------------------------- xsd doc -------------------------------------");

@@ -2,8 +2,8 @@
 <database defaultPhpNamingMethod="underscore" heavyIndexing="false"
 name="propel" defaultIdMethod="native" noXsd="true"
 package="lib.model">
-  <table skipSql="false" abstract="false" name="kuser"
-  phpName="kuser">
+  <table skipSql="false" abstract="false" name="vuser"
+  phpName="vuser">
     <column autoIncrement="false" lazyLoad="false" name="id"
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
@@ -95,7 +95,7 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="storage_size"
     type="integer" default="0" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="produced_kshows"
+    autoIncrement="false" lazyLoad="false" name="produced_vshows"
     type="integer" default="0" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="status"
@@ -160,8 +160,8 @@ package="lib.model">
       <index-column name="indexed_partner_data_string" />
     </index>
   </table>
-  <table skipSql="false" abstract="false" name="kshow"
-  phpName="kshow">
+  <table skipSql="false" abstract="false" name="vshow"
+  phpName="vshow">
     <column autoIncrement="false" lazyLoad="false" name="id"
     type="varchar" required="true" primaryKey="true" size="20" />
     <column primaryKey="false" required="false"
@@ -318,7 +318,7 @@ package="lib.model">
     lazyLoad="false" name="int_id" type="integer" required="true"
     autoincrement="true" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
+    foreignTable="vuser">
       <reference local="producer_id" foreign="id" />
     </foreign-key>
     <index name="views_index">
@@ -358,10 +358,10 @@ package="lib.model">
     <column autoIncrement="false" lazyLoad="false" name="id"
     type="varchar" required="true" primaryKey="true" size="20" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kshow_id"
+    autoIncrement="false" lazyLoad="false" name="vshow_id"
     type="varchar" size="20" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kuser_id"
+    autoIncrement="false" lazyLoad="false" name="vuser_id"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="name"
@@ -517,12 +517,12 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="available_from"
     type="timestamp" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kshow">
-      <reference local="kshow_id" foreign="id" />
+    foreignTable="vshow">
+      <reference local="vshow_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="vuser_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
     foreignTable="access_control">
@@ -532,20 +532,20 @@ package="lib.model">
     foreignTable="conversion_profile_2">
       <reference local="conversion_profile_id" foreign="id" />
     </foreign-key>
-    <index name="kshow_rank_index">
-      <index-column name="kshow_id" />
+    <index name="vshow_rank_index">
+      <index-column name="vshow_id" />
       <index-column name="rank" />
     </index>
-    <index name="kshow_views_index">
-      <index-column name="kshow_id" />
+    <index name="vshow_views_index">
+      <index-column name="vshow_id" />
       <index-column name="views" />
     </index>
-    <index name="kshow_votes_index">
-      <index-column name="kshow_id" />
+    <index name="vshow_votes_index">
+      <index-column name="vshow_id" />
       <index-column name="votes" />
     </index>
-    <index name="kshow_created_index">
-      <index-column name="kshow_id" />
+    <index name="vshow_created_index">
+      <index-column name="vshow_id" />
       <index-column name="created_at" />
     </index>
     <index name="views_index">
@@ -561,9 +561,9 @@ package="lib.model">
       <index-column name="partner_id" />
       <index-column name="group_id" />
     </index>
-    <index name="partner_kuser_indexed_custom_data_index">
+    <index name="partner_vuser_indexed_custom_data_index">
       <index-column name="partner_id" />
-      <index-column name="kuser_id,indexed_custom_data_1" />
+      <index-column name="vuser_id,indexed_custom_data_1" />
     </index>
     <index name="partner_status_index">
       <index-column name="partner_id" />
@@ -578,19 +578,19 @@ package="lib.model">
       <index-column name="modified_at" />
     </index>
   </table>
-  <table skipSql="false" abstract="false" name="kvote"
-  phpName="kvote">
+  <table skipSql="false" abstract="false" name="vvote"
+  phpName="vvote">
     <column autoIncrement="false" lazyLoad="false" name="id"
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kshow_id"
+    autoIncrement="false" lazyLoad="false" name="vshow_id"
     type="varchar" size="20" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="entry_id"
     type="varchar" size="20" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kuser_id"
+    autoIncrement="false" lazyLoad="false" name="vuser_id"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="rank"
@@ -599,19 +599,19 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="created_at"
     type="timestamp" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kshow">
-      <reference local="kshow_id" foreign="id" />
+    foreignTable="vshow">
+      <reference local="vshow_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
     foreignTable="entry">
       <reference local="entry_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kshow">
-      <reference local="kuser_id" foreign="id" />
+    foreignTable="vshow">
+      <reference local="vuser_id" foreign="id" />
     </foreign-key>
-    <index name="kshow_index">
-      <index-column name="kshow_id" />
+    <index name="vshow_index">
+      <index-column name="vshow_id" />
     </index>
     <index name="entry_user_index">
       <index-column name="entry_id" />
@@ -623,7 +623,7 @@ package="lib.model">
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kuser_id"
+    autoIncrement="false" lazyLoad="false" name="vuser_id"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="comment_type"
@@ -644,8 +644,8 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="created_at"
     type="timestamp" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="vuser_id" foreign="id" />
     </foreign-key>
     <index name="subject_created_index">
       <index-column name="comment_type" />
@@ -661,7 +661,7 @@ package="lib.model">
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kuser_id"
+    autoIncrement="false" lazyLoad="false" name="vuser_id"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="subject_type"
@@ -682,8 +682,8 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="created_at"
     type="timestamp" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="vuser_id" foreign="id" />
     </foreign-key>
     <index name="subject_created_index">
       <index-column name="subject_type" />
@@ -697,7 +697,7 @@ package="lib.model">
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kuser_id"
+    autoIncrement="false" lazyLoad="false" name="vuser_id"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="alert_type"
@@ -709,11 +709,11 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="rule_type"
     type="integer" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="vuser_id" foreign="id" />
     </foreign-key>
-    <index name="kuser_index">
-      <index-column name="kuser_id" />
+    <index name="vuser_index">
+      <index-column name="vuser_id" />
     </index>
     <index name="subject_index">
       <index-column name="alert_type" />
@@ -723,7 +723,7 @@ package="lib.model">
   <table skipSql="false" abstract="false" name="favorite"
   phpName="favorite">
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kuser_id"
+    autoIncrement="false" lazyLoad="false" name="vuser_id"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="subject_type"
@@ -738,23 +738,23 @@ package="lib.model">
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="vuser_id" foreign="id" />
     </foreign-key>
-    <index name="kuser_index">
-      <index-column name="kuser_id" />
+    <index name="vuser_index">
+      <index-column name="vuser_id" />
     </index>
     <index name="subject_index">
       <index-column name="subject_type" />
       <index-column name="subject_id" />
     </index>
   </table>
-  <table skipSql="false" abstract="false" name="kshow_kuser">
+  <table skipSql="false" abstract="false" name="vshow_vuser">
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kshow_id"
+    autoIncrement="false" lazyLoad="false" name="vshow_id"
     type="varchar" size="20" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kuser_id"
+    autoIncrement="false" lazyLoad="false" name="vuser_id"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="subscription_type"
@@ -766,21 +766,21 @@ package="lib.model">
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kshow">
-      <reference local="kshow_id" foreign="id" />
+    foreignTable="vshow">
+      <reference local="vshow_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="vuser_id" foreign="id" />
     </foreign-key>
-    <index name="kshow_index">
-      <index-column name="kshow_id" />
+    <index name="vshow_index">
+      <index-column name="vshow_id" />
     </index>
-    <index name="kuser_index">
-      <index-column name="kuser_id" />
+    <index name="vuser_index">
+      <index-column name="vuser_id" />
     </index>
     <index name="subscription_index">
-      <index-column name="kshow_id" />
+      <index-column name="vshow_id" />
       <index-column name="subscription_type" />
     </index>
   </table>
@@ -887,7 +887,7 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="dc" type="varchar"
     size="2" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
+    foreignTable="vuser">
       <reference local="recipient_id" foreign="id" />
     </foreign-key>
     <index name="mail_job_index">
@@ -1501,7 +1501,7 @@ package="lib.model">
   <table skipSql="false" abstract="false" name="flickr_token"
   phpName="flickrToken">
     <column required="false" autoIncrement="false" lazyLoad="false"
-    name="kalt_token" primaryKey="true" type="varchar"
+    name="vidi_token" primaryKey="true" type="varchar"
     size="256" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="frob"
@@ -1526,10 +1526,10 @@ package="lib.model">
     type="timestamp" />
     <index name="is_valid_index">
       <index-column name="is_valid" />
-      <index-column name="kalt_token" />
+      <index-column name="vidi_token" />
     </index>
   </table>
-  <table skipSql="false" abstract="false" name="puser_kuser">
+  <table skipSql="false" abstract="false" name="puser_vuser">
     <column autoIncrement="false" lazyLoad="false" name="id"
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
@@ -1540,7 +1540,7 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="puser_id"
     type="varchar" size="64" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kuser_id"
+    autoIncrement="false" lazyLoad="false" name="vuser_id"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="puser_name"
@@ -1561,15 +1561,15 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="subp_id"
     type="integer" default="0" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="vuser_id" foreign="id" />
     </foreign-key>
     <index name="partner_puser_index">
       <index-column name="partner_id" />
       <index-column name="puser_id" />
     </index>
-    <index name="kuser_id_index">
-      <index-column name="kuser_id" />
+    <index name="vuser_id_index">
+      <index-column name="vuser_id" />
     </index>
   </table>
   <table skipSql="false" abstract="false" name="puser_role">
@@ -1577,7 +1577,7 @@ package="lib.model">
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kshow_id"
+    autoIncrement="false" lazyLoad="false" name="vshow_id"
     type="varchar" size="20" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="partner_id"
@@ -1598,23 +1598,23 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="subp_id"
     type="integer" default="0" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kshow">
-      <reference local="kshow_id" foreign="id" />
+    foreignTable="vshow">
+      <reference local="vshow_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="puser_kuser">
+    foreignTable="puser_vuser">
       <reference local="partner_id" foreign="partner_id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="puser_kuser">
+    foreignTable="puser_vuser">
       <reference local="puser_id" foreign="puser_id" />
     </foreign-key>
     <index name="partner_puser_index">
       <index-column name="partner_id" />
       <index-column name="puser_id" />
     </index>
-    <index name="kshow_id_index">
-      <index-column name="kshow_id" />
+    <index name="vshow_id_index">
+      <index-column name="vshow_id" />
     </index>
   </table>
   <table skipSql="false" abstract="false" name="facebook_invite">
@@ -1686,10 +1686,10 @@ package="lib.model">
     type="timestamp" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false"
-    name="anonymous_kuser_id" type="integer" />
+    name="anonymous_vuser_id" type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false"
-    name="ks_max_expiry_in_seconds" type="integer"
+    name="vs_max_expiry_in_seconds" type="integer"
     default="86400" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false"
@@ -1770,11 +1770,11 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="partner_parent_id"
     type="integer" default="null" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kmc_version"
+    autoIncrement="false" lazyLoad="false" name="vmc_version"
     type="varchar" default="1" size="15" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="anonymous_kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="anonymous_vuser_id" foreign="id" />
     </foreign-key>
     <index name="partner_alias_index">
       <index-column name="partner_alias" />
@@ -1830,7 +1830,7 @@ package="lib.model">
     type="varchar" size="256" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false"
-    name="campaign_mgr_kuser_id" type="integer" />
+    name="campaign_mgr_vuser_id" type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="send_count"
     type="integer" />
@@ -1850,11 +1850,11 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="updated_at"
     type="timestamp" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="campaign_mgr_kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="campaign_mgr_vuser_id" foreign="id" />
     </foreign-key>
-    <index name="campaign_mgr_kuser_id_index">
-      <index-column name="campaign_mgr_kuser_id" />
+    <index name="campaign_mgr_vuser_id_index">
+      <index-column name="campaign_mgr_vuser_id" />
     </index>
   </table>
   <table skipSql="false" abstract="false" name="widget_log">
@@ -1862,13 +1862,13 @@ package="lib.model">
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kshow_id"
+    autoIncrement="false" lazyLoad="false" name="vshow_id"
     type="varchar" size="20" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="entry_id"
     type="varchar" size="20" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kmedia_type"
+    autoIncrement="false" lazyLoad="false" name="vmedia_type"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="widget_type"
@@ -1913,9 +1913,9 @@ package="lib.model">
     <index name="referer_index">
       <index-column name="referer" />
     </index>
-    <index name="entry_id_kshow_id_index">
+    <index name="entry_id_vshow_id_index">
       <index-column name="entry_id" />
-      <index-column name="kshow_id" />
+      <index-column name="vshow_id" />
     </index>
     <index name="partner_id_subp_id_index">
       <index-column name="partner_id" />
@@ -1954,8 +1954,8 @@ package="lib.model">
       <index-column name="partnership_order" />
     </index>
   </table>
-  <table skipSql="false" abstract="false" name="admin_kuser"
-  phpName="adminKuser">
+  <table skipSql="false" abstract="false" name="admin_vuser"
+  phpName="adminVuser">
     <column autoIncrement="false" lazyLoad="false" name="id"
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
@@ -2006,11 +2006,11 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="groups"
     type="varchar" size="512" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="admin_kuser_id"
+    autoIncrement="false" lazyLoad="false" name="admin_vuser_id"
     type="integer" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="admin_kuser">
-      <reference local="admin_kuser_id" foreign="id" />
+    foreignTable="admin_vuser">
+      <reference local="admin_vuser_id" foreign="id" />
     </foreign-key>
   </table>
   <table skipSql="false" abstract="false" name="notification"
@@ -2095,7 +2095,7 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="object_type"
     type="smallint" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kuser_id"
+    autoIncrement="false" lazyLoad="false" name="vuser_id"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="puser_id"
@@ -2119,8 +2119,8 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="report_code"
     type="integer" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="vuser_id" foreign="id" />
     </foreign-key>
     <index name="partner_id_status_index">
       <index-column name="partner_id" />
@@ -2147,7 +2147,7 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="partner_id"
     type="integer" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kuser_id"
+    autoIncrement="false" lazyLoad="false" name="vuser_id"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="object_type"
@@ -2156,7 +2156,7 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="flagged_entry_id"
     type="varchar" size="20" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="flagged_kuser_id"
+    autoIncrement="false" lazyLoad="false" name="flagged_vuser_id"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="status"
@@ -2174,16 +2174,16 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="flag_type"
     type="integer" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="vuser_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
     foreignTable="entry">
       <reference local="flagged_entry_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="flagged_kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="flagged_vuser_id" foreign="id" />
     </foreign-key>
     <index name="partner_id_status_index">
       <index-column name="partner_id" />
@@ -2193,7 +2193,7 @@ package="lib.model">
       <index-column name="partner_id" />
       <index-column name="status" />
       <index-column name="object_type" />
-      <index-column name="flagged_kuser_id" />
+      <index-column name="flagged_vuser_id" />
     </index>
   </table>
   <table skipSql="false" abstract="false" name="roughcut_entry"
@@ -2208,7 +2208,7 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="roughcut_version"
     type="integer" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="roughcut_kshow_id"
+    autoIncrement="false" lazyLoad="false" name="roughcut_vshow_id"
     type="varchar" size="20" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="entry_id"
@@ -2230,8 +2230,8 @@ package="lib.model">
       <reference local="roughcut_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kshow">
-      <reference local="roughcut_kshow_id" foreign="id" />
+    foreignTable="vshow">
+      <reference local="roughcut_vshow_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
     foreignTable="entry">
@@ -2246,8 +2246,8 @@ package="lib.model">
     <index name="roughcut_id_index">
       <index-column name="roughcut_id" />
     </index>
-    <index name="roughcut_kshow_id_index">
-      <index-column name="roughcut_kshow_id" />
+    <index name="roughcut_vshow_id_index">
+      <index-column name="roughcut_vshow_id" />
     </index>
   </table>
   <table skipSql="false" abstract="false" name="widget"
@@ -2270,7 +2270,7 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="subp_id"
     type="integer" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kshow_id"
+    autoIncrement="false" lazyLoad="false" name="vshow_id"
     type="varchar" size="20" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="entry_id"
@@ -2297,8 +2297,8 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="partner_data"
     type="varchar" size="4096" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kshow">
-      <reference local="kshow_id" foreign="id" />
+    foreignTable="vshow">
+      <reference local="vshow_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
     foreignTable="entry">
@@ -2312,7 +2312,7 @@ package="lib.model">
       <index-column name="int_id" />
     </index>
   </table>
-  <table skipSql="false" abstract="false" name="kwidget_log">
+  <table skipSql="false" abstract="false" name="vwidget_log">
     <column autoIncrement="false" lazyLoad="false" name="id"
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
@@ -2326,7 +2326,7 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="root_widget_id"
     type="varchar" size="32" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kshow_id"
+    autoIncrement="false" lazyLoad="false" name="vshow_id"
     type="varchar" size="20" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="entry_id"
@@ -2372,8 +2372,8 @@ package="lib.model">
       <reference local="widget_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kshow">
-      <reference local="kshow_id" foreign="id" />
+    foreignTable="vshow">
+      <reference local="vshow_id" foreign="id" />
     </foreign-key>
     <foreign-key onDelete="none" onUpdate="none"
     foreignTable="entry">
@@ -2386,9 +2386,9 @@ package="lib.model">
     <index name="referer_index">
       <index-column name="referer" />
     </index>
-    <index name="entry_id_kshow_id_index">
+    <index name="entry_id_vshow_id_index">
       <index-column name="entry_id" />
-      <index-column name="kshow_id" />
+      <index-column name="vshow_id" />
     </index>
     <index name="partner_id_subp_id_index">
       <index-column name="partner_id" />
@@ -2502,10 +2502,10 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="rc_2"
     type="integer" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kshows_1"
+    autoIncrement="false" lazyLoad="false" name="vshows_1"
     type="integer" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kshows_2"
+    autoIncrement="false" lazyLoad="false" name="vshows_2"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="created_at"
@@ -2711,7 +2711,7 @@ package="lib.model">
     </index>
   </table>
   <table skipSql="false" abstract="false"
-  name="kce_installation_error">
+  name="vce_installation_error">
     <column autoIncrement="false" lazyLoad="false" name="id"
     type="integer" required="true" primaryKey="true"
     autoincrement="true" />
@@ -2869,7 +2869,7 @@ package="lib.model">
     name="country_restrict_list" type="varchar" size="1024" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false"
-    name="ks_restrict_privilege" type="varchar" size="20" />
+    name="vs_restrict_privilege" type="varchar" size="20" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false"
     name="prv_restrict_privilege" type="varchar" size="20" />
@@ -2878,7 +2878,7 @@ package="lib.model">
     name="prv_restrict_length" type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false"
-    name="kdir_restrict_type" type="tinyint" />
+    name="vdir_restrict_type" type="tinyint" />
   </table>
   <table skipSql="false" abstract="false" name="media_info"
   phpName="mediaInfo">
@@ -3520,7 +3520,7 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="param_3_str"
     type="varchar" size="511" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="ks" type="varchar"
+    autoIncrement="false" lazyLoad="false" name="vs" type="varchar"
     size="511" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="description"
@@ -3615,10 +3615,10 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="uid"
     type="varchar" size="63" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="ks_partner_id"
+    autoIncrement="false" lazyLoad="false" name="vs_partner_id"
     type="integer" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="ks_uid"
+    autoIncrement="false" lazyLoad="false" name="vs_uid"
     type="varchar" size="63" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="before"
@@ -3762,7 +3762,7 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="partner_id"
     type="integer" default="0" />
     <column primaryKey="false" required="false"
-    autoIncrement="false" lazyLoad="false" name="kuser_id"
+    autoIncrement="false" lazyLoad="false" name="vuser_id"
     type="integer" />
     <column primaryKey="false" required="false"
     autoIncrement="false" lazyLoad="false" name="status"
@@ -3789,8 +3789,8 @@ package="lib.model">
     autoIncrement="false" lazyLoad="false" name="updated_at"
     type="timestamp" />
     <foreign-key onDelete="none" onUpdate="none"
-    foreignTable="kuser">
-      <reference local="kuser_id" foreign="id" />
+    foreignTable="vuser">
+      <reference local="vuser_id" foreign="id" />
     </foreign-key>
     <index name="int_id">
       <index-column name="int_id" />

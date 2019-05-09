@@ -3,7 +3,7 @@
  * @package plugins.cuePoints
  * @subpackage Scheduler
  */
-abstract class KCopyCuePointEngine
+abstract class VCopyCuePointEngine
 {
 	const MAX_CUE_POINT_CHUNKS = 500;
 
@@ -53,13 +53,13 @@ abstract class KCopyCuePointEngine
 		$clonedCuePointIds = array();
 		do
 		{
-			KalturaLog::debug("Getting list of cue point for entry [$srcEntryId] with pager index: " . $pager->pageIndex);
-			$listResponse = KBatchBase::tryExecuteApiCall(array('KCopyCuePointEngine','cuePointList'), array($filter, $pager));
+			VidiunLog::debug("Getting list of cue point for entry [$srcEntryId] with pager index: " . $pager->pageIndex);
+			$listResponse = VBatchBase::tryExecuteApiCall(array('VCopyCuePointEngine','cuePointList'), array($filter, $pager));
 			if (!$listResponse)
 				return false;
 			$cuePoints = $listResponse->objects;
 			$this->preProcessCuePoints($cuePoints);
-			KalturaLog::debug("Return " . count($cuePoints) . " cue-points from list");
+			VidiunLog::debug("Return " . count($cuePoints) . " cue-points from list");
 			foreach ($cuePoints as &$cuePoint)
 			{
 				if ($this->shouldCopyCuePoint($cuePoint))
@@ -88,23 +88,23 @@ abstract class KCopyCuePointEngine
 			}
 			else
 			{
-				KalturaLog::warning("Cuepoint $cuePoint->parentId as parent of $cuePoint->id is not in ids map");
+				VidiunLog::warning("Cuepoint $cuePoint->parentId as parent of $cuePoint->id is not in ids map");
 			}
 		}
 
-		$clonedCuePoint = KBatchBase::tryExecuteApiCall(array('KCopyCuePointEngine', 'cuePointClone'), array($cuePoint, $destEntryId, $parentId));
+		$clonedCuePoint = VBatchBase::tryExecuteApiCall(array('VCopyCuePointEngine', 'cuePointClone'), array($cuePoint, $destEntryId, $parentId));
 		if ($clonedCuePoint)
 		{
 			$this->idsMap[$cuePoint->id] = $clonedCuePoint->id;
 			list($startTime, $endTime) = $this->calculateCuePointTimes($cuePoint);
-			$res = KBatchBase::tryExecuteApiCall(array('KCopyCuePointEngine', 'updateCuePointTimes'), array($clonedCuePoint->id, $startTime, $endTime));
+			$res = VBatchBase::tryExecuteApiCall(array('VCopyCuePointEngine', 'updateCuePointTimes'), array($clonedCuePoint->id, $startTime, $endTime));
 			if ($res)
 				return $cuePoint->id;
 			else
-				KalturaLog::info("Update time for [{$cuePoint->id}] of [$startTime, $endTime] - Failed");
+				VidiunLog::info("Update time for [{$cuePoint->id}] of [$startTime, $endTime] - Failed");
 		}
 		else
-			KalturaLog::info("Could not copy [{$cuePoint->id}] - moving to next");
+			VidiunLog::info("Could not copy [{$cuePoint->id}] - moving to next");
 		return null;
 	}
 
@@ -128,11 +128,11 @@ abstract class KCopyCuePointEngine
 		switch($copyCuePointJobType)
 		{
 			case CopyCuePointJobType::MULTI_CLIP:
-				return new KMultiClipCopyCuePointEngine();
+				return new VMultiClipCopyCuePointEngine();
 			case CopyCuePointJobType::LIVE:
-				return new KLiveToVodCopyCuePointEngine();
+				return new VLiveToVodCopyCuePointEngine();
 			case CopyCuePointJobType::LIVE_CLIPPING:
-				return new KLiveClippingCopyCuePointEngine();
+				return new VLiveClippingCopyCuePointEngine();
 			default:
 				return null;
 		}
@@ -140,7 +140,7 @@ abstract class KCopyCuePointEngine
 
 	protected function getCuePointFilter($entryId, $status = CuePointStatus::READY)
 	{
-		$filter = new KalturaCuePointFilter();
+		$filter = new VidiunCuePointFilter();
 		$filter->entryIdEqual = $entryId;
 		$filter->statusIn = $status;
 		$filter->orderBy = '+' . $this->getOrderByField();
@@ -149,7 +149,7 @@ abstract class KCopyCuePointEngine
 
 	protected function getCuePointPager()
 	{
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageIndex = 0;
 		$pager->pageSize = self::MAX_CUE_POINT_CHUNKS;
 		return $pager;
@@ -157,50 +157,50 @@ abstract class KCopyCuePointEngine
 
 	public static function updateCuePointTimes($cuePointId, $startTime, $endTime = null)
 	{
-		return KBatchBase::$kClient->cuePoint->updateCuePointsTimes($cuePointId, $startTime,$endTime);
+		return VBatchBase::$vClient->cuePoint->updateCuePointsTimes($cuePointId, $startTime,$endTime);
 	}
 
 	public static function cuePointList($filter, $pager)
 	{
-		return KBatchBase::$kClient->cuePoint->listAction($filter, $pager);
+		return VBatchBase::$vClient->cuePoint->listAction($filter, $pager);
 	}
 
 	public static function cuePointClone($cuePoint, $destinationEntryId, $parentId = null)
 	{
-		if ($cuePoint instanceof KalturaAnnotation)
+		if ($cuePoint instanceof VidiunAnnotation)
 		{
-			return KBatchBase::$kClient->annotation->cloneAction($cuePoint->id, $destinationEntryId, $parentId);
+			return VBatchBase::$vClient->annotation->cloneAction($cuePoint->id, $destinationEntryId, $parentId);
 		}
 		else
 		{
-			return KBatchBase::$kClient->cuePoint->cloneAction($cuePoint->id, $destinationEntryId, $parentId);
+			return VBatchBase::$vClient->cuePoint->cloneAction($cuePoint->id, $destinationEntryId, $parentId);
 		}
 	}
 
 	public static function cuePointUpdateStatus($cuePointId, $newStatus)
 	{
-		return KBatchBase::$kClient->cuePoint->updateStatus($cuePointId, $newStatus);
+		return VBatchBase::$vClient->cuePoint->updateStatus($cuePointId, $newStatus);
 	}
 
 	public static function deleteCuePoint($cuePointId)
 	{
-		return KBatchBase::$kClient->cuePoint->delete($cuePointId);
+		return VBatchBase::$vClient->cuePoint->delete($cuePointId);
 	}
 
 
 	/**
-	 * @param KalturaCuePoint $currentCuePoint
-	 * @param KalturaCuePoint $nextCuePoint
+	 * @param VidiunCuePoint $currentCuePoint
+	 * @param VidiunCuePoint $nextCuePoint
 	 * @return mixed
 	 */
 	public static function mergeConsecutiveCuePoint($currentCuePoint, $nextCuePoint)
 	{
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		if (property_exists($nextCuePoint,'endTime'))
 			/** @noinspection PhpUndefinedFieldInspection */
 			self::updateCuePointTimes($currentCuePoint->id,$currentCuePoint->startTime,$nextCuePoint->endTime);
 		self::deleteCuePoint($nextCuePoint->id);
-		return KBatchBase::$kClient->doMultiRequest();
+		return VBatchBase::$vClient->doMultiRequest();
 	}
 
 

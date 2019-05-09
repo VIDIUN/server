@@ -1,5 +1,5 @@
 #!/bin/sh
-. /etc/kaltura.d/system.ini
+. /etc/vidiun.d/system.ini
 
 echo `date`
 

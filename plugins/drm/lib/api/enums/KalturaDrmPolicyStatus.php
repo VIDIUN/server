@@ -3,7 +3,7 @@
  * @package plugins.drm
  * @subpackage api.enum
  */
-class KalturaDrmPolicyStatus extends KalturaEnum implements DrmPolicyStatus
+class VidiunDrmPolicyStatus extends VidiunEnum implements DrmPolicyStatus
 {
 	// see DrmPolicyStatus interface
 }

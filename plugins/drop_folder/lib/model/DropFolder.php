@@ -24,7 +24,7 @@ class DropFolder extends BaseDropFolder implements IBaseObject
 	const METADATA_PROFILE_ID = 'metadata_profile_id';
 	const CATEGORIES_METADATA_FIELD_NAME = 'categories_metadata_field_name';
 	const ENFORCE_ENTITLEMENT = 'enforce_entitlement';
-	const SHOULD_VALIDATE_KS = 'should_validate_ks';
+	const SHOULD_VALIDATE_VS = 'should_validate_vs';
 	
 	// -------------------------------------
 	// -- Default values -------------------
@@ -70,7 +70,7 @@ class DropFolder extends BaseDropFolder implements IBaseObject
 			$config = @unserialize($serializedConfig);
 		}
 		catch (Exception $e) {
-			KalturaLog::err('Error unserializing file handler config for drop folder id ['.$this->getId().']');
+			VidiunLog::err('Error unserializing file handler config for drop folder id ['.$this->getId().']');
 			$config = null;
 		}
 		if ($config instanceof DropFolderFileHandlerConfig) {
@@ -91,7 +91,7 @@ class DropFolder extends BaseDropFolder implements IBaseObject
 		}
 		else
 		{
-			KalturaLog::err('Given input $fileHandlerConfig is not an instance of DropFolderFileHandlerConfig - ignoring');
+			VidiunLog::err('Given input $fileHandlerConfig is not an instance of DropFolderFileHandlerConfig - ignoring');
 		}
 	}	
 	
@@ -252,17 +252,17 @@ class DropFolder extends BaseDropFolder implements IBaseObject
 	/**
  	 * @return bool
 	 */
-	public function getShouldValidateKS()
+	public function getShouldValidateVS()
 	{
-		return $this->getFromCustomData(self::SHOULD_VALIDATE_KS);
+		return $this->getFromCustomData(self::SHOULD_VALIDATE_VS);
 	}
 	
 	/**
 	 * @param bool $v
 	 */
-	public function setShouldValidateKS($v)
+	public function setShouldValidateVS($v)
 	{
-		$this->putInCustomData(self::SHOULD_VALIDATE_KS, $v);
+		$this->putInCustomData(self::SHOULD_VALIDATE_VS, $v);
 	}
 	
 	public function getCacheInvalidationKeys()
@@ -271,18 +271,18 @@ class DropFolder extends BaseDropFolder implements IBaseObject
 	}
 	
 	/**
-	 * @return kFileTransferMgrType
+	 * @return vFileTransferMgrType
 	 */
 	public function getFileTransferMgrType()
 	{
-		return kFileTransferMgrType::LOCAL;
+		return vFileTransferMgrType::LOCAL;
 	}
 
 	/**
 	 * Login using fileTransferMgr according to the available credentials
-	 * @param kFileTransferMgr $fileTransferMgr
+	 * @param vFileTransferMgr $fileTransferMgr
 	 */
-	public function loginByCredentialsType(kFileTransferMgr $fileTransferMgr)
+	public function loginByCredentialsType(vFileTransferMgr $fileTransferMgr)
 	{
 		return $fileTransferMgr->login(null, null, null);
 	}
@@ -291,9 +291,9 @@ class DropFolder extends BaseDropFolder implements IBaseObject
 	 * get full local file path
 	 * @param string $fileName
 	 * @param int $fileId
-	 * @param kFileTransferMgr $fileTransferMgr
+	 * @param vFileTransferMgr $fileTransferMgr
 	 */
-	public function getLocalFilePath($fileName, $fileId, kFileTransferMgr $fileTransferMgr)
+	public function getLocalFilePath($fileName, $fileId, vFileTransferMgr $fileTransferMgr)
 	{
 		$dropFolderFilePath = $this->getPath().'/'.$fileName;
 		return realpath($dropFolderFilePath);

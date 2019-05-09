@@ -4,8 +4,8 @@ require_once (dirname(__FILE__).'/../bootstrap.php');
 
 $f = fopen("php://stdin", "r");
 $count = 0;
-$sphinxMgr = new kSphinxSearchManager();
-$dbConf = kConf::getDB();
+$sphinxMgr = new vSphinxSearchManager();
+$dbConf = vConf::getDB();
 DbManager::setConfig($dbConf);
 DbManager::initialize();
 $connection = Propel::getConnection();
@@ -16,7 +16,7 @@ while($s = trim(fgets($f))){
         myPartnerUtils::resetPartnerFilter('entry');
         $entry = entryPeer::retrieveByPK ( $entryId);
         if (is_null ( $entry )) {
-                KalturaLog::err ('Couldn\'t find entry [' . $entryId . ']' );
+                VidiunLog::err ('Couldn\'t find entry [' . $entryId . ']' );
                 continue;
         }
 
@@ -39,10 +39,10 @@ while($s = trim(fgets($f))){
 			$updateSql = "UPDATE entry set views='$views',plays='$plays',last_played_at='$mysqlNow' WHERE id='$entryId'";
 			$stmt = $connection->prepare($updateSql);
 			$stmt->execute();
-			KalturaLog::debug ( 'Successfully saved entry [' . $entryId . ']' );
+			VidiunLog::debug ( 'Successfully saved entry [' . $entryId . ']' );
 
 			$affectedRows = $stmt->rowCount();
-			KalturaLog::log("AffectedRows: ". $affectedRows);
+			VidiunLog::log("AffectedRows: ". $affectedRows);
 			// update sphinx log directly
 			$sql = $sphinxMgr->getSphinxSaveSql($entry, false);
 			$sphinxLog = new SphinxLog();
@@ -79,7 +79,7 @@ while($s = trim(fgets($f))){
 			$elasticLog->save(myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_SPHINX_LOG));
 
 		} catch (Exception $e) {
-			KalturaLog::log($e->getMessage(), Propel::LOG_ERR);
+			VidiunLog::log($e->getMessage(), Propel::LOG_ERR);
 
 		}
         }
