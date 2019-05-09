@@ -7,7 +7,7 @@ class ShortLinkFilter extends baseObjectFilter
 {
 	public function init ()
 	{
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 				"_eq_id",
 				"_in_id",
 				"_gte_created_at",
@@ -29,7 +29,7 @@ class ShortLinkFilter extends baseObjectFilter
 		$this->allowed_order_fields = array("created_at" , "updated_at", "expires_at");
 			
 		$this->aliases = array(
-			"user_id" => "kuser_id",
+			"user_id" => "vuser_id",
 		);
 	}
 

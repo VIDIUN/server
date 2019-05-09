@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class helperAction extends kalturaSystemAction
+class helperAction extends vidiunSystemAction
 {
 	public function execute()
 	{
@@ -41,7 +41,7 @@ class helperAction extends kalturaSystemAction
 		elseif ( $algo == "base64_3des_encode" )
 		{
 			$key = $this->getP ( "des_key" );
-			$encrypted_data = KCryptoWrapper::encrypt_3des($str, $key);
+			$encrypted_data = VCryptoWrapper::encrypt_3des($str, $key);
 	    
 			$res = base64_encode($encrypted_data)		;
 			$this->des_key = $key;
@@ -50,42 +50,42 @@ class helperAction extends kalturaSystemAction
 		{
 			$key = $this->getP ( "des_key" );
 			$input = base64_decode ( $str );
-			$decrypted_data = KCryptoWrapper::decrypt_3des($input, $key);
+			$decrypted_data = VCryptoWrapper::decrypt_3des($input, $key);
 	    
 			$res = ($decrypted_data )		;
 			$this->des_key = $key;
 		}
-		elseif ( $algo == "ks" )
+		elseif ( $algo == "vs" )
 		{
-			$ks = ks::fromSecureString ( $str );
-			$res = print_r ( $ks , true );
-			if ( $ks != null )
+			$vs = vs::fromSecureString ( $str );
+			$res = print_r ( $vs , true );
+			if ( $vs != null )
 			{
-				$expired = $ks->valid_until;
+				$expired = $vs->valid_until;
 				$expired_str = self::formatThisData($expired);
 				$now = time();
 				$now_str = self::formatThisData($now);
 				$res .= "<br>" . "valid until: " . $expired_str . "<br>now: $now ($now_str)";
 			} 
 		}
-		elseif ( $algo == "kwid" )
+		elseif ( $algo == "vwid" )
 		{
-			$kwid_str = @base64_decode( $str );
-			if ( ! $kwid_str)
+			$vwid_str = @base64_decode( $str );
+			if ( ! $vwid_str)
 			{
 				// invalid string
 				return "";
 			}
-/*			$kwid = new kwid();
-			list ( $kwid->kshow_id , $kwid->partner_id , $kwid->subp_id ,$kwid->article_name  ,$kwid->widget_id , $kwid->hash  ) =
-				 @explode ( self::KWID_SEPARATOR , $str );
+/*			$vwid = new vwid();
+			list ( $vwid->vshow_id , $vwid->partner_id , $vwid->subp_id ,$vwid->article_name  ,$vwid->widget_id , $vwid->hash  ) =
+				 @explode ( self::VWID_SEPARATOR , $str );
 */
-			$cracked = @explode ( "|" , $kwid_str );
-			$names = array ( "kshow_id" , "partner_id" , "subp_id" , "article_name" , "widget_id" , "hash" );
+			$cracked = @explode ( "|" , $vwid_str );
+			$names = array ( "vshow_id" , "partner_id" , "subp_id" , "article_name" , "widget_id" , "hash" );
 			$combined = array_combine( $names , $cracked );
 			
 			$secret = $this->getP ( "secret" );
-			$md5 = md5 ( $combined["kshow_id"]  . $combined["partner_id"]  . $combined["subp_id"] . $combined["article_name"] . 
+			$md5 = md5 ( $combined["vshow_id"]  . $combined["partner_id"]  . $combined["subp_id"] . $combined["article_name"] . 
 				$combined["widget_id"] .  $secret );
 				
 			$combined["secret"] = $secret;

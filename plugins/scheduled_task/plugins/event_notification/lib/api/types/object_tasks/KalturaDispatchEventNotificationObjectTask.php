@@ -4,7 +4,7 @@
  * @package plugins.scheduledTaskEventNotification
  * @subpackage api.objects.objectTasks
  */
-class KalturaDispatchEventNotificationObjectTask extends KalturaObjectTask
+class VidiunDispatchEventNotificationObjectTask extends VidiunObjectTask
 {
 	/**
 	 * The event notification template id to dispatch
@@ -19,7 +19,7 @@ class KalturaDispatchEventNotificationObjectTask extends KalturaObjectTask
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage()
+	 * @see VidiunObject::validateForUsage()
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -27,25 +27,25 @@ class KalturaDispatchEventNotificationObjectTask extends KalturaObjectTask
 
 		$this->validatePropertyNotNull('eventNotificationTemplateId');
 
-		myPartnerUtils::addPartnerToCriteria('EventNotificationTemplate', kCurrentContext::getCurrentPartnerId(), true);
+		myPartnerUtils::addPartnerToCriteria('EventNotificationTemplate', vCurrentContext::getCurrentPartnerId(), true);
 		$eventNotificationTemplate = EventNotificationTemplatePeer::retrieveByPK($this->eventNotificationTemplateId);
 		if (is_null($eventNotificationTemplate))
-			throw new KalturaAPIException(KalturaEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_NOT_FOUND, $this->eventNotificationTemplateId);
+			throw new VidiunAPIException(VidiunEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_NOT_FOUND, $this->eventNotificationTemplateId);
 	}
 
 	public function toObject($dbObject = null, $skip = array())
 	{
-		/** @var kObjectTask $dbObject */
+		/** @var vObjectTask $dbObject */
 		$dbObject = parent::toObject($dbObject, $skip);
 		$dbObject->setDataValue('eventNotificationTemplateId', $this->eventNotificationTemplateId);
 		return $dbObject;
 	}
 
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($srcObj, $responseProfile);
 
-		/** @var kObjectTask $srcObj */
+		/** @var vObjectTask $srcObj */
 		$this->eventNotificationTemplateId = $srcObj->getDataValue('eventNotificationTemplateId');
 	}
 }

@@ -12,7 +12,7 @@
 	</session>
 
 	<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="{prompt:Target Partner ID:}">
-		<template objectType="KalturaEmailNotificationTemplate">
+		<template objectType="VidiunEmailNotificationTemplate">
 			<name>Entry Content Replaced</name>
 			<systemName>Entry_Content_Replaced</systemName>
 			<description>Email notification template to be sent when an entry content replaced successfully.</description>
@@ -24,40 +24,40 @@
 			<body>Your recently replaced media: "{entry_name}", is ready for playback: [AppEntryUrl]{entry_id}</body>
 			<fromEmail>{from_email}</fromEmail>
 			<fromName>{from_name}</fromName>
-			<to objectType="KalturaEmailNotificationStaticRecipientProvider">
+			<to objectType="VidiunEmailNotificationStaticRecipientProvider">
 				<emailRecipients objectType="array">
-					<item objectType = "KalturaEmailNotificationRecipient">
-						<email objectType="KalturaEvalStringField">
-							<code>!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getEmail() : ''</code>
+					<item objectType = "VidiunEmailNotificationRecipient">
+						<email objectType="VidiunEvalStringField">
+							<code>!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getEmail() : ''</code>
 						</email>
-						<name objectType="KalturaEvalStringField">
-							<code>!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getFirstName() . ' ' . $scope->getObject()->getkuser()->getLastName() : ''</code>
+						<name objectType="VidiunEvalStringField">
+							<code>!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getFirstName() . ' ' . $scope->getObject()->getvuser()->getLastName() : ''</code>
 						</name>
 					</item>
 				</emailRecipients>
 			</to>
 			<contentParameters objectType="array">
-				<item objectType="KalturaEventNotificationParameter">
+				<item objectType="VidiunEventNotificationParameter">
 					<key>from_email</key>
-					<value objectType="KalturaEvalStringField">
-						<code>kConf::get("partner_notification_email")</code>
+					<value objectType="VidiunEvalStringField">
+						<code>vConf::get("partner_notification_email")</code>
 					</value>
 				</item>
-				<item objectType="KalturaEventNotificationParameter">
+				<item objectType="VidiunEventNotificationParameter">
 					<key>from_name</key>
-					<value objectType="KalturaEvalStringField">
-						<code>kConf::get("partner_notification_name")</code>
+					<value objectType="VidiunEvalStringField">
+						<code>vConf::get("partner_notification_name")</code>
 					</value>
 				</item>
-				<item objectType="KalturaEventNotificationParameter">
+				<item objectType="VidiunEventNotificationParameter">
 					<key>entry_id</key>
-					<value objectType="KalturaEvalStringField">
+					<value objectType="VidiunEvalStringField">
 						<code>$scope->getObject()->getId()</code>
 					</value>
 				</item>
-				<item objectType="KalturaEventNotificationParameter">
+				<item objectType="VidiunEventNotificationParameter">
 					<key>entry_name</key>
-					<value objectType="KalturaEvalStringField">
+					<value objectType="VidiunEvalStringField">
 						<code>$scope->getObject()->getName()</code>
 					</value>
 				</item>

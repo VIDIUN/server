@@ -32,7 +32,7 @@ class listdownloadsAction extends defPartnerservices2Action
 			); 
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		// TODO -  verify permissions for viewing lists 
 
@@ -53,7 +53,7 @@ class listdownloadsAction extends defPartnerservices2Action
 		$fields_set = $filter->fillObjectFromRequest( $this->getInputParams() , "filter_" , null );
 		$filter->attachToCriteria( $c );
 		
-		//if ($order_by != -1) kshowPeer::setOrder( $c , $order_by );
+		//if ($order_by != -1) vshowPeer::setOrder( $c , $order_by );
 		$count = BatchJobPeer::doCount( $c );
 
 		$offset = ($page-1)* $limit;

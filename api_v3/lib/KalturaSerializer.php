@@ -4,7 +4,7 @@
  * @package api
  * @subpackage v3
  */
-abstract class KalturaSerializer
+abstract class VidiunSerializer
 {
 	protected function prepareSerializedObject($object)
 	{
@@ -35,7 +35,7 @@ abstract class KalturaSerializer
 				"objectType" => get_class($object)
 			);
 			
-			if ( $object instanceof KalturaAPIException )
+			if ( $object instanceof VidiunAPIException )
 			{
 				$error["args"] = $object->getArgs();
 			}
@@ -60,7 +60,7 @@ abstract class KalturaSerializer
 	{
 	    if (is_object($object))
     	{
-    		if ($object instanceof KalturaTypedArray)
+    		if ($object instanceof VidiunTypedArray)
 			{
     			return $this->convertTypedArraysToPhpArrays($object->toArray());
 			}

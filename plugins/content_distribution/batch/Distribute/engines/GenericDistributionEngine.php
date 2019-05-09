@@ -22,15 +22,15 @@ class GenericDistributionEngine extends DistributionEngine implements
 	{
 		parent::configure();
 		
-		if(KBatchBase::$taskConfig->params->tempXmlPath)
+		if(VBatchBase::$taskConfig->params->tempXmlPath)
 		{
-			$this->tempXmlPath = KBatchBase::$taskConfig->params->tempXmlPath;
+			$this->tempXmlPath = VBatchBase::$taskConfig->params->tempXmlPath;
 			if(!is_dir($this->tempXmlPath))
-				kFile::fullMkfileDir($this->tempXmlPath, 0777, true);
+				vFile::fullMkfileDir($this->tempXmlPath, 0777, true);
 		}
 		else
 		{
-			KalturaLog::err("params.tempXmlPath configuration not supplied");
+			VidiunLog::err("params.tempXmlPath configuration not supplied");
 			$this->tempXmlPath = sys_get_temp_dir();
 		}
 	}
@@ -38,26 +38,26 @@ class GenericDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaGenericDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaGenericDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunGenericDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunGenericDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaGenericDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaGenericDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunGenericDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunGenericDistributionJobProviderData");
 		
 		return $this->handleAction($data, $data->distributionProfile, $data->distributionProfile->submitAction, $data->providerData);
 	}
 
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaGenericDistributionProfile $distributionProfile
-	 * @param KalturaGenericDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunGenericDistributionProfile $distributionProfile
+	 * @param VidiunGenericDistributionJobProviderData $providerData
 	 * @throws Exception
-	 * @throws kFileTransferMgrException
+	 * @throws vFileTransferMgrException
 	 * @return boolean true if finished, false if will be finished asynchronously
 	 */
-	protected function handleAction(KalturaDistributionJobData $data, KalturaGenericDistributionProfile $distributionProfile, KalturaGenericDistributionProfileAction $distributionProfileAction, KalturaGenericDistributionJobProviderData $providerData)
+	protected function handleAction(VidiunDistributionJobData $data, VidiunGenericDistributionProfile $distributionProfile, VidiunGenericDistributionProfileAction $distributionProfileAction, VidiunGenericDistributionJobProviderData $providerData)
 	{
 		if(!$providerData->xml)
 			throw new Exception("XML data not supplied");
@@ -66,19 +66,19 @@ class GenericDistributionEngine extends DistributionEngine implements
 		$srcFile = $this->tempXmlPath . '/' . $fileName;
 		$destFile = $distributionProfileAction->serverPath;
 			
-		if($distributionProfileAction->protocol != KalturaDistributionProtocol::HTTP && $distributionProfileAction->protocol != KalturaDistributionProtocol::HTTPS)
+		if($distributionProfileAction->protocol != VidiunDistributionProtocol::HTTP && $distributionProfileAction->protocol != VidiunDistributionProtocol::HTTPS)
 			$destFile .= '/' . $fileName;
 			
 		$destFile = str_replace('{REMOTE_ID}', $data->remoteId, $destFile);
 		
 		file_put_contents($srcFile, $providerData->xml);
-		KalturaLog::log("XML written to file [$srcFile]");
+		VidiunLog::log("XML written to file [$srcFile]");
 		
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
 		$engineOptions['passiveMode'] = $distributionProfileAction->ftpPassiveMode;
 		$engineOptions['fieldName'] = $distributionProfileAction->httpFieldName;
 		$engineOptions['fileName'] = $distributionProfileAction->httpFileName;
-		$fileTransferMgr = kFileTransferMgr::getInstance($distributionProfileAction->protocol, $engineOptions);
+		$fileTransferMgr = vFileTransferMgr::getInstance($distributionProfileAction->protocol, $engineOptions);
 		if(!$fileTransferMgr)
 			throw new Exception("File transfer manager type [$distributionProfileAction->protocol] not supported");
 			
@@ -100,7 +100,7 @@ class GenericDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * @param string $results
-	 * @param KalturaGenericDistributionProviderParser $resultParserType
+	 * @param VidiunGenericDistributionProviderParser $resultParserType
 	 * @param string $resultParseData
 	 * @return array of parsed values
 	 */
@@ -108,7 +108,7 @@ class GenericDistributionEngine extends DistributionEngine implements
 	{
 		switch($resultParserType)
 		{
-			case KalturaGenericDistributionProviderParser::XSL;
+			case VidiunGenericDistributionProviderParser::XSL;
 				$xml = new DOMDocument();
 				if(!$xml->loadXML($results))
 					return false;
@@ -117,7 +117,7 @@ class GenericDistributionEngine extends DistributionEngine implements
 				$xsl->loadXML($resultParseData);
 				
 				$proc = new XSLTProcessor;
-				$proc->registerPHPFunctions(kXml::getXslEnabledPhpFunctions());
+				$proc->registerPHPFunctions(vXml::getXslEnabledPhpFunctions());
 				$proc->importStyleSheet($xsl);
 				
 				$data = $proc->transformToDoc($xml);
@@ -126,7 +126,7 @@ class GenericDistributionEngine extends DistributionEngine implements
 					
 				return explode(',', $data);
 				
-			case KalturaGenericDistributionProviderParser::XPATH;
+			case VidiunGenericDistributionProviderParser::XPATH;
 				$xml = new DOMDocument();
 				if(!$xml->loadXML($results))
 					return false;
@@ -142,7 +142,7 @@ class GenericDistributionEngine extends DistributionEngine implements
 					
 				return $matches;;
 				
-			case KalturaGenericDistributionProviderParser::REGEX;
+			case VidiunGenericDistributionProviderParser::REGEX;
 				$matches = array();
 				if(!preg_match("/$resultParseData/", $results, $matches))
 					return false;
@@ -157,7 +157,7 @@ class GenericDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		// not supported
 		return false;
@@ -166,13 +166,13 @@ class GenericDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaGenericDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaGenericDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunGenericDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunGenericDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaGenericDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaGenericDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunGenericDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunGenericDistributionJobProviderData");
 		
 		return $this->handleAction($data, $data->distributionProfile, $data->distributionProfile->deleteAction, $data->providerData);
 	}
@@ -180,7 +180,7 @@ class GenericDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseDelete::closeDelete()
 	 */
-	public function closeDelete(KalturaDistributionDeleteJobData $data)
+	public function closeDelete(VidiunDistributionDeleteJobData $data)
 	{
 		// not supported
 		return false;
@@ -189,7 +189,7 @@ class GenericDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseReport::closeReport()
 	 */
-	public function closeReport(KalturaDistributionFetchReportJobData $data)
+	public function closeReport(VidiunDistributionFetchReportJobData $data)
 	{
 		// not supported
 		return false;
@@ -198,7 +198,7 @@ class GenericDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseUpdate::closeUpdate()
 	 */
-	public function closeUpdate(KalturaDistributionUpdateJobData $data)
+	public function closeUpdate(VidiunDistributionUpdateJobData $data)
 	{
 		// not supported
 		return false;
@@ -207,31 +207,31 @@ class GenericDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineReport::fetchReport()
 	 */
-	public function fetchReport(KalturaDistributionFetchReportJobData $data)
+	public function fetchReport(VidiunDistributionFetchReportJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaGenericDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaGenericDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunGenericDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunGenericDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaGenericDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaGenericDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunGenericDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunGenericDistributionJobProviderData");
 		
 		return $this->handleFetchReport($data, $data->distributionProfile, $data->distributionProfile->report, $data->providerData);
 	}
 
 
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaGenericDistributionProfile $distributionProfile
-	 * @param KalturaGenericDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunGenericDistributionProfile $distributionProfile
+	 * @param VidiunGenericDistributionJobProviderData $providerData
 	 * @throws Exception
-	 * @throws kFileTransferMgrException
+	 * @throws vFileTransferMgrException
 	 * @return boolean true if finished, false if will be finished asynchronously
 	 */
-	protected function handleFetchReport(KalturaDistributionFetchReportJobData $data, KalturaGenericDistributionProfile $distributionProfile, KalturaGenericDistributionProfileAction $distributionProfileAction, KalturaGenericDistributionJobProviderData $providerData)
+	protected function handleFetchReport(VidiunDistributionFetchReportJobData $data, VidiunGenericDistributionProfile $distributionProfile, VidiunGenericDistributionProfileAction $distributionProfileAction, VidiunGenericDistributionJobProviderData $providerData)
 	{
 		$srcFile = str_replace('{REMOTE_ID}', $data->remoteId, $distributionProfileAction->serverPath);
 		
-		KalturaLog::log("Fetch report from url [$srcFile]");
+		VidiunLog::log("Fetch report from url [$srcFile]");
 		$results = file_get_contents($srcFile);
 	
 		if($results && is_string($results))
@@ -248,13 +248,13 @@ class GenericDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaGenericDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaGenericDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunGenericDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunGenericDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaGenericDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaGenericDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunGenericDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunGenericDistributionJobProviderData");
 		
 		return $this->handleAction($data, $data->distributionProfile, $data->distributionProfile->updateAction, $data->providerData);
 	}

@@ -5,17 +5,17 @@
  * @package api
  * @subpackage ps2
  */
-class rankkshowAction extends defPartnerservices2Action
+class rankvshowAction extends defPartnerservices2Action
 {
 	public function describe()
 	{
 		return 	
 			array (
-				"display_name" => "rankKShow",
+				"display_name" => "rankVShow",
 				"desc" => "" ,
 				"in" => array (
 					"mandatory" => array ( 
-						"kshow_id" => array ("type" => "string", "desc" => ""),
+						"vshow_id" => array ("type" => "string", "desc" => ""),
 						"rank" => array ("type" => "integer", "desc" => "")
 						),
 					"optional" => array ()
@@ -25,27 +25,27 @@ class rankkshowAction extends defPartnerservices2Action
 					),
 				"errors" => array (
 					APIErrors::INVALID_RANK ,
-					APIErrors::INVALID_KSHOW_ID , 
-					APIErrors::USER_ALREADY_RANKED_KSHOW , 
+					APIErrors::INVALID_VSHOW_ID , 
+					APIErrors::USER_ALREADY_RANKED_VSHOW , 
 					
 				)
 			); 
 	}
 	
 	protected function ticketType()	{		return self::REQUIED_TICKET_REGULAR;	}
-	// ask to fetch the kuser from puser_kuser - so we can tel the difference between a 
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_KUSER_ID_ONLY; 	}
+	// ask to fetch the vuser from puser_vuser - so we can tel the difference between a 
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_VUSER_ID_ONLY; 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		$kshow_id = $this->getPM ( "kshow_id" );
+		$vshow_id = $this->getPM ( "vshow_id" );
 		$rank = $this->getPM ( "rank" );
 		
-		$kshow = kshowPeer::retrieveByPK( $kshow_id );
+		$vshow = vshowPeer::retrieveByPK( $vshow_id );
 		
-		if ( ! $kshow )
+		if ( ! $vshow )
 		{
-			$this->addError( APIErrors::INVALID_KSHOW_ID , $kshow_id  );
+			$this->addError( APIErrors::INVALID_VSHOW_ID , $vshow_id  );
 			return;		
 		}
 		
@@ -55,8 +55,8 @@ class rankkshowAction extends defPartnerservices2Action
 			return;					
 		}
 
-		$kuser_id = $puser_kuser->getKuserId();
-		$entry_id = $kshow->getShowEntryId();
+		$vuser_id = $puser_vuser->getVuserId();
+		$entry_id = $vshow->getShowEntryId();
 		
 		$partner = PartnerPeer::retrieveByPK($partner_id);
 
@@ -64,38 +64,38 @@ class rankkshowAction extends defPartnerservices2Action
 		{
 			// prevent duplicate votes
 			$c = new Criteria ();
-			$c->add ( kvotePeer::KUSER_ID , $kuser_id);
-			$c->add ( kvotePeer::ENTRY_ID , $entry_id);
-			$c->add ( kvotePeer::KSHOW_ID , $kshow_id);
+			$c->add ( vvotePeer::VUSER_ID , $vuser_id);
+			$c->add ( vvotePeer::ENTRY_ID , $entry_id);
+			$c->add ( vvotePeer::VSHOW_ID , $vshow_id);
 			
-			$kvote = kvotePeer::doSelectOne( $c );
-			if ( $kvote != NULL )
+			$vvote = vvotePeer::doSelectOne( $c );
+			if ( $vvote != NULL )
 			{
-				$this->addError( APIErrors::USER_ALREADY_RANKED_KSHOW , $puser_id  , $kshow_id );
+				$this->addError( APIErrors::USER_ALREADY_RANKED_VSHOW , $puser_id  , $vshow_id );
 				return;						
 			}
 		}
 		
-		$kvote = new kvote();
-		$kvote->setKshowId($kshow_id);
-		$kvote->setEntryId($entry_id);
-		$kvote->setKuserId($kuser_id);
-		$kvote->setRank($rank);
-		$kvote->save();
+		$vvote = new vvote();
+		$vvote->setVshowId($vshow_id);
+		$vvote->setEntryId($entry_id);
+		$vvote->setVuserId($vuser_id);
+		$vvote->setRank($rank);
+		$vvote->save();
 
-		$statistics_results = $kvote->getStatisticsResults();
-		$updated_kshow = @$statistics_results["kshow"];
+		$statistics_results = $vvote->getStatisticsResults();
+		$updated_vshow = @$statistics_results["vshow"];
 		
-		if ( $updated_kshow )
+		if ( $updated_vshow )
 		{
-			myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_KSHOW_RANK , $updated_kshow );
+			myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_VSHOW_RANK , $updated_vshow );
 			
-			$data = array ( "kshow_id" => $kshow_id , 
+			$data = array ( "vshow_id" => $vshow_id , 
 				"uid" => $puser_id ,
-				"rank" => $updated_kshow->getRank() ,
-				"votes" => $updated_kshow->getVotes() );
+				"rank" => $updated_vshow->getRank() ,
+				"votes" => $updated_vshow->getVotes() );
 				
-			//$this->addMsg ( "kshow" , objectWrapperBase::getWrapperClass( $updated_kshow , objectWrapperBase::DETAIL_LEVEL_DETAILED) );
+			//$this->addMsg ( "vshow" , objectWrapperBase::getWrapperClass( $updated_vshow , objectWrapperBase::DETAIL_LEVEL_DETAILED) );
 			$this->addMsg ( "rank" , $data ); 
 		}
 

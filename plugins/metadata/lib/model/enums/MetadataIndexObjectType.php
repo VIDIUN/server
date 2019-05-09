@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage model.enum
  */
-class MetadataIndexObjectType implements IKalturaPluginEnum, IndexObjectType
+class MetadataIndexObjectType implements IVidiunPluginEnum, IndexObjectType
 {
 	const METADATA = 'Metadata';
 	

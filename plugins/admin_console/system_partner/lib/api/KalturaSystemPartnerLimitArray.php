@@ -3,20 +3,20 @@
  * @package plugins.systemPartner
  * @subpackage api.objects
  */
-class KalturaSystemPartnerLimitArray extends KalturaTypedArray
+class VidiunSystemPartnerLimitArray extends VidiunTypedArray
 {
 	/**
 	 * @param Partner $partner
-	 * @return KalturaSystemPartnerLimitArray
+	 * @return VidiunSystemPartnerLimitArray
 	 */
 	public static function fromPartner(Partner $partner)
 	{
-		$arr = new KalturaSystemPartnerLimitArray();
-		$reflector = KalturaTypeReflectorCacher::get('KalturaSystemPartnerLimitType');
+		$arr = new VidiunSystemPartnerLimitArray();
+		$reflector = VidiunTypeReflectorCacher::get('VidiunSystemPartnerLimitType');
 		$types = $reflector->getConstants();
 		foreach($types as $typeInfo) {
 		    $typeValue = $typeInfo->getDefaultValue();
-		    $arr[] = KalturaSystemPartnerOveragedLimit::fromPartner($typeValue, $partner);
+		    $arr[] = VidiunSystemPartnerOveragedLimit::fromPartner($typeValue, $partner);
 		}
 			
 			
@@ -25,6 +25,6 @@ class KalturaSystemPartnerLimitArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaSystemPartnerLimit");
+		return parent::__construct("VidiunSystemPartnerLimit");
 	}
 }

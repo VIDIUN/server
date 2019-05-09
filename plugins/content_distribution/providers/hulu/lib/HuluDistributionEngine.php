@@ -19,14 +19,14 @@ class HuluDistributionEngine extends DistributionEngine implements
 	 * 
 	 * Demonstrate asynchronous external API usage
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
 		// validates received object types
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaHuluDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaHuluDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunHuluDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunHuluDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaHuluDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaHuluDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunHuluDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunHuluDistributionJobProviderData");
 		
 		// call the actual submit action
 		$this->handleSubmit($data, $data->distributionProfile, $data->providerData);
@@ -37,7 +37,7 @@ class HuluDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		$entryId = $data->entryDistribution->entryId;
 		$loginName = $data->distributionProfile->sftpLogin;
@@ -47,11 +47,11 @@ class HuluDistributionEngine extends DistributionEngine implements
 	}
 
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaHuluDistributionProfile $distributionProfile
-	 * @param KalturaHuluDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunHuluDistributionProfile $distributionProfile
+	 * @param VidiunHuluDistributionJobProviderData $providerData
 	 */
-	protected function handleSubmit(KalturaDistributionJobData $data, KalturaHuluDistributionProfile $distributionProfile, KalturaHuluDistributionJobProviderData $providerData)
+	protected function handleSubmit(VidiunDistributionJobData $data, VidiunHuluDistributionProfile $distributionProfile, VidiunHuluDistributionJobProviderData $providerData)
 	{
 		$feed = new HuluFeedHelper('hulu_template.xml', $distributionProfile, $providerData);
 		$xml = $feed->getXml();
@@ -59,21 +59,21 @@ class HuluDistributionEngine extends DistributionEngine implements
 		$videoFilePath = $providerData->videoAssetFilePath;
 		$thumbAssetFilePath = $providerData->thumbAssetFilePath;
 		$captionsFilesPaths = $providerData->captionLocalPaths;
-		$protocol = $distributionProfile->protocol ? $distributionProfile->protocol : KalturaDistributionProtocol::SFTP;
+		$protocol = $distributionProfile->protocol ? $distributionProfile->protocol : VidiunDistributionProtocol::SFTP;
 		
 		$remoteVideoFileName = $providerData->fileBaseName.'.'.pathinfo($videoFilePath, PATHINFO_EXTENSION);
 		$remoteThumbFileName = $providerData->fileBaseName.'.'.pathinfo($thumbAssetFilePath, PATHINFO_EXTENSION);
 		$remoteXmlFileName = $providerData->fileBaseName.'.xml';
 		switch ($protocol){
-			case KalturaDistributionProtocol::SFTP:
+			case VidiunDistributionProtocol::SFTP:
 				$sftpBasePath = '/home/' . $distributionProfile->sftpLogin . '/upload';
 				$videoSFTPPath = $sftpBasePath.'/'.$remoteVideoFileName;
 				$thumbSFTPPath = $sftpBasePath.'/'.$remoteThumbFileName;
 				$xmlSFTPPath = $sftpBasePath.'/'.$remoteXmlFileName;
-				KalturaLog::info('$videoSFTPPath:' . $videoSFTPPath);
-				KalturaLog::info('$thumbSFTPPath:' . $thumbSFTPPath);
-				KalturaLog::info('$xmlSFTPPath:' . $xmlSFTPPath);
-				KalturaLog::info('XML:' . $xml);
+				VidiunLog::info('$videoSFTPPath:' . $videoSFTPPath);
+				VidiunLog::info('$thumbSFTPPath:' . $thumbSFTPPath);
+				VidiunLog::info('$xmlSFTPPath:' . $xmlSFTPPath);
+				VidiunLog::info('XML:' . $xml);
 				$fileManager = $this->getSFTPManager($distributionProfile);
 				$fileManager->putFile($videoSFTPPath, $videoFilePath);
 				if($thumbAssetFilePath && file_exists($thumbAssetFilePath))
@@ -83,13 +83,13 @@ class HuluDistributionEngine extends DistributionEngine implements
 					if(file_exists($captionFilePath->value)){
 						$remoteCaptionFileName = $providerData->fileBaseName.'.'.pathinfo($captionFilePath->value, PATHINFO_EXTENSION);
 						$captionSFTPPath = $sftpBasePath.'/'.$remoteCaptionFileName;
-						KalturaLog::info('$captionSFTPPath:' . $captionSFTPPath);
+						VidiunLog::info('$captionSFTPPath:' . $captionSFTPPath);
 						$fileManager->putFile($captionSFTPPath, $captionFilePath->value);
 					}
 				}
 				$fileManager->filePutContents($xmlSFTPPath, $xml);
 				break;
-			case KalturaDistributionProtocol::ASPERA:
+			case VidiunDistributionProtocol::ASPERA:
 				$xmlTempPath = $this->getFileLocation($distributionProfile->id, $xml, $providerData->fileBaseName.'.xml');
 				$host = $distributionProfile->asperaHost;
 				$username = $distributionProfile->asperaLogin;
@@ -104,7 +104,7 @@ class HuluDistributionEngine extends DistributionEngine implements
 				if ($videoFilePath && file_exists($videoFilePath))
 					$this->uploadFileWithAspera($host, $username, $videoFilePath, $password, $privateKeyTempPath, $passphrase, $port, $remoteVideoFileName);
 				else{
-					throw new kFileTransferMgrException("video file [$videoFilePath] not exists", kFileTransferMgrException::localFileNotExists);
+					throw new vFileTransferMgrException("video file [$videoFilePath] not exists", vFileTransferMgrException::localFileNotExists);
 				}
 				if($thumbAssetFilePath && file_exists($thumbAssetFilePath))
 					$this->uploadFileWithAspera($host, $username, $thumbAssetFilePath, $password, $privateKeyTempPath, $passphrase, $port, $remoteThumbFileName );
@@ -143,16 +143,16 @@ class HuluDistributionEngine extends DistributionEngine implements
 	
 	/**
 	 * 
-	 * @param KalturaHuluDistributionProfile $distributionProfile
+	 * @param VidiunHuluDistributionProfile $distributionProfile
 	 * @return sftpMgr
 	 */
-	protected function getSFTPManager(KalturaHuluDistributionProfile $distributionProfile)
+	protected function getSFTPManager(VidiunHuluDistributionProfile $distributionProfile)
 	{
 		$serverUrl = $distributionProfile->sftpHost;
 		$loginName = $distributionProfile->sftpLogin;
 		$loginPass = $distributionProfile->sftpPass;
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$sftpManager = kFileTransferMgr::getInstance(kFileTransferMgrType::SFTP, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$sftpManager = vFileTransferMgr::getInstance(vFileTransferMgrType::SFTP, $engineOptions);
 		$sftpManager->login($serverUrl, $loginName, $loginPass);
 		return $sftpManager;
 	}
@@ -167,7 +167,7 @@ class HuluDistributionEngine extends DistributionEngine implements
 		$res = $this->executeCmd($cmd);
 		if (!$res){
 			$last_error = error_get_last();
-			throw new KalturaDistributionException("Can't put file [$remoteFilePath] - " . $last_error['message'], kFileTransferMgrException::otherError);
+			throw new VidiunDistributionException("Can't put file [$remoteFilePath] - " . $last_error['message'], vFileTransferMgrException::otherError);
 		}
 	}
 	
@@ -187,7 +187,7 @@ class HuluDistributionEngine extends DistributionEngine implements
 		// $remoteFilePath : No need in validation, inner parameter with validation in creation.
 		
 		if(!$validInput)
-			throw new kFileTransferMgrException("Can't put file, Illegal parameters");
+			throw new vFileTransferMgrException("Can't put file, Illegal parameters");
 	}
 	
 	private function getCmdPrefix($privateKeyTempPath, $passphrase, $password, $port){
@@ -211,12 +211,12 @@ class HuluDistributionEngine extends DistributionEngine implements
 	}
 	
 	private function executeCmd($cmd){
-		KalturaLog::info('Executing command: '.$cmd);
+		VidiunLog::info('Executing command: '.$cmd);
 		$return_value = null;
 		$beginTime = time();
 		system($cmd, $return_value);
 		$duration = (time() - $beginTime)/1000;
-		KalturaLog::info("Execution took [$duration]sec with value [$return_value]");
+		VidiunLog::info("Execution took [$duration]sec with value [$return_value]");
 		if ($return_value == 0)
 			return true;
 		return false;

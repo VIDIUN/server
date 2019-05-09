@@ -33,7 +33,7 @@ class ContentDistributionSearchFilter extends AdvancedSearchFilterItem
 	protected $entryDistributionFlag;
 	
 	/**
-	 * enum from KalturaEntryDistributionStatus
+	 * enum from VidiunEntryDistributionStatus
 	 * @var int
 	 */
 	protected $entryDistributionStatus;
@@ -146,35 +146,35 @@ class ContentDistributionSearchFilter extends AdvancedSearchFilterItem
 		if(!is_null($this->noDistributionProfiles))
 		{
 			if($this->noDistributionProfiles)
-				return kContentDistributionManager::getSearchStringNoDistributionProfiles();
+				return vContentDistributionManager::getSearchStringNoDistributionProfiles();
 		}
 		
 		if(!is_null($this->distributionProfileId))
-			$conditions[] = '"' . kContentDistributionManager::getSearchStringDistributionProfile($this->distributionProfileId) . '"';
+			$conditions[] = '"' . vContentDistributionManager::getSearchStringDistributionProfile($this->distributionProfileId) . '"';
 		else 
-			$conditions[] = '"' . kContentDistributionManager::getSearchStringDistributionProfile() . '"';;
+			$conditions[] = '"' . vContentDistributionManager::getSearchStringDistributionProfile() . '"';;
 			
 		
 		if(!is_null($this->distributionSunStatus))
-			$conditions[] = '"' . kContentDistributionManager::getSearchStringDistributionSunStatus($this->distributionSunStatus, $this->distributionProfileId, false) . '"';
+			$conditions[] = '"' . vContentDistributionManager::getSearchStringDistributionSunStatus($this->distributionSunStatus, $this->distributionProfileId, false) . '"';
 		
 		if(!is_null($this->entryDistributionFlag))
-			$conditions[] = '"' . kContentDistributionManager::getSearchStringDistributionFlag($this->entryDistributionFlag, $this->distributionProfileId, false) . '"';
+			$conditions[] = '"' . vContentDistributionManager::getSearchStringDistributionFlag($this->entryDistributionFlag, $this->distributionProfileId, false) . '"';
 		
 		if(!is_null($this->entryDistributionStatus))
-			$conditions[] = '"' . kContentDistributionManager::getSearchStringDistributionStatus($this->entryDistributionStatus, $this->distributionProfileId, false) . '"';
+			$conditions[] = '"' . vContentDistributionManager::getSearchStringDistributionStatus($this->entryDistributionStatus, $this->distributionProfileId, false) . '"';
 			
 		if(!is_null($this->hasEntryDistributionValidationErrors))
 		{
 			if($this->hasEntryDistributionValidationErrors)
-				$conditions[] = '"' . kContentDistributionManager::getSearchStringDistributionHasValidationError($this->distributionProfileId, false) . '"';
+				$conditions[] = '"' . vContentDistributionManager::getSearchStringDistributionHasValidationError($this->distributionProfileId, false) . '"';
 			else
-				$conditions[] = kContentDistributionManager::getSearchStringDistributionHasNoValidationError($this->distributionProfileId);
+				$conditions[] = vContentDistributionManager::getSearchStringDistributionHasNoValidationError($this->distributionProfileId);
 		}
 
 		if(!is_null($this->entryDistributionValidationErrors))
 			foreach($this->entryDistributionValidationErrors as $validationError)
-				$conditions[] = '"' . kContentDistributionManager::getSearchStringDistributionValidationError($validationError, $this->distributionProfileId, false) . '"';
+				$conditions[] = '"' . vContentDistributionManager::getSearchStringDistributionValidationError($validationError, $this->distributionProfileId, false) . '"';
 			
 		if(!count($conditions))
 			return null;
@@ -186,9 +186,9 @@ class ContentDistributionSearchFilter extends AdvancedSearchFilterItem
 	/* (non-PHPdoc)
 	 * @see AdvancedSearchFilterItem::applyCondition()
 	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
-		if ($query instanceof IKalturaIndexQuery){
+		if ($query instanceof IVidiunIndexQuery){
 			$condition = $this->getCondition();
 			$key = '@' . ContentDistributionSphinxPlugin::getSphinxFieldName(ContentDistributionPlugin::SPHINX_EXPANDER_FIELD_DATA);
 			$query->addMatch("($key $condition)");

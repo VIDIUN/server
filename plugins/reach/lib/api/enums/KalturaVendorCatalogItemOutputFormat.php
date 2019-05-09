@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage api.enum
  */
-class KalturaVendorCatalogItemOutputFormat extends KalturaEnum implements VendorCatalogItemOutputFormat
+class VidiunVendorCatalogItemOutputFormat extends VidiunEnum implements VendorCatalogItemOutputFormat
 {
 
 }

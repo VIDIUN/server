@@ -6,21 +6,21 @@
 class YouTubeDistributionCsvEngine extends YouTubeDistributionRightsFeedEngine
 {
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaYouTubeDistributionProfile $distributionProfile
-	 * @param KalturaYouTubeDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunYouTubeDistributionProfile $distributionProfile
+	 * @param VidiunYouTubeDistributionJobProviderData $providerData
 	 */
-	protected function handleSubmit(KalturaDistributionJobData $data, KalturaYouTubeDistributionProfile $distributionProfile, KalturaYouTubeDistributionJobProviderData $providerData)
+	protected function handleSubmit(VidiunDistributionJobData $data, VidiunYouTubeDistributionProfile $distributionProfile, VidiunYouTubeDistributionJobProviderData $providerData)
 	{
 		$videoFilePath = $providerData->videoAssetFilePath;
 		$thumbAssetId = $providerData->thumbAssetId;
 		$thumbAssetFilePath = $providerData->thumbAssetFilePath;
 
 		if (!$videoFilePath)
-			throw new KalturaDistributionException('No video asset to distribute, the job will fail');
+			throw new VidiunDistributionException('No video asset to distribute, the job will fail');
 
 		if (!file_exists($videoFilePath))
-			throw new KalturaDistributionException('The file ['.$videoFilePath.'] was not found (probably not synced yet), the job will retry');
+			throw new VidiunDistributionException('The file ['.$videoFilePath.'] was not found (probably not synced yet), the job will retry');
 
 		$csvMap = unserialize($providerData->submitCsvMap);
 		$videoCsv = implode(',' ,array_keys($csvMap )) .'\n';
@@ -38,7 +38,7 @@ class YouTubeDistributionCsvEngine extends YouTubeDistributionRightsFeedEngine
 		unlink($fp);
 
 		$data->sentData = $videoCsv;
-		$data->results = 'none'; // otherwise kContentDistributionFlowManager won't save sentData
+		$data->results = 'none'; // otherwise vContentDistributionFlowManager won't save sentData
 
 		// upload the video
 		$videoSFTPPath = $providerData->sftpDirectory.'/'.pathinfo($videoFilePath, PATHINFO_BASENAME);
@@ -63,7 +63,7 @@ class YouTubeDistributionCsvEngine extends YouTubeDistributionRightsFeedEngine
 			}
 			catch(Exception $e)
 			{
-				KalturaLog::err($e);
+				VidiunLog::err($e);
 			}
 			unlink($thumbAssetPath);
 		}
@@ -72,7 +72,7 @@ class YouTubeDistributionCsvEngine extends YouTubeDistributionRightsFeedEngine
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		$reportCsv = $this->fetchFile($data, $data->distributionProfile, $data->providerData, 'report');
 
@@ -136,11 +136,11 @@ class YouTubeDistributionCsvEngine extends YouTubeDistributionRightsFeedEngine
 	}
 
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaYouTubeDistributionProfile $distributionProfile
-	 * @param KalturaYouTubeDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunYouTubeDistributionProfile $distributionProfile
+	 * @param VidiunYouTubeDistributionJobProviderData $providerData
 	 */
-	protected function handleUpdate(KalturaDistributionJobData $data, KalturaYouTubeDistributionProfile $distributionProfile, KalturaYouTubeDistributionJobProviderData $providerData)
+	protected function handleUpdate(VidiunDistributionJobData $data, VidiunYouTubeDistributionProfile $distributionProfile, VidiunYouTubeDistributionJobProviderData $providerData)
 	{
 		$thumbAssetFilePath = $providerData->thumbAssetFilePath;
 		$thumbAssetId = $providerData->thumbAssetId;
@@ -161,7 +161,7 @@ class YouTubeDistributionCsvEngine extends YouTubeDistributionRightsFeedEngine
 		unlink($fp);
 
 		$data->sentData = $videoCsv;
-		$data->results = 'none'; // otherwise kContentDistributionFlowManager won't save sentData
+		$data->results = 'none'; // otherwise vContentDistributionFlowManager won't save sentData
 
 		// upload the thumbnail if exists
 		$this->handleThumbUpload($thumbAssetId, $providerData, $sftpManager, $thumbAssetFilePath);
@@ -172,7 +172,7 @@ class YouTubeDistributionCsvEngine extends YouTubeDistributionRightsFeedEngine
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseUpdate::closeUpdate()
 	 */
-	public function closeUpdate(KalturaDistributionUpdateJobData $data)
+	public function closeUpdate(VidiunDistributionUpdateJobData $data)
 	{
 		$statusXml = $this->fetchFile($data, $data->distributionProfile, $data->providerData, "status", "xml");
 
@@ -219,11 +219,11 @@ class YouTubeDistributionCsvEngine extends YouTubeDistributionRightsFeedEngine
 
 	/**
 	 * Deleting a video is done via api call
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaYouTubeDistributionProfile $distributionProfile
-	 * @param KalturaYouTubeDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunYouTubeDistributionProfile $distributionProfile
+	 * @param VidiunYouTubeDistributionJobProviderData $providerData
 	 */
-	protected function handleDelete(KalturaDistributionJobData $data, KalturaYouTubeDistributionProfile $distributionProfile, KalturaYouTubeDistributionJobProviderData $providerData)
+	protected function handleDelete(VidiunDistributionJobData $data, VidiunYouTubeDistributionProfile $distributionProfile, VidiunYouTubeDistributionJobProviderData $providerData)
 	{
 		$videoIdsToDelete = unserialize($providerData->deleteVideoIds);
 
@@ -235,35 +235,35 @@ class YouTubeDistributionCsvEngine extends YouTubeDistributionRightsFeedEngine
 		$tokenData = $providerData->googleTokenData;
 
 		if (!$tokenData)// no token was not setup, do nothing
-			throw new KalturaDistributionException('No google Token was set. the job will fail');
+			throw new VidiunDistributionException('No google Token was set. the job will fail');
 
 		$youtubeService = YouTubeDistributionGoogleClientHelper::getYouTubeService($clientId, $clientSecret, $tokenData);
 		foreach($videoIdsToDelete as $videoIdToDelete)
 		{
-			KalturaLog::debug("Deleting video with id $videoIdToDelete ");
+			VidiunLog::debug("Deleting video with id $videoIdToDelete ");
 			$res = $youtubeService->videos->delete($videoIdToDelete);
-			KalturaLog::debug("Result for Deleting $videoIdToDelete: " .print_r($res,true));
+			VidiunLog::debug("Result for Deleting $videoIdToDelete: " .print_r($res,true));
 		}
 
 		$data->sentData = implode(',',$videoIdsToDelete);
-		$data->results = 'none'; // otherwise kContentDistributionFlowManager won't save sentData
+		$data->results = 'none'; // otherwise vContentDistributionFlowManager won't save sentData
 	}
 
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseDelete::closeDelete()
 	 */
-	public function closeDelete(KalturaDistributionDeleteJobData $data)
+	public function closeDelete(VidiunDistributionDeleteJobData $data)
 	{
 		return true;
 	}
 
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaYouTubeDistributionProfile $distributionProfile
-	 * @param KalturaYouTubeDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunYouTubeDistributionProfile $distributionProfile
+	 * @param VidiunYouTubeDistributionJobProviderData $providerData
 	 * @return Status CSV or FALSE when status is not available yet
 	 */
-	protected function fetchFile(KalturaDistributionJobData $data, KalturaYouTubeDistributionProfile $distributionProfile, KalturaYouTubeDistributionJobProviderData $providerData, $prefix = '', $extension = null )
+	protected function fetchFile(VidiunDistributionJobData $data, VidiunYouTubeDistributionProfile $distributionProfile, VidiunYouTubeDistributionJobProviderData $providerData, $prefix = '', $extension = null )
 	{
 		if ($extension)
 			$statusFilePath = $providerData->sftpDirectory . '/' . $prefix  . '-' . $providerData->sftpMetadataFilename . "." . $extension;
@@ -274,12 +274,12 @@ class YouTubeDistributionCsvEngine extends YouTubeDistributionRightsFeedEngine
 		$statusFile = null;
 		try
 		{
-			KalturaLog::info('Trying to get the following status file: ['.$statusFilePath.']');
+			VidiunLog::info('Trying to get the following status file: ['.$statusFilePath.']');
 			$statusFile = $sftpManager->getFile($statusFilePath);
 		}
-		catch(kFileTransferMgrException $ex) // file is still missing
+		catch(vFileTransferMgrException $ex) // file is still missing
 		{
-			KalturaLog::info('File doesn\'t exist yet, retry later');
+			VidiunLog::info('File doesn\'t exist yet, retry later');
 			return false;
 		}
 

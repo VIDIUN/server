@@ -1,18 +1,18 @@
 <?php
 
 /**
- * Auto-generated index class for categoryKuser
+ * Auto-generated index class for categoryVuser
 */
-class categoryKuserIndex extends BaseIndexObject
+class categoryVuserIndex extends BaseIndexObject
 {
 	public static function getObjectName()
 	{
-		return 'category_kuser';
+		return 'category_vuser';
 	}
 
 	public static function getObjectIndexName()
 	{
-		return 'category_kuser';
+		return 'category_vuser';
 	}
 
 	public static function getSphinxIdField()
@@ -22,7 +22,7 @@ class categoryKuserIndex extends BaseIndexObject
 
 	public static function getPropelIdField()
 	{
-		return categoryKuserPeer::ID;
+		return categoryVuserPeer::ID;
 	}
 
 	public static function getIdField()
@@ -32,7 +32,7 @@ class categoryKuserIndex extends BaseIndexObject
 
 	public static function getDefaultCriteriaFilter()
 	{
-		return categoryKuserPeer::getCriteriaFilter();
+		return categoryVuserPeer::getCriteriaFilter();
 	}
 
 	protected static $fieldsMap;
@@ -43,12 +43,12 @@ class categoryKuserIndex extends BaseIndexObject
 		{
 			self::$fieldsMap = array(
 				'category_id' => 'categoryId',
-				'kuser_id' => 'kuserId',
+				'vuser_id' => 'vuserId',
 				'category_full_ids' => 'searchIndexCategoryFullIds',
 				'permission_names' => 'searchIndexPermissionNames',
 				'puser_id' => 'puserId',
 				'screen_name' => 'screenName',
-				'category_kuser_status' => 'searchIndexStatus',
+				'category_vuser_status' => 'searchIndexStatus',
 				'partner_id' => 'partnerId',
 				'update_method' => 'searchIndexUpdateMethod',
 				'created_at' => 'createdAt',
@@ -66,12 +66,12 @@ class categoryKuserIndex extends BaseIndexObject
 		{
 			self::$typesMap = array(
 				'category_id' => IIndexable::FIELD_TYPE_STRING,
-				'kuser_id' => IIndexable::FIELD_TYPE_STRING,
+				'vuser_id' => IIndexable::FIELD_TYPE_STRING,
 				'category_full_ids' => IIndexable::FIELD_TYPE_STRING,
 				'permission_names' => IIndexable::FIELD_TYPE_STRING,
 				'puser_id' => IIndexable::FIELD_TYPE_STRING,
 				'screen_name' => IIndexable::FIELD_TYPE_STRING,
-				'category_kuser_status' => IIndexable::FIELD_TYPE_STRING,
+				'category_vuser_status' => IIndexable::FIELD_TYPE_STRING,
 				'partner_id' => IIndexable::FIELD_TYPE_STRING,
 				'update_method' => IIndexable::FIELD_TYPE_STRING,
 				'created_at' => IIndexable::FIELD_TYPE_DATETIME,
@@ -100,17 +100,17 @@ class categoryKuserIndex extends BaseIndexObject
 		if (!self::$searchableFieldsMap)
 		{
 			self::$searchableFieldsMap = array(
-				'category_kuser.CATEGORY_ID' => 'category_id',
-				'category_kuser.KUSER_ID' => 'kuser_id',
-				'category_kuser.CATEGORY_FULL_IDS' => 'category_full_ids',
-				'category_kuser.PERMISSION_NAMES' => 'permission_names',
-				'category_kuser.PUSER_ID' => 'puser_id',
-				'category_kuser.SCREEN_NAME' => 'screen_name',
-				'category_kuser.STATUS' => 'category_kuser_status',
-				'category_kuser.PARTNER_ID' => 'partner_id',
-				'category_kuser.UPDATE_METHOD' => 'update_method',
-				'category_kuser.CREATED_AT' => 'created_at',
-				'category_kuser.UPDATED_AT' => 'updated_at',
+				'category_vuser.CATEGORY_ID' => 'category_id',
+				'category_vuser.VUSER_ID' => 'vuser_id',
+				'category_vuser.CATEGORY_FULL_IDS' => 'category_full_ids',
+				'category_vuser.PERMISSION_NAMES' => 'permission_names',
+				'category_vuser.PUSER_ID' => 'puser_id',
+				'category_vuser.SCREEN_NAME' => 'screen_name',
+				'category_vuser.STATUS' => 'category_vuser_status',
+				'category_vuser.PARTNER_ID' => 'partner_id',
+				'category_vuser.UPDATE_METHOD' => 'update_method',
+				'category_vuser.CREATED_AT' => 'created_at',
+				'category_vuser.UPDATED_AT' => 'updated_at',
 			);
 		}
 		return self::$searchableFieldsMap;
@@ -123,7 +123,7 @@ class categoryKuserIndex extends BaseIndexObject
 		if (!self::$searchEscapeTypes)
 		{
 			self::$searchEscapeTypes = array(
-				'category_kuser.CATEGORY_FULL_IDS' => SearchIndexFieldEscapeType::MD5_LOWER_CASE,
+				'category_vuser.CATEGORY_FULL_IDS' => SearchIndexFieldEscapeType::MD5_LOWER_CASE,
 			);
 		}
 		return self::$searchEscapeTypes;
@@ -136,7 +136,7 @@ class categoryKuserIndex extends BaseIndexObject
 		if (!self::$indexEscapeTypes)
 		{
 			self::$indexEscapeTypes = array(
-				'category_kuser.CATEGORY_FULL_IDS' => SearchIndexFieldEscapeType::NO_ESCAPE,
+				'category_vuser.CATEGORY_FULL_IDS' => SearchIndexFieldEscapeType::NO_ESCAPE,
 			);
 		}
 		return self::$indexEscapeTypes;
@@ -150,7 +150,7 @@ class categoryKuserIndex extends BaseIndexObject
 		{
 			self::$matchableFields = array(
 				"category_id",
-				"kuser_id",
+				"vuser_id",
 				"category_full_ids",
 				"permission_names",
 				"puser_id",
@@ -169,8 +169,8 @@ class categoryKuserIndex extends BaseIndexObject
 		if (!self::$orderFields)
 		{
 			self::$orderFields = array(
-				'category_kuser.CREATED_AT' => 'created_at',
-				'category_kuser.UPDATED_AT' => 'updated_at',
+				'category_vuser.CREATED_AT' => 'created_at',
+				'category_vuser.UPDATED_AT' => 'updated_at',
 			);
 		}
 		return self::$orderFields;
@@ -240,16 +240,16 @@ class categoryKuserIndex extends BaseIndexObject
 
 	public static function doCountOnPeer(Criteria $c)
 	{
-		return categoryKuserPeer::doCount($c);
+		return categoryVuserPeer::doCount($c);
 	}
 
 	//This function is generated based on cacheInvalidationKey elements in the relevant IndexSchema.xml
 	public static function getCacheInvalidationKeys($object = null)
 	{
 		if (is_null($object))
-			return array(array("category_kuser:partnerId=%s", categoryKuserPeer::PARTNER_ID));
+			return array(array("category_vuser:partnerId=%s", categoryVuserPeer::PARTNER_ID));
 		else
-			return array("category_kuser:partnerId=".strtolower($object->getPartnerId()));
+			return array("category_vuser:partnerId=".strtolower($object->getPartnerId()));
 	}
 
 }

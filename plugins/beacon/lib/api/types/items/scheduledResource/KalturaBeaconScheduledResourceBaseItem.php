@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-abstract class KalturaBeaconScheduledResourceBaseItem extends KalturaESearchBaseItem
+abstract class VidiunBeaconScheduledResourceBaseItem extends VidiunESearchBaseItem
 {
 
 }

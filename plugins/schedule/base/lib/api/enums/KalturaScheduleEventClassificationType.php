@@ -3,6 +3,6 @@
  * @package plugins.schedule
  * @subpackage api.enum
  */
-class KalturaScheduleEventClassificationType extends KalturaEnum implements ScheduleEventClassificationType
+class VidiunScheduleEventClassificationType extends VidiunEnum implements ScheduleEventClassificationType
 {
 }

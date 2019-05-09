@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaApiActionPermissionItemFilter extends KalturaApiActionPermissionItemBaseFilter
+class VidiunApiActionPermissionItemFilter extends VidiunApiActionPermissionItemBaseFilter
 {
 }

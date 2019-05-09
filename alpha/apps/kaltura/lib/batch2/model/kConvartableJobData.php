@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model.data
  */
-class kConvartableJobData extends kJobData
+class vConvartableJobData extends vJobData
 {
 	/**
-	 * @var array<kSourceFileSyncDescriptor>
+	 * @var array<vSourceFileSyncDescriptor>
 	 */
 	private $srcFileSyncs;
 	
@@ -73,7 +73,7 @@ class kConvartableJobData extends kJobData
 	{
 		if($this->srcFileSyncLocalPath || $this->srcFileSyncRemoteUrl || $this->actualSrcFileSyncLocalPath)
 		{
-			$srcDescriptor = new kSourceFileSyncDescriptor();
+			$srcDescriptor = new vSourceFileSyncDescriptor();
 			$srcDescriptor->setActualFileSyncLocalPath($this->actualSrcFileSyncLocalPath);
 			$srcDescriptor->setFileSyncLocalPath($this->srcFileSyncLocalPath);
 			$srcDescriptor->setFileSyncRemoteUrl($this->srcFileSyncRemoteUrl);
@@ -90,7 +90,7 @@ class kConvartableJobData extends kJobData
 	}
 
 	/**
-	 * @param array<kSourceFileSyncDescriptor> $srcFileSyncs
+	 * @param array<vSourceFileSyncDescriptor> $srcFileSyncs
 	 */
 	public function setSrcFileSyncs($srcFileSyncs) 
 	{
@@ -106,7 +106,7 @@ class kConvartableJobData extends kJobData
 		
 		if(!$srcDescriptor)
 			return null;
-		/* @var $srcDescriptor kSourceFileSyncDescriptor */
+		/* @var $srcDescriptor vSourceFileSyncDescriptor */
 		return $srcDescriptor->getFileSyncLocalPath();
 	}
 	
@@ -119,7 +119,7 @@ class kConvartableJobData extends kJobData
 		
 		if(!$srcDescriptor)
 		{
-			$srcDescriptor = new kSourceFileSyncDescriptor();
+			$srcDescriptor = new vSourceFileSyncDescriptor();
 			$srcDescriptor->setFileSyncRemoteUrl($srcFileSyncRemoteUrl);	
 			$this->srcFileSyncs = array($srcDescriptor);
 		}
@@ -138,7 +138,7 @@ class kConvartableJobData extends kJobData
 		
 		if(!$srcDescriptor)
 			return null;
-		/* @var $srcDescriptor kSourceFileSyncDescriptor */
+		/* @var $srcDescriptor vSourceFileSyncDescriptor */
 		return $srcDescriptor->getFileSyncRemoteUrl();
 	}
 
@@ -159,7 +159,7 @@ class kConvartableJobData extends kJobData
 		
 		if(!$srcDescriptor)
 		{
-			$srcDescriptor = new kSourceFileSyncDescriptor();
+			$srcDescriptor = new vSourceFileSyncDescriptor();
 			$srcDescriptor->setPathAndKeyByFileSync($fileSync);
 			$this->srcFileSyncs = array($srcDescriptor);
 		}
@@ -178,7 +178,7 @@ class kConvartableJobData extends kJobData
 		
 		if(!$srcDescriptor)
 			return null;
-		/* @var $srcDescriptor kSourceFileSyncDescriptor */
+		/* @var $srcDescriptor vSourceFileSyncDescriptor */
 		return $srcDescriptor->getActualFileSyncLocalPath();
 	}
 
@@ -191,7 +191,7 @@ class kConvartableJobData extends kJobData
 		
 		if(!$srcDescriptor)
 		{
-			$srcDescriptor = new kSourceFileSyncDescriptor();
+			$srcDescriptor = new vSourceFileSyncDescriptor();
 			$srcDescriptor->setActualFileSyncLocalPath($actualSrcFileSyncLocalPath);	
 			$this->srcFileSyncs = array($srcDescriptor);
 		}

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage errors
  */
-class kUserException extends kCoreException
+class vUserException extends vCoreException
 {
 	const LOGIN_DATA_NOT_FOUND = 'LOGIN_DATA_NOT_FOUND';
 	

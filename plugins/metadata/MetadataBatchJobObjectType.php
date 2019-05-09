@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class MetadataBatchJobObjectType implements IKalturaPluginEnum, BatchJobObjectType
+class MetadataBatchJobObjectType implements IVidiunPluginEnum, BatchJobObjectType
 {
 	const METADATA				= "Metadata";
 	const METADATA_PROFILE 		= "MetadataProfile";

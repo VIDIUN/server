@@ -4,7 +4,7 @@
  *
  * @package plugins.watermark
  */
-class WatermarkPlugin extends KalturaPlugin implements IKalturaPending, IKalturaAssetParamsAdjuster, IKalturaEventConsumers
+class WatermarkPlugin extends VidiunPlugin implements IVidiunPending, IVidiunAssetParamsAdjuster, IVidiunEventConsumers
 {
 	const PLUGIN_NAME = 'watermark';
 	
@@ -19,10 +19,10 @@ class WatermarkPlugin extends KalturaPlugin implements IKalturaPending, IKaltura
 	const TRANSCODING_METADATA_WATERMMARK_IMAGE_ENTRY = 'WatermarkImageEntry';
 	const TRANSCODING_METADATA_WATERMMARK_IMAGE_URL = 'WatermarkImageURL';
 	
-	const WATERMARK_FLOW_MANAGER_CLASS = 'kWatermarkFlowManager';
+	const WATERMARK_FLOW_MANAGER_CLASS = 'vWatermarkFlowManager';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -30,18 +30,18 @@ class WatermarkPlugin extends KalturaPlugin implements IKalturaPending, IKaltura
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$metadataVersion = new KalturaVersion(self::METADATA_PLUGIN_VERSION_MAJOR, self::METADATA_PLUGIN_VERSION_MINOR, self::METADATA_PLUGIN_VERSION_BUILD);
-		$metadataDependency = new KalturaDependency(self::METADATA_PLUGIN_NAME, $metadataVersion);
+		$metadataVersion = new VidiunVersion(self::METADATA_PLUGIN_VERSION_MAJOR, self::METADATA_PLUGIN_VERSION_MINOR, self::METADATA_PLUGIN_VERSION_BUILD);
+		$metadataDependency = new VidiunDependency(self::METADATA_PLUGIN_NAME, $metadataVersion);
 		
 		return array($metadataDependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
  	 */
 	public static function getEventConsumers()
 	{
@@ -51,25 +51,25 @@ class WatermarkPlugin extends KalturaPlugin implements IKalturaPending, IKaltura
 	}
 		
 	/* (non-PHPdoc)
-	 * @see IKalturaAssetParamsAdjuster::adjustAssetParams()
+	 * @see IVidiunAssetParamsAdjuster::adjustAssetParams()
 	 */
 	public function adjustAssetParams($entryId, array &$flavors)
 	{
 		$entry = entryPeer::retrieveByPK($entryId);
 		if(!isset($entry))
 		{
-			KalturaLog::warning("Bad entry id ($entryId).");
+			VidiunLog::warning("Bad entry id ($entryId).");
 			return;
 		}
 		
-		$xmlStr = kWatermarkManager::getWatermarkMetadataXml($entry);
+		$xmlStr = vWatermarkManager::getWatermarkMetadataXml($entry);
 		if(!isset($xmlStr))
 		{
-			KalturaLog::log("Entry($entryId) metadata object misses valid file sync! Nothing to adjust");
+			VidiunLog::log("Entry($entryId) metadata object misses valid file sync! Nothing to adjust");
 			return;
 		}
 		
-		KalturaLog::log("Adjusting: entry($entryId),metadata profile(".self::TRANSCODING_METADATA_PROF_SYSNAME."),xml==>$xmlStr");
+		VidiunLog::log("Adjusting: entry($entryId),metadata profile(".self::TRANSCODING_METADATA_PROF_SYSNAME."),xml==>$xmlStr");
 
 		// Retrieve the custom metadata fields from the asocieted XML
 		
@@ -86,7 +86,7 @@ class WatermarkPlugin extends KalturaPlugin implements IKalturaPending, IKaltura
 		if(isset($xml->$fldName)) 
 		{
 			$watermarkSettingsStr =(string)$xml->$fldName;
-			KalturaLog::log("Found custom metadata - $fldName($watermarkSettingsStr)");
+			VidiunLog::log("Found custom metadata - $fldName($watermarkSettingsStr)");
 			if(isset($watermarkSettingsStr)) 
 			{
 				$watermarkSettings = json_decode($watermarkSettingsStr);
@@ -94,11 +94,11 @@ class WatermarkPlugin extends KalturaPlugin implements IKalturaPending, IKaltura
 				{
 					$watermarkSettings = array($watermarkSettings);
 				}
-				KalturaLog::log("WM($fldName) object:".serialize($watermarkSettings));
+				VidiunLog::log("WM($fldName) object:".serialize($watermarkSettings));
 			}
 		}
 		else
-			KalturaLog::log("No custom metadata - $fldName");
+			VidiunLog::log("No custom metadata - $fldName");
 
 		/*
 		 * Acquire the optional partial WM settings ('imageEntry'/'url') 
@@ -109,28 +109,28 @@ class WatermarkPlugin extends KalturaPlugin implements IKalturaPending, IKaltura
 		if(isset($xml->$fldName)) 
 		{
 			$wmTmp->imageEntry =(string)$xml->$fldName;
-			KalturaLog::log("Found custom metadata - $fldName($wmTmp->imageEntry)");
+			VidiunLog::log("Found custom metadata - $fldName($wmTmp->imageEntry)");
 		}
 		else 
 		{
-			KalturaLog::log("No custom metadata - $fldName");
+			VidiunLog::log("No custom metadata - $fldName");
 			$fldName = self::TRANSCODING_METADATA_WATERMMARK_IMAGE_URL;
 			if(isset($xml->$fldName)) 
 			{
 				$fldVal = (string)$xml->$fldName;
 				$wmTmp->url =(string)$xml->$fldName;
-				KalturaLog::log("Found custom metadata - $fldName($wmTmp->url)");
+				VidiunLog::log("Found custom metadata - $fldName($wmTmp->url)");
 			}
 			else 
-				KalturaLog::log("No custom metadata - $fldName");
+				VidiunLog::log("No custom metadata - $fldName");
 		}
 		
 		/*
 		 * Merge the imageEntry/imageUrl values into previously aquired 'full' WM settings (if provided).
 		 */
 		if(isset($wmTmp))
-			$watermarkSettings = kWatermarkManager::adjustWatermarkSettings($watermarkSettings, $wmTmp);
-		KalturaLog::log("Custom meta data WM settings:".serialize($watermarkSettings));
+			$watermarkSettings = vWatermarkManager::adjustWatermarkSettings($watermarkSettings, $wmTmp);
+		VidiunLog::log("Custom meta data WM settings:".serialize($watermarkSettings));
 
 		/*
 		 * Check for valuable WM custom data.
@@ -147,7 +147,7 @@ class WatermarkPlugin extends KalturaPlugin implements IKalturaPending, IKaltura
 			}
 			if($fldCnt==0)
 			{
-				KalturaLog::log("No WM custom data to merge");
+				VidiunLog::log("No WM custom data to merge");
 				return;
 			}
 		}
@@ -158,18 +158,18 @@ class WatermarkPlugin extends KalturaPlugin implements IKalturaPending, IKaltura
 		 */
 		foreach($flavors as $k=>$flavor) 
 		{
-			KalturaLog::log("Processing flavor id:".$flavor->getId());
+			VidiunLog::log("Processing flavor id:".$flavor->getId());
 			$wmDataFixed = null;
 			$wmPredefined = null;
 			$wmPredefinedStr = $flavor->getWatermarkData();
 			if(!(isset($wmPredefinedStr) && ($wmPredefined=json_decode($wmPredefinedStr))!=null))
 			{
-				KalturaLog::log("No WM data for flavor:".$flavor->getId());
+				VidiunLog::log("No WM data for flavor:".$flavor->getId());
 				continue;
 			}
-			KalturaLog::log("wmPredefined : count(".count($wmPredefined).")-".serialize($wmPredefined));
+			VidiunLog::log("wmPredefined : count(".count($wmPredefined).")-".serialize($wmPredefined));
 
-			$wmDataFixed = kWatermarkManager::adjustWatermarkSettings($wmPredefined, $watermarkSettings);
+			$wmDataFixed = vWatermarkManager::adjustWatermarkSettings($wmPredefined, $watermarkSettings);
 
 			/*
 			 * The 'full' WM settings in the custom metadata overides any exitings WM settings 
@@ -177,7 +177,7 @@ class WatermarkPlugin extends KalturaPlugin implements IKalturaPending, IKaltura
 			$wmJsonStr = json_encode($wmDataFixed);
 			$flavor->setWatermarkData($wmJsonStr);
 			$flavors[$k]= $flavor;
-			KalturaLog::log("Update flavor (".$flavor->getId().") WM to: $wmJsonStr");
+			VidiunLog::log("Update flavor (".$flavor->getId().") WM to: $wmJsonStr");
 		}
 	}
 }

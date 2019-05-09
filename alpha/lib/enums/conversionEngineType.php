@@ -5,7 +5,7 @@
  */ 
 interface conversionEngineType extends BaseEnum
 {
-	const KALTURA_COM = 0;
+	const VIDIUN_COM = 0;
 	const ON2 = 1;
 	const FFMPEG = 2;
 	const MENCODER = 3;

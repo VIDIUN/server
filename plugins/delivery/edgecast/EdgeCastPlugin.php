@@ -2,10 +2,10 @@
 /**
  * @package plugins.edgeCast
  */
-class EdgeCastPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEventConsumers, IKalturaEnumerator, IKalturaObjectLoader
+class EdgeCastPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEventConsumers, IVidiunEnumerator, IVidiunObjectLoader
 {
 	const PLUGIN_NAME = 'edgeCast';
-	const EDGECAST_FLOW_MANAGER = 'kEdgeCastFlowManager';
+	const EDGECAST_FLOW_MANAGER = 'vEdgeCastFlowManager';
 	const PARTNER_CUSTOM_DATA_FIELD_EDGECAST_PARAMS = 'edgeCastParams';
 	
 	public static function getPluginName()
@@ -25,7 +25,7 @@ class EdgeCastPlugin extends KalturaPlugin implements IKalturaPermissions, IKalt
 	
 	/**
 	 * @param Partner $partner
-	 * @return kEdgeCastParams
+	 * @return vEdgeCastParams
 	 */
 	public static function getEdgeCastParams($partner)
 	{
@@ -34,7 +34,7 @@ class EdgeCastPlugin extends KalturaPlugin implements IKalturaPermissions, IKalt
 	
 	/**
 	 * @param Partner $partner
-	 * @param kEdgeCastParams $edgeCastParams
+	 * @param vEdgeCastParams $edgeCastParams
 	 */
 	public static function setEdgeCastParams($partner, $edgeCastParams)
 	{		
@@ -46,7 +46,7 @@ class EdgeCastPlugin extends KalturaPlugin implements IKalturaPermissions, IKalt
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/**
@@ -55,7 +55,7 @@ class EdgeCastPlugin extends KalturaPlugin implements IKalturaPermissions, IKalt
 	public static function getDeliveryProfileType($valueName)
 	{
 		$apiValue = self::getApiValue($valueName);
-		return kPluginableEnumsManager::apiToCore('DeliveryProfileType', $apiValue);
+		return vPluginableEnumsManager::apiToCore('DeliveryProfileType', $apiValue);
 	}
 	
 	public static function getEnums($baseEnumName = null)
@@ -73,7 +73,7 @@ class EdgeCastPlugin extends KalturaPlugin implements IKalturaPermissions, IKalt
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	*/
 	public static function getObjectClass($baseClass, $enumValue) {
 		if ($baseClass == 'DeliveryProfile') {

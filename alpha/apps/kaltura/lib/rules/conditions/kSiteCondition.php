@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kSiteCondition extends kMatchCondition
+class vSiteCondition extends vMatchCondition
 {
 	/**
 	 * Indicates that global whitelist domains already appended 
@@ -12,7 +12,7 @@ class kSiteCondition extends kMatchCondition
 	private $globalWhitelistDomainsAppended = false;
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -21,44 +21,44 @@ class kSiteCondition extends kMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::getFieldValue()
+	 * @see vCondition::getFieldValue()
 	 */
-	public function getFieldValue(kScope $scope)
+	public function getFieldValue(vScope $scope)
 	{
 		$referrer = $scope->getReferrer();
 		return requestUtils::parseUrlHost($referrer);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
 		$referrer = $scope->getReferrer();
 
-		if ($this->getNot()===true && !$this->globalWhitelistDomainsAppended && strpos($referrer, "kwidget") === false && kConf::hasParam("global_whitelisted_domains"))
+		if ($this->getNot()===true && !$this->globalWhitelistDomainsAppended && strpos($referrer, "vwidget") === false && vConf::hasParam("global_whitelisted_domains"))
 		{
-			$ks = $scope->getKs();
-			if (!$ks || !in_array($ks->partner_id, kConf::getMap('global_whitelisted_domains_exclude_list')))
+			$vs = $scope->getVs();
+			if (!$vs || !in_array($vs->partner_id, vConf::getMap('global_whitelisted_domains_exclude_list')))
 			{
 				$this->globalWhitelistDomainsAppended = true;
 			
-				$globalWhitelistedDomains = kConf::get("global_whitelisted_domains");
+				$globalWhitelistedDomains = vConf::get("global_whitelisted_domains");
 				if(!is_array($globalWhitelistedDomains))
 					$globalWhitelistedDomains = explode(',', $globalWhitelistedDomains);
 				
 				foreach($globalWhitelistedDomains as $globalWhitelistedDomain)
-					$this->values[] = new kStringValue($globalWhitelistedDomain);
+					$this->values[] = new vStringValue($globalWhitelistedDomain);
 			}
 		}
 
-		kApiCache::addExtraField(kApiCache::ECF_REFERRER, kApiCache::COND_SITE_MATCH, $this->getStringValues($scope));
+		vApiCache::addExtraField(vApiCache::ECF_REFERRER, vApiCache::COND_SITE_MATCH, $this->getStringValues($scope));
 		
 		return parent::internalFulfilled($scope);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::matches()
+	 * @see vMatchCondition::matches()
 	 */
 	protected function matches($field, $value)
 	{
@@ -66,7 +66,7 @@ class kSiteCondition extends kMatchCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kCondition::shouldFieldDisableCache()
+	 * @see vCondition::shouldFieldDisableCache()
 	 */
 	public function shouldFieldDisableCache($scope)
 	{

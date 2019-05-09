@@ -1,20 +1,20 @@
 <?php
 
-require_once(dirname(__FILE__) . '/kApiCacheBase.php');
-require_once(dirname(__FILE__) . '/../../../../config/kConf.php');
+require_once(dirname(__FILE__) . '/vApiCacheBase.php');
+require_once(dirname(__FILE__) . '/../../../../config/vConf.php');
 require_once(dirname(__FILE__) . '/../request/infraRequestUtils.class.php');
-require_once(dirname(__FILE__) . '/kCacheManager.php');
-require_once(dirname(__FILE__) . '/../request/kSessionBase.class.php');
-require_once(dirname(__FILE__) . '/../request/kIpAddressUtils.php');
-require_once(dirname(__FILE__) . '/../request/kGeoUtils.php');
-require_once(dirname(__FILE__) . '/../kGeoCoderManager.php');
-require_once(dirname(__FILE__) . '/../monitor/KalturaMonitorClient.php');
+require_once(dirname(__FILE__) . '/vCacheManager.php');
+require_once(dirname(__FILE__) . '/../request/vSessionBase.class.php');
+require_once(dirname(__FILE__) . '/../request/vIpAddressUtils.php');
+require_once(dirname(__FILE__) . '/../request/vGeoUtils.php');
+require_once(dirname(__FILE__) . '/../vGeoCoderManager.php');
+require_once(dirname(__FILE__) . '/../monitor/VidiunMonitorClient.php');
 
 /**
  * @package server-infra
  * @subpackage cache
  */
-class kApiCache extends kApiCacheBase
+class vApiCache extends vApiCacheBase
 {
 	const EXTRA_KEYS_PREFIX = 'extra-keys-';	// apc cache key prefix
 
@@ -33,7 +33,7 @@ class kApiCache extends kApiCacheBase
 
 	const ANONYMOUS_CACHE_EXPIRY = 600;
 	const CONDITIONAL_CACHE_EXPIRY = 86400;		// 1 day, must not be greater than the expiry of the query cache keys
-	const KALTURA_COMMENT_MARKER = '@KALTURA_COMMENT@';
+	const VIDIUN_COMMENT_MARKER = '@VIDIUN_COMMENT@';
 	const REDIRECT_ENTRY_CACHE_EXPIRY = 120;
 	
 	const EXPIRY_MARGIN = 300;
@@ -47,7 +47,7 @@ class kApiCache extends kApiCacheBase
 	// this request named warm cache request will block other such requests for WARM_CACHE_TTL seconds
 
 	// header to mark the request is due to cache warming. the header holds the original request protocol http/https
-	const WARM_CACHE_HEADER = "X-KALTURA-WARM-CACHE";
+	const WARM_CACHE_HEADER = "X-VIDIUN-WARM-CACHE";
 
 	// interval before cache expiry in which to try and warm the cache
 	const WARM_CACHE_INTERVAL = 60;
@@ -75,11 +75,11 @@ class kApiCache extends kApiCacheBase
 	protected $_cacheKeyDirty = true;			// true if _params was changed since _cacheKey was calculated
 	protected $_originalCacheKey = null;		// the value of the cache key before any extra fields were added to it
 
-	// ks
-	protected $_ks = "";
-	protected $_ksStatus = kSessionBase::UNKNOWN;
-	protected $_ksObj = null;
-	protected $_ksPartnerId = null;
+	// vs
+	protected $_vs = "";
+	protected $_vsStatus = vSessionBase::UNKNOWN;
+	protected $_vsObj = null;
+	protected $_vsPartnerId = null;
 	protected $_partnerId = null;
 	
 	// extra fields
@@ -93,7 +93,7 @@ class kApiCache extends kApiCacheBase
 	
 	protected function __construct($cacheType, $params = null)
 	{
-		$this->_cacheStoreTypes = kCacheManager::getCacheSectionNames($cacheType);
+		$this->_cacheStoreTypes = vCacheManager::getCacheSectionNames($cacheType);
 
 		if ($params)
 			$this->_params = $params;
@@ -108,11 +108,11 @@ class kApiCache extends kApiCacheBase
 		if(isset($this->_params['clientTag']))
 			$this->clientTag = $this->_params['clientTag'];
 		
-		$ks = $this->getKs();
-		if ($ks === false)
+		$vs = $this->getVs();
+		if ($vs === false)
 		{
 			if (self::$_debugMode)
-				$this->debugLog("getKs failed, disabling cache");
+				$this->debugLog("getVs failed, disabling cache");
 			return false;
 		}
 
@@ -121,13 +121,13 @@ class kApiCache extends kApiCacheBase
 		if ($warmCacheHeader == "https")
 			$_SERVER['HTTPS'] = "on";
 
-		$this->addKsData($ks);
+		$this->addVsData($vs);
 		$this->addInternalCacheParams();
 		
 		// print the partner id using apache note
-		if ($this->_ksPartnerId)
+		if ($this->_vsPartnerId)
 		{
-			$this->_partnerId = $this->_ksPartnerId;
+			$this->_partnerId = $this->_vsPartnerId;
 		}
 		else if (isset($this->_params["partnerId"]))
 		{
@@ -141,10 +141,10 @@ class kApiCache extends kApiCacheBase
 		
 		if ($this->_partnerId && function_exists('apache_note'))
 		{
-			apache_note("Kaltura_PartnerId", $this->_partnerId);
+			apache_note("Vidiun_PartnerId", $this->_partnerId);
 		}
 
-		if (!kConf::get('enable_cache') ||
+		if (!vConf::get('enable_cache') ||
 			$this->isCacheDisabled())
 		{
 			if (self::$_debugMode)
@@ -155,50 +155,50 @@ class kApiCache extends kApiCacheBase
 		return true;
 	}
 
-	protected function getKs()			// overridable
+	protected function getVs()			// overridable
 	{
-		$ks = isset($this->_params['ks']) ? $this->_params['ks'] : '';
-		unset($this->_params['ks']);
-		return $ks;
+		$vs = isset($this->_params['vs']) ? $this->_params['vs'] : '';
+		unset($this->_params['vs']);
+		return $vs;
 	}
 
-	protected function addKSData($ks)
+	protected function addVSData($vs)
 	{
-		$this->_ks = $ks;
+		$this->_vs = $vs;
 		
-		// determine the KS status
-		if (empty($ks))
+		// determine the VS status
+		if (empty($vs))
 		{
-			$this->_ksStatus = kSessionBase::OK;
+			$this->_vsStatus = vSessionBase::OK;
 		}
 		else
 		{
-			$ksObj = new kSessionBase();
-			$parseResult = $ksObj->parseKS($ks);
+			$vsObj = new vSessionBase();
+			$parseResult = $vsObj->parseVS($vs);
 			if ($parseResult)
 			{
-				$this->_ksStatus = $ksObj->tryToValidateKS();
-				if ($this->_ksStatus == kSessionBase::OK)
+				$this->_vsStatus = $vsObj->tryToValidateVS();
+				if ($this->_vsStatus == vSessionBase::OK)
 				{
-					$this->_ksObj = $ksObj;
-					$this->_ksPartnerId = $ksObj->partner_id;
+					$this->_vsObj = $vsObj;
+					$this->_vsPartnerId = $vsObj->partner_id;
 				}
 			}
 			else if ($parseResult === false)
 			{
-				$this->_ksStatus = kSessionBase::INVALID_STR;
+				$this->_vsStatus = vSessionBase::INVALID_STR;
 			}
 			else	// null
 			{
-				$this->_ksStatus = kSessionBase::UNKNOWN;
+				$this->_vsStatus = vSessionBase::UNKNOWN;
 			}
 		}
 
-		$this->_params["___cache___partnerId"] =  $this->_ksPartnerId;
-		$this->_params["___cache___ksStatus"] =   $this->_ksStatus;
-		$this->_params["___cache___ksType"] = 	  ($this->_ksObj ? $this->_ksObj->type		 : null);
-		$this->_params["___cache___userId"] =     ($this->_ksObj ? $this->_ksObj->user		 : null);
-		$this->_params["___cache___privileges"] = ($this->_ksObj ? $this->_ksObj->privileges : null);
+		$this->_params["___cache___partnerId"] =  $this->_vsPartnerId;
+		$this->_params["___cache___vsStatus"] =   $this->_vsStatus;
+		$this->_params["___cache___vsType"] = 	  ($this->_vsObj ? $this->_vsObj->type		 : null);
+		$this->_params["___cache___userId"] =     ($this->_vsObj ? $this->_vsObj->user		 : null);
+		$this->_params["___cache___privileges"] = ($this->_vsObj ? $this->_vsObj->privileges : null);
 	}
 
 	protected function addInternalCacheParams()
@@ -206,18 +206,18 @@ class kApiCache extends kApiCacheBase
 		$this->_params['___cache___protocol'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? "https" : "http";
 		$this->_params['___cache___host'] = @$_SERVER['HTTP_HOST'];
 		$this->_params['___cache___version'] = self::CACHE_VERSION;
-		$this->_params['___internal'] = intval(kIpAddressUtils::isInternalIp());
+		$this->_params['___internal'] = intval(vIpAddressUtils::isInternalIp());
 		
-		if (kConf::hasMap("optimized_playback"))
+		if (vConf::hasMap("optimized_playback"))
 		{
-			$optimizedPlayback = kConf::getMap("optimized_playback");
-			if (array_key_exists($this->_ksPartnerId, $optimizedPlayback))
+			$optimizedPlayback = vConf::getMap("optimized_playback");
+			if (array_key_exists($this->_vsPartnerId, $optimizedPlayback))
 			{
-				$params = $optimizedPlayback[$this->_ksPartnerId];
-				if (array_key_exists('cache_kdp_access_control', $params) && $params['cache_kdp_access_control'])
+				$params = $optimizedPlayback[$this->_vsPartnerId];
+				if (array_key_exists('cache_vdp_access_control', $params) && $params['cache_vdp_access_control'])
 				{
 					$clientTag = 'none';
-					if (strpos(strtolower($this->clientTag), "kdp") !== false || strpos(strtolower($this->clientTag), "html") !== false )
+					if (strpos(strtolower($this->clientTag), "vdp") !== false || strpos(strtolower($this->clientTag), "html") !== false )
 					{
 						$clientTag = 'player';
 					}
@@ -255,7 +255,7 @@ class kApiCache extends kApiCacheBase
 	{
 		if (is_null(self::$$fieldName))
 		{
-			$geoCoder = kGeoCoderManager::getGeoCoder(is_array($extraField) ? $extraField[self::ECFD_GEO_CODER_TYPE] : null);
+			$geoCoder = vGeoCoderManager::getGeoCoder(is_array($extraField) ? $extraField[self::ECFD_GEO_CODER_TYPE] : null);
 			if ($geoCoder)
 			{
 				$ipAddress = infraRequestUtils::getRemoteAddress();
@@ -306,7 +306,7 @@ class kApiCache extends kApiCacheBase
 			return array(infraRequestUtils::getRemoteAddress());
 			
 		case self::ECF_CDN_REGION:
-			return array(kGeoUtils::getCDNRegionFromIP());
+			return array(vGeoUtils::getCDNRegionFromIP());
 		}
 
 		return array();
@@ -353,7 +353,7 @@ class kApiCache extends kApiCacheBase
 			return false;
 
 		case self::COND_SITE_MATCH:
-			$result = (strpos($fieldValue, "kwidget") === false ? '0' : '1');
+			$result = (strpos($fieldValue, "vwidget") === false ? '0' : '1');
 			if (!count($refValue))
 				return $result;
 			foreach($refValue as $curRefValue)
@@ -369,7 +369,7 @@ class kApiCache extends kApiCacheBase
 				return null;
 			foreach($refValue as $curRefValue)
 			{
-				if (kIpAddressUtils::isIpInRanges($fieldValue, $curRefValue))
+				if (vIpAddressUtils::isIpInRanges($fieldValue, $curRefValue))
 					return true;
 			}
 			return false;
@@ -379,7 +379,7 @@ class kApiCache extends kApiCacheBase
 				return null;
 			foreach($refValue as $curRefValue)
 			{
-				if (kGeoUtils::isInGeoDistance($fieldValue, $curRefValue))
+				if (vGeoUtils::isInGeoDistance($fieldValue, $curRefValue))
 					return true;
 			}
 			return false;
@@ -424,7 +424,7 @@ class kApiCache extends kApiCacheBase
 	
 	protected function addExtraFields()
 	{
-		$extraFieldsCache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_API_EXTRA_FIELDS);
+		$extraFieldsCache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_API_EXTRA_FIELDS);
 		if (!$extraFieldsCache)
 			return;
 
@@ -434,7 +434,7 @@ class kApiCache extends kApiCacheBase
 
 		foreach ($extraFields as $extraFieldParams)
 		{
-			call_user_func_array(array('kApiCache', 'addExtraField'), $extraFieldParams);
+			call_user_func_array(array('vApiCache', 'addExtraField'), $extraFieldParams);
 			call_user_func_array(array($this, 'addExtraFieldInternal'), $extraFieldParams);			// the current instance may have not been activated yet
 		}
 
@@ -446,7 +446,7 @@ class kApiCache extends kApiCacheBase
 		if (!$this->_cacheKeyDirty)
 			return true;			// no extra fields were added to the cache
 
-		$extraFieldsCache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_API_EXTRA_FIELDS);
+		$extraFieldsCache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_API_EXTRA_FIELDS);
 		if (!$extraFieldsCache)
 		{
 			self::disableCache();
@@ -478,7 +478,7 @@ class kApiCache extends kApiCacheBase
 	// cache read functions
 	protected static function getMaxInvalidationTime($invalidationKeys)
 	{
-		$memcache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS);
+		$memcache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS);
 		if (!$memcache)
 			return null;
 
@@ -497,7 +497,7 @@ class kApiCache extends kApiCacheBase
 		if (!$sqlConditions)
 			return true;
 		
-		$dataSources = kConf::get('datasources', 'db', null);
+		$dataSources = vConf::get('datasources', 'db', null);
 		if (!$dataSources)
 			return false;
 		
@@ -519,7 +519,7 @@ class kApiCache extends kApiCacheBase
 			}
 			$connTook = microtime(true) - $connStart;
 
-			$this->_monitorEvents[] = array(array('KalturaMonitorClient', 'monitorConnTook'), array($dsn, $connTook));
+			$this->_monitorEvents[] = array(array('VidiunMonitorClient', 'monitorConnTook'), array($dsn, $connTook));
 
 			// get the host name from the dsn
 			list($mysql, $connection) = explode(':', $dsn);
@@ -542,7 +542,7 @@ class kApiCache extends kApiCacheBase
 				
 				$comment = (isset($_SERVER["HOSTNAME"]) ? $_SERVER["HOSTNAME"] : gethostname());
 				$comment .= "[{$this->_cacheKey}]";
-				$sql = str_replace(self::KALTURA_COMMENT_MARKER, $comment, $sql);
+				$sql = str_replace(self::VIDIUN_COMMENT_MARKER, $comment, $sql);
 				
 				$sqlStart = microtime(true);
 				$stmt = $pdo->query($sql);
@@ -552,7 +552,7 @@ class kApiCache extends kApiCacheBase
 				}
 				$sqlTook = microtime(true) - $sqlStart;
 
-				$this->_monitorEvents[] = array(array('KalturaMonitorClient', 'monitorDatabaseAccess'), array($sql, $sqlTook, $hostName));
+				$this->_monitorEvents[] = array(array('VidiunMonitorClient', 'monitorDatabaseAccess'), array($sql, $sqlTook, $hostName));
 
 				if ($query['fetchStyle'] == PDO::FETCH_COLUMN)
 					$result = $stmt->fetchAll($query['fetchStyle'], $query['columnIndex']);
@@ -651,7 +651,7 @@ class kApiCache extends kApiCacheBase
 			}
 			else if ($cacheTTL < self::WARM_CACHE_INTERVAL) // 1 minute left for cache, lets warm it
 			{
-				if (kConf::hasParam('disable_cache_warmup_client_tags') && !in_array($this->clientTag, kConf::get('disable_cache_warmup_client_tags')))
+				if (vConf::hasParam('disable_cache_warmup_client_tags') && !in_array($this->clientTag, vConf::get('disable_cache_warmup_client_tags')))
 					self::warmCache($this->_cacheKey);
 			}
 			
@@ -666,11 +666,11 @@ class kApiCache extends kApiCacheBase
 
 	protected function getCacheStoreForRead()
 	{
-		if ($this->_ksStatus == kSessionBase::UNKNOWN)
+		if ($this->_vsStatus == vSessionBase::UNKNOWN)
 		{
 			if (self::$_debugMode)
-				$this->debugLog('getCacheStoreForRead ks status is unknown');
-			return array(null, null);					// ks not valid, do not return from cache
+				$this->debugLog('getCacheStoreForRead vs status is unknown');
+			return array(null, null);					// vs not valid, do not return from cache
 		}
 
 		// if the request is for warming the cache, disregard the cache and run the request
@@ -678,7 +678,7 @@ class kApiCache extends kApiCacheBase
 		if ($warmCacheHeader !== false)
 		{
 			// make a trace in the access log of this being a warmup call
-			header("X-Kaltura:cached-warmup-$warmCacheHeader,".$this->_cacheKey, false);
+			header("X-Vidiun:cached-warmup-$warmCacheHeader,".$this->_cacheKey, false);
 		}
 		
 		if(is_null($this->_cacheStoreTypes))
@@ -686,7 +686,7 @@ class kApiCache extends kApiCacheBase
 
 		foreach ($this->_cacheStoreTypes as $cacheType)
 		{
-			$cacheStore = kCacheManager::getCache($cacheType);
+			$cacheStore = vCacheManager::getCache($cacheType);
 			if (!$cacheStore)
 			{
 				continue;
@@ -718,16 +718,16 @@ class kApiCache extends kApiCacheBase
 	 */
 	protected function getCurrentSessionType()
 	{
-		if(!$this->_ksObj)
-			return kSessionBase::SESSION_TYPE_NONE;
+		if(!$this->_vsObj)
+			return vSessionBase::SESSION_TYPE_NONE;
 
-		if($this->_ksObj->isAdmin())
-			return kSessionBase::SESSION_TYPE_ADMIN;
+		if($this->_vsObj->isAdmin())
+			return vSessionBase::SESSION_TYPE_ADMIN;
 
-		if($this->_ksObj->isWidgetSession())
-			return kSessionBase::SESSION_TYPE_WIDGET;
+		if($this->_vsObj->isWidgetSession())
+			return vSessionBase::SESSION_TYPE_WIDGET;
 
-		return kSessionBase::SESSION_TYPE_USER;
+		return vSessionBase::SESSION_TYPE_USER;
 	}
 
 	/**
@@ -743,7 +743,7 @@ class kApiCache extends kApiCacheBase
 	 * @param $cacheHeaderName - the header name to add
 	 * @param $cacheHeader - the header value to add
 	 */
-	public function checkCache($cacheHeaderName = 'X-Kaltura', $cacheHeader = 'cached-dispatcher')
+	public function checkCache($cacheHeaderName = 'X-Vidiun', $cacheHeader = 'cached-dispatcher')
 	{
 		for ($attempt = 0; $attempt < 20; $attempt++)
 		{
@@ -773,7 +773,7 @@ class kApiCache extends kApiCacheBase
 			if ($action != 'multirequest' && isset($this->_params['action']))
 				$action = $this->_params['service'] . '.' . $this->_params['action'];
 		
-			KalturaMonitorClient::monitorApiStart($result !== false, $action, $this->_partnerId, $this->getCurrentSessionType(), $this->clientTag, $isInMultiRequest);
+			VidiunMonitorClient::monitorApiStart($result !== false, $action, $this->_partnerId, $this->getCurrentSessionType(), $this->clientTag, $isInMultiRequest);
 
 			foreach ($this->_monitorEvents as $event)
 			{
@@ -784,7 +784,7 @@ class kApiCache extends kApiCacheBase
 
 			if ($result !== false)
 			{
-				KalturaMonitorClient::flushPacket();
+				VidiunMonitorClient::flushPacket();
 			}
 		}
 		
@@ -843,7 +843,7 @@ class kApiCache extends kApiCacheBase
 		}
 
 		$processingTime = microtime(true) - $startTime;
-		if (self::hasExtraFields() && $cacheHeaderName == 'X-Kaltura')
+		if (self::hasExtraFields() && $cacheHeaderName == 'X-Vidiun')
 			$cacheHeader = 'cached-with-extra-fields';
 		if (self::$_cacheHeaderCount < self::MAX_CACHE_HEADER_COUNT)
 			header("$cacheHeaderName:$cacheHeader,$this->_cacheKey,$processingTime", false);
@@ -856,29 +856,29 @@ class kApiCache extends kApiCacheBase
 	}
 
 	// cache write functions
-	protected function isAnonymous($ks)					// overridable
+	protected function isAnonymous($vs)					// overridable
 	{
-		if(kIpAddressUtils::isInternalIp())
+		if(vIpAddressUtils::isInternalIp())
 		{
 			return false;
 		}
 
-		if (!$ks)
+		if (!$vs)
 			return true;
 
-		if(!$ks->isAdmin() && ($ks->user === "0" || $ks->user === null ))
+		if(!$vs->isAdmin() && ($vs->user === "0" || $vs->user === null ))
 		{
-			$privileges = $ks->getParsedPrivileges();
-			if (!$privileges || !array_key_exists (kSessionBase::PRIVILEGE_SET_ROLE,$privileges))
+			$privileges = $vs->getParsedPrivileges();
+			if (!$privileges || !array_key_exists (vSessionBase::PRIVILEGE_SET_ROLE,$privileges))
 				return true;
 
-			if (kConf::hasParam('anonymous_roles_to_cache'))
+			if (vConf::hasParam('anonymous_roles_to_cache'))
 			{
-				$ksRoles = $privileges[kSessionBase::PRIVILEGE_SET_ROLE];
-				$rolesToCacheList = kConf::get('anonymous_roles_to_cache');
+				$vsRoles = $privileges[vSessionBase::PRIVILEGE_SET_ROLE];
+				$rolesToCacheList = vConf::get('anonymous_roles_to_cache');
 				foreach ($rolesToCacheList as $roleKey => $roleValue)
 				{
-					if (is_array($ksRoles) && in_array($roleKey, $ksRoles))
+					if (is_array($vsRoles) && in_array($roleKey, $vsRoles))
 						return true;
 				}
 			}
@@ -886,12 +886,12 @@ class kApiCache extends kApiCacheBase
 			return false;
 		}
 
-		if (kConf::hasParam('cache_anonymous_users'))
+		if (vConf::hasParam('cache_anonymous_users'))
 		{
-			$anonymousUsers = kConf::get('cache_anonymous_users');
+			$anonymousUsers = vConf::get('cache_anonymous_users');
 			foreach ($anonymousUsers as $userName => $partnerIds)
 			{
-				if ($ks->user == $userName && in_array($ks->partner_id, explode(',', $partnerIds)))
+				if ($vs->user == $userName && in_array($vs->partner_id, explode(',', $partnerIds)))
 					return true;
 			}
 		}
@@ -913,16 +913,16 @@ class kApiCache extends kApiCacheBase
 		if ($this->_cacheStatus == self::CACHE_STATUS_DISABLED)
 			return;
 
-		if ($this->_ksStatus == kSessionBase::UNKNOWN)
+		if ($this->_vsStatus == vSessionBase::UNKNOWN)
 		{
 			if (self::$_debugMode)
-				$this->debugLog('ks status is unknown - not saving to cache');
+				$this->debugLog('vs status is unknown - not saving to cache');
 				
 			self::disableCache();
 			return;
 		}
 
-		$isAnonymous = $this->isAnonymous($this->_ksObj);
+		$isAnonymous = $this->isAnonymous($this->_vsObj);
 		if (!$isAnonymous && $this->_cacheStatus == self::CACHE_STATUS_ANONYMOUS_ONLY)
 		{
 			if (self::$_debugMode)
@@ -982,14 +982,14 @@ class kApiCache extends kApiCacheBase
 		if (!$this->storeExtraFields())
 			return;
 
-		// set the X-Kaltura header only if it does not exist or contains 'cache-key'
+		// set the X-Vidiun header only if it does not exist or contains 'cache-key'
 		// the header is overwritten for cache-key so that for a multirequest we'll get the key of
 		// the entire request and not just the last request
 		$headers = headers_list();
 		$foundHeader = false;
 		foreach($headers as $header)
 		{
-			if (strpos($header, 'X-Kaltura:') === 0 && strpos($header, 'cache-key') === false)
+			if (strpos($header, 'X-Vidiun:') === 0 && strpos($header, 'cache-key') === false)
 			{
 				$foundHeader = true;
 				break;
@@ -997,7 +997,7 @@ class kApiCache extends kApiCacheBase
 		}
 
 		if (!$foundHeader)
-			header("X-Kaltura: cache-key,".$this->_cacheKey);
+			header("X-Vidiun: cache-key,".$this->_cacheKey);
 		
 		$this->_responseMetadata = $responseMetadata;
 		$this->_cacheId = microtime(true) . '_' . getmypid();
@@ -1052,13 +1052,13 @@ class kApiCache extends kApiCacheBase
 		
 		$key = "cache-warmup-$key";
 		
-		$cacheSections = kCacheManager::getCacheSectionNames(kCacheManager::CACHE_TYPE_API_WARMUP);
+		$cacheSections = vCacheManager::getCacheSectionNames(vCacheManager::CACHE_TYPE_API_WARMUP);
 		if (!$cacheSections)
 			return;
 		
 		foreach ($cacheSections as $cacheSection)
 		{
-			$cacheStore = kCacheManager::getCache($cacheSection);
+			$cacheStore = vCacheManager::getCache($cacheSection);
 			if (!$cacheStore)
 				return;
 		
@@ -1072,7 +1072,7 @@ class kApiCache extends kApiCacheBase
 		
 		$uri = $_SERVER["REQUEST_URI"];
 
-		$fp = fsockopen(kConf::get('api_cache_warmup_host'), 80, $errno, $errstr, 1);
+		$fp = fsockopen(vConf::get('api_cache_warmup_host'), 80, $errno, $errstr, 1);
 
 		if ($fp === false)
 		{
@@ -1146,14 +1146,14 @@ class kApiCache extends kApiCacheBase
 		return $_SERVER[$headerName];
 	}
 	
-	public static function limitConditionalCacheTimeToKs()
+	public static function limitConditionalCacheTimeToVs()
 	{
-		$ksObj = kCurrentContext::$ks_object;
-		if(!$ksObj)
+		$vsObj = vCurrentContext::$vs_object;
+		if(!$vsObj)
 		{
 			return;
 		}
-		$timeDiff = $ksObj->valid_until - time() - self::MIN_CONDITIONAL_CACHE_EXPIRATION;
+		$timeDiff = $vsObj->valid_until - time() - self::MIN_CONDITIONAL_CACHE_EXPIRATION;
 		if($timeDiff > 0)
 		{
 			self::setConditionalCacheExpiry($timeDiff);

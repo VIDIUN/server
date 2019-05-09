@@ -2,7 +2,7 @@
 /**
  * from the Andromeda Nov 25 document:
  * 1.
- * 2.KMC  Content Section events
+ * 2.VMC  Content Section events
  * page view (on each page)
  * Add playlist
  * Edit playlist
@@ -19,13 +19,13 @@
  * Bulk upload
  * Admin Upload via CW
  * 3.
- * 4.KMC Account events
+ * 4.VMC Account events
  * Change partner info
  * Change login info
  * Contact us usage
  * Update server settings
  * 1.
- * 2.KMC App studio events
+ * 2.VMC App studio events
  * New player - single video
  * New player - Playlist
  * New player - Multi-tab playlist
@@ -38,7 +38,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaStatsKmcEventType extends KalturaEnum
+class VidiunStatsVmcEventType extends VidiunEnum
 {
 	const CONTENT_PAGE_VIEW = 1001;
 	
@@ -57,7 +57,7 @@ class KalturaStatsKmcEventType extends KalturaEnum
 	const CONTENT_APPROVE_MODERATION = 1020;
 	const CONTENT_REJECT_MODERATION = 1021;
 	const CONTENT_BULK_UPLOAD = 1022;
-	const CONTENT_ADMIN_KCW_UPLOAD = 1023;
+	const CONTENT_ADMIN_VCW_UPLOAD = 1023;
     const CONTENT_CONTENT_GO_TO_PAGE = 1057;
     const CONTENT_ENTRY_DRILLDOWN = 1088;
     const CONTENT_OPEN_PREVIEW_AND_EMBED=1089;

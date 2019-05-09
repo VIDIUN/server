@@ -3,9 +3,9 @@
  * @package plugins.conference
  * @subpackage api.filters
  */
-class KalturaConferenceServerNodeFilter extends KalturaConferenceServerNodeBaseFilter
+class VidiunConferenceServerNodeFilter extends VidiunConferenceServerNodeBaseFilter
 {
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, $type = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, $type = null)
 	{
 		if(!$type)
 			$type = ConferencePlugin::getCoreValue('serverNodeType',ConferenceServerNodeType::CONFERENCE_SERVER);

@@ -6,7 +6,7 @@
  * @package plugins.tagSearch
  * @subpackage api.services
  */
-class TagService extends KalturaBaseService
+class TagService extends VidiunBaseService
 {   
     public function initService($serviceId, $serviceName, $actionName)
     {
@@ -18,25 +18,25 @@ class TagService extends KalturaBaseService
      * @action search
      * 
      * Action to search tags using a string of 3 letters or more.
-     * @param KalturaTagFilter $tagFilter
-     * @param KalturaFilterPager $pager
-     * @return KalturaTagListResponse
+     * @param VidiunTagFilter $tagFilter
+     * @param VidiunFilterPager $pager
+     * @return VidiunTagListResponse
      */
-    public function searchAction (KalturaTagFilter $tagFilter, KalturaFilterPager $pager = null)
+    public function searchAction (VidiunTagFilter $tagFilter, VidiunFilterPager $pager = null)
     {
         if (!$tagFilter)
         {
-            $tagFilter = new KalturaTagFilter();
+            $tagFilter = new VidiunTagFilter();
         }
         
         if (!$pager)
         {
-            $pager = new KalturaFilterPager();
+            $pager = new VidiunFilterPager();
         }
         
         $tagFilter->validate();
 
-        $c = KalturaCriteria::create(TagPeer::OM_CLASS);
+        $c = VidiunCriteria::create(TagPeer::OM_CLASS);
         $tagCoreFilter = new TagFilter();
         $tagFilter->toObject($tagCoreFilter);
         $c->setGroupByColumn('tag');
@@ -44,8 +44,8 @@ class TagService extends KalturaBaseService
         $pager->attachToCriteria($c);
         $tags = TagPeer::doSelect($c);
         
-        $searchResponse = new KalturaTagListResponse();
-        $searchResponse->objects = KalturaTagArray::fromDbArray($tags, $this->getResponseProfile());
+        $searchResponse = new VidiunTagListResponse();
+        $searchResponse->objects = VidiunTagArray::fromDbArray($tags, $this->getResponseProfile());
         $searchResponse->totalCount = $c->getRecordsCount();
         
         return $searchResponse;
@@ -59,7 +59,7 @@ class TagService extends KalturaBaseService
     public function deletePendingAction ()
     {
 		TagPeer::setUseCriteriaFilter(false);
-    	$c = KalturaCriteria::create(TagPeer::OM_CLASS);
+    	$c = VidiunCriteria::create(TagPeer::OM_CLASS);
 		$filter = new TagFilter();
 		$filter->set('_eq_instance_count', 0);
 		$filter->attachToCriteria($c);
@@ -68,7 +68,7 @@ class TagService extends KalturaBaseService
 		
 		if (!$count)
 		{
-			KalturaLog::info ('No tags pending for deletion.');
+			VidiunLog::info ('No tags pending for deletion.');
 			return 0;
 		}
 			
@@ -99,13 +99,13 @@ class TagService extends KalturaBaseService
 	 */
 	private function resolveEntryTag (Tag $tag)
 	{
-	    $c = KalturaCriteria::create(entryPeer::OM_CLASS);
+	    $c = VidiunCriteria::create(entryPeer::OM_CLASS);
 	    $c->add(entryPeer::PARTNER_ID, $tag->getPartnerId());
-	    if ($tag->getPrivacyContext() != kTagFlowManager::NULL_PC)
+	    if ($tag->getPrivacyContext() != vTagFlowManager::NULL_PC)
 	    	$c->addAnd(entryPeer::PRIVACY_BY_CONTEXTS, $tag->getPrivacyContext(), Criteria::LIKE);
 			
 	    $entryFilter = new entryFilter();
-	    $tagString = str_replace(kTagFlowManager::$specialCharacters, kTagFlowManager::$specialCharactersReplacement, $tag->getTag());
+	    $tagString = str_replace(vTagFlowManager::$specialCharacters, vTagFlowManager::$specialCharactersReplacement, $tag->getTag());
 	    $entryFilter->set('_mlikeand_tags', $tagString);
 	    $entryFilter->attachToCriteria($c);
 	    $c->applyFilters();
@@ -132,10 +132,10 @@ class TagService extends KalturaBaseService
 	 */
 	private function resolveCategoryTag (Tag $tag)
 	{
-	    $c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+	    $c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 	    $c->add(categoryPeer::PARTNER_ID, $tag->getPartnerId());
 	    $categoryFilter = new categoryFilter();
-	    $tagString = str_replace(kTagFlowManager::$specialCharacters, kTagFlowManager::$specialCharactersReplacement, $tag->getTag());
+	    $tagString = str_replace(vTagFlowManager::$specialCharacters, vTagFlowManager::$specialCharactersReplacement, $tag->getTag());
 	    $categoryFilter->set('_mlikeand_tags', $tagString);
 	    $categoryFilter->attachToCriteria($c);
 	    $c->applyFilters();
@@ -165,9 +165,9 @@ class TagService extends KalturaBaseService
 	public function indexCategoryEntryTagsAction ($categoryId, $pcToDecrement, $pcToIncrement)
 	{
 		$pcToDecrementArray = explode(',', $pcToDecrement);
-		$c = KalturaCriteria::create(TagPeer::OM_CLASS);
-		$c->add(TagPeer::PARTNER_ID, kCurrentContext::getCurrentPartnerId());
-		$c->add(TagPeer::PRIVACY_CONTEXT, $pcToDecrementArray, KalturaCriteria::IN);
+		$c = VidiunCriteria::create(TagPeer::OM_CLASS);
+		$c->add(TagPeer::PARTNER_ID, vCurrentContext::getCurrentPartnerId());
+		$c->add(TagPeer::PRIVACY_CONTEXT, $pcToDecrementArray, VidiunCriteria::IN);
 		TagPeer::setUseCriteriaFilter(false);
 		$tagsToDecrement = TagPeer::doSelect($c);
 		TagPeer::setUseCriteriaFilter(true);	
@@ -191,7 +191,7 @@ class TagService extends KalturaBaseService
 		}
 		
 		$tagsToIncrement = array_unique($tagsToIncrement);
-		kTagFlowManager::addOrIncrementTags(implode(",", $tagsToIncrement), kCurrentContext::getCurrentPartnerId(), "entry", $pcToIncrementArray);
+		vTagFlowManager::addOrIncrementTags(implode(",", $tagsToIncrement), vCurrentContext::getCurrentPartnerId(), "entry", $pcToIncrementArray);
 	}
 	
 }

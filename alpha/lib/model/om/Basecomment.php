@@ -26,10 +26,10 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 	protected $id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the comment_type field.
@@ -68,9 +68,9 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 	protected $created_at;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuser;
+	protected $avuser;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -128,13 +128,13 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -281,31 +281,31 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 	} // setId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     comment The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[commentPeer::KUSER_ID]))
-			$this->oldColumnsValues[commentPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[commentPeer::VUSER_ID]))
+			$this->oldColumnsValues[commentPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = commentPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = commentPeer::VUSER_ID;
 		}
 
-		if ($this->akuser !== null && $this->akuser->getId() !== $v) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->avuser->getId() !== $v) {
+			$this->avuser = null;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [comment_type] column.
@@ -533,7 +533,7 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 		try {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->kuser_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+			$this->vuser_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->comment_type = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
 			$this->subject_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->base_date = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
@@ -572,8 +572,8 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akuser !== null && $this->kuser_id !== $this->akuser->getId()) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->vuser_id !== $this->avuser->getId()) {
+			$this->avuser = null;
 		}
 	} // ensureConsistency
 
@@ -616,7 +616,7 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akuser = null;
+			$this->avuser = null;
 		} // if (deep)
 	}
 
@@ -735,11 +735,11 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if ($this->akuser->isModified() || $this->akuser->isNew()) {
-					$affectedRows += $this->akuser->save($con);
+			if ($this->avuser !== null) {
+				if ($this->avuser->isModified() || $this->avuser->isNew()) {
+					$affectedRows += $this->avuser->save($con);
 				}
-				$this->setkuser($this->akuser);
+				$this->setvuser($this->avuser);
 			}
 
 			if ($this->isNew() ) {
@@ -806,7 +806,7 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -829,12 +829,12 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -852,8 +852,8 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -975,9 +975,9 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if (!$this->akuser->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuser->getValidationFailures());
+			if ($this->avuser !== null) {
+				if (!$this->avuser->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuser->getValidationFailures());
 				}
 			}
 
@@ -1024,7 +1024,7 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 				return $this->getId();
 				break;
 			case 1:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 2:
 				return $this->getCommentType();
@@ -1066,7 +1066,7 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 		$keys = commentPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
-			$keys[1] => $this->getKuserId(),
+			$keys[1] => $this->getVuserId(),
 			$keys[2] => $this->getCommentType(),
 			$keys[3] => $this->getSubjectId(),
 			$keys[4] => $this->getBaseDate(),
@@ -1108,7 +1108,7 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 				$this->setId($value);
 				break;
 			case 1:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 2:
 				$this->setCommentType($value);
@@ -1153,7 +1153,7 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 		$keys = commentPeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setKuserId($arr[$keys[1]]);
+		if (array_key_exists($keys[1], $arr)) $this->setVuserId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setCommentType($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setSubjectId($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setBaseDate($arr[$keys[4]]);
@@ -1172,7 +1172,7 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 		$criteria = new Criteria(commentPeer::DATABASE_NAME);
 
 		if ($this->isColumnModified(commentPeer::ID)) $criteria->add(commentPeer::ID, $this->id);
-		if ($this->isColumnModified(commentPeer::KUSER_ID)) $criteria->add(commentPeer::KUSER_ID, $this->kuser_id);
+		if ($this->isColumnModified(commentPeer::VUSER_ID)) $criteria->add(commentPeer::VUSER_ID, $this->vuser_id);
 		if ($this->isColumnModified(commentPeer::COMMENT_TYPE)) $criteria->add(commentPeer::COMMENT_TYPE, $this->comment_type);
 		if ($this->isColumnModified(commentPeer::SUBJECT_ID)) $criteria->add(commentPeer::SUBJECT_ID, $this->subject_id);
 		if ($this->isColumnModified(commentPeer::BASE_DATE)) $criteria->add(commentPeer::BASE_DATE, $this->base_date);
@@ -1233,7 +1233,7 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setCommentType($this->comment_type);
 
@@ -1311,24 +1311,24 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
+	 * @param      vuser $v
 	 * @return     comment The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuser(kuser $v = null)
+	public function setvuser(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setKuserId(NULL);
+			$this->setVuserId(NULL);
 		} else {
-			$this->setKuserId($v->getId());
+			$this->setVuserId($v->getId());
 		}
 
-		$this->akuser = $v;
+		$this->avuser = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
 			$v->addcomment($this);
 		}
@@ -1338,25 +1338,25 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuser(PropelPDO $con = null)
+	public function getvuser(PropelPDO $con = null)
 	{
-		if ($this->akuser === null && ($this->kuser_id !== null)) {
-			$this->akuser = kuserPeer::retrieveByPk($this->kuser_id);
+		if ($this->avuser === null && ($this->vuser_id !== null)) {
+			$this->avuser = vuserPeer::retrieveByPk($this->vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuser->addcomments($this);
+			   $this->avuser->addcomments($this);
 			 */
 		}
-		return $this->akuser;
+		return $this->avuser;
 	}
 
 	/**
@@ -1373,7 +1373,7 @@ abstract class Basecomment extends BaseObject  implements Persistent {
 		if ($deep) {
 		} // if ($deep)
 
-			$this->akuser = null;
+			$this->avuser = null;
 	}
 
 } // Basecomment

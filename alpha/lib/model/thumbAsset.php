@@ -22,7 +22,7 @@ class thumbAsset extends exportableAsset
 		$this->setType(assetType::THUMBNAIL);
 	}
 	
-	public function getFinalDownloadUrlPathWithoutKs()
+	public function getFinalDownloadUrlPathWithoutVs()
 	{
 		$finalPath = '/api_v3/index.php/service/thumbAsset/action/serve';
 		$finalPath .= '/thumbAssetId/' . $this->getId();
@@ -52,13 +52,13 @@ class thumbAsset extends exportableAsset
 		return false;
 	}
 	
-	public function getThumbnailUrl(KSecureEntryHelper $securyEntryHelper, $storageId = null, KalturaThumbParams $thumbParams = null)
+	public function getThumbnailUrl(VSecureEntryHelper $securyEntryHelper, $storageId = null, VidiunThumbParams $thumbParams = null)
 	{
 		if ($thumbParams)
 		{
 			$assetUrl = $this->getDownloadUrlWithExpiry(84600);
-			$assetParameters = KalturaRequestParameterSerializer::serialize($thumbParams, "thumbParams");
-			$thumbnailUrl = $assetUrl . "?thumbParams:objectType=KalturaThumbParams&".implode("&", $assetParameters);
+			$assetParameters = VidiunRequestParameterSerializer::serialize($thumbParams, "thumbParams");
+			$thumbnailUrl = $assetUrl . "?thumbParams:objectType=VidiunThumbParams&".implode("&", $assetParameters);
 		}
 			
 		if($storageId)

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaRule extends KalturaObject
+class VidiunRule extends VidiunObject
 {
 	/**
 	 * Short Rule Description
@@ -36,21 +36,21 @@ class KalturaRule extends KalturaObject
 	/**
 	 * Actions to be performed by the player in case the rule is fulfilled
 	 * 
-	 * @var KalturaRuleActionArray
+	 * @var VidiunRuleActionArray
 	 */
 	public $actions;
 	
 	/**
 	 * Conditions to validate the rule
 	 * 
-	 * @var KalturaConditionArray
+	 * @var VidiunConditionArray
 	 */
 	public $conditions;
 	
 	/**
 	 * Indicates what contexts should be tested by this rule 
 	 * 
-	 * @var KalturaContextTypeHolderArray
+	 * @var VidiunContextTypeHolderArray
 	 */
 	public $contexts;
 	
@@ -62,9 +62,9 @@ class KalturaRule extends KalturaObject
 	public $stopProcessing;
 	
 	/**
-	 * Indicates if we should force ks validation for admin ks users as well
+	 * Indicates if we should force vs validation for admin vs users as well
 	 *
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $forceAdminValidation;
 
@@ -89,7 +89,7 @@ class KalturaRule extends KalturaObject
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kRule();
+			$dbObject = new vRule();
 			
 		return parent::toObject($dbObject, $skip);
 	}

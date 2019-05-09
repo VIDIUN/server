@@ -1,9 +1,9 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage api.objects
  */
-class KalturaCrossKalturaDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunCrossVidiunDistributionProfile extends VidiunConfigurableDistributionProfile
 {
 	/**
 	 * @var string
@@ -31,7 +31,7 @@ class KalturaCrossKalturaDistributionProfile extends KalturaConfigurableDistribu
 	 public $metadataXslt;
 	 
  	/**
-	 * @var KalturaStringValueArray
+	 * @var VidiunStringValueArray
 	 */
 	 public $metadataXpathsTriggerUpdate;
 	 
@@ -61,37 +61,37 @@ class KalturaCrossKalturaDistributionProfile extends KalturaConfigurableDistribu
 	 public $distributeRemoteCaptionAssetContent;
 	 
 	 /**
-	  * @var KalturaKeyValueArray
+	  * @var VidiunKeyValueArray
 	  */
 	 public $mapAccessControlProfileIds;
 	 
 	 /**
-	  * @var KalturaKeyValueArray
+	  * @var VidiunKeyValueArray
 	  */
 	 public $mapConversionProfileIds;
 	 
 	 /**
-	  * @var KalturaKeyValueArray
+	  * @var VidiunKeyValueArray
 	  */
 	 public $mapMetadataProfileIds;
 	 
 	 /**
-	  * @var KalturaKeyValueArray
+	  * @var VidiunKeyValueArray
 	  */
 	 public $mapStorageProfileIds;
 	 
 	 /**
-	  * @var KalturaKeyValueArray
+	  * @var VidiunKeyValueArray
 	  */
 	 public $mapFlavorParamsIds;
 	 
 	 /**
-	  * @var KalturaKeyValueArray
+	  * @var VidiunKeyValueArray
 	  */
 	 public $mapThumbParamsIds;
 	 
 	 /**
-	  * @var KalturaKeyValueArray
+	  * @var VidiunKeyValueArray
 	  */
 	 public $mapCaptionParamsIds;
 	 	  
@@ -123,9 +123,9 @@ class KalturaCrossKalturaDistributionProfile extends KalturaConfigurableDistribu
     public function toObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		if(is_null($object_to_fill))
-			$object_to_fill = new CrossKalturaDistributionProfile();
+			$object_to_fill = new CrossVidiunDistributionProfile();
 		
-		/* @var $object_to_fill CrossKalturaDistributionProfile */
+		/* @var $object_to_fill CrossVidiunDistributionProfile */
 		$object_to_fill =  parent::toObject($object_to_fill, $props_to_skip);
 		
 		if (!is_null($this->mapAccessControlProfileIds)) {
@@ -153,18 +153,18 @@ class KalturaCrossKalturaDistributionProfile extends KalturaConfigurableDistribu
 		return $object_to_fill;
 	}
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 	    parent::doFromObject($source_object, $responseProfile);
 	    
-	    /* @var $source_object CrossKalturaDistributionProfile */
-	    $this->mapAccessControlProfileIds = KalturaKeyValueArray::fromKeyValueArray($source_object->getMapAccessControlProfileIds());
-	    $this->mapConversionProfileIds = KalturaKeyValueArray::fromKeyValueArray($source_object->getMapConversionProfileIds());
-	    $this->mapMetadataProfileIds = KalturaKeyValueArray::fromKeyValueArray($source_object->getMapMetadataProfileIds());
-	    $this->mapStorageProfileIds = KalturaKeyValueArray::fromKeyValueArray($source_object->getMapStorageProfileIds());
-	    $this->mapFlavorParamsIds = KalturaKeyValueArray::fromKeyValueArray($source_object->getMapFlavorParamsIds());
-	    $this->mapThumbParamsIds = KalturaKeyValueArray::fromKeyValueArray($source_object->getMapThumbParamsIds());
-	    $this->mapCaptionParamsIds = KalturaKeyValueArray::fromKeyValueArray($source_object->getMapCaptionParamsIds());
+	    /* @var $source_object CrossVidiunDistributionProfile */
+	    $this->mapAccessControlProfileIds = VidiunKeyValueArray::fromKeyValueArray($source_object->getMapAccessControlProfileIds());
+	    $this->mapConversionProfileIds = VidiunKeyValueArray::fromKeyValueArray($source_object->getMapConversionProfileIds());
+	    $this->mapMetadataProfileIds = VidiunKeyValueArray::fromKeyValueArray($source_object->getMapMetadataProfileIds());
+	    $this->mapStorageProfileIds = VidiunKeyValueArray::fromKeyValueArray($source_object->getMapStorageProfileIds());
+	    $this->mapFlavorParamsIds = VidiunKeyValueArray::fromKeyValueArray($source_object->getMapFlavorParamsIds());
+	    $this->mapThumbParamsIds = VidiunKeyValueArray::fromKeyValueArray($source_object->getMapThumbParamsIds());
+	    $this->mapCaptionParamsIds = VidiunKeyValueArray::fromKeyValueArray($source_object->getMapCaptionParamsIds());
 	}
 	
 	
@@ -175,7 +175,7 @@ class KalturaCrossKalturaDistributionProfile extends KalturaConfigurableDistribu
         {
             foreach($apiKeyValueArray as $keyValueObj)
             {
-                /* @var $keyValueObj KalturaKeyValue */
+                /* @var $keyValueObj VidiunKeyValue */
 			    $keyValueArray[$keyValueObj->key] = $keyValueObj->value;
             }
         }		

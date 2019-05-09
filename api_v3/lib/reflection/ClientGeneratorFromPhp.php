@@ -9,7 +9,7 @@ abstract class ClientGeneratorFromPhp
 	protected $_classMap = null;
 	protected $_typesClassMap = null;
 	
-	protected $package = 'Kaltura';
+	protected $package = 'Vidiun';
 	protected $subpackage = 'Client';
 	
 	public function setPackage($package)
@@ -110,7 +110,7 @@ abstract class ClientGeneratorFromPhp
 		// services
 		foreach($this->_services as $serviceId => $serviceActionItem)
 		{
-			/* @var $serviceActionItem KalturaServiceActionItem */
+			/* @var $serviceActionItem VidiunServiceActionItem */
 			$this->writeBeforeService($serviceActionItem);
 			$serviceName = $serviceActionItem->serviceInfo->serviceName;
 			$serviceId = $serviceActionItem->serviceId;
@@ -141,7 +141,7 @@ abstract class ClientGeneratorFromPhp
 		if ($this->_classMap !== null)
 			return;
 		
-		$this->_classMap = KAutoloader::getClassMap();
+		$this->_classMap = VAutoloader::getClassMap();
 	}
 	
 	public function load()
@@ -157,7 +157,7 @@ abstract class ClientGeneratorFromPhp
 			{
 				$filterOrderByStringEnumTypeName = str_replace("Filter", "OrderBy", $typeReflector->getType());
 				if (class_exists($filterOrderByStringEnumTypeName))
-					$this->addType(KalturaTypeReflectorCacher::get($filterOrderByStringEnumTypeName));
+					$this->addType(VidiunTypeReflectorCacher::get($filterOrderByStringEnumTypeName));
 			}
 		}
 
@@ -195,10 +195,10 @@ abstract class ClientGeneratorFromPhp
 	}
 	
 	/**
-	 * @param KalturaTypeReflector $a
-	 * @param KalturaTypeReflector $b
+	 * @param VidiunTypeReflector $a
+	 * @param VidiunTypeReflector $b
 	 */
-	protected function compareTypes(KalturaTypeReflector $a, KalturaTypeReflector $b)
+	protected function compareTypes(VidiunTypeReflector $a, VidiunTypeReflector $b)
 	{
 		// enums at the begining
 		if($a->isEnum() && !$b->isEnum())
@@ -233,7 +233,7 @@ abstract class ClientGeneratorFromPhp
 	
 	protected abstract function writeBeforeServices();
 	
-	protected abstract function writeBeforeService(KalturaServiceActionItem $serviceReflector);
+	protected abstract function writeBeforeService(VidiunServiceActionItem $serviceReflector);
 	
 	/**
 	 * Called while looping the actions inside a service to write the service action description
@@ -241,11 +241,11 @@ abstract class ClientGeneratorFromPhp
 	 * @param string $serviceName
 	 * @param string $action
 	 * @param array $actionParams
-	 * @param KalturaTypeReflector $outputTypeReflector
+	 * @param VidiunTypeReflector $outputTypeReflector
 	 */
 	protected abstract function writeServiceAction($serviceId, $serviceName, $action, $actionParams, $outputTypeReflector);
 	
-	protected abstract function writeAfterService(KalturaServiceActionItem $serviceReflector);
+	protected abstract function writeAfterService(VidiunServiceActionItem $serviceReflector);
 	
 	protected abstract function writeAfterServices();
 	
@@ -256,7 +256,7 @@ abstract class ClientGeneratorFromPhp
 	 *
 	 * @param array $typeDescription
 	 */
-	protected abstract function writeType(KalturaTypeReflector $type);
+	protected abstract function writeType(VidiunTypeReflector $type);
 	
 	protected abstract function writeAfterTypes();
 	
@@ -269,15 +269,15 @@ abstract class ClientGeneratorFromPhp
 	{
 		$this->initClassMap();
 		
-		$serviceMap = KalturaServicesMap::getMap();
+		$serviceMap = VidiunServicesMap::getMap();
 		foreach($serviceMap as $serviceId => $serviceActionItem)
 		{
-		    /* @var $serviceActionItem KalturaServiceActionItem */
+		    /* @var $serviceActionItem VidiunServiceActionItem */
 			
-  			$serviceActionItemToAdd = KalturaServiceActionItem::cloneItem($serviceActionItem);
+  			$serviceActionItemToAdd = VidiunServiceActionItem::cloneItem($serviceActionItem);
 		    foreach ($serviceActionItem->actionMap as $actionId => $actionCallback)
 		    {
-      			$actionReflector = new KalturaActionReflector($serviceId, $actionId, $actionCallback);
+      			$actionReflector = new VidiunActionReflector($serviceId, $actionId, $actionCallback);
       			if ($this->shouldUseServiceAction($actionReflector))      			
       				$serviceActionItemToAdd->actionMap[$actionId] = $actionReflector;
 		    }
@@ -289,7 +289,7 @@ abstract class ClientGeneratorFromPhp
 		}
 	}
 	
-	private function getTypeDependencies(KalturaTypeReflector $typeReflector)
+	private function getTypeDependencies(VidiunTypeReflector $typeReflector)
 	{
 		$result = array();
 		
@@ -309,7 +309,7 @@ abstract class ClientGeneratorFromPhp
 		
 		if ($typeReflector->isArray() && !$typeReflector->isAbstract())
 		{
-			$arrayTypeReflector = KalturaTypeReflectorCacher::get($typeReflector->getArrayType());
+			$arrayTypeReflector = VidiunTypeReflectorCacher::get($typeReflector->getArrayType());
 			if($arrayTypeReflector)
 				$result[$arrayTypeReflector->getType()] = $arrayTypeReflector;
 		}
@@ -320,7 +320,7 @@ abstract class ClientGeneratorFromPhp
 	protected function getTypesClassMapPath()
 	{
 		$class = get_class($this);
-		$dir = kConf::get("cache_root_path") . "/generator";
+		$dir = vConf::get("cache_root_path") . "/generator";
 		if (!is_dir($dir))
 			mkdir($dir, 0777, true);
 			
@@ -338,17 +338,17 @@ abstract class ClientGeneratorFromPhp
 		}
 		foreach($this->_typesClassMap as $class => $path)
 		{
-			if (strpos($class, 'Kaltura') === 0 && strpos($class, '_') === false && strpos($path, 'api') !== false) // make sure the class is api object
+			if (strpos($class, 'Vidiun') === 0 && strpos($class, '_') === false && strpos($path, 'api') !== false) // make sure the class is api object
 			{
 				$reflector = new ReflectionClass($class);
-				if ($reflector->isSubclassOf('KalturaObject') || $reflector->isSubclassOf('KalturaEnum') || $reflector->isSubclassOf('KalturaStringEnum'))
+				if ($reflector->isSubclassOf('VidiunObject') || $reflector->isSubclassOf('VidiunEnum') || $reflector->isSubclassOf('VidiunStringEnum'))
 				{
-					$classTypeReflector = KalturaTypeReflectorCacher::get($class);
+					$classTypeReflector = VidiunTypeReflectorCacher::get($class);
 					if(!$classTypeReflector)
 						throw new Exception("Type [$class] reflector not found");
 						
 					$pluginName = $classTypeReflector->getPlugin();
-					if ($pluginName && !KalturaPluginManager::getPluginInstance($pluginName))
+					if ($pluginName && !VidiunPluginManager::getPluginInstance($pluginName))
 					{
 						unset($this->_typesClassMap[$class]);
 						continue;
@@ -369,26 +369,26 @@ abstract class ClientGeneratorFromPhp
 		}
 	}
 	
-	protected function shouldUseServiceAction (KalturaActionReflector $actionReflector)
+	protected function shouldUseServiceAction (VidiunActionReflector $actionReflector)
 	{
 	    $serviceId = $actionReflector->getServiceId();
 	    
 	    if ($actionReflector->getActionClassInfo()->serverOnly)
 	    {
-	        KalturaLog::info("Service [".$serviceId."] is server only");
+	        VidiunLog::info("Service [".$serviceId."] is server only");
 	        return false;
 	    }
 	    
 	    $actionId = $actionReflector->getActionId();
 	    if (strpos($actionReflector->getActionInfo()->clientgenerator, "ignore") !== false)
 	    {
-	        KalturaLog::info("Action [$actionId] in service [$serviceId] ignored by generator");
+	        VidiunLog::info("Action [$actionId] in service [$serviceId] ignored by generator");
 	        return false;
 	    }
 	    
 	    if (isset($this->_serviceActions[$serviceId]) && isset($this->_serviceActions[$serviceId][$actionId]))
 	    {
-	        KalturaLog::err("Service [$serviceId] action [$actionId] already exists!");
+	        VidiunLog::err("Service [$serviceId] action [$actionId] already exists!");
 	        return false;
 	    }
         
@@ -396,7 +396,7 @@ abstract class ClientGeneratorFromPhp
 	}
 	
 	
-	protected function addType(KalturaTypeReflector $objectReflector)
+	protected function addType(VidiunTypeReflector $objectReflector)
 	{
 		$type = $objectReflector->getType();
 	
@@ -407,7 +407,7 @@ abstract class ClientGeneratorFromPhp
 		
 		if($objectReflector->isServerOnly())
 		{
-			KalturaLog::info("Type is server only [$type]");
+			VidiunLog::info("Type is server only [$type]");
 			return;
 		}
 			

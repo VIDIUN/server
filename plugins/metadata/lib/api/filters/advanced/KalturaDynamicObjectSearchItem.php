@@ -4,7 +4,7 @@
  * @package plugins.metadata
  * @subpackage api.filters
  */
-class KalturaDynamicObjectSearchItem extends KalturaSearchOperator
+class VidiunDynamicObjectSearchItem extends VidiunSearchOperator
 {
 	/**
 	 * @var string

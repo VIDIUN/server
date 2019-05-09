@@ -3,7 +3,7 @@
  * Sending beacons on various objects
  * @package plugins.confMaps
  */
-class ConfMapsPlugin extends KalturaPlugin implements IKalturaServices, IKalturaPermissions, IKalturaAdminConsolePages
+class ConfMapsPlugin extends VidiunPlugin implements IVidiunServices, IVidiunPermissions, IVidiunAdminConsolePages
 {
 	const PLUGIN_NAME = 'confMaps';
 
@@ -13,7 +13,7 @@ class ConfMapsPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -29,7 +29,7 @@ class ConfMapsPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	}
 
 	/*
-	 * @see IKalturaAdminConsolePages::getApplicationPages()
+	 * @see IVidiunAdminConsolePages::getApplicationPages()
 	 */
 	public static function getApplicationPages()
 	{

@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaUserLoginDataFilter extends KalturaUserLoginDataBaseFilter
+class VidiunUserLoginDataFilter extends VidiunUserLoginDataBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -14,9 +14,9 @@ class KalturaUserLoginDataFilter extends KalturaUserLoginDataBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{	
 		$userLoginDataFilter = $this->toObject();
 		
@@ -26,9 +26,9 @@ class KalturaUserLoginDataFilter extends KalturaUserLoginDataBaseFilter
 		$totalCount = UserLoginDataPeer::doCount($c);
 		$pager->attachToCriteria($c);
 		$list = UserLoginDataPeer::doSelect($c);
-		$newList = KalturaUserLoginDataArray::fromDbArray($list, $responseProfile);
+		$newList = VidiunUserLoginDataArray::fromDbArray($list, $responseProfile);
 		
-		$response = new KalturaUserLoginDataListResponse();
+		$response = new VidiunUserLoginDataListResponse();
 		$response->totalCount = $totalCount;
 		$response->objects = $newList;
 		return $response;

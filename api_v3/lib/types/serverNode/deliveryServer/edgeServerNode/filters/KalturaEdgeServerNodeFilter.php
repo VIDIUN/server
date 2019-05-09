@@ -3,9 +3,9 @@
  * @package api
  * @subpackage filters
  */
-class KalturaEdgeServerNodeFilter extends KalturaEdgeServerNodeBaseFilter
+class VidiunEdgeServerNodeFilter extends VidiunEdgeServerNodeBaseFilter
 {
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, $type = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, $type = null)
 	{
 		if(!$type)
 			$type = serverNodeType::EDGE;

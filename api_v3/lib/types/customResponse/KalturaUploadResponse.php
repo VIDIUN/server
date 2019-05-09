@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUploadResponse extends KalturaObject
+class VidiunUploadResponse extends VidiunObject
 {
 	/**
 	 * @var string
@@ -17,7 +17,7 @@ class KalturaUploadResponse extends KalturaObject
 	
 	/**
 	 * 
-	 * @var KalturaUploadErrorCode
+	 * @var VidiunUploadErrorCode
 	 */
 	public $errorCode;
 	

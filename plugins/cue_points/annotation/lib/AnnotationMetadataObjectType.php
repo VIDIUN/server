@@ -3,7 +3,7 @@
  * @package plugins.annotation
  * @subpackage lib.enum
  */
-class AnnotationMetadataObjectType implements IKalturaPluginEnum, MetadataObjectType
+class AnnotationMetadataObjectType implements IVidiunPluginEnum, MetadataObjectType
 {
 	const ANNOTATION = 'Annotation';
 	

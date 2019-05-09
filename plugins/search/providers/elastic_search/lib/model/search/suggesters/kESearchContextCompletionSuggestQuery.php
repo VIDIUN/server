@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchContextCompletionSuggestQuery extends kESearchCompletionSuggestQuery
+class vESearchContextCompletionSuggestQuery extends vESearchCompletionSuggestQuery
 {
 
 	const CONTEXTS_KEY = 'contexts';
@@ -13,7 +13,7 @@ class kESearchContextCompletionSuggestQuery extends kESearchCompletionSuggestQue
 	 */
 	protected $contexts = array();
 
-	public function addContext(kESearchSuggestContext $context)
+	public function addContext(vESearchSuggestContext $context)
 	{
 		$this->contexts[$context->getName()][] = $context->getContext();
 	}

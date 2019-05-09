@@ -7,29 +7,29 @@
 		<!--===============================================================-->
 		<!--===============================================================-->
 		<feature showCheckbox="true" specialFeature="true" featureLabel="Title Text" id="TopTitleScreen"
-				 selected="false" k_param="selected" k_value="true" height="30">
+				 selected="false" v_param="selected" v_value="true" height="30">
 			<Label label="Title Text" bold="true"/>
 			<Spacer/>
 			<Label label="This feature allows you to display the title of the video currently playing."/>
-			<CheckBox label="Top video area" selected="true" k_param="selected" k_value="true" enabled="false"/>
+			<CheckBox label="Top video area" selected="true" v_param="selected" v_value="true" enabled="false"/>
 			<Spacer/>
 		</feature>
 
 		<feature showCheckbox="true" specialFeature="true" featureLabel="Your Watermark" id="watermark" selected="true"
-				 k_param="selected" k_value="true">
+				 v_param="selected" v_value="true">
 			<Spacer/>
 			<Label label="Your Watermark" bold="true"/>
 			<Label 
 				   label="Brand your player with your own logo displayed as a watermark on the video. Upload an image to a location on the web and provide the link below."/>
 			<Spacer/>
 			<Label label="Watermark URL"/>
-			<Input id="watermarkPath" k_param="watermarkPath"
-				   k_value="http://www.kaltura.com/content/uiconf/kaltura/kmc/appstudio/kdp3/exampleWatermark.png"/>
+			<Input id="watermarkPath" v_param="watermarkPath"
+				   v_value="http://www.vidiun.com/content/uiconf/vidiun/vmc/appstudio/vdp3/exampleWatermark.png"/>
 			<Label label="Watermark landing page url"/>
-			<Input id="watermarkClickPath" k_param="watermarkClickPath" k_value="http://www.kaltura.com/"/>
+			<Input id="watermarkClickPath" v_param="watermarkClickPath" v_value="http://www.vidiun.com/"/>
 			<Spacer/>
 			<Label label="Watermark location on the video:"/>
-			<ComboBox id="watermarkPosition" k_param="watermarkPosition" k_value="bottomLeft">
+			<ComboBox id="watermarkPosition" v_param="watermarkPosition" v_value="bottomLeft">
 				<item>
 					<data>bottomLeft</data>
 					<label>Bottom Left</label>
@@ -48,22 +48,22 @@
 				</item>
 			</ComboBox>
 			<Label label="Padding"/>
-			<NumericStepper id="padding" k_param="padding" k_value="5"/>
+			<NumericStepper id="padding" v_param="padding" v_value="5"/>
 
 		</feature>
 
 		<feature showCheckbox="true" featureLabel="Left Play Counter" specialFeature="true" id="timerControllerScreen1"
-				 selected="true" k_param="selected" k_value="true">
+				 selected="true" v_param="selected" v_value="true">
 			<Spacer/>
 			<Label label="Play Counter" bold="true"/>
 			<Label label="A timer that shows the video progress in minutes and seconds."/>
 			<Label label="This timer is located at the left side of the scrubber"/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"
 					  enabled="false"/>
 			<Spacer/>
-			<ComboBox id="timerType" k_param="timerType" k_value="forwards">
+			<ComboBox id="timerType" v_param="timerType" v_value="forwards">
 				<item>
 					<data>forwards</data>
 					<label>Count Forwards</label>
@@ -84,7 +84,7 @@
 		</feature>
 
 		<feature showCheckbox="true" featureLabel="Right Play Counter" specialFeature="true" id="timerControllerScreen2"
-				 selected="true" k_param="selected" k_value="true">
+				 selected="true" v_param="selected" v_value="true">
 			<Spacer/>
 			<Label label="Play Counter" bold="true"/>
 			<Label label="A timer that shows the video progress in minutes and seconds."/>
@@ -92,10 +92,10 @@
 			<Label label="Usually shows the total duration of the media"/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"
 					  enabled="false"/>
 			<Spacer/>
-			<ComboBox id="timerType" k_param="timerType" k_value="total">
+			<ComboBox id="timerType" v_param="timerType" v_value="total">
 				<item>
 					<data>forwards</data>
 					<label>Count Forwards</label>
@@ -116,41 +116,41 @@
 		</feature>
 
 		<feature showCheckbox="true" featureLabel="Flavor Selector" specialFeature="true"
-				 id="flavorComboControllerScreen" selected="false" k_param="selected" k_value="true">
+				 id="flavorComboControllerScreen" selected="false" v_param="selected" v_value="true">
 			<Spacer/>
 			<Label label="Flavor Selector" bold="true"/>
 			<Label label="Allow the user to select the flavor (Video quality) to watch."/>
 			<Label label="HD-on label:"/>
-			<Input id="hdOn" k_param="hdOn" k_value="HD On"/>
+			<Input id="hdOn" v_param="hdOn" v_value="HD On"/>
 			<Spacer/>
 			<Label label="HD-off label:"/>
-			<Input id="hdOff" k_param="hdOff" k_value="HD Off"/>
+			<Input id="hdOff" v_param="hdOff" v_value="HD Off"/>
 			<Spacer/>
 			<Label label="Tooltip for auto select message:"/>
-			<Input id="autoMessage" k_param="autoMessage" k_value="Automatically switches between bitrates"/>
+			<Input id="autoMessage" v_param="autoMessage" v_value="Automatically switches between bitrates"/>
 			<Spacer/>
 		</feature>
 
 		<feature showCheckbox="true" featureLabel="Full Screen Button" id="fullScreenBtn" selected="true"
-				 k_param="selected" k_value="true">
+				 v_param="selected" v_value="true">
 			<Spacer/>
 			<Label label="Full Screen Button" bold="true"/>
 			<Label label="This button allows users to switch to full screen mode, and back to regular mode."/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="false" k_param="selected" k_value="false"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="false" v_param="selected" v_value="false"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="false"
-						  k_param="selected" k_value="false"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="false" k_param="selected" k_value="false"/>
-				<CheckBox label="End play" id="EndScreen" selected="false" k_param="selected" k_value="false"/>
+						  v_param="selected" v_value="false"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="false" v_param="selected" v_value="false"/>
+				<CheckBox label="End play" id="EndScreen" selected="false" v_param="selected" v_value="false"/>
 			</CheckBox>
 			<Seperator/>
 
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"/>
 
 			<Label label="Display in controls area as:"/>
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -161,29 +161,29 @@
 				</item>
 			</ComboBox>
 			<Label label="Button Label:"/>
-			<Input id="Label" k_param="label" k_value="fullscreen"/>
+			<Input id="Label" v_param="label" v_value="fullscreen"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip - Play:"/>
-			<Input id="tooltipGo" k_param="upTooltip" k_value="Open Full Screen"/>
+			<Input id="tooltipGo" v_param="upTooltip" v_value="Open Full Screen"/>
 			<Label label="Tooltip - Pause:"/>
-			<Input id="tooltipExit" k_param="selectedTooltip" k_value="Close Full Screen"/>
+			<Input id="tooltipExit" v_param="selectedTooltip" v_value="Close Full Screen"/>
 		</feature>
 
 		<feature showCheckbox="true" featureLabel="On-video Play Button" id="onVideoPlayBtn" selected="true"
-				 k_param="selected" k_value="true">
+				 v_param="selected" v_value="true">
 			<Spacer/>
 			<Label label="On-video Play Button" bold="true"/>
 			<Label label="Displays play button on the video area. Usually shown when the video is loading or paused."/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
 
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -195,25 +195,25 @@
 			</ComboBox>
 
 			<Label label="Button Label:"/>
-			<Input id="Label" k_param="label" k_value="Play"/>
+			<Input id="Label" v_param="label" v_value="Play"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip Text:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="Play video"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="Play video"/>
 			<fixedData/>
 		</feature>
 
-		<feature showCheckbox="true" featureLabel="Play - Pause Button" id="playBtn" selected="true" k_param="selected"
-				 k_value="true">
+		<feature showCheckbox="true" featureLabel="Play - Pause Button" id="playBtn" selected="true" v_param="selected"
+				 v_value="true">
 			<Spacer/>
 			<Label label="Play - Pause Button" bold="true"/>
 			<Label label="Displays Play or Pause buttons according to the state of the video."/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"
 					  enabled="false"/>
 			<Spacer/>
-			<ComboBox id="Display" k_param="k_buttonType" aps_visible="false" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" aps_visible="false" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -224,29 +224,29 @@
 				</item>
 			</ComboBox>
 			<Label label="Tooltip - Play:"/>
-			<Input id="tooltipPlay" k_param="upTooltip" k_value="Play"/>
+			<Input id="tooltipPlay" v_param="upTooltip" v_value="Play"/>
 			<Label label="Tooltip - Pause:"/>
-			<Input id="tooltipPause" k_param="selectedTooltip" k_value="Pause"/>
+			<Input id="tooltipPause" v_param="selectedTooltip" v_value="Pause"/>
 		</feature>
 
-		<feature showCheckbox="true" featureLabel="Volume Controller" id="volumeBar" selected="true" k_param="selected"
-				 k_value="true">
+		<feature showCheckbox="true" featureLabel="Volume Controller" id="volumeBar" selected="true" v_param="selected"
+				 v_value="true">
 			<Spacer/>
 			<Label label="Volume Controller" bold="true"/>
 			<Label label="Displays mute/unmute button with a vertical volume control bar."/>
 			<Spacer/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"
 					  enabled="false"/>
 			<Spacer/>
 			<Label label="Tooltip Text:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="Change volume"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="Change volume"/>
 			
 			<Label label="Volume level for first play:"/>
-			<NumericStepper id="initialVolumeLevel" k_param="initialValue" k_value="1" minimum="0" maximum="1" stepSize="0.1"/>
+			<NumericStepper id="initialVolumeLevel" v_param="initialValue" v_value="1" minimum="0" maximum="1" stepSize="0.1"/>
 			
 			<Label label="Override user saved volume level:"/>
-			<ComboBox id="volumeOverride" k_param="forceInitialValue"
-				k_value="false">
+			<ComboBox id="volumeOverride" v_param="forceInitialValue"
+				v_value="false">
 				<item>
 					<data>false</data>
 					<label>No</label>
@@ -258,81 +258,81 @@
 			</ComboBox>
 		</feature>
 		
-		<feature showCheckbox="true" featureLabel="Scrubber" id="scrubberContainer" selected="true" k_param="selected"
-				 k_value="true">
+		<feature showCheckbox="true" featureLabel="Scrubber" id="scrubberContainer" selected="true" v_param="selected"
+				 v_value="true">
 			<Spacer/>
 			<Label label="Scrubber" bold="true"/>
 			<Label 
 				   label="The scrubber enables users to navigate through the video by dragging the handle. The scrubber also shows the buffering and playing progress."/>
 			<Spacer/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"
 					  enabled="false"/>
 		</feature>
 
-		<feature showCheckbox="true" featureLabel="Replay Button" id="replayBtn" selected="true" k_param="selected"
-				 k_value="true">
+		<feature showCheckbox="true" featureLabel="Replay Button" id="replayBtn" selected="true" v_param="selected"
+				 v_value="true">
 			<Spacer/>
 			<Label label="Replay Button" bold="true"/>
 			<Label label="Replays current video from the start."/>
 			<Label label="Location &amp; Playing States:"/>
 			<Spacer/>
-			<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true" enabled="false"/>
+			<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true" enabled="false"/>
 			<Seperator/>
 			<Label label="Button Label:"/>
-			<Input id="Label" k_param="label" k_value="Replay"/>
+			<Input id="Label" v_param="label" v_value="Replay"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip Text:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="Replay"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="Replay"/>
 		</feature>
 
 		<feature showCheckbox="true" featureLabel="On-video Unmute Button" id="unmuteBtn" selected="false"
-				 k_param="selected" k_value="false">
+				 v_param="selected" v_value="false">
 			<Spacer/>
 			<Label label="On-video Unmute Button" bold="true"/>
 			<Label 
 				   label="A button on the video area that turns the sound on. Used for videos that are set to auto play - starts the video muted and allows the user to easily switch on the sound."/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="true"
-						  k_param="selected" k_value="true"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true"/>
+						  v_param="selected" v_value="true"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
 			<Label label="Label:"/>
-			<Input id="Label" k_param="label" k_value="unmute"/>
+			<Input id="Label" v_param="label" v_value="unmute"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="unmute sound"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="unmute sound"/>
 		</feature>
 		<!--===============================================================-->
 		<!--===============================================================-->
 		<feature featureLabel="Viral &amp; Distribution" showCheckbox="false"/>
 		<!--===============================================================-->
 		<!--===============================================================-->
-		<feature showCheckbox="true" featureLabel="Share Button" id="shareBtn" selected="true" k_param="selected"
-				 pluginId="gigya" k_value="true">
+		<feature showCheckbox="true" featureLabel="Share Button" id="shareBtn" selected="true" v_param="selected"
+				 pluginId="gigya" v_value="true">
 			<Spacer/>
 			<Label label="Share Button" bold="true"/>
 			<Label 
 				   label="Share this movie. Enables posting to social networks, social bookmarking, sending email and grabbing of the embed code."/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="false"
-						  k_param="selected" k_value="false"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true"/>
+						  v_param="selected" v_value="false"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"/>
 			<Label label="Display in controls area as:"/>
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -343,40 +343,40 @@
 				</item>
 			</ComboBox>
 			<Label label="Label:"/>
-			<Input id="Label" k_param="label" k_value="Share"/>
+			<Input id="Label" v_param="label" v_value="Share"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="share with friends"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="share with friends"/>
 			<Spacer/>
 			<Label label="Syndicated Player ID"/>
 			<Label 
 				   label="Configure the player to be used on syndicated sites (created when users click the Share button).
-By default Syndicated player will use the  'Kaltura Dark' standard player configuration, and will only display a single media asset (and not the entire playlist).
+By default Syndicated player will use the  'Vidiun Dark' standard player configuration, and will only display a single media asset (and not the entire playlist).
 If you wish to select a different player for syndication, paste the relevant Player ID below (Player ID can be taken from Players List).
 "/>
-			<Input id="uiconfId" k_param="uiconfId" k_value=""/>
+			<Input id="uiconfId" v_param="uiconfId" v_value=""/>
 		</feature>
 
-		<feature showCheckbox="true" featureLabel="Download Button" id="downloadBtn" selected="false" k_param="selected"
-				 pluginId="download" k_value="false">
+		<feature showCheckbox="true" featureLabel="Download Button" id="downloadBtn" selected="false" v_param="selected"
+				 pluginId="download" v_value="false">
 			<Spacer/>
 			<Label label="Download Button" bold="true"/>
 			<Label 
-				   label="Enables download of video to your computer. Note that the download button only supports downloads of single video files and does not support mix downloads - contact Kaltura Professional Services to enable download of mix content."/>
+				   label="Enables download of video to your computer. Note that the download button only supports downloads of single video files and does not support mix downloads - contact Vidiun Professional Services to enable download of mix content."/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="true"
-						  k_param="selected" k_value="true"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true"/>
+						  v_param="selected" v_value="true"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"/>
 			<Label label="Display in controls area as:"/>
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -387,42 +387,42 @@ If you wish to select a different player for syndication, paste the relevant Pla
 				</item>
 			</ComboBox>
 			<Label label="Label:"/>
-			<Input id="Label" k_param="label" k_value="Download"/>
+			<Input id="Label" v_param="label" v_value="Download"/>
 			<Label label="Tooltip:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="download video"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="download video"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Force download of a specific flavor"/>
 			<Label label="(enter ID from the transcoding settings):"/>
-			<Input id="flavor" k_param="flavorId" k_value="" applyTo="download"/>
+			<Input id="flavor" v_param="flavorId" v_value="" applyTo="download"/>
 		</feature>
 		<!--===============================================================-->
 		<!--===============================================================-->
 		<feature featureLabel="UGC &amp; User Interaction" showCheckbox="false"/>
 		<!--===============================================================-->
 		<!--===============================================================-->
-		<feature showCheckbox="true" featureLabel="Upload Button*" id="uploadBtn" selected="false" k_param="selected"
-				 k_value="false">
+		<feature showCheckbox="true" featureLabel="Upload Button*" id="uploadBtn" selected="false" v_param="selected"
+				 v_value="false">
 			<Spacer/>
 			<Label label="Upload Button" bold="true"/>
 			<Label 
 				   label="Launches the Uploader (Contribution Wizard). Allows users to add videos, images and audio files to the video. Enable this button only if you wish to allow uploading. Clicking on the button will invoke the javascript function 'gotoContributorWindow' with the current entry as an argument. In order to connect this javascript function with editor launching follow the community guide:"/>
-			<Label label="http://www.kaltura.org/integrate-kdp-web-pages-javascript"
-				   link="http://www.kaltura.org/integrate-kdp-web-pages-javascript"/>
-			<Label label="or contact Kaltura Professional Services for assistance."/>
+			<Label label="http://www.vidiun.org/integrate-vdp-web-pages-javascript"
+				   link="http://www.vidiun.org/integrate-vdp-web-pages-javascript"/>
+			<Label label="or contact Vidiun Professional Services for assistance."/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="true"
-						  k_param="selected" k_value="true"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true"/>
+						  v_param="selected" v_value="true"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"/>
 			<Label label="Display in controls area as:"/>
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -433,34 +433,34 @@ If you wish to select a different player for syndication, paste the relevant Pla
 				</item>
 			</ComboBox>
 			<Label label="Label:"/>
-			<Input id="Label" k_param="label" k_value="upload"/>
+			<Input id="Label" v_param="label" v_value="upload"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="Add additional videos, images or audio files to this video"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="Add additional videos, images or audio files to this video"/>
 		</feature>
-		<feature showCheckbox="true" featureLabel="Remix Button*" id="editBtn" selected="false" k_param="selected"
-				 k_value="false">
+		<feature showCheckbox="true" featureLabel="Remix Button*" id="editBtn" selected="false" v_param="selected"
+				 v_value="false">
 			<Spacer/>
 			<Label label="Remix Button" bold="true"/>
 			<Label 
 				   label="Launches the Video Editor. Enable this button only if you wish to allow remixing. Clicking on the button will invoke the javascript function 'gotoEditorWindow' with the current entry as an argument. In order to connect this javascript function with editor launching follow the community guide:"/>
-			<Label label="http://www.kaltura.org/integrate-kdp-web-pages-javascript"
-				   link="http://www.kaltura.org/integrate-kdp-web-pages-javascript"/>
-			<Label label="or contact Kaltura Professional Services for assistance."/>
+			<Label label="http://www.vidiun.org/integrate-vdp-web-pages-javascript"
+				   link="http://www.vidiun.org/integrate-vdp-web-pages-javascript"/>
+			<Label label="or contact Vidiun Professional Services for assistance."/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="true"
-						  k_param="selected" k_value="true"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true"/>
+						  v_param="selected" v_value="true"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"/>
 			<Label label="Display in controls area as:"/>
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -471,32 +471,32 @@ If you wish to select a different player for syndication, paste the relevant Pla
 				</item>
 			</ComboBox>
 			<Label label="Label:"/>
-			<Input id="Label" k_param="label" k_value="Edit"/>
+			<Input id="Label" v_param="label" v_value="Edit"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="Remix this video"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="Remix this video"/>
 		</feature>
 
 		<feature showCheckbox="true" featureLabel="Capture Thumbnail" id="captureThumbBtn" selected="false"
-				 k_param="selected" pluginId="captureThumbnail" k_value="false">
+				 v_param="selected" pluginId="captureThumbnail" v_value="false">
 			<Spacer/>
 			<Label label="Capture Thumbnail" bold="true"/>
 			<Label 
 				   label="Allows users to change the thumbnail of the video. Users can play the video and click Capture at their preferred frame. (Usually used only by content administrators for CMS systems)."/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="true"
-						  k_param="selected" k_value="true"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true"/>
+						  v_param="selected" v_value="true"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"/>
 			<Label label="Display in controls area as:"/>
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -507,32 +507,32 @@ If you wish to select a different player for syndication, paste the relevant Pla
 				</item>
 			</ComboBox>
 			<Label label="Label:"/>
-			<Input id="Label" k_param="label" k_value="Thumb"/>
+			<Input id="Label" v_param="label" v_value="Thumb"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="Use current frame as the video thumbnail"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="Use current frame as the video thumbnail"/>
 		</feature>
 
-		<feature showCheckbox="true" featureLabel="Flag Button" id="flagBtn" selected="false" k_param="selected"
-				 k_value="false" pluginId="moderation">
+		<feature showCheckbox="true" featureLabel="Flag Button" id="flagBtn" selected="false" v_param="selected"
+				 v_value="false" pluginId="moderation">
 			<Spacer/>
 			<Label label="Flag Button" bold="true"/>
 			<Label 
-				   label="Allows users to report inappropriate content. You may then review and moderate the content in the Moderation tab of the Kaltura Management Console."/>
+				   label="Allows users to report inappropriate content. You may then review and moderate the content in the Moderation tab of the Vidiun Management Console."/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="true"
-						  k_param="selected" k_value="true"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true"/>
+						  v_param="selected" v_value="true"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"/>
 			<Label label="Display in controls area as:"/>
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea" >
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea" >
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -543,21 +543,21 @@ If you wish to select a different player for syndication, paste the relevant Pla
 				</item>
 			</ComboBox>
 			<Label label="Label:"/>
-			<Input id="Label" k_param="label" k_value="flag"/>
+			<Input id="Label" v_param="label" v_value="flag"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="Report this content as inappropriate"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="Report this content as inappropriate"/>
 		</feature>
 
 		<feature showCheckbox="true" specialFeature="true" featureLabel="Stars Rating" id="stars" selected="false"
-				 k_param="selected" k_value="false">
+				 v_param="selected" v_value="false">
 			<Spacer/>
 			<Label label="Rating Component" bold="true"/>
 			<Spacer/>
 			<Label label="Allows your viewers to rate the media they watch."/>
 			<Label label="View Only"/>
-			<ComboBox id="editable" k_param="editable" k_value="true">
+			<ComboBox id="editable" v_param="editable" v_value="true">
 				<item>
 					<data>true</data>
 					<label>false</label>
@@ -569,35 +569,35 @@ If you wish to select a different player for syndication, paste the relevant Pla
 			</ComboBox>
 			<Spacer/>
 			<Label label="Starts size:"/>
-			<NumericStepper id="starsSize" k_param="starScale" k_value="1" minimum="1" maximum="3" stepSize="0.1" />
+			<NumericStepper id="starsSize" v_param="starScale" v_value="1" minimum="1" maximum="3" stepSize="0.1" />
 		</feature>
 
 		<!-- feature showCheckbox="true" featureLabel="Credits Button"
-			 id="creditsBtn" selected="false" k_param="selected"
-			 k_value="false">
+			 id="creditsBtn" selected="false" v_param="selected"
+			 v_value="false">
 			 <Spacer />
 			 <Label label="Credits Button" bold="true" />
 			 <Label label="Opens a window with a list of the users who contributed media to this mix. Typically useful for collaborative projects and social networks." />
 			 <Spacer />
 			 <Label label="Location &amp; Playing States:" />
 			 <CheckBox id="showOnVideoControllers" label="Video Area"
-			 selected="true" k_param="selected" k_value="true">
+			 selected="true" v_param="selected" v_value="true">
 			 <CheckBox label="Before play" id="StartScreen"
-			 selected="true" k_param="selected" k_value="true" />
+			 selected="true" v_param="selected" v_value="true" />
 			 <CheckBox label="During play, when mouse is on screen"
-			 id="PlayScreen" selected="true" k_param="selected"
-			 k_value="true" />
+			 id="PlayScreen" selected="true" v_param="selected"
+			 v_value="true" />
 			 <CheckBox label="When paused" id="PauseScreen"
-			 selected="true" k_param="selected" k_value="true" />
+			 selected="true" v_param="selected" v_value="true" />
 			 <CheckBox label="End play" id="EndScreen" selected="true"
-			 k_param="selected" k_value="true" />
+			 v_param="selected" v_value="true" />
 			 </CheckBox>
 			 <Seperator />
 			 <CheckBox label="Controls Area" id="ControllerScreen"
-			 selected="true" k_param="selected" k_value="true" />
+			 selected="true" v_param="selected" v_value="true" />
 			 <Label label="Display in controls area as:" />
-			 <ComboBox id="Display" k_param="k_buttonType"
-			 k_value="buttonIconControllerArea">
+			 <ComboBox id="Display" v_param="v_buttonType"
+			 v_value="buttonIconControllerArea">
 			 <item>
 			 <data>buttonIconControllerArea</data>
 			 <label>Icon</label>
@@ -608,12 +608,12 @@ If you wish to select a different player for syndication, paste the relevant Pla
 			 </item>
 			 </ComboBox>
 			 <Label label="Label:" />
-			 <Input id="Label" k_param="label" k_value="credits" />
+			 <Input id="Label" v_param="label" v_value="credits" />
 			 <Seperator />
 			 <Spacer />
 			 <Label label="Tooltip:" />
-			 <Input id="Tooltip" k_param="tooltip"
-			 k_value="Users who contributed to this mix" />
+			 <Input id="Tooltip" v_param="tooltip"
+			 v_value="Users who contributed to this mix" />
 			 <fixedData />
 			 </feature -->
 
@@ -624,53 +624,53 @@ If you wish to select a different player for syndication, paste the relevant Pla
 		<!--===============================================================-->
 
 		<feature showCheckbox="true" specialFeature="true" featureLabel="Subply Component*" id="plymedia"
-				 selected="false" k_param="selected" k_value="false">
+				 selected="false" v_param="selected" v_value="false">
 			<Spacer/>
 			<Label label="Subtitle Component" bold="true"/>
 			<Label 
 				   label="Shows subtitles and captions for this video using the PLYmedia SubPly solution. If there are no subtitles related to the video, the component will be hidden."/>
 			<Label label="If you are interested in adding this value-added service to your account, please contact:"/>
-			<Label label="Kaltura Professional Services" link="http://corp.kaltura.com/about/contact"/>
+			<Label label="Vidiun Professional Services" link="http://corp.vidiun.com/about/contact"/>
 			<Spacer/>
 		</feature>
 		
 		
 		<feature showCheckbox="true" featureLabel="Captions on video" id="ccOverComboBoxWrapper"
-				 pluginId="closedCaptionsOverPlayer" selected="false" k_param="selected" k_value="false">
+				 pluginId="closedCaptionsOverPlayer" selected="false" v_param="selected" v_value="false">
 			<Spacer/>
 			<Label label="Captions on video" bold="true"/>
 			<Label label='Displays captions on top of the video. Make sure that "Captions for accessibility" is not selected.' />
 			<Spacer/>
 			
 			<Label label="Text Color:" />
-			<ColorPicker id="fontColor" k_param="fontColor" k_value="0xFFFFFF" applyTo="closedCaptionsOverPlayer" />
+			<ColorPicker id="fontColor" v_param="fontColor" v_value="0xFFFFFF" applyTo="closedCaptionsOverPlayer" />
 			
 			<Label label="Text Styles:" />
-			<RadioButtonGroup id="ccOverRG" k_param="useGlow" k_value="true" applyTo="closedCaptionsOverPlayer"/>
+			<RadioButtonGroup id="ccOverRG" v_param="useGlow" v_value="true" applyTo="closedCaptionsOverPlayer"/>
 			
 			<RadioButton id="ccOverGlowRB" groupName="ccOverRG" selected="true" value="true" 
-				k_param="selected" k_value="true" label="Glow effect surrounding text"/>
+				v_param="selected" v_value="true" label="Glow effect surrounding text"/>
 
 			<Label label='Glow Color:' />
-			<ColorPicker id="ccOverGlowColor" k_param="glowColor" k_value="0x000333" applyTo="closedCaptionsOverPlayer"
+			<ColorPicker id="ccOverGlowColor" v_param="glowColor" v_value="0x000333" applyTo="closedCaptionsOverPlayer"
 				enabled="{ccOverGlowRB.selected}" />
 			
 			<Label label="Glow Blur:" />
-			<NumericStepper id="ccOverGlowBlur" k_param="glowBlur" k_value="4" minimum="0" maximum="255"
+			<NumericStepper id="ccOverGlowBlur" v_param="glowBlur" v_value="4" minimum="0" maximum="255"
 				applyTo="closedCaptionsOverPlayer" enabled="{ccOverGlowRB.selected}"/>
 			
 			<RadioButton id="ccOverBgRB" groupName="ccOverRG" selected="false" value="false" 
-				k_param="selected" k_value="false" label="Background layer behind text"/>
+				v_param="selected" v_value="false" label="Background layer behind text"/>
 			
 			<Label label='Background Color:' />
-			<ColorPicker id="bgColor" k_param="bg" k_value="0x000000" applyTo="closedCaptionsOverPlayer" 
+			<ColorPicker id="bgColor" v_param="bg" v_value="0x000000" applyTo="closedCaptionsOverPlayer" 
 				enabled="{ccOverBgRB.selected}" />
 			
 			<Label label="Font Size:" />
-			<NumericStepper id="fontsize" k_param="fontsize" k_value="12" applyTo="closedCaptionsOverPlayer" />
+			<NumericStepper id="fontsize" v_param="fontsize" v_value="12" applyTo="closedCaptionsOverPlayer" />
 			
 			<Label label="Font Family:" />
-			<ComboBox id="fontFamily" k_param="fontFamily" k_value="Arial" applyTo="closedCaptionsOverPlayer">
+			<ComboBox id="fontFamily" v_param="fontFamily" v_value="Arial" applyTo="closedCaptionsOverPlayer">
 				<item>
 					<data>Verdana</data>
 					<label>Verdana</label>
@@ -730,49 +730,49 @@ If you wish to select a different player for syndication, paste the relevant Pla
 			</ComboBox>
 			
 			<Label label="Prompt (text that appears on captions selector):" />
-			<Input id="ccOverPrompt"  k_param="prompt" k_value="Captions" applyTo="ccOverComboBox"/>
+			<Input id="ccOverPrompt"  v_param="prompt" v_value="Captions" applyTo="ccOverComboBox"/>
 			
 			<Label label="Tooltip:" />
-			<Input id="ccOverTooltip"  k_param="tooltip" k_value="" applyTo="ccOverComboBox"/>
+			<Input id="ccOverTooltip"  v_param="tooltip" v_value="" applyTo="ccOverComboBox"/>
 			
 		</feature>
 		
 		<feature showCheckbox="true" featureLabel="Captions for accessibility" id="ccUnderComboBox"
-				 pluginId="closedCaptionsUnderPlayer" selected="false" k_param="selected" k_value="false">
+				 pluginId="closedCaptionsUnderPlayer" selected="false" v_param="selected" v_value="false">
 			<Spacer/>
 			<Label label="Captions for accessibility" bold="true"/>
 			<Label label='Displays captions in a dedicated area under video. Make sure that "Captions on video" is not selected.' />
 			<Spacer/>
 			
 			<Label label="Text color:" />
-			<ColorPicker id="fontColor" k_param="fontColor" k_value="0xFFFFFF" applyTo="closedCaptionsUnderPlayer"/>
+			<ColorPicker id="fontColor" v_param="fontColor" v_value="0xFFFFFF" applyTo="closedCaptionsUnderPlayer"/>
 			
 			<Label label="Text Styles:" />
-			<RadioButtonGroup id="ccUnderRG" k_param="useGlow" k_value="true" applyTo="closedCaptionsUnderPlayer"/>
+			<RadioButtonGroup id="ccUnderRG" v_param="useGlow" v_value="true" applyTo="closedCaptionsUnderPlayer"/>
 			
 			<RadioButton id="ccUnderGlowRB" groupName="ccUnderRG" selected="true" value="true" 
-				k_param="selected" k_value="true" label="Glow effect surrounding text"/>
+				v_param="selected" v_value="true" label="Glow effect surrounding text"/>
 
 			<Label label='Glow Color:' />
-			<ColorPicker id="ccUnderGlowColor" k_param="glowColor" k_value="0x000333" applyTo="closedCaptionsUnderPlayer"
+			<ColorPicker id="ccUnderGlowColor" v_param="glowColor" v_value="0x000333" applyTo="closedCaptionsUnderPlayer"
 				enabled="{ccUnderGlowRB.selected}" />
 			
 			<Label label="Glow Blur:" />
-			<NumericStepper id="ccUnderGlowBlur" k_param="glowBlur" k_value="4" minimum="0" maximum="255"
+			<NumericStepper id="ccUnderGlowBlur" v_param="glowBlur" v_value="4" minimum="0" maximum="255"
 				applyTo="closedCaptionsUnderPlayer" enabled="{ccUnderGlowRB.selected}"/>
 			
 			<RadioButton id="ccUnderBgRB" groupName="ccUnderRG" selected="false" value="false" 
-				k_param="selected" k_value="false" label="Background layer behind text"/>
+				v_param="selected" v_value="false" label="Background layer behind text"/>
 			
 			<Label label='Background Color:' />
-			<ColorPicker id="bgColor" k_param="bg" k_value="0x000000" applyTo="closedCaptionsUnderPlayer" 
+			<ColorPicker id="bgColor" v_param="bg" v_value="0x000000" applyTo="closedCaptionsUnderPlayer" 
 				enabled="{ccUnderBgRB.selected}" />
 			
 			<Label label="Font Size:" />
-			<NumericStepper id="fontsize" k_param="fontsize" k_value="12" applyTo="closedCaptionsUnderPlayer" />
+			<NumericStepper id="fontsize" v_param="fontsize" v_value="12" applyTo="closedCaptionsUnderPlayer" />
 			
 			<Label label="Font Family:" />
-			<ComboBox id="fontFamily" k_param="fontFamily" k_value="Arial" applyTo="closedCaptionsUnderPlayer">
+			<ComboBox id="fontFamily" v_param="fontFamily" v_value="Arial" applyTo="closedCaptionsUnderPlayer">
 				<item>
 					<data>Verdana</data>
 					<label>Verdana</label>
@@ -832,10 +832,10 @@ If you wish to select a different player for syndication, paste the relevant Pla
 			</ComboBox>
 			
 			<Label label="Prompt (text that appears on captions selector):" />
-			<Input id="ccUnderPrompt"  k_param="prompt" k_value="Captions" />
+			<Input id="ccUnderPrompt"  v_param="prompt" v_value="Captions" />
 			
 			<Label label="Tooltip:" />
-			<Input id="ccUnderTooltip"  k_param="tooltip" k_value="" />
+			<Input id="ccUnderTooltip"  v_param="tooltip" v_value="" />
 			
 		</feature>
 
@@ -846,37 +846,37 @@ If you wish to select a different player for syndication, paste the relevant Pla
 		<!--===============================================================-->
 
 		<!--feature showCheckbox="true" specialFeature="true" featureLabel="AdapTv*"
-			 id="adaptv" selected="false" k_param="selected" k_value="false">
+			 id="adaptv" selected="false" v_param="selected" v_value="false">
 			 <Spacer/>
 			 <Label label="Advertising Component" bold="true"/>
 			 <Spacer/>
 			 <Label
-			 label="Allows you to include various types of video ads in your videso. Please enter your credentials below and you will be transferred to the advertising management system to set up your ads. If you do not have credentials and would like to add video ads to your account, please contact Kaltura Professional Services."/>
+			 label="Allows you to include various types of video ads in your videso. Please enter your credentials below and you will be transferred to the advertising management system to set up your ads. If you do not have credentials and would like to add video ads to your account, please contact Vidiun Professional Services."/>
 			 <Label label="Adap.tv Partner Key"/>
-			 <Input id="key" k_param="key" k_value=""/>
+			 <Input id="key" v_param="key" v_value=""/>
 			 <Spacer/>
 			 <Label label="Adap.tv Zone ID"/>
-			 <Input id="zone" k_param="zone" k_value="default"/>
+			 <Input id="zone" v_param="zone" v_value="default"/>
 			 <Label label="Pre sequence index"/>
-			 <Input id="preSequence" k_param="preSequence" k_value="1"/>
+			 <Input id="preSequence" v_param="preSequence" v_value="1"/>
 			 <Label label="post sequence index"/>
-			 <Input id="postSequence" k_param="postSequence" k_value="1"/>
+			 <Input id="postSequence" v_param="postSequence" v_value="1"/>
 			 </feature>
 
 			 <feature showCheckbox="true" specialFeature="true" featureLabel="Tremor*"
-			 id="tremor" selected="false" k_param="selected" k_value="false">
+			 id="tremor" selected="false" v_param="selected" v_value="false">
 			 <Spacer/>
 			 <Label label="Advertising Component" bold="true"/>
 			 <Spacer/>
 			 <Label
-			 label="Allows you to include various types of video ads in your videso. Please enter your credentials below and you will be transferred to the advertising management system to set up your ads. If you do not have credentials and would like to add video ads to your account, please contact Kaltura Professional Services."/>
+			 label="Allows you to include various types of video ads in your videso. Please enter your credentials below and you will be transferred to the advertising management system to set up your ads. If you do not have credentials and would like to add video ads to your account, please contact Vidiun Professional Services."/>
 			 <Label label="Acudeo program id"/>
-			 <Input id="progId" k_param="progId" k_value=""/>
+			 <Input id="progId" v_param="progId" v_value=""/>
 			 <Spacer/>
 			 <Label label="Pre sequence index"/>
-			 <Input id="preSequence" k_param="preSequence" k_value="1"/>
+			 <Input id="preSequence" v_param="preSequence" v_value="1"/>
 			 <Label label="post sequence index"/>
-			 <Input id="postSequence" k_param="postSequence" k_value="1"/>
+			 <Input id="postSequence" v_param="postSequence" v_value="1"/>
 			 </feature-->
 
 		<!--===============================================================-->
@@ -885,8 +885,8 @@ If you wish to select a different player for syndication, paste the relevant Pla
 		<!--===============================================================-->
 		<!--===============================================================-->
 
-		<feature showCheckbox="true" featureLabel="Custom Button 1" id="custom1Btn" selected="false" k_param="selected"
-				 k_value="false">
+		<feature showCheckbox="true" featureLabel="Custom Button 1" id="custom1Btn" selected="false" v_param="selected"
+				 v_value="false">
 			<Spacer/>
 			<Label label="Custom Button 1" bold="true"/>
 			<Label 
@@ -894,23 +894,23 @@ If you wish to select a different player for syndication, paste the relevant Pla
 			<Label label="Add the following code to your HTML page to integrate with this feature:"/>
 			<Label 
 				   label="&lt;script&gt; function customFunc1 (entryId){ // add your custom code here... } &lt;/script&gt;"/>
-			<Label label="If needed, contact Kaltura Professional Services for assistance"/>
+			<Label label="If needed, contact Vidiun Professional Services for assistance"/>
 			<Label label="Read more here:"/>
-			<Label label="http://www.kaltura.org/integrate-kdp-web-pages-javascript"
-				   link="http://www.kaltura.org/integrate-kdp-web-pages-javascript"/>
+			<Label label="http://www.vidiun.org/integrate-vdp-web-pages-javascript"
+				   link="http://www.vidiun.org/integrate-vdp-web-pages-javascript"/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="true"
-						  k_param="selected" k_value="true"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true"/>
+						  v_param="selected" v_value="true"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"/>
 			<Label label="Display in controls area:"/>
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -921,15 +921,15 @@ If you wish to select a different player for syndication, paste the relevant Pla
 				</item>
 			</ComboBox>
 			<Label label="Label:"/>
-			<Input id="Label" k_param="label" k_value="custom1"/>
+			<Input id="Label" v_param="label" v_value="custom1"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="Custom1 tooltip"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="Custom1 tooltip"/>
 			<fixedData/>
 		</feature>
-		<feature showCheckbox="true" featureLabel="Custom Button 2" id="custom2Btn" selected="false" k_param="selected"
-				 k_value="false">
+		<feature showCheckbox="true" featureLabel="Custom Button 2" id="custom2Btn" selected="false" v_param="selected"
+				 v_value="false">
 			<Spacer/>
 			<Label label="Custom Button 2" bold="true"/>
 			<Label 
@@ -937,23 +937,23 @@ If you wish to select a different player for syndication, paste the relevant Pla
 			<Label label="Add the following code to your HTML page to integrate with this feature:"/>
 			<Label 
 				   label="&lt;script&gt; function customFunc2 (entryId){ // add your custom code here... } &lt;/script&gt;"/>
-			<Label label="If needed, contact Kaltura Professional Services for assistance"/>
+			<Label label="If needed, contact Vidiun Professional Services for assistance"/>
 			<Label label="Read more here:"/>
-			<Label label="http://www.kaltura.org/integrate-kdp-web-pages-javascript"
-				   link="http://www.kaltura.org/integrate-kdp-web-pages-javascript"/>
+			<Label label="http://www.vidiun.org/integrate-vdp-web-pages-javascript"
+				   link="http://www.vidiun.org/integrate-vdp-web-pages-javascript"/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="true"
-						  k_param="selected" k_value="true"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true"/>
+						  v_param="selected" v_value="true"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"/>
 			<Label label="Display in controls area:"/>
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -964,15 +964,15 @@ If you wish to select a different player for syndication, paste the relevant Pla
 				</item>
 			</ComboBox>
 			<Label label="Label:"/>
-			<Input id="Label" k_param="label" k_value="custom2"/>
+			<Input id="Label" v_param="label" v_value="custom2"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="Custom2 tooltip"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="Custom2 tooltip"/>
 			<fixedData/>
 		</feature>
-		<feature showCheckbox="true" featureLabel="Custom Button 3" id="custom3Btn" selected="false" k_param="selected"
-				 k_value="false">
+		<feature showCheckbox="true" featureLabel="Custom Button 3" id="custom3Btn" selected="false" v_param="selected"
+				 v_value="false">
 			<Spacer/>
 			<Label label="Custom Button 3" bold="true"/>
 			<Label 
@@ -980,23 +980,23 @@ If you wish to select a different player for syndication, paste the relevant Pla
 			<Label label="Add the following code to your HTML page to integrate with this feature:"/>
 			<Label 
 				   label="&lt;script&gt; function customFunc3 (entryId){ // add your custom code here... } &lt;/script&gt;"/>
-			<Label label="If needed, contact Kaltura Professional Services for assistance"/>
+			<Label label="If needed, contact Vidiun Professional Services for assistance"/>
 			<Label label="Read more here:"/>
-			<Label label="http://www.kaltura.org/integrate-kdp-web-pages-javascript"
-				   link="http://www.kaltura.org/integrate-kdp-web-pages-javascript"/>
+			<Label label="http://www.vidiun.org/integrate-vdp-web-pages-javascript"
+				   link="http://www.vidiun.org/integrate-vdp-web-pages-javascript"/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="true"
-						  k_param="selected" k_value="true"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true"/>
+						  v_param="selected" v_value="true"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"/>
 			<Label label="Display in controls area:"/>
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -1007,15 +1007,15 @@ If you wish to select a different player for syndication, paste the relevant Pla
 				</item>
 			</ComboBox>
 			<Label label="Label:"/>
-			<Input id="Label" k_param="label" k_value="custom3"/>
+			<Input id="Label" v_param="label" v_value="custom3"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="Custom3 tooltip"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="Custom3 tooltip"/>
 			<fixedData/>
 		</feature>
-		<feature showCheckbox="true" featureLabel="Custom Button 4" id="custom4Btn" selected="false" k_param="selected"
-				 k_value="false">
+		<feature showCheckbox="true" featureLabel="Custom Button 4" id="custom4Btn" selected="false" v_param="selected"
+				 v_value="false">
 			<Spacer/>
 			<Label label="Custom Button 4" bold="true"/>
 			<Label 
@@ -1023,23 +1023,23 @@ If you wish to select a different player for syndication, paste the relevant Pla
 			<Label label="Add the following code to your HTML page to integrate with this feature:"/>
 			<Label 
 				   label="&lt;script&gt; function customFunc4 (entryId){ // add your custom code here... } &lt;/script&gt;"/>
-			<Label label="If needed, contact Kaltura Professional Services for assistance"/>
+			<Label label="If needed, contact Vidiun Professional Services for assistance"/>
 			<Label label="Read more here:"/>
-			<Label label="http://www.kaltura.org/integrate-kdp-web-pages-javascript"
-				   link="http://www.kaltura.org/integrate-kdp-web-pages-javascript"/>
+			<Label label="http://www.vidiun.org/integrate-vdp-web-pages-javascript"
+				   link="http://www.vidiun.org/integrate-vdp-web-pages-javascript"/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="true"
-						  k_param="selected" k_value="true"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true"/>
+						  v_param="selected" v_value="true"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"/>
 			<Label label="Display in controls area:"/>
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -1050,15 +1050,15 @@ If you wish to select a different player for syndication, paste the relevant Pla
 				</item>
 			</ComboBox>
 			<Label label="Label:"/>
-			<Input id="Label" k_param="label" k_value="custom4"/>
+			<Input id="Label" v_param="label" v_value="custom4"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="Custom4 tooltip"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="Custom4 tooltip"/>
 			<fixedData/>
 		</feature>
-		<feature showCheckbox="true" featureLabel="Custom Button 5" id="custom5Btn" selected="false" k_param="selected"
-				 k_value="false">
+		<feature showCheckbox="true" featureLabel="Custom Button 5" id="custom5Btn" selected="false" v_param="selected"
+				 v_value="false">
 			<Spacer/>
 			<Label label="Custom Button 5" bold="true"/>
 			<Label 
@@ -1066,23 +1066,23 @@ If you wish to select a different player for syndication, paste the relevant Pla
 			<Label label="Add the following code to your HTML page to integrate with this feature:"/>
 			<Label 
 				   label="&lt;script&gt; function customFunc5 (entryId){ // add your custom code here... } &lt;/script&gt;"/>
-			<Label label="If needed, contact Kaltura Professional Services for assistance"/>
+			<Label label="If needed, contact Vidiun Professional Services for assistance"/>
 			<Label label="Read more here:"/>
-			<Label label="http://www.kaltura.org/integrate-kdp-web-pages-javascript"
-				   link="http://www.kaltura.org/integrate-kdp-web-pages-javascript"/>
+			<Label label="http://www.vidiun.org/integrate-vdp-web-pages-javascript"
+				   link="http://www.vidiun.org/integrate-vdp-web-pages-javascript"/>
 			<Spacer/>
 			<Label label="Location &amp; Playing States:"/>
-			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" k_param="selected" k_value="true">
-				<CheckBox label="Before play" id="StartScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox id="showOnVideoControllers" label="Video Area" selected="true" v_param="selected" v_value="true">
+				<CheckBox label="Before play" id="StartScreen" selected="true" v_param="selected" v_value="true"/>
 				<CheckBox label="During play, when mouse is on screen" id="PlayScreen" selected="true"
-						  k_param="selected" k_value="true"/>
-				<CheckBox label="When paused" id="PauseScreen" selected="true" k_param="selected" k_value="true"/>
-				<CheckBox label="End play" id="EndScreen" selected="true" k_param="selected" k_value="true"/>
+						  v_param="selected" v_value="true"/>
+				<CheckBox label="When paused" id="PauseScreen" selected="true" v_param="selected" v_value="true"/>
+				<CheckBox label="End play" id="EndScreen" selected="true" v_param="selected" v_value="true"/>
 			</CheckBox>
 			<Seperator/>
-			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" k_param="selected" k_value="true"/>
+			<CheckBox label="Controls Area" id="ControllerScreen" selected="true" v_param="selected" v_value="true"/>
 			<Label label="Display in controls area:"/>
-			<ComboBox id="Display" k_param="k_buttonType" k_value="buttonIconControllerArea">
+			<ComboBox id="Display" v_param="v_buttonType" v_value="buttonIconControllerArea">
 				<item>
 					<data>buttonIconControllerArea</data>
 					<label>Icon</label>
@@ -1093,11 +1093,11 @@ If you wish to select a different player for syndication, paste the relevant Pla
 				</item>
 			</ComboBox>
 			<Label label="Label:"/>
-			<Input id="Label" k_param="label" k_value="custom5"/>
+			<Input id="Label" v_param="label" v_value="custom5"/>
 			<Seperator/>
 			<Spacer/>
 			<Label label="Tooltip:"/>
-			<Input id="Tooltip" k_param="tooltip" k_value="Custom5 tooltip"/>
+			<Input id="Tooltip" v_param="tooltip" v_value="Custom5 tooltip"/>
 			<fixedData/>
 		</feature>
 		<!--===============================================================-->
@@ -1106,171 +1106,171 @@ If you wish to select a different player for syndication, paste the relevant Pla
 
 			 <feature showCheckbox="true" featureLabel="Thumbnail"
 			 customXmlId="irScreen" id="irImage" selected="true"
-			 k_param="selected" k_value="true">
+			 v_param="selected" v_value="true">
 			 <Spacer />
 			 <Label label="Show Thumbnail" bold="true" />
 			 <CheckBox label="Item in list" enabled="false" id="irScreen"
-			 selected="true" k_param="selected" k_value="true" />
-			 <Input id="source" k_param="source"
-			 k_value="{this.thumbnailUrl}" enabled="false"
+			 selected="true" v_param="selected" v_value="true" />
+			 <Input id="source" v_param="source"
+			 v_value="{this.thumbnailUrl}" enabled="false"
 			 aps_visible="false" />
 			 <fixedData />
 			 </feature>
 
 			 <feature showCheckbox="true" featureLabel="Name"
 			 customXmlId="irScreen" id="irLink" selected="true"
-			 k_param="selected" k_value="true">
+			 v_param="selected" v_value="true">
 			 <Spacer />
 			 <Label label="Name of Entry" bold="true" />
 			 <CheckBox label="Item in list" enabled="false" id="irScreen"
-			 selected="true" k_param="selected" k_value="true" />
-			 <Input id="name" k_param="label" k_value="{this.name}"
+			 selected="true" v_param="selected" v_value="true" />
+			 <Input id="name" v_param="label" v_value="{this.name}"
 			 enabled="false" aps_visible="false" />
 			 <Label label="Prefix:" aps_visible="false" />
 			 <Input id="prefix" affectsOnAttribute="label"
-			 k_param="prefix" k_value="" aps_visible="false" />
+			 v_param="prefix" v_value="" aps_visible="false" />
 			 <fixedData />
 			 </feature>
 
 			 <feature showCheckbox="true" featureLabel="Description"
 			 customXmlId="irScreen" id="irDescription" selected="true"
-			 k_param="selected" k_value="true">
+			 v_param="selected" v_value="true">
 			 <Spacer />
 			 <Label label="Description of Entry" bold="true" />
 			 <CheckBox label="Item in list" enabled="false" id="irScreen"
-			 selected="true" k_param="selected" k_value="true" />
-			 <Input id="Description" k_param="text"
-			 k_value="{this.description}" enabled="false"
+			 selected="true" v_param="selected" v_value="true" />
+			 <Input id="Description" v_param="text"
+			 v_value="{this.description}" enabled="false"
 			 aps_visible="false" />
 			 <Label label="Prefix:" />
-			 <Input id="prefix" affectsOnAttribute="text" k_param="prefix"
-			 k_value="" aps_visible="false" />
+			 <Input id="prefix" affectsOnAttribute="text" v_param="prefix"
+			 v_value="" aps_visible="false" />
 			 <fixedData />
 			 </feature>
 
 			 <feature showCheckbox="true" featureLabel="Duration"
 			 customXmlId="irScreen" id="irDuration" selected="true"
-			 k_param="selected" k_value="true">
+			 v_param="selected" v_value="true">
 			 <Spacer />
 			 <Label label="Duration" bold="true" />
 			 <CheckBox label="Item in list" enabled="false" id="irScreen"
-			 selected="true" k_param="selected" k_value="true" />
-			 <Input id="duration" k_param="text"
-			 k_value="{formatDate(this.duration, 'NN:SS')}"
+			 selected="true" v_param="selected" v_value="true" />
+			 <Input id="duration" v_param="text"
+			 v_value="{formatDate(this.duration, 'NN:SS')}"
 			 enabled="false" aps_visible="false" />
 			 <Label label="Prefix:" aps_visible="false" />
-			 <Input id="prefix" affectsOnAttribute="text" k_param="prefix"
-			 k_value="" aps_visible="false" />
+			 <Input id="prefix" affectsOnAttribute="text" v_param="prefix"
+			 v_value="" aps_visible="false" />
 			 <fixedData />
 			 </feature>
 
 			 <feature showCheckbox="true" featureLabel="Plays"
 			 customXmlId="irScreen" id="irPlays" selected="false"
-			 k_param="selected" k_value="false">
+			 v_param="selected" v_value="false">
 			 <Spacer />
 			 <Label label="Plays Count" bold="true" />
 			 <CheckBox label="Item in list" enabled="false" id="irScreen"
-			 selected="true" k_param="selected" k_value="true" />
-			 <Input id="playscountData" k_param="text"
-			 k_value="Plays: {this.plays}" enabled="false"
+			 selected="true" v_param="selected" v_value="true" />
+			 <Input id="playscountData" v_param="text"
+			 v_value="Plays: {this.plays}" enabled="false"
 			 aps_visible="false" />
 			 <Label label="Prefix:" aps_visible="false" />
-			 <Input id="prefix" affectsOnAttribute="text" k_param="prefix"
-			 aps_visible="false" k_value="" />
+			 <Input id="prefix" affectsOnAttribute="text" v_param="prefix"
+			 aps_visible="false" v_value="" />
 			 <fixedData />
 			 </feature>
 
 			 <feature showCheckbox="true" featureLabel="Rank"
 			 customXmlId="irScreen" id="irRank" selected="false"
-			 k_param="selected" k_value="false">
+			 v_param="selected" v_value="false">
 			 <Spacer />
 			 <Label label="Entry Rank" bold="true" />
 			 <CheckBox label="Item in list" enabled="false" id="irScreen"
-			 selected="true" k_param="selected" k_value="true" />
-			 <Input id="rank" k_param="text" k_value="Rank: {this.rank}"
+			 selected="true" v_param="selected" v_value="true" />
+			 <Input id="rank" v_param="text" v_value="Rank: {this.rank}"
 			 enabled="false" aps_visible="false" />
 			 <Label label="Prefix:" aps_visible="false" />
-			 <Input id="prefix" affectsOnAttribute="text" k_param="prefix"
-			 aps_visible="false" k_value="" />
+			 <Input id="prefix" affectsOnAttribute="text" v_param="prefix"
+			 aps_visible="false" v_value="" />
 			 <fixedData />
 			 </feature>
 
 			 <feature showCheckbox="true" featureLabel="Votes Count"
 			 customXmlId="irScreen" id="irVotes" selected="false"
-			 k_param="selected" k_value="false">
+			 v_param="selected" v_value="false">
 			 <Spacer />
 			 <Label label="Entry Votes" bold="true" />
 			 <CheckBox label="Item in list" enabled="false" id="irScreen"
-			 selected="true" k_param="selected" k_value="true" />
-			 <Input id="votes" k_param="text"
-			 k_value=" ({this.votes} votes)" enabled="false"
+			 selected="true" v_param="selected" v_value="true" />
+			 <Input id="votes" v_param="text"
+			 v_value=" ({this.votes} votes)" enabled="false"
 			 aps_visible="false" />
 			 <Label label="Prefix:" aps_visible="false" />
-			 <Input id="prefix" affectsOnAttribute="text" k_param="prefix"
-			 k_value="" aps_visible="false" />
+			 <Input id="prefix" affectsOnAttribute="text" v_param="prefix"
+			 v_value="" aps_visible="false" />
 			 <fixedData />
 			 </feature>
 
 			 <feature showCheckbox="true" featureLabel="Tags"
 			 customXmlId="irScreen" id="irTags" selected="false"
-			 k_param="selected" k_value="false">
+			 v_param="selected" v_value="false">
 			 <Spacer />
 			 <Label label="Entry Tags" bold="true" />
 			 <CheckBox label="Item in list" enabled="false" id="irScreen"
-			 selected="true" k_param="selected" k_value="true" />
-			 <Input id="tags" k_param="text" k_value="Tags: {this.tags}"
+			 selected="true" v_param="selected" v_value="true" />
+			 <Input id="tags" v_param="text" v_value="Tags: {this.tags}"
 			 enabled="false" aps_visible="false" />
 			 <Label label="Prefix:" aps_visible="false" />
-			 <Input id="prefix" affectsOnAttribute="text" k_param="prefix"
-			 k_value="" aps_visible="false" />
+			 <Input id="prefix" affectsOnAttribute="text" v_param="prefix"
+			 v_value="" aps_visible="false" />
 			 <fixedData />
 			 </feature>
 
 			 <feature showCheckbox="true" featureLabel="Admin Tags"
 			 customXmlId="irScreen" id="irAdminTags" selected="false"
-			 k_param="selected" k_value="false">
+			 v_param="selected" v_value="false">
 			 <Spacer />
 			 <Label label="Admin Tags" bold="true" />
 			 <CheckBox label="Item in list" enabled="false" id="irScreen"
-			 selected="true" k_param="selected" k_value="true" />
-			 <Input id="adminTags" k_param="text"
-			 k_value="Categories: {this.adminTags}" enabled="false"
+			 selected="true" v_param="selected" v_value="true" />
+			 <Input id="adminTags" v_param="text"
+			 v_value="Categories: {this.adminTags}" enabled="false"
 			 aps_visible="false" />
 			 <Label label="Prefix:" aps_visible="false" />
-			 <Input id="prefix" affectsOnAttribute="text" k_param="prefix"
-			 k_value="" aps_visible="false" />
+			 <Input id="prefix" affectsOnAttribute="text" v_param="prefix"
+			 v_value="" aps_visible="false" />
 			 <fixedData />
 			 </feature>
 
 			 <feature showCheckbox="true" featureLabel="Create Date"
 			 customXmlId="irScreen" id="irCreated" selected="false"
-			 k_param="selected" k_value="false">
+			 v_param="selected" v_value="false">
 			 <Spacer />
 			 <Label label="Creation Date" bold="true" />
 			 <CheckBox label="Item in list" enabled="false" id="irScreen"
-			 selected="true" k_param="selected" k_value="true" />
-			 <Input id="createDate" k_param="text"
-			 k_value="Created at: {formatDate(this.createdAt, 'DD/MM/YYY')}"
+			 selected="true" v_param="selected" v_value="true" />
+			 <Input id="createDate" v_param="text"
+			 v_value="Created at: {formatDate(this.createdAt, 'DD/MM/YYY')}"
 			 enabled="false" aps_visible="false" />
 			 <Label label="Prefix:" aps_visible="false" />
-			 <Input id="prefix" affectsOnAttribute="text" k_param="prefix"
-			 aps_visible="false" k_value="" />
+			 <Input id="prefix" affectsOnAttribute="text" v_param="prefix"
+			 aps_visible="false" v_value="" />
 			 <fixedData />
 			 </feature>
 
 			 <feature showCheckbox="true" featureLabel="Created By"
 			 customXmlId="irScreen" id="irCreatedBy" selected="false"
-			 k_param="selected" k_value="false">
+			 v_param="selected" v_value="false">
 			 <Spacer />
 			 <Label label="Created By" bold="true" />
 			 <CheckBox label="Item in list" enabled="false" id="irScreen"
-			 selected="true" k_param="selected" k_value="true" />
-			 <Input id="irCreatedBy" k_param="label"
-			 k_value="Created by: {this.userScreenName}" enabled="false"
+			 selected="true" v_param="selected" v_value="true" />
+			 <Input id="irCreatedBy" v_param="label"
+			 v_value="Created by: {this.userScreenName}" enabled="false"
 			 aps_visible="false" />
 			 <Label label="Prefix:" aps_visible="false" />
 			 <Input id="prefix" affectsOnAttribute="label"
-			 aps_visible="false" k_param="prefix" k_value="" />
+			 aps_visible="false" v_param="prefix" v_value="" />
 			 <fixedData />
 			 </feature-->
 	</features>
@@ -1287,7 +1287,7 @@ If you wish to select a different player for syndication, paste the relevant Pla
 	<!--===============================================================-->
 	<visual>
 		<theme id="dark" name="Dark">
-			<themeSkinPath>/content/uiconf/kaltura/kmc/appstudio/kdp3/eagle/skin/v3.5.9/skin.swf</themeSkinPath>
+			<themeSkinPath>/content/uiconf/vidiun/vmc/appstudio/vdp3/eagle/skin/v3.5.9/skin.swf</themeSkinPath>
 			<color1>0xDDDDDD</color1>
 			<color2>0xFFFFFF</color2>
 			<color3>0x333333</color3>
@@ -1296,7 +1296,7 @@ If you wish to select a different player for syndication, paste the relevant Pla
 			<font>Arial</font>
 		</theme>
 		<theme id="light" name="Light">
-			<themeSkinPath>/content/uiconf/kaltura/kmc/appstudio/kdp3/eagle/skin/v3.5.9/skin_light.swf</themeSkinPath>
+			<themeSkinPath>/content/uiconf/vidiun/vmc/appstudio/vdp3/eagle/skin/v3.5.9/skin_light.swf</themeSkinPath>
 			<color1>0x222222</color1>
 			<color2>0x000000</color2>
 			<color3>0xDDDDDD</color3>

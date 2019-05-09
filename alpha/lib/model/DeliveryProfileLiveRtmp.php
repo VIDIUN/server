@@ -6,7 +6,7 @@ class DeliveryProfileLiveRtmp extends DeliveryProfileLive {
 	
 	function __construct() {
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kF4MManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vF4MManifestRenderer';
 	}
 	
 	public function setEnforceRtmpe($v)
@@ -39,7 +39,7 @@ class DeliveryProfileLiveRtmp extends DeliveryProfileLive {
 	{
 		$renderer = parent::getRenderer($flavors);
 		$renderer->baseUrl = $this->baseUrl;
-		$renderer->streamType = kF4MManifestRenderer::PLAY_STREAM_TYPE_LIVE;
+		$renderer->streamType = vF4MManifestRenderer::PLAY_STREAM_TYPE_LIVE;
 		return $renderer;
 	}
 	
@@ -60,7 +60,7 @@ class DeliveryProfileLiveRtmp extends DeliveryProfileLive {
 	protected function buildRtmpLiveStreamFlavorsArray()
 	{
 		$entry = entryPeer::retrieveByPK($this->params->getEntryId());
-		if (in_array($entry->getSource(), LiveEntry::$kalturaLiveSourceTypes)) 
+		if (in_array($entry->getSource(), LiveEntry::$vidiunLiveSourceTypes)) 
 		{
 			/* @var $entry LiveEntry */
 			$flavors = array( 0 => $this->getFlavorAssetInfo($entry->getStreamName()) );

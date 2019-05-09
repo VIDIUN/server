@@ -16,7 +16,7 @@ class startwidgetsessionAction extends startsessionAction
 		return
 			array (
 				"display_name" => "startWidgetSession",
-				"desc" => "Starts new kaltura session for a specific widget id." ,
+				"desc" => "Starts new vidiun session for a specific widget id." ,
 				"in" => array (
 					"mandatory" => array (
 						"widget_id" 		=> array ("type" => "string", "desc" => ""),
@@ -26,7 +26,7 @@ class startwidgetsessionAction extends startsessionAction
 						)
 					),
 				"out" => array (
-					"ks" => array ("type" => "string", "desc" => ""),
+					"vs" => array ("type" => "string", "desc" => ""),
 					"partner_id" => array ("type" => "string", "desc" => ""),
 					"subp_id" => array ("type" => "string", "desc" => ""),
 					"uid" => array ("type" => "string", "desc" => "")
@@ -44,10 +44,10 @@ class startwidgetsessionAction extends startsessionAction
 	// we'll allow empty uid here - this is called from just any place in the web with now defined context
 	protected function allowEmptyPuser()	{		return true;	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		// make sure the secret fits the one in the partner's table
-		$ks_str = "";
+		$vs_str = "";
 		$expiry = $this->getP ( "expiry" , 86400 );
 		$widget_id = $this->getPM ( "widget_id" );
 
@@ -64,36 +64,36 @@ class startwidgetsessionAction extends startsessionAction
 		// TODO - see how to decide if the partner has a URL to redirect to
 
 
-		// according to the partner's policy and the widget's policy - define the privileges of the ks
-		// TODO - decide !! - for now only view - any kshow
+		// according to the partner's policy and the widget's policy - define the privileges of the vs
+		// TODO - decide !! - for now only view - any vshow
 		$privileges = "view:*,widget:1";
 
-		if ( $widget->getSecurityType() == widget::WIDGET_SECURITY_TYPE_FORCE_KS )
+		if ( $widget->getSecurityType() == widget::WIDGET_SECURITY_TYPE_FORCE_VS )
 		{
 			
-			if ( ! $this->ks )// the one from the defPartnerservices2Action
-				$this->addException( APIErrors::MISSING_KS );
+			if ( ! $this->vs )// the one from the defPartnerservices2Action
+				$this->addException( APIErrors::MISSING_VS );
 
-			$ks_str = $this->getP ( "ks" );
+			$vs_str = $this->getP ( "vs" );
 			$widget_partner_id = $widget->getPartnerId();
-			$res = kSessionUtils::validateKSession2 ( 1 ,$widget_partner_id  , $puser_id , $ks_str , $this->ks );
+			$res = vSessionUtils::validateVSession2 ( 1 ,$widget_partner_id  , $puser_id , $vs_str , $this->vs );
 			
 			if ( 0 >= $res )
 			{
 				// chaned this to be an exception rather than an error
-				$this->addException ( APIErrors::INVALID_KS , $ks_str , $res , ks::getErrorStr( $res ));
+				$this->addException ( APIErrors::INVALID_VS , $vs_str , $res , vs::getErrorStr( $res ));
 			}			
 		}
 		else
 		{
 			// 	the session will be for NON admins and privileges of view only
 			$puser_id = 0;
-			$result = kSessionUtils::createKSessionNoValidations ( $partner_id , $puser_id , $ks_str , $expiry , false , "" , $privileges );
+			$result = vSessionUtils::createVSessionNoValidations ( $partner_id , $puser_id , $vs_str , $expiry , false , "" , $privileges );
 		}
 
 		if ( $result >= 0 )
 		{
-			$this->addMsg ( "ks" , $ks_str );
+			$this->addMsg ( "vs" , $vs_str );
 			$this->addMsg ( "partner_id" , $partner_id );
 			$this->addMsg ( "subp_id" , $widget->getSubpId() );
 			$this->addMsg ( "uid" , "0" );

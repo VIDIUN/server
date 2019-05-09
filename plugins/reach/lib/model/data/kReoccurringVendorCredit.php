@@ -7,7 +7,7 @@
  * @subpackage model
  *
  */
-class kReoccurringVendorCredit extends kTimeRangeVendorCredit
+class vReoccurringVendorCredit extends vTimeRangeVendorCredit
 {
 	/**
 	 * @var VendorCreditRecurrenceFrequency
@@ -76,28 +76,28 @@ class kReoccurringVendorCredit extends kTimeRangeVendorCredit
 
 	public function calculateNextPeriodDates($startTime, $currentDate)
 	{
-		$endTime = kReachUtils::reachStrToTime('+1 ' . $this->getFrequency(), $startTime);
+		$endTime = vReachUtils::reachStrToTime('+1 ' . $this->getFrequency(), $startTime);
 		while ($endTime < $currentDate)
 		{
 			$startTime = $endTime;
-			$endTime = kReachUtils::reachStrToTime('+1 ' . $this->getFrequency(), $endTime);
+			$endTime = vReachUtils::reachStrToTime('+1 ' . $this->getFrequency(), $endTime);
 		}
-		$this->periodStartDate = kReachUtils::reachStrToTime("tomorrow" , $startTime);
+		$this->periodStartDate = vReachUtils::reachStrToTime("tomorrow" , $startTime);
 		$this->periodEndDate = min($endTime, $this->getToDate());
-		$this->periodEndDate = kReachUtils::reachStrToTime("tomorrow", $this->periodEndDate)-1;
+		$this->periodEndDate = vReachUtils::reachStrToTime("tomorrow", $this->periodEndDate)-1;
 	}
 
 	public function initiatePeriodDates($startTime, $currentDate)
 	{
-		$endTime = kReachUtils::reachStrToTime('+1 ' . $this->getFrequency(), $startTime);
+		$endTime = vReachUtils::reachStrToTime('+1 ' . $this->getFrequency(), $startTime);
 		while ($endTime < $currentDate)
 		{
 			$startTime = $endTime;
-			$endTime = kReachUtils::reachStrToTime('+1 ' . $this->getFrequency(), $endTime);
+			$endTime = vReachUtils::reachStrToTime('+1 ' . $this->getFrequency(), $endTime);
 		}
-		$this->periodStartDate = kReachUtils::reachStrToTime("today", $startTime);
+		$this->periodStartDate = vReachUtils::reachStrToTime("today", $startTime);
 		$this->periodEndDate = min($endTime, $this->getToDate());
-		$this->periodEndDate = kReachUtils::reachStrToTime("today", $this->periodEndDate) -1;
+		$this->periodEndDate = vReachUtils::reachStrToTime("today", $this->periodEndDate) -1;
 	}
 
 	public function setPeriodDates()
@@ -116,7 +116,7 @@ class kReoccurringVendorCredit extends kTimeRangeVendorCredit
 		$now = time();
 		if ($now < $this->periodStartDate || $now > $this->periodEndDate)
 		{
-			KalturaLog::debug("Current date [$now] is not in credit time range  [from - $this->periodStartDate , to - $this->periodEndDate] ");
+			VidiunLog::debug("Current date [$now] is not in credit time range  [from - $this->periodStartDate , to - $this->periodEndDate] ");
 			return 0;
 		}
 
@@ -141,7 +141,7 @@ class kReoccurringVendorCredit extends kTimeRangeVendorCredit
 
 		if ($now < $this->periodStartDate || $now > $this->periodEndDate)
 		{
-			KalturaLog::debug("Current date [$now] is not in frequency credit time Range cycle [from - $this->periodStartDate to - $this->periodEndDate] ");
+			VidiunLog::debug("Current date [$now] is not in frequency credit time Range cycle [from - $this->periodStartDate to - $this->periodEndDate] ");
 			return false;
 		}
 		return true;

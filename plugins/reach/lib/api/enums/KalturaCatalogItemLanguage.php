@@ -3,31 +3,31 @@
  * @package plugins.reach
  * @subpackage api.enum
  */
-class KalturaCatalogItemLanguage extends KalturaStringEnum
+class VidiunCatalogItemLanguage extends VidiunStringEnum
 {
-	const EN = KalturaLanguage::EN;
-	const EN_US = KalturaLanguage::EN_US;
-	const EN_GB = KalturaLanguage::EN_GB;
-	const NL = KalturaLanguage::NL;
-	const FR = KalturaLanguage::FR;
-	const DE = KalturaLanguage::DE;
-	const IT = KalturaLanguage::IT;
-	const ES = KalturaLanguage::ES;
-	const AR = KalturaLanguage::AR;
-	const ZH = KalturaLanguage::ZH;
-	const CMN = KalturaLanguage::CMN;
-	const YUE = KalturaLanguage::YUE;
-	const HE = KalturaLanguage::HE;
-	const HI = KalturaLanguage::HI;
-	const JA = KalturaLanguage::JA;
-	const KO = KalturaLanguage::KO;
-	const PT = KalturaLanguage::PT;
-	const RU = KalturaLanguage::RU;
-	const TR = KalturaLanguage::TR;
-	const TH = KalturaLanguage::TH;
-	const SV = KalturaLanguage::SV;
-	const DA = KalturaLanguage::DA;
-	const NO = KalturaLanguage::NO;
-	const FI = KalturaLanguage::FI;
-	const IS = KalturaLanguage::IS;
+	const EN = VidiunLanguage::EN;
+	const EN_US = VidiunLanguage::EN_US;
+	const EN_GB = VidiunLanguage::EN_GB;
+	const NL = VidiunLanguage::NL;
+	const FR = VidiunLanguage::FR;
+	const DE = VidiunLanguage::DE;
+	const IT = VidiunLanguage::IT;
+	const ES = VidiunLanguage::ES;
+	const AR = VidiunLanguage::AR;
+	const ZH = VidiunLanguage::ZH;
+	const CMN = VidiunLanguage::CMN;
+	const YUE = VidiunLanguage::YUE;
+	const HE = VidiunLanguage::HE;
+	const HI = VidiunLanguage::HI;
+	const JA = VidiunLanguage::JA;
+	const KO = VidiunLanguage::KO;
+	const PT = VidiunLanguage::PT;
+	const RU = VidiunLanguage::RU;
+	const TR = VidiunLanguage::TR;
+	const TH = VidiunLanguage::TH;
+	const SV = VidiunLanguage::SV;
+	const DA = VidiunLanguage::DA;
+	const NO = VidiunLanguage::NO;
+	const FI = VidiunLanguage::FI;
+	const IS = VidiunLanguage::IS;
 }

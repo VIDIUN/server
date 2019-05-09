@@ -4,17 +4,17 @@
  * @subpackage lib.entitlement
  */
 
-class kElasticPrivacyContextEntitlementDecorator extends kElasticCategoryEntitlementDecorator
+class vElasticPrivacyContextEntitlementDecorator extends vElasticCategoryEntitlementDecorator
 {
 	public static function getEntitlementCondition(array $params = array(), $fieldPrefix = '')
 	{
-		$privacyContexts = kEntitlementUtils::getKsPrivacyContext();
+		$privacyContexts = vEntitlementUtils::getVsPrivacyContext();
 		if(!is_array($privacyContexts))
 		{
 			$privacyContexts = array($privacyContexts);
 		}
 
 		$privacyContexts = array_map('elasticSearchUtils::formatSearchTerm', $privacyContexts);
-		return new kESearchTermsQuery(ESearchCategoryFieldName::PRIVACY_CONTEXTS, $privacyContexts);
+		return new vESearchTermsQuery(ESearchCategoryFieldName::PRIVACY_CONTEXTS, $privacyContexts);
 	}
 }

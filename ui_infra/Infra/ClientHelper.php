@@ -40,23 +40,23 @@ class Infra_ClientHelper
 		return $settings->curlTimeout;
 	}
 
-	public static function getKs()
+	public static function getVs()
 	{
 		if (Infra_AuthHelper::getAuthInstance()->hasIdentity())
 		{
-			$ks = Infra_AuthHelper::getAuthInstance()->getIdentity()->getKs();
+			$vs = Infra_AuthHelper::getAuthInstance()->getIdentity()->getVs();
 		}
 		else
 		{
-			$ks = null;
+			$vs = null;
 		}
 
-		return $ks;
+		return $vs;
 	}
 
 	/**
 	 *
-	 * @return Kaltura_Client_Client
+	 * @return Vidiun_Client_Client
 	 */
 	public static function getClient()
 	{
@@ -65,12 +65,12 @@ class Infra_ClientHelper
 			return self::$client;
 		}
 
-		if (!class_exists('Kaltura_Client_Client'))
-			throw new Infra_Exception('Kaltura client not found, maybe it wasn\'t generated', Infra_Exception::ERROR_CODE_MISSING_CLIENT_LIB);
+		if (!class_exists('Vidiun_Client_Client'))
+			throw new Infra_Exception('Vidiun client not found, maybe it wasn\'t generated', Infra_Exception::ERROR_CODE_MISSING_CLIENT_LIB);
 
-		$ks = self::getKs();
+		$vs = self::getVs();
 
-		$config = new Kaltura_Client_Configuration();
+		$config = new Vidiun_Client_Configuration();
 		$config->serviceUrl = self::getServiceUrl();
 		$config->curlTimeout = self::getCurlTimeout();
 		$config->setLogger(new Infra_ClientLoggingProxy());
@@ -91,9 +91,9 @@ class Infra_ClientHelper
 				$config->startZendDebuggerSession = true;
 		}
 
-		$client = new Kaltura_Client_Client($config);
-		$client->setClientTag('Kaltura-' . $settings->applicationName);
-		$client->setKs($ks);
+		$client = new Vidiun_Client_Client($config);
+		$client->setClientTag('Vidiun-' . $settings->applicationName);
+		$client->setVs($vs);
 		self::$client = $client;
 
 		return $client;

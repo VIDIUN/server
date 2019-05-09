@@ -4,7 +4,7 @@
  * @package plugins.dropFolder
  * @subpackage api.errors
  */
-class KalturaDropFolderErrors extends KalturaErrors
+class VidiunDropFolderErrors extends VidiunErrors
 {
 	
 	const DROP_FOLDER_FILE_ALREADY_EXISTS = "DROP_FOLDER_FILE_ALREADY_EXISTS;FOLDER_ID,FILE_NAME;Drop folder id [@FOLDER_ID@] already has a file with name [@FILE_NAME@]";

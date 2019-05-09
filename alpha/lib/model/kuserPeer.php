@@ -1,20 +1,20 @@
 <?php
 /**
- * Subclass for performing query and update operations on the 'kuser' table.
+ * Subclass for performing query and update operations on the 'vuser' table.
  *
  * 
  *
  * @package Core
  * @subpackage model
  */ 
-class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
+class vuserPeer extends BasevuserPeer implements IRelatedObjectPeer
 {	
-	const KALTURA_NEW_USER_EMAIL = 120;
-	const KALTURA_NEW_EXISTING_USER_EMAIL = 121;
-	const KALTURA_NEW_USER_EMAIL_TO_ADMINS = 122;
-	const KALTURA_NEW_USER_ADMIN_CONSOLE_EMAIL = 123;
-	const KALTURA_NEW_EXISTING_USER_ADMIN_CONSOLE_EMAIL = 124;
-	const KALTURA_NEW_USER_ADMIN_CONSOLE_EMAIL_TO_ADMINS = 125;
+	const VIDIUN_NEW_USER_EMAIL = 120;
+	const VIDIUN_NEW_EXISTING_USER_EMAIL = 121;
+	const VIDIUN_NEW_USER_EMAIL_TO_ADMINS = 122;
+	const VIDIUN_NEW_USER_ADMIN_CONSOLE_EMAIL = 123;
+	const VIDIUN_NEW_EXISTING_USER_ADMIN_CONSOLE_EMAIL = 124;
+	const VIDIUN_NEW_USER_ADMIN_CONSOLE_EMAIL_TO_ADMINS = 125;
 	const MAX_PUSER_LENGTH = 100;
 
 	private static $s_default_count_limit = 301;
@@ -26,41 +26,41 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 			self::$s_criteria_filter = new criteriaFilter ();
 		}
 		
-		$c = KalturaCriteria::create(kuserPeer::OM_CLASS);
-		$c->addAnd ( kuserPeer::STATUS, KuserStatus::DELETED, KalturaCriteria::NOT_EQUAL);
+		$c = VidiunCriteria::create(vuserPeer::OM_CLASS);
+		$c->addAnd ( vuserPeer::STATUS, VuserStatus::DELETED, VidiunCriteria::NOT_EQUAL);
 		self::$s_criteria_filter->setFilter ( $c );
 	}
 	
-	public static function getKuserByScreenName( $screen_name  )
+	public static function getVuserByScreenName( $screen_name  )
 	{
 		$c = new Criteria();
-		$c->add ( kuserPeer::SCREEN_NAME , $screen_name );
+		$c->add ( vuserPeer::SCREEN_NAME , $screen_name );
 		return self::doSelectOne( $c ); 
 	}
 	
 	/**
 	 * @param int $partnerId
 	 * @param string $puserId
-	 * @param bool $ignorePuserKuser
-	 * @return kuser
+	 * @param bool $ignorePuserVuser
+	 * @return vuser
 	 */
-	public static function getKuserByPartnerAndUid($partnerId, $puserId, $ignorePuserKuser = false)
+	public static function getVuserByPartnerAndUid($partnerId, $puserId, $ignorePuserVuser = false)
 	{
 		$puserId = self::getValidPuserStr($puserId);
 
-		if(!$ignorePuserKuser && !kCurrentContext::isApiV3Context())
+		if(!$ignorePuserVuser && !vCurrentContext::isApiV3Context())
 		{
-			$puserKuser = PuserKuserPeer::retrieveByPartnerAndUid($partnerId, 0, $puserId, true);
-			if($puserKuser)
-				return $puserKuser->getKuser();
+			$puserVuser = PuserVuserPeer::retrieveByPartnerAndUid($partnerId, 0, $puserId, true);
+			if($puserVuser)
+				return $puserVuser->getVuser();
 		}
 		
 		$c = new Criteria();
 		$c->add(self::PARTNER_ID, $partnerId);
 		$c->add(self::PUSER_ID, $puserId);
 
-		// in case of more than one deleted kusers - get the last one
-		$c->addDescendingOrderByColumn(kuserPeer::UPDATED_AT);
+		// in case of more than one deleted vusers - get the last one
+		$c->addDescendingOrderByColumn(vuserPeer::UPDATED_AT);
 
 		return self::doSelectOne($c);
 	}
@@ -74,9 +74,9 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 	/**
 	 * @param int $partner_id
 	 * @param array $puser_ids
-	 * @return array<kuser>
+	 * @return array<vuser>
 	 */
-	public static function getKuserByPartnerAndUids($partner_id, array $puser_ids)
+	public static function getVuserByPartnerAndUids($partner_id, array $puser_ids)
 	{
 		$c = new Criteria();
 		$c->add(self::PARTNER_ID, $partner_id);
@@ -84,83 +84,83 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 		return self::doSelect($c);
 	}
 	
-	public static function getActiveKuserByPartnerAndUid($partner_id , $puser_id)
+	public static function getActiveVuserByPartnerAndUid($partner_id , $puser_id)
 	{
 		if ($puser_id == '')
 			return null;
 			
 		$c = new Criteria();
-		$c->add(self::STATUS, KuserStatus::ACTIVE);
+		$c->add(self::STATUS, VuserStatus::ACTIVE);
 		$c->add(self::PARTNER_ID, $partner_id);
 		$c->add(self::PUSER_ID, $puser_id);
 		return self::doSelectOne($c);			
 	}
 
-	public static function createKuserForPartner($partner_id, $puser_id, $is_admin = false)
+	public static function createVuserForPartner($partner_id, $puser_id, $is_admin = false)
 	{
 		$puser_id = self::getValidPuserStr($puser_id);
-		$kuser = kuserPeer::getKuserForPartner($partner_id, $puser_id);
-		if(!$kuser)
+		$vuser = vuserPeer::getVuserForPartner($partner_id, $puser_id);
+		if(!$vuser)
 		{
 			$lockKey = "user_add_" . $partner_id . $puser_id;
-			$kuser = kLock::runLocked($lockKey, array('kuserPeer', 'createUniqueKuserForPartner'), array($partner_id, $puser_id, $is_admin));
+			$vuser = vLock::runLocked($lockKey, array('vuserPeer', 'createUniqueVuserForPartner'), array($partner_id, $puser_id, $is_admin));
 		}
-		return $kuser;
+		return $vuser;
 	}
 
-	public static function createUniqueKuserForPartner($partner_id, $puser_id, $is_admin = false)
+	public static function createUniqueVuserForPartner($partner_id, $puser_id, $is_admin = false)
 	{
-		$kuser = kuserPeer::getKuserForPartner($partner_id, $puser_id);
-		if (!$kuser)
-			return kuserPeer::createNewUser($partner_id, $puser_id, $is_admin);
+		$vuser = vuserPeer::getVuserForPartner($partner_id, $puser_id);
+		if (!$vuser)
+			return vuserPeer::createNewUser($partner_id, $puser_id, $is_admin);
 
-		return $kuser;
+		return $vuser;
 	}
 	
 	public static function createNewUser($partner_id, $puser_id, $is_admin)
 	{
-		$kuser = new kuser();
-		$kuser->setPuserId($puser_id);
-		$kuser->setScreenName($puser_id);
-		$kuser->setFirstName($puser_id);
-		$kuser->setPartnerId($partner_id);
-		$kuser->setStatus(KuserStatus::ACTIVE);
-		$kuser->setIsAdmin($is_admin);
-		$kuser->save();
-		return $kuser;
+		$vuser = new vuser();
+		$vuser->setPuserId($puser_id);
+		$vuser->setScreenName($puser_id);
+		$vuser->setFirstName($puser_id);
+		$vuser->setPartnerId($partner_id);
+		$vuser->setStatus(VuserStatus::ACTIVE);
+		$vuser->setIsAdmin($is_admin);
+		$vuser->save();
+		return $vuser;
 	}
 
 	/**
-	 * Replaces 'getKuserByPartnerAndUid' and doesn't use its default conditions.
+	 * Replaces 'getVuserByPartnerAndUid' and doesn't use its default conditions.
 	 * @param string $partnerId
 	 * @param string $puserId
 	 */
-	protected static function getKuserForPartner($partnerId, $puserId) {
+	protected static function getVuserForPartner($partnerId, $puserId) {
 		self::setUseCriteriaFilter(false);
 		$c = new Criteria();
 		$c->add(self::PARTNER_ID, $partnerId);
 		$c->add(self::PUSER_ID, $puserId);
-		$c->addAnd ( kuserPeer::STATUS, KuserStatus::DELETED, KalturaCriteria::NOT_EQUAL);
+		$c->addAnd ( vuserPeer::STATUS, VuserStatus::DELETED, VidiunCriteria::NOT_EQUAL);
 		
-		$kuser = self::doSelectOne($c);
+		$vuser = self::doSelectOne($c);
 		self::setUseCriteriaFilter(true);
-		return $kuser;
+		return $vuser;
 	}
 	
 	/**
 	 * This function returns a pager object holding the given user's favorite users
 	 *
-	 * @param int $kuserId = the requested user
+	 * @param int $vuserId = the requested user
 	 * @param int $privacy = the privacy filter
-	 * @param int $pageSize = number of kshows in each page
+	 * @param int $pageSize = number of vshows in each page
 	 * @param int $page = the requested page
 	 * @return the pager object
 	 */
-	public static function getUserFavorites($kuserId, $privacy, $pageSize, $page)
+	public static function getUserFavorites($vuserId, $privacy, $pageSize, $page)
 	{
 		$c = new Criteria();
-		$c->addJoin(kuserPeer::ID, favoritePeer::SUBJECT_ID, Criteria::INNER_JOIN);
-		$c->add(favoritePeer::KUSER_ID, $kuserId);
+		$c->addJoin(vuserPeer::ID, favoritePeer::SUBJECT_ID, Criteria::INNER_JOIN);
+		$c->add(favoritePeer::VUSER_ID, $vuserId);
 		$c->add(favoritePeer::SUBJECT_TYPE, favorite::SUBJECT_TYPE_USER);
 		$c->add(favoritePeer::PRIVACY, $privacy);
 		$c->setDistinct();
@@ -171,9 +171,9 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 			$c->addOr( favoritePeer::PRIVACY, favorite::PRIVACY_TYPE_WORLD );
 		}
 			
-		$c->addAscendingOrderByColumn(kuserPeer::SCREEN_NAME);
+		$c->addAscendingOrderByColumn(vuserPeer::SCREEN_NAME);
 		
-	    $pager = new sfPropelPager('kuser', $pageSize);
+	    $pager = new sfPropelPager('vuser', $pageSize);
 	    $pager->setCriteria($c);
 	    $pager->setPage($page);
 	    $pager->init();
@@ -183,19 +183,19 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 
 	/**
 	 * This function returns a pager object holding the given user's favorite entries
-	 * each entry holds the kuser object of its host.
+	 * each entry holds the vuser object of its host.
 	 *
-	 * @param int $kuserId = the requested user
+	 * @param int $vuserId = the requested user
 	 * @param int $privacy = the privacy filter
-	 * @param int $pageSize = number of kshows in each page
+	 * @param int $pageSize = number of vshows in each page
 	 * @param int $page = the requested page
 	 * @return the pager object
 	 */
-	public static function getUserFans($kuserId, $privacy, $pageSize, $page)
+	public static function getUserFans($vuserId, $privacy, $pageSize, $page)
 	{
 		$c = new Criteria();
-		$c->addJoin(kuserPeer::ID, favoritePeer::KUSER_ID, Criteria::INNER_JOIN);
-		$c->add(favoritePeer::SUBJECT_ID, $kuserId);
+		$c->addJoin(vuserPeer::ID, favoritePeer::VUSER_ID, Criteria::INNER_JOIN);
+		$c->add(favoritePeer::SUBJECT_ID, $vuserId);
 		$c->add(favoritePeer::SUBJECT_TYPE, favorite::SUBJECT_TYPE_USER);
 		$c->add(favoritePeer::PRIVACY, $privacy);
 		
@@ -207,9 +207,9 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 			$c->addOr( favoritePeer::PRIVACY, favorite::PRIVACY_TYPE_WORLD );
 		}
 			
-		$c->addAscendingOrderByColumn(kuserPeer::SCREEN_NAME);
+		$c->addAscendingOrderByColumn(vuserPeer::SCREEN_NAME);
 		
-	    $pager = new sfPropelPager('kuser', $pageSize);
+	    $pager = new sfPropelPager('vuser', $pageSize);
 	    $pager->setCriteria($c);
 	    $pager->setPage($page);
 	    $pager->init();
@@ -222,19 +222,19 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 	 * sorted by a given sort order.
 	 * the $mine_flag param decides if to return favorite people or fans
 	 */
-	public static function getUserFavoritesOrderedPager( $order, $pageSize, $page, $kuserId, $mine_flag )
+	public static function getUserFavoritesOrderedPager( $order, $pageSize, $page, $vuserId, $mine_flag )
 	{
 		$c = new Criteria();
 		
 		if ( $mine_flag ) 
 		{
-			$c->addJoin(kuserPeer::ID, favoritePeer::SUBJECT_ID, Criteria::INNER_JOIN);
-			$c->add(favoritePeer::KUSER_ID, $kuserId); 
+			$c->addJoin(vuserPeer::ID, favoritePeer::SUBJECT_ID, Criteria::INNER_JOIN);
+			$c->add(favoritePeer::VUSER_ID, $vuserId); 
 		}
 		else 
 		{
-			$c->addJoin(kuserPeer::ID, favoritePeer::KUSER_ID, Criteria::INNER_JOIN);
-			$c->add(favoritePeer::SUBJECT_ID, $kuserId); 
+			$c->addJoin(vuserPeer::ID, favoritePeer::VUSER_ID, Criteria::INNER_JOIN);
+			$c->add(favoritePeer::SUBJECT_ID, $vuserId); 
 		}
 			
 		$c->add(favoritePeer::SUBJECT_TYPE, favorite::SUBJECT_TYPE_USER);
@@ -251,22 +251,22 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 		switch( $order )
 		{
 			
-			case kuser::KUSER_SORT_MOST_VIEWED: $c->addDescendingOrderByColumn(kuserPeer::VIEWS);  break;
-			case kuser::KUSER_SORT_MOST_RECENT: $c->addAscendingOrderByColumn(kuserPeer::CREATED_AT);  break;
-			case kuser::KUSER_SORT_NAME: $c->addAscendingOrderByColumn(kuserPeer::SCREEN_NAME); break;
-			case kuser::KUSER_SORT_AGE: $c->addAscendingOrderByColumn(kuserPeer::DATE_OF_BIRTH); break;
-			case kuser::KUSER_SORT_COUNTRY: $c->addAscendingOrderByColumn(kuserPeer::COUNTRY); break;
-			case kuser::KUSER_SORT_CITY: $c->addAscendingOrderByColumn(kuserPeer::CITY); break;
-			case kuser::KUSER_SORT_GENDER: $c->addAscendingOrderByColumn(kuserPeer::GENDER); break;		
-			case kuser::KUSER_SORT_PRODUCED_KSHOWS: $c->addDescendingOrderByColumn(kuserPeer::PRODUCED_KSHOWS); break;
+			case vuser::VUSER_SORT_MOST_VIEWED: $c->addDescendingOrderByColumn(vuserPeer::VIEWS);  break;
+			case vuser::VUSER_SORT_MOST_RECENT: $c->addAscendingOrderByColumn(vuserPeer::CREATED_AT);  break;
+			case vuser::VUSER_SORT_NAME: $c->addAscendingOrderByColumn(vuserPeer::SCREEN_NAME); break;
+			case vuser::VUSER_SORT_AGE: $c->addAscendingOrderByColumn(vuserPeer::DATE_OF_BIRTH); break;
+			case vuser::VUSER_SORT_COUNTRY: $c->addAscendingOrderByColumn(vuserPeer::COUNTRY); break;
+			case vuser::VUSER_SORT_CITY: $c->addAscendingOrderByColumn(vuserPeer::CITY); break;
+			case vuser::VUSER_SORT_GENDER: $c->addAscendingOrderByColumn(vuserPeer::GENDER); break;		
+			case vuser::VUSER_SORT_PRODUCED_VSHOWS: $c->addDescendingOrderByColumn(vuserPeer::PRODUCED_VSHOWS); break;
 			
-			default: $c->addAscendingOrderByColumn(kuserPeer::SCREEN_NAME);
+			default: $c->addAscendingOrderByColumn(vuserPeer::SCREEN_NAME);
 		}
 		
 		$c->setDistinct();
 		
 		
-	    $pager = new sfPropelPager('kuser', $pageSize);
+	    $pager = new sfPropelPager('vuser', $pageSize);
 	    $pager->setCriteria($c);
 	    $pager->setPage($page);
 	    $pager->init();
@@ -285,20 +285,20 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 		switch( $order )
 		{
 			
-			case kuser::KUSER_SORT_MOST_VIEWED: $c->addDescendingOrderByColumn(kuserPeer::VIEWS);  break;
-			case kuser::KUSER_SORT_MOST_RECENT: $c->addAscendingOrderByColumn(kuserPeer::CREATED_AT);  break;
-			case kuser::KUSER_SORT_NAME: $c->addAscendingOrderByColumn(kuserPeer::SCREEN_NAME); break;
-			case kuser::KUSER_SORT_AGE: $c->addAscendingOrderByColumn(kuserPeer::DATE_OF_BIRTH); break;
-			case kuser::KUSER_SORT_COUNTRY: $c->addAscendingOrderByColumn(kuserPeer::COUNTRY); break;
-			case kuser::KUSER_SORT_CITY: $c->addAscendingOrderByColumn(kuserPeer::CITY); break;
-			case kuser::KUSER_SORT_GENDER: $c->addAscendingOrderByColumn(kuserPeer::GENDER); break;		
-			case kuser::KUSER_SORT_MOST_ENTRIES: $c->addDescendingOrderByColumn(kuserPeer::ENTRIES); break;		
-			case kuser::KUSER_SORT_MOST_FANS: $c->addDescendingOrderByColumn(kuserPeer::FANS); break;		
+			case vuser::VUSER_SORT_MOST_VIEWED: $c->addDescendingOrderByColumn(vuserPeer::VIEWS);  break;
+			case vuser::VUSER_SORT_MOST_RECENT: $c->addAscendingOrderByColumn(vuserPeer::CREATED_AT);  break;
+			case vuser::VUSER_SORT_NAME: $c->addAscendingOrderByColumn(vuserPeer::SCREEN_NAME); break;
+			case vuser::VUSER_SORT_AGE: $c->addAscendingOrderByColumn(vuserPeer::DATE_OF_BIRTH); break;
+			case vuser::VUSER_SORT_COUNTRY: $c->addAscendingOrderByColumn(vuserPeer::COUNTRY); break;
+			case vuser::VUSER_SORT_CITY: $c->addAscendingOrderByColumn(vuserPeer::CITY); break;
+			case vuser::VUSER_SORT_GENDER: $c->addAscendingOrderByColumn(vuserPeer::GENDER); break;		
+			case vuser::VUSER_SORT_MOST_ENTRIES: $c->addDescendingOrderByColumn(vuserPeer::ENTRIES); break;		
+			case vuser::VUSER_SORT_MOST_FANS: $c->addDescendingOrderByColumn(vuserPeer::FANS); break;		
 			
-			default: $c->addAscendingOrderByColumn(kuserPeer::SCREEN_NAME);
+			default: $c->addAscendingOrderByColumn(vuserPeer::SCREEN_NAME);
 		}
 		
-		$pager = new sfPropelPager('kuser', $pageSize);
+		$pager = new sfPropelPager('vuser', $pageSize);
 	    $pager->setCriteria($c);
 	    $pager->setPage($page);
 	    $pager->init();
@@ -351,7 +351,7 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 	{
 		$c = clone $criteria;
 		
-		if($c instanceof KalturaCriteria)
+		if($c instanceof VidiunCriteria)
 		{ 
 			$c->applyFilters();
 			$criteria->setRecordsCount($c->getRecordsCount());
@@ -368,19 +368,19 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 	
 	/**
 	 * @param string $email
-	 * @return kuser
+	 * @return vuser
 	 */
-	public static function getKuserByEmail($email, $partnerId = null)
+	public static function getVuserByEmail($email, $partnerId = null)
 	{
 		$c = new Criteria();
-		$c->add (kuserPeer::EMAIL, $email);
+		$c->add (vuserPeer::EMAIL, $email);
 		
 		if(!is_null($partnerId))
-			$c->add (kuserPeer::PARTNER_ID, $partnerId);
+			$c->add (vuserPeer::PARTNER_ID, $partnerId);
 			
-		$kuser = kuserPeer::doSelectOne( $c );
+		$vuser = vuserPeer::doSelectOne( $c );
 		
-		return $kuser;
+		return $vuser;
 		
 	}
 	
@@ -390,72 +390,72 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 	 */
 	public static function getEmailById($id)
 	{
-		$kuser = kuserPeer::retrieveByPK($id);
-		return $kuser->getEmail();
+		$vuser = vuserPeer::retrieveByPK($id);
+		return $vuser->getEmail();
 	}
 
 	/**
 	 * @param string $email
 	 * @param string $password
 	 * @param int $partnerId
-	 * @return kuser
+	 * @return vuser
 	 */
 	public static function userLogin($puserId, $password, $partnerId)
 	{
-		$kuser = self::getKuserByPartnerAndUid($partnerId , $puserId);
-		if (!$kuser) {
-			throw new kUserException('', kUserException::USER_NOT_FOUND);
+		$vuser = self::getVuserByPartnerAndUid($partnerId , $puserId);
+		if (!$vuser) {
+			throw new vUserException('', vUserException::USER_NOT_FOUND);
 		}
 
-		if (!$kuser->getLoginDataId()) {
-			throw new kUserException('', kUserException::LOGIN_DATA_NOT_FOUND);
+		if (!$vuser->getLoginDataId()) {
+			throw new vUserException('', vUserException::LOGIN_DATA_NOT_FOUND);
 		}
 		
-		$kuser = UserLoginDataPeer::userLoginByDataId($kuser->getLoginDataId(), $password, $partnerId);
+		$vuser = UserLoginDataPeer::userLoginByDataId($vuser->getLoginDataId(), $password, $partnerId);
 					
-		return $kuser;
+		return $vuser;
 	}
 	
 	
 	public static function getByLoginDataAndPartner($loginDataId, $partnerId)
 	{
 		$c = new Criteria();
-		$c->addAnd(kuserPeer::LOGIN_DATA_ID, $loginDataId);
-		$c->addAnd(kuserPeer::PARTNER_ID, $partnerId);
-		$c->addAnd(kuserPeer::STATUS, KuserStatus::DELETED, Criteria::NOT_EQUAL);
-		$kuser = self::doSelectOne($c);
-		if (!$kuser) {
+		$c->addAnd(vuserPeer::LOGIN_DATA_ID, $loginDataId);
+		$c->addAnd(vuserPeer::PARTNER_ID, $partnerId);
+		$c->addAnd(vuserPeer::STATUS, VuserStatus::DELETED, Criteria::NOT_EQUAL);
+		$vuser = self::doSelectOne($c);
+		if (!$vuser) {
 			return false;
 		}
-		return $kuser;
+		return $vuser;
 	}
 	
 	
 	/**
-	 * Adds a new kuser and user_login_data records as needed
-	 * @param kuser $user
+	 * Adds a new vuser and user_login_data records as needed
+	 * @param vuser $user
 	 * @param string $password
 	 * @param bool $checkPasswordStructure
-	 * @throws kUserException::USER_NOT_FOUND
-	 * @throws kUserException::USER_ALREADY_EXISTS
-	 * @throws kUserException::INVALID_EMAIL
-	 * @throws kUserException::INVALID_PARTNER
-	 * @throws kUserException::ADMIN_LOGIN_USERS_QUOTA_EXCEEDED
-	 * @throws kUserException::LOGIN_ID_ALREADY_USED
-	 * @throws kUserException::PASSWORD_STRUCTURE_INVALID
-	 * @throws kPermissionException::ROLE_ID_MISSING
-	 * @throws kPermissionException::ONLY_ONE_ROLE_PER_USER_ALLOWED
+	 * @throws vUserException::USER_NOT_FOUND
+	 * @throws vUserException::USER_ALREADY_EXISTS
+	 * @throws vUserException::INVALID_EMAIL
+	 * @throws vUserException::INVALID_PARTNER
+	 * @throws vUserException::ADMIN_LOGIN_USERS_QUOTA_EXCEEDED
+	 * @throws vUserException::LOGIN_ID_ALREADY_USED
+	 * @throws vUserException::PASSWORD_STRUCTURE_INVALID
+	 * @throws vPermissionException::ROLE_ID_MISSING
+	 * @throws vPermissionException::ONLY_ONE_ROLE_PER_USER_ALLOWED
 	 */
-	public static function addUser(kuser $user, $password = null, $checkPasswordStructure = true, $sendEmail = null)
+	public static function addUser(vuser $user, $password = null, $checkPasswordStructure = true, $sendEmail = null)
 	{
 		if (!$user->getPuserId()) {
-			throw new kUserException('', kUserException::USER_ID_MISSING);
+			throw new vUserException('', vUserException::USER_ID_MISSING);
 		}
 		
 		// check if user with the same partner and puserId already exists		
-		$existingUser = kuserPeer::getKuserByPartnerAndUid($user->getPartnerId(), $user->getPuserId());
+		$existingUser = vuserPeer::getVuserByPartnerAndUid($user->getPartnerId(), $user->getPuserId());
 		if ($existingUser) {
-			throw new kUserException('', kUserException::USER_ALREADY_EXISTS);
+			throw new vUserException('', vUserException::USER_ALREADY_EXISTS);
 		}
 		
 		// check if roles are valid - may throw exceptions
@@ -475,7 +475,7 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 		}
 		
 		if (is_null($user->getStatus())) {
-			$user->setStatus(KuserStatus::ACTIVE);
+			$user->setStatus(VuserStatus::ACTIVE);
 		}
 		
 		// if password is set, user should be able to login to the system - add a user_login_data record
@@ -490,13 +490,13 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 	
 	
 	
-	public static function sendNewUserMailToAdmins(kuser $user)
+	public static function sendNewUserMailToAdmins(vuser $user)
 	{
 		$partnerId = $user->getPartnerId();
 		$creatorUserName = 'Unknown';
-		if (!is_null(kCurrentContext::$ks_uid))
+		if (!is_null(vCurrentContext::$vs_uid))
 		{
-			$creatorUser = kuserPeer::getKuserByPartnerAndUid($partnerId, kCurrentContext::$ks_uid);
+			$creatorUser = vuserPeer::getVuserByPartnerAndUid($partnerId, vCurrentContext::$vs_uid);
 			if ($creatorUser) {
 				$creatorUserName = $creatorUser->getFullName();
 			}
@@ -509,17 +509,17 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 		$bodyParams = null;
 
 
-		$mailType = self::KALTURA_NEW_USER_EMAIL_TO_ADMINS;
+		$mailType = self::VIDIUN_NEW_USER_EMAIL_TO_ADMINS;
 		
 		//If the new user partner is -2 (admin console) then it is a admin console user		
 		if($partnerId == Partner::ADMIN_CONSOLE_PARTNER_ID)
 		{
-			$mailType = self::KALTURA_NEW_USER_ADMIN_CONSOLE_EMAIL_TO_ADMINS;
+			$mailType = self::VIDIUN_NEW_USER_ADMIN_CONSOLE_EMAIL_TO_ADMINS;
 		}
 				
 		// get all partner administrators
-		$adminKusers = Partner::getAdminLoginUsersList($partnerId);
-		foreach ($adminKusers as $admin)
+		$adminVusers = Partner::getAdminLoginUsersList($partnerId);
+		foreach ($adminVusers as $admin)
 		{
 			// don't send mail to the created user
 			if ($admin->getId() == $user->getId())
@@ -545,14 +545,14 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 				}
 				
 				// add mail job
-				kJobsManager::addMailJob(
+				vJobsManager::addMailJob(
 					null, 
 					0, 
 					$partnerId, 
 					$mailType, 
-					kMailJobData::MAIL_PRIORITY_NORMAL, 
-					kConf::get ("partner_registration_confirmation_email" ), 
-					kConf::get ("partner_registration_confirmation_name" ), 
+					vMailJobData::MAIL_PRIORITY_NORMAL, 
+					vConf::get ("partner_registration_confirmation_email" ), 
+					vConf::get ("partner_registration_confirmation_name" ), 
 					$admin->getEmail(), 
 					$bodyParams
 				);
@@ -561,16 +561,16 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 	}
 	
 	
-	public static function sendNewUserMail(kuser $user, $existingUser)
+	public static function sendNewUserMail(vuser $user, $existingUser)
 	{
 		// setup parameters
 		$partnerId = $user->getPartnerId();
 		$userName = $user->getFullName();
 		if (!$userName) { $userName = $user->getPuserId(); }
 		$creatorUserName = 'Unknown';
-		if (!is_null(kCurrentContext::$ks_uid))
+		if (!is_null(vCurrentContext::$vs_uid))
 		{
-			$creatorUser = kuserPeer::getKuserByPartnerAndUid($partnerId, kCurrentContext::$ks_uid);
+			$creatorUser = vuserPeer::getVuserByPartnerAndUid($partnerId, vCurrentContext::$vs_uid);
 			if ($creatorUser) {
 				$creatorUserName = $creatorUser->getFullName();
 			}
@@ -582,11 +582,11 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 		if (!$existingUser) {
 			$resetPasswordLink = UserLoginDataPeer::getPassResetLink($user->getLoginData()->getPasswordHashKey());
 		}
-		$kmcLink = trim(kConf::get('apphome_url'), '/').'/kmc';
-		$adminConsoleLink = trim(kConf::get('admin_console_url'));
-		$contactLink = kConf::get('contact_url');
-		$beginnersGuideLink = kConf::get('beginners_tutorial_url');
-		$quickStartGuideLink = kConf::get('quick_start_guide_url');
+		$vmcLink = trim(vConf::get('apphome_url'), '/').'/vmc';
+		$adminConsoleLink = trim(vConf::get('admin_console_url'));
+		$contactLink = vConf::get('contact_url');
+		$beginnersGuideLink = vConf::get('beginners_tutorial_url');
+		$quickStartGuideLink = vConf::get('quick_start_guide_url');
 		
 		// setup mail
 		$mailType = null;
@@ -595,19 +595,19 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 		if($partnerId == Partner::ADMIN_CONSOLE_PARTNER_ID) // If new user is admin console user
 		{
 			// add google authenticator library to include path
-			require_once KALTURA_ROOT_PATH . '/vendor/phpGangsta/GoogleAuthenticator.php';
+			require_once VIDIUN_ROOT_PATH . '/vendor/phpGangsta/GoogleAuthenticator.php';
 			
 			//QR code link might contain the '|' character used as a separator by the mailer job dispatcher. 
-			$qrCodeLink = str_replace ("|", "M%7C", GoogleAuthenticator::getQRCodeGoogleUrl ($user->getPuserId() . ' ' . kConf::get ('www_host') . ' KAC', $user->getLoginData()->getSeedFor2FactorAuth()));
+			$qrCodeLink = str_replace ("|", "M%7C", GoogleAuthenticator::getQRCodeGoogleUrl ($user->getPuserId() . ' ' . vConf::get ('www_host') . ' VAC', $user->getLoginData()->getSeedFor2FactorAuth()));
 			
 			if ($existingUser)
 			{
-				$mailType = self::KALTURA_NEW_EXISTING_USER_ADMIN_CONSOLE_EMAIL;
+				$mailType = self::VIDIUN_NEW_EXISTING_USER_ADMIN_CONSOLE_EMAIL;
 				$bodyParams = array($userName, $creatorUserName, $loginEmail, $roleName, $qrCodeLink);
 			}
 			else
 			{
-				$mailType = self::KALTURA_NEW_USER_ADMIN_CONSOLE_EMAIL;
+				$mailType = self::VIDIUN_NEW_USER_ADMIN_CONSOLE_EMAIL;
 				$bodyParams = array($userName, $creatorUserName, $loginEmail, $resetPasswordLink, $roleName, $adminConsoleLink, $qrCodeLink);
 			}
 		}
@@ -615,24 +615,24 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 		{
 			if ($existingUser)
 			{
-				$mailType = self::KALTURA_NEW_EXISTING_USER_EMAIL;
-				$bodyParams = array($userName, $creatorUserName, $publisherName, $loginEmail, $partnerId, $publisherName, $publisherName, $roleName, $publisherName, $puserId, $kmcLink, $contactLink, $beginnersGuideLink, $quickStartGuideLink);
+				$mailType = self::VIDIUN_NEW_EXISTING_USER_EMAIL;
+				$bodyParams = array($userName, $creatorUserName, $publisherName, $loginEmail, $partnerId, $publisherName, $publisherName, $roleName, $publisherName, $puserId, $vmcLink, $contactLink, $beginnersGuideLink, $quickStartGuideLink);
 			}
 			else
 			{
-				$mailType = self::KALTURA_NEW_USER_EMAIL;
-				$bodyParams = array($userName, $creatorUserName, $publisherName, $loginEmail, $resetPasswordLink, $partnerId, $publisherName, $publisherName, $roleName, $publisherName, $puserId, $kmcLink, $contactLink, $beginnersGuideLink, $quickStartGuideLink);
+				$mailType = self::VIDIUN_NEW_USER_EMAIL;
+				$bodyParams = array($userName, $creatorUserName, $publisherName, $loginEmail, $resetPasswordLink, $partnerId, $publisherName, $publisherName, $roleName, $publisherName, $puserId, $vmcLink, $contactLink, $beginnersGuideLink, $quickStartGuideLink);
 			}		
 		}
 		// add mail job
-		kJobsManager::addMailJob(
+		vJobsManager::addMailJob(
 			null, 
 			0, 
 			$partnerId, 
 			$mailType, 
-			kMailJobData::MAIL_PRIORITY_NORMAL, 
-			kConf::get ("partner_registration_confirmation_email" ), 
-			kConf::get ("partner_registration_confirmation_name" ), 
+			vMailJobData::MAIL_PRIORITY_NORMAL, 
+			vConf::get ("partner_registration_confirmation_email" ), 
+			vConf::get ("partner_registration_confirmation_name" ), 
 			$loginEmail, 
 			$bodyParams
 		);
@@ -640,7 +640,7 @@ class kuserPeer extends BasekuserPeer implements IRelatedObjectPeer
 			
 	public static function getCacheInvalidationKeys()
 	{
-		return array(array("kuser:id=%s", self::ID), array("kuser:partnerId=%s,puserid=%s", self::PARTNER_ID, self::PUSER_ID), array("kuser:loginDataId=%s", self::LOGIN_DATA_ID));		
+		return array(array("vuser:id=%s", self::ID), array("vuser:partnerId=%s,puserid=%s", self::PARTNER_ID, self::PUSER_ID), array("vuser:loginDataId=%s", self::LOGIN_DATA_ID));		
 	}
 	
 	public static function retrieveByPKNoFilter($pk, PropelPDO $con = null)

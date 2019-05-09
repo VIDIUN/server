@@ -3,16 +3,16 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBatchGetExclusiveNotificationJobsResponse extends KalturaObject
+class VidiunBatchGetExclusiveNotificationJobsResponse extends VidiunObject
 {
 	/**
-	 * @var KalturaBatchJobArray
+	 * @var VidiunBatchJobArray
 	 * @readonly
 	 */
 	public $notifications;
 
 	/**
-	 * @var KalturaPartnerArray
+	 * @var VidiunPartnerArray
 	 * @readonly
 	 */
 	public $partners;

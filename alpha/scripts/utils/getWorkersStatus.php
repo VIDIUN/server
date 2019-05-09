@@ -23,14 +23,14 @@ class Worker_Status_from_Ini extends Zend_Config_Ini
 
 /**
  * $argv[1] - path to files configuration folder
- * example: /opt/kaltura/app/configurations/batch
+ * example: /opt/vidiun/app/configurations/batch
  * $argv[2] - name of candidates example workers.ini
  */
 $files = glob($argv[1]."/*$argv[2]");
 if (count($argv) < 2 )
 	die(PHP_EOL .
 		'* $argv[1] - path to files configuration folder
-		 * example: /opt/kaltura/app/configurations/batch
+		 * example: /opt/vidiun/app/configurations/batch
          * $argv[2] - name of candidates example workers.ini' . PHP_EOL);
 $answers = array();
 foreach($files as $file)

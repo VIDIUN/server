@@ -58,7 +58,7 @@ class addplaylistAction extends addentrybaseAction
 			myPlaylistUtils::updatePlaylistStatistics( $entry->getPartnerId() , $entry );
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 /*
 		// make the playlist_mediaType a mandatory field -
@@ -69,7 +69,7 @@ class addplaylistAction extends addentrybaseAction
 		}
 */
 		// validate the xml of the dynamic playlist and update the update the entry_group table for a static playlist
-		$res = parent::executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser );
+		$res = parent::executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser );
 		
 		
 	}

@@ -2,7 +2,7 @@
 /**
  * @package plugins.mp4box
  */
-class Mp4boxPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaEnumerator
+class Mp4boxPlugin extends VidiunPlugin implements IVidiunObjectLoader, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'mp4box';
 	
@@ -19,18 +19,18 @@ class Mp4boxPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKaltu
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::MP4BOX)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::MP4BOX)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 				
 			$params = $constructorArgs['params'];
-			return new KOperationEngineMp4box($params->mp4boxCmd, $constructorArgs['outFilePath']);
+			return new VOperationEngineMp4box($params->mp4boxCmd, $constructorArgs['outFilePath']);
 		}
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(Mp4boxConversionEngineType::MP4BOX))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(Mp4boxConversionEngineType::MP4BOX))
 		{
-			return new KDLOperatorMp4box($enumValue);
+			return new VDLOperatorMp4box($enumValue);
 		}
 		
 		return null;
@@ -43,11 +43,11 @@ class Mp4boxPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKaltu
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == self::getApiValue(Mp4boxConversionEngineType::MP4BOX))
-			return 'KOperationEngineMp4box';
+		if($baseClass == 'VOperationEngine' && $enumValue == self::getApiValue(Mp4boxConversionEngineType::MP4BOX))
+			return 'VOperationEngineMp4box';
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(Mp4boxConversionEngineType::MP4BOX))
-			return 'KDLOperatorMp4box';
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(Mp4boxConversionEngineType::MP4BOX))
+			return 'VDLOperatorMp4box';
 		
 		return null;
 	}
@@ -71,8 +71,8 @@ class Mp4boxPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKaltu
 	 */
 	public static function getConversionEngineCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('conversionEngineType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('conversionEngineType', $value);
 	}
 	
 	/**
@@ -80,6 +80,6 @@ class Mp4boxPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKaltu
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

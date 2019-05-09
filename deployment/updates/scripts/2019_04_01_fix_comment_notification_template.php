@@ -13,7 +13,7 @@ $templateUpdateXmlPath = realpath(DEPLOYMENT_DIR . '/updates/scripts/xml/notific
 
 if(!file_exists($templateUpdateXmlPath) || !file_exists($scriptPath))
 {
-    KalturaLog::err('Missing update script file');
+    VidiunLog::err('Missing update script file');
     return;
 }
 

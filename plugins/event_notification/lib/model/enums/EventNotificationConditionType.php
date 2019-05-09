@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage model.enum
  */
-class EventNotificationConditionType implements IKalturaPluginEnum, ConditionType
+class EventNotificationConditionType implements IVidiunPluginEnum, ConditionType
 {
 	const EVENT_NOTIFICATION_FIELD = 'BooleanField';
 	const EVENT_NOTIFICATION_OBJECT_CHANGED = 'ObjectChanged';

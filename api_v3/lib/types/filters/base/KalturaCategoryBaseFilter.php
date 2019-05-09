@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaCategoryBaseFilter extends KalturaRelatedFilter
+abstract class VidiunCategoryBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -181,12 +181,12 @@ abstract class KalturaCategoryBaseFilter extends KalturaRelatedFilter
 	public $tagsMultiLikeAnd;
 
 	/**
-	 * @var KalturaAppearInListType
+	 * @var VidiunAppearInListType
 	 */
 	public $appearInListEqual;
 
 	/**
-	 * @var KalturaPrivacyType
+	 * @var VidiunPrivacyType
 	 */
 	public $privacyEqual;
 
@@ -196,7 +196,7 @@ abstract class KalturaCategoryBaseFilter extends KalturaRelatedFilter
 	public $privacyIn;
 
 	/**
-	 * @var KalturaInheritanceType
+	 * @var VidiunInheritanceType
 	 */
 	public $inheritanceTypeEqual;
 
@@ -211,12 +211,12 @@ abstract class KalturaCategoryBaseFilter extends KalturaRelatedFilter
 	public $referenceIdEqual;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $referenceIdEmpty;
 
 	/**
-	 * @var KalturaContributionPolicyType
+	 * @var VidiunContributionPolicyType
 	 */
 	public $contributionPolicyEqual;
 
@@ -246,7 +246,7 @@ abstract class KalturaCategoryBaseFilter extends KalturaRelatedFilter
 	public $privacyContextEqual;
 
 	/**
-	 * @var KalturaCategoryStatus
+	 * @var VidiunCategoryStatus
 	 */
 	public $statusEqual;
 

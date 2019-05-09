@@ -1,6 +1,6 @@
 <?php
 
-class kDrmPartnerSetup
+class vDrmPartnerSetup
 {
 	
 	public static function setupPartner($partnerId)
@@ -12,7 +12,7 @@ class kDrmPartnerSetup
 		$policies = DrmPolicyPeer::doSelectOne($c);
 		if(!count($policies))
 		{
-			KalturaLog::info("DRM setup for partner ".$partnerId);
+			VidiunLog::info("DRM setup for partner ".$partnerId);
 			list ($defaultPolicy) = self::createPartnerPolicies($partnerId);
 			self::createDefaultAccessControl($partnerId, $defaultPolicy);
 		}
@@ -25,7 +25,7 @@ class kDrmPartnerSetup
 							"",
 							1,
 							1);
-		KalturaLog::info("Default policy id:".$defaultPolicy->getId());
+		VidiunLog::info("Default policy id:".$defaultPolicy->getId());
 
 		return array($defaultPolicy);
 	}
@@ -42,7 +42,7 @@ class kDrmPartnerSetup
 
 		$accessControlProfile->setRulesArray(array($ruleDefault));
 		$accessControlProfile->save();
-		KalturaLog::info("Access control profile id:".$accessControlProfile->getId());
+		VidiunLog::info("Access control profile id:".$accessControlProfile->getId());
 	}
 
 	private static function createPolicy($partnerId, $policyName, $scenario, $expirationPolicy, $duration = null)
@@ -65,8 +65,8 @@ class kDrmPartnerSetup
 
 	private static function addAccessControlRule($policyId)
 	{
-		$rule = new kRule();
-		$action = new kAccessControlDrmPolicyAction();
+		$rule = new vRule();
+		$action = new vAccessControlDrmPolicyAction();
 		$action->setPolicyId($policyId);
 		$rule->setActions(array($action));
 		return $rule;

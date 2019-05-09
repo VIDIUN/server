@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class requestsAction extends kalturaSystemAction
+class requestsAction extends vidiunSystemAction
 {
 	public function execute()
 	{
@@ -27,7 +27,7 @@ class requestsAction extends kalturaSystemAction
 			ob_start();
 			passthru("tail -10000 /web/logs/APACHE$i-access_log|head -1");
 			passthru("date");
-			passthru("tail -10000 /web/logs/APACHE$i-access_log|php /web/kaltura/support_prod/monitor/request_types.php");
+			passthru("tail -10000 /web/logs/APACHE$i-access_log|php /web/vidiun/support_prod/monitor/request_types.php");
 			$result = ob_get_contents();
 			ob_end_clean();
 			echo $result;

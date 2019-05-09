@@ -5,7 +5,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEvalBooleanField extends KalturaBooleanField
+class VidiunEvalBooleanField extends VidiunBooleanField
 {
 	/**
 	 * PHP code
@@ -25,12 +25,12 @@ class KalturaEvalBooleanField extends KalturaBooleanField
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kEvalBooleanField();
+			$dbObject = new vEvalBooleanField();
 			
 		return parent::toObject($dbObject, $skip);
 	}

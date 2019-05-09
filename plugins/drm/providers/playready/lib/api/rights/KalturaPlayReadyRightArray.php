@@ -3,11 +3,11 @@
  * @package plugins.playReady
  * @subpackage api.objects
  */
-class KalturaPlayReadyRightArray extends KalturaTypedArray
+class VidiunPlayReadyRightArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaPlayReadyRightArray();
+		$newArr = new VidiunPlayReadyRightArray();
 		if ($arr == null)
 			return $newArr;
 
@@ -26,15 +26,15 @@ class KalturaPlayReadyRightArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaPlayReadyRight");	
+		parent::__construct("VidiunPlayReadyRight");	
 	}
 	
 	private static function getInstanceByDbObject($obj)
 	{
 		if($obj instanceof PlayReadyCopyRight)
-			return new KalturaPlayReadyCopyRight();
+			return new VidiunPlayReadyCopyRight();
 		if($obj instanceof PlayReadyPlayRight)
-			return new KalturaPlayReadyPlayRight();
+			return new VidiunPlayReadyPlayRight();
 			
 		return null;
 	}

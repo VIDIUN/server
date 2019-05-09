@@ -4,7 +4,7 @@ ini_set( "memory_limit","512M" );
 
 chdir(__DIR__);
 
-//bootstrap connects the generator to the rest of Kaltura system
+//bootstrap connects the generator to the rest of Vidiun system
 require_once(__DIR__ . "/bootstrap.php");
 
 $options = getopt('h', array(
@@ -46,13 +46,13 @@ else
 if(!file_exists($outputPathBase))
 	mkdir($outputPathBase, 0755, true);
 
-$xmlFileName = "$outputPathBase/KalturaClient.xml";
+$xmlFileName = "$outputPathBase/VidiunClient.xml";
 
-KalturaLog::info("Using code introspection to generate XML schema");
+VidiunLog::info("Using code introspection to generate XML schema");
 $xmlGenerator = new XmlClientGenerator();
 $xmlGenerator->generate();
 
 $files = $xmlGenerator->getOutputFiles();
-file_put_contents($xmlFileName, $files["KalturaClient.xml"]);
+file_put_contents($xmlFileName, $files["VidiunClient.xml"]);
 
-KalturaLog::info("XML generated: $xmlFileName");
+VidiunLog::info("XML generated: $xmlFileName");

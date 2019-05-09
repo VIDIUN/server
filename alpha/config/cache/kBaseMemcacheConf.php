@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/kBaseConfCache.php';
-require_once __DIR__ . '/kMapCacheInterface.php';
+require_once __DIR__ . '/vBaseConfCache.php';
+require_once __DIR__ . '/vMapCacheInterface.php';
 
-class kBaseMemcacheConf extends kBaseConfCache implements kMapCacheInterface
+class vBaseMemcacheConf extends vBaseConfCache implements vMapCacheInterface
 {
 	protected $cache;
 	protected $inLoad;
@@ -31,14 +31,14 @@ class kBaseMemcacheConf extends kBaseConfCache implements kMapCacheInterface
 
 	protected function getConfigParams($mapName)
 	{
-		$map = kConfCacheManager::load($mapName,$mapName);
+		$map = vConfCacheManager::load($mapName,$mapName);
 		return $map;
 	}
 
 	protected function initCache($port, $host)
 	{
-		require_once (__DIR__ . '/../../../infra/cache/kInfraMemcacheCacheWrapper.php');
-		$cache = new kInfraMemcacheCacheWrapper;
+		require_once (__DIR__ . '/../../../infra/cache/vInfraMemcacheCacheWrapper.php');
+		$cache = new vInfraMemcacheCacheWrapper;
 		$sectionConfig= array('host'=>$host,'port'=>$port);
 		try
 		{

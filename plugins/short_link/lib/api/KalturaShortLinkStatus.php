@@ -3,6 +3,6 @@
  * @package plugins.shortLink
  * @subpackage api.enum
  */
-class KalturaShortLinkStatus extends KalturaEnum implements ShortLinkStatus
+class VidiunShortLinkStatus extends VidiunEnum implements ShortLinkStatus
 {
 }

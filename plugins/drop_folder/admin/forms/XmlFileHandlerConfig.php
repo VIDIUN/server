@@ -11,7 +11,7 @@ class Form_XmlFileHandlerConfig extends Form_BaseFileHandlerConfig
 	 */
 	protected function getFileHandlerType()
 	{
-		return Kaltura_Client_DropFolder_Enum_DropFolderFileHandlerType::XML;
+		return Vidiun_Client_DropFolder_Enum_DropFolderFileHandlerType::XML;
 	}
 
 	public function populateFromObject($object, $add_underscore = true)

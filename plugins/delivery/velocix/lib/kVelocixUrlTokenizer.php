@@ -1,5 +1,5 @@
 <?php
-class kVelocixUrlTokenizer extends kUrlTokenizer
+class vVelocixUrlTokenizer extends vUrlTokenizer
 {
 
 	protected $protocol = "http";

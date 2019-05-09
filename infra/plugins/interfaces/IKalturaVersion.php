@@ -5,10 +5,10 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaVersion extends IKalturaBase
+interface IVidiunVersion extends IVidiunBase
 {
 	/**
-	 * @return KalturaVersion
+	 * @return VidiunVersion
 	 */
 	public static function getVersion();
 }

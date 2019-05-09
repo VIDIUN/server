@@ -4,28 +4,28 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectTaskEngine
  */
-class KObjectTaskModifyEntryEngine extends KObjectTaskEntryEngineBase
+class VObjectTaskModifyEntryEngine extends VObjectTaskEntryEngineBase
 {
 	/**
-	 * @param KalturaBaseEntry $object
+	 * @param VidiunBaseEntry $object
 	 */
 	function processObject($object)
 	{
-		/** @var KalturaModifyEntryObjectTask $objectTask */
+		/** @var VidiunModifyEntryObjectTask $objectTask */
 		$objectTask = $this->getObjectTask();
 		if (is_null($objectTask))
 			return;
 
 		$client = $this->getClient();
-		$metadataPlugin = KalturaMetadataClientPlugin::get($client);
+		$metadataPlugin = VidiunMetadataClientPlugin::get($client);
 		$entryId = $object->id;
 		$outputMetadataProfileId = $objectTask->outputMetadataProfileId;
 		$outputMetadataArr = $objectTask->outputMetadata;
 		$inputMetadataProfileId = $objectTask->inputMetadataProfileId;
 		$inputMetadataArr = $objectTask->inputMetadata;
 		
-		$metadataFilter = new KalturaMetadataFilter();
-		$metadataFilter->metadataObjectTypeEqual = KalturaMetadataObjectType::ENTRY;
+		$metadataFilter = new VidiunMetadataFilter();
+		$metadataFilter->metadataObjectTypeEqual = VidiunMetadataObjectType::ENTRY;
 		$metadataFilter->objectIdEqual = $entryId;
 		
 		if($outputMetadataProfileId != 0 && !empty($outputMetadataArr))
@@ -36,8 +36,8 @@ class KObjectTaskModifyEntryEngine extends KObjectTaskEntryEngineBase
 			$this->updateMetadataObj($entryResultForMetadataUpdate, $metadataPlugin, $outputMetadataArr, $outputMetadataProfileId, $metadataFilter);
 		}
 		
-		KalturaLog::debug("updating entry $entryId");
-		$entryObj = new KalturaBaseEntry();
+		VidiunLog::debug("updating entry $entryId");
+		$entryObj = new VidiunBaseEntry();
 		
 		if($inputMetadataProfileId != 0 && !empty($inputMetadataArr))
 		{
@@ -52,7 +52,7 @@ class KObjectTaskModifyEntryEngine extends KObjectTaskEntryEngineBase
 		$client->baseEntry->update($entryId, $entryObj);
 	}
 	
-	private function updateMetadataObj(KalturaBaseEntry $entryResultForMetadataUpdate, &$metadataPlugin, $outputMetadataArr, $outputMetadataProfileId, $metadataFilter)
+	private function updateMetadataObj(VidiunBaseEntry $entryResultForMetadataUpdate, &$metadataPlugin, $outputMetadataArr, $outputMetadataProfileId, $metadataFilter)
 	{
 		$entryId = $entryResultForMetadataUpdate->id;
 		
@@ -78,14 +78,14 @@ class KObjectTaskModifyEntryEngine extends KObjectTaskEntryEngineBase
 			$xmlObj = new SimpleXMLElement("<metadata></metadata>");
 			$xmlData = $this->getUpdatedMetadataXmlStrFromEntry($entryResultForMetadataUpdate, $tepmlateXmlObj, $xmlObj, $outputMetadataArr);
 	
-			$metadataPlugin->metadata->add($outputMetadataProfileId, KalturaMetadataObjectType::ENTRY, $entryId, $xmlData);
+			$metadataPlugin->metadata->add($outputMetadataProfileId, VidiunMetadataObjectType::ENTRY, $entryId, $xmlData);
 		}
 	}
 	
-	private function getUpdatedMetadataXmlStrFromEntry(KalturaBaseEntry $entryResultForMetadataUpdate, SimpleXMLElement $templateXmlObj, SimpleXMLElement $currentXmlObj, array $outputMetadataArr)
+	private function getUpdatedMetadataXmlStrFromEntry(VidiunBaseEntry $entryResultForMetadataUpdate, SimpleXMLElement $templateXmlObj, SimpleXMLElement $currentXmlObj, array $outputMetadataArr)
 	{		
-		KalturaLog::debug("current xml object - " . print_r($currentXmlObj, true));
-		KalturaLog::debug("output metadata array - " . print_r($outputMetadataArr, true));
+		VidiunLog::debug("current xml object - " . print_r($currentXmlObj, true));
+		VidiunLog::debug("output metadata array - " . print_r($outputMetadataArr, true));
 		
 		foreach($templateXmlObj as $metadataFieldName => $templateXmlObjItem)
 		{
@@ -110,7 +110,7 @@ class KObjectTaskModifyEntryEngine extends KObjectTaskEntryEngineBase
 		return $templateXmlObj->asXml();
 	}
 	
-	private function updateEntryFromMetadata($metadataPlugin, array $inputMetadataArr, KalturaBaseEntry $entryObj, $metadataFilter)
+	private function updateEntryFromMetadata($metadataPlugin, array $inputMetadataArr, VidiunBaseEntry $entryObj, $metadataFilter)
 	{
 		$entryId = $entryObj->id;
 		$metadataInputResult = $metadataPlugin->metadata->listAction($metadataFilter, null);
@@ -130,7 +130,7 @@ class KObjectTaskModifyEntryEngine extends KObjectTaskEntryEngineBase
 			}	
 		}
 		else
-			KalturaLog::info("found no input metadata objects for entry $entryId");
+			VidiunLog::info("found no input metadata objects for entry $entryId");
 		
 		return $entryObj;
 	}
@@ -143,7 +143,7 @@ class KObjectTaskModifyEntryEngine extends KObjectTaskEntryEngineBase
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::notice("problem with metadataProfile get entry id $entryId - " . $e->getMessage());
+			VidiunLog::notice("problem with metadataProfile get entry id $entryId - " . $e->getMessage());
 			return null;
 		}
 		
@@ -164,7 +164,7 @@ class KObjectTaskModifyEntryEngine extends KObjectTaskEntryEngineBase
 			}
 		}
 
-		KalturaLog::debug("metadata profile schema - " . $emptyXmlObj->asXml());
+		VidiunLog::debug("metadata profile schema - " . $emptyXmlObj->asXml());
 
 		return $emptyXmlObj;
 	}

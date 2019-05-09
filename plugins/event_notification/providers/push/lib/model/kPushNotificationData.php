@@ -3,7 +3,7 @@
  * @package plugins.pushNotification
  * @subpackage model
  */
-class kPushNotificationData extends KalturaObject
+class vPushNotificationData extends VidiunObject
 {
 	/**
 	 * @var string

@@ -3,7 +3,7 @@
  * @package plugins.audit
  * @subpackage api.enums
  */
-class KalturaAuditTrailFileSyncType extends KalturaEnum 
+class VidiunAuditTrailFileSyncType extends VidiunEnum 
 {
 	const FILE = 1;
 	const LINK = 2;

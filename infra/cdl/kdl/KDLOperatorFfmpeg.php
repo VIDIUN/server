@@ -3,7 +3,7 @@
  * @package plugins.ffmpeg
  * @subpackage lib
  */
-class KDLOperatorFfmpeg extends KDLOperatorBase {
+class VDLOperatorFfmpeg extends VDLOperatorBase {
 /*
     public function __construct($id, $name=null, $sourceBlacklist=null, $targetBlacklist=null) {
     	parent::__construct($id, $name, $sourceBlacklist,$targetBlacklist);
@@ -12,11 +12,11 @@ class KDLOperatorFfmpeg extends KDLOperatorBase {
 	/* ---------------------------
 	 * GenerateCommandLine
 	 */
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 // rem ffmpeg -i <infilename> -vcodec flv   -r 25 -b 500k  -ar 22050 -ac 2 -acodec libmp3lame -f flv -t 60 -y <outfilename>
 
-		$cmdStr = " -i ".KDLCmdlinePlaceholders::InFileName;
+		$cmdStr = " -i ".VDLCmdlinePlaceholders::InFileName;
 		
 		$cmdStr.= $this->generateVideoParams($design, $target);
 		$cmdStr.= $this->generateAudioParams($design, $target);
@@ -27,7 +27,7 @@ class KDLOperatorFfmpeg extends KDLOperatorBase {
 		if($extra)
 			$cmdStr.= " ".$extra;
 		
-		$cmdStr.= " -y ".KDLCmdlinePlaceholders::OutFileName;
+		$cmdStr.= " -y ".VDLCmdlinePlaceholders::OutFileName;
 
 		return $cmdStr;
 	}
@@ -35,7 +35,7 @@ class KDLOperatorFfmpeg extends KDLOperatorBase {
 	/* ---------------------------
 	 * generateVideoParams
 	 */
-    protected function generateVideoParams(KDLFlavor $design, KDLFlavor $target)
+    protected function generateVideoParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		if(!isset($target->_video)){
 			return " -vn";
@@ -48,7 +48,7 @@ class KDLOperatorFfmpeg extends KDLOperatorBase {
 $vid = $target->_video;
 $vidBr = $vid->_bitRate;
 		switch($vid->_id){
-		case KDLVideoTarget::VP6:
+		case VDLVideoTarget::VP6:
 			if(isset($design->_video) && $design->_video->_bitRate){
 				$vidBr=$this->fixVP6BitRate($design->_video->_bitRate, $vid->_bitRate);
 			}
@@ -78,7 +78,7 @@ $bt=0;
 		/*
 		 * DV video should get 'target' operand, rather than frame size.
 		 */
-		if($vid->_id==KDLVideoTarget::DV) {
+		if($vid->_id==VDLVideoTarget::DV) {
 			if(isset($vid->_height)) {
 				switch($vid->_height) {
 				case 480: 
@@ -113,34 +113,34 @@ $bt=0;
 	/* ---------------------------
 	 * getVideoCodecName
 	 */
-    protected function getVideoCodecSpecificParams(KDLFlavor $design, KDLFlavor $target)
+    protected function getVideoCodecSpecificParams(VDLFlavor $design, VDLFlavor $target)
 	{
 $vidObj = $target->_video;
 		switch($vidObj->_id){
-		case KDLVideoTarget::VP6:
-		case KDLVideoTarget::FLV:
-		case KDLVideoTarget::H263:
+		case VDLVideoTarget::VP6:
+		case VDLVideoTarget::FLV:
+		case VDLVideoTarget::H263:
 			return "flv";
-		case KDLVideoTarget::H264:
-		case KDLVideoTarget::H264B:
-		case KDLVideoTarget::H264M:
-		case KDLVideoTarget::H264H:
+		case VDLVideoTarget::H264:
+		case VDLVideoTarget::H264B:
+		case VDLVideoTarget::H264M:
+		case VDLVideoTarget::H264H:
 			return "libx264 ".$this->generateH264params($vidObj);
-		case KDLVideoTarget::MPEG4:
+		case VDLVideoTarget::MPEG4:
 			return "mpeg4";
-		case KDLVideoTarget::THEORA:
+		case VDLVideoTarget::THEORA:
 			return "libtheora";
-		case KDLVideoTarget::WMV2:
-		case KDLVideoTarget::WMV3:
-		case KDLVideoTarget::WVC1A:
+		case VDLVideoTarget::WMV2:
+		case VDLVideoTarget::WMV3:
+		case VDLVideoTarget::WVC1A:
 			return "wmv2";
-		case KDLVideoTarget::VP8:
+		case VDLVideoTarget::VP8:
 			return "libvpx";
-		case KDLVideoTarget::MPEG2:
+		case VDLVideoTarget::MPEG2:
 			return "mpeg2video";
-		case KDLVideoTarget::DV:
+		case VDLVideoTarget::DV:
 			return "dvvideo";
-		case KDLVideoTarget::COPY:
+		case VDLVideoTarget::COPY:
 			return "copy";
 		default:
 			return null;
@@ -150,7 +150,7 @@ $vidObj = $target->_video;
 	/* ---------------------------
 	 * generateAudioParams
 	 */
-    protected function generateAudioParams(KDLFlavor $design, KDLFlavor $target)
+    protected function generateAudioParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		if(!isset($target->_audio)) {
 			return " -an";
@@ -160,26 +160,26 @@ $acodec = "libmp3lam";
 $cmdStr = null;
 $aud = $target->_audio;
 		switch($aud->_id){
-			case KDLAudioTarget::MP3:
+			case VDLAudioTarget::MP3:
 				$acodec = "libmp3lame";
 				break;
-			case KDLAudioTarget::AAC:
+			case VDLAudioTarget::AAC:
 				$acodec = "libfaac";
 				break;
-			case KDLAudioTarget::VORBIS:
+			case VDLAudioTarget::VORBIS:
 				$acodec = "libvorbis";
 				break;
-			case KDLAudioTarget::WMA:
+			case VDLAudioTarget::WMA:
 				$acodec = "wmav2";
 				break;
-			case KDLAudioTarget::AMRNB:
+			case VDLAudioTarget::AMRNB:
 				// common settings - -ab 12.2k -ar 8000 -ac 1
 				$acodec = "libopencore_amrnb";
 				break;
-			case KDLAudioTarget::MPEG2:
+			case VDLAudioTarget::MPEG2:
 				$acodec = "mp2";
 				break;
-			case KDLAudioTarget::PCM:
+			case VDLAudioTarget::PCM:
 				if(isset($aud->_resolution) && in_array($aud->_resolution, array(16,24,32))) {
 					$acodec = "pcm_s".$aud->_resolution."le";
 				}
@@ -187,7 +187,7 @@ $aud = $target->_audio;
 					$acodec = "pcm_s16le";
 				}
 				break;
-			case KDLAudioTarget::COPY:
+			case VDLAudioTarget::COPY:
 				$acodec = "copy";
 				break;
 		}
@@ -209,7 +209,7 @@ $aud = $target->_audio;
 	/* ---------------------------
 	 * generateContainerParams
 	 */
-    protected function generateContainerParams(KDLFlavor $design, KDLFlavor $target)
+    protected function generateContainerParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		if(!isset($target->_container)) 
 			return null;
@@ -218,40 +218,40 @@ $format = "fl";
 $cmdStr = null;
 $con = $target->_container;
 		switch($con->_id){
-			case KDLContainerTarget::FLV:
+			case VDLContainerTarget::FLV:
 				$format = "flv";
 				break;
-			case KDLContainerTarget::AVI:
-			case KDLContainerTarget::MP4:
-			case KDLContainerTarget::_3GP:
-			case KDLContainerTarget::MOV:
-			case KDLContainerTarget::MP3:
-			case KDLContainerTarget::OGG:
-			case KDLContainerTarget::M4V:
-			case KDLContainerTarget::MXF:
+			case VDLContainerTarget::AVI:
+			case VDLContainerTarget::MP4:
+			case VDLContainerTarget::_3GP:
+			case VDLContainerTarget::MOV:
+			case VDLContainerTarget::MP3:
+			case VDLContainerTarget::OGG:
+			case VDLContainerTarget::M4V:
+			case VDLContainerTarget::MXF:
 				$format = $con->_id;
 				break;
-			case KDLContainerTarget::OGV:
+			case VDLContainerTarget::OGV:
 				$format = "ogg";
 				break;
-			case KDLContainerTarget::WMV:
+			case VDLContainerTarget::WMV:
 				$format = "asf";
 				break;
-			case KDLContainerTarget::MKV:
+			case VDLContainerTarget::MKV:
 				$format = "matroska";
 				break;
-			case KDLContainerTarget::WEBM:
+			case VDLContainerTarget::WEBM:
 				$format = "webm";
 				break;
-			case KDLContainerTarget::MPEGTS:
-			case KDLContainerTarget::M2TS:
-			case KDLContainerTarget::APPLEHTTP:
+			case VDLContainerTarget::MPEGTS:
+			case VDLContainerTarget::M2TS:
+			case VDLContainerTarget::APPLEHTTP:
 				$format = "mpegts";
 				break;
-			case KDLContainerTarget::MPEG:
+			case VDLContainerTarget::MPEG:
 				$format = "mpeg";
 				break;
-			case KDLContainerTarget::WAV:
+			case VDLContainerTarget::WAV:
 				$format = "wav";
 				break;
 		}
@@ -263,7 +263,7 @@ $con = $target->_container;
 	/* ---------------------------
 	 * processClipping 
 	 */
-	protected function processClipping(KDLFlavor $target, $cmdStr)
+	protected function processClipping(VDLFlavor $target, $cmdStr)
 	{
 		$clipStr=null;
 		if(isset($target->_clipStart) && $target->_clipStart>0){
@@ -308,27 +308,27 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 		$h264params=null;
 		$ffQsettings = " -qcomp 0.6 -qmin 10 -qmax 50 -qdiff 4";
 		switch($videoObject->_id) {
-		case KDLVideoTarget::H264:
+		case VDLVideoTarget::H264:
 			$h264params=" -subq 2".$ffQsettings;
-			if($videoObject->_bitRate<KDLConstants::LowBitrateThresHold) {
+			if($videoObject->_bitRate<VDLConstants::LowBitrateThresHold) {
 				$h264params .= " -crf 30";
 			}
 			break;
-		case KDLVideoTarget::H264B:
+		case VDLVideoTarget::H264B:
 			$h264params=" -subq 2".$ffQsettings." -coder 0";;
-			if($videoObject->_bitRate<KDLConstants::LowBitrateThresHold) {
+			if($videoObject->_bitRate<VDLConstants::LowBitrateThresHold) {
 				$h264params .= " -crf 30";
 			}
 			break;
-		case KDLVideoTarget::H264M:
+		case VDLVideoTarget::H264M:
 			$h264params=" -subq 5".$ffQsettings." -coder 1 -refs 2";
-			if($videoObject->_bitRate<KDLConstants::LowBitrateThresHold) {
+			if($videoObject->_bitRate<VDLConstants::LowBitrateThresHold) {
 				$h264params .= " -crf 30";
 			}
 			break;
-		case KDLVideoTarget::H264H:				
+		case VDLVideoTarget::H264H:				
 			$h264params=" -subq 7".$ffQsettings." -bf 16 -coder 1 -refs 6 -flags2 +bpyramid+wpred+mixed_refs+dct8x8+fastpskip";
-			if($videoObject->_bitRate<KDLConstants::LowBitrateThresHold) {
+			if($videoObject->_bitRate<VDLConstants::LowBitrateThresHold) {
 				$h264params .= " -crf 30";
 			}
 			break;
@@ -339,7 +339,7 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 	/* ---------------------------
 	 * CheckConstraints
 	 */
-	public function CheckConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+	public function CheckConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
 	    if(parent::CheckConstraints($source, $target, $errors, $warnings)==true)
 			return true;
@@ -349,8 +349,8 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 		 * for rotated videos
 		 */
 		if($target->_video && $target->_video->_rotation) {
-			$warnings[KDLConstants::VideoIndex][] = //"The transcoder (".$key.") does not handle properly DAR<>PAR.";
-				KDLWarnings::ToString(KDLWarnings::TranscoderLimitation, $this->_id);
+			$warnings[VDLConstants::VideoIndex][] = //"The transcoder (".$key.") does not handle properly DAR<>PAR.";
+				VDLWarnings::ToString(VDLWarnings::TranscoderLimitation, $this->_id);
 			return true;
 		}
 
@@ -360,7 +360,7 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 	/* ---------------------------
 	 * checkBasicFFmpegConstraints
 	 */
-	protected function checkBasicFFmpegConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+	protected function checkBasicFFmpegConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
 		/*
 		 * Non Mac transcoders should not mess up with QT/WMV/WMA
@@ -373,8 +373,8 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 			||($source->_audio && (in_array($source->_audio->_format,$qt_wmv_list)||in_array($source->_audio->_id,$qt_wmv_list)))
 			)
 		){
-			$warnings[KDLConstants::VideoIndex][] = //"The transcoder (".$key.") can not process the (".$sourcePart->_id."/".$sourcePart->_format. ").";
-				KDLWarnings::ToString(KDLWarnings::TranscoderFormat, $this->_id, "qt/wmv/wma");
+			$warnings[VDLConstants::VideoIndex][] = //"The transcoder (".$key.") can not process the (".$sourcePart->_id."/".$sourcePart->_format. ").";
+				VDLWarnings::ToString(VDLWarnings::TranscoderFormat, $this->_id, "qt/wmv/wma");
 			return true;
 		}
 		
@@ -409,7 +409,7 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 	 */
 	public static function AdjustCmdlineWithWatermarkData($cmdLine, $wmData, $wmFilePath, $wmImgIdx)
 	{
-		KalturaLog::log("cmdLine($cmdLine),wmFilePath($wmFilePath), wmImgIdx($wmImgIdx),wmData:".json_encode($wmData));
+		VidiunLog::log("cmdLine($cmdLine),wmFilePath($wmFilePath), wmImgIdx($wmImgIdx),wmData:".json_encode($wmData));
 			/*
 			 * evaluate WM scale and margins, if any
 			 */
@@ -420,7 +420,7 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 			$wmData->margins = explode("x",$wmData->margins);
 		}
 	
-		KalturaLog::log("Updated Watermark data:\n".print_r($wmData,1));
+		VidiunLog::log("Updated Watermark data:\n".print_r($wmData,1));
 
 			/*
 			 * Evaluate WM scaling params and scale it accordingly
@@ -457,10 +457,10 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 "[1]scale=100:100,setsar=100/100[logo];[0:v][logo]overlay=main_w-overlay_w-10:300[out]" -map "[out]"
 */
 		$cmdLine = str_replace(
-				array(KDLCmdlinePlaceholders::WaterMarkFileName."_$wmImgIdx",KDLCmdlinePlaceholders::WaterMarkWidth."_$wmImgIdx",KDLCmdlinePlaceholders::WaterMarkHeight."_$wmImgIdx"), 
+				array(VDLCmdlinePlaceholders::WaterMarkFileName."_$wmImgIdx",VDLCmdlinePlaceholders::WaterMarkWidth."_$wmImgIdx",VDLCmdlinePlaceholders::WaterMarkHeight."_$wmImgIdx"), 
 				array($wmFilePath, $wid, $hgt),
 				$cmdLine);
-		KalturaLog::log("After:cmdline($cmdLine)");
+		VidiunLog::log("After:cmdline($cmdLine)");
 		return $cmdLine;
 	}
 	
@@ -494,7 +494,7 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 			$cmdLine = implode(' ', $cmdValsArr);
 			return $cmdLine;
 		}
-		foreach($filtersArr as $kFlt=>$filter){
+		foreach($filtersArr as $vFlt=>$filter){
 			$toRemove=strstr($filter, $filterName);
 			if($toRemove!=false)
 				break;
@@ -502,11 +502,11 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 		
 		$pipeName = str_replace($toRemove, '', $filter);
 		unset($filtersArr[$key+1]);
-		unset($filtersArr[$kFlt]);
+		unset($filtersArr[$vFlt]);
 		$lastChar = substr($toRemove,-1);
 		if($lastChar!='\'' && $lastChar!='\"')
 			$lastChar = null;
-		$filtersArr[$kFlt-1] = str_replace($pipeName, $lastChar, $filtersArr[$kFlt-1]);
+		$filtersArr[$vFlt-1] = str_replace($pipeName, $lastChar, $filtersArr[$vFlt-1]);
 		
 		$cmdValsArr[$key+1] = implode(';', $filtersArr);
 		$cmdLine = implode(' ', $cmdValsArr);
@@ -520,14 +520,14 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 	 */
 	public static function ExpandForcedKeyframesParams($execCmd)
 	{
-		$cmdLineWithKeyframes = strstr($execCmd, KDLCmdlinePlaceholders::ForceKeyframes);
+		$cmdLineWithKeyframes = strstr($execCmd, VDLCmdlinePlaceholders::ForceKeyframes);
 		if($cmdLineWithKeyframes==false){
 			return $execCmd;
 		}
 		
 		$cmdLineWithKeyframes = explode(" ",$cmdLineWithKeyframes);	// 
 		$cmdLineWithKeyframes = $cmdLineWithKeyframes[0];
-		$kfPrms = substr($cmdLineWithKeyframes,strlen(KDLCmdlinePlaceholders::ForceKeyframes));
+		$kfPrms = substr($cmdLineWithKeyframes,strlen(VDLCmdlinePlaceholders::ForceKeyframes));
 		$kfPrms = explode("_",$kfPrms);
 		$forcedKF=null;
 		for($t=0,$tr=0;$t<=$kfPrms[0]; $t+=$kfPrms[1], $tr+=round($kfPrms[1])){
@@ -553,7 +553,7 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 	 */
 	public static function SplitCommandLineForVideoPiping($cmdLine, $pipeStr)
 	{
-		KalturaLog::log("Before:cmdLine($cmdLine)");
+		VidiunLog::log("Before:cmdLine($cmdLine)");
 		$cmdLineArr = explode(' ', $cmdLine);
 	
 		$ffmpegBin = $cmdLineArr[0];
@@ -561,18 +561,18 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 	
 		// Check for '2pass' - 2-pass is compound cmd-line that contain contains twice the source op (one per pass)
 		// Get the source file
-		$kArr = array_keys($cmdLineArr,'-i');
-		$is2pass=(count($kArr)>1);
+		$vArr = array_keys($cmdLineArr,'-i');
+		$is2pass=(count($vArr)>1);
 		if($is2pass){
-			$keySrc = $kArr[1]+1;
+			$keySrc = $vArr[1]+1;
 		}
 		else {
-			$keySrc = $kArr[0]+1;
+			$keySrc = $vArr[0]+1;
 		}
 		$srcFile = $cmdLineArr[$keySrc];
 	
-		$kArr = array_keys($cmdLineArr,'-an');
-		if(count($kArr)==0 || ($is2pass && count($kArr)==1)) {
+		$vArr = array_keys($cmdLineArr,'-an');
+		if(count($vArr)==0 || ($is2pass && count($vArr)==1)) {
 			/*
 			 * Fix the audio source mapping, to adjust for separating video and audio sources
 			 * in order to support NGS (video only) piping.
@@ -580,10 +580,10 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 			 * For 2-pass sessions - the 1st pass should remain as-is
 			 * and this fix should be applied only to the 2nd pass
 			 */
-			$kArr = array_keys($cmdLineArr,'-filter_complex');
-			if(count($kArr)>0) {
-				$kFilterIdx = end($kArr);
-				$filterStr = $cmdLineArr[$kFilterIdx+1];
+			$vArr = array_keys($cmdLineArr,'-filter_complex');
+			if(count($vArr)>0) {
+				$vFilterIdx = end($vArr);
+				$filterStr = $cmdLineArr[$vFilterIdx+1];
 				$filterArr = explode(';', $filterStr);
 				foreach($filterArr as $idx=>$filterStr){
 					/*
@@ -592,23 +592,23 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 					if(preg_match("/\b(pan|amix|amerge)\b/", $filterStr)==1)
 						$filterArr[$idx] = str_replace ('[0:','[1:',$filterStr);
 				}
-				$cmdLineArr[$kFilterIdx+1] = implode(';', $filterArr);
+				$cmdLineArr[$vFilterIdx+1] = implode(';', $filterArr);
 			}
-			$kArr = array_keys($cmdLineArr,'-map');
-			if(count($kArr)>0) {
-				foreach ($kArr as $kIdx){
+			$vArr = array_keys($cmdLineArr,'-map');
+			if(count($vArr)>0) {
+				foreach ($vArr as $vIdx){
 					/*
 					 * The mapping fix should be applied only to the 2nd pass
 					 */
-					if($is2pass && $kIdx<=$keySrc){
+					if($is2pass && $vIdx<=$keySrc){
 						continue;
 					}
-					$mapStr = $cmdLineArr[$kIdx+1];
+					$mapStr = $cmdLineArr[$vIdx+1];
 					if($mapStr=='v'){
-						$cmdLineArr[$kIdx+1] = "0:v";
+						$cmdLineArr[$vIdx+1] = "0:v";
 					}
 					else if(strncmp($mapStr,"0:",2)==0 || $mapStr[2]!='a'){
-						$cmdLineArr[$kIdx+1] = str_replace ('0:','1:',$mapStr);
+						$cmdLineArr[$vIdx+1] = str_replace ('0:','1:',$mapStr);
 					}
 				}
 				$pipeStr.= " -i $srcFile";
@@ -616,11 +616,11 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 			else
 				$pipeStr.= " -i $srcFile -map 0:v -map 1:a";
 		}
-		KalturaLog::log("Fixed part:$pipeStr");
+		VidiunLog::log("Fixed part:$pipeStr");
 		$cmdLineArr[$keySrc].= " $pipeStr";
 		$cmdLine = implode(" ", $cmdLineArr);
-		$cmdLine = str_replace (KDLCmdlinePlaceholders::BinaryName,$ffmpegBin,$cmdLine);
-		KalturaLog::log("After:cmdLine($cmdLine)");
+		$cmdLine = str_replace (VDLCmdlinePlaceholders::BinaryName,$ffmpegBin,$cmdLine);
+		VidiunLog::log("After:cmdLine($cmdLine)");
 		return $cmdLine;
 	}
 }

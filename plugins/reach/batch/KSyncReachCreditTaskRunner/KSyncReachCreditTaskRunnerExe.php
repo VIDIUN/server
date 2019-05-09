@@ -5,6 +5,6 @@
  */
 require_once(__DIR__ . "/../../../../batch/bootstrap.php");
 
-$instance = new KSyncReachCreditTaskRunner();
+$instance = new VSyncReachCreditTaskRunner();
 $instance->run();
 $instance->done();

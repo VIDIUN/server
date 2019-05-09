@@ -4,7 +4,7 @@
  * @subpackage model.search
  */
 
-abstract class kBaseESearch extends kBaseSearch
+abstract class vBaseESearch extends vBaseSearch
 {
 	const GLOBAL_HIGHLIGHT_CONFIG = 'globalMaxNumberOfFragments';
 
@@ -31,9 +31,9 @@ abstract class kBaseESearch extends kBaseSearch
 		return $result;
 	}
 
-	protected function initQuery(array $statuses, $objectId, kPager $pager = null, ESearchOrderBy $order = null)
+	protected function initQuery(array $statuses, $objectId, vPager $pager = null, ESearchOrderBy $order = null)
 	{
-		$partnerId = kBaseElasticEntitlement::$partnerId;
+		$partnerId = vBaseElasticEntitlement::$partnerId;
 		$this->initQueryAttributes($partnerId, $objectId);
 		$this->initBaseFilter($partnerId, $statuses, $objectId);
 		$this->initPager($pager);
@@ -44,7 +44,7 @@ abstract class kBaseESearch extends kBaseSearch
 	{
 		$this->queryAttributes->getQueryHighlightsAttributes()->setScopeToGlobal();
 		$numOfFragments = elasticSearchUtils::getNumOfFragmentsByConfigKey(self::GLOBAL_HIGHLIGHT_CONFIG);
-		$highlight = new kESearchHighlightQuery($this->queryAttributes->getQueryHighlightsAttributes()->getFieldsToHighlight(), $numOfFragments);
+		$highlight = new vESearchHighlightQuery($this->queryAttributes->getQueryHighlightsAttributes()->getFieldsToHighlight(), $numOfFragments);
 		$highlight = $highlight->getFinalQuery();
 		if($highlight)
 		{
@@ -59,18 +59,18 @@ abstract class kBaseESearch extends kBaseSearch
 		$searchTerms = array_values($searchTerms);
 		if (!$searchTerms)
 		{
-			KalturaLog::log("Empty search terms, not adding to search history");
+			VidiunLog::log("Empty search terms, not adding to search history");
 			return;
 		}
 
 		$searchHistoryInfo = new ESearchSearchHistoryInfo();
 		$searchHistoryInfo->setSearchTerms($searchTerms);
-		$searchHistoryInfo->setPartnerId(kBaseElasticEntitlement::$partnerId);
-		$searchHistoryInfo->setKUserId(kBaseElasticEntitlement::$kuserId);
+		$searchHistoryInfo->setPartnerId(vBaseElasticEntitlement::$partnerId);
+		$searchHistoryInfo->setVUserId(vBaseElasticEntitlement::$vuserId);
 		$searchHistoryInfo->setSearchContext(searchHistoryUtils::getSearchContext());
 		$searchHistoryInfo->setSearchedObject($this->getElasticTypeName());
 		$searchHistoryInfo->setTimestamp(time());
-		kEventsManager::raiseEventDeferred(new kESearchSearchHistoryInfoEvent($searchHistoryInfo));
+		vEventsManager::raiseEventDeferred(new vESearchSearchHistoryInfoEvent($searchHistoryInfo));
 	}
 
 }

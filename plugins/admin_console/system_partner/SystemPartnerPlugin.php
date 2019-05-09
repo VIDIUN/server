@@ -2,7 +2,7 @@
 /**
  * @package plugins.systemPartner
  */
-class SystemPartnerPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaServices, IKalturaEnumerator
+class SystemPartnerPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunServices, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'systemPartner';
 	

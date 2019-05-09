@@ -3,17 +3,17 @@
  * @package plugins.caption
  * @subpackage lib
  */
-class srtCaptionsContentManager extends kCaptionsContentManager
+class srtCaptionsContentManager extends vCaptionsContentManager
 {
 
 	const SRT_TIMECODE_PATTERN = '#^((?:[0-9]{2}:)?[0-9]{2}:[0-9]{2}\,[0-9]{3}) --> ((?:[0-9]{2}:)?[0-9]{2}:[0-9]{2}\,[0-9]{3})( .*)?$#';
 
 	/* (non-PHPdoc)
-	 * @see kCaptionsContentManager::parse()
+	 * @see vCaptionsContentManager::parse()
 	 */
 	public function parse($content)
 	{
-		if (kString::beginsWith($content, "\xff\xfe"))
+		if (vString::beginsWith($content, "\xff\xfe"))
 		{
 			$content = iconv('utf-16', 'utf-8', substr($content, 2));
 		}
@@ -22,7 +22,7 @@ class srtCaptionsContentManager extends kCaptionsContentManager
 		$regex = '/(?P<index>\d+)\s*\r?\n\s*(?P<startHours>\d{1,2}):(?P<startMinutes>\d{1,2}):(?P<startSeconds>\d{1,2})[,\.](?P<startMilliseconds>\d{1,3})\s*-->\s*(?P<endHours>\d{1,2}):(?P<endMinutes>\d{1,2}):(?P<endSeconds>\d{1,2})[,\.](?P<endMilliseconds>\d{1,3})\s*\r?\n((?P<content>.+)\r?(\n|$))?\s*\r?(\n|$)/sU';
 		if(!preg_match_all($regex, $content, $matches) || !count($matches) || !count($matches[0]))
 		{
-			KalturaLog::err("Content regex not found");
+			VidiunLog::err("Content regex not found");
 			return array();
 		}
 		
@@ -60,11 +60,11 @@ class srtCaptionsContentManager extends kCaptionsContentManager
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCaptionsContentManager::getContent()
+	 * @see vCaptionsContentManager::getContent()
 	 */
 	public function getContent($content)
 	{
-		if (kString::beginsWith($content, "\xff\xfe"))
+		if (vString::beginsWith($content, "\xff\xfe"))
 		{
 			$content = iconv('utf-16', 'utf-8', substr($content, 2));
 		}
@@ -102,7 +102,7 @@ class srtCaptionsContentManager extends kCaptionsContentManager
 			return null;
 		$adjustedStartTime = TimeOffsetUtils::getAdjustedStartTime($startCaption, $clipStartTime, $globalOffset);
 		$adjustedEndTime = TimeOffsetUtils::getAdjustedEndTime($endCaption, $clipStartTime, $clipEndTime, $globalOffset);
-		$timeLine = $this->formatSrtTimeStamp($adjustedStartTime) . ' --> ' . $this->formatSrtTimeStamp($adjustedEndTime). kCaptionsContentManager::UNIX_LINE_ENDING;
+		$timeLine = $this->formatSrtTimeStamp($adjustedStartTime) . ' --> ' . $this->formatSrtTimeStamp($adjustedEndTime). vCaptionsContentManager::UNIX_LINE_ENDING;
 		return $timeLine;
 	}
 

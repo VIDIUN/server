@@ -3,7 +3,7 @@
  * @package plugins.unicornDistribution
  * @subpackage api.objects
  */
-class KalturaUnicornDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunUnicornDistributionProfile extends VidiunConfigurableDistributionProfile
 {
 	/**
 	 * The email address associated with the Upload User, used to authorize the incoming request.
@@ -84,7 +84,7 @@ class KalturaUnicornDistributionProfile extends KalturaConfigurableDistributionP
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaDistributionProfile::getMapBetweenObjects()
+	 * @see VidiunDistributionProfile::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{

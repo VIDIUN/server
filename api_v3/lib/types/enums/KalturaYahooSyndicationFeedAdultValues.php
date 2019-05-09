@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaYahooSyndicationFeedAdultValues extends KalturaStringEnum
+class VidiunYahooSyndicationFeedAdultValues extends VidiunStringEnum
 {
 	// applied on <media:rating scheme="urn:simple">
 	const ADULT = "adult";

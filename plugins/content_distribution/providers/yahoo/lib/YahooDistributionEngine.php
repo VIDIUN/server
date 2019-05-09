@@ -32,13 +32,13 @@ class YahooDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaYahooDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaYahooDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunYahooDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunYahooDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaYahooDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaYahooDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunYahooDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunYahooDistributionJobProviderData");
 
 		return $this->handleSubmit($data, $data->distributionProfile, $data->providerData);
 	}
@@ -46,7 +46,7 @@ class YahooDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		
 	}
@@ -54,13 +54,13 @@ class YahooDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaYahooDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaYahooDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunYahooDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunYahooDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaYahooDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaYahooDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunYahooDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunYahooDistributionJobProviderData");
 		
 		return $this->handleDelete($data, $data->distributionProfile, $data->providerData);
 		
@@ -69,7 +69,7 @@ class YahooDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseDelete::closeDelete()
 	 */
-	public function closeDelete(KalturaDistributionDeleteJobData $data)
+	public function closeDelete(VidiunDistributionDeleteJobData $data)
 	{
 		
 	}
@@ -77,13 +77,13 @@ class YahooDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaYahooDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaYahooDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunYahooDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunYahooDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaYahooDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaYahooDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunYahooDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunYahooDistributionJobProviderData");
 		
 		return $this->handleSubmit($data, $data->distributionProfile, $data->providerData);
 	
@@ -92,17 +92,17 @@ class YahooDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseUpdate::closeUpdate()
 	 */
-	public function closeUpdate(KalturaDistributionUpdateJobData $data)
+	public function closeUpdate(VidiunDistributionUpdateJobData $data)
 	{
 		
 	}
 
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaYahooDistributionProfile $distributionProfile
-	 * @param KalturaYahooDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunYahooDistributionProfile $distributionProfile
+	 * @param VidiunYahooDistributionJobProviderData $providerData
 	 */
-	protected function handleSubmit(KalturaDistributionJobData $data, KalturaYahooDistributionProfile $distributionProfile, KalturaYahooDistributionJobProviderData $providerData)
+	protected function handleSubmit(VidiunDistributionJobData $data, VidiunYahooDistributionProfile $distributionProfile, VidiunYahooDistributionJobProviderData $providerData)
 	{
 		$distributionProfile = $data->distributionProfile;
 		$providerData = $data->providerData;
@@ -110,7 +110,7 @@ class YahooDistributionEngine extends DistributionEngine implements
 
 		$this->fieldValues = unserialize($providerData->fieldValues);
 		if (!$this->fieldValues) {
-			KalturaLog::err("fieldValues array is empty or null");
+			VidiunLog::err("fieldValues array is empty or null");
 			throw new Exception("fieldValues array is empty or null");	
 		}			
 		//xml creation
@@ -135,7 +135,7 @@ class YahooDistributionEngine extends DistributionEngine implements
 			
 		$xmlString = $feed->getXmlString();	
 		file_put_contents($srcFile, $xmlString);	
-		KalturaLog::info("XML written to file [$srcFile]");
+		VidiunLog::info("XML written to file [$srcFile]");
 		//upload file to FTP
 
 		$ftpManager = $this->getFTPManager($distributionProfile);
@@ -151,7 +151,7 @@ class YahooDistributionEngine extends DistributionEngine implements
 		$data->sentData = $xmlString;
 		$data->results = 'none'; 
 		// the url should be accessed automatically
-		if ($distributionProfile->processFeed == KalturaYahooDistributionProcessFeedActionStatus::AUTOMATIC)
+		if ($distributionProfile->processFeed == VidiunYahooDistributionProcessFeedActionStatus::AUTOMATIC)
 		{
 			$accessUrlResult = $this->accessUrl($distributionProfile, $destFile);
 			$data->results = $accessUrlResult['result'];
@@ -160,15 +160,15 @@ class YahooDistributionEngine extends DistributionEngine implements
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaYahooDistributionProfile $distributionProfile
-	 * @param KalturaYahooDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunYahooDistributionProfile $distributionProfile
+	 * @param VidiunYahooDistributionJobProviderData $providerData
 	 */
-	protected function handleDelete(KalturaDistributionJobData $data, KalturaYahooDistributionProfile $distributionProfile, KalturaYahooDistributionJobProviderData $providerData)
+	protected function handleDelete(VidiunDistributionJobData $data, VidiunYahooDistributionProfile $distributionProfile, VidiunYahooDistributionJobProviderData $providerData)
 	{	
 		$this->fieldValues = unserialize($providerData->fieldValues);
 		if (!$this->fieldValues) {
-			KalturaLog::err("fieldValues array is empty or null");
+			VidiunLog::err("fieldValues array is empty or null");
 			throw new Exception("fieldValues array is empty or null");	
 		}		
 		$entryDistribution = $data->entryDistribution;	
@@ -190,7 +190,7 @@ class YahooDistributionEngine extends DistributionEngine implements
 	
 		$xmlString = $feed->getXmlString();
 		file_put_contents($srcFile, $xmlString);
-		KalturaLog::info("XML written to file [$srcFile]");
+		VidiunLog::info("XML written to file [$srcFile]");
 		//upload file to FTP
 		$ftpManager = $this->getFTPManager($distributionProfile);
 		$ftpManager->putFile($destFile, $srcFile, true);
@@ -198,7 +198,7 @@ class YahooDistributionEngine extends DistributionEngine implements
 		$data->sentData = $xmlString;
 		$data->results = 'none'; 
 		// the url should be accessed automatically
-		if ($distributionProfile->processFeed == KalturaYahooDistributionProcessFeedActionStatus::AUTOMATIC)
+		if ($distributionProfile->processFeed == VidiunYahooDistributionProcessFeedActionStatus::AUTOMATIC)
 		{
 			$accessUrlResult = $this->accessUrl($distributionProfile, $destFile);
 			$data->results = $accessUrlResult['result'];
@@ -208,17 +208,17 @@ class YahooDistributionEngine extends DistributionEngine implements
 				
 	/**
 	 * 
-	 * @param KalturaYahooDistributionProfile $distributionProfile
+	 * @param VidiunYahooDistributionProfile $distributionProfile
 	 * @return ftpMgr
 	 */
-	protected function getFTPManager(KalturaYahooDistributionProfile $distributionProfile)
+	protected function getFTPManager(VidiunYahooDistributionProfile $distributionProfile)
 	{
 		$ftpHost = $distributionProfile->ftpHost;
 		$ftpUsername = $distributionProfile->ftpUsername;
 		$ftpPassword = $distributionProfile->ftpPassword;
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
 		$engineOptions['passiveMode'] = true;
-		$ftpManager = kFileTransferMgr::getInstance(kFileTransferMgrType::FTP, $engineOptions);
+		$ftpManager = vFileTransferMgr::getInstance(vFileTransferMgrType::FTP, $engineOptions);
 		if(!$ftpManager){
 			throw new Exception("FTP manager not loaded");
 		}
@@ -226,7 +226,7 @@ class YahooDistributionEngine extends DistributionEngine implements
 		return $ftpManager;
 	}
 	
-	protected function getEntryDistributionFlavorAssets(KalturaEntryDistribution $entryDistribution)
+	protected function getEntryDistributionFlavorAssets(VidiunEntryDistribution $entryDistribution)
 	{
 		$flavorAssetIds = $entryDistribution->flavorAssetIds;
 		$partnerId = $entryDistribution->partnerId;
@@ -234,7 +234,7 @@ class YahooDistributionEngine extends DistributionEngine implements
 		return parent::getFlavorAssets($partnerId, $flavorAssetIds);
 	}
 
-	protected function getEntryDistributionThumbAssets(KalturaEntryDistribution $entryDistribution)
+	protected function getEntryDistributionThumbAssets(VidiunEntryDistribution $entryDistribution)
 	{
 		$thumbAssetIds = $entryDistribution->thumbAssetIds;
 		$partnerId = $entryDistribution->partnerId;
@@ -244,13 +244,13 @@ class YahooDistributionEngine extends DistributionEngine implements
 	
 	/**
 	 * upload all flavor assets files to FTP
-	 * @param KalturaYahooDistributionJobProviderData $providerData
+	 * @param VidiunYahooDistributionJobProviderData $providerData
 	 * @param YahooDistributionFeedHelper $feed
 	 */
 	protected function uploadFlavorAssetsFiles($path, $feed, $providerData, $ftpManager, $flavorAssets, $currentTime)
 	{
 		/* @var $feed YahooDistributionFeedHelper */
-		/* @var $providerData KalturaYahooDistributionJobProviderData */
+		/* @var $providerData VidiunYahooDistributionJobProviderData */
 		foreach ($flavorAssets as $asset)
 		{
 			$destName = $feed->flavorAssetUniqueName($asset, $currentTime);
@@ -271,9 +271,9 @@ class YahooDistributionEngine extends DistributionEngine implements
 	
 	/**
 	 * access url.
-	 * @param KalturaYahooDistributionProfile $distributionProfile
+	 * @param VidiunYahooDistributionProfile $distributionProfile
 	 */
-	private function accessUrl(KalturaYahooDistributionProfile $distributionProfile, $fileName)
+	private function accessUrl(VidiunYahooDistributionProfile $distributionProfile, $fileName)
 	{
 		$url = self::ACCESS_URL;
 		$params = array(

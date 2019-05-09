@@ -5,15 +5,15 @@
  * @package api
  * @subpackage objects
  */
-class KalturaObjectIdField extends KalturaStringField
+class VidiunObjectIdField extends VidiunStringField
 {
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kObjectIdField();
+			$dbObject = new vObjectIdField();
 			
 		return parent::toObject($dbObject, $skip);
 	}

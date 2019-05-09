@@ -13,10 +13,10 @@ CREATE TABLE IF NOT EXISTS `access_control` (
   `site_restrict_list` text,
   `country_restrict_type` tinyint(4) DEFAULT NULL,
   `country_restrict_list` text,
-  `ks_restrict_privilege` varchar(20) DEFAULT NULL,
+  `vs_restrict_privilege` varchar(20) DEFAULT NULL,
   `prv_restrict_privilege` varchar(20) DEFAULT NULL,
   `prv_restrict_length` int(11) DEFAULT NULL,
-  `kdir_restrict_type` tinyint(4) DEFAULT NULL,
+  `vdir_restrict_type` tinyint(4) DEFAULT NULL,
   `custom_data` text,
   `rules` mediumtext,
   PRIMARY KEY (`id`),
@@ -47,10 +47,10 @@ CREATE TABLE app_token(
   `session_privileges` text,
   `token` text,
   `custom_data` text,
-  `kuser_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `int_id_index` (`int_id`),
-  KEY `kuser_id` (`kuser_id`)
+  KEY `vuser_id` (`vuser_id`)
 )ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `audit_trail` (
@@ -66,10 +66,10 @@ CREATE TABLE IF NOT EXISTS `audit_trail` (
   `master_partner_id` int(11) DEFAULT NULL,
   `partner_id` int(11) DEFAULT NULL,
   `request_id` varchar(31) DEFAULT NULL,
-  `kuser_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `action` varchar(31) DEFAULT NULL,
   `data` text,
-  `ks` varchar(511) DEFAULT NULL,
+  `vs` varchar(511) DEFAULT NULL,
   `context` tinyint(4) DEFAULT NULL,
   `entry_point` varchar(127) DEFAULT NULL,
   `server_name` varchar(63) DEFAULT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `audit_trail` (
   PRIMARY KEY (`id`),
   KEY `object_index` (`object_type`,`object_id`),
   KEY `partner_entry_index` (`partner_id`,`entry_id`),
-  KEY `kuser_index` (`kuser_id`),
+  KEY `vuser_index` (`vuser_id`),
   KEY `status_index` (`status`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -384,7 +384,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   `inheritance_type` tinyint(4) DEFAULT '2',
   `user_join_policy` tinyint(4) DEFAULT '3',
   `default_permission_level` tinyint(4) DEFAULT '3',
-  `kuser_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `puser_id` varchar(100) NOT NULL,
   `reference_id` varchar(512) DEFAULT NULL,
   `contribution_policy` tinyint(4) DEFAULT '2',
@@ -414,7 +414,7 @@ CREATE TABLE IF NOT EXISTS `category_entry` (
   `category_full_ids` text NOT NULL,
   `status` int(11) DEFAULT '2',
   `privacy_context` varchar(255) DEFAULT NULL,
-  `creator_kuser_id` int(11) DEFAULT NULL,
+  `creator_vuser_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id_index` (`category_id`),
   KEY `updated_at` (`updated_at`),
@@ -423,10 +423,10 @@ CREATE TABLE IF NOT EXISTS `category_entry` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE IF NOT EXISTS `category_kuser` (
+CREATE TABLE IF NOT EXISTS `category_vuser` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `category_id` int(11) NOT NULL,
-  `kuser_id` int(11) NOT NULL,
+  `vuser_id` int(11) NOT NULL,
   `puser_id` varchar(100) NOT NULL,
   `partner_id` int(11) NOT NULL,
   `permission_level` tinyint(4) DEFAULT NULL,
@@ -442,12 +442,12 @@ CREATE TABLE IF NOT EXISTS `category_kuser` (
   PRIMARY KEY (`id`),
   KEY `partner_id_index` (`partner_id`),
   KEY `category_index` (`category_id`,`status`),
-  KEY `kuser_index` (`kuser_id`,`status`)
+  KEY `vuser_index` (`vuser_id`,`status`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `comment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `kuser_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `comment_type` int(11) DEFAULT NULL,
   `subject_id` int(11) DEFAULT NULL,
   `base_date` date DEFAULT NULL,
@@ -456,7 +456,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `subject_created_index` (`comment_type`,`subject_id`,`base_date`,`reply_to`,`created_at`),
-  KEY `comment_FI_1` (`kuser_id`)
+  KEY `comment_FI_1` (`vuser_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
@@ -593,7 +593,7 @@ CREATE TABLE IF NOT EXISTS `cue_point` (
   `status` int(11) NOT NULL,
   `type` int(11) NOT NULL,
   `sub_type` int(11) NOT NULL,
-  `kuser_id` int(11) NOT NULL,
+  `vuser_id` int(11) NOT NULL,
   `custom_data` text,
   `partner_data` text,
   `partner_sort_value` int(11) DEFAULT NULL,
@@ -783,7 +783,7 @@ CREATE TABLE IF NOT EXISTS `drop_folder_file` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
--- dynamic_enum IDs must start from 10001 to avoid conflicts, see https://kaltura.atlassian.net/browse/PLAT-9149
+-- dynamic_enum IDs must start from 10001 to avoid conflicts, see https://vidiun.atlassian.net/browse/PLAT-9149
 CREATE TABLE IF NOT EXISTS `dynamic_enum` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `enum_name` varchar(255) NOT NULL,
@@ -833,8 +833,8 @@ CREATE TABLE IF NOT EXISTS `email_ingestion_profile` (
 
 CREATE TABLE IF NOT EXISTS `entry` (
   `id` varchar(20) NOT NULL DEFAULT '',
-  `kshow_id` varchar(20) DEFAULT NULL,
-  `kuser_id` int(11) DEFAULT NULL,
+  `vshow_id` varchar(20) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `name` varchar(256) DEFAULT NULL,
   `type` smallint(6) DEFAULT NULL,
   `media_type` smallint(6) DEFAULT NULL,
@@ -952,7 +952,7 @@ CREATE TABLE `entry_vendor_task` (
   `price` float NOT NULL,
   `catalog_item_id` int(11) NOT NULL,
   `reach_profile_id` int(11) NOT NULL,
-  `kuser_id` int(11) NOT NULL,
+  `vuser_id` int(11) NOT NULL,
   `version` int(11) DEFAULT NULL,
   `context` varchar(256) DEFAULT NULL,
   `custom_data` text,
@@ -983,13 +983,13 @@ CREATE TABLE IF NOT EXISTS `event_notification_template` (
 
 
 CREATE TABLE IF NOT EXISTS `favorite` (
-  `kuser_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `subject_type` int(11) DEFAULT NULL,
   `subject_id` int(11) DEFAULT NULL,
   `privacy` int(11) DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
-  KEY `kuser_index` (`kuser_id`),
+  KEY `vuser_index` (`vuser_id`),
   KEY `subject_index` (`subject_type`,`subject_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -1043,7 +1043,7 @@ CREATE TABLE IF NOT EXISTS `file_sync` (
 
 CREATE TABLE IF NOT EXISTS `flag` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `kuser_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `subject_type` int(11) DEFAULT NULL,
   `subject_id` int(11) DEFAULT NULL,
   `flag_type` int(11) DEFAULT NULL,
@@ -1052,7 +1052,7 @@ CREATE TABLE IF NOT EXISTS `flag` (
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `subject_created_index` (`subject_type`,`subject_id`,`created_at`),
-  KEY `flag_FI_1` (`kuser_id`)
+  KEY `flag_FI_1` (`vuser_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
@@ -1199,7 +1199,7 @@ CREATE TABLE IF NOT EXISTS `flavor_params_output` (
 
 
 CREATE TABLE IF NOT EXISTS `flickr_token` (
-  `kalt_token` varchar(256) NOT NULL,
+  `vidi_token` varchar(256) NOT NULL,
   `frob` varchar(64) DEFAULT NULL,
   `token` varchar(64) DEFAULT NULL,
   `nsid` varchar(64) DEFAULT NULL,
@@ -1207,8 +1207,8 @@ CREATE TABLE IF NOT EXISTS `flickr_token` (
   `is_valid` int(11) DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`kalt_token`),
-  KEY `is_valid_index` (`is_valid`,`kalt_token`)
+  PRIMARY KEY (`vidi_token`),
+  KEY `is_valid_index` (`is_valid`,`vidi_token`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `generic_distribution_provider` (
@@ -1255,18 +1255,18 @@ CREATE TABLE IF NOT EXISTS `generic_distribution_provider_action` (
 
 CREATE TABLE IF NOT EXISTS `invalid_session` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `ks` varchar(300) DEFAULT NULL,
-  `ks_valid_until` datetime DEFAULT NULL,
+  `vs` varchar(300) DEFAULT NULL,
+  `vs_valid_until` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `actions_limit` int(11) DEFAULT NULL,
   `type` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `ks_index` (`ks`(255)),
-  KEY `ks_valid_until_index` (`ks_valid_until`)
+  KEY `vs_index` (`vs`(255)),
+  KEY `vs_valid_until_index` (`vs_valid_until`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE IF NOT EXISTS `kce_installation_error` (
+CREATE TABLE IF NOT EXISTS `vce_installation_error` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `partner_id` int(11) DEFAULT NULL,
   `browser` varchar(100) DEFAULT NULL,
@@ -1294,7 +1294,7 @@ CREATE TABLE IF NOT EXISTS `keyword` (
   KEY `word_index` (`word`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `kshow` (
+CREATE TABLE IF NOT EXISTS `vshow` (
   `id` varchar(20) NOT NULL DEFAULT '',
   `producer_id` int(11) DEFAULT NULL,
   `episode_id` varchar(20) DEFAULT NULL,
@@ -1353,19 +1353,19 @@ CREATE TABLE IF NOT EXISTS `kshow` (
 
 
 
-CREATE TABLE IF NOT EXISTS `kshow_kuser` (
-  `kshow_id` varchar(20) DEFAULT NULL,
-  `kuser_id` int(11) DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS `vshow_vuser` (
+  `vshow_id` varchar(20) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `subscription_type` int(11) DEFAULT NULL,
   `alert_type` int(11) DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
-  KEY `kshow_index` (`kshow_id`),
-  KEY `kuser_index` (`kuser_id`),
-  KEY `subscription_index` (`kshow_id`,`subscription_type`)
+  KEY `vshow_index` (`vshow_id`),
+  KEY `vuser_index` (`vuser_id`),
+  KEY `subscription_index` (`vshow_id`,`subscription_type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `kuser` (
+CREATE TABLE IF NOT EXISTS `vuser` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `login_data_id` int(11) DEFAULT NULL,
   `is_admin` tinyint(4) DEFAULT NULL,
@@ -1399,7 +1399,7 @@ CREATE TABLE IF NOT EXISTS `kuser` (
   `views` int(11) DEFAULT '0',
   `fans` int(11) DEFAULT '0',
   `entries` int(11) DEFAULT '0',
-  `produced_kshows` int(11) DEFAULT '0',
+  `produced_vshows` int(11) DEFAULT '0',
   `status` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
@@ -1421,11 +1421,11 @@ CREATE TABLE IF NOT EXISTS `kuser` (
   KEY `partner_puser_status_updated` (`partner_id`,`puser_id`,`status`,`updated_at`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `kuser_kgroup` (
+CREATE TABLE `vuser_vgroup` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `kuser_id` int(11) NOT NULL,
+  `vuser_id` int(11) NOT NULL,
   `puser_id` varchar(100) NOT NULL,
-  `kgroup_id` int(11) NOT NULL,
+  `vgroup_id` int(11) NOT NULL,
   `pgroup_id` varchar(100) NOT NULL,
   `status` tinyint(4) NOT NULL,
   `partner_id` int(11) NOT NULL,
@@ -1433,49 +1433,49 @@ CREATE TABLE `kuser_kgroup` (
   `updated_at` datetime DEFAULT NULL,
   `custom_data` text,
   PRIMARY KEY (`id`),
-  KEY `partner_kuser_index` (`kuser_id`,`status`),
-  KEY `partner_kgroup_index` (`kgroup_id`,`status`),
+  KEY `partner_vuser_index` (`vuser_id`,`status`),
+  KEY `partner_vgroup_index` (`vgroup_id`,`status`),
   KEY `partner_index` (`partner_id`,`status`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=4;
 
-CREATE TABLE IF NOT EXISTS `kuser_to_user_role` (
+CREATE TABLE IF NOT EXISTS `vuser_to_user_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `kuser_id` int(11) NOT NULL,
+  `vuser_id` int(11) NOT NULL,
   `user_role_id` int(11) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `kuser_to_user_role_FI_1` (`kuser_id`)
+  KEY `vuser_to_user_role_FI_1` (`vuser_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE IF NOT EXISTS `kvote` (
+CREATE TABLE IF NOT EXISTS `vvote` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `kshow_id` varchar(20) DEFAULT NULL,
+  `vshow_id` varchar(20) DEFAULT NULL,
   `entry_id` varchar(20) DEFAULT NULL,
-  `kuser_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `puser_id` varchar(100) DEFAULT NULL,
   `rank` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   `partner_id` int(11) DEFAULT NULL,
-  `kvote_type` int(11) DEFAULT '1',
+  `vvote_type` int(11) DEFAULT '1',
   `custom_data` text,
   PRIMARY KEY (`id`),
-  KEY `kshow_index` (`kshow_id`),
+  KEY `vshow_index` (`vshow_id`),
   KEY `entry_user_index` (`entry_id`),
-  KEY `kvote_FI_3` (`kuser_id`),
-  KEY `entry_user_status_index` (`entry_id`,`kuser_id`,`status`),
+  KEY `vvote_FI_3` (`vuser_id`),
+  KEY `entry_user_status_index` (`entry_id`,`vuser_id`,`status`),
   KEY `partner_created_at` (`partner_id`,`created_at`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE IF NOT EXISTS `kwidget_log` (
+CREATE TABLE IF NOT EXISTS `vwidget_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `widget_id` varchar(24) DEFAULT NULL,
   `source_widget_id` varchar(24) DEFAULT NULL,
   `root_widget_id` varchar(24) DEFAULT NULL,
-  `kshow_id` varchar(20) DEFAULT NULL,
+  `vshow_id` varchar(20) DEFAULT NULL,
   `entry_id` varchar(20) DEFAULT NULL,
   `ui_conf_id` int(11) DEFAULT NULL,
   `referer` varchar(1024) DEFAULT NULL,
@@ -1491,11 +1491,11 @@ CREATE TABLE IF NOT EXISTS `kwidget_log` (
   `subp_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `referer_index` (`referer`(255)),
-  KEY `entry_id_kshow_id_index` (`entry_id`,`kshow_id`),
+  KEY `entry_id_vshow_id_index` (`entry_id`,`vshow_id`),
   KEY `partner_id_subp_id_index` (`partner_id`,`subp_id`),
-  KEY `kwidget_log_FI_1` (`widget_id`),
-  KEY `kwidget_log_FI_2` (`kshow_id`),
-  KEY `kwidget_log_FI_4` (`ui_conf_id`)
+  KEY `vwidget_log_FI_1` (`widget_id`),
+  KEY `vwidget_log_FI_2` (`vshow_id`),
+  KEY `vwidget_log_FI_4` (`ui_conf_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1676,7 +1676,7 @@ CREATE TABLE IF NOT EXISTS `moderation` (
   `subp_id` int(11) DEFAULT NULL,
   `object_id` varchar(20) DEFAULT NULL,
   `object_type` smallint(6) DEFAULT NULL,
-  `kuser_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `puser_id` varchar(64) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
@@ -1687,7 +1687,7 @@ CREATE TABLE IF NOT EXISTS `moderation` (
   PRIMARY KEY (`id`),
   KEY `partner_id_group_id_status_index` (`partner_id`,`group_id`,`status`),
   KEY `object_index` (`partner_id`,`status`,`object_id`,`object_type`),
-  KEY `moderation_FI_1` (`kuser_id`)
+  KEY `moderation_FI_1` (`vuser_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
@@ -1695,17 +1695,17 @@ CREATE TABLE IF NOT EXISTS `moderation` (
 CREATE TABLE IF NOT EXISTS `moderation_flag` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `partner_id` int(11) DEFAULT NULL,
-  `kuser_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `object_type` smallint(6) DEFAULT NULL,
   `flagged_entry_id` varchar(20) COLLATE latin1_general_ci DEFAULT NULL,
-  `flagged_kuser_id` int(11) DEFAULT NULL,
+  `flagged_vuser_id` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `comments` varchar(1024) COLLATE latin1_general_ci DEFAULT NULL,
   `flag_type` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `entry_object_index` (`partner_id`,`status`,`object_type`,`flagged_kuser_id`)
+  KEY `entry_object_index` (`partner_id`,`status`,`object_type`,`flagged_vuser_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 CREATE TABLE `notification` (
@@ -1750,8 +1750,8 @@ CREATE TABLE IF NOT EXISTS `partner` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `partner_alias` varchar(64) DEFAULT NULL,
-  `ANONYMOUS_KUSER_ID` int(11) DEFAULT NULL,
-  `ks_max_expiry_in_seconds` int(11) DEFAULT NULL,
+  `ANONYMOUS_VUSER_ID` int(11) DEFAULT NULL,
+  `vs_max_expiry_in_seconds` int(11) DEFAULT NULL,
   `create_user_on_demand` tinyint(4) DEFAULT '1',
   `prefix` varchar(32) DEFAULT NULL,
   `admin_name` varchar(50) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
@@ -1778,7 +1778,7 @@ CREATE TABLE IF NOT EXISTS `partner` (
   `work_group_id` int(11) DEFAULT NULL,
   `partner_group_type` smallint(6) DEFAULT '1',
   `partner_parent_id` int(11) DEFAULT NULL,
-  `kmc_version` varchar(15) DEFAULT '1',
+  `vmc_version` varchar(15) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `partner_alias_index` (`partner_alias`),
   KEY `updated_at` (`updated_at`),
@@ -1851,8 +1851,8 @@ CREATE TABLE IF NOT EXISTS `partner_stats` (
   `users_2` int(11) DEFAULT NULL,
   `rc_1` int(11) DEFAULT NULL,
   `rc_2` int(11) DEFAULT NULL,
-  `kshows_1` int(11) DEFAULT NULL,
-  `kshows_2` int(11) DEFAULT NULL,
+  `vshows_1` int(11) DEFAULT NULL,
+  `vshows_2` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `custom_data` text,
@@ -1961,11 +1961,11 @@ CREATE TABLE IF NOT EXISTS `priority_group` (
 
 
 
-CREATE TABLE IF NOT EXISTS `puser_kuser` (
+CREATE TABLE IF NOT EXISTS `puser_vuser` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `partner_id` int(11) DEFAULT NULL,
   `puser_id` varchar(64) DEFAULT NULL,
-  `kuser_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `puser_name` varchar(64) DEFAULT NULL,
   `custom_data` varchar(1024) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
@@ -1974,14 +1974,14 @@ CREATE TABLE IF NOT EXISTS `puser_kuser` (
   `subp_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `partner_puser_index` (`partner_id`,`puser_id`),
-  KEY `kuser_id_index` (`kuser_id`)
+  KEY `vuser_id_index` (`vuser_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 
 CREATE TABLE IF NOT EXISTS `puser_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `kshow_id` varchar(20) DEFAULT NULL,
+  `vshow_id` varchar(20) DEFAULT NULL,
   `partner_id` int(11) DEFAULT NULL,
   `puser_id` varchar(64) DEFAULT NULL,
   `role` int(11) DEFAULT NULL,
@@ -1990,7 +1990,7 @@ CREATE TABLE IF NOT EXISTS `puser_role` (
   `subp_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `partner_puser_index` (`partner_id`,`puser_id`),
-  KEY `kshow_id_index` (`kshow_id`),
+  KEY `vshow_id_index` (`vshow_id`),
   KEY `puser_role_FI_3` (`puser_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -2045,7 +2045,7 @@ CREATE TABLE IF NOT EXISTS `roughcut_entry` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `roughcut_id` varchar(20) DEFAULT NULL,
   `roughcut_version` int(11) DEFAULT NULL,
-  `roughcut_kshow_id` varchar(20) DEFAULT NULL,
+  `roughcut_vshow_id` varchar(20) DEFAULT NULL,
   `entry_id` varchar(20) DEFAULT NULL,
   `partner_id` int(11) DEFAULT NULL,
   `op_type` smallint(6) DEFAULT NULL,
@@ -2073,7 +2073,7 @@ CREATE TABLE `schedule_event` (
   `geo_long` float DEFAULT NULL,
   `location` varchar(256) DEFAULT NULL,
   `organizer` varchar(256) DEFAULT NULL,
-  `owner_kuser_id` int(11) DEFAULT NULL,
+  `owner_vuser_id` int(11) DEFAULT NULL,
   `priority` int(11) DEFAULT NULL,
   `sequence` int(11) DEFAULT NULL,
   `recurrence_type` int(11) NOT NULL,
@@ -2273,14 +2273,14 @@ CREATE TABLE IF NOT EXISTS `short_link` (
   `updated_at` datetime DEFAULT NULL,
   `expires_at` datetime DEFAULT NULL,
   `partner_id` int(11) DEFAULT NULL,
-  `kuser_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `name` varchar(63) DEFAULT NULL,
   `system_name` varchar(63) DEFAULT NULL,
   `full_url` text DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `int_id` (`int_id`),
-  KEY `kuser_partner_name` (`partner_id`,`kuser_id`,`system_name`)
+  KEY `vuser_partner_name` (`partner_id`,`vuser_id`,`system_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
 
 
@@ -2409,8 +2409,8 @@ CREATE TABLE `temp_server_node_status` (
   PRIMARY KEY (`host_name`(255))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `temp_updated_kusers_storage_usage` (
-  `kuser_id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `temp_updated_vusers_storage_usage` (
+  `vuser_id` int(11) NOT NULL,
   `storage_kb` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -2418,8 +2418,8 @@ CREATE TABLE IF NOT EXISTS `temp_updated_kusers_storage_usage` (
 
 CREATE TABLE IF NOT EXISTS `tmp` (
   `id` int(11) NOT NULL DEFAULT '0',
-  `kshow_id` int(11) DEFAULT NULL,
-  `kuser_id` int(11) DEFAULT NULL,
+  `vshow_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `name` varchar(60) DEFAULT NULL,
   `type` smallint(6) DEFAULT NULL,
   `media_type` smallint(6) DEFAULT NULL,
@@ -2462,7 +2462,7 @@ CREATE TABLE IF NOT EXISTS `track_entry` (
   `param_1_str` varchar(255) DEFAULT NULL,
   `param_2_str` varchar(511) DEFAULT NULL,
   `param_3_str` varchar(511) DEFAULT NULL,
-  `ks` varchar(511) DEFAULT NULL,
+  `vs` varchar(511) DEFAULT NULL,
   `description` varchar(127) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
@@ -2510,7 +2510,7 @@ CREATE TABLE IF NOT EXISTS `upload_token` (
   `id` varchar(35) NOT NULL,
   `int_id` int(11) NOT NULL AUTO_INCREMENT,
   `partner_id` int(11) DEFAULT '0',
-  `kuser_id` int(11) DEFAULT NULL,
+  `vuser_id` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   `file_name` varchar(256) DEFAULT NULL,
   `file_size` bigint(20) DEFAULT NULL,
@@ -2527,7 +2527,7 @@ CREATE TABLE IF NOT EXISTS `upload_token` (
   KEY `int_id` (`int_id`),
   KEY `partner_id_status` (`partner_id`,`status`),
   KEY `status_created_at` (`status`,`created_at`),
-  KEY `upload_token_FI_1` (`kuser_id`),
+  KEY `upload_token_FI_1` (`vuser_id`),
   KEY `partner_filename_status` (`partner_id`,`file_name`(255),`status`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -2535,7 +2535,7 @@ CREATE TABLE IF NOT EXISTS `upload_token` (
 CREATE TABLE `user_entry` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `entry_id` varchar(20) DEFAULT NULL,
-  `kuser_id` int(11) NOT NULL,
+  `vuser_id` int(11) NOT NULL,
   `partner_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
@@ -2545,9 +2545,9 @@ CREATE TABLE `user_entry` (
   `privacy_context` varchar(255) DEFAULT NULL,
   `custom_data` text,
   PRIMARY KEY (`id`),
-  KEY `entry_id` (`entry_id`,`kuser_id`),
-  KEY `kuser_id_updated_at` (`kuser_id`,`privacy_context`,`updated_at`),
-  KEY `kuser_id_extended_status_updated_at` (`kuser_id`,`privacy_context`,`extended_status`,`updated_at`)
+  KEY `entry_id` (`entry_id`,`vuser_id`),
+  KEY `vuser_id_updated_at` (`vuser_id`,`privacy_context`,`updated_at`),
+  KEY `vuser_id_extended_status_updated_at` (`vuser_id`,`privacy_context`,`extended_status`,`updated_at`)
 )ENGINE=InnoDB COMMENT='Describes the relationship between a specific user and a specific entry';
 
 CREATE TABLE IF NOT EXISTS `user_login_data` (
@@ -2632,7 +2632,7 @@ CREATE TABLE IF NOT EXISTS `widget` (
   `root_widget_id` varchar(32) DEFAULT NULL,
   `partner_id` int(11) DEFAULT NULL,
   `subp_id` int(11) DEFAULT NULL,
-  `kshow_id` varchar(20) DEFAULT NULL,
+  `vshow_id` varchar(20) DEFAULT NULL,
   `entry_id` varchar(20) DEFAULT NULL,
   `ui_conf_id` int(11) DEFAULT NULL,
   `custom_data` varchar(1024) DEFAULT NULL,
@@ -2653,9 +2653,9 @@ CREATE TABLE IF NOT EXISTS `widget` (
 
 CREATE TABLE IF NOT EXISTS `widget_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `kshow_id` varchar(20) DEFAULT NULL,
+  `vshow_id` varchar(20) DEFAULT NULL,
   `entry_id` varchar(20) DEFAULT NULL,
-  `kmedia_type` int(11) DEFAULT NULL,
+  `vmedia_type` int(11) DEFAULT NULL,
   `widget_type` varchar(32) DEFAULT NULL,
   `referer` varchar(1024) DEFAULT NULL,
   `views` int(11) DEFAULT '0',
@@ -2670,7 +2670,7 @@ CREATE TABLE IF NOT EXISTS `widget_log` (
   `subp_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `referer_index` (`referer`(255)),
-  KEY `entry_id_kshow_id_index` (`entry_id`,`kshow_id`),
+  KEY `entry_id_vshow_id_index` (`entry_id`,`vshow_id`),
   KEY `views_index` (`views`),
   KEY `plays_index` (`plays`),
   KEY `partner_id_subp_id_index` (`partner_id`,`subp_id`),

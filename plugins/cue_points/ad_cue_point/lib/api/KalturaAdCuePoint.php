@@ -3,10 +3,10 @@
  * @package plugins.adCuePoint
  * @subpackage api.objects
  */
-class KalturaAdCuePoint extends KalturaCuePoint
+class VidiunAdCuePoint extends VidiunCuePoint
 {
 	/**
-	 * @var KalturaAdProtocolType
+	 * @var VidiunAdProtocolType
 	 * @filter eq,in
 	 * @insertonly
 	 * @requiresPermission insert,update
@@ -20,7 +20,7 @@ class KalturaAdCuePoint extends KalturaCuePoint
 	public $sourceUrl;
 	
 	/**
-	 * @var KalturaAdType 
+	 * @var VidiunAdType 
 	 * @requiresPermission insert,update
 	 */
 	public $adType;
@@ -62,7 +62,7 @@ class KalturaAdCuePoint extends KalturaCuePoint
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::getMapBetweenObjects()
+	 * @see VidiunCuePoint::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -70,7 +70,7 @@ class KalturaAdCuePoint extends KalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -81,7 +81,7 @@ class KalturaAdCuePoint extends KalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::validateForInsert()
+	 * @see VidiunCuePoint::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -91,7 +91,7 @@ class KalturaAdCuePoint extends KalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::validateForUpdate()
+	 * @see VidiunCuePoint::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{

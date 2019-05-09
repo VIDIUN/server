@@ -1,2 +1,2 @@
 <?php
-define('KALTURA_API_VERSION', '3.3.0');
+define('VIDIUN_API_VERSION', '3.3.0');

@@ -4,7 +4,7 @@
  * @subpackage objects
  * @relatedService GroupUserService
  */
-class KalturaGroupUser extends KalturaObject implements IRelatedFilterable
+class VidiunGroupUser extends VidiunObject implements IRelatedFilterable
 {
 	/**
 	 * @var string
@@ -27,7 +27,7 @@ class KalturaGroupUser extends KalturaObject implements IRelatedFilterable
 	public $groupId;
 
 	/**
-	 * @var KalturaGroupUserStatus
+	 * @var VidiunGroupUserStatus
 	 * @readonly
 	 * @filter eq,in
 	 */
@@ -59,12 +59,12 @@ class KalturaGroupUser extends KalturaObject implements IRelatedFilterable
 	
 	/**
 	 * @insertonly
-	 * @var KalturaGroupUserCreationMode
+	 * @var VidiunGroupUserCreationMode
 	 */
 	public $creationMode;
 
 	/**
-	 * @var KalturaGroupUserRole
+	 * @var VidiunGroupUserRole
 	 */
 	public $userRole;
 
@@ -89,7 +89,7 @@ class KalturaGroupUser extends KalturaObject implements IRelatedFilterable
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new KuserKgroup();
+			$dbObject = new VuserVgroup();
 			
 		return parent::toObject($dbObject, $skip);
 	}

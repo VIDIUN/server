@@ -4,7 +4,7 @@
  * @package plugins.multiCenters
  * @subpackage api.services
  */
-class FileSyncImportBatchService extends KalturaBatchService
+class FileSyncImportBatchService extends VidiunBatchService
 {
 	const MAX_FILESYNC_ID_PREFIX = 'fileSyncMaxId-dc';
 	const LAST_FILESYNC_ID_PREFIX = 'fileSyncLastId-worker';
@@ -29,49 +29,49 @@ class FileSyncImportBatchService extends KalturaBatchService
 	 * batch lockPendingFileSyncs action locks file syncs for import by the file sync periodic worker
 	 *
 	 * @action lockPendingFileSyncs
-	 * @param KalturaFileSyncFilter $filter
+	 * @param VidiunFileSyncFilter $filter
 	 * @param int $workerId The id of the file sync import worker 
 	 * @param int $sourceDc The id of the DC from which the file syncs should be pulled
 	 * @param int $maxCount The maximum number of file syncs that should be returned
 	 * @param int $maxSize The maximum total size of file syncs that should be returned, this limit may be exceeded by one file sync
-	 * @return KalturaLockFileSyncsResponse
+	 * @return VidiunLockFileSyncsResponse
 	 */
-	function lockPendingFileSyncsAction(KalturaFileSyncFilter $filter, $workerId, $sourceDc, $maxCount, $maxSize = null)
+	function lockPendingFileSyncsAction(VidiunFileSyncFilter $filter, $workerId, $sourceDc, $maxCount, $maxSize = null)
 	{
 		// need to explicitly disable the cache since this action may not perform any queries
-		kApiCache::disableConditionalCache();
+		vApiCache::disableConditionalCache();
 		
 		// for dual dc deployments, if source dc is not specified, set it to the remote dc 
 		if ($sourceDc < 0)
 		{
-			$sourceDc = 1 - kDataCenterMgr::getCurrentDcId();
+			$sourceDc = 1 - vDataCenterMgr::getCurrentDcId();
 		}
 		
 		// get caches
-		$keysCache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS);
+		$keysCache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS);
 		if (!$keysCache)
 		{
-			throw new KalturaAPIException(MultiCentersErrors::GET_KEYS_CACHE_FAILED);
+			throw new VidiunAPIException(MultiCentersErrors::GET_KEYS_CACHE_FAILED);
 		}
 		
-		$lockCache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_LOCK_KEYS);
+		$lockCache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_LOCK_KEYS);
 		if (!$lockCache)
 		{
-			throw new KalturaAPIException(MultiCentersErrors::GET_LOCK_CACHE_FAILED);
+			throw new VidiunAPIException(MultiCentersErrors::GET_LOCK_CACHE_FAILED);
 		}
 		
 		// get the max id / last id
 		$maxId = $keysCache->get(self::MAX_FILESYNC_ID_PREFIX . $sourceDc);
 		if (!$maxId)
 		{
-			throw new KalturaAPIException(MultiCentersErrors::GET_MAX_FILESYNC_ID_FAILED, $sourceDc);
+			throw new VidiunAPIException(MultiCentersErrors::GET_MAX_FILESYNC_ID_FAILED, $sourceDc);
 		}
 		
 		// Note: reducing slightly the max id, because the ids may arrive out of order in the mysql replication
 		$maxId -= 1000;
 
 		$initialLastId = $keysCache->get(self::LAST_FILESYNC_ID_PREFIX . $workerId);
-		KalturaLog::info("got lastId [$initialLastId] for worker [$workerId]");
+		VidiunLog::info("got lastId [$initialLastId] for worker [$workerId]");
 		
 		$lastId = $initialLastId ? $initialLastId : $maxId;
 								
@@ -88,7 +88,7 @@ class FileSyncImportBatchService extends KalturaBatchService
 		
 		$baseCriteria->add(FileSyncPeer::STATUS, FileSync::FILE_SYNC_STATUS_PENDING);
 		$baseCriteria->add(FileSyncPeer::FILE_TYPE, FileSync::FILE_SYNC_FILE_TYPE_FILE);
-		$baseCriteria->add(FileSyncPeer::DC, kDataCenterMgr::getCurrentDcId());
+		$baseCriteria->add(FileSyncPeer::DC, vDataCenterMgr::getCurrentDcId());
 		
 		$baseCriteria->addAscendingOrderByColumn(FileSyncPeer::ID);
 
@@ -148,7 +148,7 @@ class FileSyncImportBatchService extends KalturaBatchService
 			}
 
 			// filter by object type / sub type
-			$fileSyncs = array_filter($fileSyncs, array('kFileSyncUtils', 'shouldSyncFileObjectType'));
+			$fileSyncs = array_filter($fileSyncs, array('vFileSyncUtils', 'shouldSyncFileObjectType'));
 
 			// filter by created at
 			if ($createdAtLessThanOrEqual)
@@ -184,17 +184,17 @@ class FileSyncImportBatchService extends KalturaBatchService
 				$curKey = self::LOCK_KEY_PREFIX . $fileSync->getId();
 				if (isset($lockKeys[$curKey]))
 				{
-					KalturaLog::info('file sync '.$fileSync->getId().' already locked');
+					VidiunLog::info('file sync '.$fileSync->getId().' already locked');
 					continue;
 				}
 				
 				if (!$lockCache->add($curKey, true, self::LOCK_EXPIRY))
 				{
-					KalturaLog::info('failed to lock file sync '.$fileSync->getId());
+					VidiunLog::info('failed to lock file sync '.$fileSync->getId());
 					continue;
 				}
 				
-				KalturaLog::info('locked file sync ' . $fileSync->getId());
+				VidiunLog::info('locked file sync ' . $fileSync->getId());
 				
 				// get the original id if not set
 				if (!$fileSync->getOriginalId())
@@ -202,7 +202,7 @@ class FileSyncImportBatchService extends KalturaBatchService
 					$originalFileSync = self::getOriginalFileSync($fileSync);
 					if (!$originalFileSync)
 					{
-						KalturaLog::info('failed to get original file sync for '.$fileSync->getId());
+						VidiunLog::info('failed to get original file sync for '.$fileSync->getId());
 						continue;
 					}
 					
@@ -230,7 +230,7 @@ class FileSyncImportBatchService extends KalturaBatchService
 		//		but the only effect of this is that some file syncs will be scanned again		
 		if (!$initialLastId || $lastId > $initialLastId)
 		{
-			KalturaLog::info("setting lastId to [$lastId] for worker [$workerId]");
+			VidiunLog::info("setting lastId to [$lastId] for worker [$workerId]");
 			
 			$keysCache->set(self::LAST_FILESYNC_ID_PREFIX . $workerId, $lastId);
 		}
@@ -243,17 +243,17 @@ class FileSyncImportBatchService extends KalturaBatchService
 				continue;
 			}
 
-			$fileSyncKey = kFileSyncUtils::getKeyForFileSync($fileSync);
-			list($fileRoot, $realPath) = kPathManager::getFilePathArr($fileSyncKey);
+			$fileSyncKey = vFileSyncUtils::getKeyForFileSync($fileSync);
+			list($fileRoot, $realPath) = vPathManager::getFilePathArr($fileSyncKey);
 
 			$fileSync->setFileRoot($fileRoot);
 			$fileSync->setFilePath($realPath);
 		}
 		
 		// build the response object
-		$sourceDc = kDataCenterMgr::getDcById($sourceDc);
-		$result = new KalturaLockFileSyncsResponse;
-		$result->fileSyncs = KalturaFileSyncArray::fromDbArray($lockedFileSyncs, $this->getResponseProfile());
+		$sourceDc = vDataCenterMgr::getDcById($sourceDc);
+		$result = new VidiunLockFileSyncsResponse;
+		$result->fileSyncs = VidiunFileSyncArray::fromDbArray($lockedFileSyncs, $this->getResponseProfile());
 		$result->limitReached = $limitReached;
 		$result->dcSecret = $sourceDc["secret"];
 		$result->baseUrl = isset($sourceDc["fileSyncImportUrl"]) ? $sourceDc["fileSyncImportUrl"] : $sourceDc["url"];
@@ -270,17 +270,17 @@ class FileSyncImportBatchService extends KalturaBatchService
 	function extendFileSyncLockAction($id)
 	{
 		// need to explicitly disable the cache since this action does not perform any queries
-		kApiCache::disableConditionalCache();
+		vApiCache::disableConditionalCache();
 		
-		$lockCache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_LOCK_KEYS);
+		$lockCache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_LOCK_KEYS);
 		if (!$lockCache)
 		{
-			throw new KalturaAPIException(MultiCentersErrors::GET_LOCK_CACHE_FAILED);
+			throw new VidiunAPIException(MultiCentersErrors::GET_LOCK_CACHE_FAILED);
 		}
 		
 		if (!$lockCache->set(self::LOCK_KEY_PREFIX . $id, true, self::LOCK_EXPIRY))
 		{
-			throw new KalturaAPIException(MultiCentersErrors::EXTEND_FILESYNC_LOCK_FAILED);
+			throw new VidiunAPIException(MultiCentersErrors::EXTEND_FILESYNC_LOCK_FAILED);
 		}
 	}
 }

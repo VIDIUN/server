@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model	
  */
-class kExtendingItemMrssParameter
+class vExtendingItemMrssParameter
 {
 	/**
 	 * @var string
@@ -11,7 +11,7 @@ class kExtendingItemMrssParameter
 	protected $xpath;
 	
 	/**
-	 * @var kObjectIdentifier
+	 * @var vObjectIdentifier
 	 */
 	protected $identifier;
 	
@@ -35,14 +35,14 @@ class kExtendingItemMrssParameter
 	}
 	
 	/**
-	 * @return KObjectIdentifier
+	 * @return VObjectIdentifier
 	 */
 	public function getIdentifier() {
 		return $this->identifier;
 	}
 
 	/**
-	 * @param KObjectIdentifier $identifier
+	 * @param VObjectIdentifier $identifier
 	 */
 	public function setIdentifier($identifier) {
 		$this->identifier = $identifier;

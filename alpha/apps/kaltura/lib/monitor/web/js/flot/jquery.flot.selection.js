@@ -225,8 +225,8 @@ The plugin allso adds the following methods to the plot object:
         function extractRange(ranges, coord) {
             var axis, from, to, key, axes = plot.getAxes();
 
-            for (var k in axes) {
-                axis = axes[k];
+            for (var v in axes) {
+                axis = axes[v];
                 if (axis.direction == coord) {
                     key = coord + axis.n + "axis";
                     if (!ranges[key] && axis.n == 1)

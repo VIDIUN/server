@@ -5,13 +5,13 @@
  * @package plugins.emailNotification
  * @subpackage model
  **/
-abstract class kEmailNotificationRecipientProvider
+abstract class vEmailNotificationRecipientProvider
 {
 	
 	/**
 	 * This function is called when the recipient provider needs to be narrowed down using the current context
-	 * @param kContext $context
-	 * @return kEmailNotificationRecipientJobData
+	 * @param vContext $context
+	 * @return vEmailNotificationRecipientJobData
 	 */
-	abstract public function getScopedProviderJobData (kScope $scope = null);
+	abstract public function getScopedProviderJobData (vScope $scope = null);
 }

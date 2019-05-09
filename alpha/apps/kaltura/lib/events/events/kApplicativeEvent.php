@@ -4,7 +4,7 @@
  * @package Core
  * @subpackage events
  */
-abstract class kApplicativeEvent extends KalturaEvent implements IKalturaContinualEvent,  IKalturaObjectRelatedEvent
+abstract class vApplicativeEvent extends VidiunEvent implements IVidiunContinualEvent,  IVidiunObjectRelatedEvent
 {
 	/**
 	 * @var BaseObject
@@ -31,7 +31,7 @@ abstract class kApplicativeEvent extends KalturaEvent implements IKalturaContinu
 		if($raisedJob)
 			$additionalLog .= ' raised job id [' . $raisedJob->getId() . '] of type [' . $raisedJob->getJobType() . ']';
 			
-		KalturaLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "]" . $additionalLog);
+		VidiunLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "]" . $additionalLog);
 	}
 	
 	public function getKey()
@@ -59,7 +59,7 @@ abstract class kApplicativeEvent extends KalturaEvent implements IKalturaContinu
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaEvent::getScope()
+	 * @see VidiunEvent::getScope()
 	 */
 	public function getScope()
 	{

@@ -6,7 +6,7 @@
  * @package api
  * @subpackage services
  */
-class LiveReportsService extends KalturaBaseService
+class LiveReportsService extends VidiunBaseService
 {
 	// kava implementation
 	protected function arrayToApiObject(array $input, $objectType)
@@ -37,12 +37,12 @@ class LiveReportsService extends KalturaBaseService
 			$countryName = $item->countryName;
 			$regionName = $item->regionName;
 			$cityName = $item->cityName;
-			$keys[kKavaBase::getCoordinatesKey(array($countryName))] = true;
-			$keys[kKavaBase::getCoordinatesKey(array($countryName, $regionName, $cityName))] = true;
+			$keys[vKavaBase::getCoordinatesKey(array($countryName))] = true;
+			$keys[vKavaBase::getCoordinatesKey(array($countryName, $regionName, $cityName))] = true;
 		}
-		$coords = kKavaBase::getCoordinatesForKeys(array_keys($keys));
+		$coords = vKavaBase::getCoordinatesForKeys(array_keys($keys));
 		// parse the coordinates
-		$coords = array_map('kKavaBase::parseCoordinates', $coords);
+		$coords = array_map('vKavaBase::parseCoordinates', $coords);
 		
 		foreach ($items as $item)
 		{
@@ -56,18 +56,18 @@ class LiveReportsService extends KalturaBaseService
 			unset($item->cityName);
 
 			// country
-			$item->country = new KalturaCoordinate();
+			$item->country = new VidiunCoordinate();
 			$item->country->name = strtoupper($countryName);
-			$key = kKavaBase::getCoordinatesKey(array($countryName));
+			$key = vKavaBase::getCoordinatesKey(array($countryName));
 			if (isset($coords[$key]))
 			{
 				list($item->country->latitude, $item->country->longitude) = $coords[$key];
 			}
 
 			// city
-			$item->city = new KalturaCoordinate();
+			$item->city = new VidiunCoordinate();
 			$item->city->name = strtoupper($cityName);
-			$key = kKavaBase::getCoordinatesKey(array($countryName, $regionName, $cityName));
+			$key = vKavaBase::getCoordinatesKey(array($countryName, $regionName, $cityName));
 			if (isset($coords[$key]))
 			{
 				list($item->city->latitude, $item->city->longitude) = $coords[$key];
@@ -76,114 +76,114 @@ class LiveReportsService extends KalturaBaseService
 	}
 
 	protected function getReportKava($reportType,
-			KalturaLiveReportInputFilter $filter = null,
-			KalturaFilterPager $pager = null)
+			VidiunLiveReportInputFilter $filter = null,
+			VidiunFilterPager $pager = null)
 	{
-		if ($reportType != KalturaLiveReportType::ENTRY_TOTAL && 
+		if ($reportType != VidiunLiveReportType::ENTRY_TOTAL && 
 			$pager->pageIndex > 1)
 		{
-			throw new APIException(KalturaErrors::ANALYTICS_UNSUPPORTED_QUERY);
+			throw new APIException(VidiunErrors::ANALYTICS_UNSUPPORTED_QUERY);
 		}
 
 		$reportTypes = array(
-			KalturaLiveReportType::PARTNER_TOTAL => 
-				array('partnerTotal', 'KalturaLiveStats'),
-			KalturaLiveReportType::ENTRY_TOTAL => 
-				array('entryTotal', 'KalturaEntryLiveStats'),
-			KalturaLiveReportType::ENTRY_GEO_TIME_LINE => 
-				array('entryGeoTimeline', 'KalturaGeoTimeLiveStats'),
-			KalturaLiveReportType::ENTRY_SYNDICATION_TOTAL => 
-				array('entrySyndicationTotal', 'KalturaEntryReferrerLiveStats'),
+			VidiunLiveReportType::PARTNER_TOTAL => 
+				array('partnerTotal', 'VidiunLiveStats'),
+			VidiunLiveReportType::ENTRY_TOTAL => 
+				array('entryTotal', 'VidiunEntryLiveStats'),
+			VidiunLiveReportType::ENTRY_GEO_TIME_LINE => 
+				array('entryGeoTimeline', 'VidiunGeoTimeLiveStats'),
+			VidiunLiveReportType::ENTRY_SYNDICATION_TOTAL => 
+				array('entrySyndicationTotal', 'VidiunEntryReferrerLiveStats'),
 		);
 		
 		if (!isset($reportTypes[$reportType]))
 		{
-			throw new APIException(KalturaErrors::ANALYTICS_UNSUPPORTED_QUERY);
+			throw new APIException(VidiunErrors::ANALYTICS_UNSUPPORTED_QUERY);
 		}
 		
 		list($methodName, $objectType) = $reportTypes[$reportType];
 		if ($methodName == 'entryTotal' &&
-			kString::beginsWith(kCurrentContext::$client_lang, 'KWP:'))
+			vString::beginsWith(vCurrentContext::$client_lang, 'KWP:'))
 		{
 			$methodName = 'entryQuality';
 		} 
 
 		try
 		{
-			list($items, $totalCount) = call_user_func(array('kKavaLiveReportsMgr', $methodName), 
+			list($items, $totalCount) = call_user_func(array('vKavaLiveReportsMgr', $methodName), 
 				$this->getPartnerId(), 
 				$filter, 
 				$pager->pageIndex, 
 				$pager->pageSize);
 		}
-		catch (kKavaNoResultsException $e)
+		catch (vKavaNoResultsException $e)
 		{
 			$items = array();
 			$totalCount = 0;
 		}
 		
 		$items = $this->arrayToApiObjects($items, $objectType);
-		if ($objectType == 'KalturaGeoTimeLiveStats' && $items)
+		if ($objectType == 'VidiunGeoTimeLiveStats' && $items)
 		{
 			self::addCoordinates($items);
 		}
 		
-		$result = new KalturaLiveStatsListResponse();
+		$result = new VidiunLiveStatsListResponse();
 		$result->objects = $items;
 		$result->totalCount = $totalCount;
 		return $result;
 	}
 
 	protected function getEventsKava($reportType,
-			KalturaLiveReportInputFilter $filter = null)
+			VidiunLiveReportInputFilter $filter = null)
 	{
-		if ($reportType != KalturaLiveReportType::ENTRY_TIME_LINE)
+		if ($reportType != VidiunLiveReportType::ENTRY_TIME_LINE)
 		{
-			throw new APIException(KalturaErrors::ANALYTICS_UNSUPPORTED_QUERY);
+			throw new APIException(VidiunErrors::ANALYTICS_UNSUPPORTED_QUERY);
 		}
 	
 		try
 		{
-			$data = kKavaLiveReportsMgr::entryTimeline($this->getPartnerId(), $filter);
+			$data = vKavaLiveReportsMgr::entryTimeline($this->getPartnerId(), $filter);
 		}
-		catch (kKavaNoResultsException $e)
+		catch (vKavaNoResultsException $e)
 		{
 			$data = '';
 		}
 	
-		$graph = new KalturaReportGraph();
+		$graph = new VidiunReportGraph();
 		$graph->id = 'audience';
 		$graph->data = $data;
 			
-		$result = new KalturaReportGraphArray();
+		$result = new VidiunReportGraphArray();
 		$result->offsetSet(null, $graph);
 		return $result;
 	}
 	
 	/**
 	 * @action getEvents
-	 * @param KalturaLiveReportType $reportType
-	 * @param KalturaLiveReportInputFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaReportGraphArray
+	 * @param VidiunLiveReportType $reportType
+	 * @param VidiunLiveReportInputFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunReportGraphArray
 	 */
 	public function getEventsAction($reportType,
-			KalturaLiveReportInputFilter $filter = null,
-			KalturaFilterPager $pager = null)
+			VidiunLiveReportInputFilter $filter = null,
+			VidiunFilterPager $pager = null)
 	{
 		if(is_null($filter))
-			$filter = new KalturaLiveReportInputFilter();
+			$filter = new VidiunLiveReportInputFilter();
 		if(is_null($pager))
-			$pager = new KalturaFilterPager;
+			$pager = new VidiunFilterPager;
 		
-		if (kKavaBase::isPartnerAllowed($this->getPartnerId(), kKavaBase::LIVE_DISABLED_PARTNERS))
+		if (vKavaBase::isPartnerAllowed($this->getPartnerId(), vKavaBase::LIVE_DISABLED_PARTNERS))
 		{
 			return $this->getEventsKava($reportType, $filter);
 		}
 		
 		$client = new WSLiveReportsClient();
 		$wsFilter = $filter->getWSObject();
-		$wsFilter->partnerId = kCurrentContext::getCurrentPartnerId();
+		$wsFilter->partnerId = vCurrentContext::getCurrentPartnerId();
 		$wsPager = new WSLiveReportInputPager($pager->pageSize, $pager->pageIndex);
 		
 		$wsResult = $client->getEvents($reportType, $wsFilter, $wsPager);
@@ -200,28 +200,28 @@ class LiveReportsService extends KalturaBaseService
 			$resultsArray[$parts[0]] = $parts[1] . $additionalValue;
 		}
 		
-		$kResult = KalturaReportGraphArray::fromReportDataArray(array("audience" => $resultsArray));
+		$vResult = VidiunReportGraphArray::fromReportDataArray(array("audience" => $resultsArray));
 		
-		return $kResult;
+		return $vResult;
 	}
 	
 	/**
 	 * @action getReport
-	 * @param KalturaLiveReportType $reportType
-	 * @param KalturaLiveReportInputFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaLiveStatsListResponse
+	 * @param VidiunLiveReportType $reportType
+	 * @param VidiunLiveReportInputFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunLiveStatsListResponse
 	 */
 	public function getReportAction($reportType, 
-			KalturaLiveReportInputFilter $filter = null,
-			KalturaFilterPager $pager = null)
+			VidiunLiveReportInputFilter $filter = null,
+			VidiunFilterPager $pager = null)
 	{
 		if(is_null($filter))
-			$filter = new KalturaLiveReportInputFilter();
+			$filter = new VidiunLiveReportInputFilter();
 		if(is_null($pager))
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		
-		if (kKavaBase::isPartnerAllowed($this->getPartnerId(), kKavaBase::LIVE_DISABLED_PARTNERS))
+		if (vKavaBase::isPartnerAllowed($this->getPartnerId(), vKavaBase::LIVE_DISABLED_PARTNERS))
 		{
 			return $this->getReportKava($reportType, $filter, $pager);			
 		}
@@ -230,23 +230,23 @@ class LiveReportsService extends KalturaBaseService
 
 		$client = new WSLiveReportsClient();
 		$wsFilter = $filter->getWSObject();
-		$wsFilter->partnerId = kCurrentContext::getCurrentPartnerId();
+		$wsFilter->partnerId = vCurrentContext::getCurrentPartnerId();
 		
 		$wsPager = new WSLiveReportInputPager($pager->pageSize, $pager->pageIndex);
 		
 		switch($reportType) {
-			case KalturaLiveReportType::ENTRY_GEO_TIME_LINE:
-			case KalturaLiveReportType::ENTRY_SYNDICATION_TOTAL:
+			case VidiunLiveReportType::ENTRY_GEO_TIME_LINE:
+			case VidiunLiveReportType::ENTRY_SYNDICATION_TOTAL:
 				return $this->requestClient($client, $reportType, $wsFilter, $wsPager);
 				
-			case KalturaLiveReportType::PARTNER_TOTAL:
+			case VidiunLiveReportType::PARTNER_TOTAL:
 				if($filter->live && empty($wsFilter->entryIds)) {
 					$entryIds = $this->getAllLiveEntriesLiveNow();
 					if(empty($entryIds)) {
-						$response = new KalturaLiveStatsListResponse();
+						$response = new VidiunLiveStatsListResponse();
 						$response->totalCount = 1;
 						$response->objects = array();
-						$response->objects[] = new KalturaLiveStats();
+						$response->objects[] = new VidiunLiveStats();
 						return $response;
 					}
 					
@@ -254,17 +254,17 @@ class LiveReportsService extends KalturaBaseService
 				}
 				return $this->requestClient($client, $reportType, $wsFilter, $wsPager);
 				
-			case KalturaLiveReportType::ENTRY_TOTAL:
+			case VidiunLiveReportType::ENTRY_TOTAL:
 				$totalCount = null;
 				if(!$filter->live && empty($wsFilter->entryIds)) {
-					list($entryIds, $totalCount) = $this->getLiveEntries($client, kCurrentContext::getCurrentPartnerId(), $pager);
+					list($entryIds, $totalCount) = $this->getLiveEntries($client, vCurrentContext::getCurrentPartnerId(), $pager);
 					if(empty($entryIds))
-						return new KalturaLiveStatsListResponse();
+						return new VidiunLiveStatsListResponse();
 
 					$wsFilter->entryIds = implode(",", $entryIds);
 				}
 				
-				/** @var KalturaLiveStatsListResponse */
+				/** @var VidiunLiveStatsListResponse */
 				$result = $this->requestClient($client, $reportType, $wsFilter, $wsPager);
 				if($totalCount)
 					$result->totalCount = $totalCount;
@@ -279,18 +279,18 @@ class LiveReportsService extends KalturaBaseService
 	
 	/**
 	 * @action exportToCsv
-	 * @param KalturaLiveReportExportType $reportType 
-	 * @param KalturaLiveReportExportParams $params
-	 * @return KalturaLiveReportExportResponse
+	 * @param VidiunLiveReportExportType $reportType 
+	 * @param VidiunLiveReportExportParams $params
+	 * @return VidiunLiveReportExportResponse
 	 */
-	public function exportToCsvAction($reportType, KalturaLiveReportExportParams $params)
+	public function exportToCsvAction($reportType, VidiunLiveReportExportParams $params)
 	{
 		if(!$params->recpientEmail) {
-			$kuser = kCurrentContext::getCurrentKsKuser();
-			if($kuser) {
-				$params->recpientEmail = $kuser->getEmail();
+			$vuser = vCurrentContext::getCurrentVsVuser();
+			if($vuser) {
+				$params->recpientEmail = $vuser->getEmail();
 			} else {
-				$partnerId = kCurrentContext::getCurrentPartnerId();
+				$partnerId = vCurrentContext::getCurrentPartnerId();
 				$partner = PartnerPeer::retrieveByPK($partnerId);
 				$params->recpientEmail = $partner->getAdminEmail();
 			}
@@ -301,13 +301,13 @@ class LiveReportsService extends KalturaBaseService
 			$entryIds = explode(",", $params->entryIds);
 			$entries = entryPeer::retrieveByPKs($entryIds);
 			if(count($entryIds) != count($entries))
-				throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $params->entryIds);
+				throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $params->entryIds);
 		}
 		
 		
-		$dbBatchJob = kJobsManager::addExportLiveReportJob($reportType, $params);
+		$dbBatchJob = vJobsManager::addExportLiveReportJob($reportType, $params);
 		
-		$res = new KalturaLiveReportExportResponse();
+		$res = new VidiunLiveReportExportResponse();
 		$res->referenceJobId = $dbBatchJob->getId();
 		$res->reportEmail = $params->recpientEmail;
 		
@@ -327,19 +327,19 @@ class LiveReportsService extends KalturaBaseService
 		
 		$fileNameRegex = "/^(?<dc>[01]+)_(?<fileName>\\d+_Export_[a-zA-Z0-9]+_[\\w\\-]+.csv)$/";
 	
-		// KS verification - we accept either admin session or download privilege of the file
-		$ks = $this->getKs();
-		if(!$ks || !($ks->isAdmin() || $ks->verifyPrivileges(ks::PRIVILEGE_DOWNLOAD, $id)))
-			KExternalErrors::dieError(KExternalErrors::ACCESS_CONTROL_RESTRICTED);
+		// VS verification - we accept either admin session or download privilege of the file
+		$vs = $this->getVs();
+		if(!$vs || !($vs->isAdmin() || $vs->verifyPrivileges(vs::PRIVILEGE_DOWNLOAD, $id)))
+			VExternalErrors::dieError(VExternalErrors::ACCESS_CONTROL_RESTRICTED);
 	
 		if(!preg_match($fileNameRegex, $id, $matches)) {
-			throw new KalturaAPIException(KalturaErrors::REPORT_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::REPORT_NOT_FOUND, $id);
 		}
 		
 		// Check if the request should be handled by the other DC
-		$curerntDc = kDataCenterMgr::getCurrentDcId();
+		$curerntDc = vDataCenterMgr::getCurrentDcId();
 		if($matches['dc'] == 1 - $curerntDc)
-			kFileUtils::dumpApiRequest ( kDataCenterMgr::getRemoteDcExternalUrlByDcId ( 1 - $curerntDc ) );
+			vFileUtils::dumpApiRequest ( vDataCenterMgr::getRemoteDcExternalUrlByDcId ( 1 - $curerntDc ) );
 		
 		// Serve report
 		$filePath = $this->getReportDirectory( $this->getPartnerId()) . DIRECTORY_SEPARATOR . $matches['fileName'];
@@ -359,11 +359,11 @@ class LiveReportsService extends KalturaBaseService
 	 */
 	protected function getAllLiveEntriesLiveNow() {
 		// Partner ID condition is embeded in the default criteria.
-		$baseCriteria = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$baseCriteria = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$filter = new entryFilter();
-		$filter->setTypeEquel(KalturaEntryType::LIVE_STREAM);
+		$filter->setTypeEquel(VidiunEntryType::LIVE_STREAM);
 		$filter->setIsLive(true);
-		$filter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);
+		$filter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);
 		$filter->attachToCriteria($baseCriteria);
 		
 		$entries = entryPeer::doSelect($baseCriteria);
@@ -377,7 +377,7 @@ class LiveReportsService extends KalturaBaseService
 	/**
 	 * Returns all live entries that were live in the past X hours
 	 */
-	protected function getLiveEntries(WSLiveReportsClient $client, $partnerId, KalturaFilterPager $pager) {
+	protected function getLiveEntries(WSLiveReportsClient $client, $partnerId, VidiunFilterPager $pager) {
 		// Get live entries list
 		/** @var WSLiveEntriesListResponse */
 		$response = $client->getLiveEntries($partnerId);
@@ -393,11 +393,11 @@ class LiveReportsService extends KalturaBaseService
 		}
 
 		// Order entries by first broadcast
-		$baseCriteria = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$baseCriteria = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$filter = new entryFilter();
-		$filter->setTypeEquel(KalturaEntryType::LIVE_STREAM);
+		$filter->setTypeEquel(VidiunEntryType::LIVE_STREAM);
 		$filter->setIdIn($entryIds);
-		$filter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);
+		$filter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);
 		$baseCriteria->addAscendingOrderByColumn(entryPeer::NAME);
 		$filter->attachToCriteria($baseCriteria);
 		$pager->attachToCriteria($baseCriteria);
@@ -414,8 +414,8 @@ class LiveReportsService extends KalturaBaseService
 	protected function requestClient(WSLiveReportsClient $client, $reportType, $wsFilter, $wsPager) {
 		/** @var WSLiveStatsListResponse */
 		$result = $client->getReport($reportType, $wsFilter, $wsPager);
-		$kResult = $result->toKalturaObject();
-		return $kResult;
+		$vResult = $result->toVidiunObject();
+		return $vResult;
 	}
 
 	/**

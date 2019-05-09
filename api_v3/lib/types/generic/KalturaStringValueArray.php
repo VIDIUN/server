@@ -1,26 +1,26 @@
 <?php
 /**
- * An array of KalturaStringValue
+ * An array of VidiunStringValue
  * 
  * @package api
  * @subpackage objects
  */
-class KalturaStringValueArray extends KalturaTypedArray
+class VidiunStringValueArray extends VidiunTypedArray
 {
 	/**
-	 * @param array<string|kStringValue> $strings
-	 * @return KalturaStringValueArray
+	 * @param array<string|vStringValue> $strings
+	 * @return VidiunStringValueArray
 	 */
-	public static function fromDbArray(array $strings = null, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $strings = null, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$stringArray = new KalturaStringValueArray();
+		$stringArray = new VidiunStringValueArray();
 		if($strings && is_array($strings))
 		{
 			foreach($strings as $string)
 			{
-				$stringObject = new KalturaStringValue();
+				$stringObject = new VidiunStringValue();
 				
-				if($string instanceof kValue)
+				if($string instanceof vValue)
 				{
 					$stringObject->fromObject($string, $responseProfile);;
 				}
@@ -37,6 +37,6 @@ class KalturaStringValueArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaStringValue");
+		return parent::__construct("VidiunStringValue");
 	}
 }

@@ -1,21 +1,21 @@
 Hi <?php echo $name ?> , 
 
-Welcome, and thanks for joining Kaltura - where you can create and edit videos together with  others. 
+Welcome, and thanks for joining Vidiun - where you can create and edit videos together with  others. 
 We’re excited to have you!
 
-Your Kaltura account is now fully activated.
+Your Vidiun account is now fully activated.
 
 View your profile:
-http://www.kaltura.com/mykaltura
+http://www.vidiun.com/myvidiun
 
-See what’s new on Kaltura:
-http://www.kaltura.com/index.php
+See what’s new on Vidiun:
+http://www.vidiun.com/index.php
 
 
-Questions about your account or about Kaltura? 
-Go to: http://www.kaltura.com/help or email us at: support@kaltura.com
+Questions about your account or about Vidiun? 
+Go to: http://www.vidiun.com/help or email us at: support@vidiun.com
 
 Kind regards,
-The Kaltura Team
+The Vidiun Team
 
 

@@ -3,14 +3,14 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPartnerArray extends KalturaTypedArray
+class VidiunPartnerArray extends VidiunTypedArray
 {
 	public static function fromPartnerArray(array $arr)
 	{
-		$newArr = new KalturaPartnerArray();
+		$newArr = new VidiunPartnerArray();
 		foreach($arr as $obj)
 		{
-			$nObj = new KalturaPartner();
+			$nObj = new VidiunPartner();
 			$nObj->fromPartner($obj);
 			$newArr[] = $nObj;
 		}
@@ -20,7 +20,7 @@ class KalturaPartnerArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaPartner" );
+		return parent::__construct ( "VidiunPartner" );
 	}
 }
 ?>

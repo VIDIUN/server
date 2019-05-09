@@ -1,12 +1,12 @@
 <?php
 /**
- * Will run the KAsyncClearCuePoints 
+ * Will run the VAsyncClearCuePoints 
  *
  * @package Scheduler
  * @subpackage ClearCuePoints
  */
 require_once(__DIR__ . "/../../../../../batch/bootstrap.php");
 
-$instance = new KAsyncClearCuePoints();
+$instance = new VAsyncClearCuePoints();
 $instance->run();
 $instance->done();

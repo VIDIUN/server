@@ -2,7 +2,7 @@ SELECT
 	COUNT(DISTINCT a.id) count_all
 FROM (
 	SELECT b.id
-		FROM	kalturadw.dwh_hourly_events_context_app_devices ev, kalturadw.dwh_dim_browser b
+		FROM	vidiundw.dwh_hourly_events_context_app_devices ev, vidiundw.dwh_dim_browser b
 	WHERE
 	b.id=ev.browser_id
 	AND {OBJ_ID_CLAUSE}

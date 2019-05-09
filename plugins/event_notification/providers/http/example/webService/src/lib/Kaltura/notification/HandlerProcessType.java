@@ -1,4 +1,4 @@
-package lib.Kaltura.notification;
+package lib.Vidiun.notification;
 
 /**
  * This enum indicates all the time-based events 

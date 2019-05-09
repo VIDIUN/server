@@ -5,22 +5,22 @@
  * @package Core
  * @subpackage model.data
  */
-abstract class kBooleanField extends kBooleanValue implements IScopeField
+abstract class vBooleanField extends vBooleanValue implements IScopeField
 {
 	/**
-	 * @var kScope
+	 * @var vScope
 	 */
 	protected $scope = null;
 	
 	/**
 	 * Calculates the value at realtime
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @return bool $value
 	 */
-	abstract protected function getFieldValue(kScope $scope = null);
+	abstract protected function getFieldValue(vScope $scope = null);
 	
 	/* (non-PHPdoc)
-	 * @see kBooleanValue::getValue()
+	 * @see vBooleanValue::getValue()
 	 */
 	public function getValue() 
 	{
@@ -28,15 +28,15 @@ abstract class kBooleanField extends kBooleanValue implements IScopeField
 	}
 	
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 */
-	public function setScope(kScope $scope) 
+	public function setScope(vScope $scope) 
 	{
 		$this->scope = $scope;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBooleanField::shouldDisableCache()
+	 * @see vBooleanField::shouldDisableCache()
 	 */
 	public function shouldDisableCache($scope)
 	{

@@ -2,13 +2,13 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaRuleArray instead
+ * @deprecated use VidiunRuleArray instead
  */
-class KalturaRestrictionArray extends KalturaTypedArray
+class VidiunRestrictionArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaRestrictionArray();
+		$newArr = new VidiunRestrictionArray();
 		if ($arr == null)
 			return $newArr;
 
@@ -22,33 +22,33 @@ class KalturaRestrictionArray extends KalturaTypedArray
 		return $newArr;
 	}
 
-	static function getInstanceByDbObject(kAccessControlRestriction $dbObject)
+	static function getInstanceByDbObject(vAccessControlRestriction $dbObject)
 	{
 		$objectClass = get_class($dbObject);
 		switch($objectClass)
 		{
-			case "kAccessControlSiteRestriction":
-				return new KalturaSiteRestriction();
-			case "kAccessControlCountryRestriction":
-				return new KalturaCountryRestriction();
-			case "kAccessControlSessionRestriction":
-				return new KalturaSessionRestriction();
-			case "kAccessControlPreviewRestriction":
-				return new KalturaPreviewRestriction();
-			case "kAccessControlIpAddressRestriction":
-				return new KalturaIpAddressRestriction();
-			case "kAccessControlUserAgentRestriction":
-				return new KalturaUserAgentRestriction();
-			case "kAccessControlLimitFlavorsRestriction":
-				return new KalturaLimitFlavorsRestriction();
+			case "vAccessControlSiteRestriction":
+				return new VidiunSiteRestriction();
+			case "vAccessControlCountryRestriction":
+				return new VidiunCountryRestriction();
+			case "vAccessControlSessionRestriction":
+				return new VidiunSessionRestriction();
+			case "vAccessControlPreviewRestriction":
+				return new VidiunPreviewRestriction();
+			case "vAccessControlIpAddressRestriction":
+				return new VidiunIpAddressRestriction();
+			case "vAccessControlUserAgentRestriction":
+				return new VidiunUserAgentRestriction();
+			case "vAccessControlLimitFlavorsRestriction":
+				return new VidiunLimitFlavorsRestriction();
 			default:
-				KalturaLog::err("Access control rule type [$objectClass] could not be loaded");
+				VidiunLog::err("Access control rule type [$objectClass] could not be loaded");
 				return null;
 		}
 	}
 	
 	public function __construct()
 	{
-		parent::__construct("KalturaBaseRestriction");	
+		parent::__construct("VidiunBaseRestriction");	
 	}
 }

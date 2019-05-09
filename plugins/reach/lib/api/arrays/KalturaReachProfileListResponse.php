@@ -3,10 +3,10 @@
  * @package plugins.reach
  * @subpackage api.objects
  */
-class KalturaReachProfileListResponse extends KalturaListResponse
+class VidiunReachProfileListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaReachProfileArray
+	 * @var VidiunReachProfileArray
 	 * @readonly
 	 */
 	public $objects;

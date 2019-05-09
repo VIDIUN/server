@@ -11,7 +11,7 @@
 class ConversionParams extends BaseConversionParams implements IBaseObject
 {
 	const CONVERSION_PARAMS_CREATION_MODE_MANUAL = 1;
-	const CONVERSION_PARAMS_CREATION_MODE_KMC = 2;
+	const CONVERSION_PARAMS_CREATION_MODE_VMC = 2;
 	const CONVERSION_PARAMS_CREATION_MODE_AUTOMATIC = 3;
 	
 /*

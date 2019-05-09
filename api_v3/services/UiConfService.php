@@ -1,13 +1,13 @@
 <?php
 /**
  * UiConf service lets you create and manage your UIConfs for the various flash components
- * This service is used by the KMC-ApplicationStudio
+ * This service is used by the VMC-ApplicationStudio
  *
  * @service uiConf
  * @package api
  * @subpackage services
  */
-class UiConfService extends KalturaBaseService 
+class UiConfService extends VidiunBaseService 
 {
 	// use initService to add a peer to the partner filter
 	/**
@@ -28,7 +28,7 @@ class UiConfService extends KalturaBaseService
 		return parent::partnerGroup();
 	}
 	
-	protected function kalturaNetworkAllowed($actionName)
+	protected function vidiunNetworkAllowed($actionName)
 	{
 		if ($actionName === 'get') {
 			return true;
@@ -36,23 +36,23 @@ class UiConfService extends KalturaBaseService
 		if ($actionName === 'clone') {
 			return true;
 		}
-		return parent::kalturaNetworkAllowed($actionName);
+		return parent::vidiunNetworkAllowed($actionName);
 	}
 	
 	
 	/**
-	 * UIConf Add action allows you to add a UIConf to Kaltura DB
+	 * UIConf Add action allows you to add a UIConf to Vidiun DB
 	 * 
 	 * @action add
-	 * @param KalturaUiConf $uiConf Mandatory input parameter of type KalturaUiConf
-	 * @return KalturaUiConf
+	 * @param VidiunUiConf $uiConf Mandatory input parameter of type VidiunUiConf
+	 * @return VidiunUiConf
 	 */
-	function addAction( KalturaUiConf $uiConf )
+	function addAction( VidiunUiConf $uiConf )
 	{
 		$uiConf->validatePropertyNotNull('creationMode');
-		if($uiConf->creationMode != KalturaUiConfCreationMode::ADVANCED && $uiConf->creationMode != KalturaUiConfCreationMode::WIZARD)
+		if($uiConf->creationMode != VidiunUiConfCreationMode::ADVANCED && $uiConf->creationMode != VidiunUiConfCreationMode::WIZARD)
 		{
-			throw new KalturaAPIException ( "Should not create MANUAL ui_confs via the API!! MANUAL is deprecated" );
+			throw new VidiunAPIException ( "Should not create MANUAL ui_confs via the API!! MANUAL is deprecated" );
 		}
 		
 		// if not specified set to true (default)
@@ -63,7 +63,7 @@ class UiConfService extends KalturaBaseService
 		$dbUiConf->setPartnerId ( $this->getPartnerId() );
 		$dbUiConf->save();
 		
-		$uiConf = new KalturaUiConf(); // start from blank
+		$uiConf = new VidiunUiConf(); // start from blank
 		$uiConf->fromObject($dbUiConf, $this->getResponseProfile());
 		
 		return $uiConf;
@@ -74,17 +74,17 @@ class UiConfService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id 
-	 * @param KalturaUiConf $uiConf
-	 * @return KalturaUiConf
+	 * @param VidiunUiConf $uiConf
+	 * @return VidiunUiConf
 	 *
 	 * @throws APIErrors::INVALID_UI_CONF_ID
 	 */	
-	function updateAction( $id , KalturaUiConf $uiConf )
+	function updateAction( $id , VidiunUiConf $uiConf )
 	{
 		$dbUiConf = uiConfPeer::retrieveByPK( $id );
 		
 		if ( ! $dbUiConf )
-			throw new KalturaAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
+			throw new VidiunAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
 		
 		$dbUiConf = $uiConf->toUpdatableObject($dbUiConf);
 		
@@ -99,7 +99,7 @@ class UiConfService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id 
-	 * @return KalturaUiConf
+	 * @return VidiunUiConf
 	 *
 	 * @throws APIErrors::INVALID_UI_CONF_ID
 	 */		
@@ -108,8 +108,8 @@ class UiConfService extends KalturaBaseService
 		$dbUiConf = uiConfPeer::retrieveByPK( $id );
 		
 		if ( ! $dbUiConf )
-			throw new KalturaAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
-		$uiConf = new KalturaUiConf();
+			throw new VidiunAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
+		$uiConf = new VidiunUiConf();
 		$uiConf->fromObject($dbUiConf, $this->getResponseProfile());
 		
 		return $uiConf;
@@ -128,7 +128,7 @@ class UiConfService extends KalturaBaseService
 		$dbUiConf = uiConfPeer::retrieveByPK( $id );
 		
 		if ( ! $dbUiConf )
-			throw new KalturaAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
+			throw new VidiunAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
 		
 		$dbUiConf->setStatus ( uiConf::UI_CONF_STATUS_DELETED );
 
@@ -140,24 +140,24 @@ class UiConfService extends KalturaBaseService
 	 * 
 	 * @action clone
 	 * @param int $id 
-	 * @return KalturaUiConf
+	 * @return VidiunUiConf
 	 *
 	 * @throws APIErrors::INVALID_UI_CONF_ID
 	 */	
 	// TODO - get the new data of uiConf - will help override the parameters without needing to call update 
-	function cloneAction( $id ) // , KalturaUiConf $_uiConf )
+	function cloneAction( $id ) // , VidiunUiConf $_uiConf )
 	{
 		$dbUiConf = uiConfPeer::retrieveByPK( $id );
 		
 		if ( ! $dbUiConf )
-			throw new KalturaAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
+			throw new VidiunAPIException ( APIErrors::INVALID_UI_CONF_ID , $id );
 		$ui_conf_verride_params = new uiConf();
 		$ui_conf_verride_params->setPartnerId( $this->getPartnerId() );
 		$ui_conf_verride_params->setDisplayInSearch(1);  // the cloned ui_conf should NOT be a template
 			
 		$uiConfClone = $dbUiConf->cloneToNew ( $ui_conf_verride_params );
 
-		$uiConf = new KalturaUiConf();
+		$uiConf = new VidiunUiConf();
 		$uiConf->fromObject($uiConfClone, $this->getResponseProfile());
 		
 		return $uiConf;
@@ -167,11 +167,11 @@ class UiConfService extends KalturaBaseService
 	 * retrieve a list of available template UIConfs
 	 *
 	 * @action listTemplates
-	 * @param KalturaUiConfFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaUiConfListResponse
+	 * @param VidiunUiConfFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunUiConfListResponse
 	 */
-	function listTemplatesAction(KalturaUiConfFilter $filter = null , KalturaFilterPager $pager = null)
+	function listTemplatesAction(VidiunUiConfFilter $filter = null , VidiunFilterPager $pager = null)
 	{
 		$templatePartnerId = 0;
 		if ($this->getPartnerId() !== NULL)
@@ -181,22 +181,22 @@ class UiConfService extends KalturaBaseService
 		}
 		
 		$templateCriteria = new Criteria();
-		$templateCriteria->add(uiConfPeer::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK , Criteria::GREATER_EQUAL);
+		$templateCriteria->add(uiConfPeer::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK , Criteria::GREATER_EQUAL);
 		$templateCriteria->addAnd(uiConfPeer::PARTNER_ID, $templatePartnerId);
 		
 		if (!$filter)
-		        $filter = new KalturaUiConfFilter;
+		        $filter = new VidiunUiConfFilter;
 		$uiConfFilter = new uiConfFilter ();
 		$filter->toObject( $uiConfFilter );
 		$uiConfFilter->attachToCriteria( $templateCriteria);
 		
 		$count = uiConfPeer::doCount( $templateCriteria );
 		if (!$pager)
-		        $pager = new KalturaFilterPager ();
+		        $pager = new VidiunFilterPager ();
 		$pager->attachToCriteria( $templateCriteria );
 		$list = uiConfPeer::doSelect( $templateCriteria );
-		$newList = KalturaUiConfArray::fromDbArray($list, $this->getResponseProfile());
-		$response = new KalturaUiConfListResponse();
+		$newList = VidiunUiConfArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunUiConfListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $count;
 		return $response;	
@@ -206,16 +206,16 @@ class UiConfService extends KalturaBaseService
 	 * Retrieve a list of available UIConfs
 	 * 
 	 * @action list
-	 * @param KalturaUiConfFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaUiConfListResponse
+	 * @param VidiunUiConfFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunUiConfListResponse
 	 */		
-	function listAction( KalturaUiConfFilter $filter = null , KalturaFilterPager $pager = null)
+	function listAction( VidiunUiConfFilter $filter = null , VidiunFilterPager $pager = null)
 	{
 	    myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL2;
 	    
 		if (!$filter)
-			$filter = new KalturaUiConfFilter;
+			$filter = new VidiunUiConfFilter;
 		$uiConfFilter = new uiConfFilter ();
 		$filter->toObject( $uiConfFilter );
 		
@@ -223,13 +223,13 @@ class UiConfService extends KalturaBaseService
 		$uiConfFilter->attachToCriteria( $c );
 		$count = uiConfPeer::doCount( $c );
 		if (! $pager)
-			$pager = new KalturaFilterPager ();
+			$pager = new VidiunFilterPager ();
 		$pager->attachToCriteria( $c );
 		$list = uiConfPeer::doSelect( $c );
 		
-		$newList = KalturaUiConfArray::fromDbArray($list, $this->getResponseProfile());
+		$newList = VidiunUiConfArray::fromDbArray($list, $this->getResponseProfile());
 		
-		$response = new KalturaUiConfListResponse();
+		$response = new VidiunUiConfListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $count;
 		
@@ -240,7 +240,7 @@ class UiConfService extends KalturaBaseService
 	 * Retrieve a list of all available versions by object type
 	 * 
 	 * @action getAvailableTypes
-	 * @return KalturaUiConfTypeInfoArray
+	 * @return VidiunUiConfTypeInfoArray
 	 */
 	function getAvailableTypesAction()
 	{
@@ -250,10 +250,10 @@ class UiConfService extends KalturaBaseService
 		$dirs = $uiConf->getDirectoryMap();
 		$swfNames = $uiConf->getSwfNames();
 		
-		$typesInfoArray = new KalturaUiConfTypeInfoArray();
+		$typesInfoArray = new VidiunUiConfTypeInfoArray();
 		foreach($dirs as $objType => $dir)
 		{
-			$typesInfo = new KalturaUiConfTypeInfo();
+			$typesInfo = new VidiunUiConfTypeInfo();
 			$typesInfo->type = $objType;
 			$typesInfo->directory = $dir;
 			$typesInfo->filename = isset($swfNames[$objType]) ? $swfNames[$objType] : '';
@@ -261,7 +261,7 @@ class UiConfService extends KalturaBaseService
 			$path = $flashPath . '/' . $dir . '/';
 			if(!file_exists($path) || !is_dir($path))
 			{
-				KalturaLog::err("Path [$path] does not exist");
+				VidiunLog::err("Path [$path] does not exist");
 				continue;
 			}
 				
@@ -269,7 +269,7 @@ class UiConfService extends KalturaBaseService
 			$files = scandir($path);
 			if(!$files)
 			{
-				KalturaLog::err("Could not scan directory [$path]");
+				VidiunLog::err("Could not scan directory [$path]");
 				continue;
 			}
 				
@@ -280,10 +280,10 @@ class UiConfService extends KalturaBaseService
 			}
 			rsort($versions);
 			
-			$versionsObjectArray = new KalturaStringArray();
+			$versionsObjectArray = new VidiunStringArray();
 			foreach($versions as $version)
 			{
-				$versionString = new KalturaString();
+				$versionString = new VidiunString();
 				$versionString->value = $version;
 				$versionsObjectArray[] = $versionString;
 			}

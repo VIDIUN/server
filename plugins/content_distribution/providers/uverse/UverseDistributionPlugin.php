@@ -2,14 +2,14 @@
 /**
  * @package plugins.uverseDistribution
  */
-class UverseDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider, IKalturaEventConsumers, IKalturaServices
+class UverseDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider, IVidiunEventConsumers, IVidiunServices
 {
 	const PLUGIN_NAME = 'uverseDistribution';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
 	const CONTENT_DSTRIBUTION_VERSION_MINOR = 0;
 	const CONTENT_DSTRIBUTION_VERSION_BUILD = 0;
 	
-	const UVERSE_EVENT_CONSUMER = 'kUverseDistributionEventConsumer';
+	const UVERSE_EVENT_CONSUMER = 'vUverseDistributionEventConsumer';
 	
 	public static function getPluginName()
 	{
@@ -18,12 +18,12 @@ class UverseDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -59,7 +59,7 @@ class UverseDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::UVERSE)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::UVERSE)
 		{
 			if($baseClass == 'IDistributionEngineDelete')
 				return new UverseDistributionEngine();
@@ -73,14 +73,14 @@ class UverseDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 			if($baseClass == 'IDistributionEngineUpdate')
 				return new UverseDistributionEngine();
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaUverseDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunUverseDistributionProfile();
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return new KalturaUverseDistributionJobProviderData();
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return new VidiunUverseDistributionJobProviderData();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::UVERSE)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::UVERSE)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -90,23 +90,23 @@ class UverseDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 		}
 		
 		// content distribution does not work in partner services 2 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || kCurrentContext::$ps_vesion != 'ps3')
+		if (!class_exists('vCurrentContext') || vCurrentContext::$ps_vesion != 'ps3')
 			return null;
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseDistributionProviderType::UVERSE))
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseDistributionProviderType::UVERSE))
 		{
-			$reflect = new ReflectionClass('KalturaUverseDistributionJobProviderData');
+			$reflect = new ReflectionClass('VidiunUverseDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(UverseDistributionProviderType::UVERSE))
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(UverseDistributionProviderType::UVERSE))
 		{
-			$reflect = new ReflectionClass('kUverseDistributionJobProviderData');
+			$reflect = new ReflectionClass('vUverseDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseDistributionProviderType::UVERSE))
-			return new KalturaUverseDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseDistributionProviderType::UVERSE))
+			return new VidiunUverseDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseDistributionProviderType::UVERSE))
 			return new UverseDistributionProfile();
@@ -122,7 +122,7 @@ class UverseDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::UVERSE)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::UVERSE)
 		{
 			if($baseClass == 'IDistributionEngineDelete')
 				return 'UverseDistributionEngine';
@@ -136,34 +136,34 @@ class UverseDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 			if($baseClass == 'IDistributionEngineUpdate')
 				return 'UverseDistributionEngine';
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaUverseDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunUverseDistributionProfile';
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaUverseDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunUverseDistributionJobProviderData';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::UVERSE)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::UVERSE)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_UverseProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_UverseDistribution_Type_UverseDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_UverseDistribution_Type_UverseDistributionProfile';
 		}
 		
 		// content distribution does not work in partner services 2 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || kCurrentContext::$ps_vesion != 'ps3')
+		if (!class_exists('vCurrentContext') || vCurrentContext::$ps_vesion != 'ps3')
 			return null;
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseDistributionProviderType::UVERSE))
-			return 'KalturaUverseDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseDistributionProviderType::UVERSE))
+			return 'VidiunUverseDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(UverseDistributionProviderType::UVERSE))
-			return 'kUverseDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(UverseDistributionProviderType::UVERSE))
+			return 'vUverseDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseDistributionProviderType::UVERSE))
-			return 'KalturaUverseDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseDistributionProviderType::UVERSE))
+			return 'VidiunUverseDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(UverseDistributionProviderType::UVERSE))
 			return 'UverseDistributionProfile';
@@ -184,11 +184,11 @@ class UverseDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaUverseDistributionProvider();
+		$distributionProvider = new VidiunUverseDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -208,8 +208,8 @@ class UverseDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -217,7 +217,7 @@ class UverseDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/**
@@ -232,7 +232,7 @@ class UverseDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{

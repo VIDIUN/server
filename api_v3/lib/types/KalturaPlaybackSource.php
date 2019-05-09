@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPlaybackSource extends KalturaObject{
+class VidiunPlaybackSource extends VidiunObject{
 
 	/**
 	 * @var string
@@ -35,7 +35,7 @@ class KalturaPlaybackSource extends KalturaObject{
 
 	/**
 	 * drm data object containing relevant license url ,scheme name and certificate
-	 * @var KalturaDrmPlaybackPluginDataArray
+	 * @var VidiunDrmPlaybackPluginDataArray
 	 */
 	public $drm;
 

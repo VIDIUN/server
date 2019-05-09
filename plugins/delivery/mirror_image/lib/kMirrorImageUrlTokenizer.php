@@ -1,6 +1,6 @@
 <?php
 
-class kMirrorImageUrlTokenizer extends kUrlTokenizer
+class vMirrorImageUrlTokenizer extends vUrlTokenizer
 {
 	// Window (default) - 900
 	// RTMP:

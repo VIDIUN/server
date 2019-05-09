@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaOrCondition extends KalturaCondition
+class VidiunOrCondition extends VidiunCondition
 {
 	/**
-	 * @var KalturaConditionArray
+	 * @var VidiunConditionArray
 	 */
 	public $conditions;
 	
@@ -29,12 +29,12 @@ class KalturaOrCondition extends KalturaCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kOrCondition();
+			$dbObject = new vOrCondition();
 			
 		return parent::toObject($dbObject, $skip);
 	}

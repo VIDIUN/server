@@ -1,6 +1,6 @@
 <?php
 
-class KDLUtils
+class VDLUtils
 {
 	/* ------------------------------
 	 * trima
@@ -67,10 +67,10 @@ class KDLUtils
 			}
 			if(is_array($item)) {
 				if($prevKey && $key==$prevKey) {
-					$str = $str.",".KDLUtils::arrayToString($item);
+					$str = $str.",".VDLUtils::arrayToString($item);
 				}
 				else{
-					$str = $str.$key."=>".KDLUtils::arrayToString($item);
+					$str = $str.$key."=>".VDLUtils::arrayToString($item);
 				}
 			}
 			else {
@@ -112,7 +112,7 @@ class KDLUtils
 	 */
     static function parseTranscodingDataList($dataStr, $delim)
 	{
-//		$dataStr = KDLUtils::trima($dataStr);
+//		$dataStr = VDLUtils::trima($dataStr);
 
 $parsed = array();
 		//		preg_match_all("/([0-9]*),?/", $transStr, $transParse);
@@ -156,14 +156,14 @@ $parsed = array();
 			
 			if(is_array($trId)){
 				$auxArr = array();
-				$trPrmArr[$key] = KDLUtils::mergeTranscoderObjArr($auxArr, $trId, $trEx, $transDictionary);
+				$trPrmArr[$key] = VDLUtils::mergeTranscoderObjArr($auxArr, $trId, $trEx, $transDictionary);
 			}
 			else {
-				$trId = KDLUtils::trima($trId);
+				$trId = VDLUtils::trima($trId);
 				if(!is_null($transDictionary) && array_key_exists($trId, $transDictionary)){
 					$trId = $transDictionary[$trId];
 				}
-				$trPrm = new KDLOperationParams();
+				$trPrm = new VDLOperationParams();
 				$trPrm->Set($trId, $trEx);
 				$trPrmArr[$key] = $trPrm;
 			}
@@ -176,10 +176,10 @@ $parsed = array();
 	 */
 	static function parseTranscoderList($transStr, $extraStr, array $transDictionary=null)
 	{
-		$transParse = KDLUtils::parseTranscodingDataList($transStr, '\,');
-		$extraParse = KDLUtils::parseTranscodingDataList($extraStr, '\|');
+		$transParse = VDLUtils::parseTranscodingDataList($transStr, '\,');
+		$extraParse = VDLUtils::parseTranscodingDataList($extraStr, '\|');
 		$trPrmArr = array();
-		$trPrmArr = KDLUtils::mergeTranscoderObjArr($trPrmArr, $transParse, $extraParse, $transDictionary);
+		$trPrmArr = VDLUtils::mergeTranscoderObjArr($trPrmArr, $transParse, $extraParse, $transDictionary);
 
 		return $trPrmArr;
 		
@@ -191,7 +191,7 @@ $parsed = array();
 	public static function RecursiveScan(array $transObjArr, $func, $param1, $param2){
 		foreach ($transObjArr as $key=>$trPrm) {
 			if(is_array($trPrm)){
-				KDLUtils::RecursiveScan($trPrm, $func, $param1, $param2);
+				VDLUtils::RecursiveScan($trPrm, $func, $param1, $param2);
 			}
 			else {
 				$func($trPrm, $param1, $param2);

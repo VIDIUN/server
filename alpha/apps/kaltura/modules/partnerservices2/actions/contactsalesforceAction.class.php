@@ -10,7 +10,7 @@ class contactsalesforceAction extends defPartnerservices2Action
 		return false;
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		return false;
 	}

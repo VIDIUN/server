@@ -3,7 +3,7 @@
  * @package plugins.scheduledTask
  * @subpackage model.data
  */
-class kScheduledTaskJobData extends kJobData
+class vScheduledTaskJobData extends vJobData
 {
 	/**
 	 * @var int
@@ -31,7 +31,7 @@ class kScheduledTaskJobData extends kJobData
 	private $_referenceTime;
 
 	/**
-	 * kScheduledTaskJobData constructor.
+	 * vScheduledTaskJobData constructor.
 	 */
 	public function __construct()
 	{

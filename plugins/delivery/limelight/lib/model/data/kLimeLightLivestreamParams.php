@@ -4,7 +4,7 @@
  * @package plugins.limeLight
  * @subpackage model.data
  */ 
-class kLimeLightLivestreamParams
+class vLimeLightLivestreamParams
 {
 	private $limelightPrimaryPublishUrl;
 	private $limelightSecondaryPublishUrl;

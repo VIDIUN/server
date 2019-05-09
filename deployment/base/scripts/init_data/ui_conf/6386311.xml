@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<KUploadConfiguration>
+<VUploadConfiguration>
 
   <fileFilters default="documents">
     <fileFilter id="documents"
@@ -10,4 +10,4 @@
   </fileFilters>
 
   <limits maxUploads="60" maxFileSize="200" maxTotalSize="9999999999" />
-</KUploadConfiguration>
+</VUploadConfiguration>

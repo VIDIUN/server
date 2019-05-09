@@ -2,9 +2,9 @@
 /**
  * Applicative event that raised by the developer when indexed object is ready for indexing inherited tree in the index server
  */
-class kObjectReadyForIndexInheritedTreeEvent extends kApplicativeEvent implements IKalturaMultiDeferredEvent
+class vObjectReadyForIndexInheritedTreeEvent extends vApplicativeEvent implements IVidiunMultiDeferredEvent
 {
-	const EVENT_CONSUMER = 'kObjectReadyForIndexInheritedTreeEventConsumer';
+	const EVENT_CONSUMER = 'vObjectReadyForIndexInheritedTreeEventConsumer';
 
 	private $partnerCriteriaParams;
 
@@ -14,7 +14,7 @@ class kObjectReadyForIndexInheritedTreeEvent extends kApplicativeEvent implement
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaMultiDeferredEvent::setPartnerCriteriaParams()
+	 * @see IVidiunMultiDeferredEvent::setPartnerCriteriaParams()
 	 */
 	public function setPartnerCriteriaParams(array $partnerCriteriaParams)
 	{
@@ -22,10 +22,10 @@ class kObjectReadyForIndexInheritedTreeEvent extends kApplicativeEvent implement
 	}
 
 	/**
-	 * @param kObjectAddedEventConsumer $consumer
+	 * @param vObjectAddedEventConsumer $consumer
 	 * @return bool true if should continue to the next consumer
 	 */
-	protected function doConsume(KalturaEventConsumer $consumer)
+	protected function doConsume(VidiunEventConsumer $consumer)
 	{
 		if(!$consumer->shouldConsumeReadyForIndexInheritedTreeEvent($this->object))
 			return true;
@@ -34,9 +34,9 @@ class kObjectReadyForIndexInheritedTreeEvent extends kApplicativeEvent implement
 		if(method_exists($this->object, 'getId'))
 			$additionalLog .= 'id [' . $this->object->getId() . ']';
 
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		$result = $consumer->objectReadyForIndexInheritedTreeEvent($this->object, $this->partnerCriteriaParams, $this->raisedJob);
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		return $result;
 	}
 

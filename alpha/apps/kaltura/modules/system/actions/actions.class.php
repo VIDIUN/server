@@ -4,7 +4,7 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemActions.class.php");
+require_once ( __DIR__ . "/vidiunSystemActions.class.php");
 
 /**
  * system actions.
@@ -13,7 +13,7 @@ require_once ( __DIR__ . "/kalturaSystemActions.class.php");
  * @subpackage system
  * @deprecated
  */
-class systemActions extends kalturaSystemActions
+class systemActions extends vidiunSystemActions
 {
   /**
    * Executes index action
@@ -44,8 +44,8 @@ class systemActions extends kalturaSystemActions
 		
 		$c = new Criteria();
 		$c->addDescendingOrderByColumn( flagPeer::CREATED_AT);
-		$c->addJoin( flagPeer::KUSER_ID, kuserPeer::ID, Criteria::LEFT_JOIN );
-		$this->reports = flagPeer::doSelectJoinkuser( $c );
+		$c->addJoin( flagPeer::VUSER_ID, vuserPeer::ID, Criteria::LEFT_JOIN );
+		$this->reports = flagPeer::doSelectJoinvuser( $c );
 	}
 
 	public function executeDeleteReport()

@@ -1,6 +1,6 @@
 <?php
 
-class KalturaManifestException extends Exception
+class VidiunManifestException extends Exception
 {
 	
 }
@@ -9,7 +9,7 @@ $config = array();
 $client = null;
 $serviceUrl = null;
 $error=null;
-/* @var $client KalturaMonitorClient */
+/* @var $client VidiunMonitorClient */
 require_once __DIR__  . '/common.php';
 
 $options = getopt('', array(
@@ -28,16 +28,16 @@ if(!isset($options['entry-id']) && !isset($options['entry-reference-id']))
 }
 
 $start = microtime(true);
-$monitorResult = new KalturaMonitorResult();
+$monitorResult = new VidiunMonitorResult();
 $apiCall = null;
 try
 {
 	$apiCall = 'session.start';
-	$ks = $client->session->start($config['monitor-partner']['adminSecret'], 'monitor-user', KalturaSessionType::ADMIN, $config['monitor-partner']['id']);
-	$client->setKs($ks);
+	$vs = $client->session->start($config['monitor-partner']['adminSecret'], 'monitor-user', VidiunSessionType::ADMIN, $config['monitor-partner']['id']);
+	$client->setVs($vs);
 	
 	$entry = null;
-	/* @var $entry KalturaMediaEntry */
+	/* @var $entry VidiunMediaEntry */
 	if(isset($options['entry-id']))
 	{
 		$apiCall = 'media.get';
@@ -47,14 +47,14 @@ try
 	{
 		$apiCall = 'baseEntry.listByReferenceId';
 		$baseEntryList = $client->baseEntry->listByReferenceId($options['entry-reference-id']);
-		/* @var $baseEntryList KalturaBaseEntryListResponse */
+		/* @var $baseEntryList VidiunBaseEntryListResponse */
 		if(!count($baseEntryList->objects))
 			throw new Exception("Entry with reference id [" . $options['entry-reference-id'] . "] not found");
 			
 		$entry = reset($baseEntryList->objects);
 	}
 	
-	if($entry->status != KalturaEntryStatus::READY)
+	if($entry->status != VidiunEntryStatus::READY)
 		throw new Exception("Entry id [$entry->id] is not ready for play");
 	
 	$params = array(
@@ -83,28 +83,28 @@ try
 	{
 		if($httpCode != 302)
 		{
-			throw new KalturaManifestException("fetch manifest failed, HTTP Code: $httpCode, URL: $manifestUrl");
+			throw new VidiunManifestException("fetch manifest failed, HTTP Code: $httpCode, URL: $manifestUrl");
 		}
-		if(isset($headers['x-kaltura-app']) && strpos($headers['x-kaltura-app'], 'exiting on error') === 0)
+		if(isset($headers['x-vidiun-app']) && strpos($headers['x-vidiun-app'], 'exiting on error') === 0)
 		{
-			list($prefix, $message) = explode(' - ', $headers['x-kaltura-app'], 2);
-			throw new KalturaManifestException($message);
+			list($prefix, $message) = explode(' - ', $headers['x-vidiun-app'], 2);
+			throw new VidiunManifestException($message);
 		}
 	}
 	else
 	{
 		if($httpCode != 200)
 		{
-			throw new KalturaManifestException("fetch manifest failed, HTTP Code: $httpCode, URL: $manifestUrl");
+			throw new VidiunManifestException("fetch manifest failed, HTTP Code: $httpCode, URL: $manifestUrl");
 		}
-		if(isset($headers['x-kaltura-app']) && strpos($headers['x-kaltura-app'], 'exiting on error') === 0)
+		if(isset($headers['x-vidiun-app']) && strpos($headers['x-vidiun-app'], 'exiting on error') === 0)
 		{
-			list($prefix, $message) = explode(' - ', $headers['x-kaltura-app'], 2);
-			throw new KalturaManifestException($message);
+			list($prefix, $message) = explode(' - ', $headers['x-vidiun-app'], 2);
+			throw new VidiunManifestException($message);
 		}
 		if(!file_exists($manifestLocalPath) || !filesize($manifestLocalPath))
 		{
-			throw new KalturaManifestException("no manifest file returned, URL: $manifestUrl");
+			throw new VidiunManifestException("no manifest file returned, URL: $manifestUrl");
 		}
 	}
 	
@@ -114,51 +114,51 @@ try
 			$manifest = new SimpleXMLElement($manifestLocalPath, LIBXML_NOERROR | LIBXML_NOWARNING, true);
 			
 			if($manifest->getName() != 'manifest')
-				throw new KalturaManifestException("root element expected to be 'manifest', '" . $manifest->getName() . "' returned.");
+				throw new VidiunManifestException("root element expected to be 'manifest', '" . $manifest->getName() . "' returned.");
 			
 			if(!isset($manifest->id))
-				throw new KalturaManifestException("id element expected under manifest element.");
+				throw new VidiunManifestException("id element expected under manifest element.");
 				
 			if(strval($manifest->id) != $entry->id)
-				throw new KalturaManifestException("id value should be the entry id, '$manifest->id' returned.");
+				throw new VidiunManifestException("id value should be the entry id, '$manifest->id' returned.");
 			
 			if(!isset($manifest->mimeType))
-				throw new KalturaManifestException("mimeType element expected under manifest element.");
+				throw new VidiunManifestException("mimeType element expected under manifest element.");
 				
 			if(strval($manifest->mimeType) != 'video/x-flv')
-				throw new KalturaManifestException("mimeType value should be 'video/x-flv', '$manifest->mimeType' returned.");
+				throw new VidiunManifestException("mimeType value should be 'video/x-flv', '$manifest->mimeType' returned.");
 			
 			if(!isset($manifest->streamType))
-				throw new KalturaManifestException("streamType element expected under manifest element.");
+				throw new VidiunManifestException("streamType element expected under manifest element.");
 				
 			if(strval($manifest->streamType) != 'recorded')
-				throw new KalturaManifestException("streamType value should be 'recorded', '$manifest->streamType' returned.");
+				throw new VidiunManifestException("streamType value should be 'recorded', '$manifest->streamType' returned.");
 			
 			if(!isset($manifest->duration))
-				throw new KalturaManifestException("duration element expected under manifest element.");
+				throw new VidiunManifestException("duration element expected under manifest element.");
 				
 //			$expectedDuration = $entry->msDuration / 1000;
 //			if(floatval($manifest->duration) != $expectedDuration)
-//				throw new KalturaManifestException("duration value should be $expectedDuration, $manifest->duration returned.");
+//				throw new VidiunManifestException("duration value should be $expectedDuration, $manifest->duration returned.");
 			
 			if(!isset($manifest->media))
-				throw new KalturaManifestException("media element expected under manifest element.");
+				throw new VidiunManifestException("media element expected under manifest element.");
 				
 			foreach($manifest->media as $media)
 			{
 				$mediaAttributes = $media->attributes();
 				
 				if(!isset($mediaAttributes->bitrate))
-					throw new KalturaManifestException("bitrate attribute expected in media element.");
+					throw new VidiunManifestException("bitrate attribute expected in media element.");
 					
 				if(!isset($mediaAttributes->width))
-					throw new KalturaManifestException("width attribute expected in media element.");
+					throw new VidiunManifestException("width attribute expected in media element.");
 					
 				if(!isset($mediaAttributes->height))
-					throw new KalturaManifestException("height attribute expected in media element.");
+					throw new VidiunManifestException("height attribute expected in media element.");
 					
 				if(!isset($mediaAttributes->url))
-					throw new KalturaManifestException("url attribute expected in media element.");
+					throw new VidiunManifestException("url attribute expected in media element.");
 			}
 			break;
 				
@@ -166,31 +166,31 @@ try
 			$manifest = new SimpleXMLElement($manifestLocalPath, LIBXML_NOERROR | LIBXML_NOWARNING, true);
 			
 			if($manifest->getName() != 'manifest')
-				throw new KalturaManifestException("root element expected to be 'manifest', '" . $manifest->getName() . "' returned.");
+				throw new VidiunManifestException("root element expected to be 'manifest', '" . $manifest->getName() . "' returned.");
 			
 			$manifestAttributes = $manifest->attributes();
 				
 			if(!isset($manifestAttributes->url))
-				throw new KalturaManifestException("url attribute expected in manifest element.");
+				throw new VidiunManifestException("url attribute expected in manifest element.");
 				
 			if(!isset($manifest->id))
-				throw new KalturaManifestException("id element expected under manifest element.");
+				throw new VidiunManifestException("id element expected under manifest element.");
 				
 			if(strval($manifest->id) != $entry->id)
-				throw new KalturaManifestException("id value should be the entry id, '$manifest->id' returned.");
+				throw new VidiunManifestException("id value should be the entry id, '$manifest->id' returned.");
 			
 			if(!isset($manifest->streamType))
-				throw new KalturaManifestException("streamType element expected under manifest element.");
+				throw new VidiunManifestException("streamType element expected under manifest element.");
 				
 			if(strval($manifest->streamType) != 'recorded')
-				throw new KalturaManifestException("streamType value should be 'recorded', '$manifest->streamType' returned.");
+				throw new VidiunManifestException("streamType value should be 'recorded', '$manifest->streamType' returned.");
 			
 			if(!isset($manifest->duration))
-				throw new KalturaManifestException("duration element expected under manifest element.");
+				throw new VidiunManifestException("duration element expected under manifest element.");
 				
 //			$expectedDuration = $entry->msDuration / 1000;
 //			if(floatval($manifest->duration) != $expectedDuration)
-//				throw new KalturaManifestException("duration value should be $expectedDuration, $manifest->duration returned.");
+//				throw new VidiunManifestException("duration value should be $expectedDuration, $manifest->duration returned.");
 			
 			$serveFlavorUrl = strval($manifestAttributes->url);
 			
@@ -201,16 +201,16 @@ try
 	
 			if($httpCode != 200)
 			{
-				throw new KalturaManifestException("serve flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
+				throw new VidiunManifestException("serve flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
 			}
-			if(isset($headers['x-kaltura-app']) && strpos($headers['x-kaltura-app'], 'exiting on error') === 0)
+			if(isset($headers['x-vidiun-app']) && strpos($headers['x-vidiun-app'], 'exiting on error') === 0)
 			{
-				list($prefix, $message) = explode(' - ', $headers['x-kaltura-app'], 2);
-				throw new KalturaManifestException($message);
+				list($prefix, $message) = explode(' - ', $headers['x-vidiun-app'], 2);
+				throw new VidiunManifestException($message);
 			}
 			if(!file_exists($mediaLocalPath) || !filesize($mediaLocalPath))
 			{
-				throw new KalturaManifestException("no media file returned, URL: $serveFlavorUrl");
+				throw new VidiunManifestException("no media file returned, URL: $serveFlavorUrl");
 			}
 			
 			break;
@@ -218,11 +218,11 @@ try
 		case 'applehttp':
 			$manifest = file_get_contents($manifestLocalPath);
 			if(strpos($manifest, '#EXTM3U') !== 0)
-				throw new KalturaManifestException("apple HTTP format must start with header '#EXTM3U'");
+				throw new VidiunManifestException("apple HTTP format must start with header '#EXTM3U'");
 				
 			$matches = null;
 			if(!preg_match_all('/#EXT-X-STREAM-INF:PROGRAM-ID=\d+,BANDWIDTH=\d+\n([^\n]+)/', $manifest, $matches))
-				throw new KalturaManifestException("manifest format does not match Apple HTTP expected format.");
+				throw new VidiunManifestException("manifest format does not match Apple HTTP expected format.");
 					
 			foreach($matches[1] as $serveFlavorUrl)
 			{
@@ -233,16 +233,16 @@ try
 		
 				if($httpCode != 200)
 				{
-					throw new KalturaManifestException("serve flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
+					throw new VidiunManifestException("serve flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
 				}
-				if(isset($headers['x-kaltura-app']) && strpos($headers['x-kaltura-app'], 'exiting on error') === 0)
+				if(isset($headers['x-vidiun-app']) && strpos($headers['x-vidiun-app'], 'exiting on error') === 0)
 				{
-					list($prefix, $message) = explode(' - ', $headers['x-kaltura-app'], 2);
-					throw new KalturaManifestException($message);
+					list($prefix, $message) = explode(' - ', $headers['x-vidiun-app'], 2);
+					throw new VidiunManifestException($message);
 				}
 				if(!file_exists($mediaLocalPath) || !filesize($mediaLocalPath))
 				{
-					throw new KalturaManifestException("no media file returned, URL: $serveFlavorUrl");
+					throw new VidiunManifestException("no media file returned, URL: $serveFlavorUrl");
 				}
 			}
 			break;
@@ -252,35 +252,35 @@ try
 			$manifest = new SimpleXMLElement($manifestLocalPath, LIBXML_NOERROR | LIBXML_NOWARNING, true);
 			
 			if($manifest->getName() != 'manifest')
-				throw new KalturaManifestException("root element expected to be 'manifest', '" . $manifest->getName() . "' returned.");
+				throw new VidiunManifestException("root element expected to be 'manifest', '" . $manifest->getName() . "' returned.");
 			
 			if(!isset($manifest->id))
-				throw new KalturaManifestException("id element expected under manifest element.");
+				throw new VidiunManifestException("id element expected under manifest element.");
 				
 			if(strval($manifest->id) != $entry->id)
-				throw new KalturaManifestException("id value should be the entry id, '$manifest->id' returned.");
+				throw new VidiunManifestException("id value should be the entry id, '$manifest->id' returned.");
 			
 			if(!isset($manifest->mimeType))
-				throw new KalturaManifestException("mimeType element expected under manifest element.");
+				throw new VidiunManifestException("mimeType element expected under manifest element.");
 				
 			if(strval($manifest->mimeType) != 'video/x-flv')
-				throw new KalturaManifestException("mimeType value should be 'video/x-flv', '$manifest->mimeType' returned.");
+				throw new VidiunManifestException("mimeType value should be 'video/x-flv', '$manifest->mimeType' returned.");
 			
 			if(!isset($manifest->streamType))
-				throw new KalturaManifestException("streamType element expected under manifest element.");
+				throw new VidiunManifestException("streamType element expected under manifest element.");
 				
 			if(strval($manifest->streamType) != 'recorded')
-				throw new KalturaManifestException("streamType value should be 'recorded', '$manifest->streamType' returned.");
+				throw new VidiunManifestException("streamType value should be 'recorded', '$manifest->streamType' returned.");
 			
 			if(!isset($manifest->duration))
-				throw new KalturaManifestException("duration element expected under manifest element.");
+				throw new VidiunManifestException("duration element expected under manifest element.");
 				
 //			$expectedDuration = $entry->msDuration / 1000;
 //			if(floatval($manifest->duration) != $expectedDuration)
-//				throw new KalturaManifestException("duration value should be $expectedDuration, $manifest->duration returned.");
+//				throw new VidiunManifestException("duration value should be $expectedDuration, $manifest->duration returned.");
 			
 			if(!isset($manifest->media))
-				throw new KalturaManifestException("media element expected under manifest element.");
+				throw new VidiunManifestException("media element expected under manifest element.");
 				
 			foreach($manifest->media as $media)
 			{
@@ -289,17 +289,17 @@ try
 				if($format == 'hds')
 				{
 					if(!isset($mediaAttributes->bitrate))
-						throw new KalturaManifestException("bitrate attribute expected in media element.");
+						throw new VidiunManifestException("bitrate attribute expected in media element.");
 						
 					if(!isset($mediaAttributes->width))
-						throw new KalturaManifestException("width attribute expected in media element.");
+						throw new VidiunManifestException("width attribute expected in media element.");
 						
 					if(!isset($mediaAttributes->height))
-						throw new KalturaManifestException("height attribute expected in media element.");
+						throw new VidiunManifestException("height attribute expected in media element.");
 				}
 					
 				if(!isset($mediaAttributes->url))
-					throw new KalturaManifestException("url attribute expected in media element.");
+					throw new VidiunManifestException("url attribute expected in media element.");
 			
 				$serveFlavorUrl = strval($mediaAttributes->url);
 
@@ -310,16 +310,16 @@ try
 
 				if($httpCode != 200)
 				{
-					throw new KalturaManifestException("serve flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
+					throw new VidiunManifestException("serve flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
 				}
-				if(isset($headers['x-kaltura-app']) && strpos($headers['x-kaltura-app'], 'exiting on error') === 0)
+				if(isset($headers['x-vidiun-app']) && strpos($headers['x-vidiun-app'], 'exiting on error') === 0)
 				{
-					list($prefix, $message) = explode(' - ', $headers['x-kaltura-app'], 2);
-					throw new KalturaManifestException($message);
+					list($prefix, $message) = explode(' - ', $headers['x-vidiun-app'], 2);
+					throw new VidiunManifestException($message);
 				}
 				if(!file_exists($mediaLocalPath) || !filesize($mediaLocalPath))
 				{
-					throw new KalturaManifestException("no media file returned, URL: $serveFlavorUrl");
+					throw new VidiunManifestException("no media file returned, URL: $serveFlavorUrl");
 				}
 			}
 			break;
@@ -332,16 +332,16 @@ try
 			
 			if($httpCode != 200)
 			{
-				throw new KalturaManifestException("fetch redirected flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
+				throw new VidiunManifestException("fetch redirected flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
 			}
-			if(isset($headers['x-kaltura-app']) && strpos($headers['x-kaltura-app'], 'exiting on error') === 0)
+			if(isset($headers['x-vidiun-app']) && strpos($headers['x-vidiun-app'], 'exiting on error') === 0)
 			{
-				list($prefix, $message) = explode(' - ', $headers['x-kaltura-app'], 2);
-				throw new KalturaManifestException($message);
+				list($prefix, $message) = explode(' - ', $headers['x-vidiun-app'], 2);
+				throw new VidiunManifestException($message);
 			}
 			if(!file_exists($manifestLocalPath) || !filesize($manifestLocalPath))
 			{
-				throw new KalturaManifestException("no redirected flavor file returned, URL: $manifestUrl");
+				throw new VidiunManifestException("no redirected flavor file returned, URL: $manifestUrl");
 			}
 			break;
 				
@@ -349,7 +349,7 @@ try
 			$html = file_get_contents($manifestLocalPath);
 			$matches = null;
 			if(!preg_match('/<html><head><meta http-equiv="refresh" content="0;url=([^"]+)"><\/head><\/html>/', $html, $matches))
-				throw new KalturaManifestException("HTML format does not match RTSP expected format.");
+				throw new VidiunManifestException("HTML format does not match RTSP expected format.");
 					
 			$serveFlavorUrl = $clientConfig->serviceUrl . $matches[1];
 
@@ -360,16 +360,16 @@ try
 
 			if($httpCode != 200)
 			{
-				throw new KalturaManifestException("serve flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
+				throw new VidiunManifestException("serve flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
 			}
-			if(isset($headers['x-kaltura-app']) && strpos($headers['x-kaltura-app'], 'exiting on error') === 0)
+			if(isset($headers['x-vidiun-app']) && strpos($headers['x-vidiun-app'], 'exiting on error') === 0)
 			{
-				list($prefix, $message) = explode(' - ', $headers['x-kaltura-app'], 2);
-				throw new KalturaManifestException($message);
+				list($prefix, $message) = explode(' - ', $headers['x-vidiun-app'], 2);
+				throw new VidiunManifestException($message);
 			}
 			if(!file_exists($mediaLocalPath) || !filesize($mediaLocalPath))
 			{
-				throw new KalturaManifestException("no media file returned, URL: $serveFlavorUrl");
+				throw new VidiunManifestException("no media file returned, URL: $serveFlavorUrl");
 			}
 			break;
 				
@@ -377,60 +377,60 @@ try
 			$manifest = new SimpleXMLElement($manifestLocalPath, LIBXML_NOERROR | LIBXML_NOWARNING, true);
 			
 			if($manifest->getName() != 'smil')
-				throw new KalturaManifestException("root element expected to be 'smil', '" . $manifest->getName() . "' returned.");
+				throw new VidiunManifestException("root element expected to be 'smil', '" . $manifest->getName() . "' returned.");
 			
 			if(!isset($manifest->head))
-				throw new KalturaManifestException("head element expected under smil element.");
+				throw new VidiunManifestException("head element expected under smil element.");
 				
 			$metaData = array();
 			foreach($manifest->head->children() as $meta)
 			{
 				/* @var $meta SimpleXMLElement */
 				if($meta->getName() != 'meta')
-					throw new KalturaManifestException("only meta elements expected under smil/head element, '" . $meta->getName() . "' returned.");
+					throw new VidiunManifestException("only meta elements expected under smil/head element, '" . $meta->getName() . "' returned.");
 				
 				$metaAttributes = $meta->attributes();
 				
 				if(!isset($metaAttributes->name))
-					throw new KalturaManifestException("name attribute expected in smil/head/meta elements.");
+					throw new VidiunManifestException("name attribute expected in smil/head/meta elements.");
 				
 				if(!isset($metaAttributes->content))
-					throw new KalturaManifestException("content attribute expected in smil/head/meta elements.");
+					throw new VidiunManifestException("content attribute expected in smil/head/meta elements.");
 					
 				$metaData[strval($metaAttributes->name)] = strval($metaAttributes->content);
 			}
 			
 			if(!isset($metaData['vod']))
-				throw new KalturaManifestException("meta element with name 'vod' expected under smil/head element.");
+				throw new VidiunManifestException("meta element with name 'vod' expected under smil/head element.");
 			
 			if(strtolower($metaData['vod']) != 'true')
-				throw new KalturaManifestException("vod meta element expected to be true.");
+				throw new VidiunManifestException("vod meta element expected to be true.");
 				
 			if(!isset($metaData['httpBase']))
-				throw new KalturaManifestException("meta element with name 'httpBase' expected under smil/head element.");
+				throw new VidiunManifestException("meta element with name 'httpBase' expected under smil/head element.");
 				
 			$httpBase = $metaData['httpBase'];
 			
 			if(!isset($manifest->body))
-				throw new KalturaManifestException("body element expected under smil element.");
+				throw new VidiunManifestException("body element expected under smil element.");
 	
 			if(!isset($manifest->body->switch))
-				throw new KalturaManifestException("switch element expected under smil/body element.");
+				throw new VidiunManifestException("switch element expected under smil/body element.");
 	
 			foreach($manifest->body->switch->children() as $video)
 			{
 				/* @var $video SimpleXMLElement */
 				if($video->getName() != 'video')
-					throw new KalturaManifestException("only video elements expected under smil/body/switch element, '" . $video->getName() . "' returned.");
+					throw new VidiunManifestException("only video elements expected under smil/body/switch element, '" . $video->getName() . "' returned.");
 				
 				$videoAttributes = $video->attributes();
 				
 				if(!isset($videoAttributes->src))
-					throw new KalturaManifestException("src attribute expected in smil/body/switch/video elements.");
+					throw new VidiunManifestException("src attribute expected in smil/body/switch/video elements.");
 				
 				$systemBitrate = 'system-bitrate';
 				if(!isset($videoAttributes->$systemBitrate))
-					throw new KalturaManifestException("$systemBitrate attribute expected in smil/body/switch/video elements.");
+					throw new VidiunManifestException("$systemBitrate attribute expected in smil/body/switch/video elements.");
 				
 				$serveFlavorUrl = $httpBase . strval($videoAttributes->src);
 
@@ -441,16 +441,16 @@ try
 
 				if($httpCode != 200)
 				{
-					throw new KalturaManifestException("serve flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
+					throw new VidiunManifestException("serve flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
 				}
-				if(isset($headers['x-kaltura-app']) && strpos($headers['x-kaltura-app'], 'exiting on error') === 0)
+				if(isset($headers['x-vidiun-app']) && strpos($headers['x-vidiun-app'], 'exiting on error') === 0)
 				{
-					list($prefix, $message) = explode(' - ', $headers['x-kaltura-app'], 2);
-					throw new KalturaManifestException($message);
+					list($prefix, $message) = explode(' - ', $headers['x-vidiun-app'], 2);
+					throw new VidiunManifestException($message);
 				}
 				if(!file_exists($mediaLocalPath) || !filesize($mediaLocalPath))
 				{
-					throw new KalturaManifestException("no media file returned, URL: $serveFlavorUrl");
+					throw new VidiunManifestException("no media file returned, URL: $serveFlavorUrl");
 				}
 			}
 			
@@ -462,49 +462,49 @@ try
 			$manifest = new SimpleXMLElement($manifestLocalPath, LIBXML_NOERROR | LIBXML_NOWARNING, true);
 			
 			if($manifest->getName() != 'manifest')
-				throw new KalturaManifestException("root element expected to be 'manifest', '" . $manifest->getName() . "' returned.");
+				throw new VidiunManifestException("root element expected to be 'manifest', '" . $manifest->getName() . "' returned.");
 			
 			if(!isset($manifest->id))
-				throw new KalturaManifestException("id element expected under manifest element.");
+				throw new VidiunManifestException("id element expected under manifest element.");
 				
 			if(strval($manifest->id) != $entry->id)
-				throw new KalturaManifestException("id value should be the entry id, '$manifest->id' returned.");
+				throw new VidiunManifestException("id value should be the entry id, '$manifest->id' returned.");
 			
 			if(!isset($manifest->mimeType))
-				throw new KalturaManifestException("mimeType element expected under manifest element.");
+				throw new VidiunManifestException("mimeType element expected under manifest element.");
 				
 			if(strval($manifest->mimeType) != 'video/x-flv')
-				throw new KalturaManifestException("mimeType value should be 'video/x-flv', '$manifest->mimeType' returned.");
+				throw new VidiunManifestException("mimeType value should be 'video/x-flv', '$manifest->mimeType' returned.");
 			
 			if(!isset($manifest->streamType))
-				throw new KalturaManifestException("streamType element expected under manifest element.");
+				throw new VidiunManifestException("streamType element expected under manifest element.");
 				
 			if(strval($manifest->streamType) != 'recorded')
-				throw new KalturaManifestException("streamType value should be 'recorded', '$manifest->streamType' returned.");
+				throw new VidiunManifestException("streamType value should be 'recorded', '$manifest->streamType' returned.");
 			
 			if(!isset($manifest->duration))
-				throw new KalturaManifestException("duration element expected under manifest element.");
+				throw new VidiunManifestException("duration element expected under manifest element.");
 				
 //			$expectedDuration = $entry->msDuration / 1000;
 //			if(floatval($manifest->duration) != $expectedDuration)
-//				throw new KalturaManifestException("duration value should be $expectedDuration, $manifest->duration returned.");
+//				throw new VidiunManifestException("duration value should be $expectedDuration, $manifest->duration returned.");
 			
 			if(!isset($manifest->media))
-				throw new KalturaManifestException("media element expected under manifest element.");
+				throw new VidiunManifestException("media element expected under manifest element.");
 				
 			$mediaAttributes = $manifest->media->attributes();
 			
 			if(!isset($mediaAttributes->bitrate))
-				throw new KalturaManifestException("bitrate attribute expected in media element.");
+				throw new VidiunManifestException("bitrate attribute expected in media element.");
 				
 			if(!isset($mediaAttributes->width))
-				throw new KalturaManifestException("width attribute expected in media element.");
+				throw new VidiunManifestException("width attribute expected in media element.");
 				
 			if(!isset($mediaAttributes->height))
-				throw new KalturaManifestException("height attribute expected in media element.");
+				throw new VidiunManifestException("height attribute expected in media element.");
 				
 			if(!isset($mediaAttributes->url))
-				throw new KalturaManifestException("url attribute expected in media element.");
+				throw new VidiunManifestException("url attribute expected in media element.");
 				
 			$serveFlavorUrl = strval($mediaAttributes->url);
 			
@@ -515,16 +515,16 @@ try
 	
 			if($httpCode != 200)
 			{
-				throw new KalturaManifestException("serve flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
+				throw new VidiunManifestException("serve flavor failed, HTTP Code: $httpCode, URL: $manifestUrl");
 			}
-			if(isset($headers['x-kaltura-app']) && strpos($headers['x-kaltura-app'], 'exiting on error') === 0)
+			if(isset($headers['x-vidiun-app']) && strpos($headers['x-vidiun-app'], 'exiting on error') === 0)
 			{
-				list($prefix, $message) = explode(' - ', $headers['x-kaltura-app'], 2);
-				throw new KalturaManifestException($message);
+				list($prefix, $message) = explode(' - ', $headers['x-vidiun-app'], 2);
+				throw new VidiunManifestException($message);
 			}
 			if(!file_exists($mediaLocalPath) || !filesize($mediaLocalPath))
 			{
-				throw new KalturaManifestException("no media file returned, URL: $serveFlavorUrl");
+				throw new VidiunManifestException("no media file returned, URL: $serveFlavorUrl");
 			}
 			
 			break;
@@ -534,38 +534,38 @@ try
 	$monitorResult->value = $monitorResult->executionTime;
 	$monitorResult->description = "Play manifest time: $monitorResult->value seconds";
 }
-catch(KalturaException $e)
+catch(VidiunException $e)
 {
 	$monitorResult->executionTime = microtime(true) - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $e->getCode();
 	$error->description = $e->getMessage();
-	$error->level = KalturaMonitorError::ERR;
+	$error->level = VidiunMonitorError::ERR;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = "Exception: " . get_class($e) . ", API: $apiCall, Code: " . $e->getCode() . ", Message: " . $e->getMessage();
 }
-catch(KalturaClientException $ce)
+catch(VidiunClientException $ce)
 {
 	$monitorResult->executionTime = microtime(true) - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $ce->getCode();
 	$error->description = $ce->getMessage();
-	$error->level = KalturaMonitorError::CRIT;
+	$error->level = VidiunMonitorError::CRIT;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = "Exception: " . get_class($ce) . ", API: $apiCall, Code: " . $ce->getCode() . ", Message: " . $ce->getMessage();
 }
-catch(KalturaManifestException $me)
+catch(VidiunManifestException $me)
 {
 	$monitorResult->executionTime = microtime(true) - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $me->getCode();
 	$error->description = $me->getMessage();
-	$error->level = KalturaMonitorError::CRIT;
+	$error->level = VidiunMonitorError::CRIT;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = $me->getMessage();
@@ -574,10 +574,10 @@ catch(Exception $ex)
 {
 	$monitorResult->executionTime = microtime(true) - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $ex->getCode();
 	$error->description = $ex->getMessage();
-	$error->level = KalturaMonitorError::ERR;
+	$error->level = VidiunMonitorError::ERR;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = $ex->getMessage();

@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaEntryVendorTaskBaseFilter extends KalturaRelatedFilter
+abstract class VidiunEntryVendorTaskBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -126,7 +126,7 @@ abstract class KalturaEntryVendorTaskBaseFilter extends KalturaRelatedFilter
 	public $entryIdEqual;
 
 	/**
-	 * @var KalturaEntryVendorTaskStatus
+	 * @var VidiunEntryVendorTaskStatus
 	 */
 	public $statusEqual;
 

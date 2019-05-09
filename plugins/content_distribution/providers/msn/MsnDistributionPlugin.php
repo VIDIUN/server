@@ -2,7 +2,7 @@
 /**
  * @package plugins.msnDistribution
  */
-class MsnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider
+class MsnDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider
 {
 	const PLUGIN_NAME = 'msnDistribution';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
@@ -16,12 +16,12 @@ class MsnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -57,7 +57,7 @@ class MsnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::MSN)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::MSN)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return new MsnDistributionEngine();
@@ -80,14 +80,14 @@ class MsnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 			if($baseClass == 'IDistributionEngineUpdate')
 				return new MsnDistributionEngine();
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaMsnDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunMsnDistributionProfile();
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return new KalturaMsnDistributionJobProviderData();
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return new VidiunMsnDistributionJobProviderData();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::MSN)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::MSN)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -97,23 +97,23 @@ class MsnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 		}
 		
 		// content distribution does not work in partner services 2 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || kCurrentContext::$ps_vesion != 'ps3')
+		if (!class_exists('vCurrentContext') || vCurrentContext::$ps_vesion != 'ps3')
 			return null;
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(MsnDistributionProviderType::MSN))
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(MsnDistributionProviderType::MSN))
 		{
-			$reflect = new ReflectionClass('KalturaMsnDistributionJobProviderData');
+			$reflect = new ReflectionClass('VidiunMsnDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(MsnDistributionProviderType::MSN))
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(MsnDistributionProviderType::MSN))
 		{
-			$reflect = new ReflectionClass('kMsnDistributionJobProviderData');
+			$reflect = new ReflectionClass('vMsnDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(MsnDistributionProviderType::MSN))
-			return new KalturaMsnDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(MsnDistributionProviderType::MSN))
+			return new VidiunMsnDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(MsnDistributionProviderType::MSN))
 			return new MsnDistributionProfile();
@@ -129,7 +129,7 @@ class MsnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::MSN)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::MSN)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return 'MsnDistributionEngine';
@@ -152,34 +152,34 @@ class MsnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 			if($baseClass == 'IDistributionEngineUpdate')
 				return 'MsnDistributionEngine';
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaMsnDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunMsnDistributionProfile';
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaMsnDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunMsnDistributionJobProviderData';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::MSN)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::MSN)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_MsnProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_MsnDistribution_Type_MsnDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_MsnDistribution_Type_MsnDistributionProfile';
 		}
 		
 		// content distribution does not work in partner services 2 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || kCurrentContext::$ps_vesion != 'ps3')
+		if (!class_exists('vCurrentContext') || vCurrentContext::$ps_vesion != 'ps3')
 			return null;
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(MsnDistributionProviderType::MSN))
-			return 'KalturaMsnDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(MsnDistributionProviderType::MSN))
+			return 'VidiunMsnDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(MsnDistributionProviderType::MSN))
-			return 'kMsnDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(MsnDistributionProviderType::MSN))
+			return 'vMsnDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(MsnDistributionProviderType::MSN))
-			return 'KalturaMsnDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(MsnDistributionProviderType::MSN))
+			return 'VidiunMsnDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(MsnDistributionProviderType::MSN))
 			return 'MsnDistributionProfile';
@@ -200,11 +200,11 @@ class MsnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaMsnDistributionProvider();
+		$distributionProvider = new VidiunMsnDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -220,10 +220,10 @@ class MsnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	    // append Msn specific report statistics
 	    $distributionProfile = DistributionProfilePeer::retrieveByPK($entryDistribution->getDistributionProfileId());
 	    if (!$distributionProfile)
-	    	return KalturaLog::err('Distribution profile #'.$entryDistribution->getDistributionProfileId() .' not found');
+	    	return VidiunLog::err('Distribution profile #'.$entryDistribution->getDistributionProfileId() .' not found');
 
     	if (!$distributionProfile instanceof MsnDistributionProfile)
-    		return KalturaLog::crit('Distribution profile #'.$entryDistribution->getDistributionProfileId() .' is not instanceof MsnDistributionProfile');
+    		return VidiunLog::crit('Distribution profile #'.$entryDistribution->getDistributionProfileId() .' is not instanceof MsnDistributionProfile');
     		
 		$mrss->addChild('csid', $distributionProfile->getCsId());
 		$mrss->addChild('source', $distributionProfile->getSource());
@@ -239,8 +239,8 @@ class MsnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -248,6 +248,6 @@ class MsnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

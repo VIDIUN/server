@@ -15,50 +15,50 @@ setlocale ( LC_ALL, 'en_US.UTF-8' );
  * @package Scheduler
  * @subpackage Bulk-Upload
  */
-class KAsyncBulkUpload extends KJobHandlerWorker 
+class VAsyncBulkUpload extends VJobHandlerWorker 
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::BULKUPLOAD;
+		return VidiunBatchJobType::BULKUPLOAD;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		ini_set('auto_detect_line_endings', true);
 		try
 		{
 			$job = $this->startBulkUpload($job);
 		}
-		catch (KalturaBulkUploadAbortedException $abortedException)
+		catch (VidiunBulkUploadAbortedException $abortedException)
 		{
 			self::unimpersonate();
-			$job = $this->closeJob($job, null, null, null, KalturaBatchJobStatus::ABORTED);
+			$job = $this->closeJob($job, null, null, null, VidiunBatchJobStatus::ABORTED);
 		}
-		catch(KalturaBatchException $kbex)
+		catch(VidiunBatchException $kbex)
 		{
 			self::unimpersonate();
-			$job = $this->closeJob($job, KalturaBatchJobErrorTypes::APP, $kbex->getCode(), "Error: " . $kbex->getMessage(), KalturaBatchJobStatus::FAILED);
+			$job = $this->closeJob($job, VidiunBatchJobErrorTypes::APP, $kbex->getCode(), "Error: " . $kbex->getMessage(), VidiunBatchJobStatus::FAILED);
 		}
-		catch(KalturaException $kex)
+		catch(VidiunException $kex)
 		{
 			self::unimpersonate();
-			$job = $this->closeJob($job, KalturaBatchJobErrorTypes::KALTURA_API, $kex->getCode(), "Error: " . $kex->getMessage(), KalturaBatchJobStatus::FAILED);
+			$job = $this->closeJob($job, VidiunBatchJobErrorTypes::VIDIUN_API, $kex->getCode(), "Error: " . $kex->getMessage(), VidiunBatchJobStatus::FAILED);
 		}
-		catch(KalturaClientException $kcex)
+		catch(VidiunClientException $vcex)
 		{
 			self::unimpersonate();
-			$job = $this->closeJob($job, KalturaBatchJobErrorTypes::KALTURA_CLIENT, $kcex->getCode(), "Error: " . $kcex->getMessage(), KalturaBatchJobStatus::RETRY);
+			$job = $this->closeJob($job, VidiunBatchJobErrorTypes::VIDIUN_CLIENT, $vcex->getCode(), "Error: " . $vcex->getMessage(), VidiunBatchJobStatus::RETRY);
 		}
 		catch(Exception $ex)
 		{
 			self::unimpersonate();
-			$job = $this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::FAILED);
+			$job = $this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::FAILED);
 		}
 		ini_set('auto_detect_line_endings', false);
 
@@ -67,7 +67,7 @@ class KAsyncBulkUpload extends KJobHandlerWorker
 
 
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::getMaxJobsEachRun()
+	 * @see VJobHandlerWorker::getMaxJobsEachRun()
 	 */
 	protected function getMaxJobsEachRun()
 	{
@@ -76,22 +76,22 @@ class KAsyncBulkUpload extends KJobHandlerWorker
 
 	/**
 	 * Starts the bulk upload
-	 * @param KalturaBatchJob $job
-	 * @return KalturaBatchJob
-	 * @throws KalturaBatchException
-	 * @throws KalturaException
+	 * @param VidiunBatchJob $job
+	 * @return VidiunBatchJob
+	 * @throws VidiunBatchException
+	 * @throws VidiunException
 	 */
-	private function startBulkUpload(KalturaBatchJob $job)
+	private function startBulkUpload(VidiunBatchJob $job)
 	{
-		KalturaLog::info( "Start bulk upload ($job->id)" );
+		VidiunLog::info( "Start bulk upload ($job->id)" );
 		
 		//Gets the right Engine instance 
-		$engine = KBulkUploadEngine::getEngine($job->jobSubType, $job);
+		$engine = VBulkUploadEngine::getEngine($job->jobSubType, $job);
 		if (is_null ( $engine )) {
-			throw new KalturaException ( "Unable to find bulk upload engine", KalturaBatchJobAppErrors::ENGINE_NOT_FOUND );
+			throw new VidiunException ( "Unable to find bulk upload engine", VidiunBatchJobAppErrors::ENGINE_NOT_FOUND );
 		}
-		$job = $this->updateJob($job, 'Parsing file [' . $engine->getName() . ']', KalturaBatchJobStatus::QUEUED, $engine->getData());
-		$this->appendPrivilegesToKs($job->data->privileges);
+		$job = $this->updateJob($job, 'Parsing file [' . $engine->getName() . ']', VidiunBatchJobStatus::QUEUED, $engine->getData());
+		$this->appendPrivilegesToVs($job->data->privileges);
 		$engine->setJob($job);
 		$engine->setData($job->data);
 		$engine->handleBulkUpload();
@@ -104,21 +104,21 @@ class KAsyncBulkUpload extends KJobHandlerWorker
 		$countErrorObjects = $countObjects[1];
 
 		if(!$countHandledObjects && !$engine->shouldRetry() && $countErrorObjects)
-			throw new KalturaBatchException("None of the uploaded items were processed succsessfuly", KalturaBatchJobAppErrors::BULK_NO_ENTRIES_HANDLED, $engine->getData());
+			throw new VidiunBatchException("None of the uploaded items were processed succsessfuly", VidiunBatchJobAppErrors::BULK_NO_ENTRIES_HANDLED, $engine->getData());
 		
 		if($engine->shouldRetry())
 		{
-			self::$kClient->batch->resetJobExecutionAttempts($job->id, $this->getExclusiveLockKey(), $job->jobType);
-			return $this->closeJob($job, null, null, "Retrying: ".$countHandledObjects." ".$engine->getObjectTypeTitle()." objects were handled until now", KalturaBatchJobStatus::RETRY);
+			self::$vClient->batch->resetJobExecutionAttempts($job->id, $this->getExclusiveLockKey(), $job->jobType);
+			return $this->closeJob($job, null, null, "Retrying: ".$countHandledObjects." ".$engine->getObjectTypeTitle()." objects were handled until now", VidiunBatchJobStatus::RETRY);
 		}
 
 		//check if all items were done already
-		if(!self::$kClient->batch->updateBulkUploadResults($job->id) && !$countErrorObjects)
+		if(!self::$vClient->batch->updateBulkUploadResults($job->id) && !$countErrorObjects)
 		{
-			return $this->closeJob($job, null, null, 'Finished successfully', KalturaBatchJobStatus::FINISHED);
+			return $this->closeJob($job, null, null, 'Finished successfully', VidiunBatchJobStatus::FINISHED);
 		}
 			
-		return $this->closeJob($job, null, null, 'Waiting for objects closure', KalturaBatchJobStatus::ALMOST_DONE, $data);
+		return $this->closeJob($job, null, null, 'Waiting for objects closure', VidiunBatchJobStatus::ALMOST_DONE, $data);
 	}
 	
 	/**
@@ -131,10 +131,10 @@ class KAsyncBulkUpload extends KJobHandlerWorker
 		$createdCount = 0;
 		$errorCount = 0;
 		
-		$counters = self::$kClient->batch->countBulkUploadEntries($jobId, $bulkuploadObjectType);
+		$counters = self::$vClient->batch->countBulkUploadEntries($jobId, $bulkuploadObjectType);
 		foreach($counters as $counter)
 		{
-			/** @var KalturaKeyValue $counter */
+			/** @var VidiunKeyValue $counter */
 			if ($counter->key == 'created')
 				$createdCount = $counter->value;
 			if ($counter->key == 'error')

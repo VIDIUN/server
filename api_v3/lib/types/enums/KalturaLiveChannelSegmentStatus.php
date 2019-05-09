@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaLiveChannelSegmentStatus extends KalturaDynamicEnum implements LiveChannelSegmentStatus
+class VidiunLiveChannelSegmentStatus extends VidiunDynamicEnum implements LiveChannelSegmentStatus
 {
 	public static function getEnumClass()
 	{

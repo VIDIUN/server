@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaDeliveryProfileRtmpFilter extends KalturaDeliveryProfileRtmpBaseFilter
+class VidiunDeliveryProfileRtmpFilter extends VidiunDeliveryProfileRtmpBaseFilter
 {
 }

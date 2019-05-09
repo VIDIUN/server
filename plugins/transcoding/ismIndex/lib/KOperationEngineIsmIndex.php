@@ -3,23 +3,23 @@
  * @package plugins.ismIndex
  * @subpackage lib
  */
-class KOperationEngineIsmIndex  extends KSingleOutputOperationEngine
+class VOperationEngineIsmIndex  extends VSingleOutputOperationEngine
 {
 
 	public function __construct($cmd, $outFilePath)
 	{
 		parent::__construct($cmd,$outFilePath);
-		KalturaLog::info(": cmd($cmd), outFilePath($outFilePath)");
+		VidiunLog::info(": cmd($cmd), outFilePath($outFilePath)");
 	}
 
 	protected function getCmdLine()
 	{
 		$exeCmd =  parent::getCmdLine();
-		KalturaLog::info(print_r($this,true));
+		VidiunLog::info(print_r($this,true));
 		return $exeCmd;
 	}
 
-	public function operate(kOperator $operator = null, $inFilePath, $configFilePath = null)
+	public function operate(vOperator $operator = null, $inFilePath, $configFilePath = null)
 	{
 		$res = parent::operate($operator, $inFilePath, $configFilePath);
 		if($res==false) {
@@ -41,11 +41,11 @@ class KOperationEngineIsmIndex  extends KSingleOutputOperationEngine
 		rename("$this->outFilePath.ismc", "$newIsmBaseName.ismc");
 		
 		$fsDescArr = array();
-		$fsDesc = new KalturaDestFileSyncDescriptor();
+		$fsDesc = new VidiunDestFileSyncDescriptor();
 		$fsDesc->fileSyncLocalPath = "$newIsmBaseName.ism";
 		$fsDesc->fileSyncObjectSubType = 3; //".ism";
 		$fsDescArr[] = $fsDesc;
-		$fsDesc = new KalturaDestFileSyncDescriptor();
+		$fsDesc = new VidiunDestFileSyncDescriptor();
 		$fsDesc->fileSyncLocalPath = "$newIsmBaseName.ismc";
 		$fsDesc->fileSyncObjectSubType = 4; //".ismc";
 		$fsDescArr[] = $fsDesc;

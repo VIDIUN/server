@@ -15,7 +15,7 @@
 	        <field name="classification_type" indexName="classification_type" type="int" />        
 	        <field name="location" indexName="location" type="string" matchable="yes" />
 	        <field name="organizer" indexName="organizer" type="string" orderable="yes" />
-	        <field name="owner_kuser_id" indexName="owner_kuser_id" type="int" orderable="yes" />
+	        <field name="owner_vuser_id" indexName="owner_vuser_id" type="int" orderable="yes" />
 	        <field name="priority" indexName="priority" type="int" orderable="yes" />
 	        <field name="sequence" indexName="sequence" type="int" orderable="yes" />
 	        <field name="recurrence_type" indexName="recurrence_type" type="int" orderable="yes" />

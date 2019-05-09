@@ -3,7 +3,7 @@
  * @package plugins.virusScan
  * @subpackage api.objects
  */
-class KalturaVirusScanEngineType extends KalturaDynamicEnum implements VirusScanEngineType
+class VidiunVirusScanEngineType extends VidiunDynamicEnum implements VirusScanEngineType
 {
 	/**
 	 * @return string

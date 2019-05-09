@@ -5,7 +5,7 @@ class DeliveryProfileLivePackagerDash extends DeliveryProfileLiveDash
 	function __construct()
 	{
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kRedirectManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vRedirectManifestRenderer';
 	}
 	
 	protected function getHttpUrl($serverNode)
@@ -20,7 +20,7 @@ class DeliveryProfileLivePackagerDash extends DeliveryProfileLiveDash
 		
 		$httpUrl .= ".mpd";
 		
-		KalturaLog::debug("Live Stream url [$httpUrl]");
+		VidiunLog::debug("Live Stream url [$httpUrl]");
 		return $httpUrl;
 	}
 }

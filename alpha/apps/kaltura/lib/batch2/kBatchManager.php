@@ -7,7 +7,7 @@
  * @package Core
  * @subpackage Batch
  */
-class kBatchManager
+class vBatchManager
 {
 	/**
 	 * @var BatchJob
@@ -33,7 +33,7 @@ class kBatchManager
 	 */
 	public static function createFlavorAsset(flavorParamsOutputWrap $flavor, $partnerId, $entryId, $flavorAssetId = null)
 	{
-		$description = kBusinessConvertDL::parseFlavorDescription($flavor);
+		$description = vBusinessConvertDL::parseFlavorDescription($flavor);
 		
 		$flavorAsset = null;
 		if($flavorAssetId)
@@ -65,13 +65,13 @@ class kBatchManager
 		// decided by the business logic layer
 		if($flavor->_create_anyway)
 		{
-			KalturaLog::log("Flavor [" . $flavor->getFlavorParamsId() . "] selected to be created anyway");
+			VidiunLog::log("Flavor [" . $flavor->getFlavorParamsId() . "] selected to be created anyway");
 		}
 		else
 		{
 			if(!$flavor->IsValid())
 			{
-				KalturaLog::err("Flavor [" . $flavor->getFlavorParamsId() . "] is invalid");
+				VidiunLog::err("Flavor [" . $flavor->getFlavorParamsId() . "] is invalid");
 				$flavorAsset->setStatus(flavorAsset::FLAVOR_ASSET_STATUS_ERROR);
 				$flavorAsset->save();	
 				return null;
@@ -79,13 +79,13 @@ class kBatchManager
 			
 			if($flavor->_force)
 			{
-				KalturaLog::log("Flavor [" . $flavor->getFlavorParamsId() . "] is forced");
+				VidiunLog::log("Flavor [" . $flavor->getFlavorParamsId() . "] is forced");
 			}
 			else
 			{
 				if($flavor->_isNonComply)
 				{
-					KalturaLog::err("Flavor [" . $flavor->getFlavorParamsId() . "] is none-comply");
+					VidiunLog::err("Flavor [" . $flavor->getFlavorParamsId() . "] is none-comply");
 					$flavorAsset->setStatus(flavorAsset::FLAVOR_ASSET_STATUS_NOT_APPLICABLE);
 					$flavorAsset->save();	
 					return null;
@@ -98,20 +98,20 @@ class kBatchManager
 				 * Added check for 'sourceAssetParamsIds' to conditions for setting 
 				 * of 'FLAVOR_ASSET_STATUS_NOT_APPLICABLE' - 
 				 * - flavors that are dependent on other assets/sources can not be 
-				 * redundant (evaluated by 'KDL' from bitrate's), 
+				 * redundant (evaluated by 'VDL' from bitrate's), 
 				 * they should be activated upon completion of dependee asset 
 				 * The usecase - PlayReady audio-only flavors
 				 */
 				if(($flavor->_isRedundant) && !isset($vidCodec) && isset($audCodec) 
 				&& !(isset($sourceAssetParamsIds) && strlen($sourceAssetParamsIds)>0))
 				{
-					KalturaLog::err("Flavor [" . $flavor->getFlavorParamsId() . "] is redandant audio-only");
+					VidiunLog::err("Flavor [" . $flavor->getFlavorParamsId() . "] is redandant audio-only");
 					$flavorAsset->setStatus(flavorAsset::FLAVOR_ASSET_STATUS_NOT_APPLICABLE);
 					$flavorAsset->save();
 					return null;
 				}
 				
-				KalturaLog::log("Flavor [" . $flavor->getFlavorParamsId() . "] is valid");
+				VidiunLog::log("Flavor [" . $flavor->getFlavorParamsId() . "] is valid");
 			}
 		}
 		$flavorAsset->save();
@@ -180,7 +180,7 @@ class kBatchManager
 	public static function addMediaInfo(mediaInfo $mediaInfoDb)
 	{
 		$mediaInfoDb->save();
-		KalturaLog::log("Added media info [" . $mediaInfoDb->getId() . "] for flavor asset [" . $mediaInfoDb->getFlavorAssetId() . "]");
+		VidiunLog::log("Added media info [" . $mediaInfoDb->getId() . "] for flavor asset [" . $mediaInfoDb->getFlavorAssetId() . "]");
 		
 		if(!$mediaInfoDb->getFlavorAssetId())
 			return $mediaInfoDb;
@@ -191,15 +191,15 @@ class kBatchManager
 
 		if($flavorAsset->getIsOriginal())
 		{
-			kBusinessPreConvertDL::checkConditionalProfiles($flavorAsset->getentry(), $mediaInfoDb);
+			vBusinessPreConvertDL::checkConditionalProfiles($flavorAsset->getentry(), $mediaInfoDb);
 		
-			KalturaLog::log("Media info is for the original flavor asset");
+			VidiunLog::log("Media info is for the original flavor asset");
 			$tags = null;
 			
 			$profile = myPartnerUtils::getConversionProfile2ForEntry($flavorAsset->getEntryId());
 			if($profile)
 				$tags = $profile->getInputTagsMap();
-			KalturaLog::log("Flavor asset tags from profile [$tags]");
+			VidiunLog::log("Flavor asset tags from profile [$tags]");
 			
 			if(!is_null($tags))
 			{
@@ -208,7 +208,7 @@ class kBatchManager
 				// support for old migrated profiles
 				if($profile->getCreationMode() == conversionProfile2::CONVERSION_PROFILE_2_CREATION_MODE_AUTOMATIC_BYPASS_FLV)
 				{
-					if(!KDLWrap::CDLIsFLV($mediaInfoDb))
+					if(!VDLWrap::CDLIsFLV($mediaInfoDb))
 					{
 						$key = array_search(flavorParams::TAG_MBR, $tagsArray);
 						if($key !== false)
@@ -216,22 +216,22 @@ class kBatchManager
 					}
 				}
 				
-				$finalTagsArray = KDLWrap::CDLMediaInfo2Tags($mediaInfoDb, $tagsArray);
+				$finalTagsArray = VDLWrap::CDLMediaInfo2Tags($mediaInfoDb, $tagsArray);
 				$finalTags = join(',', array_unique($finalTagsArray));
-				KalturaLog::log("Flavor asset tags from KDL [$finalTags]");
-//KalturaLog::log("Flavor asset tags [".print_r($flavorAsset->setTags(),1)."]");
+				VidiunLog::log("Flavor asset tags from VDL [$finalTags]");
+//VidiunLog::log("Flavor asset tags [".print_r($flavorAsset->setTags(),1)."]");
 				$flavorAsset->addTags($finalTagsArray);
 			}
 		}
 		else 
 		{
-			KalturaLog::log("Media info is for the destination flavor asset");
+			VidiunLog::log("Media info is for the destination flavor asset");
 			$tags = null;
 			
 			$flavorParams = assetParamsPeer::retrieveByPK($flavorAsset->getFlavorParamsId());
 			if($flavorParams)
 				$tags = $flavorParams->getTags();
-			KalturaLog::log("Flavor asset tags from flavor params [$tags]");
+			VidiunLog::log("Flavor asset tags from flavor params [$tags]");
 			
 			if(!is_null($tags))
 			{
@@ -243,13 +243,13 @@ class kBatchManager
 				$finalTagsArray = $tagsArray;
 
 				$finalTags = join(',', array_unique($finalTagsArray));
-				KalturaLog::log("Flavor asset tags from KDL [$finalTags]");
+				VidiunLog::log("Flavor asset tags from VDL [$finalTags]");
 				$flavorAsset->setTags($finalTags);
 			}
 		}
 				
-		KalturaLog::log("KDLWrap::ConvertMediainfoCdl2FlavorAsset(" . $mediaInfoDb->getId() . ", " . $flavorAsset->getId() . ");");
-		KDLWrap::ConvertMediainfoCdl2FlavorAsset($mediaInfoDb, $flavorAsset);
+		VidiunLog::log("VDLWrap::ConvertMediainfoCdl2FlavorAsset(" . $mediaInfoDb->getId() . ", " . $flavorAsset->getId() . ");");
+		VDLWrap::ConvertMediainfoCdl2FlavorAsset($mediaInfoDb, $flavorAsset);
 		/*
 		 * If the flavorParams has explicit language settings, 
 		 * use the first flavorParams language to set/overwrite the flavorAsset language
@@ -258,11 +258,11 @@ class kBatchManager
 			if(isset($multiStreamObj->audio->languages) && count($multiStreamObj->audio->languages)>0){
 				$lang = $multiStreamObj->audio->languages[0];
 			}
-			else if(KDLAudioMultiStreaming::IsStreamFieldSet($multiStreamObj, "lang")){
+			else if(VDLAudioMultiStreaming::IsStreamFieldSet($multiStreamObj, "lang")){
 				$lang = $multiStreamObj->audio->streams[0]->lang;
 			}
 			if(isset($lang)){
-				KalturaLog::log("Flavor asset(".$flavorAsset->getId().") language overloaded with flavor Params(".$flavorParams->getId().") language($lang)");
+				VidiunLog::log("Flavor asset(".$flavorAsset->getId().") language overloaded with flavor Params(".$flavorParams->getId().") language($lang)");
 				$flavorAsset->setLanguage($lang);
 			}
 		}
@@ -298,31 +298,31 @@ class kBatchManager
 	} 
 	
 	// common to all the jobs using the BatchJob table 
-	public static function freeExclusiveBatchJob($id, kExclusiveLockKey $lockKey, $resetExecutionAttempts = false)
+	public static function freeExclusiveBatchJob($id, vExclusiveLockKey $lockKey, $resetExecutionAttempts = false)
 	{
-		return kBatchExclusiveLock::freeExclusive($id, $lockKey, $resetExecutionAttempts);
+		return vBatchExclusiveLock::freeExclusive($id, $lockKey, $resetExecutionAttempts);
 	}
 	
 	public static function getQueueSize($workerId, $jobType, $filter)
 	{
 		$c = new Criteria();
 		$filter->attachToCriteria($c);
-		return kBatchExclusiveLock::getQueueSize($c, $workerId, $jobType);
+		return vBatchExclusiveLock::getQueueSize($c, $workerId, $jobType);
 	}
 	
 	public static function cleanExclusiveJobs()
 	{
-		$jobs = kBatchExclusiveLock::getExpiredJobs();
+		$jobs = vBatchExclusiveLock::getExpiredJobs();
 		foreach($jobs as $job)
 		{
-			KalturaLog::log("Cleaning job id[" . $job->getId() . "]");
+			VidiunLog::log("Cleaning job id[" . $job->getId() . "]");
 			$job->setMessage("Job was cleaned up.");
-			kJobsManager::updateBatchJob($job, BatchJob::BATCHJOB_STATUS_FATAL);
+			vJobsManager::updateBatchJob($job, BatchJob::BATCHJOB_STATUS_FATAL);
 		}
 		
-		$jobs = kBatchExclusiveLock::getStatusInconsistentJob();
+		$jobs = vBatchExclusiveLock::getStatusInconsistentJob();
 		foreach($jobs as $job) {
-			KalturaLog::log("Fixing batch job Inconsistency [" . $job->getId() . "]");
+			VidiunLog::log("Fixing batch job Inconsistency [" . $job->getId() . "]");
 			$job->delete();
 			// The job shouldhave been deleted. The reason it got here is since the update
 			// process has failed fataly. Therefore there is no point in retrying to save it.
@@ -336,36 +336,36 @@ class kBatchManager
 	 * Common to all the jobs using the BatchJob table
 	 * 
 	 * @param unknown_type $id
-	 * @param kExclusiveLockKey $lockKey
+	 * @param vExclusiveLockKey $lockKey
 	 * @param BatchJob $dbBatchJob
 	 * @return Ambigous <BatchJob, NULL, unknown, multitype:>
 	 */
-	public static function updateExclusiveBatchJob($id, kExclusiveLockKey $lockKey, BatchJob $dbBatchJob)
+	public static function updateExclusiveBatchJob($id, vExclusiveLockKey $lockKey, BatchJob $dbBatchJob)
 	{
 		self::$currentUpdatingJob = $dbBatchJob;
 		
-		$dbBatchJob = kBatchExclusiveLock::updateExclusive($id, $lockKey, $dbBatchJob);
+		$dbBatchJob = vBatchExclusiveLock::updateExclusive($id, $lockKey, $dbBatchJob);
 		
-		$event = new kBatchJobStatusEvent($dbBatchJob);
-		kEventsManager::raiseEvent($event);
+		$event = new vBatchJobStatusEvent($dbBatchJob);
+		vEventsManager::raiseEvent($event);
 		
 		$dbBatchJob->reload();
 		return $dbBatchJob;
 	}
 	
-	public static function getExclusiveAlmostDoneJobs(kExclusiveLockKey $lockKey, $maxExecutionTime, $numberOfJobs, $jobType, BatchJobFilter $filter)
+	public static function getExclusiveAlmostDoneJobs(vExclusiveLockKey $lockKey, $maxExecutionTime, $numberOfJobs, $jobType, BatchJobFilter $filter)
 	{
 		$c = new Criteria();
 		$filter->attachToCriteria($c);
 		
-		return kBatchExclusiveLock::getExclusiveAlmostDone($c, $lockKey, $maxExecutionTime, $numberOfJobs, $jobType);
+		return vBatchExclusiveLock::getExclusiveAlmostDone($c, $lockKey, $maxExecutionTime, $numberOfJobs, $jobType);
 	}
 
 public static function updateEntry($entryId, $status)
 	{
 		$entry = entryPeer::retrieveByPK($entryId);
 		if(!$entry) {
-			KalturaLog::err("Entry was not found for id [$entryId]");
+			VidiunLog::err("Entry was not found for id [$entryId]");
 			return null;
 		}
 		
@@ -374,9 +374,9 @@ public static function updateEntry($entryId, $status)
 			return $entry;
 		
 		// backward compatibility 
-		// if entry has kshow, and this is the first entry in the mix, 
+		// if entry has vshow, and this is the first entry in the mix, 
 		// the thumbnail of the entry should be copied into the mix entry  
-		if ($status == entryStatus::READY && $entry->getKshowId())
+		if ($status == entryStatus::READY && $entry->getVshowId())
 			myEntryUtils::createRoughcutThumbnailFromEntry($entry, false);
 			
 		// entry status is ready and above, not changing status through batch job
@@ -387,14 +387,14 @@ public static function updateEntry($entryId, $status)
 		
 		if(in_array($entry->getStatus(), $unAcceptedStatuses))
 		{
-			KalturaLog::info("Entry status [" . $entry->getStatus() . "] will not be changed");
+			VidiunLog::info("Entry status [" . $entry->getStatus() . "] will not be changed");
 			return $entry;
 		}
 		
 		$entry->setStatus($status);
 		$entry->save();
 		
-		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry, null, null, null, null, $entry->getId());
+		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry, null, null, null, null, $entry->getId());
 		
 		return $entry;
 	}

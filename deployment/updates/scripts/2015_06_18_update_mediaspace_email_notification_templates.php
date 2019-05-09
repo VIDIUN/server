@@ -22,9 +22,9 @@ while($eventNotificationTemplates){
 		
 		$lastId = $eventNotificationTemplate->getId();
 
-		$categoryId = new kEvalStringField();
+		$categoryId = new vEvalStringField();
 		$categoryId->setCode('$scope->getEvent()->getObject()->getCategoryId()');
-		$categoryUserFilter = new categoryKuserFilter();		
+		$categoryUserFilter = new categoryVuserFilter();		
 		if($eventNotificationTemplate->getSystemName() == 'Entry_Was_Added_To_Channel')
 		{
 			$categoryUserFilter->set('_matchor_permission_names', 'CATEGORY_SUBSCRIBE');
@@ -33,7 +33,7 @@ while($eventNotificationTemplates){
 		{
 			$categoryUserFilter->set('_matchor_permission_names', 'CATEGORY_MODERATE');
 		}
-		$bcc = new kEmailNotificationCategoryRecipientProvider();
+		$bcc = new vEmailNotificationCategoryRecipientProvider();
 		$bcc->setCategoryId($categoryId);
 		$bcc->setCategoryUserFilter($categoryUserFilter);
 		$eventNotificationTemplate->setBcc($bcc);
@@ -45,5 +45,5 @@ while($eventNotificationTemplates){
 	$criteria->add(EventNotificationTemplatePeer::ID, $lastId, Criteria::GREATER_THAN);
 	$eventNotificationTemplates = EventNotificationTemplatePeer::doSelect($criteria);
 }
-KalturaLog::log('Done: updated '.$count.' templates');
+VidiunLog::log('Done: updated '.$count.' templates');
 

@@ -1,17 +1,17 @@
 check process sphinx-populate 
     with pidfile "@LOG_DIR@/populate.pid"
-    start program = "/etc/init.d/kaltura-populate start" with timeout 60 seconds
-    stop program = "/etc/init.d/kaltura-populate stop"
+    start program = "/etc/init.d/vidiun-populate start" with timeout 60 seconds
+    stop program = "/etc/init.d/vidiun-populate stop"
     
 
-    group kaltura
+    group vidiun
     depends on populate.conf, populate_script
 
 check file populate.conf
     with path "@APP_DIR@/configurations/sphinx/populate/@INSTALLED_HOSTNAME@.ini"
     # Reload populate if the server-sphinx.php file was changed
     if changed checksum
-       then exec "/etc/init.d/kaltura-populate restart"
+       then exec "/etc/init.d/vidiun-populate restart"
 
 check file populate_script
     with path "@APP_DIR@/plugins/search/providers/sphinx_search/scripts/populateFromLog.php"

@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class reconvertAction extends kalturaSystemAction
+class reconvertAction extends vidiunSystemAction
 {
 	/**
 	 * Will reconvert an entry - should infact move to some utility function
@@ -76,7 +76,7 @@ class reconvertAction extends kalturaSystemAction
 		}
 		
 		$syncKey = $flavorAsset->getSyncKey ( flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET );
-		$filePath = kFileSyncUtils::getReadyLocalFilePathForKey( $syncKey );
+		$filePath = vFileSyncUtils::getReadyLocalFilePathForKey( $syncKey );
 		if ( ! $filePath )
 		{
 			$error = "Cannot find a fileSync for the flavorAsset [" . $flavorAsset->getId() . "]" ;
@@ -87,7 +87,7 @@ class reconvertAction extends kalturaSystemAction
 		$dbBatchJob->setEntryId( $entry_id );
 		$dbBatchJob->setPartnerId( $entry->getPartnerId() );
 		$dbBatchJob->setStatus(BatchJob::BATCHJOB_STATUS_PENDING);
-		$dbBatchJob->setDc( kDataCenterMgr::getCurrentDcId() );
+		$dbBatchJob->setDc( vDataCenterMgr::getCurrentDcId() );
 		//$dbBatchJob->setPriority ( $job_priority ); Not supported anymore
 		$dbBatchJob->setObjectId($entry_id);
 		$dbBatchJob->setObjectType(BatchJobObjectType::ENTRY);
@@ -95,10 +95,10 @@ class reconvertAction extends kalturaSystemAction
 		$dbBatchJob->save();
 		
 		// creates a convert profile job
-		$convertProfileData = new kConvertProfileJobData();
+		$convertProfileData = new vConvertProfileJobData();
 		$convertProfileData->setFlavorAssetId($flavorAsset->getId());
 		$convertProfileData->setInputFileSyncLocalPath($filePath);
-		kJobsManager::addJob($dbBatchJob, $convertProfileData, BatchJobType::CONVERT_PROFILE);
+		vJobsManager::addJob($dbBatchJob, $convertProfileData, BatchJobType::CONVERT_PROFILE);
 		// save again afget the addJob
 		$dbBatchJob->save();
 

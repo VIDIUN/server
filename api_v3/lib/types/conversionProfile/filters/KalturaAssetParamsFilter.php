@@ -3,17 +3,17 @@
  * @package api
  * @subpackage filters
  */
-class KalturaAssetParamsFilter extends KalturaAssetParamsBaseFilter
+class VidiunAssetParamsFilter extends VidiunAssetParamsBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
 		return new assetParamsFilter();
 	}
 
-	protected function doGetListResponse(KalturaFilterPager $pager, array $types = null)
+	protected function doGetListResponse(VidiunFilterPager $pager, array $types = null)
 	{
 		$flavorParamsFilter = $this->toObject();
 		
@@ -35,20 +35,20 @@ class KalturaAssetParamsFilter extends KalturaAssetParamsBaseFilter
 		return array($list, $totalCount);
 	}
 
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, array $types = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, array $types = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager, $types);
 		
-		$response = new KalturaFlavorParamsListResponse();
-		$response->objects = KalturaFlavorParamsArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunFlavorParamsListResponse();
+		$response->objects = VidiunFlavorParamsArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 		return $response;  
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		return $this->getTypeListResponse($pager, $responseProfile);  
 	}

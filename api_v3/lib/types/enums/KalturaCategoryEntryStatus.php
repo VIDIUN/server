@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaCategoryEntryStatus extends KalturaEnum implements CategoryEntryStatus
+class VidiunCategoryEntryStatus extends VidiunEnum implements CategoryEntryStatus
 {
 
 }

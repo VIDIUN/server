@@ -3,17 +3,17 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAccessControlMessageArray extends KalturaTypedArray
+class VidiunAccessControlMessageArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaAccessControlMessageArray();
+		$newArr = new VidiunAccessControlMessageArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-			$nObj = new KalturaAccessControlMessage();
+			$nObj = new VidiunAccessControlMessage();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaAccessControlMessageArray extends KalturaTypedArray
 
 	public function __construct()
 	{
-		parent::__construct("KalturaAccessControlMessage");
+		parent::__construct("VidiunAccessControlMessage");
 	}
 }

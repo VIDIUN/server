@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaPermissionsEnabler extends IKalturaPermissions
+interface IVidiunPermissionsEnabler extends IVidiunPermissions
 {
 	/**
 	 * Grants or denies a partner permission to use a plugin.

@@ -3,7 +3,7 @@
  * @package plugins.freewheelGenericDistribution
  * @subpackage api.enum
  */
-class KalturaFreewheelGenericDistributionField extends KalturaStringEnum implements FreewheelGenericDistributionField
+class VidiunFreewheelGenericDistributionField extends VidiunStringEnum implements FreewheelGenericDistributionField
 {
 	// see FreewheelGenericDistributionField interface
 }

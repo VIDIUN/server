@@ -3,10 +3,10 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-abstract class KalturaESearchOrderByItem extends KalturaObject
+abstract class VidiunESearchOrderByItem extends VidiunObject
 {
     /**
-     *  @var KalturaESearchSortOrder
+     *  @var VidiunESearchSortOrder
      */
     public $sortOrder;
 

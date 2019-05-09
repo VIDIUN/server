@@ -8,7 +8,7 @@ $partnerId = $argv[1];
 $entryIds = $argv[2];
 $entryIdsArray = explode(',', trim($entryIds));
 require_once(__DIR__ . '/../bootstrap.php');
-KalturaStatement::setDryRun($argv[3] !== 'real-run');
+VidiunStatement::setDryRun($argv[3] !== 'real-run');
 
 if (!PartnerPeer::retrieveByPK($partnerId)){
 	die ("Partner ID not found.\n");

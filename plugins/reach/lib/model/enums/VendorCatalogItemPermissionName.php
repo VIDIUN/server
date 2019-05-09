@@ -4,7 +4,7 @@
  * @package plugins.reach
  * @subpackage model.enum
  */ 
-class VendorCatalogItemPermissionName implements IKalturaPluginEnum, PermissionName
+class VendorCatalogItemPermissionName implements IVidiunPluginEnum, PermissionName
 {
 	const SYSTEM_ADMIN_CATALOG_ITEM_BASE = "reach.SYSTEM_ADMIN_CATALOG_ITEM_BASE";
 	const SYSTEM_ADMIN_CATALOG_ITEM_MODIFY = "reach.SYSTEM_ADMIN_CATALOG_ITEM_MODIFY";

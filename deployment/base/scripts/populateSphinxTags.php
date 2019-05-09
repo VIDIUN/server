@@ -22,27 +22,27 @@ $con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 //$sphinxCon = DbManager::getSphinxConnection();
 
 $tags = TagPeer::doSelect($c, $con);
-$sphinx = new kSphinxSearchManager();
+$sphinx = new vSphinxSearchManager();
 while(count($tags))
 {
 	foreach($tags as $tag)
 	{
 	    /* @var $tag Tag */
-		KalturaLog::log('tag id ' . $tag->getId() . ' tag string [' . $tag->getTag() . '] crc id[' . $sphinx->getSphinxId($tag) . ']');
+		VidiunLog::log('tag id ' . $tag->getId() . ' tag string [' . $tag->getTag() . '] crc id[' . $sphinx->getSphinxId($tag) . ']');
 		
 		try {
 			$ret = $sphinx->saveToSphinx($tag, true);
 		}
 		catch(Exception $e){
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			exit -1;
 		}
 	}
 	
 	$c->setOffset($c->getOffset() + count($tags));
-	kMemoryManager::clearMemory();
+	vMemoryManager::clearMemory();
 	$tags = TagPeer::doSelect($c, $con);
 }
 
-KalturaLog::log('Done');
+VidiunLog::log('Done');
 exit(0);

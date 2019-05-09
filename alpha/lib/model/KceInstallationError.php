@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Subclass for representing a row from the 'kce_installation_error' table.
+ * Subclass for representing a row from the 'vce_installation_error' table.
  *
  * 
  *
  * @package Core
  * @subpackage model
  */ 
-class KceInstallationError extends BaseKceInstallationError implements IBaseObject
+class VceInstallationError extends BaseVceInstallationError implements IBaseObject
 {
 }

@@ -49,7 +49,7 @@ abstract class myBaseObject implements Iterator
 			}
 			catch ( Exception $ex )
 			{
-				KalturaLog::err($ex);
+				VidiunLog::err($ex);
 			}
 			
 			return null;
@@ -115,7 +115,7 @@ abstract class myBaseObject implements Iterator
 
 				// TODO - should add a reg-exp array rather than this hard-coded logic in the base class !!
 				// dont' fill the properties ending with backgroundImage (the avlues are WRONG!)
-				if ( kString::endsWith( $param_name , "Image" ) )
+				if ( vString::endsWith( $param_name , "Image" ) )
 				{
 					continue;
 				}
@@ -229,14 +229,14 @@ abstract class myBaseObject implements Iterator
 			}
 			
 			if(in_array($param, $time_params_to_relative))
-				$value = kTime::getRelativeTime($value);
+				$value = vTime::getRelativeTime($value);
 
 			// the field name is the rest of the string coming after the prefix
 			$param_name = $prefix_to_add . $param;
 
 			// TODO - should add a reg-exp array rather than this hard-coded logic in the base class !!
 			// dont' fill the properties ending with backgroundImage (the avlues are WRONG!)
-			if ( kString::endsWith( $param_name , "Image" ) )
+			if ( vString::endsWith( $param_name , "Image" ) )
 			{
 				continue;
 			}

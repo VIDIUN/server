@@ -3,11 +3,11 @@
  * @package plugins.schedule
  * @subpackage api.objects
  */
-class KalturaLocationScheduleResource extends KalturaScheduleResource
+class VidiunLocationScheduleResource extends VidiunScheduleResource
 {
 	/**
 	 * {@inheritDoc}
-	 * @see KalturaScheduleResource::getScheduleResourceType()
+	 * @see VidiunScheduleResource::getScheduleResourceType()
 	 */
 	protected function getScheduleResourceType()
 	{
@@ -15,7 +15,7 @@ class KalturaLocationScheduleResource extends KalturaScheduleResource
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($sourceObject = null, $propertiesToSkip = array())
 	{

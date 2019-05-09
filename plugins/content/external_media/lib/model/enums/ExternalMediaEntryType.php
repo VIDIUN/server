@@ -3,7 +3,7 @@
  * @package plugins.externalMedia
  * @subpackage model.enum
  */
-class ExternalMediaEntryType implements IKalturaPluginEnum, entryType
+class ExternalMediaEntryType implements IVidiunPluginEnum, entryType
 {
 	const EXTERNAL_MEDIA = 'externalMedia';
 	

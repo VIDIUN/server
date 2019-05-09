@@ -41,9 +41,9 @@ class EmailNotificationTemplate extends BatchEventNotificationTemplate implement
 	/* (non-PHPdoc)
 	 * @see BatchEventNotificationTemplate::getJobData()
 	 */
-	protected function getJobData(kScope $scope = null)
+	protected function getJobData(vScope $scope = null)
 	{
-		$jobData = new kEmailNotificationDispatchJobData();
+		$jobData = new vEmailNotificationDispatchJobData();
 		$jobData->setTemplateId($this->getId());
 		$jobData->setFromEmail($this->getFromEmail());
 		$jobData->setFromName($this->getFromName());
@@ -66,9 +66,9 @@ class EmailNotificationTemplate extends BatchEventNotificationTemplate implement
 		$contentParameters = $this->getContentParameters();
 		foreach($contentParameters as $contentParameter)
 		{
-			/* @var $contentParameter kEventNotificationParameter */
+			/* @var $contentParameter vEventNotificationParameter */
 			$value = $contentParameter->getValue();
-			if($scope && $value instanceof kStringField)
+			if($scope && $value instanceof vStringField)
 				$value->setScope($scope);
 				
 			$contentParametersValues[$contentParameter->getKey()] = $value->getValue();
@@ -77,16 +77,16 @@ class EmailNotificationTemplate extends BatchEventNotificationTemplate implement
 		$userParameters = $this->getUserParameters();
 		foreach($userParameters as $userParameter)
 		{
-			/* @var $userParameter kEventNotificationParameter */
+			/* @var $userParameter vEventNotificationParameter */
 			$value = $userParameter->getValue();
-			if($scope && $value instanceof kStringField)
+			if($scope && $value instanceof vStringField)
 				$value->setScope($scope);
 			
 			$contentParametersValues[$userParameter->getKey()] = $value->getValue();
 		}
 		
 		
-		KalturaLog::info("Sweeping Email Notification Template with id {$this->getId()} for metadata tokens.");
+		VidiunLog::info("Sweeping Email Notification Template with id {$this->getId()} for metadata tokens.");
 		
 		$jobDataFields = array ('to', 'cc', 'bcc');
 		$templateFields = array ('subject', 'body');
@@ -100,12 +100,12 @@ class EmailNotificationTemplate extends BatchEventNotificationTemplate implement
 			
 			if (is_string($fieldValue))
 				$sweepFieldValues[] = $fieldValue;
-			elseif ($fieldValue instanceof kEmailNotificationStaticRecipientJobData)
+			elseif ($fieldValue instanceof vEmailNotificationStaticRecipientJobData)
 			{
-				/* @var $fieldValue kEmailNotificationStaticRecipientJobData */
+				/* @var $fieldValue vEmailNotificationStaticRecipientJobData */
 				foreach($fieldValue->getEmailRecipients() as $email => $name)
 				{
-					/* @var $emailRecipient kEmailNotificationRecipient */
+					/* @var $emailRecipient vEmailNotificationRecipient */
 					$sweepFieldValues[] = $email;
 					$sweepFieldValues[] = $name;
 				}
@@ -122,7 +122,7 @@ class EmailNotificationTemplate extends BatchEventNotificationTemplate implement
 				$sweepFieldValues[] = $fieldValue;
 		}
 		
-		$editorPlugins = KalturaPluginManager::getPluginInstances("IKalturaEventNotificationContentEditor");
+		$editorPlugins = VidiunPluginManager::getPluginInstances("IVidiunEventNotificationContentEditor");
 		foreach ($editorPlugins as $plugin)
 		{
 			$pluginContentParameters = $plugin->editTemplateFields($sweepFieldValues, $scope, $this->getObjectType());
@@ -265,7 +265,7 @@ class EmailNotificationTemplate extends BatchEventNotificationTemplate implement
 			return $this->cachedBody;
 			
 		$key = $this->getSyncKey(self::FILE_SYNC_BODY);
-		$this->cachedBody = kFileSyncUtils::file_get_contents($key, true, false);
+		$this->cachedBody = vFileSyncUtils::file_get_contents($key, true, false);
 		return $this->cachedBody;
 	}
 
@@ -295,11 +295,11 @@ class EmailNotificationTemplate extends BatchEventNotificationTemplate implement
 		if($this->wasObjectSaved() && $this->setBody)
 		{
 			$key = $this->getSyncKey(self::FILE_SYNC_BODY);
-			kFileSyncUtils::file_put_contents($key, $this->setBody);
+			vFileSyncUtils::file_put_contents($key, $this->setBody);
 			$this->cachedBody = $this->setBody;
 			$this->setBody = null;
 			
-			kEventsManager::raiseEvent(new kObjectDataChangedEvent($this, $this->bodyPreviousVersion));	
+			vEventsManager::raiseEvent(new vObjectDataChangedEvent($this, $this->bodyPreviousVersion));	
 		}
 		
 		return parent::postSave($con);
@@ -317,28 +317,28 @@ class EmailNotificationTemplate extends BatchEventNotificationTemplate implement
 	public function getCustomHeaders()							{return $this->getFromCustomData(self::CUSTOM_DATA_CUSTOM_HEADERS, null, array());}
 	/**
 	 * Return recipient provider for the to parameter
-	 * @return kEmailNotificationRecipientProvider
+	 * @return vEmailNotificationRecipientProvider
 	 */
 	public function getTo()										{return $this->getFromCustomData(self::CUSTOM_DATA_TO);}
 	/**
 	 * Return recipient provider for the CC parameter
-	 * @return kEmailNotificationRecipientProvider
+	 * @return vEmailNotificationRecipientProvider
 	 */
 	public function getCc()										{return $this->getFromCustomData(self::CUSTOM_DATA_CC);}
 	/**
 	 * Return recipient provider for the BCC parameter
-	 * @return kEmailNotificationRecipientProvider
+	 * @return vEmailNotificationRecipientProvider
 	 */
 	public function getBcc()									{return $this->getFromCustomData(self::CUSTOM_DATA_BCC);}
 	/**
 	 * Return receipientProvider for the replyTo parameter
-	 * @return kEmailNotificationRecipientProvider
+	 * @return vEmailNotificationRecipientProvider
 	 */
 	public function getReplyTo()								{return $this->getFromCustomData(self::CUSTOM_DATA_REPLY_TO);}
 	
 	public function incrementBodyFileVersion()
 	{
-		$version = kDataCenterMgr::incrementVersion($this->getBodyFileVersion());
+		$version = vDataCenterMgr::incrementVersion($this->getBodyFileVersion());
 		return $this->putInCustomData(self::CUSTOM_DATA_BODY_FILE_VERSION, $version);
 	}
 	
@@ -351,8 +351,8 @@ class EmailNotificationTemplate extends BatchEventNotificationTemplate implement
 	public function setHostname($v)								{return $this->putInCustomData(self::CUSTOM_DATA_HOSTNAME, $v);}
 	public function setMessageID($v)							{return $this->putInCustomData(self::CUSTOM_DATA_MESSAGE_ID, $v);}
 	public function setCustomHeaders($v)						{return $this->putInCustomData(self::CUSTOM_DATA_CUSTOM_HEADERS, $v);}
-	public function setTo(kEmailNotificationRecipientProvider $v = null)							{return $this->putInCustomData(self::CUSTOM_DATA_TO, $v);}
-	public function setCc(kEmailNotificationRecipientProvider $v = null)							{return $this->putInCustomData(self::CUSTOM_DATA_CC, $v);}
-	public function setBcc(kEmailNotificationRecipientProvider $v = null)							{return $this->putInCustomData(self::CUSTOM_DATA_BCC, $v);}
-	public function setReplyTo(kEmailNotificationRecipientProvider $v = null)						{return $this->putInCustomData(self::CUSTOM_DATA_REPLY_TO, $v);}
+	public function setTo(vEmailNotificationRecipientProvider $v = null)							{return $this->putInCustomData(self::CUSTOM_DATA_TO, $v);}
+	public function setCc(vEmailNotificationRecipientProvider $v = null)							{return $this->putInCustomData(self::CUSTOM_DATA_CC, $v);}
+	public function setBcc(vEmailNotificationRecipientProvider $v = null)							{return $this->putInCustomData(self::CUSTOM_DATA_BCC, $v);}
+	public function setReplyTo(vEmailNotificationRecipientProvider $v = null)						{return $this->putInCustomData(self::CUSTOM_DATA_REPLY_TO, $v);}
 }

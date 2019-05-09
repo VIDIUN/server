@@ -3,10 +3,10 @@
 						->appendFile($this->baseUrl('js/swfobject.js'));
 ?>
 
-<div id="kcwEditor"></div>
+<div id="vcwEditor"></div>
 <script type="text/javascript">
 	var flashvars = {
-		baseXmlUrl: "<?php echo $this->kcwBaseUrl . $this->kcwEditorVersion ?>/assets/base.xml"
+		baseXmlUrl: "<?php echo $this->vcwBaseUrl . $this->vcwEditorVersion ?>/assets/base.xml"
 	};
 	var params = {};
 	params.quality = "high";
@@ -14,31 +14,31 @@
 	params.allowscriptaccess = "sameDomain";
 	params.allowfullscreen = "true";
 	var attributes = {};
-	attributes.id = "KCWEditor";
-	attributes.name = "KCWEditor";
+	attributes.id = "VCWEditor";
+	attributes.name = "VCWEditor";
 	attributes.align = "middle";
 
-	swfobject.embedSWF("<?php echo $this->kcwBaseUrl . $this->kcwEditorVersion ?>/KCWEditor.swf", "kcwEditor", "100%", "100%", "9.0", false, flashvars, params, attributes);
+	swfobject.embedSWF("<?php echo $this->vcwBaseUrl . $this->vcwEditorVersion ?>/VCWEditor.swf", "vcwEditor", "100%", "100%", "9.0", false, flashvars, params, attributes);
 	var confFile = "";
 	var shouldSave = false;
 	  	
-	function KCWEditor_ReadyHandler() {
+	function VCWEditor_ReadyHandler() {
 		var confFile = window.parent.jQuery('#conf_file').val();
 		if (jQuery.trim(confFile).length > 0) {
-			var f = document.getElementById("KCWEditor");
+			var f = document.getElementById("VCWEditor");
 			f.setConfXML(confFile);
 		}
 	}
 	
-	function KCWEditor_publishXML(xml) {
+	function VCWEditor_publishXML(xml) {
 		confFile = unescape(xml);
 		shouldSave = true;
 	}
 	
-	function KCWEditor_close() {
+	function VCWEditor_close() {
 		if (shouldSave)
 			window.parent.jQuery('#conf_file').val(confFile);
 			
-		window.parent.jQuery('#kcw-editor').dialog('close');
+		window.parent.jQuery('#vcw-editor').dialog('close');
 	}	
 </script>

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlTokenizerCloudFront extends KalturaUrlTokenizer {
+class VidiunUrlTokenizerCloudFront extends VidiunUrlTokenizer {
 
 	/**
 	 * @var string
@@ -29,7 +29,7 @@ class KalturaUrlTokenizerCloudFront extends KalturaUrlTokenizer {
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kCloudFrontUrlTokenizer();
+			$dbObject = new vCloudFrontUrlTokenizer();
 			
 		parent::toObject($dbObject, $skip);
 	

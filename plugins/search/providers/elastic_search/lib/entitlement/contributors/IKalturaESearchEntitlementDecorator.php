@@ -5,7 +5,7 @@
  * @subpackage lib.entitlement
  */
 
-interface IKalturaESearchEntitlementDecorator
+interface IVidiunESearchEntitlementDecorator
 {
 	public static function shouldContribute();
 	public static function getEntitlementCondition(array $params = array(), $fieldPrefix ='');

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage v3
  */
-class KalturaParamInfo extends KalturaPropertyInfo 
+class VidiunParamInfo extends VidiunPropertyInfo 
 {
 	private $_optional = false;
 	 

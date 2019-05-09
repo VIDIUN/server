@@ -1,9 +1,9 @@
 <?php
 $config = null;
 $clientConfig = null;
-/* @var $clientConfig KalturaConfiguration */
+/* @var $clientConfig VidiunConfiguration */
 $client = null;
-/* @var $client KalturaClient */
+/* @var $client VidiunClient */
 
 require_once __DIR__ . '/lib/init.php';
 echo "Test started [" . __FILE__ . "]\n";
@@ -14,7 +14,7 @@ echo "Test started [" . __FILE__ . "]\n";
  */
 $partnerId = $config['session']['partnerId'];
 $adminSecretForSigning = $config['session']['adminSecret'];
-$client->setKs($client->generateSessionV2($adminSecretForSigning, 'sanity-user', KalturaSessionType::USER, $partnerId, 86400, ''));
+$client->setVs($client->generateSessionV2($adminSecretForSigning, 'sanity-user', VidiunSessionType::USER, $partnerId, 86400, ''));
 echo "Session started\n";
 
 
@@ -23,17 +23,17 @@ echo "Session started\n";
 /**
  * Creates a new entry
  */
-$entry = new KalturaMediaEntry();
+$entry = new VidiunMediaEntry();
 $entry->name = 'sanity-test';
 $entry->description = 'sanity-test';
-$entry->mediaType = KalturaMediaType::VIDEO;
+$entry->mediaType = VidiunMediaType::VIDEO;
 
-$resource = new KalturaUrlResource();
-$resource->url = $clientConfig->serviceUrl . 'content/templates/entry/data/kaltura_logo_animated_blue.flv';
+$resource = new VidiunUrlResource();
+$resource->url = $clientConfig->serviceUrl . 'content/templates/entry/data/vidiun_logo_animated_blue.flv';
 
 $client->startMultiRequest();
 $requestEntry = $client->media->add($entry);
-/* @var $requestEntry KalturaMediaEntry */
+/* @var $requestEntry VidiunMediaEntry */
 $client->media->addContent($requestEntry->id, $resource);
 $client->media->get($requestEntry->id);
 
@@ -43,7 +43,7 @@ foreach($results as $index => $result)
 	if ($client->isError($result))
 	{
 		echo "Executing failed for request #".($index+1)." with error [" . $result['message'] . "]\n";
-		throw new KalturaException($result["message"], $result["code"]);
+		throw new VidiunException($result["message"], $result["code"]);
 	}
 }
 echo "Entry ingested\n";
@@ -56,13 +56,13 @@ echo "Entry ingested\n";
  * Waits for the entry to be ready
  */
 $createdEntry = end($results);
-/* @var $createdEntry KalturaMediaEntry */
+/* @var $createdEntry VidiunMediaEntry */
 while ($createdEntry)
 {
-	if($createdEntry->status == KalturaEntryStatus::READY)
+	if($createdEntry->status == VidiunEntryStatus::READY)
 		break;
 
-	if($createdEntry->status != KalturaEntryStatus::IMPORT && $createdEntry->status != KalturaEntryStatus::PRECONVERT)
+	if($createdEntry->status != VidiunEntryStatus::IMPORT && $createdEntry->status != VidiunEntryStatus::PRECONVERT)
 	{
 		echo "Entry status failed [$createdEntry->status]\n";
 		exit(-1);
@@ -84,9 +84,9 @@ echo "Entry ready\n";
 /**
  * Gets the entry context
  */
-$contextDataParams = new KalturaEntryContextDataParams();
+$contextDataParams = new VidiunEntryContextDataParams();
 $entryContextDataResult = $client->baseEntry->getContextData($createdEntry->id, $contextDataParams);
-/* @var $entryContextDataResult KalturaEntryContextDataResult */
+/* @var $entryContextDataResult VidiunEntryContextDataResult */
 if(!$entryContextDataResult)
 {
 	echo "Unable to get entry [$createdEntry->id] context\n";
@@ -118,9 +118,9 @@ if(!file_exists($manifestLocalPath) || !filesize($manifestLocalPath))
 	echo "Entry [$createdEntry->id] no manifest file\n";
 	exit(-1);
 }
-if(isset($headers['x-kaltura']) && strpos($headers['x-kaltura'], 'error-') === 0)
+if(isset($headers['x-vidiun']) && strpos($headers['x-vidiun'], 'error-') === 0)
 {
-	echo "Entry [$createdEntry->id] manifest error: " . $headers['x-kaltura'] . "\n";
+	echo "Entry [$createdEntry->id] manifest error: " . $headers['x-vidiun'] . "\n";
 	exit(-1);
 }
 echo "OK\n";
@@ -157,9 +157,9 @@ if($errCode != 302)
 	echo "Entry [$createdEntry->id] download redirect failed\n";
 	exit(-1);
 }
-if(isset($headers['x-kaltura']) && strpos($headers['x-kaltura'], 'error-') === 0)
+if(isset($headers['x-vidiun']) && strpos($headers['x-vidiun'], 'error-') === 0)
 {
-	echo "Entry [$createdEntry->id] download error: " . $headers['x-kaltura'] . "\n";
+	echo "Entry [$createdEntry->id] download error: " . $headers['x-vidiun'] . "\n";
 	exit(-1);
 }
 echo "OK\n";
@@ -190,9 +190,9 @@ if($errCode != 302)
 	echo "Entry [$createdEntry->id] raw redirect failed\n";
 	exit(-1);
 }
-if(isset($headers['x-kaltura']) && strpos($headers['x-kaltura'], 'error-') === 0)
+if(isset($headers['x-vidiun']) && strpos($headers['x-vidiun'], 'error-') === 0)
 {
-	echo "Entry [$createdEntry->id] raw error: " . $headers['x-kaltura'] . "\n";
+	echo "Entry [$createdEntry->id] raw error: " . $headers['x-vidiun'] . "\n";
 	exit(-1);
 }
 echo "OK\n";
@@ -228,9 +228,9 @@ if(!file_exists($mediaLocalPath) || !filesize($mediaLocalPath))
 	echo "Entry [$createdEntry->id] no thumbnail file\n";
 	exit(-1);
 }
-if(isset($headers['x-kaltura']) && strpos($headers['x-kaltura'], 'error-') === 0)
+if(isset($headers['x-vidiun']) && strpos($headers['x-vidiun'], 'error-') === 0)
 {
-	echo "Entry [$createdEntry->id] thumbnail error: " . $headers['x-kaltura'] . "\n";
+	echo "Entry [$createdEntry->id] thumbnail error: " . $headers['x-vidiun'] . "\n";
 	exit(-1);
 }
 echo "OK\n";

@@ -5,17 +5,17 @@
  * @package plugins.emailNotification
  * @subpackage Scheduler
  */
-class KEmailNotificationStaticRecipientEngine extends KEmailNotificationRecipientEngine
+class VEmailNotificationStaticRecipientEngine extends VEmailNotificationRecipientEngine
 {
 	/* (non-PHPdoc)
-	 * @see KEmailNotificationRecipientEngine::getRecipients()
+	 * @see VEmailNotificationRecipientEngine::getRecipients()
 	 */
 	function getRecipients(array $contentParameters) 
 	{
 		$recipients = array();
 		foreach ($this->recipientJobData->emailRecipients as $emailRecipient)
 		{
-			/* var $emailRecipient KalturaKeyValue */
+			/* var $emailRecipient VidiunKeyValue */
 			$email = $emailRecipient->key;
 			$name = $emailRecipient->value;
 			if(is_array($contentParameters) && count($contentParameters))

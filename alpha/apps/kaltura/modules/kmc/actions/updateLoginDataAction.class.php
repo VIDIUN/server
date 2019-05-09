@@ -1,9 +1,9 @@
 <?php
 /**
  * @package    Core
- * @subpackage KMC
+ * @subpackage VMC
  */
-class updateLoginDataAction extends kalturaAction
+class updateLoginDataAction extends vidiunAction
 {
 
 	public function execute() 
@@ -14,42 +14,42 @@ class updateLoginDataAction extends kalturaAction
 
 		$this->type = $this->getRequestParameter('type');
 		if(!$this->type)
-			KExternalErrors::dieError(KExternalErrors::MISSING_PARAMETER, 'type');
+			VExternalErrors::dieError(VExternalErrors::MISSING_PARAMETER, 'type');
 
 		$validTypes = array('name', 'email' ,'password');
 		if(! in_array($this->type, $validTypes))
-			KExternalErrors::dieError( KExternalErrors::INVALID_SETTING_TYPE );
+			VExternalErrors::dieError( VExternalErrors::INVALID_SETTING_TYPE );
 
-		$ks = $this->getP ( "kmcks" );
-		if(!$ks)
-			KExternalErrors::dieError(KExternalErrors::MISSING_PARAMETER, 'ks');
+		$vs = $this->getP ( "vmcvs" );
+		if(!$vs)
+			VExternalErrors::dieError(VExternalErrors::MISSING_PARAMETER, 'vs');
 
-		// Get partner & user info from KS
-		$ksObj = kSessionUtils::crackKs($ks);
-		$partnerId = $ksObj->partner_id;
-		$userId = $ksObj->user;
+		// Get partner & user info from VS
+		$vsObj = vSessionUtils::crackVs($vs);
+		$partnerId = $vsObj->partner_id;
+		$userId = $vsObj->user;
 		
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		if (!$partner)
-			KExternalErrors::dieError(KExternalErrors::PARTNER_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::PARTNER_NOT_FOUND);
 		
 		if (!$partner->validateApiAccessControl())
-			KExternalErrors::dieError(KExternalErrors::SERVICE_ACCESS_CONTROL_RESTRICTED);
+			VExternalErrors::dieError(VExternalErrors::SERVICE_ACCESS_CONTROL_RESTRICTED);
 
-		$this->forceKMCHttps = PermissionPeer::isValidForPartner(PermissionName::FEATURE_KMC_ENFORCE_HTTPS, $partnerId);
-		if( $this->forceKMCHttps ) {
+		$this->forceVMCHttps = PermissionPeer::isValidForPartner(PermissionName::FEATURE_VMC_ENFORCE_HTTPS, $partnerId);
+		if( $this->forceVMCHttps ) {
 			// Prevent the page fron being embeded in an iframe
 			header( 'X-Frame-Options: SAMEORIGIN' );
 		}
-		if( $this->forceKMCHttps && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') ) {
+		if( $this->forceVMCHttps && (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') ) {
 			die();
 		}
 
 		// Load the current user
-		$dbUser = kuserPeer::getKuserByPartnerAndUid($partnerId, $userId);
+		$dbUser = vuserPeer::getVuserByPartnerAndUid($partnerId, $userId);
 	
 		if (!$dbUser)
-			KExternalErrors::dieError('INVALID_USER_ID', $userId);;
+			VExternalErrors::dieError('INVALID_USER_ID', $userId);;
 
 		$this->email = $dbUser->getEmail();
 		$this->fname = $dbUser->getFirstName();
@@ -110,7 +110,7 @@ class updateLoginDataAction extends kalturaAction
 			$this->updateLoginData($this->email, $_POST['cur_password'], null, $_POST['new_password'], null, null);
 			$this->setSuccess();
 						
-		} catch( KalturaLoginDataException $e ){
+		} catch( VidiunLoginDataException $e ){
 			$this->setError($e->getMessage());
 		}
 	}
@@ -126,7 +126,7 @@ class updateLoginDataAction extends kalturaAction
 			$this->updateLoginData($this->email, $_POST['password'], $_POST['email'], null, null, null);
 			$this->setSuccess();
 						
-		} catch( KalturaLoginDataException $e ){
+		} catch( VidiunLoginDataException $e ){
 			$this->setError($e->getMessage());
 		}	
 	}
@@ -151,7 +151,7 @@ class updateLoginDataAction extends kalturaAction
 			$this->updateLoginData($this->email, $_POST['password'], null, null, $firstName, $lastName);
 			$this->setSuccess();
 
-		} catch( KalturaLoginDataException $e ){
+		} catch( VidiunLoginDataException $e ){
 			$this->setError($e->getMessage());
 		}
 	}
@@ -199,47 +199,47 @@ class updateLoginDataAction extends kalturaAction
 	{
 		if ($newEmail != "")
 		{
-			if(!kString::isEmailString($newEmail))
-				throw new KalturaLoginDataException ( APIErrors::INVALID_FIELD_VALUE, "newEmail" );
+			if(!vString::isEmailString($newEmail))
+				throw new VidiunLoginDataException ( APIErrors::INVALID_FIELD_VALUE, "newEmail" );
 		}
 
 		try {
 			UserLoginDataPeer::updateLoginData ( $email , $password, $newEmail, $newPassword, $newFirstName, $newLastName);
 		}
-		catch (kUserException $e) {
+		catch (vUserException $e) {
 			$code = $e->getCode();
-			if ($code == kUserException::LOGIN_DATA_NOT_FOUND) {
-				throw new KalturaLoginDataException(APIErrors::LOGIN_DATA_NOT_FOUND);
+			if ($code == vUserException::LOGIN_DATA_NOT_FOUND) {
+				throw new VidiunLoginDataException(APIErrors::LOGIN_DATA_NOT_FOUND);
 			}
-			else if ($code == kUserException::WRONG_PASSWORD) {
+			else if ($code == vUserException::WRONG_PASSWORD) {
 				if($password == $newPassword)
-					throw new KalturaLoginDataException(APIErrors::USER_WRONG_PASSWORD);
+					throw new VidiunLoginDataException(APIErrors::USER_WRONG_PASSWORD);
 				else
-					throw new KalturaLoginDataException(APIErrors::WRONG_OLD_PASSWORD);
+					throw new VidiunLoginDataException(APIErrors::WRONG_OLD_PASSWORD);
 			}
-			else if ($code == kUserException::PASSWORD_STRUCTURE_INVALID) {
+			else if ($code == vUserException::PASSWORD_STRUCTURE_INVALID) {
 				$c = new Criteria(); 
 				$c->add(UserLoginDataPeer::LOGIN_EMAIL, $email ); 
 				$loginData = UserLoginDataPeer::doSelectOne($c);
 				$invalidPasswordStructureMessage = $loginData->getInvalidPasswordStructureMessage();
 				$invalidPasswordStructureMessage = str_replace('\n', "\n", $invalidPasswordStructureMessage);
-				throw new KalturaLoginDataException(APIErrors::PASSWORD_STRUCTURE_INVALID,$invalidPasswordStructureMessage);
+				throw new VidiunLoginDataException(APIErrors::PASSWORD_STRUCTURE_INVALID,$invalidPasswordStructureMessage);
 			}
-			else if ($code == kUserException::PASSWORD_ALREADY_USED) {
-				throw new KalturaLoginDataException(APIErrors::PASSWORD_ALREADY_USED);
+			else if ($code == vUserException::PASSWORD_ALREADY_USED) {
+				throw new VidiunLoginDataException(APIErrors::PASSWORD_ALREADY_USED);
 			}
-			else if ($code == kUserException::INVALID_EMAIL) {
-				throw new KalturaLoginDataException(APIErrors::INVALID_FIELD_VALUE, 'email');
+			else if ($code == vUserException::INVALID_EMAIL) {
+				throw new VidiunLoginDataException(APIErrors::INVALID_FIELD_VALUE, 'email');
 			}
-			else if ($code == kUserException::LOGIN_ID_ALREADY_USED) {
-				throw new KalturaLoginDataException(APIErrors::LOGIN_ID_ALREADY_USED);
+			else if ($code == vUserException::LOGIN_ID_ALREADY_USED) {
+				throw new VidiunLoginDataException(APIErrors::LOGIN_ID_ALREADY_USED);
 			}
 			throw $e;			
 		}		
 	}
 }
 
-class KalturaLoginDataException extends Exception 
+class VidiunLoginDataException extends Exception 
 {
 	protected $code;
 	

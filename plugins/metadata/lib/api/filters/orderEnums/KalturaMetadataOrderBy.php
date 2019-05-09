@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.filters.enum
  */
-class KalturaMetadataOrderBy extends KalturaStringEnum
+class VidiunMetadataOrderBy extends VidiunStringEnum
 {
 	const METADATA_PROFILE_VERSION_ASC = "+metadataProfileVersion";
 	const METADATA_PROFILE_VERSION_DESC = "-metadataProfileVersion";

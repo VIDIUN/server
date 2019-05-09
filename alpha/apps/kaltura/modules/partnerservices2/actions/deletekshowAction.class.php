@@ -5,51 +5,51 @@
  * @package api
  * @subpackage ps2
  */
-class deletekshowAction extends defPartnerservices2Action
+class deletevshowAction extends defPartnerservices2Action
 {
 	public function describe()
 	{
 		return 
 			array (
-				"display_name" => "deleteKShow",
+				"display_name" => "deleteVShow",
 				"desc" => "" ,
 				"in" => array (
 					"mandatory" => array ( 
-						"kshow_id" => array ("type" => "string", "desc" => "")
+						"vshow_id" => array ("type" => "string", "desc" => "")
 						),
 					"optional" => array (
 						)
 					),
 				"out" => array (
-					"deleted_kshow" => array ("type" => "kshow", "desc" => "")
+					"deleted_vshow" => array ("type" => "vshow", "desc" => "")
 					),
 				"errors" => array (
-					APIErrors::INVALID_KSHOW_ID ,
+					APIErrors::INVALID_VSHOW_ID ,
 				)
 			); 
 	}
 	
 	protected function ticketType()			{		return self::REQUIED_TICKET_ADMIN;	}
-	// ask to fetch the kuser from puser_kuser - so we can tel the difference between a 
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_KUSER_ID_ONLY;	}
+	// ask to fetch the vuser from puser_vuser - so we can tel the difference between a 
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_VUSER_ID_ONLY;	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		$kshow_id_to_delete = $this->getPM ( "kshow_id" );
+		$vshow_id_to_delete = $this->getPM ( "vshow_id" );
 		
-		$kshow_to_delete = kshowPeer::retrieveByPK( $kshow_id_to_delete );
+		$vshow_to_delete = vshowPeer::retrieveByPK( $vshow_id_to_delete );
 		
-		if ( ! $kshow_to_delete )
+		if ( ! $vshow_to_delete )
 		{
-			$this->addError( APIErrors::INVALID_KSHOW_ID , $kshow_id_to_delete );
+			$this->addError( APIErrors::INVALID_VSHOW_ID , $vshow_id_to_delete );
 			return;		
 		}
 
-		$kshow_to_delete->delete();
+		$vshow_to_delete->delete();
 
-		myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_KSHOW_DELETE , $kshow_to_delete );
+		myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_VSHOW_DELETE , $vshow_to_delete );
 		
-		$this->addMsg ( "deleted_kshow" , objectWrapperBase::getWrapperClass( $kshow_to_delete , objectWrapperBase::DETAIL_LEVEL_REGULAR) );
+		$this->addMsg ( "deleted_vshow" , objectWrapperBase::getWrapperClass( $vshow_to_delete , objectWrapperBase::DETAIL_LEVEL_REGULAR) );
 	}
 }
 ?>

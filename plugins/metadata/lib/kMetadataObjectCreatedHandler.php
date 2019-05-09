@@ -3,10 +3,10 @@
  * @package plugins.metadata
  * @subpackage lib
  */
-class kMetadataObjectCreatedHandler implements kObjectCreatedEventConsumer
+class vMetadataObjectCreatedHandler implements vObjectCreatedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+	 * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $fromObject)
 	{
@@ -20,7 +20,7 @@ class kMetadataObjectCreatedHandler implements kObjectCreatedEventConsumer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::objectCreated()
+	 * @see vObjectCreatedEventConsumer::objectCreated()
 	 */
 	public function objectCreated(BaseObject $fromObject)
 	{
@@ -55,23 +55,23 @@ class kMetadataObjectCreatedHandler implements kObjectCreatedEventConsumer
 					$destMetadataObj->setMetadataProfileVersion($metadataProfileVersion);
 					$destMetadataObj->setObjectType(MetadataObjectType::ENTRY);
 					$destMetadataObj->setObjectId($recordedEntryId);
-					$destMetadataObj->setStatus(KalturaMetadataStatus::VALID);
+					$destMetadataObj->setStatus(VidiunMetadataStatus::VALID);
 	
 					$originMetadataKey = $originMetadataObj->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-					$originXml = kFileSyncUtils::file_get_contents($originMetadataKey, true, false);
+					$originXml = vFileSyncUtils::file_get_contents($originMetadataKey, true, false);
 	
 					// validate object exists
-					$object = kMetadataManager::getObjectFromPeer($destMetadataObj);
+					$object = vMetadataManager::getObjectFromPeer($destMetadataObj);
 					if($object)
 							$destMetadataObj->save();
 					else
 					{
-							KalturaLog::err('invalid object type');
+							VidiunLog::err('invalid object type');
 							continue;
 					}
 	
 					$destMetadataKey = $destMetadataObj->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-					kFileSyncUtils::file_put_contents($destMetadataKey, $originXml);
+					vFileSyncUtils::file_put_contents($destMetadataKey, $originXml);
 			}
 		}
 	}

@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAssetsParamsResourceContainers extends KalturaResource 
+class VidiunAssetsParamsResourceContainers extends VidiunResource 
 {
 	/**
 	 * Array of resources associated with asset params ids
-	 * @var KalturaAssetParamsResourceContainerArray
+	 * @var VidiunAssetParamsResourceContainerArray
 	 */
 	public $resources;
 
@@ -21,7 +21,7 @@ class KalturaAssetsParamsResourceContainers extends KalturaResource
     	{
     		$resource->validateEntry($dbEntry,$validateLocalExist);
     	
-    		if(!($resource instanceof KalturaDataCenterContentResource))
+    		if(!($resource instanceof VidiunDataCenterContentResource))
     			continue;
     			
     		$theDc = $resource->getDc();
@@ -34,14 +34,14 @@ class KalturaAssetsParamsResourceContainers extends KalturaResource
     		}
     		elseif($dc != $theDc)
     		{
-				throw new KalturaAPIException(KalturaErrors::RESOURCES_MULTIPLE_DATA_CENTERS);
+				throw new VidiunAPIException(VidiunErrors::RESOURCES_MULTIPLE_DATA_CENTERS);
     		}
     	}
     	
-    	if(!is_null($dc) && $dc != kDataCenterMgr::getCurrentDcId())
+    	if(!is_null($dc) && $dc != vDataCenterMgr::getCurrentDcId())
     	{
-    		$remoteHost = kDataCenterMgr::getRemoteDcExternalUrlByDcId($dc);
-    		kFileUtils::dumpApiRequest($remoteHost);
+    		$remoteHost = vDataCenterMgr::getRemoteDcExternalUrlByDcId($dc);
+    		vFileUtils::dumpApiRequest($remoteHost);
     	}
 	}
 	
@@ -56,7 +56,7 @@ class KalturaAssetsParamsResourceContainers extends KalturaResource
 	public function toObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kAssetsParamsResourceContainers();
+			$object_to_fill = new vAssetsParamsResourceContainers();
 			
 		$resources = array();
 		foreach($this->resources as $resource)

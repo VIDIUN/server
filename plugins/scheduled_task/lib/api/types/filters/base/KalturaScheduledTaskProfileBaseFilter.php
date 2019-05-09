@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaScheduledTaskProfileBaseFilter extends KalturaFilter
+abstract class VidiunScheduledTaskProfileBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -78,7 +78,7 @@ abstract class KalturaScheduledTaskProfileBaseFilter extends KalturaFilter
 	public $systemNameIn;
 
 	/**
-	 * @var KalturaScheduledTaskProfileStatus
+	 * @var VidiunScheduledTaskProfileStatus
 	 */
 	public $statusEqual;
 

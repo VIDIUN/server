@@ -1,7 +1,7 @@
 <?php
 	$host = requestUtils::getHost() ;
 	$recorderUrl = "";
-	if ( ! kString::beginsWith( $host , "http://www.kaltura.com" ) )
+	if ( ! vString::beginsWith( $host , "http://www.vidiun.com" ) )
 	{ 
 		$rtmp_host = str_replace ( "http:" , "rtmp:" , $host );
 		$recorderUrl = "Red5ServerURL=$rtmp_host/oflaDemo&"; 
@@ -23,12 +23,12 @@ else
 <div class="cont2 step1" id="_prodWizPageType" autoFocus="true">
 	<div class="top2_hint">
 		<div class="top2 step1">
-			<h1>Choose the type of Kaltura to create</h1>
+			<h1>Choose the type of Vidiun to create</h1>
 		</div>
 	</div>
 	<div class="container">
 		<div class="radioGroup clearfix">			
-			<?php  $types =  kshow::getTypes();
+			<?php  $types =  vshow::getTypes();
 				foreach ( $types as $type => $type_text ) 
 					echo "<label><input name='prod_ShowType' type='radio' value='".$type."' />".$type_text."</label>"; 
 			?>
@@ -39,13 +39,13 @@ else
 <div class="cont2 step1_1" id="_prodWizPageTitle" autoFocus="true">
 	<div class="top2_hint">
 		<div class="top2 step1_1">
-			<h1>Describe your Kaltura</h1>
+			<h1>Describe your Vidiun</h1>
 		</div>
 	</div>
 	<div class="container">
 		<fieldset>
 			<input type="text" id="prod_ShowTitle" defValue="Enter Title here" class="has_jtip width60"/><div class="jTip"><div></div><h3>A title is required</h3><p>(you can change it later)</p></div>
-			<textarea cols="33" rows="7" id="prod_ShowDescription" defValue="Add short description here" class="has_jtip width60"></textarea><div class="jTip"><div></div><h3>Tell us more</h3><p>How would you describe what this Kaltura is about?</p></div>
+			<textarea cols="33" rows="7" id="prod_ShowDescription" defValue="Add short description here" class="has_jtip width60"></textarea><div class="jTip"><div></div><h3>Tell us more</h3><p>How would you describe what this Vidiun is about?</p></div>
 			<textarea cols="33" rows="7" id="prod_ShowTags" defValue="Enter Tags (separated by commas)" class="has_jtip width60"></textarea><div class="jTip"><div></div><h3>Tags</h3><p>Help users find your show by adding tags (separated by commas)</p></div>
 		</fieldset>
 	</div>
@@ -57,7 +57,7 @@ else
 		</div>
 	</div>
 	<div class="container">
-		<p>Would you like to customize your Kaltura now?<br />(Background, Colors, Fonts)</p>
+		<p>Would you like to customize your Vidiun now?<br />(Background, Colors, Fonts)</p>
 		<button class="btn3" style="margin-right:20px;">Yes!</button>
 		<button class="btn3">No (later)</button>
 	</div>
@@ -73,28 +73,28 @@ else
 		<fieldset>
 			<div class="col">
 				<span>Who can view</span>
-				<label><input type="radio" class="radio" id="prod_ViewShow1" name="prod_ViewShow" checked="checked" value="<?php echo kshow::KSHOW_PERMISSION_EVERYONE; ?>" />Everyone</label>
-				<label><input type="radio" class="radio" id="prod_ViewShow2" name="prod_ViewShow" value="<?php echo kshow::KSHOW_PERMISSION_JUST_ME; ?>" />Just me (draft)</label>
-				<label><input type="radio" class="radio" id="prod_ViewShow3" name="prod_ViewShow" value="<?php echo kshow::KSHOW_PERMISSION_INVITE_ONLY; ?>" />By invitation only</label><div class="pass"><input id="prod_ViewShow_Invite_pass" defValue="Enter password"/>Send password by email to friends.</div>
+				<label><input type="radio" class="radio" id="prod_ViewShow1" name="prod_ViewShow" checked="checked" value="<?php echo vshow::VSHOW_PERMISSION_EVERYONE; ?>" />Everyone</label>
+				<label><input type="radio" class="radio" id="prod_ViewShow2" name="prod_ViewShow" value="<?php echo vshow::VSHOW_PERMISSION_JUST_ME; ?>" />Just me (draft)</label>
+				<label><input type="radio" class="radio" id="prod_ViewShow3" name="prod_ViewShow" value="<?php echo vshow::VSHOW_PERMISSION_INVITE_ONLY; ?>" />By invitation only</label><div class="pass"><input id="prod_ViewShow_Invite_pass" defValue="Enter password"/>Send password by email to friends.</div>
 			</div>
 			<div class="col">
 				<span>Who can contribute media</span>
-				<label><input type="radio" class="radio" id="prod_ContributeShow1" name="prod_ContributeShow" checked="checked" value="<?php echo kshow::KSHOW_PERMISSION_REGISTERED; ?>" />Everyone</label>
-				<label><input type="radio" class="radio" id="prod_ContributeShow2" name="prod_ContributeShow" value="<?php echo kshow::KSHOW_PERMISSION_JUST_ME; ?>" />Just me</label>
-				<label><input type="radio" class="radio" id="prod_ContributeShow3" name="prod_ContributeShow" value="<?php echo kshow::KSHOW_PERMISSION_INVITE_ONLY; ?>" />By invitation only</label><div class="pass"><input id="prod_ContributeShow_Invite_pass" defValue="Enter password"/>Send password by email to friends.</div>
+				<label><input type="radio" class="radio" id="prod_ContributeShow1" name="prod_ContributeShow" checked="checked" value="<?php echo vshow::VSHOW_PERMISSION_REGISTERED; ?>" />Everyone</label>
+				<label><input type="radio" class="radio" id="prod_ContributeShow2" name="prod_ContributeShow" value="<?php echo vshow::VSHOW_PERMISSION_JUST_ME; ?>" />Just me</label>
+				<label><input type="radio" class="radio" id="prod_ContributeShow3" name="prod_ContributeShow" value="<?php echo vshow::VSHOW_PERMISSION_INVITE_ONLY; ?>" />By invitation only</label><div class="pass"><input id="prod_ContributeShow_Invite_pass" defValue="Enter password"/>Send password by email to friends.</div>
 			</div>
 			<div class="col">
 				<span>Who can edit</span>
-				<label><input type="radio" class="radio" id="prod_EditShow1" name="prod_EditShow" checked="checked" value="<?php echo kshow::KSHOW_PERMISSION_REGISTERED; ?>" />Everyone</label>
-				<label><input type="radio" class="radio" id="prod_EditShow2" name="prod_EditShow" value="<?php echo kshow::KSHOW_PERMISSION_JUST_ME; ?>" />Just me</label>
-				<label><input type="radio" class="radio" id="prod_EditShow3" name="prod_EditShow" value="<?php echo kshow::KSHOW_PERMISSION_INVITE_ONLY; ?>" />By invitation only</label><div class="pass"><input id="prod_EditShow_Invite_pass" defValue="Enter password"/>Send password by email to friends.</div>
+				<label><input type="radio" class="radio" id="prod_EditShow1" name="prod_EditShow" checked="checked" value="<?php echo vshow::VSHOW_PERMISSION_REGISTERED; ?>" />Everyone</label>
+				<label><input type="radio" class="radio" id="prod_EditShow2" name="prod_EditShow" value="<?php echo vshow::VSHOW_PERMISSION_JUST_ME; ?>" />Just me</label>
+				<label><input type="radio" class="radio" id="prod_EditShow3" name="prod_EditShow" value="<?php echo vshow::VSHOW_PERMISSION_INVITE_ONLY; ?>" />By invitation only</label><div class="pass"><input id="prod_EditShow_Invite_pass" defValue="Enter password"/>Send password by email to friends.</div>
 			</div>
 		</fieldset>
 	</div>
 </div>
 
 <div class="cont2 intro" id="_prodWizPageIntro">
-	<div class="top2_hint">Create an invite (pitch your Kaltura to the world)</div>
+	<div class="top2_hint">Create an invite (pitch your Vidiun to the world)</div>
 	<div class="container">
 		<fieldset>
 			<div class="buttons">
@@ -107,7 +107,7 @@ else
 </div>
 
 <div class="cont2 thumb" id="_prodWizPageThumb">
-	<div class="top2_hint">Create a thumbnail for your Kaltura</div>
+	<div class="top2_hint">Create a thumbnail for your Vidiun</div>
 	<div class="container">
 		<fieldset>
 			<div class="buttons">
@@ -121,7 +121,7 @@ else
 <div class="cont2 customize1" id="_prodWizPageStyle" noNextButton="true">
 	<div class="top2_hint">
 		<div class="top2 customize1">
-			<h1>Select a style for your Kaltura title</h1>
+			<h1>Select a style for your Vidiun title</h1>
 		</div>
 	</div>
 	<div class="container">
@@ -141,7 +141,7 @@ else
 	</div>
 	<div class="container">
 		<ul class="choose_scheme clearfix">
-			<?php  $colorSchemes = kshow::getColorSchemes();
+			<?php  $colorSchemes = vshow::getColorSchemes();
 				foreach ( $colorSchemes as $colorScheme )
 					echo '<li><div style="background-color:'.$colorScheme[0].'"><div style="background-color:'.$colorScheme[2].'; color:'.$colorScheme[1].';">a</div></div></li>';
 			?>
@@ -474,12 +474,12 @@ else
 <div class="cont2 prod_edit" id="_prodWizPageEdit">
 	<div class="top2_hint">
 		<div class="top2 prod_edit">
-			<h1>Customize your Kaltura</h1>
+			<h1>Customize your Vidiun</h1>
 		</div><!-- end top-->
 	</div>
 	<div class="container clearfix">
 		<div class="buttons">
-			<button class="btn5" id="prod_EditTitle">Kaltura Info<b></b></button>
+			<button class="btn5" id="prod_EditTitle">Vidiun Info<b></b></button>
 			<button class="btn5" id="prod_EditStyle">Title style<b></b></button>
 			<button class="btn5" id="prod_EditPermissions">Permissions<b></b></button>
 			<button class="btn5" id="prod_EditBG">Background<b></b></button>

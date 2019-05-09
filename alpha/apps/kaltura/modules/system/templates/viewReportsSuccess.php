@@ -39,8 +39,8 @@ function retrieveSubject( $type, $id )
 {
 	switch( $type )
 	{
-		case flag::SUBJECT_TYPE_ENTRY: { $entry = entryPeer::retrieveByPK( $id ); return 'entry id:'.$id.'<br/>kshow:'.returnKshowLink($entry->getKshowId()).'<br/>Name:'.$entry->getName(); }
-		case flag::SUBJECT_TYPE_USER: { $user = kuserPeer::retrieveByPK( $id ); return returnUserLink( $user->getScreenName()); }
+		case flag::SUBJECT_TYPE_ENTRY: { $entry = entryPeer::retrieveByPK( $id ); return 'entry id:'.$id.'<br/>vshow:'.returnVshowLink($entry->getVshowId()).'<br/>Name:'.$entry->getName(); }
+		case flag::SUBJECT_TYPE_USER: { $user = vuserPeer::retrieveByPK( $id ); return returnUserLink( $user->getScreenName()); }
 		case flag::SUBJECT_TYPE_COMMENT: { $comment = commentPeer::retrieveByPK( $id ); return 'comment id:'.$id.'<br/>Commnet:'.$comment->getComment(); }
 		default: return 'Unknown';
 	}
@@ -48,12 +48,12 @@ function retrieveSubject( $type, $id )
 
 function returnUserLink( $username )
 {
-	return "<a href='/index.php/mykaltura/viewprofile?screenname=".$username."'>".$username."</a>";
+	return "<a href='/index.php/myvidiun/viewprofile?screenname=".$username."'>".$username."</a>";
 }
 
-function returnKshowLink( $kshow_id )
+function returnVshowLink( $vshow_id )
 {
-	return "<a href='/index.php/browse?kshow_id=".$kshow_id."'>".$kshow_id."</a>";
+	return "<a href='/index.php/browse?vshow_id=".$vshow_id."'>".$vshow_id."</a>";
 }
 
 
@@ -70,7 +70,7 @@ if( !$reports ) echo '<h1>No reports found</h1>';
 			echo '<TR>'.	
 			'<TD>'.$report->getId().'</TD>'.
 			'<TD>'.$report->getCreatedAt().'</TD>'.
-			'<TD>'.returnUserLink( $report->getkuser()->getScreenName()).'</TD>'.
+			'<TD>'.returnUserLink( $report->getvuser()->getScreenName()).'</TD>'.
 			'<TD>'.reportTypeToText( $report->getFlagType() ).'<br/>'.$report->getOther().'</TD>'.
 			'<TD>'.$report->getComment().'</TD>'.
 			'<TD>'.subjectTypeToText($report->getSubjectType()).'</TD>'.

@@ -3,22 +3,22 @@
  * @package api
  * @subpackage filters
  */
-class KalturaMixEntryFilter extends KalturaMixEntryBaseFilter
+class VidiunMixEntryFilter extends VidiunMixEntryBaseFilter
 {
 	public function __construct()
 	{
-		$this->typeIn = KalturaEntryType::MIX;
+		$this->typeIn = VidiunEntryType::MIX;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntryFilter::getListResponse()
+	 * @see VidiunBaseEntryFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager);
 		
-	    $newList = KalturaMixEntryArray::fromDbArray($list, $responseProfile);
-		$response = new KalturaBaseEntryListResponse();
+	    $newList = VidiunMixEntryArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunBaseEntryListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		

@@ -1,5 +1,5 @@
 <?php
-require_once KALTURA_ROOT_PATH.'/vendor/google-api-php-client-1.1.2/src/Google/autoload.php';
+require_once VIDIUN_ROOT_PATH.'/vendor/google-api-php-client-1.1.2/src/Google/autoload.php';
 
 /**
  * @package plugins.youtubeApiDistribution
@@ -12,7 +12,7 @@ class YoutubeApiDistributionEngineLogger extends Google_Logger_Abstract
 	 */
 	protected function write($message)
 	{
-		KalturaLog::debug($message);
+		VidiunLog::debug($message);
 	}
 }
 
@@ -45,35 +45,35 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 	{
 		parent::configure();
 
-		if(KBatchBase::$taskConfig->params->tempXmlPath)
+		if(VBatchBase::$taskConfig->params->tempXmlPath)
 		{
-			$this->tempXmlPath = KBatchBase::$taskConfig->params->tempXmlPath;
+			$this->tempXmlPath = VBatchBase::$taskConfig->params->tempXmlPath;
 			if(!is_dir($this->tempXmlPath))
 				mkdir($this->tempXmlPath, 0777, true);
 		}
 		else
 		{
-			KalturaLog::err("params.tempXmlPath configuration not supplied");
+			VidiunLog::err("params.tempXmlPath configuration not supplied");
 			$this->tempXmlPath = sys_get_temp_dir();
 		}
 
-		if (isset(KBatchBase::$taskConfig->params->youtubeApi))
+		if (isset(VBatchBase::$taskConfig->params->youtubeApi))
 		{
-			if (isset(KBatchBase::$taskConfig->params->youtubeApi->timeout))
-				$this->timeout = KBatchBase::$taskConfig->params->youtubeApi->timeout;
+			if (isset(VBatchBase::$taskConfig->params->youtubeApi->timeout))
+				$this->timeout = VBatchBase::$taskConfig->params->youtubeApi->timeout;
 
-			if (isset(KBatchBase::$taskConfig->params->youtubeApi->processedTimeout))
-				$this->processedTimeout = KBatchBase::$taskConfig->params->youtubeApi->processedTimeout;
+			if (isset(VBatchBase::$taskConfig->params->youtubeApi->processedTimeout))
+				$this->processedTimeout = VBatchBase::$taskConfig->params->youtubeApi->processedTimeout;
 		}
 
-		KalturaLog::info('Request timeout set to '.$this->timeout.' seconds, processed timeout set to '.$this->processedTimeout.' seconds');
+		VidiunLog::info('Request timeout set to '.$this->timeout.' seconds, processed timeout set to '.$this->processedTimeout.' seconds');
 	}
 
 	/**
-	 * @param KalturaYoutubeApiDistributionJobProviderData $providerData
+	 * @param VidiunYoutubeApiDistributionJobProviderData $providerData
 	 * @return Google_Client
 	 */
-	protected function initClient(KalturaYoutubeApiDistributionProfile $distributionProfile)
+	protected function initClient(VidiunYoutubeApiDistributionProfile $distributionProfile)
 	{
 		$options = array(
 			CURLOPT_VERBOSE => true,
@@ -94,10 +94,10 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaYoutubeApiDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaYoutubeApiDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunYoutubeApiDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunYoutubeApiDistributionProfile");
 
 		return $this->doSubmit($data, $data->distributionProfile);
 	}
@@ -105,11 +105,11 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 	/**
 	 * Tries to transalte the friendly name of the category to the api value, if not found the distribution progile default will be used
 	 * @param Google_Service_YouTube $youtube
-	 * @param KalturaYoutubeApiDistributionProfile $distributionProfile
+	 * @param VidiunYoutubeApiDistributionProfile $distributionProfile
 	 * @param string $category
 	 * @return int
 	 */
-	protected function translateCategory(Google_Service_YouTube $youtube, KalturaYoutubeApiDistributionProfile $distributionProfile, $categoryName)
+	protected function translateCategory(Google_Service_YouTube $youtube, VidiunYoutubeApiDistributionProfile $distributionProfile, $categoryName)
 	{
 		if($categoryName)
 		{
@@ -119,7 +119,7 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 				if($category['snippet']['title'] == $categoryName)
 					return $category['id'];
 			}
-			KalturaLog::warning("Partner [$distributionProfile->partnerId] Distribution-Profile [$distributionProfile->id] category [$categoryName] not found");
+			VidiunLog::warning("Partner [$distributionProfile->partnerId] Distribution-Profile [$distributionProfile->id] category [$categoryName] not found");
 		}
 
 		if($distributionProfile->defaultCategory)
@@ -128,7 +128,7 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 		return $categoryName;
 	}
 
-	protected function doCloseSubmit(KalturaDistributionSubmitJobData $data, KalturaYoutubeApiDistributionProfile $distributionProfile)
+	protected function doCloseSubmit(VidiunDistributionSubmitJobData $data, VidiunYoutubeApiDistributionProfile $distributionProfile)
 	{
 		$client = $this->initClient($distributionProfile);
 		$youtube = new Google_Service_YouTube($client);
@@ -136,7 +136,7 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 		$listResponse = $youtube->videos->listVideos('status', array('id' => $data->entryDistribution->remoteId));
 		$items = $listResponse->getItems();
 		$video = reset($items);
-		KalturaLog::debug("Video: " . print_r($video, true));
+		VidiunLog::debug("Video: " . print_r($video, true));
 
 		switch($video['modelData']['status']['uploadStatus'])
 		{
@@ -198,7 +198,7 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 		}
 	}
 
-	protected function doSubmit(KalturaDistributionSubmitJobData $data, KalturaYoutubeApiDistributionProfile $distributionProfile)
+	protected function doSubmit(VidiunDistributionSubmitJobData $data, VidiunYoutubeApiDistributionProfile $distributionProfile)
 	{
 		$client = $this->initClient($distributionProfile);
 		$youtube = new Google_Service_YouTube($client);
@@ -211,9 +211,9 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 		{
 			$videoPath = $data->providerData->videoAssetFilePath;
 			if (!$videoPath)
-				throw new KalturaException('No video asset to distribute, the job will fail');
+				throw new VidiunException('No video asset to distribute, the job will fail');
 			if (!file_exists($videoPath))
-				throw new KalturaDistributionException("The file [$videoPath] was not found (probably not synced yet), the job will retry");
+				throw new VidiunDistributionException("The file [$videoPath] was not found (probably not synced yet), the job will retry");
 
 			$needDel = false;
 			if (strstr($videoPath, ".") === false)
@@ -230,26 +230,26 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 
 			$this->fieldValues = unserialize($data->providerData->fieldValues);
 
-	//		$props['start_date'] = $this->getValueForField(KalturaYouTubeApiDistributionField::START_DATE);
-	//		$props['end_date'] = $this->getValueForField(KalturaYouTubeApiDistributionField::END_DATE);
+	//		$props['start_date'] = $this->getValueForField(VidiunYouTubeApiDistributionField::START_DATE);
+	//		$props['end_date'] = $this->getValueForField(VidiunYouTubeApiDistributionField::END_DATE);
 
 			$snippet = new Google_Service_YouTube_VideoSnippet();
-			$snippet->setTitle(self::sanitizeFromHtmlTags($this->getValueForField(KalturaYouTubeApiDistributionField::MEDIA_TITLE)));
-			$snippet->setDescription(self::sanitizeFromHtmlTags($this->getValueForField(KalturaYouTubeApiDistributionField::MEDIA_DESCRIPTION)));
-			$snippet->setTags(explode(',', self::sanitizeFromHtmlTags($this->getValueForField(KalturaYouTubeApiDistributionField::MEDIA_KEYWORDS))));
-			$snippet->setCategoryId($this->translateCategory($youtube, $distributionProfile, $this->getValueForField(KalturaYouTubeApiDistributionField::MEDIA_CATEGORY)));
+			$snippet->setTitle(self::sanitizeFromHtmlTags($this->getValueForField(VidiunYouTubeApiDistributionField::MEDIA_TITLE)));
+			$snippet->setDescription(self::sanitizeFromHtmlTags($this->getValueForField(VidiunYouTubeApiDistributionField::MEDIA_DESCRIPTION)));
+			$snippet->setTags(explode(',', self::sanitizeFromHtmlTags($this->getValueForField(VidiunYouTubeApiDistributionField::MEDIA_KEYWORDS))));
+			$snippet->setCategoryId($this->translateCategory($youtube, $distributionProfile, $this->getValueForField(VidiunYouTubeApiDistributionField::MEDIA_CATEGORY)));
 
 			$status = new Google_Service_YouTube_VideoStatus();
 			$status->setPrivacyStatus('private');
 			$status->setEmbeddable(false);
 
-			if($data->entryDistribution->sunStatus == KalturaEntryDistributionSunStatus::AFTER_SUNRISE)
+			if($data->entryDistribution->sunStatus == VidiunEntryDistributionSunStatus::AFTER_SUNRISE)
 			{
 				$privacyStatus = $this->getPrivacyStatus($distributionProfile);
-				KalturaLog::debug("Setting privacy status to [$privacyStatus]");
+				VidiunLog::debug("Setting privacy status to [$privacyStatus]");
 				$status->setPrivacyStatus($privacyStatus);
 			}
-			if($this->getValueForField(KalturaYouTubeApiDistributionField::ALLOW_EMBEDDING) == 'allowed')
+			if($this->getValueForField(VidiunYouTubeApiDistributionField::ALLOW_EMBEDDING) == 'allowed')
 			{
 				$status->setEmbeddable(true);
 			}
@@ -279,15 +279,15 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 		{
 			foreach ($data->providerData->captionsInfo as $captionInfo)
 			{
-				/* @var $captionInfo KalturaYouTubeApiCaptionDistributionInfo */
-				if ($captionInfo->action == KalturaYouTubeApiDistributionCaptionAction::SUBMIT_ACTION)
+				/* @var $captionInfo VidiunYouTubeApiCaptionDistributionInfo */
+				if ($captionInfo->action == VidiunYouTubeApiDistributionCaptionAction::SUBMIT_ACTION)
 				{
 					$data->mediaFiles[] = $this->submitCaption($youtube, $captionInfo, $data->remoteId);
 				}
 			}
 		}
 
-		$playlistIds = explode(',', $this->getValueForField(KalturaYouTubeApiDistributionField::MEDIA_PLAYLIST_IDS));
+		$playlistIds = explode(',', $this->getValueForField(VidiunYouTubeApiDistributionField::MEDIA_PLAYLIST_IDS));
 		$this->syncPlaylistIds($youtube, $data->remoteId, $playlistIds);
 
 		return $distributionProfile->assumeSuccess;
@@ -299,7 +299,7 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 		return strip_tags(html_entity_decode(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $filed),null, 'UTF-8'));
 	}
 
-	protected function doUpdate(KalturaDistributionUpdateJobData $data, KalturaYoutubeApiDistributionProfile $distributionProfile, $enable = true)
+	protected function doUpdate(VidiunDistributionUpdateJobData $data, VidiunYoutubeApiDistributionProfile $distributionProfile, $enable = true)
 	{
 		$this->fieldValues = unserialize($data->providerData->fieldValues);
 
@@ -310,26 +310,26 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 		$items = $listResponse->getItems();
 		$video = reset($items);
 
-//		$props['start_date'] = $this->getValueForField(KalturaYouTubeApiDistributionField::START_DATE);
-//		$props['end_date'] = $this->getValueForField(KalturaYouTubeApiDistributionField::END_DATE);
+//		$props['start_date'] = $this->getValueForField(VidiunYouTubeApiDistributionField::START_DATE);
+//		$props['end_date'] = $this->getValueForField(VidiunYouTubeApiDistributionField::END_DATE);
 
 		$snippet = $video['snippet'];
-		$snippet['title'] = self::sanitizeFromHtmlTags($this->getValueForField(KalturaYouTubeApiDistributionField::MEDIA_TITLE));
-		$snippet['description'] = self::sanitizeFromHtmlTags($this->getValueForField(KalturaYouTubeApiDistributionField::MEDIA_DESCRIPTION));
-		$snippet['tags'] = explode(',', self::sanitizeFromHtmlTags($this->getValueForField(KalturaYouTubeApiDistributionField::MEDIA_KEYWORDS)));
-		$snippet['category'] = $this->translateCategory($youtube, $distributionProfile, $this->getValueForField(KalturaYouTubeApiDistributionField::MEDIA_CATEGORY));
+		$snippet['title'] = self::sanitizeFromHtmlTags($this->getValueForField(VidiunYouTubeApiDistributionField::MEDIA_TITLE));
+		$snippet['description'] = self::sanitizeFromHtmlTags($this->getValueForField(VidiunYouTubeApiDistributionField::MEDIA_DESCRIPTION));
+		$snippet['tags'] = explode(',', self::sanitizeFromHtmlTags($this->getValueForField(VidiunYouTubeApiDistributionField::MEDIA_KEYWORDS)));
+		$snippet['category'] = $this->translateCategory($youtube, $distributionProfile, $this->getValueForField(VidiunYouTubeApiDistributionField::MEDIA_CATEGORY));
 
 		$status = $video['status'];
 		$status['privacyStatus'] = 'private';
 		$status['embeddable'] = false;
 
-		if($enable && $data->entryDistribution->sunStatus == KalturaEntryDistributionSunStatus::AFTER_SUNRISE)
+		if($enable && $data->entryDistribution->sunStatus == VidiunEntryDistributionSunStatus::AFTER_SUNRISE)
 		{
 			$privacyStatus = $this->getPrivacyStatus($distributionProfile);
-			KalturaLog::debug("Setting privacy status to [$privacyStatus]");
+			VidiunLog::debug("Setting privacy status to [$privacyStatus]");
 			$status['privacyStatus'] = $privacyStatus;
 		}
-		if($this->getValueForField(KalturaYouTubeApiDistributionField::ALLOW_EMBEDDING) == 'allowed')
+		if($this->getValueForField(VidiunYouTubeApiDistributionField::ALLOW_EMBEDDING) == 'allowed')
 		{
 			$status['embeddable'] = true;
 		}
@@ -338,27 +338,27 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 
 		foreach ($data->providerData->captionsInfo as $captionInfo)
 		{
-			/* @var $captionInfo KalturaYouTubeApiCaptionDistributionInfo */
+			/* @var $captionInfo VidiunYouTubeApiCaptionDistributionInfo */
 			switch ($captionInfo->action){
-				case KalturaYouTubeApiDistributionCaptionAction::SUBMIT_ACTION:
+				case VidiunYouTubeApiDistributionCaptionAction::SUBMIT_ACTION:
 					$data->mediaFiles[] = $this->submitCaption($youtube, $captionInfo, $data->entryDistribution->remoteId);
 					break;
-				case KalturaYouTubeApiDistributionCaptionAction::UPDATE_ACTION:
+				case VidiunYouTubeApiDistributionCaptionAction::UPDATE_ACTION:
 					$this->updateCaption($youtube, $captionInfo, $data->mediaFiles);
 					break;
-				case KalturaYouTubeApiDistributionCaptionAction::DELETE_ACTION:
+				case VidiunYouTubeApiDistributionCaptionAction::DELETE_ACTION:
 					$this->deleteCaption($youtube, $captionInfo);
 					break;
 			}
 		}
 
-		$playlistIds = explode(',', $this->getValueForField(KalturaYouTubeApiDistributionField::MEDIA_PLAYLIST_IDS));
+		$playlistIds = explode(',', $this->getValueForField(VidiunYouTubeApiDistributionField::MEDIA_PLAYLIST_IDS));
 		$this->syncPlaylistIds($youtube, $data->entryDistribution->remoteId, $playlistIds);
 
 		return true;
 	}
 
-	protected function doDelete(KalturaDistributionDeleteJobData $data, KalturaYoutubeApiDistributionProfile $distributionProfile)
+	protected function doDelete(VidiunDistributionDeleteJobData $data, VidiunYoutubeApiDistributionProfile $distributionProfile)
 	{
 		$client = $this->initClient($distributionProfile);
 		$youtube = new Google_Service_YouTube($client);
@@ -370,10 +370,10 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaYoutubeApiDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaYoutubeApiDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunYoutubeApiDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunYoutubeApiDistributionProfile");
 
 		return $this->doCloseSubmit($data, $data->distributionProfile);
 	}
@@ -381,10 +381,10 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaYoutubeApiDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaYoutubeApiDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunYoutubeApiDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunYoutubeApiDistributionProfile");
 
 		return $this->doUpdate($data, $data->distributionProfile);
 	}
@@ -392,10 +392,10 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDisable::disable()
 	 */
-	public function disable(KalturaDistributionDisableJobData $data)
+	public function disable(VidiunDistributionDisableJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaYoutubeApiDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaYoutubeApiDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunYoutubeApiDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunYoutubeApiDistributionProfile");
 
 		return $this->doUpdate($data, $data->distributionProfile, false);
 	}
@@ -403,10 +403,10 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineEnable::enable()
 	 */
-	public function enable(KalturaDistributionEnableJobData $data)
+	public function enable(VidiunDistributionEnableJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaYoutubeApiDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaYoutubeApiDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunYoutubeApiDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunYoutubeApiDistributionProfile");
 
 		return $this->doUpdate($data, $data->distributionProfile);
 	}
@@ -414,10 +414,10 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaYoutubeApiDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaYoutubeApiDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunYoutubeApiDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunYoutubeApiDistributionProfile");
 
 		return $this->doDelete($data, $data->distributionProfile);
 	}
@@ -431,12 +431,12 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 	}
 
 	/**
-	 * @param KalturaYoutubeApiDistributionProfile $distributionProfile
+	 * @param VidiunYoutubeApiDistributionProfile $distributionProfile
 	 * @return null|string
 	 */
-	protected function getPrivacyStatus(KalturaYoutubeApiDistributionProfile $distributionProfile)
+	protected function getPrivacyStatus(VidiunYoutubeApiDistributionProfile $distributionProfile)
 	{
-		$privacyStatus = $this->getValueForField(KalturaYouTubeApiDistributionField::ENTRY_PRIVACY_STATUS);
+		$privacyStatus = $this->getValueForField(VidiunYouTubeApiDistributionField::ENTRY_PRIVACY_STATUS);
 		if ($privacyStatus == "" || is_null($privacyStatus))
 		{
 			$privacyStatus = $distributionProfile->privacyStatus;
@@ -444,8 +444,8 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 		return $privacyStatus;
 	}
 
-	private function updateRemoteMediaFileVersion(KalturaDistributionRemoteMediaFileArray &$remoteMediaFiles, KalturaYouTubeApiCaptionDistributionInfo $captionInfo){
-		/* @var $mediaFile KalturaDistributionRemoteMediaFile */
+	private function updateRemoteMediaFileVersion(VidiunDistributionRemoteMediaFileArray &$remoteMediaFiles, VidiunYouTubeApiCaptionDistributionInfo $captionInfo){
+		/* @var $mediaFile VidiunDistributionRemoteMediaFile */
 		foreach ($remoteMediaFiles as $remoteMediaFile){
 			if ($remoteMediaFile->assetId == $mediaFile->assetId){
 				$remoteMediaFile->version = $captionInfo->version;
@@ -454,13 +454,13 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 		}
 	}
 
-	protected function deleteCaption(Google_Service_YouTube $youtube, KalturaYouTubeApiCaptionDistributionInfo $captionInfo)
+	protected function deleteCaption(Google_Service_YouTube $youtube, VidiunYouTubeApiCaptionDistributionInfo $captionInfo)
 	{
-		KalturaLog::info("Deleting caption with remote id: {$captionInfo->remoteId} and language {$captionInfo->language}");
+		VidiunLog::info("Deleting caption with remote id: {$captionInfo->remoteId} and language {$captionInfo->language}");
 		$youtube->captions->delete($captionInfo->remoteId);
 	}
 
-	protected function updateCaption(Google_Service_YouTube $youtube, KalturaYouTubeApiCaptionDistributionInfo $captionInfo, KalturaDistributionRemoteMediaFileArray &$mediaFiles)
+	protected function updateCaption(Google_Service_YouTube $youtube, VidiunYouTubeApiCaptionDistributionInfo $captionInfo, VidiunDistributionRemoteMediaFileArray &$mediaFiles)
 	{
 		$captionSnippet = new Google_Service_YouTube_CaptionSnippet();
 		$captionSnippet->setName($captionInfo->label);
@@ -487,11 +487,11 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 		}
 	}
 
-	protected function submitCaption(Google_Service_YouTube $youtube, KalturaYouTubeApiCaptionDistributionInfo $captionInfo, $remoteId)
+	protected function submitCaption(Google_Service_YouTube $youtube, VidiunYouTubeApiCaptionDistributionInfo $captionInfo, $remoteId)
 	{
 		$tempPath = $this->getAssetFile($captionInfo->assetId, $this->tempDirectory);
 		if (!file_exists($tempPath))
-			throw new KalturaDistributionException("The caption file [$tempPath] was not found (probably not synced yet), the job will retry");
+			throw new VidiunDistributionException("The caption file [$tempPath] was not found (probably not synced yet), the job will retry");
 
 		$captionSnippet = new Google_Service_YouTube_CaptionSnippet();
 		$captionSnippet->setVideoId($remoteId);
@@ -507,7 +507,7 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 		$media = new Google_Http_MediaFileUpload($youtube->getClient(), $insertRequest, '*/*', null, true, self::DEFAULT_CHUNK_SIZE_BYTE);
 		$ingestedCaption = $this->uploadAndCleanCaption($media, $tempPath);
 		$youtube->getClient()->setDefer(false);
-		$remoteMediaFile = new KalturaDistributionRemoteMediaFile ();
+		$remoteMediaFile = new VidiunDistributionRemoteMediaFile ();
 		$remoteMediaFile->remoteId = $ingestedCaption['id'];
 		$remoteMediaFile->version = $captionInfo->version;
 		$remoteMediaFile->assetId = $captionInfo->assetId;
@@ -580,7 +580,7 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 
 	private function isVideoReady($videoStatus)
 	{
-		KalturaLog::debug("video upload status is {$videoStatus['uploadStatus']}");
+		VidiunLog::debug("video upload status is {$videoStatus['uploadStatus']}");
 		switch($videoStatus['uploadStatus'])
 		{
 			case "processed":
@@ -622,7 +622,7 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 
 			if ( (time() - $startCheckingReadyTime) > $this->processedTimeout )
 			{
-				throw new kTemporaryException("Video with remote id {$remoteId} transcoding on youtube has timed out");
+				throw new vTemporaryException("Video with remote id {$remoteId} transcoding on youtube has timed out");
 			}
 
 			sleep(self::TIME_TO_WAIT_FOR_YOUTUBE_TRANSCODING);
@@ -633,17 +633,17 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 	 * @param Google_Http_MediaFileUpload $media
 	 * @param String $filePath
 	 * @param Integer $chunkSizeBytes
-	 * @throw kTemporaryException
+	 * @throw vTemporaryException
 	 * @return Google_Service_YouTube_Video
 	 */
 	private static function uploadInChunks($media, $filePath , $chunkSizeBytes = self::DEFAULT_CHUNK_SIZE_BYTE)
 	{
 		$ingestedVideo = false;
 		$currentByte = 0;
-		$size = kFile::fileSize($filePath);
+		$size = vFile::fileSize($filePath);
 		while (!$ingestedVideo && $currentByte < $size)
 		{
-			$chunk = kFile::getFileContent($filePath, $currentByte, $currentByte + $chunkSizeBytes, 'rb');
+			$chunk = vFile::getFileContent($filePath, $currentByte, $currentByte + $chunkSizeBytes, 'rb');
 			if (!$chunk)
 				throw new Exception("Cannot get chunk from file [$filePath] starting from [$currentByte]");
 			$ingestedVideo = self::uploadChunk($media, $chunk);
@@ -656,7 +656,7 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 	/**
 	 * @param Google_Http_MediaFileUpload $media
 	 * @param String $chunk
-	 * @throws kTemporaryException
+	 * @throws vTemporaryException
 	 * @return Google_Service_YouTube_Video
 	 */
 	private static function uploadChunk($media, $chunk)
@@ -672,10 +672,10 @@ class YoutubeApiDistributionEngine extends DistributionEngine implements
 			}
 			catch (Google_IO_Exception $e)
 			{
-				KalturaLog::info("Uploading chunk to youtube failed with the message '".$e->getMessage()."' number of retries ".$numOfTries);
+				VidiunLog::info("Uploading chunk to youtube failed with the message '".$e->getMessage()."' number of retries ".$numOfTries);
 				$numOfTries++;
 				if ($numOfTries >= self::MAXIMUM_NUMBER_OF_UPLOAD_CHUNK_RETRY)
-					throw new kTemporaryException($e->getMessage(), $e->getCode());
+					throw new vTemporaryException($e->getMessage(), $e->getCode());
 			}
 		}
 		return $ingestedVideo;

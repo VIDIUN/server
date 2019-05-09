@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kExclusiveLockKey
+class vExclusiveLockKey
 {
 	/**
 	 * @var int

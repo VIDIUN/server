@@ -30,15 +30,15 @@ class updateentrythumbnailAction extends defPartnerservices2Action
 			); 
 	}
 	
-	// ask to fetch the kuser from puser_kuser 
-	public function needKuserFromPuser ( )
+	// ask to fetch the vuser from puser_vuser 
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_KUSER_DATA;
+		return self::VUSER_DATA_VUSER_DATA;
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		if ( ! $puser_kuser )
+		if ( ! $puser_vuser )
 		{
 			$this->addError ( APIErrors::INVALID_USER_ID ,$puser_id );
 			return;
@@ -72,21 +72,21 @@ class updateentrythumbnailAction extends defPartnerservices2Action
 		{
 /*			
 			$roughcutPath = myContentStorage::getFSContentRootPath() . $entry->getDataPath(); // replaced__getDataPath
-			$xml_doc = new KDOMDocument();
+			$xml_doc = new VDOMDocument();
 			$xml_doc->load( $roughcutPath );
 		
 			if (myMetadataUtils::updateThumbUrl($xml_doc, $entry->getThumbnailUrl()))
 				$xml_doc->save($roughcutPath);
 	*/
 			$sync_key = $entry->getSyncKey ( entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA );
-			$xml_doc = new KDOMDocument();
-			$xml_doc->loadXML( kFileSyncUtils::file_get_contents( $sync_key ) );
+			$xml_doc = new VDOMDocument();
+			$xml_doc->loadXML( vFileSyncUtils::file_get_contents( $sync_key ) );
 			if (myMetadataUtils::updateThumbUrl($xml_doc, $entry->getThumbnailUrl()))
 			{
 				$entry->setMetadata ( null , $xml_doc->saveXML( ) , true , null ,  null ) ;//$entry->getVersion() );
 			}
 			
-			myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL , $entry );
+			myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL , $entry );
 		}
 		
 		$wrapper = objectWrapperBase::getWrapperClass( $entry , objectWrapperBase::DETAIL_LEVEL_DETAILED );

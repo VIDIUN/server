@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage Admin
  */
-class ReachProfileCloneAction extends KalturaApplicationPlugin
+class ReachProfileCloneAction extends VidiunApplicationPlugin
 {
 	const ADMIN_CONSOLE_RULE_PREFIX = "AutomaticAdminConsoleRule_";
 
@@ -25,7 +25,7 @@ class ReachProfileCloneAction extends KalturaApplicationPlugin
 
 		try
 		{
-			$reachPluginClient = Kaltura_Client_Reach_Plugin::get($client);
+			$reachPluginClient = Vidiun_Client_Reach_Plugin::get($client);
 			$reachProfile = $reachPluginClient->reachProfile->get($reachProfileId);
 			if (!$reachProfile)
 			{
@@ -59,7 +59,7 @@ class ReachProfileCloneAction extends KalturaApplicationPlugin
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			echo $action->getHelper('json')->sendJson($e->getMessage(), false);
 		}
 		Infra_ClientHelper::unimpersonate();

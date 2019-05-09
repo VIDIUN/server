@@ -75,9 +75,9 @@ while ($moreFileSyncs)
     {
         $lastFileSyncId = $exportedFileSync->getId();
         
-        $syncKey = kFileSyncUtils::getKeyForFileSync($exportedFileSync);
+        $syncKey = vFileSyncUtils::getKeyForFileSync($exportedFileSync);
         echo 'Deleting file sync key - '.serialize($syncKey).PHP_EOL;
-        kFileSyncUtils::deleteSyncFileForKey($syncKey, false, true); // 3rd param = true -> only delete from local dcs
+        vFileSyncUtils::deleteSyncFileForKey($syncKey, false, true); // 3rd param = true -> only delete from local dcs
     }
     
     
@@ -91,7 +91,7 @@ while ($moreFileSyncs)
     }
     
     $exportedFileSyncs = null;
-    kMemoryManager::clearMemory();
+    vMemoryManager::clearMemory();
     
 }
 

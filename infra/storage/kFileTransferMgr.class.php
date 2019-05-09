@@ -2,32 +2,32 @@
 
 
 /**
- * List of classes that extend 'kFileTransferMgr'.
+ * List of classes that extend 'vFileTransferMgr'.
  * Instances of these classes can be created using the 'getInstance($type)' function.
  * 
  * @package infra
  * @subpackage Storage
  */
-interface kFileTransferMgrType extends StorageProfileProtocol
+interface vFileTransferMgrType extends StorageProfileProtocol
 {
 	const HTTP = 4;
 	const HTTPS = 5;
 	const ASPERA = 10;
 }
-// path where the classes extending kFileTransferMgr are stored relative to this file
+// path where the classes extending vFileTransferMgr are stored relative to this file
 define ("PATH_TO_MANAGERS", "file_transfer_managers");
 
 
 
 
 /**
- * List of exception types relevant to 'kFileTransferMgr'.
- * Should be used as the exception code (getCode()) when creating a 'kFileTransferMgrException' exception.
+ * List of exception types relevant to 'vFileTransferMgr'.
+ * Should be used as the exception code (getCode()) when creating a 'vFileTransferMgrException' exception.
  * 
  * @package infra
  * @subpackage Storage
  */
-class kFileTransferMgrException extends Exception
+class vFileTransferMgrException extends Exception
 {
 	const notYetConnected    = 1; // connection not yet established
 	const cantConnect        = 2; // cannot connect to server/port
@@ -48,7 +48,7 @@ class kFileTransferMgrException extends Exception
  * @package infra
  * @subpackage Storage
  */
-abstract class kFileTransferMgr
+abstract class vFileTransferMgr
 {
 	/********************/
 	/* Member Variables */
@@ -84,7 +84,7 @@ abstract class kFileTransferMgr
 	}
 
 	/*********************************************************************************************/
-	/* Abstract functions that should be implemented in all classes extending 'kFileTransferMgr'.
+	/* Abstract functions that should be implemented in all classes extending 'vFileTransferMgr'.
 	 /*********************************************************************************************/
 
 	/**
@@ -228,35 +228,35 @@ abstract class kFileTransferMgr
 	/**
 	 * Create a new class instance according to the given type.
 	 *
-	 * @param fileTransferMgrTypes $type Class type from the list under 'kFileTransferMgrType' class.
+	 * @param fileTransferMgrTypes $type Class type from the list under 'vFileTransferMgrType' class.
 	 * @param array $options
 	 *
-	 * @return kFileTransferMgr a new instance
+	 * @return vFileTransferMgr a new instance
 	 */
 	public static function getInstance($type, array $options = null)
 	{
 		switch($type)
 		{
-			case kFileTransferMgrType::FTP:
+			case vFileTransferMgrType::FTP:
 				return new ftpMgr($options);
 
-			case kFileTransferMgrType::SCP:
+			case vFileTransferMgrType::SCP:
 				return new scpMgr($options);
 
-			case kFileTransferMgrType::SFTP:
+			case vFileTransferMgrType::SFTP:
 				return new sftpMgr($options);
 
-			case kFileTransferMgrType::HTTP:
-			case kFileTransferMgrType::HTTPS:
+			case vFileTransferMgrType::HTTP:
+			case vFileTransferMgrType::HTTPS:
 				return new httpMgr($options);
 
-			case kFileTransferMgrType::S3:
+			case vFileTransferMgrType::S3:
 				return new s3Mgr($options);
 				
-			case kFileTransferMgrType::LOCAL:
+			case vFileTransferMgrType::LOCAL:
 			    return new localMgr($options);
 			    
-			case kFileTransferMgrType::ASPERA:
+			case vFileTransferMgrType::ASPERA:
 				return new asperaMgr($options);
 		}
 
@@ -281,30 +281,30 @@ abstract class kFileTransferMgr
 	 * @param $pass Password
 	 * @param $port Server's listening port
 	 *
-	 * @throws kFileTransferMgrException
+	 * @throws vFileTransferMgrException
 	 *
 	 * @return FILETRANSFERMGR_RES_OK / FILETRANSFERMGR_RES_ERR
 	 */
 	public function login ( $server, $user, $pass, $port = null)
 	{
-		KalturaLog::debug("Login to server [$server] port [$port] username/password [$user/$pass]");
+		VidiunLog::debug("Login to server [$server] port [$port] username/password [$user/$pass]");
 		
 		$this->connection_id = @($this->doConnect($server, $port));
 		if (!$this->connection_id) {
 			$last_error = error_get_last();
-			throw new kFileTransferMgrException ("Can't connect [$server:$port] - " . $last_error['message'], kFileTransferMgrException::cantConnect);
+			throw new vFileTransferMgrException ("Can't connect [$server:$port] - " . $last_error['message'], vFileTransferMgrException::cantConnect);
 		}
 		
 		if(@($this->doLogin($user, $pass)))
 		{
-			KalturaLog::debug("Logged in successfully");
+			VidiunLog::debug("Logged in successfully");
 		}
 		else
 		{
 			$last_error = error_get_last();
-			throw new kFileTransferMgrException ( "Can't authenticate [$user] - " . $last_error['message'], kFileTransferMgrException::cantAuthenticate);
+			throw new vFileTransferMgrException ( "Can't authenticate [$user] - " . $last_error['message'], vFileTransferMgrException::cantAuthenticate);
 		}
-		$this->start_dir = kString::removeNewLine($this->doPwd());
+		$this->start_dir = vString::removeNewLine($this->doPwd());
 	}
 
 
@@ -318,30 +318,30 @@ abstract class kFileTransferMgr
 	 * @param int $port server's listening port
 	 * @param string $passphrase if $privKeyFile is encrypted (which it should be), the passphrase must be provided
 	 *
-	 * @throws kFileTransferMgrException
+	 * @throws vFileTransferMgrException
 	 *
 	 * @return FILETRANSFERMGR_RES_OK / FILETRANSFERMGR_RES_ERR
 	 */
 	public function loginPubKey ( $server, $user, $pubKeyFile, $privKeyFile, $passphrase = null, $port = null)
 	{
-		KalturaLog::debug("Login to server [$server] port [$port] username [$user] public key file [$pubKeyFile] private key file [$privKeyFile]");
+		VidiunLog::debug("Login to server [$server] port [$port] username [$user] public key file [$pubKeyFile] private key file [$privKeyFile]");
 		
 		$this->connection_id = @($this->doConnect($server, $port));
 		if (!$this->connection_id) {
 			$last_error = error_get_last();
-			throw new kFileTransferMgrException ("Can't connect [$server:$port] - " . $last_error['message'], kFileTransferMgrException::cantConnect);
+			throw new vFileTransferMgrException ("Can't connect [$server:$port] - " . $last_error['message'], vFileTransferMgrException::cantConnect);
 		}
 		
 		if(@($this->doLoginPubKey($user, $pubKeyFile, $privKeyFile, $passphrase)))
 		{
-			KalturaLog::debug("Logged in successfully");
+			VidiunLog::debug("Logged in successfully");
 		}
 		else
 		{
 			$last_error = error_get_last();
-			throw new kFileTransferMgrException ( "Can't authenticate [$user] - " . $last_error['message'], kFileTransferMgrException::cantAuthenticate);
+			throw new vFileTransferMgrException ( "Can't authenticate [$user] - " . $last_error['message'], vFileTransferMgrException::cantAuthenticate);
 		}
-		$this->start_dir = kString::removeNewLine($this->doPwd());
+		$this->start_dir = vString::removeNewLine($this->doPwd());
 	}
 
 
@@ -353,20 +353,20 @@ abstract class kFileTransferMgr
 	 * @param bool $overwrite true if should overwrite an existing remote file, or false otherwise
 	 * @param bool $overwrite_if_different put will be ignored if file already exists with the same size
 	 *
-	 * @throws kFileTransferMgrException
+	 * @throws vFileTransferMgrException
 	 *
 	 * @return FILETRANSFERMGR_RES_OK / FILETRANSFERMGR_RES_ERR
 	 */
 	public function putFile ($remote_file, $local_file, $overwrite = false, $overwrite_if_different = true)
 	{
-		KalturaLog::debug("Puts file [$remote_file] from local [$local_file] overwrite [$overwrite]");
+		VidiunLog::debug("Puts file [$remote_file] from local [$local_file] overwrite [$overwrite]");
 		
 		// parameter checks
 		if (!$this->connection_id) {
-			throw new kFileTransferMgrException("No connection established yet.", kFileTransferMgrException::notYetConnected);
+			throw new vFileTransferMgrException("No connection established yet.", vFileTransferMgrException::notYetConnected);
 		}
 		if (!file_exists($local_file)) {
-			throw new kFileTransferMgrException("Can't find local file [$local_file]", kFileTransferMgrException::localFileNotExists);
+			throw new vFileTransferMgrException("Can't find local file [$local_file]", vFileTransferMgrException::localFileNotExists);
 		}
 
 		$remote_file = $this->fixPathString($remote_file);
@@ -382,13 +382,13 @@ abstract class kFileTransferMgr
 				// check if deletion was done succesfully
 				if (!$res) {
 					$last_error = error_get_last();
-					throw new kFileTransferMgrException("Can't delete existing file [$remote_file] - " . $last_error['message'], kFileTransferMgrException::otherError);
+					throw new vFileTransferMgrException("Can't delete existing file [$remote_file] - " . $last_error['message'], vFileTransferMgrException::otherError);
 					return self::FILETRANSFERMGR_RES_ERR;
 				}
 			}
 			else { // $overwrite == false
 				if ($this->fileExists($remote_file)) {
-					throw new kFileTransferMgrException("Remote file [$remote_file] already exists.", kFileTransferMgrException::remoteFileExists);
+					throw new vFileTransferMgrException("Remote file [$remote_file] already exists.", vFileTransferMgrException::remoteFileExists);
 				}
 			}
 
@@ -398,7 +398,7 @@ abstract class kFileTransferMgr
 				    @$this->mkDir(dirname($remote_file));
 				}
 				catch (Exception $e) {
-				    KalturaLog::log('Error creating directory ['.dirname($remote_file).'] - ['.$e->getMessage().'] - proceeding anyway');
+				    VidiunLog::log('Error creating directory ['.dirname($remote_file).'] - ['.$e->getMessage().'] - proceeding anyway');
 				}
 			}
 		}
@@ -411,10 +411,10 @@ abstract class kFileTransferMgr
 		// check response
 		if ( !$res ) {
 			$last_error = error_get_last();
-			throw new kFileTransferMgrException("Can't put file [$remote_file] - " . $last_error['message'], kFileTransferMgrException::otherError);
+			throw new vFileTransferMgrException("Can't put file [$remote_file] - " . $last_error['message'], vFileTransferMgrException::otherError);
 		}
 		
-		KalturaLog::debug("File uploaded successfully");
+		VidiunLog::debug("File uploaded successfully");
 		return self::FILETRANSFERMGR_RES_OK;
 	}
 	
@@ -424,17 +424,17 @@ abstract class kFileTransferMgr
 	 * @param $remote_file Remote file name
 	 * @param $local_file Local file name
 	 *
-	 * @throws kFileTransferMgrException
+	 * @throws vFileTransferMgrException
 	 *
 	 * @return FILETRANSFERMGR_RES_OK / FILETRANSFERMGR_RES_ERR
 	 */
 	public function getFile ( $remote_file, $local_file = null)
 	{
-		KalturaLog::debug("Gets file [$remote_file] to local [$local_file]");
+		VidiunLog::debug("Gets file [$remote_file] to local [$local_file]");
 		
 		// parameter checks
 		if (!$this->connection_id) {
-			throw new kFileTransferMgrException("No connection established yet.", kFileTransferMgrException::notYetConnected);
+			throw new vFileTransferMgrException("No connection established yet.", vFileTransferMgrException::notYetConnected);
 		}
 
 		$remote_file = $this->fixPathString($remote_file);
@@ -448,11 +448,11 @@ abstract class kFileTransferMgr
 		if ( ! $res )
 		{
 			$last_error = error_get_last();
-			throw new kFileTransferMgrException("Can't get file [$remote_file] - " . $last_error['message'], kFileTransferMgrException::otherError);
+			throw new vFileTransferMgrException("Can't get file [$remote_file] - " . $last_error['message'], vFileTransferMgrException::otherError);
 		}
 		else
 		{
-			KalturaLog::debug("File retrieved successfully");
+			VidiunLog::debug("File retrieved successfully");
 			if(is_null($local_file))
 				return $res;
 
@@ -467,11 +467,11 @@ abstract class kFileTransferMgr
 		if($expectedSize)
 		{
 			clearstatcache();
-			$actualFileSize = kFile::fileSize($localFile);
+			$actualFileSize = vFile::fileSize($localFile);
 			if ($actualFileSize < $expectedSize) 
 			{
 				$percent = floor($actualFileSize * 100 / $expectedSize);
-				$e = new kTemporaryException("Downloaded size: $actualFileSize($percent%)");
+				$e = new vTemporaryException("Downloaded size: $actualFileSize($percent%)");
 				throw $e;
 			}
 		}
@@ -482,20 +482,20 @@ abstract class kFileTransferMgr
 	 *
 	 * @param $remote_path New directory path
 	 *
-	 * @throws kFileTransferMgrException
+	 * @throws vFileTransferMgrException
 	 *
 	 * @return FILETRANSFERMGR_RES_OK / FILETRANSFERMGR_RES_ERR
 	 */
 	public function mkDir ($remote_path)
 	{
-		KalturaLog::debug("Makes directory [$remote_path]");
+		VidiunLog::debug("Makes directory [$remote_path]");
 		
 		// parameter checks
 		if (!$this->connection_id) {
-			throw new kFileTransferMgrException("No connection established yet.", kFileTransferMgrException::notYetConnected);
+			throw new vFileTransferMgrException("No connection established yet.", vFileTransferMgrException::notYetConnected);
 		}
 		if (strlen(trim($remote_path)) <= 0) {
-			throw new kFileTransferMgrException("Remote path given is empty", kFileTransferMgrException::remotePathNotValid);
+			throw new vFileTransferMgrException("Remote path given is empty", vFileTransferMgrException::remotePathNotValid);
 			return self::FILETRANSFERMGR_RES_ERR;
 		}
 
@@ -531,10 +531,10 @@ abstract class kFileTransferMgr
 		// check response
 		if ( !$res ) {
 			$last_error = error_get_last();
-			throw new kFileTransferMgrException("Can't make directory [$remote_path] - " . $last_error['message'], kFileTransferMgrException::otherError);
+			throw new vFileTransferMgrException("Can't make directory [$remote_path] - " . $last_error['message'], vFileTransferMgrException::otherError);
 		}
 		
-		KalturaLog::debug("Directory [$remote_path] created successfully");
+		VidiunLog::debug("Directory [$remote_path] created successfully");
 		return self::FILETRANSFERMGR_RES_OK;
 	}
 	
@@ -544,17 +544,17 @@ abstract class kFileTransferMgr
 	 * @param $remote_file
 	 * @param $chmod_code
 	 *
-	 * @throws kFileTransferMgrException
+	 * @throws vFileTransferMgrException
 	 *
 	 * @return FILETRANSFERMGR_RES_OK / FILETRANSFERMGR_RES_ERR
 	 */
 	public function chmod ($remote_file, $chmod_code)
 	{
-		KalturaLog::debug("Changes mode [$chmod_code] on file [$remote_file]");
+		VidiunLog::debug("Changes mode [$chmod_code] on file [$remote_file]");
 		
 		// parameter changes
 		if (!$this->connection_id) {
-			throw new kFileTransferMgrException("No connection established yet.", kFileTransferMgrException::notYetConnected);
+			throw new vFileTransferMgrException("No connection established yet.", vFileTransferMgrException::notYetConnected);
 		}
 
 		$remote_file = $this->fixPathString($remote_file);
@@ -565,12 +565,12 @@ abstract class kFileTransferMgr
 		// check response
 		if ( !$res ) {
 			$last_error = error_get_last();
-			throw new kFileTransferMgrException("Can't change mode of [$remote_file] to [$chmod_code] - " . $last_error['message'], kFileTransferMgrException::otherError);
+			throw new vFileTransferMgrException("Can't change mode of [$remote_file] to [$chmod_code] - " . $last_error['message'], vFileTransferMgrException::otherError);
 			return self::FILETRANSFERMGR_RES_ERR;
 		}
 		else
 		{
-			KalturaLog::debug("Mode changed successfully");
+			VidiunLog::debug("Mode changed successfully");
 			return self::FILETRANSFERMGR_RES_OK;
 		}
 	}
@@ -581,7 +581,7 @@ abstract class kFileTransferMgr
 	 *
 	 * @param $remote_file path to remote file or directory
 	 *
-	 * @throws kFileTransferMgrException
+	 * @throws vFileTransferMgrException
 	 *
 	 * @return FILETRANSFERMGR_RES_OK / FILETRANSFERMGR_RES_ERR	 *
 	 */
@@ -589,16 +589,16 @@ abstract class kFileTransferMgr
 	{
 		$remote_file = trim($remote_file);
 		
-		KalturaLog::debug("Checking if file exists [$remote_file]");
+		VidiunLog::debug("Checking if file exists [$remote_file]");
 		
 		if ($this->start_dir && strpos($this->start_dir, $remote_file) === 0) {
-			KalturaLog::debug("File is part of start directory - exists");
+			VidiunLog::debug("File is part of start directory - exists");
 			return true;
 		}
 		
 		// parameter checks
 		if (!$this->connection_id) {
-			throw new kFileTransferMgrException("No connection established yet.", kFileTransferMgrException::notYetConnected);
+			throw new vFileTransferMgrException("No connection established yet.", vFileTransferMgrException::notYetConnected);
 		}
 
 		$remote_file = $this->fixPathString($remote_file);
@@ -608,11 +608,11 @@ abstract class kFileTransferMgr
 		
 		if($res)
 		{
-			KalturaLog::debug("File exists");
+			VidiunLog::debug("File exists");
 		}
 		else
 		{
-			KalturaLog::debug("File does not exist");
+			VidiunLog::debug("File does not exist");
 		}
 		
 		return $res;
@@ -622,11 +622,11 @@ abstract class kFileTransferMgr
 
 	public function delFile ($remote_file)
 	{
-		KalturaLog::debug("Deleting file [$remote_file]");
+		VidiunLog::debug("Deleting file [$remote_file]");
 		
 		// parameter checks
 		if (!$this->connection_id) {
-			throw new kFileTransferMgrException("No connection established yet.", kFileTransferMgrException::notYetConnected);
+			throw new vFileTransferMgrException("No connection established yet.", vFileTransferMgrException::notYetConnected);
 		}
 
 		$remote_file = $this->fixPathString($remote_file);
@@ -637,12 +637,12 @@ abstract class kFileTransferMgr
 		// check response
 		if ( !$res ) {
 			$last_error = error_get_last();
-			throw new kFileTransferMgrException("Can't delete file [$remote_file] - " . $last_error['message'], kFileTransferMgrException::otherError);
+			throw new vFileTransferMgrException("Can't delete file [$remote_file] - " . $last_error['message'], vFileTransferMgrException::otherError);
 			return self::FILETRANSFERMGR_RES_ERR;
 		}
 		else
 		{
-			KalturaLog::debug("File deleted successfully");
+			VidiunLog::debug("File deleted successfully");
 			return self::FILETRANSFERMGR_RES_OK;
 		}
 	}
@@ -650,11 +650,11 @@ abstract class kFileTransferMgr
 
 	public function delDir ($remote_path)
 	{
-		KalturaLog::debug("Deleting directory [$remote_path]");
+		VidiunLog::debug("Deleting directory [$remote_path]");
 		
 		// parameter checks
 		if (!$this->connection_id) {
-			throw new kFileTransferMgrException("No connection established yet.", kFileTransferMgrException::notYetConnected);
+			throw new vFileTransferMgrException("No connection established yet.", vFileTransferMgrException::notYetConnected);
 		}
 
 		$remote_path = $this->fixPathString($remote_path);
@@ -665,12 +665,12 @@ abstract class kFileTransferMgr
 		// check response
 		if ( !$res ) {
 			$last_error = error_get_last();
-			throw new kFileTransferMgrException("Can't delete directory [$remote_path] - " . $last_error['message'], kFileTransferMgrException::otherError);
+			throw new vFileTransferMgrException("Can't delete directory [$remote_path] - " . $last_error['message'], vFileTransferMgrException::otherError);
 			return self::FILETRANSFERMGR_RES_ERR;
 		}
 		else
 		{
-			KalturaLog::debug("Directory deleted successfully");
+			VidiunLog::debug("Directory deleted successfully");
 			return self::FILETRANSFERMGR_RES_OK;
 		}
 	}
@@ -682,11 +682,11 @@ abstract class kFileTransferMgr
 	 */
 	public function listDir ($remote_path)
 	{
-		KalturaLog::debug("Listing directory [$remote_path]");
+		VidiunLog::debug("Listing directory [$remote_path]");
 		
 		// parameter checks
 		if (!$this->connection_id) {
-			throw new kFileTransferMgrException("No connection established yet.", kFileTransferMgrException::notYetConnected);
+			throw new vFileTransferMgrException("No connection established yet.", vFileTransferMgrException::notYetConnected);
 		}
 
 		$remote_path = $this->fixPathString($remote_path);
@@ -704,11 +704,11 @@ abstract class kFileTransferMgr
 	 */
 	public function listFileObjects ($remote_path)
 	{
-		KalturaLog::debug("Listing directory [$remote_path]");
+		VidiunLog::debug("Listing directory [$remote_path]");
 		
 		// parameter checks
 		if (!$this->connection_id) {
-			throw new kFileTransferMgrException("No connection established yet.", kFileTransferMgrException::notYetConnected);
+			throw new vFileTransferMgrException("No connection established yet.", vFileTransferMgrException::notYetConnected);
 		}
 
 		$remote_path = $this->fixPathString($remote_path);
@@ -724,7 +724,7 @@ abstract class kFileTransferMgr
 	 *
 	 * @param $remote_file path to remote file or directory
 	 *
-	 * @throws kFileTransferMgrException
+	 * @throws vFileTransferMgrException
 	 *
 	 * @return FILETRANSFERMGR_RES_OK / FILETRANSFERMGR_RES_ERR	 *
 	 */
@@ -732,11 +732,11 @@ abstract class kFileTransferMgr
 	{
 		$remote_file = trim($remote_file);
 		
-		KalturaLog::debug("Checking for size of file [$remote_file]");
+		VidiunLog::debug("Checking for size of file [$remote_file]");
 				
 		// parameter checks
 		if (!$this->connection_id) {
-			throw new kFileTransferMgrException("No connection established yet.", kFileTransferMgrException::notYetConnected);
+			throw new vFileTransferMgrException("No connection established yet.", vFileTransferMgrException::notYetConnected);
 		}
 
 		$remote_file = $this->fixPathString($remote_file);
@@ -746,11 +746,11 @@ abstract class kFileTransferMgr
 		
 		if(is_null($res) || $res < -1 )
 		{
-			KalturaLog::debug("Cannot find size of [$remote_file]");
-			throw new kFileTransferMgrException("Error finding file size.", kFileTransferMgrException::otherError);
+			VidiunLog::debug("Cannot find size of [$remote_file]");
+			throw new vFileTransferMgrException("Error finding file size.", vFileTransferMgrException::otherError);
 		}
 		
-		KalturaLog::debug("File size [$res] found for [$remote_file]");
+		VidiunLog::debug("File size [$res] found for [$remote_file]");
 		
 		return $res;
 	}
@@ -760,7 +760,7 @@ abstract class kFileTransferMgr
 	 *
 	 * @param $remote_file path to remote file or directory
 	 *
-	 * @throws kFileTransferMgrException
+	 * @throws vFileTransferMgrException
 	 *
 	 * @return FILETRANSFERMGR_RES_OK / FILETRANSFERMGR_RES_ERR	 *
 	 */
@@ -768,11 +768,11 @@ abstract class kFileTransferMgr
 	{
 		$remote_file = trim($remote_file);
 		
-		KalturaLog::debug("Checking for modification time of file [$remote_file]");
+		VidiunLog::debug("Checking for modification time of file [$remote_file]");
 				
 		// parameter checks
 		if (!$this->connection_id) {
-			throw new kFileTransferMgrException("No connection established yet.", kFileTransferMgrException::notYetConnected);
+			throw new vFileTransferMgrException("No connection established yet.", vFileTransferMgrException::notYetConnected);
 		}
 
 		$remote_file = $this->fixPathString($remote_file);
@@ -782,11 +782,11 @@ abstract class kFileTransferMgr
 		
 		if(is_null($res) || $res < -1 )
 		{
-			KalturaLog::debug("Cannot find modification time of [$remote_file]");
-			throw new kFileTransferMgrException("Error finding modification time.", kFileTransferMgrException::otherError);
+			VidiunLog::debug("Cannot find modification time of [$remote_file]");
+			throw new vFileTransferMgrException("Error finding modification time.", vFileTransferMgrException::otherError);
 		}
 		
-		KalturaLog::debug("File modification time [$res] found for [$remote_file]");
+		VidiunLog::debug("File modification time [$res] found for [$remote_file]");
 		
 		return $res;
 	}
@@ -811,12 +811,12 @@ abstract class kFileTransferMgr
 	 */
 	private function fixPathString ($path)
 	{
-		KalturaLog::debug("Fix path [$path] with start directory [$this->start_dir]");
+		VidiunLog::debug("Fix path [$path] with start directory [$this->start_dir]");
 		
 		$new_path = trim($path);
 		$new_path = str_replace("\\", "/", $new_path);
 		
-		KalturaLog::debug("Fixed path [$new_path]");
+		VidiunLog::debug("Fixed path [$new_path]");
 		return $new_path;
 	}
 

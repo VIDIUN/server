@@ -23,7 +23,7 @@ class Partner extends BasePartner
 	const VALIDATE_WRONG_PASSWORD = -2;
 	const VALIDATE_TOO_MANY_INVALID_LOGINS = -3;
 	const VALIDATE_PARTNER_BLOCKED = -4;
-	const VALIDATE_LKS_DISABLED = -10;
+	const VALIDATE_LVS_DISABLED = -10;
 	
 	const PARTNER_STATUS_DELETED = 0;
 	const PARTNER_STATUS_ACTIVE = 1;
@@ -39,7 +39,7 @@ class Partner extends BasePartner
 	const MAX_NUMBER_OF_CATEGORIES = 1500;
 	
 	// added by Tan-Tan, 06/10/09
-	const PARTNER_TYPE_KMC = 1;
+	const PARTNER_TYPE_VMC = 1;
 	const PARTNER_TYPE_OTHER = 2;
 	const PARTNER_TYPE_BATCH = 3;
 	
@@ -91,14 +91,14 @@ class Partner extends BasePartner
 		return parent::save ( $con ) ;		
 	}
 	
-	public function validateSecret ( $partner_secret , $partner_key , &$ks_max_expiry_in_seconds , $admin = false )
+	public function validateSecret ( $partner_secret , $partner_key , &$vs_max_expiry_in_seconds , $admin = false )
 	{
 		$additionalSecrets = $this->getEnabledAdditionalAdminSecrets();
 		if ($partner_secret === $this->getAdminSecret() ||
 			in_array($partner_secret, $additionalSecrets, true) ||
 			(!$admin && $partner_secret === $this->getSecret()))
 		{
-			$ks_max_expiry_in_seconds = $this->getKsMaxExpiryInSeconds();
+			$vs_max_expiry_in_seconds = $this->getVsMaxExpiryInSeconds();
 			return true;
 		}
 		else
@@ -199,27 +199,27 @@ class Partner extends BasePartner
 	
 	private static $s_config_params = array ( );
 
-	public function getUseDefaultKshow()	{		return $this->getFromCustomData( "useDefaultKshow" , null , true );	}
-	public function setUseDefaultKshow( $v )	{		return $this->putInCustomData( "useDefaultKshow", $v );	}
+	public function getUseDefaultVshow()	{		return $this->getFromCustomData( "useDefaultVshow" , null , true );	}
+	public function setUseDefaultVshow( $v )	{		return $this->putInCustomData( "useDefaultVshow", $v );	}
 		
-	public function getShouldForceUniqueKshow()
+	public function getShouldForceUniqueVshow()
 	{
-		return $this->getFromCustomData( "forceUniqueKshow" , null , false );
+		return $this->getFromCustomData( "forceUniqueVshow" , null , false );
 	}
 	
-	public function setShouldForceUniqueKshow( $v )
+	public function setShouldForceUniqueVshow( $v )
 	{
-		return $this->putInCustomData( "forceUniqueKshow", $v );	
+		return $this->putInCustomData( "forceUniqueVshow", $v );	
 	}
 	
-	public function getReturnDuplicateKshow()
+	public function getReturnDuplicateVshow()
 	{
-		return $this->getFromCustomData( "returnDuplicateKshow" , null , true );
+		return $this->getFromCustomData( "returnDuplicateVshow" , null , true );
 	}
 	
-	public function setReturnDuplicateKshow( $v )
+	public function setReturnDuplicateVshow( $v )
 	{
-		return $this->putInCustomData( "returnDuplicateKshow", $v );
+		return $this->putInCustomData( "returnDuplicateVshow", $v );
 	}
 
 	public function getAllowQuickEdit()
@@ -265,7 +265,7 @@ class Partner extends BasePartner
 	
 	
 	public function getInvalidPasswordStructureMessage(){
-		$invalidPasswordStructureMessage = kConf::get('invalid_password_structure_message');
+		$invalidPasswordStructureMessage = vConf::get('invalid_password_structure_message');
 		$structureValidations = $this->getPasswordStructureValidations();
 		if($structureValidations && is_array($structureValidations)){
 			$invalidPasswordStructureMessage ='';
@@ -542,7 +542,7 @@ class Partner extends BasePartner
 		
 	public function addFeaturesStatus($type, $value = 1)
 	{
-		$newFeatureStatus = new kFeatureStatus();
+		$newFeatureStatus = new vFeatureStatus();
 		$newFeatureStatus->setType($type);
 		$newFeatureStatus->setValue($value);
 		
@@ -584,13 +584,13 @@ class Partner extends BasePartner
 	 * @return bool
 	 * @deprecated
 	 */
-	public function getRestrictThumbnailByKs()	{		return $this->getFromCustomData( "restrictThumbnailByKs" , null, false  );	}
+	public function getRestrictThumbnailByVs()	{		return $this->getFromCustomData( "restrictThumbnailByVs" , null, false  );	}
 	
 	/**
 	 * @return bool
 	 * @deprecated
 	 */
-	public function setRestrictThumbnailByKs( $v )	{		return $this->putInCustomData( "restrictThumbnailByKs", $v );	}
+	public function setRestrictThumbnailByVs( $v )	{		return $this->putInCustomData( "restrictThumbnailByVs", $v );	}
 
 	public function getSupportAnimatedThumbnails()	{		return $this->getFromCustomData( "supportAnimatedThumbnails" , null, false  );	}
 	public function setSupportAnimatedThumbnails( $v )	{		return $this->putInCustomData( "supportAnimatedThumbnails", $v );	}
@@ -631,11 +631,11 @@ class Partner extends BasePartner
 	public function getMaxBulkSize() { return $this->getFromCustomData("maxBulk", null, null); }
 	public function setMaxBulkSize( $v ) { $this->putInCustomData("maxBulk", (int)$v); } 
 
-	public function getStorageServePriority() { return $this->getFromCustomData("storageServePriority", null, StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY); }
+	public function getStorageServePriority() { return $this->getFromCustomData("storageServePriority", null, StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY); }
 	public function setStorageServePriority( $v ) { $this->putInCustomData("storageServePriority", (int)$v); } 
 	
-	public function getStorageDeleteFromKaltura() { return $this->getFromCustomData("storageDeleteFromKaltura", null, 0); }
-	public function setStorageDeleteFromKaltura( $v ) { $this->putInCustomData("storageDeleteFromKaltura", (int)$v); } 
+	public function getStorageDeleteFromVidiun() { return $this->getFromCustomData("storageDeleteFromVidiun", null, 0); }
+	public function setStorageDeleteFromVidiun( $v ) { $this->putInCustomData("storageDeleteFromVidiun", (int)$v); } 
 	
 	public function getAppStudioExampleEntry() { return $this->getFromCustomData("appStudioExampleEntry", null); }
 	public function setAppStudioExampleEntry( $v ) { $this->putInCustomData("appStudioExampleEntry", $v); } 
@@ -668,7 +668,7 @@ class Partner extends BasePartner
 	public function getInternalUse() { return $this->getFromCustomData("internalUse", false); }
 	public function setInternalUse( $v ) { $this->putInCustomData("internalUse", $v); }	
 	
-	/** added disableAkamaiHDNetwork param for having per-partner ability to disable Akamai HD Network feature (GUI in KMC preview & embed) **/
+	/** added disableAkamaiHDNetwork param for having per-partner ability to disable Akamai HD Network feature (GUI in VMC preview & embed) **/
 	public function getDisableAkamaiHDNetwork() { return $this->getFromCustomData("disableAkamaiHDNetwork", null); }
 	public function setDisableAkamaiHDNetwork( $v ) { $this->putInCustomData("disableAkamaiHDNetwork", $v); }
 
@@ -679,8 +679,8 @@ class Partner extends BasePartner
 	public function getEnableBulkUploadNotificationsEmails() {return $this->getFromCustomData("enableBulkUploadNotificationsEmails", null, false); }
 	public function setEnableBulkUploadNotificationsEmails($v) { $this->putInCustomData("enableBulkUploadNotificationsEmails", $v); }
 	
-	public function getKSVersion() { return $this->getFromCustomData( "ksVersion" , null, 1  );	}
-	public function setKSVersion( $v ) { return $this->putInCustomData( "ksVersion", $v );	}
+	public function getVSVersion() { return $this->getFromCustomData( "vsVersion" , null, 1  );	}
+	public function setVSVersion( $v ) { return $this->putInCustomData( "vsVersion", $v );	}
 
 	public function getShouldApplyAccessControlOnEntryMetadata() { return $this->getFromCustomData( "shouldApplyAccessControlOnEntryMetadata" , null, false ); }
 	public function setShouldApplyAccessControlOnEntryMetadata( $v ) { return $this->putInCustomData( "shouldApplyAccessControlOnEntryMetadata", $v ); }
@@ -779,7 +779,7 @@ class Partner extends BasePartner
 
 	public function getDeliveryTypes()
 	{
-		$map = kConf::getMap('players');
+		$map = vConf::getMap('players');
 		$availableDeliveryTypes = $map['delivery_types'];
 		$customDeliveryTypes = $this->getCustomDeliveryTypes();
 		$deliveryTypes = array();
@@ -845,7 +845,7 @@ class Partner extends BasePartner
 	
 	public function getEmbedCodeTypes()
 	{
-		$map = kConf::getMap('players');
+		$map = vConf::getMap('players');
 		return $map['embed_code_types'];
 	} 
 	
@@ -916,11 +916,11 @@ class Partner extends BasePartner
 	public function getStatusChangeReason() { return $this->getFromCustomData('statusChangeReason'); }	
 	public function setStatusChangeReason( $v ) { return $this->putInCustomData('statusChangeReason', $v); }
 	
-	//kmc language
-	public function setKMCLanguage($v) { $this->putInCustomData('language', $v, 'KMC');}
-	public function getKMCLanguage() { return $this->getFromCustomData('language', 'KMC', null);}
+	//vmc language
+	public function setVMCLanguage($v) { $this->putInCustomData('language', $v, 'VMC');}
+	public function getVMCLanguage() { return $this->getFromCustomData('language', 'VMC', null);}
 	
-	//default entitlement scope for ks
+	//default entitlement scope for vs
 	public function setDefaultEntitlementEnforcement($v) { $this->putInCustomData('defaultEntitlementEnforcement', $v, 'entitlement');}
 	public function getDefaultEntitlementEnforcement() 
 	{
@@ -972,7 +972,7 @@ class Partner extends BasePartner
 
 	public function getOpenId ()
 	{
-		return "http://www.kaltura.com/openid/pid/" . $this->getId();
+		return "http://www.vidiun.com/openid/pid/" . $this->getId();
 	}
 	
 	public function getServiceConfig ()
@@ -985,7 +985,7 @@ class Partner extends BasePartner
 	{
 		$maxAttempts = $this->getFromCustomData('max_login_attempts', null, null);
 		if (!$maxAttempts) {
-			$maxAttempts = kConf::get('user_login_max_wrong_attempts');
+			$maxAttempts = vConf::get('user_login_max_wrong_attempts');
 		}
 		return $maxAttempts;
 	}
@@ -999,7 +999,7 @@ class Partner extends BasePartner
 	{
 		$blockPeriod = $this->getFromCustomData('login_blocked_period', null, null);
 		if (!$blockPeriod) {
-			$blockPeriod = kConf::get('user_login_block_period');
+			$blockPeriod = vConf::get('user_login_block_period');
 		}
 		return $blockPeriod;
 	}
@@ -1014,7 +1014,7 @@ class Partner extends BasePartner
 	{
 		$prevPass = $this->getFromCustomData('num_prev_passwords_to_keep', null, null);
 		if (!$prevPass) {
-			$prevPass = kConf::get('user_login_num_prev_passwords_to_keep');
+			$prevPass = vConf::get('user_login_num_prev_passwords_to_keep');
 		}
 		return $prevPass;
 	}
@@ -1029,7 +1029,7 @@ class Partner extends BasePartner
 	{
 		$replaceFreq = $this->getFromCustomData('password_replace_freq', null, null);
 		if (!$replaceFreq) {
-			$replaceFreq = kConf::get('user_login_password_replace_freq');
+			$replaceFreq = vConf::get('user_login_password_replace_freq');
 		}
 		return $replaceFreq;
 	}
@@ -1119,7 +1119,7 @@ class Partner extends BasePartner
 	public function getMaxLiveRtcStreamInputs()			{
 		$liveRtcStreamInputs = $this->getFromCustomData('live_rtc_stream_inputs');
 		if ($liveRtcStreamInputs === null)
-			$liveRtcStreamInputs = kConf::get('live_rtc_concurrent_streams', 'local', 2);
+			$liveRtcStreamInputs = vConf::get('live_rtc_concurrent_streams', 'local', 2);
 		return $liveRtcStreamInputs;
 	}
 	public function getLoginUsersOveragePrice()			{return $this->getFromCustomData('login_users_overage_price');}
@@ -1167,19 +1167,19 @@ class Partner extends BasePartner
     
 	public function getLiveStreamBroadcastUrlConfigurations($dc = null)
 	{
-		$config = (!is_null($dc) ? kConf::get($dc, 'broadcast') : kConf::getMap('broadcast'));
+		$config = (!is_null($dc) ? vConf::get($dc, 'broadcast') : vConf::getMap('broadcast'));
 		
 		$partnerConfig = $this->getFromCustomData($dc, 'live_stream_broadcast_url_configurations');
 		if($partnerConfig)
 		{
-			$config = kConf::mergeConfigItem($config, $partnerConfig, true);
+			$config = vConf::mergeConfigItem($config, $partnerConfig, true);
 		}
 		
 		return $config;
 	}
 	
 	/**
-	 * @return kAkamaiLiveParams
+	 * @return vAkamaiLiveParams
 	 */
 	public function getAkamaiLiveParams()
 	{
@@ -1226,8 +1226,8 @@ class Partner extends BasePartner
     {
         $defaultSourceType = $this->getFromCustomData(self::CUSTOM_DATA_DEFAULT_LIVE_STREAM_ENTRY_SOURCE_TYPE, null, null);
         if (is_null($defaultSourceType)) {
-            $kc = kConf::get('default_live_stream_entry_source_type');
-            $evalResult= eval("\$defaultSourceType = $kc;");
+            $vc = vConf::get('default_live_stream_entry_source_type');
+            $evalResult= eval("\$defaultSourceType = $vc;");
             if ($evalResult === false){
             	$defaultSourceType = EntrySourceType::AKAMAI_LIVE;
             } 
@@ -1252,11 +1252,11 @@ class Partner extends BasePartner
 
 	private static function getAdminUserCriteria($partnerId)
 	{
-		$c = KalturaCriteria::create(kuserPeer::OM_CLASS);
-		$c->addAnd(kuserPeer::PARTNER_ID, $partnerId);
-		$c->addAnd(kuserPeer::LOGIN_DATA_ID, NULL, Criteria::ISNOTNULL);
-		$c->addAnd(kuserPeer::IS_ADMIN , true);
-		$c->addAnd(kuserPeer::STATUS, KuserStatus::DELETED, Criteria::NOT_EQUAL);
+		$c = VidiunCriteria::create(vuserPeer::OM_CLASS);
+		$c->addAnd(vuserPeer::PARTNER_ID, $partnerId);
+		$c->addAnd(vuserPeer::LOGIN_DATA_ID, NULL, Criteria::ISNOTNULL);
+		$c->addAnd(vuserPeer::IS_ADMIN , true);
+		$c->addAnd(vuserPeer::STATUS, VuserStatus::DELETED, Criteria::NOT_EQUAL);
 		$c->applyFilters();
 		return $c;
 	}
@@ -1264,13 +1264,13 @@ class Partner extends BasePartner
 	public static function getAdminLoginUsersList($partnerId)
 	{
 		$c = self::getAdminUserCriteria($partnerId);
-		return kuserPeer::doSelect($c);
+		return vuserPeer::doSelect($c);
 	}
     
 	public function getAdminLoginUsersNumber()
 	{
 		$c = self::getAdminUserCriteria($this->getId());
-		return kuserPeer::doCount($c);
+		return vuserPeer::doCount($c);
 	}
 	
 	public function setPassResetUrlPrefixName($name)
@@ -1290,7 +1290,7 @@ class Partner extends BasePartner
 			$userRole = UserRolePeer::retrieveByPK($roleId);
 			if (!$userRole || !in_array($userRole->getPartnerId(),array($this->getId(),PartnerPeer::GLOBAL_PARTNER) ) )
 			{
-				throw new kPermissionException("A user role with ID [$roleId] does not exist", kPermissionException::USER_ROLE_NOT_FOUND);
+				throw new vPermissionException("A user role with ID [$roleId] does not exist", vPermissionException::USER_ROLE_NOT_FOUND);
 			}
 		}
 		else {
@@ -1316,7 +1316,7 @@ class Partner extends BasePartner
 			$userRole = UserRolePeer::retrieveByPK($roleId);
 			if (!$userRole || !in_array($userRole->getPartnerId(),array($this->getId(),PartnerPeer::GLOBAL_PARTNER) ) )
 			{
-				throw new kPermissionException("A user role with ID [$roleId] does not exist", kPermissionException::USER_ROLE_NOT_FOUND);
+				throw new vPermissionException("A user role with ID [$roleId] does not exist", vPermissionException::USER_ROLE_NOT_FOUND);
 			}
 		}
 		else {
@@ -1402,24 +1402,24 @@ class Partner extends BasePartner
 		
 		
 		
-		$ksObj = kSessionUtils::crackKs(kCurrentContext::$ks);
-		$currentKuser = null;
-		if(is_object($ksObj)){
-			$currentKuser = kuserPeer::getKuserByEmail($ksObj->user, -2);
+		$vsObj = vSessionUtils::crackVs(vCurrentContext::$vs);
+		$currentVuser = null;
+		if(is_object($vsObj)){
+			$currentVuser = vuserPeer::getVuserByEmail($vsObj->user, -2);
 		}
-		if ($currentKuser) 
+		if ($currentVuser) 
 		{
-			$allowedPartners = $currentKuser->getAllowedPartners();
+			$allowedPartners = $currentVuser->getAllowedPartners();
 			if (isset($allowedPartners) && !empty($allowedPartners)) {
 				$partnersArray = array_map('trim', explode(',', $allowedPartners));
 				if (!in_array($this->getId(), $partnersArray)) {
-					$currentKuser->setAllowedPartners($allowedPartners.','.$this->getId());
+					$currentVuser->setAllowedPartners($allowedPartners.','.$this->getId());
 				}
 			} else {
-				$currentKuser->setAllowedPartners($this->getId());
+				$currentVuser->setAllowedPartners($this->getId());
 			}
 			
-			$currentKuser->save();
+			$currentVuser->save();
 		}
 		
 		
@@ -1430,21 +1430,21 @@ class Partner extends BasePartner
 		if ($this->alreadyInSave)
 			return parent::postUpdate($con);
 		
-		// update the owner kuser deatils if required
+		// update the owner vuser deatils if required
 		$adminNameModified = $this->isColumnModified(PartnerPeer::ADMIN_NAME);
 		$adminEmailModified = $this->isColumnModified(PartnerPeer::ADMIN_EMAIL);
 		if ( $adminNameModified || $adminEmailModified )
 		{
-			$ownerKuserId = $this->getAccountOwnerKuserId();
-			if ($ownerKuserId) {
-				$ownerKuser = kuserPeer::retrieveByPK($ownerKuserId);
+			$ownerVuserId = $this->getAccountOwnerVuserId();
+			if ($ownerVuserId) {
+				$ownerVuser = vuserPeer::retrieveByPK($ownerVuserId);
 				if ($adminNameModified) {
-					$ownerKuser->setFullName($this->getAdminName());
+					$ownerVuser->setFullName($this->getAdminName());
 				}
 				if ($adminEmailModified) {
-					$ownerKuser->setEmail($this->getAdminEmail());
+					$ownerVuser->setEmail($this->getAdminEmail());
 				}
-				$ownerKuser->save();
+				$ownerVuser->save();
 			}	
 		}
 	
@@ -1455,7 +1455,7 @@ class Partner extends BasePartner
 		$ret = parent::postUpdate($con);
 	
 		if ($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 		
 		return $ret;
 	}
@@ -1549,70 +1549,70 @@ class Partner extends BasePartner
 	
 	
 	// -------------------------------------------------
-	// -- start of account owner kuser related functions
+	// -- start of account owner vuser related functions
 	// -------------------------------------------------
 	
 	/**
-	 * @throws kUserException::USER_NOT_FOUND
-	 * @throws kPermissionException::ACCOUNT_OWNER_NEEDS_PARTNER_ADMIN_ROLE
+	 * @throws vUserException::USER_NOT_FOUND
+	 * @throws vPermissionException::ACCOUNT_OWNER_NEEDS_PARTNER_ADMIN_ROLE
 	 */
-	public function setAccountOwnerKuserId($kuserId, $doChecks = true) //$doChecks needed to support user migration and can later be deleted
+	public function setAccountOwnerVuserId($vuserId, $doChecks = true) //$doChecks needed to support user migration and can later be deleted
 	{	
-		$kuser = kuserPeer::retrieveByPK($kuserId);
+		$vuser = vuserPeer::retrieveByPK($vuserId);
 		if ($doChecks)
 		{
-			if (!$kuser || $kuser->getPartnerId() != $this->getId()) {
-				throw new kUserException('', kUserException::USER_NOT_FOUND);
+			if (!$vuser || $vuser->getPartnerId() != $this->getId()) {
+				throw new vUserException('', vUserException::USER_NOT_FOUND);
 			}
-			$kuserRoles = explode(',', $kuser->getRoleIds());
-			if (!in_array($this->getAdminSessionRoleId(), $kuserRoles)) {
-				throw new kPermissionException('', kPermissionException::ACCOUNT_OWNER_NEEDS_PARTNER_ADMIN_ROLE);
+			$vuserRoles = explode(',', $vuser->getRoleIds());
+			if (!in_array($this->getAdminSessionRoleId(), $vuserRoles)) {
+				throw new vPermissionException('', vPermissionException::ACCOUNT_OWNER_NEEDS_PARTNER_ADMIN_ROLE);
 			}
 		}
-		if ($kuser) {
-			$this->setAdminName($kuser->getFullName());
-			$this->setAdminEmail($kuser->getEmail());
+		if ($vuser) {
+			$this->setAdminName($vuser->getFullName());
+			$this->setAdminEmail($vuser->getEmail());
 		}
-		$this->putInCustomData('account_owner_kuser_id', $kuserId);
+		$this->putInCustomData('account_owner_vuser_id', $vuserId);
 	}
 	
-	public function getAccountOwnerKuserId()
+	public function getAccountOwnerVuserId()
 	{
-		return $this->getFromCustomData('account_owner_kuser_id');
+		return $this->getFromCustomData('account_owner_vuser_id');
 	}
 	
 	/**
-	 * @return puserId of the kuser currently set as the account owner
+	 * @return puserId of the vuser currently set as the account owner
 	 */
 	public function getAdminUserId()
 	{
-		$ownerKuserId = $this->getAccountOwnerKuserId();
-		if (!$ownerKuserId) {
+		$ownerVuserId = $this->getAccountOwnerVuserId();
+		if (!$ownerVuserId) {
 			return null;
 		}
-		$ownerKuser = kuserPeer::retrieveByPK($ownerKuserId);
-		if (!$ownerKuser) {
-			KalturaLog::err('Cannot find kuser with id ['.$ownerKuserId.'] set as account of partner id ['.$this->getId().']');
+		$ownerVuser = vuserPeer::retrieveByPK($ownerVuserId);
+		if (!$ownerVuser) {
+			VidiunLog::err('Cannot find vuser with id ['.$ownerVuserId.'] set as account of partner id ['.$this->getId().']');
 			return null;
 		}
-		return $ownerKuser->getPuserId();
+		return $ownerVuser->getPuserId();
 	}
 	
 	/**
-	 * Change the kuser set as the account owner to the one with puserId = $adminUserId
-	 * @param string $adminUserId puserId of the new kuser
+	 * Change the vuser set as the account owner to the one with puserId = $adminUserId
+	 * @param string $adminUserId puserId of the new vuser
 	 */
 	public function setAdminUserId($adminUserId)
 	{
-		$adminKuser = kuserPeer::getKuserByPartnerAndUid($this->getId(), $adminUserId);
-		if (!$adminKuser) {
-			throw new kCoreException("User Id [$adminUserId] not found", kCoreException::INVALID_USER_ID); // TODO - don't use API objects in core object
+		$adminVuser = vuserPeer::getVuserByPartnerAndUid($this->getId(), $adminUserId);
+		if (!$adminVuser) {
+			throw new vCoreException("User Id [$adminUserId] not found", vCoreException::INVALID_USER_ID); // TODO - don't use API objects in core object
 		}
-		$this->setAccountOwnerKuserId($adminKuser->getId());
+		$this->setAccountOwnerVuserId($adminVuser->getId());
 	}
 		
 	// -----------------------------------------------
-	// -- end of account owner kuser related functions
+	// -- end of account owner vuser related functions
 	// -----------------------------------------------
 	
 	
@@ -1748,12 +1748,12 @@ class Partner extends BasePartner
 
 	public function validateApiAccessControl()
 	{
-		if (kIpAddressUtils::isInternalIp())
+		if (vIpAddressUtils::isInternalIp())
 			return true;
 
 		if ($this->getEnforceHttpsApi() && infraRequestUtils::getProtocol() != infraRequestUtils::PROTOCOL_HTTPS)
 		{
-			KalturaLog::err('Action was accessed over HTTP while the partner is configured for HTTPS access only');
+			VidiunLog::err('Action was accessed over HTTP while the partner is configured for HTTPS access only');
 			return false;
 		}
 
@@ -1761,19 +1761,19 @@ class Partner extends BasePartner
 		if (is_null($accessControl))
 			return true;
 
-		$context = new kEntryContextDataResult();
+		$context = new vEntryContextDataResult();
 		
 		$scope = new accessControlScope();
-		$scope->setKs(kCurrentContext::$ks);
+		$scope->setVs(vCurrentContext::$vs);
 		$scope->setContexts(array(ContextType::PLAY));
 		
 		$disableCache = $accessControl->applyContext($context, $scope, false);
 		if ($disableCache)
-			kApiCache::disableCache();
+			vApiCache::disableCache();
 
 		if(count($context->getMessages()))
 		{
-			header("X-Kaltura-API-Access-Control: ".implode(', ', $context->getMessages()));
+			header("X-Vidiun-API-Access-Control: ".implode(', ', $context->getMessages()));
 		}
 
 		if(count($context->getActions()))
@@ -1781,10 +1781,10 @@ class Partner extends BasePartner
 			$actions = $context->getActions();
 			foreach($actions as $action)
 			{
-				/* @var $action kAccessControlAction */
+				/* @var $action vAccessControlAction */
 				if($action->getType() == RuleActionType::BLOCK)
 				{
-					KalturaLog::err('Action was blocked by API access control');
+					VidiunLog::err('Action was blocked by API access control');
 					return false;
 				}
 			}
@@ -1811,7 +1811,7 @@ class Partner extends BasePartner
 		$tokenData = $this->getFromCustomData($customDataKey, 'googleAuth');
 		if(is_null($tokenData))
 		{
-			$appConfig = kConf::get($appId, 'google_auth', null);
+			$appConfig = vConf::get($appId, 'google_auth', null);
 			if($appConfig && isset($appConfig[$objectIdentifier]))
 			{
 				$tokenJsonStr = $appConfig[$objectIdentifier];
@@ -1842,7 +1842,7 @@ class Partner extends BasePartner
 			return $this->cdnWhiteListCache[$host];
 		}
 
-		KalturaLog::debug("Checking host [$host] is in partner CDN white list");
+		VidiunLog::debug("Checking host [$host] is in partner CDN white list");
 		$whiteList = $this->getCdnHostWhiteListArray();
 		foreach ($whiteList as $regEx)
 		{
@@ -2029,7 +2029,7 @@ class Partner extends BasePartner
 
 	public function getRTCEnv()
 	{
-		return $this->getFromCustomData( self::CUSTOMER_DATA_RTC_ENV, null , kConf::get(self::RTC_SERVER_NODE_ENV) );
+		return $this->getFromCustomData( self::CUSTOMER_DATA_RTC_ENV, null , vConf::get(self::RTC_SERVER_NODE_ENV) );
 	}
 
 	public function setRTCEnv($v)

@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaSearchDataContributor extends IKalturaBase
+interface IVidiunSearchDataContributor extends IVidiunBase
 {
 	/**
 	 * Return textual search data to be associated with the object

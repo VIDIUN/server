@@ -3,16 +3,16 @@
  * @package api
  * @subpackage objects
  */
-class KalturaMixEntryArray extends KalturaTypedArray
+class VidiunMixEntryArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaMixEntryArray();
+		$newArr = new VidiunMixEntryArray();
 		if ($arr == null)
 			return $newArr;		
 		foreach ($arr as $obj)
 		{
-    		$nObj = KalturaEntryFactory::getInstanceByType($obj->getType());
+    		$nObj = VidiunEntryFactory::getInstanceByType($obj->getType());
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -22,6 +22,6 @@ class KalturaMixEntryArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaMixEntry");	
+		parent::__construct("VidiunMixEntry");	
 	}
 }

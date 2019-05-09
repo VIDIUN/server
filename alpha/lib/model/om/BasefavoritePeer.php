@@ -31,8 +31,8 @@ abstract class BasefavoritePeer {
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
-	/** the column name for the KUSER_ID field */
-	const KUSER_ID = 'favorite.KUSER_ID';
+	/** the column name for the VUSER_ID field */
+	const VUSER_ID = 'favorite.VUSER_ID';
 
 	/** the column name for the SUBJECT_TYPE field */
 	const SUBJECT_TYPE = 'favorite.SUBJECT_TYPE';
@@ -62,10 +62,10 @@ abstract class BasefavoritePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('KuserId', 'SubjectType', 'SubjectId', 'Privacy', 'Id', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('kuserId', 'subjectType', 'subjectId', 'privacy', 'id', ),
-		BasePeer::TYPE_COLNAME => array (self::KUSER_ID, self::SUBJECT_TYPE, self::SUBJECT_ID, self::PRIVACY, self::ID, ),
-		BasePeer::TYPE_FIELDNAME => array ('kuser_id', 'subject_type', 'subject_id', 'privacy', 'id', ),
+		BasePeer::TYPE_PHPNAME => array ('VuserId', 'SubjectType', 'SubjectId', 'Privacy', 'Id', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('vuserId', 'subjectType', 'subjectId', 'privacy', 'id', ),
+		BasePeer::TYPE_COLNAME => array (self::VUSER_ID, self::SUBJECT_TYPE, self::SUBJECT_ID, self::PRIVACY, self::ID, ),
+		BasePeer::TYPE_FIELDNAME => array ('vuser_id', 'subject_type', 'subject_id', 'privacy', 'id', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
 
@@ -76,10 +76,10 @@ abstract class BasefavoritePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('KuserId' => 0, 'SubjectType' => 1, 'SubjectId' => 2, 'Privacy' => 3, 'Id' => 4, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('kuserId' => 0, 'subjectType' => 1, 'subjectId' => 2, 'privacy' => 3, 'id' => 4, ),
-		BasePeer::TYPE_COLNAME => array (self::KUSER_ID => 0, self::SUBJECT_TYPE => 1, self::SUBJECT_ID => 2, self::PRIVACY => 3, self::ID => 4, ),
-		BasePeer::TYPE_FIELDNAME => array ('kuser_id' => 0, 'subject_type' => 1, 'subject_id' => 2, 'privacy' => 3, 'id' => 4, ),
+		BasePeer::TYPE_PHPNAME => array ('VuserId' => 0, 'SubjectType' => 1, 'SubjectId' => 2, 'Privacy' => 3, 'Id' => 4, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('vuserId' => 0, 'subjectType' => 1, 'subjectId' => 2, 'privacy' => 3, 'id' => 4, ),
+		BasePeer::TYPE_COLNAME => array (self::VUSER_ID => 0, self::SUBJECT_TYPE => 1, self::SUBJECT_ID => 2, self::PRIVACY => 3, self::ID => 4, ),
+		BasePeer::TYPE_FIELDNAME => array ('vuser_id' => 0, 'subject_type' => 1, 'subject_id' => 2, 'privacy' => 3, 'id' => 4, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
 	);
 
@@ -150,7 +150,7 @@ abstract class BasefavoritePeer {
 	 */
 	public static function addSelectColumns(Criteria $criteria)
 	{
-		$criteria->addSelectColumn(favoritePeer::KUSER_ID);
+		$criteria->addSelectColumn(favoritePeer::VUSER_ID);
 		$criteria->addSelectColumn(favoritePeer::SUBJECT_TYPE);
 		$criteria->addSelectColumn(favoritePeer::SUBJECT_ID);
 		$criteria->addSelectColumn(favoritePeer::PRIVACY);
@@ -188,11 +188,11 @@ abstract class BasefavoritePeer {
 		
 		favoritePeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'favoritePeer', 
 			$cacheKey, 
 			$queryDB);
@@ -216,7 +216,7 @@ abstract class BasefavoritePeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -297,7 +297,7 @@ abstract class BasefavoritePeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -320,11 +320,11 @@ abstract class BasefavoritePeer {
 	{		
 		$criteriaForSelect = favoritePeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'favoritePeer', 
 			$cacheKey, 
 			$queryDB);
@@ -340,12 +340,12 @@ abstract class BasefavoritePeer {
 		
 		$queryResult = favoritePeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -355,17 +355,17 @@ abstract class BasefavoritePeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -436,7 +436,7 @@ abstract class BasefavoritePeer {
 		favoritePeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 	}
 	
@@ -535,11 +535,11 @@ abstract class BasefavoritePeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('favoritePeer');
+				vMemoryManager::registerPeer('favoritePeer');
 			}
 		}
 	}
@@ -664,7 +664,7 @@ abstract class BasefavoritePeer {
 	}
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuser table
+	 * Returns the number of rows matching criteria, joining the related vuser table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -672,7 +672,7 @@ abstract class BasefavoritePeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinkuser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinvuser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -696,7 +696,7 @@ abstract class BasefavoritePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(favoritePeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(favoritePeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = favoritePeer::doCountStmt($criteria, $con);
 
@@ -711,7 +711,7 @@ abstract class BasefavoritePeer {
 
 
 	/**
-	 * Selects a collection of favorite objects pre-filled with their kuser objects.
+	 * Selects a collection of favorite objects pre-filled with their vuser objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -719,7 +719,7 @@ abstract class BasefavoritePeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinkuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -730,9 +730,9 @@ abstract class BasefavoritePeer {
 
 		favoritePeer::addSelectColumns($criteria);
 		$startcol = (favoritePeer::NUM_COLUMNS - favoritePeer::NUM_LAZY_LOAD_COLUMNS);
-		kuserPeer::addSelectColumns($criteria);
+		vuserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(favoritePeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(favoritePeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = favoritePeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -752,19 +752,19 @@ abstract class BasefavoritePeer {
 				favoritePeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (favorite) to $obj2 (kuser)
+				// Add the $obj1 (favorite) to $obj2 (vuser)
 				$obj2->addfavorite($obj1);
 
 			} // if joined row was not null
@@ -773,7 +773,7 @@ abstract class BasefavoritePeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -813,7 +813,7 @@ abstract class BasefavoritePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(favoritePeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(favoritePeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = favoritePeer::doCountStmt($criteria, $con);
 
@@ -848,10 +848,10 @@ abstract class BasefavoritePeer {
 		favoritePeer::addSelectColumns($criteria);
 		$startcol2 = (favoritePeer::NUM_COLUMNS - favoritePeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kuserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kuserPeer::NUM_COLUMNS - kuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vuserPeer::NUM_COLUMNS - vuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(favoritePeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(favoritePeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = favoritePeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -870,21 +870,21 @@ abstract class BasefavoritePeer {
 				favoritePeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined kuser rows
+			// Add objects for joined vuser rows
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (favorite) to the collection in $obj2 (kuser)
+				// Add the $obj1 (favorite) to the collection in $obj2 (vuser)
 				$obj2->addfavorite($obj1);
 			} // if joined row not null
 

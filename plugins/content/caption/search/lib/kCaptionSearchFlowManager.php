@@ -3,10 +3,10 @@
  * @package plugins.captionSearch
  * @subpackage lib
  */
-class kCaptionSearchFlowManager implements kObjectDataChangedEventConsumer, kObjectDeletedEventConsumer, kObjectAddedEventConsumer
+class vCaptionSearchFlowManager implements vObjectDataChangedEventConsumer, vObjectDeletedEventConsumer, vObjectAddedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeAddedEvent
+	 * @see vObjectAddedEventConsumer::shouldConsumeAddedEvent
 	 */
 	public function shouldConsumeAddedEvent(BaseObject $object)
 	{
@@ -20,7 +20,7 @@ class kCaptionSearchFlowManager implements kObjectDataChangedEventConsumer, kObj
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::objectAdded
+	 * @see vObjectAddedEventConsumer::objectAdded
 	 */
 	public function objectAdded(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -28,7 +28,7 @@ class kCaptionSearchFlowManager implements kObjectDataChangedEventConsumer, kObj
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDataChangedEventConsumer::shouldConsumeDataChangedEvent()
+	 * @see vObjectDataChangedEventConsumer::shouldConsumeDataChangedEvent()
 	 */
 	public function shouldConsumeDataChangedEvent(BaseObject $object, $previousVersion = null)
 	{
@@ -39,7 +39,7 @@ class kCaptionSearchFlowManager implements kObjectDataChangedEventConsumer, kObj
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDataChangedEventConsumer::objectDataChanged()
+	 * @see vObjectDataChangedEventConsumer::objectDataChanged()
 	 */
 	public function objectDataChanged(BaseObject $object, $previousVersion = null, BatchJob $raisedJob = null)
 	{
@@ -63,30 +63,30 @@ class kCaptionSearchFlowManager implements kObjectDataChangedEventConsumer, kObj
 	/**
 	 * @param CaptionAsset $captionAsset
 	 * @param BatchJob $parentJob
-	 * @throws kCoreException FILE_NOT_FOUND
+	 * @throws vCoreException FILE_NOT_FOUND
 	 * @return BatchJob
 	 */
 	public function addParseCaptionAssetJob(CaptionAsset $captionAsset, BatchJob $parentJob = null)
 	{
 		$syncKey = $captionAsset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-		$fileSync = kFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
+		$fileSync = vFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
 		if(!$fileSync)
 		{
 			if(!PermissionPeer::isValidForPartner(CaptionPermissionName::IMPORT_REMOTE_CAPTION_FOR_INDEXING, $captionAsset->getPartnerId()))
-				throw new kCoreException("File sync not found: $syncKey", kCoreException::FILE_NOT_FOUND);
+				throw new vCoreException("File sync not found: $syncKey", vCoreException::FILE_NOT_FOUND);
 			
-			$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
+			$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
 			if(!$fileSync)
-				throw new kCoreException("File sync not found: $syncKey", kCoreException::FILE_NOT_FOUND);
+				throw new vCoreException("File sync not found: $syncKey", vCoreException::FILE_NOT_FOUND);
 			
 	    	$fullPath = myContentStorage::getFSUploadsPath() . '/' . $captionAsset->getId() . '.tmp';
-			if(!KCurlWrapper::getDataFromFile($fileSync->getExternalUrl($captionAsset->getEntryId()), $fullPath, null, true))
-				throw new kCoreException("File sync not found: $syncKey", kCoreException::FILE_NOT_FOUND);
+			if(!VCurlWrapper::getDataFromFile($fileSync->getExternalUrl($captionAsset->getEntryId()), $fullPath, null, true))
+				throw new vCoreException("File sync not found: $syncKey", vCoreException::FILE_NOT_FOUND);
 			
-			kFileSyncUtils::moveFromFile($fullPath, $syncKey, true, false, true);
+			vFileSyncUtils::moveFromFile($fullPath, $syncKey, true, false, true);
 		}
 		
-		$jobData = new kParseCaptionAssetJobData();
+		$jobData = new vParseCaptionAssetJobData();
 		$jobData->setCaptionAssetId($captionAsset->getId());
 			
  		$batchJobType = CaptionSearchPlugin::getBatchJobTypeCoreValue(CaptionSearchBatchJobType::PARSE_CAPTION_ASSET);
@@ -104,11 +104,11 @@ class kCaptionSearchFlowManager implements kObjectDataChangedEventConsumer, kObj
 			
 		$batchJob->setObjectId($captionAsset->getId());
 		$batchJob->setObjectType(BatchJobObjectType::ASSET);
-		return kJobsManager::addJob($batchJob, $jobData, $batchJobType);
+		return vJobsManager::addJob($batchJob, $jobData, $batchJobType);
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -119,7 +119,7 @@ class kCaptionSearchFlowManager implements kObjectDataChangedEventConsumer, kObj
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{

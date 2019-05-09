@@ -4,7 +4,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPlaybackContextOptions extends KalturaEntryContextDataParams
+class VidiunPlaybackContextOptions extends VidiunEntryContextDataParams
 {
 
 }

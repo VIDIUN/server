@@ -6,10 +6,10 @@
  * @subpackage Debug
  */
 
-require_once ( dirname(__FILE__) ."/../KDwhClient.class.php");
-require_once ( dirname(__FILE__) ."/../KBatchEvent.class.php");
+require_once ( dirname(__FILE__) ."/../VDwhClient.class.php");
+require_once ( dirname(__FILE__) ."/../VBatchEvent.class.php");
 
-KDwhClient::setFileName( "/var/log/dwh/dwh_batch_events" );
+VDwhClient::setFileName( "/var/log/dwh/dwh_batch_events" );
 
 $param = $argv[1];
 $loop_size = $argv[2];
@@ -19,7 +19,7 @@ for ( $i = 0 ; $i < $loop_size ; $i++ )
 {
 	if ( $i % 10 == 0 )
 		$session_id = md5 ( "abc" . time() );
-	$event = new KBatchEvent ();
+	$event = new VBatchEvent ();
 	$event->batch_client_version = "123|{$param}";
 	$event->batch_event_time = time();
 	$event->batch_event_type_id = rand ( 1, 10 );
@@ -32,7 +32,7 @@ for ( $i = 0 ; $i < $loop_size ; $i++ )
 	$event->partner_id = rand ( 1, 10 );
 	$event->section_id = "1";
 	
-	KDwhClient::send( $event );
+	VDwhClient::send( $event );
 	
 	usleep( 200 );
 }

@@ -3,7 +3,7 @@
  * @package plugins.eventCuePoint
  * @subpackage api.enum
  */
-class KalturaEventType extends KalturaDynamicEnum implements EventType
+class VidiunEventType extends VidiunDynamicEnum implements EventType
 {
 	public static function getEnumClass()
 	{

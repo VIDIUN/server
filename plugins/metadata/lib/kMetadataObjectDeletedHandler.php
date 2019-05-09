@@ -3,17 +3,17 @@
  * @package plugins.metadata
  * @subpackage lib
  */
-class kMetadataObjectDeletedHandler extends kObjectDeleteHandlerBase implements kObjectChangedEventConsumer
+class vMetadataObjectDeletedHandler extends vObjectDeleteHandlerBase implements vObjectChangedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{
 		if($object instanceof entry)
 			return true;
 	
-		if($object instanceof kuser)
+		if($object instanceof vuser)
 			return true;
 	
 		if($object instanceof category)
@@ -31,7 +31,7 @@ class kMetadataObjectDeletedHandler extends kObjectDeleteHandlerBase implements 
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
@@ -42,7 +42,7 @@ class kMetadataObjectDeletedHandler extends kObjectDeleteHandlerBase implements 
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -50,14 +50,14 @@ class kMetadataObjectDeletedHandler extends kObjectDeleteHandlerBase implements 
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDeleteHandler::objectDeleted()
+	 * @see vObjectDeleteHandler::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null) 
 	{
 		if($object instanceof entry)
 			$this->deleteMetadataObjects(MetadataObjectType::ENTRY, $object->getId());
 	
-		if($object instanceof kuser)
+		if($object instanceof vuser)
 			$this->deleteMetadataObjects(MetadataObjectType::USER, $object->getId());
 	
 		if($object instanceof category)
@@ -81,9 +81,9 @@ class kMetadataObjectDeletedHandler extends kObjectDeleteHandlerBase implements 
 		$this->syncableDeleted($metadata->getId(), FileSyncObjectType::METADATA);
 		
 		// updated in the indexing server (sphinx)
-		$object = kMetadataManager::getObjectFromPeer($metadata);
+		$object = vMetadataManager::getObjectFromPeer($metadata);
 		if($object && $object instanceof IIndexable)
-			kEventsManager::raiseEvent(new kObjectUpdatedEvent($object));
+			vEventsManager::raiseEvent(new vObjectUpdatedEvent($object));
 	}
 	
 	/**
@@ -109,7 +109,7 @@ class kMetadataObjectDeletedHandler extends kObjectDeleteHandlerBase implements 
 		MetadataPeer::setUseCriteriaFilter(false);
 		$metadatas = MetadataPeer::doSelect($c);
 		foreach($metadatas as $metadata)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($metadata));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($metadata));
 		
 		$update = new Criteria();
 		$update->add(MetadataPeer::STATUS, Metadata::STATUS_DELETED);

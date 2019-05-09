@@ -3,7 +3,7 @@
  * @package plugins.podcastDistribution
  * @subpackage api.objects
  */
-class KalturaPodcastDistributionProfile extends KalturaDistributionProfile
+class VidiunPodcastDistributionProfile extends VidiunDistributionProfile
 {	
 	/**
 	 * @var string

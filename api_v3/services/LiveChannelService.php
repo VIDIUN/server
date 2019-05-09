@@ -7,24 +7,24 @@
  * @package api
  * @subpackage services
  */
-class LiveChannelService extends KalturaLiveEntryService
+class LiveChannelService extends VidiunLiveEntryService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
 		parent::initService($serviceId, $serviceName, $actionName);
 
 		if($this->getPartnerId() > 0 && !PermissionPeer::isValidForPartner(PermissionName::FEATURE_LIVE_CHANNEL, $this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
+			throw new VidiunAPIException(VidiunErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
 	}
 	
 	/**
 	 * Adds new live channel.
 	 * 
 	 * @action add
-	 * @param KalturaLiveChannel $liveChannel Live channel metadata  
-	 * @return KalturaLiveChannel The new live channel
+	 * @param VidiunLiveChannel $liveChannel Live channel metadata  
+	 * @return VidiunLiveChannel The new live channel
 	 */
-	function addAction(KalturaLiveChannel $liveChannel)
+	function addAction(VidiunLiveChannel $liveChannel)
 	{
 		$dbEntry = $this->prepareEntryForInsert($liveChannel);
 		$dbEntry->save();
@@ -35,7 +35,7 @@ class LiveChannelService extends KalturaLiveEntryService
 		$te->setDescription(__METHOD__ . ":" . __LINE__ . "::LIVE_CHANNEL");
 		TrackEntry::addTrackEntry($te);
 		
-		$liveChannel = new KalturaLiveChannel();
+		$liveChannel = new VidiunLiveChannel();
 		$liveChannel->fromObject($dbEntry, $this->getResponseProfile());
 		return $liveChannel;
 	}
@@ -46,13 +46,13 @@ class LiveChannelService extends KalturaLiveEntryService
 	 * 
 	 * @action get
 	 * @param string $id Live channel id
-	 * @return KalturaLiveChannel The requested live channel
+	 * @return VidiunLiveChannel The requested live channel
 	 * 
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	function getAction($id)
 	{
-		return $this->getEntry($id, -1, KalturaEntryType::LIVE_CHANNEL);
+		return $this->getEntry($id, -1, VidiunEntryType::LIVE_CHANNEL);
 	}
 
 	
@@ -61,15 +61,15 @@ class LiveChannelService extends KalturaLiveEntryService
 	 * 
 	 * @action update
 	 * @param string $id Live channel id to update
-	 * @param KalturaLiveChannel $liveChannel Live channel metadata to update
-	 * @return KalturaLiveChannel The updated live channel
+	 * @param VidiunLiveChannel $liveChannel Live channel metadata to update
+	 * @return VidiunLiveChannel The updated live channel
 	 * 
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 * @validateUser entry id edit
 	 */
-	function updateAction($id, KalturaLiveChannel $liveChannel)
+	function updateAction($id, VidiunLiveChannel $liveChannel)
 	{
-		return $this->updateEntry($id, $liveChannel, KalturaEntryType::LIVE_CHANNEL);
+		return $this->updateEntry($id, $liveChannel, VidiunEntryType::LIVE_CHANNEL);
 	}
 
 	/**
@@ -78,32 +78,32 @@ class LiveChannelService extends KalturaLiveEntryService
 	 * @action delete
 	 * @param string $id Live channel id to delete
 	 * 
- 	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+ 	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
  	 * @validateUser entry id edit
 	 */
 	function deleteAction($id)
 	{
-		$this->deleteEntry($id, KalturaEntryType::LIVE_CHANNEL);
+		$this->deleteEntry($id, VidiunEntryType::LIVE_CHANNEL);
 	}
 	
 	/**
 	 * List live channels by filter with paging support.
 	 * 
 	 * @action list
-     * @param KalturaLiveChannelFilter $filter live channel filter
-	 * @param KalturaFilterPager $pager Pager
-	 * @return KalturaLiveChannelListResponse Wrapper for array of live channels and total count
+     * @param VidiunLiveChannelFilter $filter live channel filter
+	 * @param VidiunFilterPager $pager Pager
+	 * @return VidiunLiveChannelListResponse Wrapper for array of live channels and total count
 	 */
-	function listAction(KalturaLiveChannelFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunLiveChannelFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 	    if (!$filter)
-			$filter = new KalturaLiveChannelFilter();
+			$filter = new VidiunLiveChannelFilter();
 			
-	    $filter->typeEqual = KalturaEntryType::LIVE_CHANNEL;
+	    $filter->typeEqual = VidiunEntryType::LIVE_CHANNEL;
 	    list($list, $totalCount) = parent::listEntriesByFilter($filter, $pager);
 	    
-	    $newList = KalturaLiveChannelArray::fromDbArray($list, $this->getResponseProfile());
-		$response = new KalturaLiveChannelListResponse();
+	    $newList = VidiunLiveChannelArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunLiveChannelListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		return $response;
@@ -115,16 +115,16 @@ class LiveChannelService extends KalturaLiveEntryService
 	 * @action isLive
 	 * @param string $id ID of the live channel
 	 * @return bool
-	 * @ksOptional
+	 * @vsOptional
 	 * 
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	public function isLiveAction ($id)
 	{
 		$dbEntry = entryPeer::retrieveByPK($id);
 
-		if (!$dbEntry || $dbEntry->getType() != KalturaEntryType::LIVE_CHANNEL)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $id);
+		if (!$dbEntry || $dbEntry->getType() != VidiunEntryType::LIVE_CHANNEL)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $id);
 
 		return $dbEntry->isCurrentlyLive();
 	}

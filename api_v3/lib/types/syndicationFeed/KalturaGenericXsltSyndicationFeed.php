@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaGenericXsltSyndicationFeed extends KalturaGenericSyndicationFeed
+class VidiunGenericXsltSyndicationFeed extends VidiunGenericSyndicationFeed
 {
 	/**
 	*
@@ -12,7 +12,7 @@ class KalturaGenericXsltSyndicationFeed extends KalturaGenericSyndicationFeed
 	public $xslt;
 
 	/**
-	 * @var KalturaExtendingItemMrssParameterArray
+	 * @var VidiunExtendingItemMrssParameterArray
 	 */
 	public $itemXpathsToExtend;
 	
@@ -27,26 +27,26 @@ class KalturaGenericXsltSyndicationFeed extends KalturaGenericSyndicationFeed
         
     function __construct()
 	{
-		$this->type = KalturaSyndicationFeedType::KALTURA_XSLT;
+		$this->type = VidiunSyndicationFeedType::VIDIUN_XSLT;
 	}
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 
 		if($this->shouldGet('xslt', $responseProfile))
 		{
 			$key = $source_object->getSyncKey(genericSyndicationFeed::FILE_SYNC_SYNDICATION_FEED_XSLT);
-			$this->xslt = kFileSyncUtils::file_get_contents($key, true, false);
+			$this->xslt = vFileSyncUtils::file_get_contents($key, true, false);
 		}
 
 		if($this->shouldGet('itemXpathsToExtend', $responseProfile))
 		{
 			$mrssParams = $source_object->getMrssParameters();
-			$this->itemXpathsToExtend = new KalturaExtendingItemMrssParameterArray();
+			$this->itemXpathsToExtend = new VidiunExtendingItemMrssParameterArray();
 			if ($mrssParams && $mrssParams->getItemXpathsToExtend())
 			{
-				$this->itemXpathsToExtend = KalturaExtendingItemMrssParameterArray::fromDbArray($mrssParams->getItemXpathsToExtend());
+				$this->itemXpathsToExtend = VidiunExtendingItemMrssParameterArray::fromDbArray($mrssParams->getItemXpathsToExtend());
 			}
 		}
 	}
@@ -58,7 +58,7 @@ class KalturaGenericXsltSyndicationFeed extends KalturaGenericSyndicationFeed
 		$mrssParams = $dbObject->getMrssParameters();
 		if (!$mrssParams)
 		{
-			$mrssParams = new kMrssParameters;
+			$mrssParams = new vMrssParameters;
 		}
 		
 		if ($this->itemXpathsToExtend)
@@ -82,7 +82,7 @@ class KalturaGenericXsltSyndicationFeed extends KalturaGenericSyndicationFeed
 			$object_to_fill = new genericSyndicationFeed();
 		
 		if($this->xslt)
-			kSyndicationFeedManager::validateXsl($this->xslt);
+			vSyndicationFeedManager::validateXsl($this->xslt);
 		
 		return parent::toInsertableObject($object_to_fill, $props_to_skip);
 	}
@@ -98,7 +98,7 @@ class KalturaGenericXsltSyndicationFeed extends KalturaGenericSyndicationFeed
 			$object_to_fill = new genericSyndicationFeed();
 		
 		if($this->xslt)
-			kSyndicationFeedManager::validateXsl($this->xslt);
+			vSyndicationFeedManager::validateXsl($this->xslt);
 		
 		return parent::toUpdatableObject($object_to_fill, $props_to_skip );
 	}

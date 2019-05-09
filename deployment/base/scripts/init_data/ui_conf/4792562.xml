@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<layout id="full" name="player" skinPath="/content/uiconf/kaltura/kmc/appstudio/kdp3/dragonfly/skin/skin_3.5.5/skin.swf">
+<layout id="full" name="player" skinPath="/content/uiconf/vidiun/vmc/appstudio/vdp3/dragonfly/skin/skin_3.5.5/skin.swf">
 	<HBox id="topLevel" width="100%" height="100%">
 		<VBox id="player" width="100%" height="100%" styleName="black">
-			<Plugin id="kalturaMix" width="0%" height="0%" includeInLayout="false" loadingPolicy="onDemand"/>
+			<Plugin id="vidiunMix" width="0%" height="0%" includeInLayout="false" loadingPolicy="onDemand"/>
 			<Plugin id="download" width="0%" height="0%" includeInLayout="false" loadingPolicy="noWait"/>
 			<Plugin id="statistics" width="0%" height="0%" includeInLayout="false"/>
 			<Plugin id="captureThumbnail" width="0%" height="0%" includeInLayout="false" loadingPolicy="noWait"/>
@@ -37,8 +37,8 @@
 
 
 				<Watermark id="watermark" width="100%" height="100%"
-						   watermarkPath="http://www.kaltura.com/content/uiconf/kaltura/kmc/appstudio/kdp3/exampleWatermark.png"
-						   watermarkClickPath="http://www.kaltura.com/" watermarkPosition="topRight"/>
+						   watermarkPath="http://www.vidiun.com/content/uiconf/vidiun/vmc/appstudio/vdp3/exampleWatermark.png"
+						   watermarkClickPath="http://www.vidiun.com/" watermarkPosition="topRight"/>
 						   
 				<!--5 star rating plugin-->
 				<Plugin id="stars" width="100%" height="30" editable="true" rating="-1"/>
@@ -48,7 +48,7 @@
 						overlayInterval="{vast.overlayInterval}" displayDuration="" width="100%" height="100%"/>
 
 				<!-- new bumper plugin -->
-				<Plugin id="bumper" bumperEntryID="0_c2gx2xjm" clickurl="http://www.kaltura.com" lockUI="true"
+				<Plugin id="bumper" bumperEntryID="0_c2gx2xjm" clickurl="http://www.vidiun.com" lockUI="true"
 						playOnce="false" preSequence="1" postSequence="1" width="100%" height="100%"/>
 				
 				<!-- new skip button -->
@@ -58,7 +58,7 @@
         				<Spacer width="100%"/>
         				<Button id="skipBtn" visible="{sequenceProxy.isAdSkip}" includeInLayout="{sequenceProxy.isAdSkip}"
 						type="labelButton" color1="0xFFFF00" color2="0xFF00FF" styleName="controllerScreen" height="30" width="20"
-						allowDisable="false" label="Skip Ad >" kClick="sendNotification('sequenceSkipNext')"/>
+						allowDisable="false" label="Skip Ad >" vClick="sendNotification('sequenceSkipNext')"/>
        				</HBox>
        			</VBox>
 
@@ -110,27 +110,27 @@
 						</VBox>
 						<VolumeBar id="volumeBar" styleName="volumeBtn" width="20" height="20" buttonType="iconButton" tooltip="Change volume"/>
 						<Button id="shareBtnControllerScreen" label="" buttonType="iconButton"
-								kClick="sendNotification('doGigya')" height="22" styleName="controllerScreen"
+								vClick="sendNotification('doGigya')" height="22" styleName="controllerScreen"
 								focusRectPadding="0" icon="shareIcon" tooltip="Share with friends"/>
 						<Button id="flagBtnControllerScreen" label="" buttonType="iconButton"
-								kClick="sendNotification('flagForReview')" height="22" styleName="controllerScreen"
+								vClick="sendNotification('flagForReview')" height="22" styleName="controllerScreen"
 								focusRectPadding="0" icon="flagIcon" tooltip="Flag for review"/>
 						<Button id="editBtnControllerScreen" label="" buttonType="iconButton" focusRectPadding="0"
-								kClick="jsCall('gotoEditorWindow', mediaProxy.entry.id )" height="22"
+								vClick="jsCall('gotoEditorWindow', mediaProxy.entry.id )" height="22"
 								styleName="controllerScreen" icon="remixIcon" tooltip="Open editor"/>
 						<Button id="uploadBtnControllerScreen" label="" focusRectPadding="0"
-								kClick="jsCall('gotoContributorWindow', mediaProxy.entry.id )" height="22"
+								vClick="jsCall('gotoContributorWindow', mediaProxy.entry.id )" height="22"
 								buttonType="iconButton" styleName="controllerScreen" icon="uploadIcon" tooltip="Upload content"/>
 						<Button id="downloadBtnControllerScreen" label="" focusRectPadding="0" buttonType="iconButton"
-								kClick="sendNotification('doDownload')" height="22" icon="downloadIcon"
+								vClick="sendNotification('doDownload')" height="22" icon="downloadIcon"
 								styleName="controllerScreen" tooltip="Download content"/>
-						<Button id="captureThumbBtnControllerScreen" kClick="sendNotification('captureThumbnail')"
+						<Button id="captureThumbBtnControllerScreen" vClick="sendNotification('captureThumbnail')"
 								height="22" buttonType="iconButton" focusRectPadding="0" icon="thumbIcon" label=""
 								styleName="controllerScreen" tooltip="Change thumbnail"/>
 
 						<FlavorCombo id="flavorComboControllerScreen" width="80"
 									 streamerType="{configProxy.flashvars.streamerType}"
-									 flavorDataProvider="{mediaProxy.kalturaMediaFlavorArray}" styleName="_kdp"
+									 flavorDataProvider="{mediaProxy.vidiunMediaFlavorArray}" styleName="_vdp"
 									 color1="0xFF0000" hdOn="HD On" hdOff="HD Off" selectedMessage=""
 									 autoMessage="Automatically switches between bitrates"
 									 preferedFlavorBR="{mediaProxy.preferedFlavorBR}"
@@ -142,24 +142,24 @@
 								selectedDownIcon="closeFullScreenIcon" selectedDisabledIcon="closeFullScreenIcon"
 								focusRectPadding="0" allowDisable="false" tooltip="Toggle fullscreen"/>
 						<Button id="custom1BtnControllerScreen" height="22" focusRectPadding="0" buttonType="iconButton"
-								kClick="jsCall('customFunc1', mediaProxy.entry.id )" label="Custom 1"
+								vClick="jsCall('customFunc1', mediaProxy.entry.id )" label="Custom 1"
 								styleName="controllerScreen" icon="generalIcon"/>
 						<Button id="custom2BtnControllerScreen" height="22" buttonType="iconButton"
-								kClick="jsCall('customFunc2', mediaProxy.entry.id )" label="Custom 2"
+								vClick="jsCall('customFunc2', mediaProxy.entry.id )" label="Custom 2"
 								styleName="controllerScreen" focusRectPadding="0" icon="generalIcon"/>
 						<Button id="custom3BtnControllerScreen" height="22" buttonType="iconButton" focusRectPadding="0"
-								kClick="jsCall('customFunc3', mediaProxy.entry.id )" label="Custom 3"
+								vClick="jsCall('customFunc3', mediaProxy.entry.id )" label="Custom 3"
 								styleName="controllerScreen" icon="generalIcon"/>
 						<Button id="custom4BtnControllerScreen" height="22" buttonType="iconButton"
-								kClick="jsCall('customFunc4', mediaProxy.entry.id )" focusRectPadding="0"
+								vClick="jsCall('customFunc4', mediaProxy.entry.id )" focusRectPadding="0"
 								label="Custom 4" styleName="controllerScreen" icon="generalIcon"/>
 						<Button id="custom5BtnControllerScreen" height="22" focusRectPadding="0" buttonType="iconButton"
-								kClick="jsCall('customFunc5', mediaProxy.entry.id )" label="Custom 5"
+								vClick="jsCall('customFunc5', mediaProxy.entry.id )" label="Custom 5"
 								styleName="controllerScreen" icon="generalIcon"/>
 					</HBox>
 					<Spacer width="13"/>
-					<Button id="kalturaLogo" height="50" width="100" kClick="navigate('http://www.kaltura.com')"
-							styleName="controllerScreen" icon="kalturaLogo"/>
+					<Button id="vidiunLogo" height="50" width="100" vClick="navigate('http://www.vidiun.com')"
+							styleName="controllerScreen" icon="vidiunLogo"/>
 					<Spacer width="13"/>
 				</HBox>
 			</Canvas>
@@ -177,20 +177,20 @@
 							overIcon="playIcon" downIcon="playIcon" disabeledIcon="playIcon" selectedUpIcon="playIcon"
 							selectedOverIcon="playIcon" selectedDownIcon="playIcon" selectedDisabledIcon="playIcon"/>
 
-					<Button id="shareBtnStartScreen" kClick="sendNotification('doGigya')" buttonType="onScreenButton"
+					<Button id="shareBtnStartScreen" vClick="sendNotification('doGigya')" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" label="Share" styleName="onScreenBtn" upIcon="shareIcon"/>
-					<Button id="flagBtnStartScreen" kClick="sendNotification('flagForReview')" buttonType="onScreenButton"
+					<Button id="flagBtnStartScreen" vClick="sendNotification('flagForReview')" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" label="Flag" styleName="onScreenBtn" upIcon="flagIcon"/>
-					<Button id="editBtnStartScreen" kClick="jsCall('gotoEditorWindow', mediaProxy.entry.id )"
+					<Button id="editBtnStartScreen" vClick="jsCall('gotoEditorWindow', mediaProxy.entry.id )"
 							label="Remix" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" upIcon="remixIcon"/>
-					<Button id="uploadBtnStartScreen" kClick="jsCall('gotoContributorWindow', mediaProxy.entry.id )"
+					<Button id="uploadBtnStartScreen" vClick="jsCall('gotoContributorWindow', mediaProxy.entry.id )"
 							label="Upload" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" upIcon="uploadIcon"/>
-					<Button id="downloadBtnStartScreen" kClick="sendNotification('doDownload')" label="Download"
+					<Button id="downloadBtnStartScreen" vClick="sendNotification('doDownload')" label="Download"
 							buttonType="onScreenButton" minWidth="60" labelPlacement="top" upIcon="downloadIcon"
 							styleName="onScreenBtn"/>
-					<Button id="captureThumbBtnStartScreen" kClick="sendNotification('captureThumbnail')"
+					<Button id="captureThumbBtnStartScreen" vClick="sendNotification('captureThumbnail')"
 							buttonType="onScreenButton" minWidth="60" labelPlacement="top" label="Thumb"
 							upIcon="thumbIcon" styleName="onScreenBtn"/>
 					<!--Button id="flagBtnStartScreen"
@@ -210,24 +210,24 @@
 							selectedOverIcon="closeFullScreenIcon" selectedDownIcon="closeFullScreenIcon"
 							selectedDisabledIcon="closeFullScreenIcon"/>
 					<Button id="custom1BtnStartScreen" label="Custom 1"
-							kClick="jsCall('customFunc1', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc1', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" icon="generalIcon"
 							upIcon="generalIcon"/>
 					<Button id="custom2BtnStartScreen" label="Custom 2"
-							kClick="jsCall('customFunc2', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc2', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" icon="generalIcon"
 							upIcon="generalIcon"/>
 					<Button id="custom3BtnStartScreen" label="Custom 3"
-							kClick="jsCall('customFunc3', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc3', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" icon="generalIcon"
 							upIcon="generalIcon"/>
 					<Button id="custom4BtnStartScreen" label="Custom 4"
-							kClick="jsCall('customFunc4', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc4', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" upIcon="generalIcon"/>
-					<Button id="custom5BtnStartScreen" kClick="jsCall('customFunc5', mediaProxy.entry.id )"
+					<Button id="custom5BtnStartScreen" vClick="jsCall('customFunc5', mediaProxy.entry.id )"
 							label="Custom 5" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" upIcon="generalIcon"/>
-					<Button id="unmuteBtnStartScreen" kClick="sendNotification('changeVolume',1)" label="Unmute"
+					<Button id="unmuteBtnStartScreen" vClick="sendNotification('changeVolume',1)" label="Unmute"
 							buttonType="onScreenButton" minWidth="60" labelPlacement="top" styleName="onScreenBtn"
 							upIcon="Button_upIcon_volumeBtn"/>
 				</Tile>
@@ -242,20 +242,20 @@
 							labelPlacement="top" label="Play" styleName="onScreenBtn" upIcon="playIcon"
 							overIcon="playIcon" downIcon="playIcon" disabeledIcon="playIcon" selectedUpIcon="playIcon"
 							selectedOverIcon="playIcon" selectedDownIcon="playIcon" selectedDisabledIcon="playIcon"/>
-					<Button id="shareBtnPauseScreen" kClick="sendNotification('doGigya')" buttonType="onScreenButton"
+					<Button id="shareBtnPauseScreen" vClick="sendNotification('doGigya')" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" label="Share" styleName="onScreenBtn" upIcon="shareIcon"/>
-					<Button id="flagBtnPauseScreen" kClick="sendNotification('flagForReview')" buttonType="onScreenButton"
+					<Button id="flagBtnPauseScreen" vClick="sendNotification('flagForReview')" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" label="Flag" styleName="onScreenBtn" upIcon="flagIcon"/>
-					<Button id="editBtnPauseScreen" kClick="jsCall('gotoEditorWindow', mediaProxy.entry.id )"
+					<Button id="editBtnPauseScreen" vClick="jsCall('gotoEditorWindow', mediaProxy.entry.id )"
 							label="Remix" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" upIcon="remixIcon"/>
-					<Button id="uploadBtnPauseScreen" kClick="jsCall('gotoContributorWindow', mediaProxy.entry.id )"
+					<Button id="uploadBtnPauseScreen" vClick="jsCall('gotoContributorWindow', mediaProxy.entry.id )"
 							label="Upload" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" upIcon="uploadIcon"/>
-					<Button id="downloadBtnPauseScreen" kClick="sendNotification('doDownload')" label="Download"
+					<Button id="downloadBtnPauseScreen" vClick="sendNotification('doDownload')" label="Download"
 							upIcon="downloadIcon" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn"/>
-					<Button id="captureThumbBtnPauseScreen" kClick="sendNotification('captureThumbnail')"
+					<Button id="captureThumbBtnPauseScreen" vClick="sendNotification('captureThumbnail')"
 							buttonType="onScreenButton" minWidth="60" labelPlacement="top" upIcon="thumbIcon"
 							label="Thumb" styleName="onScreenBtn"/>
 					<!--Button id="flagBtnPauseScreen"
@@ -275,25 +275,25 @@
 							selectedOverIcon="closeFullScreenIcon" selectedDownIcon="closeFullScreenIcon"
 							selectedDisabledIcon="closeFullScreenIcon"/>
 					<Button id="custom1BtnPauseScreen" label="Custom 1"
-							kClick="jsCall('customFunc1', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc1', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" upIcon="generalIcon"/>
 					<Button id="custom2BtnPauseScreen" label="Custom 2"
-							kClick="jsCall('customFunc2', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc2', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" icon="generalIcon"
 							upIcon="generalIcon" downIcon="generalIcon"/>
 					<Button id="custom3BtnPauseScreen" label="Custom 3"
-							kClick="jsCall('customFunc3', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc3', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" icon="generalIcon"
 							upIcon="generalIcon" downIcon="generalIcon"/>
 
-					<Button id="custom4BtnPauseScreen" kClick="jsCall('customFunc4', mediaProxy.entry.id )"
+					<Button id="custom4BtnPauseScreen" vClick="jsCall('customFunc4', mediaProxy.entry.id )"
 							label="Custom 4" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" icon="generalIcon" upIcon="generalIcon" downIcon="generalIcon"/>
 					<Button id="custom5BtnPauseScreen" label="Custom 5"
-							kClick="jsCall('customFunc5', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc5', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" icon="generalIcon"
 							upIcon="generalIcon" downIcon="generalIcon"/>
-					<Button id="unmuteBtnPauseScreen" kClick="sendNotification('changeVolume',1)" label="Unmute"
+					<Button id="unmuteBtnPauseScreen" vClick="sendNotification('changeVolume',1)" label="Unmute"
 							buttonType="onScreenButton" minWidth="60" labelPlacement="top" styleName="onScreenBtn"
 							upIcon="Button_upIcon_volumeBtn"/>
 				</Tile>
@@ -304,22 +304,22 @@
 			<VBox id="playContainer" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
 				<Spacer height="100%"/>
 				<Tile id="playTile" width="100%" verticalGap="10" verticalAlign="middle" horizontalAlign="center">
-					<Button id="shareBtnPlayScreen" kClick="sendNotification('doGigya')" buttonType="onScreenButton"
+					<Button id="shareBtnPlayScreen" vClick="sendNotification('doGigya')" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" label="Share" styleName="onScreenBtn" upIcon="shareIcon"/>
-					<Button id="flagBtnPlayScreen" kClick="sendNotification('flagForReview')" buttonType="onScreenButton"
+					<Button id="flagBtnPlayScreen" vClick="sendNotification('flagForReview')" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" label="Flag" styleName="onScreenBtn" upIcon="flagIcon"/>
-					<Button id="editBtnPlayScreen" kClick="jsCall('gotoEditorWindow', mediaProxy.entry.id )"
+					<Button id="editBtnPlayScreen" vClick="jsCall('gotoEditorWindow', mediaProxy.entry.id )"
 							label="Remix" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" upIcon="remixIcon"/>
-					<Button id="uploadBtnPlayScreen" kClick="jsCall('gotoContributorWindow', mediaProxy.entry.id )"
+					<Button id="uploadBtnPlayScreen" vClick="jsCall('gotoContributorWindow', mediaProxy.entry.id )"
 							label="Upload" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" upIcon="uploadIcon" downIcon="uploadIcon" overIcon="uploadIcon"
 							disabledIcon="uploadIcon" selectedUpIcon="uploadIcon" selectedOverIcon="uploadIcon"
 							selectedDownIcon="uploadIcon"/>
-					<Button id="downloadBtnPlayScreen" kClick="sendNotification('doDownload')" height=""
+					<Button id="downloadBtnPlayScreen" vClick="sendNotification('doDownload')" height=""
 							label="Download" upIcon="downloadIcon" buttonType="onScreenButton" minWidth="60"
 							labelPlacement="top" styleName="onScreenBtn"/>
-					<Button id="captureThumbBtnPlayScreen" kClick="sendNotification('captureThumbnail')"
+					<Button id="captureThumbBtnPlayScreen" vClick="sendNotification('captureThumbnail')"
 							buttonType="onScreenButton" minWidth="60" labelPlacement="top" upIcon="thumbIcon"
 							label="Thumb" styleName="onScreenBtn"/>
 
@@ -342,25 +342,25 @@
 							selectedOverIcon="closeFullScreenIcon" selectedDownIcon="closeFullScreenIcon"
 							selectedDisabledIcon="closeFullScreenIcon"/>
 					<Button id="custom1BtnPlayScreen" label="Custom 1"
-							kClick="jsCall('customFunc1', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc1', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" icon="generalIcon"
 							upIcon="generalIcon" downIcon="generalIcon"/>
-					<Button id="custom2BtnPlayScreen" kClick="jsCall('customFunc2', mediaProxy.entry.id )"
+					<Button id="custom2BtnPlayScreen" vClick="jsCall('customFunc2', mediaProxy.entry.id )"
 							label="Custom 2" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" icon="generalIcon" upIcon="generalIcon" downIcon="generalIcon"/>
 					<Button id="custom3BtnPlayScreen" label="Custom 3"
-							kClick="jsCall('customFunc3', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc3', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" icon="generalIcon"
 							upIcon="generalIcon" downIcon="generalIcon"/>
 					<Button id="custom4BtnPlayScreen" label="Custom 4"
-							kClick="jsCall('customFunc4', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc4', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" icon="generalIcon"
 							upIcon="generalIcon" downIcon="generalIcon"/>
 					<Button id="custom5BtnPlayScreen" label="Custom 5"
-							kClick="jsCall('customFunc5', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc5', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" icon="generalIcon"
 							upIcon="generalIcon" downIcon="generalIcon"/>
-					<Button id="unmuteBtnPlayScreen" kClick="sendNotification('changeVolume',1)" label="Unmute"
+					<Button id="unmuteBtnPlayScreen" vClick="sendNotification('changeVolume',1)" label="Unmute"
 							buttonType="onScreenButton" minWidth="60" labelPlacement="top" styleName="onScreenBtn"
 							upIcon="Button_upIcon_volumeBtn"/>
 				</Tile>
@@ -372,23 +372,23 @@
 
 				<Spacer height="100%"/>
 				<Tile id="endTile" width="100%" verticalGap="10" verticalAlign="middle" horizontalAlign="center">
-					<Button id="replayBtnEndScreen" kClick="sendNotification('doPlay')" buttonType="onScreenButton"
+					<Button id="replayBtnEndScreen" vClick="sendNotification('doPlay')" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" label="Replay" styleName="onScreenBtn"
 							upIcon="replayIcon"/>
-					<Button id="shareBtnEndScreen" kClick="sendNotification('doGigya')" buttonType="onScreenButton"
+					<Button id="shareBtnEndScreen" vClick="sendNotification('doGigya')" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" label="Share" styleName="onScreenBtn" upIcon="shareIcon"/>
-					<Button id="flagBtnEndScreen" kClick="sendNotification('flagForReview')" buttonType="onScreenButton"
+					<Button id="flagBtnEndScreen" vClick="sendNotification('flagForReview')" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" label="Flag" styleName="onScreenBtn" upIcon="flagIcon"/>
-					<Button id="editBtnEndScreen" kClick="jsCall('gotoEditorWindow', mediaProxy.entry.id )"
+					<Button id="editBtnEndScreen" vClick="jsCall('gotoEditorWindow', mediaProxy.entry.id )"
 							label="Remix" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" upIcon="remixIcon"/>
-					<Button id="uploadBtnEndScreen" kClick="jsCall('gotoContributorWindow', mediaProxy.entry.id )"
+					<Button id="uploadBtnEndScreen" vClick="jsCall('gotoContributorWindow', mediaProxy.entry.id )"
 							label="Upload" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" upIcon="uploadIcon"/>
-					<Button id="downloadBtnEndScreen" kClick="sendNotification('doDownload')" label="Download"
+					<Button id="downloadBtnEndScreen" vClick="sendNotification('doDownload')" label="Download"
 							upIcon="downloadIcon" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn"/>
-					<Button id="captureThumbBtnEndScreen" kClick="sendNotification('captureThumbnail')"
+					<Button id="captureThumbBtnEndScreen" vClick="sendNotification('captureThumbnail')"
 							buttonType="onScreenButton" minWidth="60" labelPlacement="top" upIcon="thumbIcon"
 							label="Thumb" styleName="onScreenBtn"/>
 					<Button id="fullScreenBtnEndScreen" command="fullScreen" label="Fullscreen" styleName="onScreenBtn"
@@ -397,25 +397,25 @@
 							disabeledIcon="openFullScreenIcon" selectedUpIcon="closeFullScreenIcon"
 							selectedOverIcon="closeFullScreenIcon" selectedDownIcon="closeFullScreenIcon"
 							selectedDisabledIcon="closeFullScreenIcon"/>
-					<Button id="custom1BtnEndScreen" kClick="jsCall('customFunc1', mediaProxy.entry.id )"
+					<Button id="custom1BtnEndScreen" vClick="jsCall('customFunc1', mediaProxy.entry.id )"
 							label="Custom 1" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" icon="generalIcon" upIcon="generalIcon" downIcon="generalIcon"/>
 					<Button id="custom2BtnEndScreen" label="Custom 2"
-							kClick="jsCall('customFunc2', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc2', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" icon="generalIcon"
 							upIcon="generalIcon" downIcon="generalIcon"/>
 					<Button id="custom3BtnEndScreen" label="Custom 3"
-							kClick="jsCall('customFunc3', mediaProxy.entry.id )" buttonType="onScreenButton"
+							vClick="jsCall('customFunc3', mediaProxy.entry.id )" buttonType="onScreenButton"
 							minWidth="60" labelPlacement="top" styleName="onScreenBtn" icon="generalIcon"
 							upIcon="generalIcon" downIcon="generalIcon"/>
-					<Button id="custom4BtnEndScreen" kClick="jsCall('customFunc4', mediaProxy.entry.id )"
+					<Button id="custom4BtnEndScreen" vClick="jsCall('customFunc4', mediaProxy.entry.id )"
 							label="Custom 4" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" icon="generalIcon" upIcon="generalIcon" downIcon="generalIcon"/>
 
-					<Button id="custom5BtnEndScreen" kClick="jsCall('customFunc5', mediaProxy.entry.id )"
+					<Button id="custom5BtnEndScreen" vClick="jsCall('customFunc5', mediaProxy.entry.id )"
 							label="Custom 5" buttonType="onScreenButton" minWidth="60" labelPlacement="top"
 							styleName="onScreenBtn" icon="generalIcon" upIcon="generalIcon" downIcon="generalIcon"/>
-					<Button id="unmuteBtnEndScreen" kClick="sendNotification('changeVolume',1)" label="Unmute"
+					<Button id="unmuteBtnEndScreen" vClick="sendNotification('changeVolume',1)" label="Unmute"
 							buttonType="onScreenButton" minWidth="60" labelPlacement="top" styleName="onScreenBtn"
 							upIcon="Button_upIcon_volumeBtn"/>
 				</Tile>

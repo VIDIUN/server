@@ -10,9 +10,9 @@ require_once(dirname( __FILE__ ) . "/../../bootstrap.php");
  * @package Scheduler
  * @subpackage Debug
  */
-class KAsyncConvertCloserTest extends PHPUnit_Framework_TestCase 
+class VAsyncConvertCloserTest extends PHPUnit_Framework_TestCase 
 {
-	const JOB_NAME = 'KAsyncConvertCloser';
+	const JOB_NAME = 'VAsyncConvertCloser';
 	
 	public function setUp() 
 	{
@@ -26,15 +26,15 @@ class KAsyncConvertCloserTest extends PHPUnit_Framework_TestCase
 	
 	public function testEncodingCom()
 	{
-		$engineType = KalturaConversionEngineType::ENCODING_COM;
+		$engineType = VidiunConversionEngineType::ENCODING_COM;
 		$remoteMediaId = '845877';
-		$this->doTest($engineType, $remoteMediaId, '', KalturaBatchJobStatus::FINISHED);
+		$this->doTest($engineType, $remoteMediaId, '', VidiunBatchJobStatus::FINISHED);
 	}
 	
 	private function doTest($engineType, $remoteMediaId, $remoteUrl, $expectedStatus)
 	{
 		$iniFile = "batch_config.ini";
-		$schedulerConfig = new KSchedulerConfig($iniFile);
+		$schedulerConfig = new VSchedulerConfig($iniFile);
 	
 		$taskConfigs = $schedulerConfig->getTaskConfigList();
 		$config = null;
@@ -59,14 +59,14 @@ class KAsyncConvertCloserTest extends PHPUnit_Framework_TestCase
 	
 	private function prepareJobs($engineType, $remoteMediaId, $remoteUrl)
 	{
-		$data = new KalturaConvertJobData();
+		$data = new VidiunConvertJobData();
 		$data->remoteMediaId = $remoteMediaId;
 		$data->destFileSyncRemoteUrl = $remoteUrl;
 		
-		$job = new KalturaBatchJob();
+		$job = new VidiunBatchJob();
 		$job->id = 1;
 		$job->jobSubType = $engineType;
-		$job->status = KalturaBatchJobStatus::ALMOST_DONE;
+		$job->status = VidiunBatchJobStatus::ALMOST_DONE;
 		$job->data = $data;
 		$job->queueTime = time();
 		

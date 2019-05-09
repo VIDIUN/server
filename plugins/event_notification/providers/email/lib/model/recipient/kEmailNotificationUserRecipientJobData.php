@@ -5,24 +5,24 @@
  * @package plugins.emailNotification
  * @subpackage model.data 
  */
-class kEmailNotificationUserRecipientJobData extends kEmailNotificationRecipientJobData
+class vEmailNotificationUserRecipientJobData extends vEmailNotificationRecipientJobData
 {
 	/**
-	 * @var kuserFilter
+	 * @var vuserFilter
 	 */
 	protected $filter;
 	
 	/**
-	 * @return kuserFilter $filter
+	 * @return vuserFilter $filter
 	 */
 	public function getFilter() {
 		return $this->filter;
 	}
 
 	/**
-	 * @param kuserFilter $filter
+	 * @param vuserFilter $filter
 	 */
-	public function setFilter(kuserFilter $filter) {
+	public function setFilter(vuserFilter $filter) {
 		$this->filter = $filter;
 	}
 

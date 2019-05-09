@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaBaseEntryBaseFilter extends KalturaRelatedFilter
+abstract class VidiunBaseEntryBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -175,14 +175,14 @@ abstract class KalturaBaseEntryBaseFilter extends KalturaRelatedFilter
 	public $nameEqual;
 
 	/**
-	 * This filter should be in use for retrieving only entries which were uploaded by/assigned to users of a specific Kaltura Partner (identified by Partner ID).
+	 * This filter should be in use for retrieving only entries which were uploaded by/assigned to users of a specific Vidiun Partner (identified by Partner ID).
 	 * 
 	 * @var int
 	 */
 	public $partnerIdEqual;
 
 	/**
-	 * This filter should be in use for retrieving only entries within Kaltura network which were uploaded by/assigned to users of few Kaltura Partners  (string should include comma separated list of PartnerIDs)
+	 * This filter should be in use for retrieving only entries within Vidiun network which were uploaded by/assigned to users of few Vidiun Partners  (string should include comma separated list of PartnerIDs)
 	 * 
 	 * @var string
 	 */
@@ -288,47 +288,47 @@ abstract class KalturaBaseEntryBaseFilter extends KalturaRelatedFilter
 	public $categoriesIdsNotContains;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $categoriesIdsEmpty;
 
 	/**
-	 * This filter should be in use for retrieving only entries, at a specific {@link ?object=KalturaEntryStatus KalturaEntryStatus}.
+	 * This filter should be in use for retrieving only entries, at a specific {@link ?object=VidiunEntryStatus VidiunEntryStatus}.
 	 * 
-	 * @var KalturaEntryStatus
+	 * @var VidiunEntryStatus
 	 */
 	public $statusEqual;
 
 	/**
-	 * This filter should be in use for retrieving only entries, not at a specific {@link ?object=KalturaEntryStatus KalturaEntryStatus}.
+	 * This filter should be in use for retrieving only entries, not at a specific {@link ?object=VidiunEntryStatus VidiunEntryStatus}.
 	 * 
-	 * @var KalturaEntryStatus
+	 * @var VidiunEntryStatus
 	 */
 	public $statusNotEqual;
 
 	/**
-	 * This filter should be in use for retrieving only entries, at few specific {@link ?object=KalturaEntryStatus KalturaEntryStatus} (comma separated).
+	 * This filter should be in use for retrieving only entries, at few specific {@link ?object=VidiunEntryStatus VidiunEntryStatus} (comma separated).
 	 * 
-	 * @dynamicType KalturaEntryStatus
+	 * @dynamicType VidiunEntryStatus
 	 * @var string
 	 */
 	public $statusIn;
 
 	/**
-	 * This filter should be in use for retrieving only entries, not at few specific {@link ?object=KalturaEntryStatus KalturaEntryStatus} (comma separated).
+	 * This filter should be in use for retrieving only entries, not at few specific {@link ?object=VidiunEntryStatus VidiunEntryStatus} (comma separated).
 	 * 
-	 * @dynamicType KalturaEntryStatus
+	 * @dynamicType VidiunEntryStatus
 	 * @var string
 	 */
 	public $statusNotIn;
 
 	/**
-	 * @var KalturaEntryModerationStatus
+	 * @var VidiunEntryModerationStatus
 	 */
 	public $moderationStatusEqual;
 
 	/**
-	 * @var KalturaEntryModerationStatus
+	 * @var VidiunEntryModerationStatus
 	 */
 	public $moderationStatusNotEqual;
 
@@ -343,27 +343,27 @@ abstract class KalturaBaseEntryBaseFilter extends KalturaRelatedFilter
 	public $moderationStatusNotIn;
 
 	/**
-	 * @var KalturaEntryType
+	 * @var VidiunEntryType
 	 */
 	public $typeEqual;
 
 	/**
-	 * This filter should be in use for retrieving entries of few {@link ?object=KalturaEntryType KalturaEntryType} (string should include a comma separated list of {@link ?object=KalturaEntryType KalturaEntryType} enumerated parameters).
+	 * This filter should be in use for retrieving entries of few {@link ?object=VidiunEntryType VidiunEntryType} (string should include a comma separated list of {@link ?object=VidiunEntryType VidiunEntryType} enumerated parameters).
 	 * 
-	 * @dynamicType KalturaEntryType
+	 * @dynamicType VidiunEntryType
 	 * @var string
 	 */
 	public $typeIn;
 
 	/**
-	 * This filter parameter should be in use for retrieving only entries which were created at Kaltura system after a specific time/date (standard timestamp format).
+	 * This filter parameter should be in use for retrieving only entries which were created at Vidiun system after a specific time/date (standard timestamp format).
 	 * 
 	 * @var time
 	 */
 	public $createdAtGreaterThanOrEqual;
 
 	/**
-	 * This filter parameter should be in use for retrieving only entries which were created at Kaltura system before a specific time/date (standard timestamp format).
+	 * This filter parameter should be in use for retrieving only entries which were created at Vidiun system before a specific time/date (standard timestamp format).
 	 * 
 	 * @var time
 	 */
@@ -489,12 +489,12 @@ abstract class KalturaBaseEntryBaseFilter extends KalturaRelatedFilter
 	public $replacedEntryIdIn;
 
 	/**
-	 * @var KalturaEntryReplacementStatus
+	 * @var VidiunEntryReplacementStatus
 	 */
 	public $replacementStatusEqual;
 
 	/**
-	 * @dynamicType KalturaEntryReplacementStatus
+	 * @dynamicType VidiunEntryReplacementStatus
 	 * @var string
 	 */
 	public $replacementStatusIn;

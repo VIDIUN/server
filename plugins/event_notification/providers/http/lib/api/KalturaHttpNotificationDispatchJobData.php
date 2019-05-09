@@ -3,7 +3,7 @@
  * @package plugins.httpNotification
  * @subpackage api.objects
  */
-class KalturaHttpNotificationDispatchJobData extends KalturaEventNotificationDispatchJobData
+class VidiunHttpNotificationDispatchJobData extends VidiunEventNotificationDispatchJobData
 {
 	/**
 	 * Remote server URL
@@ -13,7 +13,7 @@ class KalturaHttpNotificationDispatchJobData extends KalturaEventNotificationDis
 	
 	/**
 	 * Request method.
-	 * @var KalturaHttpNotificationMethod
+	 * @var VidiunHttpNotificationMethod
 	 */
 	public $method;
 	
@@ -61,7 +61,7 @@ class KalturaHttpNotificationDispatchJobData extends KalturaEventNotificationDis
 	 * The HTTP authentication method to use.
 	 * 
 	 * @see CURLOPT_HTTPAUTH
-	 * @var KalturaHttpNotificationAuthenticationMethod
+	 * @var VidiunHttpNotificationAuthenticationMethod
 	 */
 	public $authenticationMethod;
 	
@@ -70,7 +70,7 @@ class KalturaHttpNotificationDispatchJobData extends KalturaEventNotificationDis
 	 * By default PHP will try to determine this itself, although in some cases this must be set manually.
 	 * 
 	 * @see CURLOPT_SSLVERSION
-	 * @var KalturaHttpNotificationSslVersion
+	 * @var VidiunHttpNotificationSslVersion
 	 */
 	public $sslVersion;
 	
@@ -86,7 +86,7 @@ class KalturaHttpNotificationDispatchJobData extends KalturaEventNotificationDis
 	 * The format of the certificate.
 	 * 
 	 * @see CURLOPT_SSLCERTTYPE
-	 * @var KalturaHttpNotificationCertificateType
+	 * @var VidiunHttpNotificationCertificateType
 	 */
 	public $sslCertificateType;
 	
@@ -118,7 +118,7 @@ class KalturaHttpNotificationDispatchJobData extends KalturaEventNotificationDis
 	 * The key type of the private SSL key specified in ssl key - PEM / DER / ENG.
 	 * 
 	 * @see CURLOPT_SSLKEYTYPE
-	 * @var KalturaHttpNotificationSslKeyType
+	 * @var VidiunHttpNotificationSslKeyType
 	 */
 	public $sslKeyType;
 	
@@ -141,7 +141,7 @@ class KalturaHttpNotificationDispatchJobData extends KalturaEventNotificationDis
 	/**
 	 * Adds a e-mail custom header
 	 * 
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $customHeaders;
 	
@@ -175,7 +175,7 @@ class KalturaHttpNotificationDispatchJobData extends KalturaEventNotificationDis
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaEventNotificationDispatchJobData::getMapBetweenObjects()
+	 * @see VidiunEventNotificationDispatchJobData::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -183,16 +183,16 @@ class KalturaHttpNotificationDispatchJobData extends KalturaEventNotificationDis
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject($srcObj)
+	 * @see VidiunObject::fromObject($srcObj)
 	 */
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $srcObj kHttpNotificationDispatchJobData */
+		/* @var $srcObj vHttpNotificationDispatchJobData */
 		parent::doFromObject($srcObj, $responseProfile);
 		
 		if(is_null($this->data) && $srcObj->getDataObject())
 		{
-			$dataObject = KalturaHttpNotificationData::getInstance($srcObj->getDataObject());
+			$dataObject = VidiunHttpNotificationData::getInstance($srcObj->getDataObject());
 			if($dataObject)
 				$this->data = $dataObject->getData($srcObj);
 		}

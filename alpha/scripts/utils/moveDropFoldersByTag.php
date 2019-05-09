@@ -16,7 +16,7 @@ chdir(dirname(__FILE__));
 require_once(dirname(__FILE__) . '/../bootstrap.php');
 
 //list all drop folder by tag + dc
-$isCurrentDc = (kDataCenterMgr::getCurrentDcId() == $dcFrom);
+$isCurrentDc = (vDataCenterMgr::getCurrentDcId() == $dcFrom);
 $dropFolders = DropFolderPeer::retrieveByTag($tag,$isCurrentDc);
 if(!count($dropFolders))
 	die("\r\nNOTICE: Could  not find any drop folder with tag - {$tag} under dc {$dcFrom}\r\n");
@@ -32,16 +32,16 @@ foreach ($dropFolders as $dropFolder)
 
 ob_end_clean();
 
-$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_BATCH_JOBS);
+$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_BATCH_JOBS);
 if(!$cache)
-	die("\r\nERROR: Cache layer [" . kCacheManager::CACHE_TYPE_BATCH_JOBS . "] not found, drop folder will not be allocated\r\n");
+	die("\r\nERROR: Cache layer [" . vCacheManager::CACHE_TYPE_BATCH_JOBS . "] not found, drop folder will not be allocated\r\n");
 
 $tagKey = "drop_folder_list_key_".$tag;
 
 if($isCurrentDc)
 {
 	if (!$cache->delete($tagKey))
-		die ("\r\nERROR: Could not delete cache key {$tagKey} from cache layer ".kCacheManager::CACHE_TYPE_BATCH_JOBS." must do it manually!\r\n ". print_r($cache,true));
+		die ("\r\nERROR: Could not delete cache key {$tagKey} from cache layer ".vCacheManager::CACHE_TYPE_BATCH_JOBS." must do it manually!\r\n ". print_r($cache,true));
 	else
 		echo ("\r\nINFO: cache key {$tagKey} was deleted successfully \r\n");
 }

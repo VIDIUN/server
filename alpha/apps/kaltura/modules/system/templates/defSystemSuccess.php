@@ -5,7 +5,7 @@
 	<li><a href="/index.php/system/viewUsers" target="content_frame">Users</a></li>
 	<li><a href="/index.php/system/viewWidgets" target="content_frame">Widgets</a></li>	
 	<li><a href="/index.php/system/viewPartners" target="content_frame">Partners</a></li>	
-	<li><a href="/index.php/system/deleteKShow" target="content_frame">Delete Show</a></li>
+	<li><a href="/index.php/system/deleteVShow" target="content_frame">Delete Show</a></li>
 	<li><a href="/index.php/system/viewReports" target="content_frame">User Reports</a></li>
 	<li><a href="/index.php/system/investigate" target="content_frame">Investigate</a></li>
 	<li><a href="/index.php/system/showErrors" target="content_frame">Conversion Errors</a></li>

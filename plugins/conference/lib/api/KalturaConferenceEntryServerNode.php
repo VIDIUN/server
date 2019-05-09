@@ -3,11 +3,11 @@
  * @package plugins.conference
  * @subpackage api.objects
  */
-class KalturaConferenceEntryServerNode extends KalturaEntryServerNode
+class VidiunConferenceEntryServerNode extends VidiunEntryServerNode
 {
 
 	/**
-	 * @var KalturaConferenceRoomStatus
+	 * @var VidiunConferenceRoomStatus
 	 * @readonly
 	 */
 	public $confRoomStatus;
@@ -25,7 +25,7 @@ class KalturaConferenceEntryServerNode extends KalturaEntryServerNode
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{

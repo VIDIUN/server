@@ -4,7 +4,7 @@
  * @subpackage api.objects
  * @relatedService FileAssetService
  */
-class KalturaFileAsset extends KalturaObject implements IRelatedFilterable 
+class VidiunFileAsset extends VidiunObject implements IRelatedFilterable 
 {
 	/**
 	 * @var bigint
@@ -24,7 +24,7 @@ class KalturaFileAsset extends KalturaObject implements IRelatedFilterable
 	
 	/**
 	 * 
-	 * @var KalturaFileAssetObjectType
+	 * @var VidiunFileAssetObjectType
 	 * @filter eq
 	 * @insertonly
 	 */
@@ -89,7 +89,7 @@ class KalturaFileAsset extends KalturaObject implements IRelatedFilterable
 	
 	/**
 	 * 
-	 * @var KalturaFileAssetStatus
+	 * @var VidiunFileAssetStatus
 	 * @filter eq,in
 	 * @readonly
 	 */
@@ -111,7 +111,7 @@ class KalturaFileAsset extends KalturaObject implements IRelatedFilterable
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -135,7 +135,7 @@ class KalturaFileAsset extends KalturaObject implements IRelatedFilterable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbFileAsset = null, $propsToSkip = array())
 	{
@@ -146,7 +146,7 @@ class KalturaFileAsset extends KalturaObject implements IRelatedFilterable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert($propertiesToSkip)
+	 * @see VidiunObject::validateForInsert($propertiesToSkip)
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -157,17 +157,17 @@ class KalturaFileAsset extends KalturaObject implements IRelatedFilterable
 
 		switch($this->fileAssetObjectType)
 		{
-			case KalturaFileAssetObjectType::UI_CONF:
+			case VidiunFileAssetObjectType::UI_CONF:
 				$peerType = uiConfPeer;
 				break;
-			case KalturaFileAssetObjectType::ENTRY:
+			case VidiunFileAssetObjectType::ENTRY:
 				$peerType = entryPeer;
 				break;
 		}
 		if($peerType) {
 			$object = $peerType::retrieveByPK($this->objectId);
 			if (!$object)
-				throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $this->objectId);
+				throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $this->objectId);
 		}
 	}
 }

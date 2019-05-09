@@ -1,12 +1,12 @@
 <?php
 /**
- * Executes the KAsyncMailer
+ * Executes the VAsyncMailer
  *
  * @package Scheduler
  * @subpackage Mailer
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncMailer();
+$instance = new VAsyncMailer();
 $instance->run(); 
 $instance->done();

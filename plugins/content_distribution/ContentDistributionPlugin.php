@@ -2,32 +2,32 @@
 /**
  * @package plugins.contentDistribution
  */
-class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaServices, IKalturaEventConsumers, IKalturaEnumerator, IKalturaVersion, IKalturaSearchDataContributor, IKalturaObjectLoader, IKalturaAdminConsolePages, IKalturaApplicationPartialView, IKalturaPending, IKalturaSchemaContributor
+class ContentDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunServices, IVidiunEventConsumers, IVidiunEnumerator, IVidiunVersion, IVidiunSearchDataContributor, IVidiunObjectLoader, IVidiunAdminConsolePages, IVidiunApplicationPartialView, IVidiunPending, IVidiunSchemaContributor
 {
 	const PLUGIN_NAME = 'contentDistribution';
 	const PLUGIN_VERSION_MAJOR = 2;
 	const PLUGIN_VERSION_MINOR = 0;
 	const PLUGIN_VERSION_BUILD = 0;
-	const CONTENT_DSTRIBUTION_MANAGER = 'kContentDistributionFlowManager';
-	const CONTENT_DSTRIBUTION_COPY_HANDLER = 'kContentDistributionObjectCopiedHandler';
+	const CONTENT_DSTRIBUTION_MANAGER = 'vContentDistributionFlowManager';
+	const CONTENT_DSTRIBUTION_COPY_HANDLER = 'vContentDistributionObjectCopiedHandler';
 	const SPHINX_EXPANDER_FIELD_DATA = 'data';
 
 	/* (non-PHPdoc)
-	 * @see KalturaPlugin::getInstance()
+	 * @see VidiunPlugin::getInstance()
 	 */
 	public function getInstance($interface)
 	{
 		if($this instanceof $interface)
 			return $this;
 			
-		if($interface == 'IKalturaMrssContributor')
-			return kContentDistributionMrssManager::get();
+		if($interface == 'IVidiunMrssContributor')
+			return vContentDistributionMrssManager::get();
 			
 		return null;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -35,16 +35,16 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$dependency = new KalturaDependency(MetadataPlugin::getPluginName());
+		$dependency = new VidiunDependency(MetadataPlugin::getPluginName());
 		return array($dependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -59,7 +59,7 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{
@@ -75,7 +75,7 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -86,7 +86,7 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -109,11 +109,11 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaVersion::getVersion()
+	 * @see IVidiunVersion::getVersion()
 	 */
 	public static function getVersion()
 	{
-		return new KalturaVersion(
+		return new VidiunVersion(
 			self::PLUGIN_VERSION_MAJOR,
 			self::PLUGIN_VERSION_MINOR,
 			self::PLUGIN_VERSION_BUILD
@@ -121,19 +121,19 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSearchDataContributor::getSearchData()
+	 * @see IVidiunSearchDataContributor::getSearchData()
 	 */
 	public static function getSearchData(BaseObject $object)
 	{
 		if(class_exists('ContentDistributionSphinxPlugin'))
 			if($object instanceof entry)
-				return array (ContentDistributionSphinxPlugin::getSphinxFieldName(self::SPHINX_EXPANDER_FIELD_DATA) => kContentDistributionManager::getEntrySearchValues($object));
+				return array (ContentDistributionSphinxPlugin::getSphinxFieldName(self::SPHINX_EXPANDER_FIELD_DATA) => vContentDistributionManager::getEntrySearchValues($object));
 
 		return null;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
@@ -166,53 +166,53 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 			}
 		}
 		
-		if($baseClass == 'kJobData')
+		if($baseClass == 'vJobData')
 		{
 			if($enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_SUBMIT))
-				return new kDistributionSubmitJobData();
+				return new vDistributionSubmitJobData();
 				
 			if($enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_UPDATE))
-				return new kDistributionUpdateJobData();
+				return new vDistributionUpdateJobData();
 				
 			if($enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_DELETE))
-				return new kDistributionDeleteJobData();
+				return new vDistributionDeleteJobData();
 				
 			if($enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_FETCH_REPORT))
-				return new kDistributionFetchReportJobData();
+				return new vDistributionFetchReportJobData();
 				
 			if($enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_ENABLE))
-				return new kDistributionEnableJobData();
+				return new vDistributionEnableJobData();
 				
 			if($enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_DISABLE))
-				return new kDistributionDisableJobData();
+				return new vDistributionDisableJobData();
 		}
 	
-		if($baseClass == 'KalturaJobData')
+		if($baseClass == 'VidiunJobData')
 		{
 			if($enumValue == self::getApiValue(ContentDistributionBatchJobType::DISTRIBUTION_SUBMIT) || $enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_SUBMIT))
-				return new KalturaDistributionSubmitJobData();
+				return new VidiunDistributionSubmitJobData();
 				
 			if($enumValue == self::getApiValue(ContentDistributionBatchJobType::DISTRIBUTION_UPDATE) || $enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_UPDATE))
-				return new KalturaDistributionUpdateJobData();
+				return new VidiunDistributionUpdateJobData();
 				
 			if($enumValue == self::getApiValue(ContentDistributionBatchJobType::DISTRIBUTION_DELETE) || $enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_DELETE))
-				return new KalturaDistributionDeleteJobData();
+				return new VidiunDistributionDeleteJobData();
 				
 			if($enumValue == self::getApiValue(ContentDistributionBatchJobType::DISTRIBUTION_FETCH_REPORT) || $enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_FETCH_REPORT))
-				return new KalturaDistributionFetchReportJobData();
+				return new VidiunDistributionFetchReportJobData();
 				
 			if($enumValue == self::getApiValue(ContentDistributionBatchJobType::DISTRIBUTION_ENABLE) || $enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_ENABLE))
-				return new KalturaDistributionEnableJobData();
+				return new VidiunDistributionEnableJobData();
 				
 			if($enumValue == self::getApiValue(ContentDistributionBatchJobType::DISTRIBUTION_DISABLE) || $enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_DISABLE))
-				return new KalturaDistributionDisableJobData();
+				return new VidiunDistributionDisableJobData();
 		}
 		
 		return null;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -226,53 +226,53 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 				return 'DistributionProfile';
 		}
 		
-		if($baseClass == 'kJobData')
+		if($baseClass == 'vJobData')
 		{
 			if($enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_SUBMIT))
-				return 'kDistributionSubmitJobData';
+				return 'vDistributionSubmitJobData';
 				
 			if($enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_UPDATE))
-				return 'kDistributionUpdateJobData';
+				return 'vDistributionUpdateJobData';
 				
 			if($enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_DELETE))
-				return 'kDistributionDeleteJobData';
+				return 'vDistributionDeleteJobData';
 				
 			if($enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_FETCH_REPORT))
-				return 'kDistributionFetchReportJobData';
+				return 'vDistributionFetchReportJobData';
 				
 			if($enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_ENABLE))
-				return 'kDistributionEnableJobData';
+				return 'vDistributionEnableJobData';
 				
 			if($enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_DISABLE))
-				return 'kDistributionDisableJobData';
+				return 'vDistributionDisableJobData';
 		}
 	
-		if($baseClass == 'KalturaJobData')
+		if($baseClass == 'VidiunJobData')
 		{
 			if($enumValue == self::getApiValue(ContentDistributionBatchJobType::DISTRIBUTION_SUBMIT) || $enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_SUBMIT))
-				return 'KalturaDistributionSubmitJobData';
+				return 'VidiunDistributionSubmitJobData';
 				
 			if($enumValue == self::getApiValue(ContentDistributionBatchJobType::DISTRIBUTION_UPDATE) || $enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_UPDATE))
-				return 'KalturaDistributionUpdateJobData';
+				return 'VidiunDistributionUpdateJobData';
 				
 			if($enumValue == self::getApiValue(ContentDistributionBatchJobType::DISTRIBUTION_DELETE) || $enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_DELETE))
-				return 'KalturaDistributionDeleteJobData';
+				return 'VidiunDistributionDeleteJobData';
 				
 			if($enumValue == self::getApiValue(ContentDistributionBatchJobType::DISTRIBUTION_FETCH_REPORT) || $enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_FETCH_REPORT))
-				return 'KalturaDistributionFetchReportJobData';
+				return 'VidiunDistributionFetchReportJobData';
 				
 			if($enumValue == self::getApiValue(ContentDistributionBatchJobType::DISTRIBUTION_ENABLE) || $enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_ENABLE))
-				return 'KalturaDistributionEnableJobData';
+				return 'VidiunDistributionEnableJobData';
 				
 			if($enumValue == self::getApiValue(ContentDistributionBatchJobType::DISTRIBUTION_DISABLE) || $enumValue == self::getBatchJobTypeCoreValue(ContentDistributionBatchJobType::DISTRIBUTION_DISABLE))
-				return 'KalturaDistributionDisableJobData';
+				return 'VidiunDistributionDisableJobData';
 		}
 		
 		return null;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaAdminConsolePages::getApplicationPages()
+	 * @see IVidiunAdminConsolePages::getApplicationPages()
 	 */
 	public static function getApplicationPages()
 	{
@@ -293,14 +293,14 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaApplicationPartialView::getApplicationPartialViews()
+	 * @see IVidiunApplicationPartialView::getApplicationPartialViews()
 	 */
 	public static function getApplicationPartialViews($controller, $action)
 	{
 		if($controller == 'batch' && $action == 'entryInvestigation')
 		{
 			return array(
-				new Kaltura_View_Helper_EntryInvestigateDistribution(),
+				new Vidiun_View_Helper_EntryInvestigateDistribution(),
 			);
 		}
 		
@@ -312,8 +312,8 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	 */
 	public static function getContentDistributionFileSyncObjectTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('FileSyncObjectType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('FileSyncObjectType', $value);
 	}
 	
 	/**
@@ -321,8 +321,8 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	 */
 	public static function getBatchJobTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BatchJobType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BatchJobType', $value);
 	}
 	
 	/**
@@ -330,8 +330,8 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	 */
 	public static function getObjectFeatureTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('ObjectFeatureType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('ObjectFeatureType', $value);
 	}
 	
 	/**
@@ -339,15 +339,15 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if($coreType != SchemaType::SYNDICATION)
 			return null;
 			
@@ -427,17 +427,17 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 					<xs:documentation>Entry distribution last report date</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="dirtyStatus" minOccurs="0" maxOccurs="1" type="KalturaEntryDistributionFlag">
+			<xs:element name="dirtyStatus" minOccurs="0" maxOccurs="1" type="VidiunEntryDistributionFlag">
 				<xs:annotation>
 					<xs:documentation>Indicates that there are future action to be submitted</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="status" minOccurs="1" maxOccurs="1" type="KalturaEntryDistributionStatus">
+			<xs:element name="status" minOccurs="1" maxOccurs="1" type="VidiunEntryDistributionStatus">
 				<xs:annotation>
 					<xs:documentation>Entry distribution status</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="sunStatus" minOccurs="1" maxOccurs="1" type="KalturaEntryDistributionSunStatus">
+			<xs:element name="sunStatus" minOccurs="1" maxOccurs="1" type="VidiunEntryDistributionSunStatus">
 				<xs:annotation>
 					<xs:documentation>Entry distribution availability status</xs:documentation>
 				</xs:annotation>
@@ -457,7 +457,7 @@ class ContentDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 					<xs:documentation>Submission error number</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="errorType" minOccurs="0" maxOccurs="1" type="KalturaBatchJobErrorTypes">
+			<xs:element name="errorType" minOccurs="0" maxOccurs="1" type="VidiunBatchJobErrorTypes">
 				<xs:annotation>
 					<xs:documentation>Submission error type</xs:documentation>
 				</xs:annotation>

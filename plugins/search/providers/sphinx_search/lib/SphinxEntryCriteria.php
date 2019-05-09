@@ -18,7 +18,7 @@ class SphinxEntryCriteria extends SphinxCriteria
 
 		if ( $filter->is_set('_eq_redirect_from_entry_id' ) )
 		{
-			$partnerGroup = array(kCurrentContext::getCurrentPartnerId(), PartnerPeer::GLOBAL_PARTNER);
+			$partnerGroup = array(vCurrentContext::getCurrentPartnerId(), PartnerPeer::GLOBAL_PARTNER);
 			$criteriaFilter = entryPeer::getCriteriaFilter();
 			$defaultCriteria = $criteriaFilter->getFilter();
 			$defaultCriteria->remove(entryPeer::PARTNER_ID);
@@ -33,7 +33,7 @@ class SphinxEntryCriteria extends SphinxCriteria
 				{
 					// Set a relatively short expiry value in order to reduce the wait-time
 					// until the cache is refreshed and a redirection kicks-in. 
-					kApiCache::setExpiry( kApiCache::REDIRECT_ENTRY_CACHE_EXPIRY );
+					vApiCache::setExpiry( vApiCache::REDIRECT_ENTRY_CACHE_EXPIRY );
 				}
 								
 				// Get the id of the entry id that is being redirected from the original entry
@@ -64,7 +64,7 @@ class SphinxEntryCriteria extends SphinxCriteria
 			}
 			else
 			{
-				throw new kCoreException( "Invalid entry id [\"$origEntryId\"]", kCoreException::INVALID_ENTRY_ID, $origEntryId );
+				throw new vCoreException( "Invalid entry id [\"$origEntryId\"]", vCoreException::INVALID_ENTRY_ID, $origEntryId );
 			}
 
 			$filter->unsetByName( '_eq_redirect_from_entry_id' );
@@ -257,7 +257,7 @@ class SphinxEntryCriteria extends SphinxCriteria
 			
 		if($filter->get(baseObjectFilter::ORDER) === "recent" || $filter->get(baseObjectFilter::ORDER) === "-recent")
 		{
-			$filter->set("_lte_available_from", kApiCache::getTime());
+			$filter->set("_lte_available_from", vApiCache::getTime());
 			//$filter->set("_gteornull_end_date", time()); // schedule not finished
 			$filter->set(baseObjectFilter::ORDER, "-available_from");
 		}
@@ -282,7 +282,7 @@ class SphinxEntryCriteria extends SphinxCriteria
 		if($filter->get('_free_text'))
 		{
 			$freeTexts = $filter->get('_free_text');
-			KalturaLog::debug("Attach free text [$freeTexts]");
+			VidiunLog::debug("Attach free text [$freeTexts]");
 			
 			$additionalConditions = array();
 			$advancedSearch = $filter->getAdvancedSearch();
@@ -298,7 +298,7 @@ class SphinxEntryCriteria extends SphinxCriteria
 
 	private function buildReferenceIdMatchString( $refId )
 	{
-		$notEmpty = kSphinxSearchManager::HAS_VALUE . kCurrentContext::getCurrentPartnerId();
+		$notEmpty = vSphinxSearchManager::HAS_VALUE . vCurrentContext::getCurrentPartnerId();
 		return "\\\" " . mySearchUtils::getMd5EncodedString($refId) . " $notEmpty$\\\"";
 	}
 	
@@ -312,14 +312,14 @@ class SphinxEntryCriteria extends SphinxCriteria
 		// depending on the partner_search_scope - alter the against_str 
 		$partner_search_scope = $filter->getPartnerSearchScope();
 		
-		if ( baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE == $partner_search_scope )
+		if ( baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE == $partner_search_scope )
 		{
 			// add nothing the the partner match
 			
 		}
 		elseif ( $partner_search_scope == null  )
 		{
-			$this->add(entryPeer::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+			$this->add(entryPeer::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 		}
 		else
 		{
@@ -360,7 +360,7 @@ class SphinxEntryCriteria extends SphinxCriteria
 			return entry::ROOTS_FIELD_PREFIX;
 		
 		if ($fieldName == 'categories')
-			return entry::CATEGORIES_INDEXED_FIELD_PREFIX.kCurrentContext::getCurrentPartnerId();	
+			return entry::CATEGORIES_INDEXED_FIELD_PREFIX.vCurrentContext::getCurrentPartnerId();	
 			
 		return parent::getFieldPrefix($fieldName);
 	}

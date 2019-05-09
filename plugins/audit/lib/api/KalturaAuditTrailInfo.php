@@ -4,17 +4,17 @@
  * @subpackage api.objects
  * @abstract
  */
-abstract class KalturaAuditTrailInfo extends KalturaObject 
+abstract class VidiunAuditTrailInfo extends VidiunObject 
 {
 	/**
-	 * @param kAuditTrailInfo $dbAuditTrail
+	 * @param vAuditTrailInfo $dbAuditTrail
 	 * @param array $propsToSkip
-	 * @return kAuditTrailInfo
+	 * @return vAuditTrailInfo
 	 */
 	public function toObject($auditTrailInfo = null, $propsToSkip = array())
 	{
 		if(is_null($auditTrailInfo))
-			$auditTrailInfo = new kAuditTrailInfo();
+			$auditTrailInfo = new vAuditTrailInfo();
 			
 		return parent::toObject($auditTrailInfo, $propsToSkip);
 	}

@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaConversionProfileAssetParamsOrderBy extends KalturaStringEnum
+class VidiunConversionProfileAssetParamsOrderBy extends VidiunStringEnum
 {
 }

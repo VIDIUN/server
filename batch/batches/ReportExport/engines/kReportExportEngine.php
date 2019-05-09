@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage ReportExport
  */
-abstract class kReportExportEngine
+abstract class vReportExportEngine
 {
 	const DEFAULT_TITLE = 'default';
 	const DISCLAIMER_CONFIG_KEY = 'report_filter_disclaimer_message';
@@ -21,7 +21,7 @@ abstract class kReportExportEngine
 		$this->fp = fopen($this->filename, 'w');
 		if (!$this->fp)
 		{
-			throw new KOperationEngineException("Failed to open report file : " . $this->filename);
+			throw new VOperationEngineException("Failed to open report file : " . $this->filename);
 		}
 	}
 
@@ -63,7 +63,7 @@ abstract class kReportExportEngine
 			return;
 		}
 
-		$disclaimerMessage = kConf::get(self::DISCLAIMER_CONFIG_KEY, 'local', null);
+		$disclaimerMessage = vConf::get(self::DISCLAIMER_CONFIG_KEY, 'local', null);
 		if ($disclaimerMessage)
 		{
 			$this->writeRow($disclaimerMessage);
@@ -102,7 +102,7 @@ abstract class kReportExportEngine
 		{
 			$row = array($row);
 		}
-		KCsvWrapper::sanitizedFputCsv($this->fp, $row);
+		VCsvWrapper::sanitizedFputCsv($this->fp, $row);
 	}
 
 	protected function createFileName($outputPath)

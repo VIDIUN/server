@@ -3,7 +3,7 @@
  * @package plugins.schedule
  * @subpackage api.objects
  */
-class KalturaLiveStreamScheduleEvent extends KalturaEntryScheduleEvent
+class VidiunLiveStreamScheduleEvent extends VidiunEntryScheduleEvent
 {
 	/**
 	 * Defines the expected audience.
@@ -13,7 +13,7 @@ class KalturaLiveStreamScheduleEvent extends KalturaEntryScheduleEvent
 	public $projectedAudience;
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($sourceObject = null, $propertiesToSkip = array())
 	{
@@ -34,7 +34,7 @@ class KalturaLiveStreamScheduleEvent extends KalturaEntryScheduleEvent
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -43,7 +43,7 @@ class KalturaLiveStreamScheduleEvent extends KalturaEntryScheduleEvent
 
 	/**
 	 * {@inheritDoc}
-	 * @see KalturaScheduleEvent::getScheduleEventType()
+	 * @see VidiunScheduleEvent::getScheduleEventType()
 	 */
 	public function getScheduleEventType()
 	{

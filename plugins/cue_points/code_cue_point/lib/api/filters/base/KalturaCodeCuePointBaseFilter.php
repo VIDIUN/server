@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaCodeCuePointBaseFilter extends KalturaCuePointFilter
+abstract class VidiunCodeCuePointBaseFilter extends VidiunCuePointFilter
 {
 	static private $map_between_objects = array
 	(

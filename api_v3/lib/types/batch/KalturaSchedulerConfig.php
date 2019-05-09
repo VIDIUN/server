@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaSchedulerConfig extends KalturaObject 
+class VidiunSchedulerConfig extends VidiunObject 
 {
 	/**
 	 * The id of the Category

@@ -4,7 +4,7 @@
  * @subpackage api.objects
  * @relatedService GroupService
  */
-class KalturaGroup extends KalturaBaseUser
+class VidiunGroup extends VidiunBaseUser
 {
 	/**
 	 * @var int
@@ -25,8 +25,8 @@ class KalturaGroup extends KalturaBaseUser
 	{
 		if (is_null($dbObject))
 		{
-			$dbObject = new kuser();
-			$dbObject->setType(KuserType::GROUP);
+			$dbObject = new vuser();
+			$dbObject->setType(VuserType::GROUP);
 		}
 		parent::toObject($dbObject, $skip);
 		return $dbObject;
@@ -39,9 +39,9 @@ class KalturaGroup extends KalturaBaseUser
 		{
 			$id = $propertiesToSkip->getPuserId();
 		}
-		if (!preg_match(kuser::PUSER_ID_REGEXP, $id))
+		if (!preg_match(vuser::PUSER_ID_REGEXP, $id))
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_FIELD_VALUE, 'id');
+			throw new VidiunAPIException(VidiunErrors::INVALID_FIELD_VALUE, 'id');
 		}
 		$this->validateNames($this,self::$names);
 		parent::validateForInsert($propertiesToSkip);

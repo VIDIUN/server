@@ -3,7 +3,7 @@
  * @package plugins.bulkUploadXml
  * @subpackage lib
  */
-class CuePointSchemaType implements IKalturaPluginEnum, SchemaType
+class CuePointSchemaType implements IVidiunPluginEnum, SchemaType
 {
 	const SERVE_API = 'serveAPI';
 	const INGEST_API = 'ingestAPI';

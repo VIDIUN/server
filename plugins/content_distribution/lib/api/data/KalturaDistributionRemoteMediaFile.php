@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaDistributionRemoteMediaFile extends KalturaObject
+class VidiunDistributionRemoteMediaFile extends VidiunObject
 {
 	/**
 	 * @var string
@@ -36,7 +36,7 @@ class KalturaDistributionRemoteMediaFile extends KalturaObject
 	public function toObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		if(is_null($object_to_fill))
-			$object_to_fill = new kDistributionRemoteMediaFile();
+			$object_to_fill = new vDistributionRemoteMediaFile();
 			
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

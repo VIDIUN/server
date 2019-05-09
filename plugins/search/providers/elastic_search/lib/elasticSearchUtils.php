@@ -57,7 +57,7 @@ class elasticSearchUtils
 	public static function getSynonymFieldName($language, $fieldName, $delimiter)
 	{
 		$fieldMap = array(
-			'english' => kESearchQueryManager::SYNONYM_FIELD_SUFFIX,
+			'english' => vESearchQueryManager::SYNONYM_FIELD_SUFFIX,
 		);
 
 		$language = strtolower($language);
@@ -118,7 +118,7 @@ class elasticSearchUtils
 	public static function getCategoryUserAllPermissionLevels($userId)
 	{
 		$formatPermissions = array();
-		$permissionLevelReflection = new ReflectionClass('CategoryKuserPermissionLevel');
+		$permissionLevelReflection = new ReflectionClass('CategoryVuserPermissionLevel');
 		$permissionLevels = $permissionLevelReflection->getConstants();
 		foreach ($permissionLevels as $permissionLevel)
 			$formatPermissions[] = elasticSearchUtils::formatCategoryUserPermissionLevel($userId, $permissionLevel);
@@ -175,7 +175,7 @@ class elasticSearchUtils
 	
 	public static function getNumOfFragmentsByConfigKey($highlightConfigKey)
 	{
-		$highlightConfig = kConf::get('highlights', 'elastic');
+		$highlightConfig = vConf::get('highlights', 'elastic');
 		//return null to use elastic default num of fragments
 		$numOfFragments = isset($highlightConfig[$highlightConfigKey]) ? $highlightConfig[$highlightConfigKey] : null;
 		return $numOfFragments;

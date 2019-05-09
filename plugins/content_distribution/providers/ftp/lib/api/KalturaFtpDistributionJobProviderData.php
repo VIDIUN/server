@@ -3,42 +3,42 @@
  * @package plugins.ftpDistribution
  * @subpackage api.objects
  */
-class KalturaFtpDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunFtpDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 	/**
-	 * @var KalturaFtpDistributionFileArray
+	 * @var VidiunFtpDistributionFileArray
 	 */
 	public $filesForDistribution;
 	
 	/**
 	 * Called on the server side and enables you to populate the object with any data from the DB
 	 * 
-	 * @param KalturaDistributionJobData $distributionJobData
+	 * @param VidiunDistributionJobData $distributionJobData
 	 */
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 		
 		if(!$distributionJobData)
 			return;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaFtpDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunFtpDistributionProfile))
 			return;
 			
 		$entryDistributionDb = EntryDistributionPeer::retrieveByPK($distributionJobData->entryDistributionId);
 		$distributionProfileDb = DistributionProfilePeer::retrieveByPK($distributionJobData->distributionProfileId);
 		
 		if (is_null($entryDistributionDb))
-			return KalturaLog::err('Entry distribution #'.$distributionJobData->entryDistributionId.' not found');
+			return VidiunLog::err('Entry distribution #'.$distributionJobData->entryDistributionId.' not found');
 		
 		if (is_null($distributionProfileDb))
-			return KalturaLog::err('Distribution profile #'.$distributionJobData->distributionProfileId.' not found');
+			return VidiunLog::err('Distribution profile #'.$distributionJobData->distributionProfileId.' not found');
 
 		if (!$distributionProfileDb instanceof FtpDistributionProfile)
-			return KalturaLog::err('Distribution profile #'.$distributionJobData->distributionProfileId.' is not instance of FtpDistributionProfile');
+			return VidiunLog::err('Distribution profile #'.$distributionJobData->distributionProfileId.' is not instance of FtpDistributionProfile');
 
 		$this->filesForDistribution = $this->getDistributionFiles($distributionProfileDb, $entryDistributionDb);
-		KalturaLog::log("Files for distribution: ".print_r($this->filesForDistribution, true));
+		VidiunLog::log("Files for distribution: ".print_r($this->filesForDistribution, true));
 	}
 		
 	/**
@@ -52,7 +52,7 @@ class KalturaFtpDistributionJobProviderData extends KalturaConfigurableDistribut
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -61,14 +61,14 @@ class KalturaFtpDistributionJobProviderData extends KalturaConfigurableDistribut
 	
 	protected function getDistributionFiles(FtpDistributionProfile $distributionProfileDb, EntryDistribution $entryDistributionDb)
 	{
-		$files = new KalturaFtpDistributionFileArray();
+		$files = new VidiunFtpDistributionFileArray();
 		$sendMetadataAfterAssets = false;
 		if(!is_null($distributionProfileDb->getSendMetadataAfterAssets()))
 			$sendMetadataAfterAssets = $distributionProfileDb->getSendMetadataAfterAssets();
 			
 		if (!$distributionProfileDb->getDisableMetadata()) 
 		{
-			$metadataFile = new KalturaFtpDistributionFile();
+			$metadataFile = new VidiunFtpDistributionFile();
 			$metadataXml = $distributionProfileDb->getMetadataXml($entryDistributionDb);
 			$metadataFile->filename = $distributionProfileDb->getMetadataFilename($entryDistributionDb);
 			$metadataFile->contents = $metadataXml;
@@ -85,17 +85,17 @@ class KalturaFtpDistributionJobProviderData extends KalturaConfigurableDistribut
 		
 		$assets = assetPeer::retrieveByIds(array_merge($flavorAssetsIds, $thumbnailAssetIds, $assetIds));
 		
-		KalturaLog::log("Assets to distribute: ".print_r($assets, true));
+		VidiunLog::log("Assets to distribute: ".print_r($assets, true));
 		
 		foreach($assets as $asset) 
 		{
 			/* @var $assets asset */
 			$syncKey = $asset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 			
-			$file = new KalturaFtpDistributionFile();
+			$file = new VidiunFtpDistributionFile();
 			$file->assetId = $asset->getId();
 			
-			$file->localFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			$file->localFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 			$file->version = $syncKey->getVersion();
 			$defaultFilename = pathinfo($file->localFilePath, PATHINFO_BASENAME);
 			

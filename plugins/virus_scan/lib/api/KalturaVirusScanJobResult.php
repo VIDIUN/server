@@ -3,7 +3,7 @@
  * @package plugins.virusScan
  * @subpackage api.enum
  */
-class KalturaVirusScanJobResult extends KalturaEnum
+class VidiunVirusScanJobResult extends VidiunEnum
 {
 	const SCAN_ERROR        = 1;
 	const FILE_IS_CLEAN     = 2;

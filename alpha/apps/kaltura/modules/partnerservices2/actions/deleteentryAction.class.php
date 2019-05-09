@@ -35,22 +35,22 @@ class deleteentryAction extends defPartnerservices2Action
 		return self::REQUIED_TICKET_ADMIN;
 	}
 
-	// ask to fetch the kuser from puser_kuser - so we can tel the difference between a
-	public function needKuserFromPuser ( )
+	// ask to fetch the vuser from puser_vuser - so we can tel the difference between a
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_KUSER_ID_ONLY;
+		return self::VUSER_DATA_VUSER_ID_ONLY;
 	}
 
 	protected function getObjectPrefix () { return "entry"; }
 
 	protected function getCriteria (  ) { return null; }
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$prefix = $this->getObjectPrefix();
 		$entry_id_to_delete = $this->getPM ( "{$prefix}_id" );
 
-		$kshow_id_for_entry_id_to_delete = $this->getP ( "kshow_id" );
+		$vshow_id_for_entry_id_to_delete = $this->getP ( "vshow_id" );
 		$c = $this->getCriteria(); 
 		if ( $c == null )
 		{
@@ -67,12 +67,12 @@ class deleteentryAction extends defPartnerservices2Action
 			return;
 		}
 
-		if ( $kshow_id_for_entry_id_to_delete != null )
+		if ( $vshow_id_for_entry_id_to_delete != null )
 		{
-			// match the kshow_id
-			if (  $kshow_id_for_entry_id_to_delete != $entry_to_delete->getKshowId() )
+			// match the vshow_id
+			if (  $vshow_id_for_entry_id_to_delete != $entry_to_delete->getVshowId() )
 			{
-				$this->addError( APIErrors::CANNOT_DELETE_ENTRY , $entry_id_to_delete , $kshow_id_for_entry_id_to_delete  );
+				$this->addError( APIErrors::CANNOT_DELETE_ENTRY , $entry_id_to_delete , $vshow_id_for_entry_id_to_delete  );
 				return;
 			}
 		}
@@ -89,7 +89,7 @@ class deleteentryAction extends defPartnerservices2Action
 			$entry_to_delete->setModifiedAt( time() ) ;
 			$entry_to_delete->save();
 			
-			myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_DELETE , $entry_to_delete );
+			myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_DELETE , $entry_to_delete );
 		*/
 		
 		$this->addMsg ( "deleted_" . $prefix  , objectWrapperBase::getWrapperClass( $entry_to_delete , objectWrapperBase::DETAIL_LEVEL_REGULAR ) );

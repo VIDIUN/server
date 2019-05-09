@@ -6,7 +6,7 @@ class scriptLogger
 	static function logScript($msg)
 	{
 		print $msg.PHP_EOL;
-		KalturaLog::debug($msg);
+		VidiunLog::debug($msg);
 	}
 }
 

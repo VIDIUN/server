@@ -127,34 +127,34 @@ class IdeticDistributionProvider extends ConfigurableDistributionProvider
 	
 	/**
 	 * @param string $entryId
-	 * @param KalturaIdeticDistributionJobProviderData $providerData
+	 * @param VidiunIdeticDistributionJobProviderData $providerData
 	 * @return DOMDocument
 	 */
-	public static function generateXML($entryId, KalturaIdeticDistributionJobProviderData $providerData)
+	public static function generateXML($entryId, VidiunIdeticDistributionJobProviderData $providerData)
 	{
 		$entry = entryPeer::retrieveByPKNoFilter($entryId);
-		$mrss = kMrssManager::getEntryMrss($entry);
+		$mrss = vMrssManager::getEntryMrss($entry);
 
 		if(!$mrss)
 		{
-			KalturaLog::err("No MRSS returned for entry [$entryId]");
+			VidiunLog::err("No MRSS returned for entry [$entryId]");
 			return null;
 		}
 			
-		$xml = new KDOMDocument();
+		$xml = new VDOMDocument();
 		if(!$xml->loadXML($mrss))
 		{
-			KalturaLog::err("Could not load MRSS as XML for entry [$entryId]");
+			VidiunLog::err("Could not load MRSS as XML for entry [$entryId]");
 			return null;
 		}
 		
 		$xslPath = realpath(dirname(__FILE__) . '/../') . '/xml/submit.xsl';
 		if(!file_exists($xslPath))
 		{
-			KalturaLog::err("XSL file not found [$xslPath]");
+			VidiunLog::err("XSL file not found [$xslPath]");
 			return null;
 		}
-		$xsl = new KDOMDocument();
+		$xsl = new VDOMDocument();
 		$xsl->load($xslPath);
 			
 		// set variables in the xsl
@@ -170,7 +170,7 @@ class IdeticDistributionProvider extends ConfigurableDistributionProvider
 			{
 				$varNode->textContent = $providerData->$name;
 				$varNode->appendChild($xsl->createTextNode($providerData->$name));
-				KalturaLog::info("Set variable [$name] to [{$providerData->$name}]");
+				VidiunLog::info("Set variable [$name] to [{$providerData->$name}]");
 			}
 		}
 
@@ -181,7 +181,7 @@ class IdeticDistributionProvider extends ConfigurableDistributionProvider
 		$xml = $proc->transformToDoc($xml);
 		if(!$xml)
 		{
-			KalturaLog::err("XML Transformation failed");
+			VidiunLog::err("XML Transformation failed");
 			return null;
 		}
 			
@@ -189,7 +189,7 @@ class IdeticDistributionProvider extends ConfigurableDistributionProvider
 		$xsdPath = realpath(dirname(__FILE__) . '/../') . '/xml/submit.xsd';
 		if(file_exists($xsdPath) && !$xml->schemaValidate($xsdPath))
 		{
-			KalturaLog::err("Schema validation failed");		
+			VidiunLog::err("Schema validation failed");		
 			return null;
 		}
 		

@@ -34,8 +34,8 @@ abstract class BasePuserRolePeer {
 	/** the column name for the ID field */
 	const ID = 'puser_role.ID';
 
-	/** the column name for the KSHOW_ID field */
-	const KSHOW_ID = 'puser_role.KSHOW_ID';
+	/** the column name for the VSHOW_ID field */
+	const VSHOW_ID = 'puser_role.VSHOW_ID';
 
 	/** the column name for the PARTNER_ID field */
 	const PARTNER_ID = 'puser_role.PARTNER_ID';
@@ -71,10 +71,10 @@ abstract class BasePuserRolePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'KshowId', 'PartnerId', 'PuserId', 'Role', 'CreatedAt', 'UpdatedAt', 'SubpId', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'kshowId', 'partnerId', 'puserId', 'role', 'createdAt', 'updatedAt', 'subpId', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::KSHOW_ID, self::PARTNER_ID, self::PUSER_ID, self::ROLE, self::CREATED_AT, self::UPDATED_AT, self::SUBP_ID, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'kshow_id', 'partner_id', 'puser_id', 'role', 'created_at', 'updated_at', 'subp_id', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'VshowId', 'PartnerId', 'PuserId', 'Role', 'CreatedAt', 'UpdatedAt', 'SubpId', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'vshowId', 'partnerId', 'puserId', 'role', 'createdAt', 'updatedAt', 'subpId', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::VSHOW_ID, self::PARTNER_ID, self::PUSER_ID, self::ROLE, self::CREATED_AT, self::UPDATED_AT, self::SUBP_ID, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'vshow_id', 'partner_id', 'puser_id', 'role', 'created_at', 'updated_at', 'subp_id', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
 	);
 
@@ -85,10 +85,10 @@ abstract class BasePuserRolePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'KshowId' => 1, 'PartnerId' => 2, 'PuserId' => 3, 'Role' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'SubpId' => 7, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'kshowId' => 1, 'partnerId' => 2, 'puserId' => 3, 'role' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'subpId' => 7, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::KSHOW_ID => 1, self::PARTNER_ID => 2, self::PUSER_ID => 3, self::ROLE => 4, self::CREATED_AT => 5, self::UPDATED_AT => 6, self::SUBP_ID => 7, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'kshow_id' => 1, 'partner_id' => 2, 'puser_id' => 3, 'role' => 4, 'created_at' => 5, 'updated_at' => 6, 'subp_id' => 7, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'VshowId' => 1, 'PartnerId' => 2, 'PuserId' => 3, 'Role' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'SubpId' => 7, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'vshowId' => 1, 'partnerId' => 2, 'puserId' => 3, 'role' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'subpId' => 7, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::VSHOW_ID => 1, self::PARTNER_ID => 2, self::PUSER_ID => 3, self::ROLE => 4, self::CREATED_AT => 5, self::UPDATED_AT => 6, self::SUBP_ID => 7, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'vshow_id' => 1, 'partner_id' => 2, 'puser_id' => 3, 'role' => 4, 'created_at' => 5, 'updated_at' => 6, 'subp_id' => 7, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
 	);
 
@@ -160,7 +160,7 @@ abstract class BasePuserRolePeer {
 	public static function addSelectColumns(Criteria $criteria)
 	{
 		$criteria->addSelectColumn(PuserRolePeer::ID);
-		$criteria->addSelectColumn(PuserRolePeer::KSHOW_ID);
+		$criteria->addSelectColumn(PuserRolePeer::VSHOW_ID);
 		$criteria->addSelectColumn(PuserRolePeer::PARTNER_ID);
 		$criteria->addSelectColumn(PuserRolePeer::PUSER_ID);
 		$criteria->addSelectColumn(PuserRolePeer::ROLE);
@@ -200,11 +200,11 @@ abstract class BasePuserRolePeer {
 		
 		PuserRolePeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'PuserRolePeer', 
 			$cacheKey, 
 			$queryDB);
@@ -228,7 +228,7 @@ abstract class BasePuserRolePeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -309,7 +309,7 @@ abstract class BasePuserRolePeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -332,11 +332,11 @@ abstract class BasePuserRolePeer {
 	{		
 		$criteriaForSelect = PuserRolePeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'PuserRolePeer', 
 			$cacheKey, 
 			$queryDB);
@@ -352,12 +352,12 @@ abstract class BasePuserRolePeer {
 		
 		$queryResult = PuserRolePeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -367,17 +367,17 @@ abstract class BasePuserRolePeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -448,7 +448,7 @@ abstract class BasePuserRolePeer {
 		PuserRolePeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -456,19 +456,19 @@ abstract class BasePuserRolePeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -487,7 +487,7 @@ abstract class BasePuserRolePeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -606,11 +606,11 @@ abstract class BasePuserRolePeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('PuserRolePeer');
+				vMemoryManager::registerPeer('PuserRolePeer');
 			}
 		}
 	}
@@ -735,7 +735,7 @@ abstract class BasePuserRolePeer {
 	}
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kshow table
+	 * Returns the number of rows matching criteria, joining the related vshow table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -743,7 +743,7 @@ abstract class BasePuserRolePeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinkshow(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinvshow(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -767,7 +767,7 @@ abstract class BasePuserRolePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(PuserRolePeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$stmt = PuserRolePeer::doCountStmt($criteria, $con);
 
@@ -782,7 +782,7 @@ abstract class BasePuserRolePeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related PuserKuserRelatedByPartnerId table
+	 * Returns the number of rows matching criteria, joining the related PuserVuserRelatedByPartnerId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -790,7 +790,7 @@ abstract class BasePuserRolePeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinPuserKuserRelatedByPartnerId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinPuserVuserRelatedByPartnerId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -814,7 +814,7 @@ abstract class BasePuserRolePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(PuserRolePeer::PARTNER_ID, PuserKuserPeer::PARTNER_ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::PARTNER_ID, PuserVuserPeer::PARTNER_ID, $join_behavior);
 
 		$stmt = PuserRolePeer::doCountStmt($criteria, $con);
 
@@ -829,7 +829,7 @@ abstract class BasePuserRolePeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related PuserKuserRelatedByPuserId table
+	 * Returns the number of rows matching criteria, joining the related PuserVuserRelatedByPuserId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -837,7 +837,7 @@ abstract class BasePuserRolePeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinPuserKuserRelatedByPuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinPuserVuserRelatedByPuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -861,7 +861,7 @@ abstract class BasePuserRolePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(PuserRolePeer::PUSER_ID, PuserKuserPeer::PUSER_ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::PUSER_ID, PuserVuserPeer::PUSER_ID, $join_behavior);
 
 		$stmt = PuserRolePeer::doCountStmt($criteria, $con);
 
@@ -876,7 +876,7 @@ abstract class BasePuserRolePeer {
 
 
 	/**
-	 * Selects a collection of PuserRole objects pre-filled with their kshow objects.
+	 * Selects a collection of PuserRole objects pre-filled with their vshow objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -884,7 +884,7 @@ abstract class BasePuserRolePeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinkshow(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvshow(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -895,9 +895,9 @@ abstract class BasePuserRolePeer {
 
 		PuserRolePeer::addSelectColumns($criteria);
 		$startcol = (PuserRolePeer::NUM_COLUMNS - PuserRolePeer::NUM_LAZY_LOAD_COLUMNS);
-		kshowPeer::addSelectColumns($criteria);
+		vshowPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(PuserRolePeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$stmt = PuserRolePeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -917,19 +917,19 @@ abstract class BasePuserRolePeer {
 				PuserRolePeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = kshowPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = vshowPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = kshowPeer::getInstanceFromPool($key2);
+				$obj2 = vshowPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kshowPeer::getOMClass(false);
+					$cls = vshowPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					kshowPeer::addInstanceToPool($obj2, $key2);
+					vshowPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (PuserRole) to $obj2 (kshow)
+				// Add the $obj1 (PuserRole) to $obj2 (vshow)
 				$obj2->addPuserRole($obj1);
 
 			} // if joined row was not null
@@ -938,7 +938,7 @@ abstract class BasePuserRolePeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -946,7 +946,7 @@ abstract class BasePuserRolePeer {
 
 
 	/**
-	 * Selects a collection of PuserRole objects pre-filled with their PuserKuser objects.
+	 * Selects a collection of PuserRole objects pre-filled with their PuserVuser objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -954,7 +954,7 @@ abstract class BasePuserRolePeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinPuserKuserRelatedByPartnerId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinPuserVuserRelatedByPartnerId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -965,9 +965,9 @@ abstract class BasePuserRolePeer {
 
 		PuserRolePeer::addSelectColumns($criteria);
 		$startcol = (PuserRolePeer::NUM_COLUMNS - PuserRolePeer::NUM_LAZY_LOAD_COLUMNS);
-		PuserKuserPeer::addSelectColumns($criteria);
+		PuserVuserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(PuserRolePeer::PARTNER_ID, PuserKuserPeer::PARTNER_ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::PARTNER_ID, PuserVuserPeer::PARTNER_ID, $join_behavior);
 
 		$stmt = PuserRolePeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -987,19 +987,19 @@ abstract class BasePuserRolePeer {
 				PuserRolePeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = PuserKuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = PuserVuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = PuserKuserPeer::getInstanceFromPool($key2);
+				$obj2 = PuserVuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = PuserKuserPeer::getOMClass(false);
+					$cls = PuserVuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					PuserKuserPeer::addInstanceToPool($obj2, $key2);
+					PuserVuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (PuserRole) to $obj2 (PuserKuser)
+				// Add the $obj1 (PuserRole) to $obj2 (PuserVuser)
 				$obj2->addPuserRoleRelatedByPartnerId($obj1);
 
 			} // if joined row was not null
@@ -1008,7 +1008,7 @@ abstract class BasePuserRolePeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1016,7 +1016,7 @@ abstract class BasePuserRolePeer {
 
 
 	/**
-	 * Selects a collection of PuserRole objects pre-filled with their PuserKuser objects.
+	 * Selects a collection of PuserRole objects pre-filled with their PuserVuser objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1024,7 +1024,7 @@ abstract class BasePuserRolePeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinPuserKuserRelatedByPuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinPuserVuserRelatedByPuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1035,9 +1035,9 @@ abstract class BasePuserRolePeer {
 
 		PuserRolePeer::addSelectColumns($criteria);
 		$startcol = (PuserRolePeer::NUM_COLUMNS - PuserRolePeer::NUM_LAZY_LOAD_COLUMNS);
-		PuserKuserPeer::addSelectColumns($criteria);
+		PuserVuserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(PuserRolePeer::PUSER_ID, PuserKuserPeer::PUSER_ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::PUSER_ID, PuserVuserPeer::PUSER_ID, $join_behavior);
 
 		$stmt = PuserRolePeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -1057,19 +1057,19 @@ abstract class BasePuserRolePeer {
 				PuserRolePeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = PuserKuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = PuserVuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = PuserKuserPeer::getInstanceFromPool($key2);
+				$obj2 = PuserVuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = PuserKuserPeer::getOMClass(false);
+					$cls = PuserVuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					PuserKuserPeer::addInstanceToPool($obj2, $key2);
+					PuserVuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (PuserRole) to $obj2 (PuserKuser)
+				// Add the $obj1 (PuserRole) to $obj2 (PuserVuser)
 				$obj2->addPuserRoleRelatedByPuserId($obj1);
 
 			} // if joined row was not null
@@ -1078,7 +1078,7 @@ abstract class BasePuserRolePeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1118,11 +1118,11 @@ abstract class BasePuserRolePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(PuserRolePeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
-		$criteria->addJoin(PuserRolePeer::PARTNER_ID, PuserKuserPeer::PARTNER_ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::PARTNER_ID, PuserVuserPeer::PARTNER_ID, $join_behavior);
 
-		$criteria->addJoin(PuserRolePeer::PUSER_ID, PuserKuserPeer::PUSER_ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::PUSER_ID, PuserVuserPeer::PUSER_ID, $join_behavior);
 
 		$stmt = PuserRolePeer::doCountStmt($criteria, $con);
 
@@ -1157,20 +1157,20 @@ abstract class BasePuserRolePeer {
 		PuserRolePeer::addSelectColumns($criteria);
 		$startcol2 = (PuserRolePeer::NUM_COLUMNS - PuserRolePeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kshowPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kshowPeer::NUM_COLUMNS - kshowPeer::NUM_LAZY_LOAD_COLUMNS);
+		vshowPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vshowPeer::NUM_COLUMNS - vshowPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		PuserKuserPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (PuserKuserPeer::NUM_COLUMNS - PuserKuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		PuserVuserPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (PuserVuserPeer::NUM_COLUMNS - PuserVuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		PuserKuserPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (PuserKuserPeer::NUM_COLUMNS - PuserKuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		PuserVuserPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (PuserVuserPeer::NUM_COLUMNS - PuserVuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(PuserRolePeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
-		$criteria->addJoin(PuserRolePeer::PARTNER_ID, PuserKuserPeer::PARTNER_ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::PARTNER_ID, PuserVuserPeer::PARTNER_ID, $join_behavior);
 
-		$criteria->addJoin(PuserRolePeer::PUSER_ID, PuserKuserPeer::PUSER_ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::PUSER_ID, PuserVuserPeer::PUSER_ID, $join_behavior);
 
 		$stmt = PuserRolePeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -1189,57 +1189,57 @@ abstract class BasePuserRolePeer {
 				PuserRolePeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined kshow rows
+			// Add objects for joined vshow rows
 
-			$key2 = kshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = vshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = kshowPeer::getInstanceFromPool($key2);
+				$obj2 = vshowPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kshowPeer::getOMClass(false);
+					$cls = vshowPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kshowPeer::addInstanceToPool($obj2, $key2);
+					vshowPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (PuserRole) to the collection in $obj2 (kshow)
+				// Add the $obj1 (PuserRole) to the collection in $obj2 (vshow)
 				$obj2->addPuserRole($obj1);
 			} // if joined row not null
 
-			// Add objects for joined PuserKuser rows
+			// Add objects for joined PuserVuser rows
 
-			$key3 = PuserKuserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+			$key3 = PuserVuserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
 			if ($key3 !== null) {
-				$obj3 = PuserKuserPeer::getInstanceFromPool($key3);
+				$obj3 = PuserVuserPeer::getInstanceFromPool($key3);
 				if (!$obj3) {
 
-					$cls = PuserKuserPeer::getOMClass(false);
+					$cls = PuserVuserPeer::getOMClass(false);
 
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
-					PuserKuserPeer::addInstanceToPool($obj3, $key3);
+					PuserVuserPeer::addInstanceToPool($obj3, $key3);
 				} // if obj3 loaded
 
-				// Add the $obj1 (PuserRole) to the collection in $obj3 (PuserKuser)
+				// Add the $obj1 (PuserRole) to the collection in $obj3 (PuserVuser)
 				$obj3->addPuserRoleRelatedByPartnerId($obj1);
 			} // if joined row not null
 
-			// Add objects for joined PuserKuser rows
+			// Add objects for joined PuserVuser rows
 
-			$key4 = PuserKuserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+			$key4 = PuserVuserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
 			if ($key4 !== null) {
-				$obj4 = PuserKuserPeer::getInstanceFromPool($key4);
+				$obj4 = PuserVuserPeer::getInstanceFromPool($key4);
 				if (!$obj4) {
 
-					$cls = PuserKuserPeer::getOMClass(false);
+					$cls = PuserVuserPeer::getOMClass(false);
 
 					$obj4 = new $cls();
 					$obj4->hydrate($row, $startcol4);
-					PuserKuserPeer::addInstanceToPool($obj4, $key4);
+					PuserVuserPeer::addInstanceToPool($obj4, $key4);
 				} // if obj4 loaded
 
-				// Add the $obj1 (PuserRole) to the collection in $obj4 (PuserKuser)
+				// Add the $obj1 (PuserRole) to the collection in $obj4 (PuserVuser)
 				$obj4->addPuserRoleRelatedByPuserId($obj1);
 			} // if joined row not null
 
@@ -1251,7 +1251,7 @@ abstract class BasePuserRolePeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kshow table
+	 * Returns the number of rows matching criteria, joining the related vshow table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1259,7 +1259,7 @@ abstract class BasePuserRolePeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptkshow(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptvshow(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1283,9 +1283,9 @@ abstract class BasePuserRolePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(PuserRolePeer::PARTNER_ID, PuserKuserPeer::PARTNER_ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::PARTNER_ID, PuserVuserPeer::PARTNER_ID, $join_behavior);
 
-		$criteria->addJoin(PuserRolePeer::PUSER_ID, PuserKuserPeer::PUSER_ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::PUSER_ID, PuserVuserPeer::PUSER_ID, $join_behavior);
 
 		$stmt = PuserRolePeer::doCountStmt($criteria, $con);
 
@@ -1300,7 +1300,7 @@ abstract class BasePuserRolePeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related PuserKuserRelatedByPartnerId table
+	 * Returns the number of rows matching criteria, joining the related PuserVuserRelatedByPartnerId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1308,7 +1308,7 @@ abstract class BasePuserRolePeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptPuserKuserRelatedByPartnerId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptPuserVuserRelatedByPartnerId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1332,7 +1332,7 @@ abstract class BasePuserRolePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(PuserRolePeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$stmt = PuserRolePeer::doCountStmt($criteria, $con);
 
@@ -1347,7 +1347,7 @@ abstract class BasePuserRolePeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related PuserKuserRelatedByPuserId table
+	 * Returns the number of rows matching criteria, joining the related PuserVuserRelatedByPuserId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1355,7 +1355,7 @@ abstract class BasePuserRolePeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptPuserKuserRelatedByPuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptPuserVuserRelatedByPuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1379,7 +1379,7 @@ abstract class BasePuserRolePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(PuserRolePeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 		$stmt = PuserRolePeer::doCountStmt($criteria, $con);
 
@@ -1394,7 +1394,7 @@ abstract class BasePuserRolePeer {
 
 
 	/**
-	 * Selects a collection of PuserRole objects pre-filled with all related objects except kshow.
+	 * Selects a collection of PuserRole objects pre-filled with all related objects except vshow.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -1403,7 +1403,7 @@ abstract class BasePuserRolePeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptkshow(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptvshow(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1417,15 +1417,15 @@ abstract class BasePuserRolePeer {
 		PuserRolePeer::addSelectColumns($criteria);
 		$startcol2 = (PuserRolePeer::NUM_COLUMNS - PuserRolePeer::NUM_LAZY_LOAD_COLUMNS);
 
-		PuserKuserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (PuserKuserPeer::NUM_COLUMNS - PuserKuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		PuserVuserPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (PuserVuserPeer::NUM_COLUMNS - PuserVuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		PuserKuserPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (PuserKuserPeer::NUM_COLUMNS - PuserKuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		PuserVuserPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (PuserVuserPeer::NUM_COLUMNS - PuserVuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(PuserRolePeer::PARTNER_ID, PuserKuserPeer::PARTNER_ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::PARTNER_ID, PuserVuserPeer::PARTNER_ID, $join_behavior);
 
-		$criteria->addJoin(PuserRolePeer::PUSER_ID, PuserKuserPeer::PUSER_ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::PUSER_ID, PuserVuserPeer::PUSER_ID, $join_behavior);
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
@@ -1445,40 +1445,40 @@ abstract class BasePuserRolePeer {
 				PuserRolePeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined PuserKuser rows
+				// Add objects for joined PuserVuser rows
 
-				$key2 = PuserKuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				$key2 = PuserVuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 				if ($key2 !== null) {
-					$obj2 = PuserKuserPeer::getInstanceFromPool($key2);
+					$obj2 = PuserVuserPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$cls = PuserKuserPeer::getOMClass(false);
+						$cls = PuserVuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					PuserKuserPeer::addInstanceToPool($obj2, $key2);
+					PuserVuserPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (PuserRole) to the collection in $obj2 (PuserKuser)
+				// Add the $obj1 (PuserRole) to the collection in $obj2 (PuserVuser)
 				$obj2->addPuserRoleRelatedByPartnerId($obj1);
 
 			} // if joined row is not null
 
-				// Add objects for joined PuserKuser rows
+				// Add objects for joined PuserVuser rows
 
-				$key3 = PuserKuserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				$key3 = PuserVuserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
 				if ($key3 !== null) {
-					$obj3 = PuserKuserPeer::getInstanceFromPool($key3);
+					$obj3 = PuserVuserPeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$cls = PuserKuserPeer::getOMClass(false);
+						$cls = PuserVuserPeer::getOMClass(false);
 
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
-					PuserKuserPeer::addInstanceToPool($obj3, $key3);
+					PuserVuserPeer::addInstanceToPool($obj3, $key3);
 				} // if $obj3 already loaded
 
-				// Add the $obj1 (PuserRole) to the collection in $obj3 (PuserKuser)
+				// Add the $obj1 (PuserRole) to the collection in $obj3 (PuserVuser)
 				$obj3->addPuserRoleRelatedByPuserId($obj1);
 
 			} // if joined row is not null
@@ -1491,7 +1491,7 @@ abstract class BasePuserRolePeer {
 
 
 	/**
-	 * Selects a collection of PuserRole objects pre-filled with all related objects except PuserKuserRelatedByPartnerId.
+	 * Selects a collection of PuserRole objects pre-filled with all related objects except PuserVuserRelatedByPartnerId.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -1500,7 +1500,7 @@ abstract class BasePuserRolePeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptPuserKuserRelatedByPartnerId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptPuserVuserRelatedByPartnerId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1514,10 +1514,10 @@ abstract class BasePuserRolePeer {
 		PuserRolePeer::addSelectColumns($criteria);
 		$startcol2 = (PuserRolePeer::NUM_COLUMNS - PuserRolePeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kshowPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kshowPeer::NUM_COLUMNS - kshowPeer::NUM_LAZY_LOAD_COLUMNS);
+		vshowPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vshowPeer::NUM_COLUMNS - vshowPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(PuserRolePeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
@@ -1537,21 +1537,21 @@ abstract class BasePuserRolePeer {
 				PuserRolePeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined kshow rows
+				// Add objects for joined vshow rows
 
-				$key2 = kshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				$key2 = vshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 				if ($key2 !== null) {
-					$obj2 = kshowPeer::getInstanceFromPool($key2);
+					$obj2 = vshowPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$cls = kshowPeer::getOMClass(false);
+						$cls = vshowPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kshowPeer::addInstanceToPool($obj2, $key2);
+					vshowPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (PuserRole) to the collection in $obj2 (kshow)
+				// Add the $obj1 (PuserRole) to the collection in $obj2 (vshow)
 				$obj2->addPuserRole($obj1);
 
 			} // if joined row is not null
@@ -1564,7 +1564,7 @@ abstract class BasePuserRolePeer {
 
 
 	/**
-	 * Selects a collection of PuserRole objects pre-filled with all related objects except PuserKuserRelatedByPuserId.
+	 * Selects a collection of PuserRole objects pre-filled with all related objects except PuserVuserRelatedByPuserId.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -1573,7 +1573,7 @@ abstract class BasePuserRolePeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptPuserKuserRelatedByPuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptPuserVuserRelatedByPuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1587,10 +1587,10 @@ abstract class BasePuserRolePeer {
 		PuserRolePeer::addSelectColumns($criteria);
 		$startcol2 = (PuserRolePeer::NUM_COLUMNS - PuserRolePeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kshowPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kshowPeer::NUM_COLUMNS - kshowPeer::NUM_LAZY_LOAD_COLUMNS);
+		vshowPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vshowPeer::NUM_COLUMNS - vshowPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(PuserRolePeer::KSHOW_ID, kshowPeer::ID, $join_behavior);
+		$criteria->addJoin(PuserRolePeer::VSHOW_ID, vshowPeer::ID, $join_behavior);
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
@@ -1610,21 +1610,21 @@ abstract class BasePuserRolePeer {
 				PuserRolePeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined kshow rows
+				// Add objects for joined vshow rows
 
-				$key2 = kshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				$key2 = vshowPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 				if ($key2 !== null) {
-					$obj2 = kshowPeer::getInstanceFromPool($key2);
+					$obj2 = vshowPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$cls = kshowPeer::getOMClass(false);
+						$cls = vshowPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kshowPeer::addInstanceToPool($obj2, $key2);
+					vshowPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (PuserRole) to the collection in $obj2 (kshow)
+				// Add the $obj1 (PuserRole) to the collection in $obj2 (vshow)
 				$obj2->addPuserRole($obj1);
 
 			} // if joined row is not null

@@ -39,7 +39,7 @@
 					});
 				}
 			}).next("span").click(function(){
-				var source = "http://www.kaltura.com<?php echo $basePath; ?>" + jQuery(this).parents("tr").find("td:first b").text();
+				var source = "http://www.vidiun.com<?php echo $basePath; ?>" + jQuery(this).parents("tr").find("td:first b").text();
 				copy(source);
 			});
 			

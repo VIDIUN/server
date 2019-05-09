@@ -37,8 +37,8 @@ abstract class BasemoderationFlagPeer {
 	/** the column name for the PARTNER_ID field */
 	const PARTNER_ID = 'moderation_flag.PARTNER_ID';
 
-	/** the column name for the KUSER_ID field */
-	const KUSER_ID = 'moderation_flag.KUSER_ID';
+	/** the column name for the VUSER_ID field */
+	const VUSER_ID = 'moderation_flag.VUSER_ID';
 
 	/** the column name for the OBJECT_TYPE field */
 	const OBJECT_TYPE = 'moderation_flag.OBJECT_TYPE';
@@ -46,8 +46,8 @@ abstract class BasemoderationFlagPeer {
 	/** the column name for the FLAGGED_ENTRY_ID field */
 	const FLAGGED_ENTRY_ID = 'moderation_flag.FLAGGED_ENTRY_ID';
 
-	/** the column name for the FLAGGED_KUSER_ID field */
-	const FLAGGED_KUSER_ID = 'moderation_flag.FLAGGED_KUSER_ID';
+	/** the column name for the FLAGGED_VUSER_ID field */
+	const FLAGGED_VUSER_ID = 'moderation_flag.FLAGGED_VUSER_ID';
 
 	/** the column name for the STATUS field */
 	const STATUS = 'moderation_flag.STATUS';
@@ -80,10 +80,10 @@ abstract class BasemoderationFlagPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'PartnerId', 'KuserId', 'ObjectType', 'FlaggedEntryId', 'FlaggedKuserId', 'Status', 'CreatedAt', 'UpdatedAt', 'Comments', 'FlagType', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'partnerId', 'kuserId', 'objectType', 'flaggedEntryId', 'flaggedKuserId', 'status', 'createdAt', 'updatedAt', 'comments', 'flagType', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::PARTNER_ID, self::KUSER_ID, self::OBJECT_TYPE, self::FLAGGED_ENTRY_ID, self::FLAGGED_KUSER_ID, self::STATUS, self::CREATED_AT, self::UPDATED_AT, self::COMMENTS, self::FLAG_TYPE, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'partner_id', 'kuser_id', 'object_type', 'flagged_entry_id', 'flagged_kuser_id', 'status', 'created_at', 'updated_at', 'comments', 'flag_type', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'PartnerId', 'VuserId', 'ObjectType', 'FlaggedEntryId', 'FlaggedVuserId', 'Status', 'CreatedAt', 'UpdatedAt', 'Comments', 'FlagType', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'partnerId', 'vuserId', 'objectType', 'flaggedEntryId', 'flaggedVuserId', 'status', 'createdAt', 'updatedAt', 'comments', 'flagType', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::PARTNER_ID, self::VUSER_ID, self::OBJECT_TYPE, self::FLAGGED_ENTRY_ID, self::FLAGGED_VUSER_ID, self::STATUS, self::CREATED_AT, self::UPDATED_AT, self::COMMENTS, self::FLAG_TYPE, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'partner_id', 'vuser_id', 'object_type', 'flagged_entry_id', 'flagged_vuser_id', 'status', 'created_at', 'updated_at', 'comments', 'flag_type', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
 
@@ -94,10 +94,10 @@ abstract class BasemoderationFlagPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'PartnerId' => 1, 'KuserId' => 2, 'ObjectType' => 3, 'FlaggedEntryId' => 4, 'FlaggedKuserId' => 5, 'Status' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, 'Comments' => 9, 'FlagType' => 10, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'partnerId' => 1, 'kuserId' => 2, 'objectType' => 3, 'flaggedEntryId' => 4, 'flaggedKuserId' => 5, 'status' => 6, 'createdAt' => 7, 'updatedAt' => 8, 'comments' => 9, 'flagType' => 10, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PARTNER_ID => 1, self::KUSER_ID => 2, self::OBJECT_TYPE => 3, self::FLAGGED_ENTRY_ID => 4, self::FLAGGED_KUSER_ID => 5, self::STATUS => 6, self::CREATED_AT => 7, self::UPDATED_AT => 8, self::COMMENTS => 9, self::FLAG_TYPE => 10, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'partner_id' => 1, 'kuser_id' => 2, 'object_type' => 3, 'flagged_entry_id' => 4, 'flagged_kuser_id' => 5, 'status' => 6, 'created_at' => 7, 'updated_at' => 8, 'comments' => 9, 'flag_type' => 10, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'PartnerId' => 1, 'VuserId' => 2, 'ObjectType' => 3, 'FlaggedEntryId' => 4, 'FlaggedVuserId' => 5, 'Status' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, 'Comments' => 9, 'FlagType' => 10, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'partnerId' => 1, 'vuserId' => 2, 'objectType' => 3, 'flaggedEntryId' => 4, 'flaggedVuserId' => 5, 'status' => 6, 'createdAt' => 7, 'updatedAt' => 8, 'comments' => 9, 'flagType' => 10, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PARTNER_ID => 1, self::VUSER_ID => 2, self::OBJECT_TYPE => 3, self::FLAGGED_ENTRY_ID => 4, self::FLAGGED_VUSER_ID => 5, self::STATUS => 6, self::CREATED_AT => 7, self::UPDATED_AT => 8, self::COMMENTS => 9, self::FLAG_TYPE => 10, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'partner_id' => 1, 'vuser_id' => 2, 'object_type' => 3, 'flagged_entry_id' => 4, 'flagged_vuser_id' => 5, 'status' => 6, 'created_at' => 7, 'updated_at' => 8, 'comments' => 9, 'flag_type' => 10, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
 
@@ -170,10 +170,10 @@ abstract class BasemoderationFlagPeer {
 	{
 		$criteria->addSelectColumn(moderationFlagPeer::ID);
 		$criteria->addSelectColumn(moderationFlagPeer::PARTNER_ID);
-		$criteria->addSelectColumn(moderationFlagPeer::KUSER_ID);
+		$criteria->addSelectColumn(moderationFlagPeer::VUSER_ID);
 		$criteria->addSelectColumn(moderationFlagPeer::OBJECT_TYPE);
 		$criteria->addSelectColumn(moderationFlagPeer::FLAGGED_ENTRY_ID);
-		$criteria->addSelectColumn(moderationFlagPeer::FLAGGED_KUSER_ID);
+		$criteria->addSelectColumn(moderationFlagPeer::FLAGGED_VUSER_ID);
 		$criteria->addSelectColumn(moderationFlagPeer::STATUS);
 		$criteria->addSelectColumn(moderationFlagPeer::CREATED_AT);
 		$criteria->addSelectColumn(moderationFlagPeer::UPDATED_AT);
@@ -212,11 +212,11 @@ abstract class BasemoderationFlagPeer {
 		
 		moderationFlagPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'moderationFlagPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -240,7 +240,7 @@ abstract class BasemoderationFlagPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -321,7 +321,7 @@ abstract class BasemoderationFlagPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -344,11 +344,11 @@ abstract class BasemoderationFlagPeer {
 	{		
 		$criteriaForSelect = moderationFlagPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'moderationFlagPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -364,12 +364,12 @@ abstract class BasemoderationFlagPeer {
 		
 		$queryResult = moderationFlagPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -379,17 +379,17 @@ abstract class BasemoderationFlagPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -460,7 +460,7 @@ abstract class BasemoderationFlagPeer {
 		moderationFlagPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -468,19 +468,19 @@ abstract class BasemoderationFlagPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -499,7 +499,7 @@ abstract class BasemoderationFlagPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -618,11 +618,11 @@ abstract class BasemoderationFlagPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('moderationFlagPeer');
+				vMemoryManager::registerPeer('moderationFlagPeer');
 			}
 		}
 	}
@@ -747,7 +747,7 @@ abstract class BasemoderationFlagPeer {
 	}
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuserRelatedByKuserId table
+	 * Returns the number of rows matching criteria, joining the related vuserRelatedByVuserId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -755,7 +755,7 @@ abstract class BasemoderationFlagPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinkuserRelatedByKuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinvuserRelatedByVuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -779,7 +779,7 @@ abstract class BasemoderationFlagPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(moderationFlagPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(moderationFlagPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = moderationFlagPeer::doCountStmt($criteria, $con);
 
@@ -841,7 +841,7 @@ abstract class BasemoderationFlagPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuserRelatedByFlaggedKuserId table
+	 * Returns the number of rows matching criteria, joining the related vuserRelatedByFlaggedVuserId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -849,7 +849,7 @@ abstract class BasemoderationFlagPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinkuserRelatedByFlaggedKuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinvuserRelatedByFlaggedVuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -873,7 +873,7 @@ abstract class BasemoderationFlagPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(moderationFlagPeer::FLAGGED_KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(moderationFlagPeer::FLAGGED_VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = moderationFlagPeer::doCountStmt($criteria, $con);
 
@@ -888,7 +888,7 @@ abstract class BasemoderationFlagPeer {
 
 
 	/**
-	 * Selects a collection of moderationFlag objects pre-filled with their kuser objects.
+	 * Selects a collection of moderationFlag objects pre-filled with their vuser objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -896,7 +896,7 @@ abstract class BasemoderationFlagPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinkuserRelatedByKuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvuserRelatedByVuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -907,9 +907,9 @@ abstract class BasemoderationFlagPeer {
 
 		moderationFlagPeer::addSelectColumns($criteria);
 		$startcol = (moderationFlagPeer::NUM_COLUMNS - moderationFlagPeer::NUM_LAZY_LOAD_COLUMNS);
-		kuserPeer::addSelectColumns($criteria);
+		vuserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(moderationFlagPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(moderationFlagPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = moderationFlagPeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -929,20 +929,20 @@ abstract class BasemoderationFlagPeer {
 				moderationFlagPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (moderationFlag) to $obj2 (kuser)
-				$obj2->addmoderationFlagRelatedByKuserId($obj1);
+				// Add the $obj1 (moderationFlag) to $obj2 (vuser)
+				$obj2->addmoderationFlagRelatedByVuserId($obj1);
 
 			} // if joined row was not null
 
@@ -950,7 +950,7 @@ abstract class BasemoderationFlagPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1021,7 +1021,7 @@ abstract class BasemoderationFlagPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1029,7 +1029,7 @@ abstract class BasemoderationFlagPeer {
 
 
 	/**
-	 * Selects a collection of moderationFlag objects pre-filled with their kuser objects.
+	 * Selects a collection of moderationFlag objects pre-filled with their vuser objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -1037,7 +1037,7 @@ abstract class BasemoderationFlagPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinkuserRelatedByFlaggedKuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvuserRelatedByFlaggedVuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1048,9 +1048,9 @@ abstract class BasemoderationFlagPeer {
 
 		moderationFlagPeer::addSelectColumns($criteria);
 		$startcol = (moderationFlagPeer::NUM_COLUMNS - moderationFlagPeer::NUM_LAZY_LOAD_COLUMNS);
-		kuserPeer::addSelectColumns($criteria);
+		vuserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(moderationFlagPeer::FLAGGED_KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(moderationFlagPeer::FLAGGED_VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = moderationFlagPeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -1070,20 +1070,20 @@ abstract class BasemoderationFlagPeer {
 				moderationFlagPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (moderationFlag) to $obj2 (kuser)
-				$obj2->addmoderationFlagRelatedByFlaggedKuserId($obj1);
+				// Add the $obj1 (moderationFlag) to $obj2 (vuser)
+				$obj2->addmoderationFlagRelatedByFlaggedVuserId($obj1);
 
 			} // if joined row was not null
 
@@ -1091,7 +1091,7 @@ abstract class BasemoderationFlagPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1131,11 +1131,11 @@ abstract class BasemoderationFlagPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(moderationFlagPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(moderationFlagPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$criteria->addJoin(moderationFlagPeer::FLAGGED_ENTRY_ID, entryPeer::ID, $join_behavior);
 
-		$criteria->addJoin(moderationFlagPeer::FLAGGED_KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(moderationFlagPeer::FLAGGED_VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = moderationFlagPeer::doCountStmt($criteria, $con);
 
@@ -1170,20 +1170,20 @@ abstract class BasemoderationFlagPeer {
 		moderationFlagPeer::addSelectColumns($criteria);
 		$startcol2 = (moderationFlagPeer::NUM_COLUMNS - moderationFlagPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kuserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kuserPeer::NUM_COLUMNS - kuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vuserPeer::NUM_COLUMNS - vuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		entryPeer::addSelectColumns($criteria);
 		$startcol4 = $startcol3 + (entryPeer::NUM_COLUMNS - entryPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kuserPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (kuserPeer::NUM_COLUMNS - kuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + (vuserPeer::NUM_COLUMNS - vuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(moderationFlagPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(moderationFlagPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$criteria->addJoin(moderationFlagPeer::FLAGGED_ENTRY_ID, entryPeer::ID, $join_behavior);
 
-		$criteria->addJoin(moderationFlagPeer::FLAGGED_KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(moderationFlagPeer::FLAGGED_VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = moderationFlagPeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -1202,22 +1202,22 @@ abstract class BasemoderationFlagPeer {
 				moderationFlagPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined kuser rows
+			// Add objects for joined vuser rows
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (moderationFlag) to the collection in $obj2 (kuser)
-				$obj2->addmoderationFlagRelatedByKuserId($obj1);
+				// Add the $obj1 (moderationFlag) to the collection in $obj2 (vuser)
+				$obj2->addmoderationFlagRelatedByVuserId($obj1);
 			} // if joined row not null
 
 			// Add objects for joined entry rows
@@ -1239,22 +1239,22 @@ abstract class BasemoderationFlagPeer {
 				$obj3->addmoderationFlag($obj1);
 			} // if joined row not null
 
-			// Add objects for joined kuser rows
+			// Add objects for joined vuser rows
 
-			$key4 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+			$key4 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
 			if ($key4 !== null) {
-				$obj4 = kuserPeer::getInstanceFromPool($key4);
+				$obj4 = vuserPeer::getInstanceFromPool($key4);
 				if (!$obj4) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj4 = new $cls();
 					$obj4->hydrate($row, $startcol4);
-					kuserPeer::addInstanceToPool($obj4, $key4);
+					vuserPeer::addInstanceToPool($obj4, $key4);
 				} // if obj4 loaded
 
-				// Add the $obj1 (moderationFlag) to the collection in $obj4 (kuser)
-				$obj4->addmoderationFlagRelatedByFlaggedKuserId($obj1);
+				// Add the $obj1 (moderationFlag) to the collection in $obj4 (vuser)
+				$obj4->addmoderationFlagRelatedByFlaggedVuserId($obj1);
 			} // if joined row not null
 
 			$results[] = $obj1;
@@ -1265,7 +1265,7 @@ abstract class BasemoderationFlagPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuserRelatedByKuserId table
+	 * Returns the number of rows matching criteria, joining the related vuserRelatedByVuserId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1273,7 +1273,7 @@ abstract class BasemoderationFlagPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptkuserRelatedByKuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptvuserRelatedByVuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1344,9 +1344,9 @@ abstract class BasemoderationFlagPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(moderationFlagPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(moderationFlagPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
-		$criteria->addJoin(moderationFlagPeer::FLAGGED_KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(moderationFlagPeer::FLAGGED_VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = moderationFlagPeer::doCountStmt($criteria, $con);
 
@@ -1361,7 +1361,7 @@ abstract class BasemoderationFlagPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuserRelatedByFlaggedKuserId table
+	 * Returns the number of rows matching criteria, joining the related vuserRelatedByFlaggedVuserId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1369,7 +1369,7 @@ abstract class BasemoderationFlagPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptkuserRelatedByFlaggedKuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptvuserRelatedByFlaggedVuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1408,7 +1408,7 @@ abstract class BasemoderationFlagPeer {
 
 
 	/**
-	 * Selects a collection of moderationFlag objects pre-filled with all related objects except kuserRelatedByKuserId.
+	 * Selects a collection of moderationFlag objects pre-filled with all related objects except vuserRelatedByVuserId.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -1417,7 +1417,7 @@ abstract class BasemoderationFlagPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptkuserRelatedByKuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptvuserRelatedByVuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1505,15 +1505,15 @@ abstract class BasemoderationFlagPeer {
 		moderationFlagPeer::addSelectColumns($criteria);
 		$startcol2 = (moderationFlagPeer::NUM_COLUMNS - moderationFlagPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kuserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kuserPeer::NUM_COLUMNS - kuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vuserPeer::NUM_COLUMNS - vuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kuserPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (kuserPeer::NUM_COLUMNS - kuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (vuserPeer::NUM_COLUMNS - vuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(moderationFlagPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(moderationFlagPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
-		$criteria->addJoin(moderationFlagPeer::FLAGGED_KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(moderationFlagPeer::FLAGGED_VUSER_ID, vuserPeer::ID, $join_behavior);
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
@@ -1533,41 +1533,41 @@ abstract class BasemoderationFlagPeer {
 				moderationFlagPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined kuser rows
+				// Add objects for joined vuser rows
 
-				$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 				if ($key2 !== null) {
-					$obj2 = kuserPeer::getInstanceFromPool($key2);
+					$obj2 = vuserPeer::getInstanceFromPool($key2);
 					if (!$obj2) {
 	
-						$cls = kuserPeer::getOMClass(false);
+						$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (moderationFlag) to the collection in $obj2 (kuser)
-				$obj2->addmoderationFlagRelatedByKuserId($obj1);
+				// Add the $obj1 (moderationFlag) to the collection in $obj2 (vuser)
+				$obj2->addmoderationFlagRelatedByVuserId($obj1);
 
 			} // if joined row is not null
 
-				// Add objects for joined kuser rows
+				// Add objects for joined vuser rows
 
-				$key3 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				$key3 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
 				if ($key3 !== null) {
-					$obj3 = kuserPeer::getInstanceFromPool($key3);
+					$obj3 = vuserPeer::getInstanceFromPool($key3);
 					if (!$obj3) {
 	
-						$cls = kuserPeer::getOMClass(false);
+						$cls = vuserPeer::getOMClass(false);
 
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
-					kuserPeer::addInstanceToPool($obj3, $key3);
+					vuserPeer::addInstanceToPool($obj3, $key3);
 				} // if $obj3 already loaded
 
-				// Add the $obj1 (moderationFlag) to the collection in $obj3 (kuser)
-				$obj3->addmoderationFlagRelatedByFlaggedKuserId($obj1);
+				// Add the $obj1 (moderationFlag) to the collection in $obj3 (vuser)
+				$obj3->addmoderationFlagRelatedByFlaggedVuserId($obj1);
 
 			} // if joined row is not null
 
@@ -1579,7 +1579,7 @@ abstract class BasemoderationFlagPeer {
 
 
 	/**
-	 * Selects a collection of moderationFlag objects pre-filled with all related objects except kuserRelatedByFlaggedKuserId.
+	 * Selects a collection of moderationFlag objects pre-filled with all related objects except vuserRelatedByFlaggedVuserId.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -1588,7 +1588,7 @@ abstract class BasemoderationFlagPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptkuserRelatedByFlaggedKuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptvuserRelatedByFlaggedVuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 

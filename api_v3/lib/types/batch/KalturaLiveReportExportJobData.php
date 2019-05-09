@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveReportExportJobData extends KalturaJobData
+class VidiunLiveReportExportJobData extends VidiunJobData
 {
 	/**
 	 * @var time
@@ -47,7 +47,7 @@ class KalturaLiveReportExportJobData extends KalturaJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kLiveReportExportJobData();
+			$dbData = new vLiveReportExportJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

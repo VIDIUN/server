@@ -21,8 +21,8 @@ class Form_NewEventNotificationTemplate extends Infra_Form
 			'decorators'	=> array('ViewHelper', array('HtmlTag',  array('tag' => 'span'))),
 		));
 		
-		$newType = new Kaltura_Form_Element_EnumSelect('cloneTemplateType', array(
-			'enum' => 'Kaltura_Client_EventNotification_Enum_EventNotificationTemplateType',
+		$newType = new Vidiun_Form_Element_EnumSelect('cloneTemplateType', array(
+			'enum' => 'Vidiun_Client_EventNotification_Enum_EventNotificationTemplateType',
 			'label'			=> 'Type:',
 			'onchange'		=> "switchTemplatesBox()",
 			'filters'		=> array('StringTrim'),

@@ -13,8 +13,8 @@
 	<multirequest continueOnError="1">
 		<!-- Metadata Content Changed -->
 		<request service="eventNotificationTemplate" action="listAction" plugin="eventNotification" partnerId="0">
-			<filter objectType="KalturaEventNotificationTemplateFilter">
-				<typeEqual>{php:return KalturaEventNotificationTemplateType::BPM_START;}</typeEqual>
+			<filter objectType="VidiunEventNotificationTemplateFilter">
+				<typeEqual>{php:return VidiunEventNotificationTemplateType::BPM_START;}</typeEqual>
 				<partnerIdEqual>0</partnerIdEqual>
 				<statusEqual>1</statusEqual>
 				<systemNameEqual>BPM_START_ENTRY_CUSTOM_METADATA_CONTENT_CHANGED</systemNameEqual>
@@ -24,7 +24,7 @@
 			<id>{1:result:objects:0:id}</id>
 		</request>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaBusinessProcessStartNotificationTemplate">
+			<template objectType="VidiunBusinessProcessStartNotificationTemplate">
 				<name>Metadata Content Changed</name>
 				<systemName>BPM_START_ENTRY_CUSTOM_METADATA_CONTENT_CHANGED</systemName>
 				<description>Metadata Content Changed</description>
@@ -33,67 +33,67 @@
 				<eventObjectType>metadataEventNotifications.Metadata</eventObjectType> <!-- EventNotificationEventObjectType::METADATA -->
 				<mainObjectCode>$object->getEntry()</mainObjectCode>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>endPoint</key>
 						<description>Server Host</description>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get('apphome_url')</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get('apphome_url')</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>partnerId</key>
 						<description>Partner ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null($scope->getObject()->getEntry()) ? $scope->getObject()->getEntry()->getPartnerId() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>adminSecret</key>
 						<description>Partner Administrator Secret</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null($scope->getObject()->getEntry()) &amp;&amp; !is_null($scope->getObject()->getEntry()->getPartner()) ? $scope->getObject()->getEntry()->getPartner()->getAdminSecret() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entryId</key>
 						<description>Entry ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null($scope->getObject()->getEntry()) ? $scope->getObject()->getEntry()->getId() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_old_version</key>
 						<description>Metadata previous version</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getEvent()->getPreviousVersion()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_version</key>
 						<description>Metadata version</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getVersion()</code>
 						</value>
 					</item>
 				</contentParameters>
 				<eventConditions objectType="array">
-					<item objectType="KalturaFieldMatchCondition">
+					<item objectType="VidiunFieldMatchCondition">
 						<description>metadata objects of specific metadata-profile</description>
-						<field objectType="KalturaEvalStringField">
+						<field objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getMetadataProfile()->getSystemName()</code>
 						</field>
 						<values objectType="array">
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>{metadata_profile_system_name}</value>
 							</item>
 						</values>
 					</item>
 				</eventConditions>
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_profile_system_name</key>
 						<description>Custom metadata profile system name to be compared and used</description>
-						<value objectType="KalturaStringValue">
+						<value objectType="VidiunStringValue">
 							<value></value>
 						</value>
 					</item>

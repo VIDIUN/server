@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kImportJobData extends kJobData
+class vImportJobData extends vJobData
 {
 	/**
 	 * @var string

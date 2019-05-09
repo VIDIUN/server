@@ -1,6 +1,6 @@
 <?php
 
-header('Access-Control-Expose-Headers: Server, Content-Length, Content-Range, Date, X-Kaltura, X-Kaltura-Session, X-Me');
+header('Access-Control-Expose-Headers: Server, Content-Length, Content-Range, Date, X-Vidiun, X-Vidiun-Session, X-Me');
 
 if($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 {
@@ -13,26 +13,26 @@ if($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 
 $start = microtime(true);
 // check cache before loading anything
-require_once(dirname(__FILE__)."/../lib/KalturaResponseCacher.php");
-$cache = new KalturaResponseCacher();
+require_once(dirname(__FILE__)."/../lib/VidiunResponseCacher.php");
+$cache = new VidiunResponseCacher();
 $cache->checkOrStart();
 
 require_once(dirname(__FILE__)."/../bootstrap.php");
 
 // Database
-DbManager::setConfig(kConf::getDB());
+DbManager::setConfig(vConf::getDB());
 DbManager::initialize();
 
 ActKeyUtils::checkCurrent();
 
-KalturaLog::debug(">------------------------------------- api_v3 -------------------------------------");
-KalturaLog::info("API-start pid:".getmypid());
+VidiunLog::debug(">------------------------------------- api_v3 -------------------------------------");
+VidiunLog::info("API-start pid:".getmypid());
 
-$controller = KalturaFrontController::getInstance();
+$controller = VidiunFrontController::getInstance();
 $result = $controller->run();
 
 $end = microtime(true);
-KalturaLog::info("API-end [".($end - $start)."]");
-KalturaLog::debug("<------------------------------------- api_v3 -------------------------------------");
+VidiunLog::info("API-end [".($end - $start)."]");
+VidiunLog::debug("<------------------------------------- api_v3 -------------------------------------");
 
 $cache->end($result);

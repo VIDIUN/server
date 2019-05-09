@@ -2,10 +2,10 @@
 /**
  * @package plugins.activitiBusinessProcessNotification
  */
-class kActivitiBusinessProcessProvider extends kBusinessProcessProvider
+class vActivitiBusinessProcessProvider extends vBusinessProcessProvider
 {
 	/**
-	 * @var KalturaActivitiBusinessProcessServer
+	 * @var VidiunActivitiBusinessProcessServer
 	 */
 	protected $server;
 	
@@ -24,7 +24,7 @@ class kActivitiBusinessProcessProvider extends kBusinessProcessProvider
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBusinessProcessProvider::enableDebug()
+	 * @see vBusinessProcessProvider::enableDebug()
 	 */
 	public function enableDebug($enable)
 	{
@@ -32,7 +32,7 @@ class kActivitiBusinessProcessProvider extends kBusinessProcessProvider
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBusinessProcessProvider::listBusinessProcesses()
+	 * @see vBusinessProcessProvider::listBusinessProcesses()
 	 */
 	public function listBusinessProcesses()
 	{
@@ -63,7 +63,7 @@ class kActivitiBusinessProcessProvider extends kBusinessProcessProvider
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBusinessProcessProvider::startBusinessProcess()
+	 * @see vBusinessProcessProvider::startBusinessProcess()
 	 */
 	public function startBusinessProcess($processId, array $variables)
 	{
@@ -84,13 +84,13 @@ class kActivitiBusinessProcessProvider extends kBusinessProcessProvider
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBusinessProcessProvider::getCase()
+	 * @see vBusinessProcessProvider::getCase()
 	 */
 	public function getCase($caseId)
 	{
 		$processInstance = $this->client->processInstances->getProcessInstance($caseId);
 		
-		$case = new kBusinessProcessCase();
+		$case = new vBusinessProcessCase();
 		$case->setId($processInstance->getId());
 		$case->setBusinessProcessId($processInstance->getBusinesskey());
 		$case->setActivityId($processInstance->getActivityid());
@@ -100,7 +100,7 @@ class kActivitiBusinessProcessProvider extends kBusinessProcessProvider
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBusinessProcessProvider::abortCase()
+	 * @see vBusinessProcessProvider::abortCase()
 	 */
 	public function abortCase($caseId)
 	{
@@ -119,7 +119,7 @@ class kActivitiBusinessProcessProvider extends kBusinessProcessProvider
 			}
 			catch (Exception $e)
 			{
-				KalturaLog::err($e);
+				VidiunLog::err($e);
 			}
 		}
 		
@@ -130,7 +130,7 @@ class kActivitiBusinessProcessProvider extends kBusinessProcessProvider
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBusinessProcessProvider::signalCase()
+	 * @see vBusinessProcessProvider::signalCase()
 	 */
 	public function signalCase($caseId, $eventId, $message, array $variables = array())
 	{
@@ -158,11 +158,11 @@ class kActivitiBusinessProcessProvider extends kBusinessProcessProvider
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBusinessProcessProvider::getCaseDiagramUrl()
+	 * @see vBusinessProcessProvider::getCaseDiagramUrl()
 	 */
 	public function getCaseDiagram($caseId, $filename)
 	{
-		kFileUtils::fullMkdir($filename);
-		kFile::setFileContent($filename, $this->client->processInstances->getDiagramForProcessInstance($caseId));
+		vFileUtils::fullMkdir($filename);
+		vFile::setFileContent($filename, $this->client->processInstances->getDiagramForProcessInstance($caseId));
 	}
 }

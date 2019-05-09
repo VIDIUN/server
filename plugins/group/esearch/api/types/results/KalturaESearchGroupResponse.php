@@ -3,10 +3,10 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchGroupResponse extends KalturaESearchResponse
+class VidiunESearchGroupResponse extends VidiunESearchResponse
 {
 	/**
-	 * @var KalturaESearchGroupResultArray
+	 * @var VidiunESearchGroupResultArray
 	 * @readonly
 	 */
 	public $objects;

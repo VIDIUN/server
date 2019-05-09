@@ -1,8 +1,8 @@
 <?php
-class kContentDistributionObjectCopiedHandler implements kObjectCopiedEventConsumer
+class vContentDistributionObjectCopiedHandler implements vObjectCopiedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectCopiedEventConsumer::shouldConsumeCopiedEvent()
+	 * @see vObjectCopiedEventConsumer::shouldConsumeCopiedEvent()
 	 */
 	public function shouldConsumeCopiedEvent(BaseObject $fromObject, BaseObject $toObject)
 	{
@@ -13,7 +13,7 @@ class kContentDistributionObjectCopiedHandler implements kObjectCopiedEventConsu
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCopiedEventConsumer::objectCopied()
+	 * @see vObjectCopiedEventConsumer::objectCopied()
 	 */
 	public function objectCopied(BaseObject $fromObject, BaseObject $toObject)
 	{
@@ -38,7 +38,7 @@ class kContentDistributionObjectCopiedHandler implements kObjectCopiedEventConsu
  			$newDistributionProfile->setPartnerId($toPartnerId);
  			$newDistributionProfile->save();
  			
- 			kFileSyncUtils::createSyncFileLinkForKey(
+ 			vFileSyncUtils::createSyncFileLinkForKey(
  				$newDistributionProfile->getSyncKey(DistributionProfile::FILE_SYNC_DISTRIBUTION_PROFILE_CONFIG),
  				$distributionProfile->getSyncKey(DistributionProfile::FILE_SYNC_DISTRIBUTION_PROFILE_CONFIG)
  			);

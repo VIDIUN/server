@@ -3,7 +3,7 @@
  * @package plugins.dropFolder
  * @subpackage api.enum
  */
-class KalturaDropFolderFileStatus extends KalturaEnum implements DropFolderFileStatus
+class VidiunDropFolderFileStatus extends VidiunEnum implements DropFolderFileStatus
 {
 	// see DropFolderFileStatus interface
 }

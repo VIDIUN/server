@@ -3,22 +3,22 @@
  * Will hold the current context of the API call / current running batch.
  * The inforamtion is static per call and can be used from anywhare in the code. 
  */
-class kCurrentContext
+class vCurrentContext
 {
 	/**
 	 * @var string
 	 */
-	public static $ks;
+	public static $vs;
 	
 	/**
-	 * @var ks
+	 * @var vs
 	 */
-	public static $ks_object;
+	public static $vs_object;
 	
 	/**
 	 * @var string
 	 */
-	public static $ks_hash;
+	public static $vs_hash;
 	
 	/**
 	 * This value is populated only in case of impersonation using partnerId in the request.
@@ -31,7 +31,7 @@ class kCurrentContext
 	/**
 	 * @var int
 	 */
-	public static $ks_partner_id;
+	public static $vs_partner_id;
 
 	/**
 	 * @var int
@@ -47,17 +47,17 @@ class kCurrentContext
 	/**
 	 * @var string
 	 */
-	public static $ks_uid;
+	public static $vs_uid;
 	
 	/**
 	 * @var int
 	 */
-	public static $ks_kuser_id = null;
+	public static $vs_vuser_id = null;
 	
 	/**
-	 * @var kuser
+	 * @var vuser
 	 */
-	public static $ks_kuser;
+	public static $vs_vuser;
 
 	/**
 	 * @var string
@@ -107,7 +107,7 @@ class kCurrentContext
 	/**
 	 * @var bool
 	 */
-	public static $ksPartnerUserInitialized = false;
+	public static $vsPartnerUserInitialized = false;
 	
 	/**
 	 * @var int
@@ -148,7 +148,7 @@ class kCurrentContext
 	
 	public static function isApiV3Context()
 	{		
-		if (kCurrentContext::$ps_vesion == 'ps3') {
+		if (vCurrentContext::$ps_vesion == 'ps3') {
 			return true;
 		}
 		
@@ -161,119 +161,119 @@ class kCurrentContext
 		if(!$entry)
 			return null;
 			
-		kCurrentContext::$ks = null;
-		kCurrentContext::$ks_object = null;
-		kCurrentContext::$ks_hash = null;
-		kCurrentContext::$ks_partner_id = $entry->getPartnerId();
-		kCurrentContext::$ks_uid = null;
-		kCurrentContext::$master_partner_id = null;
-		kCurrentContext::$partner_id = $entry->getPartnerId();
-		kCurrentContext::$uid = null;
-		kCurrentContext::$is_admin_session = false;
+		vCurrentContext::$vs = null;
+		vCurrentContext::$vs_object = null;
+		vCurrentContext::$vs_hash = null;
+		vCurrentContext::$vs_partner_id = $entry->getPartnerId();
+		vCurrentContext::$vs_uid = null;
+		vCurrentContext::$master_partner_id = null;
+		vCurrentContext::$partner_id = $entry->getPartnerId();
+		vCurrentContext::$uid = null;
+		vCurrentContext::$is_admin_session = false;
 		
 		return $entry;
 	}
 	
 	public static function initPartnerByAssetId($assetId)
 	{		
-		KalturaCriterion::disableTags(array(KalturaCriterion::TAG_ENTITLEMENT_ENTRY, KalturaCriterion::TAG_WIDGET_SESSION));
+		VidiunCriterion::disableTags(array(VidiunCriterion::TAG_ENTITLEMENT_ENTRY, VidiunCriterion::TAG_WIDGET_SESSION));
 		$asset = assetPeer::retrieveByIdNoFilter($assetId);
-		KalturaCriterion::restoreTags(array(KalturaCriterion::TAG_ENTITLEMENT_ENTRY, KalturaCriterion::TAG_WIDGET_SESSION));
+		VidiunCriterion::restoreTags(array(VidiunCriterion::TAG_ENTITLEMENT_ENTRY, VidiunCriterion::TAG_WIDGET_SESSION));
 		
 		if(!$asset)
 			return null;
 			
-		kCurrentContext::$ks = null;
-		kCurrentContext::$ks_object = null;
-		kCurrentContext::$ks_hash = null;
-		kCurrentContext::$ks_partner_id = $asset->getPartnerId();
-		kCurrentContext::$ks_uid = null;
-		kCurrentContext::$master_partner_id = null;
-		kCurrentContext::$partner_id = $asset->getPartnerId();
-		kCurrentContext::$uid = null;
-		kCurrentContext::$is_admin_session = false;
+		vCurrentContext::$vs = null;
+		vCurrentContext::$vs_object = null;
+		vCurrentContext::$vs_hash = null;
+		vCurrentContext::$vs_partner_id = $asset->getPartnerId();
+		vCurrentContext::$vs_uid = null;
+		vCurrentContext::$master_partner_id = null;
+		vCurrentContext::$partner_id = $asset->getPartnerId();
+		vCurrentContext::$uid = null;
+		vCurrentContext::$is_admin_session = false;
 		
 		return $asset;
 	}
 	
-	public static function initKsPartnerUser($ksString, $requestedPartnerId = null, $requestedPuserId = null)
+	public static function initVsPartnerUser($vsString, $requestedPartnerId = null, $requestedPuserId = null)
 	{		
-		if (!$ksString)
+		if (!$vsString)
 		{
-			kCurrentContext::$ks = null;
-			kCurrentContext::$ks_object = null;
-			kCurrentContext::$ks_hash = null;
-			kCurrentContext::$ks_partner_id = null;
-			kCurrentContext::$ks_uid = null;
-			kCurrentContext::$master_partner_id = null;
-			kCurrentContext::$partner_id = $requestedPartnerId;
-			kCurrentContext::$uid = $requestedPuserId;
-			kCurrentContext::$is_admin_session = false;
+			vCurrentContext::$vs = null;
+			vCurrentContext::$vs_object = null;
+			vCurrentContext::$vs_hash = null;
+			vCurrentContext::$vs_partner_id = null;
+			vCurrentContext::$vs_uid = null;
+			vCurrentContext::$master_partner_id = null;
+			vCurrentContext::$partner_id = $requestedPartnerId;
+			vCurrentContext::$uid = $requestedPuserId;
+			vCurrentContext::$is_admin_session = false;
 		}
 		else
 		{
-			try { $ksObj = kSessionUtils::crackKs ( $ksString ); }
+			try { $vsObj = vSessionUtils::crackVs ( $vsString ); }
 			catch(Exception $ex)
 			{
 				if (strpos($ex->getMessage(), "INVALID_STR") !== null)
-					throw new kCoreException($ex->getMessage(), kCoreException::INVALID_KS, $ksString);
+					throw new vCoreException($ex->getMessage(), vCoreException::INVALID_VS, $vsString);
 				else 
 					throw $ex;
 			}
 		
-			kCurrentContext::$ks = $ksString;
-			kCurrentContext::$ks_object = $ksObj;
-			kCurrentContext::$ks_hash = $ksObj->getHash();
-			kCurrentContext::$ks_partner_id = $ksObj->partner_id;
-			kCurrentContext::$ks_uid = $ksObj->user;
-			kCurrentContext::$master_partner_id = $ksObj->master_partner_id ? $ksObj->master_partner_id : kCurrentContext::$ks_partner_id;
-			kCurrentContext::$is_admin_session = $ksObj->isAdmin();
+			vCurrentContext::$vs = $vsString;
+			vCurrentContext::$vs_object = $vsObj;
+			vCurrentContext::$vs_hash = $vsObj->getHash();
+			vCurrentContext::$vs_partner_id = $vsObj->partner_id;
+			vCurrentContext::$vs_uid = $vsObj->user;
+			vCurrentContext::$master_partner_id = $vsObj->master_partner_id ? $vsObj->master_partner_id : vCurrentContext::$vs_partner_id;
+			vCurrentContext::$is_admin_session = $vsObj->isAdmin();
 			
-			if($requestedPartnerId == PartnerPeer::GLOBAL_PARTNER && self::$ks_partner_id > PartnerPeer::GLOBAL_PARTNER)
+			if($requestedPartnerId == PartnerPeer::GLOBAL_PARTNER && self::$vs_partner_id > PartnerPeer::GLOBAL_PARTNER)
 				$requestedPartnerId = null;
 			
-			kCurrentContext::$partner_id = $requestedPartnerId;
-			kCurrentContext::$uid = $requestedPuserId;
+			vCurrentContext::$partner_id = $requestedPartnerId;
+			vCurrentContext::$uid = $requestedPuserId;
 		}
 
 		// set partner ID for logger
-		if (kCurrentContext::$partner_id) {
-			$GLOBALS["partnerId"] = kCurrentContext::$partner_id;
+		if (vCurrentContext::$partner_id) {
+			$GLOBALS["partnerId"] = vCurrentContext::$partner_id;
 		}
-		else if (kCurrentContext::$ks_partner_id) {
-			$GLOBALS["partnerId"] = kCurrentContext::$ks_partner_id;
+		else if (vCurrentContext::$vs_partner_id) {
+			$GLOBALS["partnerId"] = vCurrentContext::$vs_partner_id;
 		}
 		
-		self::$ksPartnerUserInitialized = true;
+		self::$vsPartnerUserInitialized = true;
 	}
 	
-	public static function getCurrentKsKuser($activeOnly = true)
+	public static function getCurrentVsVuser($activeOnly = true)
 	{
-		if(!kCurrentContext::$ks_kuser)
+		if(!vCurrentContext::$vs_vuser)
 		{			
-			kCurrentContext::$ks_kuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::$ks_partner_id, kCurrentContext::$ks_uid, true);
+			vCurrentContext::$vs_vuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::$vs_partner_id, vCurrentContext::$vs_uid, true);
 		}
 		
-		if(kCurrentContext::$ks_kuser &&
+		if(vCurrentContext::$vs_vuser &&
 		   $activeOnly && 
-		   kCurrentContext::$ks_kuser->getStatus() != KuserStatus::ACTIVE)
+		   vCurrentContext::$vs_vuser->getStatus() != VuserStatus::ACTIVE)
 		   	return null;
 			
-		return kCurrentContext::$ks_kuser;
+		return vCurrentContext::$vs_vuser;
 	}
 
 	public static function getCurrentSessionType()
 	{
-		if(!self::$ks_object)
-			return kSessionBase::SESSION_TYPE_NONE;
+		if(!self::$vs_object)
+			return vSessionBase::SESSION_TYPE_NONE;
 			
-		if(self::$ks_object->isAdmin())
-			return kSessionBase::SESSION_TYPE_ADMIN;
+		if(self::$vs_object->isAdmin())
+			return vSessionBase::SESSION_TYPE_ADMIN;
 			
-		if(self::$ks_object->isWidgetSession())
-			return kSessionBase::SESSION_TYPE_WIDGET;
+		if(self::$vs_object->isWidgetSession())
+			return vSessionBase::SESSION_TYPE_WIDGET;
 			
-		return kSessionBase::SESSION_TYPE_USER;
+		return vSessionBase::SESSION_TYPE_USER;
 	}
 
 	public static function getCurrentPartnerId()
@@ -281,20 +281,20 @@ class kCurrentContext
 		if(isset(self::$partner_id))
 			return self::$partner_id;
 			
-		return self::$ks_partner_id;
+		return self::$vs_partner_id;
 	}
 
-	public static function getCurrentKsKuserId()
+	public static function getCurrentVsVuserId()
 	{
-		if (!is_null(kCurrentContext::$ks_kuser_id))
-			return kCurrentContext::$ks_kuser_id;
+		if (!is_null(vCurrentContext::$vs_vuser_id))
+			return vCurrentContext::$vs_vuser_id;
 			
-		$ksKuser = kCurrentContext::getCurrentKsKuser(false);
-		if($ksKuser)
-			kCurrentContext::$ks_kuser_id = $ksKuser->getId();
+		$vsVuser = vCurrentContext::getCurrentVsVuser(false);
+		if($vsVuser)
+			vCurrentContext::$vs_vuser_id = $vsVuser->getId();
 		else 
-			kCurrentContext::$ks_kuser_id = 0;
+			vCurrentContext::$vs_vuser_id = 0;
 			
-		return kCurrentContext::$ks_kuser_id;
+		return vCurrentContext::$vs_vuser_id;
 	}
 }

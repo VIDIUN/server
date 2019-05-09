@@ -273,7 +273,7 @@ class YouTubeDistributionProfile extends ConfigurableDistributionProfile
 		
 		$allFieldValues = $this->getAllFieldValues($entryDistribution);
 		if (!$allFieldValues || !is_array($allFieldValues)) {
-		    KalturaLog::err('Error getting field values from entry distribution id ['.$entryDistribution->getId().'] profile id ['.$this->getId().']');
+		    VidiunLog::err('Error getting field values from entry distribution id ['.$entryDistribution->getId().'] profile id ['.$this->getId().']');
 		    return $validationErrors;
 		}
 		
@@ -289,7 +289,7 @@ class YouTubeDistributionProfile extends ConfigurableDistributionProfile
 			if ($this->getFeedSpecVersion() == YouTubeDistributionFeedSpecVersion::VERSION_3)
 				break;
 
-			if (!is_null($val) && !kString::isEmailString($val))
+			if (!is_null($val) && !vString::isEmailString($val))
 			{
 				$errorMsg = $this->getUserFriendlyFieldName($fieldName).' value must be an email string [value:'.$val.']';
 			    $validationError = $this->createValidationError($action, DistributionErrorType::INVALID_DATA, $this->getUserFriendlyFieldName($fieldName));
@@ -884,7 +884,7 @@ class YouTubeDistributionProfile extends ConfigurableDistributionProfile
 		$appId = YouTubeDistributionPlugin::GOOGLE_APP_ID;
 		$subId = $this->getId();
 					
-		$url = kConf::get('apphome_url');
+		$url = vConf::get('apphome_url');
 		$url .= "/index.php/extservices/googleoauth2/ytid/$appId/subid/$subId";
 		$url .= "?partnerId=".$this->getPartnerId();
 		return $url;

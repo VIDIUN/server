@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaMediaEntryBaseFilter extends KalturaPlayableEntryFilter
+abstract class VidiunMediaEntryBaseFilter extends VidiunPlayableEntryFilter
 {
 	static private $map_between_objects = array
 	(
@@ -38,7 +38,7 @@ abstract class KalturaMediaEntryBaseFilter extends KalturaPlayableEntryFilter
 	}
 
 	/**
-	 * @var KalturaMediaType
+	 * @var VidiunMediaType
 	 */
 	public $mediaTypeEqual;
 
@@ -48,23 +48,23 @@ abstract class KalturaMediaEntryBaseFilter extends KalturaPlayableEntryFilter
 	public $mediaTypeIn;
 
 	/**
-	 * @var KalturaSourceType
+	 * @var VidiunSourceType
 	 */
 	public $sourceTypeEqual;
 
 	/**
-	 * @var KalturaSourceType
+	 * @var VidiunSourceType
 	 */
 	public $sourceTypeNotEqual;
 
 	/**
-	 * @dynamicType KalturaSourceType
+	 * @dynamicType VidiunSourceType
 	 * @var string
 	 */
 	public $sourceTypeIn;
 
 	/**
-	 * @dynamicType KalturaSourceType
+	 * @dynamicType VidiunSourceType
 	 * @var string
 	 */
 	public $sourceTypeNotIn;

@@ -5,7 +5,7 @@
  * @package plugins.businessProcessNotification
  * @subpackage api.services
  */
-class BusinessProcessCaseService extends KalturaBaseService
+class BusinessProcessCaseService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -13,7 +13,7 @@ class BusinessProcessCaseService extends KalturaBaseService
 		
 		$partnerId = $this->getPartnerId();
 		if (!EventNotificationPlugin::isAllowedPartner($partnerId))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, EventNotificationPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, EventNotificationPlugin::PLUGIN_NAME);
 			
 		$this->applyPartnerFilterForClass('EventNotificationTemplate');
 	}
@@ -22,43 +22,43 @@ class BusinessProcessCaseService extends KalturaBaseService
 	 * Abort business-process case
 	 * 
 	 * @action abort
-	 * @param KalturaEventNotificationEventObjectType $objectType
+	 * @param VidiunEventNotificationEventObjectType $objectType
 	 * @param string $objectId
 	 * @param int $businessProcessStartNotificationTemplateId
 	 *
-	 * @throws KalturaEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_NOT_FOUND
-	 * @throws KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_CASE_NOT_FOUND
-	 * @throws KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
+	 * @throws VidiunEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_NOT_FOUND
+	 * @throws VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_CASE_NOT_FOUND
+	 * @throws VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
 	 */		
 	public function abortAction($objectType, $objectId, $businessProcessStartNotificationTemplateId)
 	{
-		$dbObject = kEventNotificationFlowManager::getObject($objectType, $objectId);
+		$dbObject = vEventNotificationFlowManager::getObject($objectType, $objectId);
 		if(!$dbObject)
 		{
-			throw new KalturaAPIException(KalturaErrors::OBJECT_NOT_FOUND);
+			throw new VidiunAPIException(VidiunErrors::OBJECT_NOT_FOUND);
 		}
 		
 		$dbTemplate = EventNotificationTemplatePeer::retrieveByPK($businessProcessStartNotificationTemplateId);
 		if(!$dbTemplate || !($dbTemplate instanceof BusinessProcessStartNotificationTemplate))
 		{
-			throw new KalturaAPIException(KalturaEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_NOT_FOUND, $businessProcessStartNotificationTemplateId);
+			throw new VidiunAPIException(VidiunEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_NOT_FOUND, $businessProcessStartNotificationTemplateId);
 		}
 		
 		$caseIds = $dbTemplate->getCaseIds($dbObject, false);
 		if(!count($caseIds))
 		{
-			throw new KalturaAPIException(KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_CASE_NOT_FOUND);
+			throw new VidiunAPIException(VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_CASE_NOT_FOUND);
 		}
 		
 		$dbBusinessProcessServer = BusinessProcessServerPeer::retrieveByPK($dbTemplate->getServerId());
 		if (!$dbBusinessProcessServer)
 		{
-			throw new KalturaAPIException(KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND, $dbTemplate->getServerId());
+			throw new VidiunAPIException(VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND, $dbTemplate->getServerId());
 		}
 		
-		$server = new KalturaActivitiBusinessProcessServer();
+		$server = new VidiunActivitiBusinessProcessServer();
 		$server->fromObject($dbBusinessProcessServer);
-		$provider = kBusinessProcessProvider::get($server);
+		$provider = vBusinessProcessProvider::get($server);
 		
 		foreach($caseIds as $caseId)
 		{
@@ -70,44 +70,44 @@ class BusinessProcessCaseService extends KalturaBaseService
 	 * Server business-process case diagram
 	 * 
 	 * @action serveDiagram
-	 * @param KalturaEventNotificationEventObjectType $objectType
+	 * @param VidiunEventNotificationEventObjectType $objectType
 	 * @param string $objectId
 	 * @param int $businessProcessStartNotificationTemplateId
 	 * @return file
 	 *
-	 * @throws KalturaEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_NOT_FOUND
-	 * @throws KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_CASE_NOT_FOUND
-	 * @throws KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
+	 * @throws VidiunEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_NOT_FOUND
+	 * @throws VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_CASE_NOT_FOUND
+	 * @throws VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
 	 */		
 	public function serveDiagramAction($objectType, $objectId, $businessProcessStartNotificationTemplateId)
 	{
-		$dbObject = kEventNotificationFlowManager::getObject($objectType, $objectId);
+		$dbObject = vEventNotificationFlowManager::getObject($objectType, $objectId);
 		if(!$dbObject)
 		{
-			throw new KalturaAPIException(KalturaErrors::OBJECT_NOT_FOUND);
+			throw new VidiunAPIException(VidiunErrors::OBJECT_NOT_FOUND);
 		}
 		
 		$dbTemplate = EventNotificationTemplatePeer::retrieveByPK($businessProcessStartNotificationTemplateId);
 		if(!$dbTemplate || !($dbTemplate instanceof BusinessProcessStartNotificationTemplate))
 		{
-			throw new KalturaAPIException(KalturaEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_NOT_FOUND, $businessProcessStartNotificationTemplateId);
+			throw new VidiunAPIException(VidiunEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_NOT_FOUND, $businessProcessStartNotificationTemplateId);
 		}
 		
 		$caseIds = $dbTemplate->getCaseIds($dbObject, false);
 		if(!count($caseIds))
 		{
-			throw new KalturaAPIException(KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_CASE_NOT_FOUND);
+			throw new VidiunAPIException(VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_CASE_NOT_FOUND);
 		}
 		
 		$dbBusinessProcessServer = BusinessProcessServerPeer::retrieveByPK($dbTemplate->getServerId());
 		if (!$dbBusinessProcessServer)
 		{
-			throw new KalturaAPIException(KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND, $dbTemplate->getServerId());
+			throw new VidiunAPIException(VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND, $dbTemplate->getServerId());
 		}
 		
-		$businessProcessServer = KalturaBusinessProcessServer::getInstanceByType($dbBusinessProcessServer->getType());
+		$businessProcessServer = VidiunBusinessProcessServer::getInstanceByType($dbBusinessProcessServer->getType());
 		$businessProcessServer->fromObject($dbBusinessProcessServer);
-		$provider = kBusinessProcessProvider::get($businessProcessServer);
+		$provider = vBusinessProcessProvider::get($businessProcessServer);
 		
 		$caseId = end($caseIds);
 		
@@ -117,7 +117,7 @@ class BusinessProcessCaseService extends KalturaBaseService
 		$filename .= $caseId . '.jpg';
 		
 		$provider->getCaseDiagram($caseId, $filename);
-		$mimeType = kFile::mimeType($filename);			
+		$mimeType = vFile::mimeType($filename);			
 		return $this->dumpFile($filename, $mimeType);
 	}
 	
@@ -125,44 +125,44 @@ class BusinessProcessCaseService extends KalturaBaseService
 	 * list business-process cases
 	 * 
 	 * @action list
-	 * @param KalturaEventNotificationEventObjectType $objectType
+	 * @param VidiunEventNotificationEventObjectType $objectType
 	 * @param string $objectId
-	 * @return KalturaBusinessProcessCaseArray
+	 * @return VidiunBusinessProcessCaseArray
 	 * 
-	 * @throws KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_CASE_NOT_FOUND
-	 * @throws KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
+	 * @throws VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_CASE_NOT_FOUND
+	 * @throws VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
 	 */
 	public function listAction($objectType, $objectId)
 	{
-		$dbObject = kEventNotificationFlowManager::getObject($objectType, $objectId);
+		$dbObject = vEventNotificationFlowManager::getObject($objectType, $objectId);
 		if(!$dbObject)
 		{
-			throw new KalturaAPIException(KalturaErrors::OBJECT_NOT_FOUND);
+			throw new VidiunAPIException(VidiunErrors::OBJECT_NOT_FOUND);
 		}
 		
 		$cases = BusinessProcessCasePeer::retrieveCasesByObjectIdObjecType($objectId, $objectType);
 		if(!count($cases))
 		{
-			throw new KalturaAPIException(KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_CASE_NOT_FOUND);
+			throw new VidiunAPIException(VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_CASE_NOT_FOUND);
 		}
 		
-		$array = new KalturaBusinessProcessCaseArray();
+		$array = new VidiunBusinessProcessCaseArray();
 		foreach($cases as $case)
 		{
 			/* @var $case BusinessProcessCase */
 			$dbBusinessProcessServer = BusinessProcessServerPeer::retrieveByPK($case->getServerId());
 			if (!$dbBusinessProcessServer)
 			{
-				KalturaLog::info("Business-Process server [" . $case->getServerId() . "] not found");
+				VidiunLog::info("Business-Process server [" . $case->getServerId() . "] not found");
 				continue;
 			}
 			
-			$businessProcessServer = KalturaBusinessProcessServer::getInstanceByType($dbBusinessProcessServer->getType());
+			$businessProcessServer = VidiunBusinessProcessServer::getInstanceByType($dbBusinessProcessServer->getType());
 			$businessProcessServer->fromObject($dbBusinessProcessServer);
-			$provider = kBusinessProcessProvider::get($businessProcessServer);
+			$provider = vBusinessProcessProvider::get($businessProcessServer);
 			if(!$provider)
 			{
-				KalturaLog::info("Provider [" . $businessProcessServer->type . "] not found");
+				VidiunLog::info("Provider [" . $businessProcessServer->type . "] not found");
 				continue;
 			}
 
@@ -171,12 +171,12 @@ class BusinessProcessCaseService extends KalturaBaseService
 			{
 				try {
 					$case = $provider->getCase($latestCaseId);
-					$businessProcessCase = new KalturaBusinessProcessCase();
+					$businessProcessCase = new VidiunBusinessProcessCase();
 					$businessProcessCase->businessProcessStartNotificationTemplateId = $templateId;
 					$businessProcessCase->fromObject($case);
 					$array[] = $businessProcessCase;
 				} catch (ActivitiClientException $e) {
-					KalturaLog::err("Case [$latestCaseId] not found: " . $e->getMessage());
+					VidiunLog::err("Case [$latestCaseId] not found: " . $e->getMessage());
 				}
 			}
 		}

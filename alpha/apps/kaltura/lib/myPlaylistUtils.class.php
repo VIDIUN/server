@@ -17,13 +17,13 @@ class myPlaylistUtils
 
 	private static $user_cache = null;
 	
-	private static $isAdminKs = false;
+	private static $isAdminVs = false;
 	
 	private static $playlistContext;
 	
-	public static function setIsAdminKs($v)
+	public static function setIsAdminVs($v)
 	{
-		self::$isAdminKs = $v;
+		self::$isAdminVs = $v;
 	}
 
 	/**
@@ -64,7 +64,7 @@ class myPlaylistUtils
 			// assume this is a dynamic playlist			
 			// TODO - validate XML
 			$dynamic_playlist_str = $playlist->getDataContent(true);
-			KalturaLog::log( "Playlist [" . $playlist->getId() . "] [" . $playlist->getName() . "] dataContent:\n" . $dynamic_playlist_str );
+			VidiunLog::log( "Playlist [" . $playlist->getId() . "] [" . $playlist->getName() . "] dataContent:\n" . $dynamic_playlist_str );
 			if ( ! $dynamic_playlist_str ) $playlist->setDataContent( null , false ); // set to null and it the content of the xml won't be update
 		}
 		elseif ( $playlist->getMediaType() == entry::ENTRY_MEDIA_TYPE_GENERIC_1 )
@@ -84,13 +84,13 @@ class myPlaylistUtils
 		$entry = entryPeer::retrieveByPK($entryId);
 		if(!$entry)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_ID, $entryId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_ID, $entryId);
 		}
 		//Entitlements disabled and user or his groups dont have edit/publish/owner permissions
-		if (!kCurrentContext::$is_admin_session && !kPermissionManager::isPermitted(PermissionName::PLAYLIST_ADD)
-			&& !kEntitlementUtils::getEntitlementEnforcement() && !self::validatePlaylistContentEntitlement($entry, null))
+		if (!vCurrentContext::$is_admin_session && !vPermissionManager::isPermitted(PermissionName::PLAYLIST_ADD)
+			&& !vEntitlementUtils::getEntitlementEnforcement() && !self::validatePlaylistContentEntitlement($entry, null))
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_ID, $entryId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_ID, $entryId);
 		}
 	}
 
@@ -134,12 +134,12 @@ class myPlaylistUtils
 
 		if ( ! $playlist )
 		{
-			throw new kCoreException("Invalid entry id [$playlist_id]", APIErrors::INVALID_ENTRY_ID); 
+			throw new vCoreException("Invalid entry id [$playlist_id]", APIErrors::INVALID_ENTRY_ID); 
 		}
 		
 		if ( $playlist->getType() != entryType::PLAYLIST )
 		{
-			throw new kCoreException("Invalid entry id [$playlist_id]", APIErrors::INVALID_ENTRY_TYPE);
+			throw new vCoreException("Invalid entry id [$playlist_id]", APIErrors::INVALID_ENTRY_TYPE);
 		}
 		
 		// the default of detrailed should be true - most of the time the kuse is needed 
@@ -152,7 +152,7 @@ class myPlaylistUtils
 	{
 		if ( ! $playlist )
 		{
-			throw new kCoreException("Invalid entry id", APIErrors::INVALID_ENTRY_ID);
+			throw new vCoreException("Invalid entry id", APIErrors::INVALID_ENTRY_ID);
 		}
 		 
 		// the default of detrailed should be true - most of the time the kuse is needed 
@@ -186,7 +186,7 @@ class myPlaylistUtils
 
 		// Perform entries redirection
 		if ( ! empty(self::$playlistContext)
-				&& (self::$playlistContext instanceof kEntryContext)
+				&& (self::$playlistContext instanceof vEntryContext)
 				&& self::$playlistContext->getFollowEntryRedirect() )
 		{
 			$entryObjectsArray = self::replaceRedirectedEntries( $entryObjectsArray );
@@ -263,13 +263,13 @@ class myPlaylistUtils
 		if ( ! $playlist )
 		{
 			$exceptionData = array('playlistId' => $playlist_id);
-			throw new kCoreException("Invalid entry id [$playlist_id]", kCoreException::INVALID_ENTRY_ID, $exceptionData);
+			throw new vCoreException("Invalid entry id [$playlist_id]", vCoreException::INVALID_ENTRY_ID, $exceptionData);
 		}
 		
 		if ( $playlist->getType() != entryType::PLAYLIST )
 		{
 			$exceptionData = array('playlistId' => $playlist_id, 'wrongType' => $playlist->getType(), 'correctType' => entryType::PLAYLIST);
-			throw new kCoreException("Invalid entry type [$playlist_id]", kCoreException::INVALID_ENTRY_TYPE, $exceptionData);
+			throw new vCoreException("Invalid entry type [$playlist_id]", vCoreException::INVALID_ENTRY_TYPE, $exceptionData);
 		}
 		
 		return self::getPlaylistFilters ( $playlist );
@@ -322,16 +322,16 @@ class myPlaylistUtils
 	public static function executeStaticPlaylistFromEntryIds(array $entry_id_list, $entry_filter = null, $detailed = true, $pager = null)
 	{
 		// if exists extra_filters - use the first one to filter the entry_id_list
-		$c= KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c= VidiunCriteria::create(entryPeer::OM_CLASS);
 		
 		$filter = new entryFilter();
 		$filter->setIdIn($entry_id_list);
 		$filter->setStatusEquel(entryStatus::READY);
-		$filter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);
+		$filter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);
 		$filter->attachToCriteria($c);
 		
 		
-		if (!self::$isAdminKs)
+		if (!self::$isAdminVs)
 		{
 			self::addSchedulingToCriteria($c, $entry_filter);
 		}
@@ -352,7 +352,7 @@ class myPlaylistUtils
 			{
 				$entry_filter->set ( "_eq_display_in_search" , null );
 			}
-			$entry_filter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);
+			$entry_filter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);
 			$entry_filter->attachToCriteria( $c );
 			
 			// add some hard-coded criteria
@@ -361,7 +361,7 @@ class myPlaylistUtils
 
 			if ( $display_in_search >= 2 )
 			{
-				// We don't allow searching in the KalturaNEtwork anymore (mainly for performance reasons)
+				// We don't allow searching in the VidiunNEtwork anymore (mainly for performance reasons)
 				// allow only assets for the partner  
 				$c->addAnd ( entryPeer::PARTNER_ID , $partner_id ); // 
 /*				
@@ -373,9 +373,9 @@ class myPlaylistUtils
 		}
 
 		if ( $detailed )
-			$unsorted_entry_list = entryPeer::doSelectJoinkuser( $c ); // maybe join with kuser to add some data about the contributor
+			$unsorted_entry_list = entryPeer::doSelectJoinvuser( $c ); // maybe join with vuser to add some data about the contributor
 		else
-			$unsorted_entry_list = entryPeer::doSelect( $c ); // maybe join with kuser to add some data about the contributor
+			$unsorted_entry_list = entryPeer::doSelect( $c ); // maybe join with vuser to add some data about the contributor
 	
 		// now sort the list according to $entry_id_list
 		
@@ -511,7 +511,7 @@ class myPlaylistUtils
 			$entry_filter_xml = $list_of_filters[$i];
 
 		    /* @var $entry_filter_xml SimpleXMLElement */
-			// 	in general this service can fetch entries from kaltura networks.
+			// 	in general this service can fetch entries from vidiun networks.
 			// for each filter we should decide if thie assumption is true...
 			$allow_partner_only = true;
 			
@@ -546,7 +546,7 @@ class myPlaylistUtils
 					myBaseObject::CLONE_FIELD_POLICY_THIS , 
 					myBaseObject::CLONE_POLICY_PREFER_NEW , null , null , false );
 					
-				$entry_filter->setPartnerSearchScope ( baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE );
+				$entry_filter->setPartnerSearchScope ( baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE );
 			}
 			
 			self::updateEntryFilter( $entry_filter ,  $partner_id , true );
@@ -572,7 +572,7 @@ class myPlaylistUtils
 			// no need to fetch any more results
 			if ( $current_limit <= 0 ) break;
 
-			$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+			$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 			// don't fetch the same entries twice - filter out all the entries that were already fetched
 			if( $entry_ids_list ) $c->add ( entryPeer::ID , $entry_ids_list , Criteria::NOT_IN );
 			
@@ -595,8 +595,8 @@ class myPlaylistUtils
 
 			// add some hard-coded criteria
 			$typeArray = array (entryType::MEDIA_CLIP, entryType::MIX, entryType::LIVE_STREAM );
-			$typeArray = array_merge($typeArray, KalturaPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::MEDIA_CLIP));
-			$typeArray = array_merge($typeArray, KalturaPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::LIVE_STREAM));
+			$typeArray = array_merge($typeArray, VidiunPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::MEDIA_CLIP));
+			$typeArray = array_merge($typeArray, VidiunPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::LIVE_STREAM));
 			
 			$c->addAnd ( entryPeer::TYPE , array_unique($typeArray) , Criteria::IN ); // search only for clips or roughcuts
 			$c->addAnd ( entryPeer::STATUS , entryStatus::READY ); // search only for READY entries 
@@ -604,7 +604,7 @@ class myPlaylistUtils
 
 			if ( $display_in_search >= 2 )
 			{
-				// We don't allow searching in the KalturaNEtwork anymore (mainly for performance reasons)
+				// We don't allow searching in the VidiunNEtwork anymore (mainly for performance reasons)
 				// allow only assets for the partner  
 				$c->addAnd ( entryPeer::PARTNER_ID , $partner_id ); // 
 /*				
@@ -614,7 +614,7 @@ class myPlaylistUtils
 */
 			}
 			
-			if (!self::$isAdminKs)
+			if (!self::$isAdminVs)
 			{
 				self::addSchedulingToCriteria($c, $entry_filter);
 			}
@@ -638,11 +638,11 @@ class myPlaylistUtils
 
 		// Disable entitlement, which was already applied in entryPeer::prepareEntitlementCriteriaAndFilters()
 		// otherwise we will hit the 150 entries limit from SphinxCriterion
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 
 		$db_entry_list = entryPeer::retrieveByPKs( $entry_ids_list );
 
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 
 		// Map the entries to their IDs
 		$entry_map = array();
@@ -662,26 +662,26 @@ class myPlaylistUtils
 		return $entry_list;		 
 	}
 	
-	// will assume that user_id is actually the puser_id and should be replaced by kuser_id to be able to search by in the entry table
+	// will assume that user_id is actually the puser_id and should be replaced by vuser_id to be able to search by in the entry table
 	private static function setUser ( $partner_id , $filter )
 	{
 		$target_puser_id = $filter->get ( "_eq_user_id" );
 		if ( $target_puser_id !== null )
 		{
-			$puser_kuser = self::getPuserKuserFromCache ( $target_puser_id );
-			if( $puser_kuser == null )
+			$puser_vuser = self::getPuserVuserFromCache ( $target_puser_id );
+			if( $puser_vuser == null )
 			{
-				$puser_kuser = PuserKuserPeer::retrieveByPartnerAndUid( $partner_id , null /* $subp_id */, $target_puser_id , false);
-				if ( $puser_kuser )
+				$puser_vuser = PuserVuserPeer::retrieveByPartnerAndUid( $partner_id , null /* $subp_id */, $target_puser_id , false);
+				if ( $puser_vuser )
 				{
-					$filter->set ( "_eq_user_id" ,  $puser_kuser->getkuserId() );
+					$filter->set ( "_eq_user_id" ,  $puser_vuser->getvuserId() );
 				}
-				self::setPuserKuserFromCache( $target_puser_id , $puser_kuser );
+				self::setPuserVuserFromCache( $target_puser_id , $puser_vuser );
 			}
 		}		
 	}
 	
-	private static function getPuserKuserFromCache ( $puser_id )
+	private static function getPuserVuserFromCache ( $puser_id )
 	{
 		if ( self::$user_cache == null ) return null;
 		{
@@ -689,10 +689,10 @@ class myPlaylistUtils
 		} 
 	}
 
-	private static  function setPuserKuserFromCache ( $puser_id , $puser_kuser )
+	private static  function setPuserVuserFromCache ( $puser_id , $puser_vuser )
 	{
 		if ( self::$user_cache == null ) self::$user_cache = array();
-		self::$user_cache[$puser_id] = $puser_kuser; 
+		self::$user_cache[$puser_id] = $puser_vuser; 
 	}
 	
 	public static function getPlaylistFilterListStruct ( $xml )
@@ -749,15 +749,15 @@ class myPlaylistUtils
 		
 		if ( ! $ui_conf ) 
 		{
-			throw new kCoreException("Invalid uiconf id [$ui_conf_id] for widget [$wid]", APIErrors::INVALID_UI_CONF_ID);
+			throw new vCoreException("Invalid uiconf id [$ui_conf_id] for widget [$wid]", APIErrors::INVALID_UI_CONF_ID);
 		}
 		
 //		$autoplay_str = $autoplay ? "autoPlay=true" : "autoPlay=false" ; 
 		$autoplay_str = "";
 $embed = <<< HTML
-<object height="{$ui_conf->getHeight()}" width="{$ui_conf->getWidth()}" type="application/x-shockwave-flash" data="{$host}/kwidget/wid/{$wid}/ui_conf_id/{$ui_conf_id}" id="kaltura_playlist" style="visibility: visible;">		
+<object height="{$ui_conf->getHeight()}" width="{$ui_conf->getWidth()}" type="application/x-shockwave-flash" data="{$host}/vwidget/wid/{$wid}/ui_conf_id/{$ui_conf_id}" id="vidiun_playlist" style="visibility: visible;">		
 <param name="allowscriptaccess" value="always"/><param name="allownetworking" value="all"/><param name="bgcolor" value="#000000"/><param name="wmode" value="opaque"/><param name="allowfullscreen" value="true"/>
-<param name="movie" value="{$host}/kwidget/wid/{$wid}/ui_conf_id/{$ui_conf_id}"/>
+<param name="movie" value="{$host}/vwidget/wid/{$wid}/ui_conf_id/{$ui_conf_id}"/>
 <param name="flashvars" value="layoutId=playlistLight&uid={$uid}&partner_id={$partner_id}&subp_id={$subp_id}&$playlist_flashvars"/></object>
 HTML;
 		return array ( $embed , $ui_conf->getWidth() ,  $ui_conf->getHeight() ); 		
@@ -776,12 +776,12 @@ HTML;
 		{
 			$playlist_url = urlencode ( $host . "/index.php/partnerservices2/executeplaylist?" .
 				"uid={$uid}&partner_id={$partner_id}&subp_id={$subp_id}&format=8&" .   // make sure the format is 8 - mRss
-				"ks={ks}&" .   
+				"vs={vs}&" .   
 				self::toQueryString( $playlist , false ) ); 
 		}
 		
-//		$str = "k_pl_autoContinue=true&k_pl_autoInsertMedia=true&k_pl_0_name=" . $playlist->getName() . "&k_pl_0_url=" . $playlist_url;
-		$str = "k_pl_0_name=" . $playlist->getName() . "&k_pl_0_url=" . $playlist_url;
+//		$str = "v_pl_autoContinue=true&v_pl_autoInsertMedia=true&v_pl_0_name=" . $playlist->getName() . "&v_pl_0_url=" . $playlist_url;
+		$str = "v_pl_0_name=" . $playlist->getName() . "&v_pl_0_url=" . $playlist_url;
 		return $str;
 	}
 	
@@ -797,7 +797,7 @@ HTML;
 		$playlist_url = 
 			$host . "/index.php/partnerservices2/executeplaylist?format=8&" .
 //				"uid={uid}&partner_id={partnerid}&subp_id={subpid}&" .   // make sure the format is 8 - mRss
-				"ks={ks}&" .   
+				"vs={vs}&" .   
 				self::toQueryString( $playlist , false ) ; 		
 		return 	$playlist_url;			
 	}
@@ -818,7 +818,7 @@ HTML;
 		$entry_filters = array();
 		$partner_id = $playlist->getPartnerId(); 
 		
-		// add ks=_KS_ for the playlist to replace it before hitting the executePlaylist 
+		// add vs=_VS_ for the playlist to replace it before hitting the executePlaylist 
 		$query .= "&fp=f"; // make sure the filter prefix is short
 		
 		if ( ! $list_of_filters ) return $query;
@@ -827,7 +827,7 @@ HTML;
 		foreach ( $list_of_filters as $entry_filter_xml )
 		{
 			$prefix = "f{$i}_";
-			// 	in general this service can fetch entries from kaltura networks.
+			// 	in general this service can fetch entries from vidiun networks.
 			// for each filter we should decide if thie assumption is true...
 			$allow_partner_only = true;
 			
@@ -842,7 +842,7 @@ HTML;
 				$entry_filter->setLimit( self::TOTAL_RESULTS );
 			}
 			
-			$entry_filter->setPartnerSearchScope ( baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE );
+			$entry_filter->setPartnerSearchScope ( baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE );
 			self::updateEntryFilter( $entry_filter ,  $partner_id );
 
 			//$entry_filters[] = $entry_filter;
@@ -873,7 +873,7 @@ HTML;
 		}	
 		else
 		{
-			$entry_filter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);
+			$entry_filter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);
 		}
 	}
 
@@ -886,7 +886,7 @@ HTML;
 	protected static function getCaptionFilePath($captionAsset, &$localFilePath)
 	{
 		$captionFileSyncKey = $captionAsset->getSyncKey(asset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		list($captionFileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($captionFileSyncKey, true, false);
+		list($captionFileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($captionFileSyncKey, true, false);
 		if (!$captionFileSync)
 		{
 			return false;
@@ -949,7 +949,7 @@ HTML;
 	private static function addSchedulingToCriteria(Criteria $c, entryFilter $filter = null)
 	{
 		$min = 0;
-		$max = kApiCache::getTime();
+		$max = vApiCache::getTime();
 		$allowNull = true;
 		if($filter)
 		{
@@ -975,7 +975,7 @@ HTML;
 		self::addSchedulingCriterion($c, entryPeer::START_DATE, $min, $max, $allowNull);
 
 
-		$min = kApiCache::getTime();
+		$min = vApiCache::getTime();
 		$max = 0;
 		$allowNull = true;
 		if($filter)
@@ -1047,9 +1047,9 @@ HTML;
 	
 	/**
 	 * Static method to set the static $playlistContext variable
-	 * @param kContext $v
+	 * @param vContext $v
 	 */
-	public static function setPlaylistContext (kContext $v)
+	public static function setPlaylistContext (vContext $v)
 	{
 	    self::$playlistContext = $v;
 	}
@@ -1068,7 +1068,7 @@ HTML;
 	        if (isset($propertyAttributes['dynamic']) && $propertyAttributes['dynamic'] = 1)
 	        {
 	            $tokenValue = (string)$property;
-	            KalturaLog::debug("Apply dynamic token [$property]");
+	            VidiunLog::debug("Apply dynamic token [$property]");
 	            $tokenValue = explode("::", $tokenValue);
 	            if ($tokenValue[0] == self::CONTEXT_DELIMITER)
 	            {
@@ -1079,7 +1079,7 @@ HTML;
     	                $getter = "get".$tokenPart;
     	                if (!method_exists($replaceValue, $getter))
     	                {
-    	                	KalturaLog::err("Method [$getter] not found on class [" . get_class($replaceValue) . "] for token [$property]");
+    	                	VidiunLog::err("Method [$getter] not found on class [" . get_class($replaceValue) . "] for token [$property]");
     	                	$replaceValue = null;
     	                	break;
     	                }
@@ -1089,7 +1089,7 @@ HTML;
     	            
     	            if(!$replaceValue)
     	            {
-    	            	KalturaLog::debug("Dynamic token [$property] is null");
+    	            	VidiunLog::debug("Dynamic token [$property] is null");
                         $contentAsDom = dom_import_simplexml($contentXml);
                         $contentAsDom->removeChild(dom_import_simplexml($property));
     	            	continue;
@@ -1114,7 +1114,7 @@ HTML;
 
 	public static function retrieveStitchedPlaylistEntries(entry $playlist)
 	{
-		$pager = new kFilterPager();
+		$pager = new vFilterPager();
 		$pager->setPageIndex(1);
 		$pager->setPageSize(self::MAX_STITCHED_PLAYLIST_ENTRY_COUNT);
 		$entries = self::executePlaylist(
@@ -1224,14 +1224,14 @@ HTML;
 		return $entryList[0];
 	}
 
-	public static function validatePlaylistContentEntitlement($entry, $kuserId = null)
+	public static function validatePlaylistContentEntitlement($entry, $vuserId = null)
 	{
-		$ks = ks::fromSecureString(kCurrentContext::$ks);
-		$kuserId = kEntitlementUtils::getKuserIdForEntitlement($kuserId, $ks);
+		$vs = vs::fromSecureString(vCurrentContext::$vs);
+		$vuserId = vEntitlementUtils::getVuserIdForEntitlement($vuserId, $vs);
 
-		if($entry->isEntitledKuserEdit($kuserId) || $entry->isEntitledKuserPublish($kuserId))
+		if($entry->isEntitledVuserEdit($vuserId) || $entry->isEntitledVuserPublish($vuserId))
 		{
-			KalturaLog::info('Entry ['.print_r($entry->getId(), true).'] entitled: user or associated user group allowed: ['.$kuserId.']');
+			VidiunLog::info('Entry ['.print_r($entry->getId(), true).'] entitled: user or associated user group allowed: ['.$vuserId.']');
 			return true;
 		}
 

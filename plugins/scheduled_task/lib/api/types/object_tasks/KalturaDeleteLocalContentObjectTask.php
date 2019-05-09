@@ -4,7 +4,7 @@
  * @package plugins.scheduledTask
  * @subpackage api.objects.objectTasks
  */
-class KalturaDeleteLocalContentObjectTask extends KalturaObjectTask
+class VidiunDeleteLocalContentObjectTask extends VidiunObjectTask
 {
 	public function __construct()
 	{

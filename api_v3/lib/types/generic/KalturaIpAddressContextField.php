@@ -5,15 +5,15 @@
  * @package api
  * @subpackage objects
  */
-class KalturaIpAddressContextField extends KalturaStringField
+class VidiunIpAddressContextField extends VidiunStringField
 {
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kIpAddressContextField();
+			$dbObject = new vIpAddressContextField();
 			
 		return parent::toObject($dbObject, $skip);
 	}

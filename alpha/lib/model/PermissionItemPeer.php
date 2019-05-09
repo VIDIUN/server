@@ -29,11 +29,11 @@ class PermissionItemPeer extends BasePermissionItemPeer implements IRelatedObjec
 			$permissionItem = self::retrieveByPK($itemId);
 			self::setUseCriteriaFilter(true);
 			if (!$permissionItem) {
-				throw new kPermissionException('Permission item with id ['.$itemId.'] not found', kPermissionException::PERMISSION_ITEM_NOT_FOUND);
+				throw new vPermissionException('Permission item with id ['.$itemId.'] not found', vPermissionException::PERMISSION_ITEM_NOT_FOUND);
 			}
 			
 			if (!in_array($permissionItem->getPartnerId(), array($partnerId, PartnerPeer::GLOBAL_PARTNER))) {
-				throw new kPermissionException('Permission item with id ['.$itemId.'] not found', kPermissionException::PERMISSION_ITEM_NOT_FOUND);
+				throw new vPermissionException('Permission item with id ['.$itemId.'] not found', vPermissionException::PERMISSION_ITEM_NOT_FOUND);
 			}
 		}
 	}

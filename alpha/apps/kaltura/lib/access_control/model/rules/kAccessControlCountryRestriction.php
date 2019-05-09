@@ -5,10 +5,10 @@
  * 
  * Old country restriction for backward compatibility
  */
-class kAccessControlCountryRestriction extends kAccessControlRestriction
+class vAccessControlCountryRestriction extends vAccessControlRestriction
 {
 	/**
-	 * @var kCountryCondition
+	 * @var vCountryCondition
 	 */
 	private $condition;
 	
@@ -18,9 +18,9 @@ class kAccessControlCountryRestriction extends kAccessControlRestriction
 	public function __construct(accessControl $accessControl = null)
 	{
 		parent::__construct($accessControl);
-		$this->setActions(array(new kAccessControlAction(RuleActionType::BLOCK)));
+		$this->setActions(array(new vAccessControlAction(RuleActionType::BLOCK)));
 		
-		$this->condition = new kCountryCondition(true);
+		$this->condition = new vCountryCondition(true);
 		if($accessControl)
 		{
 			$this->setCountryList($accessControl->getCountryRestrictList());
@@ -31,9 +31,9 @@ class kAccessControlCountryRestriction extends kAccessControlRestriction
 	}
 
 	/* (non-PHPdoc)
-	 * @see kRule::applyContext()
+	 * @see vRule::applyContext()
 	 */
-	public function applyContext(kContextDataResult $context)
+	public function applyContext(vContextDataResult $context)
 	{
 		$fulfilled = parent::applyContext($context);
 		if($fulfilled)
@@ -43,7 +43,7 @@ class kAccessControlCountryRestriction extends kAccessControlRestriction
 	}
 
 	/**
-	 * @return kCountryCondition
+	 * @return vCountryCondition
 	 */
 	protected function getCondition()
 	{
@@ -59,7 +59,7 @@ class kAccessControlCountryRestriction extends kAccessControlRestriction
 	 */
 	function setCountryRestrictionType($type)
 	{
-		$this->getCondition()->setNot($type == kAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST);
+		$this->getCondition()->setNot($type == vAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ class kAccessControlCountryRestriction extends kAccessControlRestriction
 		$values = explode(',', $values);
 		$stringValues = array();
 		foreach($values as $value)
-			$stringValues[] = new kStringValue($value);
+			$stringValues[] = new vStringValue($value);
 			
 		$this->getCondition()->setValues($stringValues);
 	}
@@ -80,7 +80,7 @@ class kAccessControlCountryRestriction extends kAccessControlRestriction
 	 */
 	function getCountryRestrictionType()
 	{
-		return $this->getCondition()->getNot() ? kAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST : kAccessControlRestriction::RESTRICTION_TYPE_RESTRICT_LIST;	
+		return $this->getCondition()->getNot() ? vAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST : vAccessControlRestriction::RESTRICTION_TYPE_RESTRICT_LIST;	
 	}
 	
 	/**

@@ -1,15 +1,15 @@
 <?php
 /**
- * to get example code for kmc wrapper add:
+ * to get example code for vmc wrapper add:
  *  --include-code
  */
 
-define("KALTURA_ROOT_PATH", realpath(__DIR__ . '/../../'));
+define("VIDIUN_ROOT_PATH", realpath(__DIR__ . '/../../'));
 define ('SEARCH_BY_TAG_FUNCTION_NAME', 'find_confs_by_usage_tag');
 
 $code = array();
-$kcw_for_editors = array();
-$kdp_for_studio = array();
+$vcw_for_editors = array();
+$vdp_for_studio = array();
 $exlude_tags_from_code = array('uploadforkae', 'uploadforkse',);
 
 /** init arguments **/
@@ -50,7 +50,7 @@ if(!file_exists($arguments['ini'])) { print_usage('config file not found '.$argu
 
 error_reporting(0);
 $confObj = init($arguments['ini'], $arguments['infra']);
-$kclient = getClient($arguments['partner_id'], $arguments['admin_secret'], $arguments['host']);
+$vclient = getClient($arguments['partner_id'], $arguments['admin_secret'], $arguments['host']);
 
 $baseTag = $confObj->general->component->name;
 $defaultTags = "autodeploy, {$baseTag}_{$confObj->general->component->version}";
@@ -60,7 +60,7 @@ if($includeCode)
 {
   $code[] = '$c = new Criteria();';
   $code[] = '$c->addAnd(UiConfPeer::PARTNER_ID, '.$confObj->statics->partner_id.');';
-  $code[] = '$c->addAnd(UiConfPeer::TAGS, "%'.$baseTag.'_".$this->kmc_'.$baseTag.'_version."%", Criteria::LIKE);';
+  $code[] = '$c->addAnd(UiConfPeer::TAGS, "%'.$baseTag.'_".$this->vmc_'.$baseTag.'_version."%", Criteria::LIKE);';
   $code[] = '$c->addAnd(UiConfPeer::TAGS, "%autodeploy%", Criteria::LIKE);';
   $code[] = '$this->confs = UiConfPeer::doSelect($c);';
 }
@@ -84,14 +84,14 @@ foreach($sections as $section)
     $uiconf = populate_uiconf_from_config($configObj, $baseSwfUrl, $swfName, $objType);
     if($uiconf)
     {
-      $uiconf_id = add_ui_conf($kclient, $uiconf);
+      $uiconf_id = add_ui_conf($vclient, $uiconf);
       if($configObj->usage == 'uploadforkae' || $configObj->usage == 'uploadforkse')
       {
-	$kcw_for_editors[$configObj->identifier] = $uiconf_id;
+	$vcw_for_editors[$configObj->identifier] = $uiconf_id;
       }
       if($configObj->usage == 'template_uiconf_for_appstudio')
       {
-        $kdp_for_studio[$configObj->identifier] = $uiconf_id;
+        $vdp_for_studio[$configObj->identifier] = $uiconf_id;
       }
     }
     else
@@ -112,36 +112,36 @@ if($includeCode)
     if(in_array($tag, $exlude_tags_from_code)) continue;
     $code[] = '$this->'.$baseTag.'_uiconfs_'.$tag.' = $this->'.SEARCH_BY_TAG_FUNCTION_NAME.'("'.$baseTag.'_'.$tag.'");';
   }
-  echo PHP_EOL.'// code for KMC wrapper'.PHP_EOL;
+  echo PHP_EOL.'// code for VMC wrapper'.PHP_EOL;
   $code[] = add_search_conf_by_tag_code();
   echo implode(PHP_EOL, $code);
 }
 
 function getClient($partner_id, $admin_secret, $host)
 {
-  require_once(__DIR__ . '/KalturaClient.php');  
+  require_once(__DIR__ . '/VidiunClient.php');  
   
-  $kconf = new KalturaConfiguration($partner_id);
-  $kconf->serviceUrl = $host;
-  $kclient = new KalturaClient($kconf);
-  $kclient->setKs($kclient->session->startLocal($admin_secret, "", 2));
+  $vconf = new VidiunConfiguration($partner_id);
+  $vconf->serviceUrl = $host;
+  $vclient = new VidiunClient($vconf);
+  $vclient->setVs($vclient->session->startLocal($admin_secret, "", 2));
   
-  return $kclient;
+  return $vclient;
 }
 function init($conf_file_path, $infra_path)
 {
   $conf = parse_ini_file($conf_file_path, true);
-  require_once(KALTURA_ROOT_PATH.DIRECTORY_SEPARATOR."infra".DIRECTORY_SEPARATOR."KAutoloader.php");
-  KAutoloader::setIncludePath(array(KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "ZendFramework", "library"),));
-  KAutoloader::register();
+  require_once(VIDIUN_ROOT_PATH.DIRECTORY_SEPARATOR."infra".DIRECTORY_SEPARATOR."VAutoloader.php");
+  VAutoloader::setIncludePath(array(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "ZendFramework", "library"),));
+  VAutoloader::register();
   
   $confObj = new Zend_Config_Ini($conf_file_path);
   return $confObj;
 }
 function populate_uiconf_from_config($confConfigObj, $baseSwfUrl, $swfName, $objType)
 {
-  global $defaultTags, $baseTag, $confObj, $kcw_for_editors, $kdp_for_studio;
-  $uiconf = new KalturaUiConf();
+  global $defaultTags, $baseTag, $confObj, $vcw_for_editors, $vdp_for_studio;
+  $uiconf = new VidiunUiConf();
   $uiconf->confFile = read_conf_file_from_path($confConfigObj->conf_file);
   if($uiconf->confFile === FALSE)
   {
@@ -149,20 +149,20 @@ function populate_uiconf_from_config($confConfigObj, $baseSwfUrl, $swfName, $obj
   }
   
   $replace_tag = '';
-  if($objType == KalturaUiConfObjType::ADVANCED_EDITOR) $replace_tag = 'uIConfigId';
-  if($objType == KalturaUiConfObjType::SIMPLE_EDITOR) $replace_tag = 'UIConfigId';
+  if($objType == VidiunUiConfObjType::ADVANCED_EDITOR) $replace_tag = 'uIConfigId';
+  if($objType == VidiunUiConfObjType::SIMPLE_EDITOR) $replace_tag = 'UIConfigId';
   if($replace_tag)
   {
-    if(isset($confConfigObj->kcw_identifier) && isset($kcw_for_editors[$confConfigObj->kcw_identifier]))
+    if(isset($confConfigObj->vcw_identifier) && isset($vcw_for_editors[$confConfigObj->vcw_identifier]))
     {
       $pattern = '/<'.$replace_tag.'>(.*)<\/'.$replace_tag.'>/';
-      $replacement = "<$replace_tag>{$kcw_for_editors[$confConfigObj->kcw_identifier]}</$replace_tag>";
+      $replacement = "<$replace_tag>{$vcw_for_editors[$confConfigObj->vcw_identifier]}</$replace_tag>";
       $uiconf->confFile = preg_replace($pattern, $replacement, $uiconf->confFile);
     }
   }
   if(isset($confConfigObj->usage) && $confConfigObj->usage == 'templates')
   {
-    foreach($kdp_for_studio as $identifier => $confId)
+    foreach($vdp_for_studio as $identifier => $confId)
     {
       $uiconf->confFile = str_replace('@@'.$identifier.'@@', $confId, $uiconf->confFile);
     }
@@ -187,13 +187,13 @@ function populate_uiconf_from_config($confConfigObj, $baseSwfUrl, $swfName, $obj
   return $uiconf;
 }
 
-function add_ui_conf($kclient, $pe_conf)
+function add_ui_conf($vclient, $pe_conf)
 {
   global $skipAddUiconf;
   if($skipAddUiconf) return rand(1000,1200);
   
   try{
-    $conf_output = $kclient->uiConf->add($pe_conf);
+    $conf_output = $vclient->uiConf->add($pe_conf);
   }
   catch(Exception $ex)
   {
@@ -220,7 +220,7 @@ function read_conf_file_from_path($file_path, $is_features = false)
 }
 function get_uiconf_objtype_const_from_number($num)
 {
-  $reflectionClass = new ReflectionClass('KalturaUiConfObjType');
+  $reflectionClass = new ReflectionClass('VidiunUiConfObjType');
   $allConsts = $reflectionClass->getConstants();
   $consts = array();
   foreach($allConsts as $key => $value)
@@ -228,7 +228,7 @@ function get_uiconf_objtype_const_from_number($num)
     if($value == $num)
       return $key;
   }
-  $objType = KalturaUiConfObjType::SIMPLE_EDITOR;
+  $objType = VidiunUiConfObjType::SIMPLE_EDITOR;
 }
 
 function add_search_conf_by_tag_code()

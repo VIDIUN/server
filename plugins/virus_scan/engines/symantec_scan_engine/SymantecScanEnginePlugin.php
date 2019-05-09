@@ -2,17 +2,17 @@
 /**
  * @package plugins.symantecScanEngine
  */
-class SymantecScanEnginePlugin extends KalturaPlugin implements IKalturaPending, IKalturaEnumerator, IKalturaObjectLoader
+class SymantecScanEnginePlugin extends VidiunPlugin implements IVidiunPending, IVidiunEnumerator, IVidiunObjectLoader
 {
 	const PLUGIN_NAME = 'symantecScanEngine';
 	const VIRUS_SCAN_PLUGIN_NAME = 'virusScan';
 	
 	/**
-	 * @return array<KalturaDependency>
+	 * @return array<VidiunDependency>
 	 */
 	public static function dependsOn()
 	{
-		return array(new KalturaDependency(self::VIRUS_SCAN_PLUGIN_NAME));
+		return array(new VidiunDependency(self::VIRUS_SCAN_PLUGIN_NAME));
 	}
 
 	/**
@@ -47,13 +47,13 @@ class SymantecScanEnginePlugin extends KalturaPlugin implements IKalturaPending,
 	{
 		if($baseClass == 'VirusScanEngine')
 		{
-			if($enumValue == KalturaVirusScanEngineType::SYMANTEC_SCAN_ENGINE)
+			if($enumValue == VidiunVirusScanEngineType::SYMANTEC_SCAN_ENGINE)
 				return new SymantecScanEngine();
 		
-			if($enumValue == KalturaVirusScanEngineType::SYMANTEC_SCAN_JAVA_ENGINE)
+			if($enumValue == VidiunVirusScanEngineType::SYMANTEC_SCAN_JAVA_ENGINE)
 				return new SymantecScanJavaEngine();
 
-			if($enumValue == KalturaVirusScanEngineType::SYMANTEC_SCAN_DIRECT_ENGINE)
+			if($enumValue == VidiunVirusScanEngineType::SYMANTEC_SCAN_DIRECT_ENGINE)
 				return new SymantecScanDirectEngine();
 		}
 		
@@ -69,13 +69,13 @@ class SymantecScanEnginePlugin extends KalturaPlugin implements IKalturaPending,
 	{
 		if($baseClass == 'VirusScanEngine')
 		{
-			if($enumValue == KalturaVirusScanEngineType::SYMANTEC_SCAN_ENGINE)
+			if($enumValue == VidiunVirusScanEngineType::SYMANTEC_SCAN_ENGINE)
 				return 'SymantecScanEngine';
 			
-			if($enumValue == KalturaVirusScanEngineType::SYMANTEC_SCAN_JAVA_ENGINE)
+			if($enumValue == VidiunVirusScanEngineType::SYMANTEC_SCAN_JAVA_ENGINE)
 				return 'SymantecScanJavaEngine';
 
-			if($enumValue == KalturaVirusScanEngineType::SYMANTEC_SCAN_DIRECT_ENGINE)
+			if($enumValue == VidiunVirusScanEngineType::SYMANTEC_SCAN_DIRECT_ENGINE)
 				return 'SymantecScanDirectEngine';
 		}
 

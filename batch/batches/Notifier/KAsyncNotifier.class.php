@@ -13,45 +13,45 @@
  * @package Scheduler
  * @subpackage Notifier
  */
-class KAsyncNotifier extends KJobHandlerWorker
+class VAsyncNotifier extends VJobHandlerWorker
 {
 	private $partnerMap = null;
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::NOTIFICATION;
+		return VidiunBatchJobType::NOTIFICATION;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $job;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::run()
+	 * @see VBatchBase::run()
 	*/
 	public function run($jobs = null)
 	{
-		if(KBatchBase::$taskConfig->isInitOnly())
+		if(VBatchBase::$taskConfig->isInitOnly())
 			return $this->init();
 		
-		// of type KalturaBatchGetExclusiveNotificationJobsResponse
-		$notificationResponse = KBatchBase::$kClient->batch->getExclusiveNotificationJobs($this->getExclusiveLockKey(), KBatchBase::$taskConfig->maximumExecutionTime, KBatchBase::$taskConfig->maxJobsEachRun, $this->getFilter());
+		// of type VidiunBatchGetExclusiveNotificationJobsResponse
+		$notificationResponse = VBatchBase::$vClient->batch->getExclusiveNotificationJobs($this->getExclusiveLockKey(), VBatchBase::$taskConfig->maximumExecutionTime, VBatchBase::$taskConfig->maxJobsEachRun, $this->getFilter());
 		
 		$jobs = $notificationResponse->notifications;
 		$partners = $notificationResponse->partners;
 		
-		KalturaLog::info(count($jobs) . " notification jobs to perform");
+		VidiunLog::info(count($jobs) . " notification jobs to perform");
 		
 		if(! count($jobs))
 		{
-			KalturaLog::info("Queue size: 0 sent to scheduler");
+			VidiunLog::info("Queue size: 0 sent to scheduler");
 			$this->saveSchedulerQueue(self::getType(), 0);
 			return;
 		}
@@ -78,7 +78,7 @@ class KAsyncNotifier extends KJobHandlerWorker
 				if(! $partner)
 					continue;
 				
-				KalturaLog::info("Sending multi-notifications to partner [$partner_id]");
+				VidiunLog::info("Sending multi-notifications to partner [$partner_id]");
 				
 				// we assume that the partner wants notificatins or else it would have not appeared in the list	
 				list($params_sent, $res, $http_code) = $this->sendMultiNotifications($partner->notificationUrl, $partner->adminSecret, $multi_notifications_per_partner);
@@ -93,7 +93,7 @@ class KAsyncNotifier extends KJobHandlerWorker
 				if(! $partner)
 					continue;
 				
-				KalturaLog::info("Sending single-notifications to partner [{$partner->id}]");
+				VidiunLog::info("Sending single-notifications to partner [{$partner->id}]");
 				// we assume that the partner wants notificatins or else it would have not appeared in the DB			
 				list($params_sent, $res, $http_code) = $this->sendSingleNotification($partner->notificationUrl, $partner->adminSecret, $not);
 				$this->updateNotificationStatus($not, $http_code, $res);
@@ -104,52 +104,52 @@ class KAsyncNotifier extends KJobHandlerWorker
 		
 		}
 		
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($notificationJobs as $job)
 		{
-			KalturaLog::info("Free job[$job->id]");
+			VidiunLog::info("Free job[$job->id]");
 			$this->freeExclusiveJob($job);
 			$this->onFree($job);
 		}
 
-		$freeExclusiveResults = KBatchBase::$kClient->doMultiRequest();
+		$freeExclusiveResults = VBatchBase::$vClient->doMultiRequest();
 		$freeExclusiveResults = array_pop($freeExclusiveResults);
-		KalturaLog::info("Queue size: {$freeExclusiveResults->queueSize} sent to scheduler");
+		VidiunLog::info("Queue size: {$freeExclusiveResults->queueSize} sent to scheduler");
 		$this->saveSchedulerQueue(static::getType(), $freeExclusiveResults->queueSize);
 	}
 	
 	/**
 	 * @param string $url
 	 * @param string $signature_key
-	 * @param KalturaBatchJob $not
+	 * @param VidiunBatchJob $not
 	 * @param string $prefix
 	 * @return array 
 	 */
-	private function sendSingleNotification($url, $signature_key, KalturaBatchJob $not, $prefix = null)
+	private function sendSingleNotification($url, $signature_key, VidiunBatchJob $not, $prefix = null)
 	{
 		$start_time = microtime(true);
 		
-		list($params, $raw_siganture) = KAsyncNotifierParamsUtils::prepareNotificationData($url, $signature_key, $not, $not->data, $prefix);
+		list($params, $raw_siganture) = VAsyncNotifierParamsUtils::prepareNotificationData($url, $signature_key, $not, $not->data, $prefix);
 		
 		try
 		{
-			list($params, $result, $http_code) = KAsyncNotifierSender::send($url, $params);
+			list($params, $result, $http_code) = VAsyncNotifierSender::send($url, $params);
 		}
 		catch(Exception $ex)
 		{
 			// try a second time - the connection will probably be closed
 			try
 			{
-				list($params, $result, $http_code) = KAsyncNotifierSender::send($url, $params);
+				list($params, $result, $http_code) = VAsyncNotifierSender::send($url, $params);
 			}
 			catch(Exception $ex)
 			{
-				KalturaLog::err('sendSingleNotification failed second try with message: '.$ex->getMessage());
+				VidiunLog::err('sendSingleNotification failed second try with message: '.$ex->getMessage());
 			}
 		}
 		
 		$end_time = microtime(true);
-		KalturaLog::info("partner [{$not->partnerId}] notification [{$not->id}] of type [{$not->jobSubType}] to [{$url}]\nhttp result code [{$http_code}]\n" . print_r($params, true) . "\nresult [{$result}]\nraw_signature [$raw_siganture]\ntook [" . ($end_time - $start_time) . "]");
+		VidiunLog::info("partner [{$not->partnerId}] notification [{$not->id}] of type [{$not->jobSubType}] to [{$url}]\nhttp result code [{$http_code}]\n" . print_r($params, true) . "\nresult [{$result}]\nraw_signature [$raw_siganture]\ntook [" . ($end_time - $start_time) . "]");
 		
 		// see if the hit worked properly
 		// the hit should return a specific string to indicate a success 
@@ -172,7 +172,7 @@ class KAsyncNotifier extends KJobHandlerWorker
 		foreach($not_list as $not)
 		{
 			$prefix = "not{$index}_";
-			list($notification_params, $raw_siganture) = KAsyncNotifierParamsUtils::prepareNotificationData($url, $signature_key, $not, $not->data, $prefix);
+			list($notification_params, $raw_siganture) = VAsyncNotifierParamsUtils::prepareNotificationData($url, $signature_key, $not, $not->data, $prefix);
 			$index ++;
 			$params = array_merge($params, $notification_params);
 			$not_id_str .= $not->id . ", ";
@@ -182,26 +182,26 @@ class KAsyncNotifier extends KJobHandlerWorker
 		$params["number_of_notifications"] = count($not_list);
 		
 		//the "sig" parameter will be overidden - so eventually only the last will remain
-		list($params, $raw_siganture) = KAsyncNotifierParamsUtils::signParams($signature_key, $params);
+		list($params, $raw_siganture) = VAsyncNotifierParamsUtils::signParams($signature_key, $params);
 		try
 		{
-			list($params, $result, $http_code) = KAsyncNotifierSender::send($url, $params);
+			list($params, $result, $http_code) = VAsyncNotifierSender::send($url, $params);
 		}
 		catch(Exception $ex)
 		{
 			// try a second time - the connection will probably be closed
 			try
 			{
-				list($params, $result, $http_code) = KAsyncNotifierSender::send($url, $params);
+				list($params, $result, $http_code) = VAsyncNotifierSender::send($url, $params);
 			}
 			catch(Exception $ex)
 			{
-				KalturaLog::err('sendMultiNotifications failed second try with message: '.$ex->getMessage());
+				VidiunLog::err('sendMultiNotifications failed second try with message: '.$ex->getMessage());
 			}
 		}
 		
 		$end_time = microtime(true);
-		KalturaLog::info("partner [{$not->partnerId}] notification [$not_id_str] to [{$url}]\nhttp result code [{$http_code}]\n" . print_r($params, true) . "\nresult [{$result}]\nraw_signature [$raw_siganture]\ntook [" . ($end_time - $start_time) . "]");
+		VidiunLog::info("partner [{$not->partnerId}] notification [$not_id_str] to [{$url}]\nhttp result code [{$http_code}]\n" . print_r($params, true) . "\nresult [{$result}]\nraw_signature [$raw_siganture]\ntook [" . ($end_time - $start_time) . "]");
 		
 		// see if the hit worked properly
 		// the hit should return a specific string to indicate a success 
@@ -215,39 +215,39 @@ class KAsyncNotifier extends KJobHandlerWorker
 	 */
 	private function updateMultiNotificationStatus(array $not_list, $http_code, $res)
 	{
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($not_list as $not)
 			$this->updateNotificationStatus($not, $http_code, $res);
-		KBatchBase::$kClient->doMultiRequest();
+		VBatchBase::$vClient->doMultiRequest();
 	}
 	
 	/**
 	 * update the $not->status and $not->numberOfAttempts
 	 * 
-	 * @param KalturaBatchJob $not
+	 * @param VidiunBatchJob $not
 	 * @param unknown_type $http_code
 	 * @param unknown_type $res
 	 */
-	private function updateNotificationStatus(KalturaBatchJob $not, $http_code, $res)
+	private function updateNotificationStatus(VidiunBatchJob $not, $http_code, $res)
 	{
 		$not->data->notificationResult = $res;
 
-		if(!KCurlHeaderResponse::isError($http_code) && $res !== false)
+		if(!VCurlHeaderResponse::isError($http_code) && $res !== false)
 		{
 			// final state - update on server
-			$not->status = KalturaBatchJobStatus::FINISHED;
+			$not->status = VidiunBatchJobStatus::FINISHED;
 		}
-		else //if ( $res == KalturaNotificationResult::ERROR_RETRY  )
+		else //if ( $res == VidiunNotificationResult::ERROR_RETRY  )
 		{
-			$not->status = KalturaBatchJobStatus::RETRY;
+			$not->status = VidiunBatchJobStatus::RETRY;
 		}
 
-		$updateData = new KalturaNotificationJobData();
+		$updateData = new VidiunNotificationJobData();
 		//Instead of writing the notification result to th DB, write it to the log only
-		KalturaLog::info("Notification result: [" . $not->data->notificationResult ."]");
+		VidiunLog::info("Notification result: [" . $not->data->notificationResult ."]");
 		//$updateData->notificationResult = $not->data->notificationResult;
 		
-		$updateNot = new KalturaBatchJob();
+		$updateNot = new VidiunBatchJob();
 		$updateNot->status = $not->status;
 		$updateNot->data = $updateData;
 		
@@ -309,7 +309,7 @@ class KAsyncNotifier extends KJobHandlerWorker
 		{
 			return $this->partnerMap[$partnerId];
 		}
-		KalturaLog::err("Cannot find partner for partnerId [$partnerId]");
+		VidiunLog::err("Cannot find partner for partnerId [$partnerId]");
 		return false;
 	}
 }

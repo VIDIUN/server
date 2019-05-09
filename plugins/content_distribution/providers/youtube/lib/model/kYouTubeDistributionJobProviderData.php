@@ -3,7 +3,7 @@
  * @package plugins.youTubeDistribution
  * @subpackage model.data
  */
-class kYouTubeDistributionJobProviderData extends kConfigurableDistributionJobProviderData
+class vYouTubeDistributionJobProviderData extends vConfigurableDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -69,7 +69,7 @@ class kYouTubeDistributionJobProviderData extends kConfigurableDistributionJobPr
 		$this->currentPlaylists = $currentPlaylists;
 	}
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

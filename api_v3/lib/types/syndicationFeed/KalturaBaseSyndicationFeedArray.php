@@ -3,15 +3,15 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBaseSyndicationFeedArray extends KalturaTypedArray
+class VidiunBaseSyndicationFeedArray extends VidiunTypedArray
 {
-	public static function fromDbArray(array $arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaBaseSyndicationFeedArray();
+		$newArr = new VidiunBaseSyndicationFeedArray();
 		if ( $arr == null ) return $newArr;
 		foreach ( $arr as $obj )
 		{
-			$nObj = KalturaSyndicationFeedFactory::getInstanceByType($obj->getType());
+			$nObj = VidiunSyndicationFeedFactory::getInstanceByType($obj->getType());
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -21,6 +21,6 @@ class KalturaBaseSyndicationFeedArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaBaseSyndicationFeed");	
+		parent::__construct("VidiunBaseSyndicationFeed");	
 	}
 }

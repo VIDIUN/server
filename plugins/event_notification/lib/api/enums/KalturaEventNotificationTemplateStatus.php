@@ -4,6 +4,6 @@
  * @subpackage api.enum
  * @see EventNotificationTemplateStatus
  */
-class KalturaEventNotificationTemplateStatus extends KalturaEnum implements EventNotificationTemplateStatus
+class VidiunEventNotificationTemplateStatus extends VidiunEnum implements EventNotificationTemplateStatus
 {
 }

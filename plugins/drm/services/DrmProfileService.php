@@ -5,7 +5,7 @@
  * @package plugins.drm
  * @subpackage api.services
  */
-class DrmProfileService extends KalturaBaseService
+class DrmProfileService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -13,22 +13,22 @@ class DrmProfileService extends KalturaBaseService
 		$this->applyPartnerFilterForClass('DrmProfile');
 		
 		if (!DrmPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, DrmPlugin::PLUGIN_NAME);		
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, DrmPlugin::PLUGIN_NAME);		
 	}
 	
 	/**
 	 * Allows you to add a new DrmProfile object
 	 * 
 	 * @action add
-	 * @param KalturaDrmProfile $drmProfile
-	 * @return KalturaDrmProfile
+	 * @param VidiunDrmProfile $drmProfile
+	 * @return VidiunDrmProfile
 	 * 
-	 * @throws KalturaErrors::PLUGIN_NOT_AVAILABLE_FOR_PARTNER
-	 * @throws KalturaErrors::INVALID_PARTNER_ID
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
+	 * @throws VidiunErrors::PLUGIN_NOT_AVAILABLE_FOR_PARTNER
+	 * @throws VidiunErrors::INVALID_PARTNER_ID
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
 	 * @throws DrmErrors::ACTIVE_PROVIDER_PROFILE_ALREADY_EXIST
 	 */
-	public function addAction(KalturaDrmProfile $drmProfile)
+	public function addAction(VidiunDrmProfile $drmProfile)
 	{
 		// check for required parameters
 		$drmProfile->validatePropertyNotNull('name');
@@ -38,19 +38,19 @@ class DrmProfileService extends KalturaBaseService
 		
 		// validate values						
 		if (!PartnerPeer::retrieveByPK($drmProfile->partnerId)) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_PARTNER_ID, $drmProfile->partnerId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_PARTNER_ID, $drmProfile->partnerId);
 		}
 		
 		if (!DrmPlugin::isAllowedPartner($drmProfile->partnerId))
 		{
-			throw new KalturaAPIException(KalturaErrors::PLUGIN_NOT_AVAILABLE_FOR_PARTNER, DrmPlugin::getPluginName(), $drmProfile->partnerId);
+			throw new VidiunAPIException(VidiunErrors::PLUGIN_NOT_AVAILABLE_FOR_PARTNER, DrmPlugin::getPluginName(), $drmProfile->partnerId);
 		}
 		
 		$dbDrmProfile = $drmProfile->toInsertableObject();
 		
 		if(DrmProfilePeer::retrieveByProvider($dbDrmProfile->getProvider()))
 		{
-			throw new KalturaAPIException(DrmErrors::ACTIVE_PROVIDER_PROFILE_ALREADY_EXIST, $drmProfile->provider);
+			throw new VidiunAPIException(DrmErrors::ACTIVE_PROVIDER_PROFILE_ALREADY_EXIST, $drmProfile->provider);
 		}
 
 		// save in database
@@ -58,28 +58,28 @@ class DrmProfileService extends KalturaBaseService
 		$dbDrmProfile->save();
 		
 		// return the saved object
-		$drmProfile = KalturaDrmProfile::getInstanceByType($dbDrmProfile->getProvider());
+		$drmProfile = VidiunDrmProfile::getInstanceByType($dbDrmProfile->getProvider());
 		$drmProfile->fromObject($dbDrmProfile, $this->getResponseProfile());
 		return $drmProfile;		
 	}
 	
 	/**
-	 * Retrieve a KalturaDrmProfile object by ID
+	 * Retrieve a VidiunDrmProfile object by ID
 	 * 
 	 * @action get
 	 * @param int $drmProfileId 
-	 * @return KalturaDrmProfile
+	 * @return VidiunDrmProfile
 	 * 
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */		
 	public function getAction($drmProfileId)
 	{
 		$dbDrmProfile = DrmProfilePeer::retrieveByPK($drmProfileId);
 		
 		if (!$dbDrmProfile) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $drmProfileId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $drmProfileId);
 		}
-		$drmProfile = KalturaDrmProfile::getInstanceByType($dbDrmProfile->getProvider());
+		$drmProfile = VidiunDrmProfile::getInstanceByType($dbDrmProfile->getProvider());
 		$drmProfile->fromObject($dbDrmProfile, $this->getResponseProfile());
 		
 		return $drmProfile;
@@ -87,110 +87,110 @@ class DrmProfileService extends KalturaBaseService
 	
 
 	/**
-	 * Update an existing KalturaDrmProfile object
+	 * Update an existing VidiunDrmProfile object
 	 * 
 	 * @action update
 	 * @param int $drmProfileId
-	 * @param KalturaDrmProfile $drmProfile
-	 * @return KalturaDrmProfile
+	 * @param VidiunDrmProfile $drmProfile
+	 * @return VidiunDrmProfile
 	 *
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */	
-	public function updateAction($drmProfileId, KalturaDrmProfile $drmProfile)
+	public function updateAction($drmProfileId, VidiunDrmProfile $drmProfile)
 	{
 		$dbDrmProfile = DrmProfilePeer::retrieveByPK($drmProfileId);
 		
 		if (!$dbDrmProfile) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $drmProfileId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $drmProfileId);
 		}
 								
 		$dbDrmProfile = $drmProfile->toUpdatableObject($dbDrmProfile);
 		$dbDrmProfile->save();
 			
-		$drmProfile = KalturaDrmProfile::getInstanceByType($dbDrmProfile->getProvider());
+		$drmProfile = VidiunDrmProfile::getInstanceByType($dbDrmProfile->getProvider());
 		$drmProfile->fromObject($dbDrmProfile, $this->getResponseProfile());
 		
 		return $drmProfile;
 	}
 
 	/**
-	 * Mark the KalturaDrmProfile object as deleted
+	 * Mark the VidiunDrmProfile object as deleted
 	 * 
 	 * @action delete
 	 * @param int $drmProfileId 
-	 * @return KalturaDrmProfile
+	 * @return VidiunDrmProfile
 	 *
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */		
 	public function deleteAction($drmProfileId)
 	{
 		$dbDrmProfile = DrmProfilePeer::retrieveByPK($drmProfileId);
 		
 		if (!$dbDrmProfile) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $drmProfileId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $drmProfileId);
 		}
 
 		$dbDrmProfile->setStatus(DrmProfileStatus::DELETED);
 		$dbDrmProfile->save();
 			
-		$drmProfile = KalturaDrmProfile::getInstanceByType($dbDrmProfile->getProvider());
+		$drmProfile = VidiunDrmProfile::getInstanceByType($dbDrmProfile->getProvider());
 		$drmProfile->fromObject($dbDrmProfile, $this->getResponseProfile());
 		
 		return $drmProfile;
 	}
 	
 	/**
-	 * List KalturaDrmProfile objects
+	 * List VidiunDrmProfile objects
 	 * 
 	 * @action list
-	 * @param KalturaDrmProfileFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaDrmProfileListResponse
+	 * @param VidiunDrmProfileFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunDrmProfileListResponse
 	 */
-	public function listAction(KalturaDrmProfileFilter  $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunDrmProfileFilter  $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaDrmProfileFilter();
+			$filter = new VidiunDrmProfileFilter();
 
 		$drmProfileFilter = $filter->toObject();
 		$c = new Criteria();
 		$drmProfileFilter->attachToCriteria($c);
 		$count = DrmProfilePeer::doCount($c);
 		if (! $pager)
-			$pager = new KalturaFilterPager ();
+			$pager = new VidiunFilterPager ();
 		$pager->attachToCriteria ( $c );
 		$list = DrmProfilePeer::doSelect($c);
 		
-		$response = new KalturaDrmProfileListResponse();
-		$response->objects = KalturaDrmProfileArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunDrmProfileListResponse();
+		$response->objects = VidiunDrmProfileArray::fromDbArray($list, $this->getResponseProfile());
 		$response->totalCount = $count;
 		
 		return $response;
 	}
 	
 	/**
-	 * Retrieve a KalturaDrmProfile object by provider, if no specific profile defined return default profile
+	 * Retrieve a VidiunDrmProfile object by provider, if no specific profile defined return default profile
 	 * 
 	 * @action getByProvider
-	 * @param KalturaDrmProviderType $provider
-	 * @return KalturaDrmProfile
+	 * @param VidiunDrmProviderType $provider
+	 * @return VidiunDrmProfile
 	 */
 	public function getByProviderAction($provider)
 	{	
-		$drmProfile = KalturaDrmProfile::getInstanceByType($provider);
+		$drmProfile = VidiunDrmProfile::getInstanceByType($provider);
 		$drmProfile->provider = $provider;
 		$tmpDbProfile = $drmProfile->toObject();
 			
 		$dbDrmProfile = DrmProfilePeer::retrieveByProvider($tmpDbProfile->getProvider());
 		if(!$dbDrmProfile)
 		{
-            if ($provider == KalturaDrmProviderType::CENC)
+            if ($provider == VidiunDrmProviderType::CENC)
             {
                 $dbDrmProfile = new DrmProfile();
             }
             else
             {
-                $dbDrmProfile = KalturaPluginManager::loadObject('DrmProfile', $tmpDbProfile->getProvider());
+                $dbDrmProfile = VidiunPluginManager::loadObject('DrmProfile', $tmpDbProfile->getProvider());
             }
 			$dbDrmProfile->setName('default');
 			$dbDrmProfile->setProvider($tmpDbProfile->getProvider());

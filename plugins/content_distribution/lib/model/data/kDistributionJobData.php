@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage model.data
  */
-class kDistributionJobData extends kJobData
+class vDistributionJobData extends vJobData
 {
 	/**
 	 * @var int
@@ -29,7 +29,7 @@ class kDistributionJobData extends kJobData
 
 	/**
 	 * Additional data that relevant for the provider only
-	 * @var kDistributionJobProviderData
+	 * @var vDistributionJobProviderData
 	 */
 	private $providerData;
 
@@ -48,7 +48,7 @@ class kDistributionJobData extends kJobData
 	/**
 	 * Stores array of media files that submitted to the destination site
 	 * Could be used later for media update 
-	 * @var array<kDistributionRemoteMediaFile>
+	 * @var array<vDistributionRemoteMediaFile>
 	 */
 	private $mediaFiles = array();
 	
@@ -85,7 +85,7 @@ class kDistributionJobData extends kJobData
 	}
 
 	/**
-	 * @return kDistributionJobProviderData $providerData
+	 * @return vDistributionJobProviderData $providerData
 	 */
 	public function getProviderData()
 	{
@@ -93,9 +93,9 @@ class kDistributionJobData extends kJobData
 	}
 
 	/**
-	 * @param kDistributionJobProviderData $providerData
+	 * @param vDistributionJobProviderData $providerData
 	 */
-	public function setProviderData(kDistributionJobProviderData $providerData)
+	public function setProviderData(vDistributionJobProviderData $providerData)
 	{
 		$this->providerData = $providerData;
 	}
@@ -176,7 +176,7 @@ class kDistributionJobData extends kJobData
 	}
 
 	/**
-	 * @param array<kDistributionRemoteMediaFile> $mediaFiles
+	 * @param array<vDistributionRemoteMediaFile> $mediaFiles
 	 */
 	public function setMediaFiles(array $mediaFiles)
 	{

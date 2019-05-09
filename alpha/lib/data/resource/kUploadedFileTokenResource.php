@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kUploadedFileTokenResource extends kLocalFileResource
+class vUploadedFileTokenResource extends vLocalFileResource
 {
 	/**
 	 * Token that returned from upload.upload action or uploadToken.add action. 
@@ -13,11 +13,11 @@ class kUploadedFileTokenResource extends kLocalFileResource
 	
 	public function getType()
 	{
-		return 'kLocalFileResource';
+		return 'vLocalFileResource';
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kLocalFileResource::attachCreatedObject()
+	 * @see vLocalFileResource::attachCreatedObject()
 	 */
 	public function attachCreatedObject(BaseObject $object)
 	{

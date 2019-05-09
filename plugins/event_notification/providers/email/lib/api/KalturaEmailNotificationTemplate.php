@@ -3,11 +3,11 @@
  * @package plugins.emailNotification
  * @subpackage api.objects
  */
-class KalturaEmailNotificationTemplate extends KalturaEventNotificationTemplate
+class VidiunEmailNotificationTemplate extends VidiunEventNotificationTemplate
 {	
 	/**
 	 * Define the email body format
-	 * @var KalturaEmailNotificationFormat
+	 * @var VidiunEmailNotificationFormat
 	 * @requiresPermission update
 	 */
 	public $format;
@@ -38,32 +38,32 @@ class KalturaEmailNotificationTemplate extends KalturaEventNotificationTemplate
 	
 	/**
 	 * Email recipient emails and names
-	 * @var KalturaEmailNotificationRecipientProvider
+	 * @var VidiunEmailNotificationRecipientProvider
 	 */
 	public $to;
 	
 	/**
 	 * Email recipient emails and names
-	 * @var KalturaEmailNotificationRecipientProvider
+	 * @var VidiunEmailNotificationRecipientProvider
 	 */
 	public $cc;
 	
 	/**
 	 * Email recipient emails and names
-	 * @var KalturaEmailNotificationRecipientProvider
+	 * @var VidiunEmailNotificationRecipientProvider
 	 */
 	public $bcc;
 	
 	/**
 	 * Default email addresses to whom the reply should be sent. 
 	 * 
-	 * @var KalturaEmailNotificationRecipientProvider
+	 * @var VidiunEmailNotificationRecipientProvider
 	 */
 	public $replyTo;
 	
 	/**
 	 * Define the email priority
-	 * @var KalturaEmailNotificationTemplatePriority
+	 * @var VidiunEmailNotificationTemplatePriority
 	 * @requiresPermission update
 	 */
 	public $priority;
@@ -96,7 +96,7 @@ class KalturaEmailNotificationTemplate extends KalturaEventNotificationTemplate
 	/**
 	 * Adds a e-mail custom header
 	 * 
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 * @requiresPermission update
 	 */
 	public $customHeaders;
@@ -127,7 +127,7 @@ class KalturaEmailNotificationTemplate extends KalturaEventNotificationTemplate
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -135,7 +135,7 @@ class KalturaEmailNotificationTemplate extends KalturaEventNotificationTemplate
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -144,7 +144,7 @@ class KalturaEmailNotificationTemplate extends KalturaEventNotificationTemplate
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate()
+	 * @see VidiunObject::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -153,7 +153,7 @@ class KalturaEmailNotificationTemplate extends KalturaEventNotificationTemplate
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
@@ -164,20 +164,20 @@ class KalturaEmailNotificationTemplate extends KalturaEventNotificationTemplate
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject($source_object)
+	 * @see VidiunObject::fromObject($source_object)
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		/* @var $dbObject EmailNotificationTemplate */
 		parent::doFromObject($dbObject, $responseProfile);
 		
 		if($this->shouldGet('to', $responseProfile) && $dbObject->getTo())
-			$this->to = KalturaEmailNotificationRecipientProvider::getProviderInstance($dbObject->getTo());
+			$this->to = VidiunEmailNotificationRecipientProvider::getProviderInstance($dbObject->getTo());
 		if($this->shouldGet('cc', $responseProfile) && $dbObject->getCc())
-			$this->cc = KalturaEmailNotificationRecipientProvider::getProviderInstance($dbObject->getCc());
+			$this->cc = VidiunEmailNotificationRecipientProvider::getProviderInstance($dbObject->getCc());
 		if($this->shouldGet('bcc', $responseProfile) && $dbObject->getBcc())
-			$this->bcc = KalturaEmailNotificationRecipientProvider::getProviderInstance($dbObject->getBcc());
+			$this->bcc = VidiunEmailNotificationRecipientProvider::getProviderInstance($dbObject->getBcc());
 		if($this->shouldGet('replyTo', $responseProfile) && $dbObject->getReplyTo())
-			$this->replyTo = KalturaEmailNotificationRecipientProvider::getProviderInstance($dbObject->getReplyTo());
+			$this->replyTo = VidiunEmailNotificationRecipientProvider::getProviderInstance($dbObject->getReplyTo());
 	}
 }

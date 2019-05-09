@@ -3,7 +3,7 @@
  * @package plugins.youtubeApiDistribution
  * @subpackage model.data
  */
-class kYoutubeApiDistributionJobProviderData extends kConfigurableDistributionJobProviderData
+class vYoutubeApiDistributionJobProviderData extends vConfigurableDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -16,7 +16,7 @@ class kYoutubeApiDistributionJobProviderData extends kConfigurableDistributionJo
 	private $thumbAssetFilePath;
 	
 	/**
-	 * @var KalturaYouTubeApiCaptionDistributionInfoArray
+	 * @var VidiunYouTubeApiCaptionDistributionInfoArray
 	 */
 	private $captionsInfo;
 	
@@ -74,7 +74,7 @@ class kYoutubeApiDistributionJobProviderData extends kConfigurableDistributionJo
 	}	
 	
 	/**
-	 * @return KalturaYouTubeApiCaptionDistributionInfoArray $captionsInfo
+	 * @return VidiunYouTubeApiCaptionDistributionInfoArray $captionsInfo
 	 */
 	public function getCaptionsInfo()
 	{
@@ -82,7 +82,7 @@ class kYoutubeApiDistributionJobProviderData extends kConfigurableDistributionJo
 	}
 
 	/**
-	 * @param KalturaYouTubeApiCaptionDistributionInfoArray $captionsInfo
+	 * @param VidiunYouTubeApiCaptionDistributionInfoArray $captionsInfo
 	 */
 	public function setCaptionsInfo($captionsInfo)
 	{
@@ -90,7 +90,7 @@ class kYoutubeApiDistributionJobProviderData extends kConfigurableDistributionJo
 	}	
 	
     
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

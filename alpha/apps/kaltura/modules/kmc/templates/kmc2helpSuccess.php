@@ -28,9 +28,9 @@
 </style>
 
 <div id="header">
-	<img src="/lib/images/kmc/logo.gif" alt="Kaltura CMS" class="logo" />
+	<img src="/lib/images/vmc/logo.gif" alt="Vidiun CMS" class="logo" />
 </div><!-- end #header -->
 <div id="main">
-<iframe id="help" src="/kmc5help.html" frameborder="0"></iframe>
+<iframe id="help" src="/vmc5help.html" frameborder="0"></iframe>
 </div><!-- end #main -->
 <script src="/lib/js/eagle_help.js"></script>

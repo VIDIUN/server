@@ -1,13 +1,13 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage lib.batch
  */
-class CrossKalturaDistributionEngine extends DistributionEngine implements
+class CrossVidiunDistributionEngine extends DistributionEngine implements
 	IDistributionEngineSubmit,
 	IDistributionEngineUpdate,
 	IDistributionEngineDelete,
-	IKalturaLogger
+	IVidiunLogger
 {
 
 	const DISTRIBUTED_INFO_SOURCE_ID = 'sourceId';
@@ -17,17 +17,17 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 
 	/**
-	 * @var KalturaClient
+	 * @var VidiunClient
 	 */
 	protected $targetClient = null;
 
 	/**
-	 * @var KalturaClient
+	 * @var VidiunClient
 	 */
 	protected $sourceClient = null;
 
 	/**
-	 * @var KalturaCrossKalturaDistributionProfile
+	 * @var VidiunCrossVidiunDistributionProfile
 	 */
 	protected $distributionProfile = null;
 
@@ -62,7 +62,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 	protected $mapCaptionParamsIds = array();
 
 	/**
-	 * @var CrossKalturaEntryObjectsContainer
+	 * @var CrossVidiunEntryObjectsContainer
 	 */
 	protected $sourceObjects = null;
 
@@ -89,21 +89,21 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * Initialize
-	 * @param KalturaDistributionJobData $data
+	 * @param VidiunDistributionJobData $data
 	 * @throws Exception
 	 */
-	protected function init(KalturaDistributionJobData $data)
+	protected function init(VidiunDistributionJobData $data)
 	{
 		// validate objects
-		if(!$data->distributionProfile instanceof KalturaCrossKalturaDistributionProfile)
-			throw new Exception('Distribution profile must be of type KalturaCrossKalturaDistributionProfile');
+		if(!$data->distributionProfile instanceof VidiunCrossVidiunDistributionProfile)
+			throw new Exception('Distribution profile must be of type VidiunCrossVidiunDistributionProfile');
 
-		if (!$data->providerData instanceof KalturaCrossKalturaDistributionJobProviderData)
-			throw new Exception('Provider data must be of type KalturaCrossKalturaDistributionJobProviderData');
+		if (!$data->providerData instanceof VidiunCrossVidiunDistributionJobProviderData)
+			throw new Exception('Provider data must be of type VidiunCrossVidiunDistributionJobProviderData');
 
 		$this->distributionProfile = $data->distributionProfile;
 
-		// init target kaltura client
+		// init target vidiun client
 		$this->initClients($this->distributionProfile);
 
 		// check for plugins availability
@@ -120,40 +120,40 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 	}
 
 	/**
-	 * Init a KalturaClient object for the target account
-	 * @param KalturaCrossKalturaDistributionProfile $distributionProfile
+	 * Init a VidiunClient object for the target account
+	 * @param VidiunCrossVidiunDistributionProfile $distributionProfile
 	 * @throws Exception
 	 */
-	protected function initClients(KalturaCrossKalturaDistributionProfile $distributionProfile)
+	protected function initClients(VidiunCrossVidiunDistributionProfile $distributionProfile)
 	{
 		// init source client
-		$sourceClientConfig = new KalturaConfiguration($distributionProfile->partnerId);
-		$sourceClientConfig->serviceUrl = KBatchBase::$kClient->getConfig()->serviceUrl; // copy from static batch client
+		$sourceClientConfig = new VidiunConfiguration($distributionProfile->partnerId);
+		$sourceClientConfig->serviceUrl = VBatchBase::$vClient->getConfig()->serviceUrl; // copy from static batch client
 		$sourceClientConfig->setLogger($this);
-		$this->sourceClient = new KalturaClient($sourceClientConfig);
-		$this->sourceClient->setKs(KBatchBase::$kClient->getKs()); // copy from static batch client
+		$this->sourceClient = new VidiunClient($sourceClientConfig);
+		$this->sourceClient->setVs(VBatchBase::$vClient->getVs()); // copy from static batch client
 
 		// init target client
-		$targetClientConfig = new KalturaConfiguration($distributionProfile->targetAccountId);
+		$targetClientConfig = new VidiunConfiguration($distributionProfile->targetAccountId);
 		$targetClientConfig->serviceUrl = $distributionProfile->targetServiceUrl;
 		$targetClientConfig->setLogger($this);
-		$this->targetClient = new KalturaClient($targetClientConfig);
-		$ks = $this->targetClient->user->loginByLoginId($distributionProfile->targetLoginId, $distributionProfile->targetLoginPassword, $distributionProfile->targetAccountId, 86400, 'disableentitlement');
-		$this->targetClient->setKs($ks);
+		$this->targetClient = new VidiunClient($targetClientConfig);
+		$vs = $this->targetClient->user->loginByLoginId($distributionProfile->targetLoginId, $distributionProfile->targetLoginPassword, $distributionProfile->targetAccountId, 86400, 'disableentitlement');
+		$this->targetClient->setVs($vs);
 	}
 
 	/**
 	 * Check which server plugins should be used
-	 * @param KalturaCrossKalturaDistributionProfile $distributionProfile
+	 * @param VidiunCrossVidiunDistributionProfile $distributionProfile
 	 * @throws Exception
 	 */
-	protected function initPlugins(KalturaCrossKalturaDistributionProfile $distributionProfile)
+	protected function initPlugins(VidiunCrossVidiunDistributionProfile $distributionProfile)
 	{
 		// check if should distribute caption assets
 		$this->distributeCaptions = false;
 		if ($distributionProfile->distributeCaptions == true)
 		{
-			if (class_exists('CaptionPlugin') && class_exists('KalturaCaptionClientPlugin') && KalturaPluginManager::getPluginInstance(CaptionPlugin::getPluginName()))
+			if (class_exists('CaptionPlugin') && class_exists('VidiunCaptionClientPlugin') && VidiunPluginManager::getPluginInstance(CaptionPlugin::getPluginName()))
 			{
 				$this->distributeCaptions = true;
 			}
@@ -167,7 +167,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		$this->distributeCuePoints = false;
 		if ($distributionProfile->distributeCuePoints == true)
 		{
-			if (class_exists('CuePointPlugin') && class_exists('KalturaCuePointClientPlugin') && KalturaPluginManager::getPluginInstance(CuePointPlugin::getPluginName()))
+			if (class_exists('CuePointPlugin') && class_exists('VidiunCuePointClientPlugin') && VidiunPluginManager::getPluginInstance(CuePointPlugin::getPluginName()))
 			{
 				$this->distributeCuePoints = true;
 			}
@@ -179,7 +179,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 	}
 
 
-	protected function initMapArrays(KalturaCrossKalturaDistributionProfile $distributionProfile)
+	protected function initMapArrays(VidiunCrossVidiunDistributionProfile $distributionProfile)
 	{
 		$this->mapAccessControlIds = $this->toKeyValueArray($distributionProfile->mapAccessControlProfileIds);
 		$this->mapConversionProfileIds = $this->toKeyValueArray($distributionProfile->mapConversionProfileIds);
@@ -198,26 +198,26 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @return CrossKalturaEntryObjectsContainer
+	 * @param VidiunDistributionJobData $data
+	 * @return CrossVidiunEntryObjectsContainer
 	 */
-	protected function getSourceObjects(KalturaDistributionJobData $data)
+	protected function getSourceObjects(VidiunDistributionJobData $data)
 	{
 		$sourceEntryId = $data->entryDistribution->entryId;
-		KBatchBase::impersonate($this->distributionProfile->partnerId);
-		$sourceObjects = $this->getEntryObjects(KBatchBase::$kClient, $sourceEntryId, $data);
-		KBatchBase::unimpersonate();
+		VBatchBase::impersonate($this->distributionProfile->partnerId);
+		$sourceObjects = $this->getEntryObjects(VBatchBase::$vClient, $sourceEntryId, $data);
+		VBatchBase::unimpersonate();
 		return $sourceObjects;
 	}
 
 	/**
 	 * Get entry objects for distribution
-	 * @param KalturaClient $client
+	 * @param VidiunClient $client
 	 * @param string $entryId
-	 * @param KalturaDistributionJobData $data
-	 * @return CrossKalturaEntryObjectsContainer
+	 * @param VidiunDistributionJobData $data
+	 * @return CrossVidiunEntryObjectsContainer
 	 */
-	protected function getEntryObjects(KalturaClient $client, $entryId, KalturaDistributionJobData $data)
+	protected function getEntryObjects(VidiunClient $client, $entryId, VidiunDistributionJobData $data)
 	{
 		$remoteFlavorAssetContent = $data->distributionProfile->distributeRemoteFlavorAssetContent;
 		$remoteThumbAssetContent = $data->distributionProfile->distributeRemoteThumbAssetContent;
@@ -230,7 +230,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		$flavorAssets = array();
 		if (!empty($data->entryDistribution->flavorAssetIds))
 		{
-			$flavorAssetFilter = new KalturaFlavorAssetFilter();
+			$flavorAssetFilter = new VidiunFlavorAssetFilter();
 			$flavorAssetFilter->idIn = $data->entryDistribution->flavorAssetIds;
 			$flavorAssetFilter->entryIdEqual = $entryId;
 			try {
@@ -239,19 +239,19 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 				{
 					$twoLetterCode = languageCodeManager::getLanguageKey($asset->language);
 					$obj = languageCodeManager::getObjectFromTwoCode($twoLetterCode);
-					$asset->language = !is_null($obj) ? $obj[languageCodeManager::KALTURA_NAME] : null;
+					$asset->language = !is_null($obj) ? $obj[languageCodeManager::VIDIUN_NAME] : null;
 
 					$flavorAssets[$asset->id] = $asset;
 				}
 			}
 			catch (Exception $e) {
-				KalturaLog::err('Cannot get list of flavor assets - '.$e->getMessage());
+				VidiunLog::err('Cannot get list of flavor assets - '.$e->getMessage());
 				throw $e;
 			}
 		}
 		else
 		{
-			KalturaLog::log('No flavor assets set for distribution!');
+			VidiunLog::log('No flavor assets set for distribution!');
 		}
 
 		// get flavor assets content
@@ -267,7 +267,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		$timedThumbAssets = array();
 		if (!empty($data->entryDistribution->thumbAssetIds))
 		{
-			$thumbAssetFilter = new KalturaThumbAssetFilter();
+			$thumbAssetFilter = new VidiunThumbAssetFilter();
 			$thumbAssetFilter->idIn = $data->entryDistribution->thumbAssetIds;
 			$thumbAssetFilter->entryIdEqual = $entryId;
 			try {
@@ -285,13 +285,13 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 				}
 			}
 			catch (Exception $e) {
-				KalturaLog::err('Cannot get list of thumbnail assets - '.$e->getMessage());
+				VidiunLog::err('Cannot get list of thumbnail assets - '.$e->getMessage());
 				throw $e;
 			}
 		}
 		else
 		{
-			KalturaLog::log('No thumb assets set for distribution!');
+			VidiunLog::log('No thumb assets set for distribution!');
 		}
 
 		// get thumb assets content
@@ -307,11 +307,11 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 		// get entry's custom metadata objects
 		$metadataObjects = array();
-		$metadataFilter = new KalturaMetadataFilter();
-		$metadataFilter->metadataObjectTypeEqual = KalturaMetadataObjectType::ENTRY;
+		$metadataFilter = new VidiunMetadataFilter();
+		$metadataFilter->metadataObjectTypeEqual = VidiunMetadataObjectType::ENTRY;
 		$metadataFilter->objectIdEqual = $entryId;
 		try {
-			$metadataClient = KalturaMetadataClientPlugin::get($client);
+			$metadataClient = VidiunMetadataClientPlugin::get($client);
 			$metadataObjectsList = $metadataClient->metadata->listAction($metadataFilter);
 			foreach ($metadataObjectsList->objects as $metadata)
 			{
@@ -319,16 +319,16 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 			}
 		}
 		catch (Exception $e) {
-			KalturaLog::err('Cannot get list of metadata objects - '.$e->getMessage());
+			VidiunLog::err('Cannot get list of metadata objects - '.$e->getMessage());
 			throw $e;
 		}
 
 		// get entry's caption assets
-		$captionAssetClient = KalturaCaptionClientPlugin::get($client);
+		$captionAssetClient = VidiunCaptionClientPlugin::get($client);
 		$captionAssets = array();
 		if ($this->distributeCaptions == true)
 		{
-			$captionAssetFilter = new KalturaCaptionAssetFilter();
+			$captionAssetFilter = new VidiunCaptionAssetFilter();
 			$captionAssetFilter->entryIdEqual = $entryId;
 			try {
 				$captionAssetsList = $captionAssetClient->captionAsset->listAction($captionAssetFilter);
@@ -338,7 +338,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 				}
 			}
 			catch (Exception $e) {
-				KalturaLog::err('Cannot get list of caption assets - '.$e->getMessage());
+				VidiunLog::err('Cannot get list of caption assets - '.$e->getMessage());
 				throw $e;
 			}
 		}
@@ -357,29 +357,29 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		$thumbCuePoints = array();
 		if ($this->distributeCuePoints == true)
 		{
-			$cuePointFilter = new KalturaCuePointFilter();
+			$cuePointFilter = new VidiunCuePointFilter();
 			$cuePointFilter->entryIdEqual = $entryId;
 			try {
-				$cuePointClient = KalturaCuePointClientPlugin::get($client);
+				$cuePointClient = VidiunCuePointClientPlugin::get($client);
 				$cuePointsList = $cuePointClient->cuePoint->listAction($cuePointFilter);
 				foreach ($cuePointsList->objects as $cuePoint)
 				{
 					/**
-					 * @var $cuePoint KalturaCuePoint
+					 * @var $cuePoint VidiunCuePoint
 					 */
-					if ($cuePoint->cuePointType != KalturaCuePointType::THUMB)
+					if ($cuePoint->cuePointType != VidiunCuePointType::THUMB)
 						$cuePoints[$cuePoint->id] = $cuePoint;
 					else
 						$thumbCuePoints[$cuePoint->id] = $cuePoint;
 				}
 			}
 			catch (Exception $e) {
-				KalturaLog::err('Cannot get list of cue points - '.$e->getMessage());
+				VidiunLog::err('Cannot get list of cue points - '.$e->getMessage());
 				throw $e;
 			}
 		}
 
-		$entryObjects = new CrossKalturaEntryObjectsContainer();
+		$entryObjects = new CrossVidiunEntryObjectsContainer();
 		$entryObjects->entry = $entry;
 		$entryObjects->metadataObjects = $metadataObjects;
 		$entryObjects->flavorAssets = $flavorAssets;
@@ -397,12 +397,12 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 
 	/**
-	 * @return KalturaContentResource content resource for the given asset in the target account
+	 * @return VidiunContentResource content resource for the given asset in the target account
 	 * @param string $assetId
-	 * @param KalturaServiceBase $assetService
+	 * @param VidiunServiceBase $assetService
 	 * @param bool $remote
 	 */
-	protected function getAssetContentResource($assetId, KalturaServiceBase $assetService, $remote)
+	protected function getAssetContentResource($assetId, VidiunServiceBase $assetService, $remote)
 	{
 		$contentResource = null;
 
@@ -410,15 +410,15 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		{
 			// get remote resource
 
-			$contentResource = new KalturaRemoteStorageResources();
+			$contentResource = new VidiunRemoteStorageResources();
 			$contentResource->resources = array();
 
 			$remotePaths = $assetService->getRemotePaths($assetId);
 			$remotePaths = $remotePaths->objects;
 			foreach ($remotePaths as $remotePath)
 			{
-				/* @var $remotePath KalturaRemotePath */
-				$res = new KalturaRemoteStorageResource();
+				/* @var $remotePath VidiunRemotePath */
+				$res = new VidiunRemoteStorageResource();
 				if (!isset($this->mapStorageProfileIds[$remotePath->storageProfileId]))
 				{
 					throw new Exception('Cannot map storage profile ID ['.$remotePath->storageProfileId.']');
@@ -432,7 +432,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		else
 		{
 			// get local resource
-			$contentResource = new KalturaUrlResource();
+			$contentResource = new VidiunUrlResource();
 			$contentResource->url = $this->getAssetUrlByAssetId($assetId, $assetService);
 		}
 		return $contentResource;
@@ -440,8 +440,8 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 	
 	protected function getAssetUrlByAssetId($assetId, $assetService)
 	{
-		if ( $assetService instanceof KalturaFlavorAssetService ) {
-			$options = new KalturaFlavorAssetUrlOptions();
+		if ( $assetService instanceof VidiunFlavorAssetService ) {
+			$options = new VidiunFlavorAssetUrlOptions();
 			$options->fileName = $assetId;
 			return $assetService->getUrl($assetId, null, false, $options);
 		}
@@ -455,14 +455,14 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * Transform source entry object to a target object ready for insert/update
-	 * @param KalturaBaseEntry $sourceEntry
+	 * @param VidiunBaseEntry $sourceEntry
 	 * @param bool $forUpdate
-	 * @return KalturaBaseEntry
+	 * @return VidiunBaseEntry
 	 */
-	protected function transformEntry(KalturaBaseEntry $sourceEntry, $forUpdate = false)
+	protected function transformEntry(VidiunBaseEntry $sourceEntry, $forUpdate = false)
 	{
 		// remove readonly/insertonly parameters
-		/* @var $targetEntry KalturaBaseEntry */
+		/* @var $targetEntry VidiunBaseEntry */
 		$targetEntry = $this->copyObjectForInsertUpdate($sourceEntry);
 
 		// switch to target account's object ids
@@ -493,17 +493,17 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		}
 
 		// transform metadata according to fields configuration
-		$targetEntry->name = $this->getValueForField(KalturaCrossKalturaDistributionField::BASE_ENTRY_NAME);
-		$targetEntry->description = $this->getValueForField(KalturaCrossKalturaDistributionField::BASE_ENTRY_DESCRIPTION);
-		$targetEntry->userId = $this->getValueForField(KalturaCrossKalturaDistributionField::BASE_ENTRY_USER_ID);
-		$targetEntry->tags = $this->getValueForField(KalturaCrossKalturaDistributionField::BASE_ENTRY_TAGS);
-		$targetEntry->categories = $this->getValueForField(KalturaCrossKalturaDistributionField::BASE_ENTRY_CATEGORIES);
+		$targetEntry->name = $this->getValueForField(VidiunCrossVidiunDistributionField::BASE_ENTRY_NAME);
+		$targetEntry->description = $this->getValueForField(VidiunCrossVidiunDistributionField::BASE_ENTRY_DESCRIPTION);
+		$targetEntry->userId = $this->getValueForField(VidiunCrossVidiunDistributionField::BASE_ENTRY_USER_ID);
+		$targetEntry->tags = $this->getValueForField(VidiunCrossVidiunDistributionField::BASE_ENTRY_TAGS);
+		$targetEntry->categories = $this->getValueForField(VidiunCrossVidiunDistributionField::BASE_ENTRY_CATEGORIES);
 		$targetEntry->categoriesIds = null;
-		$targetEntry->partnerData = $this->getValueForField(KalturaCrossKalturaDistributionField::BASE_ENTRY_PARTNER_DATA);
-		$targetEntry->startDate = $this->getValueForField(KalturaCrossKalturaDistributionField::BASE_ENTRY_START_DATE);
-		$targetEntry->endDate = $this->getValueForField(KalturaCrossKalturaDistributionField::BASE_ENTRY_END_DATE);
-		$targetEntry->referenceId = $this->getValueForField(KalturaCrossKalturaDistributionField::BASE_ENTRY_REFERENCE_ID);
-		$targetEntry->licenseType = $this->getValueForField(KalturaCrossKalturaDistributionField::BASE_ENTRY_LICENSE_TYPE);
+		$targetEntry->partnerData = $this->getValueForField(VidiunCrossVidiunDistributionField::BASE_ENTRY_PARTNER_DATA);
+		$targetEntry->startDate = $this->getValueForField(VidiunCrossVidiunDistributionField::BASE_ENTRY_START_DATE);
+		$targetEntry->endDate = $this->getValueForField(VidiunCrossVidiunDistributionField::BASE_ENTRY_END_DATE);
+		$targetEntry->referenceId = $this->getValueForField(VidiunCrossVidiunDistributionField::BASE_ENTRY_REFERENCE_ID);
+		$targetEntry->licenseType = $this->getValueForField(VidiunCrossVidiunDistributionField::BASE_ENTRY_LICENSE_TYPE);
 		if (isset($targetEntry->conversionQuality)) {
 			$targetEntry->conversionQuality = null;
 		}
@@ -520,8 +520,8 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * Transform source metadata objects to target objects ready for insert/update
-	 * @param array<KalturaMetadata> $sourceMetadatas
-	 * @return array<KalturaMetadata>
+	 * @param array<VidiunMetadata> $sourceMetadatas
+	 * @return array<VidiunMetadata>
 	 */
 	protected function transformMetadatas(array $sourceMetadatas)
 	{
@@ -532,7 +532,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		$targetMetadatas = array();
 		foreach ($sourceMetadatas as $sourceMetadata)
 		{
-			/* @var $sourceMetadata KalturaMetadata */
+			/* @var $sourceMetadata VidiunMetadata */
 
 			if (!isset($this->mapMetadataProfileIds[$sourceMetadata->metadataProfileId]))
 			{
@@ -543,7 +543,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 				continue;
 			}
 
-			$targetMetadata = new KalturaMetadata();
+			$targetMetadata = new VidiunMetadata();
 			$targetMetadata->metadataProfileId = $this->mapMetadataProfileIds[$sourceMetadata->metadataProfileId];
 
 			$xsltStr = $this->distributionProfile->metadataXslt;
@@ -565,8 +565,8 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * Transform source flavor assets to target objects ready for insert/update
-	 * @param array<KalturaFlavorAsset> $sourceFlavorAssets
-	 * @return array<KalturaFlavorAsset>
+	 * @param array<VidiunFlavorAsset> $sourceFlavorAssets
+	 * @return array<VidiunFlavorAsset>
 	 */
 	protected function transformFlavorAssets(array $sourceFlavorAssets)
 	{
@@ -575,8 +575,8 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * Transform source thumbnail assets to target objects ready for insert/update
-	 * @param array<KalturaThumbAsset> $sourceThumbAssets
-	 * @return array<KalturaThumbAsset>
+	 * @param array<VidiunThumbAsset> $sourceThumbAssets
+	 * @return array<VidiunThumbAsset>
 	 */
 	protected function transformThumbAssets(array $sourceThumbAssets)
 	{
@@ -585,8 +585,8 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * Transform source caption assets to target objects ready for insert/update
-	 * @param array<KalturaCaptionAsset> $sourceCaptionAssets
-	 * @return array<KalturaCaptionAsset>
+	 * @param array<VidiunCaptionAsset> $sourceCaptionAssets
+	 * @return array<VidiunCaptionAsset>
 	 */
 	protected function transformCaptionAssets(array $sourceCaptionAssets)
 	{
@@ -596,10 +596,10 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 	/**
 	 *
 	 * Transform source assets to target assets ready for insert/update
-	 * @param array<KalturaAsset> $sourceAssets
+	 * @param array<VidiunAsset> $sourceAssets
 	 * @param array $mapParams
 	 * @param string $paramsFieldName
-	 * @return array<KalturaAsset>
+	 * @return array<VidiunAsset>
 	 */
 	protected function transformAssets(array $sourceAssets, array $mapParams, $paramsFieldName)
 	{
@@ -632,8 +632,8 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * Transform source cue points to target objects ready for insert/update
-	 * @param array<KalturaCuePoint> $sourceCuePoints
-	 * @return array<KalturaCuePoint>
+	 * @param array<VidiunCuePoint> $sourceCuePoints
+	 * @return array<VidiunCuePoint>
 	 */
 	protected function transformCuePoints(array $sourceCuePoints)
 	{
@@ -666,13 +666,13 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * Transform source objects to target objects ready for insert/update
-	 * @param CrossKalturaEntryObjectsContainer $sourceObjects
+	 * @param CrossVidiunEntryObjectsContainer $sourceObjects
 	 * @param bool $forUpdate
-	 * @return CrossKalturaEntryObjectsContainer target objects
+	 * @return CrossVidiunEntryObjectsContainer target objects
 	 */
-	protected function transformSourceToTarget(CrossKalturaEntryObjectsContainer $sourceObjects, $forUpdate = false)
+	protected function transformSourceToTarget(CrossVidiunEntryObjectsContainer $sourceObjects, $forUpdate = false)
 	{
-		$targetObjects = new CrossKalturaEntryObjectsContainer();
+		$targetObjects = new CrossVidiunEntryObjectsContainer();
 		$targetObjects->entry = $this->transformEntry($sourceObjects->entry, $forUpdate); // basic entry object
 		$targetObjects->metadataObjects = $this->transformMetadatas($sourceObjects->metadataObjects); // metadata objects
 		$targetObjects->flavorAssets = $this->transformFlavorAssets($sourceObjects->flavorAssets); // flavor assets
@@ -702,9 +702,9 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 	/**
 	 * @return array of arguments that should be passed to metadata->update api action
 	 * @param string $existingObjId
-	 * @param KalturaMetadata $newObj
+	 * @param VidiunMetadata $newObj
 	 */
-	protected function getMetadataUpdateArgs($existingObjId, KalturaMetadata $newObj)
+	protected function getMetadataUpdateArgs($existingObjId, VidiunMetadata $newObj)
 	{
 		return array(
 			$existingObjId,
@@ -714,13 +714,13 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * @return array of arguments that should be passed to metadata->add api action
-	 * @param KalturaMetadata $newObj
+	 * @param VidiunMetadata $newObj
 	 */
-	protected function getMetadataAddArgs(KalturaMetadata $newObj)
+	protected function getMetadataAddArgs(VidiunMetadata $newObj)
 	{
 		return array(
 			$newObj->metadataProfileId,
-			KalturaMetadataObjectType::ENTRY,
+			VidiunMetadataObjectType::ENTRY,
 			$newObj->objectId,
 			$newObj->xml
 		);
@@ -728,9 +728,9 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * @return array of arguments that should be passed to cuepoint->add api action
-	 * @param KalturaCuePoint $newObj
+	 * @param VidiunCuePoint $newObj
 	 */
-	protected function getCuePointAddArgs(KalturaCuePoint $newObj)
+	protected function getCuePointAddArgs(VidiunCuePoint $newObj)
 	{
 		return array(
 			$newObj
@@ -744,10 +744,10 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * Fill provider data with map of distributed objects
-	 * @param KalturaDistributionJobData $data
-	 * @param CrossKalturaEntryObjectsContainer $syncedObjects
+	 * @param VidiunDistributionJobData $data
+	 * @param CrossVidiunEntryObjectsContainer $syncedObjects
 	 */
-	protected function getDistributedMap(KalturaDistributionJobData $data, CrossKalturaEntryObjectsContainer $syncedObjects)
+	protected function getDistributedMap(VidiunDistributionJobData $data, CrossVidiunEntryObjectsContainer $syncedObjects)
 	{
 		$data->providerData->distributedFlavorAssets = $this->getDistributedMapForObjects($this->sourceObjects->flavorAssets, $syncedObjects->flavorAssets);
 
@@ -790,7 +790,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * Sync objects between the source and target accounts
-	 * @param KalturaServiceBase $targetClientService API service for the current object type
+	 * @param VidiunServiceBase $targetClientService API service for the current object type
 	 * @param array $newObjects array of target objects that should be added/updated
 	 * @param array $sourceObjects array of source objects
 	 * @param array $distributedMap array of information about previously distributed objects
@@ -799,7 +799,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 	 * @param string $updateArgsFunc special function to extract arguments for the UPDATE api action
 	 * @return array of the synced objects
 	 */
-	protected function syncTargetEntryObjects(KalturaServiceBase $targetClientService, $newObjects, $sourceObjects, $distributedMap, $targetEntryId, $addArgsFunc = null, $updateArgsFunc = null)
+	protected function syncTargetEntryObjects(VidiunServiceBase $targetClientService, $newObjects, $sourceObjects, $distributedMap, $targetEntryId, $addArgsFunc = null, $updateArgsFunc = null)
 	{
 		$syncedObjects = array();
 		$distributedMap = empty($distributedMap) ? array() : unserialize($distributedMap);
@@ -807,13 +807,13 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		// walk through all new target objects and add/update on target as necessary
 		if (count($newObjects))
 		{
-			KalturaLog::info('Syncing target objects for source IDs ['.implode(',', array_keys($newObjects)).']');
+			VidiunLog::info('Syncing target objects for source IDs ['.implode(',', array_keys($newObjects)).']');
 			foreach ($newObjects as $sourceObjectId => $targetObject)
 			{
 				if (is_array($distributedMap) && array_key_exists($sourceObjectId, $distributedMap))
 				{
 					// this object was previously distributed
-					KalturaLog::info('Source object id ['.$sourceObjectId.'] was previously distributed');
+					VidiunLog::info('Source object id ['.$sourceObjectId.'] was previously distributed');
 
 					$lastDistributedUpdatedAt = isset($distributedMap[$sourceObjectId][self::DISTRIBUTED_INFO_SOURCE_UPDATED_AT]) ? $distributedMap[$sourceObjectId][self::DISTRIBUTED_INFO_SOURCE_UPDATED_AT] : null;
 					$currentSourceUpdatedAt = isset($sourceObjects[$sourceObjectId]->updatedAt)	? $sourceObjects[$sourceObjectId]->updatedAt : null;
@@ -827,7 +827,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 					if (!is_null($lastDistributedUpdatedAt) && !is_null($currentSourceUpdatedAt) && $currentSourceUpdatedAt <= $lastDistributedUpdatedAt)
 					{
 						// object wasn't updated since last distributed - just return existing info
-						KalturaLog::info('No need to re-distributed object since it was not updated since last distribution - returning dummy object with target id ['.$targetObjectId.']');
+						VidiunLog::info('No need to re-distributed object since it was not updated since last distribution - returning dummy object with target id ['.$targetObjectId.']');
 						$targetObject->id = $targetObjectId;
 						$syncedObjects[$sourceObjectId] = $targetObject;
 					}
@@ -866,12 +866,12 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		// check if previously distributed objects should be deleted from the target account
 		if (count($distributedMap))
 		{
-			KalturaLog::info('Deleting target objects that were deleted in source with IDs ['.implode(',', array_keys($distributedMap)).']');
+			VidiunLog::info('Deleting target objects that were deleted in source with IDs ['.implode(',', array_keys($distributedMap)).']');
 			foreach ($distributedMap as $sourceId => $objInfo)
 			{
 				// delete from target account
 				$targetId = isset($objInfo[self::DISTRIBUTED_INFO_TARGET_ID]) ? $objInfo[self::DISTRIBUTED_INFO_TARGET_ID] : null;
-				KalturaLog::info('Deleting previously distributed source object id ['.$sourceId.'] target object id ['.$targetId.']');
+				VidiunLog::info('Deleting previously distributed source object id ['.$sourceId.'] target object id ['.$targetId.']');
 				if (is_null($targetId))
 				{
 					throw new Exception('Missing previously distributed target object id for source id ['.$sourceId.']');
@@ -890,7 +890,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 					);
 					if (in_array($e->getCode(), $acceptableErrorCodes))
 					{
-						KalturaLog::warning('Object with id ['.$targetId.'] is already deleted - ignoring exception');
+						VidiunLog::warning('Object with id ['.$targetId.'] is already deleted - ignoring exception');
 					}
 					else
 					{
@@ -905,7 +905,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 	}
 
 
-	protected function syncAssetsContent(KalturaServiceBase $targetClientService, $targetAssetsContent, $targetAssets, $distributedMap, $sourceAssets)
+	protected function syncAssetsContent(VidiunServiceBase $targetClientService, $targetAssetsContent, $targetAssets, $distributedMap, $sourceAssets)
 	{
 		$distributedMap = empty($distributedMap) ? array() : unserialize($distributedMap);
 
@@ -922,11 +922,11 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 			if (!is_null($currentSourceVersion) && !is_null($lastDistributedSourceVersion) && $currentSourceVersion <= $lastDistributedSourceVersion)
 			{
-				KalturaLog::info('No need to update content of source asset id ['.$sourceAssetId.'] target id ['.$targetAssetId.'] since it was not updated since last distribution');
+				VidiunLog::info('No need to update content of source asset id ['.$sourceAssetId.'] target id ['.$targetAssetId.'] since it was not updated since last distribution');
 			}
 			else
 			{
-				KalturaLog::info('Updating content for source asset id ['.$sourceAssetId.'] target id ['.$targetAssetId.']');
+				VidiunLog::info('Updating content for source asset id ['.$sourceAssetId.'] target id ['.$targetAssetId.']');
 				$targetClientService->setContent($targetAssetId, $targetAssetContent);
 			}
 		}
@@ -934,12 +934,12 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	/**
 	 * Sync target objects
-	 * @param KalturaDistributionJobData $jobData
-	 * @param CrossKalturaEntryObjectsContainer $targetObjects
+	 * @param VidiunDistributionJobData $jobData
+	 * @param CrossVidiunEntryObjectsContainer $targetObjects
 	 */
-	protected function sync(KalturaDistributionJobData $jobData, CrossKalturaEntryObjectsContainer $targetObjects)
+	protected function sync(VidiunDistributionJobData $jobData, CrossVidiunEntryObjectsContainer $targetObjects)
 	{
-		$syncedObjects = new CrossKalturaEntryObjectsContainer();
+		$syncedObjects = new CrossVidiunEntryObjectsContainer();
 
 		$targetEntryId = $jobData->remoteId;
 
@@ -947,7 +947,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		if ($targetEntryId)
 		{
 			// update entry
-			KalturaLog::info('Updating target entry id ['.$targetEntryId.']');
+			VidiunLog::info('Updating target entry id ['.$targetEntryId.']');
 			$syncedObjects->entry = $this->targetClient->baseEntry->update($targetEntryId, $targetObjects->entry);
 		}
 		else
@@ -955,17 +955,17 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 			// add entry
 			$syncedObjects->entry = $this->targetClient->baseEntry->add($targetObjects->entry);
 			$targetEntryId = $syncedObjects->entry->id;
-			KalturaLog::info('New target entry added with id ['.$targetEntryId.']');
+			VidiunLog::info('New target entry added with id ['.$targetEntryId.']');
 		}
 		$this->targetEntryId = $targetEntryId;
 
 		// sync metadata objects
 		foreach ($targetObjects->metadataObjects as $metadataObj)
 		{
-			/* @var $metadataObj KalturaMetadata */
+			/* @var $metadataObj VidiunMetadata */
 			$metadataObj->objectId = $targetEntryId;
 		}
-		$targetMetadataClient = KalturaMetadataClientPlugin::get($this->targetClient);
+		$targetMetadataClient = VidiunMetadataClientPlugin::get($this->targetClient);
 		$syncedObjects->metadataObjects = $this->syncTargetEntryObjects(
 			$targetMetadataClient->metadata,
 			$targetObjects->metadataObjects,
@@ -1008,7 +1008,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		// sync caption assets
 		if ($this->distributeCaptions)
 		{
-			$targetCaptionClient = KalturaCaptionClientPlugin::get($this->targetClient);
+			$targetCaptionClient = VidiunCaptionClientPlugin::get($this->targetClient);
 			$syncedObjects->captionAssets = $this->syncTargetEntryObjects(
 				$targetCaptionClient->captionAsset,
 				$targetObjects->captionAssets,
@@ -1034,10 +1034,10 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		{
 			foreach ($targetObjects->cuePoints as $cuePoint)
 			{
-				/* @var $cuePoint KalturaCuePoint */
+				/* @var $cuePoint VidiunCuePoint */
 				$cuePoint->entryId = $targetEntryId;
 			}
-			$targetCuePointClient = KalturaCuePointClientPlugin::get($this->targetClient);
+			$targetCuePointClient = VidiunCuePointClientPlugin::get($this->targetClient);
 			$syncedObjects->cuePoints = $this->syncTargetEntryObjects(
 				$targetCuePointClient->cuePoint,
 				$targetObjects->cuePoints,
@@ -1061,7 +1061,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 					$thumbCuePoint->assetId = null;
 			}
 			
-			$targetCuePointClient = KalturaCuePointClientPlugin::get($this->targetClient);
+			$targetCuePointClient = VidiunCuePointClientPlugin::get($this->targetClient);
 			$syncedObjects->thumbCuePoints = $this->syncTargetEntryObjects(
 				$targetCuePointClient->cuePoint,
 				$targetObjects->thumbCuePoints,
@@ -1102,7 +1102,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
      * @see IDistributionEngineSubmit::submit()
      */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
 		// initialize
 		$this->init($data);
@@ -1130,14 +1130,14 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 			// if a new target entry was created - delete it before failing distribution
 			if ($this->targetEntryId)
 			{
-				KalturaLog::info('Deleting partial new target entry ['.$this->targetEntryId.']');
+				VidiunLog::info('Deleting partial new target entry ['.$this->targetEntryId.']');
 				// delete entry from target account - may throw an exception
 				try {
 					$deleteResult = $this->targetClient->baseEntry->delete($this->targetEntryId);
 				}
 				catch (Exception $ignoredException)
 				{
-					KalturaLog::err('Failed deleting partial entry ['.$this->targetEntryId.'] - '.$ignoredException->getMessage());
+					VidiunLog::err('Failed deleting partial entry ['.$this->targetEntryId.'] - '.$ignoredException->getMessage());
 				}
 			}
 
@@ -1153,7 +1153,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
      * @see IDistributionEngineUpdate::update()
      */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
 		// initialize
 		$this->init($data);
@@ -1185,7 +1185,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
      * @see IDistributionEngineDelete::delete()
      */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
 		// initialize
 		$this->init($data);
@@ -1277,7 +1277,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		{
 			foreach($apiKeyValueArray as $keyValueObj)
 			{
-				/* @var $keyValueObj KalturaKeyValue */
+				/* @var $keyValueObj VidiunKeyValue */
 				$keyValueArray[$keyValueObj->key] = $keyValueObj->value;
 			}
 		}
@@ -1306,7 +1306,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 		}
 
 		$proc = new XSLTProcessor;
-		$proc->registerPHPFunctions(kXml::getXslEnabledPhpFunctions());
+		$proc->registerPHPFunctions(vXml::getXslEnabledPhpFunctions());
 		$proc->importStyleSheet($xslObj);
 
 		$resultXmlObj = $proc->transformToDoc($xmlObj);
@@ -1322,7 +1322,7 @@ class CrossKalturaDistributionEngine extends DistributionEngine implements
 
 	function log($message)
 	{
-		KalturaLog::log($message);
+		VidiunLog::log($message);
 	}
 
 }

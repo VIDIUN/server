@@ -3,7 +3,7 @@
  * @package plugins.thumbCuePoint
  * @subpackage lib.enum
  */
-class ThumbCuePointMetadataObjectType implements IKalturaPluginEnum, MetadataObjectType
+class ThumbCuePointMetadataObjectType implements IVidiunPluginEnum, MetadataObjectType
 {
 	const THUMB_CUE_POINT = 'thumbCuePoint';
 	

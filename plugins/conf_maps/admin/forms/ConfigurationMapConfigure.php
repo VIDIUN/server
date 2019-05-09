@@ -61,7 +61,7 @@ class Form_ConfigurationMapConfigure extends ConfigureForm
 		$allElements = $this->getElements();
 		foreach ($allElements as $element)
 		{
-			if ($element instanceof Kaltura_Form_Element_EnumSelect)
+			if ($element instanceof Vidiun_Form_Element_EnumSelect)
 			{
 				$elementName = $element->getName();
 				if (isset($props[$elementName]))
@@ -74,9 +74,9 @@ class Form_ConfigurationMapConfigure extends ConfigureForm
 
 	/**
 	 * Set to null all the attributes that shouldn't be updated
-	 * @param Kaltura_Client_ConfMaps_Type_ConfMaps $configurationItem
+	 * @param Vidiun_Client_ConfMaps_Type_ConfMaps $configurationItem
 	 */
-	public function resetUnUpdatebleAttributes(Kaltura_Client_ConfMaps_Type_ConfMaps $configurationItem)
+	public function resetUnUpdatebleAttributes(Vidiun_Client_ConfMaps_Type_ConfMaps $configurationItem)
 	{
 		// reset readonly attributes
 		$configurationItem->lastUpdate = null;

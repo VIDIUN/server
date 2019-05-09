@@ -4,10 +4,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaClippingTaskEntryServerNode extends KalturaTaskEntryServerNode
+class VidiunClippingTaskEntryServerNode extends VidiunTaskEntryServerNode
 {
     /**
-    * @var KalturaClipAttributes
+    * @var VidiunClipAttributes
     */
 	public $clipAttributes;
 

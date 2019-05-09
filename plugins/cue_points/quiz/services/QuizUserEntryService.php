@@ -6,7 +6,7 @@
  * @package plugins.quiz
  * @subpackage api.services
  */
-class QuizUserEntryService extends KalturaBaseService{
+class QuizUserEntryService extends VidiunBaseService{
 
 	/**
 	 * Submits the quiz so that it's status will be submitted and calculates the score for the quiz
@@ -14,34 +14,34 @@ class QuizUserEntryService extends KalturaBaseService{
 	 * @action submitQuiz
 	 * @actionAlias userEntry.submitQuiz
 	 * @param int $id
-	 * @return KalturaQuizUserEntry
-	 * @throws KalturaAPIException
+	 * @return VidiunQuizUserEntry
+	 * @throws VidiunAPIException
 	 */
 	public function submitQuizAction($id)
 	{
 		$dbUserEntry = UserEntryPeer::retrieveByPK($id);
 		if (!$dbUserEntry)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $id);
 		
 		if ($dbUserEntry->getType() != QuizPlugin::getCoreValue('UserEntryType',QuizUserEntryType::QUIZ))
-			throw new KalturaAPIException(KalturaQuizErrors::PROVIDED_ENTRY_IS_NOT_A_QUIZ, $id);
+			throw new VidiunAPIException(VidiunQuizErrors::PROVIDED_ENTRY_IS_NOT_A_QUIZ, $id);
 		
 		$dbUserEntry->setStatus(QuizPlugin::getCoreValue('UserEntryStatus', QuizUserEntryStatus::QUIZ_SUBMITTED));
-		$userEntry = new KalturaQuizUserEntry();
+		$userEntry = new VidiunQuizUserEntry();
 		$userEntry->fromObject($dbUserEntry, $this->getResponseProfile());
 		$entryId = $dbUserEntry->getEntryId();
 		$entry = entryPeer::retrieveByPK($entryId);
 		if(!$entry)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $entryId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $entryId);
 		
-		$kQuiz = QuizPlugin::getQuizData($entry);
-		if (!$kQuiz)
-			throw new KalturaAPIException(KalturaQuizErrors::PROVIDED_ENTRY_IS_NOT_A_QUIZ, $entryId);
+		$vQuiz = QuizPlugin::getQuizData($entry);
+		if (!$vQuiz)
+			throw new VidiunAPIException(VidiunQuizErrors::PROVIDED_ENTRY_IS_NOT_A_QUIZ, $entryId);
 		
 		list($score, $numOfCorrectAnswers) = $dbUserEntry->calculateScoreAndCorrectAnswers();
 		$dbUserEntry->setScore($score);
 		$dbUserEntry->setNumOfCorrectAnswers($numOfCorrectAnswers);	
-		if ($kQuiz->getShowGradeAfterSubmission()== KalturaNullableBoolean::TRUE_VALUE || $this->getKs()->isAdmin() == true)
+		if ($vQuiz->getShowGradeAfterSubmission()== VidiunNullableBoolean::TRUE_VALUE || $this->getVs()->isAdmin() == true)
 		{
 			$userEntry->score = $score;
 		}
@@ -50,7 +50,7 @@ class QuizUserEntryService extends KalturaBaseService{
 			$userEntry->score = null;
 		}
 
-		$c = new KalturaCriteria();
+		$c = new VidiunCriteria();
 		$c->add(CuePointPeer::ENTRY_ID, $dbUserEntry->getEntryId(), Criteria::EQUAL);
 		$c->add(CuePointPeer::TYPE, QuizPlugin::getCoreValue('CuePointType', QuizCuePointType::QUIZ_QUESTION));
 		$questions = CuePointPeer::doSelect($c);
@@ -67,12 +67,12 @@ class QuizUserEntryService extends KalturaBaseService{
 		$dbUserEntry->setNumOfRelevnatQuestions($relevantQuestionCount);
 		$dbUserEntry->setStatus(QuizPlugin::getCoreValue('UserEntryStatus', QuizUserEntryStatus::QUIZ_SUBMITTED));
 		$dbUserEntry->save();
-		self::calculateScoreByScoreType($kQuiz,$userEntry, $dbUserEntry, $score);
+		self::calculateScoreByScoreType($vQuiz,$userEntry, $dbUserEntry, $score);
 
 		return $userEntry;
 	}
 
-	protected function calculateScoreByScoreType($kQuiz, $kalturaUserEntry, $dbUserEntry, $currentScore)
+	protected function calculateScoreByScoreType($vQuiz, $vidiunUserEntry, $dbUserEntry, $currentScore)
 	{
 		if ($dbUserEntry->getVersion() == 0)
 		{
@@ -80,28 +80,28 @@ class QuizUserEntryService extends KalturaBaseService{
 		}
 		else
 		{
-			$scoreType = $kQuiz->getScoreType();
+			$scoreType = $vQuiz->getScoreType();
 			//retrieve user entry list order by version desc
-			$userEntryVersions = userEntryPeer::retriveUserEntriesSubmitted($dbUserEntry->getKuserId(), $dbUserEntry->getEntryId(), QuizPlugin::getCoreValue('UserEntryType', QuizUserEntryType::QUIZ));
+			$userEntryVersions = userEntryPeer::retriveUserEntriesSubmitted($dbUserEntry->getVuserId(), $dbUserEntry->getEntryId(), QuizPlugin::getCoreValue('UserEntryType', QuizUserEntryType::QUIZ));
 			switch ($scoreType)
 			{
-				case KalturaScoreType::HIGHEST:
+				case VidiunScoreType::HIGHEST:
 					$calculatedScore = self::getHighestScore($userEntryVersions);
 					break;
 
-				case KalturaScoreType::LOWEST:
+				case VidiunScoreType::LOWEST:
 					$calculatedScore = self::getLowestScore($userEntryVersions);
 					break;
 
-				case KalturaScoreType::LATEST:
+				case VidiunScoreType::LATEST:
 					$calculatedScore = reset($userEntryVersions)->getScore();
 					break;
 
-				case KalturaScoreType::FIRST:
+				case VidiunScoreType::FIRST:
 					$calculatedScore = end($userEntryVersions)->getScore();
 					break;
 
-				case KalturaScoreType::AVERAGE:
+				case VidiunScoreType::AVERAGE:
 					$calculatedScore = self::getAverageScore($userEntryVersions);
 					break;
 			}
@@ -109,9 +109,9 @@ class QuizUserEntryService extends KalturaBaseService{
 
 		$dbUserEntry->setCalculatedScore($calculatedScore);
 		$dbUserEntry->save();
-		if ($kQuiz->getShowGradeAfterSubmission()== KalturaNullableBoolean::TRUE_VALUE || $this->getKs()->isAdmin() == true)
+		if ($vQuiz->getShowGradeAfterSubmission()== VidiunNullableBoolean::TRUE_VALUE || $this->getVs()->isAdmin() == true)
 		{
-			$kalturaUserEntry->calculatedScore = $calculatedScore;
+			$vidiunUserEntry->calculatedScore = $calculatedScore;
 		}
 	}
 

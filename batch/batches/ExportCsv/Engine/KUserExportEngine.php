@@ -3,14 +3,14 @@
  * @package Scheduler
  * @subpackage ExportCsv
  */
-class KUserExportEngine extends KObjectExportEngine
+class KUserExportEngine extends VObjectExportEngine
 {
 	
 	public function fillCsv(&$csvFile, &$data)
 	{
-		KalturaLog::info ('Exporting content for user items');
+		VidiunLog::info ('Exporting content for user items');
 		$filter = clone $data->filter;
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
 		$pager->pageIndex = 1;
 		
@@ -20,7 +20,7 @@ class KUserExportEngine extends KObjectExportEngine
 		$lastCreatedAtObjectIdList = array();
 		$lastCreatedAt=0;
 		$totalCount=0;
-		$filter->orderBy = KalturaUserOrderBy::CREATED_AT_ASC;
+		$filter->orderBy = VidiunUserOrderBy::CREATED_AT_ASC;
 		do
 		{
 			if($lastCreatedAt)
@@ -29,12 +29,12 @@ class KUserExportEngine extends KObjectExportEngine
 			}
 			try
 			{
-				$userList = KBatchBase::$kClient->user->listAction($filter, $pager);
+				$userList = VBatchBase::$vClient->user->listAction($filter, $pager);
 				$returnedSize = $userList->objects ? count($userList->objects) : 0;
 			}
 			catch(Exception $e)
 			{
-				KalturaLog::info("Couldn't list users on page: [$pager->pageIndex]" . $e->getMessage());
+				VidiunLog::info("Couldn't list users on page: [$pager->pageIndex]" . $e->getMessage());
 				$this->apiError = $e;
 				return;
 			}
@@ -59,7 +59,7 @@ class KUserExportEngine extends KObjectExportEngine
 			$lastCreatedAtObjectIdList = $newCreatedAtListObject;
 			$this->addUsersToCsv($uniqUsers, $csvFile, $data->metadataProfileId, $additionalFields);
 			$totalCount+=count($uniqUsers);
-			KalturaLog::debug("Adding More  - ".count($uniqUsers). " totalCount - ". $totalCount);
+			VidiunLog::debug("Adding More  - ".count($uniqUsers). " totalCount - ". $totalCount);
 			unset($newCreatedAtListObject);
 			unset($uniqUsers);
 			unset($userList);
@@ -77,7 +77,7 @@ class KUserExportEngine extends KObjectExportEngine
 		$headerRow = 'User ID,First Name,Last Name,Email';
 		foreach ($additionalFields as $field)
 			$headerRow .= ','.$field->fieldName;
-		KCsvWrapper::sanitizedFputCsv($csvFile, explode(',', $headerRow));
+		VCsvWrapper::sanitizedFputCsv($csvFile, explode(',', $headerRow));
 		
 		return $csvFile;
 	}
@@ -107,7 +107,7 @@ class KUserExportEngine extends KObjectExportEngine
 		}
 		foreach ($userIdToRow as $key=>$val)
 		{
-			KCsvWrapper::sanitizedFputCsv($csvFile, $val);
+			VCsvWrapper::sanitizedFputCsv($csvFile, $val);
 		}
 	}
 	
@@ -141,21 +141,21 @@ class KUserExportEngine extends KObjectExportEngine
 	protected function retrieveUsersMetadata($userIds, $metadataProfileId)
 	{
 		$result = null;
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
 		$pager->pageIndex = 1;
-		$filter = new KalturaMetadataFilter();
+		$filter = new VidiunMetadataFilter();
 		$filter->objectIdIn = implode(',', $userIds);
 		$filter->metadataObjectTypeEqual = MetadataObjectType::USER;
 		$filter->metadataProfileIdEqual = $metadataProfileId;
 		try
 		{
-			$metadataClient = KalturaMetadataClientPlugin::get(KBatchBase::$kClient);
+			$metadataClient = VidiunMetadataClientPlugin::get(VBatchBase::$vClient);
 			$result = $metadataClient->metadata->listAction($filter, $pager);
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::info("Couldn't list metadata objects for metadataProfileId: [$metadataProfileId]" . $e->getMessage());
+			VidiunLog::info("Couldn't list metadata objects for metadataProfileId: [$metadataProfileId]" . $e->getMessage());
 			$this->apiError = $e;
 		}
 		return $result;
@@ -179,7 +179,7 @@ class KUserExportEngine extends KObjectExportEngine
 		if(is_array($value) && count($value) == 1)
 			$strValue = (string)$value[0];
 		else if (count($value) == 1)
-			KalturaLog::err("Unknown element in the base xml when quering the xpath: [$xpath]");
+			VidiunLog::err("Unknown element in the base xml when quering the xpath: [$xpath]");
 		
 		return $strValue;
 	}
@@ -195,7 +195,7 @@ class KUserExportEngine extends KObjectExportEngine
 			{
 				if($field->xpath)
 				{
-					KalturaLog::info("current field xpath: [$field->xpath]");
+					VidiunLog::info("current field xpath: [$field->xpath]");
 					$strValue = $this->getValueFromXmlElement($metadataObj->xml, $field->xpath);
 					if($strValue)
 					{

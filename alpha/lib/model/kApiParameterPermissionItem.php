@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kApiParameterPermissionItem extends PermissionItem
+class vApiParameterPermissionItem extends PermissionItem
 {
 	// column names
 	

@@ -4,7 +4,7 @@
  * @package api
  * @subpackage objects
   */
-class KalturaQuizUserEntry extends KalturaUserEntry{
+class VidiunQuizUserEntry extends VidiunUserEntry{
 
 	CONST DEFAULT_VERSION = 0;
 
@@ -47,7 +47,7 @@ class KalturaQuizUserEntry extends KalturaUserEntry{
 	}
 
 	/**
-	 * KalturaQuizUserEntry constructor.
+	 * VidiunQuizUserEntry constructor.
 	 */
 	public function __construct()
 	{
@@ -64,23 +64,23 @@ class KalturaQuizUserEntry extends KalturaUserEntry{
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		$object_to_fill = parent::toInsertableObject($object_to_fill, $props_to_skip);
 		$isAnonymous = false;
-		$anonKusers = kuserPeer::getKuserByPartnerAndUids(kCurrentContext::getCurrentPartnerId(), array('', 0));
-		foreach ($anonKusers as $anonKuser)
+		$anonVusers = vuserPeer::getVuserByPartnerAndUids(vCurrentContext::getCurrentPartnerId(), array('', 0));
+		foreach ($anonVusers as $anonVuser)
 		{
-			if ($anonKuser->getKuserId() == $object_to_fill->getKuserId())
+			if ($anonVuser->getVuserId() == $object_to_fill->getVuserId())
 			{
 				$isAnonymous = true;
 			}
 		}
 		if (!$isAnonymous)
 		{
-			$userEntry = UserEntryPeer::retriveUserEntriesSubmitted( $object_to_fill->getKuserId(), $this->entryId, QuizPlugin::getCoreValue('UserEntryType', QuizUserEntryType::QUIZ));
+			$userEntry = UserEntryPeer::retriveUserEntriesSubmitted( $object_to_fill->getVuserId(), $this->entryId, QuizPlugin::getCoreValue('UserEntryType', QuizUserEntryType::QUIZ));
 
 			if (count($userEntry) == 0 )
 			{
@@ -98,7 +98,7 @@ class KalturaQuizUserEntry extends KalturaUserEntry{
 				}
 				else
 				{
-					throw new KalturaAPIException(KalturaQuizErrors::NO_RETAKES_LEFT, $this->entryId);
+					throw new VidiunAPIException(VidiunQuizErrors::NO_RETAKES_LEFT, $this->entryId);
 				}
 			}
 
@@ -109,13 +109,13 @@ class KalturaQuizUserEntry extends KalturaUserEntry{
 	public function validateForInsert($propertiesToSkip = array())
 	{
 		if(!QuizPlugin::isQuiz($this->entryId))
-			throw new KalturaAPIException(KalturaQuizErrors::PROVIDED_ENTRY_IS_NOT_A_QUIZ, $this->entryId);
+			throw new VidiunAPIException(VidiunQuizErrors::PROVIDED_ENTRY_IS_NOT_A_QUIZ, $this->entryId);
 		parent::validateForInsert($propertiesToSkip);
 		$dbEntry = entryPeer::retrieveByPK($this->entryId);
-		if ($this->feedback != null && !kEntitlementUtils::isEntitledForEditEntry($dbEntry) )
+		if ($this->feedback != null && !vEntitlementUtils::isEntitledForEditEntry($dbEntry) )
 		{
-			KalturaLog::debug('Insert feedback on quiz is allowed only with admin KS or entry owner or co-editor');
-			throw new KalturaAPIException(KalturaErrors::INVALID_USER_ID);
+			VidiunLog::debug('Insert feedback on quiz is allowed only with admin VS or entry owner or co-editor');
+			throw new VidiunAPIException(VidiunErrors::INVALID_USER_ID);
 		}
 	}
 
@@ -123,10 +123,10 @@ class KalturaQuizUserEntry extends KalturaUserEntry{
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
 		$dbEntry = entryPeer::retrieveByPK($this->entryId);
-		if ( !kEntitlementUtils::isEntitledForEditEntry($dbEntry) )
+		if ( !vEntitlementUtils::isEntitledForEditEntry($dbEntry) )
 		{
-			KalturaLog::debug('Update quiz allowed only with admin KS or entry owner or co-editor');
-			throw new KalturaAPIException(KalturaErrors::INVALID_USER_ID);
+			VidiunLog::debug('Update quiz allowed only with admin VS or entry owner or co-editor');
+			throw new VidiunAPIException(VidiunErrors::INVALID_USER_ID);
 		}
 		return parent::validateForUpdate($sourceObject, $propertiesToSkip);
 	}

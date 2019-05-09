@@ -2,9 +2,9 @@
 /**
  * @package api
  * @subpackage enum
- * @deprecated use KalturaRule instead
+ * @deprecated use VidiunRule instead
  */
-class KalturaCountryRestrictionType extends KalturaEnum
+class VidiunCountryRestrictionType extends VidiunEnum
 {
 	const RESTRICT_COUNTRY_LIST = 0;
 	const ALLOW_COUNTRY_LIST = 1;

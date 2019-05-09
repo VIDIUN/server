@@ -19,7 +19,7 @@ class myBlockedEmailUtils
 
 	public static function createBlockEmailStr ( $email )
 	{
-		return  $email . self::SEPARATOR . kString::expiryHash( $email , self::$key , self::EXPIRY_INTERVAL );
+		return  $email . self::SEPARATOR . vString::expiryHash( $email , self::$key , self::EXPIRY_INTERVAL );
 	}
 	
 	// TODO - remove  $should_update_db  - should always update DB !
@@ -29,7 +29,7 @@ class myBlockedEmailUtils
 		$email = @$params[0];
 		$email_hash = @$params[1];
 
-		$valid = kString::verifyExpiryHash( $email , self::$key , $email_hash , self::EXPIRY_INTERVAL);
+		$valid = vString::verifyExpiryHash( $email , self::$key , $email_hash , self::EXPIRY_INTERVAL);
 
 		if ( $valid )
 		{

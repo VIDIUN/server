@@ -8,10 +8,10 @@
  * @subpackage model
  *
  */
-class kDictionary
+class vDictionary
 {
 	/**
-	 * @var KalturaCatalogItemLanguage
+	 * @var VidiunCatalogItemLanguage
 	 */
 	protected $language;
 
@@ -21,7 +21,7 @@ class kDictionary
 	protected $data;
 
 	/**
-	 * @return the KalturaCatalogItemLanguage
+	 * @return the VidiunCatalogItemLanguage
 	 */
 	public function getLanguage()
 	{
@@ -37,7 +37,7 @@ class kDictionary
 	}
 
 	/**
-	 * @param KalturaCatalogItemLanguage $language
+	 * @param VidiunCatalogItemLanguage $language
 	 */
 	public function setLanguage($language)
 	{

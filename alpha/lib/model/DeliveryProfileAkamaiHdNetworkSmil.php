@@ -4,7 +4,7 @@ class DeliveryProfileAkamaiHdNetworkSmil extends DeliveryProfileVod {
 	
 	function __construct() {
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kSmilManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vSmilManifestRenderer';
 	}
 	
 	/**

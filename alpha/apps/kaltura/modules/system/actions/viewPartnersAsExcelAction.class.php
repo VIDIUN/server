@@ -4,7 +4,7 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 require_once ( __DIR__ . "/viewPartnersAAction.class.php" );
 
 /**
@@ -12,7 +12,7 @@ require_once ( __DIR__ . "/viewPartnersAAction.class.php" );
  * @subpackage system
  * @deprecated
  */
-class viewPartnersAsExcelAction extends kalturaSystemAction
+class viewPartnersAsExcelAction extends vidiunSystemAction
 {
 
 	public function execute()

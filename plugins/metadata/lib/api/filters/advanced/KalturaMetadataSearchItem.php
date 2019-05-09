@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.filters
  */
-class KalturaMetadataSearchItem extends KalturaSearchOperator
+class VidiunMetadataSearchItem extends VidiunSearchOperator
 {
 	/**
 	 * @var int

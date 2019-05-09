@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kAssetsParamsResourceContainers extends kResource 
+class vAssetsParamsResourceContainers extends vResource 
 {
 	/**
 	 * Array of resources associated with asset params ids

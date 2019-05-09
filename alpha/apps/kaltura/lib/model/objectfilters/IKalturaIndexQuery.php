@@ -4,7 +4,7 @@
  * @package Core
  * @subpackage model.filters
  */
-interface IKalturaIndexQuery extends IKalturaDbQuery
+interface IVidiunIndexQuery extends IVidiunDbQuery
 {
 	/**
 	 * Add a new where clause condition to the query

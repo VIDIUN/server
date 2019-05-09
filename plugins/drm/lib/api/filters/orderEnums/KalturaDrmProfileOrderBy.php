@@ -3,7 +3,7 @@
  * @package plugins.drm
  * @subpackage api.filters.enum
  */
-class KalturaDrmProfileOrderBy extends KalturaStringEnum
+class VidiunDrmProfileOrderBy extends VidiunStringEnum
 {
 	const ID_ASC = "+id";
 	const ID_DESC = "-id";

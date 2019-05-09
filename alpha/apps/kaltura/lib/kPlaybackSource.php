@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kPlaybackSource {
+class vPlaybackSource {
 
 	/**
 	 * @var string

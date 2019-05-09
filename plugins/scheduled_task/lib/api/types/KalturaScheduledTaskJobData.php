@@ -4,7 +4,7 @@
  * @package plugins.scheduledTask
  * @subpackage api.objects
  */
-class KalturaScheduledTaskJobData extends KalturaJobData
+class VidiunScheduledTaskJobData extends VidiunJobData
 {
 	/**
 	 * @var int
@@ -17,7 +17,7 @@ class KalturaScheduledTaskJobData extends KalturaJobData
 	public $totalCount;
 
 	/**
-	 * @var KalturaDryRunFileType
+	 * @var VidiunDryRunFileType
 	 */
 	public $fileFormat;
 
@@ -49,9 +49,9 @@ class KalturaScheduledTaskJobData extends KalturaJobData
 	public function toObject($objectToFill = null, $propsToSkip = array())
 	{
 		if (is_null($objectToFill))
-			$objectToFill = new kScheduledTaskJobData();
+			$objectToFill = new vScheduledTaskJobData();
 
-		/** @var kScheduledTaskJobData $objectToFill */
+		/** @var vScheduledTaskJobData $objectToFill */
 		$objectToFill = parent::toObject($objectToFill, $propsToSkip);
 
 		return $objectToFill;

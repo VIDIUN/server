@@ -31,14 +31,14 @@ class PartnerController extends Zend_Controller_Action
 		{
 			if ($form->isValid($request->getPost()))
 			{
-				$partner = $form->getObject("Kaltura_Client_Type_Partner", $request->getPost());
+				$partner = $form->getObject("Vidiun_Client_Type_Partner", $request->getPost());
 				$templatePartnerId = $form->getValue("copyPartner");
-				/* @var $partner Kaltura_Client_Type_Partner */
+				/* @var $partner Vidiun_Client_Type_Partner */
 				if(is_array($partner->contentCategories))
 					$partner->contentCategories = implode(',', $partner->contentCategories);
 					
 				$partner->description = "Multi-publishers console";
-				$partner->type = Kaltura_Client_Enum_PartnerType::ADMIN_CONSOLE;
+				$partner->type = Vidiun_Client_Enum_PartnerType::ADMIN_CONSOLE;
 				
 				try 
 				{
@@ -68,17 +68,17 @@ class PartnerController extends Zend_Controller_Action
 			}
 		}
 		
-		$varConsoleFilter = new Kaltura_Client_VarConsole_Type_VarConsolePartnerFilter();
-		$varConsoleFilter->groupTypeEq = Kaltura_Client_Enum_PartnerGroupType::TEMPLATE;
-		$varConsoleFilter->statusEqual = Kaltura_Client_Enum_PartnerStatus::ACTIVE;
-		$pager = new Kaltura_Client_Type_FilterPager();
+		$varConsoleFilter = new Vidiun_Client_VarConsole_Type_VarConsolePartnerFilter();
+		$varConsoleFilter->groupTypeEq = Vidiun_Client_Enum_PartnerGroupType::TEMPLATE;
+		$varConsoleFilter->statusEqual = Vidiun_Client_Enum_PartnerStatus::ACTIVE;
+		$pager = new Vidiun_Client_Type_FilterPager();
 		$templatePartnerList = $client->partner->listAction($varConsoleFilter, $pager);
 		
 		$providers = array();
 		$providers[0] = $this->view->translate('partner-create default copy partner');
 		foreach ($templatePartnerList->objects as $templatePartner)
 		{
-		    /* @var $templatePartner Kaltura_Client_Type_Partner */
+		    /* @var $templatePartner Vidiun_Client_Type_Partner */
 		    $providers[$templatePartner->id] = $templatePartner->name;
 		}
 		
@@ -87,12 +87,12 @@ class PartnerController extends Zend_Controller_Action
 		//If available sub-publisher quota was reached, submit button should be disabled.
 		//Exclude publisher iteself, template sub-publisher and deleted sub-publisher
 		$currentPartner = $client->partner->getInfo();
-		$filter = new Kaltura_Client_VarConsole_Type_VarConsolePartnerFilter();
+		$filter = new Vidiun_Client_VarConsole_Type_VarConsolePartnerFilter();
 		$filter->idNotIn = $currentPartner->id;
-		$filter->statusIn = implode(",", array (Kaltura_Client_Enum_PartnerStatus::ACTIVE, Kaltura_Client_Enum_PartnerStatus::BLOCKED));
-		$filter->groupTypeEq = Kaltura_Client_Enum_PartnerGroupType::PUBLISHER;
+		$filter->statusIn = implode(",", array (Vidiun_Client_Enum_PartnerStatus::ACTIVE, Vidiun_Client_Enum_PartnerStatus::BLOCKED));
+		$filter->groupTypeEq = Vidiun_Client_Enum_PartnerGroupType::PUBLISHER;
 		$subPublisherCount = $client->partner->count($filter);
-		/* @var $currentPartner Kaltura_Client_Type_Partner */
+		/* @var $currentPartner Vidiun_Client_Type_Partner */
 		if ($currentPartner->publishersQuota - $subPublisherCount <= 0)
 		{
     		$submitBtn = $form->getElement('submit');
@@ -145,7 +145,7 @@ class PartnerController extends Zend_Controller_Action
     
     private function getPartnerFilterFromRequest(Zend_Controller_Request_Abstract $request)
 	{
-		$filter = new Kaltura_Client_Type_PartnerFilter();
+		$filter = new Vidiun_Client_Type_PartnerFilter();
 		$filterType = $request->getParam('filter_type');
 		$filterInput = $request->getParam('filter_input');
 		$filterIncludActive = $request->getParam('include_active');
@@ -165,20 +165,20 @@ class PartnerController extends Zend_Controller_Action
 		}
 		$statuses = array();
 		if ($filterIncludActive)
-			$statuses[] = Kaltura_Client_Enum_PartnerStatus::ACTIVE;
+			$statuses[] = Vidiun_Client_Enum_PartnerStatus::ACTIVE;
 		if ($filterIncludBlocked)
-			$statuses[] = Kaltura_Client_Enum_PartnerStatus::BLOCKED;
+			$statuses[] = Vidiun_Client_Enum_PartnerStatus::BLOCKED;
 		if ($filterIncludRemoved)
-			$statuses[] = Kaltura_Client_Enum_PartnerStatus::FULL_BLOCK;
+			$statuses[] = Vidiun_Client_Enum_PartnerStatus::FULL_BLOCK;
 		
 		$statusIn = implode(',', $statuses);
 		if ($statusIn != ''){
 			$filter->statusIn = $statusIn;
 		}else{
-			$filter->statusIn = Kaltura_Client_Enum_PartnerStatus::ACTIVE . ',' . Kaltura_Client_Enum_PartnerStatus::BLOCKED;
+			$filter->statusIn = Vidiun_Client_Enum_PartnerStatus::ACTIVE . ',' . Vidiun_Client_Enum_PartnerStatus::BLOCKED;
 		}
 		 
-		$filter->orderBy = Kaltura_Client_Enum_PartnerOrderBy::ID_DESC;
+		$filter->orderBy = Vidiun_Client_Enum_PartnerOrderBy::ID_DESC;
 		return $filter;
 	}
 	
@@ -188,35 +188,35 @@ class PartnerController extends Zend_Controller_Action
 		$partnerId = $this->_getParam('partner_id');
 		$status = $this->_getParam('status');
 		$client = Infra_ClientHelper::getClient();
-		$varConsolePlugin = Kaltura_Client_VarConsole_Plugin::get($client);
+		$varConsolePlugin = Vidiun_Client_VarConsole_Plugin::get($client);
 		$varConsolePlugin->varConsole->updateStatus($partnerId, $status);
 		echo $this->_helper->json('ok', false);
 	}
 
-    public function kmcRedirectAction()
+    public function vmcRedirectAction()
 	{
 		$partnerId = $this->_getParam('partner_id');
-		$ks = $this->generateAdminKs();
-		if(!$ks)
+		$vs = $this->generateAdminVs();
+		if(!$vs)
 			return;
 
-		$url = $this->createKmcRedirectionUrl($ks, $partnerId);
+		$url = $this->createVmcRedirectionUrl($vs, $partnerId);
 		$this->getResponse()->setRedirect($url);
 	}
 
-	public function kmcNewRedirectAction()
+	public function vmcNewRedirectAction()
 	{
-		$ks = $this->generateAdminKs();
-		if(!$ks)
+		$vs = $this->generateAdminVs();
+		if(!$vs)
 		{
 			return;
 		}
 
-		$url = $this->createNewKmcRedirectionUrl($ks);
+		$url = $this->createNewVmcRedirectionUrl($vs);
 		$this->getResponse()->setRedirect($url);
 	}
 
-	private function generateAdminKs()
+	private function generateAdminVs()
 	{
 		$impersonatedPartnerId = $this->_getParam('partner_id');
 		$userId = $this->_getParam('user_id');
@@ -228,7 +228,7 @@ class PartnerController extends Zend_Controller_Action
 			$client->partner->get($impersonatedPartnerId);
 		}
 
-		$client->session->impersonate('{1:result:adminSecret}', $impersonatedPartnerId, $userId ? $userId : '{2:result:adminUserId}', Kaltura_Client_Enum_SessionType::ADMIN, '{1:result:id}', null, "disableentitlement");
+		$client->session->impersonate('{1:result:adminSecret}', $impersonatedPartnerId, $userId ? $userId : '{2:result:adminUserId}', Vidiun_Client_Enum_SessionType::ADMIN, '{1:result:id}', null, "disableentitlement");
 		$result = $client->doMultiRequest();
 
 		foreach($result as $resultItem)
@@ -239,7 +239,7 @@ class PartnerController extends Zend_Controller_Action
 			}
 		}
 
-		// The KS is always the last item received in the multi-request
+		// The VS is always the last item received in the multi-request
 		if(!$userId)
 		{
 			$userId = $result[1]->adminUserId;
@@ -249,7 +249,7 @@ class PartnerController extends Zend_Controller_Action
 		$partnerId =  $result[0]->id;
 		
 		if($userId != Zend_Auth::getInstance()->getIdentity()->getUser()->id)
-			return $client->session->impersonate($adminSecret, $impersonatedPartnerId, $userId, Kaltura_Client_Enum_SessionType::ADMIN, $partnerId, null, "disableentitlement,enablechangeaccount:$impersonatedPartnerId");
+			return $client->session->impersonate($adminSecret, $impersonatedPartnerId, $userId, Vidiun_Client_Enum_SessionType::ADMIN, $partnerId, null, "disableentitlement,enablechangeaccount:$impersonatedPartnerId");
 		
 		return end($result);
 	}
@@ -263,29 +263,29 @@ class PartnerController extends Zend_Controller_Action
 		return  implode("/", $partnersId);
 	}
 
-	private function createKmcRedirectionUrl($ks, $partnerId)
+	private function createVmcRedirectionUrl($vs, $partnerId)
 	{
 		$settings = Zend_Registry::get('config')->settings;
-		if($settings->kmcUrl)
+		if($settings->vmcUrl)
 		{
-			$url = $settings->kmcUrl;
+			$url = $settings->vmcUrl;
 		}
 		else
 		{
 			$url = Infra_ClientHelper::getServiceUrl();
-			$url .= '/index.php/kmc/extlogin';
+			$url .= '/index.php/vmc/extlogin';
 		}
 
-		$url .= '?ks='.$ks.'&partner_id='.$partnerId;
+		$url .= '?vs='.$vs.'&partner_id='.$partnerId;
 		return $url;
 	}
 
-	private function createNewKmcRedirectionUrl($ks)
+	private function createNewVmcRedirectionUrl($vs)
 	{
 		$url = Infra_ClientHelper::getServiceUrl();
 		if(substr($url, -1) == '/')
 			$url = substr($url,0,-1);
-		$url .= '/index.php/kmcng/actions/login-by-ks/'.$ks;
+		$url .= '/index.php/vmcng/actions/login-by-vs/'.$vs;
 		return $url;
 	}
 
@@ -299,7 +299,7 @@ class PartnerController extends Zend_Controller_Action
 		$password = Infra_AuthHelper::getAuthInstance()->getIdentity()->getPassword();
 		$timezoneOffset = Infra_AuthHelper::getAuthInstance()->getIdentity()->getTimezoneOffset();
 		
-	    $adapter = new Kaltura_VarAuthAdapter();
+	    $adapter = new Vidiun_VarAuthAdapter();
 	    $adapter->setCredentials($email, $password);
 	    $adapter->setPartnerId($authorizedPartnerId);
 	    $adapter->setTimezoneOffset($timezoneOffset);
@@ -332,11 +332,11 @@ class PartnerController extends Zend_Controller_Action
 		
 		
 		// get results and paginate
-		//$systemPartnerPlugin = Kaltura_Client_SystemPartner_Plugin::get($client);
-		$filter = new Kaltura_Client_VarConsole_Type_VarConsolePartnerFilter();
+		//$systemPartnerPlugin = Vidiun_Client_SystemPartner_Plugin::get($client);
+		$filter = new Vidiun_Client_VarConsole_Type_VarConsolePartnerFilter();
 		if (isset($settings->requiredPermissions) && $settings->requiredPermissions)
 		    $filter->partnerPermissionsExist = $settings->requiredPermissions;
-		$filter->groupTypeIn = Kaltura_Client_Enum_PartnerGroupType::GROUP . "," . Kaltura_Client_Enum_PartnerGroupType::VAR_GROUP;
+		$filter->groupTypeIn = Vidiun_Client_Enum_PartnerGroupType::GROUP . "," . Vidiun_Client_Enum_PartnerGroupType::VAR_GROUP;
 		$paginatorAdapter = new Infra_FilterPaginator($client->partner, "listPartnersForUser", null, $filter);
 		$paginator = new Infra_Paginator($paginatorAdapter, $request);
 		if ($paginator->getItemsCount() == 1)
@@ -352,7 +352,7 @@ class PartnerController extends Zend_Controller_Action
 		$this->view->paginator = $paginator;
 	}
 	
-    public function kmcUsersAction()
+    public function vmcUsersAction()
 	{
 		$this->_helper->layout->disableLayout();
 		
@@ -364,10 +364,10 @@ class PartnerController extends Zend_Controller_Action
 		$page = $this->_getParam('page', 1);
 		$pageSize = $this->_getParam('pageSize', 10);
 		
-		$filter = new Kaltura_Client_Type_UserFilter();
+		$filter = new Vidiun_Client_Type_UserFilter();
 		$filter->isAdminEqual = true;
 		$filter->partnerIdEqual = $partnerId;
-		$filter->statusEqual = Kaltura_Client_Enum_UserStatus::ACTIVE;
+		$filter->statusEqual = Vidiun_Client_Enum_UserStatus::ACTIVE;
 		
 		$client = Infra_ClientHelper::getClient();
 		$paginatorAdapter = new Infra_FilterPaginator($client->user, "listAction", $partnerId, $filter);

@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model.data
  */
-class kValidateActiveEdgeCondition extends kCondition
+class vValidateActiveEdgeCondition extends vCondition
 {
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -38,16 +38,16 @@ class kValidateActiveEdgeCondition extends kCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
-		KalturaLog::debug("Validating edge server [{$this->getEdgeServerIds()}] are active");
+		VidiunLog::debug("Validating edge server [{$this->getEdgeServerIds()}] are active");
 		$edgeServers = ServerNodePeer::retrieveRegisteredServerNodesArrayByPKs($this->edgeServerIds);
 		
 		if(!count($edgeServers)) 
 		{
-			KalturaLog::debug("Unable to find active edge in list, condition is false");
+			VidiunLog::debug("Unable to find active edge in list, condition is false");
 			return false;
 		}
 		
@@ -58,7 +58,7 @@ class kValidateActiveEdgeCondition extends kCondition
 			if($edgeServer->validateEdgeTreeRegistered())
 			{
 				$isFulfilled = true;
-				KalturaLog::debug("Found active edge in list, condition is true");
+				VidiunLog::debug("Found active edge in list, condition is true");
 				break;
 				
 			}

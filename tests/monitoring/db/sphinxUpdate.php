@@ -1,6 +1,6 @@
 <?php
-require_once realpath(__DIR__ . '/../../') . '/lib/KalturaEnums.php';
-require_once realpath(__DIR__ . '/../') . '/KalturaMonitorResult.php';
+require_once realpath(__DIR__ . '/../../') . '/lib/VidiunEnums.php';
+require_once realpath(__DIR__ . '/../') . '/VidiunMonitorResult.php';
 
 $options = getopt('', array(
 	'debug',
@@ -25,7 +25,7 @@ $timeout = $options['timeout'];
 
 // start
 $start = microtime(true);
-$monitorResult = new KalturaMonitorResult();
+$monitorResult = new VidiunMonitorResult();
 
 $config = parse_ini_file(__DIR__ . '/../config.ini', true);
 try
@@ -43,9 +43,9 @@ try
 	$updatedEntryId = uniqid();
 	
 	// insert or update sphinx log
-	$replaceQuery = "replace into kaltura_entry (id, entry_id, str_entry_id) values(1, \'MONITOR_TEST\', \'$updatedEntryId\')";
+	$replaceQuery = "replace into vidiun_entry (id, entry_id, str_entry_id) values(1, \'MONITOR_TEST\', \'$updatedEntryId\')";
 	$insertLogQuery = "INSERT INTO sphinx_log (object_type, object_id, partner_id, dc, `sql`, created_at) VALUES ('test', '$updatedEntryId', -4, 0, '$replaceQuery', NOW())";
-	$selectQuery = "select str_entry_id from kaltura_entry where id = 1";
+	$selectQuery = "select str_entry_id from vidiun_entry where id = 1";
 
 	if(isset($options['debug']))
 	{
@@ -80,9 +80,9 @@ try
 	}
 	else
 	{
-		$error = new KalturaMonitorError();
+		$error = new VidiunMonitorError();
 		$error->description = "Sphinx not populated from log";
-		$error->level = KalturaMonitorError::CRIT;
+		$error->level = VidiunMonitorError::CRIT;
 		
 		$monitorResult->errors[] = $error;
 		$monitorResult->value = 0;
@@ -97,10 +97,10 @@ catch(PDOException $pdoe)
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $pdoe->getCode();
 	$error->description = $pdoe->getMessage();
-	$error->level = KalturaMonitorError::CRIT;
+	$error->level = VidiunMonitorError::CRIT;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = get_class($pdoe) . ": " . $pdoe->getMessage();
@@ -113,10 +113,10 @@ catch(Exception $e)
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $e->getCode();
 	$error->description = $e->getMessage();
-	$error->level = KalturaMonitorError::ERR;
+	$error->level = VidiunMonitorError::ERR;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = $e->getMessage();

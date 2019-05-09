@@ -3,7 +3,7 @@
  * Enable indexing and searching caption asset objects
  * @package plugins.captionSearch
  */
-class CaptionSearchPlugin extends KalturaPlugin implements IKalturaPending, IKalturaPermissions, IKalturaServices, IKalturaEventConsumers, IKalturaEnumerator, IKalturaObjectLoader, IKalturaSearchDataContributor, IKalturaElasticSearchDataContributor
+class CaptionSearchPlugin extends VidiunPlugin implements IVidiunPending, IVidiunPermissions, IVidiunServices, IVidiunEventConsumers, IVidiunEnumerator, IVidiunObjectLoader, IVidiunSearchDataContributor, IVidiunElasticSearchDataContributor
 {
 	const MAX_CAPTION_FILE_SIZE_FOR_INDEXING = 900000; // limit the size of text which can indexed, the mysql packet size is limited by default to 1M anyway
 	const PLUGIN_NAME = 'captionSearch';
@@ -11,7 +11,7 @@ class CaptionSearchPlugin extends KalturaPlugin implements IKalturaPending, IKal
 	const SEARCH_FIELD_DATA = 'data';
 	const SEARCH_TEXT_SUFFIX = 'csend';
 	
-	const CAPTION_SEARCH_FLOW_MANAGER_CLASS = 'kCaptionSearchFlowManager';
+	const CAPTION_SEARCH_FLOW_MANAGER_CLASS = 'vCaptionSearchFlowManager';
 	
 	public static function getPluginName()
 	{
@@ -19,17 +19,17 @@ class CaptionSearchPlugin extends KalturaPlugin implements IKalturaPending, IKal
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$captionDependency = new KalturaDependency(CaptionPlugin::getPluginName());
+		$captionDependency = new VidiunDependency(CaptionPlugin::getPluginName());
 		
 		return array($captionDependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -44,7 +44,7 @@ class CaptionSearchPlugin extends KalturaPlugin implements IKalturaPending, IKal
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{
@@ -55,7 +55,7 @@ class CaptionSearchPlugin extends KalturaPlugin implements IKalturaPending, IKal
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -65,7 +65,7 @@ class CaptionSearchPlugin extends KalturaPlugin implements IKalturaPending, IKal
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -79,35 +79,35 @@ class CaptionSearchPlugin extends KalturaPlugin implements IKalturaPending, IKal
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'kJobData' && $enumValue == self::getBatchJobTypeCoreValue(CaptionSearchBatchJobType::PARSE_CAPTION_ASSET))
-			return new kParseCaptionAssetJobData();
+		if($baseClass == 'vJobData' && $enumValue == self::getBatchJobTypeCoreValue(CaptionSearchBatchJobType::PARSE_CAPTION_ASSET))
+			return new vParseCaptionAssetJobData();
 	
-		if($baseClass == 'KalturaJobData' && $enumValue == self::getApiValue(CaptionSearchBatchJobType::PARSE_CAPTION_ASSET))
-			return new KalturaParseCaptionAssetJobData();
+		if($baseClass == 'VidiunJobData' && $enumValue == self::getApiValue(CaptionSearchBatchJobType::PARSE_CAPTION_ASSET))
+			return new VidiunParseCaptionAssetJobData();
 		
 		return null;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'kJobData' && $enumValue == self::getBatchJobTypeCoreValue(CaptionSearchBatchJobType::PARSE_CAPTION_ASSET))
-			return 'kParseCaptionAssetJobData';
+		if($baseClass == 'vJobData' && $enumValue == self::getBatchJobTypeCoreValue(CaptionSearchBatchJobType::PARSE_CAPTION_ASSET))
+			return 'vParseCaptionAssetJobData';
 	
-		if($baseClass == 'KalturaJobData' && $enumValue == self::getApiValue(CaptionSearchBatchJobType::PARSE_CAPTION_ASSET))
-			return 'KalturaParseCaptionAssetJobData';
+		if($baseClass == 'VidiunJobData' && $enumValue == self::getApiValue(CaptionSearchBatchJobType::PARSE_CAPTION_ASSET))
+			return 'VidiunParseCaptionAssetJobData';
 		
 		return null;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSearchDataContributor::getSearchData()
+	 * @see IVidiunSearchDataContributor::getSearchData()
 	 */
 	public static function getSearchData(BaseObject $object)
 	{
@@ -129,14 +129,14 @@ class CaptionSearchPlugin extends KalturaPlugin implements IKalturaPending, IKal
 			/* @var $captionAsset CaptionAsset */
 			
 			$syncKey = $captionAsset->getSyncKey(asset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			$content = kFileSyncUtils::file_get_contents($syncKey, true, false, self::MAX_CAPTION_FILE_SIZE_FOR_INDEXING);
+			$content = vFileSyncUtils::file_get_contents($syncKey, true, false, self::MAX_CAPTION_FILE_SIZE_FOR_INDEXING);
 			if(!$content)
 				continue;
 				
-	    	$captionsContentManager = kCaptionsContentManager::getCoreContentManager($captionAsset->getContainerFormat());
+	    	$captionsContentManager = vCaptionsContentManager::getCoreContentManager($captionAsset->getContainerFormat());
 	    	if(!$captionsContentManager)
 	    	{
-	    		KalturaLog::err("Captions content manager not found for format [" . $captionAsset->getContainerFormat() . "]");
+	    		VidiunLog::err("Captions content manager not found for format [" . $captionAsset->getContainerFormat() . "]");
 	    		continue;
 	    	}
 
@@ -160,8 +160,8 @@ class CaptionSearchPlugin extends KalturaPlugin implements IKalturaPending, IKal
 	 */
 	public static function getBatchJobTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BatchJobType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BatchJobType', $value);
 	}
 	
 	/**
@@ -169,7 +169,7 @@ class CaptionSearchPlugin extends KalturaPlugin implements IKalturaPending, IKal
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/**
@@ -210,14 +210,14 @@ class CaptionSearchPlugin extends KalturaPlugin implements IKalturaPending, IKal
 			/* @var $captionAsset CaptionAsset */
 
 			$syncKey = $captionAsset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-			$content = kFileSyncUtils::file_get_contents($syncKey, true, false, self::MAX_CAPTION_FILE_SIZE_FOR_INDEXING);
+			$content = vFileSyncUtils::file_get_contents($syncKey, true, false, self::MAX_CAPTION_FILE_SIZE_FOR_INDEXING);
 			if(!$content)
 				continue;
 
-			$captionsContentManager = kCaptionsContentManager::getCoreContentManager($captionAsset->getContainerFormat());
+			$captionsContentManager = vCaptionsContentManager::getCoreContentManager($captionAsset->getContainerFormat());
 			if(!$captionsContentManager)
 			{
-				KalturaLog::err("Captions content manager not found for format [" . $captionAsset->getContainerFormat() . "]");
+				VidiunLog::err("Captions content manager not found for format [" . $captionAsset->getContainerFormat() . "]");
 				continue;
 			}
 
@@ -253,10 +253,10 @@ class CaptionSearchPlugin extends KalturaPlugin implements IKalturaPending, IKal
 			foreach ($item['content'] as $curChunk)
 				$content .= $curChunk['text'];
 
-			$content = kString::stripUtf8InvalidChars($content);
-			$content = kXml::stripXMLInvalidChars($content);
-			if(strlen($content) > kElasticSearchManager::MAX_LENGTH)
-				$content = substr($content, 0, kElasticSearchManager::MAX_LENGTH);
+			$content = vString::stripUtf8InvalidChars($content);
+			$content = vXml::stripXMLInvalidChars($content);
+			if(strlen($content) > vElasticSearchManager::MAX_LENGTH)
+				$content = substr($content, 0, vElasticSearchManager::MAX_LENGTH);
 			$line['content'] = $content;
 
 			$analyzedFieldName = elasticSearchUtils::getAnalyzedFieldName($language, 'content' ,elasticSearchUtils::UNDERSCORE_FIELD_DELIMITER);

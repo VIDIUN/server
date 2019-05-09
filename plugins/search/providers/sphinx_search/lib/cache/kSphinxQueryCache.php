@@ -4,7 +4,7 @@
  * @subpackage cache
  */
 
-class kSphinxQueryCache extends kQueryCache
+class vSphinxQueryCache extends vQueryCache
 {
 	const MIN_CONDITIONAL_EXPIRY_INVALIDATION_WAIT = 30;	// min expiry time of conditional sphinx queries due to expected
 															// sphinx server update which will provide real sphinx conditional cache
@@ -22,7 +22,7 @@ class kSphinxQueryCache extends kQueryCache
 	{
 		self::$reduceConditionalExpiry = 0;
 		
-		if (!kConf::get("sphinx_query_cache_enabled"))
+		if (!vConf::get("sphinx_query_cache_enabled"))
 		{
 			return null;
 		}
@@ -35,7 +35,7 @@ class kSphinxQueryCache extends kQueryCache
 		if (!$invalidationKeys)
 			return null;
 
-		//KalturaLog::log("sphinx invalidationKeys ".print_r($invalidationKeys, true));
+		//VidiunLog::log("sphinx invalidationKeys ".print_r($invalidationKeys, true));
 
 		self::initGlobalMemcache();
 		if (self::$s_memcacheQueries === null)                  // we must have both memcaches initialized
@@ -55,11 +55,11 @@ class kSphinxQueryCache extends kQueryCache
 
 		$queryStart = microtime(true);
 		$cacheResult = self::$s_memcacheKeys->multiGet($keysToGet);
-		KalturaLog::debug("kQueryCache: keys query took " . (microtime(true) - $queryStart) . " seconds");
+		VidiunLog::debug("vQueryCache: keys query took " . (microtime(true) - $queryStart) . " seconds");
 
 		if ($cacheResult === false)
 		{
-			KalturaLog::log("kQueryCache: failed to query keys memcache, not using query cache");
+			VidiunLog::log("vQueryCache: failed to query keys memcache, not using query cache");
 			return null;
 		}
 
@@ -68,7 +68,7 @@ class kSphinxQueryCache extends kQueryCache
 		if (array_key_exists(self::DONT_CACHE_KEY, $cacheResult) && 
 			$cacheResult[self::DONT_CACHE_KEY])
 		{
-			KalturaLog::log("kQueryCache: dontCache key is set -> not caching the result");
+			VidiunLog::log("vQueryCache: dontCache key is set -> not caching the result");
 			$cacheQuery = false;
 		}
 		unset($cacheResult[self::DONT_CACHE_KEY]);
@@ -104,17 +104,17 @@ class kSphinxQueryCache extends kQueryCache
 		$cacheKey = self::CACHE_PREFIX_QUERY . md5(serialize($criteria) . self::CACHE_VERSION);
 		if ($cacheKey)
 		{
-			kApiCache::addInvalidationKeys($invalidationKeys, $maxInvalidationTime);
+			vApiCache::addInvalidationKeys($invalidationKeys, $maxInvalidationTime);
 		}
 
 		// check whether we have a valid cached query
 		$queryStart = microtime(true);
 		$queryResult = self::$s_memcacheQueries->get($cacheKey);
-		KalturaLog::debug("kQueryCache: query took " . (microtime(true) - $queryStart) . " seconds");
+		VidiunLog::debug("vQueryCache: query took " . (microtime(true) - $queryStart) . " seconds");
 
 		if (!$queryResult)
 		{
-			KalturaLog::debug("kQueryCache: cache miss, peer=$objectClass, key=$cacheKey");
+			VidiunLog::debug("vQueryCache: cache miss, peer=$objectClass, key=$cacheKey");
 			return null;
 		}
 
@@ -123,7 +123,7 @@ class kSphinxQueryCache extends kQueryCache
 		if (!is_null($maxInvalidationTime) &&
 			$queryTime < $maxInvalidationTime + self::CLOCK_SYNC_TIME_MARGIN_SEC)
 		{
-			KalturaLog::debug("kQueryCache: cached query invalid, peer=$objectClass, key=$cacheKey, invkey=$maxInvalidationKey querytime=$queryTime debugInfo=$debugInfo invtime=$maxInvalidationTime");
+			VidiunLog::debug("vQueryCache: cached query invalid, peer=$objectClass, key=$cacheKey, invkey=$maxInvalidationKey querytime=$queryTime debugInfo=$debugInfo invtime=$maxInvalidationTime");
 			return null;
 		}
 		
@@ -135,7 +135,7 @@ class kSphinxQueryCache extends kQueryCache
 		}
 		$existingInvKeys = implode(',', $existingInvKeys);
 
-		KalturaLog::debug("kQueryCache: returning from memcache, peer=$objectClass, key=$cacheKey queryTime=$queryTime debugInfo=$debugInfo invkeys=[$existingInvKeys]");
+		VidiunLog::debug("vQueryCache: returning from memcache, peer=$objectClass, key=$cacheKey queryTime=$queryTime debugInfo=$debugInfo invkeys=[$existingInvKeys]");
 		return $queryResult;
 	}
 
@@ -146,15 +146,15 @@ class kSphinxQueryCache extends kQueryCache
 		if (!$cached && count($sqlConditions))
 		{
 			foreach($sqlConditions as $sqlCondition)
-				call_user_func_array("kApiCache::addSqlQueryCondition", $sqlCondition);
+				call_user_func_array("vApiCache::addSqlQueryCondition", $sqlCondition);
 
 			// if invalidation keys exists but the query couldn't be cached yet, shortne the expiry
 			// in hope to have full api caching in one of the next calls
 			if (self::$reduceConditionalExpiry)
 			{
 				$finalExpiry = max(self::$reduceConditionalExpiry, self::MIN_CONDITIONAL_EXPIRY_INVALIDATION_WAIT);
-				KalturaLog::debug("kQueryCache: setConditionalCacheExpiry targetExpiry=".self::$reduceConditionalExpiry." finalExpiry=$finalExpiry");
-				kApiCache::setConditionalCacheExpiry($finalExpiry);
+				VidiunLog::debug("vQueryCache: setConditionalCacheExpiry targetExpiry=".self::$reduceConditionalExpiry." finalExpiry=$finalExpiry");
+				vApiCache::setConditionalCacheExpiry($finalExpiry);
 			}
 		}
 	}
@@ -177,7 +177,7 @@ class kSphinxQueryCache extends kQueryCache
 			// in case of sphinx conditional queries, shorten the cache expiry till the sphinx server will reach the required invalidation update time
 			self::$reduceConditionalExpiry = self::$maxInvalidationTime - $queryTime;
 			$currentTime = time();
-			KalturaLog::debug("kQueryCache: using an out of date sphinx  -> not caching the result, peer=$objectClass, invkey=".self::$maxInvalidationKey." querytime=$currentTime invtime=".self::$maxInvalidationTime." sphinxLag=$queryTime");
+			VidiunLog::debug("vQueryCache: using an out of date sphinx  -> not caching the result, peer=$objectClass, invkey=".self::$maxInvalidationKey." querytime=$currentTime invtime=".self::$maxInvalidationTime." sphinxLag=$queryTime");
 			return false;
 		}
 		
@@ -185,7 +185,7 @@ class kSphinxQueryCache extends kQueryCache
 		$debugInfo = (isset($_SERVER["HOSTNAME"]) ? $_SERVER["HOSTNAME"] : '');
 		$debugInfo .= "[$uniqueId]";
 
-		KalturaLog::debug("kQueryCache: Updating memcache, key=$cacheKey queryTime=$queryTime");
+		VidiunLog::debug("vQueryCache: Updating memcache, key=$cacheKey queryTime=$queryTime");
 		self::$s_memcacheQueries->set($cacheKey, array($queryResult, $queryTime, $debugInfo), self::CACHED_QUERIES_EXPIRY_SEC);
 		
 		return true;
@@ -193,7 +193,7 @@ class kSphinxQueryCache extends kQueryCache
 
 	public static function invalidateQueryCache($object)
 	{
-		if (!kConf::get("sphinx_query_cache_invalidate_on_change"))
+		if (!vConf::get("sphinx_query_cache_invalidate_on_change"))
 		{
 			return;
 		}
@@ -215,11 +215,11 @@ class kSphinxQueryCache extends kQueryCache
 		foreach ($invalidationKeys as $invalidationKey)
 		{
 			$invalidationKey = self::CACHE_PREFIX_INVALIDATION_KEY . str_replace(' ', '_', $invalidationKey);
-			KalturaLog::debug("kQueryCache: updating invalidation key, invkey=$invalidationKey");
+			VidiunLog::debug("vQueryCache: updating invalidation key, invkey=$invalidationKey");
 			if (!self::$s_memcacheKeys->set($invalidationKey, $currentTime, 
 				self::CACHED_QUERIES_EXPIRY_SEC + self::INVALIDATION_KEYS_EXPIRY_MARGIN))
 			{
-				KalturaLog::err("kQueryCache: failed to update invalidation key");
+				VidiunLog::err("vQueryCache: failed to update invalidation key");
 			}
 		}
 	}

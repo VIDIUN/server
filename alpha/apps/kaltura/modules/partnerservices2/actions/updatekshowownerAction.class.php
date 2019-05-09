@@ -3,27 +3,27 @@
  * @package api
  * @subpackage ps2
  */
-class updatekshowownerAction extends defPartnerservices2Action
+class updatevshowownerAction extends defPartnerservices2Action
 {
 	public function describe()
 	{
 		return 
 			array (
-				"display_name" => "updateKshowOwner",
+				"display_name" => "updateVshowOwner",
 				"desc" => "" ,
 				"in" => array (
 					"mandatory" => array ( 
-						"kshow_id" => array ("type" => "string", "desc" => "")
+						"vshow_id" => array ("type" => "string", "desc" => "")
 						),
 					"optional" => array (
 						"detailed" => array ("type" => "boolean", "desc" => "")
 						)
 					),
 				"out" => array (
-					"kshow" => array ("type" => "kshow", "desc" => "")
+					"vshow" => array ("type" => "vshow", "desc" => "")
 					),
 				"errors" => array (
-					APIErrors::INVALID_KSHOW_ID,
+					APIErrors::INVALID_VSHOW_ID,
 					APIErrors::INVALID_USER_ID,
 				)
 			); 
@@ -34,11 +34,11 @@ class updatekshowownerAction extends defPartnerservices2Action
 		return self::REQUIED_TICKET_ADMIN;
 	}
 
-	// check to see if already exists in the system = ask to fetch the puser & the kuser
-	// don't ask for  KUSER_DATA_KUSER_DATA - because then we won't tell the difference between a missing kuser and a missing puser_kuser
-	public function needKuserFromPuser ( )
+	// check to see if already exists in the system = ask to fetch the puser & the vuser
+	// don't ask for  VUSER_DATA_VUSER_DATA - because then we won't tell the difference between a missing vuser and a missing puser_vuser
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_KUSER_ID_ONLY;
+		return self::VUSER_DATA_VUSER_ID_ONLY;
 	}
 
 	protected function addUserOnDemand ( )
@@ -46,42 +46,42 @@ class updatekshowownerAction extends defPartnerservices2Action
 		return self::CREATE_USER_FROM_PARTNER_SETTINGS;
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		$kshow_id = $this->getPM ( "kshow_id" );
+		$vshow_id = $this->getPM ( "vshow_id" );
 		$target_puser_id = $this->getPM ( "user_id" );
 		$detailed = $this->getP ( "detailed" , false );
-		$kshow_indexedCustomData3 = $this->getP ( "indexedCustomData3" );
-		$kshow = null;
-		if ( $kshow_id )
+		$vshow_indexedCustomData3 = $this->getP ( "indexedCustomData3" );
+		$vshow = null;
+		if ( $vshow_id )
 		{
-			$kshow = kshowPeer::retrieveByPK( $kshow_id );
+			$vshow = vshowPeer::retrieveByPK( $vshow_id );
 		}
-		elseif ( $kshow_indexedCustomData3 )
+		elseif ( $vshow_indexedCustomData3 )
 		{
-			$kshow = kshowPeer::retrieveByIndexedCustomData3( $kshow_indexedCustomData3 );
+			$vshow = vshowPeer::retrieveByIndexedCustomData3( $vshow_indexedCustomData3 );
 		}
 
-		if ( ! $kshow )
+		if ( ! $vshow )
 		{
-			$this->addError ( APIErrors::INVALID_KSHOW_ID , $kshow_id );
+			$this->addError ( APIErrors::INVALID_VSHOW_ID , $vshow_id );
 		}
 		else
 		{
-			$new_puser_kuser = PuserKuserPeer::retrieveByPartnerAndUid( $partner_id , null , $target_puser_id );
-			if ( ! $new_puser_kuser )
+			$new_puser_vuser = PuserVuserPeer::retrieveByPartnerAndUid( $partner_id , null , $target_puser_id );
+			if ( ! $new_puser_vuser )
 			{
 				$this->addError ( APIErrors::INVALID_USER_ID , $target_puser_id );
 				return;
 			}
- 			$kshow->setProducerId ( $new_puser_kuser->getKuserId() );
- 			$kshow->save();
+ 			$vshow->setProducerId ( $new_puser_vuser->getVuserId() );
+ 			$vshow->save();
 
  			$level = ( $detailed ? objectWrapperBase::DETAIL_LEVEL_DETAILED : objectWrapperBase::DETAIL_LEVEL_REGULAR );
-			$wrapper = objectWrapperBase::getWrapperClass( $kshow , $level );
+			$wrapper = objectWrapperBase::getWrapperClass( $vshow , $level );
 			// TODO - remove this code when cache works properly when saving objects (in their save method)
-			$wrapper->removeFromCache( "kshow" , $kshow->getId() );
-			$this->addMsg ( "kshow" , $wrapper ) ;
+			$wrapper->removeFromCache( "vshow" , $vshow->getId() );
+			$this->addMsg ( "vshow" , $wrapper ) ;
 		}
 	}
 }

@@ -3,7 +3,7 @@
  * @package plugins.audit
  * @subpackage api.objects
  */
-class KalturaAuditTrailFileSyncCreateInfo extends KalturaAuditTrailInfo
+class VidiunAuditTrailFileSyncCreateInfo extends VidiunAuditTrailInfo
 {
 	/**
 	 * @var string
@@ -26,7 +26,7 @@ class KalturaAuditTrailFileSyncCreateInfo extends KalturaAuditTrailInfo
 	public $original;
 
 	/**
-	 * @var KalturaAuditTrailFileSyncType
+	 * @var VidiunAuditTrailFileSyncType
 	 */
 	public $fileType;
 
@@ -46,14 +46,14 @@ class KalturaAuditTrailFileSyncCreateInfo extends KalturaAuditTrailInfo
 	}
 	
 	/**
-	 * @param kAuditTrailFileSyncCreateInfo $dbAuditTrail
+	 * @param vAuditTrailFileSyncCreateInfo $dbAuditTrail
 	 * @param array $propsToSkip
-	 * @return kAuditTrailInfo
+	 * @return vAuditTrailInfo
 	 */
 	public function toObject($auditTrailInfo = null, $propsToSkip = array())
 	{
 		if(is_null($auditTrailInfo))
-			$auditTrailInfo = new kAuditTrailFileSyncCreateInfo();
+			$auditTrailInfo = new vAuditTrailFileSyncCreateInfo();
 			
 		return parent::toObject($auditTrailInfo, $propsToSkip);
 	}

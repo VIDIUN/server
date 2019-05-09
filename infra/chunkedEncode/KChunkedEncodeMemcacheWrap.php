@@ -8,9 +8,9 @@ ini_set("memory_limit","512M");
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/****************************
-	 * KChunkedEncodeMemcacheWrap
+	 * VChunkedEncodeMemcacheWrap
 	 */
-	class KChunkedEncodeMemcacheWrap implements KChunkedEncodeDistrExecInterface
+	class VChunkedEncodeMemcacheWrap implements VChunkedEncodeDistrExecInterface
 	{
 		const WRITE_IDX = "ChunkedEncodeWriteIdx";
 		const READ_IDX  = "ChunkedEncodeReadIdx";
@@ -40,9 +40,9 @@ ini_set("memory_limit","512M");
 		 */
 		public function Setup($config)
 		{
-			$this->cacheStore = new kInfraMemcacheCacheWrapper();
+			$this->cacheStore = new vInfraMemcacheCacheWrapper();
 			if($this->cacheStore->init($config)===false){
-				KalturaLog::log("cacheStore failed to initialize with config:".serialize($config));
+				VidiunLog::log("cacheStore failed to initialize with config:".serialize($config));
 				false;
 			}
 			$this->memcacheConfig = $config;
@@ -55,13 +55,13 @@ ini_set("memory_limit","512M");
 		public function SetupWithCacheType($cacheType)
 		{
 			if(!isset($cacheType))
-				$cacheType = kCacheManager::CACHE_TYPE_LIVE_MEDIA_SERVER . '_0';
+				$cacheType = vCacheManager::CACHE_TYPE_LIVE_MEDIA_SERVER . '_0';
 				/*
 				 * Create the memcacah store object
 				 */
-			$this->cacheStore = kCacheManager::getSingleLayerCache($cacheType);
+			$this->cacheStore = vCacheManager::getSingleLayerCache($cacheType);
 			if(!$this->cacheStore) {
-				KalturaLog::log("cacheStore is null. cacheType: $cacheType . returning false");
+				VidiunLog::log("cacheStore is null. cacheType: $cacheType . returning false");
 				return false;
 			}
 			
@@ -77,12 +77,12 @@ ini_set("memory_limit","512M");
 			$key = $this->getJobKeyName($job->keyIdx);
 			$str = serialize($job);
 			if($this->set($key, $str, $this->expiry)===false){
-				KalturaLog::log("Session($job->session) - Failed to set job $key($str)");
+				VidiunLog::log("Session($job->session) - Failed to set job $key($str)");
 				return false;
 			}
 				// Just to remove non printables from the log msg
 			$str = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $str);
-			KalturaLog::log("Session($job->session) - Set job $key($str)");
+			VidiunLog::log("Session($job->session) - Set job $key($str)");
 			return true;
 		}
 		 
@@ -111,10 +111,10 @@ ini_set("memory_limit","512M");
 					break;
 				}
 				sleep(0.3);
-				KalturaLog::log("Attempt($try) to fetch job ($keyIdx)");
+				VidiunLog::log("Attempt($try) to fetch job ($keyIdx)");
 			}
 			if($try==$maxTries){
-				KalturaLog::log("Job($keyIdx) - Failed to get job ($keyIdx)");
+				VidiunLog::log("Job($keyIdx) - Failed to get job ($keyIdx)");
 				return false;
 			}
 			$job = unserialize($jobStr);
@@ -128,7 +128,7 @@ ini_set("memory_limit","512M");
 		{
 			$key = $this->getJobKeyName($keyIdx);
 			$this->delete($key);
-			KalturaLog::log("Job($keyIdx) - Deleted");
+			VidiunLog::log("Job($keyIdx) - Deleted");
 			return true;
 		}
 		
@@ -139,7 +139,7 @@ ini_set("memory_limit","512M");
 		public function GetActiveSessions()
 		{
 			if($this->fetchReadWriteIndexes($writeIndex, $readIndex)===false){
-				KalturaLog::log("ERROR: Missing write or read index ");
+				VidiunLog::log("ERROR: Missing write or read index ");
 				return false;
 			}
 				/*
@@ -148,7 +148,7 @@ ini_set("memory_limit","512M");
 			if($readIndex>=$writeIndex+1) 
 				return array();;
 
-			KalturaLog::log("RD:$readIndex, WR:$writeIndex");
+			VidiunLog::log("RD:$readIndex, WR:$writeIndex");
 			$sessions = array();
 			for($idx=$readIndex; $idx<$writeIndex; $idx++){
 				$job = $this->FetchJob($idx);
@@ -177,23 +177,23 @@ ini_set("memory_limit","512M");
 			if(!isset($writeIndex)){
 				$writeIndex = 0;
 				if($this->set($writeIndexKeyName,$writeIndex,0)===false) {
-					KalturaLog::log("Failed to create WR index ($writeIndexKeyName)");
+					VidiunLog::log("Failed to create WR index ($writeIndexKeyName)");
 					return false;
 				}
 			}
 			$this->writeIndex = $writeIndex;
-			KalturaLog::log("Current WR index value ($writeIndexKeyName:$writeIndex)");
+			VidiunLog::log("Current WR index value ($writeIndexKeyName:$writeIndex)");
 			
 			$readIndexKeyName = $this->getReadIndexKeyName();
 			if(!isset($readIndex)){
 				$readIndex = 1;
 				if($this->set($readIndexKeyName,$readIndex,0)===false) {
-					KalturaLog::log("Failed to create RD index ($readIndexKeyName)");
+					VidiunLog::log("Failed to create RD index ($readIndexKeyName)");
 					return false;
 				}
 			}
 			$this->readIndex = $readIndex;
-			KalturaLog::log("Current RD index value ($readIndexKeyName:$readIndex)");
+			VidiunLog::log("Current RD index value ($readIndexKeyName:$readIndex)");
 			return true;
 		}
 		
@@ -213,19 +213,19 @@ ini_set("memory_limit","512M");
 		{
 			$writeIndexKeyName = $this->getWriteIndexKeyName();
 			if(($writeIndex=$this->get($writeIndexKeyName))===false){
-				KalturaLog::log("Missing WR index ($writeIndexKeyName)");
+				VidiunLog::log("Missing WR index ($writeIndexKeyName)");
 				$writeIndex = null;
 			}
 			else
-				KalturaLog::log("Current WR index value ($writeIndexKeyName:$writeIndex)");
+				VidiunLog::log("Current WR index value ($writeIndexKeyName:$writeIndex)");
 
 			$readIndexKeyName = $this->getReadIndexKeyName();		
 			if(($readIndex=$this->get($readIndexKeyName))===false){
-				KalturaLog::log("Missing RD index ($readIndexKeyName)");
+				VidiunLog::log("Missing RD index ($readIndexKeyName)");
 				$readIndex = null;
 			}
 			else
-				KalturaLog::log("Current RD index value ($readIndexKeyName: $readIndex)");
+				VidiunLog::log("Current RD index value ($readIndexKeyName: $readIndex)");
 			if(isset($readIndex) && isset($writeIndex))
 				return true;
 			else
@@ -286,7 +286,7 @@ ini_set("memory_limit","512M");
 		protected function lock($key, $val, $attempDuration=60, $attemptSleep=0.005, $expiry=3600) // expiry = 1hr
 		{
 			$waited=0;
-	KalturaLog::log("key($key), val($val)");
+	VidiunLog::log("key($key), val($val)");
 			do {
 				$addLasted = microtime(true);
 				$rv = $this->cacheStore->add($key, $val, $expiry);
@@ -299,14 +299,14 @@ ini_set("memory_limit","512M");
 				$sleepLasted = round((microtime(true)-$sleepLasted),5);
 				$waited+=($addLasted+$sleepLasted);
 				$attempDuration-= ($addLasted+$sleepLasted);
-	KalturaLog::log("attempDuration($attempDuration)");
+	VidiunLog::log("attempDuration($attempDuration)");
 			}
 			while($attempDuration>0);
 			if($waited>0){
-	KalturaLog::log("EXIT:key($key),val($val): rv($rv),waited($waited)");
+	VidiunLog::log("EXIT:key($key),val($val): rv($rv),waited($waited)");
 			}
 			else {
-	KalturaLog::log("EXIT:key($key),val($val): rv($rv)");
+	VidiunLog::log("EXIT:key($key),val($val): rv($rv)");
 			}
 			return $rv;
 		}
@@ -369,18 +369,18 @@ ini_set("memory_limit","512M");
 		 */
 		public static function ExecuteSession($host, $port, $token, $concurrent, $sessionName, $cmdLine)
 		{
-			KalturaLog::log("host:$host, port:$port, token:$token, concurrent:$concurrent, sessionName:$sessionName, cmdLine:$cmdLine");
-			$storeManager = new KChunkedEncodeMemcacheWrap($token);
+			VidiunLog::log("host:$host, port:$port, token:$token, concurrent:$concurrent, sessionName:$sessionName, cmdLine:$cmdLine");
+			$storeManager = new VChunkedEncodeMemcacheWrap($token);
 				// 'flags=1' stands for 'compress stored data'
 			$config = array('host'=>$host, 'port'=>$port, 'flags'=>1);
 			$storeManager->Setup($config);
 			
-			$setup = new KChunkedEncodeSetup;
+			$setup = new VChunkedEncodeSetup;
 			$setup->concurrent = $concurrent;
 			$setup->cleanUp = 0;
 			$setup->cmd = $cmdLine;
 			
-			$session = new KChunkedEncodeSessionManager($setup, $storeManager, $sessionName);
+			$session = new VChunkedEncodeSessionManager($setup, $storeManager, $sessionName);
 			
 			if(($rv=$session->Initialize())!=true) {
 				$session->Report();
@@ -393,13 +393,13 @@ ini_set("memory_limit","512M");
 
 	}
 	/*****************************
-	 * End of KChunkedEncodeMemcacheWrap
+	 * End of VChunkedEncodeMemcacheWrap
 	 *****************************/
 	
 	/****************************
-	 * KChunkedEncodeMemcacheScheduler
+	 * VChunkedEncodeMemcacheScheduler
 	 */
-	class KChunkedEncodeMemcacheScheduler extends KChunkedEncodeMemcacheWrap implements KChunkedEncodeDistrSchedInterface
+	class VChunkedEncodeMemcacheScheduler extends VChunkedEncodeMemcacheWrap implements VChunkedEncodeDistrSchedInterface
 	{
 		protected $tmpFolder = null;
 		
@@ -426,7 +426,7 @@ ini_set("memory_limit","512M");
 			$semaphoreToken = getmypid().".".gethostname().".".rand();
 			while(true) {
 				if($this->fetchReadWriteIndexes($writeIndex, $readIndex)===false){
-					KalturaLog::log("ERROR: Missing write or read index ");
+					VidiunLog::log("ERROR: Missing write or read index ");
 					return false;
 				}
 					/*
@@ -435,7 +435,7 @@ ini_set("memory_limit","512M");
 				if($readIndex>=$writeIndex+1) 
 					break;
 
-				KalturaLog::log("RD:$readIndex), WR:$writeIndex");
+				VidiunLog::log("RD:$readIndex), WR:$writeIndex");
 
 					/*
 					 * Try to lock the next unread job object
@@ -446,7 +446,7 @@ ini_set("memory_limit","512M");
 				if($rv!==true){
 					if($this->setReadIndex($readIndex+1)===false)
 						return false;
-					KalturaLog::log("Unable to lock readIndex($readIndex), skipping to the next ");
+					VidiunLog::log("Unable to lock readIndex($readIndex), skipping to the next ");
 					continue;
 				}
 				
@@ -460,7 +460,7 @@ ini_set("memory_limit","512M");
 				}
 				else {
 					$this->delete($semaphoreKey);
-					KalturaLog::log("Unable to access job ($readIndex), skip to next");
+					VidiunLog::log("Unable to access job ($readIndex), skip to next");
 					if($this->setReadIndex($readIndex+1)===false)
 						return false;
 				}
@@ -486,7 +486,7 @@ ini_set("memory_limit","512M");
 				 * If there are no free execution slots - wait and retry
 				 */
 			if($running>=$maxSlots) {
-				KalturaLog::log("Running:$running - No free job slots, maxSlots:$maxSlots");
+				VidiunLog::log("Running:$running - No free job slots, maxSlots:$maxSlots");
 				return null;
 			}
 
@@ -495,11 +495,11 @@ ini_set("memory_limit","512M");
 				 */
 			$job = $this->FetchNextJob();
 			if($job===null){
-				KalturaLog::log("Running:$running - No pending jobs");
+				VidiunLog::log("Running:$running - No pending jobs");
 				return null;
 			}
 			else if($job===false){
-				KalturaLog::log("Failed to fetch next job");
+				VidiunLog::log("Failed to fetch next job");
 				return false;
 			}
 
@@ -520,7 +520,7 @@ ini_set("memory_limit","512M");
 			foreach($jobs as $idx=>$job) {
 				$job = $this->FetchJob($job->keyIdx);
 				if($job===false) {
-					KalturaLog::log("Missing $idx");
+					VidiunLog::log("Missing $idx");
 					continue;
 				}
 				if($job->isFinished() || $job->isRetry()) {
@@ -552,24 +552,24 @@ ini_set("memory_limit","512M");
 			$logName.= "/$job->session"."_$job->id"."_$job->keyIdx".".log";
 			{
 				$cmdLine = 'php -r "';
-				$cmdLine.= 'require_once \'/opt/kaltura/app/batch/bootstrap.php\';';
+				$cmdLine.= 'require_once \'/opt/vidiun/app/batch/bootstrap.php\';';
 				/********************************************************
 				 * The bellow includes to be removed for production
 				 ********************************************************
 				 
 				{
-					$cmdLine.= 'require_once \'/opt/kaltura/app/alpha/scripts/bootstrap.php\';';
-					$cmdLine.= 'require_once \'/opt/kaltura/app/batch/client/KalturaTypes.php\';';
-					$dirName = "/opt/kaltura/app/infra/chunkedEncode";
-					$cmdLine.= 'require_once \''.$dirName.'/KChunkedEncodeUtils.php\';';
-					$cmdLine.= 'require_once \''.$dirName.'/KChunkedEncode.php\';';
-					$cmdLine.= 'require_once \''.$dirName.'/KBaseChunkedEncodeSessionManager.php\';';
-					$cmdLine.= 'require_once \''.$dirName.'/KChunkedEncodeSessionManager.php\';';
-					$cmdLine.= 'require_once \''.$dirName.'/KChunkedEncodeDistrExecInterface.php\';';
-					$cmdLine.= 'require_once \''.$dirName.'/KChunkedEncodeMemcacheWrap.php\';';
+					$cmdLine.= 'require_once \'/opt/vidiun/app/alpha/scripts/bootstrap.php\';';
+					$cmdLine.= 'require_once \'/opt/vidiun/app/batch/client/VidiunTypes.php\';';
+					$dirName = "/opt/vidiun/app/infra/chunkedEncode";
+					$cmdLine.= 'require_once \''.$dirName.'/VChunkedEncodeUtils.php\';';
+					$cmdLine.= 'require_once \''.$dirName.'/VChunkedEncode.php\';';
+					$cmdLine.= 'require_once \''.$dirName.'/VBaseChunkedEncodeSessionManager.php\';';
+					$cmdLine.= 'require_once \''.$dirName.'/VChunkedEncodeSessionManager.php\';';
+					$cmdLine.= 'require_once \''.$dirName.'/VChunkedEncodeDistrExecInterface.php\';';
+					$cmdLine.= 'require_once \''.$dirName.'/VChunkedEncodeMemcacheWrap.php\';';
 				}
 				*/
-				$cmdLine.= '\$rv=KChunkedEncodeMemcacheScheduler::ExecuteJobCommand(';
+				$cmdLine.= '\$rv=VChunkedEncodeMemcacheScheduler::ExecuteJobCommand(';
 				$cmdLine.= '\''.($this->memcacheConfig['host']).'\',';
 				$cmdLine.= '\''.($this->memcacheConfig['port']).'\',';
 				$cmdLine.= '\''.($this->storeToken).'\',';
@@ -580,7 +580,7 @@ ini_set("memory_limit","512M");
 			$tmp_ce_process_file = $this->tmpFolder."/tmp_ce_".$job->session."_".$job->keyIdx.".log";
 			$cmdLine.= " > $logName 2>&1 & echo $! > $tmp_ce_process_file";
 
-			KalturaLog::log($cmdLine);
+			VidiunLog::log($cmdLine);
 			$output = system($cmdLine, $rv);
 			if($rv!=0) {
 				$job->state = $job::STATE_FAIL;
@@ -590,7 +590,7 @@ ini_set("memory_limit","512M");
 				$job->process = (int)file_get_contents($tmp_ce_process_file);
 				unlink($tmp_ce_process_file);
 			}
-			KalturaLog::log("id:$job->id,keyIdx:$job->keyIdx,rv:$rv,process:$job->process,cmdLine:$cmdLine");
+			VidiunLog::log("id:$job->id,keyIdx:$job->keyIdx,rv:$rv,process:$job->process,cmdLine:$cmdLine");
 			return true;
 		}
 		
@@ -599,8 +599,8 @@ ini_set("memory_limit","512M");
 		 */
 		public static function ExecuteJobCommand($host, $port, $token, $jobIndex)
 		{
-			KalturaLog::log("host:$host, port:$port, token:$token, jobIndex:$jobIndex");
-			$storeManager = new KChunkedEncodeMemcacheWrap($token);
+			VidiunLog::log("host:$host, port:$port, token:$token, jobIndex:$jobIndex");
+			$storeManager = new VChunkedEncodeMemcacheWrap($token);
 				// 'flags=1' stands for 'compress stored data'			
 			$config = array('host'=>$host, 'port'=>$port, 'flags'=>1);
 			$storeManager->Setup($config);
@@ -636,7 +636,7 @@ ini_set("memory_limit","512M");
 			}
 			else {
 				if(isset($outFilename)) {
-					$stat = new KChunkFramesStat($outFilename/*,ffmpegBin,ffprobeBin*/);
+					$stat = new VChunkFramesStat($outFilename/*,ffmpegBin,ffprobeBin*/);
 					$job->stat = $stat;
 				}
 
@@ -644,7 +644,7 @@ ini_set("memory_limit","512M");
 				$storeManager->SaveJob($job);
 				$rvStr = "SUCCESS -";
 			}
-			KalturaLog::log("$rvStr elap(".($job->finishTime-$job->startTime)."),process($job->process),".print_r($job,1));
+			VidiunLog::log("$rvStr elap(".($job->finishTime-$job->startTime)."),process($job->process),".print_r($job,1));
 			return ($rv==0? true: false);
 		}
 
@@ -659,7 +659,7 @@ ini_set("memory_limit","512M");
 				if($rv!==false){
 					return $rv;
 				}
-				KalturaLog::log("Attempt($try) to set RD($readIndex)");
+				VidiunLog::log("Attempt($try) to set RD($readIndex)");
 				sleep(0.3);
 			}
 			return false;
@@ -667,6 +667,6 @@ ini_set("memory_limit","512M");
 
 	}
 	/*****************************
-	 * End of KChunkedEncodeMemcacheScheduler
+	 * End of VChunkedEncodeMemcacheScheduler
 	 *****************************/
 

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaContainerFormat extends KalturaStringEnum
+class VidiunContainerFormat extends VidiunStringEnum
 {
 	const FLV = "flv";
 	const MP4 = "mp4";

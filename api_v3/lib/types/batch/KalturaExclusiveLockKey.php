@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaExclusiveLockKey extends KalturaObject
+class VidiunExclusiveLockKey extends VidiunObject
 {
 	/**
 	 * @var int
@@ -39,7 +39,7 @@ class KalturaExclusiveLockKey extends KalturaObject
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if(is_null($object_to_fill))
-			$object_to_fill = new kExclusiveLockKey();
+			$object_to_fill = new vExclusiveLockKey();
 			
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

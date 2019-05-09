@@ -1,9 +1,9 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage api.objects
  */
-class KalturaCrossKalturaDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunCrossVidiunDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
     /**
      * Key-value array where the keys are IDs of distributed flavor assets in the source account and the values are the matching IDs in the target account
@@ -47,7 +47,7 @@ class KalturaCrossKalturaDistributionJobProviderData extends KalturaConfigurable
 	 */
 	public $distributedTimedThumbAssets;
     
-    public function __construct(KalturaDistributionJobData $distributionJobData = null)
+    public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{			   
 		parent::__construct($distributionJobData);
 	    
@@ -55,7 +55,7 @@ class KalturaCrossKalturaDistributionJobProviderData extends KalturaConfigurable
 			return;
 		}
 			
-		if (!($distributionJobData->distributionProfile instanceof KalturaCrossKalturaDistributionProfile)) {
+		if (!($distributionJobData->distributionProfile instanceof VidiunCrossVidiunDistributionProfile)) {
 			return;
 		}
 					
@@ -63,17 +63,17 @@ class KalturaCrossKalturaDistributionJobProviderData extends KalturaConfigurable
 		$entryDistributionDb = EntryDistributionPeer::retrieveByPK($distributionJobData->entryDistributionId);
 		if (!$entryDistributionDb)
 		{
-		    KalturaLog::err('Entry distribution ['.$distributionJobData->entryDistributionId.'] not found');
+		    VidiunLog::err('Entry distribution ['.$distributionJobData->entryDistributionId.'] not found');
 		    return;
 		}
 		
-		$this->distributedFlavorAssets = $entryDistributionDb->getFromCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_FLAVOR_ASSETS);
-		$this->distributedThumbAssets = $entryDistributionDb->getFromCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_THUMB_ASSETS);
-		$this->distributedMetadata = $entryDistributionDb->getFromCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_METADATA);
-		$this->distributedCaptionAssets = $entryDistributionDb->getFromCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_CAPTION_ASSETS);
-		$this->distributedCuePoints = $entryDistributionDb->getFromCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_CUE_POINTS);
-		$this->distributedThumbCuePoints = $entryDistributionDb->getFromCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_THUMB_CUE_POINTS);
-		$this->distributedTimedThumbAssets = $entryDistributionDb->getFromCustomData(CrossKalturaDistributionCustomDataField::DISTRIBUTED_TIMED_THUMB_ASSETS);
+		$this->distributedFlavorAssets = $entryDistributionDb->getFromCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_FLAVOR_ASSETS);
+		$this->distributedThumbAssets = $entryDistributionDb->getFromCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_THUMB_ASSETS);
+		$this->distributedMetadata = $entryDistributionDb->getFromCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_METADATA);
+		$this->distributedCaptionAssets = $entryDistributionDb->getFromCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_CAPTION_ASSETS);
+		$this->distributedCuePoints = $entryDistributionDb->getFromCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_CUE_POINTS);
+		$this->distributedThumbCuePoints = $entryDistributionDb->getFromCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_THUMB_CUE_POINTS);
+		$this->distributedTimedThumbAssets = $entryDistributionDb->getFromCustomData(CrossVidiunDistributionCustomDataField::DISTRIBUTED_TIMED_THUMB_ASSETS);
 	}
 	
 	
@@ -96,7 +96,7 @@ class KalturaCrossKalturaDistributionJobProviderData extends KalturaConfigurable
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kCrossKalturaDistributionJobProviderData();
+			$dbObject = new kCrossVidiunDistributionJobProviderData();
 			
 		return parent::toObject($dbObject, $skip);
 	}

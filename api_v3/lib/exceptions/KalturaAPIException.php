@@ -3,7 +3,7 @@
  * @package api
  * @subpackage errors
  */
-class KalturaAPIException extends Exception 
+class VidiunAPIException extends Exception 
 {
 	protected $codeStr;
 	protected $args = array ();

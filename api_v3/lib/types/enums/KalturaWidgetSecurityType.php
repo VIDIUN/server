@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaWidgetSecurityType extends KalturaEnum
+class VidiunWidgetSecurityType extends VidiunEnum
 {
 	const NONE = 1;
 	const TIMEHASH = 2;

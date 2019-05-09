@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage lib
  */
-class kEventNotificationObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjectChangedEventConsumer, kObjectCreatedEventConsumer
+class vEventNotificationObjectCopiedHandler implements vObjectCopiedEventConsumer, vObjectChangedEventConsumer, vObjectCreatedEventConsumer
 {
 	private static $partnerLevelPermissionTypes = array(
 		PermissionType::PLUGIN,
@@ -11,7 +11,7 @@ class kEventNotificationObjectCopiedHandler implements kObjectCopiedEventConsume
 	);
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCopiedEventConsumer::shouldConsumeCopiedEvent()
+	 * @see vObjectCopiedEventConsumer::shouldConsumeCopiedEvent()
 	 */
 	public function shouldConsumeCopiedEvent(BaseObject $fromObject, BaseObject $toObject)
 	{
@@ -22,7 +22,7 @@ class kEventNotificationObjectCopiedHandler implements kObjectCopiedEventConsume
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCopiedEventConsumer::objectCopied()
+	 * @see vObjectCopiedEventConsumer::objectCopied()
 	 */
 	public function objectCopied(BaseObject $fromObject, BaseObject $toObject)
 	{
@@ -40,7 +40,7 @@ class kEventNotificationObjectCopiedHandler implements kObjectCopiedEventConsume
 		$fromPartnerId = $fromPartner->getId();
 		$toPartnerId = $toPartner->getId();
 		
-		KalturaLog::info("Copy event-notification templates from [$fromPartnerId] to [$toPartnerId]");
+		VidiunLog::info("Copy event-notification templates from [$fromPartnerId] to [$toPartnerId]");
 		
  		$c = new Criteria();
  		$c->add(EventNotificationTemplatePeer::PARTNER_ID, $fromPartnerId);
@@ -76,13 +76,13 @@ class kEventNotificationObjectCopiedHandler implements kObjectCopiedEventConsume
 	
 	protected function partnerPermissionEnabled(Partner $partner)
 	{
-		$templatePartner = PartnerPeer::retrieveByPK($partner->getI18nTemplatePartnerId() ? $partner->getI18nTemplatePartnerId() : kConf::get('template_partner_id'));
+		$templatePartner = PartnerPeer::retrieveByPK($partner->getI18nTemplatePartnerId() ? $partner->getI18nTemplatePartnerId() : vConf::get('template_partner_id'));
 		if($templatePartner)
 			$this->copyEventNotificationTemplates($templatePartner, $partner, true);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::objectCreated()
+	 * @see vObjectCreatedEventConsumer::objectCreated()
 	 */
 	public function objectCreated(BaseObject $object)
 	{
@@ -94,7 +94,7 @@ class kEventNotificationObjectCopiedHandler implements kObjectCopiedEventConsume
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -106,7 +106,7 @@ class kEventNotificationObjectCopiedHandler implements kObjectCopiedEventConsume
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+	 * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $object)
 	{
@@ -119,7 +119,7 @@ class kEventNotificationObjectCopiedHandler implements kObjectCopiedEventConsume
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{

@@ -37,10 +37,10 @@ class adddownloadAction extends defPartnerservices2Action
 		return self::REQUIED_TICKET_REGULAR;
 	}
 
-	// ask to fetch the kuser from puser_kuser - so we can tel the difference between a
-	public function needKuserFromPuser ( )
+	// ask to fetch the vuser from puser_vuser - so we can tel the difference between a
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_NO_KUSER;
+		return self::VUSER_DATA_NO_VUSER;
 	}
 
     protected function getObjectPrefix()
@@ -48,9 +48,9 @@ class adddownloadAction extends defPartnerservices2Action
     	return "entry";
     }
     
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		KalturaLog::log("adddownloadAction: executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser)");
+		VidiunLog::log("adddownloadAction: executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser)");
 		
 		$entry_id = $this->getPM ( "entry_id" );
 		$version = $this->getP ( "version" );
@@ -61,12 +61,12 @@ class adddownloadAction extends defPartnerservices2Action
 		
 		if ( ! $entry )
 		{
-			KalturaLog::err("Add download Action - entry not found");
+			VidiunLog::err("Add download Action - entry not found");
 			$this->addError ( APIErrors::INVALID_ENTRY_ID, $this->getObjectPrefix() , $entry_id );
 			return;
 		}
 		
-		KalturaLog::log("adddownloadAction: entry found [$entry_id]");
+		VidiunLog::log("adddownloadAction: entry found [$entry_id]");
 		
 		/*			
 		$content_path = myContentStorage::getFSContentRootPath();
@@ -82,11 +82,11 @@ class adddownloadAction extends defPartnerservices2Action
 		if(!$sync_key)
 			$sync_key = $entry->getSyncKey ( entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA , $version );
 		
-		if ( ! kFileSyncUtils::file_exists( $sync_key ) )
+		if ( ! vFileSyncUtils::file_exists( $sync_key ) )
 		{
 			// if not found local file - perhaps wasn't created here and wasn't synced yet
 			// try to see if remote exists - and proxy the request if it is.
-			list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($sync_key, true, true);
+			list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($sync_key, true, true);
 			if(!$local)
 			{
 				// take input params and add to URL
@@ -96,26 +96,26 @@ class adddownloadAction extends defPartnerservices2Action
 					'file_format' => $file_format,
 					'conversion_quality' => $conversion_quality,
 					'force_download' => $force_download,
-					'ks' => $this->ks->toSecureString(),
+					'vs' => $this->vs->toSecureString(),
 					'partner_id' => $partner_id,
 					'subp_id' => $subp_id,
 					'format' => $this->response_type,
 				);
 				$get_query = http_build_query($queryArr, '', '&');
-				$remote_url = kDataCenterMgr::getRedirectExternalUrl ( $fileSync , $_SERVER['REQUEST_URI'] );
+				$remote_url = vDataCenterMgr::getRedirectExternalUrl ( $fileSync , $_SERVER['REQUEST_URI'] );
 				$url = (strpos($remote_url, '?') === FALSE)? $remote_url.'?'.$get_query: $remote_url.'&'.$get_query;
 				// prxoy request to other DC
-				KalturaLog::log ( __METHOD__ . ": redirecting to [$url]" );
-				kFileUtils::dumpUrl($url);
+				VidiunLog::log ( __METHOD__ . ": redirecting to [$url]" );
+				vFileUtils::dumpUrl($url);
 			}
-			KalturaLog::err("Add download Action - sync key doesn't exists");
+			VidiunLog::err("Add download Action - sync key doesn't exists");
 			$this->addError ( APIErrors::INVALID_ENTRY_VERSION, $this->getObjectPrefix(), $entry_id, $version );
 			return; 
 		}
 		
 		if ( $entry->getType() == entryType::MIX  )
 		{
-			KalturaLog::err("The Batch job for flattening a mix is no longer supported");
+			VidiunLog::err("The Batch job for flattening a mix is no longer supported");
 			$this->addError(APIErrors::INVALID_ENTRY_TYPE, $this->getObjectPrefix(), $entry_id, $version );
 			return;
 		}
@@ -135,11 +135,11 @@ class adddownloadAction extends defPartnerservices2Action
 			$flavorParamsId = $flavorParams->getId();
 		}
 		
-		$jobs = kJobsManager::addBulkDownloadJob($partner_id, $puser_id, $entry->getId(), $flavorParamsId);
+		$jobs = vJobsManager::addBulkDownloadJob($partner_id, $puser_id, $entry->getId(), $flavorParamsId);
 		$job = $jobs[0];
 		
 	
-		// remove kConvertJobData object from batchJob.data
+		// remove vConvertJobData object from batchJob.data
 		$job->setData(null);
 		$jobWrapperClass = objectWrapperBase::getWrapperClass($job, objectWrapperBase::DETAIL_LEVEL_DETAILED);
 		$this->addMsg("download", $jobWrapperClass);

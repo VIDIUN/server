@@ -2,7 +2,7 @@
 /**
  * @package plugins.youtubeApiDistribution
  */
-class YoutubeApiDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider
+class YoutubeApiDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider
 {
 	const PLUGIN_NAME = 'youtubeApiDistribution';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
@@ -18,12 +18,12 @@ class YoutubeApiDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -59,7 +59,7 @@ class YoutubeApiDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::YOUTUBE_API)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::YOUTUBE_API)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return new YoutubeApiDistributionEngine();
@@ -88,14 +88,14 @@ class YoutubeApiDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 			if($baseClass == 'IDistributionEngineDisable')
 				return new YoutubeApiDistributionEngine();
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaYoutubeApiDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunYoutubeApiDistributionProfile();
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return new KalturaYoutubeApiDistributionJobProviderData();
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return new VidiunYoutubeApiDistributionJobProviderData();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::YOUTUBE_API)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::YOUTUBE_API)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -104,20 +104,20 @@ class YoutubeApiDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 			}
 		}
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
 		{
-			$reflect = new ReflectionClass('KalturaYoutubeApiDistributionJobProviderData');
+			$reflect = new ReflectionClass('VidiunYoutubeApiDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
 		{
-			$reflect = new ReflectionClass('kYoutubeApiDistributionJobProviderData');
+			$reflect = new ReflectionClass('vYoutubeApiDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
-			return new KalturaYoutubeApiDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
+			return new VidiunYoutubeApiDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
 			return new YoutubeApiDistributionProfile();
@@ -133,7 +133,7 @@ class YoutubeApiDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::YOUTUBE_API)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::YOUTUBE_API)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return 'YoutubeApiDistributionEngine';
@@ -162,30 +162,30 @@ class YoutubeApiDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 			if($baseClass == 'IDistributionEngineDisable')
 				return 'YoutubeApiDistributionEngine';
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaYoutubeApiDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunYoutubeApiDistributionProfile';
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaYoutubeApiDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunYoutubeApiDistributionJobProviderData';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::YOUTUBE_API)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::YOUTUBE_API)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_YoutubeApiProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_YoutubeApiDistribution_Type_YoutubeApiDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_YoutubeApiDistribution_Type_YoutubeApiDistributionProfile';
 		}
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
-			return 'KalturaYoutubeApiDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
+			return 'VidiunYoutubeApiDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
-			return 'kYoutubeApiDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
+			return 'vYoutubeApiDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
-			return 'KalturaYoutubeApiDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
+			return 'VidiunYoutubeApiDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(YoutubeApiDistributionProviderType::YOUTUBE_API))
 			return 'YoutubeApiDistributionProfile';
@@ -206,11 +206,11 @@ class YoutubeApiDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaYoutubeApiDistributionProvider();
+		$distributionProvider = new VidiunYoutubeApiDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -239,8 +239,8 @@ class YoutubeApiDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -248,6 +248,6 @@ class YoutubeApiDistributionPlugin extends KalturaPlugin implements IKalturaPerm
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaYahooSyndicationFeedFilter extends KalturaBaseSyndicationFeedFilter
+class VidiunYahooSyndicationFeedFilter extends VidiunBaseSyndicationFeedFilter
 {
 	static private $map_between_objects = array
 	(

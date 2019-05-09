@@ -12,7 +12,7 @@ class SphinxTagCriteria extends SphinxCriteria
 	{
 		if ($filter->get('_eq_object_type'))
 		{
-			$filter->set('_eq_object_type', Tag::getIndexedFieldValue('TagPeer::OBJECT_TYPE', $filter->get('_eq_object_type'), kCurrentContext::getCurrentPartnerId()));
+			$filter->set('_eq_object_type', Tag::getIndexedFieldValue('TagPeer::OBJECT_TYPE', $filter->get('_eq_object_type'), vCurrentContext::getCurrentPartnerId()));
 		}
 		if ($filter->get('_likex_tag'))
 		{
@@ -43,14 +43,14 @@ class SphinxTagCriteria extends SphinxCriteria
 			if ($partnerIdCrit && $partnerIdCrit->getComparison() == Criteria::EQUAL)
 				$partnerId = $partnerIdCrit->getValue();
 			else
-				$partnerId = kCurrentContext::getCurrentPartnerId();
+				$partnerId = vCurrentContext::getCurrentPartnerId();
 			
 			$value = Tag::getIndexedFieldValue($fieldName, $value, $partnerId);
 		}
 		
 		if ($field == TagPeer::TAG && in_array($crit->getComparison(), array(Criteria::EQUAL, Criteria::IN)))
 		{
-			$value = str_replace(kTagFlowManager::$specialCharacters, kTagFlowManager::$specialCharactersReplacement, $value);
+			$value = str_replace(vTagFlowManager::$specialCharacters, vTagFlowManager::$specialCharactersReplacement, $value);
 		}
 
 		return array($field, $crit->getComparison(), $value);

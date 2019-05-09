@@ -7,8 +7,8 @@ interface IDistributionEngineReport extends IDistributionEngine
 {
 	/**
 	 * retrieves statistics.
-	 * @param KalturaDistributionFetchReportJobData $data
+	 * @param VidiunDistributionFetchReportJobData $data
 	 * @return bool true if finished, false if will be finished asynchronously
 	 */
-	public function fetchReport(KalturaDistributionFetchReportJobData $data);
+	public function fetchReport(VidiunDistributionFetchReportJobData $data);
 }

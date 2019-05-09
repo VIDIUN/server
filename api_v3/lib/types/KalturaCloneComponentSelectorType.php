@@ -4,7 +4,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaCloneComponentSelectorType extends KalturaDynamicEnum implements CloneComponentSelectorType
+class VidiunCloneComponentSelectorType extends VidiunDynamicEnum implements CloneComponentSelectorType
 {
     public static function getEnumClass()
     {

@@ -7,7 +7,7 @@
  * @package api
  * @subpackage services
  */
-class SessionService extends KalturaBaseService
+class SessionService extends VidiunBaseService
 {
     
 	
@@ -21,80 +21,80 @@ class SessionService extends KalturaBaseService
 	
 	
 	/**
-	 * Start a session with Kaltura's server.
-	 * The result KS is the session key that you should pass to all services that requires a ticket.
+	 * Start a session with Vidiun's server.
+	 * The result VS is the session key that you should pass to all services that requires a ticket.
 	 * 
 	 * @action start
 	 * @param string $secret Remember to provide the correct secret according to the sessionType you want
 	 * @param string $userId
-	 * @param KalturaSessionType $type Regular session or Admin session
+	 * @param VidiunSessionType $type Regular session or Admin session
 	 * @param int $partnerId
-	 * @param int $expiry KS expiry time in seconds
+	 * @param int $expiry VS expiry time in seconds
 	 * @param string $privileges 
 	 * @return string
-	 * @ksIgnored
+	 * @vsIgnored
 	 *
 	 * @throws APIErrors::START_SESSION_ERROR
 	 */
 	function startAction($secret, $userId = "", $type = 0, $partnerId = null, $expiry = 86400 , $privileges = null )
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		// make sure the secret fits the one in the partner's table
-		$ks = "";
-		$result = kSessionUtils::startKSession ( $partnerId , $secret , $userId , $ks , $expiry , $type , "" , $privileges );
+		$vs = "";
+		$result = vSessionUtils::startVSession ( $partnerId , $secret , $userId , $vs , $expiry , $type , "" , $privileges );
 
 		if ( $result >= 0 )
 	{
-		return $ks;
+		return $vs;
 	}
 		else
 		{
-			throw new KalturaAPIException ( APIErrors::START_SESSION_ERROR ,$partnerId );
+			throw new VidiunAPIException ( APIErrors::START_SESSION_ERROR ,$partnerId );
 		}
 	}
 	
 	
 	/**
-	 * End a session with the Kaltura server, making the current KS invalid.
+	 * End a session with the Vidiun server, making the current VS invalid.
 	 * 
 	 * @action end
-	 * @ksOptional
+	 * @vsOptional
 	 */
 	function endAction()
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		
-		$ks = $this->getKs();
-		if($ks)
-			$ks->kill();
+		$vs = $this->getVs();
+		if($vs)
+			$vs->kill();
 	}
 
 	/**
-	 * Start an impersonated session with Kaltura's server.
-	 * The result KS is the session key that you should pass to all services that requires a ticket.
+	 * Start an impersonated session with Vidiun's server.
+	 * The result VS is the session key that you should pass to all services that requires a ticket.
 	 * 
 	 * @action impersonate
 	 * @param string $secret - should be the secret (admin or user) of the original partnerId (not impersonatedPartnerId).
 	 * @param int $impersonatedPartnerId
 	 * @param string $userId - impersonated userId
-	 * @param KalturaSessionType $type
+	 * @param VidiunSessionType $type
 	 * @param int $partnerId
-	 * @param int $expiry KS expiry time in seconds
+	 * @param int $expiry VS expiry time in seconds
 	 * @param string $privileges 
 	 * @return string
-	 * @ksIgnored
+	 * @vsIgnored
 	 *
 	 * @throws APIErrors::START_SESSION_ERROR
 	 */
-	function impersonateAction($secret, $impersonatedPartnerId, $userId = "", $type = KalturaSessionType::USER, $partnerId = null, $expiry = 86400 , $privileges = null )
+	function impersonateAction($secret, $impersonatedPartnerId, $userId = "", $type = VidiunSessionType::USER, $partnerId = null, $expiry = 86400 , $privileges = null )
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		
 		// verify that partnerId exists and is in correspondence with given secret
 		$result = myPartnerUtils::isValidSecret($partnerId, $secret, "", $expiry, $type);
 		if ($result !== true)
 		{
-			throw new KalturaAPIException ( APIErrors::START_SESSION_ERROR, $partnerId );
+			throw new VidiunAPIException ( APIErrors::START_SESSION_ERROR, $partnerId );
 		}
 				
 		// verify partner is allowed to start session for another partner
@@ -114,11 +114,11 @@ class SessionService extends KalturaBaseService
 		if(!$impersonatedPartner)
 		{
 			// impersonated partner could not be fetched from the DB
-			throw new KalturaAPIException ( APIErrors::START_SESSION_ERROR ,$partnerId );
+			throw new VidiunAPIException ( APIErrors::START_SESSION_ERROR ,$partnerId );
 		}
 		
 		// set the correct secret according to required session type
-		if($type == KalturaSessionType::ADMIN)
+		if($type == VidiunSessionType::ADMIN)
 		{
 			$impersonatedSecret = $impersonatedPartner->getAdminSecret();
 		}
@@ -128,52 +128,52 @@ class SessionService extends KalturaBaseService
 		}
 		
 		// make sure the secret fits the one in the partner's table
-		$ks = "";
-		$result = kSessionUtils::startKSession ( $impersonatedPartner->getId() , $impersonatedSecret, $userId , $ks , $expiry , $type , "" , $privileges, $partnerId );
+		$vs = "";
+		$result = vSessionUtils::startVSession ( $impersonatedPartner->getId() , $impersonatedSecret, $userId , $vs , $expiry , $type , "" , $privileges, $partnerId );
 
 		if ( $result >= 0 )
 		{
-			return $ks;
+			return $vs;
 		}
 		else
 		{
-			throw new KalturaAPIException ( APIErrors::START_SESSION_ERROR ,$partnerId );
+			throw new VidiunAPIException ( APIErrors::START_SESSION_ERROR ,$partnerId );
 		}
 	}
 
 	/**
-	 * Start an impersonated session with Kaltura's server.
-	 * The result KS info contains the session key that you should pass to all services that requires a ticket.
+	 * Start an impersonated session with Vidiun's server.
+	 * The result VS info contains the session key that you should pass to all services that requires a ticket.
 	 * Type, expiry and privileges won't be changed if they're not set
 	 * 
-	 * @action impersonateByKs
-	 * @param string $session The old KS of the impersonated partner
-	 * @param KalturaSessionType $type Type of the new KS 
-	 * @param int $expiry Expiry time in seconds of the new KS
-	 * @param string $privileges Privileges of the new KS
-	 * @return KalturaSessionInfo
+	 * @action impersonateByVs
+	 * @param string $session The old VS of the impersonated partner
+	 * @param VidiunSessionType $type Type of the new VS 
+	 * @param int $expiry Expiry time in seconds of the new VS
+	 * @param string $privileges Privileges of the new VS
+	 * @return VidiunSessionInfo
 	 *
 	 * @throws APIErrors::START_SESSION_ERROR
 	 */
-	function impersonateByKsAction($session, $type = null, $expiry = null , $privileges = null)
+	function impersonateByVsAction($session, $type = null, $expiry = null , $privileges = null)
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		
-		$oldKS = null;
+		$oldVS = null;
 		try
 		{
-			$oldKS = ks::fromSecureString($session);
+			$oldVS = vs::fromSecureString($session);
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
-			throw new KalturaAPIException(APIErrors::START_SESSION_ERROR, $this->getPartnerId());
+			VidiunLog::err($e->getMessage());
+			throw new VidiunAPIException(APIErrors::START_SESSION_ERROR, $this->getPartnerId());
 		}
-		$impersonatedPartnerId = $oldKS->partner_id;
-		$impersonatedUserId = $oldKS->user;
-		$impersonatedType = $oldKS->type; 
-		$impersonatedExpiry = $oldKS->valid_until - time(); 
-		$impersonatedPrivileges = $oldKS->privileges;
+		$impersonatedPartnerId = $oldVS->partner_id;
+		$impersonatedUserId = $oldVS->user;
+		$impersonatedType = $oldVS->type; 
+		$impersonatedExpiry = $oldVS->valid_until - time(); 
+		$impersonatedPrivileges = $oldVS->privileges;
 		
 		if(!is_null($type))
 			$impersonatedType = $type;
@@ -198,12 +198,12 @@ class SessionService extends KalturaBaseService
 		
 		if(!$impersonatedPartner)
 		{
-			KalturaLog::err("Impersonated partner [$impersonatedPartnerId ]could not be fetched from the DB");
-			throw new KalturaAPIException(APIErrors::START_SESSION_ERROR, $this->getPartnerId());
+			VidiunLog::err("Impersonated partner [$impersonatedPartnerId ]could not be fetched from the DB");
+			throw new VidiunAPIException(APIErrors::START_SESSION_ERROR, $this->getPartnerId());
 		}
 		
 		// set the correct secret according to required session type
-		if($impersonatedType == KalturaSessionType::ADMIN)
+		if($impersonatedType == VidiunSessionType::ADMIN)
 		{
 			$impersonatedSecret = $impersonatedPartner->getAdminSecret();
 		}
@@ -212,13 +212,13 @@ class SessionService extends KalturaBaseService
 			$impersonatedSecret = $impersonatedPartner->getSecret();
 		}
 		
-		$sessionInfo = new KalturaSessionInfo();
+		$sessionInfo = new VidiunSessionInfo();
 		
-		$result = kSessionUtils::startKSession($impersonatedPartnerId, $impersonatedSecret, $impersonatedUserId, $sessionInfo->ks, $impersonatedExpiry, $impersonatedType, '', $impersonatedPrivileges, $this->getPartnerId());
+		$result = vSessionUtils::startVSession($impersonatedPartnerId, $impersonatedSecret, $impersonatedUserId, $sessionInfo->vs, $impersonatedExpiry, $impersonatedType, '', $impersonatedPrivileges, $this->getPartnerId());
 		if($result < 0)
 		{
-			KalturaLog::err("Failed starting a session with result [$result]");
-			throw new KalturaAPIException(APIErrors::START_SESSION_ERROR, $this->getPartnerId());
+			VidiunLog::err("Failed starting a session with result [$result]");
+			throw new VidiunAPIException(APIErrors::START_SESSION_ERROR, $this->getPartnerId());
 		}
 	
 		$sessionInfo->partnerId = $impersonatedPartnerId;
@@ -234,55 +234,55 @@ class SessionService extends KalturaBaseService
 	 * Parse session key and return its info
 	 * 
 	 * @action get
-	 * @param string $session The KS to be parsed, keep it empty to use current session.
-	 * @return KalturaSessionInfo
+	 * @param string $session The VS to be parsed, keep it empty to use current session.
+	 * @return VidiunSessionInfo
 	 *
 	 * @throws APIErrors::START_SESSION_ERROR
 	 */
 	function getAction($session = null)
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		
 		if(!$session)
-			$session = kCurrentContext::$ks;
+			$session = vCurrentContext::$vs;
 		
-		$ks = ks::fromSecureString($session);
+		$vs = vs::fromSecureString($session);
 		
-		if (!myPartnerUtils::allowPartnerAccessPartner($this->getPartnerId(), $this->partnerGroup(), $ks->partner_id))
-			throw new KalturaAPIException(APIErrors::PARTNER_ACCESS_FORBIDDEN, $this->getPartnerId(), $ks->partner_id);
+		if (!myPartnerUtils::allowPartnerAccessPartner($this->getPartnerId(), $this->partnerGroup(), $vs->partner_id))
+			throw new VidiunAPIException(APIErrors::PARTNER_ACCESS_FORBIDDEN, $this->getPartnerId(), $vs->partner_id);
 		
-		$sessionInfo = new KalturaSessionInfo();
-		$sessionInfo->partnerId = $ks->partner_id;
-		$sessionInfo->userId = $ks->user;
-		$sessionInfo->expiry = $ks->valid_until;
-		$sessionInfo->sessionType = $ks->type;
-		$sessionInfo->privileges = $ks->privileges;
+		$sessionInfo = new VidiunSessionInfo();
+		$sessionInfo->partnerId = $vs->partner_id;
+		$sessionInfo->userId = $vs->user;
+		$sessionInfo->expiry = $vs->valid_until;
+		$sessionInfo->sessionType = $vs->type;
+		$sessionInfo->privileges = $vs->privileges;
 		
 		return $sessionInfo;
 	}
 	
 	/**
-	 * Start a session for Kaltura's flash widgets
+	 * Start a session for Vidiun's flash widgets
 	 * 
 	 * @action startWidgetSession
 	 * @param string $widgetId
 	 * @param int $expiry
-	 * @return KalturaStartWidgetSessionResponse
-	 * @ksIgnored
+	 * @return VidiunStartWidgetSessionResponse
+	 * @vsIgnored
 	 * 
 	 * @throws APIErrors::INVALID_WIDGET_ID
-	 * @throws APIErrors::MISSING_KS
-	 * @throws APIErrors::INVALID_KS
+	 * @throws APIErrors::MISSING_VS
+	 * @throws APIErrors::INVALID_VS
 	 * @throws APIErrors::START_WIDGET_SESSION_ERROR
 	 */	
 	function startWidgetSession ( $widgetId , $expiry = 86400 )
 	{
 		// make sure the secret fits the one in the partner's table
-		$ksStr = "";
+		$vsStr = "";
 		$widget = widgetPeer::retrieveByPK( $widgetId );
 		if ( !$widget )
 		{
-			throw new KalturaAPIException ( APIErrors::INVALID_WIDGET_ID , $widgetId );
+			throw new VidiunAPIException ( APIErrors::INVALID_WIDGET_ID , $widgetId );
 		}
 
 		$partnerId = $widget->getPartnerId();
@@ -291,68 +291,68 @@ class SessionService extends KalturaBaseService
 		// TODO - see how to decide if the partner has a URL to redirect to
 
 
-		// according to the partner's policy and the widget's policy - define the privileges of the ks
-		// TODO - decide !! - for now only view - any kshow
+		// according to the partner's policy and the widget's policy - define the privileges of the vs
+		// TODO - decide !! - for now only view - any vshow
 		$privileges = "view:*,widget:1";
 		
 		if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENTITLEMENT, $partnerId) &&
 			!$widget->getEnforceEntitlement() && $widget->getEntryId())
-			$privileges .= ','. kSessionBase::PRIVILEGE_DISABLE_ENTITLEMENT_FOR_ENTRY . ':' . $widget->getEntryId();
+			$privileges .= ','. vSessionBase::PRIVILEGE_DISABLE_ENTITLEMENT_FOR_ENTRY . ':' . $widget->getEntryId();
 			
 		if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENTITLEMENT, $partnerId) &&
 			!is_null($widget->getPrivacyContext()) && $widget->getPrivacyContext() != '' )
-			$privileges .= ','. kSessionBase::PRIVILEGE_PRIVACY_CONTEXT . ':' . $widget->getPrivacyContext();
+			$privileges .= ','. vSessionBase::PRIVILEGE_PRIVACY_CONTEXT . ':' . $widget->getPrivacyContext();
 
 		$userId = 0;
 
-		// if the widget has a role, pass it in $privileges so it will be embedded in the KS
+		// if the widget has a role, pass it in $privileges so it will be embedded in the VS
 		// only if we also have an entry to limit the role operations to
 		if ($widget->getRoles() != null)
 		{
 			$roles = explode(",", $widget->getRoles());
 			foreach($roles as $role) {
-				$privileges .= ',' . kSessionBase::PRIVILEGE_SET_ROLE . ':' . $role;
+				$privileges .= ',' . vSessionBase::PRIVILEGE_SET_ROLE . ':' . $role;
 			}
 		}
 
 		if ($widget->getEntryId() != null)
 		{
-			$privileges .= ',' . kSessionBase::PRIVILEGE_LIMIT_ENTRY . ':' . $widget->getEntryId();
+			$privileges .= ',' . vSessionBase::PRIVILEGE_LIMIT_ENTRY . ':' . $widget->getEntryId();
 		}
 
-		/*if ( $widget->getSecurityType() == widget::WIDGET_SECURITY_TYPE_FORCE_KS )
+		/*if ( $widget->getSecurityType() == widget::WIDGET_SECURITY_TYPE_FORCE_VS )
 		{
-			$user = $this->getKuser();
-			if ( ! $this->getKS() )// the one from the base class
-				throw new KalturaAPIException ( APIErrors::MISSING_KS );
+			$user = $this->getVuser();
+			if ( ! $this->getVS() )// the one from the base class
+				throw new VidiunAPIException ( APIErrors::MISSING_VS );
 
 			$widget_partner_id = $widget->getPartnerId();
-			$res = kSessionUtils::validateKSession2 ( 1 ,$widget_partner_id  , $user->getId() , $ks_str , $this->ks );
+			$res = vSessionUtils::validateVSession2 ( 1 ,$widget_partner_id  , $user->getId() , $vs_str , $this->vs );
 			
 			if ( 0 >= $res )
 			{
 				// chaned this to be an exception rather than an error
-				throw new KalturaAPIException ( APIErrors::INVALID_KS , $ks_str , $res , ks::getErrorStr( $res ));
+				throw new VidiunAPIException ( APIErrors::INVALID_VS , $vs_str , $res , vs::getErrorStr( $res ));
 			}			
 		}
 		else
 		{*/
 			// 	the session will be for NON admins and privileges of view only
-			$result = kSessionUtils::createKSessionNoValidations ( $partnerId , $userId , $ksStr , $expiry , false , "" , $privileges );
+			$result = vSessionUtils::createVSessionNoValidations ( $partnerId , $userId , $vsStr , $expiry , false , "" , $privileges );
 		//}
 
 		if ( $result >= 0 )
 		{
-			$response = new KalturaStartWidgetSessionResponse();
+			$response = new VidiunStartWidgetSessionResponse();
 			$response->partnerId = $partnerId;
-			$response->ks = $ksStr;
+			$response->vs = $vsStr;
 			$response->userId = $userId;
 			return $response;
 		}
 		else
 		{
 			// TODO - see that there is a good error for when the invalid login count exceed s the max
-			throw new  KalturaAPIException  ( APIErrors::START_WIDGET_SESSION_ERROR ,$widgetId );
+			throw new  VidiunAPIException  ( APIErrors::START_WIDGET_SESSION_ERROR ,$widgetId );
 		}		
 	}
 }

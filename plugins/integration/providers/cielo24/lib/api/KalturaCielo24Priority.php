@@ -3,7 +3,7 @@
  * @package plugins.cielo24
  * @subpackage api.enum
  */
-class KalturaCielo24Priority extends KalturaStringEnum
+class VidiunCielo24Priority extends VidiunStringEnum
 {
 	const STANDARD = "STANDARD";
 	const PRIORITY = "PRIORITY";

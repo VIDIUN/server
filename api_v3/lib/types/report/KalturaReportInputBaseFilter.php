@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaReportInputBaseFilter extends KalturaObject 
+class VidiunReportInputBaseFilter extends VidiunObject 
 {
 	/**
 	 * Start date as Unix timestamp (In seconds)
@@ -62,8 +62,8 @@ class KalturaReportInputBaseFilter extends KalturaObject
 		}
 		else if ($this->fromDate && $this->toDate)
 		{
-			$clientTag = kCurrentContext::$client_lang;
-			if (strpos($clientTag, 'kmc-analytics') !== 0 && kCurrentContext::$ks_partner_id != Partner::BATCH_PARTNER_ID)
+			$clientTag = vCurrentContext::$client_lang;
+			if (strpos($clientTag, 'vmc-analytics') !== 0 && vCurrentContext::$vs_partner_id != Partner::BATCH_PARTNER_ID)
 			{
 				$this->fromDay = date("Ymd", $this->fromDate);
 				$this->toDay = date("Ymd", $this->toDate);

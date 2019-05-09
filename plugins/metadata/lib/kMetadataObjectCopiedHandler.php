@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage lib
  */
-class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjectChangedEventConsumer, kObjectCreatedEventConsumer
+class vMetadataObjectCopiedHandler implements vObjectCopiedEventConsumer, vObjectChangedEventConsumer, vObjectCreatedEventConsumer
 {
 	private static $partnerLevelPermissionTypes = array(
 		PermissionType::PLUGIN,
@@ -11,7 +11,7 @@ class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjec
 	);
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCopiedEventConsumer::shouldConsumeCopiedEvent()
+	 * @see vObjectCopiedEventConsumer::shouldConsumeCopiedEvent()
 	 */
 	public function shouldConsumeCopiedEvent(BaseObject $fromObject, BaseObject $toObject)
 	{
@@ -31,7 +31,7 @@ class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjec
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCopiedEventConsumer::objectCopied()
+	 * @see vObjectCopiedEventConsumer::objectCopied()
 	 */
 	public function objectCopied(BaseObject $fromObject, BaseObject $toObject)
 	{
@@ -47,11 +47,11 @@ class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjec
 		elseif($fromObject instanceof category)
 			$this->copyMetadata(MetadataObjectType::CATEGORY, $fromObject, $toObject);
 		
-		elseif($fromObject instanceof kuser)
+		elseif($fromObject instanceof vuser)
 			$this->copyMetadata(MetadataObjectType::USER, $fromObject, $toObject);
 		
 		elseif($fromObject instanceof MetadataProfile)
-			kObjectCopyHandler::mapIds('MetadataProfile', $fromObject->getId(), $toObject->getId());
+			vObjectCopyHandler::mapIds('MetadataProfile', $fromObject->getId(), $toObject->getId());
 		
 		elseif($fromObject instanceof IMetadataObject)	
 			$this->copyMetadata($fromObject->getMetadataObjectType(), $fromObject, $toObject);
@@ -59,7 +59,7 @@ class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjec
 	}
 	
 	/**
-	 * @param KalturaMetadataObjectType $objectType
+	 * @param VidiunMetadataObjectType $objectType
 	 * @param BaseObject $fromObject
 	 * @param BaseObject $toObject
 	 */
@@ -80,7 +80,7 @@ class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjec
  			else
  				$newMetadata->setPartnerId($toObject->getPartnerId());
  			
-			$metadataProfileId = kObjectCopyHandler::getMappedId('MetadataProfile', $metadata->getMetadataProfileId());
+			$metadataProfileId = vObjectCopyHandler::getMappedId('MetadataProfile', $metadata->getMetadataProfileId());
 			if($metadataProfileId)
 			{
 				$metadataProfile = MetadataProfilePeer::retrieveByPK($metadataProfileId);
@@ -94,7 +94,7 @@ class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjec
 			
  			$newMetadata->save();
  			
- 			kFileSyncUtils::createSyncFileLinkForKey(
+ 			vFileSyncUtils::createSyncFileLinkForKey(
  				$newMetadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA),
  				$metadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA)
  			);
@@ -140,17 +140,17 @@ class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjec
  			$newMetadataProfile->setPartnerId($toPartnerId);
  			$newMetadataProfile->save();
  			
- 			kFileSyncUtils::createSyncFileLinkForKey(
+ 			vFileSyncUtils::createSyncFileLinkForKey(
  				$newMetadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_DEFINITION),
  				$metadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_DEFINITION)
  			);
  			
- 			kFileSyncUtils::createSyncFileLinkForKey(
+ 			vFileSyncUtils::createSyncFileLinkForKey(
  				$newMetadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_VIEWS),
  				$metadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_VIEWS)
  			);
  			
- 			kFileSyncUtils::createSyncFileLinkForKey(
+ 			vFileSyncUtils::createSyncFileLinkForKey(
  				$newMetadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_XSLT),
  				$metadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_XSLT)
  			);
@@ -168,13 +168,13 @@ class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjec
 	
 	protected function partnerPermissionEnabled(Partner $partner)
 	{
-		$templatePartner = PartnerPeer::retrieveByPK($partner->getI18nTemplatePartnerId() ? $partner->getI18nTemplatePartnerId() : kConf::get('template_partner_id'));
+		$templatePartner = PartnerPeer::retrieveByPK($partner->getI18nTemplatePartnerId() ? $partner->getI18nTemplatePartnerId() : vConf::get('template_partner_id'));
 		if($templatePartner)
 			$this->copyMetadataProfiles($templatePartner, $partner, true);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::objectCreated()
+	 * @see vObjectCreatedEventConsumer::objectCreated()
 	 */
 	public function objectCreated(BaseObject $object)
 	{
@@ -201,21 +201,21 @@ class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjec
 				$targetMetadata->setMetadataProfileId($metadataProfileId);
 				$targetMetadata->setObjectType(MetadataObjectType::ENTRY);
 				$targetMetadata->setObjectId($tempEntryId);
-				$targetMetadata->setStatus(KalturaMetadataStatus::VALID);
+				$targetMetadata->setStatus(VidiunMetadataStatus::VALID);
 		
 				$targetMetadata->save();
 		
 				$sourceMetadataKey = $sourceMetadataObject->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-				$sourceXmlData = kFileSyncUtils::file_get_contents($sourceMetadataKey, true, false);
+				$sourceXmlData = vFileSyncUtils::file_get_contents($sourceMetadataKey, true, false);
 		
 				$targetMetadataKey = $targetMetadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-				kFileSyncUtils::file_put_contents($targetMetadataKey, $sourceXmlData);
+				vFileSyncUtils::file_put_contents($targetMetadataKey, $sourceXmlData);
 			}
 		}
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -228,7 +228,7 @@ class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjec
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+	 * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $object)
 	{
@@ -243,7 +243,7 @@ class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjec
 			$replacementOptions = $replacedEntry->getReplacementOptions();
 			foreach($replacementOptions->getPluginOptionItems() as $replacementItem)
 			{
-				if($replacementItem instanceof kMetadataReplacementOptionsItem && $replacementItem->getShouldCopyMetadata())
+				if($replacementItem instanceof vMetadataReplacementOptionsItem && $replacementItem->getShouldCopyMetadata())
 					return true;
 			}
 		}	
@@ -252,7 +252,7 @@ class kMetadataObjectCopiedHandler implements kObjectCopiedEventConsumer, kObjec
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{

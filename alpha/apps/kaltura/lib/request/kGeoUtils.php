@@ -3,7 +3,7 @@
  * @package server-infra
  * @subpackage request
  */
-class kGeoUtils 
+class vGeoUtils 
 {
 	private static $countryRegion = array(
 		"AG" => "NorthAmerica",
@@ -251,15 +251,15 @@ class kGeoUtils
 		$distance = rad2deg($distance);
 		$km = $distance * 60 * 1.1515 * 1.609344;
 
-		if (class_exists('KalturaLog'))
-			KalturaLog::info("distance ($latitude1,$longitude1) to ($latitude2,$longitude2) is $km , should be less than $radius");
+		if (class_exists('VidiunLog'))
+			VidiunLog::info("distance ($latitude1,$longitude1) to ($latitude2,$longitude2) is $km , should be less than $radius");
 
 		return $km <= $radius;
 	}
 	
 	public static function getCDNRegionFromIP($getCoderType = null, $ip = null)
 	{
-		$geoCoder = kGeoCoderManager::getGeoCoder($getCoderType);
+		$geoCoder = vGeoCoderManager::getGeoCoder($getCoderType);
 		$country = $geoCoder->getCountry($ip ? $ip : infraRequestUtils::getRemoteAddress());
 		return isset(self::$countryRegion[$country]) ? self::$countryRegion[$country] : "unknown"; 
 	}

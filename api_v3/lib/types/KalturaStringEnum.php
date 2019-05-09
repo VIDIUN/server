@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-abstract class KalturaStringEnum implements IKalturaEnum
+abstract class VidiunStringEnum implements IVidiunEnum
 {
 	public static function getDescriptions()
 	{

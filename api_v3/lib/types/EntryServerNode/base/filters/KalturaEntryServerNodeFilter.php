@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaEntryServerNodeFilter extends KalturaEntryServerNodeBaseFilter
+class VidiunEntryServerNodeFilter extends VidiunEntryServerNodeBaseFilter
 {
 	/**
 	 * @return baseObjectFilter
@@ -14,18 +14,18 @@ class KalturaEntryServerNodeFilter extends KalturaEntryServerNodeBaseFilter
 	}
 
 	/**
-	 * @param KalturaFilterPager $pager
-	 * @param KalturaDetachedResponseProfile $responseProfile
-	 * @return KalturaListResponse
-	 * @throws KalturaAPIException
+	 * @param VidiunFilterPager $pager
+	 * @param VidiunDetachedResponseProfile $responseProfile
+	 * @return VidiunListResponse
+	 * @throws VidiunAPIException
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if($this->entryIdEqual)
 		{
 			$entry = entryPeer::retrieveByPK($this->entryIdEqual);
 			if(!$entry)
-				throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $this->entryIdEqual);
+				throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $this->entryIdEqual);
 		} 
 		else if ($this->entryIdIn)
 		{
@@ -52,8 +52,8 @@ class KalturaEntryServerNodeFilter extends KalturaEntryServerNodeBaseFilter
 
 		$dbEntryServerNodes = EntryServerNodePeer::doSelect($c);
 
-		$entryServerNodeList = KalturaEntryServerNodeArray::fromDbArray($dbEntryServerNodes, $responseProfile);
-		$response = new KalturaEntryServerNodeListResponse();
+		$entryServerNodeList = VidiunEntryServerNodeArray::fromDbArray($dbEntryServerNodes, $responseProfile);
+		$response = new VidiunEntryServerNodeListResponse();
 		$response->objects = $entryServerNodeList;
 		$response->totalCount = count($dbEntryServerNodes);
 		return $response;

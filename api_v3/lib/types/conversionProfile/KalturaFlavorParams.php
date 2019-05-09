@@ -3,12 +3,12 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFlavorParams extends KalturaAssetParams 
+class VidiunFlavorParams extends VidiunAssetParams 
 {
 	/**
 	 * The video codec of the Flavor Params
 	 * 
-	 * @var KalturaVideoCodec
+	 * @var VidiunVideoCodec
 	 */
 	public $videoCodec;
 	
@@ -22,7 +22,7 @@ class KalturaFlavorParams extends KalturaAssetParams
 	/**
 	 * The audio codec of the Flavor Params
 	 * 
-	 * @var KalturaAudioCodec
+	 * @var VidiunAudioCodec
 	 */
 	public $audioCodec;
 	
@@ -117,7 +117,7 @@ class KalturaFlavorParams extends KalturaAssetParams
 	/**
 	 * The container format of the Flavor Params
 	 *  
-	 * @var KalturaContainerFormat
+	 * @var VidiunContainerFormat
 	 * @filter eq
 	 */
 	public $format;
@@ -301,7 +301,7 @@ class KalturaFlavorParams extends KalturaAssetParams
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($object = null, $skip = array())
 	{

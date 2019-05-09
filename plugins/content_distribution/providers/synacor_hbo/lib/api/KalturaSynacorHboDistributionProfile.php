@@ -3,7 +3,7 @@
  * @package plugins.synacorHboDistribution
  * @subpackage api.objects
  */
-class KalturaSynacorHboDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunSynacorHboDistributionProfile extends VidiunConfigurableDistributionProfile
 {	
 	
 	/**

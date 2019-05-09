@@ -14,16 +14,16 @@ require_once 'propel/engine/builder/om/php5/PHP5ObjectBuilder.php';
  * @package server-infra
  * @subpackage propel
  */
-class KalturaObjectBuilder extends PHP5ObjectBuilder
+class VidiunObjectBuilder extends PHP5ObjectBuilder
 {
-	const KALTURA_COLUMN_CREATED_AT = 'created_at';
-	const KALTURA_COLUMN_UPDATED_AT = 'updated_at';
-	const KALTURA_COLUMN_CUSTOM_DATA = 'custom_data';
+	const VIDIUN_COLUMN_CREATED_AT = 'created_at';
+	const VIDIUN_COLUMN_UPDATED_AT = 'updated_at';
+	const VIDIUN_COLUMN_CUSTOM_DATA = 'custom_data';
 
 	protected static $systemColumns = array(
-		self::KALTURA_COLUMN_CREATED_AT,
-		self::KALTURA_COLUMN_UPDATED_AT,
-		self::KALTURA_COLUMN_CUSTOM_DATA,
+		self::VIDIUN_COLUMN_CREATED_AT,
+		self::VIDIUN_COLUMN_UPDATED_AT,
+		self::VIDIUN_COLUMN_CUSTOM_DATA,
 	);
 
 	/* (non-PHPdoc)
@@ -191,7 +191,7 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 		$newLine = "\n\t\t";
 
 		$table = $this->getTable();
-		$customDataColumn = $table->getColumn(self::KALTURA_COLUMN_CUSTOM_DATA);
+		$customDataColumn = $table->getColumn(self::VIDIUN_COLUMN_CUSTOM_DATA);
 		if($customDataColumn) {
 			$script .= $newLine . "// Nullify cached objects";
 			$script .= $newLine . "\$this->m_custom_data = null;" . $newLine;
@@ -240,11 +240,11 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 	 */
 	protected function addSaveBody(&$script) {
 		$table = $this->getTable();
-		if (!$table->containsColumn(self::KALTURA_COLUMN_CUSTOM_DATA))
+		if (!$table->containsColumn(self::VIDIUN_COLUMN_CUSTOM_DATA))
 			return parent::addSaveBody($script);
 		$reloadOnUpdate = $table->isReloadOnUpdate();
 		$reloadOnInsert = $table->isReloadOnInsert();
-		$customDataColumn = $table->getColumn(self::KALTURA_COLUMN_CUSTOM_DATA);
+		$customDataColumn = $table->getColumn(self::VIDIUN_COLUMN_CUSTOM_DATA);
 
 		$script .= "
 		if (\$this->isDeleted()) {
@@ -280,13 +280,13 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 				return 0;
 			}
 			
-			for (\$retries = 1; \$retries < KalturaPDO::SAVE_MAX_RETRIES; \$retries++)
+			for (\$retries = 1; \$retries < VidiunPDO::SAVE_MAX_RETRIES; \$retries++)
 			{
                \$affectedRows = \$this->doSave(\$con);
                 if (\$affectedRows || !\$this->isColumnModified(".$this->getPeerClassname()."::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug(\"was unable to save! retrying for the \$retries time\");
+                VidiunLog::debug(\"was unable to save! retrying for the \$retries time\");
                 \$criteria = \$this->buildPkeyCriteria();
 				\$criteria->addSelectColumn(".$this->getPeerClassname()."::CUSTOM_DATA);
                 \$stmt = BasePeer::doSelect(\$criteria, \$con);
@@ -470,7 +470,7 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 				\$this->set".$this->getFKPhpNameAffix($fk, $plural = false)."(\$this->$aVarName);
 			}
 ";
-			} // foreach foreign k
+			} // foreach foreign v
 		} // if (count(foreign keys))
 
 		if ($table->hasAutoIncrementPrimaryKey() ) {
@@ -600,9 +600,9 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 	protected function addSaveHooks(&$script)
 	{
 		$table = $this->getTable();
-		$createdAtColumn = $table->getColumn(self::KALTURA_COLUMN_CREATED_AT);
-		$updatedAtColumn = $table->getColumn(self::KALTURA_COLUMN_UPDATED_AT);
-		$customDataColumn = $table->getColumn(self::KALTURA_COLUMN_CUSTOM_DATA);
+		$createdAtColumn = $table->getColumn(self::VIDIUN_COLUMN_CREATED_AT);
+		$updatedAtColumn = $table->getColumn(self::VIDIUN_COLUMN_UPDATED_AT);
+		$customDataColumn = $table->getColumn(self::VIDIUN_COLUMN_CUSTOM_DATA);
 		$reloadOnInsert = $table->isReloadOnInsert();
 
 		$script .= "
@@ -642,7 +642,7 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 	 */
 	public function postSave(PropelPDO \$con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent(\$this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent(\$this));
 		\$this->oldColumnsValues = array();";
 
 		if($customDataColumn)
@@ -682,16 +682,16 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 	 */
 	public function postInsert(PropelPDO \$con = null)
 	{
-		kQueryCache::invalidateQueryCache(\$this);
+		vQueryCache::invalidateQueryCache(\$this);
 		";
 
 		if ($this->shouldRaiseEvents())
 		{
 			$script .= "
-		kEventsManager::raiseEvent(new kObjectCreatedEvent(\$this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent(\$this));
 		
 		if(\$this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent(\$this->copiedFrom, \$this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent(\$this->copiedFrom, \$this));
 		";
 		}
 		$script .= "
@@ -714,16 +714,16 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 			$script .= "
 		if(\$this->isModified())
 		{
-			kQueryCache::invalidateQueryCache(\$this);
+			vQueryCache::invalidateQueryCache(\$this);
 			\$modifiedColumns = \$this->tempModifiedColumns;";
 
 			if($customDataColumn) {
 				$script .= "
-			\$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = \$this->oldCustomDataValues;";
+			\$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = \$this->oldCustomDataValues;";
 			}
 
 			$script .= "
-			kEventsManager::raiseEvent(new kObjectChangedEvent(\$this, \$modifiedColumns));
+			vEventsManager::raiseEvent(new vObjectChangedEvent(\$this, \$modifiedColumns));
 		}
 			
 		\$this->tempModifiedColumns = array();
@@ -732,7 +732,7 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 		else
 		{
 			$script .= "
-		kQueryCache::invalidateQueryCache(\$this);
+		vQueryCache::invalidateQueryCache(\$this);
 		";
 		}
 		$script .= "
@@ -749,13 +749,13 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 	 */
 	public function postDelete(PropelPDO \$con = null)
 	{
-		kQueryCache::invalidateQueryCache(\$this);
+		vQueryCache::invalidateQueryCache(\$this);
 		
 		";
 			if ($this->shouldRaiseEvents())
 			{
 				$script .= "
-		kEventsManager::raiseEvent(new kObjectErasedEvent(\$this));
+		vEventsManager::raiseEvent(new vObjectErasedEvent(\$this));
 		";
 			}
 			$script .= "
@@ -890,7 +890,7 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 		parent::addClassBody($script);
 
 		$table = $this->getTable();
-		$customDataColumn = $table->getColumn(self::KALTURA_COLUMN_CUSTOM_DATA);
+		$customDataColumn = $table->getColumn(self::VIDIUN_COLUMN_CUSTOM_DATA);
 		if($customDataColumn)
 			$this->addCustomDataMethods($script);
 	}
@@ -1165,14 +1165,14 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 	protected function addBuildPkeyCriteriaClose(&$script)
 	{
 		$table = $this->getTable();
-		if(!$table->getColumn(self::KALTURA_COLUMN_UPDATED_AT))
+		if(!$table->getColumn(self::VIDIUN_COLUMN_UPDATED_AT))
 			return parent::addBuildPkeyCriteriaClose($script);
 
 		$script .= "
 		
 		if(\$this->alreadyInSave)
 		{";
-		if ($table->containsColumn(self::KALTURA_COLUMN_CUSTOM_DATA)){
+		if ($table->containsColumn(self::VIDIUN_COLUMN_CUSTOM_DATA)){
 			$script .= "
 			if (\$this->isColumnModified(".$this->getPeerClassname()."::CUSTOM_DATA))
 			{
@@ -1180,9 +1180,9 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 				{
 					\$criteria->add(".$this->getPeerClassname()."::CUSTOM_DATA, \"MD5(cast(\" . ".$this->getPeerClassname()."::CUSTOM_DATA . \" as char character set latin1)) = '\$this->custom_data_md5'\", Criteria::CUSTOM);
 					//casting to latin char set to avoid mysql and php md5 difference
-					if (kDataCenterMgr::isMultiDc()) // if multi DC configuration don't check costume data on other DC
+					if (vDataCenterMgr::isMultiDc()) // if multi DC configuration don't check costume data on other DC
 					{
-						\$currentDcId = kDataCenterMgr::getCurrentDcId();
+						\$currentDcId = vDataCenterMgr::getCurrentDcId();
 						//addOr(column, value, comparison)
 						\$criteria->addOr(".$this->getPeerClassname()."::CUSTOM_DATA,\" '\$currentDcId' != getDC()\" ,Criteria::CUSTOM);
 					}

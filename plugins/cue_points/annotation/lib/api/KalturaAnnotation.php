@@ -3,7 +3,7 @@
  * @package plugins.annotation
  * @subpackage api.objects
  */
-class KalturaAnnotation extends KalturaCuePoint
+class VidiunAnnotation extends VidiunCuePoint
 {
 	/**
 	 * @var string
@@ -59,14 +59,14 @@ class KalturaAnnotation extends KalturaCuePoint
 	
 	/**
 	 * Is the annotation public.
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 * @filter eq
 	 */
 	public $isPublic;
 	
 	/**
 	 * Should the cue point get indexed on the entry.
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $searchableOnEntry;
 	
@@ -91,7 +91,7 @@ class KalturaAnnotation extends KalturaCuePoint
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::getMapBetweenObjects()
+	 * @see VidiunCuePoint::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -99,7 +99,7 @@ class KalturaAnnotation extends KalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -133,7 +133,7 @@ class KalturaAnnotation extends KalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::validateForInsert()
+	 * @see VidiunCuePoint::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -153,7 +153,7 @@ class KalturaAnnotation extends KalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::validateForUpdate()
+	 * @see VidiunCuePoint::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -172,7 +172,7 @@ class KalturaAnnotation extends KalturaCuePoint
 
 	/*
      * @param string $cuePointId
-     * @throw KalturaAPIException - when parent annotation doesn't belong to the same entry
+     * @throw VidiunAPIException - when parent annotation doesn't belong to the same entry
      */
     public function validateParentId($cuePointId = null)
     {
@@ -184,23 +184,23 @@ class KalturaAnnotation extends KalturaCuePoint
         {
             $dbParentCuePoint = CuePointPeer::retrieveByPK($this->parentId);
             if (!$dbParentCuePoint)
-                throw new KalturaAPIException(KalturaCuePointErrors::PARENT_ANNOTATION_NOT_FOUND, $this->parentId);
+                throw new VidiunAPIException(VidiunCuePointErrors::PARENT_ANNOTATION_NOT_FOUND, $this->parentId);
 
             if($cuePointId !== null){// update
                 $dbCuePoint = CuePointPeer::retrieveByPK($cuePointId);
                 if(!$dbCuePoint)
-                    throw new KalturaAPIException(KalturaCuePointErrors::INVALID_OBJECT_ID, $cuePointId);
+                    throw new VidiunAPIException(VidiunCuePointErrors::INVALID_OBJECT_ID, $cuePointId);
 
                 if($dbCuePoint->isDescendant($this->parentId))
-                    throw new KalturaAPIException(KalturaCuePointErrors::PARENT_ANNOTATION_IS_DESCENDANT, $this->parentId, $dbCuePoint->getId());
+                    throw new VidiunAPIException(VidiunCuePointErrors::PARENT_ANNOTATION_IS_DESCENDANT, $this->parentId, $dbCuePoint->getId());
 
                 if ($dbParentCuePoint->getEntryId() != $dbCuePoint->getEntryId())
-                    throw new KalturaAPIException(KalturaCuePointErrors::PARENT_ANNOTATION_DO_NOT_BELONG_TO_THE_SAME_ENTRY);
+                    throw new VidiunAPIException(VidiunCuePointErrors::PARENT_ANNOTATION_DO_NOT_BELONG_TO_THE_SAME_ENTRY);
             }
             else
             {
                 if ($dbParentCuePoint->getEntryId() != $this->entryId)
-                    throw new KalturaAPIException(KalturaCuePointErrors::PARENT_ANNOTATION_DO_NOT_BELONG_TO_THE_SAME_ENTRY);
+                    throw new VidiunAPIException(VidiunCuePointErrors::PARENT_ANNOTATION_DO_NOT_BELONG_TO_THE_SAME_ENTRY);
             }
         }
     }

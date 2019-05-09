@@ -1,25 +1,25 @@
 <?php
 /**
- * wraps a real kshow object and copies only very little data to be stored in some cache.
+ * wraps a real vshow object and copies only very little data to be stored in some cache.
  * all the baseobject classes handle DB issues and are very heavy when persisting.
  * 
  * @package Core
  * @subpackage model.data
  */
-class kshowStub extends myBaseObject
+class vshowStub extends myBaseObject
 {
 
-	public function __construct ( kshow $kshow )
+	public function __construct ( vshow $vshow )
 	{
 		$this->init();
-		$this->fillObjectFromObject( $kshow , 
+		$this->fillObjectFromObject( $vshow , 
 			self::CLONE_FIELD_POLICY_THIS, 
 			self::CLONE_POLICY_PREFER_NEW, 
 /* fields to ignore */
 			array ( "producer_name" , "team_picture_path" , "thumbnail_path" ,"type_text" , "intro_url" , "intro_duration" , 
 				"intro_duration_formatted" , "intro_created_at_formatted" , "intro_thumbnail", "custom_data_3" ) ,   
 /* envoke getters */			
-			array ( "producer_name" => "kuser.screenName" , 
+			array ( "producer_name" => "vuser.screenName" , 
 					"team_picture_path" => "teamPicturePath" , 
 					"thumbnail_path" => "thumbnailPath" ,
 					"type_text" => "typeText" , 
@@ -35,7 +35,7 @@ class kshowStub extends myBaseObject
 	protected function init ()
 	{
 		if ( $this->fields == NULL )
-			$this->fields = kArray::makeAssociative( array ( "id" , "name" , "type" , 
+			$this->fields = vArray::makeAssociative( array ( "id" , "name" , "type" , 
 				"type_text" , "producer_name" , "rank", "views" , "entries" , "team_picture_path" , "thumbnail_path", "intro_id" , 
 				"intro_url" , "intro_duration" , "intro_duration_formatted" , "intro_created_at_formatted" ,"intro_thumbnail" , "custom_data_3" ));
 	}

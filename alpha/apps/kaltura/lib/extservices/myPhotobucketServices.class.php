@@ -9,7 +9,7 @@ class myPhotobucketServices extends myBaseMediaSource implements IMediaSource
 	protected $source_name = "PhotoBucket";
 //	protected $auth_method = self::AUTH_METHOD_NONE;
 	protected $search_in_user = false; 
-	protected $logo = "http://www.kaltura.com/images/wizard/logo_phototbucket.png";
+	protected $logo = "http://www.vidiun.com/images/wizard/logo_phototbucket.png";
 	protected $id = entry::ENTRY_MEDIA_SOURCE_PHOTOBUCKET;
 		
 	private static $NEED_MEDIA_INFO = "0";
@@ -50,7 +50,7 @@ class myPhotobucketServices extends myBaseMediaSource implements IMediaSource
 		return null;		
 	}
 	
-	public function getAuthData( $kuserId, $userName, $password, $token)
+	public function getAuthData( $vuserId, $userName, $password, $token)
 	{
 		return array('status' => 'ok', 'message' => '', 'authData' => $userName);
 //		return ""; // empty value
@@ -63,8 +63,8 @@ class myPhotobucketServices extends myBaseMediaSource implements IMediaSource
 		$postData = array("action" => "login", "redir", "username" => $userName, "password" => $password, "login" => "Login");
 		
 		$o="";
-		foreach ($postData as $k=>$v)
-			$o.= "$k=".utf8_encode($v)."&";
+		foreach ($postData as $v=>$v)
+			$o.= "$v=".utf8_encode($v)."&";
 		
 		$postData = substr($o,0,-1);
 		

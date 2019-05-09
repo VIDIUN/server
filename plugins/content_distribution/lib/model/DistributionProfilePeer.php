@@ -61,7 +61,7 @@ class DistributionProfilePeer extends BaseDistributionProfilePeer
 	public static function getOMClass($row, $colnum)
 	{
 		$class = self::getOMClassImpl($row, $colnum);
-		KalturaLog::log("Loads object [$class]");
+		VidiunLog::log("Loads object [$class]");
 		return $class;
 	}
 
@@ -73,7 +73,7 @@ class DistributionProfilePeer extends BaseDistributionProfilePeer
 			if(isset(self::$class_types_cache[$assetType]))
 				return self::$class_types_cache[$assetType];
 				
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $assetType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $assetType);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$assetType] = $extendedCls;
@@ -96,7 +96,7 @@ class DistributionProfilePeer extends BaseDistributionProfilePeer
 		if($providerType == DistributionProviderType::SYNDICATION)
 			return new SyndicationDistributionProfile();
 			
-		$distributionProfile = KalturaPluginManager::loadObject(parent::OM_CLASS, $providerType);
+		$distributionProfile = VidiunPluginManager::loadObject(parent::OM_CLASS, $providerType);
 		if($distributionProfile)
 			return $distributionProfile;
 		

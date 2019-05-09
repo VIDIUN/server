@@ -31,7 +31,7 @@ foreach ($flavorAssets as $flavorAsset)
 	$flavorSyncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 	try
 	{
-		if (!kFileSyncUtils::file_exists($flavorSyncKey, true))
+		if (!vFileSyncUtils::file_exists($flavorSyncKey, true))
 		{
 			echo 'changed source flavor asset to status deleted for entry: ' . $flavorAsset->getEntryId() .
 				' and for flavor id ' . $flavorAsset->getId() . PHP_EOL;

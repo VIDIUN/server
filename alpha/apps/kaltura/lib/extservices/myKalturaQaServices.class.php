@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage ExternalServices
  */
-class myKalturaQaServices  extends myBaseMediaSource  implements IMediaSource
+class myVidiunQaServices  extends myBaseMediaSource  implements IMediaSource
 {
 	public function getMediaInfo( $media_type ,$objectId) 
 	{
@@ -59,7 +59,7 @@ class myKalturaQaServices  extends myBaseMediaSource  implements IMediaSource
 	
 	/**
 	*/
-	public function getAuthData( $kuserId, $userName, $password, $token)
+	public function getAuthData( $vuserId, $userName, $password, $token)
 	{
 		
 	}

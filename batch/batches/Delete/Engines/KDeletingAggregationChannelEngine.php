@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage Delete
  */
-class KDeletingAggregationChannelEngine extends  KDeletingEngine
+class VDeletingAggregationChannelEngine extends  VDeletingEngine
 {
 	protected $lastCreatedAt;
 	
@@ -12,7 +12,7 @@ class KDeletingAggregationChannelEngine extends  KDeletingEngine
 	
 	public function configure($partnerId, $jobData)
 	{
-		/* @var $jobData KalturaDeleteJobData */
+		/* @var $jobData VidiunDeleteJobData */
 		parent::configure($partnerId, $jobData);
 
 		$this->publicAggregationChannel = $jobData->filter->aggregationCategoriesMultiLikeAnd;
@@ -20,38 +20,38 @@ class KDeletingAggregationChannelEngine extends  KDeletingEngine
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KDeletingEngine::delete()
+	 * @see VDeletingEngine::delete()
 	 */
-	protected function delete(KalturaFilter $filter) {
+	protected function delete(VidiunFilter $filter) {
 		return $this->deleteAggregationCategoryEntries ($filter);
 		
 	}
 	
-	protected function deleteAggregationCategoryEntries (KalturaCategoryFilter $filter)
+	protected function deleteAggregationCategoryEntries (VidiunCategoryFilter $filter)
 	{
-		$entryFilter = new KalturaBaseEntryFilter();
+		$entryFilter = new VidiunBaseEntryFilter();
 		$entryFilter->categoriesIdsNotContains = $this->excludedCategories;
 		$entryFilter->categoriesIdsMatchAnd = $this->publicAggregationChannel . "," . $filter->idNotIn;
 		
-		$entryFilter->orderBy = KalturaBaseEntryOrderBy::CREATED_AT_ASC;
+		$entryFilter->orderBy = VidiunBaseEntryOrderBy::CREATED_AT_ASC;
 		if ($this->lastCreatedAt)
 		{
 			$entryFilter->createdAtGreaterThanOrEqual = $this->lastCreatedAt;
 		}
 		
-		$entryFilter->statusIn = implode (',', array (KalturaEntryStatus::ERROR_CONVERTING, KalturaEntryStatus::ERROR_IMPORTING, KalturaEntryStatus::IMPORT, KalturaEntryStatus::NO_CONTENT, KalturaEntryStatus::READY));
-		$entriesList = KBatchBase::$kClient->baseEntry->listAction($entryFilter, $this->pager);
+		$entryFilter->statusIn = implode (',', array (VidiunEntryStatus::ERROR_CONVERTING, VidiunEntryStatus::ERROR_IMPORTING, VidiunEntryStatus::IMPORT, VidiunEntryStatus::NO_CONTENT, VidiunEntryStatus::READY));
+		$entriesList = VBatchBase::$vClient->baseEntry->listAction($entryFilter, $this->pager);
 		if(!$entriesList->objects || !count($entriesList->objects))
 			return 0;
 			
 		$this->lastCreatedAt = $entriesList->objects[count ($entriesList->objects) -1];
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($entriesList->objects as $entry)
 		{
-			/* @var $entry KalturaBaseEntry */
-			KBatchBase::$kClient->categoryEntry->delete($entry->id, $this->publicAggregationChannel);
+			/* @var $entry VidiunBaseEntry */
+			VBatchBase::$vClient->categoryEntry->delete($entry->id, $this->publicAggregationChannel);
 		}
-		$results = KBatchBase::$kClient->doMultiRequest();
+		$results = VBatchBase::$vClient->doMultiRequest();
 		foreach($results as $index => $result)
 			if(is_array($result) && isset($result['code']))
 				unset($results[$index]);
@@ -60,15 +60,15 @@ class KDeletingAggregationChannelEngine extends  KDeletingEngine
 		
 	}
 	
-	protected function retrievePublishingCategories (KalturaCategoryFilter $filter)
+	protected function retrievePublishingCategories (VidiunCategoryFilter $filter)
 	{
-		$categoryPager = new KalturaFilterPager();
+		$categoryPager = new VidiunFilterPager();
 		$categoryPager->pageIndex = 1;
 		$categoryPager->pageSize = 500;
 		
 		$categoryIdsToReturn = array ();
 		
-		$categoryResponse = KBatchBase::$kClient->category->listAction($filter, $categoryPager);
+		$categoryResponse = VBatchBase::$vClient->category->listAction($filter, $categoryPager);
 		
 		while ($categoryResponse->objects && count($categoryResponse->objects))
 		{
@@ -78,7 +78,7 @@ class KDeletingAggregationChannelEngine extends  KDeletingEngine
 			}
 			
 			$categoryPager->pageIndex++;
-			$categoryResponse = KBatchBase::$kClient->category->listAction($filter, $categoryPager);
+			$categoryResponse = VBatchBase::$vClient->category->listAction($filter, $categoryPager);
 		}
 		
 		return implode (',', $categoryIdsToReturn);

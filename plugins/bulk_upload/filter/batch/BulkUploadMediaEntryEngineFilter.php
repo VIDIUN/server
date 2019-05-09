@@ -8,24 +8,24 @@ class BulkUploadMediaEntryEngineFilter extends BulkUploadEngineFilter
 	
 	const ACTION_TAG_XPATH = '/mrss/channel/item/action';
 	
-	protected function listObjects(KalturaFilter $filter, KalturaFilterPager $pager = null)
+	protected function listObjects(VidiunFilter $filter, VidiunFilterPager $pager = null)
 	{
 		$filter->orderBy = "+createdAt";
-		if ($filter instanceof KalturaBaseEntryFilter)
+		if ($filter instanceof VidiunBaseEntryFilter)
 		{
-			return KBatchBase::$kClient->baseEntry->listAction($filter, $pager);
+			return VBatchBase::$vClient->baseEntry->listAction($filter, $pager);
 		}
 		else
 		{
-			throw new KalturaBatchException('Unsupported filter: {' . get_class($filter) . '}', KalturaBatchJobAppErrors::BULK_VALIDATION_FAILED);
+			throw new VidiunBatchException('Unsupported filter: {' . get_class($filter) . '}', VidiunBatchJobAppErrors::BULK_VALIDATION_FAILED);
 		}
 	}
 	
-	protected function createObjectFromResultAndJobData(KalturaBulkUploadResult $bulkUploadResult)
+	protected function createObjectFromResultAndJobData(VidiunBulkUploadResult $bulkUploadResult)
 	{
 		$entryId = $bulkUploadResult->jobObjectId;
 		
-		$doc = new KDOMDocument();
+		$doc = new VDOMDocument();
 		$doc->load($this->data->filePath);
 		
 		$xpath = new DOMXPath($doc);
@@ -33,7 +33,7 @@ class BulkUploadMediaEntryEngineFilter extends BulkUploadEngineFilter
 		$items = $xpath->query(self::ENTRY_TAG_XPATH);
 		if (!$items->length)
 		{
-			throw new KalturaBatchException ('No {entryId} tag found in template bulk upload XML provided!');
+			throw new VidiunBatchException ('No {entryId} tag found in template bulk upload XML provided!');
 		}
 		
 		foreach ($items as $item)
@@ -42,26 +42,26 @@ class BulkUploadMediaEntryEngineFilter extends BulkUploadEngineFilter
 			$item->nodeValue = $entryId;
 		}
 		
-		$tmpFilePath = kFile::createTempFile($doc->saveXML());
+		$tmpFilePath = vFile::createTempFile($doc->saveXML());
 		
-		$bulkUploadJobData = new KalturaBulkUploadXmlJobData();
+		$bulkUploadJobData = new VidiunBulkUploadXmlJobData();
 		$bulkUploadJobData->fileName = $this->job->id . '_' . $entryId . '.xml';
 		
-		KBatchBase::$kClient->media->bulkUploadAdd($tmpFilePath, $bulkUploadJobData);
+		VBatchBase::$vClient->media->bulkUploadAdd($tmpFilePath, $bulkUploadJobData);
 	}
 	
-	protected function deleteObjectFromResult(KalturaBulkUploadResult $bulkUploadResult)
+	protected function deleteObjectFromResult(VidiunBulkUploadResult $bulkUploadResult)
 	{
 		// TODO: Implement deleteObjectFromResult() method.
 	}
 	
 	protected function fillUploadResultInstance($object)
 	{
-		$bulkUploadResult = new KalturaBulkUploadResultJob();
+		$bulkUploadResult = new VidiunBulkUploadResultJob();
 		$bulkUploadResult->bulkUploadJobId = $this->job->id;
 		$bulkUploadResult->jobObjectId = $object->id;
 		
-		$doc = new KDOMDocument();
+		$doc = new VDOMDocument();
 		$doc->load($this->data->filePath);
 		
 		$xpath = new DOMXPath($doc);
@@ -69,7 +69,7 @@ class BulkUploadMediaEntryEngineFilter extends BulkUploadEngineFilter
 		$actions = $xpath->query(self::ACTION_TAG_XPATH);
 		if (!$actions->length)
 		{
-			throw new KalturaBatchException ('No {action} tag found in template bulk upload XML provided!');
+			throw new VidiunBatchException ('No {action} tag found in template bulk upload XML provided!');
 		}
 		
 		foreach ($actions as $action)
@@ -77,7 +77,7 @@ class BulkUploadMediaEntryEngineFilter extends BulkUploadEngineFilter
 			/* @var $action DOMNode */
 			if (strval($action->nodeValue) == 'add')
 			{
-				throw new KalturaBatchException ('{action} tag value can only be set to values [update] and [delete]');
+				throw new VidiunBatchException ('{action} tag value can only be set to values [update] and [delete]');
 			}
 		}
 		
@@ -86,7 +86,7 @@ class BulkUploadMediaEntryEngineFilter extends BulkUploadEngineFilter
 	
 	protected function getBulkUploadResultObjectType()
 	{
-		return KalturaBulkUploadObjectType::JOB;
+		return VidiunBulkUploadObjectType::JOB;
 	}
 	
 	/**

@@ -5,22 +5,22 @@
  * @package Core
  * @subpackage model.data
  */
-abstract class kIntegerField extends kIntegerValue implements IScopeField
+abstract class vIntegerField extends vIntegerValue implements IScopeField
 {
 	/**
-	 * @var kScope
+	 * @var vScope
 	 */
 	protected $scope = null;
 	
 	/**
 	 * Calculates the value at realtime
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @return int $value
 	 */
-	abstract protected function getFieldValue(kScope $scope = null);
+	abstract protected function getFieldValue(vScope $scope = null);
 	
 	/* (non-PHPdoc)
-	 * @see kIntegerValue::getValue()
+	 * @see vIntegerValue::getValue()
 	 */
 	public function getValue() 
 	{
@@ -28,15 +28,15 @@ abstract class kIntegerField extends kIntegerValue implements IScopeField
 	}
 	
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 */
-	public function setScope(kScope $scope) 
+	public function setScope(vScope $scope) 
 	{
 		$this->scope = $scope;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kIntegerValue::shouldDisableCache()
+	 * @see vIntegerValue::shouldDisableCache()
 	 */
 	public function shouldDisableCache($scope)
 	{

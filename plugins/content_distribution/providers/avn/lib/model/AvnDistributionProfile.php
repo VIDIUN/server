@@ -127,7 +127,7 @@ class AvnDistributionProfile extends ConfigurableDistributionProfile
 		{ 
 			if (in_array(strtolower($allFieldValues[AvnDistributionField::CATEGORY]), array('main menu', 'thank you')))
 			{
-				$this->overrideRequiredThumbs = new kDistributionThumbDimensions();
+				$this->overrideRequiredThumbs = new vDistributionThumbDimensions();
 				$this->overrideRequiredThumbs->setWidth(self::SPECIAL_THUMBNAIL_WIDTH);
 				$this->overrideRequiredThumbs->setHeight(self::SPECIAL_THUMBNAIL_HEIGHT);
 			}
@@ -137,7 +137,7 @@ class AvnDistributionProfile extends ConfigurableDistributionProfile
 		
 		if (!$allFieldValues || !is_array($allFieldValues)) 
 		{
-			KalturaLog::err('Error getting field values from entry distribution id ['.$entryDistribution->getId().'] profile id ['.$this->getId().']');
+			VidiunLog::err('Error getting field values from entry distribution id ['.$entryDistribution->getId().'] profile id ['.$this->getId().']');
 			return $validationErrors;
 		}
 		
@@ -150,7 +150,7 @@ class AvnDistributionProfile extends ConfigurableDistributionProfile
 	}
 	
 	/**
-	 * @return array<kDistributionThumbDimensions>
+	 * @return array<vDistributionThumbDimensions>
 	 */
 	public function getRequiredThumbDimensionsObjects()
 	{

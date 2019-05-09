@@ -29,7 +29,7 @@ class TagFilter extends baseObjectFilter
      */
     protected function init ()
     {
-        $this->fields = kArray::makeAssociativeDefaultValue ( array (
+        $this->fields = vArray::makeAssociativeDefaultValue ( array (
 			"_eq_object_type",
 			"_eq_tag",
 			"_likex_tag",

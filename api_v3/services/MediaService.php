@@ -7,9 +7,9 @@
  * @package api
  * @subpackage services
  */
-class MediaService extends KalturaEntryService
+class MediaService extends VidiunEntryService
 {
-	protected function kalturaNetworkAllowed($actionName)
+	protected function vidiunNetworkAllowed($actionName)
 	{
 		if ($actionName === 'get') {
 			return true;
@@ -31,11 +31,11 @@ class MediaService extends KalturaEntryService
 		}
 
 		// admin and batch
-		if ($actionName === 'list' && kCurrentContext::$master_partner_id < 0) {
+		if ($actionName === 'list' && vCurrentContext::$master_partner_id < 0) {
 			return true;
 		}
 
-		return parent::kalturaNetworkAllowed($actionName);
+		return parent::vidiunNetworkAllowed($actionName);
 	}
 
 	protected function partnerRequired($actionName)
@@ -50,10 +50,10 @@ class MediaService extends KalturaEntryService
      * Add entry
      *
      * @action add
-     * @param KalturaMediaEntry $entry
-     * @return KalturaMediaEntry
+     * @param VidiunMediaEntry $entry
+     * @return VidiunMediaEntry
      */
-    function addAction(KalturaMediaEntry $entry)
+    function addAction(VidiunMediaEntry $entry)
     {
     	if($entry->conversionQuality && !$entry->conversionProfileId)
     		$entry->conversionProfileId = $entry->conversionQuality;
@@ -82,7 +82,7 @@ class MediaService extends KalturaEntryService
 		$trackEntry->setDescription(__METHOD__ . ":" . __LINE__ . "::ENTRY_MEDIA");
 		TrackEntry::addTrackEntry($trackEntry);
 
-    	myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry, $dbEntry->getPartnerId(), null, null, null, $dbEntry->getId());
+    	myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry, $dbEntry->getPartnerId(), null, null, null, $dbEntry->getId());
 
 		$entry->fromObject($dbEntry, $this->getResponseProfile());
 		return $entry;
@@ -91,7 +91,7 @@ class MediaService extends KalturaEntryService
     protected function shoudlValidateLocal()
 	{
 		//if multi request of more than one api call
-		return  (kCurrentContext::$multiRequest_index <= 1);
+		return  (vCurrentContext::$multiRequest_index <= 1);
 	}
 
     /**
@@ -100,21 +100,21 @@ class MediaService extends KalturaEntryService
      *
      * @action addContent
      * @param string $entryId
-     * @param KalturaResource $resource
-     * @return KalturaMediaEntry
-     * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-     * @throws KalturaErrors::ENTRY_ALREADY_WITH_CONTENT
+     * @param VidiunResource $resource
+     * @return VidiunMediaEntry
+     * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+     * @throws VidiunErrors::ENTRY_ALREADY_WITH_CONTENT
      * @validateUser entry entryId edit
      */
-	function addContentAction($entryId, KalturaResource $resource = null)
+	function addContentAction($entryId, VidiunResource $resource = null)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
-	    if (!$dbEntry || $dbEntry->getType() != KalturaEntryType::MEDIA_CLIP)
-		    throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+	    if (!$dbEntry || $dbEntry->getType() != VidiunEntryType::MEDIA_CLIP)
+		    throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		if ($dbEntry->getStatus() != entryStatus::NO_CONTENT)
-		    throw new KalturaAPIException(KalturaErrors::ENTRY_ALREADY_WITH_CONTENT);
+		    throw new VidiunAPIException(VidiunErrors::ENTRY_ALREADY_WITH_CONTENT);
 		
 	    if ($resource)
 	    {
@@ -122,8 +122,8 @@ class MediaService extends KalturaEntryService
 			{
 				$validateLocalExist = $this->shoudlValidateLocal();
 				$resource->validateEntry($dbEntry, $validateLocalExist);
-				$kResource = $resource->toObject();
-				$this->attachResource($kResource, $dbEntry);
+				$vResource = $resource->toObject();
+				$this->attachResource($vResource, $dbEntry);
 			}
 		    catch (Exception $e)
 		    {
@@ -136,18 +136,18 @@ class MediaService extends KalturaEntryService
     }
 
     /**
-     * @param KalturaResource $resource
+     * @param VidiunResource $resource
      * @param entry $dbEntry
      * @param int $conversionProfileId
      */
-    protected function replaceResource(KalturaResource $resource, entry $dbEntry, $conversionProfileId = null, $advancedOptions = null)
+    protected function replaceResource(VidiunResource $resource, entry $dbEntry, $conversionProfileId = null, $advancedOptions = null)
     {
 	    if($advancedOptions)
     	{
     		$dbEntry->setReplacementOptions($advancedOptions->toObject());
     		$dbEntry->save();
     	}
-		if($dbEntry->getStatus() == KalturaEntryStatus::NO_CONTENT || $dbEntry->getMediaType() == KalturaMediaType::IMAGE)
+		if($dbEntry->getStatus() == VidiunEntryStatus::NO_CONTENT || $dbEntry->getMediaType() == VidiunMediaType::IMAGE)
 		{
 			$resource->validateEntry($dbEntry, true);
 
@@ -157,13 +157,13 @@ class MediaService extends KalturaEntryService
 				$dbEntry->save();
 			}
 
-			$kResource = $resource->toObject();
-			$this->attachResource($kResource, $dbEntry);
+			$vResource = $resource->toObject();
+			$this->attachResource($vResource, $dbEntry);
 		}
 		else
 		{
-			$kResource = $resource->toObject();
-			$tempMediaEntry = new KalturaMediaEntry();
+			$vResource = $resource->toObject();
+			$tempMediaEntry = new VidiunMediaEntry();
 			$tempMediaEntry->type = $dbEntry->getType();
 			$tempMediaEntry->mediaType = $dbEntry->getMediaType();
 			$tempMediaEntry->sourceType = $dbEntry->getSourceType();
@@ -205,57 +205,57 @@ class MediaService extends KalturaEntryService
     }
 
     /**
-     * @param kResource $resource
+     * @param vResource $resource
      * @param entry $dbEntry
      * @param asset $dbAsset
      * @return asset
      */
-    protected function attachResource(kResource $resource, entry $dbEntry, asset $dbAsset = null)
+    protected function attachResource(vResource $resource, entry $dbEntry, asset $dbAsset = null)
     {
     	switch($resource->getType())
     	{
-			case 'kAssetsParamsResourceContainers':
+			case 'vAssetsParamsResourceContainers':
 				// image entry doesn't support asset params
-				if($dbEntry->getMediaType() == KalturaMediaType::IMAGE)
-					throw new KalturaAPIException(KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($resource));
+				if($dbEntry->getMediaType() == VidiunMediaType::IMAGE)
+					throw new VidiunAPIException(VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($resource));
 
 				return $this->attachAssetsParamsResourceContainers($resource, $dbEntry);
 
-			case 'kAssetParamsResourceContainer':
+			case 'vAssetParamsResourceContainer':
 				// image entry doesn't support asset params
-				if($dbEntry->getMediaType() == KalturaMediaType::IMAGE)
-					throw new KalturaAPIException(KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($resource));
+				if($dbEntry->getMediaType() == VidiunMediaType::IMAGE)
+					throw new VidiunAPIException(VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($resource));
 
 				return $this->attachAssetParamsResourceContainer($resource, $dbEntry, $dbAsset);
 
-			case 'kUrlResource':
+			case 'vUrlResource':
 				return $this->attachUrlResource($resource, $dbEntry, $dbAsset);
 
-			case 'kLocalFileResource':
+			case 'vLocalFileResource':
 				return $this->attachLocalFileResource($resource, $dbEntry, $dbAsset);
 
-			case 'kLiveEntryResource':
+			case 'vLiveEntryResource':
 				return $this->attachLiveEntryResource($resource, $dbEntry, $dbAsset);
 
-			case 'kFileSyncResource':
+			case 'vFileSyncResource':
 				return $this->attachFileSyncResource($resource, $dbEntry, $dbAsset);
 
-			case 'kRemoteStorageResource':
-			case 'kRemoteStorageResources':
+			case 'vRemoteStorageResource':
+			case 'vRemoteStorageResources':
 				return $this->attachRemoteStorageResource($resource, $dbEntry, $dbAsset);
 
-			case 'kOperationResource':
-				if($dbEntry->getMediaType() == KalturaMediaType::IMAGE)
-					throw new KalturaAPIException(KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($resource));
+			case 'vOperationResource':
+				if($dbEntry->getMediaType() == VidiunMediaType::IMAGE)
+					throw new VidiunAPIException(VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($resource));
 
 				return $this->attachOperationResource($resource, $dbEntry, $dbAsset);
 
 			default:
-				KalturaLog::err("Resource of type [" . get_class($resource) . "] is not supported");
+				VidiunLog::err("Resource of type [" . get_class($resource) . "] is not supported");
 				$dbEntry->setStatus(entryStatus::ERROR_IMPORTING);
 				$dbEntry->save();
 
-				throw new KalturaAPIException(KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($resource));
+				throw new VidiunAPIException(VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($resource));
     	}
     }
 
@@ -265,17 +265,17 @@ class MediaService extends KalturaEntryService
 	 * This action should be exposed only to the batches
 	 *
 	 * @action addFromBulk
-	 * @param KalturaMediaEntry $mediaEntry Media entry metadata
+	 * @param VidiunMediaEntry $mediaEntry Media entry metadata
 	 * @param string $url An HTTP or FTP URL
 	 * @param int $bulkUploadId The id of the bulk upload job
-	 * @return KalturaMediaEntry The new media entry
+	 * @return VidiunMediaEntry The new media entry
 	 *
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_MIN_LENGTH
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_MIN_LENGTH
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
 	 *
 	 * @deprecated use media.add instead
 	 */
-	function addFromBulkAction(KalturaMediaEntry $mediaEntry, $url, $bulkUploadId)
+	function addFromBulkAction(VidiunMediaEntry $mediaEntry, $url, $bulkUploadId)
 	{
 		return $this->addDbFromUrl($mediaEntry, $url, $bulkUploadId);
 	}
@@ -285,21 +285,21 @@ class MediaService extends KalturaEntryService
 	 * The entry will be queued for import and then for conversion.
 	 *
 	 * @action addFromUrl
-	 * @param KalturaMediaEntry $mediaEntry Media entry metadata
+	 * @param VidiunMediaEntry $mediaEntry Media entry metadata
 	 * @param string $url An HTTP or FTP URL
-	 * @return KalturaMediaEntry The new media entry
+	 * @return VidiunMediaEntry The new media entry
 	 *
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_MIN_LENGTH
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_MIN_LENGTH
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
 	 *
 	 * @deprecated use media.add instead
 	 */
-	function addFromUrlAction(KalturaMediaEntry $mediaEntry, $url)
+	function addFromUrlAction(VidiunMediaEntry $mediaEntry, $url)
 	{
 		return $this->addDbFromUrl($mediaEntry, $url);
 	}
 
-	private function addDbFromUrl(KalturaMediaEntry $mediaEntry, $url, $bulkUploadId = null)
+	private function addDbFromUrl(VidiunMediaEntry $mediaEntry, $url, $bulkUploadId = null)
 	{
     	if($mediaEntry->conversionQuality && !$mediaEntry->conversionProfileId)
     		$mediaEntry->conversionProfileId = $mediaEntry->conversionQuality;
@@ -308,11 +308,11 @@ class MediaService extends KalturaEntryService
 		if($bulkUploadId)
 			$dbEntry->setBulkUploadId($bulkUploadId);
 
-        $kshowId = $dbEntry->getKshowId();
+        $vshowId = $dbEntry->getVshowId();
 
 		// setup the needed params for my insert entry helper
 		$paramsArray = array (
-			"entry_media_source" => KalturaSourceType::URL,
+			"entry_media_source" => VidiunSourceType::URL,
             "entry_media_type" => $dbEntry->getMediaType(),
 			"entry_url" => $url,
 			"entry_license" => $dbEntry->getLicenseType(),
@@ -321,15 +321,15 @@ class MediaService extends KalturaEntryService
 			"entry_tags" => $dbEntry->getTags(),
 		);
 
-		$token = $this->getKsUniqueString();
-		$insert_entry_helper = new myInsertEntryHelper(null , $dbEntry->getKuserId(), $kshowId, $paramsArray);
+		$token = $this->getVsUniqueString();
+		$insert_entry_helper = new myInsertEntryHelper(null , $dbEntry->getVuserId(), $vshowId, $paramsArray);
 		$insert_entry_helper->setPartnerId($this->getPartnerId(), $this->getPartnerId() * 100);
 		$insert_entry_helper->insertEntry($token, $dbEntry->getType(), $dbEntry->getId(), $dbEntry->getName(), $dbEntry->getTags(), $dbEntry);
 		$dbEntry = $insert_entry_helper->getEntry();
 
-		myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry, $this->getPartnerId(), null, null, null, $dbEntry->getId());
+		myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry, $this->getPartnerId(), null, null, null, $dbEntry->getId());
 
-		// FIXME: need to remove something from cache? in the old code the kshow was removed
+		// FIXME: need to remove something from cache? in the old code the vshow was removed
 		$mediaEntry->fromObject($dbEntry, $this->getResponseProfile());
 		return $mediaEntry;
 	}
@@ -339,25 +339,25 @@ class MediaService extends KalturaEntryService
 	 * This action should be used with the search service result.
 	 *
 	 * @action addFromSearchResult
-	 * @param KalturaMediaEntry $mediaEntry Media entry metadata
-	 * @param KalturaSearchResult $searchResult Result object from search service
-	 * @return KalturaMediaEntry The new media entry
+	 * @param VidiunMediaEntry $mediaEntry Media entry metadata
+	 * @param VidiunSearchResult $searchResult Result object from search service
+	 * @return VidiunMediaEntry The new media entry
 	 *
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_MIN_LENGTH
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_MIN_LENGTH
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
 	 *
 	 * @deprecated use media.add instead
 	 */
-	function addFromSearchResultAction(KalturaMediaEntry $mediaEntry = null, KalturaSearchResult $searchResult = null)
+	function addFromSearchResultAction(VidiunMediaEntry $mediaEntry = null, VidiunSearchResult $searchResult = null)
 	{
 		if($mediaEntry->conversionQuality && !$mediaEntry->conversionProfileId)
 			$mediaEntry->conversionProfileId = $mediaEntry->conversionQuality;
 
 		if ($mediaEntry === null)
-			$mediaEntry = new KalturaMediaEntry();
+			$mediaEntry = new VidiunMediaEntry();
 
 		if ($searchResult === null)
-			$searchResult = new KalturaSearchResult();
+			$searchResult = new VidiunSearchResult();
 
 		// copy the fields from search result if they are missing in media entry
 		// this should be checked before prepareEntry method call
@@ -381,28 +381,28 @@ class MediaService extends KalturaEntryService
 
      	$searchResult->validatePropertyNotNull("searchSource");
 
-    	$mediaEntry->sourceType = KalturaSourceType::SEARCH_PROVIDER;
+    	$mediaEntry->sourceType = VidiunSourceType::SEARCH_PROVIDER;
      	$mediaEntry->searchProviderType = $searchResult->searchSource;
      	$mediaEntry->searchProviderId = $searchResult->id;
 
 		$dbEntry = $this->prepareEntryForInsert($mediaEntry);
       	$dbEntry->setSourceId( $searchResult->id );
 
-        $kshowId = $dbEntry->getKshowId();
+        $vshowId = $dbEntry->getVshowId();
 
        	// $searchResult->licenseType; // FIXME, No support for licenseType
-        // FIXME - no need to clone entry if $dbEntry->getSource() == entry::ENTRY_MEDIA_SOURCE_KALTURA_USER_CLIPS
-		if ($dbEntry->getSource() == entry::ENTRY_MEDIA_SOURCE_KALTURA ||
-			$dbEntry->getSource() == entry::ENTRY_MEDIA_SOURCE_KALTURA_PARTNER ||
-			$dbEntry->getSource() == entry::ENTRY_MEDIA_SOURCE_KALTURA_PARTNER_KSHOW ||
-			$dbEntry->getSource() == entry::ENTRY_MEDIA_SOURCE_KALTURA_KSHOW ||
-			$dbEntry->getSource() == entry::ENTRY_MEDIA_SOURCE_KALTURA_USER_CLIPS)
+        // FIXME - no need to clone entry if $dbEntry->getSource() == entry::ENTRY_MEDIA_SOURCE_VIDIUN_USER_CLIPS
+		if ($dbEntry->getSource() == entry::ENTRY_MEDIA_SOURCE_VIDIUN ||
+			$dbEntry->getSource() == entry::ENTRY_MEDIA_SOURCE_VIDIUN_PARTNER ||
+			$dbEntry->getSource() == entry::ENTRY_MEDIA_SOURCE_VIDIUN_PARTNER_VSHOW ||
+			$dbEntry->getSource() == entry::ENTRY_MEDIA_SOURCE_VIDIUN_VSHOW ||
+			$dbEntry->getSource() == entry::ENTRY_MEDIA_SOURCE_VIDIUN_USER_CLIPS)
 		{
 			$sourceEntryId = $searchResult->id;
 			$copyDataResult = myEntryUtils::copyData($sourceEntryId, $dbEntry);
 
 			if (!$copyDataResult) // will be false when the entry id was not found
-				throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $sourceEntryId);
+				throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $sourceEntryId);
 
 			$dbEntry->setStatusReady();
 			$dbEntry->save();
@@ -420,14 +420,14 @@ class MediaService extends KalturaEntryService
 				"entry_tags" => $dbEntry->getTags(),
 			);
 
-			$token = $this->getKsUniqueString();
-			$insert_entry_helper = new myInsertEntryHelper(null , $dbEntry->getKuserId(), $kshowId, $paramsArray);
+			$token = $this->getVsUniqueString();
+			$insert_entry_helper = new myInsertEntryHelper(null , $dbEntry->getVuserId(), $vshowId, $paramsArray);
 			$insert_entry_helper->setPartnerId($this->getPartnerId(), $this->getPartnerId() * 100);
 			$insert_entry_helper->insertEntry($token, $dbEntry->getType(), $dbEntry->getId(), $dbEntry->getName(), $dbEntry->getTags(), $dbEntry);
 			$dbEntry = $insert_entry_helper->getEntry();
 		}
 
-		myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry);
+		myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry);
 
 		$mediaEntry->fromObject($dbEntry, $this->getResponseProfile());
 		return $mediaEntry;
@@ -437,17 +437,17 @@ class MediaService extends KalturaEntryService
 	 * Add new entry after the specific media file was uploaded and the upload token id exists
 	 *
 	 * @action addFromUploadedFile
-	 * @param KalturaMediaEntry $mediaEntry Media entry metadata
+	 * @param VidiunMediaEntry $mediaEntry Media entry metadata
 	 * @param string $uploadTokenId Upload token id
-	 * @return KalturaMediaEntry The new media entry
+	 * @return VidiunMediaEntry The new media entry
 	 *
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_MIN_LENGTH
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_MIN_LENGTH
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
 	 *
 	 * @deprecated use media.add instead
 	 */
-	function addFromUploadedFileAction(KalturaMediaEntry $mediaEntry, $uploadTokenId)
+	function addFromUploadedFileAction(VidiunMediaEntry $mediaEntry, $uploadTokenId)
 	{
 		if($mediaEntry->conversionQuality && !$mediaEntry->conversionProfileId)
 			$mediaEntry->conversionProfileId = $mediaEntry->conversionQuality;
@@ -455,22 +455,22 @@ class MediaService extends KalturaEntryService
 		try
 		{
 		    // check that the uploaded file exists
-		    $entryFullPath = kUploadTokenMgr::getFullPathByUploadTokenId($uploadTokenId);
+		    $entryFullPath = vUploadTokenMgr::getFullPathByUploadTokenId($uploadTokenId);
 		    
 		    // Make sure that the uploads path is not modified by $uploadTokenId (with the value of "../" for example )
 		    $entryRootDir = realpath( dirname( $entryFullPath ) );
 			$uploadPathBase = realpath( myContentStorage::getFSUploadsPath() );
 			if ( strpos( $entryRootDir, $uploadPathBase ) !== 0 ) // Composed path doesn't begin with $uploadPathBase?  
 			{
-				KalturaLog::err( "uploadTokenId [$uploadTokenId] points outside of uploads directory" );
-				throw new KalturaAPIException( KalturaErrors::INVALID_UPLOAD_TOKEN_ID );			
+				VidiunLog::err( "uploadTokenId [$uploadTokenId] points outside of uploads directory" );
+				throw new VidiunAPIException( VidiunErrors::INVALID_UPLOAD_TOKEN_ID );			
 			}
 		}
-		catch(kCoreException $ex)
+		catch(vCoreException $ex)
 		{
-			if ($ex->getCode() == kUploadTokenException::UPLOAD_TOKEN_INVALID_STATUS)
+			if ($ex->getCode() == vUploadTokenException::UPLOAD_TOKEN_INVALID_STATUS)
 			{
-				throw new KalturaAPIException(KalturaErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY);
+				throw new VidiunAPIException(VidiunErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY);
 			}
 			throw($ex);
 		}
@@ -478,27 +478,27 @@ class MediaService extends KalturaEntryService
 		if (!file_exists($entryFullPath))
 		{
 			// Backward compatability - support case in which the required file exist in the other DC
-			kFileUtils::dumpApiRequest ( kDataCenterMgr::getRemoteDcExternalUrlByDcId ( 1 - kDataCenterMgr::getCurrentDcId () ) );
+			vFileUtils::dumpApiRequest ( vDataCenterMgr::getRemoteDcExternalUrlByDcId ( 1 - vDataCenterMgr::getCurrentDcId () ) );
 			/*
-			$remoteDCHost = kUploadTokenMgr::getRemoteHostForUploadToken($uploadTokenId, kDataCenterMgr::getCurrentDcId());
+			$remoteDCHost = vUploadTokenMgr::getRemoteHostForUploadToken($uploadTokenId, vDataCenterMgr::getCurrentDcId());
 			if($remoteDCHost)
 			{
-				kFileUtils::dumpApiRequest($remoteDCHost);
+				vFileUtils::dumpApiRequest($remoteDCHost);
 			}
 			else
 			{
-				throw new KalturaAPIException(KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN);
+				throw new VidiunAPIException(VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN);
 			}
 			*/
 		}
 
 		$dbEntry = parent::add($mediaEntry, $mediaEntry->conversionProfileId);
 
-        $kshowId = $dbEntry->getKshowId();
+        $vshowId = $dbEntry->getVshowId();
 
 		// setup the needed params for my insert entry helper
 		$paramsArray = array (
-			"entry_media_source" => KalturaSourceType::FILE,
+			"entry_media_source" => VidiunSourceType::FILE,
 			"entry_media_type" => $dbEntry->getMediaType(),
 			"entry_full_path" => $entryFullPath,
 			"entry_license" => $dbEntry->getLicenseType(),
@@ -507,18 +507,18 @@ class MediaService extends KalturaEntryService
 			"entry_tags" => $dbEntry->getTags(),
 		);
 
-		$token = $this->getKsUniqueString();
-		$insert_entry_helper = new myInsertEntryHelper(null , $dbEntry->getKuserId(), $kshowId, $paramsArray);
+		$token = $this->getVsUniqueString();
+		$insert_entry_helper = new myInsertEntryHelper(null , $dbEntry->getVuserId(), $vshowId, $paramsArray);
 		$insert_entry_helper->setPartnerId($this->getPartnerId(), $this->getPartnerId() * 100);
 		$insert_entry_helper->insertEntry($token, $dbEntry->getType(), $dbEntry->getId(), $dbEntry->getName(), $dbEntry->getTags(), $dbEntry);
 		$dbEntry = $insert_entry_helper->getEntry();
 
-		kUploadTokenMgr::closeUploadTokenById($uploadTokenId);
+		vUploadTokenMgr::closeUploadTokenById($uploadTokenId);
 
-		$ret = new KalturaMediaEntry();
+		$ret = new VidiunMediaEntry();
 		if($dbEntry)
 		{
-			myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry, $dbEntry->getPartnerId(), null, null, null, $dbEntry->getId());
+			myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry, $dbEntry->getPartnerId(), null, null, null, $dbEntry->getId());
 			$ret->fromObject($dbEntry, $this->getResponseProfile());
 		}
 
@@ -529,17 +529,17 @@ class MediaService extends KalturaEntryService
 	 * Add new entry after the file was recorded on the server and the token id exists
 	 *
 	 * @action addFromRecordedWebcam
-	 * @param KalturaMediaEntry $mediaEntry Media entry metadata
+	 * @param VidiunMediaEntry $mediaEntry Media entry metadata
 	 * @param string $webcamTokenId Token id for the recorded webcam file
-	 * @return KalturaMediaEntry The new media entry
+	 * @return VidiunMediaEntry The new media entry
 	 *
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_MIN_LENGTH
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
-	 * @throws KalturaErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_MIN_LENGTH
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
+	 * @throws VidiunErrors::RECORDED_WEBCAM_FILE_NOT_FOUND
 	 *
 	 * @deprecated use media.add instead
 	 */
-	function addFromRecordedWebcamAction(KalturaMediaEntry $mediaEntry, $webcamTokenId)
+	function addFromRecordedWebcamAction(VidiunMediaEntry $mediaEntry, $webcamTokenId)
 	{
     	if($mediaEntry->conversionQuality && !$mediaEntry->conversionProfileId)
     		$mediaEntry->conversionProfileId = $mediaEntry->conversionQuality;
@@ -554,24 +554,24 @@ class MediaService extends KalturaEntryService
 	    $webcamBaseRootDir = realpath( dirname( $webcamBasePath ) ); // Get realpath of target directory 
 	    if ( strpos( $webcamBaseRootDir, $webcamContentRootDir ) !== 0 ) // The uploaded file's path is different from the content path?    
 	    {
-			KalturaLog::err( "webcamTokenId [$webcamTokenId] points outside of webcam content directory" );
-	    	throw new KalturaAPIException( KalturaErrors::INVALID_WEBCAM_TOKEN_ID );
+			VidiunLog::err( "webcamTokenId [$webcamTokenId] points outside of webcam content directory" );
+	    	throw new VidiunAPIException( VidiunErrors::INVALID_WEBCAM_TOKEN_ID );
 	    }
 	     
 		if (!file_exists("$webcamBasePath.flv") && !file_exists("$webcamBasePath.f4v") && !file_exists("$webcamBasePath.f4v.mp4"))
 		{
-			if (kDataCenterMgr::dcExists(1 - kDataCenterMgr::getCurrentDcId()))
-				kFileUtils::dumpApiRequest ( kDataCenterMgr::getRemoteDcExternalUrlByDcId ( 1 - kDataCenterMgr::getCurrentDcId () ) );
-			throw new KalturaAPIException ( KalturaErrors::RECORDED_WEBCAM_FILE_NOT_FOUND );
+			if (vDataCenterMgr::dcExists(1 - vDataCenterMgr::getCurrentDcId()))
+				vFileUtils::dumpApiRequest ( vDataCenterMgr::getRemoteDcExternalUrlByDcId ( 1 - vDataCenterMgr::getCurrentDcId () ) );
+			throw new VidiunAPIException ( VidiunErrors::RECORDED_WEBCAM_FILE_NOT_FOUND );
 		}
 
 		$dbEntry = $this->prepareEntryForInsert($mediaEntry);
 
-        $kshowId = $dbEntry->getKshowId();
+        $vshowId = $dbEntry->getVshowId();
 
 		// setup the needed params for my insert entry helper
 		$paramsArray = array (
-			"entry_media_source" => KalturaSourceType::WEBCAM,
+			"entry_media_source" => VidiunSourceType::WEBCAM,
             "entry_media_type" => $dbEntry->getMediaType(),
 			"webcam_suffix" => $webcamTokenId,
 			"entry_license" => $dbEntry->getLicenseType(),
@@ -580,13 +580,13 @@ class MediaService extends KalturaEntryService
 			"entry_tags" => $dbEntry->getTags(),
 		);
 
-		$token = $this->getKsUniqueString();
-		$insert_entry_helper = new myInsertEntryHelper(null , $dbEntry->getKuserId(), $kshowId, $paramsArray);
+		$token = $this->getVsUniqueString();
+		$insert_entry_helper = new myInsertEntryHelper(null , $dbEntry->getVuserId(), $vshowId, $paramsArray);
 		$insert_entry_helper->setPartnerId($this->getPartnerId(), $this->getPartnerId() * 100);
 		$insert_entry_helper->insertEntry($token, $dbEntry->getType(), $dbEntry->getId(), $dbEntry->getName(), $dbEntry->getTags(), $dbEntry);
 		$dbEntry = $insert_entry_helper->getEntry();
 
-		myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry);
+		myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry);
 
 		$mediaEntry->fromObject($dbEntry, $this->getResponseProfile());
 		return $mediaEntry;
@@ -597,17 +597,17 @@ class MediaService extends KalturaEntryService
 	 *
 	 * @action addFromEntry
 	 * @param string $sourceEntryId Media entry id to copy from
-	 * @param KalturaMediaEntry $mediaEntry Media entry metadata
+	 * @param VidiunMediaEntry $mediaEntry Media entry metadata
 	 * @param int $sourceFlavorParamsId The flavor to be used as the new entry source, source flavor will be used if not specified
-	 * @return KalturaMediaEntry The new media entry
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::ORIGINAL_FLAVOR_ASSET_IS_MISSING
-	 * @throws KalturaErrors::FLAVOR_PARAMS_NOT_FOUND
-	 * @throws KalturaErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED
+	 * @return VidiunMediaEntry The new media entry
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ORIGINAL_FLAVOR_ASSET_IS_MISSING
+	 * @throws VidiunErrors::FLAVOR_PARAMS_NOT_FOUND
+	 * @throws VidiunErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED
 	 *
 	 * @deprecated use media.add instead
 	 */
-	function addFromEntryAction($sourceEntryId, KalturaMediaEntry $mediaEntry = null, $sourceFlavorParamsId = null)
+	function addFromEntryAction($sourceEntryId, VidiunMediaEntry $mediaEntry = null, $sourceFlavorParamsId = null)
 	{
     	if($mediaEntry->conversionQuality && !$mediaEntry->conversionProfileId)
     		$mediaEntry->conversionProfileId = $mediaEntry->conversionQuality;
@@ -615,14 +615,14 @@ class MediaService extends KalturaEntryService
 		$srcEntry = entryPeer::retrieveByPK($sourceEntryId);
 
 		if (!$srcEntry || $srcEntry->getType() != entryType::MEDIA_CLIP)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $sourceEntryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $sourceEntryId);
 
 		$srcFlavorAsset = null;
 		if(is_null($sourceFlavorParamsId))
 		{
 			$srcFlavorAsset = assetPeer::retrieveOriginalByEntryId($sourceEntryId);
 			if(!$srcFlavorAsset)
-				throw new KalturaAPIException(KalturaErrors::ORIGINAL_FLAVOR_ASSET_IS_MISSING);
+				throw new VidiunAPIException(VidiunErrors::ORIGINAL_FLAVOR_ASSET_IS_MISSING);
 		}
 		else
 		{
@@ -633,12 +633,12 @@ class MediaService extends KalturaEntryService
 			}
 			else
 			{
-				throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_NOT_FOUND);
+				throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_NOT_FOUND);
 			}
 		}
 
 		if ($mediaEntry === null)
-			$mediaEntry = new KalturaMediaEntry();
+			$mediaEntry = new VidiunMediaEntry();
 
 		$mediaEntry->mediaType = $srcEntry->getMediaType();
 
@@ -650,15 +650,15 @@ class MediaService extends KalturaEntryService
 	 *
 	 * @action addFromFlavorAsset
 	 * @param string $sourceFlavorAssetId Flavor asset id to be used as the new entry source
-	 * @param KalturaMediaEntry $mediaEntry Media entry metadata
-	 * @return KalturaMediaEntry The new media entry
-	 * @throws KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED
+	 * @param VidiunMediaEntry $mediaEntry Media entry metadata
+	 * @return VidiunMediaEntry The new media entry
+	 * @throws VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED
 	 *
 	 * @deprecated use media.add instead
 	 */
-	function addFromFlavorAssetAction($sourceFlavorAssetId, KalturaMediaEntry $mediaEntry = null)
+	function addFromFlavorAssetAction($sourceFlavorAssetId, VidiunMediaEntry $mediaEntry = null)
 	{
     	if($mediaEntry->conversionQuality && !$mediaEntry->conversionProfileId)
     		$mediaEntry->conversionProfileId = $mediaEntry->conversionQuality;
@@ -666,16 +666,16 @@ class MediaService extends KalturaEntryService
 		$srcFlavorAsset = assetPeer::retrieveById($sourceFlavorAssetId);
 
 		if (!$srcFlavorAsset)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $sourceFlavorAssetId);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $sourceFlavorAssetId);
 
 		$sourceEntryId = $srcFlavorAsset->getEntryId();
 		$srcEntry = entryPeer::retrieveByPK($sourceEntryId);
 
 		if (!$srcEntry || $srcEntry->getType() != entryType::MEDIA_CLIP)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $sourceEntryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $sourceEntryId);
 
 		if ($mediaEntry === null)
-			$mediaEntry = new KalturaMediaEntry();
+			$mediaEntry = new VidiunMediaEntry();
 
 		$mediaEntry->mediaType = $srcEntry->getMediaType();
 
@@ -688,13 +688,13 @@ class MediaService extends KalturaEntryService
 	 * @action convert
 	 * @param string $entryId Media entry id
 	 * @param int $conversionProfileId
-	 * @param KalturaConversionAttributeArray $dynamicConversionAttributes
+	 * @param VidiunConversionAttributeArray $dynamicConversionAttributes
 	 * @return bigint job id
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::FLAVOR_PARAMS_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::FLAVOR_PARAMS_NOT_FOUND
 	 */
-	function convertAction($entryId, $conversionProfileId = null, KalturaConversionAttributeArray $dynamicConversionAttributes = null)
+	function convertAction($entryId, $conversionProfileId = null, VidiunConversionAttributeArray $dynamicConversionAttributes = null)
 	{
 		return $this->convert($entryId, $conversionProfileId, $dynamicConversionAttributes);
 	}
@@ -705,15 +705,15 @@ class MediaService extends KalturaEntryService
 	 * @action get
 	 * @param string $entryId Media entry id
 	 * @param int $version Desired version of the data
-	 * @return KalturaMediaEntry The requested media entry
+	 * @return VidiunMediaEntry The requested media entry
 	 *
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	function getAction($entryId, $version = -1)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
-		if (!$dbEntry || !(KalturaEntryFactory::getInstanceByType($dbEntry->getType()) instanceof KalturaMediaEntry))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+		if (!$dbEntry || !(VidiunEntryFactory::getInstanceByType($dbEntry->getType()) instanceof VidiunMediaEntry))
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		return $this->getEntry($entryId, $version);
 	}
@@ -724,24 +724,24 @@ class MediaService extends KalturaEntryService
      *
      * @action getMrss
      * @param string $entryId Entry id
-     * @param KalturaExtendingItemMrssParameterArray $extendingItemsArray
+     * @param VidiunExtendingItemMrssParameterArray $extendingItemsArray
      * @param string $features
      * @return string
-     * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+     * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
      */
-    function getMrssAction($entryId, KalturaExtendingItemMrssParameterArray $extendingItemsArray = null, $features = null)
+    function getMrssAction($entryId, VidiunExtendingItemMrssParameterArray $extendingItemsArray = null, $features = null)
     {
         $dbEntry = entryPeer::retrieveByPKNoFilter($entryId);
-		if (!$dbEntry || $dbEntry->getType() != KalturaEntryType::MEDIA_CLIP)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
-		$mrssParams = new kMrssParameters();
+		if (!$dbEntry || $dbEntry->getType() != VidiunEntryType::MEDIA_CLIP)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
+		$mrssParams = new vMrssParameters();
 		if ($extendingItemsArray)
 		{
 			$coreExtendingItemArray = $extendingItemsArray->toObjectsArray();
 			$mrssParams->setItemXpathsToExtend($coreExtendingItemArray);
 		}
         /* @var $mrss SimpleXMLElement */
-        $mrss = kMrssManager::getEntryMrssXml($dbEntry, null, $mrssParams, ($features ? explode(',', $features) : null));
+        $mrss = vMrssManager::getEntryMrssXml($dbEntry, null, $mrssParams, ($features ? explode(',', $features) : null));
         return $mrss->asXML();
     }
 
@@ -750,27 +750,27 @@ class MediaService extends KalturaEntryService
 	 *
 	 * @action update
 	 * @param string $entryId Media entry id to update
-	 * @param KalturaMediaEntry $mediaEntry Media entry metadata to update
-	 * @return KalturaMediaEntry The updated media entry
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @param VidiunMediaEntry $mediaEntry Media entry metadata to update
+	 * @return VidiunMediaEntry The updated media entry
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 * @validateUser entry entryId edit
 	 */
-	function updateAction($entryId, KalturaMediaEntry $mediaEntry)
+	function updateAction($entryId, VidiunMediaEntry $mediaEntry)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbEntry)
 		{
-			$dcIndex = kDataCenterMgr::getDCByObjectId($entryId, true);
-			if ($dcIndex != kDataCenterMgr::getCurrentDcId())
+			$dcIndex = vDataCenterMgr::getDCByObjectId($entryId, true);
+			if ($dcIndex != vDataCenterMgr::getCurrentDcId())
 			{
-				KalturaLog::info("EntryID [$entryId] wasn't found on current DC. dumping the request to DC id [$dcIndex]");
-				kFileUtils::dumpApiRequest ( kDataCenterMgr::getRemoteDcExternalUrlByDcId ($dcIndex ), true );
+				VidiunLog::info("EntryID [$entryId] wasn't found on current DC. dumping the request to DC id [$dcIndex]");
+				vFileUtils::dumpApiRequest ( vDataCenterMgr::getRemoteDcExternalUrlByDcId ($dcIndex ), true );
 			}
 		}
-		if (!$dbEntry || $dbEntry->getType() != KalturaEntryType::MEDIA_CLIP)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+		if (!$dbEntry || $dbEntry->getType() != VidiunEntryType::MEDIA_CLIP)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
-		$mediaEntry = $this->updateEntry($entryId, $mediaEntry, KalturaEntryType::MEDIA_CLIP);
+		$mediaEntry = $this->updateEntry($entryId, $mediaEntry, VidiunEntryType::MEDIA_CLIP);
 
 		return $mediaEntry;
 	}
@@ -780,27 +780,27 @@ class MediaService extends KalturaEntryService
 	 *
 	 * @action updateContent
 	 * @param string $entryId Media entry id to update
-	 * @param KalturaResource $resource Resource to be used to replace entry media content
+	 * @param VidiunResource $resource Resource to be used to replace entry media content
 	 * @param int $conversionProfileId The conversion profile id to be used on the entry
-	 * @param KalturaEntryReplacementOptions $advancedOptions Additional update content options
-	 * @return KalturaMediaEntry The updated media entry
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::ENTRY_REPLACEMENT_ALREADY_EXISTS
-     * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @param VidiunEntryReplacementOptions $advancedOptions Additional update content options
+	 * @return VidiunMediaEntry The updated media entry
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_REPLACEMENT_ALREADY_EXISTS
+     * @throws VidiunErrors::INVALID_OBJECT_ID
      * @validateUser entry entryId edit
 	 */
-	function updateContentAction($entryId, KalturaResource $resource, $conversionProfileId = null, $advancedOptions = null)
+	function updateContentAction($entryId, VidiunResource $resource, $conversionProfileId = null, $advancedOptions = null)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
-		if (!$dbEntry || $dbEntry->getType() != KalturaEntryType::MEDIA_CLIP)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+		if (!$dbEntry || $dbEntry->getType() != VidiunEntryType::MEDIA_CLIP)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		
 		//calling replaceResource only if no lock or we grabbed it
-		$lock = kLock::create("media_updateContent_{$entryId}");
+		$lock = vLock::create("media_updateContent_{$entryId}");
 		
-		if ($lock && !$lock->lock(self::KLOCK_MEDIA_UPDATECONTENT_GRAB_TIMEOUT , self::KLOCK_MEDIA_UPDATECONTENT_HOLD_TIMEOUT))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_REPLACEMENT_ALREADY_EXISTS);
+		if ($lock && !$lock->lock(self::VLOCK_MEDIA_UPDATECONTENT_GRAB_TIMEOUT , self::VLOCK_MEDIA_UPDATECONTENT_HOLD_TIMEOUT))
+			throw new VidiunAPIException(VidiunErrors::ENTRY_REPLACEMENT_ALREADY_EXISTS);
 		
 		try{
 			$this->replaceResource($resource, $dbEntry, $conversionProfileId, $advancedOptions);
@@ -827,12 +827,12 @@ class MediaService extends KalturaEntryService
 	 * @action delete
 	 * @param string $entryId Media entry id to delete
 	 *
- 	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+ 	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
  	 * @validateUser entry entryId edit
 	 */
 	function deleteAction($entryId)
 	{
-		$this->deleteEntry($entryId, KalturaEntryType::MEDIA_CLIP);
+		$this->deleteEntry($entryId, VidiunEntryType::MEDIA_CLIP);
 	}
 
 	/**
@@ -840,15 +840,15 @@ class MediaService extends KalturaEntryService
 	 *
 	 * @action approveReplace
 	 * @param string $entryId Media entry id to replace
-	 * @return KalturaMediaEntry The replaced media entry
+	 * @return VidiunMediaEntry The replaced media entry
 	 *
- 	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+ 	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 * @validateUser entry entryId edit
 	 */
 	function approveReplaceAction($entryId)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
-		$this->validateEntryForReplace($entryId, $dbEntry, KalturaEntryType::MEDIA_CLIP);
+		$this->validateEntryForReplace($entryId, $dbEntry, VidiunEntryType::MEDIA_CLIP);
 		$this->approveReplace($dbEntry);
 
 		$childEntries = entryPeer::retrieveChildEntriesByEntryIdAndPartnerId($entryId, $dbEntry->getPartnerId());
@@ -861,7 +861,7 @@ class MediaService extends KalturaEntryService
 			}
 		}
 
-		return $this->getEntry($entryId, -1, KalturaEntryType::MEDIA_CLIP);
+		return $this->getEntry($entryId, -1, VidiunEntryType::MEDIA_CLIP);
 	}
 
 	/**
@@ -869,15 +869,15 @@ class MediaService extends KalturaEntryService
 	 *
 	 * @action cancelReplace
 	 * @param string $entryId Media entry id to cancel
-	 * @return KalturaMediaEntry The canceled media entry
+	 * @return VidiunMediaEntry The canceled media entry
 	 *
- 	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+ 	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 * @validateUser entry entryId edit
 	 */
 	function cancelReplaceAction($entryId)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
-		$this->validateEntryForReplace($entryId, $dbEntry, KalturaEntryType::MEDIA_CLIP);
+		$this->validateEntryForReplace($entryId, $dbEntry, VidiunEntryType::MEDIA_CLIP);
 		$this->cancelReplace($dbEntry);
 
 		$childEntries = entryPeer::retrieveChildEntriesByEntryIdAndPartnerId($entryId, $dbEntry->getPartnerId());
@@ -890,28 +890,28 @@ class MediaService extends KalturaEntryService
 			}
 		}
 
-		return $this->getEntry($entryId, -1, KalturaEntryType::MEDIA_CLIP);
+		return $this->getEntry($entryId, -1, VidiunEntryType::MEDIA_CLIP);
 	}
 
 	/**
 	* List media entries by filter with paging support.
 	*
 	* @action list
-	* @param KalturaMediaEntryFilter $filter Media entry filter
-	* @param KalturaFilterPager $pager Pager
-	* @return KalturaMediaListResponse Wrapper for array of media entries and total count
+	* @param VidiunMediaEntryFilter $filter Media entry filter
+	* @param VidiunFilterPager $pager Pager
+	* @return VidiunMediaListResponse Wrapper for array of media entries and total count
 	*/
-	function listAction(KalturaMediaEntryFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunMediaEntryFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 	    myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 
 	    if (!$filter)
-			$filter = new KalturaMediaEntryFilter();
+			$filter = new VidiunMediaEntryFilter();
 	
 	    list($list, $totalCount) = parent::listEntriesByFilter($filter, $pager);
 
-	    $newList = KalturaMediaEntryArray::fromDbArray($list, $this->getResponseProfile());
-		$response = new KalturaMediaListResponse();
+	    $newList = VidiunMediaEntryArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunMediaListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		return $response;
@@ -921,21 +921,21 @@ class MediaService extends KalturaEntryService
 	* Count media entries by filter.
 	*
 	* @action count
-	* @param KalturaMediaEntryFilter $filter Media entry filter
+	* @param VidiunMediaEntryFilter $filter Media entry filter
 	* @return int
 	*/
-	function countAction(KalturaMediaEntryFilter $filter = null)
+	function countAction(VidiunMediaEntryFilter $filter = null)
 	{
 	    if (!$filter)
-			$filter = new KalturaMediaEntryFilter();
+			$filter = new VidiunMediaEntryFilter();
 
-		$filter->typeEqual = KalturaEntryType::MEDIA_CLIP;
+		$filter->typeEqual = VidiunEntryType::MEDIA_CLIP;
 
 		return parent::countEntriesByFilter($filter);
 	}
 
 	/**
-	 * Upload a media file to Kaltura, then the file can be used to create a media entry.
+	 * Upload a media file to Vidiun, then the file can be used to create a media entry.
 	 *
 	 * @action upload
 	 * @param file $fileData The file data
@@ -945,12 +945,12 @@ class MediaService extends KalturaEntryService
 	 */
 	function uploadAction($fileData)
 	{
-		$ksUnique = $this->getKsUniqueString();
+		$vsUnique = $this->getVsUniqueString();
 
 		$uniqueId = substr(base_convert(md5(uniqid(rand(), true)), 16, 36), 1, 20);
 
 		$ext = pathinfo($fileData["name"], PATHINFO_EXTENSION);
-		$token = $ksUnique."_".$uniqueId.".".$ext;
+		$token = $vsUnique."_".$uniqueId.".".$ext;
 
 		$res = myUploadUtils::uploadFileByToken($fileData, $token, "", null, true);
 
@@ -965,16 +965,16 @@ class MediaService extends KalturaEntryService
 	 * @param string $entryId Media entry id
 	 * @param int $timeOffset Time offset (in seconds)
 	 * @param int $flavorParamsId The flavor params id to be used
-	 * @return KalturaMediaEntry The media entry
+	 * @return VidiunMediaEntry The media entry
 	 *
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY
 	 *
 	 * @deprecated
 	 */
 	function updateThumbnailAction($entryId, $timeOffset, $flavorParamsId = null)
 	{
-		return parent::updateThumbnailForEntryFromSourceEntry($entryId, $entryId, $timeOffset, KalturaEntryType::MEDIA_CLIP, $flavorParamsId);
+		return parent::updateThumbnailForEntryFromSourceEntry($entryId, $entryId, $timeOffset, VidiunEntryType::MEDIA_CLIP, $flavorParamsId);
 	}
 
 	/**
@@ -986,16 +986,16 @@ class MediaService extends KalturaEntryService
 	 * @param string $sourceEntryId Media entry id
 	 * @param int $timeOffset Time offset (in seconds)
 	 * @param int $flavorParamsId The flavor params id to be used
-	 * @return KalturaMediaEntry The media entry
+	 * @return VidiunMediaEntry The media entry
 	 *
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY
 	 *
 	 * @deprecated
 	 */
 	function updateThumbnailFromSourceEntryAction($entryId, $sourceEntryId, $timeOffset, $flavorParamsId = null)
 	{
-		return parent::updateThumbnailForEntryFromSourceEntry($entryId, $sourceEntryId, $timeOffset, KalturaEntryType::MEDIA_CLIP, $flavorParamsId);
+		return parent::updateThumbnailForEntryFromSourceEntry($entryId, $sourceEntryId, $timeOffset, VidiunEntryType::MEDIA_CLIP, $flavorParamsId);
 	}
 
 	/**
@@ -1004,16 +1004,16 @@ class MediaService extends KalturaEntryService
 	 * @action updateThumbnailJpeg
 	 * @param string $entryId Media entry id
 	 * @param file $fileData Jpeg file data
-	 * @return KalturaMediaEntry The media entry
+	 * @return VidiunMediaEntry The media entry
 	 *
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY
 	 *
 	 * @deprecated
 	 */
 	function updateThumbnailJpegAction($entryId, $fileData)
 	{
-		return parent::updateThumbnailJpegForEntry($entryId, $fileData, KalturaEntryType::MEDIA_CLIP);
+		return parent::updateThumbnailJpegForEntry($entryId, $fileData, VidiunEntryType::MEDIA_CLIP);
 	}
 
 	/**
@@ -1022,16 +1022,16 @@ class MediaService extends KalturaEntryService
 	 * @action updateThumbnailFromUrl
 	 * @param string $entryId Media entry id
 	 * @param string $url file url
-	 * @return KalturaBaseEntry The media entry
+	 * @return VidiunBaseEntry The media entry
 	 *
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY
 	 *
 	 * @deprecated
 	 */
 	function updateThumbnailFromUrlAction($entryId, $url)
 	{
-		return parent::updateThumbnailForEntryFromUrl($entryId, $url, KalturaEntryType::MEDIA_CLIP);
+		return parent::updateThumbnailForEntryFromUrl($entryId, $url, VidiunEntryType::MEDIA_CLIP);
 	}
 
 	/**
@@ -1042,26 +1042,26 @@ class MediaService extends KalturaEntryService
 	 * @param string $fileFormat Format to convert
 	 * @return int The queued job id
 	 *
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	public function requestConversionAction($entryId, $fileFormat)
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
-		if (!$dbEntry || $dbEntry->getType() != KalturaEntryType::MEDIA_CLIP)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+		if (!$dbEntry || $dbEntry->getType() != VidiunEntryType::MEDIA_CLIP)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
-		if ($dbEntry->getMediaType() == KalturaMediaType::AUDIO)
+		if ($dbEntry->getMediaType() == VidiunMediaType::AUDIO)
 		{
 			// for audio - force format flv regardless what the user really asked for
 			$fileFormat = "flv";
 		}
 
-//		$job = myBatchDownloadVideoServer::addJob($this->getKuser()->getPuserId(), $dbEntry, null, $fileFormat);
+//		$job = myBatchDownloadVideoServer::addJob($this->getVuser()->getPuserId(), $dbEntry, null, $fileFormat);
 		$flavorParams = myConversionProfileUtils::getFlavorParamsFromFileFormat ( $this->getPartnerId() , $fileFormat );
 
 		$err = null;
-		$job = kBusinessPreConvertDL::decideAddEntryFlavor(null, $dbEntry->getId(), $flavorParams->getId(), $err);
+		$job = vBusinessPreConvertDL::decideAddEntryFlavor(null, $dbEntry->getId(), $flavorParams->getId(), $err);
 
 		if ( $job )
 			return $job->getId();
@@ -1074,15 +1074,15 @@ class MediaService extends KalturaEntryService
 	 *
 	 * @action flag
 	 * @param string $entryId
-	 * @param KalturaModerationFlag $moderationFlag
-	 * @ksOptional
+	 * @param VidiunModerationFlag $moderationFlag
+	 * @vsOptional
 	 *
- 	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+ 	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
-	public function flagAction(KalturaModerationFlag $moderationFlag)
+	public function flagAction(VidiunModerationFlag $moderationFlag)
 	{
-		KalturaResponseCacher::disableCache();
-		return parent::flagEntry($moderationFlag, KalturaEntryType::MEDIA_CLIP);
+		VidiunResponseCacher::disableCache();
+		return parent::flagEntry($moderationFlag, VidiunEntryType::MEDIA_CLIP);
 	}
 
 	/**
@@ -1091,11 +1091,11 @@ class MediaService extends KalturaEntryService
 	 * @action reject
 	 * @param string $entryId
 	 *
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	public function rejectAction($entryId)
 	{
-		parent::rejectEntry($entryId, KalturaEntryType::MEDIA_CLIP);
+		parent::rejectEntry($entryId, VidiunEntryType::MEDIA_CLIP);
 	}
 
 	/**
@@ -1104,11 +1104,11 @@ class MediaService extends KalturaEntryService
 	 * @action approve
 	 * @param string $entryId
 	 *
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	public function approveAction($entryId)
 	{
-		parent::approveEntry($entryId, KalturaEntryType::MEDIA_CLIP);
+		parent::approveEntry($entryId, VidiunEntryType::MEDIA_CLIP);
 	}
 
 	/**
@@ -1116,10 +1116,10 @@ class MediaService extends KalturaEntryService
 	 *
 	 * @action listFlags
 	 * @param string $entryId
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaModerationFlagListResponse
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunModerationFlagListResponse
 	 */
-	public function listFlags($entryId, KalturaFilterPager $pager = null)
+	public function listFlags($entryId, VidiunFilterPager $pager = null)
 	{
 		return parent::listFlagsForEntry($entryId, $pager);
 	}
@@ -1133,16 +1133,16 @@ class MediaService extends KalturaEntryService
 	 */
 	public function anonymousRankAction($entryId, $rank)
 	{
-		return parent::anonymousRankEntry($entryId, KalturaEntryType::MEDIA_CLIP, $rank);
+		return parent::anonymousRankEntry($entryId, VidiunEntryType::MEDIA_CLIP, $rank);
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaEntryService::prepareEntryForInsert()
+	 * @see VidiunEntryService::prepareEntryForInsert()
 	 */
-	protected function prepareEntryForInsert(KalturaBaseEntry $entry, entry $dbEntry = null)
+	protected function prepareEntryForInsert(VidiunBaseEntry $entry, entry $dbEntry = null)
 	{
-		if(!($entry instanceof KalturaMediaEntry))
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_TYPE,$entry->id, $entry->getType(), entryType::MEDIA_CLIP);
+		if(!($entry instanceof VidiunMediaEntry))
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_TYPE,$entry->id, $entry->getType(), entryType::MEDIA_CLIP);
 		$entry->validatePropertyNotNull("mediaType");
 
 		$conversionQuality = $this->getConversionQuality($entry);
@@ -1159,9 +1159,9 @@ class MediaService extends KalturaEntryService
 
 		$dbEntry = parent::prepareEntryForInsert($entry, $dbEntry);
 
-		$kshow = $this->createDummyKShow();
-	        $kshowId = $kshow->getId();
-		$dbEntry->setKshowId($kshowId);
+		$vshow = $this->createDummyVShow();
+	        $vshowId = $vshow->getId();
+		$dbEntry->setVshowId($vshowId);
 		$dbEntry->save();
 		return $dbEntry;
 	}
@@ -1183,17 +1183,17 @@ class MediaService extends KalturaEntryService
 	}
 
 	/**
-	 * @param $kResource
+	 * @param $vResource
 	 * @return bool
 	 */
-	protected function isResourceKClip($kResource)
+	protected function isResourceVClip($vResource)
 	{
 		/**
-		 * @var kOperationResource $kResource
+		 * @var vOperationResource $vResource
 		 */
-		foreach ($kResource->getOperationAttributes() as $opAttribute)
+		foreach ($vResource->getOperationAttributes() as $opAttribute)
 		{
-			if ($opAttribute instanceof kClipAttributes)
+			if ($opAttribute instanceof vClipAttributes)
 			{
 				return true;
 			}
@@ -1226,7 +1226,7 @@ class MediaService extends KalturaEntryService
 			if ($relatedEntry->getType() == entryType::DOCUMENT)
 				continue;
 			$resource->resource->entryId = self::getRelatedResourceEntryId($originalResourceEntryId, $dbEntry, $relatedEntry);
-			KalturaLog::debug("Replacing entry [" . $relatedEntry->getId() . "] as related entry with resource entry id : [" . $resource->resource->entryId . "]");
+			VidiunLog::debug("Replacing entry [" . $relatedEntry->getId() . "] as related entry with resource entry id : [" . $resource->resource->entryId . "]");
 			$this->replaceResource($resource, $relatedEntry, $conversionProfileId, $advancedOptions);
 		}
 	}
@@ -1238,8 +1238,8 @@ class MediaService extends KalturaEntryService
 
 	private function isClipTrimFlow($resource)
 	{
-		return ($resource instanceof KalturaOperationResource && $resource->resource instanceof KalturaEntryResource
-			&& $resource->operationAttributes[0] instanceof KalturaClipAttributes);
+		return ($resource instanceof VidiunOperationResource && $resource->resource instanceof VidiunEntryResource
+			&& $resource->operationAttributes[0] instanceof VidiunClipAttributes);
 	}
 
 	/**
@@ -1248,17 +1248,17 @@ class MediaService extends KalturaEntryService
 	 * @action getVolumeMap
 	 * @param string $entryId Entry id
 	 * @return file
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	function getVolumeMapAction($entryId)
 	{
 		$dbEntry = entryPeer::retrieveByPKNoFilter($entryId);
-		if (!$dbEntry || $dbEntry->getType() != KalturaEntryType::MEDIA_CLIP)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+		if (!$dbEntry || $dbEntry->getType() != VidiunEntryType::MEDIA_CLIP)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		$flavorAsset = myEntryUtils::getFlavorSupportedByPackagerForVolumeMap($entryId);
 		if (!$flavorAsset)
-			throw new KalturaAPIException(KalturaErrors::GIVEN_ID_NOT_SUPPORTED);
+			throw new VidiunAPIException(VidiunErrors::GIVEN_ID_NOT_SUPPORTED);
 
 		$content = myEntryUtils::getVolumeMapContent($flavorAsset);
 		return $content;
@@ -1270,15 +1270,15 @@ class MediaService extends KalturaEntryService
 		{
 			throw $e; //if no entry found then no need to do anything
 		}
-		KalturaLog::info("Exception was thrown during setContent on entry [$entryId] with error: " . $e->getMessage());
+		VidiunLog::info("Exception was thrown during setContent on entry [$entryId] with error: " . $e->getMessage());
 		$this->cancelReplaceAction($entryId);
 
-		$errorCodeArr = array(kCoreException::SOURCE_FILE_NOT_FOUND, APIErrors::getCode(APIErrors::SOURCE_FILE_NOT_FOUND));
-		if ((in_array($e->getCode(), $errorCodeArr)) && (kDataCenterMgr::dcExists(1 - kDataCenterMgr::getCurrentDcId())))
+		$errorCodeArr = array(vCoreException::SOURCE_FILE_NOT_FOUND, APIErrors::getCode(APIErrors::SOURCE_FILE_NOT_FOUND));
+		if ((in_array($e->getCode(), $errorCodeArr)) && (vDataCenterMgr::dcExists(1 - vDataCenterMgr::getCurrentDcId())))
 		{
-			$remoteDc = 1 - kDataCenterMgr::getCurrentDcId();
-			KalturaLog::info("Source file wasn't found on current DC. Dumping the request to DC ID [$remoteDc]");
-			kFileUtils::dumpApiRequest(kDataCenterMgr::getRemoteDcExternalUrlByDcId($remoteDc), true);
+			$remoteDc = 1 - vDataCenterMgr::getCurrentDcId();
+			VidiunLog::info("Source file wasn't found on current DC. Dumping the request to DC ID [$remoteDc]");
+			vFileUtils::dumpApiRequest(vDataCenterMgr::getRemoteDcExternalUrlByDcId($remoteDc), true);
 		}
 		throw $e;
 	}

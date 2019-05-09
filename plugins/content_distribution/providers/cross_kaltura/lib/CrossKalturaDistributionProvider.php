@@ -1,23 +1,23 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage lib
  */
-class CrossKalturaDistributionProvider extends ConfigurableDistributionProvider
+class CrossVidiunDistributionProvider extends ConfigurableDistributionProvider
 {
 	/**
-	 * @var CrossKalturaDistributionProvider
+	 * @var CrossVidiunDistributionProvider
 	 */
 	protected static $instance;
 	
 	
 	/**
-	 * @return CrossKalturaDistributionProvider
+	 * @return CrossVidiunDistributionProvider
 	 */
 	public static function get()
 	{
 		if(!self::$instance)
-			self::$instance = new CrossKalturaDistributionProvider();
+			self::$instance = new CrossVidiunDistributionProvider();
 			
 		return self::$instance;
 	}
@@ -27,7 +27,7 @@ class CrossKalturaDistributionProvider extends ConfigurableDistributionProvider
 	 */
 	public function getType()
 	{
-		return CrossKalturaDistributionPlugin::getDistributionProviderTypeCoreValue(CrossKalturaDistributionProviderType::CROSS_KALTURA);
+		return CrossVidiunDistributionPlugin::getDistributionProviderTypeCoreValue(CrossVidiunDistributionProviderType::CROSS_VIDIUN);
 	}
 	
 	/* (non-PHPdoc)
@@ -35,7 +35,7 @@ class CrossKalturaDistributionProvider extends ConfigurableDistributionProvider
 	 */
 	public function getName()
 	{
-		return 'CrossKaltura';
+		return 'CrossVidiun';
 	}
 
 	/* (non-PHPdoc)

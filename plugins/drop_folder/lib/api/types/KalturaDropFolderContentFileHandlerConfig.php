@@ -3,11 +3,11 @@
  * @package plugins.dropFolder
  * @subpackage api.objects
  */
-class KalturaDropFolderContentFileHandlerConfig extends KalturaDropFolderFileHandlerConfig
+class VidiunDropFolderContentFileHandlerConfig extends VidiunDropFolderFileHandlerConfig
 {	
 	
 	/**
-	 * @var KalturaDropFolderContentFileHandlerMatchPolicy
+	 * @var VidiunDropFolderContentFileHandlerMatchPolicy
 	 */
 	public $contentMatchPolicy;
 	
@@ -49,7 +49,7 @@ class KalturaDropFolderContentFileHandlerConfig extends KalturaDropFolderFileHan
 	public function validateForInsert($propertiesToSkip = array())
 	{
 		if (is_null($this->contentMatchPolicy)) {
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, get_class($this).'::contentMatchPolicy');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, get_class($this).'::contentMatchPolicy');
 		}
 		
 		return parent::validateForInsert($propertiesToSkip);
@@ -59,7 +59,7 @@ class KalturaDropFolderContentFileHandlerConfig extends KalturaDropFolderFileHan
 	public function toInsertableObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		if (is_null($this->slugRegex)) {
-			$this->slugRegex = kDropFolderEventsConsumer::DEFAULT_SLUG_REGEX;
+			$this->slugRegex = vDropFolderEventsConsumer::DEFAULT_SLUG_REGEX;
 		}
 		
 		return parent::toInsertableObject($object_to_fill, $props_to_skip);

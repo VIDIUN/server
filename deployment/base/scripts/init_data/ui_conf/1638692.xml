@@ -1,8 +1,8 @@
-<kcw>
+<vcw>
   <UIConfigList>
     <UIConfig>
       <target>ContributionWizard.swf</target>
-      <cssUrl id="light" name="Default Light">/content/uiconf/kaltura/drupal/styles_ContributionWizard.swf</cssUrl>
+      <cssUrl id="light" name="Default Light">/content/uiconf/vidiun/drupal/styles_ContributionWizard.swf</cssUrl>
     </UIConfig>
   </UIConfigList>
   <ImportTypesConfig>
@@ -61,4 +61,4 @@
       <mediaProviderName>webcam</mediaProviderName>
     </gotoScreen>
   </StartupDefaults>
-</kcw>
+</vcw>

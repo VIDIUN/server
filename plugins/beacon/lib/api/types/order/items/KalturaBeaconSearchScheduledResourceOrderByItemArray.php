@@ -3,12 +3,12 @@
  * @package plugins.beacon
  * @subpackage api.objects
  */
-class KalturaBeaconSearchScheduledResourceOrderByItemArray extends KalturaTypedArray
+class VidiunBeaconSearchScheduledResourceOrderByItemArray extends VidiunTypedArray
 {
 
 	public function __construct()
 	{
-		return parent::__construct("KalturaBeaconSearchScheduledResourceOrderByItem");
+		return parent::__construct("VidiunBeaconSearchScheduledResourceOrderByItem");
 	}
 
 }

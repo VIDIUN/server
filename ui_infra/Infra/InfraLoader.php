@@ -3,7 +3,7 @@
  * @package UI-infra
  * @subpackage bootstrap
  */
-require_once __DIR__ . '/../../infra/kEnvironment.php';
+require_once __DIR__ . '/../../infra/vEnvironment.php';
 
 /**
  * @package UI-infra
@@ -31,20 +31,20 @@ class Infra_InfraLoader implements Zend_Loader_Autoloader_Interface
 		if(!$pluginsFolder)
 			$pluginsFolder = realpath(dirname(__FILE__) . '/../../plugins/');
 		if(!$cachePath)
-			$cachePath = kEnvironment::get("cache_root_path") . '/infra/classMap.cache';
+			$cachePath = vEnvironment::get("cache_root_path") . '/infra/classMap.cache';
 		
-		require_once($infaFolder . DIRECTORY_SEPARATOR . 'KAutoloader.php');
-		require_once($infaFolder . DIRECTORY_SEPARATOR . 'kEnvironment.php');
+		require_once($infaFolder . DIRECTORY_SEPARATOR . 'VAutoloader.php');
+		require_once($infaFolder . DIRECTORY_SEPARATOR . 'vEnvironment.php');
 		
 			
-		KAutoloader::setClassPath(array($infaFolder . DIRECTORY_SEPARATOR . '*'));
-		KAutoloader::addClassPath(KAutoloader::buildPath($pluginsFolder, '*'));
-		KAutoloader::setClassMapFilePath($cachePath);
-		KAutoloader::register();
+		VAutoloader::setClassPath(array($infaFolder . DIRECTORY_SEPARATOR . '*'));
+		VAutoloader::addClassPath(VAutoloader::buildPath($pluginsFolder, '*'));
+		VAutoloader::setClassMapFilePath($cachePath);
+		VAutoloader::register();
 	}
 	
 	public function autoload($class)
 	{
-		KAutoloader::autoload($class);
+		VAutoloader::autoload($class);
 	}
 }

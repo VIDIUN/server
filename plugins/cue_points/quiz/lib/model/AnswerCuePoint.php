@@ -63,13 +63,13 @@ class AnswerCuePoint extends CuePoint implements IMetadataObject
 		return false;
 	}
 	
-    public function setKuserId($v) {
-		if (kCurrentContext::$is_admin_session) {
+    public function setVuserId($v) {
+		if (vCurrentContext::$is_admin_session) {
 		    $userEntry = UserEntryPeer::retrieveByPK($this->getQuizUserEntryId());
 		    if ($userEntry) 
-		        return parent::setKuserId($userEntry->getKuserId());
+		        return parent::setVuserId($userEntry->getVuserId());
 		}
-		return parent::setKuserId($v);
+		return parent::setVuserId($v);
 	}
 
 
@@ -111,7 +111,7 @@ class AnswerCuePoint extends CuePoint implements IMetadataObject
 	public function postUpdate(PropelPDO $con = null)
 	{
 		if ($this->isCustomDataModified(AnswerCuePoint::CUSTOM_DATA_ANSWER_KEY))
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 
 		return parent::postUpdate($con); 
 	}
@@ -128,7 +128,7 @@ class AnswerCuePoint extends CuePoint implements IMetadataObject
 	{
 		parent::postInsert($con);
 		$lockKey = "answerCuePoint_postInsert" . $this->getPartnerId() . $this->getQuizUserEntryId();
-		return kLock::runLocked($lockKey, array($this, 'addingAnswerIdToUserEntry'));
+		return vLock::runLocked($lockKey, array($this, 'addingAnswerIdToUserEntry'));
 
 	}
 	public function addingAnswerIdToUserEntry()

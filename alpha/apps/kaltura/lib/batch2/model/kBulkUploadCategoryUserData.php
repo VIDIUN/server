@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kBulkUploadCategoryUserData extends kBulkUploadObjectData
+class vBulkUploadCategoryUserData extends vBulkUploadObjectData
 {
 
 }

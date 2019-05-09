@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEntryContextDataResult extends KalturaContextDataResult
+class VidiunEntryContextDataResult extends VidiunContextDataResult
 {
 	/**
 	 * @var bool
@@ -70,14 +70,14 @@ class KalturaEntryContextDataResult extends KalturaContextDataResult
 	
 	/**
 	 * Array of messages as received from the access control rules that invalidated
-	 * @var KalturaStringArray
+	 * @var VidiunStringArray
 	 * @deprecated
 	 */
 	public $accessControlMessages;
 	
 	/**
 	 * Array of actions as received from the access control rules that invalidated
-	 * @var KalturaRuleActionArray
+	 * @var VidiunRuleActionArray
 	 * @deprecated
 	 */
 	public $accessControlActions;
@@ -85,7 +85,7 @@ class KalturaEntryContextDataResult extends KalturaContextDataResult
 	/**
 	 * Array of allowed flavor assets according to access control limitations and requested tags
 	 * 
-	 * @var KalturaFlavorAssetArray
+	 * @var VidiunFlavorAssetArray
 	 */
 	public $flavorAssets;
 
@@ -99,7 +99,7 @@ class KalturaEntryContextDataResult extends KalturaContextDataResult
 	/**
      * Array of allowed flavor assets according to access control limitations and requested tags
      *
-     * @var KalturaPluginDataArray
+     * @var VidiunPluginDataArray
      */
     public $pluginData;
 
@@ -117,7 +117,7 @@ class KalturaEntryContextDataResult extends KalturaContextDataResult
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{

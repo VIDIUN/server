@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-abstract class kOperationAttributes 
+abstract class vOperationAttributes 
 {
 	abstract public function toArray();
 	

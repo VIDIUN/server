@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage lib.paging
  */
-class kPropelPager extends sfPager
+class vPropelPager extends sfPager
 {
   protected
     $criteria               = null,

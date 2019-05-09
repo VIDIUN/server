@@ -185,9 +185,9 @@ class EntryVendorTask extends BaseEntryVendorTask implements IRelatedObject, IIn
 		return parent::preSave($con);
 	}
 	
-	public function getKuser()
+	public function getVuser()
 	{
-		return kuserPeer::retrieveByPk($this->kuser_id);
+		return vuserPeer::retrieveByPk($this->vuser_id);
 	}
 	
 	// IIndexable interface implantation 
@@ -235,7 +235,7 @@ class EntryVendorTask extends BaseEntryVendorTask implements IRelatedObject, IIn
 	 */
 	public function indexToSearchIndex()
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($this));
 	}
 	
 	public function postSave(PropelPDO $con = null)

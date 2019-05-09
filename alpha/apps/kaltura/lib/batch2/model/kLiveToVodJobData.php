@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kLiveToVodJobData extends kJobData
+class vLiveToVodJobData extends vJobData
 {
 	/** vod Entry Id
 	 * @var string

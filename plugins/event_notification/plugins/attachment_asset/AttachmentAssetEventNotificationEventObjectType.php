@@ -3,7 +3,7 @@
  * @package plugins.attachmentAssetEventNotifications
  * @subpackage lib
  */
-class AttachmentAssetEventNotificationEventObjectType implements IKalturaPluginEnum, EventNotificationEventObjectType
+class AttachmentAssetEventNotificationEventObjectType implements IVidiunPluginEnum, EventNotificationEventObjectType
 {
 	const ATTACHMENT_ASSET = 'AttachmentAsset';
 	

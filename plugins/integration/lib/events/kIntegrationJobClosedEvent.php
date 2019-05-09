@@ -3,9 +3,9 @@
  * @package plugins.integration
  * @subpackage lib.events
  */
-class kIntegrationJobClosedEvent extends KalturaEvent implements IKalturaObjectRelatedEvent, IKalturaBatchJobRelatedEvent, IKalturaContinualEvent
+class vIntegrationJobClosedEvent extends VidiunEvent implements IVidiunObjectRelatedEvent, IVidiunBatchJobRelatedEvent, IVidiunContinualEvent
 {
-	const EVENT_CONSUMER = 'kIntegrationJobClosedEventConsumer';
+	const EVENT_CONSUMER = 'vIntegrationJobClosedEventConsumer';
 
 	/**
 	 * @var BatchJob
@@ -19,11 +19,11 @@ class kIntegrationJobClosedEvent extends KalturaEvent implements IKalturaObjectR
 	{
 		$this->batchJob = $batchJob;
 		
-		KalturaLog::debug("Event [" . get_class($this) . "] batch-job id [" . $batchJob->getId() . "] status [" . $batchJob->getStatus() . "]");
+		VidiunLog::debug("Event [" . get_class($this) . "] batch-job id [" . $batchJob->getId() . "] status [" . $batchJob->getStatus() . "]");
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaEvent::getConsumerInterface()
+	 * @see VidiunEvent::getConsumerInterface()
 	 */
 	public function getConsumerInterface()
 	{
@@ -31,16 +31,16 @@ class kIntegrationJobClosedEvent extends KalturaEvent implements IKalturaObjectR
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaEvent::doConsume()
+	 * @see VidiunEvent::doConsume()
 	 */
-	protected function doConsume(KalturaEventConsumer $consumer)
+	protected function doConsume(VidiunEventConsumer $consumer)
 	{
 		if(!$consumer->shouldConsumeIntegrationCloseEvent($this->object, $this->modifiedColumns))
 			return true;
 			
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] batch-job id [' . $this->batchJob->getId() . '] status [' . $this->batchJob->getStatus() . ']');
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] batch-job id [' . $this->batchJob->getId() . '] status [' . $this->batchJob->getStatus() . ']');
 		$result = $consumer->integrationJobClosed($this->batchJob);
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] batch-job id [' . $this->batchJob->getId() . '] status [' . $this->batchJob->getStatus() . ']');
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] batch-job id [' . $this->batchJob->getId() . '] status [' . $this->batchJob->getStatus() . ']');
 		return $result;
 	}
 
@@ -53,7 +53,7 @@ class kIntegrationJobClosedEvent extends KalturaEvent implements IKalturaObjectR
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectRelatedEvent::getObject()
+	 * @see IVidiunObjectRelatedEvent::getObject()
 	 */
 	public function getObject()
 	{
@@ -61,7 +61,7 @@ class kIntegrationJobClosedEvent extends KalturaEvent implements IKalturaObjectR
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaEvent::getScope()
+	 * @see VidiunEvent::getScope()
 	 */
 	public function getScope()
 	{

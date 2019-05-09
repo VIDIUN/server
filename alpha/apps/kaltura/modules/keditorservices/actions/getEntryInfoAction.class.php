@@ -1,65 +1,65 @@
 <?php
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-require_once ( __DIR__ . "/defKeditorservicesAction.class.php");
+require_once ( __DIR__ . "/defVeditorservicesAction.class.php");
 
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-class getEntryInfoAction extends defKeditorservicesAction
+class getEntryInfoAction extends defVeditorservicesAction
 {
 	public function execute()
 	{
-		$this->kuser = null;
+		$this->vuser = null;
 		return parent::execute();
 	}
 	
-	// here the $kshow will be null (thanks to fetchKshow=false) and entry will 
-	public  function executeImpl ( kshow $kshow, entry &$entry )
+	// here the $vshow will be null (thanks to fetchVshow=false) and entry will 
+	public  function executeImpl ( vshow $vshow, entry &$entry )
 	{
 		$genericWidget = "";
 		$myspaceWidget = "";
 		
-		$kshow_id = $kshow->getId();
+		$vshow_id = $vshow->getId();
 		$entry_id = $entry->getId();
 		
-		if (!$kshow->getPartnerId() && !$this->forceViewPermissions ( $kshow, $kshow_id , false , false ))
+		if (!$vshow->getPartnerId() && !$this->forceViewPermissions ( $vshow, $vshow_id , false , false ))
 			die;
 		
-		$this->kshow_category  = $kshow->getTypeText();
-		$this->kshow_description = $kshow->getDescription();
-		$this->kshow_name = $kshow->getName();
-		$this->kshow_tags = $kshow->getTags();
+		$this->vshow_category  = $vshow->getTypeText();
+		$this->vshow_description = $vshow->getDescription();
+		$this->vshow_name = $vshow->getName();
+		$this->vshow_tags = $vshow->getTags();
 		
-		$kdata = @$_REQUEST["kdata"];
-		if ($kdata == "null")
-			$kdata = "";
+		$vdata = @$_REQUEST["vdata"];
+		if ($vdata == "null")
+			$vdata = "";
 			
 		$this->widget_type = @$_REQUEST["widget_type"];
 		
-		list($genericWidget, $myspaceWidget) = myKshowUtils::getEmbedPlayerUrl($kshow_id, $entry_id, false, $kdata); 
+		list($genericWidget, $myspaceWidget) = myVshowUtils::getEmbedPlayerUrl($vshow_id, $entry_id, false, $vdata); 
 		
 		if ($entry_id == 1002)
-			$this->share_url = requestUtils::getHost() .  "/index.php/corp/kalturaPromo";
-		else if ($kdata)
-			$this->share_url = myKshowUtils::getWidgetCmdUrl($kdata, "share");
+			$this->share_url = requestUtils::getHost() .  "/index.php/corp/vidiunPromo";
+		else if ($vdata)
+			$this->share_url = myVshowUtils::getWidgetCmdUrl($vdata, "share");
 		else
-			$this->share_url = myKshowUtils::getUrl( $kshow_id )."&entry_id=$entry_id";
+			$this->share_url = myVshowUtils::getUrl( $vshow_id )."&entry_id=$entry_id";
 		
-		//list($status, $kmediaType, $kmediaData) = myContentRender::createPlayerMedia($entry); // myContentRender class removed, old code
+		//list($status, $vmediaType, $vmediaData) = myContentRender::createPlayerMedia($entry); // myContentRender class removed, old code
 		$status = $entry->getStatus();
-		$kmediaType = $entry->getMediaType();
-		$kmediaData = "";
+		$vmediaType = $entry->getMediaType();
+		$vmediaData = "";
 		
-		$this->message = ($kmediaType == entry::ENTRY_MEDIA_TYPE_TEXT) ? $kmediaData : "";
+		$this->message = ($vmediaType == entry::ENTRY_MEDIA_TYPE_TEXT) ? $vmediaData : "";
 		
 		$this->generic_embed_code = $genericWidget;
 		$this->myspace_embed_code = $myspaceWidget;
 		$this->thumbnail = $entry ? $entry->getBigThumbnailPath(true) : "";
-		$this->kuser = $entry->getKuser();
+		$this->vuser = $entry->getVuser();
 		$this->entry = $entry;		
 	}
 }

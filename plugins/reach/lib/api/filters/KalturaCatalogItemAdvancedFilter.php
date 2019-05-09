@@ -3,10 +3,10 @@
  * @package plugins.reach
  * @subpackage api.filters
  */
-class KalturaCatalogItemAdvancedFilter extends KalturaSearchItem
+class VidiunCatalogItemAdvancedFilter extends VidiunSearchItem
 {
 	/**
-	 * @var KalturaVendorServiceType
+	 * @var VidiunVendorServiceType
 	 */
 	public $serviceTypeEqual;
 	
@@ -16,7 +16,7 @@ class KalturaCatalogItemAdvancedFilter extends KalturaSearchItem
 	public $serviceTypeIn;
 	
 	/**
-	 * @var KalturaVendorServiceFeature
+	 * @var VidiunVendorServiceFeature
 	 */
 	public $serviceFeatureEqual;
 	
@@ -26,7 +26,7 @@ class KalturaCatalogItemAdvancedFilter extends KalturaSearchItem
 	public $serviceFeatureIn;
 	
 	/**
-	 * @var KalturaVendorServiceTurnAroundTime
+	 * @var VidiunVendorServiceTurnAroundTime
 	 */
 	public $turnAroundTimeEqual;
 	
@@ -36,12 +36,12 @@ class KalturaCatalogItemAdvancedFilter extends KalturaSearchItem
 	public $turnAroundTimeIn;
 	
 	/**
-	 * @var KalturaCatalogItemLanguage
+	 * @var VidiunCatalogItemLanguage
 	 */
 	public $sourceLanguageEqual;
 	
 	/**
-	 * @var KalturaCatalogItemLanguage
+	 * @var VidiunCatalogItemLanguage
 	 */
 	public $targetLanguageEqual;
 	
@@ -59,7 +59,7 @@ class KalturaCatalogItemAdvancedFilter extends KalturaSearchItem
 	);
 	
 	/* (non-PHPdoc)
- 	 * @see KalturaCuePoint::getMapBetweenObjects()
+ 	 * @see VidiunCuePoint::getMapBetweenObjects()
  	 */
 	public function getMapBetweenObjects()
 	{
@@ -69,7 +69,7 @@ class KalturaCatalogItemAdvancedFilter extends KalturaSearchItem
 	public function toObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kCatalogItemAdvancedFilter();
+			$object_to_fill = new vCatalogItemAdvancedFilter();
 		
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

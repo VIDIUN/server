@@ -106,11 +106,11 @@ class ESearchQueryHighlightsAttributes
 
 	private function getFieldTypePriority($fieldName)
 	{
-		$highlightsPriorityConfig = kConf::get('highlights_priority', 'elastic', array());
+		$highlightsPriorityConfig = vConf::get('highlights_priority', 'elastic', array());
 
 		foreach ($this->getSuffixPriorityConfig($highlightsPriorityConfig) as $key => $priority)
 		{
-			if(kString::endsWith($fieldName, $key))
+			if(vString::endsWith($fieldName, $key))
 				return $priority;
 		}
 

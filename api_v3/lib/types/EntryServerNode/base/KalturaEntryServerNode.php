@@ -4,7 +4,7 @@
  * @subpackage objects
  * @abstract
  */
-abstract class KalturaEntryServerNode extends KalturaObject implements IFilterable, IApiObjectFactory
+abstract class VidiunEntryServerNode extends VidiunObject implements IFilterable, IApiObjectFactory
 {
 	/**
 	 * unique auto-generated identifier
@@ -48,14 +48,14 @@ abstract class KalturaEntryServerNode extends KalturaObject implements IFilterab
 	public $updatedAt;
 
 	/**
-	 * @var KalturaEntryServerNodeStatus
+	 * @var VidiunEntryServerNodeStatus
 	 * @readonly
 	 * @filter eq,in
 	 */
 	public $status;
 
 	/**
-	 * @var KalturaEntryServerNodeType
+	 * @var VidiunEntryServerNodeType
 	 * @readonly
 	 * @filter eq,in
 	 */
@@ -79,12 +79,12 @@ abstract class KalturaEntryServerNode extends KalturaObject implements IFilterab
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		$object_to_fill = parent::toInsertableObject($object_to_fill, $props_to_skip);
-		$object_to_fill->setPartnerId(kCurrentContext::getCurrentPartnerId());
+		$object_to_fill->setPartnerId(vCurrentContext::getCurrentPartnerId());
 		return $object_to_fill;
 	}
 
@@ -111,28 +111,28 @@ abstract class KalturaEntryServerNode extends KalturaObject implements IFilterab
 	/**
 	 * Function returns EntryServerNode sub-type according to protocol
 	 * @param $sourceObject
-	 * @param KalturaDetachedResponseProfile $responseProfile
-	 * @return KalturaEntryServerNode
+	 * @param VidiunDetachedResponseProfile $responseProfile
+	 * @return VidiunEntryServerNode
 	 */
-	public static function getInstance ($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function getInstance ($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$type = $sourceObject->getServerType();
 
 		switch ($type)
 		{
-			case KalturaEntryServerNodeType::LIVE_BACKUP:
-			case KalturaEntryServerNodeType::LIVE_PRIMARY:
-				$object = new KalturaLiveEntryServerNode();
+			case VidiunEntryServerNodeType::LIVE_BACKUP:
+			case VidiunEntryServerNodeType::LIVE_PRIMARY:
+				$object = new VidiunLiveEntryServerNode();
 				break;
 
-			case KalturaEntryServerNodeType::LIVE_CLIPPING_TASK:
-				$object = new KalturaClippingTaskEntryServerNode();
+			case VidiunEntryServerNodeType::LIVE_CLIPPING_TASK:
+				$object = new VidiunClippingTaskEntryServerNode();
 				break;
 
 			default:
-				$object = KalturaPluginManager::loadObject('KalturaEntryServerNode', $type);
+				$object = VidiunPluginManager::loadObject('VidiunEntryServerNode', $type);
 				if(!$object)
-					KalturaLog::err("Did not expect source object to be of type ".$type);
+					VidiunLog::err("Did not expect source object to be of type ".$type);
 		}
 
 		if (!$object)

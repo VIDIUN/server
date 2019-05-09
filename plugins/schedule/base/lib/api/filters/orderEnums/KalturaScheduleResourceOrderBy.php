@@ -3,7 +3,7 @@
  * @package plugins.schedule
  * @subpackage api.filters.enum
  */
-class KalturaScheduleResourceOrderBy extends KalturaStringEnum
+class VidiunScheduleResourceOrderBy extends VidiunStringEnum
 {
 	const CREATED_AT_ASC = "+createdAt";
 	const CREATED_AT_DESC = "-createdAt";

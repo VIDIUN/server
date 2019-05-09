@@ -2,14 +2,14 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaRule instead
+ * @deprecated use VidiunRule instead
  */
-class KalturaUserAgentRestriction extends KalturaBaseRestriction 
+class VidiunUserAgentRestriction extends VidiunBaseRestriction 
 {
 	/**
 	 * User agent restriction type (Allow or deny)
 	 * 
-	 * @var KalturaUserAgentRestrictionType
+	 * @var VidiunUserAgentRestrictionType
 	 */
 	public $userAgentRestrictionType; 
 	
@@ -32,10 +32,10 @@ class KalturaUserAgentRestriction extends KalturaBaseRestriction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseRestriction::toRule()
+	 * @see VidiunBaseRestriction::toRule()
 	 */
-	public function toRule(KalturaRestrictionArray $restrictions)
+	public function toRule(VidiunRestrictionArray $restrictions)
 	{
-		return $this->toObject(new kAccessControlUserAgentRestriction());
+		return $this->toObject(new vAccessControlUserAgentRestriction());
 	}
 }

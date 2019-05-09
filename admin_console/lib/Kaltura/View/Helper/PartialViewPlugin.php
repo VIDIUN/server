@@ -3,7 +3,7 @@
  * @package Admin
  * @subpackage views
  */
-abstract class Kaltura_View_Helper_PartialViewPlugin
+abstract class Vidiun_View_Helper_PartialViewPlugin
 {
 	/**
 	 * Assign the plugin to the view

@@ -4,7 +4,7 @@ class DeliveryProfileLiveHds extends DeliveryProfileLive {
 	
 	function __construct() {
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kF4MManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vF4MManifestRenderer';
 	}
 	
 	public function checkIsLive ($url)
@@ -13,7 +13,7 @@ class DeliveryProfileLiveHds extends DeliveryProfileLive {
 		if (is_bool($data))
 			return $data;
 		
-		$element = new KDOMDocument();
+		$element = new VDOMDocument();
 		$element->loadXML($data);
 		$streamType = $element->getElementsByTagName('streamType')->item(0);
 		if ($streamType->nodeValue == 'live')
@@ -35,7 +35,7 @@ class DeliveryProfileLiveHds extends DeliveryProfileLive {
 	 */
 	private function buildF4mFlavors($url, array &$flavors, array &$bootstrapInfos)
 	{
-		$manifest = KCurlWrapper::getContent($url);
+		$manifest = VCurlWrapper::getContent($url);
 		if(!$manifest)
 			return;
 	
@@ -88,7 +88,7 @@ class DeliveryProfileLiveHds extends DeliveryProfileLive {
 	/* (non-PHPdoc)
 	 * @see DeliveryProfileLive::serve()
 	 */
-//	public function doServe(kLiveStreamConfiguration $liveStreamConfig)	{
+//	public function doServe(vLiveStreamConfiguration $liveStreamConfig)	{
 //		if($backupUrl)
 //		{
 //			$entryId = $this->params->getEntryId();
@@ -102,12 +102,12 @@ class DeliveryProfileLiveHds extends DeliveryProfileLive {
 //				$this->buildF4mFlavors($backupUrl, $flavors, $bootstrapInfos);
 //				
 //				$renderer = $this->getRenderer($flavors);
-//				if($renderer instanceof kF4MManifestRenderer)
+//				if($renderer instanceof vF4MManifestRenderer)
 //				{
 //					$renderer->bootstrapInfos = $bootstrapInfos;
 //					if($entry->getDvrStatus() == DVRStatus::ENABLED)
 //					{
-//						$renderer->streamType = kF4MManifestRenderer::PLAY_STREAM_TYPE_DVR;
+//						$renderer->streamType = vF4MManifestRenderer::PLAY_STREAM_TYPE_DVR;
 //						$renderer->dvrWindow = $entry->getDvrWindow() ? $entry->getDvrWindow() : '7200';
 //					}
 //					$renderer->mimeType = 'video/mp4';

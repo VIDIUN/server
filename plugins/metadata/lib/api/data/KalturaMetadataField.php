@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.objects
  */
-class KalturaMetadataField extends KalturaStringField
+class VidiunMetadataField extends VidiunStringField
 {
 	/**
 	 * May contain the full xpath to the field in three formats
@@ -35,7 +35,7 @@ class KalturaMetadataField extends KalturaStringField
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaMatchCondition::getMapBetweenObjects()
+	 * @see VidiunMatchCondition::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -43,7 +43,7 @@ class KalturaMetadataField extends KalturaStringField
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage()
+	 * @see VidiunObject::validateForUsage()
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -54,12 +54,12 @@ class KalturaMetadataField extends KalturaStringField
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kMetadataField();
+			$dbObject = new vMetadataField();
 		
 		return parent::toObject($dbObject, $skip);
 	}

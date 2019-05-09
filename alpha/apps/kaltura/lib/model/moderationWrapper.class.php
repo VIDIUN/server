@@ -7,14 +7,14 @@ class moderationWrapper extends objectWrapperBase
 {
 	protected $basic_fields = array ( "id" , "partnerId" );
 	
-	protected $regular_fields_ext = array ( "objectId" , "objectType" , /*"puserId" , "kuserId" ,*/  "status" , "comments" , 
+	protected $regular_fields_ext = array ( "objectId" , "objectType" , /*"puserId" , "vuserId" ,*/  "status" , "comments" , 
 		"createdAt", "groupId" , "reportCode" );
 	
 	protected $detailed_fields_ext = array ( ) ;
 	
-	protected $detailed_objs_ext = array ( /*"kuser" ,*/ "object" , );
+	protected $detailed_objs_ext = array ( /*"vuser" ,*/ "object" , );
 	
-	protected $objs_cache = array ( ) ;//"kuser" => "kuser,kuserId" , ); 
+	protected $objs_cache = array ( ) ;//"vuser" => "vuser,vuserId" , ); 
 
 	protected $updateable_fields = array ( "comments" , /*"puserId" */ "objectType" , "objectId" , "reportCode"  );
 	

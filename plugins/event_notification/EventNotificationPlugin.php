@@ -2,18 +2,18 @@
 /**
  * @package plugins.eventNotification
  */
-class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, IKalturaPermissions, IKalturaEventConsumers, IKalturaServices, IKalturaAdminConsolePages, IKalturaEnumerator, IKalturaObjectLoader
+class EventNotificationPlugin extends VidiunPlugin implements IVidiunVersion, IVidiunPermissions, IVidiunEventConsumers, IVidiunServices, IVidiunAdminConsolePages, IVidiunEnumerator, IVidiunObjectLoader
 {
 	const PLUGIN_NAME = 'eventNotification';
 	const PLUGIN_VERSION_MAJOR = 1;
 	const PLUGIN_VERSION_MINOR = 0;
 	const PLUGIN_VERSION_BUILD = 0;
 	
-	const EVENT_NOTIFICATION_FLOW_MANAGER = 'kEventNotificationFlowManager';
-	const EVENT_NOTIFICATION_OBJECT_COPIED_HANDLER = 'kEventNotificationObjectCopiedHandler';
+	const EVENT_NOTIFICATION_FLOW_MANAGER = 'vEventNotificationFlowManager';
+	const EVENT_NOTIFICATION_OBJECT_COPIED_HANDLER = 'vEventNotificationObjectCopiedHandler';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -21,11 +21,11 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaVersion::getVersion()
+	 * @see IVidiunVersion::getVersion()
 	 */
 	public static function getVersion()
 	{
-		return new KalturaVersion(
+		return new VidiunVersion(
 			self::PLUGIN_VERSION_MAJOR,
 			self::PLUGIN_VERSION_MINOR,
 			self::PLUGIN_VERSION_BUILD
@@ -33,7 +33,7 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -41,7 +41,7 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 	}
 			
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -61,7 +61,7 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 	}
 			
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -69,7 +69,7 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaAdminConsolePages::getApplicationPages()
+	 * @see IVidiunAdminConsolePages::getApplicationPages()
 	 */
 	public static function getApplicationPages() 
 	{
@@ -81,7 +81,7 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap() 
 	{
@@ -91,32 +91,32 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KalturaJobData' && $enumValue == self::getApiValue(EventNotificationBatchType::EVENT_NOTIFICATION_HANDLER) && isset($constructorArgs['coreJobSubType']))
-			return KalturaPluginManager::loadObject('KalturaEventNotificationDispatchJobData', $constructorArgs['coreJobSubType']);
+		if($baseClass == 'VidiunJobData' && $enumValue == self::getApiValue(EventNotificationBatchType::EVENT_NOTIFICATION_HANDLER) && isset($constructorArgs['coreJobSubType']))
+			return VidiunPluginManager::loadObject('VidiunEventNotificationDispatchJobData', $constructorArgs['coreJobSubType']);
 	
-		if($baseClass == 'KalturaCondition')
+		if($baseClass == 'VidiunCondition')
 		{
 			if($enumValue == EventNotificationPlugin::getConditionTypeCoreValue(EventNotificationConditionType::EVENT_NOTIFICATION_FIELD))
-				return new KalturaEventFieldCondition();
+				return new VidiunEventFieldCondition();
 				
 			if($enumValue == EventNotificationPlugin::getConditionTypeCoreValue(EventNotificationConditionType::EVENT_NOTIFICATION_OBJECT_CHANGED))
-				return new KalturaEventObjectChangedCondition();
+				return new VidiunEventObjectChangedCondition();
 		}
 		
 		return null;
 	}
 		
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KalturaJobData' && $enumValue == self::getApiValue(EventNotificationBatchType::EVENT_NOTIFICATION_HANDLER))
-			return 'KalturaEventNotificationDispatchJobData';
+		if($baseClass == 'VidiunJobData' && $enumValue == self::getApiValue(EventNotificationBatchType::EVENT_NOTIFICATION_HANDLER))
+			return 'VidiunEventNotificationDispatchJobData';
 			
 		if($baseClass == 'EventNotificationEventObjectType')
 		{
@@ -137,8 +137,8 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 			    case EventNotificationEventObjectType::THUMBASSET:
 					return 'thumbAsset';
 
-			    case EventNotificationEventObjectType::KUSER:
-					return 'kuser';
+			    case EventNotificationEventObjectType::VUSER:
+					return 'vuser';
 
 			    case EventNotificationEventObjectType::ACCESSCONTROL:
 					return 'accessControl';
@@ -149,8 +149,8 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 				case EventNotificationEventObjectType::BULKUPLOADRESULT:
 					return 'BulkUploadResult';
 
-				case EventNotificationEventObjectType::CATEGORYKUSER:
-					return 'categoryKuser';
+				case EventNotificationEventObjectType::CATEGORYVUSER:
+					return 'categoryVuser';
 
 				case EventNotificationEventObjectType::CONVERSIONPROFILE2:
 					return 'conversionProfile2';
@@ -167,8 +167,8 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 				case EventNotificationEventObjectType::GENERICSYNDICATIONFEED:
 					return 'genericSyndicationFeed';
 
-				case EventNotificationEventObjectType::KUSERTOUSERROLE:
-					return 'KuserToUserRole';
+				case EventNotificationEventObjectType::VUSERTOUSERROLE:
+					return 'VuserToUserRole';
 
 				case EventNotificationEventObjectType::PARTNER:
 					return 'Partner';
@@ -247,8 +247,8 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 	 */
 	public static function getBatchJobTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BatchJobType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BatchJobType', $value);
 	}
 	
 	/**
@@ -256,8 +256,8 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 	 */
 	public static function getConditionTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('ConditionType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('ConditionType', $value);
 	}
 	
 	/**
@@ -265,6 +265,6 @@ class EventNotificationPlugin extends KalturaPlugin implements IKalturaVersion, 
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

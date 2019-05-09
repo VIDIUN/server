@@ -4,7 +4,7 @@
  * @package api
  * @subpackage filters
  */
-abstract class KalturaSearchMatchAttributeCondition extends KalturaAttributeCondition
+abstract class VidiunSearchMatchAttributeCondition extends VidiunAttributeCondition
 {
 	/**
 	 * @var bool
@@ -37,12 +37,12 @@ abstract class KalturaSearchMatchAttributeCondition extends KalturaAttributeCond
 		/** @var BaseIndexObject $indexClass */
 		$indexClass = $this->getIndexClass();
 		$field = $indexClass::getMatchFieldByApiName($this->attribute);
-		KalturaLog::debug("Mapping [$this->attribute] to [$field]");
+		VidiunLog::debug("Mapping [$this->attribute] to [$field]");
 		$objectToFill->setField($field);
 		return $objectToFill;
 	}
 
-	protected function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		/** @var $srcObj AdvancedSearchFilterMatchAttributeCondition) */
 		if ($this->shouldGet('attribute', $responseProfile))

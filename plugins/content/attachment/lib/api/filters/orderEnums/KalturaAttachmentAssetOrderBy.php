@@ -3,6 +3,6 @@
  * @package plugins.attachment
  * @subpackage api.filters.enum
  */
-class KalturaAttachmentAssetOrderBy extends KalturaAssetOrderBy
+class VidiunAttachmentAssetOrderBy extends VidiunAssetOrderBy
 {
 }

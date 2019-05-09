@@ -5,10 +5,10 @@
  * 
  * Old IP address restriction for backward compatibility
  */
-class kAccessControlIpAddressRestriction extends kAccessControlRestriction
+class vAccessControlIpAddressRestriction extends vAccessControlRestriction
 {
 	/**
-	 * @var kIpAddressCondition
+	 * @var vIpAddressCondition
 	 */
 	private $condition;
 	
@@ -18,9 +18,9 @@ class kAccessControlIpAddressRestriction extends kAccessControlRestriction
 	public function __construct(accessControl $accessControl = null)
 	{
 		parent::__construct($accessControl);
-		$this->setActions(array(new kAccessControlAction(RuleActionType::BLOCK)));
+		$this->setActions(array(new vAccessControlAction(RuleActionType::BLOCK)));
 		
-		$this->condition = new kIpAddressCondition(true);
+		$this->condition = new vIpAddressCondition(true);
 		if($accessControl)
 		{
 			$strArray = unserialize($accessControl->getFromCustomData(accessControl::IP_ADDRESS_RESTRICTION_COLUMN_NAME));
@@ -32,9 +32,9 @@ class kAccessControlIpAddressRestriction extends kAccessControlRestriction
 	}
 
 	/* (non-PHPdoc)
-	 * @see kRule::applyContext()
+	 * @see vRule::applyContext()
 	 */
-	public function applyContext(kContextDataResult $context)
+	public function applyContext(vContextDataResult $context)
 	{
 		$fulfilled = parent::applyContext($context);
 		if($fulfilled)
@@ -44,7 +44,7 @@ class kAccessControlIpAddressRestriction extends kAccessControlRestriction
 	}
 
 	/**
-	 * @return kSiteCondition
+	 * @return vSiteCondition
 	 */
 	private function getCondition()
 	{
@@ -60,7 +60,7 @@ class kAccessControlIpAddressRestriction extends kAccessControlRestriction
 	 */
 	function setIpAddressRestrictionType($type)
 	{
-		$this->getCondition()->setNot($type == kAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST);
+		$this->getCondition()->setNot($type == vAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST);
 	}
 	
 	/**
@@ -71,7 +71,7 @@ class kAccessControlIpAddressRestriction extends kAccessControlRestriction
 		$values = explode(',', $values);
 		$stringValues = array();
 		foreach($values as $value)
-			$stringValues[] = new kStringValue($value);
+			$stringValues[] = new vStringValue($value);
 			
 		$this->getCondition()->setValues($stringValues);
 	}
@@ -81,7 +81,7 @@ class kAccessControlIpAddressRestriction extends kAccessControlRestriction
 	 */
 	function getIpAddressRestrictionType()
 	{
-		return $this->getCondition()->getNot() ? kAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST : kAccessControlRestriction::RESTRICTION_TYPE_RESTRICT_LIST;	
+		return $this->getCondition()->getNot() ? vAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST : vAccessControlRestriction::RESTRICTION_TYPE_RESTRICT_LIST;	
 	}
 	
 	/**

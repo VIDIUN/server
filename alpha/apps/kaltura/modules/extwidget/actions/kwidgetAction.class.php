@@ -9,15 +9,15 @@ require_once ( MODULES . "/partnerservices2/actions/getwidgetAction.class.php" )
  * @package Core
  * @subpackage externalWidgets
  */
-class kwidgetAction extends sfAction
+class vwidgetAction extends sfAction
 {
 	/**
 	 * Will forward to the regular swf player according to the widget_id 
 	 */
 	public function execute()
 	{
-		// check if this is a request for the kdp without a wrapper
-		// in case of an application loading the kdp (e.g. kmc)
+		// check if this is a request for the vdp without a wrapper
+		// in case of an application loading the vdp (e.g. vmc)
 		$nowrapper = $this->getRequestParameter( "nowrapper", false);
 		
 		// allow caching if either the cache start time (cache_st) parameter
@@ -35,7 +35,7 @@ class kwidgetAction extends sfAction
 		strstr($referer, "facebook.com") === false &&
 		strstr($referer, "friendster.com") === false) ? "" : "&externalInterfaceDisabled=1";
 		
-		// if there is no wrapper the loader is responsible for setting extra params to the kdp
+		// if there is no wrapper the loader is responsible for setting extra params to the vdp
 		$noncached_params = "";
 		if (!$nowrapper)
 			$noncached_params =	$externalInterfaceDisabled."&referer=".urlencode($referer);
@@ -44,11 +44,11 @@ class kwidgetAction extends sfAction
 		$requestKey = $protocol.$_SERVER["REQUEST_URI"];
 		
 		// check if we cached the redirect url
-		$cache_redirect = new myCache("kwidget", 10 * 60); // 10 minutes
+		$cache_redirect = new myCache("vwidget", 10 * 60); // 10 minutes
 		$cachedResponse  = $cache_redirect->get($requestKey);
 		if ($allowCache && $cachedResponse) // dont use cache if we want to force no caching
 		{
-			header("X-Kaltura:cached-action");
+			header("X-Vidiun:cached-action");
 
 			header("Expires: Sun, 19 Nov 2000 08:52:00 GMT");
 			header( "Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
@@ -56,37 +56,37 @@ class kwidgetAction extends sfAction
 			
 			header("Location:$cachedResponse".$noncached_params);
 				
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 		
 		// check if we cached the patched swf with flashvars
-		$cache_swfdata = new myCache("kwidgetswf", 10 * 60); // 10 minutes
+		$cache_swfdata = new myCache("vwidgetswf", 10 * 60); // 10 minutes
 		$cachedResponse  = $cache_swfdata->get($requestKey);
 		if ($allowCache && $cachedResponse) // dont use cache if we want to force no caching
 		{
-			header("X-Kaltura:cached-action");
+			header("X-Vidiun:cached-action");
 			requestUtils::sendCdnHeaders("swf", strlen($cachedResponse), 60 * 10, null, true, time());
 			echo $cachedResponse;
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 		
 		$widget_id = $this->getRequestParameter( "wid" );
 		$show_version = $this->getRequestParameter( "v" );
-		$debug_kdp = $this->getRequestParameter( "debug_kdp" , false );
+		$debug_vdp = $this->getRequestParameter( "debug_vdp" , false );
 
 		$widget = widgetPeer::retrieveByPK( $widget_id );
 
 		if ( !$widget )
 		{
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 		
 		myPartnerUtils::blockInactivePartner($widget->getPartnerId());
 
-		// because of the routing rule - the entry_id & kmedia_type WILL exist. be sure to ignore them if smaller than 0
-		$kshow_id= $widget->getKshowId();
+		// because of the routing rule - the entry_id & vmedia_type WILL exist. be sure to ignore them if smaller than 0
+		$vshow_id= $widget->getVshowId();
 		$entry_id= $widget->getEntryId();
-		$gallery_widget = !$kshow_id && !$entry_id;
+		$gallery_widget = !$vshow_id && !$entry_id;
 
 		if( !$entry_id  ) $entry_id = -1;
 
@@ -94,13 +94,13 @@ class kwidgetAction extends sfAction
 		{
 			// try eid - if failed entry_id
 			$eid = $this->getRequestParameter( "eid" , $this->getRequestParameter( "entry_id" ) );
-			// try kid - if failed kshow_id
-			$kid = $this->getRequestParameter( "kid" , $this->getRequestParameter( "kshow_id" ) );
+			// try kid - if failed vshow_id
+			$kid = $this->getRequestParameter( "kid" , $this->getRequestParameter( "vshow_id" ) );
 			if ( $eid != null )
 			$entry_id =  $eid ;
-			// allow kshow to be overriden by dynamic one
+			// allow vshow to be overriden by dynamic one
 			elseif ( $kid != null )
-			$kshow_id = $kid ;
+			$vshow_id = $kid ;
 		}
 
 		if ( $widget->getSecurityType () == widget::WIDGET_SECURITY_TYPE_MATCH_IP  )
@@ -118,25 +118,25 @@ class kwidgetAction extends sfAction
 				$arr = explode ( ";" , $custom_data );
 				$countries_str = $arr[0]; 
 				$fallback_entry_id = (isset($arr[1]) ? $arr[1] : null);
-				$fallback_kshow_id = (isset($arr[2]) ? $arr[2] : null);
+				$fallback_vshow_id = (isset($arr[2]) ? $arr[2] : null);
 				$current_country = "";
 
 				$valid_country = requestUtils::matchIpCountry( $countries_str , $current_country );
 				if ( ! $valid_country )
 				{
-					KalturaLog::log ( "kwidgetAction: Attempting to access widget [$widget_id] and entry [$entry_id] from country [$current_country]. Retrning entry_id: [$fallback_entry_id] kshow_id [$fallback_kshow_id]" );
+					VidiunLog::log ( "vwidgetAction: Attempting to access widget [$widget_id] and entry [$entry_id] from country [$current_country]. Retrning entry_id: [$fallback_entry_id] vshow_id [$fallback_vshow_id]" );
 					$entry_id= $fallback_entry_id;
-					$kshow_id = $fallback_kshow_id;
+					$vshow_id = $fallback_vshow_id;
 				}
 			}
 		}
-		elseif ( $widget->getSecurityType () == widget::WIDGET_SECURITY_TYPE_FORCE_KS )
+		elseif ( $widget->getSecurityType () == widget::WIDGET_SECURITY_TYPE_FORCE_VS )
 		{
 
 		}
 
 
-		$kmedia_type= -1;
+		$vmedia_type= -1;
 
 		// support either uiconf_id or ui_conf_id
 		$uiconf_id =  $this->getRequestParameter( "uiconf_id" );
@@ -156,7 +156,7 @@ class kwidgetAction extends sfAction
 
 		if ( empty ( $widget_type ) )
 		$widget_type = 3;
-		$kdata = $widget->getCustomData();
+		$vdata = $widget->getCustomData();
 
 		$partner_host = myPartnerUtils::getHost($widget->getPartnerId());
 		$partner_cdnHost = myPartnerUtils::getCdnHost($widget->getPartnerId());
@@ -166,7 +166,7 @@ class kwidgetAction extends sfAction
 		if ( $widget_type == 10)
 		$swf_url = $host . "/swf/weplay.swf";
 		else
-		$swf_url = $host . "/swf/kplayer.swf";
+		$swf_url = $host . "/swf/vplayer.swf";
 
 		$partner_id = $widget->getPartnerId();
 		$subp_id = $widget->getSubpId();
@@ -177,12 +177,12 @@ class kwidgetAction extends sfAction
 		// new ui_confs which are deleted should stop the script
 		// the check for >100000 is for supporting very old mediawiki and such players
 		if (!$uiConf && $widget_type>100000)
-	        KExternalErrors::dieGracefully();
+	        VExternalErrors::dieGracefully();
 	        
 		if ($uiConf)
 		{
 			$ui_conf_swf_url = $uiConf->getSwfUrl();
-			if( kString::beginsWith( $ui_conf_swf_url , "http") )
+			if( vString::beginsWith( $ui_conf_swf_url , "http") )
 			{
 				$swf_url = 	$ui_conf_swf_url; // absolute URL
 			}
@@ -193,9 +193,9 @@ class kwidgetAction extends sfAction
 				$swf_url =  $host . myPartnerUtils::getUrlForPartner ( $partner_id , $subp_id ) . $ui_conf_swf_url;
 			}
 
-			if ( $debug_kdp )
+			if ( $debug_vdp )
 			{
-				$swf_url = str_replace( "/kdp/" , "/kdp_debug/" , $swf_url );
+				$swf_url = str_replace( "/vdp/" , "/vdp_debug/" , $swf_url );
 			}
 		}
 
@@ -206,12 +206,12 @@ class kwidgetAction extends sfAction
 		$ip = requestUtils::getRemoteAddress();// to convert back, use long2ip
 
 		// the widget log should change to reflect the new data, but for now - i used $widget_id instead of the widgget_type
-		//		WidgetLog::createWidgetLog( $referer , $ip , $kshow_id , $entry_id , $kmedia_type , $widget_id );
+		//		WidgetLog::createWidgetLog( $referer , $ip , $vshow_id , $entry_id , $vmedia_type , $widget_id );
 
 		if ( $entry_id == -1 ) $entry_id = null;
 
-		$kdp3 = false;
-		$base_wrapper_swf = myContentStorage::getFSFlashRootPath ()."/kdpwrapper/".kConf::get('kdp_wrapper_version')."/kdpwrapper.swf";
+		$vdp3 = false;
+		$base_wrapper_swf = myContentStorage::getFSFlashRootPath ()."/vdpwrapper/".vConf::get('vdp_wrapper_version')."/vdpwrapper.swf";
 		$widgetIdStr = "widget_id=$widget_id";
 		$partnerIdStr = "partner_id=$partner_id&subp_id=$subp_id";
 		
@@ -222,7 +222,7 @@ class kwidgetAction extends sfAction
 		
 		if ($uiConf)
 		{
-			$ks_flashvars = "";
+			$vs_flashvars = "";
 			$conf_vars = $uiConf->getConfVars();
 			if ($conf_vars)
 			$conf_vars = "&".$conf_vars;
@@ -238,9 +238,9 @@ class kwidgetAction extends sfAction
 
 			if (version_compare($uiConf->getSwfUrlVersion(), "3.0", ">="))
 			{
-				$kdp3 = true;
+				$vdp3 = true;
 				// further in the code, $wrapper_swf is being used and not $base_wrapper_swf
-				$wrapper_swf = $base_wrapper_swf = myContentStorage::getFSFlashRootPath ().'/kdp3wrapper/'.kConf::get('kdp3_wrapper_version').'/kdp3wrapper.swf';
+				$wrapper_swf = $base_wrapper_swf = myContentStorage::getFSFlashRootPath ().'/vdp3wrapper/'.vConf::get('vdp3_wrapper_version').'/vdp3wrapper.swf';
 				$widgetIdStr = "widgetId=$widget_id";
 				$uiconf_id_str = "&uiConfId=$uiconf_id";
 				$partnerIdStr = "partnerId=$partner_id&subpId=$subp_id";
@@ -248,7 +248,7 @@ class kwidgetAction extends sfAction
 			}
 			
 			// if we are loaded without a wrapper (directly in flex)
-			// 1. dont create the ks - keep url the same for caching
+			// 1. dont create the vs - keep url the same for caching
 			// 2. dont patch the uiconf - patching is done only to wrapper anyway
 			if ($nowrapper)
 			{
@@ -265,11 +265,11 @@ class kwidgetAction extends sfAction
 			{
 				$swf_data = null;
 				
-				// if kdp version >= 2.5
+				// if vdp version >= 2.5
 				if (version_compare($uiConf->getSwfUrlVersion(), "2.5", ">="))
 				{
 					// create an anonymous session
-					$ks = "";
+					$vs = "";
 					
 					$privileges = "view:*,widget:1";
 					if($widget->getIsPlayList())
@@ -277,26 +277,26 @@ class kwidgetAction extends sfAction
 						
 					if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENTITLEMENT, $partner_id) &&
 						!$widget->getEnforceEntitlement() && $widget->getEntryId())
-						$privileges .= ','. kSessionBase::PRIVILEGE_DISABLE_ENTITLEMENT_FOR_ENTRY . ':' . $widget->getEntryId();
+						$privileges .= ','. vSessionBase::PRIVILEGE_DISABLE_ENTITLEMENT_FOR_ENTRY . ':' . $widget->getEntryId();
 						
 					if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENTITLEMENT, $partner_id) &&
 						!is_null($widget->getPrivacyContext()) && $widget->getPrivacyContext() != '' )
-						$privileges .= ','. kSessionBase::PRIVILEGE_PRIVACY_CONTEXT . ':' . $widget->getPrivacyContext();
+						$privileges .= ','. vSessionBase::PRIVILEGE_PRIVACY_CONTEXT . ':' . $widget->getPrivacyContext();
 						
-					$result = kSessionUtils::createKSessionNoValidations ( $partner_id , 0 , $ks , 86400 , false , "" , $privileges );
-					$ks_flashvars = "&$partnerIdStr&uid=0&ts=".microtime(true);
-					if($widget->getSecurityType () != widget::WIDGET_SECURITY_TYPE_FORCE_KS)
+					$result = vSessionUtils::createVSessionNoValidations ( $partner_id , 0 , $vs , 86400 , false , "" , $privileges );
+					$vs_flashvars = "&$partnerIdStr&uid=0&ts=".microtime(true);
+					if($widget->getSecurityType () != widget::WIDGET_SECURITY_TYPE_FORCE_VS)
 					{
-						$ks_flashvars = "&ks=$ks".$ks_flashvars;
+						$vs_flashvars = "&vs=$vs".$vs_flashvars;
 					}
 					
 		
-					// patch kdpwrapper with getwidget and getuiconf
+					// patch vdpwrapper with getwidget and getuiconf
 					$root = myContentStorage::getFSContentRootPath();
 					$confFile_mtime = $uiConf->getUpdatedAt(null);
 					$swf_key = "widget_{$widget_id}_{$widget_type}_{$confFile_mtime}_".md5($base_wrapper_swf.$swf_url).".swf";
 					
-					$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_KWIDGET_SWF);
+					$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_VWIDGET_SWF);
 					
 					if ($cache)
 						$swf_data = $cache->get($swf_key);
@@ -304,29 +304,29 @@ class kwidgetAction extends sfAction
 					if (!$swf_data)
 					{
 						require_once(SF_ROOT_DIR . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "api_v3" . DIRECTORY_SEPARATOR . "bootstrap.php");
-						$dispatcher = KalturaDispatcher::getInstance();
+						$dispatcher = VidiunDispatcher::getInstance();
 						try
 						{
-							$widget_result = $dispatcher->dispatch("widget", "get", array("ks"=> $ks, "id" => $widget_id));
-							$ui_conf_result = $dispatcher->dispatch("uiConf", "get", array("ks"=> $ks, "id" => $widget_type));
+							$widget_result = $dispatcher->dispatch("widget", "get", array("vs"=> $vs, "id" => $widget_id));
+							$ui_conf_result = $dispatcher->dispatch("uiConf", "get", array("vs"=> $vs, "id" => $widget_type));
 						}
 						catch(Exception $ex)
 						{
-							KExternalErrors::dieGracefully();
+							VExternalErrors::dieGracefully();
 						}
 						
 						if (!$ui_conf_result->confFile)
-							KExternalErrors::dieGracefully();
+							VExternalErrors::dieGracefully();
 							
-						$serializer = new KalturaXmlSerializer(false);
+						$serializer = new VidiunXmlSerializer(false);
 						$widget_xml = $serializer->serialize($widget_result);
 
-						$serializer = new KalturaXmlSerializer(false);
+						$serializer = new VidiunXmlSerializer(false);
 						$ui_conf_xml = $serializer->serialize($ui_conf_result);
 
 						$result = "<xml><result>$widget_xml</result><result>$ui_conf_xml</result></xml>";
 						
-						$patcher = new kPatchSwf( file_get_contents($root . $base_wrapper_swf));
+						$patcher = new vPatchSwf( file_get_contents($root . $base_wrapper_swf));
 						$swf_data = $patcher->patch($result);
 						
 						if ($cache)
@@ -335,28 +335,28 @@ class kwidgetAction extends sfAction
 				}
 				
 	
-				$kdp_version_2 = strpos($swf_url, "kdp/v2." ) > 0;
-				if ($partner_host == "http://www.kaltura.com" && !$kdp_version_2 && !$kdp3)
+				$vdp_version_2 = strpos($swf_url, "vdp/v2." ) > 0;
+				if ($partner_host == "http://www.vidiun.com" && !$vdp_version_2 && !$vdp3)
 				{
-					$partner_host = 1; // otherwise the kdp will try going to cdnwww.kaltura.com
+					$partner_host = 1; // otherwise the vdp will try going to cdnwww.vidiun.com
 				}
 				
 				$track_wrapper = '';
-				if (kConf::get('track_kdpwrapper') && kConf::get('kdpwrapper_track_url')) {
-					$track_wrapper = "&wrapper_tracker_url=".urlencode(kConf::get('kdpwrapper_track_url')."?activation_key=".kConf::get('kaltura_activation_key')."&package_version=".kConf::get('kaltura_version'));
+				if (vConf::get('track_vdpwrapper') && vConf::get('vdpwrapper_track_url')) {
+					$track_wrapper = "&wrapper_tracker_url=".urlencode(vConf::get('vdpwrapper_track_url')."?activation_key=".vConf::get('vidiun_activation_key')."&package_version=".vConf::get('vidiun_version'));
 				}
 			
 				$optimizedConfVars = null;
 				$optimizedHost = null;
-				if (kConf::hasMap("optimized_playback"))
+				if (vConf::hasMap("optimized_playback"))
 				{
-					$optimizedPlayback = kConf::getMap("optimized_playback");
+					$optimizedPlayback = vConf::getMap("optimized_playback");
 					if (array_key_exists($partner_id, $optimizedPlayback))
 					{
-						// force a specific kdp for the partner
+						// force a specific vdp for the partner
 						$params = $optimizedPlayback[$partner_id];
-						if (array_key_exists('kdp_version', $params))
-							$swf_url =  $partner_cdnHost . myPartnerUtils::getUrlForPartner ( $partner_id , $subp_id ) . "/flash/kdp3/".$params['kdp_version']."/kdp3.swf";
+						if (array_key_exists('vdp_version', $params))
+							$swf_url =  $partner_cdnHost . myPartnerUtils::getUrlForPartner ( $partner_id , $subp_id ) . "/flash/vdp3/".$params['vdp_version']."/vdp3.swf";
 							
 						if (array_key_exists('conf_vars', $params))
 							$optimizedConfVars = $params['conf_vars'];
@@ -375,32 +375,32 @@ class kwidgetAction extends sfAction
 
 				$conf_vars = "&$optimizedConfVars&" . $conf_vars;
 	
-				$stats_host = ($protocol == "https") ? kConf::get("stats_host_https") : kConf::get("stats_host");	
-				$wrapper_stats = kConf::get('kdp3_wrapper_stats_url') ? "&wrapper_stats_url=$protocol://$stats_host".
-					urlencode(str_replace("{partnerId}", $partner_id, kConf::get('kdp3_wrapper_stats_url'))) : "";
+				$stats_host = ($protocol == "https") ? vConf::get("stats_host_https") : vConf::get("stats_host");	
+				$wrapper_stats = vConf::get('vdp3_wrapper_stats_url') ? "&wrapper_stats_url=$protocol://$stats_host".
+					urlencode(str_replace("{partnerId}", $partner_id, vConf::get('vdp3_wrapper_stats_url'))) : "";
 
 				$partner_host = str_replace("http://", "", str_replace("https://", "", $partner_host));
 				// if the host is the default www domain use the cdn api domain
-				if ($partner_host == kConf::get("www_host") && $optimizedHost === null)
-					$partner_host = kConf::get("cdn_api_host");
+				if ($partner_host == vConf::get("www_host") && $optimizedHost === null)
+					$partner_host = vConf::get("cdn_api_host");
 				else if ($optimizedHost)
 					$partner_host = $optimizedHost;
 
-				if ($protocol == "https" && $partner_host = kConf::get("cdn_api_host"))
-					$partner_host = kConf::get("cdn_api_host_https");
+				if ($protocol == "https" && $partner_host = vConf::get("cdn_api_host"))
+					$partner_host = vConf::get("cdn_api_host_https");
 	
 				$dynamic_date = $widgetIdStr .
 					$track_wrapper.
 					$wrapper_stats.
-					"&kdpUrl=".urlencode($swf_url).
+					"&vdpUrl=".urlencode($swf_url).
 					"&host=" . $partner_host .
 					"&cdnHost=" . str_replace("http://", "", str_replace("https://", "", $partner_cdnHost)).
 					"&statistics.statsDomain=$stats_host".
 					( $show_version ? "&entryVersion=$show_version" : "" ) .
-					( $kshow_id ? "&kshowId=$kshow_id" : "" ).
+					( $vshow_id ? "&vshowId=$vshow_id" : "" ).
 					( $entry_id ? "&$entryVarName=$entry_id" : "" ) .
 					$uiconf_id_str  . // will be empty if nothing to add
-					$ks_flashvars.
+					$vs_flashvars.
 					($cache_st ? "&clientTag=cache_st:$cache_st" : "").
 					$conf_vars;
 					
@@ -408,9 +408,9 @@ class kwidgetAction extends sfAction
 				if (version_compare($uiConf->getSwfUrlVersion(), "2.6.6", ">="))
 				{
 					$startTime = microtime(true);
-					$patcher = new kPatchSwf( $swf_data, "KALTURA_FLASHVARS_DATA");
+					$patcher = new vPatchSwf( $swf_data, "VIDIUN_FLASHVARS_DATA");
 					$wrapper_data = $patcher->patch($dynamic_date."&referer=".urlencode($referer));
-					KalturaLog::log('Patching took '. (microtime(true) - $startTime));
+					VidiunLog::log('Patching took '. (microtime(true) - $startTime));
 						
 					requestUtils::sendCdnHeaders("swf", strlen($wrapper_data), $allowCache ? 60 * 10 : 0, null, true, time());
 					
@@ -423,7 +423,7 @@ class kwidgetAction extends sfAction
 					{
 						$cache_swfdata->put($requestKey, $wrapper_data);
 					}
-					KExternalErrors::dieGracefully();
+					VExternalErrors::dieGracefully();
 				}
 
 				if ($swf_data)
@@ -433,29 +433,29 @@ class kwidgetAction extends sfAction
 					$wrapper_swf_path = "$root/$wrapper_swf";				
 					if (!file_exists($wrapper_swf_path))
 					{
-						kFile::fullMkdir($wrapper_swf_path);
+						vFile::fullMkdir($wrapper_swf_path);
 						file_put_contents($wrapper_swf_path, $swf_data);
 					}
 				}
 				
-				// for now changed back to $host since kdp version prior to 1.0.15 didnt support loading by external domain kdpwrapper
+				// for now changed back to $host since vdp version prior to 1.0.15 didnt support loading by external domain vdpwrapper
 				$url =  $host . myPartnerUtils::getUrlForPartner( $partner_id , $subp_id ) . "/$wrapper_swf?$dynamic_date";
 			}
 		}
 		else
 		{
-			$dynamic_date = "kshowId=$kshow_id" .
+			$dynamic_date = "vshowId=$vshow_id" .
 			"&host=" . requestUtils::getRequestHostId() .
 			( $show_version ? "&entryVersion=$show_version" : "" ) .
 			( $entry_id ? "&$entryVarName=$entry_id" : "" ) .
-			( $entry_id ? "&KmediaType=$kmedia_type" : "");
+			( $entry_id ? "&VmediaType=$vmedia_type" : "");
 			$dynamic_date .= "&isWidget=$widget_type&referer=".urlencode($referer);
-			$dynamic_date .= "&kdata=$kdata";
+			$dynamic_date .= "&vdata=$vdata";
 			$url = "$swf_url?$dynamic_date";
 		}
 
 		// if referer has a query string an IE bug will prevent out flashvars to propagate
-		// when nowrapper is true we cant use /swfparams either as there isnt a kdpwrapper
+		// when nowrapper is true we cant use /swfparams either as there isnt a vdpwrapper
 		if (!$nowrapper && $uiConf && version_compare($uiConf->getSwfUrlVersion(), "2.6.6", ">="))
 		{
 			// apart from the /swfparam/ format, add .swf suffix to the end of the stream in case
@@ -472,7 +472,7 @@ class kwidgetAction extends sfAction
 		else
 			$url .= $noncached_params;
 
-		KExternalErrors::terminateDispatch();
+		VExternalErrors::terminateDispatch();
 		$this->redirect( $url );
 	}
 }

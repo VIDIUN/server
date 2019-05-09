@@ -3,9 +3,9 @@
  * @package Core
  * @subpackage model.data
  */
-class kBulkUploadJobData extends kJobData
+class vBulkUploadJobData extends vJobData
 {
-	protected static $privilegesToPass = array(kSessionBase::PRIVILEGE_ENABLE_CATEGORY_MODERATION, kSessionBase::PRIVILEGE_ENABLE_CAPTION_MODERATION);
+	protected static $privilegesToPass = array(vSessionBase::PRIVILEGE_ENABLE_CATEGORY_MODERATION, vSessionBase::PRIVILEGE_ENABLE_CAPTION_MODERATION);
 
 	/**
 	 * @var int
@@ -70,7 +70,7 @@ class kBulkUploadJobData extends kJobData
 	
 	/**
 	 * Data pertaining to the objects being uploaded
-	 * @var kBulkUploadObjectData
+	 * @var vBulkUploadObjectData
 	 */
 	protected $objectData;
 	
@@ -87,7 +87,7 @@ class kBulkUploadJobData extends kJobData
 	 protected $emailRecipients;
 
 	/**
-	 * The bulk upload job ks privileges
+	 * The bulk upload job vs privileges
 	 * @var string
 	 */
 	protected $privileges;
@@ -261,7 +261,7 @@ class kBulkUploadJobData extends kJobData
 	}
 
 	/**
-	 * @return kBulkUploadObjectData $objectData
+	 * @return vBulkUploadObjectData $objectData
 	 */
 	public function getObjectData ()
 	{
@@ -269,7 +269,7 @@ class kBulkUploadJobData extends kJobData
 	}
 
 	/**
-	 * @param kBulkUploadObjectData $objectData
+	 * @param vBulkUploadObjectData $objectData
 	 */
 	public function setObjectData ($objectData)
 	{
@@ -316,15 +316,15 @@ class kBulkUploadJobData extends kJobData
 		return $this->emailRecipients;
 	}
 
-	public function handleKsPrivileges()
+	public function handleVsPrivileges()
 	{
-		if (!empty(kCurrentContext::$ks))
+		if (!empty(vCurrentContext::$vs))
 		{
-			$ks = ks::fromSecureString(kCurrentContext::$ks);
+			$vs = vs::fromSecureString(vCurrentContext::$vs);
 			$extraPrivileges = array();
 			foreach (self::$privilegesToPass as $privilege)
 			{
-				if($ks->hasPrivilege($privilege))
+				if($vs->hasPrivilege($privilege))
 				{
 					$extraPrivileges[] = $privilege;
 				}

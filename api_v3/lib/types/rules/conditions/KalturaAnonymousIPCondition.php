@@ -3,12 +3,12 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAnonymousIPCondition extends KalturaMatchCondition
+class VidiunAnonymousIPCondition extends VidiunMatchCondition
 {
 	/**
 	 * The ip geo coder engine to be used
 	 * 
-	 * @var KalturaGeoCoderType
+	 * @var VidiunGeoCoderType
 	 */
 	public $geoCoderType;
 
@@ -31,12 +31,12 @@ class KalturaAnonymousIPCondition extends KalturaMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kAnonymousIPCondition();
+			$dbObject = new vAnonymousIPCondition();
 			
 		return parent::toObject($dbObject, $skip);
 	}

@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaThumbParamsOrderBy extends KalturaAssetParamsOrderBy
+class VidiunThumbParamsOrderBy extends VidiunAssetParamsOrderBy
 {
 }

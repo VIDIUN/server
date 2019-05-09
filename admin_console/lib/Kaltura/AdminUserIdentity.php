@@ -3,7 +3,7 @@
  * @package Admin
  * @subpackage Authentication
  */
-class Kaltura_AdminUserIdentity extends Infra_UserIdentity
+class Vidiun_AdminUserIdentity extends Infra_UserIdentity
 {
 	/**
 	 * Current user partners

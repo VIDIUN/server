@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaAssetOrderBy extends KalturaStringEnum
+class VidiunAssetOrderBy extends VidiunStringEnum
 {
 	const SIZE_ASC = "+size";
 	const SIZE_DESC = "-size";

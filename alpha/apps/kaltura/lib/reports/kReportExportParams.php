@@ -1,6 +1,6 @@
 <?php
 
-class kReportExportParams
+class vReportExportParams
 {
 	/**
 	 * @var string

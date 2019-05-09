@@ -2,7 +2,7 @@
 /**
  * @package plugins.group
  */
-class GroupPlugin extends KalturaPlugin implements IKalturaServices, IKalturaPermissions, IKalturaPending
+class GroupPlugin extends VidiunPlugin implements IVidiunServices, IVidiunPermissions, IVidiunPending
 {
 	const PLUGIN_NAME = 'group';
 
@@ -12,7 +12,7 @@ class GroupPlugin extends KalturaPlugin implements IKalturaServices, IKalturaPer
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -21,7 +21,7 @@ class GroupPlugin extends KalturaPlugin implements IKalturaServices, IKalturaPer
 
 	public static function dependsOn()
 	{
-		$eSearchDependency = new KalturaDependency(ElasticSearchPlugin::getPluginName());
+		$eSearchDependency = new VidiunDependency(ElasticSearchPlugin::getPluginName());
 		return array($eSearchDependency);
 	}
 

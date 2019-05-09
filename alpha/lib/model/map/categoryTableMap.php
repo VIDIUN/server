@@ -61,7 +61,7 @@ class categoryTableMap extends TableMap {
 		$this->addColumn('INHERITANCE_TYPE', 'InheritanceType', 'TINYINT', false, null, 2);
 		$this->addColumn('USER_JOIN_POLICY', 'UserJoinPolicy', 'TINYINT', false, null, 3);
 		$this->addColumn('DEFAULT_PERMISSION_LEVEL', 'DefaultPermissionLevel', 'TINYINT', false, null, 3);
-		$this->addColumn('KUSER_ID', 'KuserId', 'INTEGER', false, null, null);
+		$this->addColumn('VUSER_ID', 'VuserId', 'INTEGER', false, null, null);
 		$this->addColumn('PUSER_ID', 'PuserId', 'VARCHAR', false, 100, null);
 		$this->addColumn('REFERENCE_ID', 'ReferenceId', 'VARCHAR', false, 512, null);
 		$this->addColumn('CONTRIBUTION_POLICY', 'ContributionPolicy', 'TINYINT', false, null, 2);
@@ -78,7 +78,7 @@ class categoryTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('categoryKuser', 'categoryKuser', RelationMap::ONE_TO_MANY, array('id' => 'category_id', ), null, null);
+    $this->addRelation('categoryVuser', 'categoryVuser', RelationMap::ONE_TO_MANY, array('id' => 'category_id', ), null, null);
 	} // buildRelations()
 
 } // categoryTableMap

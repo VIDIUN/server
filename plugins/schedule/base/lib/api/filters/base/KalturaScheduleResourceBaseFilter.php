@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaScheduleResourceBaseFilter extends KalturaRelatedFilter
+abstract class VidiunScheduleResourceBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -87,7 +87,7 @@ abstract class KalturaScheduleResourceBaseFilter extends KalturaRelatedFilter
 	public $systemNameIn;
 
 	/**
-	 * @var KalturaScheduleResourceStatus
+	 * @var VidiunScheduleResourceStatus
 	 */
 	public $statusEqual;
 

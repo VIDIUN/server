@@ -3,7 +3,7 @@
  * @package plugins.document
  * @subpackage lib
  */
-class KDLTranscoderPdfCreator extends KDLOperatorBase
+class VDLTranscoderPdfCreator extends VDLOperatorBase
 {
 	
 	public function __construct($id, $name=null, $sourceBlacklist=null, $targetBlacklist=null) {
@@ -13,10 +13,10 @@ class KDLTranscoderPdfCreator extends KDLOperatorBase
 
 
     /**
-     * @param KDLFlavor $target
+     * @param VDLFlavor $target
      * @return string configuration to be saved as file
      */
-    public function getConfigFile(KDLFlavor $target)
+    public function getConfigFile(VDLFlavor $target)
     {
     	$configIni = parse_ini_file(PDFCREATOR_CONFIG_TEMPLATE);
     	if (!$configIni) {
@@ -27,8 +27,8 @@ class KDLTranscoderPdfCreator extends KDLOperatorBase
     	$configIni['AutosaveFormat'] = '0'; //PDF format
     	$configIni['UseAutosave'] = '1';
     	$configIni['UseAutosaveDirectory'] = '1';
-    	$configIni['AutosaveDirectory'] = KDLCmdlinePlaceholders::OutDir;
-    	$configIni['AutosaveFilename'] = KDLCmdlinePlaceholders::OutFileName;
+    	$configIni['AutosaveDirectory'] = VDLCmdlinePlaceholders::OutDir;
+    	$configIni['AutosaveFilename'] = VDLCmdlinePlaceholders::OutFileName;
     	
     	// pdf parameters from flavor params
     	if ($target->_pdf->_resolution) {
@@ -55,9 +55,9 @@ class KDLTranscoderPdfCreator extends KDLOperatorBase
     
  
 	
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
-		$cmdStr = KDLCmdlinePlaceholders::InFileName ." ". KDLCmdlinePlaceholders::OutFileName;
+		$cmdStr = VDLCmdlinePlaceholders::InFileName ." ". VDLCmdlinePlaceholders::OutFileName;
 		if ($target->_pdf && $target->_pdf->_readonly){
 			$cmdStr .=" --readonly";
 		}

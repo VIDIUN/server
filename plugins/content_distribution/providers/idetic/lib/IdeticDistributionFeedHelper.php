@@ -23,7 +23,7 @@ class IdeticDistributionFeedHelper
 	public function __construct($templateName)
 	{
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml_templates/' . $templateName;
-		$this->doc = new KDOMDocument();
+		$this->doc = new VDOMDocument();
 		$this->doc->load($xmlTemplate);
 		$this->xpath = new DOMXPath($this->doc);
 	}
@@ -66,63 +66,63 @@ class IdeticDistributionFeedHelper
 	
 	public function setStartTime($value)
 	{
-		kXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramLocationTable/ProgramLocation/OnDemandProgram/StartOfAvailability', $value);
+		vXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramLocationTable/ProgramLocation/OnDemandProgram/StartOfAvailability', $value);
 	}
 	
 	public function setEndTime($value)
 	{
-		kXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramLocationTable/ProgramLocation/OnDemandProgram/EndOfAvailability', $value);
+		vXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramLocationTable/ProgramLocation/OnDemandProgram/EndOfAvailability', $value);
 	}
 	
 	public function setTitle($value)
 	{
-		kXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/Title', $value);
+		vXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/Title', $value);
 	}
 	
 	public function setShortTitle($value)
 	{
-		kXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/ShortTitle', $value);
+		vXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/ShortTitle', $value);
 	}
 	
 	public function setSynopsis($value)
 	{
-		kXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/Synopsis', $value);
+		vXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/Synopsis', $value);
 	}
 	
 	public function setKeyword($value)
 	{
-		kXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/Keyword', $value);
+		vXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/Keyword', $value);
 	}
 	
 	public function setGenre($value)
 	{
-		kXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/Genre', $value);
+		vXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/Genre', $value);
 	}
 	
 	public function setSlot($value)
 	{
-		kXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/Slot', $value);
+		vXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/Slot', $value);
 	}
 	
 	public function setFolder($value)
 	{
-		kXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/Folder', $value);
+		vXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramInformationTable/ProgramInformation/BasicDescription/Folder', $value);
 	}
 		
 	public function setIndirectUploadUrl($value)
 	{
-		kXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramLocationTable/ProgramLocation/OnDemandProgram/IndirectUploadURL', $value);
+		vXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramLocationTable/ProgramLocation/OnDemandProgram/IndirectUploadURL', $value);
 	}
 	
 	public function setThumbnail($value)
 	{
-		kXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramLocationTable/ProgramLocation/OnDemandProgram/thumbnail', $value);
+		vXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramLocationTable/ProgramLocation/OnDemandProgram/thumbnail', $value);
 	}
 	
 	public function setChecksum($value)
 	{
 		//TODO: veirfy that make sense
-		kXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramLocationTable/ProgramLocation/OnDemandProgram/Checksum', $value);
+		vXml::setNodeValue($this->xpath,'/ProgramDescription/ProgramLocationTable/ProgramLocation/OnDemandProgram/Checksum', $value);
 	}
 			
 }

@@ -1,11 +1,11 @@
 <?php
 /**
- * Basic push-publish configuration for Kaltura live stream entry
+ * Basic push-publish configuration for Vidiun live stream entry
  * @package api
  * @subpackage objects
  *
  */
-class KalturaLiveStreamPushPublishConfiguration extends KalturaObject
+class VidiunLiveStreamPushPublishConfiguration extends VidiunObject
 {
 	/**
 	 * @var string
@@ -28,7 +28,7 @@ class KalturaLiveStreamPushPublishConfiguration extends KalturaObject
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -36,13 +36,13 @@ class KalturaLiveStreamPushPublishConfiguration extends KalturaObject
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
 		{
-			$dbObject = new kLiveStreamPushPublishConfiguration();
+			$dbObject = new vLiveStreamPushPublishConfiguration();
 		}
 		
 		return parent::toObject($dbObject, $propsToSkip);
@@ -52,10 +52,10 @@ class KalturaLiveStreamPushPublishConfiguration extends KalturaObject
 	{
 		switch ($className)
 		{
-			case 'kLiveStreamPushPublishRTMPConfiguration':
-				return new KalturaLiveStreamPushPublishRTMPConfiguration();
+			case 'vLiveStreamPushPublishRTMPConfiguration':
+				return new VidiunLiveStreamPushPublishRTMPConfiguration();
 			default:
-				return new KalturaLiveStreamPushPublishConfiguration();
+				return new VidiunLiveStreamPushPublishConfiguration();
 		}
 	}
 }

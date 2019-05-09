@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchHighlight extends KalturaObject
+class VidiunESearchHighlight extends VidiunObject
 {
 	/**
 	 * @var string
@@ -11,7 +11,7 @@ class KalturaESearchHighlight extends KalturaObject
 	public $fieldName;
 
 	/**
-	 * @var KalturaStringArray
+	 * @var VidiunStringArray
 	 */
 	public $hits;
 

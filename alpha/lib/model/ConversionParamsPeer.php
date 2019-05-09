@@ -10,7 +10,7 @@
  */ 
 class ConversionParamsPeer extends BaseConversionParamsPeer
 {	
-	// TODO - should override kaltura's params with the partner's params for any profile_type
+	// TODO - should override vidiun's params with the partner's params for any profile_type
 	// -> if there are both params for the profile_type both under partner_id=0 and the profile's partner_id - 
 	// prefer the partner's  
 	/**

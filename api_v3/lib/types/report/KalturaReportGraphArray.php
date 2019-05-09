@@ -3,14 +3,14 @@
  * @package api
  * @subpackage objects
  */
-class KalturaReportGraphArray extends KalturaTypedArray
+class VidiunReportGraphArray extends VidiunTypedArray
 {
 	public static function fromReportDataArray ( $arr, $delimiter = ',' )
 	{
-		$newArr = new KalturaReportGraphArray();
+		$newArr = new VidiunReportGraphArray();
 		foreach ( $arr as $id => $data )
 		{
-			$nObj = new KalturaReportGraph();
+			$nObj = new VidiunReportGraph();
 			$nObj->fromReportData ( $id, $data, $delimiter );
 			$newArr[] = $nObj;
 		}
@@ -20,7 +20,7 @@ class KalturaReportGraphArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaReportGraph" );
+		return parent::__construct ( "VidiunReportGraph" );
 	}
 }
 ?>

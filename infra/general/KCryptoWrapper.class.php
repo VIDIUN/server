@@ -1,6 +1,6 @@
 <?php
 
-class KCryptoWrapper
+class VCryptoWrapper
 {
         public static function getEncryptorClassName()
         {

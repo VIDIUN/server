@@ -4,7 +4,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaDeliveryServerNodeBaseFilter extends KalturaServerNodeFilter
+abstract class VidiunDeliveryServerNodeBaseFilter extends VidiunServerNodeFilter
 {
 	static private $map_between_objects = array
 	(

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaListResponse extends KalturaObject
+class VidiunListResponse extends VidiunObject
 {
 	/**
 	 * @var int
@@ -12,9 +12,9 @@ class KalturaListResponse extends KalturaObject
 	public $totalCount;
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::loadRelatedObjects($responseProfile)
+	 * @see VidiunObject::loadRelatedObjects($responseProfile)
 	 */
-	public function loadRelatedObjects(KalturaDetachedResponseProfile $responseProfile)
+	public function loadRelatedObjects(VidiunDetachedResponseProfile $responseProfile)
 	{
 		if($this->objects)
 		{

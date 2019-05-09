@@ -1,6 +1,6 @@
 <?php
 
-class kKavaReportsMgr extends kKavaBase
+class vKavaReportsMgr extends vKavaBase
 {
 	// dimensions
 	const DIMENSION_TIME = '__time';
@@ -252,7 +252,7 @@ class kKavaReportsMgr extends kKavaBase
 				array(
 					self::REPORT_ENRICH_OUTPUT => 'country',
 					self::REPORT_ENRICH_FUNC => self::ENRICH_FOREACH_KEYS_FUNC,
-					self::REPORT_ENRICH_CONTEXT => 'kKavaCountryCodes::toShortName',
+					self::REPORT_ENRICH_CONTEXT => 'vKavaCountryCodes::toShortName',
 				),
 				array(
 					self::REPORT_ENRICH_OUTPUT => 'location_name',
@@ -277,7 +277,7 @@ class kKavaReportsMgr extends kKavaBase
 
 		myReportsMgr::REPORT_TYPE_USER_ENGAGEMENT => array(
 			self::REPORT_DIMENSION_MAP => array(
-				'name' => self::DIMENSION_KUSER_ID
+				'name' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => 'name',
@@ -303,7 +303,7 @@ class kKavaReportsMgr extends kKavaBase
 
 		myReportsMgr::REPORT_TYPE_USER_TOP_CONTENT => array(
 			self::REPORT_DIMENSION_MAP => array(
-				'name' => self::DIMENSION_KUSER_ID
+				'name' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => 'name',
@@ -316,7 +316,7 @@ class kKavaReportsMgr extends kKavaBase
 
 		myReportsMgr::REPORT_TYPE_USER_CONTENT_DROPOFF => array(
 			self::REPORT_DIMENSION_MAP => array(
-				'name' => self::DIMENSION_KUSER_ID
+				'name' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => 'name',
@@ -331,7 +331,7 @@ class kKavaReportsMgr extends kKavaBase
 
 		myReportsMgr::REPORT_TYPE_USER_CONTENT_INTERACTIONS => array(
 			self::REPORT_DIMENSION_MAP => array(
-				'name' => self::DIMENSION_KUSER_ID
+				'name' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => 'name',
@@ -672,8 +672,8 @@ class kKavaReportsMgr extends kKavaBase
 		myReportsMgr::REPORT_TYPE_TOP_CONTRIBUTORS => array(
 			self::REPORT_DATA_SOURCE => self::DATASOURCE_ENTRY_LIFECYCLE,
 			self::REPORT_DIMENSION_MAP => array(
-				'object_id' => self::DIMENSION_KUSER_ID,
-				'name' => self::DIMENSION_KUSER_ID
+				'object_id' => self::DIMENSION_VUSER_ID,
+				'name' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => 'name',
@@ -711,9 +711,9 @@ class kKavaReportsMgr extends kKavaBase
 		myReportsMgr::REPORT_TYPE_TOP_CREATORS => array(
 			self::REPORT_DATA_SOURCE => self::DATASOURCE_ENTRY_LIFECYCLE,
 			self::REPORT_DIMENSION_MAP => array(
-				'user_id' => self::DIMENSION_KUSER_ID,
-				'user_screen_name' => self::DIMENSION_KUSER_ID,
-				'user_full_name' => self::DIMENSION_KUSER_ID,
+				'user_id' => self::DIMENSION_VUSER_ID,
+				'user_screen_name' => self::DIMENSION_VUSER_ID,
+				'user_full_name' => self::DIMENSION_VUSER_ID,
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => array('user_id', 'user_screen_name', 'user_full_name'),
@@ -733,8 +733,8 @@ class kKavaReportsMgr extends kKavaBase
 		
 		myReportsMgr::REPORT_TYPE_USER_USAGE => array(
 			self::REPORT_DIMENSION_MAP => array(
-				'kuser_id' => self::DIMENSION_KUSER_ID,
-				'name' => self::DIMENSION_KUSER_ID
+				'vuser_id' => self::DIMENSION_VUSER_ID,
+				'name' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => 'name',
@@ -1367,7 +1367,7 @@ class kKavaReportsMgr extends kKavaBase
 				array(
 					self::REPORT_ENRICH_OUTPUT => 'object_id',
 					self::REPORT_ENRICH_FUNC => self::ENRICH_FOREACH_KEYS_FUNC,
-					self::REPORT_ENRICH_CONTEXT => 'kKavaCountryCodes::toShortName',
+					self::REPORT_ENRICH_CONTEXT => 'vKavaCountryCodes::toShortName',
 				),
 				array(
 					self::REPORT_ENRICH_INPUT =>  array('country'),
@@ -1408,7 +1408,7 @@ class kKavaReportsMgr extends kKavaBase
 					self::REPORT_ENRICH_FUNC => 'self::genericQueryEnrich',
 					self::REPORT_ENRICH_CONTEXT => array(
 						'peer' => 'entryPeer',
-						'columns' => array('NAME', 'KUSER_ID', '@CREATED_AT', 'STATUS', 'MEDIA_TYPE', 'LENGTH_IN_MSECS'),
+						'columns' => array('NAME', 'VUSER_ID', '@CREATED_AT', 'STATUS', 'MEDIA_TYPE', 'LENGTH_IN_MSECS'),
 					)
 				),
 				array(
@@ -1416,7 +1416,7 @@ class kKavaReportsMgr extends kKavaBase
 					self::REPORT_ENRICH_FUNC => 'self::genericQueryEnrich',
 					self::REPORT_ENRICH_CONTEXT => array(
 						'columns' => array('IFNULL(TRIM(CONCAT(FIRST_NAME, " ", LAST_NAME)), PUSER_ID)'),
-						'peer' => 'kuserPeer',
+						'peer' => 'vuserPeer',
 					)
 				)
 			),
@@ -1428,16 +1428,16 @@ class kKavaReportsMgr extends kKavaBase
 
 		myReportsMgr::REPORT_TYPE_TOP_CONTENT_CONTRIBUTORS => array(
 			self::REPORT_DIMENSION_MAP => array(
-				'user_id' => self::DIMENSION_KUSER_ID,
-				'creator_name' => self::DIMENSION_KUSER_ID,
-				'created_at' => self::DIMENSION_KUSER_ID
+				'user_id' => self::DIMENSION_VUSER_ID,
+				'creator_name' => self::DIMENSION_VUSER_ID,
+				'created_at' => self::DIMENSION_VUSER_ID
 			),
 			self::REPORT_ENRICH_DEF => array(
 				self::REPORT_ENRICH_OUTPUT => array('user_id', 'creator_name', 'created_at'),
 				self::REPORT_ENRICH_FUNC => 'self::genericQueryEnrich',
 				self::REPORT_ENRICH_CONTEXT => array(
 					'columns' => array('PUSER_ID', 'IFNULL(TRIM(CONCAT(FIRST_NAME, " ", LAST_NAME)), PUSER_ID)', '@CREATED_AT'),
-					'peer' => 'kuserPeer',
+					'peer' => 'vuserPeer',
 				)
 			),
 			self::REPORT_JOIN_REPORTS => array(
@@ -1613,9 +1613,9 @@ class kKavaReportsMgr extends kKavaBase
 	);
 
 	protected static $transform_time_dimensions = array(
-		self::GRANULARITY_HOUR => array('kKavaReportsMgr', 'timestampToHourId'),
-		self::GRANULARITY_DAY => array('kKavaReportsMgr', 'timestampToDateId'),
-		self::GRANULARITY_MONTH => array('kKavaReportsMgr', 'timestampToMonthId')
+		self::GRANULARITY_HOUR => array('vKavaReportsMgr', 'timestampToHourId'),
+		self::GRANULARITY_DAY => array('vKavaReportsMgr', 'timestampToDateId'),
+		self::GRANULARITY_MONTH => array('vKavaReportsMgr', 'timestampToMonthId')
 	);
 
 	protected static $granularity_mapping = array(
@@ -1946,7 +1946,7 @@ class kKavaReportsMgr extends kKavaBase
 
 		self::$aggregations_def[self::METRIC_UNIQUE_CONTRIBUTORS] = self::getCardinalityAggregator(
 			self::METRIC_UNIQUE_CONTRIBUTORS,
-			array(self::DIMENSION_KUSER_ID));
+			array(self::DIMENSION_VUSER_ID));
 
 		self::$aggregations_def[self::METRIC_BANDWIDTH_SIZE_BYTES] = self::getLongSumAggregator(
 			self::METRIC_BANDWIDTH_SIZE_BYTES, self::METRIC_SIZE_BYTES);
@@ -2383,7 +2383,7 @@ class kKavaReportsMgr extends kKavaBase
 			return false;
 		}
 
-		return kKavaBase::isPartnerAllowed($partner_id, kKavaBase::VOD_DISABLED_PARTNERS);
+		return vKavaBase::isPartnerAllowed($partner_id, vKavaBase::VOD_DISABLED_PARTNERS);
 	}
 		
 	protected static function toSafeId($name)
@@ -2572,7 +2572,7 @@ class kKavaReportsMgr extends kKavaBase
 		return array($from_date . '/' . $to_date);
 	}
 
-	protected static function getKuserIds($report_def, $puser_ids, $partner_id, $delimiter = ',')
+	protected static function getVuserIds($report_def, $puser_ids, $partner_id, $delimiter = ',')
 	{
 		$result = array();
 
@@ -2594,7 +2594,7 @@ class kKavaReportsMgr extends kKavaBase
 			if ($enrich_def[self::REPORT_ENRICH_FUNC] == 'self::getUsersInfo' &&
 				(!isset($enrich_def[self::REPORT_ENRICH_CONTEXT]['hash']) || $enrich_def[self::REPORT_ENRICH_CONTEXT]['hash']))
 			{
-				$hash_conf = kConf::get('kava_hash_user_ids', 'local', array());
+				$hash_conf = vConf::get('kava_hash_user_ids', 'local', array());
 				break;
 			}
 		}
@@ -2603,49 +2603,49 @@ class kKavaReportsMgr extends kKavaBase
 		{
 			foreach ($puser_ids as $index => $id)
 			{
-				$kuser_id = self::getKuserIdFromHash($id);
-				if ($kuser_id === false)
+				$vuser_id = self::getVuserIdFromHash($id);
+				if ($vuser_id === false)
 				{
 					continue;
 				}
 				
 				unset($puser_ids[$index]);
-				$result[] = strval($kuser_id);
+				$result[] = strval($vuser_id);
 			}
 		}
 		
 		if (!$puser_ids)
 		{
-			return $result ? $result : array(kuser::KUSER_ID_THAT_DOES_NOT_EXIST);
+			return $result ? $result : array(vuser::VUSER_ID_THAT_DOES_NOT_EXIST);
 		}
 		
 		// map remaining ids from db
-		$c = KalturaCriteria::create(kuserPeer::OM_CLASS);
+		$c = VidiunCriteria::create(vuserPeer::OM_CLASS);
 
-		$c->addSelectColumn(kuserPeer::ID);
+		$c->addSelectColumn(vuserPeer::ID);
 		
-		$c->add(kuserPeer::PARTNER_ID, $partner_id);
-		$c->add(kuserPeer::PUSER_ID, $puser_ids, Criteria::IN);
+		$c->add(vuserPeer::PARTNER_ID, $partner_id);
+		$c->add(vuserPeer::PUSER_ID, $puser_ids, Criteria::IN);
 
-		$c->addDescendingOrderByColumn('(' . kuserPeer::STATUS . '=' . KuserStatus::ACTIVE . ')');		// first priority - active user
-		$c->addDescendingOrderByColumn(kuserPeer::UPDATED_AT);	// second priority - recently updated
+		$c->addDescendingOrderByColumn('(' . vuserPeer::STATUS . '=' . VuserStatus::ACTIVE . ')');		// first priority - active user
+		$c->addDescendingOrderByColumn(vuserPeer::UPDATED_AT);	// second priority - recently updated
 		
-		kuserPeer::setUseCriteriaFilter(false);
-		$stmt = kuserPeer::doSelectStmt($c, myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2));
+		vuserPeer::setUseCriteriaFilter(false);
+		$stmt = vuserPeer::doSelectStmt($c, myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2));
 		$rows = $stmt->fetchAll(PDO::FETCH_NUM);
-		kuserPeer::setUseCriteriaFilter(true);
+		vuserPeer::setUseCriteriaFilter(true);
 
 		foreach ($rows as $row)
 		{
 			$result[] = strval($row[0]);
 		}
 		
-		return $result ? $result : array(kuser::KUSER_ID_THAT_DOES_NOT_EXIST); 
+		return $result ? $result : array(vuser::VUSER_ID_THAT_DOES_NOT_EXIST); 
 	}
 	
 	protected static function getCategoriesIds($categories, $partner_id, $delimiter)
 	{
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 
 		$c->addSelectColumn(categoryPeer::ID);
 
@@ -2655,10 +2655,10 @@ class kKavaReportsMgr extends kKavaBase
 		}
 		$c->add(categoryPeer::FULL_NAME, explode($delimiter, $categories), Criteria::IN);
 
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$stmt = categoryPeer::doSelectStmt($c, myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2));
 		$rows = $stmt->fetchAll(PDO::FETCH_NUM);
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 
 		if (!count($rows))
 		{
@@ -2668,9 +2668,9 @@ class kKavaReportsMgr extends kKavaBase
 		return array_map('reset', $rows);
 	}
 
-	protected static function getEntryKuserDimension($data_source)
+	protected static function getEntryVuserDimension($data_source)
 	{
-		return in_array($data_source, array(self::DATASOURCE_ENTRY_LIFECYCLE, self::DATASOURCE_STORAGE_USAGE)) ? self::DIMENSION_KUSER_ID : self::DIMENSION_ENTRY_OWNER_ID;
+		return in_array($data_source, array(self::DATASOURCE_ENTRY_LIFECYCLE, self::DATASOURCE_STORAGE_USAGE)) ? self::DIMENSION_VUSER_ID : self::DIMENSION_ENTRY_OWNER_ID;
 	}
 
 	protected static function getDruidFilter($partner_id, $report_def, $input_filter, $object_ids, $response_options)
@@ -2701,8 +2701,8 @@ class kKavaReportsMgr extends kKavaBase
 		if ($input_filter instanceof endUserReportsInputFilter && $input_filter->userIds != null)
 		{
 			$druid_filter[] = array(
-				self::DRUID_DIMENSION => self::DIMENSION_KUSER_ID,
-				self::DRUID_VALUES => self::getKuserIds($report_def, $input_filter->userIds, $partner_id, $response_options->getDelimiter()),
+				self::DRUID_DIMENSION => self::DIMENSION_VUSER_ID,
+				self::DRUID_VALUES => self::getVuserIds($report_def, $input_filter->userIds, $partner_id, $response_options->getDelimiter()),
 			);
 		}
 
@@ -2774,7 +2774,7 @@ class kKavaReportsMgr extends kKavaBase
 				$entry_filter->set('_like_admin_tags', $input_filter->keywords);
 			}
 
-			$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+			$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 			$entry_filter->attachToCriteria($c);
 			$c->applyFilters();
 
@@ -2782,7 +2782,7 @@ class kKavaReportsMgr extends kKavaBase
 
 			if ($c->getRecordsCount() > count($entry_ids_from_db))
 			{
-				throw new kCoreException('Search is to general', kCoreException::SEARCH_TOO_GENERAL);
+				throw new vCoreException('Search is to general', vCoreException::SEARCH_TOO_GENERAL);
 			}
 
 			if (!count($entry_ids_from_db))
@@ -2815,16 +2815,16 @@ class kKavaReportsMgr extends kKavaBase
 
 		if ($input_filter->entry_operator)
 		{
-			$entry_search = new kEntrySearch();
+			$entry_search = new vEntrySearch();
 			$entry_search->setFilterOnlyContext();
-			$pager = new kPager();
+			$pager = new vPager();
 			$pager->setPageSize(self::MAX_ESEARCH_RESULTS);
 			$elastic_results = $entry_search->doSearch($input_filter->entry_operator, $pager);
-			$elastic_entry_ids = kESearchCoreAdapter::getObjectIdsFromElasticResults($elastic_results);
+			$elastic_entry_ids = vESearchCoreAdapter::getObjectIdsFromElasticResults($elastic_results);
 
-			if ($elastic_results[kESearchCoreAdapter::HITS_KEY][kESearchCoreAdapter::TOTAL_KEY] > count($elastic_entry_ids))
+			if ($elastic_results[vESearchCoreAdapter::HITS_KEY][vESearchCoreAdapter::TOTAL_KEY] > count($elastic_entry_ids))
 			{
-				throw new kCoreException('Search is to general', kCoreException::SEARCH_TOO_GENERAL);
+				throw new vCoreException('Search is to general', vCoreException::SEARCH_TOO_GENERAL);
 			}
 
 			if ($elastic_entry_ids)
@@ -2857,8 +2857,8 @@ class kKavaReportsMgr extends kKavaBase
 		if ($input_filter->owners != null)
 		{
 			$druid_filter[] = array(
-				self::DRUID_DIMENSION => self::getEntryKuserDimension($data_source),
-				self::DRUID_VALUES => self::getKuserIds(array(), $input_filter->owners, $partner_id, $response_options->getDelimiter()),
+				self::DRUID_DIMENSION => self::getEntryVuserDimension($data_source),
+				self::DRUID_VALUES => self::getVuserIds(array(), $input_filter->owners, $partner_id, $response_options->getDelimiter()),
 			);
 		}
 
@@ -2879,10 +2879,10 @@ class kKavaReportsMgr extends kKavaBase
 			self::DRUID_POST_AGGR => array(),
 		);
 
-		if (kConf::hasParam('kava_top_priority_client_tags'))
+		if (vConf::hasParam('kava_top_priority_client_tags'))
 		{
-			$priority_tags = kConf::get('kava_top_priority_client_tags');
-			$client_tag = kCurrentContext::$client_lang;
+			$priority_tags = vConf::get('kava_top_priority_client_tags');
+			$client_tag = vCurrentContext::$client_lang;
 			
 			foreach ($priority_tags as $tag)
 			{
@@ -2983,7 +2983,7 @@ class kKavaReportsMgr extends kKavaBase
 			$dimension = $cur_filter[self::DRUID_DIMENSION];
 			if (!isset($valid_dimensions_to_filter[$dimension]))
 			{
-				KalturaLog::log("Invalid filter for dimension [$dimension] in data source [$data_source]. Filter is ignored.");
+				VidiunLog::log("Invalid filter for dimension [$dimension] in data source [$data_source]. Filter is ignored.");
 				continue;
 			}
 			if (isset($cur_filter[self::DRUID_TYPE]))
@@ -3012,7 +3012,7 @@ class kKavaReportsMgr extends kKavaBase
 		{
 			if (count($values) == 0)
 			{
-				KalturaLog::Log("Empty values for dimension [$dimension]. Query with this filter will return empty result.");
+				VidiunLog::Log("Empty values for dimension [$dimension]. Query with this filter will return empty result.");
 				$report_def[self::DRUID_FILTER] = false;
 				return $report_def;
 			}
@@ -3392,7 +3392,7 @@ class kKavaReportsMgr extends kKavaBase
 			break;
 		}
 		$result = self::runQuery($query);
-		KalturaLog::log('Druid returned [' . count($result) . '] rows');
+		VidiunLog::log('Druid returned [' . count($result) . '] rows');
 
 		// parse the result
 		if ($transform_enrich_def)
@@ -3449,7 +3449,7 @@ class kKavaReportsMgr extends kKavaBase
 		}
 
 		$end = microtime(true);
-		KalturaLog::log('getGraph took [' . ($end - $start) . ']');
+		VidiunLog::log('getGraph took [' . ($end - $start) . ']');
 
 		return $result;
 	}
@@ -3494,7 +3494,7 @@ class kKavaReportsMgr extends kKavaBase
 				$input_filter,
 				$object_ids,
 				$response_options);
-			KalturaLog::debug('Graph - ' . print_r($cur_result, true));
+			VidiunLog::debug('Graph - ' . print_r($cur_result, true));
 			$result = array_merge($result, $cur_result);
 			if (isset($cur_report_def[self::REPORT_GRANULARITY]))
 			{
@@ -3538,7 +3538,7 @@ class kKavaReportsMgr extends kKavaBase
 				$object_ids,
 				$response_options);
 			$base_values = $base_values[0];
-			KalturaLog::debug('Base - ' . print_r($base_values, true));
+			VidiunLog::debug('Base - ' . print_r($base_values, true));
 			
 			call_user_func_array($cur_report_def[self::REPORT_GRAPH_ACCUMULATE_FUNC], 
 				array(&$result, $base_values, $dates));
@@ -3556,10 +3556,10 @@ class kKavaReportsMgr extends kKavaBase
 			call_user_func_array($report_def[self::REPORT_GRAPH_FINALIZE_FUNC], array(&$result, $dates));
 		}
 				
-		KalturaLog::log('Result - ' . print_r($result, true));
+		VidiunLog::log('Result - ' . print_r($result, true));
 				
 		$end = microtime(true);
-		KalturaLog::log('getGraph took [' . ($end - $start) . ']');
+		VidiunLog::log('getGraph took [' . ($end - $start) . ']');
 		
 		return $result;
 	}
@@ -3608,7 +3608,7 @@ class kKavaReportsMgr extends kKavaBase
 				$input_filter,
 				$object_ids,
 				$response_options);
-			KalturaLog::debug('Graph - ' . print_r($cur_result, true));
+			VidiunLog::debug('Graph - ' . print_r($cur_result, true));
 			
 			foreach ($cur_result as $dim => $graphs)
 			{
@@ -3654,7 +3654,7 @@ class kKavaReportsMgr extends kKavaBase
 				$input_filter,
 				$object_ids,
 				$response_options);
-			KalturaLog::debug('Base - ' . print_r($base_values, true));
+			VidiunLog::debug('Base - ' . print_r($base_values, true));
 
 			// swap the base values from [graph][dim] to [dim][graph]
 			$base_values = self::transposeArray($base_values);
@@ -3693,10 +3693,10 @@ class kKavaReportsMgr extends kKavaBase
 			}
 		}
 		
-		KalturaLog::log('Result - ' . print_r($result, true));
+		VidiunLog::log('Result - ' . print_r($result, true));
 				
 		$end = microtime(true);
-		KalturaLog::log('getGraph took [' . ($end - $start) . ']');
+		VidiunLog::log('getGraph took [' . ($end - $start) . ']');
 		
 		return $result;
 	}
@@ -3739,7 +3739,7 @@ class kKavaReportsMgr extends kKavaBase
 
 		if (!$response_options)
 		{
-			$response_options = new kReportResponseOptions();
+			$response_options = new vReportResponseOptions();
 		}
 
 		self::init();
@@ -3895,15 +3895,15 @@ class kKavaReportsMgr extends kKavaBase
 		$result = array();
 		foreach ($graphs as $name => $values)
 		{
-			if (kString::beginsWith($name, 'average_'))
+			if (vString::beginsWith($name, 'average_'))
 			{
 				$value = $values ? array_sum($values) / count($values) : 0;
 			}
-			else if (kString::beginsWith($name, 'peak_'))
+			else if (vString::beginsWith($name, 'peak_'))
 			{
 				$value = $values ? max($values) : 0;
 			}
-			else if (kString::beginsWith($name, 'latest_'))
+			else if (vString::beginsWith($name, 'latest_'))
 			{
 				$value = end($values);
 			}
@@ -4004,7 +4004,7 @@ class kKavaReportsMgr extends kKavaBase
 	/// table enrich functions
 	protected static function getEntriesNames($ids, $partner_id)
 	{
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 
 		$c->addSelectColumn(entryPeer::ID);
 		$c->addSelectColumn(entryPeer::NAME);
@@ -4055,14 +4055,14 @@ class kKavaReportsMgr extends kKavaBase
 		$coordKeys = array();
 		foreach ($keys as $key)
 		{
-			$memcKey = kKavaBase::getCoordinatesKey(array($key));
+			$memcKey = vKavaBase::getCoordinatesKey(array($key));
 			$coordKeys[$memcKey] = true;
 		}
-		$coords = kKavaBase::getCoordinatesForKeys(array_keys($coordKeys));
+		$coords = vKavaBase::getCoordinatesForKeys(array_keys($coordKeys));
 		$result = array();
 		foreach ($keys as $key)
 		{
-			$memcKey = kKavaBase::getCoordinatesKey(array($key));
+			$memcKey = vKavaBase::getCoordinatesKey(array($key));
 			if (isset($coords[$memcKey]))
 			{
 				$result[$key] = array($coords[$memcKey]);
@@ -4073,7 +4073,7 @@ class kKavaReportsMgr extends kKavaBase
 
 	protected static function getEntriesUserIdsAndNames($ids, $partner_id)
 	{
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 
 		$c->addSelectColumn(entryPeer::ID);
 		$c->addSelectColumn(entryPeer::NAME);
@@ -4103,7 +4103,7 @@ class kKavaReportsMgr extends kKavaBase
 
 	protected static function getCategoriesNames($ids, $partner_id)
 	{
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 
 		$c->addSelectColumn(categoryPeer::ID);
 		$c->addSelectColumn(categoryPeer::NAME);
@@ -4129,7 +4129,7 @@ class kKavaReportsMgr extends kKavaBase
 		return $categories_names;
 	}
 
-	protected static function hashUserId($conf, $partner_id, $puser_id, $kuser_id)
+	protected static function hashUserId($conf, $partner_id, $puser_id, $vuser_id)
 	{
 		if (!isset($conf[$partner_id]))
 		{
@@ -4151,14 +4151,14 @@ class kKavaReportsMgr extends kKavaBase
 		{
 			$hash[$i >> 1] = chr(
 				(ord($hash[$i >> 1]) & 0xee) | 
-				((($kuser_id >> $i) & 1) << 4) | 
-				(($kuser_id >> ($i + 1)) & 1));
+				((($vuser_id >> $i) & 1) << 4) | 
+				(($vuser_id >> ($i + 1)) & 1));
 		}
 		
 		return strtoupper(bin2hex($hash));
 	}
 
-	protected static function getKuserIdFromHash($hash)
+	protected static function getVuserIdFromHash($hash)
 	{
 		if (!preg_match('/^[0-9A-Z]{32}$/D', $hash))
 		{
@@ -4208,7 +4208,7 @@ class kKavaReportsMgr extends kKavaBase
 		$columns = isset($context['columns']) ? $context['columns'] : array('PUSER_ID');
 		if (!isset($context['hash']) || $context['hash'])
 		{  
-			$hash_conf = kConf::get('kava_hash_user_ids', 'local', array());
+			$hash_conf = vConf::get('kava_hash_user_ids', 'local', array());
 		}
 		else
 		{
@@ -4235,11 +4235,11 @@ class kKavaReportsMgr extends kKavaBase
 			$result[$id] = $output;
 		}
 		
-		$c = KalturaCriteria::create(kuserPeer::OM_CLASS);
+		$c = VidiunCriteria::create(vuserPeer::OM_CLASS);
 
-		$c->addSelectColumn(kuserPeer::ID);
-		$c->addSelectColumn(kuserPeer::PARTNER_ID);
-		$c->addSelectColumn(kuserPeer::PUSER_ID);
+		$c->addSelectColumn(vuserPeer::ID);
+		$c->addSelectColumn(vuserPeer::PARTNER_ID);
+		$c->addSelectColumn(vuserPeer::PUSER_ID);
 
 		foreach ($columns as $column)
 		{
@@ -4248,29 +4248,29 @@ class kKavaReportsMgr extends kKavaBase
 				continue;
 			}
 			
-			$c->addSelectColumn("kuser.$column");
+			$c->addSelectColumn("vuser.$column");
 		}
 		
 		if ($partner_id != Partner::ADMIN_CONSOLE_PARTNER_ID)
 		{
-			$c->add(kuserPeer::PARTNER_ID, $partner_id);
+			$c->add(vuserPeer::PARTNER_ID, $partner_id);
 		}
-		$c->add(kuserPeer::ID, $ids, Criteria::IN);
+		$c->add(vuserPeer::ID, $ids, Criteria::IN);
 
-		kuserPeer::setUseCriteriaFilter(false);
-		$stmt = kuserPeer::doSelectStmt($c, myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2));
+		vuserPeer::setUseCriteriaFilter(false);
+		$stmt = vuserPeer::doSelectStmt($c, myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2));
 		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		kuserPeer::setUseCriteriaFilter(true);
+		vuserPeer::setUseCriteriaFilter(true);
 		
 		foreach ($rows as $row)
 		{
 			$partner_id = $row['PARTNER_ID'];
 			$puser_id = $row['PUSER_ID'];
-			$kuser_id = $row['ID'];
+			$vuser_id = $row['ID'];
 
 			$output = array();
 			
-			$hash = self::hashUserId($hash_conf, $partner_id, $puser_id, $kuser_id);
+			$hash = self::hashUserId($hash_conf, $partner_id, $puser_id, $vuser_id);
 			if ($hash === false)
 			{
 				foreach ($columns as $column)
@@ -4287,7 +4287,7 @@ class kKavaReportsMgr extends kKavaBase
 				}
 			}
 			
-			$result[$kuser_id] = $output;
+			$result[$vuser_id] = $output;
 		}
 		return $result;
 	}
@@ -4295,7 +4295,7 @@ class kKavaReportsMgr extends kKavaBase
 	protected static function getEntriesCategories($ids, $partner_id, $context)
 	{
 		// get the category ids of the entries
-		$c = KalturaCriteria::create(categoryEntryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryEntryPeer::OM_CLASS);
 
 		$c->addSelectColumn(categoryEntryPeer::ENTRY_ID);
 		$c->addSelectColumn('GROUP_CONCAT('.categoryEntryPeer::CATEGORY_ID.')');
@@ -4326,7 +4326,7 @@ class kKavaReportsMgr extends kKavaBase
 		}
 		
 		// get the names of the categories
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 
 		$c->addSelectColumn(categoryPeer::ID);
 		$c->addSelectColumn(categoryPeer::FULL_NAME);
@@ -4381,7 +4381,7 @@ class kKavaReportsMgr extends kKavaBase
 		$custom_crits = isset($context['custom_criterion']) ? $context['custom_criterion'] : array();
 		$int_ids_only = isset($context['int_ids_only']) ? $context['int_ids_only'] : false;
 
-		$c = KalturaCriteria::create($peer::OM_CLASS);
+		$c = VidiunCriteria::create($peer::OM_CLASS);
 
 		$table_name = $peer::TABLE_NAME;
 		$c->addSelectColumn($table_name . '.' . $dim_column);
@@ -4829,13 +4829,13 @@ class kKavaReportsMgr extends kKavaBase
 	{
 		$cache_key = 'reportCount-' . md5("$partner_id|".serialize($report_def)."|$object_ids|".serialize($input_filter));
 
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_REPORTS_COUNT);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_REPORTS_COUNT);
 		if ($cache)
 		{
 			$total_count = $cache->get($cache_key);
 			if ($total_count)
 			{
-				KalturaLog::log("count from cache: [$total_count]");
+				VidiunLog::log("count from cache: [$total_count]");
 				return $total_count;
 			}
 		}
@@ -4854,7 +4854,7 @@ class kKavaReportsMgr extends kKavaBase
 			$total_count = 0;
 		}
 
-		KalturaLog::log("count: [$total_count]");
+		VidiunLog::log("count: [$total_count]");
 
 		if ($cache)
 		{
@@ -4888,7 +4888,7 @@ class kKavaReportsMgr extends kKavaBase
 			if ($result)
 			{
 				$rows = $result[0][self::DRUID_RESULT];
-				KalturaLog::log('Druid returned [' . count($rows) . '] rows');
+				VidiunLog::log('Druid returned [' . count($rows) . '] rows');
 				foreach ($rows as $row)
 				{
 					$data[] = array($row[self::DRUID_VALUE]);
@@ -5009,7 +5009,7 @@ class kKavaReportsMgr extends kKavaBase
 
 			$rows = $result[0][self::DRUID_RESULT];
 			$rows_count = count($rows);
-			KalturaLog::log("Druid returned [$rows_count] rows");
+			VidiunLog::log("Druid returned [$rows_count] rows");
 
 			$rows = array_slice($rows, ($page_index - 1) * $page_size, $page_size);
 			if (!$rows)
@@ -5082,7 +5082,7 @@ class kKavaReportsMgr extends kKavaBase
 		$result = null;
 
 		$rows_count = count($rows);
-		KalturaLog::log("Druid returned [$rows_count] rows");
+		VidiunLog::log("Druid returned [$rows_count] rows");
 
 		$rows = array_slice($rows, ($page_index - 1) * $page_size, $page_size);
 		if (!$rows)
@@ -5105,7 +5105,7 @@ class kKavaReportsMgr extends kKavaBase
 				if ($total_count <= 0)
 				{
 					$end = microtime(true);
-					KalturaLog::log('getTable took [' . ($end - $start) . ']');
+					VidiunLog::log('getTable took [' . ($end - $start) . ']');
 					return array(array(), array(), 0);
 				}
 			}
@@ -5225,7 +5225,7 @@ class kKavaReportsMgr extends kKavaBase
 
 
 		$end = microtime(true);
-		KalturaLog::log('getTable took [' . ($end - $start) . ']');
+		VidiunLog::log('getTable took [' . ($end - $start) . ']');
 
 		return array($headers, $data, $total_count, $order_found);
 	}
@@ -5540,7 +5540,7 @@ class kKavaReportsMgr extends kKavaBase
 
 		if (!$response_options)
 		{
-			$response_options = new kReportResponseOptions();
+			$response_options = new vReportResponseOptions();
 		}
 
 		self::init();		
@@ -5785,7 +5785,7 @@ class kKavaReportsMgr extends kKavaBase
 		}
 
 		$end = microtime(true);
-		KalturaLog::log('getTotal took ['  . ($end - $start) . ']');
+		VidiunLog::log('getTotal took ['  . ($end - $start) . ']');
 
 		return array($headers, $data);
 	}
@@ -5844,7 +5844,7 @@ class kKavaReportsMgr extends kKavaBase
 
 		if (!$response_options)
 		{
-			$response_options = new kReportResponseOptions();
+			$response_options = new vReportResponseOptions();
 		}
 
 		self::init();
@@ -5891,7 +5891,7 @@ class kKavaReportsMgr extends kKavaBase
 
 		if (!$response_options)
 		{
-			$response_options = new kReportResponseOptions();
+			$response_options = new vReportResponseOptions();
 		}
 
 		switch ($report_type)
@@ -5907,7 +5907,7 @@ class kKavaReportsMgr extends kKavaBase
 		self::init();
 		
 		$report_def = array(
-			self::REPORT_DIMENSION => self::DIMENSION_KUSER_ID, 
+			self::REPORT_DIMENSION => self::DIMENSION_VUSER_ID, 
 			self::REPORT_JOIN_REPORTS => array(
 				// storage total
 				array(
@@ -5966,7 +5966,7 @@ class kKavaReportsMgr extends kKavaBase
 		$entry_filter = new entryFilter();
 		$entry_filter->setPartnerSearchScope($partner_id);
 		$entry_filter->set('_in_root_entry_id', $ids);
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$entry_filter->attachToCriteria($c);
 		$c->applyFilters();
 
@@ -5979,7 +5979,7 @@ class kKavaReportsMgr extends kKavaBase
 	{
 		self::init();
 
-		self::$custom_reports = kConf::getMap('custom_reports');
+		self::$custom_reports = vConf::getMap('custom_reports');
 		$report_def = self::getReportDef(-$id);
 
 		// get the partner id
@@ -6010,7 +6010,7 @@ class kKavaReportsMgr extends kKavaBase
 				continue;
 			}
 
-			KalturaLog::log("updating param [$key] from [$value] to [$newValue]");
+			VidiunLog::log("updating param [$key] from [$value] to [$newValue]");
 			$params[$key] = $newValue;
 		}
 
@@ -6036,7 +6036,7 @@ class kKavaReportsMgr extends kKavaBase
 			$input_filter->$field = $value;
 		}
 
-		$response_options = new kReportResponseOptions();
+		$response_options = new vReportResponseOptions();
 		if (isset($report_def['response_options']))
 		{
 			foreach ($report_def['response_options'] as $field => $value)
@@ -6187,7 +6187,7 @@ class kKavaReportsMgr extends kKavaBase
 
 		if ($page_index * $page_size > self::MAX_CSV_RESULT_SIZE)
 		{
-			throw new kCoreException('Exceeded max query size: ' . self::MAX_CSV_RESULT_SIZE, kCoreException::SEARCH_TOO_GENERAL);
+			throw new vCoreException('Exceeded max query size: ' . self::MAX_CSV_RESULT_SIZE, vCoreException::SEARCH_TOO_GENERAL);
 		}
 
 		if (!empty($headers_for_table))
@@ -6253,7 +6253,7 @@ class kKavaReportsMgr extends kKavaBase
 
 		if (!$response_options)
 		{
-			$response_options = new kReportResponseOptions();
+			$response_options = new vReportResponseOptions();
 		}
 
 		self::init();
@@ -6268,7 +6268,7 @@ class kKavaReportsMgr extends kKavaBase
 			$object_ids,
 			$page_size, $page_index, $order_by, $response_options);
 
-		kFile::fullMkfileDir(dirname($file_path), 0777);
+		vFile::fullMkfileDir(dirname($file_path), 0777);
 
 		//adding BOM for fixing problem in open .csv file with special chars using excel.
 		$BOM = "\xEF\xBB\xBF";

@@ -32,10 +32,10 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 	protected $entry_id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the partner_id field.
@@ -91,9 +91,9 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 	protected $aentry;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuser;
+	protected $avuser;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -161,13 +161,13 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -361,31 +361,31 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 	} // setEntryId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     UserEntry The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[UserEntryPeer::KUSER_ID]))
-			$this->oldColumnsValues[UserEntryPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[UserEntryPeer::VUSER_ID]))
+			$this->oldColumnsValues[UserEntryPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = UserEntryPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = UserEntryPeer::VUSER_ID;
 		}
 
-		if ($this->akuser !== null && $this->akuser->getId() !== $v) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->avuser->getId() !== $v) {
+			$this->avuser = null;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [partner_id] column.
@@ -657,7 +657,7 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->entry_id = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-			$this->kuser_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+			$this->vuser_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
 			$this->partner_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
 			$this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
@@ -701,8 +701,8 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 		if ($this->aentry !== null && $this->entry_id !== $this->aentry->getId()) {
 			$this->aentry = null;
 		}
-		if ($this->akuser !== null && $this->kuser_id !== $this->akuser->getId()) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->vuser_id !== $this->avuser->getId()) {
+			$this->avuser = null;
 		}
 	} // ensureConsistency
 
@@ -748,7 +748,7 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 		if ($deep) {  // also de-associate any related objects?
 
 			$this->aentry = null;
-			$this->akuser = null;
+			$this->avuser = null;
 		} // if (deep)
 	}
 
@@ -826,13 +826,13 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 				return 0;
 			}
 			
-			for ($retries = 1; $retries < KalturaPDO::SAVE_MAX_RETRIES; $retries++)
+			for ($retries = 1; $retries < VidiunPDO::SAVE_MAX_RETRIES; $retries++)
 			{
                $affectedRows = $this->doSave($con);
                 if ($affectedRows || !$this->isColumnModified(UserEntryPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug("was unable to save! retrying for the $retries time");
+                VidiunLog::debug("was unable to save! retrying for the $retries time");
                 $criteria = $this->buildPkeyCriteria();
 				$criteria->addSelectColumn(UserEntryPeer::CUSTOM_DATA);
                 $stmt = BasePeer::doSelect($criteria, $con);
@@ -940,11 +940,11 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 				$this->setentry($this->aentry);
 			}
 
-			if ($this->akuser !== null) {
-				if ($this->akuser->isModified() || $this->akuser->isNew()) {
-					$affectedRows += $this->akuser->save($con);
+			if ($this->avuser !== null) {
+				if ($this->avuser->isModified() || $this->avuser->isNew()) {
+					$affectedRows += $this->avuser->save($con);
 				}
-				$this->setkuser($this->akuser);
+				$this->setvuser($this->avuser);
 			}
 
 			if ($this->isNew() ) {
@@ -1013,7 +1013,7 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1038,12 +1038,12 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1061,10 +1061,10 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1195,9 +1195,9 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 				}
 			}
 
-			if ($this->akuser !== null) {
-				if (!$this->akuser->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuser->getValidationFailures());
+			if ($this->avuser !== null) {
+				if (!$this->avuser->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuser->getValidationFailures());
 				}
 			}
 
@@ -1247,7 +1247,7 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 				return $this->getEntryId();
 				break;
 			case 2:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 3:
 				return $this->getPartnerId();
@@ -1296,7 +1296,7 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getEntryId(),
-			$keys[2] => $this->getKuserId(),
+			$keys[2] => $this->getVuserId(),
 			$keys[3] => $this->getPartnerId(),
 			$keys[4] => $this->getCreatedAt(),
 			$keys[5] => $this->getUpdatedAt(),
@@ -1343,7 +1343,7 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 				$this->setEntryId($value);
 				break;
 			case 2:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 3:
 				$this->setPartnerId($value);
@@ -1395,7 +1395,7 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setEntryId($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setKuserId($arr[$keys[2]]);
+		if (array_key_exists($keys[2], $arr)) $this->setVuserId($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setPartnerId($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
@@ -1417,7 +1417,7 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 
 		if ($this->isColumnModified(UserEntryPeer::ID)) $criteria->add(UserEntryPeer::ID, $this->id);
 		if ($this->isColumnModified(UserEntryPeer::ENTRY_ID)) $criteria->add(UserEntryPeer::ENTRY_ID, $this->entry_id);
-		if ($this->isColumnModified(UserEntryPeer::KUSER_ID)) $criteria->add(UserEntryPeer::KUSER_ID, $this->kuser_id);
+		if ($this->isColumnModified(UserEntryPeer::VUSER_ID)) $criteria->add(UserEntryPeer::VUSER_ID, $this->vuser_id);
 		if ($this->isColumnModified(UserEntryPeer::PARTNER_ID)) $criteria->add(UserEntryPeer::PARTNER_ID, $this->partner_id);
 		if ($this->isColumnModified(UserEntryPeer::CREATED_AT)) $criteria->add(UserEntryPeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(UserEntryPeer::UPDATED_AT)) $criteria->add(UserEntryPeer::UPDATED_AT, $this->updated_at);
@@ -1507,7 +1507,7 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 
 		$copyObj->setEntryId($this->entry_id);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setPartnerId($this->partner_id);
 
@@ -1637,24 +1637,24 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
+	 * @param      vuser $v
 	 * @return     UserEntry The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuser(kuser $v = null)
+	public function setvuser(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setKuserId(NULL);
+			$this->setVuserId(NULL);
 		} else {
-			$this->setKuserId($v->getId());
+			$this->setVuserId($v->getId());
 		}
 
-		$this->akuser = $v;
+		$this->avuser = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
 			$v->addUserEntry($this);
 		}
@@ -1664,25 +1664,25 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuser(PropelPDO $con = null)
+	public function getvuser(PropelPDO $con = null)
 	{
-		if ($this->akuser === null && ($this->kuser_id !== null)) {
-			$this->akuser = kuserPeer::retrieveByPk($this->kuser_id);
+		if ($this->avuser === null && ($this->vuser_id !== null)) {
+			$this->avuser = vuserPeer::retrieveByPk($this->vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuser->addUserEntrys($this);
+			   $this->avuser->addUserEntrys($this);
 			 */
 		}
-		return $this->akuser;
+		return $this->avuser;
 	}
 
 	/**
@@ -1700,7 +1700,7 @@ abstract class BaseUserEntry extends BaseObject  implements Persistent {
 		} // if ($deep)
 
 			$this->aentry = null;
-			$this->akuser = null;
+			$this->avuser = null;
 	}
 
 	/* ---------------------- CustomData functions ------------------------- */

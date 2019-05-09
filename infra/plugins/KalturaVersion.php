@@ -3,7 +3,7 @@
  * @package infra
  * @subpackage Plugins
  */
-class KalturaVersion
+class VidiunVersion
 {
 	/**
 	 * @var int
@@ -21,11 +21,11 @@ class KalturaVersion
 	protected $build;
 	
 	/**
-	 * @var KalturaVersion
+	 * @var VidiunVersion
 	 */
 	protected $brokenCompatibilityVersion;
 
-	public function __construct($major, $minor, $build, KalturaVersion $brokenCompatibilityVersion = null)
+	public function __construct($major, $minor, $build, VidiunVersion $brokenCompatibilityVersion = null)
 	{
 		$this->major = $major;
 		$this->minor = $minor;
@@ -42,10 +42,10 @@ class KalturaVersion
 	}
 	
 	/**
-	 * @param KalturaVersion $version
+	 * @param VidiunVersion $version
 	 * @return bool
 	 */
-	public function isCompatible(KalturaVersion $version)
+	public function isCompatible(VidiunVersion $version)
 	{
 		if($version->getMajor() > $this->major)
 			return false;

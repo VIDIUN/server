@@ -2,8 +2,8 @@
 /**
  * @package api
  * @subpackage enum
- * @deprecated use KalturaContextType
+ * @deprecated use VidiunContextType
  */
-class KalturaAccessControlContextType extends KalturaContextType
+class VidiunAccessControlContextType extends VidiunContextType
 {
 }

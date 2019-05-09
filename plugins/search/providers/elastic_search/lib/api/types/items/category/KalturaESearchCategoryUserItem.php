@@ -3,18 +3,18 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchCategoryUserItem extends KalturaESearchAbstractCategoryItem
+class VidiunESearchCategoryUserItem extends VidiunESearchAbstractCategoryItem
 {
 
-	const KUSER_ID_THAT_DOESNT_EXIST = -1;
+	const VUSER_ID_THAT_DOESNT_EXIST = -1;
 
 	/**
-	 * @var KalturaESearchCategoryUserFieldName
+	 * @var VidiunESearchCategoryUserFieldName
 	 */
 	public $fieldName;
 	
 	/**
-	 * @var KalturaCategoryUserPermissionLevel
+	 * @var VidiunCategoryUserPermissionLevel
 	 */
 	public $permissionLevel;
 
@@ -32,7 +32,7 @@ class KalturaESearchCategoryUserItem extends KalturaESearchAbstractCategoryItem
 	private static $map_dynamic_enum = array();
 
 	private static $map_field_enum = array(
-		KalturaESearchCategoryUserFieldName::USER_ID => ESearchCategoryUserFieldName::USER_ID,
+		VidiunESearchCategoryUserFieldName::USER_ID => ESearchCategoryUserFieldName::USER_ID,
 	);
 
 	protected function getMapBetweenObjects()
@@ -60,14 +60,14 @@ class KalturaESearchCategoryUserItem extends KalturaESearchAbstractCategoryItem
 		if (!$object_to_fill)
 			$object_to_fill = new ESearchCategoryUserItem();
 
-		if(in_array($this->fieldName, array(KalturaESearchCategoryUserFieldName::USER_ID)))
+		if(in_array($this->fieldName, array(VidiunESearchCategoryUserFieldName::USER_ID)))
 		{
-			$kuserId = self::KUSER_ID_THAT_DOESNT_EXIST;
-			$kuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::getCurrentPartnerId(), $this->searchTerm, true);
-			if($kuser)
-				$kuserId = $kuser->getId();
+			$vuserId = self::VUSER_ID_THAT_DOESNT_EXIST;
+			$vuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::getCurrentPartnerId(), $this->searchTerm, true);
+			if($vuser)
+				$vuserId = $vuser->getId();
 
-			$this->searchTerm = $kuserId;
+			$this->searchTerm = $vuserId;
 		}
 
 		return parent::toObject($object_to_fill, $props_to_skip);

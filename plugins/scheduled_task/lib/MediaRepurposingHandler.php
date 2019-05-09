@@ -4,13 +4,13 @@
  * @package plugins.schedule_task
  * @subpackage Admin
  */
-class MediaRepurposingHandler implements kObjectDataChangedEventConsumer
+class MediaRepurposingHandler implements vObjectDataChangedEventConsumer
 {
 
 	public static function enableMrPermission($partnerId)
 	{
 		if (!MetadataProfilePeer::retrieveBySystemName(MediaRepurposingUtils::MEDIA_REPURPOSING_SYSTEM_NAME, $partnerId)) {
-			KalturaLog::info("NO MDP on partner [$partnerId] - cloning from admin-console partner");
+			VidiunLog::info("NO MDP on partner [$partnerId] - cloning from admin-console partner");
 			$templateMDPForMR = MetadataProfilePeer::retrieveBySystemName(MediaRepurposingUtils::MEDIA_REPURPOSING_SYSTEM_NAME, MediaRepurposingUtils::ADMIN_CONSOLE_PARTNER);
 			if ($templateMDPForMR) {
 				$newMDP = $templateMDPForMR->copyToPartner($partnerId);
@@ -31,20 +31,20 @@ class MediaRepurposingHandler implements kObjectDataChangedEventConsumer
 			return true; //if no metadata for media repurposing on entry then nothing to do
 		
 		$key = $mediaRepuposingMetadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-		$xml = kFileSyncUtils::file_get_contents($key, true, false);
+		$xml = vFileSyncUtils::file_get_contents($key, true, false);
 		$xml = simplexml_load_string($xml);
 
 		$mediaRepurposingProfileIdsToRemove = $this->getMRPWithMetadataSearchByProfile($partnerId, $object->getMetadataProfileId());
 
-		KalturaLog::debug("Have Media-Repurposing-Data on entryId [$entryId] as [" . print_r($xml, true) . "]");
-		KalturaLog::debug("The MR profile Ids to reset are: " . print_r($mediaRepurposingProfileIdsToRemove, true));
+		VidiunLog::debug("Have Media-Repurposing-Data on entryId [$entryId] as [" . print_r($xml, true) . "]");
+		VidiunLog::debug("The MR profile Ids to reset are: " . print_r($mediaRepurposingProfileIdsToRemove, true));
 
 		foreach($mediaRepurposingProfileIdsToRemove as $mediaRepurposingId)
 			$xml = $this->removeMediaRepurposingProfileFromMetadata($xml, $mediaRepurposingId);
 
-		KalturaLog::debug("The new XML is: " . print_r($xml, true));
+		VidiunLog::debug("The new XML is: " . print_r($xml, true));
 
-		if (!kFileSyncUtils::compareContent($key, $xml->asXML()))
+		if (!vFileSyncUtils::compareContent($key, $xml->asXML()))
 			MetadataPlugin::updateMetadataFileSync($mediaRepuposingMetadata, $xml->asXML());
 
 		return true;

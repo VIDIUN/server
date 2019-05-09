@@ -3,10 +3,10 @@
  * @package plugins.velocix
  * @subpackage lib.api
  */
-class KalturaVelocixProvisionJobData extends KalturaProvisionJobData
+class VidiunVelocixProvisionJobData extends VidiunProvisionJobData
 {
 	/**
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $provisioningParams;
 	
@@ -29,7 +29,7 @@ class KalturaVelocixProvisionJobData extends KalturaProvisionJobData
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaProvisionJobData::getMapBetweenObjects()
+	 * @see VidiunProvisionJobData::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -38,12 +38,12 @@ class KalturaVelocixProvisionJobData extends KalturaProvisionJobData
 	
 	
 	/* (non-PHPdoc)
-	 * @see KalturaProvisionJobData::toObject()
+	 * @see VidiunProvisionJobData::toObject()
 	 */
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kVelocixProvisionJobData();
+			$dbData = new vVelocixProvisionJobData();
 			
 		$dbData = parent::toObject($dbData, $props_to_skip);
 		
@@ -54,14 +54,14 @@ class KalturaVelocixProvisionJobData extends KalturaProvisionJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 		
 		if($this->shouldGet('provisioningParams', $responseProfile))
-			$this->provisioningParams = KalturaKeyValueArray::fromKeyValueArray($source_object->getProvisioningParams());
+			$this->provisioningParams = VidiunKeyValueArray::fromKeyValueArray($source_object->getProvisioningParams());
 	}
 	
  	protected function toKeyValueArray($apiKeyValueArray)
@@ -71,7 +71,7 @@ class KalturaVelocixProvisionJobData extends KalturaProvisionJobData
 		{
 			foreach($apiKeyValueArray as $keyValueObj)
 			{
-				/* @var $keyValueObj KalturaKeyValue */
+				/* @var $keyValueObj VidiunKeyValue */
 				$keyValueArray[$keyValueObj->key] = $keyValueObj->value;
 			}
 		}

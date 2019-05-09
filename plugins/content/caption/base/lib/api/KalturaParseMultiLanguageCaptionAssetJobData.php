@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage api.objects
  */
-class KalturaParseMultiLanguageCaptionAssetJobData extends KalturaJobData
+class VidiunParseMultiLanguageCaptionAssetJobData extends VidiunJobData
 {
     /**
      * @var string
@@ -34,7 +34,7 @@ class KalturaParseMultiLanguageCaptionAssetJobData extends KalturaJobData
     );
 
     /* (non-PHPdoc)
-     * @see KalturaObject::getMapBetweenObjects()
+     * @see VidiunObject::getMapBetweenObjects()
      */
     public function getMapBetweenObjects ( )
     {

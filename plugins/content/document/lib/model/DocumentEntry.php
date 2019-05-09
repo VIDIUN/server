@@ -25,7 +25,7 @@ class DocumentEntry extends entry
 		if(!$syncKey)
 			return null;
 			
-		return kFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
+		return vFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
 	}
 
 	/* (non-PHPdoc)
@@ -41,7 +41,7 @@ class DocumentEntry extends entry
 		$entryId = $this->getId();
 
 		return "$host/api_v3/index.php?service=$service&action=$action&entryId=$entryId";
-		//	http://www.kaltura.com/api_v3/index.php?service=document_documents&action=serveByFlavorParamsId&entryId=...
+		//	http://www.vidiun.com/api_v3/index.php?service=document_documents&action=serveByFlavorParamsId&entryId=...
 	}
 	*/
 	
@@ -76,18 +76,18 @@ class DocumentEntry extends entry
 	
 	public function getLocalThumbFilePath($version , $width , $height , $type , $bgcolor ="ffffff" , $crop_provider=null, $quality = 0,
 		$src_x = 0, $src_y = 0, $src_w = 0, $src_h = 0, $vid_sec = -1, $vid_slice = 0, $vid_slices = -1, $density = 0, $stripProfiles = false, $flavorId = null, $fileName = null, $start_sec = null, $end_sec = null) {
-		KalturaLog::log ( "flavor_id [$flavorId] file_name [$fileName]" );
+		VidiunLog::log ( "flavor_id [$flavorId] file_name [$fileName]" );
 		if (is_null ( $flavorId ))
-			KExternalErrors::dieError ( KExternalErrors::MISSING_PARAMETER, 'flavor_id' );
+			VExternalErrors::dieError ( VExternalErrors::MISSING_PARAMETER, 'flavor_id' );
 		$flavor = assetPeer::retrieveById ( $flavorId );
 		if (is_null ( $flavor ))
-			KExternalErrors::dieError ( KExternalErrors::FLAVOR_NOT_FOUND, $flavorId );
+			VExternalErrors::dieError ( VExternalErrors::FLAVOR_NOT_FOUND, $flavorId );
 		$flavorSyncKey = $flavor->getSyncKey ( asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET );
-		$file_path = kFileSyncUtils::getReadyLocalFilePathForKey ( $flavorSyncKey );
+		$file_path = vFileSyncUtils::getReadyLocalFilePathForKey ( $flavorSyncKey );
 		$orig_image_path = null;
 		if (is_dir($file_path)){
 			if (is_null($fileName))
-				 KExternalErrors::dieError ( KExternalErrors::MISSING_PARAMETER, 'file name' );
+				 VExternalErrors::dieError ( VExternalErrors::MISSING_PARAMETER, 'file name' );
 			$orig_image_path = $file_path . DIRECTORY_SEPARATOR . $fileName;
 		}
 		try 
@@ -96,29 +96,29 @@ class DocumentEntry extends entry
 		} 
 		catch ( Exception $ex ) 
 		{
-			if ($ex->getCode () == kFileSyncException::FILE_DOES_NOT_EXIST_ON_CURRENT_DC) 
+			if ($ex->getCode () == vFileSyncException::FILE_DOES_NOT_EXIST_ON_CURRENT_DC) 
 			{
-				$remoteFileSync = kFileSyncUtils::getOriginFileSyncForKey ( $flavorSyncKey, false );
+				$remoteFileSync = vFileSyncUtils::getOriginFileSyncForKey ( $flavorSyncKey, false );
 				if (! $remoteFileSync) 
 				{
 					// file does not exist on any DC - die
-					KalturaLog::err ( "No FileSync for flavor [$flavorId]" );
-					KExternalErrors::dieError ( KExternalErrors::FILE_NOT_FOUND );
+					VidiunLog::err ( "No FileSync for flavor [$flavorId]" );
+					VExternalErrors::dieError ( VExternalErrors::FILE_NOT_FOUND );
 				}
 				
-				if ($remoteFileSync->getDc () == kDataCenterMgr::getCurrentDcId ()) 
+				if ($remoteFileSync->getDc () == vDataCenterMgr::getCurrentDcId ()) 
 				{
-					KalturaLog::err ( "Trying to redirect to myself - stop here." );
-					KExternalErrors::dieError ( KExternalErrors::FILE_NOT_FOUND );
+					VidiunLog::err ( "Trying to redirect to myself - stop here." );
+					VExternalErrors::dieError ( VExternalErrors::FILE_NOT_FOUND );
 				}
 				
-				if (! in_array ( $remoteFileSync->getDc (), kDataCenterMgr::getDcIds () )) 
+				if (! in_array ( $remoteFileSync->getDc (), vDataCenterMgr::getDcIds () )) 
 				{
-					KalturaLog::err ( "Origin file sync is on remote storage." );
-					KExternalErrors::dieError ( KExternalErrors::FILE_NOT_FOUND );
+					VidiunLog::err ( "Origin file sync is on remote storage." );
+					VExternalErrors::dieError ( VExternalErrors::FILE_NOT_FOUND );
 				}
-				$remoteUrl = kDataCenterMgr::getRedirectExternalUrl ( $remoteFileSync );
-				kFileUtils::dumpUrl ( $remoteUrl );
+				$remoteUrl = vDataCenterMgr::getRedirectExternalUrl ( $remoteFileSync );
+				vFileUtils::dumpUrl ( $remoteUrl );
 			}
 		}			
 	}

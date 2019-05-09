@@ -1,7 +1,7 @@
 <?php
 
 $clientConfig = null;
-/* @var $clientConfig KalturaConfiguration */
+/* @var $clientConfig VidiunConfiguration */
 
 require_once __DIR__ . '/lib/init.php';
 

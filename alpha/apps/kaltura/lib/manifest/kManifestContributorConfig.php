@@ -3,7 +3,7 @@
  * Configuration object passed to contributors for the playManifestAction.
  * @package Core
  */
-class kManifestContributorConfig
+class vManifestContributorConfig
 {
 	/**
 	 * Format of the playManifest assets: RTMP, HTTP, APPLE-HTTP...

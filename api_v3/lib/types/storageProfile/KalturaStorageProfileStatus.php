@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaStorageProfileStatus extends KalturaEnum
+class VidiunStorageProfileStatus extends VidiunEnum
 {
 	const DISABLED = 1;
 	const AUTOMATIC = 2;

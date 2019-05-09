@@ -3,7 +3,7 @@
  * @package infra
  * @subpackage monitor
  */
-class KalturaMonitorClient
+class VidiunMonitorClient
 {
 	const MAX_PACKET_SIZE = 1400;
 	
@@ -25,7 +25,7 @@ class KalturaMonitorClient
 	const FIELD_PARTNER_ID = 		'p';
 	const FIELD_ACTION = 			'a';
 	const FIELD_CACHED = 			'c';
-	const FIELD_KS_TYPE = 			'k';
+	const FIELD_VS_TYPE = 			'v';
 	const FIELD_CLIENT_TAG = 		'l';
 	const FIELD_MULTIREQUEST = 		'm';
 	const FIELD_EXECUTION_TIME = 	'x';
@@ -52,10 +52,10 @@ class KalturaMonitorClient
 	
 	protected static function init()
 	{
-		if(!kConf::hasParam('monitor_uri'))
+		if(!vConf::hasParam('monitor_uri'))
 			return null;
 
-		$uri = kConf::get('monitor_uri');
+		$uri = vConf::get('monitor_uri');
 		$pathInfo = parse_url($uri);
 		if(isset($pathInfo['host']) && $pathInfo['port'])
 		{
@@ -69,8 +69,8 @@ class KalturaMonitorClient
 			if(self::$stream)
 				return true;
 
-			if(class_exists('KalturaLog'))
-				KalturaLog::err("Open socket failed: $errstr");
+			if(class_exists('VidiunLog'))
+				VidiunLog::err("Open socket failed: $errstr");
 		}
 
 		self::$stream = fopen($uri, 'a');
@@ -155,7 +155,7 @@ class KalturaMonitorClient
 		
 		self::$basicApiInfo = array(
 			self::FIELD_CACHED			=> $cached,
-			self::FIELD_KS_TYPE			=> $sessionType,
+			self::FIELD_VS_TYPE			=> $sessionType,
 			self::FIELD_MULTIREQUEST 	=> $isInMultiRequest,
 		);
 		

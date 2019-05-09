@@ -3,7 +3,7 @@
  * @package plugins.quiz
  * @subpackage api.objects
  */
-class KalturaQuiz extends KalturaObject
+class VidiunQuiz extends VidiunObject
 {
 	/**
 	 *
@@ -14,38 +14,38 @@ class KalturaQuiz extends KalturaObject
 
 	/**
 	 * Array of key value ui related objects
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $uiAttributes;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $showResultOnAnswer;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $showCorrectKeyOnAnswer;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $allowAnswerUpdate;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $showCorrectAfterSubmission;
 
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $allowDownload;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $showGradeAfterSubmission;
 
@@ -55,7 +55,7 @@ class KalturaQuiz extends KalturaObject
 	public $attemptsAllowed;
 
 	/**
-	 * @var KalturaScoreType
+	 * @var VidiunScoreType
 	 */
 	public $scoreType;
 
@@ -75,7 +75,7 @@ class KalturaQuiz extends KalturaObject
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -83,13 +83,13 @@ class KalturaQuiz extends KalturaObject
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
 		{
-			$dbObject = new kQuiz();
+			$dbObject = new vQuiz();
 		}
 
 		return parent::toObject($dbObject, $propsToSkip);

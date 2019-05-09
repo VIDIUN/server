@@ -4,7 +4,7 @@
  * @package plugins.quiz
  * @subpackage lib.enum
  */
-class QuizUserEntryType implements IKalturaPluginEnum, UserEntryType
+class QuizUserEntryType implements IVidiunPluginEnum, UserEntryType
 {
 	const QUIZ = 'QUIZ';
 

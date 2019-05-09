@@ -1,12 +1,12 @@
 <?php
-class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer 
+class vVoicebaseFlowManager implements vBatchJobStatusEventConsumer 
 {
 	private $baseEndpointUrl = null;
 	const DEFAULT_ACCURACY = 0.6;
 	const FILE_NAME_PATTERN = "{entryId}-Transcript-{language}.{ext}";
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -20,7 +20,7 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{	
@@ -30,7 +30,7 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 		$partnerId = $dbBatchJob->getPartnerId();
 		$spokenLanguage = $providerData->getSpokenLanguage();
 
-		$transcripts = kTranscriptHelper::getAssetsByLanguage($entryId, array(TranscriptPlugin::getAssetTypeCoreValue(TranscriptAssetType::TRANSCRIPT)), $spokenLanguage);
+		$transcripts = vTranscriptHelper::getAssetsByLanguage($entryId, array(TranscriptPlugin::getAssetTypeCoreValue(TranscriptAssetType::TRANSCRIPT)), $spokenLanguage);
 		$externalId = $entryId . '_' . $dbBatchJob->getId();
 		
 		if($dbBatchJob->getStatus() == BatchJob::BATCHJOB_STATUS_FAILED)
@@ -51,7 +51,7 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 			{
 				if (!isset ($transcripts[$containerFormat]))
 				{
-					$transcript = kTranscriptHelper::createTranscript($entryId, $partnerId, $spokenLanguage, $containerFormat);
+					$transcript = vTranscriptHelper::createTranscript($entryId, $partnerId, $spokenLanguage, $containerFormat);
 				}
 				else {
 					$transcript = $transcripts[$containerFormat];
@@ -77,7 +77,7 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 			$externalEntryExists = $clientHelper->checkExistingExternalContent($externalId);
 			if (!$externalEntryExists)
 			{
-				KalturaLog::err("Remote content for entry ID [$entryId] does not exist");
+				VidiunLog::err("Remote content for entry ID [$entryId] does not exist");
 				return true;     	
 			}
 			
@@ -86,7 +86,7 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 			$formatsArray[] = "JSON";
 			
 			$contentsArray = $clientHelper->getRemoteTranscripts($externalId, $formatsArray);
-			KalturaLog::debug('contents are - ' . print_r($contentsArray, true));
+			VidiunLog::debug('contents are - ' . print_r($contentsArray, true));
 			
 			$accuracy = $clientHelper->calculateAccuracy($entryId);
 			if($accuracy)
@@ -101,7 +101,7 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 					{
 						if ($transcript->getHumanVerified())
 						{
-							$transcript->setStatus(KalturaAssetStatus::READY);
+							$transcript->setStatus(VidiunAssetStatus::READY);
 							$transcript->save();
 						}
 						else
@@ -119,10 +119,10 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 			unset($contentsArray["TXT"]);
 			unset($contentsArray["JSON"]); 
 	
-			$captions = kTranscriptHelper::getAssetsByLanguage($entryId, array(CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION)), $spokenLanguage);
+			$captions = vTranscriptHelper::getAssetsByLanguage($entryId, array(CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION)), $spokenLanguage);
 			foreach ($contentsArray as $format => $content)
 			{        
-				$captionFormatConst = constant("KalturaCaptionType::" . $format);
+				$captionFormatConst = constant("VidiunCaptionType::" . $format);
 				if(isset($captions[$captionFormatConst]))
 					$caption = $captions[$captionFormatConst];
 				else
@@ -135,7 +135,7 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 					$caption->setStatus(CaptionAsset::ASSET_STATUS_QUEUED);
 					$caption->save();
 				}
-				if ($captionFormatConst == KalturaCaptionType::DFXP) {
+				if ($captionFormatConst == VidiunCaptionType::DFXP) {
 					$voicebaseOptions = VoicebasePlugin::getPartnerVoicebaseOptions($partnerId);
 					if ($voicebaseOptions->transformDfxp)
 						$content = $this->transformDfxp($content);
@@ -183,12 +183,12 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 		$assetObject->save();
 		$syncKey = $assetObject->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
 	
-		kFileSyncUtils::file_put_contents($syncKey, $content);
+		vFileSyncUtils::file_put_contents($syncKey, $content);
 
-		kEventsManager::raiseEvent(new kObjectDataChangedEvent($assetObject));
+		vEventsManager::raiseEvent(new vObjectDataChangedEvent($assetObject));
 
-		$finalPath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
-		$assetObject->setSize(kFile::fileSize($finalPath));
+		$finalPath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
+		$assetObject->setSize(vFile::fileSize($finalPath));
 	
 		if ($shouldSetTranscriptFileName && !$assetObject->getFileName())
 		{
@@ -223,7 +223,7 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 		$content = preg_replace('/&(?!(?:#x?[0-9a-f]+|[a-z]+);)/i', '&amp;', $content);
 
 		if (!$doc->loadXML($content)) {
-			KalturaLog::err('Failed to load XML');
+			VidiunLog::err('Failed to load XML');
 			return $content;
 		}
 
@@ -245,8 +245,8 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 				$beginValue = trim($pElement->getAttribute('begin'));
 				$durationValue = trim($pElement->getAttribute('dur'));
 				$endValue = trim($pElement->getAttribute('end'));
-				$beginTime = kXml::timeToInteger($beginValue);
-				$endTime = kXml::timeToInteger($endValue);
+				$beginTime = vXml::timeToInteger($beginValue);
+				$endTime = vXml::timeToInteger($endValue);
 				// reformat "begin" attribute, transforms "00:00:29.73" to "00:00:29.730"
 				if ($beginValue) {
 					$pElement->removeAttribute('begin'); // remove to change order of attributes
@@ -284,7 +284,7 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 	}
 
 	/**
-	 * Wraps kXml::integerToTime to force milliseconds and pad it
+	 * Wraps vXml::integerToTime to force milliseconds and pad it
 	 *
 	 * @param $int
 	 * @return string
@@ -292,7 +292,7 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 	private function integerToTime($int)
 	{
 		$milliseconds = $int % 1000;
-		$stringTime = kXml::integerToTime($int - $milliseconds);
+		$stringTime = vXml::integerToTime($int - $milliseconds);
 		$stringTime .= '.' . str_pad($milliseconds, 3, 0, STR_PAD_LEFT);
 		return $stringTime;
 	}
@@ -314,10 +314,10 @@ class kVoicebaseFlowManager implements kBatchJobStatusEventConsumer
 				$normalizedToken['s'] = $token['s'];
 				$normalizedToken['e'] = $token['e'];
 				
-				$normalizedToken['t'] = kTranscriptHelper::TOKEN_TYPE_WORD;
+				$normalizedToken['t'] = vTranscriptHelper::TOKEN_TYPE_WORD;
 				if (isset ($token['m']) && $token['m'] == 'punc')
 				{
-					$normalizedToken['t'] = kTranscriptHelper::TOKEN_TYPE_PUNC;
+					$normalizedToken['t'] = vTranscriptHelper::TOKEN_TYPE_PUNC;
 				}
 				$normalizedToken['w'] = $token['w'];
 			

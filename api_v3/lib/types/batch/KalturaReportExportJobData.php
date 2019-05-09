@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaReportExportJobData extends KalturaJobData
+class VidiunReportExportJobData extends VidiunJobData
 {
 	/**
 	 * @var string
@@ -11,7 +11,7 @@ class KalturaReportExportJobData extends KalturaJobData
 	public $recipientEmail;
 
 	/**
-	 * @var KalturaReportExportItemArray
+	 * @var VidiunReportExportItemArray
 	 */
 	public $reportItems;
 
@@ -42,7 +42,7 @@ class KalturaReportExportJobData extends KalturaJobData
 	{
 		if (!$jobData)
 		{
-			$jobData = new kReportExportJobData();
+			$jobData = new vReportExportJobData();
 		}
 
 		$jobData->setReportItems($this->reportItems);

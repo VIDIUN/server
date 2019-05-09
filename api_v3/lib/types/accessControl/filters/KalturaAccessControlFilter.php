@@ -2,12 +2,12 @@
 /**
  * @package api
  * @subpackage filters
- * @deprecated use KalturaAccessControlProfileFilter instead
+ * @deprecated use VidiunAccessControlProfileFilter instead
  */
-class KalturaAccessControlFilter extends KalturaAccessControlBaseFilter
+class VidiunAccessControlFilter extends VidiunAccessControlBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -15,9 +15,9 @@ class KalturaAccessControlFilter extends KalturaAccessControlBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getListResponse()
+	 * @see VidiunFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$accessControlFilter = $this->toObject();
 
@@ -29,8 +29,8 @@ class KalturaAccessControlFilter extends KalturaAccessControlBaseFilter
 		$pager->attachToCriteria($c);
 		$dbList = accessControlPeer::doSelect($c);
 		
-		$list = KalturaAccessControlArray::fromDbArray($dbList, $responseProfile);
-		$response = new KalturaAccessControlListResponse();
+		$list = VidiunAccessControlArray::fromDbArray($dbList, $responseProfile);
+		$response = new VidiunAccessControlListResponse();
 		$response->objects = $list;
 		$response->totalCount = $totalCount;
 		return $response; 

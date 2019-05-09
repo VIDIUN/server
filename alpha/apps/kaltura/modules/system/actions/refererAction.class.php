@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class refererAction extends kalturaSystemAction
+class refererAction extends vidiunSystemAction
 {
 	
 	public function execute()
@@ -27,7 +27,7 @@ class refererAction extends kalturaSystemAction
 		$c->add ( WidgetLogPeer::PARTNER_ID , $partner_id );
 		$c->addAnd ( WidgetLogPeer::REFERER , null , Criteria::ISNOTNULL );
 		$c->addAnd ( WidgetLogPeer::REFERER , "" , Criteria::NOT_EQUAL );
-		$c->addAnd(WidgetLogPeer::REFERER, "%kaltura:%", Criteria::NOT_LIKE);
+		$c->addAnd(WidgetLogPeer::REFERER, "%vidiun:%", Criteria::NOT_LIKE);
 		$c->addAnd(WidgetLogPeer::REFERER, "%localhost%", Criteria::NOT_LIKE);
 		$c->addDescendingOrderByColumn ( WidgetLogPeer::CREATED_AT );
 		$c->setLimit ( min ( $limit , 50 ) );

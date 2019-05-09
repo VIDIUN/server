@@ -8,7 +8,7 @@
 interface IRemoteStorageResource 
 {
 	/**
-	 * @return array<kRemoteStorageResource>
+	 * @return array<vRemoteStorageResource>
 	 */
 	public function getResources();
 

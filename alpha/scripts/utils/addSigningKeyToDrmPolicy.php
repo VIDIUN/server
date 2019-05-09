@@ -17,7 +17,7 @@ shout("Adding signing key [".$signingKey."] to drm policy [".$drmPolicyId."]",tr
 $drmDbPolicy = DrmPolicyPeer::retrieveByPK($drmPolicyId);
 if (is_null($drmDbPolicy))
 {
-	throw new kCoreException("DRM Policy Id is invalid");
+	throw new vCoreException("DRM Policy Id is invalid");
 }
 $drmDbPolicy->putInCustomData(DrmProfile::CUSTOM_DATA_SIGNING_KEY, $signingKey);
 $drmDbPolicy->save();

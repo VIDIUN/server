@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaDurationType extends KalturaStringEnum
+class VidiunDurationType extends VidiunStringEnum
 {
 	const NOT_AVAILABLE = "notavailable";
 	const SHORT = "short";

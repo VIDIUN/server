@@ -4,6 +4,6 @@
  * @subpackage api
  * @abstract
  */
-abstract class KalturaPluginReplacementOptionsItem extends KalturaObject
+abstract class VidiunPluginReplacementOptionsItem extends VidiunObject
 {
 } 

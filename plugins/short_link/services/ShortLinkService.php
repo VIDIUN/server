@@ -6,7 +6,7 @@
  * @package plugins.shortLink
  * @subpackage api.services
  */
-class ShortLinkService extends KalturaBaseService
+class ShortLinkService extends VidiunBaseService
 {
 	protected function partnerRequired($actionName)
 	{
@@ -23,7 +23,7 @@ class ShortLinkService extends KalturaBaseService
 		if($actionName != 'goto')
 		{
 			$this->applyPartnerFilterForClass('ShortLink');
-			$this->applyPartnerFilterForClass('kuser');
+			$this->applyPartnerFilterForClass('vuser');
 		}
 	}
 	
@@ -31,14 +31,14 @@ class ShortLinkService extends KalturaBaseService
 	 * List short link objects by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaShortLinkFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaShortLinkListResponse
+	 * @param VidiunShortLinkFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunShortLinkListResponse
 	 */
-	function listAction(KalturaShortLinkFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunShortLinkFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaShortLinkFilter;
+			$filter = new VidiunShortLinkFilter;
 			
 		$shortLinkFilter = $filter->toFilter($this->getPartnerId());
 		
@@ -47,12 +47,12 @@ class ShortLinkService extends KalturaBaseService
 		$count = ShortLinkPeer::doCount($c);
 		
 		if (! $pager)
-			$pager = new KalturaFilterPager ();
+			$pager = new VidiunFilterPager ();
 		$pager->attachToCriteria ( $c );
 		$list = ShortLinkPeer::doSelect($c);
 		
-		$response = new KalturaShortLinkListResponse();
-		$response->objects = KalturaShortLinkArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunShortLinkListResponse();
+		$response->objects = VidiunShortLinkArray::fromDbArray($list, $this->getResponseProfile());
 		$response->totalCount = $count;
 		
 		return $response;
@@ -62,10 +62,10 @@ class ShortLinkService extends KalturaBaseService
 	 * Allows you to add a short link object
 	 * 
 	 * @action add
-	 * @param KalturaShortLink $shortLink
-	 * @return KalturaShortLink
+	 * @param VidiunShortLink $shortLink
+	 * @return VidiunShortLink
 	 */
-	function addAction(KalturaShortLink $shortLink)
+	function addAction(VidiunShortLink $shortLink)
 	{
 		$shortLink->validatePropertyNotNull('systemName');
 		$shortLink->validatePropertyMinLength('systemName', 3);
@@ -73,18 +73,18 @@ class ShortLinkService extends KalturaBaseService
 		$shortLink->validatePropertyMinLength('fullUrl', 10);
 		
 		if(!$shortLink->status)
-			$shortLink->status = KalturaShortLinkStatus::ENABLED;
+			$shortLink->status = VidiunShortLinkStatus::ENABLED;
 			
 		if(!$shortLink->userId)
-			$shortLink->userId = $this->getKuser()->getPuserId();
+			$shortLink->userId = $this->getVuser()->getPuserId();
 			
 		$dbShortLink = new ShortLink();
 		$dbShortLink = $shortLink->toInsertableObject($dbShortLink, array('userId'));
 		$dbShortLink->setPartnerId($this->getPartnerId());
-		$dbShortLink->setPuserId(is_null($shortLink->userId) ? $this->getKuser()->getPuserId() : $shortLink->userId);
+		$dbShortLink->setPuserId(is_null($shortLink->userId) ? $this->getVuser()->getPuserId() : $shortLink->userId);
 		$dbShortLink->save();
 		
-		$shortLink = new KalturaShortLink();
+		$shortLink = new VidiunShortLink();
 		$shortLink->fromObject($dbShortLink, $this->getResponseProfile());
 		
 		return $shortLink;
@@ -95,17 +95,17 @@ class ShortLinkService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param string $id 
-	 * @return KalturaShortLink
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @return VidiunShortLink
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */		
 	function getAction($id)
 	{
 		$dbShortLink = ShortLinkPeer::retrieveByPK($id);
 		
 		if(!$dbShortLink)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $id);
 			
-		$shortLink = new KalturaShortLink();
+		$shortLink = new VidiunShortLink();
 		$shortLink->fromObject($dbShortLink, $this->getResponseProfile());
 		
 		return $shortLink;
@@ -117,17 +117,17 @@ class ShortLinkService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param string $id
-	 * @param KalturaShortLink $shortLink
-	 * @return KalturaShortLink
+	 * @param VidiunShortLink $shortLink
+	 * @return VidiunShortLink
 	 *
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */	
-	function updateAction($id, KalturaShortLink $shortLink)
+	function updateAction($id, VidiunShortLink $shortLink)
 	{
 		$dbShortLink = ShortLinkPeer::retrieveByPK($id);
 	
 		if (!$dbShortLink)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $id);
 		
 		$dbShortLink = $shortLink->toUpdatableObject($dbShortLink);
 		$dbShortLink->save();
@@ -142,21 +142,21 @@ class ShortLinkService extends KalturaBaseService
 	 * 
 	 * @action delete
 	 * @param string $id 
-	 * @return KalturaShortLink
+	 * @return VidiunShortLink
 	 *
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */		
 	function deleteAction($id)
 	{
 		$dbShortLink = ShortLinkPeer::retrieveByPK($id);
 	
 		if (!$dbShortLink)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $id);
 		
-		$dbShortLink->setStatus(KalturaShortLinkStatus::DELETED);
+		$dbShortLink->setStatus(VidiunShortLinkStatus::DELETED);
 		$dbShortLink->save();
 			
-		$shortLink = new KalturaShortLink();
+		$shortLink = new VidiunShortLink();
 		$shortLink->fromObject($dbShortLink, $this->getResponseProfile());
 		
 		return $shortLink;
@@ -169,21 +169,21 @@ class ShortLinkService extends KalturaBaseService
 	 * @param string $id
 	 * @param bool $proxy proxy the response instead of redirect
 	 * @return file
-	 * @ksIgnored
+	 * @vsIgnored
 	 * 
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */		
 	function gotoAction($id, $proxy = false)
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		
 		$dbShortLink = ShortLinkPeer::retrieveByPK($id);
 	
 		if (!$dbShortLink)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $id);
 
 		if($proxy)
-			kFileUtils::dumpUrl($dbShortLink->getFullUrl(), true, true);
+			vFileUtils::dumpUrl($dbShortLink->getFullUrl(), true, true);
 		
 		header('Location: ' . $dbShortLink->getFullUrl());
 		die;

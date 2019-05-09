@@ -4,6 +4,6 @@
  * @package plugins.metadata
  * @subpackage model.data
  */
-class kMetadataResponseProfileMapping extends kResponseProfileMapping
+class vMetadataResponseProfileMapping extends vResponseProfileMapping
 {
 }

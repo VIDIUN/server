@@ -2,9 +2,9 @@
 
 
 	/* ===========================
-	 * KDLOperatorInletArmada
+	 * VDLOperatorInletArmada
 	 */
-class KDLOperatorInletArmada extends KDLOperatorBase {
+class VDLOperatorInletArmada extends VDLOperatorBase {
     public function __construct($id, $name=null, $sourceBlacklist=null, $targetBlacklist=null) {
     	parent::__construct($id,$name,$sourceBlacklist,$targetBlacklist);
     }
@@ -12,7 +12,7 @@ class KDLOperatorInletArmada extends KDLOperatorBase {
 	/* ---------------------------
 	 * GenerateCommandLine
 	 */
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 		if($extra){
 			$cmdStr = $extra;
@@ -24,7 +24,7 @@ class KDLOperatorInletArmada extends KDLOperatorBase {
 	/* ---------------------------
 	 * CheckConstraints
 	 */
-	public function CheckConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+	public function CheckConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
 	    return parent::CheckConstraints($source, $target, $errors, $warnings);
 	}

@@ -11,7 +11,7 @@
 	myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 	
 	if($argc < 4){
-        KalturaLog::debug ("Usage: [fileName] [quality] [realRun]");
+        VidiunLog::debug ("Usage: [fileName] [quality] [realRun]");
         die("Not enough parameters" . "\n");
 	}
 	
@@ -25,9 +25,9 @@
 
 	//should the script save() ? by default will not save
 	$dryRun= $argv[3] !== 'realRun';
-	KalturaStatement::setDryRun($dryRun);
+	VidiunStatement::setDryRun($dryRun);
 	if ($dryRun)
-        	KalturaLog::debug('dry run --- in order to save, give realRun as a third parameter');
+        	VidiunLog::debug('dry run --- in order to save, give realRun as a third parameter');
 	
 	$partnerIds = file($fileName);
 	$partnerIds = array_map('trim' , $partnerIds);
@@ -36,12 +36,12 @@
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		if (!$partner)
 		{
-			KalturaLog::debug("ERR1 - partner $partnerId wasn\'t found");
+			VidiunLog::debug("ERR1 - partner $partnerId wasn\'t found");
 			continue;
 		}
 	
 		$partner->setDefThumbQuality($quality);
-		KalturaLog::debug("saving partner id $partnerId");
+		VidiunLog::debug("saving partner id $partnerId");
 		$partner->save();
 	}
 

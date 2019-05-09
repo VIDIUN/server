@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFlavorParamsOutput extends KalturaFlavorParams
+class VidiunFlavorParamsOutput extends VidiunFlavorParams
 {
 	/**
 	 * @var int
@@ -82,7 +82,7 @@ class KalturaFlavorParamsOutput extends KalturaFlavorParams
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($object = null, $skip = array())
 	{

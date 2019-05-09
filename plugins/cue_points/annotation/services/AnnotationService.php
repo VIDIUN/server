@@ -5,7 +5,7 @@
  * @service annotation
  * @package plugins.annotation
  * @subpackage api.services
- * @throws KalturaErrors::SERVICE_FORBIDDEN
+ * @throws VidiunErrors::SERVICE_FORBIDDEN
  * @deprecated use cuePoint service instead
  */
 class AnnotationService extends CuePointService
@@ -23,17 +23,17 @@ class AnnotationService extends CuePointService
 		parent::initService($serviceId, $serviceName, $actionName);
 
 		if(!AnnotationPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, AnnotationPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, AnnotationPlugin::PLUGIN_NAME);
 	}
 
 	/**
 	 * Allows you to add an annotation object associated with an entry
 	 *
 	 * @action add
-	 * @param KalturaAnnotation $annotation
-	 * @return KalturaAnnotation
+	 * @param VidiunAnnotation $annotation
+	 * @return VidiunAnnotation
 	 */
-	function addAction(KalturaCuePoint $annotation)
+	function addAction(VidiunCuePoint $annotation)
 	{
 		return parent::addAction($annotation);
 	}
@@ -45,23 +45,23 @@ class AnnotationService extends CuePointService
 	 * @param string $id
 	 * @param string $entryId
 	 * @param string $parentId
-	 * @return KalturaAnnotation
-	 * @throws KalturaCuePointErrors::INVALID_CUE_POINT_ID
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @return VidiunAnnotation
+	 * @throws VidiunCuePointErrors::INVALID_CUE_POINT_ID
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	function cloneAction($id, $entryId, $parentId = null)
 	{
 		$dbAnnotation = parent::doClone($id, $entryId);
 		if ( !$dbAnnotation instanceof annotation)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_TYPE, get_class($dbAnnotation));
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_TYPE, get_class($dbAnnotation));
 		}
 		if ($parentId)
 		{
 			$dbAnnotation->setParentId($parentId);
 		}
 		$dbAnnotation->save();
-		return KalturaAnnotation::getInstance($dbAnnotation, $this->getResponseProfile());
+		return VidiunAnnotation::getInstance($dbAnnotation, $this->getResponseProfile());
 	}
 
 	/**
@@ -69,11 +69,11 @@ class AnnotationService extends CuePointService
 	 *
 	 * @action update
 	 * @param string $id
-	 * @param KalturaAnnotation $annotation
-	 * @return KalturaAnnotation
-	 * @throws KalturaCuePointErrors::INVALID_CUE_POINT_ID
+	 * @param VidiunAnnotation $annotation
+	 * @return VidiunAnnotation
+	 * @throws VidiunCuePointErrors::INVALID_CUE_POINT_ID
 	 */
-	function updateAction($id, KalturaCuePoint $annotation)
+	function updateAction($id, VidiunCuePoint $annotation)
 	{
 		return parent::updateAction($id, $annotation);
 	}
@@ -82,19 +82,19 @@ class AnnotationService extends CuePointService
 	* List annotation objects by filter and pager
 	*
 	* @action list
-	* @param KalturaAnnotationFilter $filter
-	* @param KalturaFilterPager $pager
-	* @return KalturaAnnotationListResponse
+	* @param VidiunAnnotationFilter $filter
+	* @param VidiunFilterPager $pager
+	* @return VidiunAnnotationListResponse
 	*/
-	function listAction(KalturaCuePointFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunCuePointFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if(!$filter)
-			$filter = new KalturaAnnotationFilter();
+			$filter = new VidiunAnnotationFilter();
 		
 		$filter->cuePointTypeEqual = AnnotationPlugin::getApiValue(AnnotationCuePointType::ANNOTATION);
 		
 		$list = parent::listAction($filter, $pager);
-		$ret = new KalturaAnnotationListResponse();
+		$ret = new VidiunAnnotationListResponse();
 		$ret->objects = $list->objects;
 		$ret->totalCount = $list->totalCount;
 		

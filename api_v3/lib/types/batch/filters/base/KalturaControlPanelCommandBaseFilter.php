@@ -4,7 +4,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaControlPanelCommandBaseFilter extends KalturaFilter
+abstract class VidiunControlPanelCommandBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -65,7 +65,7 @@ abstract class KalturaControlPanelCommandBaseFilter extends KalturaFilter
 	public $createdByIdEqual;
 
 	/**
-	 * @var KalturaControlPanelCommandType
+	 * @var VidiunControlPanelCommandType
 	 */
 	public $typeEqual;
 
@@ -75,7 +75,7 @@ abstract class KalturaControlPanelCommandBaseFilter extends KalturaFilter
 	public $typeIn;
 
 	/**
-	 * @var KalturaControlPanelCommandTargetType
+	 * @var VidiunControlPanelCommandTargetType
 	 */
 	public $targetTypeEqual;
 
@@ -85,7 +85,7 @@ abstract class KalturaControlPanelCommandBaseFilter extends KalturaFilter
 	public $targetTypeIn;
 
 	/**
-	 * @var KalturaControlPanelCommandStatus
+	 * @var VidiunControlPanelCommandStatus
 	 */
 	public $statusEqual;
 

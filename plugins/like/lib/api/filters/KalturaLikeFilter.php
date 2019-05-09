@@ -3,10 +3,10 @@
  * @package plugins.like
  * @subpackage api.filters
  */
-class KalturaLikeFilter extends KalturaLikeBaseFilter
+class VidiunLikeFilter extends VidiunLikeBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	public function getCoreFilter()
 	{
@@ -14,37 +14,37 @@ class KalturaLikeFilter extends KalturaLikeBaseFilter
 	} 
 	
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL2;
 	
 		$c = new Criteria();
-		$c->add(kvotePeer::PARTNER_ID, kCurrentContext::$ks_partner_id);
+		$c->add(vvotePeer::PARTNER_ID, vCurrentContext::$vs_partner_id);
 	
 		if($this->entryIdEqual)
-				$c->add(kvotePeer::ENTRY_ID, $this->entryIdEqual);
+				$c->add(vvotePeer::ENTRY_ID, $this->entryIdEqual);
 		if($this->userIdEqual)
 		{
-			$kuser = kuserPeer::getActiveKuserByPartnerAndUid(kCurrentContext::$ks_partner_id, $this->userIdEqual);
-			if(!$kuser)
-				throw new KalturaAPIException(KalturaErrors::USER_NOT_FOUND);
-			$c->add(kvotePeer::KUSER_ID, $kuser->getId());
+			$vuser = vuserPeer::getActiveVuserByPartnerAndUid(vCurrentContext::$vs_partner_id, $this->userIdEqual);
+			if(!$vuser)
+				throw new VidiunAPIException(VidiunErrors::USER_NOT_FOUND);
+			$c->add(vvotePeer::VUSER_ID, $vuser->getId());
 		}
 		if($this->createdAtGreaterThanOrEqual)
-			$c->add(kvotePeer::CREATED_AT,$this->createdAtGreaterThanOrEqual, Criteria::GREATER_EQUAL);
+			$c->add(vvotePeer::CREATED_AT,$this->createdAtGreaterThanOrEqual, Criteria::GREATER_EQUAL);
 		if($this->createdAtLessThanOrEqual)
-			$c->addAnd(kvotePeer::CREATED_AT,$this->createdAtLessThanOrEqual, Criteria::LESS_EQUAL);
+			$c->addAnd(vvotePeer::CREATED_AT,$this->createdAtLessThanOrEqual, Criteria::LESS_EQUAL);
 		if($this->entryIdIn)
-			$c->add(kvotePeer::ENTRY_ID,explode(',',$this->entryIdIn),Criteria::IN);
+			$c->add(vvotePeer::ENTRY_ID,explode(',',$this->entryIdIn),Criteria::IN);
 
 		$pager->attachToCriteria($c);
 	
-		$list = kvotePeer::doSelect($c);
+		$list = vvotePeer::doSelect($c);
 	
-		$response = new KalturaLikeListResponse();
-		$response->objects = KalturaLikeArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunLikeListResponse();
+		$response->objects = VidiunLikeArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = count($list);
 		return $response;
 	}

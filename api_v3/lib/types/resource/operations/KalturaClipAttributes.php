@@ -5,7 +5,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaClipAttributes extends KalturaOperationAttributes
+class VidiunClipAttributes extends VidiunOperationAttributes
 {
 	/**
 	 * Offset in milliseconds
@@ -29,7 +29,7 @@ class KalturaClipAttributes extends KalturaOperationAttributes
 
 	/**
 	 * global Offset In Destination in milliseconds
-	 * @var KalturaEffectsArray
+	 * @var VidiunEffectsArray
 	 */
 	public $effectArray;
 
@@ -49,7 +49,7 @@ class KalturaClipAttributes extends KalturaOperationAttributes
 	public function toObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		if(is_null($object_to_fill))
-			$object_to_fill = new kClipAttributes();
+			$object_to_fill = new vClipAttributes();
 			
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

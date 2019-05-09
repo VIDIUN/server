@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEdgeServerNode extends KalturaDeliveryServerNode
+class VidiunEdgeServerNode extends VidiunDeliveryServerNode
 {
 	/**
 	 * Delivery server playback Domain
@@ -19,7 +19,7 @@ class KalturaEdgeServerNode extends KalturaDeliveryServerNode
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -27,7 +27,7 @@ class KalturaEdgeServerNode extends KalturaDeliveryServerNode
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -35,7 +35,7 @@ class KalturaEdgeServerNode extends KalturaDeliveryServerNode
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate()
+	 * @see VidiunObject::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -43,7 +43,7 @@ class KalturaEdgeServerNode extends KalturaDeliveryServerNode
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{

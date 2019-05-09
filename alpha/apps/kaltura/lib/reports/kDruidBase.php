@@ -1,6 +1,6 @@
 <?php
 
-class kDruidBase
+class vDruidBase
 {
 	// druid query keywords
 	const DRUID_QUERY_TYPE = 'queryType';
@@ -86,7 +86,7 @@ class kDruidBase
 	const DRUID_ERROR_CLASS = 'errorClass';
 	const DRUID_ERROR_MSG = 'errorMessage';
 
-	// kConf params
+	// vConf params
 	const DRUID_URL = "druid_url";
 	const DRUID_QUERY_TIMEOUT = 'druid_timeout';
 
@@ -292,7 +292,7 @@ class kDruidBase
 			return array();
 		}
 
-		kApiCache::disableConditionalCache();
+		vApiCache::disableConditionalCache();
 		
 		if (!isset($content[self::DRUID_CONTEXT]))
 		{
@@ -301,13 +301,13 @@ class kDruidBase
 
 		$content[self::DRUID_CONTEXT][self::DRUID_COMMENT] = self::COMMENT_MARKER;
 
-		$timeout = kConf::get(self::DRUID_QUERY_TIMEOUT, 'local', null);
+		$timeout = vConf::get(self::DRUID_QUERY_TIMEOUT, 'local', null);
 		if ($timeout)
 		{
 			$content[self::DRUID_CONTEXT][self::DRUID_TIMEOUT] = intval($timeout);
 		}
 
-		KalturaLog::log('{' . print_r($content, true) . '}');
+		VidiunLog::log('{' . print_r($content, true) . '}');
 
 		$post = json_encode($content);
 
@@ -320,20 +320,20 @@ class kDruidBase
 				$result = json_decode($response, true);
 				if ($result)
 				{
-					KalturaLog::log("Returning from cache $cacheKey");
+					VidiunLog::log("Returning from cache $cacheKey");
 					return $result;
 				}
 			}
 		}
 
 		$uniqueId = new UniqueId();
-		$clientTag = kCurrentContext::$client_lang;
+		$clientTag = vCurrentContext::$client_lang;
 		$comment = (isset($_SERVER["HOSTNAME"]) ? $_SERVER["HOSTNAME"] : gethostname());
 		$comment .= "[$uniqueId][$clientTag]";
 		$post = str_replace(self::COMMENT_MARKER, $comment, $post);
-		KalturaLog::log($post);
+		VidiunLog::log($post);
 			
-		$url = kConf::get(self::DRUID_URL);
+		$url = vConf::get(self::DRUID_URL);
 
 		if (!self::$curl_handle)
 		{
@@ -359,7 +359,7 @@ class kDruidBase
 			$response = curl_exec($ch);
 			$druidTook = microtime(true) - $startTime;
 
-			KalturaLog::debug('Druid query took - ' . $druidTook. ' seconds');
+			VidiunLog::debug('Druid query took - ' . $druidTook. ' seconds');
 
 			if (curl_errno($ch))
 			{
@@ -368,12 +368,12 @@ class kDruidBase
 
 			$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-			if ($httpCode != KCurlHeaderResponse::HTTP_STATUS_OK)
+			if ($httpCode != VCurlHeaderResponse::HTTP_STATUS_OK)
 			{
 				if (strpos($response, 'Query timeout') !== false)
 				{
-					KalturaLog::err('Druid Query timed out.');
-					throw new kCoreException("Druid Query timed out", kCoreException::DRUID_QUERY_TIMED_OUT);
+					VidiunLog::err('Druid Query timed out.');
+					throw new vCoreException("Druid Query timed out", vCoreException::DRUID_QUERY_TIMED_OUT);
 				}
 
 				throw new Exception('Got invalid status code from druid: ' . $httpCode);
@@ -383,7 +383,7 @@ class kDruidBase
 
 			$result = json_decode($response, true);
 
-			KalturaMonitorClient::monitorDruidQuery(
+			VidiunMonitorClient::monitorDruidQuery(
 				parse_url($url, PHP_URL_HOST),
 				$content[self::DRUID_DATASOURCE],
 				$content[self::DRUID_QUERY_TYPE],
@@ -395,7 +395,7 @@ class kDruidBase
 			if (isset($result[self::DRUID_ERROR]) &&
 				strpos($result[self::DRUID_ERROR_MSG], 'Channel disconnected') !== false)
 			{
-				KalturaLog::log('Retrying on error ' . $result[self::DRUID_ERROR_MSG]);
+				VidiunLog::log('Retrying on error ' . $result[self::DRUID_ERROR_MSG]);
 				continue;
 			}
 
@@ -404,13 +404,13 @@ class kDruidBase
 	
 		if (isset($result[self::DRUID_ERROR])) 
 		{
-			KalturaLog::err('Error while running report ' . $result[self::DRUID_ERROR_MSG]);
+			VidiunLog::err('Error while running report ' . $result[self::DRUID_ERROR_MSG]);
 			throw new Exception('Error while running report ' . $result[self::DRUID_ERROR_MSG]);
 		}
 
 		if ($cache)
 		{
-			KalturaLog::log("Saving query response to cache $cacheKey");
+			VidiunLog::log("Saving query response to cache $cacheKey");
 			$cache->set($cacheKey, $response, $cacheExpiration);
 		}
 

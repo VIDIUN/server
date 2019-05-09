@@ -3,7 +3,7 @@
  * @package plugins.tvinciDistribution
  * @subpackage lib
  */
-class TvinciDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class TvinciDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const TVINCI = 'TVINCI';
 	

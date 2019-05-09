@@ -3,7 +3,7 @@
  * @package plugins.schedule_task
  * @subpackage Admin
  */
-class MediaRepurposingSetStatusAction extends KalturaApplicationPlugin
+class MediaRepurposingSetStatusAction extends VidiunApplicationPlugin
 {
 	
 	/**
@@ -25,11 +25,11 @@ class MediaRepurposingSetStatusAction extends KalturaApplicationPlugin
 		MediaRepurposingUtils::changeMrStatus($mr, $newStatus);
 
 		$batchJobId = null;
-		if ($newStatus == Kaltura_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DRY_RUN_ONLY)
+		if ($newStatus == Vidiun_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DRY_RUN_ONLY)
 		{
 			$batchJobId = MediaRepurposingUtils::executeDryRun($mr);
-			KalturaLog::info("Add job for Schedule Task Dry Run with ID $batchJobId. Data will save in configured path [default: {WEB_DIR_PATH}/content/batchfiles/{PARTNER_ID}/bulk_$batchJobId");
-			MediaRepurposingUtils::changeMrStatus($mr, Kaltura_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DISABLED);
+			VidiunLog::info("Add job for Schedule Task Dry Run with ID $batchJobId. Data will save in configured path [default: {WEB_DIR_PATH}/content/batchfiles/{PARTNER_ID}/bulk_$batchJobId");
+			MediaRepurposingUtils::changeMrStatus($mr, Vidiun_Client_ScheduledTask_Enum_ScheduledTaskProfileStatus::DISABLED);
 		}
 		
 		try
@@ -38,7 +38,7 @@ class MediaRepurposingSetStatusAction extends KalturaApplicationPlugin
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			echo $action->getHelper('json')->sendJson($e->getMessage(), false);
 		}
 

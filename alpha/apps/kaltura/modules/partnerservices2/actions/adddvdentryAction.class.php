@@ -23,7 +23,7 @@ class adddvdentryAction extends defPartnerservices2Action
 					),
 				"errors" => array (
 					APIErrors::NO_FIELDS_SET_FOR_GENERIC_ENTRY ,
-					APIErrors::INVALID_KSHOW_ID
+					APIErrors::INVALID_VSHOW_ID
 				)
 			); 
 	}
@@ -40,9 +40,9 @@ class adddvdentryAction extends defPartnerservices2Action
 //		$entry->setMediaType( entry::ENTRY_MEDIA_TYPE_DVD_PROJECT );		 
 	} 
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		// get the new properties for the kuser from the request
+		// get the new properties for the vuser from the request
 		$dvd_entry = new entry();
 		
 		$this->getTypeAndMediaType ( $dvd_entry );
@@ -58,39 +58,39 @@ class adddvdentryAction extends defPartnerservices2Action
 		if ( count ( $fields_modified ) > 0 )
 		{
 			
-			$kshow_id = $this->getP ( "kshow_id" , kshow::KSHOW_ID_USE_DEFAULT );						
-	       	if ( $kshow_id == kshow::KSHOW_ID_USE_DEFAULT )
+			$vshow_id = $this->getP ( "vshow_id" , vshow::VSHOW_ID_USE_DEFAULT );						
+	       	if ( $vshow_id == vshow::VSHOW_ID_USE_DEFAULT )
 	        {
-	            // see if the partner has some default kshow to add to
-	            $kshow = myPartnerUtils::getDefaultKshow ( $partner_id, $subp_id , $puser_kuser  );
-	            if ( $kshow ) $kshow_id = $kshow->getId();
+	            // see if the partner has some default vshow to add to
+	            $vshow = myPartnerUtils::getDefaultVshow ( $partner_id, $subp_id , $puser_vuser  );
+	            if ( $vshow ) $vshow_id = $vshow->getId();
 	        }
-			elseif ( $kshow_id == kshow::KSHOW_ID_CREATE_NEW )
+			elseif ( $vshow_id == vshow::VSHOW_ID_CREATE_NEW )
 	        {
-	            // if the partner allows - create a new kshow 
-	            $kshow = myPartnerUtils::getDefaultKshow ( $partner_id, $subp_id , $puser_kuser , null , true );
-	            if ( $kshow ) $kshow_id = $kshow->getId();
+	            // if the partner allows - create a new vshow 
+	            $vshow = myPartnerUtils::getDefaultVshow ( $partner_id, $subp_id , $puser_vuser , null , true );
+	            if ( $vshow ) $vshow_id = $vshow->getId();
 	        }   
 			else
 	        {
-	            $kshow = kshowPeer::retrieveByPK( $kshow_id );
+	            $vshow = vshowPeer::retrieveByPK( $vshow_id );
 	        }
 	
-	        if ( ! $kshow )
+	        if ( ! $vshow )
 	        {
-	            // the partner is attempting to add an entry to some invalid or non-existing kwho
-	            $this->addError( APIErrors::INVALID_KSHOW_ID, $kshow_id );
+	            // the partner is attempting to add an entry to some invalid or non-existing vwho
+	            $this->addError( APIErrors::INVALID_VSHOW_ID, $vshow_id );
 	            return;
 	        }
 	        
 			// force the type and media type
-			// TODO - set the kshow to some default kshow of the partner - maybe extract it from the custom_data of this specific partner
-			$dvd_entry->setKshowId ( $kshow_id );
+			// TODO - set the vshow to some default vshow of the partner - maybe extract it from the custom_data of this specific partner
+			$dvd_entry->setVshowId ( $vshow_id );
 			$dvd_entry->setStatus( entryStatus::READY );
 			$dvd_entry->setPartnerId( $partner_id );
 			$dvd_entry->setSubpId( $subp_id );
-			$dvd_entry->setKuserId($puser_kuser->getKuserId() );
-			$dvd_entry->setCreatorKuserId($puser_kuser->getKuserId() );
+			$dvd_entry->setVuserId($puser_vuser->getVuserId() );
+			$dvd_entry->setCreatorVuserId($puser_vuser->getVuserId() );
 						
 			$dvd_entry->save();
 										

@@ -34,7 +34,7 @@ class listmoderationsAction extends defPartnerservices2Action
 	
 	protected function ticketType()	{		return self::REQUIED_TICKET_ADMIN;	}
 		
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		// TODO -  verify permissions for viewing lists 
 
@@ -45,7 +45,7 @@ class listmoderationsAction extends defPartnerservices2Action
 		
 		$offset = ($page-1)* $limit;
 
-//		kuserPeer::setUseCriteriaFilter( false );
+//		vuserPeer::setUseCriteriaFilter( false );
 
 		$c = new Criteria();
 				
@@ -54,7 +54,7 @@ class listmoderationsAction extends defPartnerservices2Action
 		$fields_set = $filter->fillObjectFromRequest( $this->getInputParams() , "filter_" , null );
 		$filter->attachToCriteria( $c );
 		
-		//if ($order_by != -1) kshowPeer::setOrder( $c , $order_by );
+		//if ($order_by != -1) vshowPeer::setOrder( $c , $order_by );
 		$count = moderationPeer::doCount( $c );
 
 		$offset = ($page-1)* $limit;

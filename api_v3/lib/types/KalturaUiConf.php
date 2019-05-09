@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUiConf extends KalturaObject implements IFilterable 
+class VidiunUiConf extends VidiunObject implements IFilterable 
 {
 	/**
 	 * @var int
@@ -35,7 +35,7 @@ class KalturaUiConf extends KalturaObject implements IFilterable
 	
 
 	/**
-	 * @var KalturaUiConfObjType $objType
+	 * @var VidiunUiConfObjType $objType
 	 * @filter eq,in
 	 */
 	public $objType;
@@ -132,7 +132,7 @@ class KalturaUiConf extends KalturaObject implements IFilterable
 		
 	/**
 	 *
-	 * @var KalturaUiConfCreationMode $creationMode
+	 * @var VidiunUiConfCreationMode $creationMode
 	 * @filter eq,in
 	 */
 	public $creationMode;

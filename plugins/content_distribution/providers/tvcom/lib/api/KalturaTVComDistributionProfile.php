@@ -3,7 +3,7 @@
  * @package plugins.tvComDistribution
  * @subpackage api.objects
  */
-class KalturaTVComDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunTVComDistributionProfile extends VidiunConfigurableDistributionProfile
 {	
 	/**
 	 * @var int

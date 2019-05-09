@@ -101,7 +101,7 @@ class QuizUserEntry extends UserEntry{
 		foreach ($optionalAnswers as $optionalAnswer)
 		{
 			/**
-			 * @var kOptionalAnswer $optionalAnswer
+			 * @var vOptionalAnswer $optionalAnswer
 			 */
 			if ($optionalAnswer->getIsCorrect())
 			{
@@ -127,7 +127,7 @@ class QuizUserEntry extends UserEntry{
 	{
                if($this->isColumnModified(UserEntryPeer::STATUS) && $this->getStatus() == UserEntryStatus::DELETED)
                {
-                       kEventsManager::raiseEventDeferred(new kObjectDeletedEvent($this));
+                       vEventsManager::raiseEventDeferred(new vObjectDeletedEvent($this));
                }
 
                parent::postUpdate($con);

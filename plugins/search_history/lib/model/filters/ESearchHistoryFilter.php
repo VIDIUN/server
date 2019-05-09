@@ -57,25 +57,25 @@ class ESearchHistoryFilter extends ESearchBaseFilter
 	public function execQueryFromFilter()
 	{
 		$this->applyFilter();
-		$historyClient = new kESearchHistoryElasticClient();
+		$historyClient = new vESearchHistoryElasticClient();
 		$elasticResults = $historyClient->searchRecentForUser($this->query);
-		return kESearchHistoryCoreAdapter::getCoreESearchHistoryFromResults($elasticResults);
+		return vESearchHistoryCoreAdapter::getCoreESearchHistoryFromResults($elasticResults);
 	}
 
 	protected function applyFilter()
 	{
-		$searchHistoryConfig = kConf::get('search_history', 'elastic', array());
-		$partnerId = kCurrentContext::getCurrentPartnerId();
-		$kuserId = kCurrentContext::getCurrentKsKuserId();
-		if (!$kuserId)
+		$searchHistoryConfig = vConf::get('search_history', 'elastic', array());
+		$partnerId = vCurrentContext::getCurrentPartnerId();
+		$vuserId = vCurrentContext::getCurrentVsVuserId();
+		if (!$vuserId)
 		{
-			throw new kESearchHistoryException('Invalid userId', kESearchHistoryException::INVALID_USER_ID);
+			throw new vESearchHistoryException('Invalid userId', vESearchHistoryException::INVALID_USER_ID);
 		}
 		$pageSize = isset($searchHistoryConfig['emptyTermListSize']) ? $searchHistoryConfig['emptyTermListSize'] : self::DEFAULT_LIST_SIZE;
 
-		$boolQuery = new kESearchBoolQuery();
-		$pidUidContext = searchHistoryUtils::formatPartnerIdUserIdContext($partnerId, $kuserId, searchHistoryUtils::getSearchContext());
-		$pidUidContextQuery = new kESearchTermQuery(ESearchHistoryFieldName::PID_UID_CONTEXT, $pidUidContext);
+		$boolQuery = new vESearchBoolQuery();
+		$pidUidContext = searchHistoryUtils::formatPartnerIdUserIdContext($partnerId, $vuserId, searchHistoryUtils::getSearchContext());
+		$pidUidContextQuery = new vESearchTermQuery(ESearchHistoryFieldName::PID_UID_CONTEXT, $pidUidContext);
 		$boolQuery->addToFilter($pidUidContextQuery);
 		$searchTermStartsWith = $this->getSearchTermStartsWith();
 		if ($searchTermStartsWith)
@@ -84,21 +84,21 @@ class ESearchHistoryFilter extends ESearchBaseFilter
 			{
 				$searchTermStartsWith = mb_strcut($searchTermStartsWith, 0, self::MAX_SEARCH_TERM_LENGTH, "utf-8");
 			}
-			$searchTermStartsWithQuery = new kESearchPrefixQuery(ESearchHistoryFieldName::SEARCH_TERM, elasticSearchUtils::formatSearchTerm($searchTermStartsWith));
+			$searchTermStartsWithQuery = new vESearchPrefixQuery(ESearchHistoryFieldName::SEARCH_TERM, elasticSearchUtils::formatSearchTerm($searchTermStartsWith));
 			$boolQuery->addToFilter($searchTermStartsWithQuery);
 			$pageSize = isset($searchHistoryConfig['completionListSize']) ? $searchHistoryConfig['completionListSize'] : self::STARTS_WITH_PAGE_SIZE;
 		}
 		if($this->searchedObjectIn)
 		{
 			$searchedObjects = $this->getSearchedObjectsArray();
-			$searchObjectsQuery = new kESearchTermsQuery(ESearchHistoryFieldName::SEARCHED_OBJECT, $searchedObjects);
+			$searchObjectsQuery = new vESearchTermsQuery(ESearchHistoryFieldName::SEARCHED_OBJECT, $searchedObjects);
 			$boolQuery->addToFilter($searchObjectsQuery);
 		}
 
-		$this->query[kESearchQueryManager::QUERY_KEY] = $boolQuery->getFinalQuery();
-		$this->query[kESearchQueryManager::SORT_KEY] = array(ESearchHistoryFieldName::TIMESTAMP => array(kESearchQueryManager::ORDER_KEY => ESearchSortOrder::ORDER_BY_DESC));
-		$this->query[kESearchQueryManager::FROM_KEY] = 0;
-		$this->query[kESearchQueryManager::SIZE_KEY] = $pageSize;
+		$this->query[vESearchQueryManager::QUERY_KEY] = $boolQuery->getFinalQuery();
+		$this->query[vESearchQueryManager::SORT_KEY] = array(ESearchHistoryFieldName::TIMESTAMP => array(vESearchQueryManager::ORDER_KEY => ESearchSortOrder::ORDER_BY_DESC));
+		$this->query[vESearchQueryManager::FROM_KEY] = 0;
+		$this->query[vESearchQueryManager::SIZE_KEY] = $pageSize;
 	}
 
 	protected function getSearchedObjectsArray()

@@ -5,7 +5,7 @@
  * @package Scheduler
  * @subpackage Bulk-Upload
  */
-class KalturaBulkUploadAbortedException extends kException
+class VidiunBulkUploadAbortedException extends vException
 {
 	/**
 	 * Represents that a job was aborted

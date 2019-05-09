@@ -2,7 +2,7 @@
 /**
  * @package plugins.document
  */
-class DocumentPlugin extends KalturaPlugin implements IKalturaPlugin, IKalturaServices, IKalturaObjectLoader, IKalturaEventConsumers, IKalturaEnumerator, IKalturaTypeExtender
+class DocumentPlugin extends VidiunPlugin implements IVidiunPlugin, IVidiunServices, IVidiunObjectLoader, IVidiunEventConsumers, IVidiunEnumerator, IVidiunTypeExtender
 {
 	const PLUGIN_NAME = 'document';
 	const DOCUMENT_OBJECT_CREATED_HANDLER = 'DocumentCreatedHandler';
@@ -21,7 +21,7 @@ class DocumentPlugin extends KalturaPlugin implements IKalturaPlugin, IKalturaSe
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaTypeExtender::getExtendedTypes()
+	 * @see IVidiunTypeExtender::getExtendedTypes()
 	 */
 	public static function getExtendedTypes($baseClass, $enumValue)
 	{
@@ -45,7 +45,7 @@ class DocumentPlugin extends KalturaPlugin implements IKalturaPlugin, IKalturaSe
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
@@ -56,50 +56,50 @@ class DocumentPlugin extends KalturaPlugin implements IKalturaPlugin, IKalturaSe
 			return new DocumentEntry();
 		}
 		
-		if($baseClass == 'KalturaBaseEntry' && $enumValue == entryType::DOCUMENT)
+		if($baseClass == 'VidiunBaseEntry' && $enumValue == entryType::DOCUMENT)
 		{
-			return new KalturaDocumentEntry();
+			return new VidiunDocumentEntry();
 		}
 		
 		
-		// KALTURA FLAVOR PARAMS
+		// VIDIUN FLAVOR PARAMS
 		
-		if($baseClass == 'KalturaFlavorParams')
+		if($baseClass == 'VidiunFlavorParams')
 		{
 			switch($enumValue)
 			{
 				case DocumentPlugin::getAssetTypeCoreValue(DocumentAssetType::PDF):
-					return new KalturaPdfFlavorParams();
+					return new VidiunPdfFlavorParams();
 					
 				case DocumentPlugin::getAssetTypeCoreValue(DocumentAssetType::SWF):
-					return new KalturaSwfFlavorParams();
+					return new VidiunSwfFlavorParams();
 					
 				case DocumentPlugin::getAssetTypeCoreValue(DocumentAssetType::DOCUMENT):
-					return new KalturaDocumentFlavorParams();
+					return new VidiunDocumentFlavorParams();
 					
 				case DocumentPlugin::getAssetTypeCoreValue(DocumentAssetType::IMAGE);
-					return new KalturaImageFlavorParams();
+					return new VidiunImageFlavorParams();
 				
 				default:
 					return null;	
 			}
 		}
 	
-		if($baseClass == 'KalturaFlavorParamsOutput')
+		if($baseClass == 'VidiunFlavorParamsOutput')
 		{
 			switch($enumValue)
 			{
 				case DocumentPlugin::getAssetTypeCoreValue(DocumentAssetType::PDF):
-					return new KalturaPdfFlavorParamsOutput();
+					return new VidiunPdfFlavorParamsOutput();
 					
 				case DocumentPlugin::getAssetTypeCoreValue(DocumentAssetType::SWF):
-					return new KalturaSwfFlavorParamsOutput();
+					return new VidiunSwfFlavorParamsOutput();
 					
 				case DocumentPlugin::getAssetTypeCoreValue(DocumentAssetType::DOCUMENT):
-					return new KalturaDocumentFlavorParamsOutput();
+					return new VidiunDocumentFlavorParamsOutput();
 					
 				case DocumentPlugin::getAssetTypeCoreValue(DocumentAssetType::IMAGE);
-					return new KalturaImageFlavorParamsOutput();
+					return new VidiunImageFlavorParamsOutput();
 				
 				default:
 					return null;	
@@ -109,76 +109,76 @@ class DocumentPlugin extends KalturaPlugin implements IKalturaPlugin, IKalturaSe
 		
 		// OPERATION ENGINES
 		
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::PDF_CREATOR)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::PDF_CREATOR)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 			
-			return new KOperationEnginePdfCreator($constructorArgs['params']->pdfCreatorCmd, $constructorArgs['outFilePath']);
+			return new VOperationEnginePdfCreator($constructorArgs['params']->pdfCreatorCmd, $constructorArgs['outFilePath']);
 		}
 
 		
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::PDF2SWF)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::PDF2SWF)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 			
-			return new KOperationEnginePdf2Swf($constructorArgs['params']->pdf2SwfCmd, $constructorArgs['outFilePath']);
+			return new VOperationEnginePdf2Swf($constructorArgs['params']->pdf2SwfCmd, $constructorArgs['outFilePath']);
 		}
 		
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::IMAGEMAGICK)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::IMAGEMAGICK)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 			
-			return new KOperationEngineImageMagick($constructorArgs['params']->imageMagickCmd, $constructorArgs['outFilePath']);
+			return new VOperationEngineImageMagick($constructorArgs['params']->imageMagickCmd, $constructorArgs['outFilePath']);
 		}
 		
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::PPT2IMG)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::PPT2IMG)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
-			return new KOperationEnginePpt2Image($constructorArgs['params']->ppt2ImgCmd, $constructorArgs['outFilePath']);
+			return new VOperationEnginePpt2Image($constructorArgs['params']->ppt2ImgCmd, $constructorArgs['outFilePath']);
 		}
 
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::THUMB_ASSETS)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::THUMB_ASSETS)
 		{
-			return new KOperationEngineThumbAssetsGenerator(null, null);
+			return new VOperationEngineThumbAssetsGenerator(null, null);
 		}
 
 		
-		// KDL ENGINES
+		// VDL ENGINES
 		
-		if($baseClass == 'KDLOperatorBase' && $enumValue == conversionEngineType::PDF_CREATOR)
+		if($baseClass == 'VDLOperatorBase' && $enumValue == conversionEngineType::PDF_CREATOR)
 		{
-			return new KDLTranscoderPdfCreator($enumValue);
+			return new VDLTranscoderPdfCreator($enumValue);
 		}
 				
-		if($baseClass == 'KDLOperatorBase' && $enumValue == conversionEngineType::PDF2SWF)
+		if($baseClass == 'VDLOperatorBase' && $enumValue == conversionEngineType::PDF2SWF)
 		{
-			return new KDLTranscoderPdf2Swf($enumValue);
+			return new VDLTranscoderPdf2Swf($enumValue);
 		}
 		
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(DocumentConversionEngineType::IMAGEMAGICK_ENGINE))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(DocumentConversionEngineType::IMAGEMAGICK_ENGINE))
 		{
-			return new KDLTranscoderImageMagick($enumValue);
+			return new VDLTranscoderImageMagick($enumValue);
 		}
 		
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(DocumentConversionEngineType::PPT2IMG_ENGINE))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(DocumentConversionEngineType::PPT2IMG_ENGINE))
 		{
-			return new KDLTranscoderPpt2Img($enumValue);
+			return new VDLTranscoderPpt2Img($enumValue);
 		}
 
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(DocumentConversionEngineType::THUMB_ASSETS_ENGINE))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(DocumentConversionEngineType::THUMB_ASSETS_ENGINE))
 		{
-			return new KDLTranscoderThumbAssetsGenerator($enumValue);
+			return new VDLTranscoderThumbAssetsGenerator($enumValue);
 		}
 		
 		return null;
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -260,8 +260,8 @@ class DocumentPlugin extends KalturaPlugin implements IKalturaPlugin, IKalturaSe
 	 */
 	public static function getAssetTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('assetType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('assetType', $value);
 	}
 	
 	/**
@@ -269,7 +269,7 @@ class DocumentPlugin extends KalturaPlugin implements IKalturaPlugin, IKalturaSe
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/**

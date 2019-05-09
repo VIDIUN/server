@@ -1,6 +1,6 @@
 <?php
 /**
- * Will run KAsyncConcat.class.php 
+ * Will run VAsyncConcat.class.php 
  * 
  *
  * @package Scheduler
@@ -8,6 +8,6 @@
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncConcat();
+$instance = new VAsyncConcat();
 $instance->run(); 
 $instance->done();

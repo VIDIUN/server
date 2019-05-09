@@ -44,12 +44,12 @@ class SymantecScanJavaEngine extends SymantecScanEngine
 		if (!$this->binFile)
 		{
 			$errorDescription = 'Engine command line not set';
-			return KalturaVirusScanJobResult::SCAN_ERROR;
+			return VidiunVirusScanJobResult::SCAN_ERROR;
 		}
 		
 		if (!file_exists($filePath)) {
 			$errorDescription = 'Source file does not exists ['.$filePath.']';
-			return KalturaVirusScanJobResult::SCAN_ERROR;
+			return VidiunVirusScanJobResult::SCAN_ERROR;
 		}
 		
 		$scanMode = $cleanIfInfected ? 'scanrepair' : 'scan';
@@ -60,19 +60,19 @@ class SymantecScanJavaEngine extends SymantecScanEngine
 		$output = null;
 		
 		
-		KalturaLog::info("Executing - [$cmd]");
+		VidiunLog::info("Executing - [$cmd]");
 		
 		for($tries = 1; $tries <= self::NUM_OF_ATTEMPTS; $tries ++) {
 			while (!$this->isEngineRunning())
 			{
-				KalturaLog::info("Symantec engine not running, retrying in 10 seconds");
+				VidiunLog::info("Symantec engine not running, retrying in 10 seconds");
 				sleep(10);
 			}
 			system ( $cmd, $return_value );
 			$output = file ( $logFile );
 			if (!count ( $output ) || strpos($output [0],self::UNABLE_TO_SEND_DATA_TO_THE_SERVER) === false )
 				break;
-			KalturaLog::info ( "Retrying scan.attempt number:".$tries );
+			VidiunLog::info ( "Retrying scan.attempt number:".$tries );
 			sleep ( 10 );
 		}
 		
@@ -83,10 +83,10 @@ class SymantecScanJavaEngine extends SymantecScanEngine
 			if(preg_match('/^ERROR: (.+)/', $line, $matches))
 			{
 				$errorDescription = $matches[1];
-				return KalturaVirusScanJobResult::SCAN_ERROR;
+				return VidiunVirusScanJobResult::SCAN_ERROR;
 			}
 			
-			if (kString::beginsWith($line, self::STATUS_PREFIX)) {
+			if (vString::beginsWith($line, self::STATUS_PREFIX)) {
 				$found = $line;
 				break;
 			}
@@ -97,29 +97,29 @@ class SymantecScanJavaEngine extends SymantecScanEngine
 		if (!$found)
 		{
 			$errorDescription = 'Unknown error';
-			return KalturaVirusScanJobResult::SCAN_ERROR;
+			return VidiunVirusScanJobResult::SCAN_ERROR;
 		}
 		
 		$returnValue = trim(substr($found, strlen(self::STATUS_PREFIX)));
 		
 		if ($returnValue == 'Clean')
 		{
-			return KalturaVirusScanJobResult::FILE_IS_CLEAN;
+			return VidiunVirusScanJobResult::FILE_IS_CLEAN;
 		}
 		else if ($returnValue == 'Repaired')
 		{
-			return KalturaVirusScanJobResult::FILE_WAS_CLEANED;
+			return VidiunVirusScanJobResult::FILE_WAS_CLEANED;
 		}
 		else if ($returnValue == 'Infected')
 		{
-			return KalturaVirusScanJobResult::FILE_INFECTED;
+			return VidiunVirusScanJobResult::FILE_INFECTED;
 		}
 		else 
 		{ 
 			$errorDescription = "Unknown returned value from virus scanner";
 		}
 
-		return KalturaVirusScanJobResult::SCAN_ERROR;
+		return VidiunVirusScanJobResult::SCAN_ERROR;
 	}
 
 }

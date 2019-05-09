@@ -5,17 +5,17 @@
  * @package plugins.httpNotification
  * @subpackage api.objects
  */
-class KalturaHttpNotificationObjectData extends KalturaHttpNotificationData
+class VidiunHttpNotificationObjectData extends VidiunHttpNotificationData
 {
 	/**
-	 * Kaltura API object type
+	 * Vidiun API object type
 	 * @var string
 	 */
 	public $apiObjectType;
 	
 	/**
 	 * Data format
-	 * @var KalturaResponseType
+	 * @var VidiunResponseType
 	 */
 	public $format;
 	
@@ -33,13 +33,13 @@ class KalturaHttpNotificationObjectData extends KalturaHttpNotificationData
 
 	/**
 	 * An array of pattern-replacement pairs used for data string regex replacements
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $dataStringReplacements;
 
 	/**
 	 * Serialized object, protected on purpose, used by getData
-	 * @see KalturaHttpNotificationObjectData::getData()
+	 * @see VidiunHttpNotificationObjectData::getData()
 	 * @var string
 	 */
 	protected $coreObject;
@@ -54,7 +54,7 @@ class KalturaHttpNotificationObjectData extends KalturaHttpNotificationData
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaValue::getMapBetweenObjects()
+	 * @see VidiunValue::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -62,45 +62,45 @@ class KalturaHttpNotificationObjectData extends KalturaHttpNotificationData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
-		if(!$this->apiObjectType || !is_subclass_of($this->apiObjectType, 'KalturaObject'))
-			throw new KalturaAPIException(KalturaHttpNotificationErrors::HTTP_NOTIFICATION_INVALID_OBJECT_TYPE);
+		if(!$this->apiObjectType || !is_subclass_of($this->apiObjectType, 'VidiunObject'))
+			throw new VidiunAPIException(VidiunHttpNotificationErrors::HTTP_NOTIFICATION_INVALID_OBJECT_TYPE);
 			
 		if(!$dbObject)
-			$dbObject = new kHttpNotificationObjectData();
+			$dbObject = new vHttpNotificationObjectData();
 			
 		return parent::toObject($dbObject, $skip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject($srcObj)
+	 * @see VidiunObject::fromObject($srcObj)
 	 */
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $srcObj kHttpNotificationObjectData */
+		/* @var $srcObj vHttpNotificationObjectData */
 		parent::doFromObject($srcObj, $responseProfile);
 		$this->coreObject = $srcObj->getCoreObject();
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaHttpNotificationData::getData()
+	 * @see VidiunHttpNotificationData::getData()
 	 */
-	public function getData(kHttpNotificationDispatchJobData $jobData = null)
+	public function getData(vHttpNotificationDispatchJobData $jobData = null)
 	{
 		$coreObject = unserialize($this->coreObject);
 
 		$apiObject = new $this->apiObjectType;
-		/* @var $apiObject KalturaObject */
+		/* @var $apiObject VidiunObject */
 		$apiObject->fromObject($coreObject);
 		
 		$httpNotificationTemplate = EventNotificationTemplatePeer::retrieveByPK($jobData->getTemplateId());
 		
-		$notification = new KalturaHttpNotification();
+		$notification = new VidiunHttpNotification();
 		$notification->object = $apiObject;
-		$notification->eventObjectType = kPluginableEnumsManager::coreToApi('EventNotificationEventObjectType', $httpNotificationTemplate->getObjectType());
+		$notification->eventObjectType = vPluginableEnumsManager::coreToApi('EventNotificationEventObjectType', $httpNotificationTemplate->getObjectType());
 		$notification->eventNotificationJobId = $jobData->getJobId();
 		$notification->templateId = $httpNotificationTemplate->getId();
 		$notification->templateName = $httpNotificationTemplate->getName();
@@ -110,23 +110,23 @@ class KalturaHttpNotificationObjectData extends KalturaHttpNotificationData
 		$data = '';
 		switch ($this->format)
 		{
-			case KalturaResponseType::RESPONSE_TYPE_XML:
-				$serializer = new KalturaXmlSerializer($this->ignoreNull);				
+			case VidiunResponseType::RESPONSE_TYPE_XML:
+				$serializer = new VidiunXmlSerializer($this->ignoreNull);				
 				$data = '<notification>' . $serializer->serialize($notification) . '</notification>';
 				break;
 				
-			case KalturaResponseType::RESPONSE_TYPE_PHP:
-				$serializer = new KalturaPhpSerializer($this->ignoreNull);				
+			case VidiunResponseType::RESPONSE_TYPE_PHP:
+				$serializer = new VidiunPhpSerializer($this->ignoreNull);				
 				$data = $serializer->serialize($notification);
 				break;
 				
-			case KalturaResponseType::RESPONSE_TYPE_JSON:
-				$serializer = new KalturaJsonSerializer($this->ignoreNull);				
+			case VidiunResponseType::RESPONSE_TYPE_JSON:
+				$serializer = new VidiunJsonSerializer($this->ignoreNull);				
 				$data = $serializer->serialize($notification);
 
 				if($this->dataStringReplacements)
 				{
-					KalturaLog::info("replacing data string");
+					VidiunLog::info("replacing data string");
 					$patterns = array();
 					$replacements = array();
 					foreach($this->dataStringReplacements->toArray() as $dataStringReplacement)

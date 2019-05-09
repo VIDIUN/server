@@ -4,7 +4,7 @@
  * @subpackage api.enum
  * @see IntegrationTriggerType
  */
-class KalturaIntegrationTriggerType extends KalturaDynamicEnum implements IntegrationTriggerType
+class VidiunIntegrationTriggerType extends VidiunDynamicEnum implements IntegrationTriggerType
 {
 	public static function getEnumClass()
 	{

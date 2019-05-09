@@ -38,7 +38,7 @@ function implodeDirectoryFiles($sourceFiles, $dest)
 
 function getFileSyncWorkers($iniDir)
 {
-	$configFileName = kEnvironment::get('cache_root_path') . DIRECTORY_SEPARATOR . 'batch' . DIRECTORY_SEPARATOR . 'fileSyncStatus-config.ini';
+	$configFileName = vEnvironment::get('cache_root_path') . DIRECTORY_SEPARATOR . 'batch' . DIRECTORY_SEPARATOR . 'fileSyncStatus-config.ini';
 	@mkdir(dirname($configFileName), 0777, true);
 	
 	$filePaths = getIniFilePaths($iniDir);
@@ -52,7 +52,7 @@ function getFileSyncWorkers($iniDir)
 	{
 		if (!isset($section["id"]) || 
 			!isset($section["scriptPath"]) || 
-			strpos($section["scriptPath"], 'KAsyncFileSyncImportExe') === false)
+			strpos($section["scriptPath"], 'VAsyncFileSyncImportExe') === false)
 		{
 			continue;
 		}
@@ -65,7 +65,7 @@ function getFileSyncWorkers($iniDir)
 function getExcludeFileSyncMap()
 {
 	$result = array();
-	$dcConfig = kConf::getMap("dc_config");
+	$dcConfig = vConf::getMap("dc_config");
 	if(isset($dcConfig['sync_exclude_types']))
 	{
 		foreach($dcConfig['sync_exclude_types'] as $syncExcludeType)
@@ -78,13 +78,13 @@ function getExcludeFileSyncMap()
 
 			// translate api dynamic enum, such as contentDistribution.EntryDistribution - {plugin name}.{object name}
 			if(!is_numeric($configObjectType))
-				$configObjectType = kPluginableEnumsManager::apiToCore('FileSyncObjectType', $configObjectType);
+				$configObjectType = vPluginableEnumsManager::apiToCore('FileSyncObjectType', $configObjectType);
 
 			// translate api dynamic enum, including the enum type, such as conversionEngineType.mp4box.Mp4box - {enum class name}.{plugin name}.{object name}
 			if(!is_null($configObjectSubType) && !is_numeric($configObjectSubType))
 			{
 				list($enumType, $configObjectSubType) = explode('.', $configObjectSubType);
-				$configObjectSubType = kPluginableEnumsManager::apiToCore($enumType, $configObjectSubType);
+				$configObjectSubType = vPluginableEnumsManager::apiToCore($enumType, $configObjectSubType);
 			}
 
 			if(!isset($result[$configObjectType]))
@@ -120,15 +120,15 @@ if(isset($argc) && $argc > 2)
 	$iniDir = $argv[2];
 }
 
-$keysCache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS);
+$keysCache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_QUERY_CACHE_KEYS);
 if (!$keysCache)
 {
 	die('failed to get keys cache');
 }
 
 // get the max id / last id
-$maxId = $keysCache->get(MAX_FILESYNC_ID_PREFIX . kDataCenterMgr::getCurrentDcId());
-writeOutput('Max id for dc ['.kDataCenterMgr::getCurrentDcId().'] is ['.$maxId."]\n");
+$maxId = $keysCache->get(MAX_FILESYNC_ID_PREFIX . vDataCenterMgr::getCurrentDcId());
+writeOutput('Max id for dc ['.vDataCenterMgr::getCurrentDcId().'] is ['.$maxId."]\n");
 
 $excludeFileSyncMap = getExcludeFileSyncMap();
 
@@ -148,7 +148,7 @@ foreach ($fileSyncWorkers as $fileSyncWorker)
 	
 	$baseCriteria->add(FileSyncPeer::STATUS, FileSync::FILE_SYNC_STATUS_PENDING);
 	$baseCriteria->add(FileSyncPeer::FILE_TYPE, FileSync::FILE_SYNC_FILE_TYPE_FILE);
-	$baseCriteria->add(FileSyncPeer::DC, kDataCenterMgr::getCurrentDcId());
+	$baseCriteria->add(FileSyncPeer::DC, vDataCenterMgr::getCurrentDcId());
 	
 	$idCriterion = $baseCriteria->getNewCriterion(FileSyncPeer::ID, $lastId - 100, Criteria::GREATER_THAN);
 	$idCriterion->addAnd($baseCriteria->getNewCriterion(FileSyncPeer::ID, $maxId, Criteria::LESS_THAN));

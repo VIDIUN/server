@@ -3,6 +3,6 @@
  * @package plugins.yahooDistribution
  * @subpackage api.filters.enum
  */
-class KalturaYahooDistributionProfileOrderBy extends KalturaConfigurableDistributionProfileOrderBy
+class VidiunYahooDistributionProfileOrderBy extends VidiunConfigurableDistributionProfileOrderBy
 {
 }

@@ -5,15 +5,15 @@
  * @subpackage api.services
  */
 
-class GroupService extends KalturaBaseUserService
+class GroupService extends VidiunBaseUserService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
 		parent::initService($serviceId, $serviceName, $actionName);
-		$kuser = kCurrentContext::getCurrentKsKuser();
-		if(!$kuser && !kCurrentContext::$is_admin_session)
+		$vuser = vCurrentContext::getCurrentVsVuser();
+		if(!$vuser && !vCurrentContext::$is_admin_session)
 		{
-			throw new KalturaAPIException(KalturaErrors::USER_ID_NOT_PROVIDED_OR_EMPTY);
+			throw new VidiunAPIException(VidiunErrors::USER_ID_NOT_PROVIDED_OR_EMPTY);
 		}
 	}
 
@@ -21,21 +21,21 @@ class GroupService extends KalturaBaseUserService
 	 * Adds a new group (user of type group).
 	 *
 	 * @action add
-	 * @param KalturaGroup $group a new group
-	 * @return KalturaGroup The new group
+	 * @param VidiunGroup $group a new group
+	 * @return VidiunGroup The new group
 	 *
-	 * @throws KalturaErrors::DUPLICATE_USER_BY_ID
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
-	 * @throws KalturaErrors::INVALID_FIELD_VALUE
-	 * @throws KalturaErrors::UNKNOWN_PARTNER_ID
-	 * @throws KalturaErrors::PASSWORD_STRUCTURE_INVALID
-	 * @throws KalturaErrors::DUPLICATE_USER_BY_LOGIN_ID
+	 * @throws VidiunErrors::DUPLICATE_USER_BY_ID
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
+	 * @throws VidiunErrors::INVALID_FIELD_VALUE
+	 * @throws VidiunErrors::UNKNOWN_PARTNER_ID
+	 * @throws VidiunErrors::PASSWORD_STRUCTURE_INVALID
+	 * @throws VidiunErrors::DUPLICATE_USER_BY_LOGIN_ID
 	 */
-	public function addAction(KalturaGroup $group)
+	public function addAction(VidiunGroup $group)
 	{
-		$group->type = KuserType::GROUP;
+		$group->type = VuserType::GROUP;
 		$lockKey = "user_add_" . $this->getPartnerId() . $group->id;
-		$ret =  kLock::runLocked($lockKey, array($this, 'adduserImpl'), array($group));
+		$ret =  vLock::runLocked($lockKey, array($this, 'adduserImpl'), array($group));
 		return $ret;
 	}
 
@@ -43,22 +43,22 @@ class GroupService extends KalturaBaseUserService
 	 * Retrieves a group object for a specified group ID.
 	 * @action get
 	 * @param string $groupId The unique identifier in the partner's system
-	 * @return KalturaGroup The specified user object
+	 * @return VidiunGroup The specified user object
 	 *
-	 * @throws KalturaGroupErrors::INVALID_GROUP_ID
+	 * @throws VidiunGroupErrors::INVALID_GROUP_ID
 	 */
 	public function getAction($groupId)
 	{
 		$dbGroup = $this->getGroup($groupId);
 
-		if (!kCurrentContext::$is_admin_session )//TODO - add validation function to allow access to the group
-			throw new KalturaAPIException(KalturaErrors::CANNOT_RETRIEVE_ANOTHER_USER_USING_NON_ADMIN_SESSION, $groupId);
+		if (!vCurrentContext::$is_admin_session )//TODO - add validation function to allow access to the group
+			throw new VidiunAPIException(VidiunErrors::CANNOT_RETRIEVE_ANOTHER_USER_USING_NON_ADMIN_SESSION, $groupId);
 
 
 		if (!$dbGroup)
-			throw new KalturaAPIException(KalturaGroupErrors::INVALID_GROUP_ID, $groupId);
+			throw new VidiunAPIException(VidiunGroupErrors::INVALID_GROUP_ID, $groupId);
 
-		$group = new KalturaGroup();
+		$group = new VidiunGroup();
 		$group->fromObject($dbGroup, $this->getResponseProfile());
 
 		return $group;
@@ -69,15 +69,15 @@ class GroupService extends KalturaBaseUserService
 	 *
 	 * @action delete
 	 * @param string $groupId The unique identifier in the partner's system
-	 * @return KalturaGroup The deleted  object
-	 * @throws KalturaErrors::INVALID_USER_ID
+	 * @return VidiunGroup The deleted  object
+	 * @throws VidiunErrors::INVALID_USER_ID
 	 */
 	public function deleteAction($groupId)
 	{
 		$dbGroup = self::getGroup($groupId);
-		$dbGroup->setStatus(KalturaUserStatus::DELETED);
+		$dbGroup->setStatus(VidiunUserStatus::DELETED);
 		$dbGroup->save();
-		$group = new KalturaGroup();
+		$group = new VidiunGroup();
 		$group->fromObject($dbGroup, $this->getResponseProfile());
 		return $group;
 	}
@@ -87,16 +87,16 @@ class GroupService extends KalturaBaseUserService
 	 *
 	 * @action update
 	 * @param string $groupId The unique identifier in the partner's system
-	 * @param KalturaGroup the updated object
-	 * @return KalturaGroup The updated  object
-	 * @throws KalturaErrors::INVALID_USER_ID
+	 * @param VidiunGroup the updated object
+	 * @return VidiunGroup The updated  object
+	 * @throws VidiunErrors::INVALID_USER_ID
 	 */
-	public function updateAction($groupId, KalturaGroup $group)
+	public function updateAction($groupId, VidiunGroup $group)
 	{
 		$dbGroup = self::getGroup($groupId);
 		$dbGroup = $group->toUpdatableObject($dbGroup);
 		$dbGroup->save();
-		$group = new KalturaGroup();
+		$group = new VidiunGroup();
 		$group->fromObject($dbGroup, $this->getResponseProfile());
 		return $group;
 	}
@@ -107,17 +107,17 @@ class GroupService extends KalturaBaseUserService
 	 * Deleted users are not listed unless you use a filter to include them.
 	 *
 	 * @action list
-	 * @param KalturaGroupFilter $filter
-	 * @param KalturaFilterPager $pager A limit for the number of records to display on a page
-	 * @return KalturaGroupListResponse The list of user objects
+	 * @param VidiunGroupFilter $filter
+	 * @param VidiunFilterPager $pager A limit for the number of records to display on a page
+	 * @return VidiunGroupListResponse The list of user objects
 	 */
-	public function listAction(KalturaGroupFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunGroupFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaGroupFilter();
+			$filter = new VidiunGroupFilter();
 
 		if(!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 
 		return $filter->getListResponse($pager, $this->getResponseProfile());
 
@@ -125,10 +125,10 @@ class GroupService extends KalturaBaseUserService
 
 	protected function getGroup($groupId)
 	{
-		$dbGroup = kuserPeer::getKuserByPartnerAndUid($this->getPartnerId(), $groupId);
-		if(!$dbGroup || $dbGroup->getType() != KuserType::GROUP)
+		$dbGroup = vuserPeer::getVuserByPartnerAndUid($this->getPartnerId(), $groupId);
+		if(!$dbGroup || $dbGroup->getType() != VuserType::GROUP)
 		{
-			throw new KalturaAPIException(KalturaGroupErrors::INVALID_GROUP_ID);
+			throw new VidiunAPIException(VidiunGroupErrors::INVALID_GROUP_ID);
 		}
 		return $dbGroup;
 	}
@@ -136,37 +136,37 @@ class GroupService extends KalturaBaseUserService
 	/**
 	 * @action searchGroup
 	 * @actionAlias elasticsearch_esearch.searchGroup
-	 * @param KalturaESearchGroupParams $searchParams
-	 * @param KalturaPager $pager
-	 * @return KalturaESearchGroupResponse
+	 * @param VidiunESearchGroupParams $searchParams
+	 * @param VidiunPager $pager
+	 * @return VidiunESearchGroupResponse
 	 */
-	public function searchGroupAction(KalturaESearchGroupParams $searchParams, KalturaPager $pager = null)
+	public function searchGroupAction(VidiunESearchGroupParams $searchParams, VidiunPager $pager = null)
 	{
-		$userSearch = new kUserSearch();
+		$userSearch = new vUserSearch();
 		list($coreResults, $objectCount) = self::initAndSearch($userSearch, $searchParams, $pager);
-		$response = new KalturaESearchGroupResponse();
-		$response->objects = KalturaESearchGroupResultArray::fromDbArray($coreResults, $this->getResponseProfile());
+		$response = new VidiunESearchGroupResponse();
+		$response->objects = VidiunESearchGroupResultArray::fromDbArray($coreResults, $this->getResponseProfile());
 		$response->totalCount = $objectCount;
 		return $response;
 	}
 
 	/**
-	 * @param kBaseSearch $coreSearchObject
+	 * @param vBaseSearch $coreSearchObject
 	 * @param $searchParams
 	 * @param $pager
 	 * @return array
 	 */
 	protected function initAndSearch($coreSearchObject, $searchParams, $pager)
 	{
-		list($coreSearchOperator, $objectStatusesArr, $objectId, $kPager, $coreOrder) =
+		list($coreSearchOperator, $objectStatusesArr, $objectId, $vPager, $coreOrder) =
 			self::initSearchActionParams($searchParams, $pager);
-		$elasticResults = $coreSearchObject->doSearch($coreSearchOperator, $kPager, $objectStatusesArr, $objectId, $coreOrder);
+		$elasticResults = $coreSearchObject->doSearch($coreSearchOperator, $vPager, $objectStatusesArr, $objectId, $coreOrder);
 
-		list($coreResults, $objectCount) = kESearchCoreAdapter::transformElasticToCoreObject($elasticResults, $coreSearchObject);
+		list($coreResults, $objectCount) = vESearchCoreAdapter::transformElasticToCoreObject($elasticResults, $coreSearchObject);
 		return array($coreResults, $objectCount);
 	}
 
-	protected static function initSearchActionParams($searchParams, KalturaPager $pager = null)
+	protected static function initSearchActionParams($searchParams, VidiunPager $pager = null)
 	{
 
 		/**
@@ -175,7 +175,7 @@ class GroupService extends KalturaBaseUserService
 		$coreParams = $searchParams->toObject();
 
 		$groupTypeItem = new ESearchUserItem();
-		$groupTypeItem->setSearchTerm(KuserType::GROUP);
+		$groupTypeItem->setSearchTerm(VuserType::GROUP);
 		$groupTypeItem->setItemType(ESearchItemType::EXACT_MATCH);
 		$groupTypeItem->setFieldName(ESearchUserFieldName::TYPE);
 
@@ -190,13 +190,13 @@ class GroupService extends KalturaBaseUserService
 			$objectStatusesArr = explode(',', $objectStatuses);
 		}
 
-		$kPager = null;
+		$vPager = null;
 		if ($pager)
 		{
-			$kPager = $pager->toObject();
+			$vPager = $pager->toObject();
 		}
 
-		return array($baseOperator, $objectStatusesArr, $coreParams->getObjectId(), $kPager, $coreParams->getOrderBy());
+		return array($baseOperator, $objectStatusesArr, $coreParams->getObjectId(), $vPager, $coreParams->getOrderBy());
 	}
 
 	/**
@@ -205,10 +205,10 @@ class GroupService extends KalturaBaseUserService
 	 * @action clone
 	 * @param string $originalGroupId The unique identifier in the partner's system
 	 * @param string $newGroupName The unique identifier in the partner's system
-	 * @return KalturaGroup The cloned group
+	 * @return VidiunGroup The cloned group
 	 *
-	 * @throws KalturaErrors::INVALID_FIELD_VALUE
-	 * @throws KalturaGroupErrors::INVALID_GROUP_ID
+	 * @throws VidiunErrors::INVALID_FIELD_VALUE
+	 * @throws VidiunGroupErrors::INVALID_GROUP_ID
 	 */
 	public function cloneAction($originalGroupId, $newGroupName)
 	{
@@ -216,38 +216,38 @@ class GroupService extends KalturaBaseUserService
 
 		if (!$dbGroup)
 		{
-			throw new KalturaAPIException(KalturaGroupErrors::INVALID_GROUP_ID, $originalGroupId);
+			throw new VidiunAPIException(VidiunGroupErrors::INVALID_GROUP_ID, $originalGroupId);
 		}
 
-		$dbNewGroup = kuserPeer::getKuserByPartnerAndUid($this->getPartnerId(), $newGroupName);
+		$dbNewGroup = vuserPeer::getVuserByPartnerAndUid($this->getPartnerId(), $newGroupName);
 		if ($dbNewGroup)
 		{
-			throw new KalturaAPIException(KalturaGroupErrors::DUPLICATE_GROUP_BY_ID, $newGroupName);
+			throw new VidiunAPIException(VidiunGroupErrors::DUPLICATE_GROUP_BY_ID, $newGroupName);
 		}
 
-		$group = new KalturaGroup();
+		$group = new VidiunGroup();
 		$newDbGroup = $group->clonedObject($dbGroup, $newGroupName);
 		$group->validateForInsert($newDbGroup);
 		$newDbGroup->save();
 
-		$groupUsers =  KuserKgroupPeer::retrieveKuserKgroupByKgroupId($dbGroup->getId());
-		$kusers = $this->getKusersFromKuserKgroup($groupUsers);
+		$groupUsers =  VuserVgroupPeer::retrieveVuserVgroupByVgroupId($dbGroup->getId());
+		$vusers = $this->getVusersFromVuserVgroup($groupUsers);
 		$GroupUser = new GroupUserService();
-		$GroupUser->addGroupUsersToClonedGroup($kusers, $newDbGroup, $dbGroup->getId());
+		$GroupUser->addGroupUsersToClonedGroup($vusers, $newDbGroup, $dbGroup->getId());
 
 		$group->fromObject($newDbGroup, $this->getResponseProfile());
 
 		return $group;
 	}
 
-	protected function getKusersFromKuserKgroup($groupUsers)
+	protected function getVusersFromVuserVgroup($groupUsers)
 	{
-		$kusers = array();
+		$vusers = array();
 		foreach ($groupUsers as $groupUser)
 		{
-			$kuserId = $groupUser->getKuserId();
-			$kusers[] = kuserPeer::retrieveByPK($kuserId);
+			$vuserId = $groupUser->getVuserId();
+			$vusers[] = vuserPeer::retrieveByPK($vuserId);
 		}
-		return $kusers;
+		return $vusers;
 	}
 }

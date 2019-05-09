@@ -23,15 +23,15 @@ echo "Running php $script $config";
 passthru("php $script $config");
 
 /// adding objects permissions
-$config = realpath(dirname(__FILE__)) . '/../../../permissions/object.KalturaReachProfile.ini';
+$config = realpath(dirname(__FILE__)) . '/../../../permissions/object.VidiunReachProfile.ini';
 echo "Running php $script $config";
 passthru("php $script $config");
 
-$config = realpath(dirname(__FILE__)) . '/../../../permissions/object.KalturaEntryVendorTask.ini';
+$config = realpath(dirname(__FILE__)) . '/../../../permissions/object.VidiunEntryVendorTask.ini';
 echo "Running php $script $config";
 passthru("php $script $config");
 
-$config = realpath(dirname(__FILE__)) . '/../../../permissions/object.KalturaVendorCatalogItem.ini';
+$config = realpath(dirname(__FILE__)) . '/../../../permissions/object.VidiunVendorCatalogItem.ini';
 echo "Running php $script $config";
 passthru("php $script $config");
 

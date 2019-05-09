@@ -3,7 +3,7 @@
  * @package plugins.dailymotionDistribution
  * @subpackage lib
  */
-class DailymotionDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class DailymotionDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const DAILYMOTION = 'DAILYMOTION';
 	

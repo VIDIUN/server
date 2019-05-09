@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . "/model/ktagword.class.php");
+require_once(__DIR__ . "/model/vtagword.class.php");
 
 	/**
 	 * Tag Cloud
@@ -118,7 +118,7 @@ require_once(__DIR__ . "/model/ktagword.class.php");
 			preg_match_all('/\\b(\\w+?)\\b/i', $tc_content, $regs, PREG_PATTERN_ORDER);
 			foreach ($regs[0] as $tc_word) {
 				$tc_word = strtolower(trim($tc_word));
-				$tc_a_tags[$tc_word] = ktagword::getWeight($tc_word);
+				$tc_a_tags[$tc_word] = vtagword::getWeight($tc_word);
 			}
 
 
@@ -142,7 +142,7 @@ require_once(__DIR__ . "/model/ktagword.class.php");
 		 */
 		static public function renderTopTags ()
 		{
-			$tagword_count_list = ktagword::getTopTags();
+			$tagword_count_list = vtagword::getTopTags();
 			
 			$tag_list = array ();
 			foreach ( $tagword_count_list as $tagword_count  )
@@ -164,7 +164,7 @@ require_once(__DIR__ . "/model/ktagword.class.php");
 				
 			foreach ($tc_array as $tc_word) {
 				$tc_word = strtolower(trim($tc_word));
-				$tc_a_tags[$tc_word] = ktagword::getWeight($tc_word);
+				$tc_a_tags[$tc_word] = vtagword::getWeight($tc_word);
 			}
 
 
@@ -191,7 +191,7 @@ require_once(__DIR__ . "/model/ktagword.class.php");
 			$res = "";
 			if (  empty ( $tag_str ) ) return $res;
 			
-			$tag_list = ktagword::getTagsArray ( $tag_str );
+			$tag_list = vtagword::getTagsArray ( $tag_str );
 			$total_tag_count = min ( $max_number_of_tags , count ( $tag_list) );
 			$displayed_tag_count = 0;
 			foreach ( $tag_list as $tag ) 

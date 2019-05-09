@@ -3,17 +3,17 @@
  * @package api
  * @subpackage objects
  */
-class KalturaConversionProfileArray extends KalturaTypedArray
+class VidiunConversionProfileArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaConversionProfileArray();
+		$newArr = new VidiunConversionProfileArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaConversionProfile();
+    		$nObj = new VidiunConversionProfile();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,7 +23,7 @@ class KalturaConversionProfileArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaConversionProfile");	
+		parent::__construct("VidiunConversionProfile");	
 	}
 	
 	public function loadFlavorParamsIds()

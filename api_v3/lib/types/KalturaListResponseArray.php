@@ -1,14 +1,14 @@
 <?php
 /**
- * Associative array of KalturaListResponse
+ * Associative array of VidiunListResponse
  * 
  * @package api
  * @subpackage objects
  */
-class KalturaListResponseArray extends KalturaAssociativeArray
+class VidiunListResponseArray extends VidiunAssociativeArray
 {
 	public function __construct()
 	{
-		return parent::__construct("KalturaListResponse");
+		return parent::__construct("VidiunListResponse");
 	}
 }

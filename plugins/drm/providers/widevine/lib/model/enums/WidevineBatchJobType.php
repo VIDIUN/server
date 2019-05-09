@@ -4,7 +4,7 @@
  * @package plugins.widevine
  * @subpackage model.enum
  */ 
-class WidevineBatchJobType implements IKalturaPluginEnum, BatchJobType
+class WidevineBatchJobType implements IVidiunPluginEnum, BatchJobType
 {
 	const WIDEVINE_REPOSITORY_SYNC = 'WidevineRepositorySync';
 	

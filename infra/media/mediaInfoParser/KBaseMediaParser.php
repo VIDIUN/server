@@ -3,13 +3,13 @@
  * @package server-infra
  * @subpackage Media
  */
-abstract class KBaseMediaParser
+abstract class VBaseMediaParser
 {
 	const MEDIA_PARSER_TYPE_MEDIAINFO = '0';
 	const MEDIA_PARSER_TYPE_FFMPEG = '1';
 	
-	const ERROR_NFS_FILE_DOESNT_EXIST = 21; // KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST
-	const ERROR_EXTRACT_MEDIA_FAILED = 31; // KalturaBatchJobAppErrors::EXTRACT_MEDIA_FAILED
+	const ERROR_NFS_FILE_DOESNT_EXIST = 21; // VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST
+	const ERROR_EXTRACT_MEDIA_FAILED = 31; // VidiunBatchJobAppErrors::EXTRACT_MEDIA_FAILED
 	
 	/**
 	 * @var string
@@ -19,21 +19,21 @@ abstract class KBaseMediaParser
 	/**
 	 * @param string $type
 	 * @param string $filePath
-	 * @param KSchedularTaskConfig $taskConfig
-	 * @return KBaseMediaParser
+	 * @param VSchedularTaskConfig $taskConfig
+	 * @return VBaseMediaParser
 	 */
-	public static function getParser($type, $filePath, KSchedularTaskConfig $taskConfig, KalturaBatchJob $job)
+	public static function getParser($type, $filePath, VSchedularTaskConfig $taskConfig, VidiunBatchJob $job)
 	{
 		switch($type)
 		{
 			case self::MEDIA_PARSER_TYPE_MEDIAINFO:
-				return new KMediaInfoMediaParser($filePath, $taskConfig->params->mediaInfoCmd);
+				return new VMediaInfoMediaParser($filePath, $taskConfig->params->mediaInfoCmd);
 				
 			case self::MEDIA_PARSER_TYPE_FFMPEG:
-				return new KFFMpegMediaParser($filePath, $taskConfig->params->FFMpegCmd);
+				return new VFFMpegMediaParser($filePath, $taskConfig->params->FFMpegCmd);
 				
 			default:
-				return KalturaPluginManager::loadObject('KBaseMediaParser', $type, array($job, $taskConfig));
+				return VidiunPluginManager::loadObject('VBaseMediaParser', $type, array($job, $taskConfig));
 		}
 	}
 	
@@ -46,7 +46,7 @@ abstract class KBaseMediaParser
 	}
 	
 	/**
-	 * @return KalturaMediaInfo
+	 * @return VidiunMediaInfo
 	 */
 	public function getMediaInfo()
 	{
@@ -68,20 +68,20 @@ abstract class KBaseMediaParser
 	public function getRawMediaInfo()
 	{
 		$cmd = $this->getCommand();
-		KalturaLog::debug("Executing '$cmd'");
+		VidiunLog::debug("Executing '$cmd'");
 		$output = shell_exec($cmd);
 		if (trim($output) === "")
-			throw new kApplicativeException(KBaseMediaParser::ERROR_EXTRACT_MEDIA_FAILED, "Failed to parse media using " . get_class($this));
+			throw new vApplicativeException(VBaseMediaParser::ERROR_EXTRACT_MEDIA_FAILED, "Failed to parse media using " . get_class($this));
 			
 		return $output;
 	}
 	
 	/**
 	 * 
-	 * @param KalturaMediaInfo $mediaInfo
-	 * @return KalturaMediaInfo
+	 * @param VidiunMediaInfo $mediaInfo
+	 * @return VidiunMediaInfo
 	 */
-	public static function removeUnsetFields(KalturaMediaInfo $mediaInfo)
+	public static function removeUnsetFields(VidiunMediaInfo $mediaInfo)
 	{
 		foreach($mediaInfo as $key => $value) {
            	if(!isset($value)){
@@ -93,11 +93,11 @@ abstract class KBaseMediaParser
 	
 	/**
 	 * 
-	 * @param KalturaMediaInfo $mIn
-	 * @param KalturaMediaInfo $mOut
-	 * @return KalturaMediaInfo
+	 * @param VidiunMediaInfo $mIn
+	 * @param VidiunMediaInfo $mOut
+	 * @return VidiunMediaInfo
 	 */
-	public static function copyFields(KalturaMediaInfo $mIn, KalturaMediaInfo $mOut)
+	public static function copyFields(VidiunMediaInfo $mIn, VidiunMediaInfo $mOut)
 	{
 		foreach($mIn as $key => $value) {
 			$mOut->$key = $mIn->$key;
@@ -107,8 +107,8 @@ abstract class KBaseMediaParser
 
 	/**
 	 * 
-	 * @param KalturaMediaInfo $m1
-	 * @param KalturaMediaInfo $m2
+	 * @param VidiunMediaInfo $m1
+	 * @param VidiunMediaInfo $m2
 	 */
 	public static function compareFields($m1, $m2)
 	{
@@ -270,10 +270,10 @@ $audio_codec_id_synonyms = array(
 	
 	/**
 	 * 
-	 * @param KalturaMediaInfo $mediaInfo
+	 * @param VidiunMediaInfo $mediaInfo
 	 * @return boolean
 	 */
-	public static function isVideoSet(KalturaMediaInfo $mediaInfo)
+	public static function isVideoSet(VidiunMediaInfo $mediaInfo)
 	{
 		if(isset($mediaInfo->videoCodecId))
 			return true;
@@ -299,10 +299,10 @@ $audio_codec_id_synonyms = array(
 	
 	/**
 	 * 
-	 * @param KalturaMediaInfo $mediaInfo
+	 * @param VidiunMediaInfo $mediaInfo
 	 * @return boolean
 	 */
-	public static function isAudioSet(KalturaMediaInfo $mediaInfo)
+	public static function isAudioSet(VidiunMediaInfo $mediaInfo)
 	{
 		if(isset($mediaInfo->audioCodecId))
 			return true;
@@ -349,10 +349,10 @@ $audio_codec_id_synonyms = array(
 	
 	/**
 	 * Set 'empty' video params fields with ffmpeg/ffprobe values
-	 * @param KalturaMediaInfo $mediaInfo
-	 * 		  KalturaMediaInfo $mediaInfoFix
+	 * @param VidiunMediaInfo $mediaInfo
+	 * 		  VidiunMediaInfo $mediaInfoFix
 	 */
-	protected static function setVideoParams(KalturaMediaInfo $mediaInfo, KalturaMediaInfo $mediaInfoFix)
+	protected static function setVideoParams(VidiunMediaInfo $mediaInfo, VidiunMediaInfo $mediaInfoFix)
 	{
 		$fieldsArr = array("videoCodecId","videoFormat","videoDuration","videoBitRate","videoWidth","videoHeight","videoFrameRate","videoDar");
 		foreach($fieldsArr as $field) {
@@ -363,10 +363,10 @@ $audio_codec_id_synonyms = array(
 	
 	/**
 	 * Set 'empty' audio params fields with ffmpeg/ffprobe values
-	 * @param KalturaMediaInfo $mediaInfo
-	 * 		  KalturaMediaInfo $mediaInfoFix
+	 * @param VidiunMediaInfo $mediaInfo
+	 * 		  VidiunMediaInfo $mediaInfoFix
 	 */
-	protected static function setAudioParams(KalturaMediaInfo $mediaInfo, KalturaMediaInfo $mediaInfoFix)
+	protected static function setAudioParams(VidiunMediaInfo $mediaInfo, VidiunMediaInfo $mediaInfoFix)
 	{
 		$fieldsArr = array("audioCodecId","audioFormat","audioDuration","audioBitRate","audioSamplingRate","audioResolution","audioChannels");
 		foreach($fieldsArr as $field) {
@@ -377,10 +377,10 @@ $audio_codec_id_synonyms = array(
 	
 	/**
 	 * Adjust/fix duration fields with ffmpeg/ffprobe values
-	 * @param KalturaMediaInfo $mediaInfo
-	 * 		  KalturaMediaInfo $mediaInfoFix
+	 * @param VidiunMediaInfo $mediaInfo
+	 * 		  VidiunMediaInfo $mediaInfoFix
 	 */
-	protected static function adjustDurations(KalturaMediaInfo $mediaInfo, KalturaMediaInfo $mediaInfoFix)
+	protected static function adjustDurations(VidiunMediaInfo $mediaInfo, VidiunMediaInfo $mediaInfoFix)
 	{
 		$fieldsArr = array("audioDuration","videoDuration","containerDuration");
 		foreach($fieldsArr as $field) {
@@ -402,7 +402,7 @@ $audio_codec_id_synonyms = array(
 	/**
 	 * 
 	 * @param string $output
-	 * @return KalturaMediaInfo
+	 * @return VidiunMediaInfo
 	 */
 	protected abstract function parseOutput($output);
 }

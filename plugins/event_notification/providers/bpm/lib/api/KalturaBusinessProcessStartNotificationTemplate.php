@@ -3,7 +3,7 @@
  * @package plugins.businessProcessNotification
  * @subpackage api.objects
  */
-class KalturaBusinessProcessStartNotificationTemplate extends KalturaBusinessProcessNotificationTemplate
+class VidiunBusinessProcessStartNotificationTemplate extends VidiunBusinessProcessNotificationTemplate
 {	
 	/**
 	 * Abort the process automatically if the triggering object deleted
@@ -25,7 +25,7 @@ class KalturaBusinessProcessStartNotificationTemplate extends KalturaBusinessPro
 	);
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -33,7 +33,7 @@ class KalturaBusinessProcessStartNotificationTemplate extends KalturaBusinessPro
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{

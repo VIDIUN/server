@@ -5,12 +5,12 @@
  * @package Core
  * @subpackage model.data
  */
-class kEffect
+class vEffect
 {
 
 	/**
 	 * audio fade in MilSec
-	 * @var kEffectType
+	 * @var vEffectType
 	 */
 	private $effectType;
 
@@ -22,7 +22,7 @@ class kEffect
 	private $value;
 
 	/**
-	 * @return kEffectType
+	 * @return vEffectType
 	 */
 	public function getEffectType()
 	{
@@ -30,7 +30,7 @@ class kEffect
 	}
 
 	/**
-	 * @param kEffectType $effectType
+	 * @param vEffectType $effectType
 	 */
 	public function setEffectType($effectType)
 	{

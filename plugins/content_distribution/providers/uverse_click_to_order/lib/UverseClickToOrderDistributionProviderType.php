@@ -3,7 +3,7 @@
  * @package plugins.uverseClickToOrderDistribution
  * @subpackage lib
  */
-class UverseClickToOrderDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class UverseClickToOrderDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const UVERSE_CLICK_TO_ORDER = 'UVERSE_CLICK_TO_ORDER';
 	

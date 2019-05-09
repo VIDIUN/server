@@ -3,22 +3,22 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class kEmailNotificationRecipient
+class vEmailNotificationRecipient
 {
 	/**
 	 * Recipient e-mail address
-	 * @var kStringValue
+	 * @var vStringValue
 	 */
 	protected $email;
 	
 	/**
 	 * Recipient name
-	 * @var kStringValue
+	 * @var vStringValue
 	 */
 	protected $name;
 	
 	/**
-	 * @return kStringValue $email
+	 * @return vStringValue $email
 	 */
 	public function getEmail()
 	{
@@ -26,7 +26,7 @@ class kEmailNotificationRecipient
 	}
 
 	/**
-	 * @return kStringValue $name
+	 * @return vStringValue $name
 	 */
 	public function getName()
 	{
@@ -34,17 +34,17 @@ class kEmailNotificationRecipient
 	}
 
 	/**
-	 * @param kStringValue $email
+	 * @param vStringValue $email
 	 */
-	public function setEmail(kStringValue $email)
+	public function setEmail(vStringValue $email)
 	{
 		$this->email = $email;
 	}
 
 	/**
-	 * @param kStringValue $name
+	 * @param vStringValue $name
 	 */
-	public function setName(kStringValue $name)
+	public function setName(vStringValue $name)
 	{
 		$this->name = $name;
 	}

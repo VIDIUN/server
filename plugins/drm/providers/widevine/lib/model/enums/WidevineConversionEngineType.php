@@ -3,7 +3,7 @@
  * @package plugins.widevine
  * @subpackage model.enum
  */
-class WidevineConversionEngineType implements IKalturaPluginEnum, conversionEngineType
+class WidevineConversionEngineType implements IVidiunPluginEnum, conversionEngineType
 {
 	const WIDEVINE = 'Widevine';
 	

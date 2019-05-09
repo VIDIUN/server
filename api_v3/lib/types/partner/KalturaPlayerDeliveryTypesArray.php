@@ -3,25 +3,25 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPlayerDeliveryTypesArray extends KalturaTypedArray
+class VidiunPlayerDeliveryTypesArray extends VidiunTypedArray
 {
 	public function __construct()
 	{
-		return parent::__construct("KalturaPlayerDeliveryType");
+		return parent::__construct("VidiunPlayerDeliveryType");
 	}
 
-	public static function fromDbArray(array $arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$ret = new KalturaPlayerDeliveryTypesArray();
+		$ret = new VidiunPlayerDeliveryTypesArray();
 		foreach($arr as $id => $item)
 		{
-			$obj = new KalturaPlayerDeliveryType();
+			$obj = new VidiunPlayerDeliveryType();
 			$obj->id = $id;
 			$obj->fromArray($item);
 			$obj->enabledByDefault = (bool)$obj->enabledByDefault;
 				
 			if(isset($item['flashvars']))
-				$obj->flashvars = KalturaKeyValueArray::fromDbArray($item['flashvars']);
+				$obj->flashvars = VidiunKeyValueArray::fromDbArray($item['flashvars']);
 				
 			$ret[] = $obj;
 		}

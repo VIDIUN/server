@@ -3,15 +3,15 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchCategoryEntryItem extends KalturaESearchAbstractEntryItem
+class VidiunESearchCategoryEntryItem extends VidiunESearchAbstractEntryItem
 {
 	/**
-	 * @var KalturaESearchCategoryEntryFieldName
+	 * @var VidiunESearchCategoryEntryFieldName
 	 */
 	public $fieldName;
 
 	/**
-	 * @var KalturaCategoryEntryStatus
+	 * @var VidiunCategoryEntryStatus
 	 */
 	public $categoryEntryStatus;
 
@@ -23,11 +23,11 @@ class KalturaESearchCategoryEntryItem extends KalturaESearchAbstractEntryItem
 	private static $map_dynamic_enum = array();
 
 	private static $map_field_enum = array(
-		KalturaESearchCategoryEntryFieldName::ID => ESearchCategoryEntryFieldName::ID,
-		KalturaESearchCategoryEntryFieldName::FULL_IDS => ESearchCategoryEntryFieldName::FULL_IDS,
-		KalturaESearchCategoryEntryFieldName::NAME => ESearchCategoryEntryFieldName::NAME,
-		KalturaESearchCategoryEntryFieldName::ANCESTOR_ID => ESearchCategoryEntryFieldName::ANCESTOR_ID,
-		KalturaESearchCategoryEntryFieldName::ANCESTOR_NAME => ESearchCategoryEntryFieldName::ANCESTOR_NAME,
+		VidiunESearchCategoryEntryFieldName::ID => ESearchCategoryEntryFieldName::ID,
+		VidiunESearchCategoryEntryFieldName::FULL_IDS => ESearchCategoryEntryFieldName::FULL_IDS,
+		VidiunESearchCategoryEntryFieldName::NAME => ESearchCategoryEntryFieldName::NAME,
+		VidiunESearchCategoryEntryFieldName::ANCESTOR_ID => ESearchCategoryEntryFieldName::ANCESTOR_ID,
+		VidiunESearchCategoryEntryFieldName::ANCESTOR_NAME => ESearchCategoryEntryFieldName::ANCESTOR_NAME,
 	);
 
 	protected function getMapBetweenObjects()

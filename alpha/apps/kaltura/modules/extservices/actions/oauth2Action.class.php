@@ -8,27 +8,27 @@ abstract class oauth2Action extends sfAction{
 
 	const EXPIRY_SECONDS = 1800; // 30 minutes
 
-	private function generateKs($partnerId, $additionalData, $privileges)
+	private function generateVs($partnerId, $additionalData, $privileges)
 	{
 		$partner = $this->getPartner($partnerId);
-		$limitedKs = '';
-		$result = kSessionUtils::startKSession($partnerId, $partner->getAdminSecret(), '', $limitedKs, self::EXPIRY_SECONDS, kSessionBase::SESSION_TYPE_ADMIN, '', $privileges, null, $additionalData);
+		$limitedVs = '';
+		$result = vSessionUtils::startVSession($partnerId, $partner->getAdminSecret(), '', $limitedVs, self::EXPIRY_SECONDS, vSessionBase::SESSION_TYPE_ADMIN, '', $privileges, null, $additionalData);
 		if ($result < 0)
 			throw new Exception('Failed to create limited session for partner '.$partnerId);
 
-		return $limitedKs;
+		return $limitedVs;
 	}
 
-	protected function generateTimeLimitedKsWithData($partnerId, $stateData)
+	protected function generateTimeLimitedVsWithData($partnerId, $stateData)
 	{
-		$privileges = kSessionBase::PRIVILEGE_ACTIONS_LIMIT.':0';
+		$privileges = vSessionBase::PRIVILEGE_ACTIONS_LIMIT.':0';
 		$additionalData =  json_encode($stateData);
-		return $this->generateKs($partnerId, $additionalData, $privileges);
+		return $this->generateVs($partnerId, $additionalData, $privileges);
 	}
 
-	protected function generateTimeLimitedKs($partnerId)
+	protected function generateTimeLimitedVs($partnerId)
 	{
-		return $this->generateKs($partnerId, null, null);
+		return $this->generateVs($partnerId, null, null);
 	}
 
 	protected function getPartner($partnerId)
@@ -40,41 +40,41 @@ abstract class oauth2Action extends sfAction{
 		return $partner;
 	}
 
-	protected function processKs($ksStr, $requiredPermission = null)
+	protected function processVs($vsStr, $requiredPermission = null)
 	{
 		try
 		{
-			kCurrentContext::initKsPartnerUser($ksStr);
+			vCurrentContext::initVsPartnerUser($vsStr);
 		}
 		catch(Exception $ex)
 		{
-			KalturaLog::err($ex);
+			VidiunLog::err($ex);
 			return false;
 		}
 
-		if (kCurrentContext::$ks_object->type != ks::SESSION_TYPE_ADMIN)
+		if (vCurrentContext::$vs_object->type != vs::SESSION_TYPE_ADMIN)
 		{
-			KalturaLog::err('Ks is not admin');
+			VidiunLog::err('Vs is not admin');
 			return false;
 		}
 
 		try
 		{
-			kPermissionManager::init(kConf::get('enable_cache'));
+			vPermissionManager::init(vConf::get('enable_cache'));
 		}
 		catch(Exception $ex)
 		{
-			if (strpos($ex->getCode(), 'INVALID_ACTIONS_LIMIT') === false) // allow using limited ks
+			if (strpos($ex->getCode(), 'INVALID_ACTIONS_LIMIT') === false) // allow using limited vs
 			{
-				KalturaLog::err($ex);
+				VidiunLog::err($ex);
 				return false;
 			}
 		}
 		if ($requiredPermission)
 		{
-			if (!kPermissionManager::isPermitted(PermissionName::ADMIN_PUBLISHER_MANAGE))
+			if (!vPermissionManager::isPermitted(PermissionName::ADMIN_PUBLISHER_MANAGE))
 			{
-				KalturaLog::err('Ks is missing "ADMIN_PUBLISHER_MANAGE" permission');
+				VidiunLog::err('Vs is missing "ADMIN_PUBLISHER_MANAGE" permission');
 				return false;
 			}
 		}

@@ -3,12 +3,12 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBatchJobResponse extends KalturaObject 
+class VidiunBatchJobResponse extends VidiunObject 
 {
 	/**
 	 * The main batch job
 	 * 
-	 * @var KalturaBatchJob
+	 * @var VidiunBatchJob
 	 */
 	public $batchJob;
 	
@@ -16,7 +16,7 @@ class KalturaBatchJobResponse extends KalturaObject
 	/**
 	 * All batch jobs that reference the main job as root
 	 * 
-	 * @var KalturaBatchJobArray
+	 * @var VidiunBatchJobArray
 	 */
 	public $childBatchJobs;
 }

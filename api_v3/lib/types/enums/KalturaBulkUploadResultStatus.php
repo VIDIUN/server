@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaBulkUploadResultStatus extends KalturaDynamicEnum implements BulkUploadResultStatus
+class VidiunBulkUploadResultStatus extends VidiunDynamicEnum implements BulkUploadResultStatus
 {
 	public static function getEnumClass()
 	{

@@ -3,13 +3,13 @@
  * Enable time based cue point objects management on entry objects
  * @package plugins.cuePoint
  */
-class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKalturaPermissions, IKalturaEventConsumers, IKalturaVersion, IKalturaEnumerator, IKalturaSchemaContributor, IKalturaSchemaDefiner, IKalturaMrssContributor, IKalturaSearchDataContributor, IKalturaElasticSearchDataContributor
+class CuePointPlugin extends VidiunPlugin implements IVidiunServices, IVidiunPermissions, IVidiunEventConsumers, IVidiunVersion, IVidiunEnumerator, IVidiunSchemaContributor, IVidiunSchemaDefiner, IVidiunMrssContributor, IVidiunSearchDataContributor, IVidiunElasticSearchDataContributor
 {
 	const PLUGIN_NAME = 'cuePoint';
 	const PLUGIN_VERSION_MAJOR = 1;
 	const PLUGIN_VERSION_MINOR = 0;
 	const PLUGIN_VERSION_BUILD = 0;
-	const CUE_POINT_MANAGER = 'kCuePointManager';
+	const CUE_POINT_MANAGER = 'vCuePointManager';
 	const SEARCH_FIELD_DATA = 'data';
 	const SEARCH_TEXT_SUFFIX = 'cpend';
 	const ENTRY_CUE_POINT_INDEX_PREFIX = 'cps_';
@@ -20,7 +20,7 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -28,11 +28,11 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaVersion::getVersion()
+	 * @see IVidiunVersion::getVersion()
 	 */
 	public static function getVersion()
 	{
-		return new KalturaVersion(
+		return new VidiunVersion(
 			self::PLUGIN_VERSION_MAJOR,
 			self::PLUGIN_VERSION_MINOR,
 			self::PLUGIN_VERSION_BUILD
@@ -40,7 +40,7 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -49,7 +49,7 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{
@@ -61,7 +61,7 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -71,7 +71,7 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -88,11 +88,11 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if($coreType != SchemaType::SYNDICATION)
 			return null;
 			
@@ -197,9 +197,9 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaMrssContributor::contribute()
+	 * @see IVidiunMrssContributor::contribute()
 	 */
-	public function contribute(BaseObject $object, SimpleXMLElement $mrss, kMrssParameters $mrssParams = null)
+	public function contribute(BaseObject $object, SimpleXMLElement $mrss, vMrssParameters $mrssParams = null)
 	{
 		if(!($object instanceof entry))
 			return;
@@ -209,15 +209,15 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 			return;
 		
 		$scenes = $mrss->addChild('scenes');
-		kCuePointManager::syndicate($cuePoints, $scenes);
+		vCuePointManager::syndicate($cuePoints, $scenes);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function getPluginSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		
 		if($coreType == self::getSchemaTypeCoreValue(CuePointSchemaType::INGEST_API))
 			return new SimpleXMLElement(file_get_contents(dirname(__FILE__) . '/xml/ingestion.xsd'));
@@ -233,8 +233,8 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	 */
 	public static function getSchemaTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('SchemaType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('SchemaType', $value);
 	}
 	
 	/**
@@ -242,8 +242,8 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	 */
 	public static function getObjectFeatureTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('ObjectFeatureType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('ObjectFeatureType', $value);
 	}
 	
 	/**
@@ -251,11 +251,11 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaMrssContributor::getObjectFeatureType()
+	 * @see IVidiunMrssContributor::getObjectFeatureType()
 	 */
 	public function getObjectFeatureType ()
 	{
@@ -263,7 +263,7 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSearchDataContributor::getSearchData()
+	 * @see IVidiunSearchDataContributor::getSearchData()
 	 */
 	public static function getSearchData(BaseObject $object)
 	{
@@ -314,7 +314,7 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 			$offset += $handledObjectsCount;
 		} 
 		while ($handledObjectsCount == self::CUE_POINT_FETCH_LIMIT && //In case cue point was deleted during index execution than offset will not reach count so break when count is 0
-					$contributedDataSize < kSphinxSearchManager::MAX_SIZE_FOR_PLUGIN_SEARCH_DATA);
+					$contributedDataSize < vSphinxSearchManager::MAX_SIZE_FOR_PLUGIN_SEARCH_DATA);
 		
 		
 		$dataField  = CuePointPlugin::getSearchFieldName(CuePointPlugin::SEARCH_FIELD_DATA);
@@ -341,7 +341,7 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	{
 		$indexOnEntryTypes = array();
 		
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaCuePoint');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunCuePoint');
 		foreach ($pluginInstances as $pluginInstance)
 		{
 			$currIndexOnEntryTypes = $pluginInstance::getTypesToIndexOnEntry();
@@ -402,8 +402,8 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 				if(!$contributedData)
 					continue;
 
-				if (isset($contributedData['cue_point_text']) && (strlen($contributedData['cue_point_text']) > kElasticSearchManager::MAX_LENGTH))
-					$contributedData['cue_point_text'] = substr($contributedData['cue_point_text'], 0, kElasticSearchManager::MAX_LENGTH);
+				if (isset($contributedData['cue_point_text']) && (strlen($contributedData['cue_point_text']) > vElasticSearchManager::MAX_LENGTH))
+					$contributedData['cue_point_text'] = substr($contributedData['cue_point_text'], 0, vElasticSearchManager::MAX_LENGTH);
 
 				$cuePointData = $contributedData;
 				$cuePointData['cue_point_type'] = $cuePoint->getType();
@@ -413,14 +413,14 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 				if(!is_null($cuePoint->getEndTime()))
 					$cuePointData['cue_point_end_time'] = $cuePoint->getEndTime();
 				//add cue point metadata - todo maybe add checkbox
-//				$metaDataPlugin = KalturaPluginManager::getPluginInstance(CuePointMetadataPlugin::PLUGIN_NAME);
+//				$metaDataPlugin = VidiunPluginManager::getPluginInstance(CuePointMetadataPlugin::PLUGIN_NAME);
 //				if($metaDataPlugin)
 //				{
 //					$cuePointElasticMetaData = $metaDataPlugin::getElasticSearchData($cuePoint);
 //
-//					if($cuePointElasticMetaData && count($cuePointElasticMetaData[kMetadataManager::ELASTIC_DATA_FIELD_NAME]))
+//					if($cuePointElasticMetaData && count($cuePointElasticMetaData[vMetadataManager::ELASTIC_DATA_FIELD_NAME]))
 //					{
-//						foreach ($cuePointElasticMetaData[kMetadataManager::ELASTIC_DATA_FIELD_NAME] as $fieldName => $fieldValue)
+//						foreach ($cuePointElasticMetaData[vMetadataManager::ELASTIC_DATA_FIELD_NAME] as $fieldName => $fieldValue)
 //						{
 //							$cuePointData['cue_point_metadata'][$fieldName] = $fieldValue;
 //						}
@@ -433,7 +433,7 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 			$offset += $handledObjectsCount;
 		}
 		while ($handledObjectsCount == self::CUE_POINT_FETCH_LIMIT &&
-			$offset < kElasticSearchManager::MAX_CUE_POINTS); //remove after we move to php7
+			$offset < vElasticSearchManager::MAX_CUE_POINTS); //remove after we move to php7
 
 		if(count($data))
 			$cuePoints['cue_points'] = $data;
@@ -444,7 +444,7 @@ class CuePointPlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	public static function getElasticIndexOnEntryTypes()
 	{
 		$indexOnEntryTypes = array();
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaCuePoint');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunCuePoint');
 		foreach ($pluginInstances as $pluginInstance)
 		{
 			$currIndexOnEntryTypes = $pluginInstance::getTypesToElasticIndexOnEntry();

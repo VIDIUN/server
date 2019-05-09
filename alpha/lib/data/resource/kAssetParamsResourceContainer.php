@@ -3,11 +3,11 @@
  * @package Core
  * @subpackage model.data
  */
-class kAssetParamsResourceContainer extends kResource 
+class vAssetParamsResourceContainer extends vResource 
 {
 	/**
 	 * The content resource to associate with asset params
-	 * @var kContentResource
+	 * @var vContentResource
 	 */
 	private $resource;
 	
@@ -18,7 +18,7 @@ class kAssetParamsResourceContainer extends kResource
 	private $assetParamsId;
 	
 	/**
-	 * @return kContentResource
+	 * @return vContentResource
 	 */
 	public function getResource()
 	{
@@ -34,9 +34,9 @@ class kAssetParamsResourceContainer extends kResource
 	}
 
 	/**
-	 * @param kContentResource $resource
+	 * @param vContentResource $resource
 	 */
-	public function setResource(kContentResource $resource)
+	public function setResource(vContentResource $resource)
 	{
 		$this->resource = $resource;
 	}

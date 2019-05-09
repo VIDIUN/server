@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage batch
  */
-class kEntryVendorTaskCsvJobData extends kExportCsvJobData
+class vEntryVendorTaskCsvJobData extends vExportCsvJobData
 {
 	/**
 	 * The filter should return the list of users that need to be specified in the csv.

@@ -4,32 +4,32 @@
  * @subpackage api.objects
  * @abstract
  */
-abstract class KalturaHttpNotificationData extends KalturaObject
+abstract class VidiunHttpNotificationData extends VidiunObject
 {
 	/**
-	 * @param kHttpNotificationData $coreObject
-	 * @return KalturaHttpNotificationData
+	 * @param vHttpNotificationData $coreObject
+	 * @return VidiunHttpNotificationData
 	 */
-	public static function getInstance(kHttpNotificationData $coreObject)
+	public static function getInstance(vHttpNotificationData $coreObject)
 	{
 		$dataType = get_class($coreObject);
 		$data = null;
 		switch ($dataType)
 		{
-			case 'kHttpNotificationDataFields':
-				$data = new KalturaHttpNotificationDataFields();
+			case 'vHttpNotificationDataFields':
+				$data = new VidiunHttpNotificationDataFields();
 				break;
 				
-			case 'kHttpNotificationDataText':
-				$data = new KalturaHttpNotificationDataText();
+			case 'vHttpNotificationDataText':
+				$data = new VidiunHttpNotificationDataText();
 				break;
 				
-			case 'kHttpNotificationObjectData':
-				$data = new KalturaHttpNotificationObjectData();
+			case 'vHttpNotificationObjectData':
+				$data = new VidiunHttpNotificationObjectData();
 				break;
 				
 			default:
-				$data = KalturaPluginManager::loadObject('KalturaHttpNotificationData', $dataType);
+				$data = VidiunPluginManager::loadObject('VidiunHttpNotificationData', $dataType);
 				break;
 		}
 		
@@ -40,8 +40,8 @@ abstract class KalturaHttpNotificationData extends KalturaObject
 	}
 
 	/**
-	 * @param $jobData kHttpNotificationDispatchJobData
+	 * @param $jobData vHttpNotificationDispatchJobData
 	 * @return string the data to be sent
 	 */
-	abstract public function getData(kHttpNotificationDispatchJobData $jobData = null);
+	abstract public function getData(vHttpNotificationDispatchJobData $jobData = null);
 }

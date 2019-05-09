@@ -3,7 +3,7 @@
  * @package plugins.schedule
  * @subpackage api.objects
  */
-class KalturaScheduleEventRecurrence extends KalturaObject
+class VidiunScheduleEventRecurrence extends VidiunObject
 {
 	/**
 	 * @var string
@@ -11,7 +11,7 @@ class KalturaScheduleEventRecurrence extends KalturaObject
 	public $name;
 	
 	/**
-	 * @var KalturaScheduleEventRecurrenceFrequency
+	 * @var VidiunScheduleEventRecurrenceFrequency
 	 */
 	public $frequency;
 	
@@ -55,7 +55,7 @@ class KalturaScheduleEventRecurrence extends KalturaObject
 	public $byHour;
 	
 	/**
-	 * Comma separated of KalturaScheduleEventRecurrenceDay
+	 * Comma separated of VidiunScheduleEventRecurrenceDay
 	 * Each byDay value can also be preceded by a positive (+n) or negative (-n) integer.
 	 * If present, this indicates the nth occurrence of the specific day within the MONTHLY or YEARLY RRULE.
 	 * For example, within a MONTHLY rule, +1MO (or simply 1MO) represents the first Monday within the month, whereas -1MO represents the last Monday of the month.
@@ -108,7 +108,7 @@ class KalturaScheduleEventRecurrence extends KalturaObject
 	public $byOffset;
 	
 	/**
-	 * @var KalturaScheduleEventRecurrenceDay
+	 * @var VidiunScheduleEventRecurrenceDay
 	 * Specifies the day on which the workweek starts.
 	 * This is significant when a WEEKLY frequency has an interval greater than 1, and a byDay rule part is specified.
 	 * This is also significant when in a YEARLY frequency when a byWeekNumber rule part is specified.
@@ -139,7 +139,7 @@ class KalturaScheduleEventRecurrence extends KalturaObject
 	 );
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -147,29 +147,29 @@ class KalturaScheduleEventRecurrence extends KalturaObject
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
 		if($this->isNull('until') == $this->isNull('count'))
 		{
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_ALL_MUST_BE_NULL_BUT_ONE, 'until / count');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_ALL_MUST_BE_NULL_BUT_ONE, 'until / count');
 		}
 
 		if($this->isNull('frequency'))
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'frequency');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'frequency');
 
 		parent::validateForUsage($sourceObject, $propertiesToSkip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($sourceObject = null, $propertiesToSkip = array())
 	{
 		if(!$sourceObject)
 		{
-			$sourceObject = new kScheduleEventRecurrence();
+			$sourceObject = new vScheduleEventRecurrence();
 		}
 		
 		return parent::toObject($sourceObject, $propertiesToSkip);

@@ -1,8 +1,8 @@
 <?php
-class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectChangedEventConsumer, kObjectReplacedEventConsumer
+class vCopyCaptionsFlowManager implements  vObjectAddedEventConsumer, vObjectChangedEventConsumer, vObjectReplacedEventConsumer
 {
 	/* (non-PHPdoc)
-  * @see kObjectReplacedEventConsumer::shouldConsumeReplacedEvent()
+  * @see vObjectReplacedEventConsumer::shouldConsumeReplacedEvent()
   */
 	public function shouldConsumeReplacedEvent(BaseObject $object)
 	{
@@ -13,7 +13,7 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectAddedEventConsumer::shouldConsumeAddedEvent()
+	 * @see vObjectAddedEventConsumer::shouldConsumeAddedEvent()
 	 */
 	public function shouldConsumeAddedEvent(BaseObject $object)
 	{
@@ -24,7 +24,7 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 	}
 
 	/* (non-PHPdoc)
-	  * @see kObjectAddedEventConsumer::objectAdded()
+	  * @see vObjectAddedEventConsumer::objectAdded()
 	  */
 	public function objectAdded(BaseObject $object, BatchJob $raisedJob = null)
 	{
@@ -38,7 +38,7 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 
 
 	/* (non-PHPdoc)
-	 * @see kObjectReplacedEventConsumer::objectReplaced()
+	 * @see vObjectReplacedEventConsumer::objectReplaced()
 	*/
 	public function objectReplaced(BaseObject $object, BaseObject $replacingObject, BatchJob $raisedJob = null) {
 		$clipAttributes = self::getClipAttributesFromEntry($replacingObject);
@@ -46,7 +46,7 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 		//replacement as a result of trimming
 		if (!is_null($clipAttributes) || $clipConcatTrimFlow)
 		{
-			kEventsManager::setForceDeferredEvents(true);
+			vEventsManager::setForceDeferredEvents(true);
 			$c = new Criteria();
 			$c->add(assetPeer::ENTRY_ID, $object->getId());
 			$types = array(CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION));
@@ -60,7 +60,7 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 				$newCaptionAsset = $captionAsset->copyToEntry($object->getId());
 				$newCaptionAsset->save();
 			}
-			kEventsManager::flushEvents();
+			vEventsManager::flushEvents();
 		}
 		return true;
 	}
@@ -71,21 +71,21 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 		CuePointPeer::setUseCriteriaFilter(false);
 		$captions = assetPeer::doSelect($c);
 		$update = new Criteria();
-		$update->add(assetPeer::STATUS, KalturaCaptionAssetStatus::DELETED);
+		$update->add(assetPeer::STATUS, VidiunCaptionAssetStatus::DELETED);
 
 		$con = Propel::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 		BasePeer::doUpdate($c, $update, $con);
 		CuePointPeer::setUseCriteriaFilter(true);
 		foreach($captions as $caption)
 		{
-			$caption->setStatus(KalturaCaptionAssetStatus::DELETED);
-			KalturaLog::info("Deleted caption asset: [{$caption->getId()}]");
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($caption));
+			$caption->setStatus(VidiunCaptionAssetStatus::DELETED);
+			VidiunLog::info("Deleted caption asset: [{$caption->getId()}]");
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($caption));
 		}
 	}
 
 	/* (non-PHPdoc)
-   * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+   * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
    */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{
@@ -98,7 +98,7 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -117,7 +117,7 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 	 */
 	protected function copyUpdatedCaptionsToEntry(entry $destEntry)
 	{
-		$jobData = new kCopyCaptionsJobData();
+		$jobData = new vCopyCaptionsJobData();
 		$jobData->setEntryId($destEntry->getId());
 
 		//regular replacement
@@ -126,22 +126,22 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 			$sourceEntry = entryPeer::retrieveByPK($sourceEntryId);
 			if(!$sourceEntry)
 			{
-				KalturaLog::debug("Didn't copy captions for entry [{$destEntry->getId()}] because source entry [" . $sourceEntryId . "] wasn't found");
+				VidiunLog::debug("Didn't copy captions for entry [{$destEntry->getId()}] because source entry [" . $sourceEntryId . "] wasn't found");
 				return;
 			}
 			
 			$captionAssets = assetPeer::retrieveByEntryId($sourceEntryId, array(CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION)));
 			if(!count($captionAssets))
 			{
-				KalturaLog::debug("No captions found on source entry [" . $sourceEntryId . "], no need to run copy captions job");
+				VidiunLog::debug("No captions found on source entry [" . $sourceEntryId . "], no need to run copy captions job");
 				return;
 			}
-			$kClipDescriptionArray = array();
-			$kClipDescription = new kClipDescription();
-			$kClipDescription->setSourceEntryId($sourceEntryId);
-			$kClipDescription->setStartTime(0);
-			$kClipDescription->setDuration($sourceEntry->getLengthInMsecs());
-			$kClipDescriptionArray[] = $kClipDescription;
+			$vClipDescriptionArray = array();
+			$vClipDescription = new vClipDescription();
+			$vClipDescription->setSourceEntryId($sourceEntryId);
+			$vClipDescription->setStartTime(0);
+			$vClipDescription->setDuration($sourceEntry->getLengthInMsecs());
+			$vClipDescriptionArray[] = $vClipDescription;
 			$jobData->setFullCopy(true);
 		}
 		else { //trim or clip
@@ -152,7 +152,7 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 				$sourceEntry = entryPeer::retrieveByPK($destEntry->getSourceEntryId());
 				if (is_null($sourceEntry))
 				{
-					KalturaLog::info("Didn't copy captions for entry [{$destEntry->getId()}] because source entry [" . $destEntry->getSourceEntryId() . "] wasn't found");
+					VidiunLog::info("Didn't copy captions for entry [{$destEntry->getId()}] because source entry [" . $destEntry->getSourceEntryId() . "] wasn't found");
 					return;
 				}
 				
@@ -160,30 +160,30 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 				$captionAssets = assetPeer::retrieveByEntryId($sourceEntryId, array(CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION)));
 				if(!count($captionAssets))
 				{
-					KalturaLog::debug("No captions found on source entry [" . $sourceEntryId . "], no need to run copy captions job");
+					VidiunLog::debug("No captions found on source entry [" . $sourceEntryId . "], no need to run copy captions job");
 					return;
 				}
 				$globalOffset = 0;
-				$kClipDescriptionArray = array();
-				/** @var kClipAttributes $operationAttribute */
+				$vClipDescriptionArray = array();
+				/** @var vClipAttributes $operationAttribute */
 				foreach ($operationAttributes as $operationAttribute)
 				{
-					$kClipDescription = new kClipDescription();
+					$vClipDescription = new vClipDescription();
 					if (!$sourceEntryId)
 					{
 						//if no source entry we will not copy the entry ID. add clip offset to global offset and continue
 						$globalOffset = $globalOffset + $operationAttribute->getDuration();
 						continue;
 					}
-					$kClipDescription->setSourceEntryId($sourceEntryId);
-					$kClipDescription->setStartTime($operationAttribute->getOffset() ? $operationAttribute->getOffset() : 0);
-					$kClipDescription->setDuration($operationAttribute->getDuration() ? $operationAttribute->getDuration() : $sourceEntry->getLengthInMsecs());
-					self::setCaptionGlobalOffset($operationAttribute, $globalOffset, $kClipDescription);
-					$kClipDescriptionArray[] = $kClipDescription;
+					$vClipDescription->setSourceEntryId($sourceEntryId);
+					$vClipDescription->setStartTime($operationAttribute->getOffset() ? $operationAttribute->getOffset() : 0);
+					$vClipDescription->setDuration($operationAttribute->getDuration() ? $operationAttribute->getDuration() : $sourceEntry->getLengthInMsecs());
+					self::setCaptionGlobalOffset($operationAttribute, $globalOffset, $vClipDescription);
+					$vClipDescriptionArray[] = $vClipDescription;
 					//add clip offset to global offset
 					$globalOffset = $globalOffset + $operationAttribute->getDuration();
 				}
-				$jobData->setClipsDescriptionArray($kClipDescriptionArray);
+				$jobData->setClipsDescriptionArray($vClipDescriptionArray);
 				$jobData->setFullCopy(false);
 			}
 		}
@@ -192,13 +192,13 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 		$batchJob->setEntryId($destEntry->getId());
 		$batchJob->setPartnerId($destEntry->getPartnerId());
 
-		kJobsManager::addJob($batchJob, $jobData, BatchJobType::COPY_CAPTIONS);
+		vJobsManager::addJob($batchJob, $jobData, BatchJobType::COPY_CAPTIONS);
 		return;
 	}
 
 	/**
 	 * @param BaseObject entry to check
-	 * @return kClipAttributes|null
+	 * @return vClipAttributes|null
 	 */
 	protected static function getClipAttributesFromEntry(BaseObject $object) {
 		if ($object instanceof entry)
@@ -207,7 +207,7 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 			if (!is_null($operationAttributes) && count($operationAttributes) > 0)
 			{
 				$clipAttributes = reset($operationAttributes);
-				if ($clipAttributes instanceof kClipAttributes)
+				if ($clipAttributes instanceof vClipAttributes)
 					return $clipAttributes;
 			}
 		}
@@ -225,16 +225,16 @@ class kCopyCaptionsFlowManager implements  kObjectAddedEventConsumer, kObjectCha
 	}
 
 	/**
-	 * @param kClipAttributes $operationAttribute
+	 * @param vClipAttributes $operationAttribute
 	 * @param int $globalOffset
-	 * @param kClipDescription $kClipDescription
+	 * @param vClipDescription $vClipDescription
 	 */
-	private static function setCaptionGlobalOffset($operationAttribute, $globalOffset, $kClipDescription)
+	private static function setCaptionGlobalOffset($operationAttribute, $globalOffset, $vClipDescription)
 	{
 		if ($operationAttribute->getGlobalOffsetInDestination() || $operationAttribute->getGlobalOffsetInDestination() === 0) {
-			$kClipDescription->setOffsetInDestination($operationAttribute->getGlobalOffsetInDestination());
+			$vClipDescription->setOffsetInDestination($operationAttribute->getGlobalOffsetInDestination());
 		} else {
-			$kClipDescription->setOffsetInDestination($globalOffset);
+			$vClipDescription->setOffsetInDestination($globalOffset);
 		}
 	}
 

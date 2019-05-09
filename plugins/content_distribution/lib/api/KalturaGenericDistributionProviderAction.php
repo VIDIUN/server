@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaGenericDistributionProviderAction extends KalturaObject implements IFilterable
+class VidiunGenericDistributionProviderAction extends VidiunObject implements IFilterable
 {
 	/**
 	 * Auto generated
@@ -40,25 +40,25 @@ class KalturaGenericDistributionProviderAction extends KalturaObject implements 
 	public $genericDistributionProviderId;
 
 	/**
-	 * @var KalturaDistributionAction
+	 * @var VidiunDistributionAction
 	 * @insertonly
 	 * @filter eq,in
 	 */
 	public $action;
 
 	/**
-	 * @var KalturaGenericDistributionProviderStatus
+	 * @var VidiunGenericDistributionProviderStatus
 	 * @readonly
 	 */
 	public $status;
 
 	/**
-	 * @var KalturaGenericDistributionProviderParser
+	 * @var VidiunGenericDistributionProviderParser
 	 */
 	public $resultsParser;
 
 	/**
-	 * @var KalturaDistributionProtocol
+	 * @var VidiunDistributionProtocol
 	 */
 	public $protocol;
 
@@ -136,26 +136,26 @@ class KalturaGenericDistributionProviderAction extends KalturaObject implements 
 		return array_merge(parent::getMapBetweenObjects(), self::$map_between_objects);
 	}
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 
 		if($this->shouldGet('mrssTransformer', $responseProfile))
 		{
 			$key = $source_object->getSyncKey(GenericDistributionProviderAction::FILE_SYNC_DISTRIBUTION_PROVIDER_ACTION_MRSS_TRANSFORMER);
-			$this->mrssTransformer = kFileSyncUtils::file_get_contents($key, true, false);
+			$this->mrssTransformer = vFileSyncUtils::file_get_contents($key, true, false);
 		}
 		
 		if($this->shouldGet('mrssValidator', $responseProfile))
 		{
 			$key = $source_object->getSyncKey(GenericDistributionProviderAction::FILE_SYNC_DISTRIBUTION_PROVIDER_ACTION_MRSS_VALIDATOR);
-			$this->mrssValidator = kFileSyncUtils::file_get_contents($key, true, false);
+			$this->mrssValidator = vFileSyncUtils::file_get_contents($key, true, false);
 		}
 			
 		if($this->shouldGet('resultsTransformer', $responseProfile))
 		{
 			$key = $source_object->getSyncKey(GenericDistributionProviderAction::FILE_SYNC_DISTRIBUTION_PROVIDER_ACTION_RESULTS_TRANSFORMER);
-			$this->resultsTransformer = kFileSyncUtils::file_get_contents($key, true, false);
+			$this->resultsTransformer = vFileSyncUtils::file_get_contents($key, true, false);
 		}
 	}
 	

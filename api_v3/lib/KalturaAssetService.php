@@ -6,7 +6,7 @@
  * @package api
  * @subpackage services
  */
-abstract class KalturaAssetService extends KalturaBaseService
+abstract class VidiunAssetService extends VidiunBaseService
 {
 	/**
 	 * @var array of all entry types that extend from media
@@ -14,12 +14,12 @@ abstract class KalturaAssetService extends KalturaBaseService
 	
 	protected function getEnabledMediaTypes()
 	{
-		$mediaTypes = KalturaPluginManager::getExtendedTypes(entryPeer::OM_CLASS, KalturaEntryType::MEDIA_CLIP);
+		$mediaTypes = VidiunPluginManager::getExtendedTypes(entryPeer::OM_CLASS, VidiunEntryType::MEDIA_CLIP);
 		return $mediaTypes;
 	}
 		
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::setPartnerFilters()
+	 * @see VidiunBaseService::setPartnerFilters()
 	 */
 	protected function setPartnerFilters($partnerId)
 	{
@@ -38,7 +38,7 @@ abstract class KalturaAssetService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param string $id
-	 * @return KalturaAsset
+	 * @return VidiunAsset
 	 */
 	abstract public function getAction($id);
 	
@@ -47,7 +47,7 @@ abstract class KalturaAssetService extends KalturaBaseService
 	* @param string $fileName
 	* @param bool $forceProxy
 	* @param int $version
-	* @throws KalturaErrors::FILE_DOESNT_EXIST
+	* @throws VidiunErrors::FILE_DOESNT_EXIST
 	*/
 	protected function serveAsset(asset $asset, $fileName, $forceProxy = false, $version = null)
 	{
@@ -61,35 +61,35 @@ abstract class KalturaAssetService extends KalturaBaseService
 		{
 			case StorageProfile::STORAGE_SERVE_PRIORITY_EXTERNAL_ONLY:
 				$serveRemote = true;
-				$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
+				$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
 				if(!$fileSync || $fileSync->getStatus() != FileSync::FILE_SYNC_STATUS_READY)
-					throw new KalturaAPIException(KalturaErrors::FILE_DOESNT_EXIST);
+					throw new VidiunAPIException(VidiunErrors::FILE_DOESNT_EXIST);
 				
 				break;
 			
 			case StorageProfile::STORAGE_SERVE_PRIORITY_EXTERNAL_FIRST:
-				$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
+				$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
 				if($fileSync && $fileSync->getStatus() == FileSync::FILE_SYNC_STATUS_READY)
 					$serveRemote = true;
 				
 				break;
 			
-			case StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_FIRST:
-				$fileSync = kFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
+			case StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_FIRST:
+				$fileSync = vFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
 				if($fileSync)
 					break;
 					
-				$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
+				$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
 				if(!$fileSync || $fileSync->getStatus() != FileSync::FILE_SYNC_STATUS_READY)
-					throw new KalturaAPIException(KalturaErrors::FILE_DOESNT_EXIST);
+					throw new VidiunAPIException(VidiunErrors::FILE_DOESNT_EXIST);
 				
 				$serveRemote = true;
 				break;
 			
-			case StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY:
-				$fileSync = kFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
+			case StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY:
+				$fileSync = vFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
 				if(!$fileSync)
-					throw new KalturaAPIException(KalturaErrors::FILE_DOESNT_EXIST);
+					throw new VidiunAPIException(VidiunErrors::FILE_DOESNT_EXIST);
 				
 				break;
 		}
@@ -107,38 +107,38 @@ abstract class KalturaAssetService extends KalturaBaseService
 	 * Action for manually exporting an asset
 	 * @param string $assetId
 	 * @param int $storageProfileId
-	 * @throws KalturaErrors::INVALID_FLAVOR_ASSET_ID
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::INTERNAL_SERVERL_ERROR
-	 * @return KalturaFlavorAsset The exported asset
+	 * @throws VidiunErrors::INVALID_FLAVOR_ASSET_ID
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::INTERNAL_SERVERL_ERROR
+	 * @return VidiunFlavorAsset The exported asset
 	 */
 	protected function exportAction ( $assetId , $storageProfileId )
 	{	    
 	    $dbAsset = assetPeer::retrieveById($assetId);
 	    if (!$dbAsset)
 	    {
-	        throw new KalturaAPIException(KalturaErrors::INVALID_FLAVOR_ASSET_ID, $assetId);
+	        throw new VidiunAPIException(VidiunErrors::INVALID_FLAVOR_ASSET_ID, $assetId);
 	    }
 	    
 	    $dbStorageProfile = StorageProfilePeer::retrieveByPK($storageProfileId);	    
 	    if (!$dbStorageProfile)
 	    {
-	        throw new KalturaAPIException(KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND, $storageProfileId);
+	        throw new VidiunAPIException(VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND, $storageProfileId);
 	    }
 	    
 	   	$scope = $dbStorageProfile->getScope();
 	    $scope->setEntryId($dbAsset->getEntryId());
 	    if(!$dbStorageProfile->fulfillsRules($scope))
 	    {
-	    	throw new KalturaAPIException(KalturaErrors::STORAGE_PROFILE_RULES_NOT_FULFILLED, $storageProfileId);
+	    	throw new VidiunAPIException(VidiunErrors::STORAGE_PROFILE_RULES_NOT_FULFILLED, $storageProfileId);
 	    }
 	    
-	    $exported = kStorageExporter::exportFlavorAsset($dbAsset, $dbStorageProfile);
+	    $exported = vStorageExporter::exportFlavorAsset($dbAsset, $dbStorageProfile);
 	    
 	    if ($exported !== true)
 	    {
 	        //TODO: implement export errors
-	        throw new KalturaAPIException(KalturaErrors::INTERNAL_SERVERL_ERROR);
+	        throw new VidiunAPIException(VidiunErrors::INTERNAL_SERVERL_ERROR);
 	    }
 	    
 	    return $this->getAction($assetId);
@@ -146,13 +146,13 @@ abstract class KalturaAssetService extends KalturaBaseService
 	
 	protected function validateEntryEntitlement($entryId, $assetId)
 	{
-		if(kEntitlementUtils::getEntitlementEnforcement())
+		if(vEntitlementUtils::getEntitlementEnforcement())
 		{
 			$entry = entryPeer::retrieveByPK($entryId);
 			if(!$entry)
 			{
 				//we will throw asset not found, as the user is not entitled, and should not know that the entry exists.
-				throw new KalturaAPIException(KalturaErrors::ASSET_ID_NOT_FOUND, $assetId);
+				throw new VidiunAPIException(VidiunErrors::ASSET_ID_NOT_FOUND, $assetId);
 			}	
 		}		
 	}

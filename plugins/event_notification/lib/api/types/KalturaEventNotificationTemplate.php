@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage api.objects
  */
-class KalturaEventNotificationTemplate extends KalturaObject implements IFilterable
+class VidiunEventNotificationTemplate extends VidiunObject implements IFilterable
 {	
 	/**
 	 * @var int
@@ -36,14 +36,14 @@ class KalturaEventNotificationTemplate extends KalturaObject implements IFiltera
 	public $description;
 	
 	/**
-	 * @var KalturaEventNotificationTemplateType
+	 * @var VidiunEventNotificationTemplateType
 	 * @insertonly
 	 * @filter eq,in
 	 */
 	public $type;
 	
 	/**
-	 * @var KalturaEventNotificationTemplateStatus
+	 * @var VidiunEventNotificationTemplateStatus
 	 * @readonly
 	 * @filter eq,in
 	 */
@@ -82,7 +82,7 @@ class KalturaEventNotificationTemplate extends KalturaObject implements IFiltera
 	/**
 	 * Define the event that should trigger this notification
 	 * 
-	 * @var KalturaEventNotificationEventType
+	 * @var VidiunEventNotificationEventType
 	 * @requiresPermission update
 	 */
 	public $eventType;
@@ -90,28 +90,28 @@ class KalturaEventNotificationTemplate extends KalturaObject implements IFiltera
 	/**
 	 * Define the object that raied the event that should trigger this notification
 	 * 
-	 * @var KalturaEventNotificationEventObjectType
+	 * @var VidiunEventNotificationEventObjectType
 	 * @requiresPermission update
 	 */
 	public $eventObjectType;
 
 	/**
 	 * Define the conditions that cause this notification to be triggered
-	 * @var KalturaConditionArray
+	 * @var VidiunConditionArray
 	 * @requiresPermission update
 	 */
 	public $eventConditions;
 	
 	/**
 	 * Define the content dynamic parameters
-	 * @var KalturaEventNotificationParameterArray
+	 * @var VidiunEventNotificationParameterArray
 	 * @requiresPermission update
 	 */
 	public $contentParameters;
 	
 	/**
 	 * Define the content dynamic parameters
-	 * @var KalturaEventNotificationParameterArray
+	 * @var VidiunEventNotificationParameterArray
 	 */
 	public $userParameters;
 	
@@ -137,7 +137,7 @@ class KalturaEventNotificationTemplate extends KalturaObject implements IFiltera
 	);
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -145,7 +145,7 @@ class KalturaEventNotificationTemplate extends KalturaObject implements IFiltera
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -156,7 +156,7 @@ class KalturaEventNotificationTemplate extends KalturaObject implements IFiltera
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate()
+	 * @see VidiunObject::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -167,12 +167,12 @@ class KalturaEventNotificationTemplate extends KalturaObject implements IFiltera
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
 		if(is_null($dbObject))
-			throw new kCoreException("Event notification template type [" . $this->type . "] not found", kCoreException::OBJECT_TYPE_NOT_FOUND, $this->type);
+			throw new vCoreException("Event notification template type [" . $this->type . "] not found", vCoreException::OBJECT_TYPE_NOT_FOUND, $this->type);
         	
 		return parent::toObject($dbObject, $propertiesToSkip);
 	}
@@ -195,11 +195,11 @@ class KalturaEventNotificationTemplate extends KalturaObject implements IFiltera
 	
 	/**
 	 * @param int $type core enum value of EventNotificationTemplateType
-	 * @return KalturaEventNotificationTemplate
+	 * @return VidiunEventNotificationTemplate
 	 */
 	public static function getInstanceByType($type)
 	{
-		return KalturaPluginManager::loadObject('KalturaEventNotificationTemplate', $type);
+		return VidiunPluginManager::loadObject('VidiunEventNotificationTemplate', $type);
 	}
 	
 	protected function validate (EventNotificationTemplate $sourceObject = null)
@@ -214,7 +214,7 @@ class KalturaEventNotificationTemplate extends KalturaObject implements IFiltera
 		{
 			$systemNameTemplates = EventNotificationTemplatePeer::retrieveBySystemName($this->systemName, $id);
 	        if (count($systemNameTemplates))
-	            throw new KalturaAPIException(KalturaEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_DUPLICATE_SYSTEM_NAME, $this->systemName);
+	            throw new VidiunAPIException(VidiunEventNotificationErrors::EVENT_NOTIFICATION_TEMPLATE_DUPLICATE_SYSTEM_NAME, $this->systemName);
 		}
 	}
 }

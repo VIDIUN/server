@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveToVodJobData extends KalturaJobData
+class VidiunLiveToVodJobData extends VidiunJobData
 {
 	/**
 	 * $vod Entry Id
@@ -59,7 +59,7 @@ class KalturaLiveToVodJobData extends KalturaJobData
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -67,12 +67,12 @@ class KalturaLiveToVodJobData extends KalturaJobData
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kLiveToVodJobData();
+			$dbData = new vLiveToVodJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

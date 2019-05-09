@@ -3,7 +3,7 @@
  * Enable event notifications on content distribution objects
  * @package plugins.contentDistributionEventNotifications
  */
-class ContentDistributionEventNotificationsPlugin extends KalturaPlugin implements IKalturaPending, IKalturaEnumerator, IKalturaObjectLoader
+class ContentDistributionEventNotificationsPlugin extends VidiunPlugin implements IVidiunPending, IVidiunEnumerator, IVidiunObjectLoader
 {
 	const PLUGIN_NAME = 'contentDistributionEventNotifications';
 	
@@ -15,7 +15,7 @@ class ContentDistributionEventNotificationsPlugin extends KalturaPlugin implemen
 	const EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD = 0;
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -23,20 +23,20 @@ class ContentDistributionEventNotificationsPlugin extends KalturaPlugin implemen
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$eventNotificationVersion = new KalturaVersion(self::EVENT_NOTIFICATION_PLUGIN_VERSION_MAJOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_MINOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD);
+		$eventNotificationVersion = new VidiunVersion(self::EVENT_NOTIFICATION_PLUGIN_VERSION_MAJOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_MINOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD);
 		
-		$contentDistributionDependency = new KalturaDependency(self::CONTENT_DISTRIBUTION_PLUGIN_NAME);
-		$eventNotificationDependency = new KalturaDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $eventNotificationVersion);
+		$contentDistributionDependency = new VidiunDependency(self::CONTENT_DISTRIBUTION_PLUGIN_NAME);
+		$eventNotificationDependency = new VidiunDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $eventNotificationVersion);
 		
 		return array($contentDistributionDependency, $eventNotificationDependency);
 	}
 			
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -50,7 +50,7 @@ class ContentDistributionEventNotificationsPlugin extends KalturaPlugin implemen
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
@@ -58,7 +58,7 @@ class ContentDistributionEventNotificationsPlugin extends KalturaPlugin implemen
 	}
 		
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -79,8 +79,8 @@ class ContentDistributionEventNotificationsPlugin extends KalturaPlugin implemen
 	 */
 	public static function getEventNotificationEventObjectTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('EventNotificationEventObjectType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('EventNotificationEventObjectType', $value);
 	}
 	
 	/**
@@ -88,6 +88,6 @@ class ContentDistributionEventNotificationsPlugin extends KalturaPlugin implemen
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

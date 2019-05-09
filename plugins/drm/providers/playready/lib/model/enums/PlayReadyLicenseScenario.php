@@ -3,7 +3,7 @@
  * @package plugins.playReady
  * @subpackage model.enum
  */
-class PlayReadyLicenseScenario implements IKalturaPluginEnum, DrmLicenseScenario
+class PlayReadyLicenseScenario implements IVidiunPluginEnum, DrmLicenseScenario
 {
 	const PROTECTION = 'PROTECTION';
 	const PURCHASE = 'PURCHASE';

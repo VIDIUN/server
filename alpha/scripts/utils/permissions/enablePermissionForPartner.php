@@ -24,7 +24,7 @@ if ($argc > 3){
 require_once (dirname ( __FILE__ ) . '/../../bootstrap.php');
 
 $con = myDbHelper::getConnection ( myDbHelper::DB_HELPER_CONN_PROPEL2 );
-KalturaStatement::setDryRun ( $dryRun );
+VidiunStatement::setDryRun ( $dryRun );
 
 $dbPermission = PermissionPeer::getByNameAndPartner ( $permissionName, $partnerId );
 var_dump($dbPermission);
@@ -39,6 +39,6 @@ if (!$dbPermission) {
 $dbPermission->setStatus ( PermissionStatus::ACTIVE );
 $dbPermission->save ();
 
-kMemoryManager::clearMemory();
+vMemoryManager::clearMemory();
 
-KalturaLog::debug("Done");
+VidiunLog::debug("Done");

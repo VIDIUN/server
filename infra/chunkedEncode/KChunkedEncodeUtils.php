@@ -7,7 +7,7 @@
 	/********************
 	 * Session exit statuses
 	 */
-	class KChunkedEncodeReturnStatus {
+	class VChunkedEncodeReturnStatus {
 		const OK = 0;
 		const InitializeError = 1000;
 		const GenerateVideoError = 1001;
@@ -22,7 +22,7 @@
 	/********************
 	 * Session setup values
 	 */
-	class KChunkedEncodeSetup {
+	class VChunkedEncodeSetup {
 
 		const	DefaultChunkDuration = 60;  // secs
 		const	DefaultChunkOverlap =  0.5; // secs
@@ -98,7 +98,7 @@
 	/********************
 	 * 
 	 */
-	class KChunkFramesStat {
+	class VChunkFramesStat {
 		public $start = null;
 		public $frame = 0;
 		public $finish = null;
@@ -119,26 +119,26 @@
 		 */
 		public function getData($chunkFileName, $ffprobeBin="ffprobe", $ffmpegBin="ffmpeg")
 		{
-			KChunkFramesStat::getData2($chunkFileName, $this, $ffprobeBin, $ffmpegBin);
+			VChunkFramesStat::getData2($chunkFileName, $this, $ffprobeBin, $ffmpegBin);
 		}
 		
 		/********************
 		 * getData
 		 *	Retrieve following chunk stat data - 
 		 */
-		protected static function getData1($chunkFileName, KChunkFramesStat $framesStat, $ffprobeBin="ffprobe", $ffmpegBin="ffmpeg")
+		protected static function getData1($chunkFileName, VChunkFramesStat $framesStat, $ffprobeBin="ffprobe", $ffmpegBin="ffmpeg")
 		{
 				/*
 				 * Retrieve data for first frame and for last 10
 				 */
 			$cmdLine = "$ffprobeBin -select_streams v -show_frames -show_entries frame=coded_picture_number,pkt_pts_time,pict_type -print_format csv -v quiet $chunkFileName | (head -n1 && tail -n10)";
-			KalturaLog::log($cmdLine);
+			VidiunLog::log($cmdLine);
 			$lastLine=exec($cmdLine , $outputArr, $rv);
 			if($rv!=0) {
-				KalturaLog::log("ERROR: failed to extract frame data from chunk ($chunkFileName).");
+				VidiunLog::log("ERROR: failed to extract frame data from chunk ($chunkFileName).");
 				return null;
 			}
-			KalturaLog::log("rv($rv), output:\n".print_r($outputArr,1));
+			VidiunLog::log("rv($rv), output:\n".print_r($outputArr,1));
 			$outputLine = array_shift($outputArr);
 			list($stam,$pts,$type,$frame) = explode(",",$outputLine);
 			$framesStat->start = $pts;
@@ -156,7 +156,7 @@
 			$framesStat->type = $type;
 			
 			$jsonStr = json_encode($framesStat);
-			KalturaLog::log("$jsonStr");
+			VidiunLog::log("$jsonStr");
 			
 			return $framesStat;
 		}
@@ -165,29 +165,29 @@
 		 * getData
 		 *	Retrieve following chunk stat data - 
 		 */
-		protected static function getData2($chunkFileName, KChunkFramesStat $framesStat, $ffprobeBin="ffprobe", $ffmpegBin="ffmpeg")
+		protected static function getData2($chunkFileName, VChunkFramesStat $framesStat, $ffprobeBin="ffprobe", $ffmpegBin="ffmpeg")
 		{
-			KalturaLog::log("$chunkFileName");
+			VidiunLog::log("$chunkFileName");
 			$cmdLine = "$ffmpegBin -i $chunkFileName -c copy -f mp4 -v quiet -y $chunkFileName.mp4;$ffprobeBin -show_streams -select_streams v -v quiet -show_entries stream=duration,nb_frames -print_format csv $chunkFileName.mp4";
-			KalturaLog::log("copy:$cmdLine");
+			VidiunLog::log("copy:$cmdLine");
 			$lastLine=exec($cmdLine , $outputArr, $rv);
 			if($rv!=0) {
-				KalturaLog::log("ERROR: failed to extract frame data from chunk ($chunkFileName).");
+				VidiunLog::log("ERROR: failed to extract frame data from chunk ($chunkFileName).");
 				return null;
 			}
-			KalturaLog::log("copy:rv($rv), output:\n".print_r($outputArr,1));
+			VidiunLog::log("copy:rv($rv), output:\n".print_r($outputArr,1));
 			list($stam,$duration,$frames,$stam2) = explode(",",$outputArr[0]);
-			KalturaLog::log("duration:$duration,frames:$frames");
+			VidiunLog::log("duration:$duration,frames:$frames");
 /**/
 			$outputArr = array();
 			$cmdLine = "$ffmpegBin -t 1 -i $chunkFileName -c:v copy -an -copyts -mpegts_copyts 1 -vsync 1 -f mpegts -y -v quiet - | $ffprobeBin -select_streams v -show_frames -show_entries frame=coded_picture_number,pkt_pts_time,pict_type,pkt_size -print_format csv -v quiet - | (head -n1)";
-			KalturaLog::log("head:$cmdLine");
+			VidiunLog::log("head:$cmdLine");
 			$lastLine=exec($cmdLine , $outputArr, $rv);
 			if($rv!=0) {
-				KalturaLog::log("ERROR: failed to extract frame data from chunk ($chunkFileName).");
+				VidiunLog::log("ERROR: failed to extract frame data from chunk ($chunkFileName).");
 				return null;
 			}
-			KalturaLog::log("head:rv($rv), output:\n".print_r($outputArr,1));
+			VidiunLog::log("head:rv($rv), output:\n".print_r($outputArr,1));
 			if($duration<10) {
 				$startFrom = 0;
 			}
@@ -195,19 +195,19 @@
 				$startFrom = $duration-4;
 			}
 			$cmdLine = "$ffmpegBin -ss $startFrom -i $chunkFileName -c:v copy -an -copyts -mpegts_copyts 1 -vsync 1 -f mpegts -y -v quiet - | $ffprobeBin -f mpegts -select_streams v -show_frames -show_entries frame=coded_picture_number,pkt_pts_time,pict_type,pkt_size -print_format csv -v quiet - | tail";
-			KalturaLog::log("tail:$cmdLine");
+			VidiunLog::log("tail:$cmdLine");
 			$lastLine=exec($cmdLine , $outputArr, $rv);
 			if($rv!=0) {
-				KalturaLog::log("ERROR: failed to extract frame data from chunk ($chunkFileName).");
+				VidiunLog::log("ERROR: failed to extract frame data from chunk ($chunkFileName).");
 				return null;
 			}
-			KalturaLog::log("tail:rv($rv), output:\n".print_r($outputArr,1));
+			VidiunLog::log("tail:rv($rv), output:\n".print_r($outputArr,1));
 			foreach($outputArr as $idx=>$outputLine) {
 				if(strlen(trim($outputLine))==0) {
 					unset($outputArr[$idx]);
 				}
 			}
-			KalturaLog::log("trimmed:output:\n".print_r($outputArr,1));
+			VidiunLog::log("trimmed:output:\n".print_r($outputArr,1));
 
 			$outputLine = array_shift($outputArr);
 			list($stam,$pts,$size,$type,$frame) = explode(",",$outputLine);
@@ -220,7 +220,7 @@
 			$framesStat->frame = $frames;
 			
 			$jsonStr = json_encode($framesStat);
-			KalturaLog::log("$jsonStr");
+			VidiunLog::log("$jsonStr");
 			return $framesStat;
 		}
 		
@@ -232,17 +232,17 @@
 		{
 			$outputArr = array();
 			$cmdLine = "$ffmpegBin -ss $startFrom -t $duration -i $fileName -c:v copy -an -copyts -mpegts_copyts 1 -vsync 1 -f mpegts -y -v quiet - | $ffprobeBin -select_streams v -show_frames -show_entries frame=coded_picture_number,pkt_pts_time,pict_type -print_format csv -v quiet - ";
-			KalturaLog::log("head:$cmdLine");
+			VidiunLog::log("head:$cmdLine");
 			$lastLine=exec($cmdLine , $outputArr, $rv);
 			if($rv!=0) {
-				KalturaLog::log("ERROR: failed to extract frame data from chunk ($fileName).");
+				VidiunLog::log("ERROR: failed to extract frame data from chunk ($fileName).");
 				return null;
 			}
 			$statsArr = array();
 			foreach($outputArr as $idx=>$line) {
 				if(strlen($line)>10){
 					list($stam,$pts,$type,$frame) = explode(",",$line);
-					$framesStat = new KChunkFramesStat();
+					$framesStat = new VChunkFramesStat();
 					$framesStat->start = $pts;
 					$framesStat->type = $type;
 					$framesStat->frame = (int)($frame);
@@ -257,7 +257,7 @@
 	/********************
 	 * Process stat data
 	 */
-	class KProcessExecutionData {
+	class VProcessExecutionData {
 		public $process = null;	// ...
 		public $exitCode = null;// ...
 		public $startedAt = null;
@@ -287,7 +287,7 @@
 		{
 			$cmdLine = "$cmdLine & echo $! ";
 			$started = date_create();
-			KalturaLog::log("cmdLine:\n$cmdLine\n");
+			VidiunLog::log("cmdLine:\n$cmdLine\n");
 
 			$rv = 0;
 			$op = null;
@@ -297,7 +297,7 @@
 				return false;
 			}
 			$pid = implode("\n",$op);
-			KalturaLog::log("pid($pid), rv($rv)");
+			VidiunLog::log("pid($pid), rv($rv)");
 			return $pid;
 		}
 		
@@ -306,14 +306,14 @@
 		 */
 		public static function waitForCompletion($process, $sleepTime=2)
 		{
-			KalturaLog::log("process($process), sleepTime($sleepTime)");
+			VidiunLog::log("process($process), sleepTime($sleepTime)");
 			while(1) {
 				if(self::isProcessRunning($process)==false){
 					break;
 				}
 				sleep($sleepTime);
 			}
-			KalturaLog::log("process($process)==>finished");
+			VidiunLog::log("process($process)==>finished");
 		}
 
 		/********************

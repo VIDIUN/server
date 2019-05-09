@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kEntryContextDataResult extends kContextDataResult
+class vEntryContextDataResult extends vContextDataResult
 {
 	/**
 	 * @var bool

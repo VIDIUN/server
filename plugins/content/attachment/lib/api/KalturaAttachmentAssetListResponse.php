@@ -3,10 +3,10 @@
  * @package plugins.attachment
  * @subpackage api.objects
  */
-class KalturaAttachmentAssetListResponse extends KalturaListResponse
+class VidiunAttachmentAssetListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaAttachmentAssetArray
+	 * @var VidiunAttachmentAssetArray
 	 * @readonly
 	 */
 	public $objects;

@@ -5,7 +5,7 @@
  *
  * @service liveChannelSegment
  */
-class LiveChannelSegmentService extends KalturaBaseService
+class LiveChannelSegmentService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -13,24 +13,24 @@ class LiveChannelSegmentService extends KalturaBaseService
 		$this->applyPartnerFilterForClass('LiveChannelSegment'); 	
 		
 		if(!PermissionPeer::isValidForPartner(PermissionName::FEATURE_LIVE_CHANNEL, $this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
+			throw new VidiunAPIException(VidiunErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
 	}
 	
 	/**
 	 * Add new live channel segment
 	 * 
 	 * @action add
-	 * @param KalturaLiveChannelSegment $liveChannelSegment
-	 * @return KalturaLiveChannelSegment
+	 * @param VidiunLiveChannelSegment $liveChannelSegment
+	 * @return VidiunLiveChannelSegment
 	 */
-	function addAction(KalturaLiveChannelSegment $liveChannelSegment)
+	function addAction(VidiunLiveChannelSegment $liveChannelSegment)
 	{
 		$dbLiveChannelSegment = $liveChannelSegment->toInsertableObject();
 		$dbLiveChannelSegment->setPartnerId($this->getPartnerId());
 		$dbLiveChannelSegment->setStatus(LiveChannelSegmentStatus::ACTIVE);
 		$dbLiveChannelSegment->save();
 		
-		$liveChannelSegment = new KalturaLiveChannelSegment();
+		$liveChannelSegment = new VidiunLiveChannelSegment();
 		$liveChannelSegment->fromObject($dbLiveChannelSegment, $this->getResponseProfile());
 		return $liveChannelSegment;
 	}
@@ -40,17 +40,17 @@ class LiveChannelSegmentService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param bigint $id
-	 * @return KalturaLiveChannelSegment
+	 * @return VidiunLiveChannelSegment
 	 * 
-	 * @throws KalturaErrors::LIVE_CHANNEL_SEGMENT_ID_NOT_FOUND
+	 * @throws VidiunErrors::LIVE_CHANNEL_SEGMENT_ID_NOT_FOUND
 	 */
 	function getAction($id)
 	{
 		$dbLiveChannelSegment = LiveChannelSegmentPeer::retrieveByPK($id);
 		if (!$dbLiveChannelSegment)
-			throw new KalturaAPIException(KalturaErrors::LIVE_CHANNEL_SEGMENT_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::LIVE_CHANNEL_SEGMENT_ID_NOT_FOUND, $id);
 			
-		$liveChannelSegment = new KalturaLiveChannelSegment();
+		$liveChannelSegment = new VidiunLiveChannelSegment();
 		$liveChannelSegment->fromObject($dbLiveChannelSegment, $this->getResponseProfile());
 		return $liveChannelSegment;
 	}
@@ -60,21 +60,21 @@ class LiveChannelSegmentService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param bigint $id
-	 * @param KalturaLiveChannelSegment $liveChannelSegment
-	 * @return KalturaLiveChannelSegment
+	 * @param VidiunLiveChannelSegment $liveChannelSegment
+	 * @return VidiunLiveChannelSegment
 	 * 
-	 * @throws KalturaErrors::LIVE_CHANNEL_SEGMENT_ID_NOT_FOUND
+	 * @throws VidiunErrors::LIVE_CHANNEL_SEGMENT_ID_NOT_FOUND
 	 */
-	function updateAction($id, KalturaLiveChannelSegment $liveChannelSegment)
+	function updateAction($id, VidiunLiveChannelSegment $liveChannelSegment)
 	{
 		$dbLiveChannelSegment = LiveChannelSegmentPeer::retrieveByPK($id);
 		if (!$dbLiveChannelSegment)
-			throw new KalturaAPIException(KalturaErrors::LIVE_CHANNEL_SEGMENT_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::LIVE_CHANNEL_SEGMENT_ID_NOT_FOUND, $id);
 		
 		$liveChannelSegment->toUpdatableObject($dbLiveChannelSegment);
 		$dbLiveChannelSegment->save();
 		
-		$liveChannelSegment = new KalturaLiveChannelSegment();
+		$liveChannelSegment = new VidiunLiveChannelSegment();
 		$liveChannelSegment->fromObject($dbLiveChannelSegment, $this->getResponseProfile());
 		return $liveChannelSegment;
 	}
@@ -85,13 +85,13 @@ class LiveChannelSegmentService extends KalturaBaseService
 	 * @action delete
 	 * @param bigint $id
 	 * 
-	 * @throws KalturaErrors::LIVE_CHANNEL_SEGMENT_ID_NOT_FOUND
+	 * @throws VidiunErrors::LIVE_CHANNEL_SEGMENT_ID_NOT_FOUND
 	 */
 	function deleteAction($id)
 	{
 		$dbLiveChannelSegment = LiveChannelSegmentPeer::retrieveByPK($id);
 		if (!$dbLiveChannelSegment)
-			throw new KalturaAPIException(KalturaErrors::LIVE_CHANNEL_SEGMENT_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::LIVE_CHANNEL_SEGMENT_ID_NOT_FOUND, $id);
 
 		$dbLiveChannelSegment->setStatus(LiveChannelSegmentStatus::DELETED);
 		$dbLiveChannelSegment->save();
@@ -101,17 +101,17 @@ class LiveChannelSegmentService extends KalturaBaseService
 	 * List live channel segments by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaFilterPager $filter
-	 * @param KalturaLiveChannelSegmentFilter $pager
-	 * @return KalturaLiveChannelSegmentListResponse
+	 * @param VidiunFilterPager $filter
+	 * @param VidiunLiveChannelSegmentFilter $pager
+	 * @return VidiunLiveChannelSegmentListResponse
 	 */
-	function listAction(KalturaLiveChannelSegmentFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunLiveChannelSegmentFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaLiveChannelSegmentFilter();
+			$filter = new VidiunLiveChannelSegmentFilter();
 			
 		if (!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		return $filter->getListResponse($pager, $this->getResponseProfile());
 	}

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBatchJob extends KalturaObject implements IFilterable
+class VidiunBatchJob extends VidiunObject implements IFilterable
 {
 	
 	/**
@@ -73,7 +73,7 @@ class KalturaBatchJob extends KalturaObject implements IFilterable
 	public $entryName;
 	
 	/**
-	 * @var KalturaBatchJobType
+	 * @var VidiunBatchJobType
 	 * @readonly 
 	 * @filter eq,in,notin
 	 */
@@ -86,12 +86,12 @@ class KalturaBatchJob extends KalturaObject implements IFilterable
     public $jobSubType;
     
 	/**
-	 * @var KalturaJobData
+	 * @var VidiunJobData
 	 */
     public $data;
 
     /**
-	 * @var KalturaBatchJobStatus
+	 * @var VidiunBatchJobStatus
 	 * @filter eq,in,notin,order
 	 */
     public $status;
@@ -123,7 +123,7 @@ class KalturaBatchJob extends KalturaObject implements IFilterable
     public $priority ;
     
     /**
-     * @var KalturaBatchHistoryDataArray
+     * @var VidiunBatchHistoryDataArray
      */
     public $history ;
     
@@ -171,7 +171,7 @@ class KalturaBatchJob extends KalturaObject implements IFilterable
     
     
     /**
-	 * @var KalturaBatchJobErrorTypes
+	 * @var VidiunBatchJobErrorTypes
 	 * @filter eq,in,notin
 	 */    
     public $errType;
@@ -284,179 +284,179 @@ class KalturaBatchJob extends KalturaObject implements IFilterable
 				
 		switch(get_class($dbData))
 		{
-			case 'kConvartableJobData':
-				$this->data = new KalturaConvartableJobData();
+			case 'vConvartableJobData':
+				$this->data = new VidiunConvartableJobData();
 				break;
 				
-			case 'kConvertJobData':
-				$this->data = new KalturaConvertJobData();
+			case 'vConvertJobData':
+				$this->data = new VidiunConvertJobData();
 				break;
 				
-			case 'kConvertProfileJobData':
-				$this->data = new KalturaConvertProfileJobData();
+			case 'vConvertProfileJobData':
+				$this->data = new VidiunConvertProfileJobData();
 				break;
 				
-			case 'kExtractMediaJobData':
-				$this->data = new KalturaExtractMediaJobData();
+			case 'vExtractMediaJobData':
+				$this->data = new VidiunExtractMediaJobData();
 				break;
 				
-			case 'kImportJobData':
-				$this->data = new KalturaImportJobData();
+			case 'vImportJobData':
+				$this->data = new VidiunImportJobData();
 				break;
 				
-			case 'kSshImportJobData':
-				$this->data = new KalturaSshImportJobData();
+			case 'vSshImportJobData':
+				$this->data = new VidiunSshImportJobData();
 				break;
 				
-			case 'kPostConvertJobData':
-				$this->data = new KalturaPostConvertJobData();
+			case 'vPostConvertJobData':
+				$this->data = new VidiunPostConvertJobData();
 				break;
 				
-			case 'kMailJobData':
-				$this->data = new KalturaMailJobData();
+			case 'vMailJobData':
+				$this->data = new VidiunMailJobData();
 				break;
 				
-			case 'kNotificationJobData':
-				$this->data = new KalturaNotificationJobData();
+			case 'vNotificationJobData':
+				$this->data = new VidiunNotificationJobData();
 				break;
 				
-			case 'kBulkDownloadJobData':
-				$this->data = new KalturaBulkDownloadJobData();
+			case 'vBulkDownloadJobData':
+				$this->data = new VidiunBulkDownloadJobData();
 				break;
 				
-			case 'kFlattenJobData':
-				$this->data = new KalturaFlattenJobData();
+			case 'vFlattenJobData':
+				$this->data = new VidiunFlattenJobData();
 				break;
 			
-			case 'kProvisionJobData':
-				$this->data = new KalturaProvisionJobData();
+			case 'vProvisionJobData':
+				$this->data = new VidiunProvisionJobData();
 				break;
 				
-			case 'kAkamaiProvisionJobData':
-				$this->data = new KalturaAkamaiProvisionJobData();
+			case 'vAkamaiProvisionJobData':
+				$this->data = new VidiunAkamaiProvisionJobData();
 				break;	
 
-			case 'kAkamaiUniversalProvisionJobData':
-				$this->data = new KalturaAkamaiUniversalProvisionJobData();
+			case 'vAkamaiUniversalProvisionJobData':
+				$this->data = new VidiunAkamaiUniversalProvisionJobData();
 				break;
 				
-			case 'kConvertCollectionJobData':
-				$this->data = new KalturaConvertCollectionJobData();
+			case 'vConvertCollectionJobData':
+				$this->data = new VidiunConvertCollectionJobData();
 				break;
 				
-			case 'kStorageExportJobData':
-				$this->data = new KalturaStorageExportJobData();
+			case 'vStorageExportJobData':
+				$this->data = new VidiunStorageExportJobData();
 				break;
 				
-			case 'kAmazonS3StorageExportJobData':
-				$this->data = new KalturaAmazonS3StorageExportJobData();
+			case 'vAmazonS3StorageExportJobData':
+				$this->data = new VidiunAmazonS3StorageExportJobData();
 				break;
 				
-			case 'kMoveCategoryEntriesJobData':
-				$this->data = new KalturaMoveCategoryEntriesJobData();
+			case 'vMoveCategoryEntriesJobData':
+				$this->data = new VidiunMoveCategoryEntriesJobData();
 				break;
 				
-			case 'kStorageDeleteJobData':
-				$this->data = new KalturaStorageDeleteJobData();
+			case 'vStorageDeleteJobData':
+				$this->data = new VidiunStorageDeleteJobData();
 				break;
 				
-			case 'kCaptureThumbJobData':
-				$this->data = new KalturaCaptureThumbJobData();
+			case 'vCaptureThumbJobData':
+				$this->data = new VidiunCaptureThumbJobData();
 				break;
 				
-			case 'kMoveCategoryEntriesJobData':
-			    $this->data = new KalturaMoveCategoryEntriesJobData();
+			case 'vMoveCategoryEntriesJobData':
+			    $this->data = new VidiunMoveCategoryEntriesJobData();
 			    break;
 
 			case 'kIndexJobData':
-				$this->data = new KalturaIndexJobData();
+				$this->data = new VidiunIndexJobData();
 				break;
 				
-			case 'kCopyJobData':
-				$this->data = new KalturaCopyJobData();
+			case 'vCopyJobData':
+				$this->data = new VidiunCopyJobData();
 				break;
 				
-			case 'kDeleteJobData':
-				$this->data = new KalturaDeleteJobData();
+			case 'vDeleteJobData':
+				$this->data = new VidiunDeleteJobData();
 				break;
 
-			case 'kDeleteFileJobData':
-				$this->data = new KalturaDeleteFileJobData();
+			case 'vDeleteFileJobData':
+				$this->data = new VidiunDeleteFileJobData();
 				break;
 				
-			case 'kConvertLiveSegmentJobData':
-				$this->data = new KalturaConvertLiveSegmentJobData();
+			case 'vConvertLiveSegmentJobData':
+				$this->data = new VidiunConvertLiveSegmentJobData();
 				break;
 				
-			case 'kConcatJobData':
-				$this->data = new KalturaConcatJobData();
+			case 'vConcatJobData':
+				$this->data = new VidiunConcatJobData();
 				break;
 				
-			case 'kCopyPartnerJobData':
-				$this->data = new KalturaCopyPartnerJobData();
+			case 'vCopyPartnerJobData':
+				$this->data = new VidiunCopyPartnerJobData();
 				break;
 				
-			case 'kSyncCategoryPrivacyContextJobData':
-				$this->data = new KalturaSyncCategoryPrivacyContextJobData();
+			case 'vSyncCategoryPrivacyContextJobData':
+				$this->data = new VidiunSyncCategoryPrivacyContextJobData();
 				break;
 			
-			case 'kLiveReportExportJobData':
-				$this->data = new KalturaLiveReportExportJobData();
+			case 'vLiveReportExportJobData':
+				$this->data = new VidiunLiveReportExportJobData();
 				break;
 			
-			case 'kRecalculateResponseProfileCacheJobData':
-				$this->data = new KalturaRecalculateResponseProfileCacheJobData();
+			case 'vRecalculateResponseProfileCacheJobData':
+				$this->data = new VidiunRecalculateResponseProfileCacheJobData();
 				break;
 
-			case 'kLiveToVodJobData':
-				$this->data = new KalturaLiveToVodJobData();
+			case 'vLiveToVodJobData':
+				$this->data = new VidiunLiveToVodJobData();
 				break;
 
-			case 'kCopyCaptionsJobData':
-				$this->data = new KalturaCopyCaptionsJobData();
+			case 'vCopyCaptionsJobData':
+				$this->data = new VidiunCopyCaptionsJobData();
 				break;
 
-			case 'kUsersCsvJobData':
-				$this->data = new KalturaUsersCsvJobData();
+			case 'vUsersCsvJobData':
+				$this->data = new VidiunUsersCsvJobData();
 				break;
 			
-			case 'kClipConcatJobData':
-				$this->data = new KalturaClipConcatJobData();
+			case 'vClipConcatJobData':
+				$this->data = new VidiunClipConcatJobData();
 				break;
 
-			case 'kCopyCuePointsJobData':
-				$this->data = new KalturaCopyCuePointsJobData();
+			case 'vCopyCuePointsJobData':
+				$this->data = new VidiunCopyCuePointsJobData();
 				break;
 
-			case 'kMultiClipCopyCuePointsJobData':
-				$this->data = new KalturaMultiClipCopyCuePointsJobData();
+			case 'vMultiClipCopyCuePointsJobData':
+				$this->data = new VidiunMultiClipCopyCuePointsJobData();
 				break;
 
-			case 'kReportExportJobData':
-				$this->data = new KalturaReportExportJobData();
+			case 'vReportExportJobData':
+				$this->data = new VidiunReportExportJobData();
 				break;
 
 			default:
-				if($dbData instanceof kBulkUploadJobData)
+				if($dbData instanceof vBulkUploadJobData)
 				{
-					$this->data = KalturaPluginManager::loadObject('KalturaBulkUploadJobData', $dbBatchJob->getJobSubType());
+					$this->data = VidiunPluginManager::loadObject('VidiunBulkUploadJobData', $dbBatchJob->getJobSubType());
 					if(is_null($this->data))
-						KalturaLog::err("Unable to init KalturaBulkUploadJobData for sub-type [" . $dbBatchJob->getJobSubType() . "]");
+						VidiunLog::err("Unable to init VidiunBulkUploadJobData for sub-type [" . $dbBatchJob->getJobSubType() . "]");
 				}
-				else if($dbData instanceof kImportJobData)
+				else if($dbData instanceof vImportJobData)
 				{
-					$this->data = KalturaPluginManager::loadObject('KalturaImportJobData', get_class($dbData));
+					$this->data = VidiunPluginManager::loadObject('VidiunImportJobData', get_class($dbData));
 					if(is_null($this->data))
-						KalturaLog::err("Unable to init KalturaImportJobData for class [" . get_class($dbData) . "]");
+						VidiunLog::err("Unable to init VidiunImportJobData for class [" . get_class($dbData) . "]");
 				}
 				else
 				{
-					$this->data = KalturaPluginManager::loadObject('KalturaJobData', $this->jobType, array('coreJobSubType' => $dbBatchJob->getJobSubType()));
+					$this->data = VidiunPluginManager::loadObject('VidiunJobData', $this->jobType, array('coreJobSubType' => $dbBatchJob->getJobSubType()));
 				}
 		}
 		
 		if(is_null($this->data))
-			KalturaLog::err("Unable to init KalturaJobData for job type [{$this->jobType}] sub-type [" . $dbBatchJob->getJobSubType() . "]");
+			VidiunLog::err("Unable to init VidiunJobData for job type [{$this->jobType}] sub-type [" . $dbBatchJob->getJobSubType() . "]");
 			
 		if($this->data)
 			$this->data->fromObject($dbData);
@@ -504,218 +504,218 @@ class KalturaBatchJob extends KalturaObject implements IFilterable
 		$dbData = null;
 		
 		if(is_null($this->jobType))
-			$this->jobType = kPluginableEnumsManager::coreToApi('BatchJobType', $dbBatchJob->getJobType());
+			$this->jobType = vPluginableEnumsManager::coreToApi('BatchJobType', $dbBatchJob->getJobType());
 		
 		switch($dbBatchJob->getJobType())
 		{
-			case KalturaBatchJobType::BULKUPLOAD:
-				$dbData = new kBulkUploadJobData();
+			case VidiunBatchJobType::BULKUPLOAD:
+				$dbData = new vBulkUploadJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaBulkUploadJobData();
+					$this->data = new VidiunBulkUploadJobData();
 				break;
 				
-			case KalturaBatchJobType::CONVERT:
-				$dbData = new kConvertJobData();
+			case VidiunBatchJobType::CONVERT:
+				$dbData = new vConvertJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaConvertJobData();
+					$this->data = new VidiunConvertJobData();
 				break;
 				
-			case KalturaBatchJobType::CONVERT_PROFILE:
-				$dbData = new kConvertProfileJobData();
+			case VidiunBatchJobType::CONVERT_PROFILE:
+				$dbData = new vConvertProfileJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaConvertProfileJobData();
+					$this->data = new VidiunConvertProfileJobData();
 				break;
 				
-			case KalturaBatchJobType::EXTRACT_MEDIA:
-				$dbData = new kExtractMediaJobData();
+			case VidiunBatchJobType::EXTRACT_MEDIA:
+				$dbData = new vExtractMediaJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaExtractMediaJobData();
+					$this->data = new VidiunExtractMediaJobData();
 				break;
 				
-			case KalturaBatchJobType::IMPORT:
-				$dbData = new kImportJobData();
+			case VidiunBatchJobType::IMPORT:
+				$dbData = new vImportJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaImportJobData();
+					$this->data = new VidiunImportJobData();
 				break;
 				
-			case KalturaBatchJobType::POSTCONVERT:
-				$dbData = new kPostConvertJobData();
+			case VidiunBatchJobType::POSTCONVERT:
+				$dbData = new vPostConvertJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaPostConvertJobData();
+					$this->data = new VidiunPostConvertJobData();
 				break;
 				
-			case KalturaBatchJobType::MAIL:
-				$dbData = new kMailJobData();
+			case VidiunBatchJobType::MAIL:
+				$dbData = new vMailJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaMailJobData();
+					$this->data = new VidiunMailJobData();
 				break;
 				
-			case KalturaBatchJobType::NOTIFICATION:
-				$dbData = new kNotificationJobData();
+			case VidiunBatchJobType::NOTIFICATION:
+				$dbData = new vNotificationJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaNotificationJobData();
+					$this->data = new VidiunNotificationJobData();
 				break;
 				
-			case KalturaBatchJobType::BULKDOWNLOAD:
-				$dbData = new kBulkDownloadJobData();
+			case VidiunBatchJobType::BULKDOWNLOAD:
+				$dbData = new vBulkDownloadJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaBulkDownloadJobData();
+					$this->data = new VidiunBulkDownloadJobData();
 				break;
 				
-			case KalturaBatchJobType::FLATTEN:
-				$dbData = new kFlattenJobData();
+			case VidiunBatchJobType::FLATTEN:
+				$dbData = new vFlattenJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaFlattenJobData();
+					$this->data = new VidiunFlattenJobData();
 				break;
 				
-			case KalturaBatchJobType::PROVISION_PROVIDE:
-			case KalturaBatchJobType::PROVISION_DELETE:
+			case VidiunBatchJobType::PROVISION_PROVIDE:
+			case VidiunBatchJobType::PROVISION_DELETE:
 				$jobSubType = $dbBatchJob->getJobSubType();
-				$dbData = kAkamaiProvisionJobData::getInstance($jobSubType);
+				$dbData = vAkamaiProvisionJobData::getInstance($jobSubType);
 				if(is_null($this->data))
-					$this->data = KalturaProvisionJobData::getJobDataInstance($jobSubType);
+					$this->data = VidiunProvisionJobData::getJobDataInstance($jobSubType);
 
 				break;
 				
-			case KalturaBatchJobType::CONVERT_COLLECTION:
-				$dbData = new kConvertCollectionJobData();
+			case VidiunBatchJobType::CONVERT_COLLECTION:
+				$dbData = new vConvertCollectionJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaConvertCollectionJobData();
+					$this->data = new VidiunConvertCollectionJobData();
 				break;
 				
-			case KalturaBatchJobType::STORAGE_EXPORT:
-				$dbData = new kStorageExportJobData();
+			case VidiunBatchJobType::STORAGE_EXPORT:
+				$dbData = new vStorageExportJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaStorageExportJobData();
+					$this->data = new VidiunStorageExportJobData();
 				break;
 				
-			case KalturaBatchJobType::MOVE_CATEGORY_ENTRIES:
-				$dbData = new kMoveCategoryEntriesJobData();
+			case VidiunBatchJobType::MOVE_CATEGORY_ENTRIES:
+				$dbData = new vMoveCategoryEntriesJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaMoveCategoryEntriesJobData();
+					$this->data = new VidiunMoveCategoryEntriesJobData();
 				break;
 				
-			case KalturaBatchJobType::STORAGE_DELETE:
-				$dbData = new kStorageDeleteJobData();
+			case VidiunBatchJobType::STORAGE_DELETE:
+				$dbData = new vStorageDeleteJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaStorageDeleteJobData();
+					$this->data = new VidiunStorageDeleteJobData();
 				break;
 				
-			case KalturaBatchJobType::CAPTURE_THUMB:
-				$dbData = new kCaptureThumbJobData();
+			case VidiunBatchJobType::CAPTURE_THUMB:
+				$dbData = new vCaptureThumbJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaCaptureThumbJobData();
+					$this->data = new VidiunCaptureThumbJobData();
 				break;
 				
-			case KalturaBatchJobType::INDEX:
+			case VidiunBatchJobType::INDEX:
 				$dbData = new kIndexJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaIndexJobData();
+					$this->data = new VidiunIndexJobData();
 				break;
 				
-			case KalturaBatchJobType::COPY:
-				$dbData = new kCopyJobData();
+			case VidiunBatchJobType::COPY:
+				$dbData = new vCopyJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaCopyJobData();
+					$this->data = new VidiunCopyJobData();
 				break;
 				
-			case KalturaBatchJobType::DELETE:
-				$dbData = new kDeleteJobData();
+			case VidiunBatchJobType::DELETE:
+				$dbData = new vDeleteJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaDeleteJobData();
+					$this->data = new VidiunDeleteJobData();
 				break;
 
-			case KalturaBatchJobType::DELETE_FILE:
-				$dbData = new kDeleteFileJobData();
+			case VidiunBatchJobType::DELETE_FILE:
+				$dbData = new vDeleteFileJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaDeleteFileJobData();
+					$this->data = new VidiunDeleteFileJobData();
 				break;
 				
-			case KalturaBatchJobType::CONVERT_LIVE_SEGMENT:
-				$dbData = new kConvertLiveSegmentJobData();
+			case VidiunBatchJobType::CONVERT_LIVE_SEGMENT:
+				$dbData = new vConvertLiveSegmentJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaConvertLiveSegmentJobData();
+					$this->data = new VidiunConvertLiveSegmentJobData();
 				break;
 				
-			case KalturaBatchJobType::CONCAT:
-				$dbData = new kConcatJobData();
+			case VidiunBatchJobType::CONCAT:
+				$dbData = new vConcatJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaConcatJobData();
+					$this->data = new VidiunConcatJobData();
 				break;
 					
-			case KalturaBatchJobType::COPY_PARTNER:
-				$dbData = new kCopyPartnerJobData();
+			case VidiunBatchJobType::COPY_PARTNER:
+				$dbData = new vCopyPartnerJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaCopyPartnerJobData();
+					$this->data = new VidiunCopyPartnerJobData();
 				break;
 					
-			case KalturaBatchJobType::RECALCULATE_CACHE:
+			case VidiunBatchJobType::RECALCULATE_CACHE:
 				switch($dbBatchJob->getJobSubType())
 				{
 					case RecalculateCacheType::RESPONSE_PROFILE:
-						$dbData = new kRecalculateResponseProfileCacheJobData();
+						$dbData = new vRecalculateResponseProfileCacheJobData();
 						if(is_null($this->data))
-							$this->data = new KalturaRecalculateResponseProfileCacheJobData();
+							$this->data = new VidiunRecalculateResponseProfileCacheJobData();
 						break;
 				}
 				break;
 			
-			case KalturaBatchJobType::LIVE_TO_VOD:
-				$dbData = new kLiveToVodJobData();
+			case VidiunBatchJobType::LIVE_TO_VOD:
+				$dbData = new vLiveToVodJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaLiveToVodJobData();
+					$this->data = new VidiunLiveToVodJobData();
  				break;
 
 
-			case KalturaBatchJobType::CLIP_CONCAT:
-				$dbData = new kClipConcatJobData();
+			case VidiunBatchJobType::CLIP_CONCAT:
+				$dbData = new vClipConcatJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaClipConcatJobData();
+					$this->data = new VidiunClipConcatJobData();
 				break;
 
-			case KalturaBatchJobType::COPY_CUE_POINTS:
+			case VidiunBatchJobType::COPY_CUE_POINTS:
 				switch ($dbBatchJob->getJobSubType()) {
 					case CopyCuePointJobType::MULTI_CLIP:
-						$dbData = new kMultiClipCopyCuePointsJobData();
+						$dbData = new vMultiClipCopyCuePointsJobData();
 						if(is_null($this->data))
-							$this->data = new KalturaMultiClipCopyCuePointsJobData();
+							$this->data = new VidiunMultiClipCopyCuePointsJobData();
 						break;
 					case CopyCuePointJobType::LIVE_CLIPPING:
-						$dbData = new kLiveToVodJobData();
+						$dbData = new vLiveToVodJobData();
 						if(is_null($this->data))
-							$this->data = new KalturaLiveToVodJobData();
+							$this->data = new VidiunLiveToVodJobData();
 						break;
 					default:
-						$dbData = new kCopyCuePointsJobData();
+						$dbData = new vCopyCuePointsJobData();
 						if(is_null($this->data))
-							$this->data = new KalturaCopyCuePointsJobData();
+							$this->data = new VidiunCopyCuePointsJobData();
 						break;
 				}
 				break;
 
-			case KalturaBatchJobType::COPY_CAPTIONS:
-				$dbData = new kCopyCaptionsJobData();
+			case VidiunBatchJobType::COPY_CAPTIONS:
+				$dbData = new vCopyCaptionsJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaCopyCaptionsJobData();
+					$this->data = new VidiunCopyCaptionsJobData();
 				break;
 
-			case KalturaBatchJobType::USERS_CSV:
-				$dbData = new kUsersCsvJobData();
+			case VidiunBatchJobType::USERS_CSV:
+				$dbData = new vUsersCsvJobData();
 				if(is_null($this->data))
-					$this->data = new KalturaUsersCsvJobData();
+					$this->data = new VidiunUsersCsvJobData();
 				break;
 
 			default:
-				$dbData = KalturaPluginManager::loadObject('kJobData', $dbBatchJob->getJobType());
+				$dbData = VidiunPluginManager::loadObject('vJobData', $dbBatchJob->getJobType());
 				if(is_null($this->data)) {
-					$this->data = KalturaPluginManager::loadObject('KalturaJobData', $this->jobType);
+					$this->data = VidiunPluginManager::loadObject('VidiunJobData', $this->jobType);
 				}
 		}
 		
 		if(is_null($dbBatchJob->getData()))
 			$dbBatchJob->setData($dbData);
 	
-		if($this->data instanceof KalturaJobData)
+		if($this->data instanceof VidiunJobData)
 		{
 			$dbData = $this->data->toObject($dbBatchJob->getData());
 			$dbBatchJob->setData($dbData);
@@ -735,7 +735,7 @@ class KalturaBatchJob extends KalturaObject implements IFilterable
 		
 		if (!is_null($this->data))
 		    $this->toData($dbBatchJob);
-		if(!is_null($this->jobSubType) && $this->data instanceof KalturaJobData)
+		if(!is_null($this->jobSubType) && $this->data instanceof VidiunJobData)
 			$dbBatchJob->setJobSubType($this->data->toSubType($this->jobSubType));
 		
 		return $dbBatchJob;

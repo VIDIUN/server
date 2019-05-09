@@ -3,35 +3,35 @@
  * @package Scheduler
  * @subpackage Delete
  */
-class KDeletingGroupUserEngine extends KDeletingEngine
+class VDeletingGroupUserEngine extends VDeletingEngine
 {
 	/* (non-PHPdoc)
-	 * @see KDeletingEngine::delete()
+	 * @see VDeletingEngine::delete()
 	 */
-	protected function delete(KalturaFilter $filter)
+	protected function delete(VidiunFilter $filter)
 	{
 		return $this->deleteGroupUser($filter);
 	}
 	
 	/**
-	 * @param KalturaGroupUserFilter $filter The filter should return the list of groupUsers users that need to be deleted
+	 * @param VidiunGroupUserFilter $filter The filter should return the list of groupUsers users that need to be deleted
 	 * @return int the number of deleted groupUsers
 	 */
-	protected function deleteGroupUser(KalturaGroupUserFilter $filter)
+	protected function deleteGroupUser(VidiunGroupUserFilter $filter)
 	{
-		$filter->orderBy = KalturaGroupUserOrderBy::CREATED_AT_ASC;
+		$filter->orderBy = VidiunGroupUserOrderBy::CREATED_AT_ASC;
 		
-		$groupUsersList = KBatchBase::$kClient->groupUser->listAction($filter, $this->pager);
+		$groupUsersList = VBatchBase::$vClient->groupUser->listAction($filter, $this->pager);
 		if(!$groupUsersList->objects || !count($groupUsersList->objects))
 			return 0;
 			
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($groupUsersList->objects as $groupUser)
 		{
-			/* @var $groupUser KalturaGroupUser */
-			KBatchBase::$kClient->groupUser->delete($groupUser->userId, $groupUser->groupId);
+			/* @var $groupUser VidiunGroupUser */
+			VBatchBase::$vClient->groupUser->delete($groupUser->userId, $groupUser->groupId);
 		}
-		$results = KBatchBase::$kClient->doMultiRequest();
+		$results = VBatchBase::$vClient->doMultiRequest();
 		foreach($results as $index => $result)
 			if(is_array($result) && isset($result['code']))
 				unset($results[$index]);

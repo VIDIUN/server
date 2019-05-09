@@ -4,7 +4,7 @@
  * @subpackage objects
  * @relatedService ConversionProfileAssetParamsService
  */
-class KalturaConversionProfileAssetParams extends KalturaObject implements IRelatedFilterable 
+class VidiunConversionProfileAssetParams extends VidiunObject implements IRelatedFilterable 
 {
 	/**
 	 * The id of the conversion profile
@@ -27,7 +27,7 @@ class KalturaConversionProfileAssetParams extends KalturaObject implements IRela
 	/**
 	 * The ingestion origin of the asset params
 	 *  
-	 * @var KalturaFlavorReadyBehaviorType
+	 * @var VidiunFlavorReadyBehaviorType
 	 * @filter eq,in
 	 */
 	public $readyBehavior;
@@ -35,7 +35,7 @@ class KalturaConversionProfileAssetParams extends KalturaObject implements IRela
 	/**
 	 * The ingestion origin of the asset params
 	 *  
-	 * @var KalturaAssetParamsOrigin
+	 * @var VidiunAssetParamsOrigin
 	 * @filter eq,in
 	 */
 	public $origin;
@@ -50,19 +50,19 @@ class KalturaConversionProfileAssetParams extends KalturaObject implements IRela
 	
 	/**
 	 * Starts conversion even if the decision layer reduced the configuration to comply with the source
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $forceNoneComplied;
 	
 	/**
 	 * 
 	 * Specifies how to treat the flavor after conversion is finished
-	 * @var KalturaAssetParamsDeletePolicy
+	 * @var VidiunAssetParamsDeletePolicy
 	 */
 	public $deletePolicy;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isEncrypted;
 
@@ -77,7 +77,7 @@ class KalturaConversionProfileAssetParams extends KalturaObject implements IRela
 	public $chunkedEncodeMode;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $twoPass;
 
@@ -110,7 +110,7 @@ class KalturaConversionProfileAssetParams extends KalturaObject implements IRela
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -134,16 +134,16 @@ class KalturaConversionProfileAssetParams extends KalturaObject implements IRela
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUpdate($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
 		/* @var $sourceObject flavorParamsConversionProfile */
 		$assetParams = $sourceObject->getassetParams();
 		if(!$assetParams)
-			throw new KalturaAPIException(KalturaErrors::ASSET_ID_NOT_FOUND, $sourceObject->getFlavorParamsId());
+			throw new VidiunAPIException(VidiunErrors::ASSET_ID_NOT_FOUND, $sourceObject->getFlavorParamsId());
 			
-		if($assetParams instanceof liveParams && $this->origin == KalturaAssetParamsOrigin::CONVERT_WHEN_MISSING)
-			throw new KalturaAPIException(KalturaErrors::LIVE_PARAMS_ORIGIN_NOT_SUPPORTED, $sourceObject->getFlavorParamsId(), $assetParams->getType(), $this->origin);
+		if($assetParams instanceof liveParams && $this->origin == VidiunAssetParamsOrigin::CONVERT_WHEN_MISSING)
+			throw new VidiunAPIException(VidiunErrors::LIVE_PARAMS_ORIGIN_NOT_SUPPORTED, $sourceObject->getFlavorParamsId(), $assetParams->getType(), $this->origin);
 	}
 }

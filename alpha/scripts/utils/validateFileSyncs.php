@@ -12,7 +12,7 @@ require_once(__DIR__ . '/../bootstrap.php');
 
 function deleteObject(FileSync $fileSync)
 {
-	$object = kFileSyncUtils::retrieveObjectForFileSync($fileSync);
+	$object = vFileSyncUtils::retrieveObjectForFileSync($fileSync);
 	$key = $object->getSyncKey($fileSync->getObjectSubType());
 	if($key->version != $fileSync->getVersion())
 		return;
@@ -33,7 +33,7 @@ function deleteObject(FileSync $fileSync)
 			}
 			catch(Exception $e)
 			{
-				KalturaLog::err($e);
+				VidiunLog::err($e);
 			}
 			break;
 			
@@ -65,7 +65,7 @@ function deleteObject(FileSync $fileSync)
 		deleteObject($link);
 }
 
-KalturaStatement::setDryRun($dryRun);
+VidiunStatement::setDryRun($dryRun);
 
 $criteria = new Criteria();
 $criteria->add(FileSyncPeer::STATUS, FileSync::FILE_SYNC_STATUS_READY);
@@ -76,7 +76,7 @@ if($startId)
 	$criteria->add(FileSyncPeer::ID, $startId, Criteria::GREATER_THAN);
 
 $fileSyncsCount = FileSyncPeer::doCount($criteria);
-KalturaLog::debug("Found [$fileSyncsCount] file syncs");
+VidiunLog::debug("Found [$fileSyncsCount] file syncs");
 
 $criteria->addAscendingOrderByColumn(FileSyncPeer::ID);
 $criteria->setLimit(500);
@@ -96,9 +96,9 @@ while(count($fileSyncs))
 		if(!file_exists($fileSync->getFullPath()))
 			deleteObject($fileSync);
 			
-		KalturaLog::debug("Handled [$index/$fileSyncsCount]");
+		VidiunLog::debug("Handled [$index/$fileSyncsCount]");
 	}
-	kMemoryManager::clearMemory();
+	vMemoryManager::clearMemory();
 	
 	$nextCriteria = clone $criteria;
 	$nextCriteria->add(FileSyncPeer::ID, $lastId, Criteria::GREATER_THAN);

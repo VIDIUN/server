@@ -10,28 +10,28 @@
  * @package Scheduler
  * @subpackage RecalculateCache
  */
-class KAsyncRecalculateCache extends KJobHandlerWorker
+class VAsyncRecalculateCache extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::RECALCULATE_CACHE;
+		return VidiunBatchJobType::RECALCULATE_CACHE;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->recalculate($job, $job->data);
 	}
 	
-	private function recalculate(KalturaBatchJob $job, KalturaRecalculateCacheJobData $data)
+	private function recalculate(VidiunBatchJob $job, VidiunRecalculateCacheJobData $data)
 	{
-		$engine = KRecalculateCacheEngine::getInstance($job->jobSubType);
+		$engine = VRecalculateCacheEngine::getInstance($job->jobSubType);
 		$recalculatedObjects = $engine->recalculate($data);
-		return $this->closeJob($job, null, null, "Recalculated $recalculatedObjects cache objects", KalturaBatchJobStatus::FINISHED);
+		return $this->closeJob($job, null, null, "Recalculated $recalculatedObjects cache objects", VidiunBatchJobStatus::FINISHED);
 	}
 }

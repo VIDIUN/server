@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.filters
  */
-class KalturaMetadataProfileFilter extends KalturaMetadataProfileBaseFilter
+class VidiunMetadataProfileFilter extends VidiunMetadataProfileBaseFilter
 {
 	static private $map_between_objects = array
 	(
@@ -17,7 +17,7 @@ class KalturaMetadataProfileFilter extends KalturaMetadataProfileBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

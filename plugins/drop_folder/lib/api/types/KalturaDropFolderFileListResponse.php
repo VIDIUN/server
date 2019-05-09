@@ -3,10 +3,10 @@
  * @package plugins.dropFolder
  * @subpackage api.objects
  */
-class KalturaDropFolderFileListResponse extends KalturaListResponse
+class VidiunDropFolderFileListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaDropFolderFileArray
+	 * @var VidiunDropFolderFileArray
 	 * @readonly
 	 */
 	public $objects;

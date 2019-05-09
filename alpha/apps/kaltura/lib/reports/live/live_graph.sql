@@ -2,7 +2,7 @@ SELECT
 	DATE_FORMAT(DATE(date_id) + INTERVAL hour_id HOUR + INTERVAL {TIME_SHIFT} HOUR, "%Y%m%d%H") day_hour_id, # time shifted date
 	IFNULL(SUM(count_plays),0) count_plays
 FROM 
-	dwh_hourly_events_live_entry ev, kalturadw.dwh_dim_entries en
+	dwh_hourly_events_live_entry ev, vidiundw.dwh_dim_entries en
 WHERE 	
 	en.entry_id=ev.entry_id
 	AND {OBJ_ID_CLAUSE}

@@ -1,10 +1,10 @@
 <?php
 /**
- * The KalturaPager object enables paging management to be applied upon service list/search actions.
+ * The VidiunPager object enables paging management to be applied upon service list/search actions.
  * @package api
  * @subpackage objects
  */
-class KalturaPager extends KalturaObject
+class VidiunPager extends VidiunObject
 {
     const MIN_PAGE_INDEX = 1;
     const MAX_PAGE_SIZE = 500;
@@ -26,7 +26,7 @@ class KalturaPager extends KalturaObject
     private static $map_between_objects = array();
 
     /* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
     public function getMapBetweenObjects()
     {
@@ -37,7 +37,7 @@ class KalturaPager extends KalturaObject
     {
         if (!$object)
         {
-            $object = new kPager();
+            $object = new vPager();
         }
 
         $object->setPageSize($this->calcPageSize());

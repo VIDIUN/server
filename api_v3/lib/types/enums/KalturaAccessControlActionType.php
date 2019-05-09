@@ -2,8 +2,8 @@
 /**
  * @package api
  * @subpackage enum
- * @deprecated use KalturaRuleActionType
+ * @deprecated use VidiunRuleActionType
  */
-class KalturaAccessControlActionType extends KalturaRuleActionType
+class VidiunAccessControlActionType extends VidiunRuleActionType
 {
 }

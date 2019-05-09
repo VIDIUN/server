@@ -5,17 +5,17 @@
  * @package plugins.httpNotification
  * @subpackage api.objects
  */
-class KalturaHttpNotification extends KalturaObject
+class VidiunHttpNotification extends VidiunObject
 {
 	/**
 	 * Object that triggered the notification
-	 * @var KalturaObject
+	 * @var VidiunObject
 	 */
 	public $object;
 	
 	/**
 	 * Object type that triggered the notification
-	 * @var KalturaEventNotificationEventObjectType
+	 * @var VidiunEventNotificationEventObjectType
 	 */
 	public $eventObjectType;
 	
@@ -45,7 +45,7 @@ class KalturaHttpNotification extends KalturaObject
 	
 	/**
 	 * Ecent type that triggered the notification
-	 * @var KalturaEventNotificationEventType
+	 * @var VidiunEventNotificationEventType
 	 */
 	public $eventType;
 }

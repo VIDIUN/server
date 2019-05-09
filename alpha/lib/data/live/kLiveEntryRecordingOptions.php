@@ -7,7 +7,7 @@
  * @subpackage model
  *
  */
-class kLiveEntryRecordingOptions
+class vLiveEntryRecordingOptions
 {
 	/**
 	 * @var boolean

@@ -26,10 +26,10 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 	protected $id;
 
 	/**
-	 * The value for the kshow_id field.
+	 * The value for the vshow_id field.
 	 * @var        string
 	 */
-	protected $kshow_id;
+	protected $vshow_id;
 
 	/**
 	 * The value for the entry_id field.
@@ -38,10 +38,10 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 	protected $entry_id;
 
 	/**
-	 * The value for the kmedia_type field.
+	 * The value for the vmedia_type field.
 	 * @var        int
 	 */
-	protected $kmedia_type;
+	protected $vmedia_type;
 
 	/**
 	 * The value for the widget_type field.
@@ -208,13 +208,13 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kshow_id] column value.
+	 * Get the [vshow_id] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getKshowId()
+	public function getVshowId()
 	{
-		return $this->kshow_id;
+		return $this->vshow_id;
 	}
 
 	/**
@@ -228,13 +228,13 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kmedia_type] column value.
+	 * Get the [vmedia_type] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKmediaType()
+	public function getVmediaType()
 	{
-		return $this->kmedia_type;
+		return $this->vmedia_type;
 	}
 
 	/**
@@ -441,27 +441,27 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 	} // setId()
 
 	/**
-	 * Set the value of [kshow_id] column.
+	 * Set the value of [vshow_id] column.
 	 * 
 	 * @param      string $v new value
 	 * @return     WidgetLog The current object (for fluent API support)
 	 */
-	public function setKshowId($v)
+	public function setVshowId($v)
 	{
-		if(!isset($this->oldColumnsValues[WidgetLogPeer::KSHOW_ID]))
-			$this->oldColumnsValues[WidgetLogPeer::KSHOW_ID] = $this->kshow_id;
+		if(!isset($this->oldColumnsValues[WidgetLogPeer::VSHOW_ID]))
+			$this->oldColumnsValues[WidgetLogPeer::VSHOW_ID] = $this->vshow_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->kshow_id !== $v) {
-			$this->kshow_id = $v;
-			$this->modifiedColumns[] = WidgetLogPeer::KSHOW_ID;
+		if ($this->vshow_id !== $v) {
+			$this->vshow_id = $v;
+			$this->modifiedColumns[] = WidgetLogPeer::VSHOW_ID;
 		}
 
 		return $this;
-	} // setKshowId()
+	} // setVshowId()
 
 	/**
 	 * Set the value of [entry_id] column.
@@ -491,27 +491,27 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 	} // setEntryId()
 
 	/**
-	 * Set the value of [kmedia_type] column.
+	 * Set the value of [vmedia_type] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     WidgetLog The current object (for fluent API support)
 	 */
-	public function setKmediaType($v)
+	public function setVmediaType($v)
 	{
-		if(!isset($this->oldColumnsValues[WidgetLogPeer::KMEDIA_TYPE]))
-			$this->oldColumnsValues[WidgetLogPeer::KMEDIA_TYPE] = $this->kmedia_type;
+		if(!isset($this->oldColumnsValues[WidgetLogPeer::VMEDIA_TYPE]))
+			$this->oldColumnsValues[WidgetLogPeer::VMEDIA_TYPE] = $this->vmedia_type;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kmedia_type !== $v) {
-			$this->kmedia_type = $v;
-			$this->modifiedColumns[] = WidgetLogPeer::KMEDIA_TYPE;
+		if ($this->vmedia_type !== $v) {
+			$this->vmedia_type = $v;
+			$this->modifiedColumns[] = WidgetLogPeer::VMEDIA_TYPE;
 		}
 
 		return $this;
-	} // setKmediaType()
+	} // setVmediaType()
 
 	/**
 	 * Set the value of [widget_type] column.
@@ -898,9 +898,9 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 		try {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->kshow_id = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+			$this->vshow_id = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
 			$this->entry_id = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-			$this->kmedia_type = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+			$this->vmedia_type = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->widget_type = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
 			$this->referer = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
 			$this->views = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
@@ -1179,7 +1179,7 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -1203,12 +1203,12 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1226,8 +1226,8 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1401,13 +1401,13 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 				return $this->getId();
 				break;
 			case 1:
-				return $this->getKshowId();
+				return $this->getVshowId();
 				break;
 			case 2:
 				return $this->getEntryId();
 				break;
 			case 3:
-				return $this->getKmediaType();
+				return $this->getVmediaType();
 				break;
 			case 4:
 				return $this->getWidgetType();
@@ -1467,9 +1467,9 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 		$keys = WidgetLogPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
-			$keys[1] => $this->getKshowId(),
+			$keys[1] => $this->getVshowId(),
 			$keys[2] => $this->getEntryId(),
-			$keys[3] => $this->getKmediaType(),
+			$keys[3] => $this->getVmediaType(),
 			$keys[4] => $this->getWidgetType(),
 			$keys[5] => $this->getReferer(),
 			$keys[6] => $this->getViews(),
@@ -1517,13 +1517,13 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 				$this->setId($value);
 				break;
 			case 1:
-				$this->setKshowId($value);
+				$this->setVshowId($value);
 				break;
 			case 2:
 				$this->setEntryId($value);
 				break;
 			case 3:
-				$this->setKmediaType($value);
+				$this->setVmediaType($value);
 				break;
 			case 4:
 				$this->setWidgetType($value);
@@ -1586,9 +1586,9 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 		$keys = WidgetLogPeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setKshowId($arr[$keys[1]]);
+		if (array_key_exists($keys[1], $arr)) $this->setVshowId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setEntryId($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setKmediaType($arr[$keys[3]]);
+		if (array_key_exists($keys[3], $arr)) $this->setVmediaType($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setWidgetType($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setReferer($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setViews($arr[$keys[6]]);
@@ -1613,9 +1613,9 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 		$criteria = new Criteria(WidgetLogPeer::DATABASE_NAME);
 
 		if ($this->isColumnModified(WidgetLogPeer::ID)) $criteria->add(WidgetLogPeer::ID, $this->id);
-		if ($this->isColumnModified(WidgetLogPeer::KSHOW_ID)) $criteria->add(WidgetLogPeer::KSHOW_ID, $this->kshow_id);
+		if ($this->isColumnModified(WidgetLogPeer::VSHOW_ID)) $criteria->add(WidgetLogPeer::VSHOW_ID, $this->vshow_id);
 		if ($this->isColumnModified(WidgetLogPeer::ENTRY_ID)) $criteria->add(WidgetLogPeer::ENTRY_ID, $this->entry_id);
-		if ($this->isColumnModified(WidgetLogPeer::KMEDIA_TYPE)) $criteria->add(WidgetLogPeer::KMEDIA_TYPE, $this->kmedia_type);
+		if ($this->isColumnModified(WidgetLogPeer::VMEDIA_TYPE)) $criteria->add(WidgetLogPeer::VMEDIA_TYPE, $this->vmedia_type);
 		if ($this->isColumnModified(WidgetLogPeer::WIDGET_TYPE)) $criteria->add(WidgetLogPeer::WIDGET_TYPE, $this->widget_type);
 		if ($this->isColumnModified(WidgetLogPeer::REFERER)) $criteria->add(WidgetLogPeer::REFERER, $this->referer);
 		if ($this->isColumnModified(WidgetLogPeer::VIEWS)) $criteria->add(WidgetLogPeer::VIEWS, $this->views);
@@ -1694,11 +1694,11 @@ abstract class BaseWidgetLog extends BaseObject  implements Persistent {
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 
-		$copyObj->setKshowId($this->kshow_id);
+		$copyObj->setVshowId($this->vshow_id);
 
 		$copyObj->setEntryId($this->entry_id);
 
-		$copyObj->setKmediaType($this->kmedia_type);
+		$copyObj->setVmediaType($this->vmedia_type);
 
 		$copyObj->setWidgetType($this->widget_type);
 

@@ -35,7 +35,7 @@ class categoryEntryPeer extends BasecategoryEntryPeer implements IRelatedObjectP
 	{
 		$c = clone $criteria;
 			
-		if($c instanceof KalturaCriteria)
+		if($c instanceof VidiunCriteria)
 		{
 			$c->applyFilters();
 			$criteria->setRecordsCount($c->getRecordsCount());
@@ -49,7 +49,7 @@ class categoryEntryPeer extends BasecategoryEntryPeer implements IRelatedObjectP
 	{
 		$c = clone $criteria;
 
-		if($c instanceof KalturaCriteria)
+		if($c instanceof VidiunCriteria)
 		{
 			$c->applyFilters();
 		}
@@ -192,9 +192,9 @@ class categoryEntryPeer extends BasecategoryEntryPeer implements IRelatedObjectP
 				$newCatsIds = array();	
 				
 			
-			KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+			VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 			$dbCategories = categoryPeer::retrieveByPKs($newCatsIds);
-			KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+			VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 	
 			foreach ($dbCategories as $dbCategory)
 			{
@@ -248,9 +248,9 @@ class categoryEntryPeer extends BasecategoryEntryPeer implements IRelatedObjectP
 		
 		foreach ( $remainingCats as $cat ) 
 		{
-			KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+			VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 			$category = categoryPeer::getByFullNameExactMatch ( $cat );
-			KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+			VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 			if ($category) 
 			{
 				if($category->getPrivacyContext() == '' || $category->getPrivacyContext() == null)
@@ -266,9 +266,9 @@ class categoryEntryPeer extends BasecategoryEntryPeer implements IRelatedObjectP
 			$category = categoryPeer::getByFullNameExactMatch ( $cat );
 			if (!$category)
 			{
-				KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+				VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 				$unentitedCategory = categoryPeer::getByFullNameExactMatch ( $cat );
-				KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+				VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 
 				if(!$unentitedCategory)
 				{
@@ -276,15 +276,15 @@ class categoryEntryPeer extends BasecategoryEntryPeer implements IRelatedObjectP
 					
 					//it is possible to add on an entry a few new categories on the same new parent - 
 					//and we need to sync sphinx once we add so the category will not be duplicated 
-					kEventsManager::flushEvents();
+					vEventsManager::flushEvents();
 				}
 			}
 			else
 			{
-				$categoryKuser = categoryKuserPeer::retrievePermittedKuserInCategory($category->getId(), kCurrentContext::getCurrentKsKuserId());
-				if(kEntitlementUtils::getEntitlementEnforcement() && 
+				$categoryVuser = categoryVuserPeer::retrievePermittedVuserInCategory($category->getId(), vCurrentContext::getCurrentVsVuserId());
+				if(vEntitlementUtils::getEntitlementEnforcement() && 
 					$category->getContributionPolicy() != ContributionPolicyType::ALL &&
-					(!$categoryKuser || $categoryKuser->getPermissionLevel() == CategoryKuserPermissionLevel::MEMBER))
+					(!$categoryVuser || $categoryVuser->getPermissionLevel() == CategoryVuserPermissionLevel::MEMBER))
 				{
 					//user is not entitled to add entry to this category
 					$category = null;
@@ -328,8 +328,8 @@ class categoryEntryPeer extends BasecategoryEntryPeer implements IRelatedObjectP
 				$categoryEntryToDelete = categoryEntryPeer::retrieveByCategoryIdAndEntryId($category->getId(), $entry->getId());
 				if($categoryEntryToDelete)
 				{
-					$categoryKuser = categoryKuserPeer::retrievePermittedKuserInCategory($categoryEntryToDelete->getCategoryId(), kCurrentContext::getCurrentKsKuserId());
-					if($category->getPrivacyContexts() && (!$categoryKuser || $categoryKuser->getPermissionLevel() == CategoryKuserPermissionLevel::MEMBER))
+					$categoryVuser = categoryVuserPeer::retrievePermittedVuserInCategory($categoryEntryToDelete->getCategoryId(), vCurrentContext::getCurrentVsVuserId());
+					if($category->getPrivacyContexts() && (!$categoryVuser || $categoryVuser->getPermissionLevel() == CategoryVuserPermissionLevel::MEMBER))
 					{
 						//not entiteld to delete - should be set back on the entry.
 						$allCats[] = $category->getFullName();
@@ -345,9 +345,9 @@ class categoryEntryPeer extends BasecategoryEntryPeer implements IRelatedObjectP
 			else
 			{
 				//category was not found - it could be that user is not entitled to remove it 
-				KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+				VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 				$category = categoryPeer::getByFullNameExactMatch ( $cat );
-				KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+				VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 				
 				if($category)
 				{

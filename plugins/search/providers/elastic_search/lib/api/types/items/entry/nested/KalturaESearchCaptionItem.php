@@ -3,11 +3,11 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchCaptionItem extends KalturaESearchEntryAbstractNestedItem
+class VidiunESearchCaptionItem extends VidiunESearchEntryAbstractNestedItem
 {
 
 	/**
-	 * @var KalturaESearchCaptionFieldName
+	 * @var VidiunESearchCaptionFieldName
 	 */
 	public $fieldName;
 
@@ -18,12 +18,12 @@ class KalturaESearchCaptionItem extends KalturaESearchEntryAbstractNestedItem
 	private static $map_dynamic_enum = array();
 
 	private static $map_field_enum = array(
-		KalturaESearchCaptionFieldName::CONTENT => ESearchCaptionFieldName::CONTENT,
-		KalturaESearchCaptionFieldName::START_TIME => ESearchCaptionFieldName::START_TIME,
-		KalturaESearchCaptionFieldName::END_TIME => ESearchCaptionFieldName::END_TIME,
-		KalturaESearchCaptionFieldName::LANGUAGE => ESearchCaptionFieldName::LANGUAGE,
-		KalturaESearchCaptionFieldName::LABEL => ESearchCaptionFieldName::LABEL,
-		KalturaESearchCaptionFieldName::CAPTION_ASSET_ID => ESearchCaptionFieldName::CAPTION_ASSET_ID,
+		VidiunESearchCaptionFieldName::CONTENT => ESearchCaptionFieldName::CONTENT,
+		VidiunESearchCaptionFieldName::START_TIME => ESearchCaptionFieldName::START_TIME,
+		VidiunESearchCaptionFieldName::END_TIME => ESearchCaptionFieldName::END_TIME,
+		VidiunESearchCaptionFieldName::LANGUAGE => ESearchCaptionFieldName::LANGUAGE,
+		VidiunESearchCaptionFieldName::LABEL => ESearchCaptionFieldName::LABEL,
+		VidiunESearchCaptionFieldName::CAPTION_ASSET_ID => ESearchCaptionFieldName::CAPTION_ASSET_ID,
 	);
 
 	protected function getMapBetweenObjects()
@@ -38,7 +38,7 @@ class KalturaESearchCaptionItem extends KalturaESearchEntryAbstractNestedItem
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}
 	
-	protected function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$this->fieldName = self::getApiFieldName($srcObj->getFieldName());
 		return parent::doFromObject($srcObj, $responseProfile);

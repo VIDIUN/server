@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage model.data
  */
-abstract class kAssetDistributionCondition
+abstract class vAssetDistributionCondition
 {
 	/**
 	 * @param asset $asset

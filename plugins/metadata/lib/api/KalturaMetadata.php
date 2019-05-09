@@ -4,7 +4,7 @@
  * @subpackage api.objects
  * @relatedService MetadataService
  */
-class KalturaMetadata extends KalturaObject implements IRelatedFilterable 
+class VidiunMetadata extends VidiunObject implements IRelatedFilterable 
 {
 	/**
 	 * 
@@ -45,7 +45,7 @@ class KalturaMetadata extends KalturaObject implements IRelatedFilterable
 	
 	/**
 	 * 
-	 * @var KalturaMetadataObjectType
+	 * @var VidiunMetadataObjectType
 	 * @filter eq
 	 * @readonly
 	 */
@@ -95,7 +95,7 @@ class KalturaMetadata extends KalturaObject implements IRelatedFilterable
 	
 	/**
 	 * 
-	 * @var KalturaMetadataStatus
+	 * @var VidiunMetadataStatus
 	 * @filter eq,in
 	 * @readonly
 	 */
@@ -136,7 +136,7 @@ class KalturaMetadata extends KalturaObject implements IRelatedFilterable
 	
 	public function getFilterDocs()
 	{
-		return array('metadataObjectTypeEqual' => 'When null, default is KalturaMetadataObjectType::ENTRY');
+		return array('metadataObjectTypeEqual' => 'When null, default is VidiunMetadataObjectType::ENTRY');
 	}
 	
 	public function toObject($dbMetadata = null, $propsToSkip = array())
@@ -147,15 +147,15 @@ class KalturaMetadata extends KalturaObject implements IRelatedFilterable
 		return parent::toObject($dbMetadata, $propsToSkip);
 	}
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 		
 		if($this->shouldGet('objectId', $responseProfile))
 		{
-			if($this->metadataObjectType == KalturaMetadataObjectType::USER)
+			if($this->metadataObjectType == VidiunMetadataObjectType::USER)
 			{
-				$user = kuserPeer::retrieveByPK($this->objectId);
+				$user = vuserPeer::retrieveByPK($this->objectId);
 				
 				$this->objectId = null;
 				if($user)
@@ -166,7 +166,7 @@ class KalturaMetadata extends KalturaObject implements IRelatedFilterable
 		if($this->shouldGet('xml', $responseProfile))
 		{
 			$key = $source_object->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-			$this->xml = kFileSyncUtils::file_get_contents($key, true, false);
+			$this->xml = vFileSyncUtils::file_get_contents($key, true, false);
 		}
 	}
 }

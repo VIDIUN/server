@@ -19,9 +19,9 @@ interface AuditTrailObjectType extends BaseEnum
 	const FLAVOR_PARAMS_CONVERSION_PROFILE = flavorParamsConversionProfilePeer::OM_CLASS;
 	const FLAVOR_PARAMS_OUTPUT = assetParamsOutputPeer::FLAVOR_OM_CLASS;
 	const THUMBNAIL_PARAMS_OUTPUT = assetParamsOutputPeer::THUMBNAIL_OM_CLASS;
-	const KSHOW = kshowPeer::OM_CLASS;
-	const KSHOW_KUSER = KshowKuserPeer::OM_CLASS;
-	const KUSER = kuserPeer::OM_CLASS;
+	const VSHOW = vshowPeer::OM_CLASS;
+	const VSHOW_VUSER = VshowVuserPeer::OM_CLASS;
+	const VUSER = vuserPeer::OM_CLASS;
 	const MEDIA_INFO = mediaInfoPeer::OM_CLASS;
 	const MODERATION = moderationPeer::OM_CLASS;
 	const PARTNER = PartnerPeer::OM_CLASS;

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaCommercialUseType extends KalturaEnum implements CommercialUseType
+class VidiunCommercialUseType extends VidiunEnum implements CommercialUseType
 {
 	// see CommercialUseType interface
 }

@@ -2,10 +2,10 @@
 /**
  * @package plugins.tvComDistribution
  */
-class TVComDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider, IKalturaEventConsumers, IKalturaServices
+class TVComDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider, IVidiunEventConsumers, IVidiunServices
 {
 	const PLUGIN_NAME = 'tvComDistribution';
-	const TVCOM_EVENT_CONSUMER = "kTVComFlowManager";
+	const TVCOM_EVENT_CONSUMER = "vTVComFlowManager";
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 1;
 	const CONTENT_DSTRIBUTION_VERSION_MINOR = 0;
 	const CONTENT_DSTRIBUTION_VERSION_BUILD = 0;
@@ -17,12 +17,12 @@ class TVComDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -58,13 +58,13 @@ class TVComDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::TVCOM)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::TVCOM)
 		{
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaTVComDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunTVComDistributionProfile();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::TVCOM)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::TVCOM)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -73,8 +73,8 @@ class TVComDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 			}
 		}
 		
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TVComDistributionProviderType::TVCOM))
-			return new KalturaTVComDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TVComDistributionProviderType::TVCOM))
+			return new VidiunTVComDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TVComDistributionProviderType::TVCOM))
 			return new TVComDistributionProfile();
@@ -90,23 +90,23 @@ class TVComDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::TVCOM)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::TVCOM)
 		{
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaTVComDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunTVComDistributionProfile';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::TVCOM)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::TVCOM)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_TVComProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_TvComDistribution_Type_TVComDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_TvComDistribution_Type_TVComDistributionProfile';
 		}
 		
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TVComDistributionProviderType::TVCOM))
-			return 'KalturaTVComDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TVComDistributionProviderType::TVCOM))
+			return 'VidiunTVComDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TVComDistributionProviderType::TVCOM))
 			return 'TVComDistributionProfile';
@@ -127,11 +127,11 @@ class TVComDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaTVComDistributionProvider();
+		$distributionProvider = new VidiunTVComDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -155,8 +155,8 @@ class TVComDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -164,11 +164,11 @@ class TVComDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -178,7 +178,7 @@ class TVComDistributionPlugin extends KalturaPlugin implements IKalturaPermissio
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{

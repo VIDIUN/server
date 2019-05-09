@@ -3,14 +3,14 @@
  * @package api
  * @subpackage objects
  */
-class KalturaRemotePathArray extends KalturaTypedArray
+class VidiunRemotePathArray extends VidiunTypedArray
 {
-	public static function fromDbArray(array $arr = null, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr = null, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaRemotePathArray();
+		$newArr = new VidiunRemotePathArray();
 		foreach($arr as $obj)
 		{
-			$nObj = new KalturaRemotePath();
+			$nObj = new VidiunRemotePath();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -20,6 +20,6 @@ class KalturaRemotePathArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaRemotePath" );
+		return parent::__construct ( "VidiunRemotePath" );
 	}
 }

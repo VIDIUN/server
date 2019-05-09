@@ -210,8 +210,8 @@ $.fn.ajaxSubmit = function(options) {
     $form.removeData('jqxhr').data('jqxhr', jqxhr);
 
     // clear element array
-    for (var k=0; k < elements.length; k++)
-        elements[k] = null;
+    for (var v=0; v < elements.length; v++)
+        elements[v] = null;
 
     // fire 'notify' event
     this.trigger('form-submit-notify', [this, options]);

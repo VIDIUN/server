@@ -10,7 +10,7 @@ $newTemplateUpdate = realpath(dirname(__FILE__) . "/../../updates/scripts/xml/20
 
 if(!file_exists($newTemplateUpdate) || !file_exists($script))
 {
-	KalturaLog::err("Missing update script file");
+	VidiunLog::err("Missing update script file");
 	return;
 }
 

@@ -86,16 +86,16 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 	protected $rc_2;
 
 	/**
-	 * The value for the kshows_1 field.
+	 * The value for the vshows_1 field.
 	 * @var        int
 	 */
-	protected $kshows_1;
+	protected $vshows_1;
 
 	/**
-	 * The value for the kshows_2 field.
+	 * The value for the vshows_2 field.
 	 * @var        int
 	 */
-	protected $kshows_2;
+	protected $vshows_2;
 
 	/**
 	 * The value for the created_at field.
@@ -277,23 +277,23 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kshows_1] column value.
+	 * Get the [vshows_1] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKshows1()
+	public function getVshows1()
 	{
-		return $this->kshows_1;
+		return $this->vshows_1;
 	}
 
 	/**
-	 * Get the [kshows_2] column value.
+	 * Get the [vshows_2] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKshows2()
+	public function getVshows2()
 	{
-		return $this->kshows_2;
+		return $this->vshows_2;
 	}
 
 	/**
@@ -650,50 +650,50 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 	} // setRc2()
 
 	/**
-	 * Set the value of [kshows_1] column.
+	 * Set the value of [vshows_1] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     PartnerStats The current object (for fluent API support)
 	 */
-	public function setKshows1($v)
+	public function setVshows1($v)
 	{
-		if(!isset($this->oldColumnsValues[PartnerStatsPeer::KSHOWS_1]))
-			$this->oldColumnsValues[PartnerStatsPeer::KSHOWS_1] = $this->kshows_1;
+		if(!isset($this->oldColumnsValues[PartnerStatsPeer::VSHOWS_1]))
+			$this->oldColumnsValues[PartnerStatsPeer::VSHOWS_1] = $this->vshows_1;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kshows_1 !== $v) {
-			$this->kshows_1 = $v;
-			$this->modifiedColumns[] = PartnerStatsPeer::KSHOWS_1;
+		if ($this->vshows_1 !== $v) {
+			$this->vshows_1 = $v;
+			$this->modifiedColumns[] = PartnerStatsPeer::VSHOWS_1;
 		}
 
 		return $this;
-	} // setKshows1()
+	} // setVshows1()
 
 	/**
-	 * Set the value of [kshows_2] column.
+	 * Set the value of [vshows_2] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     PartnerStats The current object (for fluent API support)
 	 */
-	public function setKshows2($v)
+	public function setVshows2($v)
 	{
-		if(!isset($this->oldColumnsValues[PartnerStatsPeer::KSHOWS_2]))
-			$this->oldColumnsValues[PartnerStatsPeer::KSHOWS_2] = $this->kshows_2;
+		if(!isset($this->oldColumnsValues[PartnerStatsPeer::VSHOWS_2]))
+			$this->oldColumnsValues[PartnerStatsPeer::VSHOWS_2] = $this->vshows_2;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kshows_2 !== $v) {
-			$this->kshows_2 = $v;
-			$this->modifiedColumns[] = PartnerStatsPeer::KSHOWS_2;
+		if ($this->vshows_2 !== $v) {
+			$this->vshows_2 = $v;
+			$this->modifiedColumns[] = PartnerStatsPeer::VSHOWS_2;
 		}
 
 		return $this;
-	} // setKshows2()
+	} // setVshows2()
 
 	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
@@ -879,8 +879,8 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 			$this->users_2 = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
 			$this->rc_1 = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
 			$this->rc_2 = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
-			$this->kshows_1 = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
-			$this->kshows_2 = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
+			$this->vshows_1 = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
+			$this->vshows_2 = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
 			$this->created_at = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
 			$this->updated_at = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
 			$this->custom_data = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
@@ -1132,7 +1132,7 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1158,12 +1158,12 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1181,8 +1181,8 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1374,10 +1374,10 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 				return $this->getRc2();
 				break;
 			case 11:
-				return $this->getKshows1();
+				return $this->getVshows1();
 				break;
 			case 12:
-				return $this->getKshows2();
+				return $this->getVshows2();
 				break;
 			case 13:
 				return $this->getCreatedAt();
@@ -1423,8 +1423,8 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 			$keys[8] => $this->getUsers2(),
 			$keys[9] => $this->getRc1(),
 			$keys[10] => $this->getRc2(),
-			$keys[11] => $this->getKshows1(),
-			$keys[12] => $this->getKshows2(),
+			$keys[11] => $this->getVshows1(),
+			$keys[12] => $this->getVshows2(),
 			$keys[13] => $this->getCreatedAt(),
 			$keys[14] => $this->getUpdatedAt(),
 			$keys[15] => $this->getCustomData(),
@@ -1494,10 +1494,10 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 				$this->setRc2($value);
 				break;
 			case 11:
-				$this->setKshows1($value);
+				$this->setVshows1($value);
 				break;
 			case 12:
-				$this->setKshows2($value);
+				$this->setVshows2($value);
 				break;
 			case 13:
 				$this->setCreatedAt($value);
@@ -1546,8 +1546,8 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[8], $arr)) $this->setUsers2($arr[$keys[8]]);
 		if (array_key_exists($keys[9], $arr)) $this->setRc1($arr[$keys[9]]);
 		if (array_key_exists($keys[10], $arr)) $this->setRc2($arr[$keys[10]]);
-		if (array_key_exists($keys[11], $arr)) $this->setKshows1($arr[$keys[11]]);
-		if (array_key_exists($keys[12], $arr)) $this->setKshows2($arr[$keys[12]]);
+		if (array_key_exists($keys[11], $arr)) $this->setVshows1($arr[$keys[11]]);
+		if (array_key_exists($keys[12], $arr)) $this->setVshows2($arr[$keys[12]]);
 		if (array_key_exists($keys[13], $arr)) $this->setCreatedAt($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setUpdatedAt($arr[$keys[14]]);
 		if (array_key_exists($keys[15], $arr)) $this->setCustomData($arr[$keys[15]]);
@@ -1574,8 +1574,8 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(PartnerStatsPeer::USERS_2)) $criteria->add(PartnerStatsPeer::USERS_2, $this->users_2);
 		if ($this->isColumnModified(PartnerStatsPeer::RC_1)) $criteria->add(PartnerStatsPeer::RC_1, $this->rc_1);
 		if ($this->isColumnModified(PartnerStatsPeer::RC_2)) $criteria->add(PartnerStatsPeer::RC_2, $this->rc_2);
-		if ($this->isColumnModified(PartnerStatsPeer::KSHOWS_1)) $criteria->add(PartnerStatsPeer::KSHOWS_1, $this->kshows_1);
-		if ($this->isColumnModified(PartnerStatsPeer::KSHOWS_2)) $criteria->add(PartnerStatsPeer::KSHOWS_2, $this->kshows_2);
+		if ($this->isColumnModified(PartnerStatsPeer::VSHOWS_1)) $criteria->add(PartnerStatsPeer::VSHOWS_1, $this->vshows_1);
+		if ($this->isColumnModified(PartnerStatsPeer::VSHOWS_2)) $criteria->add(PartnerStatsPeer::VSHOWS_2, $this->vshows_2);
 		if ($this->isColumnModified(PartnerStatsPeer::CREATED_AT)) $criteria->add(PartnerStatsPeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(PartnerStatsPeer::UPDATED_AT)) $criteria->add(PartnerStatsPeer::UPDATED_AT, $this->updated_at);
 		if ($this->isColumnModified(PartnerStatsPeer::CUSTOM_DATA)) $criteria->add(PartnerStatsPeer::CUSTOM_DATA, $this->custom_data);
@@ -1668,9 +1668,9 @@ abstract class BasePartnerStats extends BaseObject  implements Persistent {
 
 		$copyObj->setRc2($this->rc_2);
 
-		$copyObj->setKshows1($this->kshows_1);
+		$copyObj->setVshows1($this->vshows_1);
 
-		$copyObj->setKshows2($this->kshows_2);
+		$copyObj->setVshows2($this->vshows_2);
 
 		$copyObj->setCreatedAt($this->created_at);
 

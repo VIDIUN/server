@@ -18,21 +18,21 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 	const UI_CONF_TYPE_EDITOR = 3;
 	const UI_CONF_TYPE_ADVANCED_EDITOR = 4;
 	const UI_CONF_TYPE_PLAYLIST = 5;			// maybe this is in fact type WIDGET with some flags switched on ?!?
-	const UI_CONF_TYPE_KMC_APP_STUDIO = 6;
-	const UI_CONF_TYPE_KRECORD = 7;
-	const UI_CONF_TYPE_KDP3 = 8;
-	const UI_CONF_TYPE_KMC_ACCOUNT = 9;
-	const UI_CONF_TYPE_KMC_ANALYTICS = 10;
-	const UI_CONF_TYPE_KMC_CONTENT = 11;
-	const UI_CONF_TYPE_KMC_DASHBOARD = 12;
-	const UI_CONF_TYPE_KMC_LOGIN = 13;
+	const UI_CONF_TYPE_VMC_APP_STUDIO = 6;
+	const UI_CONF_TYPE_VRECORD = 7;
+	const UI_CONF_TYPE_VDP3 = 8;
+	const UI_CONF_TYPE_VMC_ACCOUNT = 9;
+	const UI_CONF_TYPE_VMC_ANALYTICS = 10;
+	const UI_CONF_TYPE_VMC_CONTENT = 11;
+	const UI_CONF_TYPE_VMC_DASHBOARD = 12;
+	const UI_CONF_TYPE_VMC_LOGIN = 13;
 	const UI_CONF_TYPE_SLP = 14;
 	const UI_CONF_CLIENTSIDE_ENCODER = 15;
-	const UI_CONF_KMC_GENERAL = 16;
-	const UI_CONF_KMC_ROLES_AND_PERMISSIONS = 17;
+	const UI_CONF_VMC_GENERAL = 16;
+	const UI_CONF_VMC_ROLES_AND_PERMISSIONS = 17;
 	const UI_CONF_CLIPPER = 18;
-	const UI_CONF_TYPE_KSR = 19;
-	const UI_CONF_TYPE_KUPLOAD = 20;
+	const UI_CONF_TYPE_VSR = 19;
+	const UI_CONF_TYPE_VUPLOAD = 20;
 	const UI_CONF_TYPE_WEBCASTING = 21;
 
 
@@ -60,51 +60,51 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 
 	private $swf_url_version = null;
 
-	//UI_CONF_TYPE_KSR:: This is a general path value the actual jar file should be symlinked under each KSR version dir
-	private static $swf_names = array ( self::UI_CONF_TYPE_WIDGET => "kdp.swf" ,
+	//UI_CONF_TYPE_VSR:: This is a general path value the actual jar file should be symlinked under each VSR version dir
+	private static $swf_names = array ( self::UI_CONF_TYPE_WIDGET => "vdp.swf" ,
 										self::UI_CONF_TYPE_CW => "ContributionWizard.swf" ,
 										self::UI_CONF_TYPE_EDITOR => "simpleeditor.swf" ,
-										self::UI_CONF_TYPE_ADVANCED_EDITOR => "KalturaAdvancedVideoEditor.swf" ,
-										self::UI_CONF_TYPE_PLAYLIST => "kdp.swf" ,
-										self::UI_CONF_TYPE_KMC_APP_STUDIO => "applicationstudio.swf",
-										self::UI_CONF_TYPE_KDP3 => "kdp3.swf",
-										self::UI_CONF_TYPE_KMC_ACCOUNT => "account.swf",
-										self::UI_CONF_TYPE_KMC_ANALYTICS => "ReportsAndAnalytics.swf",
-										self::UI_CONF_TYPE_KMC_CONTENT => "content.swf",
-										self::UI_CONF_TYPE_KMC_DASHBOARD => "dashboard.swf",
-										self::UI_CONF_TYPE_KMC_LOGIN => "login.swf",
-										self::UI_CONF_TYPE_SLP => "KalturaPlayer.xap",
+										self::UI_CONF_TYPE_ADVANCED_EDITOR => "VidiunAdvancedVideoEditor.swf" ,
+										self::UI_CONF_TYPE_PLAYLIST => "vdp.swf" ,
+										self::UI_CONF_TYPE_VMC_APP_STUDIO => "applicationstudio.swf",
+										self::UI_CONF_TYPE_VDP3 => "vdp3.swf",
+										self::UI_CONF_TYPE_VMC_ACCOUNT => "account.swf",
+										self::UI_CONF_TYPE_VMC_ANALYTICS => "ReportsAndAnalytics.swf",
+										self::UI_CONF_TYPE_VMC_CONTENT => "content.swf",
+										self::UI_CONF_TYPE_VMC_DASHBOARD => "dashboard.swf",
+										self::UI_CONF_TYPE_VMC_LOGIN => "login.swf",
+										self::UI_CONF_TYPE_SLP => "VidiunPlayer.xap",
 										self::UI_CONF_CLIENTSIDE_ENCODER => "KEU_0.8_win.msi",
-										self::UI_CONF_KMC_GENERAL => "kmc.swf",
-										self::UI_CONF_KMC_ROLES_AND_PERMISSIONS => "",
+										self::UI_CONF_VMC_GENERAL => "vmc.swf",
+										self::UI_CONF_VMC_ROLES_AND_PERMISSIONS => "",
 										self::UI_CONF_CLIPPER => "",
-										self::UI_CONF_TYPE_KSR => "ScreencastOMaticRun.jar",
-										self::UI_CONF_TYPE_KRECORD => "KRecord.swf",
-										self::UI_CONF_TYPE_KUPLOAD => "KUpload.swf",
+										self::UI_CONF_TYPE_VSR => "ScreencastOMaticRun.jar",
+										self::UI_CONF_TYPE_VRECORD => "VRecord.swf",
+										self::UI_CONF_TYPE_VUPLOAD => "VUpload.swf",
 										self::UI_CONF_TYPE_WEBCASTING => "",
 									);
 
 	private static $swf_directory_map = array (
-		self::UI_CONF_TYPE_WIDGET => "kdp",
-		self::UI_CONF_TYPE_CW => "kcw",
-		self::UI_CONF_TYPE_EDITOR => "kse",
-		self::UI_CONF_TYPE_ADVANCED_EDITOR => "kae",
-		self::UI_CONF_TYPE_PLAYLIST => "kdp",
-		self::UI_CONF_TYPE_KMC_APP_STUDIO => "kmc/appstudio",
-		self::UI_CONF_TYPE_KDP3 => "kdp3",
-		self::UI_CONF_TYPE_KMC_ACCOUNT => "kmc/account",
-		self::UI_CONF_TYPE_KMC_ANALYTICS => "kmc/analytics",
-		self::UI_CONF_TYPE_KMC_CONTENT => "kmc/content",
-		self::UI_CONF_TYPE_KMC_DASHBOARD => "kmc/dashboard",
-		self::UI_CONF_TYPE_KMC_LOGIN => "kmc/login",
+		self::UI_CONF_TYPE_WIDGET => "vdp",
+		self::UI_CONF_TYPE_CW => "vcw",
+		self::UI_CONF_TYPE_EDITOR => "vse",
+		self::UI_CONF_TYPE_ADVANCED_EDITOR => "vae",
+		self::UI_CONF_TYPE_PLAYLIST => "vdp",
+		self::UI_CONF_TYPE_VMC_APP_STUDIO => "vmc/appstudio",
+		self::UI_CONF_TYPE_VDP3 => "vdp3",
+		self::UI_CONF_TYPE_VMC_ACCOUNT => "vmc/account",
+		self::UI_CONF_TYPE_VMC_ANALYTICS => "vmc/analytics",
+		self::UI_CONF_TYPE_VMC_CONTENT => "vmc/content",
+		self::UI_CONF_TYPE_VMC_DASHBOARD => "vmc/dashboard",
+		self::UI_CONF_TYPE_VMC_LOGIN => "vmc/login",
 		self::UI_CONF_TYPE_SLP => "slp",
 		self::UI_CONF_CLIENTSIDE_ENCODER => "expressUploader",
-		self::UI_CONF_KMC_GENERAL => "kmc",
-		self::UI_CONF_KMC_ROLES_AND_PERMISSIONS => "",
-		self::UI_CONF_CLIPPER => "kclip",
-		self::UI_CONF_TYPE_KSR => "ksr",
-		self::UI_CONF_TYPE_KRECORD => 'krecord',
-		self::UI_CONF_TYPE_KUPLOAD => "kupload",
+		self::UI_CONF_VMC_GENERAL => "vmc",
+		self::UI_CONF_VMC_ROLES_AND_PERMISSIONS => "",
+		self::UI_CONF_CLIPPER => "vclip",
+		self::UI_CONF_TYPE_VSR => "vsr",
+		self::UI_CONF_TYPE_VRECORD => 'vrecord',
+		self::UI_CONF_TYPE_VUPLOAD => "vupload",
 		self::UI_CONF_TYPE_WEBCASTING => "",
 	);
 
@@ -177,7 +177,7 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 		$ret = parent::postUpdate($con);
 
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 
 		return $ret;
 	}
@@ -193,21 +193,21 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 				self::UI_CONF_TYPE_EDITOR => "Simple Editor",
 				self::UI_CONF_TYPE_ADVANCED_EDITOR => "Advanced Editor",
 				self::UI_CONF_TYPE_PLAYLIST => "Playlist",
-				self::UI_CONF_TYPE_KDP3 => "KDP3",
-				self::UI_CONF_TYPE_KMC_APP_STUDIO => "KMC AppStudio",
-				self::UI_CONF_TYPE_KMC_ACCOUNT => "KMC Account",
-				self::UI_CONF_TYPE_KMC_ANALYTICS => "KMC Analytics",
-				self::UI_CONF_TYPE_KMC_CONTENT => "KMC Content",
-				self::UI_CONF_TYPE_KMC_DASHBOARD => "KMC Dashboard",
-				self::UI_CONF_TYPE_KMC_LOGIN => "KMC Login",
+				self::UI_CONF_TYPE_VDP3 => "VDP3",
+				self::UI_CONF_TYPE_VMC_APP_STUDIO => "VMC AppStudio",
+				self::UI_CONF_TYPE_VMC_ACCOUNT => "VMC Account",
+				self::UI_CONF_TYPE_VMC_ANALYTICS => "VMC Analytics",
+				self::UI_CONF_TYPE_VMC_CONTENT => "VMC Content",
+				self::UI_CONF_TYPE_VMC_DASHBOARD => "VMC Dashboard",
+				self::UI_CONF_TYPE_VMC_LOGIN => "VMC Login",
 				self::UI_CONF_TYPE_SLP => "SLP",
 				self::UI_CONF_CLIENTSIDE_ENCODER => "Express Uploader",
-				self::UI_CONF_KMC_GENERAL => "KMC",
-				self::UI_CONF_KMC_ROLES_AND_PERMISSIONS => "KMC Roles and Permissions",
-				self::UI_CONF_CLIPPER => "Kaltura Clipper",
-				self::UI_CONF_TYPE_KSR => "Kaltura Screen Recorder",
-				self::UI_CONF_TYPE_KUPLOAD => "Kaltura Simple Uploader",
-				self::UI_CONF_TYPE_WEBCASTING => "Kaltura Webcasting Studio",
+				self::UI_CONF_VMC_GENERAL => "VMC",
+				self::UI_CONF_VMC_ROLES_AND_PERMISSIONS => "VMC Roles and Permissions",
+				self::UI_CONF_CLIPPER => "Vidiun Clipper",
+				self::UI_CONF_TYPE_VSR => "Vidiun Screen Recorder",
+				self::UI_CONF_TYPE_VUPLOAD => "Vidiun Simple Uploader",
+				self::UI_CONF_TYPE_WEBCASTING => "Vidiun Webcasting Studio",
 			);
 		}
 	}
@@ -338,7 +338,7 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 		}
 
 		// This is only called on Save, after parent::save(), so ID is present.
-		kFileSyncUtils::file_put_contents( $sync_key , $v ); //replaced__setFileContent
+		vFileSyncUtils::file_put_contents( $sync_key , $v ); //replaced__setFileContent
 	}
 
 	private function setConfFileBySuffix($suffix = null, $v)
@@ -365,10 +365,10 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 			
 		$sync_key = $this->getSyncKey( $subType );
 		
-		$contents = kFileSyncUtils::file_get_contents( $sync_key , true , false );
+		$contents = vFileSyncUtils::file_get_contents( $sync_key , true , false );
 		
 		if(!$contents)
-			KalturaLog::debug("Conf file of sub type [$subType] not found for key [$sync_key]");
+			VidiunLog::debug("Conf file of sub type [$subType] not found for key [$sync_key]");
 		return $contents;
 	}
 	
@@ -416,7 +416,7 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 	{
 		$raw = parent::getSwfUrl();
 		if ( $raw_only ) return $raw;
-		$root_url = kConf::get ( "flash_root_url");
+		$root_url = vConf::get ( "flash_root_url");
 		if ( ! $root_url )
 			return $raw;
 		if ( strpos ( $raw , $root_url) === 0 )
@@ -443,8 +443,8 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 	
 		if($version)
 		{
-			if (strpos($this->swf_url, "kdp3") !== false)
-				$this->setSwfUrl("$flashUrl/kdp3/v{$version}/kdp3.swf");
+			if (strpos($this->swf_url, "vdp3") !== false)
+				$this->setSwfUrl("$flashUrl/vdp3/v{$version}/vdp3.swf");
 			else
 				$this->setSwfUrl("$flashUrl/$dir/v{$version}/$swfName");
 		}
@@ -462,13 +462,13 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 		return null;
 	}
 
-	private function getCachedContent ( $kaltura_config , $confFilePath )
+	private function getCachedContent ( $vidiun_config , $confFilePath )
 	{
 		if ( ! file_exists ( $confFilePath ) ) return null;
 		if ( strpos ( $confFilePath , "://" ) != FALSE )
 		{
 			// remote file (http:// or ftp://) - store the cache in a directory near the base file
-			//$cache_path = dirname( $kaltura_config ) . "cache/" . $confFilePath  . "_cache.xml" ;
+			//$cache_path = dirname( $vidiun_config ) . "cache/" . $confFilePath  . "_cache.xml" ;
 			// for now - don't cache for remote files
 			$cache_path = null;
 		}
@@ -476,23 +476,23 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 		{
 			// this is a local file - store the cache file in the same directory
 			$cache_path = str_replace ( "/uiconf/" , "/cacheuiconf/" ,$confFilePath ) . "_cache.xml";
-			kFile::fullMkdir( $cache_path );
+			vFile::fullMkdir( $cache_path );
 		}
 		try
 		{
 			$s_time = microtime( true );
-			$config = new kXmlConfig( $kaltura_config , $confFilePath );
+			$config = new vXmlConfig( $vidiun_config , $confFilePath );
 			$content = $config->getConfig( $cache_path );
 			$e_time = microtime( true );
 
 			if ( $config->createdCache() )
-				KalturaLog::log( __METHOD__ . " created config cache file [$kaltura_config]+[$confFilePath]->[$cache_path].\ntook [" . ($e_time - $s_time) . "] seconds" );
+				VidiunLog::log( __METHOD__ . " created config cache file [$vidiun_config]+[$confFilePath]->[$cache_path].\ntook [" . ($e_time - $s_time) . "] seconds" );
 
 			return $content;
 		}
 		catch ( Exception $ex )
 		{
-			KalturaLog::log( __METHOD__ . " Error creating config [$kaltura_config]+[$confFilePath]:" . $ex->getMessage() );
+			VidiunLog::log( __METHOD__ . " Error creating config [$vidiun_config]+[$confFilePath]:" . $ex->getMessage() );
 			return null;
 		}
 	}
@@ -548,16 +548,16 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 	 */
 	public function setConfFilePath( $v )
 	{
-		if ( kString::beginsWith( $v , ".." ) )
+		if ( vString::beginsWith( $v , ".." ) )
 		{
 			$err = "Error in " . __METHOD__ . ": attmpting to set ConfFilePath to [$v]";
-			KalturaLog::log( $err );
+			VidiunLog::log( $err );
 			throw new APIException ( APIErrors::ERROR_SETTING_FILE_PATH_FOR_UI_CONF , $v );
 		}
 
 		if ( $this->getCreationMode() == self::UI_CONF_CREATION_MODE_MANUAL )
 		{
-			if ( ! kString::beginsWith( $v , $this->getUiConfRootDirectory() . "uiconf/" ) )
+			if ( ! vString::beginsWith( $v , $this->getUiConfRootDirectory() . "uiconf/" ) )
 			{
 				$v =  $this->getUiConfRootDirectory() . "uiconf/" . $v ;
 			}
@@ -577,7 +577,7 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 						if ( $ui_conf->getPartnerId ( ) != $this->getPartnerId() )
 						{
 							$err = "Error in " . __METHOD__ . ": attmpting to set ConfFilePath to [$v]";
-							KalturaLog::log( $err );
+							VidiunLog::log( $err );
 							throw new APIException ( APIErrors::ERROR_SETTING_FILE_PATH_FOR_UI_CONF , $v );
 						}
 					}
@@ -734,7 +734,7 @@ class uiConf extends BaseuiConf implements ISyncableFile, IRelatedObject
 	public function incrementVersion($subType = self::FILE_SYNC_UICONF_SUB_TYPE_CONFIG)
 	{
 		$version = $this->getVersion($subType);
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $version, FileSyncObjectType::UICONF, $subType);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $version, FileSyncObjectType::UICONF, $subType);
 		if($subType == self::FILE_SYNC_UICONF_SUB_TYPE_CONFIG)
 		{
 			if(!$this->getConfFileVersion() && $this->getConfFileBySuffix())

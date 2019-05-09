@@ -5,6 +5,6 @@
  */
 require_once(__DIR__ . "/../../../../batch/bootstrap.php");
 
-$instance = new KScheduledTaskRunner();
+$instance = new VScheduledTaskRunner();
 $instance->run();
 $instance->done();

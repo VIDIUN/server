@@ -1,7 +1,7 @@
 <?php
 class dateUtils
 {
-	const KALTURA_FORMAT = "K";
+	const VIDIUN_FORMAT = "K";
 	const MODEL_DEFAULT_FORMAT = "D";
 
 	
@@ -59,20 +59,20 @@ class dateUtils
 	 *
 	 * @param BaseObject $obj - the object to be invoked with method $date_method_str
 	 * @param unknown_type $format
-	 * @return formated date according to kaltura's string rules
+	 * @return formated date according to vidiun's string rules
 	 */
-	public static function formatKalturaDate ( BaseObject $obj , $date_method_str , $format = self::KALTURA_FORMAT )
+	public static function formatVidiunDate ( BaseObject $obj , $date_method_str , $format = self::VIDIUN_FORMAT )
 	{
 		// prepare an array with the object to invoke & the date_method
 		$f = array ( $obj , $date_method_str );
-		if ( $format == self::KALTURA_FORMAT )
+		if ( $format == self::VIDIUN_FORMAT )
 		{
 			// call parent with NULL so there will be no formating of the original date  
 			$params = array ( NULL );
 			$date = call_user_func_array ( $f , $params );
 			 
 			// now - we'll format it our way
-			return kString::formatDate( $date );
+			return vString::formatDate( $date );
 		}
 		else if ( $format == self::MODEL_DEFAULT_FORMAT )
 		{

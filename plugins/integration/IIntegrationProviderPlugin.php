@@ -5,7 +5,7 @@
 interface IIntegrationProviderPlugin
 {
 	/**
-	 * @return KalturaVersion
+	 * @return VidiunVersion
 	 */
 	public static function getRequiredIntegrationPluginVersion();
 	

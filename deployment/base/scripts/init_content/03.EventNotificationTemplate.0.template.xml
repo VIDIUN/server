@@ -19,54 +19,54 @@
 	
 	
 	<multirequest>
-		<!-- New Item Pending Moderation (Emailing to KMC Moderators) -->
+		<!-- New Item Pending Moderation (Emailing to VMC Moderators) -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
-				<name>New Item Pending Moderation (Emailing to KMC Moderators)</name>
-				<systemName>New_Item_Pending_Moderation_Kmc_Moderators</systemName>
-				<description>Email notification template to be sent when a new item is pending to be moderated by a KMC moderator.</description>
+			<template objectType="VidiunEmailNotificationTemplate">
+				<name>New Item Pending Moderation (Emailing to VMC Moderators)</name>
+				<systemName>New_Item_Pending_Moderation_Vmc_Moderators</systemName>
+				<description>Email notification template to be sent when a new item is pending to be moderated by a VMC moderator.</description>
 				<automaticDispatchEnabled>1</automaticDispatchEnabled>
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>1</eventObjectType> <!-- EventNotificationEventObjectType::ENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof entry &amp;&amp; in_array(entryPeer::MODERATION_STATUS, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getModerationStatus() == entry::ENTRY_MODERATION_STATUS_PENDING_MODERATION</code>
 						</field>
 					</item>
 				</eventConditions>
 				<format>1</format>
-				<subject>[Kaltura] - New Item Pending Moderation</subject>
-				<body>A new item is pending your approval in the Kaltura Management Console</body>
+				<subject>[Vidiun] - New Item Pending Moderation</subject>
+				<body>A new item is pending your approval in the Vidiun Management Console</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<bcc objectType="KalturaEmailNotificationUserRecipientProvider">
-					<filter objectType="KalturaUserFilter">
+				<bcc objectType="VidiunEmailNotificationUserRecipientProvider">
+					<filter objectType="VidiunUserFilter">
 						<permissionNamesMultiLikeAnd>CONTENT_MODERATE_APPROVE_REJECT,CONTENT_MODERATE_BASE</permissionNamesMultiLikeAnd>
 					</filter>
 				</bcc>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getId())) ? entryPeer::retrieveByPk($scope->getObject()->getId())->getName() : ''</code>
 						</value>
 					</item>
@@ -82,54 +82,54 @@
 	
 	
 	<multirequest>
-		<!-- New Item Flagged For Moderation (Emailing to KMC Moderators) -->
+		<!-- New Item Flagged For Moderation (Emailing to VMC Moderators) -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
-				<name>New Item Flagged For Moderation (Emailing to KMC Moderators)</name>
-				<systemName>New_Item_Flagged_For_Moderation_Kmc_Moderators</systemName>
+			<template objectType="VidiunEmailNotificationTemplate">
+				<name>New Item Flagged For Moderation (Emailing to VMC Moderators)</name>
+				<systemName>New_Item_Flagged_For_Moderation_Vmc_Moderators</systemName>
 				<description>Email notification template to be sent when an item is flagged for moderation.</description>
 				<automaticDispatchEnabled>1</automaticDispatchEnabled>
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>1</eventObjectType> <!-- EventNotificationEventObjectType::ENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof entry &amp;&amp; in_array(entryPeer::MODERATION_STATUS, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getModerationStatus() == entry::ENTRY_MODERATION_STATUS_FLAGGED_FOR_REVIEW</code>
 						</field>
 					</item>
 				</eventConditions>
 				<format>1</format>
-				<subject>[Kaltura] - New Item Flagged For Review</subject>
-				<body>A new item is flagged for review in the Kaltura Management Console</body>
+				<subject>[Vidiun] - New Item Flagged For Review</subject>
+				<body>A new item is flagged for review in the Vidiun Management Console</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<bcc objectType="KalturaEmailNotificationUserRecipientProvider">
-					<filter objectType="KalturaUserFilter">
+				<bcc objectType="VidiunEmailNotificationUserRecipientProvider">
+					<filter objectType="VidiunUserFilter">
 						<permissionNamesMultiLikeAnd>CONTENT_MODERATE_APPROVE_REJECT,CONTENT_MODERATE_BASE</permissionNamesMultiLikeAnd>
 					</filter>
 				</bcc>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getId())) ? entryPeer::retrieveByPk($scope->getObject()->getId())->getName() : ''</code>
 						</value>
 					</item>
@@ -146,7 +146,7 @@
 	<multirequest>
 		<!-- New Item Pending Moderation -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>New Item Pending Moderation</name>
 				<systemName>New_Item_Pending_Moderation</systemName>
 				<description>Email notification template to be sent when a new item is pending moderation in a specific category (channel).</description>
@@ -154,8 +154,8 @@
 				<eventType>5</eventType> <!-- EventNotificationEventType::OBJECT_CREATED -->
 				<eventObjectType>37</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof categoryEntry &amp;&amp; $scope->getObject()->getStatus() == CategoryEntryStatus::PENDING</code>
 						</field>
 					</item>
@@ -165,48 +165,48 @@
 				<body>A new item is pending your approval: [ChannelSettingsPendingURLPrefix]{category_name_encoded}/{category_id}[ChannelSettingsPendingURLSuffix]</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<bcc objectType="KalturaEmailNotificationCategoryRecipientProvider">
-					<categoryId objectType="KalturaEvalStringField">
+				<bcc objectType="VidiunEmailNotificationCategoryRecipientProvider">
+					<categoryId objectType="VidiunEvalStringField">
 						<code>$scope->getObject()->getCategoryId()</code>
 					</categoryId>
-					<categoryUserFilter objectType="KalturaCategoryUserProviderFilter">
+					<categoryUserFilter objectType="VidiunCategoryUserProviderFilter">
 						<permissionNamesMatchOr>CATEGORY_MODERATE</permissionNamesMatchOr>
 					</categoryUserFilter>
 				</bcc>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_id</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getCategoryId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())) ? categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_name_encoded</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>urlencode(!is_null(categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())) ? categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())->getName() : '')</code>
 						</value>
 					</item>
@@ -224,7 +224,7 @@
 	<multirequest>
 		<!-- New Item Pending Moderation -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>Existing Item Pending Moderation</name>
 				<systemName>New_Item_Pending_Moderation_2</systemName>
 				<description>Email notification template to be sent when a new item is pending moderation in a specific category (channel).</description>
@@ -232,8 +232,8 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>37</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof categoryEntry &amp;&amp; in_array(categoryEntryPeer::STATUS, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getStatus() == CategoryEntryStatus::PENDING</code>
 						</field>
 					</item>
@@ -243,48 +243,48 @@
 				<body>A new item is pending your approval: [ChannelSettingsPendingURLPrefix]{category_name_encoded}/{category_id}[ChannelSettingsPendingURLSuffix]</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<bcc objectType="KalturaEmailNotificationCategoryRecipientProvider">
-					<categoryId objectType="KalturaEvalStringField">
+				<bcc objectType="VidiunEmailNotificationCategoryRecipientProvider">
+					<categoryId objectType="VidiunEvalStringField">
 						<code>$scope->getObject()->getCategoryId()</code>
 					</categoryId>
-					<categoryUserFilter objectType="KalturaCategoryUserProviderFilter">
+					<categoryUserFilter objectType="VidiunCategoryUserProviderFilter">
 						<permissionNamesMatchOr>CATEGORY_MODERATE</permissionNamesMatchOr>
 					</categoryUserFilter>
 				</bcc>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_id</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getCategoryId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())) ? categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_name_encoded</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>urlencode(!is_null(categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())) ? categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())->getName() : '')</code>
 						</value>
 					</item>
@@ -302,7 +302,7 @@
 	<multirequest>
 		<!-- Entry Approved In Category -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>Entry Approved In Category</name>
 				<systemName>Entry_Approved_In_Category</systemName>
 				<description>Email notification template to be sent when a new entry is approved in a category.</description>
@@ -310,8 +310,8 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>37</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof categoryEntry &amp;&amp; in_array(categoryEntryPeer::STATUS, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getStatus() == CategoryEntryStatus::ACTIVE</code>
 						</field>
 					</item>
@@ -321,46 +321,46 @@
 				<body>Your media {entry_name} [AppEntryUrl]{entry_id} has been approved to be published in {category_name}</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<to objectType="KalturaEmailNotificationStaticRecipientProvider">
+				<to objectType="VidiunEmailNotificationStaticRecipientProvider">
 					<emailRecipients objectType="array">
-						<item objectType = "KalturaEmailNotificationRecipient">
-							<email objectType="KalturaEvalStringField">
-								<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? (!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()->getEmail() : '') : ''</code>
+						<item objectType = "VidiunEmailNotificationRecipient">
+							<email objectType="VidiunEvalStringField">
+								<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? (!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()->getEmail() : '') : ''</code>
 							</email>
-							<name objectType="KalturaEvalStringField">
-								<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? (!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()->getFirstName().' '.entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()->getLastName() : '') : ''</code>
+							<name objectType="VidiunEvalStringField">
+								<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? (!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()->getFirstName().' '.entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()->getLastName() : '') : ''</code>
 							</name>
 						</item>
 					</emailRecipients>
 				</to>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())) ? categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getEntryId()</code>
 						</value>
 					</item>
@@ -379,7 +379,7 @@
 	<multirequest>
 		<!-- Entry Rejected In Category -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>Entry Rejected In Category</name>
 				<systemName>Entry_Rejected_In_Category</systemName>
 				<description>Email notification template to be sent when a new entry is rejected in a category.</description>
@@ -387,8 +387,8 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>37</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof categoryEntry &amp;&amp; in_array(categoryEntryPeer::STATUS, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getStatus() == CategoryEntryStatus::REJECTED</code>
 						</field>
 					</item>
@@ -398,46 +398,46 @@
 				<body>Your media {entry_name} [AppEntryUrl]{entry_id} has been rejected to be published in {category_name}</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<to objectType="KalturaEmailNotificationStaticRecipientProvider">
+				<to objectType="VidiunEmailNotificationStaticRecipientProvider">
 					<emailRecipients objectType="array">
-						<item objectType = "KalturaEmailNotificationRecipient">
-							<email objectType="KalturaEvalStringField">
-								<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? (!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()->getEmail() : '') : ''</code>
+						<item objectType = "VidiunEmailNotificationRecipient">
+							<email objectType="VidiunEvalStringField">
+								<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? (!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()->getEmail() : '') : ''</code>
 							</email>
-							<name objectType="KalturaEvalStringField">
-								<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? (!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()->getFirstName().' '.entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()->getLastName() : '') : ''</code>
+							<name objectType="VidiunEvalStringField">
+								<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? (!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()->getFirstName().' '.entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()->getLastName() : '') : ''</code>
 							</name>
 						</item>
 					</emailRecipients>
 				</to>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())) ? categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getEntryId()</code>
 						</value>
 					</item>
@@ -456,7 +456,7 @@
 	<multirequest>
 		<!-- Entry Rejected -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>Entry Rejected</name>
 				<systemName>Entry_Rejected</systemName>
 				<description>Email notification template to be sent when a new entry is rejected.</description>
@@ -464,8 +464,8 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>1</eventObjectType> <!-- EventNotificationEventObjectType::ENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof entry &amp;&amp; in_array(entryPeer::MODERATION_STATUS, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getModerationStatus() == entry::ENTRY_MODERATION_STATUS_REJECTED</code>
 						</field>
 					</item>
@@ -475,34 +475,34 @@
 				<body>Your media {entry_name} has been rejected</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<to objectType="KalturaEmailNotificationStaticRecipientProvider">
+				<to objectType="VidiunEmailNotificationStaticRecipientProvider">
 					<emailRecipients objectType="array">
-						<item objectType = "KalturaEmailNotificationRecipient">
-							<email objectType="KalturaEvalStringField">
-								<code>!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getEmail() : ''</code>
+						<item objectType = "VidiunEmailNotificationRecipient">
+							<email objectType="VidiunEvalStringField">
+								<code>!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getEmail() : ''</code>
 							</email>
-							<name objectType="KalturaEvalStringField">
-								<code>!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getFirstName().' '.$scope->getObject()->getkuser()->getLastName() : ''</code>
+							<name objectType="VidiunEvalStringField">
+								<code>!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getFirstName().' '.$scope->getObject()->getvuser()->getLastName() : ''</code>
 							</name>
 						</item>
 					</emailRecipients>
 				</to>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getName()</code>
 						</value>
 					</item>
@@ -522,7 +522,7 @@
 	<multirequest>
 		<!-- Entry Approved -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>Entry Approved</name>
 				<systemName>Entry_Approved</systemName>
 				<description>Email notification template to be sent when a new entry is approved.</description>
@@ -530,8 +530,8 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>1</eventObjectType> <!-- EventNotificationEventObjectType::ENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof entry &amp;&amp; in_array(entryPeer::MODERATION_STATUS, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getModerationStatus() == entry::ENTRY_MODERATION_STATUS_APPROVED</code>
 						</field>
 					</item>
@@ -541,34 +541,34 @@
 				<body>Your media {entry_name} has been approved</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<to objectType="KalturaEmailNotificationStaticRecipientProvider">
+				<to objectType="VidiunEmailNotificationStaticRecipientProvider">
 					<emailRecipients objectType="array">
-						<item objectType = "KalturaEmailNotificationRecipient">
-							<email objectType="KalturaEvalStringField">
-								<code>!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getEmail() : ''</code>
+						<item objectType = "VidiunEmailNotificationRecipient">
+							<email objectType="VidiunEvalStringField">
+								<code>!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getEmail() : ''</code>
 							</email>
-							<name objectType="KalturaEvalStringField">
-								<code>!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getFirstName().' '.$scope->getObject()->getkuser()->getLastName() : ''</code>
+							<name objectType="VidiunEvalStringField">
+								<code>!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getFirstName().' '.$scope->getObject()->getvuser()->getLastName() : ''</code>
 							</name>
 						</item>
 					</emailRecipients>
 				</to>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getName()</code>
 						</value>
 					</item>
@@ -588,7 +588,7 @@
 	<multirequest>
 		<!-- Entry Ready -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>Entry Ready</name>
 				<systemName>Entry_Ready</systemName>
 				<description>Email notification template to be sent when a new entry is ready.</description>
@@ -596,20 +596,20 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>1</eventObjectType> <!-- EventNotificationEventObjectType::ENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof entry &amp;&amp; in_array(entryPeer::STATUS, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getStatus() == entryStatus::READY</code>
 						</field>
 					</item>
-					<item objectType="KalturaOrCondition">
+					<item objectType="VidiunOrCondition">
 						<conditions objectType="array">
-							<item objectType="KalturaEventFieldCondition">
-								<field objectType="KalturaEvalBooleanField">
+							<item objectType="VidiunEventFieldCondition">
+								<field objectType="VidiunEvalBooleanField">
 									<code>!$scope->getObject()->getReplacedEntryId()</code>
 								</field>
 							</item>
-							<item objectType="KalturaEventFieldCondition">
-								<field objectType="KalturaEvalBooleanField">
+							<item objectType="VidiunEventFieldCondition">
+								<field objectType="VidiunEvalBooleanField">
 									<code>$scope->getObject()->getReplacedEntryId() &amp;&amp; entryPeer::retrieveByPK($scope->getObject()->getReplacedEntryId())->getSourceType()!= EntrySourceType::RECORDED_LIVE</code>
 								</field>
 							</item>
@@ -621,79 +621,79 @@
 				<body><![CDATA[ Hello,<p>A new entry is ready for publishing:</p><p>Entry Name: {entry_name} <br>Entry ID:  {entry_id}<br>Entry Creator: {creator_name}, {creator_id}/{creator_email} </p>]]></body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<to objectType="KalturaEmailNotificationStaticRecipientProvider">
+				<to objectType="VidiunEmailNotificationStaticRecipientProvider">
 					<emailRecipients objectType="array">
-						<item objectType = "KalturaEmailNotificationRecipient">
-							<email objectType="KalturaStringValue">
+						<item objectType = "VidiunEmailNotificationRecipient">
+							<email objectType="VidiunStringValue">
 								<value>{creator_email}</value>
 							</email>
-							<name objectType="KalturaStringValue">
+							<name objectType="VidiunStringValue">
 								<value>{creator_name}</value>
 							</name>
 						</item>
 					</emailRecipients>
 				</to>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
 						<description>Sender email</description>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
 						<description>Sender name</description>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
 						<description>Entry name</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>(($scope->getObject() instanceof entry) &amp;&amp; ($scope->getObject()->getIsTemporary()) &amp;&amp; ($scope->getObject()->getReplacedEntryId()))? entryPeer::retrieveByPK($scope->getObject()->getReplacedEntryId())->getName():$scope->getObject()->getName()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
 						<description>Entry ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>(($scope->getObject() instanceof entry) &amp;&amp; ($scope->getObject()->getIsTemporary()) &amp;&amp; ($scope->getObject()->getReplacedEntryId()))? $scope->getObject()->getReplacedEntryId():$scope->getObject()->getId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>creator_name</key>
 						<description>Entry creator name</description>
-						<value objectType="KalturaEvalStringField">
-							<code>$scope->getEvent()->getObject()->getkuser()->getFirstName() . ' ' . $scope->getEvent()->getObject()->getkuser()->getLastName()</code>
+						<value objectType="VidiunEvalStringField">
+							<code>$scope->getEvent()->getObject()->getvuser()->getFirstName() . ' ' . $scope->getEvent()->getObject()->getvuser()->getLastName()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>creator_id</key>
 						<description>Entry creator ID</description>
-						<value objectType="KalturaEvalStringField">
-							<code>$scope->getEvent()->getObject()->getKuserId()</code>
+						<value objectType="VidiunEvalStringField">
+							<code>$scope->getEvent()->getObject()->getVuserId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>creator_email</key>
 						<description>Entry creator email</description>
-						<value objectType="KalturaEvalStringField">
-							<code>$scope->getEvent()->getObject()->getkuser()->getEmail()</code>
+						<value objectType="VidiunEvalStringField">
+							<code>$scope->getEvent()->getObject()->getvuser()->getEmail()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>owner_name</key>
 						<description>Account owner name</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getEvent()->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getEvent()->getObject()->getEntryId())->getPartner()->getPartnerName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>owner_email</key>
 						<description>Account owner email</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getEvent()->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getEvent()->getObject()->getEntryId())->getPartner()->getAdminEmail() : ''</code>
 						</value>
 					</item>
@@ -713,22 +713,22 @@
 	<multirequest>
 		<!-- User was added to category as [role] -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>User was added to category as [role]</name>
 				<systemName>User_Added_To_Category_As_Role</systemName>
 				<description>Email notification template to be sent when a used is added to a category with a specific role.</description>
 				<automaticDispatchEnabled>1</automaticDispatchEnabled>
 				<eventType>2</eventType> <!-- EventNotificationEventType::OBJECT_ADDED -->
-				<eventObjectType>12</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYKUSER -->
+				<eventObjectType>12</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYVUSER -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
-							<code>$scope->getObject() instanceof categoryKuser &amp;&amp; $scope->getObject()->getStatus() == CategoryKuserStatus::ACTIVE</code>
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
+							<code>$scope->getObject() instanceof categoryVuser &amp;&amp; $scope->getObject()->getStatus() == CategoryVuserStatus::ACTIVE</code>
 						</field>
 					</item>
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
-							<code>$scope->getObject() instanceof categoryKuser &amp;&amp; category::getPermissionLevelName($scope->getObject()->getPermissionLevel())</code>
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
+							<code>$scope->getObject() instanceof categoryVuser &amp;&amp; category::getPermissionLevelName($scope->getObject()->getPermissionLevel())</code>
 						</field>
 					</item>
 				</eventConditions>
@@ -737,40 +737,40 @@
 				<body>You have been added as {role} to {category_name}</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<to objectType="KalturaEmailNotificationStaticRecipientProvider">
+				<to objectType="VidiunEmailNotificationStaticRecipientProvider">
 					<emailRecipients objectType="array">
-						<item objectType = "KalturaEmailNotificationRecipient">
-							<email objectType="KalturaEvalStringField">
-								<code>!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getEmail() : ''</code>
+						<item objectType = "VidiunEmailNotificationRecipient">
+							<email objectType="VidiunEvalStringField">
+								<code>!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getEmail() : ''</code>
 							</email>
-							<name objectType="KalturaEvalStringField">
-								<code>!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getFirstName().' '.$scope->getObject()->getkuser()->getLastName() : ''</code>
+							<name objectType="VidiunEvalStringField">
+								<code>!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getFirstName().' '.$scope->getObject()->getvuser()->getLastName() : ''</code>
 							</name>
 						</item>
 					</emailRecipients>
 				</to>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>($scope->getObject()->getcategory()) ? $scope->getObject()->getcategory()->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>role</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>ucfirst(strtolower(category::getPermissionLevelName($scope->getObject()->getPermissionLevel())))</code>
 						</value>
 					</item>
@@ -790,17 +790,17 @@
 	<multirequest>
 		<!-- User's role was changed in category -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>User's role was changed in category</name>
 				<systemName>User_Role_Was_Changed_In_Category</systemName>
 				<description>Email notification template to be sent when user's role is changed in category.</description>
 				<automaticDispatchEnabled>1</automaticDispatchEnabled>
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
-				<eventObjectType>12</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYKUSER -->
+				<eventObjectType>12</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYVUSER -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
-							<code>$scope->getObject() instanceof categoryKuser &amp;&amp; in_array(categoryKuserPeer::PERMISSION_LEVEL, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getStatus() == CategoryKuserStatus::ACTIVE</code>
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
+							<code>$scope->getObject() instanceof categoryVuser &amp;&amp; in_array(categoryVuserPeer::PERMISSION_LEVEL, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getStatus() == CategoryVuserStatus::ACTIVE</code>
 						</field>
 					</item>
 				</eventConditions>
@@ -809,40 +809,40 @@
 				<body>Your role in {category_name} has changed and is now {role}</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<to objectType="KalturaEmailNotificationStaticRecipientProvider">
+				<to objectType="VidiunEmailNotificationStaticRecipientProvider">
 					<emailRecipients objectType="array">
-						<item objectType = "KalturaEmailNotificationRecipient">
-							<email objectType="KalturaEvalStringField">
-								<code>!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getEmail() : ''</code>
+						<item objectType = "VidiunEmailNotificationRecipient">
+							<email objectType="VidiunEvalStringField">
+								<code>!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getEmail() : ''</code>
 							</email>
-							<name objectType="KalturaEvalStringField">
-								<code>!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getFirstName().' '.$scope->getObject()->getkuser()->getLastName() : ''</code>
+							<name objectType="VidiunEvalStringField">
+								<code>!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getFirstName().' '.$scope->getObject()->getvuser()->getLastName() : ''</code>
 							</name>
 						</item>
 					</emailRecipients>
 				</to>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>($scope->getObject()->getcategory()) ? $scope->getObject()->getcategory()->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>role</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>ucfirst(strtolower(category::getPermissionLevelName($scope->getObject()->getPermissionLevel())))</code>
 						</value>
 					</item>
@@ -862,17 +862,17 @@
 	<multirequest>
 		<!-- User was removed from category -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>User was removed from category</name>
 				<systemName>User_Was_Removed_From_Category</systemName>
 				<description>Email notification template to be sent when user was removed from category.</description>
 				<automaticDispatchEnabled>1</automaticDispatchEnabled>
 				<eventType>8</eventType> <!-- EventNotificationEventType::OBJECT_DELETED -->
-				<eventObjectType>12</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYKUSER -->
+				<eventObjectType>12</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYVUSER -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
-							<code>$scope->getObject() instanceof categoryKuser</code>
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
+							<code>$scope->getObject() instanceof categoryVuser</code>
 						</field>
 					</item>
 				</eventConditions>
@@ -881,34 +881,34 @@
 				<body>You have been removed from {category_name}</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<to objectType="KalturaEmailNotificationStaticRecipientProvider">
+				<to objectType="VidiunEmailNotificationStaticRecipientProvider">
 					<emailRecipients objectType="array">
-						<item objectType = "KalturaEmailNotificationRecipient">
-							<email objectType="KalturaEvalStringField">
-								<code>!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getEmail() : ''</code>
+						<item objectType = "VidiunEmailNotificationRecipient">
+							<email objectType="VidiunEvalStringField">
+								<code>!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getEmail() : ''</code>
 							</email>
-							<name objectType="KalturaEvalStringField">
-								<code>!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getFirstName().' '.$scope->getObject()->getkuser()->getLastName() : ''</code>
+							<name objectType="VidiunEvalStringField">
+								<code>!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getFirstName().' '.$scope->getObject()->getvuser()->getLastName() : ''</code>
 							</name>
 						</item>
 					</emailRecipients>
 				</to>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>($scope->getObject()->getcategory()) ? $scope->getObject()->getcategory()->getName() : ''</code>
 						</value>
 					</item>
@@ -928,7 +928,7 @@
 	<multirequest>
 		<!-- Entry was added to channel -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>Entry was added to channel</name>
 				<systemName>Entry_Was_Added_To_Channel</systemName>
 				<description>Email notification template to be sent when entry is added to channel.</description>
@@ -936,8 +936,8 @@
 				<eventType>5</eventType> <!-- EventNotificationEventType::OBJECT_CREATED -->
 				<eventObjectType>37</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof categoryEntry &amp;&amp; $scope->getObject()->getStatus() == CategoryEntryStatus::ACTIVE</code>
 						</field>
 					</item>
@@ -947,42 +947,42 @@
 				<body>Media {entry_name} was added to {category_name}. You can see the media here: [AppEntryUrl]{entry_id}</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<bcc objectType="KalturaEmailNotificationCategoryRecipientProvider">
-					<categoryId objectType="KalturaEvalStringField">
+				<bcc objectType="VidiunEmailNotificationCategoryRecipientProvider">
+					<categoryId objectType="VidiunEvalStringField">
 						<code>$scope->getObject()->getCategoryId()</code>
 					</categoryId>
-					<categoryUserFilter objectType="KalturaCategoryUserProviderFilter">
+					<categoryUserFilter objectType="VidiunCategoryUserProviderFilter">
 						<permissionNamesMatchOr>CATEGORY_SUBSCRIBE</permissionNamesMatchOr>
 					</categoryUserFilter>
 				</bcc>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())) ? categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getEntryId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getName() : ''</code>
 						</value>
 					</item>
@@ -1003,7 +1003,7 @@
 	<multirequest>
 		<!-- Comment was added to entry -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>Comment was added to entry</name>
 				<systemName>Comment_Was_Added_To_Entry</systemName>
 				<description>Email notification template to be sent to entry creator when a comment is added to his entry.</description>
@@ -1011,23 +1011,23 @@
 				<eventType>5</eventType> <!-- EventNotificationEventType::OBJECT_CREATED -->
 				<eventObjectType>annotationEventNotifications.Annotation</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
+					<item objectType="VidiunEventFieldCondition">
 						<description>An annotation object was created</description>
-						<field objectType="KalturaEvalBooleanField">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof Annotation</code>
 						</field>
 					</item>
-					<item objectType="KalturaOrCondition">
+					<item objectType="VidiunOrCondition">
 						<description>Annotation tags contains at least one of the comment tags</description>
 						<conditions objectType="array">
-							<item objectType="KalturaEventFieldCondition">
-								<field objectType="KalturaEvalBooleanField">
-									<code>(strpos($scope->getObject()->getTags(),"KMS_public_comment") !== false)</code>
+							<item objectType="VidiunEventFieldCondition">
+								<field objectType="VidiunEvalBooleanField">
+									<code>(strpos($scope->getObject()->getTags(),"VMS_public_comment") !== false)</code>
 								</field>
 							</item>
-							<item objectType="KalturaEventFieldCondition">
-								<field objectType="KalturaEvalBooleanField">
-									<code>(strpos($scope->getObject()->getTags(),"KMS_comment_context_") !== false)</code>
+							<item objectType="VidiunEventFieldCondition">
+								<field objectType="VidiunEvalBooleanField">
+									<code>(strpos($scope->getObject()->getTags(),"VMS_comment_context_") !== false)</code>
 								</field>
 							</item>
 						</conditions>
@@ -1038,106 +1038,106 @@
 				<body>A new comment was added to your video {entry_name}.Comment: {comment_text}. You can access the video page here: [AppEntryUrl]{entry_id}</body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<to objectType="KalturaEmailNotificationStaticRecipientProvider">
+				<to objectType="VidiunEmailNotificationStaticRecipientProvider">
 					<emailRecipients objectType="array">
-						<item objectType = "KalturaEmailNotificationRecipient">
-							<email objectType="KalturaEvalStringField">
-								<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? (!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()->getEmail() : '') : ''</code>
+						<item objectType = "VidiunEmailNotificationRecipient">
+							<email objectType="VidiunEvalStringField">
+								<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? (!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()->getEmail() : '') : ''</code>
 							</email>
-							<name objectType="KalturaEvalStringField">
-								<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? (!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()->getFirstName().' '.entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getkuser()->getLastName() : '') : ''</code>
+							<name objectType="VidiunEvalStringField">
+								<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? (!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()->getFirstName().' '.entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getvuser()->getLastName() : '') : ''</code>
 							</name>
 						</item>
 					</emailRecipients>
 				</to>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getEntryId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>comment_text</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getText()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>comment_id</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>comment_parent_id</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getParentId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>comment_system_name</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getSystemName()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>comment_user_id</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getPuserId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>comment_created_at</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getCreatedAt()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>comment_updated_at</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getUpdatedAt()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>comment_partner_data</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getPartnerData()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>comment_start_time</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getStartTime()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>comment_end_time</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getEndTime()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>comment_duration</key>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getDuration()</code>
 						</value>
 					</item>
@@ -1152,7 +1152,7 @@
 	
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>Entry Status Changed</name>
 				<systemName>HTTP_ENTRY_STATUS_CHANGED</systemName>
 				<description>HTTP notification template to be sent when an entry status changed.</description>
@@ -1160,45 +1160,45 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>1</eventObjectType> <!-- EventNotificationEventObjectType::ENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
+					<item objectType="VidiunEventFieldCondition">
 						<description>Status field modified</description>
-						<field objectType="KalturaEvalBooleanField">
+						<field objectType="VidiunEvalBooleanField">
 							<code>in_array(entryPeer::STATUS, $scope->getEvent()->getModifiedColumns())</code>
 						</field>
 					</item>
 				</eventConditions>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
 						<description>Entry ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
 						<description>Entry name</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getName()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_status</key>
 						<description>Entry status</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getStatus()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_reference_id</key>
 						<description>Entry reference ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getReferenceID()</code>
 						</value>
 					</item>
 				</contentParameters>
 				
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -1209,7 +1209,7 @@
 
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>Entry Status Equals</name>
 				<systemName>HTTP_ENTRY_STATUS_EQUALS</systemName>
 				<description>HTTP notification template to be sent when an entry status changed to specific value.</description>
@@ -1217,65 +1217,65 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>1</eventObjectType> <!-- EventNotificationEventObjectType::ENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
+					<item objectType="VidiunEventFieldCondition">
 						<description>Status field modified</description>
-						<field objectType="KalturaEvalBooleanField">
+						<field objectType="VidiunEvalBooleanField">
 							<code>in_array(entryPeer::STATUS, $scope->getEvent()->getModifiedColumns())</code>
 						</field>
 					</item>
-					<item objectType="KalturaFieldMatchCondition">
+					<item objectType="VidiunFieldMatchCondition">
 						<description>Status equals</description>
-						<field objectType="KalturaEvalStringField">
+						<field objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getStatus()</code>
 						</field>
 						<values objectType="array">
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>{trigger_status}</value>
 							</item>
 						</values>
 					</item>
 				</eventConditions>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
 						<description>Entry ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
 						<description>Entry name</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getName()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_status</key>
 						<description>Entry status</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getStatus()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_reference_id</key>
 						<description>Entry reference ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getReferenceID()</code>
 						</value>
 					</item>
 				</contentParameters>
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>trigger_status</key>
-						<description>Entry status that triggers the event, See:KalturaEntryStatus:/api_v3/testmeDoc/?object=KalturaEntryStatus</description>
-						<value objectType="KalturaStringValue">
+						<description>Entry status that triggers the event, See:VidiunEntryStatus:/api_v3/testmeDoc/?object=VidiunEntryStatus</description>
+						<value objectType="VidiunStringValue">
 							<value>2</value>
 						</value>
 					</item>
 				</userParameters>
 				
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -1286,7 +1286,7 @@
 
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>Entry Changed</name>
 				<systemName>HTTP_ENTRY_CHANGED</systemName>
 				<description>HTTP notification template to be sent when an entry metadata changed.</description>
@@ -1294,135 +1294,135 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>1</eventObjectType> <!-- EventNotificationEventObjectType::ENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventObjectChangedCondition">
+					<item objectType="VidiunEventObjectChangedCondition">
 						<description>Entry metadata changed, columns defined in modified_columns parameter</description>
 						<modifiedColumns>{modified_columns}</modifiedColumns>
 					</item>
 				</eventConditions>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
 						<description>Entry ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
 						<description>Entry name</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getName()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_status</key>
 						<description>Entry status</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getStatus()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_reference_id</key>
 						<description>Entry reference ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getReferenceID()</code>
 						</value>
 					</item>
 				</contentParameters>
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationArrayParameter">
+					<item objectType="VidiunEventNotificationArrayParameter">
 						<key>modified_columns</key>
 						<description>Entry metadata columns that will trigger the event</description>
 						<allowedValues objectType="array">
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.NAME</value>
 								<description>name</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.DATA</value>
 								<description>content</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.THUMBNAIL</value>
 								<description>thumbnail</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.RANK</value>
 								<description>rank</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.TAGS</value>
 								<description>tags</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.STATUS</value>
 								<description>status</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.LENGTH_IN_MSECS</value>
 								<description>duration</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.PARTNER_DATA</value>
 								<description>partner data</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.DESCRIPTION</value>
 								<description>description</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.MODERATION_STATUS</value>
 								<description>moderation status</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.PUSER_ID</value>
 								<description>owner id</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.ACCESS_CONTROL_ID</value>
 								<description>access control profile id</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.START_DATE</value>
 								<description>start date</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.END_DATE</value>
 								<description>end date</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entry.FLAVOR_PARAMS_IDS</value>
 								<description>flavor params ids</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>referenceID</value>
 								<description>reference id</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>partnerSortValue</value>
 								<description>partner sort value</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>replacementStatus</value>
 								<description>replacement status</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>replacingEntryId</value>
 								<description>replacing entry id</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entitledUserPuserEdit</value>
 								<description>entitled users - edit</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>entitledUserPuserPublish</value>
 								<description>entitled users - publish</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>width</value>
 								<description>width</description>
 							</item>
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>height</value>
 								<description>height</description>
 							</item>
@@ -1430,7 +1430,7 @@
 					</item>
 				</userParameters>
 				
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -1441,7 +1441,7 @@
 
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>Metadata Field Changed</name>
 				<systemName>HTTP_METADATA_FIELD_CHANGED</systemName>
 				<description>HTTP notification template to be sent when a custom metadata field changed.</description>
@@ -1449,7 +1449,7 @@
 				<eventType>6</eventType> <!-- EventNotificationEventType::OBJECT_DATA_CHANGED -->
 				<eventObjectType>metadataEventNotifications.Metadata</eventObjectType> <!-- EventNotificationEventObjectType::METADATA -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaMetadataFieldChangedCondition">
+					<item objectType="VidiunMetadataFieldChangedCondition">
 						<description>Metadata field changed</description>
 						<xPath>{metadata_field}</xPath>
 						<profileSystemName>{metadata_profile_system_name}</profileSystemName>
@@ -1458,60 +1458,60 @@
 					</item>
 				</eventConditions>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_id</key>
 						<description>Metadata ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_version</key>
 						<description>Metadata version</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getVersion()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_old_version</key>
 						<description>Metadata previous version</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getEvent()->getPreviousVersion()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>object_id</key>
 						<description>Object ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getObjectId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>object_type</key>
 						<description>Object type</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getObjectType()</code>
 						</value>
 					</item>
 				</contentParameters>
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_field</key>
 						<description>Custom metadata field to be compared</description>
-						<value objectType="KalturaStringValue">
+						<value objectType="VidiunStringValue">
 							<value></value>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_profile_system_name</key>
 						<description>Custom metadata profile system name to be compared</description>
-						<value objectType="KalturaStringValue">
+						<value objectType="VidiunStringValue">
 							<value></value>
 						</value>
 					</item>
 				</userParameters>
 				
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -1522,7 +1522,7 @@
 
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>Metadata Field Equals</name>
 				<systemName>HTTP_METADATA_FIELD_EQUALS</systemName>
 				<description>HTTP notification template to be sent when a custom metadata field changed to specific value.</description>
@@ -1530,86 +1530,86 @@
 				<eventType>6</eventType> <!-- EventNotificationEventType::OBJECT_DATA_CHANGED -->
 				<eventObjectType>metadataEventNotifications.Metadata</eventObjectType> <!-- EventNotificationEventObjectType::METADATA -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaMetadataFieldChangedCondition">
+					<item objectType="VidiunMetadataFieldChangedCondition">
 						<description>Metadata field changed</description>
 						<xPath>{metadata_field}</xPath>
 						<profileSystemName>{metadata_profile_system_name}</profileSystemName>
 						<versionA>{metadata_old_version}</versionA>
 						<versionB>{metadata_version}</versionB>
 					</item>
-					<item objectType="KalturaMatchMetadataCondition">
+					<item objectType="VidiunMatchMetadataCondition">
 						<description>Metadata field equals</description>
 						<xPath>{metadata_field}</xPath>
 						<profileSystemName>{metadata_profile_system_name}</profileSystemName>
 						<values objectType="array">
-							<item objectType="KalturaStringValue">
+							<item objectType="VidiunStringValue">
 								<value>{metadata_value}</value>
 							</item>
 						</values>
 					</item>
 				</eventConditions>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_id</key>
 						<description>Metadata ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_version</key>
 						<description>Metadata version</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getVersion()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_old_version</key>
 						<description>Metadata previous version</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getEvent()->getPreviousVersion()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>object_id</key>
 						<description>Object ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getObjectId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>object_type</key>
 						<description>Object type</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getObjectType()</code>
 						</value>
 					</item>
 				</contentParameters>
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_field</key>
 						<description>Custom metadata field to be compared</description>
-						<value objectType="KalturaStringValue">
+						<value objectType="VidiunStringValue">
 							<value></value>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_profile_system_name</key>
 						<description>Custom metadata profile system name to be compared</description>
-						<value objectType="KalturaStringValue">
+						<value objectType="VidiunStringValue">
 							<value></value>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>metadata_value</key>
 						<description>Custom metadata field value that triggers the event</description>
-						<value objectType="KalturaStringValue">
+						<value objectType="VidiunStringValue">
 							<value></value>
 						</value>
 					</item>
 				</userParameters>
 				
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -1620,7 +1620,7 @@
 
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>Entry-Distribution Created</name>
 				<systemName>HTTP_ENTRY_DISTRIBUTION_CREATED</systemName>
 				<description>HTTP notification template to be sent when a entry-distribution object created.</description>
@@ -1628,27 +1628,27 @@
 				<eventType>5</eventType> <!-- EventNotificationEventType::OBJECT_CREATED -->
 				<eventObjectType>contentDistributionEventNotifications.EntryDistribution</eventObjectType> <!-- EventNotificationEventObjectType::ENTRY_DISTRIBUTION -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaOrCondition">
+					<item objectType="VidiunOrCondition">
 						<description>Distribution profile ID equals or *</description>
 						<conditions objectType="array">
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>Distribution profile ID equals</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>$scope->getObject()->getDistributionProfileId()</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_distribution_profile_id}</value>
 									</item>
 								</values>
 							</item>
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>All distribution profiles</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>'*'</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_distribution_profile_id}</value>
 									</item>
 								</values>
@@ -1657,45 +1657,45 @@
 					</item>
 				</eventConditions>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_distribution_id</key>
 						<description>Entry-Distribution ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
 						<description>Entry ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getEntryId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>distribution_profile_id</key>
 						<description>Distribution profile ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getDistributionProfileId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_distribution_status</key>
 						<description>Entry-Distribution status</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getStatus()</code>
 						</value>
 					</item>
 				</contentParameters>
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>trigger_distribution_profile_id</key>
 						<description>Distribution profile ID that triggers the event (use asterisk to all profiles)</description>
-						<value objectType="KalturaStringValue">
+						<value objectType="VidiunStringValue">
 							<value>*</value>
 						</value>
 					</item>
 				</userParameters>	
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -1706,7 +1706,7 @@
 
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>Entry-Distribution Status Changed</name>
 				<systemName>HTTP_ENTRY_DISTRIBUTION_STATUS_CHANGED</systemName>
 				<description>HTTP notification template to be sent when a entry-distribution object status field changed.</description>
@@ -1714,33 +1714,33 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>contentDistributionEventNotifications.EntryDistribution</eventObjectType> <!-- EventNotificationEventObjectType::ENTRY_DISTRIBUTION -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
+					<item objectType="VidiunEventFieldCondition">
 						<description>Status field modified</description>
-						<field objectType="KalturaEvalBooleanField">
+						<field objectType="VidiunEvalBooleanField">
 							<code>in_array(EntryDistributionPeer::STATUS, $scope->getEvent()->getModifiedColumns())</code>
 						</field>
 					</item>
-					<item objectType="KalturaOrCondition">
+					<item objectType="VidiunOrCondition">
 						<description>Distribution profile ID equals or *</description>
 						<conditions objectType="array">
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>Distribution profile ID equals</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>$scope->getObject()->getDistributionProfileId()</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_distribution_profile_id}</value>
 									</item>
 								</values>
 							</item>
-							<item objectType="KalturaFieldMatchCondition">
+							<item objectType="VidiunFieldMatchCondition">
 								<description>All distribution profiles</description>
-								<field objectType="KalturaEvalStringField">
+								<field objectType="VidiunEvalStringField">
 									<code>'*'</code>
 								</field>
 								<values objectType="array">
-									<item objectType="KalturaStringValue">
+									<item objectType="VidiunStringValue">
 										<value>{trigger_distribution_profile_id}</value>
 									</item>
 								</values>
@@ -1749,45 +1749,45 @@
 					</item>
 				</eventConditions>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_distribution_id</key>
 						<description>Entry-Distribution ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
 						<description>Entry ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getEntryId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>distribution_profile_id</key>
 						<description>Distribution profile ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getDistributionProfileId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_distribution_status</key>
 						<description>Entry-Distribution status</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getStatus()</code>
 						</value>
 					</item>
 				</contentParameters>
 				<userParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>trigger_distribution_profile_id</key>
 						<description>Distribution profile ID that triggers the event (use asterisk to all profiles)</description>
-						<value objectType="KalturaStringValue">
+						<value objectType="VidiunStringValue">
 							<value>*</value>
 						</value>
 					</item>
 				</userParameters>	
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -1798,7 +1798,7 @@
 
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>Entry Added to Category</name>
 				<systemName>HTTP_ENTRY_ADDED_TO_CATEGORY</systemName>
 				<description>HTTP notification template to be sent when a entry associated with category.</description>
@@ -1806,36 +1806,36 @@
 				<eventType>5</eventType> <!-- EventNotificationEventType::OBJECT_CREATED -->
 				<eventObjectType>37</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYENTRY -->
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
 						<description>Entry ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getEntryId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
 						<description>Entry name</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_id</key>
 						<description>Category ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getCategoryId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_name</key>
 						<description>Category name</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())) ? categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())->getName() : ''</code>
 						</value>
 					</item>
 				</contentParameters>
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -1846,7 +1846,7 @@
 
 	<multirequest>
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaHttpNotificationTemplate">
+			<template objectType="VidiunHttpNotificationTemplate">
 				<name>Entry-Category Status Changed</name>
 				<systemName>HTTP_ENTRY_CATEGORY_STATUS_CHANGED</systemName>
 				<description>HTTP notification template to be sent when a entry status in category changed.</description>
@@ -1854,44 +1854,44 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>37</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
+					<item objectType="VidiunEventFieldCondition">
 						<description>Status field modified</description>
-						<field objectType="KalturaEvalBooleanField">
+						<field objectType="VidiunEvalBooleanField">
 							<code>in_array(categoryEntryPeer::STATUS, $scope->getEvent()->getModifiedColumns())</code>
 						</field>
 					</item>
 				</eventConditions>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
 						<description>Entry ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getEntryId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
 						<description>Entry name</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_id</key>
 						<description>Category ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getCategoryId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>category_name</key>
 						<description>Category name</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())) ? categoryPeer::retrieveByPk($scope->getObject()->getCategoryId())->getName() : ''</code>
 						</value>
 					</item>
 				</contentParameters>
-				<method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+				<method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
 			</template>
 		</request>
 		<request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -1903,7 +1903,7 @@
 	<multirequest>
 		<!-- Media Entry Ready -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>Media Entry Ready</name>
 				<systemName>Media_Entry_Ready</systemName>
 				<description>Email notification template to be sent when a new media entry is ready.</description>
@@ -1911,20 +1911,20 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>1</eventObjectType> <!-- EventNotificationEventObjectType::ENTRY -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventFieldCondition">
-						<field objectType="KalturaEvalBooleanField">
+					<item objectType="VidiunEventFieldCondition">
+						<field objectType="VidiunEvalBooleanField">
 							<code>$scope->getObject() instanceof entry &amp;&amp; !(in_array($scope->getObject()->getType(), array(entryType::DATA, entryType::DOCUMENT))) &amp;&amp; in_array(entryPeer::STATUS, $scope->getEvent()->getModifiedColumns()) &amp;&amp; $scope->getObject()->getStatus() == entryStatus::READY</code>
 						</field>
 					</item>
-					<item objectType="KalturaOrCondition">
+					<item objectType="VidiunOrCondition">
 						<conditions objectType="array">
-							<item objectType="KalturaEventFieldCondition">
-								<field objectType="KalturaEvalBooleanField">
+							<item objectType="VidiunEventFieldCondition">
+								<field objectType="VidiunEvalBooleanField">
 									<code>!$scope->getObject()->getReplacedEntryId()</code>
 								</field>
 							</item>
-							<item objectType="KalturaEventFieldCondition">
-								<field objectType="KalturaEvalBooleanField">
+							<item objectType="VidiunEventFieldCondition">
+								<field objectType="VidiunEvalBooleanField">
 									<code>$scope->getObject()->getReplacedEntryId() &amp;&amp; entryPeer::retrieveByPK($scope->getObject()->getReplacedEntryId())->getSourceType()!= EntrySourceType::RECORDED_LIVE</code>
 								</field>
 							</item>
@@ -1936,79 +1936,79 @@
 				<body><![CDATA[ Hello,<p>A new entry is ready for publishing:</p><p>Entry Name: {entry_name} <br>Entry ID:  {entry_id}<br>Entry Creator: {creator_name}, {creator_id}/{creator_email} </p>]]></body>
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
-				<to objectType="KalturaEmailNotificationStaticRecipientProvider">
+				<to objectType="VidiunEmailNotificationStaticRecipientProvider">
 					<emailRecipients objectType="array">
-						<item objectType = "KalturaEmailNotificationRecipient">
-							<email objectType="KalturaStringValue">
+						<item objectType = "VidiunEmailNotificationRecipient">
+							<email objectType="VidiunStringValue">
 								<value>{creator_email}</value>
 							</email>
-							<name objectType="KalturaStringValue">
+							<name objectType="VidiunStringValue">
 								<value>{creator_name}</value>
 							</name>
 						</item>
 					</emailRecipients>
 				</to>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
 						<description>Sender email</description>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
 						<description>Sender name</description>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_name</key>
 						<description>Entry name</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>(($scope->getObject() instanceof entry) &amp;&amp; ($scope->getObject()->getIsTemporary()) &amp;&amp; ($scope->getObject()->getReplacedEntryId()))? entryPeer::retrieveByPK($scope->getObject()->getReplacedEntryId())->getName():$scope->getObject()->getName()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>entry_id</key>
 						<description>Entry ID</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>(($scope->getObject() instanceof entry) &amp;&amp; ($scope->getObject()->getIsTemporary()) &amp;&amp; ($scope->getObject()->getReplacedEntryId()))? $scope->getObject()->getReplacedEntryId():$scope->getObject()->getId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>creator_name</key>
 						<description>Entry creator name</description>
-						<value objectType="KalturaEvalStringField">
-							<code>$scope->getEvent()->getObject()->getkuser()->getFirstName() . ' ' . $scope->getEvent()->getObject()->getkuser()->getLastName()</code>
+						<value objectType="VidiunEvalStringField">
+							<code>$scope->getEvent()->getObject()->getvuser()->getFirstName() . ' ' . $scope->getEvent()->getObject()->getvuser()->getLastName()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>creator_id</key>
 						<description>Entry creator ID</description>
-						<value objectType="KalturaEvalStringField">
-							<code>$scope->getEvent()->getObject()->getKuserId()</code>
+						<value objectType="VidiunEvalStringField">
+							<code>$scope->getEvent()->getObject()->getVuserId()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>creator_email</key>
 						<description>Entry creator email</description>
-						<value objectType="KalturaEvalStringField">
-							<code>$scope->getEvent()->getObject()->getkuser()->getEmail()</code>
+						<value objectType="VidiunEvalStringField">
+							<code>$scope->getEvent()->getObject()->getvuser()->getEmail()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>owner_name</key>
 						<description>Account owner name</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getEvent()->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getEvent()->getObject()->getEntryId())->getPartner()->getPartnerName() : ''</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>owner_email</key>
 						<description>Account owner email</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>!is_null(entryPeer::retrieveByPk($scope->getEvent()->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getEvent()->getObject()->getEntryId())->getPartner()->getAdminEmail() : ''</code>
 						</value>
 					</item>
@@ -2024,7 +2024,7 @@
 	<multirequest>
 		<!-- Server-Node is Status Changed -->
 		<request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-			<template objectType="KalturaEmailNotificationTemplate">
+			<template objectType="VidiunEmailNotificationTemplate">
 				<name>Server Node Status Changed</name>
 				<systemName>SERVER_NODE_STATUS_CHANGE</systemName>
 				<description>Email notification template to be sent when a server node status is changed.</description>
@@ -2032,7 +2032,7 @@
 				<eventType>3</eventType> <!-- EventNotificationEventType::OBJECT_CHANGED -->
 				<eventObjectType>39</eventObjectType> <!-- EventNotificationEventObjectType::SERVER_NODE -->
 				<eventConditions objectType="array">
-					<item objectType="KalturaEventObjectChangedCondition">
+					<item objectType="VidiunEventObjectChangedCondition">
 						<description>Server Node status changed </description>
 						<modifiedColumns>server_node.STATUS</modifiedColumns>
 					</item>
@@ -2043,31 +2043,31 @@
 				<fromEmail>{from_email}</fromEmail>
 				<fromName>{from_name}</fromName>
 				<contentParameters objectType="array">
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_email</key>
 						<description>Sender email</description>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_email")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_email")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>from_name</key>
 						<description>Sender name</description>
-						<value objectType="KalturaEvalStringField">
-							<code>kConf::get("partner_notification_name")</code>
+						<value objectType="VidiunEvalStringField">
+							<code>vConf::get("partner_notification_name")</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>server_node_hostname</key>
 						<description>Server-Node hostname</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>$scope->getObject()->getHostName()</code>
 						</value>
 					</item>
-					<item objectType="KalturaEventNotificationParameter">
+					<item objectType="VidiunEventNotificationParameter">
 						<key>server_node_status</key>
 						<description>Server-Node status</description>
-						<value objectType="KalturaEvalStringField">
+						<value objectType="VidiunEvalStringField">
 							<code>($scope->getObject()->getStatus() == ServerNodeStatus::ACTIVE) ? 'Active' : (($scope->getObject()->getStatus() == ServerNodeStatus::DISABLED)?'Disabled' : (($scope->getObject()->getStatus() == ServerNodeStatus::NOT_REGISTERED)?'Not Registered': 'Deleted'))</code>
 						</value>
 					</item>

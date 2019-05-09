@@ -1,5 +1,5 @@
 <?php
-class KalturaLivePublishStatus extends KalturaEnum implements LivePublishStatus
+class VidiunLivePublishStatus extends VidiunEnum implements LivePublishStatus
 {
     
 }

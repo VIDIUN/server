@@ -4,21 +4,21 @@
  * @package plugins.elasticSearch
  * @subpackage api.services
  */
-class ESearchService extends KalturaBaseService
+class ESearchService extends VidiunBaseService
 {
 	/**
 	 *
 	 * @action searchEntry
-	 * @param KalturaESearchEntryParams $searchParams
-	 * @param KalturaPager $pager
-	 * @return KalturaESearchEntryResponse
+	 * @param VidiunESearchEntryParams $searchParams
+	 * @param VidiunPager $pager
+	 * @return VidiunESearchEntryResponse
 	 */
-	function searchEntryAction(KalturaESearchEntryParams $searchParams, KalturaPager $pager = null)
+	function searchEntryAction(VidiunESearchEntryParams $searchParams, VidiunPager $pager = null)
 	{
-		$entrySearch = new kEntrySearch();
+		$entrySearch = new vEntrySearch();
 		list($coreResults, $objectCount) = $this->initAndSearch($entrySearch, $searchParams, $pager);
-		$response = new KalturaESearchEntryResponse();
-		$response->objects = KalturaESearchEntryResultArray::fromDbArray($coreResults, $this->getResponseProfile());
+		$response = new VidiunESearchEntryResponse();
+		$response->objects = VidiunESearchEntryResultArray::fromDbArray($coreResults, $this->getResponseProfile());
 		$response->totalCount = $objectCount;
 		return $response;
 	}
@@ -26,16 +26,16 @@ class ESearchService extends KalturaBaseService
 	/**
 	 *
 	 * @action searchCategory
-	 * @param KalturaESearchCategoryParams $searchParams
-	 * @param KalturaPager $pager
-	 * @return KalturaESearchCategoryResponse
+	 * @param VidiunESearchCategoryParams $searchParams
+	 * @param VidiunPager $pager
+	 * @return VidiunESearchCategoryResponse
 	 */
-	function searchCategoryAction(KalturaESearchCategoryParams $searchParams, KalturaPager $pager = null)
+	function searchCategoryAction(VidiunESearchCategoryParams $searchParams, VidiunPager $pager = null)
 	{
-		$categorySearch = new kCategorySearch();
+		$categorySearch = new vCategorySearch();
 		list($coreResults, $objectCount) = $this->initAndSearch($categorySearch, $searchParams, $pager);
-		$response = new KalturaESearchCategoryResponse();
-		$response->objects = KalturaESearchCategoryResultArray::fromDbArray($coreResults, $this->getResponseProfile());
+		$response = new VidiunESearchCategoryResponse();
+		$response->objects = VidiunESearchCategoryResultArray::fromDbArray($coreResults, $this->getResponseProfile());
 		$response->totalCount = $objectCount;
 		return $response;
 	}
@@ -43,16 +43,16 @@ class ESearchService extends KalturaBaseService
 	/**
 	 *
 	 * @action searchUser
-	 * @param KalturaESearchUserParams $searchParams
-	 * @param KalturaPager $pager
-	 * @return KalturaESearchUserResponse
+	 * @param VidiunESearchUserParams $searchParams
+	 * @param VidiunPager $pager
+	 * @return VidiunESearchUserResponse
 	 */
-	function searchUserAction(KalturaESearchUserParams $searchParams, KalturaPager $pager = null)
+	function searchUserAction(VidiunESearchUserParams $searchParams, VidiunPager $pager = null)
 	{
-		$userSearch = new kUserSearch();
+		$userSearch = new vUserSearch();
 		list($coreResults, $objectCount) = $this->initAndSearch($userSearch, $searchParams, $pager);
-		$response = new KalturaESearchUserResponse();
-		$response->objects = KalturaESearchUserResultArray::fromDbArray($coreResults, $this->getResponseProfile());
+		$response = new VidiunESearchUserResponse();
+		$response->objects = VidiunESearchUserResultArray::fromDbArray($coreResults, $this->getResponseProfile());
 		$response->totalCount = $objectCount;
 		return $response;
 	}
@@ -62,40 +62,40 @@ class ESearchService extends KalturaBaseService
 	 *
 	 * @action entryExportToCsv
 	 * @actionAlias media.exportToCsv
-	 * @param KalturaMediaEsearchExportToCsvJobData $data job data indicating filter to pass to the job
+	 * @param VidiunMediaEsearchExportToCsvJobData $data job data indicating filter to pass to the job
 	 * @return string
 	 *
 	 * @throws APIErrors::USER_EMAIL_NOT_FOUND
 	 */
-	public function entryExportToCsvAction (KalturaMediaEsearchExportToCsvJobData $data)
+	public function entryExportToCsvAction (VidiunMediaEsearchExportToCsvJobData $data)
 	{
 		if(!$data->userName || !$data->userMail)
-			throw new KalturaAPIException(APIErrors::USER_EMAIL_NOT_FOUND, $kuser);
+			throw new VidiunAPIException(APIErrors::USER_EMAIL_NOT_FOUND, $vuser);
 		
-		$kJobdData = $data->toObject(new kMediaEsearchExportToCsvJobData());
+		$vJobdData = $data->toObject(new vMediaEsearchExportToCsvJobData());
 		
-		kJobsManager::addExportCsvJob($kJobdData, $this->getPartnerId(), ElasticSearchPlugin::getExportTypeCoreValue(EsearchMediaEntryExportObjectType::ESEARCH_MEDIA));
+		vJobsManager::addExportCsvJob($vJobdData, $this->getPartnerId(), ElasticSearchPlugin::getExportTypeCoreValue(EsearchMediaEntryExportObjectType::ESEARCH_MEDIA));
 		
 		return $data->userMail;
 	}
 
 	/**
-	 * @param kBaseSearch $coreSearchObject
+	 * @param vBaseSearch $coreSearchObject
 	 * @param $searchParams
 	 * @param $pager
 	 * @return array
 	 */
 	protected function initAndSearch($coreSearchObject, $searchParams, $pager)
 	{
-		list($coreSearchOperator, $objectStatusesArr, $objectId, $kPager, $coreOrder) =
+		list($coreSearchOperator, $objectStatusesArr, $objectId, $vPager, $coreOrder) =
 			self::initSearchActionParams($searchParams, $pager);
-		$elasticResults = $coreSearchObject->doSearch($coreSearchOperator, $kPager, $objectStatusesArr, $objectId, $coreOrder);
+		$elasticResults = $coreSearchObject->doSearch($coreSearchOperator, $vPager, $objectStatusesArr, $objectId, $coreOrder);
 
-		list($coreResults, $objectCount) = kESearchCoreAdapter::transformElasticToCoreObject($elasticResults, $coreSearchObject);
+		list($coreResults, $objectCount) = vESearchCoreAdapter::transformElasticToCoreObject($elasticResults, $coreSearchObject);
 		return array($coreResults, $objectCount);
 	}
 
-	protected static function initSearchActionParams($searchParams, KalturaPager $pager = null)
+	protected static function initSearchActionParams($searchParams, VidiunPager $pager = null)
 	{
 		/**
 		 * @var ESearchParams $coreParams
@@ -109,13 +109,13 @@ class ESearchService extends KalturaBaseService
 			$objectStatusesArr = explode(',', $objectStatuses);
 		}
 
-		$kPager = null;
+		$vPager = null;
 		if ($pager)
 		{
-			$kPager = $pager->toObject();
+			$vPager = $pager->toObject();
 		}
 
-		return array($coreParams->getSearchOperator(), $objectStatusesArr, $coreParams->getObjectId(), $kPager, $coreParams->getOrderBy());
+		return array($coreParams->getSearchOperator(), $objectStatusesArr, $coreParams->getObjectId(), $vPager, $coreParams->getOrderBy());
 	}
 
 }

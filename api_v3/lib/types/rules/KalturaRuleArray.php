@@ -3,18 +3,18 @@
  * @package api
  * @subpackage objects
  */
-class KalturaRuleArray extends KalturaTypedArray
+class VidiunRuleArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		KalturaLog::debug(print_r($arr, true));
-		$newArr = new KalturaRuleArray();
+		VidiunLog::debug(print_r($arr, true));
+		$newArr = new VidiunRuleArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaRule();
+    		$nObj = new VidiunRule();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -24,6 +24,6 @@ class KalturaRuleArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaRule");	
+		parent::__construct("VidiunRule");	
 	}
 }

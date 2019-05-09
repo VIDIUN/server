@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kAssetTypeCondition extends kCondition
+class vAssetTypeCondition extends vCondition
 {
 	/**
 	 * @var array
@@ -11,7 +11,7 @@ class kAssetTypeCondition extends kCondition
 	private $assetTypes;
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -20,10 +20,10 @@ class kAssetTypeCondition extends kCondition
 	}
 
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @return bool
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
 		//get flavor from scope
 		$asset = ($scope instanceof  accessControlScope) ? $scope->getAsset() : null;

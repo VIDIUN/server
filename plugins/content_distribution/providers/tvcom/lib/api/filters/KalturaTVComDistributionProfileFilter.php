@@ -3,6 +3,6 @@
  * @package plugins.tvComDistribution
  * @subpackage api.filters
  */
-class KalturaTVComDistributionProfileFilter extends KalturaTVComDistributionProfileBaseFilter
+class VidiunTVComDistributionProfileFilter extends VidiunTVComDistributionProfileBaseFilter
 {
 }

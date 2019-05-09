@@ -19,7 +19,7 @@
 
 	<multirequest>
 		<request service="media" action="add">
-			<entry objectType="KalturaMediaEntry">
+			<entry objectType="VidiunMediaEntry">
 				<name>Normal web quality video (400kbps)</name>
 				<mediaType>1</mediaType>
 				<tags>fish</tags>
@@ -30,18 +30,18 @@
 			</entry>
 		</request>
 		<request service="uploadToken" action="add">
-			<uploadToken objectType="KalturaUploadToken">
+			<uploadToken objectType="VidiunUploadToken">
 				<fileName>NormalWebQualityVideo.flv</fileName>
 			</uploadToken>
 		</request>
 		<request service="uploadToken" action="add">
-			<uploadToken objectType="KalturaUploadToken">
+			<uploadToken objectType="VidiunUploadToken">
 				<fileName>NormalWebQualityVideoThumb.jpg</fileName>
 			</uploadToken>
 		</request>
 		<request service="thumbAsset" action="add">
 			<entryId>{1:result:id}</entryId>
-			<thumbAsset objectType="KalturaThumbAsset" />
+			<thumbAsset objectType="VidiunThumbAsset" />
 		</request>
 		<request service="uploadToken" action="upload">
 			<uploadTokenId>{2:result:id}</uploadTokenId>
@@ -53,13 +53,13 @@
 		</request>
 		<request service="media" action="addContent">
 			<entryId>{1:result:id}</entryId>
-			<resource objectType="KalturaUploadedFileTokenResource">
+			<resource objectType="VidiunUploadedFileTokenResource">
 				<token>{2:result:id}</token>
 			</resource>
 		</request>
 		<request service="thumbAsset" action="setContent">
 			<id>{4:result:id}</id>
-			<contentResource objectType="KalturaUploadedFileTokenResource">
+			<contentResource objectType="VidiunUploadedFileTokenResource">
 				<token>{3:result:id}</token>
 			</contentResource>
 		</request>
@@ -67,7 +67,7 @@
 
 	<multirequest>
 		<request service="media" action="add">
-			<entry objectType="KalturaMediaEntry">
+			<entry objectType="VidiunMediaEntry">
 				<name>Excellent web quality video (1200kbps)</name>
 				<mediaType>1</mediaType>
 				<tags>fish</tags>
@@ -78,18 +78,18 @@
 			</entry>
 		</request>
 		<request service="uploadToken" action="add">
-			<uploadToken objectType="KalturaUploadToken">
+			<uploadToken objectType="VidiunUploadToken">
 				<fileName>ExcellentWebQualityVideo.flv</fileName>
 			</uploadToken>
 		</request>
 		<request service="uploadToken" action="add">
-			<uploadToken objectType="KalturaUploadToken">
+			<uploadToken objectType="VidiunUploadToken">
 				<fileName>ExcellentWebQualityVideoThumb.jpg</fileName>
 			</uploadToken>
 		</request>
 		<request service="thumbAsset" action="add">
 			<entryId>{1:result:id}</entryId>
-			<thumbAsset objectType="KalturaThumbAsset" />
+			<thumbAsset objectType="VidiunThumbAsset" />
 		</request>
 		<request service="uploadToken" action="upload">
 			<uploadTokenId>{2:result:id}</uploadTokenId>
@@ -101,13 +101,13 @@
 		</request>
 		<request service="media" action="addContent">
 			<entryId>{1:result:id}</entryId>
-			<resource objectType="KalturaUploadedFileTokenResource">
+			<resource objectType="VidiunUploadedFileTokenResource">
 				<token>{2:result:id}</token>
 			</resource>
 		</request>
 		<request service="thumbAsset" action="setContent">
 			<id>{4:result:id}</id>
-			<contentResource objectType="KalturaUploadedFileTokenResource">
+			<contentResource objectType="VidiunUploadedFileTokenResource">
 				<token>{3:result:id}</token>
 			</contentResource>
 		</request>
@@ -115,27 +115,27 @@
 
 	<multirequest>
 		<request service="media" action="add">
-			<entry objectType="KalturaMediaEntry">
-				<name>Sample Kaltura Logo</name>
+			<entry objectType="VidiunMediaEntry">
+				<name>Sample Vidiun Logo</name>
 				<mediaType>2</mediaType>
-				<tags>logo, kaltura, image</tags>
-				<description>Sample Kaltura Logo logo, kaltura</description>
+				<tags>logo, vidiun, image</tags>
+				<description>Sample Vidiun Logo logo, vidiun</description>
 				<userId>template</userId>
 				<categories>image</categories>
 			</entry>
 		</request>
 		<request service="uploadToken" action="add">
-			<uploadToken objectType="KalturaUploadToken">
-				<fileName>SampleKalturaLogo.png</fileName>
+			<uploadToken objectType="VidiunUploadToken">
+				<fileName>SampleVidiunLogo.png</fileName>
 			</uploadToken>
 		</request>
 		<request service="uploadToken" action="upload">
 			<uploadTokenId>{2:result:id}</uploadTokenId>
-			<fileData objectType="file">media/SampleKalturaLogo.png</fileData>
+			<fileData objectType="file">media/SampleVidiunLogo.png</fileData>
 		</request>
 		<request service="media" action="addContent">
 			<entryId>{1:result:id}</entryId>
-			<resource objectType="KalturaUploadedFileTokenResource">
+			<resource objectType="VidiunUploadedFileTokenResource">
 				<token>{2:result:id}</token>
 			</resource>
 		</request>
@@ -143,46 +143,46 @@
 
 	<multirequest>
 		<request service="media" action="add">
-			<entry objectType="KalturaMediaEntry">
-				<name>Sample Kaltura Animated Logo</name>
+			<entry objectType="VidiunMediaEntry">
+				<name>Sample Vidiun Animated Logo</name>
 				<mediaType>1</mediaType>
-				<tags>kaltura, logo, anmated, video</tags>
-				<description>Sample Kaltura Animated Logo kaltura</description>
+				<tags>vidiun, logo, anmated, video</tags>
+				<description>Sample Vidiun Animated Logo vidiun</description>
 				<userId>template</userId>
 				<categories>video</categories>
 			</entry>
 		</request>
 		<request service="uploadToken" action="add">
-			<uploadToken objectType="KalturaUploadToken">
-				<fileName>SampleKalturaAnimatedLogo.flv</fileName>
+			<uploadToken objectType="VidiunUploadToken">
+				<fileName>SampleVidiunAnimatedLogo.flv</fileName>
 			</uploadToken>
 		</request>
 		<request service="uploadToken" action="add">
-			<uploadToken objectType="KalturaUploadToken">
-				<fileName>SampleKalturaAnimatedLogoThumb.jpg</fileName>
+			<uploadToken objectType="VidiunUploadToken">
+				<fileName>SampleVidiunAnimatedLogoThumb.jpg</fileName>
 			</uploadToken>
 		</request>
 		<request service="thumbAsset" action="add">
 			<entryId>{1:result:id}</entryId>
-			<thumbAsset objectType="KalturaThumbAsset" />
+			<thumbAsset objectType="VidiunThumbAsset" />
 		</request>
 		<request service="uploadToken" action="upload">
 			<uploadTokenId>{2:result:id}</uploadTokenId>
-			<fileData objectType="file">media/SampleKalturaAnimatedLogo.flv</fileData>
+			<fileData objectType="file">media/SampleVidiunAnimatedLogo.flv</fileData>
 		</request>
 		<request service="uploadToken" action="upload">
 			<uploadTokenId>{3:result:id}</uploadTokenId>
-			<fileData objectType="file">media/SampleKalturaAnimatedLogoThumb.jpg</fileData>
+			<fileData objectType="file">media/SampleVidiunAnimatedLogoThumb.jpg</fileData>
 		</request>
 		<request service="media" action="addContent">
 			<entryId>{1:result:id}</entryId>
-			<resource objectType="KalturaUploadedFileTokenResource">
+			<resource objectType="VidiunUploadedFileTokenResource">
 				<token>{2:result:id}</token>
 			</resource>
 		</request>
 		<request service="thumbAsset" action="setContent">
 			<id>{4:result:id}</id>
-			<contentResource objectType="KalturaUploadedFileTokenResource">
+			<contentResource objectType="VidiunUploadedFileTokenResource">
 				<token>{3:result:id}</token>
 			</contentResource>
 		</request>
@@ -190,7 +190,7 @@
 
 	<multirequest>
 		<request service="media" action="add">
-			<entry objectType="KalturaMediaEntry">
+			<entry objectType="VidiunMediaEntry">
 				<name>Sample Big Buck Bunny Trailer (HD)</name>
 				<mediaType>1</mediaType>
 				<tags>hd content, video, bunny</tags>
@@ -201,18 +201,18 @@
 			</entry>
 		</request>
 		<request service="uploadToken" action="add">
-			<uploadToken objectType="KalturaUploadToken">
+			<uploadToken objectType="VidiunUploadToken">
 				<fileName>SampleBigBuckBunnyTrailer.flv</fileName>
 			</uploadToken>
 		</request>
 		<request service="uploadToken" action="add">
-			<uploadToken objectType="KalturaUploadToken">
+			<uploadToken objectType="VidiunUploadToken">
 				<fileName>SampleBigBuckBunnyThumb.jpg</fileName>
 			</uploadToken>
 		</request>
 		<request service="thumbAsset" action="add">
 			<entryId>{1:result:id}</entryId>
-			<thumbAsset objectType="KalturaThumbAsset" />
+			<thumbAsset objectType="VidiunThumbAsset" />
 		</request>
 		<request service="uploadToken" action="upload">
 			<uploadTokenId>{2:result:id}</uploadTokenId>
@@ -224,13 +224,13 @@
 		</request>
 		<request service="media" action="addContent">
 			<entryId>{1:result:id}</entryId>
-			<resource objectType="KalturaUploadedFileTokenResource">
+			<resource objectType="VidiunUploadedFileTokenResource">
 				<token>{2:result:id}</token>
 			</resource>
 		</request>
 		<request service="thumbAsset" action="setContent">
 			<id>{4:result:id}</id>
-			<contentResource objectType="KalturaUploadedFileTokenResource">
+			<contentResource objectType="VidiunUploadedFileTokenResource">
 				<token>{3:result:id}</token>
 			</contentResource>
 		</request>

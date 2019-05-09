@@ -3,7 +3,7 @@
  * @package plugins.avnDistribution
  * @subpackage api.objects
  */
-class KalturaAvnDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunAvnDistributionProfile extends VidiunConfigurableDistributionProfile
 {	
 	/**
 	 * @readonly

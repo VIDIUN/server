@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage model.data
  */
-class kEventNotificationScope extends kEventScope
+class vEventNotificationScope extends vEventScope
 {
 	/**
 	 * @var BaseObject

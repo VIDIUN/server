@@ -23,7 +23,7 @@ exclude-result-prefixes="xs">
 				<link>link to the feed</link>
 				<language>en-us</language>
 				<managingEditor>podcasts@hbo.com</managingEditor>
-				<generator>Kaltura - Open Source Video</generator>
+				<generator>Vidiun - Open Source Video</generator>
 				<ttl>60</ttl>
 				<itunes:explicit>yes</itunes:explicit>
 				<itunes:keywords>This tag allows users to search on a maximum of 12 text keywords. Use commas to separate keywords</itunes:keywords>
@@ -36,7 +36,7 @@ exclude-result-prefixes="xs">
 				<itunes:name>John Doe</itunes:name>
 				<itunes:email>john.doe@example.com</itunes:email>
 				</itunes:owner>
-				<itunes:image href="http://corp.kaltura.com/images/header/kalturaLogo.png" />
+				<itunes:image href="http://corp.vidiun.com/images/header/vidiunLogo.png" />
 				<itunes:category text="TV &amp; Film">
 				</itunes:category>
 				<xsl:apply-templates name="item"
@@ -47,7 +47,7 @@ exclude-result-prefixes="xs">
   </xsl:template>
   <xsl:template name="item" match="item">
 	<xsl:variable name="podFlvor" select="distribution[@distributionProfileId=$distributionProfileId]/flavorAssetIds/flavorAssetId" />
-	<xsl:variable name="server" select="'http://www.kaltura.com'" />
+	<xsl:variable name="server" select="'http://www.vidiun.com'" />
 		<item>
 			<title>
 				<xsl:choose>

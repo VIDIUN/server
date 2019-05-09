@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage externalWidgets
  */
-class serveFlavorAction extends kalturaAction
+class serveFlavorAction extends vidiunAction
 {
 	const CHUNK_SIZE = 1048576; // 1024 X 1024
 	const NO_CLIP_TO = 2147483647;
@@ -26,12 +26,12 @@ class serveFlavorAction extends kalturaAction
 	{
 		$fullPath = $fileSync->getFullPath();
 
-		$pathPrefix = kConf::get('serve_flavor_path_search_prefix', 'local', '');
+		$pathPrefix = vConf::get('serve_flavor_path_search_prefix', 'local', '');
 		if ($pathPrefix &&
-			kString::beginsWith($fullPath, $pathPrefix) &&
+			vString::beginsWith($fullPath, $pathPrefix) &&
 			$this->pathOnly)
 		{
-			$pathReplace = kConf::get('serve_flavor_path_replace');
+			$pathReplace = vConf::get('serve_flavor_path_replace');
 			$newPrefix = $pathReplace[mt_rand(0, count($pathReplace) - 1)];
 			$fullPath = $newPrefix . substr($fullPath, strlen($pathPrefix));
 		}
@@ -43,16 +43,16 @@ class serveFlavorAction extends kalturaAction
 	{
 		if (!function_exists('apc_store') || 
 			$_SERVER["REQUEST_METHOD"] != "GET" || 
-			$renderer instanceof kRendererString)
+			$renderer instanceof vRendererString)
 		{
 			return;
 		}
 
 		$renderer->partnerId = $partnerId;
 		$host = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST'];
-		$cacheKey = 'dumpFile-'.kIpAddressUtils::isInternalIp($_SERVER['REMOTE_ADDR']).'-'.$host.$_SERVER["REQUEST_URI"];
+		$cacheKey = 'dumpFile-'.vIpAddressUtils::isInternalIp($_SERVER['REMOTE_ADDR']).'-'.$host.$_SERVER["REQUEST_URI"];
 		apc_store($cacheKey, $renderer, 86400);
-		header("X-Kaltura:cache-key");
+		header("X-Vidiun:cache-key");
 	}
 	
 	protected function getSimpleMappingRenderer($path, asset $asset = null)
@@ -73,7 +73,7 @@ class serveFlavorAction extends kalturaAction
 
 		if ($asset && method_exists($asset, 'getLanguage') && $asset->getLanguage())
 		{
-			$language = languageCodeManager::getObjectFromKalturaName($asset->getLanguage());
+			$language = languageCodeManager::getObjectFromVidiunName($asset->getLanguage());
 			$language = $language[1];
 			
 			// map enu / enb to eng, since these are not supported by the packager 
@@ -99,7 +99,7 @@ class serveFlavorAction extends kalturaAction
 
 		$json = str_replace('\/', '/', self::jsonEncode($result));
 
-		return new kRendererString(
+		return new vRendererString(
 				$json,
 				self::JSON_CONTENT_TYPE);
 	}
@@ -109,7 +109,7 @@ class serveFlavorAction extends kalturaAction
 	 */
 	protected function renderEmptySimpleMapping()
 	{
-		if (!$this->pathOnly || !kIpAddressUtils::isInternalIp($_SERVER['REMOTE_ADDR']))
+		if (!$this->pathOnly || !vIpAddressUtils::isInternalIp($_SERVER['REMOTE_ADDR']))
 			return;
 
 		$renderer = $this->getSimpleMappingRenderer('', null);
@@ -164,7 +164,7 @@ class serveFlavorAction extends kalturaAction
 		// allow only manual playlist
 		if ($entry->getMediaType() != entry::ENTRY_MEDIA_TYPE_TEXT)
 		{
-			KExternalErrors::dieError(KExternalErrors::INVALID_ENTRY_TYPE);
+			VExternalErrors::dieError(VExternalErrors::INVALID_ENTRY_TYPE);
 		}
 
 		$version = $this->getRequestParameter("v");
@@ -194,7 +194,7 @@ class serveFlavorAction extends kalturaAction
 
 		if (!$referenceEntry)
 		{
-			KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 
 		// load the flavor assets
@@ -245,7 +245,7 @@ class serveFlavorAction extends kalturaAction
 
 		if (!$flavorParamIds)
 		{
-			KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 		}
 
 		// build the sequences
@@ -275,10 +275,10 @@ class serveFlavorAction extends kalturaAction
 					}
 					// get the file path of the flavor
 					$syncKey = $flavor->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-					list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, false, false);
+					list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, false, false);
 					if ($fileSync)
 					{
-						$resolvedFileSync = kFileSyncUtils::resolve($fileSync);
+						$resolvedFileSync = vFileSyncUtils::resolve($fileSync);
 						$path = $this->getFileSyncFullPath($resolvedFileSync);
 					}
 					else
@@ -307,14 +307,14 @@ class serveFlavorAction extends kalturaAction
 
 		// build the json
 		$json = self::jsonEncode($mediaSet);
-		$renderer = new kRendererString($json, self::JSON_CONTENT_TYPE);
+		$renderer = new vRendererString($json, self::JSON_CONTENT_TYPE);
 		if ($storeCache && !$isLive)
 		{
 			$this->storeCache($renderer, $origEntry->getPartnerId());
 		}
 
 		$renderer->output();
-		KExternalErrors::dieGracefully();
+		VExternalErrors::dieGracefully();
 	}
 
 
@@ -349,12 +349,12 @@ class serveFlavorAction extends kalturaAction
 		$mediaSet = array('durations' => $durations, 'sequences' => $sequences);
 		// build the json
 		$json = self::jsonEncode($mediaSet);
-		$renderer = new kRendererString($json, self::JSON_CONTENT_TYPE);
+		$renderer = new vRendererString($json, self::JSON_CONTENT_TYPE);
 
 		$this->storeCache($renderer, $partnerId);
 
 		$renderer->output();
-		KExternalErrors::dieGracefully();
+		VExternalErrors::dieGracefully();
 	}
 
 	protected function verifySequenceEntries($sequenceEntries)
@@ -363,7 +363,7 @@ class serveFlavorAction extends kalturaAction
 		{
 			/* @var entry $sequence */
 			if (!in_array('sequence_entry',$sequence->getTagsArr()))
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_SEQUENCE);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_SEQUENCE);
 		}
 		return true;
 
@@ -371,8 +371,8 @@ class serveFlavorAction extends kalturaAction
 
 	public function execute()
 	{
-		//entitlement should be disabled to serveFlavor action as we do not get ks on this action.
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		//entitlement should be disabled to serveFlavor action as we do not get vs on this action.
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		
 		requestUtils::handleConditionalGet();
 
@@ -389,14 +389,14 @@ class serveFlavorAction extends kalturaAction
 			{
 				// rendering empty response in case entry was not replicated yet
 				$this->renderEmptySimpleMapping();
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 			}
 
 			if ($entry->getStatus() == entryStatus::DELETED) {
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 			}
 
-			$isInternalIp = kIpAddressUtils::isInternalIp($_SERVER['REMOTE_ADDR']);
+			$isInternalIp = vIpAddressUtils::isInternalIp($_SERVER['REMOTE_ADDR']);
 			if ($entry->getType() == entryType::PLAYLIST && $isInternalIp)
 			{
 				list($flavorParamId, $asset) = $this->getFlavorAssetAndParamIds($flavorId);
@@ -429,15 +429,15 @@ class serveFlavorAction extends kalturaAction
 		if (is_null($flavorAsset)) {
 			// rendering empty response in case flavor asset was not replicated yet
 			$this->renderEmptySimpleMapping();
-			KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 		}
 
 		if ($flavorAsset->getStatus() == asset::ASSET_STATUS_DELETED) {
-			KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 		}
 
 		if (!is_null($entryId) && $flavorAsset->getEntryId() != $entryId)
-			KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 
 		if ($fileName)
 		{
@@ -451,10 +451,10 @@ class serveFlavorAction extends kalturaAction
 		$entry = $flavorAsset->getentry();
 		if (!$entry)
 		{
-			KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 		
-		KalturaMonitorClient::initApiMonitor(false, 'extwidget.serveFlavor', $flavorAsset->getPartnerId());
+		VidiunMonitorClient::initApiMonitor(false, 'extwidget.serveFlavor', $flavorAsset->getPartnerId());
 			
 		myPartnerUtils::enforceDelivery($entry, $flavorAsset);
 		
@@ -464,13 +464,13 @@ class serveFlavorAction extends kalturaAction
 		
 		$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET, $version);
 
-		if ($this->pathOnly && kIpAddressUtils::isInternalIp($_SERVER['REMOTE_ADDR']))
+		if ($this->pathOnly && vIpAddressUtils::isInternalIp($_SERVER['REMOTE_ADDR']))
 		{
 			$path = '';
-			list ( $file_sync , $local )= kFileSyncUtils::getReadyFileSyncForKey( $syncKey , false, false );
+			list ( $file_sync , $local )= vFileSyncUtils::getReadyFileSyncForKey( $syncKey , false, false );
 			if ( $file_sync )
 			{
-				$parent_file_sync = kFileSyncUtils::resolve($file_sync);
+				$parent_file_sync = vFileSyncUtils::resolve($file_sync);
 				$path = $this->getFileSyncFullPath($parent_file_sync);
 				if ($fileParam && is_dir($path)) 
 				{
@@ -484,31 +484,31 @@ class serveFlavorAction extends kalturaAction
 				$this->storeCache($renderer, $flavorAsset->getPartnerId());
 			}
 			$renderer->output();
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 		
-		if (kConf::hasParam('serve_flavor_allowed_partners') && 
-			!in_array($flavorAsset->getPartnerId(), kConf::get('serve_flavor_allowed_partners')))
+		if (vConf::hasParam('serve_flavor_allowed_partners') && 
+			!in_array($flavorAsset->getPartnerId(), vConf::get('serve_flavor_allowed_partners')))
 		{
-			KExternalErrors::dieError(KExternalErrors::ACTION_BLOCKED);
+			VExternalErrors::dieError(VExternalErrors::ACTION_BLOCKED);
 		}
 
-		if (!kFileSyncUtils::file_exists($syncKey, false))
+		if (!vFileSyncUtils::file_exists($syncKey, false))
 		{
-			list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
+			list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
 			
 			if (is_null($fileSync))
 			{
-				KalturaLog::log("Error - no FileSync for flavor [".$flavorAsset->getId()."]");
-				KExternalErrors::dieError(KExternalErrors::FILE_NOT_FOUND);
+				VidiunLog::log("Error - no FileSync for flavor [".$flavorAsset->getId()."]");
+				VExternalErrors::dieError(VExternalErrors::FILE_NOT_FOUND);
 			}
 			
 			// always dump remote urls so they will be cached by the cdn transparently
-			$remoteUrl = kDataCenterMgr::getRedirectExternalUrl($fileSync);
-			kFileUtils::dumpUrl($remoteUrl);
+			$remoteUrl = vDataCenterMgr::getRedirectExternalUrl($fileSync);
+			vFileUtils::dumpUrl($remoteUrl);
 		}
 		
-		$path = kFileSyncUtils::getReadyLocalFilePathForKey($syncKey);
+		$path = vFileSyncUtils::getReadyLocalFilePathForKey($syncKey);
 		$isFlv = false;
 		if (!$shouldProxy) // if the forceproxy is set dump file and dont treat it as flv (for progressive download)
 		{
@@ -523,7 +523,7 @@ class serveFlavorAction extends kalturaAction
 		if($clipTo == 0) 
 			$clipTo = self::NO_CLIP_TO;
 		if(!is_numeric($clipTo) || $clipTo < 0)
-			KExternalErrors::dieError(KExternalErrors::BAD_QUERY, 'clipTo must be a positive number');
+			VExternalErrors::dieError(VExternalErrors::BAD_QUERY, 'clipTo must be a positive number');
 		
 		$seekFrom = $this->getRequestParameter ( "seekFrom" , -1);
 		if ($seekFrom <= 0)
@@ -536,8 +536,8 @@ class serveFlavorAction extends kalturaAction
 		
 		if($fileParam && is_dir($path)) {
 			$path .= "/$fileParam";
-			kFileUtils::dumpFile($path, null, null);
-			KExternalErrors::dieGracefully();
+			vFileUtils::dumpFile($path, null, null);
+			VExternalErrors::dieGracefully();
 		}
 		else if (!$isFlv || ($clipTo == self::NO_CLIP_TO && $seekFrom < 0 && $seekFromBytes < 0)) // dump as regular file if the forceproxy parameter was specified or the file isn't an flv
 		{
@@ -552,24 +552,24 @@ class serveFlavorAction extends kalturaAction
 					$tempClipPath = $contentPath . myContentStorage::getGeneralEntityPath("entry/tempclip", $flavorAsset->getIntId(), $flavorAsset->getId(), $tempClipName);
 					if (!file_exists($tempClipPath))
 					{
-						kFile::fullMkdir($tempClipPath);
+						vFile::fullMkdir($tempClipPath);
 						$clipToSec = round($clipTo / 1000, 3);
-						$cmdLine = kConf::get ( "bin_path_ffmpeg" ) . " -i {$path} -vcodec copy -acodec copy -f mp4 -t {$clipToSec} -y {$tempClipPath} 2>&1";
-						KalturaLog::log("Executing {$cmdLine}");
+						$cmdLine = vConf::get ( "bin_path_ffmpeg" ) . " -i {$path} -vcodec copy -acodec copy -f mp4 -t {$clipToSec} -y {$tempClipPath} 2>&1";
+						VidiunLog::log("Executing {$cmdLine}");
 						$output = array ();
 						$return_value = "";
 						exec($cmdLine, $output, $return_value);
-						KalturaLog::log("ffmpeg returned {$return_value}, output:".implode("\n", $output));
+						VidiunLog::log("ffmpeg returned {$return_value}, output:".implode("\n", $output));
 					}
 					
 					if (file_exists($tempClipPath))
 					{
-						KalturaLog::log("Dumping {$tempClipPath}");
-						kFileUtils::dumpFile($tempClipPath);
+						VidiunLog::log("Dumping {$tempClipPath}");
+						vFileUtils::dumpFile($tempClipPath);
 					}
 					else
 					{
-						KalturaLog::err('Failed to clip the file using ffmpeg, falling back to rough clipping');
+						VidiunLog::err('Failed to clip the file using ffmpeg, falling back to rough clipping');
 					}
 				}
 				
@@ -578,16 +578,16 @@ class serveFlavorAction extends kalturaAction
 				{
 					$duration = ($mediaInfo->getVideoDuration() ? $mediaInfo->getVideoDuration() : ($mediaInfo->getAudioDuration() ?
 					$mediaInfo->getAudioDuration() : $mediaInfo->getContainerDuration()));
-					$limit_file_size = floor((@kFile::fileSize($path) * ($clipTo / $duration))*1.2);
+					$limit_file_size = floor((@vFile::fileSize($path) * ($clipTo / $duration))*1.2);
 				}
 			}
 			
-			$renderer = kFileUtils::getDumpFileRenderer($path, null, null, $limit_file_size);
+			$renderer = vFileUtils::getDumpFileRenderer($path, null, null, $limit_file_size);
 			if(!$fileName)
 				$this->storeCache($renderer, $flavorAsset->getPartnerId());
 			$renderer->output();
 			
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 		
 		$audioOnly = $this->getRequestParameter ( "audioOnly" ); // milliseconds
@@ -639,7 +639,7 @@ class serveFlavorAction extends kalturaAction
 		header("Content-Type: video/x-flv");
 
 		$flvWrapper->dump(self::CHUNK_SIZE, $fromByte, $toByte, $audioOnly, $seekFromBytes, $rangeFrom, $rangeTo, $cuepointTime, $cuepointPos);
-		KExternalErrors::dieGracefully();
+		VExternalErrors::dieGracefully();
 	}
 
 	/**
@@ -708,7 +708,7 @@ class serveFlavorAction extends kalturaAction
 			$asset = assetPeer::retrieveById($flavorId);
 			if (is_null($asset))
 			{
-				KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 			}
 			$flavorParamId = $asset->getFlavorParamsId();
 		}
@@ -787,7 +787,7 @@ class serveFlavorAction extends kalturaAction
 		$clipDesc = array('type' => 'source', 'path' => $path);
 		if (!$hasAudio)
 		{
-			KalturaLog::debug("$flavorId Audio Bit rate is null or 0 (taken from mediaInfo)");
+			VidiunLog::debug("$flavorId Audio Bit rate is null or 0 (taken from mediaInfo)");
 			$silent = array_merge(array(array('type' => 'silence')),array($clipDesc));
 			$clipDesc = array('type' => 'mixFilter','sources' => $silent);
 		}

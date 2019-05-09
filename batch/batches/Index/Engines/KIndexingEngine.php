@@ -6,7 +6,7 @@
 abstract class KIndexingEngine
 {
 	/**
-	 * @var KalturaFilterPager
+	 * @var VidiunFilterPager
 	 */
 	protected $pager;
 	
@@ -33,33 +33,33 @@ abstract class KIndexingEngine
 	private $batchPartnerId;
 	
 	/**
-	 * @param int $objectType of enum KalturaIndexObjectType
+	 * @param int $objectType of enum VidiunIndexObjectType
 	 * @return KIndexingEngine
 	 */
 	public static function getInstance($objectType)
 	{
 		switch($objectType)
 		{
-			case KalturaIndexObjectType::ENTRY:
+			case VidiunIndexObjectType::ENTRY:
 				return new KIndexingEntryEngine();
 				
-			case KalturaIndexObjectType::CATEGORY:
+			case VidiunIndexObjectType::CATEGORY:
 				return new KIndexingCategoryEngine();
 				
-			case KalturaIndexObjectType::LOCK_CATEGORY:
+			case VidiunIndexObjectType::LOCK_CATEGORY:
 				return new KIndexingCategoryEngine();
 				
-			case KalturaIndexObjectType::CATEGORY_ENTRY:
+			case VidiunIndexObjectType::CATEGORY_ENTRY:
 				return new KIndexingCategoryEntryEngine();
 				
-			case KalturaIndexObjectType::CATEGORY_USER:
+			case VidiunIndexObjectType::CATEGORY_USER:
 				return new KIndexingCategoryUserEngine();
 				
-			case KalturaIndexObjectType::USER:
+			case VidiunIndexObjectType::USER:
 				return new KIndexingKuserPermissionsEngine();
 				
 			default:
-				return KalturaPluginManager::loadObject('KIndexingEngine', $objectType);
+				return VidiunPluginManager::loadObject('KIndexingEngine', $objectType);
 		}
 	}
 	
@@ -69,35 +69,35 @@ abstract class KIndexingEngine
 	public function configure($partnerId)
 	{
 		$this->partnerId = $partnerId;
-		$this->batchPartnerId = KBatchBase::$taskConfig->getPartnerId();
+		$this->batchPartnerId = VBatchBase::$taskConfig->getPartnerId();
 
-		$this->pager = new KalturaFilterPager();
+		$this->pager = new VidiunFilterPager();
 		$this->pager->pageSize = 100;
 
-		if(KBatchBase::$taskConfig->params && KBatchBase::$taskConfig->params->pageSize)
-			$this->pager->pageSize = KBatchBase::$taskConfig->params->pageSize;
+		if(VBatchBase::$taskConfig->params && VBatchBase::$taskConfig->params->pageSize)
+			$this->pager->pageSize = VBatchBase::$taskConfig->params->pageSize;
 	}
 	
 	/**
-	 * @param KalturaFilter $filter The filter should return the list of objects that need to be reindexed
+	 * @param VidiunFilter $filter The filter should return the list of objects that need to be reindexed
 	 * @param bool $shouldUpdate Indicates that the object columns and attributes values should be recalculated before reindexed
 	 * @return int the number of indexed objects
 	 */
-	public function run(KalturaFilter $filter, $shouldUpdate)
+	public function run(VidiunFilter $filter, $shouldUpdate)
 	{
-		KBatchBase::impersonate($this->partnerId);
+		VBatchBase::impersonate($this->partnerId);
 		$ret = $this->index($filter, $shouldUpdate);
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
 		return $ret;
 	}
 	
 	/**
-	 * @param KalturaFilter $filter The filter should return the list of objects that need to be reindexed
+	 * @param VidiunFilter $filter The filter should return the list of objects that need to be reindexed
 	 * @param bool $shouldUpdate Indicates that the object columns and attributes values should be recalculated before reindexed
 	 * @return int the number of indexed objects
 	 */
-	abstract protected function index(KalturaFilter $filter, $shouldUpdate);
+	abstract protected function index(VidiunFilter $filter, $shouldUpdate);
 	
 	/**
 	 * @return int $lastIndexId
@@ -134,7 +134,7 @@ abstract class KIndexingEngine
 	public function initAdvancedFilter($data, $advancedFilter = null)
 	{
 		if(!$advancedFilter)
-			$advancedFilter = new KalturaIndexAdvancedFilter();
+			$advancedFilter = new VidiunIndexAdvancedFilter();
 		
 		if($data->lastIndexId)
 			$advancedFilter->indexIdGreaterThan = $data->lastIndexId;

@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage RecalculateCache
  */
-class KRecalculateResponseProfileCacheEngine extends KRecalculateCacheEngine
+class VRecalculateResponseProfileCacheEngine extends VRecalculateCacheEngine
 {
 	const RESPONSE_PROFILE_CACHE_ALREADY_RECALCULATED = 'RESPONSE_PROFILE_CACHE_ALREADY_RECALCULATED';
 	const RESPONSE_PROFILE_CACHE_RECALCULATE_RESTARTED = 'RESPONSE_PROFILE_CACHE_RECALCULATE_RESTARTED';
@@ -12,38 +12,38 @@ class KRecalculateResponseProfileCacheEngine extends KRecalculateCacheEngine
 	
 	public function __construct()
 	{
-		if(KBatchBase::$taskConfig->params->maxCacheObjectsPerRequest)
-			$this->maxCacheObjectsPerRequest = intval(KBatchBase::$taskConfig->params->maxCacheObjectsPerRequest);
+		if(VBatchBase::$taskConfig->params->maxCacheObjectsPerRequest)
+			$this->maxCacheObjectsPerRequest = intval(VBatchBase::$taskConfig->params->maxCacheObjectsPerRequest);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KRecalculateCacheEngine::recalculate()
+	 * @see VRecalculateCacheEngine::recalculate()
 	 */
-	public function recalculate(KalturaRecalculateCacheJobData $data)
+	public function recalculate(VidiunRecalculateCacheJobData $data)
 	{
 		return $this->doRecalculate($data);
 	}
 	
-	public function doRecalculate(KalturaRecalculateResponseProfileCacheJobData $data)
+	public function doRecalculate(VidiunRecalculateResponseProfileCacheJobData $data)
 	{
-		$job = KJobHandlerWorker::getCurrentJob();
-		KBatchBase::impersonate($job->partnerId);
-		$partner = KBatchBase::$kClient->partner->get($job->partnerId);
-		KBatchBase::unimpersonate();
+		$job = VJobHandlerWorker::getCurrentJob();
+		VBatchBase::impersonate($job->partnerId);
+		$partner = VBatchBase::$vClient->partner->get($job->partnerId);
+		VBatchBase::unimpersonate();
 		
 		$role = reset($data->userRoles);
-		/* @var $role KalturaIntegerValue */
+		/* @var $role VidiunIntegerValue */
 		$privileges = array(
 			'setrole:' . $role->value,
 			'disableentitlement',
 		);
 		$privileges = implode(',', $privileges);
 		
-		$client = new KalturaClient(KBatchBase::$kClientConfig);
-		$ks = $client->generateSession($partner->adminSecret, 'batchUser', $data->ksType, $job->partnerId, 86400, $privileges);
-		$client->setKs($ks);
+		$client = new VidiunClient(VBatchBase::$vClientConfig);
+		$vs = $client->generateSession($partner->adminSecret, 'batchUser', $data->vsType, $job->partnerId, 86400, $privileges);
+		$client->setVs($vs);
 		
-		$options = new KalturaResponseProfileCacheRecalculateOptions();
+		$options = new VidiunResponseProfileCacheRecalculateOptions();
 		$options->limit = $this->maxCacheObjectsPerRequest;
 		$options->cachedObjectType = $data->cachedObjectType;
 		$options->objectId = $data->objectId;
@@ -63,12 +63,12 @@ class KRecalculateResponseProfileCacheEngine extends KRecalculateCacheEngine
 				$options->isFirstLoop = false;
 			} while($results->lastObjectKey);
 		}
-		catch(KalturaException $e)
+		catch(VidiunException $e)
 		{
 			if($e->getCode() != self::RESPONSE_PROFILE_CACHE_ALREADY_RECALCULATED && $e->getCode() != self::RESPONSE_PROFILE_CACHE_RECALCULATE_RESTARTED)
 				throw $e;
 			
-			KalturaLog::err($e);
+			VidiunLog::err($e);
 		}
 		
 		return $recalculated;

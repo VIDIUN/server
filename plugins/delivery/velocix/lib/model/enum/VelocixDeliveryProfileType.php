@@ -4,7 +4,7 @@
  * @package plugins.velocix
  * @subpackage model.enum
  */ 
-class VelocixDeliveryProfileType implements IKalturaPluginEnum, DeliveryProfileType
+class VelocixDeliveryProfileType implements IVidiunPluginEnum, DeliveryProfileType
 {
 	const VELOCIX_HDS = 'VELOCIX_HDS';
 	const VELOCIX_HLS = 'VELOCIX_HLS';

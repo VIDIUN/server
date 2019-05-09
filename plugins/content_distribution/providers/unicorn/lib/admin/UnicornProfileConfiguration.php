@@ -64,11 +64,11 @@ class Form_UnicornProfileConfiguration extends Form_ConfigurableProfileConfigura
 		
 			foreach($storageProfileList->objects as $storageProfile)
 			{
-				/* @var $storageProfile Kaltura_Client_Type_StorageProfile */
+				/* @var $storageProfile Vidiun_Client_Type_StorageProfile */
 				$storageProfiles[$storageProfile->id] = $storageProfile->name;
 			}
 		}
-		catch (Kaltura_Client_Exception $e)
+		catch (Vidiun_Client_Exception $e)
 		{
 		}
 		
@@ -78,12 +78,12 @@ class Form_UnicornProfileConfiguration extends Form_ConfigurableProfileConfigura
 		));
 	}
 	
-	public function addFlavorParamsFields(Kaltura_Client_Type_FlavorParamsListResponse $flavorParams, array $optionalFlavorParamsIds = array(), array $requiredFlavorParamsIds = array())
+	public function addFlavorParamsFields(Vidiun_Client_Type_FlavorParamsListResponse $flavorParams, array $optionalFlavorParamsIds = array(), array $requiredFlavorParamsIds = array())
 	{
 		$options = array();
 		foreach($flavorParams->objects as $flavorParamsItem)
 		{
-			/* @var $flavorParamsItem Kaltura_Client_Type_FlavorParams */
+			/* @var $flavorParamsItem Vidiun_Client_Type_FlavorParams */
 			$options[$flavorParamsItem->id] = $flavorParamsItem->name;
 		}
 		$this->getElement("remote_asset_params_id")->setMultiOptions($options);

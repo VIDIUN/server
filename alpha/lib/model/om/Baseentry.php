@@ -26,16 +26,16 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	protected $id;
 
 	/**
-	 * The value for the kshow_id field.
+	 * The value for the vshow_id field.
 	 * @var        string
 	 */
-	protected $kshow_id;
+	protected $vshow_id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the name field.
@@ -349,9 +349,9 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	protected $last_played_at;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuser;
+	protected $avuser;
 
 	/**
 	 * @var        array LiveChannelSegment[] Collection to store aggregation of LiveChannelSegment objects.
@@ -374,14 +374,14 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	private $lastLiveChannelSegmentRelatedByEntryIdCriteria = null;
 
 	/**
-	 * @var        array kvote[] Collection to store aggregation of kvote objects.
+	 * @var        array vvote[] Collection to store aggregation of vvote objects.
 	 */
-	protected $collkvotes;
+	protected $collvvotes;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collkvotes.
+	 * @var        Criteria The criteria used to select the current contents of collvvotes.
 	 */
-	private $lastkvoteCriteria = null;
+	private $lastvvoteCriteria = null;
 
 	/**
 	 * @var        array conversion[] Collection to store aggregation of conversion objects.
@@ -550,23 +550,23 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kshow_id] column value.
+	 * Get the [vshow_id] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getKshowId()
+	public function getVshowId()
 	{
-		return $this->kshow_id;
+		return $this->vshow_id;
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -1333,54 +1333,54 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	} // setId()
 
 	/**
-	 * Set the value of [kshow_id] column.
+	 * Set the value of [vshow_id] column.
 	 * 
 	 * @param      string $v new value
 	 * @return     entry The current object (for fluent API support)
 	 */
-	public function setKshowId($v)
+	public function setVshowId($v)
 	{
-		if(!isset($this->oldColumnsValues[entryPeer::KSHOW_ID]))
-			$this->oldColumnsValues[entryPeer::KSHOW_ID] = $this->kshow_id;
+		if(!isset($this->oldColumnsValues[entryPeer::VSHOW_ID]))
+			$this->oldColumnsValues[entryPeer::VSHOW_ID] = $this->vshow_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->kshow_id !== $v) {
-			$this->kshow_id = $v;
-			$this->modifiedColumns[] = entryPeer::KSHOW_ID;
+		if ($this->vshow_id !== $v) {
+			$this->vshow_id = $v;
+			$this->modifiedColumns[] = entryPeer::VSHOW_ID;
 		}
 
 		return $this;
-	} // setKshowId()
+	} // setVshowId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     entry The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[entryPeer::KUSER_ID]))
-			$this->oldColumnsValues[entryPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[entryPeer::VUSER_ID]))
+			$this->oldColumnsValues[entryPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = entryPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = entryPeer::VUSER_ID;
 		}
 
-		if ($this->akuser !== null && $this->akuser->getId() !== $v) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->avuser->getId() !== $v) {
+			$this->avuser = null;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [name] column.
@@ -2835,8 +2835,8 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 		try {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (string) $row[$startcol + 0] : null;
-			$this->kshow_id = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-			$this->kuser_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+			$this->vshow_id = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+			$this->vuser_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
 			$this->name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->type = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
 			$this->media_type = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
@@ -2919,8 +2919,8 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akuser !== null && $this->kuser_id !== $this->akuser->getId()) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->vuser_id !== $this->avuser->getId()) {
+			$this->avuser = null;
 		}
 	} // ensureConsistency
 
@@ -2965,15 +2965,15 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akuser = null;
+			$this->avuser = null;
 			$this->collLiveChannelSegmentsRelatedByChannelId = null;
 			$this->lastLiveChannelSegmentRelatedByChannelIdCriteria = null;
 
 			$this->collLiveChannelSegmentsRelatedByEntryId = null;
 			$this->lastLiveChannelSegmentRelatedByEntryIdCriteria = null;
 
-			$this->collkvotes = null;
-			$this->lastkvoteCriteria = null;
+			$this->collvvotes = null;
+			$this->lastvvoteCriteria = null;
 
 			$this->collconversions = null;
 			$this->lastconversionCriteria = null;
@@ -3081,13 +3081,13 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 				return 0;
 			}
 			
-			for ($retries = 1; $retries < KalturaPDO::SAVE_MAX_RETRIES; $retries++)
+			for ($retries = 1; $retries < VidiunPDO::SAVE_MAX_RETRIES; $retries++)
 			{
                $affectedRows = $this->doSave($con);
                 if ($affectedRows || !$this->isColumnModified(entryPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug("was unable to save! retrying for the $retries time");
+                VidiunLog::debug("was unable to save! retrying for the $retries time");
                 $criteria = $this->buildPkeyCriteria();
 				$criteria->addSelectColumn(entryPeer::CUSTOM_DATA);
                 $stmt = BasePeer::doSelect($criteria, $con);
@@ -3190,11 +3190,11 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if ($this->akuser->isModified() || $this->akuser->isNew()) {
-					$affectedRows += $this->akuser->save($con);
+			if ($this->avuser !== null) {
+				if ($this->avuser->isModified() || $this->avuser->isNew()) {
+					$affectedRows += $this->avuser->save($con);
 				}
-				$this->setkuser($this->akuser);
+				$this->setvuser($this->avuser);
 			}
 
 
@@ -3239,8 +3239,8 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 				}
 			}
 
-			if ($this->collkvotes !== null) {
-				foreach ($this->collkvotes as $referrerFK) {
+			if ($this->collvvotes !== null) {
+				foreach ($this->collvvotes as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
@@ -3353,7 +3353,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -3378,12 +3378,12 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -3401,10 +3401,10 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -3529,9 +3529,9 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if (!$this->akuser->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuser->getValidationFailures());
+			if ($this->avuser !== null) {
+				if (!$this->avuser->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuser->getValidationFailures());
 				}
 			}
 
@@ -3557,8 +3557,8 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 					}
 				}
 
-				if ($this->collkvotes !== null) {
-					foreach ($this->collkvotes as $referrerFK) {
+				if ($this->collvvotes !== null) {
+					foreach ($this->collvvotes as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -3666,10 +3666,10 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 				return $this->getId();
 				break;
 			case 1:
-				return $this->getKshowId();
+				return $this->getVshowId();
 				break;
 			case 2:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 3:
 				return $this->getName();
@@ -3843,8 +3843,8 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 		$keys = entryPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
-			$keys[1] => $this->getKshowId(),
-			$keys[2] => $this->getKuserId(),
+			$keys[1] => $this->getVshowId(),
+			$keys[2] => $this->getVuserId(),
 			$keys[3] => $this->getName(),
 			$keys[4] => $this->getType(),
 			$keys[5] => $this->getMediaType(),
@@ -3930,10 +3930,10 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 				$this->setId($value);
 				break;
 			case 1:
-				$this->setKshowId($value);
+				$this->setVshowId($value);
 				break;
 			case 2:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 3:
 				$this->setName($value);
@@ -4110,8 +4110,8 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 		$keys = entryPeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setKshowId($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setKuserId($arr[$keys[2]]);
+		if (array_key_exists($keys[1], $arr)) $this->setVshowId($arr[$keys[1]]);
+		if (array_key_exists($keys[2], $arr)) $this->setVuserId($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setName($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setType($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setMediaType($arr[$keys[5]]);
@@ -4174,8 +4174,8 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 		$criteria = new Criteria(entryPeer::DATABASE_NAME);
 
 		if ($this->isColumnModified(entryPeer::ID)) $criteria->add(entryPeer::ID, $this->id);
-		if ($this->isColumnModified(entryPeer::KSHOW_ID)) $criteria->add(entryPeer::KSHOW_ID, $this->kshow_id);
-		if ($this->isColumnModified(entryPeer::KUSER_ID)) $criteria->add(entryPeer::KUSER_ID, $this->kuser_id);
+		if ($this->isColumnModified(entryPeer::VSHOW_ID)) $criteria->add(entryPeer::VSHOW_ID, $this->vshow_id);
+		if ($this->isColumnModified(entryPeer::VUSER_ID)) $criteria->add(entryPeer::VUSER_ID, $this->vuser_id);
 		if ($this->isColumnModified(entryPeer::NAME)) $criteria->add(entryPeer::NAME, $this->name);
 		if ($this->isColumnModified(entryPeer::TYPE)) $criteria->add(entryPeer::TYPE, $this->type);
 		if ($this->isColumnModified(entryPeer::MEDIA_TYPE)) $criteria->add(entryPeer::MEDIA_TYPE, $this->media_type);
@@ -4252,9 +4252,9 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 				{
 					$criteria->add(entryPeer::CUSTOM_DATA, "MD5(cast(" . entryPeer::CUSTOM_DATA . " as char character set latin1)) = '$this->custom_data_md5'", Criteria::CUSTOM);
 					//casting to latin char set to avoid mysql and php md5 difference
-					if (kDataCenterMgr::isMultiDc()) // if multi DC configuration don't check costume data on other DC
+					if (vDataCenterMgr::isMultiDc()) // if multi DC configuration don't check costume data on other DC
 					{
-						$currentDcId = kDataCenterMgr::getCurrentDcId();
+						$currentDcId = vDataCenterMgr::getCurrentDcId();
 						//addOr(column, value, comparison)
 						$criteria->addOr(entryPeer::CUSTOM_DATA," '$currentDcId' != getDC()" ,Criteria::CUSTOM);
 					}
@@ -4314,9 +4314,9 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 
 		$copyObj->setId($this->id);
 
-		$copyObj->setKshowId($this->kshow_id);
+		$copyObj->setVshowId($this->vshow_id);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setName($this->name);
 
@@ -4434,9 +4434,9 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 				}
 			}
 
-			foreach ($this->getkvotes() as $relObj) {
+			foreach ($this->getvvotes() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addkvote($relObj->copy($deepCopy));
+					$copyObj->addvvote($relObj->copy($deepCopy));
 				}
 			}
 
@@ -4554,24 +4554,24 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
+	 * @param      vuser $v
 	 * @return     entry The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuser(kuser $v = null)
+	public function setvuser(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setKuserId(NULL);
+			$this->setVuserId(NULL);
 		} else {
-			$this->setKuserId($v->getId());
+			$this->setVuserId($v->getId());
 		}
 
-		$this->akuser = $v;
+		$this->avuser = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
 			$v->addentry($this);
 		}
@@ -4581,25 +4581,25 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuser(PropelPDO $con = null)
+	public function getvuser(PropelPDO $con = null)
 	{
-		if ($this->akuser === null && ($this->kuser_id !== null)) {
-			$this->akuser = kuserPeer::retrieveByPk($this->kuser_id);
+		if ($this->avuser === null && ($this->vuser_id !== null)) {
+			$this->avuser = vuserPeer::retrieveByPk($this->vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuser->addentrys($this);
+			   $this->avuser->addentrys($this);
 			 */
 		}
-		return $this->akuser;
+		return $this->avuser;
 	}
 
 	/**
@@ -5099,47 +5099,47 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Clears out the collkvotes collection (array).
+	 * Clears out the collvvotes collection (array).
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
 	 *
 	 * @return     void
-	 * @see        addkvotes()
+	 * @see        addvvotes()
 	 */
-	public function clearkvotes()
+	public function clearvvotes()
 	{
-		$this->collkvotes = null; // important to set this to NULL since that means it is uninitialized
+		$this->collvvotes = null; // important to set this to NULL since that means it is uninitialized
 	}
 
 	/**
-	 * Initializes the collkvotes collection (array).
+	 * Initializes the collvvotes collection (array).
 	 *
-	 * By default this just sets the collkvotes collection to an empty array (like clearcollkvotes());
+	 * By default this just sets the collvvotes collection to an empty array (like clearcollvvotes());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
 	 * @return     void
 	 */
-	public function initkvotes()
+	public function initvvotes()
 	{
-		$this->collkvotes = array();
+		$this->collvvotes = array();
 	}
 
 	/**
-	 * Gets an array of kvote objects which contain a foreign key that references this object.
+	 * Gets an array of vvote objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
 	 * Otherwise if this entry has previously been saved, it will retrieve
-	 * related kvotes from storage. If this entry is new, it will return
+	 * related vvotes from storage. If this entry is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
 	 * @param      Criteria $criteria
-	 * @return     array kvote[]
+	 * @return     array vvote[]
 	 * @throws     PropelException
 	 */
-	public function getkvotes($criteria = null, PropelPDO $con = null)
+	public function getvvotes($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(entryPeer::DATABASE_NAME);
@@ -5149,15 +5149,15 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collkvotes === null) {
+		if ($this->collvvotes === null) {
 			if ($this->isNew()) {
-			   $this->collkvotes = array();
+			   $this->collvvotes = array();
 			} else {
 
-				$criteria->add(kvotePeer::ENTRY_ID, $this->id);
+				$criteria->add(vvotePeer::ENTRY_ID, $this->id);
 
-				kvotePeer::addSelectColumns($criteria);
-				$this->collkvotes = kvotePeer::doSelect($criteria, $con);
+				vvotePeer::addSelectColumns($criteria);
+				$this->collvvotes = vvotePeer::doSelect($criteria, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -5167,28 +5167,28 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 				// one, just return the collection.
 
 
-				$criteria->add(kvotePeer::ENTRY_ID, $this->id);
+				$criteria->add(vvotePeer::ENTRY_ID, $this->id);
 
-				kvotePeer::addSelectColumns($criteria);
-				if (!isset($this->lastkvoteCriteria) || !$this->lastkvoteCriteria->equals($criteria)) {
-					$this->collkvotes = kvotePeer::doSelect($criteria, $con);
+				vvotePeer::addSelectColumns($criteria);
+				if (!isset($this->lastvvoteCriteria) || !$this->lastvvoteCriteria->equals($criteria)) {
+					$this->collvvotes = vvotePeer::doSelect($criteria, $con);
 				}
 			}
 		}
-		$this->lastkvoteCriteria = $criteria;
-		return $this->collkvotes;
+		$this->lastvvoteCriteria = $criteria;
+		return $this->collvvotes;
 	}
 
 	/**
-	 * Returns the number of related kvote objects.
+	 * Returns the number of related vvote objects.
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct
 	 * @param      PropelPDO $con
-	 * @return     int Count of related kvote objects.
+	 * @return     int Count of related vvote objects.
 	 * @throws     PropelException
 	 */
-	public function countkvotes(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	public function countvvotes(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(entryPeer::DATABASE_NAME);
@@ -5202,14 +5202,14 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 
 		$count = null;
 
-		if ($this->collkvotes === null) {
+		if ($this->collvvotes === null) {
 			if ($this->isNew()) {
 				$count = 0;
 			} else {
 
-				$criteria->add(kvotePeer::ENTRY_ID, $this->id);
+				$criteria->add(vvotePeer::ENTRY_ID, $this->id);
 
-				$count = kvotePeer::doCount($criteria, false, $con);
+				$count = vvotePeer::doCount($criteria, false, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -5219,35 +5219,35 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 				// one, just return count of the collection.
 
 
-				$criteria->add(kvotePeer::ENTRY_ID, $this->id);
+				$criteria->add(vvotePeer::ENTRY_ID, $this->id);
 
-				if (!isset($this->lastkvoteCriteria) || !$this->lastkvoteCriteria->equals($criteria)) {
-					$count = kvotePeer::doCount($criteria, false, $con);
+				if (!isset($this->lastvvoteCriteria) || !$this->lastvvoteCriteria->equals($criteria)) {
+					$count = vvotePeer::doCount($criteria, false, $con);
 				} else {
-					$count = count($this->collkvotes);
+					$count = count($this->collvvotes);
 				}
 			} else {
-				$count = count($this->collkvotes);
+				$count = count($this->collvvotes);
 			}
 		}
 		return $count;
 	}
 
 	/**
-	 * Method called to associate a kvote object to this object
-	 * through the kvote foreign key attribute.
+	 * Method called to associate a vvote object to this object
+	 * through the vvote foreign key attribute.
 	 *
-	 * @param      kvote $l kvote
+	 * @param      vvote $l vvote
 	 * @return     void
 	 * @throws     PropelException
 	 */
-	public function addkvote(kvote $l)
+	public function addvvote(vvote $l)
 	{
-		if ($this->collkvotes === null) {
-			$this->initkvotes();
+		if ($this->collvvotes === null) {
+			$this->initvvotes();
 		}
-		if (!in_array($l, $this->collkvotes, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collkvotes, $l);
+		if (!in_array($l, $this->collvvotes, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collvvotes, $l);
 			$l->setentry($this);
 		}
 	}
@@ -5258,13 +5258,13 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	 * an identical criteria, it returns the collection.
 	 * Otherwise if this entry is new, it will return
 	 * an empty collection; or if this entry has previously
-	 * been saved, it will retrieve related kvotes from storage.
+	 * been saved, it will retrieve related vvotes from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in entry.
 	 */
-	public function getkvotesJoinkshowRelatedByKshowId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getvvotesJoinvshowRelatedByVshowId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(entryPeer::DATABASE_NAME);
@@ -5274,29 +5274,29 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collkvotes === null) {
+		if ($this->collvvotes === null) {
 			if ($this->isNew()) {
-				$this->collkvotes = array();
+				$this->collvvotes = array();
 			} else {
 
-				$criteria->add(kvotePeer::ENTRY_ID, $this->id);
+				$criteria->add(vvotePeer::ENTRY_ID, $this->id);
 
-				$this->collkvotes = kvotePeer::doSelectJoinkshowRelatedByKshowId($criteria, $con, $join_behavior);
+				$this->collvvotes = vvotePeer::doSelectJoinvshowRelatedByVshowId($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(kvotePeer::ENTRY_ID, $this->id);
+			$criteria->add(vvotePeer::ENTRY_ID, $this->id);
 
-			if (!isset($this->lastkvoteCriteria) || !$this->lastkvoteCriteria->equals($criteria)) {
-				$this->collkvotes = kvotePeer::doSelectJoinkshowRelatedByKshowId($criteria, $con, $join_behavior);
+			if (!isset($this->lastvvoteCriteria) || !$this->lastvvoteCriteria->equals($criteria)) {
+				$this->collvvotes = vvotePeer::doSelectJoinvshowRelatedByVshowId($criteria, $con, $join_behavior);
 			}
 		}
-		$this->lastkvoteCriteria = $criteria;
+		$this->lastvvoteCriteria = $criteria;
 
-		return $this->collkvotes;
+		return $this->collvvotes;
 	}
 
 
@@ -5305,13 +5305,13 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	 * an identical criteria, it returns the collection.
 	 * Otherwise if this entry is new, it will return
 	 * an empty collection; or if this entry has previously
-	 * been saved, it will retrieve related kvotes from storage.
+	 * been saved, it will retrieve related vvotes from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in entry.
 	 */
-	public function getkvotesJoinkshowRelatedByKuserId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getvvotesJoinvshowRelatedByVuserId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(entryPeer::DATABASE_NAME);
@@ -5321,29 +5321,29 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collkvotes === null) {
+		if ($this->collvvotes === null) {
 			if ($this->isNew()) {
-				$this->collkvotes = array();
+				$this->collvvotes = array();
 			} else {
 
-				$criteria->add(kvotePeer::ENTRY_ID, $this->id);
+				$criteria->add(vvotePeer::ENTRY_ID, $this->id);
 
-				$this->collkvotes = kvotePeer::doSelectJoinkshowRelatedByKuserId($criteria, $con, $join_behavior);
+				$this->collvvotes = vvotePeer::doSelectJoinvshowRelatedByVuserId($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(kvotePeer::ENTRY_ID, $this->id);
+			$criteria->add(vvotePeer::ENTRY_ID, $this->id);
 
-			if (!isset($this->lastkvoteCriteria) || !$this->lastkvoteCriteria->equals($criteria)) {
-				$this->collkvotes = kvotePeer::doSelectJoinkshowRelatedByKuserId($criteria, $con, $join_behavior);
+			if (!isset($this->lastvvoteCriteria) || !$this->lastvvoteCriteria->equals($criteria)) {
+				$this->collvvotes = vvotePeer::doSelectJoinvshowRelatedByVuserId($criteria, $con, $join_behavior);
 			}
 		}
-		$this->lastkvoteCriteria = $criteria;
+		$this->lastvvoteCriteria = $criteria;
 
-		return $this->collkvotes;
+		return $this->collvvotes;
 	}
 
 	/**
@@ -5820,7 +5820,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in entry.
 	 */
-	public function getmoderationFlagsJoinkuserRelatedByKuserId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getmoderationFlagsJoinvuserRelatedByVuserId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(entryPeer::DATABASE_NAME);
@@ -5837,7 +5837,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 
 				$criteria->add(moderationFlagPeer::FLAGGED_ENTRY_ID, $this->id);
 
-				$this->collmoderationFlags = moderationFlagPeer::doSelectJoinkuserRelatedByKuserId($criteria, $con, $join_behavior);
+				$this->collmoderationFlags = moderationFlagPeer::doSelectJoinvuserRelatedByVuserId($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
@@ -5847,7 +5847,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 			$criteria->add(moderationFlagPeer::FLAGGED_ENTRY_ID, $this->id);
 
 			if (!isset($this->lastmoderationFlagCriteria) || !$this->lastmoderationFlagCriteria->equals($criteria)) {
-				$this->collmoderationFlags = moderationFlagPeer::doSelectJoinkuserRelatedByKuserId($criteria, $con, $join_behavior);
+				$this->collmoderationFlags = moderationFlagPeer::doSelectJoinvuserRelatedByVuserId($criteria, $con, $join_behavior);
 			}
 		}
 		$this->lastmoderationFlagCriteria = $criteria;
@@ -5867,7 +5867,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in entry.
 	 */
-	public function getmoderationFlagsJoinkuserRelatedByFlaggedKuserId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getmoderationFlagsJoinvuserRelatedByFlaggedVuserId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(entryPeer::DATABASE_NAME);
@@ -5884,7 +5884,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 
 				$criteria->add(moderationFlagPeer::FLAGGED_ENTRY_ID, $this->id);
 
-				$this->collmoderationFlags = moderationFlagPeer::doSelectJoinkuserRelatedByFlaggedKuserId($criteria, $con, $join_behavior);
+				$this->collmoderationFlags = moderationFlagPeer::doSelectJoinvuserRelatedByFlaggedVuserId($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
@@ -5894,7 +5894,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 			$criteria->add(moderationFlagPeer::FLAGGED_ENTRY_ID, $this->id);
 
 			if (!isset($this->lastmoderationFlagCriteria) || !$this->lastmoderationFlagCriteria->equals($criteria)) {
-				$this->collmoderationFlags = moderationFlagPeer::doSelectJoinkuserRelatedByFlaggedKuserId($criteria, $con, $join_behavior);
+				$this->collmoderationFlags = moderationFlagPeer::doSelectJoinvuserRelatedByFlaggedVuserId($criteria, $con, $join_behavior);
 			}
 		}
 		$this->lastmoderationFlagCriteria = $criteria;
@@ -6068,7 +6068,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in entry.
 	 */
-	public function getroughcutEntrysRelatedByRoughcutIdJoinkshow($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getroughcutEntrysRelatedByRoughcutIdJoinvshow($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(entryPeer::DATABASE_NAME);
@@ -6085,7 +6085,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 
 				$criteria->add(roughcutEntryPeer::ROUGHCUT_ID, $this->id);
 
-				$this->collroughcutEntrysRelatedByRoughcutId = roughcutEntryPeer::doSelectJoinkshow($criteria, $con, $join_behavior);
+				$this->collroughcutEntrysRelatedByRoughcutId = roughcutEntryPeer::doSelectJoinvshow($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
@@ -6095,7 +6095,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 			$criteria->add(roughcutEntryPeer::ROUGHCUT_ID, $this->id);
 
 			if (!isset($this->lastroughcutEntryRelatedByRoughcutIdCriteria) || !$this->lastroughcutEntryRelatedByRoughcutIdCriteria->equals($criteria)) {
-				$this->collroughcutEntrysRelatedByRoughcutId = roughcutEntryPeer::doSelectJoinkshow($criteria, $con, $join_behavior);
+				$this->collroughcutEntrysRelatedByRoughcutId = roughcutEntryPeer::doSelectJoinvshow($criteria, $con, $join_behavior);
 			}
 		}
 		$this->lastroughcutEntryRelatedByRoughcutIdCriteria = $criteria;
@@ -6269,7 +6269,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in entry.
 	 */
-	public function getroughcutEntrysRelatedByEntryIdJoinkshow($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getroughcutEntrysRelatedByEntryIdJoinvshow($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(entryPeer::DATABASE_NAME);
@@ -6286,7 +6286,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 
 				$criteria->add(roughcutEntryPeer::ENTRY_ID, $this->id);
 
-				$this->collroughcutEntrysRelatedByEntryId = roughcutEntryPeer::doSelectJoinkshow($criteria, $con, $join_behavior);
+				$this->collroughcutEntrysRelatedByEntryId = roughcutEntryPeer::doSelectJoinvshow($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
@@ -6296,7 +6296,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 			$criteria->add(roughcutEntryPeer::ENTRY_ID, $this->id);
 
 			if (!isset($this->lastroughcutEntryRelatedByEntryIdCriteria) || !$this->lastroughcutEntryRelatedByEntryIdCriteria->equals($criteria)) {
-				$this->collroughcutEntrysRelatedByEntryId = roughcutEntryPeer::doSelectJoinkshow($criteria, $con, $join_behavior);
+				$this->collroughcutEntrysRelatedByEntryId = roughcutEntryPeer::doSelectJoinvshow($criteria, $con, $join_behavior);
 			}
 		}
 		$this->lastroughcutEntryRelatedByEntryIdCriteria = $criteria;
@@ -6470,7 +6470,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in entry.
 	 */
-	public function getwidgetsJoinkshow($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getwidgetsJoinvshow($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(entryPeer::DATABASE_NAME);
@@ -6487,7 +6487,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 
 				$criteria->add(widgetPeer::ENTRY_ID, $this->id);
 
-				$this->collwidgets = widgetPeer::doSelectJoinkshow($criteria, $con, $join_behavior);
+				$this->collwidgets = widgetPeer::doSelectJoinvshow($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
@@ -6497,7 +6497,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 			$criteria->add(widgetPeer::ENTRY_ID, $this->id);
 
 			if (!isset($this->lastwidgetCriteria) || !$this->lastwidgetCriteria->equals($criteria)) {
-				$this->collwidgets = widgetPeer::doSelectJoinkshow($criteria, $con, $join_behavior);
+				$this->collwidgets = widgetPeer::doSelectJoinvshow($criteria, $con, $join_behavior);
 			}
 		}
 		$this->lastwidgetCriteria = $criteria;
@@ -6966,7 +6966,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 	 * api reasonable.  You can provide public methods for those you
 	 * actually need in entry.
 	 */
-	public function getUserEntrysJoinkuser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getUserEntrysJoinvuser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
 			$criteria = new Criteria(entryPeer::DATABASE_NAME);
@@ -6983,7 +6983,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 
 				$criteria->add(UserEntryPeer::ENTRY_ID, $this->id);
 
-				$this->collUserEntrys = UserEntryPeer::doSelectJoinkuser($criteria, $con, $join_behavior);
+				$this->collUserEntrys = UserEntryPeer::doSelectJoinvuser($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
@@ -6993,7 +6993,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 			$criteria->add(UserEntryPeer::ENTRY_ID, $this->id);
 
 			if (!isset($this->lastUserEntryCriteria) || !$this->lastUserEntryCriteria->equals($criteria)) {
-				$this->collUserEntrys = UserEntryPeer::doSelectJoinkuser($criteria, $con, $join_behavior);
+				$this->collUserEntrys = UserEntryPeer::doSelectJoinvuser($criteria, $con, $join_behavior);
 			}
 		}
 		$this->lastUserEntryCriteria = $criteria;
@@ -7023,8 +7023,8 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 					$o->clearAllReferences($deep);
 				}
 			}
-			if ($this->collkvotes) {
-				foreach ((array) $this->collkvotes as $o) {
+			if ($this->collvvotes) {
+				foreach ((array) $this->collvvotes as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
@@ -7072,7 +7072,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 
 		$this->collLiveChannelSegmentsRelatedByChannelId = null;
 		$this->collLiveChannelSegmentsRelatedByEntryId = null;
-		$this->collkvotes = null;
+		$this->collvvotes = null;
 		$this->collconversions = null;
 		$this->collWidgetLogs = null;
 		$this->collmoderationFlags = null;
@@ -7081,7 +7081,7 @@ abstract class Baseentry extends BaseObject  implements Persistent {
 		$this->collwidgets = null;
 		$this->collassetParamsOutputs = null;
 		$this->collUserEntrys = null;
-			$this->akuser = null;
+			$this->avuser = null;
 	}
 
 	/* ---------------------- CustomData functions ------------------------- */

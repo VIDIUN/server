@@ -4,7 +4,7 @@
  * @package plugins.drm
  * @subpackage model.enum
  */ 
-class DrmPermissionName implements IKalturaPluginEnum, PermissionName
+class DrmPermissionName implements IVidiunPluginEnum, PermissionName
 {
 	const SYSTEM_ADMIN_DRM_PROFILE_BASE = 'SYSTEM_ADMIN_DRM_PROFILE_BASE';
 	const SYSTEM_ADMIN_DRM_PROFILE_MODIFY = 'SYSTEM_ADMIN_DRM_PROFILE_MODIFY';

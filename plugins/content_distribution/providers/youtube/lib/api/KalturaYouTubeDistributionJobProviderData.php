@@ -3,7 +3,7 @@
  * @package plugins.youTubeDistribution
  * @subpackage api.objects
  */
-class KalturaYouTubeDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunYouTubeDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -95,14 +95,14 @@ class KalturaYouTubeDistributionJobProviderData extends KalturaConfigurableDistr
 	 */
 	public $deleteVideoIds;
 
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 	    parent::__construct($distributionJobData);
 	    
 		if(!$distributionJobData)
 			return;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaYouTubeDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunYouTubeDistributionProfile))
 			return;
 		
 		$flavorAssets = assetPeer::retrieveByIds(explode(',', $distributionJobData->entryDistribution->flavorAssetIds));
@@ -114,8 +114,8 @@ class KalturaYouTubeDistributionJobProviderData extends KalturaConfigurableDistr
 		if($flavorAsset) 
 		{
 			$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			if(kFileSyncUtils::fileSync_exists($syncKey))
-			    $this->videoAssetFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			if(vFileSyncUtils::fileSync_exists($syncKey))
+			    $this->videoAssetFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 		}
 		
 		$thumbAssets = assetPeer::retrieveByIds(explode(',', $distributionJobData->entryDistribution->thumbAssetIds));
@@ -123,9 +123,9 @@ class KalturaYouTubeDistributionJobProviderData extends KalturaConfigurableDistr
 		{
 			$thumbAsset = reset($thumbAssets);
 			$syncKey = $thumbAsset->getSyncKey(thumbAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			if(kFileSyncUtils::fileSync_exists($syncKey))
+			if(vFileSyncUtils::fileSync_exists($syncKey))
 			{
-				$this->thumbAssetFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+				$this->thumbAssetFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 				$this->thumbAssetId = $thumbAsset->getId();
 			}
 		}
@@ -137,14 +137,14 @@ class KalturaYouTubeDistributionJobProviderData extends KalturaConfigurableDistr
 		if ($entryDistributionDb)
 			$this->currentPlaylists = $entryDistributionDb->getFromCustomData('currentPlaylists');
 		else
-			KalturaLog::err('Entry distribution ['.$distributionJobData->entryDistributionId.'] not found');  
+			VidiunLog::err('Entry distribution ['.$distributionJobData->entryDistributionId.'] not found');  
 
 		if ($distributionJobData->distributionProfile->feedSpecVersion == YouTubeDistributionFeedSpecVersion::VERSION_1)
 			return;
 			
 		if (is_null($this->fieldValues))
 			return;
-			//23.5.13 this return is a hack because of bad inheritance of kYouTubeDistributionJobProviderData causing some YouTube distribution 
+			//23.5.13 this return is a hack because of bad inheritance of vYouTubeDistributionJobProviderData causing some YouTube distribution 
 			//batch jobs to not have fieldValues. it can be removed at some point. 
 			
 		$videoFilePath = $this->videoAssetFilePath;
@@ -153,7 +153,7 @@ class KalturaYouTubeDistributionJobProviderData extends KalturaConfigurableDistr
 
 		$feed = null;
 		$fieldValues = unserialize($this->fieldValues);
-		if ($distributionJobData instanceof KalturaDistributionSubmitJobData)
+		if ($distributionJobData instanceof VidiunDistributionSubmitJobData)
 		{
 			if ($distributionJobData->distributionProfile->feedSpecVersion == YouTubeDistributionFeedSpecVersion::VERSION_2)
 			{
@@ -168,7 +168,7 @@ class KalturaYouTubeDistributionJobProviderData extends KalturaConfigurableDistr
 			}
 
 		}
-		elseif ($distributionJobData instanceof KalturaDistributionUpdateJobData)
+		elseif ($distributionJobData instanceof VidiunDistributionUpdateJobData)
 		{
 			$remoteIdHandler = YouTubeDistributionRemoteIdHandler::initialize($distributionJobData->remoteId);
 			if ($distributionJobData->distributionProfile->feedSpecVersion == YouTubeDistributionFeedSpecVersion::VERSION_2)
@@ -183,7 +183,7 @@ class KalturaYouTubeDistributionJobProviderData extends KalturaConfigurableDistr
 			}
 
 		}
-		elseif ($distributionJobData instanceof KalturaDistributionDeleteJobData)
+		elseif ($distributionJobData instanceof VidiunDistributionDeleteJobData)
 		{
 			$remoteIdHandler = YouTubeDistributionRemoteIdHandler::initialize($distributionJobData->remoteId);
 			if ($distributionJobData->distributionProfile->feedSpecVersion == YouTubeDistributionFeedSpecVersion::VERSION_2)
@@ -198,7 +198,7 @@ class KalturaYouTubeDistributionJobProviderData extends KalturaConfigurableDistr
 			}
 		}
 
-		$this->newPlaylists = isset($fieldValues[KalturaYouTubeDistributionField::PLAYLISTS]) ? $fieldValues[KalturaYouTubeDistributionField::PLAYLISTS] : null;
+		$this->newPlaylists = isset($fieldValues[VidiunYouTubeDistributionField::PLAYLISTS]) ? $fieldValues[VidiunYouTubeDistributionField::PLAYLISTS] : null;
 		if ($feed)
 		{
 			$this->sftpDirectory = $feed->getDirectoryName();
@@ -227,7 +227,7 @@ class KalturaYouTubeDistributionJobProviderData extends KalturaConfigurableDistr
 	protected function loadGoogleConfig($distributionProfileId)
 	{
 		$appConfigId = 'youtubepartner'; // config section for configuration/google_auth.ini
-		$authConfig = kConf::get($appConfigId, 'google_auth', null);
+		$authConfig = vConf::get($appConfigId, 'google_auth', null);
 
 		$this->googleClientId = isset($authConfig['clientId']) ? $authConfig['clientId'] : null;
 		$this->googleClientSecret = isset($authConfig['clientSecret']) ? $authConfig['clientSecret'] : null;

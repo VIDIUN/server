@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage admin
  */
-class EventNotificationTemplateUpdateStatusAction extends KalturaApplicationPlugin
+class EventNotificationTemplateUpdateStatusAction extends VidiunApplicationPlugin
 {
 	public function __construct()
 	{
@@ -11,7 +11,7 @@ class EventNotificationTemplateUpdateStatusAction extends KalturaApplicationPlug
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaApplicationPlugin::getTemplatePath()
+	 * @see VidiunApplicationPlugin::getTemplatePath()
 	 */
 	public function getTemplatePath()
 	{
@@ -19,15 +19,15 @@ class EventNotificationTemplateUpdateStatusAction extends KalturaApplicationPlug
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaApplicationPlugin::getRequiredPermissions()
+	 * @see VidiunApplicationPlugin::getRequiredPermissions()
 	 */
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_EVENT_NOTIFICATION_MODIFY);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_EVENT_NOTIFICATION_MODIFY);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaApplicationPlugin::doAction()
+	 * @see VidiunApplicationPlugin::doAction()
 	 */
 	public function doAction(Zend_Controller_Action $action)
 	{
@@ -35,7 +35,7 @@ class EventNotificationTemplateUpdateStatusAction extends KalturaApplicationPlug
 		$templateId = $this->_getParam('template_id');
 		$status = $this->_getParam('status');
 		$client = Infra_ClientHelper::getClient();
-		$eventNotificationPlugin = Kaltura_Client_EventNotification_Plugin::get($client);
+		$eventNotificationPlugin = Vidiun_Client_EventNotification_Plugin::get($client);
 		
 		$partnerId = $this->_getParam('partner_id');
 		if($partnerId)
@@ -48,7 +48,7 @@ class EventNotificationTemplateUpdateStatusAction extends KalturaApplicationPlug
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			echo $action->getHelper('json')->sendJson($e->getMessage(), false);
 		}
 	}

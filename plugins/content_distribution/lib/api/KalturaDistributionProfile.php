@@ -4,7 +4,7 @@
  * @subpackage api.objects
  * @abstract
  */
-abstract class KalturaDistributionProfile extends KalturaObject implements IFilterable
+abstract class VidiunDistributionProfile extends VidiunObject implements IFilterable
 {
 	/**
 	 * Auto generated unique id
@@ -41,7 +41,7 @@ abstract class KalturaDistributionProfile extends KalturaObject implements IFilt
 
 	/**
 	 * @insertonly
-	 * @var KalturaDistributionProviderType
+	 * @var VidiunDistributionProviderType
 	 */
 	public $providerType;
 
@@ -51,28 +51,28 @@ abstract class KalturaDistributionProfile extends KalturaObject implements IFilt
 	public $name;
 
 	/**
-	 * @var KalturaDistributionProfileStatus
+	 * @var VidiunDistributionProfileStatus
 	 * @filter eq,in
 	 */
 	public $status;
 
 	/**
-	 * @var KalturaDistributionProfileActionStatus
+	 * @var VidiunDistributionProfileActionStatus
 	 */
 	public $submitEnabled;
 
 	/**
-	 * @var KalturaDistributionProfileActionStatus
+	 * @var VidiunDistributionProfileActionStatus
 	 */
 	public $updateEnabled;
 
 	/**
-	 * @var KalturaDistributionProfileActionStatus
+	 * @var VidiunDistributionProfileActionStatus
 	 */
 	public $deleteEnabled;
 
 	/**
-	 * @var KalturaDistributionProfileActionStatus
+	 * @var VidiunDistributionProfileActionStatus
 	 */
 	public $reportEnabled;
 
@@ -102,25 +102,25 @@ abstract class KalturaDistributionProfile extends KalturaObject implements IFilt
 
 	/**
 	 * Thumbnail dimensions that should be submitted if ready
-	 * @var KalturaDistributionThumbDimensionsArray
+	 * @var VidiunDistributionThumbDimensionsArray
 	 */
 	public $optionalThumbDimensions;
 
 	/**
 	 * Thumbnail dimensions that required to be readt before submission
-	 * @var KalturaDistributionThumbDimensionsArray
+	 * @var VidiunDistributionThumbDimensionsArray
 	 */
 	public $requiredThumbDimensions;
 	
 	/**
 	 * Asset Distribution Rules for assets that should be submitted if ready
-	 * @var KalturaAssetDistributionRulesArray
+	 * @var VidiunAssetDistributionRulesArray
 	 */
 	public $optionalAssetDistributionRules;
 	
 	/**
 	 * Assets Asset Distribution Rules for assets that are required to be ready before submission
-	 * @var KalturaAssetDistributionRulesArray
+	 * @var VidiunAssetDistributionRulesArray
 	 */
 	public $requiredAssetDistributionRules;
 		
@@ -143,13 +143,13 @@ abstract class KalturaDistributionProfile extends KalturaObject implements IFilt
 	public $recommendedStorageProfileForDownload;
 	
 	/**
-	 * The best Kaltura data center to be used to download the asset files to
+	 * The best Vidiun data center to be used to download the asset files to
 	 * @var int
 	 */
 	public $recommendedDcForDownload;
 	
 	/**
-	 * The best Kaltura data center to be used to execute the distribution job
+	 * The best Vidiun data center to be used to execute the distribution job
 	 * @var int
 	 */
 	public $recommendedDcForExecute;
@@ -237,7 +237,7 @@ abstract class KalturaDistributionProfile extends KalturaObject implements IFilt
 		return $dbObject;
 	}
 	
-	protected function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if(!$sourceObject)
 			return;
@@ -245,14 +245,14 @@ abstract class KalturaDistributionProfile extends KalturaObject implements IFilt
 		parent::doFromObject($sourceObject, $responseProfile);
 		
 		if($this->shouldGet('optionalThumbDimensions', $responseProfile))
-			$this->optionalThumbDimensions = KalturaDistributionThumbDimensionsArray::fromDbArray($sourceObject->getOptionalThumbDimensionsObjects());
+			$this->optionalThumbDimensions = VidiunDistributionThumbDimensionsArray::fromDbArray($sourceObject->getOptionalThumbDimensionsObjects());
 		if($this->shouldGet('requiredThumbDimensions', $responseProfile))
-			$this->requiredThumbDimensions = KalturaDistributionThumbDimensionsArray::fromDbArray($sourceObject->getRequiredThumbDimensionsObjects());
+			$this->requiredThumbDimensions = VidiunDistributionThumbDimensionsArray::fromDbArray($sourceObject->getRequiredThumbDimensionsObjects());
 			
 		if($this->shouldGet('optionalAssetDistributionRules', $responseProfile))
-			$this->optionalAssetDistributionRules = KalturaAssetDistributionRulesArray::fromDbArray($sourceObject->getOptionalAssetDistributionRules());
+			$this->optionalAssetDistributionRules = VidiunAssetDistributionRulesArray::fromDbArray($sourceObject->getOptionalAssetDistributionRules());
 		if($this->shouldGet('requiredAssetDistributionRules', $responseProfile))
-			$this->requiredAssetDistributionRules = KalturaAssetDistributionRulesArray::fromDbArray($sourceObject->getRequiredAssetDistributionRules());
+			$this->requiredAssetDistributionRules = VidiunAssetDistributionRulesArray::fromDbArray($sourceObject->getRequiredAssetDistributionRules());
 	}
 	
 	public function getExtraFilters()

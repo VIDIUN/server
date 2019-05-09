@@ -1,2 +1,2 @@
-ALTER TABLE kuser 
+ALTER TABLE vuser 
 MODIFY picture varchar(1024) DEFAULT NULL;

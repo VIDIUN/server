@@ -4,7 +4,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaUploadTokenBaseFilter extends KalturaFilter
+abstract class VidiunUploadTokenBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -49,7 +49,7 @@ abstract class KalturaUploadTokenBaseFilter extends KalturaFilter
 	public $userIdEqual;
 
 	/**
-	 * @var KalturaUploadTokenStatus
+	 * @var VidiunUploadTokenStatus
 	 */
 	public $statusEqual;
 

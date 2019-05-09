@@ -3,7 +3,7 @@
  * @package plugins.expressionEncoder
  * @subpackage lib
  */
-class ExpressionEncoderConversionEngineType implements IKalturaPluginEnum, conversionEngineType
+class ExpressionEncoderConversionEngineType implements IVidiunPluginEnum, conversionEngineType
 {
 	const EXPRESSION_ENCODER = 'ExpressionEncoder';
 	

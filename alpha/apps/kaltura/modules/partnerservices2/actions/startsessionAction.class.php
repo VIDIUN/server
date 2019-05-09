@@ -10,7 +10,7 @@ class startsessionAction extends defPartnerservices2Action
 		return
 			array (
 				"display_name" => "startSession",
-				"desc" => "Starts new kaltura session." ,
+				"desc" => "Starts new vidiun session." ,
 				"in" => array (
 					"mandatory" => array (
 						"secret" 		=> array ("type" => "string", "desc" => ""),
@@ -22,7 +22,7 @@ class startsessionAction extends defPartnerservices2Action
 						)
 					),
 				"out" => array (
-					"ks" => array ("type" => "string", "desc" => ""),
+					"vs" => array ("type" => "string", "desc" => ""),
 					"partner_id" => array ("type" => "string", "desc" => ""),
 					"subp_id" => array ("type" => "string", "desc" => ""),
 					"uid" => array ("type" => "string", "desc" => "")
@@ -42,24 +42,24 @@ class startsessionAction extends defPartnerservices2Action
 //		return self::CREATE_USER_FROM_PARTNER_SETTINGS;;
 	}
 
-	protected function needKuserFromPuser ( )
+	protected function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_NO_KUSER;
+		return self::VUSER_DATA_NO_VUSER;
 	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		// make sure the secret fits the one in the partner's table
-		$ks = "";
+		$vs = "";
 		$expiry = $this->getP ( "expiry" , 86400 );
 		$admin = $this->getP ( "admin" , false);
 		$privileges = $this->getP ( "privileges" , null );
 
-		$result = kSessionUtils::startKSession ( $partner_id , $this->getPM ( "secret" ) , $puser_id , $ks , $expiry , $admin , "" , $privileges );
+		$result = vSessionUtils::startVSession ( $partner_id , $this->getPM ( "secret" ) , $puser_id , $vs , $expiry , $admin , "" , $privileges );
 
 		if ( $result >= 0 )
 		{
-			$this->addMsg ( "ks" , $ks );
+			$this->addMsg ( "vs" , $vs );
 			$this->addMsg ( "partner_id" , $partner_id );
 			$this->addMsg ( "subp_id" , $subp_id );
 			$this->addMsg ( "uid" , $puser_id );

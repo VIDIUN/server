@@ -7,7 +7,7 @@
  * @package api
  * @subpackage services
  */
-class StatsService extends KalturaBaseService 
+class StatsService extends VidiunBaseService 
 {
 	const SEPARATOR = ",";
 	
@@ -17,10 +17,10 @@ class StatsService extends KalturaBaseService
 		if ($actionName === 'collect') {
 			return false;
 		}
-		if ($actionName === 'kmcCollect') {
+		if ($actionName === 'vmcCollect') {
 			return false;
 		}
-		if ($actionName === 'reportKceRrror') {
+		if ($actionName === 'reportVceRrror') {
 			return false;
 		}
 		if ($actionName === 'reportDeviceCapabilities') {
@@ -55,17 +55,17 @@ new point
 referrer
 	
 	
-	 * KalturaStatsEvent $event
+	 * VidiunStatsEvent $event
 	 * 
 	 * @action collect
 	 * @return bool
-	 * @ksIgnored
+	 * @vsIgnored
 	 */
 	
 	// TODO - should move to a lighter php script that is not part of the API - it is unnecessarily  heavy	
-	function collectAction( KalturaStatsEvent $event )
+	function collectAction( VidiunStatsEvent $event )
 	{
-		$evenLogFullPath = kConf::get ( "event_log_file_path" );
+		$evenLogFullPath = vConf::get ( "event_log_file_path" );
 		
 		// if no file path - do nothing
 		if ( ! $evenLogFullPath ) return;
@@ -101,26 +101,26 @@ referrer
 		{
 			$res = $this->writeToFile ( $evenLogFullPath , $eventLine);
 			if ( ! $res )
-				KalturaLog::err( "Error while trying to write event to log. Event:\n". $eventLine );
+				VidiunLog::err( "Error while trying to write event to log. Event:\n". $eventLine );
         }
         catch ( Exception $ex )
         {
-        	KalturaLog::err( "Error while trying to write event to log. Event:\n". $eventLine );	
+        	VidiunLog::err( "Error while trying to write event to log. Event:\n". $eventLine );	
         }
 		return true;
 	}
 
 	/**
 	 * 
-	 * Will collect the kmcEvent sent form the KMC client
+	 * Will collect the vmcEvent sent form the VMC client
 	 * // this will actually be an empty function because all events will be sent using GET and will anyway be logged in the apache log
 	 * 
-	 * @action kmcCollect
+	 * @action vmcCollect
 	 * 
-	 * @param KalturaStatsKmcEvent $kmcEvent
-	 * @ksIgnored
+	 * @param VidiunStatsVmcEvent $vmcEvent
+	 * @vsIgnored
 	 */
-	public function kmcCollectAction( KalturaStatsKmcEvent $kmcEvent )
+	public function vmcCollectAction( VidiunStatsVmcEvent $vmcEvent )
 	{
 		
 	}
@@ -145,34 +145,34 @@ referrer
 	}
 	
 	/**
-	 * @action reportKceError
-	 * @param KalturaCEError $kalturaCEError 
-	 * @return KalturaCEError
-	 * @ksIgnored
+	 * @action reportVceError
+	 * @param VidiunCEError $vidiunCEError 
+	 * @return VidiunCEError
+	 * @vsIgnored
 	 */
-	function reportKceErrorAction( KalturaCEError $kalturaCEError )
+	function reportVceErrorAction( VidiunCEError $vidiunCEError )
 	{
-		$_kalturaCEError = $kalturaCEError->toKceInstallationError();
-		if (($this->getPartnerId() && !$_kalturaCEError->partnerId) ||
-		    ($this->getPartnerId && $this->getPartnerId != $_kalturaCEError->partnerId))
+		$_vidiunCEError = $vidiunCEError->toVceInstallationError();
+		if (($this->getPartnerId() && !$_vidiunCEError->partnerId) ||
+		    ($this->getPartnerId && $this->getPartnerId != $_vidiunCEError->partnerId))
 		{
-			$_kalturaCEError->setPartnerId ( $this->getPartnerId() );
+			$_vidiunCEError->setPartnerId ( $this->getPartnerId() );
 		}
-		$_kalturaCEError->save();
+		$_vidiunCEError->save();
 		
-		$kalturaCEError = new KalturaCEError(); // start from blank
-		$kalturaCEError->fromObject($_kalturaCEError, $this->getResponseProfile());
+		$vidiunCEError = new VidiunCEError(); // start from blank
+		$vidiunCEError->fromObject($_vidiunCEError, $this->getResponseProfile());
 		
-		return $kalturaCEError;
+		return $vidiunCEError;
 	}
 	
 	/**
-	 * Use this action to report errors to the kaltura server.
+	 * Use this action to report errors to the vidiun server.
 	 * 
 	 * @action reportError
 	 * @param string $errorCode 
 	 * @param string $errorMessage 
-	 * @ksIgnored
+	 * @vsIgnored
 	 */
 	function reportError($errorCode, $errorMessage)
 	{
@@ -180,11 +180,11 @@ referrer
 	}
 	
 	/**
-	 * Use this action to report device capabilities to the kaltura server.
+	 * Use this action to report device capabilities to the vidiun server.
 	 *
 	 * @action reportDeviceCapabilities
 	 * @param string $data
-	 * @ksIgnored
+	 * @vsIgnored
 	 */
 	
 	function reportDeviceCapabilities($data)

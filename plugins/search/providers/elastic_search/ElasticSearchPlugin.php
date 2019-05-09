@@ -2,11 +2,11 @@
 /**
  * @package plugins.elasticSearch
  */
-class ElasticSearchPlugin extends KalturaPlugin implements IKalturaEventConsumers, IKalturaPending, IKalturaServices, IKalturaObjectLoader, IKalturaExceptionHandler, IKalturaEnumerator
+class ElasticSearchPlugin extends VidiunPlugin implements IVidiunEventConsumers, IVidiunPending, IVidiunServices, IVidiunObjectLoader, IVidiunExceptionHandler, IVidiunEnumerator
 {
     const PLUGIN_NAME = 'elasticSearch';
-    const ELASTIC_SEARCH_MANAGER = 'kElasticSearchManager';
-    const ELASTIC_CORE_EXCEPTION = 'kESearchException';
+    const ELASTIC_SEARCH_MANAGER = 'vElasticSearchManager';
+    const ELASTIC_CORE_EXCEPTION = 'vESearchException';
 
     public static function getPluginName()
     {
@@ -24,13 +24,13 @@ class ElasticSearchPlugin extends KalturaPlugin implements IKalturaEventConsumer
     }
 
     /**
-     * Returns a Kaltura dependency object that defines the relationship between two plugins.
+     * Returns a Vidiun dependency object that defines the relationship between two plugins.
      *
-     * @return array<KalturaDependency> The Kaltura dependency object
+     * @return array<VidiunDependency> The Vidiun dependency object
      */
     public static function dependsOn()
     {
-        $searchDependency = new KalturaDependency(SearchPlugin::getPluginName());
+        $searchDependency = new VidiunDependency(SearchPlugin::getPluginName());
         return array($searchDependency);
     }
 
@@ -43,48 +43,48 @@ class ElasticSearchPlugin extends KalturaPlugin implements IKalturaEventConsumer
     }
 
     /* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
     public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
     {
-        if ($baseClass == 'KalturaESearchItemData' && $enumValue == KalturaESearchItemDataType::CAPTION)
-            return new KalturaESearchCaptionItemData();
+        if ($baseClass == 'VidiunESearchItemData' && $enumValue == VidiunESearchItemDataType::CAPTION)
+            return new VidiunESearchCaptionItemData();
 
         if ($baseClass == 'ESearchItemData' && $enumValue == ESearchItemDataType::CAPTION)
             return new ESearchCaptionItemData();
 
-        if ($baseClass == 'KalturaESearchItemData' && $enumValue == KalturaESearchItemDataType::METADATA)
-            return new KalturaESearchMetadataItemData();
+        if ($baseClass == 'VidiunESearchItemData' && $enumValue == VidiunESearchItemDataType::METADATA)
+            return new VidiunESearchMetadataItemData();
 
         if ($baseClass == 'ESearchItemData' && $enumValue == ESearchItemDataType::METADATA)
             return new ESearchMetadataItemData();
 
-        if ($baseClass == 'KalturaESearchItemData' && $enumValue == KalturaESearchItemDataType::CUE_POINTS)
-            return new KalturaESearchCuePointItemData();
+        if ($baseClass == 'VidiunESearchItemData' && $enumValue == VidiunESearchItemDataType::CUE_POINTS)
+            return new VidiunESearchCuePointItemData();
 
         if ($baseClass == 'ESearchItemData' && $enumValue == ESearchItemDataType::CUE_POINTS)
             return new ESearchCuePointItemData();
         
-        if ($baseClass == 'KObjectExportEngine' && $enumValue == KalturaExportObjectType::ESEARCH_MEDIA)
+        if ($baseClass == 'VObjectExportEngine' && $enumValue == VidiunExportObjectType::ESEARCH_MEDIA)
         {
-        	return new KExportMediaEsearchEngine($constructorArgs);
+        	return new VExportMediaEsearchEngine($constructorArgs);
         }
 	
-	    if($baseClass == 'KalturaJobData' && $enumValue == BatchJobType::EXPORT_CSV && (isset($constructorArgs['coreJobSubType']) &&  $constructorArgs['coreJobSubType']== self::getExportTypeCoreValue(EsearchMediaEntryExportObjectType::ESEARCH_MEDIA)))
+	    if($baseClass == 'VidiunJobData' && $enumValue == BatchJobType::EXPORT_CSV && (isset($constructorArgs['coreJobSubType']) &&  $constructorArgs['coreJobSubType']== self::getExportTypeCoreValue(EsearchMediaEntryExportObjectType::ESEARCH_MEDIA)))
 	    {
-		    return new KalturaMediaEsearchExportToCsvJobData();
+		    return new VidiunMediaEsearchExportToCsvJobData();
 	    }
 	
-	    if ($baseClass == 'KalturaESearchOrderByItem' && $enumValue == 'ESearchMetadataOrderByItem')
+	    if ($baseClass == 'VidiunESearchOrderByItem' && $enumValue == 'ESearchMetadataOrderByItem')
 	    {
-		    return new KalturaESearchMetadataOrderByItem($constructorArgs);
+		    return new VidiunESearchMetadataOrderByItem($constructorArgs);
 	    }
 	
         return null;
     }
 
     /* (non-PHPdoc)
-	* @see IKalturaObjectLoader::loadObject()
+	* @see IVidiunObjectLoader::loadObject()
 	*/
     public static function getObjectClass($baseClass, $enumValue)
     {
@@ -97,41 +97,41 @@ class ElasticSearchPlugin extends KalturaPlugin implements IKalturaEventConsumer
         $data = $exception->getData();
         switch ($code)
         {
-            case kESearchException::SEARCH_TYPE_NOT_ALLOWED_ON_FIELD:
-                $object = new KalturaAPIException(KalturaESearchErrors::SEARCH_TYPE_NOT_ALLOWED_ON_FIELD, $data['itemType'], $data['fieldName']);
+            case vESearchException::SEARCH_TYPE_NOT_ALLOWED_ON_FIELD:
+                $object = new VidiunAPIException(VidiunESearchErrors::SEARCH_TYPE_NOT_ALLOWED_ON_FIELD, $data['itemType'], $data['fieldName']);
                 break;
-            case kESearchException::EMPTY_SEARCH_TERM_NOT_ALLOWED:
-                $object = new KalturaAPIException(KalturaESearchErrors::EMPTY_SEARCH_TERM_NOT_ALLOWED, $data['fieldName'], $data['itemType']);
+            case vESearchException::EMPTY_SEARCH_TERM_NOT_ALLOWED:
+                $object = new VidiunAPIException(VidiunESearchErrors::EMPTY_SEARCH_TERM_NOT_ALLOWED, $data['fieldName'], $data['itemType']);
                 break;
-            case kESearchException::SEARCH_TYPE_NOT_ALLOWED_ON_UNIFIED_SEARCH:
-                $object = new KalturaAPIException(KalturaESearchErrors::SEARCH_TYPE_NOT_ALLOWED_ON_UNIFIED_SEARCH, $data['itemType']);
+            case vESearchException::SEARCH_TYPE_NOT_ALLOWED_ON_UNIFIED_SEARCH:
+                $object = new VidiunAPIException(VidiunESearchErrors::SEARCH_TYPE_NOT_ALLOWED_ON_UNIFIED_SEARCH, $data['itemType']);
                 break;
-            case kESearchException::EMPTY_SEARCH_ITEMS_NOT_ALLOWED:
-                $object = new KalturaAPIException(KalturaESearchErrors::EMPTY_SEARCH_ITEMS_NOT_ALLOWED);
+            case vESearchException::EMPTY_SEARCH_ITEMS_NOT_ALLOWED:
+                $object = new VidiunAPIException(VidiunESearchErrors::EMPTY_SEARCH_ITEMS_NOT_ALLOWED);
                 break;
-            case kESearchException::UNMATCHING_BRACKETS:
-                $object = new KalturaAPIException(KalturaESearchErrors::UNMATCHING_BRACKETS);
+            case vESearchException::UNMATCHING_BRACKETS:
+                $object = new VidiunAPIException(VidiunESearchErrors::UNMATCHING_BRACKETS);
                 break;
-            case kESearchException::MISSING_QUERY_OPERAND:
-                $object = new KalturaAPIException(KalturaESearchErrors::MISSING_QUERY_OPERAND);
+            case vESearchException::MISSING_QUERY_OPERAND:
+                $object = new VidiunAPIException(VidiunESearchErrors::MISSING_QUERY_OPERAND);
                 break;
-            case kESearchException::UNMATCHING_QUERY_OPERAND:
-                $object = new KalturaAPIException(KalturaESearchErrors::UNMATCHING_QUERY_OPERAND);
+            case vESearchException::UNMATCHING_QUERY_OPERAND:
+                $object = new VidiunAPIException(VidiunESearchErrors::UNMATCHING_QUERY_OPERAND);
                 break;
-            case kESearchException::CONSECUTIVE_OPERANDS_MISMATCH:
-                $object = new KalturaAPIException(KalturaESearchErrors::CONSECUTIVE_OPERANDS_MISMATCH);
+            case vESearchException::CONSECUTIVE_OPERANDS_MISMATCH:
+                $object = new VidiunAPIException(VidiunESearchErrors::CONSECUTIVE_OPERANDS_MISMATCH);
                 break;
-            case kESearchException::INVALID_FIELD_NAME:
-                $object = new KalturaAPIException(KalturaESearchErrors::INVALID_FIELD_NAME, $data['fieldName']);
+            case vESearchException::INVALID_FIELD_NAME:
+                $object = new VidiunAPIException(VidiunESearchErrors::INVALID_FIELD_NAME, $data['fieldName']);
                 break;
-            case kESearchException::MISSING_MANDATORY_PARAMETERS_IN_ORDER_ITEM:
-                $object = new KalturaAPIException(KalturaESearchErrors::MISSING_MANDATORY_PARAMETERS_IN_ORDER_ITEM);
+            case vESearchException::MISSING_MANDATORY_PARAMETERS_IN_ORDER_ITEM:
+                $object = new VidiunAPIException(VidiunESearchErrors::MISSING_MANDATORY_PARAMETERS_IN_ORDER_ITEM);
                 break;
-            case kESearchException::MIXED_SEARCH_ITEMS_IN_NESTED_OPERATOR_NOT_ALLOWED:
-                $object = new KalturaAPIException(KalturaESearchErrors::MIXED_SEARCH_ITEMS_IN_NESTED_OPERATOR_NOT_ALLOWED);
+            case vESearchException::MIXED_SEARCH_ITEMS_IN_NESTED_OPERATOR_NOT_ALLOWED:
+                $object = new VidiunAPIException(VidiunESearchErrors::MIXED_SEARCH_ITEMS_IN_NESTED_OPERATOR_NOT_ALLOWED);
                 break;
-            case kESearchException::MISSING_OPERATOR_TYPE:
-                $object = new KalturaAPIException(KalturaESearchErrors::MISSING_OPERATOR_TYPE);
+            case vESearchException::MISSING_OPERATOR_TYPE:
+                $object = new VidiunAPIException(VidiunESearchErrors::MISSING_OPERATOR_TYPE);
                 break;
 
             default:
@@ -152,8 +152,8 @@ class ElasticSearchPlugin extends KalturaPlugin implements IKalturaEventConsumer
 	 */
 	public static function getExportTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('ExportObjectType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('ExportObjectType', $value);
 	}
 	
 	/**
@@ -161,7 +161,7 @@ class ElasticSearchPlugin extends KalturaPlugin implements IKalturaEventConsumer
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/**

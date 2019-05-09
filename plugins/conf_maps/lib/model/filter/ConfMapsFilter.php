@@ -4,7 +4,7 @@ class ConfMapsFilter extends baseObjectFilter
 {
 	public function init()
 	{
-		$this->fields = kArray::makeAssociativeDefaultValue(array(
+		$this->fields = vArray::makeAssociativeDefaultValue(array(
 			'_eq_map_name',
 			'_eq_host_name',
 			'_eq_version'

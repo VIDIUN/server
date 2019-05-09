@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage Conversion.engines
  */
-class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
+class VConversionEngineChunkedFfmpeg  extends VConversionEngineFfmpeg
 {
 	const CHUNKED_FFMPEG = "chunked_ffmpeg";
 	
@@ -14,12 +14,12 @@ class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
 	
 	public function getType()
 	{
-		return KalturaConversionEngineType::CHUNKED_FFMPEG;
+		return VidiunConversionEngineType::CHUNKED_FFMPEG;
 	}
 	
 	public function getCmd ()
 	{
-		return KBatchBase::$taskConfig->params->ffmpegCmd;
+		return VBatchBase::$taskConfig->params->ffmpegCmd;
 	}
 	
 	/**
@@ -30,17 +30,17 @@ class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
 	 */
 	protected function execute_conversion_cmdline($command, &$returnVar)
 	{
-		KalturaLog::log($command);
+		VidiunLog::log($command);
 		if(strstr($command,"ffmpeg")===false)
 			return parent::execute_conversion_cmdline($command, $returnVar);
-		if(!isset(KBatchBase::$taskConfig->params->executionMode)){
+		if(!isset(VBatchBase::$taskConfig->params->executionMode)){
 			$returnVar = -1;
 			$errMsg = "ERROR: Missing executionMode value in the batch/worker.ini";
-			KalturaLog::log($errMsg);
+			VidiunLog::log($errMsg);
 			return ($errMsg);
 		}
 		
-		$executionMode = KBatchBase::$taskConfig->params->executionMode;
+		$executionMode = VBatchBase::$taskConfig->params->executionMode;
 		if($executionMode=="standalone") {
 			$output=$this->execute_chunked_encode_standalone($command, $returnVar);
 		}
@@ -50,10 +50,10 @@ class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
 		else {
 			$returnVar = -1;
 			$errMsg = "ERROR: Invalid executionMode value ($executionMode) in the batch/worker.ini";
-			KalturaLog::log($errMsg);
+			VidiunLog::log($errMsg);
 			return ($errMsg);
 		}
-		KalturaLog::log("rv($returnVar),".print_r($output,1));
+		VidiunLog::log("rv($returnVar),".print_r($output,1));
 		return $output;
 	}
 
@@ -63,22 +63,22 @@ class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
 	 *	Uses following configuration fields - 
 	 *	- chunkedEncodeMemcacheHost - memcache host URL (mandatory)
 	 *	- chunkedEncodeMemcachePort - memcache host port (mandatory)
-	 *	- chunkedEncodeMemcacheToken - token to differentiate between general/global Kaltura jobs and per customer dedicated servers (optional, default:null)
+	 *	- chunkedEncodeMemcacheToken - token to differentiate between general/global Vidiun jobs and per customer dedicated servers (optional, default:null)
 	 *	- chunkedEncodeMaxConcurrent - maximum concurrently executed chunks jobs, more or less servers core number (optional, default:5)
 	 */
 	protected function execute_chunked_encode_memcache($cmdLine, &$returnVar)
 	{
-		KalturaLog::log("Original cmdLine:$cmdLine");
+		VidiunLog::log("Original cmdLine:$cmdLine");
 		
 				/*
 				 * 'chunkedEncodeMemcacheHost' and 'chunkedEncodeMemcachePort'
 				 * are mandatory
 				 */
-		if(!(isset(KBatchBase::$taskConfig->params->chunkedEncodeMemcacheHost) 
-		&& isset(KBatchBase::$taskConfig->params->chunkedEncodeMemcachePort))){
+		if(!(isset(VBatchBase::$taskConfig->params->chunkedEncodeMemcacheHost) 
+		&& isset(VBatchBase::$taskConfig->params->chunkedEncodeMemcachePort))){
 			$returnVar = -1;
 			$errMsg = "ERROR: Missing memcache host/port in the batch/worker.ini";
-			KalturaLog::log($errMsg);
+			VidiunLog::log($errMsg);
 			return ($errMsg);
 		}
 			/*
@@ -88,16 +88,16 @@ class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
 		$cmdLineAdjusted = $this->adjust_cmdline($cmdLine);
 		
 		{
-			$host = KBatchBase::$taskConfig->params->chunkedEncodeMemcacheHost;
-			$port = KBatchBase::$taskConfig->params->chunkedEncodeMemcachePort;
+			$host = VBatchBase::$taskConfig->params->chunkedEncodeMemcacheHost;
+			$port = VBatchBase::$taskConfig->params->chunkedEncodeMemcachePort;
 			
-			if(isset(KBatchBase::$taskConfig->params->chunkedEncodeMemcacheToken)){
-				$token = KBatchBase::$taskConfig->params->chunkedEncodeMemcacheToken;
+			if(isset(VBatchBase::$taskConfig->params->chunkedEncodeMemcacheToken)){
+				$token = VBatchBase::$taskConfig->params->chunkedEncodeMemcacheToken;
 			}
 			else $token = null;
 			
-			if(isset(KBatchBase::$taskConfig->params->chunkedEncodeMaxConcurrent)){
-				$concurrent = KBatchBase::$taskConfig->params->chunkedEncodeMaxConcurrent;
+			if(isset(VBatchBase::$taskConfig->params->chunkedEncodeMaxConcurrent)){
+				$concurrent = VBatchBase::$taskConfig->params->chunkedEncodeMaxConcurrent;
 			}
 			else 
 				$concurrent = 5;
@@ -106,9 +106,9 @@ class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
 		}
 		{
 			$cmdLine = 'php -r "';
-			$cmdLine.= 'require_once \'/opt/kaltura/app/batch/bootstrap.php\';';
+			$cmdLine.= 'require_once \'/opt/vidiun/app/batch/bootstrap.php\';';
 
-			$cmdLine.= '\$rv=KChunkedEncodeMemcacheWrap::ExecuteSession(';
+			$cmdLine.= '\$rv=VChunkedEncodeMemcacheWrap::ExecuteSession(';
 			$cmdLine.= '\''.($host).'\',';
 			$cmdLine.= '\''.($port).'\',';
 			$cmdLine.= '\''.($token).'\',';
@@ -119,10 +119,10 @@ class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
 			$cmdLine.= '"';
 		}
 		$cmdLine.= " >> ".$this->logFilePath." 2>&1";
-		KalturaLog::log("Final cmdLine:$cmdLine");
+		VidiunLog::log("Final cmdLine:$cmdLine");
 
 		$output = system($cmdLine, $returnVar);
-		KalturaLog::log("rv($returnVar),".print_r($output,1));
+		VidiunLog::log("rv($returnVar),".print_r($output,1));
 		return $output;
 	}
 	
@@ -134,7 +134,7 @@ class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
 	 */
 	protected function execute_chunked_encode_standalone($cmdLine, &$returnVar)
 	{
-		KalturaLog::log("Original cmdLine:$cmdLine");
+		VidiunLog::log("Original cmdLine:$cmdLine");
 			/*
 			 * Clean up the cmd line - remove 'ffmpeg' and log file redirection instructions
 			 * those will be handled by the Chunked flow
@@ -142,23 +142,23 @@ class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
 		$cmdLineAdjusted = $this->adjust_cmdline($cmdLine);
 
 		{
-			if(isset(KBatchBase::$taskConfig->params->chunkedEncodeMaxConcurrent)){
-				$concurrent = KBatchBase::$taskConfig->params->chunkedEncodeMaxConcurrent;
+			if(isset(VBatchBase::$taskConfig->params->chunkedEncodeMaxConcurrent)){
+				$concurrent = VBatchBase::$taskConfig->params->chunkedEncodeMaxConcurrent;
 			}
 			else
 				$concurrent = 5;
 
-			if(isset(KBatchBase::$taskConfig->params->chunkedEncodeMinConcurrent)) {
-				$concurrentMin = KBatchBase::$taskConfig->params->chunkedEncodeMinConcurrent;
+			if(isset(VBatchBase::$taskConfig->params->chunkedEncodeMinConcurrent)) {
+				$concurrentMin = VBatchBase::$taskConfig->params->chunkedEncodeMinConcurrent;
 			}
 			else
 				$concurrentMin = 1;
 			$sessionName = null;
 			
 			$cmdLine = 'php -r "';
-			$cmdLine.= 'require_once \'/opt/kaltura/app/batch/bootstrap.php\';';
+			$cmdLine.= 'require_once \'/opt/vidiun/app/batch/bootstrap.php\';';
 			
-			$cmdLine.= '\$rv=KChunkedEncodeSessionManagerStandalone::ExecuteSession(';
+			$cmdLine.= '\$rv=VChunkedEncodeSessionManagerStandalone::ExecuteSession(';
 			$cmdLine.= '\''.($concurrent).'\',';
 			$cmdLine.= '\''.($concurrentMin).'\',';
 			$cmdLine.= '\''.($sessionName).'\',';
@@ -167,10 +167,10 @@ class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
                         $cmdLine.= '"';
 		}
 		$cmdLine.= " >> ".$this->logFilePath." 2>&1";
-		KalturaLog::log("Final cmdLine:$cmdLine");
+		VidiunLog::log("Final cmdLine:$cmdLine");
 
 		$output = system($cmdLine, $returnVar);
-		KalturaLog::log("rv($returnVar),".print_r($output,1));
+		VidiunLog::log("rv($returnVar),".print_r($output,1));
 		return $output;
 	}
 
@@ -179,17 +179,17 @@ class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
 	 */
 	private function adjust_cmdline($cmdLine)
 	{
-		KalturaLog::log("Original cmdLine:$cmdLine");
+		VidiunLog::log("Original cmdLine:$cmdLine");
 			/*
 			 * Clean up the cmd line - remove 'ffmpeg' and log file redirection instructions
 			 * those will be handled by the Chunked flow
 			 */
-		$cmdLineAdjusted = str_replace(KBatchBase::$taskConfig->params->ffmpegCmd, KDLCmdlinePlaceholders::BinaryName, $cmdLine);
+		$cmdLineAdjusted = str_replace(VBatchBase::$taskConfig->params->ffmpegCmd, VDLCmdlinePlaceholders::BinaryName, $cmdLine);
 		$cmdValsArr = explode(' ', $cmdLineAdjusted);
 		if(($idx=array_search('>>', $cmdValsArr))!==false){
 			$cmdValsArr = array_slice ($cmdValsArr,0,$idx);
 		}
-		if(($idx=array_search(KDLCmdlinePlaceholders::BinaryName, $cmdValsArr))!==false){
+		if(($idx=array_search(VDLCmdlinePlaceholders::BinaryName, $cmdValsArr))!==false){
 			unset($cmdValsArr[$idx]);
 		}
 		if(($idx=array_search('&&', $cmdValsArr))!==false){
@@ -203,9 +203,9 @@ class KConversionEngineChunkedFfmpeg  extends KConversionEngineFfmpeg
 			}
 		}
 		$cmdLineAdjusted = implode(" ",$cmdValsArr);
-		$cmdLineAdjusted = str_replace(KDLCmdlinePlaceholders::BinaryName, KBatchBase::$taskConfig->params->ffmpegCmd, $cmdLineAdjusted);
+		$cmdLineAdjusted = str_replace(VDLCmdlinePlaceholders::BinaryName, VBatchBase::$taskConfig->params->ffmpegCmd, $cmdLineAdjusted);
 		$cmdLineAdjusted = str_replace('\'', '\\\'',$cmdLineAdjusted);
-		KalturaLog::log("Cleaned up cmdLine:$cmdLineAdjusted");
+		VidiunLog::log("Cleaned up cmdLine:$cmdLineAdjusted");
 		
 		return $cmdLineAdjusted;
 	}

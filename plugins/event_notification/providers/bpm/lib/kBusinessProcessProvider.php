@@ -2,16 +2,16 @@
 /**
  * @package plugins.businessProcessNotification
  */
-abstract class kBusinessProcessProvider
+abstract class vBusinessProcessProvider
 {
 	/**
-	 * @param KalturaBusinessProcessServer $server
-	 * @return kBusinessProcessProvider
+	 * @param VidiunBusinessProcessServer $server
+	 * @return vBusinessProcessProvider
 	 */
 	public static function get($server)
 	{
-		/* @var $server KalturaBusinessProcessServer */
-		return KalturaPluginManager::loadObject('kBusinessProcessProvider', $server->type, array($server));
+		/* @var $server VidiunBusinessProcessServer */
+		return VidiunPluginManager::loadObject('vBusinessProcessProvider', $server->type, array($server));
 	}
 	
 	/**
@@ -52,7 +52,7 @@ abstract class kBusinessProcessProvider
 	
 	/**
 	 * @param string $caseId
-	 * @return kBusinessProcessCase
+	 * @return vBusinessProcessCase
 	 */
 	abstract public function getCase($caseId);
 }

@@ -4,7 +4,7 @@
  * @package plugins.scheduledTask
  * @subpackage api.objects.objectTasks
  */
-class KalturaStorageExportObjectTask extends KalturaObjectTask
+class VidiunStorageExportObjectTask extends VidiunObjectTask
 {
 	/**
 	 * Storage profile id
@@ -20,18 +20,18 @@ class KalturaStorageExportObjectTask extends KalturaObjectTask
 
 	public function toObject($dbObject = null, $skip = array())
 	{
-		/** @var kObjectTask $dbObject */
+		/** @var vObjectTask $dbObject */
 		$dbObject = parent::toObject($dbObject, $skip);
 
 		$dbObject->setDataValue('storageId', $this->storageId);
 		return $dbObject;
 	}
 
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($srcObj, $responseProfile);
 
-		/** @var kObjectTask $srcObj */
+		/** @var vObjectTask $srcObj */
 		$this->storageId = $srcObj->getDataValue('storageId');
 	}
 }

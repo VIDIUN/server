@@ -3,11 +3,11 @@
  * @package plugins.httpNotification
  * @subpackage model.data
  */
-abstract class kHttpNotificationData
+abstract class vHttpNotificationData
 {
 	/**
 	 * Applies scope upon creation
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 */
-	abstract public function setScope(kScope $scope);
+	abstract public function setScope(vScope $scope);
 }

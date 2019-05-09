@@ -24,7 +24,7 @@ $permissionName = 'DRM_PLUGIN_PERMISSION';
 require_once (__DIR__ . '/../../bootstrap.php');
 
 $con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
-KalturaStatement::setDryRun($dryRun);
+VidiunStatement::setDryRun($dryRun);
 
 $criteria = new Criteria();
 $criteria->add(PermissionPeer::STATUS, PermissionStatus::ACTIVE);
@@ -36,12 +36,12 @@ $criteria->addSelectColumn(PermissionPeer::PARTNER_ID);
 $stmt = PermissionPeer::doSelectStmt($criteria, $con);
 $partners = PartnerPeer::retrieveByPKs($stmt->fetchAll(PDO::FETCH_COLUMN));
 
-KalturaLog::debug("found ". count($partners). " partners");
+VidiunLog::debug("found ". count($partners). " partners");
 foreach($partners as $partner)
 {
 	/* @var $partner partner */
 	$partnerId = $partner->getId();
-	KalturaLog::debug("Set permission [$permissionName] for partner id [$partnerId]");
+	VidiunLog::debug("Set permission [$permissionName] for partner id [$partnerId]");
 	$dbPermission = PermissionPeer::getByNameAndPartner($permissionName, $partnerId);
 	if(! $dbPermission)
 	{		
@@ -55,6 +55,6 @@ foreach($partners as $partner)
 	$dbPermission->save();
 }
 	
-kMemoryManager::clearMemory();
+vMemoryManager::clearMemory();
 
-KalturaLog::debug("Done");
+VidiunLog::debug("Done");

@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/kBaseConfCache.php';
-require_once __DIR__ . '/kMapCacheInterface.php';
+require_once __DIR__ . '/vBaseConfCache.php';
+require_once __DIR__ . '/vMapCacheInterface.php';
 
-class kFileSystemConf extends kBaseConfCache implements kMapCacheInterface
+class vFileSystemConf extends vBaseConfCache implements vMapCacheInterface
 {
 	const LOCAL_CONF_FILE = 'local';
 	const HOSTS_DIR = '/hosts/';
@@ -25,7 +25,7 @@ class kFileSystemConf extends kBaseConfCache implements kMapCacheInterface
 			return $iniFiles;
 		}
 
-		$configDir = kEnvironment::getConfigDir();
+		$configDir = vEnvironment::getConfigDir();
 		if ($mapName == self::LOCAL_CONF_FILE)
 		{
 			$iniFiles[] = "$configDir/base.ini";
@@ -58,7 +58,7 @@ class kFileSystemConf extends kBaseConfCache implements kMapCacheInterface
 	{
 		$result = array();
 		if ($isLocal)
-			$result = kEnvironment::getEnvMap();
+			$result = vEnvironment::getEnvMap();
 		foreach ($mapNames as $iniFile)
 		{
 			if(file_exists($iniFile))
@@ -66,7 +66,7 @@ class kFileSystemConf extends kBaseConfCache implements kMapCacheInterface
 				$config = new Zend_Config_Ini($iniFile);
 				if($result)
 				{
-					$result = kEnvironment::mergeConfigItem($result, $config->toArray());
+					$result = vEnvironment::mergeConfigItem($result, $config->toArray());
 				}
 				else
 				{
@@ -100,14 +100,14 @@ class kFileSystemConf extends kBaseConfCache implements kMapCacheInterface
 	public function getIniFilesList($mapName, $hostNameRegex)
 	{
 		$iniFile = array();
-		$configDir = kEnvironment::getConfigDir();
+		$configDir = vEnvironment::getConfigDir();
 		$baseConfigFile = $configDir . DIRECTORY_SEPARATOR . $mapName . '.ini';
-		if(kFile::fileSize($baseConfigFile))
+		if(vFile::fileSize($baseConfigFile))
 		{
 			$iniFile[] = $baseConfigFile;
 		}
 		$hostNameRegexPattern = '/'.$hostNameRegex.'/';
-		$iniFilesFiles = kFile::listDir($configDir . self::HOSTS_DIR . $mapName);
+		$iniFilesFiles = vFile::listDir($configDir . self::HOSTS_DIR . $mapName);
 		foreach ($iniFilesFiles as $iniFileItem)
 		{
 			$mapHostNameRegex = $iniFileItem[0];
@@ -133,7 +133,7 @@ class kFileSystemConf extends kBaseConfCache implements kMapCacheInterface
 			$mapName =  basename($iniFile,'.ini');
 		}
 
-		if(!kFile::fileSize($iniFile))
+		if(!vFile::fileSize($iniFile))
 		{
 			return array (null, null ,null);
 		}

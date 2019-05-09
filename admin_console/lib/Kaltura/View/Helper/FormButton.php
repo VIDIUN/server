@@ -3,7 +3,7 @@
  * @package Admin
  * @subpackage views
  */
-class Kaltura_View_Helper_FormButton extends Zend_View_Helper_FormButton
+class Vidiun_View_Helper_FormButton extends Zend_View_Helper_FormButton
 {
 	 /**
      * Generates a 'button' element with a div after the content for better styling

@@ -6,7 +6,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaAssetDistributionPropertyCondition extends KalturaAssetDistributionCondition
+class VidiunAssetDistributionPropertyCondition extends VidiunAssetDistributionCondition
 {
 	/**
 	 * The property name to look for, this will match to a getter on the asset object.
@@ -40,7 +40,7 @@ class KalturaAssetDistributionPropertyCondition extends KalturaAssetDistribution
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kAssetDistributionPropertyCondition();
+			$dbObject = new vAssetDistributionPropertyCondition();
 			
 		return parent::toObject($dbObject, $skip);
 	}

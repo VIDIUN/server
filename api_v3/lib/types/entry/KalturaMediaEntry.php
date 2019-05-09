@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaMediaEntry extends KalturaPlayableEntry {
+class VidiunMediaEntry extends VidiunPlayableEntry {
 	/**
 	 * The media type of the entry
 	 * 
-	 * @var KalturaMediaType
+	 * @var VidiunMediaType
 	 * @insertonly
 	 * @filter eq,in,order
 	 */
@@ -25,7 +25,7 @@ class KalturaMediaEntry extends KalturaPlayableEntry {
 	/**
 	 * The source type of the entry 
 	 *
-	 * @var KalturaSourceType
+	 * @var VidiunSourceType
 	 * @insertonly
 	 * @filter eq,not,in,notin
 	 */
@@ -34,7 +34,7 @@ class KalturaMediaEntry extends KalturaPlayableEntry {
 	/**
 	 * The search provider type used to import this entry
 	 *
-	 * @var KalturaSearchProviderType
+	 * @var VidiunSearchProviderType
 	 * @insertonly
 	 */
 	public $searchProviderType;
@@ -90,14 +90,14 @@ class KalturaMediaEntry extends KalturaPlayableEntry {
 	/**
 	 * True if trim action is disabled for this entry
 	 *
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 * @readonly
 	 */
 	public $isTrimDisabled;
 
 	/**
 	 * Array of streams that exists on the entry
-	 * @var KalturaStreamContainerArray
+	 * @var VidiunStreamContainerArray
 	 */
 	public $streams;
 
@@ -106,7 +106,7 @@ class KalturaMediaEntry extends KalturaPlayableEntry {
 	"searchProviderId" => "sourceId", "creditUserName" => "credit", "creditUrl" => "siteUrl", "partnerId", "mediaDate", "dataUrl", "flavorParamsIds", "isTrimDisabled", "streams" );
 	
 	public function __construct() {
-		$this->type = KalturaEntryType::MEDIA_CLIP;
+		$this->type = VidiunEntryType::MEDIA_CLIP;
 	}
 	
 	public function getMapBetweenObjects() {
@@ -114,7 +114,7 @@ class KalturaMediaEntry extends KalturaPlayableEntry {
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntry::toObject()
+	 * @see VidiunBaseEntry::toObject()
 	 */
 	public function toObject($entry = null, $props_to_skip = array()) {
 		if (is_null ( $entry )) {
@@ -124,8 +124,8 @@ class KalturaMediaEntry extends KalturaPlayableEntry {
 		$entry = parent::toObject($entry, $props_to_skip);
 		
 		/* @var $entry entry */
-		if ($this->msDuration && ($entry->getMediaType () == KalturaMediaType::IMAGE || $this->mediaType == KalturaMediaType::IMAGE && $this->msDuration)) {
-			throw new KalturaAPIException ( KalturaErrors::PROPERTY_VALIDATION_NOT_UPDATABLE, "msDuration" );
+		if ($this->msDuration && ($entry->getMediaType () == VidiunMediaType::IMAGE || $this->mediaType == VidiunMediaType::IMAGE && $this->msDuration)) {
+			throw new VidiunAPIException ( VidiunErrors::PROPERTY_VALIDATION_NOT_UPDATABLE, "msDuration" );
 		}
 		return $entry;
 	}

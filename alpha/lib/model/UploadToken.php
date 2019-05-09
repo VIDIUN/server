@@ -48,7 +48,7 @@ class UploadToken extends BaseUploadToken implements IBaseObject
 		if ($this->isNew())
 		{
 			$this->setId($this->calculateId());
-			$this->setDc(kDataCenterMgr::getCurrentDcId());
+			$this->setDc(vDataCenterMgr::getCurrentDcId());
 			if($this->autoFinalize)
 				$this->addAutoFinalizeToCache();
 		}
@@ -70,14 +70,14 @@ class UploadToken extends BaseUploadToken implements IBaseObject
 		$ret = parent::postUpdate($con);
 		
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		return $ret;
 	}
 	
 	public function calculateId()
 	{
-		$dc = kDataCenterMgr::getCurrentDc();
+		$dc = vDataCenterMgr::getCurrentDc();
 		for ($i = 0; $i < 10; $i++)
 		{
 			$id = $dc["id"].'_'.md5(microtime(true) . getmypid() . uniqid(rand(),true));
@@ -92,8 +92,8 @@ class UploadToken extends BaseUploadToken implements IBaseObject
 	
 	public function getPuserId()
 	{
-		$kuser = $this->getkuser();
-		return $kuser ? $kuser->getPuserId() : null;
+		$vuser = $this->getvuser();
+		return $vuser ? $vuser->getPuserId() : null;
 	}
 
 	public function getCacheInvalidationKeys()
@@ -108,19 +108,19 @@ class UploadToken extends BaseUploadToken implements IBaseObject
 	
 	public function getAutoFinalize()
 	{
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_UPLOAD_TOKEN);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_UPLOAD_TOKEN);
 		if (!$cache)
-			throw new kUploadTokenException("Cache instance required for AutoFinalize functionality Could not initiated", kUploadTokenException::UPLOAD_TOKEN_AUTO_FINALIZE_CACHE_NOT_INITIALIZED);
+			throw new vUploadTokenException("Cache instance required for AutoFinalize functionality Could not initiated", vUploadTokenException::UPLOAD_TOKEN_AUTO_FINALIZE_CACHE_NOT_INITIALIZED);
 		
 		return $cache->get($this->getId().".autoFinalize");
 	}
 	
 	private function addAutoFinalizeToCache()
 	{
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_UPLOAD_TOKEN);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_UPLOAD_TOKEN);
 		if (!$cache)
-			throw new kUploadTokenException("Cache instance required for AutoFinalize functionality Could not initiated", kUploadTokenException::UPLOAD_TOKEN_AUTO_FINALIZE_CACHE_NOT_INITIALIZED);
+			throw new vUploadTokenException("Cache instance required for AutoFinalize functionality Could not initiated", vUploadTokenException::UPLOAD_TOKEN_AUTO_FINALIZE_CACHE_NOT_INITIALIZED);
 		
-		$cache->add($this->getId().".autoFinalize", true, kUploadTokenMgr::AUTO_FINALIZE_CACHE_TTL);
+		$cache->add($this->getId().".autoFinalize", true, vUploadTokenMgr::AUTO_FINALIZE_CACHE_TTL);
 	}
 }

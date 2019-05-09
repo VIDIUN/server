@@ -551,13 +551,13 @@ class DeliveryProfileDynamicAttributes {
 		
 		if(json_last_error() != JSON_ERROR_NONE)
 		{
-			KalturaLog::debug("playerConfig provided is not a json object, data will not be forward to playServer [$playerConfig]");
+			VidiunLog::debug("playerConfig provided is not a json object, data will not be forward to playServer [$playerConfig]");
 			return false;
 		}
 		
 		if(isset($playConfigJson->sessionId) && is_int($playConfigJson->sessionId))
 		{
-			KalturaLog::debug("Integer sessionId value provided in player config, data will not be forward to playServer [$playerConfig]");
+			VidiunLog::debug("Integer sessionId value provided in player config, data will not be forward to playServer [$playerConfig]");
 			return false;
 		}
 		

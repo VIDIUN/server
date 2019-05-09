@@ -1,12 +1,12 @@
 <?php
 
-class kCacheConfFactory
+class vCacheConfFactory
 {
-	const SESSION = 'kSessionConf';
-	const APC = 'kApcConf';
-	const LOCAL_MEM_CACHE = 'kLocalMemCacheConf';
-	const FILE_SYSTEM = 'kFileSystemConf';
-	const REMOTE_MEM_CACHE = 'kRemoteMemCacheConf';
+	const SESSION = 'vSessionConf';
+	const APC = 'vApcConf';
+	const LOCAL_MEM_CACHE = 'vLocalMemCacheConf';
+	const FILE_SYSTEM = 'vFileSystemConf';
+	const REMOTE_MEM_CACHE = 'vRemoteMemCacheConf';
 
 	protected static $cacheInstanceList;
 

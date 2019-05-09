@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-abstract class KalturaESearchParams extends KalturaObject
+abstract class VidiunESearchParams extends VidiunObject
 {
 	/**
 	 * @var string
@@ -16,7 +16,7 @@ abstract class KalturaESearchParams extends KalturaObject
 	public $objectId;
 
 	/**
-	 * @var KalturaESearchOrderBy
+	 * @var VidiunESearchOrderBy
 	 */
 	public $orderBy;
 
@@ -46,12 +46,12 @@ abstract class KalturaESearchParams extends KalturaObject
 	{
 		if (!$searchOperator)
 		{
-			throw new KalturaAPIException(KalturaESearchErrors::EMPTY_SEARCH_OPERATOR_NOT_ALLOWED);
+			throw new VidiunAPIException(VidiunESearchErrors::EMPTY_SEARCH_OPERATOR_NOT_ALLOWED);
 		}
 
 		if (!$searchOperator->operator)
 		{
-			$searchOperator->operator = KalturaSearchOperatorType::SEARCH_AND;
+			$searchOperator->operator = VidiunSearchOperatorType::SEARCH_AND;
 		}
 	}
 

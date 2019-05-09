@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaDocumentEntryBaseFilter extends KalturaBaseEntryFilter
+abstract class VidiunDocumentEntryBaseFilter extends VidiunBaseEntryFilter
 {
 	static private $map_between_objects = array
 	(
@@ -30,7 +30,7 @@ abstract class KalturaDocumentEntryBaseFilter extends KalturaBaseEntryFilter
 	}
 
 	/**
-	 * @var KalturaDocumentType
+	 * @var VidiunDocumentType
 	 */
 	public $documentTypeEqual;
 

@@ -3,7 +3,7 @@
  * @package plugins.bulkUploadCsv
  * @subpackage lib.model
  */
-class kBulkGroupUserSyncCsv
+class vBulkGroupUserSyncCsv
 {
 
 	const NAME = 'name';
@@ -15,12 +15,12 @@ class kBulkGroupUserSyncCsv
 	const GROUP_ID = 'group';
 
 	protected $userMap;
-	protected $kuser;
+	protected $vuser;
 	protected $groupIds;
 
-	public function __construct($kuser, $groupIds)
+	public function __construct($vuser, $groupIds)
 	{
-		$this->kuser = $kuser;
+		$this->vuser = $vuser;
 		$this->groupIds = $groupIds;
 		$this->userMap = array();
 	}
@@ -45,7 +45,7 @@ class kBulkGroupUserSyncCsv
 	{
 		foreach ($users as $user)
 		{
-			/**@var kuser $user*/
+			/**@var vuser $user*/
 			$this->userMap[$user->getId()][self::MODE] = $user->getUserMode();
 			$this->userMap[trim($user->getPuserId())][self::MODE] = $user->getUserMode();
 			$this->userMap[$user->getId()][self::TYPE] = $user->getType();
@@ -56,18 +56,18 @@ class kBulkGroupUserSyncCsv
 	public function getSyncGroupUsers($removeFromExistingGroups, $createNewGroups)
 	{
 		$requestGroupIds = array_map('trim', $this->groupIds);
-		$partnerId = $this->kuser->getPartnerId();
-		$currentUserGroups = KuserKgroupPeer::retrieveByKuserIds(array($this->kuser->getId()));
-		$currentKgroupsIds = array();
+		$partnerId = $this->vuser->getPartnerId();
+		$currentUserGroups = VuserVgroupPeer::retrieveByVuserIds(array($this->vuser->getId()));
+		$currentVgroupsIds = array();
 		$currentPgroupsIds = array();
 		foreach ($currentUserGroups as $currentUserGroup)
 		{
-			$currentKgroupsIds[] = $currentUserGroup->getKgroupId();
+			$currentVgroupsIds[] = $currentUserGroup->getVgroupId();
 			$currentPgroupsIds[] = $currentUserGroup->getPgroupId();
 		}
 
 		$groupsPuserIds = array_merge($currentPgroupsIds, $requestGroupIds);
-		$users = kuserPeer::getKuserByPartnerAndUids($partnerId, $groupsPuserIds);
+		$users = vuserPeer::getVuserByPartnerAndUids($partnerId, $groupsPuserIds);
 
 		$this->buildUserMap($users);
 		$groupsToRemove = array();
@@ -91,9 +91,9 @@ class kBulkGroupUserSyncCsv
 	{
 		if(!in_array($currentUserGroup->getPgroupId(), $requestGroupIds) && //the group is not in the sync group list
 			$currentUserGroup->getCreationMode() == GroupUserCreationMode::AUTOMATIC && //the group creation mode is automatic
-			array_key_exists($currentUserGroup->getKgroupId(), $this->userMap) && //if the the group exists and removeFromExistingGroups flag is true and the group is not protected
+			array_key_exists($currentUserGroup->getVgroupId(), $this->userMap) && //if the the group exists and removeFromExistingGroups flag is true and the group is not protected
 			$removeFromExistingGroups &&
-			$this->isGroupAndNotProtected($currentUserGroup->getKgroupId()))
+			$this->isGroupAndNotProtected($currentUserGroup->getVgroupId()))
 			return true;
 
 		return false;
@@ -111,15 +111,15 @@ class kBulkGroupUserSyncCsv
 
 	protected function isGroupAndNotProtected($key)
 	{
-		if(array_key_exists(self::TYPE, $this->userMap[$key]) && $this->userMap[$key][self::TYPE] == KuserType::GROUP &&
-			array_key_exists(self::MODE, $this->userMap[$key]) && $this->userMap[$key][self::MODE] != KuserMode::PROTECTED_USER)
+		if(array_key_exists(self::TYPE, $this->userMap[$key]) && $this->userMap[$key][self::TYPE] == VuserType::GROUP &&
+			array_key_exists(self::MODE, $this->userMap[$key]) && $this->userMap[$key][self::MODE] != VuserMode::PROTECTED_USER)
 			return true;
 		return false;
 	}
 
 	protected function buildUsersCsv($groupsToRemove, $groupIdsToAdd)
 	{
-		$userId = $this->kuser->getPuserId();
+		$userId = $this->vuser->getPuserId();
 		$csvPath = tempnam(sys_get_temp_dir(), 'csv');
 		$csvData = array();
 		foreach ($groupsToRemove as $removeGroupId)

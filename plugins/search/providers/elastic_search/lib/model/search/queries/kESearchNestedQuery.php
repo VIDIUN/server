@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchNestedQuery extends kESearchCompoundQuery
+class vESearchNestedQuery extends vESearchCompoundQuery
 {
 	const NESTED_KEY = 'nested';
 	const PATH_KEY = 'path';

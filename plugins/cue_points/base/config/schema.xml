@@ -17,7 +17,7 @@
 		<column primaryKey="false" required="true"  lazyLoad="false" name="status"					type="integer" />
 		<column primaryKey="false" required="true"  lazyLoad="false" name="type"					type="integer" inheritance="single" />
 		<column primaryKey="false" required="true"  lazyLoad="false" name="sub_type"				type="integer" />
-		<column primaryKey="false" required="true"  lazyLoad="false" name="kuser_id"				type="integer" />
+		<column primaryKey="false" required="true"  lazyLoad="false" name="vuser_id"				type="integer" />
 		<column primaryKey="false" required="false" lazyLoad="false" name="custom_data"				type="longvarchar"/>
 		<column primaryKey="false" required="false" lazyLoad="false" name="partner_data"			type="longvarchar"/>
 		<column primaryKey="false" required="false" lazyLoad="false" name="partner_sort_value"		type="integer" />

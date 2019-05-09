@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaCropDimensions extends KalturaObject
+class VidiunCropDimensions extends VidiunObject
 {
 	/**
 	 * Crop left point

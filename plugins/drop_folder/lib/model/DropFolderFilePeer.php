@@ -98,7 +98,7 @@ class DropFolderFilePeer extends BaseDropFolderFilePeer implements IRelatedObjec
 			if(isset(self::$class_types_cache[$assetType]))
 				return self::$class_types_cache[$assetType];
 				
-			$extendedCls = KalturaPluginManager::getObjectClass(self::OM_CLASS, $assetType);
+			$extendedCls = VidiunPluginManager::getObjectClass(self::OM_CLASS, $assetType);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$assetType] = $extendedCls;

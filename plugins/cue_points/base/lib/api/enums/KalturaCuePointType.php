@@ -3,7 +3,7 @@
  * @package plugins.cuePoint
  * @subpackage api.enum
  */
-class KalturaCuePointType extends KalturaDynamicEnum implements CuePointType
+class VidiunCuePointType extends VidiunDynamicEnum implements CuePointType
 {
 	public static function getEnumClass()
 	{

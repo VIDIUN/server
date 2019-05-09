@@ -88,12 +88,12 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:element>
-			<xs:element maxOccurs="1" minOccurs="1" name="type" type="KalturaEntryType">
+			<xs:element maxOccurs="1" minOccurs="1" name="type" type="VidiunEntryType">
 				<xs:annotation>
 					<xs:documentation>Entry type</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element maxOccurs="1" minOccurs="1" name="licenseType" type="KalturaLicenseType">
+			<xs:element maxOccurs="1" minOccurs="1" name="licenseType" type="VidiunLicenseType">
 				<xs:annotation>
 					<xs:documentation>Entry license type</xs:documentation>
 				</xs:annotation>
@@ -113,7 +113,7 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:element>
-			<xs:element maxOccurs="1" minOccurs="1" name="status" type="KalturaEntryStatus">
+			<xs:element maxOccurs="1" minOccurs="1" name="status" type="VidiunEntryStatus">
 				<xs:annotation>
 					<xs:documentation>Entry current status</xs:documentation>
 				</xs:annotation>
@@ -242,7 +242,7 @@
 	
 	<xs:complexType name="T_media">
 		<xs:sequence>
-			<xs:element maxOccurs="1" minOccurs="1" name="mediaType" type="KalturaMediaType">
+			<xs:element maxOccurs="1" minOccurs="1" name="mediaType" type="VidiunMediaType">
 				<xs:annotation>
 					<xs:documentation>Entry media type</xs:documentation>
 				</xs:annotation>
@@ -458,7 +458,7 @@
 						<name>my entry name</name>
 						<status>2</status>
 						<description>my entry free text description</description>
-						<thumbnailUrl url="http://kaltura.domain/thumbnail/path/to/file.jpg"/>
+						<thumbnailUrl url="http://vidiun.domain/thumbnail/path/to/file.jpg"/>
 						<tags>
 							<tag>example</tag>
 							<tag>my_tag</tag>
@@ -473,10 +473,10 @@
 							<duration>34951</duration>
 							<flavorParamsIds>0,3</flavorParamsIds>
 						</media>
-						<thumbnail url="http://kaltura.domain/thumbnail/path/to/thumbnail1.jpg">...</thumbnail>
-						<thumbnail url="http://kaltura.domain/thumbnail/path/to/thumbnail2.jpg">...</thumbnail>
-						<content url="http://kaltura.domain/flavor/path/to/flavor1.flv">...</content>
-						<content url="http://kaltura.domain/flavor/path/to/flavor2.flv">...</content>
+						<thumbnail url="http://vidiun.domain/thumbnail/path/to/thumbnail1.jpg">...</thumbnail>
+						<thumbnail url="http://vidiun.domain/thumbnail/path/to/thumbnail2.jpg">...</thumbnail>
+						<content url="http://vidiun.domain/flavor/path/to/flavor1.flv">...</content>
+						<content url="http://vidiun.domain/flavor/path/to/flavor2.flv">...</content>
 					</item>
 				</example>
 			</xs:appinfo>
@@ -541,7 +541,7 @@
 						<action>add</action>
 						<entryId>{entry id}</entryId>
 						<media>...</media>
-						<content assetId="{flavor asset id}" audioBitrate="0" audioCodec="" containerFormat="flash video" extension="flv" flavorParamsId="0" flavorParamsName="Source" format="" frameRate="0" height="0" isSource="true" url="http://kaltura.domain/path/my_flavor_asset.flv" videoBitrate="0" videoCodec="" width="0">
+						<content assetId="{flavor asset id}" audioBitrate="0" audioCodec="" containerFormat="flash video" extension="flv" flavorParamsId="0" flavorParamsName="Source" format="" frameRate="0" height="0" isSource="true" url="http://vidiun.domain/path/my_flavor_asset.flv" videoBitrate="0" videoCodec="" width="0">
 						&gt;
 							<tags>
 								<tag>example</tag>
@@ -565,7 +565,7 @@
 						<action>add</action>
 						<entryId>{entry id}</entryId>
 						<media>...</media>
-						<thumbnail format="" height="120" isDefault="false" thumbAssetId="{thumb asset id}" url="http://kaltura.domain/path/my_thumbnail_asset.flv" width="120">
+						<thumbnail format="" height="120" isDefault="false" thumbAssetId="{thumb asset id}" url="http://vidiun.domain/path/my_thumbnail_asset.flv" width="120">
 							<tags>
 								<tag>example</tag>
 								<tag>my_tag</tag>

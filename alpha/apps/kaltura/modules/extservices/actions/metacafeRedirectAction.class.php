@@ -3,7 +3,7 @@
  * @package    Core
  * @subpackage externalServices
  */
-class metacafeRedirectAction extends kalturaAction
+class metacafeRedirectAction extends vidiunAction
 {
 	public function execute()
 	{
@@ -13,7 +13,7 @@ class metacafeRedirectAction extends kalturaAction
 		$itemId = $this->getRequestParameter("itemId");
 		
 		$url = "http://www.metacafe.com/api/item/" . $itemId;
-		$content = kFile::downloadUrlToString($url);
+		$content = vFile::downloadUrlToString($url);
 		
 		$doc = new DOMDocument();
 		if ($doc->loadXML($content))

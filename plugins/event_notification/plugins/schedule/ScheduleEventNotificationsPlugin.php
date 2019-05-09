@@ -3,7 +3,7 @@
  * Enable event notifications on schedule objects
  * @package plugins.scheduleEventNotifications
  */
-class ScheduleEventNotificationsPlugin extends KalturaPlugin implements IKalturaPending, IKalturaEnumerator, IKalturaObjectLoader
+class ScheduleEventNotificationsPlugin extends VidiunPlugin implements IVidiunPending, IVidiunEnumerator, IVidiunObjectLoader
 {
 	const PLUGIN_NAME = 'scheduleEventNotifications';
 	
@@ -18,7 +18,7 @@ class ScheduleEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	const EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD = 0;
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -26,21 +26,21 @@ class ScheduleEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$scheduleVersion = new KalturaVersion(self::SCHEDULE_PLUGIN_VERSION_MAJOR, self::SCHEDULE_PLUGIN_VERSION_MINOR, self::SCHEDULE_PLUGIN_VERSION_BUILD);
-		$eventNotificationVersion = new KalturaVersion(self::EVENT_NOTIFICATION_PLUGIN_VERSION_MAJOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_MINOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD);
+		$scheduleVersion = new VidiunVersion(self::SCHEDULE_PLUGIN_VERSION_MAJOR, self::SCHEDULE_PLUGIN_VERSION_MINOR, self::SCHEDULE_PLUGIN_VERSION_BUILD);
+		$eventNotificationVersion = new VidiunVersion(self::EVENT_NOTIFICATION_PLUGIN_VERSION_MAJOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_MINOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD);
 		
-		$scheduleDependency = new KalturaDependency(self::SCHEDULE_PLUGIN_NAME, $scheduleVersion);
-		$eventNotificationDependency = new KalturaDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $eventNotificationVersion);
+		$scheduleDependency = new VidiunDependency(self::SCHEDULE_PLUGIN_NAME, $scheduleVersion);
+		$eventNotificationDependency = new VidiunDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $eventNotificationVersion);
 		
 		return array($scheduleDependency, $eventNotificationDependency);
 	}
 			
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -54,7 +54,7 @@ class ScheduleEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
@@ -62,7 +62,7 @@ class ScheduleEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	}
 		
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -90,8 +90,8 @@ class ScheduleEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	 */
 	public static function getEventNotificationEventObjectTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('EventNotificationEventObjectType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('EventNotificationEventObjectType', $value);
 	}
 	
 	/**
@@ -99,6 +99,6 @@ class ScheduleEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

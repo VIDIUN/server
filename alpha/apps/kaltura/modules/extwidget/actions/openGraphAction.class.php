@@ -12,7 +12,7 @@ class openGraphAction extends sfAction
 		$widget = widgetPeer::retrieveByPK($widgetId);
 		if(!$widget)
 		{
-			KalturaLog::err("Widget id [$widgetId] not found");
+			VidiunLog::err("Widget id [$widgetId] not found");
 			die();
 		}
 		
@@ -20,7 +20,7 @@ class openGraphAction extends sfAction
 		$entryId = $widget->getEntryId();
 		if(!$entry)
 		{
-			KalturaLog::err("Entry id [$entryId] not found");
+			VidiunLog::err("Entry id [$entryId] not found");
 			die();
 		}
 		
@@ -28,7 +28,7 @@ class openGraphAction extends sfAction
 		$uiConfId = $widget->getUiConfId();
 		if(!$uiConf)
 		{
-			KalturaLog::err("UI Conf id [$uiConfId] not found");
+			VidiunLog::err("UI Conf id [$uiConfId] not found");
 			die();
 		}
 
@@ -46,8 +46,8 @@ class openGraphAction extends sfAction
 			$flavorId = $flavor_asset->getId();
 		}	
 
-		$embed_host = (kConf::hasParam('cdn_api_host')) ? kConf::get('cdn_api_host') : kConf::get('www_host');
-		$embed_host_https = (kConf::hasParam('cdn_api_host_https')) ? kConf::get('cdn_api_host_https') : kConf::get('www_host');
+		$embed_host = (vConf::hasParam('cdn_api_host')) ? vConf::get('cdn_api_host') : vConf::get('www_host');
+		$embed_host_https = (vConf::hasParam('cdn_api_host_https')) ? vConf::get('cdn_api_host_https') : vConf::get('www_host');
 
 		$https_enabled = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? true : false;
 		$protocol = ($https_enabled) ? 'https' : 'http';
@@ -60,7 +60,7 @@ class openGraphAction extends sfAction
 		$this->uiConf = $uiConf;
 
 		// Build SWF Path
-		$swfPath = "/index.php/kwidget/wid/" . $widgetId . "/uiconf_id/" . $uiConfId . "/entry_id/" . $entryId;
+		$swfPath = "/index.php/vwidget/wid/" . $widgetId . "/uiconf_id/" . $uiConfId . "/entry_id/" . $entryId;
 		// Set SWF URLs
 		$this->swfUrl = 'http://' . $embed_host . $swfPath;
 		$this->swfSecureUrl = 'https://' . $embed_host_https . $swfPath;		

@@ -116,10 +116,10 @@ $hosts = array(
 
 foreach($hosts as $host)
 {
-	KSchedulerConfig::setHostname($host);
+	VSchedulerConfig::setHostname($host);
 	
-	$newConfig = new KSchedulerConfig($newDir);
-	$oldConfig = new KSchedulerConfig($oldDir);
+	$newConfig = new VSchedulerConfig($newDir);
+	$oldConfig = new VSchedulerConfig($oldDir);
 	
 	$array1 = $newConfig->toArray();
 	$array2 = $oldConfig->toArray();
@@ -129,13 +129,13 @@ foreach($hosts as $host)
 
 	if(count($diff1))
 	{
-		KalturaLog::info("Host $host [" . print_r($diff1, true) . "]");
+		VidiunLog::info("Host $host [" . print_r($diff1, true) . "]");
 	}
 	if(count($diff2))
 	{
-		KalturaLog::info("Host $host [" . print_r($diff2, true) . "]");
+		VidiunLog::info("Host $host [" . print_r($diff2, true) . "]");
 	}
 	
 	if(!count($diff1) && !count($diff2))
-		KalturaLog::info("Host $host OK");
+		VidiunLog::info("Host $host OK");
 }

@@ -90,7 +90,7 @@ abstract class ESearchItem extends BaseObject implements IESearchItem
 			$data = array();
 			$data['itemType'] = $this->getItemType();
 			$data['fieldName'] = $fieldName;
-			throw new kESearchException('Type of search ['.$this->getItemType().'] not allowed on specific field ['. $fieldName.']', kESearchException::SEARCH_TYPE_NOT_ALLOWED_ON_FIELD, $data);
+			throw new vESearchException('Type of search ['.$this->getItemType().'] not allowed on specific field ['. $fieldName.']', vESearchException::SEARCH_TYPE_NOT_ALLOWED_ON_FIELD, $data);
 		}
 	}
 
@@ -101,7 +101,7 @@ abstract class ESearchItem extends BaseObject implements IESearchItem
 			$data = array();
 			$data['itemType'] = $this->getItemType();
 			$data['fieldName'] = $fieldName;
-			throw new kESearchException('Empty search term is not allowed on Field ['. $fieldName.'] and search type ['.$this->getItemType().']', kESearchException::EMPTY_SEARCH_TERM_NOT_ALLOWED, $data);
+			throw new vESearchException('Empty search term is not allowed on Field ['. $fieldName.'] and search type ['.$this->getItemType().']', vESearchException::EMPTY_SEARCH_TERM_NOT_ALLOWED, $data);
 		}
 	}
 
@@ -135,7 +135,7 @@ abstract class ESearchItem extends BaseObject implements IESearchItem
 	 */
 	public static function getFieldBoostFactor($fieldName)
 	{
-		$result = kESearchQueryManager::DEFAULT_BOOST_FACTOR;
+		$result = vESearchQueryManager::DEFAULT_BOOST_FACTOR;
 		if(array_key_exists($fieldName, static::$field_boost_values))
 		{
 			$result = static::$field_boost_values[$fieldName];

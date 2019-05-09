@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaStorageAddAction extends KalturaRuleAction
+class VidiunStorageAddAction extends VidiunRuleAction
 {
 	/**
 	 * Init object type
@@ -14,12 +14,12 @@ class KalturaStorageAddAction extends KalturaRuleAction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kRuleAction(RuleActionType::ADD_TO_STORAGE);
+			$dbObject = new vRuleAction(RuleActionType::ADD_TO_STORAGE);
 			
 		return parent::toObject($dbObject, $skip);
 	}

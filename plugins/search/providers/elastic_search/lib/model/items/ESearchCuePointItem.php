@@ -112,10 +112,10 @@ class ESearchCuePointItem extends ESearchNestedObjectItem
 				$query = $this->getCuePointRangeQuery($allowedSearchTypes, $queryAttributes);
 				break;
 			default:
-				KalturaLog::log("Undefined item type[".$this->getItemType()."]");
+				VidiunLog::log("Undefined item type[".$this->getItemType()."]");
 		}
 
-		if($boolOperator == kESearchBoolQuery::MUST_KEY && !array_key_exists($this->getFieldName(), self::$field_boost_values))
+		if($boolOperator == vESearchBoolQuery::MUST_KEY && !array_key_exists($this->getFieldName(), self::$field_boost_values))
 			$cuePointBoolQuery->addToFilter($query);
 		else
 			$cuePointBoolQuery->addByOperatorType($boolOperator, $query);
@@ -141,31 +141,31 @@ class ESearchCuePointItem extends ESearchNestedObjectItem
 
 	protected function getCuePointExactMatchQuery($allowedSearchTypes, &$queryAttributes)
 	{
-		$cuePointExactMatch = kESearchQueryManager::getExactMatchQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+		$cuePointExactMatch = vESearchQueryManager::getExactMatchQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 		return $cuePointExactMatch;
 	}
 
 	protected function getCuePointPartialQuery(&$queryAttributes)
 	{
-		$cuePointPartial = kESearchQueryManager::getPartialQuery($this, $this->getFieldName(), $queryAttributes);
+		$cuePointPartial = vESearchQueryManager::getPartialQuery($this, $this->getFieldName(), $queryAttributes);
 		return $cuePointPartial;
 	}
 
 	protected function getCuePointPrefixQuery($allowedSearchTypes, &$queryAttributes)
 	{
-		$cuePointPrefix = kESearchQueryManager::getPrefixQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+		$cuePointPrefix = vESearchQueryManager::getPrefixQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 		return $cuePointPrefix;
 	}
 
 	protected function getCuePointExistsQuery($allowedSearchTypes, &$queryAttributes)
 	{
-		$cuePointExists = kESearchQueryManager::getExistsQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+		$cuePointExists = vESearchQueryManager::getExistsQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 		return $cuePointExists;
 	}
 
 	protected function getCuePointRangeQuery($allowedSearchTypes, &$queryAttributes)
 	{
-		$cuePointRange = kESearchQueryManager::getRangeQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+		$cuePointRange = vESearchQueryManager::getRangeQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 		return $cuePointRange;
 	}
 

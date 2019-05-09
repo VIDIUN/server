@@ -1,29 +1,29 @@
 <?php
 
 /**
- * Base static class for performing query and update operations on the 'kce_installation_error' table.
+ * Base static class for performing query and update operations on the 'vce_installation_error' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class BaseKceInstallationErrorPeer {
+abstract class BaseVceInstallationErrorPeer {
 
 	/** the default database name for this class */
 	const DATABASE_NAME = 'propel';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'kce_installation_error';
+	const TABLE_NAME = 'vce_installation_error';
 
 	/** the related Propel class for this table */
-	const OM_CLASS = 'KceInstallationError';
+	const OM_CLASS = 'VceInstallationError';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'Core.KceInstallationError';
+	const CLASS_DEFAULT = 'Core.VceInstallationError';
 
 	/** the related TableMap class for this table */
-	const TM_CLASS = 'KceInstallationErrorTableMap';
+	const TM_CLASS = 'VceInstallationErrorTableMap';
 	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 10;
@@ -32,40 +32,40 @@ abstract class BaseKceInstallationErrorPeer {
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** the column name for the ID field */
-	const ID = 'kce_installation_error.ID';
+	const ID = 'vce_installation_error.ID';
 
 	/** the column name for the PARTNER_ID field */
-	const PARTNER_ID = 'kce_installation_error.PARTNER_ID';
+	const PARTNER_ID = 'vce_installation_error.PARTNER_ID';
 
 	/** the column name for the BROWSER field */
-	const BROWSER = 'kce_installation_error.BROWSER';
+	const BROWSER = 'vce_installation_error.BROWSER';
 
 	/** the column name for the SERVER_IP field */
-	const SERVER_IP = 'kce_installation_error.SERVER_IP';
+	const SERVER_IP = 'vce_installation_error.SERVER_IP';
 
 	/** the column name for the SERVER_OS field */
-	const SERVER_OS = 'kce_installation_error.SERVER_OS';
+	const SERVER_OS = 'vce_installation_error.SERVER_OS';
 
 	/** the column name for the PHP_VERSION field */
-	const PHP_VERSION = 'kce_installation_error.PHP_VERSION';
+	const PHP_VERSION = 'vce_installation_error.PHP_VERSION';
 
 	/** the column name for the CE_ADMIN_EMAIL field */
-	const CE_ADMIN_EMAIL = 'kce_installation_error.CE_ADMIN_EMAIL';
+	const CE_ADMIN_EMAIL = 'vce_installation_error.CE_ADMIN_EMAIL';
 
 	/** the column name for the TYPE field */
-	const TYPE = 'kce_installation_error.TYPE';
+	const TYPE = 'vce_installation_error.TYPE';
 
 	/** the column name for the DESCRIPTION field */
-	const DESCRIPTION = 'kce_installation_error.DESCRIPTION';
+	const DESCRIPTION = 'vce_installation_error.DESCRIPTION';
 
 	/** the column name for the DATA field */
-	const DATA = 'kce_installation_error.DATA';
+	const DATA = 'vce_installation_error.DATA';
 
 	/**
-	 * An identiy map to hold any loaded instances of KceInstallationError objects.
+	 * An identiy map to hold any loaded instances of VceInstallationError objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
 	 * queries.
-	 * @var        array KceInstallationError[]
+	 * @var        array VceInstallationError[]
 	 */
 	public static $instances = array();
 
@@ -144,12 +144,12 @@ abstract class BaseKceInstallationErrorPeer {
 	 *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
 	 * </code>
 	 * @param      string $alias The alias for the current table.
-	 * @param      string $column The column name for current table. (i.e. KceInstallationErrorPeer::COLUMN_NAME).
+	 * @param      string $column The column name for current table. (i.e. VceInstallationErrorPeer::COLUMN_NAME).
 	 * @return     string
 	 */
 	public static function alias($alias, $column)
 	{
-		return str_replace(KceInstallationErrorPeer::TABLE_NAME.'.', $alias.'.', $column);
+		return str_replace(VceInstallationErrorPeer::TABLE_NAME.'.', $alias.'.', $column);
 	}
 
 	/**
@@ -165,16 +165,16 @@ abstract class BaseKceInstallationErrorPeer {
 	 */
 	public static function addSelectColumns(Criteria $criteria)
 	{
-		$criteria->addSelectColumn(KceInstallationErrorPeer::ID);
-		$criteria->addSelectColumn(KceInstallationErrorPeer::PARTNER_ID);
-		$criteria->addSelectColumn(KceInstallationErrorPeer::BROWSER);
-		$criteria->addSelectColumn(KceInstallationErrorPeer::SERVER_IP);
-		$criteria->addSelectColumn(KceInstallationErrorPeer::SERVER_OS);
-		$criteria->addSelectColumn(KceInstallationErrorPeer::PHP_VERSION);
-		$criteria->addSelectColumn(KceInstallationErrorPeer::CE_ADMIN_EMAIL);
-		$criteria->addSelectColumn(KceInstallationErrorPeer::TYPE);
-		$criteria->addSelectColumn(KceInstallationErrorPeer::DESCRIPTION);
-		$criteria->addSelectColumn(KceInstallationErrorPeer::DATA);
+		$criteria->addSelectColumn(VceInstallationErrorPeer::ID);
+		$criteria->addSelectColumn(VceInstallationErrorPeer::PARTNER_ID);
+		$criteria->addSelectColumn(VceInstallationErrorPeer::BROWSER);
+		$criteria->addSelectColumn(VceInstallationErrorPeer::SERVER_IP);
+		$criteria->addSelectColumn(VceInstallationErrorPeer::SERVER_OS);
+		$criteria->addSelectColumn(VceInstallationErrorPeer::PHP_VERSION);
+		$criteria->addSelectColumn(VceInstallationErrorPeer::CE_ADMIN_EMAIL);
+		$criteria->addSelectColumn(VceInstallationErrorPeer::TYPE);
+		$criteria->addSelectColumn(VceInstallationErrorPeer::DESCRIPTION);
+		$criteria->addSelectColumn(VceInstallationErrorPeer::DATA);
 	}
 
 	/**
@@ -193,27 +193,27 @@ abstract class BaseKceInstallationErrorPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(KceInstallationErrorPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(VceInstallationErrorPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			KceInstallationErrorPeer::addSelectColumns($criteria);
+			VceInstallationErrorPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 		$criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
 		
-		KceInstallationErrorPeer::attachCriteriaFilter($criteria);
+		VceInstallationErrorPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
-			'KceInstallationErrorPeer', 
+			vQueryCache::QUERY_TYPE_COUNT,
+			'VceInstallationErrorPeer', 
 			$cacheKey, 
 			$queryDB);
 		if ($cachedResult !== null)
@@ -222,7 +222,7 @@ abstract class BaseKceInstallationErrorPeer {
 		}
 		
 		// select the connection for the query
-		$con = KceInstallationErrorPeer::alternativeCon ($con, $queryDB);
+		$con = VceInstallationErrorPeer::alternativeCon ($con, $queryDB);
 		
 		// BasePeer returns a PDOStatement
 		$stmt = BasePeer::doCount($criteria, $con);
@@ -236,7 +236,7 @@ abstract class BaseKceInstallationErrorPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -246,7 +246,7 @@ abstract class BaseKceInstallationErrorPeer {
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
-	 * @return     KceInstallationError
+	 * @return     VceInstallationError
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -254,7 +254,7 @@ abstract class BaseKceInstallationErrorPeer {
 	{
 		$critcopy = clone $criteria;
 		$critcopy->setLimit(1);
-		$objects = KceInstallationErrorPeer::doSelect($critcopy, $con);
+		$objects = VceInstallationErrorPeer::doSelect($critcopy, $con);
 		if ($objects) {
 			return $objects[0];
 		}
@@ -296,10 +296,10 @@ abstract class BaseKceInstallationErrorPeer {
 	{
 		foreach ($queryResult as $curIndex => $curObject)
 		{
-			$objFromPool = KceInstallationErrorPeer::getInstanceFromPool($curObject->getPrimaryKey());
+			$objFromPool = VceInstallationErrorPeer::getInstanceFromPool($curObject->getPrimaryKey());
 			if ($objFromPool === null)
 			{
-				KceInstallationErrorPeer::addInstanceToPool($curObject);
+				VceInstallationErrorPeer::addInstanceToPool($curObject);
 			}
 			else
 			{
@@ -317,11 +317,11 @@ abstract class BaseKceInstallationErrorPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
-					KceInstallationErrorPeer::addInstanceToPool($curResult);
+					VceInstallationErrorPeer::addInstanceToPool($curResult);
 				}
 			}
 		}
@@ -338,54 +338,54 @@ abstract class BaseKceInstallationErrorPeer {
 	 */
 	public static function doSelect(Criteria $criteria, PropelPDO $con = null)
 	{		
-		$criteriaForSelect = KceInstallationErrorPeer::prepareCriteriaForSelect($criteria);
+		$criteriaForSelect = VceInstallationErrorPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
-			'KceInstallationErrorPeer', 
+			vQueryCache::QUERY_TYPE_SELECT,
+			'VceInstallationErrorPeer', 
 			$cacheKey, 
 			$queryDB);
 		if ($cachedResult !== null)
 		{
 			$cacheKey = null;
-			KceInstallationErrorPeer::filterSelectResults($cachedResult, $criteriaForSelect);
-			KceInstallationErrorPeer::updateInstancePool($cachedResult);
+			VceInstallationErrorPeer::filterSelectResults($cachedResult, $criteriaForSelect);
+			VceInstallationErrorPeer::updateInstancePool($cachedResult);
 			return $cachedResult;
 		}
 		
-		$con = KceInstallationErrorPeer::alternativeCon($con, $queryDB);
+		$con = VceInstallationErrorPeer::alternativeCon($con, $queryDB);
 		
-		$queryResult = KceInstallationErrorPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
+		$queryResult = VceInstallationErrorPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
-		KceInstallationErrorPeer::filterSelectResults($queryResult, $criteria);
+		VceInstallationErrorPeer::filterSelectResults($queryResult, $criteria);
 		
-		KceInstallationErrorPeer::addInstancesToPool($queryResult);
+		VceInstallationErrorPeer::addInstancesToPool($queryResult);
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -395,7 +395,7 @@ abstract class BaseKceInstallationErrorPeer {
 			$con = myDbHelper::alternativeCon($con);
 			
 		if($con === null)
-			$con = Propel::getConnection(KceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(VceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		
 		return $con;
 	}
@@ -407,7 +407,7 @@ abstract class BaseKceInstallationErrorPeer {
 	
 	public static function  setUseCriteriaFilter ( $use )
 	{
-		$criteria_filter = KceInstallationErrorPeer::getCriteriaFilter();
+		$criteria_filter = VceInstallationErrorPeer::getCriteriaFilter();
 		
 		if ( $use )  $criteria_filter->enable(); 
 		else $criteria_filter->disable();
@@ -421,12 +421,12 @@ abstract class BaseKceInstallationErrorPeer {
 	public static function &getCriteriaFilter()
 	{
 		if(self::$s_criteria_filter == null)
-			KceInstallationErrorPeer::setDefaultCriteriaFilter();
+			VceInstallationErrorPeer::setDefaultCriteriaFilter();
 		
-		$partnerCriteria = myPartnerUtils::getPartnerCriteriaParams('KceInstallationError');
+		$partnerCriteria = myPartnerUtils::getPartnerCriteriaParams('VceInstallationError');
 		if ($partnerCriteria)
 		{
-			call_user_func_array(array('KceInstallationErrorPeer','addPartnerToCriteria'), $partnerCriteria);
+			call_user_func_array(array('VceInstallationErrorPeer','addPartnerToCriteria'), $partnerCriteria);
 		}
 		
 		return self::$s_criteria_filter;
@@ -453,10 +453,10 @@ abstract class BaseKceInstallationErrorPeer {
 	 */
 	protected static function attachCriteriaFilter(Criteria $criteria)
 	{
-		KceInstallationErrorPeer::getCriteriaFilter()->applyFilter($criteria);
+		VceInstallationErrorPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -464,19 +464,19 @@ abstract class BaseKceInstallationErrorPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -495,7 +495,7 @@ abstract class BaseKceInstallationErrorPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -535,10 +535,10 @@ abstract class BaseKceInstallationErrorPeer {
 	public static function doCountStmt(Criteria $criteria, PropelPDO $con = null)
 	{
 		// attach default criteria
-		KceInstallationErrorPeer::attachCriteriaFilter($criteria);
+		VceInstallationErrorPeer::attachCriteriaFilter($criteria);
 		
 		// select the connection for the query
-		$con = KceInstallationErrorPeer::alternativeCon ( $con );
+		$con = VceInstallationErrorPeer::alternativeCon ( $con );
 		
 		// BasePeer returns a PDOStatement
 		return BasePeer::doCount($criteria, $con);
@@ -552,20 +552,20 @@ abstract class BaseKceInstallationErrorPeer {
 			if(count($asColumns) == 1 && isset($asColumns['_score']))
 			{
 				$criteria = clone $criteria;
-				KceInstallationErrorPeer::addSelectColumns($criteria);
+				VceInstallationErrorPeer::addSelectColumns($criteria);
 			}
 		}
 		else
 		{
 			$criteria = clone $criteria;
-			KceInstallationErrorPeer::addSelectColumns($criteria);
+			VceInstallationErrorPeer::addSelectColumns($criteria);
 		}
 		
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		// attach default criteria
-		KceInstallationErrorPeer::attachCriteriaFilter($criteria);
+		VceInstallationErrorPeer::attachCriteriaFilter($criteria);
 
 		return $criteria;
 	}
@@ -585,9 +585,9 @@ abstract class BaseKceInstallationErrorPeer {
 	 */
 	public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
 	{
-		$con = KceInstallationErrorPeer::alternativeCon($con);
+		$con = VceInstallationErrorPeer::alternativeCon($con);
 		
-		$criteria = KceInstallationErrorPeer::prepareCriteriaForSelect($criteria);
+		$criteria = VceInstallationErrorPeer::prepareCriteriaForSelect($criteria);
 		
 		// BasePeer returns a PDOStatement
 		return BasePeer::doSelect($criteria, $con);
@@ -601,10 +601,10 @@ abstract class BaseKceInstallationErrorPeer {
 	 * to the cache in order to ensure that the same objects are always returned by doSelect*()
 	 * and retrieveByPK*() calls.
 	 *
-	 * @param      KceInstallationError $value A KceInstallationError object.
+	 * @param      VceInstallationError $value A VceInstallationError object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(KceInstallationError $obj, $key = null)
+	public static function addInstanceToPool(VceInstallationError $obj, $key = null)
 	{
 		if ( Propel::isInstancePoolingEnabled() )
 		{
@@ -614,11 +614,11 @@ abstract class BaseKceInstallationErrorPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('KceInstallationErrorPeer');
+				vMemoryManager::registerPeer('VceInstallationErrorPeer');
 			}
 		}
 	}
@@ -631,18 +631,18 @@ abstract class BaseKceInstallationErrorPeer {
 	 * methods in your stub classes -- you may need to explicitly remove objects
 	 * from the cache in order to prevent returning objects that no longer exist.
 	 *
-	 * @param      mixed $value A KceInstallationError object or a primary key value.
+	 * @param      mixed $value A VceInstallationError object or a primary key value.
 	 */
 	public static function removeInstanceFromPool($value)
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
-			if (is_object($value) && $value instanceof KceInstallationError) {
+			if (is_object($value) && $value instanceof VceInstallationError) {
 				$key = (string) $value->getId();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
 			} else {
-				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or KceInstallationError object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or VceInstallationError object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
 			}
 
@@ -657,7 +657,7 @@ abstract class BaseKceInstallationErrorPeer {
 	 * a multi-column primary key, a serialize()d version of the primary key will be returned.
 	 *
 	 * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-	 * @return     KceInstallationError Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+	 * @return     VceInstallationError Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
 	 * @see        getPrimaryKeyHash()
 	 */
 	public static function getInstanceFromPool($key)
@@ -685,7 +685,7 @@ abstract class BaseKceInstallationErrorPeer {
 	}
 	
 	/**
-	 * Method to invalidate the instance pool of all tables related to kce_installation_error
+	 * Method to invalidate the instance pool of all tables related to vce_installation_error
 	 * by a foreign key with ON DELETE CASCADE
 	 */
 	public static function clearRelatedInstancePool()
@@ -723,11 +723,11 @@ abstract class BaseKceInstallationErrorPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = KceInstallationErrorPeer::getOMClass(false);
+		$cls = VceInstallationErrorPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key = KceInstallationErrorPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj = KceInstallationErrorPeer::getInstanceFromPool($key))) {
+			$key = VceInstallationErrorPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj = VceInstallationErrorPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
@@ -758,10 +758,10 @@ abstract class BaseKceInstallationErrorPeer {
 	 */
 	public static function buildTableMap()
 	{
-	  $dbMap = Propel::getDatabaseMap(BaseKceInstallationErrorPeer::DATABASE_NAME);
-	  if (!$dbMap->hasTable(BaseKceInstallationErrorPeer::TABLE_NAME))
+	  $dbMap = Propel::getDatabaseMap(BaseVceInstallationErrorPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseVceInstallationErrorPeer::TABLE_NAME))
 	  {
-	    $dbMap->addTableObject(new KceInstallationErrorTableMap());
+	    $dbMap->addTableObject(new VceInstallationErrorTableMap());
 	  }
 	}
 
@@ -778,13 +778,13 @@ abstract class BaseKceInstallationErrorPeer {
 	 */
 	public static function getOMClass($withPrefix = true)
 	{
-		return $withPrefix ? KceInstallationErrorPeer::CLASS_DEFAULT : KceInstallationErrorPeer::OM_CLASS;
+		return $withPrefix ? VceInstallationErrorPeer::CLASS_DEFAULT : VceInstallationErrorPeer::OM_CLASS;
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a KceInstallationError or Criteria object.
+	 * Method perform an INSERT on the database, given a VceInstallationError or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or KceInstallationError object containing data that is used to create the INSERT statement.
+	 * @param      mixed $values Criteria or VceInstallationError object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
 	 * @return     mixed The new primary key.
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -793,17 +793,17 @@ abstract class BaseKceInstallationErrorPeer {
 	public static function doInsert($values, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(KceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 		} else {
-			$criteria = $values->buildCriteria(); // build Criteria from KceInstallationError object
+			$criteria = $values->buildCriteria(); // build Criteria from VceInstallationError object
 		}
 
-		if ($criteria->containsKey(KceInstallationErrorPeer::ID) && $criteria->keyContainsValue(KceInstallationErrorPeer::ID) ) {
-			throw new PropelException('Cannot insert a value for auto-increment primary key ('.KceInstallationErrorPeer::ID.')');
+		if ($criteria->containsKey(VceInstallationErrorPeer::ID) && $criteria->keyContainsValue(VceInstallationErrorPeer::ID) ) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key ('.VceInstallationErrorPeer::ID.')');
 		}
 
 
@@ -825,9 +825,9 @@ abstract class BaseKceInstallationErrorPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a KceInstallationError or Criteria object.
+	 * Method perform an UPDATE on the database, given a VceInstallationError or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or KceInstallationError object containing data that is used to create the UPDATE statement.
+	 * @param      mixed $values Criteria or VceInstallationError object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -836,7 +836,7 @@ abstract class BaseKceInstallationErrorPeer {
 	public static function doUpdate($values, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(KceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$selectCriteria = new Criteria(self::DATABASE_NAME);
@@ -844,10 +844,10 @@ abstract class BaseKceInstallationErrorPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(KceInstallationErrorPeer::ID);
-			$selectCriteria->add(KceInstallationErrorPeer::ID, $criteria->remove(KceInstallationErrorPeer::ID), $comparison);
+			$comparison = $criteria->getComparison(VceInstallationErrorPeer::ID);
+			$selectCriteria->add(VceInstallationErrorPeer::ID, $criteria->remove(VceInstallationErrorPeer::ID), $comparison);
 
-		} else { // $values is KceInstallationError object
+		} else { // $values is VceInstallationError object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
 		}
@@ -868,26 +868,26 @@ abstract class BaseKceInstallationErrorPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the kce_installation_error table.
+	 * Method to DELETE all rows from the vce_installation_error table.
 	 *
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
 	public static function doDeleteAll($con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(KceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		$affectedRows = 0; // initialize var to track total num of affected rows
 		try {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(KceInstallationErrorPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(VceInstallationErrorPeer::TABLE_NAME, $con);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
 			// instances get re-added by the select statement contained therein).
-			KceInstallationErrorPeer::clearInstancePool();
-			KceInstallationErrorPeer::clearRelatedInstancePool();
+			VceInstallationErrorPeer::clearInstancePool();
+			VceInstallationErrorPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -897,9 +897,9 @@ abstract class BaseKceInstallationErrorPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a KceInstallationError or Criteria object OR a primary key value.
+	 * Method perform a DELETE on the database, given a VceInstallationError or Criteria object OR a primary key value.
 	 *
-	 * @param      mixed $values Criteria or KceInstallationError object or primary key or array of primary keys
+	 * @param      mixed $values Criteria or VceInstallationError object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
 	 * @param      PropelPDO $con the connection to use
 	 * @return     int 	The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -910,27 +910,27 @@ abstract class BaseKceInstallationErrorPeer {
 	 public static function doDelete($values, PropelPDO $con = null)
 	 {
 		if ($con === null) {
-			$con = Propel::getConnection(KceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VceInstallationErrorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			// invalidate the cache for all objects of this type, since we have no
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
-			KceInstallationErrorPeer::clearInstancePool();
+			VceInstallationErrorPeer::clearInstancePool();
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof KceInstallationError) { // it's a model object
+		} elseif ($values instanceof VceInstallationError) { // it's a model object
 			// invalidate the cache for this single object
-			KceInstallationErrorPeer::removeInstanceFromPool($values);
+			VceInstallationErrorPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(KceInstallationErrorPeer::ID, (array) $values, Criteria::IN);
+			$criteria->add(VceInstallationErrorPeer::ID, (array) $values, Criteria::IN);
 			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				KceInstallationErrorPeer::removeInstanceFromPool($singleval);
+				VceInstallationErrorPeer::removeInstanceFromPool($singleval);
 			}
 		}
 
@@ -945,7 +945,7 @@ abstract class BaseKceInstallationErrorPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-			KceInstallationErrorPeer::clearRelatedInstancePool();
+			VceInstallationErrorPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -955,24 +955,24 @@ abstract class BaseKceInstallationErrorPeer {
 	}
 
 	/**
-	 * Validates all modified columns of given KceInstallationError object.
+	 * Validates all modified columns of given VceInstallationError object.
 	 * If parameter $columns is either a single column name or an array of column names
 	 * than only those columns are validated.
 	 *
 	 * NOTICE: This does not apply to primary or foreign keys for now.
 	 *
-	 * @param      KceInstallationError $obj The object to validate.
+	 * @param      VceInstallationError $obj The object to validate.
 	 * @param      mixed $cols Column name or array of column names.
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(KceInstallationError $obj, $cols = null)
+	public static function doValidate(VceInstallationError $obj, $cols = null)
 	{
 		$columns = array();
 
 		if ($cols) {
-			$dbMap = Propel::getDatabaseMap(KceInstallationErrorPeer::DATABASE_NAME);
-			$tableMap = $dbMap->getTable(KceInstallationErrorPeer::TABLE_NAME);
+			$dbMap = Propel::getDatabaseMap(VceInstallationErrorPeer::DATABASE_NAME);
+			$tableMap = $dbMap->getTable(VceInstallationErrorPeer::TABLE_NAME);
 
 			if (! is_array($cols)) {
 				$cols = array($cols);
@@ -988,7 +988,7 @@ abstract class BaseKceInstallationErrorPeer {
 
 		}
 
-		return BasePeer::doValidate(KceInstallationErrorPeer::DATABASE_NAME, KceInstallationErrorPeer::TABLE_NAME, $columns);
+		return BasePeer::doValidate(VceInstallationErrorPeer::DATABASE_NAME, VceInstallationErrorPeer::TABLE_NAME, $columns);
 	}
 
 	/**
@@ -996,19 +996,19 @@ abstract class BaseKceInstallationErrorPeer {
 	 *
 	 * @param      int $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
-	 * @return     KceInstallationError
+	 * @return     VceInstallationError
 	 */
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
 
-		if (null !== ($obj = KceInstallationErrorPeer::getInstanceFromPool((string) $pk))) {
+		if (null !== ($obj = VceInstallationErrorPeer::getInstanceFromPool((string) $pk))) {
 			return $obj;
 		}
 
-		$criteria = new Criteria(KceInstallationErrorPeer::DATABASE_NAME);
-		$criteria->add(KceInstallationErrorPeer::ID, $pk);
+		$criteria = new Criteria(VceInstallationErrorPeer::DATABASE_NAME);
+		$criteria->add(VceInstallationErrorPeer::ID, $pk);
 
-		$v = KceInstallationErrorPeer::doSelect($criteria, $con);
+		$v = VceInstallationErrorPeer::doSelect($criteria, $con);
 
 		return !empty($v) > 0 ? $v[0] : null;
 	}
@@ -1027,16 +1027,16 @@ abstract class BaseKceInstallationErrorPeer {
 		if (empty($pks)) {
 			$objs = array();
 		} else {
-			$criteria = new Criteria(KceInstallationErrorPeer::DATABASE_NAME);
-			$criteria->add(KceInstallationErrorPeer::ID, $pks, Criteria::IN);
-			$objs = KceInstallationErrorPeer::doSelect($criteria, $con);
+			$criteria = new Criteria(VceInstallationErrorPeer::DATABASE_NAME);
+			$criteria->add(VceInstallationErrorPeer::ID, $pks, Criteria::IN);
+			$objs = VceInstallationErrorPeer::doSelect($criteria, $con);
 		}
 		return $objs;
 	}
 
-} // BaseKceInstallationErrorPeer
+} // BaseVceInstallationErrorPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseKceInstallationErrorPeer::buildTableMap();
+BaseVceInstallationErrorPeer::buildTableMap();
 

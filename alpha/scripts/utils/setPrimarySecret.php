@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../bootstrap.php');
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
-KalturaLog::info('add admin secret start' . PHP_EOL);
+VidiunLog::info('add admin secret start' . PHP_EOL);
 
 if ($argc !== 3)
 	die(PHP_EOL . 'php' ."Usage: $argv[0] <partnerId> <secretToSetAsPrimary>". PHP_EOL .

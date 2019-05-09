@@ -3,7 +3,7 @@
  * @package api
  * @subpackage v3
  */
-class KalturaFrontController
+class VidiunFrontController
 {
 	private static $instance;
 	private $requestStart = null;
@@ -18,20 +18,20 @@ class KalturaFrontController
 
 	private function __construct()
 	{
-		$this->dispatcher = KalturaDispatcher::getInstance();
+		$this->dispatcher = VidiunDispatcher::getInstance();
 		
 		$this->params = requestUtils::getRequestParams();
 		
 		$this->service = isset($this->params["service"]) ? (string)$this->params["service"] : null;
 		$this->action = isset($this->params["action"]) ? (string)$this->params["action"] : null;
 		
-		kCurrentContext::$serializeCallback = array($this, 'serialize');
+		vCurrentContext::$serializeCallback = array($this, 'serialize');
 	}
 		
 	/**
-	 * Return a singleton KalturaFrontController instance
+	 * Return a singleton VidiunFrontController instance
 	 *
-	 * @return KalturaFrontController
+	 * @return VidiunFrontController
 	 */
 	public static function getInstance()
 	{
@@ -46,7 +46,7 @@ class KalturaFrontController
 	public function onRequestStart($service, $action, array $params, $requestIndex = 0, $isInMultiRequest = false)
 	{
 		$this->requestStart = microtime(true);
-		KalturaLog::analytics(array(
+		VidiunLog::analytics(array(
 			'request_start',
 			'pid' => getmypid(),
 			'agent' => '"' . (isset($_SERVER["HTTP_USER_AGENT"]) ? $_SERVER["HTTP_USER_AGENT"] : null) . '"',
@@ -65,20 +65,20 @@ class KalturaFrontController
 	{
 		$duration = microtime(true) - $this->requestStart;
 		
-		KalturaLog::analytics(array(
+		VidiunLog::analytics(array(
 			'request_end',
-			'partnerId' => kCurrentContext::$partner_id,
-			'masterPartnerId' => kCurrentContext::$master_partner_id,
-			'ks' => kCurrentContext::$ks,
-			'isAdmin' => intval(kCurrentContext::$is_admin_session),
-			'kuserId' => '"' . str_replace('"', '\\"', (kCurrentContext::$uid ? kCurrentContext::$uid : kCurrentContext::$ks_uid)) . '"',
+			'partnerId' => vCurrentContext::$partner_id,
+			'masterPartnerId' => vCurrentContext::$master_partner_id,
+			'vs' => vCurrentContext::$vs,
+			'isAdmin' => intval(vCurrentContext::$is_admin_session),
+			'vuserId' => '"' . str_replace('"', '\\"', (vCurrentContext::$uid ? vCurrentContext::$uid : vCurrentContext::$vs_uid)) . '"',
 			'duration' => $duration,
 			'success' => intval($success),
 			'errorCode' => $errorCode,
 			'requestIndex' => $requestIndex,
 		));
 		
-		KalturaMonitorClient::monitorApiEnd($errorCode);
+		VidiunMonitorClient::monitorApiEnd($errorCode);
 	}
 	
 	public function run()
@@ -91,12 +91,12 @@ class KalturaFrontController
 		
 		set_error_handler(array(&$this, "errorHandler"));
 		
-		KalturaLog::debug("Params [" . print_r($this->params, true) . "]");
+		VidiunLog::debug("Params [" . print_r($this->params, true) . "]");
 		try {	
 			$this->setSerializerByFormat();
 		}
 		catch (Exception $e) {
-			return new kRendererDieError($e->getCode(), $e->getMessage());	
+			return new vRendererDieError($e->getCode(), $e->getMessage());	
 		}
 		
 		if ($this->service == "multirequest")
@@ -175,7 +175,7 @@ class KalturaFrontController
 						$attributePath = explode(':', $matches[2]);
 						$valueFromObject = $this->getValueFromObject($result, $attributePath);
 						if(!$valueFromObject)
-							KalturaLog::debug("replaceMultiRequestResults: Empty value returned from object");
+							VidiunLog::debug("replaceMultiRequestResults: Empty value returned from object");
 							
 						$params[$key] = str_replace($path, $valueFromObject, $params[$key]);
 					}
@@ -193,7 +193,7 @@ class KalturaFrontController
 		$listOfRequests = array();
 		$requestStartIndex = 1;
 		$requestEndIndex = 1;
-		$ksArray = array();
+		$vsArray = array();
 
 		foreach ($this->params as $paramName => $paramValue)
 		{
@@ -203,8 +203,8 @@ class KalturaFrontController
 				$requestStartIndex = min($requestStartIndex, $paramName);
 				$requestEndIndex = max($requestEndIndex, $paramName);
 				$listOfRequests[$paramName] = $paramValue;
-				if (isset($paramValue['ks'])) {
-					$ksArray[$paramValue['ks']] = true;
+				if (isset($paramValue['vs'])) {
+					$vsArray[$paramValue['vs']] = true;
 				}
 
 				continue;
@@ -228,23 +228,23 @@ class KalturaFrontController
 				$listOfRequests[$requestIndex][$paramName] = $paramValue;
 			}
 
-			if ($paramName == 'ks') {
-				$ksArray[$paramValue] = true;
+			if ($paramName == 'vs') {
+				$vsArray[$paramValue] = true;
 			}
 		}
 
-		//enable multi deferred events only if all ks's are the same
-		if ( count($ksArray)==1 ) {
-			kEventsManager::enableMultiDeferredEvents(true);
+		//enable multi deferred events only if all vs's are the same
+		if ( count($vsArray)==1 ) {
+			vEventsManager::enableMultiDeferredEvents(true);
 		} else {
-			kEventsManager::enableMultiDeferredEvents(false);
+			vEventsManager::enableMultiDeferredEvents(false);
 		}
 		
 		$multiRequestResultsPaths = $this->getMultiRequestResultsPaths($listOfRequests);
 
 		// process the requests
 		$results = array();
-		kCurrentContext::$multiRequest_index = 0;
+		vCurrentContext::$multiRequest_index = 0;
 
 		for($i = $requestStartIndex; $i <= $requestEndIndex; $i++)
 		{
@@ -253,7 +253,7 @@ class KalturaFrontController
 			if (!isset($currentParams["service"]) || !isset($currentParams["action"]))
 				break;
 
-			kCurrentContext::$multiRequest_index++;
+			vCurrentContext::$multiRequest_index++;
 			$currentService = $currentParams["service"];
 			$currentAction = $currentParams["action"];
 		
@@ -263,9 +263,9 @@ class KalturaFrontController
 				$currentParams['clientTag'] = $commonParams['clientTag'];
 			}
 
-			if (isset($commonParams['ks']) && !isset($currentParams['ks']))
+			if (isset($commonParams['vs']) && !isset($currentParams['vs']))
 			{
-				$currentParams['ks'] = $commonParams['ks'];
+				$currentParams['vs'] = $commonParams['vs'];
 			}
 
 			if (isset($commonParams['partnerId']) && !isset($currentParams['partnerId']))
@@ -283,12 +283,12 @@ class KalturaFrontController
 			}
 			else
 			{
-				throw new KalturaAPIException(APIErrors::INTERNAL_SERVERL_ERROR, "Malformed request");
+				throw new VidiunAPIException(APIErrors::INTERNAL_SERVERL_ERROR, "Malformed request");
 			}
 							
-			$cache = new KalturaResponseCacher($currentParams);
+			$cache = new VidiunResponseCacher($currentParams);
 			
-			$cachedResult = $cache->checkCache('X-Kaltura-Part-Of-MultiRequest');
+			$cachedResult = $cache->checkCache('X-Vidiun-Part-Of-MultiRequest');
 			if ($cachedResult)
 			{
 				$currentResult = unserialize($cachedResult);
@@ -297,11 +297,11 @@ class KalturaFrontController
 			{
 				$success = true;
 				$errorCode = null;
-				$this->onRequestStart($currentService, $currentAction, $currentParams, kCurrentContext::$multiRequest_index, true);
-				if (kCurrentContext::$multiRequest_index != 1)
+				$this->onRequestStart($currentService, $currentAction, $currentParams, vCurrentContext::$multiRequest_index, true);
+				if (vCurrentContext::$multiRequest_index != 1)
 				{
-					kMemoryManager::clearMemory();
-					KalturaCriterion::clearTags();
+					vMemoryManager::clearMemory();
+					VidiunCriterion::clearTags();
 				}
 							
 				try
@@ -324,7 +324,7 @@ class KalturaFrontController
 					$currentResult = $this->getExceptionObject($ex, $currentService, $currentAction);
 				}
 				$cache->storeCache($currentResult, array(), true);
-				$this->onRequestEnd($success, $errorCode, kCurrentContext::$multiRequest_index);
+				$this->onRequestEnd($success, $errorCode, vCurrentContext::$multiRequest_index);
 			}
 			
 			for($nextMultiRequestIndex = ($i + 1); $nextMultiRequestIndex <= count($listOfRequests); $nextMultiRequestIndex++)
@@ -333,7 +333,7 @@ class KalturaFrontController
 				{
 					try 
 					{
-						$listOfRequests[$nextMultiRequestIndex] = $this->replaceMultiRequestResults(kCurrentContext::$multiRequest_index, $multiRequestResultsPaths[$nextMultiRequestIndex], $listOfRequests[$nextMultiRequestIndex], $currentResult);
+						$listOfRequests[$nextMultiRequestIndex] = $this->replaceMultiRequestResults(vCurrentContext::$multiRequest_index, $multiRequestResultsPaths[$nextMultiRequestIndex], $listOfRequests[$nextMultiRequestIndex], $currentResult);
 					}
 					catch(Exception $ex)
 					{
@@ -342,15 +342,15 @@ class KalturaFrontController
 				}
 			}
 			
-			$results[kCurrentContext::$multiRequest_index] = $this->serializer->serialize($currentResult);
+			$results[vCurrentContext::$multiRequest_index] = $this->serializer->serialize($currentResult);
 			
 			// in case a serve action is included in a multirequest, return only the result of the serve action
-			// in order to avoid serializing the kRendererBase object and returning the internal server paths to the client
-			if ($currentResult instanceof kRendererBase)
+			// in order to avoid serializing the vRendererBase object and returning the internal server paths to the client
+			if ($currentResult instanceof vRendererBase)
 				return $currentResult;
 		}
 
-		kEventsManager::flushEvents(true);
+		vEventsManager::flushEvents(true);
 		return $results;
 	}
 	
@@ -377,7 +377,7 @@ class KalturaFrontController
 			return $this->getValueFromObject($object->$currentProperty, $path);
 		}
 		
-		if ($object instanceof KalturaTypedArray)
+		if ($object instanceof VidiunTypedArray)
 		{
 			if($currentProperty == "_all")
 			{
@@ -422,14 +422,14 @@ class KalturaFrontController
 			case E_NOTICE:
 			case E_STRICT:
 			case E_USER_NOTICE:
-				KalturaLog::log(sprintf($errorFormat, $errFile, $errLine, $errStr), KalturaLog::NOTICE);
+				VidiunLog::log(sprintf($errorFormat, $errFile, $errLine, $errStr), VidiunLog::NOTICE);
 				break;
 			case E_USER_WARNING:
 			case E_WARNING:
-				KalturaLog::log(sprintf($errorFormat, $errFile, $errLine, $errStr), KalturaLog::WARN);
+				VidiunLog::log(sprintf($errorFormat, $errFile, $errLine, $errStr), VidiunLog::WARN);
 				break;
 			case E_DEPRECATED:
-				KalturaLog::log(sprintf($errorFormat, $errFile, $errLine, $errStr), KalturaLog::NOTICE);
+				VidiunLog::log(sprintf($errorFormat, $errFile, $errLine, $errStr), VidiunLog::NOTICE);
 				break;
 			default: // throw it as an exception
 				throw new ErrorException($errStr, 0, $errNo, $errFile, $errLine);
@@ -438,113 +438,113 @@ class KalturaFrontController
 	
 	public function getExceptionObject($ex, $service, $action)
 	{
-		KalturaResponseCacher::adjustApiCacheForException($ex);
+		VidiunResponseCacher::adjustApiCacheForException($ex);
 
 		$object = null;
-		if ($ex instanceof KalturaAPIException)
+		if ($ex instanceof VidiunAPIException)
 		{
-			KalturaLog::err($ex);
+			VidiunLog::err($ex);
 			$object = $ex;
 		}
 		else if ($ex instanceof APIException)  // don't let unwanted exception to be serialized
 		{
 			$args = $ex->extra_data;
-			$reflectionException = new ReflectionClass("KalturaAPIException");
+			$reflectionException = new ReflectionClass("VidiunAPIException");
 			$ex = $reflectionException->newInstanceArgs($args);
-			KalturaLog::err($ex);
+			VidiunLog::err($ex);
 			$object = $ex;
 		}
-		else if ($ex instanceof kCoreException)
+		else if ($ex instanceof vCoreException)
 		{
 			switch($ex->getCode())
 			{
-				case kCoreException::USER_BLOCKED:
-					$object = new KalturaAPIException(KalturaErrors::USER_BLOCKED);
+				case vCoreException::USER_BLOCKED:
+					$object = new VidiunAPIException(VidiunErrors::USER_BLOCKED);
 					break;
-				case kCoreException::PARTNER_BLOCKED:
-					$object = new KalturaAPIException(KalturaErrors::SERVICE_FORBIDDEN_CONTENT_BLOCKED);
-					break;
-					
-				case kCoreException::INVALID_KS:
-					$object = new KalturaAPIException(KalturaErrors::INVALID_KS, $ex->getData(), ks::INVALID_STR, 'INVALID_STR');
+				case vCoreException::PARTNER_BLOCKED:
+					$object = new VidiunAPIException(VidiunErrors::SERVICE_FORBIDDEN_CONTENT_BLOCKED);
 					break;
 					
-				case kCoreException::MAX_NUMBER_OF_ACCESS_CONTROLS_REACHED:
-					$object = new KalturaAPIException(KalturaErrors::MAX_NUMBER_OF_ACCESS_CONTROLS_REACHED, $ex->getData());
+				case vCoreException::INVALID_VS:
+					$object = new VidiunAPIException(VidiunErrors::INVALID_VS, $ex->getData(), vs::INVALID_STR, 'INVALID_STR');
 					break;
 					
-				case kCoreException::MAX_CATEGORIES_PER_ENTRY:
-					$object = new KalturaAPIException(KalturaErrors::MAX_CATEGORIES_FOR_ENTRY_REACHED, $ex->getData());
+				case vCoreException::MAX_NUMBER_OF_ACCESS_CONTROLS_REACHED:
+					$object = new VidiunAPIException(VidiunErrors::MAX_NUMBER_OF_ACCESS_CONTROLS_REACHED, $ex->getData());
 					break;
 					
-				case kCoreException::MAX_ASSETS_PER_ENTRY:
-					$object = new KalturaAPIException(KalturaErrors::MAX_ASSETS_FOR_ENTRY_REACHED, asset::MAX_ASSETS_PER_ENTRY);
+				case vCoreException::MAX_CATEGORIES_PER_ENTRY:
+					$object = new VidiunAPIException(VidiunErrors::MAX_CATEGORIES_FOR_ENTRY_REACHED, $ex->getData());
+					break;
+					
+				case vCoreException::MAX_ASSETS_PER_ENTRY:
+					$object = new VidiunAPIException(VidiunErrors::MAX_ASSETS_FOR_ENTRY_REACHED, asset::MAX_ASSETS_PER_ENTRY);
 					break;
 				
-				case kCoreException::SEARCH_TOO_GENERAL:
-					$object = new KalturaAPIException(KalturaErrors::SEARCH_TOO_GENERAL);
+				case vCoreException::SEARCH_TOO_GENERAL:
+					$object = new VidiunAPIException(VidiunErrors::SEARCH_TOO_GENERAL);
 					break;
 					
-				case kCoreException::SOURCE_FILE_NOT_FOUND:
-					$object = new KalturaAPIException(KalturaErrors::SOURCE_FILE_NOT_FOUND);
+				case vCoreException::SOURCE_FILE_NOT_FOUND:
+					$object = new VidiunAPIException(VidiunErrors::SOURCE_FILE_NOT_FOUND);
 					break;
 					
 				case APIErrors::INVALID_ACTIONS_LIMIT:
-					$object = new KalturaAPIException(APIErrors::INVALID_ACTIONS_LIMIT);
+					$object = new VidiunAPIException(APIErrors::INVALID_ACTIONS_LIMIT);
 					break;
 					
 				case APIErrors::PRIVILEGE_IP_RESTRICTION:
-					$object = new KalturaAPIException(APIErrors::PRIVILEGE_IP_RESTRICTION);
+					$object = new VidiunAPIException(APIErrors::PRIVILEGE_IP_RESTRICTION);
 					break;
 					
 				case APIErrors::INVALID_SET_ROLE:
-					$object = new KalturaAPIException(APIErrors::INVALID_SET_ROLE);
+					$object = new VidiunAPIException(APIErrors::INVALID_SET_ROLE);
 					break;
 					
 				case APIErrors::UNKNOWN_ROLE_ID:
-					$object = new KalturaAPIException(APIErrors::UNKNOWN_ROLE_ID);
+					$object = new VidiunAPIException(APIErrors::UNKNOWN_ROLE_ID);
 					break;
 					
 				case APIErrors::SEARCH_ENGINE_QUERY_FAILED:
-					$object = new KalturaAPIException(APIErrors::SEARCH_ENGINE_QUERY_FAILED);
+					$object = new VidiunAPIException(APIErrors::SEARCH_ENGINE_QUERY_FAILED);
 					break;
 					
-				case kCoreException::FILE_NOT_FOUND:
-					$object = new KalturaAPIException(KalturaErrors::FILE_NOT_FOUND);
+				case vCoreException::FILE_NOT_FOUND:
+					$object = new VidiunAPIException(VidiunErrors::FILE_NOT_FOUND);
 					break;
 					
-				case kCoreException::LOCK_TIMED_OUT:
-					$object = new KalturaAPIException(KalturaErrors::LOCK_TIMED_OUT);
+				case vCoreException::LOCK_TIMED_OUT:
+					$object = new VidiunAPIException(VidiunErrors::LOCK_TIMED_OUT);
 					break;
 					
-				case kCoreException::SPHINX_CRITERIA_EXCEEDED_MAX_MATCHES_ALLOWED:
-					$object = new KalturaAPIException(KalturaErrors::SPHINX_CRITERIA_EXCEEDED_MAX_MATCHES_ALLOWED);
+				case vCoreException::SPHINX_CRITERIA_EXCEEDED_MAX_MATCHES_ALLOWED:
+					$object = new VidiunAPIException(VidiunErrors::SPHINX_CRITERIA_EXCEEDED_MAX_MATCHES_ALLOWED);
 					break;
 
-				case kCoreException::INVALID_ENTRY_ID:
-					$object = new KalturaAPIException(KalturaErrors::INVALID_ENTRY_ID, $ex->getData());
+				case vCoreException::INVALID_ENTRY_ID:
+					$object = new VidiunAPIException(VidiunErrors::INVALID_ENTRY_ID, $ex->getData());
 					break;
 					
-				case kCoreException::MAX_FILE_SYNCS_FOR_OBJECT_PER_DAY_REACHED:
-					$object = new KalturaAPIException(KalturaErrors::MAX_FILE_SYNCS_FOR_OBJECT_PER_DAY_REACHED, $ex->getData());
+				case vCoreException::MAX_FILE_SYNCS_FOR_OBJECT_PER_DAY_REACHED:
+					$object = new VidiunAPIException(VidiunErrors::MAX_FILE_SYNCS_FOR_OBJECT_PER_DAY_REACHED, $ex->getData());
 					break;
 
-				case kCoreException::ID_NOT_FOUND:
-					$object = new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $ex->getData());
+				case vCoreException::ID_NOT_FOUND:
+					$object = new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $ex->getData());
 					break;
-				case kCoreException::FILE_PENDING:
-					$object = new KalturaAPIException(KalturaErrors::FILE_PENDING);
+				case vCoreException::FILE_PENDING:
+					$object = new VidiunAPIException(VidiunErrors::FILE_PENDING);
 					break;
 
-				case kCoreException::DRUID_QUERY_TIMED_OUT:
-					$object = new KalturaAPIException(KalturaErrors::DRUID_QUERY_TIMED_OUT);
+				case vCoreException::DRUID_QUERY_TIMED_OUT:
+					$object = new VidiunAPIException(VidiunErrors::DRUID_QUERY_TIMED_OUT);
 					break;
 			}
 		}
 		else if ($ex instanceof PropelException)
 		{
-			KalturaLog::alert($ex);
-			$object = new KalturaAPIException(KalturaErrors::INTERNAL_DATABASE_ERROR);
+			VidiunLog::alert($ex);
+			$object = new VidiunAPIException(VidiunErrors::INTERNAL_DATABASE_ERROR);
 		}
 
 		$exceptionClass = get_class($ex);
@@ -555,8 +555,8 @@ class KalturaFrontController
 
 		if (!$object)
 		{
-			KalturaLog::crit($ex);
-			$object = new KalturaAPIException(KalturaErrors::INTERNAL_SERVERL_ERROR);
+			VidiunLog::crit($ex);
+			$object = new VidiunAPIException(VidiunErrors::INTERNAL_SERVERL_ERROR);
 		}
 
 		return $this->handleErrorMapping($object, $service, $action);
@@ -567,10 +567,10 @@ class KalturaFrontController
 		if (is_null($this->exceptionHandlers))
 		{
 			$this->exceptionHandlers = array();
-			$handlers = KalturaPluginManager::getPluginInstances('IKalturaExceptionHandler');
+			$handlers = VidiunPluginManager::getPluginInstances('IVidiunExceptionHandler');
 			foreach ($handlers as $handler)
 			{
-				/* @var $handler IKalturaExceptionHandler */
+				/* @var $handler IVidiunExceptionHandler */
 				$this->exceptionHandlers = array_merge($this->exceptionHandlers, $handler->getExceptionMap());
 			}
 		}
@@ -583,20 +583,20 @@ class KalturaFrontController
 		// Return a serializer according to the given format
 		switch ($format)
 		{
-			case KalturaResponseType::RESPONSE_TYPE_XML:
-				return new KalturaXmlSerializer($ignoreNull);
+			case VidiunResponseType::RESPONSE_TYPE_XML:
+				return new VidiunXmlSerializer($ignoreNull);
 		
-			case KalturaResponseType::RESPONSE_TYPE_PHP:
-				return new KalturaPhpSerializer();
+			case VidiunResponseType::RESPONSE_TYPE_PHP:
+				return new VidiunPhpSerializer();
 		
-			case KalturaResponseType::RESPONSE_TYPE_JSON:
-				return new KalturaJsonSerializer();
+			case VidiunResponseType::RESPONSE_TYPE_JSON:
+				return new VidiunJsonSerializer();
 					
-			case KalturaResponseType::RESPONSE_TYPE_JSONP:
-				return new KalturaJsonProcSerializer();
+			case VidiunResponseType::RESPONSE_TYPE_JSONP:
+				return new VidiunJsonProcSerializer();
 				 
 			default:
-				return KalturaPluginManager::loadObject('KalturaSerializer', $format);
+				return VidiunPluginManager::loadObject('VidiunSerializer', $format);
 		}		
 	}
 	
@@ -612,25 +612,25 @@ class KalturaFrontController
 		}
 		
 		// Determine the output format (or default to XML)
-		$format = isset($this->params["format"]) ? $this->params["format"] : KalturaResponseType::RESPONSE_TYPE_XML;
+		$format = isset($this->params["format"]) ? $this->params["format"] : VidiunResponseType::RESPONSE_TYPE_XML;
 		
 		// Create a serializer according to the given format
 		$serializer = $this->setSerializer($format, $ignoreNull);
 		if(empty($serializer))
-			throw new KalturaAPIException(APIErrors::UNKNOWN_RESPONSE_FORMAT, $format);
+			throw new VidiunAPIException(APIErrors::UNKNOWN_RESPONSE_FORMAT, $format);
 		
 		$this->serializer = $serializer;
 	}
 	
 	public function serializeResponse($object)
 	{
-		if ($object instanceof kRendererBase)
+		if ($object instanceof vRendererBase)
 		{
 			return $object;
 		}
 		
 		$start = microtime(true);
-		KalturaLog::debug("Serialize start");
+		VidiunLog::debug("Serialize start");
 
 		// Set HTTP headers
 		if(isset($this->params['content-type']))
@@ -651,7 +651,7 @@ class KalturaFrontController
 		// Post processing (handle special cases)
 		$result = $this->serializer->getHeader() . $serializedObject . $this->serializer->getFooter($this->end - $this->start);
 		
-		KalturaLog::debug("Serialize took - " . (microtime(true) - $start));
+		VidiunLog::debug("Serialize took - " . (microtime(true) - $start));
 		return $result;
 	}
 	
@@ -673,15 +673,15 @@ class KalturaFrontController
 		return $serializedObject;
 	}
 
-	protected function handleErrorMapping(KalturaAPIException $apiException, $service, $action)
+	protected function handleErrorMapping(VidiunAPIException $apiException, $service, $action)
 	{
-		if (!kConf::hasParam('api_strict_error_map'))
+		if (!vConf::hasParam('api_strict_error_map'))
 		{
-			KalturaLog::err('api_strict_error_map was not found in kConf and is mandatory!');
-			return new KalturaAPIException(KalturaErrors::INTERNAL_SERVERL_ERROR);
+			VidiunLog::err('api_strict_error_map was not found in vConf and is mandatory!');
+			return new VidiunAPIException(VidiunErrors::INTERNAL_SERVERL_ERROR);
 		}
 
-		$map = kConf::get('api_strict_error_map');
+		$map = vConf::get('api_strict_error_map');
 		if (!is_array($map))
 			return $apiException;
 
@@ -698,24 +698,24 @@ class KalturaFrontController
 
 		if (array_search($apiException->getCode(), $whiteListedErrors, true) !== false)
 		{
-			KalturaLog::debug('Returning white-listed error: '.$apiException->getCode());
+			VidiunLog::debug('Returning white-listed error: '.$apiException->getCode());
 			return $apiException;
 		}
 
 		// finally, replace the error or return null as default
 		if ($defaultNull)
 		{
-			KalturaLog::debug('Replacing error code "' . $apiException->getCode() . '" with null result');
+			VidiunLog::debug('Replacing error code "' . $apiException->getCode() . '" with null result');
 			return null;
 		}
 		else
 		{
-			$reflectionException = new ReflectionClass("KalturaAPIException");
+			$reflectionException = new ReflectionClass("VidiunAPIException");
 			$errorStr = constant($defaultError);
 			$args = array_merge(array($errorStr), $apiException->getArgs());
-			/** @var KalturaAPIException $replacedException */
+			/** @var VidiunAPIException $replacedException */
 			$replacedException = $reflectionException->newInstanceArgs($args);
-			KalturaLog::debug('Replacing error code "' . $apiException->getCode() . '" with error code "' . $replacedException->getCode() . '"');
+			VidiunLog::debug('Replacing error code "' . $apiException->getCode() . '" with error code "' . $replacedException->getCode() . '"');
 			return $replacedException;
 		}
 	}
@@ -723,7 +723,7 @@ class KalturaFrontController
 	public function serialize($object, $className, $serializerType, IResponseProfile $coreResponseProfile = null)
 	{
 		if (!class_exists($className)) {
-			KalturaLog::err("Class [$className] was not found!");
+			VidiunLog::err("Class [$className] was not found!");
 			return null;
 		}
 		
@@ -732,16 +732,16 @@ class KalturaFrontController
 		
 		if($coreResponseProfile)
 		{
-			$responseProfile = KalturaBaseResponseProfile::getInstance($coreResponseProfile);
+			$responseProfile = VidiunBaseResponseProfile::getInstance($coreResponseProfile);
 		}
 			
-		// if KalturaBaseEntry, KalturaCuePoint, KalturaAsset
+		// if VidiunBaseEntry, VidiunCuePoint, VidiunAsset
 		if (is_subclass_of($className, 'IApiObjectFactory')) 
 		{
 			$apiObject = $className::getInstance($object, $responseProfile);
 		}		
 
-		// if KalturaObject
+		// if VidiunObject
 		elseif (is_subclass_of($className, 'IApiObject')) 
 		{
 			$apiObject = new $className();

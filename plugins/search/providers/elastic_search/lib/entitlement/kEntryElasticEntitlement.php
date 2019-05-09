@@ -4,7 +4,7 @@
  * @package plugins.elasticSearch
  * @subpackage lib.entitlement
  */
-class kEntryElasticEntitlement extends kBaseElasticEntitlement
+class vEntryElasticEntitlement extends vBaseElasticEntitlement
 {
     
     public static $privacyContext = null;
@@ -19,10 +19,10 @@ class kEntryElasticEntitlement extends kBaseElasticEntitlement
     public static $filteredCategoryIds = array();
 
     protected static $entitlementContributors = array(
-        'kElasticEntryDisableEntitlementDecorator',
-        'kElasticPublicEntriesEntitlementDecorator',
-        'kElasticUserCategoryEntryEntitlementDecorator',
-        'kElasticUserEntitlementDecorator',
+        'vElasticEntryDisableEntitlementDecorator',
+        'vElasticPublicEntriesEntitlementDecorator',
+        'vElasticUserCategoryEntryEntitlementDecorator',
+        'vElasticUserEntitlementDecorator',
     );
 
     protected static function initialize()
@@ -34,21 +34,21 @@ class kEntryElasticEntitlement extends kBaseElasticEntitlement
             return;
 
         self::initializeParentEntitlement();
-        self::initializeDisableEntitlement(self::$ks);
-        self::initializeUserEntitlement(self::$ks);
+        self::initializeDisableEntitlement(self::$vs);
+        self::initializeUserEntitlement(self::$vs);
 
-        if(self::$ks)
-            self::$privacyContext = self::$ks->getPrivacyContext();
+        if(self::$vs)
+            self::$privacyContext = self::$vs->getPrivacyContext();
 
-        self::initializePublicEntryEntitlement(self::$ks);
-        self::initializeUserCategoryEntryEntitlement(self::$ks);
+        self::initializePublicEntryEntitlement(self::$vs);
+        self::initializeUserCategoryEntryEntitlement(self::$vs);
         
         self::$isInitialized = true;
     }
 
     private static function shouldEnforceEntitlement()
     {
-        return kEntitlementUtils::getEntitlementEnforcement();
+        return vEntitlementUtils::getEntitlementEnforcement();
     }
 
     private static function initializeParentEntitlement()
@@ -60,38 +60,38 @@ class kEntryElasticEntitlement extends kBaseElasticEntitlement
         }
     }
 
-    private static function initializeDisableEntitlement($ks)
+    private static function initializeDisableEntitlement($vs)
     {
-        if($ks && count($ks->getDisableEntitlementForEntry()))
+        if($vs && count($vs->getDisableEntitlementForEntry()))
         {
             //disable entitlement for entries
-            $entries = $ks->getDisableEntitlementForEntry();
+            $entries = $vs->getDisableEntitlementForEntry();
             self::$entriesDisabledEntitlement = $entries;
         }
     }
 
-    private static function initializeUserEntitlement($ks)
+    private static function initializeUserEntitlement($vs)
     {
-        if($ks && self::$kuserId)
+        if($vs && self::$vuserId)
         {
             self::$userEntitlement = true;
         }
     }
 
-    private static function initializePublicEntryEntitlement($ks)
+    private static function initializePublicEntryEntitlement($vs)
     {
-        if(!$ks)
+        if(!$vs)
         {
             self::$publicActiveEntries = true; //add entries that are not in any active category
         }
-        else //ks
+        else //vs
         {
             if(!PermissionPeer::isValidForPartner(PermissionName::FEATURE_DISABLE_CATEGORY_LIMIT, self::$partnerId) && !self::$privacyContext)
                 self::$publicEntries = true; //return entries that are not in any active/pending category
         }
     }
 
-    private static function initializeUserCategoryEntryEntitlement($ks)
+    private static function initializeUserCategoryEntryEntitlement($vs)
     {
         if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_DISABLE_CATEGORY_LIMIT, self::$partnerId))
         {
@@ -99,10 +99,10 @@ class kEntryElasticEntitlement extends kBaseElasticEntitlement
                 self::$entryInSomeCategoryNoPC = true;
         }
 
-        if(self::$kuserId)
+        if(self::$vuserId)
         {
             $privacy = array(PrivacyType::ALL);
-            if($ks && !$ks->isAnonymousSession())
+            if($vs && !$vs->isAnonymousSession())
                 $privacy[] = PrivacyType::AUTHENTICATED_USERS;
 
             self::$privacy = $privacy;

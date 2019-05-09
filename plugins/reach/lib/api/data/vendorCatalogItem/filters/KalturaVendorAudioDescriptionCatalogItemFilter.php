@@ -3,12 +3,12 @@
  * @package plugins.reach
  * @subpackage api.filters
  */
-class KalturaVendorAudioDescriptionCatalogItemFilter extends KalturaVendorCaptionsCatalogItemBaseFilter
+class VidiunVendorAudioDescriptionCatalogItemFilter extends VidiunVendorCaptionsCatalogItemBaseFilter
 {
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, $type = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, $type = null)
 	{
 		if(!$type)
-			$type = KalturaVendorServiceFeature::AUDIO_DESCRIPTION;
+			$type = VidiunVendorServiceFeature::AUDIO_DESCRIPTION;
 		
 		return parent::getTypeListResponse($pager, $responseProfile, $type);
 	}

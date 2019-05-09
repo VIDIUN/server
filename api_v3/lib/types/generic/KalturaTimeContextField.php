@@ -1,11 +1,11 @@
 <?php
 /**
- * Represents the current time context on Kaltura servers
+ * Represents the current time context on Vidiun servers
  * 
  * @package api
  * @subpackage objects
  */
-class KalturaTimeContextField extends KalturaIntegerField
+class VidiunTimeContextField extends VidiunIntegerField
 {
 	/**
 	 * Time offset in seconds since current time
@@ -24,12 +24,12 @@ class KalturaTimeContextField extends KalturaIntegerField
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kTimeContextField();
+			$dbObject = new vTimeContextField();
 			
 		return parent::toObject($dbObject, $skip);
 	}

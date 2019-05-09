@@ -5,7 +5,7 @@
  * @subpackage api.objects
  * @relatedService ignore
  */
-class KalturaReachProfile extends KalturaObject implements IRelatedFilterable
+class VidiunReachProfile extends VidiunObject implements IRelatedFilterable
 {
 	const MAX_DICTIONARY_LENGTH = 1000;
 	
@@ -43,60 +43,60 @@ class KalturaReachProfile extends KalturaObject implements IRelatedFilterable
 	public $updatedAt;
 	
 	/**
-	 * @var KalturaReachProfileStatus
+	 * @var VidiunReachProfileStatus
 	 * @readonly
 	 * @filter eq,in
 	 */
 	public $status;
 	
 	/**
-	 * @var KalturaReachProfileType
+	 * @var VidiunReachProfileType
 	 * @filter eq,in
 	 */
 	public $profileType;
 	
 	/**
-	 * @var KalturaVendorCatalogItemOutputFormat
+	 * @var VidiunVendorCatalogItemOutputFormat
 	 */
 	public $defaultOutputFormat;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $enableMachineModeration;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $enableHumanModeration;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $autoDisplayMachineCaptionsOnPlayer;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $autoDisplayHumanCaptionsOnPlayer;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $enableMetadataExtraction;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $enableSpeakerChangeIndication;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $enableAudioTags;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $enableProfanityRemoval;
 	
@@ -106,17 +106,17 @@ class KalturaReachProfile extends KalturaObject implements IRelatedFilterable
 	public $maxCharactersPerCaptionLine;
 	
 	/**
-	 * @var KalturaReachProfileContentDeletionPolicy
+	 * @var VidiunReachProfileContentDeletionPolicy
 	 */
 	public $contentDeletionPolicy;
 	
 	/**
-	 * @var KalturaRuleArray
+	 * @var VidiunRuleArray
 	 */
 	public $rules;
 	
 	/**
-	 * @var KalturaBaseVendorCredit
+	 * @var VidiunBaseVendorCredit
 	 * @requiresPermission update
 	 */
 	public $credit;
@@ -128,7 +128,7 @@ class KalturaReachProfile extends KalturaObject implements IRelatedFilterable
 	public $usedCredit;
 	
 	/**
-	 * @var KalturaDictionaryArray
+	 * @var VidiunDictionaryArray
 	 */
 	public $dictionaries;
 	
@@ -140,7 +140,7 @@ class KalturaReachProfile extends KalturaObject implements IRelatedFilterable
 	
 	/**
 	 * Indicates in which region the task processing should task place
-	 * @var KalturaVendorTaskProcessingRegion
+	 * @var VidiunVendorTaskProcessingRegion
 	 */
 	public $vendorTaskProcessingRegion;
 	
@@ -173,7 +173,7 @@ class KalturaReachProfile extends KalturaObject implements IRelatedFilterable
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::getMapBetweenObjects()
+	 * @see VidiunCuePoint::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -181,7 +181,7 @@ class KalturaReachProfile extends KalturaObject implements IRelatedFilterable
 	}
 	
 	/* (non-PHPdoc)
- 	 * @see KalturaObject::toInsertableObject()
+ 	 * @see VidiunObject::toInsertableObject()
  	 */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -228,16 +228,16 @@ class KalturaReachProfile extends KalturaObject implements IRelatedFilterable
 	
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		/* @var $dbObject ReachProfile */
 		parent::doFromObject($dbObject, $responseProfile);
 		
 		if ($this->shouldGet('credit', $responseProfile) && !is_null($dbObject->getCredit()))
 		{
-			$this->credit = KalturaBaseVendorCredit::getInstance($dbObject->getCredit(), $responseProfile);
+			$this->credit = VidiunBaseVendorCredit::getInstance($dbObject->getCredit(), $responseProfile);
 		}
 	}
 	
@@ -249,12 +249,12 @@ class KalturaReachProfile extends KalturaObject implements IRelatedFilterable
 		$languages = array();
 		foreach ($this->dictionaries as $dictionary)
 		{
-			/* @var KalturaDictionary $dictionary */
+			/* @var VidiunDictionary $dictionary */
 			if (in_array($dictionary->language, $languages))
-				throw new KalturaAPIException(KalturaReachErrors::DICTIONARY_LANGUAGE_DUPLICATION, $dictionary->language);
+				throw new VidiunAPIException(VidiunReachErrors::DICTIONARY_LANGUAGE_DUPLICATION, $dictionary->language);
 			
 			if (!$this->validateDictionaryLength($dictionary->data))
-				throw new KalturaAPIException(KalturaReachErrors::MAX_DICTIONARY_LENGTH_EXCEEDED, $dictionary->language, self::MAX_DICTIONARY_LENGTH);
+				throw new VidiunAPIException(VidiunReachErrors::MAX_DICTIONARY_LENGTH_EXCEEDED, $dictionary->language, self::MAX_DICTIONARY_LENGTH);
 			
 			$languages[] = $dictionary->language;
 		}

@@ -29,8 +29,8 @@ class GenericDistributionProviderPeer extends BaseGenericDistributionProviderPee
 		self::$s_criteria_filter->setFilter ( $c );
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null , $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null , $vidiunNetwork = null)
 	{
-		return parent::addPartnerToCriteria($partnerId, $privatePartnerData, "$partnerGroup,0", $kalturaNetwork);
+		return parent::addPartnerToCriteria($partnerId, $privatePartnerData, "$partnerGroup,0", $vidiunNetwork);
 	}
 }

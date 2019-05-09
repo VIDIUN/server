@@ -1,5 +1,5 @@
 <?php
-class kDropFolderContentProcessorJobData extends kJobData
+class vDropFolderContentProcessorJobData extends vJobData
 {
     /**
      * @var string
@@ -133,13 +133,13 @@ class kDropFolderContentProcessorJobData extends kJobData
 			case DropFolderType::SFTP:
 			case DropFolderType::SCP:
 			case DropFolderType::S3:
-				$res = new kDropFolderContentProcessorJobData();
+				$res = new vDropFolderContentProcessorJobData();
 			default:
-				$res = KalturaPluginManager::loadObject('kDropFolderContentProcessorJobData', $dropFolderType);
+				$res = VidiunPluginManager::loadObject('vDropFolderContentProcessorJobData', $dropFolderType);
 		}
 		
 		if (!$res)
-			$res = new kDropFolderContentProcessorJobData();
+			$res = new vDropFolderContentProcessorJobData();
 		
 		return $res;
 	}

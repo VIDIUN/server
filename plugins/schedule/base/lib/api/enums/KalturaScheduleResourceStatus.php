@@ -3,6 +3,6 @@
  * @package plugins.schedule
  * @subpackage api.enum
  */
-class KalturaScheduleResourceStatus extends KalturaEnum implements ScheduleResourceStatus
+class VidiunScheduleResourceStatus extends VidiunEnum implements ScheduleResourceStatus
 {
 }

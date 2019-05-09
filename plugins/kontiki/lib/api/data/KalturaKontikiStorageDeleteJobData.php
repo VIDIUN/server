@@ -3,7 +3,7 @@
  * @package plugins.kontiki
  * @subpackage api.object
  */
-class KalturaKontikiStorageDeleteJobData extends KalturaStorageDeleteJobData
+class VidiunKontikiStorageDeleteJobData extends VidiunStorageDeleteJobData
 {
      /**
      * Unique Kontiki MOID for the content uploaded to Kontiki
@@ -23,7 +23,7 @@ class KalturaKontikiStorageDeleteJobData extends KalturaStorageDeleteJobData
     );
     
     /* (non-PHPdoc)
-     * @see KalturaObject::getMapBetweenObjects()
+     * @see VidiunObject::getMapBetweenObjects()
      */
     public function getMapBetweenObjects ( )
     {
@@ -31,12 +31,12 @@ class KalturaKontikiStorageDeleteJobData extends KalturaStorageDeleteJobData
     }
     
     /* (non-PHPdoc)
-     * @see KalturaObject::toObject()
+     * @see VidiunObject::toObject()
      */
     public function toObject($dbData = null, $props_to_skip = array()) 
     {
         if(is_null($dbData))
-            $dbData = new kKontikiStorageDeleteJobData();
+            $dbData = new vKontikiStorageDeleteJobData();
             
         return parent::toObject($dbData);
     }

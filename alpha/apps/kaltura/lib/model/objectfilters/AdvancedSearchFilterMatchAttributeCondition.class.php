@@ -7,14 +7,14 @@ class AdvancedSearchFilterMatchAttributeCondition extends AdvancedSearchFilterMa
 {
 	/**
 	 * Adds conditions, matches and where clauses to the query
-	 * @param IKalturaDbQuery $query
+	 * @param IVidiunDbQuery $query
 	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
-		if (!$query instanceof IKalturaIndexQuery)
+		if (!$query instanceof IVidiunIndexQuery)
 			return;
 
-		$matchText = '"'.KalturaCriteria::escapeString($this->value).'"';
+		$matchText = '"'.VidiunCriteria::escapeString($this->value).'"';
 		if ($this->not)
 			$matchText = '!'.$matchText;
 		$query->addMatch("@$this->field (".$matchText.")");

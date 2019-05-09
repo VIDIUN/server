@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaAssetParamsOutputFilter extends KalturaAssetParamsOutputBaseFilter
+class VidiunAssetParamsOutputFilter extends VidiunAssetParamsOutputBaseFilter
 {
 }

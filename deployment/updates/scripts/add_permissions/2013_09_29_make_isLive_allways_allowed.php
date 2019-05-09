@@ -3,7 +3,7 @@
  * @package deployment
  * @subpackage falcon.roles_and_permissions
  * 
- * isLive not require KS
+ * isLive not require VS
  */
 
 $script = realpath(dirname(__FILE__) . '/../../../../') . '/alpha/scripts/utils/permissions/addPermissionsAndItems.php';

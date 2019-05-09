@@ -3,7 +3,7 @@
  * @package api
  * @subpackage v3
  */
-class KalturaSyndicationFeedRenderer
+class VidiunSyndicationFeedRenderer
 {
 	const MAX_RETUREND_ENTRIES = 10000;
 	const ENTRY_PEER_LIMIT_QUERY = 100;
@@ -23,7 +23,7 @@ class KalturaSyndicationFeedRenderer
 	private $limit = self::MAX_RETUREND_ENTRIES;
 
 	/**
-	 * @var KalturaBaseSyndicationFeed
+	 * @var VidiunBaseSyndicationFeed
 	 */
 	public $syndicationFeed = null;
 	
@@ -64,7 +64,7 @@ class KalturaSyndicationFeedRenderer
 	
 	/**
 	 * The critria used currently
-	 * @var KalturaCriteria
+	 * @var VidiunCriteria
 	 */
 	private $currentCriteria = null;
 	
@@ -75,7 +75,7 @@ class KalturaSyndicationFeedRenderer
 	private $executed = false;
 	
 	/**
-	 * @var KalturaCriteria
+	 * @var VidiunCriteria
 	 */
 	private $baseCriteria = null;
 	
@@ -111,7 +111,7 @@ class KalturaSyndicationFeedRenderer
 	 */
 	private $addLinkForNextIteration = false;
 	
-	public function __construct($feedId, $feedProcessingKey = null, $ks = null, $state = null)
+	public function __construct($feedId, $feedProcessingKey = null, $vs = null, $state = null)
 	{
 		$this->feedProcessingKey = $feedProcessingKey;
 		
@@ -122,17 +122,17 @@ class KalturaSyndicationFeedRenderer
 		$this->syndicationFeedDb = $syndicationFeedDB = syndicationFeedPeer::retrieveByPK($feedId);
 		if( !$syndicationFeedDB )
 			throw new Exception("Feed Id not found");
-		kCurrentContext::initKsPartnerUser($ks, $syndicationFeedDB->getPartnerId(), '');
-		kPermissionManager::init();
-		kEntitlementUtils::initEntitlementEnforcement($syndicationFeedDB->getPartnerId(), $syndicationFeedDB->getEnforceEntitlement());
+		vCurrentContext::initVsPartnerUser($vs, $syndicationFeedDB->getPartnerId(), '');
+		vPermissionManager::init();
+		vEntitlementUtils::initEntitlementEnforcement($syndicationFeedDB->getPartnerId(), $syndicationFeedDB->getEnforceEntitlement());
 
-		// in case ks exists, it's privacy context will be added in entryPeer::setDefaultCriteriaFilter
-		$ksObj = kCurrentContext::$ks_object;
+		// in case vs exists, it's privacy context will be added in entryPeer::setDefaultCriteriaFilter
+		$vsObj = vCurrentContext::$vs_object;
 		
-		if((!$ksObj || !$ksObj->getPrivacyContext()) && !is_null($syndicationFeedDB->getPrivacyContext()) && $syndicationFeedDB->getPrivacyContext() != '')
-			kEntitlementUtils::setPrivacyContextSearch($syndicationFeedDB->getPrivacyContext());
+		if((!$vsObj || !$vsObj->getPrivacyContext()) && !is_null($syndicationFeedDB->getPrivacyContext()) && $syndicationFeedDB->getPrivacyContext() != '')
+			vEntitlementUtils::setPrivacyContextSearch($syndicationFeedDB->getPrivacyContext());
 			
-		$tmpSyndicationFeed = KalturaSyndicationFeedFactory::getInstanceByType($syndicationFeedDB->getType());
+		$tmpSyndicationFeed = VidiunSyndicationFeedFactory::getInstanceByType($syndicationFeedDB->getType());
 		$tmpSyndicationFeed->fromObject($syndicationFeedDB);
 		$this->syndicationFeed = $tmpSyndicationFeed;
 		
@@ -194,7 +194,7 @@ class KalturaSyndicationFeedRenderer
 			$this->entryFilters = myPlaylistUtils::getPlaylistFiltersById($this->syndicationFeed->playlistId);
 			foreach($this->entryFilters as $entryFilter)
 			{
-				$entryFilter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);		// partner scope already attached
+				$entryFilter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);		// partner scope already attached
 			}
 			
 			$playlist = entryPeer::retrieveByPK( $this->syndicationFeed->playlistId );
@@ -213,7 +213,7 @@ class KalturaSyndicationFeedRenderer
 		}
 			
 		$microTimeEnd = microtime(true);
-		KalturaLog::info("syndicationFeedRenderer- initialization done [".($microTimeEnd - $microTimeStart)."]");		
+		VidiunLog::info("syndicationFeedRenderer- initialization done [".($microTimeEnd - $microTimeStart)."]");		
 	}
 	
 	private function extractStateParams($state)
@@ -237,7 +237,7 @@ class KalturaSyndicationFeedRenderer
 
 	private function shouldAddNextLink()
 	{
-		if(($this->syndicationFeed->type == KalturaSyndicationFeedType::KALTURA || $this->syndicationFeed->type == KalturaSyndicationFeedType::KALTURA_XSLT) && (!$this->syndicationFeed->playlistId && $this->syndicationFeed->pageSize && $this->syndicationFeed->pageSize <= self::PAGE_SIZE_MAX_VALUE))
+		if(($this->syndicationFeed->type == VidiunSyndicationFeedType::VIDIUN || $this->syndicationFeed->type == VidiunSyndicationFeedType::VIDIUN_XSLT) && (!$this->syndicationFeed->playlistId && $this->syndicationFeed->pageSize && $this->syndicationFeed->pageSize <= self::PAGE_SIZE_MAX_VALUE))
 		{
 			return true;
 		}
@@ -253,7 +253,7 @@ class KalturaSyndicationFeedRenderer
 			return;
 			
 		$entryFilter = new entryFilter();
-		$entryFilter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);		// partner scope already attached
+		$entryFilter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);		// partner scope already attached
 		$entryFilter->setFlavorParamsMatchOr($this->syndicationFeed->flavorParamId);
 		$entryFilter->attachToCriteria($this->baseCriteria);
 	}
@@ -286,7 +286,7 @@ class KalturaSyndicationFeedRenderer
 		if($this->executed)
 			return;
 			
-		$entryFilter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);		// partner scope already attached
+		$entryFilter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);		// partner scope already attached
 		$entryFilter->attachToCriteria($this->baseCriteria);
 	}
 	
@@ -404,7 +404,7 @@ class KalturaSyndicationFeedRenderer
 			return;
 
 		$this->entriesCurrentPage = null;
-		kMemoryManager::clearMemory();
+		vMemoryManager::clearMemory();
 		
 		if($this->currentCriteria)
 		{
@@ -461,7 +461,7 @@ class KalturaSyndicationFeedRenderer
 	}
 	
 	/**
-	 * @return KalturaCriteria
+	 * @return VidiunCriteria
 	 */
 	private function getNextCriteria()
 	{
@@ -526,7 +526,7 @@ class KalturaSyndicationFeedRenderer
 			
 		$microTimeStart = microtime(true);
 		
-		$renderer = KalturaSyndicationFeedFactory::getRendererByType($this->syndicationFeed->type);
+		$renderer = VidiunSyndicationFeedFactory::getRendererByType($this->syndicationFeed->type);
 		$renderer->init($this->syndicationFeed, $this->syndicationFeedDb, $this->mimeType);
 		
 		header($renderer->handleHttpHeader());
@@ -534,14 +534,14 @@ class KalturaSyndicationFeedRenderer
 		
 		$cacheStore = null;
 		if($renderer->shouldEnableCache())
-			$cacheStore = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_FEED_ENTRY);
+			$cacheStore = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_FEED_ENTRY);
 		
 		$protocol = infraRequestUtils::getProtocol();
 		$cachePrefix = "feed_{$this->syndicationFeed->id}/{$protocol}/entry_";
 		$feedUpdatedAt = $this->syndicationFeedDb->getUpdatedAt(null);
 
 		$e = null;
-		$kalturaFeed = $this->syndicationFeed->type == KalturaSyndicationFeedType::KALTURA || in_array($this->syndicationFeed->type, array(KalturaSyndicationFeedType::KALTURA_XSLT, KalturaSyndicationFeedType::ROKU_DIRECT_PUBLISHER, KalturaSyndicationFeedType::OPERA_TV_SNAP));
+		$vidiunFeed = $this->syndicationFeed->type == VidiunSyndicationFeedType::VIDIUN || in_array($this->syndicationFeed->type, array(VidiunSyndicationFeedType::VIDIUN_XSLT, VidiunSyndicationFeedType::ROKU_DIRECT_PUBLISHER, VidiunSyndicationFeedType::OPERA_TV_SNAP));
 		$nextEntry = $this->getNextEntry();
 	
 		$lastCreatedAtVal = null;
@@ -587,14 +587,14 @@ class KalturaSyndicationFeedRenderer
 			if ($xml === false)
 			{	
 				$e = null;
-				if(!$kalturaFeed) {
-					$e = new KalturaMediaEntry();
+				if(!$vidiunFeed) {
+					$e = new VidiunMediaEntry();
 					$e->fromObject($entry);
 				}
 				
 				$flavorAssetUrl = is_null($e) ? null : $this->getFlavorAssetUrl($e);
 				
-				if(!$kalturaFeed && $entry->getType() !== entryType::MIX && is_null($flavorAssetUrl)) {
+				if(!$vidiunFeed && $entry->getType() !== entryType::MIX && is_null($flavorAssetUrl)) {
 					$xml = ""; // cache empty result to avoid checking getFlavorAssetUrl next time
 				} else {
 					$xml = $renderer->handleBody($entry, $e, $flavorAssetUrl);
@@ -625,7 +625,7 @@ class KalturaSyndicationFeedRenderer
 			apc_delete($this->feedProcessingKey);
 				
 		$microTimeEnd = microtime(true);
-		KalturaLog::info("syndicationFeedRenderer- render time for ({$this->syndicationFeed->type}) is " . ($microTimeEnd - $microTimeStart));
+		VidiunLog::info("syndicationFeedRenderer- render time for ({$this->syndicationFeed->type}) is " . ($microTimeEnd - $microTimeStart));
 	}
 	
 	/*
@@ -642,14 +642,14 @@ class KalturaSyndicationFeedRenderer
 	
 	private function getExternalStorageUrl(Partner $partner, flavorAsset $flavorAsset, FileSyncKey $key)
 	{
-		if(!$partner->getStorageServePriority() || $partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY)
+		if(!$partner->getStorageServePriority() || $partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY)
 			return null;
 			
-		if($partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_FIRST)
-			if(kFileSyncUtils::getReadyInternalFileSyncForKey($key)) // check if having file sync on kaltura dcs
+		if($partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_FIRST)
+			if(vFileSyncUtils::getReadyInternalFileSyncForKey($key)) // check if having file sync on vidiun dcs
 				return null;
 				
-		$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($key);
+		$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($key);
 		if(!$fileSync)
 			return null;
 			
@@ -664,7 +664,7 @@ class KalturaSyndicationFeedRenderer
 			$clientTag = 'feed:' . $this->syndicationFeedDb->getId();
 		
 			if (is_null($deliveryProfile))
-				$url = infraRequestUtils::PROTOCOL_HTTP . "://" . kConf::get("cdn_api_host");
+				$url = infraRequestUtils::PROTOCOL_HTTP . "://" . vConf::get("cdn_api_host");
 			else
 				$url = requestUtils::getApiCdnHost();
 		
@@ -688,13 +688,13 @@ class KalturaSyndicationFeedRenderer
 		return $url;
 	}
 	
-	private function getFlavorAssetUrl($kalturaEntry)
+	private function getFlavorAssetUrl($vidiunEntry)
 	{
 		$partner = PartnerPeer::retrieveByPK($this->syndicationFeed->partnerId);
 		if(!$partner)
 			return null;
 	
-		$flavorAsset = assetPeer::retrieveByEntryIdAndParams($kalturaEntry->id,$this->syndicationFeed->flavorParamId);
+		$flavorAsset = assetPeer::retrieveByEntryIdAndParams($vidiunEntry->id,$this->syndicationFeed->flavorParamId);
 		if (!$flavorAsset)
 			return null;
 					
@@ -708,18 +708,18 @@ class KalturaSyndicationFeedRenderer
 		
 		if($this->syndicationFeedDb->getServePlayManifest())
 		{
-			$shouldAddKtToken = false;
-			if($this->syndicationFeed->type == KalturaSyndicationFeedType::ITUNES)
+			$shouldAddVtToken = false;
+			if($this->syndicationFeed->type == VidiunSyndicationFeedType::ITUNES)
 			{
 				$entry = $flavorAsset->getentry();
 				$accessControl = $entry->getaccessControl();
 				if ($accessControl && $accessControl->hasRules())
-					$shouldAddKtToken = true;
+					$shouldAddVtToken = true;
 			}
 
 			$cdnHost = requestUtils::getApiCdnHost();
 			$clientTag = 'feed:' . $this->syndicationFeedDb->getId();
-			$url = $cdnHost . $flavorAsset->getPlayManifestUrl($clientTag, null, PlaybackProtocol::HTTP , $shouldAddKtToken);
+			$url = $cdnHost . $flavorAsset->getPlayManifestUrl($clientTag, null, PlaybackProtocol::HTTP , $shouldAddVtToken);
 		}
 		else
 		{

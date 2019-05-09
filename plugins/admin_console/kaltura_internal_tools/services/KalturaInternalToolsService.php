@@ -3,11 +3,11 @@
  * 
  * Internal Tools Service
  * 
- * @service KalturaInternalTools
- * @package plugins.KalturaInternalTools
+ * @service VidiunInternalTools
+ * @package plugins.VidiunInternalTools
  * @subpackage api.services
  */
-class KalturaInternalToolsService extends KalturaBaseService
+class VidiunInternalToolsService extends VidiunBaseService
 {
 
 

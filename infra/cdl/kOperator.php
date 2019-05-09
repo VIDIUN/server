@@ -3,15 +3,15 @@
  * @package infra
  * @subpackage Conversion
  */
-class kOperator
+class vOperator
 {
 	public function __construct($opr=null)
 	{
 		if($opr==null){
-//			KalturaLog::info("no input");
+//			VidiunLog::info("no input");
 			return;
 		}
-//		KalturaLog::info(print_r($opr,true));
+//		VidiunLog::info(print_r($opr,true));
 		$this->id = $opr->id;
 		$this->extra = isset($opr->extra) ? $opr->extra : null;
 		$this->command = isset($opr->command) ? $opr->command : null;

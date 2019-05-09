@@ -3,9 +3,9 @@
  * @package plugins.avidemux
  * @subpackage lib
  */
-class KDLOperatorAvidemux extends KDLOperatorBase {
+class VDLOperatorAvidemux extends VDLOperatorBase {
 
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 // avidemux2_cli.exe --force-alt-h264 n --autoindex --rebuild-index --nogui --force-smart --load split_810.mp4 --append split_840.mp4 --save ccc.mp4
 // avidemux2_cli.exe --force-alt-h264 n --autoindex --rebuild-index --nogui --force-smart --load split_810.mp4 --append split_840.mp4 --save ccc.mp4
@@ -17,22 +17,22 @@ $vcodecParams = "fl";
 $format = "fl";
 $acodec = "libmp3lam";
 
-		$cmdStr = "--force-alt-h264 n --autoindex --rebuild-index --nogui --force-smart --load ".KDLCmdlinePlaceholders::InFileName;
-		$cmdStr.= " --video-codec x264 --save ".KDLCmdlinePlaceholders::OutFileName." --quit";
+		$cmdStr = "--force-alt-h264 n --autoindex --rebuild-index --nogui --force-smart --load ".VDLCmdlinePlaceholders::InFileName;
+		$cmdStr.= " --video-codec x264 --save ".VDLCmdlinePlaceholders::OutFileName." --quit";
 	return $cmdStr;
 		if($target->_video){
 			$vid = $target->_video;
 			switch($vid->_id){
-				case KDLVideoTarget::H263:
+				case VDLVideoTarget::H263:
 					$vcodecParams = "263";
 					break; 
-				case KDLVideoTarget::H264:
-				case KDLVideoTarget::H264B:
-				case KDLVideoTarget::H264M:
-				case KDLVideoTarget::H264H:
+				case VDLVideoTarget::H264:
+				case VDLVideoTarget::H264B:
+				case VDLVideoTarget::H264M:
+				case VDLVideoTarget::H264H:
 					$vcodecParams = "avc1";
 					break; 				
-				case KDLVideoTarget::MPEG4:
+				case VDLVideoTarget::MPEG4:
 					$vcodecParams = "mp4v";
 					break;
 				default:
@@ -70,19 +70,19 @@ $acodec = "libmp3lam";
 		if(0 && $target->_audio) {
 			$aud = $target->_audio;
 			switch($aud->_id){
-				case KDLAudioTarget::MP3:
+				case VDLAudioTarget::MP3:
 					$acodec = "libmp3lame";
 					break;
-				case KDLAudioTarget::AAC:
+				case VDLAudioTarget::AAC:
 					$acodec = "libfaac";
 					break;
-				case KDLAudioTarget::VORBIS:
+				case VDLAudioTarget::VORBIS:
 					$acodec = "libvorbis";
 					break;
-				case KDLAudioTarget::WMA:
+				case VDLAudioTarget::WMA:
 					$acodec = "wmav2";
 					break;
-				case KDLAudioTarget::COPY:
+				case VDLAudioTarget::COPY:
 					$acodec = "copy";
 					break;
 				default:
@@ -118,22 +118,22 @@ $acodec = "libmp3lam";
 		if(0 && $target->_container) {
 			$cont = $target->_container;
 			switch($cont->_id){
-				case KDLContainerTarget::FLV:
+				case VDLContainerTarget::FLV:
 					$format = "flv";
 					break;
-				case KDLContainerTarget::AVI:
-				case KDLContainerTarget::MP4:
-				case KDLContainerTarget::_3GP:
-				case KDLContainerTarget::MOV:
-				case KDLContainerTarget::MP3:
-				case KDLContainerTarget::OGG:
-				case KDLContainerTarget::WEBM:
+				case VDLContainerTarget::AVI:
+				case VDLContainerTarget::MP4:
+				case VDLContainerTarget::_3GP:
+				case VDLContainerTarget::MOV:
+				case VDLContainerTarget::MP3:
+				case VDLContainerTarget::OGG:
+				case VDLContainerTarget::WEBM:
 					$format = $cont->_id;
 					break;
-				case KDLContainerTarget::WMV:
+				case VDLContainerTarget::WMV:
 					$format = "asf";
 					break;
-				case KDLContainerTarget::MKV:
+				case VDLContainerTarget::MKV:
 					$format = "matroska";
 					break;
 				default:
@@ -146,7 +146,7 @@ $acodec = "libmp3lam";
 		if($extra)
 			$cmdStr .= " ".$extra;
 		
-		$cmdStr .= " --replacefile -1 ".KDLCmdlinePlaceholders::OutFileName;
+		$cmdStr .= " --replacefile -1 ".VDLCmdlinePlaceholders::OutFileName;
 
 		return $cmdStr;
 	}

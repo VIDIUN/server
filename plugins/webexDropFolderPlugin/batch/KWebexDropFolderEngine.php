@@ -2,7 +2,7 @@
 /**
  * 
  */
-class KWebexDropFolderEngine extends KDropFolderEngine
+class VWebexDropFolderEngine extends VDropFolderEngine
 {
 	const ZERO_DATE = '12/31/1971 00:00:01';
 	const ARF_FORMAT = 'ARF';
@@ -31,21 +31,21 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 	}
 
 	/**
-	 * @param $dropFolder KalturaWebexDropFolder
+	 * @param $dropFolder VidiunWebexDropFolder
 	 */
 	public function setDropFolder($dropFolder)
 	{
 		$this->dropFolder = $dropFolder;
 	}
 
-	public function watchFolder(KalturaDropFolder $dropFolder)
+	public function watchFolder(VidiunDropFolder $dropFolder)
 	{
-		/* @var $dropFolder KalturaWebexDropFolder */
+		/* @var $dropFolder VidiunWebexDropFolder */
 		$this->dropFolder = $dropFolder;
 		$this->webexWrapper = new webexWrapper($this->dropFolder->webexServiceUrl . '/' . $this->dropFolder->path, $this->getWebexClientSecurityContext(),
-			array('KalturaLog', 'err'), array('KalturaLog', 'debug'));
+			array('VidiunLog', 'err'), array('VidiunLog', 'debug'));
 
-		KalturaLog::info('Watching folder ['.$this->dropFolder->id.']');
+		VidiunLog::info('Watching folder ['.$this->dropFolder->id.']');
 		$startTime = null;
 		$endTime = null;
 		if ($this->dropFolder->incremental)
@@ -66,10 +66,10 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 		}
 		else
 		{
-			KalturaLog::info('No new files to handle at this time');
+			VidiunLog::info('No new files to handle at this time');
 		}
 
-		if ($this->dropFolder->fileDeletePolicy != KalturaDropFolderFileDeletePolicy::MANUAL_DELETE)
+		if ($this->dropFolder->fileDeletePolicy != VidiunDropFolderFileDeletePolicy::MANUAL_DELETE)
 		{
 			$this->purgeFiles();
 		}
@@ -87,11 +87,11 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 
 	/**
 	 * @param $physicalFiles array
-	 * @return kWebexHandleFilesResult
+	 * @return vWebexHandleFilesResult
 	 */
 	public function HandleNewFiles($physicalFiles)
 	{
-		$result = new kWebexHandleFilesResult();
+		$result = new vWebexHandleFilesResult();
 		$dropFolderFilesMap = $this->getDropFolderFilesMap();
 		$maxTime = $this->dropFolder->lastFileTimestamp;
 		foreach ($physicalFiles as $physicalFile)
@@ -100,8 +100,8 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 			$physicalFileName = $physicalFile->getName() . '_' . $physicalFile->getRecordingID();
 			if (in_array($physicalFile->getFormat(),self::$unsupported_file_formats))
 			{
-				KalturaLog::info('Recording with id [' . $physicalFile->getRecordingID() . '] format [' . $physicalFile->getFormat() . '] is incompatible with the Kaltura conversion processes. Ignoring.');
-				$result->addFileName(kWebexHandleFilesResult::FILE_NOT_ADDED_TO_DROP_FOLDER, $physicalFileName);
+				VidiunLog::info('Recording with id [' . $physicalFile->getRecordingID() . '] format [' . $physicalFile->getFormat() . '] is incompatible with the Vidiun conversion processes. Ignoring.');
+				$result->addFileName(vWebexHandleFilesResult::FILE_NOT_ADDED_TO_DROP_FOLDER, $physicalFileName);
 				continue;
 			}
 
@@ -110,26 +110,26 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 				if($this->handleFileAdded($physicalFile))
 				{
 					$maxTime = max(strtotime($physicalFile->getCreateTime()), $maxTime);
-					KalturaLog::info("Added new file with name [$physicalFileName]. maxTime updated: $maxTime");
-					$result->addFileName(kWebexHandleFilesResult::FILE_ADDED_TO_DROP_FOLDER, $physicalFileName);
+					VidiunLog::info("Added new file with name [$physicalFileName]. maxTime updated: $maxTime");
+					$result->addFileName(vWebexHandleFilesResult::FILE_ADDED_TO_DROP_FOLDER, $physicalFileName);
 				}
 				else
-					$result->addFileName(kWebexHandleFilesResult::FILE_NOT_ADDED_TO_DROP_FOLDER, $physicalFileName);
+					$result->addFileName(vWebexHandleFilesResult::FILE_NOT_ADDED_TO_DROP_FOLDER, $physicalFileName);
 			}
 			else //drop folder file entry found
 			{
 				$dropFolderFile = $dropFolderFilesMap[$physicalFileName];
 				unset($dropFolderFilesMap[$physicalFileName]);
-				if ($dropFolderFile->status == KalturaDropFolderFileStatus::UPLOADING && $this->handleExistingDropFolderFile($dropFolderFile))
-					$result->addFileName(kWebexHandleFilesResult::FILE_HANDLED, $physicalFileName);
+				if ($dropFolderFile->status == VidiunDropFolderFileStatus::UPLOADING && $this->handleExistingDropFolderFile($dropFolderFile))
+					$result->addFileName(vWebexHandleFilesResult::FILE_HANDLED, $physicalFileName);
 				else
-					$result->addFileName(kWebexHandleFilesResult::FILE_NOT_HANDLED, $physicalFileName);
+					$result->addFileName(vWebexHandleFilesResult::FILE_NOT_HANDLED, $physicalFileName);
 			}
 		}
 
 		if ($this->dropFolder->incremental && $maxTime > $this->dropFolder->lastFileTimestamp)
 		{
-			$updateDropFolder = new KalturaDropFolder();
+			$updateDropFolder = new VidiunDropFolder();
 			$updateDropFolder->lastFileTimestamp = $maxTime;
 			$this->dropFolderPlugin->dropFolder->update($this->dropFolder->id, $updateDropFolder);
 		}
@@ -147,35 +147,35 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 		}
 	}
 
-	public function processFolder (KalturaBatchJob $job, KalturaDropFolderContentProcessorJobData $data)
+	public function processFolder (VidiunBatchJob $job, VidiunDropFolderContentProcessorJobData $data)
 	{
-		KBatchBase::impersonate ($job->partnerId);
+		VBatchBase::impersonate ($job->partnerId);
 		
-		/* @var $data KalturaWebexDropFolderContentProcessorJobData */
+		/* @var $data VidiunWebexDropFolderContentProcessorJobData */
 		$dropFolder = $this->dropFolderPlugin->dropFolder->get ($data->dropFolderId);
 		//In the case of the webex drop folder engine, the only possible contentMatch policy is ADD_AS_NEW.
 		//Any other policy should cause an error.
 		switch ($data->contentMatchPolicy)
 		{
-			case KalturaDropFolderContentFileHandlerMatchPolicy::ADD_AS_NEW:
+			case VidiunDropFolderContentFileHandlerMatchPolicy::ADD_AS_NEW:
 				$this->addAsNewContent($job, $data, $dropFolder);
 				break;
 			default:
-				throw new kApplicativeException(KalturaDropFolderErrorCode::DROP_FOLDER_APP_ERROR, 'Content match policy not allowed for Webex drop folders');
+				throw new vApplicativeException(VidiunDropFolderErrorCode::DROP_FOLDER_APP_ERROR, 'Content match policy not allowed for Webex drop folders');
 				break;
 		}
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 	}
 
 	protected function listRecordings ($startTime = null, $endTime = null, $startFrom = 1)
 	{
-		KalturaLog::info("Fetching list of recordings from Webex, startTime [$startTime], endTime [$endTime] of types ".print_r($this->getServiceTypes()));
+		VidiunLog::info("Fetching list of recordings from Webex, startTime [$startTime], endTime [$endTime] of types ".print_r($this->getServiceTypes()));
 		$result = $this->webexWrapper->listRecordings($this->getServiceTypes(), $startTime, $endTime, $startFrom);
 		if($result)
 		{
 			$recording = $result->getRecording();
-			KalturaLog::info('Recordings fetched: ' . print_r($recording, true));
+			VidiunLog::info('Recordings fetched: ' . print_r($recording, true));
 		}
 
 		return $result;
@@ -183,9 +183,9 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 
 	protected function listAllRecordings ($startTime = null, $endTime = null)
 	{
-		KalturaLog::info("Fetching list of all recordings from Webex, startTime [$startTime], endTime [$endTime] of types ".print_r($this->getServiceTypes()));
+		VidiunLog::info("Fetching list of all recordings from Webex, startTime [$startTime], endTime [$endTime] of types ".print_r($this->getServiceTypes()));
 		$result = $this->webexWrapper->listAllRecordings($this->getServiceTypes(), $startTime, $endTime);
-		KalturaLog::info('Recordings fetched: '.print_r($result, true) );
+		VidiunLog::info('Recordings fetched: '.print_r($result, true) );
 		return $result;
 	}
 
@@ -211,11 +211,11 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 		if ($this->dropFolder->deleteFromTimestamp && $this->dropFolder->deleteFromTimestamp > (time() - self::MAX_QUERY_DATE_RANGE_DAYS * 86400))
 			$createTimeStart = date('m/j/Y H:i:s', $this->dropFolder->deleteFromTimestamp);
 
-		KalturaLog::info("Finding files to purge.");
+		VidiunLog::info("Finding files to purge.");
 		$result = $this->listAllRecordings($createTimeStart, $createTimeEnd);
 		if($result)
 		{
-			KalturaLog::info("Files to delete: " . count($result));
+			VidiunLog::info("Files to delete: " . count($result));
 			$dropFolderFilesMap = $this->getDropFolderFilesMap();
 		}
 
@@ -231,7 +231,7 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 			}
 			catch (Exception $e)
 			{
-				KalturaLog::err('Error occurred: ' . print_r($e, true));
+				VidiunLog::err('Error occurred: ' . print_r($e, true));
 				continue;
 			}
 
@@ -243,13 +243,13 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 				}
 				catch (Exception $e)
 				{
-					KalturaLog::err("File [$physicalFileName] could not be removed from recycle bin. Purge manually");
+					VidiunLog::err("File [$physicalFileName] could not be removed from recycle bin. Purge manually");
 					continue;
 				}
 			}
 
-			KalturaLog::info("File [$physicalFileName] successfully purged. Purging drop folder file");
-			$this->dropFolderFileService->updateStatus($dropFolderFilesMap[$physicalFileName]->id, KalturaDropFolderFileStatus::PURGED);
+			VidiunLog::info("File [$physicalFileName] successfully purged. Purging drop folder file");
+			$this->dropFolderFileService->updateStatus($dropFolderFilesMap[$physicalFileName]->id, VidiunDropFolderFileStatus::PURGED);
 		}
 	}
 
@@ -262,26 +262,26 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 	{
 		if (!array_key_exists($physicalFileName, $dropFolderFilesMap))
 		{
-			KalturaLog::info("File with name $physicalFileName not handled yet. Ignoring");
+			VidiunLog::info("File with name $physicalFileName not handled yet. Ignoring");
 			return false;
 		}
 
 		$dropFolderFile = $dropFolderFilesMap[$physicalFileName];
-		/* @var $dropFolderFile KalturaWebexDropFolderFile */
-		if (!in_array($dropFolderFile->status, array(KalturaDropFolderFileStatus::HANDLED, KalturaDropFolderFileStatus::DELETED)))
+		/* @var $dropFolderFile VidiunWebexDropFolderFile */
+		if (!in_array($dropFolderFile->status, array(VidiunDropFolderFileStatus::HANDLED, VidiunDropFolderFileStatus::DELETED)))
 		{
-			KalturaLog::info("File with name $physicalFileName not in final status. Ignoring");
+			VidiunLog::info("File with name $physicalFileName not in final status. Ignoring");
 			return false;
 		}
 
 		$deleteTime = $dropFolderFile->updatedAt + $this->dropFolder->autoFileDeleteDays*86400;
 		if (time() < $deleteTime)
 		{
-			KalturaLog::info("File with name $physicalFileName- not time to delete yet. Ignoring");
+			VidiunLog::info("File with name $physicalFileName- not time to delete yet. Ignoring");
 			return false;
 		}
 
-		KalturaLog::info("Going to purge file:$physicalFileName.");
+		VidiunLog::info("Going to purge file:$physicalFileName.");
 		return true;
 	}
 	
@@ -289,7 +289,7 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 	{
 		try 
 		{
-			$newDropFolderFile = new KalturaWebexDropFolderFile();
+			$newDropFolderFile = new VidiunWebexDropFolderFile();
 	    	$newDropFolderFile->dropFolderId = $this->dropFolder->id;
 	    	$newDropFolderFile->fileName = $webexFile->getName() . '_' . $webexFile->getRecordingID();
 	    	$newDropFolderFile->fileSize = WebexPlugin::getSizeFromWebexContentUrl($webexFile->getFileURL());
@@ -299,19 +299,19 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 			$newDropFolderFile->recordingId = $webexFile->getRecordingID();
 			$newDropFolderFile->webexHostId = $webexFile->getHostWebExID();
 			$newDropFolderFile->contentUrl = $webexFile->getFileURL();
-			KalturaLog::debug("Adding new WebexDropFolderFile: " . print_r($newDropFolderFile, true));
+			VidiunLog::debug("Adding new WebexDropFolderFile: " . print_r($newDropFolderFile, true));
 			$dropFolderFile = $this->dropFolderFileService->add($newDropFolderFile);
 			
 			return $dropFolderFile;
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Cannot add new drop folder file with name ['.$webexFile->getName() . '_' . $webexFile->getRecordingID().'] - '.$e->getMessage());
+			VidiunLog::err('Cannot add new drop folder file with name ['.$webexFile->getName() . '_' . $webexFile->getRecordingID().'] - '.$e->getMessage());
 			return null;
 		}
 	}
 
-	protected function handleExistingDropFolderFile (KalturaWebexDropFolderFile $dropFolderFile)
+	protected function handleExistingDropFolderFile (VidiunWebexDropFolderFile $dropFolderFile)
 	{
 		try
 		{
@@ -319,28 +319,28 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 		}
 		catch (Exception $e)
 		{
-			$this->handleFileError($dropFolderFile->id, KalturaDropFolderFileStatus::ERROR_HANDLING, KalturaDropFolderFileErrorCode::ERROR_READING_FILE,
+			$this->handleFileError($dropFolderFile->id, VidiunDropFolderFileStatus::ERROR_HANDLING, VidiunDropFolderFileErrorCode::ERROR_READING_FILE,
 					DropFolderPlugin::ERROR_READING_FILE_MESSAGE, $e);
 			return null;
 		}
 
 		if (!$dropFolderFile->fileSize)
 		{
-			$this->handleFileError($dropFolderFile->id, KalturaDropFolderFileStatus::ERROR_HANDLING, KalturaDropFolderFileErrorCode::ERROR_READING_FILE,
+			$this->handleFileError($dropFolderFile->id, VidiunDropFolderFileStatus::ERROR_HANDLING, VidiunDropFolderFileErrorCode::ERROR_READING_FILE,
 				DropFolderPlugin::ERROR_READING_FILE_MESSAGE . '[' . $dropFolderFile->contentUrl . ']');
 		}
 		else if ($dropFolderFile->fileSize < $updatedFileSize)
 		{
 			try
 			{
-				$updateDropFolderFile = new KalturaDropFolderFile();
+				$updateDropFolderFile = new VidiunDropFolderFile();
 				$updateDropFolderFile->fileSize = $updatedFileSize;
 
 				return $this->dropFolderFileService->update($dropFolderFile->id, $updateDropFolderFile);
 			}
 			catch (Exception $e)
 			{
-				$this->handleFileError($dropFolderFile->id, KalturaDropFolderFileStatus::ERROR_HANDLING, KalturaDropFolderFileErrorCode::ERROR_UPDATE_FILE,
+				$this->handleFileError($dropFolderFile->id, VidiunDropFolderFileStatus::ERROR_HANDLING, VidiunDropFolderFileErrorCode::ERROR_UPDATE_FILE,
 					DropFolderPlugin::ERROR_UPDATE_FILE_MESSAGE, $e);
 				return null;
 			}
@@ -350,14 +350,14 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 			$time = time();
 			$fileSizeLastSetAt = $this->dropFolder->fileSizeCheckInterval + $dropFolderFile->fileSizeLastSetAt;
 
-			KalturaLog::info("time [$time] fileSizeLastSetAt [$fileSizeLastSetAt]");
+			VidiunLog::info("time [$time] fileSizeLastSetAt [$fileSizeLastSetAt]");
 
 			// check if fileSizeCheckInterval time has passed since the last file size update
 			if ($time > $fileSizeLastSetAt) {
 				try {
-					return $this->dropFolderFileService->updateStatus($dropFolderFile->id, KalturaDropFolderFileStatus::PENDING);
-				} catch (KalturaException $e) {
-					$this->handleFileError($dropFolderFile->id, KalturaDropFolderFileStatus::ERROR_HANDLING, KalturaDropFolderFileErrorCode::ERROR_UPDATE_FILE,
+					return $this->dropFolderFileService->updateStatus($dropFolderFile->id, VidiunDropFolderFileStatus::PENDING);
+				} catch (VidiunException $e) {
+					$this->handleFileError($dropFolderFile->id, VidiunDropFolderFileStatus::ERROR_HANDLING, VidiunDropFolderFileErrorCode::ERROR_UPDATE_FILE,
 						DropFolderPlugin::ERROR_UPDATE_FILE_MESSAGE, $e);
 					return null;
 				}
@@ -365,12 +365,12 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 		}
 	}
 
-	protected function addAsNewContent (KalturaBatchJob $job, KalturaWebexDropFolderContentProcessorJobData $data, KalturaWebexDropFolder $folder)
+	protected function addAsNewContent (VidiunBatchJob $job, VidiunWebexDropFolderContentProcessorJobData $data, VidiunWebexDropFolder $folder)
 	{
-		/* @var $data KalturaWebexDropFolderContentProcessorJobData */
+		/* @var $data VidiunWebexDropFolderContentProcessorJobData */
 		$resource = $this->getIngestionResource($job, $data);
-		$newEntry = new KalturaMediaEntry();
-		$newEntry->mediaType = KalturaMediaType::VIDEO;
+		$newEntry = new VidiunMediaEntry();
+		$newEntry->mediaType = VidiunMediaType::VIDEO;
 		$newEntry->conversionProfileId = $data->conversionProfileId;
 		$newEntry->name = $data->parsedSlug;
 		$newEntry->description = $data->description;
@@ -379,32 +379,32 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 		$newEntry->referenceId = $data->parsedSlug;
 		$newEntry->adminTags = self::ADMIN_TAG_WEBEX;
 			
-		KBatchBase::$kClient->startMultiRequest();
-		$addedEntry = KBatchBase::$kClient->media->add($newEntry, null);
-		KBatchBase::$kClient->baseEntry->addContent($addedEntry->id, $resource);
-		$result = KBatchBase::$kClient->doMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
+		$addedEntry = VBatchBase::$vClient->media->add($newEntry, null);
+		VBatchBase::$vClient->baseEntry->addContent($addedEntry->id, $resource);
+		$result = VBatchBase::$vClient->doMultiRequest();
 		
-		if ($result [1] && $result[1] instanceof KalturaBaseEntry)
+		if ($result [1] && $result[1] instanceof VidiunBaseEntry)
 		{
 			$entry = $result [1];
 			$this->createCategoryAssociations ($folder, $entry->userId, $entry->id);
 		}
 	}
 
-	protected function retrieveUserFromWebexHostId (KalturaWebexDropFolderContentProcessorJobData $data, KalturaWebexDropFolder $folder)
+	protected function retrieveUserFromWebexHostId (VidiunWebexDropFolderContentProcessorJobData $data, VidiunWebexDropFolder $folder)
 	{
 		if ($folder->metadataProfileId && $folder->webexHostIdMetadataFieldName && $data->webexHostId)
 		{
-			$filter = new KalturaUserFilter();
-			$filter->advancedSearch = new KalturaMetadataSearchItem();
+			$filter = new VidiunUserFilter();
+			$filter->advancedSearch = new VidiunMetadataSearchItem();
 			$filter->advancedSearch->metadataProfileId = $folder->metadataProfileId;
-			$webexHostIdSearchCondition = new KalturaSearchCondition();
+			$webexHostIdSearchCondition = new VidiunSearchCondition();
 			$webexHostIdSearchCondition->field = $folder->webexHostIdMetadataFieldName;
 			$webexHostIdSearchCondition->value = $data->webexHostId;
 			$filter->advancedSearch->items = array($webexHostIdSearchCondition);
 			try
 			{
-				$result = KBatchBase::$kClient->user->listAction ($filter, new KalturaFilterPager());
+				$result = VBatchBase::$vClient->user->listAction ($filter, new VidiunFilterPager());
 				
 				if ($result->totalCount)
 				{
@@ -414,7 +414,7 @@ class KWebexDropFolderEngine extends KDropFolderEngine
 			}
 			catch (Exception $e)
 			{
-				KalturaLog::err('Error encountered. Code: ['. $e->getCode() . '] Message: [' . $e->getMessage() . ']');
+				VidiunLog::err('Error encountered. Code: ['. $e->getCode() . '] Message: [' . $e->getMessage() . ']');
 			}
 
 		}

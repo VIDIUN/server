@@ -6,7 +6,7 @@
  * @subpackage model
  *
  */
-class kPendingMediaEntry
+class vPendingMediaEntry
 {
 	/**
 	 * @var string

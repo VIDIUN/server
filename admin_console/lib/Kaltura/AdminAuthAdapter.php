@@ -3,13 +3,13 @@
  * @package Admin
  * @subpackage Authentication
  */
-class Kaltura_AdminAuthAdapter extends Infra_AuthAdapter
+class Vidiun_AdminAuthAdapter extends Infra_AuthAdapter
 {
 	/* (non-PHPdoc)
 	 * @see Infra_AuthAdapter::getUserIdentity()
 	 */
-	protected function getUserIdentity(Kaltura_Client_Type_User $user=null, $ks=null, $partnerId=null)
+	protected function getUserIdentity(Vidiun_Client_Type_User $user=null, $vs=null, $partnerId=null)
 	{
-		return new Kaltura_AdminUserIdentity($user, $ks, $this->timezoneOffset, $partnerId);
+		return new Vidiun_AdminUserIdentity($user, $vs, $this->timezoneOffset, $partnerId);
 	}
 }

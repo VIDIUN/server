@@ -3,7 +3,7 @@
  * @package plugins.confMaps
  * @subpackage Admin
  */
-class ConfigurationMapListAction extends KalturaApplicationPlugin implements IKalturaAdminConsolePublisherAction
+class ConfigurationMapListAction extends VidiunApplicationPlugin implements IVidiunAdminConsolePublisherAction
 {
 	public function __construct()
 	{
@@ -43,7 +43,7 @@ class ConfigurationMapListAction extends KalturaApplicationPlugin implements IKa
 	    }
 
 		$client = Infra_ClientHelper::getClient();
-		$configurationPluginClient = Kaltura_Client_ConfMaps_Plugin::get($client);
+		$configurationPluginClient = Vidiun_Client_ConfMaps_Plugin::get($client);
 
 		// get results and paginate
 		$paginatorAdapter = new Infra_FilterPaginator($configurationPluginClient->confMaps, "listAction", $partnerId, $configurationMapFilter);
@@ -73,7 +73,7 @@ class ConfigurationMapListAction extends KalturaApplicationPlugin implements IKa
 			$action->view->newConfigurationMapFolderForm = $createConfigurationMapForm;
 		}
 		catch(Exception $e){
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			$action->view->errMessage = $e->getCode();
 		}
 
@@ -82,7 +82,7 @@ class ConfigurationMapListAction extends KalturaApplicationPlugin implements IKa
 	
 	protected function getConfigurationMapFilter()
 	{
-		return new Kaltura_Client_ConfMaps_Type_ConfMapsFilter();
+		return new Vidiun_Client_ConfMaps_Type_ConfMapsFilter();
 	}
 
 	public function getInstance($interface)

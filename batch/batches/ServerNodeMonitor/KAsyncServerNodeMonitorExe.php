@@ -1,12 +1,12 @@
 <?php
 /**
- * Will run the KAsyncDbCleanup 
+ * Will run the VAsyncDbCleanup 
  *
  * @package Scheduler
  * @subpackage Cleanup
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncServerNodeMonitor();
+$instance = new VAsyncServerNodeMonitor();
 $instance->run(); 
 $instance->done();

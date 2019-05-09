@@ -4,15 +4,15 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectTaskEngine
  */
-class KObjectTaskStorageExportEngine extends KObjectTaskEntryEngineBase
+class VObjectTaskStorageExportEngine extends VObjectTaskEntryEngineBase
 {
 
 	/**
-	 * @param KalturaBaseEntry $object
+	 * @param VidiunBaseEntry $object
 	 */
 	function processObject($object)
 	{
-		/** @var KalturaStorageExportObjectTask $objectTask */
+		/** @var VidiunStorageExportObjectTask $objectTask */
 		$objectTask = $this->getObjectTask();
 		if (is_null($objectTask))
 			return;
@@ -22,7 +22,7 @@ class KObjectTaskStorageExportEngine extends KObjectTaskEntryEngineBase
 		if (!$storageId)
 			throw new Exception('Storage profile was not configured');
 
-		KalturaLog::info("Submitting entry export for entry $entryId to remote storage $storageId");
+		VidiunLog::info("Submitting entry export for entry $entryId to remote storage $storageId");
 
 		$client = $this->getClient();
 		$client->baseEntry->export($entryId, $storageId);

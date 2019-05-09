@@ -81,10 +81,10 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 	protected $privacy_context;
 
 	/**
-	 * The value for the creator_kuser_id field.
+	 * The value for the creator_vuser_id field.
 	 * @var        int
 	 */
-	protected $creator_kuser_id;
+	protected $creator_vuser_id;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -313,13 +313,13 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [creator_kuser_id] column value.
+	 * Get the [creator_vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getCreatorKuserId()
+	public function getCreatorVuserId()
 	{
-		return $this->creator_kuser_id;
+		return $this->creator_vuser_id;
 	}
 
 	/**
@@ -602,27 +602,27 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 	} // setPrivacyContext()
 
 	/**
-	 * Set the value of [creator_kuser_id] column.
+	 * Set the value of [creator_vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     categoryEntry The current object (for fluent API support)
 	 */
-	public function setCreatorKuserId($v)
+	public function setCreatorVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[categoryEntryPeer::CREATOR_KUSER_ID]))
-			$this->oldColumnsValues[categoryEntryPeer::CREATOR_KUSER_ID] = $this->creator_kuser_id;
+		if(!isset($this->oldColumnsValues[categoryEntryPeer::CREATOR_VUSER_ID]))
+			$this->oldColumnsValues[categoryEntryPeer::CREATOR_VUSER_ID] = $this->creator_vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->creator_kuser_id !== $v) {
-			$this->creator_kuser_id = $v;
-			$this->modifiedColumns[] = categoryEntryPeer::CREATOR_KUSER_ID;
+		if ($this->creator_vuser_id !== $v) {
+			$this->creator_vuser_id = $v;
+			$this->modifiedColumns[] = categoryEntryPeer::CREATOR_VUSER_ID;
 		}
 
 		return $this;
-	} // setCreatorKuserId()
+	} // setCreatorVuserId()
 
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
@@ -673,7 +673,7 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 			$this->custom_data = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
 			$this->status = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
 			$this->privacy_context = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-			$this->creator_kuser_id = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
+			$this->creator_vuser_id = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -826,13 +826,13 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 				return 0;
 			}
 			
-			for ($retries = 1; $retries < KalturaPDO::SAVE_MAX_RETRIES; $retries++)
+			for ($retries = 1; $retries < VidiunPDO::SAVE_MAX_RETRIES; $retries++)
 			{
                $affectedRows = $this->doSave($con);
                 if ($affectedRows || !$this->isColumnModified(categoryEntryPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug("was unable to save! retrying for the $retries time");
+                VidiunLog::debug("was unable to save! retrying for the $retries time");
                 $criteria = $this->buildPkeyCriteria();
 				$criteria->addSelectColumn(categoryEntryPeer::CUSTOM_DATA);
                 $stmt = BasePeer::doSelect($criteria, $con);
@@ -994,7 +994,7 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1019,12 +1019,12 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1042,10 +1042,10 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1058,7 +1058,7 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 	 */
 	public function postDelete(PropelPDO $con = null)
 	{
-		kEventsManager::raiseEvent(new kObjectErasedEvent($this));
+		vEventsManager::raiseEvent(new vObjectErasedEvent($this));
 		
 		parent::postDelete($con);
 	}
@@ -1245,7 +1245,7 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 				return $this->getPrivacyContext();
 				break;
 			case 10:
-				return $this->getCreatorKuserId();
+				return $this->getCreatorVuserId();
 				break;
 			default:
 				return null;
@@ -1278,7 +1278,7 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 			$keys[7] => $this->getCustomData(),
 			$keys[8] => $this->getStatus(),
 			$keys[9] => $this->getPrivacyContext(),
-			$keys[10] => $this->getCreatorKuserId(),
+			$keys[10] => $this->getCreatorVuserId(),
 		);
 		return $result;
 	}
@@ -1341,7 +1341,7 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 				$this->setPrivacyContext($value);
 				break;
 			case 10:
-				$this->setCreatorKuserId($value);
+				$this->setCreatorVuserId($value);
 				break;
 		} // switch()
 	}
@@ -1377,7 +1377,7 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[7], $arr)) $this->setCustomData($arr[$keys[7]]);
 		if (array_key_exists($keys[8], $arr)) $this->setStatus($arr[$keys[8]]);
 		if (array_key_exists($keys[9], $arr)) $this->setPrivacyContext($arr[$keys[9]]);
-		if (array_key_exists($keys[10], $arr)) $this->setCreatorKuserId($arr[$keys[10]]);
+		if (array_key_exists($keys[10], $arr)) $this->setCreatorVuserId($arr[$keys[10]]);
 	}
 
 	/**
@@ -1399,7 +1399,7 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(categoryEntryPeer::CUSTOM_DATA)) $criteria->add(categoryEntryPeer::CUSTOM_DATA, $this->custom_data);
 		if ($this->isColumnModified(categoryEntryPeer::STATUS)) $criteria->add(categoryEntryPeer::STATUS, $this->status);
 		if ($this->isColumnModified(categoryEntryPeer::PRIVACY_CONTEXT)) $criteria->add(categoryEntryPeer::PRIVACY_CONTEXT, $this->privacy_context);
-		if ($this->isColumnModified(categoryEntryPeer::CREATOR_KUSER_ID)) $criteria->add(categoryEntryPeer::CREATOR_KUSER_ID, $this->creator_kuser_id);
+		if ($this->isColumnModified(categoryEntryPeer::CREATOR_VUSER_ID)) $criteria->add(categoryEntryPeer::CREATOR_VUSER_ID, $this->creator_vuser_id);
 
 		return $criteria;
 	}
@@ -1496,7 +1496,7 @@ abstract class BasecategoryEntry extends BaseObject  implements Persistent {
 
 		$copyObj->setPrivacyContext($this->privacy_context);
 
-		$copyObj->setCreatorKuserId($this->creator_kuser_id);
+		$copyObj->setCreatorVuserId($this->creator_vuser_id);
 
 
 		$copyObj->setNew(true);

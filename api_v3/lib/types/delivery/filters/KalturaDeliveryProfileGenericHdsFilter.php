@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaDeliveryProfileGenericHdsFilter extends KalturaDeliveryProfileGenericHdsBaseFilter
+class VidiunDeliveryProfileGenericHdsFilter extends VidiunDeliveryProfileGenericHdsBaseFilter
 {
 }

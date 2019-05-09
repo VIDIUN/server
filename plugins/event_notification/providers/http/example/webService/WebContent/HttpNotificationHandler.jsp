@@ -1,10 +1,10 @@
 <%@page import="java.io.BufferedReader"%>
 <%@page import="org.w3c.dom.Element"%>
-<%@page import="com.kaltura.client.utils.XmlUtils"%>
-<%@page import="lib.Kaltura.HttpNotificationHandler"%>
-<%@page import="com.kaltura.client.types.KalturaHttpNotification"%>
-<%@page import="com.kaltura.client.utils.ParseUtils"%>
-<%@page import="lib.Kaltura.RequestHandler"%>
+<%@page import="com.vidiun.client.utils.XmlUtils"%>
+<%@page import="lib.Vidiun.HttpNotificationHandler"%>
+<%@page import="com.vidiun.client.types.VidiunHttpNotification"%>
+<%@page import="com.vidiun.client.utils.ParseUtils"%>
+<%@page import="lib.Vidiun.RequestHandler"%>
 <%
 
 BufferedReader reader = request.getReader();
@@ -16,8 +16,8 @@ while ((line = reader.readLine()) != null){
 reader.reset();
 
 String xml = sb.toString();
-String signature = request.getHeader("x-kaltura-signature");
-RequestHandler.validateSignature(xml, SessionConfig.KALTURA_ADMIN_SECRET, signature);
+String signature = request.getHeader("x-vidiun-signature");
+RequestHandler.validateSignature(xml, SessionConfig.VIDIUN_ADMIN_SECRET, signature);
 
 int dataOffset = xml.indexOf("data=");
 if(dataOffset < 0) {
@@ -26,7 +26,7 @@ if(dataOffset < 0) {
 
 String xmlData = xml.substring(5);
 Element xmlElement = XmlUtils.parseXml(xmlData);
-KalturaHttpNotification httpNotification = ParseUtils.parseObject(KalturaHttpNotification.class, xmlElement);
+VidiunHttpNotification httpNotification = ParseUtils.parseObject(VidiunHttpNotification.class, xmlElement);
 
 HttpNotificationHandler handler = new HttpNotificationHandler();
 handler.handle(httpNotification);

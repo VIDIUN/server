@@ -3,7 +3,7 @@
  * Enable event notifications on metadata objects
  * @package plugins.metadataEventNotifications
  */
-class MetadataEventNotificationsPlugin extends KalturaPlugin implements IKalturaPending, IKalturaEnumerator, IKalturaObjectLoader, IKalturaEventNotificationContentEditor
+class MetadataEventNotificationsPlugin extends VidiunPlugin implements IVidiunPending, IVidiunEnumerator, IVidiunObjectLoader, IVidiunEventNotificationContentEditor
 {
 	const PLUGIN_NAME = 'metadataEventNotifications';
 	
@@ -17,7 +17,7 @@ class MetadataEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	const METADATA_EMAIL_NOTIFICATION_REGEX = '/\{metadata\:[^:]+\:[^}]+\}/';
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -25,20 +25,20 @@ class MetadataEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$eventNotificationVersion = new KalturaVersion(self::EVENT_NOTIFICATION_PLUGIN_VERSION_MAJOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_MINOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD);
+		$eventNotificationVersion = new VidiunVersion(self::EVENT_NOTIFICATION_PLUGIN_VERSION_MAJOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_MINOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD);
 		
-		$metadataDependency = new KalturaDependency(self::METADATA_PLUGIN_NAME);
-		$eventNotificationDependency = new KalturaDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $eventNotificationVersion);
+		$metadataDependency = new VidiunDependency(self::METADATA_PLUGIN_NAME);
+		$eventNotificationDependency = new VidiunDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $eventNotificationVersion);
 		
 		return array($metadataDependency, $eventNotificationDependency);
 	}
 			
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -52,7 +52,7 @@ class MetadataEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
@@ -60,7 +60,7 @@ class MetadataEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	}
 		
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -77,8 +77,8 @@ class MetadataEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	 */
 	public static function getEventNotificationEventObjectTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('EventNotificationEventObjectType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('EventNotificationEventObjectType', $value);
 	}
 	
 	/**
@@ -86,7 +86,7 @@ class MetadataEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/**
@@ -95,14 +95,14 @@ class MetadataEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 	 */
 	public static function editTemplateFields($sweepFieldValues, $scope, $objectType)
 	{
-		if (! ($scope instanceof kEventScope))
+		if (! ($scope instanceof vEventScope))
 			return array();
 		
 		if (!method_exists($scope->getObject(), 'getPartnerId'))
 			return array();
 		
 		$partnerId = $scope->getObject()->getPartnerId();
-		/* @var $scope kEventScope */
+		/* @var $scope vEventScope */
 		$metadataContentParameters = array();
 		foreach ($sweepFieldValues as $sweepFieldValue)
 		{
@@ -115,7 +115,7 @@ class MetadataEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 				$profile = MetadataProfilePeer::retrieveBySystemName($profileSystemName, $partnerId);
 				if (!$profile)
 				{
-					KalturaLog::info("Metadata profile with system name $profileSystemName not found for this partner. Token will be replaced with empty string.");
+					VidiunLog::info("Metadata profile with system name $profileSystemName not found for this partner. Token will be replaced with empty string.");
 					$metadataContentParameters[$match] = '';
 					continue;
 				}
@@ -125,24 +125,24 @@ class MetadataEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 				//If the metadataProfileobjectType matches the one on the emailNotification, we can proceed
 				//If the objectType of the email template is 'asset' we can use the entryId
 				//If the objectType of the email template is a metadata object we can use its id
-				if (kMetadataManager::getObjectTypeName($profile->getObjectType()) == KalturaPluginManager::getObjectClass('EventNotificationEventObjectType', $objectType))
+				if (vMetadataManager::getObjectTypeName($profile->getObjectType()) == VidiunPluginManager::getObjectClass('EventNotificationEventObjectType', $objectType))
 				{
 					$objectId = $scope->getObject()->getId();
 				}
-				elseif (kMetadataManager::getObjectTypeName($profile->getObjectType()) == 'entry'
+				elseif (vMetadataManager::getObjectTypeName($profile->getObjectType()) == 'entry'
 						&& ($scope->getObject() instanceof asset))
 				{
 					$objectId = $scope->getObject()->getEntryId();
 				}
 				elseif ($scope->getObject() instanceof categoryEntry)
 				{
-					$profileObject = kMetadataManager::getObjectTypeName($profile->getObjectType());
+					$profileObject = vMetadataManager::getObjectTypeName($profile->getObjectType());
 					$getter = "get{$profileObject}Id";
-					KalturaLog::info ("Using $getter in order to retrieve the metadata object ID");
+					VidiunLog::info ("Using $getter in order to retrieve the metadata object ID");
 					$categoryEntry = $scope->getObject();
 					$objectId = $categoryEntry->$getter();
 				}
-				elseif (KalturaPluginManager::getObjectClass('EventNotificationEventObjectType', $objectType) == MetadataPeer::OM_CLASS)
+				elseif (VidiunPluginManager::getObjectClass('EventNotificationEventObjectType', $objectType) == MetadataPeer::OM_CLASS)
 				{
 					$metadataObjectId = $scope->getObject()->getId();
 				}
@@ -159,19 +159,19 @@ class MetadataEventNotificationsPlugin extends KalturaPlugin implements IKaltura
 				else 
 				{
 					//There is not enough specification regarding the required metadataObject, abort.
-					KalturaLog::info("The template does not contain an object Id for which custom metadata can be retrieved. Token will be replaced with empty string.");
+					VidiunLog::info("The template does not contain an object Id for which custom metadata can be retrieved. Token will be replaced with empty string.");
 					$metadataContentParameters[$match] = '';
 					continue;	
 				}
 				
 				if (!$result)
 				{
-					KalturaLog::info("Metadata object could not be retrieved. Token will be replaced with empty string.");
+					VidiunLog::info("Metadata object could not be retrieved. Token will be replaced with empty string.");
 					$metadataContentParameters[$match] = '';
 					continue;
 				}
 				
-				$strvals = kMetadataManager::getMetadataValueForField($result, $fieldSystemName);
+				$strvals = vMetadataManager::getMetadataValueForField($result, $fieldSystemName);
 				foreach ($strvals as &$strval)
 				{
 					if ($format && is_numeric($strval))

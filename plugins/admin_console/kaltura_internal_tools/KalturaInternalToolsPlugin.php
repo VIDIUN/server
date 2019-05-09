@@ -1,10 +1,10 @@
 <?php
 /**
- * @package plugins.KalturaInternalTools
+ * @package plugins.VidiunInternalTools
  */
-class KalturaInternalToolsPlugin extends KalturaPlugin implements IKalturaServices, IKalturaAdminConsolePages
+class VidiunInternalToolsPlugin extends VidiunPlugin implements IVidiunServices, IVidiunAdminConsolePages
 {
-	const PLUGIN_NAME = 'KalturaInternalTools';
+	const PLUGIN_NAME = 'VidiunInternalTools';
 	
 	public static function getPluginName()
 	{
@@ -17,19 +17,19 @@ class KalturaInternalToolsPlugin extends KalturaPlugin implements IKalturaServic
 	public static function getServicesMap()
 	{
 		$map = array(
-			'KalturaInternalTools' => 'KalturaInternalToolsService',
-			'KalturaInternalToolsSystemHelper' => 'KalturaInternalToolsSystemHelperService',
+			'VidiunInternalTools' => 'VidiunInternalToolsService',
+			'VidiunInternalToolsSystemHelper' => 'VidiunInternalToolsSystemHelperService',
 		);
 		return $map;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaAdminConsolePages::getApplicationPages()
+	 * @see IVidiunAdminConsolePages::getApplicationPages()
 	 */
 	public static function getApplicationPages()
 	{
-		$KalturaInternalTools = array(new KalturaInternalToolsPluginSystemHelperAction(),new KalturaInternalToolsPluginFlavorParams());
-		return $KalturaInternalTools;
+		$VidiunInternalTools = array(new VidiunInternalToolsPluginSystemHelperAction(),new VidiunInternalToolsPluginFlavorParams());
+		return $VidiunInternalTools;
 	}
 	
 	public static function isAllowedPartner($partnerId)

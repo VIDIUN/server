@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
-include_once(__DIR__ . '/../alpha/config/kConf.php');
+include_once(__DIR__ . '/../alpha/config/vConf.php');
 ?>
 
 <!-- This landing page is based on a template taken from https://github.com/BlackrockDigital/startbootstrap-landing-page, license: MIT -->
@@ -15,7 +15,7 @@ include_once(__DIR__ . '/../alpha/config/kConf.php');
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Kaltura Platform Start Page - Getting Started</title>
+    <title>Vidiun Platform Start Page - Getting Started</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -46,7 +46,7 @@ include_once(__DIR__ . '/../alpha/config/kConf.php');
             <div class="row">
                 <div class="col-lg-12">
                     <div class="intro-message">
-                        <h1>Kaltura Video Platform (<?php echo kConf::get('kaltura_version');?>)</h1>
+                        <h1>Vidiun Video Platform (<?php echo vConf::get('vidiun_version');?>)</h1>
                         <h3>Getting Started With Your Deployment</h3>
                         <hr class="intro-divider">
                         <ul class="intro-links-list">
@@ -54,7 +54,7 @@ include_once(__DIR__ . '/../alpha/config/kConf.php');
                                 <a href="#adminconsole" class="intro-link"><span class="network-name">Server Admin &amp; Create Accounts</span></a>
                             </li>
                             <li>
-                                <a href="#kmc" class="intro-link"><span class="network-name">Manage a Content Account</span></a>
+                                <a href="#vmc" class="intro-link"><span class="network-name">Manage a Content Account</span></a>
                             </li>
                         </ul>
                     </div>
@@ -77,9 +77,9 @@ include_once(__DIR__ . '/../alpha/config/kConf.php');
                 <div class="col-lg-5 col-sm-6">
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
-                    <h2 class="section-heading">The Admin Console<br /><a href="//<?php echo kConf::get('apphome_url_no_protocol')?>/admin_console" target="_blank">Admin Your Platform Backend</a></h2>
-                    <p class="lead">The Admin Console makes it easy to manage your Kaltura backend and administer Kaltura accounts. View and access all accounts, manage permissions, register new accounts using templates, view usage reports for each account or the entire group, manage backend services and investigate jobs, and more. <a href="https://knowledge.kaltura.com/kaltura-admin-console-user-manual" target="_blank">Learn more about the Admin Console</a>.</p>
-                    <p>NOTE: Before you can begin to manage content using the KMC, login to the Admin Console using the credentials provided during the installation, and create a new Kaltura account.</p>
+                    <h2 class="section-heading">The Admin Console<br /><a href="//<?php echo vConf::get('apphome_url_no_protocol')?>/admin_console" target="_blank">Admin Your Platform Backend</a></h2>
+                    <p class="lead">The Admin Console makes it easy to manage your Vidiun backend and administer Vidiun accounts. View and access all accounts, manage permissions, register new accounts using templates, view usage reports for each account or the entire group, manage backend services and investigate jobs, and more. <a href="https://knowledge.vidiun.com/vidiun-admin-console-user-manual" target="_blank">Learn more about the Admin Console</a>.</p>
+                    <p>NOTE: Before you can begin to manage content using the VMC, login to the Admin Console using the credentials provided during the installation, and create a new Vidiun account.</p>
                 </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
                     <img class="img-responsive" src="img/ipad.png" alt="">
@@ -92,7 +92,7 @@ include_once(__DIR__ . '/../alpha/config/kConf.php');
     </div>
     <!-- /.content-section-a -->
 
-    <a name="kmc" id="kmc"></a>
+    <a name="vmc" id="vmc"></a>
     <div class="content-section-b">
 
         <div class="container">
@@ -101,8 +101,8 @@ include_once(__DIR__ . '/../alpha/config/kConf.php');
                 <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
-                    <h2 class="section-heading">KMC: Management Console<br /><a href="//<?php echo kConf::get('apphome_url_no_protocol')?>/kmc" target="_blank">Manage Specific Accounts</a></h2>
-                    <p class="lead">The KMC is the media management application. Perform bulk ingestion/upload, create transcoding profiles, manage metadata and categories, design and configure players, create playlists, view analytics, configure live streaming, distribute content across the web, configure ad campaigns, control access to media, manage your account, users, entitlements and permissions, and much more. <a href="https://knowledge.kaltura.com/node/1606/attachment/field_media" target="_blank">Learn more about the KMC application</a>.</p>
+                    <h2 class="section-heading">VMC: Management Console<br /><a href="//<?php echo vConf::get('apphome_url_no_protocol')?>/vmc" target="_blank">Manage Specific Accounts</a></h2>
+                    <p class="lead">The VMC is the media management application. Perform bulk ingestion/upload, create transcoding profiles, manage metadata and categories, design and configure players, create playlists, view analytics, configure live streaming, distribute content across the web, configure ad campaigns, control access to media, manage your account, users, entitlements and permissions, and much more. <a href="https://knowledge.vidiun.com/node/1606/attachment/field_media" target="_blank">Learn more about the VMC application</a>.</p>
                 </div>
                 <div class="col-lg-5 col-sm-pull-6  col-sm-6">
                     <img class="img-responsive" src="img/dog.png" alt="">
@@ -127,13 +127,13 @@ include_once(__DIR__ . '/../alpha/config/kConf.php');
                 <div class="col-lg-6">
                     <ul class="list-inline banner-social-buttons">
                         <li>
-                            <a href="https://twitter.com/Kaltura" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">@Kaltura</span></a>
+                            <a href="https://twitter.com/Vidiun" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">@Vidiun</span></a>
                         </li>
                         <li>
-                            <a href="https://github.com/kaltura/platform-install-packages/blob/master/doc/Contributing-to-the-Kaltura-Platform.md" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Contribute</span></a>
+                            <a href="https://github.com/vidiun/platform-install-packages/blob/master/doc/Contributing-to-the-Vidiun-Platform.md" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Contribute</span></a>
                         </li>
                         <li>
-                            <a href="https://forum.kaltura.org" class="btn btn-default btn-lg"><i class="fa fa-users fa-fw"></i> <span class="network-name">Forum</span></a>
+                            <a href="https://forum.vidiun.org" class="btn btn-default btn-lg"><i class="fa fa-users fa-fw"></i> <span class="network-name">Forum</span></a>
                         </li>
                     </ul>
                 </div>
@@ -152,22 +152,22 @@ include_once(__DIR__ . '/../alpha/config/kConf.php');
                 <div class="col-lg-12">
                     <ul class="list-inline">
                         <li>
-                            <a href="https://www.kaltura.org" target="_blank">Kaltura.org</a>
+                            <a href="https://www.vidiun.org" target="_blank">Vidiun.org</a>
                         </li>
                         <li class="footer-menu-divider">|</li>
                         <li>
-                            <a href="https://corp.kaltura.com" target="_blank">Kaltura.com</a>
+                            <a href="https://corp.vidiun.com" target="_blank">Vidiun.com</a>
                         </li>
                         <li class="footer-menu-divider">|</li>
                         <li>
-                            <a href="https://vpaas.kaltura.com" target="_blank">Kaltura VPaaS</a>
+                            <a href="https://vpaas.vidiun.com" target="_blank">Vidiun VPaaS</a>
                         </li>
                         <li class="footer-menu-divider">|</li>
                         <li>
-                            <a href="https://developer.kaltura.com" target="_blank">Kaltura Developer Tools</a>
+                            <a href="https://developer.vidiun.com" target="_blank">Vidiun Developer Tools</a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted small">Copyright &copy; Kaltura <script type="text/javascript">document.write(new Date().getFullYear());</script>.</p>
+                    <p class="copyright text-muted small">Copyright &copy; Vidiun <script type="text/javascript">document.write(new Date().getFullYear());</script>.</p>
                 </div>
             </div>
         </div>

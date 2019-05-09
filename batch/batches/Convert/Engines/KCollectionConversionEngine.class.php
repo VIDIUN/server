@@ -5,52 +5,52 @@
  * @package Scheduler
  * @subpackage Conversion.engines
  */
-abstract class KCollectionConversionEngine extends KConversionEngine
+abstract class VCollectionConversionEngine extends VConversionEngine
 {
-	protected abstract function convertCollection ( KalturaConvertCollectionJobData &$data );
-	protected abstract function parseCreatedFiles (KalturaConvertCollectionJobData &$data);
+	protected abstract function convertCollection ( VidiunConvertCollectionJobData &$data );
+	protected abstract function parseCreatedFiles (VidiunConvertCollectionJobData &$data);
 	
-	public function simulate ( KalturaConvartableJobData $data )
+	public function simulate ( VidiunConvartableJobData $data )
 	{
 		return $this->simulateCollection ( $data );
 	}	
 	
-	private function simulateCollection ( KalturaConvertCollectionJobData $data )
+	private function simulateCollection ( VidiunConvertCollectionJobData $data )
 	{
 		return  ''; //TODO
 	}
 	
-	public function convert ( KalturaConvartableJobData &$data )
+	public function convert ( VidiunConvartableJobData &$data )
 	{
 		return  $this->convertCollection ( $data );
 	}	
 	
 	
 	/**
-	 * @param KalturaConvertJobData $data
-	 * @return array<KConversioEngineResult>
+	 * @param VidiunConvertJobData $data
+	 * @return array<VConversioEngineResult>
 	 */
-	protected function getExecutionCommandAndConversionString ( KalturaConvertCollectionJobData $data )
+	protected function getExecutionCommandAndConversionString ( VidiunConvertCollectionJobData $data )
 	{
 		$uniqid = uniqid("convert_") . '.xml';
 		$xmlPath = $data->destDirLocalPath . DIRECTORY_SEPARATOR . $uniqid;
 		copy($data->inputXmlLocalPath, $xmlPath);
 		$xml = file_get_contents($xmlPath);
-		$xml = str_replace(KDLCmdlinePlaceholders::OutDir, $data->destDirLocalPath, $xml);
+		$xml = str_replace(VDLCmdlinePlaceholders::OutDir, $data->destDirLocalPath, $xml);
 		file_put_contents($xmlPath, $xml);
 
-		KalturaLog::debug("Config File Path: $xmlPath");
+		VidiunLog::debug("Config File Path: $xmlPath");
 		$this->configFilePath = $xmlPath;
 		$this->logFilePath = $data->destDirLocalPath . DIRECTORY_SEPARATOR . $data->destFileName . '.log';
 		
 				
-		KalturaLog::debug("Command Line Str: " . $data->commandLinesStr);
+		VidiunLog::debug("Command Line Str: " . $data->commandLinesStr);
 		$cmd_line_arr = $this->getCmdArray($data->commandLinesStr);
 		
 		$conversion_engine_result_list = array();
 		foreach ( $cmd_line_arr as $type => $cmd_line )
 		{
-			KalturaLog::debug("Command Line type[$type] line[$cmd_line]");
+			VidiunLog::debug("Command Line type[$type] line[$cmd_line]");
 			
 			if($type != $this->getType())
 				continue;
@@ -88,7 +88,7 @@ abstract class KCollectionConversionEngine extends KConversionEngine
 				{
 					$exec_cmd = $this->getCmdLine ( $cmd , true );
 				}
-				$conversion_engine_result = new KConversioEngineResult( $exec_cmd , $cmd );
+				$conversion_engine_result = new VConversioEngineResult( $exec_cmd , $cmd );
 				$conversion_engine_result_list[] = $conversion_engine_result;
 			}	
 		}

@@ -5,7 +5,7 @@
  * @subpackage model.enum
  */
 
-class ReachConditionType implements IKalturaPluginEnum, ConditionType
+class ReachConditionType implements IVidiunPluginEnum, ConditionType
 {
 	const EVENT_CATEGORY_ENTRY = 'CategoryEntry';
 	

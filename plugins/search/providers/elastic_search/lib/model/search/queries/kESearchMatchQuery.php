@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchMatchQuery extends kESearchBaseFieldQuery
+class vESearchMatchQuery extends vESearchBaseFieldQuery
 {
 	const MATCH_KEY = 'match';
 	const QUERY_KEY = 'query';

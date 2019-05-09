@@ -3,6 +3,6 @@
  * @package plugins.msnDistribution
  * @subpackage api.filters.enum
  */
-class KalturaMsnDistributionProfileOrderBy extends KalturaConfigurableDistributionProfileOrderBy
+class VidiunMsnDistributionProfileOrderBy extends VidiunConfigurableDistributionProfileOrderBy
 {
 }

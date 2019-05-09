@@ -1,2 +1,2 @@
-CALL kalturadw.calc_partner_billing_data("{FROM_DATE_ID}", {PARTNER_ID});
+CALL vidiundw.calc_partner_billing_data("{FROM_DATE_ID}", {PARTNER_ID});
 

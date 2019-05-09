@@ -3,12 +3,12 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDeliveryProfileCondition extends KalturaCondition
+class VidiunDeliveryProfileCondition extends VidiunCondition
 {
 	/**
 	 * The delivery ids that are accepted by this condition
 	 * 
-	 * @var KalturaIntegerValueArray
+	 * @var VidiunIntegerValueArray
 	 */
 	public $deliveryProfileIds;
 	
@@ -23,12 +23,12 @@ class KalturaDeliveryProfileCondition extends KalturaCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kDeliveryProfileCondition();
+			$dbObject = new vDeliveryProfileCondition();
 		return parent::toObject($dbObject, $skip);
 	}
 }

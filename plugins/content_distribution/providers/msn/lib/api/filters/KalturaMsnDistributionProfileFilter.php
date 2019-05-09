@@ -3,6 +3,6 @@
  * @package plugins.msnDistribution
  * @subpackage api.filters
  */
-class KalturaMsnDistributionProfileFilter extends KalturaMsnDistributionProfileBaseFilter
+class VidiunMsnDistributionProfileFilter extends VidiunMsnDistributionProfileBaseFilter
 {
 }

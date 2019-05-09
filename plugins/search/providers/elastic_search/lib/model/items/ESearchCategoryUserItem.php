@@ -17,7 +17,7 @@ class ESearchCategoryUserItem extends ESearchItem
 	protected $searchTerm;
 
 	/**
-	 * @var CategoryKuserPermissionLevel
+	 * @var CategoryVuserPermissionLevel
 	 */
 	protected $permissionLevel;
 
@@ -63,7 +63,7 @@ class ESearchCategoryUserItem extends ESearchItem
 	}
 
 	/**
-	 * @return CategoryKuserPermissionLevel
+	 * @return CategoryVuserPermissionLevel
 	 */
 	public function getPermissionLevel()
 	{
@@ -71,7 +71,7 @@ class ESearchCategoryUserItem extends ESearchItem
 	}
 
 	/**
-	 * @param CategoryKuserPermissionLevel $permissionLevel
+	 * @param CategoryVuserPermissionLevel $permissionLevel
 	 */
 	public function setPermissionLevel($permissionLevel)
 	{
@@ -121,7 +121,7 @@ class ESearchCategoryUserItem extends ESearchItem
 				$categoryUserQuery[] = $this->getCategoryUserExactMatchQuery($allowedSearchTypes, $queryAttributes);
 				break;
 			default:
-				KalturaLog::log("Undefined item type[".$this->getItemType()."]");
+				VidiunLog::log("Undefined item type[".$this->getItemType()."]");
 		}
 	}
 
@@ -136,16 +136,16 @@ class ESearchCategoryUserItem extends ESearchItem
 
 	protected function getExactMatchQuery($allowedSearchTypes, &$queryAttributes)
 	{
-		$exactQuery = kESearchQueryManager::getExactMatchQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+		$exactQuery = vESearchQueryManager::getExactMatchQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 
 		if ($this->getFieldName()  ==  ESearchCategoryUserFieldName::USER_ID)
 		{
-			$preFixGroups = new kESearchTermsQuery($this->getFieldName(),
-				array('index' => ElasticIndexMap::ELASTIC_KUSER_INDEX,
-					'type' => ElasticIndexMap::ELASTIC_KUSER_TYPE,
+			$preFixGroups = new vESearchTermsQuery($this->getFieldName(),
+				array('index' => ElasticIndexMap::ELASTIC_VUSER_INDEX,
+					'type' => ElasticIndexMap::ELASTIC_VUSER_TYPE,
 					'id' => $this->getSearchTerm(),
 					'path' => ESearchUserFieldName::GROUP_IDS));
-			$boolQuery = new kESearchBoolQuery();
+			$boolQuery = new vESearchBoolQuery();
 			$boolQuery->addToShould($exactQuery);
 			$boolQuery->addToShould($preFixGroups);
 			return $boolQuery;
@@ -166,11 +166,11 @@ class ESearchCategoryUserItem extends ESearchItem
 
 	protected function getUserIdExactMatchWithPermissions($allowedSearchTypes, &$queryAttributes)
 	{
-		$kuserId = $this->getSearchTerm();
-		$groupIds = $this->getGroupIds($kuserId);
-		$groupIds[] = $kuserId;
+		$vuserId = $this->getSearchTerm();
+		$groupIds = $this->getGroupIds($vuserId);
+		$groupIds[] = $vuserId;
 
-		$boolQuery = new kESearchBoolQuery();
+		$boolQuery = new vESearchBoolQuery();
 		$item = clone $this;
 		foreach ($groupIds as $groupId)
 		{
@@ -181,7 +181,7 @@ class ESearchCategoryUserItem extends ESearchItem
 			if (!is_null($permissionLevel) && !$permissionName)
 			{
 				$item->setSearchTerm(elasticSearchUtils::formatCategoryUserPermissionLevel($groupId, $permissionLevel));
-				$permissionLevelQuery = kESearchQueryManager::getExactMatchQuery($item, ESearchCategoryUserFieldName::USER_ID, $allowedSearchTypes, $queryAttributes);
+				$permissionLevelQuery = vESearchQueryManager::getExactMatchQuery($item, ESearchCategoryUserFieldName::USER_ID, $allowedSearchTypes, $queryAttributes);
 				$boolQuery->addToShould($permissionLevelQuery);
 			}
 
@@ -189,20 +189,20 @@ class ESearchCategoryUserItem extends ESearchItem
 			else if (is_null($permissionLevel) && $permissionName)
 			{
 				$item->setSearchTerm(elasticSearchUtils::formatCategoryUserPermissionName($groupId, $permissionName));
-				$permissionNameQuery = kESearchQueryManager::getExactMatchQuery($item, ESearchCategoryUserFieldName::USER_ID, $allowedSearchTypes, $queryAttributes);
+				$permissionNameQuery = vESearchQueryManager::getExactMatchQuery($item, ESearchCategoryUserFieldName::USER_ID, $allowedSearchTypes, $queryAttributes);
 				$boolQuery->addToShould($permissionNameQuery);
 			}
 
 			else if (!is_null($permissionLevel) && $permissionName)
 			{
-				$subBoolQuery = new kESearchBoolQuery();
+				$subBoolQuery = new vESearchBoolQuery();
 
 				$item->setSearchTerm(elasticSearchUtils::formatCategoryUserPermissionLevel($groupId, $permissionLevel));
-				$permissionLevelQuery = kESearchQueryManager::getExactMatchQuery($item, ESearchCategoryUserFieldName::USER_ID, $allowedSearchTypes, $queryAttributes);
+				$permissionLevelQuery = vESearchQueryManager::getExactMatchQuery($item, ESearchCategoryUserFieldName::USER_ID, $allowedSearchTypes, $queryAttributes);
 				$subBoolQuery->addToFilter($permissionLevelQuery);
 
 				$item->setSearchTerm(elasticSearchUtils::formatCategoryUserPermissionName($groupId, $permissionName));
-				$permissionNameQuery = kESearchQueryManager::getExactMatchQuery($item, ESearchCategoryUserFieldName::USER_ID, $allowedSearchTypes, $queryAttributes);
+				$permissionNameQuery = vESearchQueryManager::getExactMatchQuery($item, ESearchCategoryUserFieldName::USER_ID, $allowedSearchTypes, $queryAttributes);
 				$subBoolQuery->addToFilter($permissionNameQuery);
 
 				$boolQuery->addToShould($subBoolQuery);
@@ -213,20 +213,20 @@ class ESearchCategoryUserItem extends ESearchItem
 		return $boolQuery;
 	}
 
-	protected function getGroupIds($kuserId)
+	protected function getGroupIds($vuserId)
 	{
 		$params = array(
-			elasticClient::ELASTIC_INDEX_KEY => ElasticIndexMap::ELASTIC_KUSER_INDEX,
-			elasticClient::ELASTIC_TYPE_KEY => ElasticIndexMap::ELASTIC_KUSER_TYPE,
-			elasticClient::ELASTIC_ID_KEY => $kuserId
+			elasticClient::ELASTIC_INDEX_KEY => ElasticIndexMap::ELASTIC_VUSER_INDEX,
+			elasticClient::ELASTIC_TYPE_KEY => ElasticIndexMap::ELASTIC_VUSER_TYPE,
+			elasticClient::ELASTIC_ID_KEY => $vuserId
 		);
 
 		$elasticClient = new elasticClient();
 		$elasticResults = $elasticClient->get($params);
 		$groupIds = array();
-		if (isset($elasticResults[kESearchCoreAdapter::SOURCE][ESearchUserFieldName::GROUP_IDS]))
+		if (isset($elasticResults[vESearchCoreAdapter::SOURCE][ESearchUserFieldName::GROUP_IDS]))
 		{
-			$groupIds = $elasticResults[kESearchCoreAdapter::SOURCE][ESearchUserFieldName::GROUP_IDS];
+			$groupIds = $elasticResults[vESearchCoreAdapter::SOURCE][ESearchUserFieldName::GROUP_IDS];
 		}
 
 		return $groupIds;

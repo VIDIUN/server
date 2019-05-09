@@ -3,6 +3,6 @@
  * @package plugins.document
  * @subpackage api.filters.enum
  */
-class KalturaImageFlavorParamsOrderBy extends KalturaFlavorParamsOrderBy
+class VidiunImageFlavorParamsOrderBy extends VidiunFlavorParamsOrderBy
 {
 }

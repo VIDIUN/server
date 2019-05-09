@@ -2,7 +2,7 @@
 /**
  * @package plugins.freewheelGenericDistribution
  */
-class FreewheelGenericDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider
+class FreewheelGenericDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider
 {
 	const PLUGIN_NAME = 'freewheelGenericDistribution';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
@@ -18,13 +18,13 @@ class FreewheelGenericDistributionPlugin extends KalturaPlugin implements IKaltu
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 
-		$dependency1 = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
-		$dependency2 = new KalturaDependency(FreewheelGenericDistributionPlugin::DEPENDENTS_ON_PLUGIN_NAME_CUE_POINT);
+		$dependency1 = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency2 = new VidiunDependency(FreewheelGenericDistributionPlugin::DEPENDENTS_ON_PLUGIN_NAME_CUE_POINT);
 		return array($dependency1, $dependency2);
 	}
 	
@@ -60,7 +60,7 @@ class FreewheelGenericDistributionPlugin extends KalturaPlugin implements IKaltu
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::FREEWHEEL_GENERIC)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::FREEWHEEL_GENERIC)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return new FreewheelGenericDistributionEngine();
@@ -89,14 +89,14 @@ class FreewheelGenericDistributionPlugin extends KalturaPlugin implements IKaltu
 			if($baseClass == 'IDistributionEngineDisable')
 				return new FreewheelGenericDistributionEngine();
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaFreewheelGenericDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunFreewheelGenericDistributionProfile();
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return new KalturaFreewheelGenericDistributionJobProviderData();
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return new VidiunFreewheelGenericDistributionJobProviderData();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::FREEWHEEL_GENERIC)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::FREEWHEEL_GENERIC)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -105,20 +105,20 @@ class FreewheelGenericDistributionPlugin extends KalturaPlugin implements IKaltu
 			}
 		}
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
 		{
-			$reflect = new ReflectionClass('KalturaFreewheelGenericDistributionJobProviderData');
+			$reflect = new ReflectionClass('VidiunFreewheelGenericDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
 		{
-			$reflect = new ReflectionClass('kFreewheelGenericDistributionJobProviderData');
+			$reflect = new ReflectionClass('vFreewheelGenericDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
-			return new KalturaFreewheelGenericDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
+			return new VidiunFreewheelGenericDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
 			return new FreewheelGenericDistributionProfile();
@@ -134,7 +134,7 @@ class FreewheelGenericDistributionPlugin extends KalturaPlugin implements IKaltu
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::FREEWHEEL_GENERIC)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::FREEWHEEL_GENERIC)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return 'FreewheelGenericDistributionEngine';
@@ -163,30 +163,30 @@ class FreewheelGenericDistributionPlugin extends KalturaPlugin implements IKaltu
 			if($baseClass == 'IDistributionEngineDisable')
 				return 'FreewheelGenericDistributionEngine';
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaFreewheelGenericDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunFreewheelGenericDistributionProfile';
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaFreewheelGenericDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunFreewheelGenericDistributionJobProviderData';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::FREEWHEEL_GENERIC)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::FREEWHEEL_GENERIC)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_FreewheelGenericProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_FreewheelGenericDistribution_Type_FreewheelGenericDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_FreewheelGenericDistribution_Type_FreewheelGenericDistributionProfile';
 		}
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
-			return 'KalturaFreewheelGenericDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
+			return 'VidiunFreewheelGenericDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
-			return 'kFreewheelGenericDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
+			return 'vFreewheelGenericDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
-			return 'KalturaFreewheelGenericDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
+			return 'VidiunFreewheelGenericDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(FreewheelGenericDistributionProviderType::FREEWHEEL_GENERIC))
 			return 'FreewheelGenericDistributionProfile';
@@ -207,11 +207,11 @@ class FreewheelGenericDistributionPlugin extends KalturaPlugin implements IKaltu
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaFreewheelGenericDistributionProvider();
+		$distributionProvider = new VidiunFreewheelGenericDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -232,8 +232,8 @@ class FreewheelGenericDistributionPlugin extends KalturaPlugin implements IKaltu
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -241,6 +241,6 @@ class FreewheelGenericDistributionPlugin extends KalturaPlugin implements IKaltu
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

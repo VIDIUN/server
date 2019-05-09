@@ -3,10 +3,10 @@
  * @package plugins.timeWarnerDistribution
  * @subpackage lib
  */
-class kTimeWarnerFlowManager implements kBatchJobStatusEventConsumer
+class vTimeWarnerFlowManager implements vBatchJobStatusEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -34,10 +34,10 @@ class kTimeWarnerFlowManager implements kBatchJobStatusEventConsumer
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
 		$data = $dbBatchJob->getData();
-		if (!$data instanceof kDistributionJobData)
+		if (!$data instanceof vDistributionJobData)
 			return true;
 			
-		$timeWarnerCoreValueType = kPluginableEnumsManager::apiToCore('DistributionProviderType', TimeWarnerDistributionPlugin::getApiValue(TimeWarnerDistributionProviderType::TIME_WARNER));
+		$timeWarnerCoreValueType = vPluginableEnumsManager::apiToCore('DistributionProviderType', TimeWarnerDistributionPlugin::getApiValue(TimeWarnerDistributionProviderType::TIME_WARNER));
 		if ($data->getProviderType() != $timeWarnerCoreValueType)
 			return true;
 			
@@ -54,7 +54,7 @@ class kTimeWarnerFlowManager implements kBatchJobStatusEventConsumer
 		);
 		
 		if (in_array($dbBatchJob->getJobType(), $jobTypesToFinish))
-			kJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
+			vJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
 		
 		return true;
 	}

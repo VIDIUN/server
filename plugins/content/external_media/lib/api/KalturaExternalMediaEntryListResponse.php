@@ -3,10 +3,10 @@
  * @package plugins.externalMedia
  * @subpackage api.objects
  */
-class KalturaExternalMediaEntryListResponse extends KalturaListResponse
+class VidiunExternalMediaEntryListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaExternalMediaEntryArray
+	 * @var VidiunExternalMediaEntryArray
 	 * @readonly
 	 */
 	public $objects;

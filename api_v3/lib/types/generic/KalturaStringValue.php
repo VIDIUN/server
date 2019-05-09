@@ -2,11 +2,11 @@
 /**
  * A string representation to return an array of strings
  * 
- * @see KalturaStringValueArray
+ * @see VidiunStringValueArray
  * @package api
  * @subpackage objects
  */
-class KalturaStringValue extends KalturaValue
+class VidiunStringValue extends VidiunValue
 {
 	/**
 	 * @var string
@@ -14,12 +14,12 @@ class KalturaStringValue extends KalturaValue
     public $value;
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kStringValue();
+			$dbObject = new vStringValue();
 			
 		return parent::toObject($dbObject, $skip);
 	}

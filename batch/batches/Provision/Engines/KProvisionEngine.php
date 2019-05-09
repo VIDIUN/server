@@ -6,30 +6,30 @@
  * @subpackage Provision
  * @abstract
  */
-abstract class KProvisionEngine
+abstract class VProvisionEngine
 {
 	
 	/**
-	 * Will return the proper engine depending on the type (KalturaSourceType)
+	 * Will return the proper engine depending on the type (VidiunSourceType)
 	 *
 	 * @param int $provider
-	 * @param KalturaProvisionJobData $data
-	 * @return KProvisionEngine
+	 * @param VidiunProvisionJobData $data
+	 * @return VProvisionEngine
 	 */
-	public static function getInstance ( $provider , KalturaProvisionJobData $data = null)
+	public static function getInstance ( $provider , VidiunProvisionJobData $data = null)
 	{
 		$engine =  null;
 		
 		switch ($provider )
 		{
-			case KalturaSourceType::AKAMAI_LIVE:
-				$engine = new KProvisionEngineAkamai($data);
+			case VidiunSourceType::AKAMAI_LIVE:
+				$engine = new VProvisionEngineAkamai($data);
 				break;
-			case KalturaSourceType::AKAMAI_UNIVERSAL_LIVE:
-				$engine = new KProvisionEngineUniversalAkamai($data);
+			case VidiunSourceType::AKAMAI_UNIVERSAL_LIVE:
+				$engine = new VProvisionEngineUniversalAkamai($data);
 				break;
 			default:
-				$engine = KalturaPluginManager::loadObject('KProvisionEngine', $provider);
+				$engine = VidiunPluginManager::loadObject('VProvisionEngine', $provider);
 		}
 		
 		return $engine;
@@ -42,25 +42,25 @@ abstract class KProvisionEngine
 	abstract public function getName();
 	
 	/**
-	 * @param KalturaBatchJob $job
-	 * @param KalturaProvisionJobData $data
-	 * @return KProvisionEngineResult
+	 * @param VidiunBatchJob $job
+	 * @param VidiunProvisionJobData $data
+	 * @return VProvisionEngineResult
 	 */
-	abstract public function provide( KalturaBatchJob $job, KalturaProvisionJobData $data );
+	abstract public function provide( VidiunBatchJob $job, VidiunProvisionJobData $data );
 	
 	/**
-	 * @param KalturaBatchJob $job
-	 * @param KalturaProvisionJobData $data
-	 * @return KProvisionEngineResult
+	 * @param VidiunBatchJob $job
+	 * @param VidiunProvisionJobData $data
+	 * @return VProvisionEngineResult
 	 */
-	abstract public function delete( KalturaBatchJob $job, KalturaProvisionJobData $data );
+	abstract public function delete( VidiunBatchJob $job, VidiunProvisionJobData $data );
 	
 	/**
-	 * @param KalturaBatchJob $job
-	 * @param KalturaProvisionJobData $data
-	 * @return KProvisionEngineResult
+	 * @param VidiunBatchJob $job
+	 * @param VidiunProvisionJobData $data
+	 * @return VProvisionEngineResult
 	 */
-	abstract public function checkProvisionedStream ( KalturaBatchJob $job, KalturaProvisionJobData $data ) ;
+	abstract public function checkProvisionedStream ( VidiunBatchJob $job, VidiunProvisionJobData $data ) ;
 }
 
 
@@ -69,7 +69,7 @@ abstract class KProvisionEngine
  * @subpackage Conversion
  *
  */
-class KProvisionEngineResult
+class VProvisionEngineResult
 {
 	/**
 	 * @var int
@@ -82,16 +82,16 @@ class KProvisionEngineResult
 	public $errMessage;
 	
 	/**
-	 * @var KalturaProvisionJobData
+	 * @var VidiunProvisionJobData
 	 */
 	public $data;
 	
 	/**
 	 * @param int $status
 	 * @param string $errMessage
-	 * @param KalturaProvisionJobData $data
+	 * @param VidiunProvisionJobData $data
 	 */
-	public function __construct( $status , $errMessage, KalturaProvisionJobData $data = null )
+	public function __construct( $status , $errMessage, VidiunProvisionJobData $data = null )
 	{
 		$this->status = $status;
 		$this->errMessage = $errMessage;

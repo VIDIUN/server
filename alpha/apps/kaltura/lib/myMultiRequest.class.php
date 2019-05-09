@@ -35,7 +35,7 @@ class myMultiRequest extends defPartnerservices2Action
 
 
 	protected function ticketType () {				return self::REQUIED_TICKET_NONE;	}
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER;	}
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER;	}
 	protected function addUserOnDemand ( )	{		return self::CREATE_USER_FALSE;		}
 
 	// a list of params that cause some problems when calling from testme 
@@ -71,7 +71,7 @@ class myMultiRequest extends defPartnerservices2Action
 		return $this->executeMultiRequest();
 	}
 	*/
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		return $this->executeMultiRequest();
 	}
@@ -82,7 +82,7 @@ class myMultiRequest extends defPartnerservices2Action
 		// several default params
 		$global_format = @$this->original_request_params["format"];
 		if (!$global_format)
-			$global_format = kalturaWebserviceRenderer::RESPONSE_TYPE_XML;
+			$global_format = vidiunWebserviceRenderer::RESPONSE_TYPE_XML;
 		$this->response_type = $global_format; //
 		$multi_response = array();
 
@@ -113,7 +113,7 @@ class myMultiRequest extends defPartnerservices2Action
 
 				// request the response as
 				// becuase the format is global - it cannot be used per service anyway.
-				$params["format"] = kalturaWebserviceRenderer::RESPONSE_TYPE_PHP_ARRAY;
+				$params["format"] = vidiunWebserviceRenderer::RESPONSE_TYPE_PHP_ARRAY;
 				$myaction->setInputParams ( $params );
 				//$myaction->setResponseContext ( "response{$this->current_action_index}");
 				$response = $myaction->execute( false ); // foreach single action - pass false so no extra debug data will be outputed
@@ -230,7 +230,7 @@ class myMultiRequest extends defPartnerservices2Action
 		foreach ( $input_param_list as $param => $value )
 		{
 
-			//if ( kString::beginsWith( $param , "req_") )
+			//if ( vString::beginsWith( $param , "req_") )
 			$res = preg_match ( "/request(.+?)_(.*)/", $param , $match ) ;
 //			echo "$param: " . print_r ( $match , true ) , " [$res]<br>";
 

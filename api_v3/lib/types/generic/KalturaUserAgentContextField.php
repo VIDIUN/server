@@ -5,15 +5,15 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUserAgentContextField extends KalturaStringField
+class VidiunUserAgentContextField extends VidiunStringField
 {
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kUserAgentContextField();
+			$dbObject = new vUserAgentContextField();
 			
 		return parent::toObject($dbObject, $skip);
 	}

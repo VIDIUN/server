@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDeliveryProfileRtmp extends KalturaDeliveryProfile {
+class VidiunDeliveryProfileRtmp extends VidiunDeliveryProfile {
 
 	/**
 	 * enforceRtmpe

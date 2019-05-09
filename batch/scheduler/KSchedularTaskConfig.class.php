@@ -2,7 +2,7 @@
 /**
  * @package Scheduler
  */
-class KSchedularTaskConfig extends Zend_Config_Ini
+class VSchedularTaskConfig extends Zend_Config_Ini
 {
 	
 	protected $queueSize = 0;
@@ -16,7 +16,7 @@ class KSchedularTaskConfig extends Zend_Config_Ini
 		
 		if($this->filter)
 		{
-			$filter = new KalturaBatchJobFilter();
+			$filter = new VidiunBatchJobFilter();
 			foreach($this->filter as $attr => $value)
 				$filter->$attr = $value;
 				
@@ -158,7 +158,7 @@ class KSchedularTaskConfig extends Zend_Config_Ini
 			if($socket)
 				return $socket;
 			
-			KalturaLog::err("Open socket failed: $errstr");
+			VidiunLog::err("Open socket failed: $errstr");
 		}
 		
 		return $this->dwhPath;

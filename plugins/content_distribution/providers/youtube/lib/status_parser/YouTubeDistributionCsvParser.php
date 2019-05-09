@@ -28,7 +28,7 @@ class YouTubeDistributionCsvParser
 		}
 
 		$this->rows = $all_rows;
-		KalturaLog::debug("Parsed Csv Result:" . print_r($this->rows, true));
+		VidiunLog::debug("Parsed Csv Result:" . print_r($this->rows, true));
 
 	}
 

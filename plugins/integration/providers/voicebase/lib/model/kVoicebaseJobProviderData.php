@@ -3,7 +3,7 @@
  * @package plugins.voicebase
  * @subpackage model.data
  */
-class kVoicebaseJobProviderData extends kIntegrationJobProviderData
+class vVoicebaseJobProviderData extends vIntegrationJobProviderData
 {
 	const CUSTOM_DATA_SPOKEN_LANGUAGE = "spokenLanguage";
 	
@@ -221,12 +221,12 @@ class kVoicebaseJobProviderData extends kIntegrationJobProviderData
 	}
 
 	/**
-	 * kVoicebaseJobProviderData constructor.
+	 * vVoicebaseJobProviderData constructor.
 	 * The VoiceBase job provider data must include the partner's additional params.
 	 */
 	public function __construct()
 	{
-		$partnerOptions = VoicebasePlugin::getPartnerVoicebaseOptions(kCurrentContext::getCurrentPartnerId());
+		$partnerOptions = VoicebasePlugin::getPartnerVoicebaseOptions(vCurrentContext::getCurrentPartnerId());
 
 		if($partnerOptions->defaultParams)
 			$this->setAdditionalParameters($partnerOptions->defaultParams);

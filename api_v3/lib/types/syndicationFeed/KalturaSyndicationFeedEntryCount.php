@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaSyndicationFeedEntryCount extends KalturaObject
+class VidiunSyndicationFeedEntryCount extends VidiunObject
 {
 	/**
 	 * the total count of entries that should appear in the feed without flavor filtering

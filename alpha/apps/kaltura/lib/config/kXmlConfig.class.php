@@ -7,7 +7,7 @@
  * @package server-infra
  * @subpackage config
  */
-class kXmlConfig
+class vXmlConfig
 {
 	const ATTR_EXTENDS = "extends";
 	const ATTR_INHERITS = "inherits";
@@ -25,9 +25,9 @@ class kXmlConfig
 	 * Throws as excpetion if the files don't exist or not valid XMLs
 	 *
 	 * @param array $files
-	 * @return kXmlConfig
+	 * @return vXmlConfig
 	 */
-	public function  kXmlConfig ( $base_file , $referrer_file )
+	public function  vXmlConfig ( $base_file , $referrer_file )
 	{
 		$this->referrer_file = $referrer_file;
 		$this->referrer_xml = simplexml_load_string (file_get_contents( $referrer_file ),null,LIBXML_NOERROR );

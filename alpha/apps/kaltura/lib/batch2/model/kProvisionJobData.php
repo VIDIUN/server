@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-abstract class kProvisionJobData extends kJobData
+abstract class vProvisionJobData extends vJobData
 {
 	/**
 	 * @var string
@@ -282,7 +282,7 @@ abstract class kProvisionJobData extends kJobData
 	/**
 	 * Get instance of provision job data based on the live stream entry's source type
 	 * @param int $sourceType
-	 * @return kProvisionJobData
+	 * @return vProvisionJobData
 	 */
 	public static function getInstance($sourceType)
 	{
@@ -290,13 +290,13 @@ abstract class kProvisionJobData extends kJobData
 		switch ($sourceType)
 		{
 			case EntrySourceType::AKAMAI_LIVE:
-				$data =  new kAkamaiProvisionJobData();
+				$data =  new vAkamaiProvisionJobData();
 				break;
 			case EntrySourceType::AKAMAI_UNIVERSAL_LIVE:
-				$data =  new kAkamaiUniversalProvisionJobData();
+				$data =  new vAkamaiUniversalProvisionJobData();
 				break;
 			default:
-				$data =  KalturaPluginManager::loadObject('kProvisionJobData', $sourceType);
+				$data =  VidiunPluginManager::loadObject('vProvisionJobData', $sourceType);
 				break;
 		}
 		

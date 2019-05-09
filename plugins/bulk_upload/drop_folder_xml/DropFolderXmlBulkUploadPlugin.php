@@ -2,24 +2,24 @@
 /**
  * @package plugins.dropFolderXmlBulkUpload
  */
-class DropFolderXmlBulkUploadPlugin extends KalturaPlugin implements IKalturaBulkUpload, IKalturaPending, IKalturaSchemaDefiner, IKalturaEventConsumers
+class DropFolderXmlBulkUploadPlugin extends VidiunPlugin implements IVidiunBulkUpload, IVidiunPending, IVidiunSchemaDefiner, IVidiunEventConsumers
 {
 	const PLUGIN_NAME = 'dropFolderXmlBulkUpload';
 	const XML_BULK_UPLOAD_PLUGIN_VERSION_MAJOR = 1;
 	const XML_BULK_UPLOAD_PLUGIN_VERSION_MINOR = 1;
 	const XML_BULK_UPLOAD_PLUGIN_VERSION_BUILD = 0;	
-	const DROP_FOLDER_XML_EVENTS_CONSUMER = 'kDropFolderXmlEventsConsumer';
+	const DROP_FOLDER_XML_EVENTS_CONSUMER = 'vDropFolderXmlEventsConsumer';
 	
 	//Error Messages
-	const ERROR_ADDING_BULK_UPLOAD_MESSAGE = 'Failed to create bulk upload job in Kaltura';
-	const ERROR_IN_BULK_UPLOAD_MESSAGE = 'Failed  to execute the bulk upload job in Kaltura';
+	const ERROR_ADDING_BULK_UPLOAD_MESSAGE = 'Failed to create bulk upload job in Vidiun';
+	const ERROR_IN_BULK_UPLOAD_MESSAGE = 'Failed  to execute the bulk upload job in Vidiun';
 	const ERROR_ADD_CONTENT_RESOURCE_MESSAGE = 'Failed to add drop folder content resource files';
 	const MALFORMED_XML_FILE_MESSAGE = 'Failed to handle  XML File.  Invalid XML format.';
 	const XML_FILE_SIZE_EXCEED_LIMIT_MESSAGE = 'Failed to handle XML file. XML file size exceeds the supported 10 MB limit';
 	
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -27,23 +27,23 @@ class DropFolderXmlBulkUploadPlugin extends KalturaPlugin implements IKalturaBul
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$bulkUploadXmlVersion = new KalturaVersion(
+		$bulkUploadXmlVersion = new VidiunVersion(
 			self::XML_BULK_UPLOAD_PLUGIN_VERSION_MAJOR,
 			self::XML_BULK_UPLOAD_PLUGIN_VERSION_MINOR,
 			self::XML_BULK_UPLOAD_PLUGIN_VERSION_BUILD);
 			
-		$bulkUploadXmlDependency = new KalturaDependency(BulkUploadXmlPlugin::getPluginName(), $bulkUploadXmlVersion);
-		$dropFolderDependency = new KalturaDependency(DropFolderPlugin::getPluginName());
+		$bulkUploadXmlDependency = new VidiunDependency(BulkUploadXmlPlugin::getPluginName(), $bulkUploadXmlVersion);
+		$dropFolderDependency = new VidiunDependency(DropFolderPlugin::getPluginName());
 		
 		return array($bulkUploadXmlDependency, $dropFolderDependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -69,39 +69,39 @@ class DropFolderXmlBulkUploadPlugin extends KalturaPlugin implements IKalturaBul
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		//Gets the right job for the engine
-		if($baseClass == 'KalturaDropFolderBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(DropFolderXmlBulkUploadType::DROP_FOLDER_XML))
-			return new KalturaDropFolderXmlBulkUploadJobData();
+		if($baseClass == 'VidiunDropFolderBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(DropFolderXmlBulkUploadType::DROP_FOLDER_XML))
+			return new VidiunDropFolderXmlBulkUploadJobData();
 
 		//Gets the right job for the engine
-		if($baseClass == 'KalturaBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(DropFolderXmlBulkUploadType::DROP_FOLDER_XML))
-			return new KalturaDropFolderXmlBulkUploadJobData();
+		if($baseClass == 'VidiunBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(DropFolderXmlBulkUploadType::DROP_FOLDER_XML))
+			return new VidiunDropFolderXmlBulkUploadJobData();
 
 		//Gets the right job for the engine	
-		if($baseClass == 'kBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(DropFolderXmlBulkUploadType::DROP_FOLDER_XML))
-			return new kDropFolderBulkUploadXmlJobData();
+		if($baseClass == 'vBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(DropFolderXmlBulkUploadType::DROP_FOLDER_XML))
+			return new vDropFolderBulkUploadXmlJobData();
 
 		//Gets the right job for the engine
-		if($baseClass == 'kDropFolderBulkUploadXmlJobData' && $enumValue == self::getBulkUploadTypeCoreValue(DropFolderXmlBulkUploadType::DROP_FOLDER_XML))
-			return new kDropFolderBulkUploadXmlJobData();
+		if($baseClass == 'vDropFolderBulkUploadXmlJobData' && $enumValue == self::getBulkUploadTypeCoreValue(DropFolderXmlBulkUploadType::DROP_FOLDER_XML))
+			return new vDropFolderBulkUploadXmlJobData();
 
 		//Gets the engine (only for clients)
-		if($baseClass == 'KBulkUploadEngine' && class_exists('KalturaClient') && $enumValue == KalturaBulkUploadType::DROP_FOLDER_XML)
+		if($baseClass == 'VBulkUploadEngine' && class_exists('VidiunClient') && $enumValue == VidiunBulkUploadType::DROP_FOLDER_XML)
 		{
 			list($job) = $constructorArgs;
 			return new DropFolderXmlBulkUploadEngine($job);
 		}
 		
-		if ($baseClass == 'KalturaDropFolderFileHandlerConfig' && $enumValue == self::getFileHandlerTypeCoreValue(DropFolderXmlFileHandlerType::XML))
-			return new KalturaDropFolderXmlBulkUploadFileHandlerConfig();
+		if ($baseClass == 'VidiunDropFolderFileHandlerConfig' && $enumValue == self::getFileHandlerTypeCoreValue(DropFolderXmlFileHandlerType::XML))
+			return new VidiunDropFolderXmlBulkUploadFileHandlerConfig();
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -121,16 +121,16 @@ class DropFolderXmlBulkUploadPlugin extends KalturaPlugin implements IKalturaBul
 		$xmlElement = BulkUploadXmlPlugin::getBulkUploadMrssXml($batchJob);
 		if(is_null($xmlElement)){
 			echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?><mrss><error>Log file is not ready: ".$batchJob->getMessage()."</error></mrss>";
-			kFile::closeDbConnections();
+			vFile::closeDbConnections();
 			exit;
 		}
 		echo $xmlElement->asXML();
-		kFile::closeDbConnections();
+		vFile::closeDbConnections();
 		exit;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUpload::getFileExtension()
+	 * @see IVidiunBulkUpload::getFileExtension()
 	 */
 	public static function getFileExtension($enumValue)
 	{
@@ -139,11 +139,11 @@ class DropFolderXmlBulkUploadPlugin extends KalturaPlugin implements IKalturaBul
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::getPluginSchema()
+	 * @see IVidiunSchemaContributor::getPluginSchema()
 	 */
 	public static function getPluginSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if($coreType != self::getSchemaTypeCoreValue(DropFolderXmlSchemaType::DROP_FOLDER_XML))
 			return null;
 			
@@ -219,7 +219,7 @@ class DropFolderXmlBulkUploadPlugin extends KalturaPlugin implements IKalturaBul
 
 	<xs:element name="dropFolderFileContentResource" type="T_dropFolderFileContentResource" substitutionGroup="contentResource-extension">
 		<xs:annotation>
-			<xs:documentation>Specifies that content file location is within a Kaltura defined drop folder</xs:documentation>
+			<xs:documentation>Specifies that content file location is within a Vidiun defined drop folder</xs:documentation>
 			<xs:appinfo>
 				<example title="Using file size validation example">
 					<item>
@@ -253,10 +253,10 @@ class DropFolderXmlBulkUploadPlugin extends KalturaPlugin implements IKalturaBul
 	
 	';
 	
-		$schemaContributors = KalturaPluginManager::getPluginInstances('IKalturaSchemaContributor');
+		$schemaContributors = VidiunPluginManager::getPluginInstances('IVidiunSchemaContributor');
 		foreach($schemaContributors as $key => $schemaContributor)
 		{
-			/* @var $schemaContributor IKalturaSchemaContributor */
+			/* @var $schemaContributor IVidiunSchemaContributor */
 			$elements = $schemaContributor->contributeToSchema($xmlApiType);
 			if($elements)
 				$xsd .= $elements;
@@ -273,8 +273,8 @@ class DropFolderXmlBulkUploadPlugin extends KalturaPlugin implements IKalturaBul
 	 */
 	public static function getBulkUploadTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BulkUploadType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BulkUploadType', $value);
 	}
 		
 	/**
@@ -282,8 +282,8 @@ class DropFolderXmlBulkUploadPlugin extends KalturaPlugin implements IKalturaBul
 	 */
 	public static function getSchemaTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('SchemaType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('SchemaType', $value);
 	}
 		
 	/**
@@ -291,20 +291,20 @@ class DropFolderXmlBulkUploadPlugin extends KalturaPlugin implements IKalturaBul
 	 */
 	public static function getFileHandlerTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DropFolderFileHandlerType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DropFolderFileHandlerType', $value);
 	}
 	
 	public static function getErrorCodeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DropFolderFileErrorCode', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DropFolderFileErrorCode', $value);
 	}
 	
 	public static function getBatchJobObjectTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BatchJobObjectType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BatchJobObjectType', $value);
 	}
 		
 	/**
@@ -312,7 +312,7 @@ class DropFolderXmlBulkUploadPlugin extends KalturaPlugin implements IKalturaBul
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	public static function getEventConsumers()

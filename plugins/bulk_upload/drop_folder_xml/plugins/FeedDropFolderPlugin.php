@@ -2,7 +2,7 @@
 /**
  * @package plugins.FeedDropFolder
  */
-class FeedDropFolderPlugin extends KalturaPlugin implements IKalturaPlugin, IKalturaPending, IKalturaObjectLoader, IKalturaEnumerator, IKalturaApplicationTranslations
+class FeedDropFolderPlugin extends VidiunPlugin implements IVidiunPlugin, IVidiunPending, IVidiunObjectLoader, IVidiunEnumerator, IVidiunApplicationTranslations
 {
 	const PLUGIN_NAME = 'FeedDropFolder';
 	const DROP_FOLDER_PLUGIN_NAME = 'dropFolder';
@@ -10,7 +10,7 @@ class FeedDropFolderPlugin extends KalturaPlugin implements IKalturaPlugin, IKal
 	const ERROR_MESSAGE_INCOMPLETE_HANDLING = "Feed is too long- because of handling limitation not all feed items will be handled. Feed Drop Folder ID ";
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName() {
 		return self::PLUGIN_NAME;
@@ -20,40 +20,40 @@ class FeedDropFolderPlugin extends KalturaPlugin implements IKalturaPlugin, IKal
 	{
 		switch ($baseClass)
 		{
-			case 'KDropFolderEngine':
-				if ($enumValue == KalturaDropFolderType::FEED)
+			case 'VDropFolderEngine':
+				if ($enumValue == VidiunDropFolderType::FEED)
 				{
-					return new KFeedDropFolderEngine();
+					return new VFeedDropFolderEngine();
 				}
 				break;
-			case ('KalturaDropFolderFile'):
+			case ('VidiunDropFolderFile'):
 				if ($enumValue == self::getDropFolderTypeCoreValue(FeedDropFolderType::FEED) )
 				{
-					return new KalturaFeedDropFolderFile();
+					return new VidiunFeedDropFolderFile();
 				}
 				break;
-			case ('KalturaDropFolder'):
+			case ('VidiunDropFolder'):
 				if ($enumValue == self::getDropFolderTypeCoreValue(FeedDropFolderType::FEED) )
 				{
-					return new KalturaFeedDropFolder();
+					return new VidiunFeedDropFolder();
 				}
 				break;
-			case 'kDropFolderXmlFileHandler':
+			case 'vDropFolderXmlFileHandler':
 				if ($enumValue == self::getDropFolderTypeCoreValue(FeedDropFolderType::FEED))
 				{
-					return new kDropFolderFeedXmlFileHandler();
+					return new vDropFolderFeedXmlFileHandler();
 				}
 				break;
 			case 'Form_DropFolderConfigureExtend_SubForm':
-				if ($enumValue == Kaltura_Client_DropFolder_Enum_DropFolderType::FEED)
+				if ($enumValue == Vidiun_Client_DropFolder_Enum_DropFolderType::FEED)
 				{
 					return new Form_FeedDropFolderConfigureExtend_SubForm();
 				}
 				break;
-			case 'Kaltura_Client_DropFolder_Type_DropFolder':
-				if ($enumValue == Kaltura_Client_DropFolder_Enum_DropFolderType::FEED)
+			case 'Vidiun_Client_DropFolder_Type_DropFolder':
+				if ($enumValue == Vidiun_Client_DropFolder_Enum_DropFolderType::FEED)
 				{
-					return new Kaltura_Client_FeedDropFolder_Type_FeedDropFolder();
+					return new Vidiun_Client_FeedDropFolder_Type_FeedDropFolder();
 				}
 				break;
 		}
@@ -76,7 +76,7 @@ class FeedDropFolderPlugin extends KalturaPlugin implements IKalturaPlugin, IKal
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -93,10 +93,10 @@ class FeedDropFolderPlugin extends KalturaPlugin implements IKalturaPlugin, IKal
 	}
 		
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn() {
-		$dropFolderDependency = new KalturaDependency(self::DROP_FOLDER_PLUGIN_NAME);
+		$dropFolderDependency = new VidiunDependency(self::DROP_FOLDER_PLUGIN_NAME);
 		
 		return array($dropFolderDependency);
 	}
@@ -106,13 +106,13 @@ class FeedDropFolderPlugin extends KalturaPlugin implements IKalturaPlugin, IKal
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 
 	public static function getDropFolderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DropFolderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DropFolderType', $value);
 	}
 
 	/**
@@ -129,7 +129,7 @@ class FeedDropFolderPlugin extends KalturaPlugin implements IKalturaPlugin, IKal
 			$langFilePath = __DIR__ . "/config/lang/$default.php";
 		}
 		
-		KalturaLog::info("Loading file [$langFilePath]");
+		VidiunLog::info("Loading file [$langFilePath]");
 		$array = include($langFilePath);
 	
 		return array($locale => $array);

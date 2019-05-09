@@ -1,30 +1,30 @@
 
 <script type="text/javascript">
 
-<?php require_once __DIR__ . '/js/kObjects.js'; ?>
+<?php require_once __DIR__ . '/js/vObjects.js'; ?>
 
 
-function getVariables(kSelection, value, variables) {
+function getVariables(vSelection, value, variables) {
 
 	var variable =  'value';
-	if(kSelection.variable)
-		variable = kSelection.variable;
+	if(vSelection.variable)
+		variable = vSelection.variable;
 
 	variables[variable] = value;
 	
-	for(var variable in kSelection)
-		variables[variable] = kSelection[variable];
+	for(var variable in vSelection)
+		variables[variable] = vSelection[variable];
 	
 	return variables;
 }
 
-function addSelections(label, kSelections, selectCallback) {
+function addSelections(label, vSelections, selectCallback) {
 	var jqSelection = jQuery('<select><option value="">' + label + '</option></select>');
 	var jqWrap = null;
 	
-	for(var value in kSelections){
-		var kSelection = kSelections[value];
-		jqSelection.append('<option value="' + value + '">' + kSelection.label + '</option>');
+	for(var value in vSelections){
+		var vSelection = vSelections[value];
+		jqSelection.append('<option value="' + value + '">' + vSelection.label + '</option>');
 	}
 
 	jqSelection.change(function(){
@@ -38,16 +38,16 @@ function addSelections(label, kSelections, selectCallback) {
 		}
 
 		var value =  jqSelection.val();
-		var kSelection = kSelections[value];
-		if(kSelection != null && kSelection.subSelections == null && kSelection.fieldType == null){
+		var vSelection = vSelections[value];
+		if(vSelection != null && vSelection.subSelections == null && vSelection.fieldType == null){
 
-			var variablesObject = getVariables(kSelection, value, {});
+			var variablesObject = getVariables(vSelection, value, {});
 			selectCallback.apply(jqSelection, [null, variablesObject]);
 			return;
 		}
 
 		var jqSubField = null;
-		switch(kSelection.fieldType)
+		switch(vSelection.fieldType)
 		{
 			case 'text':
 				jqSubField = jQuery('<input>');
@@ -64,12 +64,12 @@ function addSelections(label, kSelections, selectCallback) {
 				break;
 			
 			default:
-				jqSubField = addSelections(kSelection.subLabel, kSelection.subSelections, function(subData, variables){
-					variables = getVariables(kSelection, jqSubField.val(), variables);
+				jqSubField = addSelections(vSelection.subLabel, vSelection.subSelections, function(subData, variables){
+					variables = getVariables(vSelection, jqSubField.val(), variables);
 		
 					var data = subData;
-					if(kSelection.getData)
-						var data = kSelection.getData.apply(jqSelection, [subData, variables]);
+					if(vSelection.getData)
+						var data = vSelection.getData.apply(jqSelection, [subData, variables]);
 					
 					selectCallback.apply(jqSelection, [data, variables]);
 				});
@@ -102,7 +102,7 @@ jQuery(document).ready(function() {
 	var jqObject = jQuery('#object');
 	var jqObjectApiName = jQuery('#objectType');
 	
-	var jqSelection = addSelections('Select Object', kObjects, function(data, variables){
+	var jqSelection = addSelections('Select Object', vObjects, function(data, variables){
 		jqObject.val(data.code);
 		jqObjectApiName.val(data.apiName);
 	});

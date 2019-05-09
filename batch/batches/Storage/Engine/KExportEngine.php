@@ -2,17 +2,17 @@
 /**
  * 
  */
-abstract class KExportEngine
+abstract class VExportEngine
 {
 	/**
-	 * @var KalturaStorageJobData
+	 * @var VidiunStorageJobData
 	 */
 	protected $data;
 	
 	/**
-	 * @param KalturaStorageJobData $data
+	 * @param VidiunStorageJobData $data
 	 */
-	public function __construct(KalturaStorageJobData $data)
+	public function __construct(VidiunStorageJobData $data)
 	{
 		$this->data = $data;
 	}
@@ -35,22 +35,22 @@ abstract class KExportEngine
 	
 	/**
 	 * @param int $protocol
-	 * @param KalturaStorageExportJobData $data
-	 * @return KExportEngine
+	 * @param VidiunStorageExportJobData $data
+	 * @return VExportEngine
 	 */
-	public static function getInstance ($protocol, $partnerId, KalturaStorageJobData $data)
+	public static function getInstance ($protocol, $partnerId, VidiunStorageJobData $data)
 	{
 		switch ($protocol)
 		{
-			case KalturaStorageProfileProtocol::FTP:
-			case KalturaStorageProfileProtocol::KALTURA_DC:
-			case KalturaStorageProfileProtocol::S3:
-			case KalturaStorageProfileProtocol::SCP:
-			case KalturaStorageProfileProtocol::SFTP:
-			case KalturaStorageProfileProtocol::LOCAL:
-				return new KFileTransferExportEngine($data, $protocol);
+			case VidiunStorageProfileProtocol::FTP:
+			case VidiunStorageProfileProtocol::VIDIUN_DC:
+			case VidiunStorageProfileProtocol::S3:
+			case VidiunStorageProfileProtocol::SCP:
+			case VidiunStorageProfileProtocol::SFTP:
+			case VidiunStorageProfileProtocol::LOCAL:
+				return new VFileTransferExportEngine($data, $protocol);
 			default:
-				return KalturaPluginManager::loadObject('KExportEngine', $protocol, array($data, $partnerId));
+				return VidiunPluginManager::loadObject('VExportEngine', $protocol, array($data, $partnerId));
 		}
 	}
 }

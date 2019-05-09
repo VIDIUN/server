@@ -4,7 +4,7 @@
  * @package plugins.dropFolder
  * @subpackage model.enum
  */ 
-class DropFolderPermissionName implements IKalturaPluginEnum, PermissionName
+class DropFolderPermissionName implements IVidiunPluginEnum, PermissionName
 {
 	const SYSTEM_ADMIN_DROP_FOLDER_BASE = 'SYSTEM_ADMIN_DROP_FOLDER_BASE';
 	const SYSTEM_ADMIN_DROP_FOLDER_MODIFY = 'SYSTEM_ADMIN_DROP_FOLDER_MODIFY';

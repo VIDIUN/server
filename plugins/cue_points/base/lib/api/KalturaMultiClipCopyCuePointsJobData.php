@@ -3,12 +3,12 @@
  * @package plugins.cue_points
  * @subpackage api.objects
  */
-class KalturaMultiClipCopyCuePointsJobData extends KalturaCopyCuePointsJobData
+class VidiunMultiClipCopyCuePointsJobData extends VidiunCopyCuePointsJobData
 {
     
     /**
      *  an array of source start time and duration
-     * @var KalturaClipDescriptionArray
+     * @var VidiunClipDescriptionArray
      */
     public $clipsDescriptionArray;
 
@@ -18,7 +18,7 @@ class KalturaMultiClipCopyCuePointsJobData extends KalturaCopyCuePointsJobData
     );
 
     /* (non-PHPdoc)
-     * @see KalturaObject::getMapBetweenObjects()
+     * @see VidiunObject::getMapBetweenObjects()
      */
     public function getMapBetweenObjects ( )
     {
@@ -26,12 +26,12 @@ class KalturaMultiClipCopyCuePointsJobData extends KalturaCopyCuePointsJobData
     }
 
     /* (non-PHPdoc)
-     * @see KalturaObject::toObject()
+     * @see VidiunObject::toObject()
      */
     public function toObject($dbData = null, $props_to_skip = array())
     {
         if(is_null($dbData))
-            $dbData = new kMultiClipCopyCuePointsJobData();
+            $dbData = new vMultiClipCopyCuePointsJobData();
 
         return parent::toObject($dbData, $props_to_skip);
     }

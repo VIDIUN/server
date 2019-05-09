@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage api.objects
  */
-class KalturaCopyCaptionsJobData extends KalturaJobData
+class VidiunCopyCaptionsJobData extends VidiunJobData
 {
 
 	/** entry Id
@@ -13,7 +13,7 @@ class KalturaCopyCaptionsJobData extends KalturaJobData
 
 	/**
 	 *  an array of source start time and duration
-	 * @var KalturaClipDescriptionArray
+	 * @var VidiunClipDescriptionArray
 	 */
 	public $clipsDescriptionArray;
 
@@ -30,7 +30,7 @@ class KalturaCopyCaptionsJobData extends KalturaJobData
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -38,12 +38,12 @@ class KalturaCopyCaptionsJobData extends KalturaJobData
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbData = null, $props_to_skip = array())
 	{
 		if(is_null($dbData))
-			$dbData = new kCopyCaptionsJobData();
+			$dbData = new vCopyCaptionsJobData();
 
 		return parent::toObject($dbData, $props_to_skip);
 	}

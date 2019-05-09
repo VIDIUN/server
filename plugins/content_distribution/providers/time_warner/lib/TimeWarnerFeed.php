@@ -48,7 +48,7 @@ class TimeWarnerFeed
 	public function __construct($templateName)
 	{
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml/' . $templateName;
-		$this->doc = new KDOMDocument();
+		$this->doc = new VDOMDocument();
 		$this->doc->formatOutput = true;
 		$this->doc->preserveWhiteSpace = false;
 		$this->doc->load($xmlTemplate);
@@ -85,7 +85,7 @@ class TimeWarnerFeed
 	 */
 	public function setNodeValue($xpath, $value, DOMNode $contextnode = null)
 	{
-		kXml::setNodeValue($this->xpath, $xpath, $value, $contextnode);
+		vXml::setNodeValue($this->xpath, $xpath, $value, $contextnode);
 	}
 	
 	/**
@@ -142,15 +142,15 @@ class TimeWarnerFeed
 	{
 		$item = $this->item->cloneNode(true);
 		
-		kXml::setNodeValue($this->xpath,'guid', $values[TimeWarnerDistributionField::GUID], $item);
-		kXml::setNodeValue($this->xpath,'title', $values[TimeWarnerDistributionField::TITLE], $item);
-		kXml::setNodeValue($this->xpath,'description', $values[TimeWarnerDistributionField::DESCRIPTION], $item);
-		kXml::setNodeValue($this->xpath,'author', $values[TimeWarnerDistributionField::AUTHOR], $item);
-		kXml::setNodeValue($this->xpath,'pubDate', $this->formatTimeWarnerDate($values[TimeWarnerDistributionField::PUB_DATE]), $item);
+		vXml::setNodeValue($this->xpath,'guid', $values[TimeWarnerDistributionField::GUID], $item);
+		vXml::setNodeValue($this->xpath,'title', $values[TimeWarnerDistributionField::TITLE], $item);
+		vXml::setNodeValue($this->xpath,'description', $values[TimeWarnerDistributionField::DESCRIPTION], $item);
+		vXml::setNodeValue($this->xpath,'author', $values[TimeWarnerDistributionField::AUTHOR], $item);
+		vXml::setNodeValue($this->xpath,'pubDate', $this->formatTimeWarnerDate($values[TimeWarnerDistributionField::PUB_DATE]), $item);
 		
-		kXml::setNodeValue($this->xpath,'media:copyright', $values[TimeWarnerDistributionField::MEDIA_COPYRIGHT], $item);
-		kXml::setNodeValue($this->xpath,'media:keywords', $values[TimeWarnerDistributionField::MEDIA_KEYWORDS], $item);
-		kXml::setNodeValue($this->xpath,'media:rating', $values[TimeWarnerDistributionField::MEDIA_RATING], $item);
+		vXml::setNodeValue($this->xpath,'media:copyright', $values[TimeWarnerDistributionField::MEDIA_COPYRIGHT], $item);
+		vXml::setNodeValue($this->xpath,'media:keywords', $values[TimeWarnerDistributionField::MEDIA_KEYWORDS], $item);
+		vXml::setNodeValue($this->xpath,'media:rating', $values[TimeWarnerDistributionField::MEDIA_RATING], $item);
 
 		//handle category
 		$this->addCategory($item,'CT-'.$values[TimeWarnerDistributionField::MEDIA_CATEGORY_CT]);
@@ -169,21 +169,21 @@ class TimeWarnerFeed
 		}				
 		
 		
-		kXml::setNodeValue($this->xpath,'plmedia:approved', $values[TimeWarnerDistributionField::PLMEDIA_APPROVED], $item);
+		vXml::setNodeValue($this->xpath,'plmedia:approved', $values[TimeWarnerDistributionField::PLMEDIA_APPROVED], $item);
 		
-		kXml::setNodeValue($this->xpath,'twcable:episodeNumber', $values[TimeWarnerDistributionField::CABLE_EPISODE_NUMBER], $item);
-		kXml::setNodeValue($this->xpath,'twcable:externalID', $values[TimeWarnerDistributionField::CABLE_EXTERNAL_ID], $item);
-		kXml::setNodeValue($this->xpath,'twcable:productionDate', $values[TimeWarnerDistributionField::CABLE_PRODUCTION_DATE], $item);
-		kXml::setNodeValue($this->xpath,'twcable:network', $values[TimeWarnerDistributionField::CABLE_NETWORK], $item);
-		kXml::setNodeValue($this->xpath,'twcable:provider', $values[TimeWarnerDistributionField::CABLE_PROVIDER], $item);
-		kXml::setNodeValue($this->xpath,'twcable:shortDescription', $values[TimeWarnerDistributionField::CABLE_SHORT_DESCRIPTION], $item);
-		kXml::setNodeValue($this->xpath,'twcable:shortTitle', $values[TimeWarnerDistributionField::CABLE_SHORT_TITLE], $item);
-		kXml::setNodeValue($this->xpath,'twcable:showName', $values[TimeWarnerDistributionField::CABLE_SHOW_NAME], $item);
+		vXml::setNodeValue($this->xpath,'twcable:episodeNumber', $values[TimeWarnerDistributionField::CABLE_EPISODE_NUMBER], $item);
+		vXml::setNodeValue($this->xpath,'twcable:externalID', $values[TimeWarnerDistributionField::CABLE_EXTERNAL_ID], $item);
+		vXml::setNodeValue($this->xpath,'twcable:productionDate', $values[TimeWarnerDistributionField::CABLE_PRODUCTION_DATE], $item);
+		vXml::setNodeValue($this->xpath,'twcable:network', $values[TimeWarnerDistributionField::CABLE_NETWORK], $item);
+		vXml::setNodeValue($this->xpath,'twcable:provider', $values[TimeWarnerDistributionField::CABLE_PROVIDER], $item);
+		vXml::setNodeValue($this->xpath,'twcable:shortDescription', $values[TimeWarnerDistributionField::CABLE_SHORT_DESCRIPTION], $item);
+		vXml::setNodeValue($this->xpath,'twcable:shortTitle', $values[TimeWarnerDistributionField::CABLE_SHORT_TITLE], $item);
+		vXml::setNodeValue($this->xpath,'twcable:showName', $values[TimeWarnerDistributionField::CABLE_SHOW_NAME], $item);
 		
 		$startTime = date('c', $values[TimeWarnerDistributionField::START_TIME]);
 		$endTime = date('c', $values[TimeWarnerDistributionField::END_TIME]);
 		$dcTerms = "start=$startTime; end=$endTime;";
-		kXml::setNodeValue($this->xpath,'dcterms:valid', $dcTerms, $item);
+		vXml::setNodeValue($this->xpath,'dcterms:valid', $dcTerms, $item);
 
 		if (!is_null($flavorAssets) && is_array($flavorAssets) && count($flavorAssets)>0)
 			$this->setFlavorAsset($item, $flavorAssets);
@@ -200,7 +200,7 @@ class TimeWarnerFeed
 				switch($assetType){
 					case CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION):
 						/* @var $captionPlugin CaptionPlugin */
-						$captionPlugin = KalturaPluginManager::getPluginInstance(CaptionPlugin::PLUGIN_NAME);
+						$captionPlugin = VidiunPluginManager::getPluginInstance(CaptionPlugin::PLUGIN_NAME);
 						$dummyElement = new SimpleXMLElement('<dummy/>');
 						$captionPlugin->contributeCaptionAssets($additionalAsset, $dummyElement);
 						$dummyDom = dom_import_simplexml($dummyElement);
@@ -210,7 +210,7 @@ class TimeWarnerFeed
 						break;
 					case AttachmentPlugin::getAssetTypeCoreValue(AttachmentAssetType::ATTACHMENT):
 						/* @var $attachmentPlugin AttachmentPlugin */
-						$attachmentPlugin = KalturaPluginManager::getPluginInstance(AttachmentPlugin::PLUGIN_NAME);
+						$attachmentPlugin = VidiunPluginManager::getPluginInstance(AttachmentPlugin::PLUGIN_NAME);
 						$dummyElement = new SimpleXMLElement('<dummy/>');
 						$attachmentPlugin->contributeAttachmentAssets($additionalAsset, $dummyElement);
 						$dummyDom = dom_import_simplexml($dummyElement);
@@ -258,7 +258,7 @@ class TimeWarnerFeed
 		$mediaGroup = $this->xpath->query('media:group', $item)->item(0);
 		$mediaGroup->appendChild($content);
 		$url = $this->getAssetUrl($flavorAsset);
-		kXml::setNodeValue($this->xpath,'@url', $url, $content);
+		vXml::setNodeValue($this->xpath,'@url', $url, $content);
 		
 	}
 	
@@ -270,9 +270,9 @@ class TimeWarnerFeed
 		/** @var $thumbAsset thumbAsset */ 
 		$thumbAsset = $thumbAssets[0];
 		$url = $this->getAssetUrl($thumbAsset);
-		kXml::setNodeValue($this->xpath,'media:thumbnail/@url', $url, $item);
-		kXml::setNodeValue($this->xpath,'media:thumbnail/@width', $thumbAsset->getWidth(), $item);
-		kXml::setNodeValue($this->xpath,'media:thumbnail/@height', $thumbAsset->getHeight(), $item);	
+		vXml::setNodeValue($this->xpath,'media:thumbnail/@url', $url, $item);
+		vXml::setNodeValue($this->xpath,'media:thumbnail/@width', $thumbAsset->getWidth(), $item);
+		vXml::setNodeValue($this->xpath,'media:thumbnail/@height', $thumbAsset->getHeight(), $item);	
 	}
 	
 	protected function getContentTypeFromUrl($url)
@@ -290,7 +290,7 @@ class TimeWarnerFeed
 		}
 		else
 		{
-			KalturaLog::alert('"Content-Type" header was not found for the following URL: '. $url);
+			VidiunLog::alert('"Content-Type" header was not found for the following URL: '. $url);
 			return null;
 		}
 	}

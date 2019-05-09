@@ -4,10 +4,10 @@
  * @subpackage api.objects
  * @abstract
  */
-abstract class KalturaDropFolderFileHandlerConfig extends KalturaObject
+abstract class VidiunDropFolderFileHandlerConfig extends VidiunObject
 {	
 	/**
-	 * @var KalturaDropFolderFileHandlerType
+	 * @var VidiunDropFolderFileHandlerType
 	 * @readonly
 	 */
 	public $handlerType;

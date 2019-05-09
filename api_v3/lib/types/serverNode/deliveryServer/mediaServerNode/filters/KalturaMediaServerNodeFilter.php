@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaMediaServerNodeFilter extends KalturaMediaServerNodeBaseFilter
+class VidiunMediaServerNodeFilter extends VidiunMediaServerNodeBaseFilter
 {
 }

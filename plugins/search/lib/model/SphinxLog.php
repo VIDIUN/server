@@ -19,7 +19,7 @@ class SphinxLog extends BaseSphinxLog {
 	{
 		parent::applyDefaultValues();
 		
-		$this->setDc(kDataCenterMgr::getCurrentDcId());
+		$this->setDc(vDataCenterMgr::getCurrentDcId());
 	}
 	
 } // SphinxLog

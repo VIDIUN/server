@@ -1,11 +1,11 @@
 <?php
 /**
- * Will run KScheduleHelper 
+ * Will run VScheduleHelper 
  *
  * @package Scheduler
  */
 require_once(__DIR__ . "/../bootstrap.php");
 
-$instance = new KScheduleHelper();
+$instance = new VScheduleHelper();
 $instance->run(); 
 $instance->done();

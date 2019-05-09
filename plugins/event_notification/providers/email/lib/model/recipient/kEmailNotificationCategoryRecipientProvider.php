@@ -5,49 +5,49 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class kEmailNotificationCategoryRecipientProvider extends kEmailNotificationRecipientProvider
+class vEmailNotificationCategoryRecipientProvider extends vEmailNotificationRecipientProvider
 {
 	/**
 	 * ID of the category to whose subscribers the email should be sent
-	 * @var kStringValue
+	 * @var vStringValue
 	 */
 	protected $categoryId;
 
 	/**
 	 * ID of the category to whose subscribers the email should be sent
-	 * @var kStringValue
+	 * @var vStringValue
 	 */
 	protected $categoryIds;
 
 	/**
 	 * Additional filter
-	 * @var categoryKuserFilter
+	 * @var categoryVuserFilter
 	 */
 	protected $categoryUserFilter;
 	
 	/**
-	 * @return kStringValue
+	 * @return vStringValue
 	 */
 	public function getCategoryId() {
 		return $this->categoryId;
 	}
 
 	/**
-	 * @param kStringValue $category_id
+	 * @param vStringValue $category_id
 	 */
 	public function setCategoryId($category_id) {
 		$this->categoryId = $category_id;
 	}
 
 	/**
-	 * @return kStringValue
+	 * @return vStringValue
 	 */
 	public function getCategoryIds() {
 		return $this->categoryIds;
 	}
 
 	/**
-	 * @param kStringValue $category_id
+	 * @param vStringValue $category_id
 	 */
 	public function setCategoryIds($category_ids) {
 		$this->categoryIds = $category_ids;
@@ -55,11 +55,11 @@ class kEmailNotificationCategoryRecipientProvider extends kEmailNotificationReci
 	
 	
 	/* (non-PHPdoc)
-	 * @see kEmailNotificationRecipientProvider::getScopedProviderJobData()
+	 * @see vEmailNotificationRecipientProvider::getScopedProviderJobData()
 	 */
-	public function getScopedProviderJobData(kScope $scope = null)
+	public function getScopedProviderJobData(vScope $scope = null)
     {
-		$ret = new kEmailNotificationCategoryRecipientJobData();
+		$ret = new vEmailNotificationCategoryRecipientJobData();
 
 		if (!$this->categoryId && !$this->categoryIds)
 		{
@@ -67,14 +67,14 @@ class kEmailNotificationCategoryRecipientProvider extends kEmailNotificationReci
 		}
 
 		$implicitCategoryId = null;
-		if ($this->categoryId && $this->categoryId instanceof kStringField)
+		if ($this->categoryId && $this->categoryId instanceof vStringField)
 		{
 			$this->categoryId->setScope($scope);
 			$implicitCategoryId = $this->categoryId->getValue();
 		}
 
 		$implicitCategoryIds = null;
-		if ($this->categoryIds && $this->categoryIds instanceof kStringField)
+		if ($this->categoryIds && $this->categoryIds instanceof vStringField)
 		{
 
 			$this->categoryIds->setScope($scope);
@@ -86,7 +86,7 @@ class kEmailNotificationCategoryRecipientProvider extends kEmailNotificationReci
 			$implicitCategoryIds .= ",$implicitCategoryId";
 		}
 
-		$categoryUserFilter = new categoryKuserFilter();
+		$categoryUserFilter = new categoryVuserFilter();
 		$categoryUserFilter->set('_matchor_permission_names', PermissionName::CATEGORY_SUBSCRIBE);
 		if ($this->categoryUserFilter)
 		{
@@ -107,16 +107,16 @@ class kEmailNotificationCategoryRecipientProvider extends kEmailNotificationReci
 	}
 
 	/**
-	 * @return categoryKuserFilter
+	 * @return categoryVuserFilter
 	 */
 	public function getCategoryUserFilter() {
 		return $this->categoryUserFilter;
 	}
 
 	/**
-	 * @param categoryKuserFilter $categoryUserFilter
+	 * @param categoryVuserFilter $categoryUserFilter
 	 */
-	public function setCategoryUserFilter(categoryKuserFilter $categoryUserFilter) {
+	public function setCategoryUserFilter(categoryVuserFilter $categoryUserFilter) {
 		$this->categoryUserFilter = $categoryUserFilter;
 	}
 }

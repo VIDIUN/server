@@ -1,71 +1,71 @@
 <?php
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-require_once ( __DIR__ . "/defKeditorservicesAction.class.php");
+require_once ( __DIR__ . "/defVeditorservicesAction.class.php");
 
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-class getAllEntriesAction extends defKeditorservicesAction
+class getAllEntriesAction extends defVeditorservicesAction
 {
-	const LIST_TYPE_KSHOW = 1 ;
-	const LIST_TYPE_KUSER = 2 ;
+	const LIST_TYPE_VSHOW = 1 ;
+	const LIST_TYPE_VUSER = 2 ;
 	const LIST_TYPE_ROUGHCUT = 4 ;
 	const LIST_TYPE_EPISODE = 8 ;
 	const LIST_TYPE_ALL = 15;
 	
-	protected function executeImpl ( kshow $kshow, entry &$entry )
+	protected function executeImpl ( vshow $vshow, entry &$entry )
 	{
 		$list_type = $this->getP ( "list_type" , self::LIST_TYPE_ALL );
 		
-		$kshow_entry_list = array();
-		$kuser_entry_list = array();
+		$vshow_entry_list = array();
+		$vuser_entry_list = array();
 		
-		if ( $list_type & self::LIST_TYPE_KSHOW )
+		if ( $list_type & self::LIST_TYPE_VSHOW )
 		{
 			$c = new Criteria();
 			$c->add ( entryPeer::TYPE , entryType::MEDIA_CLIP );
 			$c->add ( entryPeer::MEDIA_TYPE , entry::ENTRY_MEDIA_TYPE_SHOW , Criteria::NOT_EQUAL );
-			$c->add ( entryPeer::KSHOW_ID , $this->kshow_id );
-			$kshow_entry_list = entryPeer::doSelectJoinkuser( $c );
+			$c->add ( entryPeer::VSHOW_ID , $this->vshow_id );
+			$vshow_entry_list = entryPeer::doSelectJoinvuser( $c );
 		}
 
-		if ( $list_type & self::LIST_TYPE_KUSER )
+		if ( $list_type & self::LIST_TYPE_VUSER )
 		{
 			$c = new Criteria();
 			$c->add ( entryPeer::TYPE , entryType::MEDIA_CLIP );
 			$c->add ( entryPeer::MEDIA_TYPE , entry::ENTRY_MEDIA_TYPE_SHOW , Criteria::NOT_EQUAL );
-			$c->add ( entryPeer::KUSER_ID , $this->getLoggedInUserIds(), Criteria::IN  );
-			$kuser_entry_list = entryPeer::doSelectJoinkuser( $c );
+			$c->add ( entryPeer::VUSER_ID , $this->getLoggedInUserIds(), Criteria::IN  );
+			$vuser_entry_list = entryPeer::doSelectJoinvuser( $c );
 		}		
 
 		if ( $list_type & self::LIST_TYPE_EPISODE )
 		{
-			if ( $kshow->getEpisodeId() )
+			if ( $vshow->getEpisodeId() )
 			{
-				// episode_id will point to the "parent" kshow
-				// fetch the entries of the parent kshow
+				// episode_id will point to the "parent" vshow
+				// fetch the entries of the parent vshow
 				$c = new Criteria();
 				$c->add ( entryPeer::TYPE , entryType::MEDIA_CLIP );
 				$c->add ( entryPeer::MEDIA_TYPE , entry::ENTRY_MEDIA_TYPE_SHOW , Criteria::NOT_EQUAL );
-				$c->add ( entryPeer::KSHOW_ID , $kshow->getEpisodeId() );
-				$parent_kshow_entries = entryPeer::doSelectJoinkuser( $c );
-				if ( count ( $parent_kshow_entries) )
+				$c->add ( entryPeer::VSHOW_ID , $vshow->getEpisodeId() );
+				$parent_vshow_entries = entryPeer::doSelectJoinvuser( $c );
+				if ( count ( $parent_vshow_entries) )
 				{
-					$kshow_entry_list = kArray::append  ( $kshow_entry_list , $parent_kshow_entries );
+					$vshow_entry_list = vArray::append  ( $vshow_entry_list , $parent_vshow_entries );
 				}			
 			}
 		}
 		
-		// fetch all entries that were used in the roughcut - those of other kusers 
-		// - appeared under kuser_entry_list when someone else logged in
+		// fetch all entries that were used in the roughcut - those of other vusers 
+		// - appeared under vuser_entry_list when someone else logged in
 
 		if ( $list_type & self::LIST_TYPE_ROUGHCUT )
 		{
-			if ( $kshow->getHasRoughcut() )
+			if ( $vshow->getHasRoughcut() )
 			{
 				$entry_ids_from_roughcut = myFlvStreamer::getAllAssetsIds ( $entry );
 				
@@ -73,7 +73,7 @@ class getAllEntriesAction extends defKeditorservicesAction
 				foreach ( $entry_ids_from_roughcut as $id )
 				{
 					$found = false;
-					foreach ( $kshow_entry_list as $entry )
+					foreach ( $vshow_entry_list as $entry )
 					{
 						if ( $entry->getId() == $id )
 						{
@@ -86,22 +86,22 @@ class getAllEntriesAction extends defKeditorservicesAction
 				
 				$c = new Criteria();
 				$c->add ( entryPeer::ID , $final_id_list , Criteria::IN );
-				$extra_entries = entryPeer::doSelectJoinkuser( $c );
+				$extra_entries = entryPeer::doSelectJoinvuser( $c );
 				
 				// merge the 2 lists into 1:
-				$kshow_entry_list = kArray::append  ( $kshow_entry_list , $extra_entries );
+				$vshow_entry_list = vArray::append  ( $vshow_entry_list , $extra_entries );
 			}
 		}
 		
-		$this->kshow_entry_list = $kshow_entry_list;
-		$this->kuser_entry_list = $kuser_entry_list;
+		$this->vshow_entry_list = $vshow_entry_list;
+		$this->vuser_entry_list = $vuser_entry_list;
 		
 	}
 	
-	protected function noSuchKshow ( $kshow_id )
+	protected function noSuchVshow ( $vshow_id )
 	{
-		$this->kshow_entry_list = array ();
-		$this->kuser_entry_list = array ();
+		$this->vshow_entry_list = array ();
+		$this->vuser_entry_list = array ();
 	}
 
 }

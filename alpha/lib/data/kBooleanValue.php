@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kBooleanValue extends kValue
+class vBooleanValue extends vValue
 {
 	/**
 	 * @param bool $value
@@ -32,7 +32,7 @@ class kBooleanValue extends kValue
 	}
 
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @return bool
 	 */
 	public function shouldDisableCache($scope)

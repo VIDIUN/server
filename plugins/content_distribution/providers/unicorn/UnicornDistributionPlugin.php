@@ -2,7 +2,7 @@
 /**
  * @package plugins.unicornDistribution
  */
-class UnicornDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider, IKalturaServices
+class UnicornDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider, IVidiunServices
 {
 	const PLUGIN_NAME = 'unicornDistribution';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
@@ -17,12 +17,12 @@ class UnicornDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -83,7 +83,7 @@ class UnicornDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::UNICORN)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::UNICORN)
 		{										
 			if($baseClass == 'IDistributionEngineSubmit')
 				return 'UnicornDistributionEngine';
@@ -104,23 +104,23 @@ class UnicornDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 				return 'UnicornDistributionEngine';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::UNICORN)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::UNICORN)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_UnicornProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_UnicornDistribution_Type_UnicornDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_UnicornDistribution_Type_UnicornDistributionProfile';
 		}
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(UnicornDistributionProviderType::UNICORN))
-			return 'KalturaUnicornDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(UnicornDistributionProviderType::UNICORN))
+			return 'VidiunUnicornDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(UnicornDistributionProviderType::UNICORN))
-			return 'kUnicornDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(UnicornDistributionProviderType::UNICORN))
+			return 'vUnicornDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(UnicornDistributionProviderType::UNICORN))
-			return 'KalturaUnicornDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(UnicornDistributionProviderType::UNICORN))
+			return 'VidiunUnicornDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(UnicornDistributionProviderType::UNICORN))
 			return 'UnicornDistributionProfile';
@@ -141,11 +141,11 @@ class UnicornDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaUnicornDistributionProvider();
+		$distributionProvider = new VidiunUnicornDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -165,8 +165,8 @@ class UnicornDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -174,11 +174,11 @@ class UnicornDistributionPlugin extends KalturaPlugin implements IKalturaPermiss
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{

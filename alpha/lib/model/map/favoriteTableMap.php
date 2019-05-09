@@ -37,7 +37,7 @@ class favoriteTableMap extends TableMap {
 		$this->setPackage('Core');
 		$this->setUseIdGenerator(true);
 		// columns
-		$this->addForeignKey('KUSER_ID', 'KuserId', 'INTEGER', 'kuser', 'ID', false, null, null);
+		$this->addForeignKey('VUSER_ID', 'VuserId', 'INTEGER', 'vuser', 'ID', false, null, null);
 		$this->addColumn('SUBJECT_TYPE', 'SubjectType', 'INTEGER', false, null, null);
 		$this->addColumn('SUBJECT_ID', 'SubjectId', 'INTEGER', false, null, null);
 		$this->addColumn('PRIVACY', 'Privacy', 'INTEGER', false, null, null);
@@ -50,7 +50,7 @@ class favoriteTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('kuser', 'kuser', RelationMap::MANY_TO_ONE, array('kuser_id' => 'id', ), null, null);
+    $this->addRelation('vuser', 'vuser', RelationMap::MANY_TO_ONE, array('vuser_id' => 'id', ), null, null);
 	} // buildRelations()
 
 } // favoriteTableMap

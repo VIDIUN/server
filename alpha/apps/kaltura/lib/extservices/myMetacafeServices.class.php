@@ -9,7 +9,7 @@ class myMetacafeServices extends myBaseMediaSource implements IMediaSource
 	protected $source_name = "Metacafe";
 	protected $auth_method = array ( self::AUTH_METHOD_PUBLIC );
 	protected $search_in_user = false;
-	protected $logo = "http://www.kaltura.com/images/wizard/logo_metacafe.png";
+	protected $logo = "http://www.vidiun.com/images/wizard/logo_metacafe.png";
 	protected $id = entry::ENTRY_MEDIA_SOURCE_METACAFE;
 
 	private static $domain = "http://www.metacafe.com";
@@ -38,7 +38,7 @@ class myMetacafeServices extends myBaseMediaSource implements IMediaSource
 
 	}
 
-	public function getAuthData( $kuserId, $userName, $password, $token)
+	public function getAuthData( $vuserId, $userName, $password, $token)
 	{
 		return;
 	}
@@ -55,7 +55,7 @@ class myMetacafeServices extends myBaseMediaSource implements IMediaSource
 		$startIndex = ($page - 1) * $pageSize;
 		$url = self::$domain."/api/videos/?vq=".urlencode($searchText)."&max-results=".$pageSize."&start-index=".$startIndex."&time=all_time";
 
-		$content = kFile::downloadUrlToString($url);
+		$content = vFile::downloadUrlToString($url);
 
 		return $content;
 	}
@@ -99,7 +99,7 @@ class myMetacafeServices extends myBaseMediaSource implements IMediaSource
 							'license' => '',
 							'credit' => $credit,
 							'source_link' => $link,
-							'url' => kConf::get("apphome_url") . "/index.php/extservices/metacafeRedirect/itemId/".$id
+							'url' => vConf::get("apphome_url") . "/index.php/extservices/metacafeRedirect/itemId/".$id
 						);
 				}
 

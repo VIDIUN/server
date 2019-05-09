@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaDeliveryProfileGenericAppleHttpOrderBy extends KalturaDeliveryProfileOrderBy
+class VidiunDeliveryProfileGenericAppleHttpOrderBy extends VidiunDeliveryProfileOrderBy
 {
 }

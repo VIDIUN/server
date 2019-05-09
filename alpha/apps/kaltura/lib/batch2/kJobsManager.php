@@ -8,7 +8,7 @@
  * @subpackage Batch
  *
  */
-class kJobsManager
+class vJobsManager
 {
 	
 	const BULK_DOWNLOAD_TOTAL_ENTRIES_AMOUNT_RESTRICTION = 1000;
@@ -38,8 +38,8 @@ class kJobsManager
 			return $batchJob;
 		}
 		
-		$event = new kBatchJobStatusEvent($batchJob);
-		kEventsManager::raiseEvent($event);
+		$event = new vBatchJobStatusEvent($batchJob);
+		vEventsManager::raiseEvent($event);
 		$batchJob->reload();
 		return $batchJob;
 	}
@@ -93,7 +93,7 @@ class kJobsManager
 		
 		$lockObject = $dbBatchJob->getBatchJobLock();
 		if(is_null($lockObject)) {
-			KalturaLog::err("Batch job [" . $dbBatchJob->getId() . "] doesn't have a lock object and can't be deleted. Status (" . $dbBatchJob->getStatus() . ")");
+			VidiunLog::err("Batch job [" . $dbBatchJob->getId() . "] doesn't have a lock object and can't be deleted. Status (" . $dbBatchJob->getStatus() . ")");
 			return $dbBatchJob;
 		}
 		
@@ -205,7 +205,7 @@ class kJobsManager
 	
 	public static function addMailJob(BatchJob $parentJob = null, $entryId, $partnerId, $mailType, $mailPriority, $fromEmail, $fromName, $toEmail, array $bodyParams = array(), array $subjectParams = array(), $toName = null, $toId = null, $camaignId = null, $templatePath = null, $separator = null)
 	{
-	  	$jobData = new kMailJobData();
+	  	$jobData = new vMailJobData();
 		$jobData->setMailPriority($mailPriority);
 	 	$jobData->setMailType($mailType);
 		
@@ -247,7 +247,7 @@ class kJobsManager
 	
 	public static function addProvisionDeleteJob(BatchJob $parentJob = null, entry $entry)
 	{
-		$jobData = kProvisionJobData::getInstance($entry->getSource());
+		$jobData = vProvisionJobData::getInstance($entry->getSource());
 		if ($jobData){
 			$jobData->setStreamID($entry->getStreamRemoteId());
 			$subType = $entry->getSource();
@@ -272,7 +272,7 @@ class kJobsManager
 		return false;
 	}
 	
-	public static function addProvisionProvideJob(BatchJob $parentJob = null, entry $entry, kProvisionJobData $jobData)
+	public static function addProvisionProvideJob(BatchJob $parentJob = null, entry $entry, vProvisionJobData $jobData)
 	{
 		$entry->setStatus(entryStatus::IMPORT);
 		$entry->save();
@@ -306,9 +306,9 @@ class kJobsManager
 	 */
 	public static function addConvertIsmCollectionJob($tag, FileSyncKey $srcSyncKey, entry $entry, BatchJob $parentJob = null, array $flavorParamsOutputs, $sameRoot = null)
 	{		
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
 		
-		$srcFileSyncDescriptor = new kSourceFileSyncDescriptor();
+		$srcFileSyncDescriptor = new vSourceFileSyncDescriptor();
 		if($fileSync)
 		{
 			if($fileSync->getFileType() != FileSync::FILE_SYNC_FILE_TYPE_URL)			
@@ -326,7 +326,7 @@ class kJobsManager
 		
 		
 		// creates convert data
-		$convertCollectionData = new kConvertCollectionJobData();
+		$convertCollectionData = new vConvertCollectionJobData();
 		$convertCollectionData->setSrcFileSyncs(array($srcFileSyncDescriptor));
 		$convertCollectionData->setDestFileName($fileName);
 		
@@ -338,7 +338,7 @@ class kJobsManager
 			$clipOffset = $flavorParamsOutput->getClipOffset();
 			$clipDuration = $flavorParamsOutput->getClipDuration();
 			if(isset($clipOffset) || isset($clipDuration)){
-				KalturaLog::log("Found clipping params: clipOffset($clipOffset),clipDuration($clipDuration)");
+				VidiunLog::log("Found clipping params: clipOffset($clipOffset),clipDuration($clipDuration)");
 				break;
 			}
 		}
@@ -364,10 +364,10 @@ class kJobsManager
 			 */
 				
 				
-		KalturaLog::log("Calling CDLProceessFlavorsForCollection with [" . count($flavorParamsOutputs) . "] flavor params");
+		VidiunLog::log("Calling CDLProceessFlavorsForCollection with [" . count($flavorParamsOutputs) . "] flavor params");
 				
-		$presetXml = KDLWrap::CDLProceessFlavorsForCollection($flavorParamsOutputs);
-		$presetXml = str_replace(KDLCmdlinePlaceholders::OutFileName, $fileName, $presetXml);
+		$presetXml = VDLWrap::CDLProceessFlavorsForCollection($flavorParamsOutputs);
+		$presetXml = str_replace(VDLCmdlinePlaceholders::OutFileName, $fileName, $presetXml);
 
 		
 		foreach($flavorParamsOutputs as $flavorParamsOutput)
@@ -376,7 +376,7 @@ class kJobsManager
 			 * Save in case that videoBitrate was changed by the FlavorsForCollection (see above)
 			 */
 			$flavorParamsOutput->save();
-			$convertCollectionFlavorData = new kConvertCollectionFlavorData();
+			$convertCollectionFlavorData = new vConvertCollectionFlavorData();
 			$convertCollectionFlavorData->setFlavorAssetId($flavorParamsOutput->getFlavorAssetId());
 			$convertCollectionFlavorData->setFlavorParamsOutputId($flavorParamsOutput->getId());
 			$convertCollectionFlavorData->setReadyBehavior($flavorParamsOutput->getReadyBehavior());
@@ -388,7 +388,7 @@ class kJobsManager
 		}
 		
 		$currentConversionEngine = conversionEngineType::EXPRESSION_ENCODER3;
-		KalturaLog::log("Using conversion engine [$currentConversionEngine]");
+		VidiunLog::log("Using conversion engine [$currentConversionEngine]");
 		
 		if($sameRoot == null)
 		{
@@ -396,7 +396,7 @@ class kJobsManager
 			if($parentJob)
 			{
 				$dbConvertCollectionJob = $parentJob->createChild(BatchJobType::CONVERT_COLLECTION, $currentConversionEngine);
-				KalturaLog::log("Created from parent convert job with entry id [" . $dbConvertCollectionJob->getEntryId() . "]");
+				VidiunLog::log("Created from parent convert job with entry id [" . $dbConvertCollectionJob->getEntryId() . "]");
 			}
 			else
 			{
@@ -414,19 +414,19 @@ class kJobsManager
 		$dbConvertCollectionJob->setObjectType(BatchJobObjectType::ENTRY);
 		$dbConvertCollectionJob->setStatus(BatchJob::BATCHJOB_STATUS_DONT_PROCESS);
 		
-		$dbConvertCollectionJob = kJobsManager::addJob($dbConvertCollectionJob, $convertCollectionData, 
+		$dbConvertCollectionJob = vJobsManager::addJob($dbConvertCollectionJob, $convertCollectionData, 
 				BatchJobType::CONVERT_COLLECTION, $currentConversionEngine);
 		
 		
 		$syncKey = $dbConvertCollectionJob->getSyncKey(BatchJob::FILE_SYNC_BATCHJOB_SUB_TYPE_CONFIG);
-		kFileSyncUtils::file_put_contents($syncKey, $presetXml);
+		vFileSyncUtils::file_put_contents($syncKey, $presetXml);
 		
-		$fileSync = kFileSyncUtils::getLocalFileSyncForKey($syncKey);
+		$fileSync = vFileSyncUtils::getLocalFileSyncForKey($syncKey);
 		$remoteUrl = $fileSync->getExternalUrl($entry->getId());
-		$localPath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
+		$localPath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
 		
 		$commandLines = array(
-				conversionEngineType::EXPRESSION_ENCODER3 => KDLCmdlinePlaceholders::InFileName . ' ' . KDLCmdlinePlaceholders::ConfigFileName,
+				conversionEngineType::EXPRESSION_ENCODER3 => VDLCmdlinePlaceholders::InFileName . ' ' . VDLCmdlinePlaceholders::ConfigFileName,
 		);
 		$commandLinesStr = flavorParamsOutput::buildCommandLinesStr($commandLines);
 		
@@ -435,7 +435,7 @@ class kJobsManager
 		$convertCollectionData->setCommandLinesStr($commandLinesStr);
 		
 		$dbConvertCollectionJob->setData($convertCollectionData);
-		return kJobsManager::updateBatchJob($dbConvertCollectionJob, BatchJob::BATCHJOB_STATUS_PENDING);
+		return vJobsManager::updateBatchJob($dbConvertCollectionJob, BatchJob::BATCHJOB_STATUS_PENDING);
 	}
 	
 	
@@ -458,7 +458,7 @@ class kJobsManager
 		$flavorAsset = assetPeer::retrieveById($flavorAssetId);
 		if(!$flavorAsset)
 		{
-			KalturaLog::err("No flavor asset found for id [$flavorAssetId]");
+			VidiunLog::err("No flavor asset found for id [$flavorAssetId]");
 			return null;
 		}
 		$partner = PartnerPeer::retrieveByPK($flavorAsset->getPartnerId());
@@ -467,7 +467,7 @@ class kJobsManager
 		
 		foreach ($srcSyncKeys as $srcSyncKey) 
 		{		
-			$srcFileSyncDescriptor = new kSourceFileSyncDescriptor();
+			$srcFileSyncDescriptor = new vSourceFileSyncDescriptor();
 			$addImportJob = false;
 				
 			$fileSync = self::getFileSyncForKey($srcSyncKey, $flavor, $flavorAsset, $partner, $addImportJob);
@@ -482,11 +482,11 @@ class kJobsManager
 				$flavorAsset->save();
 
 				$url = $fileSync->getExternalUrl($flavorAsset->getEntryId());
-				return kJobsManager::addImportJob($parentJob, $flavorAsset->getEntryId(), $partner->getId(), $url, $srcFlavorAsset, null, null, true);
+				return vJobsManager::addImportJob($parentJob, $flavorAsset->getEntryId(), $partner->getId(), $url, $srcFlavorAsset, null, null, true);
 			}
 			else 
 			{
-				if($flavor->getSourceRemoteStorageProfileId() == StorageProfile::STORAGE_KALTURA_DC)
+				if($flavor->getSourceRemoteStorageProfileId() == StorageProfile::STORAGE_VIDIUN_DC)
 				{
 					if($fileSync->getFileType() != FileSync::FILE_SYNC_FILE_TYPE_URL)
 						$srcFileSyncDescriptor->setPathAndKeyByFileSync($fileSync);						
@@ -508,7 +508,7 @@ class kJobsManager
 			return null;
 
 		// creates convert data
-		$convertData = new kConvertJobData();
+		$convertData = new vConvertJobData();
 		$convertData->setSrcFileSyncs($srcFileSyncs);
 		$convertData->setMediaInfoId($mediaInfoId);
 		$convertData->setFlavorParamsOutputId($flavor->getId());
@@ -533,12 +533,12 @@ class kJobsManager
 			$dbConvertFlavorJob->setJobSubType($dbCurrentConversionEngine);
 		}
 		$dbConvertFlavorJob->setEntryId($flavor->getEntryId());
-		KalturaLog::log("Job created with entry id [" . $dbConvertFlavorJob->getEntryId() . "]");
+		VidiunLog::log("Job created with entry id [" . $dbConvertFlavorJob->getEntryId() . "]");
 		
 		$mediaInfo = mediaInfoPeer::retrieveByPK($mediaInfoId);
 		if($mediaInfo === NULL) {
 			// in case we don't know the estimatted info, we will set it to a big number.
-			$estimatedEffort = kJobData::MAX_ESTIMATED_EFFORT; 
+			$estimatedEffort = vJobData::MAX_ESTIMATED_EFFORT; 
 		} else {
 			$estimatedEffort = max($mediaInfo->getVideoDuration(),$mediaInfo->getAudioDuration(),$mediaInfo->getContainerDuration());
 		}
@@ -546,22 +546,22 @@ class kJobsManager
 		$dbConvertFlavorJob->setObjectId($flavorAssetId);
 		$dbConvertFlavorJob->setObjectType(BatchJobObjectType::ASSET);
 		
-		return kJobsManager::addJob($dbConvertFlavorJob, $convertData, BatchJobType::CONVERT, $dbCurrentConversionEngine);
+		return vJobsManager::addJob($dbConvertFlavorJob, $convertData, BatchJobType::CONVERT, $dbCurrentConversionEngine);
 	}
 	
 	private static function getFileSyncForKey(FileSyncKey $srcSyncKey, flavorParamsOutput $flavor, asset $flavorAsset, Partner $partner, &$addImportJob)
 	{
 		$addImportJob = false;
-		$isLocal = ($flavor->getSourceRemoteStorageProfileId() == StorageProfile::STORAGE_KALTURA_DC);
+		$isLocal = ($flavor->getSourceRemoteStorageProfileId() == StorageProfile::STORAGE_VIDIUN_DC);
 		
 		if($isLocal)
-			list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
+			list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
 		else 
-			$fileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($srcSyncKey, $flavor->getSourceRemoteStorageProfileId());		
+			$fileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($srcSyncKey, $flavor->getSourceRemoteStorageProfileId());		
 		
 		if(!$fileSync)
 		{
-			kBatchManager::updateEntry($flavorAsset->getEntryId(), entryStatus::ERROR_CONVERTING);
+			vBatchManager::updateEntry($flavorAsset->getEntryId(), entryStatus::ERROR_CONVERTING);
 			if($isLocal)
 				$description = "Source file sync not found: $srcSyncKey";
 			else 
@@ -571,7 +571,7 @@ class kJobsManager
 			$flavorAsset->setDescription($description);
 			$flavorAsset->save();
 				
-			KalturaLog::err($description);
+			VidiunLog::err($description);
 			return null;
 		}
 		
@@ -580,15 +580,15 @@ class kJobsManager
 			if($fileSync->getFileType() == FileSync::FILE_SYNC_FILE_TYPE_URL && $partner && $partner->getImportRemoteSourceForConvert())
 				$addImportJob = true;
 			else	
-				throw new kCoreException("Source file not found for flavor conversion [" . $flavorAsset->getId() . "]", kCoreException::SOURCE_FILE_NOT_FOUND);
+				throw new vCoreException("Source file not found for flavor conversion [" . $flavorAsset->getId() . "]", vCoreException::SOURCE_FILE_NOT_FOUND);
 		}
 		
 		return $fileSync;		
 	}
 	
-	private static function getNextConversionEngine(flavorParamsOutput $flavor, BatchJob $parentJob = null, $lastEngineType, kConvertJobData &$convertData)
+	private static function getNextConversionEngine(flavorParamsOutput $flavor, BatchJob $parentJob = null, $lastEngineType, vConvertJobData &$convertData)
 	{
-		KalturaLog::log("Conversion engines string: '" . $flavor->getConversionEngines() . "'");
+		VidiunLog::log("Conversion engines string: '" . $flavor->getConversionEngines() . "'");
 		
 		$currentConversionEngine = null;
 		
@@ -598,7 +598,7 @@ class kJobsManager
 		if(!$flavor->getEngineVersion()) // uses the old engine version
 		{
 			$conversionEngines = explode(',', $flavor->getConversionEngines());
-			KalturaLog::log(count($conversionEngines) . " conversion engines found for the flavor");
+			VidiunLog::log(count($conversionEngines) . " conversion engines found for the flavor");
 			$currentConversionEngine = reset($conversionEngines); // gets the first engine type
 		}
 		// remove until here
@@ -606,19 +606,19 @@ class kJobsManager
 		
 		if(is_null($lastEngineType))
 		{
-			KalturaLog::log("Last Engine Type is null, engine version [" . $flavor->getEngineVersion() . "]");
+			VidiunLog::log("Last Engine Type is null, engine version [" . $flavor->getEngineVersion() . "]");
 			if($flavor->getEngineVersion()) // uses the new engine version
 			{
-				$operatorSet = new kOperatorSets();
+				$operatorSet = new vOperatorSets();
 				$operatorSet->setSerialized(/*stripslashes*/($flavor->getOperators()));
 				$nextOperator = $operatorSet->getOperator();
 				if(!$nextOperator)
 				{
-					KalturaLog::err("First operator is invalid");
+					VidiunLog::err("First operator is invalid");
 					return null;
 				}
 				
-				KalturaLog::log("Set first operator in first set");
+				VidiunLog::log("Set first operator in first set");
 				$currentConversionEngine = $nextOperator->id;
 			}
 		}
@@ -635,27 +635,27 @@ class kJobsManager
 			) // uses the new engine version
 			{
 				// using next oprator
-				KalturaLog::log("Adding next conversion operator");
+				VidiunLog::log("Adding next conversion operator");
 				
 				$parentData = $parentJob->getData();
-				if(!$parentData || !($parentData instanceof kConvartableJobData))
+				if(!$parentData || !($parentData instanceof vConvartableJobData))
 				{
-					KalturaLog::err("Parent job data is invalid");
+					VidiunLog::err("Parent job data is invalid");
 					return null;
 				}
 				
-				$operatorSet = new kOperatorSets();
+				$operatorSet = new vOperatorSets();
 				$operatorSet->setSerialized(/*stripslashes*/($flavor->getOperators()));
 				$nextOperatorSet = $parentData->getCurrentOperationSet();
 				$nextOperatorIndex = $parentData->getCurrentOperationIndex() + 1;
 				$nextOperator = $operatorSet->getOperator($nextOperatorSet, $nextOperatorIndex);
 				if(!$nextOperator)
 				{
-					KalturaLog::err("Next operator is invalid");
+					VidiunLog::err("Next operator is invalid");
 					return null;
 				}
 				
-				KalturaLog::log("Moving to next operator [$nextOperatorIndex] in set [$nextOperatorSet]");
+				VidiunLog::log("Moving to next operator [$nextOperatorIndex] in set [$nextOperatorSet]");
 				$convertData->setCurrentOperationSet($nextOperatorSet);
 				$convertData->setCurrentOperationIndex($nextOperatorIndex);
 				
@@ -665,7 +665,7 @@ class kJobsManager
 			{
 				// TODO remove after all old version flavors migrated
 				
-				KalturaLog::log("Last used conversion engine is [$lastEngineType]");
+				VidiunLog::log("Last used conversion engine is [$lastEngineType]");
 				// searching for $lastEngineType in the list
 				while($lastEngineType != $currentConversionEngine && next($conversionEngines))
 					$currentConversionEngine = current($conversionEngines);
@@ -674,16 +674,16 @@ class kJobsManager
 				$currentConversionEngine = next($conversionEngines);
 				if(! $currentConversionEngine)
 				{
-					KalturaLog::err("There is no other conversion engine to use");
+					VidiunLog::err("There is no other conversion engine to use");
 					return null;
 				}
 			}
 		}
-		KalturaLog::log("Using conversion engine [$currentConversionEngine]");
+		VidiunLog::log("Using conversion engine [$currentConversionEngine]");
 		
 		self::contributeToConvertJobData($currentConversionEngine, $convertData);
 		
-		$dbCurrentConversionEngine = kPluginableEnumsManager::apiToCore('conversionEngineType', $currentConversionEngine);
+		$dbCurrentConversionEngine = vPluginableEnumsManager::apiToCore('conversionEngineType', $currentConversionEngine);
 		
 		return $dbCurrentConversionEngine;
 	}
@@ -692,12 +692,12 @@ class kJobsManager
 	 * Allow plugin to set additional information on ConvertJobData object
 	 * 
 	 * @param string $conversionEngineId
-	 * @param kConvertJobData $convertData
+	 * @param vConvertJobData $convertData
 	 */
-	private static function contributeToConvertJobData($conversionEngineId, kConvertJobData &$convertData)
+	private static function contributeToConvertJobData($conversionEngineId, vConvertJobData &$convertData)
 	{
-		$plugin = kPluginableEnumsManager::getPlugin($conversionEngineId);
-		if($plugin && $plugin instanceof IKalturaBatchJobDataContributor)
+		$plugin = vPluginableEnumsManager::getPlugin($conversionEngineId);
+		if($plugin && $plugin instanceof IVidiunBatchJobDataContributor)
 		{
 			$convertData = $plugin->contributeToConvertJobData(BatchJobType::CONVERT, $conversionEngineId, $convertData);
 		}
@@ -719,20 +719,20 @@ class kJobsManager
 		$thumbAsset = assetPeer::retrieveById($thumbAssetId);
 		if(!$thumbAsset)
 		{
-			KalturaLog::err("No thumbnail asset found for id [$thumbAssetId]");
+			VidiunLog::err("No thumbnail asset found for id [$thumbAssetId]");
 			return null;
 		}
 		
 		$partner = PartnerPeer::retrieveByPK($thumbAsset->getPartnerId());
 		
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
 		if(!$fileSync)
 		{
 			$thumbAsset->setStatus(asset::ASSET_STATUS_ERROR);
 			$thumbAsset->setDescription("Source file sync not found: $srcSyncKey");
 			$thumbAsset->save();
 			
-			KalturaLog::err("Source file sync not found: $srcSyncKey");
+			VidiunLog::err("Source file sync not found: $srcSyncKey");
 			return null;
 		}
 		
@@ -741,7 +741,7 @@ class kJobsManager
 			if($fileSync->getFileType() == FileSync::FILE_SYNC_FILE_TYPE_URL && $partner && $partner->getImportRemoteSourceForConvert())
 			{
 				$url = $fileSync->getExternalUrl($entryId);
-				$originalAsset = kFileSyncUtils::retrieveObjectForSyncKey($srcSyncKey);
+				$originalAsset = vFileSyncUtils::retrieveObjectForSyncKey($srcSyncKey);
 				if($originalAsset instanceof flavorAsset)
 				{
 					if($thumbParams)
@@ -754,27 +754,27 @@ class kJobsManager
 					$thumbAsset->setDescription("Source file sync is importing: $srcSyncKey");
 					$thumbAsset->save();
 					
-					return kJobsManager::addImportJob($parentJob, $thumbAsset->getEntryId(), $partner->getId(), $url, $originalAsset, null, null, true);
+					return vJobsManager::addImportJob($parentJob, $thumbAsset->getEntryId(), $partner->getId(), $url, $originalAsset, null, null, true);
 				}
 				
 				$downloadPath = myContentStorage::getFSUploadsPath() . '/' . $thumbAsset->getId() . '.jpg';
-				if (KCurlWrapper::getDataFromFile($url, $downloadPath, null, true))
+				if (VCurlWrapper::getDataFromFile($url, $downloadPath, null, true))
 				{
-					kFileSyncUtils::moveFromFile($downloadPath, $srcSyncKey);
-					list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, false, false);
+					vFileSyncUtils::moveFromFile($downloadPath, $srcSyncKey);
+					list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, false, false);
 					if(!$fileSync)
-						throw new kCoreException("Source file not found for thumbnail capture [$thumbAssetId]", kCoreException::SOURCE_FILE_NOT_FOUND);
+						throw new vCoreException("Source file not found for thumbnail capture [$thumbAssetId]", vCoreException::SOURCE_FILE_NOT_FOUND);
 				}
 			}
 			else
 			{
-				throw new kCoreException("Source file not found for thumbnail capture [$thumbAssetId]", kCoreException::SOURCE_FILE_NOT_FOUND);
+				throw new vCoreException("Source file not found for thumbnail capture [$thumbAssetId]", vCoreException::SOURCE_FILE_NOT_FOUND);
 			}
 		}
 		$remoteUrl = $fileSync->getExternalUrl($entryId);
 		
 		// creates convert data
-		$data = new kCaptureThumbJobData();
+		$data = new vCaptureThumbJobData();
 		$data->setThumbAssetId($thumbAssetId);
 		$data->setSrcAssetId($srcAssetId);
 		$data->setSrcAssetEncryptionKey(self::getAssetEncyptionKey($srcAssetId));
@@ -797,7 +797,7 @@ class kJobsManager
 		
 		$batchJob->setObjectId($thumbAssetId);
 		$batchJob->setObjectType(BatchJobObjectType::ASSET);
-		return kJobsManager::addJob($batchJob, $data, BatchJobType::CAPTURE_THUMB);
+		return vJobsManager::addJob($batchJob, $data, BatchJobType::CAPTURE_THUMB);
 	}
 	
 	/**
@@ -813,9 +813,9 @@ class kJobsManager
 	 */
 	public static function addPostConvertJob(BatchJob $parentJob = null, $postConvertAssetType, $fileSyncKey, $flavorAssetId, $flavorParamsOutputId, $createThumb = false, $thumbOffset = 3)
 	{
-		$postConvertData = new kPostConvertJobData();
+		$postConvertData = new vPostConvertJobData();
 		$postConvertData->setPostConvertAssetType($postConvertAssetType);
-		$postConvertData->setSrcFileSyncLocalPath(kFileSyncUtils::getResolveLocalFileSyncForKey($fileSyncKey));
+		$postConvertData->setSrcFileSyncLocalPath(vFileSyncUtils::getResolveLocalFileSyncForKey($fileSyncKey));
 		$postConvertData->setFlavorParamsOutputId($flavorParamsOutputId);
 		$postConvertData->setFlavorAssetId($flavorAssetId);
 		$postConvertData->setThumbOffset($thumbOffset);
@@ -824,7 +824,7 @@ class kJobsManager
 		if($parentJob)
 		{
 			$parentData = $parentJob->getData();
-			if($parentData instanceof kConvartableJobData)
+			if($parentData instanceof vConvartableJobData)
 			{
 				$postConvertData->setCurrentOperationSet($parentData->getCurrentOperationSet());
 				$postConvertData->setCurrentOperationIndex($parentData->getCurrentOperationIndex());
@@ -853,7 +853,7 @@ class kJobsManager
 			{
 				$postConvertData->setCreateThumb(false);
 			}
-			elseif($flavorParamsOutput->getSourceRemoteStorageProfileId() != StorageProfile::STORAGE_KALTURA_DC)
+			elseif($flavorParamsOutput->getSourceRemoteStorageProfileId() != StorageProfile::STORAGE_VIDIUN_DC)
 			{
 				$postConvertData->setCreateThumb(false);
 			}
@@ -906,13 +906,13 @@ class kJobsManager
 		
 		$batchJob->setObjectId($flavorAsset->getId());
 		$batchJob->setObjectType(BatchJobObjectType::ASSET);
-		KalturaLog::log("Post Convert created with file: " . $postConvertData->getSrcFileSyncLocalPath());
+		VidiunLog::log("Post Convert created with file: " . $postConvertData->getSrcFileSyncLocalPath());
 		
 		
-		return kJobsManager::addJob($batchJob, $postConvertData, BatchJobType::POSTCONVERT, $mediaParserType);
+		return vJobsManager::addJob($batchJob, $postConvertData, BatchJobType::POSTCONVERT, $mediaParserType);
 	}
 	
-	public static function addImportJob(BatchJob $parentJob = null, $entryId, $partnerId, $entryUrl, asset $asset = null, $subType = null, kImportJobData $jobData = null, $keepCurrentVersion = false)
+	public static function addImportJob(BatchJob $parentJob = null, $entryId, $partnerId, $entryUrl, asset $asset = null, $subType = null, vImportJobData $jobData = null, $keepCurrentVersion = false)
 	{
 		$entryUrl = str_replace('//', '/', $entryUrl);
 		$entryUrl = preg_replace('/^((https?)|(ftp)|(scp)|(sftp)):\//', '$1://', $entryUrl);
@@ -921,28 +921,28 @@ class kJobsManager
 		{
     		if (stripos($entryUrl, 'sftp:') === 0) 
     		{
-    		    $subType = kFileTransferMgrType::SFTP;
+    		    $subType = vFileTransferMgrType::SFTP;
     		}
     		elseif (stripos($entryUrl, 'scp:') === 0) 
     		{
-    		    $subType = kFileTransferMgrType::SCP;
+    		    $subType = vFileTransferMgrType::SCP;
     		}
     		elseif (stripos($entryUrl, 'ftp:') === 0) 
     		{
-    		    $subType = kFileTransferMgrType::FTP;
+    		    $subType = vFileTransferMgrType::FTP;
     		}
     		elseif (stripos($entryUrl, 'https:') === 0) 
     		{
-    		    $subType = kFileTransferMgrType::HTTPS;
+    		    $subType = vFileTransferMgrType::HTTPS;
     		}
     		else 
     		{
-    		    $subType = kFileTransferMgrType::HTTP;
+    		    $subType = vFileTransferMgrType::HTTP;
     		}
 		}
 		
 		if (!$jobData) {
- 		    $jobData = new kImportJobData();
+ 		    $jobData = new vImportJobData();
 		}
  		$jobData->setSrcFileUrl($entryUrl);
  		
@@ -1013,12 +1013,12 @@ class kJobsManager
 			
 		$key = $asset->getSyncKey($keyType);
 		$files = array();
-		if(kFileSyncUtils::fileSync_exists($key))
+		if(vFileSyncUtils::fileSync_exists($key))
 		{
-			$files = kFileSyncUtils::dir_get_files($key, false);
+			$files = vFileSyncUtils::dir_get_files($key, false);
 		}
 		
-		$jobData = new kConvertLiveSegmentJobData();
+		$jobData = new vConvertLiveSegmentJobData();
  		$jobData->setEntryId($asset->getEntryId());
  		$jobData->setAssetId($asset->getId());
 		$jobData->setMediaServerIndex($mediaServerIndex);
@@ -1054,7 +1054,7 @@ class kJobsManager
 	 */
 	public static function addConcatJob(BatchJob $parentJob = null, flavorAsset $asset, array $files, $shouldSort = true , $offset = null, $duration = null)
 	{
-		$jobData = new kConcatJobData();
+		$jobData = new vConcatJobData();
  		$jobData->setSrcFiles($files);
 		$jobData->setFlavorAssetId($asset->getId());
 		$jobData->setOffset($offset);
@@ -1090,7 +1090,7 @@ class kJobsManager
 	 * @param int $objectType of enum IndexObjectType
 	 * @param baseObjectFilter $filter The filter should return the list of objects that need to be reindexed
 	 * @param bool $shouldUpdate Indicates that the object columns and attributes values should be recalculated before reindexed
-	 * @param array $featureStatusesToRemove - kFeatureStatus to remove when job is finished.
+	 * @param array $featureStatusesToRemove - vFeatureStatus to remove when job is finished.
 	 * @return BatchJob
 	 */
 	public static function addIndexJob($partnerId, $objectType, baseObjectFilter $filter, $shouldUpdate, $featureStatusesToRemove = array())
@@ -1115,7 +1115,7 @@ class kJobsManager
 	 */
 	public static function addCopyJob($partnerId, $objectType, baseObjectFilter $filter, BaseObject $templateObject)
 	{
-	    $jobData = new kCopyJobData();
+	    $jobData = new vCopyJobData();
  		$jobData->setFilter($filter);
  		$jobData->setTemplateObject($templateObject);
  		
@@ -1128,18 +1128,18 @@ class kJobsManager
 	/**
 	 * @param int $partnerId
 	 * @param string $protocol http or https
-	 * @param SessionType $ksType
+	 * @param SessionType $vsType
 	 * @param array $userRoles
 	 * @param string $objectType class name
 	 * @param string $objectId
 	 * @param string $startObjectKey
 	 * @param string $endObjectKey
 	 */
-	public static function addRecalculateResponseProfileCacheJob($partnerId, $protocol, $ksType, array $userRoles, $objectType, $objectId = null, $startObjectKey = null, $endObjectKey = null)
+	public static function addRecalculateResponseProfileCacheJob($partnerId, $protocol, $vsType, array $userRoles, $objectType, $objectId = null, $startObjectKey = null, $endObjectKey = null)
 	{
-	    $jobData = new kRecalculateResponseProfileCacheJobData();
+	    $jobData = new vRecalculateResponseProfileCacheJobData();
  		$jobData->setProtocol($protocol);
- 		$jobData->setKsType($ksType);
+ 		$jobData->setVsType($vsType);
  		$jobData->setUserRoles($userRoles);
  		$jobData->setObjectType($objectType);
  		$jobData->setObjectId($objectId);
@@ -1162,7 +1162,7 @@ class kJobsManager
 		}
 		else
 		{
-			KalturaLog::warning("Object type [$objectType] is not expected to need cache recalculation");
+			VidiunLog::warning("Object type [$objectType] is not expected to need cache recalculation");
 			return null;
 		}
 
@@ -1177,7 +1177,7 @@ class kJobsManager
 	 */
 	public static function addDeleteJob($partnerId, $objectType, baseObjectFilter $filter)
 	{
-	    $jobData = new kDeleteJobData();
+	    $jobData = new vDeleteJobData();
  		$jobData->setFilter($filter);	
  		
 		$batchJob = new BatchJob();
@@ -1207,7 +1207,7 @@ class kJobsManager
 		{
 			$jobDb = new BatchJob();
 			$jobDb->setPartnerId($partnerId);
-			$data = new kBulkDownloadJobData();
+			$data = new vBulkDownloadJobData();
 		
 			$data->setEntryIds(implode(",", $chunk));
 			$data->setFlavorParamsId($flavorParamsId);
@@ -1239,7 +1239,7 @@ class kJobsManager
 			$entry->setStatus(entryStatus::PENDING);
 			$entry->save();
 			
-			KalturaLog::notice('Entry should not be converted');
+			VidiunLog::notice('Entry should not be converted');
 			return null;
 		}
 
@@ -1248,9 +1248,9 @@ class kJobsManager
 			$inputFileSyncLocalPath = $fileSync->getFilePath();
 		$importingSources = false;
 		// if file size is 0, do not create conversion profile and set entry status as error converting
-		if (!file_exists($inputFileSyncLocalPath) || kFile::fileSize($inputFileSyncLocalPath) == 0)
+		if (!file_exists($inputFileSyncLocalPath) || vFile::fileSize($inputFileSyncLocalPath) == 0)
 		{
-			KalturaLog::info("Input file [$inputFileSyncLocalPath] does not exist");
+			VidiunLog::info("Input file [$inputFileSyncLocalPath] does not exist");
 			
 			$partner = $entry->getPartner();
 			
@@ -1265,14 +1265,14 @@ class kJobsManager
 			$sourceIncludedInProfile = false;
 			$flavorAsset = assetPeer::retrieveById($flavorAssetId);
 			$flavors = flavorParamsConversionProfilePeer::retrieveByConversionProfile($conversionProfile->getId());
-			KalturaLog::info("Found flavors [" . count($flavors) . "] in conversion profile [" . $conversionProfile->getId() . "]");
+			VidiunLog::info("Found flavors [" . count($flavors) . "] in conversion profile [" . $conversionProfile->getId() . "]");
 			foreach($flavors as $flavor)
 			{
 				/* @var $flavor flavorParamsConversionProfile */
 				
 				if($flavor->getFlavorParamsId() == $flavorAsset->getFlavorParamsId())
 				{
-					KalturaLog::info("Flavor [" . $flavor->getFlavorParamsId() . "] is ingested source");
+					VidiunLog::info("Flavor [" . $flavor->getFlavorParamsId() . "] is ingested source");
 					$sourceIncludedInProfile = true;
 					continue;
 				}
@@ -1281,7 +1281,7 @@ class kJobsManager
 				
 				if($flavorParams instanceof liveParams || $flavor->getOrigin() == assetParamsOrigin::INGEST)
 				{
-					KalturaLog::info("Flavor [" . $flavor->getFlavorParamsId() . "] should be ingested");
+					VidiunLog::info("Flavor [" . $flavor->getFlavorParamsId() . "] should be ingested");
 					continue;
 				}
 			
@@ -1290,7 +1290,7 @@ class kJobsManager
 					$siblingFlavorAsset = assetPeer::retrieveByEntryIdAndParams($entry->getId(), $flavor->getFlavorParamsId());
 					if($siblingFlavorAsset)
 					{
-						KalturaLog::info("Flavor [" . $flavor->getFlavorParamsId() . "] already ingested");
+						VidiunLog::info("Flavor [" . $flavor->getFlavorParamsId() . "] already ingested");
 						continue;
 					}
 				}
@@ -1305,14 +1305,14 @@ class kJobsManager
 			{
 				foreach($sourceFileRequiredStorages as $storageId)
 				{
-					if($storageId == StorageProfile::STORAGE_KALTURA_DC)
+					if($storageId == StorageProfile::STORAGE_VIDIUN_DC)
 					{
 						$key = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-						list($syncFile, $local) = kFileSyncUtils::getReadyFileSyncForKey($key, true, false);
+						list($syncFile, $local) = vFileSyncUtils::getReadyFileSyncForKey($key, true, false);
 						if($syncFile && $syncFile->getFileType() == FileSync::FILE_SYNC_FILE_TYPE_URL && $partner && $partner->getImportRemoteSourceForConvert())
 						{
 							$url = $syncFile->getExternalUrl($entry->getId());
-							kJobsManager::addImportJob($parentJob, $entry->getId(), $partner->getId(), $url, $flavorAsset, null, null, true);
+							vJobsManager::addImportJob($parentJob, $entry->getId(), $partner->getId(), $url, $flavorAsset, null, null, true);
 							$importingSources = true;
 							continue;
 						}
@@ -1322,14 +1322,14 @@ class kJobsManager
 						continue;
 					}
 					
-					kBatchManager::updateEntry($entry->getId(), entryStatus::ERROR_CONVERTING);
+					vBatchManager::updateEntry($entry->getId(), entryStatus::ERROR_CONVERTING);
 					
 					$flavorAsset = assetPeer::retrieveById($flavorAssetId);
 					$flavorAsset->setStatus(flavorAsset::FLAVOR_ASSET_STATUS_ERROR);
 					$flavorAsset->setDescription('Entry of size 0 should not be converted');
 					$flavorAsset->save();
 					
-					KalturaLog::err('Entry of size 0 should not be converted');
+					VidiunLog::err('Entry of size 0 should not be converted');
 					return null;
 				}
 			}
@@ -1349,7 +1349,7 @@ class kJobsManager
 					
 					if($sourceIncludedInProfile)
 					{
-						kBusinessPostConvertDL::handleConvertFinished(null, $flavorAsset);
+						vBusinessPostConvertDL::handleConvertFinished(null, $flavorAsset);
 					}
 				}
 				return null;
@@ -1361,7 +1361,7 @@ class kJobsManager
 			$entry->setStatus(entryStatus::PRECONVERT);
 		}
 		
-		$jobData = new kConvertProfileJobData();
+		$jobData = new vConvertProfileJobData();
 		$jobData->setFlavorAssetId($flavorAssetId);
 		$jobData->setInputFileSyncLocalPath($inputFileSyncLocalPath);
 		$jobData->setExtractMedia(true);
@@ -1407,7 +1407,7 @@ class kJobsManager
 	 */
 	public static function addStorageExportJob(BatchJob $parentJob = null, $entryId, $partnerId, StorageProfile $externalStorage, FileSync $fileSync, FileSync $srcFileSync, $force = false, $dc = null)
 	{
-		$netStorageExportData = kStorageExportJobData::getInstance($externalStorage->getProtocol());
+		$netStorageExportData = vStorageExportJobData::getInstance($externalStorage->getProtocol());
 		$netStorageExportData->setStorageExportJobData($externalStorage, $fileSync, $srcFileSync);
 				
 		$batchJob = null;
@@ -1426,7 +1426,7 @@ class kJobsManager
 		$batchJob->setObjectType(BatchJobObjectType::FILE_SYNC);
 		$batchJob->setJobSubType($externalStorage->getProtocol());
 		$batchJob->setDc($dc);
-		KalturaLog::log("Creating Storage export job, with source file: " . $netStorageExportData->getSrcFileSyncLocalPath()); 
+		VidiunLog::log("Creating Storage export job, with source file: " . $netStorageExportData->getSrcFileSyncLocalPath()); 
 		return self::addJob($batchJob, $netStorageExportData, BatchJobType::STORAGE_EXPORT, $externalStorage->getProtocol());
 	}
 	
@@ -1442,7 +1442,7 @@ class kJobsManager
 	 */
 	public static function addMoveCategoryEntriesJob(BatchJob $parentJob = null, $partnerId, $srcCategoryId, $destCategoryId, $moveFromChildren = false, $fallback = null)
 	{
-		$moveCategoryEntriesData = new kMoveCategoryEntriesJobData();
+		$moveCategoryEntriesData = new vMoveCategoryEntriesJobData();
 	    $moveCategoryEntriesData->setSrcCategoryId($srcCategoryId);
 	    $moveCategoryEntriesData->setDestCategoryId($destCategoryId);
 	    $moveCategoryEntriesData->setMoveFromChildren($moveFromChildren);
@@ -1471,7 +1471,7 @@ class kJobsManager
 	 */
 	public static function addSyncCategoryPrivacyContextJob(BatchJob $parentJob = null, $partnerId, $categoryId)
 	{
-		$syncPrivacyContextData = new kSyncCategoryPrivacyContextJobData();
+		$syncPrivacyContextData = new vSyncCategoryPrivacyContextJobData();
 	    $syncPrivacyContextData->setCategoryId($categoryId);
 		
 		$batchJob = null;
@@ -1491,7 +1491,7 @@ class kJobsManager
 	
 	public static function addStorageDeleteJob(BatchJob $parentJob = null, $entryId = null, StorageProfile $storage, FileSync $fileSync)
 	{
-		$netStorageDeleteData = kStorageDeleteJobData::getInstance($storage->getProtocol());
+		$netStorageDeleteData = vStorageDeleteJobData::getInstance($storage->getProtocol());
         $netStorageDeleteData->setJobData($storage, $fileSync);
         
 		if ($parentJob)
@@ -1508,13 +1508,13 @@ class kJobsManager
 		$batchJob->setObjectId($fileSync->getId());
 		$batchJob->setObjectType(BatchJobObjectType::FILE_SYNC);
 		$batchJob->setJobSubType($storage->getProtocol());
-		KalturaLog::log("Creating Net-Storage Delete job, with source file: " . $netStorageDeleteData->getSrcFileSyncLocalPath()); 
+		VidiunLog::log("Creating Net-Storage Delete job, with source file: " . $netStorageDeleteData->getSrcFileSyncLocalPath()); 
 		return self::addJob($batchJob, $netStorageDeleteData, BatchJobType::STORAGE_DELETE, $storage->getProtocol());
 	}
 	
 	public static function addDeleteFileJob(BatchJob $parentJob = null, $entryId = null, $partnerId, $syncKey, $localFileSyncPath, $dc)
 	{
-		$deleteFileData = new kDeleteFileJobData();
+		$deleteFileData = new vDeleteFileJobData();
 		$deleteFileData->setLocalFileSyncPath($localFileSyncPath);
 		$deleteFileData->setSyncKey($syncKey);
 
@@ -1531,7 +1531,7 @@ class kJobsManager
 		
 		$batchJob->setDc($dc);
 		
-		KalturaLog::log("Creating File Delete job, from data center id: ". $dc ." with source file: " . $deleteFileData->getLocalFileSyncPath());
+		VidiunLog::log("Creating File Delete job, from data center id: ". $dc ." with source file: " . $deleteFileData->getLocalFileSyncPath());
 		return self::addJob($batchJob, $deleteFileData, BatchJobType::DELETE_FILE );
 	}
 	
@@ -1543,19 +1543,19 @@ class kJobsManager
 		try
 		{
 			$profile = myPartnerUtils::getConversionProfile2ForEntry($parentJob->getEntryId());
-			KalturaLog::info("profile [" . $profile->getId() . "]");
+			VidiunLog::info("profile [" . $profile->getId() . "]");
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 		}
 		
 		$mediaInfoEngine = mediaParserType::MEDIAINFO;
 		if($profile)
 			$mediaInfoEngine = $profile->getMediaParserType();
 		
-		$extractMediaData = new kExtractMediaJobData();
-		$srcFileSyncDescriptor = new kSourceFileSyncDescriptor();
+		$extractMediaData = new vExtractMediaJobData();
+		$srcFileSyncDescriptor = new vSourceFileSyncDescriptor();
 		$srcFileSyncDescriptor->setFileSyncLocalPath($inputFileSyncLocalPath);
 		$srcFileSyncDescriptor->setFileEncryptionKey(self::getEncryptionKeyForAssetId($flavorAssetId));
 		$extractMediaData->setSrcFileSyncs(array($srcFileSyncDescriptor));
@@ -1568,13 +1568,13 @@ class kJobsManager
 		$shouldDetectGOP = null;
 		if($entry)
 		{
-			if($entry->getSourceType() == EntrySourceType::KALTURA_RECORDED_LIVE)
+			if($entry->getSourceType() == EntrySourceType::VIDIUN_RECORDED_LIVE)
 			{
 				$extractMediaData->setExtractId3Tags(true);
 			}
 			else if($entry->getSourceType() == EntrySourceType::LECTURE_CAPTURE) 
 			{
-				$profileLC = conversionProfile2Peer::retrieveByPartnerIdAndSystemName($entry->getPartnerId(), kBusinessPreConvertDL::$conditionalMapBySourceType[EntrySourceType::LECTURE_CAPTURE], ConversionProfileType::MEDIA);
+				$profileLC = conversionProfile2Peer::retrieveByPartnerIdAndSystemName($entry->getPartnerId(), vBusinessPreConvertDL::$conditionalMapBySourceType[EntrySourceType::LECTURE_CAPTURE], ConversionProfileType::MEDIA);
 				$shouldDetectGOP = $profileLC ? $profileLC->getDetectGOP() : null;
 			}
 		}
@@ -1586,7 +1586,7 @@ class kJobsManager
 		$batchJob = $parentJob->createChild(BatchJobType::EXTRACT_MEDIA, $mediaInfoEngine, false);
 		$batchJob->setObjectId($flavorAssetId);
 		$batchJob->setObjectType(BatchJobObjectType::ASSET);
-		KalturaLog::log("Creating Extract Media job, with source file: " . $extractMediaData->getSrcFileSyncLocalPath()); 
+		VidiunLog::log("Creating Extract Media job, with source file: " . $extractMediaData->getSrcFileSyncLocalPath()); 
 		return self::addJob($batchJob, $extractMediaData, BatchJobType::EXTRACT_MEDIA, $mediaInfoEngine);
 	}
 
@@ -1594,7 +1594,7 @@ class kJobsManager
 	{
 		$asset = assetPeer::retrieveById($flavorAssetId);
 		$syncKey = $asset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey);
 		if ($fileSync && $fileSync->isEncrypted())
 			return $fileSync->getEncryptionKey();
 		return null;
@@ -1602,7 +1602,7 @@ class kJobsManager
 	
 	public static function addNotificationJob(BatchJob $parentJob = null, $entryId, $partnerId, $notificationType, $sendType, $puserId, $objectId, $notificationData)
 	{
-		$jobData = new kNotificationJobData();
+		$jobData = new vNotificationJobData();
 		$jobData->setType($notificationType);
 		$jobData->setSendType($sendType);
 		$jobData->setUserId($puserId);
@@ -1621,7 +1621,7 @@ class kJobsManager
 			$batchJob->setPartnerId($partnerId);
 		}
 			
-		if($sendType == kNotificationJobData::NOTIFICATION_MGR_NO_SEND || $sendType == kNotificationJobData::NOTIFICATION_MGR_SEND_SYNCH)
+		if($sendType == vNotificationJobData::NOTIFICATION_MGR_NO_SEND || $sendType == vNotificationJobData::NOTIFICATION_MGR_SEND_SYNCH)
 			$batchJob->setStatus(BatchJob::BATCHJOB_STATUS_DONT_PROCESS);
 		
 		return self::addJob($batchJob, $jobData, BatchJobType::NOTIFICATION, $notificationType);
@@ -1635,7 +1635,7 @@ class kJobsManager
 	 * @param int $subType
 	 * @return BatchJob
 	 */
-	public static function addJob(BatchJob $batchJob, kJobData $data, $type, $subType = null)
+	public static function addJob(BatchJob $batchJob, vJobData $data, $type, $subType = null)
 	{
 		$batchJob->setJobType($type);
 		$batchJob->setJobSubType($subType);
@@ -1643,7 +1643,7 @@ class kJobsManager
 		
 		if(!$batchJob->getParentJobId() && $batchJob->getEntryId())
 		{
-			$currentJob = kBatchManager::getCurrentUpdatingJob();
+			$currentJob = vBatchManager::getCurrentUpdatingJob();
 			if($currentJob && $currentJob->getEntryId() == $batchJob->getEntryId())
 			{
 				$batchJob->setParentJobId($currentJob->getId());
@@ -1661,7 +1661,7 @@ class kJobsManager
 			}
 		}
 		
-		$lockInfo = new kLockInfoData($batchJob);
+		$lockInfo = new vLockInfoData($batchJob);
 		$lockInfo->setEstimatedEffort($data->calculateEstimatedEffort($batchJob));
 		$lockInfo->setPriority($data->calculatePriority($batchJob));
 		$lockInfo->setUrgency($data->calculateUrgency($batchJob));
@@ -1679,12 +1679,12 @@ class kJobsManager
 	/**
 	 * Function adds bulk upload job to the queue
 	 * @param Partner $partner
-	 * @param kBulkUploadJobData $jobData
+	 * @param vBulkUploadJobData $jobData
 	 * @param string $bulkUploadType
 	 * @throws APIException
 	 * @return BatchJob
 	 */
-	public static function addBulkUploadJob(Partner $partner, kBulkUploadJobData $jobData, $bulkUploadType = null, $objectId = null, $objectType = null)
+	public static function addBulkUploadJob(Partner $partner, vBulkUploadJobData $jobData, $bulkUploadType = null, $objectId = null, $objectType = null)
 	{
 		$job = new BatchJob();
 		$job->setPartnerId($partner->getId());
@@ -1702,22 +1702,22 @@ class kJobsManager
 		}
 		
 		$job->setStatus(BatchJob::BATCHJOB_STATUS_DONT_PROCESS);
-		$job = kJobsManager::addJob($job, $jobData, BatchJobType::BULKUPLOAD, $bulkUploadType);
+		$job = vJobsManager::addJob($job, $jobData, BatchJobType::BULKUPLOAD, $bulkUploadType);
 		
 		if(!is_null($jobData->getFilePath()))
 		{
 			$syncKey = $job->getSyncKey(BatchJob::FILE_SYNC_BATCHJOB_SUB_TYPE_BULKUPLOAD);
-	//		kFileSyncUtils::file_put_contents($syncKey, file_get_contents($csvFileData["tmp_name"]));
+	//		vFileSyncUtils::file_put_contents($syncKey, file_get_contents($csvFileData["tmp_name"]));
 			try{
-				kFileSyncUtils::moveFromFile($jobData->getFilePath(), $syncKey, true);
+				vFileSyncUtils::moveFromFile($jobData->getFilePath(), $syncKey, true);
 			}
 			catch(Exception $e)
 			{
-				KalturaLog::err($e);
+				VidiunLog::err($e);
 				throw new APIException(APIErrors::BULK_UPLOAD_CREATE_CSV_FILE_SYNC_ERROR);
 			}
 			
-			$filePath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
+			$filePath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
 			$jobData->setFilePath($filePath);
 		}
 		
@@ -1729,9 +1729,9 @@ class kJobsManager
 		if ($jobData->getBulkUploadObjectType() == BulkUploadObjectType::ENTRY && !$jobData->getObjectData()->getConversionProfileId())
 		{
 			$jobData->setConversionProfileId($partner->getDefaultConversionProfileId());
-			$kmcVersion = $partner->getKmcVersion();
+			$vmcVersion = $partner->getVmcVersion();
 		    $check = null;
-			if($kmcVersion < 2)
+			if($vmcVersion < 2)
     		{
     			$check = ConversionProfilePeer::retrieveByPK($jobData->getConversionProfileId());
     		}
@@ -1744,7 +1744,7 @@ class kJobsManager
     	}
 
 		$job->setData($jobData);
-		return kJobsManager::updateBatchJob($job, BatchJob::BATCHJOB_STATUS_PENDING);
+		return vJobsManager::updateBatchJob($job, BatchJob::BATCHJOB_STATUS_PENDING);
 	}
 
 	/**
@@ -1756,7 +1756,7 @@ class kJobsManager
 	 */
 	public static function addCopyPartnerJob( $fromPartnerId, $toPartnerId )
 	{
-	    $jobData = new kCopyPartnerJobData();
+	    $jobData = new vCopyPartnerJobData();
 	    $jobData->setFromPartnerId( $fromPartnerId );
 	    $jobData->setToPartnerId( $toPartnerId );
 
@@ -1766,16 +1766,16 @@ class kJobsManager
 		return self::addJob( $batchJob, $jobData, BatchJobType::COPY_PARTNER );
 	}
 	
-	public static function addExportLiveReportJob($reportType, KalturaLiveReportExportParams $params)
+	public static function addExportLiveReportJob($reportType, VidiunLiveReportExportParams $params)
 	{
 		// Calculate time offset from server time to UTC
-		$dateTimeZoneServer = new DateTimeZone(kConf::get('date_default_timezone'));
+		$dateTimeZoneServer = new DateTimeZone(vConf::get('date_default_timezone'));
 		$dateTimeZoneUTC = new DateTimeZone("UTC");
 		$dateTimeUTC = new DateTime("now", $dateTimeZoneUTC);
 		$timeOffsetSeconds = -1 * $dateTimeZoneServer->getOffset($dateTimeUTC);
 		
 		// Create job data
-		$jobData = new kLiveReportExportJobData();
+		$jobData = new vLiveReportExportJobData();
 		$jobData->entryIds = $params->entryIds;
 		$jobData->recipientEmail = $params->recpientEmail;
 		$jobData->timeZoneOffset = $timeOffsetSeconds - ($params->timeZoneOffset * 60); // Convert minutes to seconds
@@ -1784,7 +1784,7 @@ class kJobsManager
 		
 		
 		$job = new BatchJob();
-		$job->setPartnerId(kCurrentContext::getCurrentPartnerId());
+		$job->setPartnerId(vCurrentContext::getCurrentPartnerId());
 		$job->setJobType(BatchJobType::LIVE_REPORT_EXPORT);
 		$job->setJobSubType($reportType);
 		$job->setData($jobData);
@@ -1795,19 +1795,19 @@ class kJobsManager
 	public static function getFileContainer(FileSyncKey $syncKey)
 	{
 
-		$fileSync = kFileSyncUtils::getResolveLocalFileSyncForKey($syncKey);
+		$fileSync = vFileSyncUtils::getResolveLocalFileSyncForKey($syncKey);
 		return self::getFileContainerByFileSync($fileSync);
 	}
 
-	public static function addExportReportJob(KalturaReportExportParams $params)
+	public static function addExportReportJob(VidiunReportExportParams $params)
 	{
 		// Calculate time offset from server time to UTC
-		$dateTimeZoneServer = new DateTimeZone(kConf::get('date_default_timezone'));
+		$dateTimeZoneServer = new DateTimeZone(vConf::get('date_default_timezone'));
 		$dateTimeZoneUTC = new DateTimeZone("UTC");
 		$dateTimeUTC = new DateTime("now", $dateTimeZoneUTC);
 		$timeOffsetSeconds = -1 * $dateTimeZoneServer->getOffset($dateTimeUTC);
 
-		$jobData = new kReportExportJobData();
+		$jobData = new vReportExportJobData();
 		$coreParams = $params->toObject();
 
 		$jobData->setRecipientEmail($coreParams->getRecipientEmail());
@@ -1818,7 +1818,7 @@ class kJobsManager
 		$jobData->setTimeReference(time());
 
 		$job = new BatchJob();
-		$job->setPartnerId(kCurrentContext::getCurrentPartnerId());
+		$job->setPartnerId(vCurrentContext::getCurrentPartnerId());
 		$job->setJobType(BatchJobType::REPORT_EXPORT);
 		$job->setData($jobData);
 
@@ -1862,12 +1862,12 @@ class kJobsManager
  	{
 		if (!$fileSync)
 		{
-			KalturaLog::notice('No file-sync supplied for conversion');
+			VidiunLog::notice('No file-sync supplied for conversion');
 			return false;
 		}
  		if (self::shouldBlockFileConversion($fileSync))
  		{
- 			KalturaLog::notice('Source of type text will not be converted - FileSyncId [' . $fileSync->getId() . ']');
+ 			VidiunLog::notice('Source of type text will not be converted - FileSyncId [' . $fileSync->getId() . ']');
  			return false;
  		}
 		return true;
@@ -1883,15 +1883,15 @@ class kJobsManager
 			$filePath = $fileSync->createTempClear();
 		else
 			$filePath = $fileSync->getFullPath();
-		$actualFileDescription = trim(kFile::getFileDescription($filePath));
-		$blackList = kconf::get('file_descriptions_black_list');
+		$actualFileDescription = trim(vFile::getFileDescription($filePath));
+		$blackList = vconf::get('file_descriptions_black_list');
 		$shouldBlock = in_array($actualFileDescription,$blackList['fileDescriptions']);
 		if($fileSync->isEncrypted())
 			$fileSync->deleteTempClear();
 		return $shouldBlock;
 	}
 
-	public static function addExportCsvJob(kExportCsvJobData $jobData, $partnerId, $exportObjectType)
+	public static function addExportCsvJob(vExportCsvJobData $jobData, $partnerId, $exportObjectType)
 	{
 		$batchJob = new BatchJob();
 		$batchJob->setPartnerId($partnerId);
@@ -1899,14 +1899,14 @@ class kJobsManager
 		return self::addJob($batchJob, $jobData, BatchJobType::EXPORT_CSV, $exportObjectType);
 	}
 
-	public static function addMultiClipCopyCuePointsJob($destEntryID, $partnerId, $kClipDescriptionArray)
+	public static function addMultiClipCopyCuePointsJob($destEntryID, $partnerId, $vClipDescriptionArray)
 	{
-		$jobData = new kMultiClipCopyCuePointsJobData();
-		$jobData->setClipsDescriptionArray($kClipDescriptionArray);
+		$jobData = new vMultiClipCopyCuePointsJobData();
+		$jobData->setClipsDescriptionArray($vClipDescriptionArray);
 		$jobData->setDestinationEntryId($destEntryID);
 		$batchJob = new BatchJob();
 		$batchJob->setEntryId($destEntryID);
 		$batchJob->setPartnerId($partnerId);
-		return kJobsManager::addJob($batchJob, $jobData, BatchJobType::COPY_CUE_POINTS, CopyCuePointJobType::MULTI_CLIP);
+		return vJobsManager::addJob($batchJob, $jobData, BatchJobType::COPY_CUE_POINTS, CopyCuePointJobType::MULTI_CLIP);
 	}
 }

@@ -3,7 +3,7 @@
  * @package plugins.yahooDistribution
  * @subpackage model.data
  */
-class kYahooDistributionJobProviderData extends kDistributionJobProviderData
+class vYahooDistributionJobProviderData extends vDistributionJobProviderData
 {
 	
 	/**
@@ -65,7 +65,7 @@ class kYahooDistributionJobProviderData extends kDistributionJobProviderData
 		$this->videoAssetFilePath = $videoAssetFilePath;
 	}
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution 
  * @subpackage admin
  */
-class DistributionProfileConfigureAction extends KalturaApplicationPlugin
+class DistributionProfileConfigureAction extends VidiunApplicationPlugin
 {
 	protected $client;
 	
@@ -22,14 +22,14 @@ class DistributionProfileConfigureAction extends KalturaApplicationPlugin
 	
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_CONTENT_DISTRIBUTION_MODIFY);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_CONTENT_DISTRIBUTION_MODIFY);
 	}
 	
 	public function doAction(Zend_Controller_Action $action)
 	{
 		$action->getHelper('layout')->disableLayout();
 		$this->client = Infra_ClientHelper::getClient();
-		$contentDistributionPlugin = Kaltura_Client_ContentDistribution_Plugin::get($this->client);
+		$contentDistributionPlugin = Vidiun_Client_ContentDistribution_Plugin::get($this->client);
 		$request = $action->getRequest();
 		
 		$profileId = $this->_getParam('profile_id');
@@ -55,22 +55,22 @@ class DistributionProfileConfigureAction extends KalturaApplicationPlugin
 			}
 			
 			$form = null;
-			$profileClass = 'Kaltura_Client_ContentDistribution_Type_DistributionProfile';
+			$profileClass = 'Vidiun_Client_ContentDistribution_Type_DistributionProfile';
 			
-			if($providerType == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::GENERIC)
+			if($providerType == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::GENERIC)
 			{
 				$form = new Form_GenericProviderProfileConfiguration($partnerId, $providerType, $distributionProfile);
-				$profileClass = 'Kaltura_Client_ContentDistribution_Type_GenericDistributionProfile';
+				$profileClass = 'Vidiun_Client_ContentDistribution_Type_GenericDistributionProfile';
 			}
-			elseif($providerType == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::SYNDICATION)
+			elseif($providerType == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::SYNDICATION)
 			{
 				$form = new Form_SyndicationProviderProfileConfiguration($partnerId, $providerType, $distributionProfile);
-				$profileClass = 'Kaltura_Client_ContentDistribution_Type_SyndicationDistributionProfile';
+				$profileClass = 'Vidiun_Client_ContentDistribution_Type_SyndicationDistributionProfile';
 			}
 			else
 			{
-				$form = KalturaPluginManager::loadObject('Form_ProviderProfileConfiguration', $providerType, array($partnerId, $providerType, $distributionProfile));
-				$profileClass = KalturaPluginManager::getObjectClass($profileClass, $providerType);
+				$form = VidiunPluginManager::loadObject('Form_ProviderProfileConfiguration', $providerType, array($partnerId, $providerType, $distributionProfile));
+				$profileClass = VidiunPluginManager::getObjectClass($profileClass, $providerType);
 			}
 			if(!$form)
 			{
@@ -80,7 +80,7 @@ class DistributionProfileConfigureAction extends KalturaApplicationPlugin
 			
 			$form->setAction($action->view->url(array('controller' => 'plugin', 'action' => 'DistributionProfileConfigureAction')));
 			
-			$pager = new Kaltura_Client_Type_FilterPager();
+			$pager = new Vidiun_Client_Type_FilterPager();
 			$pager->pageSize = 100;
 			
 			Infra_ClientHelper::impersonate($partnerId);
@@ -143,7 +143,7 @@ class DistributionProfileConfigureAction extends KalturaApplicationPlugin
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			$action->view->errMessage = $e->getMessage();
 			
 			$form->populate($request->getPost());
@@ -157,7 +157,7 @@ class DistributionProfileConfigureAction extends KalturaApplicationPlugin
 		$action->view->form = $form;
 	}
 	
-	protected function populateForm(Form_DistributionConfiguration $form, Kaltura_Client_ContentDistribution_Type_DistributionProfile $distributionProfile, Kaltura_Client_Type_FlavorParamsListResponse $flavorParamsResponse)
+	protected function populateForm(Form_DistributionConfiguration $form, Vidiun_Client_ContentDistribution_Type_DistributionProfile $distributionProfile, Vidiun_Client_Type_FlavorParamsListResponse $flavorParamsResponse)
 	{
 		$optionalFlavorParamsIds = array();
 		$requiredFlavorParamsIds = array();

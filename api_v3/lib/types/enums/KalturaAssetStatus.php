@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaAssetStatus extends KalturaEnum
+class VidiunAssetStatus extends VidiunEnum
 {
 	const ERROR = -1;
 	const QUEUED = 0;

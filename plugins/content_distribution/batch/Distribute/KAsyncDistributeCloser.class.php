@@ -5,7 +5,7 @@
  * @package plugins.contentDistribution 
  * @subpackage Scheduler.Distribute
  */
-abstract class KAsyncDistributeCloser extends KJobCloserWorker
+abstract class VAsyncDistributeCloser extends VJobCloserWorker
 {
 	/**
 	 * @var IDistributionEngine
@@ -13,9 +13,9 @@ abstract class KAsyncDistributeCloser extends KJobCloserWorker
 	protected $engine;
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->distribute($job, $job->data);
 	}
@@ -23,44 +23,44 @@ abstract class KAsyncDistributeCloser extends KJobCloserWorker
 	/**
 	 * @return DistributionEngine
 	 */
-	abstract protected function getDistributionEngine($providerType, KalturaDistributionJobData $data);
+	abstract protected function getDistributionEngine($providerType, VidiunDistributionJobData $data);
 	
 	/**
 	 * Throw detailed exceptions for any failure 
 	 * @return bool true if job is closed, false for almost done
 	 */
-	abstract protected function execute(KalturaDistributionJobData $data);
+	abstract protected function execute(VidiunDistributionJobData $data);
 	
-	protected function distribute(KalturaBatchJob $job, KalturaDistributionJobData $data)
+	protected function distribute(VidiunBatchJob $job, VidiunDistributionJobData $data)
 	{
 		
 		if(($job->queueTime + self::$taskConfig->params->maxTimeBeforeFail) < time())
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::CLOSER_TIMEOUT, 'Timed out', KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::CLOSER_TIMEOUT, 'Timed out', VidiunBatchJobStatus::FAILED);
 		
 		try
 		{
 			$this->engine = $this->getDistributionEngine($job->jobSubType, $data);
 			if (!$this->engine)
 			{
-				KalturaLog::err('Cannot create DistributeEngine of type ['.$job->jobSubType.']');
-				$this->closeJob($job, KalturaBatchJobErrorTypes::APP, null, 'Error: Cannot create DistributeEngine of type ['.$job->jobSubType.']', KalturaBatchJobStatus::FAILED);
+				VidiunLog::err('Cannot create DistributeEngine of type ['.$job->jobSubType.']');
+				$this->closeJob($job, VidiunBatchJobErrorTypes::APP, null, 'Error: Cannot create DistributeEngine of type ['.$job->jobSubType.']', VidiunBatchJobStatus::FAILED);
 				return $job;
 			}
-			$job = $this->updateJob($job, "Engine found [" . get_class($this->engine) . "]", KalturaBatchJobStatus::QUEUED);
+			$job = $this->updateJob($job, "Engine found [" . get_class($this->engine) . "]", VidiunBatchJobStatus::QUEUED);
 						
 			$closed = $this->execute($data);
 			if($closed)
-				return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::FINISHED, $data);
+				return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::FINISHED, $data);
 			 			
-			return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::ALMOST_DONE, $data);
+			return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::ALMOST_DONE, $data);
 		}
-		catch(KalturaDistributionException $ex)
+		catch(VidiunDistributionException $ex)
 		{
-			$job = $this->closeJob($job, KalturaBatchJobErrorTypes::APP, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::RETRY, $job->data);
+			$job = $this->closeJob($job, VidiunBatchJobErrorTypes::APP, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::RETRY, $job->data);
 		}
 		catch(Exception $ex)
 		{
-			$job = $this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), KalturaBatchJobStatus::FAILED, $job->data);
+			$job = $this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, $ex->getCode(), "Error: " . $ex->getMessage(), VidiunBatchJobStatus::FAILED, $job->data);
 		}
 		return $job;
 	}

@@ -7,7 +7,7 @@
  *
  */
 
-class kQuiz {
+class vQuiz {
 
 	/**
 	 *
@@ -18,7 +18,7 @@ class kQuiz {
 
 	/**
 	 * Array of key value ui related objects
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	protected $uiAttributes;
 
@@ -57,7 +57,7 @@ class kQuiz {
 	protected $attemptsAllowed;
 
 	/**
-	 * @var KalturaScoreType
+	 * @var VidiunScoreType
 	 */
 	protected $scoreType;
 
@@ -78,7 +78,7 @@ class kQuiz {
 	}
 
 	/**
-	 * @return KalturaKeyValueArray
+	 * @return VidiunKeyValueArray
 	 */
 	public function getUiAttributes()
 	{
@@ -86,7 +86,7 @@ class kQuiz {
 	}
 
 	/**
-	 * @param KalturaKeyValueArray $uiAttributes
+	 * @param VidiunKeyValueArray $uiAttributes
 	 */
 	public function setUiAttributes($uiAttributes)
 	{
@@ -206,7 +206,7 @@ class kQuiz {
 	}
 
 	/**
-	 * @return KalturaScoreType
+	 * @return VidiunScoreType
 	 */
 	public function getScoreType()
 	{
@@ -214,7 +214,7 @@ class kQuiz {
 	}
 
 	/**
-	 * @param KalturaScoreType
+	 * @param VidiunScoreType
 	 */
 	public function setScoreType($scoreType)
 	{

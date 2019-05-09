@@ -4,7 +4,7 @@ SELECT 	r.referrer,
 	SUM(sum_time_viewed)/SUM(count_plays) avg_time_viewed,
 	SUM(count_loads) count_loads,
 	( SUM(count_plays) / SUM(count_loads) ) load_play_ratio
-FROM kalturadw.dwh_hourly_events_domain_referrer  ev, kalturadw.dwh_dim_referrer r
+FROM vidiundw.dwh_hourly_events_domain_referrer  ev, vidiundw.dwh_dim_referrer r
 WHERE {OBJ_ID_CLAUSE} 
 AND ev.referrer_id = r.referrer_id 
 AND ev.partner_id = {PARTNER_ID} /* PARTNER_ID*/

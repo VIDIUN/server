@@ -3,22 +3,22 @@
  * @package api
  * @subpackage filters
  */
-class KalturaLiveStreamEntryFilter extends KalturaLiveStreamEntryBaseFilter
+class VidiunLiveStreamEntryFilter extends VidiunLiveStreamEntryBaseFilter
 {
 	public function __construct()
 	{
-		$this->typeIn = KalturaEntryType::LIVE_STREAM;
+		$this->typeIn = VidiunEntryType::LIVE_STREAM;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntryFilter::getListResponse()
+	 * @see VidiunBaseEntryFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager);
 		
-	    $newList = KalturaLiveStreamEntryArray::fromDbArray($list, $responseProfile);
-		$response = new KalturaBaseEntryListResponse();
+	    $newList = VidiunLiveStreamEntryArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunBaseEntryListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		

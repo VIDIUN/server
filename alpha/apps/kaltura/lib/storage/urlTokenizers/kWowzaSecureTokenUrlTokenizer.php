@@ -1,6 +1,6 @@
 <?php
 
-class kWowzaSecureTokenUrlTokenizer extends kUrlTokenizer
+class vWowzaSecureTokenUrlTokenizer extends vUrlTokenizer
 {
 	/**
 	 * @var string
@@ -72,9 +72,9 @@ class kWowzaSecureTokenUrlTokenizer extends kUrlTokenizer
 		
 		// Building parameters.
 		// Cannot use 'http_build_query' here as it includes the equals sign for parameters that have no value.
-		foreach($params as $k => $v)
+		foreach($params as $v => $v)
 		{
-			$query .= '&' . $k;
+			$query .= '&' . $v;
 			if(isset($v) && !empty($v))
 			{
 				$query .= '=' . $v;

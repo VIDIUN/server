@@ -3,7 +3,7 @@
  * @package plugins.venodr
  * @subpackage model.zoomOauth
  */
-interface kVendorOauth
+interface vVendorOauth
 {
 
 	/**

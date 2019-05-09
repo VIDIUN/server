@@ -1,1 +1,1 @@
-CALL kalturadw.get_data_for_operational('entry');
+CALL vidiundw.get_data_for_operational('entry');

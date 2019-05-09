@@ -29,7 +29,7 @@ class BusinessProcessCasePeer extends BaseBusinessProcessCasePeer {
 	 */
 	public static function retrieveCasesByObjectIdObjecType ($objectId, $objectType, $partnerId = null)
 	{
-		KalturaLog::info ("Retrieving cases for object ID [$objectId], object type [$objectType]");
+		VidiunLog::info ("Retrieving cases for object ID [$objectId], object type [$objectType]");
 		$criteria = new Criteria ();
 		if(!is_null($partnerId))
 			$criteria->add (BusinessProcessCasePeer::PARTNER_ID, $partnerId);
@@ -51,7 +51,7 @@ class BusinessProcessCasePeer extends BaseBusinessProcessCasePeer {
 	 */
 	public static function retrieveCasesByObjectIdObjectTypeProcessIdServerId ($objectId, $objectType, $serverId, $processId, $partnerId = null)
 	{
-		KalturaLog::info ("Retrieving cases for object ID [$objectId], object type [$objectType], server Id [$serverId], process ID [$processId]");
+		VidiunLog::info ("Retrieving cases for object ID [$objectId], object type [$objectType], server Id [$serverId], process ID [$processId]");
 		$criteria = new Criteria ();
 		$criteria->add(BusinessProcessCasePeer::SERVER_ID, $serverId);
 		$criteria->add(BusinessProcessCasePeer::PROCESS_ID, $processId);

@@ -3,7 +3,7 @@
  * @package plugins.unicornDistribution
  * @subpackage api.objects
  */
-class KalturaUnicornDistributionProvider extends KalturaDistributionProvider
+class VidiunUnicornDistributionProvider extends VidiunDistributionProvider
 {
 
 }

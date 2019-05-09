@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kFlattenJobData extends kJobData
+class vFlattenJobData extends vJobData
 {
 	
 }

@@ -3,15 +3,15 @@
  * @package plugins.beacon
  * @subpackage model.search
  */
-class kScheduledResourceSearch extends kBaseSearch
+class vScheduledResourceSearch extends vBaseSearch
 {
 	public function __construct()
 	{
 		parent::__construct();
-		$beaconElasticConfig = kConf::get('beacon', 'elastic');
+		$beaconElasticConfig = vConf::get('beacon', 'elastic');
 		if(!$beaconElasticConfig)
 		{
-			throw new KalturaAPIException("Missing beacon configuration");
+			throw new VidiunAPIException("Missing beacon configuration");
 		}
 
 		$host = isset($beaconElasticConfig['elasticHost']) ? $beaconElasticConfig['elasticHost'] : null;
@@ -19,20 +19,20 @@ class kScheduledResourceSearch extends kBaseSearch
 		$this->elasticClient = new elasticClient($host, $port);
 	}
 
-	public function doSearch(ESearchOperator $eSearchOperator, kPager $pager = null, $statuses = array(), $objectId = null,
+	public function doSearch(ESearchOperator $eSearchOperator, vPager $pager = null, $statuses = array(), $objectId = null,
 							 ESearchOrderBy $order = null)
 	{
-		kScheduledResourceSearchEntitlement::init();
+		vScheduledResourceSearchEntitlement::init();
 		$this->initQuery($statuses, $objectId, $pager, $order);
 		$this->initEntitlement();
 		$result = $this->execSearch($eSearchOperator);
 		return $result;
 	}
 
-	protected function initQuery(array $statuses, $objectId, kPager $pager = null, ESearchOrderBy $order = null)
+	protected function initQuery(array $statuses, $objectId, vPager $pager = null, ESearchOrderBy $order = null)
 	{
 		$this->query = array(elasticClient::ELASTIC_INDEX_KEY => BeaconIndexName::SCHEDULED_RESOURCE_INDEX);
-		$partnerId = kBaseElasticEntitlement::$partnerId;
+		$partnerId = vBaseElasticEntitlement::$partnerId;
 		$this->initQueryAttributes($partnerId, $objectId);
 		$this->initPager($pager);
 		$this->initOrderBy($order);
@@ -58,7 +58,7 @@ class kScheduledResourceSearch extends kBaseSearch
 
 	protected function initEntitlement()
 	{
-		$entitlementFilterQueries = kScheduledResourceSearchEntitlement::getEntitlementFilterQueries();
+		$entitlementFilterQueries = vScheduledResourceSearchEntitlement::getEntitlementFilterQueries();
 		if($entitlementFilterQueries)
 		{
 			$this->mainBoolQuery->addQueriesToFilter($entitlementFilterQueries);

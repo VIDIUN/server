@@ -4,15 +4,15 @@
  * @package plugins.confMaps
  * @subpackage api.services
  */
-class ConfMapsService extends KalturaBaseService
+class ConfMapsService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
 		parent::initService($serviceId, $serviceName, $actionName);
-		$kuser = kCurrentContext::getCurrentKsKuser();
-		if(!$kuser)
+		$vuser = vCurrentContext::getCurrentVsVuser();
+		if(!$vuser)
 		{
-			throw new KalturaAPIException(KalturaErrors::USER_ID_NOT_PROVIDED_OR_EMPTY);
+			throw new VidiunAPIException(VidiunErrors::USER_ID_NOT_PROVIDED_OR_EMPTY);
 		}
 	}
 
@@ -20,23 +20,23 @@ class ConfMapsService extends KalturaBaseService
 	 * Add configuration map
 	 *
 	 * @action add
-	 * @param KalturaConfMaps $map
-	 * @return KalturaConfMaps
-	 * @throws KalturaErrors::MAP_ALREADY_EXIST
+	 * @param VidiunConfMaps $map
+	 * @return VidiunConfMaps
+	 * @throws VidiunErrors::MAP_ALREADY_EXIST
 	 */
-	function addAction(KalturaConfMaps $map)
+	function addAction(VidiunConfMaps $map)
 	{
 		$dbMap = ConfMapsPeer::getMapByVersion($map->name, $map->relatedHost);
 		if($dbMap)
 		{
-			throw new KalturaAPIException(KalturaErrors::MAP_ALREADY_EXIST, $map->name, $map->relatedHost);
+			throw new VidiunAPIException(VidiunErrors::MAP_ALREADY_EXIST, $map->name, $map->relatedHost);
 		}
 		$map->validateContent();
 		$newMapVersion = new ConfMaps();
 		$map->toInsertableObject($newMapVersion);
 		$newMapVersion->setStatus(ConfMapsStatus::STATUS_ENABLED);
 		$newMapVersion->setVersion(0);
-		$newMapVersion->setRemarks(kCurrentContext::$ks);
+		$newMapVersion->setRemarks(vCurrentContext::$vs);
 		$newMapVersion->save();
 		$newMapVersion->syncMapsToCache();
 		$map->fromObject($newMapVersion);
@@ -46,17 +46,17 @@ class ConfMapsService extends KalturaBaseService
 	 * Update configuration map
 	 *
 	 * @action update
-	 * @param KalturaConfMaps $map
-	 * @return KalturaConfMaps
-	 * @throws KalturaErrors::MAP_DOES_NOT_EXIST
+	 * @param VidiunConfMaps $map
+	 * @return VidiunConfMaps
+	 * @throws VidiunErrors::MAP_DOES_NOT_EXIST
 	 */
-	function updateAction(KalturaConfMaps $map)
+	function updateAction(VidiunConfMaps $map)
 	{
 		//get map by values name / hostname
 		$dbMap = ConfMapsPeer::getMapByVersion($map->name, $map->relatedHost);
 		if(!$dbMap)
 		{
-			throw new KalturaAPIException(KalturaErrors::MAP_DOES_NOT_EXIST );
+			throw new VidiunAPIException(VidiunErrors::MAP_DOES_NOT_EXIST );
 		}
 		$map->validateContent();
 		$newMapVersion = new ConfMaps();
@@ -70,14 +70,14 @@ class ConfMapsService extends KalturaBaseService
 	 * List configuration maps
 	 *
 	 * @action list
-	 * @param KalturaConfMapsFilter $filter
-	 * @return KalturaConfMapsListResponse
-	 * @throws KalturaErrors::MISSING_MAP_NAME
+	 * @param VidiunConfMapsFilter $filter
+	 * @return VidiunConfMapsListResponse
+	 * @throws VidiunErrors::MISSING_MAP_NAME
 	 */
-	function listAction(KalturaConfMapsFilter $filter)
+	function listAction(VidiunConfMapsFilter $filter)
 	{
-		kApiCache::disableCache();
-		$pager = new KalturaFilterPager();
+		vApiCache::disableCache();
+		$pager = new VidiunFilterPager();
 		$response = $filter->getListResponse($pager);
 		return $response;
 	}
@@ -86,12 +86,12 @@ class ConfMapsService extends KalturaBaseService
 	 * Get configuration map
 	 *
 	 * @action get
-	 * @param KalturaConfMapsFilter $filter
-	 * @return KalturaConfMaps
+	 * @param VidiunConfMapsFilter $filter
+	 * @return VidiunConfMaps
 	 */
-	function getAction(KalturaConfMapsFilter $filter)
+	function getAction(VidiunConfMapsFilter $filter)
 	{
-		kApiCache::disableCache();
+		vApiCache::disableCache();
 		$confMap = $filter->getMap();
 		return $confMap;
 	}
@@ -100,12 +100,12 @@ class ConfMapsService extends KalturaBaseService
 	* List configuration maps names
 	*
 	* @action getMapNames
-	* @return KalturaStringArray
+	* @return VidiunStringArray
 	*/
 	public function getMapNamesAction()
 	{
 		$mapNames= ConfMapsPeer::retrieveMapsNames();
-		$result =  KalturaStringArray::fromDbArray($mapNames);
+		$result =  VidiunStringArray::fromDbArray($mapNames);
 		return $result;
 	}
 }

@@ -36,14 +36,14 @@
 			</tr>
 		</tfoot>
 		<tbody>
-			<?php foreach($this->paginator as /* Kaltura_Client_Type_DeliveryProfile */ $delivery): ?>
+			<?php foreach($this->paginator as /* Vidiun_Client_Type_DeliveryProfile */ $delivery): ?>
 			<tr class="<?php echo $this->cycle(array('odd', 'even'))->next(); ?>">
 			
-				<td><?php echo $this->enumTranslate('Kaltura_Client_Enum_DeliveryStatus', $delivery->status); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_Enum_DeliveryStatus', $delivery->status); ?></td>
 				<td><?php echo $delivery->id; ?></td>
 				<td><?php echo $delivery->name; ?></td>
-				<td><?php echo $this->enumTranslate('Kaltura_Client_Enum_DeliveryProfileType', $delivery->type); ?></td>
-				<td><?php echo $this->enumTranslate('Kaltura_Client_Enum_PlaybackProtocol', $delivery->streamerType); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_Enum_DeliveryProfileType', $delivery->type); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_Enum_PlaybackProtocol', $delivery->streamerType); ?></td>
 				<td><?php echo $delivery->mediaProtocols; ?></td>
 				<td><?php echo $delivery->url; ?></td>
 				<td><?php echo (is_null($delivery->recognizer) ? "-" : 
@@ -62,13 +62,13 @@
 						<!-- Actions -->
 						<option value=""><?php echo $this->translate('Select Action'); ?></option>
 						<option value="configure"><?php echo $this->translate('Configure'); ?></option>
-						<?php if ($delivery->status == Kaltura_Client_Enum_DeliveryStatus::DELETED): ?>
+						<?php if ($delivery->status == Vidiun_Client_Enum_DeliveryStatus::DELETED): ?>
 							<option value="enable"><?php echo $this->translate('Enable'); ?></option>
 						<?php else:?>
 							<option value="deleteDP"><?php echo $this->translate('Delete'); ?></option>
-							<?php if ($delivery->status == Kaltura_Client_Enum_DeliveryStatus::ACTIVE): ?>
+							<?php if ($delivery->status == Vidiun_Client_Enum_DeliveryStatus::ACTIVE): ?>
 								<option value="disable"><?php echo $this->translate('Disable'); ?></option>
-							<?php elseif ($delivery->status == Kaltura_Client_Enum_DeliveryStatus::STAGING_IN):?>
+							<?php elseif ($delivery->status == Vidiun_Client_Enum_DeliveryStatus::STAGING_IN):?>
 								<option value="enable"><?php echo $this->translate('Enable'); ?></option>
 							<?php endif;?>
 						<?php endif; ?>
@@ -227,7 +227,7 @@ function disable(partnerId, deliveryProfileId, status)
 		changeStatus(
 				partnerId, 
 				deliveryProfileId, 
-			<?php echo Kaltura_Client_Enum_DeliveryStatus::STAGING_IN; ?>, 
+			<?php echo Vidiun_Client_Enum_DeliveryStatus::STAGING_IN; ?>, 
 			function() {
 				alert('<?php echo $this->translate('Delivery profile was disabled');?>');
 			}
@@ -240,9 +240,9 @@ function deleteDP(partnerId, deliveryProfileId, curStatus)
 	var ok = confirm('<?php echo $this->translate('Delete delivery profile?'); ?>');
 	if (ok)
 	{
-		var status = <?php echo Kaltura_Client_Enum_DeliveryStatus::DELETED; ?>;
-		if(curStatus == <?php echo Kaltura_Client_Enum_DeliveryStatus::ACTIVE; ?>)
-			status = <?php echo Kaltura_Client_Enum_DeliveryStatus::STAGING_OUT; ?>;
+		var status = <?php echo Vidiun_Client_Enum_DeliveryStatus::DELETED; ?>;
+		if(curStatus == <?php echo Vidiun_Client_Enum_DeliveryStatus::ACTIVE; ?>)
+			status = <?php echo Vidiun_Client_Enum_DeliveryStatus::STAGING_OUT; ?>;
 			
 		changeStatus(
 				partnerId, 
@@ -260,9 +260,9 @@ function enable(partnerId, deliveryProfileId, curStatus)
 	var ok = confirm('<?php echo $this->translate('Enable delivery profile?'); ?>');
 	if (ok)
 	{
-		var status = <?php echo Kaltura_Client_Enum_DeliveryStatus::ACTIVE; ?>;
-		if(curStatus == <?php echo Kaltura_Client_Enum_DeliveryStatus::DELETED; ?>)
-			status = <?php echo Kaltura_Client_Enum_DeliveryStatus::STAGING_IN; ?>;
+		var status = <?php echo Vidiun_Client_Enum_DeliveryStatus::ACTIVE; ?>;
+		if(curStatus == <?php echo Vidiun_Client_Enum_DeliveryStatus::DELETED; ?>)
+			status = <?php echo Vidiun_Client_Enum_DeliveryStatus::STAGING_IN; ?>;
 			
 		changeStatus(
 				partnerId, 

@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage utils
  */
-class kRegExTokenMapper
+class vRegExTokenMapper
 {
 	const TOKEN_REG_EX = "/@K\w+K@/";
 	private $tokensMap;
@@ -27,7 +27,7 @@ class kRegExTokenMapper
 	public function tokenToKey( $matches )
 	{
 		$token = $matches[0];
-		$key = "@K" . kString::generateStringId() . "K@";
+		$key = "@K" . vString::generateStringId() . "K@";
 
 		$this->tokensMap[$key] = $token;
 		return $key;

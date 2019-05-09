@@ -3,17 +3,17 @@
  * @package Scheduler
  * @subpackage TagResolver
  */
-class KAsyncTagResolve extends KPeriodicWorker
+class VAsyncTagResolve extends VPeriodicWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::run()
+	 * @see VBatchBase::run()
 	 */
 	public function run($jobs = null) 
 	{
-		$tagPlugin = KalturaTagSearchClientPlugin::get(self::$kClient);
+		$tagPlugin = VidiunTagSearchClientPlugin::get(self::$vClient);
 		$deletedTags = $tagPlugin->tag->deletePending();
 		
-		KalturaLog::info("Finished resolving tags: $deletedTags tags removed from DB");
+		VidiunLog::info("Finished resolving tags: $deletedTags tags removed from DB");
 	}
 	
 	/**
@@ -22,7 +22,7 @@ class KAsyncTagResolve extends KPeriodicWorker
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::TAG_RESOLVE;
+		return VidiunBatchJobType::TAG_RESOLVE;
 	}
 
 	

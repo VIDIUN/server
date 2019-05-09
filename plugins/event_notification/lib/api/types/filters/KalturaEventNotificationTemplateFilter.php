@@ -3,10 +3,10 @@
  * @package plugins.eventNotification
  * @subpackage api.filters
  */
-class KalturaEventNotificationTemplateFilter extends KalturaEventNotificationTemplateBaseFilter
+class VidiunEventNotificationTemplateFilter extends VidiunEventNotificationTemplateBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

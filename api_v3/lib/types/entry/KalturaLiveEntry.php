@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-abstract class KalturaLiveEntry extends KalturaMediaEntry
+abstract class VidiunLiveEntry extends VidiunMediaEntry
 {
 	const MIN_ALLOWED_SEGMENT_DURATION_MILLISECONDS = 1000;
 	const MAX_ALLOWED_SEGMENT_DURATION_MILLISECONDS = 20000;
@@ -17,13 +17,13 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 	
 	/**
 	 * Recording Status Enabled/Disabled
-	 * @var KalturaRecordStatus
+	 * @var VidiunRecordStatus
 	 */
 	public $recordStatus;
 	
 	/**
 	 * DVR Status Enabled/Disabled
-	 * @var KalturaDVRStatus
+	 * @var VidiunDVRStatus
 	 */
 	public $dvrStatus;
 	
@@ -41,7 +41,7 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 
 	/**
 	 * Array of key value protocol->live stream url objects
-	 * @var KalturaLiveStreamConfigurationArray
+	 * @var VidiunLiveStreamConfigurationArray
 	 */
 	public $liveStreamConfigurations;
 	
@@ -56,7 +56,7 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 	/**
 	 * Flag denoting whether entry should be published by the media server
 	 * 
-	 * @var KalturaLivePublishStatus
+	 * @var VidiunLivePublishStatus
 	 * @requiresPermission all
 	 */
 	public $pushPublishEnabled;
@@ -64,7 +64,7 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 	/**
 	 * Array of publish configurations
 	 * 
-	 * @var KalturaLiveStreamPushPublishConfigurationArray
+	 * @var VidiunLiveStreamPushPublishConfigurationArray
 	 * @requiresPermission all
 	 */
 	public $publishConfigurations;
@@ -92,15 +92,15 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 	public $currentBroadcastStartTime;
 
 	/**
-	 * @var KalturaLiveEntryRecordingOptions
+	 * @var VidiunLiveEntryRecordingOptions
 	 */
 	public $recordingOptions;
 
 	/**
 	 * the status of the entry of type EntryServerNodeStatus
-	 * @var KalturaEntryServerNodeStatus
+	 * @var VidiunEntryServerNodeStatus
 	 * @readonly
-	 * @deprecated use KalturaLiveStreamService.isLive instead
+	 * @deprecated use VidiunLiveStreamService.isLive instead
 	 */
 	public $liveStatus;
 
@@ -111,17 +111,17 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 	public $segmentDuration;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $explicitLive;
 
 	/**
-	 * @var KalturaViewMode
+	 * @var VidiunViewMode
 	 */
 	public $viewMode;
 
 	/**
-	 * @var KalturaRecordingStatus
+	 * @var VidiunRecordingStatus
 	 */
 	public $recordingStatus;
 
@@ -156,7 +156,7 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaMediaEntry::getMapBetweenObjects()
+	 * @see VidiunMediaEntry::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -165,26 +165,26 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 	
 	public function toInsertableObject($sourceObject = null, $propsToSkip = array())
 	{
-		$isRecordPermissionValidForPartner = PermissionPeer::isValidForPartner(PermissionName::FEATURE_LIVE_STREAM_RECORD, kCurrentContext::getCurrentPartnerId()) ||
-				PermissionPeer::isValidForPartner(PermissionName::FEATURE_LIVE_STREAM_KALTURA_RECORDING, kCurrentContext::getCurrentPartnerId());
+		$isRecordPermissionValidForPartner = PermissionPeer::isValidForPartner(PermissionName::FEATURE_LIVE_STREAM_RECORD, vCurrentContext::getCurrentPartnerId()) ||
+				PermissionPeer::isValidForPartner(PermissionName::FEATURE_LIVE_STREAM_VIDIUN_RECORDING, vCurrentContext::getCurrentPartnerId());
 		
-		if(isset($this->recordStatus) && $this->recordStatus != KalturaRecordStatus::DISABLED && !$isRecordPermissionValidForPartner)
-			throw new KalturaAPIException(KalturaErrors::RECORDING_DISABLED);
+		if(isset($this->recordStatus) && $this->recordStatus != VidiunRecordStatus::DISABLED && !$isRecordPermissionValidForPartner)
+			throw new VidiunAPIException(VidiunErrors::RECORDING_DISABLED);
 		
 		if(is_null($this->recordStatus))
 		{
-			$this->recordStatus = KalturaRecordStatus::DISABLED;
+			$this->recordStatus = VidiunRecordStatus::DISABLED;
 			if($isRecordPermissionValidForPartner)
 			{
-				$this->recordStatus = KalturaRecordStatus::APPENDED;
+				$this->recordStatus = VidiunRecordStatus::APPENDED;
 			}
 		}
 
-		if ((is_null($this->recordingOptions) || is_null($this->recordingOptions->shouldCopyEntitlement)) && PermissionPeer::isValidForPartner(PermissionName::FEATURE_LIVE_STREAM_COPY_ENTITELMENTS, kCurrentContext::getCurrentPartnerId()))
+		if ((is_null($this->recordingOptions) || is_null($this->recordingOptions->shouldCopyEntitlement)) && PermissionPeer::isValidForPartner(PermissionName::FEATURE_LIVE_STREAM_COPY_ENTITELMENTS, vCurrentContext::getCurrentPartnerId()))
 		{
 			if (is_null($this->recordingOptions))
 			{
-				$this->recordingOptions = new KalturaLiveEntryRecordingOptions();
+				$this->recordingOptions = new VidiunLiveEntryRecordingOptions();
 			}
 			$this->recordingOptions->shouldCopyEntitlement = true;
 		}
@@ -193,9 +193,9 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaMediaEntry::fromObject()
+	 * @see VidiunMediaEntry::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if(!($dbObject instanceof LiveEntry))
 			return;
@@ -204,13 +204,13 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 
 		if($this->shouldGet('recordingOptions', $responseProfile) && !is_null($dbObject->getRecordingOptions()))
 		{
-			$this->recordingOptions = new KalturaLiveEntryRecordingOptions();
+			$this->recordingOptions = new VidiunLiveEntryRecordingOptions();
 			$this->recordingOptions->fromObject($dbObject->getRecordingOptions());
 		}
 
 		if ($dbObject->isPlayable())
 		{
-			kApiCache::setExpiry( kApiCache::REDIRECT_ENTRY_CACHE_EXPIRY );
+			vApiCache::setExpiry( vApiCache::REDIRECT_ENTRY_CACHE_EXPIRY );
 		}
 	}
 
@@ -220,12 +220,12 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 		{
 			$conversionProfile = conversionProfile2Peer::retrieveByPK($this->conversionProfileId);
 			if(!$conversionProfile || $conversionProfile->getType() != ConversionProfileType::LIVE_STREAM)
-				throw new KalturaAPIException(KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $this->conversionProfileId);
+				throw new VidiunAPIException(VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $this->conversionProfileId);
 		}
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -236,7 +236,7 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate($source_object)
+	 * @see VidiunObject::validateForUpdate($source_object)
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -266,9 +266,9 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 	
 	protected function validatePropertyChanged($sourceObject, $attr)
 	{
-		if($this->hasPropertyChanged($sourceObject, $attr) && $sourceObject->getLiveStatus() !== KalturaEntryServerNodeStatus::STOPPED )
+		if($this->hasPropertyChanged($sourceObject, $attr) && $sourceObject->getLiveStatus() !== VidiunEntryServerNodeStatus::STOPPED )
 		{
-			throw new KalturaAPIException(KalturaErrors::CANNOT_UPDATE_FIELDS_WHILE_ENTRY_BROADCASTING, $attr);
+			throw new VidiunAPIException(VidiunErrors::CANNOT_UPDATE_FIELDS_WHILE_ENTRY_BROADCASTING, $attr);
 		}
 	}
 	
@@ -284,16 +284,16 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 		$recordedEntry = $sourceObject->getRecordedEntryId() ? entryPeer::retrieveByPK($sourceObject->getRecordedEntryId()) : null;
 		if($recordedEntry)
 		{
-			$validUpdateStatuses = array(KalturaEntryStatus::READY, KalturaEntryStatus::ERROR_CONVERTING, KalturaEntryStatus::ERROR_IMPORTING);
+			$validUpdateStatuses = array(VidiunEntryStatus::READY, VidiunEntryStatus::ERROR_CONVERTING, VidiunEntryStatus::ERROR_IMPORTING);
 			if( !in_array($recordedEntry->getStatus(), $validUpdateStatuses) )
-				throw new KalturaAPIException(KalturaErrors::CANNOT_UPDATE_FIELDS_RECORDED_ENTRY_STILL_NOT_READY, $attr);
+				throw new VidiunAPIException(VidiunErrors::CANNOT_UPDATE_FIELDS_RECORDED_ENTRY_STILL_NOT_READY, $attr);
 			
 			$noneReadyAssets = assetPeer::retrieveByEntryId($recordedEntry->getId(),
-					array(KalturaAssetType::FLAVOR),
-					array(KalturaFlavorAssetStatus::CONVERTING, KalturaFlavorAssetStatus::QUEUED, KalturaFlavorAssetStatus::WAIT_FOR_CONVERT, KalturaFlavorAssetStatus::VALIDATING));
+					array(VidiunAssetType::FLAVOR),
+					array(VidiunFlavorAssetStatus::CONVERTING, VidiunFlavorAssetStatus::QUEUED, VidiunFlavorAssetStatus::WAIT_FOR_CONVERT, VidiunFlavorAssetStatus::VALIDATING));
 			
 			if(count($noneReadyAssets))
-				throw new KalturaAPIException(KalturaErrors::CANNOT_UPDATE_FIELDS_RECORDED_ENTRY_STILL_NOT_READY, $attr);
+				throw new VidiunAPIException(VidiunErrors::CANNOT_UPDATE_FIELDS_RECORDED_ENTRY_STILL_NOT_READY, $attr);
 		}
 	}
 	
@@ -312,8 +312,8 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 		
 		if($hasObjectChanged)
 		{
-			if( $sourceObject->getLiveStatus() !== KalturaEntryServerNodeStatus::STOPPED)
-				throw new KalturaAPIException(KalturaErrors::CANNOT_UPDATE_FIELDS_WHILE_ENTRY_BROADCASTING, "recordingOptions");
+			if( $sourceObject->getLiveStatus() !== VidiunEntryServerNodeStatus::STOPPED)
+				throw new VidiunAPIException(VidiunErrors::CANNOT_UPDATE_FIELDS_WHILE_ENTRY_BROADCASTING, "recordingOptions");
 			
 			$this->validateRecordingDone($sourceObject, "recordingOptions");
 		}
@@ -324,9 +324,9 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 
 		if (!$this->isNull($attr) && $this->hasPropertyChanged($sourceObject, $attr)) 
 		{
-			if (!PermissionPeer::isValidForPartner(PermissionName::FEATURE_DYNAMIC_SEGMENT_DURATION, kCurrentContext::getCurrentPartnerId())) 
+			if (!PermissionPeer::isValidForPartner(PermissionName::FEATURE_DYNAMIC_SEGMENT_DURATION, vCurrentContext::getCurrentPartnerId())) 
 			{
-				throw new KalturaAPIException(KalturaErrors::DYNAMIC_SEGMENT_DURATION_DISABLED, $this->getFormattedPropertyNameWithClassName($attr));
+				throw new VidiunAPIException(VidiunErrors::DYNAMIC_SEGMENT_DURATION_DISABLED, $this->getFormattedPropertyNameWithClassName($attr));
 			}
 
 			$this->validatePropertyNumeric($attr);
@@ -338,7 +338,7 @@ abstract class KalturaLiveEntry extends KalturaMediaEntry
 	{
 		$resolvedAttrName = $this->getObjectPropertyName($attr);
 		if(!$resolvedAttrName)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_IS_NOT_DEFINED, $attr, get_class($this));
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_IS_NOT_DEFINED, $attr, get_class($this));
 		
 		/* @var $sourceObject LiveEntry */
 		$getter = "get" . ucfirst($resolvedAttrName);

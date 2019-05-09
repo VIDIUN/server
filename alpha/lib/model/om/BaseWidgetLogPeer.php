@@ -34,14 +34,14 @@ abstract class BaseWidgetLogPeer {
 	/** the column name for the ID field */
 	const ID = 'widget_log.ID';
 
-	/** the column name for the KSHOW_ID field */
-	const KSHOW_ID = 'widget_log.KSHOW_ID';
+	/** the column name for the VSHOW_ID field */
+	const VSHOW_ID = 'widget_log.VSHOW_ID';
 
 	/** the column name for the ENTRY_ID field */
 	const ENTRY_ID = 'widget_log.ENTRY_ID';
 
-	/** the column name for the KMEDIA_TYPE field */
-	const KMEDIA_TYPE = 'widget_log.KMEDIA_TYPE';
+	/** the column name for the VMEDIA_TYPE field */
+	const VMEDIA_TYPE = 'widget_log.VMEDIA_TYPE';
 
 	/** the column name for the WIDGET_TYPE field */
 	const WIDGET_TYPE = 'widget_log.WIDGET_TYPE';
@@ -95,10 +95,10 @@ abstract class BaseWidgetLogPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'KshowId', 'EntryId', 'KmediaType', 'WidgetType', 'Referer', 'Views', 'Ip1', 'Ip1Count', 'Ip2', 'Ip2Count', 'CreatedAt', 'UpdatedAt', 'Plays', 'PartnerId', 'SubpId', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'kshowId', 'entryId', 'kmediaType', 'widgetType', 'referer', 'views', 'ip1', 'ip1Count', 'ip2', 'ip2Count', 'createdAt', 'updatedAt', 'plays', 'partnerId', 'subpId', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::KSHOW_ID, self::ENTRY_ID, self::KMEDIA_TYPE, self::WIDGET_TYPE, self::REFERER, self::VIEWS, self::IP1, self::IP1_COUNT, self::IP2, self::IP2_COUNT, self::CREATED_AT, self::UPDATED_AT, self::PLAYS, self::PARTNER_ID, self::SUBP_ID, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'kshow_id', 'entry_id', 'kmedia_type', 'widget_type', 'referer', 'views', 'ip1', 'ip1_count', 'ip2', 'ip2_count', 'created_at', 'updated_at', 'plays', 'partner_id', 'subp_id', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'VshowId', 'EntryId', 'VmediaType', 'WidgetType', 'Referer', 'Views', 'Ip1', 'Ip1Count', 'Ip2', 'Ip2Count', 'CreatedAt', 'UpdatedAt', 'Plays', 'PartnerId', 'SubpId', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'vshowId', 'entryId', 'vmediaType', 'widgetType', 'referer', 'views', 'ip1', 'ip1Count', 'ip2', 'ip2Count', 'createdAt', 'updatedAt', 'plays', 'partnerId', 'subpId', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::VSHOW_ID, self::ENTRY_ID, self::VMEDIA_TYPE, self::WIDGET_TYPE, self::REFERER, self::VIEWS, self::IP1, self::IP1_COUNT, self::IP2, self::IP2_COUNT, self::CREATED_AT, self::UPDATED_AT, self::PLAYS, self::PARTNER_ID, self::SUBP_ID, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'vshow_id', 'entry_id', 'vmedia_type', 'widget_type', 'referer', 'views', 'ip1', 'ip1_count', 'ip2', 'ip2_count', 'created_at', 'updated_at', 'plays', 'partner_id', 'subp_id', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
 	);
 
@@ -109,10 +109,10 @@ abstract class BaseWidgetLogPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'KshowId' => 1, 'EntryId' => 2, 'KmediaType' => 3, 'WidgetType' => 4, 'Referer' => 5, 'Views' => 6, 'Ip1' => 7, 'Ip1Count' => 8, 'Ip2' => 9, 'Ip2Count' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, 'Plays' => 13, 'PartnerId' => 14, 'SubpId' => 15, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'kshowId' => 1, 'entryId' => 2, 'kmediaType' => 3, 'widgetType' => 4, 'referer' => 5, 'views' => 6, 'ip1' => 7, 'ip1Count' => 8, 'ip2' => 9, 'ip2Count' => 10, 'createdAt' => 11, 'updatedAt' => 12, 'plays' => 13, 'partnerId' => 14, 'subpId' => 15, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::KSHOW_ID => 1, self::ENTRY_ID => 2, self::KMEDIA_TYPE => 3, self::WIDGET_TYPE => 4, self::REFERER => 5, self::VIEWS => 6, self::IP1 => 7, self::IP1_COUNT => 8, self::IP2 => 9, self::IP2_COUNT => 10, self::CREATED_AT => 11, self::UPDATED_AT => 12, self::PLAYS => 13, self::PARTNER_ID => 14, self::SUBP_ID => 15, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'kshow_id' => 1, 'entry_id' => 2, 'kmedia_type' => 3, 'widget_type' => 4, 'referer' => 5, 'views' => 6, 'ip1' => 7, 'ip1_count' => 8, 'ip2' => 9, 'ip2_count' => 10, 'created_at' => 11, 'updated_at' => 12, 'plays' => 13, 'partner_id' => 14, 'subp_id' => 15, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'VshowId' => 1, 'EntryId' => 2, 'VmediaType' => 3, 'WidgetType' => 4, 'Referer' => 5, 'Views' => 6, 'Ip1' => 7, 'Ip1Count' => 8, 'Ip2' => 9, 'Ip2Count' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, 'Plays' => 13, 'PartnerId' => 14, 'SubpId' => 15, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'vshowId' => 1, 'entryId' => 2, 'vmediaType' => 3, 'widgetType' => 4, 'referer' => 5, 'views' => 6, 'ip1' => 7, 'ip1Count' => 8, 'ip2' => 9, 'ip2Count' => 10, 'createdAt' => 11, 'updatedAt' => 12, 'plays' => 13, 'partnerId' => 14, 'subpId' => 15, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::VSHOW_ID => 1, self::ENTRY_ID => 2, self::VMEDIA_TYPE => 3, self::WIDGET_TYPE => 4, self::REFERER => 5, self::VIEWS => 6, self::IP1 => 7, self::IP1_COUNT => 8, self::IP2 => 9, self::IP2_COUNT => 10, self::CREATED_AT => 11, self::UPDATED_AT => 12, self::PLAYS => 13, self::PARTNER_ID => 14, self::SUBP_ID => 15, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'vshow_id' => 1, 'entry_id' => 2, 'vmedia_type' => 3, 'widget_type' => 4, 'referer' => 5, 'views' => 6, 'ip1' => 7, 'ip1_count' => 8, 'ip2' => 9, 'ip2_count' => 10, 'created_at' => 11, 'updated_at' => 12, 'plays' => 13, 'partner_id' => 14, 'subp_id' => 15, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
 	);
 
@@ -184,9 +184,9 @@ abstract class BaseWidgetLogPeer {
 	public static function addSelectColumns(Criteria $criteria)
 	{
 		$criteria->addSelectColumn(WidgetLogPeer::ID);
-		$criteria->addSelectColumn(WidgetLogPeer::KSHOW_ID);
+		$criteria->addSelectColumn(WidgetLogPeer::VSHOW_ID);
 		$criteria->addSelectColumn(WidgetLogPeer::ENTRY_ID);
-		$criteria->addSelectColumn(WidgetLogPeer::KMEDIA_TYPE);
+		$criteria->addSelectColumn(WidgetLogPeer::VMEDIA_TYPE);
 		$criteria->addSelectColumn(WidgetLogPeer::WIDGET_TYPE);
 		$criteria->addSelectColumn(WidgetLogPeer::REFERER);
 		$criteria->addSelectColumn(WidgetLogPeer::VIEWS);
@@ -232,11 +232,11 @@ abstract class BaseWidgetLogPeer {
 		
 		WidgetLogPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'WidgetLogPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -260,7 +260,7 @@ abstract class BaseWidgetLogPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -341,7 +341,7 @@ abstract class BaseWidgetLogPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -364,11 +364,11 @@ abstract class BaseWidgetLogPeer {
 	{		
 		$criteriaForSelect = WidgetLogPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'WidgetLogPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -384,12 +384,12 @@ abstract class BaseWidgetLogPeer {
 		
 		$queryResult = WidgetLogPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -399,17 +399,17 @@ abstract class BaseWidgetLogPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -480,7 +480,7 @@ abstract class BaseWidgetLogPeer {
 		WidgetLogPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -488,19 +488,19 @@ abstract class BaseWidgetLogPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -519,7 +519,7 @@ abstract class BaseWidgetLogPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -638,11 +638,11 @@ abstract class BaseWidgetLogPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('WidgetLogPeer');
+				vMemoryManager::registerPeer('WidgetLogPeer');
 			}
 		}
 	}
@@ -877,7 +877,7 @@ abstract class BaseWidgetLogPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;

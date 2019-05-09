@@ -3,7 +3,7 @@
  * @package plugins.viewHistory
  * @subpackage api
  */
-class KalturaViewHistoryUserEntry extends KalturaUserEntry
+class VidiunViewHistoryUserEntry extends VidiunUserEntry
 {
 	/**
 	 * Playback context
@@ -32,7 +32,7 @@ class KalturaViewHistoryUserEntry extends KalturaUserEntry
 	);
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -40,7 +40,7 @@ class KalturaViewHistoryUserEntry extends KalturaUserEntry
 	}	
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
@@ -51,16 +51,16 @@ class KalturaViewHistoryUserEntry extends KalturaUserEntry
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		$object_to_fill = parent::toInsertableObject($object_to_fill, $props_to_skip);
-		if (kCurrentContext::getCurrentSessionType() == SessionType::USER)
+		if (vCurrentContext::getCurrentSessionType() == SessionType::USER)
 		{
-			if ($this->userId && (!kCurrentContext::getCurrentKsKuser() ||strtolower(kCurrentContext::getCurrentKsKuser()->getPuserId()) != strtolower($this->userId)))
+			if ($this->userId && (!vCurrentContext::getCurrentVsVuser() ||strtolower(vCurrentContext::getCurrentVsVuser()->getPuserId()) != strtolower($this->userId)))
 			{
-				throw new KalturaAPIException (KalturaErrors::INVALID_USER_ID);	
+				throw new VidiunAPIException (VidiunErrors::INVALID_USER_ID);	
 			}
 		}
 		

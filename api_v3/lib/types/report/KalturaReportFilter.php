@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaReportFilter extends KalturaObject
+class VidiunReportFilter extends VidiunObject
 {
 	/**
 	 * The dimension whose values should be filtered

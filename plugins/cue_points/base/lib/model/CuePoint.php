@@ -34,7 +34,7 @@ abstract class CuePoint extends BaseCuePoint implements IIndexable, IRelatedObje
 		if ($this->isNew())
 			return array();
 			
-		$c = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$c = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		$c->add(CuePointPeer::PARENT_ID, $this->getId());
 		
 		return CuePointPeer::doSelect($c);
@@ -42,11 +42,11 @@ abstract class CuePoint extends BaseCuePoint implements IIndexable, IRelatedObje
 	
 	public function getPuserId()
 	{
-		$kuser =  kuserPeer::retrieveByPKNoFilter($this->getKuserId());
-	    if(!$kuser)
-			throw new KalturaAPIException(KalturaErrors::INVALID_USER_ID);
+		$vuser =  vuserPeer::retrieveByPKNoFilter($this->getVuserId());
+	    if(!$vuser)
+			throw new VidiunAPIException(VidiunErrors::INVALID_USER_ID);
 			
-		return $kuser->getPuserId();
+		return $vuser->getPuserId();
 	} 
 	
 	/**
@@ -59,11 +59,11 @@ abstract class CuePoint extends BaseCuePoint implements IIndexable, IRelatedObje
 		if(!$this->getPartnerId())
 			throw new Exception("Partner id must be set in order to load puser [$puserId]");
 			
-		$kuser = kuserPeer::getKuserByPartnerAndUid($this->getPartnerId(), $puserId, true);
-		if(!$kuser)
-			$kuser = kuserPeer::createKuserForPartner($this->getPartnerId(), $puserId);
+		$vuser = vuserPeer::getVuserByPartnerAndUid($this->getPartnerId(), $puserId, true);
+		if(!$vuser)
+			$vuser = vuserPeer::createVuserForPartner($this->getPartnerId(), $puserId);
 			
-		$this->setKuserId($kuser->getId());
+		$this->setVuserId($vuser->getId());
 	} 
 	
 	/**
@@ -71,13 +71,13 @@ abstract class CuePoint extends BaseCuePoint implements IIndexable, IRelatedObje
 	 */
 	private function calculateId()
 	{
-		$currentDcId = kDataCenterMgr::getCurrentDcId();
+		$currentDcId = vDataCenterMgr::getCurrentDcId();
 		for ($i = 0; $i < 10; $i++)
 		{
-			$id = $currentDcId.'_'.kString::generateStringId();
+			$id = $currentDcId.'_'.vString::generateStringId();
 			$existingObject = CuePointPeer::retrieveByPKNoFilter($id);
 			if ($existingObject){
-				KalturaLog::log(__METHOD__ . ": id [$id] already exists");
+				VidiunLog::log(__METHOD__ . ": id [$id] already exists");
 			}else{
 				return $id;
 			}
@@ -110,8 +110,8 @@ abstract class CuePoint extends BaseCuePoint implements IIndexable, IRelatedObje
 	{
 		if ($this->isNew())
 		{
-			if(is_null($this->getKuserId()))
-				$this->setPuserId(kCurrentContext::$uid, kCurrentContext::$is_admin_session);
+			if(is_null($this->getVuserId()))
+				$this->setPuserId(vCurrentContext::$uid, vCurrentContext::$is_admin_session);
 				
 			$this->setId($this->calculateId());
 		}
@@ -125,7 +125,7 @@ abstract class CuePoint extends BaseCuePoint implements IIndexable, IRelatedObje
 	public function postInsert(PropelPDO $con = null)
 	{
 		parent::postInsert($con);
-		kEventsManager::raiseEvent(new kObjectAddedEvent($this));
+		vEventsManager::raiseEvent(new vObjectAddedEvent($this));
 	}
 	
 	
@@ -146,11 +146,11 @@ abstract class CuePoint extends BaseCuePoint implements IIndexable, IRelatedObje
 		
 		if($objectDeleted)
 		{
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 		}
 			
 		if($objectUpdated)
-			kEventsManager::raiseEvent(new kObjectUpdatedEvent($this));
+			vEventsManager::raiseEvent(new vObjectUpdatedEvent($this));
 			
 		return $ret;
 	}
@@ -185,7 +185,7 @@ abstract class CuePoint extends BaseCuePoint implements IIndexable, IRelatedObje
 	 */
 	public function indexToSearchIndex()
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($this));
 	}
 
 	/**
@@ -335,7 +335,7 @@ abstract class CuePoint extends BaseCuePoint implements IIndexable, IRelatedObje
 		if(!is_null($ret))
 			return $ret;
 			
-		$c = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$c = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		$c->add(CuePointPeer::PARENT_ID, $this->getId());
 		$c->applyFilters();
 		

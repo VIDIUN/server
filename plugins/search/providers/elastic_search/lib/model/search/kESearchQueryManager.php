@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchQueryManager
+class vESearchQueryManager
 {
 	const BOOST_KEY = 'boost';
 	const VALUE_KEY = 'value';
@@ -37,7 +37,7 @@ class kESearchQueryManager
 	const RAW_FIELD_SUFFIX = 'raw';
 	const SYNONYM_FIELD_SUFFIX = 'synonym';
 	const MATCH_PHRASE_KEY = 'match_phrase';
-	const KALTURA_TEXT_PARTIAL_SEARCH_ANALYZER = 'kaltura_text_partial_search';
+	const VIDIUN_TEXT_PARTIAL_SEARCH_ANALYZER = 'vidiun_text_partial_search';
 	const FROM_KEY = 'from';
 	const SIZE_KEY = 'size';
 
@@ -56,16 +56,16 @@ class kESearchQueryManager
 	 */
 	public static function getPartialQuery($searchItem, $fieldName, &$queryAttributes)
 	{
-		$partialQuery = new kESearchBoolQuery();
+		$partialQuery = new vESearchBoolQuery();
 		$fieldBoostFactor = $searchItem::getFieldBoostFactor($fieldName);
 
-		$matchQuery = new kESearchMatchQuery($fieldName, $searchItem->getSearchTerm());
+		$matchQuery = new vESearchMatchQuery($fieldName, $searchItem->getSearchTerm());
 		$multiMatchFieldBoostFactor = self::MATCH_FIELD_BOOST_FACTOR * $fieldBoostFactor;
 		$matchQuery->setBoostFactor($multiMatchFieldBoostFactor);
-		$matchQuery->setAnalyzer(self::KALTURA_TEXT_PARTIAL_SEARCH_ANALYZER);
+		$matchQuery->setAnalyzer(self::VIDIUN_TEXT_PARTIAL_SEARCH_ANALYZER);
 		$partialQuery->addToShould($matchQuery);
 
-		$multiMatchQuery = new kESearchMultiMatchQuery();
+		$multiMatchQuery = new vESearchMultiMatchQuery();
 		$multiMatchQuery->setQuery($searchItem->getSearchTerm());
 		$rawBoostFactor = self::RAW_FIELD_BOOST_FACTOR * $fieldBoostFactor;
 		$multiMatchQuery->addToFields($fieldName.'.'.self::RAW_FIELD_SUFFIX.'^'.$rawBoostFactor);
@@ -102,8 +102,8 @@ class kESearchQueryManager
 		$partialQuery->addToShould($multiMatchQuery);
 
 		$trigramFieldName = $fieldName.'.'.self::NGRAMS_FIELD_SUFFIX;
-		$matchQuery = new kESearchMatchQuery($trigramFieldName, $searchItem->getSearchTerm());
-		$trigramPercentage = kConf::get('ngramPercentage', 'elastic', self::DEFAULT_TRIGRAM_PERCENTAGE);
+		$matchQuery = new vESearchMatchQuery($trigramFieldName, $searchItem->getSearchTerm());
+		$trigramPercentage = vConf::get('ngramPercentage', 'elastic', self::DEFAULT_TRIGRAM_PERCENTAGE);
 		$matchQuery->setMinimumShouldMatch("$trigramPercentage%");
 		if($searchItem->getAddHighlight())
 			$queryAttributes->getQueryHighlightsAttributes()->addFieldToHighlight($fieldName, $trigramFieldName);
@@ -129,10 +129,10 @@ class kESearchQueryManager
 		}
 		$fieldBoostFactor = $searchItem::getFieldBoostFactor($fieldName);
 		$fieldSuffix = '';
-		$queryObject = 'kESearchTermQuery';
+		$queryObject = 'vESearchTermQuery';
 
 		if(isset($allowedSearchTypes[$fieldName]) && in_array(ESearchItemType::PARTIAL, $allowedSearchTypes[$fieldName]))
-			$queryObject = 'kESearchMatchPhraseQuery';
+			$queryObject = 'vESearchMatchPhraseQuery';
 		
 		$exactMatch = new $queryObject($fieldName, $searchTerm);
 		$exactMatch->setBoostFactor($fieldBoostFactor);
@@ -155,7 +155,7 @@ class kESearchQueryManager
 
 		$searchTerm = elasticSearchUtils::formatSearchTerm($searchItem->getSearchTerm());
 		$fieldBoostFactor = $searchItem::getFieldBoostFactor($fieldName);
-		$prefixQuery = new kESearchPrefixQuery($fieldName . $fieldSuffix, $searchTerm);
+		$prefixQuery = new vESearchPrefixQuery($fieldName . $fieldSuffix, $searchTerm);
 		$prefixQuery->setBoostFactor($fieldBoostFactor);
 		if($searchItem->getAddHighlight())
 			$queryAttributes->getQueryHighlightsAttributes()->addFieldToHighlight($fieldName, $fieldName . $fieldSuffix);
@@ -167,24 +167,24 @@ class kESearchQueryManager
 		$rangeObject = $searchItem->getRange();
 		if(!$rangeObject)
 			return null;
-		$rangeQuery = new kESearchRangeQuery($rangeObject, $fieldName);
+		$rangeQuery = new vESearchRangeQuery($rangeObject, $fieldName);
 		return $rangeQuery;
 	}
 
 	public static function getExistsQuery($searchItem, $fieldName, $allowedSearchTypes, &$queryAttributes)
 	{
-		$existsQuery = new kESearchExistsQuery($fieldName);
+		$existsQuery = new vESearchExistsQuery($fieldName);
 		return $existsQuery;
 	}
 
 	public static function getNestedQuery($query, &$queryAttributes)
 	{
 		/** @var  ESearchQueryAttributes $queryAttributes*/
-		$nestedQuery = new kESearchNestedQuery();
+		$nestedQuery = new vESearchNestedQuery();
 		$nestedQuery->setPath($queryAttributes->getNestedOperatorPath());
 		$nestedQuery->setInnerHitsSize($queryAttributes->getNestedOperatorInnerHitsSize());
 		$nestedQuery->setInnerHitsSource(true);
-		$highlight = new kESearchHighlightQuery($queryAttributes->getQueryHighlightsAttributes()->getFieldsToHighlight(), $queryAttributes->getNestedOperatorNumOfFragments());
+		$highlight = new vESearchHighlightQuery($queryAttributes->getQueryHighlightsAttributes()->getFieldsToHighlight(), $queryAttributes->getNestedOperatorNumOfFragments());
 		$nestedQuery->setHighlight($highlight->getFinalQuery());
 		$nestedQuery->setQuery($query);
 		$nestedQuery->setInnerHitsName($queryAttributes->getNestedQueryName());

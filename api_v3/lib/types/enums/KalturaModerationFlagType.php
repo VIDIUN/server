@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaModerationFlagType extends KalturaEnum
+class VidiunModerationFlagType extends VidiunEnum
 {
 	const SEXUAL_CONTENT = 1;
 	const VIOLENT_REPULSIVE = 2;

@@ -1,11 +1,11 @@
 <?php
 /**
- * An array of KalturaString
+ * An array of VidiunString
  * 
  * @package api
  * @subpackage objects
  */
-class KalturaStringArray extends KalturaTypedArray
+class VidiunStringArray extends VidiunTypedArray
 {
 	public static function fromDbArray(array $strings = null)
 	{
@@ -14,12 +14,12 @@ class KalturaStringArray extends KalturaTypedArray
 	
 	public static function fromStringArray(array $strings = null)
 	{
-		$stringArray = new KalturaStringArray();
+		$stringArray = new VidiunStringArray();
 		if($strings && is_array($strings))
 		{
 			foreach($strings as $string)
 			{
-				$stringObject = new KalturaString();
+				$stringObject = new VidiunString();
 				$stringObject->value = $string;
 				$stringArray[] = $stringObject;
 			}
@@ -29,7 +29,7 @@ class KalturaStringArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaString");
+		return parent::__construct("VidiunString");
 	}
 
 }

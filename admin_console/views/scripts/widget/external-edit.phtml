@@ -108,9 +108,9 @@ function openEditor() {
 }
 
 function openVisualEditor() {
-	var url = '<?php echo $this->url(array('controller' => 'widget', 'action' => 'kcw-editor'), null, true); ?>';
+	var url = '<?php echo $this->url(array('controller' => 'widget', 'action' => 'vcw-editor'), null, true); ?>';
 	var title = '<?php echo $this->translate('Contribution Wizard Editor'); ?>';
-	var dialogDiv = jQuery('<iframe id="kcw-editor" src="'+url+'"></iframe>').appendTo('body');
+	var dialogDiv = jQuery('<iframe id="vcw-editor" src="'+url+'"></iframe>').appendTo('body');
 	dialogDiv.dialog({
 		bgiframe: true,
 		modal: true,
@@ -120,12 +120,12 @@ function openVisualEditor() {
 		padding: 0,
 		title: title,
 		close: function() {
-			jQuery('#kcw-editor').remove();
+			jQuery('#vcw-editor').remove();
 		}
 	});
 	
-	jQuery('#kcw-editor')
-		.width(jQuery('#kcw-editor').parent().width())
+	jQuery('#vcw-editor')
+		.width(jQuery('#vcw-editor').parent().width())
 		.css('padding', 0);
 }
 

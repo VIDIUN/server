@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBulkUploadResultUser extends KalturaBulkUploadResult
+class VidiunBulkUploadResultUser extends VidiunBulkUploadResult
 {
     /**
      * @var string
@@ -92,7 +92,7 @@ class KalturaBulkUploadResultUser extends KalturaBulkUploadResult
 	);
 	
     /* (non-PHPdoc)
-     * @see KalturaBulkUploadResult::getMapBetweenObjects()
+     * @see VidiunBulkUploadResult::getMapBetweenObjects()
      */
     public function getMapBetweenObjects()
 	{
@@ -100,30 +100,30 @@ class KalturaBulkUploadResultUser extends KalturaBulkUploadResult
 	}
 	
     /* (non-PHPdoc)
-     * @see KalturaBulkUploadResult::toInsertableObject()
+     * @see VidiunBulkUploadResult::toInsertableObject()
      */
     public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
 	    if ($this->userId)
 	    {
-	        $kuser = kuserPeer::getKuserByPartnerAndUid($this->partnerId, $this->userId);
-	        if ($kuser)
-                $this->objectId = $kuser->getId();	            
+	        $vuser = vuserPeer::getVuserByPartnerAndUid($this->partnerId, $this->userId);
+	        if ($vuser)
+                $this->objectId = $vuser->getId();	            
 	    }
 	    
-		return parent::toInsertableObject(new BulkUploadResultKuser(), $props_to_skip);
+		return parent::toInsertableObject(new BulkUploadResultVuser(), $props_to_skip);
 	}
 
     /* (non-PHPdoc)
-     * @see KalturaObject::toObject()
+     * @see VidiunObject::toObject()
      */
     public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 	    if (!is_numeric($this->objectId))
 	    {
-	        $kuser = kuserPeer::getKuserByPartnerAndUid($this->partnerId, $this->userId);
-	        if ($kuser)
-                $this->objectId = $kuser->getId();	            
+	        $vuser = vuserPeer::getVuserByPartnerAndUid($this->partnerId, $this->userId);
+	        if ($vuser)
+                $this->objectId = $vuser->getId();	            
 	    }
 	    
 		return parent::toObject($object_to_fill, $props_to_skip);

@@ -5,6 +5,6 @@
  * @subpackage lib
  */
 
-class kAsperaNodeApiException extends kCoreException
+class vAsperaNodeApiException extends vCoreException
 {
 }

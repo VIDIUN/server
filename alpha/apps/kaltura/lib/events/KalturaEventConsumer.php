@@ -4,6 +4,6 @@
  * @package Core
  * @subpackage events
  */
-interface KalturaEventConsumer
+interface VidiunEventConsumer
 {
 }

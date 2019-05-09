@@ -41,7 +41,7 @@ function addRow($partner_stat, $even_row )
 		'<td>'.prop($partner_stat , "created" ). '</td>'.
  		'<td>'.prop($partner_stat , "views",true )  .'</td>'.
 		'<td>'.prop($partner_stat , "plays" , true ). '</td>'. 		
-// 		'<td>'.prop($partner_stat , "kusers" , true ).'</td>'.
+// 		'<td>'.prop($partner_stat , "vusers" , true ).'</td>'.
 //	 	'<td>'.prop($partner_stat , "contribs" , true ). '</td>'.
 	 	'<td>'.prop($partner_stat , "rcs" , true ). '</td>'.
 	 	
@@ -125,7 +125,7 @@ function openGroups()
 }
 </script>
 
-<div class="mykaltura_viewAll mykaltura_media" style="width: 98%;">
+<div class="myvidiun_viewAll myvidiun_media" style="width: 98%;">
 	<div>
 		<span style="float:right;">
 			<a href="javascript:openGroups()">Groups</a> 
@@ -167,7 +167,7 @@ foreach ( $partner_group_list as $group )
 						<tr style="width:200px; text-align:center;" >
 							<td colspan=7>Partner data</td> 
 							<td colspan=4>General</td>
-<?php // 							<td style="width:40px;" class="type" ><span>Kusers</span></td> ?>
+<?php // 							<td style="width:40px;" class="type" ><span>Vusers</span></td> ?>
 <?php //							<td style="width:40px;" class="type" ><span>Contributors</span></td> ?>
 							<td colspan=4>Entries</td>
 							<td colspan=3>Active Site (views:plays)</td>
@@ -186,7 +186,7 @@ foreach ( $partner_group_list as $group )
 							<td style="width:60px;" class="type" ><span>Created</span></td>
 							<td style="width:50px;" class="type" ><span>Views</span></td>
 							<td style="width:50px;" class="type" ><span>Plays</span></td>
-<?php // 							<td style="width:40px;" class="type" ><span>Kusers</span></td> ?>
+<?php // 							<td style="width:40px;" class="type" ><span>Vusers</span></td> ?>
 <?php //							<td style="width:40px;" class="type" ><span>Contributors</span></td> ?>
 							<td style="width:30px;" class="type" >RC &gt;= 2</td>
 							<td style="width:40px;" class="type" >Widgets</td>

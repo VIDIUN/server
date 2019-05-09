@@ -4,10 +4,10 @@
  * @subpackage lib.entitlement
  */
 
-abstract class kElasticCategoryEntitlementDecorator implements IKalturaESearchEntitlementDecorator
+abstract class vElasticCategoryEntitlementDecorator implements IVidiunESearchEntitlementDecorator
 {
 	public static function shouldContribute()
 	{
-		return kEntitlementUtils::getEntitlementEnforcement();
+		return vEntitlementUtils::getEntitlementEnforcement();
 	}
 }

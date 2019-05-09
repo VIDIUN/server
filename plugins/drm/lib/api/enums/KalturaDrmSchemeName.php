@@ -3,7 +3,7 @@
  * @package api
  * @subpackage api.enum
  */
-class KalturaDrmSchemeName extends KalturaDynamicEnum implements DrmSchemeName
+class VidiunDrmSchemeName extends VidiunDynamicEnum implements DrmSchemeName
 {
 	public static function getEnumClass()
 	{

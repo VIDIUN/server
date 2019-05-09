@@ -5,7 +5,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEvalStringField extends KalturaStringField
+class VidiunEvalStringField extends VidiunStringField
 {
 	/**
 	 * PHP code
@@ -25,12 +25,12 @@ class KalturaEvalStringField extends KalturaStringField
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kEvalStringField();
+			$dbObject = new vEvalStringField();
 			
 		return parent::toObject($dbObject, $skip);
 	}

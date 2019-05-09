@@ -14,7 +14,7 @@ class DrmLicenseUtils {
 
     public function __construct($entry, $referrer)
     {
-        $this->secureEntryHelper = new KSecureEntryHelper($entry, kCurrentContext::$ks, $referrer, ContextType::PLAY);
+        $this->secureEntryHelper = new VSecureEntryHelper($entry, vCurrentContext::$vs, $referrer, ContextType::PLAY);
         $this->secureEntryHelper->validateForPlay();
     }
 
@@ -27,7 +27,7 @@ class DrmLicenseUtils {
         $policyId = null;
         foreach($actions as $action)
         {
-            if($action instanceof kAccessControlDrmPolicyAction && $action->getPolicyId())
+            if($action instanceof vAccessControlDrmPolicyAction && $action->getPolicyId())
             {
                 $policyId = $action->getPolicyId();
                 break;
@@ -87,8 +87,8 @@ class DrmLicenseUtils {
 
         $innerData = array();
         $innerData["ca_system"] = self::SYSTEM_NAME;
-        $innerData["user_token"] = kCurrentContext::$ks;
-        $innerData["account_id"] = kCurrentContext::getCurrentPartnerId();
+        $innerData["user_token"] = vCurrentContext::$vs;
+        $innerData["account_id"] = vCurrentContext::getCurrentPartnerId();
         $innerData["content_id"] = $entryId;
         $innerData["files"] = $flavorIds;
 
@@ -107,7 +107,7 @@ class DrmLicenseUtils {
 			$customData[$flavor->getId()]["signature"] = $innerDataSignature;
 		}
 
-		kApiCache::limitConditionalCacheTimeToKs();
+		vApiCache::limitConditionalCacheTimeToVs();
 
 		return $customData;
 	}

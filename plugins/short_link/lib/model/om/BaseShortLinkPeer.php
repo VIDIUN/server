@@ -49,8 +49,8 @@ abstract class BaseShortLinkPeer {
 	/** the column name for the PARTNER_ID field */
 	const PARTNER_ID = 'short_link.PARTNER_ID';
 
-	/** the column name for the KUSER_ID field */
-	const KUSER_ID = 'short_link.KUSER_ID';
+	/** the column name for the VUSER_ID field */
+	const VUSER_ID = 'short_link.VUSER_ID';
 
 	/** the column name for the NAME field */
 	const NAME = 'short_link.NAME';
@@ -80,10 +80,10 @@ abstract class BaseShortLinkPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'IntId', 'CreatedAt', 'UpdatedAt', 'ExpiresAt', 'PartnerId', 'KuserId', 'Name', 'SystemName', 'FullUrl', 'Status', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'intId', 'createdAt', 'updatedAt', 'expiresAt', 'partnerId', 'kuserId', 'name', 'systemName', 'fullUrl', 'status', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::INT_ID, self::CREATED_AT, self::UPDATED_AT, self::EXPIRES_AT, self::PARTNER_ID, self::KUSER_ID, self::NAME, self::SYSTEM_NAME, self::FULL_URL, self::STATUS, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'int_id', 'created_at', 'updated_at', 'expires_at', 'partner_id', 'kuser_id', 'name', 'system_name', 'full_url', 'status', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'IntId', 'CreatedAt', 'UpdatedAt', 'ExpiresAt', 'PartnerId', 'VuserId', 'Name', 'SystemName', 'FullUrl', 'Status', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'intId', 'createdAt', 'updatedAt', 'expiresAt', 'partnerId', 'vuserId', 'name', 'systemName', 'fullUrl', 'status', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::INT_ID, self::CREATED_AT, self::UPDATED_AT, self::EXPIRES_AT, self::PARTNER_ID, self::VUSER_ID, self::NAME, self::SYSTEM_NAME, self::FULL_URL, self::STATUS, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'int_id', 'created_at', 'updated_at', 'expires_at', 'partner_id', 'vuser_id', 'name', 'system_name', 'full_url', 'status', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
 
@@ -94,10 +94,10 @@ abstract class BaseShortLinkPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'IntId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, 'ExpiresAt' => 4, 'PartnerId' => 5, 'KuserId' => 6, 'Name' => 7, 'SystemName' => 8, 'FullUrl' => 9, 'Status' => 10, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'intId' => 1, 'createdAt' => 2, 'updatedAt' => 3, 'expiresAt' => 4, 'partnerId' => 5, 'kuserId' => 6, 'name' => 7, 'systemName' => 8, 'fullUrl' => 9, 'status' => 10, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::INT_ID => 1, self::CREATED_AT => 2, self::UPDATED_AT => 3, self::EXPIRES_AT => 4, self::PARTNER_ID => 5, self::KUSER_ID => 6, self::NAME => 7, self::SYSTEM_NAME => 8, self::FULL_URL => 9, self::STATUS => 10, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'int_id' => 1, 'created_at' => 2, 'updated_at' => 3, 'expires_at' => 4, 'partner_id' => 5, 'kuser_id' => 6, 'name' => 7, 'system_name' => 8, 'full_url' => 9, 'status' => 10, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'IntId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, 'ExpiresAt' => 4, 'PartnerId' => 5, 'VuserId' => 6, 'Name' => 7, 'SystemName' => 8, 'FullUrl' => 9, 'Status' => 10, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'intId' => 1, 'createdAt' => 2, 'updatedAt' => 3, 'expiresAt' => 4, 'partnerId' => 5, 'vuserId' => 6, 'name' => 7, 'systemName' => 8, 'fullUrl' => 9, 'status' => 10, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::INT_ID => 1, self::CREATED_AT => 2, self::UPDATED_AT => 3, self::EXPIRES_AT => 4, self::PARTNER_ID => 5, self::VUSER_ID => 6, self::NAME => 7, self::SYSTEM_NAME => 8, self::FULL_URL => 9, self::STATUS => 10, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'int_id' => 1, 'created_at' => 2, 'updated_at' => 3, 'expires_at' => 4, 'partner_id' => 5, 'vuser_id' => 6, 'name' => 7, 'system_name' => 8, 'full_url' => 9, 'status' => 10, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
 
@@ -174,7 +174,7 @@ abstract class BaseShortLinkPeer {
 		$criteria->addSelectColumn(ShortLinkPeer::UPDATED_AT);
 		$criteria->addSelectColumn(ShortLinkPeer::EXPIRES_AT);
 		$criteria->addSelectColumn(ShortLinkPeer::PARTNER_ID);
-		$criteria->addSelectColumn(ShortLinkPeer::KUSER_ID);
+		$criteria->addSelectColumn(ShortLinkPeer::VUSER_ID);
 		$criteria->addSelectColumn(ShortLinkPeer::NAME);
 		$criteria->addSelectColumn(ShortLinkPeer::SYSTEM_NAME);
 		$criteria->addSelectColumn(ShortLinkPeer::FULL_URL);
@@ -212,11 +212,11 @@ abstract class BaseShortLinkPeer {
 		
 		ShortLinkPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'ShortLinkPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -240,7 +240,7 @@ abstract class BaseShortLinkPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -321,7 +321,7 @@ abstract class BaseShortLinkPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -344,11 +344,11 @@ abstract class BaseShortLinkPeer {
 	{		
 		$criteriaForSelect = ShortLinkPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'ShortLinkPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -364,12 +364,12 @@ abstract class BaseShortLinkPeer {
 		
 		$queryResult = ShortLinkPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -379,17 +379,17 @@ abstract class BaseShortLinkPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -460,7 +460,7 @@ abstract class BaseShortLinkPeer {
 		ShortLinkPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -468,19 +468,19 @@ abstract class BaseShortLinkPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -499,7 +499,7 @@ abstract class BaseShortLinkPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -618,11 +618,11 @@ abstract class BaseShortLinkPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('ShortLinkPeer');
+				vMemoryManager::registerPeer('ShortLinkPeer');
 			}
 		}
 	}

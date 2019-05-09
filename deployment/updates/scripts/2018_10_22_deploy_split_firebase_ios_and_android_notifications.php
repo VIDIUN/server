@@ -10,7 +10,7 @@ $newFirebaseNotifications = realpath(dirname(__FILE__) . "/../../updates/scripts
 
 if(!file_exists($newFirebaseNotifications) || !file_exists($script))
 {
-	KalturaLog::err("Missing update script file");
+	VidiunLog::err("Missing update script file");
 	return;
 }
 

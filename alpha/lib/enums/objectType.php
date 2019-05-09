@@ -12,7 +12,7 @@ interface objectType extends BaseEnum
     const THUMBASSET = 5;
     const UICONF = 6;
     const CONVERSIONPROFILE2 = 7;
-    const KUSER=8;
+    const VUSER=8;
     const PERMISSION=9;
     const PERMISSIONITEM=10;
     const USERROLE=11;

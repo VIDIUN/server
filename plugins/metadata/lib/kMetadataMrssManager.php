@@ -3,10 +3,10 @@
  * @package plugins.metadata
  * @subpackage lib
  */
-class kMetadataMrssManager implements IKalturaMrssContributor
+class vMetadataMrssManager implements IVidiunMrssContributor
 {
 	/**
-	 * @var kMetadataMrssManager
+	 * @var vMetadataMrssManager
 	 */
 	protected static $instance;
 	
@@ -15,22 +15,22 @@ class kMetadataMrssManager implements IKalturaMrssContributor
 	}
 	
 	/**
-	 * @return kMetadataMrssManager
+	 * @return vMetadataMrssManager
 	 */
 	public static function get()
 	{
 		if(!self::$instance)
-			self::$instance = new kMetadataMrssManager();
+			self::$instance = new vMetadataMrssManager();
 			
 		return self::$instance;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaMrssContributor::contributeToSchema()
+	 * @see IVidiunMrssContributor::contributeToSchema()
 	 */
-	public function contribute(BaseObject $object, SimpleXMLElement $mrss, kMrssParameters $mrssParams = null)
+	public function contribute(BaseObject $object, SimpleXMLElement $mrss, vMrssParameters $mrssParams = null)
 	{
-		$objectType = kMetadataManager::getTypeNameFromObject($object);
+		$objectType = vMetadataManager::getTypeNameFromObject($object);
 		$metadatas = MetadataPeer::retrieveAllByObject($objectType, $object->getId());
 		foreach($metadatas as $metadata)
 			$this->contributeMetadata($metadata, $mrss, $mrssParams);
@@ -39,15 +39,15 @@ class kMetadataMrssManager implements IKalturaMrssContributor
 	/**
 	 * @param Metadata $metadata
 	 * @param SimpleXMLElement $mrss
-	 * @param kMrssParameters $mrssParams
+	 * @param vMrssParameters $mrssParams
 	 * @return SimpleXMLElement
 	 */
-	public function contributeMetadata(Metadata $metadata, SimpleXMLElement $mrss, kMrssParameters $mrssParams = null)
+	public function contributeMetadata(Metadata $metadata, SimpleXMLElement $mrss, vMrssParameters $mrssParams = null)
 	{
 		$key = $metadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-		$xml = kFileSyncUtils::file_get_contents($key, true, false);
+		$xml = vFileSyncUtils::file_get_contents($key, true, false);
 		if (is_null($xml)){
-			KalturaLog::alert("ready file sync was not found for key[$key]");
+			VidiunLog::alert("ready file sync was not found for key[$key]");
 			return;
 		}
 		$metadataXml = new SimpleXMLElement($xml);
@@ -64,10 +64,10 @@ class kMetadataMrssManager implements IKalturaMrssContributor
 	/**
 	 * @param SimpleXMLElement $mrss
 	 * @param SimpleXMLElement $metadata
-	 * @param kMrssParameters $mrssParams
+	 * @param vMrssParameters $mrssParams
 	 * @return SimpleXMLElement
 	 */
-	public function contributeMetadataObject(SimpleXMLElement $mrss, SimpleXMLElement $metadata, kMrssParameters $mrssParams = null, $currentXPath)
+	public function contributeMetadataObject(SimpleXMLElement $mrss, SimpleXMLElement $metadata, vMrssParameters $mrssParams = null, $currentXPath)
 	{
 		$currentXPath .= "/*[local-name()='" . $metadata->getName() . "']";
 		
@@ -83,20 +83,20 @@ class kMetadataMrssManager implements IKalturaMrssContributor
 			}
 			else
 			{
-				$metadataObject->addChild($metadataField, kString::stringToSafeXml($metadataValue));
+				$metadataObject->addChild($metadataField, vString::stringToSafeXml($metadataValue));
 			}					
 		}				
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaBase::getInstance()
+	 * @see IVidiunBase::getInstance()
 	 */
 	public function getInstance($interface)
 	{
 		if($this instanceof $interface)
 			return $this;
 			
-		$plugin = KalturaPluginManager::getPluginInstance(MetadataPlugin::getPluginName());		
+		$plugin = VidiunPluginManager::getPluginInstance(MetadataPlugin::getPluginName());		
 		if($plugin)
 			return $plugin->getInstance($interface);
 		
@@ -104,7 +104,7 @@ class kMetadataMrssManager implements IKalturaMrssContributor
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaMrssContributor::returnObjectFeatureType()
+	 * @see IVidiunMrssContributor::returnObjectFeatureType()
 	 */
 	public function getObjectFeatureType() 
 	{

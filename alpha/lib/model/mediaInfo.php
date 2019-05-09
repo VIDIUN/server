@@ -32,7 +32,7 @@ class mediaInfo extends BasemediaInfo
 	
 	public function setRawData($v)
 	{
-		$saveRawDataAllowedPartners = kConf::get("save_media_info_raw_data_partners", 'local', array());
+		$saveRawDataAllowedPartners = vConf::get("save_media_info_raw_data_partners", 'local', array());
 		if(!count($saveRawDataAllowedPartners))
 			return parent::setRawData($v);
 	
@@ -49,7 +49,7 @@ class mediaInfo extends BasemediaInfo
 	public function getRawDataXml()
 	{
 		$rawData = $this->getRawData();
-		$tokenizer = new KStringTokenizer ( $rawData, "\t\n" );
+		$tokenizer = new VStringTokenizer ( $rawData, "\t\n" );
 	
 		$rawDataXml = new DOMDocument();
 		$rootNode = $rawDataXml->createElement("RawData");

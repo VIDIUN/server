@@ -23,7 +23,7 @@ class PartnerLoadPeer extends BasePartnerLoadPeer {
 		if(!$maxQuota)
 			$maxQuota = BatchJobLockPeer::getMaxJobsForPartner($jobType);
 		
-		$dcId = kDataCenterMgr::getCurrentDcId();
+		$dcId = vDataCenterMgr::getCurrentDcId();
 		
 		// Hack to avoid the not-null constaint on job sub type
 		if(is_null($jobSubType))
@@ -79,7 +79,7 @@ class PartnerLoadPeer extends BasePartnerLoadPeer {
 		try {
 			$affectedRows = $con->exec($sql);
 		} catch (Exception $e) {
-			KalturaLog::err("Failed to update partner load with error : " . $e->getMessage());
+			VidiunLog::err("Failed to update partner load with error : " . $e->getMessage());
 		}
 		
 	}
@@ -92,7 +92,7 @@ class PartnerLoadPeer extends BasePartnerLoadPeer {
 	 */
 	public static function getPartnerLoads()
 	{
-		$dcId = kDataCenterMgr::getCurrentDcId();
+		$dcId = vDataCenterMgr::getCurrentDcId();
 		$c = new Criteria();
 		$c->add(BatchJobLockPeer::WORKER_ID, null, Criteria::ISNOTNULL);
 		$c->add(BatchJobLockPeer::DC, $dcId);
@@ -138,7 +138,7 @@ class PartnerLoadPeer extends BasePartnerLoadPeer {
 	public static function updatePartnerLoadTable() {
 		$actualPartnerLoads = PartnerLoadPeer::getPartnerLoads();
 		$c = new Criteria();
-		$c->add(PartnerLoadPeer::DC, kDataCenterMgr::getCurrentDcId());
+		$c->add(PartnerLoadPeer::DC, vDataCenterMgr::getCurrentDcId());
 		$currentPartnerLoads = PartnerLoadPeer::doSelect($c);
 			
 		

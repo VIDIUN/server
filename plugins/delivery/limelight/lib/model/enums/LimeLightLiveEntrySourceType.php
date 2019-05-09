@@ -4,7 +4,7 @@
  * @package plugins.limeLight
  * @subpackage model.enum
  */ 
-class LimeLightLiveEntrySourceType implements IKalturaPluginEnum, EntrySourceType
+class LimeLightLiveEntrySourceType implements IVidiunPluginEnum, EntrySourceType
 {
 	const LIMELIGHT_LIVE = 'LIVE_STREAM';
 	

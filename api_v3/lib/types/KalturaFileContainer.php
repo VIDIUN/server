@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFileContainer extends KalturaObject
+class VidiunFileContainer extends VidiunObject
 {
 	/**
 	 * @var string
@@ -33,7 +33,7 @@ class KalturaFileContainer extends KalturaObject
 	}
 
 	/* (non-PHPdoc)
- * @see KalturaObject::toObject()
+ * @see VidiunObject::toObject()
  */
 	public function toObject ($dbObject = null, $skip = array())
 	{

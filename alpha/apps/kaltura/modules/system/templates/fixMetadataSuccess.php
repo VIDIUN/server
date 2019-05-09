@@ -127,7 +127,7 @@ function closeText()
 <form>
 	Entry Ids: <input type="text" name="entry_ids" value="<?php echo $entry_ids ?>">
 
-	Kshow Ids: <input type="text" name="kshow_ids" value="<?php echo $kshow_ids ?>">
+	Vshow Ids: <input type="text" name="vshow_ids" value="<?php echo $vshow_ids ?>">
 
 <input type="submit" id="Go" name="Go" value="Go"/>
 </form>

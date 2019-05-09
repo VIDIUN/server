@@ -3,19 +3,19 @@
  * @package Scheduler
  * @subpackage Killer
  */
-class KBatchKiller
+class VBatchKiller
 {
 	/**
-	 * @var KBatchKillerConfig
+	 * @var VBatchKillerConfig
 	 */
 	private $config;
 	
-	public function __construct(KBatchKillerConfig $config) 
+	public function __construct(VBatchKillerConfig $config) 
 	{
 		$this->config = $config;
 		
-		KDwhClient::setEnabled($config->dwhEnabled);		
-		KDwhClient::setFileName($config->dwhPath);
+		VDwhClient::setEnabled($config->dwhEnabled);		
+		VDwhClient::setFileName($config->dwhPath);
 	}
 	
 	/**
@@ -30,14 +30,14 @@ class KBatchKiller
 		{
 			if(!file_exists($file))
 			{
-				$this->logToDWH(KBatchEvent::EVENT_KILLER_FILE_DOESNT_EXIST, $file);
+				$this->logToDWH(VBatchEvent::EVENT_KILLER_FILE_DOESNT_EXIST, $file);
 				return true;
 			}
 				
 			$idle = $now - filemtime($file);
 			if($idle > $this->config->maxIdleTime)
 			{
-				$this->logToDWH(KBatchEvent::EVENT_KILLER_FILE_IDLE, $file, $idle);
+				$this->logToDWH(VBatchEvent::EVENT_KILLER_FILE_IDLE, $file, $idle);
 				return true;
 			}
 		}
@@ -46,7 +46,7 @@ class KBatchKiller
 	
 	protected function logToDWH($event_id, $filePath = null, $idleTime = null)
 	{
-		$event = new KBatchEvent();
+		$event = new VBatchEvent();
 		
 		$event->value_1 = $idleTime;
 		$event->value_2 = $filePath;
@@ -63,7 +63,7 @@ class KBatchKiller
 		$event->location_id = $this->config->schedulerId;
 		$event->host_name = $this->config->schedulerName;
 		
-		KDwhClient::send($event);
+		VDwhClient::send($event);
 	}
 	
 	protected function killBatch()
@@ -79,7 +79,7 @@ class KBatchKiller
 	protected static function killProcessTree($ppid)
 	{
 		$mypid = getmypid();
-KalturaLog::info(__METHOD__.': Killing parent pid='.$ppid.', mypid='.$mypid);
+VidiunLog::info(__METHOD__.': Killing parent pid='.$ppid.', mypid='.$mypid);
 //		$pids = preg_split('/\s+/', `ps -o pid --no-heading --ppid $ppid`);
 //		$pids = preg_split('/\s+/', `ps -o ppid $ppid | tail -n 1`);
 		$rawpids = preg_split('/\s+/', `ps -o pid,ppid -ax | grep $ppid`);
@@ -99,7 +99,7 @@ KalturaLog::info(__METHOD__.': Killing parent pid='.$ppid.', mypid='.$mypid);
 		/*
 			run through the list, go recursive for every child and kill the process
 		*/
-KalturaLog::info(__METHOD__.': Child pids='.print_r($pids,true));				
+VidiunLog::info(__METHOD__.': Child pids='.print_r($pids,true));				
 		$cnt = count($pids);
 		for ($i=0;$i<$cnt; $i+=2) {
 			$pid = $pids[$i];
@@ -108,11 +108,11 @@ KalturaLog::info(__METHOD__.': Child pids='.print_r($pids,true));
 			}
 			self::killProcessTree($pid);
 			
-KalturaLog::info(__METHOD__.': Killing pid='.$pid);
+VidiunLog::info(__METHOD__.': Killing pid='.$pid);
 			if(function_exists('posix_kill'))
 			{
 				$rv=posix_kill($pid, 9);
-				KalturaLog::info("pid=".$pid.", rv=".$rv);
+				VidiunLog::info("pid=".$pid.", rv=".$rv);
 			}
 			else
 			{
@@ -123,7 +123,7 @@ KalturaLog::info(__METHOD__.': Killing pid='.$pid);
 		if(function_exists('posix_kill'))
 		{
 			$rv=posix_kill($ppid, 9);
-			KalturaLog::info("ppid=".$ppid.", rv=".$rv);
+			VidiunLog::info("ppid=".$ppid.", rv=".$rv);
 		}
 		else
 		{
@@ -134,7 +134,7 @@ KalturaLog::info(__METHOD__.': Killing pid='.$pid);
 	
 	public function run()
 	{
-		$this->logToDWH(KBatchEvent::EVENT_KILLER_UP);
+		$this->logToDWH(VBatchEvent::EVENT_KILLER_UP);
 		while(true)
 		{
 			sleep($this->config->sleepTime);

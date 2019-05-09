@@ -607,8 +607,8 @@ var swfobject = function() {
 					removeSWF(objIdArr[j]);
 				}
 				// cleanup library's main closures to avoid memory leaks
-				for (var k in ua) {
-					ua[k] = null;
+				for (var v in ua) {
+					ua[v] = null;
 				}
 				ua = null;
 				for (var l in swfobject) {
@@ -667,12 +667,12 @@ var swfobject = function() {
 						}
 					}
 					if (flashvarsObj && typeof flashvarsObj === OBJECT) {
-						for (var k in flashvarsObj) { // copy object to avoid the use of references, because web authors often reuse flashvarsObj for multiple SWFs
+						for (var v in flashvarsObj) { // copy object to avoid the use of references, because web authors often reuse flashvarsObj for multiple SWFs
 							if (typeof par.flashvars != UNDEF) {
-								par.flashvars += "&" + k + "=" + flashvarsObj[k];
+								par.flashvars += "&" + v + "=" + flashvarsObj[v];
 							}
 							else {
-								par.flashvars = k + "=" + flashvarsObj[k];
+								par.flashvars = v + "=" + flashvarsObj[v];
 							}
 						}
 					}

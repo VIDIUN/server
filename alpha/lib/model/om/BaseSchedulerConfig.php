@@ -1098,7 +1098,7 @@ abstract class BaseSchedulerConfig extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -1122,7 +1122,7 @@ abstract class BaseSchedulerConfig extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
 		parent::postInsert($con);
 	}
@@ -1138,7 +1138,7 @@ abstract class BaseSchedulerConfig extends BaseObject  implements Persistent {
 			return;
 		}
 	
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
 		parent::postUpdate($con);
 	}

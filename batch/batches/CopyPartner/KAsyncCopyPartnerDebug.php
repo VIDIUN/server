@@ -10,8 +10,8 @@ $iniDir = "../configurations/batch";		// should be the full file path
 
 try
 {
-	$kdebuger = new KGenericDebuger($iniDir);
-	$kdebuger->run('KAsyncCopyPartner');
+	$vdebuger = new VGenericDebuger($iniDir);
+	$vdebuger->run('VAsyncCopyPartner');
 }
 catch ( Exception $e )
 {

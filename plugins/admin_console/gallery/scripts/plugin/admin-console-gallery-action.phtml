@@ -43,11 +43,11 @@
 						$recordsFound = false;
 						foreach($this->paginator as $index => $entry)
 						{
-							/* @var $entry Kaltura_Client_Type_MediaEntry */
+							/* @var $entry Vidiun_Client_Type_MediaEntry */
 							
 							$recordsFound = true;
-							$status = $this->enumTranslate('Kaltura_Client_Enum_EntryStatus', $entry->status);
-							if($entry->status == Kaltura_Client_Enum_EntryStatus::READY)
+							$status = $this->enumTranslate('Vidiun_Client_Enum_EntryStatus', $entry->status);
+							if($entry->status == Vidiun_Client_Enum_EntryStatus::READY)
 								$status = "<font color=\"green\">$status</font>";
 							elseif($entry->status < 0)
 								$status = "<font color=\"red\">$status</font>";
@@ -96,10 +96,10 @@
 					'partnerId' => $this->playerPartnerId,
 				);
 				
-				/* @var $uiConf Kaltura_Client_AdminConsole_Type_UiConfAdmin */
+				/* @var $uiConf Vidiun_Client_AdminConsole_Type_UiConfAdmin */
 				?>
 				<div>
-					<object id="kaltura_player" name="kaltura_player" type="application/x-shockwave-flash" allowFullScreen="true" allowNetworking="all" allowScriptAccess="always" height="<?php echo $uiConf->height; ?>" width="<?php echo $uiConf->width; ?>" bgcolor="#000000" xmlns:dc="http://purl.org/dc/terms/" xmlns:media="http://search.yahoo.com/searchmonkey/media/" rel="media:video" resource="<?php echo $swfUrl; ?>" data="<?php echo $swfUrl; ?>">
+					<object id="vidiun_player" name="vidiun_player" type="application/x-shockwave-flash" allowFullScreen="true" allowNetworking="all" allowScriptAccess="always" height="<?php echo $uiConf->height; ?>" width="<?php echo $uiConf->width; ?>" bgcolor="#000000" xmlns:dc="http://purl.org/dc/terms/" xmlns:media="http://search.yahoo.com/searchmonkey/media/" rel="media:video" resource="<?php echo $swfUrl; ?>" data="<?php echo $swfUrl; ?>">
 						<param name="allowFullScreen" value="true" />
 						<param name="allowNetworking" value="all" />
 						<param name="allowScriptAccess" value="always" />
@@ -128,7 +128,7 @@
 								'cdnHost' => '',
 								'clientTag' => 'adminConsole.gallery',
 								'partnerId' => 0,
-								'ks' => '',
+								'vs' => '',
 								'referrer' => '',
 								'entryId' => '',
 								'flavorId' => '',
@@ -177,7 +177,7 @@
 
 	function playEntry ( entry_id ){
 		//alert ( "playEntry:" + entry_id );
-		var player = document.getElementById("kaltura_player");
+		var player = document.getElementById("vidiun_player");
 		if ( player ){
 			if ( player.sendNotification ){
 				player.sendNotification ('changeMedia', {entryId: entry_id});

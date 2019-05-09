@@ -1,5 +1,5 @@
 <?php
-abstract class kalturaProject
+abstract class vidiunProject
 {
 	abstract function getName();
 	abstract function getId();

@@ -54,7 +54,7 @@ if(!$ret)
 
 function getPdoConnection()
 {
-	$dbMap = kConf::getMap('db');
+	$dbMap = vConf::getMap('db');
 	if(!$dbMap)
 	{
 		die('Cannot get db.ini map from configuration!');

@@ -15,7 +15,7 @@ Each group will have it's own file with the name of the group and the relevant d
 <br>
 <?php
 $link_prefix = "./";
-// http://www.kaltura.com/index.php/system/viewPartnersA?partner_filter=kmc_signup&filter_type=kmc_signup&type=2&from_date=2009-08-21&to_date=2009-08-27&days=7&new_first=false&partners_between=false&page=1
+// http://www.vidiun.com/index.php/system/viewPartnersA?partner_filter=vmc_signup&filter_type=vmc_signup&type=2&from_date=2009-08-21&to_date=2009-08-27&days=7&new_first=false&partners_between=false&page=1
 
 foreach ( $partner_group_list as $group )
 {

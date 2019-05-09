@@ -1,9 +1,9 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage api.enum
  */
-class KalturaCrossKalturaDistributionField extends KalturaStringEnum implements CrossKalturaDistributionField
+class VidiunCrossVidiunDistributionField extends VidiunStringEnum implements CrossVidiunDistributionField
 {
-	// see CrossKalturaDistributionField interface
+	// see CrossVidiunDistributionField interface
 }

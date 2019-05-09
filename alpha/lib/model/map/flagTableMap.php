@@ -38,7 +38,7 @@ class flagTableMap extends TableMap {
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
-		$this->addForeignKey('KUSER_ID', 'KuserId', 'INTEGER', 'kuser', 'ID', false, null, null);
+		$this->addForeignKey('VUSER_ID', 'VuserId', 'INTEGER', 'vuser', 'ID', false, null, null);
 		$this->addColumn('SUBJECT_TYPE', 'SubjectType', 'INTEGER', false, null, null);
 		$this->addColumn('SUBJECT_ID', 'SubjectId', 'INTEGER', false, null, null);
 		$this->addColumn('FLAG_TYPE', 'FlagType', 'INTEGER', false, null, null);
@@ -53,7 +53,7 @@ class flagTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('kuser', 'kuser', RelationMap::MANY_TO_ONE, array('kuser_id' => 'id', ), null, null);
+    $this->addRelation('vuser', 'vuser', RelationMap::MANY_TO_ONE, array('vuser_id' => 'id', ), null, null);
 	} // buildRelations()
 
 } // flagTableMap

@@ -5,7 +5,7 @@
  * @package api
  * @subpackage services
  */
-class UserEntryService extends KalturaBaseService {
+class UserEntryService extends VidiunBaseService {
 
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -14,18 +14,18 @@ class UserEntryService extends KalturaBaseService {
 	}
 
 	/**
-	 * Adds a user_entry to the Kaltura DB.
+	 * Adds a user_entry to the Vidiun DB.
 	 *
 	 * @action add
-	 * @param KalturaUserEntry $userEntry
-	 * @return KalturaUserEntry
+	 * @param VidiunUserEntry $userEntry
+	 * @return VidiunUserEntry
 	 */
-	public function addAction(KalturaUserEntry $userEntry)
+	public function addAction(VidiunUserEntry $userEntry)
 	{
 		$dbUserEntry = $userEntry->toInsertableObject(null, array('type'));
-		$lockUser = $userEntry->userId ? $userEntry->userId : kCurrentContext::getCurrentKsKuserId();
+		$lockUser = $userEntry->userId ? $userEntry->userId : vCurrentContext::getCurrentVsVuserId();
 		$lockKey = "userEntry_add_" . $this->getPartnerId() . $userEntry->entryId . $lockUser;
-		$dbUserEntry = kLock::runLocked($lockKey, array($this, 'addUserEntryImpl'), array($dbUserEntry));
+		$dbUserEntry = vLock::runLocked($lockKey, array($this, 'addUserEntryImpl'), array($dbUserEntry));
 		$userEntry->fromObject($dbUserEntry, $this->getResponseProfile());
 
 		return $userEntry;
@@ -35,7 +35,7 @@ class UserEntryService extends KalturaBaseService {
 	{
 		if($dbUserEntry->checkAlreadyExists())
 		{
-			throw new KalturaAPIException(KalturaErrors::USER_ENTRY_ALREADY_EXISTS);
+			throw new VidiunAPIException(VidiunErrors::USER_ENTRY_ALREADY_EXISTS);
 		}
 		$dbUserEntry->save();
 		
@@ -46,15 +46,15 @@ class UserEntryService extends KalturaBaseService {
 	 *
 	 * @action update
 	 * @param int $id
-	 * @param KalturaUserEntry $userEntry
-	 * @return KalturaUserEntry
-	 * @throws KalturaAPIException
+	 * @param VidiunUserEntry $userEntry
+	 * @return VidiunUserEntry
+	 * @throws VidiunAPIException
 	 */
-	public function updateAction($id, KalturaUserEntry $userEntry)
+	public function updateAction($id, VidiunUserEntry $userEntry)
 	{
 		$dbUserEntry = UserEntryPeer::retrieveByPK($id);
 		if (!$dbUserEntry)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $id);
 
 		$dbUserEntry = $userEntry->toUpdatableObject($dbUserEntry);
 		$dbUserEntry->save();
@@ -67,18 +67,18 @@ class UserEntryService extends KalturaBaseService {
 	/**
 	 * @action delete
 	 * @param int $id
-	 * @return KalturaUserEntry The deleted UserEntry object
- 	 * @throws KalturaAPIException
+	 * @return VidiunUserEntry The deleted UserEntry object
+ 	 * @throws VidiunAPIException
 	 */
 	public function deleteAction($id)
 	{
 		$dbUserEntry = UserEntryPeer::retrieveByPK($id);
 		if (!$dbUserEntry)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $id);
-		$dbUserEntry->setStatus(KalturaUserEntryStatus::DELETED);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $id);
+		$dbUserEntry->setStatus(VidiunUserEntryStatus::DELETED);
 		$dbUserEntry->save();
 
-		$userEntry = KalturaUserEntry::getInstanceByType($dbUserEntry->getType());
+		$userEntry = VidiunUserEntry::getInstanceByType($dbUserEntry->getType());
 		$userEntry->fromObject($dbUserEntry, $this->getResponseProfile());
 
 		return $userEntry;
@@ -87,23 +87,23 @@ class UserEntryService extends KalturaBaseService {
 
 	/**
 	 * @action list
-	 * @param KalturaUserEntryFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaUserEntryListResponse
+	 * @param VidiunUserEntryFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunUserEntryListResponse
 	 */
-	public function listAction(KalturaUserEntryFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunUserEntryFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if(!$filter)
 		{
-			$filter = new KalturaUserEntryFilter();
+			$filter = new VidiunUserEntryFilter();
 		}
 		
 		if (!$pager)
 		{
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		}
 		// return empty list when userId was not given
-		if ( $this->getKs() && !$this->getKs()->isAdmin() && !kCurrentContext::$ks_uid )
+		if ( $this->getVs() && !$this->getVs()->isAdmin() && !vCurrentContext::$vs_uid )
 		{
 			return $filter->getEmptyListResponse();
 		}
@@ -113,16 +113,16 @@ class UserEntryService extends KalturaBaseService {
 	/**
 	 * @action get
 	 * @param string $id
-	 * @return KalturaUserEntry
-	 * @throws KalturaAPIException
+	 * @return VidiunUserEntry
+	 * @throws VidiunAPIException
 	 */
 	public function getAction($id)
 	{
 		$dbUserEntry = UserEntryPeer::retrieveByPK( $id );
 		if(!$dbUserEntry)
-			throw new KalturaAPIException(KalturaErrors::USER_ENTRY_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::USER_ENTRY_NOT_FOUND, $id);
 
-		$userEntry = KalturaUserEntry::getInstanceByType($dbUserEntry->getType());
+		$userEntry = VidiunUserEntry::getInstanceByType($dbUserEntry->getType());
 		if (!$userEntry)
 			return null;
 		$userEntry->fromObject($dbUserEntry);

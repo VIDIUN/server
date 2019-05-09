@@ -9,7 +9,7 @@ if($argc < 2) {
 $jobId = $argv[1];
 chdir(__DIR__.'/../');
 require_once(__DIR__ . '/../bootstrap.php');
-$batchConfigDir = KALTURA_ROOT_PATH .'/configurations/batch/';
+$batchConfigDir = VIDIUN_ROOT_PATH .'/configurations/batch/';
 
 
 
@@ -65,7 +65,7 @@ function getNameFromConf($conf, $workerId) {
 
 function getNameFromKey($str) {
 	$parts = explode(":", $str);
-	$prefix = 'KAsync';
+	$prefix = 'VAsync';
 	if (!(substr($str, 0, strlen($prefix)) === $prefix))
 		return null;
 	$name = substr($parts[0], strlen($prefix));

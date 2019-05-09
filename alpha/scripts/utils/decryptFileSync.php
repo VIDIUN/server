@@ -20,7 +20,7 @@ if (isset($argv[2]) && $argv[2] == 'decrypt')
 	$plainData = $fs->decrypt();
 	$realPath = realpath($fs->getFullPath());
 	echo "Decrypt the original file in path [$realPath]" . PHP_EOL;
-	kFileBase::setFileContent( $realPath, $plainData);
+	vFileBase::setFileContent( $realPath, $plainData);
 	$fs->setEncryptionKey(null);
 	$fs->save();
 }

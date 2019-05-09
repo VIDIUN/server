@@ -4,25 +4,25 @@
  * @package plugins.searchHistory
  * @subpackage api.services
  */
-class ESearchHistoryService extends KalturaBaseService 
+class ESearchHistoryService extends VidiunBaseService 
 {
 
     /**
      * @action list
-     * @param KalturaESearchHistoryFilter|null $filter
-     * @return KalturaESearchHistoryListResponse
-     * @throws KalturaAPIException
+     * @param VidiunESearchHistoryFilter|null $filter
+     * @return VidiunESearchHistoryListResponse
+     * @throws VidiunAPIException
      */
-    public function listAction(KalturaESearchHistoryFilter $filter = null)
+    public function listAction(VidiunESearchHistoryFilter $filter = null)
     {
         if (!$filter)
-            $filter = new KalturaESearchHistoryFilter();
+            $filter = new VidiunESearchHistoryFilter();
 
         try
         {
             $response = $filter->getListResponse();
         }
-        catch (kESearchHistoryException $e)
+        catch (vESearchHistoryException $e)
         {
             $this->handleSearchHistoryException($e);
         }
@@ -32,21 +32,21 @@ class ESearchHistoryService extends KalturaBaseService
     /**
      * @action delete
      * @param string $searchTerm
-     * @throws KalturaAPIException
+     * @throws VidiunAPIException
      */
     public function deleteAction($searchTerm)
     {
         if (is_null($searchTerm) || $searchTerm == '')
         {
-            throw new KalturaAPIException(KalturaESearchHistoryErrors::EMPTY_DELETE_SEARCH_TERM_NOT_ALLOWED);
+            throw new VidiunAPIException(VidiunESearchHistoryErrors::EMPTY_DELETE_SEARCH_TERM_NOT_ALLOWED);
         }
 
         try
         {
-            $historyClient = new kESearchHistoryElasticClient();
+            $historyClient = new vESearchHistoryElasticClient();
             $historyClient->deleteSearchTermForUser($searchTerm);
         }
-        catch (kESearchHistoryException $e)
+        catch (vESearchHistoryException $e)
         {
             $this->handleSearchHistoryException($e);
         }
@@ -58,11 +58,11 @@ class ESearchHistoryService extends KalturaBaseService
         $data = $exception->getData();
         switch ($code)
         {
-            case kESearchHistoryException::INVALID_USER_ID:
-                throw new KalturaAPIException(KalturaESearchHistoryErrors::INVALID_USER_ID);
+            case vESearchHistoryException::INVALID_USER_ID:
+                throw new VidiunAPIException(VidiunESearchHistoryErrors::INVALID_USER_ID);
 
             default:
-                throw new KalturaAPIException(KalturaESearchHistoryErrors::INTERNAL_SERVERL_ERROR);
+                throw new VidiunAPIException(VidiunESearchHistoryErrors::INTERNAL_SERVERL_ERROR);
         }
     }
 

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kFileSyncDescriptor 
+class vFileSyncDescriptor 
 {
 	/**
 	 * @var string

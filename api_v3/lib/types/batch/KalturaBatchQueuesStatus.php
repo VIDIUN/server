@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBatchQueuesStatus extends KalturaObject 
+class VidiunBatchQueuesStatus extends VidiunObject 
 {
 	/**
-	 * @var KalturaBatchJobType
+	 * @var VidiunBatchJobType
 	 */
 	public $jobType;
 	

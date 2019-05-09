@@ -31,7 +31,7 @@ class ZoomHelper
 	const ADMIN_TAG_ZOOM = 'zoomentry';
 
 	/**
-	 * @param kuser $dbUser
+	 * @param vuser $dbUser
 	 * @param string $zoomCategory
 	 * @param $emails
 	 * @param $meetingId
@@ -50,7 +50,7 @@ class ZoomHelper
 		$entry->setPartnerId($dbUser->getPartnerId());
 		$entry->setStatus(entryStatus::NO_CONTENT);
 		$entry->setPuserId($dbUser->getPuserId());
-		$entry->setKuserId($dbUser->getKuserId());
+		$entry->setVuserId($dbUser->getVuserId());
 		$entry->setConversionProfileId(myPartnerUtils::getConversionProfile2ForPartner($dbUser->getPartnerId())->getId());
 		$entry->setAdminTags(self::ADMIN_TAG_ZOOM);
 		if ($zoomCategory)
@@ -61,22 +61,22 @@ class ZoomHelper
 		{
 			foreach ($emails as $email)
 			{
-				kuserPeer::createUniqueKuserForPartner($dbUser->getPartnerId(), $email);
+				vuserPeer::createUniqueVuserForPartner($dbUser->getPartnerId(), $email);
 				//User John.Doe@k.com will be added both as John.Doe@k.com and John.Doe
-				if(kString::isEmailString($email))
+				if(vString::isEmailString($email))
 				{
 					list($puserId,) = explode('@', $email);
-					kuserPeer::createUniqueKuserForPartner($dbUser->getPartnerId(), $puserId);
+					vuserPeer::createUniqueVuserForPartner($dbUser->getPartnerId(), $puserId);
 					$emails [] = $puserId;
 				}
 			}
 			$entry->setEntitledPusersPublish(implode(",", array_unique($emails)));
 		}
 		//In case that user is saved in Zoom with full email addresss,we keep also user ID on the entry as co-editor.
-		if(kString::isEmailString($dbUser->getPuserId()))
+		if(vString::isEmailString($dbUser->getPuserId()))
 		{
 			list($puserId,) = explode('@', $dbUser->getPuserId());
-			kuserPeer::createUniqueKuserForPartner($dbUser->getPartnerId(), $puserId);
+			vuserPeer::createUniqueVuserForPartner($dbUser->getPartnerId(), $puserId);
 			$entry->setEntitledPusersEdit($puserId);
 		}
 		$entry->save();
@@ -101,9 +101,9 @@ class ZoomHelper
 	 */
 	public static function redirect($url)
 	{
-		$redirect  = new kRendererRedirect($url);
+		$redirect  = new vRendererRedirect($url);
 		$redirect->output();
-		KExternalErrors::dieGracefully();
+		VExternalErrors::dieGracefully();
 	}
 
 	/**
@@ -112,12 +112,12 @@ class ZoomHelper
 	 */
 	public static function loadLoginPage($tokens)
 	{
-		$file_path = dirname(__FILE__) . "/../../api/webPage/zoom/kalturaZoomLoginPage.html";
+		$file_path = dirname(__FILE__) . "/../../api/webPage/zoom/vidiunZoomLoginPage.html";
 		if (file_exists($file_path))
 		{
 			$page = file_get_contents($file_path);
 			$tokensString = json_encode($tokens);
-			$zoomConfiguration = kConf::get('ZoomAccount', 'vendor');
+			$zoomConfiguration = vConf::get('ZoomAccount', 'vendor');
 			$verificationToken = $zoomConfiguration['verificationToken'];
 			list($enc, $iv) = AESEncrypt::encrypt($verificationToken, $tokensString);
 			$page = str_replace('@BaseServiceUrl@', requestUtils::getHost(), $page);
@@ -131,17 +131,17 @@ class ZoomHelper
 	/**
 	 * @param ZoomVendorIntegration $zoomIntegration
 	 * @param $accountId
-	 * @param $ks
+	 * @param $vs
 	 * @throws Exception
 	 */
-	public static function loadSubmitPage($zoomIntegration, $accountId, $ks)
+	public static function loadSubmitPage($zoomIntegration, $accountId, $vs)
 	{
-		$file_path = dirname(__FILE__) . "/../../api/webPage/zoom/KalturaZoomRegistrationPage.html";
+		$file_path = dirname(__FILE__) . "/../../api/webPage/zoom/VidiunZoomRegistrationPage.html";
 		if (file_exists($file_path))
 		{
 			$page = file_get_contents($file_path);
 			/** @noinspection PhpUndefinedMethodInspection */
-			$page = str_replace('@ks@', $ks->getOriginalString(), $page);
+			$page = str_replace('@vs@', $vs->getOriginalString(), $page);
 			$page = str_replace('@BaseServiceUrl@', requestUtils::getHost(), $page);
 			if (!is_null($zoomIntegration))
 			{
@@ -161,7 +161,7 @@ class ZoomHelper
 			echo $page;
 			die();
 		}
-		throw new KalturaAPIException('unable to find submit page, please contact support');
+		throw new VidiunAPIException('unable to find submit page, please contact support');
 	}
 
 	/**
@@ -188,11 +188,11 @@ class ZoomHelper
 	public static function verifyHeaderToken()
 	{
 		$headers = self::getAllHeaders();
-		$zoomConfiguration = kConf::get('ZoomAccount', 'vendor');
+		$zoomConfiguration = vConf::get('ZoomAccount', 'vendor');
 		$verificationToken = $zoomConfiguration['verificationToken'];
 		if ($verificationToken !== $headers['Authorization'])
 		{
-			KExternalErrors::dieGracefully('ZOOM - Received verification token is different from existing token');
+			VExternalErrors::dieGracefully('ZOOM - Received verification token is different from existing token');
 		}
 	}
 
@@ -217,8 +217,8 @@ class ZoomHelper
 	 */
 	public static function extractDataFromRecordingCompletePayload($data)
 	{
-		KalturaLog::debug('recordingcomplete data recived from zoom:');
-		KalturaLog::debug(print_r($data, true));
+		VidiunLog::debug('recordingcomplete data recived from zoom:');
+		VidiunLog::debug(print_r($data, true));
 		$payload = $data[self::PAYLOAD];
 		$downloadToken = $data[self::DOWNLOAD_TOKEN];
 		$accountId = $payload[self::ACCOUNT_ID];
@@ -254,9 +254,9 @@ class ZoomHelper
 		$emails = array();
 		$meetingApi = str_replace('@meetingId@', $meetingId, self::API_PARTICIPANT);
 		list($tokens, $participants) = ZoomWrapper::retrieveZoomDataAsArray($meetingApi, false, $zoomIntegration->getTokens(), $accountId);
-		if (isset($tokens[kZoomOauth::ACCESS_TOKEN]) &&
-			$tokens[kZoomOauth::ACCESS_TOKEN] &&
-			$zoomIntegration->getAccessToken() !== $tokens[kZoomOauth::ACCESS_TOKEN])
+		if (isset($tokens[vZoomOauth::ACCESS_TOKEN]) &&
+			$tokens[vZoomOauth::ACCESS_TOKEN] &&
+			$zoomIntegration->getAccessToken() !== $tokens[vZoomOauth::ACCESS_TOKEN])
 		{
 			// token changed -> refresh tokens
 			self::saveNewTokenData($tokens, $accountId, $zoomIntegration);
@@ -287,13 +287,13 @@ class ZoomHelper
 		$validatedEmails=array();
 		foreach ($emails as $usersEmail)
 		{
-			if(kuserPeer::getKuserByPartnerAndUid($partnerId, $usersEmail, true))
+			if(vuserPeer::getVuserByPartnerAndUid($partnerId, $usersEmail, true))
 			{
 				$validatedEmails[] = $usersEmail;
 			}
 			elseif($createIfNotFound)
 			{
-				kuserPeer::createKuserForPartner($partnerId, $usersEmail);
+				vuserPeer::createVuserForPartner($partnerId, $usersEmail);
 				$validatedEmails[] = $usersEmail;
 			}
 		}
@@ -305,20 +305,20 @@ class ZoomHelper
 	 * @param $defaultHostEmail
 	 * @param $partnerId
 	 * @param $createIfNotFound
-	 * @return kuser
+	 * @return vuser
 	 */
 	public static function getEntryOwner($hostEmail, $defaultHostEmail, $partnerId, $createIfNotFound)
 	{
-		$dbUser = kuserPeer::getKuserByPartnerAndUid($partnerId, $hostEmail, true);
+		$dbUser = vuserPeer::getVuserByPartnerAndUid($partnerId, $hostEmail, true);
 		if (!$dbUser)
 		{
 			if($createIfNotFound)
 			{
-				$dbUser = kuserPeer::createKuserForPartner($partnerId, $hostEmail);
+				$dbUser = vuserPeer::createVuserForPartner($partnerId, $hostEmail);
 			}
 			else//get the default user that will be the owner if the entry.
 			{
-				$dbUser = kuserPeer::getKuserByPartnerAndUid($partnerId, $defaultHostEmail, true);
+				$dbUser = vuserPeer::getVuserByPartnerAndUid($partnerId, $defaultHostEmail, true);
 			}
 		}
 		return $dbUser;
@@ -365,7 +365,7 @@ class ZoomHelper
 		}
 		if (!$downloadURLs)
 		{
-			KExternalErrors::dieGracefully('Zoom - MP4 downland url was not found');
+			VExternalErrors::dieGracefully('Zoom - MP4 downland url was not found');
 		}
 		return $downloadURLs;
 	}
@@ -383,7 +383,7 @@ class ZoomHelper
 
 	/**
 	 * @param array $urls
-	 * @param kuser $dbUser
+	 * @param vuser $dbUser
 	 * @param ZoomVendorIntegration $zoomIntegration
 	 * @param $emails
 	 * @param $meetingId
@@ -391,13 +391,13 @@ class ZoomHelper
 	 * @param $topic
 	 * @throws Exception
 	 */
-	public static function uploadToKaltura($urls, $dbUser, $zoomIntegration, $emails, $meetingId, $hostEmail, $topic)
+	public static function uploadToVidiun($urls, $dbUser, $zoomIntegration, $emails, $meetingId, $hostEmail, $topic)
 	{
 		foreach ($urls as $url)
 		{
 			$entryId = ZoomHelper::createEntryForZoom($dbUser, $zoomIntegration->getZoomCategory(), $emails, $meetingId, $topic);
-			kJobsManager::addImportJob(null, $entryId, $dbUser->getPartnerId(), $url);
-			KalturaLog::debug('Zoom - upload entry to kaltura started, partner id: ' .
+			vJobsManager::addImportJob(null, $entryId, $dbUser->getPartnerId(), $url);
+			VidiunLog::debug('Zoom - upload entry to vidiun started, partner id: ' .
 				$zoomIntegration->getPartnerId() . ' host email: ' . $hostEmail .
 				' emails: ' . print_r($emails, true) . ' category: ' .  $zoomIntegration->getZoomCategory() .
 				' meeting Id: ' . $meetingId . ' entry Id: ' . $entryId);
@@ -420,7 +420,7 @@ class ZoomHelper
 		$category = categoryPeer::getByFullNameExactMatch($categoryFullName, null, $partnerId);
 		if($category)
 		{
-			KalturaLog::debug('Category: ' . $categoryFullName . ' already exist for partner: ' . $partnerId);
+			VidiunLog::debug('Category: ' . $categoryFullName . ' already exist for partner: ' . $partnerId);
 			return $category->getId();
 		}
 		if(!$createIfNotExist)
@@ -440,7 +440,7 @@ class ZoomHelper
 			$parentCategory = categoryPeer::getByFullNameExactMatch($parentCategoryFullName, null, $partnerId);
 			if(!$parentCategory)
 			{
-				throw new KalturaAPIException(KalturaErrors::PARENT_CATEGORY_NOT_FOUND, $parentCategoryFullName);
+				throw new VidiunAPIException(VidiunErrors::PARENT_CATEGORY_NOT_FOUND, $parentCategoryFullName);
 			}
 			$parentCategoryId = $parentCategory->getId();
 			$categoryDb->setParentId($parentCategoryId);

@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaGenericDistributionProviderActionBaseFilter extends KalturaFilter
+abstract class VidiunGenericDistributionProviderActionBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -79,7 +79,7 @@ abstract class KalturaGenericDistributionProviderActionBaseFilter extends Kaltur
 	public $genericDistributionProviderIdIn;
 
 	/**
-	 * @var KalturaDistributionAction
+	 * @var VidiunDistributionAction
 	 */
 	public $actionEqual;
 

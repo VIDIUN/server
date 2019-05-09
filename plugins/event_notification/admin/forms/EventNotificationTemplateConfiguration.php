@@ -11,7 +11,7 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 	protected $partnerId;
 	
 	/**
-	 * @var Kaltura_Client_EventNotification_Enum_EventNotificationTemplateType
+	 * @var Vidiun_Client_EventNotification_Enum_EventNotificationTemplateType
 	 */
 	protected $templateType;
 	
@@ -28,7 +28,7 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 		parent::__construct();
 	}
 	
-	abstract protected function addTypeElements(Kaltura_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate);
+	abstract protected function addTypeElements(Vidiun_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate);
 
 	protected function getDescriptionHtml($description)
 	{
@@ -38,21 +38,21 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 	}
 	
 	/**
-	 * @param Kaltura_Client_Type_StringValue|Kaltura_Client_Type_BooleanValue $field
+	 * @param Vidiun_Client_Type_StringValue|Vidiun_Client_Type_BooleanValue $field
 	 * @return string
 	 */
 	protected function getValueDescription($field)
 	{
-		if($field instanceof Kaltura_Client_Type_EvalStringField || $field instanceof Kaltura_Client_Type_EvalBooleanField)
+		if($field instanceof Vidiun_Client_Type_EvalStringField || $field instanceof Vidiun_Client_Type_EvalBooleanField)
 			return 'Code: ' . $field->code;
 	
 		if($field->value)
 			return $this->getDescriptionHtml($field->value);
 		
-		return $field->getKalturaObjectType();
+		return $field->getVidiunObjectType();
 	}
 	
-	protected function getParameterDescription(Kaltura_Client_EventNotification_Type_EventNotificationParameter $parameter)
+	protected function getParameterDescription(Vidiun_Client_EventNotification_Type_EventNotificationParameter $parameter)
 	{
 		$html = "<b>$parameter->key</b> - ";
 		if($parameter->description)
@@ -61,15 +61,15 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 		return $this->getDescriptionHtml($html . $this->getValueDescription($parameter->value));
 	}
 	
-	protected function getConditionDescription(Kaltura_Client_Type_Condition $condition)
+	protected function getConditionDescription(Vidiun_Client_Type_Condition $condition)
 	{
 		if($condition->description)
 			return $this->getDescriptionHtml($condition->description);
 			
-		if($condition instanceof Kaltura_Client_EventNotification_Type_EventFieldCondition)
+		if($condition instanceof Vidiun_Client_EventNotification_Type_EventFieldCondition)
 			return $this->getDescriptionHtml($this->getValueDescription($condition->field));
 			
-		return $condition->getKalturaObjectType();
+		return $condition->getVidiunObjectType();
 	}
 	
 	/* (non-PHPdoc)
@@ -77,7 +77,7 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 	 */
 	public function populateFromObject($object, $add_underscore = true)
 	{
-		if(!($object instanceof Kaltura_Client_EventNotification_Type_EventNotificationTemplate))
+		if(!($object instanceof Vidiun_Client_EventNotification_Type_EventNotificationTemplate))
 			return;
 			
 		parent::populateFromObject($object, $add_underscore);
@@ -122,7 +122,7 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 	public function getObject($objectType, array $properties, $add_underscore = true, $include_empty_fields = false)
 	{
 		$object = parent::getObject($objectType, $properties, $add_underscore, $include_empty_fields);
-		if($object instanceof Kaltura_Client_EventNotification_Type_EventNotificationTemplate)
+		if($object instanceof Vidiun_Client_EventNotification_Type_EventNotificationTemplate)
 		{
 			$userParameters = $object->userParameters;
 			if(!$userParameters || !is_array($userParameters))
@@ -139,15 +139,15 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 					$userParameter = null;
 					if(isset($properties["userParameterValue_{$index}"]))
 					{
-						$field = new Kaltura_Client_Type_StringValue();
+						$field = new Vidiun_Client_Type_StringValue();
 						$field->value = $properties["userParameterValue_{$index}"];
 						
-						$userParameter = new Kaltura_Client_EventNotification_Type_EventNotificationParameter();
+						$userParameter = new Vidiun_Client_EventNotification_Type_EventNotificationParameter();
 						$userParameter->value = $field;
 					}
 					else
 					{
-						$userParameter = new Kaltura_Client_EventNotification_Type_EventNotificationArrayParameter();
+						$userParameter = new Vidiun_Client_EventNotification_Type_EventNotificationArrayParameter();
 						$userParameter->allowedValues = array();
 						$userParameter->values = array();
 						
@@ -155,7 +155,7 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 						{
 							if($subValue && preg_match("/^userParameterItem_{$index}_(\d+)$/", $subProperty))
 							{
-								$string = new Kaltura_Client_Type_String();
+								$string = new Vidiun_Client_Type_String();
 								$string->value = $subValue;
 								$userParameter->values[] = $string;
 							}
@@ -167,7 +167,7 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 								if(isset($properties["userParameterAllowedDescription_{$index}_$subIndex"]))
 									$description = $properties["userParameterAllowedDescription_{$index}_$subIndex"];
 									
-								$string = new Kaltura_Client_Type_StringValue();
+								$string = new Vidiun_Client_Type_StringValue();
 								$string->value = $subValue;
 								$string->description = $description;
 								$userParameter->allowedValues[] = $string;
@@ -193,9 +193,9 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 	
 	/**
 	 * Set to null all the attributes that shouldn't be updated
-	 * @param Kaltura_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate
+	 * @param Vidiun_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate
 	 */
-	public function resetUnUpdatebleAttributes(Kaltura_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate)
+	public function resetUnUpdatebleAttributes(Vidiun_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate)
 	{
 		// reset readonly attributes
 		$eventNotificationTemplate->id = null;
@@ -206,7 +206,7 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 		$eventNotificationTemplate->status = null;
 	}
 	
-	public function finit(Kaltura_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate)
+	public function finit(Vidiun_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate)
 	{
 		$this->addElement('hidden', 'crossLine01', array(
 			'lable'			=> 'line',
@@ -264,14 +264,14 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 			'onclick'		=> 'automaticEnabled(this.checked)',
 		));
 		
-		$eventType = new Kaltura_Form_Element_EnumSelect('event_type', array(
-			'enum' => 'Kaltura_Client_EventNotification_Enum_EventNotificationEventType',
+		$eventType = new Vidiun_Form_Element_EnumSelect('event_type', array(
+			'enum' => 'Vidiun_Client_EventNotification_Enum_EventNotificationEventType',
 			'disabled'		=> true,
 			'label'			=> 'Event type:',
 		));
 		
-		$eventObjectType = new Kaltura_Form_Element_EnumSelect('event_object_type', array(
-			'enum' => 'Kaltura_Client_EventNotification_Enum_EventNotificationEventObjectType',
+		$eventObjectType = new Vidiun_Form_Element_EnumSelect('event_object_type', array(
+			'enum' => 'Vidiun_Client_EventNotification_Enum_EventNotificationEventObjectType',
 			'disabled'		=> true,
 			'label'			=> 'Event object type:',
 		));
@@ -292,9 +292,9 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 	}
 	
 	/**
-	 * @param Kaltura_Client_HttpNotification_Type_EventNotificationParameter $parameter
+	 * @param Vidiun_Client_HttpNotification_Type_EventNotificationParameter $parameter
 	 */
-	protected function addUserParameter(Kaltura_Client_EventNotification_Type_EventNotificationParameter $parameter)
+	protected function addUserParameter(Vidiun_Client_EventNotification_Type_EventNotificationParameter $parameter)
 	{
 		$elements = array();
 	
@@ -321,21 +321,21 @@ abstract class Form_EventNotificationTemplateConfiguration extends Infra_Form
 		));
 		$elements[] = "userParameterKey_{$this->userParametersCount}";
 	
-		if($parameter instanceof Kaltura_Client_EventNotification_Type_EventNotificationArrayParameter)
+		if($parameter instanceof Vidiun_Client_EventNotification_Type_EventNotificationArrayParameter)
 		{
 			$values = array();
 			if(is_array($parameter->values))
 			{
 				foreach($parameter->values as $value)
 				{
-					/* @var $value Kaltura_Client_Type_String */
+					/* @var $value Vidiun_Client_Type_String */
 					$values[] = $value->value;
 				}
 			}
 			
 			foreach($parameter->allowedValues as $index => $allowedValue)
 			{
-				/* @var $allowedValue Kaltura_Client_Type_StringValue */
+				/* @var $allowedValue Vidiun_Client_Type_StringValue */
 				
 				$this->addElement('checkbox', "userParameterItem_{$this->userParametersCount}_$index", array(
 					'label'			=> $allowedValue->description,

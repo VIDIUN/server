@@ -3,7 +3,7 @@
  * @package plugins.mencoder
  * @subpackage lib
  */
-class KDLOperatorMencoder extends KDLOperatorBase {
+class VDLOperatorMencoder extends VDLOperatorBase {
 /*
     public function __construct($id, $name=null, $sourceBlacklist=null, $targetBlacklist=null) {
     	parent::__construct($id, $name, $sourceBlacklist,$targetBlacklist);
@@ -12,11 +12,11 @@ class KDLOperatorMencoder extends KDLOperatorBase {
 	/* ---------------------------
 	 * GenerateCommandLine
 	 */
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 	$cmdStr = null;
 
-		$cmdStr.= " ".KDLCmdlinePlaceholders::InFileName;
+		$cmdStr.= " ".VDLCmdlinePlaceholders::InFileName;
 
 		$cmdStr.= $this->generateContainerParams($design, $target);
 		$cmdStr.= $this->generateVideoParams($design, $target);
@@ -35,7 +35,7 @@ class KDLOperatorMencoder extends KDLOperatorBase {
 		if($extra)
 			$cmdStr.= " ".$extra;
 		
-		$cmdStr.= " -o ".KDLCmdlinePlaceholders::OutFileName;
+		$cmdStr.= " -o ".VDLCmdlinePlaceholders::OutFileName;
 		
 		return $cmdStr;
 	}
@@ -43,7 +43,7 @@ class KDLOperatorMencoder extends KDLOperatorBase {
 	/* ---------------------------
 	 * generateVideoParams
 	 */
-    protected function generateVideoParams(KDLFlavor $design, KDLFlavor $target)
+    protected function generateVideoParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		if(!isset($target->_video)){
 			return " -novideo";
@@ -56,14 +56,14 @@ $vbrFixedVp6=null;
 		if($vid->_frameRate)
 			$cmdStr.= " -ofps ".$vid->_frameRate;
 		else
-			$cmdStr.= " -ofps ".KDLConstants::MaxFramerate;
+			$cmdStr.= " -ofps ".VDLConstants::MaxFramerate;
 		
 		switch($vid->_id){
-			case KDLVideoTarget::VP6:
+			case VDLVideoTarget::VP6:
 				if(isset($design->_video) && $design->_video->_bitRate)
 					$vbrFixedVp6=$this->fixVP6BitRate($design->_video->_bitRate, $vid->_bitRate);
-			case KDLVideoTarget::FLV:
-			case KDLVideoTarget::H263:
+			case VDLVideoTarget::FLV:
+			case VDLVideoTarget::H263:
 				$cmdStr.= " -ovc lavc";
 				$cmdStr.= " -lavcopts vcodec=flv";
 $vBr = isset($vbrFixedVp6)? $vbrFixedVp6: $vid->_bitRate;
@@ -73,22 +73,22 @@ $vBr = isset($vbrFixedVp6)? $vbrFixedVp6: $vid->_bitRate;
 				$cmdStr.= ":mbd=2:mv0:trell:v4mv:cbp:last_pred=3";
 //					$cmdStr.= ":mbd=2:mv0:trell:v4mv:cbp";
 				break;
-			case KDLVideoTarget::H264:
-			case KDLVideoTarget::H264B:
-			case KDLVideoTarget::H264M:
-			case KDLVideoTarget::H264H:
+			case VDLVideoTarget::H264:
+			case VDLVideoTarget::H264B:
+			case VDLVideoTarget::H264M:
+			case VDLVideoTarget::H264H:
 				$cmdStr.= $this->generateH264params($vid);
 				break; 				
-			case KDLVideoTarget::MPEG4:
+			case VDLVideoTarget::MPEG4:
 				$cmdStr.= " -ovc lavc";
 				$cmdStr.= " -lavcopts vcodec=mpeg4";
 				if($vid->_bitRate) {
 					$cmdStr.= ":vbitrate=".$vid->_bitRate;
 				}
 				break;
-			case KDLVideoTarget::WMV2:
-			case KDLVideoTarget::WMV3:
-			case KDLVideoTarget::WVC1A:
+			case VDLVideoTarget::WMV2:
+			case VDLVideoTarget::WMV3:
+			case VDLVideoTarget::WVC1A:
 				$cmdStr.= " -ovc lavc";
 				$cmdStr.= " -lavcopts vcodec=wmv2";
 				if($vid->_bitRate) {
@@ -118,7 +118,7 @@ $vBr = isset($vbrFixedVp6)? $vbrFixedVp6: $vid->_bitRate;
 	/* ---------------------------
 	 * generateAudioParams
 	 */
-    protected function generateAudioParams(KDLFlavor $design, KDLFlavor $target)
+    protected function generateAudioParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		if(!isset($target->_audio)) {
 			return " -nosound";
@@ -128,20 +128,20 @@ $acodec = "libmp3lam";
 $cmdStr = null;
 $aud = $target->_audio;
 
-		if($aud->_id==KDLAudioTarget::MP3){
+		if($aud->_id==VDLAudioTarget::MP3){
 			$cmdStr.= " -oac mp3lame -lameopts abr";
 			if($aud->_bitRate)
 				$cmdStr.= ":br=".$aud->_bitRate;
 //				if($aud->_channels)
 //					$cmdStr.= " -ac ".$aud->_channels;
 		}
-///web/kaltura/bin/x64/mencoder -endpos 2 $1 -of lavf -lavfopts format=avi -ovc x264 -ofps 25 -x264encopts bitrate=500 -vf scale=1280:720,harddup -oac faac -srate 48000 -channels 5 -faacopts mpeg=4:object=2:br=32 -o $outputFile
-		else if($aud->_id==KDLAudioTarget::AAC){
+///web/vidiun/bin/x64/mencoder -endpos 2 $1 -of lavf -lavfopts format=avi -ovc x264 -ofps 25 -x264encopts bitrate=500 -vf scale=1280:720,harddup -oac faac -srate 48000 -channels 5 -faacopts mpeg=4:object=2:br=32 -o $outputFile
+		else if($aud->_id==VDLAudioTarget::AAC){
 			$cmdStr.= " -oac faac -faacopts mpeg=4:object=2:tns:raw";
 			if($aud->_bitRate)
 				$cmdStr.= ":br=".$aud->_bitRate;
 		}
-		else if($aud->_id==KDLAudioTarget::WMA){
+		else if($aud->_id==VDLAudioTarget::WMA){
 			$cmdStr.= " -oac lavc -lavcopts acodec=wmav2";
 			if($aud->_bitRate)
 				$cmdStr.= ":abitrate=".$aud->_bitRate;
@@ -156,7 +156,7 @@ $aud = $target->_audio;
 	/* ---------------------------
 	 * generateContainerParams
 	 */
-    protected function generateContainerParams(KDLFlavor $design, KDLFlavor $target)
+    protected function generateContainerParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		if(!isset($target->_container)) 
 			return null;
@@ -166,12 +166,12 @@ $cmdStr = null;
 $con = $target->_container;
 
 		switch($con->_id){
-			case KDLContainerTarget::WMV:
+			case VDLContainerTarget::WMV:
 				$format = "asf";
 				break;
-			case KDLContainerTarget::MPEGTS:
-			case KDLContainerTarget::M2TS:
-			case KDLContainerTarget::APPLEHTTP:
+			case VDLContainerTarget::MPEGTS:
+			case VDLContainerTarget::M2TS:
+			case VDLContainerTarget::APPLEHTTP:
 				$format = "mpg";
 				break;
 			default:
@@ -204,45 +204,45 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 		$h264params=null;
 //		$ffQsettings = " -qcomp 0.6 -qmin 10 -qmax 50 -qdiff 4";
 		switch($videoObject->_id) {
-		case KDLVideoTarget::H264:
+		case VDLVideoTarget::H264:
 			$h264params.= " -ovc x264 -x264encopts ";
 			if($videoObject->_bitRate) {
 				$h264params.= "bitrate=".$videoObject->_bitRate;
 				$h264params.= ":";
-				if($videoObject->_bitRate<KDLConstants::LowBitrateThresHold) {
+				if($videoObject->_bitRate<VDLConstants::LowBitrateThresHold) {
 					$h264params.= "crf=30:";
 				}
 			}
 			$h264params .= "subq=2:8x8dct:frameref=2:bframes=3:b_pyramid=1:weight_b:threads=auto";
 			break;
-		case KDLVideoTarget::H264B:
+		case VDLVideoTarget::H264B:
 			$h264params.= " -ovc x264 -sws 9 -x264encopts ";
 			if($videoObject->_bitRate) {
 				$h264params.= " bitrate=".$videoObject->_bitRate;
 				$h264params.= ":";
-				if($videoObject->_bitRate<KDLConstants::LowBitrateThresHold) {
+				if($videoObject->_bitRate<VDLConstants::LowBitrateThresHold) {
 					$h264params.= "crf=30:";
 				}
 			}
 			$h264params.= "subq=2:frameref=6:bframes=0:threads=auto:nocabac:level_idc=30:global_header:partitions=all:trellis=1:chroma_me:me=umh";
 			break;
-		case KDLVideoTarget::H264M:
+		case VDLVideoTarget::H264M:
 			$h264params.= " -ovc x264 -sws 9 -x264encopts ";
 			if($videoObject->_bitRate) {
 				$h264params.= " bitrate=".$videoObject->_bitRate;
 				$h264params.= ":";
-				if($videoObject->_bitRate<KDLConstants::LowBitrateThresHold) {
+				if($videoObject->_bitRate<VDLConstants::LowBitrateThresHold) {
 					$h264params.= "crf=30:";
 				}
 			}
 			$h264params.= "subq=5:frameref=6:bframes=3:threads=auto:level_idc=30:global_header:partitions=all:trellis=1:chroma_me:me=umh";
 			break;
-		case KDLVideoTarget::H264H:				
+		case VDLVideoTarget::H264H:				
 			$h264params.= " -ovc x264 -sws 9 -x264encopts ";
 			if($videoObject->_bitRate) {
 				$h264params.= " bitrate=".$videoObject->_bitRate;
 				$h264params.= ":";
-				if($videoObject->_bitRate<KDLConstants::LowBitrateThresHold) {
+				if($videoObject->_bitRate<VDLConstants::LowBitrateThresHold) {
 					$h264params.= "crf=30:";
 				}
 			}
@@ -255,7 +255,7 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 	/* ---------------------------
 	 * CheckConstraints
 	 */
-	public function CheckConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+	public function CheckConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
 	    if(parent::CheckConstraints($source, $target, $errors, $warnings)==true)
 			return true;
@@ -265,15 +265,15 @@ bad  mencoder32 ~/Media/Canon.Rotated.0_qaqsufbl.avi -of lavf -lavfopts format=m
 		 * for audio only flavors
 		 */
 		if($target->_video==null) {
-			$warnings[KDLConstants::AudioIndex][] = //"The transcoder (".$key.") does not handle properly DAR<>PAR.";
-				KDLWarnings::ToString(KDLWarnings::TranscoderLimitation, $this->_id);
+			$warnings[VDLConstants::AudioIndex][] = //"The transcoder (".$key.") does not handle properly DAR<>PAR.";
+				VDLWarnings::ToString(VDLWarnings::TranscoderLimitation, $this->_id);
 			return true;
 		}
 
 			// Encryption unsupported by Mencoder
 		if($target->_isEncrypted==true){
-			$warnings[KDLConstants::ContainerIndex][] = 
-				KDLWarnings::ToString(KDLWarnings::TranscoderLimitation, $this->_id)."(encryption)";
+			$warnings[VDLConstants::ContainerIndex][] = 
+				VDLWarnings::ToString(VDLWarnings::TranscoderLimitation, $this->_id)."(encryption)";
 			return true;
 		}
 		return false;

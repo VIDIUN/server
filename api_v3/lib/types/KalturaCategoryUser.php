@@ -4,7 +4,7 @@
  * @subpackage objects
  * @relatedService CategoryUserService
  */
-class KalturaCategoryUser extends KalturaObject implements IRelatedFilterable
+class VidiunCategoryUser extends VidiunObject implements IRelatedFilterable
 {
 	/**
 	 * 
@@ -34,7 +34,7 @@ class KalturaCategoryUser extends KalturaObject implements IRelatedFilterable
 	/**
 	 * Permission level
 	 * @deprecated
-	 * @var KalturaCategoryUserPermissionLevel
+	 * @var VidiunCategoryUserPermissionLevel
 	 * @filter eq,in
 	 */
 	public $permissionLevel;
@@ -42,7 +42,7 @@ class KalturaCategoryUser extends KalturaObject implements IRelatedFilterable
 	/**
 	 * Status
 	 * 
-	 * @var KalturaCategoryUserStatus
+	 * @var VidiunCategoryUserStatus
 	 * @readonly
 	 * @filter eq,in
 	 */
@@ -67,9 +67,9 @@ class KalturaCategoryUser extends KalturaObject implements IRelatedFilterable
 	public $updatedAt;
 	
 	/**
-	 * Update method can be either manual or automatic to distinguish between manual operations (for example in KMC) on automatic - using bulk upload 
+	 * Update method can be either manual or automatic to distinguish between manual operations (for example in VMC) on automatic - using bulk upload 
 	 * 
-	 * @var KalturaUpdateMethodType
+	 * @var VidiunUpdateMethodType
 	 * @filter eq, in
 	 */
 	public $updateMethod;
@@ -107,22 +107,22 @@ class KalturaCategoryUser extends KalturaObject implements IRelatedFilterable
 	public function toObject($dbObject = null, $skip = array()) {
 	    
 		if (is_null ( $dbObject ))
-			$dbObject = new categoryKuser ();
-		/* @var $dbObject categoryKuser */
+			$dbObject = new categoryVuser ();
+		/* @var $dbObject categoryVuser */
 		if (!$this->permissionNames && !is_null($this->permissionLevel) && $this->permissionLevel !== $dbObject->getPermissionLevel())
 		{
 			$permissionNames = $dbObject->getPermissionNames();
 			if ($permissionNames)
 			{
 				$permissionNamesArr = explode(',', $permissionNames);
-				$permissionNamesArr = categoryKuser::removeCategoryPermissions($permissionNamesArr);
+				$permissionNamesArr = categoryVuser::removeCategoryPermissions($permissionNamesArr);
 			}
 			else 
 			{
 				$permissionNamesArr = array();
 			}
 			
-			$permissionNamesArr = categoryKuser::getPermissionNamesByPermissionLevel($this->permissionLevel);
+			$permissionNamesArr = categoryVuser::getPermissionNamesByPermissionLevel($this->permissionLevel);
 			
 			$dbObject->setPermissionNames(implode(',', $permissionNamesArr));
 		}
@@ -133,7 +133,7 @@ class KalturaCategoryUser extends KalturaObject implements IRelatedFilterable
 	
 	
 	/*
-	 * mapping between the field on this object (on the left) and the setter/getter on the CategoryKuser object (on the right)  
+	 * mapping between the field on this object (on the left) and the setter/getter on the CategoryVuser object (on the right)  
 	 */
 	public function getMapBetweenObjects() {
 		return array_merge ( parent::getMapBetweenObjects (), self::$mapBetweenObjects );
@@ -148,54 +148,54 @@ class KalturaCategoryUser extends KalturaObject implements IRelatedFilterable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array()) 
 	{
 		$category = categoryPeer::retrieveByPK ( $this->categoryId );
 		if (! $category)
-			throw new KalturaAPIException ( KalturaErrors::CATEGORY_NOT_FOUND, $this->categoryId );
+			throw new VidiunAPIException ( VidiunErrors::CATEGORY_NOT_FOUND, $this->categoryId );
 		
 		if ($category->getInheritanceType () == InheritanceType::INHERIT)
-			throw new KalturaAPIException ( KalturaErrors::CATEGORY_INHERIT_MEMBERS, $this->categoryId );
+			throw new VidiunAPIException ( VidiunErrors::CATEGORY_INHERIT_MEMBERS, $this->categoryId );
 		
 		//validating userId is not 0 or null
 		if($this->userId == "0")
-		    throw new KalturaAPIException ( KalturaErrors::INVALID_USER_ID);
+		    throw new VidiunAPIException ( VidiunErrors::INVALID_USER_ID);
 		$this->validatePropertyMinLength('userId',1);
 		
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 		
-		$kuser = kuserPeer::getKuserByPartnerAndUid ($partnerId , $this->userId );
-		if($kuser)
+		$vuser = vuserPeer::getVuserByPartnerAndUid ($partnerId , $this->userId );
+		if($vuser)
 		{
-			$categoryKuser = categoryKuserPeer::retrieveByCategoryIdAndKuserId ( $this->categoryId, $kuser->getId () );
-			if ($categoryKuser)
-				throw new KalturaAPIException ( KalturaErrors::CATEGORY_USER_ALREADY_EXISTS );
+			$categoryVuser = categoryVuserPeer::retrieveByCategoryIdAndVuserId ( $this->categoryId, $vuser->getId () );
+			if ($categoryVuser)
+				throw new VidiunAPIException ( VidiunErrors::CATEGORY_USER_ALREADY_EXISTS );
 		}
 		
-		$currentKuserCategoryKuser = categoryKuserPeer::retrievePermittedKuserInCategory($this->categoryId, kCurrentContext::getCurrentKsKuserId());
-		if ((! $currentKuserCategoryKuser || 
-				$currentKuserCategoryKuser->getPermissionLevel () != CategoryKuserPermissionLevel::MANAGER) && 
+		$currentVuserCategoryVuser = categoryVuserPeer::retrievePermittedVuserInCategory($this->categoryId, vCurrentContext::getCurrentVsVuserId());
+		if ((! $currentVuserCategoryVuser || 
+				$currentVuserCategoryVuser->getPermissionLevel () != CategoryVuserPermissionLevel::MANAGER) && 
 				$category->getUserJoinPolicy () == UserJoinPolicyType::NOT_ALLOWED && 
-				kEntitlementUtils::getEntitlementEnforcement ()) {
-			throw new KalturaAPIException ( KalturaErrors::CATEGORY_USER_JOIN_NOT_ALLOWED, $this->categoryId );
+				vEntitlementUtils::getEntitlementEnforcement ()) {
+			throw new VidiunAPIException ( VidiunErrors::CATEGORY_USER_JOIN_NOT_ALLOWED, $this->categoryId );
 		}
 		
 		//if user doesn't exists - create it
-		if(!$kuser)
+		if(!$vuser)
 		{
-			if(!preg_match(kuser::PUSER_ID_REGEXP, $this->userId))
-				throw new KalturaAPIException(KalturaErrors::INVALID_FIELD_VALUE, 'userId');
+			if(!preg_match(vuser::PUSER_ID_REGEXP, $this->userId))
+				throw new VidiunAPIException(VidiunErrors::INVALID_FIELD_VALUE, 'userId');
 				
-			kuserPeer::createKuserForPartner($partnerId, $this->userId);
+			vuserPeer::createVuserForPartner($partnerId, $this->userId);
 		}
 		
 		return parent::validateForInsert ( $propertiesToSkip );
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject($dbObject = null, $skip = array())
 	{
@@ -203,7 +203,7 @@ class KalturaCategoryUser extends KalturaObject implements IRelatedFilterable
 	    {
     	    $category = categoryPeer::retrieveByPK($this->categoryId);
     	    if(!$category)
-    	    	throw new KalturaAPIException ( KalturaErrors::CATEGORY_NOT_FOUND, $this->categoryId );
+    	    	throw new VidiunAPIException ( VidiunErrors::CATEGORY_NOT_FOUND, $this->categoryId );
     	    
 	        $this->permissionLevel = $category->getDefaultPermissionLevel();
 	    }
@@ -212,30 +212,30 @@ class KalturaCategoryUser extends KalturaObject implements IRelatedFilterable
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUpdate($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = null)
 	{
-		/* @var $sourceObject categoryKuser */
+		/* @var $sourceObject categoryVuser */
 		$category = categoryPeer::retrieveByPK($sourceObject->getCategoryId());
 		if (!$category)
-			throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $sourceObject->getCategoryId());
+			throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $sourceObject->getCategoryId());
 			
 		if ($this->permissionNames && $this->permissionNames != $sourceObject->getPermissionNames())
 		{
-			if($sourceObject->getKuserId() == $category->getKuserId())
+			if($sourceObject->getVuserId() == $category->getVuserId())
 			{
 				if (strpos($this->permissionNames, PermissionName::CATEGORY_EDIT) === false)
 				{
-					throw new KalturaAPIException(KalturaErrors::CANNOT_UPDATE_CATEGORY_USER_OWNER);
+					throw new VidiunAPIException(VidiunErrors::CANNOT_UPDATE_CATEGORY_USER_OWNER);
 				}
 			}
 		}
 		
-		$currentKuserCategoryKuser = categoryKuserPeer::retrievePermittedKuserInCategory($sourceObject->getCategoryId(), kCurrentContext::getCurrentKsKuserId());
-		if(kEntitlementUtils::getEntitlementEnforcement() && 
-		(!$currentKuserCategoryKuser || !$currentKuserCategoryKuser->hasPermission(PermissionName::CATEGORY_EDIT)))
-			throw new KalturaAPIException(KalturaErrors::CANNOT_UPDATE_CATEGORY_USER, $sourceObject->getCategoryId());
+		$currentVuserCategoryVuser = categoryVuserPeer::retrievePermittedVuserInCategory($sourceObject->getCategoryId(), vCurrentContext::getCurrentVsVuserId());
+		if(vEntitlementUtils::getEntitlementEnforcement() && 
+		(!$currentVuserCategoryVuser || !$currentVuserCategoryVuser->hasPermission(PermissionName::CATEGORY_EDIT)))
+			throw new VidiunAPIException(VidiunErrors::CANNOT_UPDATE_CATEGORY_USER, $sourceObject->getCategoryId());
 			
 		return parent::validateForUpdate($sourceObject, $propertiesToSkip);
 	}

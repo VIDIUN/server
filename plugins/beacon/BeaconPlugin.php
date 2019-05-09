@@ -4,13 +4,13 @@
  * Sending beacons on various objects
  * @package plugins.beacon
  */
-class BeaconPlugin extends KalturaPlugin implements IKalturaServices, IKalturaPermissions, IKalturaPending
+class BeaconPlugin extends VidiunPlugin implements IVidiunServices, IVidiunPermissions, IVidiunPending
 {
 	const PLUGIN_NAME = "beacon";
-	const BEACON_MANAGER = 'kBeaconManager';
+	const BEACON_MANAGER = 'vBeaconManager';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{
@@ -21,7 +21,7 @@ class BeaconPlugin extends KalturaPlugin implements IKalturaServices, IKalturaPe
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -30,7 +30,7 @@ class BeaconPlugin extends KalturaPlugin implements IKalturaServices, IKalturaPe
 	
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -38,12 +38,12 @@ class BeaconPlugin extends KalturaPlugin implements IKalturaServices, IKalturaPe
 	}
 	
 	/* (non-PHPdoc)
- 	 * @see IKalturaPending::dependsOn()
+ 	 * @see IVidiunPending::dependsOn()
  	*/
 	public static function dependsOn()
 	{
-		$rabbitMqDependency = new KalturaDependency(RabbitMQPlugin::getPluginName());
-		$elasticSearchDependency = new KalturaDependency(ElasticSearchPlugin::getPluginName());
+		$rabbitMqDependency = new VidiunDependency(RabbitMQPlugin::getPluginName());
+		$elasticSearchDependency = new VidiunDependency(ElasticSearchPlugin::getPluginName());
 		return array($rabbitMqDependency, $elasticSearchDependency);
 	}
 	/**
@@ -51,6 +51,6 @@ class BeaconPlugin extends KalturaPlugin implements IKalturaServices, IKalturaPe
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

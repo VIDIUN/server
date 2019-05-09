@@ -1,18 +1,18 @@
 <?php
-require_once ( __DIR__ . "/kalturaWebserviceRenderer.class.php" );
+require_once ( __DIR__ . "/vidiunWebserviceRenderer.class.php" );
 /**
  * This class will make common tasks in the action classes much easier.
  *
  */
-abstract class kalturaBaseWebserviceAction extends kalturaAction
+abstract class vidiunBaseWebserviceAction extends vidiunAction
 {
 	protected static $escape_text = false;
 	
-	protected $response_type = kalturaWebserviceRenderer::RESPONSE_TYPE_XML;
+	protected $response_type = vidiunWebserviceRenderer::RESPONSE_TYPE_XML;
 	
 	protected function renderDataInRequestedFormat( $response_params , $return_value = false )
 	{
-		$renderer = new kalturaWebserviceRenderer( $this );
+		$renderer = new vidiunWebserviceRenderer( $this );
 		list ( $response , $content_type ) = $renderer->renderDataInRequestedFormat( $response_params , $this->response_type,  self::$escape_text );
 
 		$this->getResponse()->setHttpHeader ( "Content-Type"  , $content_type  );

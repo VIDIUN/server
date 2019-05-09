@@ -9,5 +9,5 @@ require_once(__DIR__ . "/../../bootstrap.php");
 
 $iniDir = "../configurations/batch";		// should be the full file path
 
-$kdebuger = new KGenericDebuger($iniDir, true);
-$kdebuger->run('KAsyncCaptureThumb');
+$vdebuger = new VGenericDebuger($iniDir, true);
+$vdebuger->run('VAsyncCaptureThumb');

@@ -2,18 +2,18 @@
 /**
  * @package plugins.schedule
  */
-class SchedulePlugin extends KalturaPlugin implements IKalturaServices, IKalturaEventConsumers, IKalturaVersion, IKalturaObjectLoader
+class SchedulePlugin extends VidiunPlugin implements IVidiunServices, IVidiunEventConsumers, IVidiunVersion, IVidiunObjectLoader
 {
 	const PLUGIN_NAME = 'schedule';
 	const PLUGIN_VERSION_MAJOR = 1;
 	const PLUGIN_VERSION_MINOR = 0;
 	const PLUGIN_VERSION_BUILD = 0;
-	const SCHEDULE_EVENTS_CONSUMER = 'kScheduleEventsConsumer';
+	const SCHEDULE_EVENTS_CONSUMER = 'vScheduleEventsConsumer';
 	const ICAL_RESPONSE_TYPE = 'ical';
 	
 	public static function dependsOn()
 	{
-		$metadataDependency = new KalturaDependency(self::METADATA_PLUGIN_NAME);
+		$metadataDependency = new VidiunDependency(self::METADATA_PLUGIN_NAME);
 		
 		return array($metadataDependency);
 	}
@@ -24,16 +24,16 @@ class SchedulePlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	
 	/*
 	 * (non-PHPdoc)
-	 * @see IKalturaVersion::getVersion()
+	 * @see IVidiunVersion::getVersion()
 	 */
 	public static function getVersion()
 	{
-		return new KalturaVersion(self::PLUGIN_VERSION_MAJOR, self::PLUGIN_VERSION_MINOR, self::PLUGIN_VERSION_BUILD);
+		return new VidiunVersion(self::PLUGIN_VERSION_MAJOR, self::PLUGIN_VERSION_MINOR, self::PLUGIN_VERSION_BUILD);
 	}
 	
 	/*
 	 * (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{
@@ -43,7 +43,7 @@ class SchedulePlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	
 	/*
 	 * (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -52,24 +52,24 @@ class SchedulePlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	
 	/*
 	 * (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KalturaSerializer' && $enumValue == self::ICAL_RESPONSE_TYPE)
-			return new KalturaICalSerializer();
+		if($baseClass == 'VidiunSerializer' && $enumValue == self::ICAL_RESPONSE_TYPE)
+			return new VidiunICalSerializer();
 		
 		return null;
 	}
 	
 	/*
 	 * (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KalturaSerializer' && $enumValue == self::ICAL_RESPONSE_TYPE)
-			return 'KalturaICalSerializer';
+		if($baseClass == 'VidiunSerializer' && $enumValue == self::ICAL_RESPONSE_TYPE)
+			return 'VidiunICalSerializer';
 		
 		return null;
 	}
@@ -77,18 +77,18 @@ class SchedulePlugin extends KalturaPlugin implements IKalturaServices, IKaltura
 	public static function getSingleScheduleEventMaxDuration()
 	{
 		$maxSingleScheduleEventDuration = 60 * 60 * 24; // 24 hours
-		return kConf::get('max_single_schedule_event_duration', 'local', $maxSingleScheduleEventDuration);
+		return vConf::get('max_single_schedule_event_duration', 'local', $maxSingleScheduleEventDuration);
 	}
 
 	public static function getScheduleEventmaxDuration()
 	{
 		$maxDuration = 60 * 60 * 24 * 365 * 2; // two years
-		return kConf::get('max_schedule_event_duration', 'local', $maxDuration);
+		return vConf::get('max_schedule_event_duration', 'local', $maxDuration);
 	}
 	
 	public static function getScheduleEventmaxRecurrences()
 	{
 		$maxRecurrences = 1000;
-		return kConf::get('max_schedule_event_recurrences', 'local', $maxRecurrences);
+		return vConf::get('max_schedule_event_recurrences', 'local', $maxRecurrences);
 	}
 }

@@ -3,7 +3,7 @@
  * @package Admin
  * @subpackage views
  */
-class Kaltura_View_Helper_FailReasonTranslate extends Zend_View_Helper_Abstract
+class Vidiun_View_Helper_FailReasonTranslate extends Zend_View_Helper_Abstract
 {
 	private static $curlHashes = array(
 		0 => 'CURLEOK',
@@ -241,31 +241,31 @@ class Kaltura_View_Helper_FailReasonTranslate extends Zend_View_Helper_Abstract
 	);
 	
 	private static $clientDescriptions = array(
-		Kaltura_Client_Exception::ERROR_UNSERIALIZE_FAILED => 'Failed to unserialize response',
-		Kaltura_Client_Exception::ERROR_FORMAT_NOT_SUPPORTED => 'Unsupported format',
-		Kaltura_Client_Exception::ERROR_UPLOAD_NOT_SUPPORTED => 'Upload is not supported',
-		Kaltura_Client_Exception::ERROR_CONNECTION_FAILED => 'HTTP connection failed',
-		Kaltura_Client_Exception::ERROR_READ_FAILED => 'Response read failed',
-		Kaltura_Client_Exception::ERROR_INVALID_PARTNER_ID => 'Invalid partner ID',
-		Kaltura_Client_Exception::ERROR_INVALID_OBJECT_TYPE => 'Invalid object type',
+		Vidiun_Client_Exception::ERROR_UNSERIALIZE_FAILED => 'Failed to unserialize response',
+		Vidiun_Client_Exception::ERROR_FORMAT_NOT_SUPPORTED => 'Unsupported format',
+		Vidiun_Client_Exception::ERROR_UPLOAD_NOT_SUPPORTED => 'Upload is not supported',
+		Vidiun_Client_Exception::ERROR_CONNECTION_FAILED => 'HTTP connection failed',
+		Vidiun_Client_Exception::ERROR_READ_FAILED => 'Response read failed',
+		Vidiun_Client_Exception::ERROR_INVALID_PARTNER_ID => 'Invalid partner ID',
+		Vidiun_Client_Exception::ERROR_INVALID_OBJECT_TYPE => 'Invalid object type',
 	);
 	
 	public function failReasonTranslate($status, $errType, $errNumber, $message)
 	{
-		if($status != Kaltura_Client_Enum_BatchJobStatus::FAILED)
-			return $this->view->enumTranslate('Kaltura_Client_Enum_BatchJobStatus', $status);
+		if($status != Vidiun_Client_Enum_BatchJobStatus::FAILED)
+			return $this->view->enumTranslate('Vidiun_Client_Enum_BatchJobStatus', $status);
 			
-		$errTypeDesc = $this->view->enumTranslate('Kaltura_Client_Enum_BatchJobErrorTypes', $errType);
+		$errTypeDesc = $this->view->enumTranslate('Vidiun_Client_Enum_BatchJobErrorTypes', $errType);
 		$ret = $errTypeDesc;
 		
 		switch($errType)
 		{
-			case Kaltura_Client_Enum_BatchJobErrorTypes::APP:
-				$title = $this->view->enumTranslate('Kaltura_Client_Enum_BatchJobAppErrors', $errNumber);
+			case Vidiun_Client_Enum_BatchJobErrorTypes::APP:
+				$title = $this->view->enumTranslate('Vidiun_Client_Enum_BatchJobAppErrors', $errNumber);
 				$ret = "<span title=\"$title\">$errTypeDesc ($errNumber)</span>";
 				break;
 				
-			case Kaltura_Client_Enum_BatchJobErrorTypes::HTTP:
+			case Vidiun_Client_Enum_BatchJobErrorTypes::HTTP:
 				$url = 'http://en.wikipedia.org/wiki/List_of_HTTP_status_codes';
 				
 				if($errNumber > 0)
@@ -278,7 +278,7 @@ class Kaltura_View_Helper_FailReasonTranslate extends Zend_View_Helper_Abstract
 				$ret = "<a title=\"$title\" href=\"$url\" target=\"_blank\">$errTypeDesc ($errNumber)</a>";
 				break;
 				
-			case Kaltura_Client_Enum_BatchJobErrorTypes::CURL:
+			case Vidiun_Client_Enum_BatchJobErrorTypes::CURL:
 				$url = 'http://curl.haxx.se/libcurl/c/libcurl-errors.html';
 				if(isset(self::$curlHashes[$errNumber]))
 					$url .= '#' . self::$curlHashes[$errNumber];
@@ -290,15 +290,15 @@ class Kaltura_View_Helper_FailReasonTranslate extends Zend_View_Helper_Abstract
 				$ret = "<a title=\"$title\" href=\"$url\" target=\"_blank\">$errTypeDesc ($errNumber)</a>";
 				break;
 				
-			case Kaltura_Client_Enum_BatchJobErrorTypes::RUNTIME:
+			case Vidiun_Client_Enum_BatchJobErrorTypes::RUNTIME:
 				$ret = "<span title=\"$message\">$errTypeDesc ($errNumber)</span>";
 				break;
 				
-			case Kaltura_Client_Enum_BatchJobErrorTypes::KALTURA_API:
+			case Vidiun_Client_Enum_BatchJobErrorTypes::VIDIUN_API:
 				$ret = "<span title=\"$message\">$errTypeDesc ($errNumber)</span>";
 				break;
 				
-			case Kaltura_Client_Enum_BatchJobErrorTypes::KALTURA_CLIENT:
+			case Vidiun_Client_Enum_BatchJobErrorTypes::VIDIUN_CLIENT:
 				$title = $message;
 				if(isset(self::$clientDescriptions[$errNumber]))
 					$title = self::$clientDescriptions[$errNumber];

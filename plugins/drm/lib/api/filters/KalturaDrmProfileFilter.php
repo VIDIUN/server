@@ -3,10 +3,10 @@
  * @package plugins.drm
  * @subpackage api.filters
  */
-class KalturaDrmProfileFilter extends KalturaDrmProfileBaseFilter
+class VidiunDrmProfileFilter extends VidiunDrmProfileBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

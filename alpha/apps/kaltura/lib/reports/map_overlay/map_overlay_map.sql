@@ -6,7 +6,7 @@ SELECT ev.country_id,c.country,
 	SUM(count_plays_75) count_plays_75,
 	SUM(count_plays_100) count_plays_100,
 	SUM(count_loads) count_loads
-FROM kalturadw.dwh_hourly_events_country ev, dwh_dim_locations c
+FROM vidiundw.dwh_hourly_events_country ev, dwh_dim_locations c
 	WHERE ev.country_id = c.location_id
 	AND c.location_type_name = 'COUNTRY' 
 	AND ev.partner_id = {PARTNER_ID} /* PARTNER_ID*/

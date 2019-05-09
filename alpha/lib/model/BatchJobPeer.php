@@ -145,7 +145,7 @@ class BatchJobPeer extends BaseBatchJobPeer
 	}
 	
 	
-	public static function postLockUpdate(kExclusiveLockKey $lockKey, array $exclusive_objects_ids, $con)
+	public static function postLockUpdate(vExclusiveLockKey $lockKey, array $exclusive_objects_ids, $con)
 	{
 		
 		$batchJobs = BatchJobPeer::retrieveByPKs($exclusive_objects_ids);
@@ -156,7 +156,7 @@ class BatchJobPeer extends BaseBatchJobPeer
 
 			// Set history
 			$uniqueId = new UniqueId();
-			$historyRecord = new kBatchHistoryData();
+			$historyRecord = new vBatchHistoryData();
 			$historyRecord->setWorkerId($lockKey->getWorkerId());
 			$historyRecord->setSchedulerId($lockKey->getSchedulerId());
 			$historyRecord->setBatchIndex($lockKey->getBatchIndex());
@@ -184,7 +184,7 @@ class BatchJobPeer extends BaseBatchJobPeer
 		if($batchJob->isColumnModified(BatchJobPeer::ERR_NUMBER) || $batchJob->isColumnModified(BatchJobPeer::ERR_TYPE) || 
 				$batchJob->isColumnModified(BatchJobPeer::MESSAGE)) {
 			
-			$historyRecord = new kBatchHistoryData();
+			$historyRecord = new vBatchHistoryData();
 			$historyRecord->setErrNumber($batchJob->getErrNumber());
 			$historyRecord->setErrType($batchJob->getErrType());
 			$historyRecord->setMessage($batchJob->getMessage());

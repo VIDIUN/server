@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.filters
  */
-abstract class KalturaESearchBaseFilter extends KalturaObject
+abstract class VidiunESearchBaseFilter extends VidiunObject
 {
 	private static $mapBetweenObjects = array();
 

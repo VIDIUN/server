@@ -5,7 +5,7 @@
 * @subpackage model.enums
 */
 
-class CencSchemeName implements IKalturaPluginEnum, DrmSchemeName
+class CencSchemeName implements IVidiunPluginEnum, DrmSchemeName
 {
 	const PLAYREADY_CENC = 'PLAYREADY_CENC';
 	const WIDEVINE_CENC = 'WIDEVINE_CENC';

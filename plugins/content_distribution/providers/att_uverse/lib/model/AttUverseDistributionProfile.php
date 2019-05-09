@@ -36,7 +36,7 @@ class AttUverseDistributionProfile extends ConfigurableDistributionProfile
 		    		
 		$allFieldValues = $this->getAllFieldValues($entryDistribution);
 		if (!$allFieldValues || !is_array($allFieldValues)) {
-		    KalturaLog::err('Error getting field values from entry distribution id ['.$entryDistribution->getId().'] profile id ['.$this->getId().']');
+		    VidiunLog::err('Error getting field values from entry distribution id ['.$entryDistribution->getId().'] profile id ['.$this->getId().']');
 		    return $validationErrors;
 		}
 		
@@ -298,7 +298,7 @@ class AttUverseDistributionProfile extends ConfigurableDistributionProfile
 		$entry = entryPeer::retrieveByPK($entryDistribution->getEntryId());
 				
 		// set the default criteria to use the current entry distribution partner id (it is restored later)
-		// this is needed for related entries under kMetadataMrssManager which is using retrieveByPK without the correct partner id filter
+		// this is needed for related entries under vMetadataMrssManager which is using retrieveByPK without the correct partner id filter
 		$oldEntryCriteria = entryPeer::getCriteriaFilter()->getFilter();
 		myPartnerUtils::resetPartnerFilter('entry');
 		entryPeer::addPartnerToCriteria($this->getPartnerId(), true);
@@ -306,10 +306,10 @@ class AttUverseDistributionProfile extends ConfigurableDistributionProfile
 		try
 		{
     		$mrss = null;
-    		$mrssParams = new kMrssParameters();
+    		$mrssParams = new vMrssParameters();
     		if ($this->getItemXpathsToExtend())
     			$mrssParams->setItemXpathsToExtend($this->getItemXpathsToExtend());
-    		$mrss = kMrssManager::getEntryMrssXml($entry, $mrss, $mrssParams);
+    		$mrss = vMrssManager::getEntryMrssXml($entry, $mrss, $mrssParams);
     		$mrssStr = $mrss->asXML();
 		}
 		catch (Exception $e)

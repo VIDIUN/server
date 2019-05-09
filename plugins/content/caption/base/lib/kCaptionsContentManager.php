@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage lib
  */
-abstract class kCaptionsContentManager
+abstract class vCaptionsContentManager
 {
 	const UNIX_LINE_ENDING = "\n";
 	const MAC_LINE_ENDING = "\r";
@@ -53,7 +53,7 @@ abstract class kCaptionsContentManager
 	public static function handleTextLines($line)
 	{
 		$lines = array_map('trim', preg_split('/$\R?^/m', $line));
-		$line = implode(kCaptionsContentManager::UNIX_LINE_ENDING, $lines);
+		$line = implode(vCaptionsContentManager::UNIX_LINE_ENDING, $lines);
 		return $line;
 	}
 
@@ -99,7 +99,7 @@ abstract class kCaptionsContentManager
 
 	/**
 	 * @param CaptionType $type
-	 * @return kCaptionsContentManager
+	 * @return vCaptionsContentManager
 	 */
 	public static function getCoreContentManager($type)
 	{
@@ -118,29 +118,29 @@ abstract class kCaptionsContentManager
 				return capCaptionsContentManager::get();
 
 			default:
-				return KalturaPluginManager::loadObject('kCaptionsContentManager', $type);
+				return VidiunPluginManager::loadObject('vCaptionsContentManager', $type);
 		}
 	}
 	
 	/**
-	 * @param KalturaCaptionType $type
-	 * @return kCaptionsContentManager
+	 * @param VidiunCaptionType $type
+	 * @return vCaptionsContentManager
 	 */
 	public static function getApiContentManager($type)
 	{
 		switch($type)
 		{
-			case KalturaCaptionType::SRT:
+			case VidiunCaptionType::SRT:
 				return srtCaptionsContentManager::get(); 
 				
-			case KalturaCaptionType::DFXP:
+			case VidiunCaptionType::DFXP:
 				return dfxpCaptionsContentManager::get();
 
 			case CaptionType::WEBVTT:
 				return webVttCaptionsContentManager::get();
 
 			default:
-				return KalturaPluginManager::loadObject('kCaptionsContentManager', $type);
+				return VidiunPluginManager::loadObject('vCaptionsContentManager', $type);
 		}
 	}
 	
@@ -151,7 +151,7 @@ abstract class kCaptionsContentManager
 		$id = $captionAsset->getId();
 		$entryId = $captionAsset->getEntryId();
 
-		$jobData = new kParseMultiLanguageCaptionAssetJobData();
+		$jobData = new vParseMultiLanguageCaptionAssetJobData();
 		$jobData->setMultiLanaguageCaptionAssetId($id);
 		$jobData->setEntryId($entryId);
 		$jobData->setFileLocation($fileLocation);
@@ -163,7 +163,7 @@ abstract class kCaptionsContentManager
 		$batchJob->setPartnerId($captionAsset->getPartnerId());
 		$batchJob->setObjectId($id);
 
-		return kJobsManager::addJob($batchJob, $jobData, $jobType);
+		return vJobsManager::addJob($batchJob, $jobData, $jobType);
 	}
 
 
@@ -182,7 +182,7 @@ abstract class kCaptionsContentManager
 		if ($result == 2)
 			$timeInMilliseconds = self::shortTimeFormatToInteger($timeStr) ;
 		elseif  ($result == 3)
-			$timeInMilliseconds = kXml::timeToInteger($timeStr);
+			$timeInMilliseconds = vXml::timeToInteger($timeStr);
 		else
 			$error = 'Error parsing time to milliseconds. invalid format for '.$timeStr;
 
@@ -195,7 +195,7 @@ abstract class kCaptionsContentManager
 	 */
 	public function parseCaptionTime($time)
 	{
-		list($captionTime, $error) = kCaptionsContentManager::parseStrTTTime($time);
+		list($captionTime, $error) = vCaptionsContentManager::parseStrTTTime($time);
 		return $captionTime;
 	}
 
@@ -225,8 +225,8 @@ abstract class kCaptionsContentManager
 	public function createCaptionsFile($content, $clipStartTime, $clipEndTime, $timeCode, $globalOffset)
 	{
 		$newFileContent = '';
-		$originalFileContentArray = kCaptionsContentManager::getFileContentAsArray($content);
-		while (($line = kCaptionsContentManager::getNextValueFromArray($originalFileContentArray)) !== false)
+		$originalFileContentArray = vCaptionsContentManager::getFileContentAsArray($content);
+		while (($line = vCaptionsContentManager::getNextValueFromArray($originalFileContentArray)) !== false)
 		{
 			$currentBlock = '';
 			$shouldAddBlockToNewFile = true;
@@ -243,11 +243,11 @@ abstract class kCaptionsContentManager
 						$shouldAddBlockToNewFile = false;
 				}
 				else
-					$currentBlock .= $line . kCaptionsContentManager::UNIX_LINE_ENDING;
-				$line = kCaptionsContentManager::getNextValueFromArray($originalFileContentArray);
+					$currentBlock .= $line . vCaptionsContentManager::UNIX_LINE_ENDING;
+				$line = vCaptionsContentManager::getNextValueFromArray($originalFileContentArray);
 			}
 			if($shouldAddBlockToNewFile)
-				$newFileContent .= $currentBlock . kCaptionsContentManager::UNIX_LINE_ENDING;;
+				$newFileContent .= $currentBlock . vCaptionsContentManager::UNIX_LINE_ENDING;;
 		}
 		return $newFileContent;
 	}

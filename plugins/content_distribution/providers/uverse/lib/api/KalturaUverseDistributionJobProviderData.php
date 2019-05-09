@@ -3,7 +3,7 @@
  * @package plugins.uverseDistribution
  * @subpackage api.objects
  */
-class KalturaUverseDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunUverseDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 	/**
 	 * The local file path of the video asset that needs to be distributed
@@ -26,14 +26,14 @@ class KalturaUverseDistributionJobProviderData extends KalturaConfigurableDistri
 	 */
 	public $remoteAssetFileName;
 	
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 
 		if(!$distributionJobData)
 			return;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaUverseDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunUverseDistributionProfile))
 			return;
 			
 		$flavorAssets = assetPeer::retrieveByIds(explode(',', $distributionJobData->entryDistribution->flavorAssetIds));
@@ -45,8 +45,8 @@ class KalturaUverseDistributionJobProviderData extends KalturaConfigurableDistri
 		if($flavorAsset) 
 		{
 			$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			if(kFileSyncUtils::fileSync_exists($syncKey))
-				$this->localAssetFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			if(vFileSyncUtils::fileSync_exists($syncKey))
+				$this->localAssetFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 		}
 		
 		$entryDistributionDb = EntryDistributionPeer::retrieveByPK($distributionJobData->entryDistributionId);
@@ -56,7 +56,7 @@ class KalturaUverseDistributionJobProviderData extends KalturaConfigurableDistri
 			$this->remoteAssetFileName = $entryDistributionDb->getFromCustomData(UverseEntryDistributionCustomDataField::REMOTE_ASSET_FILE_NAME);
 		}
 		else
-			KalturaLog::err('Entry distribution ['.$distributionJobData->entryDistributionId.'] not found');
+			VidiunLog::err('Entry distribution ['.$distributionJobData->entryDistributionId.'] not found');
 	}
 		
 	private static $map_between_objects = array

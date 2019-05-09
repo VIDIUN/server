@@ -38,9 +38,9 @@ class WidgetLogTableMap extends TableMap {
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
-		$this->addColumn('KSHOW_ID', 'KshowId', 'VARCHAR', false, 20, null);
+		$this->addColumn('VSHOW_ID', 'VshowId', 'VARCHAR', false, 20, null);
 		$this->addForeignKey('ENTRY_ID', 'EntryId', 'VARCHAR', 'entry', 'ID', false, 20, null);
-		$this->addColumn('KMEDIA_TYPE', 'KmediaType', 'INTEGER', false, null, null);
+		$this->addColumn('VMEDIA_TYPE', 'VmediaType', 'INTEGER', false, null, null);
 		$this->addColumn('WIDGET_TYPE', 'WidgetType', 'VARCHAR', false, 32, null);
 		$this->addColumn('REFERER', 'Referer', 'VARCHAR', false, 1024, null);
 		$this->addColumn('VIEWS', 'Views', 'INTEGER', false, null, 0);

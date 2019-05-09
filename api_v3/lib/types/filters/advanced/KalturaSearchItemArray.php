@@ -3,28 +3,28 @@
  * @package api
  * @subpackage filters
  */
-class KalturaSearchItemArray extends KalturaTypedArray
+class VidiunSearchItemArray extends VidiunTypedArray
 {
 	/**
 	 * @param array $arr
-	 * @return KalturaSearchItemArray
+	 * @return VidiunSearchItemArray
 	 */
-	public static function fromDbArray(array $arr = null, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr = null, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaSearchItemArray();
+		$newArr = new VidiunSearchItemArray();
 		if(!$arr || !count($arr))
 			return $newArr;
 			
 		foreach ( $arr as $obj )
 		{
-			$kalturaClass = $obj->getKalturaClass();
-			if(!class_exists($kalturaClass))
+			$vidiunClass = $obj->getVidiunClass();
+			if(!class_exists($vidiunClass))
 			{
-				KalturaLog::err("Class [$kalturaClass] not found");
+				VidiunLog::err("Class [$vidiunClass] not found");
 				continue;
 			}
 				
-			$nObj = new $kalturaClass();
+			$nObj = new $vidiunClass();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -48,7 +48,7 @@ class KalturaSearchItemArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaSearchItem" );
+		return parent::__construct ( "VidiunSearchItem" );
 	}
 }
 ?>

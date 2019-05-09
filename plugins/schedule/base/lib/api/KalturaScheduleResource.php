@@ -5,7 +5,7 @@
  * @relatedService ScheduleResourceService
  * @abstract
  */
-abstract class KalturaScheduleResource extends KalturaObject implements IRelatedFilterable, IApiObjectFactory
+abstract class VidiunScheduleResource extends VidiunObject implements IRelatedFilterable, IApiObjectFactory
 {
 	/**
 	 * Auto-generated unique identifier
@@ -51,7 +51,7 @@ abstract class KalturaScheduleResource extends KalturaObject implements IRelated
 	public $description;
 
 	/**
-	 * @var KalturaScheduleResourceStatus
+	 * @var VidiunScheduleResourceStatus
 	 * @readonly
 	 * @filter eq,in
 	 */
@@ -97,7 +97,7 @@ abstract class KalturaScheduleResource extends KalturaObject implements IRelated
 	 );
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -123,7 +123,7 @@ abstract class KalturaScheduleResource extends KalturaObject implements IRelated
 	abstract protected function getScheduleResourceType();
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert($propertiesToSkip)
+	 * @see VidiunObject::validateForInsert($propertiesToSkip)
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -135,21 +135,21 @@ abstract class KalturaScheduleResource extends KalturaObject implements IRelated
 			$c->add(ScheduleResourcePeer::SYSTEM_NAME, $this->systemName);
 			$c->add(ScheduleResourcePeer::TYPE, $this->getScheduleResourceType());
 			if(ScheduleResourcePeer::doCount($c))
-				throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+				throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 		}
 
 		if (!$this->isNull('parentId') && $this->parentId != 0 )
 		{
 			$scheduleResource = ScheduleResourcePeer::retrieveByPK($this->parentId);
 			if (is_null($scheduleResource))
-				throw new KalturaAPIException(KalturaErrors::RESOURCE_PARENT_ID_NOT_FOUND, $this->parentId);
+				throw new VidiunAPIException(VidiunErrors::RESOURCE_PARENT_ID_NOT_FOUND, $this->parentId);
 		}
 		
 		return parent::validateForInsert($propertiesToSkip);
 	}
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUpdate($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -160,41 +160,41 @@ abstract class KalturaScheduleResource extends KalturaObject implements IRelated
 			$c->add(ScheduleResourcePeer::TYPE, $this->getScheduleResourceType());
 			$c->add(ScheduleResourcePeer::ID, $sourceObject->getId(), Criteria::NOT_EQUAL);
 			if(ScheduleResourcePeer::doCount($c))
-				throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+				throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 		}
 
 		if (!$this->isNull('parentId') && $this->parentId != 0 && $this->parentId != $sourceObject->getId() )
 		{
 			$scheduleResource = ScheduleResourcePeer::retrieveByPK($this->parentId);
 			if (is_null($scheduleResource))
-				throw new KalturaAPIException(KalturaErrors::RESOURCE_PARENT_ID_NOT_FOUND, $this->parentId);
+				throw new VidiunAPIException(VidiunErrors::RESOURCE_PARENT_ID_NOT_FOUND, $this->parentId);
 		}
 		
 		return parent::validateForUpdate($sourceObject, $propertiesToSkip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IApiObjectFactory::getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile)
+	 * @see IApiObjectFactory::getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile)
 	 */
-	public static function getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$object = null;
 	    switch($sourceObject->getType())
 	    {
 		    case ScheduleResourceType::LOCATION:
-	    		$object = new KalturaLocationScheduleResource();
+	    		$object = new VidiunLocationScheduleResource();
 	    		break;
 	    		
 	    	case ScheduleResourceType::LIVE_ENTRY:
-	    		$object = new KalturaLiveEntryScheduleResource();
+	    		$object = new VidiunLiveEntryScheduleResource();
 	    		break;
 	    		
 	    	case ScheduleResourceType::CAMERA:
-	    		$object = new KalturaCameraScheduleResource();
+	    		$object = new VidiunCameraScheduleResource();
 	    		break;
 	    		
 	    	default:
-				$object = KalturaPluginManager::loadObject('KalturaScheduleResource', $sourceObject->getType());
+				$object = VidiunPluginManager::loadObject('VidiunScheduleResource', $sourceObject->getType());
 				if(!$object)
 				{
 	    			return null;

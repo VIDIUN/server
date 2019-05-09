@@ -41,22 +41,22 @@ class BatchJobLockPeer extends BaseBatchJobLockPeer {
 	
 	public static function getRetryInterval($job_type = null)
 	{
-		$job_type = kPluginableEnumsManager::coreToApi('BatchJobType', $job_type);
+		$job_type = vPluginableEnumsManager::coreToApi('BatchJobType', $job_type);
 		$job_type = str_replace('.', '_', $job_type);		// in Zend_Ini . is used to create hierarchy
-		$jobCheckAgainTimeouts = kConf::get('job_retry_intervals');
+		$jobCheckAgainTimeouts = vConf::get('job_retry_intervals');
 		if(isset($jobCheckAgainTimeouts[$job_type]))
 			return $jobCheckAgainTimeouts[$job_type];
 			
-		return kConf::get('default_job_retry_interval');
+		return vConf::get('default_job_retry_interval');
 	}
 	
 	public static function getMaxExecutionAttempts($job_type = null)
 	{
-		$jobMaxExecutionAttempts = kConf::get('job_execution_attempt');
+		$jobMaxExecutionAttempts = vConf::get('job_execution_attempt');
 		if(isset($jobMaxExecutionAttempts[$job_type]))
 			return $jobMaxExecutionAttempts[$job_type];
 			
-		return kConf::get('default_job_execution_attempt');
+		return vConf::get('default_job_execution_attempt');
 	}
 	
 	/**
@@ -68,11 +68,11 @@ class BatchJobLockPeer extends BaseBatchJobLockPeer {
 	 */
 	public static function getPrioritizersRatio($job_type = null)
 	{
-		$jobRateBetweenSchedulers = kConf::get('prioritizers_ratio');
+		$jobRateBetweenSchedulers = vConf::get('prioritizers_ratio');
 		if(isset($jobRateBetweenSchedulers[$job_type]))
 			return $jobRateBetweenSchedulers[$job_type];
 			
-		return kConf::get('default_prioritizers_ratio');
+		return vConf::get('default_prioritizers_ratio');
 	}
 	
 	/**
@@ -82,11 +82,11 @@ class BatchJobLockPeer extends BaseBatchJobLockPeer {
 	 */
 	public static function getMaxJobsForPartner($job_type = null)
 	{
-		$maxJobsForPartner = kConf::get('max_jobs_for_partner');
+		$maxJobsForPartner = vConf::get('max_jobs_for_partner');
 		if(isset($maxJobsForPartner[$job_type]))
 			return $maxJobsForPartner[$job_type];
 			
-		return kConf::get('default_max_job_for_partner');
+		return vConf::get('default_max_job_for_partner');
 	}
 	
 	
@@ -171,7 +171,7 @@ class BatchJobLockPeer extends BaseBatchJobLockPeer {
 	{
 		$batchJobLock = $batchJob->getBatchJobLock();
 		if($batchJobLock === null) {
-			KalturaLog::info("Lock object wasn't found for Batch Job " . $batchJob->getId());
+			VidiunLog::info("Lock object wasn't found for Batch Job " . $batchJob->getId());
 			return;
 		}
 		
@@ -211,11 +211,11 @@ class BatchJobLockPeer extends BaseBatchJobLockPeer {
 	}
 	
 	public static function getBatchVersion($job_type = null) {
-		$batchVersions = kConf::get('batch_version_for_job');
+		$batchVersions = vConf::get('batch_version_for_job');
 		if(isset($batchVersions[$job_type]))
 			return $batchVersions[$job_type];
 		
-		return kConf::get('default_batch_version');
+		return vConf::get('default_batch_version');
 	}
 	
 	/**

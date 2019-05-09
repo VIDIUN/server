@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaDistributionErrorType extends KalturaEnum implements DistributionErrorType
+class VidiunDistributionErrorType extends VidiunEnum implements DistributionErrorType
 {
 	
 }

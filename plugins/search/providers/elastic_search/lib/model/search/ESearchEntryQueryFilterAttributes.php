@@ -7,8 +7,8 @@ class ESearchEntryQueryFilterAttributes extends ESearchBaseQueryFilterAttributes
 {
 	public function getDisplayInSearchFilter()
 	{
-		$displayInSearchQuery = new kESearchTermQuery(ESearchEntryFieldName::DISPLAY_IN_SEARCH, EntryDisplayInSearchType::SYSTEM);
-		$mustNotDisplayInSearchBoolQuery = new kESearchBoolQuery();
+		$displayInSearchQuery = new vESearchTermQuery(ESearchEntryFieldName::DISPLAY_IN_SEARCH, EntryDisplayInSearchType::SYSTEM);
+		$mustNotDisplayInSearchBoolQuery = new vESearchBoolQuery();
 		$mustNotDisplayInSearchBoolQuery->addToMustNot($displayInSearchQuery);
 
 		$ignoreDisplayInSearchQueries = array();
@@ -16,12 +16,12 @@ class ESearchEntryQueryFilterAttributes extends ESearchBaseQueryFilterAttributes
 		foreach	($this->ignoreDisplayInSearchValues as $key => $value)
 		{
 			if($value)
-				$ignoreDisplayInSearchQueries[] = new kESearchTermsQuery($key, $value);
+				$ignoreDisplayInSearchQueries[] = new vESearchTermsQuery($key, $value);
 		}
 
 		if(count($ignoreDisplayInSearchQueries))
 		{
-			$displayInSearchBoolQuery = new kESearchBoolQuery();
+			$displayInSearchBoolQuery = new vESearchBoolQuery();
 			$displayInSearchBoolQuery->addQueriesToShould($ignoreDisplayInSearchQueries);
 			$displayInSearchBoolQuery->addToShould($mustNotDisplayInSearchBoolQuery);
 			return $displayInSearchBoolQuery;

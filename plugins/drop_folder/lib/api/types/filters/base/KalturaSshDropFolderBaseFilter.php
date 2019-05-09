@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaSshDropFolderBaseFilter extends KalturaRemoteDropFolderFilter
+abstract class VidiunSshDropFolderBaseFilter extends VidiunRemoteDropFolderFilter
 {
 	static private $map_between_objects = array
 	(

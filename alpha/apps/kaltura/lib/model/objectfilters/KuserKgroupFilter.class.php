@@ -3,12 +3,12 @@
  * @package Core
  * @subpackage model.filters
  */ 
-class KuserKgroupFilter extends baseObjectFilter
+class VuserVgroupFilter extends baseObjectFilter
 {
 	public function init ()
 	{
 		// or can use this to set default valuse
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 				"_eq_group_id",
 				"_in_group_id",
 				"_eq_user_id",
@@ -24,8 +24,8 @@ class KuserKgroupFilter extends baseObjectFilter
 		$this->allowed_order_fields = array ( "created_at" , "updated_at");
 		
 		$this->aliases = array ( 
-			"user_id" => "kuser_id",
-			"group_id" => "kgroup_id"
+			"user_id" => "vuser_id",
+			"group_id" => "vgroup_id"
 		);
 	}
 
@@ -33,7 +33,7 @@ class KuserKgroupFilter extends baseObjectFilter
 	{
 		return
 			array (
-				"display_name" => "KuserKgroupFilter",
+				"display_name" => "VuserVgroupFilter",
 				"desc" => ""
 			);
 	}
@@ -41,13 +41,13 @@ class KuserKgroupFilter extends baseObjectFilter
 	// The base class should invoke $peer_class::translateFieldName( $field_name , BasePeer::TYPE_FIELDNAME , BasePeer::TYPE_COLNAME );
 	public function getFieldNameFromPeer ( $field_name )
 	{
-		$res = KuserKgroupPeer::translateFieldName( $field_name , $this->field_name_translation_type , BasePeer::TYPE_COLNAME );
+		$res = VuserVgroupPeer::translateFieldName( $field_name , $this->field_name_translation_type , BasePeer::TYPE_COLNAME );
 		return $res;
 	}
 
 	public function getIdFromPeer (  )
 	{
-		return KuserKgroupPeer::ID;
+		return VuserVgroupPeer::ID;
 	}
 
 

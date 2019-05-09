@@ -3,7 +3,7 @@
  * @package server-infra
  * @subpackage Media
  */
-abstract class KBaseThumbnailMaker
+abstract class VBaseThumbnailMaker
 {
 	/**
 	 * @var string
@@ -28,13 +28,13 @@ abstract class KBaseThumbnailMaker
 	{
 		$params = self::normalizeParams($params);
 		
-		KalturaLog::debug("position[$position], width[$width], height[$height], params[".serialize($params)."]");
+		VidiunLog::debug("position[$position], width[$width], height[$height], params[".serialize($params)."]");
 		$cmd = $this->getCommand($position, $width, $height, $params);
-		KalturaLog::info("Executing: $cmd");
+		VidiunLog::info("Executing: $cmd");
 		
 		$returnValue = null;
 		$output = system( $cmd , $returnValue );
-		KalturaLog::debug("Returned value: '$returnValue'");
+		VidiunLog::debug("Returned value: '$returnValue'");
 		
 		if($returnValue)
 			return false;

@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Base class that represents a row from the 'kvote' table.
+ * Base class that represents a row from the 'vvote' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class Basekvote extends BaseObject  implements Persistent {
+abstract class Basevvote extends BaseObject  implements Persistent {
 
 
 	/**
 	 * The Peer class.
 	 * Instance provides a convenient way of calling static methods on a class
 	 * that calling code may not be able to identify.
-	 * @var        kvotePeer
+	 * @var        vvotePeer
 	 */
 	protected static $peer;
 
@@ -26,10 +26,10 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	protected $id;
 
 	/**
-	 * The value for the kshow_id field.
+	 * The value for the vshow_id field.
 	 * @var        string
 	 */
-	protected $kshow_id;
+	protected $vshow_id;
 
 	/**
 	 * The value for the entry_id field.
@@ -38,10 +38,10 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	protected $entry_id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the puser_id field.
@@ -68,11 +68,11 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	protected $status;
 
 	/**
-	 * The value for the kvote_type field.
+	 * The value for the vvote_type field.
 	 * Note: this column has a database default value of: 1
 	 * @var        int
 	 */
-	protected $kvote_type;
+	protected $vvote_type;
 
 	/**
 	 * The value for the created_at field.
@@ -87,9 +87,9 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	protected $custom_data;
 
 	/**
-	 * @var        kshow
+	 * @var        vshow
 	 */
-	protected $akshowRelatedByKshowId;
+	protected $avshowRelatedByVshowId;
 
 	/**
 	 * @var        entry
@@ -97,9 +97,9 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	protected $aentry;
 
 	/**
-	 * @var        kshow
+	 * @var        vshow
 	 */
-	protected $akshowRelatedByKuserId;
+	protected $avshowRelatedByVuserId;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -154,11 +154,11 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 */
 	public function applyDefaultValues()
 	{
-		$this->kvote_type = 1;
+		$this->vvote_type = 1;
 	}
 
 	/**
-	 * Initializes internal state of Basekvote object.
+	 * Initializes internal state of Basevvote object.
 	 * @see        applyDefaults()
 	 */
 	public function __construct()
@@ -178,13 +178,13 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kshow_id] column value.
+	 * Get the [vshow_id] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getKshowId()
+	public function getVshowId()
 	{
-		return $this->kshow_id;
+		return $this->vshow_id;
 	}
 
 	/**
@@ -198,13 +198,13 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -248,13 +248,13 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kvote_type] column value.
+	 * Get the [vvote_type] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKvoteType()
+	public function getVvoteType()
 	{
-		return $this->kvote_type;
+		return $this->vvote_type;
 	}
 
 	/**
@@ -311,12 +311,12 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kvote The current object (for fluent API support)
+	 * @return     vvote The current object (for fluent API support)
 	 */
 	public function setId($v)
 	{
-		if(!isset($this->oldColumnsValues[kvotePeer::ID]))
-			$this->oldColumnsValues[kvotePeer::ID] = $this->id;
+		if(!isset($this->oldColumnsValues[vvotePeer::ID]))
+			$this->oldColumnsValues[vvotePeer::ID] = $this->id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -324,49 +324,49 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 
 		if ($this->id !== $v) {
 			$this->id = $v;
-			$this->modifiedColumns[] = kvotePeer::ID;
+			$this->modifiedColumns[] = vvotePeer::ID;
 		}
 
 		return $this;
 	} // setId()
 
 	/**
-	 * Set the value of [kshow_id] column.
+	 * Set the value of [vshow_id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kvote The current object (for fluent API support)
+	 * @return     vvote The current object (for fluent API support)
 	 */
-	public function setKshowId($v)
+	public function setVshowId($v)
 	{
-		if(!isset($this->oldColumnsValues[kvotePeer::KSHOW_ID]))
-			$this->oldColumnsValues[kvotePeer::KSHOW_ID] = $this->kshow_id;
+		if(!isset($this->oldColumnsValues[vvotePeer::VSHOW_ID]))
+			$this->oldColumnsValues[vvotePeer::VSHOW_ID] = $this->vshow_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->kshow_id !== $v) {
-			$this->kshow_id = $v;
-			$this->modifiedColumns[] = kvotePeer::KSHOW_ID;
+		if ($this->vshow_id !== $v) {
+			$this->vshow_id = $v;
+			$this->modifiedColumns[] = vvotePeer::VSHOW_ID;
 		}
 
-		if ($this->akshowRelatedByKshowId !== null && $this->akshowRelatedByKshowId->getId() !== $v) {
-			$this->akshowRelatedByKshowId = null;
+		if ($this->avshowRelatedByVshowId !== null && $this->avshowRelatedByVshowId->getId() !== $v) {
+			$this->avshowRelatedByVshowId = null;
 		}
 
 		return $this;
-	} // setKshowId()
+	} // setVshowId()
 
 	/**
 	 * Set the value of [entry_id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kvote The current object (for fluent API support)
+	 * @return     vvote The current object (for fluent API support)
 	 */
 	public function setEntryId($v)
 	{
-		if(!isset($this->oldColumnsValues[kvotePeer::ENTRY_ID]))
-			$this->oldColumnsValues[kvotePeer::ENTRY_ID] = $this->entry_id;
+		if(!isset($this->oldColumnsValues[vvotePeer::ENTRY_ID]))
+			$this->oldColumnsValues[vvotePeer::ENTRY_ID] = $this->entry_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -374,7 +374,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 
 		if ($this->entry_id !== $v) {
 			$this->entry_id = $v;
-			$this->modifiedColumns[] = kvotePeer::ENTRY_ID;
+			$this->modifiedColumns[] = vvotePeer::ENTRY_ID;
 		}
 
 		if ($this->aentry !== null && $this->aentry->getId() !== $v) {
@@ -385,42 +385,42 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	} // setEntryId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kvote The current object (for fluent API support)
+	 * @return     vvote The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[kvotePeer::KUSER_ID]))
-			$this->oldColumnsValues[kvotePeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[vvotePeer::VUSER_ID]))
+			$this->oldColumnsValues[vvotePeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = kvotePeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = vvotePeer::VUSER_ID;
 		}
 
-		if ($this->akshowRelatedByKuserId !== null && $this->akshowRelatedByKuserId->getId() !== $v) {
-			$this->akshowRelatedByKuserId = null;
+		if ($this->avshowRelatedByVuserId !== null && $this->avshowRelatedByVuserId->getId() !== $v) {
+			$this->avshowRelatedByVuserId = null;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [puser_id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kvote The current object (for fluent API support)
+	 * @return     vvote The current object (for fluent API support)
 	 */
 	public function setPuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[kvotePeer::PUSER_ID]))
-			$this->oldColumnsValues[kvotePeer::PUSER_ID] = $this->puser_id;
+		if(!isset($this->oldColumnsValues[vvotePeer::PUSER_ID]))
+			$this->oldColumnsValues[vvotePeer::PUSER_ID] = $this->puser_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -428,7 +428,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 
 		if ($this->puser_id !== $v) {
 			$this->puser_id = $v;
-			$this->modifiedColumns[] = kvotePeer::PUSER_ID;
+			$this->modifiedColumns[] = vvotePeer::PUSER_ID;
 		}
 
 		return $this;
@@ -438,12 +438,12 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 * Set the value of [partner_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kvote The current object (for fluent API support)
+	 * @return     vvote The current object (for fluent API support)
 	 */
 	public function setPartnerId($v)
 	{
-		if(!isset($this->oldColumnsValues[kvotePeer::PARTNER_ID]))
-			$this->oldColumnsValues[kvotePeer::PARTNER_ID] = $this->partner_id;
+		if(!isset($this->oldColumnsValues[vvotePeer::PARTNER_ID]))
+			$this->oldColumnsValues[vvotePeer::PARTNER_ID] = $this->partner_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -451,7 +451,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 
 		if ($this->partner_id !== $v) {
 			$this->partner_id = $v;
-			$this->modifiedColumns[] = kvotePeer::PARTNER_ID;
+			$this->modifiedColumns[] = vvotePeer::PARTNER_ID;
 		}
 
 		return $this;
@@ -461,12 +461,12 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 * Set the value of [rank] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kvote The current object (for fluent API support)
+	 * @return     vvote The current object (for fluent API support)
 	 */
 	public function setRank($v)
 	{
-		if(!isset($this->oldColumnsValues[kvotePeer::RANK]))
-			$this->oldColumnsValues[kvotePeer::RANK] = $this->rank;
+		if(!isset($this->oldColumnsValues[vvotePeer::RANK]))
+			$this->oldColumnsValues[vvotePeer::RANK] = $this->rank;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -474,7 +474,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 
 		if ($this->rank !== $v) {
 			$this->rank = $v;
-			$this->modifiedColumns[] = kvotePeer::RANK;
+			$this->modifiedColumns[] = vvotePeer::RANK;
 		}
 
 		return $this;
@@ -484,12 +484,12 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 * Set the value of [status] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kvote The current object (for fluent API support)
+	 * @return     vvote The current object (for fluent API support)
 	 */
 	public function setStatus($v)
 	{
-		if(!isset($this->oldColumnsValues[kvotePeer::STATUS]))
-			$this->oldColumnsValues[kvotePeer::STATUS] = $this->status;
+		if(!isset($this->oldColumnsValues[vvotePeer::STATUS]))
+			$this->oldColumnsValues[vvotePeer::STATUS] = $this->status;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -497,41 +497,41 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 
 		if ($this->status !== $v) {
 			$this->status = $v;
-			$this->modifiedColumns[] = kvotePeer::STATUS;
+			$this->modifiedColumns[] = vvotePeer::STATUS;
 		}
 
 		return $this;
 	} // setStatus()
 
 	/**
-	 * Set the value of [kvote_type] column.
+	 * Set the value of [vvote_type] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kvote The current object (for fluent API support)
+	 * @return     vvote The current object (for fluent API support)
 	 */
-	public function setKvoteType($v)
+	public function setVvoteType($v)
 	{
-		if(!isset($this->oldColumnsValues[kvotePeer::KVOTE_TYPE]))
-			$this->oldColumnsValues[kvotePeer::KVOTE_TYPE] = $this->kvote_type;
+		if(!isset($this->oldColumnsValues[vvotePeer::VVOTE_TYPE]))
+			$this->oldColumnsValues[vvotePeer::VVOTE_TYPE] = $this->vvote_type;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kvote_type !== $v || $this->isNew()) {
-			$this->kvote_type = $v;
-			$this->modifiedColumns[] = kvotePeer::KVOTE_TYPE;
+		if ($this->vvote_type !== $v || $this->isNew()) {
+			$this->vvote_type = $v;
+			$this->modifiedColumns[] = vvotePeer::VVOTE_TYPE;
 		}
 
 		return $this;
-	} // setKvoteType()
+	} // setVvoteType()
 
 	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     kvote The current object (for fluent API support)
+	 * @return     vvote The current object (for fluent API support)
 	 */
 	public function setCreatedAt($v)
 	{
@@ -568,7 +568,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 					)
 			{
 				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = kvotePeer::CREATED_AT;
+				$this->modifiedColumns[] = vvotePeer::CREATED_AT;
 			}
 		} // if either are not null
 
@@ -579,7 +579,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 * Set the value of [custom_data] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kvote The current object (for fluent API support)
+	 * @return     vvote The current object (for fluent API support)
 	 */
 	public function setCustomData($v)
 	{
@@ -589,7 +589,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 
 		if ($this->custom_data !== $v) {
 			$this->custom_data = $v;
-			$this->modifiedColumns[] = kvotePeer::CUSTOM_DATA;
+			$this->modifiedColumns[] = vvotePeer::CUSTOM_DATA;
 		}
 
 		return $this;
@@ -605,7 +605,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 */
 	public function hasOnlyDefaultValues()
 	{
-			if ($this->kvote_type !== 1) {
+			if ($this->vvote_type !== 1) {
 				return false;
 			}
 
@@ -635,14 +635,14 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 		try {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->kshow_id = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+			$this->vshow_id = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
 			$this->entry_id = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-			$this->kuser_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+			$this->vuser_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->puser_id = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
 			$this->partner_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
 			$this->rank = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
 			$this->status = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
-			$this->kvote_type = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+			$this->vvote_type = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
 			$this->created_at = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
 			$this->custom_data = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
 			$this->resetModified();
@@ -654,10 +654,10 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 11; // 11 = kvotePeer::NUM_COLUMNS - kvotePeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 11; // 11 = vvotePeer::NUM_COLUMNS - vvotePeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
-			throw new PropelException("Error populating kvote object", $e);
+			throw new PropelException("Error populating vvote object", $e);
 		}
 	}
 
@@ -677,14 +677,14 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akshowRelatedByKshowId !== null && $this->kshow_id !== $this->akshowRelatedByKshowId->getId()) {
-			$this->akshowRelatedByKshowId = null;
+		if ($this->avshowRelatedByVshowId !== null && $this->vshow_id !== $this->avshowRelatedByVshowId->getId()) {
+			$this->avshowRelatedByVshowId = null;
 		}
 		if ($this->aentry !== null && $this->entry_id !== $this->aentry->getId()) {
 			$this->aentry = null;
 		}
-		if ($this->akshowRelatedByKuserId !== null && $this->kuser_id !== $this->akshowRelatedByKuserId->getId()) {
-			$this->akshowRelatedByKuserId = null;
+		if ($this->avshowRelatedByVuserId !== null && $this->vuser_id !== $this->avshowRelatedByVuserId->getId()) {
+			$this->avshowRelatedByVuserId = null;
 		}
 	} // ensureConsistency
 
@@ -709,17 +709,17 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(kvotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(vvotePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		// We don't need to alter the object instance pool; we're just modifying this instance
 		// already in the pool.
 
-		kvotePeer::setUseCriteriaFilter(false);
+		vvotePeer::setUseCriteriaFilter(false);
 		$criteria = $this->buildPkeyCriteria();
-		kvotePeer::addSelectColumns($criteria);
+		vvotePeer::addSelectColumns($criteria);
 		$stmt = BasePeer::doSelect($criteria, $con);
-		kvotePeer::setUseCriteriaFilter(true);
+		vvotePeer::setUseCriteriaFilter(true);
 		$row = $stmt->fetch(PDO::FETCH_NUM);
 		$stmt->closeCursor();
 		if (!$row) {
@@ -729,9 +729,9 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akshowRelatedByKshowId = null;
+			$this->avshowRelatedByVshowId = null;
 			$this->aentry = null;
-			$this->akshowRelatedByKuserId = null;
+			$this->avshowRelatedByVuserId = null;
 		} // if (deep)
 	}
 
@@ -751,14 +751,14 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(kvotePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(vvotePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
 			$ret = $this->preDelete($con);
 			if ($ret) {
-				kvotePeer::doDelete($this, $con);
+				vvotePeer::doDelete($this, $con);
 				$this->postDelete($con);
 				$this->setDeleted(true);
 				$con->commit();
@@ -791,7 +791,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(kvotePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(vvotePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
@@ -809,15 +809,15 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 				return 0;
 			}
 			
-			for ($retries = 1; $retries < KalturaPDO::SAVE_MAX_RETRIES; $retries++)
+			for ($retries = 1; $retries < VidiunPDO::SAVE_MAX_RETRIES; $retries++)
 			{
                $affectedRows = $this->doSave($con);
-                if ($affectedRows || !$this->isColumnModified(kvotePeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
+                if ($affectedRows || !$this->isColumnModified(vvotePeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug("was unable to save! retrying for the $retries time");
+                VidiunLog::debug("was unable to save! retrying for the $retries time");
                 $criteria = $this->buildPkeyCriteria();
-				$criteria->addSelectColumn(kvotePeer::CUSTOM_DATA);
+				$criteria->addSelectColumn(vvotePeer::CUSTOM_DATA);
                 $stmt = BasePeer::doSelect($criteria, $con);
                 $cutsomDataArr = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 $newCustomData = $cutsomDataArr[0];
@@ -829,7 +829,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 
 				//set custom data column values we wanted to change to
 				$validUpdate = true;
-				$atomicCustomDataFields = kvotePeer::getAtomicCustomDataFields();
+				$atomicCustomDataFields = vvotePeer::getAtomicCustomDataFields();
 			 	foreach ($this->oldCustomDataValues as $namespace => $namespaceValues){
                 	foreach($namespaceValues as $name => $oldValue)
 					{
@@ -879,7 +879,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 				$this->postUpdate($con);
 			}
 			$this->postSave($con);
-			kvotePeer::addInstanceToPool($this);
+			vvotePeer::addInstanceToPool($this);
 			
 			$con->commit();
 			return $affectedRows;
@@ -916,11 +916,11 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akshowRelatedByKshowId !== null) {
-				if ($this->akshowRelatedByKshowId->isModified() || $this->akshowRelatedByKshowId->isNew()) {
-					$affectedRows += $this->akshowRelatedByKshowId->save($con);
+			if ($this->avshowRelatedByVshowId !== null) {
+				if ($this->avshowRelatedByVshowId->isModified() || $this->avshowRelatedByVshowId->isNew()) {
+					$affectedRows += $this->avshowRelatedByVshowId->save($con);
 				}
-				$this->setkshowRelatedByKshowId($this->akshowRelatedByKshowId);
+				$this->setvshowRelatedByVshowId($this->avshowRelatedByVshowId);
 			}
 
 			if ($this->aentry !== null) {
@@ -930,22 +930,22 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 				$this->setentry($this->aentry);
 			}
 
-			if ($this->akshowRelatedByKuserId !== null) {
-				if ($this->akshowRelatedByKuserId->isModified() || $this->akshowRelatedByKuserId->isNew()) {
-					$affectedRows += $this->akshowRelatedByKuserId->save($con);
+			if ($this->avshowRelatedByVuserId !== null) {
+				if ($this->avshowRelatedByVuserId->isModified() || $this->avshowRelatedByVuserId->isNew()) {
+					$affectedRows += $this->avshowRelatedByVuserId->save($con);
 				}
-				$this->setkshowRelatedByKuserId($this->akshowRelatedByKuserId);
+				$this->setvshowRelatedByVuserId($this->avshowRelatedByVuserId);
 			}
 
 			if ($this->isNew() ) {
-				$this->modifiedColumns[] = kvotePeer::ID;
+				$this->modifiedColumns[] = vvotePeer::ID;
 			}
 
 			// If this object has been modified, then save it to the database.
 			$this->objectSaved = false;
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = kvotePeer::doInsert($this, $con);
+					$pk = vvotePeer::doInsert($this, $con);
 					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
 										 // should always be true here (even though technically
 										 // BasePeer::doInsert() can insert multiple rows).
@@ -955,7 +955,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 					$this->setNew(false);
 					$this->objectSaved = true;
 				} else {
-					$affectedObjects = kvotePeer::doUpdate($this, $con);
+					$affectedObjects = vvotePeer::doUpdate($this, $con);
 					if($affectedObjects)
 						$this->objectSaved = true;
 						
@@ -1003,7 +1003,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1027,12 +1027,12 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1050,10 +1050,10 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1175,9 +1175,9 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akshowRelatedByKshowId !== null) {
-				if (!$this->akshowRelatedByKshowId->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akshowRelatedByKshowId->getValidationFailures());
+			if ($this->avshowRelatedByVshowId !== null) {
+				if (!$this->avshowRelatedByVshowId->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avshowRelatedByVshowId->getValidationFailures());
 				}
 			}
 
@@ -1187,14 +1187,14 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 				}
 			}
 
-			if ($this->akshowRelatedByKuserId !== null) {
-				if (!$this->akshowRelatedByKuserId->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akshowRelatedByKuserId->getValidationFailures());
+			if ($this->avshowRelatedByVuserId !== null) {
+				if (!$this->avshowRelatedByVuserId->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avshowRelatedByVuserId->getValidationFailures());
 				}
 			}
 
 
-			if (($retval = kvotePeer::doValidate($this, $columns)) !== true) {
+			if (($retval = vvotePeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
@@ -1217,7 +1217,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = kvotePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = vvotePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		$field = $this->getByPosition($pos);
 		return $field;
 	}
@@ -1236,13 +1236,13 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 				return $this->getId();
 				break;
 			case 1:
-				return $this->getKshowId();
+				return $this->getVshowId();
 				break;
 			case 2:
 				return $this->getEntryId();
 				break;
 			case 3:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 4:
 				return $this->getPuserId();
@@ -1257,7 +1257,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 				return $this->getStatus();
 				break;
 			case 8:
-				return $this->getKvoteType();
+				return $this->getVvoteType();
 				break;
 			case 9:
 				return $this->getCreatedAt();
@@ -1284,17 +1284,17 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
-		$keys = kvotePeer::getFieldNames($keyType);
+		$keys = vvotePeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
-			$keys[1] => $this->getKshowId(),
+			$keys[1] => $this->getVshowId(),
 			$keys[2] => $this->getEntryId(),
-			$keys[3] => $this->getKuserId(),
+			$keys[3] => $this->getVuserId(),
 			$keys[4] => $this->getPuserId(),
 			$keys[5] => $this->getPartnerId(),
 			$keys[6] => $this->getRank(),
 			$keys[7] => $this->getStatus(),
-			$keys[8] => $this->getKvoteType(),
+			$keys[8] => $this->getVvoteType(),
 			$keys[9] => $this->getCreatedAt(),
 			$keys[10] => $this->getCustomData(),
 		);
@@ -1313,7 +1313,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 */
 	public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = kvotePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = vvotePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->setByPosition($pos, $value);
 	}
 
@@ -1332,13 +1332,13 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 				$this->setId($value);
 				break;
 			case 1:
-				$this->setKshowId($value);
+				$this->setVshowId($value);
 				break;
 			case 2:
 				$this->setEntryId($value);
 				break;
 			case 3:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 4:
 				$this->setPuserId($value);
@@ -1353,7 +1353,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 				$this->setStatus($value);
 				break;
 			case 8:
-				$this->setKvoteType($value);
+				$this->setVvoteType($value);
 				break;
 			case 9:
 				$this->setCreatedAt($value);
@@ -1383,17 +1383,17 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 */
 	public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
 	{
-		$keys = kvotePeer::getFieldNames($keyType);
+		$keys = vvotePeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setKshowId($arr[$keys[1]]);
+		if (array_key_exists($keys[1], $arr)) $this->setVshowId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setEntryId($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setKuserId($arr[$keys[3]]);
+		if (array_key_exists($keys[3], $arr)) $this->setVuserId($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setPuserId($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setPartnerId($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setRank($arr[$keys[6]]);
 		if (array_key_exists($keys[7], $arr)) $this->setStatus($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setKvoteType($arr[$keys[8]]);
+		if (array_key_exists($keys[8], $arr)) $this->setVvoteType($arr[$keys[8]]);
 		if (array_key_exists($keys[9], $arr)) $this->setCreatedAt($arr[$keys[9]]);
 		if (array_key_exists($keys[10], $arr)) $this->setCustomData($arr[$keys[10]]);
 	}
@@ -1405,19 +1405,19 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 */
 	public function buildCriteria()
 	{
-		$criteria = new Criteria(kvotePeer::DATABASE_NAME);
+		$criteria = new Criteria(vvotePeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(kvotePeer::ID)) $criteria->add(kvotePeer::ID, $this->id);
-		if ($this->isColumnModified(kvotePeer::KSHOW_ID)) $criteria->add(kvotePeer::KSHOW_ID, $this->kshow_id);
-		if ($this->isColumnModified(kvotePeer::ENTRY_ID)) $criteria->add(kvotePeer::ENTRY_ID, $this->entry_id);
-		if ($this->isColumnModified(kvotePeer::KUSER_ID)) $criteria->add(kvotePeer::KUSER_ID, $this->kuser_id);
-		if ($this->isColumnModified(kvotePeer::PUSER_ID)) $criteria->add(kvotePeer::PUSER_ID, $this->puser_id);
-		if ($this->isColumnModified(kvotePeer::PARTNER_ID)) $criteria->add(kvotePeer::PARTNER_ID, $this->partner_id);
-		if ($this->isColumnModified(kvotePeer::RANK)) $criteria->add(kvotePeer::RANK, $this->rank);
-		if ($this->isColumnModified(kvotePeer::STATUS)) $criteria->add(kvotePeer::STATUS, $this->status);
-		if ($this->isColumnModified(kvotePeer::KVOTE_TYPE)) $criteria->add(kvotePeer::KVOTE_TYPE, $this->kvote_type);
-		if ($this->isColumnModified(kvotePeer::CREATED_AT)) $criteria->add(kvotePeer::CREATED_AT, $this->created_at);
-		if ($this->isColumnModified(kvotePeer::CUSTOM_DATA)) $criteria->add(kvotePeer::CUSTOM_DATA, $this->custom_data);
+		if ($this->isColumnModified(vvotePeer::ID)) $criteria->add(vvotePeer::ID, $this->id);
+		if ($this->isColumnModified(vvotePeer::VSHOW_ID)) $criteria->add(vvotePeer::VSHOW_ID, $this->vshow_id);
+		if ($this->isColumnModified(vvotePeer::ENTRY_ID)) $criteria->add(vvotePeer::ENTRY_ID, $this->entry_id);
+		if ($this->isColumnModified(vvotePeer::VUSER_ID)) $criteria->add(vvotePeer::VUSER_ID, $this->vuser_id);
+		if ($this->isColumnModified(vvotePeer::PUSER_ID)) $criteria->add(vvotePeer::PUSER_ID, $this->puser_id);
+		if ($this->isColumnModified(vvotePeer::PARTNER_ID)) $criteria->add(vvotePeer::PARTNER_ID, $this->partner_id);
+		if ($this->isColumnModified(vvotePeer::RANK)) $criteria->add(vvotePeer::RANK, $this->rank);
+		if ($this->isColumnModified(vvotePeer::STATUS)) $criteria->add(vvotePeer::STATUS, $this->status);
+		if ($this->isColumnModified(vvotePeer::VVOTE_TYPE)) $criteria->add(vvotePeer::VVOTE_TYPE, $this->vvote_type);
+		if ($this->isColumnModified(vvotePeer::CREATED_AT)) $criteria->add(vvotePeer::CREATED_AT, $this->created_at);
+		if ($this->isColumnModified(vvotePeer::CUSTOM_DATA)) $criteria->add(vvotePeer::CUSTOM_DATA, $this->custom_data);
 
 		return $criteria;
 	}
@@ -1432,9 +1432,9 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 */
 	public function buildPkeyCriteria()
 	{
-		$criteria = new Criteria(kvotePeer::DATABASE_NAME);
+		$criteria = new Criteria(vvotePeer::DATABASE_NAME);
 
-		$criteria->add(kvotePeer::ID, $this->id);
+		$criteria->add(vvotePeer::ID, $this->id);
 
 		return $criteria;
 	}
@@ -1465,18 +1465,18 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 * If desired, this method can also make copies of all associated (fkey referrers)
 	 * objects.
 	 *
-	 * @param      object $copyObj An object of kvote (or compatible) type.
+	 * @param      object $copyObj An object of vvote (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
 	 * @throws     PropelException
 	 */
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 
-		$copyObj->setKshowId($this->kshow_id);
+		$copyObj->setVshowId($this->vshow_id);
 
 		$copyObj->setEntryId($this->entry_id);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setPuserId($this->puser_id);
 
@@ -1486,7 +1486,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 
 		$copyObj->setStatus($this->status);
 
-		$copyObj->setKvoteType($this->kvote_type);
+		$copyObj->setVvoteType($this->vvote_type);
 
 		$copyObj->setCreatedAt($this->created_at);
 
@@ -1508,7 +1508,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 * objects.
 	 *
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-	 * @return     kvote Clone of current object.
+	 * @return     vvote Clone of current object.
 	 * @throws     PropelException
 	 */
 	public function copy($deepCopy = false)
@@ -1524,16 +1524,16 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @var     kvote Clone of current object.
+	 * @var     vvote Clone of current object.
 	 */
 	protected $copiedFrom = null;
 	
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @param      kvote $copiedFrom Clone of current object.
+	 * @param      vvote $copiedFrom Clone of current object.
 	 */
-	public function setCopiedFrom(kvote $copiedFrom)
+	public function setCopiedFrom(vvote $copiedFrom)
 	{
 		$this->copiedFrom = $copiedFrom;
 	}
@@ -1545,37 +1545,37 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	 * same instance for all member of this class. The method could therefore
 	 * be static, but this would prevent one from overriding the behavior.
 	 *
-	 * @return     kvotePeer
+	 * @return     vvotePeer
 	 */
 	public function getPeer()
 	{
 		if (self::$peer === null) {
-			self::$peer = new kvotePeer();
+			self::$peer = new vvotePeer();
 		}
 		return self::$peer;
 	}
 
 	/**
-	 * Declares an association between this object and a kshow object.
+	 * Declares an association between this object and a vshow object.
 	 *
-	 * @param      kshow $v
-	 * @return     kvote The current object (for fluent API support)
+	 * @param      vshow $v
+	 * @return     vvote The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkshowRelatedByKshowId(kshow $v = null)
+	public function setvshowRelatedByVshowId(vshow $v = null)
 	{
 		if ($v === null) {
-			$this->setKshowId(NULL);
+			$this->setVshowId(NULL);
 		} else {
-			$this->setKshowId($v->getId());
+			$this->setVshowId($v->getId());
 		}
 
-		$this->akshowRelatedByKshowId = $v;
+		$this->avshowRelatedByVshowId = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kshow object, it will not be re-added.
+		// If this object has already been added to the vshow object, it will not be re-added.
 		if ($v !== null) {
-			$v->addkvoteRelatedByKshowId($this);
+			$v->addvvoteRelatedByVshowId($this);
 		}
 
 		return $this;
@@ -1583,32 +1583,32 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kshow object
+	 * Get the associated vshow object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kshow The associated kshow object.
+	 * @return     vshow The associated vshow object.
 	 * @throws     PropelException
 	 */
-	public function getkshowRelatedByKshowId(PropelPDO $con = null)
+	public function getvshowRelatedByVshowId(PropelPDO $con = null)
 	{
-		if ($this->akshowRelatedByKshowId === null && (($this->kshow_id !== "" && $this->kshow_id !== null))) {
-			$this->akshowRelatedByKshowId = kshowPeer::retrieveByPk($this->kshow_id);
+		if ($this->avshowRelatedByVshowId === null && (($this->vshow_id !== "" && $this->vshow_id !== null))) {
+			$this->avshowRelatedByVshowId = vshowPeer::retrieveByPk($this->vshow_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akshowRelatedByKshowId->addkvotesRelatedByKshowId($this);
+			   $this->avshowRelatedByVshowId->addvvotesRelatedByVshowId($this);
 			 */
 		}
-		return $this->akshowRelatedByKshowId;
+		return $this->avshowRelatedByVshowId;
 	}
 
 	/**
 	 * Declares an association between this object and a entry object.
 	 *
 	 * @param      entry $v
-	 * @return     kvote The current object (for fluent API support)
+	 * @return     vvote The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
 	public function setentry(entry $v = null)
@@ -1624,7 +1624,7 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 		// Add binding for other direction of this n:n relationship.
 		// If this object has already been added to the entry object, it will not be re-added.
 		if ($v !== null) {
-			$v->addkvote($this);
+			$v->addvvote($this);
 		}
 
 		return $this;
@@ -1647,33 +1647,33 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->aentry->addkvotes($this);
+			   $this->aentry->addvvotes($this);
 			 */
 		}
 		return $this->aentry;
 	}
 
 	/**
-	 * Declares an association between this object and a kshow object.
+	 * Declares an association between this object and a vshow object.
 	 *
-	 * @param      kshow $v
-	 * @return     kvote The current object (for fluent API support)
+	 * @param      vshow $v
+	 * @return     vvote The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkshowRelatedByKuserId(kshow $v = null)
+	public function setvshowRelatedByVuserId(vshow $v = null)
 	{
 		if ($v === null) {
-			$this->setKuserId(NULL);
+			$this->setVuserId(NULL);
 		} else {
-			$this->setKuserId($v->getId());
+			$this->setVuserId($v->getId());
 		}
 
-		$this->akshowRelatedByKuserId = $v;
+		$this->avshowRelatedByVuserId = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kshow object, it will not be re-added.
+		// If this object has already been added to the vshow object, it will not be re-added.
 		if ($v !== null) {
-			$v->addkvoteRelatedByKuserId($this);
+			$v->addvvoteRelatedByVuserId($this);
 		}
 
 		return $this;
@@ -1681,25 +1681,25 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kshow object
+	 * Get the associated vshow object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kshow The associated kshow object.
+	 * @return     vshow The associated vshow object.
 	 * @throws     PropelException
 	 */
-	public function getkshowRelatedByKuserId(PropelPDO $con = null)
+	public function getvshowRelatedByVuserId(PropelPDO $con = null)
 	{
-		if ($this->akshowRelatedByKuserId === null && ($this->kuser_id !== null)) {
-			$this->akshowRelatedByKuserId = kshowPeer::retrieveByPk($this->kuser_id);
+		if ($this->avshowRelatedByVuserId === null && ($this->vuser_id !== null)) {
+			$this->avshowRelatedByVuserId = vshowPeer::retrieveByPk($this->vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akshowRelatedByKuserId->addkvotesRelatedByKuserId($this);
+			   $this->avshowRelatedByVuserId->addvvotesRelatedByVuserId($this);
 			 */
 		}
-		return $this->akshowRelatedByKuserId;
+		return $this->avshowRelatedByVuserId;
 	}
 
 	/**
@@ -1716,9 +1716,9 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 		if ($deep) {
 		} // if ($deep)
 
-			$this->akshowRelatedByKshowId = null;
+			$this->avshowRelatedByVshowId = null;
 			$this->aentry = null;
-			$this->akshowRelatedByKuserId = null;
+			$this->avshowRelatedByVuserId = null;
 	}
 
 	/* ---------------------- CustomData functions ------------------------- */
@@ -1864,4 +1864,4 @@ abstract class Basekvote extends BaseObject  implements Persistent {
 	
 	/* ---------------------- CustomData functions ------------------------- */
 	
-} // Basekvote
+} // Basevvote

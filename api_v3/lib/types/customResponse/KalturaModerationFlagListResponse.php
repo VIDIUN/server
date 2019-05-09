@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaModerationFlagListResponse extends KalturaListResponse
+class VidiunModerationFlagListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaModerationFlagArray
+	 * @var VidiunModerationFlagArray
 	 * @readonly
 	 */
 	public $objects;

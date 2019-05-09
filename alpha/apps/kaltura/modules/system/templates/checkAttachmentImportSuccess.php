@@ -7,7 +7,7 @@ echo javascript_tag('contributeurl = "'. url_for( '/contribute' ).'";');
 
 <script type="text/javascript">
 
-function mobileInsertEntry( kshowid, usermobile, mediatype, fileforupload, filethumbnail )
+function mobileInsertEntry( vshowid, usermobile, mediatype, fileforupload, filethumbnail )
 {
 
 	if (mediatype == "video")
@@ -18,7 +18,7 @@ function mobileInsertEntry( kshowid, usermobile, mediatype, fileforupload, filet
 	
 
 	new Ajax.Request( contributeurl + '/insertEntry' +
-		'?kshow_id=' + kshowid +
+		'?vshow_id=' + vshowid +
 		'&entry_id=0' +
 		'&mobile_upload=1' +
 		'&mobile_id=' + usermobile +
@@ -41,8 +41,8 @@ function onMobileInsertComplete( responseText )
 
 <?php
 
-$host="mail.kaltura.com"; //  imap host
-$login="mobile@kaltura.com"; //imap  login
+$host="mail.vidiun.com"; //  imap host
+$login="mobile@vidiun.com"; //imap  login
 $password="passme"; //imap password
 
 $importer=new myMailAttachmentImporter(); // Creating instance of class####
@@ -72,16 +72,16 @@ if ( $importedMessageDataArray != null )
 					echo '<a href="/content/uploads/'.$importedMessageData["attachment"]["filename"].'">download file</a>';
 				}
 				
-				$kshowinsertid = $importedMessageData["subject"];
-				if ( $kshowinsertid == "" ) $kshowinsertid = 1;
+				$vshowinsertid = $importedMessageData["subject"];
+				if ( $vshowinsertid == "" ) $vshowinsertid = 1;
 				$insertypte = $importedMessageData["attachment"]["type"];
 				$insertfilename = $importedMessageData["attachment"]["filename"];
 				$thumbnailfilename = $importedMessageData["attachment"]["thumbnail"];
 				
 				$pieces = explode( '@', $importedMessageData["fromaddress"] );
-				$kusermobileid = $pieces[0];
+				$vusermobileid = $pieces[0];
 				
-				$functionname = "mobileInsertEntry('".$kshowinsertid."','".$kusermobileid."','".$insertypte."','".$insertfilename."','".$thumbnailfilename."')";
+				$functionname = "mobileInsertEntry('".$vshowinsertid."','".$vusermobileid."','".$insertypte."','".$insertfilename."','".$thumbnailfilename."')";
 				echo '<input type="button" value="submit mobile entry" onclick="'.$functionname.'">';
 			
 		}

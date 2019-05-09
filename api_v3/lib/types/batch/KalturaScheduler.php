@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaScheduler extends KalturaObject 
+class VidiunScheduler extends VidiunObject 
 {
 	/**
 	 * The id of the Scheduler
@@ -42,7 +42,7 @@ class KalturaScheduler extends KalturaObject
 	/**
 	 * Array of the last statuses
 	 *  
-	 * @var KalturaSchedulerStatusArray
+	 * @var VidiunSchedulerStatusArray
 	 * @readonly
 	 */
 	public $statuses;
@@ -52,7 +52,7 @@ class KalturaScheduler extends KalturaObject
 	/**
 	 * Array of the last configs
 	 *  
-	 * @var KalturaSchedulerConfigArray
+	 * @var VidiunSchedulerConfigArray
 	 * @readonly
 	 */
 	public $configs;
@@ -62,7 +62,7 @@ class KalturaScheduler extends KalturaObject
 	/**
 	 * Array of the workers
 	 *  
-	 * @var KalturaSchedulerWorkerArray
+	 * @var VidiunSchedulerWorkerArray
 	 * @readonly
 	 */
 	public $workers;
@@ -126,15 +126,15 @@ class KalturaScheduler extends KalturaObject
 	    
 	/**
 	 * @param Scheduler $dbData
-	 * @return KalturaScheduler
+	 * @return VidiunScheduler
 	 */
-	public function doFromObject($dbData, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbData, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($dbData, $responseProfile);
 		
 		$statusesArray = $dbData->getStatuses();
 		if(is_array($statusesArray))
-			$this->statuses = KalturaSchedulerStatusArray::fromValuesArray($statusesArray, $this->id, $this->configuredId);
+			$this->statuses = VidiunSchedulerStatusArray::fromValuesArray($statusesArray, $this->id, $this->configuredId);
 		
 		$this->lastStatusStr = date('d-m-Y H:i:s', $this->lastStatus);
 		
@@ -143,14 +143,14 @@ class KalturaScheduler extends KalturaObject
 	    
 	/**
 	 * @param Scheduler $dbData
-	 * @return KalturaScheduler
+	 * @return VidiunScheduler
 	 */
 	public function statusFromObject($dbData)
 	{
 		$this->fromObject($dbData);
 		
-		$this->workers = KalturaSchedulerWorkerArray::statusFromSchedulerWorkerArray($dbData->getWorkers());
-		$this->configs = KalturaSchedulerConfigArray::fromDbArray($dbData->getConfigs());
+		$this->workers = VidiunSchedulerWorkerArray::statusFromSchedulerWorkerArray($dbData->getWorkers());
+		$this->configs = VidiunSchedulerConfigArray::fromDbArray($dbData->getConfigs());
 		
 		return $this;
 	}
@@ -160,7 +160,7 @@ class KalturaScheduler extends KalturaObject
 		if(is_null($dbData))
 			$dbData = new Scheduler();
 			
-		if(!is_null($this->statuses) && $this->statuses instanceof KalturaSchedulerStatusArray)
+		if(!is_null($this->statuses) && $this->statuses instanceof VidiunSchedulerStatusArray)
 			$dbData->setStatuses($this->statuses->toValuesArray());
 			
 		return parent::toObject($dbData, $props_to_skip);

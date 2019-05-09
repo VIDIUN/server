@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kDeleteJobData extends kJobData
+class vDeleteJobData extends vJobData
 {
 	/**
 	 * The filter should return the list of objects that need to be deleted.

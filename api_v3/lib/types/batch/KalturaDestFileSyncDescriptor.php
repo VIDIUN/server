@@ -3,12 +3,12 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDestFileSyncDescriptor extends KalturaFileSyncDescriptor
+class VidiunDestFileSyncDescriptor extends VidiunFileSyncDescriptor
 {
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kDestFileSyncDescriptor();
+			$dbObject = new vDestFileSyncDescriptor();
 			
 		return parent::toObject($dbObject, $skip);
 	}

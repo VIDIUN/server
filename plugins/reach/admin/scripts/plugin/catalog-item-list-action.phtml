@@ -34,24 +34,24 @@
         </tfoot>
         <tbody>
 				<?php if($this->paginator)
-						foreach ($this->paginator as /* Kaltura_Client_Reach_Type_VendorCatalogItem */  $catalogItem): ?>
+						foreach ($this->paginator as /* Vidiun_Client_Reach_Type_VendorCatalogItem */  $catalogItem): ?>
             <tr class="<?php echo $this->cycle(array('odd', 'even'))->next(); ?>">
                 <td><?php echo $catalogItem->id; ?></td>
-                <td><?php echo $this->enumTranslate('Kaltura_Client_Reach_Enum_VendorCatalogItemStatus', $catalogItem->status); ?></td>
+                <td><?php echo $this->enumTranslate('Vidiun_Client_Reach_Enum_VendorCatalogItemStatus', $catalogItem->status); ?></td>
                 <td><?php echo $catalogItem->name; ?></td>
                 <td><?php echo $catalogItem->systemName; ?></td>
                 <td><?php echo $catalogItem->vendorPartnerId; ?></td>
-                <td><?php echo $this->enumTranslate('Kaltura_Client_Reach_Enum_VendorServiceFeature', $catalogItem->serviceFeature); ?></td>
-                <td><?php echo $this->enumTranslate('Kaltura_Client_Reach_Enum_VendorServiceType', $catalogItem->serviceType); ?></td>
-                <td><?php echo $this->enumTranslate('Kaltura_Client_Reach_Enum_VendorServiceTurnAroundTime', $catalogItem->turnAroundTime); ?></td>
-                <td><?php echo $this->enumTranslate('Kaltura_Client_Reach_Enum_CatalogItemLanguage', $catalogItem->sourceLanguage); ?></td>
+                <td><?php echo $this->enumTranslate('Vidiun_Client_Reach_Enum_VendorServiceFeature', $catalogItem->serviceFeature); ?></td>
+                <td><?php echo $this->enumTranslate('Vidiun_Client_Reach_Enum_VendorServiceType', $catalogItem->serviceType); ?></td>
+                <td><?php echo $this->enumTranslate('Vidiun_Client_Reach_Enum_VendorServiceTurnAroundTime', $catalogItem->turnAroundTime); ?></td>
+                <td><?php echo $this->enumTranslate('Vidiun_Client_Reach_Enum_CatalogItemLanguage', $catalogItem->sourceLanguage); ?></td>
                 <td><?php if (isset($catalogItem->targetLanguage))
-                    echo $this->enumTranslate('Kaltura_Client_Reach_Enum_CatalogItemLanguage', $catalogItem->targetLanguage);
+                    echo $this->enumTranslate('Vidiun_Client_Reach_Enum_CatalogItemLanguage', $catalogItem->targetLanguage);
                 else
                     echo null;?>
                 </td>
                 <td><?php if (isset($catalogItem->outputFormat))
-						echo $this->enumTranslate('Kaltura_Client_Reach_Enum_VendorCatalogItemOutputFormat', $catalogItem->outputFormat);
+						echo $this->enumTranslate('Vidiun_Client_Reach_Enum_VendorCatalogItemOutputFormat', $catalogItem->outputFormat);
 					else
 						echo null;?>
                 </td>
@@ -62,9 +62,9 @@
                             onchange="doAction(this.value, <?php echo $catalogItem->id; ?>)">
                         <option value=""><?php echo $this->translate('Select Action'); ?></option>
                         <option value="configureCatalogItem"><?php echo $this->translate('Configure'); ?></option>
-						<?php if ($catalogItem->status === Kaltura_Client_Reach_Enum_VendorCatalogItemStatus::DEPRECATED): ?>
+						<?php if ($catalogItem->status === Vidiun_Client_Reach_Enum_VendorCatalogItemStatus::DEPRECATED): ?>
                             <option value="enable"><?php echo $this->translate('Enable'); ?></option>
-						<?php elseif ($catalogItem->status === Kaltura_Client_Reach_Enum_VendorCatalogItemStatus::ACTIVE): ?>
+						<?php elseif ($catalogItem->status === Vidiun_Client_Reach_Enum_VendorCatalogItemStatus::ACTIVE): ?>
                             <option value="disable"><?php echo $this->translate('Deprecate'); ?></option>
 						<?php endif; ?>
                         <option value="remove"><?php echo $this->translate('Remove'); ?></option>
@@ -111,7 +111,7 @@
 		changeStatus(
 			catalogItemId,
 			
-			<?php echo Kaltura_Client_Reach_Enum_VendorCatalogItemStatus::ACTIVE; ?>,
+			<?php echo Vidiun_Client_Reach_Enum_VendorCatalogItemStatus::ACTIVE; ?>,
 			partnerId,
 			function () {
 				alert('<?php echo $this->translate('Catalog Item enabled');?>');
@@ -122,7 +122,7 @@
 	function disable(catalogItemId, partnerId) {
 		changeStatus(
 			catalogItemId,
-			<?php echo Kaltura_Client_Reach_Enum_VendorCatalogItemStatus::DEPRECATED; ?>,
+			<?php echo Vidiun_Client_Reach_Enum_VendorCatalogItemStatus::DEPRECATED; ?>,
 			partnerId,
 			function () {
 				alert('<?php echo $this->translate('Catalog Item disabled');?>');
@@ -135,7 +135,7 @@
 		if (ok) {
 			changeStatus(
 				catalogItemId,
-				<?php echo Kaltura_Client_Reach_Enum_VendorCatalogItemStatus::DELETED; ?>,
+				<?php echo Vidiun_Client_Reach_Enum_VendorCatalogItemStatus::DELETED; ?>,
 				partnerId,
 				function () {
 					alert('<?php echo $this->translate('Catalog Item removed');?>');
@@ -361,15 +361,15 @@
 		jQuery('#filterSourceLanguage').attr('hidden', 1);
 		jQuery('#filterTargetLanguage').attr('hidden', 1);
 
-		if (templateServiceFeature == <?php echo Kaltura_Client_Reach_Enum_VendorServiceFeature::CAPTIONS; ?>) {
+		if (templateServiceFeature == <?php echo Vidiun_Client_Reach_Enum_VendorServiceFeature::CAPTIONS; ?>) {
 			jQuery('#filterSourceLanguage').removeAttr('hidden');
 		}
 
-		if (templateServiceFeature == <?php echo Kaltura_Client_Reach_Enum_VendorServiceFeature::ALIGNMENT; ?>) {
+		if (templateServiceFeature == <?php echo Vidiun_Client_Reach_Enum_VendorServiceFeature::ALIGNMENT; ?>) {
 			jQuery('#filterSourceLanguage').removeAttr('hidden');
 		}
 		
-		if (templateServiceFeature == <?php echo Kaltura_Client_Reach_Enum_VendorServiceFeature::TRANSLATION; ?>) {
+		if (templateServiceFeature == <?php echo Vidiun_Client_Reach_Enum_VendorServiceFeature::TRANSLATION; ?>) {
 			jQuery('#filterSourceLanguage').removeAttr('hidden');
 			jQuery('#filterTargetLanguage').removeAttr('hidden');
 		}

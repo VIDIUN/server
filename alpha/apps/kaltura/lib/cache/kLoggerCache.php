@@ -4,7 +4,7 @@
  * @package server-infra
  * @subpackage cache
  */
-class kLoggerCache
+class vLoggerCache
 {
 	const LOGGER_APC_CACHE_KEY_PREFIX = 'LoggerInstance_';
 
@@ -14,7 +14,7 @@ class kLoggerCache
 	 */
 	static public function InitLogger($configName, $context = null)
 	{
-		if (KalturaLog::getLogger())	// already initialized
+		if (VidiunLog::getLogger())	// already initialized
 			return;
 		
 		if (function_exists('apc_fetch'))
@@ -24,9 +24,9 @@ class kLoggerCache
 			if ($logger)
 			{
 				list($logger, $cacheVersionId) = $logger;
-				if ($cacheVersionId == kConf::getCachedVersionId())
+				if ($cacheVersionId == vConf::getCachedVersionId())
 				{
-					KalturaLog::setLogger($logger);
+					VidiunLog::setLogger($logger);
 					return;
 				}
 			}
@@ -34,14 +34,14 @@ class kLoggerCache
 
 		try // we don't want to fail when logger is not configured right
 		{
-			$config = new Zend_Config(kConf::getMap('logger'));
+			$config = new Zend_Config(vConf::getMap('logger'));
 			
-			KalturaLog::initLog($config->$configName);
+			VidiunLog::initLog($config->$configName);
 			if ($context)
-				KalturaLog::setContext($context);
+				VidiunLog::setContext($context);
 					
 			if (function_exists('apc_store'))
-				apc_store($cacheKey, array(KalturaLog::getLogger(), kConf::getCachedVersionId()));
+				apc_store($cacheKey, array(VidiunLog::getLogger(), vConf::getCachedVersionId()));
 		}
 		catch(Zend_Config_Exception $ex)
 		{

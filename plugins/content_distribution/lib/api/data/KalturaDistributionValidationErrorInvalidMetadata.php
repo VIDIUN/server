@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaDistributionValidationErrorInvalidMetadata extends KalturaDistributionValidationErrorInvalidData
+class VidiunDistributionValidationErrorInvalidMetadata extends VidiunDistributionValidationErrorInvalidData
 {
 	/**
 	 * @var int

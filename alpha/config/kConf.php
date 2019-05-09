@@ -13,24 +13,24 @@ stream_wrapper_unregister ('https');
 $include_path = realpath(__DIR__ . '/../../vendor/ZendFramework/library') . PATH_SEPARATOR . get_include_path();
 set_include_path($include_path);
 
-require_once __DIR__ . '/../../infra/kEnvironment.php';
-require_once __DIR__ . '/kConfCacheManager.php';
+require_once __DIR__ . '/../../infra/vEnvironment.php';
+require_once __DIR__ . '/vConfCacheManager.php';
 
 /**
- * Manages all Kaltura configurations
+ * Manages all Vidiun configurations
  * @package server-infra
  * @subpackage Configuration
  */
-class kConf extends kEnvironment
+class vConf extends vEnvironment
 {
 	public static function hasMap($mapName)
 	{
-		return kConfCacheManager::hasMap($mapName);
+		return vConfCacheManager::hasMap($mapName);
 	}
 
 	public static function getMap($mapName)
 	{
-		return kConfCacheManager::load($mapName);
+		return vConfCacheManager::load($mapName);
 	}
 
 	protected static function getInternal($paramName, $mapName)
@@ -70,7 +70,7 @@ class kConf extends kEnvironment
 	 */
 	public static function getArrayValue($paramName, $sectionName, $mapName = 'local', $defaultValue = false)
 	{
-		$result = kConf::get($sectionName, $mapName, $defaultValue);
+		$result = vConf::get($sectionName, $mapName, $defaultValue);
 		if (is_array($result) && isset($result[$paramName]))
 			return $result[$paramName];
 		return $defaultValue;
@@ -78,7 +78,7 @@ class kConf extends kEnvironment
 
 	public static function getCachedVersionId()
 	{
-		return kConfCacheManager::loadKey();
+		return vConfCacheManager::loadKey();
 	}
 
 	public static function getAll()

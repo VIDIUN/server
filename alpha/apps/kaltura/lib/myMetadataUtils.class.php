@@ -3,7 +3,7 @@
 class myMetadataUtils
 {
 	const METADATA_EDITOR_SIMPLE = "Simple";
-	const METADATA_EDITOR_ADVANCED = "Keditor";
+	const METADATA_EDITOR_ADVANCED = "Veditor";
 	const METADATA_QUICK_EDIT = "QuickEdit";
 	
 	const LAST_PENDING_TIMESTAMP_ELEM_NAME = "LastPendingTimeStamp";
@@ -27,7 +27,7 @@ class myMetadataUtils
 
 		if ($style < count(self::$textSlidesStyles))
 		{
-			$k_id = $item->getAttribute ( "entry_id" );
+			$v_id = $item->getAttribute ( "entry_id" );
 			$line1 = $item->getAttribute ( "label1" );
 			$line2 = $item->getAttribute ( "label2" );
 
@@ -42,7 +42,7 @@ class myMetadataUtils
 			$line = $line1.'&#xD;'.$line2;
 
 			$vidassets .=
-				'<vidAsset k_id="'.$k_id.'" type="SOLID" name="'.$bg_color.'" url="SOLID">'.
+				'<vidAsset v_id="'.$v_id.'" type="SOLID" name="'.$bg_color.'" url="SOLID">'.
 					'<StreamInfo file_name="SOLID" start_time="'.$assetStartTime.'" len_time="'.$lenTimeSecs.'" posX="0" posY="0" start_byte="-1" end_byte="-1" total_bytes="-1" real_seek_time="-1" volume="1" pan="0" isSingleFrame="0" real_start_byte="-1" real_end_byte="-1"/>'.
 					'<EndTransition type="None" StartTime="'.$lenTimeSecs.'" length="0" />'.
 				'</vidAsset>';
@@ -63,10 +63,10 @@ class myMetadataUtils
 		return array($vidassets, $overlays);
 	}
 
-	static public function getExtData($kshow_id, $partner_id)
+	static public function getExtData($vshow_id, $partner_id)
 	{
-		$kshow = kshowPeer::retrieveByPK( $kshow_id );
-		$show_entry_id = $kshow->getShowEntryId();
+		$vshow = vshowPeer::retrieveByPK( $vshow_id );
+		$show_entry_id = $vshow->getShowEntryId();
 		$show_entry = entryPeer::retrieveByPK( $show_entry_id );
 
 		$show_entry_data_key = $show_entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
@@ -74,7 +74,7 @@ class myMetadataUtils
 		if ($show_entry->getMediaType() != entry::ENTRY_MEDIA_TYPE_SHOW)
 			return array(null, null);
 
-		$content = kFileSyncUtils::file_get_contents($show_entry_data_key);
+		$content = vFileSyncUtils::file_get_contents($show_entry_data_key);
 
 		if ($content == "")
 			return array(null, null);
@@ -96,16 +96,16 @@ class myMetadataUtils
 		return array($xml_doc, $node);
 	}
 
-	static public function setMetadata($content, $kshow, $show_entry , $ignore_current = false, $version_info = null )
+	static public function setMetadata($content, $vshow, $show_entry , $ignore_current = false, $version_info = null )
 	{
 		$xml_content = "";
 
 		$show_entry_data_key = $show_entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
 		
-		$current_content = ($show_entry->getMediaType() != entry::ENTRY_MEDIA_TYPE_SHOW) ? "" : kFileSyncUtils::file_get_contents( $show_entry_data_key );
+		$current_content = ($show_entry->getMediaType() != entry::ENTRY_MEDIA_TYPE_SHOW) ? "" : vFileSyncUtils::file_get_contents( $show_entry_data_key );
 		if ( $ignore_current ) $current_content = "";
 
-		$update_kshow = false;
+		$update_vshow = false;
 
 		// compare the content and store only if different
 		if ( $content != $current_content )
@@ -130,7 +130,7 @@ class myMetadataUtils
 				$content = self::addVersionInfo($content, $version_info);
 			}
 			
-			//fixme $content = myFlvStreamer::modifiedByKeditor ( $content );
+			//fixme $content = myFlvStreamer::modifiedByVeditor ( $content );
 
 			// total_duration is in seconds with 2 digits after the decimal point
 			$show_entry->setLengthInMsecs ( $total_duration * 1000 );
@@ -139,16 +139,16 @@ class myMetadataUtils
 			$show_entry->setModifiedAt(time());		// update the modified_at date
 			$show_entry->save();
 
-			kFileSyncUtils::file_put_contents($show_entry_data_key, $content, true);
+			vFileSyncUtils::file_put_contents($show_entry_data_key, $content, true);
 			
-			$xml_content = kFileSyncUtils::file_get_contents( $show_entry_data_key ); // replaced__getFileContent
+			$xml_content = vFileSyncUtils::file_get_contents( $show_entry_data_key ); // replaced__getFileContent
 			
-			$update_kshow = true;
+			$update_vshow = true;
 
 			$show_entry_id = $show_entry->getId();
 			// update the roughcut_entry table
 			$all_entries_for_roughcut = self::getAllEntries ( $content );
-			roughcutEntry::updateRoughcut( $show_entry->getId(), $show_entry->getVersion(), $show_entry->getKshowId()  , $all_entries_for_roughcut );
+			roughcutEntry::updateRoughcut( $show_entry->getId(), $show_entry->getVersion(), $show_entry->getVshowId()  , $all_entries_for_roughcut );
 
 			$xml_content = $content;
 		}
@@ -158,16 +158,16 @@ class myMetadataUtils
 			$comments = "old and new files are the same";
 		}
 
-		if ( ! $kshow->getHasRoughcut() && $kshow->getIntroId() != $show_entry->getId())
+		if ( ! $vshow->getHasRoughcut() && $vshow->getIntroId() != $show_entry->getId())
 		{
-			$kshow->setHasRoughcut( true );
-			$update_kshow = true;
+			$vshow->setHasRoughcut( true );
+			$update_vshow = true;
 		}
 
-		myStatisticsMgr::incKshowUpdates( $kshow );
-		$kshow->save();
+		myStatisticsMgr::incVshowUpdates( $vshow );
+		$vshow->save();
 
-		return array($xml_content, $comments, $update_kshow);
+		return array($xml_content, $comments, $update_vshow);
 	}
 
 	public static function getAllEntries ( $content_or_doc )
@@ -204,10 +204,10 @@ class myMetadataUtils
 
   			if ( $type != "VIDEO" && $type != "AUDIO" && $type != "IMAGE" ) continue;
 
-  			$k_id =  $asset->getAttribute ( "k_id" );
-  			if ( ! in_array ( $k_id , $list ) )
+  			$v_id =  $asset->getAttribute ( "v_id" );
+  			if ( ! in_array ( $v_id , $list ) )
   			{
-  				$list[] = $k_id;
+  				$list[] = $v_id;
   			}
 		}
 
@@ -219,7 +219,7 @@ class myMetadataUtils
 	
 	// ASSUME : NO MULTIPLE ROUGHCUT !!!!
 	// the entry will be added to the current $content !
-	static public function addEntryToMetadata ( $content, $entry , $current_kshow_version = null, $version_info = null )
+	static public function addEntryToMetadata ( $content, $entry , $current_vshow_version = null, $version_info = null )
 	{
 		if ( !$entry)
 		{
@@ -267,12 +267,12 @@ class myMetadataUtils
 
 		$host_name = null;
 		// set the updated list in the xml
-		$host_elem = kXml::getFirstElement( $xml_doc , "Host" );
+		$host_elem = vXml::getFirstElement( $xml_doc , "Host" );
 		if ( $host_elem==null || empty ( $host_elem->nodeValue ) || strlen ( $host_elem->nodeValue ) < 6 )
 		{
 			$host_name = requestUtils::getHost();
-			$metadata = kXml::getFirstElement( $xml_doc , "MetaData" );
-			kXml::setChildElement( $xml_doc , $metadata , "Host" , $host_name , false );
+			$metadata = vXml::getFirstElement( $xml_doc , "MetaData" );
+			vXml::setChildElement( $xml_doc , $metadata , "Host" , $host_name , false );
 			$should_save = true;
 		}
 		else
@@ -282,7 +282,7 @@ class myMetadataUtils
 
 		$prev_transition_duration = 0;
 
-		$vidAsset_parentNode = kXml::getFirstElement ( $xml_doc , "VideoAssets" );
+		$vidAsset_parentNode = vXml::getFirstElement ( $xml_doc , "VideoAssets" );
 
 		$vidAssets = $xpath->query("//VideoAssets/vidAsset");
 		$vidAssets_count = 0;
@@ -293,7 +293,7 @@ class myMetadataUtils
 				if ($vidAsset_parentNode == null )
 					$vidAsset_parentNode = $vidAsset->parentNode;
 			}
-			$end_transition = kXml::getFirstElement ( $vidAsset , "EndTransition" );
+			$end_transition = vXml::getFirstElement ( $vidAsset , "EndTransition" );
 			if ( $end_transition  )
 			{
 				// by the end of the loop we'll have the last transisiotn in hand
@@ -318,9 +318,9 @@ class myMetadataUtils
 		if ( $entry->getStatus() == entryStatus::ERROR_CONVERTING )
 		{
 			// return the XML - new if modified and the original if not
-			if ( $current_kshow_version != null)
+			if ( $current_vshow_version != null)
 			{
-//				$entry->setUpdateWhenReady ( $current_kshow_version );
+//				$entry->setUpdateWhenReady ( $current_vshow_version );
 				$should_save = self::updatePending ( $xml_doc , $entry_id , false );
 				// increment the count on the show entry
 			}
@@ -333,12 +333,12 @@ class myMetadataUtils
 		if ( $entry->getStatus() != entryStatus::READY )
 		{
 			// return the XML - new if modified and the original if not
-			if ( $current_kshow_version != null)
+			if ( $current_vshow_version != null)
 			{
-				$entry->setUpdateWhenReady ( $current_kshow_version );
+				$entry->setUpdateWhenReady ( $current_vshow_version );
 				$should_save = self::updatePending ( $xml_doc , $entry_id , true );
 				// increment the count on the show entry
-				$show_entry = $entry->getKshow()->getShowEntry();
+				$show_entry = $entry->getVshow()->getShowEntry();
 				if($show_entry)
 				{
 					$show_entry->incInCustomData ( "pending_entries" );
@@ -353,7 +353,7 @@ class myMetadataUtils
 
 		if ( $vidAssets_count >= self::MAX_ENTRIES_IN_METADATA )
 		{
-			KalturaLog::log ( "Exceeded number of entries in metadata [" . self::MAX_ENTRIES_IN_METADATA . "]. Will not add entry [{$entry_id}] to file." );
+			VidiunLog::log ( "Exceeded number of entries in metadata [" . self::MAX_ENTRIES_IN_METADATA . "]. Will not add entry [{$entry_id}] to file." );
 			$should_save = false;
 			return null;
 		}
@@ -396,8 +396,8 @@ class myMetadataUtils
 		if ($media_type == entry::ENTRY_MEDIA_TYPE_VIDEO )
 		{
 		// for video - change the URL of the asset to use the clipper
-/* http://www6.localhost.com/index.php/keditorservices/flvclipper?entry_id=12353 */
-			$clipper_path = $host_name . "/index.php/keditorservices/flvclipper?entry_id=$entry_id" ;
+/* http://www6.localhost.com/index.php/veditorservices/flvclipper?entry_id=12353 */
+			$clipper_path = $host_name . "/index.php/veditorservices/flvclipper?entry_id=$entry_id" ;
 			$media_url = $clipper_path;
 		}
 
@@ -410,9 +410,9 @@ class myMetadataUtils
 
 		$transition_type = "dissolve"; // the dissolve transition is from the cross family. It should not be used with the simple editor
 		
-		$fixed_media_name = kString::xmlEncode($media_name);
+		$fixed_media_name = vString::xmlEncode($media_name);
 		$newVidasset = "\n" .
-		'		<vidAsset k_id="'.$entry_id.'" type="'.$media_type_str.'" name="'.$fixed_media_name.'" url="'.$media_url.'">'. "\n".
+		'		<vidAsset v_id="'.$entry_id.'" type="'.$media_type_str.'" name="'.$fixed_media_name.'" url="'.$media_url.'">'. "\n".
 		'			<StreamInfo file_name="'.$relMedia_url.'" start_time="'.$startTime.'" len_time="'.$lenTime.'"
 						posX="0" posY="0" start_byte="-1" end_byte="-1" total_bytes="-1" real_seek_time="-1" volume="1"
 						pan="0" isSingleFrame="0" real_start_byte="-1" real_end_byte="-1" Clipped_Start="0" Clipped_Len="' . $lenTime . '"/>'. "\n".
@@ -431,7 +431,7 @@ class myMetadataUtils
 		// update the pending element if needed
 		$should_save = self::updatePending ( $xml_doc , $entry_id , true );
 
-KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
+VidiunLog::log ( "Will append to xml\n{$newVidasset}" );
 
 		$temp_xml_doc = new DOMDocument();
 		$temp_xml_doc->loadXML ( $newVidasset );
@@ -442,7 +442,7 @@ KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
 
 		if (!$vidAsset_parentNode)
 		{
-			KalturaLog::log ( "No VideoAssets parent node for entry [{$entry_id}] content [{$content}]." );
+			VidiunLog::log ( "No VideoAssets parent node for entry [{$entry_id}] content [{$content}]." );
 			return null;
 		}
 		
@@ -459,12 +459,12 @@ KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
       public static function updateAllMetadataVersionsRelevantForEntry ( $entry )
       {
             // TODO - null entry
-            $kshow = $entry->getKshow();
+            $vshow = $entry->getVshow();
             
-            if ( ! $kshow ) return null;
+            if ( ! $vshow ) return null;
             
-            // TODO - null kshow
-            $show_entry = $kshow->getShowEntry();
+            // TODO - null vshow
+            $show_entry = $vshow->getShowEntry();
             
             if ( ! $show_entry ) return null;
             
@@ -474,7 +474,7 @@ KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
             // entries can be os status ENTRY_STATUS_READY or ENTRY_STATUS_ERROR_CONVERTING
             $status= $entry->getStatus();
 
-            KalturaLog::log ( "updateAllMetadataVersionsRelevantForEntry [" . $entry->getId() . "] with status [" . $status . "]");
+            VidiunLog::log ( "updateAllMetadataVersionsRelevantForEntry [" . $entry->getId() . "] with status [" . $status . "]");
             $metadata = $show_entry->getMetadata ();
             if ( $metadata )
             {
@@ -483,10 +483,10 @@ KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
                   {
                         $show_entry->setDataContent($new_metadata); 
                         $show_entry->save();
-                        myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry);
+                        myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $entry);
                   }
             }
-            KalturaLog::log ( "updateAllMetadataVersionsRelevantForEntry [" . $entry->getId() . "]  created a new version" );
+            VidiunLog::log ( "updateAllMetadataVersionsRelevantForEntry [" . $entry->getId() . "]  created a new version" );
             
             return true;
       }
@@ -494,7 +494,7 @@ KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
 	// get the pedning entries from the XML metadata
 	public static function getPending ( DOMDocument $xml_doc )
 	{
-		$pending_node = kXml::getFirstElement( $xml_doc , "Pending" );
+		$pending_node = vXml::getFirstElement( $xml_doc , "Pending" );
 
 		// get the current list from xml
 		$already_pending_arr = array();
@@ -524,12 +524,12 @@ KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
 		// manipulate the array
 		if  ($add )
 		{
-			kArray::addToArray ( $already_pending_arr , $entry_id , true );
+			vArray::addToArray ( $already_pending_arr , $entry_id , true );
 		}
 		else
 		{
 			// remove from array
-			kArray::removeFromArray ( $already_pending_arr , $entry_id );
+			vArray::removeFromArray ( $already_pending_arr , $entry_id );
 		}
 
 		if ( count ( $already_pending_arr ) > 0 )
@@ -538,10 +538,10 @@ KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
 			$already_pending = "";
 
 		// set the updated list in the xml
-		$metadata = kXml::getFirstElement( $xml_doc , "MetaData" );
-		$should_save = kXml::setChildElement( $xml_doc , $metadata , "Pending" , $already_pending , true );
+		$metadata = vXml::getFirstElement( $xml_doc , "MetaData" );
+		$should_save = vXml::setChildElement( $xml_doc , $metadata , "Pending" , $already_pending , true );
 		$timestamp =  empty ($already_pending) ? "" : time();
-		kXml::setChildElement( $xml_doc , $metadata , self::LAST_PENDING_TIMESTAMP_ELEM_NAME , $timestamp , true );
+		vXml::setChildElement( $xml_doc , $metadata , self::LAST_PENDING_TIMESTAMP_ELEM_NAME , $timestamp , true );
 
 		return $should_save;
 	}
@@ -557,10 +557,10 @@ KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
 			$pending_str = $pending_obj;
 		}
 
-		$metadata = kXml::getFirstElement( $xml_doc , "MetaData" );
-		$should_save = kXml::setChildElement( $xml_doc , $metadata , "Pending" , $pending_str , true );
+		$metadata = vXml::getFirstElement( $xml_doc , "MetaData" );
+		$should_save = vXml::setChildElement( $xml_doc , $metadata , "Pending" , $pending_str , true );
 		$timestamp =  empty ($pending_str) ? "" : time();
-		kXml::setChildElement( $xml_doc , $metadata , self::LAST_PENDING_TIMESTAMP_ELEM_NAME , $timestamp , true );
+		vXml::setChildElement( $xml_doc , $metadata , self::LAST_PENDING_TIMESTAMP_ELEM_NAME , $timestamp , true );
 		return $should_save;
 	}
 
@@ -580,7 +580,7 @@ KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
 				$xml_doc = new DOMDocument();
 				$xml_doc->loadXML( $content );
 
-				$timestamp_elem = kXml::getFirstElement ( $xml_doc , self::LAST_PENDING_TIMESTAMP_ELEM_NAME );
+				$timestamp_elem = vXml::getFirstElement ( $xml_doc , self::LAST_PENDING_TIMESTAMP_ELEM_NAME );
 				if ( $timestamp_elem )
 				{
 					$time = $timestamp_elem->nodeValue;
@@ -604,7 +604,7 @@ KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
 	// get the thumb url from the XML metadata
 	public static function getThumbUrl ( DOMDocument $xml_doc )
 	{
-		return kXml::getFirstElementAsText($xml_doc , "ThumbUrl");
+		return vXml::getFirstElementAsText($xml_doc , "ThumbUrl");
 	}
 
 	public static function updateThumbUrlFromMetadata ( $xml_metadata, $thumb_url )
@@ -623,8 +623,8 @@ KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
 	public static function updateThumbUrl ( DOMDocument &$xml_doc , $thumb_url )
 	{
 		// set the updated list in the xml
-		$metadata = kXml::getFirstElement( $xml_doc , "MetaData" );
-		$should_save = kXml::setChildElement( $xml_doc , $metadata , "ThumbUrl" , $thumb_url , true );
+		$metadata = vXml::getFirstElement( $xml_doc , "MetaData" );
+		$should_save = vXml::setChildElement( $xml_doc , $metadata , "ThumbUrl" , $thumb_url , true );
 
 		return $should_save;
 	}
@@ -650,11 +650,11 @@ KalturaLog::log ( "Will append to xml\n{$newVidasset}" );
 		$xml_doc = new DOMDocument();
 		$xml_doc->loadXML( $xml_metadata );
 
-		$metadata = kXml::getFirstElement( $xml_doc, "MetaData" );
-		kXml::setChildElement( $xml_doc, $metadata, "KuserId", @$version_info["KuserId"], false );
-		kXml::setChildElement( $xml_doc, $metadata, "PuserId", @$version_info["PuserId"], false );
-		kXml::setChildElement( $xml_doc, $metadata, "ScreenName", @$version_info["ScreenName"], false );
-		kXml::setChildElement( $xml_doc, $metadata, "UpdatedAt", time(), false );
+		$metadata = vXml::getFirstElement( $xml_doc, "MetaData" );
+		vXml::setChildElement( $xml_doc, $metadata, "VuserId", @$version_info["VuserId"], false );
+		vXml::setChildElement( $xml_doc, $metadata, "PuserId", @$version_info["PuserId"], false );
+		vXml::setChildElement( $xml_doc, $metadata, "ScreenName", @$version_info["ScreenName"], false );
+		vXml::setChildElement( $xml_doc, $metadata, "UpdatedAt", time(), false );
 		
 		return $xml_doc->saveXML();
 	}

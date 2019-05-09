@@ -5,60 +5,60 @@
  *
  * @service groupUser
  */
-class GroupUserService extends KalturaBaseService
+class GroupUserService extends VidiunBaseService
 {
 	const USER_GROUP_SYNC_THRESHOLD_DEFUALT = '50';
 
 	public function initService($serviceId, $serviceName, $actionName)
 	{
 		parent::initService($serviceId, $serviceName, $actionName);
-		$this->applyPartnerFilterForClass('KuserKgroup');
+		$this->applyPartnerFilterForClass('VuserVgroup');
 	}
 
 	/**
 	 * Add new GroupUser
 	 *
 	 * @action add
-	 * @param KalturaGroupUser $groupUser
-	 * @return KalturaGroupUser
-	 * @throws KalturaAPIException
+	 * @param VidiunGroupUser $groupUser
+	 * @return VidiunGroupUser
+	 * @throws VidiunAPIException
 	 */
-	function addAction(KalturaGroupUser $groupUser)
+	function addAction(VidiunGroupUser $groupUser)
 	{
 		$this->checkPermissionsForGroupUser($groupUser->groupId);
-		/* @var $dbGroupUser KuserKgroup*/
+		/* @var $dbGroupUser VuserVgroup*/
 		$partnerId = $this->getPartnerId();
 
-		//verify kuser exists
-		$kuser = kuserPeer::getKuserByPartnerAndUid( $partnerId, $groupUser->userId);
-		if ( !$kuser || $kuser->getType() != KuserType::USER)
-			throw new KalturaAPIException ( KalturaErrors::USER_NOT_FOUND, $groupUser->userId );
+		//verify vuser exists
+		$vuser = vuserPeer::getVuserByPartnerAndUid( $partnerId, $groupUser->userId);
+		if ( !$vuser || $vuser->getType() != VuserType::USER)
+			throw new VidiunAPIException ( VidiunErrors::USER_NOT_FOUND, $groupUser->userId );
 
-		//verify kgroup exists
-		$kgroup = kuserPeer::getKuserByPartnerAndUid( $partnerId, $groupUser->groupId);
-		if ( !$kgroup || $kgroup->getType() != KuserType::GROUP)
-			throw new KalturaAPIException ( KalturaErrors::GROUP_NOT_FOUND, $groupUser->userId );
+		//verify vgroup exists
+		$vgroup = vuserPeer::getVuserByPartnerAndUid( $partnerId, $groupUser->groupId);
+		if ( !$vgroup || $vgroup->getType() != VuserType::GROUP)
+			throw new VidiunAPIException ( VidiunErrors::GROUP_NOT_FOUND, $groupUser->userId );
 
-		//verify kuser does not belongs to kgroup
-		$kuserKgroup = KuserKgroupPeer::retrieveByKuserIdAndKgroupId($kuser->getId(), $kgroup->getId());
-		if($kuserKgroup)
-			throw new KalturaAPIException (KalturaErrors::GROUP_USER_ALREADY_EXISTS);
+		//verify vuser does not belongs to vgroup
+		$vuserVgroup = VuserVgroupPeer::retrieveByVuserIdAndVgroupId($vuser->getId(), $vgroup->getId());
+		if($vuserVgroup)
+			throw new VidiunAPIException (VidiunErrors::GROUP_USER_ALREADY_EXISTS);
 
 		//verify user does not belongs to more than max allowed groups
 		$criteria = new Criteria();
-		$criteria->add(KuserKgroupPeer::KUSER_ID, $kuser->getId());
-		$criteria->add(KuserKgroupPeer::STATUS, KuserKgroupStatus::ACTIVE);
-		if (KuserKgroupPeer::doCount($criteria) > KuserKgroup::MAX_NUMBER_OF_GROUPS_PER_USER){
-			throw new KalturaAPIException (KalturaErrors::USER_EXCEEDED_MAX_GROUPS);
+		$criteria->add(VuserVgroupPeer::VUSER_ID, $vuser->getId());
+		$criteria->add(VuserVgroupPeer::STATUS, VuserVgroupStatus::ACTIVE);
+		if (VuserVgroupPeer::doCount($criteria) > VuserVgroup::MAX_NUMBER_OF_GROUPS_PER_USER){
+			throw new VidiunAPIException (VidiunErrors::USER_EXCEEDED_MAX_GROUPS);
 		}
 
-		$numberOfUsersPerGroup = $this->getNumberOfUsersInGroup($kgroup);
-		$kgroup->setMembersCount($numberOfUsersPerGroup+1);
-		$kgroup->save();
+		$numberOfUsersPerGroup = $this->getNumberOfUsersInGroup($vgroup);
+		$vgroup->setMembersCount($numberOfUsersPerGroup+1);
+		$vgroup->save();
 
 		$dbGroupUser = $groupUser->toInsertableObject();
 		$dbGroupUser->setPartnerId($this->getPartnerId());
-		$dbGroupUser->setStatus(KuserKgroupStatus::ACTIVE);
+		$dbGroupUser->setStatus(VuserVgroupStatus::ACTIVE);
 		$dbGroupUser->save();
 		$groupUser->fromObject($dbGroupUser);
 
@@ -70,22 +70,22 @@ class GroupUserService extends KalturaBaseService
 	 *
 	 * @action update
 	 * @param string $groupUserId
-	 * @param KalturaGroupUser $groupUser
-	 * @return KalturaGroupUser
-	 * @throws KalturaAPIException
+	 * @param VidiunGroupUser $groupUser
+	 * @return VidiunGroupUser
+	 * @throws VidiunAPIException
 	 */
-	function updateAction($groupUserId, KalturaGroupUser $groupUser)
+	function updateAction($groupUserId, VidiunGroupUser $groupUser)
 	{
-		$currentDBGroupUser = KuserKgroupPeer::retrieveByPK($groupUserId);
+		$currentDBGroupUser = VuserVgroupPeer::retrieveByPK($groupUserId);
 		if (!$currentDBGroupUser)
 		{
-			throw new KalturaAPIException(KalturaErrors::GROUP_USER_NOT_FOUND);
+			throw new VidiunAPIException(VidiunErrors::GROUP_USER_NOT_FOUND);
 		}
 
-		$this->checkPermissionsForGroupUser($currentDBGroupUser->getKgroupId());
+		$this->checkPermissionsForGroupUser($currentDBGroupUser->getVgroupId());
 		$dbGroupUser = $groupUser->toUpdatableObject($currentDBGroupUser);
 		$dbGroupUser->save();
-		$groupUser = new KalturaGroupUser();
+		$groupUser = new VidiunGroupUser();
 		$groupUser->fromObject($dbGroupUser, $this->getResponseProfile());
 		return $groupUser;
 	}
@@ -96,77 +96,77 @@ class GroupUserService extends KalturaBaseService
 	 * @action delete
 	 * @param string $userId
 	 * @param string $groupId
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	function deleteAction($userId, $groupId)
 	{
 		$this->checkPermissionsForGroupUser($groupId);
 		$partnerId = $this->getPartnerId();
-		//verify kuser exists
-		$kuser = kuserPeer::getKuserByPartnerAndUid( $partnerId, $userId);
-		if (!$kuser)
+		//verify vuser exists
+		$vuser = vuserPeer::getVuserByPartnerAndUid( $partnerId, $userId);
+		if (!$vuser)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_USER_ID, $userId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_USER_ID, $userId);
 		}
 
 
 		//verify group exists
-		$kgroup = kuserPeer::getKuserByPartnerAndUid(  $partnerId, $groupId);
-		if (!$kgroup)
+		$vgroup = vuserPeer::getVuserByPartnerAndUid(  $partnerId, $groupId);
+		if (!$vgroup)
 		{
 			//if the delete worker was triggered due to group deletion
-			if(kCurrentContext::$master_partner_id != Partner::BATCH_PARTNER_ID)
+			if(vCurrentContext::$master_partner_id != Partner::BATCH_PARTNER_ID)
 			{
-				throw new KalturaAPIException(KalturaErrors::GROUP_NOT_FOUND, $groupId);
+				throw new VidiunAPIException(VidiunErrors::GROUP_NOT_FOUND, $groupId);
 			}
 
-			kuserPeer::setUseCriteriaFilter(false);
-			$kgroup = kuserPeer::getKuserByPartnerAndUid($partnerId, $groupId);
-			kuserPeer::setUseCriteriaFilter(true);
+			vuserPeer::setUseCriteriaFilter(false);
+			$vgroup = vuserPeer::getVuserByPartnerAndUid($partnerId, $groupId);
+			vuserPeer::setUseCriteriaFilter(true);
 
-			if(!$kgroup)
+			if(!$vgroup)
 			{
-				throw new KalturaAPIException (KalturaErrors::GROUP_NOT_FOUND, $groupId);
+				throw new VidiunAPIException (VidiunErrors::GROUP_NOT_FOUND, $groupId);
 			}
 		}
 
 
-		$dbKuserKgroup = KuserKgroupPeer::retrieveByKuserIdAndKgroupId($kuser->getId(), $kgroup->getId());
-		if(!$dbKuserKgroup)
+		$dbVuserVgroup = VuserVgroupPeer::retrieveByVuserIdAndVgroupId($vuser->getId(), $vgroup->getId());
+		if(!$dbVuserVgroup)
 		{
-			throw new KalturaAPIException(KalturaErrors::GROUP_USER_DOES_NOT_EXIST, $userId, $groupId);
+			throw new VidiunAPIException(VidiunErrors::GROUP_USER_DOES_NOT_EXIST, $userId, $groupId);
 		}
-		$numberOfUsersPerGroup = $this->getNumberOfUsersInGroup($kgroup);
-		$kgroup->setMembersCount(max(0,$numberOfUsersPerGroup-1));
-		$kgroup->save();
+		$numberOfUsersPerGroup = $this->getNumberOfUsersInGroup($vgroup);
+		$vgroup->setMembersCount(max(0,$numberOfUsersPerGroup-1));
+		$vgroup->save();
 
-		$dbKuserKgroup->setStatus(KuserKgroupStatus::DELETED);
-		$dbKuserKgroup->save();
+		$dbVuserVgroup->setStatus(VuserVgroupStatus::DELETED);
+		$dbVuserVgroup->save();
 
-		$groupUser = new KalturaGroupUser();
-		$groupUser->fromObject($dbKuserKgroup);
+		$groupUser = new VidiunGroupUser();
+		$groupUser->fromObject($dbVuserVgroup);
 	}
 
 	/**
 	 * List all GroupUsers
 	 * 
 	 * @action list
-	 * @param KalturaGroupUserFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaGroupUserListResponse
+	 * @param VidiunGroupUserFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunGroupUserListResponse
 	 */
-	function listAction(KalturaGroupUserFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunGroupUserFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
 		{
-			$filter = new KalturaGroupUserFilter();
+			$filter = new VidiunGroupUserFilter();
 		}
 
 		$this->checkPermissionsForList($filter);
 
 		if (!$pager)
 		{
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		}
 			
 		return $filter->getListResponse($pager, $this->getResponseProfile());
@@ -179,23 +179,23 @@ class GroupUserService extends KalturaBaseService
 	 * @param string $groupIds
 	 * @param bool $removeFromExistingGroups
 	 * @param bool $createNewGroups
-	 * @return KalturaBulkUpload|null
-	 * @throws KalturaAPIException
+	 * @return VidiunBulkUpload|null
+	 * @throws VidiunAPIException
 	 */
 	public function syncAction($userId, $groupIds, $removeFromExistingGroups = true, $createNewGroups = true)
 	{
 		$groupIdsList = explode(',', $groupIds);
 		self::validateSyncGroupUserArgs($userId, $groupIdsList, $groupIds);
 
-		$kUser = kuserPeer::getKuserByPartnerAndUid($this->getPartnerId(), $userId);
-		if (!$kUser || $kUser->getType() != KuserType::USER)
+		$vUser = vuserPeer::getVuserByPartnerAndUid($this->getPartnerId(), $userId);
+		if (!$vUser || $vUser->getType() != VuserType::USER)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_USER_ID, $userId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_USER_ID, $userId);
 		}
 
-		$groupLimit = kConf::get('user_groups_sync_threshold', 'local', self::USER_GROUP_SYNC_THRESHOLD_DEFUALT);
+		$groupLimit = vConf::get('user_groups_sync_threshold', 'local', self::USER_GROUP_SYNC_THRESHOLD_DEFUALT);
 		$bulkUpload = null;
-		$bulkGroupUserSyncCsv = new kBulkGroupUserSyncCsv($kUser, $groupIdsList);
+		$bulkGroupUserSyncCsv = new vBulkGroupUserSyncCsv($vUser, $groupIdsList);
 		$shouldHandleGroupsInBatch = ($groupLimit < count($groupIdsList));
 		if (!$shouldHandleGroupsInBatch)
 		{
@@ -217,14 +217,14 @@ class GroupUserService extends KalturaBaseService
 		if(!$numberOfUsersPerGroup)
 		{
 			$criteria = new Criteria();
-			$criteria->add(KuserKgroupPeer::KGROUP_ID, $group->getId());
-			$criteria->add(KuserKgroupPeer::STATUS, KuserKgroupStatus::ACTIVE);
-			$numberOfUsersPerGroup = KuserKgroupPeer::doCount($criteria);
+			$criteria->add(VuserVgroupPeer::VGROUP_ID, $group->getId());
+			$criteria->add(VuserVgroupPeer::STATUS, VuserVgroupStatus::ACTIVE);
+			$numberOfUsersPerGroup = VuserVgroupPeer::doCount($criteria);
 		}
 		return $numberOfUsersPerGroup;
 	}
 
-	protected static function handleGroupUserInBatch(kBulkGroupUserSyncCsv $bulkGroupUserSyncCsv, $removeFromExistingGroups, $createNewGroups)
+	protected static function handleGroupUserInBatch(vBulkGroupUserSyncCsv $bulkGroupUserSyncCsv, $removeFromExistingGroups, $createNewGroups)
 	{
 		$fileData = $bulkGroupUserSyncCsv->getSyncGroupUsersCsvFile($removeFromExistingGroups, $createNewGroups);
 		if (!$fileData)
@@ -249,10 +249,10 @@ class GroupUserService extends KalturaBaseService
 		{
 			try
 			{
-				$groupUser = new KalturaGroupUser();
+				$groupUser = new VidiunGroupUser();
 				$groupUser->userId = $userId;
 				$groupUser->groupId = $groupId;
-				$groupUser->creationMode = KalturaGroupUserCreationMode::AUTOMATIC;
+				$groupUser->creationMode = VidiunGroupUserCreationMode::AUTOMATIC;
 				$this->addAction($groupUser);
 			}
 			catch (Exception $e)
@@ -263,20 +263,20 @@ class GroupUserService extends KalturaBaseService
 		return $shouldHandleGroupsInBatch;
 	}
 
-	public function addGroupUsersToClonedGroup($kusers, $newGroup, $originalGroupId)
+	public function addGroupUsersToClonedGroup($vusers, $newGroup, $originalGroupId)
 	{
-		$groupUsersLimit = kConf::get('user_groups_sync_threshold', 'local', self::USER_GROUP_SYNC_THRESHOLD_DEFUALT);
-		$bulkGroupUserSyncCsv = new kBulkGroupUsersToGroupCsv($kusers, $newGroup->getPuserId());
-		$shouldHandleGroupsUsersInBatch = ($groupUsersLimit < count($kusers));
+		$groupUsersLimit = vConf::get('user_groups_sync_threshold', 'local', self::USER_GROUP_SYNC_THRESHOLD_DEFUALT);
+		$bulkGroupUserSyncCsv = new vBulkGroupUsersToGroupCsv($vusers, $newGroup->getPuserId());
+		$shouldHandleGroupsUsersInBatch = ($groupUsersLimit < count($vusers));
 		if (!$shouldHandleGroupsUsersInBatch)
 		{
 			$this->initService('groupuser', 'groupuser', 'add');
-			list($shouldHandleGroupsUsersInBatch, $userToAddInBulk) = $this->addUserGroupsToGroup($kusers, $newGroup, $originalGroupId);
-			$kusers = $userToAddInBulk;
+			list($shouldHandleGroupsUsersInBatch, $userToAddInBulk) = $this->addUserGroupsToGroup($vusers, $newGroup, $originalGroupId);
+			$vusers = $userToAddInBulk;
 		}
 		if ($shouldHandleGroupsUsersInBatch)
 		{
-			$bulkGroupUserSyncCsv->AddGroupUserInBatch($kusers, $originalGroupId);
+			$bulkGroupUserSyncCsv->AddGroupUserInBatch($vusers, $originalGroupId);
 		}
 
 	}
@@ -293,13 +293,13 @@ class GroupUserService extends KalturaBaseService
 		$shouldHandleGroupsInBatch = false;
 		foreach ($userToAdd as $user)
 		{
-			$originalGroupUser = KuserKgroupPeer::retrieveByKuserIdAndKgroupId($user->getId(),$originalGroupId);
+			$originalGroupUser = VuserVgroupPeer::retrieveByVuserIdAndVgroupId($user->getId(),$originalGroupId);
 			try
 			{
-				$groupUser = new KalturaGroupUser();
+				$groupUser = new VidiunGroupUser();
 				$groupUser->userId = $user->getPuserId();
 				$groupUser->groupId = $groupId;
-				$groupUser->creationMode = KalturaGroupUserCreationMode::AUTOMATIC;
+				$groupUser->creationMode = VidiunGroupUserCreationMode::AUTOMATIC;
 				$groupUser->userRole = $originalGroupUser->getUserRole();
 				$this->addAction($groupUser);
 			}
@@ -316,55 +316,55 @@ class GroupUserService extends KalturaBaseService
 	 * @param $userId
 	 * @param $groupIdsList
 	 * @param $groupIds
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	protected static function validateSyncGroupUserArgs($userId, $groupIdsList, $groupIds)
 	{
-		if (!preg_match(kuser::PUSER_ID_REGEXP, $userId))
+		if (!preg_match(vuser::PUSER_ID_REGEXP, $userId))
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_FIELD_VALUE, 'userId');
+			throw new VidiunAPIException(VidiunErrors::INVALID_FIELD_VALUE, 'userId');
 		}
 
 		if(!strlen(trim($groupIds)))
 		{
-			throw new KalturaAPIException(KalturaErrors::MISSING_MANDATORY_PARAMETER, 'groupIds');
+			throw new VidiunAPIException(VidiunErrors::MISSING_MANDATORY_PARAMETER, 'groupIds');
 		}
 
 		foreach ($groupIdsList as $groupId)
 		{
-			if (!preg_match(kuser::PUSER_ID_REGEXP, trim($groupId)))
+			if (!preg_match(vuser::PUSER_ID_REGEXP, trim($groupId)))
 			{
-				throw new KalturaAPIException(KalturaErrors::INVALID_FIELD_VALUE, 'groupIds');
+				throw new VidiunAPIException(VidiunErrors::INVALID_FIELD_VALUE, 'groupIds');
 			}
 		}
 	}
 
 	protected function throwServiceForbidden()
 	{
-		$e = new KalturaAPIException ( APIErrors::SERVICE_FORBIDDEN, $this->serviceId.'->'.$this->actionName);
-		header("X-Kaltura:error-".$e->getCode());
-		header("X-Kaltura-App: exiting on error ".$e->getCode()." - ".$e->getMessage());
+		$e = new VidiunAPIException ( APIErrors::SERVICE_FORBIDDEN, $this->serviceId.'->'.$this->actionName);
+		header("X-Vidiun:error-".$e->getCode());
+		header("X-Vidiun-App: exiting on error ".$e->getCode()." - ".$e->getMessage());
 		throw $e;
 	}
 
 	protected function checkPermissionsForGroupUser($groupId)
 	{
-		if(!$this->checkPermissionsForGroupUserFromKs() && !self::checkIfKsUserIsGroupManager($groupId))
+		if(!$this->checkPermissionsForGroupUserFromVs() && !self::checkIfVsUserIsGroupManager($groupId))
 		{
 			$this->throwServiceForbidden();
 		}
 	}
 
-	public static function checkIfKsUserIsGroupManager($pUserGroupId)
+	public static function checkIfVsUserIsGroupManager($pUserGroupId)
 	{
-		$kuserId = kCurrentContext::getCurrentKsKuserId();
-		if($kuserId)
+		$vuserId = vCurrentContext::getCurrentVsVuserId();
+		if($vuserId)
 		{
-			$groupUser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::$ks_partner_id, $pUserGroupId);
+			$groupUser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::$vs_partner_id, $pUserGroupId);
 			if($groupUser)
 			{
-				$ksUserGroup = KuserKgroupPeer::retrieveByKuserIdAndKgroupId($kuserId, $groupUser->getKuserId());
-				if ($ksUserGroup && $ksUserGroup->getUserRole() == GroupUserRole::MANAGER)
+				$vsUserGroup = VuserVgroupPeer::retrieveByVuserIdAndVgroupId($vuserId, $groupUser->getVuserId());
+				if ($vsUserGroup && $vsUserGroup->getUserRole() == GroupUserRole::MANAGER)
 				{
 					return true;
 				}
@@ -374,35 +374,35 @@ class GroupUserService extends KalturaBaseService
 		return false;
 	}
 
-	protected function checkPermissionsForGroupUserFromKs()
+	protected function checkPermissionsForGroupUserFromVs()
 	{
-		return (kCurrentContext::$is_admin_session || kCurrentContext::$ks_partner_id == Partner::BATCH_PARTNER_ID ||
-			kPermissionManager::isPermitted("CONTENT_MANAGE_ASSIGN_USER_GROUP"));
+		return (vCurrentContext::$is_admin_session || vCurrentContext::$vs_partner_id == Partner::BATCH_PARTNER_ID ||
+			vPermissionManager::isPermitted("CONTENT_MANAGE_ASSIGN_USER_GROUP"));
 	}
 
 	/**
-	 * @param KalturaGroupUserFilter $filter
-	 * @throws KalturaAPIException
+	 * @param VidiunGroupUserFilter $filter
+	 * @throws VidiunAPIException
 	 */
 	protected function checkPermissionsForList($filter)
 	{
-		if(!$this->checkPermissionsForGroupUserFromKs())
+		if(!$this->checkPermissionsForGroupUserFromVs())
 		{
 			if($filter->groupIdEqual == null && $filter->userIdEqual == null)
 			{
-				throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL,
+				throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL,
 					$filter->getFormattedPropertyNameWithClassName('userIdEqual') .
 					'/' . $this->getFormattedPropertyNameWithClassName('groupIdEqual'));
 			}
 			else if($filter->userIdEqual != null)
 			{
-				$kuser = kuserPeer::getKuserByPartnerAndUid($this->getPartnerId(), $filter->userIdEqual);
-				if($kuser->getKuserId() != kCurrentContext::getCurrentKsKuserId())
+				$vuser = vuserPeer::getVuserByPartnerAndUid($this->getPartnerId(), $filter->userIdEqual);
+				if($vuser->getVuserId() != vCurrentContext::getCurrentVsVuserId())
 				{
 					$this->throwServiceForbidden();
 				}
 			}
-			else if(!self::checkIfKsUserIsGroupManager($filter->groupIdEqual))
+			else if(!self::checkIfVsUserIsGroupManager($filter->groupIdEqual))
 			{
 				$this->throwServiceForbidden();
 			}

@@ -7,8 +7,8 @@ interface IDistributionEngineDelete extends IDistributionEngine
 {
 	/**
 	 * removes media.
-	 * @param KalturaDistributionDeleteJobData $data
+	 * @param VidiunDistributionDeleteJobData $data
 	 * @return bool true if finished, false if will be finished asynchronously
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data);
+	public function delete(VidiunDistributionDeleteJobData $data);
 }

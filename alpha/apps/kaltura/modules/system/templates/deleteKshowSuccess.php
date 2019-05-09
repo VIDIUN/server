@@ -1,61 +1,61 @@
 <?php
-//$kshow_id = $kshow ? $kshow->getId() : "";
-$band_id = $kshow ? $kshow->getIndexedCustomData1() : "";
+//$vshow_id = $vshow ? $vshow->getId() : "";
+$band_id = $vshow ? $vshow->getIndexedCustomData1() : "";
 $delete_text = $should_delete ? "Deleted " : "Will delete ";
 
-$kshow_count = count ( $other_kshows_by_producer );
+$vshow_count = count ( $other_vshows_by_producer );
 
 echo $error . "<br>";
 
-$url = url_for ( "/system") . "/deleteKshow?kshow_id="; 
-if ( $kshow_count > 1 )
+$url = url_for ( "/system") . "/deleteVshow?vshow_id="; 
+if ( $vshow_count > 1 )
 {
 	$str = "";
-	foreach ( $other_kshows_by_producer as $other_kshow )
+	foreach ( $other_vshows_by_producer as $other_vshow )
 	{
-		$str .= "<a href='$url" . $other_kshow->getId() ."'>" .$other_kshow->getId() . "</a> "; 
+		$str .= "<a href='$url" . $other_vshow->getId() ."'>" .$other_vshow->getId() . "</a> "; 
 	}
 	
 	echo $str;
 }
 
-if ( $kuser_count > 1 )
+if ( $vuser_count > 1 )
 {
-	echo "There are [$kuser_count] results for [$kuser_name]. Bellow is displayed the first one.<br>You may want to better specify the screen name." ; 
+	echo "There are [$vuser_count] results for [$vuser_name]. Bellow is displayed the first one.<br>You may want to better specify the screen name." ; 
 }
 ?>
  
 <form id="form1" method=get>
-	kshow id: <input name="kshow_id" value="<?php echo $kshow_id ?>"> band id: <input name="band_id" value="<?php echo $band_id ?>">
-	User name: <input name="kuser_name" value="<?php echo $kuser_name ?>">
+	vshow id: <input name="vshow_id" value="<?php echo $vshow_id ?>"> band id: <input name="band_id" value="<?php echo $band_id ?>">
+	User name: <input name="vuser_name" value="<?php echo $vuser_name ?>">
 	<input type="hidden" id="deleteme" name="deleteme" value="false">
 	<input type="submit"  name="find" value="find">
 </form>
 
-<?php if ( !$kshow ) 
+<?php if ( !$vshow ) 
 {
-	if ( $kshow_id )
+	if ( $vshow_id )
 	{
-		echo "Kshow id [" . $kshow_id . "] does not exist in the DB";
+		echo "Vshow id [" . $vshow_id . "] does not exist in the DB";
 	}	
 	return ;
 }
 
 ?>
 
-<?php if ( $kuser && $kshow_count < 2 ) 
+<?php if ( $vuser && $vshow_count < 2 ) 
 {
-	echo $delete_text . "kuser '" . $kuser->getScreenName() . "' [" . $kuser->getId()
-	. "] which was created at " . $kuser->getCreatedAt() . " (" .  $kuser->getFormattedCreatedAt() . ")" ; 
+	echo $delete_text . "vuser '" . $vuser->getScreenName() . "' [" . $vuser->getId()
+	. "] which was created at " . $vuser->getCreatedAt() . " (" .  $vuser->getFormattedCreatedAt() . ")" ; 
 } ?>
 <br> 
 
-<?php echo $delete_text . "'" . $kshow->getName() ."' [" . $kshow->getId() ."] with band id . " . $kshow->getIndexedCustomData1() . ":" ?>
+<?php echo $delete_text . "'" . $vshow->getName() ."' [" . $vshow->getId() ."] with band id . " . $vshow->getIndexedCustomData1() . ":" ?>
 <br>
 <table>
 <?php 
-echo investigate::printKshowHeader();
-echo investigate::printKshow( $kshow );
+echo investigate::printVshowHeader();
+echo investigate::printVshow( $vshow );
 ?>
 </table>
 <br>
@@ -76,15 +76,15 @@ foreach ( $entries as $entry )
 <script>
 function deleteme()
 {
-<?php if ( $kshow_count ) { ?> 
-	text = "kuser '<?php echo $kuser->getScreenName()?>' will not be deleted becuase he/she has (<?php echo $kshow_count ?>) kshows.'\n" + 
-		"One of the kshows: kshow '<?php echo $kshow->getName() ?>' with all (<?php echo count ( $entries ) ?>) entries\n" +
+<?php if ( $vshow_count ) { ?> 
+	text = "vuser '<?php echo $vuser->getScreenName()?>' will not be deleted becuase he/she has (<?php echo $vshow_count ?>) vshows.'\n" + 
+		"One of the vshows: vshow '<?php echo $vshow->getName() ?>' with all (<?php echo count ( $entries ) ?>) entries\n" +
 			"????\n\n" +
 			"Remember - this action is NOT reversible!!" ;
 	
 <?php } else { ?>
-	text = "Do you really want to delete poor kuser '<?php echo $kuser->getScreenName()?>'\n" + 
-		"and it's kshow '<?php echo $kshow->getName() ?>' with all (<?php echo count ( $entries ) ?>) entries\n" +
+	text = "Do you really want to delete poor vuser '<?php echo $vuser->getScreenName()?>'\n" + 
+		"and it's vshow '<?php echo $vshow->getName() ?>' with all (<?php echo count ( $entries ) ?>) entries\n" +
 			"????\n\n" +
 			"Remember - this action is NOT reversible!!" ;
 <?php } ?>

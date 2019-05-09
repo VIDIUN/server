@@ -3,7 +3,7 @@
 /**
  * Auto-generated enum class
 */
-class KalturaPlayableEntryMatchAttribute extends KalturaBaseEntryMatchAttribute
+class VidiunPlayableEntryMatchAttribute extends VidiunBaseEntryMatchAttribute
 {
 	const DURATION_TYPE = "durationType";
 }

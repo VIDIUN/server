@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFairPlayPlaybackPluginData extends KalturaDrmPlaybackPluginData {
+class VidiunFairPlayPlaybackPluginData extends VidiunDrmPlaybackPluginData {
 
     /**
      * @var string

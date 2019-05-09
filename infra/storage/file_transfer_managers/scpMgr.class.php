@@ -1,26 +1,26 @@
 <?php
 /**
- * Extends the 'kFileTransferMgr' class & implements a file transfer manager using the SCP protocol.
- * For additional comments please look at the 'kFileTransferMgr' class.
+ * Extends the 'vFileTransferMgr' class & implements a file transfer manager using the SCP protocol.
+ * For additional comments please look at the 'vFileTransferMgr' class.
  * 
  * @package infra
  * @subpackage Storage
  */
-class scpMgr extends kFileTransferMgr
+class scpMgr extends vFileTransferMgr
 {
 	
-	// instances of this class should be created usign the 'getInstance' of the 'kFileTransferMgr' class
+	// instances of this class should be created usign the 'getInstance' of the 'vFileTransferMgr' class
 	protected function __construct(array $options = null)
 	{
 		if(!function_exists('ssh2_connect'))
-			throw new kFileTransferMgrException("SSH2 extension is not installed.", kFileTransferMgrException::extensionMissing);
+			throw new vFileTransferMgrException("SSH2 extension is not installed.", vFileTransferMgrException::extensionMissing);
 	
 		parent::__construct($options);
 	}
 	
 	
 	/**********************************************************************/
-	/* Implementation of abstract functions from class 'kFileTransferMgr' */
+	/* Implementation of abstract functions from class 'vFileTransferMgr' */
 	/**********************************************************************/
 	
 	// scp connect to server:port

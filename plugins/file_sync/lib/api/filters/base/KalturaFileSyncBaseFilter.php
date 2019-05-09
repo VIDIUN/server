@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaFileSyncBaseFilter extends KalturaFilter
+abstract class VidiunFileSyncBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -71,12 +71,12 @@ abstract class KalturaFileSyncBaseFilter extends KalturaFilter
 	public $partnerIdEqual;
 
 	/**
-	 * @var KalturaFileSyncObjectType
+	 * @var VidiunFileSyncObjectType
 	 */
 	public $fileObjectTypeEqual;
 
 	/**
-	 * @dynamicType KalturaFileSyncObjectType
+	 * @dynamicType VidiunFileSyncObjectType
 	 * @var string
 	 */
 	public $fileObjectTypeIn;
@@ -167,7 +167,7 @@ abstract class KalturaFileSyncBaseFilter extends KalturaFilter
 	public $syncTimeLessThanOrEqual;
 
 	/**
-	 * @var KalturaFileSyncStatus
+	 * @var VidiunFileSyncStatus
 	 */
 	public $statusEqual;
 
@@ -177,7 +177,7 @@ abstract class KalturaFileSyncBaseFilter extends KalturaFilter
 	public $statusIn;
 
 	/**
-	 * @var KalturaFileSyncType
+	 * @var VidiunFileSyncType
 	 */
 	public $fileTypeEqual;
 

@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage api.enum
  */
-class KalturaReachProfileContentDeletionPolicy extends KalturaEnum implements ReachProfileContentDeletionPolicy
+class VidiunReachProfileContentDeletionPolicy extends VidiunEnum implements ReachProfileContentDeletionPolicy
 {
 
 }

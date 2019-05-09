@@ -3,12 +3,12 @@
  * @package plugins.quiz
  * @subpackage api.objects
  */
-class KalturaQuestionCuePoint extends KalturaCuePoint
+class VidiunQuestionCuePoint extends VidiunCuePoint
 {
 
 	/**
 	 * Array of key value answerKey->optionAnswer objects
-	 * @var KalturaOptionalAnswersArray
+	 * @var VidiunOptionalAnswersArray
 	 */
 	public $optionalAnswers;
 
@@ -32,7 +32,7 @@ class KalturaQuestionCuePoint extends KalturaCuePoint
 
 
 	/**
-	 * @var KalturaQuestionType.
+	 * @var VidiunQuestionType.
 	 */
 	public $questionType;
 
@@ -42,7 +42,7 @@ class KalturaQuestionCuePoint extends KalturaCuePoint
 	public $presentationOrder;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $excludeFromScore;
 
@@ -63,7 +63,7 @@ class KalturaQuestionCuePoint extends KalturaCuePoint
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::getMapBetweenObjects()
+	 * @see VidiunCuePoint::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -71,7 +71,7 @@ class KalturaQuestionCuePoint extends KalturaCuePoint
 	}
 
 	/* (non-PHPdoc)
-	* @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	* @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	*/
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
@@ -84,31 +84,31 @@ class KalturaQuestionCuePoint extends KalturaCuePoint
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($dbObject, $responseProfile);
-		$this->optionalAnswers = KalturaOptionalAnswersArray::fromDbArray($dbObject->getOptionalAnswers(), $responseProfile);
+		$this->optionalAnswers = VidiunOptionalAnswersArray::fromDbArray($dbObject->getOptionalAnswers(), $responseProfile);
 		$dbEntry = entryPeer::retrieveByPK($dbObject->getEntryId());
-		if ( !kEntitlementUtils::isEntitledForEditEntry($dbEntry) ) {
+		if ( !vEntitlementUtils::isEntitledForEditEntry($dbEntry) ) {
 			foreach ( $this->optionalAnswers as $answer ) {
-				$answer->isCorrect = KalturaNullableBoolean::NULL_VALUE;
+				$answer->isCorrect = VidiunNullableBoolean::NULL_VALUE;
 			}
 			$this->explanation = null;
 		}
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::validateForInsert()
+	 * @see VidiunCuePoint::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
 		parent::validateForInsert($propertiesToSkip);
 		$dbEntry = entryPeer::retrieveByPK($this->entryId);
 		QuizPlugin::validateAndGetQuiz($dbEntry);
-		if ( !kEntitlementUtils::isEntitledForEditEntry($dbEntry) ) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_USER_ID);
+		if ( !vEntitlementUtils::isEntitledForEditEntry($dbEntry) ) {
+			throw new VidiunAPIException(VidiunErrors::INVALID_USER_ID);
 		}
 	}
 

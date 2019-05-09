@@ -3,10 +3,10 @@
  * @package plugins.annotation
  * @subpackage api.objects
  */
-class KalturaAnnotationListResponse extends KalturaListResponse
+class VidiunAnnotationListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaAnnotationArray
+	 * @var VidiunAnnotationArray
 	 * @readonly
 	 */
 	public $objects;

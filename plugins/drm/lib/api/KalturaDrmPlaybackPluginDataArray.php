@@ -3,14 +3,14 @@
  * @package plugins.drm
  * @subpackage api.objects
  */
-class KalturaDrmPlaybackPluginDataArray extends KalturaTypedArray
+class VidiunDrmPlaybackPluginDataArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaDrmPlaybackPluginDataArray();
+		$newArr = new VidiunDrmPlaybackPluginDataArray();
 		foreach ( $arr as $obj )
 		{
-			$nObj = KalturaPluginManager::loadObject('KalturaDrmPlaybackPluginData', get_class($obj));
+			$nObj = VidiunPluginManager::loadObject('VidiunDrmPlaybackPluginData', get_class($obj));
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -21,6 +21,6 @@ class KalturaDrmPlaybackPluginDataArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( 'KalturaDrmPlaybackPluginData' );
+		return parent::__construct ( 'VidiunDrmPlaybackPluginData' );
 	}
 }

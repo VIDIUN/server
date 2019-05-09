@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaVirusScanProfileBaseFilter extends KalturaFilter
+abstract class VidiunVirusScanProfileBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -93,7 +93,7 @@ abstract class KalturaVirusScanProfileBaseFilter extends KalturaFilter
 	public $nameLike;
 
 	/**
-	 * @var KalturaVirusScanProfileStatus
+	 * @var VidiunVirusScanProfileStatus
 	 */
 	public $statusEqual;
 
@@ -103,12 +103,12 @@ abstract class KalturaVirusScanProfileBaseFilter extends KalturaFilter
 	public $statusIn;
 
 	/**
-	 * @var KalturaVirusScanEngineType
+	 * @var VidiunVirusScanEngineType
 	 */
 	public $engineTypeEqual;
 
 	/**
-	 * @dynamicType KalturaVirusScanEngineType
+	 * @dynamicType VidiunVirusScanEngineType
 	 * @var string
 	 */
 	public $engineTypeIn;

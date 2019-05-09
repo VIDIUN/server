@@ -3,7 +3,7 @@
  * @package plugins.freewheelGenericDistribution
  * @subpackage lib
  */
-class FreewheelGenericDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class FreewheelGenericDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const FREEWHEEL_GENERIC = 'FREEWHEEL_GENERIC';
 	

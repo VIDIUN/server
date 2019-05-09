@@ -3,7 +3,7 @@
  * @package plugins.WebexDropFolder
  * @subpackage api.objects
  */
-class KalturaWebexDropFolderContentProcessorJobData extends KalturaDropFolderContentProcessorJobData
+class VidiunWebexDropFolderContentProcessorJobData extends VidiunDropFolderContentProcessorJobData
 {
 	/**
 	 * @var string
@@ -30,7 +30,7 @@ class KalturaWebexDropFolderContentProcessorJobData extends KalturaDropFolderCon
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kWebexDropFolderContentProcessorJobData();
+			$dbData = new vWebexDropFolderContentProcessorJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

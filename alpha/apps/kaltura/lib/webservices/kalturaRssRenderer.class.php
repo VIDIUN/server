@@ -1,5 +1,5 @@
 <?php
-class kalturaRssRenderer
+class vidiunRssRenderer
 {
 	const TYPE_YAHOO = 1;
 	const TYPE_TABOOLA = 2;
@@ -12,9 +12,9 @@ class kalturaRssRenderer
 	public function startMrss ( )
 	{
 		if ( $this->type == self::TYPE_YAHOO )
-			return '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:kaltura="http://kaltura.com/playlist/1.0" >';
+			return '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:vidiun="http://vidiun.com/playlist/1.0" >';
 		if ( $this->type == self::TYPE_TABOOLA )
-			return '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:kaltura="http://kaltura.com/playlist/1.0" xmlns:tv="http://taboola.com/schema/taboolavideo/1.0">';
+			return '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:vidiun="http://vidiun.com/playlist/1.0" xmlns:tv="http://taboola.com/schema/taboolavideo/1.0">';
 			
 	}
 
@@ -52,39 +52,39 @@ class kalturaRssRenderer
 		
 		$entry_id = $entry->getId();
 		
-		$kaltura_elements =
-			"<kaltura:entryId>" . $entry->getId() . "</kaltura:entryId>";
+		$vidiun_elements =
+			"<vidiun:entryId>" . $entry->getId() . "</vidiun:entryId>";
 		
-		if (isset(kCurrentContext::$partner_id) &&
-			!PermissionPeer::isValidForPartner(PermissionName::FEATURE_HIDE_SENSITIVE_DATA_IN_RSS_FEED, kCurrentContext::$partner_id))
+		if (isset(vCurrentContext::$partner_id) &&
+			!PermissionPeer::isValidForPartner(PermissionName::FEATURE_HIDE_SENSITIVE_DATA_IN_RSS_FEED, vCurrentContext::$partner_id))
 		{
-			$kaltura_elements .=
-				"<kaltura:views>" . ($entry->getViews() ? $entry->getViews() : "0"). "</kaltura:views>" .  
-				"<kaltura:plays>" . ($entry->getPlays() ? $entry->getPlays() : "0"). "</kaltura:plays>" .
-				"<kaltura:userScreenName>" . kString::xmlEncode ($entry->getUserScreenName()) . "</kaltura:userScreenName>" . 
-				"<kaltura:puserId>" . $entry->getPuserId() . "</kaltura:puserId>" .
-				"<kaltura:userLandingPage>" . $entry->getUserLandingPage() . "</kaltura:userLandingPage>";
+			$vidiun_elements .=
+				"<vidiun:views>" . ($entry->getViews() ? $entry->getViews() : "0"). "</vidiun:views>" .  
+				"<vidiun:plays>" . ($entry->getPlays() ? $entry->getPlays() : "0"). "</vidiun:plays>" .
+				"<vidiun:userScreenName>" . vString::xmlEncode ($entry->getUserScreenName()) . "</vidiun:userScreenName>" . 
+				"<vidiun:puserId>" . $entry->getPuserId() . "</vidiun:puserId>" .
+				"<vidiun:userLandingPage>" . $entry->getUserLandingPage() . "</vidiun:userLandingPage>";
 		}
 		else
 		{
-			$kaltura_elements .=
-				"<kaltura:views>0</kaltura:views>" .  
-				"<kaltura:plays>0</kaltura:plays>" .
-				"<kaltura:userScreenName></kaltura:userScreenName>" . 
-				"<kaltura:puserId></kaltura:puserId>" .
-				"<kaltura:userLandingPage></kaltura:userLandingPage>";
+			$vidiun_elements .=
+				"<vidiun:views>0</vidiun:views>" .  
+				"<vidiun:plays>0</vidiun:plays>" .
+				"<vidiun:userScreenName></vidiun:userScreenName>" . 
+				"<vidiun:puserId></vidiun:puserId>" .
+				"<vidiun:userLandingPage></vidiun:userLandingPage>";
 		}
 		
-		$kaltura_elements .=
-			"<kaltura:partnerLandingPage>" . $entry->getPartnerLandingPage() . "</kaltura:partnerLandingPage>" .
-			"<kaltura:tags>" . kString::xmlEncode ($entry->getTags()) . "</kaltura:tags>" .
-			"<kaltura:adminTags>" . kString::xmlEncode ($entry->getAdminTags()) . "</kaltura:adminTags>" .
-			"<kaltura:votes>" . ($entry->getVotes() ? $entry->getVotes() : "0") . "</kaltura:votes>" .
-			"<kaltura:rank>" . ($entry->getRank() ? $entry->getRank() : "0") . "</kaltura:rank>" .	
-			"<kaltura:createdAt>" . $entry->getCreatedAt() . "</kaltura:createdAt>" .
-			"<kaltura:createdAtInt>" . $entry->getCreatedAt(null) . "</kaltura:createdAtInt>" .
-			"<kaltura:sourceLink>" . $entry->getSourceLink() . "</kaltura:sourceLink>" .
-			"<kaltura:credit>" . $entry->getCredit() . "</kaltura:credit>" ;
+		$vidiun_elements .=
+			"<vidiun:partnerLandingPage>" . $entry->getPartnerLandingPage() . "</vidiun:partnerLandingPage>" .
+			"<vidiun:tags>" . vString::xmlEncode ($entry->getTags()) . "</vidiun:tags>" .
+			"<vidiun:adminTags>" . vString::xmlEncode ($entry->getAdminTags()) . "</vidiun:adminTags>" .
+			"<vidiun:votes>" . ($entry->getVotes() ? $entry->getVotes() : "0") . "</vidiun:votes>" .
+			"<vidiun:rank>" . ($entry->getRank() ? $entry->getRank() : "0") . "</vidiun:rank>" .	
+			"<vidiun:createdAt>" . $entry->getCreatedAt() . "</vidiun:createdAt>" .
+			"<vidiun:createdAtInt>" . $entry->getCreatedAt(null) . "</vidiun:createdAtInt>" .
+			"<vidiun:sourceLink>" . $entry->getSourceLink() . "</vidiun:sourceLink>" .
+			"<vidiun:credit>" . $entry->getCredit() . "</vidiun:credit>" ;
 		
 		
 		if ( $this->type == self::TYPE_TABOOLA )
@@ -103,7 +103,7 @@ class kalturaRssRenderer
 		// for now the partner_id & entry_id are set in the guid elementy of the item..
 		// TODO - move the partner_id to be part of the primary key of the entry so entry will not appear in wrong partners
 		 $mrss = '<item>' . 
-		 	'<description>Kaltura Item</description>' . 
+		 	'<description>Vidiun Item</description>' . 
 		 	'<guid isPermaLink="false">' . $entry->getPartnerId() . "|" . $entry_id . '</guid>' . 
 		 	'<link>' . $entry->getPartnerLandingPage()  . '</link>'.
 		 	'<pubDate>' . $entry->getCreatedAt() . '</pubDate>' . 
@@ -122,12 +122,12 @@ class kalturaRssRenderer
 //              	'width="' . $entry->getWidth() . '" ' .  
                	'lang="en"' .  
                	'/> '.
-               	'<media:title type="plain">' .  kString::xmlEncode ( $entry->getName()) . "</media:title>" .
-               	'<media:description>'. kString::xmlEncode ( $entry->getDescription() ) . '</media:description>'.
-               	'<media:keywords>' . kString::xmlEncode ( $entry->getSearchText() ) . '</media:keywords>' .
+               	'<media:title type="plain">' .  vString::xmlEncode ( $entry->getName()) . "</media:title>" .
+               	'<media:description>'. vString::xmlEncode ( $entry->getDescription() ) . '</media:description>'.
+               	'<media:keywords>' . vString::xmlEncode ( $entry->getSearchText() ) . '</media:keywords>' .
                	'<media:thumbnail url="'. $entry->getThumbnailUrl() . '/width/640/height/480"/>' . 
-               '<media:credit role="kaltura partner">' . $entry->getPartnerId() . '</media:credit>' .
-		 		$kaltura_elements . 
+               '<media:credit role="vidiun partner">' . $entry->getPartnerId() . '</media:credit>' .
+		 		$vidiun_elements . 
                	$taboola_elements .
                '</item>';
 		 
@@ -163,12 +163,12 @@ class kalturaRssRenderer
 //print_r ( $list );		
 		$str = $this->startMrss() ;
 		$str .= "<channel>";
-		$str .= "<description>Kaltura's mRss" . 
+		$str .= "<description>Vidiun's mRss" . 
 			( $page ? ", page: {$page}" : "" ) . 
 			( $result_count ? ", results: {$result_count}" : ""  ). 
 			"</description>" .
-			"<title>Kaltura's mRss</title>" .
-			"<link>" . kString::xmlEncode ( $_SERVER["REQUEST_URI"] ) . "</link>"	;
+			"<title>Vidiun's mRss</title>" .
+			"<link>" . vString::xmlEncode ( $_SERVER["REQUEST_URI"] ) . "</link>"	;
 		
 		$str .= $this->recursiveRenderMrssFeed ( $list , 3 );
 		$str .= "</channel>" ;

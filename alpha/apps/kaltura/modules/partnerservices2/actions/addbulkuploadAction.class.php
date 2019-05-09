@@ -31,10 +31,10 @@ class addbulkuploadAction extends defPartnerservices2Action
 		return self::REQUIED_TICKET_REGULAR;
 	}
 
-	// ask to fetch the kuser from puser_kuser - so we can tel the difference between a
-	public function needKuserFromPuser ( )
+	// ask to fetch the vuser from puser_vuser - so we can tel the difference between a
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_KUSER_DATA;
+		return self::VUSER_DATA_VUSER_DATA;
 	}
 
     protected function getObjectPrefix()
@@ -42,7 +42,7 @@ class addbulkuploadAction extends defPartnerservices2Action
     	return "";
     }
     
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		die("This action is no longer supported");
 	}

@@ -3,7 +3,7 @@
  * @package plugins.fairplay
  * @subpackage api.objects
  */
-class KalturaFairplayDrmProfile extends KalturaDrmProfile
+class VidiunFairplayDrmProfile extends VidiunDrmProfile
 {
     /**
      * @var string
@@ -31,18 +31,18 @@ class KalturaFairplayDrmProfile extends KalturaDrmProfile
 	
 	public function validateForInsert($propertiesToSkip = array())
 	{
-		if (!DrmPlugin::isAllowedPartner(kCurrentContext::getCurrentPartnerId()) || !DrmPlugin::isAllowedPartner($this->partnerId))
+		if (!DrmPlugin::isAllowedPartner(vCurrentContext::getCurrentPartnerId()) || !DrmPlugin::isAllowedPartner($this->partnerId))
 		{
-			throw new KalturaAPIException (KalturaErrors::PERMISSION_NOT_FOUND, 'Permission not found to use the PlayReady feature.');
+			throw new VidiunAPIException (VidiunErrors::PERMISSION_NOT_FOUND, 'Permission not found to use the PlayReady feature.');
 		}
 		return parent::validateForInsert($propertiesToSkip);
 	}
 	
 	public function validateForUpdate ($sourceObject, $propertiesToSkip = array())
 	{
-		if (!DrmPlugin::isAllowedPartner(kCurrentContext::getCurrentPartnerId()) || !DrmPlugin::isAllowedPartner($sourceObject->getPartnerId()))
+		if (!DrmPlugin::isAllowedPartner(vCurrentContext::getCurrentPartnerId()) || !DrmPlugin::isAllowedPartner($sourceObject->getPartnerId()))
 		{
-			throw new KalturaAPIException (KalturaErrors::PERMISSION_NOT_FOUND, 'Permission not found to use the PlayReady feature.');
+			throw new VidiunAPIException (VidiunErrors::PERMISSION_NOT_FOUND, 'Permission not found to use the PlayReady feature.');
 		}
 		return parent::validateForUpdate($sourceObject, $propertiesToSkip);
 	}

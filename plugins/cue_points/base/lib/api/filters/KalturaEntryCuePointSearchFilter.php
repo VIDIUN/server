@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaEntryCuePointSearchFilter extends KalturaSearchItem
+class VidiunEntryCuePointSearchFilter extends VidiunSearchItem
 {
 	/**
 	 * @var string
@@ -11,7 +11,7 @@ class KalturaEntryCuePointSearchFilter extends KalturaSearchItem
 	public $cuePointsFreeText;
 	
 	/**
-	 * @dynamicType KalturaCuePointType
+	 * @dynamicType VidiunCuePointType
 	 * @var string
 	 */
 	public $cuePointTypeIn;
@@ -42,13 +42,13 @@ class KalturaEntryCuePointSearchFilter extends KalturaSearchItem
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
 		parent::validateForUsage($sourceObject, $propertiesToSkip);
 		
 		if(isset($this->cuePointSubTypeEqual) && !isset($this->cuePointTypeIn))
-			throw new KalturaAPIException( KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $this->getFormattedPropertyNameWithClassName('cuePointSubTypeEqual') );
+			throw new VidiunAPIException( VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $this->getFormattedPropertyNameWithClassName('cuePointSubTypeEqual') );
 	}
 }

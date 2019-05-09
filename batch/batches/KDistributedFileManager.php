@@ -5,7 +5,7 @@
  *
  */
 
-class KDistributedFileManager
+class VDistributedFileManager
 {
 	private $fileCacheTimeout = null;
 	private $localRoot = null;
@@ -25,7 +25,7 @@ class KDistributedFileManager
 	
 	public function getLocalPath($localPath, $remotePath, &$errDescription, &$fetched = false)
 	{
-		KalturaLog::info("Translating remote path [$remotePath] to local path [$localPath]");
+		VidiunLog::info("Translating remote path [$remotePath] to local path [$localPath]");
 				
 		if(file_exists($localPath))
 		{
@@ -42,9 +42,9 @@ class KDistributedFileManager
 		$res = $this->fetchFile($remotePath, $localPath, $errDescription);
 		if(!$res) {
 			if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-				KalturaLog::warning("Going to flush DNS: ");
+				VidiunLog::warning("Going to flush DNS: ");
 				$output = system( "ipconfig /flushdns" , $rc);
-				KalturaLog::warning($output);
+				VidiunLog::warning($output);
 			}
 		}
 		
@@ -57,7 +57,7 @@ class KDistributedFileManager
 	 */
 	public function getRemoteUrl($localPath)
 	{
-		KalturaLog::debug("str_replace($this->localRoot, $this->remoteRoot, $localPath)");	
+		VidiunLog::debug("str_replace($this->localRoot, $this->remoteRoot, $localPath)");	
 		return str_replace($this->localRoot, $this->remoteRoot, $localPath);
 	}
 
@@ -75,7 +75,7 @@ class KDistributedFileManager
 			if(!file_exists($folder))
 				mkdir($folder, 777, true);
 			
-			$curlWrapper = new KCurlWrapper();
+			$curlWrapper = new VCurlWrapper();
 			$curlHeaderResponse = $curlWrapper->getHeader($remotePath, true);
 			$removeServer = isset($curlHeaderResponse->headers['X-Me']) ? $curlHeaderResponse->headers['X-Me'] : "unknown";
 			
@@ -100,14 +100,14 @@ class KDistributedFileManager
 			{
 				unlink($localPath);
         		$cmd = "curl -s $remotePath -o $localPath";
-				KalturaLog::debug($cmd);
+				VidiunLog::debug($cmd);
         		exec($cmd);
 			}
 			else
 			{			
-				$curlWrapper = new KCurlWrapper();
+				$curlWrapper = new VCurlWrapper();
 				$res = $curlWrapper->exec($remotePath, $localPath, null, true);
-				KalturaLog::debug("Curl results: $res");
+				VidiunLog::debug("Curl results: $res");
 			
 				if(!$res || $curlWrapper->getError())
 				{
@@ -127,7 +127,7 @@ class KDistributedFileManager
 			if($fileSize)
 			{
 				clearstatcache();
-				if(kFile::fileSize($localPath) != $fileSize)
+				if(vFile::fileSize($localPath) != $fileSize)
 				{
 					$errDescription = "Error: output file have a wrong size";
 					return false;

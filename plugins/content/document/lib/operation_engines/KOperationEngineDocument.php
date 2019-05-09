@@ -1,12 +1,12 @@
 <?php
 
-abstract class KOperationEngineDocument extends KSingleOutputOperationEngine {
+abstract class VOperationEngineDocument extends VSingleOutputOperationEngine {
 
 	protected function getPdfInfo($file) {
-		$pdfInfoExe = KBatchBase::$taskConfig->params->pdfInfo;
+		$pdfInfoExe = VBatchBase::$taskConfig->params->pdfInfo;
 		$output = null;
 		$command = $pdfInfoExe . " \"" . realpath($file) . "\" 2>&1";
-		KalturaLog::info("Executing: $command");
+		VidiunLog::info("Executing: $command");
 		exec($command, $output);
 		return $output;
 	}
@@ -16,7 +16,7 @@ abstract class KOperationEngineDocument extends KSingleOutputOperationEngine {
 		$returnValue = null;
 		$output = null;
 		$command = "file '{$filePath}'";
-		KalturaLog::info("Executing: $command");
+		VidiunLog::info("Executing: $command");
 		exec($command, $output, $returnValue);
 		return implode("\n",$output);
 	}
@@ -36,7 +36,7 @@ abstract class KOperationEngineDocument extends KSingleOutputOperationEngine {
 				return null;
 		}
 	
-		KalturaLog::info("file $filePath is of unexpected type : {$fileType}");
+		VidiunLog::info("file $filePath is of unexpected type : {$fileType}");
 		return "invalid file type: {$fileType}";
 	}
 }

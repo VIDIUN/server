@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class executeCommandAction extends kalturaSystemAction
+class executeCommandAction extends vidiunSystemAction
 {
 	// TODO - read from the entryWrapper 
 	private static $allowed_names = array ( "conversionQuality" );

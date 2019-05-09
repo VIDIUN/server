@@ -10,7 +10,7 @@ class appTokenFilter extends baseObjectFilter
 	 */
 	public function init()
 	{
-		$this->fields = kArray::makeAssociativeDefaultValue(array(
+		$this->fields = vArray::makeAssociativeDefaultValue(array(
 			'_eq_id', 
 			'_in_id', 
 			'_gte_created_at', 
@@ -19,7 +19,7 @@ class appTokenFilter extends baseObjectFilter
 			'_lte_updated_at',
 			'_eq_status',
 			'_in_status',
-			'_eq_kuser_id'
+			'_eq_vuser_id'
 		), null);
 		
 		$this->allowed_order_fields = array(

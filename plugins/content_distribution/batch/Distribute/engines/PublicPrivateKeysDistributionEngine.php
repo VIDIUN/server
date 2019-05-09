@@ -15,10 +15,10 @@ abstract class PublicPrivateKeysDistributionEngine extends DistributionEngine
 	{
 		$tempDirectory = $this->getTempDirectoryForProfile($distributionProfileId);
 		$fileLocation = $tempDirectory . $fileName;
-		$content = kFile::getFileContent($fileLocation);
+		$content = vFile::getFileContent($fileLocation);
 		if (!$content || $content !== $keyContent)
 		{
-			kFile::safeFilePutContents($fileLocation, $keyContent, 0600);
+			vFile::safeFilePutContents($fileLocation, $keyContent, 0600);
 		}
 		return $fileLocation;
 	}
@@ -30,7 +30,7 @@ abstract class PublicPrivateKeysDistributionEngine extends DistributionEngine
 	{
 		$tempFilePath = $this->tempDirectory . '/' . $this->getTempDirectory() . '/' . $distributionProfileId . '/';
 		if (!file_exists($tempFilePath))		
-			kFile::fullMkfileDir($tempFilePath);
+			vFile::fullMkfileDir($tempFilePath);
 		return $tempFilePath;
 	}
 

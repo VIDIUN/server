@@ -3,19 +3,19 @@
  * @package Core
  * @subpackage model.data
  */
-class kStorageDeleteJobData extends kStorageJobData
+class vStorageDeleteJobData extends vStorageJobData
 {
     /**
-     * @return kStorageDeleteJobData
+     * @return vStorageDeleteJobData
      */
     public static function getInstance($protocol)
     {
         $data = null;
 
-        $data = KalturaPluginManager::loadObject('kStorageDeleteJobData', $protocol);
+        $data = VidiunPluginManager::loadObject('vStorageDeleteJobData', $protocol);
         
         if (!$data)
-            $data = new kStorageDeleteJobData();
+            $data = new vStorageDeleteJobData();
         
         return $data;
     }

@@ -3,17 +3,17 @@
  * @package plugins.playReady
  * @subpackage api.objects
  */
-class KalturaPlayReadyPlayEnablerHolderArray extends KalturaTypedArray
+class VidiunPlayReadyPlayEnablerHolderArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaPlayReadyPlayEnablerHolderArray();
+		$newArr = new VidiunPlayReadyPlayEnablerHolderArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $type)
 		{
-    		$nObj = new KalturaPlayReadyPlayEnablerHolder();
+    		$nObj = new VidiunPlayReadyPlayEnablerHolder();
 			$nObj->type = $type;
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaPlayReadyPlayEnablerHolderArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		parent::__construct("KalturaPlayReadyPlayEnablerHolder");	
+		parent::__construct("VidiunPlayReadyPlayEnablerHolder");	
 	}
 }

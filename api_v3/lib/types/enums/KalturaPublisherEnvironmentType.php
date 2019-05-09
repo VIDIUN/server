@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaPublisherEnvironmentType extends KalturaDynamicEnum implements PublisherEnvironmentType
+class VidiunPublisherEnvironmentType extends VidiunDynamicEnum implements PublisherEnvironmentType
 {
 	/**
 	 * @return string

@@ -3,12 +3,12 @@
  * @package plugins.attachment
  * @subpackage model.enum
  */
-class AttachmentObjectFeatureType implements IKalturaPluginEnum, ObjectFeatureType
+class AttachmentObjectFeatureType implements IVidiunPluginEnum, ObjectFeatureType
 {
 	const ATTACHMENT = 'Attachment';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalValues()
+	 * @see IVidiunPluginEnum::getAdditionalValues()
 	 */
 	public static function getAdditionalValues() 
 	{
@@ -20,7 +20,7 @@ class AttachmentObjectFeatureType implements IKalturaPluginEnum, ObjectFeatureTy
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalDescriptions()
+	 * @see IVidiunPluginEnum::getAdditionalDescriptions()
 	 */
 	public static function getAdditionalDescriptions() {
 		return array();

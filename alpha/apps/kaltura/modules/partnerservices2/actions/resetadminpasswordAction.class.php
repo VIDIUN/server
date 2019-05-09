@@ -27,7 +27,7 @@ class resetadminpasswordAction extends defPartnerservices2Action
 			);
 	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		defPartnerservices2baseAction::disableCache();
 		
@@ -35,25 +35,25 @@ class resetadminpasswordAction extends defPartnerservices2Action
 		try {	
 			$new_password = UserLoginDataPeer::resetUserPassword ( $email  );
 		}		
-		catch (kUserException $e) {
+		catch (vUserException $e) {
 			$code = $e->getCode();
-			if ($code == kUserException::LOGIN_DATA_NOT_FOUND) {
-				$this->addException( APIErrors::ADMIN_KUSER_NOT_FOUND );
+			if ($code == vUserException::LOGIN_DATA_NOT_FOUND) {
+				$this->addException( APIErrors::ADMIN_VUSER_NOT_FOUND );
 				return null;
 			}
-			if ($code == kUserException::PASSWORD_STRUCTURE_INVALID) {
+			if ($code == vUserException::PASSWORD_STRUCTURE_INVALID) {
 				$this->addException( APIErrors::PASSWORD_STRUCTURE_INVALID );
 				return null;
 			}
-			if ($code == kUserException::PASSWORD_ALREADY_USED) {
+			if ($code == vUserException::PASSWORD_ALREADY_USED) {
 				$this->addException( APIErrors::PASSWORD_ALREADY_USED );
 				return null;
 			}
-			if ($code == kUserException::INVALID_EMAIL) {
+			if ($code == vUserException::INVALID_EMAIL) {
 				$this->addException( APIErrors::INVALID_FIELD_VALUE, 'email' );
 				return null;
 			}
-			if ($code == kUserException::LOGIN_ID_ALREADY_USED) {
+			if ($code == vUserException::LOGIN_ID_ALREADY_USED) {
 				$this->addException( APIErrors::LOGIN_ID_ALREADY_USED);
 				return null;
 			}			
@@ -62,7 +62,7 @@ class resetadminpasswordAction extends defPartnerservices2Action
 		
 		if ( ! $new_password )
 		{
-			$this->addException( APIErrors::ADMIN_KUSER_NOT_FOUND );
+			$this->addException( APIErrors::ADMIN_VUSER_NOT_FOUND );
 		}
 		$this->addMsg ( "msg" , "email sent") ;
 	}

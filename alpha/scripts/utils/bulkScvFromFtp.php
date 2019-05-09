@@ -5,8 +5,8 @@ if($argc < 5)
 {
 	echo "Usage: php bulkScvFromFtp.php {ftp url} {username} {password} {dir} [{outputfile}]\n";
 	echo "Examples:\n";
-	echo "	php bulkScvFromFtp.php ftp.kaltura.com username /dir password\n";
-	echo "	php bulkScvFromFtp.php ftp.kaltura.com username /dir password myCsv.csv\n";
+	echo "	php bulkScvFromFtp.php ftp.vidiun.com username /dir password\n";
+	echo "	php bulkScvFromFtp.php ftp.vidiun.com username /dir password myCsv.csv\n";
 	exit;
 }
 

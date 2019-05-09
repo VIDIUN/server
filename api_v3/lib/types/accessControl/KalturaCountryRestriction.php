@@ -2,14 +2,14 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaRule instead
+ * @deprecated use VidiunRule instead
  */
-class KalturaCountryRestriction extends KalturaBaseRestriction 
+class VidiunCountryRestriction extends VidiunBaseRestriction 
 {
 	/**
 	 * Country restriction type (Allow or deny)
 	 * 
-	 * @var KalturaCountryRestrictionType
+	 * @var VidiunCountryRestrictionType
 	 */
 	public $countryRestrictionType; 
 	
@@ -32,10 +32,10 @@ class KalturaCountryRestriction extends KalturaBaseRestriction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseRestriction::toRule()
+	 * @see VidiunBaseRestriction::toRule()
 	 */
-	public function toRule(KalturaRestrictionArray $restrictions)
+	public function toRule(VidiunRestrictionArray $restrictions)
 	{
-		return $this->toObject(new kAccessControlCountryRestriction());
+		return $this->toObject(new vAccessControlCountryRestriction());
 	}
 }

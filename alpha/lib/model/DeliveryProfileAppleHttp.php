@@ -4,7 +4,7 @@ class DeliveryProfileAppleHttp extends DeliveryProfileVod {
 	
 	function __construct() {
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kM3U8ManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vM3U8ManifestRenderer';
 	}
 	
 	protected function doGetFlavorAssetUrl(asset $flavorAsset)

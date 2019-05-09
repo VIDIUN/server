@@ -20,8 +20,8 @@ class Form_CreateDrmProfile extends Infra_Form
 			'filters'		=> array('StringTrim'),
 		));	
 
-		$newDrmProfileProvider = new Kaltura_Form_Element_EnumSelect('newDrmProfileProvider', array(
-			'enum' => 'Kaltura_Client_Drm_Enum_DrmProviderType'
+		$newDrmProfileProvider = new Vidiun_Form_Element_EnumSelect('newDrmProfileProvider', array(
+			'enum' => 'Vidiun_Client_Drm_Enum_DrmProviderType'
 		));
 		
 		$newDrmProfileProvider->setLabel('Provider:');

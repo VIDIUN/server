@@ -88,7 +88,7 @@ class ConfigureForm extends Infra_Form
 	}
 
 	protected function addEnumElement($name, $prefix, $enumClass) {
-		$elem = new Kaltura_Form_Element_EnumSelect("$prefix$name", array(
+		$elem = new Vidiun_Form_Element_EnumSelect("$prefix$name", array(
 			'enum' => $enumClass,
 			'excludes' => array(),
 			'value' => 'default'

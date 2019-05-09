@@ -16,16 +16,16 @@
 <script type="text/javascript" src="<?php echo requestUtils::getCdnHost( requestUtils::getRequestProtocol() ); ?>/lib/js/swfobject_v2.2.js"></script>
 
 </head>
-<body id="ng-app" ng-app="kmcApp">
+<body id="ng-app" ng-app="vmcApp">
  <div id="wrap">
  <?php echo $sf_content ?>
  </div>
-<?php if( ! kConf::get('kmc_disable_analytics') ){ ?>
+<?php if( ! vConf::get('vmc_disable_analytics') ){ ?>
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 try {
-var pageTracker = _gat._getTracker("<?php echo kConf::get('ga_account'); ?>");
+var pageTracker = _gat._getTracker("<?php echo vConf::get('ga_account'); ?>");
 pageTracker._trackPageview();
 } catch(err) {}
 </script>

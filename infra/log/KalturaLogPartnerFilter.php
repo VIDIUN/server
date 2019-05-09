@@ -3,7 +3,7 @@
  * @package infra
  * @subpackage log
  */
-class KalturaLogPartnerFilter implements Zend_Log_Filter_Interface
+class VidiunLogPartnerFilter implements Zend_Log_Filter_Interface
 {
 	/**
 	 * @param int

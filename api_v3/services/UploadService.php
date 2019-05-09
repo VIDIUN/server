@@ -7,7 +7,7 @@
  * @subpackage services
  * @deprecated Please use UploadToken service
  */
-class UploadService extends KalturaEntryService
+class UploadService extends VidiunEntryService
 {
 	/**
 	 * 
@@ -17,12 +17,12 @@ class UploadService extends KalturaEntryService
 	 */
 	function uploadAction($fileData)
 	{
-		$ksUnique = md5($this->getKs()->toSecureString());
+		$vsUnique = md5($this->getVs()->toSecureString());
 		
 		$uniqueId = md5($fileData["name"]);
 		
 		$ext = pathinfo($fileData["name"], PATHINFO_EXTENSION);
-		$token = $ksUnique."_".$uniqueId.".".$ext;
+		$token = $vsUnique."_".$uniqueId.".".$ext;
 		
 		$res = myUploadUtils::uploadFileByToken($fileData, $token, "", null, true);
 	
@@ -33,26 +33,26 @@ class UploadService extends KalturaEntryService
 	 * 
 	 * @action getUploadedFileTokenByFileName
 	 * @param string $fileName
-	 * @return KalturaUploadResponse
+	 * @return VidiunUploadResponse
 	 */
 	function getUploadedFileTokenByFileNameAction($fileName)
 	{
-		KalturaResponseCacher::disableConditionalCache();
+		VidiunResponseCacher::disableConditionalCache();
 		
-		$res = new KalturaUploadResponse();
-		$ksUnique = md5($this->getKs()->toSecureString());
+		$res = new VidiunUploadResponse();
+		$vsUnique = md5($this->getVs()->toSecureString());
 		
 		$uniqueId = md5($fileName);
 		
 		$ext = pathinfo($fileName, PATHINFO_EXTENSION);
-		$token = $ksUnique."_".$uniqueId.".".$ext;
+		$token = $vsUnique."_".$uniqueId.".".$ext;
 		
 		$entryFullPath = myUploadUtils::getUploadPath($token, "", null , strtolower($ext)); // filesync ok
 		if (!file_exists($entryFullPath))
-			throw new KalturaAPIException(KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN);
+			throw new VidiunAPIException(VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN);
 			
 		$res->uploadTokenId = $token;
-		$res->fileSize = kFile::fileSize($entryFullPath);
+		$res->fileSize = vFile::fileSize($entryFullPath);
 		return $res; 
 	}
 }

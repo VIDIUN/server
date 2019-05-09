@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../bootstrap.php');
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
-KalturaLog::info('add admin secret start' . PHP_EOL);
+VidiunLog::info('add admin secret start' . PHP_EOL);
 
 if ($argc <= 1)
 	die(PHP_EOL . 'php' . "Usage: $argv[0] <partnerId> [<replacePrimarySecret>] [<adminSecret>]". PHP_EOL .
@@ -25,7 +25,7 @@ if (isset($argv[3]))
 	$newSecret = $argv[3];
 }
 else
-	$newSecret = md5(KCryptoWrapper::random_pseudo_bytes(16));
+	$newSecret = md5(VCryptoWrapper::random_pseudo_bytes(16));
 
 
 
@@ -48,14 +48,14 @@ if ($replacePrimaryAdminSecret)
 	array_unshift($additionalEnableSecrets, $oldSecret);
 	$partner->setAdminSecret($newSecret);
 	$partner->setEnabledAdditionalAdminSecrets($additionalEnableSecrets);
-	KalturaLog::info('primary admin Secret replaced' . PHP_EOL);
+	VidiunLog::info('primary admin Secret replaced' . PHP_EOL);
 }
 else
 {
 	$additionalEnableSecrets = $partner->getEnabledAdditionalAdminSecrets();
 	$additionalEnableSecrets[] = $newSecret;
 	$partner->setEnabledAdditionalAdminSecrets($additionalEnableSecrets);
-	KalturaLog::info('new secret was added to additional admin secrets'. PHP_EOL);
+	VidiunLog::info('new secret was added to additional admin secrets'. PHP_EOL);
 }
 
 try

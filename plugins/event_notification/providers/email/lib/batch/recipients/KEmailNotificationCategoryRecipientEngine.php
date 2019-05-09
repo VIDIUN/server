@@ -5,22 +5,22 @@
  * @package plugins.emailNotification
  * @subpackage Scheduler
  */
-class KEmailNotificationCategoryRecipientEngine extends KEmailNotificationRecipientEngine
+class VEmailNotificationCategoryRecipientEngine extends VEmailNotificationRecipientEngine
 {
 	/* (non-PHPdoc)
-	 * @see KEmailNotificationRecipientEngine::getRecipients()
+	 * @see VEmailNotificationRecipientEngine::getRecipients()
 	 */ 
 	function getRecipients(array $contentParameters)
 	{
 		$recipients = array();
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
 		$pager->pageIndex = 1;
 		$categoryUserIds = array();
 		$maxPagesToScan = 2;
 		do
 		{
-			$categoryUserList = KBatchBase::$kClient->categoryUser->listAction($this->recipientJobData->categoryUserFilter, $pager);
+			$categoryUserList = VBatchBase::$vClient->categoryUser->listAction($this->recipientJobData->categoryUserFilter, $pager);
 			foreach ($categoryUserList->objects as $categoryUser)
 				$categoryUserIds[] = $categoryUser->userId;
 
@@ -32,11 +32,11 @@ class KEmailNotificationCategoryRecipientEngine extends KEmailNotificationRecipi
 	            return $recipients;
 
 		$pager->pageIndex = 1;
-		$userFilter = new KalturaUserFilter();
+		$userFilter = new VidiunUserFilter();
 		$userFilter->idIn = implode(',', $categoryUserIds);
 		do
 		{
-			$userList = KBatchBase::$kClient->user->listAction($userFilter, $pager);
+			$userList = VBatchBase::$vClient->user->listAction($userFilter, $pager);
 			foreach ($userList->objects as $user)
 				$recipients[$user->email] = $user->firstName. ' ' . $user->lastName;
 

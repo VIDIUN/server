@@ -1,11 +1,11 @@
 
-@LOG_DIR@/kaltura_cleanup.log {
+@LOG_DIR@/vidiun_cleanup.log {
  rotate 5
  daily
  missingok
  compress
  dateext
  notifempty
- su root kaltura
+ su root vidiun
 }
 

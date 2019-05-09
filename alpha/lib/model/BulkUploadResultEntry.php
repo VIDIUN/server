@@ -94,7 +94,7 @@ class BulkUploadResultEntry extends BulkUploadResult
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			return;
 		}
 		
@@ -108,7 +108,7 @@ class BulkUploadResultEntry extends BulkUploadResult
 	{
 	    $entry = $this->getObject(); 
 		if(!$entry)
-			throw new kCoreException("Entry not found");
+			throw new vCoreException("Entry not found");
 			
 		if($this->getThumbnailUrl())
 			$entry->setCreateThumb(false);

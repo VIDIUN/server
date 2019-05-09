@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kMailJobData extends kJobData
+class vMailJobData extends vJobData
 {
 	const MAIL_STATUS_PENDING = 1;
 	const MAIL_STATUS_SENT = 2;
@@ -17,7 +17,7 @@ class kMailJobData extends kJobData
 	
 	
 	/**
-	 * @var KalturaMailType
+	 * @var VidiunMailType
 	 */
 	private $mailType;
 
@@ -27,7 +27,7 @@ class kMailJobData extends kJobData
     private $mailPriority;
 
     /**
-	 * @var KalturaMailJobStatus
+	 * @var VidiunMailJobStatus
 	 */
     private $status ;
     
@@ -42,7 +42,7 @@ class kMailJobData extends kJobData
    	private $recipientEmail;
    	
 	/**
-	 * kuserId  
+	 * vuserId  
 	 * @var int
 	 */   	
     private $recipientId;

@@ -1,13 +1,13 @@
 <?php
 /**
- * The Audit Trail service allows you to keep track of changes made to various Kaltura objects. 
+ * The Audit Trail service allows you to keep track of changes made to various Vidiun objects. 
  * This service is disabled by default.
  *
  * @service auditTrail
  * @package plugins.audit
  * @subpackage api.services
  */
-class AuditTrailService extends KalturaBaseService
+class AuditTrailService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -18,18 +18,18 @@ class AuditTrailService extends KalturaBaseService
 		$this->applyPartnerFilterForClass('AuditTrailConfig');
 		
 		if(!AuditPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, AuditPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, AuditPlugin::PLUGIN_NAME);
 	}
 	
 	/**
-	 * Allows you to add an audit trail object and audit trail content associated with Kaltura object
+	 * Allows you to add an audit trail object and audit trail content associated with Vidiun object
 	 * 
 	 * @action add
-	 * @param KalturaAuditTrail $auditTrail
-	 * @return KalturaAuditTrail
+	 * @param VidiunAuditTrail $auditTrail
+	 * @return VidiunAuditTrail
 	 * @throws AuditTrailErrors::AUDIT_TRAIL_DISABLED
 	 */
-	function addAction(KalturaAuditTrail $auditTrail)
+	function addAction(VidiunAuditTrail $auditTrail)
 	{
 		$auditTrail->validatePropertyNotNull("auditObjectType");
 		$auditTrail->validatePropertyNotNull("objectId");
@@ -39,17 +39,17 @@ class AuditTrailService extends KalturaBaseService
 		$dbAuditTrail = $auditTrail->toInsertableObject();
 		$dbAuditTrail->setPartnerId($this->getPartnerId());
 		$dbAuditTrail->setStatus(AuditTrail::AUDIT_TRAIL_STATUS_READY);
-		$dbAuditTrail->setContext(KalturaAuditTrailContext::CLIENT);
+		$dbAuditTrail->setContext(VidiunAuditTrailContext::CLIENT);
 		
-		$enabled = kAuditTrailManager::traceEnabled($this->getPartnerId(), $dbAuditTrail);
+		$enabled = vAuditTrailManager::traceEnabled($this->getPartnerId(), $dbAuditTrail);
 		if(!$enabled)
-			throw new KalturaAPIException(AuditTrailErrors::AUDIT_TRAIL_DISABLED, $this->getPartnerId(), $dbAuditTrail->getObjectType(), $dbAuditTrail->getAction());
+			throw new VidiunAPIException(AuditTrailErrors::AUDIT_TRAIL_DISABLED, $this->getPartnerId(), $dbAuditTrail->getObjectType(), $dbAuditTrail->getAction());
 			
 		$created = $dbAuditTrail->save();
 		if(!$created)
 			return null;
 		
-		$auditTrail = new KalturaAuditTrail();
+		$auditTrail = new VidiunAuditTrail();
 		$auditTrail->fromObject($dbAuditTrail, $this->getResponseProfile());
 		
 		return $auditTrail;
@@ -60,17 +60,17 @@ class AuditTrailService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id 
-	 * @return KalturaAuditTrail
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @return VidiunAuditTrail
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */		
 	function getAction($id)
 	{
 		$dbAuditTrail = AuditTrailPeer::retrieveByPK( $id );
 		
 		if(!$dbAuditTrail)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $id);
 			
-		$auditTrail = new KalturaAuditTrail();
+		$auditTrail = new VidiunAuditTrail();
 		$auditTrail->fromObject($dbAuditTrail, $this->getResponseProfile());
 		
 		return $auditTrail;
@@ -80,17 +80,17 @@ class AuditTrailService extends KalturaBaseService
 	 * List audit trail objects by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaAuditTrailFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaAuditTrailListResponse
+	 * @param VidiunAuditTrailFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunAuditTrailListResponse
 	 */
-	function listAction(KalturaAuditTrailFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunAuditTrailFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaAuditTrailFilter;
+			$filter = new VidiunAuditTrailFilter;
 			
 		if (!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		return $filter->getListResponse($pager, $this->getResponseProfile());
 	}

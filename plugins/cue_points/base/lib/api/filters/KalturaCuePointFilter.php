@@ -3,7 +3,7 @@
  * @package plugins.cuePoint
  * @subpackage api.filters
  */
-class KalturaCuePointFilter extends KalturaCuePointBaseFilter
+class VidiunCuePointFilter extends VidiunCuePointBaseFilter
 {
 	/**
 	 * @var string
@@ -11,12 +11,12 @@ class KalturaCuePointFilter extends KalturaCuePointBaseFilter
 	public $freeText;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $userIdEqualCurrent;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $userIdCurrent;
 	
@@ -35,13 +35,13 @@ class KalturaCuePointFilter extends KalturaCuePointBaseFilter
 	protected function validateEntryIdFiltered()
 	{
 		if(!$this->idEqual && !$this->idIn && !$this->entryIdEqual && !$this->entryIdIn)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL,
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL,
 					$this->getFormattedPropertyNameWithClassName('idEqual') . '/' . $this->getFormattedPropertyNameWithClassName('idIn') . '/' .
 					$this->getFormattedPropertyNameWithClassName('entryIdEqual') . '/' . $this->getFormattedPropertyNameWithClassName('entryIdIn'));
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -50,53 +50,53 @@ class KalturaCuePointFilter extends KalturaCuePointBaseFilter
 	
 	protected function translateUserIds()
 	{		
-		if($this->userIdCurrent == KalturaNullableBoolean::TRUE_VALUE)
+		if($this->userIdCurrent == VidiunNullableBoolean::TRUE_VALUE)
 		{
-			if(kCurrentContext::$ks_kuser_id)
+			if(vCurrentContext::$vs_vuser_id)
 			{
-				$this->userIdEqual = kCurrentContext::$ks_kuser_id;
+				$this->userIdEqual = vCurrentContext::$vs_vuser_id;
 			}
 			else
 			{
-				$this->isPublicEqual = KalturaNullableBoolean::TRUE_VALUE;
+				$this->isPublicEqual = VidiunNullableBoolean::TRUE_VALUE;
 			}
 			$this->userIdCurrent = null;
 		}
 		
 		if(isset($this->userIdEqual)){
-			$dbKuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::$ks_partner_id, $this->userIdEqual);
-			if (! $dbKuser) {
-				throw new KalturaAPIException ( KalturaErrors::INVALID_USER_ID );
+			$dbVuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::$vs_partner_id, $this->userIdEqual);
+			if (! $dbVuser) {
+				throw new VidiunAPIException ( VidiunErrors::INVALID_USER_ID );
 			}
-			$this->userIdEqual = $dbKuser->getId();
+			$this->userIdEqual = $dbVuser->getId();
 		}
 		
 		if(isset($this->userIdIn)){
 			$userIds = explode(",", $this->userIdIn);
 			foreach ($userIds as $userId){
-				$dbKuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::$ks_partner_id, $userId);
-				if (! $dbKuser) {
-				    throw new KalturaAPIException ( KalturaErrors::INVALID_USER_ID );
+				$dbVuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::$vs_partner_id, $userId);
+				if (! $dbVuser) {
+				    throw new VidiunAPIException ( VidiunErrors::INVALID_USER_ID );
 			}
-				$kuserIds = $dbKuser->getId().",";
+				$vuserIds = $dbVuser->getId().",";
 			}
 			
-			$this->userIdIn = $kuserIds;
+			$this->userIdIn = $vuserIds;
 		}
 	}
 	
 	protected function getCriteria()
 	{
-	    return KalturaCriteria::create(CuePointPeer::OM_CLASS);
+	    return VidiunCriteria::create(CuePointPeer::OM_CLASS);
 	}
 	
-	protected function doGetListResponse(KalturaFilterPager $pager, $type = null)
+	protected function doGetListResponse(VidiunFilterPager $pager, $type = null)
 	{
 		$this->validateEntryIdFiltered();
 		
 		if (!is_null($this->userIdEqualCurrent) && $this->userIdEqualCurrent)
 		{
-			$this->userIdEqual = kCurrentContext::getCurrentKsKuserId();
+			$this->userIdEqual = vCurrentContext::getCurrentVsVuserId();
 		}
 		else
 		{
@@ -114,7 +114,7 @@ class KalturaCuePointFilter extends KalturaCuePointBaseFilter
 		$entryIds = $this->getFilteredEntryIds();
 		if (!is_null($entryIds))
 		{
-			$entryIds = entryPeer::filterEntriesByPartnerOrKalturaNetwork ( $entryIds, kCurrentContext::getCurrentPartnerId());
+			$entryIds = entryPeer::filterEntriesByPartnerOrVidiunNetwork ( $entryIds, vCurrentContext::getCurrentPartnerId());
 			if (!$entryIds)
 			{
 				return array(array(), 0);
@@ -135,63 +135,63 @@ class KalturaCuePointFilter extends KalturaCuePointBaseFilter
 		return array($list, $c->getRecordsCount());
 	}
 	
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, $type = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, $type = null)
 	{
 		//Was added to avoid braking backward compatibility for old player chapters module
-		if(isset($this->tagsLike) && $this->tagsLike==KalturaAnnotationFilter::CHAPTERS_PUBLIC_TAG)
-			KalturaCriterion::disableTag(KalturaCriterion::TAG_WIDGET_SESSION);
+		if(isset($this->tagsLike) && $this->tagsLike==VidiunAnnotationFilter::CHAPTERS_PUBLIC_TAG)
+			VidiunCriterion::disableTag(VidiunCriterion::TAG_WIDGET_SESSION);
 
 		list($list, $totalCount) = $this->doGetListResponse($pager, $type);
-		$response = new KalturaCuePointListResponse();
-		$response->objects = KalturaCuePointArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunCuePointListResponse();
+		$response->objects = VidiunCuePointArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 	
 		return $response;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		return $this->getTypeListResponse($pager, $responseProfile);
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::validateForResponseProfile()
+	 * @see VidiunRelatedFilter::validateForResponseProfile()
 	 */
 	public function validateForResponseProfile()
 	{
-		if(		!kCurrentContext::$is_admin_session
+		if(		!vCurrentContext::$is_admin_session
 			&&	!$this->idEqual
 			&&	!$this->idIn
 			&&	!$this->systemNameEqual
 			&&	!$this->systemNameIn)
 		{
-			if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENABLE_RESPONSE_PROFILE_USER_CACHE, kCurrentContext::getCurrentPartnerId()))
+			if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENABLE_RESPONSE_PROFILE_USER_CACHE, vCurrentContext::getCurrentPartnerId()))
 			{
-				KalturaResponseProfileCacher::useUserCache();
+				VidiunResponseProfileCacher::useUserCache();
 				return;
 			}
 			
-			throw new KalturaAPIException(KalturaCuePointErrors::USER_KS_CANNOT_LIST_RELATED_CUE_POINTS, get_class($this));
+			throw new VidiunAPIException(VidiunCuePointErrors::USER_VS_CANNOT_LIST_RELATED_CUE_POINTS, get_class($this));
 		}
 	}
 	
 	public function applyPartnerOnCurrentContext($entryIds)
 	{
-		if(kCurrentContext::getCurrentPartnerId() >= 0 || !$entryIds)
+		if(vCurrentContext::getCurrentPartnerId() >= 0 || !$entryIds)
 			return;
 		
 		$entryId = reset($entryIds);
 		$entry = entryPeer::retrieveByPKNoFilter($entryId);
 		if($entry)
 		{
-			kCurrentContext::$partner_id = $entry->getPartnerId();
+			vCurrentContext::$partner_id = $entry->getPartnerId();
 		}
 		else
 		{
-			KalturaLog::debug("Entry id not filtered, If partner id not correctly defined wrong results set may be returned");
+			VidiunLog::debug("Entry id not filtered, If partner id not correctly defined wrong results set may be returned");
 		}
 	}
 	

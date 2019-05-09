@@ -3,10 +3,10 @@
  * @package plugins.shortLink
  * @subpackage api.objects
  */
-class KalturaShortLinkListResponse extends KalturaListResponse
+class VidiunShortLinkListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaShortLinkArray
+	 * @var VidiunShortLinkArray
 	 * @readonly
 	 */
 	public $objects;

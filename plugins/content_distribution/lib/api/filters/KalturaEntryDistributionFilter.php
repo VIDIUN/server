@@ -3,10 +3,10 @@
  * @package plugins.contentDistribution
  * @subpackage api.filters
  */
-class KalturaEntryDistributionFilter extends KalturaEntryDistributionBaseFilter
+class VidiunEntryDistributionFilter extends VidiunEntryDistributionBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -14,9 +14,9 @@ class KalturaEntryDistributionFilter extends KalturaEntryDistributionBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$c = new Criteria();
 		$entryDistributionFilter = $this->toObject();
@@ -27,8 +27,8 @@ class KalturaEntryDistributionFilter extends KalturaEntryDistributionBaseFilter
 		$pager->attachToCriteria ( $c );
 		$list = EntryDistributionPeer::doSelect($c);
 		
-		$response = new KalturaEntryDistributionListResponse();
-		$response->objects = KalturaEntryDistributionArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunEntryDistributionListResponse();
+		$response->objects = VidiunEntryDistributionArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $count;
 	
 		return $response;

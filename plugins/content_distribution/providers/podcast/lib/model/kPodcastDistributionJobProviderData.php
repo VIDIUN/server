@@ -3,7 +3,7 @@
  * @package plugins.podcastDistribution
  * @subpackage model.data
  */
-class kPodcastDistributionJobProviderData extends kDistributionJobProviderData
+class vPodcastDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -20,7 +20,7 @@ class kPodcastDistributionJobProviderData extends kDistributionJobProviderData
 	 */
 	private $distributionProfileId;
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

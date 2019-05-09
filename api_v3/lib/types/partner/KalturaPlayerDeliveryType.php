@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPlayerDeliveryType extends KalturaObject
+class VidiunPlayerDeliveryType extends VidiunObject
 {
 	/**
 	 * @var string
@@ -16,7 +16,7 @@ class KalturaPlayerDeliveryType extends KalturaObject
 	public $label;
 	
 	/**
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $flashvars;
 	
@@ -38,7 +38,7 @@ class KalturaPlayerDeliveryType extends KalturaObject
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{

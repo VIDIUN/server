@@ -1,6 +1,6 @@
 <?php
 
-class kBulkUploadXmlFlowManager implements kBatchJobStatusEventConsumer
+class vBulkUploadXmlFlowManager implements vBatchJobStatusEventConsumer
 {
 	/**
 	 * @param BatchJob $dbBatchJob
@@ -8,12 +8,12 @@ class kBulkUploadXmlFlowManager implements kBatchJobStatusEventConsumer
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
-		KalturaLog::debug("Handling finished ExtractMedia job!");
+		VidiunLog::debug("Handling finished ExtractMedia job!");
 		
 		$profile = myPartnerUtils::getConversionProfile2ForEntry($dbBatchJob->getEntryId());
 		if(is_null($profile))
 		{
-			KalturaLog::err("no profile found for entry " . $dbBatchJob->getEntryId());
+			VidiunLog::err("no profile found for entry " . $dbBatchJob->getEntryId());
 			return true;
 		}
 		$mediaInfoXslt = $profile->getMediaInfoXslTransformation();
@@ -25,37 +25,37 @@ class kBulkUploadXmlFlowManager implements kBatchJobStatusEventConsumer
 		$mediaInfo = mediaInfoPeer::retrieveByPk($dbBatchJob->getData()->getMediaInfoId());
 		$mediaInfoRawData = $mediaInfo->getRawDataXml();
 		
-		$transformedXml = kXml::transformXmlUsingXslt($mediaInfoRawData, $mediaInfoXslt, array("entryId" => $dbBatchJob->getEntryId()));
-		$xml = new KDOMDocument();
+		$transformedXml = vXml::transformXmlUsingXslt($mediaInfoRawData, $mediaInfoXslt, array("entryId" => $dbBatchJob->getEntryId()));
+		$xml = new VDOMDocument();
 		if(!$xml->loadXML($transformedXml))
 		{
-			KalturaLog::err("Could not load xml string");
+			VidiunLog::err("Could not load xml string");
 			return true;
 		}
 		
 		if(!$xml->getElementsByTagName("entryId")->item(0))
 		{
-			KalturaLog::err("XML structure is incorrect - must contain tag entry ID");
+			VidiunLog::err("XML structure is incorrect - must contain tag entry ID");
 			return true;
 		}
 		$transformedXml = $xml->saveXML();
 		
 		//Save the file to a shared temporary location
-		$tmpSharedFolder = kConf::get("shared_temp_folder") . DIRECTORY_SEPARATOR . "bulkupload";
+		$tmpSharedFolder = vConf::get("shared_temp_folder") . DIRECTORY_SEPARATOR . "bulkupload";
 		$fileName = $dbBatchJob->getEntryId() . '_update_' . uniqid() . ".xml";
 		$filePath = $tmpSharedFolder . DIRECTORY_SEPARATOR. $fileName;
-		kFile::fullMkdir($filePath,0755);
+		vFile::fullMkdir($filePath,0755);
 		$res = file_put_contents($filePath, $transformedXml);
 		chmod($filePath, 0640);
 		
-		$jobData = new kBulkUploadXmlJobData();
+		$jobData = new vBulkUploadXmlJobData();
 		$jobData->setFileName($fileName);
 		$jobData->setFilePath($filePath);
 		$jobData->setBulkUploadObjectType(BulkUploadObjectType::ENTRY);
-		$jobData->setObjectData(new kBulkUploadEntryData());
+		$jobData->setObjectData(new vBulkUploadEntryData());
 		$bulkUploadCoreType = BulkUploadXmlPlugin::getBulkUploadTypeCoreValue(BulkUploadXmlType::XML);
 		
-		kJobsManager::addBulkUploadJob($dbBatchJob->getPartner(), $jobData, $bulkUploadCoreType);
+		vJobsManager::addBulkUploadJob($dbBatchJob->getPartner(), $jobData, $bulkUploadCoreType);
 		
 		return true;
 	}

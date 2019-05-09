@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAkamaiUniversalProvisionJobData extends KalturaProvisionJobData
+class VidiunAkamaiUniversalProvisionJobData extends VidiunProvisionJobData
 {
 	/**
 	 * @var int
@@ -26,7 +26,7 @@ class KalturaAkamaiUniversalProvisionJobData extends KalturaProvisionJobData
 	public $domainName;
 
 	/**
-	 * @var KalturaDVRStatus
+	 * @var VidiunDVRStatus
 	 */
 	public $dvrEnabled;
 	
@@ -46,7 +46,7 @@ class KalturaAkamaiUniversalProvisionJobData extends KalturaProvisionJobData
 	public $secondaryContact;
 	
 	/**
-	 * @var KalturaAkamaiUniversalStreamType
+	 * @var VidiunAkamaiUniversalStreamType
 	 */
 	public $streamType;
 	
@@ -70,7 +70,7 @@ class KalturaAkamaiUniversalProvisionJobData extends KalturaProvisionJobData
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaProvisionJobData::getMapBetweenObjects()
+	 * @see VidiunProvisionJobData::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -79,12 +79,12 @@ class KalturaAkamaiUniversalProvisionJobData extends KalturaProvisionJobData
 	
 	
 	/* (non-PHPdoc)
-	 * @see KalturaProvisionJobData::toObject()
+	 * @see VidiunProvisionJobData::toObject()
 	 */
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kAkamaiUniversalProvisionJobData();
+			$dbData = new vAkamaiUniversalProvisionJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

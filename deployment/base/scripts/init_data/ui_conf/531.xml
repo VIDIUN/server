@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layouts>
 	<!-- Player Only -->
-	<layout layoutId="playerOnly" skinPath="/content/uiconf/kaltura/wordpress/kdp_2.0.12/kdp_skin_aps_v4.swf">
+	<layout layoutId="playerOnly" skinPath="/content/uiconf/vidiun/wordpress/vdp_2.0.12/vdp_skin_aps_v4.swf">
 		<Canvas width="100%" height="100%" styleName="topLevelLayout">
 		<HBox width="100%" height="100%" styleName="noGapsNoPadding">
 			<VBox id="player" width="100%" height="100%" styleName="noGapsNoPadding">
-				<HBox height="30" id="TopTitleScreen" styleName="controllerBoxDark" k_theme_change="true" width="100%">
+				<HBox height="30" id="TopTitleScreen" styleName="controllerBoxDark" v_theme_change="true" width="100%">
 					<Spacer width="3"/>
-					<Label height="22" id="movieName" styleName="movieName" width="100%" text="{myKplayer.kalturaEntry.entryName}" k_theme_change="true"/>
+					<Label height="22" id="movieName" styleName="movieName" width="100%" text="{myVplayer.vidiunEntry.entryName}" v_theme_change="true"/>
 					<VBox id="scrubberContainerControllerScreen" styleName="noGapsNoPadding" width="32" height="100%">
 						<Spacer height="5" />
-						<Button id="poweredByControllerScreen" width="32" height="20" k_click="navigate('http://www.kaltura.com')" styleName="kalturaLogoDark" k_theme_change="true"/>
+						<Button id="poweredByControllerScreen" width="32" height="20" v_click="navigate('http://www.vidiun.com')" styleName="vidiunLogoDark" v_theme_change="true"/>
 					</VBox>
 					<Spacer width="3"/>
 				</HBox>
 				<HBox height="100%" styleName="playerContainer" id="playerContainer" width="100%">
 					<Canvas height="100%" id="PlayerHolder" styleName="PlayerBackground" width="100%">
-						<KplayerModule height="100%" id="myKplayer" k_path="kplayer/KplayerModule.swf" styleName="centered" width="100%"/>
-						<screens height="100%" id="screens" styleName="centered" width="100%" k_path="screens/Screens.swf" k_end_screen_id="endScreen" k_end_screen_over_id="endScreen" k_pause_screen_id="pauseScreen" k_pause_screen_over_id="pauseScreen" k_play_screen_id="emptyScreen" k_play_screen_over_id="playScreen" k_start_screen_id="startScreen" k_start_screen_over_id="startScreen"/>
-						<Gigya height="100%" id="Gigya" k_share_email_body="Hi%2c%3cbr%3eI watched this video and thought you'd enjoy it too %24URL%24 to watch.%3cbr%3e%0d%0a%24sender%24%0d%0a" k_share_email_subject="Take a look at this video" k_path="addons/Gigya.swf" width="100%" k_uiconf_id=""/>
+						<VplayerModule height="100%" id="myVplayer" v_path="vplayer/VplayerModule.swf" styleName="centered" width="100%"/>
+						<screens height="100%" id="screens" styleName="centered" width="100%" v_path="screens/Screens.swf" v_end_screen_id="endScreen" v_end_screen_over_id="endScreen" v_pause_screen_id="pauseScreen" v_pause_screen_over_id="pauseScreen" v_play_screen_id="emptyScreen" v_play_screen_over_id="playScreen" v_start_screen_id="startScreen" v_start_screen_over_id="startScreen"/>
+						<Gigya height="100%" id="Gigya" v_share_email_body="Hi%2c%3cbr%3eI watched this video and thought you'd enjoy it too %24URL%24 to watch.%3cbr%3e%0d%0a%24sender%24%0d%0a" v_share_email_subject="Take a look at this video" v_path="addons/Gigya.swf" width="100%" v_uiconf_id=""/>
 					</Canvas>
 				</HBox>
-				<HBox id="ControllerScreen" width="100%" height="35" styleName="controllerBoxDark" k_theme_change="true">
+				<HBox id="ControllerScreen" width="100%" height="35" styleName="controllerBoxDark" v_theme_change="true">
 					<HBox id="ControllerScreenInner" width="100%" height="35" styleName="transparentContainer">
-						<Button id="playBtnControllerScreen" command="play" width="25" height="25" k_buttonType="buttonIconControllerArea" styleName="play" tooltip=""/>
+						<Button id="playBtnControllerScreen" command="play" width="25" height="25" v_buttonType="buttonIconControllerArea" styleName="play" tooltip=""/>
 						<VBox id="scrubberContainerControllerScreen" styleName="noGapsNoPadding" width="100%" height="100%">
 							<Spacer height="7"/>
-							<Scrubber id="scrubberControllerScreen" styleName="scrubberLight" width="100%" k_color_change="true" height="12" k_theme_change="true" />
+							<Scrubber id="scrubberControllerScreen" styleName="scrubberLight" width="100%" v_color_change="true" height="12" v_theme_change="true" />
 							<Spacer height="2"/>
 							<HBox width="100%" styleName="noGapsNoPadding" >
 								<Spacer width="5"/>
-								<TimerCountdown id="timerControllerScreen" width="30" height="10" styleName="timer" k_path="timertext/TimerCountdown.swf" timerType="forwards"/>
+								<TimerCountdown id="timerControllerScreen" width="30" height="10" styleName="timer" v_path="timertext/TimerCountdown.swf" timerType="forwards"/>
 							</HBox>
 						</VBox>
-						<VolumeModule width="20" height="15" id="volumeBarControllerScreen" k_path="VolumeBars/VolumeBarB.swf" styleName="volumebarLight" tooltip="change volume" k_theme_change="true"/>
-						<Button id="fullScreenBtnControllerScreen" command="fullScreen" k_buttonType="buttonIconControllerArea" width="autoSize" height="autoSize" label="fullscreen" styleName="fullScreenBtn" tooltip="Toggle fullscreen"/>
-						<Button id="shareBtnControllerScreen" k_buttonType="buttonIconControllerArea" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+						<VolumeModule width="20" height="15" id="volumeBarControllerScreen" v_path="VolumeBars/VolumeBarB.swf" styleName="volumebarLight" tooltip="change volume" v_theme_change="true"/>
+						<Button id="fullScreenBtnControllerScreen" command="fullScreen" v_buttonType="buttonIconControllerArea" width="autoSize" height="autoSize" label="fullscreen" styleName="fullScreenBtn" tooltip="Toggle fullscreen"/>
+						<Button id="shareBtnControllerScreen" v_buttonType="buttonIconControllerArea" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
 						<Spacer width="3"/>
 					</HBox>
 					<Spacer width="3"/>
@@ -45,14 +45,14 @@
 		</HBox>
 	</Canvas>
 	<popups>
-		<module height="100%" id="report" k_path="popups/Report.swf" width="100%" styleName="report" k_reason_sex_label="papa"/>
-		<module height="100%" id="credits" k_path="credits/CreditsWindow.swf" width="100%" styleName="credits"/>
+		<module height="100%" id="report" v_path="popups/Report.swf" width="100%" styleName="report" v_reason_sex_label="papa"/>
+		<module height="100%" id="credits" v_path="credits/CreditsWindow.swf" width="100%" styleName="credits"/>
 	</popups>
 	<screens>
 		<screen id="startScreen">
 			<VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
 				<Tile styleName="TileContainer">
-					<Button id="onVideoPlayBtnStartScreen" command="play" minWidth="75" minHeight="75" width="autoSize" height="autoSize" label="Play" labelPlacement="top" k_buttonType="buttonVideoArea" styleName="statesPlayBtn" tooltip="Play video"/>
+					<Button id="onVideoPlayBtnStartScreen" command="play" minWidth="75" minHeight="75" width="autoSize" height="autoSize" label="Play" labelPlacement="top" v_buttonType="buttonVideoArea" styleName="statesPlayBtn" tooltip="Play video"/>
 				</Tile>
 			</VBox>
 		</screen>
@@ -60,7 +60,7 @@
 			<VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
 				<Spacer height="100%"/>
 				<Tile styleName="TileContainer">
-					<Button id="shareBtnPauseScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" k_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+					<Button id="shareBtnPauseScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" v_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
 				</Tile>
 				<Spacer height="100%"/>
 			</VBox>
@@ -77,8 +77,8 @@
 			<VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
 				<Spacer height="100%"/>
 				<Tile styleName="TileContainer">
-					<Button id="shareBtnEndScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" k_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
-					<Button id="replayBtnEndScreen" command="replay" minWidth="75" minHeight="75" k_buttonType="buttonVideoArea" width="autoSize" labelPlacement="top" height="autoSize" label="Replay" styleName="replayBtn" tooltip="replay"/>
+					<Button id="shareBtnEndScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" v_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+					<Button id="replayBtnEndScreen" command="replay" minWidth="75" minHeight="75" v_buttonType="buttonVideoArea" width="autoSize" labelPlacement="top" height="autoSize" label="Replay" styleName="replayBtn" tooltip="replay"/>
 				</Tile>
 				<Spacer height="100%"/>
 			</VBox>
@@ -98,7 +98,7 @@
 			<cssSelector componentId="listDemo" newClass="plItemsListDark"/>
 			<cssSelector componentId="TopTitleScreen" newClass="controllerBoxDark"/>
 			<cssSelector componentId="ControllerScreen" newClass="controllerBoxDark"/>
-			<cssSelector componentId="poweredByControllerScreen" newClass="kalturaLogoDark"/>
+			<cssSelector componentId="poweredByControllerScreen" newClass="vidiunLogoDark"/>
 			<cssSelector componentId="plTabs" newClass="scrollingTabsDark"/>
 			<cssSelector componentId="plPrevButton" newClass="nextPrevButtonsDark"/>
 			<font>Arial</font>
@@ -148,43 +148,43 @@
 	</layout>
 	
 	<!-- Add Only -->
-	<layout layoutId="addOnly" skinPath="/content/uiconf/kaltura/wordpress/kdp_2.0.12/kdp_skin_aps_v4.swf">
+	<layout layoutId="addOnly" skinPath="/content/uiconf/vidiun/wordpress/vdp_2.0.12/vdp_skin_aps_v4.swf">
 		<Canvas width="100%" height="100%" styleName="topLevelLayout">
 		<HBox width="100%" height="100%" styleName="noGapsNoPadding">
 			<VBox id="player" width="100%" height="100%" styleName="noGapsNoPadding">
-				<HBox height="30" id="TopTitleScreen" styleName="controllerBoxDark" k_theme_change="true" width="100%">
+				<HBox height="30" id="TopTitleScreen" styleName="controllerBoxDark" v_theme_change="true" width="100%">
 					<Spacer width="3"/>
-					<Label height="22" id="movieName" styleName="movieName" width="100%" text="{myKplayer.kalturaEntry.entryName}" k_theme_change="true"/>
+					<Label height="22" id="movieName" styleName="movieName" width="100%" text="{myVplayer.vidiunEntry.entryName}" v_theme_change="true"/>
 					<VBox id="scrubberContainerControllerScreen" styleName="noGapsNoPadding" width="32" height="100%">
 						<Spacer height="5" />
-						<Button id="poweredByControllerScreen" width="32" height="20" k_click="navigate('http://www.kaltura.com')" styleName="kalturaLogoDark" k_theme_change="true"/>
+						<Button id="poweredByControllerScreen" width="32" height="20" v_click="navigate('http://www.vidiun.com')" styleName="vidiunLogoDark" v_theme_change="true"/>
 					</VBox>
 					<Spacer width="3"/>
 				</HBox>
 				<HBox height="100%" styleName="playerContainer" id="playerContainer" width="100%">
 					<Canvas height="100%" id="PlayerHolder" styleName="PlayerBackground" width="100%">
-						<KplayerModule height="100%" id="myKplayer" k_path="kplayer/KplayerModule.swf" styleName="centered" width="100%"/>
-						<screens height="100%" id="screens" styleName="centered" width="100%" k_path="screens/Screens.swf" k_end_screen_id="endScreen" k_end_screen_over_id="endScreen" k_pause_screen_id="pauseScreen" k_pause_screen_over_id="pauseScreen" k_play_screen_id="emptyScreen" k_play_screen_over_id="playScreen" k_start_screen_id="startScreen" k_start_screen_over_id="startScreen"/>
-						<Gigya height="100%" id="Gigya" k_share_email_body="Hi%2c%3cbr%3eI watched this video and thought you'd enjoy it too %24URL%24 to watch.%3cbr%3e%0d%0a%24sender%24%0d%0a" k_share_email_subject="Take a look at this video" k_path="addons/Gigya.swf" width="100%" k_uiconf_id=""/>
+						<VplayerModule height="100%" id="myVplayer" v_path="vplayer/VplayerModule.swf" styleName="centered" width="100%"/>
+						<screens height="100%" id="screens" styleName="centered" width="100%" v_path="screens/Screens.swf" v_end_screen_id="endScreen" v_end_screen_over_id="endScreen" v_pause_screen_id="pauseScreen" v_pause_screen_over_id="pauseScreen" v_play_screen_id="emptyScreen" v_play_screen_over_id="playScreen" v_start_screen_id="startScreen" v_start_screen_over_id="startScreen"/>
+						<Gigya height="100%" id="Gigya" v_share_email_body="Hi%2c%3cbr%3eI watched this video and thought you'd enjoy it too %24URL%24 to watch.%3cbr%3e%0d%0a%24sender%24%0d%0a" v_share_email_subject="Take a look at this video" v_path="addons/Gigya.swf" width="100%" v_uiconf_id=""/>
 					</Canvas>
 				</HBox>
-				<HBox id="ControllerScreen" width="100%" height="35" styleName="controllerBoxDark" k_theme_change="true">
+				<HBox id="ControllerScreen" width="100%" height="35" styleName="controllerBoxDark" v_theme_change="true">
 					<HBox id="ControllerScreenInner" width="100%" height="35" styleName="transparentContainer">
-						<Button id="playBtnControllerScreen" command="play" width="25" height="25" k_buttonType="buttonIconControllerArea" styleName="play" tooltip=""/>
+						<Button id="playBtnControllerScreen" command="play" width="25" height="25" v_buttonType="buttonIconControllerArea" styleName="play" tooltip=""/>
 						<VBox id="scrubberContainerControllerScreen" styleName="noGapsNoPadding" width="100%" height="100%">
 							<Spacer height="7"/>
-							<Scrubber id="scrubberControllerScreen" styleName="scrubberLight" width="100%" k_color_change="true" height="12" k_theme_change="true" />
+							<Scrubber id="scrubberControllerScreen" styleName="scrubberLight" width="100%" v_color_change="true" height="12" v_theme_change="true" />
 							<Spacer height="2"/>
 							<HBox width="100%" styleName="noGapsNoPadding" >
 								<Spacer width="5"/>
-								<TimerCountdown id="timerControllerScreen" width="30" height="10" styleName="timer" k_path="timertext/TimerCountdown.swf" timerType="forwards"/>
+								<TimerCountdown id="timerControllerScreen" width="30" height="10" styleName="timer" v_path="timertext/TimerCountdown.swf" timerType="forwards"/>
 							</HBox>
 						</VBox>
-						<VolumeModule width="20" height="15" id="volumeBarControllerScreen" k_path="VolumeBars/VolumeBarB.swf" styleName="volumebarLight" tooltip="change volume" k_theme_change="true"/>
-						<Button id="fullScreenBtnControllerScreen" command="fullScreen" k_buttonType="buttonIconControllerArea" width="autoSize" height="autoSize" label="fullscreen" styleName="fullScreenBtn" tooltip="Toggle fullscreen"/>
-						<Button id="shareBtnControllerScreen" k_buttonType="buttonIconControllerArea" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+						<VolumeModule width="20" height="15" id="volumeBarControllerScreen" v_path="VolumeBars/VolumeBarB.swf" styleName="volumebarLight" tooltip="change volume" v_theme_change="true"/>
+						<Button id="fullScreenBtnControllerScreen" command="fullScreen" v_buttonType="buttonIconControllerArea" width="autoSize" height="autoSize" label="fullscreen" styleName="fullScreenBtn" tooltip="Toggle fullscreen"/>
+						<Button id="shareBtnControllerScreen" v_buttonType="buttonIconControllerArea" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
 						<Spacer width="3"/>
-						<Button id="uploadBtnControllerScreen" width="autoSize" height="autoSize" k_buttonType="buttonControllerArea" k_click="jsCall('handleGotoContribWizard', widgetId, entryId); pauseMedia()" label="Upload" styleName="uploadBtn" tooltip="Add additional videos, images or audio files to this video"/>
+						<Button id="uploadBtnControllerScreen" width="autoSize" height="autoSize" v_buttonType="buttonControllerArea" v_click="jsCall('handleGotoContribWizard', widgetId, entryId); pauseMedia()" label="Upload" styleName="uploadBtn" tooltip="Add additional videos, images or audio files to this video"/>
 						<Spacer width="3"/>
 					</HBox>
 					<Spacer width="3"/>
@@ -194,14 +194,14 @@
 		</HBox>
 	</Canvas>
 	<popups>
-		<module height="100%" id="report" k_path="popups/Report.swf" width="100%" styleName="report" k_reason_sex_label="papa"/>
-		<module height="100%" id="credits" k_path="credits/CreditsWindow.swf" width="100%" styleName="credits"/>
+		<module height="100%" id="report" v_path="popups/Report.swf" width="100%" styleName="report" v_reason_sex_label="papa"/>
+		<module height="100%" id="credits" v_path="credits/CreditsWindow.swf" width="100%" styleName="credits"/>
 	</popups>
 	<screens>
 		<screen id="startScreen">
 			<VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
 				<Tile styleName="TileContainer">
-					<Button id="onVideoPlayBtnStartScreen" command="play" minWidth="75" minHeight="75" width="autoSize" height="autoSize" label="Play" labelPlacement="top" k_buttonType="buttonVideoArea" styleName="statesPlayBtn" tooltip="Play video"/>
+					<Button id="onVideoPlayBtnStartScreen" command="play" minWidth="75" minHeight="75" width="autoSize" height="autoSize" label="Play" labelPlacement="top" v_buttonType="buttonVideoArea" styleName="statesPlayBtn" tooltip="Play video"/>
 				</Tile>
 			</VBox>
 		</screen>
@@ -209,7 +209,7 @@
 			<VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
 				<Spacer height="100%"/>
 				<Tile styleName="TileContainer">
-					<Button id="shareBtnPauseScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" k_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+					<Button id="shareBtnPauseScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" v_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
 				</Tile>
 				<Spacer height="100%"/>
 			</VBox>
@@ -226,8 +226,8 @@
 			<VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
 				<Spacer height="100%"/>
 				<Tile styleName="TileContainer">
-					<Button id="shareBtnEndScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" k_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
-					<Button id="replayBtnEndScreen" command="replay" minWidth="75" minHeight="75" k_buttonType="buttonVideoArea" width="autoSize" labelPlacement="top" height="autoSize" label="Replay" styleName="replayBtn" tooltip="replay"/>
+					<Button id="shareBtnEndScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" v_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+					<Button id="replayBtnEndScreen" command="replay" minWidth="75" minHeight="75" v_buttonType="buttonVideoArea" width="autoSize" labelPlacement="top" height="autoSize" label="Replay" styleName="replayBtn" tooltip="replay"/>
 				</Tile>
 				<Spacer height="100%"/>
 			</VBox>
@@ -247,7 +247,7 @@
 			<cssSelector componentId="listDemo" newClass="plItemsListDark"/>
 			<cssSelector componentId="TopTitleScreen" newClass="controllerBoxDark"/>
 			<cssSelector componentId="ControllerScreen" newClass="controllerBoxDark"/>
-			<cssSelector componentId="poweredByControllerScreen" newClass="kalturaLogoDark"/>
+			<cssSelector componentId="poweredByControllerScreen" newClass="vidiunLogoDark"/>
 			<cssSelector componentId="plTabs" newClass="scrollingTabsDark"/>
 			<cssSelector componentId="plPrevButton" newClass="nextPrevButtonsDark"/>
 			<font>Arial</font>
@@ -297,45 +297,45 @@
 	</layout>
 	
 	<!-- Full -->
-	<layout layoutId="full" skinPath="/content/uiconf/kaltura/wordpress/kdp_2.0.12/kdp_skin_aps_v4.swf">
+	<layout layoutId="full" skinPath="/content/uiconf/vidiun/wordpress/vdp_2.0.12/vdp_skin_aps_v4.swf">
 		<Canvas width="100%" height="100%" styleName="topLevelLayout">
 		<HBox width="100%" height="100%" styleName="noGapsNoPadding">
 			<VBox id="player" width="100%" height="100%" styleName="noGapsNoPadding">
-				<HBox height="30" id="TopTitleScreen" styleName="controllerBoxDark" k_theme_change="true" width="100%">
+				<HBox height="30" id="TopTitleScreen" styleName="controllerBoxDark" v_theme_change="true" width="100%">
 					<Spacer width="3"/>
-					<Label height="22" id="movieName" styleName="movieName" width="100%" text="{myKplayer.kalturaEntry.entryName}" k_theme_change="true"/>
+					<Label height="22" id="movieName" styleName="movieName" width="100%" text="{myVplayer.vidiunEntry.entryName}" v_theme_change="true"/>
 					<VBox id="scrubberContainerControllerScreen" styleName="noGapsNoPadding" width="32" height="100%">
 						<Spacer height="5" />
-						<Button id="poweredByControllerScreen" width="32" height="20" k_click="navigate('http://www.kaltura.com')" styleName="kalturaLogoDark" k_theme_change="true"/>
+						<Button id="poweredByControllerScreen" width="32" height="20" v_click="navigate('http://www.vidiun.com')" styleName="vidiunLogoDark" v_theme_change="true"/>
 					</VBox>
 					<Spacer width="3"/>
 				</HBox>
 				<HBox height="100%" styleName="playerContainer" id="playerContainer" width="100%">
 					<Canvas height="100%" id="PlayerHolder" styleName="PlayerBackground" width="100%">
-						<KplayerModule height="100%" id="myKplayer" k_path="kplayer/KplayerModule.swf" styleName="centered" width="100%"/>
-						<screens height="100%" id="screens" styleName="centered" width="100%" k_path="screens/Screens.swf" k_end_screen_id="endScreen" k_end_screen_over_id="endScreen" k_pause_screen_id="pauseScreen" k_pause_screen_over_id="pauseScreen" k_play_screen_id="emptyScreen" k_play_screen_over_id="playScreen" k_start_screen_id="startScreen" k_start_screen_over_id="startScreen"/>
-						<Gigya height="100%" id="Gigya" k_share_email_body="Hi%2c%3cbr%3eI watched this video and thought you'd enjoy it too %24URL%24 to watch.%3cbr%3e%0d%0a%24sender%24%0d%0a" k_share_email_subject="Take a look at this video" k_path="addons/Gigya.swf" width="100%" k_uiconf_id=""/>
+						<VplayerModule height="100%" id="myVplayer" v_path="vplayer/VplayerModule.swf" styleName="centered" width="100%"/>
+						<screens height="100%" id="screens" styleName="centered" width="100%" v_path="screens/Screens.swf" v_end_screen_id="endScreen" v_end_screen_over_id="endScreen" v_pause_screen_id="pauseScreen" v_pause_screen_over_id="pauseScreen" v_play_screen_id="emptyScreen" v_play_screen_over_id="playScreen" v_start_screen_id="startScreen" v_start_screen_over_id="startScreen"/>
+						<Gigya height="100%" id="Gigya" v_share_email_body="Hi%2c%3cbr%3eI watched this video and thought you'd enjoy it too %24URL%24 to watch.%3cbr%3e%0d%0a%24sender%24%0d%0a" v_share_email_subject="Take a look at this video" v_path="addons/Gigya.swf" width="100%" v_uiconf_id=""/>
 					</Canvas>
 				</HBox>
-				<HBox id="ControllerScreen" width="100%" height="35" styleName="controllerBoxDark" k_theme_change="true">
+				<HBox id="ControllerScreen" width="100%" height="35" styleName="controllerBoxDark" v_theme_change="true">
 					<HBox id="ControllerScreenInner" width="100%" height="35" styleName="transparentContainer">
-						<Button id="playBtnControllerScreen" command="play" width="25" height="25" k_buttonType="buttonIconControllerArea" styleName="play" tooltip=""/>
+						<Button id="playBtnControllerScreen" command="play" width="25" height="25" v_buttonType="buttonIconControllerArea" styleName="play" tooltip=""/>
 						<VBox id="scrubberContainerControllerScreen" styleName="noGapsNoPadding" width="100%" height="100%">
 							<Spacer height="7"/>
-							<Scrubber id="scrubberControllerScreen" styleName="scrubberLight" width="100%" k_color_change="true" height="12" k_theme_change="true" />
+							<Scrubber id="scrubberControllerScreen" styleName="scrubberLight" width="100%" v_color_change="true" height="12" v_theme_change="true" />
 							<Spacer height="2"/>
 							<HBox width="100%" styleName="noGapsNoPadding" >
 								<Spacer width="5"/>
-								<TimerCountdown id="timerControllerScreen" width="30" height="10" styleName="timer" k_path="timertext/TimerCountdown.swf" timerType="forwards"/>
+								<TimerCountdown id="timerControllerScreen" width="30" height="10" styleName="timer" v_path="timertext/TimerCountdown.swf" timerType="forwards"/>
 							</HBox>
 						</VBox>
-						<VolumeModule width="20" height="15" id="volumeBarControllerScreen" k_path="VolumeBars/VolumeBarB.swf" styleName="volumebarLight" tooltip="change volume" k_theme_change="true"/>
-						<Button id="fullScreenBtnControllerScreen" command="fullScreen" k_buttonType="buttonIconControllerArea" width="autoSize" height="autoSize" label="fullscreen" styleName="fullScreenBtn" tooltip="Toggle fullscreen"/>
-						<Button id="shareBtnControllerScreen" k_buttonType="buttonIconControllerArea" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+						<VolumeModule width="20" height="15" id="volumeBarControllerScreen" v_path="VolumeBars/VolumeBarB.swf" styleName="volumebarLight" tooltip="change volume" v_theme_change="true"/>
+						<Button id="fullScreenBtnControllerScreen" command="fullScreen" v_buttonType="buttonIconControllerArea" width="autoSize" height="autoSize" label="fullscreen" styleName="fullScreenBtn" tooltip="Toggle fullscreen"/>
+						<Button id="shareBtnControllerScreen" v_buttonType="buttonIconControllerArea" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
 						<Spacer width="3"/>
-						<Button id="uploadBtnControllerScreen" width="autoSize" height="autoSize" k_buttonType="buttonControllerArea" k_click="jsCall('handleGotoContribWizard', widgetId, entryId); pauseMedia()" label="Upload" styleName="uploadBtn" tooltip="Add additional videos, images or audio files to this video"/>
+						<Button id="uploadBtnControllerScreen" width="autoSize" height="autoSize" v_buttonType="buttonControllerArea" v_click="jsCall('handleGotoContribWizard', widgetId, entryId); pauseMedia()" label="Upload" styleName="uploadBtn" tooltip="Add additional videos, images or audio files to this video"/>
 						<Spacer width="3"/>
-						<Button id="editBtnControllerScreen" k_buttonType="buttonControllerArea" width="autoSize" height="autoSize" k_click="jsCall('handleGotoEditorWindow', widgetId, entryId); pauseMedia()" label="Edit" styleName="editBtn" tooltip="Remix this video"/>
+						<Button id="editBtnControllerScreen" v_buttonType="buttonControllerArea" width="autoSize" height="autoSize" v_click="jsCall('handleGotoEditorWindow', widgetId, entryId); pauseMedia()" label="Edit" styleName="editBtn" tooltip="Remix this video"/>
 						<Spacer width="3"/>
 					</HBox>
 					<Spacer width="3"/>
@@ -345,14 +345,14 @@
 		</HBox>
 	</Canvas>
 	<popups>
-		<module height="100%" id="report" k_path="popups/Report.swf" width="100%" styleName="report" k_reason_sex_label="papa"/>
-		<module height="100%" id="credits" k_path="credits/CreditsWindow.swf" width="100%" styleName="credits"/>
+		<module height="100%" id="report" v_path="popups/Report.swf" width="100%" styleName="report" v_reason_sex_label="papa"/>
+		<module height="100%" id="credits" v_path="credits/CreditsWindow.swf" width="100%" styleName="credits"/>
 	</popups>
 	<screens>
 		<screen id="startScreen">
 			<VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
 				<Tile styleName="TileContainer">
-					<Button id="onVideoPlayBtnStartScreen" command="play" minWidth="75" minHeight="75" width="autoSize" height="autoSize" label="Play" labelPlacement="top" k_buttonType="buttonVideoArea" styleName="statesPlayBtn" tooltip="Play video"/>
+					<Button id="onVideoPlayBtnStartScreen" command="play" minWidth="75" minHeight="75" width="autoSize" height="autoSize" label="Play" labelPlacement="top" v_buttonType="buttonVideoArea" styleName="statesPlayBtn" tooltip="Play video"/>
 				</Tile>
 			</VBox>
 		</screen>
@@ -360,7 +360,7 @@
 			<VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
 				<Spacer height="100%"/>
 				<Tile styleName="TileContainer">
-					<Button id="shareBtnPauseScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" k_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+					<Button id="shareBtnPauseScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" v_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
 				</Tile>
 				<Spacer height="100%"/>
 			</VBox>
@@ -377,8 +377,8 @@
 			<VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
 				<Spacer height="100%"/>
 				<Tile styleName="TileContainer">
-					<Button id="shareBtnEndScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" k_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
-					<Button id="replayBtnEndScreen" command="replay" minWidth="75" minHeight="75" k_buttonType="buttonVideoArea" width="autoSize" labelPlacement="top" height="autoSize" label="Replay" styleName="replayBtn" tooltip="replay"/>
+					<Button id="shareBtnEndScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" v_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+					<Button id="replayBtnEndScreen" command="replay" minWidth="75" minHeight="75" v_buttonType="buttonVideoArea" width="autoSize" labelPlacement="top" height="autoSize" label="Replay" styleName="replayBtn" tooltip="replay"/>
 				</Tile>
 				<Spacer height="100%"/>
 			</VBox>
@@ -398,7 +398,7 @@
 			<cssSelector componentId="listDemo" newClass="plItemsListDark"/>
 			<cssSelector componentId="TopTitleScreen" newClass="controllerBoxDark"/>
 			<cssSelector componentId="ControllerScreen" newClass="controllerBoxDark"/>
-			<cssSelector componentId="poweredByControllerScreen" newClass="kalturaLogoDark"/>
+			<cssSelector componentId="poweredByControllerScreen" newClass="vidiunLogoDark"/>
 			<cssSelector componentId="plTabs" newClass="scrollingTabsDark"/>
 			<cssSelector componentId="plPrevButton" newClass="nextPrevButtonsDark"/>
 			<font>Arial</font>

@@ -4,7 +4,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveReportInputFilter extends KalturaObject
+class VidiunLiveReportInputFilter extends VidiunObject
 {	
 	/**
 	 * @var string
@@ -22,18 +22,18 @@ class KalturaLiveReportInputFilter extends KalturaObject
 	public $toTime;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 **/
 	public $live;
 	
 	/**
-	 * @var KalturaLiveReportOrderBy
+	 * @var VidiunLiveReportOrderBy
 	 */
 	public $orderBy;
 	
 	public function getWSObject() {
 		$obj = new WSLiveReportInputFilter();
-		$obj->fromKalturaObject($this);
+		$obj->fromVidiunObject($this);
 		return $obj;
 	}
 }

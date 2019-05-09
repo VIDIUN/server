@@ -10,37 +10,37 @@
  * @package Scheduler
  * @subpackage ClearCuePoints
  */
-class KAsyncClearCuePoints extends KPeriodicWorker
+class VAsyncClearCuePoints extends VPeriodicWorker
 {	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::CLEANUP;
+		return VidiunBatchJobType::CLEANUP;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::run()
+	 * @see VBatchBase::run()
 	*/
 	public function run($jobs = null)
 	{
-		$entryFilter = new KalturaLiveStreamEntryFilter();
-		$entryFilter->isLive = KalturaNullableBoolean::TRUE_VALUE;
-		$entryFilter->orderBy = KalturaLiveStreamEntryOrderBy::CREATED_AT_ASC;
+		$entryFilter = new VidiunLiveStreamEntryFilter();
+		$entryFilter->isLive = VidiunNullableBoolean::TRUE_VALUE;
+		$entryFilter->orderBy = VidiunLiveStreamEntryOrderBy::CREATED_AT_ASC;
 		
 		$entryFilter->moderationStatusIn = 
-			KalturaEntryModerationStatus::PENDING_MODERATION . ',' .
-			KalturaEntryModerationStatus::APPROVED . ',' .
-			KalturaEntryModerationStatus::REJECTED . ',' .
-			KalturaEntryModerationStatus::FLAGGED_FOR_REVIEW . ',' .
-			KalturaEntryModerationStatus::AUTO_APPROVED;
+			VidiunEntryModerationStatus::PENDING_MODERATION . ',' .
+			VidiunEntryModerationStatus::APPROVED . ',' .
+			VidiunEntryModerationStatus::REJECTED . ',' .
+			VidiunEntryModerationStatus::FLAGGED_FOR_REVIEW . ',' .
+			VidiunEntryModerationStatus::AUTO_APPROVED;
 		
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 100;
 		$pager->pageIndex = 1;
 		
-		$entries = self::$kClient->liveStream->listAction($entryFilter, $pager);
+		$entries = self::$vClient->liveStream->listAction($entryFilter, $pager);
 		
 		while(count($entries->objects))
 		{
@@ -48,44 +48,44 @@ class KAsyncClearCuePoints extends KPeriodicWorker
 			{
 				//When entry has recording on the cue poitns are copied from the live entry to the vod entry
 				//The copy process allready markes the live entry cue points as handled
-				/* @var $entry KalturaLiveEntry */
-				if($entry->recordStatus !== KalturaRecordStatus::DISABLED)
+				/* @var $entry VidiunLiveEntry */
+				if($entry->recordStatus !== VidiunRecordStatus::DISABLED)
 					continue;
 					
 				$this->clearEntryCuePoints($entry);
 			}
 			
 			$pager->pageIndex++;
-			$entries = self::$kClient->liveStream->listAction($entryFilter, $pager);
+			$entries = self::$vClient->liveStream->listAction($entryFilter, $pager);
 		}
 	}
 	
 	private function clearEntryCuePoints($entry)
 	{
-		$cuePointPlugin = KalturaCuePointClientPlugin::get(self::$kClient);
+		$cuePointPlugin = VidiunCuePointClientPlugin::get(self::$vClient);
 		
-		$cuePointFilter = $this->getAdvancedFilter("KalturaCuePointFilter");
+		$cuePointFilter = $this->getAdvancedFilter("VidiunCuePointFilter");
 		$cuePointFilter->entryIdEqual = $entry->id;
 		
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 100;
 		
 		$cuePoints = $cuePointPlugin->cuePoint->listAction($cuePointFilter, $pager);
 
 		if(!$cuePoints->objects)
 		{
-			KalturaLog::debug("No cue points found for entry [{$entry->id}] continue to next live entry");
+			VidiunLog::debug("No cue points found for entry [{$entry->id}] continue to next live entry");
 			return;
 		}
 
 		//Clear Max 100 cue points each run on each live entry to avoid massive old cue points updates
 		self::impersonate($entry->partnerId);
-		self::$kClient->startMultiRequest();
+		self::$vClient->startMultiRequest();
 		foreach ($cuePoints->objects as $cuePoint)
 		{
-			$cuePointPlugin->cuePoint->updateStatus($cuePoint->id, KalturaCuePointStatus::HANDLED);
+			$cuePointPlugin->cuePoint->updateStatus($cuePoint->id, VidiunCuePointStatus::HANDLED);
 		}
-		self::$kClient->doMultiRequest();
+		self::$vClient->doMultiRequest();
 		self::unimpersonate();
 	}
 }

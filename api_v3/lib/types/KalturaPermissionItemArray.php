@@ -3,24 +3,24 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPermissionItemArray extends KalturaTypedArray
+class VidiunPermissionItemArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaPermissionItemArray();
+		$newArr = new VidiunPermissionItemArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
 			if ($obj->getType() == PermissionItemType::API_ACTION_ITEM) {
-				$nObj = new KalturaApiActionPermissionItem();
+				$nObj = new VidiunApiActionPermissionItem();
 			}
 			else if ($obj->getType() == PermissionItemType::API_PARAMETER_ITEM) {
-				$nObj = new KalturaApiParameterPermissionItem();
+				$nObj = new VidiunApiParameterPermissionItem();
 			}
 			else {
-				KalturaLog::crit('Unknown permission item type ['.$obj->getType().'] defined with id ['.$obj->getId().'] - skipping!');
+				VidiunLog::crit('Unknown permission item type ['.$obj->getType().'] defined with id ['.$obj->getId().'] - skipping!');
 				continue;
 			}
 			$nObj->fromObject($obj, $responseProfile);
@@ -32,6 +32,6 @@ class KalturaPermissionItemArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct('KalturaPermissionItem');	
+		parent::__construct('VidiunPermissionItem');	
 	}
 }

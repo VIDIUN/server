@@ -1,5 +1,5 @@
 <?php
-class kLiveStreamPushPublishConfiguration
+class vLiveStreamPushPublishConfiguration
 {
 	/**
 	 * @var string

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage ps2
  */
-class defPartnerservices2baseAction extends kalturaAction
+class defPartnerservices2baseAction extends vidiunAction
 {
 	protected static $_useCache = true;	
 
@@ -16,7 +16,7 @@ class defPartnerservices2baseAction extends kalturaAction
 		'adddvdjobAction.class.php',
 		'addentryAction.class.php',
 		'addentrybaseAction.class.php',
-		'addkshowAction.class.php',
+		'addvshowAction.class.php',
 		'addmoderationAction.class.php',
 		'addpartnerentryAction.class.php',
 		'addplaylistAction.class.php',
@@ -26,14 +26,14 @@ class defPartnerservices2baseAction extends kalturaAction
 		'addwidgetAction.class.php',
 		'adminloginAction.class.php',
 		'appendentrytoroughcutAction.class.php',
-		'clonekshowAction.class.php',
+		'clonevshowAction.class.php',
 		'cloneroughcutAction.class.php',
 		'cloneuiconfAction.class.php',
 		'collectstatsAction.class.php',
 		'contactsalesforceAction.class.php',
 		'deletedataentryAction.class.php',
 		'deleteentryAction.class.php',
-		'deletekshowAction.class.php',
+		'deletevshowAction.class.php',
 		'deleteplaylistAction.class.php',
 		'deleteuiconfAction.class.php',
 		'deleteuserAction.class.php',
@@ -49,7 +49,7 @@ class defPartnerservices2baseAction extends kalturaAction
 		'getentryAction.class.php',
 		'getentryroughcutsAction.class.php',
 		'getfilehashAction.class.php',
-		'getkshowAction.class.php',
+		'getvshowAction.class.php',
 		'getlastversionsinfoAction.class.php',
 		'getmetadataAction.class.php',
 		'getpartnerAction.class.php',
@@ -70,11 +70,11 @@ class defPartnerservices2baseAction extends kalturaAction
 		'listdownloadsAction.class.php',
 		'listdvdentriesAction.class.php',
 		'listentriesAction.class.php',
-		'listkshowsAction.class.php',
+		'listvshowsAction.class.php',
 		'listmoderationsAction.class.php',
 		'listmydvdentriesAction.class.php',
 		'listmyentriesAction.class.php',
-		'listmykshowsAction.class.php',
+		'listmyvshowsAction.class.php',
 		'listpartnerentriesAction.class.php',
 		'listpartnerpackagesAction.class.php',
 		'listplaylistsAction.class.php',
@@ -84,14 +84,14 @@ class defPartnerservices2baseAction extends kalturaAction
 		'objdetailsAction.class.php',
 		'pingAction.class.php',
 		'queuependingbatchjobAction.class.php',
-		'rankkshowAction.class.php',
+		'rankvshowAction.class.php',
 		'registerpartnerAction.class.php',
 		'reportentryAction.class.php',
 		'reporterrorAction.class.php',
-		'reportkshowAction.class.php',
+		'reportvshowAction.class.php',
 		'reportuserAction.class.php',
 		'resetadminpasswordAction.class.php',
-		'rollbackkshowAction.class.php',
+		'rollbackvshowAction.class.php',
 		'searchAction.class.php',
 		'searchauthdataAction.class.php',
 		'searchfromurlAction.class.php',
@@ -111,8 +111,8 @@ class defPartnerservices2baseAction extends kalturaAction
 		'updateentrymoderationAction.class.php',
 		'updateentrythumbnailAction.class.php',
 		'updateentrythumbnailjpegAction.class.php',
-		'updatekshowAction.class.php',
-		'updatekshowownerAction.class.php',
+		'updatevshowAction.class.php',
+		'updatevshowownerAction.class.php',
 		'updatepartnerAction.class.php',
 		'updateplaylistAction.class.php',
 		'updateuiconfAction.class.php',
@@ -158,7 +158,7 @@ class defPartnerservices2baseAction extends kalturaAction
 				$myaction = new $clazz_name( $this );
 				$myaction->setInputParams ( $_REQUEST );
 				$response = $myaction->execute( );
-				kEventsManager::flushEvents();
+				vEventsManager::flushEvents();
 			}
 			else
 			{
@@ -168,21 +168,21 @@ class defPartnerservices2baseAction extends kalturaAction
 		}
 
 		$format = $this->getP ( "format" );
-		if ( $format == kalturaWebserviceRenderer::RESPONSE_TYPE_PHP_ARRAY || $format == kalturaWebserviceRenderer::RESPONSE_TYPE_PHP_OBJECT )
+		if ( $format == vidiunWebserviceRenderer::RESPONSE_TYPE_PHP_ARRAY || $format == vidiunWebserviceRenderer::RESPONSE_TYPE_PHP_OBJECT )
 		{
 			//$this->setHttpHeader ( "Content-Type" , "text/html; charset=utf-8" );
 			$response = "<pre>" . print_r ( $response , true ) . "</pre>" ;
 		}
 
 		// uncomment in order to cache api responses
-		if(kConf::get('enable_cache'))
+		if(vConf::get('enable_cache'))
 		{
 			$this->cacheResponse($response);
 		}
 
 		
         $ret = $this->renderText( $response );
-        KExternalErrors::terminateDispatch();
+        VExternalErrors::terminateDispatch();
         return $ret;
 	}
 
@@ -201,12 +201,12 @@ class defPartnerservices2baseAction extends kalturaAction
 
 		$params = $_GET + $_POST;
 		
-		$ks = isset($params['ks']) ? $params['ks'] : '';
-		if ($ks)
+		$vs = isset($params['vs']) ? $params['vs'] : '';
+		if ($vs)
 		{ 
-			$ksData = $this->getKsData($ks);
-			$uid = @$ksData["userId"];
-			$validUntil = @$ksData["validUntil"];
+			$vsData = $this->getVsData($vs);
+			$uid = @$vsData["userId"];
+			$validUntil = @$vsData["validUntil"];
 		}
 		else
 		{
@@ -220,8 +220,8 @@ class defPartnerservices2baseAction extends kalturaAction
 		if ($uid != "0" && $uid != "" && !$isStartSession)
 			return;
 	
-		unset($params['ks']);
-		unset($params['kalsig']);
+		unset($params['vs']);
+		unset($params['vidsig']);
 		$params['uri'] = $_SERVER['PATH_INFO'];
 		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')
 			$params['__protocol'] = 'https';
@@ -244,18 +244,18 @@ class defPartnerservices2baseAction extends kalturaAction
 		$this->getResponse()->setHttpHeader ( $hdr_name , $hdr_value  );
 	}
 	
-	private function getKsData($ks)
+	private function getVsData($vs)
 	{
 		$partnerId = null;
 		$userId = null;
 		$validUntil = null;
 		
-		$ksObj = kSessionBase::getKSObject($ks);
-		if ($ksObj)
+		$vsObj = vSessionBase::getVSObject($vs);
+		if ($vsObj)
 		{
-			$partnerId = $ksObj->partner_id;
-			$userId = $ksObj->user;
-			$validUntil = $ksObj->valid_until;
+			$partnerId = $vsObj->partner_id;
+			$userId = $vsObj->user;
+			$validUntil = $vsObj->valid_until;
 		}
 		
 		return array("partnerId" => $partnerId, "userId" => $userId, "validUntil" => $validUntil );

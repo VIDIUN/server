@@ -23,13 +23,13 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaYouTubeDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaYouTubeDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunYouTubeDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunYouTubeDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaYouTubeDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaYouTubeDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunYouTubeDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunYouTubeDistributionJobProviderData");
 		
 		$this->handleSubmit($data, $data->distributionProfile, $data->providerData);
 		
@@ -39,7 +39,7 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		$statusXml = $this->fetchStatusXml($data, $data->distributionProfile, $data->providerData);
 
@@ -86,13 +86,13 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaYouTubeDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaYouTubeDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunYouTubeDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunYouTubeDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaYouTubeDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaYouTubeDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunYouTubeDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunYouTubeDistributionJobProviderData");
 		
 		$this->handleDelete($data, $data->distributionProfile, $data->providerData);
 		
@@ -102,7 +102,7 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseDelete::closeDelete()
 	 */
-	public function closeDelete(KalturaDistributionDeleteJobData $data)
+	public function closeDelete(VidiunDistributionDeleteJobData $data)
 	{
 		$statusXml = $this->fetchStatusXml($data, $data->distributionProfile, $data->providerData);
 
@@ -123,13 +123,13 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaYouTubeDistributionProfile))
-			KalturaLog::err("Distribution profile must be of type KalturaYouTubeDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunYouTubeDistributionProfile))
+			VidiunLog::err("Distribution profile must be of type VidiunYouTubeDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaYouTubeDistributionJobProviderData))
-			KalturaLog::err("Provider data must be of type KalturaYouTubeDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunYouTubeDistributionJobProviderData))
+			VidiunLog::err("Provider data must be of type VidiunYouTubeDistributionJobProviderData");
 
 		$this->handleUpdate($data, $data->distributionProfile, $data->providerData);
 		
@@ -139,7 +139,7 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseUpdate::closeUpdate()
 	 */
-	public function closeUpdate(KalturaDistributionUpdateJobData $data)
+	public function closeUpdate(VidiunDistributionUpdateJobData $data)
 	{
 		$statusXml = $this->fetchStatusXml($data, $data->distributionProfile, $data->providerData);
 
@@ -167,32 +167,32 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineReport::fetchReport()
 	 */
-	public function fetchReport(KalturaDistributionFetchReportJobData $data)
+	public function fetchReport(VidiunDistributionFetchReportJobData $data)
 	{
 		return false;
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaYouTubeDistributionProfile $distributionProfile
-	 * @param KalturaYouTubeDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunYouTubeDistributionProfile $distributionProfile
+	 * @param VidiunYouTubeDistributionJobProviderData $providerData
 	 */
-	protected function handleSubmit(KalturaDistributionJobData $data, KalturaYouTubeDistributionProfile $distributionProfile, KalturaYouTubeDistributionJobProviderData $providerData)
+	protected function handleSubmit(VidiunDistributionJobData $data, VidiunYouTubeDistributionProfile $distributionProfile, VidiunYouTubeDistributionJobProviderData $providerData)
 	{
 		$videoFilePath = $providerData->videoAssetFilePath;
 		$thumbnailFilePath = $providerData->thumbAssetFilePath;
 		$captionAssetsids = $providerData->captionAssetIds;
 		
 		if (!$videoFilePath)
-			throw new KalturaDistributionException('No video asset to distribute, the job will fail');
+			throw new VidiunDistributionException('No video asset to distribute, the job will fail');
 
 		if (!file_exists($videoFilePath))
-			throw new KalturaDistributionException('The file ['.$videoFilePath.'] was not found (probably not synced yet), the job will retry');
+			throw new VidiunDistributionException('The file ['.$videoFilePath.'] was not found (probably not synced yet), the job will retry');
 
 		$sftpManager = $this->getSFTPManager($distributionProfile);
 		$sftpManager->filePutContents($providerData->sftpDirectory.'/'.$providerData->sftpMetadataFilename, $providerData->submitXml);
 		$data->sentData = $providerData->submitXml;
-		$data->results = 'none'; // otherwise kContentDistributionFlowManager won't save sentData
+		$data->results = 'none'; // otherwise vContentDistributionFlowManager won't save sentData
 
 		// upload the video
 		$videoSFTPPath = $providerData->sftpDirectory.'/'.pathinfo($videoFilePath, PATHINFO_BASENAME);
@@ -211,33 +211,33 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaYouTubeDistributionProfile $distributionProfile
-	 * @param KalturaYouTubeDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunYouTubeDistributionProfile $distributionProfile
+	 * @param VidiunYouTubeDistributionJobProviderData $providerData
 	 */
-	protected function handleDelete(KalturaDistributionJobData $data, KalturaYouTubeDistributionProfile $distributionProfile, KalturaYouTubeDistributionJobProviderData $providerData)
+	protected function handleDelete(VidiunDistributionJobData $data, VidiunYouTubeDistributionProfile $distributionProfile, VidiunYouTubeDistributionJobProviderData $providerData)
 	{
 		$sftpManager = $this->getSFTPManager($distributionProfile);
 		$sftpManager->filePutContents($providerData->sftpDirectory.'/'.$providerData->sftpMetadataFilename, $providerData->deleteXml);
 		$data->sentData = $providerData->deleteXml;
-		$data->results = 'none'; // otherwise kContentDistributionFlowManager won't save sentData
+		$data->results = 'none'; // otherwise vContentDistributionFlowManager won't save sentData
 
 		$this->setDeliveryComplete($sftpManager, $providerData->sftpDirectory);
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaYouTubeDistributionProfile $distributionProfile
-	 * @param KalturaYouTubeDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunYouTubeDistributionProfile $distributionProfile
+	 * @param VidiunYouTubeDistributionJobProviderData $providerData
 	 */
-	protected function handleUpdate(KalturaDistributionJobData $data, KalturaYouTubeDistributionProfile $distributionProfile, KalturaYouTubeDistributionJobProviderData $providerData)
+	protected function handleUpdate(VidiunDistributionJobData $data, VidiunYouTubeDistributionProfile $distributionProfile, VidiunYouTubeDistributionJobProviderData $providerData)
 	{
 		$thumbnailFilePath = $providerData->thumbAssetFilePath;
 
 		$sftpManager = $this->getSFTPManager($distributionProfile);
 		$sftpManager->filePutContents($providerData->sftpDirectory.'/'.$providerData->sftpMetadataFilename, $providerData->updateXml);
 		$data->sentData = $providerData->updateXml;
-		$data->results = 'none'; // otherwise kContentDistributionFlowManager won't save sentData
+		$data->results = 'none'; // otherwise vContentDistributionFlowManager won't save sentData
 
 		// upload the thumbnail if exists
 		if (file_exists($thumbnailFilePath))
@@ -251,20 +251,20 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 	
 	protected function getFilePath( $asset, $entryId )
 	{
-		$filter = new KalturaFileSyncFilter();
+		$filter = new VidiunFileSyncFilter();
 		$filter->orderBy = '-version';
-		$filter->fileObjectTypeEqual = KalturaFileSyncObjectType::ASSET;
+		$filter->fileObjectTypeEqual = VidiunFileSyncObjectType::ASSET;
 		$filter->objectIdEqual = $asset->id;
 		$filter->objectSubTypeEqual = 1;
-		$filter->statusEqual = KalturaFileSyncStatus::READY;
+		$filter->statusEqual = VidiunFileSyncStatus::READY;
 		$filter->entryIdEqual = $entryId;
-		$filter->currentDc = KalturaNullableBoolean::TRUE_VALUE;
+		$filter->currentDc = VidiunNullableBoolean::TRUE_VALUE;
 		
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 1;
 		$pager->pageIndex = 1;
 		
-		$filesyncPlugin = KalturaFileSyncClientPlugin::get( KBatchBase::$kClient );
+		$filesyncPlugin = VidiunFileSyncClientPlugin::get( VBatchBase::$vClient );
 		$result = $filesyncPlugin->fileSync->listAction($filter, $pager);
 		if ( ! empty( $result->objects ) )
 		{
@@ -275,38 +275,38 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 		return "";
 	}
 	
-	protected function addCaptions(KalturaYouTubeDistributionJobProviderData $providerData, $sftpManager, KalturaDistributionJobData $data)
+	protected function addCaptions(VidiunYouTubeDistributionJobProviderData $providerData, $sftpManager, VidiunDistributionJobData $data)
 	{
 		if ( $providerData->captionAssetIds == "" ) 
 			return;
 	
 		$entryId = $data->entryDistribution->entryId;
-		$filter = new KalturaAssetFilter();
+		$filter = new VidiunAssetFilter();
 		$filter->idIn = $providerData->captionAssetIds;
 		$filter->entryIdEqual = $entryId;
-		KBatchBase::impersonate($data->entryDistribution->partnerId);
+		VBatchBase::impersonate($data->entryDistribution->partnerId);
 		
 		try{
-			$captionPlugin = KalturaCaptionClientPlugin::get( KBatchBase::$kClient );
+			$captionPlugin = VidiunCaptionClientPlugin::get( VBatchBase::$vClient );
 			$result = $captionPlugin->captionAsset->listAction( $filter );
 		}
 		catch(Exception $e){
-			KBatchBase::unimpersonate();
+			VBatchBase::unimpersonate();
 			throw $e;
 		}
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 	
 		foreach ($result->objects as $asset)
 		{
-			if ( $asset instanceof KalturaCaptionAsset )
+			if ( $asset instanceof VidiunCaptionAsset )
 			{
 				$filePath = null;
 				try
 				{
 					$captionAssetContentUrl = $captionPlugin->captionAsset->serve($asset->id);
-					$captionFileContent = KCurlWrapper::getContent($captionAssetContentUrl);
-					$filePath = kFileBase::createTempFile($captionFileContent, null, null, "txt");
+					$captionFileContent = VCurlWrapper::getContent($captionAssetContentUrl);
+					$filePath = vFileBase::createTempFile($captionFileContent, null, null, "txt");
 					$captionFilePath = $this->getFilePath($asset, $entryId);
 					$captionSFTPPath = $providerData->sftpDirectory . '/' . pathinfo($captionFilePath, PATHINFO_BASENAME);
 					$sftpManager->putFile($captionSFTPPath, $filePath);
@@ -314,7 +314,7 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 				}
 				catch(Exception $e)
 				{
-					KalturaLog::info("Can't serve caption asset id [$asset->id] " . $e->getMessage());
+					VidiunLog::info("Can't serve caption asset id [$asset->id] " . $e->getMessage());
 					if ($filePath && file_exists($filePath))
 						unlink($filePath);
 				}
@@ -323,24 +323,24 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 	}
 
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaYouTubeDistributionProfile $distributionProfile
-	 * @param KalturaYouTubeDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunYouTubeDistributionProfile $distributionProfile
+	 * @param VidiunYouTubeDistributionJobProviderData $providerData
 	 * @return Status XML or FALSE when status is not available yet
 	 */
-	protected function fetchStatusXml(KalturaDistributionJobData $data, KalturaYouTubeDistributionProfile $distributionProfile, KalturaYouTubeDistributionJobProviderData $providerData )
+	protected function fetchStatusXml(VidiunDistributionJobData $data, VidiunYouTubeDistributionProfile $distributionProfile, VidiunYouTubeDistributionJobProviderData $providerData )
 	{
 		$statusFilePath = $providerData->sftpDirectory . '/' . 'status-' . $providerData->sftpMetadataFilename;
 		$sftpManager = $this->getSFTPManager($distributionProfile);
 		$statusXml = null;
 		try
 		{
-			KalturaLog::info('Trying to get the following status file: ['.$statusFilePath.']');
+			VidiunLog::info('Trying to get the following status file: ['.$statusFilePath.']');
 			$statusXml = $sftpManager->getFile($statusFilePath);
 		}
-		catch(kFileTransferMgrException $ex) // file is still missing
+		catch(vFileTransferMgrException $ex) // file is still missing
 		{
-			KalturaLog::info('File doesn\'t exist yet, retry later');
+			VidiunLog::info('File doesn\'t exist yet, retry later');
 			return false;
 		}
 
@@ -349,34 +349,34 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 	}
 
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaYouTubeDistributionProfile $distributionProfile
-	 * @param KalturaYouTubeDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunYouTubeDistributionProfile $distributionProfile
+	 * @param VidiunYouTubeDistributionJobProviderData $providerData
 	 * @return string Status XML or FALSE when status is not available yet
 	 */
-	protected function fetchBatchStatus(KalturaDistributionJobData $data, KalturaYouTubeDistributionProfile $distributionProfile, KalturaYouTubeDistributionJobProviderData $providerData)
+	protected function fetchBatchStatus(VidiunDistributionJobData $data, VidiunYouTubeDistributionProfile $distributionProfile, VidiunYouTubeDistributionJobProviderData $providerData)
 	{
 		$statusFilePath = $providerData->sftpDirectory . '/internal_failure-status.xml';
 		$sftpManager = $this->getSFTPManager($distributionProfile);
 		$statusXml = null;
 		try
 		{
-			KalturaLog::info('Trying to get the following status file: ['.$statusFilePath.']');
+			VidiunLog::info('Trying to get the following status file: ['.$statusFilePath.']');
 			$statusXml = $sftpManager->getFile($statusFilePath);
 			return $statusXml;
 		}
-		catch(kFileTransferMgrException $ex) // file is still missing
+		catch(vFileTransferMgrException $ex) // file is still missing
 		{
-			KalturaLog::info('File doesn\'t exist yet, so no internal failure was found till now');
+			VidiunLog::info('File doesn\'t exist yet, so no internal failure was found till now');
 			return false;
 		}
 	}
 
-	protected function syncPlaylists($videoId, KalturaYouTubeDistributionJobProviderData $providerData)
+	protected function syncPlaylists($videoId, VidiunYouTubeDistributionJobProviderData $providerData)
 	{
 		$fieldValues = unserialize($providerData->fieldValues);
-		$youtubeChannel = isset($fieldValues[KalturaYouTubeDistributionField::VIDEO_CHANNEL]) ? $fieldValues[KalturaYouTubeDistributionField::VIDEO_CHANNEL] : null;
-		$newVideoPlaylists = isset($fieldValues[KalturaYouTubeDistributionField::PLAYLISTS]) ? $fieldValues[KalturaYouTubeDistributionField::PLAYLISTS] : null;
+		$youtubeChannel = isset($fieldValues[VidiunYouTubeDistributionField::VIDEO_CHANNEL]) ? $fieldValues[VidiunYouTubeDistributionField::VIDEO_CHANNEL] : null;
+		$newVideoPlaylists = isset($fieldValues[VidiunYouTubeDistributionField::PLAYLISTS]) ? $fieldValues[VidiunYouTubeDistributionField::PLAYLISTS] : null;
 		$clientId = $providerData->googleClientId;
 		$clientSecret   = $providerData->googleClientSecret;
 		$tokenData = $providerData->googleTokenData;
@@ -388,12 +388,12 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 		}
 		if (!$youtubeChannel)
 		{
-			KalturaLog::err('YouTube channel was not found');
+			VidiunLog::err('YouTube channel was not found');
 			return $providerData->currentPlaylists;
 		}
 		if (!$videoId)
 		{
-			KalturaLog::err('No video id');
+			VidiunLog::err('No video id');
 			return $providerData->currentPlaylists;
 		}
 		$youtubeService = YouTubeDistributionGoogleClientHelper::getYouTubeService($clientId, $clientSecret, $tokenData);
@@ -406,10 +406,10 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 
 	/**
 	 * 
-	 * @param KalturaYouTubeDistributionProfile $distributionProfile
+	 * @param VidiunYouTubeDistributionProfile $distributionProfile
 	 * @return sftpMgr
 	 */
-	protected function getSFTPManager(KalturaYouTubeDistributionProfile $distributionProfile)
+	protected function getSFTPManager(VidiunYouTubeDistributionProfile $distributionProfile)
 	{
 		if (!is_null($this->_sftpManager))
 			return $this->_sftpManager;
@@ -421,8 +421,8 @@ class YouTubeDistributionRightsFeedEngine extends PublicPrivateKeysDistributionE
 		$port = 22;
 		if ($distributionProfile->sftpPort)
 			$port = $distributionProfile->sftpPort;
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$sftpManager = kFileTransferMgr::getInstance(kFileTransferMgrType::SFTP, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$sftpManager = vFileTransferMgr::getInstance(vFileTransferMgrType::SFTP, $engineOptions);
 		$sftpManager->loginPubKey($serverUrl, $loginName, $publicKeyFile, $privateKeyFile, null, $port);
 		$this->_sftpManager = $sftpManager;
 		return $this->_sftpManager;

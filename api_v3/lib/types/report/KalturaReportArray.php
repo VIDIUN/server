@@ -3,22 +3,22 @@
  * @package api
  * @subpackage objects
  */
-class KalturaReportArray extends KalturaTypedArray
+class VidiunReportArray extends VidiunTypedArray
 {
 	public function __construct()
 	{
-		return parent::__construct("KalturaReport");
+		return parent::__construct("VidiunReport");
 	}
 	
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaReportArray();
+		$newArr = new VidiunReportArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaReport();
+    		$nObj = new VidiunReport();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}

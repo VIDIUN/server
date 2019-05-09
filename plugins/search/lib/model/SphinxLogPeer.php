@@ -15,7 +15,7 @@
  */
 class SphinxLogPeer extends BaseSphinxLogPeer {
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		return myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_SPHINX_LOG);
 	}
@@ -56,11 +56,11 @@ class SphinxLogPeer extends BaseSphinxLogPeer {
 		$disabledPartnerIds = array();
 		if ($type == SphinxLogType::SPHINX)
 		{
-			$disabledPartnerIds = kConf::get('disable_sphinx_indexing_partners', 'local', array());
+			$disabledPartnerIds = vConf::get('disable_sphinx_indexing_partners', 'local', array());
 		}
 		else if ($type == SphinxLogType::ELASTIC)
 		{
-			$disabledPartnerIds = kConf::get('disable_elastic_populate_indexing_partners', 'local', array());
+			$disabledPartnerIds = vConf::get('disable_elastic_populate_indexing_partners', 'local', array());
 		}
 
 		if ($disabledPartnerIds)

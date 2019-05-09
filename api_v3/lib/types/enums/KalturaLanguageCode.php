@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaLanguageCode extends KalturaStringEnum
+class VidiunLanguageCode extends VidiunStringEnum
 {
 	const AB = 'ab';
 	const AA = 'aa';
@@ -70,7 +70,7 @@ class KalturaLanguageCode extends KalturaStringEnum
 	const JA = 'ja';
 	const JV = 'jv';
 	const KN = 'kn';
-	const KS = 'ks';
+	const KS = 'vs';
 	const KK = 'kk';
 	const RW = 'rw';
 	const KY = 'ky';

@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage model.data
  */
-class kParseMultiLanguageCaptionAssetJobData extends kJobData
+class vParseMultiLanguageCaptionAssetJobData extends vJobData
 {
 	/**
      * @var string

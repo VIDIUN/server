@@ -26,7 +26,7 @@ class addconversionprofileAction extends defPartnerservices2Action
 			); 
 	}
  
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		// get the new properties for the ConversionProfile from the request
 		$conv_profile = new ConversionProfile();

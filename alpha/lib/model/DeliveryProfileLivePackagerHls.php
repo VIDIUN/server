@@ -15,12 +15,12 @@ class DeliveryProfileLivePackagerHls extends DeliveryProfileLiveAppleHttp {
 		
 		$httpUrl .= ".m3u8";
 		
-		KalturaLog::debug("Live Stream url [$httpUrl]");
+		VidiunLog::debug("Live Stream url [$httpUrl]");
 		return $httpUrl;
 	}
 	
-	protected function getUrlPrefix($url, $kLiveStreamParams)
+	protected function getUrlPrefix($url, $vLiveStreamParams)
 	{
-		return requestUtils::resolve("index-s" . $kLiveStreamParams->getFlavorId() . ".m3u8" , $url);
+		return requestUtils::resolve("index-s" . $vLiveStreamParams->getFlavorId() . ".m3u8" , $url);
 	}
 }

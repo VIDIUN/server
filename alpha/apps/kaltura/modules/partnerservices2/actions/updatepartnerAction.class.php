@@ -32,13 +32,13 @@ class updatepartnerAction extends defPartnerservices2Action
 
 	protected function ticketType()			{		return self::REQUIED_TICKET_NONE;	}
 
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER; 	}
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER; 	}
 
 	protected function addUserOnDemand ( )	{		return self::CREATE_USER_FALSE;	}
 
 	protected function allowEmptyPuser()	{		return true;	}
 			
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$allow_empty = $this->getP ( "allow_empty_field" , false );
 		if ( $allow_empty == "false" || $allow_empty === 0 ) $allow_empty = false;
@@ -60,7 +60,7 @@ class updatepartnerAction extends defPartnerservices2Action
 			if ( $partner && $target_partner )
 			{
 				if ( @$fields_modified["adminEmail"] && $target_partner->getAdminEmail() != $fields_modified["adminEmail"]) {
-					myPartnerUtils::emailChangedEmail($partner_id, $target_partner->getAdminEmail(), $fields_modified["adminEmail"], $target_partner->getName(), PartnerPeer::KALTURAS_PARTNER_EMAIL_CHANGE);
+					myPartnerUtils::emailChangedEmail($partner_id, $target_partner->getAdminEmail(), $fields_modified["adminEmail"], $target_partner->getName(), PartnerPeer::VIDIUNS_PARTNER_EMAIL_CHANGE);
 				}
 				$partner->setType ( $target_partner->getType() );
 				baseObjectUtils::fillObjectFromObject( $updateable_fields , $partner , $target_partner , 

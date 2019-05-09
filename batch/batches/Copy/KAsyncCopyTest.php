@@ -10,27 +10,27 @@ require_once(__DIR__ . "/../../bootstrap.php");
  * @package Scheduler
  * @subpackage Debug
  */
-class KAsyncCopyTest extends PHPUnit_Framework_TestCase
+class VAsyncCopyTest extends PHPUnit_Framework_TestCase
 {
-	const JOB_NAME = 'KAsyncCopy';
+	const JOB_NAME = 'VAsyncCopy';
 	
 	public function testMediaEntryFilter()
 	{
-		$filter = new KalturaMediaEntryFilter();
+		$filter = new VidiunMediaEntryFilter();
 		// TODO define the filter
 		
-		$this->doTestCategoryUser($filter, KalturaBatchJobStatus::FINISHED);
+		$this->doTestCategoryUser($filter, VidiunBatchJobStatus::FINISHED);
 	}
 
-	public function doTestCategoryUser(KalturaBaseEntryFilter $filter, $expectedStatus)
+	public function doTestCategoryUser(VidiunBaseEntryFilter $filter, $expectedStatus)
 	{
-		$this->doTest(KalturaCopyObjectType::CATEGORY_USER, $filter, $expectedStatus);
+		$this->doTest(VidiunCopyObjectType::CATEGORY_USER, $filter, $expectedStatus);
 	}
 	
-	public function doTest($objectType, KalturaFilter $filter, $expectedStatus)
+	public function doTest($objectType, VidiunFilter $filter, $expectedStatus)
 	{
 		$iniFile = "batch_config.ini";
-		$schedulerConfig = new KSchedulerConfig($iniFile);
+		$schedulerConfig = new VSchedulerConfig($iniFile);
 	
 		$taskConfigs = $schedulerConfig->getTaskConfigList();
 		$config = null;
@@ -53,15 +53,15 @@ class KAsyncCopyTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals($expectedStatus, $job->status);
 	}
 	
-	private function prepareJobs($objectType, KalturaFilter $filter)
+	private function prepareJobs($objectType, VidiunFilter $filter)
 	{
-		$data = new KalturaCopyJobData();
+		$data = new VidiunCopyJobData();
 		$data->filter = $filter;
 		
-		$job = new KalturaBatchJob();
+		$job = new VidiunBatchJob();
 		$job->id = 1;
 		$job->jobSubType = $objectType;
-		$job->status = KalturaBatchJobStatus::PENDING;
+		$job->status = VidiunBatchJobStatus::PENDING;
 		$job->data = $data;
 		
 		return array($job);

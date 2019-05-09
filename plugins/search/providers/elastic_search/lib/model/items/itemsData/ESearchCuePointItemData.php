@@ -288,7 +288,7 @@ class ESearchCuePointItemData extends ESearchItemData
 	{
 		if(isset($objectResult['_source']['cue_point_type']))
 		{
-			$apiCuePointType = kPluginableEnumsManager::coreToApi('CuePointType', $objectResult['_source']['cue_point_type']);
+			$apiCuePointType = vPluginableEnumsManager::coreToApi('CuePointType', $objectResult['_source']['cue_point_type']);
 			$this->cuePointType = $apiCuePointType;
 		}
 

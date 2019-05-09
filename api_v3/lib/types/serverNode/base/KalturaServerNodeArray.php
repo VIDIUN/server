@@ -3,14 +3,14 @@
  * @package api
  * @subpackage objects
  */
-class KalturaServerNodeArray extends KalturaTypedArray
+class VidiunServerNodeArray extends VidiunTypedArray
 {
-	public static function fromDbArray(array $arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaServerNodeArray();
+		$newArr = new VidiunServerNodeArray();
 		foreach($arr as $obj)
 		{
-			$nObj = KalturaServerNode::getInstance($obj, $responseProfile);
+			$nObj = VidiunServerNode::getInstance($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
 		
@@ -19,6 +19,6 @@ class KalturaServerNodeArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaServerNode" );
+		return parent::__construct ( "VidiunServerNode" );
 	}
 }

@@ -42,7 +42,7 @@ class Form_ChangeUserRole extends Infra_Form
 		$element = $this->getElement('role');
 		
 		$client = Infra_ClientHelper::getClient();
-		$filter = new Kaltura_Client_Type_UserRoleFilter();
+		$filter = new Vidiun_Client_Type_UserRoleFilter();
 		$filter->tagsMultiLikeAnd = 'admin_console';
 		$userRoles = $client->userRole->listAction($filter);
 		if ($userRoles && isset($userRoles->objects)) {

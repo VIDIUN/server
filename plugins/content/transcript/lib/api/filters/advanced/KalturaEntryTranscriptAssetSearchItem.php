@@ -3,7 +3,7 @@
  * @package plugins.transcript
  * @subpackage api.filters
  */
-class KalturaEntryTranscriptAssetSearchItem extends KalturaSearchItem
+class VidiunEntryTranscriptAssetSearchItem extends VidiunSearchItem
 {
 	/**
 	 * @var string

@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUiConfListResponse extends KalturaListResponse
+class VidiunUiConfListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaUiConfArray
+	 * @var VidiunUiConfArray
 	 * @readonly
 	 */
 	public $objects;

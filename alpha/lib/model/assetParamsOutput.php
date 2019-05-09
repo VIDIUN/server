@@ -108,7 +108,7 @@ class assetParamsOutput extends BaseassetParamsOutput implements IBaseObject
 	
 	public function getSourceRemoteStorageProfileId()
 	{
-		return $this->getFromCustomData('sourceRemoteStorageProfileId', null, StorageProfile::STORAGE_KALTURA_DC);
+		return $this->getFromCustomData('sourceRemoteStorageProfileId', null, StorageProfile::STORAGE_VIDIUN_DC);
 	}
 	
 	public function setRemoteStorageProfileIds($remoteStorageProfileIds)

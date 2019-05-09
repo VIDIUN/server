@@ -4,7 +4,7 @@
 if ( $debug ) { echo "Result<br><textarea cols=100 rows=50>"; }
 ?>
 <xml>
-	<?php echo baseObjectUtils::objToXml ( $kshow , array ( 'id' , 'name', "show_entry_id" ) , 'kshow' , true , 
+	<?php echo baseObjectUtils::objToXml ( $vshow , array ( 'id' , 'name', "show_entry_id" ) , 'vshow' , true , 
 		array ( "entry_name" => $entry->getName(),
 				"thumbnail_path" => $thumbnail , 
 				"can_publish" => $can_publish ) ) ?>

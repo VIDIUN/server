@@ -33,11 +33,11 @@ class updatedataentryAction extends updateentryAction
 			); 
 	}
 	
-	public function requiredPrivileges () { return "" ; } //"edit:<kshow_id>" ; }
+	public function requiredPrivileges () { return "" ; } //"edit:<vshow_id>" ; }
 	
 	public function verifyEntryPrivileges ( $entry ) 
 	{
-		return $this->verifyPrivileges ( "edit" , $entry->getId() ); // user was granted explicit permissions when initiatd the ks
+		return $this->verifyPrivileges ( "edit" , $entry->getId() ); // user was granted explicit permissions when initiatd the vs
 	}
 	
 	

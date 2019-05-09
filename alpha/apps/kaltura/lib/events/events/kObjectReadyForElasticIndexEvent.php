@@ -2,10 +2,10 @@
 /**
  * Applicative event that raised by the developer when indexed object is ready for indexing to elasticsearch
  */
-class kObjectReadyForElasticIndexEvent extends kApplicativeEvent
+class vObjectReadyForElasticIndexEvent extends vApplicativeEvent
 {
 
-    const EVENT_CONSUMER = 'kObjectReadyForElasticIndexEventConsumer';
+    const EVENT_CONSUMER = 'vObjectReadyForElasticIndexEventConsumer';
 
     protected $params;
 
@@ -20,7 +20,7 @@ class kObjectReadyForElasticIndexEvent extends kApplicativeEvent
         if($params)
             $additionalLog .= ' with params [' . print_r($params, true) . ']';
 
-        KalturaLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "]" . $additionalLog);
+        VidiunLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "]" . $additionalLog);
     }
 
     /**
@@ -33,10 +33,10 @@ class kObjectReadyForElasticIndexEvent extends kApplicativeEvent
 
     /**
      * Executes the consumer
-     * @param KalturaEventConsumer $consumer
+     * @param VidiunEventConsumer $consumer
      * @return bool true if should continue to the next consumer
      */
-    protected function doConsume(KalturaEventConsumer $consumer)
+    protected function doConsume(VidiunEventConsumer $consumer)
     {
         if(!$consumer->shouldConsumeReadyForElasticIndexEvent($this->object, $this->params))
             return true;
@@ -47,9 +47,9 @@ class kObjectReadyForElasticIndexEvent extends kApplicativeEvent
         if($this->params)
             $additionalLog .= ' with params [' . print_r($this->params, true) . ']';
 
-        KalturaLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+        VidiunLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
         $result = $consumer->objectReadyForElasticIndex($this->object, $this->params);
-        KalturaLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+        VidiunLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
         return $result;
     }
 }

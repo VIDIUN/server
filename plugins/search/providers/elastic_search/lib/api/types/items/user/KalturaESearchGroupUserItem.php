@@ -3,17 +3,17 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchGroupUserItem extends KalturaESearchAbstractUserItem
+class VidiunESearchGroupUserItem extends VidiunESearchAbstractUserItem
 {
-	const KUSER_ID_THAT_DOESNT_EXIST = -1;
+	const VUSER_ID_THAT_DOESNT_EXIST = -1;
 
 	/**
-	 * @var KalturaEsearchGroupUserFieldName
+	 * @var VidiunEsearchGroupUserFieldName
 	 */
 	public $fieldName;
 
 	/**
-	 * @var KalturaGroupUserCreationMode
+	 * @var VidiunGroupUserCreationMode
 	 */
 	public $creationMode;
 
@@ -26,7 +26,7 @@ class KalturaESearchGroupUserItem extends KalturaESearchAbstractUserItem
 	private static $map_dynamic_enum = array();
 
 	private static $map_field_enum = array(
-		KalturaEsearchGroupUserFieldName::GROUP_IDS => ESearchGroupUserFieldName::GROUP_USER_DATA,
+		VidiunEsearchGroupUserFieldName::GROUP_IDS => ESearchGroupUserFieldName::GROUP_USER_DATA,
 
 	);
 
@@ -57,16 +57,16 @@ class KalturaESearchGroupUserItem extends KalturaESearchAbstractUserItem
 			$object_to_fill = new ESearchGroupUserItem();
 		}
 
-		if (in_array($this->fieldName, array(KalturaEsearchGroupUserFieldName::GROUP_IDS)))
+		if (in_array($this->fieldName, array(VidiunEsearchGroupUserFieldName::GROUP_IDS)))
 		{
-			$kuserId = self::KUSER_ID_THAT_DOESNT_EXIST;
-			$kuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::getCurrentPartnerId(), $this->searchTerm, true);
-			if ($kuser)
+			$vuserId = self::VUSER_ID_THAT_DOESNT_EXIST;
+			$vuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::getCurrentPartnerId(), $this->searchTerm, true);
+			if ($vuser)
 			{
-				$kuserId = $kuser->getId();
+				$vuserId = $vuser->getId();
 			}
 
-			$this->searchTerm = $kuserId;
+			$this->searchTerm = $vuserId;
 		}
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

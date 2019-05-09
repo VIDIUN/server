@@ -3,6 +3,6 @@
  * @package api
  * @subpackage enum
  */
-class KalturaSessionType extends KalturaEnum implements SessionType
+class VidiunSessionType extends VidiunEnum implements SessionType
 {
 }

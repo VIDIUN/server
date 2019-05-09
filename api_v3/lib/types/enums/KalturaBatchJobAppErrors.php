@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaBatchJobAppErrors extends KalturaEnum implements BatchJobAppErrors
+class VidiunBatchJobAppErrors extends VidiunEnum implements BatchJobAppErrors
 {
 
 }

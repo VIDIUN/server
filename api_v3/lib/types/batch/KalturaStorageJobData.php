@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaStorageJobData extends KalturaJobData
+class VidiunStorageJobData extends VidiunJobData
 {
 	/**
 	 * @var string
@@ -86,7 +86,7 @@ class KalturaStorageJobData extends KalturaJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kStorageJobData();
+			$dbData = new vStorageJobData();
 			
 		return parent::toObject($dbData);
 	}

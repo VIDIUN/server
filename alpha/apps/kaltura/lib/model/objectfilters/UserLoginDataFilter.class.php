@@ -7,7 +7,7 @@ class UserLoginDataFilter extends baseObjectFilter
 {
 	public function init ()
 	{
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 			"_eq_login_email",
 			) , NULL );
 

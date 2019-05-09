@@ -5,27 +5,27 @@
  * @package Core
  * @subpackage model.data
  */
-class kAnonymousIPContextField extends kStringField
+class vAnonymousIPContextField extends vStringField
 {
 	/**
 	 * The ip geo coder engine to be used
 	 * 
 	 * @var int of enum geoCoderType
 	 */
-	protected $geoCoderType = geoCoderType::KALTURA;
+	protected $geoCoderType = geoCoderType::VIDIUN;
 	
 	/* (non-PHPdoc)
-	 * @see kIntegerField::getFieldValue()
+	 * @see vIntegerField::getFieldValue()
 	 */
-	protected function getFieldValue(kScope $scope = null)
+	protected function getFieldValue(vScope $scope = null)
 	{
-		kApiCache::addExtraField(kApiCache::ECF_ANONYMOUS_IP);
+		vApiCache::addExtraField(vApiCache::ECF_ANONYMOUS_IP);
 
 		if(!$scope)
-			$scope = new kScope();
+			$scope = new vScope();
 			
 		$ip = $scope->getIp();
-		$ipGeo = kGeoCoderManager::getGeoCoder($this->getGeoCoderType());
+		$ipGeo = vGeoCoderManager::getGeoCoder($this->getGeoCoderType());
 		$anonymousIPInfo = $ipGeo->getAnonymousInfo($ip);
 		return $anonymousIPInfo;
 	}
@@ -47,7 +47,7 @@ class kAnonymousIPContextField extends kStringField
 	}
 
 	/* (non-PHPdoc)
-	 * @see kStringValue::shouldDisableCache()
+	 * @see vStringValue::shouldDisableCache()
 	 */
 	public function shouldDisableCache($scope)
 	{

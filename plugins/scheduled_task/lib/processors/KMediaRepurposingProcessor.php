@@ -4,14 +4,14 @@
  * @package plugins.scheduledTask
  * @subpackage lib.processors
  */
-class KMediaRepurposingProcessor extends KGenericProcessor
+class VMediaRepurposingProcessor extends VGenericProcessor
 {
-	private static $dontUpdateMetaDataTaskTypes = array (KalturaObjectTaskType::DELETE_ENTRY);
+	private static $dontUpdateMetaDataTaskTypes = array (VidiunObjectTaskType::DELETE_ENTRY);
 
 	/**
-	 * @param KalturaScheduledTaskProfile $profile
+	 * @param VidiunScheduledTaskProfile $profile
 	 */
-	public function processProfile(KalturaScheduledTaskProfile $profile)
+	public function processProfile(VidiunScheduledTaskProfile $profile)
 	{
 		$this->taskRunner->impersonate($profile->partnerId);
 		try
@@ -32,7 +32,7 @@ class KMediaRepurposingProcessor extends KGenericProcessor
 	protected function postProcess($profile, $objectsData)
 	{
 		if ((self::getMediaRepurposingProfileTaskType($profile) == ObjectTaskType::MAIL_NOTIFICATION) && count($objectsData))
-			KObjectTaskMailNotificationEngine::sendMailNotification($profile->objectTasks[0], $objectsData, $profile->id, $profile->partnerId);
+			VObjectTaskMailNotificationEngine::sendMailNotification($profile->objectTasks[0], $objectsData, $profile->id, $profile->partnerId);
 	}
 
 	protected function handlePager($pager)
@@ -58,7 +58,7 @@ class KMediaRepurposingProcessor extends KGenericProcessor
 		}
 	}
 
-	private static function getMrAdvancedSearchFilter(KalturaScheduledTaskProfile $profile)
+	private static function getMrAdvancedSearchFilter(VidiunScheduledTaskProfile $profile)
 	{
 		return $profile->objectFilter->advancedSearch->items[0];
 	}
@@ -74,10 +74,10 @@ class KMediaRepurposingProcessor extends KGenericProcessor
 		return true;
 	}
 
-	private function updateMetadataStatusForMediaRepurposing(KalturaScheduledTaskProfile $profile, $object, $error)
+	private function updateMetadataStatusForMediaRepurposing(VidiunScheduledTaskProfile $profile, $object, $error)
 	{
 		$metadataProfileId = self::getMrAdvancedSearchFilter($profile)->metadataProfileId;
-		$metadataPlugin = KalturaMetadataClientPlugin::get(KBatchBase::$kClient);
+		$metadataPlugin = VidiunMetadataClientPlugin::get(VBatchBase::$vClient);
 		$metadata = $this->getMetadataOnObject($object->id, $metadataProfileId);
 
 		$xml = ($metadata && $metadata->xml) ? $metadata->xml : null;
@@ -95,7 +95,7 @@ class KMediaRepurposingProcessor extends KGenericProcessor
 			if ($metadata && $metadata->id)
 				$result = $metadataPlugin->metadata->update($metadata->id, $xml);
 			else
-				$result = $metadataPlugin->metadata->add($metadataProfileId, KalturaMetadataObjectType::ENTRY, $object->id, $xml);
+				$result = $metadataPlugin->metadata->add($metadataProfileId, VidiunMetadataObjectType::ENTRY, $object->id, $xml);
 
 		}
 		catch (Exception $e)
@@ -103,8 +103,8 @@ class KMediaRepurposingProcessor extends KGenericProcessor
 			if (self::getMediaRepurposingProfileTaskType($profile) == ObjectTaskType::DELETE_ENTRY)
 				return null; //delete entry should get exception when update metadata for deleted entry
 
-			throw new KalturaException("Error in metadata for entry [$object->id] with " . $e->getMessage(),
-				KalturaBatchJobAppErrors::MEDIA_REPURPOSING_FAILED, null);
+			throw new VidiunException("Error in metadata for entry [$object->id] with " . $e->getMessage(),
+				VidiunBatchJobAppErrors::MEDIA_REPURPOSING_FAILED, null);
 		}
 
 		return $result->id;
@@ -112,10 +112,10 @@ class KMediaRepurposingProcessor extends KGenericProcessor
 
 	private function getMetadataOnObject($objectId, $metadataProfileId)
 	{
-		$filter = new KalturaMetadataFilter();
+		$filter = new VidiunMetadataFilter();
 		$filter->metadataProfileIdEqual = $metadataProfileId;
 		$filter->objectIdEqual = $objectId;
-		$metadataPlugin = KalturaMetadataClientPlugin::get(KBatchBase::$kClient);
+		$metadataPlugin = VidiunMetadataClientPlugin::get(VBatchBase::$vClient);
 		$result = $metadataPlugin->metadata->listAction($filter, null);
 		if ($result->totalCount > 0)
 			return $result->objects[0];
@@ -125,14 +125,14 @@ class KMediaRepurposingProcessor extends KGenericProcessor
 	/**
 	 * Moves the profile to suspended status
 	 *
-	 * @param KalturaScheduledTaskProfile $profile
+	 * @param VidiunScheduledTaskProfile $profile
 	 */
-	public function suspendProfile(KalturaScheduledTaskProfile $profile)
+	public function suspendProfile(VidiunScheduledTaskProfile $profile)
 	{
 		parent::suspendProfile($profile);
-		KalturaLog::alert("Media Repurposing profile [$profile->id] has been suspended");
+		VidiunLog::alert("Media Repurposing profile [$profile->id] has been suspended");
 		$address = $this->getPartnerMail($profile->partnerId);
-		KObjectTaskMailNotificationEngine::sendMail(array($address), "Media Repurposing Suspended", "MR profile with id [$profile->name] has been suspended");
+		VObjectTaskMailNotificationEngine::sendMail(array($address), "Media Repurposing Suspended", "MR profile with id [$profile->name] has been suspended");
 	}
 
 	private function addMetadataXmlField($mrId, $xml_string, $error)
@@ -186,7 +186,7 @@ class KMediaRepurposingProcessor extends KGenericProcessor
 		return $xml;
 	}
 
-	protected static function getMediaRepurposingProfileTaskType(KalturaScheduledTaskProfile $profile)
+	protected static function getMediaRepurposingProfileTaskType(VidiunScheduledTaskProfile $profile)
 	{
 		return $profile->objectTasks[0]->type;
 	}

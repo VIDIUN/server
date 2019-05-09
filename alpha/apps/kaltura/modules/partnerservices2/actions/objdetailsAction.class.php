@@ -17,19 +17,19 @@ class objdetailsAction extends defPartnerservices2Action
 		return self::REQUIED_TICKET_NONE;
 	}
 
-	// ask to fetch the kuser from puser_kuser
-	public function needKuserFromPuser ( )
+	// ask to fetch the vuser from puser_vuser
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_NO_KUSER;
+		return self::VUSER_DATA_NO_VUSER;
 	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$clazz_name = $this->getP ( "clazz" );
-		if ( $clazz_name == "kshow" ) $obj = new kshow();
-		else if ( $clazz_name == "kuser" ) $obj = new kuser();
+		if ( $clazz_name == "vshow" ) $obj = new vshow();
+		else if ( $clazz_name == "vuser" ) $obj = new vuser();
 		else if ( $clazz_name == "entry" ) $obj = new entry();
-		else if ( $clazz_name == "PuserKuser" ) $obj = new PuserKuser();
+		else if ( $clazz_name == "PuserVuser" ) $obj = new PuserVuser();
 
 		$obj = new $clazz_name();
 

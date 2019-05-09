@@ -3,7 +3,7 @@
  * @package plugins.bulkUploadCsv
  * @subpackage lib
  */
-class BulkUploadFilterType implements IKalturaPluginEnum, BulkUploadType
+class BulkUploadFilterType implements IVidiunPluginEnum, BulkUploadType
 {
 	const FILTER = 'FILTER';
 	

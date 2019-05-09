@@ -9,7 +9,7 @@ class myCurrentServices extends myBaseMediaSource implements IMediaSource
 	protected $source_name = "Current";
 //	protected $auth_method = self::AUTH_METHOD_NONE;
 	protected $search_in_user = false; 
-	protected $logo = "http://www.kaltura.com/images/wizard/logo_current.gif";
+	protected $logo = "http://www.vidiun.com/images/wizard/logo_current.gif";
 	protected $id = entry::ENTRY_MEDIA_SOURCE_CURRENT;
 	
 	private static $NEED_MEDIA_INFO = "1";
@@ -45,7 +45,7 @@ class myCurrentServices extends myBaseMediaSource implements IMediaSource
 		
 	}
 
-	public function getAuthData( $kuserId, $userName, $password, $token)
+	public function getAuthData( $vuserId, $userName, $password, $token)
 	{
 		return ""; // empty value
 	}		
@@ -143,7 +143,7 @@ class myCurrentServices extends myBaseMediaSource implements IMediaSource
 	private static function getObjectInfo($objectId)
 	{
 		$source_link = "http://current.com$objectId";
-		$htmlPage = kFile::downloadUrlToString($source_link, 1);
+		$htmlPage = vFile::downloadUrlToString($source_link, 1);
 		
 		$status = 'error';
 		$message = '';

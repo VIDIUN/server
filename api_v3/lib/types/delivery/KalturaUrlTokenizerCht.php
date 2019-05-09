@@ -3,12 +3,12 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlTokenizerCht extends KalturaUrlTokenizer {
+class VidiunUrlTokenizerCht extends VidiunUrlTokenizer {
 
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kChtHttpUrlTokenizer();
+			$dbObject = new vChtHttpUrlTokenizer();
 			
 		parent::toObject($dbObject, $skip);
 	

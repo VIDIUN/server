@@ -3,7 +3,7 @@
  * @package plugins.adCuePoint
  * @subpackage lib.enum
  */
-class AdCuePointType implements IKalturaPluginEnum, CuePointType
+class AdCuePointType implements IVidiunPluginEnum, CuePointType
 {
 	const AD = 'Ad';
 	

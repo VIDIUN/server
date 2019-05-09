@@ -15,11 +15,11 @@
  */
 class invalidSession extends BaseinvalidSession {
 	
-	const INVALID_SESSION_TYPE_KS = 0;
+	const INVALID_SESSION_TYPE_VS = 0;
 	const INVALID_SESSION_TYPE_SESSION_ID = 1;
 
 	public function getCacheInvalidationKeys()
 	{
-		return array("invalidSession:ks=".strtolower($this->getKs()));
+		return array("invalidSession:vs=".strtolower($this->getVs()));
 	}
 } // invalidSession

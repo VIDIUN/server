@@ -1,4 +1,4 @@
-index kaltura_base
+index vidiun_base
 {
 	type	 = rt
 	dict	 = keywords
@@ -76,7 +76,7 @@ index kaltura_base
 						U+00E0, U+00E1, U+1EA1, U+1EA3, U+00E3, U+00E2, U+1EA7, U+1EA5, U+1EAD, U+1EA9, U+1EAB, U+0103, U+1EB1, U+1EAF, U+1EB7, U+1EB3, U+1EB5, U+00E8, U+00E9, U+1EB9, U+1EBB, U+1EBD, U+00EA, U+1EC1, U+1EBF, U+1EC7, U+1EC3, U+1EC5, U+00EC, U+00ED, U+1ECB, U+1EC9, U+0129, U+00F2, U+00F3, U+1ECD, U+1ECF, U+00F5, U+00F4, U+1ED3, U+1ED1, U+1ED9, U+1ED5, U+1ED7, U+01A1, U+1EDD, U+1EDB, U+1EE3, U+1EDF, U+1EE1, U+00F9, U+00FA, U+1EE5, U+1EE7, U+0169, U+01B0, U+1EEB, U+1EE9, U+1EF1, U+1EED, U+1EEF, U+1EF3, U+00FD, U+1EF5, U+1EF7, U+1EF9, U+0111, U+00C0->U+00E0, U+00C1->U+00E1, U+1EA0->U+1EA1, U+1EA2->U+1EA3, U+00C3->U+00E3, U+00C2->U+00E2, U+1EA6->U+1EA7, U+1EA4->U+1EA5, U+1EAC->U+1EAD, U+1EA8->U+1EA9, U+1EAA->U+1EAB, U+0102->U+0103, U+1EB0->U+1EB1, U+1EAE->U+1EAF, U+1EB6->U+1EB7, U+1EB2->U+1EB3, U+1EB4->U+1EB5, U+00C8->U+00E8, U+00C9->U+00E9, U+1EB8->U+1EB9, U+1EBA->U+1EBB, U+1EBC->U+1EBD, U+00CA->U+00EA, U+1EC0->U+1EC1, U+1EBE->U+1EBF, U+1EC6->U+1EC7, U+1EC2->U+1EC3, U+1EC4->U+1EC5, U+00CC->U+00EC, U+00CD->U+00ED, U+1ECA->U+1ECB, U+1EC8->U+1EC9, U+0128->U+0129, U+00D2->U+00F2, U+00D3->U+00F3, U+1ECC->U+1ECD, U+1ECE->U+1ECF, U+00D5->U+00F5, U+00D4->U+00F4, U+1ED2->U+1ED3, U+1ED0->U+1ED1, U+1ED8->U+1ED9, U+1ED4->U+1ED5, U+1ED6->U+1ED7, U+01A0->U+01A1, U+1EDC->U+1EDD, U+1EDA->U+1EDB, U+1EE2->U+1EE3, U+1EDE->U+1EDF, U+1EE0->U+1EE1, U+00D9->U+00F9, U+00DA->U+00FA, U+1EE4->U+1EE5, U+1EE6->U+1EE7, U+0168->U+0169, U+01AF->U+01B0, U+1EEA->U+1EEB, U+1EE8->U+1EE9, U+1EF0->U+1EF1, U+1EEC->U+1EED, U+1EEE->U+1EEF, U+1EF2->U+1EF3, U+00DD->U+00FD, U+1EF4->U+1EF5, U+1EF6->U+1EF7, U+1EF8->U+1EF9, U+0110->U+0111
 }
 
-index kaltura_base_gt_in_charset:kaltura_base
+index vidiun_base_gt_in_charset:vidiun_base
 {
 	blend_chars		 = !, $, ', (, ), *, -, /, :, ;, <, =, U+23, [, \, ], ^, `, {, |, }, ~
 	charset_table	 = _, %, &, ?, @, +, ., >, U+FF10..U+FF19->0..9, U+FF21..U+FF3A->a..z, U+FF41..U+FF5A->a..z, 0..9, A..Z->a..z, a..z,\
@@ -148,78 +148,78 @@ index kaltura_base_gt_in_charset:kaltura_base
 						U+00E0, U+00E1, U+1EA1, U+1EA3, U+00E3, U+00E2, U+1EA7, U+1EA5, U+1EAD, U+1EA9, U+1EAB, U+0103, U+1EB1, U+1EAF, U+1EB7, U+1EB3, U+1EB5, U+00E8, U+00E9, U+1EB9, U+1EBB, U+1EBD, U+00EA, U+1EC1, U+1EBF, U+1EC7, U+1EC3, U+1EC5, U+00EC, U+00ED, U+1ECB, U+1EC9, U+0129, U+00F2, U+00F3, U+1ECD, U+1ECF, U+00F5, U+00F4, U+1ED3, U+1ED1, U+1ED9, U+1ED5, U+1ED7, U+01A1, U+1EDD, U+1EDB, U+1EE3, U+1EDF, U+1EE1, U+00F9, U+00FA, U+1EE5, U+1EE7, U+0169, U+01B0, U+1EEB, U+1EE9, U+1EF1, U+1EED, U+1EEF, U+1EF3, U+00FD, U+1EF5, U+1EF7, U+1EF9, U+0111, U+00C0->U+00E0, U+00C1->U+00E1, U+1EA0->U+1EA1, U+1EA2->U+1EA3, U+00C3->U+00E3, U+00C2->U+00E2, U+1EA6->U+1EA7, U+1EA4->U+1EA5, U+1EAC->U+1EAD, U+1EA8->U+1EA9, U+1EAA->U+1EAB, U+0102->U+0103, U+1EB0->U+1EB1, U+1EAE->U+1EAF, U+1EB6->U+1EB7, U+1EB2->U+1EB3, U+1EB4->U+1EB5, U+00C8->U+00E8, U+00C9->U+00E9, U+1EB8->U+1EB9, U+1EBA->U+1EBB, U+1EBC->U+1EBD, U+00CA->U+00EA, U+1EC0->U+1EC1, U+1EBE->U+1EBF, U+1EC6->U+1EC7, U+1EC2->U+1EC3, U+1EC4->U+1EC5, U+00CC->U+00EC, U+00CD->U+00ED, U+1ECA->U+1ECB, U+1EC8->U+1EC9, U+0128->U+0129, U+00D2->U+00F2, U+00D3->U+00F3, U+1ECC->U+1ECD, U+1ECE->U+1ECF, U+00D5->U+00F5, U+00D4->U+00F4, U+1ED2->U+1ED3, U+1ED0->U+1ED1, U+1ED8->U+1ED9, U+1ED4->U+1ED5, U+1ED6->U+1ED7, U+01A0->U+01A1, U+1EDC->U+1EDD, U+1EDA->U+1EDB, U+1EE2->U+1EE3, U+1EDE->U+1EDF, U+1EE0->U+1EE1, U+00D9->U+00F9, U+00DA->U+00FA, U+1EE4->U+1EE5, U+1EE6->U+1EE7, U+0168->U+0169, U+01AF->U+01B0, U+1EEA->U+1EEB, U+1EE8->U+1EE9, U+1EF0->U+1EF1, U+1EEC->U+1EED, U+1EEE->U+1EEF, U+1EF2->U+1EF3, U+00DD->U+00FD, U+1EF4->U+1EF5, U+1EF6->U+1EF7, U+1EF8->U+1EF9, U+0110->U+0111
 }
 
-index kaltura_entry:kaltura_base
+index vidiun_entry:vidiun_base
 {
-	path	 = @BASE_DIR@/sphinx/kaltura_rt
-	@FIELDS_PLACEHOLDER-kaltura_entry@
+	path	 = @BASE_DIR@/sphinx/vidiun_rt
+	@FIELDS_PLACEHOLDER-vidiun_entry@
 }
 
-index kaltura_category:kaltura_base_gt_in_charset
+index vidiun_category:vidiun_base_gt_in_charset
 {
-	path	 = @BASE_DIR@/sphinx/kaltura_category_rt
+	path	 = @BASE_DIR@/sphinx/vidiun_category_rt
 	min_prefix_len	 = 1
-	@FIELDS_PLACEHOLDER-kaltura_category@	
+	@FIELDS_PLACEHOLDER-vidiun_category@	
 }
 
-index kaltura_kuser:kaltura_base_gt_in_charset
+index vidiun_vuser:vidiun_base_gt_in_charset
 {
-	path	 = @BASE_DIR@/sphinx/kaltura_kuser_rt
-	@FIELDS_PLACEHOLDER-kaltura_kuser@
+	path	 = @BASE_DIR@/sphinx/vidiun_vuser_rt
+	@FIELDS_PLACEHOLDER-vidiun_vuser@
 }
 
-index kaltura_category_kuser:kaltura_base_gt_in_charset
+index vidiun_category_vuser:vidiun_base_gt_in_charset
 {
-	path	 = @BASE_DIR@/sphinx/kaltura_category_kuser_rt
-	@FIELDS_PLACEHOLDER-kaltura_category_kuser@
+	path	 = @BASE_DIR@/sphinx/vidiun_category_vuser_rt
+	@FIELDS_PLACEHOLDER-vidiun_category_vuser@
 }
 
-index kaltura_cue_point:kaltura_base
+index vidiun_cue_point:vidiun_base
 {
-	path	 = @BASE_DIR@/sphinx/kaltura_cue_point_rt
-	@FIELDS_PLACEHOLDER-kaltura_cue_point@
+	path	 = @BASE_DIR@/sphinx/vidiun_cue_point_rt
+	@FIELDS_PLACEHOLDER-vidiun_cue_point@
 }
 
-index kaltura_entry_distribution:kaltura_base
+index vidiun_entry_distribution:vidiun_base
 {
-	path	 = @BASE_DIR@/sphinx/kaltura_distribution_rt
-	@FIELDS_PLACEHOLDER-kaltura_entry_distribution@
+	path	 = @BASE_DIR@/sphinx/vidiun_distribution_rt
+	@FIELDS_PLACEHOLDER-vidiun_entry_distribution@
 }
 
-index kaltura_caption_item:kaltura_base
+index vidiun_caption_item:vidiun_base
 {
-	path	 = @BASE_DIR@/sphinx/kaltura_caption_item_rt
-	@FIELDS_PLACEHOLDER-kaltura_caption_item@
+	path	 = @BASE_DIR@/sphinx/vidiun_caption_item_rt
+	@FIELDS_PLACEHOLDER-vidiun_caption_item@
 }
 
-index kaltura_tag:kaltura_base_gt_in_charset
+index vidiun_tag:vidiun_base_gt_in_charset
 {
-	path	 = @BASE_DIR@/sphinx/kaltura_tag_rt
-	@FIELDS_PLACEHOLDER-kaltura_tag@
+	path	 = @BASE_DIR@/sphinx/vidiun_tag_rt
+	@FIELDS_PLACEHOLDER-vidiun_tag@
 }
 
-index kaltura_metadata:kaltura_base
+index vidiun_metadata:vidiun_base
 {
-	path	 = @BASE_DIR@/sphinx/kaltura_metadata_rt
-	@FIELDS_PLACEHOLDER-kaltura_metadata@
+	path	 = @BASE_DIR@/sphinx/vidiun_metadata_rt
+	@FIELDS_PLACEHOLDER-vidiun_metadata@
 }
 
-index kaltura_schedule_event:kaltura_base
+index vidiun_schedule_event:vidiun_base
 {
-	path	 = @BASE_DIR@/sphinx/kaltura_schedule_event_rt
-	@FIELDS_PLACEHOLDER-kaltura_schedule_event@
+	path	 = @BASE_DIR@/sphinx/vidiun_schedule_event_rt
+	@FIELDS_PLACEHOLDER-vidiun_schedule_event@
 }
 
-index kaltura_entry_vendor_task:kaltura_base
+index vidiun_entry_vendor_task:vidiun_base
 {
-	path	 = @BASE_DIR@/sphinx/kaltura_entry_vendor_task_rt
-	@FIELDS_PLACEHOLDER-kaltura_entry_vendor_task@
+	path	 = @BASE_DIR@/sphinx/vidiun_entry_vendor_task_rt
+	@FIELDS_PLACEHOLDER-vidiun_entry_vendor_task@
 }
 
 
 searchd
 {
-	log = @LOG_DIR@/sphinx/kaltura_sphinx_searchd.log
-	query_log = @LOG_DIR@/sphinx/kaltura_sphinx_query.log
+	log = @LOG_DIR@/sphinx/vidiun_sphinx_searchd.log
+	query_log = @LOG_DIR@/sphinx/vidiun_sphinx_query.log
 	query_log_format = sphinxql
 	read_timeout = 5
 	max_children = 30

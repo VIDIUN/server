@@ -22,18 +22,18 @@
 			</tr>
 		</tfoot>
 		<tbody>
-			<?php foreach($this->paginator as /* Kaltura_Client_EventNotification_Type_EventNotificationTemplate */ $template): ?>
+			<?php foreach($this->paginator as /* Vidiun_Client_EventNotification_Type_EventNotificationTemplate */ $template): ?>
 			<tr class="<?php echo $this->cycle(array('odd', 'even'))->next(); ?>">
-				<td><?php echo $this->enumTranslate('Kaltura_Client_EventNotification_Enum_EventNotificationTemplateStatus', $template->status); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_EventNotification_Enum_EventNotificationTemplateStatus', $template->status); ?></td>
 				<td><?php echo $template->id; ?></td>
-				<td><?php echo $this->enumTranslate('Kaltura_Client_EventNotification_Enum_EventNotificationTemplateType', $template->type); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_EventNotification_Enum_EventNotificationTemplateType', $template->type); ?></td>
 				<td><?php echo $template->name; ?></td>
 				<td><?php $d = (new Zend_Date($template->createdAt)); echo $d->toString(Zend_Date::DATE_LONG); ?></td>
 				<td>
 					<select class="options" onchange="doAction(this.value, <?php echo $template->partnerId; ?>, <?php echo $template->id; ?>)">
 						<option value=""><?php echo $this->translate('Select Action'); ?></option>
 						<option value="configure"><?php echo $this->translate('Configure'); ?></option>
-						<?php if($template->status == Kaltura_Client_EventNotification_Enum_EventNotificationTemplateStatus::ACTIVE): ?>
+						<?php if($template->status == Vidiun_Client_EventNotification_Enum_EventNotificationTemplateStatus::ACTIVE): ?>
 							<option value="disableTemplate"><?php echo $this->translate('Disable'); ?></option>
 						<?php else: ?>
 							<option value="enableTemplate"><?php echo $this->translate('Enable'); ?></option>
@@ -125,7 +125,7 @@ function disableTemplate(partnerId, templateId){
 	updateStatus(
 			partnerId, 
 			templateId, 
-		<?php echo Kaltura_Client_EventNotification_Enum_EventNotificationTemplateStatus::DISABLED; ?>, 
+		<?php echo Vidiun_Client_EventNotification_Enum_EventNotificationTemplateStatus::DISABLED; ?>, 
 		function() {
 			alert('<?php echo $this->translate('Template was disabled');?>');
 		}
@@ -136,7 +136,7 @@ function enableTemplate(partnerId, templateId){
 	updateStatus(
 		partnerId, 
 		templateId, 
-		<?php echo Kaltura_Client_EventNotification_Enum_EventNotificationTemplateStatus::ACTIVE; ?>, 
+		<?php echo Vidiun_Client_EventNotification_Enum_EventNotificationTemplateStatus::ACTIVE; ?>, 
 		function() {
 			alert('<?php echo $this->translate('Template was activated');?>');
 		}
@@ -152,7 +152,7 @@ function remove(partnerId, templateId)
 	updateStatus(
 		partnerId, 
 		templateId, 
-		<?php echo Kaltura_Client_EventNotification_Enum_EventNotificationTemplateStatus::DELETED; ?>, 
+		<?php echo Vidiun_Client_EventNotification_Enum_EventNotificationTemplateStatus::DELETED; ?>, 
 		function() {
 			alert('<?php echo $this->translate('Template was removed');?>');
 		}

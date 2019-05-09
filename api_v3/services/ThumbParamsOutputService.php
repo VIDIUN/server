@@ -6,14 +6,14 @@
  * @package api
  * @subpackage services
  */
-class ThumbParamsOutputService extends KalturaBaseService
+class ThumbParamsOutputService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
 		parent::initService($serviceId, $serviceName, $actionName);
 		
 		if($this->getPartnerId() != Partner::BATCH_PARTNER_ID && $this->getPartnerId() != Partner::ADMIN_CONSOLE_PARTNER_ID)
-			throw new KalturaAPIException(KalturaErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
+			throw new VidiunAPIException(VidiunErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
 	}
 	
 	/**
@@ -21,17 +21,17 @@ class ThumbParamsOutputService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id
-	 * @return KalturaThumbParamsOutput
-	 * @throws KalturaErrors::THUMB_PARAMS_OUTPUT_ID_NOT_FOUND
+	 * @return VidiunThumbParamsOutput
+	 * @throws VidiunErrors::THUMB_PARAMS_OUTPUT_ID_NOT_FOUND
 	 */
 	public function getAction($id)
 	{
 		$thumbParamsOutputDb = assetParamsOutputPeer::retrieveByPK($id);
 		
 		if (!$thumbParamsOutputDb)
-			throw new KalturaAPIException(KalturaErrors::THUMB_PARAMS_OUTPUT_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::THUMB_PARAMS_OUTPUT_ID_NOT_FOUND, $id);
 			
-		$thumbParamsOutput = new KalturaThumbParamsOutput();
+		$thumbParamsOutput = new VidiunThumbParamsOutput();
 		$thumbParamsOutput->fromObject($thumbParamsOutputDb, $this->getResponseProfile());
 		
 		return $thumbParamsOutput;
@@ -41,21 +41,21 @@ class ThumbParamsOutputService extends KalturaBaseService
 	 * List thumb params output objects by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaThumbParamsOutputFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaThumbParamsOutputListResponse
+	 * @param VidiunThumbParamsOutputFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunThumbParamsOutputListResponse
 	 */
-	function listAction(KalturaThumbParamsOutputFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunThumbParamsOutputFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaThumbParamsOutputFilter();
+			$filter = new VidiunThumbParamsOutputFilter();
 			
 		if(!$pager)
 		{
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		}
 			
-		$types = KalturaPluginManager::getExtendedTypes(assetParamsOutputPeer::OM_CLASS, assetType::THUMBNAIL);
+		$types = VidiunPluginManager::getExtendedTypes(assetParamsOutputPeer::OM_CLASS, assetType::THUMBNAIL);
 		return $filter->getTypeListResponse($pager, $this->getResponseProfile(), $types);
 	}
 }

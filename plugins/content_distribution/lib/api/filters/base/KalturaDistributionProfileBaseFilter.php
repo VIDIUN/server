@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaDistributionProfileBaseFilter extends KalturaFilter
+abstract class VidiunDistributionProfileBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -67,7 +67,7 @@ abstract class KalturaDistributionProfileBaseFilter extends KalturaFilter
 	public $updatedAtLessThanOrEqual;
 
 	/**
-	 * @var KalturaDistributionProfileStatus
+	 * @var VidiunDistributionProfileStatus
 	 */
 	public $statusEqual;
 

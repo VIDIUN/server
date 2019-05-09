@@ -30,7 +30,7 @@ class myFileConverter
 
 	static public function getFlvDuration ( $source_file )
 	{
-		$source_file = kFile::fixPath ( $source_file );
+		$source_file = vFile::fixPath ( $source_file );
 
 		$conversion_info = new conversionInfo();
 		$conversion_info->fillFromMetadata( $source_file );
@@ -175,7 +175,7 @@ class myFileConverter
 		$text_output_file = self::createLogFileName ($source_file , $plain_log_file_name );
 		// hq - activate high quality settings
 		// deinterlace - deinterlace pictures
-		$cmd = kConf::get ( "bin_path_ffmpeg" );
+		$cmd = vConf::get ( "bin_path_ffmpeg" );
 		
 		// Test parameters
 		$validInput = TRUE;
@@ -203,7 +203,7 @@ class myFileConverter
 		$exec_cmd = $cmd . $position_str . " -noautorotate -i " . "\"$source_file\"" . " -an -y -r 1 " . $dimensions .
 			" " . " -vframes $frame_count -f \"" . $target_type . "\" " . $position_str_suffix . "\"$target_file\"" . " 2>&1";
 		
-		KalturaLog::log("ffmpeg cmd [$exec_cmd]");
+		VidiunLog::log("ffmpeg cmd [$exec_cmd]");
 		$output = array ();
 		$return_value = "";
 
@@ -215,12 +215,12 @@ class myFileConverter
 				&& strpos($outLine,"first frame is no keyframe")===false)
 					continue;
 
-				KalturaLog::log("FFMpeg response - \n".print_r(implode($output),1));
-				KalturaLog::log("The ffmpeg responded with 'first-frame-not-a-keyframe'. The fast-seek mode failed to properly get the right frame. Switching to the 'slow-mode' that is limited to th3 first 30sec only ".print_r(implode($output),1));
+				VidiunLog::log("FFMpeg response - \n".print_r(implode($output),1));
+				VidiunLog::log("The ffmpeg responded with 'first-frame-not-a-keyframe'. The fast-seek mode failed to properly get the right frame. Switching to the 'slow-mode' that is limited to th3 first 30sec only ".print_r(implode($output),1));
 					// '-noautorotate' to adjust to ffm2.7.2 that automatically normalizes rotated sources
-				$exec_cmd = kConf::get ( "bin_path_ffmpeg" ) . " -noautorotate -i \"$source_file\"". $position_str  . " -an -y -r 1 " . $dimensions .
+				$exec_cmd = vConf::get ( "bin_path_ffmpeg" ) . " -noautorotate -i \"$source_file\"". $position_str  . " -an -y -r 1 " . $dimensions .
 					" " . " -vframes $frame_count -f \"" . $target_type . "\" " . "\"$target_file\"" . " 2>&1";
-				KalturaLog::log("fmpeg cmd [$exec_cmd]");
+				VidiunLog::log("fmpeg cmd [$exec_cmd]");
 				$output = array ();
 				$return_value = "";
 
@@ -248,12 +248,12 @@ class myFileConverter
 	// Use ffmpeg to extract the video dimensions
 	public static function getVideoDimensions (  $source_file )
 	{
-		$source_file = kFile::fixPath( $source_file ) ;
+		$source_file = vFile::fixPath( $source_file ) ;
 		if (realpath($source_file) === FALSE)
 			throw new Exception("Illegal input was supplied");
 	
 		ob_start();
-		$cmd_line = kConf::get ( "bin_path_ffmpeg" ) . " -i \"". $source_file . "\" 2>&1";
+		$cmd_line = vConf::get ( "bin_path_ffmpeg" ) . " -i \"". $source_file . "\" 2>&1";
 		passthru( $cmd_line );
 		echo $cmd_line;
 		$size = ob_get_contents();
@@ -278,21 +278,21 @@ class myFileConverter
 	
 	static public function createImageByFile($source_file)
 	{
-		global $global_kaltura_memory_limit;
-		if ( ! isset ( $global_kaltura_memory_limit ) )
+		global $global_vidiun_memory_limit;
+		if ( ! isset ( $global_vidiun_memory_limit ) )
 		{
 			ini_set("memory_limit","256M");
 		}
 		
 		if(!file_exists($source_file))
 		{
-			KalturaLog::log( "file not found [$source_file]" ) ;
+			VidiunLog::log( "file not found [$source_file]" ) ;
 			return null;	
 		}
 		
 		if(!is_file($source_file))
 		{
-			KalturaLog::log( "path is not file [$source_file]" ) ;
+			VidiunLog::log( "path is not file [$source_file]" ) ;
 			return null;	
 		}
 		
@@ -310,7 +310,7 @@ class myFileConverter
 		if( !$srcIm )
 		{
 			$output = array();
-			$cmd = kConf::get ( "bin_path_imagemagick");
+			$cmd = vConf::get ( "bin_path_imagemagick");
 			$jpeg_file = myContentStorage::getFSUploadsPath(true).pathinfo($source_file, PATHINFO_FILENAME).".jpg";
 			
 			$validInput = true;
@@ -345,13 +345,13 @@ class myFileConverter
 	{
 		if ( ! file_exists( $source_file ) )
 		{
-			KalturaLog::log ( __CLASS__ . " File not found [$source_file]" );
+			VidiunLog::log ( __CLASS__ . " File not found [$source_file]" );
 			return;
 		}
 
 		if ( is_dir( $source_file ))
 		{
-			KalturaLog::log ( __CLASS__ . " Cannot create image from directory [$source_file]" );
+			VidiunLog::log ( __CLASS__ . " Cannot create image from directory [$source_file]" );
 			return;
 		}
 		//$text_output_file = self::createLogFileName ($source_file );
@@ -359,7 +359,7 @@ class myFileConverter
 		list($sourcewidth, $sourceheight, $type, $attr, $srcIm) = self::createImageByFile($source_file);
 		if (!$srcIm || !$sourcewidth || !$sourceheight)
 		{
-			KalturaLog::log ( __CLASS__ . " bad image / dimensions [$source_file]" );
+			VidiunLog::log ( __CLASS__ . " bad image / dimensions [$source_file]" );
 			return;
 		}
 
@@ -432,8 +432,8 @@ class myFileConverter
 		$crop_type = self::CROP_TYPE_ORIGINAL_ASPECT_RATIO, $bgcolor = 0xffffff, $force_jpeg = false, $quality = 0,
 		$src_x = 0, $src_y = 0, $src_w = 0, $src_h = 0, $density = 0, $stripProfiles = false, $thumbParams = null, $format = null, $forceRotation = null)
 	{
-		if (is_null($thumbParams) || !($thumbParams instanceof kThumbnailParameters))
-			$thumbParams = new kThumbnailParameters();
+		if (is_null($thumbParams) || !($thumbParams instanceof vThumbnailParameters))
+			$thumbParams = new vThumbnailParameters();
 
 		if (is_string($bgcolor) && strpos($bgcolor, '0x') === false)
 			$bgcolor = hexdec('0x' . $bgcolor);
@@ -441,7 +441,7 @@ class myFileConverter
 		// check if the source file is not an image file
 		if (!file_exists($source_file) || filesize($source_file) === 0 || getimagesize($source_file) === false)
 		{
-        	KalturaLog::log("convertImage - failed to get image size [$source_file] while creating [$target_file]");
+        	VidiunLog::log("convertImage - failed to get image size [$source_file] while creating [$target_file]");
         		return null;
 		}
 		
@@ -454,25 +454,25 @@ class myFileConverter
 			$ext = self::imageExtByType($type);
 			if($thumbParams->getSupportAnimatedThumbnail() && $ext == "gif")
 			{
-				$target_file = kFile::replaceExt($target_file, "gif");
+				$target_file = vFile::replaceExt($target_file, "gif");
 			}
 			else
 			{
-				$target_file = kFile::replaceExt($target_file, "jpg");
+				$target_file = vFile::replaceExt($target_file, "jpg");
 				$type = IMAGETYPE_JPEG;
 			}
 		}
 		else
-			$target_file = kFile::replaceExt($target_file, self::imageExtByType($type));
+			$target_file = vFile::replaceExt($target_file, self::imageExtByType($type));
 		
 		if(!is_null($format))
-			$target_file = kFile::replaceExt($target_file, $format);
+			$target_file = vFile::replaceExt($target_file, $format);
 		
 		// do convertion
 		if (file_exists($target_file))
 			unlink($target_file); // remove target file before converting in order to avoid imagemagick security wrapper script from detetcing irrelevant errors  
 		$status = null;
-		$imageCropper = new KImageMagickCropper($source_file, $target_file, kConf::get('bin_path_imagemagick'));
+		$imageCropper = new VImageMagickCropper($source_file, $target_file, vConf::get('bin_path_imagemagick'));
 		$status = $imageCropper->crop($quality, $crop_type, $width, $height, $src_x, $src_y, $src_w, $src_h, null, null, $bgcolor, $density, $forceRotation, $stripProfiles);
 		if (!$status)
 			return null;
@@ -609,7 +609,7 @@ class conversionInfo
 			throw new Exception("Illegal input was supplied");
 		
 		ob_start();
-		$cmd_line = kConf::get ( "bin_path_ffmpeg" ) . " -i \"". $source_file . "\" 2>&1";
+		$cmd_line = vConf::get ( "bin_path_ffmpeg" ) . " -i \"". $source_file . "\" 2>&1";
 		passthru( $cmd_line );
 		$content = ob_get_contents();
 		ob_end_clean();

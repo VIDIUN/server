@@ -2,7 +2,7 @@
 /**
  * @package plugins.vlc
  */
-class VlcPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaEnumerator
+class VlcPlugin extends VidiunPlugin implements IVidiunObjectLoader, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'vlc';
 	
@@ -19,18 +19,18 @@ class VlcPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaE
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::VLC)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::VLC)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 				
 			$params = $constructorArgs['params'];
-			return new KOperationEngineVlc($params->vlcCmd, $constructorArgs['outFilePath']);
+			return new VOperationEngineVlc($params->vlcCmd, $constructorArgs['outFilePath']);
 		}
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(VlcConversionEngineType::VLC))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(VlcConversionEngineType::VLC))
 		{
-			return new KDLOperatorVlc($enumValue);
+			return new VDLOperatorVlc($enumValue);
 		}
 		
 		return null;
@@ -43,11 +43,11 @@ class VlcPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaE
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == self::getApiValue(VlcConversionEngineType::VLC))
-			return 'KOperationEngineVlc';
+		if($baseClass == 'VOperationEngine' && $enumValue == self::getApiValue(VlcConversionEngineType::VLC))
+			return 'VOperationEngineVlc';
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(VlcConversionEngineType::VLC))
-			return 'KDLOperatorVlc';
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(VlcConversionEngineType::VLC))
+			return 'VDLOperatorVlc';
 		
 		return null;
 	}
@@ -71,8 +71,8 @@ class VlcPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaE
 	 */
 	public static function getConversionEngineCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('conversionEngineType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('conversionEngineType', $value);
 	}
 	
 	/**
@@ -80,6 +80,6 @@ class VlcPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaE
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layouts>
 	<layout layoutId="playerOnly"
-		skinPath="/content/uiconf/kaltura/drupal/kdp_1.1.11/skin_kdp_drupal_whiteblue.swf">
+		skinPath="/content/uiconf/vidiun/drupal/vdp_1.1.11/skin_vdp_drupal_whiteblue.swf">
 		<VBox height="100%" styleName="mlayout" width="100%">
 			<HBox height="30" styleName="TopTitle" width="100%">
 				<Label height="22" id="movieName"
-					label="{myKplayer.kalturaShow.kshowName,myKplayer.kalturaEntry.entryName,''}"
+					label="{myVplayer.vidiunShow.vshowName,myVplayer.vidiunEntry.entryName,''}"
 					styleName="movieName" width="100%" />
-				<Button height="20" id="kalturaLogo"
-					k_click="navigate:http://corp.kaltura.com/download"
-					styleName="kalturaLogo" width="40" />
+				<Button height="20" id="vidiunLogo"
+					v_click="navigate:http://corp.vidiun.com/download"
+					styleName="vidiunLogo" width="40" />
 			</HBox>
 			<HBox height="100%" styleName="playerContainer" width="100%">
 				<Canvas height="100%" id="marginLeft" styleName="playerMarginLeft"
 					width="5" />
 				<Canvas height="100%" id="PlayerHolder" styleName="PlayerBackground"
 					width="100%">
-					<KplayerModule height="100%" id="myKplayer"
-						k_path="kplayer/KplayerModule.swf" styleName="centered" width="100%" />
+					<VplayerModule height="100%" id="myVplayer"
+						v_path="vplayer/VplayerModule.swf" styleName="centered" width="100%" />
 					<screens height="100%" id="screens" styleName="centered"
-						width="100%" k_path="screens/Screens.swf" k_end_screen_id="endScreen"
-						k_end_screen_over_id="endScreen" k_pause_screen_id="pauseScreen"
-						k_pause_screen_over_id="pauseScreen" k_play_screen_id="emptyScreen"
-						k_play_screen_over_id="emptyScreen" k_start_screen_id="emptyScreen"
-						k_start_screen_over_id="emptyScreen" />
+						width="100%" v_path="screens/Screens.swf" v_end_screen_id="endScreen"
+						v_end_screen_over_id="endScreen" v_pause_screen_id="pauseScreen"
+						v_pause_screen_over_id="pauseScreen" v_play_screen_id="emptyScreen"
+						v_play_screen_over_id="emptyScreen" v_start_screen_id="emptyScreen"
+						v_start_screen_over_id="emptyScreen" />
 					<Gigya height="100%" id="Gigya"
-						k_share_email_body="Hi%2c%3cbr%3eI watched this video and thought you'd enjoy it too. %24URL%24 to watch.%3cbr%3e%0d%0a%24sender%24%0d%0a"
-						k_share_email_subject="Take a look at this video" k_uiconf_id="609"
-						k_path="addons/Gigya.swf" width="100%" />
+						v_share_email_body="Hi%2c%3cbr%3eI watched this video and thought you'd enjoy it too. %24URL%24 to watch.%3cbr%3e%0d%0a%24sender%24%0d%0a"
+						v_share_email_subject="Take a look at this video" v_uiconf_id="609"
+						v_path="addons/Gigya.swf" width="100%" />
 				</Canvas>
 				<Canvas height="100%" id="marginRight" styleName="playerMarginRight"
 					width="5" />
@@ -45,12 +45,12 @@
 					<HBox styleName="timerHolder">
 						<Spacer width="3" />
 						<TimerCountdown height="8" id="timer"
-							k_path="timertext/TimerCountdown.swf" styleName="timer" width="30" />
+							v_path="timertext/TimerCountdown.swf" styleName="timer" width="30" />
 					</HBox>
 				</VBox>
 				<Spacer width="3" />
 				<VolumeModule height="15" id="Volume"
-					k_path="VolumeBars/VolumeBarA.swf" styleName="volumeIcon" width="15" />
+					v_path="VolumeBars/VolumeBarA.swf" styleName="volumeIcon" width="15" />
 				<Spacer width="3" />
 				<Button height="17" id="fullScreen" label="" styleName="fs"
 					tooltip="Full Screen" width="20" />

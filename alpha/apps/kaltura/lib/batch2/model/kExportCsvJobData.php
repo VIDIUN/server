@@ -4,7 +4,7 @@
  * @subpackage model.data
  */
 
-class kExportCsvJobData extends kJobData
+class vExportCsvJobData extends vJobData
 {
 	
 	/**

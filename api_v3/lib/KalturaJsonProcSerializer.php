@@ -3,7 +3,7 @@
  * @package api
  * @subpackage v3
  */
-class KalturaJsonProcSerializer extends KalturaJsonSerializer
+class VidiunJsonProcSerializer extends VidiunJsonSerializer
 {
 	public function setHttpHeaders()
 	{

@@ -13,7 +13,7 @@
         <sessionType>2</sessionType>
     </session>
     <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-        <template objectType="KalturaPushNotificationTemplate">
+        <template objectType="VidiunPushNotificationTemplate">
             <name>Schedule-Event Created</name>
             <systemName>Push_Schedule_Event_Created</systemName>
             <description>Push notification template to be sent when a new schedule-event is created.</description>
@@ -22,10 +22,10 @@
             <!-- EventNotificationEventType::OBJECT_CREATED -->
             <eventObjectType>scheduleEventNotifications.ScheduleEvent</eventObjectType> 
             <contentParameters objectType="array">
-                <item objectType="KalturaEventNotificationParameter">
+                <item objectType="VidiunEventNotificationParameter">
                     <key>partnerId</key>
                     <description/>
-                    <value objectType="KalturaEvalStringField">
+                    <value objectType="VidiunEvalStringField">
                         <code>$scope->getObject()->getPartnerId()</code>
                     </value>
                 </item>
@@ -33,7 +33,7 @@
         </template>
     </request>
     <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-        <template objectType="KalturaPushNotificationTemplate">
+        <template objectType="VidiunPushNotificationTemplate">
             <name>Schedule-Event Changed</name>
             <systemName>Push_Schedule_Event_Changed</systemName>
             <description>Push notification template to be sent when schedule-event is changed.</description>
@@ -42,10 +42,10 @@
             <!-- EventNotificationEventType::OBJECT_CHANGED -->
             <eventObjectType>scheduleEventNotifications.ScheduleEvent</eventObjectType> 
             <contentParameters objectType="array">
-                <item objectType="KalturaEventNotificationParameter">
+                <item objectType="VidiunEventNotificationParameter">
                     <key>partnerId</key>
                     <description/>
-                    <value objectType="KalturaEvalStringField">
+                    <value objectType="VidiunEvalStringField">
                         <code>$scope->getObject()->getPartnerId()</code>
                     </value>
                 </item>

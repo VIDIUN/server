@@ -4,9 +4,9 @@
  * @package plugins.facebookDistribution
  * @subpackage lib
  */
-class KalturaFacebookLanguageMatch
+class VidiunFacebookLanguageMatch
 {
-	static function getFacebookCodeForKalturaLanguage($language)
+	static function getFacebookCodeForVidiunLanguage($language)
 	{
 		$facebookLanguages = self::getFacebookLanguages();
 		if (array_key_exists($language, $facebookLanguages))

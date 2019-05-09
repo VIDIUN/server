@@ -3,7 +3,7 @@
  * @package plugins.httpNotification
  * @subpackage model.enum
  */
-class HttpNotificationFileSyncObjectType implements IKalturaPluginEnum, FileSyncObjectType
+class HttpNotificationFileSyncObjectType implements IVidiunPluginEnum, FileSyncObjectType
 {
 	const HTTP_NOTIFICATION_TEMPLATE = 'HttpNotificationTemplate';
 	

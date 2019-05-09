@@ -38,7 +38,7 @@ class Form_DistributionFieldConfigArray_SubForm extends Zend_Form_SubForm
 				continue;
 			
 			$tempSubForm = new Form_DistributionFieldConfig_SubForm();
-			$fieldConfig = $tempSubForm->getObject("Kaltura_Client_ContentDistribution_Type_DistributionFieldConfig", $valueArray, false, true);
+			$fieldConfig = $tempSubForm->getObject("Vidiun_Client_ContentDistribution_Type_DistributionFieldConfig", $valueArray, false, true);
 			$fieldConfigArray[] = $fieldConfig;
 		}
 		return $fieldConfigArray;

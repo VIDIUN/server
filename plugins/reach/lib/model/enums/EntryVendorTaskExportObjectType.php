@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage model.enum
  */
-class EntryVendorTaskExportObjectType implements IKalturaPluginEnum, ExportObjectType
+class EntryVendorTaskExportObjectType implements IVidiunPluginEnum, ExportObjectType
 {
 	const ENTRY_VENDOR_TASK = 'entryVendorTask';
 	

@@ -9,7 +9,7 @@ class ScheduleEventFilter extends baseObjectFilter
 	
 	public function init ()
 	{
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 				"_eq_id",
 				"_in_id",
 				"_notin_id",
@@ -79,7 +79,7 @@ class ScheduleEventFilter extends baseObjectFilter
 		);
 			
 		$this->aliases = array ( 
-			"owner_id" => "owner_kuser_id",
+			"owner_id" => "owner_vuser_id",
 		);
 	}
 

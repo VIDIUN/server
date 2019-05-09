@@ -40,7 +40,7 @@ class roughcutEntryTableMap extends TableMap {
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		$this->addForeignKey('ROUGHCUT_ID', 'RoughcutId', 'VARCHAR', 'entry', 'ID', false, 20, null);
 		$this->addColumn('ROUGHCUT_VERSION', 'RoughcutVersion', 'INTEGER', false, null, null);
-		$this->addForeignKey('ROUGHCUT_KSHOW_ID', 'RoughcutKshowId', 'VARCHAR', 'kshow', 'ID', false, 20, null);
+		$this->addForeignKey('ROUGHCUT_VSHOW_ID', 'RoughcutVshowId', 'VARCHAR', 'vshow', 'ID', false, 20, null);
 		$this->addForeignKey('ENTRY_ID', 'EntryId', 'VARCHAR', 'entry', 'ID', false, 20, null);
 		$this->addColumn('PARTNER_ID', 'PartnerId', 'INTEGER', false, null, null);
 		$this->addColumn('OP_TYPE', 'OpType', 'SMALLINT', false, null, null);
@@ -55,7 +55,7 @@ class roughcutEntryTableMap extends TableMap {
 	public function buildRelations()
 	{
     $this->addRelation('entryRelatedByRoughcutId', 'entry', RelationMap::MANY_TO_ONE, array('roughcut_id' => 'id', ), null, null);
-    $this->addRelation('kshow', 'kshow', RelationMap::MANY_TO_ONE, array('roughcut_kshow_id' => 'id', ), null, null);
+    $this->addRelation('vshow', 'vshow', RelationMap::MANY_TO_ONE, array('roughcut_vshow_id' => 'id', ), null, null);
     $this->addRelation('entryRelatedByEntryId', 'entry', RelationMap::MANY_TO_ONE, array('entry_id' => 'id', ), null, null);
 	} // buildRelations()
 

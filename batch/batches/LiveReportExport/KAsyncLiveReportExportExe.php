@@ -1,12 +1,12 @@
 <?php
 /**
- * Will run KAsyncLiveReportExport
+ * Will run VAsyncLiveReportExport
  *
  * @package Scheduler
  * @subpackage LiveReportExport
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncLiveReportExport();
+$instance = new VAsyncLiveReportExport();
 $instance->run(); 
 $instance->done();

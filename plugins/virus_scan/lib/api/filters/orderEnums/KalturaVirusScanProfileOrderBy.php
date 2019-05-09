@@ -3,7 +3,7 @@
  * @package plugins.virusScan
  * @subpackage api.filters.enum
  */
-class KalturaVirusScanProfileOrderBy extends KalturaStringEnum
+class VidiunVirusScanProfileOrderBy extends VidiunStringEnum
 {
 	const CREATED_AT_ASC = "+createdAt";
 	const CREATED_AT_DESC = "-createdAt";

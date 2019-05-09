@@ -1,6 +1,6 @@
 <?php
 
-abstract class ContentDistributionServiceBase extends KalturaBaseService {
+abstract class ContentDistributionServiceBase extends VidiunBaseService {
 	
 	const CACHE_CREATION_TIME_SUFFIX = ".time";
 	const CACHE_CREATION_MARGIN = 30;
@@ -45,23 +45,23 @@ abstract class ContentDistributionServiceBase extends KalturaBaseService {
 	
 	/**
 	 * Validates whether a we can fullfill the get feed request.
-	 * @throws KalturaAPIException In case we can't fullfill the request
+	 * @throws VidiunAPIException In case we can't fullfill the request
 	 */
 	protected function validateRequest($distributionProfileId, $hash) 
 	{
 		if (!$this->getPartnerId() || !$this->getPartner())
-			throw new KalturaAPIException(KalturaErrors::INVALID_PARTNER_ID, $this->getPartnerId());
+			throw new VidiunAPIException(VidiunErrors::INVALID_PARTNER_ID, $this->getPartnerId());
 			
 		$this->profile = DistributionProfilePeer::retrieveByPK($distributionProfileId);
 		$profileClass = $this->getProfileClass();
 		if (!$this->profile || !$this->profile instanceof $profileClass)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $distributionProfileId);
 	
-		if ($this->profile->getStatus() != KalturaDistributionProfileStatus::ENABLED)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
+		if ($this->profile->getStatus() != VidiunDistributionProfileStatus::ENABLED)
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_DISABLED, $distributionProfileId);
 	
 		if ($this->profile->getUniqueHashForFeedUrl() != $hash)
-			throw new KalturaAPIException(ContentDistributionErrors::INVALID_FEED_URL);
+			throw new VidiunAPIException(ContentDistributionErrors::INVALID_FEED_URL);
 	}
 	
 	/**
@@ -98,7 +98,7 @@ abstract class ContentDistributionServiceBase extends KalturaBaseService {
 	 */
 	protected function getEntries($context, $orderBy = null, $limit = null) 
 	{
-		$baseCriteria = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$baseCriteria = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$baseCriteria->add(entryPeer::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_SYSTEM, Criteria::NOT_EQUAL);
 		if(!is_null($limit))
 			$baseCriteria->setLimit($limit);
@@ -122,7 +122,7 @@ abstract class ContentDistributionServiceBase extends KalturaBaseService {
 		$cacheStore = null;
 		
 		if ($enableCache) {
-			$cacheStore = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_FEED_ENTRY);
+			$cacheStore = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_FEED_ENTRY);
 			if(is_null($cacheStore))
 				$enableCache = false;
 		}
@@ -147,7 +147,7 @@ abstract class ContentDistributionServiceBase extends KalturaBaseService {
 				$entryDistribution = EntryDistributionPeer::retrieveByEntryAndProfileId($entry->getId(), $this->profile->getId());
 				if (!$entryDistribution)
 				{
-					KalturaLog::err('Entry distribution was not found for entry ['.$entry->getId().'] and profile [' . $this->profile->getId() . ']');
+					VidiunLog::err('Entry distribution was not found for entry ['.$entry->getId().'] and profile [' . $this->profile->getId() . ']');
 					continue;
 				}
 		
@@ -164,7 +164,7 @@ abstract class ContentDistributionServiceBase extends KalturaBaseService {
 				
 			//to avoid the cache exceeding the memory size
 			if ($counter % self::CACHE_SIZE == 0){
-				kMemoryManager::clearMemory();
+				vMemoryManager::clearMemory();
 			}
 		}
 	}
@@ -174,7 +174,7 @@ abstract class ContentDistributionServiceBase extends KalturaBaseService {
 	 * @param $feed
 	 */
 	protected function doneFeedGeneration ($context, $feed) {
-		return new kRendererString($feed->getXml(), 'text/xml');
+		return new vRendererString($feed->getXml(), 'text/xml');
 	}
 }
 

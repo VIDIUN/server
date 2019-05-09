@@ -19,10 +19,10 @@ class Infra_TranslateAdapter extends Zend_Translate_Adapter_Array
     	if($locale instanceof Zend_Locale)
     		$locale = "$locale";
     		
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaApplicationTranslations');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunApplicationTranslations');
 		foreach($pluginInstances as $pluginInstance)
 		{
-			/* @var $pluginInstance IKalturaApplicationTranslations */
+			/* @var $pluginInstance IVidiunApplicationTranslations */
 			$translations =  $pluginInstance->getTranslations($locale);
 			if(isset($translations[$locale]) && is_array($translations[$locale]))
 			{
@@ -36,10 +36,10 @@ class Infra_TranslateAdapter extends Zend_Translate_Adapter_Array
     {
         $translate = parent::_loadTranslationData($data, $locale, $options);
         
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaApplicationTranslations');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunApplicationTranslations');
 		foreach($pluginInstances as $pluginInstance)
 		{
-			/* @var $pluginInstance IKalturaApplicationTranslations */
+			/* @var $pluginInstance IVidiunApplicationTranslations */
 			$translations =  $pluginInstance->getTranslations($locale);
 			$translate = array_merge_recursive($translate, $translations);
 		}

@@ -55,7 +55,7 @@ FROM
 		SUM(IF(date_id BETWEEN {FROM_DATE_ID} AND {TO_DATE_ID}, aggr_partner.count_bandwidth , NULL ) ) count_bandwidth,
 		SUM(IF(date_id BETWEEN {FROM_DATE_ID} AND {TO_DATE_ID}, aggr_partner.count_storage , NULL ) ) count_storage
 	FROM 
-		kalturadw.dwh_aggr_partner aggr_partner, kalturadw.dwh_dim_partners dim_partner
+		vidiundw.dwh_aggr_partner aggr_partner, vidiundw.dwh_dim_partners dim_partner
 	WHERE 
 		aggr_partner.partner_id = dim_partner.partner_id AND {PARTNER_PACKAGE_CRITERIA}
 			AND	aggr_partner.date_id BETWEEN {TIME_SLOT_180} AND {TO_DATE_ID} 
@@ -72,7 +72,7 @@ FROM
 		dim_partner.partner_type_id,
 		SUM(aggr_partner.count_bandwidth ) count_bandwidth_all_time
 	FROM 
-		kalturadw.dwh_aggr_partner aggr_partner, kalturadw.dwh_dim_partners dim_partner
+		vidiundw.dwh_aggr_partner aggr_partner, vidiundw.dwh_dim_partners dim_partner
 	WHERE 
 		aggr_partner.partner_id = dim_partner.partner_id AND {PARTNER_PACKAGE_CRITERIA}
 	GROUP BY 

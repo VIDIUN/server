@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.objects
  */
-class KalturaUpgradeMetadataResponse extends KalturaObject
+class VidiunUpgradeMetadataResponse extends VidiunObject
 {
 	/**
 	 * @var int

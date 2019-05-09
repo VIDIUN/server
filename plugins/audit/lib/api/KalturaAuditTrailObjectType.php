@@ -3,6 +3,6 @@
  * @package plugins.audit
  * @subpackage api.enums
  */
-class KalturaAuditTrailObjectType extends KalturaStringEnum implements AuditTrailObjectType
+class VidiunAuditTrailObjectType extends VidiunStringEnum implements AuditTrailObjectType
 {
 }

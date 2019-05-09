@@ -4,7 +4,7 @@
  * @package plugins.businessProcessNotification
  * @subpackage api.errors
  */
-class KalturaBusinessProcessNotificationErrors extends KalturaErrors
+class VidiunBusinessProcessNotificationErrors extends VidiunErrors
 {
 	const BUSINESS_PROCESS_SERVER_NOT_FOUND = "BUSINESS_PROCESS_SERVER_NOT_FOUND;ID;Business-Process server id [@ID@] not found";
 

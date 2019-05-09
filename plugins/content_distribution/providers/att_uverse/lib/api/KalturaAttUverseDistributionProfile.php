@@ -3,7 +3,7 @@
  * @package plugins.attUverseDistribution
  * @subpackage api.objects
  */
-class KalturaAttUverseDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunAttUverseDistributionProfile extends VidiunConfigurableDistributionProfile
 {
 	
 	/**

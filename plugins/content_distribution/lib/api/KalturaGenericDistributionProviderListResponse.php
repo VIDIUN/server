@@ -3,10 +3,10 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaGenericDistributionProviderListResponse extends KalturaListResponse
+class VidiunGenericDistributionProviderListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaGenericDistributionProviderArray
+	 * @var VidiunGenericDistributionProviderArray
 	 * @readonly
 	 */
 	public $objects;

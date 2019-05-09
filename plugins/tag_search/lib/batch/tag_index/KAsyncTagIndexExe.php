@@ -1,12 +1,12 @@
 <?php
 /**
- * Will run the KAsyncDirectoryCleanup 
+ * Will run the VAsyncDirectoryCleanup 
  *
  * @package Scheduler
  * @subpackage Cleanup
  */
 require_once(__DIR__ . "/../../../../../batch/bootstrap.php");
 
-$instance = new KAsyncTagIndex ();
+$instance = new VAsyncTagIndex ();
 $instance->run(); 
 $instance->done();

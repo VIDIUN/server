@@ -3,15 +3,15 @@
  * @package Scheduler
  * @subpackage Copy
  */
-abstract class KCopyingEngine
+abstract class VCopyingEngine
 {
 	/**
-	 * @var KalturaClient
+	 * @var VidiunClient
 	 */
 	protected $client;
 	
 	/**
-	 * @var KalturaFilterPager
+	 * @var VidiunFilterPager
 	 */
 	protected $pager;
 	
@@ -38,70 +38,70 @@ abstract class KCopyingEngine
 	private $batchPartnerId;
 	
 	/**
-	 * @param int $objectType of enum KalturaCopyObjectType
-	 * @return KCopyingEngine
+	 * @param int $objectType of enum VidiunCopyObjectType
+	 * @return VCopyingEngine
 	 */
 	public static function getInstance($objectType)
 	{
 		switch($objectType)
 		{
-			case KalturaCopyObjectType::CATEGORY_USER:
-				return new KCopyingCategoryUserEngine();
+			case VidiunCopyObjectType::CATEGORY_USER:
+				return new VCopyingCategoryUserEngine();
 				
-			case KalturaCopyObjectType::CATEGORY_ENTRY:
- 				return new KCopyingCategoryEntryEngine();
+			case VidiunCopyObjectType::CATEGORY_ENTRY:
+ 				return new VCopyingCategoryEntryEngine();
 				
 			default:
-				return KalturaPluginManager::loadObject('KCopyingEngine', $objectType);
+				return VidiunPluginManager::loadObject('VCopyingEngine', $objectType);
 		}
 	}
 	
 	/**
 	 * @param int $partnerId
-	 * @param KalturaClient $client
-	 * @param KSchedularTaskConfig $taskConfig
+	 * @param VidiunClient $client
+	 * @param VSchedularTaskConfig $taskConfig
 	 */
 	public function configure($partnerId)
 	{
 		$this->partnerId = $partnerId;
-		$this->batchPartnerId = KBatchBase::$taskConfig->getPartnerId();
+		$this->batchPartnerId = VBatchBase::$taskConfig->getPartnerId();
 
-		$this->pager = new KalturaFilterPager();
+		$this->pager = new VidiunFilterPager();
 		$this->pager->pageSize = 100;
 		
-		if(KBatchBase::$taskConfig->params->pageSize)
-			$this->pager->pageSize = KBatchBase::$taskConfig->params->pageSize;
+		if(VBatchBase::$taskConfig->params->pageSize)
+			$this->pager->pageSize = VBatchBase::$taskConfig->params->pageSize;
 	}
 	
 	
 	/**
-	 * @param KalturaFilter $filter The filter should return the list of objects that need to be copied
-	 * @param KalturaObjectBase $templateObject Template object to overwrite attributes on the copied object
+	 * @param VidiunFilter $filter The filter should return the list of objects that need to be copied
+	 * @param VidiunObjectBase $templateObject Template object to overwrite attributes on the copied object
 	 * @return int the number of copied objects
 	 */
-	public function run(KalturaFilter $filter, KalturaObjectBase $templateObject)
+	public function run(VidiunFilter $filter, VidiunObjectBase $templateObject)
 	{
-		KBatchBase::impersonate($this->partnerId);
+		VBatchBase::impersonate($this->partnerId);
 		$ret = $this->copy($filter, $templateObject);
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
 		return $ret;
 	}
 	
 	/**
-	 * @param KalturaFilter $filter The filter should return the list of objects that need to be copied
-	 * @param KalturaObjectBase $templateObject Template object to overwrite attributes on the copied object
+	 * @param VidiunFilter $filter The filter should return the list of objects that need to be copied
+	 * @param VidiunObjectBase $templateObject Template object to overwrite attributes on the copied object
 	 * @return int the number of copied objects
 	 */
-	abstract protected function copy(KalturaFilter $filter, KalturaObjectBase $templateObject);
+	abstract protected function copy(VidiunFilter $filter, VidiunObjectBase $templateObject);
 	
 	/**
 	 * Creates a new object instance, based on source object and copied attribute from the template object
-	 * @param KalturaObjectBase $sourceObject
-	 * @param KalturaObjectBase $templateObject
-	 * @return KalturaObjectBase
+	 * @param VidiunObjectBase $sourceObject
+	 * @param VidiunObjectBase $templateObject
+	 * @return VidiunObjectBase
 	 */
-	abstract protected function getNewObject(KalturaObjectBase $sourceObject, KalturaObjectBase $templateObject);
+	abstract protected function getNewObject(VidiunObjectBase $sourceObject, VidiunObjectBase $templateObject);
 	
 	/**
 	 * @return int $lastCopyId

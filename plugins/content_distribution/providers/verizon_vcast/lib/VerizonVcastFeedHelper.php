@@ -17,17 +17,17 @@ class VerizonVcastFeedHelper
 	protected $_xpath;
 	
 	/**
-	 * @var KalturaDistributionJobData
+	 * @var VidiunDistributionJobData
 	 */
 	protected $_distributionJobData;
 	
 	/**
-	 * @var KalturaVerizonVcastDistributionProfile
+	 * @var VidiunVerizonVcastDistributionProfile
 	 */
 	protected $_distributionProfile;
 	
 	/**
-	 * @var KalturaVerizonVcastDistributionJobProviderData
+	 * @var VidiunVerizonVcastDistributionJobProviderData
 	 */
 	protected $_providerData;
 	
@@ -48,16 +48,16 @@ class VerizonVcastFeedHelper
 	
 	/**
 	 * @param string $templateName
-	 * @param KalturaVerizonVcastDistributionProfile $distributionProfile
-	 * @param KalturaVerizonVcastDistributionJobProviderData $providerData
+	 * @param VidiunVerizonVcastDistributionProfile $distributionProfile
+	 * @param VidiunVerizonVcastDistributionJobProviderData $providerData
 	 */
-	public function __construct($templateName, KalturaDistributionJobData $distributionJobData, KalturaVerizonVcastDistributionJobProviderData $providerData, array $flavorAssets, array $thumbnailAssets)
+	public function __construct($templateName, VidiunDistributionJobData $distributionJobData, VidiunVerizonVcastDistributionJobProviderData $providerData, array $flavorAssets, array $thumbnailAssets)
 	{
 		$this->_distributionJobData = $distributionJobData;
 		$this->_distributionProfile = $distributionJobData->distributionProfile;
 		$this->_providerData = $providerData;
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml/' . $templateName;
-		$this->_doc = new KDOMDocument();
+		$this->_doc = new VDOMDocument();
 		$this->_doc->load($xmlTemplate);
 		$this->_xpath = new DOMXPath($this->_doc);
 		
@@ -75,34 +75,34 @@ class VerizonVcastFeedHelper
 		if (!$this->_fieldValues) 
 			$this->_fieldValues = array();
 		
-		$this->setNodeValueFieldConfigId('//ns2:title', KalturaVerizonVcastDistributionField::TITLE);
-		$this->setNodeValueFieldConfigId('//ns2:externalid', KalturaVerizonVcastDistributionField::EXTERNAL_ID);
-		$this->setNodeValueFieldConfigId('//ns2:shortdescription', KalturaVerizonVcastDistributionField::SHORT_DESCRIPTION);
-		$this->setNodeValueFieldConfigId('//ns2:description', KalturaVerizonVcastDistributionField::DESCRIPTION);
-		$this->setNodeValueFieldConfigId('//ns2:keywords', KalturaVerizonVcastDistributionField::KEYWORDS);
-		$this->setNodeValueShortDateFieldConfigId('//ns2:pubDate', KalturaVerizonVcastDistributionField::PUB_DATE);
-		$this->setNodeValueFieldConfigId('//ns2:category', KalturaVerizonVcastDistributionField::CATEGORY);
-		$this->setNodeValueFieldConfigId('//ns2:genre', KalturaVerizonVcastDistributionField::GENRE);
-		$this->setNodeValueFieldConfigId('//ns2:rating', KalturaVerizonVcastDistributionField::RATING);
-		$this->setNodeValueFieldConfigId('//ns2:copyright', KalturaVerizonVcastDistributionField::COPYRIGHT);
-		$this->setNodeValueFieldConfigId('//ns2:entitlement', KalturaVerizonVcastDistributionField::ENTITLEMENT);
+		$this->setNodeValueFieldConfigId('//ns2:title', VidiunVerizonVcastDistributionField::TITLE);
+		$this->setNodeValueFieldConfigId('//ns2:externalid', VidiunVerizonVcastDistributionField::EXTERNAL_ID);
+		$this->setNodeValueFieldConfigId('//ns2:shortdescription', VidiunVerizonVcastDistributionField::SHORT_DESCRIPTION);
+		$this->setNodeValueFieldConfigId('//ns2:description', VidiunVerizonVcastDistributionField::DESCRIPTION);
+		$this->setNodeValueFieldConfigId('//ns2:keywords', VidiunVerizonVcastDistributionField::KEYWORDS);
+		$this->setNodeValueShortDateFieldConfigId('//ns2:pubDate', VidiunVerizonVcastDistributionField::PUB_DATE);
+		$this->setNodeValueFieldConfigId('//ns2:category', VidiunVerizonVcastDistributionField::CATEGORY);
+		$this->setNodeValueFieldConfigId('//ns2:genre', VidiunVerizonVcastDistributionField::GENRE);
+		$this->setNodeValueFieldConfigId('//ns2:rating', VidiunVerizonVcastDistributionField::RATING);
+		$this->setNodeValueFieldConfigId('//ns2:copyright', VidiunVerizonVcastDistributionField::COPYRIGHT);
+		$this->setNodeValueFieldConfigId('//ns2:entitlement', VidiunVerizonVcastDistributionField::ENTITLEMENT);
 		
-		$this->setNodeValueFullDateFieldConfigId('//ns2:liveDate', KalturaVerizonVcastDistributionField::LIVE_DATE);
-		$this->setNodeValueFullDateFieldConfigId('//ns2:endDate', KalturaVerizonVcastDistributionField::END_DATE);
-		$this->setNodeValueFieldConfigId('//ns2:priority', KalturaVerizonVcastDistributionField::PRIORITY);
-		$this->setNodeValueFieldConfigId('//ns2:allowStreaming', KalturaVerizonVcastDistributionField::ALLOW_STREAMING);
-		$this->setNodeValueFieldConfigId('//ns2:streamingPriceCode', KalturaVerizonVcastDistributionField::STREAMING_PRICE_CODE);
-		$this->setNodeValueFieldConfigId('//ns2:allowDownload', KalturaVerizonVcastDistributionField::ALLOW_DOWNLOAD);
-		$this->setNodeValueFieldConfigId('//ns2:downloadPriceCode', KalturaVerizonVcastDistributionField::DOWNLOAD_PRICE_CODE);
-		$this->setNodeValueFieldConfigId('//ns2:provider', KalturaVerizonVcastDistributionField::PROVIDER);
-		$this->setNodeValueFieldConfigId('//ns2:providerid', KalturaVerizonVcastDistributionField::PROVIDER_ID);
-		$this->setOrRemoveNodeValueFieldConfigId('//ns2:alertCode', KalturaVerizonVcastDistributionField::ALERT_CODE);
+		$this->setNodeValueFullDateFieldConfigId('//ns2:liveDate', VidiunVerizonVcastDistributionField::LIVE_DATE);
+		$this->setNodeValueFullDateFieldConfigId('//ns2:endDate', VidiunVerizonVcastDistributionField::END_DATE);
+		$this->setNodeValueFieldConfigId('//ns2:priority', VidiunVerizonVcastDistributionField::PRIORITY);
+		$this->setNodeValueFieldConfigId('//ns2:allowStreaming', VidiunVerizonVcastDistributionField::ALLOW_STREAMING);
+		$this->setNodeValueFieldConfigId('//ns2:streamingPriceCode', VidiunVerizonVcastDistributionField::STREAMING_PRICE_CODE);
+		$this->setNodeValueFieldConfigId('//ns2:allowDownload', VidiunVerizonVcastDistributionField::ALLOW_DOWNLOAD);
+		$this->setNodeValueFieldConfigId('//ns2:downloadPriceCode', VidiunVerizonVcastDistributionField::DOWNLOAD_PRICE_CODE);
+		$this->setNodeValueFieldConfigId('//ns2:provider', VidiunVerizonVcastDistributionField::PROVIDER);
+		$this->setNodeValueFieldConfigId('//ns2:providerid', VidiunVerizonVcastDistributionField::PROVIDER_ID);
+		$this->setOrRemoveNodeValueFieldConfigId('//ns2:alertCode', VidiunVerizonVcastDistributionField::ALERT_CODE);
 		
 		foreach($thumbnailAssets as $thumbnailAsset)
 		{
 			$imageNode = $this->_imageNode->cloneNode(true);
 			$url = $this->getAssetUrl($thumbnailAsset);
-			kXml::setNodeValue($this->_xpath,'ns2:url', $url, $imageNode);
+			vXml::setNodeValue($this->_xpath,'ns2:url', $url, $imageNode);
 			$priorityNode = $this->_xpath->query('//ns2:priority')->item(0);
 			$channelNode = $this->_xpath->query('//ns2:channel')->item(0);
 			$channelNode->insertBefore($imageNode, $priorityNode);
@@ -112,11 +112,11 @@ class VerizonVcastFeedHelper
 		{
 			$itemNode = $this->_itemNode->cloneNode(true);
 			$url = $this->getAssetUrl($flavorAsset);
-			kXml::setNodeValue($this->_xpath,'ns2:enclosure/@url', $url, $itemNode);
+			vXml::setNodeValue($this->_xpath,'ns2:enclosure/@url', $url, $itemNode);
 			if ($this->shouldIngestFlavor($flavorAsset))
 			{
-				kXml::setNodeValue($this->_xpath,'ns2:encode', 'Y', $itemNode);
-				kXml::setNodeValue($this->_xpath,'ns2:move', 'Y', $itemNode);
+				vXml::setNodeValue($this->_xpath,'ns2:encode', 'Y', $itemNode);
+				vXml::setNodeValue($this->_xpath,'ns2:move', 'Y', $itemNode);
 			}
 			$channelNode = $this->_xpath->query('//ns2:channel')->item(0);
 			$channelNode->appendChild($itemNode);
@@ -138,7 +138,7 @@ class VerizonVcastFeedHelper
 	protected function shouldIngestFlavor(asset $flavorAsset)
 	{
 		// mediaFile array was not initialized meaning this is the first submit job
-		if (!($this->_distributionJobData->mediaFiles instanceof KalturaDistributionRemoteMediaFileArray))
+		if (!($this->_distributionJobData->mediaFiles instanceof VidiunDistributionRemoteMediaFileArray))
 			return true;
 		
 		// find the mediaFile of our flavor
@@ -205,14 +205,14 @@ class VerizonVcastFeedHelper
 			// force time zone to EST
 			$dateTime->setTimezone(new DateTimeZone('EST'));
 			$date = $dateTime->format('c');
-			kXml::setNodeValue($this->_xpath,$xpath, $date);
+			vXml::setNodeValue($this->_xpath,$xpath, $date);
 		}
 	}
 	
 	protected function setNodeValueShortDateFieldConfigId($xpath, $fieldConfigId)
 	{
 		if (isset($this->_fieldValues[$fieldConfigId]))
-			kXml::setNodeValue($this->_xpath,$xpath, date('Y-m-d', $this->_fieldValues[$fieldConfigId]));
+			vXml::setNodeValue($this->_xpath,$xpath, date('Y-m-d', $this->_fieldValues[$fieldConfigId]));
 	}
 	
 	/**
@@ -222,7 +222,7 @@ class VerizonVcastFeedHelper
 	public function setNodeValueFieldConfigId($xpath, $fieldConfigId)
 	{
 		if (isset($this->_fieldValues[$fieldConfigId]))
-			kXml::setNodeValue($this->_xpath,$xpath, $this->_fieldValues[$fieldConfigId]);
+			vXml::setNodeValue($this->_xpath,$xpath, $this->_fieldValues[$fieldConfigId]);
 	}
 	
 	/**
@@ -233,7 +233,7 @@ class VerizonVcastFeedHelper
 	{
 		if (isset($this->_fieldValues[$fieldConfigId]) && $this->_fieldValues[$fieldConfigId])
 		{
-			kXml::setNodeValue($this->_xpath,$xpath, $this->_fieldValues[$fieldConfigId]);
+			vXml::setNodeValue($this->_xpath,$xpath, $this->_fieldValues[$fieldConfigId]);
 		}
 		else 
 		{

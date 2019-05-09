@@ -3,12 +3,12 @@
  * @package plugins.reach
  * @subpackage api.filters
  */
-class KalturaVendorTranslationCatalogItemFilter extends KalturaVendorTranslationCatalogItemBaseFilter
+class VidiunVendorTranslationCatalogItemFilter extends VidiunVendorTranslationCatalogItemBaseFilter
 {
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, $type = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, $type = null)
 	{
 		if(!$type)
-			$type = KalturaVendorServiceFeature::TRANSLATION;
+			$type = VidiunVendorServiceFeature::TRANSLATION;
 			
 		return parent::getTypeListResponse($pager, $responseProfile, $type);
 	}

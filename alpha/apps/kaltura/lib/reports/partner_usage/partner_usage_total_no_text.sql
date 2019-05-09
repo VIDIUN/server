@@ -12,7 +12,7 @@ FROM
             SUM(IFNULL(count_bandwidth_kb,0)) as bandwidth,
             SUM(IFNULL(count_transcoding_mb,0)) as transcoding
 FROM
-            kalturadw.dwh_hourly_partner_usage
+            vidiundw.dwh_hourly_partner_usage
 WHERE
             {OBJ_ID_CLAUSE}
             AND
@@ -23,7 +23,7 @@ WHERE
             SUM(IFNULL(added_storage_mb,0)) added_storage,
             SUM(IFNULL(deleted_storage_mb,0)) deleted_storage
 FROM
-            kalturadw.dwh_hourly_partner_usage
+            vidiundw.dwh_hourly_partner_usage
 WHERE
             {OBJ_ID_CLAUSE}
             AND
@@ -37,7 +37,7 @@ FROM
             FLOOR(date_id/100) month_id,
             AVG(aggr_storage_mb) monthly_avg_storage
 FROM
-            kalturadw.dwh_hourly_partner_usage
+            vidiundw.dwh_hourly_partner_usage
 WHERE
             {OBJ_ID_CLAUSE}
             AND

@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kSshUrlResource extends kUrlResource 
+class vSshUrlResource extends vUrlResource 
 {
 	/**
 	 * SSH private key
@@ -27,7 +27,7 @@ class kSshUrlResource extends kUrlResource
 	
 	public function getType()
 	{
-		return 'kUrlResource';
+		return 'vUrlResource';
 	}
 	
 	/**
@@ -80,11 +80,11 @@ class kSshUrlResource extends kUrlResource
     
     /**
      * (non-PHPdoc)
-     * @see kUrlResource::getImportJobData()
+     * @see vUrlResource::getImportJobData()
      */
 	public function getImportJobData()
 	{
-	    $sshImportJobData = new kSshImportJobData();
+	    $sshImportJobData = new vSshImportJobData();
 	    $sshImportJobData->setSrcFileUrl($this->getUrl());
 	    $sshImportJobData->setPrivateKey($this->getPrivateKey());
 	    $sshImportJobData->setPublicKey($this->getPublicKey());
@@ -94,7 +94,7 @@ class kSshUrlResource extends kUrlResource
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see kUrlResource::forceAsyncDownload()
+	 * @see vUrlResource::forceAsyncDownload()
 	 */
 	public function getForceAsyncDownload()
 	{

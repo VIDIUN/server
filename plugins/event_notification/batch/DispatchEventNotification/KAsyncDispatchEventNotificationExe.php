@@ -2,12 +2,12 @@
 require_once(__DIR__ . "/../../../../batch/bootstrap.php");
 
 /**
- * Executes the KAsyncDispatchEventNotification
+ * Executes the VAsyncDispatchEventNotification
  * 
  * @package plugins.eventNotification
  * @subpackage Scheduler
  */
 
-$instance = new KAsyncDispatchEventNotification();
+$instance = new VAsyncDispatchEventNotification();
 $instance->run(); 
 $instance->done();

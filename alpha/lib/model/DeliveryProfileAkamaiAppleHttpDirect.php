@@ -16,7 +16,7 @@ class DeliveryProfileAkamaiAppleHttpDirect extends DeliveryProfileAkamaiAppleHtt
 			return $this->formatHdIos($url);
 		}
 		else {
-			KalturaLog::err("@_!! WE DO GET TO THE ELSE");
+			VidiunLog::err("@_!! WE DO GET TO THE ELSE");
 			return parent::doGetFlavorAssetUrl($flavorAsset);
 		}
 	}

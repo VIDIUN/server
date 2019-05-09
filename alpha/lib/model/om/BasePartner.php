@@ -95,17 +95,17 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 	protected $updated_at;
 
 	/**
-	 * The value for the anonymous_kuser_id field.
+	 * The value for the anonymous_vuser_id field.
 	 * @var        int
 	 */
-	protected $anonymous_kuser_id;
+	protected $anonymous_vuser_id;
 
 	/**
-	 * The value for the ks_max_expiry_in_seconds field.
+	 * The value for the vs_max_expiry_in_seconds field.
 	 * Note: this column has a database default value of: 86400
 	 * @var        int
 	 */
-	protected $ks_max_expiry_in_seconds;
+	protected $vs_max_expiry_in_seconds;
 
 	/**
 	 * The value for the create_user_on_demand field.
@@ -270,16 +270,16 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 	protected $partner_parent_id;
 
 	/**
-	 * The value for the kmc_version field.
+	 * The value for the vmc_version field.
 	 * Note: this column has a database default value of: '1'
 	 * @var        string
 	 */
-	protected $kmc_version;
+	protected $vmc_version;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuser;
+	protected $avuser;
 
 	/**
 	 * @var        array LiveChannelSegment[] Collection to store aggregation of LiveChannelSegment objects.
@@ -347,7 +347,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 		$this->max_number_of_hits_per_day = -1;
 		$this->appear_in_search = 2;
 		$this->debug_level = 0;
-		$this->ks_max_expiry_in_seconds = 86400;
+		$this->vs_max_expiry_in_seconds = 86400;
 		$this->create_user_on_demand = 1;
 		$this->commercial_use = 0;
 		$this->moderate_content = 0;
@@ -360,7 +360,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 		$this->storage_usage = 0;
 		$this->monitor_usage = 1;
 		$this->partner_group_type = 1;
-		$this->kmc_version = '1';
+		$this->vmc_version = '1';
 	}
 
 	/**
@@ -554,23 +554,23 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [anonymous_kuser_id] column value.
+	 * Get the [anonymous_vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getAnonymousKuserId()
+	public function getAnonymousVuserId()
 	{
-		return $this->anonymous_kuser_id;
+		return $this->anonymous_vuser_id;
 	}
 
 	/**
-	 * Get the [ks_max_expiry_in_seconds] column value.
+	 * Get the [vs_max_expiry_in_seconds] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKsMaxExpiryInSeconds()
+	public function getVsMaxExpiryInSeconds()
 	{
-		return $this->ks_max_expiry_in_seconds;
+		return $this->vs_max_expiry_in_seconds;
 	}
 
 	/**
@@ -824,13 +824,13 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kmc_version] column value.
+	 * Get the [vmc_version] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getKmcVersion()
+	public function getVmcVersion()
 	{
-		return $this->kmc_version;
+		return $this->vmc_version;
 	}
 
 	/**
@@ -1162,54 +1162,54 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 	} // setUpdatedAt()
 
 	/**
-	 * Set the value of [anonymous_kuser_id] column.
+	 * Set the value of [anonymous_vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     Partner The current object (for fluent API support)
 	 */
-	public function setAnonymousKuserId($v)
+	public function setAnonymousVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[PartnerPeer::ANONYMOUS_KUSER_ID]))
-			$this->oldColumnsValues[PartnerPeer::ANONYMOUS_KUSER_ID] = $this->anonymous_kuser_id;
+		if(!isset($this->oldColumnsValues[PartnerPeer::ANONYMOUS_VUSER_ID]))
+			$this->oldColumnsValues[PartnerPeer::ANONYMOUS_VUSER_ID] = $this->anonymous_vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->anonymous_kuser_id !== $v) {
-			$this->anonymous_kuser_id = $v;
-			$this->modifiedColumns[] = PartnerPeer::ANONYMOUS_KUSER_ID;
+		if ($this->anonymous_vuser_id !== $v) {
+			$this->anonymous_vuser_id = $v;
+			$this->modifiedColumns[] = PartnerPeer::ANONYMOUS_VUSER_ID;
 		}
 
-		if ($this->akuser !== null && $this->akuser->getId() !== $v) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->avuser->getId() !== $v) {
+			$this->avuser = null;
 		}
 
 		return $this;
-	} // setAnonymousKuserId()
+	} // setAnonymousVuserId()
 
 	/**
-	 * Set the value of [ks_max_expiry_in_seconds] column.
+	 * Set the value of [vs_max_expiry_in_seconds] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     Partner The current object (for fluent API support)
 	 */
-	public function setKsMaxExpiryInSeconds($v)
+	public function setVsMaxExpiryInSeconds($v)
 	{
-		if(!isset($this->oldColumnsValues[PartnerPeer::KS_MAX_EXPIRY_IN_SECONDS]))
-			$this->oldColumnsValues[PartnerPeer::KS_MAX_EXPIRY_IN_SECONDS] = $this->ks_max_expiry_in_seconds;
+		if(!isset($this->oldColumnsValues[PartnerPeer::VS_MAX_EXPIRY_IN_SECONDS]))
+			$this->oldColumnsValues[PartnerPeer::VS_MAX_EXPIRY_IN_SECONDS] = $this->vs_max_expiry_in_seconds;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->ks_max_expiry_in_seconds !== $v || $this->isNew()) {
-			$this->ks_max_expiry_in_seconds = $v;
-			$this->modifiedColumns[] = PartnerPeer::KS_MAX_EXPIRY_IN_SECONDS;
+		if ($this->vs_max_expiry_in_seconds !== $v || $this->isNew()) {
+			$this->vs_max_expiry_in_seconds = $v;
+			$this->modifiedColumns[] = PartnerPeer::VS_MAX_EXPIRY_IN_SECONDS;
 		}
 
 		return $this;
-	} // setKsMaxExpiryInSeconds()
+	} // setVsMaxExpiryInSeconds()
 
 	/**
 	 * Set the value of [create_user_on_demand] column.
@@ -1784,27 +1784,27 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 	} // setPartnerParentId()
 
 	/**
-	 * Set the value of [kmc_version] column.
+	 * Set the value of [vmc_version] column.
 	 * 
 	 * @param      string $v new value
 	 * @return     Partner The current object (for fluent API support)
 	 */
-	public function setKmcVersion($v)
+	public function setVmcVersion($v)
 	{
-		if(!isset($this->oldColumnsValues[PartnerPeer::KMC_VERSION]))
-			$this->oldColumnsValues[PartnerPeer::KMC_VERSION] = $this->kmc_version;
+		if(!isset($this->oldColumnsValues[PartnerPeer::VMC_VERSION]))
+			$this->oldColumnsValues[PartnerPeer::VMC_VERSION] = $this->vmc_version;
 
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->kmc_version !== $v || $this->isNew()) {
-			$this->kmc_version = $v;
-			$this->modifiedColumns[] = PartnerPeer::KMC_VERSION;
+		if ($this->vmc_version !== $v || $this->isNew()) {
+			$this->vmc_version = $v;
+			$this->modifiedColumns[] = PartnerPeer::VMC_VERSION;
 		}
 
 		return $this;
-	} // setKmcVersion()
+	} // setVmcVersion()
 
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
@@ -1828,7 +1828,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 				return false;
 			}
 
-			if ($this->ks_max_expiry_in_seconds !== 86400) {
+			if ($this->vs_max_expiry_in_seconds !== 86400) {
 				return false;
 			}
 
@@ -1880,7 +1880,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 				return false;
 			}
 
-			if ($this->kmc_version !== '1') {
+			if ($this->vmc_version !== '1') {
 				return false;
 			}
 
@@ -1921,8 +1921,8 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 			$this->debug_level = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
 			$this->created_at = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
 			$this->updated_at = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-			$this->anonymous_kuser_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
-			$this->ks_max_expiry_in_seconds = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
+			$this->anonymous_vuser_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
+			$this->vs_max_expiry_in_seconds = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
 			$this->create_user_on_demand = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
 			$this->prefix = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
 			$this->admin_name = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
@@ -1948,7 +1948,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 			$this->priority_group_id = ($row[$startcol + 36] !== null) ? (int) $row[$startcol + 36] : null;
 			$this->partner_group_type = ($row[$startcol + 37] !== null) ? (int) $row[$startcol + 37] : null;
 			$this->partner_parent_id = ($row[$startcol + 38] !== null) ? (int) $row[$startcol + 38] : null;
-			$this->kmc_version = ($row[$startcol + 39] !== null) ? (string) $row[$startcol + 39] : null;
+			$this->vmc_version = ($row[$startcol + 39] !== null) ? (string) $row[$startcol + 39] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1981,8 +1981,8 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akuser !== null && $this->anonymous_kuser_id !== $this->akuser->getId()) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->anonymous_vuser_id !== $this->avuser->getId()) {
+			$this->avuser = null;
 		}
 	} // ensureConsistency
 
@@ -2027,7 +2027,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akuser = null;
+			$this->avuser = null;
 			$this->collLiveChannelSegments = null;
 			$this->lastLiveChannelSegmentCriteria = null;
 
@@ -2108,13 +2108,13 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 				return 0;
 			}
 			
-			for ($retries = 1; $retries < KalturaPDO::SAVE_MAX_RETRIES; $retries++)
+			for ($retries = 1; $retries < VidiunPDO::SAVE_MAX_RETRIES; $retries++)
 			{
                $affectedRows = $this->doSave($con);
                 if ($affectedRows || !$this->isColumnModified(PartnerPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug("was unable to save! retrying for the $retries time");
+                VidiunLog::debug("was unable to save! retrying for the $retries time");
                 $criteria = $this->buildPkeyCriteria();
 				$criteria->addSelectColumn(PartnerPeer::CUSTOM_DATA);
                 $stmt = BasePeer::doSelect($criteria, $con);
@@ -2215,11 +2215,11 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if ($this->akuser->isModified() || $this->akuser->isNew()) {
-					$affectedRows += $this->akuser->save($con);
+			if ($this->avuser !== null) {
+				if ($this->avuser->isModified() || $this->avuser->isNew()) {
+					$affectedRows += $this->avuser->save($con);
 				}
-				$this->setkuser($this->akuser);
+				$this->setvuser($this->avuser);
 			}
 
 			if ($this->isNew() ) {
@@ -2296,7 +2296,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -2321,12 +2321,12 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -2344,10 +2344,10 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -2472,9 +2472,9 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if (!$this->akuser->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuser->getValidationFailures());
+			if ($this->avuser !== null) {
+				if (!$this->avuser->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuser->getValidationFailures());
 				}
 			}
 
@@ -2562,10 +2562,10 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 				return $this->getUpdatedAt();
 				break;
 			case 12:
-				return $this->getAnonymousKuserId();
+				return $this->getAnonymousVuserId();
 				break;
 			case 13:
-				return $this->getKsMaxExpiryInSeconds();
+				return $this->getVsMaxExpiryInSeconds();
 				break;
 			case 14:
 				return $this->getCreateUserOnDemand();
@@ -2643,7 +2643,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 				return $this->getPartnerParentId();
 				break;
 			case 39:
-				return $this->getKmcVersion();
+				return $this->getVmcVersion();
 				break;
 			default:
 				return null;
@@ -2678,8 +2678,8 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 			$keys[9] => $this->getDebugLevel(),
 			$keys[10] => $this->getCreatedAt(),
 			$keys[11] => $this->getUpdatedAt(),
-			$keys[12] => $this->getAnonymousKuserId(),
-			$keys[13] => $this->getKsMaxExpiryInSeconds(),
+			$keys[12] => $this->getAnonymousVuserId(),
+			$keys[13] => $this->getVsMaxExpiryInSeconds(),
 			$keys[14] => $this->getCreateUserOnDemand(),
 			$keys[15] => $this->getPrefix(),
 			$keys[16] => $this->getAdminName(),
@@ -2705,7 +2705,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 			$keys[36] => $this->getPriorityGroupId(),
 			$keys[37] => $this->getPartnerGroupType(),
 			$keys[38] => $this->getPartnerParentId(),
-			$keys[39] => $this->getKmcVersion(),
+			$keys[39] => $this->getVmcVersion(),
 		);
 		return $result;
 	}
@@ -2774,10 +2774,10 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 				$this->setUpdatedAt($value);
 				break;
 			case 12:
-				$this->setAnonymousKuserId($value);
+				$this->setAnonymousVuserId($value);
 				break;
 			case 13:
-				$this->setKsMaxExpiryInSeconds($value);
+				$this->setVsMaxExpiryInSeconds($value);
 				break;
 			case 14:
 				$this->setCreateUserOnDemand($value);
@@ -2855,7 +2855,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 				$this->setPartnerParentId($value);
 				break;
 			case 39:
-				$this->setKmcVersion($value);
+				$this->setVmcVersion($value);
 				break;
 		} // switch()
 	}
@@ -2893,8 +2893,8 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[9], $arr)) $this->setDebugLevel($arr[$keys[9]]);
 		if (array_key_exists($keys[10], $arr)) $this->setCreatedAt($arr[$keys[10]]);
 		if (array_key_exists($keys[11], $arr)) $this->setUpdatedAt($arr[$keys[11]]);
-		if (array_key_exists($keys[12], $arr)) $this->setAnonymousKuserId($arr[$keys[12]]);
-		if (array_key_exists($keys[13], $arr)) $this->setKsMaxExpiryInSeconds($arr[$keys[13]]);
+		if (array_key_exists($keys[12], $arr)) $this->setAnonymousVuserId($arr[$keys[12]]);
+		if (array_key_exists($keys[13], $arr)) $this->setVsMaxExpiryInSeconds($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setCreateUserOnDemand($arr[$keys[14]]);
 		if (array_key_exists($keys[15], $arr)) $this->setPrefix($arr[$keys[15]]);
 		if (array_key_exists($keys[16], $arr)) $this->setAdminName($arr[$keys[16]]);
@@ -2920,7 +2920,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[36], $arr)) $this->setPriorityGroupId($arr[$keys[36]]);
 		if (array_key_exists($keys[37], $arr)) $this->setPartnerGroupType($arr[$keys[37]]);
 		if (array_key_exists($keys[38], $arr)) $this->setPartnerParentId($arr[$keys[38]]);
-		if (array_key_exists($keys[39], $arr)) $this->setKmcVersion($arr[$keys[39]]);
+		if (array_key_exists($keys[39], $arr)) $this->setVmcVersion($arr[$keys[39]]);
 	}
 
 	/**
@@ -2944,8 +2944,8 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(PartnerPeer::DEBUG_LEVEL)) $criteria->add(PartnerPeer::DEBUG_LEVEL, $this->debug_level);
 		if ($this->isColumnModified(PartnerPeer::CREATED_AT)) $criteria->add(PartnerPeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(PartnerPeer::UPDATED_AT)) $criteria->add(PartnerPeer::UPDATED_AT, $this->updated_at);
-		if ($this->isColumnModified(PartnerPeer::ANONYMOUS_KUSER_ID)) $criteria->add(PartnerPeer::ANONYMOUS_KUSER_ID, $this->anonymous_kuser_id);
-		if ($this->isColumnModified(PartnerPeer::KS_MAX_EXPIRY_IN_SECONDS)) $criteria->add(PartnerPeer::KS_MAX_EXPIRY_IN_SECONDS, $this->ks_max_expiry_in_seconds);
+		if ($this->isColumnModified(PartnerPeer::ANONYMOUS_VUSER_ID)) $criteria->add(PartnerPeer::ANONYMOUS_VUSER_ID, $this->anonymous_vuser_id);
+		if ($this->isColumnModified(PartnerPeer::VS_MAX_EXPIRY_IN_SECONDS)) $criteria->add(PartnerPeer::VS_MAX_EXPIRY_IN_SECONDS, $this->vs_max_expiry_in_seconds);
 		if ($this->isColumnModified(PartnerPeer::CREATE_USER_ON_DEMAND)) $criteria->add(PartnerPeer::CREATE_USER_ON_DEMAND, $this->create_user_on_demand);
 		if ($this->isColumnModified(PartnerPeer::PREFIX)) $criteria->add(PartnerPeer::PREFIX, $this->prefix);
 		if ($this->isColumnModified(PartnerPeer::ADMIN_NAME)) $criteria->add(PartnerPeer::ADMIN_NAME, $this->admin_name);
@@ -2971,7 +2971,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(PartnerPeer::PRIORITY_GROUP_ID)) $criteria->add(PartnerPeer::PRIORITY_GROUP_ID, $this->priority_group_id);
 		if ($this->isColumnModified(PartnerPeer::PARTNER_GROUP_TYPE)) $criteria->add(PartnerPeer::PARTNER_GROUP_TYPE, $this->partner_group_type);
 		if ($this->isColumnModified(PartnerPeer::PARTNER_PARENT_ID)) $criteria->add(PartnerPeer::PARTNER_PARENT_ID, $this->partner_parent_id);
-		if ($this->isColumnModified(PartnerPeer::KMC_VERSION)) $criteria->add(PartnerPeer::KMC_VERSION, $this->kmc_version);
+		if ($this->isColumnModified(PartnerPeer::VMC_VERSION)) $criteria->add(PartnerPeer::VMC_VERSION, $this->vmc_version);
 
 		return $criteria;
 	}
@@ -3072,9 +3072,9 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 
 		$copyObj->setUpdatedAt($this->updated_at);
 
-		$copyObj->setAnonymousKuserId($this->anonymous_kuser_id);
+		$copyObj->setAnonymousVuserId($this->anonymous_vuser_id);
 
-		$copyObj->setKsMaxExpiryInSeconds($this->ks_max_expiry_in_seconds);
+		$copyObj->setVsMaxExpiryInSeconds($this->vs_max_expiry_in_seconds);
 
 		$copyObj->setCreateUserOnDemand($this->create_user_on_demand);
 
@@ -3126,7 +3126,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 
 		$copyObj->setPartnerParentId($this->partner_parent_id);
 
-		$copyObj->setKmcVersion($this->kmc_version);
+		$copyObj->setVmcVersion($this->vmc_version);
 
 
 		if ($deepCopy) {
@@ -3206,24 +3206,24 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
+	 * @param      vuser $v
 	 * @return     Partner The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuser(kuser $v = null)
+	public function setvuser(vuser $v = null)
 	{
 		if ($v === null) {
-			$this->setAnonymousKuserId(NULL);
+			$this->setAnonymousVuserId(NULL);
 		} else {
-			$this->setAnonymousKuserId($v->getId());
+			$this->setAnonymousVuserId($v->getId());
 		}
 
-		$this->akuser = $v;
+		$this->avuser = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
 			$v->addPartner($this);
 		}
@@ -3233,25 +3233,25 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuser(PropelPDO $con = null)
+	public function getvuser(PropelPDO $con = null)
 	{
-		if ($this->akuser === null && ($this->anonymous_kuser_id !== null)) {
-			$this->akuser = kuserPeer::retrieveByPk($this->anonymous_kuser_id);
+		if ($this->avuser === null && ($this->anonymous_vuser_id !== null)) {
+			$this->avuser = vuserPeer::retrieveByPk($this->anonymous_vuser_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuser->addPartners($this);
+			   $this->avuser->addPartners($this);
 			 */
 		}
-		return $this->akuser;
+		return $this->avuser;
 	}
 
 	/**
@@ -3569,7 +3569,7 @@ abstract class BasePartner extends BaseObject  implements Persistent {
 		} // if ($deep)
 
 		$this->collLiveChannelSegments = null;
-			$this->akuser = null;
+			$this->avuser = null;
 	}
 
 	/* ---------------------- CustomData functions ------------------------- */

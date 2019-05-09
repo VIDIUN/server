@@ -34,7 +34,7 @@ class ConfMaps extends BaseConfMaps
 		$this->setHostName($exstingMap->getHostName());
 		$this->setVersion($exstingMap->getVersion() + 1);
 		$this->setContent($content);
-		$this->setRemarks(kCurrentContext::$ks);
+		$this->setRemarks(vCurrentContext::$vs);
 		$this->setStatus($exstingMap->getStatus());
 		$this->save();
 	} // ConfMaps
@@ -45,20 +45,20 @@ class ConfMaps extends BaseConfMaps
 		$memcacheObjects = self::getMemcacheObjects();
 		foreach ($memcacheObjects as $memcacheObject)
 		{
-			$memcacheObject->set(kBaseConfCache::CONF_MAP_PREFIX.$mapNameInCache,$this->getContent());
+			$memcacheObject->set(vBaseConfCache::CONF_MAP_PREFIX.$mapNameInCache,$this->getContent());
 		}
-		$mapListInCache = $memcacheObjects[0]->get(kRemoteMemCacheConf::MAP_LIST_KEY);
+		$mapListInCache = $memcacheObjects[0]->get(vRemoteMemCacheConf::MAP_LIST_KEY);
 		$mapListInCache[$mapNameInCache] = $this->getVersion();
 		$mapListInCache['UPDATED_AT']=date("Y-m-d H:i:s");
 		foreach ($memcacheObjects as $memcacheObject)
 		{
-			$memcacheObject->set(kRemoteMemCacheConf::MAP_LIST_KEY, $mapListInCache);
+			$memcacheObject->set(vRemoteMemCacheConf::MAP_LIST_KEY, $mapListInCache);
 		}
 		//create new key and set all memcache
-		$chacheKey = kBaseConfCache::generateKey();
+		$chacheKey = vBaseConfCache::generateKey();
 		foreach ($memcacheObjects as $memcacheObject)
 		{
-			$memcacheObject->set(kBaseConfCache::CONF_CACHE_VERSION_KEY, $chacheKey);
+			$memcacheObject->set(vBaseConfCache::CONF_CACHE_VERSION_KEY, $chacheKey);
 		}
 	}
 	/**
@@ -68,7 +68,7 @@ class ConfMaps extends BaseConfMaps
 	protected static function getMemcacheObjects()
 	{
 		$memcacheObjects = array();
-		$remoteCacheMap = kConf::getMap('kRemoteMemCacheConf');
+		$remoteCacheMap = vConf::getMap('vRemoteMemCacheConf');
 		if(!isset($remoteCacheMap['write_address_list']) || !isset($remoteCacheMap['port']))
 		{
 			throw new Exception('Missing configuration , cannot load cache objects');
@@ -77,7 +77,7 @@ class ConfMaps extends BaseConfMaps
 		$memcacheList = $remoteCacheMap['write_address_list'];
 		foreach($memcacheList as $memcacheItem)
 		{
-			$cacheObject = new kInfraMemcacheCacheWrapper();
+			$cacheObject = new vInfraMemcacheCacheWrapper();
 			if(!$cacheObject->init(array('host'=>$memcacheItem ,'port'=>$port)))
 			{
 				throw new Exception('Cannot open connection to memcache host:{$memcacheItem} port:{$port}');
@@ -95,7 +95,7 @@ class ConfMaps extends BaseConfMaps
 	 */
 	protected static function getMapNameInCache($mapName , $hostNameRegex)
 	{
-		return $mapName . kRemoteMemCacheConf::MAP_DELIMITER . $hostNameRegex;
+		return $mapName . vRemoteMemCacheConf::MAP_DELIMITER . $hostNameRegex;
 	}
 }
 

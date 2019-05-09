@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaESearchLanguage extends KalturaStringEnum implements ESearchLanguageEnum
+class VidiunESearchLanguage extends VidiunStringEnum implements ESearchLanguageEnum
 {
 
 }

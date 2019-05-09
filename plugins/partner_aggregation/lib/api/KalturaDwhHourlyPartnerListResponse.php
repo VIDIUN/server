@@ -3,10 +3,10 @@
  * @package plugins.partnerAggregation
  * @subpackage api.objects
  */
-class KalturaDwhHourlyPartnerListResponse extends KalturaListResponse
+class VidiunDwhHourlyPartnerListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaDwhHourlyPartnerArray
+	 * @var VidiunDwhHourlyPartnerArray
 	 * @readonly
 	 */
 	public $objects;

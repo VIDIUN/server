@@ -9,6 +9,6 @@
  */
 
 $script = realpath(dirname(__FILE__) . '/../../../../') . '/alpha/scripts/utils/permissions/addPermissionsAndItems.php';
-$config = realpath(dirname(__FILE__) . '/../../../') . '/permissions/object.KalturaLiveEntry.ini';
+$config = realpath(dirname(__FILE__) . '/../../../') . '/permissions/object.VidiunLiveEntry.ini';
 passthru("php $script $config");
 

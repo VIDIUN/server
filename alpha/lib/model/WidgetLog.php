@@ -11,21 +11,21 @@
 class WidgetLog extends BaseWidgetLog implements IBaseObject
 {
 	
-	public static function getKshowEntryId($kshow_id, $entry_id)
+	public static function getVshowEntryId($vshow_id, $entry_id)
 	{
 		if ($entry_id == -1)
 		{
-			$kshow = kshowPeer::retrieveByPK($kshow_id)	;
-			if ($kshow)
-				$entry_id = $kshow->getShowEntryId();
+			$vshow = vshowPeer::retrieveByPK($vshow_id)	;
+			if ($vshow)
+				$entry_id = $vshow->getShowEntryId();
 		}
 		
 		return $entry_id;
 	}
 	
-	public static function createWidgetLog ( $referer , $ip ,  $kshow_id , $entry_id , $kmedia_type , $widget_type , $action = 0 )
+	public static function createWidgetLog ( $referer , $ip ,  $vshow_id , $entry_id , $vmedia_type , $widget_type , $action = 0 )
 	{
-		$entry_id = self::getKshowEntryId($kshow_id, $entry_id);
+		$entry_id = self::getVshowEntryId($vshow_id, $entry_id);
 		
 		$unwanted_pattern = '/MyToken=[^\&]*/i';
 		$fixed_referer = preg_replace ( $unwanted_pattern , "" , $referer );
@@ -36,7 +36,7 @@ class WidgetLog extends BaseWidgetLog implements IBaseObject
 		$c = new Criteria();
 		$c->add ( WidgetLogPeer::REFERER , $fixed_referer );
 		$c->add ( WidgetLogPeer::ENTRY_ID , $entry_id ); 
-		$c->add ( WidgetLogPeer::KSHOW_ID , $kshow_id );
+		$c->add ( WidgetLogPeer::VSHOW_ID , $vshow_id );
 		
 		$widget_log = WidgetLogPeer::doSelectOne( $c );
 		
@@ -79,9 +79,9 @@ class WidgetLog extends BaseWidgetLog implements IBaseObject
 			$widget_log = new WidgetLog();
 			$widget_log->setIp1Count( 1 );
 			$widget_log->setIp1 ($longIP);		
-			$widget_log->setKshowId( $kshow_id);
+			$widget_log->setVshowId( $vshow_id);
 			$widget_log->setEntryId( $entry_id);
-			$widget_log->setKmediaType( $kmedia_type);
+			$widget_log->setVmediaType( $vmedia_type);
 			$widget_log->setWidgetType( $widget_type);
 			$widget_log->setReferer( $fixed_referer );
 			
@@ -109,13 +109,13 @@ class WidgetLog extends BaseWidgetLog implements IBaseObject
 		
 	}
 	
-	public static function incPlaysIfExists  ( $kshow_id , $entry_id  )
+	public static function incPlaysIfExists  ( $vshow_id , $entry_id  )
 	{
-		$entry_id = self::getKshowEntryId($kshow_id, $entry_id);
+		$entry_id = self::getVshowEntryId($vshow_id, $entry_id);
 		
 		$c = new Criteria();
 		$c->add ( WidgetLogPeer::ENTRY_ID , $entry_id ); 
-		$c->add ( WidgetLogPeer::KSHOW_ID , $kshow_id );
+		$c->add ( WidgetLogPeer::VSHOW_ID , $vshow_id );
 		$c->addAscendingOrderByColumn( WidgetLogPeer::ID ); // the first found will always stay the first found 
 		$widget_log = WidgetLogPeer::doSelectOne( $c );		
 		

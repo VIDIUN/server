@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaModerationFlag extends KalturaObject 
+class VidiunModerationFlag extends VidiunObject 
 {
 	/**
 	 * Moderation flag id
@@ -30,7 +30,7 @@ class KalturaModerationFlag extends KalturaObject
 	/**
 	 * The type of the moderation flag (entry or user)
 	 *
-	 * @var KalturaModerationObjectType
+	 * @var VidiunModerationObjectType
 	 * @readonly
 	 */
 	public $moderationObjectType; // can't be objectType because it is reserved for the type of the object in the api
@@ -52,7 +52,7 @@ class KalturaModerationFlag extends KalturaObject
 	/**
 	 * The moderation flag status
 	 *
-	 * @var KalturaModerationFlagStatus
+	 * @var VidiunModerationFlagStatus
 	 * @readonly
 	 */
 	public $status;
@@ -65,7 +65,7 @@ class KalturaModerationFlag extends KalturaObject
 	public $comments;
 	
 	/**
-	 * @var KalturaModerationFlagType
+	 * @var VidiunModerationFlagType
 	 */
 	public $flagType;
 	

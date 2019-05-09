@@ -3,7 +3,7 @@
  * @package plugins.podcastDistribution
  * @subpackage lib
  */
-class PodcastDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class PodcastDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const PODCAST = 'PODCAST';
 	

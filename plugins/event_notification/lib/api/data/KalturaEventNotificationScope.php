@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage api.objects
  */
-class KalturaEventNotificationScope extends KalturaScope
+class VidiunEventNotificationScope extends VidiunScope
 {
 	/**
 	 * @var string
@@ -11,19 +11,19 @@ class KalturaEventNotificationScope extends KalturaScope
 	public $objectId;
 
 	/**
-	 * @var KalturaEventNotificationEventObjectType
+	 * @var VidiunEventNotificationEventObjectType
 	 */
 	public $scopeObjectType;
 
 	public function toObject($objectToFill = null, $propsToSkip = array())
 	{
 		if (is_null($objectToFill))
-			$objectToFill = new kEventNotificationScope();
+			$objectToFill = new vEventNotificationScope();
 
-		/** @var kEventNotificationScope $objectToFill */
+		/** @var vEventNotificationScope $objectToFill */
 		$objectToFill = parent::toObject($objectToFill);
 
-		$objectClassName = KalturaPluginManager::getObjectClass('EventNotificationEventObjectType', kPluginableEnumsManager::apiToCore('EventNotificationEventObjectType', $this->scopeObjectType));
+		$objectClassName = VidiunPluginManager::getObjectClass('EventNotificationEventObjectType', vPluginableEnumsManager::apiToCore('EventNotificationEventObjectType', $this->scopeObjectType));
 		$peerClass = $objectClassName.'Peer';
 		$objectId = $this->objectId;
 		if (class_exists($peerClass))
@@ -39,7 +39,7 @@ class KalturaEventNotificationScope extends KalturaScope
 		}
 
 		if (is_null($objectToFill->getObject()))
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $this->objectId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $this->objectId);
 
 		return $objectToFill;
 	}

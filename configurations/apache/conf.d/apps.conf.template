@@ -11,7 +11,7 @@ Alias /hosted_pages "@BASE_DIR@/apps/hosted_pages/web"
 </Directory>
 
 Alias /apps "@BASE_DIR@/apps"
-Alias /kea "@BASE_DIR@/apps/kea"
+Alias /vea "@BASE_DIR@/apps/vea"
 Alias /html5 "@BASE_DIR@/apps/html5"
 <Directory "@BASE_DIR@/apps">
     DirectoryIndex index.php

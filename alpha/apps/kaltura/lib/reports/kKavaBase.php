@@ -1,10 +1,10 @@
 <?php
 
-class kKavaNoResultsException extends kException
+class vKavaNoResultsException extends vException
 {
 }
 
-class kKavaBase extends kDruidBase
+class vKavaBase extends vDruidBase
 {
 	// data sources
 	const DATASOURCE_REALTIME = 'player-events-realtime';
@@ -25,7 +25,7 @@ class kKavaBase extends kDruidBase
 	const DIMENSION_LOCATION_CITY = 'location.city';
 	const DIMENSION_DOMAIN = 'urlParts.domain';
 	const DIMENSION_URL = 'urlParts.canonicalUrl';
-	const DIMENSION_KUSER_ID = 'kuserId';
+	const DIMENSION_VUSER_ID = 'vuserId';
 	const DIMENSION_USER_TYPE = 'userType';
 	const DIMENSION_APPLICATION = 'application';
 	const DIMENSION_DEVICE = 'userAgent.device';
@@ -50,7 +50,7 @@ class kKavaBase extends kDruidBase
 	const DIMENSION_CUSTOM_VAR2 = 'customVar2';
 	const DIMENSION_CUSTOM_VAR3 = 'customVar3';
 	const DIMENSION_TYPE = 'type';
-	const DIMENSION_ENTRY_OWNER_ID = 'entryKuserId';
+	const DIMENSION_ENTRY_OWNER_ID = 'entryVuserId';
 	const DIMENSION_ENTRY_CREATOR_ID = 'entryCreatorId';
 	const DIMENSION_ENTRY_CREATED_AT = 'entryCreatedAt';
 	const DIMENSION_PERCENTILES = 'percentiles';
@@ -130,7 +130,7 @@ class kKavaBase extends kDruidBase
 		self::DATASOURCE_HISTORICAL => array(
 			self::DIMENSION_EVENT_TYPE => 1,
 			self::DIMENSION_PARTNER_ID => 1,
-			self::DIMENSION_KUSER_ID => 1,
+			self::DIMENSION_VUSER_ID => 1,
 			self::DIMENSION_ENTRY_ID => 1,
 			self::DIMENSION_CATEGORIES => 1,
 			self::DIMENSION_ENTRY_OWNER_ID => 1,
@@ -161,7 +161,7 @@ class kKavaBase extends kDruidBase
 			self::DIMENSION_PARTNER_ID => 1,
 			self::DIMENSION_CATEGORIES => 1,
 			self::DIMENSION_ENTRY_ID => 1,
-			self::DIMENSION_KUSER_ID => 1,
+			self::DIMENSION_VUSER_ID => 1,
 			self::DIMENSION_USER_TYPE => 1,
 			self::DIMENSION_MEDIA_TYPE => 1,
 			self::DIMENSION_SOURCE_TYPE => 1,
@@ -171,7 +171,7 @@ class kKavaBase extends kDruidBase
 			self::DIMENSION_PARTNER_ID => 1,
 			self::DIMENSION_ENTRY_ID => 1,
 			self::DIMENSION_CATEGORIES => 1,
-			self::DIMENSION_KUSER_ID => 1,
+			self::DIMENSION_VUSER_ID => 1,
 			self::DIMENSION_MEDIA_TYPE => 1,
 			self::DIMENSION_SOURCE_TYPE => 1,
 		),
@@ -198,7 +198,7 @@ class kKavaBase extends kDruidBase
 			self::DIMENSION_PARTNER_ID => 1,
 			self::DIMENSION_ENTRY_ID => 1,
 			self::DIMENSION_CATEGORIES => 1,
-			self::DIMENSION_KUSER_ID => 1,
+			self::DIMENSION_VUSER_ID => 1,
 			self::DIMENSION_MEDIA_TYPE => 1,
 			self::DIMENSION_SOURCE_TYPE => 1,
 			self::DIMENSION_STATUS => 1,
@@ -206,7 +206,7 @@ class kKavaBase extends kDruidBase
 		self::DATASOURCE_USER_LIFECYCLE => array(
 			self::DIMENSION_EVENT_TYPE => 1,
 			self::DIMENSION_PARTNER_ID => 1,
-			self::DIMENSION_KUSER_ID => 1,
+			self::DIMENSION_VUSER_ID => 1,
 			self::DIMENSION_USER_TYPE => 1,
 		),
 		self::DATASOURCE_API_USAGE => array(
@@ -226,14 +226,14 @@ class kKavaBase extends kDruidBase
 			self::DIMENSION_SOURCE_TYPE => 1,
 			self::DIMENSION_REACH_PROFILE_ID => 1,
 			self::DIMENSION_STATUS => 1,
-			self::DIMENSION_KUSER_ID => 1,
+			self::DIMENSION_VUSER_ID => 1,
 			self::DIMENSION_SERVICE_TYPE => 1,
 			self::DIMENSION_SERVICE_FEATURE => 1,
 			self::DIMENSION_TURNAROUND_TIME  => 1,
 		),
 		self::DATASOURCE_REALTIME => array(
 			self::DIMENSION_PARTNER_ID => 1,
-			self::DIMENSION_KUSER_ID => 1,
+			self::DIMENSION_VUSER_ID => 1,
 			self::DIMENSION_ENTRY_ID => 1,
 			self::DIMENSION_CATEGORIES => 1,
 			self::DIMENSION_ENTRY_OWNER_ID => 1,
@@ -261,10 +261,10 @@ class kKavaBase extends kDruidBase
 	);
 
 	public static function isPartnerAllowed($partnerId, $serviceType) {
-	    if (kConf::hasParam(self::DRUID_URL)) {
-		if (!kConf::hasParam($serviceType))
+	    if (vConf::hasParam(self::DRUID_URL)) {
+		if (!vConf::hasParam($serviceType))
 			return true;
-		return !in_array($partnerId, kConf::get($serviceType));
+		return !in_array($partnerId, vConf::get($serviceType));
 	    }
 	    return false;
 	}
@@ -282,7 +282,7 @@ class kKavaBase extends kDruidBase
 
 	public static function getCoordinatesForKeys($keys)
 	{
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_GEO_COORDINATES);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_GEO_COORDINATES);
 		if (!$cache)
 		{
 			return array();

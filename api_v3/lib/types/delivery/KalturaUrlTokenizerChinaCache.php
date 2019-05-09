@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlTokenizerChinaCache extends KalturaUrlTokenizer {
+class VidiunUrlTokenizerChinaCache extends VidiunUrlTokenizer {
 
 	/**
-	 * @var KalturaChinaCacheAlgorithmType
+	 * @var VidiunChinaCacheAlgorithmType
 	 */
 	public $algorithmId;
 	
@@ -29,7 +29,7 @@ class KalturaUrlTokenizerChinaCache extends KalturaUrlTokenizer {
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kChinaCacheUrlTokenizer();
+			$dbObject = new vChinaCacheUrlTokenizer();
 			
 		parent::toObject($dbObject, $skip);
 	

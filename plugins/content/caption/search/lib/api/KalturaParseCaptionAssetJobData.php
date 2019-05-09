@@ -3,7 +3,7 @@
  * @package plugins.virusScan
  * @subpackage api.objects
  */
-class KalturaParseCaptionAssetJobData extends KalturaJobData
+class VidiunParseCaptionAssetJobData extends VidiunJobData
 {
 	/**
 	 * @var string

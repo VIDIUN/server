@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlTokenizerLevel3 extends KalturaUrlTokenizer {
+class VidiunUrlTokenizerLevel3 extends VidiunUrlTokenizer {
 
 	/**
 	 * paramName
@@ -41,7 +41,7 @@ class KalturaUrlTokenizerLevel3 extends KalturaUrlTokenizer {
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kLevel3UrlTokenizer();
+			$dbObject = new vLevel3UrlTokenizer();
 			
 		parent::toObject($dbObject, $skip);
 	

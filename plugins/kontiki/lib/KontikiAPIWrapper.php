@@ -26,12 +26,12 @@ class KontikiAPIWrapper
     /**
      * @var string $serviceToken
      * @var string $contentMoid
-     * @var KalturaBaseEntry $entry
-     * @var KalturaFlavorAsset $flavorAsset
+     * @var VidiunBaseEntry $entry
+     * @var VidiunFlavorAsset $flavorAsset
      * 
      * @return SimpleXMLElement
      */
-	public function addKontikiVideoContentResource ($serviceToken, $uploadMoid, KalturaBaseEntry $entry, KalturaFlavorAsset $asset)
+	public function addKontikiVideoContentResource ($serviceToken, $uploadMoid, VidiunBaseEntry $entry, VidiunFlavorAsset $asset)
 	{
         $data = "<ns:content xmlns:ns='http://api.kontiki.com'>
         <contentType>". self::CONTENT_TYPE_VOD ."</contentType>
@@ -119,7 +119,7 @@ class KontikiAPIWrapper
 	 */
 	protected function execAPICall($url)
 	{
-		KalturaLog::info("Executing CURL request with URL: $url");
+		VidiunLog::info("Executing CURL request with URL: $url");
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);

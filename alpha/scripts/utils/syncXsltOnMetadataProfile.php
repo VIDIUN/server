@@ -18,7 +18,7 @@ if (!file_exists($xsltFilePath)) {
 
 require_once(dirname(__FILE__).'/../bootstrap.php');
 
-KalturaPluginManager::addPlugin('MetadataPlugin');
+VidiunPluginManager::addPlugin('MetadataPlugin');
 $dbMetadataProfile = MetadataProfilePeer::retrieveById($metadataProfileId);
 if (!$dbMetadataProfile) {
     die('ERROR - Cannot find metadata profile with id ['.$metadataProfileId.']'.PHP_EOL);
@@ -28,6 +28,6 @@ $dbMetadataProfile->incrementXsltVersion();
 $dbMetadataProfile->save();
 
 $key = $dbMetadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_XSLT);
-kFileSyncUtils::moveFromFile($xsltFilePath, $key, true, true);
+vFileSyncUtils::moveFromFile($xsltFilePath, $key, true, true);
 
 echo 'Done'.PHP_EOL;

@@ -3,7 +3,7 @@
  * @package plugins.timeWarnerDistribution
  * @subpackage api.objects
  */
-class KalturaTimeWarnerDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunTimeWarnerDistributionProfile extends VidiunConfigurableDistributionProfile
 {	
 	
 	/**

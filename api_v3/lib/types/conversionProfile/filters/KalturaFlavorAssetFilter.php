@@ -3,12 +3,12 @@
  * @package api
  * @subpackage filters
  */
-class KalturaFlavorAssetFilter extends KalturaFlavorAssetBaseFilter
+class VidiunFlavorAssetFilter extends VidiunFlavorAssetBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaAssetFilter::getListResponse()
+	 * @see VidiunAssetFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$types = assetPeer::retrieveAllFlavorsTypes();
 		return $this->getTypeListResponse($pager, $responseProfile, $types);

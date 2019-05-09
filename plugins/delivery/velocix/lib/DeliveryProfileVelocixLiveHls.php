@@ -10,7 +10,7 @@ class DeliveryProfileVelocixLiveHls extends DeliveryProfileLiveAppleHttp
 	const MAX_FLAVORS_TO_CHECK = 3;
 
 	/**
-	 * @return kUrlTokenizer
+	 * @return vUrlTokenizer
 	 */
 	public function getTokenizer()
 	{
@@ -24,14 +24,14 @@ class DeliveryProfileVelocixLiveHls extends DeliveryProfileLiveAppleHttp
 			$token->setStreamName($liveEntry->getStreamName());
 			$token->setProtocol('hls');
 			return $token;
-			return new kVelocixUrlTokenizer($window, $secret, $protocol, $liveEntry->getStreamName(), $hdsPaths, $tokenParamName, 'auth_');
+			return new vVelocixUrlTokenizer($window, $secret, $protocol, $liveEntry->getStreamName(), $hdsPaths, $tokenParamName, 'auth_');
 		}
 		return null;
 	}
 	
 	protected function getParamName() {
 		$tokenizer = $this->getTokenizer();
-		if($tokenizer && ($tokenizer instanceof kVelocixUrlTokenizer))
+		if($tokenizer && ($tokenizer instanceof vVelocixUrlTokenizer))
 			return $tokenizer->getParamName();
 		return '';
 	}
@@ -41,13 +41,13 @@ class DeliveryProfileVelocixLiveHls extends DeliveryProfileLiveAppleHttp
 		$parts = parse_url($url);
 		parse_str($parts['query'], $query);
 		$token = $query[$this->getParamName()];
-		$data = $this->urlExists($url, kConf::get("hls_live_stream_content_type"));
+		$data = $this->urlExists($url, vConf::get("hls_live_stream_content_type"));
 		if(!$data)
 		{
-			KalturaLog::Info("URL [$url] returned no valid data. Exiting.");
+			VidiunLog::Info("URL [$url] returned no valid data. Exiting.");
 			return false;
 		}
-		KalturaLog::info("url return data:[$data]");
+		VidiunLog::info("url return data:[$data]");
 		$explodedLine = explode("\n", $data);
 		$flavorsChecked = 0;
 		if (strpos($data,'#EXT-X-STREAM-INF') !== false)
@@ -66,7 +66,7 @@ class DeliveryProfileVelocixLiveHls extends DeliveryProfileLiveAppleHttp
 				}
 				$manifestUrl = $this->checkIfValidUrl($streamUrl, $url);
 				$manifestUrl .= $token ? '?'.$this->getParamName()."=$token" : '' ;
-				$data = $this->urlExists($manifestUrl, kConf::get("hls_live_stream_content_type"));
+				$data = $this->urlExists($manifestUrl, vConf::get("hls_live_stream_content_type"));
 				if (!$data)
 				{
 					continue;
@@ -102,9 +102,9 @@ class DeliveryProfileVelocixLiveHls extends DeliveryProfileLiveAppleHttp
 			}
 			$segmentUrl = $this->checkIfValidUrl($segment, $manifestUrl);
 			$segmentUrl .= $token ? '?'.$this->getParamName()."=$token" : '' ;
-			if ($this->urlExists($segmentUrl, kConf::get("hls_live_stream_content_type"),'0-0'))
+			if ($this->urlExists($segmentUrl, vConf::get("hls_live_stream_content_type"),'0-0'))
 			{
-				KalturaLog::info("is live:[$segmentUrl]");
+				VidiunLog::info("is live:[$segmentUrl]");
 				return true;
 			}
 			++$segmentsChecked;

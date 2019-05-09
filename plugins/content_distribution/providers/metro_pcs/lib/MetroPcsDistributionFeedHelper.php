@@ -21,12 +21,12 @@ class MetroPcsDistributionFeedHelper
 	protected $distributionProfile;
 
 	/**
-	 * @var KalturaEntryDistribution
+	 * @var VidiunEntryDistribution
 	 */
 	protected $entryDistribution;
 	
 	/**
-	 * @var KalturaMetroPcsDistributionJobProviderData
+	 * @var VidiunMetroPcsDistributionJobProviderData
 	 */
 	protected $providerData;
 	
@@ -40,7 +40,7 @@ class MetroPcsDistributionFeedHelper
 	 * @param $templateName
 	 * @param $distributionProfile
 	 */
-	public function __construct($templateName, $entryDistribution, KalturaMetroPcsDistributionProfile $distributionProfile, KalturaMetroPcsDistributionJobProviderData $providerData) 
+	public function __construct($templateName, $entryDistribution, VidiunMetroPcsDistributionProfile $distributionProfile, VidiunMetroPcsDistributionJobProviderData $providerData) 
 	{
 		$this->entryDistribution = $entryDistribution;
 		$this->distributionProfile = $distributionProfile;
@@ -50,66 +50,66 @@ class MetroPcsDistributionFeedHelper
 		    $this->fieldValues = array();
 		}
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml_templates/' . $templateName;
-		$this->doc = new KDOMDocument();
+		$this->doc = new VDOMDocument();
 		$this->doc->load($xmlTemplate);		
 		$this->xpath = new DOMXPath($this->doc);
 		$this->xpath->registerNamespace('msdp', 'http://www.real.com/msdp');	
 		
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:title', $this->getValueForField(KalturaMetroPcsDistributionField::TITLE));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:link', $this->getValueForField(KalturaMetroPcsDistributionField::LINK));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:externalId', $this->getValueForField(KalturaMetroPcsDistributionField::EXTERNAL_ID));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:providerId', $this->getValueForField(KalturaMetroPcsDistributionField::PROVIDER_ID));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:shortDescription', $this->getValueForField(KalturaMetroPcsDistributionField::SHORT_DESCRIPTION));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:description', $this->getValueForField(KalturaMetroPcsDistributionField::DESCRIPTION));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:language', $this->getValueForField(KalturaMetroPcsDistributionField::LANGUAGE));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:copyright', $this->getValueForField(KalturaMetroPcsDistributionField::COPYRIGHT));		
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:managingEditor', $this->getValueForField(KalturaMetroPcsDistributionField::MANAGING_EDITOR));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:title', $this->getValueForField(VidiunMetroPcsDistributionField::TITLE));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:link', $this->getValueForField(VidiunMetroPcsDistributionField::LINK));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:externalId', $this->getValueForField(VidiunMetroPcsDistributionField::EXTERNAL_ID));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:providerId', $this->getValueForField(VidiunMetroPcsDistributionField::PROVIDER_ID));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:shortDescription', $this->getValueForField(VidiunMetroPcsDistributionField::SHORT_DESCRIPTION));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:description', $this->getValueForField(VidiunMetroPcsDistributionField::DESCRIPTION));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:language', $this->getValueForField(VidiunMetroPcsDistributionField::LANGUAGE));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:copyright', $this->getValueForField(VidiunMetroPcsDistributionField::COPYRIGHT));		
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:managingEditor', $this->getValueForField(VidiunMetroPcsDistributionField::MANAGING_EDITOR));
 		
-		$pubDate = $this->getValueForField(KalturaMetroPcsDistributionField::PUB_DATE);
+		$pubDate = $this->getValueForField(VidiunMetroPcsDistributionField::PUB_DATE);
 		if ($pubDate) 
 		{
-		   kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:pubDate',date('D M j G:i:s T Y', intval($pubDate))); 
+		   vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:pubDate',date('D M j G:i:s T Y', intval($pubDate))); 
 		}
 					
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:category', $this->getValueForField(KalturaMetroPcsDistributionField::CATEGORY));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:upc', $this->getValueForField(KalturaMetroPcsDistributionField::UPC));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:isrc', $this->getValueForField(KalturaMetroPcsDistributionField::ISRC));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:program', $this->getValueForField(KalturaMetroPcsDistributionField::PROGRAM));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:seasonId', $this->getValueForField(KalturaMetroPcsDistributionField::SEASON_ID));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:episodicId', $this->getValueForField(KalturaMetroPcsDistributionField::EPISODIC_ID));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:chapterId', $this->getValueForField(KalturaMetroPcsDistributionField::CHAPTER_ID));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:artist', $this->getValueForField(KalturaMetroPcsDistributionField::ARTIST));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:performer', $this->getValueForField(KalturaMetroPcsDistributionField::PERFORMER));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:director', $this->getValueForField(KalturaMetroPcsDistributionField::DIRECTOR));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:studio', $this->getValueForField(KalturaMetroPcsDistributionField::STUDIO));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:originalRelease', $this->getValueForField(KalturaMetroPcsDistributionField::ORIGINAL_RELEASE));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:topStory', $this->getValueForField(KalturaMetroPcsDistributionField::TOP_STORY));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:sortOrder', $this->getValueForField(KalturaMetroPcsDistributionField::SORT_ORDER));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:sortName', $this->getValueForField(KalturaMetroPcsDistributionField::SORT_NAME));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:genre', $this->getValueForField(KalturaMetroPcsDistributionField::GENRE));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:keywords', $this->getValueForField(KalturaMetroPcsDistributionField::KEYWORDS));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:localCode', $this->getValueForField(KalturaMetroPcsDistributionField::LOCAL_CODE));
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:entitlements', $this->getValueForField(KalturaMetroPcsDistributionField::ENTITLEMENTS));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:category', $this->getValueForField(VidiunMetroPcsDistributionField::CATEGORY));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:upc', $this->getValueForField(VidiunMetroPcsDistributionField::UPC));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:isrc', $this->getValueForField(VidiunMetroPcsDistributionField::ISRC));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:program', $this->getValueForField(VidiunMetroPcsDistributionField::PROGRAM));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:seasonId', $this->getValueForField(VidiunMetroPcsDistributionField::SEASON_ID));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:episodicId', $this->getValueForField(VidiunMetroPcsDistributionField::EPISODIC_ID));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:chapterId', $this->getValueForField(VidiunMetroPcsDistributionField::CHAPTER_ID));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:artist', $this->getValueForField(VidiunMetroPcsDistributionField::ARTIST));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:performer', $this->getValueForField(VidiunMetroPcsDistributionField::PERFORMER));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:director', $this->getValueForField(VidiunMetroPcsDistributionField::DIRECTOR));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:studio', $this->getValueForField(VidiunMetroPcsDistributionField::STUDIO));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:originalRelease', $this->getValueForField(VidiunMetroPcsDistributionField::ORIGINAL_RELEASE));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:topStory', $this->getValueForField(VidiunMetroPcsDistributionField::TOP_STORY));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:sortOrder', $this->getValueForField(VidiunMetroPcsDistributionField::SORT_ORDER));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:sortName', $this->getValueForField(VidiunMetroPcsDistributionField::SORT_NAME));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:genre', $this->getValueForField(VidiunMetroPcsDistributionField::GENRE));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:keywords', $this->getValueForField(VidiunMetroPcsDistributionField::KEYWORDS));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:localCode', $this->getValueForField(VidiunMetroPcsDistributionField::LOCAL_CODE));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:entitlements', $this->getValueForField(VidiunMetroPcsDistributionField::ENTITLEMENTS));
 				
-		$startDate = new DateTime('@'.$this->getValueForField(KalturaMetroPcsDistributionField::START_DATE));
+		$startDate = new DateTime('@'.$this->getValueForField(VidiunMetroPcsDistributionField::START_DATE));
 		if ($startDate) 
 		{	
 			// force time zone to EST
 			$startDate->setTimezone(new DateTimeZone('EST'));
 			$date = $startDate->format('c');			
-		    kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:startDate',$date);  
+		    vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:startDate',$date);  
 		}		
 		
-		$endDate = new DateTime('@'.$this->getValueForField(KalturaMetroPcsDistributionField::END_DATE));
+		$endDate = new DateTime('@'.$this->getValueForField(VidiunMetroPcsDistributionField::END_DATE));
 		if ($endDate) 
 		{
 			// force time zone to EST
 			$endDate->setTimezone(new DateTimeZone('EST'));
 		    $date = $endDate->format('c');			
-		    kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:endDate',$date); 
+		    vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:endDate',$date); 
 		}	
 
-		kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:rating', $this->getValueForField(KalturaMetroPcsDistributionField::RATING));
+		vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:rating', $this->getValueForField(VidiunMetroPcsDistributionField::RATING));
 	}
 				
 	/**
@@ -143,7 +143,7 @@ class MetroPcsDistributionFeedHelper
 		
 	/**
 	 * set flavors in XML
-	 * @param KalturaThumbAsset $thumbAssets
+	 * @param VidiunThumbAsset $thumbAssets
 	 */
 	public function setThumbnails($thumbAssets, $thumbUrls)
 	{	
@@ -153,9 +153,9 @@ class MetroPcsDistributionFeedHelper
 			foreach ($thumbAssets as $thumbAsset)
 			{
 				$url = $thumbUrls[$thumbAsset->id];
-				kXml::setNodeValue($this->xpath,'msdp:url', $url, $templateImageNode);
-				kXml::setNodeValue($this->xpath,'msdp:width', $thumbAsset->width , $templateImageNode);
-				kXml::setNodeValue($this->xpath,'msdp:height', $thumbAsset->height , $templateImageNode);
+				vXml::setNodeValue($this->xpath,'msdp:url', $url, $templateImageNode);
+				vXml::setNodeValue($this->xpath,'msdp:width', $thumbAsset->width , $templateImageNode);
+				vXml::setNodeValue($this->xpath,'msdp:height', $thumbAsset->height , $templateImageNode);
 				//$this->cloneNode instead the DOMNode cloneNode since the cloneNode doesn't deep copy the namespaces inside the tags
 				$newImageNode = $this->cloneNode($templateImageNode, $this->doc);
 				$templateImageNode->parentNode->insertBefore($newImageNode, $templateImageNode);
@@ -165,31 +165,31 @@ class MetroPcsDistributionFeedHelper
 		else
 		{
 			//ignore image element	
-			kXml::setNodeValue($this->xpath,'@ignore', "Y", $templateImageNode);
+			vXml::setNodeValue($this->xpath,'@ignore', "Y", $templateImageNode);
 		}
 	}
 	
 	/**
 	 * set flavors in XML
-	 * @param KalturaFlavorAsset $flavorAssets
+	 * @param VidiunFlavorAsset $flavorAssets
 	 */
 	public function setFlavor ($flavorAsset, $entryDuration, $currenTime)
 	{	
 		$templateItemNode = $this->xpath->query('/msdp:rss/msdp:channel/msdp:item')->item(0);
 		if($flavorAsset)
 		{	
-			$itemTitle = $this->getValueForField(KalturaMetroPcsDistributionField::ITEM_TITLE);
-			$itemDescription= $this->getValueForField(KalturaMetroPcsDistributionField::ITEM_DESCRIPTION);
-			$itemType= $this->getValueForField(KalturaMetroPcsDistributionField::ITEM_TYPE);
+			$itemTitle = $this->getValueForField(VidiunMetroPcsDistributionField::ITEM_TITLE);
+			$itemDescription= $this->getValueForField(VidiunMetroPcsDistributionField::ITEM_DESCRIPTION);
+			$itemType= $this->getValueForField(VidiunMetroPcsDistributionField::ITEM_TYPE);
 			//$url = $this->getAssetUrl($flavorAsset);
 			$url = $this->flavorAssetUniqueName($flavorAsset, $currenTime);			
-			kXml::setNodeValue($this->xpath,'msdp:title', $itemTitle, $templateItemNode);
-			kXml::setNodeValue($this->xpath,'msdp:description', $itemDescription, $templateItemNode);
-			kXml::setNodeValue($this->xpath,'msdp:type', $itemType, $templateItemNode);				
-			kXml::setNodeValue($this->xpath,'msdp:width', $flavorAsset->width , $templateItemNode);		
-			kXml::setNodeValue($this->xpath,'msdp:height', $flavorAsset->height , $templateItemNode);					
-			kXml::setNodeValue($this->xpath,'msdp:enclosure/@url', $url, $templateItemNode);
-			kXml::setNodeValue($this->xpath,'msdp:enclosure/@length', $entryDuration, $templateItemNode);
+			vXml::setNodeValue($this->xpath,'msdp:title', $itemTitle, $templateItemNode);
+			vXml::setNodeValue($this->xpath,'msdp:description', $itemDescription, $templateItemNode);
+			vXml::setNodeValue($this->xpath,'msdp:type', $itemType, $templateItemNode);				
+			vXml::setNodeValue($this->xpath,'msdp:width', $flavorAsset->width , $templateItemNode);		
+			vXml::setNodeValue($this->xpath,'msdp:height', $flavorAsset->height , $templateItemNode);					
+			vXml::setNodeValue($this->xpath,'msdp:enclosure/@url', $url, $templateItemNode);
+			vXml::setNodeValue($this->xpath,'msdp:enclosure/@length', $entryDuration, $templateItemNode);
 			//$this->cloneNode instead the DOMNode cloneNode since the cloneNode doesn't deep copy the namespaces inside the tags
 			$newItemNode = $this->cloneNode($templateItemNode, $this->doc);
 			$templateItemNode->parentNode->insertBefore($newItemNode, $templateItemNode);
@@ -198,7 +198,7 @@ class MetroPcsDistributionFeedHelper
 		else
 		{
 			//ignore image element	
-			kXml::setNodeValue($this->xpath,'@ignore', "Y", $templateItemNode);
+			vXml::setNodeValue($this->xpath,'@ignore', "Y", $templateItemNode);
 		}
 	}
 	
@@ -215,7 +215,7 @@ class MetroPcsDistributionFeedHelper
 			// force time zone to EST
 			$startDate->setTimezone(new DateTimeZone('EST'));
 			$date = $startDate->format('c');			
-		    kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:startDate',$date);  
+		    vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:startDate',$date);  
 		}		
 		
 		//yesterday
@@ -226,22 +226,22 @@ class MetroPcsDistributionFeedHelper
 			// force time zone to EST
 			$endDate->setTimezone(new DateTimeZone('EST'));
 		    $date = $endDate->format('c');			
-		    kXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:endDate',$date); 
+		    vXml::setNodeValue($this->xpath,'/msdp:rss/msdp:channel/msdp:endDate',$date); 
 		}	
 	}
 	
 	public function setImageIgnore()
 	{
 		$imageNode = $this->xpath->query('/msdp:rss/msdp:channel/msdp:image')->item(0);	
-		kXml::setNodeValue($this->xpath,'@ignore', "Y", $imageNode);		
+		vXml::setNodeValue($this->xpath,'@ignore', "Y", $imageNode);		
 	}
 	
 	
 	public function setItemIgnore()
 	{		
 		$itemNode = $this->xpath->query('/msdp:rss/msdp:channel/msdp:item')->item(0);
-		kXml::setNodeValue($this->xpath,'msdp:type', $this->getValueForField(KalturaMetroPcsDistributionField::ITEM_TYPE), $itemNode);
-		kXml::setNodeValue($this->xpath,'@ignore', "Y", $itemNode);		
+		vXml::setNodeValue($this->xpath,'msdp:type', $this->getValueForField(VidiunMetroPcsDistributionField::ITEM_TYPE), $itemNode);
+		vXml::setNodeValue($this->xpath,'@ignore', "Y", $itemNode);		
 	}
 	
 	public function getXmlString()
@@ -251,7 +251,7 @@ class MetroPcsDistributionFeedHelper
 		
 	/**
 	 * creates unique name for flavor asset
-	 * @param KalturaFlavorAsset $flavorAsset
+	 * @param VidiunFlavorAsset $flavorAsset
 	 */
 	public function flavorAssetUniqueName($flavorAsset, $currentTime)
 	{

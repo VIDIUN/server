@@ -3,7 +3,7 @@
  * @package plugins.dailymotionDistribution
  * @subpackage api.objects
  */
-class KalturaDailymotionDistributionProvider extends KalturaDistributionProvider
+class VidiunDailymotionDistributionProvider extends VidiunDistributionProvider
 {
 	
 }

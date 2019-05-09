@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Schema for database 'kaltura'</title>
+<title>Schema for database 'vidiun'</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <style type="text/css">
 <!--
@@ -17,11 +17,11 @@ BR.page {page-break-after: always}
 <body bgcolor='#ffffff' topmargin="0">
 <table width="100%" border="0" cellspacing="0" cellpadding="5">
 <tr>
-<td class="toptext"><p align="center">kaltura</td>
+<td class="toptext"><p align="center">vidiun</td>
 </tr>
 </table>
 <a name="header">&nbsp</a><ul>
-	<li><a href="#admin_kuser"><p class="normal">admin_kuser</a></li>
+	<li><a href="#admin_vuser"><p class="normal">admin_vuser</a></li>
 	<li><a href="#admin_permission"><p class="normal">admin_permission</a></li>
 	<li><a href="#alert"><p class="normal">alert</a></li>
 	<li><a href="#batch_job"><p class="normal">batch_job</a></li>
@@ -41,11 +41,11 @@ BR.page {page-break-after: always}
 	<li><a href="#flag"><p class="normal">flag</a></li>
 	<li><a href="#flickr_token"><p class="normal">flickr_token</a></li>
 	<li><a href="#keyword"><p class="normal">keyword</a></li>
-	<li><a href="#kshow"><p class="normal">kshow</a></li>
-	<li><a href="#kshow_kuser"><p class="normal">kshow_kuser</a></li>
-	<li><a href="#kuser"><p class="normal">kuser</a></li>
-	<li><a href="#kvote"><p class="normal">kvote</a></li>
-	<li><a href="#kwidget_log"><p class="normal">kwidget_log</a></li>
+	<li><a href="#vshow"><p class="normal">vshow</a></li>
+	<li><a href="#vshow_vuser"><p class="normal">vshow_vuser</a></li>
+	<li><a href="#vuser"><p class="normal">vuser</a></li>
+	<li><a href="#vvote"><p class="normal">vvote</a></li>
+	<li><a href="#vwidget_log"><p class="normal">vwidget_log</a></li>
 	<li><a href="#mail_job"><p class="normal">mail_job</a></li>
 	<li><a href="#moderation"><p class="normal">moderation</a></li>
 	<li><a href="#news"><p class="normal">news</a></li>
@@ -56,7 +56,7 @@ BR.page {page-break-after: always}
 	<li><a href="#partner_transactions"><p class="normal">partner_transactions</a></li>
 	<li><a href="#partnership"><p class="normal">partnership</a></li>
 	<li><a href="#pr_news"><p class="normal">pr_news</a></li>
-	<li><a href="#puser_kuser"><p class="normal">puser_kuser</a></li>
+	<li><a href="#puser_vuser"><p class="normal">puser_vuser</a></li>
 	<li><a href="#puser_role"><p class="normal">puser_role</a></li>
 	<li><a href="#roughcut_entry"><p class="normal">roughcut_entry</a></li>
 	<li><a href="#sessvar"><p class="normal">sessvar</a></li>
@@ -66,10 +66,10 @@ BR.page {page-break-after: always}
 	<li><a href="#widget_log"><p class="normal">widget_log</a></li>
 </ul>
 <br class=page>
-<p><a name='admin_kuser'>&nbsp</a>
+<p><a name='admin_vuser'>&nbsp</a>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
 <tr>
-	<td class="headtext" width="30%" align="left" valign="top">admin_kuser</td>
+	<td class="headtext" width="30%" align="left" valign="top">admin_vuser</td>
 	<td>&nbsp</td>
 <tr>
 </table>
@@ -236,7 +236,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top" class="fieldcolumn">Comment</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">admin_kuser</td>
+	<td align="left" valign="top"><p class="normal">admin_vuser</td>
 	<td align="left" valign="top"><p class="normal">0</td>
 	<td align="left" valign="top"><p class="normal">PRIMARY</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -250,7 +250,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">admin_kuser</td>
+	<td align="left" valign="top"><p class="normal">admin_vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">screen_name_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -264,9 +264,9 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">admin_kuser</td>
+	<td align="left" valign="top"><p class="normal">admin_vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">admin_kuser_FI_1</td>
+	<td align="left" valign="top"><p class="normal">admin_vuser_FI_1</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">partner_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -329,7 +329,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">admin_kuser_id</td>
+	<td align="left" valign="top"><p class="normal">admin_vuser_id</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -381,7 +381,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">admin_permission_FI_1</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">admin_kuser_id</td>
+	<td align="left" valign="top"><p class="normal">admin_vuser_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -431,7 +431,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -514,9 +514,9 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">alert</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_index</td>
+	<td align="left" valign="top"><p class="normal">vuser_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -1120,7 +1120,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -1238,7 +1238,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">bb_post_FI_1</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -1393,7 +1393,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -1581,7 +1581,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">comment_FI_1</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -2509,7 +2509,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">campaign_mgr_kuser_id</td>
+	<td align="left" valign="top"><p class="normal">campaign_mgr_vuser_id</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -2625,9 +2625,9 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">email_campaign</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">campaign_mgr_kuser_id_index</td>
+	<td align="left" valign="top"><p class="normal">campaign_mgr_vuser_id_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">campaign_mgr_kuser_id</td>
+	<td align="left" valign="top"><p class="normal">campaign_mgr_vuser_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -2677,7 +2677,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">varchar(10)</td>
 	<td align="left" valign="top"><p class="normal">utf8_general_ci</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -2688,7 +2688,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -3200,9 +3200,9 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">entry</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_rank_index</td>
+	<td align="left" valign="top"><p class="normal">vshow_rank_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">1272</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -3214,7 +3214,7 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">entry</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_rank_index</td>
+	<td align="left" valign="top"><p class="normal">vshow_rank_index</td>
 	<td align="left" valign="top"><p class="normal">2</td>
 	<td align="left" valign="top"><p class="normal">rank</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -3228,9 +3228,9 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">entry</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_views_index</td>
+	<td align="left" valign="top"><p class="normal">vshow_views_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">1272</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -3242,7 +3242,7 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">entry</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_views_index</td>
+	<td align="left" valign="top"><p class="normal">vshow_views_index</td>
 	<td align="left" valign="top"><p class="normal">2</td>
 	<td align="left" valign="top"><p class="normal">views</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -3256,9 +3256,9 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">entry</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_votes_index</td>
+	<td align="left" valign="top"><p class="normal">vshow_votes_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">1272</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -3270,7 +3270,7 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">entry</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_votes_index</td>
+	<td align="left" valign="top"><p class="normal">vshow_votes_index</td>
 	<td align="left" valign="top"><p class="normal">2</td>
 	<td align="left" valign="top"><p class="normal">votes</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -3284,9 +3284,9 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">entry</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_created_index</td>
+	<td align="left" valign="top"><p class="normal">vshow_created_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">1272</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -3298,7 +3298,7 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">entry</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_created_index</td>
+	<td align="left" valign="top"><p class="normal">vshow_created_index</td>
 	<td align="left" valign="top"><p class="normal">2</td>
 	<td align="left" valign="top"><p class="normal">created_at</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -3342,7 +3342,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">entry_FI_2</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">636</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -3424,7 +3424,7 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">entry</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">partner_kuser_indexed_custom_data_index</td>
+	<td align="left" valign="top"><p class="normal">partner_vuser_indexed_custom_data_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">partner_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -3438,9 +3438,9 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">entry</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">partner_kuser_indexed_custom_data_index</td>
+	<td align="left" valign="top"><p class="normal">partner_vuser_indexed_custom_data_index</td>
 	<td align="left" valign="top"><p class="normal">2</td>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">763</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -3452,7 +3452,7 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">entry</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">partner_kuser_indexed_custom_data_index</td>
+	<td align="left" valign="top"><p class="normal">partner_vuser_indexed_custom_data_index</td>
 	<td align="left" valign="top"><p class="normal">3</td>
 	<td align="left" valign="top"><p class="normal">indexed_custom_data_1</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -3969,7 +3969,7 @@ BR.page {page-break-after: always}
 	<td align="center" valign="top" class="fieldcolumn">Comment</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -4063,9 +4063,9 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">favorite</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_index</td>
+	<td align="left" valign="top"><p class="normal">vuser_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -4143,7 +4143,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -4303,7 +4303,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">flag_FI_1</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -4342,7 +4342,7 @@ BR.page {page-break-after: always}
 	<td align="center" valign="top" class="fieldcolumn">Comment</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kalt_token</td>
+	<td align="left" valign="top"><p class="normal">vidi_token</td>
 	<td align="left" valign="top"><p class="normal">varchar(256)</td>
 	<td align="left" valign="top"><p class="normal">utf8_general_ci</td>
 	<td align="left" valign="top"><p class="normal">NO</td>
@@ -4468,7 +4468,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">0</td>
 	<td align="left" valign="top"><p class="normal">PRIMARY</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kalt_token</td>
+	<td align="left" valign="top"><p class="normal">vidi_token</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">0</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -4496,7 +4496,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">is_valid_index</td>
 	<td align="left" valign="top"><p class="normal">2</td>
-	<td align="left" valign="top"><p class="normal">kalt_token</td>
+	<td align="left" valign="top"><p class="normal">vidi_token</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -4633,10 +4633,10 @@ BR.page {page-break-after: always}
 
 
 <a href="#header"><p class="normal">Back</a><br class=page>
-<p><a name='kshow'>&nbsp</a>
+<p><a name='vshow'>&nbsp</a>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
 <tr>
-	<td class="headtext" width="30%" align="left" valign="top">kshow</td>
+	<td class="headtext" width="30%" align="left" valign="top">vshow</td>
 	<td>&nbsp</td>
 <tr>
 </table>
@@ -5254,7 +5254,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top" class="fieldcolumn">Comment</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">0</td>
 	<td align="left" valign="top"><p class="normal">PRIMARY</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -5268,7 +5268,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">views_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -5282,7 +5282,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">votes_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -5296,7 +5296,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">created_at_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -5310,7 +5310,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">type_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -5324,9 +5324,9 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_FI_1</td>
+	<td align="left" valign="top"><p class="normal">vshow_FI_1</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">producer_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -5338,9 +5338,9 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_FI_2</td>
+	<td align="left" valign="top"><p class="normal">vshow_FI_2</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">show_entry_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -5352,9 +5352,9 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_FI_3</td>
+	<td align="left" valign="top"><p class="normal">vshow_FI_3</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">intro_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -5366,7 +5366,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">partner_group_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -5380,7 +5380,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">partner_group_index</td>
 	<td align="left" valign="top"><p class="normal">2</td>
@@ -5394,7 +5394,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">int_id_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -5408,7 +5408,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">name</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -5422,7 +5422,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">name</td>
 	<td align="left" valign="top"><p class="normal">2</td>
@@ -5436,7 +5436,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">name</td>
 	<td align="left" valign="top"><p class="normal">3</td>
@@ -5450,7 +5450,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow</td>
+	<td align="left" valign="top"><p class="normal">vshow</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">search_text_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -5467,10 +5467,10 @@ BR.page {page-break-after: always}
 
 
 <a href="#header"><p class="normal">Back</a><br class=page>
-<p><a name='kshow_kuser'>&nbsp</a>
+<p><a name='vshow_vuser'>&nbsp</a>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
 <tr>
-	<td class="headtext" width="30%" align="left" valign="top">kshow_kuser</td>
+	<td class="headtext" width="30%" align="left" valign="top">vshow_vuser</td>
 	<td>&nbsp</td>
 <tr>
 </table>
@@ -5493,7 +5493,7 @@ BR.page {page-break-after: always}
 	<td align="center" valign="top" class="fieldcolumn">Comment</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">varchar(10)</td>
 	<td align="left" valign="top"><p class="normal">utf8_general_ci</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -5504,7 +5504,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -5571,7 +5571,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top" class="fieldcolumn">Comment</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow_kuser</td>
+	<td align="left" valign="top"><p class="normal">vshow_vuser</td>
 	<td align="left" valign="top"><p class="normal">0</td>
 	<td align="left" valign="top"><p class="normal">PRIMARY</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -5585,11 +5585,11 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow_kuser</td>
+	<td align="left" valign="top"><p class="normal">vshow_vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_index</td>
+	<td align="left" valign="top"><p class="normal">vshow_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -5599,11 +5599,11 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow_kuser</td>
+	<td align="left" valign="top"><p class="normal">vshow_vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_index</td>
+	<td align="left" valign="top"><p class="normal">vuser_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -5613,11 +5613,11 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow_kuser</td>
+	<td align="left" valign="top"><p class="normal">vshow_vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">subscription_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -5627,7 +5627,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow_kuser</td>
+	<td align="left" valign="top"><p class="normal">vshow_vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">subscription_index</td>
 	<td align="left" valign="top"><p class="normal">2</td>
@@ -5644,10 +5644,10 @@ BR.page {page-break-after: always}
 
 
 <a href="#header"><p class="normal">Back</a><br class=page>
-<p><a name='kuser'>&nbsp</a>
+<p><a name='vuser'>&nbsp</a>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
 <tr>
-	<td class="headtext" width="30%" align="left" valign="top">kuser</td>
+	<td class="headtext" width="30%" align="left" valign="top">vuser</td>
 	<td>&nbsp</td>
 <tr>
 </table>
@@ -5989,7 +5989,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">produced_kshows</td>
+	<td align="left" valign="top"><p class="normal">produced_vshows</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -6100,7 +6100,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top" class="fieldcolumn">Comment</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser</td>
+	<td align="left" valign="top"><p class="normal">vuser</td>
 	<td align="left" valign="top"><p class="normal">0</td>
 	<td align="left" valign="top"><p class="normal">PRIMARY</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6114,7 +6114,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser</td>
+	<td align="left" valign="top"><p class="normal">vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">screen_name_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6128,7 +6128,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser</td>
+	<td align="left" valign="top"><p class="normal">vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">full_name_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6142,7 +6142,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser</td>
+	<td align="left" valign="top"><p class="normal">vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">network_college_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6156,7 +6156,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser</td>
+	<td align="left" valign="top"><p class="normal">vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">network_highschool_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6170,7 +6170,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser</td>
+	<td align="left" valign="top"><p class="normal">vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">entries_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6184,7 +6184,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser</td>
+	<td align="left" valign="top"><p class="normal">vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">views_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6198,7 +6198,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser</td>
+	<td align="left" valign="top"><p class="normal">vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">search_text_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6215,10 +6215,10 @@ BR.page {page-break-after: always}
 
 
 <a href="#header"><p class="normal">Back</a><br class=page>
-<p><a name='kvote'>&nbsp</a>
+<p><a name='vvote'>&nbsp</a>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
 <tr>
-	<td class="headtext" width="30%" align="left" valign="top">kvote</td>
+	<td class="headtext" width="30%" align="left" valign="top">vvote</td>
 	<td>&nbsp</td>
 <tr>
 </table>
@@ -6252,7 +6252,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">varchar(10)</td>
 	<td align="left" valign="top"><p class="normal">utf8_general_ci</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -6274,7 +6274,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -6330,7 +6330,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top" class="fieldcolumn">Comment</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kvote</td>
+	<td align="left" valign="top"><p class="normal">vvote</td>
 	<td align="left" valign="top"><p class="normal">0</td>
 	<td align="left" valign="top"><p class="normal">PRIMARY</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6344,11 +6344,11 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kvote</td>
+	<td align="left" valign="top"><p class="normal">vvote</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_index</td>
+	<td align="left" valign="top"><p class="normal">vshow_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -6358,7 +6358,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kvote</td>
+	<td align="left" valign="top"><p class="normal">vvote</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">entry_user_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6372,11 +6372,11 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kvote</td>
+	<td align="left" valign="top"><p class="normal">vvote</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kvote_FI_3</td>
+	<td align="left" valign="top"><p class="normal">vvote_FI_3</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -6389,10 +6389,10 @@ BR.page {page-break-after: always}
 
 
 <a href="#header"><p class="normal">Back</a><br class=page>
-<p><a name='kwidget_log'>&nbsp</a>
+<p><a name='vwidget_log'>&nbsp</a>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
 <tr>
-	<td class="headtext" width="30%" align="left" valign="top">kwidget_log</td>
+	<td class="headtext" width="30%" align="left" valign="top">vwidget_log</td>
 	<td>&nbsp</td>
 <tr>
 </table>
@@ -6459,7 +6459,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">varchar(10)</td>
 	<td align="left" valign="top"><p class="normal">utf8_general_ci</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -6636,7 +6636,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top" class="fieldcolumn">Comment</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kwidget_log</td>
+	<td align="left" valign="top"><p class="normal">vwidget_log</td>
 	<td align="left" valign="top"><p class="normal">0</td>
 	<td align="left" valign="top"><p class="normal">PRIMARY</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6650,7 +6650,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kwidget_log</td>
+	<td align="left" valign="top"><p class="normal">vwidget_log</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">referer_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6664,9 +6664,9 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kwidget_log</td>
+	<td align="left" valign="top"><p class="normal">vwidget_log</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">entry_id_kshow_id_index</td>
+	<td align="left" valign="top"><p class="normal">entry_id_vshow_id_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">entry_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -6678,11 +6678,11 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kwidget_log</td>
+	<td align="left" valign="top"><p class="normal">vwidget_log</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">entry_id_kshow_id_index</td>
+	<td align="left" valign="top"><p class="normal">entry_id_vshow_id_index</td>
 	<td align="left" valign="top"><p class="normal">2</td>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -6692,7 +6692,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kwidget_log</td>
+	<td align="left" valign="top"><p class="normal">vwidget_log</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">partner_id_subp_id_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -6706,7 +6706,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kwidget_log</td>
+	<td align="left" valign="top"><p class="normal">vwidget_log</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">partner_id_subp_id_index</td>
 	<td align="left" valign="top"><p class="normal">2</td>
@@ -6720,9 +6720,9 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kwidget_log</td>
+	<td align="left" valign="top"><p class="normal">vwidget_log</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kwidget_log_FI_1</td>
+	<td align="left" valign="top"><p class="normal">vwidget_log_FI_1</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">widget_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -6734,11 +6734,11 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kwidget_log</td>
+	<td align="left" valign="top"><p class="normal">vwidget_log</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kwidget_log_FI_2</td>
+	<td align="left" valign="top"><p class="normal">vwidget_log_FI_2</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -6748,9 +6748,9 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kwidget_log</td>
+	<td align="left" valign="top"><p class="normal">vwidget_log</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kwidget_log_FI_4</td>
+	<td align="left" valign="top"><p class="normal">vwidget_log_FI_4</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">ui_conf_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -7196,7 +7196,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -7911,7 +7911,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">ANONYMOUS_KUSER_ID</td>
+	<td align="left" valign="top"><p class="normal">ANONYMOUS_VUSER_ID</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -7922,7 +7922,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">ks_max_expiry_in_seconds</td>
+	<td align="left" valign="top"><p class="normal">vs_max_expiry_in_seconds</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -8610,7 +8610,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshows_1</td>
+	<td align="left" valign="top"><p class="normal">vshows_1</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -8621,7 +8621,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshows_2</td>
+	<td align="left" valign="top"><p class="normal">vshows_2</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -9286,10 +9286,10 @@ BR.page {page-break-after: always}
 
 
 <a href="#header"><p class="normal">Back</a><br class=page>
-<p><a name='puser_kuser'>&nbsp</a>
+<p><a name='puser_vuser'>&nbsp</a>
 <table width="100%" border="0" cellspacing="0" cellpadding="3">
 <tr>
-	<td class="headtext" width="30%" align="left" valign="top">puser_kuser</td>
+	<td class="headtext" width="30%" align="left" valign="top">puser_vuser</td>
 	<td>&nbsp</td>
 <tr>
 </table>
@@ -9345,7 +9345,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -9445,7 +9445,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top" class="fieldcolumn">Comment</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">puser_kuser</td>
+	<td align="left" valign="top"><p class="normal">puser_vuser</td>
 	<td align="left" valign="top"><p class="normal">0</td>
 	<td align="left" valign="top"><p class="normal">PRIMARY</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -9459,7 +9459,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">puser_kuser</td>
+	<td align="left" valign="top"><p class="normal">puser_vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">partner_puser_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -9473,7 +9473,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">puser_kuser</td>
+	<td align="left" valign="top"><p class="normal">puser_vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">partner_puser_index</td>
 	<td align="left" valign="top"><p class="normal">2</td>
@@ -9487,11 +9487,11 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">puser_kuser</td>
+	<td align="left" valign="top"><p class="normal">puser_vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_id_index</td>
+	<td align="left" valign="top"><p class="normal">vuser_id_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kuser_id</td>
+	<td align="left" valign="top"><p class="normal">vuser_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -9501,7 +9501,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">puser_kuser</td>
+	<td align="left" valign="top"><p class="normal">puser_vuser</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">I_referenced_puser_role_FK_3_1</td>
 	<td align="left" valign="top"><p class="normal">1</td>
@@ -9555,7 +9555,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">varchar(10)</td>
 	<td align="left" valign="top"><p class="normal">utf8_general_ci</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -9721,9 +9721,9 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">puser_role</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_id_index</td>
+	<td align="left" valign="top"><p class="normal">vshow_id_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -9809,7 +9809,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">roughcut_kshow_id</td>
+	<td align="left" valign="top"><p class="normal">roughcut_vshow_id</td>
 	<td align="left" valign="top"><p class="normal">varchar(10)</td>
 	<td align="left" valign="top"><p class="normal">utf8_general_ci</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -9956,9 +9956,9 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">roughcut_entry</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">roughcut_kshow_id_index</td>
+	<td align="left" valign="top"><p class="normal">roughcut_vshow_id_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">roughcut_kshow_id</td>
+	<td align="left" valign="top"><p class="normal">roughcut_vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">228</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -10553,7 +10553,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">varchar(10)</td>
 	<td align="left" valign="top"><p class="normal">utf8_general_ci</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -10707,7 +10707,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">widget_FI_1</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
@@ -10785,7 +10785,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">varchar(10)</td>
 	<td align="left" valign="top"><p class="normal">utf8_general_ci</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -10807,7 +10807,7 @@ BR.page {page-break-after: always}
 	<td align="left" valign="top"><p class="normal">&nbsp;</td>
 </tr>
 <tr>
-	<td align="left" valign="top"><p class="normal">kmedia_type</td>
+	<td align="left" valign="top"><p class="normal">vmedia_type</td>
 	<td align="left" valign="top"><p class="normal">int(11)</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>
 	<td align="left" valign="top"><p class="normal">YES</td>
@@ -11003,7 +11003,7 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">widget_log</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">entry_id_kshow_id_index</td>
+	<td align="left" valign="top"><p class="normal">entry_id_vshow_id_index</td>
 	<td align="left" valign="top"><p class="normal">1</td>
 	<td align="left" valign="top"><p class="normal">entry_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
@@ -11017,9 +11017,9 @@ BR.page {page-break-after: always}
 <tr>
 	<td align="left" valign="top"><p class="normal">widget_log</td>
 	<td align="left" valign="top"><p class="normal">1</td>
-	<td align="left" valign="top"><p class="normal">entry_id_kshow_id_index</td>
+	<td align="left" valign="top"><p class="normal">entry_id_vshow_id_index</td>
 	<td align="left" valign="top"><p class="normal">2</td>
-	<td align="left" valign="top"><p class="normal">kshow_id</td>
+	<td align="left" valign="top"><p class="normal">vshow_id</td>
 	<td align="left" valign="top"><p class="normal">A</td>
 	<td align="left" valign="top"><p class="normal">412</td>
 	<td align="left" valign="top"><p class="normal">(NULL)</td>

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kConvertJobData extends kConvartableJobData
+class vConvertJobData extends vConvartableJobData
 {
 	const CONVERSION_MILTI_COMMAND_LINE_SEPERATOR = ';;;';
 	const CONVERSION_FAST_START_SIGN = 'FS';
@@ -50,7 +50,7 @@ class kConvertJobData extends kConvartableJobData
 	private $priority;
 
 	/**
-	 * @var array<kDestFileSyncDescriptor>
+	 * @var array<vDestFileSyncDescriptor>
 	 */
 	private $extraDestFileSyncs;	
 	
@@ -320,7 +320,7 @@ class kConvertJobData extends kConvartableJobData
 	}
 	
 	/**
-	 * @param array<kDestFileSyncDescriptor> $destFileSyncs
+	 * @param array<vDestFileSyncDescriptor> $destFileSyncs
 	 */
 	public function setExtraDestFileSyncs($destFileSyncs) {
 		$this->extraDestFileSyncs = $destFileSyncs;

@@ -5,7 +5,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveStreamPushPublishRTMPConfiguration extends KalturaLiveStreamPushPublishConfiguration
+class VidiunLiveStreamPushPublishRTMPConfiguration extends VidiunLiveStreamPushPublishConfiguration
 {
 	/**
 	 * @var string
@@ -33,7 +33,7 @@ class KalturaLiveStreamPushPublishRTMPConfiguration extends KalturaLiveStreamPus
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -41,13 +41,13 @@ class KalturaLiveStreamPushPublishRTMPConfiguration extends KalturaLiveStreamPus
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
 		{
-			$dbObject = new kLiveStreamPushPublishRTMPConfiguration();
+			$dbObject = new vLiveStreamPushPublishRTMPConfiguration();
 		}
 		
 		return parent::toObject($dbObject, $propsToSkip);

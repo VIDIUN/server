@@ -3,7 +3,7 @@
  * @package infra
  * @subpackage Plugins
  */
-class KalturaDependency
+class VidiunDependency
 {
 	/**
 	 * @var string
@@ -11,15 +11,15 @@ class KalturaDependency
 	protected $pluginName;
 	
 	/**
-	 * @var KalturaVersion
+	 * @var VidiunVersion
 	 */
 	protected $minVersion;
 	
 	/**
 	 * @param string $pluginName
-	 * @param KalturaVersion $minVersion
+	 * @param VidiunVersion $minVersion
 	 */
-	public function __construct($pluginName, KalturaVersion $minVersion = null)
+	public function __construct($pluginName, VidiunVersion $minVersion = null)
 	{
 		$this->pluginName = $pluginName;
 		$this->minVersion = $minVersion;
@@ -34,7 +34,7 @@ class KalturaDependency
 	}
 
 	/**
-	 * @return KalturaVersion minimum version
+	 * @return VidiunVersion minimum version
 	 */
 	public function getMinimumVersion()
 	{

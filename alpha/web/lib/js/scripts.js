@@ -1,6 +1,6 @@
 /* previously from common.js */
 
-// cookie functions - used on kmcSuccess
+// cookie functions - used on vmcSuccess
 function getCookie (name) {
   var arg = name + "=";
   var alen = arg.length;

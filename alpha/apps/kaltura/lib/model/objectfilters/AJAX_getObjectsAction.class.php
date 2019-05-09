@@ -60,7 +60,7 @@ abstract class AJAX_getObjectsAction //extends sfAction
 		if ( ! myResponseUtils::hasPageExpired ( $this->getContext()->getResponse() ) )
 			return sfView::NONE;
 		
-		$filter = $this->getFiler() ;// new kuserFilter ();
+		$filter = $this->getFiler() ;// new vuserFilter ();
 		$mode = @$_REQUEST["mode"];
 
 		$page_size = ( $mode == "ALL" ? self::PAGE_SIZE :  2 * self::PAGE_SIZE );
@@ -98,7 +98,7 @@ abstract class AJAX_getObjectsAction //extends sfAction
 		if ( $base_criteria != null )
 			$c = $base_criteria;
 		else
-			$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+			$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 		
 		$filter->addSearchMatchToCriteria( $c , $keywords , $this->getSearchableColumnName() );
 		// each entity can do specific modifications to the criteria

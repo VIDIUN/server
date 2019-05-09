@@ -3,97 +3,97 @@
  * @package api
  * @subpackage filters
  */
-class KalturaBatchJobFilter extends KalturaBatchJobBaseFilter
+class VidiunBatchJobFilter extends VidiunBatchJobBaseFilter
 {
 	protected function toDynamicJobSubTypeValues($jobType, $jobSubTypeIn)
 	{
-		$data = new KalturaJobData();
+		$data = new VidiunJobData();
 		switch($jobType)
 		{
-			case KalturaBatchJobType::BULKUPLOAD:
-				$data = new KalturaBulkUploadJobData();
+			case VidiunBatchJobType::BULKUPLOAD:
+				$data = new VidiunBulkUploadJobData();
 				break;
 				
-			case KalturaBatchJobType::CONVERT:
-				$data = new KalturaConvertJobData();
+			case VidiunBatchJobType::CONVERT:
+				$data = new VidiunConvertJobData();
 				break;
 				
-			case KalturaBatchJobType::CONVERT_PROFILE:
-				$data = new KalturaConvertProfileJobData();
+			case VidiunBatchJobType::CONVERT_PROFILE:
+				$data = new VidiunConvertProfileJobData();
 				break;
 				
-			case KalturaBatchJobType::EXTRACT_MEDIA:
-				$data = new KalturaExtractMediaJobData();
+			case VidiunBatchJobType::EXTRACT_MEDIA:
+				$data = new VidiunExtractMediaJobData();
 				break;
 				
-			case KalturaBatchJobType::IMPORT:
-				$data = new KalturaImportJobData();
+			case VidiunBatchJobType::IMPORT:
+				$data = new VidiunImportJobData();
 				break;
 				
-			case KalturaBatchJobType::POSTCONVERT:
-				$data = new KalturaPostConvertJobData();
+			case VidiunBatchJobType::POSTCONVERT:
+				$data = new VidiunPostConvertJobData();
 				break;
 				
-			case KalturaBatchJobType::MAIL:
-				$data = new KalturaMailJobData();
+			case VidiunBatchJobType::MAIL:
+				$data = new VidiunMailJobData();
 				break;
 				
-			case KalturaBatchJobType::NOTIFICATION:
-				$data = new KalturaNotificationJobData();
+			case VidiunBatchJobType::NOTIFICATION:
+				$data = new VidiunNotificationJobData();
 				break;
 				
-			case KalturaBatchJobType::BULKDOWNLOAD:
-				$data = new KalturaBulkDownloadJobData();
+			case VidiunBatchJobType::BULKDOWNLOAD:
+				$data = new VidiunBulkDownloadJobData();
 				break;
 				
-			case KalturaBatchJobType::FLATTEN:
-				$data = new KalturaFlattenJobData();
+			case VidiunBatchJobType::FLATTEN:
+				$data = new VidiunFlattenJobData();
 				break;
 				
-			case KalturaBatchJobType::PROVISION_PROVIDE:
-			case KalturaBatchJobType::PROVISION_DELETE:	
-				$data = new KalturaProvisionJobData();
+			case VidiunBatchJobType::PROVISION_PROVIDE:
+			case VidiunBatchJobType::PROVISION_DELETE:	
+				$data = new VidiunProvisionJobData();
 				break;
 				
-			case KalturaBatchJobType::CONVERT_COLLECTION:
-				$data = new KalturaConvertCollectionJobData();
+			case VidiunBatchJobType::CONVERT_COLLECTION:
+				$data = new VidiunConvertCollectionJobData();
 				break;
 				
-			case KalturaBatchJobType::STORAGE_EXPORT:
-				$data = new KalturaStorageExportJobData();
+			case VidiunBatchJobType::STORAGE_EXPORT:
+				$data = new VidiunStorageExportJobData();
 				break;
 				
-			case KalturaBatchJobType::STORAGE_DELETE:
-				$data = new KalturaStorageDeleteJobData();
+			case VidiunBatchJobType::STORAGE_DELETE:
+				$data = new VidiunStorageDeleteJobData();
 				break;
 				
-			case KalturaBatchJobType::INDEX:
-				$data = new KalturaIndexJobData();
+			case VidiunBatchJobType::INDEX:
+				$data = new VidiunIndexJobData();
 				break;
 				
-			case KalturaBatchJobType::COPY:
-				$data = new KalturaCopyJobData();
+			case VidiunBatchJobType::COPY:
+				$data = new VidiunCopyJobData();
 				break;
 				
-			case KalturaBatchJobType::DELETE:
-				$data = new KalturaDeleteJobData();
+			case VidiunBatchJobType::DELETE:
+				$data = new VidiunDeleteJobData();
 				break;
 
-			case KalturaBatchJobType::DELETE_FILE:
-				$data = new KalturaDeleteFileJobData();
+			case VidiunBatchJobType::DELETE_FILE:
+				$data = new VidiunDeleteFileJobData();
 				break;
 				
-			case KalturaBatchJobType::MOVE_CATEGORY_ENTRIES:
-				$data = new KalturaMoveCategoryEntriesJobData();
+			case VidiunBatchJobType::MOVE_CATEGORY_ENTRIES:
+				$data = new VidiunMoveCategoryEntriesJobData();
 				break;
 				
 			default:
-				$data = KalturaPluginManager::loadObject('KalturaJobData', $jobType);
+				$data = VidiunPluginManager::loadObject('VidiunJobData', $jobType);
 		}
 		
 		if(!$data)
 		{
-			KalturaLog::err("Data type not found for job type [$jobType]");
+			VidiunLog::err("Data type not found for job type [$jobType]");
 			return null;
 		}
 			
@@ -107,7 +107,7 @@ class KalturaBatchJobFilter extends KalturaBatchJobBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

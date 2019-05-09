@@ -13,10 +13,10 @@ $dryRun = (!isset($argv[$argc-1]) || $argv[$argc-1] != 'realrun');
 require_once(__DIR__ . '/../bootstrap.php');
 
 $map = array(
-   'kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob())' =>
-	   '!is_null($scope->getEvent()->getBatchJob()) ? kFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : \'\'',
-   'kCurrentContext::getCurrentKsKuser()->getPuserId()' =>
-	   '!is_null(kCurrentContext::getCurrentKsKuser()) ? kCurrentContext::getCurrentKsKuser()->getPuserId() : \'\'',
+   'vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob())' =>
+	   '!is_null($scope->getEvent()->getBatchJob()) ? vFlowHelper::createBulkUploadLogUrl($scope->getEvent()->getBatchJob()) : \'\'',
+   'vCurrentContext::getCurrentVsVuser()->getPuserId()' =>
+	   '!is_null(vCurrentContext::getCurrentVsVuser()) ? vCurrentContext::getCurrentVsVuser()->getPuserId() : \'\'',
    'entryPeer::retrieveByPk($scope->getEvent()->getObject()->getEntryId())->getName()' =>
 	   '!is_null(entryPeer::retrieveByPk($scope->getEvent()->getObject()->getEntryId())) ? entryPeer::retrieveByPk($scope->getObject()->getEntryId())->getName() : \'\'',
    '$scope->getEvent()->getObject()->getentry()->getPartner()->getAdminSecret()' =>
@@ -29,11 +29,11 @@ $map = array(
 	   '!is_null(PartnerPeer::retrieveByPK($scope->getObject()->getPartnerId())) ? PartnerPeer::retrieveByPK($scope->getObject()->getPartnerId())->getAdminSecret() : \'\'',
    '$scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail()' =>
 	   '!is_null($scope->getEvent()->getBatchJob()->getPartner()) ? $scope->getEvent()->getBatchJob()->getPartner()->getAdminEmail() : \'\'',
-   'kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail()' =>
-	   '!is_null(kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? kuserPeer::getKuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : \'\'',
-   '$scope->getEvent()->getObject()->getkuser()->getFirstName() . \' \' . $scope->getEvent()->getObject()->getkuser()->getLastName()' =>
-	   '!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getFirstName() . \' \' . $scope->getObject()->getkuser()->getLastName() : \'\'',
-   '$scope->getEvent()->getObject()->getkuser()->getEmail()' => '!is_null($scope->getObject()->getkuser()) ? $scope->getObject()->getkuser()->getEmail() : \'\'',
+   'vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail()' =>
+	   '!is_null(vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())) ? vuserPeer::getVuserByPartnerAndUid($scope->getPartnerId(), $scope->getEvent()->getBatchJob()->getData()->getUserId())->getEmail() : \'\'',
+   '$scope->getEvent()->getObject()->getvuser()->getFirstName() . \' \' . $scope->getEvent()->getObject()->getvuser()->getLastName()' =>
+	   '!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getFirstName() . \' \' . $scope->getObject()->getvuser()->getLastName() : \'\'',
+   '$scope->getEvent()->getObject()->getvuser()->getEmail()' => '!is_null($scope->getObject()->getvuser()) ? $scope->getObject()->getvuser()->getEmail() : \'\'',
 );
 
 function getTemplates($systemName, $specificPartnerId)
@@ -63,7 +63,7 @@ function updateTemplatesCode($templates, $dryRun)
 		foreach ($contentParams as $param)
 		{
 			/**
-			* @var kEventNotificationParameter $param
+			* @var vEventNotificationParameter $param
 			*/
 			$paramValue = $param->getValue();
 			if($paramValue && isset($map[$paramValue->getCode()]))

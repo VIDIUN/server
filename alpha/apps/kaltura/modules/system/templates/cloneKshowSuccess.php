@@ -4,9 +4,9 @@
 <div style='padding:0;margin:0;font-family:arial;font-size: 11px'>
 <form id='form1' method='post'>
 <table >
-	<tr><td>Source kshow id <input name="source_kshow_id" value="<?php echo $source_kshow_id ?>"></td>
-		<td>Target kshow id <input name="target_kshow_id" value="<?php echo $target_kshow_id ?>"></td></tr>
-	<tr><td colspan='2'>Kuser names  <input size='100' name="kuser_names" value="<?php echo $kuser_names ?>"></td></tr>
+	<tr><td>Source vshow id <input name="source_vshow_id" value="<?php echo $source_vshow_id ?>"></td>
+		<td>Target vshow id <input name="target_vshow_id" value="<?php echo $target_vshow_id ?>"></td></tr>
+	<tr><td colspan='2'>Vuser names  <input size='100' name="vuser_names" value="<?php echo $vuser_names ?>"></td></tr>
 	<tr><td colspan='2'>
 	<?php if ( $mode != 2 ) { ?> <input type='submit' id='submit' name='submit' value='submit'> <?php } ?>
 	<?php if ( $mode == 2 ) { ?> <input type='submit' id='reset' name='reset' value='reset'> <?php } ?>
@@ -18,31 +18,31 @@
 	<input type='hidden' id='clone' name='clone' value='false'>
 </form>
 <br>
-Will clone kshow
+Will clone vshow
 <?php flush(); ?>
 
 <table border='1px'  style='padding:0;margin:0;font-family:arial;font-size: 11px'>
-<?php echo investigate::printKshowHeader () ;flush();?>
-<tr><td colspan=20 style='color:blue;'>Source (From partner_id [<?php echo $source_kshow->getPartnerId() ?>])</td></tr>
-<?php echo investigate::printKshow ( $source_kshow ) ;flush();?>
-<tr><td colspan=20 style='color:green;'>Target  (To partner_id [<?php echo $target_kshow->getPartnerId() ?>])</td></tr>
-<?php echo investigate::printKshow ( $target_kshow) ;flush();?>
+<?php echo investigate::printVshowHeader () ;flush();?>
+<tr><td colspan=20 style='color:blue;'>Source (From partner_id [<?php echo $source_vshow->getPartnerId() ?>])</td></tr>
+<?php echo investigate::printVshow ( $source_vshow ) ;flush();?>
+<tr><td colspan=20 style='color:green;'>Target  (To partner_id [<?php echo $target_vshow->getPartnerId() ?>])</td></tr>
+<?php echo investigate::printVshow ( $target_vshow) ;flush();?>
 </table>
 
 <br>
-Kusers:
+Vusers:
 <table border='1px'  style='padding:0;margin:0;font-family:arial;font-size: 11px'>
 <tr>
 	<td>id</td>
 	<td>Screen Name</td>
 	<td>Partner Id</td>
 </tr>
-<?php foreach ( $list_of_kusers as $kuser ) { ?>
-<?php $partner_ok =  $kuser->getPartnerId() == $partner_id; ?>
+<?php foreach ( $list_of_vusers as $vuser ) { ?>
+<?php $partner_ok =  $vuser->getPartnerId() == $partner_id; ?>
 <tr <?php if ( !$partner_ok ) { echo "style='color:red; font-weight:bold;'" ;} ?>>
-	<td><?php echo $kuser->getId() ?> </td>
-	<td><?php echo $kuser->getScreenName() ?> </td>
-	<td><?php echo $kuser->getPartnerId() ?> <?php if ( !$partner_ok ) { echo " Should be of partner_id [$partner_id]. This kuser will not be used" ;} ?> </td>
+	<td><?php echo $vuser->getId() ?> </td>
+	<td><?php echo $vuser->getScreenName() ?> </td>
+	<td><?php echo $vuser->getPartnerId() ?> <?php if ( !$partner_ok ) { echo " Should be of partner_id [$partner_id]. This vuser will not be used" ;} ?> </td>
 </tr>
 <?php } ?>	
 </table>
@@ -56,8 +56,8 @@ Kusers:
 <?php echo investigate::printEntryHeader() ?>
 <?php foreach ( $entries as $entry ) {
 	$text = null; 
-	if ( $mode != 2 ) $text = "Assigned to " . @$entry_kusers[$entry->getId()];
-	echo investigate::printEntry( $entry , false , $source_kshow  , $text );
+	if ( $mode != 2 ) $text = "Assigned to " . @$entry_vusers[$entry->getId()];
+	echo investigate::printEntry( $entry , false , $source_vshow  , $text );
 } ?>	 
 <?php } ?>
 </table>

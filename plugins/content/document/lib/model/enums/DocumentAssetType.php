@@ -3,7 +3,7 @@
  * @package plugins.document
  * @subpackage model.enum
  */
-class DocumentAssetType implements IKalturaPluginEnum, assetType
+class DocumentAssetType implements IVidiunPluginEnum, assetType
 {
 	const DOCUMENT = 'Document';
 	const SWF = 'SWF';

@@ -5,9 +5,9 @@
  * @service cuePoint
  * @package plugins.cuePoint
  * @subpackage api.services
- * @throws KalturaErrors::SERVICE_FORBIDDEN
+ * @throws VidiunErrors::SERVICE_FORBIDDEN
  */
-class CuePointService extends KalturaBaseService
+class CuePointService extends VidiunBaseService
 {
 	/**
 	 * @return CuePointType or null to limit the service type
@@ -39,50 +39,50 @@ class CuePointService extends KalturaBaseService
 			$this->applyPartnerFilterForClass('CuePoint');
 		}
 
-		$ks = $this->getKs();
+		$vs = $this->getVs();
 		// when session is not admin, allow access to user entries only
-		if (!$ks || (!$ks->isAdmin() && !$ks->verifyPrivileges(ks::PRIVILEGE_LIST, ks::PRIVILEGE_WILDCARD))) {
-			KalturaCriterion::enableTag(KalturaCriterion::TAG_USER_SESSION);
+		if (!$vs || (!$vs->isAdmin() && !$vs->verifyPrivileges(vs::PRIVILEGE_LIST, vs::PRIVILEGE_WILDCARD))) {
+			VidiunCriterion::enableTag(VidiunCriterion::TAG_USER_SESSION);
 			CuePointPeer::setUserContentOnly(true);
 		}
 		
-		if (!$ks || $ks->isAnonymousSession())
+		if (!$vs || $vs->isAnonymousSession())
 		{
-			KalturaCriterion::enableTag(KalturaCriterion::TAG_WIDGET_SESSION);
+			VidiunCriterion::enableTag(VidiunCriterion::TAG_WIDGET_SESSION);
 		}
 		
 		if(!CuePointPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, CuePointPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, CuePointPlugin::PLUGIN_NAME);
 	}
 	
 	/**
 	 * Allows you to add an cue point object associated with an entry
 	 * 
 	 * @action add
-	 * @param KalturaCuePoint $cuePoint
-	 * @return KalturaCuePoint
+	 * @param VidiunCuePoint $cuePoint
+	 * @return VidiunCuePoint
 	 */
-	function addAction(KalturaCuePoint $cuePoint)
+	function addAction(VidiunCuePoint $cuePoint)
 	{
 		$dbCuePoint = $cuePoint->toInsertableObject();
 
-		// check if we have a limitEntry set on the KS, and if so verify that it is the same entry we work on
-		$limitEntry = $this->getKs()->getLimitEntry();
+		// check if we have a limitEntry set on the VS, and if so verify that it is the same entry we work on
+		$limitEntry = $this->getVs()->getLimitEntry();
 		if ($limitEntry && $limitEntry != $cuePoint->entryId)
 		{
-			throw new KalturaAPIException(KalturaCuePointErrors::NO_PERMISSION_ON_ENTRY, $cuePoint->entryId);
+			throw new VidiunAPIException(VidiunCuePointErrors::NO_PERMISSION_ON_ENTRY, $cuePoint->entryId);
 		}
 
 		if($cuePoint->systemName)
 		{
 			$existingCuePoint = CuePointPeer::retrieveBySystemName($cuePoint->entryId, $cuePoint->systemName);
 			if($existingCuePoint)
-				throw new KalturaAPIException(KalturaCuePointErrors::CUE_POINT_SYSTEM_NAME_EXISTS, $cuePoint->systemName, $existingCuePoint->getId());
+				throw new VidiunAPIException(VidiunCuePointErrors::CUE_POINT_SYSTEM_NAME_EXISTS, $cuePoint->systemName, $existingCuePoint->getId());
 		}
 		
 		/* @var $dbCuePoint CuePoint */
 		$dbCuePoint->setPartnerId($this->getPartnerId());
-		$dbCuePoint->setPuserId(is_null($cuePoint->userId) ? $this->getKuser()->getPuserId() : $cuePoint->userId);
+		$dbCuePoint->setPuserId(is_null($cuePoint->userId) ? $this->getVuser()->getPuserId() : $cuePoint->userId);
 		$dbCuePoint->setStatus(CuePointStatus::READY); 
 					
 		if($this->getCuePointType())
@@ -91,14 +91,14 @@ class CuePointService extends KalturaBaseService
 		$created = $dbCuePoint->save();
 		if(!$created)
 		{
-			KalturaLog::err("Cue point not created");
+			VidiunLog::err("Cue point not created");
 			return null;
 		}
 		
-		$cuePoint = KalturaCuePoint::getInstance($dbCuePoint, $this->getResponseProfile());
+		$cuePoint = VidiunCuePoint::getInstance($dbCuePoint, $this->getResponseProfile());
 		if(!$cuePoint)
 		{
-			KalturaLog::err("API Cue point not instantiated");
+			VidiunLog::err("API Cue point not instantiated");
 			return null;
 		}
 			
@@ -110,23 +110,23 @@ class CuePointService extends KalturaBaseService
 	 * 
 	 * @action addFromBulk
 	 * @param file $fileData
-	 * @return KalturaCuePointListResponse
-	 * @throws KalturaCuePointErrors::XML_FILE_NOT_FOUND
-	 * @throws KalturaCuePointErrors::XML_INVALID
+	 * @return VidiunCuePointListResponse
+	 * @throws VidiunCuePointErrors::XML_FILE_NOT_FOUND
+	 * @throws VidiunCuePointErrors::XML_INVALID
 	 */
 	function addFromBulkAction($fileData)
 	{
 		try
 		{
-			$list = kCuePointManager::addFromXml($fileData['tmp_name'], $this->getPartnerId());
+			$list = vCuePointManager::addFromXml($fileData['tmp_name'], $this->getPartnerId());
 		}
-		catch (kCoreException $e)
+		catch (vCoreException $e)
 		{
-			throw new KalturaAPIException($e->getCode());
+			throw new VidiunAPIException($e->getCode());
 		}
 		
-		$response = new KalturaCuePointListResponse();
-		$response->objects = KalturaCuePointArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunCuePointListResponse();
+		$response->objects = VidiunCuePointArray::fromDbArray($list, $this->getResponseProfile());
 		$response->totalCount = count($list);
 	
 		return $response;
@@ -136,18 +136,18 @@ class CuePointService extends KalturaBaseService
 	 * Download multiple cue points objects as XML definitions
 	 * 
 	 * @action serveBulk
-	 * @param KalturaCuePointFilter $filter
-	 * @param KalturaFilterPager $pager
+	 * @param VidiunCuePointFilter $filter
+	 * @param VidiunFilterPager $pager
 	 * @return file
 	 */
-	function serveBulkAction(KalturaCuePointFilter $filter = null, KalturaFilterPager $pager = null)
+	function serveBulkAction(VidiunCuePointFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaCuePointFilter();
+			$filter = new VidiunCuePointFilter();
 		else
 			$this->resetUserContentFilter($filter);
 
-		$c = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$c = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		if($this->getCuePointType())
 			$c->add(CuePointPeer::TYPE, $this->getCuePointType());
 		
@@ -158,11 +158,11 @@ class CuePointService extends KalturaBaseService
 			$pager->attachToCriteria($c);
 			
 		$list = CuePointPeer::doSelect($c);
-		$xml = kCuePointManager::generateXml($list);
+		$xml = vCuePointManager::generateXml($list);
 		
 		header("Content-Type: text/xml; charset=UTF-8");
 		echo $xml;
-		kFile::closeDbConnections();
+		vFile::closeDbConnections();
 		exit(0);
 	}
 	
@@ -171,20 +171,20 @@ class CuePointService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param string $id 
-	 * @return KalturaCuePoint
-	 * @throws KalturaCuePointErrors::INVALID_CUE_POINT_ID
+	 * @return VidiunCuePoint
+	 * @throws VidiunCuePointErrors::INVALID_CUE_POINT_ID
 	 */		
 	function getAction($id)
 	{
 		$dbCuePoint = CuePointPeer::retrieveByPK( $id );
 
 		if(!$dbCuePoint)
-			throw new KalturaAPIException(KalturaCuePointErrors::INVALID_CUE_POINT_ID, $id);
+			throw new VidiunAPIException(VidiunCuePointErrors::INVALID_CUE_POINT_ID, $id);
 			
 		if($this->getCuePointType() && $dbCuePoint->getType() != $this->getCuePointType())
-			throw new KalturaAPIException(KalturaCuePointErrors::INVALID_CUE_POINT_ID, $id);
+			throw new VidiunAPIException(VidiunCuePointErrors::INVALID_CUE_POINT_ID, $id);
 			
-		$cuePoint = KalturaCuePoint::getInstance($dbCuePoint, $this->getResponseProfile());
+		$cuePoint = VidiunCuePoint::getInstance($dbCuePoint, $this->getResponseProfile());
 		if(!$cuePoint)
 			return null;
 			
@@ -195,20 +195,20 @@ class CuePointService extends KalturaBaseService
 	 * List cue point objects by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaCuePointFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaCuePointListResponse
+	 * @param VidiunCuePointFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunCuePointListResponse
 	 */
-	function listAction(KalturaCuePointFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunCuePointFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$pager)
 		{
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			$pager->pageSize = baseObjectFilter::getMaxInValues();			// default to the max for compatibility reasons
 		}
 
 		if (!$filter)
-			$filter = new KalturaCuePointFilter();
+			$filter = new VidiunCuePointFilter();
 		else
 			$this->resetUserContentFilter($filter);
 		return $filter->getTypeListResponse($pager, $this->getResponseProfile(), $this->getCuePointType());
@@ -218,17 +218,17 @@ class CuePointService extends KalturaBaseService
 	 * count cue point objects by filter
 	 * 
 	 * @action count
-	 * @param KalturaCuePointFilter $filter
+	 * @param VidiunCuePointFilter $filter
 	 * @return int
 	 */
-	function countAction(KalturaCuePointFilter $filter = null)
+	function countAction(VidiunCuePointFilter $filter = null)
 	{
 		if (!$filter)
-			$filter = new KalturaCuePointFilter();
+			$filter = new VidiunCuePointFilter();
 		else
 			$this->resetUserContentFilter($filter);
 						
-		$c = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$c = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		if($this->getCuePointType())
 			$c->add(CuePointPeer::TYPE, $this->getCuePointType());
 		
@@ -245,33 +245,33 @@ class CuePointService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param string $id
-	 * @param KalturaCuePoint $cuePoint
-	 * @return KalturaCuePoint
-	 * @throws KalturaCuePointErrors::INVALID_CUE_POINT_ID
+	 * @param VidiunCuePoint $cuePoint
+	 * @return VidiunCuePoint
+	 * @throws VidiunCuePointErrors::INVALID_CUE_POINT_ID
 	 * @validateUser CuePoint id editcuepoint
 	 */
-	function updateAction($id, KalturaCuePoint $cuePoint)
+	function updateAction($id, VidiunCuePoint $cuePoint)
 	{
 		$dbCuePoint = CuePointPeer::retrieveByPK($id);
 
 		if (!$dbCuePoint)
-			throw new KalturaAPIException(KalturaCuePointErrors::INVALID_CUE_POINT_ID, $id);
+			throw new VidiunAPIException(VidiunCuePointErrors::INVALID_CUE_POINT_ID, $id);
 
 		if($this->getCuePointType() && $dbCuePoint->getType() != $this->getCuePointType())
-			throw new KalturaAPIException(KalturaCuePointErrors::INVALID_CUE_POINT_ID, $id);
+			throw new VidiunAPIException(VidiunCuePointErrors::INVALID_CUE_POINT_ID, $id);
 
-		// check if we have a limitEntry set on the KS, and if so verify that it is the same entry we work on
-		$limitEntry = $this->getKs()->getLimitEntry();
+		// check if we have a limitEntry set on the VS, and if so verify that it is the same entry we work on
+		$limitEntry = $this->getVs()->getLimitEntry();
 		if ($limitEntry && $limitEntry != $dbCuePoint->getEntryId())
 		{
-			throw new KalturaAPIException(KalturaCuePointErrors::NO_PERMISSION_ON_ENTRY, $dbCuePoint->getEntryId());
+			throw new VidiunAPIException(VidiunCuePointErrors::NO_PERMISSION_ON_ENTRY, $dbCuePoint->getEntryId());
 		}
 
 		if($cuePoint->systemName)
 		{
 			$existingCuePoint = CuePointPeer::retrieveBySystemName($dbCuePoint->getEntryId(), $cuePoint->systemName);
 			if($existingCuePoint && $existingCuePoint->getId() != $id)
-				throw new KalturaAPIException(KalturaCuePointErrors::CUE_POINT_SYSTEM_NAME_EXISTS, $cuePoint->systemName, $existingCuePoint->getId());
+				throw new VidiunAPIException(VidiunCuePointErrors::CUE_POINT_SYSTEM_NAME_EXISTS, $cuePoint->systemName, $existingCuePoint->getId());
 		}
 		
 		$dbCuePoint = $cuePoint->toUpdatableObject($dbCuePoint);
@@ -289,7 +289,7 @@ class CuePointService extends KalturaBaseService
 	 * 
 	 * @action delete
 	 * @param string $id 
-	 * @throws KalturaCuePointErrors::INVALID_CUE_POINT_ID
+	 * @throws VidiunCuePointErrors::INVALID_CUE_POINT_ID
 	 * @validateUser CuePoint id editcuepoint
 	 */		
 	function deleteAction($id)
@@ -297,10 +297,10 @@ class CuePointService extends KalturaBaseService
 		$dbCuePoint = CuePointPeer::retrieveByPK( $id );
 		
 		if(!$dbCuePoint)
-			throw new KalturaAPIException(KalturaCuePointErrors::INVALID_CUE_POINT_ID, $id);
+			throw new VidiunAPIException(VidiunCuePointErrors::INVALID_CUE_POINT_ID, $id);
 			
 		if($this->getCuePointType() && $dbCuePoint->getType() != $this->getCuePointType())
-			throw new KalturaAPIException(KalturaCuePointErrors::INVALID_CUE_POINT_ID, $id);
+			throw new VidiunAPIException(VidiunCuePointErrors::INVALID_CUE_POINT_ID, $id);
 		
 		$this->validateUserLog($dbCuePoint);
 		
@@ -314,22 +314,22 @@ class CuePointService extends KalturaBaseService
 	 */
 	private function validateUserLog($dbObject)
 	{
-		$log = 'validateUserLog: action ['.$this->actionName.'] client tag ['.kCurrentContext::$client_lang.'] ';
-		if (!$this->getKs()){
-			$log = $log.'Error: No KS ';
-			KalturaLog::err($log);
+		$log = 'validateUserLog: action ['.$this->actionName.'] client tag ['.vCurrentContext::$client_lang.'] ';
+		if (!$this->getVs()){
+			$log = $log.'Error: No VS ';
+			VidiunLog::err($log);
 			return;
 		}		
 
-		$log = $log.'ks ['.$this->getKs()->getOriginalString().'] ';
+		$log = $log.'vs ['.$this->getVs()->getOriginalString().'] ';
 		// if admin always allowed
-		if (kCurrentContext::$is_admin_session)
+		if (vCurrentContext::$is_admin_session)
 			return;
 
-		if (strtolower($dbObject->getPuserId()) != strtolower(kCurrentContext::$ks_uid)) 
+		if (strtolower($dbObject->getPuserId()) != strtolower(vCurrentContext::$vs_uid)) 
 		{
 			$log = $log.'Error: User not an owner ';
-			KalturaLog::err($log);
+			VidiunLog::err($log);
 		}
 	}
 	
@@ -338,18 +338,18 @@ class CuePointService extends KalturaBaseService
 	 *
 	 * @action updateStatus
 	 * @param string $id
-	 * @param KalturaCuePointStatus $status
-	 * @throws KalturaCuePointErrors::INVALID_CUE_POINT_ID
+	 * @param VidiunCuePointStatus $status
+	 * @throws VidiunCuePointErrors::INVALID_CUE_POINT_ID
 	 */
 	function updateStatusAction($id, $status)
 	{
 		$dbCuePoint = CuePointPeer::retrieveByPK($id);
 		
 		if (!$dbCuePoint)
-			throw new KalturaAPIException(KalturaCuePointErrors::INVALID_CUE_POINT_ID, $id);
+			throw new VidiunAPIException(VidiunCuePointErrors::INVALID_CUE_POINT_ID, $id);
 			
 		if($this->getCuePointType() && $dbCuePoint->getType() != $this->getCuePointType())
-			throw new KalturaAPIException(KalturaCuePointErrors::INVALID_CUE_POINT_ID, $id);
+			throw new VidiunAPIException(VidiunCuePointErrors::INVALID_CUE_POINT_ID, $id);
 	
 		$this->validateUserLog($dbCuePoint);
 		
@@ -364,18 +364,18 @@ class CuePointService extends KalturaBaseService
 	 * @param string $id
 	 * @param int $startTime
 	 * @param int $endTime
-	 * @return KalturaCuePoint
-	 * @throws KalturaCuePointErrors::INVALID_CUE_POINT_ID
+	 * @return VidiunCuePoint
+	 * @throws VidiunCuePointErrors::INVALID_CUE_POINT_ID
 	 */
 	function updateCuePointsTimesAction($id, $startTime,$endTime= null)
 	{
 		$dbCuePoint = CuePointPeer::retrieveByPK($id);
 
 		if (!$dbCuePoint)
-			throw new KalturaAPIException(KalturaCuePointErrors::INVALID_CUE_POINT_ID, $id);
+			throw new VidiunAPIException(VidiunCuePointErrors::INVALID_CUE_POINT_ID, $id);
 
 		if($this->getCuePointType() && $dbCuePoint->getType() != $this->getCuePointType())
-			throw new KalturaAPIException(KalturaCuePointErrors::INVALID_CUE_POINT_ID, $id);
+			throw new VidiunAPIException(VidiunCuePointErrors::INVALID_CUE_POINT_ID, $id);
 
 		$this->validateUserLog($dbCuePoint);
 
@@ -385,7 +385,7 @@ class CuePointService extends KalturaBaseService
 			$dbCuePoint->setEndTime($endTime);
 		}
 		$dbCuePoint->save();
-		$cuePoint = KalturaCuePoint::getInstance($dbCuePoint, $this->getResponseProfile());
+		$cuePoint = VidiunCuePoint::getInstance($dbCuePoint, $this->getResponseProfile());
 		return $cuePoint;
 	}
 
@@ -395,15 +395,15 @@ class CuePointService extends KalturaBaseService
 	 * @action clone
 	 * @param string $id
 	 * @param string $entryId
-	 * @return KalturaCuePoint
-	 * @throws KalturaCuePointErrors::INVALID_CUE_POINT_ID
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
+	 * @return VidiunCuePoint
+	 * @throws VidiunCuePointErrors::INVALID_CUE_POINT_ID
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
 	 */
 	function cloneAction($id, $entryId)
 	{
 		$newdbCuePoint = $this->doClone($id, $entryId);
 		$newdbCuePoint->save();
-		$cuePoint = KalturaCuePoint::getInstance($newdbCuePoint, $this->getResponseProfile());
+		$cuePoint = VidiunCuePoint::getInstance($newdbCuePoint, $this->getResponseProfile());
 		return $cuePoint;
 	}
 
@@ -411,10 +411,10 @@ class CuePointService extends KalturaBaseService
 	{
 		$dbCuePoint = CuePointPeer::retrieveByPK($id);
 		if (!$dbCuePoint)
-			throw new KalturaAPIException(KalturaCuePointErrors::INVALID_CUE_POINT_ID, $id);
+			throw new VidiunAPIException(VidiunCuePointErrors::INVALID_CUE_POINT_ID, $id);
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		$newdbCuePoint = $dbCuePoint->copyToEntry($dbEntry);
 		return $newdbCuePoint;
 	}
@@ -424,7 +424,7 @@ class CuePointService extends KalturaBaseService
 		if (CuePointPeer::getUserContentOnly())
 		{
 			$entryFilter = $filter->entryIdEqual ? $filter->entryIdEqual : $filter->entryIdIn;
-			if($entryFilter && $this->getKs()->verifyPrivileges(ks::PRIVILEGE_LIST, $entryFilter))
+			if($entryFilter && $this->getVs()->verifyPrivileges(vs::PRIVILEGE_LIST, $entryFilter))
 				CuePointPeer::setUserContentOnly(false);
 		}
 	}

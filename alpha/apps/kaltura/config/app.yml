@@ -1,4 +1,4 @@
-# KALTURA-INSTALL 
+# VIDIUN-INSTALL 
 # default values
 all:
   enable_remember_me: on
@@ -20,7 +20,7 @@ all:
     seconds_between_retry_notify: 180
     max_send_attempts: 10
     ignore_indicator_max_count: 60
-    kaltura_notification_support_email: notification-errors@kaltura.com
+    vidiun_notification_support_email: notification-errors@vidiun.com
   entry_delete:
     sleep_between_cycles_sec: 3
     skip_writing_sleep: 60

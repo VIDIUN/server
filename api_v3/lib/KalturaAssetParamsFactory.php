@@ -3,24 +3,24 @@
  * @package api
  * @subpackage objects.factory
  */
-class KalturaAssetParamsFactory
+class VidiunAssetParamsFactory
 {
 	static function getAssetParamsOutputInstance($type)
 	{
 		switch ($type) 
 		{
-			case KalturaAssetType::FLAVOR:
-				return new KalturaFlavorParamsOutput();
+			case VidiunAssetType::FLAVOR:
+				return new VidiunFlavorParamsOutput();
 				
-			case KalturaAssetType::THUMBNAIL:
-				return new KalturaThumbParamsOutput();
+			case VidiunAssetType::THUMBNAIL:
+				return new VidiunThumbParamsOutput();
 				
 			default:
-				$obj = KalturaPluginManager::loadObject('KalturaAssetParamsOutput', $type);
+				$obj = VidiunPluginManager::loadObject('VidiunAssetParamsOutput', $type);
 				if($obj)
 					return $obj;
 					
-				return new KalturaFlavorParamsOutput();
+				return new VidiunFlavorParamsOutput();
 		}
 	}
 	
@@ -28,18 +28,18 @@ class KalturaAssetParamsFactory
 	{
 		switch ($type) 
 		{
-			case KalturaAssetType::FLAVOR:
-				return new KalturaFlavorParams();
+			case VidiunAssetType::FLAVOR:
+				return new VidiunFlavorParams();
 				
-			case KalturaAssetType::THUMBNAIL:
-				return new KalturaThumbParams();
+			case VidiunAssetType::THUMBNAIL:
+				return new VidiunThumbParams();
 				
 			default:
-				$obj = KalturaPluginManager::loadObject('KalturaAssetParams', $type);
+				$obj = VidiunPluginManager::loadObject('VidiunAssetParams', $type);
 				if($obj)
 					return $obj;
 					
-				return new KalturaFlavorParams();
+				return new VidiunFlavorParams();
 		}
 	}
 }

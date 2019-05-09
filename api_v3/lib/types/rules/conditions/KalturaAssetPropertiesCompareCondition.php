@@ -3,12 +3,12 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAssetPropertiesCompareCondition extends KalturaCondition
+class VidiunAssetPropertiesCompareCondition extends VidiunCondition
 {
 	/**
 	 * Array of key/value objects that holds the property and the value to find and compare on an asset object
 	 *
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $properties;
 
@@ -31,12 +31,12 @@ class KalturaAssetPropertiesCompareCondition extends KalturaCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kAssetPropertiesCompareCondition();
+			$dbObject = new vAssetPropertiesCompareCondition();
 
 		$dbObject = parent::toObject($dbObject, $skip);
 
@@ -52,14 +52,14 @@ class KalturaAssetPropertiesCompareCondition extends KalturaCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/** @var $dbObject kAssetPropertiesCompareCondition */
+		/** @var $dbObject vAssetPropertiesCompareCondition */
 		parent::doFromObject($dbObject, $responseProfile);
 		
 		if($this->shouldGet('properties', $responseProfile))
-			$this->properties = KalturaKeyValueArray::fromKeyValueArray($dbObject->getProperties());
+			$this->properties = VidiunKeyValueArray::fromKeyValueArray($dbObject->getProperties());
 	}
 }

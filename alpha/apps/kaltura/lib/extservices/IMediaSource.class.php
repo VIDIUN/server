@@ -24,7 +24,7 @@ interface IMediaSource
 	
 	/**
 	*/
-	public function getAuthData( $kuserId, $userName, $password, $token);
+	public function getAuthData( $vuserId, $userName, $password, $token);
 	
 	
 	public function getSearchConfig ( );

@@ -1,5 +1,5 @@
 <?php
-class kDropFolderXmlFileHandler
+class vDropFolderXmlFileHandler
 {
 	static function getHandlerInstance ($dropFolderType)
 	{
@@ -10,10 +10,10 @@ class kDropFolderXmlFileHandler
 			case DropFolderType::S3:
 			case DropFolderType::SCP:
 			case DropFolderType::SFTP:
-				return new kDropFolderXmlFileHandler();
+				return new vDropFolderXmlFileHandler();
 				break;
 			default:
-				return KalturaPluginManager::loadObject('kDropFolderXmlFileHandler', $dropFolderType);
+				return VidiunPluginManager::loadObject('vDropFolderXmlFileHandler', $dropFolderType);
 				break;
 		}
 	}
@@ -92,7 +92,7 @@ class kDropFolderXmlFileHandler
 				if(	$e->getCode() != DropFolderXmlBulkUploadPlugin::getErrorCodeCoreValue(DropFolderXmlBulkUploadErrorCode::XML_FILE_SIZE_EXCEED_LIMIT) &&
 					$e->getCode() != DropFolderXmlBulkUploadPlugin::getErrorCodeCoreValue(DropFolderXmlBulkUploadErrorCode::MALFORMED_XML_FILE))
 					{
-						KalturaLog::err("Error in setContentResources - ".$e->getMessage());
+						VidiunLog::err("Error in setContentResources - ".$e->getMessage());
 						$e = new Exception(DropFolderPlugin::ERROR_READING_FILE_MESSAGE.'['.$folder->getPath().'/'.$file->getFileName().']', DropFolderFileErrorCode::ERROR_READING_FILE, $e);
 					}
 				throw $e;
@@ -110,7 +110,7 @@ class kDropFolderXmlFileHandler
 	{
 		if(!$file->getLeadDropFolderFileId())
 		{
-			KalturaLog::info('The XML file is not uploaded yet - changing status to WAITING');
+			VidiunLog::info('The XML file is not uploaded yet - changing status to WAITING');
 			return false;
 		}
 		$statuses = array(DropFolderFileStatus::PARSED, DropFolderFileStatus::UPLOADING, DropFolderFileStatus::DETECTED);
@@ -118,7 +118,7 @@ class kDropFolderXmlFileHandler
 		
 		if($nonReadyFiles && count($nonReadyFiles) > 0)
 		{
-			KalturaLog::info('Not all the files finished uploading - changing status to WAITING');
+			VidiunLog::info('Not all the files finished uploading - changing status to WAITING');
 			return false;
 		}
 		
@@ -155,7 +155,7 @@ class kDropFolderXmlFileHandler
 		}
 		catch(PropelException $e)
 		{
-			if($e->getCause() && $e->getCause()->getCode() == kDropFolderXmlEventsConsumer::MYSQL_CODE_DUPLICATE_KEY) //unique constraint
+			if($e->getCause() && $e->getCause()->getCode() == vDropFolderXmlEventsConsumer::MYSQL_CODE_DUPLICATE_KEY) //unique constraint
 			{
 				$existingFile = DropFolderFilePeer::retrieveByDropFolderIdAndFileName($folder->getId(), $fileName);
 				if($existingFile)
@@ -178,7 +178,7 @@ class kDropFolderXmlFileHandler
 			}
 			else
 			{
-				KalturaLog::err('Failed to add content resource for Xml file ['.$leadFile->getId().'] - '.$e->getMessage());
+				VidiunLog::err('Failed to add content resource for Xml file ['.$leadFile->getId().'] - '.$e->getMessage());
 				throw new Exception(DropFolderXmlBulkUploadPlugin::ERROR_ADD_CONTENT_RESOURCE_MESSAGE, DropFolderXmlBulkUploadPlugin::getErrorCodeCoreValue(DropFolderXmlBulkUploadErrorCode::ERROR_ADD_CONTENT_RESOURCE));
 			}		
 		}	
@@ -195,26 +195,26 @@ class kDropFolderXmlFileHandler
 		$contentResources = array();
 		$engineOptions = array(
 			'useCmd' => false,
-			'asperaTempFolder' => kConf::get('temp_folder') . '/aspera_upload',
+			'asperaTempFolder' => vConf::get('temp_folder') . '/aspera_upload',
 		);
-		$fileTransferManager = kFileTransferMgr::getInstance($folder->getFileTransferMgrType(), $engineOptions);
+		$fileTransferManager = vFileTransferMgr::getInstance($folder->getFileTransferMgrType(), $engineOptions);
 		$loginStatus = $folder->loginByCredentialsType($fileTransferManager);
 
 
-		if($fileTransferManager->fileSize($folder->getPath().'/'.$file->getFileName()) > kDropFolderXmlEventsConsumer::MAX_XML_FILE_SIZE)
+		if($fileTransferManager->fileSize($folder->getPath().'/'.$file->getFileName()) > vDropFolderXmlEventsConsumer::MAX_XML_FILE_SIZE)
 			throw new Exception(DropFolderXmlBulkUploadPlugin::XML_FILE_SIZE_EXCEED_LIMIT_MESSAGE, DropFolderXmlBulkUploadPlugin::getErrorCodeCoreValue(DropFolderXmlBulkUploadErrorCode::XML_FILE_SIZE_EXCEED_LIMIT));
 			
 		$xmlPath = $folder->getLocalFilePath($file->getFileName(), $file->getId(), $fileTransferManager);
 		
 		$xmlContent = $this->getOriginalOrTransformIfNeeded($folder, $xmlPath);
 		
-		$xmlDoc = new KDOMDocument();
+		$xmlDoc = new VDOMDocument();
 		$res = $xmlDoc->loadXML($xmlContent);
 		
-		$localResourceNodes = $xmlDoc->getElementsByTagName(kDropFolderXmlEventsConsumer::DROP_FOLDER_RESOURCE_NODE_NAME);						
+		$localResourceNodes = $xmlDoc->getElementsByTagName(vDropFolderXmlEventsConsumer::DROP_FOLDER_RESOURCE_NODE_NAME);						
 		foreach ($localResourceNodes as $localResourceNode) 
 		{
-			$contentResources[] = $localResourceNode->getAttribute(kDropFolderXmlEventsConsumer::DROP_FOLDER_RESOURCE_PATH_ATTRIBUTE);
+			$contentResources[] = $localResourceNode->getAttribute(vDropFolderXmlEventsConsumer::DROP_FOLDER_RESOURCE_PATH_ATTRIBUTE);
 		}	
 										
 		return $contentResources;
@@ -245,7 +245,7 @@ class kDropFolderXmlFileHandler
 		
 		if(!$folder->getConversionProfileId())
 		{
-			KalturaLog::info('No conversion profile found on drop folder [' . $folder->getId() . '] assuming no xsl transformation is needed');
+			VidiunLog::info('No conversion profile found on drop folder [' . $folder->getId() . '] assuming no xsl transformation is needed');
 			return file_get_contents($xmlPath);
 		}
 		
@@ -253,25 +253,25 @@ class kDropFolderXmlFileHandler
 		
 		if(!$conversionProfile || (strlen($conversionProfile->getXsl()) == 0))
 		{
-			KalturaLog::info('No conversion profile found Or no xsl transform found');
+			VidiunLog::info('No conversion profile found Or no xsl transform found');
 			return file_get_contents($xmlPath);
 		}
 		
 		$originalXmlDoc = file_get_contents($xmlPath);
-		$origianlXml = new KDOMDocument();
+		$origianlXml = new VDOMDocument();
 		if(!$origianlXml->loadXML($originalXmlDoc))
 		{
-			$errorMessage = kXml::getLibXmlErrorDescription($originalXmlDoc);
+			$errorMessage = vXml::getLibXmlErrorDescription($originalXmlDoc);
 			throw new Exception(DropFolderXmlBulkUploadPlugin::MALFORMED_XML_FILE_MESSAGE, DropFolderXmlBulkUploadPlugin::getErrorCodeCoreValue(DropFolderXmlBulkUploadErrorCode::MALFORMED_XML_FILE));
 		}
 
 		libxml_clear_errors();
 		$proc = new XSLTProcessor;
-		$proc->registerPHPFunctions(kXml::getXslEnabledPhpFunctions());
-		$xsl = new KDOMDocument();
+		$proc->registerPHPFunctions(vXml::getXslEnabledPhpFunctions());
+		$xsl = new VDOMDocument();
 		if(!$xsl->loadXML($conversionProfile->getXsl()))
 		{
-			$errorMessage = kXml::getLibXmlErrorDescription($conversionProfile->getXsl());
+			$errorMessage = vXml::getLibXmlErrorDescription($conversionProfile->getXsl());
 			throw new Exception(DropFolderXmlBulkUploadPlugin::MALFORMED_XML_FILE_MESSAGE, DropFolderXmlBulkUploadPlugin::getErrorCodeCoreValue(DropFolderXmlBulkUploadErrorCode::MALFORMED_XML_FILE));
 		}
 		
@@ -280,11 +280,11 @@ class kDropFolderXmlFileHandler
 		$transformedXml = $proc->transformToXML($origianlXml);
 		if(!$transformedXml)
 		{
-			$errorMessage = kXml::getLibXmlErrorDescription($conversionProfile->getXsl());
+			$errorMessage = vXml::getLibXmlErrorDescription($conversionProfile->getXsl());
 			throw new Exception(DropFolderXmlBulkUploadPlugin::MALFORMED_XML_FILE_MESSAGE, DropFolderXmlBulkUploadPlugin::getErrorCodeCoreValue(DropFolderXmlBulkUploadErrorCode::MALFORMED_XML_FILE));
 		}
 		
-		$xmlDoc = new KDOMDocument();
+		$xmlDoc = new VDOMDocument();
 		$res = $xmlDoc->loadXML($transformedXml);
 		
 		if(!$res)
@@ -310,22 +310,22 @@ class kDropFolderXmlFileHandler
 			$objectType = DropFolderXmlBulkUploadPlugin::getBatchJobObjectTypeCoreValue(DropFolderBatchJobObjectType::DROP_FOLDER_FILE);
 			$partner = PartnerPeer::retrieveByPK($folder->getPartnerId());
 			
-			$data = KalturaPluginManager::loadObject('kDropFolderBulkUploadXmlJobData', $coreBulkUploadType);
-			/* @var $data kDropFolderBulkUploadXmlJobData */
-			$data->setUploadedBy(kDropFolderXmlEventsConsumer::UPLOADED_BY);
+			$data = VidiunPluginManager::loadObject('vDropFolderBulkUploadXmlJobData', $coreBulkUploadType);
+			/* @var $data vDropFolderBulkUploadXmlJobData */
+			$data->setUploadedBy(vDropFolderXmlEventsConsumer::UPLOADED_BY);
 			$data->setFileName($leadDropFolderFile->getFileName());
 			$data->setBulkUploadObjectType(BulkUploadObjectType::ENTRY);
 			$data->setDropFolderId($folder->getId());
-			$objectData = new kBulkUploadEntryData();
+			$objectData = new vBulkUploadEntryData();
 			$objectData->setConversionProfileId($folder->getConversionProfileId());
 			$data->setObjectData($objectData);
 
-			$job = kJobsManager::addBulkUploadJob($partner, $data, $coreBulkUploadType, $objectId, $objectType);
+			$job = vJobsManager::addBulkUploadJob($partner, $data, $coreBulkUploadType, $objectId, $objectType);
 			return $job;
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::err("Error adding BulkUpload job -".$e->getMessage());
+			VidiunLog::err("Error adding BulkUpload job -".$e->getMessage());
 			throw new Exception(DropFolderXmlBulkUploadPlugin::ERROR_ADDING_BULK_UPLOAD_MESSAGE, DropFolderXmlBulkUploadPlugin::getErrorCodeCoreValue(DropFolderXmlBulkUploadErrorCode::ERROR_ADDING_BULK_UPLOAD));
 		}
 			

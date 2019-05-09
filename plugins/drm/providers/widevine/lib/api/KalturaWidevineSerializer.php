@@ -1,9 +1,9 @@
 <?php
 
-class KalturaWidevineSerializer extends KalturaSerializer
+class VidiunWidevineSerializer extends VidiunSerializer
 {
 	/* (non-PHPdoc)
-	 * @see KalturaSerializer::serialize()
+	 * @see VidiunSerializer::serialize()
 	 */
 	public function serialize($object) 
 	{
@@ -16,7 +16,7 @@ class KalturaWidevineSerializer extends KalturaSerializer
 				$assetid = $requestParams[WidevineLicenseProxyUtils::ASSETID];
 			}
 			
-			$object = WidevineLicenseProxyUtils::createErrorResponse(KalturaWidevineErrorCodes::GENERAL_ERROR, $assetid);
+			$object = WidevineLicenseProxyUtils::createErrorResponse(VidiunWidevineErrorCodes::GENERAL_ERROR, $assetid);
     	}
 		
 		return $object;		

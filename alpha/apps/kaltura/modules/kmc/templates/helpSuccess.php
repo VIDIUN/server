@@ -2,14 +2,14 @@
 
 ?>
 	<div id="header">
-		<img src="/lib/images/kmc/logo.gif" alt="Kaltura CMS" class="logo" />
+		<img src="/lib/images/vmc/logo.gif" alt="Vidiun CMS" class="logo" />
 	</div><!-- end #header -->
 		<div id="main">
 			<div class="bcorner"></div>
 			<div class="bcorner right"></div>
 			<div class="content">
 				<div class="title">
-					<h1>KMC Help</h1>
+					<h1>VMC Help</h1>
 				</div>
 				<div class="contwrap">
 					<div class="toc clearfix" id="contentSection">
@@ -314,7 +314,7 @@
 						<div class="dataTitle" id="section13"><a href="#main">Back to top</a><h4><span>1.6.2.1</span>Add Rule</h4></div>
 						<p>
 							To add a new rule click the "Add Rule" button. An "Add Rule" window will open allowing you to define the rule parameters. 
-							Select to show entries from your site only or the Kaltura Network as well, select words from the Tags or Admin Tags and choose 
+							Select to show entries from your site only or the Vidiun Network as well, select words from the Tags or Admin Tags and choose 
 							one or more media types (video mix, video, audio, image). You can also set the date range by clicking on the calendar icons, 
 							order the entries by most viewed, most recent or highest rated and finally limit the maximum entries for this rule. You can use one, 
 							several or all fields to create the rule. When more than one field is used, the logical relationship between fields is an "AND" relationship. 
@@ -363,14 +363,14 @@
 						<!--   1.8   -->
 						
 						<div class="dataTitle" id="section17"><a href="#main">Back to top</a><h3><span>1.8</span>Bulk Upload</h3></div>
-						<p>This is where you can upload large amounts of media files to the Kaltura servers in a simple and streamlined process.</p>
+						<p>This is where you can upload large amounts of media files to the Vidiun servers in a simple and streamlined process.</p>
 						
 						<div class="dataTitle" id="contentSection181"><a href="#main">Back to top</a><h4><span>1.8.1</span>Upload Settings</h4></div>
 						<p>Here you can review the existing upload settings for your account.  Click the Click here to edit settings button to edit the settings for each specific bulk upload session.</p>
 						
 						<div class="dataTitle" id="contentSection182"><a href="#main">Back to top</a><h4><span>1.8.2</span>Upload (CW)</h4></div>
 						<p>
-							This option will open the Kaltura Uploader/Importer wizard (Contributor Wizard). Here you can upload videos from your 
+							This option will open the Vidiun Uploader/Importer wizard (Contributor Wizard). Here you can upload videos from your 
 							computer or import media from online sources including YouTube, Flickr, MySpace, New York Public Library and more.
 						</p>
 						
@@ -386,7 +386,7 @@
 						
 						<div class="dataTitle" id="contentSection185"><a href="#main">Back to top</a><h4><span>1.8.5</span>Video Transcoding Settings</h4></div>
 						<p>
-							This is where you can select the settings for your video transcoding, i.e. how the videos that you are uploading will be transcoded when uploaded to Kaltura’s servers. 
+							This is where you can select the settings for your video transcoding, i.e. how the videos that you are uploading will be transcoded when uploaded to Vidiun’s servers. 
 							Videos which are uploaded in different formats are automatically transcoded to FLV files by the system. 
 						</p>
 						<p>
@@ -401,7 +401,7 @@
 						</p>
 						<h5>Transcoder Selection</h5>
 						<p>
-							Kaltura uses a variety of transcoding tools both open source and commercial. Commercial transcoders typically provide 
+							Vidiun uses a variety of transcoding tools both open source and commercial. Commercial transcoders typically provide 
 							improved quality and smaller file sizes which result in smoother playback and less buffering events.
 						</p>
 						<h5>Available Encoding Formats:</h5>
@@ -413,7 +413,7 @@
 						</ul>
 						<h5>Remixing Quality</h5>
 						<p>
-							If you are uploading videos that are intended for remixing and editing with Kaltura’s online editing tools, the Kaltura servers will optimize the settings to support remixing. 
+							If you are uploading videos that are intended for remixing and editing with Vidiun’s online editing tools, the Vidiun servers will optimize the settings to support remixing. 
 							If you are uploading videos that are intended for viewing only, it is recommended to keep this unchecked.
 						</p>
 						
@@ -474,9 +474,9 @@
 							<dt>Playlist</dt>
 							<dd>A list of entries that are streamed one after the other.</dd>
 							<dt>Rating</dt>
-							<dd>The average rating for a video is 1-5 stars. Note that this is only relevant for sites using the Kaltura rating widget or rating API.</dd>
+							<dd>The average rating for a video is 1-5 stars. Note that this is only relevant for sites using the Vidiun rating widget or rating API.</dd>
 							<dt>Vote Count</dt>
-							<dd>The amount of votes accumulated for a specific entry.  Note that this is only relevant for sites using the Kaltura voting widget or voting API.</dd>
+							<dd>The amount of votes accumulated for a specific entry.  Note that this is only relevant for sites using the Vidiun voting widget or voting API.</dd>
 							<dt>MRSS</dt>
 							<dd>Media RSS (MRSS) is an RSS module used for syndicating multimedia files (audio, video, image) in RSS feeds.</dd>
 							<dt>Rule</dt>
@@ -506,45 +506,45 @@
 						<div class="dataTitle" id="section21"><a href="#main">Back to top</a><h3><span>2.3</span>Server Settings</h3></div>
 						
 						<div class="dataTitle" id="contentSection231"><a href="#main">Back to top</a><h4><span>2.3.1</span>Partner Info</h4></div>
-						<p>Your Partner ID is your site’s identification and ticket to the Kaltura platform and API, and will enable you to connect to Kaltura, display media, upload media and experience all of Kaltura's functionality.</p>
+						<p>Your Partner ID is your site’s identification and ticket to the Vidiun platform and API, and will enable you to connect to Vidiun, display media, upload media and experience all of Vidiun's functionality.</p>
 						
 						<div class="dataTitle" id="contentSection232"><a href="#main">Back to top</a><h4><span>2.3.2</span>Advanced Settings</h4></div>
 						<p>Changing these settings will take affect only for new content ingested (from the moment changes have been saved) and is not retroactive.</p><br />
 						
 						<p><b>Append Entry to Video Mix</b><br />
-						This option by default appends new content that has been uploaded to a mix automatically so that it is ready to be displayed in the player as part of the mix. Selecting "False" will make the content available in the KMC but does not add the content to the mix itself.</p><br />
+						This option by default appends new content that has been uploaded to a mix automatically so that it is ready to be displayed in the player as part of the mix. Selecting "False" will make the content available in the VMC but does not add the content to the mix itself.</p><br />
 						
 						<p><b>Appear in Uploader Search</b><br />
-						This option allows partners to choose if the content they ingest via Kaltura is:<br />
-						• Public : appears for all Kaltura partners who add Kaltura as a media source in the uploader or in any web-based Kaltura directory of content.<br />
+						This option allows partners to choose if the content they ingest via Vidiun is:<br />
+						• Public : appears for all Vidiun partners who add Vidiun as a media source in the uploader or in any web-based Vidiun directory of content.<br />
 						• Available only to your site users.<br />
 						• Private:  Does not appear in searches at all.</p><br />
 						
 						<p><b>Return List of User Clips</b><br />
-						This option refers to the Kaltura editor widget. If selected, the editor will load with both mix content clips and all previously added user clips.</p><br />
+						This option refers to the Vidiun editor widget. If selected, the editor will load with both mix content clips and all previously added user clips.</p><br />
 						
 						<p><b>User Page & Media Page URL format</b><br />
-						To integrate Kaltura on your site so that entry objects can be displayed in galleries, the Kaltura entry object has 2 parameters:  [partnerLandingPage][userLandingPage]
+						To integrate Vidiun on your site so that entry objects can be displayed in galleries, the Vidiun entry object has 2 parameters:  [partnerLandingPage][userLandingPage]
 						To point to these parameters, you can do 1 of 2 things:<br />
-						• Enter a base URL to which Kaltura will append the user ID/Entry ID.<br /> 
+						• Enter a base URL to which Vidiun will append the user ID/Entry ID.<br /> 
 						• Enter the URL syntax of your choice, and make sure you add {uid} for users and {id} for entries.<br /></p><br />
 						
 						<p><b>User Upload Limit</b><br />
 						By default users can upload files up to 150 MB per file. This can be changed here.  Note that users cannot upload more than 1GB, per session.  E.g., setting the upload limit to 100MB allows users to upload up to 10 files at a time. </p>
 						
 						<div class="dataTitle" id="contentSection233"><a href="#main">Back to top</a><h4><span>2.3.3</span>Notifications</h4></div>
-						<p>The Kaltura servers send <a href='http://corp.kaltura.com/apidocs/index.html#terminology'>notifications</a> using http post requests to a given dispatcher URL on the partner host servers. For more information, see: <a href='http://corp.kaltura.com/wiki/index.php/Guides:Process_a_Notification'>http://corp.kaltura.com/wiki/index.php/Guides:Process_a_Notification</a>.</p><br />
+						<p>The Vidiun servers send <a href='http://corp.vidiun.com/apidocs/index.html#terminology'>notifications</a> using http post requests to a given dispatcher URL on the partner host servers. For more information, see: <a href='http://corp.vidiun.com/wiki/index.php/Guides:Process_a_Notification'>http://corp.vidiun.com/wiki/index.php/Guides:Process_a_Notification</a>.</p><br />
 
 						<h2>Application Studio Section</h2>
 						<!--    3.1    -->
 						<div class="dataTitle" id="section18"><a href="#main">Back to top</a><h3><span>3.1</span>Player List</h3></div>
-						<p>This page shows the list of the players defined in the system. It shows both default players that are included within the system, as well as players defined and created by administrators via the KMC.</p>
+						<p>This page shows the list of the players defined in the system. It shows both default players that are included within the system, as well as players defined and created by administrators via the VMC.</p>
 						
 						<div class="dataTitle" id="contentSection311"><a href="#main">Back to top</a><h4><span>3.1.1</span>Edit</h4></div>
-						<p>To edit players previously created via the KMC, click on the relevant line in the Player List and then click "Edit" (players created manually through Kaltura's professional services cannot be edited in this area). This will open the player configuration area described in the following sections. Note that any changes you make to an existing player will carry over to any place it has been embedded - on your site as well as any syndicated players on other sites.</p>
+						<p>To edit players previously created via the VMC, click on the relevant line in the Player List and then click "Edit" (players created manually through Vidiun's professional services cannot be edited in this area). This will open the player configuration area described in the following sections. Note that any changes you make to an existing player will carry over to any place it has been embedded - on your site as well as any syndicated players on other sites.</p>
 						
 						<div class="dataTitle" id="contentSection312"><a href="#main">Back to top</a><h4><span>3.1.2</span>Duplicate</h4></div>
-						<p>To duplicate players previously created via the KMC, click on the relevant line in the Player List and then click "Duplicate" (players created manually through Kaltura's professional services cannot be duplicated in this area). This will open the player configuration area described in the following sections. Duplication creates a copy of an existing player to use as a starting point for further editing, without making changes to the original player.</p>
+						<p>To duplicate players previously created via the VMC, click on the relevant line in the Player List and then click "Duplicate" (players created manually through Vidiun's professional services cannot be duplicated in this area). This will open the player configuration area described in the following sections. Duplication creates a copy of an existing player to use as a starting point for further editing, without making changes to the original player.</p>
 						
 						<div class="dataTitle" id="contentSection313"><a href="#main">Back to top</a><h4><span>3.1.3</span>Delete</h4></div>
 						<p>To delete a player, select the relevant line on the Player List and then click "Delete". Note that deleting a player eliminates it from all the locations where it has been previously embedded – i.e. if you have embedded a player using this design on your site or an external site, after you delete it from the Player List, the player will no longer appear and a blank area will be displayed on the website.</p>
@@ -574,17 +574,17 @@
 						<div class="dataTitle" id="contentSection32212"><a href="#main">Back to top</a><h4><span>3.2.2.1.2</span>Viral & Distribution</h4></div>
 						<p>
 						      The Viral & Distribution area includes features that assist in content distribution, such as the download and share buttons.
-						      Note that the download button only supports downloads of single video files and does not support mix downloads - <a href='http://corp.kaltura.com/support/form/project/30'>contact Kaltura Professional Services</a> to enable download of mix content 
+						      Note that the download button only supports downloads of single video files and does not support mix downloads - <a href='http://corp.vidiun.com/support/form/project/30'>contact Vidiun Professional Services</a> to enable download of mix content 
 						</p>
 
 						<!--    3.2.2.1.3   -->
 						<div class="dataTitle" id="contentSection32213"><a href="#main">Back to top</a><h4><span>3.2.2.1.3</span>UGC & User Interaction</h4></div>
 						<p>The UGC & User Interaction area includes participatory features such as media uploading and remixing.</p>
-						<p>Note that adding the Remix button does not automatically enable the Kaltura editor.</p>
+						<p>Note that adding the Remix button does not automatically enable the Vidiun editor.</p>
 
 						<!--    3.2.2.1.4   -->
 						<div class="dataTitle" id="contentSection32214"><a href="#main">Back to top</a><h4><span>3.2.2.1.4</span>Data Layer</h4></div>
-						<p>The Data Layer includes add-on features such as subtitles and advertising - <a href='http://corp.kaltura.com/support/form/project/30'>contact Kaltura Professional Services</a> to enable download of mix content.</p>
+						<p>The Data Layer includes add-on features such as subtitles and advertising - <a href='http://corp.vidiun.com/support/form/project/30'>contact Vidiun Professional Services</a> to enable download of mix content.</p>
 
 						<!--    3.2.2.1.5   -->
 						<div class="dataTitle" id="contentSection32215"><a href="#main">Back to top</a><h4><span>3.2.2.1.5</span>Custom Buttons</h4></div>
@@ -633,7 +633,7 @@
 
 						<!--    3.2.4   -->			
 						<div class="dataTitle" id="contentSection324"><a href="#main">Back to top</a><h4><span>3.2.4</span>Content Tab </h4></div>
-						<p>The Content Tab area enables you to add previously created playlists to your new playlist.  This enables you to create a playlist with multiple tabs that viewers can click through to see related playlists.  The previously created playlists are created via the Content section of the KMC, where you can select specific media entries to be included in a single playlist (manually, rules-based or RSS playlists).</p>
+						<p>The Content Tab area enables you to add previously created playlists to your new playlist.  This enables you to create a playlist with multiple tabs that viewers can click through to see related playlists.  The previously created playlists are created via the Content section of the VMC, where you can select specific media entries to be included in a single playlist (manually, rules-based or RSS playlists).</p>
 
 						<!--    3.2.4.1   -->			
 						<div class="dataTitle" id="contentSection3241"><a href="#main">Back to top</a><h4><span>3.2.4.1</span>Add Playlist (Tab) to Player</h4></div>

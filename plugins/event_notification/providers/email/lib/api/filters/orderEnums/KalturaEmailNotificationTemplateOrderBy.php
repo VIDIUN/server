@@ -3,6 +3,6 @@
  * @package plugins.emailNotification
  * @subpackage api.filters.enum
  */
-class KalturaEmailNotificationTemplateOrderBy extends KalturaEventNotificationTemplateOrderBy
+class VidiunEmailNotificationTemplateOrderBy extends VidiunEventNotificationTemplateOrderBy
 {
 }

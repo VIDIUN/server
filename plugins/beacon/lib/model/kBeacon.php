@@ -4,7 +4,7 @@
  * @package plugins.beacon
  * @subpackage model
  */
-class kBeacon
+class vBeacon
 {
 	public static $indexNameByBeaconObjectType = array(
 			BeaconObjectTypes::ENTRY_BEACON => "beacon_entry_index",
@@ -64,7 +64,7 @@ class kBeacon
 		if($partnerId)
 			$this->setPartnerId($partnerId);
 		else
-			$this->setPartnerId(kCurrentContext::getCurrentPartnerId());
+			$this->setPartnerId(vCurrentContext::getCurrentPartnerId());
 	}
 	
 	public function setId($id)
@@ -168,10 +168,10 @@ class kBeacon
 	protected function getOldIndexesName()
 	{
 		$oldIndexesNames = array();
-		$beaconElasticConfig = kConf::get('beacon', 'elastic');
+		$beaconElasticConfig = vConf::get('beacon', 'elastic');
 		if(!$beaconElasticConfig)
 		{
-			throw new KalturaAPIException("Missing beacon configuration");
+			throw new VidiunAPIException("Missing beacon configuration");
 		}
 
 		$maxNumberOfIndices = isset($beaconElasticConfig['maxNumberOfIndices']) ? $beaconElasticConfig['maxNumberOfIndices'] : 1;
@@ -187,7 +187,7 @@ class kBeacon
 
 	public function index($shouldLog = false, $queueProvider = null)
 	{
-		kApiCache::disableConditionalCache();
+		vApiCache::disableConditionalCache();
 		
 		// get instance of activated queue provider to send message
 		$queueProvider = $queueProvider ? $queueProvider : $this->getQueueProvider();

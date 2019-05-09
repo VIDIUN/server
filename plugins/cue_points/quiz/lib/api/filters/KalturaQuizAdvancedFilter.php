@@ -3,10 +3,10 @@
  * @package plugins.quiz
  * @subpackage api.filters
  */
-class KalturaQuizAdvancedFilter extends KalturaSearchItem
+class VidiunQuizAdvancedFilter extends VidiunSearchItem
 {
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isQuiz;
 
@@ -23,7 +23,7 @@ class KalturaQuizAdvancedFilter extends KalturaSearchItem
 	public function toObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kQuizAdvancedFilter();
+			$object_to_fill = new vQuizAdvancedFilter();
 
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

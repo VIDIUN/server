@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaHTMLPurifierBehaviourType extends KalturaDynamicEnum implements HTMLPurifierBehaviourType
+class VidiunHTMLPurifierBehaviourType extends VidiunDynamicEnum implements HTMLPurifierBehaviourType
 {
 	/**
 	 * @return string

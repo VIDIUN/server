@@ -2,7 +2,7 @@
 
 require_once(dirname(__file__) . '/../../../../../../vendor/akamai/token/StreamTokenFactory.php');
 
-class kAkamaiRtmpUrlTokenizer extends kUrlTokenizer
+class vAkamaiRtmpUrlTokenizer extends vUrlTokenizer
 {
 	/**
 	 * @var string
@@ -33,7 +33,7 @@ class kAkamaiRtmpUrlTokenizer extends kUrlTokenizer
 		if ($this->usePrefix)
 		{
 			//in case of a cached-in tokenizer - need to require bootstrap
-			require_once( dirname(__FILE__). '/../../../../../../' . 'infra/general/kString.class.php');
+			require_once( dirname(__FILE__). '/../../../../../../' . 'infra/general/vString.class.php');
 			
 			$strings = array();
 			foreach($flavors as $flavor)
@@ -43,7 +43,7 @@ class kAkamaiRtmpUrlTokenizer extends kUrlTokenizer
 					$url = substr($url, 4);
 				$strings[] = $url;
 			}
-			$prefix = kString::getCommonPrefix($strings);
+			$prefix = vString::getCommonPrefix($strings);
 			$pos = strrpos($prefix , "/");
 
 			if ($pos)
