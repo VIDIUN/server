@@ -3,7 +3,7 @@
  * Enable annotation cue point objects management on entry objects
  * @package plugins.annotation
  */
-class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, IKalturaCuePoint, IKalturaCuePointXmlParser
+class AnnotationPlugin extends BaseCuePointPlugin implements IVidiunServices, IVidiunCuePoint, IVidiunCuePointXmlParser
 {
 	const PLUGIN_NAME = 'annotation';
 	const CUE_POINT_VERSION_MAJOR = 1;
@@ -12,7 +12,7 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 	const CUE_POINT_NAME = 'cuePoint';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -20,7 +20,7 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{
@@ -29,7 +29,7 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{
@@ -40,7 +40,7 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -57,30 +57,30 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$cuePointVersion = new KalturaVersion(
+		$cuePointVersion = new VidiunVersion(
 			self::CUE_POINT_VERSION_MAJOR,
 			self::CUE_POINT_VERSION_MINOR,
 			self::CUE_POINT_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(self::CUE_POINT_NAME, $cuePointVersion);
+		$dependency = new VidiunDependency(self::CUE_POINT_NAME, $cuePointVersion);
 		return array($dependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KalturaCuePoint' && $enumValue == self::getCuePointTypeCoreValue(AnnotationCuePointType::ANNOTATION))
-			return new KalturaAnnotation();
+		if($baseClass == 'VidiunCuePoint' && $enumValue == self::getCuePointTypeCoreValue(AnnotationCuePointType::ANNOTATION))
+			return new VidiunAnnotation();
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -89,11 +89,11 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		
 		if(
 			$coreType == SchemaType::SYNDICATION
@@ -258,24 +258,24 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePoint::getCuePointTypeCoreValue()
+	 * @see IVidiunCuePoint::getCuePointTypeCoreValue()
 	 */
 	public static function getCuePointTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('CuePointType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('CuePointType', $value);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePoint::getApiValue()
+	 * @see IVidiunCuePoint::getApiValue()
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::parseXml()
+	 * @see IVidiunCuePointXmlParser::parseXml()
 	 */
 	public static function parseXml(SimpleXMLElement $scene, $partnerId, CuePoint $cuePoint = null)
 	{
@@ -283,12 +283,12 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 			return $cuePoint;
 			
 		if(!$cuePoint)
-			$cuePoint = kCuePointManager::parseXml($scene, $partnerId, new Annotation());
+			$cuePoint = vCuePointManager::parseXml($scene, $partnerId, new Annotation());
 			
 		if(!($cuePoint instanceof Annotation))
 			return null;
 		
-		$cuePoint->setEndTime(kXml::timeToInteger($scene->sceneEndTime));
+		$cuePoint->setEndTime(vXml::timeToInteger($scene->sceneEndTime));
 		if(isset($scene->sceneText))
 			$cuePoint->setText($scene->sceneText);
 			
@@ -304,7 +304,7 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::generateXml()
+	 * @see IVidiunCuePointXmlParser::generateXml()
 	 */
 	public static function generateXml(CuePoint $cuePoint, SimpleXMLElement $scenes, SimpleXMLElement $scene = null)
 	{
@@ -312,18 +312,18 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 			return $scene;
 			
 		if(!$scene)
-			$scene = kCuePointManager::generateCuePointXml($cuePoint, $scenes->addChild('scene-annotation'));
+			$scene = vCuePointManager::generateCuePointXml($cuePoint, $scenes->addChild('scene-annotation'));
 			
-		$scene->addChild('sceneEndTime', kXml::integerToTime($cuePoint->getEndTime()));
+		$scene->addChild('sceneEndTime', vXml::integerToTime($cuePoint->getEndTime()));
 		if($cuePoint->getText())
-			$scene->addChild('sceneText', kMrssManager::stringToSafeXml($cuePoint->getText()));
+			$scene->addChild('sceneText', vMrssManager::stringToSafeXml($cuePoint->getText()));
 		if($cuePoint->getParentId())
 		{
 			$parentCuePoint = CuePointPeer::retrieveByPK($cuePoint->getParentId());
 			if($parentCuePoint)
 			{
 				if($parentCuePoint->getSystemName())
-					$scene->addChild('parent', kMrssManager::stringToSafeXml($parentCuePoint->getSystemName()));
+					$scene->addChild('parent', vMrssManager::stringToSafeXml($parentCuePoint->getSystemName()));
 				$scene->addChild('parentId', $parentCuePoint->getId());
 			}
 		}
@@ -332,7 +332,7 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCuePointXmlParser::syndicate()
+	 * @see IVidiunCuePointXmlParser::syndicate()
 	 */
 	public static function syndicate(CuePoint $cuePoint, SimpleXMLElement $scenes, SimpleXMLElement $scene = null)
 	{
@@ -340,18 +340,18 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 			return $scene;
 			
 		if(!$scene)
-			$scene = kCuePointManager::syndicateCuePointXml($cuePoint, $scenes->addChild('scene-annotation'));
+			$scene = vCuePointManager::syndicateCuePointXml($cuePoint, $scenes->addChild('scene-annotation'));
 			
-		$scene->addChild('sceneEndTime', kXml::integerToTime($cuePoint->getEndTime()));
+		$scene->addChild('sceneEndTime', vXml::integerToTime($cuePoint->getEndTime()));
 		if($cuePoint->getText())
-			$scene->addChild('sceneText', kMrssManager::stringToSafeXml($cuePoint->getText()));
+			$scene->addChild('sceneText', vMrssManager::stringToSafeXml($cuePoint->getText()));
 		if($cuePoint->getParentId())
 		{
 			$parentCuePoint = CuePointPeer::retrieveByPK($cuePoint->getParentId());
 			if($parentCuePoint)
 			{
 				if($parentCuePoint->getSystemName())
-					$scene->addChild('parent', kMrssManager::stringToSafeXml($parentCuePoint->getSystemName()));
+					$scene->addChild('parent', vMrssManager::stringToSafeXml($parentCuePoint->getSystemName()));
 				$scene->addChild('parentId', $parentCuePoint->getId());
 			}
 		}
@@ -369,8 +369,8 @@ class AnnotationPlugin extends BaseCuePointPlugin implements IKalturaServices, I
 	 */
 	public static function getBaseEntryCloneOptionsCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BaseEntryCloneOptions', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BaseEntryCloneOptions', $value);
 	}
 
 	public static function shouldCloneByProperty(entry $entry)

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaConvertProfileJobData extends KalturaJobData
+class VidiunConvertProfileJobData extends VidiunJobData
 {
 	/**
 	 * @var string
@@ -40,7 +40,7 @@ class KalturaConvertProfileJobData extends KalturaJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kConvertProfileJobData();
+			$dbData = new vConvertProfileJobData();
 			
 		return parent::toObject($dbData);
 	}

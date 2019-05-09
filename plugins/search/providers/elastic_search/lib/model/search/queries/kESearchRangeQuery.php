@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchRangeQuery extends kESearchBaseFieldQuery
+class vESearchRangeQuery extends vESearchBaseFieldQuery
 {
 	const RANGE_KEY = 'range';
 	const GT_KEY = 'gt';

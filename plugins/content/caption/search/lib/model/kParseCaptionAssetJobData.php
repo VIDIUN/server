@@ -3,7 +3,7 @@
  * @package plugins.virusScan
  * @subpackage model.data
  */
-class kParseCaptionAssetJobData extends kJobData
+class vParseCaptionAssetJobData extends vJobData
 {
 	/**
 	 * @var string

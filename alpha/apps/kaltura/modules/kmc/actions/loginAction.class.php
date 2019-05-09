@@ -1,9 +1,9 @@
 <?php
 /**
  * @package    Core
- * @subpackage KMC
+ * @subpackage VMC
  */
-class loginAction extends kalturaAction
+class loginAction extends vidiunAction
 {
 	public function execute ( ) 
 	{
@@ -14,7 +14,7 @@ class loginAction extends kalturaAction
 		$service_url = requestUtils::getHost();
 		$service_url = str_replace ( "http://" , "" , $service_url );
 
-		if (kConf::get('kmc_secured_login')) {
+		if (vConf::get('vmc_secured_login')) {
 			$service_url = 'https://'.$service_url;		
 			
 			if ( (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') && $_SERVER['SERVER_PORT'] != 443)
@@ -31,14 +31,14 @@ class loginAction extends kalturaAction
 		}
 		
 		$this->service_url = $service_url;
-		$this->kmc_login_version 	= kConf::get('kmc_login_version');
+		$this->vmc_login_version 	= vConf::get('vmc_login_version');
 		$this->setPassHashKey = $this->getRequestParameter( "setpasshashkey" );
 		$this->hashKeyErrorCode = null;
 		$this->hashKeyLoginId = null;
 		if ($this->setPassHashKey) {
 			try {
 				if (!UserLoginDataPeer::isHashKeyValid($this->setPassHashKey)) {
-					$this->hashKeyErrorCode = kUserException::NEW_PASSWORD_HASH_KEY_INVALID;
+					$this->hashKeyErrorCode = vUserException::NEW_PASSWORD_HASH_KEY_INVALID;
 				}
 				else {
 					$userLoginDataId = UserLoginDataPeer::getIdFromHashKey($this->setPassHashKey);
@@ -49,7 +49,7 @@ class loginAction extends kalturaAction
 					$this->hashKeyLoginId = $userLoginData->getLoginEmail();			
 				}
 			}
-			catch (kCoreException $e) {
+			catch (vCoreException $e) {
 				$this->hashKeyErrorCode = $e->getCode();
 			}
 		}

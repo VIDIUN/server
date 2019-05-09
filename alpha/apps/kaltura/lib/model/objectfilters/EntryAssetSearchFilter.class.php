@@ -100,7 +100,7 @@ abstract class EntryAssetSearchFilter extends AdvancedSearchFilterItem
 		return $res;
 	}
 
-	private function addCondition($conditionStr, IKalturaIndexQuery $query)
+	private function addCondition($conditionStr, IVidiunIndexQuery $query)
 	{
 		if(!is_null($conditionStr))
 		{
@@ -111,9 +111,9 @@ abstract class EntryAssetSearchFilter extends AdvancedSearchFilterItem
 	/* (non-PHPdoc)
 	 * @see AdvancedSearchFilterItem::applyCondition()
 	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
-		if ($query instanceof IKalturaIndexQuery){
+		if ($query instanceof IVidiunIndexQuery){
 			$this->addCondition($this->getContentLike(), $query);
 			$this->addCondition($this->getContentMultiLikeAnd(), $query);
 			$this->addCondition($this->getContentMultiLikeOr(), $query);

@@ -1,12 +1,12 @@
 <?php
 /**
- * Will run KAsyncProvisionProvide
+ * Will run VAsyncProvisionProvide
  *
  * @package Scheduler
  * @subpackage Provision
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncProvisionProvide();
+$instance = new VAsyncProvisionProvide();
 $instance->run(); 
 $instance->done();

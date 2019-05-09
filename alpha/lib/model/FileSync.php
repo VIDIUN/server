@@ -58,23 +58,23 @@ class FileSync extends BaseFileSync implements IBaseObject
 
 		$key = $this->getEncryptionKey();
 		$realPath = realpath($this->getFullPath());
-		KalturaLog::debug("Encrypting content of fileSync " . $this->id . ". key is: [$key] in path [$realPath]");
-		kEncryptFileUtils::encrypt($realPath, $key, $this->getIv());
+		VidiunLog::debug("Encrypting content of fileSync " . $this->id . ". key is: [$key] in path [$realPath]");
+		vEncryptFileUtils::encrypt($realPath, $key, $this->getIv());
 	}
 
 	public function decrypt()
 	{
 		$realPath = realpath($this->getFullPath());
-		$fileData = kFileBase::getFileContent( $realPath);
+		$fileData = vFileBase::getFileContent( $realPath);
 		if (!$this->isEncrypted()) 
 		{
-			KalturaLog::info("File of fileSyncId [$this->id] in path $realPath is not encrypted");
+			VidiunLog::info("File of fileSyncId [$this->id] in path $realPath is not encrypted");
 			return $fileData;
 		}
 
 		$key = $this->getEncryptionKey();
-		KalturaLog::debug("Decrypting content of fileSync " . $this->id . ". key is: [$key]");
-		$plainData = kEncryptFileUtils::decryptData($fileData, $key, $this->getIv());
+		VidiunLog::debug("Decrypting content of fileSync " . $this->id . ". key is: [$key]");
+		$plainData = vEncryptFileUtils::decryptData($fileData, $key, $this->getIv());
 		return $plainData;
 	}
 
@@ -100,19 +100,19 @@ class FileSync extends BaseFileSync implements IBaseObject
 			$asset = assetPeer::retrieveById($this->object_id);
 			if(!$asset)
 			{
-				KalturaLog::debug("Asset id [" . $this->object_id . "] not found");
+				VidiunLog::debug("Asset id [" . $this->object_id . "] not found");
 				return false;
 			}
 
 			$shouldEncrypt = $asset->shouldEncrypt();
-			KalturaLog::debug("Asset id [$this->object_id] of type [" . $asset->getType() . "] should be encrypt: [$shouldEncrypt]");
+			VidiunLog::debug("Asset id [$this->object_id] of type [" . $asset->getType() . "] should be encrypt: [$shouldEncrypt]");
 			if (!$shouldEncrypt)
 				return false;
 		}
 
 		if ($this->getEncryptionKey())
 		{
-			KalturaLog::info("File of fileSyncId [$this->id] already has key and should not be encrypt again");
+			VidiunLog::info("File of fileSyncId [$this->id] already has key and should not be encrypt again");
 			return false;
 		}
 		return true;
@@ -121,7 +121,7 @@ class FileSync extends BaseFileSync implements IBaseObject
 
 	public function setFileSizeFromPath ($filePath)
 	{
-		$fileSize = kEncryptFileUtils::fileSize($filePath, $this->getEncryptionKey(), $this->getIv());
+		$fileSize = vEncryptFileUtils::fileSize($filePath, $this->getEncryptionKey(), $this->getIv());
 		$this->setFileSize($fileSize);
 	}
 
@@ -144,9 +144,9 @@ class FileSync extends BaseFileSync implements IBaseObject
 	{
 		$realPath = realpath($this->getFullPath());
 		$tempPath = $this->getClearTempPath();
-		KalturaLog::info("Creating new file for syncId [$this->id] on [$tempPath]");
+		VidiunLog::info("Creating new file for syncId [$this->id] on [$tempPath]");
 		if (!file_exists($tempPath))
-			kEncryptFileUtils::decryptFile($realPath, $this->getEncryptionKey(), $this->getIv(), $tempPath);
+			vEncryptFileUtils::decryptFile($realPath, $this->getEncryptionKey(), $this->getIv(), $tempPath);
 		return $tempPath;
 	}
 
@@ -171,8 +171,8 @@ class FileSync extends BaseFileSync implements IBaseObject
 	public function getExternalUrl($entryId, $format = PlaybackProtocol::HTTP)
 	{
 		$storage = StorageProfilePeer::retrieveByPK($this->getDc());
-		if(!$storage || $storage->getProtocol() == StorageProfile::STORAGE_KALTURA_DC)
-			return kDataCenterMgr::getInternalRemoteUrl($this);
+		if(!$storage || $storage->getProtocol() == StorageProfile::STORAGE_VIDIUN_DC)
+			return vDataCenterMgr::getInternalRemoteUrl($this);
 
 		$urlManager = DeliveryProfilePeer::getRemoteDeliveryByStorageId(DeliveryProfileDynamicAttributes::init($this->getDc(), $entryId, PlaybackProtocol::HTTP, infraRequestUtils::getProtocol()));
 		if(is_null($urlManager) && infraRequestUtils::getProtocol() != 'http')
@@ -219,7 +219,7 @@ class FileSync extends BaseFileSync implements IBaseObject
 		$ret = parent::postUpdate($con);
 		
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		return $ret;
 	}
@@ -264,7 +264,7 @@ class FileSync extends BaseFileSync implements IBaseObject
 	public function getEncryptionKey () { return $this->getFromCustomData("encryptionKey"); }
 	public function setEncryptionKey ($v) { $this->putInCustomData("encryptionKey", $v);  }
 	public function isEncrypted () { return ($this->getFromCustomData("encryptionKey"))? true : false ; }
-	public function getIv() {return kConf::get("encryption_iv");}
+	public function getIv() {return vConf::get("encryption_iv");}
 
 
 }

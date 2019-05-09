@@ -1,6 +1,6 @@
 <?php
 
-class kReportExportItem
+class vReportExportItem
 {
 	/**
 	 * @var string
@@ -30,7 +30,7 @@ class kReportExportItem
 	protected $objectIds;
 
 	/**
-	 * @var kReportResponseOptions
+	 * @var vReportResponseOptions
 	 */
 	protected $responseOptions;
 
@@ -131,7 +131,7 @@ class kReportExportItem
 	}
 
 	/**
-	 * @return kReportResponseOptions
+	 * @return vReportResponseOptions
 	 */
 	public function getResponseOptions()
 	{
@@ -139,7 +139,7 @@ class kReportExportItem
 	}
 
 	/**
-	 * @param kReportResponseOptions $responseOptions
+	 * @param vReportResponseOptions $responseOptions
 	 */
 	public function setResponseOptions($responseOptions)
 	{

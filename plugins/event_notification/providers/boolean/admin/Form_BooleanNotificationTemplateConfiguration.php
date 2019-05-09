@@ -8,7 +8,7 @@ class Form_BooleanNotificationTemplateConfiguration  extends Form_EventNotificat
 	/* (non-PHPdoc)
 	 * @see Form_EventNotificationTemplateConfiguration::addTypeElements()
 	 */
-	protected function addTypeElements(Kaltura_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate)
+	protected function addTypeElements(Vidiun_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate)
 	{
 	}
 }

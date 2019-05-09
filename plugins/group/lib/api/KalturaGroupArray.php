@@ -4,14 +4,14 @@
  * @subpackage api.objects
  */
 
-class KalturaGroupArray extends KalturaTypedArray
+class VidiunGroupArray extends VidiunTypedArray
 {
-	public static function fromDbArray(array $arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaGroupArray();
+		$newArr = new VidiunGroupArray();
 		foreach ( $arr as $obj )
 		{
-			$nObj = new KalturaGroup();
+			$nObj = new VidiunGroup();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -21,6 +21,6 @@ class KalturaGroupArray extends KalturaTypedArray
 
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaGroup" );
+		return parent::__construct ( "VidiunGroup" );
 	}
 }

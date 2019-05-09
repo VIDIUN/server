@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaLiveEntryOrderBy extends KalturaMediaEntryOrderBy
+class VidiunLiveEntryOrderBy extends VidiunMediaEntryOrderBy
 {
 	const FIRST_BROADCAST_ASC = "+firstBroadcast";
 	const FIRST_BROADCAST_DESC = "-firstBroadcast";

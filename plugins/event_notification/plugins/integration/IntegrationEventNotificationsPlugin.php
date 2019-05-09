@@ -3,7 +3,7 @@
  * Enable event notifications on content distribution objects
  * @package plugins.integrationEventNotifications
  */
-class IntegrationEventNotificationsPlugin extends KalturaPlugin implements IKalturaPending, IKalturaEnumerator
+class IntegrationEventNotificationsPlugin extends VidiunPlugin implements IVidiunPending, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'integrationEventNotifications';
 	
@@ -15,7 +15,7 @@ class IntegrationEventNotificationsPlugin extends KalturaPlugin implements IKalt
 	const EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD = 0;
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -23,20 +23,20 @@ class IntegrationEventNotificationsPlugin extends KalturaPlugin implements IKalt
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$eventNotificationVersion = new KalturaVersion(self::EVENT_NOTIFICATION_PLUGIN_VERSION_MAJOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_MINOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD);
+		$eventNotificationVersion = new VidiunVersion(self::EVENT_NOTIFICATION_PLUGIN_VERSION_MAJOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_MINOR, self::EVENT_NOTIFICATION_PLUGIN_VERSION_BUILD);
 		
-		$integrationDependency = new KalturaDependency(self::INTEGRATION_PLUGIN_NAME);
-		$eventNotificationDependency = new KalturaDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $eventNotificationVersion);
+		$integrationDependency = new VidiunDependency(self::INTEGRATION_PLUGIN_NAME);
+		$eventNotificationDependency = new VidiunDependency(self::EVENT_NOTIFICATION_PLUGIN_NAME, $eventNotificationVersion);
 		
 		return array($integrationDependency, $eventNotificationDependency);
 	}
 			
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -54,6 +54,6 @@ class IntegrationEventNotificationsPlugin extends KalturaPlugin implements IKalt
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

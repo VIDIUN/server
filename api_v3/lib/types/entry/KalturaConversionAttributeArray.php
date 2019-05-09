@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaConversionAttributeArray extends KalturaTypedArray
+class VidiunConversionAttributeArray extends VidiunTypedArray
 {
 	public function __construct()
 	{
-		parent::__construct("KalturaConversionAttribute");	
+		parent::__construct("VidiunConversionAttribute");	
 	}
 }

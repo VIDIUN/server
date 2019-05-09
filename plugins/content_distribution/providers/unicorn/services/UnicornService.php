@@ -6,7 +6,7 @@
  * @package plugins.unicornDistribution
  * @subpackage api.services
  */
-class UnicornService extends KalturaBaseService
+class UnicornService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -14,14 +14,14 @@ class UnicornService extends KalturaBaseService
 		$this->applyPartnerFilterForClass('BatchJob');
 		
 		if(!ContentDistributionPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, ContentDistributionPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, ContentDistributionPlugin::PLUGIN_NAME);
 	}
 	
 	/**
 	 * @action notify
 	 * @disableTags TAG_WIDGET_SESSION,TAG_ENTITLEMENT_ENTRY,TAG_ENTITLEMENT_CATEGORY
 	 * @param int $id distribution job id
-	 * @ksIgnored
+	 * @vsIgnored
 	 */
 	public function notifyAction($id) 
 	{
@@ -40,40 +40,40 @@ class UnicornService extends KalturaBaseService
 		if(!$batchJob)
 		{
 			$invalid = true;
-			KalturaLog::err("Job [$id] not found");
+			VidiunLog::err("Job [$id] not found");
 		}
 		elseif(!in_array($batchJob->getJobType(), $validJobTypes))
 		{
 			$invalid = true;
-			KalturaLog::err("Job [$id] wrong type [" . $batchJob->getJobType() . "] expected [" . implode(', ', $validJobTypes) . "]");
+			VidiunLog::err("Job [$id] wrong type [" . $batchJob->getJobType() . "] expected [" . implode(', ', $validJobTypes) . "]");
 		}
 		elseif($batchJob->getJobSubType() != UnicornDistributionProvider::get()->getType())
 		{
 			$invalid = true;
-			KalturaLog::err("Job [$id] wrong sub-type [" . $batchJob->getJobSubType() . "] expected [" . UnicornDistributionProvider::get()->getType() . "]");
+			VidiunLog::err("Job [$id] wrong sub-type [" . $batchJob->getJobSubType() . "] expected [" . UnicornDistributionProvider::get()->getType() . "]");
 		}
-		elseif($batchJob->getStatus() != KalturaBatchJobStatus::ALMOST_DONE)
+		elseif($batchJob->getStatus() != VidiunBatchJobStatus::ALMOST_DONE)
 		{
 			$invalid = true;
-			KalturaLog::err("Job [$id] wrong status [" . $batchJob->getStatus() . "] expected [" . KalturaBatchJobStatus::ALMOST_DONE . "]");
+			VidiunLog::err("Job [$id] wrong status [" . $batchJob->getStatus() . "] expected [" . VidiunBatchJobStatus::ALMOST_DONE . "]");
 		}
 		if($invalid)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_BATCHJOB_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::INVALID_BATCHJOB_ID, $id);
 		}
 			
-		kJobsManager::updateBatchJob($batchJob, KalturaBatchJobStatus::FINISHED);
+		vJobsManager::updateBatchJob($batchJob, VidiunBatchJobStatus::FINISHED);
 		
 		$data = $batchJob->getData();
-		/* @var $data kDistributionJobData */
+		/* @var $data vDistributionJobData */
 		
 		$providerData = $data->getProviderData();
-		/* @var $providerData kUnicornDistributionJobProviderData */
+		/* @var $providerData vUnicornDistributionJobProviderData */
 		
 		$entryDistribution = EntryDistributionPeer::retrieveByPK($data->getEntryDistributionId());
 		if($entryDistribution)
 		{
-			$entryDistribution->putInCustomData(kUnicornDistributionJobProviderData::CUSTOM_DATA_FLAVOR_ASSET_OLD_VERSION, $providerData->getFlavorAssetVersion());
+			$entryDistribution->putInCustomData(vUnicornDistributionJobProviderData::CUSTOM_DATA_FLAVOR_ASSET_OLD_VERSION, $providerData->getFlavorAssetVersion());
 			$entryDistribution->save();
 		}
 		
@@ -88,7 +88,7 @@ class UnicornService extends KalturaBaseService
 		}
 	}
 	
-	protected function detachRemoteAssetResource(entry $entry, kDistributionSubmitJobData $data)
+	protected function detachRemoteAssetResource(entry $entry, vDistributionSubmitJobData $data)
 	{
 		$distributionProfile = DistributionProfilePeer::retrieveByPK($data->getDistributionProfileId());
 		/* @var $distributionProfile UnicornDistributionProfile */
@@ -99,7 +99,7 @@ class UnicornService extends KalturaBaseService
 		$asset->save();		
 	}
 	
-	protected function attachRemoteAssetResource(entry $entry, kDistributionSubmitJobData $data)
+	protected function attachRemoteAssetResource(entry $entry, vDistributionSubmitJobData $data)
 	{
 		$distributionProfile = DistributionProfilePeer::retrieveByPK($data->getDistributionProfileId());
 		/* @var $distributionProfile UnicornDistributionProfile */
@@ -111,7 +111,7 @@ class UnicornService extends KalturaBaseService
 		
 		$url = "$domainGuid/$applicationGuid/$mediaItemGuid/content.m3u8";
 		
-		$entry->setSource(KalturaSourceType::URL);
+		$entry->setSource(VidiunSourceType::URL);
 		$entry->save();
 		
 		$isNewAsset = false;
@@ -139,12 +139,12 @@ class UnicornService extends KalturaBaseService
 		
 		$syncKey = $asset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 		$storageProfile = StorageProfilePeer::retrieveByPK($distributionProfile->getStorageProfileId());
-		$fileSync = kFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $url, $storageProfile);
+		$fileSync = vFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $url, $storageProfile);
 		
 		if($isNewAsset)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($asset));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($asset));
 		
-		kEventsManager::raiseEvent(new kObjectDataChangedEvent($asset));
-		kBusinessPostConvertDL::handleConvertFinished(null, $asset);
+		vEventsManager::raiseEvent(new vObjectDataChangedEvent($asset));
+		vBusinessPostConvertDL::handleConvertFinished(null, $asset);
 	}
 }

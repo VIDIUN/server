@@ -3,7 +3,7 @@
  * Enable indexing and searching ntry distribution objects in sphinx
  * @package plugins.contentDistribution
  */
-class ContentDistributionSphinxPlugin extends KalturaPlugin implements IKalturaCriteriaFactory, IKalturaSphinxConfiguration
+class ContentDistributionSphinxPlugin extends VidiunPlugin implements IVidiunCriteriaFactory, IVidiunSphinxConfiguration
 {
 	const PLUGIN_NAME = 'contentDistributionSphinx';
 	
@@ -13,12 +13,12 @@ class ContentDistributionSphinxPlugin extends KalturaPlugin implements IKalturaC
 	}
 	
 	/**
-	 * Creates a new KalturaCriteria for the given object name
+	 * Creates a new VidiunCriteria for the given object name
 	 * 
 	 * @param string $objectType object type to create Criteria for.
-	 * @return KalturaCriteria derived object
+	 * @return VidiunCriteria derived object
 	 */
-	public static function getKalturaCriteria($objectType)
+	public static function getVidiunCriteria($objectType)
 	{
 		if ($objectType == "EntryDistribution")
 			return new SphinxEntryDistributionCriteria();
@@ -27,13 +27,13 @@ class ContentDistributionSphinxPlugin extends KalturaPlugin implements IKalturaC
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSphinxConfiguration::getSphinxSchema()
+	 * @see IVidiunSphinxConfiguration::getSphinxSchema()
 	 */
 	public static function getSphinxSchema()
 	{
 		return array(
-			kSphinxSearchManager::getSphinxIndexName('entry_distribution') => array (	
-				'path'		=> '/sphinx/kaltura_distribution_rt',
+			vSphinxSearchManager::getSphinxIndexName('entry_distribution') => array (	
+				'path'		=> '/sphinx/vidiun_distribution_rt',
 				'fields'	=> array(
 					'entry_id' => SphinxFieldType::RT_FIELD,
 					'thumb_asset_ids' => SphinxFieldType::RT_FIELD,

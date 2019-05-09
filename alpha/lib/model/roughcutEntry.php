@@ -14,24 +14,24 @@ class roughcutEntry extends BaseroughcutEntry implements IBaseObject
 	const ROUGHCUT_ENTRY_OP_TYPE_REMOVE = -1;
 	
 	// used to delete a single entry from a roughcut
-	public static function deleteEntryFromRoughcut ( $roughcut_id , $roughcut_version , $roughcut_kshow_id , $entry_id )
+	public static function deleteEntryFromRoughcut ( $roughcut_id , $roughcut_version , $roughcut_vshow_id , $entry_id )
 	{
 		$roughcut_entry_list = roughcutEntryPeer::retrievByRoughcutIdAndEntryId( $roughcut_id , $entry_id );
 		$existing_entry_list = self::accumulateRoughcutEntryList ( $roughcut_entry_list );
 		
 		if ( in_array( $entry_id , $existing_entry_list ) )	
 		{	
-			self::updateRoughcutEntry( $roughcut_id , $roughcut_version , $roughcut_kshow_id , $entry_id , self::ROUGHCUT_ENTRY_OP_TYPE_REMOVE );
+			self::updateRoughcutEntry( $roughcut_id , $roughcut_version , $roughcut_vshow_id , $entry_id , self::ROUGHCUT_ENTRY_OP_TYPE_REMOVE );
 		}			
 	}
 	
 	// assume the $entry_id_list is an array of entry_ids - all the entries that exist for a roughcut at a given point
-	public static function updateRoughcut ( $roughcut_id , $roughcut_version , $roughcut_kshow_id , $entry_id_list )
+	public static function updateRoughcut ( $roughcut_id , $roughcut_version , $roughcut_vshow_id , $entry_id_list )
 	{
 /*		
 		$roughcut_id = $roughcut->getId();
 		$roughcut_version = $roughcut->getVersion();
-		$roughcut_kshow_id = $roughcut->getKshowId();
+		$roughcut_vshow_id = $roughcut->getVshowId();
 */
 		$roughcut_entry_list = roughcutEntryPeer::retrievByRoughcutId( $roughcut_id );
 		
@@ -51,7 +51,7 @@ class roughcutEntry extends BaseroughcutEntry implements IBaseObject
 				// ignore duplicates
 				if ( ! in_array ($new_entry_id , $to_add ))
 				{
-					self::updateRoughcutEntry( $roughcut_id , $roughcut_version , $roughcut_kshow_id , $new_entry_id , self::ROUGHCUT_ENTRY_OP_TYPE_ADD );
+					self::updateRoughcutEntry( $roughcut_id , $roughcut_version , $roughcut_vshow_id , $new_entry_id , self::ROUGHCUT_ENTRY_OP_TYPE_ADD );
 					$to_add[] = $new_entry_id;
 				}
 			}
@@ -65,7 +65,7 @@ class roughcutEntry extends BaseroughcutEntry implements IBaseObject
 				// ignore duplicates
 				if ( ! in_array ($existing_entry_id , $to_remove ))
 				{
-					self::updateRoughcutEntry( $roughcut_id , $roughcut_version , $roughcut_kshow_id , $existing_entry_id , self::ROUGHCUT_ENTRY_OP_TYPE_REMOVE );
+					self::updateRoughcutEntry( $roughcut_id , $roughcut_version , $roughcut_vshow_id , $existing_entry_id , self::ROUGHCUT_ENTRY_OP_TYPE_REMOVE );
 					$to_remove[] = $existing_entry_id;
 				}
 			}
@@ -74,16 +74,16 @@ class roughcutEntry extends BaseroughcutEntry implements IBaseObject
 //		echo "add: " . print_r ( $to_add , true ) . "\n";
 //		echo "delete: " . print_r ( $to_remove , true ) . "\n";
 		
-		KalturaLog::log ( 
+		VidiunLog::log ( 
 			"roughcutEntry::updateRoughcut\nadded: [" . implode ( "," , $to_add ) . "] removed:  [" . implode ( "," , $to_add ) . "]"  );
 	}
 	
-	private static function updateRoughcutEntry ( $roughcut_id , $roughcut_version , $roughcut_kshow_id , $entry_id , $op_type )
+	private static function updateRoughcutEntry ( $roughcut_id , $roughcut_version , $roughcut_vshow_id , $entry_id , $op_type )
 	{
 		$roughcut_entry = new roughcutEntry();
 		$roughcut_entry->setRoughcutId( $roughcut_id );
 		$roughcut_entry->setRoughcutVersion ( $roughcut_version );
-		$roughcut_entry->setRoughcutKshowId ( $roughcut_kshow_id );
+		$roughcut_entry->setRoughcutVshowId ( $roughcut_vshow_id );
 		$roughcut_entry->setEntryId ( $entry_id );
 		$roughcut_entry->setOpType( $op_type );
 		$roughcut_entry->save();
@@ -105,7 +105,7 @@ class roughcutEntry extends BaseroughcutEntry implements IBaseObject
 			}
 			elseif ( $roughcut_entry->getOpType() == self::ROUGHCUT_ENTRY_OP_TYPE_REMOVE )
 			{
-				kArray::removeFromArray ( $entry_id_list , $id );
+				vArray::removeFromArray ( $entry_id_list , $id );
 			}
 		}
 		

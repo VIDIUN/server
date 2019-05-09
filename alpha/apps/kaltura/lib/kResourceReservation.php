@@ -1,6 +1,6 @@
 <?php
 
-class kResourceReservation
+class vResourceReservation
 {
 	/**
 	 * @var ResourceReservation $resourceReservator
@@ -9,11 +9,11 @@ class kResourceReservation
 
 	function __construct($ttl = null)
 	{
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_RESOURCE_RESERVATION);
-		$ks = kCurrentContext::$ks;
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_RESOURCE_RESERVATION);
+		$vs = vCurrentContext::$vs;
 		if (!$ttl)
-			$ttl = kConf::get('ResourceReservationDuration');
-		$this->resourceReservator = new ResourceReservation($cache, $ttl, $ks);
+			$ttl = vConf::get('ResourceReservationDuration');
+		$this->resourceReservator = new ResourceReservation($cache, $ttl, $vs);
 	}
 
 
@@ -27,10 +27,10 @@ class kResourceReservation
 	{
 		if ($this->resourceReservator->reserve($resourceId))
 		{
-			KalturaLog::info("Resource reservation was done successfully for resource id [$resourceId]");
+			VidiunLog::info("Resource reservation was done successfully for resource id [$resourceId]");
 			return true;
 		}
-		KalturaLog::info("Could not reserve resource id [$resourceId]");
+		VidiunLog::info("Could not reserve resource id [$resourceId]");
 		return false;
 	}
 
@@ -44,10 +44,10 @@ class kResourceReservation
 	{
 		if ($this->resourceReservator->deleteReservation($resourceId))
 		{
-			KalturaLog::info("Resource reservation was deleted successfully for resource id [$resourceId]");
+			VidiunLog::info("Resource reservation was deleted successfully for resource id [$resourceId]");
 			return true;
 		}
-		KalturaLog::info("Could not delete reservation for resource id [$resourceId]");
+		VidiunLog::info("Could not delete reservation for resource id [$resourceId]");
 		return false;
 	}
 
@@ -61,10 +61,10 @@ class kResourceReservation
 	{
 		if ($this->resourceReservator->checkAvailable($resourceId))
 		{
-			KalturaLog::info("Resource id [$resourceId] is available for usage");
+			VidiunLog::info("Resource id [$resourceId] is available for usage");
 			return true;
 		}
-		KalturaLog::info("Can not use resource id [$resourceId] - it is reserved");
+		VidiunLog::info("Can not use resource id [$resourceId] - it is reserved");
 		return false;
 	}
 }

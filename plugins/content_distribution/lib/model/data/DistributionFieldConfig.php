@@ -20,8 +20,8 @@ class DistributionFieldConfig
     
     /**
      * 
-     * An XSLT string that extracts the right value from the Kaltura entry MRSS XML.
-     * The value of the current connector field will be the one that is returned from transforming the Kaltura entry MRSS XML using this XSLT string.
+     * An XSLT string that extracts the right value from the Vidiun entry MRSS XML.
+     * The value of the current connector field will be the one that is returned from transforming the Vidiun entry MRSS XML using this XSLT string.
      * @var string
      */
     private $entryMrssXslt;

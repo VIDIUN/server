@@ -1,6 +1,6 @@
 <?php
 
-class kKavaLiveReportsMgr extends kKavaBase
+class vKavaLiveReportsMgr extends vKavaBase
 {
 	const MIN_RESULTS = 1000;
 	const MAX_RESULTS = 10000;
@@ -55,7 +55,7 @@ class kKavaLiveReportsMgr extends kKavaBase
 			$filter->setIsLive($isLive);
 		}
 		
-		$criteria = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$criteria->addAscendingOrderByColumn(entryPeer::NAME);		// Note: don't really care about order here, this is a hack to force the query to go to sphinx
 		$criteria->setLimit(self::MAX_LIVE_ENTRIES);
 		$filter->attachToCriteria($criteria);
@@ -71,7 +71,7 @@ class kKavaLiveReportsMgr extends kKavaBase
 			return $input;
 		}
 		
-		$criteria = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$criteria = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$criteria->add(entryPeer::ID, array_keys($input), Criteria::IN);
 		$criteria->add(entryPeer::TYPE, entryType::LIVE_STREAM);
 		$criteria->addAscendingOrderByColumn(entryPeer::NAME);
@@ -113,7 +113,7 @@ class kKavaLiveReportsMgr extends kKavaBase
 			$entryIds = self::getLiveEntries($partnerId, $entryIds, $filter->live);
 			if (!$entryIds)
 			{
-				throw new kKavaNoResultsException();
+				throw new vKavaNoResultsException();
 			}
 			
 			// Note: since the entry ids where already filtered by partner, 
@@ -182,7 +182,7 @@ class kKavaLiveReportsMgr extends kKavaBase
 		$query[self::DRUID_GRANULARITY] = self::getGranularityAll();
 		$result = self::runQuery(
 			$query,
-			kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_DRUID_QUERIES),
+			vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_DRUID_QUERIES),
 			self::CACHE_EXPIRATION);
 		if (!$result)
 		{
@@ -190,7 +190,7 @@ class kKavaLiveReportsMgr extends kKavaBase
 		}
 		$result = reset($result);
 		$result = $result[self::DRUID_RESULT];
-		KalturaLog::log("Druid returned [" . count($result) . "] rows");
+		VidiunLog::log("Druid returned [" . count($result) . "] rows");
 		return $result;
 	}
 
@@ -199,9 +199,9 @@ class kKavaLiveReportsMgr extends kKavaBase
 		$query[self::DRUID_GRANULARITY] = self::getGranularityPeriod($period);
 		$result = self::runQuery(
 			$query,
-			kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_DRUID_QUERIES),
+			vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_DRUID_QUERIES),
 			self::CACHE_EXPIRATION);
-		KalturaLog::log("Druid returned [" . count($result) . "] rows");
+		VidiunLog::log("Druid returned [" . count($result) . "] rows");
 		return $result;
 	}
 
@@ -575,7 +575,7 @@ class kKavaLiveReportsMgr extends kKavaBase
 		self::addBaseAggregations($query);
 		
 		$queryResult = self::runGranularityPeriodQuery($query, self::VIEW_EVENT_PERIOD);
-		KalturaLog::log("Druid returned [" . count($queryResult) . "] rows");
+		VidiunLog::log("Druid returned [" . count($queryResult) . "] rows");
 	
 		list($queryResult, $totalCount) = self::applyPager($queryResult, $pageIndex, $pageSize);
 		

@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution 
  * @subpackage admin
  */
-class XsltTesterApiAction extends KalturaApplicationPlugin
+class XsltTesterApiAction extends VidiunApplicationPlugin
 {
     protected $client;
 
@@ -24,7 +24,7 @@ class XsltTesterApiAction extends KalturaApplicationPlugin
 	
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_CONTENT_DISTRIBUTION_BASE);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_CONTENT_DISTRIBUTION_BASE);
 	}
 	
 	public function doAction(Zend_Controller_Action $action)

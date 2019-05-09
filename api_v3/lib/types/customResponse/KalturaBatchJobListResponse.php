@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBatchJobListResponse extends KalturaListResponse
+class VidiunBatchJobListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaBatchJobArray
+	 * @var VidiunBatchJobArray
 	 * @readonly
 	 */
 	public $objects;

@@ -3,7 +3,7 @@
  * @package plugins.transcript
  * @subpackage lib
  */
-class kTranscriptHelper
+class vTranscriptHelper
 {
 	const TOKEN_TYPE_WORD = 'word';
 	

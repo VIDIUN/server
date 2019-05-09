@@ -3,7 +3,7 @@
  * @package plugins.beacon
  * @subpackage model.entitlement
  */
-abstract class kScheduledResourceSearchEntitlementDecorator implements IKalturaESearchEntitlementDecorator
+abstract class vScheduledResourceSearchEntitlementDecorator implements IVidiunESearchEntitlementDecorator
 {
 	public static function shouldContribute()
 	{

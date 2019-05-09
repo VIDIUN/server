@@ -1,6 +1,6 @@
 <?php
 
-class KalturaReportResponseOptions extends KalturaObject
+class VidiunReportResponseOptions extends VidiunObject
 {
 	/**
 	 * @var string
@@ -24,13 +24,13 @@ class KalturaReportResponseOptions extends KalturaObject
 	}
 
 	/* (non-PHPdoc)
- 	* @see KalturaObject::toObject()
+ 	* @see VidiunObject::toObject()
  	*/
 	public function toObject($reportResponseOptions = null, $skip = array())
 	{
 		if(!$reportResponseOptions)
 		{
-			$reportResponseOptions = new kReportResponseOptions();
+			$reportResponseOptions = new vReportResponseOptions();
 		}
 
 		return parent::toObject($reportResponseOptions, $skip);

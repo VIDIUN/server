@@ -4,7 +4,7 @@
  * @subpackage Storage
  */
 
-class kFileUtils extends kFile
+class vFileUtils extends vFile
 {
 
 	const ENCRYPT = '_ENCRYPT_V2';
@@ -21,7 +21,7 @@ class kFileUtils extends kFile
 			{
 				break;
 					
-				// when breaking, kFile will try to dump, if file not exist - will die...
+				// when breaking, vFile will try to dump, if file not exist - will die...
 			}
 			else
 			{
@@ -32,13 +32,13 @@ class kFileUtils extends kFile
 	
 	public static function xSendFileAllowed($file_name)
 	{
-		$xsendfile_uri = kConf::hasParam('xsendfile_uri') ? kConf::get('xsendfile_uri') : null;
+		$xsendfile_uri = vConf::hasParam('xsendfile_uri') ? vConf::get('xsendfile_uri') : null;
 		if ($xsendfile_uri === null || strpos($_SERVER["REQUEST_URI"], $xsendfile_uri) === false)
 			return false;
 		
 		// Note: xsend-file requires explicit listing of paths that are allowed for file dumping,
 		//		the parameter xsendfile_paths should be configured exactly the same as in the apache.conf 
-		$xsendfile_paths = kConf::hasParam('xsendfile_paths') ? kConf::get('xsendfile_paths') : array();
+		$xsendfile_paths = vConf::hasParam('xsendfile_paths') ? vConf::get('xsendfile_paths') : array();
 		foreach($xsendfile_paths as $path)
 		{
 			if (strpos($file_name, $path) === 0)
@@ -57,9 +57,9 @@ class kFileUtils extends kFile
 		
 		// if by now there is no file - die !
 		if(! file_exists($filePath))
-			KExternalErrors::dieError(KExternalErrors::FILE_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FILE_NOT_FOUND);
 		
-		return new kRendererDumpFile($filePath, $mimeType, self::xSendFileAllowed($filePath), $maxAge, $limitFileSize, $lastModified, $key, $iv, $fileSize);
+		return new vRendererDumpFile($filePath, $mimeType, self::xSendFileAllowed($filePath), $maxAge, $limitFileSize, $lastModified, $key, $iv, $fileSize);
 	}
 	
 	public static function dumpFile($file_name, $mime_type = null, $max_age = null, $limit_file_size = 0, $key = null, $iv = null, $fileSize = null)
@@ -68,30 +68,30 @@ class kFileUtils extends kFile
 		
 		$renderer->output();
 		
-		KExternalErrors::dieGracefully();
+		VExternalErrors::dieGracefully();
 	}
 
 	public static function isAlreadyInDumpApi()
 	{
-		return isset($_SERVER["HTTP_X_KALTURA_PROXY"]);
+		return isset($_SERVER["HTTP_X_VIDIUN_PROXY"]);
 	}
 	
 	public static function dumpApiRequest($host, $onlyIfAvailable = false)
 	{
 		if($onlyIfAvailable){
 			//validate that the other DC is available before dumping the request
-			if(kConf::hasParam('disable_dump_api_request') && kConf::get('disable_dump_api_request')){
-				KalturaLog::info('dumpApiRequest is disabled');
+			if(vConf::hasParam('disable_dump_api_request') && vConf::get('disable_dump_api_request')){
+				VidiunLog::info('dumpApiRequest is disabled');
 				return;
 			}			
 		}
-		if (kCurrentContext::$multiRequest_index > 1)
-            KExternalErrors::dieError(KExternalErrors::MULTIREQUEST_PROXY_FAILED);
+		if (vCurrentContext::$multiRequest_index > 1)
+            VExternalErrors::dieError(VExternalErrors::MULTIREQUEST_PROXY_FAILED);
 		self::closeDbConnections();
 		
-		// prevent loop back of the proxied request by detecting the "X-Kaltura-Proxy header
-		if (isset($_SERVER["HTTP_X_KALTURA_PROXY"]))
-			KExternalErrors::dieError(KExternalErrors::PROXY_LOOPBACK);
+		// prevent loop back of the proxied request by detecting the "X-Vidiun-Proxy header
+		if (isset($_SERVER["HTTP_X_VIDIUN_PROXY"]))
+			VExternalErrors::dieError(VExternalErrors::PROXY_LOOPBACK);
 			
 		$get_params = $post_params = array();
 		
@@ -103,7 +103,7 @@ class kFileUtils extends kFile
 		{
 			$post_params[$key] = "@".$value['tmp_name'].";filename=".$value['name'];
 			if(!is_uploaded_file($value['tmp_name'])) {
-				KExternalErrors::dieError(KExternalErrors::FILE_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::FILE_NOT_FOUND);
 			}
 		}
 		
@@ -113,13 +113,13 @@ class kFileUtils extends kFile
 		}
 		
 		$url = $_SERVER['REQUEST_URI'];
-		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' && kConf::hasParam('https_param_salt'))
+		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' && vConf::hasParam('https_param_salt'))
 		{
 			$concatStr = strpos($url, "?") !== false ? "&" : "?";
-			$url = $url . $concatStr . 'apiProtocol=https_' . kConf::get('https_param_salt');
+			$url = $url . $concatStr . 'apiProtocol=https_' . vConf::get('https_param_salt');
 		}
 			
-		$httpHeader = array("X-Kaltura-Proxy: dumpApiRequest");
+		$httpHeader = array("X-Vidiun-Proxy: dumpApiRequest");
 		
 		if(isset(infraRequestUtils::$jsonData))
 		{
@@ -146,22 +146,22 @@ class kFileUtils extends kFile
 		}
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_params);
 		// Set callback function for body
-		curl_setopt($ch, CURLOPT_WRITEFUNCTION, 'kFileUtils::read_body');
+		curl_setopt($ch, CURLOPT_WRITEFUNCTION, 'vFileUtils::read_body');
 		// Set callback function for headers
-		curl_setopt($ch, CURLOPT_HEADERFUNCTION, 'kFileUtils::read_header');
+		curl_setopt($ch, CURLOPT_HEADERFUNCTION, 'vFileUtils::read_header');
 		
-		header("X-Kaltura:dumpApiRequest " . kDataCenterMgr::getCurrentDcId());
+		header("X-Vidiun:dumpApiRequest " . vDataCenterMgr::getCurrentDcId());
 		// grab URL and pass it to the browser
 		$content = curl_exec($ch);
 		
 		// close curl resource, and free up system resources
 		curl_close($ch);
-		KExternalErrors::dieGracefully();
+		VExternalErrors::dieGracefully();
 	}
 	
     public static function dumpUrl($url, $allowRange = true, $passHeaders = false, $additionalHeaders = null)
 	{
-		KalturaLog::debug("URL [$url], $allowRange [$allowRange], $passHeaders [$passHeaders]");
+		VidiunLog::debug("URL [$url], $allowRange [$allowRange], $passHeaders [$passHeaders]");
 		self::closeDbConnections();
 	
 		$ch = curl_init();
@@ -177,11 +177,11 @@ class kFileUtils extends kFile
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, infraRequestUtils::isIpPrivate($urlHost) ? 0 : 2);
 
 
-		// prevent loop back of the proxied request by detecting the "X-Kaltura-Proxy header
-		if (isset($_SERVER["HTTP_X_KALTURA_PROXY"]))
-			KExternalErrors::dieError(KExternalErrors::PROXY_LOOPBACK);
+		// prevent loop back of the proxied request by detecting the "X-Vidiun-Proxy header
+		if (isset($_SERVER["HTTP_X_VIDIUN_PROXY"]))
+			VExternalErrors::dieError(VExternalErrors::PROXY_LOOPBACK);
 			
-		$sendHeaders = array("X-Kaltura-Proxy: dumpUrl");
+		$sendHeaders = array("X-Vidiun-Proxy: dumpUrl");
 		
 		$ipHeader = infraRequestUtils::getSignedIpAddressHeader();
 		if ($ipHeader){
@@ -211,7 +211,7 @@ class kFileUtils extends kFile
 		// when proxying request to other datacenter we may be already in a proxied request (from one of the internal proxy servers)
 		// we need to ensure the original HOST is sent in order to allow restirctions checks
 
-		$host = kConf::get('www_host');
+		$host = vConf::get('www_host');
 		if (isset($_SERVER['HTTP_X_FORWARDED_HOST']))
 		{
 			$host = $_SERVER['HTTP_X_FORWARDED_HOST'];
@@ -244,23 +244,23 @@ class kFileUtils extends kFile
 		else
 		{
 			// Set callback function for body
-			curl_setopt($ch, CURLOPT_WRITEFUNCTION, 'kFileUtils::read_body');
+			curl_setopt($ch, CURLOPT_WRITEFUNCTION, 'vFileUtils::read_body');
 		}
 		// Set callback function for headers
-		curl_setopt($ch, CURLOPT_HEADERFUNCTION, 'kFileUtils::read_header');
+		curl_setopt($ch, CURLOPT_HEADERFUNCTION, 'vFileUtils::read_header');
 		
 		//curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 		
 		header("Access-Control-Allow-Origin:*"); // avoid html5 xss issues
-		header("X-Kaltura:dumpUrl");
+		header("X-Vidiun:dumpUrl");
 		// grab URL and pass it to the browser
 		$content = curl_exec($ch);
-		KalturaLog::debug("CURL executed [$content]");
+		VidiunLog::debug("CURL executed [$content]");
 		
 		// close curl resource, and free up system resources
 		curl_close($ch);
 		
-		KExternalErrors::dieGracefully();
+		VExternalErrors::dieGracefully();
 	}
 
 	static public function addEncryptToFileName($fileName)
@@ -279,12 +279,12 @@ class kFileUtils extends kFile
 
 	public static function getMimeType($filePath)
 	{
-		$fileType = kFile::mimeType($filePath);
+		$fileType = vFile::mimeType($filePath);
 		if ($fileType == 'application/octet-stream')//stream of byte - can be media or executable
 		{
-			$fileType = kFile::getMediaInfoFormat($filePath);
+			$fileType = vFile::getMediaInfoFormat($filePath);
 			if (empty($fileType))
-				$fileType = kFile::findFileTypeByFileCmd($filePath);
+				$fileType = vFile::findFileTypeByFileCmd($filePath);
 		}
 		return $fileType;
 	}

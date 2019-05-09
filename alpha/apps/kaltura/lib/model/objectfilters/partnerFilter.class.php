@@ -9,7 +9,7 @@ class partnerFilter extends baseObjectFilter
 	{
 		// TODO - should separate the schema of the fields from the actual values
 		// or can use this to set default valuse
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 			"_eq_id",
 			"_in_id",
 			"_gt_id" ,
@@ -72,7 +72,7 @@ class partnerFilter extends baseObjectFilter
 		    if(is_null($this->get('_in_id')))
 		    {
 		        $mandatoryParameter = "_in_id";
-		        throw new kCoreException("Mandatory parameter $mandatoryParameter missing from the filter" ,kCoreException::MISSING_MANDATORY_PARAMETERS, $mandatoryParameter);
+		        throw new vCoreException("Mandatory parameter $mandatoryParameter missing from the filter" ,vCoreException::MISSING_MANDATORY_PARAMETERS, $mandatoryParameter);
 		    }
 		    
 	        $permissions = explode (',' , $this->get('_partner_permissions_exist'));

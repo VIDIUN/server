@@ -39,12 +39,12 @@ class SyndicationDistributionProfile extends DistributionProfile
 		$syndicationFeed->setStatus(syndicationFeed::SYNDICATION_ACTIVE);
 		$syndicationFeed->setDisplayInSearch(mySearchUtils::DISPLAY_IN_SEARCH_SYSTEM);
 		$syndicationFeed->setAllowEmbed(false);
-		$syndicationFeed->setType(syndicationFeedType::KALTURA);
+		$syndicationFeed->setType(syndicationFeedType::VIDIUN);
 		$syndicationFeed->setFlavorParamId($this->required_flavor_params_ids);
 		$syndicationFeed->save();
 		
 		$this->setFeedId($syndicationFeed->getId());
-		KalturaLog::log("Syndication feed created id [" . $this->getFeedId() . "]");
+		VidiunLog::log("Syndication feed created id [" . $this->getFeedId() . "]");
 		
 		return parent::preSave($con);	
 	}
@@ -84,18 +84,18 @@ class SyndicationDistributionProfile extends DistributionProfile
 
 		// creates playlist based on the filter XML
 		$playlist = new entry();
-		$playlist->setKuserId(kCurrentContext::$uid);
-		$playlist->setCreatorKuserId(kCurrentContext::$uid);
+		$playlist->setVuserId(vCurrentContext::$uid);
+		$playlist->setCreatorVuserId(vCurrentContext::$uid);
 		$playlist->setDisplayInSearch(mySearchUtils::DISPLAY_IN_SEARCH_SYSTEM);
 		$playlist->setPartnerId($this->getPartnerId());
 		$playlist->setStatus(entryStatus::READY);
-		$playlist->setKshowId(null);
+		$playlist->setVshowId(null);
 		$playlist->setType(entryType::PLAYLIST);
 		$playlist->setMediaType(entry::ENTRY_MEDIA_TYPE_XML);
 		$playlist->setDataContent($playlistContent);
 		$playlist->save();
 		
-		KalturaLog::log("Playlist [" . $playlist->getId() . "] created");
+		VidiunLog::log("Playlist [" . $playlist->getId() . "] created");
 		
 		// creates feed based on the playlist
 		$syndicationFeed->setPlaylistId($playlist->getId());
@@ -114,11 +114,11 @@ class SyndicationDistributionProfile extends DistributionProfile
 			$syndicationFeed = syndicationFeedPeer::retrieveByPK($this->getFeedId());
 			if($syndicationFeed && $syndicationFeed instanceof genericSyndicationFeed)
 			{
-				$syndicationFeed->setType(syndicationFeedType::KALTURA_XSLT);
+				$syndicationFeed->setType(syndicationFeedType::VIDIUN_XSLT);
 				$syndicationFeed->incrementVersion();
 				$syndicationFeed->save();
 				$syncKey = $syndicationFeed->getSyncKey(genericSyndicationFeed::FILE_SYNC_SYNDICATION_FEED_XSLT);
-				kFileSyncUtils::file_put_contents($syncKey, $this->xsl, false);
+				vFileSyncUtils::file_put_contents($syncKey, $this->xsl, false);
 				$this->xslModified = false;
 			}
 		}
@@ -140,7 +140,7 @@ class SyndicationDistributionProfile extends DistributionProfile
 			return null;
 			
 		$syncKey = $feed->getSyncKey(genericSyndicationFeed::FILE_SYNC_SYNDICATION_FEED_XSLT);
-		$this->xsl = kFileSyncUtils::file_get_contents($syncKey, true, false);
+		$this->xsl = vFileSyncUtils::file_get_contents($syncKey, true, false);
 		return $this->xsl;
 	}
 	

@@ -97,7 +97,7 @@ CREATE TABLE `entry_vendor_task`
 	`price` FLOAT  NOT NULL,
 	`catalog_item_id` INTEGER  NOT NULL,
 	`reach_profile_id` INTEGER  NOT NULL,
-	`kuser_id` INTEGER  NOT NULL,
+	`vuser_id` INTEGER  NOT NULL,
 	`version` INTEGER,
 	`context` VARCHAR(256),
 	`custom_data` TEXT,

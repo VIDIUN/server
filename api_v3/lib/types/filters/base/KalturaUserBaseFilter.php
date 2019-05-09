@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaUserBaseFilter extends KalturaRelatedFilter
+abstract class VidiunUserBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -51,7 +51,7 @@ abstract class KalturaUserBaseFilter extends KalturaRelatedFilter
 	public $partnerIdEqual;
 
 	/**
-	 * @var KalturaUserType
+	 * @var VidiunUserType
 	 */
 	public $typeEqual;
 
@@ -91,7 +91,7 @@ abstract class KalturaUserBaseFilter extends KalturaRelatedFilter
 	public $tagsMultiLikeAnd;
 
 	/**
-	 * @var KalturaUserStatus
+	 * @var VidiunUserStatus
 	 */
 	public $statusEqual;
 
@@ -121,7 +121,7 @@ abstract class KalturaUserBaseFilter extends KalturaRelatedFilter
 	public $lastNameStartsWith;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isAdminEqual;
 }

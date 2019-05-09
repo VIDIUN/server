@@ -3,15 +3,15 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchEntryOperator extends KalturaESearchEntryBaseItem
+class VidiunESearchEntryOperator extends VidiunESearchEntryBaseItem
 {
 	/**
-	 * @var KalturaESearchOperatorType
+	 * @var VidiunESearchOperatorType
 	 */
 	public $operator;
 	
 	/**
-	 *  @var KalturaESearchEntryBaseItemArray
+	 *  @var VidiunESearchEntryBaseItemArray
 	 */
 	public $searchItems;
 	

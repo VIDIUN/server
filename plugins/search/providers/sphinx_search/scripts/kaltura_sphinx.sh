@@ -15,14 +15,14 @@
 # Description: Sphinx is a free open-source SQL full-text search engine	 
 ### END INIT INFO
 
-. /etc/kaltura.d/system.ini
+. /etc/vidiun.d/system.ini
 
 # Source function library.
 . $APP_DIR/infra/scripts/functions.rc
 prog="searchd"
-config="$APP_DIR/configurations/sphinx/kaltura.conf"
+config="$APP_DIR/configurations/sphinx/vidiun.conf"
 exec="$BASE_DIR/bin/sphinx/searchd"
-pid_file="/opt/kaltura/sphinx/searchd.pid"
+pid_file="/opt/vidiun/sphinx/searchd.pid"
 
 
 start() {
@@ -30,7 +30,7 @@ start() {
  	[ -f $config ] || exit 6
  	echo -n $"Starting $prog: "
  	# if not running, start it up here, usually something like "daemon $exec"
- 	su $OS_KALTURA_USER -c "$exec --config $config"
+ 	su $OS_VIDIUN_USER -c "$exec --config $config"
  	retval=$?
  	echo
  	return $retval

@@ -3,7 +3,7 @@
  * @package plugins.tvinciDistribution
  * @subpackage model.data
  */
-class kTvinciDistributionJobProviderData extends kConfigurableDistributionJobProviderData
+class vTvinciDistributionJobProviderData extends vConfigurableDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -13,7 +13,7 @@ class kTvinciDistributionJobProviderData extends kConfigurableDistributionJobPro
 	public function setXml($xml)	{ $this->xml = $xml; }
 	public function getXml()		{ return $this->xml; }
 	
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

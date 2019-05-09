@@ -3,10 +3,10 @@
  * @package plugins.uverseDistribution
  * @subpackage lib
  */
-class kUverseDistributionEventConsumer implements kBatchJobStatusEventConsumer
+class vUverseDistributionEventConsumer implements vBatchJobStatusEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -21,7 +21,7 @@ class kUverseDistributionEventConsumer implements kBatchJobStatusEventConsumer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
@@ -32,10 +32,10 @@ class kUverseDistributionEventConsumer implements kBatchJobStatusEventConsumer
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kDistributionJobData $data
+	 * @param vDistributionJobData $data
 	 * @return BatchJob
 	 */
-	public static function onDistributionJobUpdated(BatchJob $dbBatchJob, kDistributionJobData $data)
+	public static function onDistributionJobUpdated(BatchJob $dbBatchJob, vDistributionJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
@@ -48,20 +48,20 @@ class kUverseDistributionEventConsumer implements kBatchJobStatusEventConsumer
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kDistributionJobData $data
+	 * @param vDistributionJobData $data
 	 * @return BatchJob
 	 */
-	public static function onDistributionJobFinished(BatchJob $dbBatchJob, kDistributionJobData $data)
+	public static function onDistributionJobFinished(BatchJob $dbBatchJob, vDistributionJobData $data)
 	{
 		$entryDistribution = EntryDistributionPeer::retrieveByPK($data->getEntryDistributionId());
 		if(!$entryDistribution)
 		{
-			KalturaLog::err("Entry distribution [" . $data->getEntryDistributionId() . "] not found");
+			VidiunLog::err("Entry distribution [" . $data->getEntryDistributionId() . "] not found");
 			return $dbBatchJob;
 		}
 		
 		$providerData = $data->getProviderData();
-		if($providerData instanceof kUverseDistributionJobProviderData)
+		if($providerData instanceof vUverseDistributionJobProviderData)
 		{
 			$entryDistribution->putInCustomData(UverseEntryDistributionCustomDataField::REMOTE_ASSET_URL, $providerData->getRemoteAssetUrl());
 			$entryDistribution->putInCustomData(UverseEntryDistributionCustomDataField::REMOTE_ASSET_FILE_NAME, $providerData->getRemoteAssetFileName());

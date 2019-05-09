@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchUnifiedItem extends KalturaESearchAbstractEntryItem
+class VidiunESearchUnifiedItem extends VidiunESearchAbstractEntryItem
 {
 
 	private static $map_dynamic_enum = array();

@@ -4,13 +4,13 @@
  * @subpackage objects
  * @abstract
  */
-abstract class KalturaCondition extends KalturaObject
+abstract class VidiunCondition extends VidiunObject
 {
 	/**
 	 * The type of the access control condition
 	 * 
 	 * @readonly
-	 * @var KalturaConditionType
+	 * @var VidiunConditionType
 	 */
 	public $type;
 	

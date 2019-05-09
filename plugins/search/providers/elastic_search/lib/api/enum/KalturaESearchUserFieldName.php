@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.enum
  */
-class KalturaESearchUserFieldName extends KalturaESearchBaseUserFieldName
+class VidiunESearchUserFieldName extends VidiunESearchBaseUserFieldName
 {
 	const TYPE = 'user_type';
 }

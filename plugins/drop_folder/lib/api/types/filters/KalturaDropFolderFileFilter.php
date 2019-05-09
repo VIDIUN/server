@@ -3,10 +3,10 @@
  * @package plugins.dropFolder
  * @subpackage api.filters
  */
-class KalturaDropFolderFileFilter extends KalturaDropFolderFileBaseFilter
+class VidiunDropFolderFileFilter extends VidiunDropFolderFileBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -14,11 +14,11 @@ class KalturaDropFolderFileFilter extends KalturaDropFolderFileBaseFilter
 	}
 	
 	/**
-	 * @param KalturaFilterPager $pager
-	 * @param KalturaDetachedResponseProfile $responseProfile
-	 * @return KalturaListResponse
+	 * @param VidiunFilterPager $pager
+	 * @param VidiunDetachedResponseProfile $responseProfile
+	 * @return VidiunListResponse
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$dropFolderFileFilter = $this->toObject();
 		
@@ -35,12 +35,12 @@ class KalturaDropFolderFileFilter extends KalturaDropFolderFileBaseFilter
 		}
 		else
 		{
-			KalturaFilterPager::detachFromCriteria($c);
+			VidiunFilterPager::detachFromCriteria($c);
 			$totalCount = DropFolderFilePeer::doCount($c);
 		}
 		
-		$response = new KalturaDropFolderFileListResponse();
-		$response->objects = KalturaDropFolderFileArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunDropFolderFileListResponse();
+		$response->objects = VidiunDropFolderFileArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 		return $response;
 	}

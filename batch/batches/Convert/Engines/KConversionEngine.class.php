@@ -5,7 +5,7 @@
  * @package Scheduler
  * @subpackage Conversion.engines
  */
-abstract class KConversionEngine
+abstract class VConversionEngine
 {
 	const COMMAND_SEPARATOR = "|||";
 	const COMMAND_KEY_SEPARATOR = "@@@";
@@ -42,10 +42,10 @@ abstract class KConversionEngine
 	
 	
 	/**
-	 * Will return the proper engine depending on the type (KalturaConversionEngineType)
+	 * Will return the proper engine depending on the type (VidiunConversionEngineType)
 	 *
 	 * @param int $type
-	 * @return KConversionEngine
+	 * @return VConversionEngine
 	 */
 	public static function getInstance($type)
 	{
@@ -53,29 +53,29 @@ abstract class KConversionEngine
 		
 		switch ($type )
 		{
-			case KalturaConversionEngineType::FFMPEG:
-				$engine = new KConversionEngineFfmpeg();
+			case VidiunConversionEngineType::FFMPEG:
+				$engine = new VConversionEngineFfmpeg();
 				break;
-			case KalturaConversionEngineType::CHUNKED_FFMPEG:
-				$engine = new KConversionEngineChunkedFfmpeg();
+			case VidiunConversionEngineType::CHUNKED_FFMPEG:
+				$engine = new VConversionEngineChunkedFfmpeg();
 				break;
-			case KalturaConversionEngineType::MENCODER:
-				$engine = new KConversionEngineMencoder();
+			case VidiunConversionEngineType::MENCODER:
+				$engine = new VConversionEngineMencoder();
 				break;
-			case KalturaConversionEngineType::ON2:
-				$engine = new KConversionEngineFlix();
+			case VidiunConversionEngineType::ON2:
+				$engine = new VConversionEngineFlix();
 				break;
-			case KalturaConversionEngineType::ENCODING_COM :
-				$engine = new KConversionEngineEncodingCom();
+			case VidiunConversionEngineType::ENCODING_COM :
+				$engine = new VConversionEngineEncodingCom();
 				break;
-			case KalturaConversionEngineType::FFMPEG_AUX:
-				$engine = new KConversionEngineFfmpegAux();
+			case VidiunConversionEngineType::FFMPEG_AUX:
+				$engine = new VConversionEngineFfmpegAux();
 				break;
-			case KalturaConversionEngineType::EXPRESSION_ENCODER3:
-				$engine = new KConversionEngineExpressionEncoder3();
+			case VidiunConversionEngineType::EXPRESSION_ENCODER3:
+				$engine = new VConversionEngineExpressionEncoder3();
 				break;
-			case KalturaConversionEngineType::FFMPEG_VP8:
-				$engine = new KConversionEngineFfmpegVp8();
+			case VidiunConversionEngineType::FFMPEG_VP8:
+				$engine = new VConversionEngineFfmpegVp8();
 				break;
 				
 			default:
@@ -89,16 +89,16 @@ abstract class KConversionEngine
 	abstract public function getCmd();
 	abstract public function getName();
 	abstract public function getType();
-	abstract public function simulate ( KalturaConvartableJobData $data );
+	abstract public function simulate ( VidiunConvartableJobData $data );
 	
 	/**
-	 * $start_params_index - the index of the kConversionParams in the kConversionCommand from which to start from. might not start at 0
-	 * $end_params_index - the index of the kConversionParams in the kConversionCommand to which to end at. -1 - the end
+	 * $start_params_index - the index of the vConversionParams in the vConversionCommand from which to start from. might not start at 0
+	 * $end_params_index - the index of the vConversionParams in the vConversionCommand to which to end at. -1 - the end
 	 * 
-	 * @param KalturaConvartableJobData $data
+	 * @param VidiunConvartableJobData $data
 	 * @return array 
 	 */
-	abstract public function convert ( KalturaConvartableJobData &$data );
+	abstract public function convert ( VidiunConvartableJobData &$data );
 	
 	public function getLogData()
 	{
@@ -139,21 +139,21 @@ abstract class KConversionEngine
 		 * If there is 'fastStartWithMp4box' set in ini- use MP4Box for mp4 faststart adjustment. 
 		 * The mp4box removes unrequired menu metadata from the file, that caused rtmp streaming problems 
 		 */
-		if(isset(KBatchBase::$taskConfig->params->mp4boxCmd) 
-		&& isset(KBatchBase::$taskConfig->params->fastStartWithMp4box) && KBatchBase::$taskConfig->params->fastStartWithMp4box==1) {
+		if(isset(VBatchBase::$taskConfig->params->mp4boxCmd) 
+		&& isset(VBatchBase::$taskConfig->params->fastStartWithMp4box) && VBatchBase::$taskConfig->params->fastStartWithMp4box==1) {
 			$inFile = $this->inFilePath;
 			$tmpFile = "$inFile.tmp";
 			$cmd_line = "-add $tmpFile ".$this->outFilePath." && mv $tmpFile $inFile";
-			$exe = "mv $inFile $tmpFile && ".KBatchBase::$taskConfig->params->mp4boxCmd;
+			$exe = "mv $inFile $tmpFile && ".VBatchBase::$taskConfig->params->mp4boxCmd;
 		}
 		else {
 			$cmd_line = "__inFileName__ __outFileName__";
-			$exe = KBatchBase::$taskConfig->params->fastStartCmd;
+			$exe = VBatchBase::$taskConfig->params->fastStartCmd;
 		}
 		// I have commented out the audio parameters so we don't decrease the quality - it stays as-is
 		$exec_cmd = "$exe " . 
 			str_replace ( 
-				array(KDLCmdlinePlaceholders::InFileName, KDLCmdlinePlaceholders::OutFileName, KDLCmdlinePlaceholders::ConfigFileName), 
+				array(VDLCmdlinePlaceholders::InFileName, VDLCmdlinePlaceholders::OutFileName, VDLCmdlinePlaceholders::ConfigFileName), 
 				array($this->inFilePath, $this->outFilePath, $this->configFilePath),
 				$cmd_line);
 				
@@ -179,7 +179,7 @@ abstract class KConversionEngine
 		$binName=$this->getCmd();
 		$exec_cmd = $binName . " " . 
 			str_replace ( 
-				array(KDLCmdlinePlaceholders::InFileName, KDLCmdlinePlaceholders::OutFileName, KDLCmdlinePlaceholders::ConfigFileName, KDLCmdlinePlaceholders::BinaryName), 
+				array(VDLCmdlinePlaceholders::InFileName, VDLCmdlinePlaceholders::OutFileName, VDLCmdlinePlaceholders::ConfigFileName, VDLCmdlinePlaceholders::BinaryName), 
 				array($this->inFilePath, $this->outFilePath, $this->configFilePath, $binName),
 				$cmd_line);
 				
@@ -245,9 +245,9 @@ abstract class KConversionEngine
 	 */
 	protected function addToLogFile ( $file_name , $str )
 	{
-		KalturaLog::debug($str);
+		VidiunLog::debug($str);
 		$extra_content = "\n\n----------------------\n$str\n----------------------\n\n";
-		kFile::appendToFile($file_name, $extra_content);
+		vFile::appendToFile($file_name, $extra_content);
 	}
 	
 	protected function getSrcActualPathFromData($data)
@@ -276,7 +276,7 @@ abstract class KConversionEngine
  * @subpackage Conversion
  *
  */
-class KConversioEngineResult
+class VConversioEngineResult
 {
 	public $exec_cmd ;
 	public $conversion_string;

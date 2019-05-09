@@ -3,6 +3,6 @@
  * @package plugins.schedule
  * @subpackage api.filters.enum
  */
-class KalturaLiveStreamScheduleEventOrderBy extends KalturaEntryScheduleEventOrderBy
+class VidiunLiveStreamScheduleEventOrderBy extends VidiunEntryScheduleEventOrderBy
 {
 }

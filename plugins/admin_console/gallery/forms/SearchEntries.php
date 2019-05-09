@@ -17,7 +17,7 @@ class Form_Batch_SearchEntries extends Form_Base
     	if(!isset($properties['partnerId']) || !strlen($properties['partnerId']))
     		return null;
     		
-    	$filter = $this->getObject('Kaltura_Client_Type_MediaEntryFilter', $properties);
+    	$filter = $this->getObject('Vidiun_Client_Type_MediaEntryFilter', $properties);
     	
     	foreach($this->enumFields as $field => $enumClass)
     	{
@@ -87,9 +87,9 @@ class Form_Batch_SearchEntries extends Form_Base
             'validators' => array(),
         ));
         
-		$this->addEmumElemets('media_type_in', 'Kaltura_Client_Enum_MediaType', 'all');
-		$this->addEmumElemets('status_in', 'Kaltura_Client_Enum_EntryStatus', array(Kaltura_Client_Enum_EntryStatus::READY));
-		$this->addEmumElemets('moderation_status_in', 'Kaltura_Client_Enum_EntryModerationStatus', 'all');
+		$this->addEmumElemets('media_type_in', 'Vidiun_Client_Enum_MediaType', 'all');
+		$this->addEmumElemets('status_in', 'Vidiun_Client_Enum_EntryStatus', array(Vidiun_Client_Enum_EntryStatus::READY));
+		$this->addEmumElemets('moderation_status_in', 'Vidiun_Client_Enum_EntryModerationStatus', 'all');
 	    
         // Add the search button
         $this->addElement('button', 'search', array(

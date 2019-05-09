@@ -43,7 +43,7 @@ class UverseFeed
 	public function __construct($templateName)
 	{
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml/' . $templateName;
-		$this->doc = new KDOMDocument();
+		$this->doc = new VDOMDocument();
 		$this->doc->formatOutput = true;
 		$this->doc->preserveWhiteSpace = false;
 		$this->doc->load($xmlTemplate);
@@ -114,21 +114,21 @@ class UverseFeed
 	
 	public function setChannelFields ()
 	{
-		kXml::setNodeValue($this->xpath,'/rss/channel/title', $this->distributionProfile->getChannelTitle());
-		kXml::setNodeValue($this->xpath,'/rss/channel/link', $this->distributionProfile->getChannelLink());
-		kXml::setNodeValue($this->xpath,'/rss/channel/description', $this->distributionProfile->getChannelDescription());
-		kXml::setNodeValue($this->xpath,'/rss/channel/language', $this->distributionProfile->getChannelLanguage());
-		kXml::setNodeValue($this->xpath,'/rss/channel/copyright', $this->distributionProfile->getChannelCopyright());
-		kXml::setNodeValue($this->xpath,'/rss/channel/image/title', $this->distributionProfile->getChannelImageTitle());
-		kXml::setNodeValue($this->xpath,'/rss/channel/image/url', $this->distributionProfile->getChannelImageUrl());
-		kXml::setNodeValue($this->xpath,'/rss/channel/image/link', $this->distributionProfile->getChannelImageLink());				
-		kXml::setNodeValue($this->xpath,'/rss/channel/pubDate', date('r',$this->distributionProfile->getCreatedAt(null)));
+		vXml::setNodeValue($this->xpath,'/rss/channel/title', $this->distributionProfile->getChannelTitle());
+		vXml::setNodeValue($this->xpath,'/rss/channel/link', $this->distributionProfile->getChannelLink());
+		vXml::setNodeValue($this->xpath,'/rss/channel/description', $this->distributionProfile->getChannelDescription());
+		vXml::setNodeValue($this->xpath,'/rss/channel/language', $this->distributionProfile->getChannelLanguage());
+		vXml::setNodeValue($this->xpath,'/rss/channel/copyright', $this->distributionProfile->getChannelCopyright());
+		vXml::setNodeValue($this->xpath,'/rss/channel/image/title', $this->distributionProfile->getChannelImageTitle());
+		vXml::setNodeValue($this->xpath,'/rss/channel/image/url', $this->distributionProfile->getChannelImageUrl());
+		vXml::setNodeValue($this->xpath,'/rss/channel/image/link', $this->distributionProfile->getChannelImageLink());				
+		vXml::setNodeValue($this->xpath,'/rss/channel/pubDate', date('r',$this->distributionProfile->getCreatedAt(null)));
 		
 	}
 	
 	public function setChannelLastBuildDate($lastBuildDate)
 	{
-		kXml::setNodeValue($this->xpath,'/rss/channel/lastBuildDate', date('r', $lastBuildDate));
+		vXml::setNodeValue($this->xpath,'/rss/channel/lastBuildDate', date('r', $lastBuildDate));
 	}
 	
 	public function addItemXml($xml)
@@ -156,20 +156,20 @@ class UverseFeed
 	public function getItem(array $values, asset $flavorAsset, $flavorAssetRemoteUrl, array $thumbAssets = null)
 	{		
 		$item = $this->item->cloneNode(true);
-		kXml::setNodeValue($this->xpath,'guid', $values[UverseDistributionField::ITEM_GUID], $item);
-		kXml::setNodeValue($this->xpath,'title', $values[UverseDistributionField::ITEM_TITLE], $item);
-		kXml::setNodeValue($this->xpath,'link', $values[UverseDistributionField::ITEM_LINK], $item);
-		kXml::setNodeValue($this->xpath,'description', $values[UverseDistributionField::ITEM_DESCRIPTION], $item);
+		vXml::setNodeValue($this->xpath,'guid', $values[UverseDistributionField::ITEM_GUID], $item);
+		vXml::setNodeValue($this->xpath,'title', $values[UverseDistributionField::ITEM_TITLE], $item);
+		vXml::setNodeValue($this->xpath,'link', $values[UverseDistributionField::ITEM_LINK], $item);
+		vXml::setNodeValue($this->xpath,'description', $values[UverseDistributionField::ITEM_DESCRIPTION], $item);
 		$pubDate = date('r', $values[UverseDistributionField::ITEM_PUB_DATE]);
-		kXml::setNodeValue($this->xpath,'pubDate', $pubDate, $item);
+		vXml::setNodeValue($this->xpath,'pubDate', $pubDate, $item);
 		$endTime = date('r', $values[UverseDistributionField::ITEM_EXPIRATION_DATE]);
-		kXml::setNodeValue($this->xpath,'expirationDate', $endTime, $item);
+		vXml::setNodeValue($this->xpath,'expirationDate', $endTime, $item);
 		$origReleaseDate = date('r', $values[UverseDistributionField::ITEM_LIVE_ORIGINAL_RELEASE_DATE]);
-		kXml::setNodeValue($this->xpath,'live:origReleaseDate',$origReleaseDate, $item);
-		kXml::setNodeValue($this->xpath,'media:title', $values[UverseDistributionField::ITEM_MEDIA_TITLE], $item);
-		kXml::setNodeValue($this->xpath,'media:description', $values[UverseDistributionField::ITEM_MEDIA_DESCRIPTION], $item);
-		kXml::setNodeValue($this->xpath,'media:keywords', $values[UverseDistributionField::ITEM_MEDIA_KEYWORDS], $item);
-		kXml::setNodeValue($this->xpath,'media:rating', $values[UverseDistributionField::ITEM_MEDIA_RATING], $item);		
+		vXml::setNodeValue($this->xpath,'live:origReleaseDate',$origReleaseDate, $item);
+		vXml::setNodeValue($this->xpath,'media:title', $values[UverseDistributionField::ITEM_MEDIA_TITLE], $item);
+		vXml::setNodeValue($this->xpath,'media:description', $values[UverseDistributionField::ITEM_MEDIA_DESCRIPTION], $item);
+		vXml::setNodeValue($this->xpath,'media:keywords', $values[UverseDistributionField::ITEM_MEDIA_KEYWORDS], $item);
+		vXml::setNodeValue($this->xpath,'media:rating', $values[UverseDistributionField::ITEM_MEDIA_RATING], $item);		
 		if (!is_null($flavorAsset))
 			$this->setFlavorAsset($item, $flavorAsset, $flavorAssetRemoteUrl, $values[UverseDistributionField::ITEM_CONTENT_LANG]);
 			
@@ -178,8 +178,8 @@ class UverseFeed
 				$this->addThumbAsset($item, $thumbAsset, $values[UverseDistributionField::ITEM_THUMBNAIL_CREDIT]);
 							
 		$this->addCategory($item,$values[UverseDistributionField::ITEM_MEDIA_CATEGORY]);
-		kXml::setNodeValue($this->xpath,'media:copyright', $values[UverseDistributionField::ITEM_MEDIA_COPYRIGHT], $item);	
-		kXml::setNodeValue($this->xpath,'media:copyright/@url', $values[UverseDistributionField::ITEM_MEDIA_COPYRIGHT_URL], $item);
+		vXml::setNodeValue($this->xpath,'media:copyright', $values[UverseDistributionField::ITEM_MEDIA_COPYRIGHT], $item);	
+		vXml::setNodeValue($this->xpath,'media:copyright/@url', $values[UverseDistributionField::ITEM_MEDIA_COPYRIGHT_URL], $item);
 		
 		return $item;			
 	}
@@ -218,12 +218,12 @@ class UverseFeed
 	
 	public function setFlavorAsset(DOMElement $item, asset $flavorAsset, $flavorAssetRemoteUrl, $lang)
 	{
-		kXml::setNodeValue($this->xpath,'media:content/@url', $flavorAssetRemoteUrl, $item);
-		kXml::setNodeValue($this->xpath,'media:content/@width', $flavorAsset->getWidth(), $item);
-		kXml::setNodeValue($this->xpath,'media:content/@height', $flavorAsset->getHeight(), $item);
-		kXml::setNodeValue($this->xpath,'media:content/@type', $this->getContentType($flavorAssetRemoteUrl), $item);
+		vXml::setNodeValue($this->xpath,'media:content/@url', $flavorAssetRemoteUrl, $item);
+		vXml::setNodeValue($this->xpath,'media:content/@width', $flavorAsset->getWidth(), $item);
+		vXml::setNodeValue($this->xpath,'media:content/@height', $flavorAsset->getHeight(), $item);
+		vXml::setNodeValue($this->xpath,'media:content/@type', $this->getContentType($flavorAssetRemoteUrl), $item);
 		if ($lang)
-			kXml::setNodeValue($this->xpath,'media:content/@lang', $lang, $item);
+			vXml::setNodeValue($this->xpath,'media:content/@lang', $lang, $item);
 	}
 	
 	protected function getContentType($url)
@@ -244,11 +244,11 @@ class UverseFeed
 		$item->appendChild($thumbnailNode);
 		$url = $this->getAssetUrl($thumbAsset);
 		
-		kXml::setNodeValue($this->xpath,'@url', $url, $thumbnailNode);
-		kXml::setNodeValue($this->xpath,'@width', $thumbAsset->getWidth(), $thumbnailNode);
-		kXml::setNodeValue($this->xpath,'@height', $thumbAsset->getHeight(), $thumbnailNode);
+		vXml::setNodeValue($this->xpath,'@url', $url, $thumbnailNode);
+		vXml::setNodeValue($this->xpath,'@width', $thumbAsset->getWidth(), $thumbnailNode);
+		vXml::setNodeValue($this->xpath,'@height', $thumbAsset->getHeight(), $thumbnailNode);
 		
 		if ($thumbnailCredit)
-			kXml::setNodeValue($this->xpath,'@credit', $thumbnailCredit, $thumbnailNode);
+			vXml::setNodeValue($this->xpath,'@credit', $thumbnailCredit, $thumbnailNode);
 	}
 }

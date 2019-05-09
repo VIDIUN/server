@@ -11,7 +11,7 @@ class Form_HttpNotificationTemplateConfiguration extends Form_EventNotificationT
 	public function getObject($objectType, array $properties, $add_underscore = true, $include_empty_fields = false)
 	{
 		$object = parent::getObject($objectType, $properties, $add_underscore, $include_empty_fields);
-		if($object instanceof Kaltura_Client_HttpNotification_Type_HttpNotificationTemplate)
+		if($object instanceof Vidiun_Client_HttpNotification_Type_HttpNotificationTemplate)
 		{
 			if(!isset($properties['dataType']) || !$properties['dataType'])
 				return $object;
@@ -19,21 +19,21 @@ class Form_HttpNotificationTemplateConfiguration extends Form_EventNotificationT
 			switch ($properties['dataType'])
 			{
 				case 'object':
-					$object->data = new Kaltura_Client_HttpNotification_Type_HttpNotificationObjectData();
+					$object->data = new Vidiun_Client_HttpNotification_Type_HttpNotificationObjectData();
 					$object->data->apiObjectType = $properties['objectType'];
 					$object->data->format = $properties['objectFormat'];
 					$object->data->code = $properties['object'];
 					break;
 					
 				case 'map':
-					$object->data = new Kaltura_Client_HttpNotification_Type_HttpNotificationDataFields();
+					$object->data = new Vidiun_Client_HttpNotification_Type_HttpNotificationDataFields();
 					break;
 					
 				case 'text':
-					$stringField = new Kaltura_Client_Type_StringValue();
+					$stringField = new Vidiun_Client_Type_StringValue();
 					$stringField->value = $properties['freeText'];
 					
-					$object->data = new Kaltura_Client_HttpNotification_Type_HttpNotificationDataText();
+					$object->data = new Vidiun_Client_HttpNotification_Type_HttpNotificationDataText();
 					$object->data->content = $stringField;
 					break;
 			}
@@ -49,22 +49,22 @@ class Form_HttpNotificationTemplateConfiguration extends Form_EventNotificationT
 	{
 		parent::populateFromObject($object, $add_underscore);
 		
-		if(!($object instanceof Kaltura_Client_HttpNotification_Type_HttpNotificationTemplate))
+		if(!($object instanceof Vidiun_Client_HttpNotification_Type_HttpNotificationTemplate))
 			return;
 		
 		if(!$object->data)
 			return;
 			
-		if($object->data instanceof Kaltura_Client_HttpNotification_Type_HttpNotificationDataFields)
+		if($object->data instanceof Vidiun_Client_HttpNotification_Type_HttpNotificationDataFields)
 		{
 			$this->getElement('dataType')->setValue('map');
 		}
-		elseif($object->data instanceof Kaltura_Client_HttpNotification_Type_HttpNotificationDataText)
+		elseif($object->data instanceof Vidiun_Client_HttpNotification_Type_HttpNotificationDataText)
 		{
 			$this->getElement('dataType')->setValue('text');
 			$this->getElement('freeText')->setValue($object->data->content->value);
 		}
-		elseif($object->data instanceof Kaltura_Client_HttpNotification_Type_HttpNotificationObjectData)
+		elseif($object->data instanceof Vidiun_Client_HttpNotification_Type_HttpNotificationObjectData)
 		{
 			$this->getElement('dataType')->setValue('object');
 			$this->getElement('objectType')->setValue($object->data->apiObjectType);
@@ -76,7 +76,7 @@ class Form_HttpNotificationTemplateConfiguration extends Form_EventNotificationT
 	/* (non-PHPdoc)
 	 * @see Form_EventNotificationTemplateConfiguration::addTypeElements()
 	 */
-	protected function addTypeElements(Kaltura_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate)
+	protected function addTypeElements(Vidiun_Client_EventNotification_Type_EventNotificationTemplate $eventNotificationTemplate)
 	{
 		$element = new Infra_Form_Html('http_title', array(
 			'content' => '<b>Notification Handler Service  Details</b>',
@@ -108,7 +108,7 @@ class Form_HttpNotificationTemplateConfiguration extends Form_EventNotificationT
 		));
 		
 		$this->addElement('text', 'objectType', array(
-			'label'			=> 'Object Type (KalturaObject):',
+			'label'			=> 'Object Type (VidiunObject):',
 			'filters'		=> array('StringTrim'),
 			'readonly'		=> true,
 		));
@@ -118,9 +118,9 @@ class Form_HttpNotificationTemplateConfiguration extends Form_EventNotificationT
 			'filters'		=> array('StringTrim'),
 			'required'		=> true,
 			'multiOptions' 	=> array(
-				Kaltura_Client_Enum_ResponseType::RESPONSE_TYPE_JSON => 'JSON',
-				Kaltura_Client_Enum_ResponseType::RESPONSE_TYPE_XML => 'XML',
-				Kaltura_Client_Enum_ResponseType::RESPONSE_TYPE_PHP => 'PHP',
+				Vidiun_Client_Enum_ResponseType::RESPONSE_TYPE_JSON => 'JSON',
+				Vidiun_Client_Enum_ResponseType::RESPONSE_TYPE_XML => 'XML',
+				Vidiun_Client_Enum_ResponseType::RESPONSE_TYPE_PHP => 'PHP',
 			),
 		));
 			

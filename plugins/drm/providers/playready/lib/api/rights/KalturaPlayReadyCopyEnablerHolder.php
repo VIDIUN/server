@@ -3,17 +3,17 @@
  * @package plugins.playReady
  * @subpackage api.objects
  */
-class KalturaPlayReadyCopyEnablerHolder extends KalturaObject
+class VidiunPlayReadyCopyEnablerHolder extends VidiunObject
 {
 	/**
 	 * The type of the copy enabler
 	 * 
-	 * @var KalturaPlayReadyCopyEnablerType
+	 * @var VidiunPlayReadyCopyEnablerType
 	 */
 	public $type;
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{

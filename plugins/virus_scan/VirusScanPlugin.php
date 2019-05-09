@@ -2,10 +2,10 @@
 /**
  * @package plugins.virusScan
  */
-class VirusScanPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaServices, IKalturaEventConsumers, IKalturaEnumerator, IKalturaObjectLoader, IKalturaAdminConsolePages 
+class VirusScanPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunServices, IVidiunEventConsumers, IVidiunEnumerator, IVidiunObjectLoader, IVidiunAdminConsolePages 
 {
 	const PLUGIN_NAME = 'virusScan';
-	const VIRUS_SCAN_FLOW_MANAGER_CLASS = 'kVirusScanFlowManager';
+	const VIRUS_SCAN_FLOW_MANAGER_CLASS = 'vVirusScanFlowManager';
 	
 	public static function getPluginName()
 	{
@@ -74,23 +74,23 @@ class VirusScanPlugin extends KalturaPlugin implements IKalturaPermissions, IKal
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// virus scan only works in api_v3 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || !kCurrentContext::isApiV3Context())
+		if (!class_exists('vCurrentContext') || !vCurrentContext::isApiV3Context())
 			return null;
 			
-		if($baseClass == 'kJobData')
+		if($baseClass == 'vJobData')
 		{
 			if($enumValue == self::getBatchJobTypeCoreValue(VirusScanBatchJobType::VIRUS_SCAN))
 			{
-				return new kVirusScanJobData();
+				return new vVirusScanJobData();
 			}
 		}
 	
-		if($baseClass == 'KalturaJobData')
+		if($baseClass == 'VidiunJobData')
 		{
 			if($enumValue == self::getApiValue(VirusScanBatchJobType::VIRUS_SCAN) || 
 			   $enumValue == self::getBatchJobTypeCoreValue(VirusScanBatchJobType::VIRUS_SCAN))
 			{
-				return new KalturaVirusScanJobData();
+				return new VidiunVirusScanJobData();
 			}
 		}
 		
@@ -105,22 +105,22 @@ class VirusScanPlugin extends KalturaPlugin implements IKalturaPermissions, IKal
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// virus scan only works in api_v3 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || !kCurrentContext::isApiV3Context())
+		if (!class_exists('vCurrentContext') || !vCurrentContext::isApiV3Context())
 			return null;
 			
-		if($baseClass == 'kJobData')
+		if($baseClass == 'vJobData')
 		{
 			if($enumValue == self::getBatchJobTypeCoreValue(VirusScanBatchJobType::VIRUS_SCAN))
 			{
-				return 'kVirusScanJobData';
+				return 'vVirusScanJobData';
 			}
 		}
 	
-		if($baseClass == 'KalturaJobData')
+		if($baseClass == 'VidiunJobData')
 		{
 			if($enumValue == self::getApiValue(VirusScanBatchJobType::VIRUS_SCAN))
 			{
-				return 'KalturaVirusScanJobData';
+				return 'VidiunVirusScanJobData';
 			}
 		}
 		
@@ -132,8 +132,8 @@ class VirusScanPlugin extends KalturaPlugin implements IKalturaPermissions, IKal
 	 */
 	public static function getBatchJobTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BatchJobType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BatchJobType', $value);
 	}
 	
 	/**
@@ -141,8 +141,8 @@ class VirusScanPlugin extends KalturaPlugin implements IKalturaPermissions, IKal
 	 */
 	public static function getEntryStatusCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('entryStatus', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('entryStatus', $value);
 	}
 	
 	/**
@@ -150,11 +150,11 @@ class VirusScanPlugin extends KalturaPlugin implements IKalturaPermissions, IKal
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaAdminConsolePages::getApplicationPages()
+	 * @see IVidiunAdminConsolePages::getApplicationPages()
 	 */
 	public static function getApplicationPages()
 	{

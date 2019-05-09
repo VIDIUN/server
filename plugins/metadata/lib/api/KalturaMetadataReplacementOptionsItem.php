@@ -4,7 +4,7 @@
  * @package plugins.metadata
  * @subpackage api
  */
-class KalturaMetadataReplacementOptionsItem extends KalturaPluginReplacementOptionsItem 
+class VidiunMetadataReplacementOptionsItem extends VidiunPluginReplacementOptionsItem 
 {
 	/**
 	 * If true custom-metadata transferred to temp entry on entry replacement
@@ -18,7 +18,7 @@ class KalturaMetadataReplacementOptionsItem extends KalturaPluginReplacementOpti
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -26,12 +26,12 @@ class KalturaMetadataReplacementOptionsItem extends KalturaPluginReplacementOpti
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kMetadataReplacementOptionsItem();
+			$object_to_fill = new vMetadataReplacementOptionsItem();
 		
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

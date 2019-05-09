@@ -3,6 +3,6 @@
  * @package plugins.huluDistribution
  * @subpackage api.filters.enum
  */
-class KalturaHuluDistributionProviderOrderBy extends KalturaDistributionProviderOrderBy
+class VidiunHuluDistributionProviderOrderBy extends VidiunDistributionProviderOrderBy
 {
 }

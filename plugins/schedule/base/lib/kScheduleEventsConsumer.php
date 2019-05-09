@@ -1,5 +1,5 @@
 <?php
-class kScheduleEventsConsumer implements kObjectChangedEventConsumer, kObjectDeletedEventConsumer, kObjectCreatedEventConsumer, kObjectErasedEventConsumer
+class vScheduleEventsConsumer implements vObjectChangedEventConsumer, vObjectDeletedEventConsumer, vObjectCreatedEventConsumer, vObjectErasedEventConsumer
 {
     public function shouldConsumeCreatedEvent(BaseObject $object)
     {
@@ -39,7 +39,7 @@ class kScheduleEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
 
 
     /* (non-PHPdoc)
-     * @see kObjectChangedEventConsumer::objectChanged()
+     * @see vObjectChangedEventConsumer::objectChanged()
      */
     public function objectChanged(BaseObject $object, array $modifiedColumns)
     {
@@ -52,7 +52,7 @@ class kScheduleEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
     }
 
     /* (non-PHPdoc)
-     * @see kObjectChangedEventConsumer::objectDeleted()
+     * @see vObjectChangedEventConsumer::objectDeleted()
      */
     public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null)
     {
@@ -64,7 +64,7 @@ class kScheduleEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
 
 
     /* (non-PHPdoc)
-     * @see kObjectChangedEventConsumer::objectCreated()
+     * @see vObjectChangedEventConsumer::objectCreated()
      */
     public function objectCreated(BaseObject $object)
     {
@@ -77,7 +77,7 @@ class kScheduleEventsConsumer implements kObjectChangedEventConsumer, kObjectDel
     }
 
     /* (non-PHPdoc)
-     * @see kObjectErasedEventConsumer::objectErased()
+     * @see vObjectErasedEventConsumer::objectErased()
      */
     public function objectErased(BaseObject $object)
     {

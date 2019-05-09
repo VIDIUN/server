@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage model.data
  */
-class kMetadataFieldChangedCondition extends kCondition
+class vMetadataFieldChangedCondition extends vCondition
 {
 	/**
 	 * May contain the full xpath to the field in two formats
@@ -36,7 +36,7 @@ class kMetadataFieldChangedCondition extends kCondition
 	private $versionB;
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -45,9 +45,9 @@ class kMetadataFieldChangedCondition extends kCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::applyDynamicValues()
+	 * @see vCondition::applyDynamicValues()
 	 */
-	protected function applyDynamicValues(kScope $scope)
+	protected function applyDynamicValues(vScope $scope)
 	{
 		parent::applyDynamicValues($scope);
 		
@@ -64,9 +64,9 @@ class kMetadataFieldChangedCondition extends kCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
 		$profileId = $this->profileId;
 		if(!$profileId)
@@ -74,7 +74,7 @@ class kMetadataFieldChangedCondition extends kCondition
 			if(!$this->profileSystemName)
 				return null;
 				
-			$profile = MetadataProfilePeer::retrieveBySystemName($this->profileSystemName, kCurrentContext::getCurrentPartnerId());
+			$profile = MetadataProfilePeer::retrieveBySystemName($this->profileSystemName, vCurrentContext::getCurrentPartnerId());
 			if(!$profile)
 				return null;
 				
@@ -86,16 +86,16 @@ class kMetadataFieldChangedCondition extends kCondition
 		{
 			$metadata = MetadataPeer::retrieveByObject($profileId, MetadataObjectType::ENTRY, $scope->getEntryId());
 		}
-		elseif($scope instanceof kEventScope && $scope->getEvent() instanceof kApplicativeEvent)
+		elseif($scope instanceof vEventScope && $scope->getEvent() instanceof vApplicativeEvent)
 		{
 			$object = $scope->getEvent()->getObject();
 			if($object instanceof Metadata)
 			{
 				$metadata = $object;
 			}
-			elseif(kMetadataManager::isMetadataObject($object))
+			elseif(vMetadataManager::isMetadataObject($object))
 			{
-				$objectType = kMetadataManager::getTypeNameFromObject($object);
+				$objectType = vMetadataManager::getTypeNameFromObject($object);
 				$metadata = MetadataPeer::retrieveByObject($profileId, $objectType, $object->getId());
 			}
 		}
@@ -104,8 +104,8 @@ class kMetadataFieldChangedCondition extends kCondition
 			return false;
 			
 		if($this->versionA)
-			$valuesA = kMetadataManager::parseMetadataValues($metadata, $this->xPath, $this->versionA);
-		$valuesB = kMetadataManager::parseMetadataValues($metadata, $this->xPath, $this->versionB);
+			$valuesA = vMetadataManager::parseMetadataValues($metadata, $this->xPath, $this->versionA);
+		$valuesB = vMetadataManager::parseMetadataValues($metadata, $this->xPath, $this->versionB);
 		
 		if(!$valuesA || !count($valuesA)) //previous MD version does not exist
 			$changedValues = $valuesB;
@@ -196,7 +196,7 @@ class kMetadataFieldChangedCondition extends kCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kCondition::shouldFieldDisableCache()
+	 * @see vCondition::shouldFieldDisableCache()
 	 */
 	public function shouldFieldDisableCache($scope)
 	{

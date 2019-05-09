@@ -48,22 +48,22 @@
 					"type":       "stemmer",
 					"language":   "possessive_english"
 				},
-				"kaltura_english_synonym_filter": {
+				"vidiun_english_synonym_filter": {
 					"type": "synonym",
-					"synonyms_path": "analysis/kaltura_synonyms_contraction.txt"
+					"synonyms_path": "analysis/vidiun_synonyms_contraction.txt"
 				},
-				"kaltura_unique_token_filter": {
+				"vidiun_unique_token_filter": {
 					"type": "unique",
 					"only_on_same_position": true
 				}
 			},
 			"char_filter": {
-				"kaltura_whitespace_filter": {
+				"vidiun_whitespace_filter": {
 					"type": "pattern_replace",
 					"pattern": "(\\s+)",
 					"replacement": " "
 				},
-				"kaltura_apostrophe_filter": {
+				"vidiun_apostrophe_filter": {
 					"type": "mapping",
 					"mappings": [
 						"'=>",
@@ -71,7 +71,7 @@
 						"‘=>"
 					]
 				},
-				"kaltura_special_chars_filter": {
+				"vidiun_special_chars_filter": {
 					"type": "mapping",
 					"mappings": [
 						"!=>__exclamationmark__",
@@ -101,7 +101,7 @@
 						"~=>__tilde__"
 					]
 				},
-				"kaltura_remove_special_chars_filter": {
+				"vidiun_remove_special_chars_filter": {
 					"type": "mapping",
 					"mappings": [
 						"'=>",
@@ -136,7 +136,7 @@
 				}
 			},
 			"tokenizer": {
-				"kaltura_ngram_tokenizer": {
+				"vidiun_ngram_tokenizer": {
 					"type": "ngram",
 					"min_gram": 3,
 					"max_gram": 3,
@@ -147,10 +147,10 @@
 				}
 			},
 			"normalizer": {
-				"kaltura_keyword_normalizer": {
+				"vidiun_keyword_normalizer": {
 					"type": "custom",
 					"char_filter": [
-						"kaltura_whitespace_filter"
+						"vidiun_whitespace_filter"
 					],
 					"filter": [
 						"lowercase",
@@ -159,23 +159,23 @@
 				}
 			},
 			"analyzer": {
-				"kaltura_ngrams": {
+				"vidiun_ngrams": {
 					"type": "custom",
-					"tokenizer": "kaltura_ngram_tokenizer",
+					"tokenizer": "vidiun_ngram_tokenizer",
 					"char_filter": [
-						"kaltura_apostrophe_filter"
+						"vidiun_apostrophe_filter"
 					],
 					"filter": [
 						"lowercase",
 						"icu_folding"
 					]
 				},
-				"kaltura_text" : {
+				"vidiun_text" : {
 					"type": "custom",
 					"tokenizer": "standard",
 					"char_filter": [
-						"kaltura_apostrophe_filter",
-						"kaltura_special_chars_filter"
+						"vidiun_apostrophe_filter",
+						"vidiun_special_chars_filter"
 					],
 					"filter": [
 						"standard",
@@ -183,11 +183,11 @@
 						"icu_folding"
 					]
 				},
-				"kaltura_text_partial_search" : {
+				"vidiun_text_partial_search" : {
 					"type": "custom",
 					"tokenizer": "standard",
 					"char_filter": [
-						"kaltura_apostrophe_filter"
+						"vidiun_apostrophe_filter"
 					],
 					"filter": [
 						"standard",
@@ -195,24 +195,24 @@
 						"icu_folding"
 					]
 				},
-				"kaltura_english_synonym": {
+				"vidiun_english_synonym": {
 					"tokenizer":  "whitespace",
 					"filter": [
 						"lowercase",
 						"english_stop",
-						"kaltura_english_synonym_filter",
-						"kaltura_unique_token_filter"
+						"vidiun_english_synonym_filter",
+						"vidiun_unique_token_filter"
 					]
 				},
-				"kaltura_english_synonym_search": {
+				"vidiun_english_synonym_search": {
 					"tokenizer":  "whitespace",
 					"char_filter": [
-						"kaltura_remove_special_chars_filter"
+						"vidiun_remove_special_chars_filter"
 					],
 					"filter": [
 						"lowercase",
 						"english_stop",
-						"kaltura_english_synonym_filter"
+						"vidiun_english_synonym_filter"
 					]
 				}
 			}
@@ -229,15 +229,15 @@
 			"properties" : {
 				"name" : {
 					"type" : "text",
-					"analyzer" : "kaltura_text",
+					"analyzer" : "vidiun_text",
 					"fields": {
 						"ngrams" : {
 							"type" : "text",
-							"analyzer" : "kaltura_ngrams"
+							"analyzer" : "vidiun_ngrams"
 						},
 						"raw" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"english" : {
 							"type" : "text",
@@ -245,8 +245,8 @@
 							"fields": {
 								"synonym": {
 									"type": "text",
-									"analyzer": "kaltura_english_synonym",
-									"search_analyzer": "kaltura_english_synonym_search"
+									"analyzer": "vidiun_english_synonym",
+									"search_analyzer": "vidiun_english_synonym_search"
 								}
 							}
 						},
@@ -330,15 +330,15 @@
 				},
 				"description" : {
 					"type" : "text",
-					"analyzer" : "kaltura_text",
+					"analyzer" : "vidiun_text",
 					"fields": {
 						"ngrams" : {
 							"type" : "text",
-							"analyzer" : "kaltura_ngrams"
+							"analyzer" : "vidiun_ngrams"
 						},
 						"raw" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"english" : {
 							"type" : "text",
@@ -346,8 +346,8 @@
 							"fields": {
 								"synonym": {
 									"type": "text",
-									"analyzer": "kaltura_english_synonym",
-									"search_analyzer": "kaltura_english_synonym_search"
+									"analyzer": "vidiun_english_synonym",
+									"search_analyzer": "vidiun_english_synonym_search"
 								}
 							}
 						},
@@ -431,102 +431,102 @@
 				},
 				"partner_id" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"partner_status" : {
 					"type" : "keyword"
 				},
 				"parent_id" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"status" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
-				"entitled_kusers_edit" : {
+				"entitled_vusers_edit" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
-				"entitled_kusers_publish" : {
+				"entitled_vusers_publish" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
-				"entitled_kusers_view" : {
+				"entitled_vusers_view" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
-				"kuser_id" : {
+				"vuser_id" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
-				"creator_kuser_id" : {
+				"creator_vuser_id" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"categories_ids" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"categories_names" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"tags" : {
 					"type" : "text",
-					"analyzer" : "kaltura_text",
+					"analyzer" : "vidiun_text",
 					"fields": {
 						"ngrams" : {
 							"type" : "text",
-							"analyzer" : "kaltura_ngrams"
+							"analyzer" : "vidiun_ngrams"
 						},
 						"raw" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						}
 					}
 				},
 				"user_names" : {
 					"type" : "text",
-					"analyzer" : "kaltura_text",
+					"analyzer" : "vidiun_text",
 					"fields": {
 						"ngrams" : {
 							"type" : "text",
-							"analyzer" : "kaltura_ngrams"
+							"analyzer" : "vidiun_ngrams"
 						},
 						"raw" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						}
 					}
 				},
 				"reference_id": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"conversion_profile_id": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"template_entry_id": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"display_in_search": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"media_type": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"source_type": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"external_source_type": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"length_in_msecs": {
 					"type" : "long"
@@ -564,11 +564,11 @@
 				},
 				"recorded_entry_id": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"credit": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"start_date": {
 					"type" : "date",
@@ -580,26 +580,26 @@
 				},
 				"site_url": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"admin_tags": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"push_publish": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"is_live": {
 					"type" : "boolean"
 				},
 				"entry_type": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"moderation_status": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"created_at" : {
 					"type" : "date",
@@ -615,75 +615,75 @@
 				},
 				"total_rank": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"access_control_id": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"group_id": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"partner_sort_value": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"redirect_entry_id": {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"is_quiz": {
 					"type" : "boolean"
 				},
 				"root_id" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"privacy_by_contexts" : {
 					"type" : "keyword",
-					"normalizer" : "kaltura_keyword_normalizer"
+					"normalizer" : "vidiun_keyword_normalizer"
 				},
 				"parent_entry" : {
 					"properties" : {
 						"entry_id" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"status" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"partner_status" :{
 							"type" : "keyword"
 						},
-						"entitled_kusers_edit" : {
+						"entitled_vusers_edit" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
-						"entitled_kusers_publish" : {
+						"entitled_vusers_publish" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
-						"entitled_kusers_view" : {
+						"entitled_vusers_view" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
-						"kuser_id" : {
+						"vuser_id" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
-						"creator_kuser_id" : {
+						"creator_vuser_id" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"categories_ids" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"privacy_by_contexts" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						}
 					}
 				},
@@ -692,15 +692,15 @@
 					"properties"  : {
 						"content" : {
 							"type" : "text",
-							"analyzer" : "kaltura_text",
+							"analyzer" : "vidiun_text",
 							"fields": {
 								"ngrams" : {
 									"type" : "text",
-									"analyzer" : "kaltura_ngrams"
+									"analyzer" : "vidiun_ngrams"
 								},
 								"raw" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								}
 							}
 						},
@@ -710,8 +710,8 @@
 							"fields":{
 								"synonym" : {
 									"type" : "text",
-									"analyzer": "kaltura_english_synonym",
-									"search_analyzer": "kaltura_english_synonym_search"
+									"analyzer": "vidiun_english_synonym",
+									"search_analyzer": "vidiun_english_synonym_search"
 								}
 							}
 						},
@@ -799,15 +799,15 @@
 						},
 						"caption_asset_id": {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"language" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"label" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						}
 					}
 				},
@@ -816,38 +816,38 @@
 					"properties"  : {
 						"metadata_id" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"system_name" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"xpath" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"metadata_profile_id" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"metadata_field_id" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"value_int": {
 							"type": "long"
 						},
 						"value_text": {
 							"type" : "text",
-							"analyzer" : "kaltura_text",
+							"analyzer" : "vidiun_text",
 							"fields": {
 								"ngrams" : {
 									"type" : "text",
-									"analyzer" : "kaltura_ngrams"
+									"analyzer" : "vidiun_ngrams"
 								},
 								"raw" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								}
 							}
 						}
@@ -858,51 +858,51 @@
 					"properties"  : {
 						"cue_point_type" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"cue_point_id": {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"cue_point_name" : {
 							"type" : "text",
-							"analyzer" : "kaltura_text",
+							"analyzer" : "vidiun_text",
 							"fields": {
 								"ngrams" : {
 									"type" : "text",
-									"analyzer" : "kaltura_ngrams"
+									"analyzer" : "vidiun_ngrams"
 								},
 								"raw" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								}
 							}
 						},
 						"cue_point_text" : {
 							"type" : "text",
-							"analyzer" : "kaltura_text",
+							"analyzer" : "vidiun_text",
 							"fields": {
 								"ngrams" : {
 									"type" : "text",
-									"analyzer" : "kaltura_ngrams"
+									"analyzer" : "vidiun_ngrams"
 								},
 								"raw" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								}
 							}
 						},
 						"cue_point_tags" : {
 							"type" : "text",
-							"analyzer" : "kaltura_text",
+							"analyzer" : "vidiun_text",
 							"fields": {
 								"ngrams" : {
 									"type" : "text",
-									"analyzer" : "kaltura_ngrams"
+									"analyzer" : "vidiun_ngrams"
 								},
 								"raw" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								}
 							}
 						},
@@ -914,61 +914,61 @@
 						},
 						"cue_point_sub_type" : {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						},
 						"cue_point_question" : {
 							"type" : "text",
-							"analyzer" : "kaltura_text",
+							"analyzer" : "vidiun_text",
 							"fields": {
 								"ngrams" : {
 									"type" : "text",
-									"analyzer" : "kaltura_ngrams"
+									"analyzer" : "vidiun_ngrams"
 								},
 								"raw" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								}
 							}
 						},
 						"cue_point_answers" : {
 							"type" : "text",
-							"analyzer" : "kaltura_text",
+							"analyzer" : "vidiun_text",
 							"fields": {
 								"ngrams" : {
 									"type" : "text",
-									"analyzer" : "kaltura_ngrams"
+									"analyzer" : "vidiun_ngrams"
 								},
 								"raw" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								}
 							}
 						},
 						"cue_point_hint" : {
 							"type" : "text",
-							"analyzer" : "kaltura_text",
+							"analyzer" : "vidiun_text",
 							"fields": {
 								"ngrams" : {
 									"type" : "text",
-									"analyzer" : "kaltura_ngrams"
+									"analyzer" : "vidiun_ngrams"
 								},
 								"raw" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								}
 							}
 						},
 						"cue_point_explanation" : {
 							"type" : "text",
-							"analyzer" : "kaltura_text",
+							"analyzer" : "vidiun_text",
 							"fields": {
 								"ngrams" : {
 									"type" : "text",
-									"analyzer" : "kaltura_ngrams"
+									"analyzer" : "vidiun_ngrams"
 								},
 								"raw" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								}
 							}
 						},
@@ -977,38 +977,38 @@
 							"properties"  : {
 								"metadata_id" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								},
 								"system_name" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								},
 								"xpath" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								},
 								"metadata_profile_id" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								},
 								"metadata_field_id" : {
 									"type" : "keyword",
-									"normalizer" : "kaltura_keyword_normalizer"
+									"normalizer" : "vidiun_keyword_normalizer"
 								},
 								"value_int": {
 									"type": "long"
 								},
 								"value_text": {
 									"type" : "text",
-									"analyzer" : "kaltura_text",
+									"analyzer" : "vidiun_text",
 									"fields": {
 										"ngrams" : {
 											"type" : "text",
-											"analyzer" : "kaltura_ngrams"
+											"analyzer" : "vidiun_ngrams"
 										},
 										"raw" : {
 											"type" : "keyword",
-											"normalizer" : "kaltura_keyword_normalizer"
+											"normalizer" : "vidiun_keyword_normalizer"
 										}
 									}
 								}
@@ -1016,7 +1016,7 @@
 						},
 						"cue_point_asset_id": {
 							"type" : "keyword",
-							"normalizer" : "kaltura_keyword_normalizer"
+							"normalizer" : "vidiun_keyword_normalizer"
 						}
 					}
 				}

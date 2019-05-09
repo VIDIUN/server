@@ -33,8 +33,8 @@ class UserRolePeer extends BaseUserRolePeer
 	/**
 	 * Temporary function that will not allow a user to have 0 or more than 1 role.
 	 * @param string $idsString
-	 * @throws kPermissionException::ROLE_ID_MISSING
-	 * @throws kPermissionException::ONLY_ONE_ROLE_PER_USER_ALLOWED
+	 * @throws vPermissionException::ROLE_ID_MISSING
+	 * @throws vPermissionException::ONLY_ONE_ROLE_PER_USER_ALLOWED
 	 */
 	public static function testValidRolesForUser($idsString, $partnerId)
 	{
@@ -45,7 +45,7 @@ class UserRolePeer extends BaseUserRolePeer
 		
 		if (count($ids) > 1)
 		{
-			throw new kPermissionException('', kPermissionException::ONLY_ONE_ROLE_PER_USER_ALLOWED);	
+			throw new vPermissionException('', vPermissionException::ONLY_ONE_ROLE_PER_USER_ALLOWED);	
 		}
 		
 		foreach ($ids as $id)
@@ -53,7 +53,7 @@ class UserRolePeer extends BaseUserRolePeer
 			$userRole = UserRolePeer::retrieveByPK($id);
 			if (!$userRole || !in_array($userRole->getPartnerId(),array($partnerId, PartnerPeer::GLOBAL_PARTNER) ) )
 			{
-				throw new kPermissionException("A user role with ID [$id] does not exist", kPermissionException::USER_ROLE_NOT_FOUND);
+				throw new vPermissionException("A user role with ID [$id] does not exist", vPermissionException::USER_ROLE_NOT_FOUND);
 			}
 		}
 		
@@ -65,11 +65,11 @@ class UserRolePeer extends BaseUserRolePeer
 	{
 		// try to get strId to id mapping form cache
 		$cacheKey = 'UserRolePeer_role_str_id_'.$strId;
-		if (kConf::get('enable_cache') && function_exists('apc_fetch') && function_exists('apc_store'))
+		if (vConf::get('enable_cache') && function_exists('apc_fetch') && function_exists('apc_store'))
 		{
 			$id = apc_fetch($cacheKey); // try to fetch from cache
 			if ($id) {
-				KalturaLog::debug("UserRole str_id [$strId] mapped to id [$id] - fetched from cache");
+				VidiunLog::debug("UserRole str_id [$strId] mapped to id [$id] - fetched from cache");
 				return $id;
 			}
 		}
@@ -84,17 +84,17 @@ class UserRolePeer extends BaseUserRolePeer
 		
 		if ($id) {
 			// store the found id in cache for later use
-			if (kConf::get('enable_cache') && function_exists('apc_fetch') && function_exists('apc_store'))
+			if (vConf::get('enable_cache') && function_exists('apc_fetch') && function_exists('apc_store'))
 			{
-				$success = apc_store($cacheKey, $id, kConf::get('apc_cache_ttl'));
+				$success = apc_store($cacheKey, $id, vConf::get('apc_cache_ttl'));
 				if ($success) {
-					KalturaLog::debug("UserRole str_id [$strId] mapped to id [$id] - stored in cache");
+					VidiunLog::debug("UserRole str_id [$strId] mapped to id [$id] - stored in cache");
 				}
 			}
 		}
 		
 		if (!$id) {
-			KalturaLog::log("UserRole with str_id [$strId] not found in DB!");
+			VidiunLog::log("UserRole with str_id [$strId] not found in DB!");
 		}
 		return $id;		
 	}

@@ -3,7 +3,7 @@
  * @package plugins.youTubeDistribution
  * @subpackage lib
  */
-class kYouTubeDistributionEventConsumer implements kBatchJobStatusEventConsumer
+class vYouTubeDistributionEventConsumer implements vBatchJobStatusEventConsumer
 {
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -18,7 +18,7 @@ class kYouTubeDistributionEventConsumer implements kBatchJobStatusEventConsumer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
@@ -29,10 +29,10 @@ class kYouTubeDistributionEventConsumer implements kBatchJobStatusEventConsumer
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kDistributionJobData $data
+	 * @param vDistributionJobData $data
 	 * @return BatchJob
 	 */
-	public static function onDistributionJobUpdated(BatchJob $dbBatchJob, kDistributionJobData $data)
+	public static function onDistributionJobUpdated(BatchJob $dbBatchJob, vDistributionJobData $data)
 	{
 		switch($dbBatchJob->getStatus())
 		{
@@ -47,15 +47,15 @@ class kYouTubeDistributionEventConsumer implements kBatchJobStatusEventConsumer
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kDistributionJobData $data
+	 * @param vDistributionJobData $data
 	 * @return BatchJob
 	 */
-	public static function onDistributionJobUpdatedAlmostDone(BatchJob $dbBatchJob, kDistributionJobData $data)
+	public static function onDistributionJobUpdatedAlmostDone(BatchJob $dbBatchJob, vDistributionJobData $data)
 	{
 		$entryDistribution = EntryDistributionPeer::retrieveByPK($data->getEntryDistributionId());
 		if(!$entryDistribution)
 		{
-			KalturaLog::err("Entry distribution [" . $data->getEntryDistributionId() . "] not found");
+			VidiunLog::err("Entry distribution [" . $data->getEntryDistributionId() . "] not found");
 			return $dbBatchJob;
 		}
 
@@ -75,15 +75,15 @@ class kYouTubeDistributionEventConsumer implements kBatchJobStatusEventConsumer
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kDistributionJobData $data
+	 * @param vDistributionJobData $data
 	 * @return BatchJob
 	 */
-	public static function onDistributionJobFinished(BatchJob $dbBatchJob, kDistributionJobData $data)
+	public static function onDistributionJobFinished(BatchJob $dbBatchJob, vDistributionJobData $data)
 	{
 		$entryDistribution = EntryDistributionPeer::retrieveByPK($data->getEntryDistributionId());
 		if(!$entryDistribution)
 		{
-			KalturaLog::err("Entry distribution [" . $data->getEntryDistributionId() . "] not found");
+			VidiunLog::err("Entry distribution [" . $data->getEntryDistributionId() . "] not found");
 			return $dbBatchJob;
 		}
 
@@ -102,13 +102,13 @@ class kYouTubeDistributionEventConsumer implements kBatchJobStatusEventConsumer
 	}
 
 	/**
-	 * @param kDistributionJobData $data
+	 * @param vDistributionJobData $data
 	 * @param $entryDistribution
 	 */
-	protected static function saveCurrentPlaylistsToCustomData(kDistributionJobData $data, $entryDistribution)
+	protected static function saveCurrentPlaylistsToCustomData(vDistributionJobData $data, $entryDistribution)
 	{
 		$providerData = $data->getProviderData();
-		if ($providerData instanceof kYouTubeDistributionJobProviderData)
+		if ($providerData instanceof vYouTubeDistributionJobProviderData)
 		{
 			$entryDistribution->putInCustomData('currentPlaylists', $providerData->getCurrentPlaylists());
 			$entryDistribution->save();

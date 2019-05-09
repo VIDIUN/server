@@ -3,7 +3,7 @@
  * @package plugins.playReady
  * @subpackage api.objects
  */
-class KalturaPlayReadyContentKey extends KalturaObject 
+class VidiunPlayReadyContentKey extends VidiunObject 
 {
 	/**
 	 * Guid - key id of the specific content 

@@ -3,7 +3,7 @@
  * @package plugins.dailymotionDistribution
  * @subpackage model.data
  */
-class kDailymotionDistributionJobProviderData extends kDistributionJobProviderData
+class vDailymotionDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string

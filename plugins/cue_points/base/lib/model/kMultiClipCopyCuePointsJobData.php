@@ -3,7 +3,7 @@
  * @package plugins.cue_points
  * @subpackage model.data
  */
-class kMultiClipCopyCuePointsJobData extends kCopyCuePointsJobData
+class vMultiClipCopyCuePointsJobData extends vCopyCuePointsJobData
 {
     /**
      * the sources start time and duration

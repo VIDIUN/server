@@ -3,6 +3,6 @@
  * @package plugins.widevine
  * @subpackage api.filters
  */
-class KalturaWidevineFlavorAssetFilter extends KalturaWidevineFlavorAssetBaseFilter
+class VidiunWidevineFlavorAssetFilter extends VidiunWidevineFlavorAssetBaseFilter
 {
 }

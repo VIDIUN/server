@@ -78,7 +78,7 @@ class Form_MediaRepurposingConfigure extends ConfigureForm
 		$this->addSubForm($TasksSubForm, 'MR_tasks');
 
 		$this->addLine("taskLine2");
-		$this->addEnumElement('TaskTypeChoose', '', 'Kaltura_Client_ScheduledTask_Enum_ObjectTaskType');
+		$this->addEnumElement('TaskTypeChoose', '', 'Vidiun_Client_ScheduledTask_Enum_ObjectTaskType');
 		$this->addElement('button', 'addTaskButton', array(
 			'ignore'	=> true,
 			'label'		=> 'Add Task',
@@ -127,8 +127,8 @@ class Form_MediaRepurposingConfigure extends ConfigureForm
 		$this->addSubForm($conditionsSubForm, 'AdvanceSearch_');
 	}
 	
-	public static $advanceSearchMap = array("Kaltura_Client_Type_SearchMatchCondition" => "match",
-												"Kaltura_Client_Type_SearchComparableCondition" => "compare");
+	public static $advanceSearchMap = array("Vidiun_Client_Type_SearchMatchCondition" => "match",
+												"Vidiun_Client_Type_SearchComparableCondition" => "compare");
 	
 	private function addAdvanceSearchTemplate()
 	{
@@ -143,7 +143,7 @@ class Form_MediaRepurposingConfigure extends ConfigureForm
 	{
 		parent::populateFromObject($object, $add_underscore);
 		
-		/* @var $object KalturaScheduledTaskProfile */
+		/* @var $object VidiunScheduledTaskProfile */
 		$this->setDefault('partnerId', $this->newPartnerId);
 		$this->setDefault('mrId', $this->mediaRepurposingId);
 
@@ -190,7 +190,7 @@ class Form_MediaRepurposingConfigure extends ConfigureForm
 	{
 		$tasks = $this->populateTask($object);
 
-		$scheduledtaskPlugin = MediaRepurposingUtils::getPluginByName('Kaltura_Client_ScheduledTask_Plugin');
+		$scheduledtaskPlugin = MediaRepurposingUtils::getPluginByName('Vidiun_Client_ScheduledTask_Plugin');
 		$ids = explode(',', $object->description);
 		foreach($ids as $stId) {
 			if (strlen($stId) == 0)
@@ -244,8 +244,8 @@ class Form_MediaRepurposingConfigure extends ConfigureForm
 
 	private function buildMetadataSearchItem($advanceSearch)
 	{
-		$searchItem = new Kaltura_Client_Metadata_Type_MetadataSearchItem();
-		$searchItem->type = Kaltura_Client_Enum_SearchOperatorType::SEARCH_AND;
+		$searchItem = new Vidiun_Client_Metadata_Type_MetadataSearchItem();
+		$searchItem->type = Vidiun_Client_Enum_SearchOperatorType::SEARCH_AND;
 		$searchItem->metadataProfileId = $advanceSearch->MetadataProfileId;
 		$type = $advanceSearch->conditionType;
 
@@ -253,7 +253,7 @@ class Form_MediaRepurposingConfigure extends ConfigureForm
 		unset($advanceSearch->MetadataProfileId);
 
 		$class = array_search($type, Form_MediaRepurposingConfigure::$advanceSearchMap);
-		/* @var $condition Kaltura_Client_Type_SearchCondition  */
+		/* @var $condition Vidiun_Client_Type_SearchCondition  */
 		$condition = new $class();
 		foreach($advanceSearch as $key => $value)
 			$condition->$key = $value;
@@ -273,7 +273,7 @@ class Form_MediaRepurposingConfigure extends ConfigureForm
 			if ($value != 'N/A')
 				$filter->$key = $value;
 
-		if ($filterType != 'Kaltura_Client_Reach_Type_EntryVendorTaskFilter')
+		if ($filterType != 'Vidiun_Client_Reach_Type_EntryVendorTaskFilter')
 		{
 			$advanceSearch = isset($formData['AdvanceSearch']) ? $formData['AdvanceSearch'] : "[]";
 			$metadataSearchArray = $this->buildMetadataSearchArray($advanceSearch);
@@ -288,7 +288,7 @@ class Form_MediaRepurposingConfigure extends ConfigureForm
 		// check if filter not empty
 		foreach($filter as $prop)
 		{
-			if ($prop instanceof Kaltura_Client_Type_SearchOperator)
+			if ($prop instanceof Vidiun_Client_Type_SearchOperator)
 			{
 				if (count($prop->items))
 					return true;

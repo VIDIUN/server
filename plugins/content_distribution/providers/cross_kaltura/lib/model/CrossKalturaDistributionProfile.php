@@ -1,9 +1,9 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage model
  */
-class CrossKalturaDistributionProfile extends ConfigurableDistributionProfile
+class CrossVidiunDistributionProfile extends ConfigurableDistributionProfile
 {
 	// custom data fields
     
@@ -82,7 +82,7 @@ class CrossKalturaDistributionProfile extends ConfigurableDistributionProfile
 	 */
 	public function getProvider()
 	{
-		return CrossKalturaDistributionPlugin::getProvider();
+		return CrossVidiunDistributionPlugin::getProvider();
 	}
 	
 	
@@ -97,7 +97,7 @@ class CrossKalturaDistributionProfile extends ConfigurableDistributionProfile
 	    {
 		    foreach ($additionalXpaths as $xpathStringValue)
 		    {
-		        /* @var $xpathStringValue kStringValue */
+		        /* @var $xpathStringValue vStringValue */
 		        $updateRequired[] = $xpathStringValue->getValue();
 		    }
 	    }
@@ -144,7 +144,7 @@ class CrossKalturaDistributionProfile extends ConfigurableDistributionProfile
 
 	    // entry name
 	    $fieldConfig = new DistributionFieldConfig();
-	    $fieldConfig->setFieldName(CrossKalturaDistributionField::BASE_ENTRY_NAME);
+	    $fieldConfig->setFieldName(CrossVidiunDistributionField::BASE_ENTRY_NAME);
 	    $fieldConfig->setUserFriendlyFieldName('Name');
 	    $fieldConfig->setEntryMrssXslt('<xsl:value-of select="string(title)" />');
 	    $fieldConfig->setUpdateOnChange(true);
@@ -154,7 +154,7 @@ class CrossKalturaDistributionProfile extends ConfigurableDistributionProfile
 	    
 	    // entry description
 	    $fieldConfig = new DistributionFieldConfig();
-	    $fieldConfig->setFieldName(CrossKalturaDistributionField::BASE_ENTRY_DESCRIPTION);
+	    $fieldConfig->setFieldName(CrossVidiunDistributionField::BASE_ENTRY_DESCRIPTION);
 	    $fieldConfig->setUserFriendlyFieldName('Description');
 	    $fieldConfig->setEntryMrssXslt('<xsl:value-of select="string(description)" />');
 	    $fieldConfig->setUpdateOnChange(true);
@@ -164,7 +164,7 @@ class CrossKalturaDistributionProfile extends ConfigurableDistributionProfile
 	    
 	    // entry user id
 	    $fieldConfig = new DistributionFieldConfig();
-	    $fieldConfig->setFieldName(CrossKalturaDistributionField::BASE_ENTRY_USER_ID);
+	    $fieldConfig->setFieldName(CrossVidiunDistributionField::BASE_ENTRY_USER_ID);
 	    $fieldConfig->setUserFriendlyFieldName('User ID');
 	    $fieldConfig->setEntryMrssXslt('<xsl:value-of select="string(userId)" />');
 	    $fieldConfig->setUpdateOnChange(true);
@@ -174,7 +174,7 @@ class CrossKalturaDistributionProfile extends ConfigurableDistributionProfile
 	    
 	    // entry tags
 	    $fieldConfig = new DistributionFieldConfig();
-	    $fieldConfig->setFieldName(CrossKalturaDistributionField::BASE_ENTRY_TAGS);
+	    $fieldConfig->setFieldName(CrossVidiunDistributionField::BASE_ENTRY_TAGS);
 	    $fieldConfig->setUserFriendlyFieldName('Tags');
 	    $fieldConfig->setEntryMrssXslt('<xsl:for-each select="tags/tag">
                                 			<xsl:if test="position() &gt; 1">
@@ -189,7 +189,7 @@ class CrossKalturaDistributionProfile extends ConfigurableDistributionProfile
 	    
 	    // entry categories
 	    $fieldConfig = new DistributionFieldConfig();
-	    $fieldConfig->setFieldName(CrossKalturaDistributionField::BASE_ENTRY_CATEGORIES);
+	    $fieldConfig->setFieldName(CrossVidiunDistributionField::BASE_ENTRY_CATEGORIES);
 	    $fieldConfig->setUserFriendlyFieldName('Categories');
 	    $fieldConfig->setEntryMrssXslt('<xsl:for-each select="category">
                                 			<xsl:if test="position() &gt; 1">
@@ -204,7 +204,7 @@ class CrossKalturaDistributionProfile extends ConfigurableDistributionProfile
 	    
 	    // entry partner data
 	    $fieldConfig = new DistributionFieldConfig();
-	    $fieldConfig->setFieldName(CrossKalturaDistributionField::BASE_ENTRY_PARTNER_DATA);
+	    $fieldConfig->setFieldName(CrossVidiunDistributionField::BASE_ENTRY_PARTNER_DATA);
 	    $fieldConfig->setUserFriendlyFieldName('Entry Partner Data');
 	    $fieldConfig->setEntryMrssXslt('<xsl:value-of select="string(partnerData)" />');
 	    $fieldConfig->setUpdateOnChange(true);
@@ -214,21 +214,21 @@ class CrossKalturaDistributionProfile extends ConfigurableDistributionProfile
 	    
 	    // entry start date
 	    $fieldConfig = new DistributionFieldConfig();
-	    $fieldConfig->setFieldName(CrossKalturaDistributionField::BASE_ENTRY_START_DATE);
+	    $fieldConfig->setFieldName(CrossVidiunDistributionField::BASE_ENTRY_START_DATE);
 	    $fieldConfig->setUserFriendlyFieldName('Distribution sunrise');
 	    $fieldConfig->setEntryMrssXslt('<xsl:value-of select="distribution[@entryDistributionId=$entryDistributionId]/sunrise" />');
 	    $fieldConfigArray[$fieldConfig->getFieldName()] = $fieldConfig;
 	    
 	    // entry end date
 	    $fieldConfig = new DistributionFieldConfig();
-	    $fieldConfig->setFieldName(CrossKalturaDistributionField::BASE_ENTRY_END_DATE);
+	    $fieldConfig->setFieldName(CrossVidiunDistributionField::BASE_ENTRY_END_DATE);
 	    $fieldConfig->setUserFriendlyFieldName('Distribution sunset');
 	    $fieldConfig->setEntryMrssXslt('<xsl:value-of select="distribution[@entryDistributionId=$entryDistributionId]/sunset" />');
 	    $fieldConfigArray[$fieldConfig->getFieldName()] = $fieldConfig;
 	    	    
 	    // entry reference id
 	    $fieldConfig = new DistributionFieldConfig();
-	    $fieldConfig->setFieldName(CrossKalturaDistributionField::BASE_ENTRY_REFERENCE_ID);
+	    $fieldConfig->setFieldName(CrossVidiunDistributionField::BASE_ENTRY_REFERENCE_ID);
 	    $fieldConfig->setUserFriendlyFieldName('Reference ID');
 	    $fieldConfig->setEntryMrssXslt('<xsl:value-of select="string(referenceID)" />');
 	    $fieldConfig->setUpdateOnChange(true);
@@ -237,7 +237,7 @@ class CrossKalturaDistributionProfile extends ConfigurableDistributionProfile
 	    
 	    // entry license type
 	    $fieldConfig = new DistributionFieldConfig();
-	    $fieldConfig->setFieldName(CrossKalturaDistributionField::BASE_ENTRY_LICENSE_TYPE);
+	    $fieldConfig->setFieldName(CrossVidiunDistributionField::BASE_ENTRY_LICENSE_TYPE);
 	    $fieldConfig->setUserFriendlyFieldName('License type');
 	    $fieldConfig->setEntryMrssXslt('<xsl:value-of select="string(licenseType)" />');
 	    $fieldConfig->setUpdateOnChange(true);

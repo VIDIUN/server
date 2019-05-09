@@ -3,6 +3,6 @@
  * @package plugins.schedule
  * @subpackage api.filters.enum
  */
-class KalturaRecordScheduleEventOrderBy extends KalturaEntryScheduleEventOrderBy
+class VidiunRecordScheduleEventOrderBy extends VidiunEntryScheduleEventOrderBy
 {
 }

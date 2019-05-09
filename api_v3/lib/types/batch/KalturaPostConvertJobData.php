@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPostConvertJobData extends KalturaConvartableJobData
+class VidiunPostConvertJobData extends VidiunConvartableJobData
 {
 	/**
 	 * @var string
@@ -76,26 +76,26 @@ class KalturaPostConvertJobData extends KalturaConvartableJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kPostConvertJobData();
+			$dbData = new vPostConvertJobData();
 
 		return parent::toObject($dbData);
 	}
 
 	/**
-	 * @param string $subType from enum KalturaMediaParserType
+	 * @param string $subType from enum VidiunMediaParserType
 	 * @return int from enum mediaParserType
 	 */
 	public function toSubType($subType)
 	{
-		return kPluginableEnumsManager::apiToCore('mediaParserType', $subType);
+		return vPluginableEnumsManager::apiToCore('mediaParserType', $subType);
 	}
 	
 	/**
 	 * @param int $subType from enum mediaParserType
-	 * @return string from enum KalturaMediaParserType
+	 * @return string from enum VidiunMediaParserType
 	 */
 	public function fromSubType($subType)
 	{
-		return kPluginableEnumsManager::coreToApi('mediaParserType', $subType);
+		return vPluginableEnumsManager::coreToApi('mediaParserType', $subType);
 	}
 }

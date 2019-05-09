@@ -3,10 +3,10 @@
  * @package plugins.captionSphinx
  * @subpackage lib
  */
-class kSphinxCaptionAssetFlowManager implements kObjectDeletedEventConsumer
+class vSphinxCaptionAssetFlowManager implements vObjectDeletedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{
@@ -17,11 +17,11 @@ class kSphinxCaptionAssetFlowManager implements kObjectDeletedEventConsumer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null)
 	{
-		$sphinxSearchManager = new kSphinxSearchManager();
+		$sphinxSearchManager = new vSphinxSearchManager();
 		return true;
 	}
 }

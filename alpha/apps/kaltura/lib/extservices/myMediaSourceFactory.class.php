@@ -63,26 +63,26 @@ class myMediaSourceFactory
 				/*			case entry::ENTRY_MEDIA_SOURCE_CURRENT:
 				 $result =  new myCurrentServices();
 				 break; */
-			case entry::ENTRY_MEDIA_SOURCE_KALTURA:
-				$result =  new myKalturaServices();
+			case entry::ENTRY_MEDIA_SOURCE_VIDIUN:
+				$result =  new myVidiunServices();
 				break;
-			case entry::ENTRY_MEDIA_SOURCE_KALTURA_QA:
-				$result =  new myKalturaQaServices();
+			case entry::ENTRY_MEDIA_SOURCE_VIDIUN_QA:
+				$result =  new myVidiunQaServices();
 				break;
-			case entry::ENTRY_MEDIA_SOURCE_KALTURA_USER_CLIPS:
-				$result =  new myKalturaUserClipsServices();
+			case entry::ENTRY_MEDIA_SOURCE_VIDIUN_USER_CLIPS:
+				$result =  new myVidiunUserClipsServices();
 				break;
 			case entry::ENTRY_MEDIA_SOURCE_MEDIA_COMMONS:
 				$result =  new myMediaCommonsServices();
 				break;
-			case entry::ENTRY_MEDIA_SOURCE_KALTURA_PARTNER:
-				$result =  new myKalturaPartnerServices();
+			case entry::ENTRY_MEDIA_SOURCE_VIDIUN_PARTNER:
+				$result =  new myVidiunPartnerServices();
 				break;
-			case entry::ENTRY_MEDIA_SOURCE_KALTURA_KSHOW:
-				$result =  new myKalturaKshowServices();
+			case entry::ENTRY_MEDIA_SOURCE_VIDIUN_VSHOW:
+				$result =  new myVidiunVshowServices();
 				break;
-			case entry::ENTRY_MEDIA_SOURCE_KALTURA_PARTNER_KSHOW:
-				$result =  new myKalturaPartnerKshowServices();
+			case entry::ENTRY_MEDIA_SOURCE_VIDIUN_PARTNER_VSHOW:
+				$result =  new myVidiunPartnerVshowServices();
 				break;
 			case entry::ENTRY_MEDIA_SOURCE_ARCHIVE_ORG:
 				$result =  new myArchiveOrgServices();
@@ -94,7 +94,7 @@ class myMediaSourceFactory
 				$result = new mySearchProxyServices();
 				break;
 			case entry::ENTRY_MEDIA_SOURCE_PARTNER_SPECIFIC:
-				$pid = kCurrentContext::$ks_partner_id;
+				$pid = vCurrentContext::$vs_partner_id;
 				$partner = PartnerPeer::retrieveByPK($pid);
 				if(!$partner)
 					throw new Exception("Cannot find partner id [$pid]");
@@ -117,18 +117,18 @@ class myMediaSourceFactory
 			default:
 				/* OLD CODE FROM LIRON - left here for the comments
 				// TODO - once we have am extension system - hook in here !
-				// $result = kExtensionMgr::extend ( "mediaSourceFactory:getMediaSource" ,  $media_source );
+				// $result = vExtensionMgr::extend ( "mediaSourceFactory:getMediaSource" ,  $media_source );
 				if ( $media_source == 100 ) // hard coded for Stroome
 				{
 					//class_exists('ext'.$pid.'Services')
-					// depending on the ks partner - choose the service. This map will have to be registered somewhere in the config / DB
-					// for now - it will be redirected to stroome and stroome will validate the ks's partner
+					// depending on the vs partner - choose the service. This map will have to be registered somewhere in the config / DB
+					// for now - it will be redirected to stroome and stroome will validate the vs's partner
 					$result = new extStroomeServices(); //STROOME
 					return $result;
 				}
 				*/
 				throw new Exception ("Cannot create media source of type [$media_source]");
-				$result = new myKalturaServices();
+				$result = new myVidiunServices();
 		}
 
 		return $result;
@@ -144,7 +144,7 @@ class myMediaSourceFactory
 			$media_source = self::getMediaSource ( entry::ENTRY_MEDIA_SOURCE_YOUTUBE );
 			$obj_id = $objectId[1];
 		}
-		//http://www.flickr.com/photos/k_soggie/338990574/
+		//http://www.flickr.com/photos/v_soggie/338990574/
 		elseif (preg_match('/http:\/\/www.flickr.com\/photos\/.*?\/(\d+)/', $url, $objectId))
 		{
 			$media_source = self::getMediaSource ( entry::ENTRY_MEDIA_SOURCE_FLICKR );
@@ -172,11 +172,11 @@ class myMediaSourceFactory
 		return array (
 		entry::ENTRY_MEDIA_SOURCE_FILE ,
 		entry::ENTRY_MEDIA_SOURCE_WEBCAM ,
-		entry::ENTRY_MEDIA_SOURCE_KALTURA ,
-		entry::ENTRY_MEDIA_SOURCE_KALTURA_PARTNER ,
-		entry::ENTRY_MEDIA_SOURCE_KALTURA_KSHOW,
-		entry::ENTRY_MEDIA_SOURCE_KALTURA_PARTNER_KSHOW ,
-		//				entry::ENTRY_MEDIA_SOURCE_KALTURA_USER_CLIPS ,
+		entry::ENTRY_MEDIA_SOURCE_VIDIUN ,
+		entry::ENTRY_MEDIA_SOURCE_VIDIUN_PARTNER ,
+		entry::ENTRY_MEDIA_SOURCE_VIDIUN_VSHOW,
+		entry::ENTRY_MEDIA_SOURCE_VIDIUN_PARTNER_VSHOW ,
+		//				entry::ENTRY_MEDIA_SOURCE_VIDIUN_USER_CLIPS ,
 		entry::ENTRY_MEDIA_SOURCE_FLICKR ,
 		entry::ENTRY_MEDIA_SOURCE_PHOTOBUCKET ,
 		entry::ENTRY_MEDIA_SOURCE_JAMENDO ,

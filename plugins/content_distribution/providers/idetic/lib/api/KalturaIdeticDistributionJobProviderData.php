@@ -3,7 +3,7 @@
  * @package plugins.ideticDistribution
  * @subpackage api.objects
  */
-class KalturaIdeticDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunIdeticDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {	
 	
 	/**
@@ -31,20 +31,20 @@ class KalturaIdeticDistributionJobProviderData extends KalturaConfigurableDistri
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kIdeticDistributionJobProviderData();
+			$dbObject = new vIdeticDistributionJobProviderData();
 			
 		return parent::toObject($dbObject, $skip);
 	}
 	
 	
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 	    parent::__construct($distributionJobData);
 	    
 		if(!$distributionJobData)
 			return;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaIdeticDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunIdeticDistributionProfile))
 			return;
 			
 		$flavorAsset=null;

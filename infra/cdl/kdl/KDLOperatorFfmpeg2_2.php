@@ -3,12 +3,12 @@
  * @package plugins.ffmpeg
  * @subpackage lib
  */
-class KDLOperatorFfmpeg2_2 extends KDLOperatorFfmpeg2_1_3 {
+class VDLOperatorFfmpeg2_2 extends VDLOperatorFfmpeg2_1_3 {
 
 	/* ---------------------------
 	 * generateVideoParams
 	 */
-	protected function generateVideoParams(KDLFlavor $design, KDLFlavor $target)
+	protected function generateVideoParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		$cmdStr = parent::generateVideoParams($design, $target);
 		if(!isset($target->_video))
@@ -23,7 +23,7 @@ class KDLOperatorFfmpeg2_2 extends KDLOperatorFfmpeg2_1_3 {
 			 * - on _arProcessingMode==4
 			 */
 		if((isset($vid->_width) && $vid->_width>0 && isset($vid->_height) && $vid->_height>0) 
-		&& (in_array($vid->_id, array(KDLVideoTarget::H265,KDLVideoTarget::H264,KDLVideoTarget::H264B,KDLVideoTarget::H264M,KDLVideoTarget::H264H))
+		&& (in_array($vid->_id, array(VDLVideoTarget::H265,VDLVideoTarget::H264,VDLVideoTarget::H264B,VDLVideoTarget::H264M,VDLVideoTarget::H264H))
 			|| $vid->_arProcessingMode==4)){
 
 			/*

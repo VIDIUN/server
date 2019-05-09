@@ -2,7 +2,7 @@
 
 <!-- 
 
-This is a *generic* example of Kaltura's bulk upload XML. 
+This is a *generic* example of Vidiun's bulk upload XML. 
 
 To enable more advanced content ingestion options, this example can be extended to include
 multiple/custom metadata items, account specific settings, update action and advanced content 
@@ -12,17 +12,17 @@ ingestion options (e.g. ingestion of multiple transcoding flavors, multiple thum
 Every item element within this xml represents a single entry created in the publisher account. 
 Each entry will be populated with the metadata listed in its item element and the content referenced from it.
 
-When submitted, the bulk upload xml is validated on the Kaltura server. 
+When submitted, the bulk upload xml is validated on the Vidiun server. 
 The validation includes an inspection of the XML structure, and verification of 
-elements' structure and order compliance with Kaltura's bulk upload XSD (XML schema). 
+elements' structure and order compliance with Vidiun's bulk upload XSD (XML schema). 
 When a validation error is detected, specific error description is avaialble in the 
-"Bulk Upload Log" page in the KMC. Access this page through the content tab in the 
-KMC main navigation: Content > Uploads Control > Switch to Bulk Upload Log
+"Bulk Upload Log" page in the VMC. Access this page through the content tab in the 
+VMC main navigation: Content > Uploads Control > Switch to Bulk Upload Log
 
 The commented-out elements within this example are placeholders for some 
 advanced/account specific options.  A description of all supported elements and 
-attributes, as well as a download of the full bulk upload XML schema are available on Kaltura's XML Schema pages 
-at: http://www.kaltura.com/api_v3/xsdDoc/?type=bulkUploadXml.bulkUploadXML
+attributes, as well as a download of the full bulk upload XML schema are available on Vidiun's XML Schema pages 
+at: http://www.vidiun.com/api_v3/xsdDoc/?type=bulkUploadXml.bulkUploadXML
 -->
 
 

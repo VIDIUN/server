@@ -5,16 +5,16 @@
  * @package api
  * @subpackage objects
  */
-class KalturaOperationResource extends KalturaContentResource
+class VidiunOperationResource extends VidiunContentResource
 {
 	/**
-	 * Only KalturaEntryResource and KalturaAssetResource are supported
-	 * @var KalturaContentResource
+	 * Only VidiunEntryResource and VidiunAssetResource are supported
+	 * @var VidiunContentResource
 	 */
 	public $resource;
 	
 	/**
-	 * @var KalturaOperationAttributesArray
+	 * @var VidiunOperationAttributesArray
 	 */
 	public $operationAttributes;
 	
@@ -25,7 +25,7 @@ class KalturaOperationResource extends KalturaContentResource
 	public $assetParamsId;
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -33,12 +33,12 @@ class KalturaOperationResource extends KalturaContentResource
 		
 		$this->validatePropertyNotNull('resource');
 		
-		if(!($this->resource instanceof KalturaEntryResource) && !($this->resource instanceof KalturaAssetResource))
-			throw new KalturaAPIException(KalturaErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($this->resource));
+		if(!($this->resource instanceof VidiunEntryResource) && !($this->resource instanceof VidiunAssetResource))
+			throw new VidiunAPIException(VidiunErrors::RESOURCE_TYPE_NOT_SUPPORTED, get_class($this->resource));
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaResource::validateEntry()
+	 * @see VidiunResource::validateEntry()
 	 */
 	public function validateEntry(entry $dbEntry, $validateLocalExist = false)
 	{
@@ -48,7 +48,7 @@ class KalturaOperationResource extends KalturaContentResource
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaResource::entryHandled()
+	 * @see VidiunResource::entryHandled()
 	 */
 	public function entryHandled(entry $dbEntry)
 	{
@@ -59,7 +59,7 @@ class KalturaOperationResource extends KalturaContentResource
 	private static $map_between_objects = array('assetParamsId');
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -67,7 +67,7 @@ class KalturaOperationResource extends KalturaContentResource
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -77,7 +77,7 @@ class KalturaOperationResource extends KalturaContentResource
 			return $this->resource->toObject();
 		
 		if(!$object_to_fill)
-			$object_to_fill = new kOperationResource();
+			$object_to_fill = new vOperationResource();
 		
 		$operationAttributes = array();
 		foreach($this->operationAttributes as $operationAttributesObject)

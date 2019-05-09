@@ -3,27 +3,27 @@
  * @package plugins.exampleIntegration
  * @subpackage Scheduler
  */
-class KExampleIntegrationEngine implements KIntegrationCloserEngine
+class VExampleIntegrationEngine implements VIntegrationCloserEngine
 {	
 	/* (non-PHPdoc)
-	 * @see KIntegrationCloserEngine::dispatch()
+	 * @see VIntegrationCloserEngine::dispatch()
 	 */
-	public function dispatch(KalturaBatchJob $job, KalturaIntegrationJobData &$data)
+	public function dispatch(VidiunBatchJob $job, VidiunIntegrationJobData &$data)
 	{
 		return $this->doDispatch($job, $data, $data->providerData);
 	}
 
 	/* (non-PHPdoc)
-	 * @see KIntegrationCloserEngine::close()
+	 * @see VIntegrationCloserEngine::close()
 	 */
-	public function close(KalturaBatchJob $job, KalturaIntegrationJobData &$data)
+	public function close(VidiunBatchJob $job, VidiunIntegrationJobData &$data)
 	{
 		return $this->doClose($job, $data, $data->providerData);
 	}
 	
-	protected function doDispatch(KalturaBatchJob $job, KalturaIntegrationJobData &$data, KalturaExampleIntegrationJobProviderData $providerData)
+	protected function doDispatch(VidiunBatchJob $job, VidiunIntegrationJobData &$data, VidiunExampleIntegrationJobProviderData $providerData)
 	{
-		KalturaLog::debug("Example URL [$providerData->exampleUrl]");
+		VidiunLog::debug("Example URL [$providerData->exampleUrl]");
 		
 		// To finish, return true
 		// To wait for closer, return false
@@ -32,9 +32,9 @@ class KExampleIntegrationEngine implements KIntegrationCloserEngine
 		return false;
 	}
 	
-	protected function doClose(KalturaBatchJob $job, KalturaIntegrationJobData &$data, KalturaExampleIntegrationJobProviderData $providerData)
+	protected function doClose(VidiunBatchJob $job, VidiunIntegrationJobData &$data, VidiunExampleIntegrationJobProviderData $providerData)
 	{
-		KalturaLog::debug("Example URL [$providerData->exampleUrl]");
+		VidiunLog::debug("Example URL [$providerData->exampleUrl]");
 		
 		// To finish, return true
 		// To keep open for future closer, return false

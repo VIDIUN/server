@@ -2,10 +2,10 @@
 /**
  * @package plugins.businessProcessNotification
  */
-class kBusinessProcessNotificationFlowManager implements kBatchJobStatusEventConsumer, kObjectDeletedEventConsumer
+class vBusinessProcessNotificationFlowManager implements vBatchJobStatusEventConsumer, vObjectDeletedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -22,7 +22,7 @@ class kBusinessProcessNotificationFlowManager implements kBatchJobStatusEventCon
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
@@ -30,7 +30,7 @@ class kBusinessProcessNotificationFlowManager implements kBatchJobStatusEventCon
 		return true;
 	}
 	
-	private function onBusinessProcessStart(BatchJob $dbBatchJob, kBusinessProcessNotificationDispatchJobData $data)
+	private function onBusinessProcessStart(BatchJob $dbBatchJob, vBusinessProcessNotificationDispatchJobData $data)
 	{
 		$object = $data->getObject();
 		$template = EventNotificationTemplatePeer::retrieveByPK($data->getTemplateId());
@@ -44,11 +44,11 @@ class kBusinessProcessNotificationFlowManager implements kBatchJobStatusEventCon
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null)
 	{
-		$scope = new kEventNotificationScope();
+		$scope = new vEventNotificationScope();
 		$scope->setObject($object);
 		if($raisedJob)
 			$scope->setParentRaisedJob($raisedJob);
@@ -59,7 +59,7 @@ class kBusinessProcessNotificationFlowManager implements kBatchJobStatusEventCon
 			$notificationTemplate = EventNotificationTemplatePeer::retrieveByPK($templateId);
 			if (!$notificationTemplate)
 			{
-				KalturaLog::info ("Notification template with ID [$templateId] could not be found.");
+				VidiunLog::info ("Notification template with ID [$templateId] could not be found.");
 				continue;
 			}
 			
@@ -80,7 +80,7 @@ class kBusinessProcessNotificationFlowManager implements kBatchJobStatusEventCon
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{

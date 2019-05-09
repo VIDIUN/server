@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kSourceFileSyncDescriptor extends kFileSyncDescriptor
+class vSourceFileSyncDescriptor extends vFileSyncDescriptor
 {	
 	/**
 	 * The translated path as used by the scheduler

@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.enum
  */
-class KalturaESearchCategoryEntryFieldName extends KalturaStringEnum
+class VidiunESearchCategoryEntryFieldName extends VidiunStringEnum
 {
 	const NAME = 'name';
 	const ID = 'id';

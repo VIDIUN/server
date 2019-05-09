@@ -39,17 +39,17 @@ class searchAction extends defPartnerservices2Action
 		return self::REQUIED_TICKET_NONE;
 	}
 	
-	// check to see if already exists in the system = ask to fetch the puser & the kuser
-	// don't ask for  KUSER_DATA_KUSER_DATA - because then we won't tell the difference between a missing kuser and a missing puser_kuser
-	public function needKuserFromPuser ( )
+	// check to see if already exists in the system = ask to fetch the puser & the vuser
+	// don't ask for  VUSER_DATA_VUSER_DATA - because then we won't tell the difference between a missing vuser and a missing puser_vuser
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_NO_KUSER;
+		return self::VUSER_DATA_NO_VUSER;
 	}
 
 	/**
-		the puser might not be a kuser in the system
+		the puser might not be a vuser in the system
 	 */
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		self::$escape_text = true;
 		
@@ -69,7 +69,7 @@ class searchAction extends defPartnerservices2Action
 		
 			
 		// TODO - get this if we need t for flickr
-		$kuserId = null;
+		$vuserId = null;
 		
 		$media_source_provider = myMediaSourceFactory::getMediaSource ( $mediaSource );
 	//	echo ( "$media_source\n" );
@@ -77,7 +77,7 @@ class searchAction extends defPartnerservices2Action
 		{
 			$media_source_provider->setUserDetails ( $partner_id , $subp_id , $puser_id  );
 			
-			//$res = call_user_func (  array ( $media_source , "searchMedia" ) , array ( $media_type , $searchText, $page, $pageSize, $kuserId ) ) ;
+			//$res = call_user_func (  array ( $media_source , "searchMedia" ) , array ( $media_type , $searchText, $page, $pageSize, $vuserId ) ) ;
 			// magic word - '$partner_id' to replace the parameter dynamically
 			$extraData = str_replace( '$partner_id' , $partner_id , $extraData );
 			$res = $media_source_provider->searchMedia ( $mediaType , $searchText, $page, $pageSize, $authData , $extraData )  ;

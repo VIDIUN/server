@@ -3,7 +3,7 @@
  * @package server-infra
  * @subpackage Media
  */
-class KFFMpegThumbnailMaker extends KBaseThumbnailMaker
+class VFFMpegThumbnailMaker extends VBaseThumbnailMaker
 {
 	protected $cmdPath;
 	/**
@@ -20,7 +20,7 @@ class KFFMpegThumbnailMaker extends KBaseThumbnailMaker
 	{
 		$params = self::normalizeParams($params);
 		
-		KalturaLog::debug("position[$position], width[$width], height[$height], params[".serialize($params)."]");
+		VidiunLog::debug("position[$position], width[$width], height[$height], params[".serialize($params)."]");
 		$dar = $params['dar'];
 		if(isset($dar) && $dar>0 && isset($height)){
 			$width = floor(round($height*$dar) /2) * 2;
@@ -30,7 +30,7 @@ class KFFMpegThumbnailMaker extends KBaseThumbnailMaker
 
 		$cmd= $cmdArr[0];
 		$rv = null;
-		KalturaLog::info("Executing: $cmd");
+		VidiunLog::info("Executing: $cmd");
 		$logFilePath = "$this->targetPath.log";
 		
 		$logFileDir = dirname($logFilePath);
@@ -39,23 +39,23 @@ class KFFMpegThumbnailMaker extends KBaseThumbnailMaker
 			
 		file_put_contents($logFilePath, $cmd, FILE_APPEND);
 		$output = system( $cmd , $rv );
-		KalturaLog::debug("Returned value: '$rv'");
+		VidiunLog::debug("Returned value: '$rv'");
 
 		if($rv==0 && $this->parseOutput($output)==true)
 			return true;
 
-		KalturaLog::warning("First attempt failed due to ffmpeg crash or 'missing-keyframe' issue.\nSecond attempt with 'slow-thumb-capture' mode");
+		VidiunLog::warning("First attempt failed due to ffmpeg crash or 'missing-keyframe' issue.\nSecond attempt with 'slow-thumb-capture' mode");
 		$cmd= $cmdArr[1];
 		if(isset($cmd) ){
 			if($position>30) {
-				KalturaLog::err("Can not run 2nd attempt - 'slow-thumb-capture' is allowed up to 30 sec position");
+				VidiunLog::err("Can not run 2nd attempt - 'slow-thumb-capture' is allowed up to 30 sec position");
 			}
 			else {
 				$rv = null;
-				KalturaLog::info("Executing: $cmd");
+				VidiunLog::info("Executing: $cmd");
 				file_put_contents($logFilePath, $cmd, FILE_APPEND);
 				$output = system( $cmd , $rv );
-				KalturaLog::debug("Returned value: '$rv'");
+				VidiunLog::debug("Returned value: '$rv'");
 				
 				if($rv==0 && $this->parseOutput($output)==true)
 					;//return true;

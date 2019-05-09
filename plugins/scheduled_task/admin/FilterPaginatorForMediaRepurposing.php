@@ -3,7 +3,7 @@
  * @package Admin
  * @subpackage paginator
  */
-class Kaltura_FilterPaginatorForMediaRepurposing implements Zend_Paginator_Adapter_Interface
+class Vidiun_FilterPaginatorForMediaRepurposing implements Zend_Paginator_Adapter_Interface
 {
 	/**
 	 * @var int

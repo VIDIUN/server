@@ -45,7 +45,7 @@ class Infra_AclHelper
 		$acl = Zend_Registry::get('acl');
 		if(!$acl->has($resource))
 		{
-			KalturaLog::info("Resource [$resource] privilege [$privilege] not found!");
+			VidiunLog::info("Resource [$resource] privilege [$privilege] not found!");
 			return false;
 		}
 		$allowed = $acl->isAllowed(self::getCurrentRole(), $resource, $privilege);
@@ -63,7 +63,7 @@ class Infra_AclHelper
 		if(!self::isAllowed($resource, $privilege))
 		{
 			$message = "Access denied to resource[$resource], needed privilege [$privilege]";
-			KalturaLog::err($message);
+			VidiunLog::err($message);
 			throw new Infra_Exception($message, Infra_Exception::ERROR_CODE_ACCESS_DENIED);
 		}
 	}

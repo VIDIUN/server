@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaContextDataHelper extends IKalturaBase
+interface IVidiunContextDataHelper extends IVidiunBase
 {
 	/**
 	 * @param accessControlScope $scope

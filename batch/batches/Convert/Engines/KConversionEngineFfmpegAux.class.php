@@ -3,7 +3,7 @@
  * @package Scheduler
  * @subpackage Conversion.engines
  */
-class KConversionEngineFfmpegAux  extends KJobConversionEngine
+class VConversionEngineFfmpegAux  extends VJobConversionEngine
 {
 	const FFMPEG_AUX = "ffmpeg_aux";
 	
@@ -14,11 +14,11 @@ class KConversionEngineFfmpegAux  extends KJobConversionEngine
 	
 	public function getType()
 	{
-		return KalturaConversionEngineType::FFMPEG_AUX;
+		return VidiunConversionEngineType::FFMPEG_AUX;
 	}
 	
 	public function getCmd ()
 	{
-		return KBatchBase::$taskConfig->params->ffmpegAuxCmd;
+		return VBatchBase::$taskConfig->params->ffmpegAuxCmd;
 	}
 }

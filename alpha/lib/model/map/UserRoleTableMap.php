@@ -57,7 +57,7 @@ class UserRoleTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('KuserToUserRole', 'KuserToUserRole', RelationMap::ONE_TO_MANY, array('id' => 'user_role_id', ), null, null);
+    $this->addRelation('VuserToUserRole', 'VuserToUserRole', RelationMap::ONE_TO_MANY, array('id' => 'user_role_id', ), null, null);
 	} // buildRelations()
 
 } // UserRoleTableMap

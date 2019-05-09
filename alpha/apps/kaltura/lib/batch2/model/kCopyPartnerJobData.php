@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kCopyPartnerJobData extends kJobData
+class vCopyPartnerJobData extends vJobData
 {
 	/**
 	 * The PartnerId to copy from

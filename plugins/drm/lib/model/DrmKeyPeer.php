@@ -30,7 +30,7 @@ class DrmKeyPeer extends BaseDrmKeyPeer
 		{
 			$typeField = self::translateFieldName(DrmKeyPeer::PROVIDER, BasePeer::TYPE_COLNAME, BasePeer::TYPE_NUM);
 			$drmKeyType = $row[$typeField];				
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $drmKeyType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $drmKeyType);
 			if($extendedCls)
 			{
 				return $extendedCls;

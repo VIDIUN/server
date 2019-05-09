@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaAdminUserFilter extends KalturaAdminUserBaseFilter
+class VidiunAdminUserFilter extends VidiunAdminUserBaseFilter
 {
 }

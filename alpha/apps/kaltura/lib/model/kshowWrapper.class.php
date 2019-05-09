@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.wrappers
  */
-class kshowWrapper extends objectWrapperBase
+class vshowWrapper extends objectWrapperBase
 {
 	protected $basic_fields = array ( "id" , "name" , "partnerId" , "subpId" );
 	
@@ -13,12 +13,12 @@ class kshowWrapper extends objectWrapperBase
 	
 	protected $detailed_fields_ext = array (  "plays" , "views" , "votes" , "comments" , "favorites" , "rank" , "entries" , "contributors" , "subscribers", "lengthInMsecs") ;
 	
-	protected $detailed_objs_ext = array ( "kuser" , "intro" , "showEntry" ,  "entrys" );
+	protected $detailed_objs_ext = array ( "vuser" , "intro" , "showEntry" ,  "entrys" );
 	
 	// for a list of all objects - this is MUCH heavier than and single object (can be a long list)
 	protected $detailed_obj_lists_ext = array ( "entrys" );
 	
-	protected $objs_cache = array ( /*"kuser" => "kuser,producerId" , 
+	protected $objs_cache = array ( /*"vuser" => "vuser,producerId" , 
 		"intro" => "entry,introId" , 
 		"showEntry" => "entry,showEntryId" ,  
 		"entrys" => "*entry,id"*/);
@@ -30,7 +30,7 @@ class kshowWrapper extends objectWrapperBase
 	{
 		return 
 			array (
-				"display_name" => "KShow",
+				"display_name" => "VShow",
 				"desc" => ""
 			);
 	}

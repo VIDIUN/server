@@ -6,7 +6,7 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KParseEngineEncodingCom
+class VParseEngineEncodingCom
 {
 	const ENCODING_COM = "encoding_com";
 	
@@ -20,7 +20,7 @@ class KParseEngineEncodingCom
 	
 	public function getType()
 	{
-		return KalturaConversionEngineType::ENCODING_COM;
+		return VidiunConversionEngineType::ENCODING_COM;
 	}
 	
 	public function getLogData()
@@ -35,32 +35,32 @@ class KParseEngineEncodingCom
 
 	protected function getUserId()
 	{
-		return KBatchBase::$taskConfig->params->EncodingComUserId;
+		return VBatchBase::$taskConfig->params->EncodingComUserId;
 	}
 
 	protected function getUserKey()
 	{
-		return KBatchBase::$taskConfig->params->EncodingComUserKey;
+		return VBatchBase::$taskConfig->params->EncodingComUserKey;
 	}
 
 	protected function getUrl()
 	{
-		return KBatchBase::$taskConfig->params->EncodingComUrl;
+		return VBatchBase::$taskConfig->params->EncodingComUrl;
 	}
 	
 	/**
-	 * @param KalturaConvertJobData $data
+	 * @param VidiunConvertJobData $data
 	 * @param string $errMessage
 	 * @return number
 	 */
-	public function parse ( KalturaConvertJobData &$data, &$errMessage )
+	public function parse ( VidiunConvertJobData &$data, &$errMessage )
 	{
-		$sendData = new KEncodingComData();
+		$sendData = new VEncodingComData();
 		
 		$sendData->setUserId($this->getUserId());
 		$sendData->setUserKey($this->getUserKey());
 		
-		$sendData->setAction(KEncodingComData::ACTION_GET_STATUS);
+		$sendData->setAction(VEncodingComData::ACTION_GET_STATUS);
 		$sendData->setMediaId($data->remoteMediaId);
 
 		$err = null;
@@ -70,7 +70,7 @@ class KParseEngineEncodingCom
 		if(!$responseXml)
 		{
 			$errMessage = "Error: $err";
-			return KalturaBatchJobStatus::ALMOST_DONE;
+			return VidiunBatchJobStatus::ALMOST_DONE;
 		}		
 		
 		preg_match('/\<status\>([\w\s]*)\<\/status\>/', $responseXml, $status);
@@ -78,27 +78,27 @@ class KParseEngineEncodingCom
 		if (!$status)
 		{
 			$errMessage = 'status not found';
-			return KalturaBatchJobStatus::ALMOST_DONE;
+			return VidiunBatchJobStatus::ALMOST_DONE;
 		}
 		
 		if(strtolower($status) == "error")
 		{
 			preg_match_all('/\<description\>([^<]*)\<\/description\>/', $responseXml, $description);
 			$errMessage = implode("\n", $description[1]);
-			return KalturaBatchJobStatus::FAILED;
+			return VidiunBatchJobStatus::FAILED;
 		}
 		
 		if(strtolower($status) != "finished")
 		{
 			$errMessage = $status;
-			return KalturaBatchJobStatus::ALMOST_DONE;
+			return VidiunBatchJobStatus::ALMOST_DONE;
 		}
 		
 		preg_match('/\<s3_destination\>(.*)\<\/s3_destination\>/', $responseXml, $s3_destination);
 		$s3_destination = (isset($s3_destination[1]) ? $s3_destination[1] : null);
 		$data->destFileSyncRemoteUrl = $s3_destination;
 		$errMessage = "Remote url: $s3_destination";
-		return KalturaBatchJobStatus::FINISHED;
+		return VidiunBatchJobStatus::FINISHED;
 	}
 	
 	/**
@@ -108,7 +108,7 @@ class KParseEngineEncodingCom
 	 */
 	private function sendRequest($requestXml, &$err)
 	{
-		KalturaLog::info("sendRequest($requestXml)");
+		VidiunLog::info("sendRequest($requestXml)");
 
 		$url = $this->getUrl();
 		
@@ -136,7 +136,7 @@ class KParseEngineEncodingCom
 		
 		curl_close($ch);
 		
-		KalturaLog::info("request results: ($result)");
+		VidiunLog::info("request results: ($result)");
 		return $result;
 	}
 }

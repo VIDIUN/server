@@ -4,10 +4,10 @@
  * @subpackage api.objects
  */
 
-class KalturaReoccurringVendorCredit extends KalturaTimeRangeVendorCredit
+class VidiunReoccurringVendorCredit extends VidiunTimeRangeVendorCredit
 {
 	/**
-	 * @var KalturaVendorCreditRecurrenceFrequency
+	 * @var VidiunVendorCreditRecurrenceFrequency
 	 */
 	public $frequency;
 
@@ -21,20 +21,20 @@ class KalturaReoccurringVendorCredit extends KalturaTimeRangeVendorCredit
 	}
 	
 	/* (non-PHPdoc)
- 	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+ 	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
  	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
 		{
-			$dbObject = new kReoccurringVendorCredit();
+			$dbObject = new vReoccurringVendorCredit();
 		}
 		
 		return parent::toObject($dbObject, $propsToSkip);
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */	 
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -48,7 +48,7 @@ class KalturaReoccurringVendorCredit extends KalturaTimeRangeVendorCredit
 		if(parent::hasObjectChanged($sourceObject))
 			return true;
 		
-		/* @var $sourceObject kReoccurringVendorCredit */
+		/* @var $sourceObject vReoccurringVendorCredit */
 		if($this->frequency && $this->frequency != $sourceObject->getFrequency())
 			return true;
 		

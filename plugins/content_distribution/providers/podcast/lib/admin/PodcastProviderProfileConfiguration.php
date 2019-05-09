@@ -13,7 +13,7 @@ class Form_PodcastProviderProfileConfiguration extends Form_ProviderProfileConfi
 		return $object;
 	}
 	
-	public function resetUnUpdatebleAttributes(Kaltura_Client_ContentDistribution_Type_DistributionProfile $distributionProfile)
+	public function resetUnUpdatebleAttributes(Vidiun_Client_ContentDistribution_Type_DistributionProfile $distributionProfile)
 	{
 		parent::resetUnUpdatebleAttributes($distributionProfile);
 		

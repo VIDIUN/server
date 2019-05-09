@@ -10,12 +10,12 @@ if ($argc == 2 && $argv[1] == '-y')
 	$interactive = false;
 }
 
-// clear kConf defined cache directories
-$path = realpath(kConf::get('cache_root_path'));
+// clear vConf defined cache directories
+$path = realpath(vConf::get('cache_root_path'));
 
-askToDelete(fixPath(kConf::get('general_cache_dir')), $interactive);
-askToDelete(fixPath(kConf::get('response_cache_dir')), $interactive);
-askToDelete(fixPath(kConf::get('cache_root_path')), $interactive);
+askToDelete(fixPath(vConf::get('general_cache_dir')), $interactive);
+askToDelete(fixPath(vConf::get('response_cache_dir')), $interactive);
+askToDelete(fixPath(vConf::get('cache_root_path')), $interactive);
 
 // clear APC cache
 if (function_exists('apc_clear_cache'))
@@ -42,8 +42,8 @@ function fixPath($path)
 
 function askToDelete($path, $interactive)
 {	
-	$baseKalturaPath = realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'../..');
-	if (strpos($path, $baseKalturaPath) === 0)
+	$baseVidiunPath = realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'../..');
+	if (strpos($path, $baseVidiunPath) === 0)
 	{
 		if ($interactive)
 		{
@@ -80,6 +80,6 @@ function askToDelete($path, $interactive)
 	}
 	else
 	{
-		echo 'Path ['.$path.'] does not belong to the kaltura server. Skipping.'.PHP_EOL;
+		echo 'Path ['.$path.'] does not belong to the vidiun server. Skipping.'.PHP_EOL;
 	}	
 }

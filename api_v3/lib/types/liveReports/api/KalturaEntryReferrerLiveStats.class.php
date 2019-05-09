@@ -4,7 +4,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaEntryReferrerLiveStats extends KalturaEntryLiveStats
+class VidiunEntryReferrerLiveStats extends VidiunEntryLiveStats
 {			
 	/**
 	 * @var string
@@ -13,7 +13,7 @@ class KalturaEntryReferrerLiveStats extends KalturaEntryLiveStats
 	
 	public function getWSObject() {
 		$obj = new WSEntryReferrerLiveStats();
-		$obj->fromKalturaObject($this);
+		$obj->fromVidiunObject($this);
 		return $obj;
 	}
 }

@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class statusAction extends kalturaSystemAction
+class statusAction extends vidiunSystemAction
 {
 	private $connection;
 	
@@ -351,9 +351,9 @@ class statusAction extends kalturaSystemAction
 	    $this->dumpQuery($query, "Notifications", $notification_statuses);
 		
 	    $mail_statuses = array(
-			kMailJobData::MAIL_STATUS_PENDING => "PENDING",
-			kMailJobData::MAIL_STATUS_SENT => "SENT",
-			kMailJobData::MAIL_STATUS_ERROR => "ERROR"
+			vMailJobData::MAIL_STATUS_PENDING => "PENDING",
+			vMailJobData::MAIL_STATUS_SENT => "SENT",
+			vMailJobData::MAIL_STATUS_ERROR => "ERROR"
 		);
 		
 	   	$query = "select status,count(1) as count,max(created_at) as date, timediff(now(),max(created_at)) as diff from mail_job where created_at>$date_filter group by status order by status";

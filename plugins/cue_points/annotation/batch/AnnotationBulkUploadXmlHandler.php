@@ -27,7 +27,7 @@ class AnnotationBulkUploadXmlHandler extends CuePointBulkUploadXmlHandler
 	 */
 	protected function getNewInstance()
 	{
-		return new KalturaAnnotation();
+		return new VidiunAnnotation();
 	}
 	
 	/* (non-PHPdoc)
@@ -39,11 +39,11 @@ class AnnotationBulkUploadXmlHandler extends CuePointBulkUploadXmlHandler
 			return null;
 			
 		$cuePoint = parent::parseCuePoint($scene);
-		if(!($cuePoint instanceof KalturaAnnotation))
+		if(!($cuePoint instanceof VidiunAnnotation))
 			return null;
 		
 		if(isset($scene->sceneEndTime))
-			$cuePoint->endTime = kXml::timeToInteger($scene->sceneEndTime);
+			$cuePoint->endTime = vXml::timeToInteger($scene->sceneEndTime);
 		if(isset($scene->sceneText))
 			$cuePoint->text = "$scene->sceneText";
 			

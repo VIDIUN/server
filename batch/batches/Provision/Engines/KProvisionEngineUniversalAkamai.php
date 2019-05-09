@@ -5,7 +5,7 @@
  * @package Scheduler
  * @subpackage Provision
  */
-class KProvisionEngineUniversalAkamai extends KProvisionEngine
+class VProvisionEngineUniversalAkamai extends VProvisionEngine
 {
 	public $systemUser;
 	
@@ -26,14 +26,14 @@ class KProvisionEngineUniversalAkamai extends KProvisionEngine
 	 */
 	protected $streamClient;
 	
-	protected function __construct(KalturaAkamaiUniversalProvisionJobData $data)
+	protected function __construct(VidiunAkamaiUniversalProvisionJobData $data)
 	{
-		if (!KBatchBase::$taskConfig->params->restapi->akamaiRestApiBaseServiceUrl)
-			return new KProvisionEngineResult(KalturaBatchJobStatus::FAILED, "Error: akamaiRestApiBaseServiceUrl is missing from worker configuration. Cannot provision stream"); 
+		if (!VBatchBase::$taskConfig->params->restapi->akamaiRestApiBaseServiceUrl)
+			return new VProvisionEngineResult(VidiunBatchJobStatus::FAILED, "Error: akamaiRestApiBaseServiceUrl is missing from worker configuration. Cannot provision stream"); 
 		
-		self::$baseServiceUrl = KBatchBase::$taskConfig->params->restapi->akamaiRestApiBaseServiceUrl;
+		self::$baseServiceUrl = VBatchBase::$taskConfig->params->restapi->akamaiRestApiBaseServiceUrl;
 		
-		if (!is_null($data) && $data instanceof KalturaAkamaiUniversalProvisionJobData)
+		if (!is_null($data) && $data instanceof VidiunAkamaiUniversalProvisionJobData)
 		{
 			//all fields are set and are not empty string
 			if ($data->systemUserName && $data->systemPassword && $data->domainName)
@@ -46,17 +46,17 @@ class KProvisionEngineUniversalAkamai extends KProvisionEngine
 		//if one of the params was not set, use the taskConfig data	
 		if (!$this->systemUser || !$this->systemPassword || !$this->domainName)
 		{
-			$this->systemUser = KBatchBase::$taskConfig->params->restapi->systemUserName;
-			$this->systemPassword = KBatchBase::$taskConfig->params->restapi->systemPassword;
-			$this->domainName = KBatchBase::$taskConfig->params->restapi->domainName;
-			$data->primaryContact = KBatchBase::$taskConfig->params->restapi->primaryContact;
-			$data->secondaryContact = KBatchBase::$taskConfig->params->restapi->secondaryContact;
-			$data->notificationEmail = KBatchBase::$taskConfig->params->restapi->notificationEmail;
+			$this->systemUser = VBatchBase::$taskConfig->params->restapi->systemUserName;
+			$this->systemPassword = VBatchBase::$taskConfig->params->restapi->systemPassword;
+			$this->domainName = VBatchBase::$taskConfig->params->restapi->domainName;
+			$data->primaryContact = VBatchBase::$taskConfig->params->restapi->primaryContact;
+			$data->secondaryContact = VBatchBase::$taskConfig->params->restapi->secondaryContact;
+			$data->notificationEmail = VBatchBase::$taskConfig->params->restapi->notificationEmail;
 		}
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KProvisionEngine::getName()
+	 * @see VProvisionEngine::getName()
 	 */
 	public function getName() {
 		return get_class($this);
@@ -64,17 +64,17 @@ class KProvisionEngineUniversalAkamai extends KProvisionEngine
 	}
 
 	/* (non-PHPdoc)
-	 * @see KProvisionEngine::provide()
+	 * @see VProvisionEngine::provide()
 	 */
-	public function provide(KalturaBatchJob $job, KalturaProvisionJobData $data) 
+	public function provide(VidiunBatchJob $job, VidiunProvisionJobData $data) 
 	{
 		$res = $this->provisionStream($data);
 		if (!$res)
 		{
-			return new KProvisionEngineResult(KalturaBatchJobStatus::FAILED, "Error: no result received for connection");
+			return new VProvisionEngineResult(VidiunBatchJobStatus::FAILED, "Error: no result received for connection");
 		}
 		
-		KalturaLog::info ("Request to provision stream returned result: $res");
+		VidiunLog::info ("Request to provision stream returned result: $res");
 		$resultXML = new SimpleXMLElement($res);
 		//In this case, REST API has returned an API error.
 		$errors = $resultXML->xpath('error');
@@ -82,7 +82,7 @@ class KProvisionEngineUniversalAkamai extends KProvisionEngine
 		{
 			//There is always only 1 error listed in the XML
 			$error = $errors[0];
-			return new KProvisionEngineResult(KalturaBatchJobStatus::RETRY, "Error: ". strval($error[0]));
+			return new VProvisionEngineResult(VidiunBatchJobStatus::RETRY, "Error: ". strval($error[0]));
 		}
 		//Otherwise, the stream provision request probably returned OK, attempt to parse it as a new stream XML
 		try {
@@ -90,19 +90,19 @@ class KProvisionEngineUniversalAkamai extends KProvisionEngine
 		}
 		catch (Exception $e)
 		{
-			return new KProvisionEngineResult(KalturaBatchJobStatus::FAILED, "Error: ". $e->getMessage());
+			return new VProvisionEngineResult(VidiunBatchJobStatus::FAILED, "Error: ". $e->getMessage());
 		}
 
-		return new KProvisionEngineResult(KalturaBatchJobStatus::FINISHED, 'Successfully provisioned entry', $data);
+		return new VProvisionEngineResult(VidiunBatchJobStatus::FINISHED, 'Successfully provisioned entry', $data);
 		
 	}
 	
 	/**
 	 * Function to provision the stream using the Akamai RestAPI
-	 * @param KalturaAkamaiUniversalProvisionJobData $data
+	 * @param VidiunAkamaiUniversalProvisionJobData $data
 	 * @return mixed
 	 */
-	private function provisionStream (KalturaAkamaiUniversalProvisionJobData $data)
+	private function provisionStream (VidiunAkamaiUniversalProvisionJobData $data)
 	{
 		$url = self::$baseServiceUrl . "/{$this->domainName}/stream";
 		$ch = curl_init($url);
@@ -116,10 +116,10 @@ class KProvisionEngineUniversalAkamai extends KProvisionEngine
 	
 	/**
 	 * Construct stream using the job data
-	 * @param KalturaAkamaiUniversalProvisionJobData $data
+	 * @param VidiunAkamaiUniversalProvisionJobData $data
 	 * @return string
 	 */
-	private function getStreamXML (KalturaAkamaiUniversalProvisionJobData $data)
+	private function getStreamXML (VidiunAkamaiUniversalProvisionJobData $data)
 	{
 		$result = new SimpleXMLElement("<stream/>");
 		$result->addChild("stream-type", $data->streamType);
@@ -140,7 +140,7 @@ class KProvisionEngineUniversalAkamai extends KProvisionEngine
 		return $result->saveXML();
 	}
 	
-	private function fromStreamXML (SimpleXMLElement $xml, KalturaAkamaiUniversalProvisionJobData $data)
+	private function fromStreamXML (SimpleXMLElement $xml, VidiunAkamaiUniversalProvisionJobData $data)
 	{
 		$data->streamID = $this->getXMLNodeValue('stream-id', $xml);
 		if (!$data->streamID)
@@ -194,11 +194,11 @@ class KProvisionEngineUniversalAkamai extends KProvisionEngine
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KProvisionEngine::delete()
+	 * @see VProvisionEngine::delete()
 	 */
-	public function delete(KalturaBatchJob $job, KalturaProvisionJobData $data) 
+	public function delete(VidiunBatchJob $job, VidiunProvisionJobData $data) 
 	{
-		KalturaLog::info("Deleting stream with ID [". $data->streamID ."]" );
+		VidiunLog::info("Deleting stream with ID [". $data->streamID ."]" );
 		
 		$url = self::$baseServiceUrl . "/{$this->domainName}/stream/".$data->streamID;
 		$ch = curl_init($url);
@@ -210,24 +210,24 @@ class KProvisionEngineUniversalAkamai extends KProvisionEngine
 		
 		if (!$result)
 		{
-			return new KProvisionEngineResult(KalturaBatchJobStatus::FAILED, "Error: failed to call RestAPI");
+			return new VProvisionEngineResult(VidiunBatchJobStatus::FAILED, "Error: failed to call RestAPI");
 		}
 		
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		if (KCurlHeaderResponse::isError($httpCode))
-			return new KProvisionEngineResult(KalturaBatchJobStatus::FAILED, "Error: delete failed");
+		if (VCurlHeaderResponse::isError($httpCode))
+			return new VProvisionEngineResult(VidiunBatchJobStatus::FAILED, "Error: delete failed");
 		
-		return new KProvisionEngineResult(KalturaBatchJobStatus::FINISHED, 'Succesfully deleted stream', $data);
+		return new VProvisionEngineResult(VidiunBatchJobStatus::FINISHED, 'Succesfully deleted stream', $data);
 	}
 	
 
 	/* (non-PHPdoc)
-	 * @see KProvisionEngine::checkProvisionedStream()
+	 * @see VProvisionEngine::checkProvisionedStream()
 	 */
-	public function checkProvisionedStream(KalturaBatchJob $job, KalturaProvisionJobData $data) 
+	public function checkProvisionedStream(VidiunBatchJob $job, VidiunProvisionJobData $data) 
 	{
 		$url = self::$baseServiceUrl . "/{$this->domainName}/stream/".$data->streamID;
-		KalturaLog::info("Retrieving stream with ID [". $data->streamID ."] from URL [$url]" );
+		VidiunLog::info("Retrieving stream with ID [". $data->streamID ."] from URL [$url]" );
 		
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER , true);
@@ -237,21 +237,21 @@ class KProvisionEngineUniversalAkamai extends KProvisionEngine
 		
 		if (!$result)
 		{
-			return new KProvisionEngineResult(KalturaBatchJobStatus::FAILED, "Error: failed to call RestAPI");
+			return new VProvisionEngineResult(VidiunBatchJobStatus::FAILED, "Error: failed to call RestAPI");
 		}
 		
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		 if (KCurlHeaderResponse::isError($httpCode))
-			return new KProvisionEngineResult(KalturaBatchJobStatus::RETRY, "Error: retrieval failed , retrying. HTTP Error code:".$httpCode);
+		 if (VCurlHeaderResponse::isError($httpCode))
+			return new VProvisionEngineResult(VidiunBatchJobStatus::RETRY, "Error: retrieval failed , retrying. HTTP Error code:".$httpCode);
 		
-		KalturaLog::info("Result received: $result");
+		VidiunLog::info("Result received: $result");
 		$resultXML = new SimpleXMLElement($result);
 		$errors = $resultXML->xpath('error');
 		if ($errors && count($errors))
 		{
 			//There is always only 1 error listed in the XML
 			$error = $errors[0];
-			return new KProvisionEngineResult(KalturaBatchJobStatus::FAILED, "Error: ". strval($error[0]));
+			return new VProvisionEngineResult(VidiunBatchJobStatus::FAILED, "Error: ". strval($error[0]));
 		}
 		
 		if ($resultXML->status)
@@ -260,15 +260,15 @@ class KProvisionEngineUniversalAkamai extends KProvisionEngine
 			{
 				case self::PENDING:
 				case self::NOT_YET_PROVISIONED:
-					return new KProvisionEngineResult(KalturaBatchJobStatus::ALMOST_DONE, "Stream is still in status Pending - retry in 5 minutes");
+					return new VProvisionEngineResult(VidiunBatchJobStatus::ALMOST_DONE, "Stream is still in status Pending - retry in 5 minutes");
 					break;
 				case self::PROVISIONED:
-					return new KProvisionEngineResult(KalturaBatchJobStatus::FINISHED, "Stream is in status Provisioned");
+					return new VProvisionEngineResult(VidiunBatchJobStatus::FINISHED, "Stream is in status Provisioned");
 					break;
 			}
 		}
 		
-		return new KProvisionEngineResult(KalturaBatchJobStatus::FAILED, "Unable to retrieve valid status from result of Akamai REST API");
+		return new VProvisionEngineResult(VidiunBatchJobStatus::FAILED, "Unable to retrieve valid status from result of Akamai REST API");
 	}
 
 	

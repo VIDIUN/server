@@ -18,7 +18,7 @@ if(!$partner)
         die('no such partner.'.PHP_EOL);
 }
 
-$partner->setKMCLanguage($language);
+$partner->setVMCLanguage($language);
 $partner->save();
 
 echo "Done.";

@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Base class that represents a row from the 'kshow' table.
+ * Base class that represents a row from the 'vshow' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class Basekshow extends BaseObject  implements Persistent {
+abstract class Basevshow extends BaseObject  implements Persistent {
 
 
 	/**
 	 * The Peer class.
 	 * Instance provides a convenient way of calling static methods on a class
 	 * that calling code may not be able to identify.
-	 * @var        kshowPeer
+	 * @var        vshowPeer
 	 */
 	protected static $peer;
 
@@ -340,39 +340,39 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	protected $int_id;
 
 	/**
-	 * @var        kuser
+	 * @var        vuser
 	 */
-	protected $akuser;
+	protected $avuser;
 
 	/**
-	 * @var        array kvote[] Collection to store aggregation of kvote objects.
+	 * @var        array vvote[] Collection to store aggregation of vvote objects.
 	 */
-	protected $collkvotesRelatedByKshowId;
+	protected $collvvotesRelatedByVshowId;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collkvotesRelatedByKshowId.
+	 * @var        Criteria The criteria used to select the current contents of collvvotesRelatedByVshowId.
 	 */
-	private $lastkvoteRelatedByKshowIdCriteria = null;
+	private $lastvvoteRelatedByVshowIdCriteria = null;
 
 	/**
-	 * @var        array kvote[] Collection to store aggregation of kvote objects.
+	 * @var        array vvote[] Collection to store aggregation of vvote objects.
 	 */
-	protected $collkvotesRelatedByKuserId;
+	protected $collvvotesRelatedByVuserId;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collkvotesRelatedByKuserId.
+	 * @var        Criteria The criteria used to select the current contents of collvvotesRelatedByVuserId.
 	 */
-	private $lastkvoteRelatedByKuserIdCriteria = null;
+	private $lastvvoteRelatedByVuserIdCriteria = null;
 
 	/**
-	 * @var        array KshowKuser[] Collection to store aggregation of KshowKuser objects.
+	 * @var        array VshowVuser[] Collection to store aggregation of VshowVuser objects.
 	 */
-	protected $collKshowKusers;
+	protected $collVshowVusers;
 
 	/**
-	 * @var        Criteria The criteria used to select the current contents of collKshowKusers.
+	 * @var        Criteria The criteria used to select the current contents of collVshowVusers.
 	 */
-	private $lastKshowKuserCriteria = null;
+	private $lastVshowVuserCriteria = null;
 
 	/**
 	 * @var        array PuserRole[] Collection to store aggregation of PuserRole objects.
@@ -474,7 +474,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Initializes internal state of Basekshow object.
+	 * Initializes internal state of Basevshow object.
 	 * @see        applyDefaults()
 	 */
 	public function __construct()
@@ -1117,12 +1117,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setId($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::ID]))
-			$this->oldColumnsValues[kshowPeer::ID] = $this->id;
+		if(!isset($this->oldColumnsValues[vshowPeer::ID]))
+			$this->oldColumnsValues[vshowPeer::ID] = $this->id;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -1130,7 +1130,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->id !== $v) {
 			$this->id = $v;
-			$this->modifiedColumns[] = kshowPeer::ID;
+			$this->modifiedColumns[] = vshowPeer::ID;
 		}
 
 		return $this;
@@ -1140,12 +1140,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [producer_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setProducerId($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::PRODUCER_ID]))
-			$this->oldColumnsValues[kshowPeer::PRODUCER_ID] = $this->producer_id;
+		if(!isset($this->oldColumnsValues[vshowPeer::PRODUCER_ID]))
+			$this->oldColumnsValues[vshowPeer::PRODUCER_ID] = $this->producer_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1153,11 +1153,11 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->producer_id !== $v) {
 			$this->producer_id = $v;
-			$this->modifiedColumns[] = kshowPeer::PRODUCER_ID;
+			$this->modifiedColumns[] = vshowPeer::PRODUCER_ID;
 		}
 
-		if ($this->akuser !== null && $this->akuser->getId() !== $v) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->avuser->getId() !== $v) {
+			$this->avuser = null;
 		}
 
 		return $this;
@@ -1167,12 +1167,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [episode_id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setEpisodeId($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::EPISODE_ID]))
-			$this->oldColumnsValues[kshowPeer::EPISODE_ID] = $this->episode_id;
+		if(!isset($this->oldColumnsValues[vshowPeer::EPISODE_ID]))
+			$this->oldColumnsValues[vshowPeer::EPISODE_ID] = $this->episode_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -1180,7 +1180,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->episode_id !== $v) {
 			$this->episode_id = $v;
-			$this->modifiedColumns[] = kshowPeer::EPISODE_ID;
+			$this->modifiedColumns[] = vshowPeer::EPISODE_ID;
 		}
 
 		return $this;
@@ -1190,12 +1190,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [name] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setName($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::NAME]))
-			$this->oldColumnsValues[kshowPeer::NAME] = $this->name;
+		if(!isset($this->oldColumnsValues[vshowPeer::NAME]))
+			$this->oldColumnsValues[vshowPeer::NAME] = $this->name;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -1203,7 +1203,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->name !== $v) {
 			$this->name = $v;
-			$this->modifiedColumns[] = kshowPeer::NAME;
+			$this->modifiedColumns[] = vshowPeer::NAME;
 		}
 
 		return $this;
@@ -1213,12 +1213,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [subdomain] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setSubdomain($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::SUBDOMAIN]))
-			$this->oldColumnsValues[kshowPeer::SUBDOMAIN] = $this->subdomain;
+		if(!isset($this->oldColumnsValues[vshowPeer::SUBDOMAIN]))
+			$this->oldColumnsValues[vshowPeer::SUBDOMAIN] = $this->subdomain;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -1226,7 +1226,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->subdomain !== $v) {
 			$this->subdomain = $v;
-			$this->modifiedColumns[] = kshowPeer::SUBDOMAIN;
+			$this->modifiedColumns[] = vshowPeer::SUBDOMAIN;
 		}
 
 		return $this;
@@ -1236,12 +1236,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [description] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setDescription($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::DESCRIPTION]))
-			$this->oldColumnsValues[kshowPeer::DESCRIPTION] = $this->description;
+		if(!isset($this->oldColumnsValues[vshowPeer::DESCRIPTION]))
+			$this->oldColumnsValues[vshowPeer::DESCRIPTION] = $this->description;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -1249,7 +1249,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->description !== $v) {
 			$this->description = $v;
-			$this->modifiedColumns[] = kshowPeer::DESCRIPTION;
+			$this->modifiedColumns[] = vshowPeer::DESCRIPTION;
 		}
 
 		return $this;
@@ -1259,12 +1259,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [status] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setStatus($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::STATUS]))
-			$this->oldColumnsValues[kshowPeer::STATUS] = $this->status;
+		if(!isset($this->oldColumnsValues[vshowPeer::STATUS]))
+			$this->oldColumnsValues[vshowPeer::STATUS] = $this->status;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1272,7 +1272,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->status !== $v || $this->isNew()) {
 			$this->status = $v;
-			$this->modifiedColumns[] = kshowPeer::STATUS;
+			$this->modifiedColumns[] = vshowPeer::STATUS;
 		}
 
 		return $this;
@@ -1282,12 +1282,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [type] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setType($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::TYPE]))
-			$this->oldColumnsValues[kshowPeer::TYPE] = $this->type;
+		if(!isset($this->oldColumnsValues[vshowPeer::TYPE]))
+			$this->oldColumnsValues[vshowPeer::TYPE] = $this->type;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1295,7 +1295,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->type !== $v) {
 			$this->type = $v;
-			$this->modifiedColumns[] = kshowPeer::TYPE;
+			$this->modifiedColumns[] = vshowPeer::TYPE;
 		}
 
 		return $this;
@@ -1305,12 +1305,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [media_type] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setMediaType($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::MEDIA_TYPE]))
-			$this->oldColumnsValues[kshowPeer::MEDIA_TYPE] = $this->media_type;
+		if(!isset($this->oldColumnsValues[vshowPeer::MEDIA_TYPE]))
+			$this->oldColumnsValues[vshowPeer::MEDIA_TYPE] = $this->media_type;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1318,7 +1318,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->media_type !== $v) {
 			$this->media_type = $v;
-			$this->modifiedColumns[] = kshowPeer::MEDIA_TYPE;
+			$this->modifiedColumns[] = vshowPeer::MEDIA_TYPE;
 		}
 
 		return $this;
@@ -1328,12 +1328,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [format_type] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setFormatType($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::FORMAT_TYPE]))
-			$this->oldColumnsValues[kshowPeer::FORMAT_TYPE] = $this->format_type;
+		if(!isset($this->oldColumnsValues[vshowPeer::FORMAT_TYPE]))
+			$this->oldColumnsValues[vshowPeer::FORMAT_TYPE] = $this->format_type;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1341,7 +1341,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->format_type !== $v) {
 			$this->format_type = $v;
-			$this->modifiedColumns[] = kshowPeer::FORMAT_TYPE;
+			$this->modifiedColumns[] = vshowPeer::FORMAT_TYPE;
 		}
 
 		return $this;
@@ -1351,12 +1351,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [language] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setLanguage($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::LANGUAGE]))
-			$this->oldColumnsValues[kshowPeer::LANGUAGE] = $this->language;
+		if(!isset($this->oldColumnsValues[vshowPeer::LANGUAGE]))
+			$this->oldColumnsValues[vshowPeer::LANGUAGE] = $this->language;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1364,7 +1364,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->language !== $v) {
 			$this->language = $v;
-			$this->modifiedColumns[] = kshowPeer::LANGUAGE;
+			$this->modifiedColumns[] = vshowPeer::LANGUAGE;
 		}
 
 		return $this;
@@ -1375,12 +1375,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setStartDate($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::START_DATE]))
-			$this->oldColumnsValues[kshowPeer::START_DATE] = $this->start_date;
+		if(!isset($this->oldColumnsValues[vshowPeer::START_DATE]))
+			$this->oldColumnsValues[vshowPeer::START_DATE] = $this->start_date;
 
 		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
 		// -- which is unexpected, to say the least.
@@ -1415,7 +1415,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 					)
 			{
 				$this->start_date = ($dt ? $dt->format('Y-m-d') : null);
-				$this->modifiedColumns[] = kshowPeer::START_DATE;
+				$this->modifiedColumns[] = vshowPeer::START_DATE;
 			}
 		} // if either are not null
 
@@ -1427,12 +1427,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setEndDate($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::END_DATE]))
-			$this->oldColumnsValues[kshowPeer::END_DATE] = $this->end_date;
+		if(!isset($this->oldColumnsValues[vshowPeer::END_DATE]))
+			$this->oldColumnsValues[vshowPeer::END_DATE] = $this->end_date;
 
 		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
 		// -- which is unexpected, to say the least.
@@ -1467,7 +1467,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 					)
 			{
 				$this->end_date = ($dt ? $dt->format('Y-m-d') : null);
-				$this->modifiedColumns[] = kshowPeer::END_DATE;
+				$this->modifiedColumns[] = vshowPeer::END_DATE;
 			}
 		} // if either are not null
 
@@ -1478,12 +1478,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [skin] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setSkin($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::SKIN]))
-			$this->oldColumnsValues[kshowPeer::SKIN] = $this->skin;
+		if(!isset($this->oldColumnsValues[vshowPeer::SKIN]))
+			$this->oldColumnsValues[vshowPeer::SKIN] = $this->skin;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -1491,7 +1491,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->skin !== $v) {
 			$this->skin = $v;
-			$this->modifiedColumns[] = kshowPeer::SKIN;
+			$this->modifiedColumns[] = vshowPeer::SKIN;
 		}
 
 		return $this;
@@ -1501,12 +1501,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [thumbnail] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setThumbnail($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::THUMBNAIL]))
-			$this->oldColumnsValues[kshowPeer::THUMBNAIL] = $this->thumbnail;
+		if(!isset($this->oldColumnsValues[vshowPeer::THUMBNAIL]))
+			$this->oldColumnsValues[vshowPeer::THUMBNAIL] = $this->thumbnail;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -1514,7 +1514,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->thumbnail !== $v) {
 			$this->thumbnail = $v;
-			$this->modifiedColumns[] = kshowPeer::THUMBNAIL;
+			$this->modifiedColumns[] = vshowPeer::THUMBNAIL;
 		}
 
 		return $this;
@@ -1524,12 +1524,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [show_entry_id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setShowEntryId($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::SHOW_ENTRY_ID]))
-			$this->oldColumnsValues[kshowPeer::SHOW_ENTRY_ID] = $this->show_entry_id;
+		if(!isset($this->oldColumnsValues[vshowPeer::SHOW_ENTRY_ID]))
+			$this->oldColumnsValues[vshowPeer::SHOW_ENTRY_ID] = $this->show_entry_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -1537,7 +1537,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->show_entry_id !== $v) {
 			$this->show_entry_id = $v;
-			$this->modifiedColumns[] = kshowPeer::SHOW_ENTRY_ID;
+			$this->modifiedColumns[] = vshowPeer::SHOW_ENTRY_ID;
 		}
 
 		return $this;
@@ -1547,12 +1547,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [intro_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setIntroId($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::INTRO_ID]))
-			$this->oldColumnsValues[kshowPeer::INTRO_ID] = $this->intro_id;
+		if(!isset($this->oldColumnsValues[vshowPeer::INTRO_ID]))
+			$this->oldColumnsValues[vshowPeer::INTRO_ID] = $this->intro_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1560,7 +1560,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->intro_id !== $v) {
 			$this->intro_id = $v;
-			$this->modifiedColumns[] = kshowPeer::INTRO_ID;
+			$this->modifiedColumns[] = vshowPeer::INTRO_ID;
 		}
 
 		return $this;
@@ -1570,12 +1570,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [views] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setViews($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::VIEWS]))
-			$this->oldColumnsValues[kshowPeer::VIEWS] = $this->views;
+		if(!isset($this->oldColumnsValues[vshowPeer::VIEWS]))
+			$this->oldColumnsValues[vshowPeer::VIEWS] = $this->views;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1583,7 +1583,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->views !== $v || $this->isNew()) {
 			$this->views = $v;
-			$this->modifiedColumns[] = kshowPeer::VIEWS;
+			$this->modifiedColumns[] = vshowPeer::VIEWS;
 		}
 
 		return $this;
@@ -1593,12 +1593,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [votes] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setVotes($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::VOTES]))
-			$this->oldColumnsValues[kshowPeer::VOTES] = $this->votes;
+		if(!isset($this->oldColumnsValues[vshowPeer::VOTES]))
+			$this->oldColumnsValues[vshowPeer::VOTES] = $this->votes;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1606,7 +1606,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->votes !== $v || $this->isNew()) {
 			$this->votes = $v;
-			$this->modifiedColumns[] = kshowPeer::VOTES;
+			$this->modifiedColumns[] = vshowPeer::VOTES;
 		}
 
 		return $this;
@@ -1616,12 +1616,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [comments] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setComments($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::COMMENTS]))
-			$this->oldColumnsValues[kshowPeer::COMMENTS] = $this->comments;
+		if(!isset($this->oldColumnsValues[vshowPeer::COMMENTS]))
+			$this->oldColumnsValues[vshowPeer::COMMENTS] = $this->comments;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1629,7 +1629,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->comments !== $v || $this->isNew()) {
 			$this->comments = $v;
-			$this->modifiedColumns[] = kshowPeer::COMMENTS;
+			$this->modifiedColumns[] = vshowPeer::COMMENTS;
 		}
 
 		return $this;
@@ -1639,12 +1639,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [favorites] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setFavorites($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::FAVORITES]))
-			$this->oldColumnsValues[kshowPeer::FAVORITES] = $this->favorites;
+		if(!isset($this->oldColumnsValues[vshowPeer::FAVORITES]))
+			$this->oldColumnsValues[vshowPeer::FAVORITES] = $this->favorites;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1652,7 +1652,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->favorites !== $v || $this->isNew()) {
 			$this->favorites = $v;
-			$this->modifiedColumns[] = kshowPeer::FAVORITES;
+			$this->modifiedColumns[] = vshowPeer::FAVORITES;
 		}
 
 		return $this;
@@ -1662,12 +1662,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [rank] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setRank($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::RANK]))
-			$this->oldColumnsValues[kshowPeer::RANK] = $this->rank;
+		if(!isset($this->oldColumnsValues[vshowPeer::RANK]))
+			$this->oldColumnsValues[vshowPeer::RANK] = $this->rank;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1675,7 +1675,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->rank !== $v || $this->isNew()) {
 			$this->rank = $v;
-			$this->modifiedColumns[] = kshowPeer::RANK;
+			$this->modifiedColumns[] = vshowPeer::RANK;
 		}
 
 		return $this;
@@ -1685,12 +1685,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [entries] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setEntries($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::ENTRIES]))
-			$this->oldColumnsValues[kshowPeer::ENTRIES] = $this->entries;
+		if(!isset($this->oldColumnsValues[vshowPeer::ENTRIES]))
+			$this->oldColumnsValues[vshowPeer::ENTRIES] = $this->entries;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1698,7 +1698,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->entries !== $v || $this->isNew()) {
 			$this->entries = $v;
-			$this->modifiedColumns[] = kshowPeer::ENTRIES;
+			$this->modifiedColumns[] = vshowPeer::ENTRIES;
 		}
 
 		return $this;
@@ -1708,12 +1708,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [contributors] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setContributors($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::CONTRIBUTORS]))
-			$this->oldColumnsValues[kshowPeer::CONTRIBUTORS] = $this->contributors;
+		if(!isset($this->oldColumnsValues[vshowPeer::CONTRIBUTORS]))
+			$this->oldColumnsValues[vshowPeer::CONTRIBUTORS] = $this->contributors;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1721,7 +1721,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->contributors !== $v || $this->isNew()) {
 			$this->contributors = $v;
-			$this->modifiedColumns[] = kshowPeer::CONTRIBUTORS;
+			$this->modifiedColumns[] = vshowPeer::CONTRIBUTORS;
 		}
 
 		return $this;
@@ -1731,12 +1731,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [subscribers] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setSubscribers($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::SUBSCRIBERS]))
-			$this->oldColumnsValues[kshowPeer::SUBSCRIBERS] = $this->subscribers;
+		if(!isset($this->oldColumnsValues[vshowPeer::SUBSCRIBERS]))
+			$this->oldColumnsValues[vshowPeer::SUBSCRIBERS] = $this->subscribers;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1744,7 +1744,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->subscribers !== $v || $this->isNew()) {
 			$this->subscribers = $v;
-			$this->modifiedColumns[] = kshowPeer::SUBSCRIBERS;
+			$this->modifiedColumns[] = vshowPeer::SUBSCRIBERS;
 		}
 
 		return $this;
@@ -1754,12 +1754,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [number_of_updates] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setNumberOfUpdates($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::NUMBER_OF_UPDATES]))
-			$this->oldColumnsValues[kshowPeer::NUMBER_OF_UPDATES] = $this->number_of_updates;
+		if(!isset($this->oldColumnsValues[vshowPeer::NUMBER_OF_UPDATES]))
+			$this->oldColumnsValues[vshowPeer::NUMBER_OF_UPDATES] = $this->number_of_updates;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1767,7 +1767,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->number_of_updates !== $v || $this->isNew()) {
 			$this->number_of_updates = $v;
-			$this->modifiedColumns[] = kshowPeer::NUMBER_OF_UPDATES;
+			$this->modifiedColumns[] = vshowPeer::NUMBER_OF_UPDATES;
 		}
 
 		return $this;
@@ -1777,12 +1777,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [tags] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setTags($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::TAGS]))
-			$this->oldColumnsValues[kshowPeer::TAGS] = $this->tags;
+		if(!isset($this->oldColumnsValues[vshowPeer::TAGS]))
+			$this->oldColumnsValues[vshowPeer::TAGS] = $this->tags;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -1790,7 +1790,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->tags !== $v) {
 			$this->tags = $v;
-			$this->modifiedColumns[] = kshowPeer::TAGS;
+			$this->modifiedColumns[] = vshowPeer::TAGS;
 		}
 
 		return $this;
@@ -1800,7 +1800,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [custom_data] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setCustomData($v)
 	{
@@ -1810,7 +1810,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->custom_data !== $v) {
 			$this->custom_data = $v;
-			$this->modifiedColumns[] = kshowPeer::CUSTOM_DATA;
+			$this->modifiedColumns[] = vshowPeer::CUSTOM_DATA;
 		}
 
 		return $this;
@@ -1820,12 +1820,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [indexed_custom_data_1] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setIndexedCustomData1($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::INDEXED_CUSTOM_DATA_1]))
-			$this->oldColumnsValues[kshowPeer::INDEXED_CUSTOM_DATA_1] = $this->indexed_custom_data_1;
+		if(!isset($this->oldColumnsValues[vshowPeer::INDEXED_CUSTOM_DATA_1]))
+			$this->oldColumnsValues[vshowPeer::INDEXED_CUSTOM_DATA_1] = $this->indexed_custom_data_1;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1833,7 +1833,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->indexed_custom_data_1 !== $v) {
 			$this->indexed_custom_data_1 = $v;
-			$this->modifiedColumns[] = kshowPeer::INDEXED_CUSTOM_DATA_1;
+			$this->modifiedColumns[] = vshowPeer::INDEXED_CUSTOM_DATA_1;
 		}
 
 		return $this;
@@ -1843,12 +1843,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [indexed_custom_data_2] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setIndexedCustomData2($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::INDEXED_CUSTOM_DATA_2]))
-			$this->oldColumnsValues[kshowPeer::INDEXED_CUSTOM_DATA_2] = $this->indexed_custom_data_2;
+		if(!isset($this->oldColumnsValues[vshowPeer::INDEXED_CUSTOM_DATA_2]))
+			$this->oldColumnsValues[vshowPeer::INDEXED_CUSTOM_DATA_2] = $this->indexed_custom_data_2;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1856,7 +1856,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->indexed_custom_data_2 !== $v) {
 			$this->indexed_custom_data_2 = $v;
-			$this->modifiedColumns[] = kshowPeer::INDEXED_CUSTOM_DATA_2;
+			$this->modifiedColumns[] = vshowPeer::INDEXED_CUSTOM_DATA_2;
 		}
 
 		return $this;
@@ -1866,12 +1866,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [indexed_custom_data_3] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setIndexedCustomData3($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::INDEXED_CUSTOM_DATA_3]))
-			$this->oldColumnsValues[kshowPeer::INDEXED_CUSTOM_DATA_3] = $this->indexed_custom_data_3;
+		if(!isset($this->oldColumnsValues[vshowPeer::INDEXED_CUSTOM_DATA_3]))
+			$this->oldColumnsValues[vshowPeer::INDEXED_CUSTOM_DATA_3] = $this->indexed_custom_data_3;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -1879,7 +1879,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->indexed_custom_data_3 !== $v) {
 			$this->indexed_custom_data_3 = $v;
-			$this->modifiedColumns[] = kshowPeer::INDEXED_CUSTOM_DATA_3;
+			$this->modifiedColumns[] = vshowPeer::INDEXED_CUSTOM_DATA_3;
 		}
 
 		return $this;
@@ -1889,12 +1889,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [reoccurence] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setReoccurence($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::REOCCURENCE]))
-			$this->oldColumnsValues[kshowPeer::REOCCURENCE] = $this->reoccurence;
+		if(!isset($this->oldColumnsValues[vshowPeer::REOCCURENCE]))
+			$this->oldColumnsValues[vshowPeer::REOCCURENCE] = $this->reoccurence;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1902,7 +1902,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->reoccurence !== $v) {
 			$this->reoccurence = $v;
-			$this->modifiedColumns[] = kshowPeer::REOCCURENCE;
+			$this->modifiedColumns[] = vshowPeer::REOCCURENCE;
 		}
 
 		return $this;
@@ -1912,12 +1912,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [license_type] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setLicenseType($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::LICENSE_TYPE]))
-			$this->oldColumnsValues[kshowPeer::LICENSE_TYPE] = $this->license_type;
+		if(!isset($this->oldColumnsValues[vshowPeer::LICENSE_TYPE]))
+			$this->oldColumnsValues[vshowPeer::LICENSE_TYPE] = $this->license_type;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1925,7 +1925,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->license_type !== $v) {
 			$this->license_type = $v;
-			$this->modifiedColumns[] = kshowPeer::LICENSE_TYPE;
+			$this->modifiedColumns[] = vshowPeer::LICENSE_TYPE;
 		}
 
 		return $this;
@@ -1935,12 +1935,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [length_in_msecs] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setLengthInMsecs($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::LENGTH_IN_MSECS]))
-			$this->oldColumnsValues[kshowPeer::LENGTH_IN_MSECS] = $this->length_in_msecs;
+		if(!isset($this->oldColumnsValues[vshowPeer::LENGTH_IN_MSECS]))
+			$this->oldColumnsValues[vshowPeer::LENGTH_IN_MSECS] = $this->length_in_msecs;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1948,7 +1948,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->length_in_msecs !== $v || $this->isNew()) {
 			$this->length_in_msecs = $v;
-			$this->modifiedColumns[] = kshowPeer::LENGTH_IN_MSECS;
+			$this->modifiedColumns[] = vshowPeer::LENGTH_IN_MSECS;
 		}
 
 		return $this;
@@ -1958,12 +1958,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [view_permissions] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setViewPermissions($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::VIEW_PERMISSIONS]))
-			$this->oldColumnsValues[kshowPeer::VIEW_PERMISSIONS] = $this->view_permissions;
+		if(!isset($this->oldColumnsValues[vshowPeer::VIEW_PERMISSIONS]))
+			$this->oldColumnsValues[vshowPeer::VIEW_PERMISSIONS] = $this->view_permissions;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -1971,7 +1971,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->view_permissions !== $v) {
 			$this->view_permissions = $v;
-			$this->modifiedColumns[] = kshowPeer::VIEW_PERMISSIONS;
+			$this->modifiedColumns[] = vshowPeer::VIEW_PERMISSIONS;
 		}
 
 		return $this;
@@ -1981,12 +1981,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [view_password] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setViewPassword($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::VIEW_PASSWORD]))
-			$this->oldColumnsValues[kshowPeer::VIEW_PASSWORD] = $this->view_password;
+		if(!isset($this->oldColumnsValues[vshowPeer::VIEW_PASSWORD]))
+			$this->oldColumnsValues[vshowPeer::VIEW_PASSWORD] = $this->view_password;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -1994,7 +1994,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->view_password !== $v) {
 			$this->view_password = $v;
-			$this->modifiedColumns[] = kshowPeer::VIEW_PASSWORD;
+			$this->modifiedColumns[] = vshowPeer::VIEW_PASSWORD;
 		}
 
 		return $this;
@@ -2004,12 +2004,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [contrib_permissions] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setContribPermissions($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::CONTRIB_PERMISSIONS]))
-			$this->oldColumnsValues[kshowPeer::CONTRIB_PERMISSIONS] = $this->contrib_permissions;
+		if(!isset($this->oldColumnsValues[vshowPeer::CONTRIB_PERMISSIONS]))
+			$this->oldColumnsValues[vshowPeer::CONTRIB_PERMISSIONS] = $this->contrib_permissions;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -2017,7 +2017,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->contrib_permissions !== $v) {
 			$this->contrib_permissions = $v;
-			$this->modifiedColumns[] = kshowPeer::CONTRIB_PERMISSIONS;
+			$this->modifiedColumns[] = vshowPeer::CONTRIB_PERMISSIONS;
 		}
 
 		return $this;
@@ -2027,12 +2027,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [contrib_password] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setContribPassword($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::CONTRIB_PASSWORD]))
-			$this->oldColumnsValues[kshowPeer::CONTRIB_PASSWORD] = $this->contrib_password;
+		if(!isset($this->oldColumnsValues[vshowPeer::CONTRIB_PASSWORD]))
+			$this->oldColumnsValues[vshowPeer::CONTRIB_PASSWORD] = $this->contrib_password;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -2040,7 +2040,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->contrib_password !== $v) {
 			$this->contrib_password = $v;
-			$this->modifiedColumns[] = kshowPeer::CONTRIB_PASSWORD;
+			$this->modifiedColumns[] = vshowPeer::CONTRIB_PASSWORD;
 		}
 
 		return $this;
@@ -2050,12 +2050,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [edit_permissions] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setEditPermissions($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::EDIT_PERMISSIONS]))
-			$this->oldColumnsValues[kshowPeer::EDIT_PERMISSIONS] = $this->edit_permissions;
+		if(!isset($this->oldColumnsValues[vshowPeer::EDIT_PERMISSIONS]))
+			$this->oldColumnsValues[vshowPeer::EDIT_PERMISSIONS] = $this->edit_permissions;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -2063,7 +2063,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->edit_permissions !== $v) {
 			$this->edit_permissions = $v;
-			$this->modifiedColumns[] = kshowPeer::EDIT_PERMISSIONS;
+			$this->modifiedColumns[] = vshowPeer::EDIT_PERMISSIONS;
 		}
 
 		return $this;
@@ -2073,12 +2073,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [edit_password] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setEditPassword($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::EDIT_PASSWORD]))
-			$this->oldColumnsValues[kshowPeer::EDIT_PASSWORD] = $this->edit_password;
+		if(!isset($this->oldColumnsValues[vshowPeer::EDIT_PASSWORD]))
+			$this->oldColumnsValues[vshowPeer::EDIT_PASSWORD] = $this->edit_password;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -2086,7 +2086,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->edit_password !== $v) {
 			$this->edit_password = $v;
-			$this->modifiedColumns[] = kshowPeer::EDIT_PASSWORD;
+			$this->modifiedColumns[] = vshowPeer::EDIT_PASSWORD;
 		}
 
 		return $this;
@@ -2096,12 +2096,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [salt] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setSalt($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::SALT]))
-			$this->oldColumnsValues[kshowPeer::SALT] = $this->salt;
+		if(!isset($this->oldColumnsValues[vshowPeer::SALT]))
+			$this->oldColumnsValues[vshowPeer::SALT] = $this->salt;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -2109,7 +2109,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->salt !== $v) {
 			$this->salt = $v;
-			$this->modifiedColumns[] = kshowPeer::SALT;
+			$this->modifiedColumns[] = vshowPeer::SALT;
 		}
 
 		return $this;
@@ -2120,7 +2120,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setCreatedAt($v)
 	{
@@ -2157,7 +2157,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 					)
 			{
 				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = kshowPeer::CREATED_AT;
+				$this->modifiedColumns[] = vshowPeer::CREATED_AT;
 			}
 		} // if either are not null
 
@@ -2169,7 +2169,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setUpdatedAt($v)
 	{
@@ -2206,7 +2206,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 					)
 			{
 				$this->updated_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = kshowPeer::UPDATED_AT;
+				$this->modifiedColumns[] = vshowPeer::UPDATED_AT;
 			}
 		} // if either are not null
 
@@ -2217,12 +2217,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [partner_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setPartnerId($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::PARTNER_ID]))
-			$this->oldColumnsValues[kshowPeer::PARTNER_ID] = $this->partner_id;
+		if(!isset($this->oldColumnsValues[vshowPeer::PARTNER_ID]))
+			$this->oldColumnsValues[vshowPeer::PARTNER_ID] = $this->partner_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -2230,7 +2230,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->partner_id !== $v || $this->isNew()) {
 			$this->partner_id = $v;
-			$this->modifiedColumns[] = kshowPeer::PARTNER_ID;
+			$this->modifiedColumns[] = vshowPeer::PARTNER_ID;
 		}
 
 		return $this;
@@ -2240,12 +2240,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [display_in_search] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setDisplayInSearch($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::DISPLAY_IN_SEARCH]))
-			$this->oldColumnsValues[kshowPeer::DISPLAY_IN_SEARCH] = $this->display_in_search;
+		if(!isset($this->oldColumnsValues[vshowPeer::DISPLAY_IN_SEARCH]))
+			$this->oldColumnsValues[vshowPeer::DISPLAY_IN_SEARCH] = $this->display_in_search;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -2253,7 +2253,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->display_in_search !== $v) {
 			$this->display_in_search = $v;
-			$this->modifiedColumns[] = kshowPeer::DISPLAY_IN_SEARCH;
+			$this->modifiedColumns[] = vshowPeer::DISPLAY_IN_SEARCH;
 		}
 
 		return $this;
@@ -2263,12 +2263,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [subp_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setSubpId($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::SUBP_ID]))
-			$this->oldColumnsValues[kshowPeer::SUBP_ID] = $this->subp_id;
+		if(!isset($this->oldColumnsValues[vshowPeer::SUBP_ID]))
+			$this->oldColumnsValues[vshowPeer::SUBP_ID] = $this->subp_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -2276,7 +2276,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->subp_id !== $v || $this->isNew()) {
 			$this->subp_id = $v;
-			$this->modifiedColumns[] = kshowPeer::SUBP_ID;
+			$this->modifiedColumns[] = vshowPeer::SUBP_ID;
 		}
 
 		return $this;
@@ -2286,12 +2286,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [permissions] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setPermissions($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::PERMISSIONS]))
-			$this->oldColumnsValues[kshowPeer::PERMISSIONS] = $this->permissions;
+		if(!isset($this->oldColumnsValues[vshowPeer::PERMISSIONS]))
+			$this->oldColumnsValues[vshowPeer::PERMISSIONS] = $this->permissions;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -2299,7 +2299,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->permissions !== $v) {
 			$this->permissions = $v;
-			$this->modifiedColumns[] = kshowPeer::PERMISSIONS;
+			$this->modifiedColumns[] = vshowPeer::PERMISSIONS;
 		}
 
 		return $this;
@@ -2309,12 +2309,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [group_id] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setGroupId($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::GROUP_ID]))
-			$this->oldColumnsValues[kshowPeer::GROUP_ID] = $this->group_id;
+		if(!isset($this->oldColumnsValues[vshowPeer::GROUP_ID]))
+			$this->oldColumnsValues[vshowPeer::GROUP_ID] = $this->group_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -2322,7 +2322,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->group_id !== $v) {
 			$this->group_id = $v;
-			$this->modifiedColumns[] = kshowPeer::GROUP_ID;
+			$this->modifiedColumns[] = vshowPeer::GROUP_ID;
 		}
 
 		return $this;
@@ -2332,12 +2332,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [plays] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setPlays($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::PLAYS]))
-			$this->oldColumnsValues[kshowPeer::PLAYS] = $this->plays;
+		if(!isset($this->oldColumnsValues[vshowPeer::PLAYS]))
+			$this->oldColumnsValues[vshowPeer::PLAYS] = $this->plays;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -2345,7 +2345,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->plays !== $v || $this->isNew()) {
 			$this->plays = $v;
-			$this->modifiedColumns[] = kshowPeer::PLAYS;
+			$this->modifiedColumns[] = vshowPeer::PLAYS;
 		}
 
 		return $this;
@@ -2355,12 +2355,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [partner_data] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setPartnerData($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::PARTNER_DATA]))
-			$this->oldColumnsValues[kshowPeer::PARTNER_DATA] = $this->partner_data;
+		if(!isset($this->oldColumnsValues[vshowPeer::PARTNER_DATA]))
+			$this->oldColumnsValues[vshowPeer::PARTNER_DATA] = $this->partner_data;
 
 		if ($v !== null) {
 			$v = (string) $v;
@@ -2368,7 +2368,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->partner_data !== $v) {
 			$this->partner_data = $v;
-			$this->modifiedColumns[] = kshowPeer::PARTNER_DATA;
+			$this->modifiedColumns[] = vshowPeer::PARTNER_DATA;
 		}
 
 		return $this;
@@ -2378,12 +2378,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Set the value of [int_id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     kshow The current object (for fluent API support)
+	 * @return     vshow The current object (for fluent API support)
 	 */
 	public function setIntId($v)
 	{
-		if(!isset($this->oldColumnsValues[kshowPeer::INT_ID]))
-			$this->oldColumnsValues[kshowPeer::INT_ID] = $this->int_id;
+		if(!isset($this->oldColumnsValues[vshowPeer::INT_ID]))
+			$this->oldColumnsValues[vshowPeer::INT_ID] = $this->int_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
@@ -2391,7 +2391,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($this->int_id !== $v) {
 			$this->int_id = $v;
-			$this->modifiedColumns[] = kshowPeer::INT_ID;
+			$this->modifiedColumns[] = vshowPeer::INT_ID;
 		}
 
 		return $this;
@@ -2548,10 +2548,10 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 51; // 51 = kshowPeer::NUM_COLUMNS - kshowPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 51; // 51 = vshowPeer::NUM_COLUMNS - vshowPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
-			throw new PropelException("Error populating kshow object", $e);
+			throw new PropelException("Error populating vshow object", $e);
 		}
 	}
 
@@ -2571,8 +2571,8 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akuser !== null && $this->producer_id !== $this->akuser->getId()) {
-			$this->akuser = null;
+		if ($this->avuser !== null && $this->producer_id !== $this->avuser->getId()) {
+			$this->avuser = null;
 		}
 	} // ensureConsistency
 
@@ -2597,17 +2597,17 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(kshowPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(vshowPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		// We don't need to alter the object instance pool; we're just modifying this instance
 		// already in the pool.
 
-		kshowPeer::setUseCriteriaFilter(false);
+		vshowPeer::setUseCriteriaFilter(false);
 		$criteria = $this->buildPkeyCriteria();
-		kshowPeer::addSelectColumns($criteria);
+		vshowPeer::addSelectColumns($criteria);
 		$stmt = BasePeer::doSelect($criteria, $con);
-		kshowPeer::setUseCriteriaFilter(true);
+		vshowPeer::setUseCriteriaFilter(true);
 		$row = $stmt->fetch(PDO::FETCH_NUM);
 		$stmt->closeCursor();
 		if (!$row) {
@@ -2617,15 +2617,15 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akuser = null;
-			$this->collkvotesRelatedByKshowId = null;
-			$this->lastkvoteRelatedByKshowIdCriteria = null;
+			$this->avuser = null;
+			$this->collvvotesRelatedByVshowId = null;
+			$this->lastvvoteRelatedByVshowIdCriteria = null;
 
-			$this->collkvotesRelatedByKuserId = null;
-			$this->lastkvoteRelatedByKuserIdCriteria = null;
+			$this->collvvotesRelatedByVuserId = null;
+			$this->lastvvoteRelatedByVuserIdCriteria = null;
 
-			$this->collKshowKusers = null;
-			$this->lastKshowKuserCriteria = null;
+			$this->collVshowVusers = null;
+			$this->lastVshowVuserCriteria = null;
 
 			$this->collPuserRoles = null;
 			$this->lastPuserRoleCriteria = null;
@@ -2655,14 +2655,14 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(kshowPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(vshowPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
 			$ret = $this->preDelete($con);
 			if ($ret) {
-				kshowPeer::doDelete($this, $con);
+				vshowPeer::doDelete($this, $con);
 				$this->postDelete($con);
 				$this->setDeleted(true);
 				$con->commit();
@@ -2700,7 +2700,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(kshowPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(vshowPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
@@ -2718,15 +2718,15 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				return 0;
 			}
 			
-			for ($retries = 1; $retries < KalturaPDO::SAVE_MAX_RETRIES; $retries++)
+			for ($retries = 1; $retries < VidiunPDO::SAVE_MAX_RETRIES; $retries++)
 			{
                $affectedRows = $this->doSave($con);
-                if ($affectedRows || !$this->isColumnModified(kshowPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
+                if ($affectedRows || !$this->isColumnModified(vshowPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug("was unable to save! retrying for the $retries time");
+                VidiunLog::debug("was unable to save! retrying for the $retries time");
                 $criteria = $this->buildPkeyCriteria();
-				$criteria->addSelectColumn(kshowPeer::CUSTOM_DATA);
+				$criteria->addSelectColumn(vshowPeer::CUSTOM_DATA);
                 $stmt = BasePeer::doSelect($criteria, $con);
                 $cutsomDataArr = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 $newCustomData = $cutsomDataArr[0];
@@ -2738,7 +2738,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 				//set custom data column values we wanted to change to
 				$validUpdate = true;
-				$atomicCustomDataFields = kshowPeer::getAtomicCustomDataFields();
+				$atomicCustomDataFields = vshowPeer::getAtomicCustomDataFields();
 			 	foreach ($this->oldCustomDataValues as $namespace => $namespaceValues){
                 	foreach($namespaceValues as $name => $oldValue)
 					{
@@ -2788,7 +2788,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				$this->postUpdate($con);
 			}
 			$this->postSave($con);
-			kshowPeer::addInstanceToPool($this);
+			vshowPeer::addInstanceToPool($this);
 			
 			$con->commit();
 			return $affectedRows;
@@ -2828,11 +2828,11 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if ($this->akuser->isModified() || $this->akuser->isNew()) {
-					$affectedRows += $this->akuser->save($con);
+			if ($this->avuser !== null) {
+				if ($this->avuser->isModified() || $this->avuser->isNew()) {
+					$affectedRows += $this->avuser->save($con);
 				}
-				$this->setkuser($this->akuser);
+				$this->setvuser($this->avuser);
 			}
 
 
@@ -2840,7 +2840,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			$this->objectSaved = false;
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = kshowPeer::doInsert($this, $con);
+					$pk = vshowPeer::doInsert($this, $con);
 					if (!$skipReload) {
 						$reloadObject = true;
 					}
@@ -2851,7 +2851,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 					$this->setNew(false);
 					$this->objectSaved = true;
 				} else {
-					$affectedObjects = kshowPeer::doUpdate($this, $con);
+					$affectedObjects = vshowPeer::doUpdate($this, $con);
 					if($affectedObjects)
 						$this->objectSaved = true;
 						
@@ -2861,24 +2861,24 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
 			}
 
-			if ($this->collkvotesRelatedByKshowId !== null) {
-				foreach ($this->collkvotesRelatedByKshowId as $referrerFK) {
+			if ($this->collvvotesRelatedByVshowId !== null) {
+				foreach ($this->collvvotesRelatedByVshowId as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
 				}
 			}
 
-			if ($this->collkvotesRelatedByKuserId !== null) {
-				foreach ($this->collkvotesRelatedByKuserId as $referrerFK) {
+			if ($this->collvvotesRelatedByVuserId !== null) {
+				foreach ($this->collvvotesRelatedByVuserId as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
 				}
 			}
 
-			if ($this->collKshowKusers !== null) {
-				foreach ($this->collKshowKusers as $referrerFK) {
+			if ($this->collVshowVusers !== null) {
+				foreach ($this->collVshowVusers as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
@@ -2951,7 +2951,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -2976,12 +2976,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -2999,10 +2999,10 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -3127,36 +3127,36 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akuser !== null) {
-				if (!$this->akuser->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akuser->getValidationFailures());
+			if ($this->avuser !== null) {
+				if (!$this->avuser->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avuser->getValidationFailures());
 				}
 			}
 
 
-			if (($retval = kshowPeer::doValidate($this, $columns)) !== true) {
+			if (($retval = vshowPeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
 
-				if ($this->collkvotesRelatedByKshowId !== null) {
-					foreach ($this->collkvotesRelatedByKshowId as $referrerFK) {
+				if ($this->collvvotesRelatedByVshowId !== null) {
+					foreach ($this->collvvotesRelatedByVshowId as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
 					}
 				}
 
-				if ($this->collkvotesRelatedByKuserId !== null) {
-					foreach ($this->collkvotesRelatedByKuserId as $referrerFK) {
+				if ($this->collvvotesRelatedByVuserId !== null) {
+					foreach ($this->collvvotesRelatedByVuserId as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
 					}
 				}
 
-				if ($this->collKshowKusers !== null) {
-					foreach ($this->collKshowKusers as $referrerFK) {
+				if ($this->collVshowVusers !== null) {
+					foreach ($this->collVshowVusers as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -3205,7 +3205,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = kshowPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = vshowPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		$field = $this->getByPosition($pos);
 		return $field;
 	}
@@ -3392,7 +3392,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
-		$keys = kshowPeer::getFieldNames($keyType);
+		$keys = vshowPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getProducerId(),
@@ -3461,7 +3461,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 */
 	public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = kshowPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = vshowPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->setByPosition($pos, $value);
 	}
 
@@ -3651,7 +3651,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 */
 	public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
 	{
-		$keys = kshowPeer::getFieldNames($keyType);
+		$keys = vshowPeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setProducerId($arr[$keys[1]]);
@@ -3713,59 +3713,59 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 */
 	public function buildCriteria()
 	{
-		$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+		$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(kshowPeer::ID)) $criteria->add(kshowPeer::ID, $this->id);
-		if ($this->isColumnModified(kshowPeer::PRODUCER_ID)) $criteria->add(kshowPeer::PRODUCER_ID, $this->producer_id);
-		if ($this->isColumnModified(kshowPeer::EPISODE_ID)) $criteria->add(kshowPeer::EPISODE_ID, $this->episode_id);
-		if ($this->isColumnModified(kshowPeer::NAME)) $criteria->add(kshowPeer::NAME, $this->name);
-		if ($this->isColumnModified(kshowPeer::SUBDOMAIN)) $criteria->add(kshowPeer::SUBDOMAIN, $this->subdomain);
-		if ($this->isColumnModified(kshowPeer::DESCRIPTION)) $criteria->add(kshowPeer::DESCRIPTION, $this->description);
-		if ($this->isColumnModified(kshowPeer::STATUS)) $criteria->add(kshowPeer::STATUS, $this->status);
-		if ($this->isColumnModified(kshowPeer::TYPE)) $criteria->add(kshowPeer::TYPE, $this->type);
-		if ($this->isColumnModified(kshowPeer::MEDIA_TYPE)) $criteria->add(kshowPeer::MEDIA_TYPE, $this->media_type);
-		if ($this->isColumnModified(kshowPeer::FORMAT_TYPE)) $criteria->add(kshowPeer::FORMAT_TYPE, $this->format_type);
-		if ($this->isColumnModified(kshowPeer::LANGUAGE)) $criteria->add(kshowPeer::LANGUAGE, $this->language);
-		if ($this->isColumnModified(kshowPeer::START_DATE)) $criteria->add(kshowPeer::START_DATE, $this->start_date);
-		if ($this->isColumnModified(kshowPeer::END_DATE)) $criteria->add(kshowPeer::END_DATE, $this->end_date);
-		if ($this->isColumnModified(kshowPeer::SKIN)) $criteria->add(kshowPeer::SKIN, $this->skin);
-		if ($this->isColumnModified(kshowPeer::THUMBNAIL)) $criteria->add(kshowPeer::THUMBNAIL, $this->thumbnail);
-		if ($this->isColumnModified(kshowPeer::SHOW_ENTRY_ID)) $criteria->add(kshowPeer::SHOW_ENTRY_ID, $this->show_entry_id);
-		if ($this->isColumnModified(kshowPeer::INTRO_ID)) $criteria->add(kshowPeer::INTRO_ID, $this->intro_id);
-		if ($this->isColumnModified(kshowPeer::VIEWS)) $criteria->add(kshowPeer::VIEWS, $this->views);
-		if ($this->isColumnModified(kshowPeer::VOTES)) $criteria->add(kshowPeer::VOTES, $this->votes);
-		if ($this->isColumnModified(kshowPeer::COMMENTS)) $criteria->add(kshowPeer::COMMENTS, $this->comments);
-		if ($this->isColumnModified(kshowPeer::FAVORITES)) $criteria->add(kshowPeer::FAVORITES, $this->favorites);
-		if ($this->isColumnModified(kshowPeer::RANK)) $criteria->add(kshowPeer::RANK, $this->rank);
-		if ($this->isColumnModified(kshowPeer::ENTRIES)) $criteria->add(kshowPeer::ENTRIES, $this->entries);
-		if ($this->isColumnModified(kshowPeer::CONTRIBUTORS)) $criteria->add(kshowPeer::CONTRIBUTORS, $this->contributors);
-		if ($this->isColumnModified(kshowPeer::SUBSCRIBERS)) $criteria->add(kshowPeer::SUBSCRIBERS, $this->subscribers);
-		if ($this->isColumnModified(kshowPeer::NUMBER_OF_UPDATES)) $criteria->add(kshowPeer::NUMBER_OF_UPDATES, $this->number_of_updates);
-		if ($this->isColumnModified(kshowPeer::TAGS)) $criteria->add(kshowPeer::TAGS, $this->tags);
-		if ($this->isColumnModified(kshowPeer::CUSTOM_DATA)) $criteria->add(kshowPeer::CUSTOM_DATA, $this->custom_data);
-		if ($this->isColumnModified(kshowPeer::INDEXED_CUSTOM_DATA_1)) $criteria->add(kshowPeer::INDEXED_CUSTOM_DATA_1, $this->indexed_custom_data_1);
-		if ($this->isColumnModified(kshowPeer::INDEXED_CUSTOM_DATA_2)) $criteria->add(kshowPeer::INDEXED_CUSTOM_DATA_2, $this->indexed_custom_data_2);
-		if ($this->isColumnModified(kshowPeer::INDEXED_CUSTOM_DATA_3)) $criteria->add(kshowPeer::INDEXED_CUSTOM_DATA_3, $this->indexed_custom_data_3);
-		if ($this->isColumnModified(kshowPeer::REOCCURENCE)) $criteria->add(kshowPeer::REOCCURENCE, $this->reoccurence);
-		if ($this->isColumnModified(kshowPeer::LICENSE_TYPE)) $criteria->add(kshowPeer::LICENSE_TYPE, $this->license_type);
-		if ($this->isColumnModified(kshowPeer::LENGTH_IN_MSECS)) $criteria->add(kshowPeer::LENGTH_IN_MSECS, $this->length_in_msecs);
-		if ($this->isColumnModified(kshowPeer::VIEW_PERMISSIONS)) $criteria->add(kshowPeer::VIEW_PERMISSIONS, $this->view_permissions);
-		if ($this->isColumnModified(kshowPeer::VIEW_PASSWORD)) $criteria->add(kshowPeer::VIEW_PASSWORD, $this->view_password);
-		if ($this->isColumnModified(kshowPeer::CONTRIB_PERMISSIONS)) $criteria->add(kshowPeer::CONTRIB_PERMISSIONS, $this->contrib_permissions);
-		if ($this->isColumnModified(kshowPeer::CONTRIB_PASSWORD)) $criteria->add(kshowPeer::CONTRIB_PASSWORD, $this->contrib_password);
-		if ($this->isColumnModified(kshowPeer::EDIT_PERMISSIONS)) $criteria->add(kshowPeer::EDIT_PERMISSIONS, $this->edit_permissions);
-		if ($this->isColumnModified(kshowPeer::EDIT_PASSWORD)) $criteria->add(kshowPeer::EDIT_PASSWORD, $this->edit_password);
-		if ($this->isColumnModified(kshowPeer::SALT)) $criteria->add(kshowPeer::SALT, $this->salt);
-		if ($this->isColumnModified(kshowPeer::CREATED_AT)) $criteria->add(kshowPeer::CREATED_AT, $this->created_at);
-		if ($this->isColumnModified(kshowPeer::UPDATED_AT)) $criteria->add(kshowPeer::UPDATED_AT, $this->updated_at);
-		if ($this->isColumnModified(kshowPeer::PARTNER_ID)) $criteria->add(kshowPeer::PARTNER_ID, $this->partner_id);
-		if ($this->isColumnModified(kshowPeer::DISPLAY_IN_SEARCH)) $criteria->add(kshowPeer::DISPLAY_IN_SEARCH, $this->display_in_search);
-		if ($this->isColumnModified(kshowPeer::SUBP_ID)) $criteria->add(kshowPeer::SUBP_ID, $this->subp_id);
-		if ($this->isColumnModified(kshowPeer::PERMISSIONS)) $criteria->add(kshowPeer::PERMISSIONS, $this->permissions);
-		if ($this->isColumnModified(kshowPeer::GROUP_ID)) $criteria->add(kshowPeer::GROUP_ID, $this->group_id);
-		if ($this->isColumnModified(kshowPeer::PLAYS)) $criteria->add(kshowPeer::PLAYS, $this->plays);
-		if ($this->isColumnModified(kshowPeer::PARTNER_DATA)) $criteria->add(kshowPeer::PARTNER_DATA, $this->partner_data);
-		if ($this->isColumnModified(kshowPeer::INT_ID)) $criteria->add(kshowPeer::INT_ID, $this->int_id);
+		if ($this->isColumnModified(vshowPeer::ID)) $criteria->add(vshowPeer::ID, $this->id);
+		if ($this->isColumnModified(vshowPeer::PRODUCER_ID)) $criteria->add(vshowPeer::PRODUCER_ID, $this->producer_id);
+		if ($this->isColumnModified(vshowPeer::EPISODE_ID)) $criteria->add(vshowPeer::EPISODE_ID, $this->episode_id);
+		if ($this->isColumnModified(vshowPeer::NAME)) $criteria->add(vshowPeer::NAME, $this->name);
+		if ($this->isColumnModified(vshowPeer::SUBDOMAIN)) $criteria->add(vshowPeer::SUBDOMAIN, $this->subdomain);
+		if ($this->isColumnModified(vshowPeer::DESCRIPTION)) $criteria->add(vshowPeer::DESCRIPTION, $this->description);
+		if ($this->isColumnModified(vshowPeer::STATUS)) $criteria->add(vshowPeer::STATUS, $this->status);
+		if ($this->isColumnModified(vshowPeer::TYPE)) $criteria->add(vshowPeer::TYPE, $this->type);
+		if ($this->isColumnModified(vshowPeer::MEDIA_TYPE)) $criteria->add(vshowPeer::MEDIA_TYPE, $this->media_type);
+		if ($this->isColumnModified(vshowPeer::FORMAT_TYPE)) $criteria->add(vshowPeer::FORMAT_TYPE, $this->format_type);
+		if ($this->isColumnModified(vshowPeer::LANGUAGE)) $criteria->add(vshowPeer::LANGUAGE, $this->language);
+		if ($this->isColumnModified(vshowPeer::START_DATE)) $criteria->add(vshowPeer::START_DATE, $this->start_date);
+		if ($this->isColumnModified(vshowPeer::END_DATE)) $criteria->add(vshowPeer::END_DATE, $this->end_date);
+		if ($this->isColumnModified(vshowPeer::SKIN)) $criteria->add(vshowPeer::SKIN, $this->skin);
+		if ($this->isColumnModified(vshowPeer::THUMBNAIL)) $criteria->add(vshowPeer::THUMBNAIL, $this->thumbnail);
+		if ($this->isColumnModified(vshowPeer::SHOW_ENTRY_ID)) $criteria->add(vshowPeer::SHOW_ENTRY_ID, $this->show_entry_id);
+		if ($this->isColumnModified(vshowPeer::INTRO_ID)) $criteria->add(vshowPeer::INTRO_ID, $this->intro_id);
+		if ($this->isColumnModified(vshowPeer::VIEWS)) $criteria->add(vshowPeer::VIEWS, $this->views);
+		if ($this->isColumnModified(vshowPeer::VOTES)) $criteria->add(vshowPeer::VOTES, $this->votes);
+		if ($this->isColumnModified(vshowPeer::COMMENTS)) $criteria->add(vshowPeer::COMMENTS, $this->comments);
+		if ($this->isColumnModified(vshowPeer::FAVORITES)) $criteria->add(vshowPeer::FAVORITES, $this->favorites);
+		if ($this->isColumnModified(vshowPeer::RANK)) $criteria->add(vshowPeer::RANK, $this->rank);
+		if ($this->isColumnModified(vshowPeer::ENTRIES)) $criteria->add(vshowPeer::ENTRIES, $this->entries);
+		if ($this->isColumnModified(vshowPeer::CONTRIBUTORS)) $criteria->add(vshowPeer::CONTRIBUTORS, $this->contributors);
+		if ($this->isColumnModified(vshowPeer::SUBSCRIBERS)) $criteria->add(vshowPeer::SUBSCRIBERS, $this->subscribers);
+		if ($this->isColumnModified(vshowPeer::NUMBER_OF_UPDATES)) $criteria->add(vshowPeer::NUMBER_OF_UPDATES, $this->number_of_updates);
+		if ($this->isColumnModified(vshowPeer::TAGS)) $criteria->add(vshowPeer::TAGS, $this->tags);
+		if ($this->isColumnModified(vshowPeer::CUSTOM_DATA)) $criteria->add(vshowPeer::CUSTOM_DATA, $this->custom_data);
+		if ($this->isColumnModified(vshowPeer::INDEXED_CUSTOM_DATA_1)) $criteria->add(vshowPeer::INDEXED_CUSTOM_DATA_1, $this->indexed_custom_data_1);
+		if ($this->isColumnModified(vshowPeer::INDEXED_CUSTOM_DATA_2)) $criteria->add(vshowPeer::INDEXED_CUSTOM_DATA_2, $this->indexed_custom_data_2);
+		if ($this->isColumnModified(vshowPeer::INDEXED_CUSTOM_DATA_3)) $criteria->add(vshowPeer::INDEXED_CUSTOM_DATA_3, $this->indexed_custom_data_3);
+		if ($this->isColumnModified(vshowPeer::REOCCURENCE)) $criteria->add(vshowPeer::REOCCURENCE, $this->reoccurence);
+		if ($this->isColumnModified(vshowPeer::LICENSE_TYPE)) $criteria->add(vshowPeer::LICENSE_TYPE, $this->license_type);
+		if ($this->isColumnModified(vshowPeer::LENGTH_IN_MSECS)) $criteria->add(vshowPeer::LENGTH_IN_MSECS, $this->length_in_msecs);
+		if ($this->isColumnModified(vshowPeer::VIEW_PERMISSIONS)) $criteria->add(vshowPeer::VIEW_PERMISSIONS, $this->view_permissions);
+		if ($this->isColumnModified(vshowPeer::VIEW_PASSWORD)) $criteria->add(vshowPeer::VIEW_PASSWORD, $this->view_password);
+		if ($this->isColumnModified(vshowPeer::CONTRIB_PERMISSIONS)) $criteria->add(vshowPeer::CONTRIB_PERMISSIONS, $this->contrib_permissions);
+		if ($this->isColumnModified(vshowPeer::CONTRIB_PASSWORD)) $criteria->add(vshowPeer::CONTRIB_PASSWORD, $this->contrib_password);
+		if ($this->isColumnModified(vshowPeer::EDIT_PERMISSIONS)) $criteria->add(vshowPeer::EDIT_PERMISSIONS, $this->edit_permissions);
+		if ($this->isColumnModified(vshowPeer::EDIT_PASSWORD)) $criteria->add(vshowPeer::EDIT_PASSWORD, $this->edit_password);
+		if ($this->isColumnModified(vshowPeer::SALT)) $criteria->add(vshowPeer::SALT, $this->salt);
+		if ($this->isColumnModified(vshowPeer::CREATED_AT)) $criteria->add(vshowPeer::CREATED_AT, $this->created_at);
+		if ($this->isColumnModified(vshowPeer::UPDATED_AT)) $criteria->add(vshowPeer::UPDATED_AT, $this->updated_at);
+		if ($this->isColumnModified(vshowPeer::PARTNER_ID)) $criteria->add(vshowPeer::PARTNER_ID, $this->partner_id);
+		if ($this->isColumnModified(vshowPeer::DISPLAY_IN_SEARCH)) $criteria->add(vshowPeer::DISPLAY_IN_SEARCH, $this->display_in_search);
+		if ($this->isColumnModified(vshowPeer::SUBP_ID)) $criteria->add(vshowPeer::SUBP_ID, $this->subp_id);
+		if ($this->isColumnModified(vshowPeer::PERMISSIONS)) $criteria->add(vshowPeer::PERMISSIONS, $this->permissions);
+		if ($this->isColumnModified(vshowPeer::GROUP_ID)) $criteria->add(vshowPeer::GROUP_ID, $this->group_id);
+		if ($this->isColumnModified(vshowPeer::PLAYS)) $criteria->add(vshowPeer::PLAYS, $this->plays);
+		if ($this->isColumnModified(vshowPeer::PARTNER_DATA)) $criteria->add(vshowPeer::PARTNER_DATA, $this->partner_data);
+		if ($this->isColumnModified(vshowPeer::INT_ID)) $criteria->add(vshowPeer::INT_ID, $this->int_id);
 
 		return $criteria;
 	}
@@ -3780,29 +3780,29 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 */
 	public function buildPkeyCriteria()
 	{
-		$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+		$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 
-		$criteria->add(kshowPeer::ID, $this->id);
+		$criteria->add(vshowPeer::ID, $this->id);
 		
 		if($this->alreadyInSave)
 		{
-			if ($this->isColumnModified(kshowPeer::CUSTOM_DATA))
+			if ($this->isColumnModified(vshowPeer::CUSTOM_DATA))
 			{
 				if (!is_null($this->custom_data_md5))
-					$criteria->add(kshowPeer::CUSTOM_DATA, "MD5(cast(" . kshowPeer::CUSTOM_DATA . " as char character set latin1)) = '$this->custom_data_md5'", Criteria::CUSTOM);
+					$criteria->add(vshowPeer::CUSTOM_DATA, "MD5(cast(" . vshowPeer::CUSTOM_DATA . " as char character set latin1)) = '$this->custom_data_md5'", Criteria::CUSTOM);
 					//casting to latin char set to avoid mysql and php md5 difference
 				else 
-					$criteria->add(kshowPeer::CUSTOM_DATA, NULL, Criteria::ISNULL);
+					$criteria->add(vshowPeer::CUSTOM_DATA, NULL, Criteria::ISNULL);
 			}
 			
-			if (count($this->modifiedColumns) == 2 && $this->isColumnModified(kshowPeer::UPDATED_AT))
+			if (count($this->modifiedColumns) == 2 && $this->isColumnModified(vshowPeer::UPDATED_AT))
 			{
 				$theModifiedColumn = null;
 				foreach($this->modifiedColumns as $modifiedColumn)
-					if($modifiedColumn != kshowPeer::UPDATED_AT)
+					if($modifiedColumn != vshowPeer::UPDATED_AT)
 						$theModifiedColumn = $modifiedColumn;
 						
-				$atomicColumns = kshowPeer::getAtomicColumns();
+				$atomicColumns = vshowPeer::getAtomicColumns();
 				if(in_array($theModifiedColumn, $atomicColumns))
 					$criteria->add($theModifiedColumn, $this->getByName($theModifiedColumn, BasePeer::TYPE_COLNAME), Criteria::NOT_EQUAL);
 			}
@@ -3837,7 +3837,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * If desired, this method can also make copies of all associated (fkey referrers)
 	 * objects.
 	 *
-	 * @param      object $copyObj An object of kshow (or compatible) type.
+	 * @param      object $copyObj An object of vshow (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
 	 * @throws     PropelException
 	 */
@@ -3950,21 +3950,21 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			// the getter/setter methods for fkey referrer objects.
 			$copyObj->setNew(false);
 
-			foreach ($this->getkvotesRelatedByKshowId() as $relObj) {
+			foreach ($this->getvvotesRelatedByVshowId() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addkvoteRelatedByKshowId($relObj->copy($deepCopy));
+					$copyObj->addvvoteRelatedByVshowId($relObj->copy($deepCopy));
 				}
 			}
 
-			foreach ($this->getkvotesRelatedByKuserId() as $relObj) {
+			foreach ($this->getvvotesRelatedByVuserId() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addkvoteRelatedByKuserId($relObj->copy($deepCopy));
+					$copyObj->addvvoteRelatedByVuserId($relObj->copy($deepCopy));
 				}
 			}
 
-			foreach ($this->getKshowKusers() as $relObj) {
+			foreach ($this->getVshowVusers() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addKshowKuser($relObj->copy($deepCopy));
+					$copyObj->addVshowVuser($relObj->copy($deepCopy));
 				}
 			}
 
@@ -4004,7 +4004,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * objects.
 	 *
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-	 * @return     kshow Clone of current object.
+	 * @return     vshow Clone of current object.
 	 * @throws     PropelException
 	 */
 	public function copy($deepCopy = false)
@@ -4020,16 +4020,16 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @var     kshow Clone of current object.
+	 * @var     vshow Clone of current object.
 	 */
 	protected $copiedFrom = null;
 	
 	/**
 	 * Stores the source object that this object copied from 
 	 *
-	 * @param      kshow $copiedFrom Clone of current object.
+	 * @param      vshow $copiedFrom Clone of current object.
 	 */
-	public function setCopiedFrom(kshow $copiedFrom)
+	public function setCopiedFrom(vshow $copiedFrom)
 	{
 		$this->copiedFrom = $copiedFrom;
 	}
@@ -4041,24 +4041,24 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * same instance for all member of this class. The method could therefore
 	 * be static, but this would prevent one from overriding the behavior.
 	 *
-	 * @return     kshowPeer
+	 * @return     vshowPeer
 	 */
 	public function getPeer()
 	{
 		if (self::$peer === null) {
-			self::$peer = new kshowPeer();
+			self::$peer = new vshowPeer();
 		}
 		return self::$peer;
 	}
 
 	/**
-	 * Declares an association between this object and a kuser object.
+	 * Declares an association between this object and a vuser object.
 	 *
-	 * @param      kuser $v
-	 * @return     kshow The current object (for fluent API support)
+	 * @param      vuser $v
+	 * @return     vshow The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkuser(kuser $v = null)
+	public function setvuser(vuser $v = null)
 	{
 		if ($v === null) {
 			$this->setProducerId(NULL);
@@ -4066,12 +4066,12 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			$this->setProducerId($v->getId());
 		}
 
-		$this->akuser = $v;
+		$this->avuser = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kuser object, it will not be re-added.
+		// If this object has already been added to the vuser object, it will not be re-added.
 		if ($v !== null) {
-			$v->addkshow($this);
+			$v->addvshow($this);
 		}
 
 		return $this;
@@ -4079,87 +4079,87 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kuser object
+	 * Get the associated vuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kuser The associated kuser object.
+	 * @return     vuser The associated vuser object.
 	 * @throws     PropelException
 	 */
-	public function getkuser(PropelPDO $con = null)
+	public function getvuser(PropelPDO $con = null)
 	{
-		if ($this->akuser === null && ($this->producer_id !== null)) {
-			$this->akuser = kuserPeer::retrieveByPk($this->producer_id);
+		if ($this->avuser === null && ($this->producer_id !== null)) {
+			$this->avuser = vuserPeer::retrieveByPk($this->producer_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akuser->addkshows($this);
+			   $this->avuser->addvshows($this);
 			 */
 		}
-		return $this->akuser;
+		return $this->avuser;
 	}
 
 	/**
-	 * Clears out the collkvotesRelatedByKshowId collection (array).
+	 * Clears out the collvvotesRelatedByVshowId collection (array).
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
 	 *
 	 * @return     void
-	 * @see        addkvotesRelatedByKshowId()
+	 * @see        addvvotesRelatedByVshowId()
 	 */
-	public function clearkvotesRelatedByKshowId()
+	public function clearvvotesRelatedByVshowId()
 	{
-		$this->collkvotesRelatedByKshowId = null; // important to set this to NULL since that means it is uninitialized
+		$this->collvvotesRelatedByVshowId = null; // important to set this to NULL since that means it is uninitialized
 	}
 
 	/**
-	 * Initializes the collkvotesRelatedByKshowId collection (array).
+	 * Initializes the collvvotesRelatedByVshowId collection (array).
 	 *
-	 * By default this just sets the collkvotesRelatedByKshowId collection to an empty array (like clearcollkvotesRelatedByKshowId());
+	 * By default this just sets the collvvotesRelatedByVshowId collection to an empty array (like clearcollvvotesRelatedByVshowId());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
 	 * @return     void
 	 */
-	public function initkvotesRelatedByKshowId()
+	public function initvvotesRelatedByVshowId()
 	{
-		$this->collkvotesRelatedByKshowId = array();
+		$this->collvvotesRelatedByVshowId = array();
 	}
 
 	/**
-	 * Gets an array of kvote objects which contain a foreign key that references this object.
+	 * Gets an array of vvote objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this kshow has previously been saved, it will retrieve
-	 * related kvotesRelatedByKshowId from storage. If this kshow is new, it will return
+	 * Otherwise if this vshow has previously been saved, it will retrieve
+	 * related vvotesRelatedByVshowId from storage. If this vshow is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
 	 * @param      Criteria $criteria
-	 * @return     array kvote[]
+	 * @return     array vvote[]
 	 * @throws     PropelException
 	 */
-	public function getkvotesRelatedByKshowId($criteria = null, PropelPDO $con = null)
+	public function getvvotesRelatedByVshowId($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collkvotesRelatedByKshowId === null) {
+		if ($this->collvvotesRelatedByVshowId === null) {
 			if ($this->isNew()) {
-			   $this->collkvotesRelatedByKshowId = array();
+			   $this->collvvotesRelatedByVshowId = array();
 			} else {
 
-				$criteria->add(kvotePeer::KSHOW_ID, $this->id);
+				$criteria->add(vvotePeer::VSHOW_ID, $this->id);
 
-				kvotePeer::addSelectColumns($criteria);
-				$this->collkvotesRelatedByKshowId = kvotePeer::doSelect($criteria, $con);
+				vvotePeer::addSelectColumns($criteria);
+				$this->collvvotesRelatedByVshowId = vvotePeer::doSelect($criteria, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -4169,31 +4169,31 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				// one, just return the collection.
 
 
-				$criteria->add(kvotePeer::KSHOW_ID, $this->id);
+				$criteria->add(vvotePeer::VSHOW_ID, $this->id);
 
-				kvotePeer::addSelectColumns($criteria);
-				if (!isset($this->lastkvoteRelatedByKshowIdCriteria) || !$this->lastkvoteRelatedByKshowIdCriteria->equals($criteria)) {
-					$this->collkvotesRelatedByKshowId = kvotePeer::doSelect($criteria, $con);
+				vvotePeer::addSelectColumns($criteria);
+				if (!isset($this->lastvvoteRelatedByVshowIdCriteria) || !$this->lastvvoteRelatedByVshowIdCriteria->equals($criteria)) {
+					$this->collvvotesRelatedByVshowId = vvotePeer::doSelect($criteria, $con);
 				}
 			}
 		}
-		$this->lastkvoteRelatedByKshowIdCriteria = $criteria;
-		return $this->collkvotesRelatedByKshowId;
+		$this->lastvvoteRelatedByVshowIdCriteria = $criteria;
+		return $this->collvvotesRelatedByVshowId;
 	}
 
 	/**
-	 * Returns the number of related kvote objects.
+	 * Returns the number of related vvote objects.
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct
 	 * @param      PropelPDO $con
-	 * @return     int Count of related kvote objects.
+	 * @return     int Count of related vvote objects.
 	 * @throws     PropelException
 	 */
-	public function countkvotesRelatedByKshowId(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	public function countvvotesRelatedByVshowId(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		} else {
 			$criteria = clone $criteria;
 		}
@@ -4204,14 +4204,14 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		$count = null;
 
-		if ($this->collkvotesRelatedByKshowId === null) {
+		if ($this->collvvotesRelatedByVshowId === null) {
 			if ($this->isNew()) {
 				$count = 0;
 			} else {
 
-				$criteria->add(kvotePeer::KSHOW_ID, $this->id);
+				$criteria->add(vvotePeer::VSHOW_ID, $this->id);
 
-				$count = kvotePeer::doCount($criteria, false, $con);
+				$count = vvotePeer::doCount($criteria, false, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -4221,36 +4221,36 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				// one, just return count of the collection.
 
 
-				$criteria->add(kvotePeer::KSHOW_ID, $this->id);
+				$criteria->add(vvotePeer::VSHOW_ID, $this->id);
 
-				if (!isset($this->lastkvoteRelatedByKshowIdCriteria) || !$this->lastkvoteRelatedByKshowIdCriteria->equals($criteria)) {
-					$count = kvotePeer::doCount($criteria, false, $con);
+				if (!isset($this->lastvvoteRelatedByVshowIdCriteria) || !$this->lastvvoteRelatedByVshowIdCriteria->equals($criteria)) {
+					$count = vvotePeer::doCount($criteria, false, $con);
 				} else {
-					$count = count($this->collkvotesRelatedByKshowId);
+					$count = count($this->collvvotesRelatedByVshowId);
 				}
 			} else {
-				$count = count($this->collkvotesRelatedByKshowId);
+				$count = count($this->collvvotesRelatedByVshowId);
 			}
 		}
 		return $count;
 	}
 
 	/**
-	 * Method called to associate a kvote object to this object
-	 * through the kvote foreign key attribute.
+	 * Method called to associate a vvote object to this object
+	 * through the vvote foreign key attribute.
 	 *
-	 * @param      kvote $l kvote
+	 * @param      vvote $l vvote
 	 * @return     void
 	 * @throws     PropelException
 	 */
-	public function addkvoteRelatedByKshowId(kvote $l)
+	public function addvvoteRelatedByVshowId(vvote $l)
 	{
-		if ($this->collkvotesRelatedByKshowId === null) {
-			$this->initkvotesRelatedByKshowId();
+		if ($this->collvvotesRelatedByVshowId === null) {
+			$this->initvvotesRelatedByVshowId();
 		}
-		if (!in_array($l, $this->collkvotesRelatedByKshowId, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collkvotesRelatedByKshowId, $l);
-			$l->setkshowRelatedByKshowId($this);
+		if (!in_array($l, $this->collvvotesRelatedByVshowId, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collvvotesRelatedByVshowId, $l);
+			$l->setvshowRelatedByVshowId($this);
 		}
 	}
 
@@ -4258,109 +4258,109 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this kshow is new, it will return
-	 * an empty collection; or if this kshow has previously
-	 * been saved, it will retrieve related kvotesRelatedByKshowId from storage.
+	 * Otherwise if this vshow is new, it will return
+	 * an empty collection; or if this vshow has previously
+	 * been saved, it will retrieve related vvotesRelatedByVshowId from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in kshow.
+	 * actually need in vshow.
 	 */
-	public function getkvotesRelatedByKshowIdJoinentry($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getvvotesRelatedByVshowIdJoinentry($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collkvotesRelatedByKshowId === null) {
+		if ($this->collvvotesRelatedByVshowId === null) {
 			if ($this->isNew()) {
-				$this->collkvotesRelatedByKshowId = array();
+				$this->collvvotesRelatedByVshowId = array();
 			} else {
 
-				$criteria->add(kvotePeer::KSHOW_ID, $this->id);
+				$criteria->add(vvotePeer::VSHOW_ID, $this->id);
 
-				$this->collkvotesRelatedByKshowId = kvotePeer::doSelectJoinentry($criteria, $con, $join_behavior);
+				$this->collvvotesRelatedByVshowId = vvotePeer::doSelectJoinentry($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(kvotePeer::KSHOW_ID, $this->id);
+			$criteria->add(vvotePeer::VSHOW_ID, $this->id);
 
-			if (!isset($this->lastkvoteRelatedByKshowIdCriteria) || !$this->lastkvoteRelatedByKshowIdCriteria->equals($criteria)) {
-				$this->collkvotesRelatedByKshowId = kvotePeer::doSelectJoinentry($criteria, $con, $join_behavior);
+			if (!isset($this->lastvvoteRelatedByVshowIdCriteria) || !$this->lastvvoteRelatedByVshowIdCriteria->equals($criteria)) {
+				$this->collvvotesRelatedByVshowId = vvotePeer::doSelectJoinentry($criteria, $con, $join_behavior);
 			}
 		}
-		$this->lastkvoteRelatedByKshowIdCriteria = $criteria;
+		$this->lastvvoteRelatedByVshowIdCriteria = $criteria;
 
-		return $this->collkvotesRelatedByKshowId;
+		return $this->collvvotesRelatedByVshowId;
 	}
 
 	/**
-	 * Clears out the collkvotesRelatedByKuserId collection (array).
+	 * Clears out the collvvotesRelatedByVuserId collection (array).
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
 	 *
 	 * @return     void
-	 * @see        addkvotesRelatedByKuserId()
+	 * @see        addvvotesRelatedByVuserId()
 	 */
-	public function clearkvotesRelatedByKuserId()
+	public function clearvvotesRelatedByVuserId()
 	{
-		$this->collkvotesRelatedByKuserId = null; // important to set this to NULL since that means it is uninitialized
+		$this->collvvotesRelatedByVuserId = null; // important to set this to NULL since that means it is uninitialized
 	}
 
 	/**
-	 * Initializes the collkvotesRelatedByKuserId collection (array).
+	 * Initializes the collvvotesRelatedByVuserId collection (array).
 	 *
-	 * By default this just sets the collkvotesRelatedByKuserId collection to an empty array (like clearcollkvotesRelatedByKuserId());
+	 * By default this just sets the collvvotesRelatedByVuserId collection to an empty array (like clearcollvvotesRelatedByVuserId());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
 	 * @return     void
 	 */
-	public function initkvotesRelatedByKuserId()
+	public function initvvotesRelatedByVuserId()
 	{
-		$this->collkvotesRelatedByKuserId = array();
+		$this->collvvotesRelatedByVuserId = array();
 	}
 
 	/**
-	 * Gets an array of kvote objects which contain a foreign key that references this object.
+	 * Gets an array of vvote objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this kshow has previously been saved, it will retrieve
-	 * related kvotesRelatedByKuserId from storage. If this kshow is new, it will return
+	 * Otherwise if this vshow has previously been saved, it will retrieve
+	 * related vvotesRelatedByVuserId from storage. If this vshow is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
 	 * @param      Criteria $criteria
-	 * @return     array kvote[]
+	 * @return     array vvote[]
 	 * @throws     PropelException
 	 */
-	public function getkvotesRelatedByKuserId($criteria = null, PropelPDO $con = null)
+	public function getvvotesRelatedByVuserId($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collkvotesRelatedByKuserId === null) {
+		if ($this->collvvotesRelatedByVuserId === null) {
 			if ($this->isNew()) {
-			   $this->collkvotesRelatedByKuserId = array();
+			   $this->collvvotesRelatedByVuserId = array();
 			} else {
 
-				$criteria->add(kvotePeer::KUSER_ID, $this->id);
+				$criteria->add(vvotePeer::VUSER_ID, $this->id);
 
-				kvotePeer::addSelectColumns($criteria);
-				$this->collkvotesRelatedByKuserId = kvotePeer::doSelect($criteria, $con);
+				vvotePeer::addSelectColumns($criteria);
+				$this->collvvotesRelatedByVuserId = vvotePeer::doSelect($criteria, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -4370,31 +4370,31 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				// one, just return the collection.
 
 
-				$criteria->add(kvotePeer::KUSER_ID, $this->id);
+				$criteria->add(vvotePeer::VUSER_ID, $this->id);
 
-				kvotePeer::addSelectColumns($criteria);
-				if (!isset($this->lastkvoteRelatedByKuserIdCriteria) || !$this->lastkvoteRelatedByKuserIdCriteria->equals($criteria)) {
-					$this->collkvotesRelatedByKuserId = kvotePeer::doSelect($criteria, $con);
+				vvotePeer::addSelectColumns($criteria);
+				if (!isset($this->lastvvoteRelatedByVuserIdCriteria) || !$this->lastvvoteRelatedByVuserIdCriteria->equals($criteria)) {
+					$this->collvvotesRelatedByVuserId = vvotePeer::doSelect($criteria, $con);
 				}
 			}
 		}
-		$this->lastkvoteRelatedByKuserIdCriteria = $criteria;
-		return $this->collkvotesRelatedByKuserId;
+		$this->lastvvoteRelatedByVuserIdCriteria = $criteria;
+		return $this->collvvotesRelatedByVuserId;
 	}
 
 	/**
-	 * Returns the number of related kvote objects.
+	 * Returns the number of related vvote objects.
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct
 	 * @param      PropelPDO $con
-	 * @return     int Count of related kvote objects.
+	 * @return     int Count of related vvote objects.
 	 * @throws     PropelException
 	 */
-	public function countkvotesRelatedByKuserId(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	public function countvvotesRelatedByVuserId(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		} else {
 			$criteria = clone $criteria;
 		}
@@ -4405,14 +4405,14 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		$count = null;
 
-		if ($this->collkvotesRelatedByKuserId === null) {
+		if ($this->collvvotesRelatedByVuserId === null) {
 			if ($this->isNew()) {
 				$count = 0;
 			} else {
 
-				$criteria->add(kvotePeer::KUSER_ID, $this->id);
+				$criteria->add(vvotePeer::VUSER_ID, $this->id);
 
-				$count = kvotePeer::doCount($criteria, false, $con);
+				$count = vvotePeer::doCount($criteria, false, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -4422,36 +4422,36 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				// one, just return count of the collection.
 
 
-				$criteria->add(kvotePeer::KUSER_ID, $this->id);
+				$criteria->add(vvotePeer::VUSER_ID, $this->id);
 
-				if (!isset($this->lastkvoteRelatedByKuserIdCriteria) || !$this->lastkvoteRelatedByKuserIdCriteria->equals($criteria)) {
-					$count = kvotePeer::doCount($criteria, false, $con);
+				if (!isset($this->lastvvoteRelatedByVuserIdCriteria) || !$this->lastvvoteRelatedByVuserIdCriteria->equals($criteria)) {
+					$count = vvotePeer::doCount($criteria, false, $con);
 				} else {
-					$count = count($this->collkvotesRelatedByKuserId);
+					$count = count($this->collvvotesRelatedByVuserId);
 				}
 			} else {
-				$count = count($this->collkvotesRelatedByKuserId);
+				$count = count($this->collvvotesRelatedByVuserId);
 			}
 		}
 		return $count;
 	}
 
 	/**
-	 * Method called to associate a kvote object to this object
-	 * through the kvote foreign key attribute.
+	 * Method called to associate a vvote object to this object
+	 * through the vvote foreign key attribute.
 	 *
-	 * @param      kvote $l kvote
+	 * @param      vvote $l vvote
 	 * @return     void
 	 * @throws     PropelException
 	 */
-	public function addkvoteRelatedByKuserId(kvote $l)
+	public function addvvoteRelatedByVuserId(vvote $l)
 	{
-		if ($this->collkvotesRelatedByKuserId === null) {
-			$this->initkvotesRelatedByKuserId();
+		if ($this->collvvotesRelatedByVuserId === null) {
+			$this->initvvotesRelatedByVuserId();
 		}
-		if (!in_array($l, $this->collkvotesRelatedByKuserId, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collkvotesRelatedByKuserId, $l);
-			$l->setkshowRelatedByKuserId($this);
+		if (!in_array($l, $this->collvvotesRelatedByVuserId, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collvvotesRelatedByVuserId, $l);
+			$l->setvshowRelatedByVuserId($this);
 		}
 	}
 
@@ -4459,109 +4459,109 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this kshow is new, it will return
-	 * an empty collection; or if this kshow has previously
-	 * been saved, it will retrieve related kvotesRelatedByKuserId from storage.
+	 * Otherwise if this vshow is new, it will return
+	 * an empty collection; or if this vshow has previously
+	 * been saved, it will retrieve related vvotesRelatedByVuserId from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in kshow.
+	 * actually need in vshow.
 	 */
-	public function getkvotesRelatedByKuserIdJoinentry($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getvvotesRelatedByVuserIdJoinentry($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collkvotesRelatedByKuserId === null) {
+		if ($this->collvvotesRelatedByVuserId === null) {
 			if ($this->isNew()) {
-				$this->collkvotesRelatedByKuserId = array();
+				$this->collvvotesRelatedByVuserId = array();
 			} else {
 
-				$criteria->add(kvotePeer::KUSER_ID, $this->id);
+				$criteria->add(vvotePeer::VUSER_ID, $this->id);
 
-				$this->collkvotesRelatedByKuserId = kvotePeer::doSelectJoinentry($criteria, $con, $join_behavior);
+				$this->collvvotesRelatedByVuserId = vvotePeer::doSelectJoinentry($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(kvotePeer::KUSER_ID, $this->id);
+			$criteria->add(vvotePeer::VUSER_ID, $this->id);
 
-			if (!isset($this->lastkvoteRelatedByKuserIdCriteria) || !$this->lastkvoteRelatedByKuserIdCriteria->equals($criteria)) {
-				$this->collkvotesRelatedByKuserId = kvotePeer::doSelectJoinentry($criteria, $con, $join_behavior);
+			if (!isset($this->lastvvoteRelatedByVuserIdCriteria) || !$this->lastvvoteRelatedByVuserIdCriteria->equals($criteria)) {
+				$this->collvvotesRelatedByVuserId = vvotePeer::doSelectJoinentry($criteria, $con, $join_behavior);
 			}
 		}
-		$this->lastkvoteRelatedByKuserIdCriteria = $criteria;
+		$this->lastvvoteRelatedByVuserIdCriteria = $criteria;
 
-		return $this->collkvotesRelatedByKuserId;
+		return $this->collvvotesRelatedByVuserId;
 	}
 
 	/**
-	 * Clears out the collKshowKusers collection (array).
+	 * Clears out the collVshowVusers collection (array).
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
 	 *
 	 * @return     void
-	 * @see        addKshowKusers()
+	 * @see        addVshowVusers()
 	 */
-	public function clearKshowKusers()
+	public function clearVshowVusers()
 	{
-		$this->collKshowKusers = null; // important to set this to NULL since that means it is uninitialized
+		$this->collVshowVusers = null; // important to set this to NULL since that means it is uninitialized
 	}
 
 	/**
-	 * Initializes the collKshowKusers collection (array).
+	 * Initializes the collVshowVusers collection (array).
 	 *
-	 * By default this just sets the collKshowKusers collection to an empty array (like clearcollKshowKusers());
+	 * By default this just sets the collVshowVusers collection to an empty array (like clearcollVshowVusers());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
 	 * @return     void
 	 */
-	public function initKshowKusers()
+	public function initVshowVusers()
 	{
-		$this->collKshowKusers = array();
+		$this->collVshowVusers = array();
 	}
 
 	/**
-	 * Gets an array of KshowKuser objects which contain a foreign key that references this object.
+	 * Gets an array of VshowVuser objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this kshow has previously been saved, it will retrieve
-	 * related KshowKusers from storage. If this kshow is new, it will return
+	 * Otherwise if this vshow has previously been saved, it will retrieve
+	 * related VshowVusers from storage. If this vshow is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
 	 * @param      Criteria $criteria
-	 * @return     array KshowKuser[]
+	 * @return     array VshowVuser[]
 	 * @throws     PropelException
 	 */
-	public function getKshowKusers($criteria = null, PropelPDO $con = null)
+	public function getVshowVusers($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collKshowKusers === null) {
+		if ($this->collVshowVusers === null) {
 			if ($this->isNew()) {
-			   $this->collKshowKusers = array();
+			   $this->collVshowVusers = array();
 			} else {
 
-				$criteria->add(KshowKuserPeer::KSHOW_ID, $this->id);
+				$criteria->add(VshowVuserPeer::VSHOW_ID, $this->id);
 
-				KshowKuserPeer::addSelectColumns($criteria);
-				$this->collKshowKusers = KshowKuserPeer::doSelect($criteria, $con);
+				VshowVuserPeer::addSelectColumns($criteria);
+				$this->collVshowVusers = VshowVuserPeer::doSelect($criteria, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -4571,31 +4571,31 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				// one, just return the collection.
 
 
-				$criteria->add(KshowKuserPeer::KSHOW_ID, $this->id);
+				$criteria->add(VshowVuserPeer::VSHOW_ID, $this->id);
 
-				KshowKuserPeer::addSelectColumns($criteria);
-				if (!isset($this->lastKshowKuserCriteria) || !$this->lastKshowKuserCriteria->equals($criteria)) {
-					$this->collKshowKusers = KshowKuserPeer::doSelect($criteria, $con);
+				VshowVuserPeer::addSelectColumns($criteria);
+				if (!isset($this->lastVshowVuserCriteria) || !$this->lastVshowVuserCriteria->equals($criteria)) {
+					$this->collVshowVusers = VshowVuserPeer::doSelect($criteria, $con);
 				}
 			}
 		}
-		$this->lastKshowKuserCriteria = $criteria;
-		return $this->collKshowKusers;
+		$this->lastVshowVuserCriteria = $criteria;
+		return $this->collVshowVusers;
 	}
 
 	/**
-	 * Returns the number of related KshowKuser objects.
+	 * Returns the number of related VshowVuser objects.
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct
 	 * @param      PropelPDO $con
-	 * @return     int Count of related KshowKuser objects.
+	 * @return     int Count of related VshowVuser objects.
 	 * @throws     PropelException
 	 */
-	public function countKshowKusers(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	public function countVshowVusers(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		} else {
 			$criteria = clone $criteria;
 		}
@@ -4606,14 +4606,14 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 
 		$count = null;
 
-		if ($this->collKshowKusers === null) {
+		if ($this->collVshowVusers === null) {
 			if ($this->isNew()) {
 				$count = 0;
 			} else {
 
-				$criteria->add(KshowKuserPeer::KSHOW_ID, $this->id);
+				$criteria->add(VshowVuserPeer::VSHOW_ID, $this->id);
 
-				$count = KshowKuserPeer::doCount($criteria, false, $con);
+				$count = VshowVuserPeer::doCount($criteria, false, $con);
 			}
 		} else {
 			// criteria has no effect for a new object
@@ -4623,36 +4623,36 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				// one, just return count of the collection.
 
 
-				$criteria->add(KshowKuserPeer::KSHOW_ID, $this->id);
+				$criteria->add(VshowVuserPeer::VSHOW_ID, $this->id);
 
-				if (!isset($this->lastKshowKuserCriteria) || !$this->lastKshowKuserCriteria->equals($criteria)) {
-					$count = KshowKuserPeer::doCount($criteria, false, $con);
+				if (!isset($this->lastVshowVuserCriteria) || !$this->lastVshowVuserCriteria->equals($criteria)) {
+					$count = VshowVuserPeer::doCount($criteria, false, $con);
 				} else {
-					$count = count($this->collKshowKusers);
+					$count = count($this->collVshowVusers);
 				}
 			} else {
-				$count = count($this->collKshowKusers);
+				$count = count($this->collVshowVusers);
 			}
 		}
 		return $count;
 	}
 
 	/**
-	 * Method called to associate a KshowKuser object to this object
-	 * through the KshowKuser foreign key attribute.
+	 * Method called to associate a VshowVuser object to this object
+	 * through the VshowVuser foreign key attribute.
 	 *
-	 * @param      KshowKuser $l KshowKuser
+	 * @param      VshowVuser $l VshowVuser
 	 * @return     void
 	 * @throws     PropelException
 	 */
-	public function addKshowKuser(KshowKuser $l)
+	public function addVshowVuser(VshowVuser $l)
 	{
-		if ($this->collKshowKusers === null) {
-			$this->initKshowKusers();
+		if ($this->collVshowVusers === null) {
+			$this->initVshowVusers();
 		}
-		if (!in_array($l, $this->collKshowKusers, true)) { // only add it if the **same** object is not already associated
-			array_push($this->collKshowKusers, $l);
-			$l->setkshow($this);
+		if (!in_array($l, $this->collVshowVusers, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collVshowVusers, $l);
+			$l->setvshow($this);
 		}
 	}
 
@@ -4660,47 +4660,47 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this kshow is new, it will return
-	 * an empty collection; or if this kshow has previously
-	 * been saved, it will retrieve related KshowKusers from storage.
+	 * Otherwise if this vshow is new, it will return
+	 * an empty collection; or if this vshow has previously
+	 * been saved, it will retrieve related VshowVusers from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in kshow.
+	 * actually need in vshow.
 	 */
-	public function getKshowKusersJoinkuser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getVshowVusersJoinvuser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
 			$criteria = clone $criteria;
 		}
 
-		if ($this->collKshowKusers === null) {
+		if ($this->collVshowVusers === null) {
 			if ($this->isNew()) {
-				$this->collKshowKusers = array();
+				$this->collVshowVusers = array();
 			} else {
 
-				$criteria->add(KshowKuserPeer::KSHOW_ID, $this->id);
+				$criteria->add(VshowVuserPeer::VSHOW_ID, $this->id);
 
-				$this->collKshowKusers = KshowKuserPeer::doSelectJoinkuser($criteria, $con, $join_behavior);
+				$this->collVshowVusers = VshowVuserPeer::doSelectJoinvuser($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(KshowKuserPeer::KSHOW_ID, $this->id);
+			$criteria->add(VshowVuserPeer::VSHOW_ID, $this->id);
 
-			if (!isset($this->lastKshowKuserCriteria) || !$this->lastKshowKuserCriteria->equals($criteria)) {
-				$this->collKshowKusers = KshowKuserPeer::doSelectJoinkuser($criteria, $con, $join_behavior);
+			if (!isset($this->lastVshowVuserCriteria) || !$this->lastVshowVuserCriteria->equals($criteria)) {
+				$this->collVshowVusers = VshowVuserPeer::doSelectJoinvuser($criteria, $con, $join_behavior);
 			}
 		}
-		$this->lastKshowKuserCriteria = $criteria;
+		$this->lastVshowVuserCriteria = $criteria;
 
-		return $this->collKshowKusers;
+		return $this->collVshowVusers;
 	}
 
 	/**
@@ -4735,8 +4735,8 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Gets an array of PuserRole objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this kshow has previously been saved, it will retrieve
-	 * related PuserRoles from storage. If this kshow is new, it will return
+	 * Otherwise if this vshow has previously been saved, it will retrieve
+	 * related PuserRoles from storage. If this vshow is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
@@ -4747,7 +4747,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	public function getPuserRoles($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -4759,7 +4759,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			   $this->collPuserRoles = array();
 			} else {
 
-				$criteria->add(PuserRolePeer::KSHOW_ID, $this->id);
+				$criteria->add(PuserRolePeer::VSHOW_ID, $this->id);
 
 				PuserRolePeer::addSelectColumns($criteria);
 				$this->collPuserRoles = PuserRolePeer::doSelect($criteria, $con);
@@ -4772,7 +4772,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				// one, just return the collection.
 
 
-				$criteria->add(PuserRolePeer::KSHOW_ID, $this->id);
+				$criteria->add(PuserRolePeer::VSHOW_ID, $this->id);
 
 				PuserRolePeer::addSelectColumns($criteria);
 				if (!isset($this->lastPuserRoleCriteria) || !$this->lastPuserRoleCriteria->equals($criteria)) {
@@ -4796,7 +4796,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	public function countPuserRoles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		} else {
 			$criteria = clone $criteria;
 		}
@@ -4812,7 +4812,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				$count = 0;
 			} else {
 
-				$criteria->add(PuserRolePeer::KSHOW_ID, $this->id);
+				$criteria->add(PuserRolePeer::VSHOW_ID, $this->id);
 
 				$count = PuserRolePeer::doCount($criteria, false, $con);
 			}
@@ -4824,7 +4824,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				// one, just return count of the collection.
 
 
-				$criteria->add(PuserRolePeer::KSHOW_ID, $this->id);
+				$criteria->add(PuserRolePeer::VSHOW_ID, $this->id);
 
 				if (!isset($this->lastPuserRoleCriteria) || !$this->lastPuserRoleCriteria->equals($criteria)) {
 					$count = PuserRolePeer::doCount($criteria, false, $con);
@@ -4853,7 +4853,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 		}
 		if (!in_array($l, $this->collPuserRoles, true)) { // only add it if the **same** object is not already associated
 			array_push($this->collPuserRoles, $l);
-			$l->setkshow($this);
+			$l->setvshow($this);
 		}
 	}
 
@@ -4861,18 +4861,18 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this kshow is new, it will return
-	 * an empty collection; or if this kshow has previously
+	 * Otherwise if this vshow is new, it will return
+	 * an empty collection; or if this vshow has previously
 	 * been saved, it will retrieve related PuserRoles from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in kshow.
+	 * actually need in vshow.
 	 */
-	public function getPuserRolesJoinPuserKuserRelatedByPartnerId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getPuserRolesJoinPuserVuserRelatedByPartnerId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -4884,19 +4884,19 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				$this->collPuserRoles = array();
 			} else {
 
-				$criteria->add(PuserRolePeer::KSHOW_ID, $this->id);
+				$criteria->add(PuserRolePeer::VSHOW_ID, $this->id);
 
-				$this->collPuserRoles = PuserRolePeer::doSelectJoinPuserKuserRelatedByPartnerId($criteria, $con, $join_behavior);
+				$this->collPuserRoles = PuserRolePeer::doSelectJoinPuserVuserRelatedByPartnerId($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(PuserRolePeer::KSHOW_ID, $this->id);
+			$criteria->add(PuserRolePeer::VSHOW_ID, $this->id);
 
 			if (!isset($this->lastPuserRoleCriteria) || !$this->lastPuserRoleCriteria->equals($criteria)) {
-				$this->collPuserRoles = PuserRolePeer::doSelectJoinPuserKuserRelatedByPartnerId($criteria, $con, $join_behavior);
+				$this->collPuserRoles = PuserRolePeer::doSelectJoinPuserVuserRelatedByPartnerId($criteria, $con, $join_behavior);
 			}
 		}
 		$this->lastPuserRoleCriteria = $criteria;
@@ -4908,18 +4908,18 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this kshow is new, it will return
-	 * an empty collection; or if this kshow has previously
+	 * Otherwise if this vshow is new, it will return
+	 * an empty collection; or if this vshow has previously
 	 * been saved, it will retrieve related PuserRoles from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in kshow.
+	 * actually need in vshow.
 	 */
-	public function getPuserRolesJoinPuserKuserRelatedByPuserId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getPuserRolesJoinPuserVuserRelatedByPuserId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -4931,19 +4931,19 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				$this->collPuserRoles = array();
 			} else {
 
-				$criteria->add(PuserRolePeer::KSHOW_ID, $this->id);
+				$criteria->add(PuserRolePeer::VSHOW_ID, $this->id);
 
-				$this->collPuserRoles = PuserRolePeer::doSelectJoinPuserKuserRelatedByPuserId($criteria, $con, $join_behavior);
+				$this->collPuserRoles = PuserRolePeer::doSelectJoinPuserVuserRelatedByPuserId($criteria, $con, $join_behavior);
 			}
 		} else {
 			// the following code is to determine if a new query is
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(PuserRolePeer::KSHOW_ID, $this->id);
+			$criteria->add(PuserRolePeer::VSHOW_ID, $this->id);
 
 			if (!isset($this->lastPuserRoleCriteria) || !$this->lastPuserRoleCriteria->equals($criteria)) {
-				$this->collPuserRoles = PuserRolePeer::doSelectJoinPuserKuserRelatedByPuserId($criteria, $con, $join_behavior);
+				$this->collPuserRoles = PuserRolePeer::doSelectJoinPuserVuserRelatedByPuserId($criteria, $con, $join_behavior);
 			}
 		}
 		$this->lastPuserRoleCriteria = $criteria;
@@ -4983,8 +4983,8 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Gets an array of roughcutEntry objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this kshow has previously been saved, it will retrieve
-	 * related roughcutEntrys from storage. If this kshow is new, it will return
+	 * Otherwise if this vshow has previously been saved, it will retrieve
+	 * related roughcutEntrys from storage. If this vshow is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
@@ -4995,7 +4995,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	public function getroughcutEntrys($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -5007,7 +5007,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			   $this->collroughcutEntrys = array();
 			} else {
 
-				$criteria->add(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, $this->id);
+				$criteria->add(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, $this->id);
 
 				roughcutEntryPeer::addSelectColumns($criteria);
 				$this->collroughcutEntrys = roughcutEntryPeer::doSelect($criteria, $con);
@@ -5020,7 +5020,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				// one, just return the collection.
 
 
-				$criteria->add(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, $this->id);
+				$criteria->add(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, $this->id);
 
 				roughcutEntryPeer::addSelectColumns($criteria);
 				if (!isset($this->lastroughcutEntryCriteria) || !$this->lastroughcutEntryCriteria->equals($criteria)) {
@@ -5044,7 +5044,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	public function countroughcutEntrys(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		} else {
 			$criteria = clone $criteria;
 		}
@@ -5060,7 +5060,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				$count = 0;
 			} else {
 
-				$criteria->add(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, $this->id);
+				$criteria->add(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, $this->id);
 
 				$count = roughcutEntryPeer::doCount($criteria, false, $con);
 			}
@@ -5072,7 +5072,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				// one, just return count of the collection.
 
 
-				$criteria->add(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, $this->id);
+				$criteria->add(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, $this->id);
 
 				if (!isset($this->lastroughcutEntryCriteria) || !$this->lastroughcutEntryCriteria->equals($criteria)) {
 					$count = roughcutEntryPeer::doCount($criteria, false, $con);
@@ -5101,7 +5101,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 		}
 		if (!in_array($l, $this->collroughcutEntrys, true)) { // only add it if the **same** object is not already associated
 			array_push($this->collroughcutEntrys, $l);
-			$l->setkshow($this);
+			$l->setvshow($this);
 		}
 	}
 
@@ -5109,18 +5109,18 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this kshow is new, it will return
-	 * an empty collection; or if this kshow has previously
+	 * Otherwise if this vshow is new, it will return
+	 * an empty collection; or if this vshow has previously
 	 * been saved, it will retrieve related roughcutEntrys from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in kshow.
+	 * actually need in vshow.
 	 */
 	public function getroughcutEntrysJoinentryRelatedByRoughcutId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -5132,7 +5132,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				$this->collroughcutEntrys = array();
 			} else {
 
-				$criteria->add(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, $this->id);
+				$criteria->add(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, $this->id);
 
 				$this->collroughcutEntrys = roughcutEntryPeer::doSelectJoinentryRelatedByRoughcutId($criteria, $con, $join_behavior);
 			}
@@ -5141,7 +5141,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, $this->id);
+			$criteria->add(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, $this->id);
 
 			if (!isset($this->lastroughcutEntryCriteria) || !$this->lastroughcutEntryCriteria->equals($criteria)) {
 				$this->collroughcutEntrys = roughcutEntryPeer::doSelectJoinentryRelatedByRoughcutId($criteria, $con, $join_behavior);
@@ -5156,18 +5156,18 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this kshow is new, it will return
-	 * an empty collection; or if this kshow has previously
+	 * Otherwise if this vshow is new, it will return
+	 * an empty collection; or if this vshow has previously
 	 * been saved, it will retrieve related roughcutEntrys from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in kshow.
+	 * actually need in vshow.
 	 */
 	public function getroughcutEntrysJoinentryRelatedByEntryId($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -5179,7 +5179,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				$this->collroughcutEntrys = array();
 			} else {
 
-				$criteria->add(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, $this->id);
+				$criteria->add(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, $this->id);
 
 				$this->collroughcutEntrys = roughcutEntryPeer::doSelectJoinentryRelatedByEntryId($criteria, $con, $join_behavior);
 			}
@@ -5188,7 +5188,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(roughcutEntryPeer::ROUGHCUT_KSHOW_ID, $this->id);
+			$criteria->add(roughcutEntryPeer::ROUGHCUT_VSHOW_ID, $this->id);
 
 			if (!isset($this->lastroughcutEntryCriteria) || !$this->lastroughcutEntryCriteria->equals($criteria)) {
 				$this->collroughcutEntrys = roughcutEntryPeer::doSelectJoinentryRelatedByEntryId($criteria, $con, $join_behavior);
@@ -5231,8 +5231,8 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	 * Gets an array of widget objects which contain a foreign key that references this object.
 	 *
 	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
-	 * Otherwise if this kshow has previously been saved, it will retrieve
-	 * related widgets from storage. If this kshow is new, it will return
+	 * Otherwise if this vshow has previously been saved, it will retrieve
+	 * related widgets from storage. If this vshow is new, it will return
 	 * an empty collection or the current collection, the criteria is ignored on a new object.
 	 *
 	 * @param      PropelPDO $con
@@ -5243,7 +5243,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	public function getwidgets($criteria = null, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -5255,7 +5255,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			   $this->collwidgets = array();
 			} else {
 
-				$criteria->add(widgetPeer::KSHOW_ID, $this->id);
+				$criteria->add(widgetPeer::VSHOW_ID, $this->id);
 
 				widgetPeer::addSelectColumns($criteria);
 				$this->collwidgets = widgetPeer::doSelect($criteria, $con);
@@ -5268,7 +5268,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				// one, just return the collection.
 
 
-				$criteria->add(widgetPeer::KSHOW_ID, $this->id);
+				$criteria->add(widgetPeer::VSHOW_ID, $this->id);
 
 				widgetPeer::addSelectColumns($criteria);
 				if (!isset($this->lastwidgetCriteria) || !$this->lastwidgetCriteria->equals($criteria)) {
@@ -5292,7 +5292,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	public function countwidgets(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		} else {
 			$criteria = clone $criteria;
 		}
@@ -5308,7 +5308,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				$count = 0;
 			} else {
 
-				$criteria->add(widgetPeer::KSHOW_ID, $this->id);
+				$criteria->add(widgetPeer::VSHOW_ID, $this->id);
 
 				$count = widgetPeer::doCount($criteria, false, $con);
 			}
@@ -5320,7 +5320,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				// one, just return count of the collection.
 
 
-				$criteria->add(widgetPeer::KSHOW_ID, $this->id);
+				$criteria->add(widgetPeer::VSHOW_ID, $this->id);
 
 				if (!isset($this->lastwidgetCriteria) || !$this->lastwidgetCriteria->equals($criteria)) {
 					$count = widgetPeer::doCount($criteria, false, $con);
@@ -5349,7 +5349,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 		}
 		if (!in_array($l, $this->collwidgets, true)) { // only add it if the **same** object is not already associated
 			array_push($this->collwidgets, $l);
-			$l->setkshow($this);
+			$l->setvshow($this);
 		}
 	}
 
@@ -5357,18 +5357,18 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this kshow is new, it will return
-	 * an empty collection; or if this kshow has previously
+	 * Otherwise if this vshow is new, it will return
+	 * an empty collection; or if this vshow has previously
 	 * been saved, it will retrieve related widgets from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in kshow.
+	 * actually need in vshow.
 	 */
 	public function getwidgetsJoinentry($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -5380,7 +5380,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				$this->collwidgets = array();
 			} else {
 
-				$criteria->add(widgetPeer::KSHOW_ID, $this->id);
+				$criteria->add(widgetPeer::VSHOW_ID, $this->id);
 
 				$this->collwidgets = widgetPeer::doSelectJoinentry($criteria, $con, $join_behavior);
 			}
@@ -5389,7 +5389,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(widgetPeer::KSHOW_ID, $this->id);
+			$criteria->add(widgetPeer::VSHOW_ID, $this->id);
 
 			if (!isset($this->lastwidgetCriteria) || !$this->lastwidgetCriteria->equals($criteria)) {
 				$this->collwidgets = widgetPeer::doSelectJoinentry($criteria, $con, $join_behavior);
@@ -5404,18 +5404,18 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	/**
 	 * If this collection has already been initialized with
 	 * an identical criteria, it returns the collection.
-	 * Otherwise if this kshow is new, it will return
-	 * an empty collection; or if this kshow has previously
+	 * Otherwise if this vshow is new, it will return
+	 * an empty collection; or if this vshow has previously
 	 * been saved, it will retrieve related widgets from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
-	 * actually need in kshow.
+	 * actually need in vshow.
 	 */
 	public function getwidgetsJoinuiConf($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		if ($criteria === null) {
-			$criteria = new Criteria(kshowPeer::DATABASE_NAME);
+			$criteria = new Criteria(vshowPeer::DATABASE_NAME);
 		}
 		elseif ($criteria instanceof Criteria)
 		{
@@ -5427,7 +5427,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 				$this->collwidgets = array();
 			} else {
 
-				$criteria->add(widgetPeer::KSHOW_ID, $this->id);
+				$criteria->add(widgetPeer::VSHOW_ID, $this->id);
 
 				$this->collwidgets = widgetPeer::doSelectJoinuiConf($criteria, $con, $join_behavior);
 			}
@@ -5436,7 +5436,7 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			// called for.  If the criteria is the same as the last
 			// one, just return the collection.
 
-			$criteria->add(widgetPeer::KSHOW_ID, $this->id);
+			$criteria->add(widgetPeer::VSHOW_ID, $this->id);
 
 			if (!isset($this->lastwidgetCriteria) || !$this->lastwidgetCriteria->equals($criteria)) {
 				$this->collwidgets = widgetPeer::doSelectJoinuiConf($criteria, $con, $join_behavior);
@@ -5459,18 +5459,18 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
-			if ($this->collkvotesRelatedByKshowId) {
-				foreach ((array) $this->collkvotesRelatedByKshowId as $o) {
+			if ($this->collvvotesRelatedByVshowId) {
+				foreach ((array) $this->collvvotesRelatedByVshowId as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
-			if ($this->collkvotesRelatedByKuserId) {
-				foreach ((array) $this->collkvotesRelatedByKuserId as $o) {
+			if ($this->collvvotesRelatedByVuserId) {
+				foreach ((array) $this->collvvotesRelatedByVuserId as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
-			if ($this->collKshowKusers) {
-				foreach ((array) $this->collKshowKusers as $o) {
+			if ($this->collVshowVusers) {
+				foreach ((array) $this->collVshowVusers as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
@@ -5491,13 +5491,13 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 			}
 		} // if ($deep)
 
-		$this->collkvotesRelatedByKshowId = null;
-		$this->collkvotesRelatedByKuserId = null;
-		$this->collKshowKusers = null;
+		$this->collvvotesRelatedByVshowId = null;
+		$this->collvvotesRelatedByVuserId = null;
+		$this->collVshowVusers = null;
 		$this->collPuserRoles = null;
 		$this->collroughcutEntrys = null;
 		$this->collwidgets = null;
-			$this->akuser = null;
+			$this->avuser = null;
 	}
 
 	/* ---------------------- CustomData functions ------------------------- */
@@ -5643,4 +5643,4 @@ abstract class Basekshow extends BaseObject  implements Persistent {
 	
 	/* ---------------------- CustomData functions ------------------------- */
 	
-} // Basekshow
+} // Basevshow

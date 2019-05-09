@@ -4,7 +4,7 @@
  * @package plugins.quiz
  * @subpackage lib.enum
  */
-class QuizUserEntryStatus implements IKalturaPluginEnum,UserEntryStatus {
+class QuizUserEntryStatus implements IVidiunPluginEnum,UserEntryStatus {
 
 	const QUIZ_SUBMITTED = 3;
 

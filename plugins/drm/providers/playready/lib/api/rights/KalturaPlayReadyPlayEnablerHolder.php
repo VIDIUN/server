@@ -3,17 +3,17 @@
  * @package plugins.playReady
  * @subpackage api.objects
  */
-class KalturaPlayReadyPlayEnablerHolder extends KalturaObject
+class VidiunPlayReadyPlayEnablerHolder extends VidiunObject
 {
 	/**
 	 * The type of the play enabler
 	 * 
-	 * @var KalturaPlayReadyPlayEnablerType
+	 * @var VidiunPlayReadyPlayEnablerType
 	 */
 	public $type;
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{

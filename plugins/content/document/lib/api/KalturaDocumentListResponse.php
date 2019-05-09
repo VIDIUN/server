@@ -3,10 +3,10 @@
  * @package plugins.document
  * @subpackage api.objects
  */
-class KalturaDocumentListResponse extends KalturaListResponse
+class VidiunDocumentListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaDocumentEntryArray
+	 * @var VidiunDocumentEntryArray
 	 * @readonly
 	 */
 	public $objects;

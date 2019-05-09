@@ -55,7 +55,7 @@ class YahooDistributionProfile extends ConfigurableDistributionProfile
 
 		$allFieldValues = $this->getAllFieldValues($entryDistribution);
 		if (!$allFieldValues || !is_array($allFieldValues)) {
-		    KalturaLog::err('Error getting field values from entry distribution id ['.$entryDistribution->getId().'] profile id ['.$this->getId().']');
+		    VidiunLog::err('Error getting field values from entry distribution id ['.$entryDistribution->getId().'] profile id ['.$this->getId().']');
 		    return $validationErrors;
 		}
 		
@@ -68,7 +68,7 @@ class YahooDistributionProfile extends ConfigurableDistributionProfile
 		
 	    $emailField = YahooDistributionField::CONTACT_EMAIL;
 		$emailValue = $allFieldValues[$emailField];
-		if ($emailValue && !kString::isEmailString($emailValue))
+		if ($emailValue && !vString::isEmailString($emailValue))
 		{
 		    $validationError = $this->createValidationError($action, DistributionErrorType::INVALID_DATA, $this->getUserFriendlyFieldName($emailField));
 			$validationError->setValidationErrorType(DistributionValidationErrorType::INVALID_FORMAT);
@@ -201,7 +201,7 @@ class YahooDistributionProfile extends ConfigurableDistributionProfile
 			if (!$smallThumbFound || !$largeThumbFound)
 			{
 				foreach ($thumbAssets as $thumbAsset) {
-					/* @var $thumbAsset KalturaThumbAsset */
+					/* @var $thumbAsset VidiunThumbAsset */
 					if (empty($thumbAsset)) {
 						continue;
 					}

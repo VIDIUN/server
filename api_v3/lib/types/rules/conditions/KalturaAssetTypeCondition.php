@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAssetTypeCondition extends KalturaCondition
+class VidiunAssetTypeCondition extends VidiunCondition
 {
 	/**
-	 * @dynamicType KalturaAssetType
+	 * @dynamicType VidiunAssetType
 	 * @var string
 	 */
 	public $assetTypes;
@@ -20,14 +20,14 @@ class KalturaAssetTypeCondition extends KalturaCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kAssetTypeCondition();
+			$dbObject = new vAssetTypeCondition();
 
-		/** @var $dbObject kAssetTypeCondition */
+		/** @var $dbObject vAssetTypeCondition */
 		$dbObject = parent::toObject($dbObject, $skip);
 
 		if (!is_null($this->assetTypes))
@@ -37,11 +37,11 @@ class KalturaAssetTypeCondition extends KalturaCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/** @var $dbObject kAssetTypeCondition */
+		/** @var $dbObject vAssetTypeCondition */
 		parent::doFromObject($dbObject, $responseProfile);
 		if($this->shouldGet('AssetTypes', $responseProfile))
 			$this->assetTypes = implode(',', $dbObject->getAssetTypes());

@@ -4,7 +4,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaStorageProfileBaseFilter extends KalturaFilter
+abstract class VidiunStorageProfileBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -93,7 +93,7 @@ abstract class KalturaStorageProfileBaseFilter extends KalturaFilter
 	public $systemNameIn;
 
 	/**
-	 * @var KalturaStorageProfileStatus
+	 * @var VidiunStorageProfileStatus
 	 */
 	public $statusEqual;
 
@@ -103,12 +103,12 @@ abstract class KalturaStorageProfileBaseFilter extends KalturaFilter
 	public $statusIn;
 
 	/**
-	 * @var KalturaStorageProfileProtocol
+	 * @var VidiunStorageProfileProtocol
 	 */
 	public $protocolEqual;
 
 	/**
-	 * @dynamicType KalturaStorageProfileProtocol
+	 * @dynamicType VidiunStorageProfileProtocol
 	 * @var string
 	 */
 	public $protocolIn;

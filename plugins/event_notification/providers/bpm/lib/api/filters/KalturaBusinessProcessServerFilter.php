@@ -3,20 +3,20 @@
  * @package plugins.businessProcessNotification
  * @subpackage api.filters
  */
-class KalturaBusinessProcessServerFilter extends KalturaBusinessProcessServerBaseFilter
+class VidiunBusinessProcessServerFilter extends VidiunBusinessProcessServerBaseFilter
 {
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $currentDcOrExternal;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $currentDc;
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -24,16 +24,16 @@ class KalturaBusinessProcessServerFilter extends KalturaBusinessProcessServerBas
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::toObject()
+	 * @see VidiunFilter::toObject()
 	 */
 	public function toObject ( $object_to_fill = null, $props_to_skip = array() )
 	{
-		if(!$this->isNull('currentDc') && KalturaNullableBoolean::toBoolean($this->currentDc))
-			$this->dcEqual = kDataCenterMgr::getCurrentDcId();
+		if(!$this->isNull('currentDc') && VidiunNullableBoolean::toBoolean($this->currentDc))
+			$this->dcEqual = vDataCenterMgr::getCurrentDcId();
 
-		elseif(!$this->isNull('currentDcOrExternal') && KalturaNullableBoolean::toBoolean($this->currentDcOrExternal))
+		elseif(!$this->isNull('currentDcOrExternal') && VidiunNullableBoolean::toBoolean($this->currentDcOrExternal))
 		{
-			$this->dcEqOrNull = kDataCenterMgr::getCurrentDcId();
+			$this->dcEqOrNull = vDataCenterMgr::getCurrentDcId();
 		}
 
 		return parent::toObject($object_to_fill, $props_to_skip);

@@ -6,7 +6,7 @@
  * @subpackage objects
  *
  */
-class KalturaBulkUploadEntryData extends KalturaBulkUploadObjectData
+class VidiunBulkUploadEntryData extends VidiunBulkUploadObjectData
 {
     /**
      * Selected profile id for all bulk entries
@@ -28,7 +28,7 @@ class KalturaBulkUploadEntryData extends KalturaBulkUploadObjectData
 	{
 	    if (!$object_to_fill)
 	    {
-	        $object_to_fill = new kBulkUploadEntryData();
+	        $object_to_fill = new vBulkUploadEntryData();
 	    }
 	    
 	    return parent::toObject($object_to_fill, $props_to_skip);

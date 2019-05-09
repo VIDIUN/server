@@ -30,7 +30,7 @@ class Form_AssetDistributionRuleSubForm extends Form_DistributionSubForm
 
 	public function populateFromObject($object, $add_underscore = true)
 	{
-		/** @var $object KalturaAssetDistributionRule */
+		/** @var $object VidiunAssetDistributionRule */
 		parent::populateFromObject($object, $add_underscore);
 		foreach($object->assetDistributionConditions as $assetDistributionCondition)
 		{

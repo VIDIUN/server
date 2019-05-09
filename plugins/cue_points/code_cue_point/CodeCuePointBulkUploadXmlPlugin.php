@@ -3,7 +3,7 @@
  * Enable code cue point ingestion from XML bulk upload
  * @package plugins.codeCuePoint
  */
-class CodeCuePointBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPending, IKalturaSchemaContributor
+class CodeCuePointBulkUploadXmlPlugin extends VidiunPlugin implements IVidiunPending, IVidiunSchemaContributor
 {
 	const PLUGIN_NAME = 'codeCuePointBulkUploadXml';
 	const BULK_UPLOAD_XML_PLUGIN_NAME = 'bulkUploadXml';
@@ -13,21 +13,21 @@ class CodeCuePointBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaP
 	const BULK_UPLOAD_XML_VERSION_BUILD = 0;
 
 	/* (non-PHPdoc)
-	 * @see KalturaPlugin::getInstance()
+	 * @see VidiunPlugin::getInstance()
 	 */
 	public function getInstance($interface)
 	{
 		if($this instanceof $interface)
 			return $this;
 			
-		if($interface == 'IKalturaBulkUploadXmlHandler')
+		if($interface == 'IVidiunBulkUploadXmlHandler')
 			return CodeCuePointBulkUploadXmlHandler::get();
 			
 		return null;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -35,27 +35,27 @@ class CodeCuePointBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaP
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$bulkUploadXmlVersion = new KalturaVersion(
+		$bulkUploadXmlVersion = new VidiunVersion(
 			self::BULK_UPLOAD_XML_VERSION_MAJOR,
 			self::BULK_UPLOAD_XML_VERSION_MINOR,
 			self::BULK_UPLOAD_XML_VERSION_BUILD);
 			
-		$bulkUploadXmlDependency = new KalturaDependency(self::BULK_UPLOAD_XML_PLUGIN_NAME, $bulkUploadXmlVersion);
-		$codeCuePointDependency = new KalturaDependency(CodeCuePointPlugin::getPluginName());
+		$bulkUploadXmlDependency = new VidiunDependency(self::BULK_UPLOAD_XML_PLUGIN_NAME, $bulkUploadXmlVersion);
+		$codeCuePointDependency = new VidiunDependency(CodeCuePointPlugin::getPluginName());
 		
 		return array($bulkUploadXmlDependency, $codeCuePointDependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if(
 			$coreType != BulkUploadXmlPlugin::getSchemaTypeCoreValue(XmlSchemaType::BULK_UPLOAD_XML)
 			&&
@@ -63,8 +63,8 @@ class CodeCuePointBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaP
 		)
 			return null;
 	
-		$xmlnsBase = "http://" . kConf::get('www_host') . "/$type";
-		$xmlnsPlugin = "http://" . kConf::get('www_host') . "/$type/" . self::getPluginName();
+		$xmlnsBase = "http://" . vConf::get('www_host') . "/$type";
+		$xmlnsPlugin = "http://" . vConf::get('www_host') . "/$type/" . self::getPluginName();
 		
 		$xsd = '
 		

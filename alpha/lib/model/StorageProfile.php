@@ -10,8 +10,8 @@
  */ 
 class StorageProfile extends BaseStorageProfile implements IBaseObject
 {
-	const STORAGE_SERVE_PRIORITY_KALTURA_ONLY = 1;
-	const STORAGE_SERVE_PRIORITY_KALTURA_FIRST = 2;
+	const STORAGE_SERVE_PRIORITY_VIDIUN_ONLY = 1;
+	const STORAGE_SERVE_PRIORITY_VIDIUN_FIRST = 2;
 	const STORAGE_SERVE_PRIORITY_EXTERNAL_FIRST = 3;
 	const STORAGE_SERVE_PRIORITY_EXTERNAL_ONLY = 4;
 	
@@ -19,14 +19,14 @@ class StorageProfile extends BaseStorageProfile implements IBaseObject
 	const STORAGE_STATUS_AUTOMATIC = 2;
 	const STORAGE_STATUS_MANUAL = 3;
 	
-	const STORAGE_KALTURA_DC = 0;
+	const STORAGE_VIDIUN_DC = 0;
 	const STORAGE_PROTOCOL_FTP = 1;
 	const STORAGE_PROTOCOL_SCP = 2;
 	const STORAGE_PROTOCOL_SFTP = 3;
 	const STORAGE_PROTOCOL_S3 = 6;
 	
-	const STORAGE_DEFAULT_KALTURA_PATH_MANAGER = 'kPathManager';
-	const STORAGE_DEFAULT_EXTERNAL_PATH_MANAGER = 'kExternalPathManager';
+	const STORAGE_DEFAULT_VIDIUN_PATH_MANAGER = 'vPathManager';
+	const STORAGE_DEFAULT_EXTERNAL_PATH_MANAGER = 'vExternalPathManager';
 	
 	const CUSTOM_DATA_DELIVERY_IDS = 'delivery_profile_ids';
 	const CUSTOM_DATA_PATH_MANAGER_PARAMS = 'path_manager_params';
@@ -37,12 +37,12 @@ class StorageProfile extends BaseStorageProfile implements IBaseObject
 	const CUSTOM_DATA_SHOULD_EXPORT_THUMBS ='should_export_thumbs';
 
 	/**
-	 * @var kStorageProfileScope
+	 * @var vStorageProfileScope
 	 */
 	protected $scope;
 	
 	/**
-	 * @return kPathManager
+	 * @return vPathManager
 	 */
 	
 	public function getPathManager()
@@ -50,9 +50,9 @@ class StorageProfile extends BaseStorageProfile implements IBaseObject
 		$class = $this->getPathManagerClass();
 		if(!$class || !strlen(trim($class)) || !class_exists($class))
 		{
-			if($this->getProtocol() == self::STORAGE_KALTURA_DC)
+			if($this->getProtocol() == self::STORAGE_VIDIUN_DC)
 			{
-				$class = self::STORAGE_DEFAULT_KALTURA_PATH_MANAGER;
+				$class = self::STORAGE_DEFAULT_VIDIUN_PATH_MANAGER;
 			}
 			else
 			{
@@ -200,7 +200,7 @@ class StorageProfile extends BaseStorageProfile implements IBaseObject
 		$scope->setEntryId($scopeEntryId);
 		if(!$this->fulfillsRules($scope))
 		{
-			KalturaLog::log('Storage profile export rules are not fulfilled');
+			VidiunLog::log('Storage profile export rules are not fulfilled');
 			return false;
 		}
 			
@@ -211,12 +211,12 @@ class StorageProfile extends BaseStorageProfile implements IBaseObject
 	{
 		if($this->isExported($key))
 		{
-			KalturaLog::info('Flavor was already exported');
+			VidiunLog::info('Flavor was already exported');
 			return false;
 		}
 		if(!$this->isValidFileSync($key))
 		{
-			KalturaLog::info('File sync is not valid for export');
+			VidiunLog::info('File sync is not valid for export');
 			return false;
 		}
 		return true;	    
@@ -256,9 +256,9 @@ class StorageProfile extends BaseStorageProfile implements IBaseObject
 	/**
 	 * Validate if the entry should be exported to the remote storage according to the defined export rules
 	 * 
-	 * @param kStorageProfileScope $scope
+	 * @param vStorageProfileScope $scope
 	 */
-	public function fulfillsRules(kStorageProfileScope $scope)
+	public function fulfillsRules(vStorageProfileScope $scope)
 	{
 		if(!PermissionPeer::isValidForPartner(PermissionName::FEATURE_REMOTE_STORAGE_RULE, $this->getPartnerId()))
 			return true;
@@ -267,33 +267,33 @@ class StorageProfile extends BaseStorageProfile implements IBaseObject
 			return true;
 			
 		$context = null;
-		if(!array_key_exists($this->getId(), kStorageExporter::$entryContextDataResult))
+		if(!array_key_exists($this->getId(), vStorageExporter::$entryContextDataResult))
 		{
-			kStorageExporter::$entryContextDataResult[$this->getId()] = array();
+			vStorageExporter::$entryContextDataResult[$this->getId()] = array();
 		}
 		
-		if(array_key_exists($scope->getEntryId(), kStorageExporter::$entryContextDataResult[$this->getId()]))
+		if(array_key_exists($scope->getEntryId(), vStorageExporter::$entryContextDataResult[$this->getId()]))
 		{
-			$context = kStorageExporter::$entryContextDataResult[$this->getId()][$scope->getEntryId()];
+			$context = vStorageExporter::$entryContextDataResult[$this->getId()][$scope->getEntryId()];
 		}
 		else
 		{	
-			$context = new kContextDataResult();	
+			$context = new vContextDataResult();	
 			foreach ($this->getRules() as $rule) 
 			{
-				/* @var $rule kRule */
+				/* @var $rule vRule */
 				$rule->setScope($scope);
 				$fulfilled = $rule->applyContext($context);
 				
 				if($fulfilled && $rule->getStopProcessing())
 					break;
 			}
-			kStorageExporter::$entryContextDataResult[$this->getId()][$scope->getEntryId()] = $context;
+			vStorageExporter::$entryContextDataResult[$this->getId()][$scope->getEntryId()] = $context;
 		}
 		
 		foreach ($context->getActions() as $action) 
 		{
-			/* @var $action kRuleAction */
+			/* @var $action vRuleAction */
 			if($action->getType() == RuleActionType::ADD_TO_STORAGE)
 				return true;
 		}
@@ -308,11 +308,11 @@ class StorageProfile extends BaseStorageProfile implements IBaseObject
 	 */
 	public function isExported(FileSyncKey $key)
 	{
-		$storageFileSync = kFileSyncUtils::getReadyPendingExternalFileSyncForKey($key, $this->getId());
+		$storageFileSync = vFileSyncUtils::getReadyPendingExternalFileSyncForKey($key, $this->getId());
 
 		if($storageFileSync) // already exported or currently being exported
 		{
-			KalturaLog::log(__METHOD__ . " key [$key] already exported or being exported");
+			VidiunLog::log(__METHOD__ . " key [$key] already exported or being exported");
 			return true;
 		}
 		else 
@@ -332,7 +332,7 @@ class StorageProfile extends BaseStorageProfile implements IBaseObject
 
 	    // check if flavor params id is in the list to export
 	    $flavorParamsIdsToExport = $this->getFlavorParamsIds();
-	    KalturaLog::log(__METHOD__ . " flavorParamsIds [$flavorParamsIdsToExport]");
+	    VidiunLog::log(__METHOD__ . " flavorParamsIds [$flavorParamsIdsToExport]");
 	    
 	    if (is_null($flavorParamsIdsToExport) || strlen(trim($flavorParamsIdsToExport)) == 0)
 	    {
@@ -359,25 +359,25 @@ class StorageProfile extends BaseStorageProfile implements IBaseObject
 	
 	public function isValidFileSync(FileSyncKey $key)
 	{
-		KalturaLog::log(__METHOD__ . " - key [$key], externalStorage id[" . $this->getId() . "]");
+		VidiunLog::log(__METHOD__ . " - key [$key], externalStorage id[" . $this->getId() . "]");
 		
-		list($kalturaFileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($key, false, false);
-		if(!$kalturaFileSync) // no local copy to export from
+		list($vidiunFileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($key, false, false);
+		if(!$vidiunFileSync) // no local copy to export from
 		{
-			KalturaLog::log(__METHOD__ . " key [$key] not found localy");
+			VidiunLog::log(__METHOD__ . " key [$key] not found localy");
 			return false;
 		}
 		
-		KalturaLog::log(__METHOD__ . " validating file size [" . $kalturaFileSync->getFileSize() . "] is between min [" . $this->getMinFileSize() . "] and max [" . $this->getMaxFileSize() . "]");
-		if($this->getMaxFileSize() && $kalturaFileSync->getFileSize() > $this->getMaxFileSize()) // too big
+		VidiunLog::log(__METHOD__ . " validating file size [" . $vidiunFileSync->getFileSize() . "] is between min [" . $this->getMinFileSize() . "] and max [" . $this->getMaxFileSize() . "]");
+		if($this->getMaxFileSize() && $vidiunFileSync->getFileSize() > $this->getMaxFileSize()) // too big
 		{
-			KalturaLog::log(__METHOD__ . " key [$key] file too big");
+			VidiunLog::log(__METHOD__ . " key [$key] file too big");
 			return false;
 		}
 			
-		if($this->getMinFileSize() && $kalturaFileSync->getFileSize() < $this->getMinFileSize()) // too small
+		if($this->getMinFileSize() && $vidiunFileSync->getFileSize() < $this->getMinFileSize()) // too small
 		{
-			KalturaLog::log(__METHOD__ . " key [$key] file too small");
+			VidiunLog::log(__METHOD__ . " key [$key] file too small");
 			return false;
 		}
 			
@@ -388,13 +388,13 @@ class StorageProfile extends BaseStorageProfile implements IBaseObject
 	/**
 	 * Get the storage profile scope
 	 * 
-	 * @return kStorageProfileScope
+	 * @return vStorageProfileScope
 	 */
 	public function &getScope()
 	{
 		if (!$this->scope)
 		{
-			$this->scope = new kStorageProfileScope();
+			$this->scope = new vStorageProfileScope();
 			$this->scope->setStorageProfileId($this->getId());
 		}
 			
@@ -402,11 +402,11 @@ class StorageProfile extends BaseStorageProfile implements IBaseObject
 	}
 	
 	/**
-	 * Set the kStorageProfileScope, called internally only
+	 * Set the vStorageProfileScope, called internally only
 	 * 
 	 * @param $scope
 	 */
-	protected function setScope(kStorageProfileScope $scope)
+	protected function setScope(vStorageProfileScope $scope)
 	{
 		$this->scope = $scope;
 	}

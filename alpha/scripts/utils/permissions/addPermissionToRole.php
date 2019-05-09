@@ -19,12 +19,12 @@ $dryRun = true;
 if(in_array('realrun', $argv))
 {
 	$dryRun = false;
-	KalturaLog::debug('Using real run mode');
+	VidiunLog::debug('Using real run mode');
 }
 else
-	KalturaLog::debug('Using dry run mode');
+	VidiunLog::debug('Using dry run mode');
 	
-KalturaStatement::setDryRun($dryRun);
+VidiunStatement::setDryRun($dryRun);
 
 $partnerId = $argv[1] == 'null' ? null : $argv[1];
 $roleName = $argv[2];
@@ -43,13 +43,13 @@ $userRoles = UserRolePeer::doSelect($criteria);
 while(count($userRoles))
 {
 	
-	KalturaLog::info("[" . count($userRoles) . "] user roles .");
+	VidiunLog::info("[" . count($userRoles) . "] user roles .");
 	foreach($userRoles as $userRole)
 	{
 		foreach($parmissionNames as $parmissionName)
 			addPermissionsToRole($userRole, $parmissionName);
 	}
-	kMemoryManager::clearMemory();
+	vMemoryManager::clearMemory();
 
 	$nextCriteria = clone $criteria;
 	$nextCriteria->add(UserRolePeer::ID, $userRole->getId(), Criteria::GREATER_THAN);
@@ -58,7 +58,7 @@ while(count($userRoles))
 }
 
 
-KalturaLog::info("Done");
+VidiunLog::info("Done");
 
 
 function addPermissionsToRole($role, $permissionList)
@@ -74,7 +74,7 @@ function addPermissionsToRole($role, $permissionList)
 	foreach ($permissionsToAddArray as $perm)
 	{
 		if (in_array($perm, $currentPermissionsArray)) {
-			KalturaLog::log('Role name ['.$role->getName().'] already has permission ['.$perm.']');
+			VidiunLog::log('Role name ['.$role->getName().'] already has permission ['.$perm.']');
 		}
 		else {
 			$tempArray[] = $perm;
@@ -86,7 +86,7 @@ function addPermissionsToRole($role, $permissionList)
 	$role->setPermissionNames($currentPermissions);
 	$role->save();
 	
-	KalturaLog::log('Added permission ['.$tempString.'] to role name ['.$role->getName().']');
+	VidiunLog::log('Added permission ['.$tempString.'] to role name ['.$role->getName().']');
 }
 
 

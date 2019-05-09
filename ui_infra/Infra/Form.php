@@ -21,7 +21,7 @@ class Infra_Form extends Zend_Form
 	 */
 	protected function initKey()
 	{
-		$this->addElementPrefixPath('Kaltura', APPLICATION_PATH . '/lib/Kaltura');
+		$this->addElementPrefixPath('Vidiun', APPLICATION_PATH . '/lib/Vidiun');
 
 		$validator = new Infra_SecurityKey(get_class($this));
 		$this->addElement('hidden', 'k', array(
@@ -29,13 +29,13 @@ class Infra_Form extends Zend_Form
 			'required' => true,
 			'value' => $validator->getKey(),
 		));
-		$kElement = $this->getElement('k');
-		$kElement->setAutoInsertNotEmptyValidator(false);
-		$kElement->addValidator($validator);
+		$vElement = $this->getElement('k');
+		$vElement->setAutoInsertNotEmptyValidator(false);
+		$vElement->addValidator($validator);
 	}
 
 	/**
-	 * @param Kaltura_Client_ObjectBase $object
+	 * @param Vidiun_Client_ObjectBase $object
 	 * @param boolean $add_underscore
 	 */
 	public function populateFromObject($object, $add_underscore = true)
@@ -57,11 +57,11 @@ class Infra_Form extends Zend_Form
 	}
 
 	/**
-	 * @param string $objectType Kaltura client class name
+	 * @param string $objectType Vidiun client class name
 	 * @param array $properties
 	 * @param boolean $add_underscore
 	 * @param boolean $include_empty_fields
-	 * @return Kaltura_Client_ObjectBase
+	 * @return Vidiun_Client_ObjectBase
 	 */
 	public function loadObject($object, array $properties, $add_underscore = true, $include_empty_fields = false)
 	{
@@ -94,11 +94,11 @@ class Infra_Form extends Zend_Form
 	}
 
 	/**
-	 * @param string $objectType Kaltura client class name
+	 * @param string $objectType Vidiun client class name
 	 * @param array $properties
 	 * @param boolean $add_underscore
 	 * @param boolean $include_empty_fields
-	 * @return Kaltura_Client_ObjectBase
+	 * @return Vidiun_Client_ObjectBase
 	 */
 	public function getObject($objectType, array $properties, $add_underscore = true, $include_empty_fields = false)
 	{

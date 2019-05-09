@@ -11,7 +11,7 @@ function prop ( $partner , $prop_name  )
 function age ( $partner )
 {
 	$created_at = $partner->getCreatedAt(null);
-	$str = kString::formatDate	( $created_at );
+	$str = vString::formatDate	( $created_at );
 	return $str;
 }
 

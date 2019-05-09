@@ -28,7 +28,7 @@ class listentriesAction extends defPartnerservices2Action
 					"page_size" => array ("type" => "integer", "desc" => ""),
 					"page" => array ("type" => "integer", "desc" => ""),
 					"entries" => array ("type" => "*entry", "desc" => ""),
-					"user" => array ("type" => "PuserKuser", "desc" => ""),
+					"user" => array ("type" => "PuserVuser", "desc" => ""),
 					),
 				"errors" => array (
 				)
@@ -46,7 +46,7 @@ class listentriesAction extends defPartnerservices2Action
 
 	protected function getObjectPrefix () { return "entries"; } 
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 		
@@ -63,17 +63,17 @@ class listentriesAction extends defPartnerservices2Action
 
 		$offset = ($page-1)* $limit;
 
-		kuserPeer::setUseCriteriaFilter( false );		
+		vuserPeer::setUseCriteriaFilter( false );		
 		//entryPeer::setUseCriteriaFilter( false );
 
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 
 		// filter
 		$filter = new entryFilter(  );
 		$fields_set = $filter->fillObjectFromRequest( $this->getInputParams() , "filter_" , null );
 
 		$this->setExtraFilters ( $filter );
-		$filter->setPartnerSearchScope( baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE );
+		$filter->setPartnerSearchScope( baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE );
 
 		$desired_status = "status:" . $filter->get ( "_eq_status" ) . "," . $filter->get ( "_in_status" );
 		$display_deleted = $this->getP ( "display_deleted" , false ); 	
@@ -90,27 +90,27 @@ class listentriesAction extends defPartnerservices2Action
 		if ( $moderation_status && 
 			( strpos ( $moderation_status , "1,5" ) !== false  || strpos ( $moderation_status , "5,1" ) !== false ) )
 		{
-			// this is when the KMC requests the moderated entries
+			// this is when the VMC requests the moderated entries
 			$filter->set ( "_in_status" , $filter->get ( "_in_status" ) . ",5" ) ;  // add the status '5' 
 		}
 		
 		$this->fixModerationStatusForBackwardCompatibility($filter);
 				
-		$puser_kuser = null;
+		$puser_vuser = null;
 		$use_filter_puser_id = $this->getP ( "use_filter_puser_id" , 1 );
 		if ( $use_filter_puser_id == "false" ) $use_filter_puser_id = false;
 		
 		if ( $use_filter_puser_id )
 		{
-			// if so - assume the producer_id is infact a puser_id and the kuser_id should be retrieved
+			// if so - assume the producer_id is infact a puser_id and the vuser_id should be retrieved
 			$target_puser_id = $filter->get ( "_eq_user_id" );
 			if ( $target_puser_id !== null )
 			{
-				$puser_kuser = PuserKuserPeer::retrieveByPartnerAndUid( $partner_id , null /* $subp_id */, $target_puser_id , false);
-				if ( $puser_kuser )
+				$puser_vuser = PuserVuserPeer::retrieveByPartnerAndUid( $partner_id , null /* $subp_id */, $target_puser_id , false);
+				if ( $puser_vuser )
 				{
-					$filter->set ( "_eq_user_id" ,  $puser_kuser->getkuserId() );
-					//	$this->setP ( "filter__eq_producer_id" , $puser_kuser->getkuserId() );
+					$filter->set ( "_eq_user_id" ,  $puser_vuser->getvuserId() );
+					//	$this->setP ( "filter__eq_producer_id" , $puser_vuser->getvuserId() );
 				}
 			}
 		}
@@ -123,9 +123,9 @@ class listentriesAction extends defPartnerservices2Action
 		
 		$filter->attachToCriteria( $c );
 
-		// for some entry types - there are no kshow or kusers - don't join even when detailed
+		// for some entry types - there are no vshow or vusers - don't join even when detailed
 		if ( $this->joinOnDetailed () )	
-			$list = entryPeer::doSelectJoinKuser( $c );
+			$list = entryPeer::doSelectJoinVuser( $c );
 		else 
 			$list = entryPeer::doSelect( $c );
 		
@@ -160,7 +160,7 @@ class listentriesAction extends defPartnerservices2Action
 		$this->addMsg ( $this->getObjectPrefix() , $wrapper ) ;
 		if ( $use_filter_puser_id )
 		{
-			$this->addMsg ( "user" , objectWrapperBase::getWrapperClass( $puser_kuser  , objectWrapperBase::DETAIL_LEVEL_REGULAR ) );
+			$this->addMsg ( "user" , objectWrapperBase::getWrapperClass( $puser_vuser  , objectWrapperBase::DETAIL_LEVEL_REGULAR ) );
 		}
 	}
 	

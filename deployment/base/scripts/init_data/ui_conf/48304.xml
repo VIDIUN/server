@@ -1,60 +1,60 @@
 <layouts isPlaylist="multi">
-  <layout layoutId="" skinPath="/content/uiconf/kaltura/appstudio/v.1/kdp_skin_aps_v2.swf" playerName="playlist light">
+  <layout layoutId="" skinPath="/content/uiconf/vidiun/appstudio/v.1/vdp_skin_aps_v2.swf" playerName="playlist light">
     <Canvas id="topLevelLayout" width="100%" height="100%" styleName="topLevelLayout">
       <VBox id="horizontalPlayerHolder" width="100%" height="100%" styleName="noGapsNoPadding">
         <VBox id="player" width="100%" height="100%" styleName="noGapsNoPadding">
           <Canvas height="100%" id="PlayerHolder" styleName="PlayerBackground" width="100%">
-          	<Module height="0" id="stats" k_path="stats/KalturaStatsModule.swf" width="0"/>
-            <KplayerModule height="100%" id="myKplayer" k_path="kplayer/KplayerModule.swf" styleName="centered" width="100%"/>
-            <screens height="100%" id="screens" styleName="centered" width="100%" k_path="screens/Screens.swf" k_end_screen_id="endScreen" k_end_screen_over_id="endScreen" k_pause_screen_id="pauseScreen" k_pause_screen_over_id="pauseScreen" k_play_screen_id="emptyScreen" k_play_screen_over_id="playScreen" k_start_screen_id="startScreen" k_start_screen_over_id="startScreen"/>
+          	<Module height="0" id="stats" v_path="stats/VidiunStatsModule.swf" width="0"/>
+            <VplayerModule height="100%" id="myVplayer" v_path="vplayer/VplayerModule.swf" styleName="centered" width="100%"/>
+            <screens height="100%" id="screens" styleName="centered" width="100%" v_path="screens/Screens.swf" v_end_screen_id="endScreen" v_end_screen_over_id="endScreen" v_pause_screen_id="pauseScreen" v_pause_screen_over_id="pauseScreen" v_play_screen_id="emptyScreen" v_play_screen_over_id="playScreen" v_start_screen_id="startScreen" v_start_screen_over_id="startScreen"/>
           </Canvas>
-          <HBox id="ControllerScreen" width="100%" height="35" styleName="controllerBoxDark" k_theme_change="true">
+          <HBox id="ControllerScreen" width="100%" height="35" styleName="controllerBoxDark" v_theme_change="true">
             <HBox id="ControllerScreenInner" width="100%" height="35" styleName="transparentContainer">
-              <Button id="playBtnControllerScreen" command="play" width="25" height="25" k_buttonType="buttonIconControllerArea" styleName="play" tooltip=""/>
-              <PrevButton id="plPrevButton" direction="prev" k_path="playlist/view/modules/PlaylistNextPrevButton.swf" k_theme_change="true"/>
+              <Button id="playBtnControllerScreen" command="play" width="25" height="25" v_buttonType="buttonIconControllerArea" styleName="play" tooltip=""/>
+              <PrevButton id="plPrevButton" direction="prev" v_path="playlist/view/modules/PlaylistNextPrevButton.swf" v_theme_change="true"/>
               <VBox id="scrubberContainerControllerScreen" styleName="noGapsNoPadding" width="100%" height="100%">
                 <Spacer height="7"/>
-                <Scrubber id="scrubberControllerScreen" styleName="scrubberLight" width="100%" k_color_change="true" height="12" k_theme_change="true"/>
+                <Scrubber id="scrubberControllerScreen" styleName="scrubberLight" width="100%" v_color_change="true" height="12" v_theme_change="true"/>
                 <Spacer height="2"/>
 	            <HBox width="100%" styleName="noGapsNoPadding">
 	              <Spacer width="5"/>
-	              <TimerCountdown id="timerControllerScreen" width="30" height="10" styleName="timer" k_path="timertext/TimerCountdown.swf" timerType="forwards"/>
+	              <TimerCountdown id="timerControllerScreen" width="30" height="10" styleName="timer" v_path="timertext/TimerCountdown.swf" timerType="forwards"/>
 	              <Spacer width="100%"/>
-	              <TimerCountdown id="timerControllerScreen2" width="30" height="10" styleName="timer" k_path="timertext/TimerCountdown.swf" timerType="total"/>
+	              <TimerCountdown id="timerControllerScreen2" width="30" height="10" styleName="timer" v_path="timertext/TimerCountdown.swf" timerType="total"/>
 	              <Spacer width="2"/>
 	            </HBox>
               </VBox>
-              <VolumeModule width="20" height="15" id="volumeBarControllerScreen" k_path="VolumeBars/VolumeBarB.swf" styleName="volumebarLight" tooltip="Change volume" k_theme_change="true"/>
-              <Button id="fullScreenBtnControllerScreen" command="fullScreen" k_buttonType="buttonIconControllerArea" width="autoSize" height="autoSize" label="fullscreen" styleName="fullScreenBtn" tooltip="Toggle fullscreen"/>
-              <Button id="shareBtnControllerScreen" k_buttonType="buttonIconControllerArea" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+              <VolumeModule width="20" height="15" id="volumeBarControllerScreen" v_path="VolumeBars/VolumeBarB.swf" styleName="volumebarLight" tooltip="Change volume" v_theme_change="true"/>
+              <Button id="fullScreenBtnControllerScreen" command="fullScreen" v_buttonType="buttonIconControllerArea" width="autoSize" height="autoSize" label="fullscreen" styleName="fullScreenBtn" tooltip="Toggle fullscreen"/>
+              <Button id="shareBtnControllerScreen" v_buttonType="buttonIconControllerArea" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
             </HBox>
             <Spacer width="3"/>
-            <Button id="poweredByControllerScreen" width="32" height="20" k_click="navigate('http://www.kaltura.com')" styleName="kalturaLogoDark" k_theme_change="true"/>
+            <Button id="poweredByControllerScreen" width="32" height="20" v_click="navigate('http://www.vidiun.com')" styleName="vidiunLogoDark" v_theme_change="true"/>
             <Spacer width="3"/>
           </HBox>
         </VBox>
-        <VBox width="100%" height="265" id="plContainer" k_hide_in_fullscreen="true" styleName="playlistBgLight" k_theme_change="true">
-          <Playlist player="{myKplayer}" visible="false" includeInLayout="false" id="playlistApi" k_path="playlist/PlaylistAPI.swf" width="0" height="0"/>
+        <VBox width="100%" height="265" id="plContainer" v_hide_in_fullscreen="true" styleName="playlistBgLight" v_theme_change="true">
+          <Playlist player="{myVplayer}" visible="false" includeInLayout="false" id="playlistApi" v_path="playlist/PlaylistAPI.swf" width="0" height="0"/>
           <Canvas width="100%" height="30" visible="{playlistApi.multiPlaylists}" includeInLayout="{playlistApi.multiPlaylists}">
-            <PlaylistTabs id="plTabs" k_theme_change="true" styleName="scrollingTabsStyle" k_path="playlist/view/modules/PlaylistScrollingTabs.swf" height="100%" width="100%" scrollJump="120" buttonWidth="20"/>
+            <PlaylistTabs id="plTabs" v_theme_change="true" styleName="scrollingTabsStyle" v_path="playlist/view/modules/PlaylistScrollingTabs.swf" height="100%" width="100%" scrollJump="120" buttonWidth="20"/>
           </Canvas>
           <VBox width="100%" height="100%" styleName="playlistHolder">
-            <List id="listDemo" width="100%" height="100%" useHandCursor="true" styleName="plItemsListDark" k_theme_change="true" selectedIndex="{listDemo.dataProvider.getItemIndex(playlistApi.activePlaylist.selectedEntry)}" itemClick="playlistApi.playEntry(listDemo.selectedItem)" dataProvider="{playlistApi.activePlaylist.entries}" k_item_renderer_id="irScreen" variableRowHeight="true"/>
+            <List id="listDemo" width="100%" height="100%" useHandCursor="true" styleName="plItemsListDark" v_theme_change="true" selectedIndex="{listDemo.dataProvider.getItemIndex(playlistApi.activePlaylist.selectedEntry)}" itemClick="playlistApi.playEntry(listDemo.selectedItem)" dataProvider="{playlistApi.activePlaylist.entries}" v_item_renderer_id="irScreen" variableRowHeight="true"/>
           </VBox>
         </VBox>
       </VBox>
-      <Gigya height="100%" id="Gigya" k_share_email_body="Hi%2c%3cbr%3eI watched this video and thought you'd enjoy it too %24URL%24 to watch.%3cbr%3e%0d%0a%24sender%24%0d%0a" k_share_email_subject="Take a look at this video" k_path="addons/Gigya.swf" width="100%"/>
+      <Gigya height="100%" id="Gigya" v_share_email_body="Hi%2c%3cbr%3eI watched this video and thought you'd enjoy it too %24URL%24 to watch.%3cbr%3e%0d%0a%24sender%24%0d%0a" v_share_email_subject="Take a look at this video" v_path="addons/Gigya.swf" width="100%"/>
     </Canvas>
     <popups>
-      <module height="100%" id="report" k_path="popups/Report.swf" width="100%" styleName="report"/>
-      <module height="100%" id="credits" k_path="credits/CreditsWindow.swf" width="100%" styleName="credits"/>
+      <module height="100%" id="report" v_path="popups/Report.swf" width="100%" styleName="report"/>
+      <module height="100%" id="credits" v_path="credits/CreditsWindow.swf" width="100%" styleName="credits"/>
     </popups>
     <screens>
       <screen id="startScreen">
         <VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
           <Tile styleName="TileContainer">
-            <Button id="onVideoPlayBtnStartScreen" command="play" minWidth="75" minHeight="75" width="autoSize" height="autoSize" label="Play video" labelPlacement="top" k_buttonType="buttonVideoArea" styleName="statesPlayBtn" tooltip="Play video"/>
-            <Button id="shareBtnStartScreen" width="autoSize" labelPlacement="top" height="autoSize" k_buttonType="buttonVideoArea" minWidth="75" minHeight="75" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+            <Button id="onVideoPlayBtnStartScreen" command="play" minWidth="75" minHeight="75" width="autoSize" height="autoSize" label="Play video" labelPlacement="top" v_buttonType="buttonVideoArea" styleName="statesPlayBtn" tooltip="Play video"/>
+            <Button id="shareBtnStartScreen" width="autoSize" labelPlacement="top" height="autoSize" v_buttonType="buttonVideoArea" minWidth="75" minHeight="75" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
           </Tile>
         </VBox>
       </screen>
@@ -62,8 +62,8 @@
         <VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
           <Spacer height="100%"/>
           <Tile styleName="TileContainer">
-            <Button id="onVideoPlayBtnPauseScreen" command="play" minWidth="75" minHeight="75" width="autoSize" height="autoSize" label="Play video" labelPlacement="top" k_buttonType="buttonVideoArea" styleName="statesPlayBtn" tooltip="Play video"/>
-            <Button id="shareBtnPauseScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" k_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+            <Button id="onVideoPlayBtnPauseScreen" command="play" minWidth="75" minHeight="75" width="autoSize" height="autoSize" label="Play video" labelPlacement="top" v_buttonType="buttonVideoArea" styleName="statesPlayBtn" tooltip="Play video"/>
+            <Button id="shareBtnPauseScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" v_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
           </Tile>
           <Spacer height="100%"/>
         </VBox>
@@ -72,7 +72,7 @@
         <VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
           <Spacer height="100%"/>
           <Tile styleName="TileContainer">
-            <Button id="shareBtnPlayScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" k_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+            <Button id="shareBtnPlayScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" v_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
           </Tile>
           <Spacer height="100%"/>
         </VBox>
@@ -81,8 +81,8 @@
         <VBox height="100%" id="screenContainer" styleName="screenContainer" width="100%">
           <Spacer height="100%"/>
           <Tile styleName="TileContainer">
-            <Button id="shareBtnEndScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" k_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
-            <Button id="replayBtnEndScreen" command="replay" minWidth="75" minHeight="75" k_buttonType="buttonVideoArea" width="autoSize" labelPlacement="top" height="autoSize" label="replay" styleName="replayBtn" tooltip="replay"/>
+            <Button id="shareBtnEndScreen" width="autoSize" minWidth="75" minHeight="75" height="autoSize" v_buttonType="buttonVideoArea" labelPlacement="top" command="gigyaButton" label="Share" styleName="shareBtn" tooltip="share with friends"/>
+            <Button id="replayBtnEndScreen" command="replay" minWidth="75" minHeight="75" v_buttonType="buttonVideoArea" width="autoSize" labelPlacement="top" height="autoSize" label="replay" styleName="replayBtn" tooltip="replay"/>
           </Tile>
           <Spacer height="100%"/>
         </VBox>
@@ -115,7 +115,7 @@
         <cssSelector componentId="listDemo" newClass="plItemsListLight"/>
         <cssSelector componentId="TopTitleScreen" newClass="controllerBoxLight"/>
         <cssSelector componentId="ControllerScreen" newClass="controllerBoxLight"/>
-        <cssSelector componentId="poweredByControllerScreen" newClass="kalturaLogoLight"/>
+        <cssSelector componentId="poweredByControllerScreen" newClass="vidiunLogoLight"/>
         <cssSelector componentId="plTabs" newClass="scrollingTabsWhite"/>
         <cssSelector componentId="plPrevButton" newClass="nextPrevButtonsBright"/>
         <font>Arial</font>
@@ -160,8 +160,8 @@
     </extraData>
     <uiVars>
 	  <var key="stretchcontent" value="false"/>
-      <var key="k_pl_autoContinue" value="false"/>
-      <var key="k_pl_imageDuration" value="2000"/>
+      <var key="v_pl_autoContinue" value="false"/>
+      <var key="v_pl_imageDuration" value="2000"/>
       <var key="autoplay" value="false"/>
       <var key="mute" value="false"/>
     </uiVars>

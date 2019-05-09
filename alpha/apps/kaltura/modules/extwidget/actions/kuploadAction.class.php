@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage externalWidgets
  */
-class kuploadAction extends sfAction
+class vuploadAction extends sfAction
 {
 	/**
 	 * Will forward to the uploader swf according to the ui_conf_id 
@@ -16,7 +16,7 @@ class kuploadAction extends sfAction
 		
 		if ( !$uiConf )
 		{
-			KExternalErrors::dieError(KExternalErrors::UI_CONF_NOT_FOUND, "UI conf not found");	
+			VExternalErrors::dieError(VExternalErrors::UI_CONF_NOT_FOUND, "UI conf not found");	
 		}
 		
 		$partner_id = $uiConf->getPartnerId();
@@ -27,10 +27,10 @@ class kuploadAction extends sfAction
 		$ui_conf_swf_url = $uiConf->getSwfUrl();
 		if (!$ui_conf_swf_url)
 		{
-			KExternalErrors::dieError(KExternalErrors::ILLEGAL_UI_CONF, "SWF URL not found in UI conf");
+			VExternalErrors::dieError(VExternalErrors::ILLEGAL_UI_CONF, "SWF URL not found in UI conf");
 		}
 			
-		if( kString::beginsWith( $ui_conf_swf_url , "http") )
+		if( vString::beginsWith( $ui_conf_swf_url , "http") )
 		{
 			$swf_url = 	$ui_conf_swf_url; // absolute URL 
 		}
@@ -49,7 +49,7 @@ class kuploadAction extends sfAction
 			"&uiConfId=" . $ui_conf_id.
 			$conf_vars;
 			
-		KExternalErrors::terminateDispatch();
+		VExternalErrors::terminateDispatch();
 		$this->redirect(  "$swf_url?$params");
 	}
 }

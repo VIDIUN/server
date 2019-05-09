@@ -34,11 +34,11 @@ abstract class BaseentryPeer {
 	/** the column name for the ID field */
 	const ID = 'entry.ID';
 
-	/** the column name for the KSHOW_ID field */
-	const KSHOW_ID = 'entry.KSHOW_ID';
+	/** the column name for the VSHOW_ID field */
+	const VSHOW_ID = 'entry.VSHOW_ID';
 
-	/** the column name for the KUSER_ID field */
-	const KUSER_ID = 'entry.KUSER_ID';
+	/** the column name for the VUSER_ID field */
+	const VUSER_ID = 'entry.VUSER_ID';
 
 	/** the column name for the NAME field */
 	const NAME = 'entry.NAME';
@@ -206,10 +206,10 @@ abstract class BaseentryPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'KshowId', 'KuserId', 'Name', 'Type', 'MediaType', 'Data', 'Thumbnail', 'Views', 'Votes', 'Comments', 'Favorites', 'TotalRank', 'Rank', 'Tags', 'Anonymous', 'Status', 'Source', 'SourceId', 'SourceLink', 'LicenseType', 'Credit', 'LengthInMsecs', 'CreatedAt', 'UpdatedAt', 'PartnerId', 'DisplayInSearch', 'SubpId', 'CustomData', 'ScreenName', 'SiteUrl', 'Permissions', 'GroupId', 'Plays', 'PartnerData', 'IntId', 'IndexedCustomData1', 'Description', 'MediaDate', 'AdminTags', 'ModerationStatus', 'ModerationCount', 'ModifiedAt', 'PuserId', 'AccessControlId', 'ConversionProfileId', 'Categories', 'CategoriesIds', 'StartDate', 'EndDate', 'FlavorParamsIds', 'AvailableFrom', 'LastPlayedAt', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'kshowId', 'kuserId', 'name', 'type', 'mediaType', 'data', 'thumbnail', 'views', 'votes', 'comments', 'favorites', 'totalRank', 'rank', 'tags', 'anonymous', 'status', 'source', 'sourceId', 'sourceLink', 'licenseType', 'credit', 'lengthInMsecs', 'createdAt', 'updatedAt', 'partnerId', 'displayInSearch', 'subpId', 'customData', 'screenName', 'siteUrl', 'permissions', 'groupId', 'plays', 'partnerData', 'intId', 'indexedCustomData1', 'description', 'mediaDate', 'adminTags', 'moderationStatus', 'moderationCount', 'modifiedAt', 'puserId', 'accessControlId', 'conversionProfileId', 'categories', 'categoriesIds', 'startDate', 'endDate', 'flavorParamsIds', 'availableFrom', 'lastPlayedAt', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::KSHOW_ID, self::KUSER_ID, self::NAME, self::TYPE, self::MEDIA_TYPE, self::DATA, self::THUMBNAIL, self::VIEWS, self::VOTES, self::COMMENTS, self::FAVORITES, self::TOTAL_RANK, self::RANK, self::TAGS, self::ANONYMOUS, self::STATUS, self::SOURCE, self::SOURCE_ID, self::SOURCE_LINK, self::LICENSE_TYPE, self::CREDIT, self::LENGTH_IN_MSECS, self::CREATED_AT, self::UPDATED_AT, self::PARTNER_ID, self::DISPLAY_IN_SEARCH, self::SUBP_ID, self::CUSTOM_DATA, self::SCREEN_NAME, self::SITE_URL, self::PERMISSIONS, self::GROUP_ID, self::PLAYS, self::PARTNER_DATA, self::INT_ID, self::INDEXED_CUSTOM_DATA_1, self::DESCRIPTION, self::MEDIA_DATE, self::ADMIN_TAGS, self::MODERATION_STATUS, self::MODERATION_COUNT, self::MODIFIED_AT, self::PUSER_ID, self::ACCESS_CONTROL_ID, self::CONVERSION_PROFILE_ID, self::CATEGORIES, self::CATEGORIES_IDS, self::START_DATE, self::END_DATE, self::FLAVOR_PARAMS_IDS, self::AVAILABLE_FROM, self::LAST_PLAYED_AT, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'kshow_id', 'kuser_id', 'name', 'type', 'media_type', 'data', 'thumbnail', 'views', 'votes', 'comments', 'favorites', 'total_rank', 'rank', 'tags', 'anonymous', 'status', 'source', 'source_id', 'source_link', 'license_type', 'credit', 'length_in_msecs', 'created_at', 'updated_at', 'partner_id', 'display_in_search', 'subp_id', 'custom_data', 'screen_name', 'site_url', 'permissions', 'group_id', 'plays', 'partner_data', 'int_id', 'indexed_custom_data_1', 'description', 'media_date', 'admin_tags', 'moderation_status', 'moderation_count', 'modified_at', 'puser_id', 'access_control_id', 'conversion_profile_id', 'categories', 'categories_ids', 'start_date', 'end_date', 'flavor_params_ids', 'available_from', 'last_played_at', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'VshowId', 'VuserId', 'Name', 'Type', 'MediaType', 'Data', 'Thumbnail', 'Views', 'Votes', 'Comments', 'Favorites', 'TotalRank', 'Rank', 'Tags', 'Anonymous', 'Status', 'Source', 'SourceId', 'SourceLink', 'LicenseType', 'Credit', 'LengthInMsecs', 'CreatedAt', 'UpdatedAt', 'PartnerId', 'DisplayInSearch', 'SubpId', 'CustomData', 'ScreenName', 'SiteUrl', 'Permissions', 'GroupId', 'Plays', 'PartnerData', 'IntId', 'IndexedCustomData1', 'Description', 'MediaDate', 'AdminTags', 'ModerationStatus', 'ModerationCount', 'ModifiedAt', 'PuserId', 'AccessControlId', 'ConversionProfileId', 'Categories', 'CategoriesIds', 'StartDate', 'EndDate', 'FlavorParamsIds', 'AvailableFrom', 'LastPlayedAt', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'vshowId', 'vuserId', 'name', 'type', 'mediaType', 'data', 'thumbnail', 'views', 'votes', 'comments', 'favorites', 'totalRank', 'rank', 'tags', 'anonymous', 'status', 'source', 'sourceId', 'sourceLink', 'licenseType', 'credit', 'lengthInMsecs', 'createdAt', 'updatedAt', 'partnerId', 'displayInSearch', 'subpId', 'customData', 'screenName', 'siteUrl', 'permissions', 'groupId', 'plays', 'partnerData', 'intId', 'indexedCustomData1', 'description', 'mediaDate', 'adminTags', 'moderationStatus', 'moderationCount', 'modifiedAt', 'puserId', 'accessControlId', 'conversionProfileId', 'categories', 'categoriesIds', 'startDate', 'endDate', 'flavorParamsIds', 'availableFrom', 'lastPlayedAt', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::VSHOW_ID, self::VUSER_ID, self::NAME, self::TYPE, self::MEDIA_TYPE, self::DATA, self::THUMBNAIL, self::VIEWS, self::VOTES, self::COMMENTS, self::FAVORITES, self::TOTAL_RANK, self::RANK, self::TAGS, self::ANONYMOUS, self::STATUS, self::SOURCE, self::SOURCE_ID, self::SOURCE_LINK, self::LICENSE_TYPE, self::CREDIT, self::LENGTH_IN_MSECS, self::CREATED_AT, self::UPDATED_AT, self::PARTNER_ID, self::DISPLAY_IN_SEARCH, self::SUBP_ID, self::CUSTOM_DATA, self::SCREEN_NAME, self::SITE_URL, self::PERMISSIONS, self::GROUP_ID, self::PLAYS, self::PARTNER_DATA, self::INT_ID, self::INDEXED_CUSTOM_DATA_1, self::DESCRIPTION, self::MEDIA_DATE, self::ADMIN_TAGS, self::MODERATION_STATUS, self::MODERATION_COUNT, self::MODIFIED_AT, self::PUSER_ID, self::ACCESS_CONTROL_ID, self::CONVERSION_PROFILE_ID, self::CATEGORIES, self::CATEGORIES_IDS, self::START_DATE, self::END_DATE, self::FLAVOR_PARAMS_IDS, self::AVAILABLE_FROM, self::LAST_PLAYED_AT, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'vshow_id', 'vuser_id', 'name', 'type', 'media_type', 'data', 'thumbnail', 'views', 'votes', 'comments', 'favorites', 'total_rank', 'rank', 'tags', 'anonymous', 'status', 'source', 'source_id', 'source_link', 'license_type', 'credit', 'length_in_msecs', 'created_at', 'updated_at', 'partner_id', 'display_in_search', 'subp_id', 'custom_data', 'screen_name', 'site_url', 'permissions', 'group_id', 'plays', 'partner_data', 'int_id', 'indexed_custom_data_1', 'description', 'media_date', 'admin_tags', 'moderation_status', 'moderation_count', 'modified_at', 'puser_id', 'access_control_id', 'conversion_profile_id', 'categories', 'categories_ids', 'start_date', 'end_date', 'flavor_params_ids', 'available_from', 'last_played_at', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, )
 	);
 
@@ -220,10 +220,10 @@ abstract class BaseentryPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'KshowId' => 1, 'KuserId' => 2, 'Name' => 3, 'Type' => 4, 'MediaType' => 5, 'Data' => 6, 'Thumbnail' => 7, 'Views' => 8, 'Votes' => 9, 'Comments' => 10, 'Favorites' => 11, 'TotalRank' => 12, 'Rank' => 13, 'Tags' => 14, 'Anonymous' => 15, 'Status' => 16, 'Source' => 17, 'SourceId' => 18, 'SourceLink' => 19, 'LicenseType' => 20, 'Credit' => 21, 'LengthInMsecs' => 22, 'CreatedAt' => 23, 'UpdatedAt' => 24, 'PartnerId' => 25, 'DisplayInSearch' => 26, 'SubpId' => 27, 'CustomData' => 28, 'ScreenName' => 29, 'SiteUrl' => 30, 'Permissions' => 31, 'GroupId' => 32, 'Plays' => 33, 'PartnerData' => 34, 'IntId' => 35, 'IndexedCustomData1' => 36, 'Description' => 37, 'MediaDate' => 38, 'AdminTags' => 39, 'ModerationStatus' => 40, 'ModerationCount' => 41, 'ModifiedAt' => 42, 'PuserId' => 43, 'AccessControlId' => 44, 'ConversionProfileId' => 45, 'Categories' => 46, 'CategoriesIds' => 47, 'StartDate' => 48, 'EndDate' => 49, 'FlavorParamsIds' => 50, 'AvailableFrom' => 51, 'LastPlayedAt' => 52, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'kshowId' => 1, 'kuserId' => 2, 'name' => 3, 'type' => 4, 'mediaType' => 5, 'data' => 6, 'thumbnail' => 7, 'views' => 8, 'votes' => 9, 'comments' => 10, 'favorites' => 11, 'totalRank' => 12, 'rank' => 13, 'tags' => 14, 'anonymous' => 15, 'status' => 16, 'source' => 17, 'sourceId' => 18, 'sourceLink' => 19, 'licenseType' => 20, 'credit' => 21, 'lengthInMsecs' => 22, 'createdAt' => 23, 'updatedAt' => 24, 'partnerId' => 25, 'displayInSearch' => 26, 'subpId' => 27, 'customData' => 28, 'screenName' => 29, 'siteUrl' => 30, 'permissions' => 31, 'groupId' => 32, 'plays' => 33, 'partnerData' => 34, 'intId' => 35, 'indexedCustomData1' => 36, 'description' => 37, 'mediaDate' => 38, 'adminTags' => 39, 'moderationStatus' => 40, 'moderationCount' => 41, 'modifiedAt' => 42, 'puserId' => 43, 'accessControlId' => 44, 'conversionProfileId' => 45, 'categories' => 46, 'categoriesIds' => 47, 'startDate' => 48, 'endDate' => 49, 'flavorParamsIds' => 50, 'availableFrom' => 51, 'lastPlayedAt' => 52, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::KSHOW_ID => 1, self::KUSER_ID => 2, self::NAME => 3, self::TYPE => 4, self::MEDIA_TYPE => 5, self::DATA => 6, self::THUMBNAIL => 7, self::VIEWS => 8, self::VOTES => 9, self::COMMENTS => 10, self::FAVORITES => 11, self::TOTAL_RANK => 12, self::RANK => 13, self::TAGS => 14, self::ANONYMOUS => 15, self::STATUS => 16, self::SOURCE => 17, self::SOURCE_ID => 18, self::SOURCE_LINK => 19, self::LICENSE_TYPE => 20, self::CREDIT => 21, self::LENGTH_IN_MSECS => 22, self::CREATED_AT => 23, self::UPDATED_AT => 24, self::PARTNER_ID => 25, self::DISPLAY_IN_SEARCH => 26, self::SUBP_ID => 27, self::CUSTOM_DATA => 28, self::SCREEN_NAME => 29, self::SITE_URL => 30, self::PERMISSIONS => 31, self::GROUP_ID => 32, self::PLAYS => 33, self::PARTNER_DATA => 34, self::INT_ID => 35, self::INDEXED_CUSTOM_DATA_1 => 36, self::DESCRIPTION => 37, self::MEDIA_DATE => 38, self::ADMIN_TAGS => 39, self::MODERATION_STATUS => 40, self::MODERATION_COUNT => 41, self::MODIFIED_AT => 42, self::PUSER_ID => 43, self::ACCESS_CONTROL_ID => 44, self::CONVERSION_PROFILE_ID => 45, self::CATEGORIES => 46, self::CATEGORIES_IDS => 47, self::START_DATE => 48, self::END_DATE => 49, self::FLAVOR_PARAMS_IDS => 50, self::AVAILABLE_FROM => 51, self::LAST_PLAYED_AT => 52, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'kshow_id' => 1, 'kuser_id' => 2, 'name' => 3, 'type' => 4, 'media_type' => 5, 'data' => 6, 'thumbnail' => 7, 'views' => 8, 'votes' => 9, 'comments' => 10, 'favorites' => 11, 'total_rank' => 12, 'rank' => 13, 'tags' => 14, 'anonymous' => 15, 'status' => 16, 'source' => 17, 'source_id' => 18, 'source_link' => 19, 'license_type' => 20, 'credit' => 21, 'length_in_msecs' => 22, 'created_at' => 23, 'updated_at' => 24, 'partner_id' => 25, 'display_in_search' => 26, 'subp_id' => 27, 'custom_data' => 28, 'screen_name' => 29, 'site_url' => 30, 'permissions' => 31, 'group_id' => 32, 'plays' => 33, 'partner_data' => 34, 'int_id' => 35, 'indexed_custom_data_1' => 36, 'description' => 37, 'media_date' => 38, 'admin_tags' => 39, 'moderation_status' => 40, 'moderation_count' => 41, 'modified_at' => 42, 'puser_id' => 43, 'access_control_id' => 44, 'conversion_profile_id' => 45, 'categories' => 46, 'categories_ids' => 47, 'start_date' => 48, 'end_date' => 49, 'flavor_params_ids' => 50, 'available_from' => 51, 'last_played_at' => 52, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'VshowId' => 1, 'VuserId' => 2, 'Name' => 3, 'Type' => 4, 'MediaType' => 5, 'Data' => 6, 'Thumbnail' => 7, 'Views' => 8, 'Votes' => 9, 'Comments' => 10, 'Favorites' => 11, 'TotalRank' => 12, 'Rank' => 13, 'Tags' => 14, 'Anonymous' => 15, 'Status' => 16, 'Source' => 17, 'SourceId' => 18, 'SourceLink' => 19, 'LicenseType' => 20, 'Credit' => 21, 'LengthInMsecs' => 22, 'CreatedAt' => 23, 'UpdatedAt' => 24, 'PartnerId' => 25, 'DisplayInSearch' => 26, 'SubpId' => 27, 'CustomData' => 28, 'ScreenName' => 29, 'SiteUrl' => 30, 'Permissions' => 31, 'GroupId' => 32, 'Plays' => 33, 'PartnerData' => 34, 'IntId' => 35, 'IndexedCustomData1' => 36, 'Description' => 37, 'MediaDate' => 38, 'AdminTags' => 39, 'ModerationStatus' => 40, 'ModerationCount' => 41, 'ModifiedAt' => 42, 'PuserId' => 43, 'AccessControlId' => 44, 'ConversionProfileId' => 45, 'Categories' => 46, 'CategoriesIds' => 47, 'StartDate' => 48, 'EndDate' => 49, 'FlavorParamsIds' => 50, 'AvailableFrom' => 51, 'LastPlayedAt' => 52, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'vshowId' => 1, 'vuserId' => 2, 'name' => 3, 'type' => 4, 'mediaType' => 5, 'data' => 6, 'thumbnail' => 7, 'views' => 8, 'votes' => 9, 'comments' => 10, 'favorites' => 11, 'totalRank' => 12, 'rank' => 13, 'tags' => 14, 'anonymous' => 15, 'status' => 16, 'source' => 17, 'sourceId' => 18, 'sourceLink' => 19, 'licenseType' => 20, 'credit' => 21, 'lengthInMsecs' => 22, 'createdAt' => 23, 'updatedAt' => 24, 'partnerId' => 25, 'displayInSearch' => 26, 'subpId' => 27, 'customData' => 28, 'screenName' => 29, 'siteUrl' => 30, 'permissions' => 31, 'groupId' => 32, 'plays' => 33, 'partnerData' => 34, 'intId' => 35, 'indexedCustomData1' => 36, 'description' => 37, 'mediaDate' => 38, 'adminTags' => 39, 'moderationStatus' => 40, 'moderationCount' => 41, 'modifiedAt' => 42, 'puserId' => 43, 'accessControlId' => 44, 'conversionProfileId' => 45, 'categories' => 46, 'categoriesIds' => 47, 'startDate' => 48, 'endDate' => 49, 'flavorParamsIds' => 50, 'availableFrom' => 51, 'lastPlayedAt' => 52, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::VSHOW_ID => 1, self::VUSER_ID => 2, self::NAME => 3, self::TYPE => 4, self::MEDIA_TYPE => 5, self::DATA => 6, self::THUMBNAIL => 7, self::VIEWS => 8, self::VOTES => 9, self::COMMENTS => 10, self::FAVORITES => 11, self::TOTAL_RANK => 12, self::RANK => 13, self::TAGS => 14, self::ANONYMOUS => 15, self::STATUS => 16, self::SOURCE => 17, self::SOURCE_ID => 18, self::SOURCE_LINK => 19, self::LICENSE_TYPE => 20, self::CREDIT => 21, self::LENGTH_IN_MSECS => 22, self::CREATED_AT => 23, self::UPDATED_AT => 24, self::PARTNER_ID => 25, self::DISPLAY_IN_SEARCH => 26, self::SUBP_ID => 27, self::CUSTOM_DATA => 28, self::SCREEN_NAME => 29, self::SITE_URL => 30, self::PERMISSIONS => 31, self::GROUP_ID => 32, self::PLAYS => 33, self::PARTNER_DATA => 34, self::INT_ID => 35, self::INDEXED_CUSTOM_DATA_1 => 36, self::DESCRIPTION => 37, self::MEDIA_DATE => 38, self::ADMIN_TAGS => 39, self::MODERATION_STATUS => 40, self::MODERATION_COUNT => 41, self::MODIFIED_AT => 42, self::PUSER_ID => 43, self::ACCESS_CONTROL_ID => 44, self::CONVERSION_PROFILE_ID => 45, self::CATEGORIES => 46, self::CATEGORIES_IDS => 47, self::START_DATE => 48, self::END_DATE => 49, self::FLAVOR_PARAMS_IDS => 50, self::AVAILABLE_FROM => 51, self::LAST_PLAYED_AT => 52, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'vshow_id' => 1, 'vuser_id' => 2, 'name' => 3, 'type' => 4, 'media_type' => 5, 'data' => 6, 'thumbnail' => 7, 'views' => 8, 'votes' => 9, 'comments' => 10, 'favorites' => 11, 'total_rank' => 12, 'rank' => 13, 'tags' => 14, 'anonymous' => 15, 'status' => 16, 'source' => 17, 'source_id' => 18, 'source_link' => 19, 'license_type' => 20, 'credit' => 21, 'length_in_msecs' => 22, 'created_at' => 23, 'updated_at' => 24, 'partner_id' => 25, 'display_in_search' => 26, 'subp_id' => 27, 'custom_data' => 28, 'screen_name' => 29, 'site_url' => 30, 'permissions' => 31, 'group_id' => 32, 'plays' => 33, 'partner_data' => 34, 'int_id' => 35, 'indexed_custom_data_1' => 36, 'description' => 37, 'media_date' => 38, 'admin_tags' => 39, 'moderation_status' => 40, 'moderation_count' => 41, 'modified_at' => 42, 'puser_id' => 43, 'access_control_id' => 44, 'conversion_profile_id' => 45, 'categories' => 46, 'categories_ids' => 47, 'start_date' => 48, 'end_date' => 49, 'flavor_params_ids' => 50, 'available_from' => 51, 'last_played_at' => 52, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, )
 	);
 
@@ -295,8 +295,8 @@ abstract class BaseentryPeer {
 	public static function addSelectColumns(Criteria $criteria)
 	{
 		$criteria->addSelectColumn(entryPeer::ID);
-		$criteria->addSelectColumn(entryPeer::KSHOW_ID);
-		$criteria->addSelectColumn(entryPeer::KUSER_ID);
+		$criteria->addSelectColumn(entryPeer::VSHOW_ID);
+		$criteria->addSelectColumn(entryPeer::VUSER_ID);
 		$criteria->addSelectColumn(entryPeer::NAME);
 		$criteria->addSelectColumn(entryPeer::TYPE);
 		$criteria->addSelectColumn(entryPeer::MEDIA_TYPE);
@@ -380,11 +380,11 @@ abstract class BaseentryPeer {
 		
 		entryPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'entryPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -408,7 +408,7 @@ abstract class BaseentryPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -489,7 +489,7 @@ abstract class BaseentryPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -512,11 +512,11 @@ abstract class BaseentryPeer {
 	{		
 		$criteriaForSelect = entryPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'entryPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -532,12 +532,12 @@ abstract class BaseentryPeer {
 		
 		$queryResult = entryPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -547,17 +547,17 @@ abstract class BaseentryPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -628,7 +628,7 @@ abstract class BaseentryPeer {
 		entryPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -636,21 +636,21 @@ abstract class BaseentryPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
-				$criteria->addAnd(self::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+				// allow only the vidiun netword stuff
+				$criteria->addAnd(self::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 				
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -669,7 +669,7 @@ abstract class BaseentryPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -683,9 +683,9 @@ abstract class BaseentryPeer {
 				else
 					$criterion = $criteria->getNewCriterion(self::PARTNER_ID, $partners, Criteria::IN);
 
-				if($kalturaNetwork)
+				if($vidiunNetwork)
 				{
-					$criterionNetwork = $criteria->getNewCriterion(self::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+					$criterionNetwork = $criteria->getNewCriterion(self::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 					$criterion->addOr($criterionNetwork);
 				}
 				$criteria->addAnd($criterion);
@@ -790,11 +790,11 @@ abstract class BaseentryPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('entryPeer');
+				vMemoryManager::registerPeer('entryPeer');
 			}
 		}
 	}
@@ -920,7 +920,7 @@ abstract class BaseentryPeer {
 	}
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuser table
+	 * Returns the number of rows matching criteria, joining the related vuser table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -928,7 +928,7 @@ abstract class BaseentryPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinkuser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinvuser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -952,7 +952,7 @@ abstract class BaseentryPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(entryPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(entryPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = entryPeer::doCountStmt($criteria, $con);
 
@@ -967,7 +967,7 @@ abstract class BaseentryPeer {
 
 
 	/**
-	 * Selects a collection of entry objects pre-filled with their kuser objects.
+	 * Selects a collection of entry objects pre-filled with their vuser objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -975,7 +975,7 @@ abstract class BaseentryPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinkuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvuser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -986,9 +986,9 @@ abstract class BaseentryPeer {
 
 		entryPeer::addSelectColumns($criteria);
 		$startcol = (entryPeer::NUM_COLUMNS - entryPeer::NUM_LAZY_LOAD_COLUMNS);
-		kuserPeer::addSelectColumns($criteria);
+		vuserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(entryPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(entryPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = entryPeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -1009,19 +1009,19 @@ abstract class BaseentryPeer {
 				entryPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (entry) to $obj2 (kuser)
+				// Add the $obj1 (entry) to $obj2 (vuser)
 				$obj2->addentry($obj1);
 
 			} // if joined row was not null
@@ -1030,7 +1030,7 @@ abstract class BaseentryPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -1070,7 +1070,7 @@ abstract class BaseentryPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(entryPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(entryPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = entryPeer::doCountStmt($criteria, $con);
 
@@ -1105,10 +1105,10 @@ abstract class BaseentryPeer {
 		entryPeer::addSelectColumns($criteria);
 		$startcol2 = (entryPeer::NUM_COLUMNS - entryPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kuserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kuserPeer::NUM_COLUMNS - kuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vuserPeer::NUM_COLUMNS - vuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(entryPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(entryPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
 		$stmt = entryPeer::doSelectStmt($criteria, $con);
 		$results = array();
@@ -1128,21 +1128,21 @@ abstract class BaseentryPeer {
 				entryPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined kuser rows
+			// Add objects for joined vuser rows
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (entry) to the collection in $obj2 (kuser)
+				// Add the $obj1 (entry) to the collection in $obj2 (vuser)
 				$obj2->addentry($obj1);
 			} // if joined row not null
 

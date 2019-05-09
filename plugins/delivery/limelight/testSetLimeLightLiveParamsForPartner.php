@@ -3,10 +3,10 @@ error_reporting(E_ALL);
 
 require_once(dirname(__FILE__).'/../../../alpha/scripts/bootstrap.php');
 
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "plugins", "limelight", "*"));
-//KAutoloader::setClassMapFilePath(KALTURA_ROOT_PATH.'/cache/scripts/limelight/classMap.cache');
-KAutoloader::setClassMapFilePath(KALTURA_ROOT_PATH.'/cache/scripts/' . basename(__FILE__) . '.cache');
-KAutoloader::register();
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "plugins", "limelight", "*"));
+//VAutoloader::setClassMapFilePath(VIDIUN_ROOT_PATH.'/cache/scripts/limelight/classMap.cache');
+VAutoloader::setClassMapFilePath(VIDIUN_ROOT_PATH.'/cache/scripts/' . basename(__FILE__) . '.cache');
+VAutoloader::register();
 
 $partnerId = 101;
 
@@ -26,7 +26,7 @@ if(!$partner)
 
 
 $ST = $partner->getDefaultLiveStreamEntrySourceType();
-$apiVal = kPluginableEnumsManager::coreToApi('EntrySourceType', $ST);
+$apiVal = vPluginableEnumsManager::coreToApi('EntrySourceType', $ST);
 
 //$entryId = '0_y3sxhrol';
 //$entry = entryPeer::retrieveByPK($entryId);

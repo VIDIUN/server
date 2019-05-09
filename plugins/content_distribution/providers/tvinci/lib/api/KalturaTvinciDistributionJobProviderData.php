@@ -3,19 +3,19 @@
  * @package plugins.tvinciDistribution
  * @subpackage api.objects
  */
-class KalturaTvinciDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunTvinciDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 	/**
 	 * @var string
 	 */
 	public $xml;
 
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 
 		if( (!$distributionJobData) ||
-			(!($distributionJobData->distributionProfile instanceof KalturaTvinciDistributionProfile)) ||
+			(!($distributionJobData->distributionProfile instanceof VidiunTvinciDistributionProfile)) ||
 			(! $distributionJobData->entryDistribution) )
 			return;
 
@@ -26,21 +26,21 @@ class KalturaTvinciDistributionJobProviderData extends KalturaConfigurableDistri
 		}
 
 		if ( ! $entry ) {
-			KalturaLog::err("Can't find entry with id: {$distributionJobData->entryDistribution->entryId}");
+			VidiunLog::err("Can't find entry with id: {$distributionJobData->entryDistribution->entryId}");
 			return;
 		}
 
 		$feedHelper = new TvinciDistributionFeedHelper($distributionJobData->distributionProfile, $entry);
 
-		if ($distributionJobData instanceof KalturaDistributionSubmitJobData)
+		if ($distributionJobData instanceof VidiunDistributionSubmitJobData)
 		{
 			$this->xml = $feedHelper->buildSubmitFeed();
 		}
-		elseif ($distributionJobData instanceof KalturaDistributionUpdateJobData)
+		elseif ($distributionJobData instanceof VidiunDistributionUpdateJobData)
 		{
 			$this->xml = $feedHelper->buildUpdateFeed();
 		}
-		elseif ($distributionJobData instanceof KalturaDistributionDeleteJobData)
+		elseif ($distributionJobData instanceof VidiunDistributionDeleteJobData)
 		{
 			$this->xml = $feedHelper->buildDeleteFeed();
 		}

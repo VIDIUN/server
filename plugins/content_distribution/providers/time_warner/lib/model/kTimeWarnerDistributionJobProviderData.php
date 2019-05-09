@@ -3,7 +3,7 @@
  * @package plugins.timeWarnerDistribution
  * @subpackage model.data
  */
-class kTimeWarnerDistributionJobProviderData extends kDistributionJobProviderData
+class vTimeWarnerDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -16,7 +16,7 @@ class kTimeWarnerDistributionJobProviderData extends kDistributionJobProviderDat
 	 */
 	private $distributionProfileId;
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

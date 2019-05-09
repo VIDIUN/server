@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveStreamEntry extends KalturaLiveEntry
+class VidiunLiveStreamEntry extends VidiunLiveEntry
 {
 	/**
 	 * The stream id as provided by the provider
@@ -24,7 +24,7 @@ class KalturaLiveStreamEntry extends KalturaLiveEntry
 	/**
 	 * Array of supported bitrates
 	 * 
-	 * @var KalturaLiveStreamBitrateArray
+	 * @var VidiunLiveStreamBitrateArray
 	 */
 	public $bitrates;
 	
@@ -143,11 +143,11 @@ class KalturaLiveStreamEntry extends KalturaLiveEntry
 	{
 		parent::__construct();
 		
-		$this->type = KalturaEntryType::LIVE_STREAM;
+		$this->type = VidiunEntryType::LIVE_STREAM;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaMediaEntry::getMapBetweenObjects()
+	 * @see VidiunMediaEntry::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -155,9 +155,9 @@ class KalturaLiveStreamEntry extends KalturaLiveEntry
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaMediaEntry::fromObject()
+	 * @see VidiunMediaEntry::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if(!($dbObject instanceof LiveStreamEntry))
 			return;
@@ -165,9 +165,9 @@ class KalturaLiveStreamEntry extends KalturaLiveEntry
 		/**
 		 * @var LiveStreamEntry @dbObject
 		 */
-		$ksObject = kCurrentContext::$ks_object;
-		if ( !kCurrentContext::$is_admin_session && !(kCurrentContext::getCurrentKsKuserId() == $dbObject->getKuserId())
-				&& !($dbObject->isEntitledKuserEdit(kCurrentContext::getCurrentKsKuserId())) && (!$ksObject || !$ksObject->verifyPrivileges(ks::PRIVILEGE_EDIT, $this->id)) )
+		$vsObject = vCurrentContext::$vs_object;
+		if ( !vCurrentContext::$is_admin_session && !(vCurrentContext::getCurrentVsVuserId() == $dbObject->getVuserId())
+				&& !($dbObject->isEntitledVuserEdit(vCurrentContext::getCurrentVsVuserId())) && (!$vsObject || !$vsObject->verifyPrivileges(vs::PRIVILEGE_EDIT, $this->id)) )
 		{
 			$this->primaryBroadcastingUrl = null;
 			$this->secondaryBroadcastingUrl = null;
@@ -178,11 +178,11 @@ class KalturaLiveStreamEntry extends KalturaLiveEntry
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaMediaEntry::toInsertableObject()
+	 * @see VidiunMediaEntry::toInsertableObject()
 	 */
 	public function toInsertableObject ( $dbObject = null , $props_to_skip = array() )
 	{
-		//This is required for backward compatibility support of api calls in KMS
+		//This is required for backward compatibility support of api calls in VMS
 		$propertiesToSkip[] = "id";
 		
 		/* @var $dbObject LiveStreamEntry */
@@ -199,7 +199,7 @@ class KalturaLiveStreamEntry extends KalturaLiveEntry
 
 	public function toUpdatableObject($object_to_fill, $props_to_skip = array())
 	{
-		if(strpos(strtolower(kCurrentContext::$client_lang), "kmc") !== false)
+		if(strpos(strtolower(vCurrentContext::$client_lang), "vmc") !== false)
 		{
 			$props_to_skip[] = 'primaryBroadcastingUrl';
 			$props_to_skip[] = 'secondaryBroadcastingUrl';
@@ -210,32 +210,32 @@ class KalturaLiveStreamEntry extends KalturaLiveEntry
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaMediaEntry::toSourceType()
+	 * @see VidiunMediaEntry::toSourceType()
 	 */
 	protected function toSourceType(entry $entry) 
 	{
 		if (!$this->sourceType)
 		{
-			$partner = PartnerPeer::retrieveByPK(kCurrentContext::getCurrentPartnerId());
+			$partner = PartnerPeer::retrieveByPK(vCurrentContext::getCurrentPartnerId());
 			if($partner)
-				$this->sourceType = kPluginableEnumsManager::coreToApi('EntrySourceType', $partner->getDefaultLiveStreamEntrySourceType());
+				$this->sourceType = vPluginableEnumsManager::coreToApi('EntrySourceType', $partner->getDefaultLiveStreamEntrySourceType());
 		}
 		
 		return parent::toSourceType($entry);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntry::validateForInsert()
+	 * @see VidiunBaseEntry::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
-		//This is required for backward compatibility support of api calls in KMS
+		//This is required for backward compatibility support of api calls in VMS
 		$propertiesToSkip[] = "id";
 		
 		$this->validatePropertyNotNull("mediaType");
 		$this->validatePropertyNotNull("sourceType");
 		$this->validatePropertyNotNull("streamPassword");
-		if (in_array($this->sourceType, array(KalturaSourceType::AKAMAI_LIVE,KalturaSourceType::AKAMAI_UNIVERSAL_LIVE)))
+		if (in_array($this->sourceType, array(VidiunSourceType::AKAMAI_LIVE,VidiunSourceType::AKAMAI_UNIVERSAL_LIVE)))
 		{
 			$this->validatePropertyNotNull("encodingIP1");
 			$this->validatePropertyNotNull("encodingIP2");
@@ -247,10 +247,10 @@ class KalturaLiveStreamEntry extends KalturaLiveEntry
 	protected function validateEncodingIP ($ip)
 	{
 		if (!filter_var($this->encodingIP1, FILTER_VALIDATE_IP))
-			throw new KalturaAPIException(KalturaErrors::ENCODING_IP_NOT_PINGABLE);	
+			throw new VidiunAPIException(VidiunErrors::ENCODING_IP_NOT_PINGABLE);	
 		
-		@exec("ping -w " . kConf::get('ping_default_timeout') . " {$this->encodingIP1}", $output, $return);
+		@exec("ping -w " . vConf::get('ping_default_timeout') . " {$this->encodingIP1}", $output, $return);
 		if ($return)
-			throw new KalturaAPIException(KalturaErrors::ENCODING_IP_NOT_PINGABLE);
+			throw new VidiunAPIException(VidiunErrors::ENCODING_IP_NOT_PINGABLE);
 	}
 }

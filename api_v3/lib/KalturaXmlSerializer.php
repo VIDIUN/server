@@ -3,7 +3,7 @@
  * @package api
  * @subpackage v3
  */
-class KalturaXmlSerializer extends KalturaSerializer
+class VidiunXmlSerializer extends VidiunSerializer
 {
 	private $_ignoreNull = false;
 	
@@ -25,9 +25,9 @@ class KalturaXmlSerializer extends KalturaSerializer
 	
 	function serialize($object)
 	{
-		if (function_exists('kaltura_serialize_xml'))
+		if (function_exists('vidiun_serialize_xml'))
 		{
-			$serializedResult = kaltura_serialize_xml($object, $this->_ignoreNull);
+			$serializedResult = vidiun_serialize_xml($object, $this->_ignoreNull);
 		}
 		else
 		{
@@ -62,11 +62,11 @@ class KalturaXmlSerializer extends KalturaSerializer
 				break;
 				
 			case 'object':
-				if ($object instanceof KalturaAssociativeArray)
+				if ($object instanceof VidiunAssociativeArray)
 				{
 					$this->serializeMap($object);
 				}
-		        elseif ($object instanceof KalturaTypedArray)
+		        elseif ($object instanceof VidiunTypedArray)
 			    {
     				$this->serializeArray($object);
 			    }
@@ -86,7 +86,7 @@ class KalturaXmlSerializer extends KalturaSerializer
 	
 	function serializePrimitive($object)
 	{
-		echo kString::xmlEncode($object);		
+		echo vString::xmlEncode($object);		
 	}
 	
 	function serializeArray($object)
@@ -110,18 +110,18 @@ class KalturaXmlSerializer extends KalturaSerializer
 		}
 	}
 	
-	function writeKalturaAPIExceptionArgsTag($object)
+	function writeVidiunAPIExceptionArgsTag($object)
 	{
-		if ( $object instanceof KalturaAPIException )
+		if ( $object instanceof VidiunAPIException )
 		{
 			echo '<args>';
 			
 			foreach ( $object->getArgs() as $name => $value )
 			{
 				echo '<item>';
-				echo '<objectType>KalturaApiExceptionArg</objectType>'; // Hardcoded imaginary type for the client code parsers.
-				echo '<name>' . kString::xmlEncode($name) . '</name>';
-				echo '<value>' . kString::xmlEncode($value) . '</value>';
+				echo '<objectType>VidiunApiExceptionArg</objectType>'; // Hardcoded imaginary type for the client code parsers.
+				echo '<name>' . vString::xmlEncode($name) . '</name>';
+				echo '<value>' . vString::xmlEncode($value) . '</value>';
 				echo '</item>';
 			}
 			
@@ -135,10 +135,10 @@ class KalturaXmlSerializer extends KalturaSerializer
 		{
 			echo '<error>';
 			
-			$this->writeTag('code', kString::xmlEncode($object->getCode()));
-			$this->writeTag('message', kString::xmlEncode($object->getMessage()));
+			$this->writeTag('code', vString::xmlEncode($object->getCode()));
+			$this->writeTag('message', vString::xmlEncode($object->getMessage()));
 			$this->writeTag('objectType', get_class($object));
-			$this->writeKalturaAPIExceptionArgsTag( $object );
+			$this->writeVidiunAPIExceptionArgsTag( $object );
 			
 			echo '</error>';
 		}
@@ -152,7 +152,7 @@ class KalturaXmlSerializer extends KalturaSerializer
 			$this->writeTag('objectType', $class);
 			
 			// load class reflection
-			$typeReflector = KalturaTypeReflectorCacher::get($class);
+			$typeReflector = VidiunTypeReflectorCacher::get($class);
 			if(!$typeReflector)
 			{
 				echo '<error>';

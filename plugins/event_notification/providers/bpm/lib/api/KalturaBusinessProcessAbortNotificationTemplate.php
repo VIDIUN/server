@@ -3,7 +3,7 @@
  * @package plugins.businessProcessNotification
  * @subpackage api.objects
  */
-class KalturaBusinessProcessAbortNotificationTemplate extends KalturaBusinessProcessNotificationTemplate
+class VidiunBusinessProcessAbortNotificationTemplate extends VidiunBusinessProcessNotificationTemplate
 {	
 	public function __construct()
 	{
@@ -11,7 +11,7 @@ class KalturaBusinessProcessAbortNotificationTemplate extends KalturaBusinessPro
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{

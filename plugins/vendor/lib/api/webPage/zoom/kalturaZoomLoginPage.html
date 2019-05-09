@@ -72,7 +72,7 @@
             $.ajax({
                 url: redirectUrl,
                 type: "post",
-                data: {"ks": res, "tokensData" : encryption.enc, "iv" : encryption.iv},
+                data: {"vs": res, "tokensData" : encryption.enc, "iv" : encryption.iv},
                 success: function (registrationPage) {
                     $("body").css("cursor", "default");
                     if (registrationPage) {
@@ -134,11 +134,11 @@
             });
         })();
     </script>
-    <title>Kaltura-Zoom login</title>
+    <title>Vidiun-Zoom login</title>
 </head>
 <form action="">
     <div class="imgcontainer">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f7/KalturaLogo_Updatedpng.png" alt="Avatar" class="avatar">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f7/VidiunLogo_Updatedpng.png" alt="Avatar" class="avatar">
     </div>
 
     <div class="container">

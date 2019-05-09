@@ -10,7 +10,7 @@ class myUrlImportServices extends myBaseMediaSource implements IMediaSource
 	protected $source_name = "URL";
 //	protected $auth_method = self::AUTH_METHOD_NONE;
 	protected $search_in_user = false; 
-	protected $logo = "http://www.kaltura.com/images/wizard/logo_url.gif";
+	protected $logo = "http://www.vidiun.com/images/wizard/logo_url.gif";
 	protected $id = entry::ENTRY_MEDIA_SOURCE_URL;
 	
 	private static $NEED_MEDIA_INFO = "0";
@@ -47,11 +47,11 @@ class myUrlImportServices extends myBaseMediaSource implements IMediaSource
 			}
 			else
 			{
-				$headers = kFile::downloadUrlToString($searchText, 2);
+				$headers = vFile::downloadUrlToString($searchText, 2);
 
 				if (!preg_match("/Content-Type:\s*video\/(.*)\r/i", $headers))
 				{
-					$content = kFile::downloadUrlToString($searchText, 1);
+					$content = vFile::downloadUrlToString($searchText, 1);
 					$result = self::parseVideos($searchText, $page, $pageSize);
 				
 					if ($result)
@@ -86,7 +86,7 @@ class myUrlImportServices extends myBaseMediaSource implements IMediaSource
 		
 	}
 		
-	public function getAuthData( $kuserId, $userName, $password, $token)
+	public function getAuthData( $vuserId, $userName, $password, $token)
 	{
 		return ""; // empty value
 	}	
@@ -173,7 +173,7 @@ class myUrlImportServices extends myBaseMediaSource implements IMediaSource
 		$offset = ($page - 1) * $pageSize;
 		$objects = array();
 
-		$content = kFile::downloadUrlToString($url, 1);
+		$content = vFile::downloadUrlToString($url, 1);
 		if (preg_match_all("/http:\/\/www.youtube.com\/v\/([a-zA-Z0-9_\-]*)/msi", $content, $vidUrls))
 		{
 			foreach($vidUrls[1] as $vidUrl)
@@ -244,7 +244,7 @@ class myUrlImportServices extends myBaseMediaSource implements IMediaSource
 		if (!parse_url($searchText, PHP_URL_SCHEME))
 			$searchText = "http://$searchText";
 		
-		$headers = kFile::downloadUrlToString($searchText, 2);
+		$headers = vFile::downloadUrlToString($searchText, 2);
 		
 		$images = array();
 		$message = "";
@@ -259,7 +259,7 @@ class myUrlImportServices extends myBaseMediaSource implements IMediaSource
 		}
 		else if (preg_match("/Content-Type:\s*text\/html;?.*\r/i", $headers))
 		{
-			$content = kFile::downloadUrlToString($searchText, 1);
+			$content = vFile::downloadUrlToString($searchText, 1);
 			return self::parseImages($content, $searchText, $page, $pageSize);
 		}
 

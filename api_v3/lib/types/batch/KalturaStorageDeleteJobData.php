@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaStorageDeleteJobData extends KalturaStorageJobData
+class VidiunStorageDeleteJobData extends VidiunStorageJobData
 {
 	private static $map_between_objects = array
 	(
@@ -18,7 +18,7 @@ class KalturaStorageDeleteJobData extends KalturaStorageJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kStorageDeleteJobData();
+			$dbData = new vStorageDeleteJobData();
 			
 		return parent::toObject($dbData);
 	}
@@ -30,14 +30,14 @@ class KalturaStorageDeleteJobData extends KalturaStorageJobData
 	public function toSubType($subType)
 	{
 		switch ($subType) {
-			case KalturaStorageProfileProtocol::SFTP:
-            case KalturaStorageProfileProtocol::FTP:
-            case KalturaStorageProfileProtocol::SCP:
-            case KalturaStorageProfileProtocol::S3:
-            case KalturaStorageProfileProtocol::KALTURA_DC:
+			case VidiunStorageProfileProtocol::SFTP:
+            case VidiunStorageProfileProtocol::FTP:
+            case VidiunStorageProfileProtocol::SCP:
+            case VidiunStorageProfileProtocol::S3:
+            case VidiunStorageProfileProtocol::VIDIUN_DC:
                 return $subType;	
 			default:
-				return kPluginableEnumsManager::apiToCore('KalturaStorageProfileProtocol', $subType);
+				return vPluginableEnumsManager::apiToCore('VidiunStorageProfileProtocol', $subType);
 		}
 	}
 	
@@ -52,10 +52,10 @@ class KalturaStorageDeleteJobData extends KalturaStorageJobData
             case StorageProfileProtocol::FTP:
             case StorageProfileProtocol::SCP:
             case StorageProfileProtocol::S3:
-            case StorageProfileProtocol::KALTURA_DC:
+            case StorageProfileProtocol::VIDIUN_DC:
                 return $subType;    
             default:
-                return kPluginableEnumsManager::coreToApi('StorageProfileProtocol', $subType);
+                return vPluginableEnumsManager::coreToApi('StorageProfileProtocol', $subType);
         }
 	}
 }

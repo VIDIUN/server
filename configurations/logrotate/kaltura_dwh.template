@@ -2,7 +2,7 @@
  rotate 30
  daily
  missingok
- create 0644 kaltura kaltura
+ create 0644 vidiun vidiun
  compress
- su root kaltura
+ su root vidiun
 }

@@ -3,11 +3,11 @@
  * @package plugins.virusScan
  * @subpackage api.objects
  */
-class KalturaVirusScanJobData extends KalturaJobData
+class VidiunVirusScanJobData extends VidiunJobData
 {
 	
 	/**
-	 * @var KalturaFileContainer
+	 * @var VidiunFileContainer
 	 */
 	public $fileContainer;
 	
@@ -17,12 +17,12 @@ class KalturaVirusScanJobData extends KalturaJobData
 	public $flavorAssetId;
 	
 	/**
-	 * @var KalturaVirusScanJobResult
+	 * @var VidiunVirusScanJobResult
 	 */
 	public $scanResult;
 	
 	/**
-	 * @var KalturaVirusFoundAction
+	 * @var VidiunVirusFoundAction
 	 */
 	public $virusFoundAction;
 	
@@ -47,7 +47,7 @@ class KalturaVirusScanJobData extends KalturaJobData
 	 */
 	public function toSubType($subType)
 	{
-		return kPluginableEnumsManager::apiToCore('VirusScanEngineType', $subType);
+		return vPluginableEnumsManager::apiToCore('VirusScanEngineType', $subType);
 	}
 	
 	/**
@@ -56,7 +56,7 @@ class KalturaVirusScanJobData extends KalturaJobData
 	 */
 	public function fromSubType($subType)
 	{
-		return kPluginableEnumsManager::coreToApi('VirusScanEngineType', $subType);
+		return vPluginableEnumsManager::coreToApi('VirusScanEngineType', $subType);
 	}
 
 }

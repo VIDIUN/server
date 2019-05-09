@@ -4,7 +4,7 @@
  * @subpackage objects
  * @deprecated
  */
-class KalturaSearch extends KalturaObject
+class VidiunSearch extends VidiunObject
 {
 	/**
 	 * @var string
@@ -12,12 +12,12 @@ class KalturaSearch extends KalturaObject
 	public $keyWords;
 	
 	/**
-	 * @var KalturaSearchProviderType
+	 * @var VidiunSearchProviderType
 	 */
 	public $searchSource;
 	
 	/**
-	 * @var KalturaMediaType
+	 * @var VidiunMediaType
 	 */
 	public $mediaType;
 	

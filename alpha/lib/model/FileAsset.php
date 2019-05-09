@@ -78,7 +78,7 @@ class FileAsset extends BaseFileAsset implements ISyncableFile, IRelatedObject
 		if(!$fileExt)
 			$fileExt = 'dat';
 		
-		return kMetadataManager::getObjectTypeName($this->getObjectType()) . "_" . $this->getObjectId() . "_" . $this->getId() . "_{$version}.{$fileExt}";
+		return vMetadataManager::getObjectTypeName($this->getObjectType()) . "_" . $this->getObjectId() . "_" . $this->getId() . "_{$version}.{$fileExt}";
 	}
 	
 	/**
@@ -104,7 +104,7 @@ class FileAsset extends BaseFileAsset implements ISyncableFile, IRelatedObject
 
 	public function incrementVersion()
 	{
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getVersion(), FileSyncObjectType::FILE_ASSET, self::FILE_SYNC_ASSET);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getVersion(), FileSyncObjectType::FILE_ASSET, self::FILE_SYNC_ASSET);
 									
 		$this->setVersion($newVersion);
 	}

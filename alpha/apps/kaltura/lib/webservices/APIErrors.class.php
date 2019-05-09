@@ -10,10 +10,10 @@ class APIErrors
 	 * if given) and return a response array containing the message and the given error code and args.
 	 * 
 	 * Sample usage:
-	 *     $errorData = APIErrors::getErrorData( APIErrors::INVALID_KS, array( 'KSID', 'ERR_CODE', 'ERR_DESC' ) );
+	 *     $errorData = APIErrors::getErrorData( APIErrors::INVALID_VS, array( 'VSID', 'ERR_CODE', 'ERR_DESC' ) );
 	 *     
-	 * Sample usage from a generic function (e.g. from KalturaAPIError):
-	 *     function KalturaAPIException( $errorString )
+	 * Sample usage from a generic function (e.g. from VidiunAPIError):
+	 *     function VidiunAPIException( $errorString )
 	 *     {
 	 *         $args = func_get_args();
 	 *         array_shift( $args );
@@ -23,7 +23,7 @@ class APIErrors
 	 * @param string $errorString
 	 * @return array(
 	 * 	   <br>'code'    => The given error code (e.g. 'INTERNAL_SERVERL_ERROR'),
-	 *     <br>'args'    => A map between the error's params and the given values from $errorArgs, e.g. array( 'KSID' => '1234' ), or an empty array in case of no params 
+	 *     <br>'args'    => A map between the error's params and the given values from $errorArgs, e.g. array( 'VSID' => '1234' ), or an empty array in case of no params 
 	 * 	   <br>'message' => Composed English message. Any placeholedrs will be replaced with the supplied args.
 	 *   <br>)
 	 */
@@ -100,9 +100,9 @@ class APIErrors
 	
 	const SERVERL_ERROR = "SERVERL_ERROR;ERR_TEXT;Server error @ERR_TEXT@";
 	
-	const MISSING_KS ="MISSING_KS;;Missing KS. Session not established";
-	// KS - the ks string, ERR_CODE - error code , ERR_DESC - error description
-	const INVALID_KS ="INVALID_KS;KSID,ERR_CODE,ERR_DESC;Invalid KS [@KSID@]. Error [@ERR_CODE@,@ERR_DESC@]";
+	const MISSING_VS ="MISSING_VS;;Missing VS. Session not established";
+	// VS - the vs string, ERR_CODE - error code , ERR_DESC - error description
+	const INVALID_VS ="INVALID_VS;VSID,ERR_CODE,ERR_DESC;Invalid VS [@VSID@]. Error [@ERR_CODE@,@ERR_DESC@]";
 	
 	// PID - partner_id
 	const START_SESSION_ERROR = "START_SESSION_ERROR;PID;Error while starting session for partner [@PID@]";
@@ -120,7 +120,7 @@ class APIErrors
 	
 	const NO_ENTRIES_ADDED = "NO_ENTRIES_ADDED;;Added 0 entries";
 	
-	const KSHOW_DOES_NOT_EXISTS = "KSHOW_DOES_NOT_EXISTS;;Kshow doesn't exist";
+	const VSHOW_DOES_NOT_EXISTS = "VSHOW_DOES_NOT_EXISTS;;Vshow doesn't exist";
 	
 	const MODERATION_OBJECT_NOT_EXISTS = "MODERATION_OBJECT_NOT_EXISTS;OBJ_TYPE;Object to moderate [@OBJ_TYPE@] does not exist in system";
 	
@@ -150,14 +150,14 @@ class APIErrors
 	// OBJ_TYPE - the type of the object forwhich to sent the notification
 	const ERROR_CREATING_NOTIFICATION = "ERROR_CREATING_NOTIFICATION;OBJ_TYPE;Cannot find object of type [@OBJ_TYPE@].";
 	
-	// KSHOW_ID - kshow_id
-	const INVALID_KSHOW_ID = "INVALID_KSHOW_ID;KSHOW_ID;Unknown kshow [@KSHOW_ID@]" ;
+	// VSHOW_ID - vshow_id
+	const INVALID_VSHOW_ID = "INVALID_VSHOW_ID;VSHOW_ID;Unknown vshow [@VSHOW_ID@]" ;
 	
-	// KSHOW_NAME - kshow name
-	const DUPLICATE_KSHOW_BY_NAME = "DUPLICATE_KSHOW_BY_NAME;KSHOW_NAME;Kshow with name [@KSHOW_NAME@] already exists in system " ;
+	// VSHOW_NAME - vshow name
+	const DUPLICATE_VSHOW_BY_NAME = "DUPLICATE_VSHOW_BY_NAME;VSHOW_NAME;Vshow with name [@VSHOW_NAME@] already exists in system " ;
 	
-	// KSHOW_ID - kshow_id , VERSION - $desired_version
-	const ERROR_KSHOW_ROLLBACK = "ERROR_KSOHW_ROLLBACK;KSHOW_ID,VERSION;Error while rollbacking kshow [@KSHOW_ID@] to version [@VERSION@]";
+	// VSHOW_ID - vshow_id , VERSION - $desired_version
+	const ERROR_VSHOW_ROLLBACK = "ERROR_VSOHW_ROLLBACK;VSHOW_ID,VERSION;Error while rollbacking vshow [@VSHOW_ID@] to version [@VERSION@]";
 	
 	const ENTRY_ID_NOT_FOUND = "ENTRY_ID_NOT_FOUND;ENTRY_ID;Entry id \"@ENTRY_ID@\" not found";
 
@@ -182,7 +182,7 @@ class APIErrors
 	
 	const INVALID_ENTRY_VERSION = "INVALID_ENTRY_VERSION;ENTRY_TYPE,ENTRY_ID,VERSION;Unknown @ENTRY_TYPE@ [@ENTRY_ID@] [@VERSION@]" ;
 	
-	const INVALID_KSHOW_AND_ENTRY_PAIR = "INVALID_KSHOW_AND_ENTRY_PAIR;KSHOW_ID,ENTRY_ID;Unknown Kshow [@KSHOW_ID@] and Entry [@ENTRY_ID@]" ;
+	const INVALID_VSHOW_AND_ENTRY_PAIR = "INVALID_VSHOW_AND_ENTRY_PAIR;VSHOW_ID,ENTRY_ID;Unknown Vshow [@VSHOW_ID@] and Entry [@ENTRY_ID@]" ;
 	
 	const NO_FIELDS_SET_FOR_GENERIC_ENTRY = "NO_FIELDS_SET_FOR_GENERIC_ENTRY;ENTRY_TYPE;Missing fiedls when adding entry of type @ENTRY_TYPE@ " ;
 	
@@ -190,16 +190,16 @@ class APIErrors
 	
 	const NO_FIELDS_SET_FOR_WIDGET = "NO_FIELDS_SET_FOR_WIDGET;;Missing fiedls when adding widget" ;
 	
-	// KSHOW_ID - kshow_id
-	const KSHOW_CLONE_FAILED = "KSHOW_CLONE_FAILED;KSHOW_ID;clone failed for kshow [@KSHOW_ID@]";
+	// VSHOW_ID - vshow_id
+	const VSHOW_CLONE_FAILED = "VSHOW_CLONE_FAILED;VSHOW_ID;clone failed for vshow [@VSHOW_ID@]";
 	
-	// ENTRY_ID - entry_id_to_delete , KSHOW_ID - kshow_id
-	const CANNOT_DELETE_ENTRY = "CANNOT_DELETE_ENTRY;ENTRY_ID,KSHOW_ID;Entry [@ENTRY_ID@] does not belong to kshow_id [@KSHOW_ID@] and will not be deleted";
+	// ENTRY_ID - entry_id_to_delete , VSHOW_ID - vshow_id
+	const CANNOT_DELETE_ENTRY = "CANNOT_DELETE_ENTRY;ENTRY_ID,VSHOW_ID;Entry [@ENTRY_ID@] does not belong to vshow_id [@VSHOW_ID@] and will not be deleted";
 	
 	// FILE_NAME - file name
 	const INVALID_FILE_NAME = "INVALID_FILE_NAME;FILE_NAME;Cannot find file @FILE_NAME@";
 	
-	const ADMIN_KUSER_NOT_FOUND = "ADMIN_KUSER_NOT_FOUND;;The data you entered is invalid";
+	const ADMIN_VUSER_NOT_FOUND = "ADMIN_VUSER_NOT_FOUND;;The data you entered is invalid";
 	
 	// UI_CONF_ID - ui_conf_id
 	const INVALID_UI_CONF_ID = "INVALID_UI_CONF_ID;UI_CONF_ID;Unknown uiConf [@UI_CONF_ID@]";
@@ -218,8 +218,8 @@ class APIErrors
 	// RANK - rank
 	const INVALID_RANK = "INVALID_RANK;RANK;Bad rank [@RANK@]";
 	
-	// USER_ID - user_id , KSHOW_ID - kshow_id
-	const USER_ALREADY_RANKED_KSHOW = "USER_ALREADY_RANKED_KSHOW;USER_ID,KSHOW_ID;User [@USER_ID@] alreay voted for kshow [@KSHOW_ID@]";
+	// USER_ID - user_id , VSHOW_ID - vshow_id
+	const USER_ALREADY_RANKED_VSHOW = "USER_ALREADY_RANKED_VSHOW;USER_ID,VSHOW_ID;User [@USER_ID@] alreay voted for vshow [@VSHOW_ID@]";
 	
 	const USER_ALREADY_EXISTS_BY_SCREEN_NAME = "USER_ALREADY_EXISTS_BY_SCREEN_NAME;SCREEN_NAME;User with screenName [@SCREEN_NAME@] already exists in system.";
 	
@@ -297,7 +297,7 @@ class APIErrors
 	// FIELD_NAME - field name
 	const INVALID_FIELD_VALUE = "INVALID_FIELD_VALUE;FIELD_NAME;value in field [@FIELD_NAME@] is not valid";
 	
-	const ADMIN_KUSER_WRONG_OLD_PASSWORD = "ADMIN_KUSER_WRONG_OLD_PASSWORD;;Old password is wrong";
+	const ADMIN_VUSER_WRONG_OLD_PASSWORD = "ADMIN_VUSER_WRONG_OLD_PASSWORD;;Old password is wrong";
 
 	const INVALID_PARTNER_PACKAGE = "INVALID_PARTNER_PACKAGE;;Invalid package id";
 	
@@ -370,7 +370,7 @@ class APIErrors
 	
 	const INVALID_SEARCH_TEXT = "INVALID_SEARCH_TEXT;TEXT;Invalid search text [@TEXT@]";
 	
-	// admin kuser password related errors
+	// admin vuser password related errors
 	
 	const PASSWORD_STRUCTURE_INVALID = "PASSWORD_STRUCTURE_INVALID;RULES;The password you entered has an invalid structure.\nPasswords must obey the following rules :\n@RULES@";
 	

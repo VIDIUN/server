@@ -3,7 +3,7 @@
  * @package plugins.uverseClickToOrderDistribution
  * @subpackage api.enum
  */
-class KalturaUverseClickToOrderDistributionField extends KalturaStringEnum implements UverseClickToOrderDistributionField
+class VidiunUverseClickToOrderDistributionField extends VidiunStringEnum implements UverseClickToOrderDistributionField
 {
 	// see UverseClicktoOrderDistributionField interface
 }

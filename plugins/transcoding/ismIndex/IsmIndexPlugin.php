@@ -2,10 +2,10 @@
 /**
  * @package plugins.ismIndex
  */
-class IsmIndexPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaEnumerator, IKalturaEventConsumers, IKalturaBatchJobDataContributor
+class IsmIndexPlugin extends VidiunPlugin implements IVidiunObjectLoader, IVidiunEnumerator, IVidiunEventConsumers, IVidiunBatchJobDataContributor
 {
 	const PLUGIN_NAME = 'ismIndex';
-	const ISM_INDEX_EVENTS_CONSUMER = 'kIsmIndexEventsConsumer';
+	const ISM_INDEX_EVENTS_CONSUMER = 'vIsmIndexEventsConsumer';
 	
 	public static function getPluginName()
 	{
@@ -20,32 +20,32 @@ class IsmIndexPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKal
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::ISMINDEX)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::ISMINDEX)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 				
 			$params = $constructorArgs['params'];
-			return new KOperationEngineIsmIndex($params->ismIndexCmd, $constructorArgs['outFilePath']);
+			return new VOperationEngineIsmIndex($params->ismIndexCmd, $constructorArgs['outFilePath']);
 		}
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(IsmIndexConversionEngineType::ISMINDEX))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(IsmIndexConversionEngineType::ISMINDEX))
 		{
-			return new KDLOperatorIsmIndex($enumValue);
+			return new VDLOperatorIsmIndex($enumValue);
 		}
 		
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::ISM_MANIFEST)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::ISM_MANIFEST)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 				
 			$params = $constructorArgs['params'];
-			return new KOperationEngineIsmManifest($params->ismIndexCmd, $constructorArgs['outFilePath']);
+			return new VOperationEngineIsmManifest($params->ismIndexCmd, $constructorArgs['outFilePath']);
 		}
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(IsmIndexConversionEngineType::ISM_MANIFEST))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(IsmIndexConversionEngineType::ISM_MANIFEST))
 		{
-			return new KDLOperatorIsmManifest($enumValue);
+			return new VDLOperatorIsmManifest($enumValue);
 		}
 		
 		return null;
@@ -58,17 +58,17 @@ class IsmIndexPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKal
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == self::getApiValue(IsmIndexConversionEngineType::ISMINDEX))
-			return 'KOperationEngineIsmIndex';
+		if($baseClass == 'VOperationEngine' && $enumValue == self::getApiValue(IsmIndexConversionEngineType::ISMINDEX))
+			return 'VOperationEngineIsmIndex';
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(IsmIndexConversionEngineType::ISMINDEX))
-			return 'KDLOperatorIsmIndex';
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(IsmIndexConversionEngineType::ISMINDEX))
+			return 'VDLOperatorIsmIndex';
 			
-		if($baseClass == 'KOperationEngine' && $enumValue == self::getApiValue(IsmIndexConversionEngineType::ISM_MANIFEST))
-			return 'KOperationEngineIsmManifest';
+		if($baseClass == 'VOperationEngine' && $enumValue == self::getApiValue(IsmIndexConversionEngineType::ISM_MANIFEST))
+			return 'VOperationEngineIsmManifest';
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(IsmIndexConversionEngineType::ISM_MANIFEST))
-			return 'KDLOperatorIsmManifest';
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(IsmIndexConversionEngineType::ISM_MANIFEST))
+			return 'VDLOperatorIsmManifest';
 		
 			
 		
@@ -94,8 +94,8 @@ class IsmIndexPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKal
 	 */
 	public static function getConversionEngineCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('conversionEngineType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('conversionEngineType', $value);
 	}
 	
 	/**
@@ -103,10 +103,10 @@ class IsmIndexPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKal
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
-	public static function contributeToConvertJobData ($jobType, $jobSubType, kConvertJobData $jobData)
+	public static function contributeToConvertJobData ($jobType, $jobSubType, vConvertJobData $jobData)
 	{
 		if($jobType == BatchJobType::CONVERT && $jobSubType == self::getApiValue(IsmIndexConversionEngineType::ISM_MANIFEST))
 			return self::addIsmManifestsToSrcFileSyncDesc($jobData);
@@ -114,7 +114,7 @@ class IsmIndexPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKal
 			return $jobData;
 	}
 	
-	public static function addIsmManifestsToSrcFileSyncDesc(kConvertJobData $jobData)
+	public static function addIsmManifestsToSrcFileSyncDesc(vConvertJobData $jobData)
 	{
 		$additionalFileSyncs = array();
 		foreach ($jobData->getSrcFileSyncs() as $srcFileSyncDesc) 
@@ -133,15 +133,15 @@ class IsmIndexPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKal
 		
 	}
 	
-	private static function getFileSyncDescriptor(kSourceFileSyncDescriptor $flavorAssetDesc, $objectSubType)
+	private static function getFileSyncDescriptor(vSourceFileSyncDescriptor $flavorAssetDesc, $objectSubType)
 	{
 		$ismDescriptor = null;
 		$flavorAsset = assetPeer::retrieveById($flavorAssetDesc->getAssetId());
 		$key = $flavorAsset->getSyncKey($objectSubType);			
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($key);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($key);
 		if($fileSync)
 		{
-			$ismDescriptor = new kSourceFileSyncDescriptor();
+			$ismDescriptor = new vSourceFileSyncDescriptor();
 			$ismDescriptor->setPathAndKeyByFileSync($fileSync);
 			$ismDescriptor->setFileSyncRemoteUrl($fileSync->getExternalUrl($flavorAsset->getEntryId()));
 			$ismDescriptor->setAssetId($key->getObjectId());

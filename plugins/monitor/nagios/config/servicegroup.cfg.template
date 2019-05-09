@@ -1,35 +1,35 @@
 
 define servicegroup{
-		servicegroup_name				kaltura-batch-queue-size
-		alias							Kaltura Batch Queue Size
+		servicegroup_name				vidiun-batch-queue-size
+		alias							Vidiun Batch Queue Size
 }
 
 define servicegroup{
-		servicegroup_name				kaltura-batch-error-percent
-		alias							Kaltura Batch Error Percent
+		servicegroup_name				vidiun-batch-error-percent
+		alias							Vidiun Batch Error Percent
 }
 
 define servicegroup{
-		servicegroup_name				kaltura-batch-fatal-percent
-		alias							Kaltura Batch Fatal Percent
+		servicegroup_name				vidiun-batch-fatal-percent
+		alias							Vidiun Batch Fatal Percent
 }
 
 define servicegroup{
-		servicegroup_name				kaltura-host-sphinx
-		alias							Kaltura Sphinx
+		servicegroup_name				vidiun-host-sphinx
+		alias							Vidiun Sphinx
 }
 
 define servicegroup{
-		servicegroup_name				kaltura-host-dwh
-		alias							Kaltura DWH
+		servicegroup_name				vidiun-host-dwh
+		alias							Vidiun DWH
 }
 
 define servicegroup{
-		servicegroup_name				kaltura-play
-		alias							Kaltura Play
+		servicegroup_name				vidiun-play
+		alias							Vidiun Play
 }
 
 define servicegroup{
-		servicegroup_name				kaltura-bulk-upload
-		alias							Kaltura Bulk Upload
+		servicegroup_name				vidiun-bulk-upload
+		alias							Vidiun Bulk Upload
 }

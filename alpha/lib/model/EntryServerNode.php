@@ -17,7 +17,7 @@ abstract class EntryServerNode extends BaseEntryServerNode {
 
 	public function validateEntryServerNode()
 	{
-		if ((time() - $this->getUpdatedAt(null)) > kConf::get('marked_for_deletion_entry_server_node_timeout'))
+		if ((time() - $this->getUpdatedAt(null)) > vConf::get('marked_for_deletion_entry_server_node_timeout'))
 			$this->deleteOrMarkForDeletion();
 	}
 

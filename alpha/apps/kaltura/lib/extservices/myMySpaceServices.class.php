@@ -9,7 +9,7 @@ class myMySpaceServices extends myBaseMediaSource implements IMediaSource
 	protected $source_name = "MySpace";
 	protected $auth_method = array ( self::AUTH_METHOD_PUBLIC ,  self::AUTH_METHOD_USER_PASS );
 	protected $search_in_user = true; 
-	protected $logo = "http://www.kaltura.com/images/wizard/logo_myspace.png";
+	protected $logo = "http://www.vidiun.com/images/wizard/logo_myspace.png";
 	protected $id = entry::ENTRY_MEDIA_SOURCE_MYSPACE;
 		
 	private static $NEED_MEDIA_INFO = "1";
@@ -43,7 +43,7 @@ class myMySpaceServices extends myBaseMediaSource implements IMediaSource
 		
 	}	
 	
-	public function getAuthData($kuserId, $userName, $password, $token)
+	public function getAuthData($vuserId, $userName, $password, $token)
 	{
 		//curl -c cookie_file -d "NextPage=fuseaction=user&email=USER@XYZ.COM&password=PASSWORD" "http://login.myspace.com/index.cfm?fuseaction=login.process"
 		//curl -b cookie_file "http://vids.myspace.com/index.cfm?fuseaction=vids.myVideos"
@@ -55,8 +55,8 @@ class myMySpaceServices extends myBaseMediaSource implements IMediaSource
 
 		/*
 		$o="";
-		foreach ($postData as $k => $v)
-			$o.= "$k=".utf8_encode($v)."&";
+		foreach ($postData as $v => $v)
+			$o.= "$v=".utf8_encode($v)."&";
 		$postData = substr($o,0,-1);
 		*/
 		
@@ -310,7 +310,7 @@ class myMySpaceServices extends myBaseMediaSource implements IMediaSource
 	
 	private static function validateObject($objectId)
 	{
-		$rssFeed = kFile::downloadUrlToString("http://mediaservices.myspace.com/services/rss.ashx?type=video&videoID=$objectId", 3);
+		$rssFeed = vFile::downloadUrlToString("http://mediaservices.myspace.com/services/rss.ashx?type=video&videoID=$objectId", 3);
 		if (preg_match('/Location: (.*?)\/Error/', $rssFeed))
 			return false;
 		if (preg_match('/The item is not available/', $rssFeed))
@@ -322,7 +322,7 @@ class myMySpaceServices extends myBaseMediaSource implements IMediaSource
 		
 	private static function getObjectInfo($objectId)
 	{
-		$htmlPage = kFile::downloadUrlToString("http://vids.myspace.com/index.cfm?fuseaction=vids.individual&videoid=$objectId");
+		$htmlPage = vFile::downloadUrlToString("http://vids.myspace.com/index.cfm?fuseaction=vids.individual&videoid=$objectId");
 		
 		$status = 'error';
 		$message = '';
@@ -350,7 +350,7 @@ class myMySpaceServices extends myBaseMediaSource implements IMediaSource
 				}
 			}
 
-			$rssFeed = kFile::downloadUrlToString("http://mediaservices.myspace.com/services/rss.ashx?type=video&videoID=$objectId");
+			$rssFeed = vFile::downloadUrlToString("http://mediaservices.myspace.com/services/rss.ashx?type=video&videoID=$objectId");
 			if (preg_match_all('/<media:content url="(.*?)"/ms', $rssFeed, $urlAttr))
 			{
 				$flvUrl = $urlAttr[1][0];

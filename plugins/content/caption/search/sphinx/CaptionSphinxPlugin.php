@@ -3,7 +3,7 @@
  * Enable indexing and searching caption asset objects in sphinx
  * @package plugins.captionSphinx
  */
-class CaptionSphinxPlugin extends KalturaPlugin implements IKalturaPending, IKalturaCriteriaFactory, IKalturaSphinxConfiguration
+class CaptionSphinxPlugin extends VidiunPlugin implements IVidiunPending, IVidiunCriteriaFactory, IVidiunSphinxConfiguration
 {
 	const PLUGIN_NAME = 'captionSphinx';
 	
@@ -13,20 +13,20 @@ class CaptionSphinxPlugin extends KalturaPlugin implements IKalturaPending, IKal
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$captionSearchDependency = new KalturaDependency(CaptionSearchPlugin::getPluginName());
+		$captionSearchDependency = new VidiunDependency(CaptionSearchPlugin::getPluginName());
 		
 		return array($captionSearchDependency);
 	}
 
 
 	/* (non-PHPdoc)
-	 * @see IKalturaCriteriaFactory::getKalturaCriteria()
+	 * @see IVidiunCriteriaFactory::getVidiunCriteria()
 	 */
-	public static function getKalturaCriteria($objectType)
+	public static function getVidiunCriteria($objectType)
 	{
 		if ($objectType == CaptionAssetItemPeer::OM_CLASS)
 			return new SphinxCaptionAssetItemCriteria();
@@ -62,13 +62,13 @@ class CaptionSphinxPlugin extends KalturaPlugin implements IKalturaPending, IKal
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSphinxConfiguration::getSphinxSchema()
+	 * @see IVidiunSphinxConfiguration::getSphinxSchema()
 	 */
 	public static function getSphinxSchema()
 	{
 		return array(
-			kSphinxSearchManager::getSphinxIndexName(CaptionSearchPlugin::INDEX_NAME) => array (	
-				'path'		=> '/sphinx/kaltura_caption_item_rt',
+			vSphinxSearchManager::getSphinxIndexName(CaptionSearchPlugin::INDEX_NAME) => array (	
+				'path'		=> '/sphinx/vidiun_caption_item_rt',
 				'fields'	=> self::getSphinxSchemaFields(),
 			)
 		);

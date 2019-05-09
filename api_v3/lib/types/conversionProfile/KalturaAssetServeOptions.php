@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAssetServeOptions extends KalturaObject 
+class VidiunAssetServeOptions extends VidiunObject 
 {
 	/**
 	 * @var bool

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kBatchHistoryData 
+class vBatchHistoryData 
 {
 	/**
 	 * The value for the scheduler_id field.

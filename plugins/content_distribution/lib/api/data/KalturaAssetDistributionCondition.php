@@ -6,7 +6,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-abstract class KalturaAssetDistributionCondition extends KalturaObject
+abstract class VidiunAssetDistributionCondition extends VidiunObject
 {
 
 }

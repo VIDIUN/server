@@ -6,8 +6,8 @@
  * @package plugins.conference
  * @subpackage api.services
  */
-class ConferenceService extends KalturaBaseService {
-	const CAN_REACH_EXPECTED_VALUE = 'kaltura';
+class ConferenceService extends VidiunBaseService {
+	const CAN_REACH_EXPECTED_VALUE = 'vidiun';
 
 	/**
 	 * Allocates a conference room or returns ones that has already been allocated
@@ -16,8 +16,8 @@ class ConferenceService extends KalturaBaseService {
 	 * @actionAlias liveStream.allocateConferenceRoom
 	 * @param string $entryId
 	 * @param string $env
-	 * @return KalturaRoomDetails
-	 * @throws KalturaAPIException
+	 * @return VidiunRoomDetails
+	 * @throws VidiunAPIException
 	 * @beta
 	 */
 	public function allocateConferenceRoomAction($entryId, $env = '')
@@ -26,31 +26,31 @@ class ConferenceService extends KalturaBaseService {
 
 		if (!PermissionPeer::isValidForPartner(PermissionName::FEATURE_SELF_SERVE, $this->getPartnerId()))
 		{
-			throw new KalturaAPIException ( APIErrors::SERVICE_FORBIDDEN, $this->serviceId.'->'.$this->actionName);
+			throw new VidiunAPIException ( APIErrors::SERVICE_FORBIDDEN, $this->serviceId.'->'.$this->actionName);
 		}
 
 		$liveEntryDb = entryPeer::retrieveByPK($entryId);
 		if (!$liveEntryDb)
 		{
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		}
 		/**
 		 * @var LiveStreamEntry $liveEntryDb
 		 */
 		if ($liveEntryDb->getType() != entryType::LIVE_STREAM)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_TYPE, $liveEntryDb->getName(), $liveEntryDb->getType(), entryType::LIVE_STREAM);
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_TYPE, $liveEntryDb->getName(), $liveEntryDb->getType(), entryType::LIVE_STREAM);
 		}
 
 		$existingConfRoom = $this->findExistingConferenceRoom($entryId);
 		if ($existingConfRoom)
 			return $existingConfRoom;
-		KalturaLog::log('Could not find existing conference room');
+		VidiunLog::log('Could not find existing conference room');
 
 		$liveEntryService = new LiveStreamService();
 		$liveEntryService->dumpApiRequest($entryId, true);
 		$lockKey = "allocate_conference_room_" . $entryId;
-		$conference = kLock::runLocked($lockKey, array($this, 'allocateConferenceRoomImpl'), array($entryId, $env));
+		$conference = vLock::runLocked($lockKey, array($this, 'allocateConferenceRoomImpl'), array($entryId, $env));
 		return $conference;
 	}
 
@@ -67,7 +67,7 @@ class ConferenceService extends KalturaBaseService {
 		$maxRTCStreamInputs = $partner->getMaxLiveRtcStreamInputs();
 		if ($numOfConcurrentRtcStreams >= $maxRTCStreamInputs)
 		{
-			throw new KalturaAPIException(KalturaErrors::LIVE_STREAM_EXCEEDED_MAX_RTC_STREAMS, $this->getPartnerId(), $maxRTCStreamInputs);
+			throw new VidiunAPIException(VidiunErrors::LIVE_STREAM_EXCEEDED_MAX_RTC_STREAMS, $this->getPartnerId(), $maxRTCStreamInputs);
 		}
 		
 		$serverNode = $this->findFreeServerNode($env, $partner);
@@ -121,12 +121,12 @@ class ConferenceService extends KalturaBaseService {
 		$serverNodes = ServerNodePeer::retrieveActiveUnoccupiedServerNodesByType(ConferencePlugin::getCoreValue('serverNodeType',ConferenceServerNodeType::CONFERENCE_SERVER), $env);
 		if (!$serverNodes)
 		{
-			KalturaLog::debug("Could not find avaialable conference server node in pool");
-			if (kConf::get('CONFERNCE_SERVER_NODE_DYNAMIC_ALLOCATION', null, null) === true)
+			VidiunLog::debug("Could not find avaialable conference server node in pool");
+			if (vConf::get('CONFERNCE_SERVER_NODE_DYNAMIC_ALLOCATION', null, null) === true)
 			{
-				throw new KalturaAPIException(KalturaErrors::INTERNAL_SERVERL_ERROR);
+				throw new VidiunAPIException(VidiunErrors::INTERNAL_SERVERL_ERROR);
 			}
-			throw new KalturaAPIException(KalturaConferenceErrors::CONFERENCE_ROOMS_UNAVAILABLE);
+			throw new VidiunAPIException(VidiunConferenceErrors::CONFERENCE_ROOMS_UNAVAILABLE);
 		}
 		foreach ($serverNodes as $serverNode)
 		{
@@ -138,14 +138,14 @@ class ConferenceService extends KalturaBaseService {
 			$serverNode->setStatus(ServerNodeStatus::NOT_REGISTERED);
 			$serverNode->save();
 		}
-		throw new KalturaAPIException(KalturaConferenceErrors::CONFERENCE_ROOMS_UNREACHABLE);
+		throw new VidiunAPIException(VidiunConferenceErrors::CONFERENCE_ROOMS_UNREACHABLE);
 	}
 
 	protected function canReach(ConferenceServerNode $serverNode)
 	{
 		//TODO: make sure that HTTP protocol is available for RTC servers.
 		$aliveUrl = $serverNode->getServiceBaseUrl() . "/alive";
-		$content = KCurlWrapper::getContent($aliveUrl);
+		$content = VCurlWrapper::getContent($aliveUrl);
 		if (strtolower($content) === self::CAN_REACH_EXPECTED_VALUE)
 			return true;
 		return false;
@@ -159,7 +159,7 @@ class ConferenceService extends KalturaBaseService {
 	 * @param string $entryId
 	 * @param int $serverNodeId
 	 * @return bool
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 * @beta
 	 */
 	public function finishConfAction($entryId, $serverNodeId = null)
@@ -169,7 +169,7 @@ class ConferenceService extends KalturaBaseService {
 		{
 			if (!$confEntryServerNode->isValid())
 			{
-				KalturaLog::debug("conf still has grace period, not finishing");
+				VidiunLog::debug("conf still has grace period, not finishing");
 				return false;
 			}
 			$confEntryServerNode->delete();
@@ -181,14 +181,14 @@ class ConferenceService extends KalturaBaseService {
 			$serverNode = ServerNodePeer::retrieveByPK($serverNodeId);
 			if (!$serverNode)
 			{
-				KalturaLog::info("Could not find server node with id [$serverNodeId]");
-				throw new KalturaAPIException(KalturaErrors::SERVER_NODE_NOT_FOUND_WITH_ID, $serverNodeId);
+				VidiunLog::info("Could not find server node with id [$serverNodeId]");
+				throw new VidiunAPIException(VidiunErrors::SERVER_NODE_NOT_FOUND_WITH_ID, $serverNodeId);
 			}
 
 			$otherEntryServerNodes = EntryServerNodePeer::retrieveByServerNodeIdAndType($serverNode->getId(), ConferencePlugin::getCoreValue('serverNodeType', ConferenceServerNodeType::CONFERENCE_SERVER));
 			if (!count($otherEntryServerNodes))
 			{
-				KalturaLog::debug('No entry server nodes left, marking server node as not registered');
+				VidiunLog::debug('No entry server nodes left, marking server node as not registered');
 				$serverNode->setStatus(ServerNodeStatus::NOT_REGISTERED);
 				$serverNode->save();
 			}
@@ -203,7 +203,7 @@ class ConferenceService extends KalturaBaseService {
 	 * @actionAlias liveStream.registerConf
 	 * @param string $entryId
 	 * @return bool
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 * @beta
 	 *
 	 */
@@ -212,7 +212,7 @@ class ConferenceService extends KalturaBaseService {
 		$confEntryServerNode = EntryServerNodePeer::retrieveByEntryIdAndServerType($entryId, ConferencePlugin::getCoreValue('EntryServerNodeType',ConferenceEntryServerNodeType::CONFERENCE_ENTRY_SERVER));
 		if (!$confEntryServerNode)
 		{
-			throw new KalturaAPIException(KalturaErrors::ENTRY_SERVER_NODE_NOT_FOUND,$entryId, ConferencePlugin::getCoreValue('EntryServerNodeType',ConferenceEntryServerNodeType::CONFERENCE_ENTRY_SERVER));
+			throw new VidiunAPIException(VidiunErrors::ENTRY_SERVER_NODE_NOT_FOUND,$entryId, ConferencePlugin::getCoreValue('EntryServerNodeType',ConferenceEntryServerNodeType::CONFERENCE_ENTRY_SERVER));
 		}
 		/** @var ConferenceEntryServerNode $confEntryServerNode */
 		$confEntryServerNode->incRegistered();
@@ -222,8 +222,8 @@ class ConferenceService extends KalturaBaseService {
 	/**
 	 * @param $entryId
 	 * @param $confRoom
-	 * @return KalturaRoomDetails
-	 * @throws kCoreException
+	 * @return VidiunRoomDetails
+	 * @throws vCoreException
 	 */
 	protected function getRoomDetails($entryId, ConferenceEntryServerNode $confRoom, ConferenceServerNode $serverNode)
 	{
@@ -231,13 +231,13 @@ class ConferenceService extends KalturaBaseService {
 		/** @var LiveStreamEntry $liveStreamEntry */
 		if (!$liveStreamEntry)
 		{
-			throw new kCoreException(KalturaErrors::ENTRY_ID_NOT_FOUND, $this->getEntryId());
+			throw new vCoreException(VidiunErrors::ENTRY_ID_NOT_FOUND, $this->getEntryId());
 		}
-		$outObj = new KalturaRoomDetails();
+		$outObj = new VidiunRoomDetails();
 		$outObj->serverUrl = $confRoom->buildRoomUrl($this->getPartnerId());
 		$outObj->entryId = $entryId;
-		$expiry = time() + kConf::get('rtc_token_expiry', null, '60');
-		$rtcSecret = kConf::get('rtc_token_secret');
+		$expiry = time() + vConf::get('rtc_token_expiry', null, '60');
+		$rtcSecret = vConf::get('rtc_token_secret');
 		$token = hash_hmac("sha256" ,$entryId . $expiry, $rtcSecret);
 		$outObj->token = $token;
 		$outObj->expiry = $expiry;

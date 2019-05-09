@@ -5,7 +5,7 @@ class myHealthCheckAndSecurityFilter extends sfFilter
 	const MAX_VALID_PARAM_NAME = 60;
 	// a list of paramter names to skip thhe basic security check
 	private static $special_params = array( "contributorsxml" , "metadata" , "xml" ,"myspace_shareHTML" , "recipientList" , "data" , 
-		"post_title" , "post_content" , "kshow_permissions" , "widget_partnerdata" );
+		"post_title" , "post_content" , "vshow_permissions" , "widget_partnerdata" );
 	
 	private static $special_suffix = array ( "xml" , "datacontent" , "conffile"); // dataContent - for entries of type DVD_PROJECT & BUBBLES
 	
@@ -50,7 +50,7 @@ $partner_id =  $request->getParameter ( "partner_id" );
 if ( ! $partner_id ) $partner_id =  $request->getParameter ( "p" );
 if ( $partner_id == -1 ) // can add code for specific partners whentrying to debug them
 {
-	// add an extra logfile for specific partners - the directory will be the same as the kaltura_prod 
+	// add an extra logfile for specific partners - the directory will be the same as the vidiun_prod 
 	// the name will be p_<partner_id>.log
 	$log_path = sfConfig::get( "sf_log_dir" );
 	$logger = sfLogger::getInstance();
@@ -94,8 +94,8 @@ if ( $partner_id == -1 ) // can add code for specific partners whentrying to deb
 			// TODO - performance 
 			// DB
 			$c = new Criteria();
-			$c->add ( kshowPeer::ID , 1  );
-			$id_list = kshowPeer::selectIdsForCriteria ( $c );
+			$c->add ( vshowPeer::ID , 1  );
+			$id_list = vshowPeer::selectIdsForCriteria ( $c );
 		}
 		catch ( Exception $ex )
 		{
@@ -168,7 +168,7 @@ if ( $partner_id == -1 ) // can add code for specific partners whentrying to deb
 			foreach ( self::$special_suffix as $allowed_suffix )
 			{
 				// the match can be case insensitive
-				if ( kString::endsWith( strtolower($param_name ), $allowed_suffix )) 
+				if ( vString::endsWith( strtolower($param_name ), $allowed_suffix )) 
 				{
 					$valid = true;
 					break;

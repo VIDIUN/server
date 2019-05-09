@@ -5,10 +5,10 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class KalturaEmailNotificationUserRecipientJobData extends KalturaEmailNotificationRecipientJobData
+class VidiunEmailNotificationUserRecipientJobData extends VidiunEmailNotificationRecipientJobData
 {
 	/**
-	 * @var KalturaUserFilter
+	 * @var VidiunUserFilter
 	 */
 	public $filter;
 	
@@ -17,7 +17,7 @@ class KalturaEmailNotificationUserRecipientJobData extends KalturaEmailNotificat
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -25,35 +25,35 @@ class KalturaEmailNotificationUserRecipientJobData extends KalturaEmailNotificat
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaEmailNotificationRecipientJobData::setProviderType()
+	 * @see VidiunEmailNotificationRecipientJobData::setProviderType()
 	 */
 	protected function setProviderType() {
-		$this->providerType = KalturaEmailNotificationRecipientProviderType::USER;	
+		$this->providerType = VidiunEmailNotificationRecipientProviderType::USER;	
 		
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject($source_object)
+	 * @see VidiunObject::fromObject($source_object)
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $dbObject kEmailNotificationStaticRecipientJobData */
+		/* @var $dbObject vEmailNotificationStaticRecipientJobData */
 		parent::doFromObject($dbObject, $responseProfile);
 		$this->setProviderType();
 		if ($dbObject->getFilter())
 		{
-			$this->filter = new KalturaUserFilter();
+			$this->filter = new VidiunUserFilter();
 			$this->filter->fromObject($dbObject->getFilter());
 		}
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kEmailNotificationUserRecipientJobData();
+			$dbObject = new vEmailNotificationUserRecipientJobData();
 		
 		return parent::toObject($dbObject, $propertiesToSkip);
 	}

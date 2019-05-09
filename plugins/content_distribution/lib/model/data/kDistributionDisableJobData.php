@@ -3,6 +3,6 @@
  * @package plugins.contentDistribution
  * @subpackage model.data
  */
-class kDistributionDisableJobData extends kDistributionUpdateJobData
+class vDistributionDisableJobData extends vDistributionUpdateJobData
 {
 }

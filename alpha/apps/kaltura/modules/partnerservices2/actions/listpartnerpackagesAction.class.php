@@ -26,7 +26,7 @@ class listpartnerpackagesAction extends defPartnerservices2Action
 	}
 
 		
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 
 		$packages = new PartnerPackages();

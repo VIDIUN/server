@@ -75,7 +75,7 @@ class myPartnerUtils
 	 *
 	 * will use cache to reduce the times the partner table is hit (hardly changes over time)
 	 */
-	public static function isValidSecret ( $partner_id , $partner_secret , $partner_key , &$ks_max_expiry_in_seconds , $admin = SessionType::USER  )
+	public static function isValidSecret ( $partner_id , $partner_secret , $partner_key , &$vs_max_expiry_in_seconds , $admin = SessionType::USER  )
 	{
 		// TODO - handle errors
 		$partner = PartnerPeer::retrieveByPK( $partner_id );
@@ -86,28 +86,28 @@ class myPartnerUtils
 			return Partner::VALIDATE_PARTNER_BLOCKED;
 		}
 		
-		return $partner->validateSecret( $partner_secret , $partner_key , $ks_max_expiry_in_seconds , $admin);
+		return $partner->validateSecret( $partner_secret , $partner_key , $vs_max_expiry_in_seconds , $admin);
 	}
 
 	/**
-	 * a lks  is a "lite" kaltura session. It is created by the partner and can be be translated into a simplified ks:
+	 * a lvs  is a "lite" vidiun session. It is created by the partner and can be be translated into a simplified vs:
 	 * 	1. only regular - not admin
-	 * 	2. view & edit privileges (nt for a specific ks)
+	 * 	2. view & edit privileges (nt for a specific vs)
 	 * 	3. does not expire  
 	 * 
-	 * 	lks = md5 ( secret , puser_id , version )
+	 * 	lvs = md5 ( secret , puser_id , version )
 	 */
-	public static function isValidLks ( $partner_id , $lks , $puser_id , $version , &$ks_max_expiry_in_seconds   )
+	public static function isValidLks ( $partner_id , $lvs , $puser_id , $version , &$vs_max_expiry_in_seconds   )
 	{
 		// TODO - handle errors
 		$partner = PartnerPeer::retrieveByPK( $partner_id );
 		if ( !$partner ) return Partner::VALIDATE_WRONG_LOGIN;
-		if ( !$partner->getAllowLks() )	 return Partner::VALIDATE_LKS_DISABLED;
+		if ( !$partner->getAllowLks() )	 return Partner::VALIDATE_LVS_DISABLED;
 			
 		$our_hash = md5 ( $partner->getSecret() . $puser_id . $version );
-		$ks_max_expiry_in_seconds = $partner->getKsMaxExpiryInSeconds();
-		if ( $lks != $our_hash ) return ks::INVALID_LKS;
-		return ( ks::OK );
+		$vs_max_expiry_in_seconds = $partner->getVsMaxExpiryInSeconds();
+		if ( $lvs != $our_hash ) return vs::INVALID_LVS;
+		return ( vs::OK );
 	}
 	
 	
@@ -117,7 +117,7 @@ class myPartnerUtils
 		$partner = PartnerPeer::retrieveByPK( $partner_id );
 		if ( !$partner ) return Partner::VALIDATE_WRONG_LOGIN;
 
-		return $partner->getKsMaxExpiryInSeconds( );
+		return $partner->getVsMaxExpiryInSeconds( );
 	}
 
 	public static function setCurrentPartner ( $partner_id )
@@ -155,27 +155,27 @@ class myPartnerUtils
 	{
 		if (!$allPartnerCriteriaParams)
 		{
-			KalturaLog::debug("could not re-apply filters, empty partnerCriteriaParams array was sent");
+			VidiunLog::debug("could not re-apply filters, empty partnerCriteriaParams array was sent");
 			return;
 		}
 
 		self::resetAllFilters();
 		foreach($allPartnerCriteriaParams as $objectName => $partnerCriteriaParams)
 		{
-			list($partner_id, $private_partner_data, $partner_group, $kaltura_network) = $partnerCriteriaParams;
-			self::addPartnerToCriteria($objectName, $partner_id, $private_partner_data, $partner_group, $kaltura_network);
+			list($partner_id, $private_partner_data, $partner_group, $vidiun_network) = $partnerCriteriaParams;
+			self::addPartnerToCriteria($objectName, $partner_id, $private_partner_data, $partner_group, $vidiun_network);
 		}
 	}
 	
 	/**
 	 * Will set the pertner filter in all 3 peers:
-	 * 	kuserPeer
-	 * 	kshowPeer
+	 * 	vuserPeer
+	 * 	vshowPeer
 	 * 	entryPeer
 	 *
 	 * @param unknown_type $partner_id
 	 */
-	public static function applyPartnerFilters ( $partner_id=null , $private_partner_data = false , $partner_group = null , $kaltura_network = null )
+	public static function applyPartnerFilters ( $partner_id=null , $private_partner_data = false , $partner_group = null , $vidiun_network = null )
 	{
 		if ( $partner_id === null )
 		{
@@ -183,13 +183,13 @@ class myPartnerUtils
 		}
 
 		//Category peer should be added before entry - since we select from category on entry->setDefaultCriteria.
-		self::addPartnerToCriteria ( 'kuser', $partner_id , $private_partner_data, $partner_group);
+		self::addPartnerToCriteria ( 'vuser', $partner_id , $private_partner_data, $partner_group);
 		self::addPartnerToCriteria ( 'category' , $partner_id , $private_partner_data , $partner_group);
-		self::addPartnerToCriteria ( 'entry' , $partner_id , $private_partner_data, $partner_group , $kaltura_network );
-		self::addPartnerToCriteria ( 'kshow' , $partner_id , $private_partner_data, $partner_group , $kaltura_network );
+		self::addPartnerToCriteria ( 'entry' , $partner_id , $private_partner_data, $partner_group , $vidiun_network );
+		self::addPartnerToCriteria ( 'vshow' , $partner_id , $private_partner_data, $partner_group , $vidiun_network );
 		self::addPartnerToCriteria ( 'moderation' , $partner_id , $private_partner_data , $partner_group);
 		self::addPartnerToCriteria ( 'categoryEntry' , $partner_id , $private_partner_data , $partner_group);
-		self::addPartnerToCriteria ( 'categoryKuser', $partner_id , $private_partner_data , $partner_group);
+		self::addPartnerToCriteria ( 'categoryVuser', $partner_id , $private_partner_data , $partner_group);
 	}
 
 	public static function getPartnerCriteriaParams($objectName)
@@ -210,11 +210,11 @@ class myPartnerUtils
 	// if only partner_id exists - force it on the criteria
 	// if also $partner_group - allow or partner_id or the partner_group - use in ( partner_id ,  $partner_group ) - where partner_group is split by ','
 	// if partner_group == "*" - don't filter at all
-	// if $kaltura_network - add 'or  display_in_search >= 2'
-	public static function addPartnerToCriteria ( $objectName, $partner_id, $private_partner_data = false , $partner_group=null , $kaltura_network=null )
+	// if $vidiun_network - add 'or  display_in_search >= 2'
+	public static function addPartnerToCriteria ( $objectName, $partner_id, $private_partner_data = false , $partner_group=null , $vidiun_network=null )
 	{
 		$objectName = strtolower($objectName);
-		self::$partnerCriteriaParams[$objectName] = array($partner_id, $private_partner_data, $partner_group, $kaltura_network);
+		self::$partnerCriteriaParams[$objectName] = array($partner_id, $private_partner_data, $partner_group, $vidiun_network);
 		self::$allPartnerCriteriaParams[$objectName] = self::$partnerCriteriaParams[$objectName];
 	}
 
@@ -263,7 +263,7 @@ class myPartnerUtils
 	public static function createWidgetImage($partner, $create)
 	{
 		$contentPath = myContentStorage::getFSContentRootPath();
-		$path = kFile::fixPath( $contentPath.$partner->getWidgetImagePath() );
+		$path = vFile::fixPath( $contentPath.$partner->getWidgetImagePath() );
 
 		// if the create flag is not set and the file doesnt exist exit
 		// e.g. the roughcut name has change, we update the image only if it was already in some widget
@@ -282,30 +282,30 @@ class myPartnerUtils
 
 		$pos = imagettftext($im, $fontSize, 0, 10, $bottom, $green, $font, $partner->getPartnerName()." Collaborative Video");
 		$pos = imagettftext($im, $fontSize, 0, $pos[2], $bottom, $white, $font, " powered by ");
-		imagettftext($im, $fontSize, 0, $pos[2], $bottom, $green, $font, "Kaltura");
+		imagettftext($im, $fontSize, 0, $pos[2], $bottom, $green, $font, "Vidiun");
 
-		kFile::fullMkdir($path);
+		vFile::fullMkdir($path);
 
 		imagegif($im, $path);
 		imagedestroy($im);
 
 	}
 
-	public static function shouldForceUniqueKshow ( $partner_id , $allow_duplicate_names )
+	public static function shouldForceUniqueVshow ( $partner_id , $allow_duplicate_names )
 	{
 		// TODO - make more generic !
 		// TODO - remove this code - it's only for wikis
 		if ( ! $allow_duplicate_names ) return true;
 		$partner = PartnerPeer::retrieveByPK( $partner_id );
 		if ( !$partner ) return !$allow_duplicate_names;
-		return $partner->getShouldForceUniqueKshow();
+		return $partner->getShouldForceUniqueVshow();
 	}
 
-	public static function returnDuplicateKshow ( $partner_id )
+	public static function returnDuplicateVshow ( $partner_id )
 	{
 		$partner = PartnerPeer::retrieveByPK( $partner_id );
 		if ( !$partner ) return false;
-		return $partner->getReturnDuplicateKshow();		
+		return $partner->getReturnDuplicateVshow();		
 	}
 	
 	public static function shouldNotify ( $partner_id )
@@ -380,12 +380,12 @@ class myPartnerUtils
 			case 'api':
 				if ($protocol == 'https')
 				{
-					$apiHost = (kConf::hasParam('cdn_api_host_https')) ? kConf::get('cdn_api_host_https') : kConf::get('www_host');
+					$apiHost = (vConf::hasParam('cdn_api_host_https')) ? vConf::get('cdn_api_host_https') : vConf::get('www_host');
 					return 'https://' . $apiHost;
 				}
 				else
 				{
-					$apiHost = (kConf::hasParam('cdn_api_host')) ? kConf::get('cdn_api_host') : kConf::get('www_host');
+					$apiHost = (vConf::hasParam('cdn_api_host')) ? vConf::get('cdn_api_host') : vConf::get('www_host');
 					return 'http://' . $apiHost;
 				}
 				break;
@@ -425,8 +425,8 @@ class myPartnerUtils
 
 		$thumbHost = $partner->getThumbnailHost();
 
-		// temporary default is http since the system is not aligned to use https in all of its components (e.g. kmc)
-		// right now, if a partner cdnHost is set to https:// the kmc wont work well if we reply with https prefix to its requests
+		// temporary default is http since the system is not aligned to use https in all of its components (e.g. vmc)
+		// right now, if a partner cdnHost is set to https:// the vmc wont work well if we reply with https prefix to its requests
 		if ($protocol === null)
 			$protocol='http';
 
@@ -617,7 +617,7 @@ class myPartnerUtils
 		$conversion_profile_2_id = $entry->getConversionProfileId();
 		$conversion_quality = "";
 		
-		KalturaLog::log("conversion_profile_2_id [$conversion_profile_2_id]");
+		VidiunLog::log("conversion_profile_2_id [$conversion_profile_2_id]");
 		if ( is_null($conversion_profile_2_id) || $conversion_profile_2_id <= 0 )
 		{
 			// this is assumed to be the old conversion profile
@@ -631,11 +631,11 @@ class myPartnerUtils
 				throw new Exception ( "Cannot find partner for entry [$entry_id]" );
 			}
 			
-			KalturaLog::log("conversion_quality [$conversion_quality]");
-			$partner_kmc_version = $partner->getKmcVersion ( );
-			if ( is_null($partner_kmc_version ) || version_compare( $partner_kmc_version , "2" , "<" ) ) 
+			VidiunLog::log("conversion_quality [$conversion_quality]");
+			$partner_vmc_version = $partner->getVmcVersion ( );
+			if ( is_null($partner_vmc_version ) || version_compare( $partner_vmc_version , "2" , "<" ) ) 
 			{
-				// if old kmc - the fallback conversion_quality is the one on the partner->getDefConversionProfileType
+				// if old vmc - the fallback conversion_quality is the one on the partner->getDefConversionProfileType
 				if ( is_null($conversion_quality) || $conversion_quality <= 0 )
 				{
 					// search for the default one on the partner
@@ -652,13 +652,13 @@ class myPartnerUtils
 					throw new Exception ( "Cannot find conversion profile for entry_id [$entry_id] OLD conversion_quality [$conversion_quality]" );
 				}
 				
-				// this is a partner working with OLD KMC
+				// this is a partner working with OLD VMC
 				// - we need to create the new conversion profile from the old one
 				$new_conversion_profile = myConversionProfileUtils::createConversionProfile2FromConversionProfile ( $old_conversion_profile );  
 			}
 			else
 			{
-				// if new kmc_version - the fallback conversion_quality is the one on the partner->getDefaultConversionProfileId
+				// if new vmc_version - the fallback conversion_quality is the one on the partner->getDefaultConversionProfileId
 	            if ( is_null($conversion_quality) || $conversion_quality <= 0 )
 				{
 					// search for the default one on the partner
@@ -666,7 +666,7 @@ class myPartnerUtils
 				}
 
 
-				// partner with new KMC version - use the $conversion_quality as if it was the conversionProfile2 id
+				// partner with new VMC version - use the $conversion_quality as if it was the conversionProfile2 id
 				$new_conversion_profile = conversionProfile2Peer::retrieveByPk ( $conversion_quality );
 			}
 			
@@ -708,8 +708,8 @@ class myPartnerUtils
 			if(!$partner) 
 				throw new Exception("Cannot find partner for id [$partner_id]");
 			
-			$partner_kmc_version = $partner->getKmcVersion();
-			if(is_null($partner_kmc_version) || version_compare($partner_kmc_version, "2", "<")) 
+			$partner_vmc_version = $partner->getVmcVersion();
+			if(is_null($partner_vmc_version) || version_compare($partner_vmc_version, "2", "<")) 
 			{
 				$old_conversion_profile = self::getCurrentConversionProfile($partner->getId());
 				if(!$old_conversion_profile)
@@ -725,17 +725,17 @@ class myPartnerUtils
 	}	
 	
 /*@Partner $partner*/
-	public static function getDefaultKshow ( $partner_id, $subp_id , $puser_kuser, $group_id = null , $create_anyway = false, $default_name = null )
+	public static function getDefaultVshow ( $partner_id, $subp_id , $puser_vuser, $group_id = null , $create_anyway = false, $default_name = null )
 	{
 		$partner = PartnerPeer::retrieveByPK( $partner_id ); 
 		if ( !$partner ) return null;
 		
-		// see if partner allows a fallback kshow
-		$allow = $partner->getUseDefaultKshow();
+		// see if partner allows a fallback vshow
+		$allow = $partner->getUseDefaultVshow();
 		if ( ! $allow ) return null;
 
-		$kshow = myKshowUtils::getDefaultKshow ( $partner_id , $subp_id , $puser_kuser , $group_id , $partner->getAllowQuickEdit() , $create_anyway , $default_name );
-		return $kshow;
+		$vshow = myVshowUtils::getDefaultVshow ( $partner_id , $subp_id , $puser_vuser , $group_id , $partner->getAllowQuickEdit() , $create_anyway , $default_name );
+		return $vshow;
 	}
 	
 	
@@ -759,7 +759,7 @@ class myPartnerUtils
 		$partner = PartnerPeer::retrieveByPK( $partner_id );
 		if ( !$partner ) return null;
 		
-		$encrypted_data = KCryptoWrapper::encrypt_3des($partner_id, $key);	
+		$encrypted_data = VCryptoWrapper::encrypt_3des($partner_id, $key);	
 		return $token_prefix . base64_encode( $encrypted_data );
 	}
 	
@@ -850,62 +850,62 @@ class myPartnerUtils
 		return $return;
 	}
 	
-	const KALTURA_ACCOUNT_UPGRADES_NOTIFICATION_EMAIL = 'upgrade@kaltura.com';
+	const VIDIUN_ACCOUNT_UPGRADES_NOTIFICATION_EMAIL = 'upgrade@vidiun.com';
 	public static function notifiyPartner($mail_type, $partner, $body_params = array() )
 	{
 		/* --- while deploying - do not notifiy the partner, only send internal notifications. --- */
 		$body_params[0] = $body_params[0].' (PartnerID: '. $partner->getId() .')';
-		kJobsManager::addMailJob(
+		vJobsManager::addMailJob(
 			null, 
 			0, 
 			$partner->getId(), 
 			$mail_type, 
-			kMailJobData::MAIL_PRIORITY_NORMAL, 
-			kConf::get ("partner_notification_email" ), 
-			kConf::get ("partner_notification_name" ), 
+			vMailJobData::MAIL_PRIORITY_NORMAL, 
+			vConf::get ("partner_notification_email" ), 
+			vConf::get ("partner_notification_name" ), 
 			$partner->getAdminEmail(), 
 			$body_params);		
 
 		// add PID,PartnerName,PartnerType to admin name when sending internal notification
 		$body_params[0] = $body_params[0].' ('. $partner->getId() .')'." type:[{$partner->getType()}] partnerName:[{$partner->getPartnerName()}]";
 		 
-		kJobsManager::addMailJob(
+		vJobsManager::addMailJob(
 			null, 
 			0, 
 			$partner->getId(), 
 			$mail_type, 
-			kMailJobData::MAIL_PRIORITY_NORMAL, 
-			kConf::get ("partner_notification_email" ), 
-			kConf::get ("partner_notification_name" ), 
-			myPartnerUtils::KALTURA_ACCOUNT_UPGRADES_NOTIFICATION_EMAIL, 
+			vMailJobData::MAIL_PRIORITY_NORMAL, 
+			vConf::get ("partner_notification_email" ), 
+			vConf::get ("partner_notification_name" ), 
+			myPartnerUtils::VIDIUN_ACCOUNT_UPGRADES_NOTIFICATION_EMAIL, 
 			$body_params);
 	}
 	
 
 	public static function emailChangedEmail($partner_id, $partner_old_email, $partner_new_email, $partner_name , $mail_type )
 	{
-		kJobsManager::addMailJob(
+		vJobsManager::addMailJob(
 			null, 
 			0, 
 			$partner_id, 
 			$mail_type, 
-			kMailJobData::MAIL_PRIORITY_NORMAL, 
-			kConf::get ("partner_change_email_email" ), 
-			kConf::get ("partner_change_email_name" ), 
+			vMailJobData::MAIL_PRIORITY_NORMAL, 
+			vConf::get ("partner_change_email_email" ), 
+			vConf::get ("partner_change_email_name" ), 
 			$partner_old_email.','.$partner_new_email, 
 			array($partner_name,$partner_old_email,$partner_new_email));
 	}
 		
-	const KALTURA_PACKAGE_EIGHTY_PERCENT_WARNING = 81;
-	const KALTURA_PACKAGE_LIMIT_WARNING_1 = 82;
-	const KALTURA_PACKAGE_LIMIT_WARNING_2 = 83;
-	const KALTURA_DELETE_ACCOUNT = 84;
-	const KALTURA_PAID_PACKAGE_SUGGEST_UPGRADE = 85;
-	const KALTURA_EXTENED_FREE_TRAIL_ENDS_WARNING = 87;
+	const VIDIUN_PACKAGE_EIGHTY_PERCENT_WARNING = 81;
+	const VIDIUN_PACKAGE_LIMIT_WARNING_1 = 82;
+	const VIDIUN_PACKAGE_LIMIT_WARNING_2 = 83;
+	const VIDIUN_DELETE_ACCOUNT = 84;
+	const VIDIUN_PAID_PACKAGE_SUGGEST_UPGRADE = 85;
+	const VIDIUN_EXTENED_FREE_TRAIL_ENDS_WARNING = 87;
 	
-	const KALTURA_MONTHLY_PACKAGE_EIGHTY_PERCENT_WARNING = 95;
- 	const KALTURA_MONTHLY_PACKAGE_LIMIT_WARNING_1 = 96;
- 	const KALTURA_MONTHLY_PACKAGE_LIMIT_WARNING_2 = 97;
+	const VIDIUN_MONTHLY_PACKAGE_EIGHTY_PERCENT_WARNING = 95;
+ 	const VIDIUN_MONTHLY_PACKAGE_LIMIT_WARNING_1 = 96;
+ 	const VIDIUN_MONTHLY_PACKAGE_LIMIT_WARNING_2 = 97;
 	
 	const IS_FREE_PACKAGE_PLACE_HOLDER = "{IS_FREE_PACKAGE}";
 	
@@ -924,7 +924,7 @@ class myPartnerUtils
 		if ($partnerPackage['id'] == 1) // free package
 			$reportFilter->extra_map[self::IS_FREE_PACKAGE_PLACE_HOLDER] = "TRUE";
 		
-		list($header, $data) = kKavaReportsMgr::getTable( $partner->getId(), myReportsMgr::REPORT_TYPE_PARTNER_USAGE_DASHBOARD ,
+		list($header, $data) = vKavaReportsMgr::getTable( $partner->getId(), myReportsMgr::REPORT_TYPE_PARTNER_USAGE_DASHBOARD ,
 		 $reportFilter, 10000 , 1 , "", null);
 
 		$avg_continuous_aggr_storage_mb_key = array_search('avg_continuous_aggr_storage_mb', $header);
@@ -950,7 +950,7 @@ class myPartnerUtils
 		$reportFilter = new reportsInputFilter();
 		$reportFilter->from_day = str_replace('-','',$fromDate);
 		$reportFilter->to_day = str_replace('-','',$report_date);		
-		list($header, $data) = kKavaReportsMgr::getTotal($partner->getId(), myReportsMgr::REPORT_TYPE_PARTNER_USAGE, $reportFilter, $partner->getId());
+		list($header, $data) = vKavaReportsMgr::getTotal($partner->getId(), myReportsMgr::REPORT_TYPE_PARTNER_USAGE, $reportFilter, $partner->getId());
 
 		$bandwidth_consumption = array_search('bandwidth_consumption', $header);
 		$deleted_storage = array_search('deleted_storage', $header);
@@ -979,7 +979,7 @@ class myPartnerUtils
 		if ($partnerPackage['id'] == 1) // free package
 			$reportFilter->extra_map[self::IS_FREE_PACKAGE_PLACE_HOLDER] = "TRUE";
 		
-		list($header, $data) = kKavaReportsMgr::getTable( $partner->getId(), myReportsMgr::REPORT_TYPE_PARTNER_BANDWIDTH_USAGE ,
+		list($header, $data) = vKavaReportsMgr::getTable( $partner->getId(), myReportsMgr::REPORT_TYPE_PARTNER_BANDWIDTH_USAGE ,
 		 $reportFilter, 10000 , 1 , "", null);
 
 		$avg_continuous_aggr_storage_mb_key = array_search('avg_continuous_aggr_storage_mb', $header);
@@ -1050,15 +1050,15 @@ class myPartnerUtils
 	
 	public static function getEmailLinkHash($partner_id, $partner_secret)
 	{
-		return md5($partner_secret.$partner_id.kConf::get('kaltura_email_hash'));
+		return md5($partner_secret.$partner_id.vConf::get('vidiun_email_hash'));
 	}
 	
 	public static function doPartnerUsage(Partner $partner)
 	{
-		KalturaLog::debug("Validating partner [" . $partner->getId() . "]");
+		VidiunLog::debug("Validating partner [" . $partner->getId() . "]");
 		if($partner->getExtendedFreeTrail())
 		{
-			KalturaLog::debug("Partner [" . $partner->getId() . "] trial account has extension");
+			VidiunLog::debug("Partner [" . $partner->getId() . "] trial account has extension");
 			if($partner->getExtendedFreeTrailExpiryDate() < time())
 			{
 				//ExtendedFreeTrail ended
@@ -1068,7 +1068,7 @@ class myPartnerUtils
 			}
 			elseif (myPartnerUtils::isPartnerCreatedAsMonitoredFreeTrial($partner))
 			{
-				KalturaLog::debug("Partner [" . $partner->getId() . "] trial account extended - monitored trial");
+				VidiunLog::debug("Partner [" . $partner->getId() . "] trial account extended - monitored trial");
 				return;
 			}
 			else{
@@ -1079,10 +1079,10 @@ class myPartnerUtils
 					$partner->save();
 					$email_link_hash = 'pid='.$partner->getId().'&h='.(self::getEmailLinkHash($partner->getId(), $partner->getSecret()));
 					$mail_parmas = array($partner->getAdminName() ,$email_link_hash);
-					myPartnerUtils::notifiyPartner(myPartnerUtils::KALTURA_EXTENED_FREE_TRAIL_ENDS_WARNING, $partner, $mail_parmas);
+					myPartnerUtils::notifiyPartner(myPartnerUtils::VIDIUN_EXTENED_FREE_TRAIL_ENDS_WARNING, $partner, $mail_parmas);
 				}			
 				
-				KalturaLog::debug("Partner [" . $partner->getId() . "] trial account extended");
+				VidiunLog::debug("Partner [" . $partner->getId() . "] trial account extended");
 				return;
 			}
 			
@@ -1116,7 +1116,7 @@ class myPartnerUtils
 		$percent = round( ($totalUsageGB / $divisionFactor)*100, 2);
 		$partner->setPartnerUsagePercent($percent);
 
-		KalturaLog::debug("percent (".$partner->getId().") is: $percent");
+		VidiunLog::debug("percent (".$partner->getId().") is: $percent");
 		$email_link_hash = 'pid='.$partner->getId().'&h='.(self::getEmailLinkHash($partner->getId(), $partner->getSecret()));
 		$email_link_hash_adOpt = $email_link_hash.'&type=adOptIn';
 		/* mindtouch partners - extra mail parameter */
@@ -1129,7 +1129,7 @@ class myPartnerUtils
 			$percent < 100 &&
 			!$partner->getEightyPercentWarning())
 		{
-			KalturaLog::debug("partner ". $partner->getId() ." reached 80% - setting first warning");
+			VidiunLog::debug("partner ". $partner->getId() ." reached 80% - setting first warning");
 				
 			/* prepare mail job, and set EightyPercentWarning() to true/date */
 			$partner->setEightyPercentWarning(time());
@@ -1137,7 +1137,7 @@ class myPartnerUtils
 			if(!$monitoredFreeTrial)
 			{
 				$body_params = array($partner->getAdminName(), $partnerPackage['cycle_bw'], $mindtouch_notice, round($totalUsageGB, 2), $email_link_hash);
-				myPartnerUtils::notifiyPartner(myPartnerUtils::KALTURA_PACKAGE_EIGHTY_PERCENT_WARNING, $partner, $body_params);
+				myPartnerUtils::notifiyPartner(myPartnerUtils::VIDIUN_PACKAGE_EIGHTY_PERCENT_WARNING, $partner, $body_params);
 			}
 		}
 		elseif ($percent >= 80 &&
@@ -1145,12 +1145,12 @@ class myPartnerUtils
 			$partner->getEightyPercentWarning() &&
 			!$partner->getUsageLimitWarning())
 		{
-			KalturaLog::log("passed the 80%, assume notification sent, nothing to do.");
+			VidiunLog::log("passed the 80%, assume notification sent, nothing to do.");
 		}
 		elseif ($percent < 80 &&
 				$partner->getEightyPercentWarning())
 		{
-			KalturaLog::debug("partner ". $partner->getId() ." was 80%, now not. clearing warnings");
+			VidiunLog::debug("partner ". $partner->getId() ." was 80%, now not. clearing warnings");
 				
 			/* clear getEightyPercentWarning */
 			$partner->setEightyPercentWarning(0);
@@ -1164,13 +1164,13 @@ class myPartnerUtils
 			// if ($partnerPackage['cycle_fee'] == 0) - script always works on free partners anyway
 			if(!$monitoredFreeTrial)
 			{
-				KalturaLog::debug("partner ". $partner->getId() ." reached 100% - setting second warning");
+				VidiunLog::debug("partner ". $partner->getId() ." reached 100% - setting second warning");
 				$body_params = array ( $partner->getAdminName(), $mindtouch_notice, round($totalUsageGB, 2), $email_link_hash );
-				myPartnerUtils::notifiyPartner(myPartnerUtils::KALTURA_PACKAGE_LIMIT_WARNING_1, $partner, $body_params);
+				myPartnerUtils::notifiyPartner(myPartnerUtils::VIDIUN_PACKAGE_LIMIT_WARNING_1, $partner, $body_params);
 			}
 			else
 			{
-				KalturaLog::debug("partner ". $partner->getId() ." reached 100% - blocking partner");
+				VidiunLog::debug("partner ". $partner->getId() ." reached 100% - blocking partner");
 				if($should_block_delete_partner)
 				{
 					$partner->setStatus(Partner::PARTNER_STATUS_CONTENT_BLOCK);
@@ -1184,11 +1184,11 @@ class myPartnerUtils
 				$partner->getUsageLimitWarning() > $delete_grace &&
 				$partner->getStatus() != Partner::PARTNER_STATUS_CONTENT_BLOCK)
 		{
-			KalturaLog::debug("partner ". $partner->getId() ." reached 100% ".self::BLOCKING_DAYS_GRACE ." days ago - sending block email and blocking partner");
+			VidiunLog::debug("partner ". $partner->getId() ." reached 100% ".self::BLOCKING_DAYS_GRACE ." days ago - sending block email and blocking partner");
 				
 			/* send block email and block partner */
 			$body_params = array ( $partner->getAdminName(), $mindtouch_notice, round($totalUsageGB, 2), $email_link_hash );
-			myPartnerUtils::notifiyPartner(myPartnerUtils::KALTURA_PACKAGE_LIMIT_WARNING_2, $partner, $body_params);
+			myPartnerUtils::notifiyPartner(myPartnerUtils::VIDIUN_PACKAGE_LIMIT_WARNING_2, $partner, $body_params);
 			if($should_block_delete_partner)
 			{
 				$partner->setStatus(Partner::PARTNER_STATUS_CONTENT_BLOCK);
@@ -1200,7 +1200,7 @@ class myPartnerUtils
 				!$monitoredFreeTrial)
 		{
 			$body_params = array ( $partner->getAdminName(), round($totalUsageGB, 2) );
-			myPartnerUtils::notifiyPartner(myPartnerUtils::KALTURA_PAID_PACKAGE_SUGGEST_UPGRADE, $partner, $body_params);
+			myPartnerUtils::notifiyPartner(myPartnerUtils::VIDIUN_PAID_PACKAGE_SUGGEST_UPGRADE, $partner, $body_params);
 		}
 		elseif ($percent >= 100 &&
 				$partnerPackage['cycle_fee'] == 0 &&
@@ -1209,11 +1209,11 @@ class myPartnerUtils
 				$partner->getStatus() == Partner::PARTNER_STATUS_CONTENT_BLOCK &&
 				!$monitoredFreeTrial)
 		{
-			KalturaLog::debug("partner ". $partner->getId() ." reached 100% a month ago - deleting partner");
+			VidiunLog::debug("partner ". $partner->getId() ." reached 100% a month ago - deleting partner");
 				
 			/* delete partner */
 			$body_params = array ( $partner->getAdminName() );
-			myPartnerUtils::notifiyPartner(myPartnerUtils::KALTURA_DELETE_ACCOUNT, $partner, $body_params);
+			myPartnerUtils::notifiyPartner(myPartnerUtils::VIDIUN_DELETE_ACCOUNT, $partner, $body_params);
 			if($should_block_delete_partner)
 			{
 				$partner->setStatus(Partner::PARTNER_STATUS_DELETED);
@@ -1221,7 +1221,7 @@ class myPartnerUtils
 		}
 		elseif($percent < 80 && ($partner->getUsageLimitWarning() || $partner->getEightyPercentWarning()))
 		{
-			KalturaLog::debug("partner ". $partner->getId() ." OK");
+			VidiunLog::debug("partner ". $partner->getId() ." OK");
 			// PARTNER OK 
 			// resetting status and warnings should only be done manually
 			//$partner->setStatus(1);
@@ -1234,12 +1234,12 @@ class myPartnerUtils
 
 	public static function doMonthlyPartnerUsage(Partner $partner)
 	{
-		KalturaLog::debug("Validating partner [" . $partner->getId() . "]");
+		VidiunLog::debug("Validating partner [" . $partner->getId() . "]");
 		
 		$packages = new PartnerPackages();
 		$partnerPackage = $packages->getPackageDetails($partner->getPartnerPackage());
 		if($partnerPackage[PartnerPackages::PACKAGE_CYCLE_FEE] != 0){
-			KalturaLog::debug("Partner has paid package, skipping validation [" . $partner->getId() . "]");
+			VidiunLog::debug("Partner has paid package, skipping validation [" . $partner->getId() . "]");
 			return;
 		}
 				
@@ -1269,7 +1269,7 @@ class myPartnerUtils
 		$percent = round( ($usageGB / $partnerPackage[$usageType])*100, 2);
 		$notificationId = 0;
 		
-		KalturaLog::debug("percent (".$partner->getId().") is: $percent for usage type $usageType");
+		VidiunLog::debug("percent (".$partner->getId().") is: $percent for usage type $usageType");
 				
 		//check if partner should be deleted
 		if($partner->getStatus() == Partner::PARTNER_STATUS_CONTENT_BLOCK )
@@ -1277,10 +1277,10 @@ class myPartnerUtils
 			$warning_100 = $partner->getUsageWarning($usageType, 100);
 			if($warning_100 > 0 && $warning_100 <= $delete_grace)
 			{
-				KalturaLog::debug("partner ". $partner->getId() ." reached 100% a month ago - deleting partner");
+				VidiunLog::debug("partner ". $partner->getId() ." reached 100% a month ago - deleting partner");
 					
 				/* delete partner */
-				$notificationId = myPartnerUtils::KALTURA_DELETE_ACCOUNT;
+				$notificationId = myPartnerUtils::VIDIUN_DELETE_ACCOUNT;
 				$partner->setStatus(Partner::PARTNER_STATUS_DELETED);				
 			}
 		}
@@ -1293,26 +1293,26 @@ class myPartnerUtils
 			
 			if($percent >= 80 && $percent < 100 && !$warning_80) //send 80% usage warning
 			{
-				KalturaLog::debug("partner ". $partner->getId() ." reached 80% - setting first warning for usage ". $usageType);
+				VidiunLog::debug("partner ". $partner->getId() ." reached 80% - setting first warning for usage ". $usageType);
 				$partner->setUsageWarning($usageType, 80, time());
 				$partner->resetUsageWarning($usageType, 100);
-				$notificationId = myPartnerUtils::KALTURA_MONTHLY_PACKAGE_EIGHTY_PERCENT_WARNING;				
+				$notificationId = myPartnerUtils::VIDIUN_MONTHLY_PACKAGE_EIGHTY_PERCENT_WARNING;				
 			}
 			elseif ($percent >= 80 && $percent < 100 && $warning_80 && !$warning_100)
 			{
-				KalturaLog::log("passed the 80%, assume notification sent, nothing to do.");
+				VidiunLog::log("passed the 80%, assume notification sent, nothing to do.");
 			}
 			elseif ($percent >= 100 && !$warning_100) // send 100% usage warning
 			{
-				KalturaLog::debug("partner ". $partner->getId() ." reached 100% - setting second warning for usage ". $usageType);
+				VidiunLog::debug("partner ". $partner->getId() ." reached 100% - setting second warning for usage ". $usageType);
 				$partner->setUsageWarning($usageType, 100, time());
-				$notificationId = myPartnerUtils::KALTURA_MONTHLY_PACKAGE_LIMIT_WARNING_1;
+				$notificationId = myPartnerUtils::VIDIUN_MONTHLY_PACKAGE_LIMIT_WARNING_1;
 			}
 			elseif ($percent >= 100 && $warning_100 > 0 && $warning_100 <= $block_notification_grace && $warning_100 > $delete_grace)
 			{
-				KalturaLog::debug("partner ". $partner->getId() ." reached 100% ". self::BLOCKING_DAYS_GRACE ." days ago - sending block email and blocking partner");				
+				VidiunLog::debug("partner ". $partner->getId() ." reached 100% ". self::BLOCKING_DAYS_GRACE ." days ago - sending block email and blocking partner");				
 				/* send block email and block partner */
-				$notificationId = myPartnerUtils::KALTURA_MONTHLY_PACKAGE_LIMIT_WARNING_2;			
+				$notificationId = myPartnerUtils::VIDIUN_MONTHLY_PACKAGE_LIMIT_WARNING_2;			
 				$partner->setStatus(Partner::PARTNER_STATUS_CONTENT_BLOCK);
 			}
 		}
@@ -1321,16 +1321,16 @@ class myPartnerUtils
 			$body_params = array();
 			$usageText = PartnerPackages::getPackageUsageText($usageType);
 			switch($notificationId){
-				case myPartnerUtils::KALTURA_MONTHLY_PACKAGE_EIGHTY_PERCENT_WARNING:
+				case myPartnerUtils::VIDIUN_MONTHLY_PACKAGE_EIGHTY_PERCENT_WARNING:
 					$body_params = array ( $partner->getAdminName(), $partnerPackage[$usageType], $usageText, round($usageGB, 2), $email_link_hash );
 					break;
-				case myPartnerUtils::KALTURA_MONTHLY_PACKAGE_LIMIT_WARNING_1:
+				case myPartnerUtils::VIDIUN_MONTHLY_PACKAGE_LIMIT_WARNING_1:
 					$body_params = array ( $partner->getAdminName(), $partnerPackage[$usageType], $usageText, round($usageGB, 2), $email_link_hash );
 					break;
-				case myPartnerUtils::KALTURA_MONTHLY_PACKAGE_LIMIT_WARNING_2:
+				case myPartnerUtils::VIDIUN_MONTHLY_PACKAGE_LIMIT_WARNING_2:
 					$body_params = array ( $partner->getAdminName(), $partnerPackage[$usageType], $usageText, round($usageGB, 2), $email_link_hash );
 					break;
-				case myPartnerUtils::KALTURA_DELETE_ACCOUNT:
+				case myPartnerUtils::VIDIUN_DELETE_ACCOUNT:
 					$body_params = array ( $partner->getAdminName() );
 					break;
 			}
@@ -1352,7 +1352,7 @@ class myPartnerUtils
 		
 			if($percent < 80 || !$isCurrent )
 			{
-				KalturaLog::debug("Reseting partner ". $partner->getId() ." warnings for usage ". $usageType);		
+				VidiunLog::debug("Reseting partner ". $partner->getId() ." warnings for usage ". $usageType);		
 				$partner->resetUsageWarning($usageType, 80);
 				$partner->resetUsageWarning($usageType, 100);			
 			}			
@@ -1388,7 +1388,7 @@ class myPartnerUtils
 			$reportFilter->to_date = $reportFilter->to_date + $tzOffsetSec;
 		}
 		
-		$data = kKavaReportsMgr::getGraph($partner->getId(), $reportType, $reportFilter, null, null);
+		$data = vKavaReportsMgr::getGraph($partner->getId(), $reportType, $reportFilter, null, null);
 		
 		$graphPointsLine = array();
 		if($resolution == reportInterval::MONTHS)
@@ -1448,7 +1448,7 @@ class myPartnerUtils
  	public static function copyTemplateContent(Partner $fromPartner, Partner $toPartner, $dontCopyUsers = false)
  	{
  		$partnerCustomDataArray = $fromPartner->getCustomDataObj()->toArray();
- 		$excludeCustomDataFields = kConf::get('template_partner_custom_data_exclude_fields');
+ 		$excludeCustomDataFields = vConf::get('template_partner_custom_data_exclude_fields');
  		foreach($partnerCustomDataArray as $customDataName => $customDataValue)
  			if(!in_array($customDataName, $excludeCustomDataFields))
  				$toPartner->putInCustomData($customDataName, $customDataValue);
@@ -1457,7 +1457,7 @@ class myPartnerUtils
  		self::copyPermissions($fromPartner, $toPartner);
 		self::copyUserRoles($fromPartner, $toPartner);
  		
-		kEventsManager::raiseEvent(new kObjectCopiedEvent($fromPartner, $toPartner));
+		vEventsManager::raiseEvent(new vObjectCopiedEvent($fromPartner, $toPartner));
  		
  		self::copyAccessControls($fromPartner, $toPartner);
  		self::copyFlavorParams($fromPartner, $toPartner);
@@ -1466,17 +1466,17 @@ class myPartnerUtils
  		self::copyCategories($fromPartner, $toPartner);
  		
  		self::copyUiConfsByType($fromPartner, $toPartner, uiConf::UI_CONF_TYPE_WIDGET);
- 		self::copyUiConfsByType($fromPartner, $toPartner, uiConf::UI_CONF_TYPE_KDP3);
+ 		self::copyUiConfsByType($fromPartner, $toPartner, uiConf::UI_CONF_TYPE_VDP3);
 
 		self::saveTemplateObjectsNum($fromPartner, $toPartner);
 
  		// Launch a batch job that will copy the heavy load as an async operation 
-  		kJobsManager::addCopyPartnerJob( $fromPartner->getId(), $toPartner->getId() );
+  		vJobsManager::addCopyPartnerJob( $fromPartner->getId(), $toPartner->getId() );
  	}
  	
 	public static function copyUserRoles(Partner $fromPartner, Partner $toPartner)
  	{
- 		KalturaLog::log('Copying user roles from partner ['.$fromPartner->getId().'] to partner ['.$toPartner->getId().']');
+ 		VidiunLog::log('Copying user roles from partner ['.$fromPartner->getId().'] to partner ['.$toPartner->getId().']');
  		UserRolePeer::setUseCriteriaFilter ( false );
  		$c = new Criteria();
  		$c->addAnd(UserRolePeer::PARTNER_ID, $fromPartner->getId(), Criteria::EQUAL);
@@ -1493,7 +1493,7 @@ class myPartnerUtils
  	
 	public static function copyPermissions(Partner $fromPartner, Partner $toPartner)
  	{
- 		KalturaLog::log('Copying permissions from partner ['.$fromPartner->getId().'] to partner ['.$toPartner->getId().']');
+ 		VidiunLog::log('Copying permissions from partner ['.$fromPartner->getId().'] to partner ['.$toPartner->getId().']');
  		PermissionPeer::setUseCriteriaFilter ( false );
  		$c = new Criteria();
  		$c->addAnd(PermissionPeer::PARTNER_ID, $fromPartner->getId(), Criteria::EQUAL);
@@ -1509,7 +1509,7 @@ class myPartnerUtils
  	
  	public static function copyCategories(Partner $fromPartner, Partner $toPartner)
  	{
- 		KalturaLog::log("Copying categories from partner [".$fromPartner->getId()."] to partner [".$toPartner->getId()."]");
+ 		VidiunLog::log("Copying categories from partner [".$fromPartner->getId()."] to partner [".$toPartner->getId()."]");
  		
  		categoryPeer::setUseCriteriaFilter(false);
  		$c = new Criteria();
@@ -1528,7 +1528,7 @@ class myPartnerUtils
  			$newCategory= $category->copy();
  			$newCategory->setPartnerId($toPartner->getId());
  			if($category->getParentId())
- 				$newCategory->setParentId(kObjectCopyHandler::getMappedId('category', $category->getParentId()));
+ 				$newCategory->setParentId(vObjectCopyHandler::getMappedId('category', $category->getParentId()));
  				
  			$newCategory->save();
  			
@@ -1547,13 +1547,13 @@ class myPartnerUtils
 			$newCategory->setDirectEntriesCount(0);
 			$newCategory->save();
  			
- 			KalturaLog::log("Copied [".$category->getId()."], new id is [".$newCategory->getId()."]");
+ 			VidiunLog::log("Copied [".$category->getId()."], new id is [".$newCategory->getId()."]");
  		}
  	}
  	
  	public static function copyEntriesByType(Partner $fromPartner, Partner $toPartner, $entryType, $dontCopyUsers = false)
  	{
- 		KalturaLog::log("Copying entries from partner [".$fromPartner->getId()."] to partner [".$toPartner->getId()."] with type [".$entryType."]");
+ 		VidiunLog::log("Copying entries from partner [".$fromPartner->getId()."] to partner [".$toPartner->getId()."] with type [".$entryType."]");
  		entryPeer::setUseCriteriaFilter ( false );
  		$c = new Criteria();
  		$c->addAnd(entryPeer::PARTNER_ID, $fromPartner->getId());
@@ -1571,7 +1571,7 @@ class myPartnerUtils
  	
  	public static function copyUiConfsByType(Partner $fromPartner, Partner $toPartner, $uiConfType)
  	{
- 		KalturaLog::log("Copying uiconfs from partner [".$fromPartner->getId()."] to partner [".$toPartner->getId()."] with type [".$uiConfType."]");
+ 		VidiunLog::log("Copying uiconfs from partner [".$fromPartner->getId()."] to partner [".$toPartner->getId()."] with type [".$uiConfType."]");
  		uiConfPeer::setUseCriteriaFilter(false);
  		$c = new Criteria();
  		$c->addAnd(uiConfPeer::PARTNER_ID, $fromPartner->getId());
@@ -1589,13 +1589,13 @@ class myPartnerUtils
  			$newUiConf = $uiConf->cloneToNew($newUiConf);
  			$newUiConf->save();
  			
- 			KalturaLog::log("UIConf [".$newUiConf->getId()."] was created");
+ 			VidiunLog::log("UIConf [".$newUiConf->getId()."] was created");
  		}
  	}
  	
  	public static function copyFlavorParams(Partner $fromPartner, Partner $toPartner)
  	{
- 		KalturaLog::log("Copying flavor params from partner [".$fromPartner->getId()."] to partner [".$toPartner->getId()."]");
+ 		VidiunLog::log("Copying flavor params from partner [".$fromPartner->getId()."] to partner [".$toPartner->getId()."]");
  		
  		$c = new Criteria();
  		$c->add(assetParamsPeer::PARTNER_ID, $fromPartner->getId());
@@ -1607,7 +1607,7 @@ class myPartnerUtils
  			$newFlavorParams->setPartnerId($toPartner->getId());
  			$newFlavorParams->save();
  			
- 			KalturaLog::log("Copied [".$flavorParams->getId()."], new id is [".$newFlavorParams->getId()."]");
+ 			VidiunLog::log("Copied [".$flavorParams->getId()."], new id is [".$newFlavorParams->getId()."]");
  		}
  	}
  	
@@ -1615,7 +1615,7 @@ class myPartnerUtils
  	{
 		$copiedList = array();
 		
- 		KalturaLog::log("Copying conversion profiles from partner [".$fromPartner->getId()."] to partner [".$toPartner->getId()."]");
+ 		VidiunLog::log("Copying conversion profiles from partner [".$fromPartner->getId()."] to partner [".$toPartner->getId()."]");
  		
  		$c = new Criteria();
  		$c->add(conversionProfile2Peer::PARTNER_ID, $fromPartner->getId());
@@ -1637,11 +1637,11 @@ class myPartnerUtils
  			}
  			catch (Exception $e)
  			{
- 				KalturaLog::info("Exception occured, conversion profile was not copied. Message: [" . $e->getMessage() . "]");
+ 				VidiunLog::info("Exception occured, conversion profile was not copied. Message: [" . $e->getMessage() . "]");
  				continue;
  			}
  			
- 			KalturaLog::log("Copied [".$conversionProfile->getId()."], new id is [".$newConversionProfile->getId()."]");
+ 			VidiunLog::log("Copied [".$conversionProfile->getId()."], new id is [".$newConversionProfile->getId()."]");
 			$copiedList[$conversionProfile->getId()] = $newConversionProfile->getId();
  			
  			$c = new Criteria();
@@ -1685,7 +1685,7 @@ class myPartnerUtils
  	public static function copyAccessControls(Partner $fromPartner, Partner $toPartner)
  	{
 		$copiedList = array();
- 		KalturaLog::log("Copying access control profiles from partner [".$fromPartner->getId()."] to partner [".$toPartner->getId()."]");
+ 		VidiunLog::log("Copying access control profiles from partner [".$fromPartner->getId()."] to partner [".$toPartner->getId()."]");
  		
  		$c = new Criteria();
  		$c->add(accessControlPeer::PARTNER_ID, $fromPartner->getId());
@@ -1697,7 +1697,7 @@ class myPartnerUtils
  			$newAccessControl->setPartnerId($toPartner->getId());
  			$newAccessControl->save();
  			
- 			KalturaLog::log("Copied [".$accessControl->getId()."], new id is [".$newAccessControl->getId()."]");
+ 			VidiunLog::log("Copied [".$accessControl->getId()."], new id is [".$newAccessControl->getId()."]");
 			$copiedList[$accessControl->getId()] = $newAccessControl->getId();
  		}
 
@@ -1723,20 +1723,20 @@ class myPartnerUtils
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		if (is_null($partner))
 		{
-			KalturaLog::log ( "BLOCK_PARNTER partner [$partnerId] doesnt exist" );
-			KExternalErrors::dieError(KExternalErrors::PARTNER_NOT_FOUND);
+			VidiunLog::log ( "BLOCK_PARNTER partner [$partnerId] doesnt exist" );
+			VExternalErrors::dieError(VExternalErrors::PARTNER_NOT_FOUND);
 		}
 			
 		$status = $partner->getStatus();
 		if ($status != Partner::PARTNER_STATUS_ACTIVE)
 		{
-			KalturaLog::log ( "BLOCK_PARNTER_STATUS partner [$partnerId] status [$status]" );
-			KExternalErrors::dieError(KExternalErrors::PARTNER_NOT_ACTIVE);
+			VidiunLog::log ( "BLOCK_PARNTER_STATUS partner [$partnerId] status [$status]" );
+			VExternalErrors::dieError(VExternalErrors::PARTNER_NOT_ACTIVE);
 		}
 
 		// take blocked-countries country code from partner custom data
 		$blockContries = $partner->getDelivryBlockCountries();
-		// if not set on partner custom data - take from kConf
+		// if not set on partner custom data - take from vConf
 		if(empty($blockContries) || is_null($blockContries))
 		{
 			// don't auto block paying partners
@@ -1745,7 +1745,7 @@ class myPartnerUtils
 					return;
 			}
 			
-			$blockContries = kConf::get ("delivery_block_countries" );
+			$blockContries = vConf::get ("delivery_block_countries" );
 		}
 		if ($blockContries)
 		{
@@ -1754,8 +1754,8 @@ class myPartnerUtils
 			$blockedCountry = requestUtils::matchIpCountry( $blockContries , $currentCountry );
 			if ($blockedCountry)
 			{
-				KalturaLog::log ( "IP_BLOCK partner [$partnerId] from country [$currentCountry]" );
-				KExternalErrors::dieError(KExternalErrors::IP_COUNTRY_BLOCKED);			
+				VidiunLog::log ( "IP_BLOCK partner [$partnerId] from country [$currentCountry]" );
+				VExternalErrors::dieError(VExternalErrors::IP_COUNTRY_BLOCKED);			
 			}
 		}
 	}
@@ -1776,7 +1776,7 @@ class myPartnerUtils
 
 		// validate serve access control
 		$flavorParamsId = $asset ? $asset->getFlavorParamsId() : null;
-		$secureEntryHelper = new KSecureEntryHelper($entry, null, null, ContextType::SERVE, array(), $asset);
+		$secureEntryHelper = new VSecureEntryHelper($entry, null, null, ContextType::SERVE, array(), $asset);
 		$secureEntryHelper->validateForServe($flavorParamsId);
 
 		// enforce delivery
@@ -1785,8 +1785,8 @@ class myPartnerUtils
 		$restricted = DeliveryProfilePeer::isRequestRestricted($partner);
 		if ($restricted)
 		{
-			KalturaLog::log ( "DELIVERY_METHOD_NOT_ALLOWED partner [$partnerId]" );
-			KExternalErrors::dieError(KExternalErrors::DELIVERY_METHOD_NOT_ALLOWED);			
+			VidiunLog::log ( "DELIVERY_METHOD_NOT_ALLOWED partner [$partnerId]" );
+			VExternalErrors::dieError(VExternalErrors::DELIVERY_METHOD_NOT_ALLOWED);			
 		}
 	}
 	
@@ -1871,13 +1871,13 @@ class myPartnerUtils
 			$formattedExtensionDate = date('Y-m-d H:i:s', $partner->getExtendedFreeTrailExpiryDate());
 			$endDay = dateUtils::diffInDays($partner->getCreatedAt(), $formattedExtensionDate);
 			$deletionDay = $endDay + 30;
-			KalturaLog::debug("After trial extension the End day is: [$endDay]");
+			VidiunLog::debug("After trial extension the End day is: [$endDay]");
 		}
 
 		$freeTrialUpdatesDays = explode(',', $partnerPackageInfo['notification_days']);
 
 		$dayInFreeTrial = dateUtils::diffInDays($partner->getCreatedAt(), dateUtils::today());
-		KalturaLog::debug("partner [{$partner->getId()}] is currently at the [$dayInFreeTrial] day of free trial");
+		VidiunLog::debug("partner [{$partner->getId()}] is currently at the [$dayInFreeTrial] day of free trial");
 
 		// in case we want to delete/block partner that reached to specific day we wil disable this line
 		//$partner = self::checkIfPartnerStatusChangeRequired($partner, $dayInFreeTrial, $endDay, $deletionDay);
@@ -1892,13 +1892,13 @@ class myPartnerUtils
 	{
 		if (($dayInFreeTrial >= $endDay) && ($dayInFreeTrial < $deletionDay))
 		{
-			KalturaLog::debug('Partner ['.$partner->getId().'] reached to end of free trial day. Blocking content.');
+			VidiunLog::debug('Partner ['.$partner->getId().'] reached to end of free trial day. Blocking content.');
 			$partner->setStatus(Partner::PARTNER_STATUS_CONTENT_BLOCK);
 		}
 
 		if ($dayInFreeTrial >= $deletionDay)
 		{
-			KalturaLog::debug('Partner ['.$partner->getId().'] reached to free trial deletion day. Deleting partner.');
+			VidiunLog::debug('Partner ['.$partner->getId().'] reached to free trial deletion day. Deleting partner.');
 			$partner->setStatus(Partner::PARTNER_STATUS_DELETED);
 		}
 		return $partner;
@@ -1907,10 +1907,10 @@ class myPartnerUtils
 	public static function checkForNotificationDay($partner, $dayInFreeTrial, $freeTrialUpdatesDays)
 	{
 		$closestUpdatesDay = self::getClosestDay($dayInFreeTrial, $freeTrialUpdatesDays);
-		KalturaLog::debug('closest notification day comparing today [' . $closestUpdatesDay . ']');
+		VidiunLog::debug('closest notification day comparing today [' . $closestUpdatesDay . ']');
 		if ($closestUpdatesDay > $partner->getLastFreeTrialNotificationDay())
 		{
-			KalturaLog::debug('Partner [' . $partner->getId() . '] reached to one of the Marketo lead sync days.');
+			VidiunLog::debug('Partner [' . $partner->getId() . '] reached to one of the Marketo lead sync days.');
 			$partner->setLastFreeTrialNotificationDay($dayInFreeTrial);
 		}
 		return $partner;
@@ -1943,7 +1943,7 @@ class myPartnerUtils
 	 */
 	public static function saveTemplateObjectsNum(Partner $fromPartner, Partner $toPartner)
 	{
-		KalturaLog::log('Saving the number of entries, categories and metadata objects exist on partner ['.$fromPartner->getId().'] on partner ['.$toPartner->getId().']');
+		VidiunLog::log('Saving the number of entries, categories and metadata objects exist on partner ['.$fromPartner->getId().'] on partner ['.$toPartner->getId().']');
 		$fromPartnerId = $fromPartner->getId();
 
 		$categoriesNum = self::getCategoriesNumForPartner($fromPartnerId);
@@ -1968,7 +1968,7 @@ class myPartnerUtils
 	public static function getCategoriesNumForPartner($partnerId, $onlyActive = true)
 	{
 		categoryPeer::setUseCriteriaFilter(false);
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 		$c->addAnd(categoryPeer::PARTNER_ID, $partnerId);
 		if($onlyActive)
 			$c->addAnd(categoryPeer::STATUS, CategoryStatus::ACTIVE);
@@ -1988,7 +1988,7 @@ class myPartnerUtils
 	public static function getEntriesNumForPartner($partnerId, $onlyReady = true)
 	{
 		entryPeer::setUseCriteriaFilter(false);
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$c->addAnd(entryPeer::PARTNER_ID, $partnerId);
 		if($onlyReady)
 			$c->addAnd(entryPeer::STATUS, entryStatus::READY);
@@ -2006,18 +2006,18 @@ class myPartnerUtils
 	 */
 	public static function getMetadataObjectsNumForPartner($partnerId)
 	{
-		kCurrentContext::$partner_id = $partnerId;
+		vCurrentContext::$partner_id = $partnerId;
 
-		$entrySearch = new kEntrySearch();
-		$categorySearch = new kCategorySearch();
-		$userSearch = new kUserSearch();
+		$entrySearch = new vEntrySearch();
+		$categorySearch = new vCategorySearch();
+		$userSearch = new vUserSearch();
 		$objectStatuses = array();
 
 		$totalCustomMetadadaCount = 0;
 		$totalCustomMetadadaCount += self::getMetadataSearchParameters($entrySearch, $objectStatuses);
-		kBaseElasticEntitlement::$isInitialized = false;
+		vBaseElasticEntitlement::$isInitialized = false;
 		$totalCustomMetadadaCount += self::getMetadataSearchParameters($categorySearch, $objectStatuses);
-		kBaseElasticEntitlement::$isInitialized = false;
+		vBaseElasticEntitlement::$isInitialized = false;
 		$totalCustomMetadadaCount += self::getMetadataSearchParameters($userSearch, $objectStatuses);
 		return $totalCustomMetadadaCount;
 	}
@@ -2030,7 +2030,7 @@ class myPartnerUtils
 		$operator = new ESearchOperator();
 		$operator->setOperator(ESearchOperatorType::AND_OP);
 		$operator->setSearchItems($searchItems);
-		$pager = new kPager();
+		$pager = new vPager();
 		$pager->setPageSize(0);
 
 		try
@@ -2042,7 +2042,7 @@ class myPartnerUtils
 			return 0;
 		}
 
-		return $results[kESearchCoreAdapter::HITS_KEY][kESearchCoreAdapter::TOTAL_KEY];
+		return $results[vESearchCoreAdapter::HITS_KEY][vESearchCoreAdapter::TOTAL_KEY];
 	}
 
 	/**
@@ -2135,9 +2135,9 @@ class myPartnerUtils
 	public static function getFreeTrialStartDate($partner)
 	{
 		if ($partner->getPartnerPackage() == PartnerPackages::PARTNER_PACKAGE_DEVELOPER_TRIAL)
-			$freeTrialStartDate = kConf::get('new_developer_free_trial_start_date','local', null);
+			$freeTrialStartDate = vConf::get('new_developer_free_trial_start_date','local', null);
 		else
-			$freeTrialStartDate = kConf::get('new_free_trial_start_date','local', null);
+			$freeTrialStartDate = vConf::get('new_free_trial_start_date','local', null);
 		return $freeTrialStartDate;
 	}
 
@@ -2154,7 +2154,7 @@ class myPartnerUtils
 		$c = new Criteria();
 		$c->add(PartnerPeer::ADMIN_EMAIL, $partner->getAdminEmail());
 		$c->add(PartnerPeer::PARTNER_PACKAGE, $package);
-		$c->add(PartnerPeer::STATUS, KalturaPartnerStatus::DELETED, Criteria::NOT_EQUAL);
+		$c->add(PartnerPeer::STATUS, VidiunPartnerStatus::DELETED, Criteria::NOT_EQUAL);
 		$result = PartnerPeer::doSelectOne($c);
 		return $result;
 	}

@@ -7,8 +7,8 @@ if(!isset($argv[1]))
 $uiConfId = $argv[1];
 
 $dryRun = (!isset($argv[2]) || $argv[2] != 'realrun');
-KalturaStatement::setDryRun($dryRun);
-KalturaLog::debug($dryRun ? "Dry Run" : "REAL RUN");
+VidiunStatement::setDryRun($dryRun);
+VidiunLog::debug($dryRun ? "Dry Run" : "REAL RUN");
 
 uiConfPeer::setUseCriteriaFilter(false);
 FileSyncPeer::setUseCriteriaFilter(false);
@@ -19,15 +19,15 @@ if(!$uiConf)
 	
 $fileSyncs = array();
 
-$fileSync = kFileSyncUtils::getLocalFileSyncForKey($uiConf->getSyncKey(uiConf::FILE_SYNC_UICONF_SUB_TYPE_DATA), false);
+$fileSync = vFileSyncUtils::getLocalFileSyncForKey($uiConf->getSyncKey(uiConf::FILE_SYNC_UICONF_SUB_TYPE_DATA), false);
 if($fileSync)
         $fileSyncs[] = $fileSync;
 
-$fileSync = kFileSyncUtils::getLocalFileSyncForKey($uiConf->getSyncKey(uiConf::FILE_SYNC_UICONF_SUB_TYPE_CONFIG), false);
+$fileSync = vFileSyncUtils::getLocalFileSyncForKey($uiConf->getSyncKey(uiConf::FILE_SYNC_UICONF_SUB_TYPE_CONFIG), false);
 if($fileSync)
 	$fileSyncs[] = $fileSync;
 	
-$fileSync = kFileSyncUtils::getLocalFileSyncForKey($uiConf->getSyncKey(uiConf::FILE_SYNC_UICONF_SUB_TYPE_FEATURES), false);
+$fileSync = vFileSyncUtils::getLocalFileSyncForKey($uiConf->getSyncKey(uiConf::FILE_SYNC_UICONF_SUB_TYPE_FEATURES), false);
 if($fileSync)
 	$fileSyncs[] = $fileSync;
 	
@@ -55,4 +55,4 @@ foreach($fileSyncs as $fileSync)
 $uiConf->setStatus(uiConf::UI_CONF_STATUS_READY);
 $uiConf->save();
 
-KalturaLog::debug('Done');
+VidiunLog::debug('Done');

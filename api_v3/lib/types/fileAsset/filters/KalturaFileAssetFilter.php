@@ -3,7 +3,7 @@
  * @package api
  * @subpackage api.filters
  */
-class KalturaFileAssetFilter extends KalturaFileAssetBaseFilter
+class VidiunFileAssetFilter extends VidiunFileAssetBaseFilter
 {
 	static private $map_between_objects = array
 	(
@@ -11,7 +11,7 @@ class KalturaFileAssetFilter extends KalturaFileAssetBaseFilter
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaFileAssetBaseFilter::getMapBetweenObjects()
+	 * @see VidiunFileAssetBaseFilter::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -19,7 +19,7 @@ class KalturaFileAssetFilter extends KalturaFileAssetBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -27,7 +27,7 @@ class KalturaFileAssetFilter extends KalturaFileAssetBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::toObject()
+	 * @see VidiunFilter::toObject()
 	 */
 	public function toObject ( $object_to_fill = null, $props_to_skip = array() )
 	{
@@ -37,9 +37,9 @@ class KalturaFileAssetFilter extends KalturaFileAssetBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$fileAssetFilter = $this->toObject();
 
@@ -51,8 +51,8 @@ class KalturaFileAssetFilter extends KalturaFileAssetBaseFilter
 		$pager->attachToCriteria($c);
 		$dbList = FileAssetPeer::doSelect($c);
 		
-		$response = new KalturaFileAssetListResponse();
-		$response->objects = KalturaFileAssetArray::fromDbArray($dbList, $responseProfile);
+		$response = new VidiunFileAssetListResponse();
+		$response->objects = VidiunFileAssetArray::fromDbArray($dbList, $responseProfile);
 		$response->totalCount = $totalCount;
 		return $response; 
 	}

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage externalWidgets
  */
-class kseAction extends sfAction
+class vseAction extends sfAction
 {
 	// TODO - this is no longer se only - it should be generalized for advanced editro and simple editor
 	/**
@@ -29,7 +29,7 @@ class kseAction extends sfAction
 		if (!$ui_conf_swf_url)
 			$ui_conf_swf_url = "/swf/simpleeditor.swf";
 			
-		if( kString::beginsWith( $ui_conf_swf_url , "http") )
+		if( vString::beginsWith( $ui_conf_swf_url , "http") )
 		{
 			$swf_url = 	$ui_conf_swf_url; // absolute URL 
 		}
@@ -42,15 +42,15 @@ class kseAction extends sfAction
 
 		// handle buggy case for backward compatiblity
 		$partner_host = $host;
-		if ($partner_host == "http://www.kaltura.com")
-			$partner_host = 1; // otherwise the kse will build a flawed url with [[IMPORT]]
+		if ($partner_host == "http://www.vidiun.com")
+			$partner_host = 1; // otherwise the vse will build a flawed url with [[IMPORT]]
 				
 		$params = "contentUrl=".urlencode($swf_url).
 			"&host=" . str_replace("http://", "", str_replace("https://", "", $partner_host)).
 			"&cdnHost=". str_replace("http://", "", str_replace("https://", "", myPartnerUtils::getCdnHost($partner_id))).
-			"&uiConfId=" . $ui_conf_id . "&disableurlhashing=".kConf::get('disable_url_hashing');
+			"&uiConfId=" . $ui_conf_id . "&disableurlhashing=".vConf::get('disable_url_hashing');
 		
-		$wrapper_swf = myContentStorage::getFSFlashRootPath ()."/flexwrapper/".kConf::get('editors_flex_wrapper_version')."/FlexWrapper.swf";
+		$wrapper_swf = myContentStorage::getFSFlashRootPath ()."/flexwrapper/".vConf::get('editors_flex_wrapper_version')."/FlexWrapper.swf";
 		$this->redirect(  $host . myPartnerUtils::getUrlForPartner( $partner_id , $subp_id ) . "$wrapper_swf?$params");
 	}
 }

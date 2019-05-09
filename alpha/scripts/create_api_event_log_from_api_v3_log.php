@@ -12,8 +12,8 @@ service
 action
 ps_version
 is_multi_request
-ks
-ks_type
+vs
+vs_type
 partner_id
 uid
 entry_id
@@ -28,7 +28,7 @@ result
 all_params
 exception
 */
-class kApiEvent 
+class vApiEvent 
 {
 	private $arr;
 	public function __construct (  )
@@ -47,8 +47,8 @@ class kApiEvent
 		$this->action . EVENT_LOG_SEPARATOR .
 		$this->ps_version . EVENT_LOG_SEPARATOR .
 		$this->is_multi_request . EVENT_LOG_SEPARATOR .
-		$this->ks . EVENT_LOG_SEPARATOR .
-		$this->ks_type . EVENT_LOG_SEPARATOR .
+		$this->vs . EVENT_LOG_SEPARATOR .
+		$this->vs_type . EVENT_LOG_SEPARATOR .
 		$this->partner_id . EVENT_LOG_SEPARATOR .
 		$this->uid . EVENT_LOG_SEPARATOR .
 		$this->entry_id . EVENT_LOG_SEPARATOR .
@@ -152,7 +152,7 @@ while(!feof($f))
 	// once flushed to disk - the api_event is removed from the array.
 	
 
-	// 2009-11-30 07:52:11 [1784322224] [API] [KalturaDispatcher->dispatch] DEBUG: Dispatching service [playlist], action [list] with params Array
+	// 2009-11-30 07:52:11 [1784322224] [API] [VidiunDispatcher->dispatch] DEBUG: Dispatching service [playlist], action [list] with params Array
 	if ( preg_match ( "/([\d\- \:]*) \[([\d]*)].*service \[(.*)\], action \[(.*)\]/" , $s , $matches ) )
 	{
 		$multi_request = 0;
@@ -168,7 +168,7 @@ while(!feof($f))
 			$multi_request = 1;
 		}
 		
-		$api_e = new kApiEvent();
+		$api_e = new vApiEvent();
 		$api_e->datetime = $matches[1];
 		$api_e->session_id=$matches[2];
 		$api_e->service=$matches[3];
@@ -191,16 +191,16 @@ while(!feof($f))
 			if ( preg_match ( "/^\)/" , $s ) )
 			{
 				// complete the array and break
-			 	$api_e->ks = @$action_arr["ks"];
+			 	$api_e->vs = @$action_arr["vs"];
 
-			 	$str = base64_decode( $api_e->ks , true ) ; // encode this string
+			 	$str = base64_decode( $api_e->vs , true ) ; // encode this string
 				@list ( $hash , $real_str) = @explode ( "|" , $str , 2 );
 				
 				$a = ""; // just a dummy to store stuff in 
-				@list ( $api_e->partner_id , $a , $a , $api_e->ks_type , $a , $api_e->uid , $a) =
+				@list ( $api_e->partner_id , $a , $a , $api_e->vs_type , $a , $api_e->uid , $a) =
 					@explode ( ";" , $real_str );
 					
-				$api_e->ks_type = 0 + $api_e->ks_type;
+				$api_e->vs_type = 0 + $api_e->vs_type;
 
 				// set the entry_id
 				if (isset ( $action_arr["entryId"]))
@@ -246,7 +246,7 @@ while(!feof($f))
 	
 	
 	// collect invoke_duration
-	// 2009-11-29 04:23:31 [59843975] [API] [KalturaDispatcher->dispatch] DEBUG: Invoke took - 0.012482881546021 seconds
+	// 2009-11-29 04:23:31 [59843975] [API] [VidiunDispatcher->dispatch] DEBUG: Invoke took - 0.012482881546021 seconds
 	if ( preg_match ( "/([\d\- \:]*) \[([\d]*)].*Invoke took - ([\d\.]*)/" , $s , $matches ) )
 	{
 		$api_e = getApiEvent ( $matches[2] );
@@ -258,7 +258,7 @@ while(!feof($f))
 	
 	
 	// collect dispatch_duration
-	// 2009-11-29 04:23:31 [59843975] [API] [KalturaDispatcher->dispatch] DEBUG: Dispatch took - 0.05302095413208 seconds
+	// 2009-11-29 04:23:31 [59843975] [API] [VidiunDispatcher->dispatch] DEBUG: Dispatch took - 0.05302095413208 seconds
 	if ( preg_match ( "/([\d\- \:]*) \[([\d]*)].*Dispatch took - ([\d\.]*)/" , $s , $matches ) )
 	{
 		$api_e = getApiEvent ( $matches[2] );
@@ -270,7 +270,7 @@ while(!feof($f))
 	
 	
 	// collect serialize_duration
-	// 2009-11-29 04:23:13 [1051747326] [API] [KalturaFrontController->serializeResponse] DEBUG: Serialize took - 0.0041739940643311
+	// 2009-11-29 04:23:13 [1051747326] [API] [VidiunFrontController->serializeResponse] DEBUG: Serialize took - 0.0041739940643311
 	if ( preg_match ( "/([\d\- \:]*) \[([\d]*)].*Serialize took - ([\d\.]*)/" , $s , $matches ) )
 	{
 		$api_e = getApiEvent ( $matches[2] );
@@ -297,7 +297,7 @@ while(!feof($f))
 	}
 	
 	// collect exceptions
-	// 2009-11-29 04:24:16 [520451400] [API] [KalturaFrontController->getExceptionObject] ERR: exception 'KalturaAPIException' with message 'Entry id "zt6jfpo0f4" not found' in /opt/k
+	// 2009-11-29 04:24:16 [520451400] [API] [VidiunFrontController->getExceptionObject] ERR: exception 'VidiunAPIException' with message 'Entry id "zt6jfpo0f4" not found' in /opt/v
 	if ( preg_match ( "/([\d\- \:]*) \[([\d]*)].* ERR: exception (.*)/ms" , $s , $matches ) )
 	{
 		$api_e = getApiEvent ( $matches[2] );

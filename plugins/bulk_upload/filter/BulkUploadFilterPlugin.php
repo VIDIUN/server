@@ -2,7 +2,7 @@
 /**
  * @package plugins.bulkUploadFilter
  */
-class BulkUploadFilterPlugin extends KalturaPlugin implements IKalturaBulkUpload, IKalturaPending
+class BulkUploadFilterPlugin extends VidiunPlugin implements IVidiunBulkUpload, IVidiunPending
 {
 	const PLUGIN_NAME = 'bulkUploadFilter';
 	
@@ -16,13 +16,13 @@ class BulkUploadFilterPlugin extends KalturaPlugin implements IKalturaBulkUpload
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$bulkUploadDependency = new KalturaDependency(BulkUploadPlugin::PLUGIN_NAME);
+		$bulkUploadDependency = new VidiunDependency(BulkUploadPlugin::PLUGIN_NAME);
 		
-		$bulkUploadXmlDependency = new KalturaDependency(BulkUploadXmlPlugin::PLUGIN_NAME);
+		$bulkUploadXmlDependency = new VidiunDependency(BulkUploadXmlPlugin::PLUGIN_NAME);
 		
 		return array($bulkUploadDependency, $bulkUploadXmlDependency);
 	}
@@ -53,33 +53,33 @@ class BulkUploadFilterPlugin extends KalturaPlugin implements IKalturaBulkUpload
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		 //Gets the right job for the engine
-		if($baseClass == 'kBulkUploadJobData' && (!$enumValue || $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadFilterType::FILTER)))
-			return new kBulkUploadFilterJobData();
+		if($baseClass == 'vBulkUploadJobData' && (!$enumValue || $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadFilterType::FILTER)))
+			return new vBulkUploadFilterJobData();
 		
 		 //Gets the right job for the engine
-		if($baseClass == 'KalturaBulkUploadJobData' && (!$enumValue || $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadFilterType::FILTER)))
-			return new KalturaBulkUploadFilterJobData();
+		if($baseClass == 'VidiunBulkUploadJobData' && (!$enumValue || $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadFilterType::FILTER)))
+			return new VidiunBulkUploadFilterJobData();
 			
 		 //Gets the service data for the engine
-//		if($baseClass == 'KalturaBulkServiceData' && (!$enumValue || $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadFilterType::FILTER)))
-//			return new KalturaBulkServiceFilterData();
+//		if($baseClass == 'VidiunBulkServiceData' && (!$enumValue || $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadFilterType::FILTER)))
+//			return new VidiunBulkServiceFilterData();
 			
 		
 		//Gets the engine (only for clients)
-		if($baseClass == 'KBulkUploadEngine' && class_exists('KalturaClient') && (!$enumValue || $enumValue == KalturaBulkUploadType::FILTER))
+		if($baseClass == 'VBulkUploadEngine' && class_exists('VidiunClient') && (!$enumValue || $enumValue == VidiunBulkUploadType::FILTER))
 		{
 			list($job) = $constructorArgs;
-			/* @var $job KalturaBatchJob */
+			/* @var $job VidiunBatchJob */
 			switch ($job->data->bulkUploadObjectType)
 			{
-			    case KalturaBulkUploadObjectType::CATEGORY_ENTRY:
+			    case VidiunBulkUploadObjectType::CATEGORY_ENTRY:
 			        return new BulkUploadCategoryEntryEngineFilter($job);
-			    case KalturaBulkUploadObjectType::USER_ENTRY:
+			    case VidiunBulkUploadObjectType::USER_ENTRY:
 				return new BulkUploadUserEntryEngineFilter($job);
-			    case KalturaBulkUploadObjectType::ENTRY:
+			    case VidiunBulkUploadObjectType::ENTRY:
 				return new BulkUploadMediaEntryEngineFilter($job);
 			    default:
-			        throw new KalturaException("Bulk upload object type [{$job->data->bulkUploadObjectType}] not found", KalturaBatchJobAppErrors::ENGINE_NOT_FOUND);
+			        throw new VidiunException("Bulk upload object type [{$job->data->bulkUploadObjectType}] not found", VidiunBatchJobAppErrors::ENGINE_NOT_FOUND);
 			        break;
 			}
 			
@@ -89,7 +89,7 @@ class BulkUploadFilterPlugin extends KalturaPlugin implements IKalturaBulkUpload
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -135,7 +135,7 @@ class BulkUploadFilterPlugin extends KalturaPlugin implements IKalturaBulkUpload
 			
 		$STDOUT = fopen('php://output', 'w');
 		$data = $batchJob->getData();
-        /* @var $data kBulkUploadFilterJobData */		
+        /* @var $data vBulkUploadFilterJobData */		
 		$handledResults = 0;
 		while(count($bulkUploadResults))
 		{
@@ -154,13 +154,13 @@ class BulkUploadFilterPlugin extends KalturaPlugin implements IKalturaBulkUpload
     		if(count($bulkUploadResults) < $criteria->getLimit())
     			break;
 	    		
-    		kMemoryManager::clearMemory();
+    		vMemoryManager::clearMemory();
     		$criteria->setOffset($handledResults);
 			$bulkUploadResults = BulkUploadResultPeer::doSelect($criteria);
 		}
 		fclose($STDOUT);
 		
-		kFile::closeDbConnections();
+		vFile::closeDbConnections();
 		exit;
 	}
 	
@@ -169,8 +169,8 @@ class BulkUploadFilterPlugin extends KalturaPlugin implements IKalturaBulkUpload
 	 */
 	public static function getBulkUploadTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BulkUploadType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BulkUploadType', $value);
 	}
 	
 	/**
@@ -178,8 +178,8 @@ class BulkUploadFilterPlugin extends KalturaPlugin implements IKalturaBulkUpload
 	 */
 	public static function getBulkUploadObjectTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BulkUploadObjectType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BulkUploadObjectType', $value);
 	}
 	
 	/**
@@ -187,7 +187,7 @@ class BulkUploadFilterPlugin extends KalturaPlugin implements IKalturaBulkUpload
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 
 }

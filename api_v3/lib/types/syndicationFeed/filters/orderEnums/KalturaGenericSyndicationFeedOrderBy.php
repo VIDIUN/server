@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaGenericSyndicationFeedOrderBy extends KalturaBaseSyndicationFeedOrderBy
+class VidiunGenericSyndicationFeedOrderBy extends VidiunBaseSyndicationFeedOrderBy
 {
 }

@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaServices extends IKalturaBase
+interface IVidiunServices extends IVidiunBase
 {
 	/**
 	 * @return array<string,string> in the form array[serviceName] = serviceClass

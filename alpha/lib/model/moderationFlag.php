@@ -12,18 +12,18 @@ class moderationFlag extends BasemoderationFlag implements IBaseObject
 {
 	public function getPuserId()
 	{
-		$kuser = $this->getkuserRelatedByKuserId();
-		if ($kuser)
-			return $kuser->getPuserId();
+		$vuser = $this->getvuserRelatedByVuserId();
+		if ($vuser)
+			return $vuser->getPuserId();
 		else
 			return null;
 	}
 	
 	public function getFlaggedPuserId()
 	{
-		$flaggedKuser = $this->getkuserRelatedByFlaggedKuserId();
-		if ($flaggedKuser)
-			return $flaggedKuser->getPuserId();
+		$flaggedVuser = $this->getvuserRelatedByFlaggedVuserId();
+		if ($flaggedVuser)
+			return $flaggedVuser->getPuserId();
 		else
 			return null;
 	}

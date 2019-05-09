@@ -6,8 +6,8 @@ class myCommentUtils
 	{
 		$commentData = array(
 			"id" => $comment->getId(),
-		  	"screenName" => $comment->getkuser()->getScreenName(),
-		  	"picture" => $comment->getkuser()->getPicturePath(),
+		  	"screenName" => $comment->getvuser()->getScreenName(),
+		  	"picture" => $comment->getvuser()->getPicturePath(),
 		  	"comment" => $comment->getComment(),
 			"createdAt" => $comment->getFormattedCreatedAt(),
 			);
@@ -21,11 +21,11 @@ class myCommentUtils
 	 * return an ajax response.
 	 * The request may include 3 fields: page number, page size, entry id.
 	 */
-	public static function getComments($page, $pageSize, $kshowId, $kuserId)
+	public static function getComments($page, $pageSize, $vshowId, $vuserId)
 	{
 		$commentsData = array(); // this array will hold the comments data
-		$subjectid =  $kshowId > 0 ? $kshowId : $kuserId;
-		$subjecttype = $kshowId > 0 ? Comment::COMMENT_TYPE_KSHOW : Comment::COMMENT_TYPE_USER;
+		$subjectid =  $vshowId > 0 ? $vshowId : $vuserId;
+		$subjecttype = $vshowId > 0 ? Comment::COMMENT_TYPE_VSHOW : Comment::COMMENT_TYPE_USER;
 	    
 		$pager = commentPeer::getOrderedPager( $subjecttype , $subjectid, $pageSize, $page);
 	    

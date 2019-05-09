@@ -3,7 +3,7 @@
  * @package plugins.ftpDistribution
  * @subpackage lib
  */
-class FtpDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class FtpDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const FTP = 'FTP';
 	const FTP_SCHEDULED = 'FTP_SCHEDULED';

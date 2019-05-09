@@ -1,10 +1,10 @@
 <?php
-class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreatedEventConsumer, kObjectChangedEventConsumer
+class vCategoryEventHandler implements vObjectDeletedEventConsumer, vObjectCreatedEventConsumer, vObjectChangedEventConsumer
 {
 	
 	const PUBLIC_AGGREGATION_CATEGORY = 'publicAggregationCategory';
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns) {
 		if ($object instanceof categoryEntry)
@@ -27,12 +27,12 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 		$currentAggregationCategories = explode (',', $object->getAggregationCategories());
 		
 		$aggregationCategoriesToAdd = array_diff($currentAggregationCategories, $oldAggregationCategories);
-		KalturaLog::info ("Copying entries from category ID [" . $object->getId() . "] to aggregation channels: " . print_r($aggregationCategoriesToAdd, true));
+		VidiunLog::info ("Copying entries from category ID [" . $object->getId() . "] to aggregation channels: " . print_r($aggregationCategoriesToAdd, true));
 		$this->addToAggregationCategories($object, $aggregationCategoriesToAdd);
 		
 		$aggregationCategoriesToRemove = array_diff ($oldAggregationCategories, $currentAggregationCategories);
 		
-		KalturaLog::info ("Removing entries from category ID [" . $object->getId() . "] to aggregation channels: " . print_r($aggregationCategoriesToRemove, true));
+		VidiunLog::info ("Removing entries from category ID [" . $object->getId() . "] to aggregation channels: " . print_r($aggregationCategoriesToRemove, true));
 		$this->deleteFromAggregationChannels ($object, $aggregationCategoriesToRemove);
 		
 	}
@@ -52,11 +52,11 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 		$filter->set('_mlikeand_aggregation_categories', $aggregationCategoryId);
 		$filter->set('_notin_id', $object->getId());
 		
-		kJobsManager::addDeleteJob($object->getPartnerId(), DeleteObjectType::CATEGORY_ENTRY_AGGREGATION, $filter);
+		vJobsManager::addDeleteJob($object->getPartnerId(), DeleteObjectType::CATEGORY_ENTRY_AGGREGATION, $filter);
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns) {
 		if ($object instanceof categoryEntry && in_array(categoryEntryPeer::STATUS, $modifiedColumns)
@@ -81,7 +81,7 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::objectCreated()
+	 * @see vObjectCreatedEventConsumer::objectCreated()
 	 */
 	public function objectCreated(BaseObject $object) {
 		if ($object instanceof categoryEntry)
@@ -102,7 +102,7 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 	{
 		if (!$object->getAggregationCategories())
 		{
-			KalturaLog::info ("Category [" . $object->getId() . "] has no aggregation channels" );
+			VidiunLog::info ("Category [" . $object->getId() . "] has no aggregation channels" );
 			return true;
 		}
 		
@@ -116,7 +116,7 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 		
 		$filter = new categoryEntryFilter();
 		$filter->set("_eq_category_id", $object->getId());
-		kJobsManager::addCopyJob($object->getPartnerId(), CopyObjectType::CATEGORY_ENTRY, $filter, $templateObject);
+		vJobsManager::addCopyJob($object->getPartnerId(), CopyObjectType::CATEGORY_ENTRY, $filter, $templateObject);
 	}
 	
 	protected function addToAggregationCategories (category $object, array $aggregationCatIds)
@@ -132,13 +132,13 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 		$category = categoryPeer::retrieveByPK($object->getCategoryId());
 		if (!$category)
 		{
-			KalturaLog::info("category [" . $object->getCategoryId() . "] does not exist in the system.");
+			VidiunLog::info("category [" . $object->getCategoryId() . "] does not exist in the system.");
 			return;
 		}
 		
 		if (!$category->getAggregationCategories())
 		{
-			KalturaLog::info("No aggregation categories found for category [" . $category->getId() . "]");
+			VidiunLog::info("No aggregation categories found for category [" . $category->getId() . "]");
 			return;
 		}
 		
@@ -152,7 +152,7 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 			$aggregationCategories = array_diff($aggregationCategories, array($aggregationCategoryEntry->getCategoryId()));
 		}
 		
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		foreach ($aggregationCategories as $categoryIdToAdd)
 		{
 			$aggregationCategory = categoryPeer::retrieveByPK($categoryIdToAdd);
@@ -165,11 +165,11 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 			$categoryEntry->setCategoryFullIds($aggregationCategory->getFullIds());
 			$categoryEntry->save();
 		}
-		KalturaCriterion::enableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::enableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
+	 * @see vObjectCreatedEventConsumer::shouldConsumeCreatedEvent()
 	 */
 	public function shouldConsumeCreatedEvent(BaseObject $object) {
 		if ($object instanceof categoryEntry && $object->getStatus() == CategoryEntryStatus::ACTIVE)
@@ -186,7 +186,7 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null) {
 		if ($object instanceof categoryEntry)
@@ -206,7 +206,7 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 	{
 		if (!$object->getAggregationCategories())
 		{
-			KalturaLog::info ("Category [" . $object->getId() . "] has no aggregation channels" );
+			VidiunLog::info ("Category [" . $object->getId() . "] has no aggregation channels" );
 			return true;
 		}
 		
@@ -218,19 +218,19 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 		$category = categoryPeer::retrieveByPK($object->getCategoryId());
 		if (!$category)
 		{
-			KalturaLog::info("category [" . $object->getCategoryId() . "] does not exist in the system.");
+			VidiunLog::info("category [" . $object->getCategoryId() . "] does not exist in the system.");
 			return true;
 		}
 		
 		if (!$category->getAggregationCategories())
 		{
-			KalturaLog::info("No aggregation categories found for category [" . $category->getId() . "]");
+			VidiunLog::info("No aggregation categories found for category [" . $category->getId() . "]");
 			return true;
 		}
 		//If this categoryEntry was deleted because its category was deleted, this will be handled later on.
 		if ($category->getStatus() == CategoryStatus::DELETED || $category->getStatus() == CategoryStatus::PURGED)
 		{
-			KalturaLog::info("Category ID [" . $category->getId() . "] is deleted, its deleted entries will be handled separately");
+			VidiunLog::info("Category ID [" . $category->getId() . "] is deleted, its deleted entries will be handled separately");
 			return true;
 		}
 		
@@ -254,7 +254,7 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 			
 			if (!count ($aggregationCategories))
 			{
-				KalturaLog::info("No need to delete any aggregation category associations.");
+				VidiunLog::info("No need to delete any aggregation category associations.");
 				return true;
 			}
 		}
@@ -265,7 +265,7 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 			foreach ($aggregationCategoryEntries as $aggregationCategoryEntry)
 			{
 				/* @var $aggregationCategoryEntry categoryEntry */
-				KalturaLog::info("Delete aggregation category entry- entry ID [" . $aggregationCategoryEntry->getEntryId() . "], category ID [" . $aggregationCategoryEntry->getCategoryId() . "]");
+				VidiunLog::info("Delete aggregation category entry- entry ID [" . $aggregationCategoryEntry->getEntryId() . "], category ID [" . $aggregationCategoryEntry->getCategoryId() . "]");
 				$aggregationCategoryEntry->setStatus(CategoryEntryStatus::DELETED);
 				$aggregationCategoryEntry->save();
 			}
@@ -273,7 +273,7 @@ class kCategoryEventHandler implements kObjectDeletedEventConsumer, kObjectCreat
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object) {
 		if ($object instanceof categoryEntry && $object->getStatus() == CategoryEntryStatus::DELETED)

@@ -3,6 +3,6 @@
  * @package plugins.integration
  * @subpackage model.data
  */
-abstract class kIntegrationJobProviderData extends kJobData
+abstract class vIntegrationJobProviderData extends vJobData
 {
 }

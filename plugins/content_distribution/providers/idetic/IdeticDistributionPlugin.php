@@ -2,14 +2,14 @@
 /**
  * @package plugins.ideticDistribution
  */
-class IdeticDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider, IKalturaEventConsumers
+class IdeticDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider, IVidiunEventConsumers
 {
 	const PLUGIN_NAME = 'ideticDistribution';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
 	const CONTENT_DSTRIBUTION_VERSION_MINOR = 0;
 	const CONTENT_DSTRIBUTION_VERSION_BUILD = 0;
 	
-	const IDETIC_REPORT_HANDLER = 'kIdeticDistributionReportHandler';
+	const IDETIC_REPORT_HANDLER = 'vIdeticDistributionReportHandler';
 
 	public static function getPluginName()
 	{
@@ -18,12 +18,12 @@ class IdeticDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -60,7 +60,7 @@ class IdeticDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	{
 		// client side apps like batch and admin console
 
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::IDETIC)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::IDETIC)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return new IdeticDistributionEngine();
@@ -83,14 +83,14 @@ class IdeticDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 			if($baseClass == 'IDistributionEngineUpdate')
 				return new IdeticDistributionEngine();
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaIdeticDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunIdeticDistributionProfile();
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return new KalturaIdeticDistributionJobProviderData();
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return new VidiunIdeticDistributionJobProviderData();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::IDETIC)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::IDETIC)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -99,20 +99,20 @@ class IdeticDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 			}
 		}
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(IdeticDistributionProviderType::IDETIC))
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(IdeticDistributionProviderType::IDETIC))
 		{
-			$reflect = new ReflectionClass('KalturaIdeticDistributionJobProviderData');
+			$reflect = new ReflectionClass('VidiunIdeticDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(IdeticDistributionProviderType::IDETIC))
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(IdeticDistributionProviderType::IDETIC))
 		{
-			$reflect = new ReflectionClass('kIdeticDistributionJobProviderData');
+			$reflect = new ReflectionClass('vIdeticDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(IdeticDistributionProviderType::IDETIC))
-			return new KalturaIdeticDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(IdeticDistributionProviderType::IDETIC))
+			return new VidiunIdeticDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(IdeticDistributionProviderType::IDETIC))
 			return new IdeticDistributionProfile();
@@ -128,7 +128,7 @@ class IdeticDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::IDETIC)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::IDETIC)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return 'IdeticDistributionEngine';
@@ -151,30 +151,30 @@ class IdeticDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 			if($baseClass == 'IDistributionEngineUpdate')
 				return 'IdeticDistributionEngine';
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaIdeticDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunIdeticDistributionProfile';
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaIdeticDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunIdeticDistributionJobProviderData';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::IDETIC)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::IDETIC)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_IdeticProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_IdeticDistribution_Type_IdeticDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_IdeticDistribution_Type_IdeticDistributionProfile';
 		}
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(IdeticDistributionProviderType::IDETIC))
-			return 'KalturaIdeticDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(IdeticDistributionProviderType::IDETIC))
+			return 'VidiunIdeticDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(IdeticDistributionProviderType::IDETIC))
-			return 'kIdeticDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(IdeticDistributionProviderType::IDETIC))
+			return 'vIdeticDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(IdeticDistributionProviderType::IDETIC))
-			return 'KalturaIdeticDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(IdeticDistributionProviderType::IDETIC))
+			return 'VidiunIdeticDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(IdeticDistributionProviderType::IDETIC))
 			return 'IdeticDistributionProfile';
@@ -195,11 +195,11 @@ class IdeticDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaIdeticDistributionProvider();
+		$distributionProvider = new VidiunIdeticDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -231,8 +231,8 @@ class IdeticDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -240,6 +240,6 @@ class IdeticDistributionPlugin extends KalturaPlugin implements IKalturaPermissi
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

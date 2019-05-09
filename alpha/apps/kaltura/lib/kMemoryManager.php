@@ -1,6 +1,6 @@
 <?php
 
-class kMemoryManager
+class vMemoryManager
 {
 	static protected $peerNames = array();
 	
@@ -17,7 +17,7 @@ class kMemoryManager
 		}
 		self::$peerNames = array();
 
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaMemoryCleaner');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunMemoryCleaner');
 		foreach($pluginInstances as $pluginInstance)
 			$pluginInstance->cleanMemory();
 					

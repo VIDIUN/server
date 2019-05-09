@@ -13,7 +13,7 @@ $script = realpath(dirname(__FILE__) . '/../../../') . '/tests/standAloneClient/
 
 $config = realpath(dirname(__FILE__)) . '/../../updates/scripts/xml/responseProfiles/reach_vendor_response_profiles.xml';
 if(!file_exists($config))
-	KalturaLog::err("Missing file [$config] will not deploy");
+	VidiunLog::err("Missing file [$config] will not deploy");
 
 passthru("php $script $config");
 
@@ -24,7 +24,7 @@ passthru("php $script $config");
 function checkMandatoryPluginsEnabled()
 {
 	$pluginsFilePath = realpath(dirname(__FILE__) . "/../../../configurations/plugins.ini");
-	KalturaLog::debug("Loading Plugins config from [$pluginsFilePath]");
+	VidiunLog::debug("Loading Plugins config from [$pluginsFilePath]");
 
 
 	$pluginsData = file($pluginsFilePath);
@@ -33,6 +33,6 @@ function checkMandatoryPluginsEnabled()
 		if (trim($item) == "Reach")
 			return;
 	}
-	KalturaLog::debug("[Reach] plugin is disabled or not configured, aborting execution");
+	VidiunLog::debug("[Reach] plugin is disabled or not configured, aborting execution");
 	exit(-2);
 }

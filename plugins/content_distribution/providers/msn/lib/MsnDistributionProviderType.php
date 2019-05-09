@@ -3,7 +3,7 @@
  * @package plugins.msnDistribution
  * @subpackage lib
  */
-class MsnDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class MsnDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const MSN = 'MSN';
 	

@@ -3,12 +3,12 @@
  * @package api
  * @subpackage v3
  */
-class KalturaReportHelper
+class VidiunReportHelper
 {
-	public static function getValidateExecutionParameters(Report $report, KalturaKeyValueArray $params = null)
+	public static function getValidateExecutionParameters(Report $report, VidiunKeyValueArray $params = null)
 	{
 		if (is_null($params))
-			$params = new KalturaKeyValueArray();
+			$params = new VidiunKeyValueArray();
 			
 		$execParams = array();
 		$currentParams = $report->getParameters();
@@ -17,7 +17,7 @@ class KalturaReportHelper
 			$found = false;
 			foreach($params as $param)
 			{
-				/* @var $param KalturaKeyValue */
+				/* @var $param VidiunKeyValue */
 				if ((strtolower($param->key) == strtolower($currentParam)))
 				{
 					$execParams[':'.$currentParam] = $param->value;
@@ -26,7 +26,7 @@ class KalturaReportHelper
 			}
 			
 			if (!$found)
-				throw new KalturaAPIException(KalturaErrors::REPORT_PARAMETER_MISSING, $currentParam);
+				throw new VidiunAPIException(VidiunErrors::REPORT_PARAMETER_MISSING, $currentParam);
 		}
 		return $execParams;
 	}

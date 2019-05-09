@@ -5,7 +5,7 @@
  * @package plugins.bulkUploadFilter
  * @subpackage batch
  */
-abstract class BulkUploadEngineFilter extends KBulkUploadEngine
+abstract class BulkUploadEngineFilter extends VBulkUploadEngine
 {
 	/**
 	 * The bulk upload results
@@ -19,7 +19,7 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 			
 
 	/* (non-PHPdoc)
-	 * @see KBulkUploadEngine::handleBulkUpload()
+	 * @see VBulkUploadEngine::handleBulkUpload()
 	 */
 	public function handleBulkUpload()
 	{
@@ -28,9 +28,9 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 		$this->processObjectsList();
 		
 		// send all invalid results
-		KBatchBase::$kClient->doMultiRequest();
+		VBatchBase::$vClient->doMultiRequest();
 		
-		KalturaLog::info("Extracted objects by filter, $this->handledObjectsCount lines with " . ($this->handledObjectsCount - count($this->bulkUploadResults)) . ' invalid records');
+		VidiunLog::info("Extracted objects by filter, $this->handledObjectsCount lines with " . ($this->handledObjectsCount - count($this->bulkUploadResults)) . ' invalid records');
 				
 		//Check if job aborted
 		$this->checkAborted();
@@ -40,19 +40,19 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 	}
 		
 	/* (non-PHPdoc)
-	 * @see KBulkUploadEngine::addBulkUploadResult()
+	 * @see VBulkUploadEngine::addBulkUploadResult()
 	 */
-	protected function addBulkUploadResult(KalturaBulkUploadResult $bulkUploadResult)
+	protected function addBulkUploadResult(VidiunBulkUploadResult $bulkUploadResult)
 	{
 		parent::addBulkUploadResult($bulkUploadResult);
 			
 	}
 	
-	abstract protected function listObjects(KalturaFilter $filter, KalturaFilterPager $pager = null); 
+	abstract protected function listObjects(VidiunFilter $filter, VidiunFilterPager $pager = null); 
 	
-	abstract protected function createObjectFromResultAndJobData (KalturaBulkUploadResult $bulkUploadResult);
+	abstract protected function createObjectFromResultAndJobData (VidiunBulkUploadResult $bulkUploadResult);
 
-	abstract protected function deleteObjectFromResult (KalturaBulkUploadResult $bulkUploadResult);
+	abstract protected function deleteObjectFromResult (VidiunBulkUploadResult $bulkUploadResult);
 	
 	abstract protected function fillUploadResultInstance ($object);
 	
@@ -71,8 +71,8 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 	/**
 	 *
 	 * Creates a new upload result object from the given parameters
-	 * @param KalturaObject $object
-	 * @return KalturaBulkUploadResult
+	 * @param VidiunObject $object
+	 * @return VidiunBulkUploadResult
 	 */
 	protected function createUploadResult($object)
 	{
@@ -87,10 +87,10 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 		$bulkUploadResult->bulkUploadJobId = $this->job->id;
 		$bulkUploadResult->lineIndex = $this->startIndex + $this->handledObjectsCount;
 		$bulkUploadResult->partnerId = $this->job->partnerId;
-		$bulkUploadResult->status = KalturaBulkUploadResultStatus::IN_PROGRESS;
+		$bulkUploadResult->status = VidiunBulkUploadResultStatus::IN_PROGRESS;
 		if (!$bulkUploadResult->action)
 		{
-		    $bulkUploadResult->action = KalturaBulkUploadAction::ADD;
+		    $bulkUploadResult->action = VidiunBulkUploadAction::ADD;
 		}	
 		$bulkUploadResult->bulkUploadResultObjectType = $this->getBulkUploadResultObjectType(); 
 			
@@ -105,11 +105,11 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 	 */
 	protected function processObjectsList()
 	{
-		KBatchBase::impersonate($this->currentPartnerId);
-		$pager = new KalturaFilterPager();
+		VBatchBase::impersonate($this->currentPartnerId);
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 100;		
-		if(KBatchBase::$taskConfig->params->pageSize)
-			$pager->pageSize = KBatchBase::$taskConfig->params->pageSize;			
+		if(VBatchBase::$taskConfig->params->pageSize)
+			$pager->pageSize = VBatchBase::$taskConfig->params->pageSize;			
 		$pager->pageIndex = $this->getPagerIndex($pager->pageSize);
 
 		$list = $this->listObjects($this->getData()->filter, $pager);
@@ -125,15 +125,15 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 				$this->createUploadResult($object);
 				if($this->exceededMaxRecordsEachRun)
 				{
-					KBatchBase::unimpersonate();
+					VBatchBase::unimpersonate();
 					return;
 				}
 				
-				if(KBatchBase::$kClient->getMultiRequestQueueSize() >= $this->multiRequestSize)
+				if(VBatchBase::$vClient->getMultiRequestQueueSize() >= $this->multiRequestSize)
 				{
-					KBatchBase::$kClient->doMultiRequest();
+					VBatchBase::$vClient->doMultiRequest();
 					$this->checkAborted();
-					KBatchBase::$kClient->startMultiRequest();
+					VBatchBase::$vClient->startMultiRequest();
 				}	
 			}
 			if(count($list->objects) < $pager->pageSize)
@@ -145,7 +145,7 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 			}
 		}
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 	}
 
 	/**
@@ -154,50 +154,50 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 	 */
 	protected function createObjects()
 	{
-		KalturaLog::info("job[{$this->job->id}] start creating objects");
+		VidiunLog::info("job[{$this->job->id}] start creating objects");
 		
 		$bulkUploadResultChunk = array(); // store the results of the created entries
 				
-		KBatchBase::impersonate($this->currentPartnerId);;
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::impersonate($this->currentPartnerId);;
+		VBatchBase::$vClient->startMultiRequest();
 		
 		foreach($this->bulkUploadResults as $bulkUploadResult)
 		{
-			/* @var $bulkUploadResult KalturaBulkUploadResultCategoryEntry */
+			/* @var $bulkUploadResult VidiunBulkUploadResultCategoryEntry */
 		    switch ($bulkUploadResult->action)
 		    {
-		        case KalturaBulkUploadAction::ADD:
+		        case VidiunBulkUploadAction::ADD:
     		        $this->createObjectFromResultAndJobData($bulkUploadResult);
         			$bulkUploadResultChunk[] = $bulkUploadResult;
 		            break;
 		        		            
-		        case KalturaBulkUploadAction::DELETE:
+		        case VidiunBulkUploadAction::DELETE:
 		            $bulkUploadResultChunk[] = $bulkUploadResult;
         			$this->deleteObjectFromResult($bulkUploadResult);      			
 		            break;
 		        
 		        default:
-		            $bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
+		            $bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
 		            $bulkUploadResult->errorDescription = "Unsupported action passed: [".$bulkUploadResult->action ."]";
 		            break;
 		    }
 		    
-		    if(KBatchBase::$kClient->getMultiRequestQueueSize() >= $this->multiRequestSize)
+		    if(VBatchBase::$vClient->getMultiRequestQueueSize() >= $this->multiRequestSize)
 			{
-				$requestResults = KBatchBase::$kClient->doMultiRequest();
-				KBatchBase::unimpersonate();
+				$requestResults = VBatchBase::$vClient->doMultiRequest();
+				VBatchBase::unimpersonate();
 				$this->updateObjectsResults($requestResults, $bulkUploadResultChunk);
 				$this->checkAborted();
-				KBatchBase::impersonate($this->currentPartnerId);;
-				KBatchBase::$kClient->startMultiRequest();
+				VBatchBase::impersonate($this->currentPartnerId);;
+				VBatchBase::$vClient->startMultiRequest();
 				$bulkUploadResultChunk = array();
 			}
 		}
 		
 		// make all the category actions as the partner
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
 		if($requestResults && count($requestResults))
 			$this->updateObjectsResults($requestResults, $bulkUploadResultChunk);
@@ -207,8 +207,8 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 	
     protected function updateObjectsResults(array $requestResults, array $bulkUploadResults)
 	{
-	    KBatchBase::$kClient->startMultiRequest();
-		KalturaLog::info("Updating " . count($requestResults) . " results");
+	    VBatchBase::$vClient->startMultiRequest();
+		VidiunLog::info("Updating " . count($requestResults) . " results");
 		
 		foreach($requestResults as $index => $requestResult)
 		{
@@ -217,8 +217,8 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 			if(is_array($requestResult) && isset($requestResult['code']))
 			{
 				if($this->isErrorResult($requestResult)){
-				    $bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-				    $bulkUploadResult->errorType = KalturaBatchJobErrorTypes::KALTURA_API;
+				    $bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+				    $bulkUploadResult->errorType = VidiunBatchJobErrorTypes::VIDIUN_API;
 					$bulkUploadResult->objectStatus = $requestResult['code'];
 					$bulkUploadResult->errorDescription = $requestResult['message'];
 					$this->addBulkUploadResult($bulkUploadResult);	
@@ -229,8 +229,8 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 			if($requestResult instanceof Exception)
 			{
 				if($this->isErrorResult($requestResult)){
-					$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-					$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::KALTURA_API;
+					$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+					$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::VIDIUN_API;
 					$bulkUploadResult->errorDescription = $requestResult->getMessage();
 					$this->addBulkUploadResult($bulkUploadResult);
 					continue;
@@ -243,7 +243,7 @@ abstract class BulkUploadEngineFilter extends KBulkUploadEngine
 			$this->addBulkUploadResult($bulkUploadResult);
 		}
 		
-		KBatchBase::$kClient->doMultiRequest();
+		VBatchBase::$vClient->doMultiRequest();
 	}
 	
 	private function getPagerIndex($pageSize)

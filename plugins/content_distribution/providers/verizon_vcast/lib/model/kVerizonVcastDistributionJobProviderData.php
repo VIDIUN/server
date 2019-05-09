@@ -3,7 +3,7 @@
  * @package plugins.verizonVcastDistribution
  * @subpackage model.data
  */
-class kVerizonVcastDistributionJobProviderData extends kDistributionJobProviderData
+class vVerizonVcastDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -20,7 +20,7 @@ class kVerizonVcastDistributionJobProviderData extends kDistributionJobProviderD
 		$this->xml = $xml;
 	}
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

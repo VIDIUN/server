@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaReportInputFilter extends KalturaReportInputBaseFilter 
+class VidiunReportInputFilter extends VidiunReportInputBaseFilter 
 {
 	/**
 	 * Search keywords to filter objects
@@ -114,7 +114,7 @@ class KalturaReportInputFilter extends KalturaReportInputBaseFilter
 	/**
 	 * Aggregated results according to interval
 	 * 
-	 * @var KalturaReportInterval
+	 * @var VidiunReportInterval
 	 */
 	public $interval;
 
@@ -140,7 +140,7 @@ class KalturaReportInputFilter extends KalturaReportInputBaseFilter
 	public $ownerIdsIn;
 
 	/**
-	 * @var KalturaESearchEntryOperator
+	 * @var VidiunESearchEntryOperator
 	 */
 	public $entryOperator;
 
@@ -193,7 +193,7 @@ class KalturaReportInputFilter extends KalturaReportInputBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaReportInputBaseFilter::toReportsInputFilter()
+	 * @see VidiunReportInputBaseFilter::toReportsInputFilter()
 	 */
 	public function toReportsInputFilter($reportInputFilter = null)
 	{

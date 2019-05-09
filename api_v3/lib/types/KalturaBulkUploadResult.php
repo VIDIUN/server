@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBulkUploadResult extends KalturaObject
+class VidiunBulkUploadResult extends VidiunObject
 {
     /**
      * The id of the result
@@ -33,12 +33,12 @@ class KalturaBulkUploadResult extends KalturaObject
     public $partnerId;
 
     /**
-     * @var KalturaBulkUploadResultStatus
+     * @var VidiunBulkUploadResultStatus
      */
     public $status;
 	
 	/**
-     * @var KalturaBulkUploadAction
+     * @var VidiunBulkUploadAction
      */
     public $action;
 
@@ -55,7 +55,7 @@ class KalturaBulkUploadResult extends KalturaObject
 
 
 	/**
-     * @var KalturaBulkUploadObjectType
+     * @var VidiunBulkUploadObjectType
      */
     public $bulkUploadResultObjectType;
 
@@ -77,7 +77,7 @@ class KalturaBulkUploadResult extends KalturaObject
     public $objectErrorDescription;
 
 	/**
-     * @var KalturaBulkUploadPluginDataArray
+     * @var VidiunBulkUploadPluginDataArray
      */
     public $pluginsData;
     
@@ -125,14 +125,14 @@ class KalturaBulkUploadResult extends KalturaObject
 	{
 	    if(is_null($object_to_fill))
 	    {
-			KalturaLog::alert("No object returned from toInsertableObject, object_to_fill [" . get_class($object_to_fill) . "], this [" . get_class($this) . "] line [" . __LINE__ . "]");
+			VidiunLog::alert("No object returned from toInsertableObject, object_to_fill [" . get_class($object_to_fill) . "], this [" . get_class($this) . "] line [" . __LINE__ . "]");
 			return null;
 	    }
 	        
 		$dbObject = parent::toInsertableObject($object_to_fill, $props_to_skip);
 		if(!$dbObject)
 		{
-			KalturaLog::alert("No object returned from toInsertableObject, object_to_fill [" . get_class($object_to_fill) . "], this [" . get_class($this) . "] line [" . __LINE__ . "]");
+			VidiunLog::alert("No object returned from toInsertableObject, object_to_fill [" . get_class($object_to_fill) . "], this [" . get_class($this) . "] line [" . __LINE__ . "]");
 			return null;
 		}
 		
@@ -148,15 +148,15 @@ class KalturaBulkUploadResult extends KalturaObject
 	protected function createPluginDataMap ()
 	{
 	    $pluginsData = array();
-	    if($this->pluginsData && $this->pluginsData instanceof KalturaBulkUploadPluginDataArray)
+	    if($this->pluginsData && $this->pluginsData instanceof VidiunBulkUploadPluginDataArray)
 		{
 			foreach($this->pluginsData as $data)
 			{
-				if($data instanceof KalturaBulkUploadPluginData)
+				if($data instanceof VidiunBulkUploadPluginData)
 					$pluginsData[$data->field] = $data->value;
 			}
 		}
-		KalturaLog::debug("Plugins data array:\n" . print_r($pluginsData, true));
+		VidiunLog::debug("Plugins data array:\n" . print_r($pluginsData, true));
 		return $pluginsData;
 	}
 }

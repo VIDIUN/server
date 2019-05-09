@@ -9,7 +9,7 @@
 	/********************
 	 * Chunked Encoding module
 	 */
-	class KChunkedEncode {
+	class VChunkedEncode {
 		const	MaxInaccuracyValue = 0.100;	// 100 msec, ~3 frames
 		
 		public $params = null;			// Additional encoding parameters, evaluated from the cmd-line
@@ -36,7 +36,7 @@
 		public function __construct($setup)
 		{
 			$this->setup = $setup;
-			$this->params  = new KChunkedEncodeParams();
+			$this->params  = new VChunkedEncodeParams();
 		}
 		
 		
@@ -45,7 +45,7 @@
 		 */
 		public function Initialize(&$msgStr)
 		{
-			KalturaLog::log(date("Y-m-d H:i:s"));
+			VidiunLog::log(date("Y-m-d H:i:s"));
 			
 			$setup = $this->setup;
 			$params = $this->params;
@@ -56,14 +56,14 @@
 				$params->source = $setup->source;
 			}
 			else if(!isset($params->source)) {
-				KalturaLog::log($msgStr="ERROR: missing essential - source");
+				VidiunLog::log($msgStr="ERROR: missing essential - source");
 				return false;
 			}
 
 				// Get source mediaData. Required for 'supported' validation
 			$this->sourceFileDt = $this->getMediaData($params->source);
 			if(!isset($this->sourceFileDt)){
-				KalturaLog::log($msgStr="ERROR: failed on media data retrieval of the source file ($params->source)");
+				VidiunLog::log($msgStr="ERROR: failed on media data retrieval of the source file ($params->source)");
 				return false;
 			}
 			
@@ -76,7 +76,7 @@
 			if(isset($setup->createFolder) && $setup->createFolder==1) {
 				$setup->output.= "_".$this->chunkEncodeToken."/";
 				if(!file_exists($setup->output)) {
-					KalturaLog::log("Create tmp folder:".$setup->output);
+					VidiunLog::log("Create tmp folder:".$setup->output);
 					mkdir($setup->output);
 				}
 				$setup->output.= $pInfo['filename'];
@@ -98,12 +98,12 @@
 			}
 
 			if(self::verifySupport($params->vcodec, $params->acodec, $params->format, $params->fps, $params->gop, $params->duration, $params->height, $msgStr)!=true){
-				KalturaLog::log($msgStr);
+				VidiunLog::log($msgStr);
 				return false;
 			}
 			
 			if(($key=array_search("-vsync", $params->cmdLineArr))!==false && $params->cmdLineArr[$key+1]!=1) {
-				KalturaLog::log($msgStr="UNSUPPORTED: vsync param (".($params->cmdLineArr[$key+1])."), should be 1 (cfr)");
+				VidiunLog::log($msgStr="UNSUPPORTED: vsync param (".($params->cmdLineArr[$key+1])."), should be 1 (cfr)");
 				return false;
 			}
 
@@ -144,7 +144,7 @@
 
 			$this->buildTemplateVideoCommandLine();
 
-			KalturaLog::log("data:".print_r($this,1));
+			VidiunLog::log("data:".print_r($this,1));
 
 				/*
 				 * Evaluate various defaults
@@ -159,10 +159,10 @@
 				 * Inaccuracy threshold
 				 * - maxInaccuracyValue - max thresh on merge
 				 */
-			$this->maxInaccuracyValue = ($params->frameDuration*1.5>KChunkedEncode::MaxInaccuracyValue)? ($params->frameDuration*1.5): KChunkedEncode::MaxInaccuracyValue; 
+			$this->maxInaccuracyValue = ($params->frameDuration*1.5>VChunkedEncode::MaxInaccuracyValue)? ($params->frameDuration*1.5): VChunkedEncode::MaxInaccuracyValue; 
 			
-			KalturaLog::log("data:".print_r($this,1));
-			KalturaLog::log("duration(".($params->duration)."), frameDuration($params->frameDuration)\n");
+			VidiunLog::log("data:".print_r($this,1));
+			VidiunLog::log("duration(".($params->duration)."), frameDuration($params->frameDuration)\n");
 
 				/*
 				 * Generate the pre-planned chunk params (start, frames, ...)
@@ -180,7 +180,7 @@
 				$subsFileHd = fopen($this->params->videoFilters->subsFilename,'r');
 				if(!$subsFileHd)
 				{
-					KalturaLog::log('ERROR: missing caption file ['.$this->params->videoFilters->subsFilename.'] - exiting.');
+					VidiunLog::log('ERROR: missing caption file ['.$this->params->videoFilters->subsFilename.'] - exiting.');
 					return false;
 				}
 				$subsArr = array();
@@ -191,13 +191,13 @@
 					$chunkSrtFile = $this->getChunkName($chunkData->index,"srt");
 					if(file_exists($chunkSrtFile))
 						unlink($chunkSrtFile);
-					KSrtText::SplitSrtFile($subsFileHd, $chunkSrtFile, $chunkData->start, $chunkData->duration, $subsArr);
-					KalturaLog::log("$chunkSrtFile, $chunkData->start, $chunkData->duration");
+					VSrtText::SplitSrtFile($subsFileHd, $chunkSrtFile, $chunkData->start, $chunkData->duration, $subsArr);
+					VidiunLog::log("$chunkSrtFile, $chunkData->start, $chunkData->duration");
 				}
 			}
 			
 			foreach($this->chunkDataArr as $idx=>$chunkData){
-				KalturaLog::log("chunk($idx)==>".json_encode($chunkData));
+				VidiunLog::log("chunk($idx)==>".json_encode($chunkData));
 			}
 
 				// Get mediaData for external reference file, if such provided 
@@ -205,7 +205,7 @@
 				$this->refFileDt = $this->getMediaData($this->setup->ref);
 			}
 
-			KalturaLog::log("cmdLine:$this->cmdLine");
+			VidiunLog::log("cmdLine:$this->cmdLine");
 			return true;
 		}
 		
@@ -215,7 +215,7 @@
 		public function GetChunk($idx)
 		{
 			if($idx>count($this->chunkDataArr)-1) {
-				KalturaLog::log("Bad index ($idx), max allowed".(count($this->chunkDataArr)-1)."!!!");
+				VidiunLog::log("Bad index ($idx), max allowed".(count($this->chunkDataArr)-1)."!!!");
 				return null;
 			}
 			return $this->chunkDataArr[$idx];
@@ -233,38 +233,38 @@
 		 * Check for supported codecs/formats, conditions
 		 */
 		static public function verifySupport($vcodec, $acodec=null, $format, $fps, $gop, $duration, $height, &$msgStr){
-			KalturaLog::log("vcodec($vcodec), acodec($acodec), format($format), fps($fps), gop($gop), duration($duration), height($height)");
+			VidiunLog::log("vcodec($vcodec), acodec($acodec), format($format), fps($fps), gop($gop), duration($duration), height($height)");
 
 
 			if(!in_array($vcodec, array("libx264","libx265","h264","h264b","h264m","h264h","h265"))){
-				KalturaLog::log($msgStr="UNSUPPORTED: video codec ($vcodec)");
+				VidiunLog::log($msgStr="UNSUPPORTED: video codec ($vcodec)");
 				return false;
 			}
 
 			if(isset($acodec) && strstr($acodec, "aac")===false) {
-				KalturaLog::log($msgStr="UNSUPPORTED: audio codec ($acodec)");
+				VidiunLog::log($msgStr="UNSUPPORTED: audio codec ($acodec)");
 				return false;
 			}
 			
 			if(!in_array($format, array("mp4","mov","ismv"))){
-				KalturaLog::log($msgStr="UNSUPPORTED: media file format ($format)");
+				VidiunLog::log($msgStr="UNSUPPORTED: media file format ($format)");
 				return false;
 			}
 			
 			if(!isset($fps) || $fps==0){
-				KalturaLog::log($msgStr="UNSUPPORTED: missing essential - fps");
+				VidiunLog::log($msgStr="UNSUPPORTED: missing essential - fps");
 				return false;
 			}
 
 			if(!isset($gop) || $gop==0){
-				KalturaLog::log($msgStr="UNSUPPORTED: missing essential - gop");
+				VidiunLog::log($msgStr="UNSUPPORTED: missing essential - gop");
 				return false;
 			}
 				/*
 				 * WV session fail with chunked encoding. Detect chunks by very large GOP value
 					***** Disable this check, WV related flavors can disable chunks via conv-prof 
 			if($gop>100){
-				KalturaLog::log($msgStr="UNSUPPORTED: WV conversion detected (large GOP=$gop). Currently chunked encoding does not work with WV.");
+				VidiunLog::log($msgStr="UNSUPPORTED: WV conversion detected (large GOP=$gop). Currently chunked encoding does not work with WV.");
 				return false;
 			}*/
 
@@ -274,22 +274,22 @@
 				 */
 			if(isset($height)) {
 				if($height>480) {
-					if($duration<KChunkedEncodeSetup::DefaultChunkDuration*2) 
-						KalturaLog::log($msgStr="UNSUPPORTED: duration ($duration) too short for the frame size (h:$height), must be at least ".(KChunkedEncodeSetup::DefaultChunkDuration*2)."sec");
+					if($duration<VChunkedEncodeSetup::DefaultChunkDuration*2) 
+						VidiunLog::log($msgStr="UNSUPPORTED: duration ($duration) too short for the frame size (h:$height), must be at least ".(VChunkedEncodeSetup::DefaultChunkDuration*2)."sec");
 				}
 				else if($height>360) {
-					if($duration<KChunkedEncodeSetup::DefaultChunkDuration*4)
-						KalturaLog::log($msgStr="UNSUPPORTED: duration ($duration) too short for the frame size (h:$height), must be at least ".(KChunkedEncodeSetup::DefaultChunkDuration*4)."sec");
+					if($duration<VChunkedEncodeSetup::DefaultChunkDuration*4)
+						VidiunLog::log($msgStr="UNSUPPORTED: duration ($duration) too short for the frame size (h:$height), must be at least ".(VChunkedEncodeSetup::DefaultChunkDuration*4)."sec");
 				}
 				else {
-					if($duration<KChunkedEncodeSetup::DefaultChunkDuration*6)
-						KalturaLog::log($msgStr="UNSUPPORTED: duration ($duration) too short for the frame size (h:$height), must be at least ".(KChunkedEncodeSetup::DefaultChunkDuration*6)."sec");
+					if($duration<VChunkedEncodeSetup::DefaultChunkDuration*6)
+						VidiunLog::log($msgStr="UNSUPPORTED: duration ($duration) too short for the frame size (h:$height), must be at least ".(VChunkedEncodeSetup::DefaultChunkDuration*6)."sec");
 				}
 				if(isset($msgStr))
 					return false;
 			}
 			else if($duration<180){
-				KalturaLog::log($msgStr="UNSUPPORTED: duration ($duration) too short, must be at least 180sec");
+				VidiunLog::log($msgStr="UNSUPPORTED: duration ($duration) too short, must be at least 180sec");
 				return false;
 			}
 			
@@ -405,7 +405,7 @@
 			}
 			$params->cmdLineArr = $cmdLineArr;
 			$this->cmdLine = implode(" ",$cmdLineArr);
-			KalturaLog::log("cmdLine:$this->cmdLine");
+			VidiunLog::log("cmdLine:$this->cmdLine");
 		}
 
 		/********************
@@ -414,7 +414,7 @@
 		 */
 		protected function adjustTimeRelatedFilters($cmdLine, $chunkIdx, $start, $chunkWithOverlap)
 		{
-			KalturaLog::log("$start, $chunkWithOverlap");
+			VidiunLog::log("$start, $chunkWithOverlap");
 			if(!isset($this->params->videoFilters->filterGraph)){
 				return $cmdLine;
 			}
@@ -478,7 +478,7 @@
 			}
 			
 			if(isset($adjustedFilterStr) || ($adjustedFilterStr=$filterGraphBase->CompoundString($lastLabelOut))!==null) {
-				KalturaLog::log("adjustedFilterStr:".$adjustedFilterStr);
+				VidiunLog::log("adjustedFilterStr:".$adjustedFilterStr);
 				$cmdLineArr[$filterIdx+1] = '\''.$adjustedFilterStr.'\'';
 				$cmdLine = implode(' ',$cmdLineArr);
 			}
@@ -492,7 +492,7 @@
 		public function BuildVideoCommandLine($start, $chunkIdx)
 		{
 			$chunkFilename = $this->getChunkName($chunkIdx,"base");
-			KalturaLog::log("start($start), chunkIdx($chunkIdx), chunkFilename($chunkFilename) :".date("Y-m-d H:i:s"));
+			VidiunLog::log("start($start), chunkIdx($chunkIdx), chunkFilename($chunkFilename) :".date("Y-m-d H:i:s"));
 			$setup = $this->setup;
 			$params = $this->params;
 			$chunkWithOverlap = $setup->chunkDuration + $setup->chunkOverlap;
@@ -523,7 +523,7 @@
 				$cmdLine = " -threads ".$this->params->threadsDec.$cmdLine;
 				
 				$cmdLine = $this->adjustTimeRelatedFilters($cmdLine, $chunkIdx, $start, $chunkWithOverlap);
-				KalturaLog::log($cmdLine);
+				VidiunLog::log($cmdLine);
 			}
 			$cmdLine = "$setup->ffmpegBin $cmdLine";
 
@@ -570,7 +570,7 @@
 					$fileDt = self::getMediaData($audioFilename);
 					if(isset($fileDt) && round($fileDt->containerDuration,4)>$params->duration) {
 						$audioInputParams = " -t ".$params->duration;
-						KalturaLog::log("cut input audio to ".$params->duration);
+						VidiunLog::log("cut input audio to ".$params->duration);
 					}
 				}
 				if($this->chunkFileFormat=="mpegts")
@@ -601,7 +601,7 @@
 				$ffmpegVerStr = self::getFFMpegVersion($setup->ffmpegBin);
 				/*
 				 * This fix is required for uDRM support. 
-				 * FFmpeg 3.2 got Kaltura patch. FFMpeg 4 comes with native solution that includes H265 as well. 
+				 * FFmpeg 3.2 got Vidiun patch. FFMpeg 4 comes with native solution that includes H265 as well. 
 				 */
 				if($params->vcodec=="libx264")
 					$mergeCmd.= ((int)$ffmpegVerStr<4)?" -nal_types_mask 0x3e":" -bsf:v filter_units=pass_types=1-5";
@@ -614,7 +614,7 @@
 			}
 
 			$mergeCmd.= " -y $mergedFilename";
-			KalturaLog::log("mergeCmd:\n$mergeCmd ".date("Y-m-d H:i:s"));
+			VidiunLog::log("mergeCmd:\n$mergeCmd ".date("Y-m-d H:i:s"));
 			return $mergeCmd;
 		}
 
@@ -644,7 +644,7 @@
 			$cmdLine.= " -map 0:v -c:v copy -f ".$this->chunkFileFormat;
 			$cmdLine.= " -frames:v ".$chunkData->toFix;
 			$cmdLine.= " -copyts -y ".$chunkFixName;
-			KalturaLog::log("fix cmdLine: $cmdLine");
+			VidiunLog::log("fix cmdLine: $cmdLine");
 			
 			return $cmdLine;
 		}
@@ -667,7 +667,7 @@
 			 || isset($sourceFileDt->audioSamplingRate))
 			&& (isset($params->acodec) || isset($params->abitrate) 
 			 || isset($params->ar) || isset($params->ac)) )){
-				KalturaLog::log("No audio in the source!");
+				VidiunLog::log("No audio in the source!");
 				return null;
 			}
 
@@ -715,7 +715,7 @@
 			if($setup->duration!=-1) $durStr = " -t ".$setup->duration;
 			$cmdLine.= "$durStr -f $this->chunkFileFormat -y ".$this->getSessionName("audio");
 			
-			KalturaLog::log("cmdLine:$cmdLine");
+			VidiunLog::log("cmdLine:$cmdLine");
 			return $cmdLine;
 		}
 
@@ -753,32 +753,32 @@
 						if(isset($prevObj->finish) && isset($prevObj->type)) 
 						{
 							$timeGap = $stat->start - $prevObj->finish;
-							KalturaLog::log($chunkName.":".json_encode($stat).":timeGap:".round($timeGap,9));
+							VidiunLog::log($chunkName.":".json_encode($stat).":timeGap:".round($timeGap,9));
 							if($timeGap>1.5*$frameDuration){
 								$toFix = $prevObj->frame+round($timeGap/$frameDuration)-1;
 								$toFixCnt++;
-								KalturaLog::log("Discontinuity: Hole, index($prevObjIdx), frameDur($frameDuration), gap($timeGap), frame($prevObj->frame), toFix($toFix)");
+								VidiunLog::log("Discontinuity: Hole, index($prevObjIdx), frameDur($frameDuration), gap($timeGap), frame($prevObj->frame), toFix($toFix)");
 								$this->chunkDataArr[$prevObjIdx]->toFix = $toFix;
 							}
 							else if($timeGap<0.5*$frameDuration){
 								$toFix = $prevObj->frame-round(abs($timeGap/$frameDuration))-1;
 								$toFixCnt++;
-								KalturaLog::log("Discontinuity: Overlap, index($prevObjIdx), frameDur($frameDuration), gap($timeGap), frame($prevObj->frame), toFix($toFix)");
+								VidiunLog::log("Discontinuity: Overlap, index($prevObjIdx), frameDur($frameDuration), gap($timeGap), frame($prevObj->frame), toFix($toFix)");
 								$this->chunkDataArr[$prevObjIdx]->toFix = $toFix;
 							}
 						}
-						else KalturaLog::log("Invalid prev ChunkData (idx=$prevObjIdx)");
+						else VidiunLog::log("Invalid prev ChunkData (idx=$prevObjIdx)");
 					}
 				}
-				else KalturaLog::log("Invalid current ChunkData (idx=$idx)");
+				else VidiunLog::log("Invalid current ChunkData (idx=$idx)");
 				$prevObjIdx = $idx;
 				$stat = null;
 			}
 			if($toFixCnt>0) {
-				KalturaLog::log("Discontinuity cases ($toFixCnt out of ".count($this->chunkDataArr).")");
+				VidiunLog::log("Discontinuity cases ($toFixCnt out of ".count($this->chunkDataArr).")");
 			}
 			else 
-				KalturaLog::log("Contiguous chunks!");
+				VidiunLog::log("Contiguous chunks!");
 			return $toFixCnt;
 		}
 
@@ -790,7 +790,7 @@
 			$mergedFilename = $this->getSessionName();
 			$fileDt = $this->getMediaData($mergedFilename);
 			if(!isset($fileDt)){
-				KalturaLog::log($msgStr="FAILED to merge, missing merged file ($mergedFilename)!");
+				VidiunLog::log($msgStr="FAILED to merge, missing merged file ($mergedFilename)!");
 				return false;
 			}
 			$this->mergedFileDt = $fileDt;
@@ -804,7 +804,7 @@
 			|| (isset($aDelta) && abs($aDelta)>$maxMergeDelta) 
 //			|| (isset($cDelta) && abs($cDelta>$maxMergeDelta))
 			){
-				KalturaLog::log($msgStr="FAILED to merge, delta to source is too large - (v:$vDelta,a:$aDelta,c:$cDelta), max allowed $maxMergeDelta sec!");
+				VidiunLog::log($msgStr="FAILED to merge, delta to source is too large - (v:$vDelta,a:$aDelta,c:$cDelta), max allowed $maxMergeDelta sec!");
 				return false;
 			}
 			return true;
@@ -895,7 +895,7 @@
 			$framesInChunkRemainder = $framesInChunk-(int)(floor($framesInChunk));
 			$frameDuration = $params->frameDuration;
 			$totalChunksNumber = ceil($params->duration/$setup->chunkDuration);
-			KalturaLog::log("framesInChunk:$framesInChunk, framesInChunkRemainder:$framesInChunkRemainder, totalChunksNumber:$totalChunksNumber, frameDur:$frameDuration");
+			VidiunLog::log("framesInChunk:$framesInChunk, framesInChunkRemainder:$framesInChunkRemainder, totalChunksNumber:$totalChunksNumber, frameDur:$frameDuration");
 			$chunkFirstFrame = 0; 
 			$framesTotal = 1;
 			$remainder = 0;
@@ -911,10 +911,10 @@
 				$chunkStartTime = round($chunkFirstFrame*$frameDuration,6);
 				$chunkLastFrameTime = round(($framesTotal-1)*$frameDuration,6);
 				$chunkDur = round(($framesTotal-$chunkFirstFrame)*$frameDuration,6);
-				KalturaLog::log("idx:$idx, fstFrm:$chunkFirstFrame, frmCnt:$framesCount, fstFrmTm(sec):$chunkStartTime, chkDur:$chunkDur, lstFrmTm(sec):$chunkLastFrameTime, framesTotal:$framesTotal, remainder:$remainder");
+				VidiunLog::log("idx:$idx, fstFrm:$chunkFirstFrame, frmCnt:$framesCount, fstFrmTm(sec):$chunkStartTime, chkDur:$chunkDur, lstFrmTm(sec):$chunkLastFrameTime, framesTotal:$framesTotal, remainder:$remainder");
 				$remainder = round($remainder+$framesInChunkRemainder,6);
-				$chunkData = new KChunkData($idx, $chunkStartTime, $chunkDur, $framesCount);
-				KalturaLog::log(json_encode($chunkData));
+				$chunkData = new VChunkData($idx, $chunkStartTime, $chunkDur, $framesCount);
+				VidiunLog::log(json_encode($chunkData));
 				$this->chunkDataArr[$idx] = $chunkData;
 			}
 		}
@@ -927,7 +927,7 @@
 			foreach($chunkDataArr as $chkIdx=>$chunkData){
 				if($chkIdx==0)
 					continue;
-				$framesStatArr = KChunkFramesStat::getFrameData($sourceFilename, $chunkData->start-1, 1);
+				$framesStatArr = VChunkFramesStat::getFrameData($sourceFilename, $chunkData->start-1, 1);
 				if(!isset($framesStatArr))
 					continue;
 				
@@ -969,7 +969,7 @@
 						$fixFrmSt = $framesStatArr[$iFrame->index];
 					$gap = $fixFrmSt->start-$chunkData->start;
 					$framesInGap = $gap/$frameDuration;
-					KalturaLog::log("BINGO - chunkStart:$chunkData->start, fixStart:$fixFrmSt->start(".round($gap,6)."),".json_encode($fixFrmSt));
+					VidiunLog::log("BINGO - chunkStart:$chunkData->start, fixStart:$fixFrmSt->start(".round($gap,6)."),".json_encode($fixFrmSt));
 					if(abs($gap>0)) {
 						$chunkData = $chunkDataArr[$chkIdx-1];
 						$chunkData->duration+= $gap;
@@ -980,7 +980,7 @@
 						$chunkData->duration-= $gap;
 						$chunkData->frames -= round($framesInGap);
 						$chunkDataArr[$chkIdx] = $chunkData;
-						KalturaLog::log(json_encode($chunkDataArr[$chkIdx]));
+						VidiunLog::log(json_encode($chunkDataArr[$chkIdx]));
 					}
 //					$chunkDataArr[$chkIdx] = $chunkData;
 				}
@@ -1005,7 +1005,7 @@
 			$duration = $setup->chunkDuration+$this->calcChunkDrift();
 			$idx = 0;
 			while($finish-$start>$params->frameDuration) {
-				$chunkData = new KChunkData($idx, $start, $duration);
+				$chunkData = new VChunkData($idx, $start, $duration);
 				if($idx>0) {
 					$this->chunkDataArr[$idx-1]->calcGapToNext($chunkData, $params->frameDuration);
 				}
@@ -1015,11 +1015,11 @@
 				$delta = $start-$idx*$setup->chunkDuration;
 				$duration = $setup->chunkDuration+$this->calcChunkDrift();
 				if($params->frameDuration<$delta) {
-					KalturaLog::log("idx($idx)- remove frame - frameDuration($params->frameDuration), delta($delta)");
+					VidiunLog::log("idx($idx)- remove frame - frameDuration($params->frameDuration), delta($delta)");
 					$start-=($params->frameDuration);
 				}
 				else if($delta<0 && $params->frameDuration>-$delta) {
-					KalturaLog::log("idx($idx)- add frame - frameDuration($params->frameDuration), delta($delta)");
+					VidiunLog::log("idx($idx)- add frame - frameDuration($params->frameDuration), delta($delta)");
 					$start+=($params->frameDuration);
 				}
 			}
@@ -1031,12 +1031,12 @@
 		protected static function getMediaData($fileName)
 		{
 			try {
-				$medPrsr = new KFFMpegMediaParser($fileName);//new KMediaInfoMediaParser($fileName);
+				$medPrsr = new VFFMpegMediaParser($fileName);//new VMediaInfoMediaParser($fileName);
 				$m=$medPrsr->getMediaInfo();
 				return $m;
 			}
 			catch(Exception $ex){
-				KalturaLog::log($ex->getMessage()."... Leaving");
+				VidiunLog::log($ex->getMessage()."... Leaving");
 				return null;
 			}
 		}
@@ -1049,7 +1049,7 @@
 			$arr = array();
 			
 			foreach($filters as $fade){
-				KalturaLog::log("chunk(start:$start, dur:$dur),fade($fade->start_time,$fade->duration)");
+				VidiunLog::log("chunk(start:$start, dur:$dur),fade($fade->start_time,$fade->duration)");
 				if(!isset($fade->start_time)){
 					$arr[] = $fade;
 					continue;
@@ -1075,7 +1075,7 @@
 				$arr[] = null;
 					
 			}
-			KalturaLog::log(print_r($arr,1));
+			VidiunLog::log(print_r($arr,1));
 			return $arr;
 		}
 
@@ -1084,15 +1084,15 @@
 		 */
 		protected static function getFFMpegVersion($ffmpegBin)
 		{
-			KalturaLog::log($ffmpegBin);
+			VidiunLog::log($ffmpegBin);
 			$lastLine=exec("$ffmpegBin -version" , $outputArr, $rv);
 			if($rv!=0) {
-				KalturaLog::log("ERROR: failed to run $ffmpegBin binary.");
+				VidiunLog::log("ERROR: failed to run $ffmpegBin binary.");
 				return null;
 			}
 			$str = $strVer = null;
 			sscanf($outputArr[0],"%s %s %s ",$str,$str,$strVer);
-			KalturaLog::log("$strVer");
+			VidiunLog::log("$strVer");
 			return $strVer;
 		}
 	}
@@ -1100,7 +1100,7 @@
 	/********************
 	 *
 	 */
-	class KChunkedEncodeParams {
+	class VChunkedEncodeParams {
 		public $vcodec = null;
 		public $vprofile =  null;
 		public $vbitrate =  null;
@@ -1170,7 +1170,7 @@
 		{
 			$cmdLineArr = explode(" ",$cmdLine);
 			
-			KalturaLog::log("cmdLineArr:".print_r($cmdLineArr,1));
+			VidiunLog::log("cmdLineArr:".print_r($cmdLineArr,1));
 				// On 'firstpass' session - get out. 
 			if(($key=array_search("-pass", $cmdLineArr))!==false){
 				$cmdLineArr = array_slice($cmdLineArr, $key);
@@ -1201,7 +1201,7 @@
 				// In case of remote source, set http-header-ext to improve access logging
 			$urlArr = parse_url ($this->source);
 			if($urlArr!==false && key_exists('host',$urlArr)) {
-				$this->httpHeaderExtPrefix = "User-Agent: Kaltura Chunked Encoding,session($this->session)";
+				$this->httpHeaderExtPrefix = "User-Agent: Vidiun Chunked Encoding,session($this->session)";
 			}
 			return 0;
 		}
@@ -1324,7 +1324,7 @@
 						 * Check and prepare for 'fade' filters
 						 */
 					$filterStr = trim($this->videoFilters->filterStr,'\'');
-					$filterGraph = new KFFmpegFilterGraph();
+					$filterGraph = new VFFmpegFilterGraph();
 					$filterGraph->Parse($filterStr);
 					$this->videoFilters->filterGraph = $filterGraph;
 					$stam = new stdClass();
@@ -1411,7 +1411,7 @@
 	/********************
 	 * Preset and processing chunk data
 	 */
-	class KChunkData {
+	class VChunkData {
 		public $index = 0;
 		public $start = 0;		// Chunks start timing
 		public $duration = 0;	// Chunk duration
@@ -1449,7 +1449,7 @@
 		 */
 	function iterFuncFadeFilters($entity, $obj)
 	{
-		KalturaLog::log("Name:".$entity->name);
+		VidiunLog::log("Name:".$entity->name);
 		if($entity->name=='fade')
 			$obj->filters[] = $entity;
 		return null;
@@ -1461,7 +1461,7 @@
 		 */
 	function iterFuncSubsFilters($entity, $obj)
 	{
-		KalturaLog::log("Name:".$entity->name);
+		VidiunLog::log("Name:".$entity->name);
 		if($entity->name=='subtitles')
 			$obj->filters[] = $entity;
 		return null;

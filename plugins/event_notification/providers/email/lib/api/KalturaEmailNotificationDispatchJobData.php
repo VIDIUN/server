@@ -3,7 +3,7 @@
  * @package plugins.emailNotification
  * @subpackage api.objects
  */
-class KalturaEmailNotificationDispatchJobData extends KalturaEventNotificationDispatchJobData
+class VidiunEmailNotificationDispatchJobData extends VidiunEventNotificationDispatchJobData
 {
 	
 	/**
@@ -20,32 +20,32 @@ class KalturaEmailNotificationDispatchJobData extends KalturaEventNotificationDi
 	
 	/**
 	 * Email recipient emails and names, key is mail address and value is the name
-	 * @var KalturaEmailNotificationRecipientJobData
+	 * @var VidiunEmailNotificationRecipientJobData
 	 */
 	public $to;
 	
 	/**
 	 * Email cc emails and names, key is mail address and value is the name
-	 * @var KalturaEmailNotificationRecipientJobData
+	 * @var VidiunEmailNotificationRecipientJobData
 	 */
 	public $cc;
 	
 	/**
 	 * Email bcc emails and names, key is mail address and value is the name
-	 * @var KalturaEmailNotificationRecipientJobData
+	 * @var VidiunEmailNotificationRecipientJobData
 	 */
 	public $bcc;
 	
 	/**
 	 * Email addresses that a replies should be sent to, key is mail address and value is the name
 	 * 
-	 * @var KalturaEmailNotificationRecipientJobData
+	 * @var VidiunEmailNotificationRecipientJobData
 	 */
 	public $replyTo;
 	
 	/**
 	 * Define the email priority
-	 * @var KalturaEmailNotificationTemplatePriority
+	 * @var VidiunEmailNotificationTemplatePriority
 	 */
 	public $priority;
 	
@@ -75,7 +75,7 @@ class KalturaEmailNotificationDispatchJobData extends KalturaEventNotificationDi
 	/**
 	 * Adds a e-mail custom header
 	 * 
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $customHeaders;
 	
@@ -100,17 +100,17 @@ class KalturaEmailNotificationDispatchJobData extends KalturaEventNotificationDi
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $dbObject kEmailNotificationDispatchJobData */
+		/* @var $dbObject vEmailNotificationDispatchJobData */
 		parent::doFromObject($dbObject, $responseProfile);
 		
-		$this->to = KalturaEmailNotificationRecipientJobData::getDataInstance($dbObject->getTo());
-		$this->cc = KalturaEmailNotificationRecipientJobData::getDataInstance($dbObject->getCc());
-		$this->bcc = KalturaEmailNotificationRecipientJobData::getDataInstance($dbObject->getBcc());
-		$this->replyTo = KalturaEmailNotificationRecipientJobData::getDataInstance($dbObject->getReplyTo());
-		$this->customHeaders = KalturaKeyValueArray::fromKeyValueArray($dbObject->getCustomHeaders());
+		$this->to = VidiunEmailNotificationRecipientJobData::getDataInstance($dbObject->getTo());
+		$this->cc = VidiunEmailNotificationRecipientJobData::getDataInstance($dbObject->getCc());
+		$this->bcc = VidiunEmailNotificationRecipientJobData::getDataInstance($dbObject->getBcc());
+		$this->replyTo = VidiunEmailNotificationRecipientJobData::getDataInstance($dbObject->getReplyTo());
+		$this->customHeaders = VidiunKeyValueArray::fromKeyValueArray($dbObject->getCustomHeaders());
 	}
 }

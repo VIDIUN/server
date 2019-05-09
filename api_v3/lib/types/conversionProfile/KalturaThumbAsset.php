@@ -4,7 +4,7 @@
  * @subpackage objects
  * @relatedService ThumbAssetService
  */
-class KalturaThumbAsset extends KalturaAsset  
+class VidiunThumbAsset extends VidiunAsset  
 {
 	/**
 	 * The Flavor Params used to create this Flavor Asset
@@ -34,7 +34,7 @@ class KalturaThumbAsset extends KalturaAsset
 	/**
 	 * The status of the asset
 	 * 
-	 * @var KalturaThumbAssetStatus
+	 * @var VidiunThumbAssetStatus
 	 * @readonly 
 	 * @filter eq,in,notin
 	 */

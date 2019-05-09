@@ -8,21 +8,21 @@ abstract class LiveReportEngine
 	protected function checkParams(array $args, array $paramsNames) {
 		foreach($paramsNames as $param) {
 			if(!array_key_exists($param, $args))
-				throw new KOperationEngineException("Missing mandatory argument : " . $param);
+				throw new VOperationEngineException("Missing mandatory argument : " . $param);
 		}
 	}
 
 	protected function shouldShowDvrColumns($entryIds)
 	{
-		$filter = new KalturaLiveStreamEntryFilter();
+		$filter = new VidiunLiveStreamEntryFilter();
 		$filter->idIn = $entryIds;
 
-		/** @var KalturaLiveStreamListResponse */
-		$response = KBatchBase::$kClient->liveStream->listAction($filter, null);
+		/** @var VidiunLiveStreamListResponse */
+		$response = VBatchBase::$vClient->liveStream->listAction($filter, null);
 
 		foreach ($response->objects as $object) {
 			if ($object->dvrStatus) {
-				KalturaLog::info("Found entry with DVR status = true: " . $object->id);
+				VidiunLog::info("Found entry with DVR status = true: " . $object->id);
 				return true;
 			}
 		}

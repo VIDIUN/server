@@ -14,7 +14,7 @@ passthru("php $script $config");
 
 require_once(dirname(__FILE__) . "/../../../../" . "alpha/scripts/bootstrap.php");
 
-$userRole = UserRolePeer::getByNameAndPartnerId(kIntegrationFlowManager::EXTERNAL_INTEGRATION_SERVICES_ROLE_NAME, PartnerPeer::GLOBAL_PARTNER);
+$userRole = UserRolePeer::getByNameAndPartnerId(vIntegrationFlowManager::EXTERNAL_INTEGRATION_SERVICES_ROLE_NAME, PartnerPeer::GLOBAL_PARTNER);
 $permissionNamesStr = $userRole->getPermissionNames();
 $permissionNamesArr = explode(",", $permissionNamesStr);
 $permissionNamesArr = array_map('trim', $permissionNamesArr);

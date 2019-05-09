@@ -5,7 +5,7 @@
  *  @subpackage general
  */
 
-class KCurlHeaderResponse
+class VCurlHeaderResponse
 {
 	const HTTP_STATUS_CONTINUE = 100; //The request can be continued.
 	const HTTP_STATUS_SWITCH_PROTOCOLS = 101; //The server has switched protocols in an upgrade header.
@@ -131,7 +131,7 @@ class KCurlHeaderResponse
  *
  * @package Scheduler
  */
-class KCurlWrapper
+class VCurlWrapper
 {
 	const HTTP_PROTOCOL_HTTP = 1;
 	const HTTP_PROTOCOL_FTP = 2;
@@ -176,7 +176,7 @@ class KCurlWrapper
 		{
 			$curlInfo = curl_getinfo($ch);
 			$httpResponseCode = $curlInfo['http_code'];
-			if(!in_array($httpResponseCode, array(KCurlHeaderResponse::HTTP_STATUS_REDIRECT, KCurlHeaderResponse::HTTP_STATUS_MOVED))) // mark when we get to the last header so we can abort the cur
+			if(!in_array($httpResponseCode, array(VCurlHeaderResponse::HTTP_STATUS_REDIRECT, VCurlHeaderResponse::HTTP_STATUS_MOVED))) // mark when we get to the last header so we can abort the cur
 				self::$lastHeader = true;
 		}
 		
@@ -267,7 +267,7 @@ class KCurlWrapper
 	{
 		if(!is_null($maxFileSize))
 		{
-			$curlWrapper = new KCurlWrapper();
+			$curlWrapper = new VCurlWrapper();
 			$curlHeaderResponse = $curlWrapper->getHeader($url, true);
 			$curlWrapper->close();
 			
@@ -283,21 +283,21 @@ class KCurlWrapper
 				if($fileSize > $maxFileSize)
 					throw new Exception("File size [$fileSize] Excedded Max Siae Allowed [$maxFileSize]");
 					
-				KalturaLog::info("File size [$fileSize] validated");
+				VidiunLog::info("File size [$fileSize] validated");
 			}
 			else 
 			{
-				KalturaLog::info("File size validation skipped");
+				VidiunLog::info("File size validation skipped");
 			}
 		}
 		
-		$curlWrapper = new KCurlWrapper();
+		$curlWrapper = new VCurlWrapper();
 		$res = $curlWrapper->exec($url, $destFilePath, null, $allowInternalUrl);
 
 		$httpCode = $curlWrapper->getHttpCode();
-		if (KCurlHeaderResponse::isError($httpCode))
+		if (VCurlHeaderResponse::isError($httpCode))
 		{
-			KalturaLog::info("curl request [$url] return with http-code of [$httpCode]");
+			VidiunLog::info("curl request [$url] return with http-code of [$httpCode]");
 			if ($destFilePath && file_exists($destFilePath))
 				unlink($destFilePath);
 			$res = false;
@@ -387,14 +387,14 @@ class KCurlWrapper
 	}
 
 	/**
-	 * @return false|KCurlHeaderResponse
+	 * @return false|VCurlHeaderResponse
 	 */
 	public function getHeader($sourceUrl, $noBody = false)
 	{
 		curl_setopt($this->ch, CURLOPT_HEADER, true);
 		curl_setopt($this->ch, CURLOPT_BINARYTRANSFER, true);
-		curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, 'KCurlWrapper::read_header');
-		curl_setopt($this->ch, CURLOPT_WRITEFUNCTION, 'KCurlWrapper::read_body');
+		curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, 'VCurlWrapper::read_header');
+		curl_setopt($this->ch, CURLOPT_WRITEFUNCTION, 'VCurlWrapper::read_body');
 		
 		$this->setSourceUrlAndprotocol($sourceUrl);
 
@@ -424,7 +424,7 @@ class KCurlWrapper
 
 		self::$headers = explode("\r\n", self::$headers);
 
-		$curlHeaderResponse = new KCurlHeaderResponse();
+		$curlHeaderResponse = new VCurlHeaderResponse();
 
 		if ( $this->protocol == self::HTTP_PROTOCOL_HTTP )
 		{
@@ -504,7 +504,7 @@ class KCurlWrapper
 			if ( $length > 0 )
 			{
 				// this is equivalent to a good HTTP request
-				$curlHeaderResponse->code = KCurlHeaderResponse::HTTP_STATUS_OK;
+				$curlHeaderResponse->code = VCurlHeaderResponse::HTTP_STATUS_OK;
 				$curlHeaderResponse->codeName = "OK";
 			}
 			else
@@ -526,8 +526,8 @@ class KCurlWrapper
 			}
 		}
 
-		curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, 'KCurlWrapper::read_header_do_nothing');
-		curl_setopt($this->ch, CURLOPT_WRITEFUNCTION, 'KCurlWrapper::read_body_do_nothing');
+		curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, 'VCurlWrapper::read_header_do_nothing');
+		curl_setopt($this->ch, CURLOPT_WRITEFUNCTION, 'VCurlWrapper::read_body_do_nothing');
 		
 		return $curlHeaderResponse;
 	}
@@ -543,7 +543,7 @@ class KCurlWrapper
 	{
 		if (!$allowInternalUrl && self::isInternalUrl($sourceUrl) && !self::isWhiteListedInternalUrl($sourceUrl))
 		{
-			KalturaLog::debug("Exec Curl - Found not allowed and not whiteListed Internal url: $sourceUrl");
+			VidiunLog::debug("Exec Curl - Found not allowed and not whiteListed Internal url: $sourceUrl");
 			$this->setInternalUrlErrorResults($sourceUrl);
 			return false;
 		}
@@ -557,7 +557,7 @@ class KCurlWrapper
 			$destFd = fopen($destFile, "ab");
 			if($destFd === false)
 			{
-				KalturaLog::debug("Exec Curl - Failed opening file [$destFile] for writing");
+				VidiunLog::debug("Exec Curl - Failed opening file [$destFile] for writing");
 				$this->setFailedOpeningFileErrorResults($destFile);
 				return false;
 			}
@@ -592,7 +592,7 @@ class KCurlWrapper
 	{
 		if (!$allowInternalUrl && self::isInternalUrl($sourceUrl) && !self::isWhiteListedInternalUrl($sourceUrl))
 		{
-			KalturaLog::debug("DoExec Curl - Found not allowed and not whiteListed Internal url: $sourceUrl");
+			VidiunLog::debug("DoExec Curl - Found not allowed and not whiteListed Internal url: $sourceUrl");
 			$this->setInternalUrlErrorResults($sourceUrl);
 			return false;
 		}
@@ -657,10 +657,10 @@ class KCurlWrapper
 
 	private static function isWhiteListedInternalUrl($url)
 	{
-		if(!kConf::hasMap('security'))
+		if(!vConf::hasMap('security'))
 			return true;
 
-    $whiteListedInternalPatterns = kConf::get('internal_url_whitelist', 'security', array());
+    $whiteListedInternalPatterns = vConf::get('internal_url_whitelist', 'security', array());
 		foreach ($whiteListedInternalPatterns as $pattern)
 		{
 			if (preg_match($pattern, $url))
@@ -731,7 +731,7 @@ class KCurlWrapper
 		{
 			throw new Exception($exception->getMessage());
 		}
-		KalturaLog::info("Setting source URL to [$sourceUrl]");
+		VidiunLog::info("Setting source URL to [$sourceUrl]");
 		
 		$sourceUrl = self::encodeUrl($sourceUrl);
 		curl_setopt($this->ch, CURLOPT_URL, $sourceUrl);
@@ -751,7 +751,7 @@ class KCurlWrapper
 	{
 		if (!$allowInternalUrl && self::isInternalUrl($url) && !self::isWhiteListedInternalUrl($url))
 		{
-			KalturaLog::debug("Exec Curl in getContent - Found Internal and not whiteListed url: $url");
+			VidiunLog::debug("Exec Curl in getContent - Found Internal and not whiteListed url: $url");
 			return false;
 		}
 

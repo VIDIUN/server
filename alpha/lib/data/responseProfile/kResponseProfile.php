@@ -4,7 +4,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kResponseProfile implements IResponseProfile
+class vResponseProfile implements IResponseProfile
 {
 	/**
 	 * Friendly name
@@ -34,7 +34,7 @@ class kResponseProfile implements IResponseProfile
 	protected $filterApiClassName;
 	
 	/**
-	 * @var kFilterPager
+	 * @var vFilterPager
 	 */
 	protected $pager;
 	
@@ -44,7 +44,7 @@ class kResponseProfile implements IResponseProfile
 	protected $relatedProfiles;
 	
 	/**
-	 * @var array<kResponseProfileMapping>
+	 * @var array<vResponseProfileMapping>
 	 */
 	protected $mappings;
 	
@@ -107,7 +107,7 @@ class kResponseProfile implements IResponseProfile
 	/* (non-PHPdoc)
 	 * @see IResponseProfile::setPager()
 	 */
-	public function setPager(kFilterPager $pager)
+	public function setPager(vFilterPager $pager)
 	{
 		$this->pager = $pager;
 	}

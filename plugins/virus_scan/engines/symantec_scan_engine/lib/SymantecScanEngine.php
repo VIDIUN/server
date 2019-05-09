@@ -35,12 +35,12 @@ class SymantecScanEngine extends VirusScanEngine
 		if (!$this->binFile)
 		{
 			$errorDescription = 'Engine binary file not set';
-			return KalturaVirusScanJobResult::SCAN_ERROR;
+			return VidiunVirusScanJobResult::SCAN_ERROR;
 		}
 		
 		if (!file_exists($filePath)) {
 			$errorDescription = 'Source file does not exists ['.$filePath.']';
-			return KalturaVirusScanJobResult::SCAN_ERROR;
+			return VidiunVirusScanJobResult::SCAN_ERROR;
 		}
 		
 		clearstatcache();
@@ -52,7 +52,7 @@ class SymantecScanEngine extends VirusScanEngine
 		$errorDescription = null;
 		$output = null;
 		
-		KalturaLog::info("Executing - [$cmd]");
+		VidiunLog::info("Executing - [$cmd]");
 		exec($cmd, $output, $return_value);
 				
 		$found = false;
@@ -68,7 +68,7 @@ class SymantecScanEngine extends VirusScanEngine
 		if (!$found)
 		{
 			$errorDescription = 'Unknown error';
-			return KalturaVirusScanJobResult::SCAN_ERROR;
+			return VidiunVirusScanJobResult::SCAN_ERROR;
 		}
 		
 		$found = explode(' ', $found);
@@ -78,15 +78,15 @@ class SymantecScanEngine extends VirusScanEngine
 		{
 			clearstatcache();
 			if ($fileLastChanged && $fileLastChanged != filemtime($filePath)) {
-				return KalturaVirusScanJobResult::FILE_WAS_CLEANED;
+				return VidiunVirusScanJobResult::FILE_WAS_CLEANED;
 			}
 			else {
-				return KalturaVirusScanJobResult::FILE_IS_CLEAN;
+				return VidiunVirusScanJobResult::FILE_IS_CLEAN;
 			}
 		}
 		else if ($returnValue == '1' || $returnValue == '2') {
 			$errorDescription = "The file was found infected, but was not repaired";
-			return KalturaVirusScanJobResult::FILE_INFECTED;
+			return VidiunVirusScanJobResult::FILE_INFECTED;
 		}
 		else if ($returnValue == '-2') {
 			$errorDescription = "An error occurred within Symantec Scan Engine. The file was not scanned.";
@@ -98,7 +98,7 @@ class SymantecScanEngine extends VirusScanEngine
 			$errorDescription = "Unknown returned value from virus scanner";
 		}
 
-		return KalturaVirusScanJobResult::SCAN_ERROR;
+		return VidiunVirusScanJobResult::SCAN_ERROR;
 	}
 
 }

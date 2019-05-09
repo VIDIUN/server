@@ -1,8 +1,8 @@
 <?php 
-class kEventCuePointConsumer implements kObjectChangedEventConsumer
+class vEventCuePointConsumer implements vObjectChangedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	*/
 	public function objectChanged(BaseObject $object, array $modifiedColumns)
 	{
@@ -49,7 +49,7 @@ class kEventCuePointConsumer implements kObjectChangedEventConsumer
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	*/
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns)
 	{

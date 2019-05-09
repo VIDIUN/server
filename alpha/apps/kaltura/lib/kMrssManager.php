@@ -1,10 +1,10 @@
 <?php
-class kMrssManager
+class vMrssManager
 {
 	const FORMAT_DATETIME = 'Y-m-d\TH:i:s';
 	
 	/**
-	 * @var array<IKalturaMrssContributor>
+	 * @var array<IVidiunMrssContributor>
 	 */
 	private static $mrssContributors = null;
 	
@@ -47,13 +47,13 @@ class kMrssManager
 	/**
 	 * Generates instance pool key
 	 * @param string $objectId
-	 * @param kMrssParameters $mrssParams
+	 * @param vMrssParameters $mrssParams
 	 * @param string $features
 	 *
 	 * returns instance key for pool
 	 */
 
-	protected static function generateInstanceKey($objectId, kMrssParameters $mrssParams = null, $features = null)
+	protected static function generateInstanceKey($objectId, vMrssParameters $mrssParams = null, $features = null)
 	{
 		$instanceKey = $objectId;
 		
@@ -77,7 +77,7 @@ class kMrssManager
 		if (self::isInstancePoolingEnabled())
 		{
 			self::$instancesPool[$entryId] = $xml;
-			kMemoryManager::registerPeer('kMrssManager');
+			vMemoryManager::registerPeer('vMrssManager');
 		}
 	}
 
@@ -110,19 +110,19 @@ class kMrssManager
 	public static function stringToSafeXml($string)
 	{
 		$string = @iconv('utf-8', 'utf-8', $string);
-		$safe = kString::xmlEncode($string);
+		$safe = vString::xmlEncode($string);
 		return $safe;
 	}
 	
 	/**
-	 * @return array<IKalturaMrssContributor>
+	 * @return array<IVidiunMrssContributor>
 	 */
 	public static function getMrssContributors()
 	{
 		if(self::$mrssContributors)
 			return self::$mrssContributors;
 			
-		self::$mrssContributors = KalturaPluginManager::getPluginInstances('IKalturaMrssContributor');
+		self::$mrssContributors = VidiunPluginManager::getPluginInstances('IVidiunMrssContributor');
 		return self::$mrssContributors;
 	}
 	
@@ -149,7 +149,7 @@ class kMrssManager
 		$mrss = new SimpleXMLElement('<rss
 			version="2.0"
 			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-			xsi:noNamespaceSchemaLocation="http://' . kConf::get('cdn_host') . '/api_v3/service/schema/action/serve/type/' . SchemaType::SYNDICATION . '"
+			xsi:noNamespaceSchemaLocation="http://' . vConf::get('cdn_host') . '/api_v3/service/schema/action/serve/type/' . SchemaType::SYNDICATION . '"
 		/>');
 //		$mrss->addAttribute('xmlns:content', 'http://www.w3.org/2001/XMLSchema-instance');
 		
@@ -232,7 +232,7 @@ class kMrssManager
 	 */
 	public static function getEntryMrss(entry $entry, SimpleXMLElement $mrss = null, $link = null)
 	{
-		$mrssParams = new kMrssParameters;
+		$mrssParams = new vMrssParameters;
 		$mrssParams->setLink($link);
 		$mrss = self::getEntryMrssXml($entry, $mrss, $mrssParams);
 		return $mrss->asXML();
@@ -249,7 +249,7 @@ class kMrssManager
 			$mrss = new SimpleXMLElement('<item/>');
 			
 		$thumbnail = $mrss->addChild('thumbnail');
-		$thumbnail->addAttribute('url', kAssetUtils::getAssetUrl($thumbAsset));
+		$thumbnail->addAttribute('url', vAssetUtils::getAssetUrl($thumbAsset));
 		$thumbnail->addAttribute('thumbAssetId', $thumbAsset->getId());
 		$thumbnail->addAttribute('isDefault', $thumbAsset->hasTag(thumbParams::TAG_DEFAULT_THUMB) ? 'true' : 'false');
 		$thumbnail->addAttribute('format', $thumbAsset->getContainerFormat());
@@ -271,7 +271,7 @@ class kMrssManager
 	 * @param SimpleXMLElement $mrss
 	 * @return SimpleXMLElement
 	 */
-	protected static function appendFlavorAssetMrss(flavorAsset $flavorAsset, SimpleXMLElement $mrss = null, kMrssParameters $mrssParams = null)
+	protected static function appendFlavorAssetMrss(flavorAsset $flavorAsset, SimpleXMLElement $mrss = null, vMrssParameters $mrssParams = null)
 	{
 		if(!$mrss)
 			$mrss = new SimpleXMLElement('<item/>');
@@ -288,7 +288,7 @@ class kMrssManager
 		}
 
 		$content = $mrss->addChild('content');
-		$content->addAttribute('url', kAssetUtils::getAssetUrl($flavorAsset, $servePlayManifest, $playManifestClientTag, $storageId));
+		$content->addAttribute('url', vAssetUtils::getAssetUrl($flavorAsset, $servePlayManifest, $playManifestClientTag, $storageId));
 		$content->addAttribute('flavorAssetId', $flavorAsset->getId());
 		$content->addAttribute('isSource', $flavorAsset->getIsOriginal() ? 'true' : 'false');
 		$content->addAttribute('containerFormat', $flavorAsset->getContainerFormat());
@@ -297,7 +297,7 @@ class kMrssManager
 
 		// get the file size
 		$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
 		$fileSize = ($fileSync && $fileSync->getFileSize() > 0) ? $fileSync->getFileSize() : ($flavorAsset->getSize() * 1024);
 		
 		$mediaParams = array(
@@ -357,35 +357,35 @@ class kMrssManager
 		self::$addedIsmUrl = true;
 		$syncKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_ISM);
 		
-		$kalturaFileSync = kFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
+		$vidiunFileSync = vFileSyncUtils::getReadyInternalFileSyncForKey($syncKey);
 	
 		$urlManager = DeliveryProfilePeer::getDeliveryProfile($entry->getId(), PlaybackProtocol::SILVER_LIGHT);
 		if(!$urlManager)
 			return;
 		
-		$urlManager->initDeliveryDynamicAttributes($kalturaFileSync);
+		$urlManager->initDeliveryDynamicAttributes($vidiunFileSync);
 		
 		$partner = $entry->getPartner();
 		if(!$partner->getStorageServePriority() ||
-			$partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY ||
-			$partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_FIRST)
+			$partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY ||
+			$partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_FIRST)
 		{
-			if($kalturaFileSync)
+			if($vidiunFileSync)
 			{
 				$urlPrefix = $urlManager->getUrl();
-				$url = $urlManager->getFileSyncUrl($kalturaFileSync, false);
+				$url = $urlManager->getFileSyncUrl($vidiunFileSync, false);
 				$mrss->addChild('ismUrl',$urlPrefix.$url);
 				return;
 			}
 		}
 		
 		if(!$partner->getStorageServePriority() ||
-			$partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY)
+			$partner->getStorageServePriority() == StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY)
 		{
 			return null;
 		}
 			
-		$externalFileSync = kFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
+		$externalFileSync = vFileSyncUtils::getReadyExternalFileSyncForKey($syncKey);
 		if($externalFileSync)
 		{
 			$urlManager = DeliveryProfilePeer::getRemoteDeliveryByStorageId(DeliveryProfileDynamicAttributes::init($externalFileSync->getDc(), $entry->getId(), PlaybackProtocol::SILVER_LIGHT));
@@ -400,9 +400,9 @@ class kMrssManager
 
 		if($partner->getStorageServePriority() != StorageProfile::STORAGE_SERVE_PRIORITY_EXTERNAL_ONLY)
 		{
-			if($kalturaFileSync)
+			if($vidiunFileSync)
 			{
-				$url = $urlManager->getFileSyncUrl($kalturaFileSync, false);
+				$url = $urlManager->getFileSyncUrl($vidiunFileSync, false);
 				$mrss->addChild('ismUrl',$urlPrefix.$url);
 				return;
 			}
@@ -412,11 +412,11 @@ class kMrssManager
 	/**
 	 * @param entry $entry
 	 * @param SimpleXMLElement $mrss
-	 * @param kMrssParameters $mrssParams
+	 * @param vMrssParameters $mrssParams
 	 * @params string $features
 	 * @return SimpleXMLElement
 	 */
-	public static function getEntryMrssXml(entry $entry, SimpleXMLElement $mrss = null, kMrssParameters $mrssParams = null, $features = null)
+	public static function getEntryMrssXml(entry $entry, SimpleXMLElement $mrss = null, vMrssParameters $mrssParams = null, $features = null)
 	{
 		$instanceKey = self::generateInstanceKey($entry->getId(), $mrssParams, $features);
 		
@@ -451,7 +451,7 @@ class kMrssManager
 		$mrss->addChild('title', self::stringToSafeXml($entry->getName()));
 		if($mrssParams && !is_null($mrssParams->getLink()))
 			$mrss->addChild('link', $mrssParams->getLink() . $entry->getId());
-		$mrss->addChild('type', kPluginableEnumsManager::coreToApi('entryType', $entry->getType()));
+		$mrss->addChild('type', vPluginableEnumsManager::coreToApi('entryType', $entry->getType()));
 		$mrss->addChild('licenseType', $entry->getLicenseType());
 		$mrss->addChild('userId', $entry->getPuserId());
 		$mrss->addChild('name', self::stringToSafeXml($entry->getName()));
@@ -469,10 +469,10 @@ class kMrssManager
 		$categories = explode(',', $entry->getCategories());
 		if ($features && count($features) && in_array (ObjectFeatureType::CATEGORY_ENTRIES, $features))
 		{
-			$partner = PartnerPeer::retrieveByPK(kCurrentContext::getCurrentPartnerId());
+			$partner = PartnerPeer::retrieveByPK(vCurrentContext::getCurrentPartnerId());
 			$partnerEntitlement = $partner->getDefaultEntitlementEnforcement();
 	
-			kEntitlementUtils::initEntitlementEnforcement($partner->getId() , false);
+			vEntitlementUtils::initEntitlementEnforcement($partner->getId() , false);
 			$categories = array ();
 			$categoryEntries = categoryEntryPeer::retrieveActiveByEntryId($entry->getId());
 			$categoryIds = array ();
@@ -487,7 +487,7 @@ class kMrssManager
 			}	
 
 			if ($partnerEntitlement)
-				kEntitlementUtils::initEntitlementEnforcement($partner->getId() , true);
+				vEntitlementUtils::initEntitlementEnforcement($partner->getId() , true);
 				
 			$keyToDelete = array_search(ObjectFeatureType::CATEGORY_ENTRIES, $features);
 			unset ($features[$keyToDelete]);
@@ -570,7 +570,7 @@ class kMrssManager
 			$capabilitiesArr = explode(",", $capabilities);
 			foreach($capabilitiesArr as $capability)
 			{
-				$capabilitiesNode->addChild('capability', kPluginableEnumsManager::coreToApi('EntryCapability', $capability));
+				$capabilitiesNode->addChild('capability', vPluginableEnumsManager::coreToApi('EntryCapability', $capability));
 			}
 		}
 
@@ -584,9 +584,9 @@ class kMrssManager
 					if (!is_array($features) || !count($features) || in_array($mrssContributor->getObjectFeatureType(), $features))
 						$mrssContributor->contribute($entry, $mrss, $mrssParams);
 				}
-				catch(kCoreException $ex)
+				catch(vCoreException $ex)
 				{
-					KalturaLog::err("Unable to add MRSS element for contributor [".get_class($mrssContributor)."] message [".$ex->getMessage()."]");
+					VidiunLog::err("Unable to add MRSS element for contributor [".get_class($mrssContributor)."] message [".$ex->getMessage()."]");
 				}
 			}
 		}
@@ -595,8 +595,8 @@ class kMrssManager
 			$mrssParams->getIncludePlayerTag())
 		{
 			$uiconfId = (!is_null($mrssParams->getPlayerUiconfId()))? '/ui_conf_id/'.$mrssParams->getPlayerUiconfId(): '';
-			$playerUrl = kConf::get('apphome_url').
-							'/kwidget/wid/_'.$entry->getPartnerId().
+			$playerUrl = vConf::get('apphome_url').
+							'/vwidget/wid/_'.$entry->getPartnerId().
 							'/entry_id/'.$entry->getId().'/ui_conf' . ($uiconfId ? "/$uiconfId" : '');
 	
 			$player = $mrss->addChild('player');
@@ -618,11 +618,11 @@ class kMrssManager
 	 * @param string $identifierValue
 	 * @param SimpleXMLElement $mrss
 	 * @param string $nodeName
-	 * @param kMrssParameters $mrssParams
+	 * @param vMrssParameters $mrssParams
 	 * @param string $features
 	 * @return SimpleXMLElement
 	 */
-	protected static function addExtendingItemNode (BaseObject $object, $identifierValue, SimpleXMLElement $mrss, $nodeName = null, kMrssParameters $mrssParams = null, $features = null)
+	protected static function addExtendingItemNode (BaseObject $object, $identifierValue, SimpleXMLElement $mrss, $nodeName = null, vMrssParameters $mrssParams = null, $features = null)
 	{
 		if ($object instanceof category)
 		{
@@ -647,11 +647,11 @@ class kMrssManager
 	 * Function calculates and returns the MRSS XML of a category
 	 * @param category $category
 	 * @param SimpleXMLElement $mrss
-	 * @param kMrssParameters $mrssParams
+	 * @param vMrssParameters $mrssParams
 	 * @param string $features
 	 * @return SimpleXMLElement
 	 */
-	public static function getCategoryMrssXml (category $category, SimpleXMLElement $mrss = null, kMrssParameters $mrssParams = null, $features = null)
+	public static function getCategoryMrssXml (category $category, SimpleXMLElement $mrss = null, vMrssParameters $mrssParams = null, $features = null)
 	{
 		$instanceKey = self::generateInstanceKey($category->getId(), $mrssParams, $features);
 		
@@ -677,15 +677,15 @@ class kMrssManager
 		{
 			foreach($mrssContributors as $mrssContributor)
 			{
-				/* @var $mrssContributor IKalturaMrssContributor */
+				/* @var $mrssContributor IVidiunMrssContributor */
 				try
 				{
 					if (!$features || in_array($mrssContributor->getObjectFeatureType(), $features))
 						$mrssContributor->contribute($category, $mrss, $mrssParams);
 				}
-				catch(kCoreException $ex)
+				catch(vCoreException $ex)
 				{
-					KalturaLog::err("Unable to add MRSS element for contributor [".get_class($mrssContributor)."] message [".$ex->getMessage()."]");
+					VidiunLog::err("Unable to add MRSS element for contributor [".get_class($mrssContributor)."] message [".$ex->getMessage()."]");
 				}
 			}
 		}
@@ -722,14 +722,14 @@ class kMrssManager
 	/**
 	 * Function goes over finished MRSS XML and adds the required extending items in the appropriate slots
 	 * @param SimpleXMLElement $mrss
-	 * @param kMrssParameters $mrssParams
+	 * @param vMrssParameters $mrssParams
 	 * @return SimpleXMLElement
 	 */
-	protected static function addExtendingItemsToMrss (SimpleXMLElement $mrss, kMrssParameters $mrssParams, $partnerId = null)
+	protected static function addExtendingItemsToMrss (SimpleXMLElement $mrss, vMrssParameters $mrssParams, $partnerId = null)
 	{
 		foreach($mrssParams->getItemXpathsToExtend() as $itemXPathToExtend)
 		{
-			/* @var $itemXPathToExtend KExtendingItemMrssParameter */
+			/* @var $itemXPathToExtend VExtendingItemMrssParameter */
 			$xmlNodesToExtend = $mrss->xpath($itemXPathToExtend->getXpath()); //metdata/entryIdX   /entry/customMetadata/metadata/entryIdY
 			foreach ($xmlNodesToExtend as $xmlNodeToExtend)
 			{

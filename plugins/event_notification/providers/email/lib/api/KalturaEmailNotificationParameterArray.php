@@ -2,8 +2,8 @@
 /**
  * @package plugins.emailNotification
  * @subpackage api.objects
- * @deprecated use KalturaEventNotificationParameterArray instead
+ * @deprecated use VidiunEventNotificationParameterArray instead
  */
-class KalturaEmailNotificationParameterArray extends KalturaEventNotificationParameterArray
+class VidiunEmailNotificationParameterArray extends VidiunEventNotificationParameterArray
 {
 }

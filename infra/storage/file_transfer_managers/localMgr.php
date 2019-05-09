@@ -1,17 +1,17 @@
 <?php
 /**
- * Extends the 'kFileTransferMgr' class & implements a file transfer manager for the local filesystem.
- * For additional comments please look at the 'kFileTransferMgr' class.
+ * Extends the 'vFileTransferMgr' class & implements a file transfer manager for the local filesystem.
+ * For additional comments please look at the 'vFileTransferMgr' class.
  * 
  * @package infra
  * @subpackage Storage
  */
-class localMgr extends kFileTransferMgr
+class localMgr extends vFileTransferMgr
 {
 	//in case link should be created instead of copy set it on options array passed to the localMgr constructor
 	private $createLink;
 	
-	// instances of this class should be created usign the 'getInstance' of the 'kFileTransferMgr' class
+	// instances of this class should be created usign the 'getInstance' of the 'vFileTransferMgr' class
 	protected function __construct(array $options = null)
 	{
 		parent::__construct($options);
@@ -25,7 +25,7 @@ class localMgr extends kFileTransferMgr
 
 
 	/**********************************************************************/
-	/* Implementation of abstract functions from class 'kFileTransferMgr' */
+	/* Implementation of abstract functions from class 'vFileTransferMgr' */
 	/**********************************************************************/
 
 	// ftp connect to server:port
@@ -145,7 +145,7 @@ class localMgr extends kFileTransferMgr
 	
 	protected function doFileSize($remote_file)
 	{
-		return kFile::fileSize($remote_file);
+		return vFile::fileSize($remote_file);
 	}
 	
     protected function doModificationTime($remote_file)

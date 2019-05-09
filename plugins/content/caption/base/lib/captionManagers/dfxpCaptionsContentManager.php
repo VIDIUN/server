@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage lib
  */
-class dfxpCaptionsContentManager extends kCaptionsContentManager
+class dfxpCaptionsContentManager extends vCaptionsContentManager
 {
 	/**
 	 * @var string
@@ -114,18 +114,18 @@ class dfxpCaptionsContentManager extends kCaptionsContentManager
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCaptionsContentManager::parse()
+	 * @see vCaptionsContentManager::parse()
 	 */
 	public function parse($content)
 	{
-		$xml = new KDOMDocument();
+		$xml = new VDOMDocument();
 		try
 		{
 			$xml->loadXML(trim($content, " \r\n\t"));
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			return array();
 		}
 
@@ -154,7 +154,7 @@ class dfxpCaptionsContentManager extends kCaptionsContentManager
 		$itemsData = $this->parseBody($xml);
 		if(! $itemsData)
 		{
-			KalturaLog::err("XML element <p> not found");
+			VidiunLog::err("XML element <p> not found");
 			return array();
 		}
 		
@@ -167,15 +167,15 @@ class dfxpCaptionsContentManager extends kCaptionsContentManager
 		if(preg_match('/(\d+)s/', $timeStr))
 			return intval($matches[1]) * 1000;
 			
-		return kXml::timeToInteger($timeStr);
+		return vXml::timeToInteger($timeStr);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCaptionsContentManager::getContent()
+	 * @see vCaptionsContentManager::getContent()
 	 */
 	public function getContent($content)
 	{
-		$xml = new KDOMDocument();
+		$xml = new VDOMDocument();
 		try
 		{
 			$xml->loadXML($content);
@@ -185,7 +185,7 @@ class dfxpCaptionsContentManager extends kCaptionsContentManager
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			return null;
 		}
 		
@@ -206,7 +206,7 @@ class dfxpCaptionsContentManager extends kCaptionsContentManager
 
 	public function buildFile($content, $clipStartTime, $clipEndTime, $globalOffset = 0)
 	{
-		$xml = new KDOMDocument();
+		$xml = new VDOMDocument();
 		try
 		{
 			$content = trim($content, " \r\n\t");
@@ -214,7 +214,7 @@ class dfxpCaptionsContentManager extends kCaptionsContentManager
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			return '';
 		}
 		$xmlUpdatedContent = $this->editBody($xml, $clipStartTime, $clipEndTime, $globalOffset);
@@ -258,9 +258,9 @@ class dfxpCaptionsContentManager extends kCaptionsContentManager
 				$adjustedStartTime = TimeOffsetUtils::getAdjustedStartTime($captionStartTime, $clipStartTime, $globalOffset);
 				$adjustedEndTime = TimeOffsetUtils::getAdjustedEndTime($captionEndTime, $clipStartTime, $clipEndTime, $globalOffset);
 
-				$childNode->setAttribute('begin',kXml::integerToTime($adjustedStartTime));
+				$childNode->setAttribute('begin',vXml::integerToTime($adjustedStartTime));
 				if($childNode->hasAttribute('end'))
-					$childNode->setAttribute('end',kXml::integerToTime($adjustedEndTime));
+					$childNode->setAttribute('end',vXml::integerToTime($adjustedEndTime));
 			}
 		}
 		$content = "";
@@ -278,8 +278,8 @@ class dfxpCaptionsContentManager extends kCaptionsContentManager
 	 */
 	public function merge($content, $toAppend)
 	{
-		$contentXML = new KDOMDocument();
-		$toAppendXML = new KDOMDocument();
+		$contentXML = new VDOMDocument();
+		$toAppendXML = new VDOMDocument();
 		try
 		{
 			$contentXML->loadXML($content);
@@ -295,7 +295,7 @@ class dfxpCaptionsContentManager extends kCaptionsContentManager
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			return $content;
 		}
 		$content = $contentXML->saveXML();

@@ -4,7 +4,7 @@
  * @subpackage model
  */
 
-class kMediaEsearchExportToCsvJobData extends kExportCsvJobData
+class vMediaEsearchExportToCsvJobData extends vExportCsvJobData
 {
 	/**
 	 * @var ESearchParams

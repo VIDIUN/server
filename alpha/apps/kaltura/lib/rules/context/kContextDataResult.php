@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kContextDataResult 
+class vContextDataResult 
 {
 	/**
 	 * Array of messages as received from the invalidated rules 
@@ -13,7 +13,7 @@ class kContextDataResult
 	
 	/**
 	 * Array of actions as received from the invalidated rules
-	 * @var array<kRuleAction>
+	 * @var array<vRuleAction>
 	 */
 	private $actions = array();
 	
@@ -26,7 +26,7 @@ class kContextDataResult
 	}
 
 	/**
-	 * @return array<kRuleAction>
+	 * @return array<vRuleAction>
 	 */
 	public function getActions() 
 	{
@@ -42,9 +42,9 @@ class kContextDataResult
 	}
 
 	/**
-	 * @param kRuleAction $action
+	 * @param vRuleAction $action
 	 */
-	public function addAction(kRuleAction $action) 
+	public function addAction(vRuleAction $action) 
 	{
 		$this->actions[] = $action;
 	}

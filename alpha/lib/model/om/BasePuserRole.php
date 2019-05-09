@@ -26,10 +26,10 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 	protected $id;
 
 	/**
-	 * The value for the kshow_id field.
+	 * The value for the vshow_id field.
 	 * @var        string
 	 */
-	protected $kshow_id;
+	protected $vshow_id;
 
 	/**
 	 * The value for the partner_id field.
@@ -69,19 +69,19 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 	protected $subp_id;
 
 	/**
-	 * @var        kshow
+	 * @var        vshow
 	 */
-	protected $akshow;
+	protected $avshow;
 
 	/**
-	 * @var        PuserKuser
+	 * @var        PuserVuser
 	 */
-	protected $aPuserKuserRelatedByPartnerId;
+	protected $aPuserVuserRelatedByPartnerId;
 
 	/**
-	 * @var        PuserKuser
+	 * @var        PuserVuser
 	 */
-	protected $aPuserKuserRelatedByPuserId;
+	protected $aPuserVuserRelatedByPuserId;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -160,13 +160,13 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kshow_id] column value.
+	 * Get the [vshow_id] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getKshowId()
+	public function getVshowId()
 	{
-		return $this->kshow_id;
+		return $this->vshow_id;
 	}
 
 	/**
@@ -313,31 +313,31 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 	} // setId()
 
 	/**
-	 * Set the value of [kshow_id] column.
+	 * Set the value of [vshow_id] column.
 	 * 
 	 * @param      string $v new value
 	 * @return     PuserRole The current object (for fluent API support)
 	 */
-	public function setKshowId($v)
+	public function setVshowId($v)
 	{
-		if(!isset($this->oldColumnsValues[PuserRolePeer::KSHOW_ID]))
-			$this->oldColumnsValues[PuserRolePeer::KSHOW_ID] = $this->kshow_id;
+		if(!isset($this->oldColumnsValues[PuserRolePeer::VSHOW_ID]))
+			$this->oldColumnsValues[PuserRolePeer::VSHOW_ID] = $this->vshow_id;
 
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->kshow_id !== $v) {
-			$this->kshow_id = $v;
-			$this->modifiedColumns[] = PuserRolePeer::KSHOW_ID;
+		if ($this->vshow_id !== $v) {
+			$this->vshow_id = $v;
+			$this->modifiedColumns[] = PuserRolePeer::VSHOW_ID;
 		}
 
-		if ($this->akshow !== null && $this->akshow->getId() !== $v) {
-			$this->akshow = null;
+		if ($this->avshow !== null && $this->avshow->getId() !== $v) {
+			$this->avshow = null;
 		}
 
 		return $this;
-	} // setKshowId()
+	} // setVshowId()
 
 	/**
 	 * Set the value of [partner_id] column.
@@ -359,8 +359,8 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 			$this->modifiedColumns[] = PuserRolePeer::PARTNER_ID;
 		}
 
-		if ($this->aPuserKuserRelatedByPartnerId !== null && $this->aPuserKuserRelatedByPartnerId->getPartnerId() !== $v) {
-			$this->aPuserKuserRelatedByPartnerId = null;
+		if ($this->aPuserVuserRelatedByPartnerId !== null && $this->aPuserVuserRelatedByPartnerId->getPartnerId() !== $v) {
+			$this->aPuserVuserRelatedByPartnerId = null;
 		}
 
 		return $this;
@@ -386,8 +386,8 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 			$this->modifiedColumns[] = PuserRolePeer::PUSER_ID;
 		}
 
-		if ($this->aPuserKuserRelatedByPuserId !== null && $this->aPuserKuserRelatedByPuserId->getPuserId() !== $v) {
-			$this->aPuserKuserRelatedByPuserId = null;
+		if ($this->aPuserVuserRelatedByPuserId !== null && $this->aPuserVuserRelatedByPuserId->getPuserId() !== $v) {
+			$this->aPuserVuserRelatedByPuserId = null;
 		}
 
 		return $this;
@@ -574,7 +574,7 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 		try {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->kshow_id = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+			$this->vshow_id = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
 			$this->partner_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
 			$this->puser_id = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->role = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
@@ -613,14 +613,14 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 	public function ensureConsistency()
 	{
 
-		if ($this->akshow !== null && $this->kshow_id !== $this->akshow->getId()) {
-			$this->akshow = null;
+		if ($this->avshow !== null && $this->vshow_id !== $this->avshow->getId()) {
+			$this->avshow = null;
 		}
-		if ($this->aPuserKuserRelatedByPartnerId !== null && $this->partner_id !== $this->aPuserKuserRelatedByPartnerId->getPartnerId()) {
-			$this->aPuserKuserRelatedByPartnerId = null;
+		if ($this->aPuserVuserRelatedByPartnerId !== null && $this->partner_id !== $this->aPuserVuserRelatedByPartnerId->getPartnerId()) {
+			$this->aPuserVuserRelatedByPartnerId = null;
 		}
-		if ($this->aPuserKuserRelatedByPuserId !== null && $this->puser_id !== $this->aPuserKuserRelatedByPuserId->getPuserId()) {
-			$this->aPuserKuserRelatedByPuserId = null;
+		if ($this->aPuserVuserRelatedByPuserId !== null && $this->puser_id !== $this->aPuserVuserRelatedByPuserId->getPuserId()) {
+			$this->aPuserVuserRelatedByPuserId = null;
 		}
 	} // ensureConsistency
 
@@ -663,9 +663,9 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->akshow = null;
-			$this->aPuserKuserRelatedByPartnerId = null;
-			$this->aPuserKuserRelatedByPuserId = null;
+			$this->avshow = null;
+			$this->aPuserVuserRelatedByPartnerId = null;
+			$this->aPuserVuserRelatedByPuserId = null;
 		} // if (deep)
 	}
 
@@ -784,25 +784,25 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akshow !== null) {
-				if ($this->akshow->isModified() || $this->akshow->isNew()) {
-					$affectedRows += $this->akshow->save($con);
+			if ($this->avshow !== null) {
+				if ($this->avshow->isModified() || $this->avshow->isNew()) {
+					$affectedRows += $this->avshow->save($con);
 				}
-				$this->setkshow($this->akshow);
+				$this->setvshow($this->avshow);
 			}
 
-			if ($this->aPuserKuserRelatedByPartnerId !== null) {
-				if ($this->aPuserKuserRelatedByPartnerId->isModified() || $this->aPuserKuserRelatedByPartnerId->isNew()) {
-					$affectedRows += $this->aPuserKuserRelatedByPartnerId->save($con);
+			if ($this->aPuserVuserRelatedByPartnerId !== null) {
+				if ($this->aPuserVuserRelatedByPartnerId->isModified() || $this->aPuserVuserRelatedByPartnerId->isNew()) {
+					$affectedRows += $this->aPuserVuserRelatedByPartnerId->save($con);
 				}
-				$this->setPuserKuserRelatedByPartnerId($this->aPuserKuserRelatedByPartnerId);
+				$this->setPuserVuserRelatedByPartnerId($this->aPuserVuserRelatedByPartnerId);
 			}
 
-			if ($this->aPuserKuserRelatedByPuserId !== null) {
-				if ($this->aPuserKuserRelatedByPuserId->isModified() || $this->aPuserKuserRelatedByPuserId->isNew()) {
-					$affectedRows += $this->aPuserKuserRelatedByPuserId->save($con);
+			if ($this->aPuserVuserRelatedByPuserId !== null) {
+				if ($this->aPuserVuserRelatedByPuserId->isModified() || $this->aPuserVuserRelatedByPuserId->isNew()) {
+					$affectedRows += $this->aPuserVuserRelatedByPuserId->save($con);
 				}
-				$this->setPuserKuserRelatedByPuserId($this->aPuserKuserRelatedByPuserId);
+				$this->setPuserVuserRelatedByPuserId($this->aPuserVuserRelatedByPuserId);
 			}
 
 			if ($this->isNew() ) {
@@ -869,7 +869,7 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array(); 
 		parent::postSave($con);
 	}
@@ -893,12 +893,12 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -916,8 +916,8 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1042,21 +1042,21 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->akshow !== null) {
-				if (!$this->akshow->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->akshow->getValidationFailures());
+			if ($this->avshow !== null) {
+				if (!$this->avshow->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->avshow->getValidationFailures());
 				}
 			}
 
-			if ($this->aPuserKuserRelatedByPartnerId !== null) {
-				if (!$this->aPuserKuserRelatedByPartnerId->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->aPuserKuserRelatedByPartnerId->getValidationFailures());
+			if ($this->aPuserVuserRelatedByPartnerId !== null) {
+				if (!$this->aPuserVuserRelatedByPartnerId->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->aPuserVuserRelatedByPartnerId->getValidationFailures());
 				}
 			}
 
-			if ($this->aPuserKuserRelatedByPuserId !== null) {
-				if (!$this->aPuserKuserRelatedByPuserId->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->aPuserKuserRelatedByPuserId->getValidationFailures());
+			if ($this->aPuserVuserRelatedByPuserId !== null) {
+				if (!$this->aPuserVuserRelatedByPuserId->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->aPuserVuserRelatedByPuserId->getValidationFailures());
 				}
 			}
 
@@ -1103,7 +1103,7 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 				return $this->getId();
 				break;
 			case 1:
-				return $this->getKshowId();
+				return $this->getVshowId();
 				break;
 			case 2:
 				return $this->getPartnerId();
@@ -1145,7 +1145,7 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 		$keys = PuserRolePeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
-			$keys[1] => $this->getKshowId(),
+			$keys[1] => $this->getVshowId(),
 			$keys[2] => $this->getPartnerId(),
 			$keys[3] => $this->getPuserId(),
 			$keys[4] => $this->getRole(),
@@ -1187,7 +1187,7 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 				$this->setId($value);
 				break;
 			case 1:
-				$this->setKshowId($value);
+				$this->setVshowId($value);
 				break;
 			case 2:
 				$this->setPartnerId($value);
@@ -1232,7 +1232,7 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 		$keys = PuserRolePeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setKshowId($arr[$keys[1]]);
+		if (array_key_exists($keys[1], $arr)) $this->setVshowId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setPartnerId($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setPuserId($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setRole($arr[$keys[4]]);
@@ -1251,7 +1251,7 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 		$criteria = new Criteria(PuserRolePeer::DATABASE_NAME);
 
 		if ($this->isColumnModified(PuserRolePeer::ID)) $criteria->add(PuserRolePeer::ID, $this->id);
-		if ($this->isColumnModified(PuserRolePeer::KSHOW_ID)) $criteria->add(PuserRolePeer::KSHOW_ID, $this->kshow_id);
+		if ($this->isColumnModified(PuserRolePeer::VSHOW_ID)) $criteria->add(PuserRolePeer::VSHOW_ID, $this->vshow_id);
 		if ($this->isColumnModified(PuserRolePeer::PARTNER_ID)) $criteria->add(PuserRolePeer::PARTNER_ID, $this->partner_id);
 		if ($this->isColumnModified(PuserRolePeer::PUSER_ID)) $criteria->add(PuserRolePeer::PUSER_ID, $this->puser_id);
 		if ($this->isColumnModified(PuserRolePeer::ROLE)) $criteria->add(PuserRolePeer::ROLE, $this->role);
@@ -1324,7 +1324,7 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 
-		$copyObj->setKshowId($this->kshow_id);
+		$copyObj->setVshowId($this->vshow_id);
 
 		$copyObj->setPartnerId($this->partner_id);
 
@@ -1402,24 +1402,24 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Declares an association between this object and a kshow object.
+	 * Declares an association between this object and a vshow object.
 	 *
-	 * @param      kshow $v
+	 * @param      vshow $v
 	 * @return     PuserRole The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setkshow(kshow $v = null)
+	public function setvshow(vshow $v = null)
 	{
 		if ($v === null) {
-			$this->setKshowId(NULL);
+			$this->setVshowId(NULL);
 		} else {
-			$this->setKshowId($v->getId());
+			$this->setVshowId($v->getId());
 		}
 
-		$this->akshow = $v;
+		$this->avshow = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the kshow object, it will not be re-added.
+		// If this object has already been added to the vshow object, it will not be re-added.
 		if ($v !== null) {
 			$v->addPuserRole($this);
 		}
@@ -1429,35 +1429,35 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated kshow object
+	 * Get the associated vshow object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     kshow The associated kshow object.
+	 * @return     vshow The associated vshow object.
 	 * @throws     PropelException
 	 */
-	public function getkshow(PropelPDO $con = null)
+	public function getvshow(PropelPDO $con = null)
 	{
-		if ($this->akshow === null && (($this->kshow_id !== "" && $this->kshow_id !== null))) {
-			$this->akshow = kshowPeer::retrieveByPk($this->kshow_id);
+		if ($this->avshow === null && (($this->vshow_id !== "" && $this->vshow_id !== null))) {
+			$this->avshow = vshowPeer::retrieveByPk($this->vshow_id);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->akshow->addPuserRoles($this);
+			   $this->avshow->addPuserRoles($this);
 			 */
 		}
-		return $this->akshow;
+		return $this->avshow;
 	}
 
 	/**
-	 * Declares an association between this object and a PuserKuser object.
+	 * Declares an association between this object and a PuserVuser object.
 	 *
-	 * @param      PuserKuser $v
+	 * @param      PuserVuser $v
 	 * @return     PuserRole The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setPuserKuserRelatedByPartnerId(PuserKuser $v = null)
+	public function setPuserVuserRelatedByPartnerId(PuserVuser $v = null)
 	{
 		if ($v === null) {
 			$this->setPartnerId(NULL);
@@ -1465,10 +1465,10 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 			$this->setPartnerId($v->getPartnerId());
 		}
 
-		$this->aPuserKuserRelatedByPartnerId = $v;
+		$this->aPuserVuserRelatedByPartnerId = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the PuserKuser object, it will not be re-added.
+		// If this object has already been added to the PuserVuser object, it will not be re-added.
 		if ($v !== null) {
 			$v->addPuserRoleRelatedByPartnerId($this);
 		}
@@ -1478,37 +1478,37 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated PuserKuser object
+	 * Get the associated PuserVuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     PuserKuser The associated PuserKuser object.
+	 * @return     PuserVuser The associated PuserVuser object.
 	 * @throws     PropelException
 	 */
-	public function getPuserKuserRelatedByPartnerId(PropelPDO $con = null)
+	public function getPuserVuserRelatedByPartnerId(PropelPDO $con = null)
 	{
-		if ($this->aPuserKuserRelatedByPartnerId === null && ($this->partner_id !== null)) {
-			$c = new Criteria(PuserKuserPeer::DATABASE_NAME);
-			$c->add(PuserKuserPeer::PARTNER_ID, $this->partner_id);
-			$this->aPuserKuserRelatedByPartnerId = PuserKuserPeer::doSelectOne($c, $con);
+		if ($this->aPuserVuserRelatedByPartnerId === null && ($this->partner_id !== null)) {
+			$c = new Criteria(PuserVuserPeer::DATABASE_NAME);
+			$c->add(PuserVuserPeer::PARTNER_ID, $this->partner_id);
+			$this->aPuserVuserRelatedByPartnerId = PuserVuserPeer::doSelectOne($c, $con);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->aPuserKuserRelatedByPartnerId->addPuserRolesRelatedByPartnerId($this);
+			   $this->aPuserVuserRelatedByPartnerId->addPuserRolesRelatedByPartnerId($this);
 			 */
 		}
-		return $this->aPuserKuserRelatedByPartnerId;
+		return $this->aPuserVuserRelatedByPartnerId;
 	}
 
 	/**
-	 * Declares an association between this object and a PuserKuser object.
+	 * Declares an association between this object and a PuserVuser object.
 	 *
-	 * @param      PuserKuser $v
+	 * @param      PuserVuser $v
 	 * @return     PuserRole The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setPuserKuserRelatedByPuserId(PuserKuser $v = null)
+	public function setPuserVuserRelatedByPuserId(PuserVuser $v = null)
 	{
 		if ($v === null) {
 			$this->setPuserId(NULL);
@@ -1516,10 +1516,10 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 			$this->setPuserId($v->getPuserId());
 		}
 
-		$this->aPuserKuserRelatedByPuserId = $v;
+		$this->aPuserVuserRelatedByPuserId = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the PuserKuser object, it will not be re-added.
+		// If this object has already been added to the PuserVuser object, it will not be re-added.
 		if ($v !== null) {
 			$v->addPuserRoleRelatedByPuserId($this);
 		}
@@ -1529,27 +1529,27 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 
 
 	/**
-	 * Get the associated PuserKuser object
+	 * Get the associated PuserVuser object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     PuserKuser The associated PuserKuser object.
+	 * @return     PuserVuser The associated PuserVuser object.
 	 * @throws     PropelException
 	 */
-	public function getPuserKuserRelatedByPuserId(PropelPDO $con = null)
+	public function getPuserVuserRelatedByPuserId(PropelPDO $con = null)
 	{
-		if ($this->aPuserKuserRelatedByPuserId === null && (($this->puser_id !== "" && $this->puser_id !== null))) {
-			$c = new Criteria(PuserKuserPeer::DATABASE_NAME);
-			$c->add(PuserKuserPeer::PUSER_ID, $this->puser_id);
-			$this->aPuserKuserRelatedByPuserId = PuserKuserPeer::doSelectOne($c, $con);
+		if ($this->aPuserVuserRelatedByPuserId === null && (($this->puser_id !== "" && $this->puser_id !== null))) {
+			$c = new Criteria(PuserVuserPeer::DATABASE_NAME);
+			$c->add(PuserVuserPeer::PUSER_ID, $this->puser_id);
+			$this->aPuserVuserRelatedByPuserId = PuserVuserPeer::doSelectOne($c, $con);
 			/* The following can be used additionally to
 			   guarantee the related object contains a reference
 			   to this object.  This level of coupling may, however, be
 			   undesirable since it could result in an only partially populated collection
 			   in the referenced object.
-			   $this->aPuserKuserRelatedByPuserId->addPuserRolesRelatedByPuserId($this);
+			   $this->aPuserVuserRelatedByPuserId->addPuserRolesRelatedByPuserId($this);
 			 */
 		}
-		return $this->aPuserKuserRelatedByPuserId;
+		return $this->aPuserVuserRelatedByPuserId;
 	}
 
 	/**
@@ -1566,9 +1566,9 @@ abstract class BasePuserRole extends BaseObject  implements Persistent {
 		if ($deep) {
 		} // if ($deep)
 
-			$this->akshow = null;
-			$this->aPuserKuserRelatedByPartnerId = null;
-			$this->aPuserKuserRelatedByPuserId = null;
+			$this->avshow = null;
+			$this->aPuserVuserRelatedByPartnerId = null;
+			$this->aPuserVuserRelatedByPuserId = null;
 	}
 
 } // BasePuserRole

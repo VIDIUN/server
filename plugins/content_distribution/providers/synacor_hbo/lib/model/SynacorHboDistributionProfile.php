@@ -39,7 +39,7 @@ class SynacorHboDistributionProfile extends ConfigurableDistributionProfile
 	    $profile = DistributionProfilePeer::retrieveByPK($entryDistribution->getDistributionProfileId());
 	    if (!$profile)
 	    {
-	        KalturaLog::err("Distribution  profile [" . $entryDistribution->getDistributionProfileId() . "] not found");
+	        VidiunLog::err("Distribution  profile [" . $entryDistribution->getDistributionProfileId() . "] not found");
 			$validationErrors[] = $this->createValidationError($action, DistributionErrorType::INVALID_DATA, 'profile', 'distribution profile not found');
 			return $validationErrors;
 	    }

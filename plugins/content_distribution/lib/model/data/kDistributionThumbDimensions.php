@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage model.data
  */
-class kDistributionThumbDimensions
+class vDistributionThumbDimensions
 {
 	/**
 	 * @var int

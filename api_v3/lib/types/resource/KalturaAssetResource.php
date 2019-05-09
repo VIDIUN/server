@@ -1,11 +1,11 @@
 <?php
 /**
- * Used to ingest media that is already ingested to Kaltura system as a different flavor asset in the past, the new created flavor asset will be ready immediately using a file sync of link type that will point to the existing file sync of the existing flavor asset.
+ * Used to ingest media that is already ingested to Vidiun system as a different flavor asset in the past, the new created flavor asset will be ready immediately using a file sync of link type that will point to the existing file sync of the existing flavor asset.
  * 
  * @package api
  * @subpackage objects
  */
-class KalturaAssetResource extends KalturaContentResource
+class VidiunAssetResource extends VidiunContentResource
 {
 	/**
 	 * ID of the source asset 
@@ -14,7 +14,7 @@ class KalturaAssetResource extends KalturaContentResource
 	public $assetId;
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -24,7 +24,7 @@ class KalturaAssetResource extends KalturaContentResource
 		
 		$srcFlavorAsset = assetPeer::retrieveById($this->assetId);
 		if(!$srcFlavorAsset)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $this->assetId);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $this->assetId);
 		
 		$key = $srcFlavorAsset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
 		$c = FileSyncPeer::getCriteriaForFileSyncKey($key);
@@ -33,26 +33,26 @@ class KalturaAssetResource extends KalturaContentResource
 		$fileSyncs = FileSyncPeer::doSelect($c);
 		foreach($fileSyncs as $fileSync)
 		{
-			$fileSync = kFileSyncUtils::resolve($fileSync);
+			$fileSync = vFileSyncUtils::resolve($fileSync);
 			if($fileSync->getFileType() == FileSync::FILE_SYNC_FILE_TYPE_FILE)
 				return;
 		}
-		throw new KalturaAPIException(KalturaErrors::FILE_DOESNT_EXIST);
+		throw new VidiunAPIException(VidiunErrors::FILE_DOESNT_EXIST);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		$this->validateForUsage($object_to_fill, $props_to_skip);
 		
 		if(!$object_to_fill)
-			$object_to_fill = new kFileSyncResource();
+			$object_to_fill = new vFileSyncResource();
 		
 		$srcFlavorAsset = assetPeer::retrieveById($this->assetId);
 		if(!$srcFlavorAsset)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $this->assetId);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $this->assetId);
 		
 		$object_to_fill->setFileSyncObjectType(FileSyncObjectType::FLAVOR_ASSET);
 		$object_to_fill->setObjectSubType(asset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);

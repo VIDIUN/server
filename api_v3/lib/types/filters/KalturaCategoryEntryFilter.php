@@ -3,12 +3,12 @@
  * @package api
  * @subpackage filters
  */
-class KalturaCategoryEntryFilter extends KalturaCategoryEntryBaseFilter
+class VidiunCategoryEntryFilter extends VidiunCategoryEntryBaseFilter
 {
 	
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -16,9 +16,9 @@ class KalturaCategoryEntryFilter extends KalturaCategoryEntryBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$blockOnEmptyFilterPartners = kConf::getMap(kConfMapNames::REQUIRE_CATEGORY_ENTRY_FILTER_PARTNERS);
 		if ($this->entryIdEqual == null &&
@@ -31,14 +31,14 @@ class KalturaCategoryEntryFilter extends KalturaCategoryEntryBaseFilter
 			throw new KalturaAPIException(KalturaErrors::MUST_FILTER_ON_ENTRY_OR_CATEGORY);
 		}
 			
-		if(kEntitlementUtils::getEntitlementEnforcement())
+		if(vEntitlementUtils::getEntitlementEnforcement())
 		{
 			//validate entitl for entry
 			if($this->entryIdEqual != null)
 			{
 				$entry = entryPeer::retrieveByPK($this->entryIdEqual);
 				if(!$entry)
-					throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $this->entryIdEqual);
+					throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $this->entryIdEqual);
 			}
 			
 			//validate entitl for entryIn
@@ -46,20 +46,20 @@ class KalturaCategoryEntryFilter extends KalturaCategoryEntryBaseFilter
 			{
 				$entry = entryPeer::retrieveByPKs($this->entryIdIn);
 				if(!$entry)
-					throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $this->entryIdIn);
+					throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $this->entryIdIn);
 			}
 			
 			//validate entitl categories
 			if($this->categoryIdIn != null)
 			{
 				$categoryIdInArr = explode(',', $this->categoryIdIn);
-				if(!categoryKuserPeer::areCategoriesAllowed($categoryIdInArr))
+				if(!categoryVuserPeer::areCategoriesAllowed($categoryIdInArr))
 				$categoryIdInArr = array_unique($categoryIdInArr);
 				
 				$entitledCategories = categoryPeer::retrieveByPKs($categoryIdInArr);
 				
 				if(!count($entitledCategories) || count($entitledCategories) != count($categoryIdInArr))
-					throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $this->categoryIdIn);
+					throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $this->categoryIdIn);
 					
 				$categoriesIdsUnlisted = array();
 				foreach($entitledCategories as $category)
@@ -70,8 +70,8 @@ class KalturaCategoryEntryFilter extends KalturaCategoryEntryBaseFilter
 
 				if(count($categoriesIdsUnlisted))
 				{
-					if(!categoryKuserPeer::areCategoriesAllowed($categoriesIdsUnlisted))
-						throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $this->categoryIdIn);
+					if(!categoryVuserPeer::areCategoriesAllowed($categoriesIdsUnlisted))
+						throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $this->categoryIdIn);
 				}
 			}
 			
@@ -79,13 +79,13 @@ class KalturaCategoryEntryFilter extends KalturaCategoryEntryBaseFilter
 			if($this->categoryIdEqual != null)
 			{
 				$category = categoryPeer::retrieveByPK($this->categoryIdEqual);
-				if(!$category && kCurrentContext::$master_partner_id != Partner::BATCH_PARTNER_ID)
-					throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $this->categoryIdEqual);
+				if(!$category && vCurrentContext::$master_partner_id != Partner::BATCH_PARTNER_ID)
+					throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $this->categoryIdEqual);
 
 				if(($category->getDisplayInSearch() == DisplayInSearchType::CATEGORY_MEMBERS_ONLY) && 
-					!categoryKuserPeer::retrievePermittedKuserInCategory($category->getId(), kCurrentContext::getCurrentKsKuserId()))
+					!categoryVuserPeer::retrievePermittedVuserInCategory($category->getId(), vCurrentContext::getCurrentVsVuserId()))
 				{
-					throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $this->categoryIdEqual);
+					throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $this->categoryIdEqual);
 				}
 			}
 		}
@@ -93,22 +93,22 @@ class KalturaCategoryEntryFilter extends KalturaCategoryEntryBaseFilter
 		$this->fixUserIds();
 		$categoryEntryFilter = $this->toObject();
 		 
-		$c = KalturaCriteria::create(categoryEntryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryEntryPeer::OM_CLASS);
 		$categoryEntryFilter->attachToCriteria($c);
 		
-		if(!kEntitlementUtils::getEntitlementEnforcement() || $this->entryIdEqual == null)
+		if(!vEntitlementUtils::getEntitlementEnforcement() || $this->entryIdEqual == null)
 			$pager->attachToCriteria($c);
 			
 		$dbCategoriesEntry = categoryEntryPeer::doSelect($c);
 		
-		if(kEntitlementUtils::getEntitlementEnforcement() && count($dbCategoriesEntry) && $this->entryIdEqual != null)
+		if(vEntitlementUtils::getEntitlementEnforcement() && count($dbCategoriesEntry) && $this->entryIdEqual != null)
 		{
 			//remove unlisted categories: display in search is set to members only
 			$categoriesIds = array();
 			foreach ($dbCategoriesEntry as $dbCategoryEntry)
 				$categoriesIds[] = $dbCategoryEntry->getCategoryId();
 				
-			$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+			$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 			$c->add(categoryPeer::ID, $categoriesIds, Criteria::IN);
 			$pager->attachToCriteria($c);
 			$c->applyFilters();
@@ -119,7 +119,7 @@ class KalturaCategoryEntryFilter extends KalturaCategoryEntryBaseFilter
 			{
 				if(!in_array($dbCategoryEntry->getCategoryId(), $categoryIds))
 				{
-					KalturaLog::info('Category [' . print_r($dbCategoryEntry->getCategoryId(),true) . '] is not listed to user');
+					VidiunLog::info('Category [' . print_r($dbCategoryEntry->getCategoryId(),true) . '] is not listed to user');
 					unset($dbCategoriesEntry[$key]);
 				}
 			}
@@ -133,32 +133,32 @@ class KalturaCategoryEntryFilter extends KalturaCategoryEntryBaseFilter
 				$totalCount = ($pager->pageIndex - 1) * $pager->pageSize + $resultCount;
 			else
 			{
-				KalturaFilterPager::detachFromCriteria($c);
+				VidiunFilterPager::detachFromCriteria($c);
 				$totalCount = categoryEntryPeer::doCount($c);
 			}
 		}
 			
-		$categoryEntrylist = KalturaCategoryEntryArray::fromDbArray($dbCategoriesEntry, $responseProfile);
-		$response = new KalturaCategoryEntryListResponse();
+		$categoryEntrylist = VidiunCategoryEntryArray::fromDbArray($dbCategoriesEntry, $responseProfile);
+		$response = new VidiunCategoryEntryListResponse();
 		$response->objects = $categoryEntrylist;
 		$response->totalCount = $totalCount; // no pager since category entry is limited to ENTRY::MAX_CATEGORIES_PER_ENTRY
 		return $response;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::validateForResponseProfile()
+	 * @see VidiunRelatedFilter::validateForResponseProfile()
 	 */
 	public function validateForResponseProfile()
 	{
-		if(kEntitlementUtils::getEntitlementEnforcement())
+		if(vEntitlementUtils::getEntitlementEnforcement())
 		{
-			if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENABLE_RESPONSE_PROFILE_USER_CACHE, kCurrentContext::getCurrentPartnerId()))
+			if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENABLE_RESPONSE_PROFILE_USER_CACHE, vCurrentContext::getCurrentPartnerId()))
 			{
-				KalturaResponseProfileCacher::useUserCache();
+				VidiunResponseProfileCacher::useUserCache();
 				return;
 			}
 			
-			throw new KalturaAPIException(KalturaErrors::CANNOT_LIST_RELATED_ENTITLED_WHEN_ENTITLEMENT_IS_ENABLE, get_class($this));
+			throw new VidiunAPIException(VidiunErrors::CANNOT_LIST_RELATED_ENTITLED_WHEN_ENTITLEMENT_IS_ENABLE, get_class($this));
 		}
 	}
 	
@@ -166,16 +166,16 @@ class KalturaCategoryEntryFilter extends KalturaCategoryEntryBaseFilter
 	{
 		if ($this->creatorUserIdEqual !== null)
 		{
-			$kuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::getCurrentPartnerId(), $this->creatorUserIdEqual);
-			if ($kuser)
-				$this->creatorUserIdEqual = $kuser->getId();
+			$vuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::getCurrentPartnerId(), $this->creatorUserIdEqual);
+			if ($vuser)
+				$this->creatorUserIdEqual = $vuser->getId();
 			else 
 				$this->creatorUserIdEqual = -1; // no result will be returned when the user is missing
 		}
 
 		if(!empty($this->creatorUserIdIn))
 		{
-			$this->creatorUserIdIn = $this->preparePusersToKusersFilter( $this->creatorUserIdIn );
+			$this->creatorUserIdIn = $this->preparePusersToVusersFilter( $this->creatorUserIdIn );
 		}
 	}
 }

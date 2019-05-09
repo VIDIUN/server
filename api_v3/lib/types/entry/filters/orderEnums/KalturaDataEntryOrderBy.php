@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaDataEntryOrderBy extends KalturaBaseEntryOrderBy
+class VidiunDataEntryOrderBy extends VidiunBaseEntryOrderBy
 {
 }

@@ -5,7 +5,7 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class kEmailNotificationStaticRecipientProvider extends kEmailNotificationRecipientProvider
+class vEmailNotificationStaticRecipientProvider extends vEmailNotificationRecipientProvider
 {
 	/**
 	 * Email notification "to" sendees
@@ -29,20 +29,20 @@ class kEmailNotificationStaticRecipientProvider extends kEmailNotificationRecipi
 	
 
 	/* (non-PHPdoc)
-	 * @see kEmailNotificationRecipientProvider::getScopedProviderJobData()
+	 * @see vEmailNotificationRecipientProvider::getScopedProviderJobData()
 	 */
-	public function getScopedProviderJobData(kScope $scope = null) 
+	public function getScopedProviderJobData(vScope $scope = null) 
 	{
 		$implicitEmailRecipients = array();
 		foreach($this->emailRecipients as &$emailRecipient)
 		{
-			/* @var $emailRecipient kEmailNotificationRecipient */
+			/* @var $emailRecipient vEmailNotificationRecipient */
 			$email = $emailRecipient->getEmail();
-			if($scope && $email instanceof kStringField)
+			if($scope && $email instanceof vStringField)
 				$email->setScope($scope);
 
 			$name = $emailRecipient->getName();
-			if($scope && $name instanceof kStringField)
+			if($scope && $name instanceof vStringField)
 				$name->setScope($scope);
 			$theName = "";
             if ($name)
@@ -51,7 +51,7 @@ class kEmailNotificationStaticRecipientProvider extends kEmailNotificationRecipi
 			$implicitEmailRecipients[$email->getValue()] = $theName;
 		}
 		
-		$ret = new kEmailNotificationStaticRecipientJobData();
+		$ret = new vEmailNotificationStaticRecipientJobData();
 		$ret->setEmailRecipients($implicitEmailRecipients);
 		
 		return $ret;

@@ -3,35 +3,35 @@
  * @package Scheduler
  * @subpackage Delete
  */
-class KDeletingCategoryEntryEngine extends KDeletingEngine
+class VDeletingCategoryEntryEngine extends VDeletingEngine
 {
 	/* (non-PHPdoc)
-	 * @see KDeletingEngine::delete()
+	 * @see VDeletingEngine::delete()
 	 */
-	protected function delete(KalturaFilter $filter)
+	protected function delete(VidiunFilter $filter)
 	{
 		return $this->deleteCategoryEntries($filter);
 	}
 	
 	/**
-	 * @param KalturaCategoryEntryFilter $filter The filter should return the list of category entries that need to be deleted
+	 * @param VidiunCategoryEntryFilter $filter The filter should return the list of category entries that need to be deleted
 	 * @return int the number of deleted category entries
 	 */
-	protected function deleteCategoryEntries(KalturaCategoryEntryFilter $filter)
+	protected function deleteCategoryEntries(VidiunCategoryEntryFilter $filter)
 	{
-		$filter->orderBy = KalturaCategoryEntryOrderBy::CREATED_AT_ASC;
+		$filter->orderBy = VidiunCategoryEntryOrderBy::CREATED_AT_ASC;
 		
-		$categoryEntriesList = KBatchBase::$kClient->categoryEntry->listAction($filter, $this->pager);
+		$categoryEntriesList = VBatchBase::$vClient->categoryEntry->listAction($filter, $this->pager);
 		if(!$categoryEntriesList->objects || !count($categoryEntriesList->objects))
 			return 0;
 			
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($categoryEntriesList->objects as $categoryEntry)
 		{
-			/* @var $categoryEntry KalturaCategoryEntry */
-			KBatchBase::$kClient->categoryEntry->delete($categoryEntry->entryId, $categoryEntry->categoryId);
+			/* @var $categoryEntry VidiunCategoryEntry */
+			VBatchBase::$vClient->categoryEntry->delete($categoryEntry->entryId, $categoryEntry->categoryId);
 		}
-		$results = KBatchBase::$kClient->doMultiRequest();
+		$results = VBatchBase::$vClient->doMultiRequest();
 		foreach($results as $index => $result)
 			if(is_array($result) && isset($result['code']))
 				unset($results[$index]);

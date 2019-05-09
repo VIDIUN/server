@@ -3,7 +3,7 @@
  * @package plugins.quiz
  * @subpackage model.filters
  */
-class kQuizAdvancedFilter extends AdvancedSearchFilterItem
+class vQuizAdvancedFilter extends AdvancedSearchFilterItem
 {
 	/**
 	 * @var boolean
@@ -29,7 +29,7 @@ class kQuizAdvancedFilter extends AdvancedSearchFilterItem
 	/* (non-PHPdoc)
 	 * @see AdvancedSearchFilterItem::applyCondition()
 	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
 		$query->addCondition(entryIndex::DYNAMIC_ATTRIBUTES . '.' .  QuizPlugin::getDynamicAttributeName() . ' = ' . ( $this->isQuiz ?  '1' : '0' ) );
 	}

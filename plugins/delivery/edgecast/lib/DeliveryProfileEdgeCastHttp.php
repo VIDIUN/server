@@ -33,7 +33,7 @@ class DeliveryProfileEdgeCastHttp extends DeliveryProfileHttp
 		$url = preg_replace('/^mp4:(\/)*/', 'mp4:', $url);
 		if ($this->params->getFormat() == PlaybackProtocol::HTTP)
 		{
-    		$syncKey = kFileSyncUtils::getKeyForFileSync($fileSync);
+    		$syncKey = vFileSyncUtils::getKeyForFileSync($fileSync);
     		$url = $this->addEcSeek($url, $syncKey);
 		}
 		return $url;
@@ -63,7 +63,7 @@ class DeliveryProfileEdgeCastHttp extends DeliveryProfileHttp
         	    }
         	    else {
         	        // flv - add ec_seek value in bytes
-        	        $url .= '?ec_seek='.$this->getSeekFromBytes(kFileSyncUtils::getLocalFilePathForKey($syncKey));
+        	        $url .= '?ec_seek='.$this->getSeekFromBytes(vFileSyncUtils::getLocalFilePathForKey($syncKey));
         	    }
             }
         }        

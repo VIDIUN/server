@@ -3,12 +3,12 @@
 /**
  * Auto-generated class.
  * 
- * Used to search KalturaPlayableEntry attributes. Use KalturaPlayableEntryCompareAttribute enum to provide attribute name.
+ * Used to search VidiunPlayableEntry attributes. Use VidiunPlayableEntryCompareAttribute enum to provide attribute name.
 */
-class KalturaPlayableEntryCompareAttributeCondition extends KalturaSearchComparableAttributeCondition
+class VidiunPlayableEntryCompareAttributeCondition extends VidiunSearchComparableAttributeCondition
 {
 	/**
-	 * @var KalturaPlayableEntryCompareAttribute
+	 * @var VidiunPlayableEntryCompareAttribute
 	 */
 	public $attribute;
 

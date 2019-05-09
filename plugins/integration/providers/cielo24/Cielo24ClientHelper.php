@@ -36,7 +36,7 @@ class Cielo24ClientHelper
 	
 	public function __construct($username, $password, $baseUrl = null, $additionalParams = array())
 	{
-		$cielo24ParamsMap = kConf::get('cielo24','integration');
+		$cielo24ParamsMap = vConf::get('cielo24','integration');
 		if(!is_null($baseUrl))
 		{
 			$this->baseEndpointUrl = $baseUrl;
@@ -131,7 +131,7 @@ class Cielo24ClientHelper
 	
 	private function sendAPICall($url, $noDecoding = false)
 	{
-		KalturaLog::debug("sending API call - $url");
+		VidiunLog::debug("sending API call - $url");
 
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -140,7 +140,7 @@ class Cielo24ClientHelper
 
 		if(($errString = curl_error($ch)) !== '' || ($errNum = curl_errno($ch)) !== 0)
 		{
-			KalturaLog::err('problem with curl - ' . $errString . ' error num - ' . $errNum);
+			VidiunLog::err('problem with curl - ' . $errString . ' error num - ' . $errNum);
 			curl_close($ch);
 			throw new Exception("curl error with url " . $url);
 		}
@@ -157,12 +157,12 @@ class Cielo24ClientHelper
 			
 			if (isset($result->ErrorType))
 			{
-				KalturaLog::err('Cielo24 API has returned an error: ' . $result->ErrorType . '::' . $result->ErrorComment);
+				VidiunLog::err('Cielo24 API has returned an error: ' . $result->ErrorType . '::' . $result->ErrorComment);
 				throw new Exception($result->ErrorType . '::' . $result->ErrorComment);
 			}
 		}
 		
-		KalturaLog::debug('result is - ' . var_dump($result));
+		VidiunLog::debug('result is - ' . var_dump($result));
 		curl_close($ch);
 		return $result;
 	}
@@ -254,7 +254,7 @@ class Cielo24ClientHelper
 
 	public function getLanguageConstantName($language)
 	{
-		$languagesReflectionClass = new ReflectionClass('KalturaLanguage');
+		$languagesReflectionClass = new ReflectionClass('VidiunLanguage');
 		$languageNames = $languagesReflectionClass->getConstants();
 		$languageName = array_search($language, $languageNames);
 

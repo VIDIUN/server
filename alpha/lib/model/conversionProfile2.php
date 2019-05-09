@@ -13,7 +13,7 @@ class conversionProfile2 extends BaseconversionProfile2 implements ISyncableFile
 	const CONVERSION_PROFILE_NONE = -1;
 	
 	const CONVERSION_PROFILE_2_CREATION_MODE_MANUAL = 1;
-	const CONVERSION_PROFILE_2_CREATION_MODE_KMC = 2;
+	const CONVERSION_PROFILE_2_CREATION_MODE_VMC = 2;
 	const CONVERSION_PROFILE_2_CREATION_MODE_AUTOMATIC = 3;
 	const CONVERSION_PROFILE_2_CREATION_MODE_AUTOMATIC_BYPASS_FLV = 4;
 	
@@ -23,7 +23,7 @@ class conversionProfile2 extends BaseconversionProfile2 implements ISyncableFile
 	const DEFAULT_REPLACEMENT_OPTIONS = "defaultReplacementOptions";
 
 	const CUSTOM_DATA_DEFAULT_AUDIO_LANG = "default_audio_lang";
-	const SKIP_VALIDATION = 'KALTURA_skipvalidation';
+	const SKIP_VALIDATION = 'VIDIUN_skipvalidation';
 	
 	private $xsl;
 	private $mediaInfoXsl;
@@ -114,14 +114,14 @@ class conversionProfile2 extends BaseconversionProfile2 implements ISyncableFile
 	
 	public function incrementXslVersion()
 	{
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getVersion(), FileSyncObjectType::CONVERSION_PROFILE, self::FILE_SYNC_MRSS_XSL);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getVersion(), FileSyncObjectType::CONVERSION_PROFILE, self::FILE_SYNC_MRSS_XSL);
 		
 		$this->putInCustomData("xslVersion", $newVersion);
 	}
 	
 	public function incrementMediaInfoXslVersion()
 	{
-		$newVersion = kFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getMediaInfoXslVersion(), FileSyncObjectType::CONVERSION_PROFILE, self::FILE_SYNC_MEDIAINFO_XSL);
+		$newVersion = vFileSyncUtils::calcObjectNewVersion($this->getId(), $this->getMediaInfoXslVersion(), FileSyncObjectType::CONVERSION_PROFILE, self::FILE_SYNC_MEDIAINFO_XSL);
 		
 		$this->putInCustomData("mediaInfoXslVersion", $newVersion);
 	}
@@ -152,7 +152,7 @@ class conversionProfile2 extends BaseconversionProfile2 implements ISyncableFile
 			return $this->xsl;
 
 		$key = $this->getSyncKey(self::FILE_SYNC_MRSS_XSL);
-		$this->xsl = kFileSyncUtils::file_get_contents($key, true, false);
+		$this->xsl = vFileSyncUtils::file_get_contents($key, true, false);
 		return $this->xsl;
 	}
 	
@@ -165,7 +165,7 @@ class conversionProfile2 extends BaseconversionProfile2 implements ISyncableFile
 			return $this->mediaInfoXsl;
 
 		$key = $this->getSyncKey(self::FILE_SYNC_MEDIAINFO_XSL);
-		$this->mediaInfoXsl = kFileSyncUtils::file_get_contents($key, true, false);
+		$this->mediaInfoXsl = vFileSyncUtils::file_get_contents($key, true, false);
 		return $this->mediaInfoXsl;
 	}
 
@@ -252,7 +252,7 @@ class conversionProfile2 extends BaseconversionProfile2 implements ISyncableFile
 		$ret = parent::postUpdate($con);
 		
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		return $ret;
 	}
@@ -270,7 +270,7 @@ class conversionProfile2 extends BaseconversionProfile2 implements ISyncableFile
 			$existingConversionProfile = conversionProfile2Peer::retrieveByPartnerIdAndSystemName($this->getPartnerId(), $this->getSystemName(), $this->getType());
 			if ($existingConversionProfile)
 			{
-				throw new kCoreException("Conversion profile with system name [" . $this->getSystemName() . "] already exists");
+				throw new vCoreException("Conversion profile with system name [" . $this->getSystemName() . "] already exists");
 			}
 		}
 		

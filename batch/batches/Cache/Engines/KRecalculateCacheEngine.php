@@ -3,27 +3,27 @@
  * @package Scheduler
  * @subpackage RecalculateCache
  */
-abstract class KRecalculateCacheEngine
+abstract class VRecalculateCacheEngine
 {
 	/**
-	 * @param int $objectType of enum KalturaRecalculateCacheType
-	 * @return KRecalculateCacheEngine
+	 * @param int $objectType of enum VidiunRecalculateCacheType
+	 * @return VRecalculateCacheEngine
 	 */
 	public static function getInstance($objectType)
 	{
 		switch($objectType)
 		{
-			case KalturaRecalculateCacheType::RESPONSE_PROFILE:
-				return new KRecalculateResponseProfileCacheEngine();
+			case VidiunRecalculateCacheType::RESPONSE_PROFILE:
+				return new VRecalculateResponseProfileCacheEngine();
 				
 			default:
-				return KalturaPluginManager::loadObject('KRecalculateCacheEngine', $objectType);
+				return VidiunPluginManager::loadObject('VRecalculateCacheEngine', $objectType);
 		}
 	}
 	
 	/**
-	 * @param KalturaRecalculateCacheJobData $data
+	 * @param VidiunRecalculateCacheJobData $data
 	 * @return int cached objects count
 	 */
-	abstract public function recalculate(KalturaRecalculateCacheJobData $data);
+	abstract public function recalculate(VidiunRecalculateCacheJobData $data);
 }

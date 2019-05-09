@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDeliveryProfile extends KalturaObject implements IFilterable 
+class VidiunDeliveryProfile extends VidiunObject implements IFilterable 
 {
 	/**
 	 * The id of the Delivery
@@ -30,7 +30,7 @@ class KalturaDeliveryProfile extends KalturaObject implements IFilterable
 	
 	/**
 	 * Delivery type
-	 * @var KalturaDeliveryProfileType
+	 * @var VidiunDeliveryProfileType
 	 */
 	public $type;
 	
@@ -68,7 +68,7 @@ class KalturaDeliveryProfile extends KalturaObject implements IFilterable
 	public $updatedAt;
 	
 	/**
-	 * @var KalturaPlaybackProtocol
+	 * @var VidiunPlaybackProtocol
 	 * @filter eq
 	 */
 	public $streamerType;
@@ -86,25 +86,25 @@ class KalturaDeliveryProfile extends KalturaObject implements IFilterable
 	public $hostName;
 
 	/**
-	 * @var KalturaDeliveryStatus
+	 * @var VidiunDeliveryStatus
 	 * @filter eq,in
 	 */
 	public $status;
 	
 	/**
-	 * @var KalturaUrlRecognizer
+	 * @var VidiunUrlRecognizer
 	 */
 	public $recognizer;
 	
 	/**
-	 * @var KalturaUrlTokenizer
+	 * @var VidiunUrlTokenizer
 	 */
 	public $tokenizer;
 	
 	/**
 	 * True if this is the systemwide default for the protocol
 	 *
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 * @readonly
 	 */
 	public $isDefault;
@@ -136,7 +136,7 @@ class KalturaDeliveryProfile extends KalturaObject implements IFilterable
 	
 	/**
 	 * A filter that can be used to include additional assets in the URL (e.g. captions)
-	 * @var KalturaAssetFilter
+	 * @var VidiunAssetFilter
 	 */
 	public $supplementaryAssetsFilter;
 
@@ -173,13 +173,13 @@ class KalturaDeliveryProfile extends KalturaObject implements IFilterable
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = KalturaDeliveryProfileFactory::getCoreDeliveryProfileInstanceByType($this->type);
+			$dbObject = VidiunDeliveryProfileFactory::getCoreDeliveryProfileInstanceByType($this->type);
 	
 		parent::toObject($dbObject, $skip);
 		return $dbObject;
 	}
 	
-	public function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if(!$sourceObject)
 			return;
@@ -197,7 +197,7 @@ class KalturaDeliveryProfile extends KalturaObject implements IFilterable
 		if(is_null($dbObject))
 			return null;
 	
-		$apiObject = KalturaDeliveryProfileFactory::getRecognizerByType(get_class($dbObject));
+		$apiObject = VidiunDeliveryProfileFactory::getRecognizerByType(get_class($dbObject));
 		if(!is_null($apiObject))
 			$apiObject->fromObject($dbObject);
 		return $apiObject;
@@ -208,7 +208,7 @@ class KalturaDeliveryProfile extends KalturaObject implements IFilterable
 		if(is_null($dbObject))
 			return null;
 	
-		$apiObject = KalturaDeliveryProfileFactory::getTokenizerInstanceByType(get_class($dbObject));
+		$apiObject = VidiunDeliveryProfileFactory::getTokenizerInstanceByType(get_class($dbObject));
 		if(!is_null($apiObject))
 			$apiObject->fromObject($dbObject);
 		return $apiObject;

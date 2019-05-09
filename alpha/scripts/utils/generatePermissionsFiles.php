@@ -12,7 +12,7 @@ $criteria->add(PermissionPeer::PARTNER_ID, array(0, -1, -2, -3), Criteria::IN);
 $criteria->add(PermissionPeer::STATUS, PermissionStatus::ACTIVE);
 $criteria->addAscendingOrderByColumn(PermissionPeer::NAME);
 $permissions = PermissionPeer::doSelect($criteria);
-KalturaLog::debug("Found [" . count($permissions) . "] permissions");
+VidiunLog::debug("Found [" . count($permissions) . "] permissions");
 
 $files = array();
 $permissionArray = array();
@@ -50,7 +50,7 @@ foreach($permissions as $index => $permission)
 foreach($files as $file)
 	fclose($file);
 
-kMemoryManager::clearMemory();
+vMemoryManager::clearMemory();
 
 
 $criteria = new Criteria();
@@ -59,14 +59,14 @@ $criteria->add(PermissionItemPeer::TYPE, PermissionItemType::API_ACTION_ITEM);
 $criteria->addAscendingOrderByColumn(PermissionItemPeer::PARAM_1);
 $criteria->addAscendingOrderByColumn(PermissionItemPeer::PARAM_2);
 $permissionItems = PermissionItemPeer::doSelect($criteria);
-KalturaLog::debug("Found [" . count($permissionItems) . "] action permission items");
+VidiunLog::debug("Found [" . count($permissionItems) . "] action permission items");
 
 $file = null;
 $currentIndex = null;
 $currentService = null;
 foreach($permissionItems as $actionPermissionItem)
 {
-	/* @var $actionPermissionItem kApiActionPermissionItem */
+	/* @var $actionPermissionItem vApiActionPermissionItem */
 	
 	$service = $actionPermissionItem->getService();
 	$action = $actionPermissionItem->getAction();
@@ -126,7 +126,7 @@ foreach($permissionItems as $actionPermissionItem)
 if($file)
 	fclose($file);
 
-kMemoryManager::clearMemory();
+vMemoryManager::clearMemory();
 
 
 $criteria = new Criteria();
@@ -135,14 +135,14 @@ $criteria->add(PermissionItemPeer::TYPE, PermissionItemType::API_PARAMETER_ITEM)
 $criteria->addAscendingOrderByColumn(PermissionItemPeer::PARAM_1);
 $criteria->addAscendingOrderByColumn(PermissionItemPeer::PARAM_2);
 $permissionItems = PermissionItemPeer::doSelect($criteria);
-KalturaLog::debug("Found [" . count($permissionItems) . "] parameter permission items");
+VidiunLog::debug("Found [" . count($permissionItems) . "] parameter permission items");
 
 $file = null;
 $currentIndex = null;
 $currentObject = null;
 foreach($permissionItems as $parameterPermissionItem)
 {
-	/* @var $parameterPermissionItem kApiParameterPermissionItem */
+	/* @var $parameterPermissionItem vApiParameterPermissionItem */
 	
 	$object = $parameterPermissionItem->getObject();
 	$parameter = $parameterPermissionItem->getParameter();

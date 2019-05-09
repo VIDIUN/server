@@ -4,7 +4,7 @@
  * @subpackage api.errors
  */
 
-class KalturaQuizErrors extends KalturaErrors
+class VidiunQuizErrors extends VidiunErrors
 {
 	const PROVIDED_ENTRY_IS_ALREADY_A_QUIZ = "PROVIDED_ENTRY_IS_ALREADY_A_QUIZ;ENTRY_ID;Provided entry [@ENTRY_ID@] is already a quiz";
 	const PROVIDED_ENTRY_IS_NOT_A_QUIZ = "PROVIDED_ENTRY_IS_NOT_A_QUIZ;ENTRY_ID;Provided entry [@ENTRY_ID@] is not a quiz";

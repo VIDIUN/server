@@ -9,7 +9,7 @@ class myNYPLServices extends myBaseMediaSource implements IMediaSource
 	protected $source_name = "NYPL";
 //	protected $auth_method = self::AUTH_METHOD_NONE;
 	protected $search_in_user = false; 
-	protected $logo = "http://www.kaltura.com/images/wizard/logo_nypl.png";
+	protected $logo = "http://www.vidiun.com/images/wizard/logo_nypl.png";
 	protected $id = entry::ENTRY_MEDIA_SOURCE_NYPL;
 		
 	private static $NEED_MEDIA_INFO = "1";
@@ -42,7 +42,7 @@ class myNYPLServices extends myBaseMediaSource implements IMediaSource
 	}
 
 	
-	public function getAuthData( $kuserId, $userName, $password, $token)
+	public function getAuthData( $vuserId, $userName, $password, $token)
 	{
 		return ""; // empty value
 	}

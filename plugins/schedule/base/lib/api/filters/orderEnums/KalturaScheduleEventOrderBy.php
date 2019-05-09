@@ -3,7 +3,7 @@
  * @package plugins.schedule
  * @subpackage api.filters.enum
  */
-class KalturaScheduleEventOrderBy extends KalturaStringEnum
+class VidiunScheduleEventOrderBy extends VidiunStringEnum
 {
 	const SUMMARY_ASC = "+summary";
 	const SUMMARY_DESC = "-summary";

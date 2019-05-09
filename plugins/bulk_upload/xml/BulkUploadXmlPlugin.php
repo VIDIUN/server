@@ -2,17 +2,17 @@
 /**
  * @package plugins.bulkUploadXml
  */
-class BulkUploadXmlPlugin extends KalturaPlugin implements IKalturaBulkUpload, IKalturaVersion, IKalturaSchemaDefiner, IKalturaPending, IKalturaEventConsumers
+class BulkUploadXmlPlugin extends VidiunPlugin implements IVidiunBulkUpload, IVidiunVersion, IVidiunSchemaDefiner, IVidiunPending, IVidiunEventConsumers
 {
 	const PLUGIN_NAME = 'bulkUploadXml';
 	const PLUGIN_VERSION_MAJOR = 1;
 	const PLUGIN_VERSION_MINOR = 1;
 	const PLUGIN_VERSION_BUILD = 0;
 	
-	const BULKUPLOAD_XML_FLOW_MANAGER = "kBulkUploadXmlFlowManager";
+	const BULKUPLOAD_XML_FLOW_MANAGER = "vBulkUploadXmlFlowManager";
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -20,21 +20,21 @@ class BulkUploadXmlPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$drmDependency = new KalturaDependency(BulkUploadPlugin::PLUGIN_NAME);
+		$drmDependency = new VidiunDependency(BulkUploadPlugin::PLUGIN_NAME);
 		
 		return array($drmDependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaVersion::getVersion()
+	 * @see IVidiunVersion::getVersion()
 	 */
 	public static function getVersion()
 	{
-		return new KalturaVersion(
+		return new VidiunVersion(
 			self::PLUGIN_VERSION_MAJOR,
 			self::PLUGIN_VERSION_MINOR,
 			self::PLUGIN_VERSION_BUILD
@@ -42,7 +42,7 @@ class BulkUploadXmlPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	}
 		
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -59,20 +59,20 @@ class BulkUploadXmlPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		//Gets the right job for the engine
-		if($baseClass == 'kBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadXmlType::XML))
-			return new kBulkUploadXmlJobData();
+		if($baseClass == 'vBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadXmlType::XML))
+			return new vBulkUploadXmlJobData();
 		
 		 //Gets the right job for the engine
-		if($baseClass == 'KalturaBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadXmlType::XML))
-			return new KalturaBulkUploadXmlJobData();
+		if($baseClass == 'VidiunBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadXmlType::XML))
+			return new VidiunBulkUploadXmlJobData();
 		
 		//Gets the engine (only for clients)
-		if($baseClass == 'KBulkUploadEngine' && class_exists('KalturaClient') && $enumValue == KalturaBulkUploadType::XML)
+		if($baseClass == 'VBulkUploadEngine' && class_exists('VidiunClient') && $enumValue == VidiunBulkUploadType::XML)
 		{
 			list($job) = $constructorArgs;
 			return new BulkUploadEngineXml($job);
@@ -80,7 +80,7 @@ class BulkUploadXmlPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -102,11 +102,11 @@ class BulkUploadXmlPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 		if(is_null($xmlElement)){
 			
 			echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?><mrss><error>Log file is not ready: ".$batchJob->getMessage()."</error></mrss>";
-			kFile::closeDbConnections();
+			vFile::closeDbConnections();
 			exit;
 		}
 		echo $xmlElement->asXML();
-		kFile::closeDbConnections();
+		vFile::closeDbConnections();
 		exit;
 		
 	}
@@ -173,13 +173,13 @@ class BulkUploadXmlPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 				if(!$entry)
 					continue;
 					
-				kMrssManager::getEntryMrssXml($entry, $item);
+				vMrssManager::getEntryMrssXml($entry, $item);
 			}
 	    		
     		if(count($bulkUploadResults) < $criteria->getLimit())
     			break;
     			
-    		kMemoryManager::clearMemory();
+    		vMemoryManager::clearMemory();
     		$criteria->setOffset($handledResults);
 			$bulkUploadResults = BulkUploadResultPeer::doSelect($criteria);
 		}
@@ -194,12 +194,12 @@ class BulkUploadXmlPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	private static function stringToSafeXml($string)
 	{
 		$string = @iconv('utf-8', 'utf-8', $string);
-		$safe = kString::xmlEncode($string);
+		$safe = vString::xmlEncode($string);
 		return $safe;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUpload::getFileExtension()
+	 * @see IVidiunBulkUpload::getFileExtension()
 	 */
 	public static function getFileExtension($enumValue)
 	{
@@ -208,11 +208,11 @@ class BulkUploadXmlPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaDefiner::getPluginSchema()
+	 * @see IVidiunSchemaDefiner::getPluginSchema()
 	 */
 	public static function getPluginSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if($coreType == self::getSchemaTypeCoreValue(XmlSchemaType::BULK_UPLOAD_XML))
 			return new SimpleXMLElement(file_get_contents(dirname(__FILE__) . '/xml/ingestion.xsd'));
 		if($coreType == self::getSchemaTypeCoreValue(XmlSchemaType::BULK_UPLOAD_RESULT_XML))
@@ -227,8 +227,8 @@ class BulkUploadXmlPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	 */
 	public static function getBulkUploadTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BulkUploadType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BulkUploadType', $value);
 	}
 		
 	/**
@@ -236,8 +236,8 @@ class BulkUploadXmlPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	 */
 	public static function getSchemaTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('SchemaType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('SchemaType', $value);
 	}
 	
 	/**
@@ -245,7 +245,7 @@ class BulkUploadXmlPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	public static function getEventConsumers()

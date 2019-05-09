@@ -1,19 +1,19 @@
 <?php
 /**
- * base class for the real KBulkUploadEngine in the system 
+ * base class for the real VBulkUploadEngine in the system 
  * 
  * @package Scheduler
  * @subpackage BulkUpload
  * @abstract
  */
-abstract class KBulkUploadEngine
+abstract class VBulkUploadEngine
 {
 	public static $actionsMap = array(
-		KalturaBulkUploadAction::ADD => 'add',
-		KalturaBulkUploadAction::UPDATE => 'update',
-		KalturaBulkUploadAction::DELETE => 'delete',
-		KalturaBulkUploadAction::REPLACE => 'replace',
-		KalturaBulkUploadAction::TRANSFORM_XSLT => 'transformxslt'
+		VidiunBulkUploadAction::ADD => 'add',
+		VidiunBulkUploadAction::UPDATE => 'update',
+		VidiunBulkUploadAction::DELETE => 'delete',
+		VidiunBulkUploadAction::REPLACE => 'replace',
+		VidiunBulkUploadAction::TRANSFORM_XSLT => 'transformxslt'
 	);
 	
 	const BULK_UPLOAD_DATE_FORMAT = '%Y-%m-%d';
@@ -56,13 +56,13 @@ abstract class KBulkUploadEngine
 	
 	/**
 	 * 
-	 * @var KalturaBatchJob
+	 * @var VidiunBatchJob
 	 */
 	protected $job = null;
 	
 	/**
 	 * 
-	 * @var KalturaBulkUploadJobData
+	 * @var VidiunBulkUploadJobData
 	 */
 	protected $data = null;
 
@@ -85,7 +85,7 @@ abstract class KBulkUploadEngine
 		
 		if(!in_array($value, $constants))
 		{
-			KalturaLog::info("Value [$value] not found in class [$class] constants [" . print_r($constants, true) . "]");
+			VidiunLog::info("Value [$value] not found in class [$class] constants [" . print_r($constants, true) . "]");
 			return false;
 		}
 		
@@ -104,7 +104,7 @@ abstract class KBulkUploadEngine
 //			if($ret)
 //			{
 //			    $date = gmmktime($ret["tm_hour"], $ret["tm_min"], $ret["tm_sec"], $ret["tm_mon"], $ret["tm_mday"], $ret["tm_year"]);
-//			    KalturaLog::debug("Formated Date [$date] " . date('Y-m-d\TH:i:s', $date));
+//			    VidiunLog::debug("Formated Date [$date] " . date('Y-m-d\TH:i:s', $date));
 //				return $date;
 //			}
 //		}
@@ -162,11 +162,11 @@ abstract class KBulkUploadEngine
 			}
 		}
 		
-		KalturaLog::debug("gmmktime($hour, $minute, $second, $month, $day, $year)");
+		VidiunLog::debug("gmmktime($hour, $minute, $second, $month, $day, $year)");
 		$ret = gmmktime($hour, $minute, $second, $month, $day, $year);
 		if($ret)
 		{
-			KalturaLog::debug("Formated Date [$ret] " . gmdate('Y-m-d\TH:i:s', $ret));
+			VidiunLog::debug("Formated Date [$ret] " . gmdate('Y-m-d\TH:i:s', $ret));
 			return $ret;
 		}
 		return null;
@@ -178,7 +178,7 @@ abstract class KBulkUploadEngine
 	 */
 	protected function isUrl($str)
 	{
-		$str = KCurlWrapper::encodeUrl($str);
+		$str = VCurlWrapper::encodeUrl($str);
 
 		$redundant_url_chars = array("_");
 
@@ -229,16 +229,16 @@ abstract class KBulkUploadEngine
 	
 
 	/**
-	 * @param KalturaBatchJob $job
+	 * @param VidiunBatchJob $job
 	 */
-	public function __construct(KalturaBatchJob $job)
+	public function __construct(VidiunBatchJob $job)
 	{
-		if(KBatchBase::$taskConfig->params->multiRequestSize)
-			$this->multiRequestSize = KBatchBase::$taskConfig->params->multiRequestSize;
-		if(KBatchBase::$taskConfig->params->maxRecords)
-			$this->maxRecords = KBatchBase::$taskConfig->params->maxRecords;
-		if(KBatchBase::$taskConfig->params->maxRecordsEachRun)
-			$this->maxRecordsEachRun = KBatchBase::$taskConfig->params->maxRecordsEachRun;
+		if(VBatchBase::$taskConfig->params->multiRequestSize)
+			$this->multiRequestSize = VBatchBase::$taskConfig->params->multiRequestSize;
+		if(VBatchBase::$taskConfig->params->maxRecords)
+			$this->maxRecords = VBatchBase::$taskConfig->params->maxRecords;
+		if(VBatchBase::$taskConfig->params->maxRecordsEachRun)
+			$this->maxRecordsEachRun = VBatchBase::$taskConfig->params->maxRecordsEachRun;
 		
 		$this->job = $job;
 		$this->data = $job->data;
@@ -247,15 +247,15 @@ abstract class KBulkUploadEngine
 	}
 	
 	/**
-	 * Will return the proper engine depending on the type (KalturaBulkUploadType)
+	 * Will return the proper engine depending on the type (VidiunBulkUploadType)
 	 *
 	 * @param int $provider
-	 * @return KBulkUploadEngine
+	 * @return VBulkUploadEngine
 	 */
-	public static function getEngine($batchJobSubType, KalturaBatchJob $job)
+	public static function getEngine($batchJobSubType, VidiunBatchJob $job)
 	{
 		//Gets the engine from the plugin (as we moved all engines to the plugin)
-		return KalturaPluginManager::loadObject('KBulkUploadEngine', $batchJobSubType, array($job));
+		return VidiunPluginManager::loadObject('VBulkUploadEngine', $batchJobSubType, array($job));
 	}
 	
 	/**
@@ -268,7 +268,7 @@ abstract class KBulkUploadEngine
 	
 	
 	/**
-	 * @return KalturaBatchJob
+	 * @return VidiunBatchJob
 	 */
 	public function getJob()
 	{
@@ -276,7 +276,7 @@ abstract class KBulkUploadEngine
 	}
 
 	/**
-	 * @return KalturaBulkUploadJobData
+	 * @return VidiunBulkUploadJobData
 	 */
 	public function getData()
 	{
@@ -285,17 +285,17 @@ abstract class KBulkUploadEngine
 
 
 	/**
-	 * @param KalturaBatchJob $job
+	 * @param VidiunBatchJob $job
 	 */
-	public function setJob(KalturaBatchJob $job)
+	public function setJob(VidiunBatchJob $job)
 	{
 		$this->job = $job;
 	}
 
 	/**
-	 * @param KalturaBulkUploadJobData $data
+	 * @param VidiunBulkUploadJobData $data
 	 */
-	public function setData(KalturaBulkUploadJobData $data)
+	public function setData(VidiunBulkUploadJobData $data)
 	{
 		$this->data = $data;
 	}
@@ -318,13 +318,13 @@ abstract class KBulkUploadEngine
 	/**
 	 * 
 	 * Adds a bulk upload result
-	 * @param KalturaBulkUploadResult $bulkUploadResult
+	 * @param VidiunBulkUploadResult $bulkUploadResult
 	 */
-	protected function addBulkUploadResult(KalturaBulkUploadResult $bulkUploadResult)
+	protected function addBulkUploadResult(VidiunBulkUploadResult $bulkUploadResult)
 	{
 		$pluginsData = $bulkUploadResult->pluginsData;
 		$bulkUploadResult->pluginsData = null;
-		KBatchBase::$kClient->batch->addBulkUploadResult($bulkUploadResult, $pluginsData);
+		VBatchBase::$vClient->batch->addBulkUploadResult($bulkUploadResult, $pluginsData);
 	}
 
 	/**
@@ -335,12 +335,12 @@ abstract class KBulkUploadEngine
 	protected function getStartIndex()
 	{
 		try{
-			$result = KBatchBase::$kClient->batch->getBulkUploadLastResult($this->job->id);
+			$result = VBatchBase::$vClient->batch->getBulkUploadLastResult($this->job->id);
 			if($result)
 				return $result->lineIndex;
 		}
 		catch(Exception $e){
-			KalturaLog::notice("getBulkUploadLastResult: " . $e->getMessage());
+			VidiunLog::notice("getBulkUploadLastResult: " . $e->getMessage());
 		}
 		return 0;
 	}
@@ -359,21 +359,21 @@ abstract class KBulkUploadEngine
 	/**
 	 * 
 	 * Checks if the job was aborted (throws exception if so)
-	 * @throws KalturaBulkUploadAbortedException
+	 * @throws VidiunBulkUploadAbortedException
 	 */
 	protected function checkAborted()
 	{
-		if(KBatchBase::$kClient->isMultiRequest())
+		if(VBatchBase::$vClient->isMultiRequest())
 			return false;
 			
-		$batchJobResponse = KBatchBase::$kClient->jobs->getBulkUploadStatus($this->job->id);
+		$batchJobResponse = VBatchBase::$vClient->jobs->getBulkUploadStatus($this->job->id);
 		$updatedJob = $batchJobResponse->batchJob;
 		if($updatedJob->abort)
 		{
-			KalturaLog::info("job[{$this->job->id}] aborted");
+			VidiunLog::info("job[{$this->job->id}] aborted");
 				
 			//Throw exception and close the job from the outside 
-			throw new KalturaBulkUploadAbortedException("Job was aborted", KalturaBulkUploadAbortedException::JOB_ABORTED);
+			throw new VidiunBulkUploadAbortedException("Job was aborted", VidiunBulkUploadAbortedException::JOB_ABORTED);
 		}
 		return false;
 	}

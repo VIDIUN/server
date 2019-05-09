@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.objects
  */
-class KalturaCompareMetadataCondition extends KalturaCompareCondition
+class VidiunCompareMetadataCondition extends VidiunCompareCondition
 {
 	/**
 	 * May contain the full xpath to the field in three formats
@@ -43,7 +43,7 @@ class KalturaCompareMetadataCondition extends KalturaCompareCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCompareCondition::getMapBetweenObjects()
+	 * @see VidiunCompareCondition::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -51,7 +51,7 @@ class KalturaCompareMetadataCondition extends KalturaCompareCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage()
+	 * @see VidiunObject::validateForUsage()
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -62,12 +62,12 @@ class KalturaCompareMetadataCondition extends KalturaCompareCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kCompareMetadataCondition();
+			$dbObject = new vCompareMetadataCondition();
 			
 		return parent::toObject($dbObject, $skip);
 	}

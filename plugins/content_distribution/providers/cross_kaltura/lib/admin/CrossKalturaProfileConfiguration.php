@@ -1,9 +1,9 @@
 <?php 
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage admin
  */
-class Form_CrossKalturaProfileConfiguration extends Form_ConfigurableProfileConfiguration
+class Form_CrossVidiunProfileConfiguration extends Form_ConfigurableProfileConfiguration
 {
     const ELEMENT_METADATA_XPATHS_THAT_TRIGGER_UPDATE = 'metadata_xpaths_trigger_update';
     const ELEMENT_MAP_ACCESS_CONTROL_IDS = 'json_map_access_control_profile_ids';
@@ -19,10 +19,10 @@ class Form_CrossKalturaProfileConfiguration extends Form_ConfigurableProfileConf
     public function init()
 	{
 		parent::init();
-		$this->setDescription('Cross Kaltura Distribution Profile');
+		$this->setDescription('Cross Vidiun Distribution Profile');
 		$this->getView()->addBasePath(realpath(dirname(__FILE__)));
 		$this->addDecorator('ViewScript', array(
-			'viewScript' => 'cross-kaltura-distribution.phtml',
+			'viewScript' => 'cross-vidiun-distribution.phtml',
 			'placement' => 'APPEND'
 		));
 	}
@@ -30,7 +30,7 @@ class Form_CrossKalturaProfileConfiguration extends Form_ConfigurableProfileConf
 	protected function addProviderElements()
 	{
         $element = new Zend_Form_Element_Hidden('providerElements');
-		$element->setLabel('Cross Kaltura Specific Configuration');
+		$element->setLabel('Cross Vidiun Specific Configuration');
 		$element->setDecorators(array('ViewHelper', array('Label', array('placement' => 'append')), array('HtmlTag',  array('tag' => 'b'))));
 		
 		
@@ -173,11 +173,11 @@ class Form_CrossKalturaProfileConfiguration extends Form_ConfigurableProfileConf
 		
 		Infra_ClientHelper::impersonate($this->partnerId);
 		$client = Infra_ClientHelper::getClient();
-		$metadataPlugin = Kaltura_Client_Metadata_Plugin::get($client);
+		$metadataPlugin = Vidiun_Client_Metadata_Plugin::get($client);
 		
 		try
 		{
-			$metadataProfileFilter = new Kaltura_Client_Metadata_Type_MetadataProfileFilter();
+			$metadataProfileFilter = new Vidiun_Client_Metadata_Type_MetadataProfileFilter();
 			$metadataProfileFilter->partnerIdEqual = $this->partnerId;
 			$metadataProfileList = $metadataPlugin->metadataProfile->listAction($metadataProfileFilter);
 			if($metadataProfileList->totalCount)
@@ -210,19 +210,19 @@ class Form_CrossKalturaProfileConfiguration extends Form_ConfigurableProfileConf
 	
     public function getObject($objectType, array $properties, $add_underscore = true, $include_empty_fields = false)
 	{
-		/* @var $object Kaltura_Client_CrossKalturaDistribution_Type_CrossKalturaDistributionProfile */
+		/* @var $object Vidiun_Client_CrossVidiunDistribution_Type_CrossVidiunDistributionProfile */
 		$object = parent::getObject($objectType, $properties, $add_underscore, true);
         
-		// transform the regular metadataXpathsTriggerUpdate array to a KalturaStringValueArray
-		$xpathsKalturaArray = array();
+		// transform the regular metadataXpathsTriggerUpdate array to a VidiunStringValueArray
+		$xpathsVidiunArray = array();
 		$uniqXpaths = is_array($object->metadataXpathsTriggerUpdate) ? array_unique($object->metadataXpathsTriggerUpdate) : array();
 		foreach ($uniqXpaths as $xpath)
 		{
-		    $xpathStringValue = new Kaltura_Client_Type_StringValue();
+		    $xpathStringValue = new Vidiun_Client_Type_StringValue();
 		    $xpathStringValue->value = $xpath;
-		    $xpathsKalturaArray[] = $xpathStringValue;
+		    $xpathsVidiunArray[] = $xpathStringValue;
 		}
-		$object->metadataXpathsTriggerUpdate = $xpathsKalturaArray;
+		$object->metadataXpathsTriggerUpdate = $xpathsVidiunArray;
 
 		// transform source/target map fields
 		$object->mapAccessControlProfileIds = isset($properties[self::ELEMENT_MAP_ACCESS_CONTROL_IDS]) ? json_decode($properties[self::ELEMENT_MAP_ACCESS_CONTROL_IDS], true) : array();
@@ -238,10 +238,10 @@ class Form_CrossKalturaProfileConfiguration extends Form_ConfigurableProfileConf
 	
 	public function populateFromObject($object, $add_underscore = true)
 	{
-        /* @var Kaltura_Client_CrossKalturaDistribution_Type_CrossKalturaDistributionProfile $object */
+        /* @var Vidiun_Client_CrossVidiunDistribution_Type_CrossVidiunDistributionProfile $object */
 		parent::populateFromObject($object, $add_underscore);
 		
-		// transform the KalturaStringValue array to a normal array
+		// transform the VidiunStringValue array to a normal array
 		$xpathsArray = array();
 		foreach ($object->metadataXpathsTriggerUpdate as $xpathStringValue)
 		{

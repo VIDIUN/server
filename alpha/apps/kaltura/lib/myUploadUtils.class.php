@@ -22,10 +22,10 @@ class myUploadUtils
 			// add the file extension after the "." character
 			$fullPath = myContentStorage::getFSUploadsPath().$filename . ( $extra_id ? "_" . $extra_id : "" ) .".".$extension;
 
-			kFile::fullMkdir($fullPath);
+			vFile::fullMkdir($fullPath);
 			if ( ! move_uploaded_file($file_data['tmp_name'], $fullPath) )
 			{
-				KalturaLog::log ( "Error while uploading [$id] [$filename] [$hash] [$extra_id] " . print_r ( $file_data ,true ) ."\n->[$fullPath]" );
+				VidiunLog::log ( "Error while uploading [$id] [$filename] [$hash] [$extra_id] " . print_r ( $file_data ,true ) ."\n->[$fullPath]" );
 				return false;
 			}
 			@chmod ( $fullPath , 0777 );
@@ -38,12 +38,12 @@ class myUploadUtils
 
 	public static function uploadFileByToken ( $file_data , $token , $filename , $extra_id = null , $create_thumb = false )
 	{
-		KalturaLog::log( "Trace while uploading1 [$filename] [$token] [$extra_id] " . print_r ( $file_data ,true ) );
+		VidiunLog::log( "Trace while uploading1 [$filename] [$token] [$extra_id] " . print_r ( $file_data ,true ) );
 		
 		$origFilename = @$file_data['name'];
 		if ( ! $origFilename )
 		{
-			KalturaLog::log ( "Error while uploading, file does not have a name. [$filename] [$token] [$extra_id] " . print_r ( $file_data ,true ) . 
+			VidiunLog::log ( "Error while uploading, file does not have a name. [$filename] [$token] [$extra_id] " . print_r ( $file_data ,true ) . 
 				"\nerror: [" . @$file_data["error"] . "]" );			
 			return;
 		}
@@ -56,7 +56,7 @@ class myUploadUtils
 */
 		list ( $fullPath , $fullUrl )  = self::getUploadPathAndUrl ( $token , $filename , $extra_id , $extension );
 		
-		KalturaLog::log ( "Trace while uploading2 [$filename] [$token] [$extra_id] " . print_r ( $file_data ,true ) ."\n->[$fullPath]" );
+		VidiunLog::log ( "Trace while uploading2 [$filename] [$token] [$extra_id] " . print_r ( $file_data ,true ) ."\n->[$fullPath]" );
 
 		// start tracking what will hopefully become an entry 
 		$te = new TrackEntry();
@@ -67,7 +67,7 @@ class myUploadUtils
 		$te->setDescription(  __METHOD__ . ":" . __LINE__ );
 		TrackEntry::addTrackEntry( $te );
 		
-		kFile::fullMkdir($fullPath);
+		vFile::fullMkdir($fullPath);
 		if ( ! move_uploaded_file($file_data['tmp_name'], $fullPath) )
 		{
 			$err =  array ( 	"token" => $token , 
@@ -75,22 +75,22 @@ class myUploadUtils
 						"origFilename" => $origFilename ,
 						"error" => @$file_data["error"] , );
 
-			KalturaLog::log ( "Error while uploading [$token] [$filename] [$extra_id] [$create_thumb] " . print_r ( $file_data ,true ) ."\n->[$fullPath]" . "\n" 
+			VidiunLog::log ( "Error while uploading [$token] [$filename] [$extra_id] [$create_thumb] " . print_r ( $file_data ,true ) ."\n->[$fullPath]" . "\n" 
 				. print_r ( $err , true ) );			
 			return $err;
 		}
 		chmod ( $fullPath , 0777 );
 		
-		$upload_server_header = isset($_SERVER["HTTP_X_KALTURA_SERVER"]) ? $_SERVER["HTTP_X_KALTURA_SERVER"] : null;
+		$upload_server_header = isset($_SERVER["HTTP_X_VIDIUN_SERVER"]) ? $_SERVER["HTTP_X_VIDIUN_SERVER"] : null;
 		
 		$thumb_created = false;
 		
-		// if the file originated from a kaltura upload server we dont need a thumbnail (kuploader)
+		// if the file originated from a vidiun upload server we dont need a thumbnail (vuploader)
 		if ( $create_thumb && !$upload_server_header)
 		{
 			$thumbFullPath = self::getThumbnailPath ( $fullPath , ".jpg" );
-			kFile::fullMkdir( $thumbFullPath );
-			KalturaLog::log("Thumbnail full path [$thumbFullPath]");
+			vFile::fullMkdir( $thumbFullPath );
+			VidiunLog::log("Thumbnail full path [$thumbFullPath]");
 			
 			if(myContentStorage::fileExtAccepted ( $extension ))
 			{
@@ -108,7 +108,7 @@ class myUploadUtils
 		
 		if(!$thumb_created)
 		{
-			KalturaLog::log("Thumbnail not generated");
+			VidiunLog::log("Thumbnail not generated");
 			// in this case no thumbnail was created - don't extract false data 
 			$thumb_url = ""; 
 		}
@@ -126,7 +126,7 @@ class myUploadUtils
 	private static function getThumbnailPath ( $path , $new_extension = '' )
 	{
 		$fixed = str_replace ( "uploads/" , "uploads/thumbnail/thumb_" , $path ) ;
-		return kFile::getFileNameNoExtension( $fixed , true ). $new_extension;
+		return vFile::getFileNameNoExtension( $fixed , true ). $new_extension;
 	}
 	
 	public static function uploadJpeg ( $data, $id , $filename , $hash , $extra_id = null , $return_extended_data=false)
@@ -141,7 +141,7 @@ class myUploadUtils
 			// add the file extension after the "." character
 			$fullPath = myContentStorage::getFSUploadsPath().$filename . ( $extra_id ? "_" . $extra_id : "" ) .".jpg";
 
-			kFile::setFileContent($fullPath, $data);
+			vFile::setFileContent($fullPath, $data);
 			chmod ( $fullPath , 0777 );
 
 			if ( $return_extended_data )

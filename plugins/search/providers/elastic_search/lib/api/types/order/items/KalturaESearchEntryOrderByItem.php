@@ -3,10 +3,10 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchEntryOrderByItem extends KalturaESearchOrderByItem
+class VidiunESearchEntryOrderByItem extends VidiunESearchOrderByItem
 {
     /**
-     *  @var KalturaESearchEntryOrderByFieldName
+     *  @var VidiunESearchEntryOrderByFieldName
      */
     public $sortField;
 
@@ -15,21 +15,21 @@ class KalturaESearchEntryOrderByItem extends KalturaESearchOrderByItem
     );
 
     private static $map_field_enum = array(
-        KalturaESearchEntryOrderByFieldName::CREATED_AT => ESearchEntryOrderByFieldName::CREATED_AT,
-        KalturaESearchEntryOrderByFieldName::UPDATED_AT => ESearchEntryOrderByFieldName::UPDATED_AT,
-        KalturaESearchEntryOrderByFieldName::END_DATE => ESearchEntryOrderByFieldName::END_DATE,
-        KalturaESearchEntryOrderByFieldName::START_DATE => ESearchEntryOrderByFieldName::START_DATE,
-        KalturaESearchEntryOrderByFieldName::NAME => ESearchEntryOrderByFieldName::NAME,
-        KalturaESearchEntryOrderByFieldName::VIEWS => ESearchEntryOrderByFieldName::VIEWS,
-        KalturaESearchEntryOrderByFieldName::VOTES => ESearchEntryOrderByFieldName::VOTES,
-        KalturaESearchEntryOrderByFieldName::PLAYS => ESearchEntryOrderByFieldName::PLAYS,
-        KalturaESearchEntryOrderByFieldName::LAST_PLAYED_AT => ESearchEntryOrderByFieldName::LAST_PLAYED_AT,
-        KalturaESearchEntryOrderByFieldName::PLAYS_LAST_30_DAYS => ESearchEntryOrderByFieldName::PLAYS_LAST_30_DAYS,
-        KalturaESearchEntryOrderByFieldName::VIEWS_LAST_30_DAYS => ESearchEntryOrderByFieldName::VIEWS_LAST_30_DAYS,
-        KalturaESearchEntryOrderByFieldName::PLAYS_LAST_7_DAYS => ESearchEntryOrderByFieldName::PLAYS_LAST_7_DAYS,
-        KalturaESearchEntryOrderByFieldName::VIEWS_LAST_7_DAYS => ESearchEntryOrderByFieldName::VIEWS_LAST_7_DAYS,
-        KalturaESearchEntryOrderByFieldName::PLAYS_LAST_1_DAY => ESearchEntryOrderByFieldName::PLAYS_LAST_1_DAY,
-        KalturaESearchEntryOrderByFieldName::VIEWS_LAST_1_DAY => ESearchEntryOrderByFieldName::VIEWS_LAST_1_DAY,
+        VidiunESearchEntryOrderByFieldName::CREATED_AT => ESearchEntryOrderByFieldName::CREATED_AT,
+        VidiunESearchEntryOrderByFieldName::UPDATED_AT => ESearchEntryOrderByFieldName::UPDATED_AT,
+        VidiunESearchEntryOrderByFieldName::END_DATE => ESearchEntryOrderByFieldName::END_DATE,
+        VidiunESearchEntryOrderByFieldName::START_DATE => ESearchEntryOrderByFieldName::START_DATE,
+        VidiunESearchEntryOrderByFieldName::NAME => ESearchEntryOrderByFieldName::NAME,
+        VidiunESearchEntryOrderByFieldName::VIEWS => ESearchEntryOrderByFieldName::VIEWS,
+        VidiunESearchEntryOrderByFieldName::VOTES => ESearchEntryOrderByFieldName::VOTES,
+        VidiunESearchEntryOrderByFieldName::PLAYS => ESearchEntryOrderByFieldName::PLAYS,
+        VidiunESearchEntryOrderByFieldName::LAST_PLAYED_AT => ESearchEntryOrderByFieldName::LAST_PLAYED_AT,
+        VidiunESearchEntryOrderByFieldName::PLAYS_LAST_30_DAYS => ESearchEntryOrderByFieldName::PLAYS_LAST_30_DAYS,
+        VidiunESearchEntryOrderByFieldName::VIEWS_LAST_30_DAYS => ESearchEntryOrderByFieldName::VIEWS_LAST_30_DAYS,
+        VidiunESearchEntryOrderByFieldName::PLAYS_LAST_7_DAYS => ESearchEntryOrderByFieldName::PLAYS_LAST_7_DAYS,
+        VidiunESearchEntryOrderByFieldName::VIEWS_LAST_7_DAYS => ESearchEntryOrderByFieldName::VIEWS_LAST_7_DAYS,
+        VidiunESearchEntryOrderByFieldName::PLAYS_LAST_1_DAY => ESearchEntryOrderByFieldName::PLAYS_LAST_1_DAY,
+        VidiunESearchEntryOrderByFieldName::VIEWS_LAST_1_DAY => ESearchEntryOrderByFieldName::VIEWS_LAST_1_DAY,
     );
 
     public function getMapBetweenObjects()

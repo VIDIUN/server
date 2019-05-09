@@ -3,24 +3,24 @@
 define ( 'TESTME_GROUP_START' , 'TESTME_GROUP_START' );
 define ( 'TESTME_GROUP_END' , 'TESTME_GROUP_END' );
 
-$SERVICE_URL = "http://localhost/kaltura_dev.php/partnerservices2/";
+$SERVICE_URL = "http://localhost/vidiun_dev.php/partnerservices2/";
 
 function getLimited()
 {
 	$host = requestUtils::getHost();
 
 	// TODO - all static lists should move out of this function !!
-	if ( strpos ( $host , "www.kaltura.com" ) !== false  )
+	if ( strpos ( $host , "www.vidiun.com" ) !== false  )
 	{
 		$limited = true;
 	}
-	else if ( strpos ( $host , "sandbox.kaltura.com" ) !== false  )
+	else if ( strpos ( $host , "sandbox.vidiun.com" ) !== false  )
 	{
 		$limited = true;
 	}
 	else
 	{
-		$limited = kConf::get('testmeconsole_state');
+		$limited = vConf::get('testmeconsole_state');
 	}
 
 	return $limited;
@@ -34,12 +34,12 @@ function createSelect ( $id , $name , $default_value , $list_name , $pid_str = n
 	//global $arrays;
 	$download_file_formats = array ( "avi" => "avi" , "mp4" => "mp4", "mov" => "mov" , "flv" => "flv" , "mp3" => "mp3" , "3gp" => "3gp" , "original" => "original" );
 	$media_type_list = array ( "1" => "Video" , "2" => "Image" , "5" => "Audio", "11" => "Document", "12" => "Swf" , "-1" => "Automatic" );
-	$media_source_list = array ( "20" => "Kaltura" , "21" => "MyClips" , "23" => "KalturaPartner" , "26" => "KalturaKshow" , "27" => "KalturaPartnerKshow" , 
+	$media_source_list = array ( "20" => "Vidiun" , "21" => "MyClips" , "23" => "VidiunPartner" , "26" => "VidiunVshow" , "27" => "VidiunPartnerVshow" , 
 									"1" => "* File" , "2" => "* Webcam" , "3" => "Flickr" , "4" => "YouTube" , "5" => "* URL" , "7" => "MySpace" , "8" =>
 									"PhotoBucket" , "9" => "Jamendo" , "10" => "CCMixter" , "11" => "NYPL" , "13" => "MediaCommons" , "22" => "Archive.org" ,
 									"24"  => "MetaCafe" );
 	if( !$limited )								
-		$media_source_list = array ( "25" => "KalturaQa") + $media_source_list ;									
+		$media_source_list = array ( "25" => "VidiunQa") + $media_source_list ;									
 
 	$protocol = requestUtils::getRequestProtocol();
 	$current_server = str_replace("$protocol://", "", requestUtils::getRequestHost());
@@ -51,13 +51,13 @@ function createSelect ( $id , $name , $default_value , $list_name , $pid_str = n
 		$format_list = array ( "1" => "JSON" , "2" => "XML" , "3" => "PHP" );
 		if (strpos ( $host , "sandbox" ) !== false )
 		{
-			$service_url_list["sandbox.kaltura.com"] = "Sandbox";
-			$service_url_list["www.kaltura.com"] = "Kaltura";
+			$service_url_list["sandbox.vidiun.com"] = "Sandbox";
+			$service_url_list["www.vidiun.com"] = "Vidiun";
 		}
 		else
 		{
-			$service_url_list["www.kaltura.com"] = "Kaltura";
-			$service_url_list["sandbox.kaltura.com"] = "Sandbox";
+			$service_url_list["www.vidiun.com"] = "Vidiun";
+			$service_url_list["sandbox.vidiun.com"] = "Sandbox";
 		}
 		
 		$index_path_list = array ( "index.php" => "index"  ) ;
@@ -65,15 +65,15 @@ function createSelect ( $id , $name , $default_value , $list_name , $pid_str = n
 	else
 	{
 		$format_list = array ( "1" => "JSON" , "2" => "XML" , "3" => "PHP" , "4" => "PHP_ARR" , "5" => "PHP_OBJ" , "8" => "mRSS");
-		$service_url_list = array_merge ( $service_url_list , array ( "localhost" => "localhost" , "qac.kaltura.dev" => "qac" , "kelev.kaltura.com:9007" => "qac-external" , "kaldev.kaltura.com" => "kaldev" , "www.kaltura.com" => "Kaltura", "sandbox.kaltura.com" => "Sandbox" ) );
-		$index_path_list = array ( "index.php" => "index" , "kaltura_dev.php" => "debug" ) ;
+		$service_url_list = array_merge ( $service_url_list , array ( "localhost" => "localhost" , "qac.vidiun.dev" => "qac" , "velev.vidiun.com:9007" => "qac-external" , "viddev.vidiun.com" => "viddev" , "www.vidiun.com" => "Vidiun", "sandbox.vidiun.com" => "Sandbox" ) );
+		$index_path_list = array ( "index.php" => "index" , "vidiun_dev.php" => "debug" ) ;
 		
-		$service_url_list["debian.kaltura.dev/kalturaCE"] = "debian";
+		$service_url_list["debian.vidiun.dev/vidiunCE"] = "debian";
 		
 	}
 
-	$clazz_list = array ( "kshow" => "kshow" , "kuser" => "kuser" , "entry" => "entry" , "PuserKuser" => "PuserKuser" ) ;
-	$moderation_object_type = array ( "1" => "kshow" , "2" => "entry" , "3" => "kuser" , "" => "none");
+	$clazz_list = array ( "vshow" => "vshow" , "vuser" => "vuser" , "entry" => "entry" , "PuserVuser" => "PuserVuser" ) ;
+	$moderation_object_type = array ( "1" => "vshow" , "2" => "entry" , "3" => "vuser" , "" => "none");
 	$moderation_status = array ( "1" => "pending" , "2" => "allow" , "3" => "block" , "4" => "delete", "5" => "review");
 	$notification_status = array ( "" => "All" , "1" => "Pending" , "2" => "Sent" , "3" => "Error" , "4" => "Should Resend" );
 	$entry_status = array ( "" => "All" , 
@@ -91,11 +91,11 @@ function createSelect ( $id , $name , $default_value , $list_name , $pid_str = n
 	$entry_media_type_filter = array( "" => "All" ,"1" => "Video" , "2" => "Image" , "5" => "Audio" , "6" => "Roughcut" , "10" => "XML", "11" => "Document", "-1" => "Automatic");
 	
 	$widget_security_type = array ( "1" => "none" , "2" => "timehash" );
-	$entries_list_type = array ( "15" => "All" , "1" => "Kshow" , "2" => "Kuser" , "4" => "Roughcut" , "8" => "Episode" );
+	$entries_list_type = array ( "15" => "All" , "1" => "Vshow" , "2" => "Vuser" , "4" => "Roughcut" , "8" => "Episode" );
 
 	$boolean_type = array ( "true" => "true" , "false" => "false"  );
 	$boolean_int_type = array ( "" => "" , "1" => "true" , "0" => "false"  );
-	$display_in_search_filter = array ( "" => "All" , "0" => "Not displayed" , "1" => "In Partner"  , "2" => "Kaltura Network" );
+	$display_in_search_filter = array ( "" => "All" , "0" => "Not displayed" , "1" => "In Partner"  , "2" => "Vidiun Network" );
 	
 	$usage_graph_resolutions = array ( "days" => "days", "months" => "months" );
 	$months_list = array ( "1" => "1", 
@@ -111,7 +111,7 @@ function createSelect ( $id , $name , $default_value , $list_name , $pid_str = n
 		"11" => "11", 
 		"12" => "12" );
 
-	$obj_type_list = array ( "kshow" => "kshow" , "entry" => "entry" );
+	$obj_type_list = array ( "vshow" => "vshow" , "entry" => "entry" );
 	
 	// TODO - fix list for moderation_status
 	$entry_moderation_status = array ( "1" => "PENDING" , "2" => "ALLOW" , "3" => "BLOCK");
@@ -128,7 +128,7 @@ function createSelect ( $id , $name , $default_value , $list_name , $pid_str = n
 		"boolean_type" => $boolean_type ,
 		"boolean_int_type" => $boolean_int_type ,
 		"notification_status" => $notification_status ,
-		"notification_type" => array_merge ( array ( "" => "All" )  , kNotificationJobData::getNotificationTypeMap() ) ,
+		"notification_type" => array_merge ( array ( "" => "All" )  , vNotificationJobData::getNotificationTypeMap() ) ,
 		"entry_media_type" => $entry_media_type ,
 		"entry_media_type_filter" => $entry_media_type_filter ,
 		"entry_type" => $entry_type ,
@@ -158,8 +158,8 @@ function createSelect ( $id , $name , $default_value , $list_name , $pid_str = n
 		
 		"conversion_profile_type" => array ( "low" => "low" , "med" => "med" , "high" => "high" , "hd" => "HD" ) ,
 		"conversion_profile_aspect_ratio" => array ( "1" => "keep aspect ratio" , "2" => "keep original size" , "3" => "4:3" , "4" => "16:9" ) ,
-		"uiconf_obj_type" => array ( "1" => "kdp" , "2" => "kcw" , "3" => "kse" , "4" => "kae" , "6" => "app-studio" ) ,
-		"uiconf_obj_type_filter" => array ( "" => "ALL" , "1" => "kdp" , "2" => "kcw" , "3" => "kse" , "4" => "kae" , "6" => "app-studio" ) ,
+		"uiconf_obj_type" => array ( "1" => "vdp" , "2" => "vcw" , "3" => "vse" , "4" => "vae" , "6" => "app-studio" ) ,
+		"uiconf_obj_type_filter" => array ( "" => "ALL" , "1" => "vdp" , "2" => "vcw" , "3" => "vse" , "4" => "vae" , "6" => "app-studio" ) ,
 		"uiconf_filter_order_by" => array ( "" => "None" ,
 			"+id" => "id asc" , "-id" => "id desc" , 
 			"+created_at" => "created_at asc" , "-created_at" => "created_at desc",
@@ -222,7 +222,7 @@ function createInput ( $name , $type="text" , $size=7 , $default_value=null , $l
 
 	$copyToClipboard = "";
 	
-	if ($name == "ks" || $name == "ks2")
+	if ($name == "vs" || $name == "vs2")
 	{
 		$copyToClipboard = "<a href='#' onclick='copyToClipboard(\"$id\"); return false;'>(copy)</a>";
 	}
@@ -314,7 +314,7 @@ $limited = getLimited();
 <span style="font-family:arial; font-size:13px;">
 <form id="theform" method="post" action="<?php echo $SERVICE_URL ?>" target="target_frame">
 <div>
-<span style="background-color:yellow" >? See docs at: <a target="KalturaAPI" href="http://www.kaltura.com/wiki/index.php/KalturaAPI:main">KalturaAPI:main</a></span>
+<span style="background-color:yellow" >? See docs at: <a target="VidiunAPI" href="http://www.vidiun.com/wiki/index.php/VidiunAPI:main">VidiunAPI:main</a></span>
 <table style="font-family:arial; font-size:13px;">
 <?php
 	$fields1 = array (
@@ -324,9 +324,9 @@ $limited = getLimited();
 		array ( "partner_id" , "" , "5" , "1" ) ,
 		array ( "subp_id" , "" , "5" , "100") ,
 		array ( "uid" , "" , "10" , "2" ) ,
-		array ( "ks" , "" , "34" , "" ) ,
-		array ( "ks2" , "" , "34" , "" ) ,
-		array ( "kalsig" , "" , "34" , "" ) ,
+		array ( "vs" , "" , "34" , "" ) ,
+		array ( "vs2" , "" , "34" , "" ) ,
+		array ( "vidsig" , "" , "34" , "" ) ,
 	);
 	
 	if( ! $limited ) 
@@ -339,7 +339,7 @@ $limited = getLimited();
 
 	echo "<tr><td></td><td><input type='submit' name='submit' value='submit' onclick='return submitForm()'>" .
 			( $limited ? "" :
-			" <button onclick='return switchKs()'>switchKs</button>" . 
+			" <button onclick='return switchVs()'>switchVs</button>" . 
 			" <button style='color:#050;font-family:arial;font-size:11px; width:40px; border-style:none;' onMouseOver='over(this);' onMouseOut='out(this);' onclick='return save()'>save</button>".
 			" <button style='color:#050;font-family:arial;font-size:11px; width:45px; border-style:none;' onMouseOver='over(this);' onMouseOut='out(this);' onclick='return restore(true)'>restore</button>" ) . 
 		"</td></tr>";
@@ -419,16 +419,16 @@ $limited = getLimited();
 		<option value="deletedataentry">delete data entry</option>
 	</optgroup>
 
-	<optgroup label="kshow">
-		<option value="addkshow">add kshow</option>
-		<option value="clonekshow">clone kshow</option>
-		<option value="updatekshow">update kshow</option>
-		<option value="getkshow">get kshow</option>
-		<option value="listkshows">list kshows</option>
-		<option value="rankkshow">rank kshow</option>
-		<option value="deletekshow">delete kshow</option>
-		<option value="listmykshows">list MY kshows</option>
-		<option value="updatekshowowner">update kshow owner</option>
+	<optgroup label="vshow">
+		<option value="addvshow">add vshow</option>
+		<option value="clonevshow">clone vshow</option>
+		<option value="updatevshow">update vshow</option>
+		<option value="getvshow">get vshow</option>
+		<option value="listvshows">list vshows</option>
+		<option value="rankvshow">rank vshow</option>
+		<option value="deletevshow">delete vshow</option>
+		<option value="listmyvshows">list MY vshows</option>
+		<option value="updatevshowowner">update vshow owner</option>
 		<option value="getlastversionsinfo">get last versions info</option>
 	</optgroup>
 
@@ -445,7 +445,7 @@ $limited = getLimited();
 	<optgroup label="moderation">
 		<option value="addmoderation">add moderation</option>
 		<option value="reportentry">report entry</option>
-<?php // 		<option value="reportkshow">report kshow</option> ?>
+<?php // 		<option value="reportvshow">report vshow</option> ?>
 		<option value="listmoderations">list moderations</option>
 		<option value="handlemoderation">handle moderation</option>
 	</optgroup>
@@ -457,7 +457,7 @@ $limited = getLimited();
 		<option value="getdefaultwidget">get default widget</option>
 	</optgroup>
 
-	<optgroup label="keditor">
+	<optgroup label="veditor">
 		<option value="getallentries">get all entries</option>
 		<option value="getmetadata">get metadata</option>
 		<option value="setmetadata">set metadata</option>
@@ -633,9 +633,9 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 		),
 
 		"updateadminpassword|2" => array (
-			array ( "adminKuser_email" , "" , "30" ) ,
+			array ( "adminVuser_email" , "" , "30" ) ,
 			array ( "new_email" , "" , "30", null, null, "optional" ) ,
-			array ( "adminKuser_password" , "" , "30" ) ,
+			array ( "adminVuser_password" , "" , "30" ) ,
 			array ( "new_password" , "" , "30" ) ,
 		),
 		
@@ -718,7 +718,7 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 		),
 
 		"addentry|1" => array (
-			array ( "kshow_id" ),
+			array ( "vshow_id" ),
 			array ( "entry1_name" ),
 			array ( "entry1_type" , "select" , "1" , "1" , "entry_type" ) ,
 			array ( "entry1_source" , "select" , "2" , "20" , "media_source" ) ,
@@ -745,7 +745,7 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 		) ,
 		
 		"addroughcutentry|1" => array (
-			array ( "kshow_id" ),
+			array ( "vshow_id" ),
 			array ( "entry_name" ),
 			array ( "entry_tags" , "" , "20" ),
 			array ( "entry_description" , "" , "20" ),
@@ -766,8 +766,8 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 		"getadmintags|2" => array (
 		),
 		
-		"getkshow|1" => array (
-			array ( "kshow_id" ),
+		"getvshow|1" => array (
+			array ( "vshow_id" ),
 			array ( "detailed" , "" , "1" ),
 		),
 
@@ -796,72 +796,72 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 		),
 		
 		
-		"clonekshow|2" => array (
-			array ( "kshow_id" ),
+		"clonevshow|2" => array (
+			array ( "vshow_id" ),
 			array ( "detailed" , "" , "1" ),
 		),
 
-		"addkshow|1" => array (
-			array ( "kshow_name" ),
-			array ( "kshow_description" , null , "20"  ) ,
-			array ( "kshow_tags" ),
-//			array ( "kshow_mediaType" , "select" , "2" , "" , "media_type" ) ,
-			array ( "kshow_indexedCustomData3" , null , 20 ) ,
-			array ( "kshow_customData" , null , 20 ) ,
-			array ( "kshow_groupId" , null , 20 ) ,
-			array ( "kshow_permissions" , "" , 20  ) ,
-			array ( "kshow_partnerData" , "" , 20  ) ,
-			array ( "kshow_allowQuickEdit" , "select" , "" , "1" , "boolean_int_type" ) ,
+		"addvshow|1" => array (
+			array ( "vshow_name" ),
+			array ( "vshow_description" , null , "20"  ) ,
+			array ( "vshow_tags" ),
+//			array ( "vshow_mediaType" , "select" , "2" , "" , "media_type" ) ,
+			array ( "vshow_indexedCustomData3" , null , 20 ) ,
+			array ( "vshow_customData" , null , 20 ) ,
+			array ( "vshow_groupId" , null , 20 ) ,
+			array ( "vshow_permissions" , "" , 20  ) ,
+			array ( "vshow_partnerData" , "" , 20  ) ,
+			array ( "vshow_allowQuickEdit" , "select" , "" , "1" , "boolean_int_type" ) ,
 			array ( "allow_duplicate_names" , null , 1  ) ,
 //			array ( "metadata" , null , 1  ) ,
 			array ( "detailed" , null , 1  ) ,
 		) ,
 
 
-		"updatekshow|1" => array (
-			array ( "kshow_id" ),
-			array ( "kshow_name" ),
-			array ( "kshow_description" , null , "20"  ) ,
-			array ( "kshow_tags" ),
-			array ( "kshow_mediaType" , "select" , "2" , "" , "media_type" ) ,
-//			array ( "kshow_indexedCustomData3" , null , 20 ) ,
-			array ( "kshow_customData" , null , 20 ) ,
-			array ( "kshow_groupId" , null , 20 ) ,
-			array ( "kshow_permissions" , "" , 20  ) ,
-			array ( "kshow_partnerData" , "" , 20  ) ,
+		"updatevshow|1" => array (
+			array ( "vshow_id" ),
+			array ( "vshow_name" ),
+			array ( "vshow_description" , null , "20"  ) ,
+			array ( "vshow_tags" ),
+			array ( "vshow_mediaType" , "select" , "2" , "" , "media_type" ) ,
+//			array ( "vshow_indexedCustomData3" , null , 20 ) ,
+			array ( "vshow_customData" , null , 20 ) ,
+			array ( "vshow_groupId" , null , 20 ) ,
+			array ( "vshow_permissions" , "" , 20  ) ,
+			array ( "vshow_partnerData" , "" , 20  ) ,
 			array ( "allow_duplicate_names" , null , 1  ) ,
 			array ( "detailed" , null , 1  ) ,
 		) ,
 
-		"updatekshowowner|2" => array (
-			array ( "kshow_id" ),
+		"updatevshowowner|2" => array (
+			array ( "vshow_id" ),
 			array ( "user_id" ),
 			array ( "detailed" , null , 1  ) ,
 		) , 
 				
-		"deletekshow|2" => array (
-			array ( "kshow_id" ),
+		"deletevshow|2" => array (
+			array ( "vshow_id" ),
 		),
 
-		"rankkshow|1" => array (
-			array ( "kshow_id" ),
+		"rankvshow|1" => array (
+			array ( "vshow_id" ),
 			array ( "rank" , null , 1),
 		),
 
 		"getlastversionsinfo|1" => array (
-			array ( "kshow_id" ),
+			array ( "vshow_id" ),
 			array ( "number_of_versions" , null , 1),
 		),
 		
 /*
 		"generatewidget|2" => array (
-			array ( "kshow_id" ),
-			array ( "kshow_name" ),
-			array ( "kshow_description" , null , "20"  ) ,
+			array ( "vshow_id" ),
+			array ( "vshow_name" ),
+			array ( "vshow_description" , null , "20"  ) ,
 		),
 */
 		"viewwidget|2" => array (
-			array ( "kshow_id" ),
+			array ( "vshow_id" ),
 			array ( "entry_id" ),
 			array ( "widget_id" , null , "20"  ) ,
 			array ( "host" , "select" , "" , "" , "service_urls1" ),
@@ -873,13 +873,13 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 			array ( "secret" ,null , 34),
 			array ( "admin" ,null , 1),
 			array ( "expiry" ,null , 6 , "86400" , "Expiry in seconds"),
-			array ( "privileges" ,null , 34 , "edit:*" , null , " '*' = Will have edit privileges for all kshows"),
+			array ( "privileges" ,null , 34 , "edit:*" , null , " '*' = Will have edit privileges for all vshows"),
 		),
 
 		"startwidgetsession|9" => array (
 			array ( "widget_id" ,null , 34),
 			array ( "expiry" ,null , 6 , "86400" , "Expiry in seconds"),
-//			array ( "privileges" ,null , 34 , "edit:*" , null , " '*' = Will have edit privileges for all kshows"),
+//			array ( "privileges" ,null , 34 , "edit:*" , null , " '*' = Will have edit privileges for all vshows"),
 		),
 
 
@@ -920,7 +920,7 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 			),
 
 		"reportuser|1" => array (
-			array ( "moderation_objectId" , "" , "7" , "" , null , "puser_id NOT kuser_id"),
+			array ( "moderation_objectId" , "" , "7" , "" , null , "puser_id NOT vuser_id"),
 //			array ( "moderation_objectType" , "select" , "2" , "2" , "moderation_object_type" ) ,
 			array ( "moderation_comments" , "" , "20" ),
 			array ( "moderation_reportCode" , "" , "2" ),
@@ -943,11 +943,11 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 			array ( "filename" , "" , null , "data" , null , "Same as addentry:filename1" ),
 		),
 
-		"listkshows|2" => array (
+		"listvshows|2" => array (
 			array ( "detailed" , "" , "1" ),
 			array ( "page" , "" , "2" , "1"),
 			array ( "page_size" , "" , "2" , "10" ),
-//			array ( "filter__eq_type", "select" , "2" , "1" , "kshow_type" ) ,
+//			array ( "filter__eq_type", "select" , "2" , "1" , "vshow_type" ) ,
 			array ( "filter__eq_id", null , "6" ),
 			array ( "filter__eq_producer_id", null , "6" ),
 			array ( "filter__like_tags", null , "20" ),
@@ -960,7 +960,7 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 			array ( "use_filter_puser_id" , "select" , "true" , "" , "boolean_type" ) ,
 		) ,
 
-		"listmykshows|1" => array (
+		"listmyvshows|1" => array (
 			array ( "detailed" , "" , "1" ),
 			array ( "page" , "" , "2" , "1"),
 			array ( "page_size" , "" , "2" , "10" ),
@@ -982,7 +982,7 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 			array ( "filter__eq_media_type", "select" , "2" , "1" , "entry_media_type_filter" ) ,
 			array ( "filter__in_media_type", "" , 10 ) ,			
 			array ( "filter__eq_user_id", null , "6" ),
-			array ( "filter__eq_kshow_id", null , "6" ),
+			array ( "filter__eq_vshow_id", null , "6" ),
 			array ( "filter__like_tags", null , "20" ),
 			array ( "filter__mlikeor_tags", null , "20" ),			
 			array ( "filter__mlikeand_tags", null , "20" ),
@@ -1048,7 +1048,7 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 		) ,
 		
 		"addpartnerentry|2" => array (
-			array ( "kshow_id" ),
+			array ( "vshow_id" ),
 			array ( "entry1_name" ),
 			array ( "entry1_source" , "select" , "2" , "20" , "media_source" ) ,
 			array ( "entry1_mediaType" , "select" , "2" , "" , "media_type" ) ,
@@ -1102,7 +1102,7 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 		),
 
 /*
-		"reportkshow|1" => array (
+		"reportvshow|1" => array (
 			array ( "moderation_objectId" , "" , "7" ),
 			array ( "moderation_comments" , "" , "20" ),
 		),
@@ -1138,7 +1138,7 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 
 		"addwidget|1" => array (
 			array ( "widget_sourceWidgetId" ),
-			array ( "widget_kshowId" ),
+			array ( "widget_vshowId" ),
 			array ( "widget_entryId" ),
 			array ( "widget_uiConfId" ),
 //			array ( "widget_customData" ),
@@ -1160,7 +1160,7 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 		"getuiconf|1" => $getuiconf,
 
 		"getallentries|1" => array (
-			array ( "kshow_id" ),
+			array ( "vshow_id" ),
 			array ( "entry_id" ),
 			array ( "version" ),
 			array ( "list_type", "select" , "1" , " " , "entries_list_type" ) ,
@@ -1168,13 +1168,13 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 		),
 
 		"getmetadata|1" => array (
-			array ( "kshow_id" ),
+			array ( "vshow_id" ),
 			array ( "entry_id" ),
 			array ( "version" ),
 		),
 
 		"setmetadata|1" => array (
-			array ( "kshow_id" ),
+			array ( "vshow_id" ),
 			array ( "entry_id" ),
 			array ( "xml" , "textarea"  , "4,30" ),
 			array ( "HasRoughCut" , "" , "1" ),
@@ -1182,7 +1182,7 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 		
 		"appendentrytoroughcut|1" => array (
 			array ( "entry_id" ),
-			array ( "kshow_id" ),
+			array ( "vshow_id" ),
 			array ( "show_entry_id" ),
 		),
 
@@ -1289,7 +1289,7 @@ require_once ( __DIR__ . "/testme_dataentries.php" );
 			array ( "filter__eq_media_type", "select" , "2" , "1" , "entry_media_type_filter" ) ,
 			array ( "filter__eq_id", null , "6" ),
 			array ( "filter__eq_user_id", null , "6" ),
-			array ( "filter__eq_kshow_id", null , "6" ),
+			array ( "filter__eq_vshow_id", null , "6" ),
 //			array ( "filter__like_name", null , "20" ),
 			array ( "filter__eq_indexed_custom_data_1", null , "20" ),
 			array ( "filter__gte_created_at", null , "20" ),

@@ -3,6 +3,6 @@
  * @package plugins.comcastMrssDistribution
  * @subpackage api.objects
  */
-class KalturaComcastMrssDistributionProvider extends KalturaDistributionProvider
+class VidiunComcastMrssDistributionProvider extends VidiunDistributionProvider
 {
 }

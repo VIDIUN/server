@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaCuePointBaseFilter extends KalturaRelatedFilter
+abstract class VidiunCuePointBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -76,18 +76,18 @@ abstract class KalturaCuePointBaseFilter extends KalturaRelatedFilter
 	public $idIn;
 
 	/**
-	 * @var KalturaCuePointType
+	 * @var VidiunCuePointType
 	 */
 	public $cuePointTypeEqual;
 
 	/**
-	 * @dynamicType KalturaCuePointType
+	 * @dynamicType VidiunCuePointType
 	 * @var string
 	 */
 	public $cuePointTypeIn;
 
 	/**
-	 * @var KalturaCuePointStatus
+	 * @var VidiunCuePointStatus
 	 */
 	public $statusEqual;
 
@@ -192,7 +192,7 @@ abstract class KalturaCuePointBaseFilter extends KalturaRelatedFilter
 	public $partnerSortValueLessThanOrEqual;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $forceStopEqual;
 

@@ -1,6 +1,6 @@
 <?php
 
-class kDropFolderAllocator
+class vDropFolderAllocator
 {
 	CONST TIME_IN_CACHE_FOR_LOCK = 5;
 
@@ -53,12 +53,12 @@ class kDropFolderAllocator
 	 */
 	public static function getDropFolder($tag, $maxTimeForWatch = 600)
 	{
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_BATCH_JOBS);
-		kApiCache::disableConditionalCache();
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_BATCH_JOBS);
+		vApiCache::disableConditionalCache();
 		
 		if(!$cache)
 		{
-			KalturaLog::err("Cache layer [" . kCacheManager::CACHE_TYPE_BATCH_JOBS . "] not found, drop folder will not be allocated");
+			VidiunLog::err("Cache layer [" . vCacheManager::CACHE_TYPE_BATCH_JOBS . "] not found, drop folder will not be allocated");
 			return null;
 		}
 			
@@ -74,7 +74,7 @@ class kDropFolderAllocator
 			if ($allocateDropFolder)
 			{
 				$dropFolderId = $allocateDropFolder->getId();
-				KalturaLog::debug("Allocate drop folder [$dropFolderId] for [$maxTimeForWatch] seconds with tag [$tag]");
+				VidiunLog::debug("Allocate drop folder [$dropFolderId] for [$maxTimeForWatch] seconds with tag [$tag]");
 				return $allocateDropFolder;
 			}
 		}
@@ -88,7 +88,7 @@ class kDropFolderAllocator
 	 */
 	public static function freeDropFolder($dropFolderId)
 	{
-		$lock = kLock::create(self::getLockKeyForDropFolder($dropFolderId));
+		$lock = vLock::create(self::getLockKeyForDropFolder($dropFolderId));
 		$lock->unlock();
 	}
 
@@ -101,14 +101,14 @@ class kDropFolderAllocator
 	 */
 	private static function lockDropFolder($dropFolderId, $maxTimeForWatch)
 	{
-		$lock = kLock::create(self::getLockKeyForDropFolder($dropFolderId));
+		$lock = vLock::create(self::getLockKeyForDropFolder($dropFolderId));
 		return $lock->lock(1, $maxTimeForWatch); // 1 is the lockGrabTimeout (seconds)
 	}
 
 
 	/**
 	 * will return DropFolder from cache if exist
-	 * @param kBaseCacheWrapper $cache
+	 * @param vBaseCacheWrapper $cache
 	 * @param array $dropFolders - of drop folders
 	 * @param string $indexKey
 	 * @param int $maxTimeForWatch
@@ -128,14 +128,14 @@ class kDropFolderAllocator
 			if (self::lockDropFolder($dropFolderToAllocate->getId(), $maxTimeForWatch))
 				return $dropFolderToAllocate;
 		}
-		KalturaLog::debug("Could not allocate any drop folder after [$numOfDropFolders] attempts");
+		VidiunLog::debug("Could not allocate any drop folder after [$numOfDropFolders] attempts");
 		return null;
 	}
 
 
 	/**
 	 * will  insert bulk of Drop folders to the cache from DB
-	 * @param kBaseCacheWrapper $cache
+	 * @param vBaseCacheWrapper $cache
 	 * @param string $tag
 	 *
 	 * @return array of DropFolder or null
@@ -148,11 +148,11 @@ class kDropFolderAllocator
 
 		$tagKey = self::getCacheKeyForDropFolderTag($tag);
 		$indexKey = self::getCacheKeyForIndex($tag);
-		$ttlForList = kConf::get("DropFolderListTTL");
+		$ttlForList = vConf::get("DropFolderListTTL");
 
 		$dropFoldersFromDB = DropFolderPeer::retrieveByTag($tag, true);
 		$numOfFolderFromDB = count($dropFoldersFromDB);
-		KalturaLog::info("Got $numOfFolderFromDB drop folder to insert to cache with tag [$tag] for [$ttlForList] seconds");
+		VidiunLog::info("Got $numOfFolderFromDB drop folder to insert to cache with tag [$tag] for [$ttlForList] seconds");
 
 		$indexKeyTtl = 86400 * 14; // day in secods * 14 days
 		$cache->add($indexKey, 0, $indexKeyTtl);

@@ -1,36 +1,36 @@
 <?php
 
-class kSearchUtils
+class vSearchUtils
 {
 	public static function getSkipRepetitiveUpdatesValue($repetitiveUpdatesConfigKey, $className)
 	{
-		$skipRepetitiveUpdatesConfig = kConf::getMap($repetitiveUpdatesConfigKey);
+		$skipRepetitiveUpdatesConfig = vConf::getMap($repetitiveUpdatesConfigKey);
 		
-		$updatesKey = strtolower(kCurrentContext::getCurrentPartnerId()."_".$className."_".kCurrentContext::$service."_".kCurrentContext::$action);
+		$updatesKey = strtolower(vCurrentContext::getCurrentPartnerId()."_".$className."_".vCurrentContext::$service."_".vCurrentContext::$action);
 		if(isset($skipRepetitiveUpdatesConfig[$updatesKey]))
 		{
 			return array($skipRepetitiveUpdatesConfig[$updatesKey], $updatesKey);
 		}
 		
-		$ksPuserId = kCurrentContext::$ks_uid;
-		if(isset($ksPuserId))
+		$vsPuserId = vCurrentContext::$vs_uid;
+		if(isset($vsPuserId))
 		{
 			//Replace dots with underscore since ini file do not support dont in the key name
-			$ksPuserId = str_replace(".", "_", $ksPuserId);
-			$updatesKey = strtolower($className."_".kCurrentContext::$service."_".kCurrentContext::$action."_".$ksPuserId);
+			$vsPuserId = str_replace(".", "_", $vsPuserId);
+			$updatesKey = strtolower($className."_".vCurrentContext::$service."_".vCurrentContext::$action."_".$vsPuserId);
 			if(isset($skipRepetitiveUpdatesConfig[$updatesKey]))
 			{
 				return array($skipRepetitiveUpdatesConfig[$updatesKey], $updatesKey);
 			}
 		}
 		
-		$updatesKey = strtolower($className."_".kCurrentContext::$service."_".kCurrentContext::$action);
+		$updatesKey = strtolower($className."_".vCurrentContext::$service."_".vCurrentContext::$action);
 		if(isset($skipRepetitiveUpdatesConfig[$updatesKey]))
 		{
 			return array($skipRepetitiveUpdatesConfig[$updatesKey], $updatesKey);
 		}
 		
-		$updatesKey = strtolower(kCurrentContext::getCurrentPartnerId()."_".$className);
+		$updatesKey = strtolower(vCurrentContext::getCurrentPartnerId()."_".$className);
 		if(isset($skipRepetitiveUpdatesConfig[$updatesKey]))
 		{
 			return array($skipRepetitiveUpdatesConfig[$updatesKey], $updatesKey);

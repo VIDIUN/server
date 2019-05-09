@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaTubeMogulSyndicationFeedFilter extends KalturaTubeMogulSyndicationFeedBaseFilter
+class VidiunTubeMogulSyndicationFeedFilter extends VidiunTubeMogulSyndicationFeedBaseFilter
 {
 }

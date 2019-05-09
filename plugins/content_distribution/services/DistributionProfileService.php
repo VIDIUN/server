@@ -6,7 +6,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.services
  */
-class DistributionProfileService extends KalturaBaseService
+class DistributionProfileService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -15,35 +15,35 @@ class DistributionProfileService extends KalturaBaseService
 		$this->applyPartnerFilterForClass('DistributionProfile');
 		
 		if(!ContentDistributionPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, ContentDistributionPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, ContentDistributionPlugin::PLUGIN_NAME);
 	}
 	
 	/**
 	 * Add new Distribution Profile
 	 * 
 	 * @action add
-	 * @param KalturaDistributionProfile $distributionProfile
-	 * @return KalturaDistributionProfile
+	 * @param VidiunDistributionProfile $distributionProfile
+	 * @return VidiunDistributionProfile
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROVIDER_NOT_FOUND
 	 */
-	function addAction(KalturaDistributionProfile $distributionProfile)
+	function addAction(VidiunDistributionProfile $distributionProfile)
 	{
 		$distributionProfile->validatePropertyMinLength("name", 1);
 		$distributionProfile->validatePropertyNotNull("providerType");
 					
 		if(is_null($distributionProfile->status))
-			$distributionProfile->status = KalturaDistributionProfileStatus::DISABLED;
+			$distributionProfile->status = VidiunDistributionProfileStatus::DISABLED;
 		
-		$providerType = kPluginableEnumsManager::apiToCore('DistributionProviderType', $distributionProfile->providerType);
+		$providerType = vPluginableEnumsManager::apiToCore('DistributionProviderType', $distributionProfile->providerType);
 		$dbDistributionProfile = DistributionProfilePeer::createDistributionProfile($providerType);
 		if(!$dbDistributionProfile)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROVIDER_NOT_FOUND, $distributionProfile->providerType);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROVIDER_NOT_FOUND, $distributionProfile->providerType);
 			
 		$distributionProfile->toInsertableObject($dbDistributionProfile);
 		$dbDistributionProfile->setPartnerId($this->impersonatedPartnerId);
 		$dbDistributionProfile->save();
 		
-		$distributionProfile = KalturaDistributionProfileFactory::createKalturaDistributionProfile($dbDistributionProfile->getProviderType());
+		$distributionProfile = VidiunDistributionProfileFactory::createVidiunDistributionProfile($dbDistributionProfile->getProviderType());
 		$distributionProfile->fromObject($dbDistributionProfile, $this->getResponseProfile());
 		return $distributionProfile;
 	}
@@ -53,16 +53,16 @@ class DistributionProfileService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id
-	 * @return KalturaDistributionProfile
+	 * @return VidiunDistributionProfile
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND
 	 */
 	function getAction($id)
 	{
 		$dbDistributionProfile = DistributionProfilePeer::retrieveByPK($id);
 		if (!$dbDistributionProfile)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $id);
 			
-		$distributionProfile = KalturaDistributionProfileFactory::createKalturaDistributionProfile($dbDistributionProfile->getProviderType());
+		$distributionProfile = VidiunDistributionProfileFactory::createVidiunDistributionProfile($dbDistributionProfile->getProviderType());
 		$distributionProfile->fromObject($dbDistributionProfile, $this->getResponseProfile());
 		return $distributionProfile;
 	}
@@ -72,15 +72,15 @@ class DistributionProfileService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id
-	 * @param KalturaDistributionProfile $distributionProfile
-	 * @return KalturaDistributionProfile
+	 * @param VidiunDistributionProfile $distributionProfile
+	 * @return VidiunDistributionProfile
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND
 	 */
-	function updateAction($id, KalturaDistributionProfile $distributionProfile)
+	function updateAction($id, VidiunDistributionProfile $distributionProfile)
 	{
 		$dbDistributionProfile = DistributionProfilePeer::retrieveByPK($id);
 		if (!$dbDistributionProfile)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $id);
 		
 		if ($distributionProfile->name !== null)
 			$distributionProfile->validatePropertyMinLength("name", 1);
@@ -88,7 +88,7 @@ class DistributionProfileService extends KalturaBaseService
 		$distributionProfile->toUpdatableObject($dbDistributionProfile);
 		$dbDistributionProfile->save();
 		
-		$distributionProfile = KalturaDistributionProfileFactory::createKalturaDistributionProfile($dbDistributionProfile->getProviderType());
+		$distributionProfile = VidiunDistributionProfileFactory::createVidiunDistributionProfile($dbDistributionProfile->getProviderType());
 		$distributionProfile->fromObject($dbDistributionProfile, $this->getResponseProfile());
 		return $distributionProfile;
 	}
@@ -98,20 +98,20 @@ class DistributionProfileService extends KalturaBaseService
 	 * 
 	 * @action updateStatus
 	 * @param int $id
-	 * @param KalturaDistributionProfileStatus $status
-	 * @return KalturaDistributionProfile
+	 * @param VidiunDistributionProfileStatus $status
+	 * @return VidiunDistributionProfile
 	 * @throws ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND
 	 */
 	function updateStatusAction($id, $status)
 	{
 		$dbDistributionProfile = DistributionProfilePeer::retrieveByPK($id);
 		if (!$dbDistributionProfile)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $id);
 		
 		$dbDistributionProfile->setStatus($status);
 		$dbDistributionProfile->save();
 		
-		$distributionProfile = KalturaDistributionProfileFactory::createKalturaDistributionProfile($dbDistributionProfile->getProviderType());
+		$distributionProfile = VidiunDistributionProfileFactory::createVidiunDistributionProfile($dbDistributionProfile->getProviderType());
 		$distributionProfile->fromObject($dbDistributionProfile, $this->getResponseProfile());
 		return $distributionProfile;
 	}
@@ -127,7 +127,7 @@ class DistributionProfileService extends KalturaBaseService
 	{
 		$dbDistributionProfile = DistributionProfilePeer::retrieveByPK($id);
 		if (!$dbDistributionProfile)
-			throw new KalturaAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::DISTRIBUTION_PROFILE_NOT_FOUND, $id);
 
 		$dbDistributionProfile->setStatus(DistributionProfileStatus::DELETED);
 		$dbDistributionProfile->save();
@@ -138,17 +138,17 @@ class DistributionProfileService extends KalturaBaseService
 	 * List all distribution providers
 	 * 
 	 * @action list
-	 * @param KalturaDistributionProfileFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaDistributionProfileListResponse
+	 * @param VidiunDistributionProfileFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunDistributionProfileListResponse
 	 */
-	function listAction(KalturaDistributionProfileFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunDistributionProfileFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaDistributionProfileFilter();
+			$filter = new VidiunDistributionProfileFilter();
 			
 		if (!$pager)
-		    $pager = new KalturaFilterPager();
+		    $pager = new VidiunFilterPager();
         
 		 //Change the pageSize to support clients who hae had all their dist. profiles listed in Eagle
 		$pager->pageSize = 100;
@@ -163,8 +163,8 @@ class DistributionProfileService extends KalturaBaseService
 		$pager->attachToCriteria($c);
 		$list = DistributionProfilePeer::doSelect($c);
 		
-		$response = new KalturaDistributionProfileListResponse();
-		$response->objects = KalturaDistributionProfileArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunDistributionProfileListResponse();
+		$response->objects = VidiunDistributionProfileArray::fromDbArray($list, $this->getResponseProfile());
 		$response->totalCount = $count;
 	
 		return $response;
@@ -172,11 +172,11 @@ class DistributionProfileService extends KalturaBaseService
 	
 	/**
 	 * @action listByPartner
-	 * @param KalturaPartnerFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaDistributionProfileListResponse
+	 * @param VidiunPartnerFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunDistributionProfileListResponse
 	 */
-	public function listByPartnerAction(KalturaPartnerFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listByPartnerAction(VidiunPartnerFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		$c = new Criteria();
 		
@@ -202,16 +202,16 @@ class DistributionProfileService extends KalturaBaseService
 		}
 			
 		if (is_null($pager))
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		$c->addDescendingOrderByColumn(DistributionProfilePeer::CREATED_AT);
 		
 		$totalCount = DistributionProfilePeer::doCount($c);
 		$pager->attachToCriteria($c);
 		$list = DistributionProfilePeer::doSelect($c);
-		$newList = KalturaDistributionProfileArray::fromDbArray($list, $this->getResponseProfile());
+		$newList = VidiunDistributionProfileArray::fromDbArray($list, $this->getResponseProfile());
 		
-		$response = new KalturaDistributionProfileListResponse();
+		$response = new VidiunDistributionProfileListResponse();
 		$response->totalCount = $totalCount;
 		$response->objects = $newList;
 		return $response;

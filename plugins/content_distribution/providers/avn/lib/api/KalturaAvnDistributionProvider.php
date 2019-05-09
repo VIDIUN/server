@@ -3,6 +3,6 @@
  * @package plugins.avnDistribution
  * @subpackage api.objects
  */
-class KalturaAvnDistributionProvider extends KalturaDistributionProvider
+class VidiunAvnDistributionProvider extends VidiunDistributionProvider
 {
 }

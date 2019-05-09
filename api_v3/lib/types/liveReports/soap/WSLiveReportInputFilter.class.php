@@ -3,8 +3,8 @@
 
 class WSLiveReportInputFilter extends WSBaseObject
 {	
-	function getKalturaObject() {
-		return new KalturaLiveReportInputFilter();
+	function getVidiunObject() {
+		return new VidiunLiveReportInputFilter();
 	}
 				
 	/**

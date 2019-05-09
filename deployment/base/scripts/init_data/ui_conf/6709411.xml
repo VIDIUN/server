@@ -1,7 +1,7 @@
-<layout id="full" name="moodle-dark" skinPath="/content/uiconf/kaltura/kmc/appstudio/kdp3/dragonfly/skin/skin_3.5.5/skin.swf">
+<layout id="full" name="moodle-dark" skinPath="/content/uiconf/vidiun/vmc/appstudio/vdp3/dragonfly/skin/skin_3.5.5/skin.swf">
   <HBox id="topLevel" width="100%" height="100%">
     <VBox id="player" width="100%" height="100%" styleName="black">
-      <Plugin id="kalturaMix" width="0%" height="0%" includeInLayout="false" loadingPolicy="onDemand"/>
+      <Plugin id="vidiunMix" width="0%" height="0%" includeInLayout="false" loadingPolicy="onDemand"/>
       <Plugin id="statistics" width="0%" height="0%" includeInLayout="false"/>
 	  <HBox id="TopTitleScreen" width="100%" height="30" styleName="darkBg">
 			<Label height="22" id="movieName" styleName="movieName" width="100%" text="{mediaProxy.entry.name}" />
@@ -15,7 +15,7 @@
           <Spacer height="100%"/>
         </VBox>
         <Screens id="screensLayer" width="100%" height="100%" mouseOverTarget="{PlayerHolder}" styleName="clickThrough" startScreenId="startScreen" startScreenOverId="startScreen" pauseScreenOverId="pauseScreen" pauseScreenId="pauseScreen" playScreenOverId="playScreen" endScreenId="endScreen" endScreenOverId="endScreen"/>
-        <Watermark id="watermark" width="100%" height="100%" watermarkPath="http://www.kaltura.com/content/uiconf/kaltura/generic/kaltura_watermark.png" watermarkClickPath="http://www.kaltura.com/" watermarkPosition="bottomLeft" padding="5"/>
+        <Watermark id="watermark" width="100%" height="100%" watermarkPath="http://www.vidiun.com/content/uiconf/vidiun/generic/vidiun_watermark.png" watermarkClickPath="http://www.vidiun.com/" watermarkPosition="bottomLeft" padding="5"/>
         <VBox id="skipBtnHolder" width="100%" height="100%">
           <Spacer height="100%"/>
           <HBox width="100%" height="30">
@@ -29,7 +29,7 @@
       <Canvas id="controlsHolder" width="100%" height="30">
         <HBox id="ControllerScreenHolder" width="100%" height="30" verticalAlign="middle" styleName="darkBg">
           <HBox id="ControllerScreen" width="100%" height="30" horizontalGap="9" paddingLeft="9" verticalAlign="middle" styleName="darkBg">
-            <Button id="playBtnControllerScreen" command="play" buttonType="iconButton" focusRectPadding="0" icon="playIcon" overIcon="playIcon" downIcon="playIcon" disabeledIcon="playIcon" selectedUpIcon="pauseIcon" selectedOverIcon="pauseIcon" selectedDownIcon="pauseIcon" selectedDisabledIcon="pauseIcon" tooltip="" upTooltip="Play" selectedTooltip="Pause" k_buttonType="buttonIconControllerArea" color1="14540253" color2="16777215" color3="3355443" color4="10066329" color5="16777215" font="Arial"/>
+            <Button id="playBtnControllerScreen" command="play" buttonType="iconButton" focusRectPadding="0" icon="playIcon" overIcon="playIcon" downIcon="playIcon" disabeledIcon="playIcon" selectedUpIcon="pauseIcon" selectedOverIcon="pauseIcon" selectedDownIcon="pauseIcon" selectedDisabledIcon="pauseIcon" tooltip="" upTooltip="Play" selectedTooltip="Pause" v_buttonType="buttonIconControllerArea" color1="14540253" color2="16777215" color3="3355443" color4="10066329" color5="16777215" font="Arial"/>
             <Button id="liveToggleStatus" toggle="true" color1="0xFF0000" color2="0xFF0000" upIcon="onAirIcon" overIcon="onAirIcon" downIcon="onAirIcon" disabeledIcon="onAirIcon" selectedUpIcon="offlineIcon" selectedOverIcon="offlineIcon" selectedDownIcon="offlineIcon" selectedDisabledIcon="offlineIcon" isSelected="{mediaProxy.isOffline}" visible="{mediaProxy.isLive}" includeInLayout="{mediaProxy.isLive}" mouseEnable="false" useHandCursor=""/>
             <VBox id="scrubberContainer" width="100%" height="30" verticalAlign="middle" verticalGap="-3" notVisible="{mediaProxy.isLive}">
               <Spacer height="10"/>
@@ -41,10 +41,10 @@
               </HBox>
             </VBox>
             <VolumeBar id="volumeBar" styleName="volumeBtn" width="20" height="20" buttonType="iconButton" tooltip="Change volume" color1="14540253" color2="16777215" color3="3355443" color4="10066329" color5="16777215" font="Arial"/>
-            <Button id="fullScreenBtnControllerScreen" command="fullScreen" buttonType="iconButton" height="22" styleName="controllerScreen" icon="openFullScreenIcon" selectedUpIcon="closeFullScreenIcong" selectedOverIcon="closeFullScreenIcon" selectedDownIcon="closeFullScreenIcon" selectedDisabledIcon="closeFullScreenIcon" focusRectPadding="0" allowDisable="false" tooltip="Toggle fullscreen" k_buttonType="buttonIconControllerArea" color1="14540253" color2="16777215" color3="3355443" color4="10066329" color5="16777215" font="Arial"/>
+            <Button id="fullScreenBtnControllerScreen" command="fullScreen" buttonType="iconButton" height="22" styleName="controllerScreen" icon="openFullScreenIcon" selectedUpIcon="closeFullScreenIcong" selectedOverIcon="closeFullScreenIcon" selectedDownIcon="closeFullScreenIcon" selectedDisabledIcon="closeFullScreenIcon" focusRectPadding="0" allowDisable="false" tooltip="Toggle fullscreen" v_buttonType="buttonIconControllerArea" color1="14540253" color2="16777215" color3="3355443" color4="10066329" color5="16777215" font="Arial"/>
           </HBox>
           <Spacer width="13"/>
-          <Button id="kalturaLogo" height="50" width="100" kClick="navigate('http://www.kaltura.com')" styleName="controllerScreen" icon="kalturaLogo"/>
+          <Button id="vidiunLogo" height="50" width="100" vClick="navigate('http://www.vidiun.com')" styleName="controllerScreen" icon="vidiunLogo"/>
           <Spacer width="13"/>
         </HBox>
       </Canvas>
@@ -55,7 +55,7 @@
       <VBox id="startContainer" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
         <Spacer width="100%"/>
         <Tile id="startTile" width="100%" verticalGap="10" verticalAlign="middle" horizontalAlign="center">
-          <Button id="onVideoPlayBtnStartScreen" command="play" buttonType="onScreenButton" minWidth="60" labelPlacement="top" label="Play" styleName="onScreenBtn" upIcon="playIcon" overIcon="playIcon" downIcon="playIcon" disabeledIcon="playIcon" selectedUpIcon="playIcon" selectedOverIcon="playIcon" selectedDownIcon="playIcon" selectedDisabledIcon="playIcon" k_buttonType="buttonIconControllerArea" tooltip="Play video" color1="14540253" color2="16777215" color3="3355443" color4="10066329" color5="16777215" font="Arial"/>
+          <Button id="onVideoPlayBtnStartScreen" command="play" buttonType="onScreenButton" minWidth="60" labelPlacement="top" label="Play" styleName="onScreenBtn" upIcon="playIcon" overIcon="playIcon" downIcon="playIcon" disabeledIcon="playIcon" selectedUpIcon="playIcon" selectedOverIcon="playIcon" selectedDownIcon="playIcon" selectedDisabledIcon="playIcon" v_buttonType="buttonIconControllerArea" tooltip="Play video" color1="14540253" color2="16777215" color3="3355443" color4="10066329" color5="16777215" font="Arial"/>
         </Tile>
         <Spacer width="100%"/>
       </VBox>
@@ -64,7 +64,7 @@
       <VBox id="pauseContainer" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
         <Spacer height="100%"/>
         <Tile id="pauseTile" width="100%" verticalGap="10" verticalAlign="middle" horizontalAlign="center">
-          <Button id="onVideoPlayBtnPauseScreen" command="play" buttonType="onScreenButton" minWidth="60" labelPlacement="top" label="Play" styleName="onScreenBtn" upIcon="playIcon" overIcon="playIcon" downIcon="playIcon" disabeledIcon="playIcon" selectedUpIcon="playIcon" selectedOverIcon="playIcon" selectedDownIcon="playIcon" selectedDisabledIcon="playIcon" k_buttonType="buttonIconControllerArea" tooltip="Play video" color1="14540253" color2="16777215" color3="3355443" color4="10066329" color5="16777215" font="Arial"/>
+          <Button id="onVideoPlayBtnPauseScreen" command="play" buttonType="onScreenButton" minWidth="60" labelPlacement="top" label="Play" styleName="onScreenBtn" upIcon="playIcon" overIcon="playIcon" downIcon="playIcon" disabeledIcon="playIcon" selectedUpIcon="playIcon" selectedOverIcon="playIcon" selectedDownIcon="playIcon" selectedDisabledIcon="playIcon" v_buttonType="buttonIconControllerArea" tooltip="Play video" color1="14540253" color2="16777215" color3="3355443" color4="10066329" color5="16777215" font="Arial"/>
         </Tile>
         <Spacer height="100%"/>
       </VBox>
@@ -81,7 +81,7 @@
       <VBox id="endContainer" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
         <Spacer height="100%"/>
         <Tile id="endTile" width="100%" verticalGap="10" verticalAlign="middle" horizontalAlign="center">
-          <Button id="replayBtnEndScreen" kClick="sendNotification('doPlay')" buttonType="onScreenButton" minWidth="60" labelPlacement="top" label="Replay" styleName="onScreenBtn" upIcon="replayIcon" k_buttonType="buttonIconControllerArea" tooltip="Replay" color1="14540253" color2="16777215" color3="3355443" color4="10066329" color5="16777215" font="Arial"/>
+          <Button id="replayBtnEndScreen" vClick="sendNotification('doPlay')" buttonType="onScreenButton" minWidth="60" labelPlacement="top" label="Replay" styleName="onScreenBtn" upIcon="replayIcon" v_buttonType="buttonIconControllerArea" tooltip="Replay" color1="14540253" color2="16777215" color3="3355443" color4="10066329" color5="16777215" font="Arial"/>
         </Tile>
         <Spacer height="100%"/>
       </VBox>

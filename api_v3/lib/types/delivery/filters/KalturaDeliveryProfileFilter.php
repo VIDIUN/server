@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaDeliveryProfileFilter extends KalturaDeliveryProfileBaseFilter
+class VidiunDeliveryProfileFilter extends VidiunDeliveryProfileBaseFilter
 {
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isLive;
 	
@@ -21,7 +21,7 @@ class KalturaDeliveryProfileFilter extends KalturaDeliveryProfileBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

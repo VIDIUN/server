@@ -27,19 +27,19 @@ class uploadjpegAction extends defPartnerservices2Action
 			); 
 	}
 	
-	// ask to fetch the kuser from puser_kuser 
-	public function needKuserFromPuser ( )
+	// ask to fetch the vuser from puser_vuser 
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_NO_KUSER;
+		return self::VUSER_DATA_NO_VUSER;
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
   		$filename = $this->getPM('filename');
 		$hash = $this->getP('hash');
   		
   		// strip the filename from invalid characters
-		$token = $this->getKsUniqueString();
+		$token = $this->getVsUniqueString();
 
 		if(isset($HTTP_RAW_POST_DATA))
 			$data = $HTTP_RAW_POST_DATA;

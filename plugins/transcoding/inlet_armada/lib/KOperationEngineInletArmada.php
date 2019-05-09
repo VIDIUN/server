@@ -5,7 +5,7 @@
  * @subpackage Conversion
  *
  */
-class KOperationEngineInletArmada  extends KSingleOutputOperationEngine
+class VOperationEngineInletArmada  extends VSingleOutputOperationEngine
 {
 /*
 	protected $url=null;
@@ -17,7 +17,7 @@ class KOperationEngineInletArmada  extends KSingleOutputOperationEngine
 	{
 		parent::__construct($cmd,$outFilePath);
 //		$this->prio=5;
-		KalturaLog::info(": cmd($cmd), outFilePath($outFilePath)");
+		VidiunLog::info(": cmd($cmd), outFilePath($outFilePath)");
 	}
 
 	/*************************************
@@ -26,16 +26,16 @@ class KOperationEngineInletArmada  extends KSingleOutputOperationEngine
 	protected function getCmdLine()
 	{
 		$exeCmd =  parent::getCmdLine();
-		KalturaLog::info(print_r($this,true));
+		VidiunLog::info(print_r($this,true));
 		return $exeCmd;
 	}
 
 	/*************************************
 	 * 
 	 */
-	public function operate(kOperator $operator = null, $inFilePath, $configFilePath = null)
+	public function operate(vOperator $operator = null, $inFilePath, $configFilePath = null)
 	{
-		KalturaLog::debug("operator==>".print_r($operator,1));
+		VidiunLog::debug("operator==>".print_r($operator,1));
 
 $encodingTemplateId = null;
 $encodingTemplateName = null;
@@ -46,30 +46,30 @@ $trgPrefixWindows = null;
 
 			// ---------------------------------
 			// Evaluate and set various Inlet Armada session params
-		if(KBatchBase::$taskConfig->params->InletStorageRootWindows) $srcPrefixWindows = KBatchBase::$taskConfig->params->InletStorageRootWindows;
-		if(KBatchBase::$taskConfig->params->InletStorageRootLinux)   $srcPrefixLinux = KBatchBase::$taskConfig->params->InletStorageRootLinux;
-		if(KBatchBase::$taskConfig->params->InletTmpStorageWindows)  $trgPrefixWindows = KBatchBase::$taskConfig->params->InletTmpStorageWindows;
+		if(VBatchBase::$taskConfig->params->InletStorageRootWindows) $srcPrefixWindows = VBatchBase::$taskConfig->params->InletStorageRootWindows;
+		if(VBatchBase::$taskConfig->params->InletStorageRootLinux)   $srcPrefixLinux = VBatchBase::$taskConfig->params->InletStorageRootLinux;
+		if(VBatchBase::$taskConfig->params->InletTmpStorageWindows)  $trgPrefixWindows = VBatchBase::$taskConfig->params->InletTmpStorageWindows;
 
-		$url = KBatchBase::$taskConfig->params->InletArmadaUrl;
-		$login = KBatchBase::$taskConfig->params->InletArmadaLogin;
-		$passw = KBatchBase::$taskConfig->params->InletArmadaPassword;
-		if(KBatchBase::$taskConfig->params->InletArmadaPriority)
-			$priority = KBatchBase::$taskConfig->params->InletArmadaPriority;
+		$url = VBatchBase::$taskConfig->params->InletArmadaUrl;
+		$login = VBatchBase::$taskConfig->params->InletArmadaLogin;
+		$passw = VBatchBase::$taskConfig->params->InletArmadaPassword;
+		if(VBatchBase::$taskConfig->params->InletArmadaPriority)
+			$priority = VBatchBase::$taskConfig->params->InletArmadaPriority;
 		else
 			$priority = 5;
 			// ----------------------------------
 			
 		$inlet = new InletAPIWrap($url);
-		KalturaLog::debug(print_r($inlet,1));
+		VidiunLog::debug(print_r($inlet,1));
 		$rvObj=new XmlRpcData;
 		
 		$rv=$inlet->userLogon($login, $passw, $rvObj);
 		if(!$rv) {
-			throw new KOperationEngineException("Inlet failure: login, rv(".(print_r($rvObj,true)).")");
+			throw new VOperationEngineException("Inlet failure: login, rv(".(print_r($rvObj,true)).")");
 		}
-		KalturaLog::debug("userLogon - ".print_r($rvObj,1));
+		VidiunLog::debug("userLogon - ".print_r($rvObj,1));
 		
-		$paramsMap = KDLUtils::parseParamStr2Map($operator->extra);
+		$paramsMap = VDLUtils::parseParamStr2Map($operator->extra);
 		foreach($paramsMap as $key=>$param){
 			switch($key){
 				case 'encodingTemplate':
@@ -101,7 +101,7 @@ $trgPrefixWindows = null;
 			$srcFileWindows  = $inFilePath;
 			
 		if(isset($trgPrefixWindows)){
-			$trgPrefixLinux = $this->addLastSlashInFolderPath(KBatchBase::$taskConfig->params->localTempPath, "/");
+			$trgPrefixLinux = $this->addLastSlashInFolderPath(VBatchBase::$taskConfig->params->localTempPath, "/");
 			$trgPrefixWindows = $this->addLastSlashInFolderPath($trgPrefixWindows, "\\");
 			$outFileWindows = str_replace($trgPrefixLinux, $trgPrefixWindows, $this->outFilePath);
 		}
@@ -117,9 +117,9 @@ $trgPrefixWindows = null;
 				array(),"",
 				$rvObj);						
 		if(!$rv) {
-			throw new KOperationEngineException("Inlet failure: add job, rv(".print_r($rvObj,1).")");
+			throw new VOperationEngineException("Inlet failure: add job, rv(".print_r($rvObj,1).")");
 		}
-		KalturaLog::debug("jobAdd - encodingTemplate($encodingTemplateId), inFile($srcFileWindows), outFile($outFileWindows),rv-".print_r($rvObj,1));
+		VidiunLog::debug("jobAdd - encodingTemplate($encodingTemplateId), inFile($srcFileWindows), outFile($outFileWindows),rv-".print_r($rvObj,1));
 		
 		$jobId=$rvObj->job_id;
 		$attemptCnt=0;
@@ -127,7 +127,7 @@ $trgPrefixWindows = null;
 			sleep(60);
 			$rv=$inlet->jobList(array($jobId),$rvObj);
 			if(!$rv) {
-				throw new KOperationEngineException("Inlet failure: job list, rv(".print_r($rvObj,1).")");
+				throw new VOperationEngineException("Inlet failure: job list, rv(".print_r($rvObj,1).")");
 			}
 			switch($rvObj->job_list[0]->job_state){
 			case InletArmadaJobStatus::CompletedSuccess:
@@ -135,28 +135,28 @@ $trgPrefixWindows = null;
 				break;
 			case InletArmadaJobStatus::CompletedUnknown:
 			case InletArmadaJobStatus::CompletedFailure:
-				throw new KOperationEngineException("Inlet failure: job, rv(".print_r($rvObj,1).")");
+				throw new VOperationEngineException("Inlet failure: job, rv(".print_r($rvObj,1).")");
 				break;
 			}
 			if($attemptCnt%10==0) {
-				KalturaLog::debug("waiting for job completion - ".print_r($rvObj,1));
+				VidiunLog::debug("waiting for job completion - ".print_r($rvObj,1));
 			}
 			$attemptCnt++;
 		}
-//KalturaLog::debug("XXX taskConfig=>".print_r(KBatchBase::$taskConfig,1));
-		KalturaLog::debug("Job completed successfully - ".print_r($rvObj,1));
+//VidiunLog::debug("XXX taskConfig=>".print_r(VBatchBase::$taskConfig,1));
+		VidiunLog::debug("Job completed successfully - ".print_r($rvObj,1));
 
 		if($trgPrefixWindows) {
-			$trgPrefixLinux = $this->addLastSlashInFolderPath(KBatchBase::$taskConfig->params->sharedTempPath, "/");
+			$trgPrefixLinux = $this->addLastSlashInFolderPath(VBatchBase::$taskConfig->params->sharedTempPath, "/");
 			$outFileLinux = str_replace($trgPrefixWindows, $trgPrefixLinux, $rvObj->job_list[0]->job_output_file);
-//KalturaLog::debug("XXX str_replace($trgPrefixWindows, ".$trgPrefixLinux.", ".$rvObj->job_list[0]->job_output_file.")==>$outFileLinux");
+//VidiunLog::debug("XXX str_replace($trgPrefixWindows, ".$trgPrefixLinux.", ".$rvObj->job_list[0]->job_output_file.")==>$outFileLinux");
 		}
 		else
 			$outFileLinux = $rvObj->job_list[0]->job_output_file;
 			
 		if($outFileLinux!=$this->outFilePath) {
-			KalturaLog::debug("copy($outFileLinux, ".$this->outFilePath.")");
-			kFile::moveFile($outFileLinux, $this->outFilePath, true);
+			VidiunLog::debug("copy($outFileLinux, ".$this->outFilePath.")");
+			vFile::moveFile($outFileLinux, $this->outFilePath, true);
 			//copy($outFileLinux, $this->outFilePath);
 		}
 		
@@ -166,20 +166,20 @@ $trgPrefixWindows = null;
 	/*************************************
 	 * 
 	 */
-	public function configure(KalturaConvartableJobData $data, KalturaBatchJob $job)
+	public function configure(VidiunConvartableJobData $data, VidiunBatchJob $job)
 	{
 		parent::configure($data, $job);
 		
 		$errStr=null;
-		if(!KBatchBase::$taskConfig->params->InletArmadaUrl)
+		if(!VBatchBase::$taskConfig->params->InletArmadaUrl)
 			$errStr="InletArmadaUrl";
-		if(!KBatchBase::$taskConfig->params->InletArmadaLogin){
+		if(!VBatchBase::$taskConfig->params->InletArmadaLogin){
 			if($errStr) 
 				$errStr.=",InletArmadaLogin";
 			else
 				$errStr="InletArmadaLogin";
 		}
-		if(!KBatchBase::$taskConfig->params->InletArmadaPassword){
+		if(!VBatchBase::$taskConfig->params->InletArmadaPassword){
 			if($errStr) 
 				$errStr.=",InletArmadaPassword";
 			else
@@ -187,7 +187,7 @@ $trgPrefixWindows = null;
 		}
 		
 		if($errStr)
-			throw new KOperationEngineException("Inlet failure: missing credentials - $errStr");//, url(".$taskConfig->params->InletArmadaUrl."), login(."$taskConfig->params->InletArmadaLogin."),passw(".$taskConfig->params->InletArmadaPassword.")");
+			throw new VOperationEngineException("Inlet failure: missing credentials - $errStr");//, url(".$taskConfig->params->InletArmadaUrl."), login(."$taskConfig->params->InletArmadaLogin."),passw(".$taskConfig->params->InletArmadaPassword.")");
 /*		
 		$this->url =	$taskConfig->params->InletArmadaUrl;
 		$this->login =	$taskConfig->params->InletArmadaLogin;
@@ -218,7 +218,7 @@ $trgPrefixWindows = null;
 	$rvObj=new XmlRpcData;
 		$rv=$inlet->templateGroupList($rvObj);
 		if(!$rv) {
-			throw new KOperationEngineException("Inlet failure: templateGroupList, rv(".print_r($rvObj,1).")");
+			throw new VOperationEngineException("Inlet failure: templateGroupList, rv(".print_r($rvObj,1).")");
 		}
 		$templateDescObj=$this->templateGroupListToJobTemplate($rvObj->template_group_list, $name);
 		return $templateDescObj->template_id;

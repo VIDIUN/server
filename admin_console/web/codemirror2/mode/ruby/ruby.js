@@ -157,24 +157,24 @@ CodeMirror.defineMode("ruby", function(config, parserConfig) {
 
     token: function(stream, state) {
       if (stream.sol()) state.indented = stream.indentation();
-      var style = state.tokenize[state.tokenize.length-1](stream, state), kwtype;
+      var style = state.tokenize[state.tokenize.length-1](stream, state), vwtype;
       if (style == "ident") {
         var word = stream.current();
         style = keywords.propertyIsEnumerable(stream.current()) ? "keyword"
           : /^[A-Z]/.test(word) ? "tag"
           : (state.lastTok == "def" || state.lastTok == "class" || state.varList) ? "def"
           : "variable";
-        if (indentWords.propertyIsEnumerable(word)) kwtype = "indent";
-        else if (dedentWords.propertyIsEnumerable(word)) kwtype = "dedent";
+        if (indentWords.propertyIsEnumerable(word)) vwtype = "indent";
+        else if (dedentWords.propertyIsEnumerable(word)) vwtype = "dedent";
         else if ((word == "if" || word == "unless") && stream.column() == stream.indentation())
-          kwtype = "indent";
+          vwtype = "indent";
       }
       if (curPunc || (style && style != "comment")) state.lastTok = word || curPunc || style;
       if (curPunc == "|") state.varList = !state.varList;
 
-      if (kwtype == "indent" || /[\(\[\{]/.test(curPunc))
+      if (vwtype == "indent" || /[\(\[\{]/.test(curPunc))
         state.context = {prev: state.context, type: curPunc || style, indented: state.indented};
-      else if ((kwtype == "dedent" || /[\)\]\}]/.test(curPunc)) && state.context.prev)
+      else if ((vwtype == "dedent" || /[\)\]\}]/.test(curPunc)) && state.context.prev)
         state.context = state.context.prev;
 
       if (stream.eol())

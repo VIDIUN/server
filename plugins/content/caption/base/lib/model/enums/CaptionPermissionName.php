@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage model.enum
  */ 
-class CaptionPermissionName implements IKalturaPluginEnum, PermissionName
+class CaptionPermissionName implements IVidiunPluginEnum, PermissionName
 {
 	const IMPORT_REMOTE_CAPTION_FOR_INDEXING = 'IMPORT_REMOTE_CAPTION_FOR_INDEXING';
 	const FEATURE_GENERATE_WEBVTT_CAPTIONS = 'FEATURE_GENERATE_WEBVTT_CAPTIONS';

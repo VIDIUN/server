@@ -73,9 +73,9 @@ class ESearchCaptionQueryFromFilter extends ESearchQueryFromFilter
 		return new ESearchEntryItem();
 	}
 
-	public function retrieveElasticQueryCaptions(baseObjectFilter $filter, kPager $entryPager, $filterOnEntryIds)
+	public function retrieveElasticQueryCaptions(baseObjectFilter $filter, vPager $entryPager, $filterOnEntryIds)
 	{
-		$entrySearch = new kEntrySearch();
+		$entrySearch = new vEntrySearch();
 		$entrySearch->setFilterOnlyContext();
 		$entrySearch->setForceInnerHitsSizeOverride();
 
@@ -100,7 +100,7 @@ class ESearchCaptionQueryFromFilter extends ESearchQueryFromFilter
 
 		$elasticResults = $entrySearch->doSearch($query, $entryPager, self::$validStatuses);
 
-		list($coreResults, $objectOrder, $objectCount, $objectHighlight) = kESearchCoreAdapter::getElasticResultAsArray($elasticResults,
+		list($coreResults, $objectOrder, $objectCount, $objectHighlight) = vESearchCoreAdapter::getElasticResultAsArray($elasticResults,
 			$entrySearch->getQueryAttributes()->getQueryHighlightsAttributes());
 
 		return $this->getCaptionAssetItemsArray($coreResults, $captionsPager, $filter, $filterOnEntryIds);
@@ -124,7 +124,7 @@ class ESearchCaptionQueryFromFilter extends ESearchQueryFromFilter
 		}
 	}
 
-	protected function getCaptionAssetItemsArray($coreResults, kPager $captionsPager, baseObjectFilter $filter, $filterOnEntryIds)
+	protected function getCaptionAssetItemsArray($coreResults, vPager $captionsPager, baseObjectFilter $filter, $filterOnEntryIds)
 	{
 		$captionAssetItemArray = array();
 		$totalCount = 0;
@@ -163,7 +163,7 @@ class ESearchCaptionQueryFromFilter extends ESearchQueryFromFilter
 	 *  if we got on the request a single entry id we will return caption results based on the pager sizes that were set,
 	 *  else pager sizes will be used only to set the number of entries returned from elastic query and not inner number of captions
 	 */
-	protected function getCaptionsIndexesFromPager(kPager $pager, $itemsNum)
+	protected function getCaptionsIndexesFromPager(vPager $pager, $itemsNum)
 	{
 		$startIndex = 0;
 		$endIndex = $itemsNum;

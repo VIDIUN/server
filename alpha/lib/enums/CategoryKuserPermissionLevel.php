@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.enum
  */ 
-interface CategoryKuserPermissionLevel extends BaseEnum
+interface CategoryVuserPermissionLevel extends BaseEnum
 {
 	const MANAGER = 0;
 	const MODERATOR = 1;

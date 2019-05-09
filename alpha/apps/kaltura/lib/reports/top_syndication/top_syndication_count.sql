@@ -1,6 +1,6 @@
 SELECT 
 	COUNT( DISTINCT ifnull(ev.domain_id,"-")) count_all
-FROM kalturadw.dwh_hourly_events_domain  ev
+FROM vidiundw.dwh_hourly_events_domain  ev
 WHERE
 {OBJ_ID_CLAUSE}
 AND  ev.partner_id = {PARTNER_ID} /* PARTNER_ID*/

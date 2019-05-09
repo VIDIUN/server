@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaPermissionFilter extends KalturaPermissionBaseFilter
+class VidiunPermissionFilter extends VidiunPermissionBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -14,9 +14,9 @@ class KalturaPermissionFilter extends KalturaPermissionBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$permissionFilter = $this->toObject();
 		
@@ -28,8 +28,8 @@ class KalturaPermissionFilter extends KalturaPermissionBaseFilter
 		
 		$list = PermissionPeer::doSelect($c);
 		
-		$response = new KalturaPermissionListResponse();
-		$response->objects = KalturaPermissionArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunPermissionListResponse();
+		$response->objects = VidiunPermissionArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $count;
 		
 		return $response;

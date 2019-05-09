@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__file__) . '/kRendererBase.php');
+require_once(dirname(__file__) . '/vRendererBase.php');
 
 /**
  * Created by IntelliJ IDEA.
@@ -7,7 +7,7 @@ require_once(dirname(__file__) . '/kRendererBase.php');
  * Date: 9/7/2015
  * Time: 2:54 PM
  */
-class kRendererPdfFile implements kRendererBase
+class vRendererPdfFile implements vRendererBase
 {
 
 

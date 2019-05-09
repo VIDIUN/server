@@ -3,6 +3,6 @@
  * @package plugins.adminConsole
  * @subpackage api.filters.enum
  */
-class KalturaUiConfAdminOrderBy extends KalturaUiConfOrderBy
+class VidiunUiConfAdminOrderBy extends VidiunUiConfOrderBy
 {
 }

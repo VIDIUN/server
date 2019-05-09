@@ -3,7 +3,7 @@
  * @package plugins.symantecScanEngine
  * @subpackage model.enum
  */
-class SymantecScanEngineVirusScanEngineType implements IKalturaPluginEnum, VirusScanEngineType
+class SymantecScanEngineVirusScanEngineType implements IVidiunPluginEnum, VirusScanEngineType
 {
 	const SYMANTEC_SCAN_ENGINE = 'SymantecScanEngine';
 	const SYMANTEC_SCAN_JAVA_ENGINE = 'SymantecScanJavaEngine';

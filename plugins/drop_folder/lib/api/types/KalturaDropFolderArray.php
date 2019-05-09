@@ -3,14 +3,14 @@
  * @package plugins.dropFolder
  * @subpackage api.objects
  */
-class KalturaDropFolderArray extends KalturaTypedArray
+class VidiunDropFolderArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaDropFolderArray();
+		$newArr = new VidiunDropFolderArray();
 		foreach ( $arr as $obj )
 		{
-		    $nObj = KalturaDropFolder::getInstanceByType($obj->getType());
+		    $nObj = VidiunDropFolder::getInstanceByType($obj->getType());
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -21,6 +21,6 @@ class KalturaDropFolderArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( 'KalturaDropFolder' );
+		return parent::__construct ( 'VidiunDropFolder' );
 	}
 }

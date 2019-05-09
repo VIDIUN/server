@@ -7,7 +7,7 @@
  * @package api
  * @subpackage services
  */
-class SystemService extends KalturaBaseService
+class SystemService extends VidiunBaseService
 {
 	const APIV3_FAIL_PING = "APIV3_FAIL_PING";
 	
@@ -22,7 +22,7 @@ class SystemService extends KalturaBaseService
 	/**
 	 * @action ping
 	 * @return bool Always true if service is working
-	 * @ksIgnored
+	 * @vsIgnored
 	 */
 	function pingAction()
 	{
@@ -35,7 +35,7 @@ class SystemService extends KalturaBaseService
 	/**
 	 * @action pingDatabase
 	 * @return bool Always true if database available and writeable
-	 * @ksIgnored
+	 * @vsIgnored
 	 */
 	function pingDatabaseAction()
 	{
@@ -59,22 +59,22 @@ class SystemService extends KalturaBaseService
 	 *
 	 * @action getTime
 	 * @return int Return current server timestamp
-	 * @ksIgnored
+	 * @vsIgnored
 	 */
 	function getTimeAction()
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		return time();
 	}
 	
 	/**
 	 * @action getVersion
 	 * @return string the current server version
-	 * @ksIgnored
+	 * @vsIgnored
 	 */
 	function getVersionAction()
 	{	
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		$version = file_get_contents(realpath(dirname(__FILE__)) . '/../../VERSION.txt');
 		return trim($version);
 	}

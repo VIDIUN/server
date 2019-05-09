@@ -4,7 +4,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaPartnerBaseFilter extends KalturaFilter
+abstract class VidiunPartnerBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -91,7 +91,7 @@ abstract class KalturaPartnerBaseFilter extends KalturaFilter
 	public $nameEqual;
 
 	/**
-	 * @var KalturaPartnerStatus
+	 * @var VidiunPartnerStatus
 	 */
 	public $statusEqual;
 
@@ -121,7 +121,7 @@ abstract class KalturaPartnerBaseFilter extends KalturaFilter
 	public $partnerPackageIn;
 
 	/**
-	 * @var KalturaPartnerGroupType
+	 * @var VidiunPartnerGroupType
 	 */
 	public $partnerGroupTypeEqual;
 

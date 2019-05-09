@@ -87,7 +87,7 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-        var ks = '@ks@';
+        var vs = '@vs@';
         var url = '@BaseServiceUrl@/api_v3/service/vendor_zoomvendor/action/submitRegistration';
         var accountId = '@accountId@';
     </script>
@@ -108,13 +108,13 @@
             $.ajax({
                 url : url,
                 type : "post",
-                data: {"ks": ks, "defaultUserId": defaultUserId, "zoomCategory" : zoomCategory
+                data: {"vs": vs, "defaultUserId": defaultUserId, "zoomCategory" : zoomCategory
                     , "accountId" : accountId ,"enableRecordingUpload":enableRecordingUpload ,"createUserIfNotExist":createUserIfNotExist,"format": 1 },
                 success : function(res) {
                     $("body").css("cursor", "default");
                     console.log(res);
                     if(res){
-                        if(res.objectType == 'KalturaAPIException')
+                        if(res.objectType == 'VidiunAPIException')
                         {
                             onFail(res.message);
                         }
@@ -152,11 +152,11 @@
             });
         })();
     </script>
-    <title>Kaltura-Zoom registration</title>
+    <title>Vidiun-Zoom registration</title>
 </head>
 <form action="" class="zoom-form">
     <div class="imgcontainer">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f7/KalturaLogo_Updatedpng.png" alt="Avatar" class="avatar">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f7/VidiunLogo_Updatedpng.png" alt="Avatar" class="avatar">
     </div>
 
     <p class="container">

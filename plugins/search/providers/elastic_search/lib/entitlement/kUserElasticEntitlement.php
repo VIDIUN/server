@@ -4,7 +4,7 @@
  * @subpackage lib.entitlement
  */
 
-class kUserElasticEntitlement extends kBaseElasticEntitlement
+class vUserElasticEntitlement extends vBaseElasticEntitlement
 {
     
 }

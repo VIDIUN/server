@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Interface kObjectReadyForElasticIndexEventConsumer
+ * Interface vObjectReadyForElasticIndexEventConsumer
  */
-interface kObjectReadyForElasticIndexEventConsumer extends KalturaEventConsumer
+interface vObjectReadyForElasticIndexEventConsumer extends VidiunEventConsumer
 {
     /**
      * @param $object

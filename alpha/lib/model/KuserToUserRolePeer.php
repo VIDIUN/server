@@ -2,7 +2,7 @@
 
 
 /**
- * Skeleton subclass for performing query and update operations on the 'kuser_to_user_role' table.
+ * Skeleton subclass for performing query and update operations on the 'vuser_to_user_role' table.
  *
  * 
  *
@@ -13,26 +13,26 @@
  * @package Core
  * @subpackage model
  */
-class KuserToUserRolePeer extends BaseKuserToUserRolePeer implements IRelatedObjectPeer
+class VuserToUserRolePeer extends BaseVuserToUserRolePeer implements IRelatedObjectPeer
 {
 	
 	/**
-	 * Get objects by kuser and user role IDs
-	 * @param int $kuserId
+	 * Get objects by vuser and user role IDs
+	 * @param int $vuserId
 	 * @param int $userRoleId
-	 * @return array Array of selected KuserToUserRole Objects
+	 * @return array Array of selected VuserToUserRole Objects
 	 */
-	public static function getByKuserAndUserRoleIds($kuserId, $userRoleId)
+	public static function getByVuserAndUserRoleIds($vuserId, $userRoleId)
 	{
 		$c = new Criteria();
-		$c->addAnd(self::KUSER_ID, $kuserId, Criteria::EQUAL);
+		$c->addAnd(self::VUSER_ID, $vuserId, Criteria::EQUAL);
 		$c->addAnd(self::USER_ROLE_ID, $userRoleId, Criteria::EQUAL);
 		return self::doSelect($c);
 	}
 	
 	public static function getCacheInvalidationKeys()
 	{
-		return array(array("kuserToUserRole:kuserId=%s", self::KUSER_ID));		
+		return array(array("vuserToUserRole:vuserId=%s", self::VUSER_ID));		
 	}
 	
 	/* (non-PHPdoc)
@@ -40,9 +40,9 @@ class KuserToUserRolePeer extends BaseKuserToUserRolePeer implements IRelatedObj
 	 */
 	public function getRootObjects(IRelatedObject $object)
 	{
-		/* @var $object KuserToUserRole */
+		/* @var $object VuserToUserRole */
 		return array(
-			$object->getkuser(),
+			$object->getvuser(),
 			$object->getUserRole(),
 		);
 	}
@@ -54,4 +54,4 @@ class KuserToUserRolePeer extends BaseKuserToUserRolePeer implements IRelatedObj
 	{
 		return false;
 	}
-} // KuserToUserRolePeer
+} // VuserToUserRolePeer

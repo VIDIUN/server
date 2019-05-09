@@ -3,7 +3,7 @@
  * @package plugins.huluDistribution
  * @subpackage api.enum
  */
-class KalturaHuluDistributionField extends KalturaStringEnum implements HuluDistributionField
+class VidiunHuluDistributionField extends VidiunStringEnum implements HuluDistributionField
 {
 	// see HuluDistributionField interface
 }

@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage api.enum
  */
-class KalturaVendorServiceFeature extends KalturaEnum implements VendorServiceFeature
+class VidiunVendorServiceFeature extends VidiunEnum implements VendorServiceFeature
 {
 
 }

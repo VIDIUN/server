@@ -4,7 +4,7 @@
  * @subpackage objects
  * @relatedService FlavorAssetService
  */
-class KalturaFlavorAsset extends KalturaAsset 
+class VidiunFlavorAsset extends VidiunAsset 
 {
 	/**
 	 * The Flavor Params used to create this Flavor Asset
@@ -56,7 +56,7 @@ class KalturaFlavorAsset extends KalturaAsset
 	public $isOriginal;
 	
 	/**
-	 * True if this Flavor Asset is playable in KDP
+	 * True if this Flavor Asset is playable in VDP
 	 * 
 	 * @var bool
 	 * @readonly
@@ -82,7 +82,7 @@ class KalturaFlavorAsset extends KalturaAsset
 	/**
 	 * The status of the Flavor Asset
 	 * 
-	 * @var KalturaFlavorAssetStatus
+	 * @var VidiunFlavorAssetStatus
 	 * @readonly 
 	 * @filter eq,in,notin
 	 */
@@ -91,7 +91,7 @@ class KalturaFlavorAsset extends KalturaAsset
 	/**
 	 * The language of the flavor asset
 	 *
-	 * @var KalturaLanguage
+	 * @var VidiunLanguage
 	 */
 	public $language;
 	
@@ -105,7 +105,7 @@ class KalturaFlavorAsset extends KalturaAsset
 	/**
 	 * Is default flavor asset of the entry (This field will be taken into account selectign which audio flavor will be selected as default)
 	 *
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isDefault;
 	

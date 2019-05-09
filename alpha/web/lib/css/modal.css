@@ -1,9 +1,9 @@
 /*
-This file is part of the Kaltura Collaborative Media Suite which allows users 
+This file is part of the Vidiun Collaborative Media Suite which allows users 
 to do with audio, video, and animation what Wiki platfroms allow them to do with 
 text.
 
-Copyright (C) 2006-2008  Kaltura Inc.
+Copyright (C) 2006-2008  Vidiun Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -32,15 +32,15 @@ html,body { height:100%; }
 
 #modalbox iframe{ overflow:hidden; }
 
-.kalturaCode{ font-size: 20px; padding: 5px; }
+.vidiunCode{ font-size: 20px; padding: 5px; }
 
 #mbContent{ padding:10px; -moz-border-radius:6px; -webkit-border-radius:6px; background:#E1E1E1; border:1px solid #ccc; font-family: arial; }
 	#mbContent .title{ padding:0 0 5px 0; color:#333; }
-		#mbContent div.title a{ float:right; width:19px; height:19px; margin-left:5px; background:url(../images/kmc/action_btns.gif) 0 0 no-repeat;  cursor: pointer; }
+		#mbContent div.title a{ float:right; width:19px; height:19px; margin-left:5px; background:url(../images/vmc/action_btns.gif) 0 0 no-repeat;  cursor: pointer; }
 		#mbContent div.title a:hover{ background-position:0 bottom; }
 		#mbContent .title a.closeBtn{ background-position:-19px 0; }
 		#mbContent .title a.closeBtn:hover{ background-position:-19px bottom; }
-	#mbContent .kplayer{  }
+	#mbContent .vplayer{  }
 	#mbContent .embed_code{  }
 		#mbContent .embed_code textarea{ width:390px; border:1px solid #aaa; font-size:11px; overflow-x:hidden; }
 	#mbContent .buttons{ padding:10px 0 0; text-align:center; }

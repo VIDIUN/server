@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage model.data
  */
-class kEventObjectChangedCondition extends kCondition
+class vEventObjectChangedCondition extends vCondition
 {
 	/**
 	 * Comma seperated column names to be tested
@@ -12,7 +12,7 @@ class kEventObjectChangedCondition extends kCondition
 	protected $modifiedColumns;
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -21,9 +21,9 @@ class kEventObjectChangedCondition extends kCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::applyDynamicValues()
+	 * @see vCondition::applyDynamicValues()
 	 */
-	protected function applyDynamicValues(kScope $scope)
+	protected function applyDynamicValues(vScope $scope)
 	{
 		parent::applyDynamicValues($scope);
 		
@@ -36,15 +36,15 @@ class kEventObjectChangedCondition extends kCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
-		if(!($scope instanceof kEventScope))
+		if(!($scope instanceof vEventScope))
 			return false;
 			
 		$event = $scope->getEvent();
-		if(!($event instanceof kObjectChangedEvent))
+		if(!($event instanceof vObjectChangedEvent))
 			return false;
 			
 		$trigerColumns = explode(',', $this->modifiedColumns);
@@ -69,8 +69,8 @@ class kEventObjectChangedCondition extends kCondition
 		
 		$foundColumns = array_intersect($modifiedColumns, $trigerColumns);
 		
-		KalturaLog::debug("Triger columns [" . print_r($trigerColumns, true) . "]");
-		KalturaLog::debug("Found columns [" . print_r($foundColumns, true) . "]");
+		VidiunLog::debug("Triger columns [" . print_r($trigerColumns, true) . "]");
+		VidiunLog::debug("Found columns [" . print_r($foundColumns, true) . "]");
 		
 		return count($foundColumns) > 0;
 	}

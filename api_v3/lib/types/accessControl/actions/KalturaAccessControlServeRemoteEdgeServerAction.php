@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAccessControlServeRemoteEdgeServerAction extends KalturaRuleAction
+class VidiunAccessControlServeRemoteEdgeServerAction extends VidiunRuleAction
 {
 	/**
 	 * Comma separated list of edge servers playBack should be done from
@@ -13,7 +13,7 @@ class KalturaAccessControlServeRemoteEdgeServerAction extends KalturaRuleAction
 	public $edgeServerIds;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $seamlessFallbackEnabled;
 
@@ -37,12 +37,12 @@ class KalturaAccessControlServeRemoteEdgeServerAction extends KalturaRuleAction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kAccessControlServeRemoteEdgeServerAction();
+			$dbObject = new vAccessControlServeRemoteEdgeServerAction();
 			
 		return parent::toObject($dbObject, $skip);
 	}

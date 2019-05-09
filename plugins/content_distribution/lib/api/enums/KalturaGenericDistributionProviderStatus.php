@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.enum
  */
-class KalturaGenericDistributionProviderStatus extends KalturaEnum implements GenericDistributionProviderStatus
+class VidiunGenericDistributionProviderStatus extends VidiunEnum implements GenericDistributionProviderStatus
 {
 	
 }

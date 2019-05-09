@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaResponseProfile extends KalturaDetachedResponseProfile implements IFilterable
+class VidiunResponseProfile extends VidiunDetachedResponseProfile implements IFilterable
 {
 	/**
 	 * Auto generated numeric identifier
@@ -47,7 +47,7 @@ class KalturaResponseProfile extends KalturaDetachedResponseProfile implements I
 	public $updatedAt;
 	
 	/**
-	 * @var KalturaResponseProfileStatus
+	 * @var VidiunResponseProfileStatus
 	 * @readonly
 	 * @filter eq,in
 	 */
@@ -79,7 +79,7 @@ class KalturaResponseProfile extends KalturaDetachedResponseProfile implements I
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -87,7 +87,7 @@ class KalturaResponseProfile extends KalturaDetachedResponseProfile implements I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -95,9 +95,9 @@ class KalturaResponseProfile extends KalturaDetachedResponseProfile implements I
 		$this->validatePropertyMinLength('systemName', 2, !is_null($sourceObject));
 		
 		//Check uniqueness of new object's system name
-		$systemNameProfile = ResponseProfilePeer::retrieveBySystemName($this->systemName, ($sourceObject && $sourceObject->getId()) ? $sourceObject->getId() : null, kCurrentContext::getCurrentPartnerId());
+		$systemNameProfile = ResponseProfilePeer::retrieveBySystemName($this->systemName, ($sourceObject && $sourceObject->getId()) ? $sourceObject->getId() : null, vCurrentContext::getCurrentPartnerId());
 		if ($systemNameProfile)
-			throw new KalturaAPIException(KalturaErrors::RESPONSE_PROFILE_DUPLICATE_SYSTEM_NAME, $this->systemName);
+			throw new VidiunAPIException(VidiunErrors::RESPONSE_PROFILE_DUPLICATE_SYSTEM_NAME, $this->systemName);
 	
 		
 		$id = $this->id;
@@ -110,7 +110,7 @@ class KalturaResponseProfile extends KalturaDetachedResponseProfile implements I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object = null, $propertiesToSkip = array())
 	{
@@ -139,7 +139,7 @@ class KalturaResponseProfile extends KalturaDetachedResponseProfile implements I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaDetachedResponseProfile::getKey()
+	 * @see VidiunDetachedResponseProfile::getKey()
 	 */
 	public function getKey()
 	{

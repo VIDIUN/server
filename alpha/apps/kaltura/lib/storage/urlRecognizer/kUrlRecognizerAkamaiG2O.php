@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model
  */ 
-class kUrlRecognizerAkamaiG2O extends kUrlRecognizer
+class vUrlRecognizerAkamaiG2O extends vUrlRecognizer
 {
 	/**
 	 * @var string

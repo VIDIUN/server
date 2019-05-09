@@ -2,9 +2,9 @@
 /**
  * This script lists all distribution profiles and check if they have a valid authentication info
  */
-chdir('/opt/kaltura/Jupiter-10.9.0/alpha/scripts/utils');
+chdir('/opt/vidiun/Jupiter-10.9.0/alpha/scripts/utils');
 
-require_once('/opt/kaltura/Jupiter-10.9.0/alpha/scripts/bootstrap.php');
+require_once('/opt/vidiun/Jupiter-10.9.0/alpha/scripts/bootstrap.php');
 
 if(count($argv) < 2)
 {
@@ -54,7 +54,7 @@ fputcsv($csv, $fields);
 
 $now = time();
 $threeMonthsAgo = $now - (60 * 60 * 24 * 30 * 3);
-$ks = null;
+$vs = null;
 $distributionProfiles = DistributionProfilePeer::doSelect($criteria);
 while($distributionProfiles){
 	$lastId = 0;
@@ -73,8 +73,8 @@ while($distributionProfiles){
 		}
 		else
 		{
-			kSessionUtils::createKSessionNoValidations($currentPartnerId, null, $ks, 2592000, SessionType::ADMIN);
-			$url .= "?ks=$ks";
+			vSessionUtils::createVSessionNoValidations($currentPartnerId, null, $vs, 2592000, SessionType::ADMIN);
+			$url .= "?vs=$vs";
 		}
 		
 		$lastDistributionDate = 'Never';

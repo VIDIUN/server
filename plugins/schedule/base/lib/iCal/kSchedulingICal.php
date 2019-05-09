@@ -1,6 +1,6 @@
 <?php
 
-class kSchedulingICal
+class vSchedulingICal
 {
 	const TIME_FORMAT = 'Ymd\THis\Z';
 	const TIME_PARSE = '%Y%m%dT%H%i%sZ';
@@ -16,18 +16,18 @@ class kSchedulingICal
 
 	/**
 	 * @param string $data
-	 * @param KalturaScheduleEventType $eventsType
-	 * @return kSchedulingICalCalendar
+	 * @param VidiunScheduleEventType $eventsType
+	 * @return vSchedulingICalCalendar
 	 */
 	public static function parse($data, $eventsType)
 	{
-		return new kSchedulingICalCalendar($data, $eventsType);
+		return new vSchedulingICalCalendar($data, $eventsType);
 	}
 
 	/**
 	 * @param string $type
 	 * @param array $lines
-	 * @return kSchedulingICalComponent
+	 * @return vSchedulingICalComponent
 	 * @throws Exception
 	 */
 	public static function parseComponent($type, array &$lines)
@@ -37,15 +37,15 @@ class kSchedulingICal
 		switch ($type)
 		{
 			case self::TYPE_CALENDAR:
-				$component = new kSchedulingICalCalendar();
+				$component = new vSchedulingICalCalendar();
 				break;
 
 			case self::TYPE_EVENT:
-				$component = new kSchedulingICalEvent();
+				$component = new vSchedulingICalEvent();
 				break;
 
 			default:
-				KalturaLog::warning("Component type [$type] is not supported. Component is ignored during schedulingICal parsing.");
+				VidiunLog::warning("Component type [$type] is not supported. Component is ignored during schedulingICal parsing.");
 
 		}
 
@@ -60,7 +60,7 @@ class kSchedulingICal
 	{
 		$original = date_default_timezone_get();
 		date_default_timezone_set('UTC');
-		$date = date(kSchedulingICal::TIME_FORMAT, $time);
+		$date = date(vSchedulingICal::TIME_FORMAT, $time);
 		date_default_timezone_set($original);
 		return $date;
 	}
@@ -161,7 +161,7 @@ class kSchedulingICal
 			return new DateTimeZone(date_default_timezone_get());
 		}
 
-		KalturaLog::info("Retrieving Timezone according to timezone name: [$tzid]");
+		VidiunLog::info("Retrieving Timezone according to timezone name: [$tzid]");
 		$tzIdentifiers = DateTimeZone::listIdentifiers();
 		try
 		{
@@ -185,7 +185,7 @@ class kSchedulingICal
 		}
 
 		// If we got all the way here, we default to UTC.
-		KalturaLog::warning("No Timezone conversion was found for: [$tzid] using Default UTC timezone");
+		VidiunLog::warning("No Timezone conversion was found for: [$tzid] using Default UTC timezone");
 		return new DateTimeZone(date_default_timezone_get());
 
 	}

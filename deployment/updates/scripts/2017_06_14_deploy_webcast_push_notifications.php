@@ -16,7 +16,7 @@ function deployWebcastPushNotifications()
 	
 	if(!file_exists($codeQnaConfig) || !file_exists($publicQnaConfig) || !file_exists($userQnaConfig) || !file_exists($pollsConfig))
 	{
-		KalturaLog::err("Missing notification file for deployign notifications");
+		VidiunLog::err("Missing notification file for deployign notifications");
 		return;
 	}
 	
@@ -34,7 +34,7 @@ function checkMandatoryPluginsEnabled()
 {
 	$requiredPlugins = array("PushNotification", "Queue", "RabbitMQ");
 	$pluginsFilePath = realpath(dirname(__FILE__) . "/../../../configurations/plugins.ini");
-	KalturaLog::debug("Loading Plugins config from [$pluginsFilePath]");
+	VidiunLog::debug("Loading Plugins config from [$pluginsFilePath]");
 	
 	$pluginsData = file_get_contents($pluginsFilePath);
 	foreach ($requiredPlugins as $requiredPlugin)
@@ -42,13 +42,13 @@ function checkMandatoryPluginsEnabled()
 		//check if plugin exists in file but is disabled
 		if(strpos($pluginsData, ";".$requiredPlugin) !== false)
 		{
-			KalturaLog::debug("[$requiredPlugin] is disabled, aborting execution");
+			VidiunLog::debug("[$requiredPlugin] is disabled, aborting execution");
 			exit(-2);
 		}
 		
 		if(strpos($pluginsData, $requiredPlugin) === false)
 		{
-			KalturaLog::debug("[$requiredPlugin] not found in plugins data, aborting execution");
+			VidiunLog::debug("[$requiredPlugin] not found in plugins data, aborting execution");
 			exit(-2);
 		}
 	}

@@ -26,8 +26,8 @@
 	<meta property="og:video:height" content="<?php echo $uiConf->getHeight();?>" />	
 
 	<meta name="twitter:card" content="player"/>
-    <meta name="twitter:site" content="@kaltura"/>
-    <meta name="twitter:creator" content="@kaltura"/>
+    <meta name="twitter:site" content="@vidiun"/>
+    <meta name="twitter:creator" content="@vidiun"/>
     <meta name="twitter:title" content="<?php echo htmlspecialchars($entry_name); ?>" />
     <meta name="twitter:description" content="<?php echo htmlspecialchars($entry_description); ?>" />
     <meta name="twitter:image" content="<?php echo $entry_thumbnail_secure_url; ?>/width/<?php echo $uiConf->getWidth();?>" />
@@ -39,7 +39,7 @@
     <meta name="twitter:player:height" content="<?php echo $uiConf->getHeight();?>" />
     <meta name="twitter:player:width" content="<?php echo $uiConf->getWidth();?>" />
 
-	<meta property="og:site_name" content="Kaltura" />
+	<meta property="og:site_name" content="Vidiun" />
 	<?php } ?>
 	<title><?php echo htmlspecialchars($entry_name); ?></title>
 	<link type="text/css" rel="stylesheet" href="/lib/css/shortlink.css" />
@@ -60,7 +60,7 @@
 	<script src="/lib/js/json2.min.js"></script>
 	<![endif]-->
 	<script src="/lib/js/jquery-1.8.3.min.js"></script>
-	<script src="/lib/js/KalturaEmbedCodeGenerator-1.0.6.min.js"></script>	
+	<script src="/lib/js/VidiunEmbedCodeGenerator-1.0.6.min.js"></script>	
 </head>
 <body>
 	<?php if(!$framed) { ?>
@@ -137,11 +137,11 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 var scriptToEval = ''; 
-var code = new kEmbedCodeGenerator(<?php echo json_encode($embedParams); ?>).getCode();
+var code = new vEmbedCodeGenerator(<?php echo json_encode($embedParams); ?>).getCode();
 var embedType = '<?php echo $embedType;?>';
 var ltIE10 = $('html').hasClass('lt-ie10');
-var isPlaykit = '<?php echo $isPlaykit?>';
-if (isPlaykit === '1') {
+var isPakhshkit = '<?php echo $isPakhshkit?>';
+if (isPakhshkit === '1') {
     var data = <?php echo json_encode($embedParams); ?>;
     var width = <?php echo $uiConf->getWidth();?>;
     var height = <?php echo $uiConf->getHeight();?>;
@@ -161,12 +161,12 @@ if (isPlaykit === '1') {
     if (!width) {
         width = 600;
     }
-    var codeUrl = "//" + data.securedHost + "/p/" + data.partnerId +"/embedPlaykitJs/uiconf_id/"+ data.uiConfId;
+    var codeUrl = "//" + data.securedHost + "/p/" + data.partnerId +"/embedPakhshkitJs/uiconf_id/"+ data.uiConfId;
     var iframeURL = codeUrl + "/entry_id/" + data.entryId + "?iframeembed=true";
-    var embedCode = '<scr'+'ipt src="'+ codeUrl +'"></scr'+'ipt><scr'+'ipt> var kalturaPlayer = KalturaPlayer.setup('+ JSON.stringify(playerConfig)+');	kalturaPlayer.loadMedia({entryId: "'+ data.entryId +'"})</scr'+'ipt>';
+    var embedCode = '<scr'+'ipt src="'+ codeUrl +'"></scr'+'ipt><scr'+'ipt> var vidiunPlayer = VidiunPlayer.setup('+ JSON.stringify(playerConfig)+');	vidiunPlayer.loadMedia({entryId: "'+ data.entryId +'"})</scr'+'ipt>';
     code = embedCode;
     if (data.embedType === 'iframe') {
-        code = '<iframe id="kaltura_player" src="'+iframeURL+'" width="'+ width +'" height="'+height+'" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen="" allow="autoplay; fullscreen; encrypted-media" frameborder="0" style="width: '+width+'px; height: '+height+'px;" itemprop="video" itemscope="" itemtype="http://schema.org/VideoObject">';
+        code = '<iframe id="vidiun_player" src="'+iframeURL+'" width="'+ width +'" height="'+height+'" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen="" allow="autoplay; fullscreen; encrypted-media" frameborder="0" style="width: '+width+'px; height: '+height+'px;" itemprop="video" itemscope="" itemtype="http://schema.org/VideoObject">';
     }
     document.getElementById('framePlayerContainer').style.height = height + 'px';
     document.getElementById('framePlayerContainer').style.width = width + 'px';

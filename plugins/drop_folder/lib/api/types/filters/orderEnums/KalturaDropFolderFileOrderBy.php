@@ -3,7 +3,7 @@
  * @package plugins.dropFolder
  * @subpackage api.filters.enum
  */
-class KalturaDropFolderFileOrderBy extends KalturaStringEnum
+class VidiunDropFolderFileOrderBy extends VidiunStringEnum
 {
 	const ID_ASC = "+id";
 	const ID_DESC = "-id";

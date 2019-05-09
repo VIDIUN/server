@@ -3,10 +3,10 @@
  * @package plugins.scheduledTask
  * @subpackage api.filters
  */
-class KalturaScheduledTaskProfileFilter extends KalturaScheduledTaskProfileBaseFilter
+class VidiunScheduledTaskProfileFilter extends VidiunScheduledTaskProfileBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

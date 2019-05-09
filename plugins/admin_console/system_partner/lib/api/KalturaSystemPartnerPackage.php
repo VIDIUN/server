@@ -3,7 +3,7 @@
  * @package plugins.systemPartner
  * @subpackage api.objects
  */
-class KalturaSystemPartnerPackage extends KalturaObject
+class VidiunSystemPartnerPackage extends VidiunObject
 {
 	/**
 	 * @var int

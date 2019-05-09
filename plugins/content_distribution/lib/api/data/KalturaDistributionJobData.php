@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaDistributionJobData extends KalturaJobData
+class VidiunDistributionJobData extends VidiunJobData
 {
 	/**
 	 * @var int
@@ -11,7 +11,7 @@ class KalturaDistributionJobData extends KalturaJobData
 	public $distributionProfileId;
 	
 	/**
-	 * @var KalturaDistributionProfile
+	 * @var VidiunDistributionProfile
 	 */
 	public $distributionProfile;
 	
@@ -21,7 +21,7 @@ class KalturaDistributionJobData extends KalturaJobData
 	public $entryDistributionId;
 	
 	/**
-	 * @var KalturaEntryDistribution
+	 * @var VidiunEntryDistribution
 	 */
 	public $entryDistribution;
 
@@ -32,13 +32,13 @@ class KalturaDistributionJobData extends KalturaJobData
 	public $remoteId;
 
 	/**
-	 * @var KalturaDistributionProviderType
+	 * @var VidiunDistributionProviderType
 	 */
 	public $providerType;
 
 	/**
 	 * Additional data that relevant for the provider only
-	 * @var KalturaDistributionJobProviderData
+	 * @var VidiunDistributionJobProviderData
 	 */
 	public $providerData;
 
@@ -57,7 +57,7 @@ class KalturaDistributionJobData extends KalturaJobData
 	/**
 	 * Stores array of media files that submitted to the destination site
 	 * Could be used later for media update 
-	 * @var KalturaDistributionRemoteMediaFileArray
+	 * @var VidiunDistributionRemoteMediaFileArray
 	 */
 	public $mediaFiles;
 	
@@ -77,11 +77,11 @@ class KalturaDistributionJobData extends KalturaJobData
 		return array_merge ( parent::getMapBetweenObjects() , self::$map_between_objects );
 	}
 	
-	public function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($sourceObject, $responseProfile);
 		
-		$this->mediaFiles = KalturaDistributionRemoteMediaFileArray::fromDbArray($sourceObject->getMediaFiles());
+		$this->mediaFiles = VidiunDistributionRemoteMediaFileArray::fromDbArray($sourceObject->getMediaFiles());
 		
 		if(!$this->distributionProfileId)
 			return;
@@ -93,30 +93,30 @@ class KalturaDistributionJobData extends KalturaJobData
 		if(!$distributionProfile || $distributionProfile->getStatus() != DistributionProfileStatus::ENABLED)
 			return;
 			
-		$this->distributionProfile = KalturaDistributionProfileFactory::createKalturaDistributionProfile($distributionProfile->getProviderType());
+		$this->distributionProfile = VidiunDistributionProfileFactory::createVidiunDistributionProfile($distributionProfile->getProviderType());
 		$this->distributionProfile->fromObject($distributionProfile);
 		
 		$entryDistribution = EntryDistributionPeer::retrieveByPK($this->entryDistributionId);
 		if($entryDistribution)
 		{
-			$this->entryDistribution = new KalturaEntryDistribution();
+			$this->entryDistribution = new VidiunEntryDistribution();
 			$this->entryDistribution->fromObject($entryDistribution);
 		}
 		
 		$providerType = $sourceObject->getProviderType();
 		if($providerType)
 		{
-			if($providerType == KalturaDistributionProviderType::GENERIC)
+			if($providerType == VidiunDistributionProviderType::GENERIC)
 			{
-				$this->providerData = new KalturaGenericDistributionJobProviderData($this);
+				$this->providerData = new VidiunGenericDistributionJobProviderData($this);
 			}
 			else 
 			{
-				$this->providerData = KalturaPluginManager::loadObject('KalturaDistributionJobProviderData', $providerType, array($this));
+				$this->providerData = VidiunPluginManager::loadObject('VidiunDistributionJobProviderData', $providerType, array($this));
 			}
 			
 			$providerData = $sourceObject->getProviderData();
-			if($this->providerData && $providerData && $providerData instanceof kDistributionJobProviderData)
+			if($this->providerData && $providerData && $providerData instanceof vDistributionJobProviderData)
 				$this->providerData->fromObject($providerData);
 		}
 	}
@@ -134,16 +134,16 @@ class KalturaDistributionJobData extends KalturaJobData
 			$object->setMediaFiles($mediaFiles);
 		}
 		
-		if($this->providerType && $this->providerData && $this->providerData instanceof KalturaDistributionJobProviderData)
+		if($this->providerType && $this->providerData && $this->providerData instanceof VidiunDistributionJobProviderData)
 		{
 			$providerData = null;
-			if($this->providerType == KalturaDistributionProviderType::GENERIC)
+			if($this->providerType == VidiunDistributionProviderType::GENERIC)
 			{
-				$providerData = new kGenericDistributionJobProviderData($object);
+				$providerData = new vGenericDistributionJobProviderData($object);
 			}
 			else 
 			{
-				$providerData = KalturaPluginManager::loadObject('kDistributionJobProviderData', $this->providerType, array($object));
+				$providerData = VidiunPluginManager::loadObject('vDistributionJobProviderData', $this->providerType, array($object));
 			}
 			
 			if($providerData)
@@ -162,7 +162,7 @@ class KalturaDistributionJobData extends KalturaJobData
 	 */
 	public function toSubType($subType)
 	{
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $subType);
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $subType);
 	}
 	
 	/**
@@ -171,6 +171,6 @@ class KalturaDistributionJobData extends KalturaJobData
 	 */
 	public function fromSubType($subType)
 	{
-		return kPluginableEnumsManager::coreToApi('DistributionProviderType', $subType);
+		return vPluginableEnumsManager::coreToApi('DistributionProviderType', $subType);
 	}
 }

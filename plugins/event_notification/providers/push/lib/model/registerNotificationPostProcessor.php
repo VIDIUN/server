@@ -37,15 +37,15 @@ class registerNotificationPostProcessor
 	
 	private function encode($data)
 	{
-		$secret = kConf::get("push_server_secret");
-		$iv = kConf::get("push_server_secret_iv");
+		$secret = vConf::get("push_server_secret");
+		$iv = vConf::get("push_server_secret_iv");
 		
 		// pad the rest of the block to suit Node crypto functions padding scheme (PKCS5)
 		$blocksize = 16;
 		$pad = $blocksize - (strlen($data) % $blocksize);
 		$data = $data . str_repeat(chr($pad), $pad);
 		
-		$cipherData = KCryptoWrapper::encrypt_aes($data, $secret, $iv);
+		$cipherData = VCryptoWrapper::encrypt_aes($data, $secret, $iv);
 		return bin2hex($cipherData);
 	}
 	
@@ -54,14 +54,14 @@ class registerNotificationPostProcessor
 		try
 		{
 			$requestParams = infraRequestUtils::getRequestParams();
-			$ksObject = $this->getKsObject($requestParams);
-			if(!$ksObject)
-				throw new Exception('Failed to get KS object');
+			$vsObject = $this->getVsObject($requestParams);
+			if(!$vsObject)
+				throw new Exception('Failed to get VS object');
 			
-			$this->setHash($ksObject->getHash());
+			$this->setHash($vsObject->getHash());
 			$this->updateResponseQueueName($response);
 			$this->updateResponseQueueKey($response, $requestParams);
-			$this->updateResponseUrl($response, $requestParams, $ksObject);
+			$this->updateResponseUrl($response, $requestParams, $vsObject);
 		}
 		catch(Exception $e)
 		{
@@ -118,10 +118,10 @@ class registerNotificationPostProcessor
 		}
 	}
 	
-	public function updateResponseUrl(&$response, $requestParams, kSessionBase $ksObject)
+	public function updateResponseUrl(&$response, $requestParams, vSessionBase $vsObject)
 	{
-		$urlData = json_encode(array_merge($this->getBasicUrlData(), $this->getKsUrlData($ksObject)));
-		$urlData = urlencode(base64_encode($ksObject->getPartnerId() . ":" . $this->encode($urlData)));		
+		$urlData = json_encode(array_merge($this->getBasicUrlData(), $this->getVsUrlData($vsObject)));
+		$urlData = urlencode(base64_encode($vsObject->getPartnerId() . ":" . $this->encode($urlData)));		
 		$response = str_replace("{urlData}", $urlData, $response);
 	}
 	
@@ -144,31 +144,31 @@ class registerNotificationPostProcessor
 		return $paramsKeyValue;
 	}
 	
-	public function getKsObject($requestParams)
+	public function getVsObject($requestParams)
 	{
-		$ks = $this->getRequestParamsKs($requestParams);
-		if(!$ks)
+		$vs = $this->getRequestParamsVs($requestParams);
+		if(!$vs)
 			return null;
 		
-		$ksObj = new kSessionBase();
-		$parseResult = $ksObj->parseKS($ks);
-		$ksStatus = $ksObj->tryToValidateKS();
-		if($parseResult && $ksStatus == kSessionBase::OK)
-			return $ksObj;
+		$vsObj = new vSessionBase();
+		$parseResult = $vsObj->parseVS($vs);
+		$vsStatus = $vsObj->tryToValidateVS();
+		if($parseResult && $vsStatus == vSessionBase::OK)
+			return $vsObj;
 		
 		return null;
 	}
 	
-	private function getRequestParamsKs($requestParams)
+	private function getRequestParamsVs($requestParams)
 	{
-		if(isset($requestParams['originalKs']))
-			return $requestParams['originalKs'];
+		if(isset($requestParams['originalVs']))
+			return $requestParams['originalVs'];
 		
-		if(isset($requestParams['ks']))
-			return $requestParams['ks'];
+		if(isset($requestParams['vs']))
+			return $requestParams['vs'];
 		
-		if(isset($requestParams['service']) && $requestParams['service'] === "multirequest" && isset($requestParams['1:ks']))
-			return $requestParams['1:ks'];
+		if(isset($requestParams['service']) && $requestParams['service'] === "multirequest" && isset($requestParams['1:vs']))
+			return $requestParams['1:vs'];
 		
 		return null;
 	}
@@ -176,53 +176,53 @@ class registerNotificationPostProcessor
 	private function getBasicUrlData()
 	{
 		return array(
-				"key"	=> kConf::get("push_server_secret"),
+				"key"	=> vConf::get("push_server_secret"),
 				"ip"		=> infraRequestUtils::getRemoteAddress(),
 				"hash"		=> $this->hash,
         );
 	}
 	
-	private function getKsUrlData(kSessionBase $ksObject = null)
+	private function getVsUrlData(vSessionBase $vsObject = null)
 	{
-		if(!$ksObject)
+		if(!$vsObject)
 			return array();
 		
 		return array(
-				"ksPartnerId"	=> $ksObject->partner_id, 
-				"ksUserId" 		=> $ksObject->user,
-				"ksPrivileges"	=> $ksObject->getPrivileges(), 
-				"ksExpiry" 		=> $ksObject->valid_until
+				"vsPartnerId"	=> $vsObject->partner_id, 
+				"vsUserId" 		=> $vsObject->user,
+				"vsPrivileges"	=> $vsObject->getPrivileges(), 
+				"vsExpiry" 		=> $vsObject->valid_until
 		);
 	}
 	
 	private function buildCachableResponse($partnerId, $queueName, $queueKey)
 	{
-		$result = new KalturaPushNotificationData();
+		$result = new VidiunPushNotificationData();
 		$result->queueName = self::QUEUE_NAME_PREFIX . $queueName . self::QUEUE_NAME_POSTFIX;
 		$result->queueKey = self::QUEUE_KEY_PREFIX . $queueKey . self::QUEUE_KEY_POSTFIX;
-		$result->url = infraRequestUtils::getProtocol() . "://" . kConf::get("push_server_host") . "/?p=" . $partnerId . "&x={urlData}";
+		$result->url = infraRequestUtils::getProtocol() . "://" . vConf::get("push_server_host") . "/?p=" . $partnerId . "&x={urlData}";
 		
 		return $result;
 	}
 	
 	private function buildUnCachableResponse($partnerId, $queueName, $queueKey)
 	{		
-		$urlData = json_encode(array_merge($this->getBasicUrlData(), $this->getKsUrlData(kCurrentContext::$ks_object)));
+		$urlData = json_encode(array_merge($this->getBasicUrlData(), $this->getVsUrlData(vCurrentContext::$vs_object)));
 		$urlData = urlencode(base64_encode("$partnerId:" . self::encode($urlData)));
 		
-		$result = new KalturaPushNotificationData();
+		$result = new VidiunPushNotificationData();
 		$result->queueName = $this->encode($queueName . ":" . $this->hash);
 		$result->queueKey = $this->encode($queueKey . ":" . $this->hash);
-		$result->url = infraRequestUtils::getProtocol() . "://" . kConf::get("push_server_host") . "/?p=" . $partnerId . "&x=$urlData";
+		$result->url = infraRequestUtils::getProtocol() . "://" . vConf::get("push_server_host") . "/?p=" . $partnerId . "&x=$urlData";
 		
 		return $result;
 	}
 	
 	public function buildResponse($partnerId, $queueName, $queueKey)
 	{
-		$this->setHash(kCurrentContext::$ks_object->getHash());
+		$this->setHash(vCurrentContext::$vs_object->getHash());
 		
-		if(kApiCache::getEnableResponsePostProcessor())
+		if(vApiCache::getEnableResponsePostProcessor())
 			return $this->buildCachableResponse($partnerId, $queueName, $queueKey);
 		else 
 			return $this->buildUnCachableResponse($partnerId, $queueName, $queueKey);

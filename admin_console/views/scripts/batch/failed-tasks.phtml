@@ -79,7 +79,7 @@
 							<td><?php echo $job->executionAttempts; ?></td>
 						</tr>
 						<tr class="additionalData <?php echo $this->cycle(array('odd', 'even'))->current(); ?>" id="tr_job_data_<?php echo $job->id; ?>" style="display: none">
-							<td colspan="11"><?php echo $this->printKalturaObject($job->data); ?></td>
+							<td colspan="11"><?php echo $this->printVidiunObject($job->data); ?></td>
 						</tr>
 					<?php
 				}

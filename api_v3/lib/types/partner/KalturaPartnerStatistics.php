@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPartnerStatistics extends KalturaObject
+class VidiunPartnerStatistics extends VidiunObject
 {
 	/**
 	 * Package total allowed bandwidth and storage

@@ -1,11 +1,11 @@
 <?php
 /**
- * kEntitlementUtils is all utils needed for entitlement use cases.
+ * vEntitlementUtils is all utils needed for entitlement use cases.
  * @package Core
  * @subpackage utils
  *
  */
-class kEntitlementUtils
+class vEntitlementUtils
 {
 	const DEFAULT_CONTEXT = 'DEFAULTPC';
 	const NOT_DEFAULT_CONTEXT = 'NOTDEFAULTPC';
@@ -26,14 +26,14 @@ class kEntitlementUtils
 
 	public static function getPartnerPrefix($partnerId)
 	{
-		return kEntitlementUtils::PARTNER_ID_PREFIX . $partnerId;
+		return vEntitlementUtils::PARTNER_ID_PREFIX . $partnerId;
 	}
 
 	public static function addPrivacyContextsPrefix($privacyContextsArray, $partnerId )
 	{
 		if ( is_null($privacyContextsArray) || is_null($partnerId))
 		{
-			KalturaLog::err("can't handle privacy context for privacyContextsArray: $privacyContextsArray and partnerId: $partnerId.");
+			VidiunLog::err("can't handle privacy context for privacyContextsArray: $privacyContextsArray and partnerId: $partnerId.");
 			return $privacyContextsArray;
 		}
 		$prefix = self::getPartnerPrefix($partnerId);
@@ -62,23 +62,23 @@ class kEntitlementUtils
 		return self::$initialized;
 	}
 
-	public static function isKsPrivacyContextSet()
+	public static function isVsPrivacyContextSet()
 	{
-		$ks = ks::fromSecureString(kCurrentContext::$ks);
+		$vs = vs::fromSecureString(vCurrentContext::$vs);
 
-		if(!$ks || !$ks->getPrivacyContext())
+		if(!$vs || !$vs->getPrivacyContext())
 			return false;
 
 		return true;
 	}
 
 	/**
-	 * Returns true if kuser or current kuser is entitled to entryId
+	 * Returns true if vuser or current vuser is entitled to entryId
 	 * @param entry $entry
-	 * @param int $kuser
+	 * @param int $vuser
 	 * @return bool
 	 */
-	public static function isEntryEntitled(entry $entry, $kuserId = null)
+	public static function isEntryEntitled(entry $entry, $vuserId = null)
 	{
 		if($entry->getPartnerId() == PartnerPeer::GLOBAL_PARTNER)
 		{
@@ -90,119 +90,119 @@ class kEntitlementUtils
 			$entry = $entry->getParentEntry();
 			if(!$entry)
 			{
-				KalturaLog::log('Parent entry not found, cannot validate entitlement');
+				VidiunLog::log('Parent entry not found, cannot validate entitlement');
 				return false;
 			}
 		}
 
-		$ks = ks::fromSecureString(kCurrentContext::$ks);
+		$vs = vs::fromSecureString(vCurrentContext::$vs);
 
 		if(self::$entitlementForced === false)
 		{
-			KalturaLog::log('Entitlement forced to be disabled');
+			VidiunLog::log('Entitlement forced to be disabled');
 			return true;
 		}
 
 		// entry is entitled when entitlement is disable
-		// for actions with no ks - need to check if partner have default entitlement feature enable.
-		if(!self::getEntitlementEnforcement() && $ks)
+		// for actions with no vs - need to check if partner have default entitlement feature enable.
+		if(!self::getEntitlementEnforcement() && $vs)
 		{
-			KalturaLog::log('Entry entitled: entitlement disabled');
+			VidiunLog::log('Entry entitled: entitlement disabled');
 			return true;
 		}
 
 		$partner = $entry->getPartner();
-		if(!$ks && !$partner->getDefaultEntitlementEnforcement())
+		if(!$vs && !$partner->getDefaultEntitlementEnforcement())
 		{
-			KalturaLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: no ks and default is with no enforcement');
+			VidiunLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: no vs and default is with no enforcement');
 			return true;
 		}
 
-		if($ks && in_array($entry->getId(), $ks->getDisableEntitlementForEntry()))
+		if($vs && in_array($entry->getId(), $vs->getDisableEntitlementForEntry()))
 		{
-			KalturaLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: ks disble entitlement for this entry');
+			VidiunLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: vs disble entitlement for this entry');
 			return true;
 		}
 
-		$kuserId = self::getKuserIdForEntitlement($kuserId, $ks);
+		$vuserId = self::getVuserIdForEntitlement($vuserId, $vs);
 
-		if($ks && $kuserId)
+		if($vs && $vuserId)
 		{
-			// kuser is set on the entry as creator or uploader
-			if ($kuserId != '' && ($entry->getKuserId() == $kuserId))
+			// vuser is set on the entry as creator or uploader
+			if ($vuserId != '' && ($entry->getVuserId() == $vuserId))
 			{
-				KalturaLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: ks user is the same as entry->kuserId or entry->creatorKuserId [' . $kuserId . ']');
+				VidiunLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: vs user is the same as entry->vuserId or entry->creatorVuserId [' . $vuserId . ']');
 				return true;
 			}
 
-			// kuser is set on the entry entitled users edit or publish or view
-			if($entry->isEntitledKuserEdit($kuserId) || $entry->isEntitledKuserPublish($kuserId) || $entry->isEntitledKuserView($kuserId))
+			// vuser is set on the entry entitled users edit or publish or view
+			if($entry->isEntitledVuserEdit($vuserId) || $entry->isEntitledVuserPublish($vuserId) || $entry->isEntitledVuserView($vuserId))
 			{
-				KalturaLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: ks user is the same as entry->entitledKusersEdit or entry->entitledKusersPublish or entry->entitledKusersView');
+				VidiunLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: vs user is the same as entry->entitledVusersEdit or entry->entitledVusersPublish or entry->entitledVusersView');
 				return true;
 			}
 		}
 
-		if(!$ks)
+		if(!$vs)
 		{
 			// entry that doesn't belong to any category is public
-			//when ks is not provided - the entry is still public (for example - download action)
+			//when vs is not provided - the entry is still public (for example - download action)
 			$categoryEntry = categoryEntryPeer::retrieveOneActiveByEntryId($entry->getId());
 			if(!$categoryEntry)
 			{
-				KalturaLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: entry does not belong to any category');
+				VidiunLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: entry does not belong to any category');
 				return true;
 			}
 		}
 
-		$ksPrivacyContexts = null;
-		if($ks)
-			$ksPrivacyContexts = $ks->getPrivacyContext();
+		$vsPrivacyContexts = null;
+		if($vs)
+			$vsPrivacyContexts = $vs->getPrivacyContext();
 
 		$allCategoriesEntry = array();
 
 		if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_DISABLE_CATEGORY_LIMIT, $partner->getId()))
 		{
-			if(!$ksPrivacyContexts || trim($ksPrivacyContexts) == '')
+			if(!$vsPrivacyContexts || trim($vsPrivacyContexts) == '')
 			{
 				$categoryEntry = categoryEntryPeer::retrieveOneByEntryIdStatusPrivacyContextExistance($entry->getId(), array(CategoryEntryStatus::PENDING, CategoryEntryStatus::ACTIVE));
 				if($categoryEntry)
 				{
-					KalturaLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: entry belongs to public category and privacy context on the ks is not set');
+					VidiunLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: entry belongs to public category and privacy context on the vs is not set');
 					return true;
 				}
 			}
 			else
-				$allCategoriesEntry = categoryEntryPeer::retrieveActiveAndPendingByEntryIdAndPrivacyContext($entry->getId(), $ksPrivacyContexts);
+				$allCategoriesEntry = categoryEntryPeer::retrieveActiveAndPendingByEntryIdAndPrivacyContext($entry->getId(), $vsPrivacyContexts);
 		}
 		else
 		{
 			$allCategoriesEntry = categoryEntryPeer::retrieveActiveAndPendingByEntryId($entry->getId());
-			if($ks && (!$ksPrivacyContexts || trim($ksPrivacyContexts) == '') && !count($allCategoriesEntry))
+			if($vs && (!$vsPrivacyContexts || trim($vsPrivacyContexts) == '') && !count($allCategoriesEntry))
 			{
 				// entry that doesn't belong to any category is public
-				KalturaLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: entry does not belong to any category and privacy context on the ks is not set');
+				VidiunLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: entry does not belong to any category and privacy context on the vs is not set');
 				return true;
 			}
 		}
 
-		return self::isMemberOfCategory($allCategoriesEntry, $entry, $partner, $kuserId, $ks, $ksPrivacyContexts);
+		return self::isMemberOfCategory($allCategoriesEntry, $entry, $partner, $vuserId, $vs, $vsPrivacyContexts);
 	}
 
-	public static function getKuserIdForEntitlement($kuserId = null, $ks = null)
+	public static function getVuserIdForEntitlement($vuserId = null, $vs = null)
 	{
-		if($ks && !$kuserId)
+		if($vs && !$vuserId)
 		{
-			$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
-			$kuser = kuserPeer::getKuserByPartnerAndUid($partnerId, kCurrentContext::$ks_uid, true);
-			if($kuser)
-				$kuserId = $kuser->getId();
+			$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
+			$vuser = vuserPeer::getVuserByPartnerAndUid($partnerId, vCurrentContext::$vs_uid, true);
+			if($vuser)
+				$vuserId = $vuser->getId();
 		}
 
-		return $kuserId;
+		return $vuserId;
 	}
 
-	private static function isMemberOfCategory($allCategoriesEntry, entry $entry, Partner $partner, $kuserId = null, $ks = null, $ksPrivacyContexts = null)
+	private static function isMemberOfCategory($allCategoriesEntry, entry $entry, Partner $partner, $vuserId = null, $vs = null, $vsPrivacyContexts = null)
 	{
 		$categories = array();
 		foreach($allCategoriesEntry as $categoryEntry)
@@ -211,66 +211,66 @@ class kEntitlementUtils
 		//if entry doesn't belong to any category.
 		$categories[] = category::CATEGORY_ID_THAT_DOES_NOT_EXIST;
 
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 		$c->add(categoryPeer::ID, $categories, Criteria::IN);
 
 		$privacy = array(category::formatPrivacy(PrivacyType::ALL, $partner->getId()));
-		if($ks && !$ks->isAnonymousSession())
+		if($vs && !$vs->isAnonymousSession())
 			$privacy[] = category::formatPrivacy(PrivacyType::AUTHENTICATED_USERS, $partner->getId());
 
 		$crit = $c->getNewCriterion (categoryPeer::PRIVACY, $privacy, Criteria::IN);
 
-		if($ks)
+		if($vs)
 		{
-			if (!$ksPrivacyContexts || trim($ksPrivacyContexts) == '')
-				$ksPrivacyContexts = self::getDefaultContextString( $partner->getId());
+			if (!$vsPrivacyContexts || trim($vsPrivacyContexts) == '')
+				$vsPrivacyContexts = self::getDefaultContextString( $partner->getId());
 			else
 			{
-				$ksPrivacyContexts = explode(',', $ksPrivacyContexts);
-				$ksPrivacyContexts = self::addPrivacyContextsPrefix( $ksPrivacyContexts, $partner->getId() );
+				$vsPrivacyContexts = explode(',', $vsPrivacyContexts);
+				$vsPrivacyContexts = self::addPrivacyContextsPrefix( $vsPrivacyContexts, $partner->getId() );
 			}
 
-			$c->add(categoryPeer::PRIVACY_CONTEXTS, $ksPrivacyContexts, KalturaCriteria::IN_LIKE);
+			$c->add(categoryPeer::PRIVACY_CONTEXTS, $vsPrivacyContexts, VidiunCriteria::IN_LIKE);
 
-			// kuser is set on the category as member
+			// vuser is set on the category as member
 			// this ugly code is temporery - since we have a bug in sphinxCriteria::getAllCriterionFields
-			if($kuserId)
+			if($vuserId)
 			{
 				// get the groups that the user belongs to in case she is not associated to the category directly
-				$kgroupIds = KuserKgroupPeer::retrieveKgroupIdsByKuserId($kuserId);
-				$kgroupIds[] = $kuserId;
-				$membersCrit = $c->getNewCriterion ( categoryPeer::MEMBERS , $kgroupIds, KalturaCriteria::IN_LIKE);
+				$vgroupIds = VuserVgroupPeer::retrieveVgroupIdsByVuserId($vuserId);
+				$vgroupIds[] = $vuserId;
+				$membersCrit = $c->getNewCriterion ( categoryPeer::MEMBERS , $vgroupIds, VidiunCriteria::IN_LIKE);
 				$membersCrit->addOr($crit);
 				$crit = $membersCrit;
 			}
 		}
 		else
 		{
-			//no ks = set privacy context to default.
-			$c->add(categoryPeer::PRIVACY_CONTEXTS, array( self::getDefaultContextString( $partner->getId() )) , KalturaCriteria::IN_LIKE);
+			//no vs = set privacy context to default.
+			$c->add(categoryPeer::PRIVACY_CONTEXTS, array( self::getDefaultContextString( $partner->getId() )) , VidiunCriteria::IN_LIKE);
 		}
 
 		$c->addAnd($crit);
 
 		//remove default FORCED criteria since categories that has display in search = public - doesn't mean that all of their entries are public
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$category = categoryPeer::doSelectOne($c);
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 
 		if($category)
 		{
-			KalturaLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: ks user is a member of this category or category privacy is set to public of authenticated');
+			VidiunLog::info('Entry [' . print_r($entry->getId(), true) . '] entitled: vs user is a member of this category or category privacy is set to public of authenticated');
 			return true;
 		}
 
-		KalturaLog::info('Entry [' . print_r($entry->getId(), true) . '] not entitled');
+		VidiunLog::info('Entry [' . print_r($entry->getId(), true) . '] not entitled');
 		return false;
 	}
 
 	/**
 	 * Set Entitlement Enforcement - if entitelement is enabled \ disabled in this session
 	 * @param int $categoryId
-	 * @param int $kuser
+	 * @param int $vuser
 	 * @return bool
 	 */
 	public static function initEntitlementEnforcement($partnerId = null, $enableEntit = null)
@@ -279,7 +279,7 @@ class kEntitlementUtils
 		self::$entitlementForced = $enableEntit;
 
 		if(is_null($partnerId))
-			$partnerId = kCurrentContext::getCurrentPartnerId();
+			$partnerId = vCurrentContext::getCurrentPartnerId();
 
 		if(is_null($partnerId) || $partnerId == Partner::BATCH_PARTNER_ID)
 			return;
@@ -288,14 +288,14 @@ class kEntitlementUtils
 		if (!$partner)
 			return;
 
-		$ks = null;
-		$ksString = kCurrentContext::$ks ? kCurrentContext::$ks : '';
-		if ($ksString != '') // for actions with no KS or when creating ks.
+		$vs = null;
+		$vsString = vCurrentContext::$vs ? vCurrentContext::$vs : '';
+		if ($vsString != '') // for actions with no VS or when creating vs.
 		{
-			$ks = ks::fromSecureString($ksString);
+			$vs = vs::fromSecureString($vsString);
 		}
 
-		self::initCategoryModeration($ks);
+		self::initCategoryModeration($vs);
 
 		if(!PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENTITLEMENT, $partnerId))
 			return;
@@ -308,13 +308,13 @@ class kEntitlementUtils
 
 		self::$entitlementEnforcement = $partnerDefaultEntitlementEnforcement;
 
-		if ($ks) // for actions with no KS or when creating ks.
+		if ($vs) // for actions with no VS or when creating vs.
 		{
-			$enableEntitlement = $ks->getDisableEntitlement();
+			$enableEntitlement = $vs->getDisableEntitlement();
 			if ($enableEntitlement)
 				self::$entitlementEnforcement = false;
 
-			$enableEntitlement = $ks->getEnableEntitlement();
+			$enableEntitlement = $vs->getEnableEntitlement();
 			if ($enableEntitlement)
 				self::$entitlementEnforcement = true;
 
@@ -330,15 +330,15 @@ class kEntitlementUtils
 
 		if (self::$entitlementEnforcement)
 		{
-			KalturaCriterion::enableTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
-			KalturaCriterion::enableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+			VidiunCriterion::enableTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
+			VidiunCriterion::enableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		}
 	}
 
-	public static function getPrivacyForKs($partnerId)
+	public static function getPrivacyForVs($partnerId)
 	{
-		$ks = ks::fromSecureString(kCurrentContext::$ks);
-		if(!$ks || $ks->isAnonymousSession())
+		$vs = vs::fromSecureString(vCurrentContext::$vs);
+		if(!$vs || $vs->isAnonymousSession())
 			return array(category::formatPrivacy(PrivacyType::ALL, $partnerId));
 
 		return array(category::formatPrivacy(PrivacyType::ALL, $partnerId),
@@ -347,33 +347,33 @@ class kEntitlementUtils
 
 	public static function getPrivacyContextSearch()
 	{
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 
 		if (self::$privacyContextSearch)
 			return self::$privacyContextSearch;
 
 		$privacyContextSearch = array();
 
-		$ks = ks::fromSecureString(kCurrentContext::$ks);
-		if(!$ks)
+		$vs = vs::fromSecureString(vCurrentContext::$vs);
+		if(!$vs)
 			return array( self::getDefaultContextString( $partnerId ) . self::TYPE_SEPERATOR . PrivacyType::ALL);
 
-		$ksPrivacyContexts = $ks->getPrivacyContext();
+		$vsPrivacyContexts = $vs->getPrivacyContext();
 
-		if(is_null($ksPrivacyContexts))
-		{   // setting $ksPrivacyContexts only with DEFAULT_CONTEXT string (to resolve conflicts)
+		if(is_null($vsPrivacyContexts))
+		{   // setting $vsPrivacyContexts only with DEFAULT_CONTEXT string (to resolve conflicts)
 			// since prefix will be add in the addPrivacyContextsPrefix bellow
-			$ksPrivacyContexts = self::DEFAULT_CONTEXT;
+			$vsPrivacyContexts = self::DEFAULT_CONTEXT;
 		}
 
-		$ksPrivacyContexts = explode(',', $ksPrivacyContexts);
+		$vsPrivacyContexts = explode(',', $vsPrivacyContexts);
 
-		foreach ($ksPrivacyContexts as $ksPrivacyContext)
+		foreach ($vsPrivacyContexts as $vsPrivacyContext)
 		{
-			$privacyContextSearch[] = $ksPrivacyContext . self::TYPE_SEPERATOR . PrivacyType::ALL;
+			$privacyContextSearch[] = $vsPrivacyContext . self::TYPE_SEPERATOR . PrivacyType::ALL;
 
-			if (!$ks->isAnonymousSession())
-				$privacyContextSearch[] = $ksPrivacyContext . self::TYPE_SEPERATOR  . PrivacyType::AUTHENTICATED_USERS;
+			if (!$vs->isAnonymousSession())
+				$privacyContextSearch[] = $vsPrivacyContext . self::TYPE_SEPERATOR  . PrivacyType::AUTHENTICATED_USERS;
 		}
 
 		self::$privacyContextSearch = self::addPrivacyContextsPrefix( $privacyContextSearch, $partnerId );
@@ -403,22 +403,22 @@ class kEntitlementUtils
 		foreach ($privacyContexts as $categoryPrivacyContext => $Privacy)
 			$entryPrivacyContexts[] = $categoryPrivacyContext . self::TYPE_SEPERATOR . $Privacy;
 
-		KalturaLog::info('Privacy by context: ' . print_r($entryPrivacyContexts,true));
+		VidiunLog::info('Privacy by context: ' . print_r($entryPrivacyContexts,true));
 
 		return $entryPrivacyContexts;
 	}
 
 	private static function getCategoriesByIds($categoriesIds)
 	{
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$c->add(categoryPeer::ID, $categoriesIds, Criteria::IN);
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$c->dontCount();
 
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$categories = categoryPeer::doSelect($c);
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 
 		return $categories;
 	}
@@ -486,80 +486,80 @@ class kEntitlementUtils
 		return $privacyContexts;
 	}
 
-	public static function getEntitledKuserByPrivacyContext()
+	public static function getEntitledVuserByPrivacyContext()
 	{
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 
 		$privacyContextSearch = array();
 
-		$ks = ks::fromSecureString(kCurrentContext::$ks);
-		$ksPrivacyContexts = null;
-		if ($ks)
-			$ksPrivacyContexts = $ks->getPrivacyContext();
+		$vs = vs::fromSecureString(vCurrentContext::$vs);
+		$vsPrivacyContexts = null;
+		if ($vs)
+			$vsPrivacyContexts = $vs->getPrivacyContext();
 
-		if(is_null($ksPrivacyContexts) || $ksPrivacyContexts == '')
-			$ksPrivacyContexts = self::DEFAULT_CONTEXT . $partnerId;
+		if(is_null($vsPrivacyContexts) || $vsPrivacyContexts == '')
+			$vsPrivacyContexts = self::DEFAULT_CONTEXT . $partnerId;
 
-		$ksPrivacyContexts = explode(',', $ksPrivacyContexts);
+		$vsPrivacyContexts = explode(',', $vsPrivacyContexts);
 
-		$privacyContexts = $ksPrivacyContexts;
+		$privacyContexts = $vsPrivacyContexts;
 		$privacyContexts[] = self::ENTRY_PRIVACY_CONTEXT;
 
 		// get the groups that the user belongs to in case she is not associated to the category directly
-		$kuserIds = KuserKgroupPeer::retrieveKgroupIdsByKuserId(kCurrentContext::getCurrentKsKuserId());
-		$kuserIds[] = kCurrentContext::getCurrentKsKuserId();
+		$vuserIds = VuserVgroupPeer::retrieveVgroupIdsByVuserId(vCurrentContext::getCurrentVsVuserId());
+		$vuserIds[] = vCurrentContext::getCurrentVsVuserId();
 		foreach ($privacyContexts as $privacyContext){
-			foreach ( $kuserIds as $kuserId){
-				$privacyContextSearch[] = $privacyContext . '_' . $kuserId;
+			foreach ( $vuserIds as $vuserId){
+				$privacyContextSearch[] = $privacyContext . '_' . $vuserId;
 			}
 		}
 
 		return $privacyContextSearch;
 	}
-	public static function getKsPrivacyContext()
+	public static function getVsPrivacyContext()
 	{
-		$partnerId = kCurrentContext::$ks_partner_id ? kCurrentContext::$ks_partner_id : kCurrentContext::$partner_id;
+		$partnerId = vCurrentContext::$vs_partner_id ? vCurrentContext::$vs_partner_id : vCurrentContext::$partner_id;
 
-		$ks = ks::fromSecureString(kCurrentContext::$ks);
-		if(!$ks)
+		$vs = vs::fromSecureString(vCurrentContext::$vs);
+		if(!$vs)
 			return array(self::getDefaultContextString( $partnerId ) );
 
-		$ksPrivacyContexts = $ks->getPrivacyContext();
-		if(is_null($ksPrivacyContexts) || $ksPrivacyContexts == '')
+		$vsPrivacyContexts = $vs->getPrivacyContext();
+		if(is_null($vsPrivacyContexts) || $vsPrivacyContexts == '')
 			return array(self::getDefaultContextString( $partnerId ));
 		else
 		{
-			$ksPrivacyContexts = explode(',', $ksPrivacyContexts);
-			$ksPrivacyContexts = self::addPrivacyContextsPrefix( $ksPrivacyContexts, $partnerId);
+			$vsPrivacyContexts = explode(',', $vsPrivacyContexts);
+			$vsPrivacyContexts = self::addPrivacyContextsPrefix( $vsPrivacyContexts, $partnerId);
 		}
 
-		return $ksPrivacyContexts;
+		return $vsPrivacyContexts;
 	}
 
 	/**
-	 * Function returns the privacy context(s) found on the KS, if none are found returns array containing DEFAULT_PC
+	 * Function returns the privacy context(s) found on the VS, if none are found returns array containing DEFAULT_PC
 	 */
-	public static function getKsPrivacyContextArray()
+	public static function getVsPrivacyContextArray()
 	{
-		$partnerId = kCurrentContext::$ks_partner_id ? kCurrentContext::$ks_partner_id : kCurrentContext::$partner_id;
+		$partnerId = vCurrentContext::$vs_partner_id ? vCurrentContext::$vs_partner_id : vCurrentContext::$partner_id;
 
-		$ks = ks::fromSecureString(kCurrentContext::$ks);
-		if(!$ks)
+		$vs = vs::fromSecureString(vCurrentContext::$vs);
+		if(!$vs)
 			return array(self::DEFAULT_CONTEXT);
 
-		$ksPrivacyContexts = $ks->getPrivacyContext();
-		if(is_null($ksPrivacyContexts) || $ksPrivacyContexts == '')
+		$vsPrivacyContexts = $vs->getPrivacyContext();
+		if(is_null($vsPrivacyContexts) || $vsPrivacyContexts == '')
 			return array(self::DEFAULT_CONTEXT);
 
-		return explode(',', $ksPrivacyContexts);
+		return explode(',', $vsPrivacyContexts);
 	}
 
-	protected static function initCategoryModeration (ks $ks = null)
+	protected static function initCategoryModeration (vs $vs = null)
 	{
-		if (!$ks)
+		if (!$vs)
 			return;
 
-		$enableCategoryModeration = $ks->getEnableCategoryModeration();
+		$enableCategoryModeration = $vs->getEnableCategoryModeration();
 		if ($enableCategoryModeration)
 			self::$categoryModeration = true;
 	}
@@ -570,9 +570,9 @@ class kEntitlementUtils
 	 */
 	public static function isEntitledForEditEntry( entry $dbEntry )
 	{
-		if ( kCurrentContext::$is_admin_session || kCurrentContext::getCurrentKsKuserId() == $dbEntry->getKuserId())
+		if ( vCurrentContext::$is_admin_session || vCurrentContext::getCurrentVsVuserId() == $dbEntry->getVuserId())
 			return true;
 
-		return $dbEntry->isEntitledKuserEdit(kCurrentContext::getCurrentKsKuserId());
+		return $dbEntry->isEntitledVuserEdit(vCurrentContext::getCurrentVsVuserId());
 	}
 }

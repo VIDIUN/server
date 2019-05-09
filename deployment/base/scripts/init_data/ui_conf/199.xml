@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layouts>
-	<layout layoutId="" skinPath="/content/uiconf/kaltura/default_player/kdp_2.0.0/kdp_skin_dark3a.swf">
+	<layout layoutId="" skinPath="/content/uiconf/vidiun/default_player/vdp_2.0.0/vdp_skin_dark3a.swf">
 		<VBox height="100%" styleName="mlayout" width="100%">
 				<Canvas width="100%" height="100%" id="PlayerHolder" 
 					styleName="PlayerBackground" >
 					
-					<KplayerModule height="100%" id="myKplayer" 
-						k_path="kplayer/KplayerModule.swf" styleName="centered" 
+					<VplayerModule height="100%" id="myVplayer" 
+						v_path="vplayer/VplayerModule.swf" styleName="centered" 
 						width="100%"/>
-					<waterMark id="loadedWaterMark" height="100%" k_path="watermarks/WaterMarkLoader.swf" styleName="centered" width="100%"/>
+					<waterMark id="loadedWaterMark" height="100%" v_path="watermarks/WaterMarkLoader.swf" styleName="centered" width="100%"/>
 					<screens height="100%" id="screens" 
-						k_path="screens/Screens.swf" styleName="centered" 
-						width="100%" k_end_screen_id="endScreen" 
-						k_end_screen_over_id="endScreen" 
-						k_pause_screen_id="pauseScreen" 
-						k_pause_screen_over_id="pauseScreen" 
-						k_play_screen_id="emptyScreen" 
-						k_play_screen_over_id="emptyScreen" 
-						k_start_screen_id="startScreen" 
-						k_start_screen_over_id="startScreen" />
+						v_path="screens/Screens.swf" styleName="centered" 
+						width="100%" v_end_screen_id="endScreen" 
+						v_end_screen_over_id="endScreen" 
+						v_pause_screen_id="pauseScreen" 
+						v_pause_screen_over_id="pauseScreen" 
+						v_play_screen_id="emptyScreen" 
+						v_play_screen_over_id="emptyScreen" 
+						v_start_screen_id="startScreen" 
+						v_start_screen_over_id="startScreen" />
 					<Gigya height="100%" id="Gigya" 
-						k_share_email_body="Hi%2c%3cbr%3eI watched this video and thought you'd enjoy it too %24URL%24 to watch.%3cbr%3e%0d%0a%24sender%24%0d%0a" 
-						k_share_email_subject="Take a look at this video" 
-						k_path="addons/Gigya.swf" width="100%" />
+						v_share_email_body="Hi%2c%3cbr%3eI watched this video and thought you'd enjoy it too %24URL%24 to watch.%3cbr%3e%0d%0a%24sender%24%0d%0a" 
+						v_share_email_subject="Take a look at this video" 
+						v_path="addons/Gigya.swf" width="100%" />
 				</Canvas>
-			<HBox id="controller" height="32" k_theme_change="true" 
+			<HBox id="controller" height="32" v_theme_change="true" 
 				styleName="controllerBoxLight" width="100%" >
 				<Button width="28" height="28" id="play" styleName="play" 
-					k_buttonType="buttonIconControllerArea" />
+					v_buttonType="buttonIconControllerArea" />
 				<VBox width="100%" height="100%" styleName="scrubberHolder" >
 					<Scrubber width="100%" height="12" id="scrubber" 
 						styleName="scrubber" />
 					<HBox width="100%" height="12" styleName="TimerCont" >
-						<TimerCountdown k_change_by_click="false" height="20" 
-							id="timer1" k_path="timertext/TimerCountdown.swf" 
+						<TimerCountdown v_change_by_click="false" height="20" 
+							id="timer1" v_path="timertext/TimerCountdown.swf" 
 							styleName="timer" width="32"/>
 						<Spacer width="100%" />
 						<TimerCountdown height="20" id="timer2" 
-							k_show_total_time="true" 
-							k_path="timertext/TimerCountdown.swf" 
-							k_change_by_click="false" styleName="timer" 
+							v_show_total_time="true" 
+							v_path="timertext/TimerCountdown.swf" 
+							v_change_by_click="false" styleName="timer" 
 							width="32"/>
 					</HBox>
 				</VBox>
 				<VolumeModule width="29" height="23" id="Volume" 
-					k_path="VolumeBars/VolumeBarA.swf" 
-					k_buttonType="buttonIconControllerArea" />
+					v_path="VolumeBars/VolumeBarA.swf" 
+					v_buttonType="buttonIconControllerArea" />
 				<Button width="29" height="23" id="fullScreen" label="" 
-					k_buttonType="buttonIconControllerArea" 
+					v_buttonType="buttonIconControllerArea" 
 					styleName="fullScreen" tooltip="Full Screen" />
 				<Button height="29" id="share" label="" 
 					styleName="controlShare" 
-					k_buttonType="buttonIconControllerArea" 
+					v_buttonType="buttonIconControllerArea" 
 					tooltip="Share this video" command="gigyaButton" />
-				<Button k_theme_change="true" id="poweredByController" 
+				<Button v_theme_change="true" id="poweredByController" 
 					width="40" height="20" 
-					k_click="navigate('http://www.kaltura.com')" 
-					styleName="kalturaLogo" />
+					v_click="navigate('http://www.vidiun.com')" 
+					styleName="vidiunLogo" />
 			</HBox>
 		</VBox>
 		<popups>
@@ -105,7 +105,7 @@
 				<cssSelector componentId="controller" 
 					newClass="controllerBox"/>
 				<cssSelector componentId="poweredByController" 
-					newClass="kalturaLogoWhite" />
+					newClass="vidiunLogoWhite" />
 				<font>Arial</font>
 			</theme>
 			<theme id="dark">

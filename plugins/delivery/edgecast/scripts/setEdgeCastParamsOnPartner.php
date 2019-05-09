@@ -14,12 +14,12 @@ $partnerId = $argv[1];
 $accountNumber = $argv[2];
 $apiToken = $argv[3];
 
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "propel", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "plugins", "edgecast", "*"));
-KAutoloader::setClassMapFilePath(KALTURA_ROOT_PATH.'/cache/scripts/' . basename(__FILE__) . '.cache');
-KAutoloader::register();
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "propel", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "plugins", "edgecast", "*"));
+VAutoloader::setClassMapFilePath(VIDIUN_ROOT_PATH.'/cache/scripts/' . basename(__FILE__) . '.cache');
+VAutoloader::register();
 
-KalturaPluginManager::addPlugin('EdgeCastPlugin');
+VidiunPluginManager::addPlugin('EdgeCastPlugin');
 
 
 $partner = PartnerPeer::retrieveByPK($partnerId);
@@ -29,7 +29,7 @@ if(!$partner)
     die("No partner with ID [$partnerId].".PHP_EOL);
 }
 
-$edgeCastParams = new kEdgeCastParams();
+$edgeCastParams = new vEdgeCastParams();
 $edgeCastParams->setAccountNumber($accountNumber);
 $edgeCastParams->setApiToken($apiToken);
 

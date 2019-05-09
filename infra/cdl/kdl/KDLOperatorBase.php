@@ -1,8 +1,8 @@
 <?php
 	/* ===========================
-	 * KDLOperatorBase
+	 * VDLOperatorBase
 	 */
-abstract class KDLOperatorBase {
+abstract class VDLOperatorBase {
 	
 	protected	$_id;
 	protected	$_name;
@@ -10,32 +10,32 @@ abstract class KDLOperatorBase {
 	protected	$_targetBlacklist = array();
 	
 
-	abstract public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null);
+	abstract public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null);
 	
-	public function GenerateConfigData(KDLFlavor $design, KDLFlavor $target)
+	public function GenerateConfigData(VDLFlavor $design, VDLFlavor $target)
 	{
 		return null;
 	}
 	
     public function __construct($id, $name=null, $sourceBlacklist=null, $targetBlacklist=null) {
-		KalturaLog::log("KDLOperatorBase::__construct: id($id), name($name), sourceBlacklist(".print_r($sourceBlacklist,true)."), targetBlacklist(".print_r($targetBlacklist,true).")");
+		VidiunLog::log("VDLOperatorBase::__construct: id($id), name($name), sourceBlacklist(".print_r($sourceBlacklist,true)."), targetBlacklist(".print_r($targetBlacklist,true).")");
     	$this->_id=$id;
 		$this->_name=$name;
 		$this->_sourceBlacklist=$sourceBlacklist;
 		$this->_targetBlacklist=$targetBlacklist;
- 		if(!isset($sourceBlacklist) && array_key_exists ($id, KDLConstants::$TranscodersSourceBlackList)) {
-			$this->_sourceBlacklist=KDLConstants::$TranscodersSourceBlackList[$id];
+ 		if(!isset($sourceBlacklist) && array_key_exists ($id, VDLConstants::$TranscodersSourceBlackList)) {
+			$this->_sourceBlacklist=VDLConstants::$TranscodersSourceBlackList[$id];
 		}
-		if(!isset($targetBlacklist) && array_key_exists ($id, KDLConstants::$TranscodersTargetBlackList)) {
-			$this->_targetBlacklist=KDLConstants::$TranscodersTargetBlackList[$id];
+		if(!isset($targetBlacklist) && array_key_exists ($id, VDLConstants::$TranscodersTargetBlackList)) {
+			$this->_targetBlacklist=VDLConstants::$TranscodersTargetBlackList[$id];
 		}
    }
 
     /**
-     * @param KDLFlavor $target
+     * @param VDLFlavor $target
      * @return string configuration to be saved as file
      */
-    public function getConfigFile(KDLFlavor $target)
+    public function getConfigFile(VDLFlavor $target)
     {
     	return null;
     }
@@ -43,7 +43,7 @@ abstract class KDLOperatorBase {
     /* ---------------------------
 	 * CheckConstraints
 	 */
-    public function CheckConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+    public function CheckConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
 			/*
 			 * Source Blacklist processing
@@ -76,13 +76,13 @@ abstract class KDLOperatorBase {
 			foreach ($blackList as $keyPart => $subBlackList){
 				$sourcePart = null;
 				switch($keyPart){
-				case KDLConstants::ContainerIndex;
+				case VDLConstants::ContainerIndex;
 					$sourcePart = $mediaSet->_container;
 					break;
-				case KDLConstants::VideoIndex;
+				case VDLConstants::VideoIndex;
 					$sourcePart = $mediaSet->_video;
 					break;
-				case KDLConstants::AudioIndex;
+				case VDLConstants::AudioIndex;
 					$sourcePart = $mediaSet->_audio;
 					break;
 				default:
@@ -92,7 +92,7 @@ abstract class KDLOperatorBase {
 				&& (in_array($sourcePart->_id, $subBlackList)
 				|| in_array($sourcePart->_format, $subBlackList))) {
 					$warnings[$keyPart][] = 
-						KDLWarnings::ToString(KDLWarnings::TranscoderFormat, $this->_id, ($sourcePart->_id."/".$sourcePart->_format));
+						VDLWarnings::ToString(VDLWarnings::TranscoderFormat, $this->_id, ($sourcePart->_id."/".$sourcePart->_format));
 					return $sourcePart;
 				}
 			}
@@ -106,7 +106,7 @@ abstract class KDLOperatorBase {
 	protected function fixVP6BitRate($maxVidRate, $videoBr)
 	{
 		if($videoBr){
-			$videoBr = round($videoBr*KDLVideoBitrateNormalize::BitrateVP6Factor);
+			$videoBr = round($videoBr*VDLVideoBitrateNormalize::BitrateVP6Factor);
 			if($videoBr>$maxVidRate){
 				$videoBr=$maxVidRate;
 			}
@@ -171,9 +171,9 @@ abstract class KDLOperatorBase {
 }
 
 	/* ===========================
-	 * KDLOperationParams
+	 * VDLOperationParams
 	 */
-class KDLOperationParams {
+class VDLOperationParams {
 	public function Set($id,$ex=null, $cmd=null, $cfg=null){
 		$this->_id=$id;
 		$this->_extra=$ex;
@@ -239,7 +239,7 @@ class KDLOperationParams {
 		/* ---------------------------
 		 * GenerateCommandAndConfig($trId, array $transObjArr)
 		 */
-	public function GenerateCommandAndConfig(KDLFlavor $design, KDLFlavor $target)
+	public function GenerateCommandAndConfig(VDLFlavor $design, VDLFlavor $target)
 	{
 		$this->UpdateTarget($target);
 		$this->_cmd = $this->_engine->GenerateCommandLine($design, $target, $this->_extra);
@@ -250,7 +250,7 @@ class KDLOperationParams {
 	/* ---------------------------
 	 * 
 	 */
-	public function UpdateTarget(KDLFlavor $target)
+	public function UpdateTarget(VDLFlavor $target)
 	{
 		/*
 		 * Following code block is a 'dirty' short cut to overload the qt_tools 
@@ -258,7 +258,7 @@ class KDLOperationParams {
 		 * Other engines will not be effected.
 		 * The correct solution is to add additional param fields to engin's JSOn record 
 		 */
-		$paramsMap = KDLUtils::parseParamStr2Map($this->_params);
+		$paramsMap = VDLUtils::parseParamStr2Map($this->_params);
 		if(!isset($paramsMap)){
 			return;
 		}

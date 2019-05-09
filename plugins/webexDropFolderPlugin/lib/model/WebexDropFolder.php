@@ -218,7 +218,7 @@ class WebexDropFolder extends RemoteDropFolder
 	
 	public function getImportJobData()
 	{
-		return new kDropFolderImportJobData();
+		return new vDropFolderImportJobData();
 	}
 	
 	public function getFolderUrl()
@@ -228,7 +228,7 @@ class WebexDropFolder extends RemoteDropFolder
 	
 	protected function getRemoteFileTransferMgrType()
 	{
-		return kFileTransferMgrType::HTTP;
+		return vFileTransferMgrType::HTTP;
 	}
 	
 }

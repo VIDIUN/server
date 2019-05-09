@@ -3,6 +3,6 @@
  * @package plugins.uverseClickToOrderDistribution
  * @subpackage api.filters.enum
  */
-class KalturaUverseClickToOrderDistributionProviderOrderBy extends KalturaDistributionProviderOrderBy
+class VidiunUverseClickToOrderDistributionProviderOrderBy extends VidiunDistributionProviderOrderBy
 {
 }

@@ -3,7 +3,7 @@
  * @package plugins.msnDistribution
  * @subpackage api.enum
  */
-class KalturaMsnDistributionField extends KalturaStringEnum implements MsnDistributionField
+class VidiunMsnDistributionField extends VidiunStringEnum implements MsnDistributionField
 {
 	// see MsnDistributionField interface
 }

@@ -2,7 +2,7 @@
 /**
  * 
  */
-abstract class KDropFolderEngine implements IKalturaLogger
+abstract class VDropFolderEngine implements IVidiunLogger
 {
 	protected $dropFolder;
 	
@@ -14,42 +14,42 @@ abstract class KDropFolderEngine implements IKalturaLogger
 	
 	public function __construct ()
 	{
-		$this->dropFolderPlugin = KalturaDropFolderClientPlugin::get(KBatchBase::$kClient);
+		$this->dropFolderPlugin = VidiunDropFolderClientPlugin::get(VBatchBase::$vClient);
 		$this->dropFolderFileService = $this->dropFolderPlugin->dropFolderFile;
 	}
 	
 	public static function getInstance ($dropFolderType)
 	{
 		switch ($dropFolderType) {
-			case KalturaDropFolderType::FTP:
-			case KalturaDropFolderType::SFTP:
-			case KalturaDropFolderType::LOCAL:
-				return new KDropFolderFileTransferEngine ();
+			case VidiunDropFolderType::FTP:
+			case VidiunDropFolderType::SFTP:
+			case VidiunDropFolderType::LOCAL:
+				return new VDropFolderFileTransferEngine ();
 				break;
 			
 			default:
-				return KalturaPluginManager::loadObject('KDropFolderEngine', $dropFolderType);
+				return VidiunPluginManager::loadObject('VDropFolderEngine', $dropFolderType);
 				break;
 		}
 	}
 	
-	abstract public function watchFolder (KalturaDropFolder $dropFolder);
+	abstract public function watchFolder (VidiunDropFolder $dropFolder);
 	
-	abstract public function processFolder (KalturaBatchJob $job, KalturaDropFolderContentProcessorJobData $data);
+	abstract public function processFolder (VidiunBatchJob $job, VidiunDropFolderContentProcessorJobData $data);
 
 	/**
 	 * Load all the files from the database that their status is not PURGED, PARSED or DETECTED
-	 * @param KalturaFilterPager $pager
+	 * @param VidiunFilterPager $pager
 	 * @return array
 	 */
 	protected function loadDropFolderFilesByPage($pager)
 	{
 		$dropFolderFiles =null;
 
-		$dropFolderFileFilter = new KalturaDropFolderFileFilter();
+		$dropFolderFileFilter = new VidiunDropFolderFileFilter();
 		$dropFolderFileFilter->dropFolderIdEqual = $this->dropFolder->id;
-		$dropFolderFileFilter->statusNotIn = KalturaDropFolderFileStatus::PARSED.','.KalturaDropFolderFileStatus::DETECTED;
-		$dropFolderFileFilter->orderBy = KalturaDropFolderFileOrderBy::CREATED_AT_ASC;
+		$dropFolderFileFilter->statusNotIn = VidiunDropFolderFileStatus::PARSED.','.VidiunDropFolderFileStatus::DETECTED;
+		$dropFolderFileFilter->orderBy = VidiunDropFolderFileOrderBy::CREATED_AT_ASC;
 
 		$dropFolderFiles = $this->dropFolderFileService->listAction($dropFolderFileFilter, $pager);
 		return $dropFolderFiles->objects;
@@ -63,15 +63,15 @@ abstract class KDropFolderEngine implements IKalturaLogger
 	{
 		$dropFolderFiles =null;
 
-		$dropFolderFileFilter = new KalturaDropFolderFileFilter();
+		$dropFolderFileFilter = new VidiunDropFolderFileFilter();
 		$dropFolderFileFilter->dropFolderIdEqual = $this->dropFolder->id;
-		$dropFolderFileFilter->statusNotIn = KalturaDropFolderFileStatus::PARSED.','.KalturaDropFolderFileStatus::DETECTED;
-		$dropFolderFileFilter->orderBy = KalturaDropFolderFileOrderBy::CREATED_AT_ASC;
+		$dropFolderFileFilter->statusNotIn = VidiunDropFolderFileStatus::PARSED.','.VidiunDropFolderFileStatus::DETECTED;
+		$dropFolderFileFilter->orderBy = VidiunDropFolderFileOrderBy::CREATED_AT_ASC;
 
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
-		if(KBatchBase::$taskConfig && KBatchBase::$taskConfig->params->pageSize)
-			$pager->pageSize = KBatchBase::$taskConfig->params->pageSize;
+		if(VBatchBase::$taskConfig && VBatchBase::$taskConfig->params->pageSize)
+			$pager->pageSize = VBatchBase::$taskConfig->params->pageSize;
 
 		return $this->loadDropFolderFilesMap($dropFolderFileFilter, $pager);
 	}
@@ -85,23 +85,23 @@ abstract class KDropFolderEngine implements IKalturaLogger
 	{
 		$dropFolderFiles =null;
 
-		$dropFolderFileFilter = new KalturaDropFolderFileFilter();
+		$dropFolderFileFilter = new VidiunDropFolderFileFilter();
 		$dropFolderFileFilter->dropFolderIdEqual = $this->dropFolder->id;
-		$dropFolderFileFilter->statusEqual = KalturaDropFolderFileStatus::UPLOADING;
+		$dropFolderFileFilter->statusEqual = VidiunDropFolderFileStatus::UPLOADING;
 		$dropFolderFileFilter->updatedAtLessThanOrEqual = $updatedAt;
-		$dropFolderFileFilter->orderBy = KalturaDropFolderFileOrderBy::CREATED_AT_ASC;
+		$dropFolderFileFilter->orderBy = VidiunDropFolderFileOrderBy::CREATED_AT_ASC;
 
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
-		if(KBatchBase::$taskConfig && KBatchBase::$taskConfig->params->pageSize)
-			$pager->pageSize = KBatchBase::$taskConfig->params->pageSize;
+		if(VBatchBase::$taskConfig && VBatchBase::$taskConfig->params->pageSize)
+			$pager->pageSize = VBatchBase::$taskConfig->params->pageSize;
 
 		return $this->loadDropFolderFilesMap($dropFolderFileFilter, $pager);
 	}
 
 	/**
-	 * @param $dropFolderFileFilter KalturaDropFolderFileFilter
-	 * @param $pager KalturaFilterPager
+	 * @param $dropFolderFileFilter VidiunDropFolderFileFilter
+	 * @param $pager VidiunFilterPager
 	 * @return array
 	 */
 	protected function loadDropFolderFilesMap($dropFolderFileFilter, $pager)
@@ -126,10 +126,10 @@ abstract class KDropFolderEngine implements IKalturaLogger
 		} while (count($dropFolderFiles) >= $pager->pageSize);
 
 		$mapCount = count($dropFolderFilesMap);
-		KalturaLog::debug("Drop folder [" . $this->dropFolder->id . "] has [$totalCount] file");
+		VidiunLog::debug("Drop folder [" . $this->dropFolder->id . "] has [$totalCount] file");
 		if ($totalCount != $mapCount)
 		{
-			KalturaLog::warning("Map is missing files - Drop folder [" . $this->dropFolder->id . "] has [$totalCount] file from list BUT has [$mapCount] files in map");
+			VidiunLog::warning("Map is missing files - Drop folder [" . $this->dropFolder->id . "] has [$totalCount] file from list BUT has [$mapCount] files in map");
 		}
 
 		return $dropFolderFilesMap;
@@ -148,19 +148,19 @@ abstract class KDropFolderEngine implements IKalturaLogger
 		try 
 		{
 			if($e)
-				KalturaLog::err('Error for drop folder file with id ['.$dropFolderFileId.'] - '.$e->getMessage());
+				VidiunLog::err('Error for drop folder file with id ['.$dropFolderFileId.'] - '.$e->getMessage());
 			else
-				KalturaLog::err('Error for drop folder file with id ['.$dropFolderFileId.'] - '.$errorMessage);
+				VidiunLog::err('Error for drop folder file with id ['.$dropFolderFileId.'] - '.$errorMessage);
 			
-			$updateDropFolderFile = new KalturaDropFolderFile();
+			$updateDropFolderFile = new VidiunDropFolderFile();
 			$updateDropFolderFile->errorCode = $errorCode;
 			$updateDropFolderFile->errorDescription = $errorMessage;
 			$this->dropFolderFileService->update($dropFolderFileId, $updateDropFolderFile);
 			return $this->dropFolderFileService->updateStatus($dropFolderFileId, $errorStatus);				
 		}
-		catch (KalturaException $e) 
+		catch (VidiunException $e) 
 		{
-			KalturaLog::err('Cannot set error details for drop folder file id ['.$dropFolderFileId.'] - '.$e->getMessage());
+			VidiunLog::err('Cannot set error details for drop folder file id ['.$dropFolderFileId.'] - '.$e->getMessage());
 			return null;
 		}
 	}
@@ -173,11 +173,11 @@ abstract class KDropFolderEngine implements IKalturaLogger
 	{
 		try 
 		{
-			return $this->dropFolderFileService->updateStatus($dropFolderFileId, KalturaDropFolderFileStatus::PURGED);
+			return $this->dropFolderFileService->updateStatus($dropFolderFileId, VidiunDropFolderFileStatus::PURGED);
 		}
 		catch(Exception $e)
 		{
-			$this->handleFileError($dropFolderFileId, KalturaDropFolderFileStatus::ERROR_HANDLING, KalturaDropFolderFileErrorCode::ERROR_UPDATE_FILE, 
+			$this->handleFileError($dropFolderFileId, VidiunDropFolderFileStatus::ERROR_HANDLING, VidiunDropFolderFileErrorCode::ERROR_UPDATE_FILE, 
 									DropFolderPlugin::ERROR_UPDATE_FILE_MESSAGE, $e);
 			
 			return null;
@@ -187,19 +187,19 @@ abstract class KDropFolderEngine implements IKalturaLogger
 	/**
 	 * Retrieve all the relevant drop folder files according to the list of id's passed on the job data.
 	 * Create resource object based on the conversion profile as an input to the ingestion API
-	 * @param KalturaBatchJob $job
-	 * @param KalturaDropFolderContentProcessorJobData $data
+	 * @param VidiunBatchJob $job
+	 * @param VidiunDropFolderContentProcessorJobData $data
 	 */
-	protected function getIngestionResource(KalturaBatchJob $job, KalturaDropFolderContentProcessorJobData $data)
+	protected function getIngestionResource(VidiunBatchJob $job, VidiunDropFolderContentProcessorJobData $data)
 	{
-		$filter = new KalturaDropFolderFileFilter();
+		$filter = new VidiunDropFolderFileFilter();
 		$filter->idIn = $data->dropFolderFileIds;
 		$dropFolderFiles = $this->dropFolderFileService->listAction($filter); 
 		
 		$resource = null;
 		if($dropFolderFiles->totalCount == 1 && is_null($dropFolderFiles->objects[0]->parsedFlavor)) //only source is ingested
 		{
-			$resource = new KalturaDropFolderFileResource();
+			$resource = new VidiunDropFolderFileResource();
 			$resource->dropFolderFileId = $dropFolderFiles->objects[0]->id;			
 		}
 		else //ingest all the required flavors
@@ -212,38 +212,38 @@ abstract class KDropFolderEngine implements IKalturaLogger
 			
 			$assetContainerArray = array();
 		
-			$assetParamsFilter = new KalturaConversionProfileAssetParamsFilter();
+			$assetParamsFilter = new VidiunConversionProfileAssetParamsFilter();
 			$assetParamsFilter->conversionProfileIdEqual = $data->conversionProfileId;
-			$assetParamsList = KBatchBase::$kClient->conversionProfileAssetParams->listAction($assetParamsFilter);
+			$assetParamsList = VBatchBase::$vClient->conversionProfileAssetParams->listAction($assetParamsFilter);
 			foreach ($assetParamsList->objects as $assetParams)
 			{
 				if(array_key_exists($assetParams->systemName, $fileToFlavorMap))
 				{
-					$assetContainer = new KalturaAssetParamsResourceContainer();
+					$assetContainer = new VidiunAssetParamsResourceContainer();
 					$assetContainer->assetParamsId = $assetParams->assetParamsId;
-					$assetContainer->resource = new KalturaDropFolderFileResource();
+					$assetContainer->resource = new VidiunDropFolderFileResource();
 					$assetContainer->resource->dropFolderFileId = $fileToFlavorMap[$assetParams->systemName];
 					$assetContainerArray[] = $assetContainer;				
 				}			
 			}		
-			$resource = new KalturaAssetsParamsResourceContainers();
+			$resource = new VidiunAssetsParamsResourceContainers();
 			$resource->resources = $assetContainerArray;
 		}
 		return $resource;		
 	}
 
-	protected function createCategoryAssociations (KalturaDropFolder $folder, $userId, $entryId)
+	protected function createCategoryAssociations (VidiunDropFolder $folder, $userId, $entryId)
 	{
 		if ($folder->metadataProfileId && $folder->categoriesMetadataFieldName)
 		{
-			$filter = new KalturaMetadataFilter();
+			$filter = new VidiunMetadataFilter();
 			$filter->metadataProfileIdEqual = $folder->metadataProfileId;
 			$filter->objectIdEqual = $userId;
-			$filter->metadataObjectTypeEqual = KalturaMetadataObjectType::USER;
+			$filter->metadataObjectTypeEqual = VidiunMetadataObjectType::USER;
 			
 			try
 			{
-				$metadataPlugin = KalturaMetadataClientPlugin::get(KBatchBase::$kClient);
+				$metadataPlugin = VidiunMetadataClientPlugin::get(VBatchBase::$vClient);
 				//Expect only one result
 				$res = $metadataPlugin->metadata->listAction($filter, new KalturaFilterPager());
 				
@@ -259,9 +259,9 @@ abstract class KDropFolderEngine implements IKalturaLogger
 					$categories[] = strval($catXPath);
 				}
 				
-				$categoryFilter = new KalturaCategoryFilter();
+				$categoryFilter = new VidiunCategoryFilter();
 				$categoryFilter->idIn = implode(',', $categories);
-				$categoryListResponse = KBatchBase::$kClient->category->listAction ($categoryFilter, new KalturaFilterPager());
+				$categoryListResponse = VBatchBase::$vClient->category->listAction ($categoryFilter, new VidiunFilterPager());
 				if ($categoryListResponse->objects && count($categoryListResponse->objects))
 				{
 					if (!$folder->enforceEntitlement)
@@ -277,38 +277,38 @@ abstract class KDropFolderEngine implements IKalturaLogger
 			}
 			catch (Exception $e)
 			{
-				KalturaLog::err('Error encountered. Code: ['. $e->getCode() . '] Message: [' . $e->getMessage() . ']');
+				VidiunLog::err('Error encountered. Code: ['. $e->getCode() . '] Message: [' . $e->getMessage() . ']');
 			}
 		}
 	}
 
 	private function createCategoryEntriesNoEntitlement (array $categoriesArr, $entryId)
 	{
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach ($categoriesArr as $category)
 		{
-			$categoryEntry = new KalturaCategoryEntry();
+			$categoryEntry = new VidiunCategoryEntry();
 			$categoryEntry->entryId = $entryId;
 			$categoryEntry->categoryId = $category->id;
-			KBatchBase::$kClient->categoryEntry->add($categoryEntry);
+			VBatchBase::$vClient->categoryEntry->add($categoryEntry);
 		}
-		KBatchBase::$kClient->doMultiRequest();
+		VBatchBase::$vClient->doMultiRequest();
 	}
 	
 	private function createCategoryEntriesWithEntitlement (array $categoriesArr, $entryId, $userId)
 	{
-		$partnerInfo = KBatchBase::$kClient->partner->get(KBatchBase::$kClientConfig->partnerId);
+		$partnerInfo = VBatchBase::$vClient->partner->get(VBatchBase::$vClientConfig->partnerId);
 		
-		$clientConfig = new KalturaConfiguration($partnerInfo->id);
-		$clientConfig->serviceUrl = KBatchBase::$kClient->getConfig()->serviceUrl;
+		$clientConfig = new VidiunConfiguration($partnerInfo->id);
+		$clientConfig->serviceUrl = VBatchBase::$vClient->getConfig()->serviceUrl;
 		$clientConfig->setLogger($this);
-		$client = new KalturaClient($clientConfig);
+		$client = new VidiunClient($clientConfig);
 		foreach ($categoriesArr as $category)
 		{
-			/* @var $category KalturaCategory */
-			$ks = $client->generateSessionV2($partnerInfo->adminSecret, $userId, KalturaSessionType::ADMIN, $partnerInfo->id, 86400, 'enableentitlement,privacycontext:'.$category->privacyContexts);
-			$client->setKs($ks);
-			$categoryEntry = new KalturaCategoryEntry();
+			/* @var $category VidiunCategory */
+			$vs = $client->generateSessionV2($partnerInfo->adminSecret, $userId, VidiunSessionType::ADMIN, $partnerInfo->id, 86400, 'enableentitlement,privacycontext:'.$category->privacyContexts);
+			$client->setVs($vs);
+			$categoryEntry = new VidiunCategoryEntry();
 			$categoryEntry->categoryId = $category->id;
 			$categoryEntry->entryId = $entryId;
 			try
@@ -317,14 +317,14 @@ abstract class KDropFolderEngine implements IKalturaLogger
 			}
 			catch (Exception $e)
 			{
-				KalturaLog::err("Could not add entry $entryId to category {$category->id}. Exception thrown.");
+				VidiunLog::err("Could not add entry $entryId to category {$category->id}. Exception thrown.");
 			}
 		}
 	}
 	
 	function log($message)
 	{
-		KalturaLog::log($message);
+		VidiunLog::log($message);
 	}
 	
 	public function setMaximumExecutionTime($maximumExecutionTime = null)

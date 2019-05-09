@@ -68,14 +68,14 @@ function moveJob(BatchJob $job, BatchJobLock $jobLock, $sourceDc, $targetDc)
 	
 	// check whether the job can be moved
 	$jobData = $job->getData();
-	/* @var $jobData kConvartableJobData */
+	/* @var $jobData vConvartableJobData */
 	$srcFileSyncs = $jobData->getSrcFileSyncs();
 	if (count($srcFileSyncs) != 1)
 	{
 		return false;		// unexpected - multiple sources for convert
 	}
 	$srcFileSync = reset($srcFileSyncs);
-	/* @var $srcFileSync kSourceFileSyncDescriptor */
+	/* @var $srcFileSync vSourceFileSyncDescriptor */
 	$sourceAsset = assetPeer::retrieveById($srcFileSync->getAssetId());
 	if (!$sourceAsset)
 	{
@@ -158,7 +158,7 @@ function moveJobs($c, $maxMovedJobs, $sourceDc, $targetDc, $jobType, $jobSubType
 				continue;
 			}
 				
-			KalturaLog::log('Moved job '.$job->getId()." PartnerId ".$job->getPartnerId()." EntryId ".$job->getEntryId()." FlavorId ".$job->getObjectId()."\n");
+			VidiunLog::log('Moved job '.$job->getId()." PartnerId ".$job->getPartnerId()." EntryId ".$job->getEntryId()." FlavorId ".$job->getObjectId()."\n");
 			$movedJobsCount++;
 			if ($movedJobsCount >= $maxMovedJobs)
 				break;
@@ -168,7 +168,7 @@ function moveJobs($c, $maxMovedJobs, $sourceDc, $targetDc, $jobType, $jobSubType
 		{
 			$c->setOffset($c->getOffset() + CHUNK_SIZE / 2);
 		}
-		kMemoryManager::clearMemory();
+		vMemoryManager::clearMemory();
 	}
 	
 	return $movedJobsCount;
@@ -189,7 +189,7 @@ function getRunningJobsCount($jobType, $jobSubType)
 	// running
 	$c->add(BatchJobLockPeer::STATUS, BatchJob::BATCHJOB_STATUS_QUEUED);
 	// job type + sub type
-	$c->add(BatchJobLockPeer::DC, kDataCenterMgr::getDcIds(), Criteria::IN);
+	$c->add(BatchJobLockPeer::DC, vDataCenterMgr::getDcIds(), Criteria::IN);
 	$c->add(BatchJobLockPeer::JOB_TYPE, $jobType);
 	if (!is_null($jobSubType))
 	{
@@ -209,7 +209,7 @@ function getRunningJobsCount($jobType, $jobSubType)
 	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
 	$countByDc = array();
-	foreach (kDataCenterMgr::getDcIds() as $dc)
+	foreach (vDataCenterMgr::getDcIds() as $dc)
 	{
 		$countByDc[$dc] = 0;
 	}
@@ -244,7 +244,7 @@ function getPendingJobsCount($jobType, $jobSubType, $maxJobsPerPartner)
 	$c->add(BatchJobLockPeer::BATCH_INDEX, null, Criteria::ISNULL);
 	$c->add(BatchJobLockPeer::STATUS, BatchJob::BATCHJOB_STATUS_PENDING);
 	// job type + sub type
-	$c->add(BatchJobLockPeer::DC, kDataCenterMgr::getDcIds(), Criteria::IN);
+	$c->add(BatchJobLockPeer::DC, vDataCenterMgr::getDcIds(), Criteria::IN);
 	$c->add(BatchJobLockPeer::JOB_TYPE, $jobType);
 	if (!is_null($jobSubType))
 	{
@@ -275,7 +275,7 @@ function getPendingJobsCount($jobType, $jobSubType, $maxJobsPerPartner)
 	
 	// build a map of dc, partner => job count
 	$countByDcPartner = array();
-	foreach (kDataCenterMgr::getDcIds() as $dc)
+	foreach (vDataCenterMgr::getDcIds() as $dc)
 	{
 		$countByDcPartner[$dc] = array();
 	}
@@ -315,25 +315,25 @@ function autoMoveJobs($jobType, $jobSubType)
 	$runningJobs = getRunningJobsCount($jobType, $jobSubType);
 	foreach ($runningJobs as $dc => $count)
 	{
-		if ($dc != kDataCenterMgr::getCurrentDcId() && $count < IDLE_DC_MAX_JOB_COUNT)
+		if ($dc != vDataCenterMgr::getCurrentDcId() && $count < IDLE_DC_MAX_JOB_COUNT)
 		{
 			$idleDcs[] = $dc;
 		}
 	}
 
-	KalturaLog::log('running jobs status '.print_r($runningJobs, true));
-	KalturaLog::log('idle dcs ' . implode(',', $idleDcs));
+	VidiunLog::log('running jobs status '.print_r($runningJobs, true));
+	VidiunLog::log('idle dcs ' . implode(',', $idleDcs));
 	
 	// get the pending jobs count
 	$countByDcPartner = getPendingJobsCount(
 			$jobType, $jobSubType, !$idleDcs ? MAX_PARTNER_JOB_COUNT : 0);
 	
-	KalturaLog::log('pending jobs status '.print_r($countByDcPartner, true));
+	VidiunLog::log('pending jobs status '.print_r($countByDcPartner, true));
 	
 	// Note: only move jobs away from current DC - can't safely lock a job belonging
 	//		to another DC - a worker may lock the job at the same time on the master DB
 	//		of the remote DC. the lock is atomic only when working with a single master
-	$sourceDc = kDataCenterMgr::getCurrentDcId();
+	$sourceDc = vDataCenterMgr::getCurrentDcId();
 
 	// find a target DC to push the jobs to
 	if ($idleDcs)
@@ -344,7 +344,7 @@ function autoMoveJobs($jobType, $jobSubType)
 	{
 		if (count($countByDcPartner[$sourceDc]) < BUSY_DC_MIN_PARTNER_COUNT)
 		{
-			KalturaLog::log('current dc has only '.count($countByDcPartner[$sourceDc]).' partners waiting');
+			VidiunLog::log('current dc has only '.count($countByDcPartner[$sourceDc]).' partners waiting');
 			return 0;
 		}
 		
@@ -359,7 +359,7 @@ function autoMoveJobs($jobType, $jobSubType)
 		
 		if (!$availDcs)
 		{
-			KalturaLog::log('no available dcs to push jobs to');
+			VidiunLog::log('no available dcs to push jobs to');
 			return 0;
 		}
 		
@@ -391,7 +391,7 @@ function autoMoveJobs($jobType, $jobSubType)
 		$createdAtCriterion->addAnd($c->getNewCriterion(BatchJobLockPeer::CREATED_AT, time() - MIN_JOB_AGE, Criteria::LESS_EQUAL));
 		$c->addAnd($createdAtCriterion);
 		
-		KalturaLog::log("moving jobs: partnerId=$partnerId max=$maxMovedJobs, source=$sourceDc, target=$targetDc, type=$jobType, subType=$jobSubType");
+		VidiunLog::log("moving jobs: partnerId=$partnerId max=$maxMovedJobs, source=$sourceDc, target=$targetDc, type=$jobType, subType=$jobSubType");
 	
 		$movedJobsCount += moveJobs($c, $maxMovedJobs, $sourceDc, $targetDc, $jobType, $jobSubType);
 	}
@@ -441,11 +441,11 @@ if ($argv[1] == 'manual')
 		}
 	}
 
-	KalturaLog::log("moving jobs: partnerId=$partnerId max=$maxMovedJobs, source=$sourceDc, target=$targetDc, type=$jobType, subType=$jobSubType");
+	VidiunLog::log("moving jobs: partnerId=$partnerId max=$maxMovedJobs, source=$sourceDc, target=$targetDc, type=$jobType, subType=$jobSubType");
 	
 	$movedJobsCount = moveJobs($c, $maxMovedJobs, $sourceDc, $targetDc, $jobType, $jobSubType);
 
-	KalturaLog::log("Moved {$movedJobsCount} jobs");
+	VidiunLog::log("Moved {$movedJobsCount} jobs");
 }
 else
 {
@@ -453,6 +453,6 @@ else
 	foreach (explode(',', $jobSubTypes) as $jobSubType)
 	{
 		$movedJobsCount = autoMoveJobs($jobType, $jobSubType);
-		KalturaLog::log("Moved jobs, subtype=$jobSubType count={$movedJobsCount}");
+		VidiunLog::log("Moved jobs, subtype=$jobSubType count={$movedJobsCount}");
 	}
 }

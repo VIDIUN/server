@@ -3,6 +3,6 @@
  * @package plugins.verizonVcastDistribution
  * @subpackage api.filters.enum
  */
-class KalturaVerizonVcastDistributionProviderOrderBy extends KalturaDistributionProviderOrderBy
+class VidiunVerizonVcastDistributionProviderOrderBy extends VidiunDistributionProviderOrderBy
 {
 }

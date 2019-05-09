@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlTokenizerVelocix extends KalturaUrlTokenizer {
+class VidiunUrlTokenizerVelocix extends VidiunUrlTokenizer {
 	
 	/**
 	 * hdsPaths
@@ -40,7 +40,7 @@ class KalturaUrlTokenizerVelocix extends KalturaUrlTokenizer {
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kVelocixUrlTokenizer();
+			$dbObject = new vVelocixUrlTokenizer();
 			
 		parent::toObject($dbObject, $skip);
 	

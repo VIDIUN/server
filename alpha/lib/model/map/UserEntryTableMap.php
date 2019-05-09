@@ -39,7 +39,7 @@ class UserEntryTableMap extends TableMap {
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		$this->addForeignKey('ENTRY_ID', 'EntryId', 'VARCHAR', 'entry', 'ID', true, 20, null);
-		$this->addForeignKey('KUSER_ID', 'KuserId', 'INTEGER', 'kuser', 'ID', true, null, null);
+		$this->addForeignKey('VUSER_ID', 'VuserId', 'INTEGER', 'vuser', 'ID', true, null, null);
 		$this->addColumn('PARTNER_ID', 'PartnerId', 'INTEGER', false, null, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -57,7 +57,7 @@ class UserEntryTableMap extends TableMap {
 	public function buildRelations()
 	{
     $this->addRelation('entry', 'entry', RelationMap::MANY_TO_ONE, array('entry_id' => 'id', ), null, null);
-    $this->addRelation('kuser', 'kuser', RelationMap::MANY_TO_ONE, array('kuser_id' => 'id', ), null, null);
+    $this->addRelation('vuser', 'vuser', RelationMap::MANY_TO_ONE, array('vuser_id' => 'id', ), null, null);
 	} // buildRelations()
 
 } // UserEntryTableMap

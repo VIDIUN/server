@@ -1,12 +1,12 @@
 <?php
-class kPartnerBroadcastUrlManager extends kBroadcastUrlManager
+class vPartnerBroadcastUrlManager extends vBroadcastUrlManager
 {
 	protected function getHostName($dc, $primary, $entry, $protocol)
 	{
 		$partner  = PartnerPeer::retrieveByPK($this->partnerId);
 		if (!$partner)
 		{
-			KalturaLog::info("Partner with id [{$this->partnerId}] was not found");
+			VidiunLog::info("Partner with id [{$this->partnerId}] was not found");
 			return null;
 		}
 

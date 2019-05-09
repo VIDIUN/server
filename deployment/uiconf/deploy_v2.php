@@ -6,13 +6,13 @@ require_once (__DIR__ . "/../bootstrap.php");
  * for running the script you need to provide path to ini file like:
  *  --ini={/path/to/config.ini}
  *
- * to get example code for kmc wrapper add:
+ * to get example code for vmc wrapper add:
  *  --include-code
  *
  * to dry-run the script add
  *  --no-create
  *
- * to define user (defaults to apache) or group (defaults to kaltura) for files ownership add
+ * to define user (defaults to apache) or group (defaults to vidiun) for files ownership add
  *  --user={username}
  *  --group={groupname}
  */
@@ -22,7 +22,7 @@ $code = array();
 $uiConfIds = array();
 $tokenValues = array();
 
-//$argv = array( 1=> "--ini=c:/web/flash/kmc/v4.0.4/config.ini", 2 => "--no-create"); //used to teswt inside the zend studio
+//$argv = array( 1=> "--ini=c:/web/flash/vmc/v4.0.4/config.ini", 2 => "--no-create"); //used to teswt inside the zend studio
 
 $arguments = uiConfDeployment::setArguments($argv);
 
@@ -58,7 +58,7 @@ if($includeCode)
 		$code[] = '$this->'.uiConfDeployment::$baseTag.'_uiconfs_'.$tag.' = $this->'.uiConfDeploymentCodeGenerator::SEARCH_BY_TAG_FUNCTION_NAME.'("'.uiConfDeployment::$baseTag.'_'.$tag.'");';
 	}
 	
-	echo PHP_EOL.'// code for KMC wrapper'.PHP_EOL;
+	echo PHP_EOL.'// code for VMC wrapper'.PHP_EOL;
 	$code[] = uiConfDeploymentCodeGenerator::addSearchConfByTag();
 	echo implode(PHP_EOL, $code);
 }
@@ -154,10 +154,10 @@ class uiConfDeployment
 		//			1.2.2.1. Find the uiCoinf id for this dependency and insert it in the right place
 		//			1.2.2.2. save the new ui conf
 
-		//Iterate through all sections (statics, general, kmc, kcw...)
+		//Iterate through all sections (statics, general, vmc, vcw...)
 		foreach ($confObj as $sectionName=> $sectionValue)
 		{
-			//If we are in the widgets section (like kmc, kcw, kse)
+			//If we are in the widgets section (like vmc, vcw, vse)
 			if($sectionName != "general" && isset($sectionValue->widgets))
 			{
 				//Set section values
@@ -180,8 +180,8 @@ class uiConfDeployment
 						//Then we need to insert the ui conf to the DB (so we can get his id)
 						$uiconf_id = uiConfDeployment::addUiConfThroughPropel($uiConf);
 
-						KalturaLog::debug("creating uiconf [$uiconf_id] for widget $widgetName with default values ( $baseSwfUrl , $swfName , $objectType ) for partner " . self::$partnerId);
-						KalturaLog::debug("$widgetName , $baseSwfUrl , $swfName , $objectType");
+						VidiunLog::debug("creating uiconf [$uiconf_id] for widget $widgetName with default values ( $baseSwfUrl , $swfName , $objectType ) for partner " . self::$partnerId);
+						VidiunLog::debug("$widgetName , $baseSwfUrl , $swfName , $objectType");
 					
 						if(isset($widgetValue->features))
 						{
@@ -207,7 +207,7 @@ class uiConfDeployment
 								else
 								{
 									uiConfDeployment::updateFeaturesFile($uiConf, $dependencyValue, "@@{$dependencyName}@@");
-									KalturaLog::debug("Missing dependency: {$dependencyName} = {$dependencyValue} for widget: {$widgetName}. Attempting to replace the token in uiconf features file");
+									VidiunLog::debug("Missing dependency: {$dependencyName} = {$dependencyValue} for widget: {$widgetName}. Attempting to replace the token in uiconf features file");
 								}
 							}
 						}
@@ -215,7 +215,7 @@ class uiConfDeployment
 					}
 					else
 					{
-						KalturaLog::debug("failed to create uiconf object ($widgetName) due to missing values. check your config.ini");
+						VidiunLog::debug("failed to create uiconf object ($widgetName) due to missing values. check your config.ini");
 					}
 				}
 			}
@@ -250,7 +250,7 @@ class uiConfDeployment
 			$deprecatedTag = $newTag;
 			$deprecatedTag = str_replace("autodeploy", "deprecated", $deprecatedTag);
 		
-			KalturaLog::debug("newTag is:         {$newTag} \nDeprecatedTag is : {$deprecatedTag} for partner ". self::$partnerId);
+			VidiunLog::debug("newTag is:         {$newTag} \nDeprecatedTag is : {$deprecatedTag} for partner ". self::$partnerId);
 			
 			$confCriteria = new Criteria();
 			$confCriteria->add(uiConfPeer::ID, $oldUiConf[0]);
@@ -261,19 +261,19 @@ class uiConfDeployment
 			//Update set tags = $deprecatedTag where ID = $oldUiConf->ID
 			$deprecatedCount = BasePeer::doUpdate($oldConfCriteria, $deprecatedConfValues, $con);
 			
-			KalturaLog::debug("uiConf number {$oldUiConf[0]} was updated with the tag = {$deprecatedTag}");
+			VidiunLog::debug("uiConf number {$oldUiConf[0]} was updated with the tag = {$deprecatedTag}");
 			
 			$totalDepractedCount += $deprecatedCount;
 		}
 		
 		//Add the status check to the select factor
-		KalturaLog::debug("{$totalDepractedCount} uiConfs were updated");
+		VidiunLog::debug("{$totalDepractedCount} uiConfs were updated");
 
 		$count = uiConfPeer::doCount($oldConfCriteria);
 		
 		if($count > 0)
 		{
-			KalturaLog::debug("Exiting, Tag: {$newTag} already found in the DB");
+			VidiunLog::debug("Exiting, Tag: {$newTag} already found in the DB");
 			exit;
 		}
 	}
@@ -331,7 +331,7 @@ class uiConfDeployment
 	 */
 	private static function setPermissionAndOwner($sync_key)
 	{
-		$localPath = kFileSyncUtils::getLocalFilePathForKey($sync_key);
+		$localPath = vFileSyncUtils::getLocalFilePathForKey($sync_key);
 		$localPath = str_replace(array('/', '\\'), array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), $localPath);
 
 		$ret = null;
@@ -343,7 +343,7 @@ class uiConfDeployment
 			passthru("chown $user_group $localPath", $ret);
 			if ($ret !== 0 && $ret !== 127)
 			{
-				KalturaLog::debug("chown [$user_group] failed on path [$localPath] returned value [$ret]");
+				VidiunLog::debug("chown [$user_group] failed on path [$localPath] returned value [$ret]");
 				exit(1);
 			}
 		}
@@ -412,12 +412,12 @@ class uiConfDeployment
 		
 			if(!$confFileContents)
 			{
-				KalturaLog::debug("Unable to read xml file from: {$widget->conf_file}");
+				VidiunLog::debug("Unable to read xml file from: {$widget->conf_file}");
 			}
 		
 			if ($disableUrlHashing)
 			{
-				$confFileContents = str_replace('<Plugin id="kalturaMix"','<Plugin id="kalturaMix" disableUrlHashing="true" ',$confFileContents);
+				$confFileContents = str_replace('<Plugin id="vidiunMix"','<Plugin id="vidiunMix" disableUrlHashing="true" ',$confFileContents);
 			}
 		
 			$uiconf->setConfFile($confFileContents);
@@ -431,7 +431,7 @@ class uiConfDeployment
 		
 			if(!$configFileContents)
 			{
-				KalturaLog::debug("Unable to read json file from: {$widget->config_file}");
+				VidiunLog::debug("Unable to read json file from: {$widget->config_file}");
 			}
 		
 			$uiconf->setConfig($configFileContents);
@@ -450,7 +450,7 @@ class uiConfDeployment
 		
 		if($uiconf->getConfFileFeatures() === FALSE)
 		{
-			KalturaLog::debug("missing features conf file for uiconf {$widget->name}"); // conf file is a must, features is not.
+			VidiunLog::debug("missing features conf file for uiconf {$widget->name}"); // conf file is a must, features is not.
 		}
 		
 		//Set values to the ui conf
@@ -472,7 +472,7 @@ class uiConfDeployment
 		$uiconf->setHeight(@$widget->height);
 		$uiconf->setConfVars(@$widget->conf_vars);
 
-		$uiconf->setDisplayInSearch(mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+		$uiconf->setDisplayInSearch(mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 			
 		return $uiconf;
 	}
@@ -493,7 +493,7 @@ class uiConfDeployment
 		$uiconf->save();
 		
 		$sync_key = $uiconf->getSyncKey(uiConf::FILE_SYNC_UICONF_SUB_TYPE_DATA);
-		$localPath = kFileSyncUtils::getLocalFilePathForKey($sync_key);
+		$localPath = vFileSyncUtils::getLocalFilePathForKey($sync_key);
 		$localPath = str_replace(array('/', '\\'), array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), $localPath);
 	
 		chmod($localPath, 0640);
@@ -505,7 +505,7 @@ class uiConfDeployment
 		passthru("chown $user_group $localPath", $ret);
 		if($ret !== 0)
 		{
-			KalturaLog::debug("chown [$user_group] failed on path [$localPath]");
+			VidiunLog::debug("chown [$user_group] failed on path [$localPath]");
 			exit(1);
 		}
 	}
@@ -543,7 +543,7 @@ class uiConfDeployment
 		echo "    --include-code: path to ui_conf deployment ini file\n";
 		echo "    --no-create: dry-run, do not really create the uiconfs\n";
 		echo "    --user={username}: define user (defaults to apache) for files ownership add\n";
-		echo "    --group={groupname}: define group (defaults to kaltura) for files ownership add\n";
+		echo "    --group={groupname}: define group (defaults to vidiun) for files ownership add\n";
 		die;
 	}
 
@@ -563,7 +563,7 @@ class uiConfDeployment
 		$arguments['disableUrlHashing'] = false;
 		$arguments['partner'] = 0;
 		$arguments['user'] = 'apache';
-		$arguments['group'] = 'kaltura';
+		$arguments['group'] = 'vidiun';
 	
 		/** get inputs from arguments **/
 		foreach($argv as $num => $value)
@@ -605,7 +605,7 @@ class uiConfDeployment
 		//Checks if the partner argument was given
 		if(!isset($arguments['partner']) || !($arguments['partner']) || is_null($arguments['partner']))
 		{
-			KalturaLog::debug("--partner argument wasn't given. Using defualt partner 0");
+			VidiunLog::debug("--partner argument wasn't given. Using defualt partner 0");
 		}
 		else
 		{
@@ -655,7 +655,7 @@ class uiConfDeploymentCodeGenerator
 	{
 		$code[] = '$c = new Criteria();';
 		$code[] = '$c->addAnd(UiConfPeer::PARTNER_ID, '.uiConfDeployment::$partnerId.');';
-		$code[] = '$c->addAnd(UiConfPeer::TAGS, "%'.uiConfDeployment::$baseTag.'_".$this->kmc_'.uiConfDeployment::$baseTag.'_version."%", Criteria::LIKE);';
+		$code[] = '$c->addAnd(UiConfPeer::TAGS, "%'.uiConfDeployment::$baseTag.'_".$this->vmc_'.uiConfDeployment::$baseTag.'_version."%", Criteria::LIKE);';
 		$code[] = '$c->addAnd(UiConfPeer::TAGS, "%autodeploy%", Criteria::LIKE);';
 		$code[] = '$this->confs = UiConfPeer::doSelect($c);';
 		return $code;

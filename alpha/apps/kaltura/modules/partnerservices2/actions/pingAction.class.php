@@ -32,7 +32,7 @@ class pingAction extends defPartnerservices2Action
 	// we'll allow empty uid here - this is called from just any place in the web with now defined context
 	protected function allowEmptyPuser()	{		return true;	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$this->addMsg ( "status" , "ok" );
 	}

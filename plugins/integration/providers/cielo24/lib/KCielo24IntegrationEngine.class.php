@@ -3,30 +3,30 @@
  * @package plugins.cielo24
  * @subpackage Scheduler
  */
-class KCielo24IntegrationEngine implements KIntegrationCloserEngine
+class VCielo24IntegrationEngine implements VIntegrationCloserEngine
 {
 	private $baseEndpointUrl = null;
 	private $clientHelper = null;
 	
-	const GET_URL_FILE_NAME = "kalturaFile";
+	const GET_URL_FILE_NAME = "vidiunFile";
 	
 	/* (non-PHPdoc)
-	 * @see KIntegrationCloserEngine::dispatch()
+	 * @see VIntegrationCloserEngine::dispatch()
 	 */
-	public function dispatch(KalturaBatchJob $job, KalturaIntegrationJobData &$data)
+	public function dispatch(VidiunBatchJob $job, VidiunIntegrationJobData &$data)
 	{
 		return $this->doDispatch($job, $data, $data->providerData);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KIntegrationCloserEngine::close()
+	 * @see VIntegrationCloserEngine::close()
 	 */
-	public function close(KalturaBatchJob $job, KalturaIntegrationJobData &$data)
+	public function close(VidiunBatchJob $job, VidiunIntegrationJobData &$data)
 	{
 		return $this->doClose($job, $data, $data->providerData);
 	}
 	
-	protected function doDispatch(KalturaBatchJob $job, KalturaIntegrationJobData &$data, KalturaCielo24JobProviderData $providerData)
+	protected function doDispatch(VidiunBatchJob $job, VidiunIntegrationJobData &$data, VidiunCielo24JobProviderData $providerData)
 	{
 		$entryId = $providerData->entryId;
 		$flavorAssetId = $providerData->flavorAssetId;
@@ -39,15 +39,15 @@ class KCielo24IntegrationEngine implements KIntegrationCloserEngine
 	
 		$shouldReplaceRemoteMedia = $providerData->replaceMediaContent;
 		$callBackUrl = $data->callbackNotificationUrl;
-		KalturaLog::debug('callback is - ' . $callBackUrl);
+		VidiunLog::debug('callback is - ' . $callBackUrl);
 
 		$additionalParameters = json_decode($providerData->additionalParameters, true);
 		$this->clientHelper = Cielo24Plugin::getClientHelper($providerData->username, $providerData->password, $providerData->baseUrl, $additionalParameters);
 		
 		//setting a pre-defined name to prevent the flavor-url to contain chars that will break the curl url syntax
-		$nameOptions = new KalturaFlavorAssetUrlOptions();
+		$nameOptions = new VidiunFlavorAssetUrlOptions();
 		$nameOptions->fileName = self::GET_URL_FILE_NAME;	
-		$flavorUrl = KBatchBase::$kClient->flavorAsset->getUrl($flavorAssetId, null, null, $nameOptions);
+		$flavorUrl = VBatchBase::$vClient->flavorAsset->getUrl($flavorAssetId, null, null, $nameOptions);
 
 		$languageName = $this->clientHelper->getLanguageConstantName($spokenLanguage);
 		$jobNameForSearch = $entryId . "_$languageName";
@@ -69,7 +69,7 @@ class KCielo24IntegrationEngine implements KIntegrationCloserEngine
 		return false;
 	}
 	
-	protected function doClose(KalturaBatchJob $job, KalturaIntegrationJobData &$data, KalturaCielo24JobProviderData $providerData)
+	protected function doClose(VidiunBatchJob $job, VidiunIntegrationJobData &$data, VidiunCielo24JobProviderData $providerData)
 	{
 		return false;
 	}

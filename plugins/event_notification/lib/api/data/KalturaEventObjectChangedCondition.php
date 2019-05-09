@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage api.objects
  */
-class KalturaEventObjectChangedCondition extends KalturaCondition
+class VidiunEventObjectChangedCondition extends VidiunCondition
 {	
 	/**
 	 * Comma seperated column names to be tested
@@ -17,7 +17,7 @@ class KalturaEventObjectChangedCondition extends KalturaCondition
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaCondition::getMapBetweenObjects()
+	 * @see VidiunCondition::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -25,12 +25,12 @@ class KalturaEventObjectChangedCondition extends KalturaCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kEventObjectChangedCondition();
+			$dbObject = new vEventObjectChangedCondition();
 	
 		return parent::toObject($dbObject, $skip);
 	}

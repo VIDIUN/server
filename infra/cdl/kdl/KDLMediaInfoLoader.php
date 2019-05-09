@@ -1,12 +1,12 @@
 <?php
 //include_once("StringTokenizer.php");
-//include_once("KDLMediaDataSet.php");
-//include_once 'KDLUtils.php';
+//include_once("VDLMediaDataSet.php");
+//include_once 'VDLUtils.php';
 
 	/* ---------------------------
-	 * KDLMediaInfoLoader
+	 * VDLMediaInfoLoader
 	 */
-	class KDLMediaInfoLoader extends StringTokenizer {
+	class VDLMediaInfoLoader extends StringTokenizer {
 		public function __construct(/*string*/ $str) {
 			parent::__construct($str, "\t\n");
 		}
@@ -35,12 +35,12 @@
 
 					if(strstr($tok,"general")==true)
 						$section = "general";
-					else if(strstr($tok,KDLConstants::VideoIndex)==true)
-						$section = KDLConstants::VideoIndex;
-					else if(strstr($tok,KDLConstants::AudioIndex)==true)
-						$section = KDLConstants::AudioIndex;
-					else if(strstr($tok,KDLConstants::ImageIndex)==true)
-						$section = KDLConstants::ImageIndex;
+					else if(strstr($tok,VDLConstants::VideoIndex)==true)
+						$section = VDLConstants::VideoIndex;
+					else if(strstr($tok,VDLConstants::AudioIndex)==true)
+						$section = VDLConstants::AudioIndex;
+					else if(strstr($tok,VDLConstants::ImageIndex)==true)
+						$section = VDLConstants::ImageIndex;
 					else	
 						$section = $tok;
 					$streamsCnt++;
@@ -56,13 +56,13 @@
 					case "general":
 						$this->loadContainerSet($dataSet->_container, $key, $val);
 						break;
-					case KDLConstants::VideoIndex:
+					case VDLConstants::VideoIndex:
 						$this->loadVideoSet($dataSet->_video, $key, $val);
 						break;
-					case KDLConstants::ImageIndex:
+					case VDLConstants::ImageIndex:
 						$this->loadVideoSet($dataSet->_image, $key, $val);
 						break;
-					case KDLConstants::AudioIndex:
+					case VDLConstants::AudioIndex:
 						$this->loadAudioSet($dataSet->_audio, $key, $val);
 						break;
 					}
@@ -75,7 +75,7 @@
 			else
 				$streamsColStr = "0+".$streamsCnt.":".$streamsColStr;
 //			$dataSet->_multiStream = $streamsColStr;
-//			KalturaLog::info("StreamsColStr- ".$dataSet->_multiStream);
+//			VidiunLog::info("StreamsColStr- ".$dataSet->_multiStream);
 		}
 
 		/* ------------------------------
@@ -83,20 +83,20 @@
 		 */
 		private function loadAudioSet(&$audioData, $key, $val) {
 			if($audioData=="")
-				$audioData = new KDLAudioData();
+				$audioData = new VDLAudioData();
 			switch($key) {
 			case "channel(s)":
-				$audioData->_channels = KDLUtils::trima($val);
+				$audioData->_channels = VDLUtils::trima($val);
 				settype($audioData->_channels, "integer");
 				break;
 			case "sampling rate":
-				$audioData->_sampleRate = KDLUtils::trima($val);
+				$audioData->_sampleRate = VDLUtils::trima($val);
 				settype($audioData->_sampleRate, "float");
 				if($audioData->_sampleRate<1000)
 					$audioData->_sampleRate *= 1000;
 				break;
 			case "resolution":
-				$audioData->_resolution = KDLUtils::trima($val);
+				$audioData->_resolution = VDLUtils::trima($val);
 				settype($audioData->_resolution, "integer");
 				break;
 			default:
@@ -110,28 +110,28 @@
 		 */
 		private function loadVideoSet(&$videoData, $key, $val) {
 			if($videoData=="")
-				$videoData = new KDLVideoData();
+				$videoData = new VDLVideoData();
 			switch($key) {
 			case "width":
-				$videoData->_width = KDLUtils::trima($val);
+				$videoData->_width = VDLUtils::trima($val);
 				settype($videoData->_width, "integer");
 				break;
 			case "height":
-				$videoData->_height = KDLUtils::trima($val);
+				$videoData->_height = VDLUtils::trima($val);
 				settype($videoData->_height, "integer");
 				break;
 			case "frame rate":
-				$videoData->_frameRate = KDLUtils::trima($val);
+				$videoData->_frameRate = VDLUtils::trima($val);
 				settype($videoData->_frameRate, "float");
 				break;
 			case "nominal frame rate":
 				if(!isset($videoData->_frameRate)){
-					$videoData->_frameRate = KDLUtils::trima($val);
+					$videoData->_frameRate = VDLUtils::trima($val);
 					settype($videoData->_frameRate, "float");
 				}
 				break;
 			case "display aspect ratio":
-				$val = KDLUtils::trima($val);
+				$val = VDLUtils::trima($val);
 				if(strstr($val, ":")==true){
 					$darW = trim(substr($val, 0, strpos($val, ":")) );
 					$darH = trim(substr(strstr($val, ":"),1));
@@ -178,11 +178,11 @@
  */
 				break;
 			case "rotation":
-				$videoData->_rotation = KDLUtils::trima($val);
+				$videoData->_rotation = VDLUtils::trima($val);
 				settype($videoData->_rotation, "integer");
 				break;
 			case "scan type":
-				$scanType = KDLUtils::trima($val);
+				$scanType = VDLUtils::trima($val);
 				if($scanType!="progressive") {
 					$videoData->_scanType=1;
 				}
@@ -202,10 +202,10 @@
 		 */
 		private function loadContainerSet(&$containerData, $key, $val) {
 			if($containerData=="")
-				$containerData = new KDLContainerData();
+				$containerData = new VDLContainerData();
 			switch($key) {
 			case "file size":
-				$containerData->_fileSize = KDLUtils::convertValue2kbits(KDLUtils::trima($val));
+				$containerData->_fileSize = VDLUtils::convertValue2kbits(VDLUtils::trima($val));
 				break;
 			case "complete name":
 				$containerData->_fileName = $val;
@@ -229,10 +229,10 @@
 				$baseData->_format = $val;
 				break;
 			case "duration":
-				$baseData->_duration = KDLUtils::convertDuration2msec($val);
+				$baseData->_duration = VDLUtils::convertDuration2msec($val);
 				break;
 			case "bit rate":
-				$baseData->_bitRate = KDLUtils::convertValue2kbits(KDLUtils::trima($val));
+				$baseData->_bitRate = VDLUtils::convertValue2kbits(VDLUtils::trima($val));
 				break;
 			default:
 	//echo "<br>". "key=". $key . " val=" . $val . "<br>";

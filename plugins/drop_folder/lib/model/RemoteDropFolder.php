@@ -9,20 +9,20 @@ abstract class RemoteDropFolder extends DropFolder
 	abstract protected function getRemoteFileTransferMgrType();
 	
 	/**
-	 * @return kFileTransferMgrType
+	 * @return vFileTransferMgrType
 	 */
 	public function getFileTransferMgrType()
 	{
 		return $this->getRemoteFileTransferMgrType();
 	}
 			
-	public function loginByCredentialsType(kFileTransferMgr $fileTransferMgr)
+	public function loginByCredentialsType(vFileTransferMgr $fileTransferMgr)
 	{
 		return false;
 	}
 		
 	/**
-	 * @return kDropFolderImportJobData
+	 * @return vDropFolderImportJobData
 	 */
 	abstract public function getImportJobData();
 	
@@ -31,7 +31,7 @@ abstract class RemoteDropFolder extends DropFolder
 	 */
 	abstract public function getFolderUrl();
 	
-	public function getLocalFilePath($fileName, $fileId, kFileTransferMgr $fileTransferMgr)
+	public function getLocalFilePath($fileName, $fileId, vFileTransferMgr $fileTransferMgr)
 	{
 		$dropFolderFilePath = $this->getPath().'/'.$fileName;
 		$tempDirectory = sys_get_temp_dir();
@@ -43,7 +43,7 @@ abstract class RemoteDropFolder extends DropFolder
 		}
 		else
 		{
-			KalturaLog::err('Missing temporary directory');
+			VidiunLog::err('Missing temporary directory');
 			return null;			
 		}
 	}

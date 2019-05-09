@@ -49,10 +49,10 @@ class accessControlTableMap extends TableMap {
 		$this->addColumn('SITE_RESTRICT_LIST', 'SiteRestrictList', 'VARCHAR', false, 1024, null);
 		$this->addColumn('COUNTRY_RESTRICT_TYPE', 'CountryRestrictType', 'TINYINT', false, null, null);
 		$this->addColumn('COUNTRY_RESTRICT_LIST', 'CountryRestrictList', 'VARCHAR', false, 1024, null);
-		$this->addColumn('KS_RESTRICT_PRIVILEGE', 'KsRestrictPrivilege', 'VARCHAR', false, 20, null);
+		$this->addColumn('VS_RESTRICT_PRIVILEGE', 'VsRestrictPrivilege', 'VARCHAR', false, 20, null);
 		$this->addColumn('PRV_RESTRICT_PRIVILEGE', 'PrvRestrictPrivilege', 'VARCHAR', false, 20, null);
 		$this->addColumn('PRV_RESTRICT_LENGTH', 'PrvRestrictLength', 'INTEGER', false, null, null);
-		$this->addColumn('KDIR_RESTRICT_TYPE', 'KdirRestrictType', 'TINYINT', false, null, null);
+		$this->addColumn('VDIR_RESTRICT_TYPE', 'VdirRestrictType', 'TINYINT', false, null, null);
 		$this->addColumn('CUSTOM_DATA', 'CustomData', 'LONGVARCHAR', false, null, null);
 		$this->addColumn('RULES', 'Rules', 'LONGVARCHAR', false, null, null);
 		// validators

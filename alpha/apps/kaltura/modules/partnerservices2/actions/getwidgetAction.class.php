@@ -29,7 +29,7 @@ class getwidgetAction extends defPartnerservices2Action
 			); 
 	}
 	
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER;	}
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER;	}
 	
 	protected function ticketType ()	{		return self::REQUIED_TICKET_NONE;	}
 
@@ -39,7 +39,7 @@ class getwidgetAction extends defPartnerservices2Action
 	protected function allowEmptyPuser()	{		return true;	}
 	
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		// it is very common to expect an updated ui_conf object 
 		objectWrapperBase::useCache( false );
@@ -58,7 +58,7 @@ class getwidgetAction extends defPartnerservices2Action
 		}
 		else
 		{
-			// check if this widget is public - if so , create a ks for viewing the related kshow
+			// check if this widget is public - if so , create a vs for viewing the related vshow
 			if ( $uiconf_id )
 				$widget->overrideUiConfId ( $uiconf_id );
 
@@ -67,7 +67,7 @@ class getwidgetAction extends defPartnerservices2Action
 			$widget->getWidgetHtml();
 			
 			// TODO - call
-//$result = kSessionUtils::startKSession ( $partner_id , $this->getP ( "secret" ) , $puser_id , $ks , $expiry , $admin , "" , $privileges );
+//$result = vSessionUtils::startVSession ( $partner_id , $this->getP ( "secret" ) , $puser_id , $vs , $expiry , $admin , "" , $privileges );
 			$level = ( $detailed ? objectWrapperBase::DETAIL_LEVEL_DETAILED : objectWrapperBase::DETAIL_LEVEL_REGULAR );
 			$this->addMsg ( "widget" , objectWrapperBase::getWrapperClass( $widget , $level ) );
 		}

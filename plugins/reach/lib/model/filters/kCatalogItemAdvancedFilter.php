@@ -3,7 +3,7 @@
  * @package plugins.viewHistory
  * @subpackage model.filters
  */
-class kCatalogItemAdvancedFilter extends AdvancedSearchFilterItem
+class vCatalogItemAdvancedFilter extends AdvancedSearchFilterItem
 {
 	/**
 	 * @var int
@@ -71,9 +71,9 @@ class kCatalogItemAdvancedFilter extends AdvancedSearchFilterItem
 	/* (non-PHPdoc)
  	 * @see AdvancedSearchFilterItem::applyCondition()
  	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 		
 		if($this->getServiceTypeEqual())
 		{

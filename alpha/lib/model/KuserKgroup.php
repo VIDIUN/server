@@ -2,7 +2,7 @@
 
 
 /**
- * Skeleton subclass for representing a row from the 'kuser_kgroup' table.
+ * Skeleton subclass for representing a row from the 'vuser_vgroup' table.
  *
  * 
  *
@@ -13,7 +13,7 @@
  * @package Core
  * @subpackage model
  */
-class KuserKgroup extends BaseKuserKgroup implements IRelatedObject
+class VuserVgroup extends BaseVuserVgroup implements IRelatedObject
 {
 	const MAX_NUMBER_OF_GROUPS_PER_USER = 1024;
 	const GROUP_USER_CREATION_MODE = 'creation_mode';
@@ -26,13 +26,13 @@ class KuserKgroup extends BaseKuserKgroup implements IRelatedObject
 
 		parent::setPuserId($puserId);
 
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 
-		$kuser = kuserPeer::getKuserByPartnerAndUid($partnerId, $puserId);
-		if (!$kuser)
-			throw new kCoreException("Invalid user Id [{$puserId}]", kCoreException::INVALID_USER_ID );
+		$vuser = vuserPeer::getVuserByPartnerAndUid($partnerId, $puserId);
+		if (!$vuser)
+			throw new vCoreException("Invalid user Id [{$puserId}]", vCoreException::INVALID_USER_ID );
 
-		parent::setKuserId($kuser->getId());
+		parent::setVuserId($vuser->getId());
 	}
 
 	public function setPgroupId($pgroupId)
@@ -42,18 +42,18 @@ class KuserKgroup extends BaseKuserKgroup implements IRelatedObject
 
 		parent::setPgroupId($pgroupId);
 
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 
-		$kgroup = kuserPeer::getKuserByPartnerAndUid($partnerId, $pgroupId, false, KuserType::GROUP);
-		if (!$kgroup)
-			throw new kCoreException("Invalid group Id [{$pgroupId}]", kCoreException::INVALID_USER_ID );
+		$vgroup = vuserPeer::getVuserByPartnerAndUid($partnerId, $pgroupId, false, VuserType::GROUP);
+		if (!$vgroup)
+			throw new vCoreException("Invalid group Id [{$pgroupId}]", vCoreException::INVALID_USER_ID );
 
-		parent::setKgroupId($kgroup->getId());
+		parent::setVgroupId($vgroup->getId());
 	}
 
 	public function getCacheInvalidationKeys()
 	{
-		return array("kuserKgroup:kuserId=".strtolower($this->getKuserId()), "kuserKgroup:kgroupId=".strtolower($this->getKgroupId()));
+		return array("vuserVgroup:vuserId=".strtolower($this->getVuserId()), "vuserVgroup:vgroupId=".strtolower($this->getVgroupId()));
 	}
 
 	public function postInsert(PropelPDO $con = null)
@@ -61,7 +61,7 @@ class KuserKgroup extends BaseKuserKgroup implements IRelatedObject
 		parent::postInsert($con);
 
 		if (!$this->alreadyInSave)
-			$this->updateKuserIndex();
+			$this->updateVuserIndex();
 	}
 
 	public function postUpdate(PropelPDO $con = null)
@@ -69,16 +69,16 @@ class KuserKgroup extends BaseKuserKgroup implements IRelatedObject
 		parent::postUpdate($con);
 
 		if (!$this->alreadyInSave)
-			$this->updateKuserIndex();
+			$this->updateVuserIndex();
 	}
 
-	protected function updateKuserIndex()
+	protected function updateVuserIndex()
 	{
-		$kuserId = $this->getKuserId();
-		$kuser = kuserPeer::retrieveByPK($kuserId);
-		if(!$kuser)
-			throw new kCoreException('kuser not found');
-		$kuser->indexToElastic();
+		$vuserId = $this->getVuserId();
+		$vuser = vuserPeer::retrieveByPK($vuserId);
+		if(!$vuser)
+			throw new vCoreException('vuser not found');
+		$vuser->indexToElastic();
 	}
 
 	public function setCreationMode($v)	{$this->putInCustomData (self::GROUP_USER_CREATION_MODE, $v);}

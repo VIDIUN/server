@@ -29,7 +29,7 @@ class addmoderationAction extends defPartnerservices2Action
 	
 	protected function ticketType()			{	return self::REQUIED_TICKET_ADMIN;	}
 
-	public function needKuserFromPuser ( )	{	return self::KUSER_DATA_KUSER_ID_ONLY;	}
+	public function needVuserFromPuser ( )	{	return self::VUSER_DATA_VUSER_ID_ONLY;	}
 	
 	protected function addUserOnDemand ( )	{		return self::CREATE_USER_FORCE;	}
 
@@ -42,9 +42,9 @@ class addmoderationAction extends defPartnerservices2Action
 	// will allow derived classes to alter the modification from received from the user 
 	protected function fixModeration  ( moderation &$moderation ) {}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		// get the new properties for the kuser from the request
+		// get the new properties for the vuser from the request
 		$moderation = new moderation();
 
 		$obj_wrapper = objectWrapperBase::getWrapperClass( $moderation , 0 );
@@ -112,7 +112,7 @@ class addmoderationAction extends defPartnerservices2Action
 	*/		
 			// TODO - decide how to describe the subject of the moderation
 //			$moderation->setPuserId( $puser_id );
-//			$moderation->setKuserId( $puser_kuser->getKuserId() );
+//			$moderation->setVuserId( $puser_vuser->getVuserId() );
 //			$moderation->setStatus( moderation::MODERATION_STATUS_PENDING )
 			$new_status = $this->getStatusToUpdate( $moderation );
 		

@@ -93,21 +93,21 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	{
 		if ($this->isNew())
 		{
-			$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+			$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 				
-			if (!PermissionPeer::isValidForPartner(PermissionName::DYNAMIC_FLAG_KMC_CHUNKED_CATEGORY_LOAD, $partnerId))
+			if (!PermissionPeer::isValidForPartner(PermissionName::DYNAMIC_FLAG_VMC_CHUNKED_CATEGORY_LOAD, $partnerId))
 			{
-				$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+				$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 				$c->add (categoryPeer::STATUS, CategoryStatus::DELETED, Criteria::NOT_EQUAL);
 				$c->add (categoryPeer::PARTNER_ID, $partnerId, Criteria::EQUAL);
 				
-				KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+				VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 				$numOfCatsForPartner = categoryPeer::doCount($c);
-				KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+				VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 	
-				$chunkedCategoryLoadThreshold = kConf::get('kmc_chunked_category_load_threshold');
+				$chunkedCategoryLoadThreshold = vConf::get('vmc_chunked_category_load_threshold');
 				if ($numOfCatsForPartner >= $chunkedCategoryLoadThreshold)
-					PermissionPeer::enableForPartner(PermissionName::DYNAMIC_FLAG_KMC_CHUNKED_CATEGORY_LOAD, PermissionType::SPECIAL_FEATURE);
+					PermissionPeer::enableForPartner(PermissionName::DYNAMIC_FLAG_VMC_CHUNKED_CATEGORY_LOAD, PermissionType::SPECIAL_FEATURE);
 			}
 
 			if ($this->getParentId() && ($this->getPrivacyContext() == '' || $this->getPrivacyContext() == null))
@@ -144,7 +144,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 			$this->isColumnModified(categoryPeer::PARENT_ID)))
 		{
 			$this->addIndexCategoryEntryJob($this->getId());
-			$this->addIndexCategoryKuserJob($this->getId());
+			$this->addIndexCategoryVuserJob($this->getId());
 		}
 		
 		if (!$this->isNew() && $this->getInheritanceType() !== InheritanceType::INHERIT &&
@@ -152,7 +152,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		{
 			if ($this->getPrivacyContexts() == '')
 			{
-				$this->addDeleteCategoryKuserJob($this->getId());
+				$this->addDeleteCategoryVuserJob($this->getId());
 			}
 		}
 		
@@ -163,7 +163,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		
 		$this->childs_for_save = array();
 
-		$kuserChanged = false;
+		$vuserChanged = false;
 		if (!$this->isNew() &&
 			$this->isColumnModified(categoryPeer::INHERITANCE_TYPE))
 		{
@@ -175,72 +175,72 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 				if($categoryToCopyInheritedFields)
 				{
 					$this->copyInheritedFields($categoryToCopyInheritedFields);
-					$kuserChanged = true;
+					$vuserChanged = true;
 				}	
 				$this->reSetMembersCount();
 			}
 			elseif ($this->inheritance_type == InheritanceType::INHERIT &&
 					$this->old_inheritance_type == InheritanceType::MANUAL)
 			{
-				$this->addDeleteCategoryKuserJob($this->getId(), true);
+				$this->addDeleteCategoryVuserJob($this->getId(), true);
 			}
 		}
 		
-		if ($this->isColumnModified(categoryPeer::KUSER_ID))
-			$kuserChanged = true;
+		if ($this->isColumnModified(categoryPeer::VUSER_ID))
+			$vuserChanged = true;
 
 		if (!$this->isNew() && $this->isColumnModified(categoryPeer::PRIVACY) && $this->getPrivacy() == PrivacyType::MEMBERS_ONLY)
 		{
-			$this->removeNonMemberKusers ();
+			$this->removeNonMemberVusers ();
 		}
 
 		parent::save($con);
 		
-		if ($kuserChanged && $this->inheritance_type != InheritanceType::INHERIT && $this->getKuserId())
+		if ($vuserChanged && $this->inheritance_type != InheritanceType::INHERIT && $this->getVuserId())
 		{
-			$categoryKuser = categoryKuserPeer::retrieveByCategoryIdAndKuserId($this->getId(), $this->getKuserId());
-			if (!$categoryKuser)
+			$categoryVuser = categoryVuserPeer::retrieveByCategoryIdAndVuserId($this->getId(), $this->getVuserId());
+			if (!$categoryVuser)
 			{
-				$categoryKuser = new categoryKuser();
-				$categoryKuser->setCategoryId($this->getId());
-				$categoryKuser->setCategoryFullIds($this->getFullIds());
-				$categoryKuser->setKuserId($this->getKuserId());
+				$categoryVuser = new categoryVuser();
+				$categoryVuser->setCategoryId($this->getId());
+				$categoryVuser->setCategoryFullIds($this->getFullIds());
+				$categoryVuser->setVuserId($this->getVuserId());
 			}
 			
-			$categoryKuser->setPermissionLevel(CategoryKuserPermissionLevel::MANAGER);
+			$categoryVuser->setPermissionLevel(CategoryVuserPermissionLevel::MANAGER);
 			$permissionNamesArr = array();
-			if ($categoryKuser->getPermissionNames())
+			if ($categoryVuser->getPermissionNames())
 			{
-					$permissionNamesArr = explode(",", $categoryKuser->getPermissionNames());
+					$permissionNamesArr = explode(",", $categoryVuser->getPermissionNames());
 			}
-			$permissionNamesArr = categoryKuser::removeCategoryPermissions($permissionNamesArr);
+			$permissionNamesArr = categoryVuser::removeCategoryPermissions($permissionNamesArr);
 			$permissionNamesArr[] = PermissionName::CATEGORY_CONTRIBUTE;
 			$permissionNamesArr[] = PermissionName::CATEGORY_EDIT;
 			$permissionNamesArr[] = PermissionName::CATEGORY_MODERATE;
 			$permissionNamesArr[] = PermissionName::CATEGORY_VIEW;
-			$categoryKuser->setPermissionNames(implode(",", $permissionNamesArr));
-			$categoryKuser->setStatus(CategoryKuserStatus::ACTIVE);
-			$categoryKuser->setPartnerId($this->getPartnerId());
-			$categoryKuser->setUpdateMethod(UpdateMethodType::MANUAL);
-			$categoryKuser->save();
+			$categoryVuser->setPermissionNames(implode(",", $permissionNamesArr));
+			$categoryVuser->setStatus(CategoryVuserStatus::ACTIVE);
+			$categoryVuser->setPartnerId($this->getPartnerId());
+			$categoryVuser->setUpdateMethod(UpdateMethodType::MANUAL);
+			$categoryVuser->save();
 			
 			$this->indexToSearchIndex();
 		}
 	}
 	
-	private function removeNonMemberKusers ()
+	private function removeNonMemberVusers ()
 	{
-		$filter = new categoryKuserFilter();
+		$filter = new categoryVuserFilter();
 		$filter->setCategoryIdEqual($this->getId());
 		$filter->set('_notcontains_permission_names', PermissionName::CATEGORY_CONTRIBUTE.",".PermissionName::CATEGORY_EDIT.",".PermissionName::CATEGORY_MODERATE.",".PermissionName::CATEGORY_VIEW);
 		
 		$c = new Criteria();
-		$c->add(categoryKuserPeer::CATEGORY_ID, $this->getId());
-		if(!categoryKuserPeer::doSelectOne($c)) {
+		$c->add(categoryVuserPeer::CATEGORY_ID, $this->getId());
+		if(!categoryVuserPeer::doSelectOne($c)) {
 			return;
 		}
 		
-		kJobsManager::addDeleteJob($this->getPartnerId(), DeleteObjectType::CATEGORY_USER, $filter);
+		vJobsManager::addDeleteJob($this->getPartnerId(), DeleteObjectType::CATEGORY_USER, $filter);
 	}
 	
 	
@@ -249,7 +249,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	 */
 	public function indexToSearchIndex()
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($this));
 	}
 	
 	public function getSphinxIndexName()
@@ -282,7 +282,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		if($this->isColumnModified(categoryPeer::DELETED_AT) && !is_null($this->getDeletedAt()))
 			$objectDeleted = true;
 				
-		$categoryGroupSize = kConf::get('max_number_of_memebrs_to_be_indexed_on_entry');
+		$categoryGroupSize = vConf::get('max_number_of_memebrs_to_be_indexed_on_entry');
 		$partner = $this->getPartner();
 		if($partner && $partner->getCategoryGroupSize())
 			$categoryGroupSize = $partner->getCategoryGroupSize();
@@ -294,7 +294,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 			$this->isColumnModified(categoryPeer::FULL_NAME) ||
 			($this->isColumnModified(categoryPeer::MEMBERS_COUNT) &&
 			$this->members_count <= $categoryGroupSize &&
-			$this->entries_count <= kConf::get('category_entries_count_limit_to_be_indexed')))
+			$this->entries_count <= vConf::get('category_entries_count_limit_to_be_indexed')))
 		{
 			$this->addIndexEntryJob($this->getId(), true);
 		}
@@ -311,7 +311,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 			$parentCategoryToResetSubCategories = $this->getParentCategory();
 		}
 		
-		if (kCurrentContext::getCurrentPartnerId() != Partner::BATCH_PARTNER_ID &&
+		if (vCurrentContext::getCurrentPartnerId() != Partner::BATCH_PARTNER_ID &&
 			($this->isColumnModified(categoryPeer::PARENT_ID) ||
 			 $this->isColumnModified(categoryPeer::INHERITANCE_TYPE) ||
 			 $this->isColumnModified(categoryPeer::NAME) ||
@@ -360,12 +360,12 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		}
 
 		if($objectDeleted)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($this));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($this));
 			
 		if($objectUpdated)
-			kEventsManager::raiseEvent(new kObjectUpdatedEvent($this));
+			vEventsManager::raiseEvent(new vObjectUpdatedEvent($this));
 			
-		kEventsManager::flushEvents();
+		vEventsManager::flushEvents();
 		
 		if($oldParentCategoryToResetSubCategories)
 		{
@@ -459,7 +459,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	 */
 	public function incrementDirectEntriesCount($entryId)
 	{
-		KalturaLog::debug("incrementing $entryId to direct entries count " . $this->getFullName());
+		VidiunLog::debug("incrementing $entryId to direct entries count " . $this->getFullName());
 		$this->preIncrement($entryId);
 		
 		$count = $this->countEntriesByCriteria(self::$incrementedEntryIds[$this->getId()], true);
@@ -486,7 +486,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	 */
 	public function decrementDirectEntriesCount($entryId)
 	{
-		KalturaLog::debug("decrementing $entryId from direct entries count " . $this->getFullName());
+		VidiunLog::debug("decrementing $entryId from direct entries count " . $this->getFullName());
 		$this->preDecrement($entryId);
 		
 		$count = $this->countEntriesByCriteria(self::$decrementedEntryIds[$this->getId()], true);
@@ -511,15 +511,15 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		$fullName = categoryPeer::getParsedFullName($fullName);
 		
 		$partnerId = null;
-		if($this->getPartnerId() != kCurrentContext::$ks_partner_id)
+		if($this->getPartnerId() != vCurrentContext::$vs_partner_id)
 			$partnerId = $this->getPartnerId();
 		
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$category = categoryPeer::getByFullNameExactMatch($fullName, $this->getId(), $partnerId);
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		
 		if ($category)
-			throw new kCoreException("Duplicate category: $fullName", kCoreException::DUPLICATE_CATEGORY);
+			throw new vCoreException("Duplicate category: $fullName", vCoreException::DUPLICATE_CATEGORY);
 	}
 
 	public function setDeletedAt($v, $moveEntriesToParentCategory = false)
@@ -534,7 +534,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	//1. get all category childes ids for sub-categories from db in one call
 	//2. update all retrieved category childes ids to be deleted in one call
 	//3. iterate on categories one by one and invoke the delete event
-	//4. delete sub-categories-entries and move all to parent category / also delete sub-categories kusers
+	//4. delete sub-categories-entries and move all to parent category / also delete sub-categories vusers
 	public function deleteChildCategories()
 	{
 		$fullIds = $this->getFullIds();
@@ -543,11 +543,11 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		$now = time();
 		if (isset($categoriesIds) && !empty($categoriesIds))
 		{
-			$update = KalturaCriteria::create(categoryPeer::OM_CLASS);
+			$update = VidiunCriteria::create(categoryPeer::OM_CLASS);
 			$update->add(categoryPeer::DELETED_AT, $now);
 			$update->add(categoryPeer::UPDATED_AT, $now);
 			$update->add(categoryPeer::STATUS, CategoryStatus::DELETED);
-			$update->add(categoryPeer::ID, $categoriesIds, KalturaCriteria::IN);
+			$update->add(categoryPeer::ID, $categoriesIds, VidiunCriteria::IN);
 			categoryPeer::doUpdate($update);
 		}
 
@@ -559,12 +559,12 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 			$categoryToDelete->setDeletedAtInternally($now);
 			$categoryToDelete->setUpdatedAt($now);
 			$categoryToDelete->setStatus(CategoryStatus::DELETED);
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($categoryToDelete));
-			kEventsManager::raiseEventDeferred(new kObjectReadyForIndexEvent($categoryToDelete));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($categoryToDelete));
+			vEventsManager::raiseEventDeferred(new vObjectReadyForIndexEvent($categoryToDelete));
 		}
 
 		if ($this->getInheritanceType() == InheritanceType::MANUAL)
-			$this->addDeleteCategoryTreeKuserJob($fullIds);
+			$this->addDeleteCategoryTreeVuserJob($fullIds);
 		if ($this->move_entries_to_parent_category && $this->parent_id!=0)
 			$this->addMoveEntriesToCategoryJob($this->parent_id);
 		else
@@ -631,38 +631,38 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		}
 	}
 
-	protected function addDeleteCategoryTreeKuserJob($fullIds)
+	protected function addDeleteCategoryTreeVuserJob($fullIds)
 	{
-		$filter = new categoryKuserFilter();
+		$filter = new categoryVuserFilter();
 		$filter->setFullIdsStartsWith($fullIds);
 
-		kJobsManager::addDeleteJob($this->getPartnerId(), DeleteObjectType::CATEGORY_USER, $filter);
+		vJobsManager::addDeleteJob($this->getPartnerId(), DeleteObjectType::CATEGORY_USER, $filter);
 	}
 
-	protected function addDeleteCategoryKuserJob($categoryId, $deleteCategoryDirectMembersOnly = false)
+	protected function addDeleteCategoryVuserJob($categoryId, $deleteCategoryDirectMembersOnly = false)
 	{
-		$filter = new categoryKuserFilter();
+		$filter = new categoryVuserFilter();
 		$filter->setCategoryIdEqual($categoryId);
 		$filter->setDirectMembers($deleteCategoryDirectMembersOnly);
 
 		$c = new Criteria();
-		$c->add(categoryKuserPeer::CATEGORY_ID, $categoryId);
-		if(!categoryKuserPeer::doSelectOne($c)) {
+		$c->add(categoryVuserPeer::CATEGORY_ID, $categoryId);
+		if(!categoryVuserPeer::doSelectOne($c)) {
 			return;
 		}
 		
-		kJobsManager::addDeleteJob($this->getPartnerId(), DeleteObjectType::CATEGORY_USER, $filter);
+		vJobsManager::addDeleteJob($this->getPartnerId(), DeleteObjectType::CATEGORY_USER, $filter);
 	}
 	
-	protected function addCopyCategoryKuserJob($categoryId)
+	protected function addCopyCategoryVuserJob($categoryId)
 	{
-		$templateCategory = new categoryKuser();
+		$templateCategory = new categoryVuser();
 		$templateCategory->setCategoryId($this->getId());
 		
-		$filter = new categoryKuserFilter();
+		$filter = new categoryVuserFilter();
 		$filter->setCategoryIdEqual($categoryId);
 
-		kJobsManager::addCopyJob($this->getPartnerId(), CopyObjectType::CATEGORY_USER, $filter, $templateCategory);
+		vJobsManager::addCopyJob($this->getPartnerId(), CopyObjectType::CATEGORY_USER, $filter, $templateCategory);
 	}
 
 	protected function addDeleteCategoryTreeEntryJob($fullIds)
@@ -670,7 +670,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		$filter = new categoryEntryFilter();
 		$filter->setFullIdsStartsWith($fullIds);
 
-		kJobsManager::addDeleteJob($this->getPartnerId(), DeleteObjectType::CATEGORY_ENTRY, $filter);
+		vJobsManager::addDeleteJob($this->getPartnerId(), DeleteObjectType::CATEGORY_ENTRY, $filter);
 	}
 
 	protected function addDeleteCategoryEntryJob($categoryId)
@@ -684,12 +684,12 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 			return;
 		}
 
-		kJobsManager::addDeleteJob($this->getPartnerId(), DeleteObjectType::CATEGORY_ENTRY, $filter);
+		vJobsManager::addDeleteJob($this->getPartnerId(), DeleteObjectType::CATEGORY_ENTRY, $filter);
 	}
 		
 	protected function addIndexEntryJob($categoryId, $shouldUpdate = false)
 	{
-		$featureStatusToRemoveIndex = new kFeatureStatus();
+		$featureStatusToRemoveIndex = new vFeatureStatus();
 		$featureStatusToRemoveIndex->setType(IndexObjectType::ENTRY);
 		
 		$featureStatusesToRemove = array();
@@ -711,17 +711,17 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		$filter->setStatusIn($statusArr);
 			
 		//TODO - add batch job size after sharon commits her code.
-		kJobsManager::addIndexJob($this->getPartnerId(), IndexObjectType::ENTRY, $filter, $shouldUpdate, $featureStatusesToRemove);
+		vJobsManager::addIndexJob($this->getPartnerId(), IndexObjectType::ENTRY, $filter, $shouldUpdate, $featureStatusesToRemove);
 	}
 	
 	protected function addMoveEntriesToCategoryJob($destCategoryId)
 	{
-		kJobsManager::addMoveCategoryEntriesJob(null, $this->getPartnerId(), $this->getId(), $destCategoryId, true, $this->getFullIds());
+		vJobsManager::addMoveCategoryEntriesJob(null, $this->getPartnerId(), $this->getId(), $destCategoryId, true, $this->getFullIds());
 	}
 	
 	protected function addSyncCategoryPrivacyContextJob()
 	{
-		kJobsManager::addSyncCategoryPrivacyContextJob(null, $this->getPartnerId(), $this->getId());
+		vJobsManager::addSyncCategoryPrivacyContextJob(null, $this->getPartnerId(), $this->getId());
 	}
 	
 	
@@ -732,12 +732,12 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		{
 			$jobSubType = IndexObjectType::LOCK_CATEGORY;
 			
-			$featureStatusToRemoveIndex = new kFeatureStatus();
+			$featureStatusToRemoveIndex = new vFeatureStatus();
 			$featureStatusToRemoveIndex->setType(IndexObjectType::LOCK_CATEGORY);
 		}
 		else
 		{
-			$featureStatusToRemoveIndex = new kFeatureStatus();
+			$featureStatusToRemoveIndex = new vFeatureStatus();
 			$featureStatusToRemoveIndex->setType(IndexObjectType::CATEGORY);
 		}
 		
@@ -748,20 +748,20 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		$filter->setFullIdsStartsWith($fullIdsStartsWithCategoryId);
 		$filter->setIdIn($categoriesIdsIn);
 		
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 		$filter->attachToCriteria($c);
 			
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		categoryPeer::doSelect($c);
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		
 		if($c->getRecordsCount() > 0)
-			kJobsManager::addIndexJob($this->getPartnerId(), $jobSubType, $filter, true, $featureStatusesToRemove);
+			vJobsManager::addIndexJob($this->getPartnerId(), $jobSubType, $filter, true, $featureStatusesToRemove);
 	}
 
 	protected function addIndexCategoryEntryJob($categoryId = null, $shouldUpdate = true)
 	{
-		$featureStatusToRemoveIndex = new kFeatureStatus();
+		$featureStatusToRemoveIndex = new vFeatureStatus();
 		$featureStatusToRemoveIndex->setType(IndexObjectType::CATEGORY_ENTRY);
 		
 		$featureStatusesToRemove = array();
@@ -770,22 +770,22 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		$filter = new categoryEntryFilter();
 		$filter->setCategoryIdEqual($categoryId);
 
-		kJobsManager::addIndexJob($this->getPartnerId(), IndexObjectType::CATEGORY_ENTRY, $filter, $shouldUpdate, $featureStatusesToRemove);
+		vJobsManager::addIndexJob($this->getPartnerId(), IndexObjectType::CATEGORY_ENTRY, $filter, $shouldUpdate, $featureStatusesToRemove);
 		
 	}
 	
-	protected function addIndexCategoryKuserJob($categoryId = null, $shouldUpdate = true)
+	protected function addIndexCategoryVuserJob($categoryId = null, $shouldUpdate = true)
 	{
-		$featureStatusToRemoveIndex = new kFeatureStatus();
+		$featureStatusToRemoveIndex = new vFeatureStatus();
 		$featureStatusToRemoveIndex->setType(IndexObjectType::CATEGORY_USER);
 		
 		$featureStatusesToRemove = array();
 		$featureStatusesToRemove[] = $featureStatusToRemoveIndex;
 		
-		$filter = new categoryKuserFilter();
+		$filter = new categoryVuserFilter();
 		$filter->setCategoryIdEqual($categoryId);
 
-		kJobsManager::addIndexJob($this->getPartnerId(), IndexObjectType::CATEGORY_USER, $filter, $shouldUpdate, $featureStatusesToRemove);
+		vJobsManager::addIndexJob($this->getPartnerId(), IndexObjectType::CATEGORY_USER, $filter, $shouldUpdate, $featureStatusesToRemove);
 	}
 	
 	/**
@@ -796,14 +796,14 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	public function validateParentIdIsNotChild($parentId)
 	{
 		if ($this->getId() == $parentId && $parentId != 0)
-			throw new kCoreException("Parent id [$parentId] is one of the childs", kCoreException::PARENT_ID_IS_CHILD);
+			throw new vCoreException("Parent id [$parentId] is one of the childs", vCoreException::PARENT_ID_IS_CHILD);
 		
 		$childs = $this->getChilds();
 		foreach($childs as $child)
 		{
 			if ($child->getId() == $parentId)
 			{
-				throw new kCoreException("Parent id [$parentId] is one of the childs", kCoreException::PARENT_ID_IS_CHILD);
+				throw new vCoreException("Parent id [$parentId] is one of the childs", vCoreException::PARENT_ID_IS_CHILD);
 			}
 			
 			$child->validateParentIdIsNotChild($parentId);
@@ -848,9 +848,9 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 			
 		$c = new Criteria();
 		$c->add(categoryPeer::PARENT_ID, $this->getId());
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$categories = categoryPeer::doSelect($c);
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		
 		return $categories;
 	}
@@ -863,9 +863,9 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		$c = new Criteria();
 		$c->add(categoryPeer::FULL_NAME, $this->getFullName() . '%', Criteria::LIKE);
 		$c->addAnd(categoryPeer::PARTNER_ID,$this->getPartnerId(),Criteria::EQUAL);
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$categories = categoryPeer::doSelect($c);
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		
 		return $categories;
 	}
@@ -929,7 +929,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		$this->setPrivacy(PrivacyType::ALL);
 		$this->setInheritanceType(InheritanceType::MANUAL);
 		$this->setUserJoinPolicy(UserJoinPolicyType::NOT_ALLOWED);
-		$this->setDefaultPermissionLevel(CategoryKuserPermissionLevel::MEMBER);
+		$this->setDefaultPermissionLevel(CategoryVuserPermissionLevel::MEMBER);
 		$this->setContributionPolicy(ContributionPolicyType::ALL);
 		$this->setStatus(CategoryStatus::ACTIVE);
 	}
@@ -939,7 +939,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	 */
 	public function getSortName()
 	{
-		return kUTF8::str2int64($this->getName());
+		return vUTF8::str2int64($this->getName());
 	}
 	
 	/* (non-PHPdoc)
@@ -964,8 +964,8 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	}
 	
 	/**
-	 * Return space seperated string of permission level and kusers ids that are active members on this category.
-	 * Example: "CONTRIBUTOR kuserId1 kuserId2 CONTRIBUTOR MANAGER kuserId3 kuserId4 MANAGER"
+	 * Return space seperated string of permission level and vusers ids that are active members on this category.
+	 * Example: "CONTRIBUTOR vuserId1 vuserId2 CONTRIBUTOR MANAGER vuserId3 vuserId4 MANAGER"
 	 * Used by index engine.
 	 *
 	 * @return string
@@ -977,27 +977,27 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		if($inheritedParentId)
 			$categoryIdToGetAllMembers = $inheritedParentId;
 		
-		$members = categoryKuserPeer::retrieveActiveKusersByCategoryId($categoryIdToGetAllMembers);
+		$members = categoryVuserPeer::retrieveActiveVusersByCategoryId($categoryIdToGetAllMembers);
 		if (!$members)
 			return '';
 
 		$membersIdsByPermission = array();
 		$permissionNamesByMembers = array();
 
-		/* @var $member categoryKuser */
+		/* @var $member categoryVuser */
 		while ($member = array_pop($members))
 		{
 			if(isset($membersIdsByPermission[$member->getPermissionLevel()]))
-				$membersIdsByPermission[$member->getPermissionLevel()][] = $member->getKuserId();
+				$membersIdsByPermission[$member->getPermissionLevel()][] = $member->getVuserId();
 			else
-				$membersIdsByPermission[$member->getPermissionLevel()] = array ($member->getKuserId());
+				$membersIdsByPermission[$member->getPermissionLevel()] = array ($member->getVuserId());
 
 			$permissionNames = explode(",", $member->getPermissionNames());
 			foreach ($permissionNames as &$permissionName)
 			{
 				$permissionName = str_replace('_', '', $permissionName);
 			}
-			$permissionNamesByMembers[] = $member->getKuserId().implode(" ".$member->getKuserId(), $permissionNames);
+			$permissionNamesByMembers[] = $member->getVuserId().implode(" ".$member->getVuserId(), $permissionNames);
 		}
 
 		$membersIds = array();
@@ -1014,7 +1014,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 
 	
 	/**
-	 * Return kusers ids that are active members on this category.
+	 * Return vusers ids that are active members on this category.
 	 *
 	 * @return array
 	 */
@@ -1025,14 +1025,14 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		if($inheritedParentId)
 			$categoryIdToGetAllMembers = $inheritedParentId;
 		
-		$members = categoryKuserPeer::retrieveActiveKusersByCategoryId($categoryIdToGetAllMembers);
+		$members = categoryVuserPeer::retrieveActiveVusersByCategoryId($categoryIdToGetAllMembers);
 		if (!$members)
 			return array();
 		
 		$membersIds = array();
 		foreach ($members as $member)
 		{
-			$membersIds[] = $member->getKuserId();
+			$membersIds[] = $member->getVuserId();
 		}
 		
 		return $membersIds;
@@ -1042,16 +1042,16 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	{
 		switch ($permissionLevel)
 		{
-			case CategoryKuserPermissionLevel::CONTRIBUTOR:
+			case CategoryVuserPermissionLevel::CONTRIBUTOR:
 				return 'CONTRIBUTOR';
 				
-			case CategoryKuserPermissionLevel::MANAGER:
+			case CategoryVuserPermissionLevel::MANAGER:
 				return 'MANAGER';
 				
-			case CategoryKuserPermissionLevel::MEMBER:
+			case CategoryVuserPermissionLevel::MEMBER:
 				return 'MEMBER';
 				
-			case CategoryKuserPermissionLevel::MODERATOR:
+			case CategoryVuserPermissionLevel::MODERATOR:
 				return 'MODERATOR';
 		}
 		
@@ -1072,9 +1072,9 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 			parent::save();
 		}
 		if (!$this->alreadyInSave)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($this));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($this));
 
-		kEventsManager::flushEvents();
+		vEventsManager::flushEvents();
 			
 		if($this->getParentCategory())
 		{
@@ -1099,19 +1099,19 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 			
 		if($this->getMembersCount())
 		{
-			KalturaLog::debug("Category still associated with [" . $this->getMembersCount() . "] users");
+			VidiunLog::debug("Category still associated with [" . $this->getMembersCount() . "] users");
 			return false;
 		}
 			
 		if($this->getEntriesCount() > 0)
 		{
-			KalturaLog::debug("Category still associated with [" . $this->getEntriesCount() . "] entries");
+			VidiunLog::debug("Category still associated with [" . $this->getEntriesCount() . "] entries");
 			return false;
 		}
 			
 		if($this->getDirectSubCategoriesCount() > 0)
 		{
-			KalturaLog::debug("Category still associated with [" . $this->getDirectSubCategoriesCount() . "] sub categories");
+			VidiunLog::debug("Category still associated with [" . $this->getDirectSubCategoriesCount() . "] sub categories");
 			return false;
 		}
 		
@@ -1135,9 +1135,9 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	
 	public function getInheritFromParentCategory()
 	{
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$parentCategory = $this->getParentCategory();
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		
 		if(!$parentCategory)
 			return null;
@@ -1153,9 +1153,9 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		if ($this->getInheritanceType() != InheritanceType::INHERIT || is_null($this->getInheritedParentId()))
 			return $this;
 			
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$inheritCategory = categoryPeer::retrieveByPK($this->getInheritedParentId());
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		
 		if(!$inheritCategory)
 			return $this;
@@ -1170,7 +1170,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	{
 		$this->setUserJoinPolicy($oldParentCategory->getUserJoinPolicy());
 		$this->setDefaultPermissionLevel($oldParentCategory->getDefaultPermissionLevel());
-		$this->setKuserId($oldParentCategory->getKuserId());
+		$this->setVuserId($oldParentCategory->getVuserId());
 		$this->setPuserId($oldParentCategory->getPuserId());
 		$this->reSetMembersCount(); //removing all members from this category
 		$this->reSetPendingMembersCount();
@@ -1225,16 +1225,16 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	 * inherited values are not synced in the DB to child category that inherit from them - but should be returned on the object.
 	 * (values are copied upon update inhertance from inherited to manual)
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
 		if ($this->getInheritanceType() == InheritanceType::INHERIT)
 		{
 			$inheritPartner = $this->getInheritParent();
 			if($inheritPartner->getId() != $this->getId())
-				return $this->getInheritParent()->getKuserId();
+				return $this->getInheritParent()->getVuserId();
 		}
 		
-		return parent::getKuserId();
+		return parent::getVuserId();
 	}
 	
 	/**
@@ -1310,16 +1310,16 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		parent::setPuserId($puserId);
 		if (is_null($puserId))
 		{
-			$this->setKuserId(null);
+			$this->setVuserId(null);
 			return;
 		}
 			
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
-		$kuser = kuserPeer::getKuserByPartnerAndUid($partnerId, $puserId);
-		if (!$kuser)
-			throw new kCoreException('Invalid user id', kCoreException::INVALID_USER_ID);
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
+		$vuser = vuserPeer::getVuserByPartnerAndUid($partnerId, $puserId);
+		if (!$vuser)
+			throw new vCoreException('Invalid user id', vCoreException::INVALID_USER_ID);
 			
-		$this->setKuserId($kuser->getId());
+		$this->setVuserId($vuser->getId());
 	}
 	
 	public function setPrivacyContext($v)
@@ -1472,7 +1472,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		
 		// Try to retrieve from cache
 		$cacheKey =  category::EXCEEDED_ENTRIES_COUNT_CACHE_PREFIX . $this->getId();
-		$cacheStore = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_LOCK_KEYS);
+		$cacheStore = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_LOCK_KEYS);
 		if ($cacheStore)
 		{
 			$countExceeded = $cacheStore->get($cacheKey);
@@ -1481,9 +1481,9 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		}
 		
 		// Query for entry count
-		$baseCriteria = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$baseCriteria = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$filter = new entryFilter();
-		$filter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);
+		$filter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);
 		
 		if($directOnly)
 			$filter->setCategoriesIdsMatchAnd($this->getId());
@@ -1494,11 +1494,11 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 			$filter->setIdNotIn($entryIds);
 		$filter->setLimit(1);
 		$filter->attachToCriteria($baseCriteria);
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 		$baseCriteria->applyFilters();
 		
 		$count = $baseCriteria->getRecordsCount();
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_ENTRY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_ENTRY);
 		
 		// Save the result within the cache		
 		if($count >= category::MAX_NUMBER_OF_ENTRIES_PER_CATEGORY) {
@@ -1538,7 +1538,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	 */
 	public function decrementEntriesCount($entryId)
 	{
-		KalturaLog::debug("decrementing $entryId from " . $this->getFullName());
+		VidiunLog::debug("decrementing $entryId from " . $this->getFullName());
 		$this->preDecrement($entryId);
 		
 		$count = $this->countEntriesByCriteria(self::$decrementedEntryIds[$this->getId()]);
@@ -1561,7 +1561,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	 */
 	public function incrementEntriesCount($entryId)
 	{
-		KalturaLog::debug("incrementing $entryId to " . $this->getFullName());
+		VidiunLog::debug("incrementing $entryId to " . $this->getFullName());
 		$this->preIncrement($entryId);
 		
 		$count = $this->countEntriesByCriteria(self::$incrementedEntryIds[$this->getId()]);
@@ -1586,9 +1586,9 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	 */
 	public function reSetDirectEntriesCount()
 	{
-		$baseCriteria = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$baseCriteria = VidiunCriteria::create(entryPeer::OM_CLASS);
 		$filter = new entryFilter();
-		$filter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);
+		$filter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);
 		$filter->setCategoriesIdsMatchAnd($this->getId());
 		$filter->setLimit(1);
 		$filter->attachToCriteria($baseCriteria);
@@ -1611,10 +1611,10 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		}
 		else
 		{
-			$criteria = KalturaCriteria::create(categoryKuserPeer::OM_CLASS);
-			$criteria->addAnd(categoryKuserPeer::CATEGORY_ID, $this->getId(), Criteria::EQUAL);
-			$criteria->addAnd(categoryKuserPeer::STATUS, CategoryKuserStatus::ACTIVE, Criteria::EQUAL);
-			$this->setMembersCount(categoryKuserPeer::doCount($criteria));
+			$criteria = VidiunCriteria::create(categoryVuserPeer::OM_CLASS);
+			$criteria->addAnd(categoryVuserPeer::CATEGORY_ID, $this->getId(), Criteria::EQUAL);
+			$criteria->addAnd(categoryVuserPeer::STATUS, CategoryVuserStatus::ACTIVE, Criteria::EQUAL);
+			$this->setMembersCount(categoryVuserPeer::doCount($criteria));
 		}
 	}
 	
@@ -1643,10 +1643,10 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		}
 		else
 		{
-			$criteria = KalturaCriteria::create(categoryKuserPeer::OM_CLASS);
-			$criteria->addAnd(categoryKuserPeer::CATEGORY_ID, $this->getId(), Criteria::EQUAL);
-			$criteria->addAnd(categoryKuserPeer::STATUS, CategoryKuserStatus::PENDING, Criteria::EQUAL);
-			$this->setPendingMembersCount(categoryKuserPeer::doCount($criteria));
+			$criteria = VidiunCriteria::create(categoryVuserPeer::OM_CLASS);
+			$criteria->addAnd(categoryVuserPeer::CATEGORY_ID, $this->getId(), Criteria::EQUAL);
+			$criteria->addAnd(categoryVuserPeer::STATUS, CategoryVuserStatus::PENDING, Criteria::EQUAL);
+			$this->setPendingMembersCount(categoryVuserPeer::doCount($criteria));
 		}
 	}
 	
@@ -1673,7 +1673,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	
 	public function copyCategoryUsersFromParent($categoryId)
 	{
-		$this->addCopyCategoryKuserJob($categoryId);
+		$this->addCopyCategoryVuserJob($categoryId);
 	}
 	
 	protected function setDefaultUnEntitlmenetCategory()
@@ -1682,23 +1682,23 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		$this->setPrivacy(PrivacyType::ALL);
 		$this->setDisplayInSearch(DisplayInSearchType::PARTNER_ONLY);
 		$this->setInheritanceType(InheritanceType::MANUAL);
-		$this->setKuserId(null);
+		$this->setVuserId(null);
 		$this->setUserJoinPolicy(UserJoinPolicyType::NOT_ALLOWED);
 		$this->setContributionPolicy(ContributionPolicyType::ALL);
-		$this->setDefaultPermissionLevel(CategoryKuserPermissionLevel::MEMBER);
+		$this->setDefaultPermissionLevel(CategoryVuserPermissionLevel::MEMBER);
 	}
 	
 	public function reSetDirectSubCategoriesCount()
 	{
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 		
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 		$c->add (categoryPeer::STATUS, array(CategoryStatus::DELETED, CategoryStatus::PURGED), Criteria::NOT_IN);
 		$c->add (categoryPeer::PARENT_ID, $this->getId(), Criteria::EQUAL);
 			
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$c->applyFilters();
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$this->setDirectSubCategoriesCount($c->getRecordsCount());
 	}
 
@@ -1708,18 +1708,18 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 			return null;
 
 		$privacyContexts = explode(',', $this->getPrivacyContext());
-		$privacyContexts[] = kEntitlementUtils::NOT_DEFAULT_CONTEXT;
-		$privacyContexts = kEntitlementUtils::addPrivacyContextsPrefix( $privacyContexts, $this->getPartnerId() );
+		$privacyContexts[] = vEntitlementUtils::NOT_DEFAULT_CONTEXT;
+		$privacyContexts = vEntitlementUtils::addPrivacyContextsPrefix( $privacyContexts, $this->getPartnerId() );
 		return $privacyContexts;
 	}
 
 	protected function getElasticSearchIndexPrivacyContexts()
 	{
 		if(is_null($this->getPrivacyContexts()) || trim($this->getPrivacyContexts()) == '')
-			return kEntitlementUtils::getDefaultContextString( $this->getPartnerId() );
+			return vEntitlementUtils::getDefaultContextString( $this->getPartnerId() );
 
 		$privacyContexts = explode(',', $this->getPrivacyContexts());
-		$privacyContexts = kEntitlementUtils::addPrivacyContextsPrefix( $privacyContexts, $this->getPartnerId() );
+		$privacyContexts = vEntitlementUtils::addPrivacyContextsPrefix( $privacyContexts, $this->getPartnerId() );
 
 		return $privacyContexts;
 	}
@@ -1730,8 +1730,8 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 			return '';
 
 		$privacyContexts = explode(',', $this->getPrivacyContext());
-		$privacyContexts[] = kEntitlementUtils::NOT_DEFAULT_CONTEXT;
-		$privacyContexts = kEntitlementUtils::addPrivacyContextsPrefix( $privacyContexts, $this->getPartnerId() );
+		$privacyContexts[] = vEntitlementUtils::NOT_DEFAULT_CONTEXT;
+		$privacyContexts = vEntitlementUtils::addPrivacyContextsPrefix( $privacyContexts, $this->getPartnerId() );
 
 		return implode(' ',$privacyContexts);
 	}
@@ -1739,10 +1739,10 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	public function getSearchIndexPrivacyContexts()
 	{
 		if(is_null($this->getPrivacyContexts()) || trim($this->getPrivacyContexts()) == '')
-			return kEntitlementUtils::getDefaultContextString( $this->getPartnerId() );
+			return vEntitlementUtils::getDefaultContextString( $this->getPartnerId() );
 
 		$privacyContexts = explode(',', $this->getPrivacyContexts());
-		$privacyContexts = kEntitlementUtils::addPrivacyContextsPrefix( $privacyContexts, $this->getPartnerId() );
+		$privacyContexts = vEntitlementUtils::addPrivacyContextsPrefix( $privacyContexts, $this->getPartnerId() );
 
 		return implode(' ',$privacyContexts);
 	}
@@ -1811,7 +1811,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		if($inheritedParentId)
 			$categoryIdToGetAllMembers = $inheritedParentId;
 
-		$members = categoryKuserPeer::retrieveActiveKusersByCategoryId($categoryIdToGetAllMembers);
+		$members = categoryVuserPeer::retrieveActiveVusersByCategoryId($categoryIdToGetAllMembers);
 		if (!$members)
 			return array();
 
@@ -1819,15 +1819,15 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		foreach ($members as $member)
 		{
 			/**
-			 * @var categoryKuser $member
+			 * @var categoryVuser $member
 			*/
-			$values[] = strval($member->getKuserId());
-			$values[] = elasticSearchUtils::formatCategoryUserPermissionLevel($member->getKuserId(), $member->getPermissionLevel());
+			$values[] = strval($member->getVuserId());
+			$values[] = elasticSearchUtils::formatCategoryUserPermissionLevel($member->getVuserId(), $member->getPermissionLevel());
 			$permissionNames = $member->getPermissionNames();
 			$permissionNames = explode(',', $permissionNames);
 			foreach ($permissionNames as $permissionName)
 			{
-				$values[] = elasticSearchUtils::formatCategoryUserPermissionName($member->getKuserId(), $permissionName);
+				$values[] = elasticSearchUtils::formatCategoryUserPermissionName($member->getVuserId(), $permissionName);
 			}
 		}
 
@@ -1859,7 +1859,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		{
 			if(count($privacyContexts) > 1)
 			{
-				throw new kCoreException("Only one privacy context allowed when Disable Category Limit feature turned on", kCoreException::DISABLE_CATEGORY_LIMIT_MULTI_PRIVACY_CONTEXT_FORBIDDEN);
+				throw new vCoreException("Only one privacy context allowed when Disable Category Limit feature turned on", vCoreException::DISABLE_CATEGORY_LIMIT_MULTI_PRIVACY_CONTEXT_FORBIDDEN);
 			}
 		}
 		return true;
@@ -1867,7 +1867,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 
 	public function addIndexCategoryInheritedTreeJob()
 	{
-		$featureStatusToRemoveIndex = new kFeatureStatus();
+		$featureStatusToRemoveIndex = new vFeatureStatus();
 		$featureStatusToRemoveIndex->setType(IndexObjectType::CATEGORY);
 
 		$featureStatusesToRemove = array();
@@ -1877,22 +1877,22 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 		$filter->setFullIdsStartsWith($this->getFullIds());
 		$filter->setInheritanceTypeEqual(InheritanceType::INHERIT);
 
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 		$filter->attachToCriteria($c);
-		KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 		$categories = categoryPeer::doSelect($c);
-		KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+		VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 
 		if(count($categories))
 		{
-			kJobsManager::addIndexJob($this->getPartnerId(), IndexObjectType::CATEGORY, $filter, true, $featureStatusesToRemove);
+			vJobsManager::addIndexJob($this->getPartnerId(), IndexObjectType::CATEGORY, $filter, true, $featureStatusesToRemove);
 		}
 
 	}
 
 	public function indexCategoryInheritedTree()
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForIndexInheritedTreeEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForIndexInheritedTreeEvent($this));
 	}
 
 	/**
@@ -1906,7 +1906,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 
 		$filter = new categoryFilter();
 		$filter->setFullIdsStartsWith($fullIds);
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 		$filter->attachToCriteria($c);
 		$c->applyFilters();
 		$categoryIds = $c->getFetchedIds();
@@ -1974,12 +1974,12 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 			'tags' => explode(',', $this->getTags()),
 			'display_in_search' => $this->getDisplayInSearch(),
 			'inheritance_type' => $this->getInheritanceType(),
-			'kuser_id' => $this->getKuserId(),
+			'vuser_id' => $this->getVuserId(),
 			'reference_id' => $this->getReferenceId(),
 			'inherited_parent_id' => $this->getInheritedParentId(),
 			'moderation' => $this->getModeration(),
 			'contribution_policy' => $this->getContributionPolicy(),
-			'kuser_ids' => $this->getElasticMembers(),
+			'vuser_ids' => $this->getElasticMembers(),
 		);
 		elasticSearchUtils::cleanEmptyValues($body);
 		return $body;
@@ -1998,7 +1998,7 @@ class category extends Basecategory implements IIndexable, IRelatedObject, IElas
 	 */
 	public function indexToElastic($params = null)
 	{
-		kEventsManager::raiseEventDeferred(new kObjectReadyForElasticIndexEvent($this));
+		vEventsManager::raiseEventDeferred(new vObjectReadyForElasticIndexEvent($this));
 	}
 
 	/**

@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchItemDataResult extends KalturaObject
+class VidiunESearchItemDataResult extends VidiunObject
 {
 	/**
 	 * @var int
@@ -11,7 +11,7 @@ class KalturaESearchItemDataResult extends KalturaObject
 	public $totalCount;
 
 	/**
-	 * @var KalturaESearchItemDataArray
+	 * @var VidiunESearchItemDataArray
 	 */
 	public $items;
 

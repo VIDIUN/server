@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kConvertProfileJobData extends kJobData
+class vConvertProfileJobData extends vJobData
 {
 	/**
 	 * @var string

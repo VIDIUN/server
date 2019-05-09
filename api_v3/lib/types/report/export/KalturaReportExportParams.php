@@ -4,7 +4,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaReportExportParams extends KalturaObject
+class VidiunReportExportParams extends VidiunObject
 {
 	/**
 	 * @var string
@@ -18,7 +18,7 @@ class KalturaReportExportParams extends KalturaObject
 	public $timeZoneOffset = 0;
 
 	/**
-	 *  @var KalturaReportExportItemArray
+	 *  @var VidiunReportExportItemArray
 	 */
 	public $reportItems;
 
@@ -37,7 +37,7 @@ class KalturaReportExportParams extends KalturaObject
 	{
 		if (!$object_to_fill)
 		{
-			$object_to_fill = new kReportExportParams();
+			$object_to_fill = new vReportExportParams();
 		}
 
 		return parent::toObject($object_to_fill, $props_to_skip);

@@ -43,8 +43,8 @@ FROM
 			IFNULL(SUM(count_plays), 0) count_plays, IFNULL(SUM(new_videos), 0) new_videos,
 			IFNULL(SUM(new_audios), 0) new_audios,
 			IFNULL(SUM(new_images), 0) new_images
-		FROM kalturadw.dwh_dim_partners dim_partner 
-		LEFT JOIN kalturadw.dwh_hourly_partner aggr_partner  
+		FROM vidiundw.dwh_dim_partners dim_partner 
+		LEFT JOIN vidiundw.dwh_hourly_partner aggr_partner  
 		ON (aggr_partner.partner_id = dim_partner.partner_id AND aggr_partner.date_id BETWEEN {FROM_DATE_ID} AND {TO_DATE_ID})
 		WHERE   {OBJ_ID_CLAUSE} AND dim_partner.created_date_id <= {TO_DATE_ID}
 		GROUP BY dim_partner.partner_id
@@ -56,8 +56,8 @@ FROM
 			IFNULL(SUM(deleted_storage_mb), 0) deleted_storage,
 			IFNULL(MAX(aggr_storage_mb), 0) peak_storage,
 			IFNULL(SUM(aggr_storage_mb), 0) / (DATEDIFF({TO_DATE_ID},{FROM_DATE_ID}) + 1) average_storage
-		FROM kalturadw.dwh_dim_partners dim_partner 
-		LEFT JOIN kalturadw.dwh_hourly_partner_usage hourly_partner_usage 
+		FROM vidiundw.dwh_dim_partners dim_partner 
+		LEFT JOIN vidiundw.dwh_hourly_partner_usage hourly_partner_usage 
 		ON (hourly_partner_usage.partner_id = dim_partner.partner_id AND hourly_partner_usage.date_id BETWEEN {FROM_DATE_ID} AND {TO_DATE_ID})
 		WHERE   {OBJ_ID_CLAUSE} AND	dim_partner.created_date_id <= {TO_DATE_ID}
 		GROUP BY dim_partner.partner_id
@@ -68,7 +68,7 @@ FROM
 (
 	SELECT	dim_partner.partner_id, 
 		SUM(IFNULL(new_videos, 0) + IFNULL(new_audios, 0) + IFNULL(new_images, 0)) count_media_all_time
-	FROM kalturadw.dwh_hourly_partner aggr_partner RIGHT JOIN kalturadw.dwh_dim_partners dim_partner ON (aggr_partner.partner_id = dim_partner.partner_id AND aggr_partner.date_id <= {TO_DATE_ID})
+	FROM vidiundw.dwh_hourly_partner aggr_partner RIGHT JOIN vidiundw.dwh_dim_partners dim_partner ON (aggr_partner.partner_id = dim_partner.partner_id AND aggr_partner.date_id <= {TO_DATE_ID})
 	WHERE {OBJ_ID_CLAUSE} AND
 	dim_partner.created_date_id <= {TO_DATE_ID}
 	GROUP BY dim_partner.partner_id

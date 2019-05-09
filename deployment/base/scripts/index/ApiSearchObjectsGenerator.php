@@ -8,7 +8,7 @@ require(__DIR__ . '/IndexGeneratorBase.php');
 
 require_once(__DIR__ . '/../../../../api_v3/bootstrap.php');
 
-KalturaTypeReflector::setClassInheritMapPath(KAutoloader::buildPath(kConf::get("cache_root_path"), "api_v3", "KalturaClassInheritMap.cache"));
+VidiunTypeReflector::setClassInheritMapPath(VAutoloader::buildPath(vConf::get("cache_root_path"), "api_v3", "VidiunClassInheritMap.cache"));
 
 class ApiSearchObjectsGenerator extends IndexGeneratorBase
 {
@@ -32,13 +32,13 @@ class ApiSearchObjectsGenerator extends IndexGeneratorBase
 		if (!$object->apiName)
 			return;
 
-		$typeReflector = KalturaTypeReflectorCacher::get($object->apiName);
+		$typeReflector = VidiunTypeReflectorCacher::get($object->apiName);
 		/** @var array($apiType => $apiParentType) $apiTypes */
 		$apiTypes = array($object->apiName => null);
 		$subTypes = $typeReflector->getSubTypesNames();
 		foreach($subTypes as $subType)
 		{
-			$subTypeReflector = KalturaTypeReflectorCacher::get($subType);
+			$subTypeReflector = VidiunTypeReflectorCacher::get($subType);
 			$apiTypes[$subType] = $subTypeReflector->getParentTypeReflector()->getType();
 		}
 
@@ -47,16 +47,16 @@ class ApiSearchObjectsGenerator extends IndexGeneratorBase
 		$compareAttributes = $this->getCompareAttributes($key);
 		foreach($apiTypes as $apiType => $parentApiType)
 		{
-			$typeReflector = KalturaTypeReflectorCacher::get($apiType);
+			$typeReflector = VidiunTypeReflectorCacher::get($apiType);
 			$enumsToGenerate[$apiType.'MatchAttribute'] = array(
 				$apiType,
 				$this->filterAttributeByClass($typeReflector, $matchAttributes),
-				($parentApiType) ? $parentApiType.'MatchAttribute' : 'KalturaStringEnum',
+				($parentApiType) ? $parentApiType.'MatchAttribute' : 'VidiunStringEnum',
 			);
 			$enumsToGenerate[$apiType.'CompareAttribute'] = array(
 				$apiType,
 				$this->filterAttributeByClass($typeReflector, $compareAttributes),
-				($parentApiType) ? $parentApiType.'CompareAttribute' : 'KalturaStringEnum'
+				($parentApiType) ? $parentApiType.'CompareAttribute' : 'VidiunStringEnum'
 			);
 		}
 
@@ -78,7 +78,7 @@ class ApiSearchObjectsGenerator extends IndexGeneratorBase
 			$fp = fopen($filePath, 'w+');
 			if(!$fp)
 			{
-				KalturaLog::err("Failed to open file " . $filePath);
+				VidiunLog::err("Failed to open file " . $filePath);
 				exit(1);
 			}
 
@@ -96,14 +96,14 @@ class ApiSearchObjectsGenerator extends IndexGeneratorBase
 		if (!$object->apiName)
 			return;
 
-		$typeReflector = KalturaTypeReflectorCacher::get($object->apiName);
+		$typeReflector = VidiunTypeReflectorCacher::get($object->apiName);
 
 		$apiTypes = array_merge(array($object->apiName), $typeReflector->getSubTypesNames());
 		$classesToGenerate = array();
 		foreach($apiTypes as $apiType)
 		{
-			$classesToGenerate[$apiType.'MatchAttributeCondition'] = array($apiType, $apiType.'MatchAttribute', 'KalturaSearchMatchAttributeCondition');
-			$classesToGenerate[$apiType.'CompareAttributeCondition'] = array($apiType, $apiType.'CompareAttribute', 'KalturaSearchComparableAttributeCondition');
+			$classesToGenerate[$apiType.'MatchAttributeCondition'] = array($apiType, $apiType.'MatchAttribute', 'VidiunSearchMatchAttributeCondition');
+			$classesToGenerate[$apiType.'CompareAttributeCondition'] = array($apiType, $apiType.'CompareAttribute', 'VidiunSearchComparableAttributeCondition');
 		}
 
 		foreach($classesToGenerate as $className => $additionalData)
@@ -118,7 +118,7 @@ class ApiSearchObjectsGenerator extends IndexGeneratorBase
 			$fp = fopen($filePath, 'w+');
 			if(!$fp)
 			{
-				KalturaLog::err("Failed to open file " . $filePath);
+				VidiunLog::err("Failed to open file " . $filePath);
 				exit(1);
 			}
 
@@ -215,7 +215,7 @@ class ApiSearchObjectsGenerator extends IndexGeneratorBase
 		return $attributes;
 	}
 
-	private function filterAttributeByClass(KalturaTypeReflector $typeReflector, array &$attributes)
+	private function filterAttributeByClass(VidiunTypeReflector $typeReflector, array &$attributes)
 	{
 		$attributesForClass = array();
 		$attributesLeft = array();
@@ -232,12 +232,12 @@ class ApiSearchObjectsGenerator extends IndexGeneratorBase
 		return $attributesForClass;
 	}
 
-	private function getProperty(KalturaTypeReflector $typeReflector, $name)
+	private function getProperty(VidiunTypeReflector $typeReflector, $name)
 	{
 		$properties = $typeReflector->getCurrentProperties();
 		foreach($properties as $property)
 		{
-			/** @var KalturaPropertyInfo $property */
+			/** @var VidiunPropertyInfo $property */
 			if ($property->getName() == $name)
 				return $property;
 		}
@@ -260,7 +260,7 @@ class ApiSearchObjectsGenerator extends IndexGeneratorBase
 
 	private function getClassFilePath($class)
 	{
-		$map = KAutoloader::getClassMap();
+		$map = VAutoloader::getClassMap();
 		if(!isset($map[$class]))
 			throw new Exception("File path was not found for [$class]");
 		return $map[$class];
@@ -277,7 +277,7 @@ function main($argv)
 {
 	if(count($argv) < 2)
 	{
-		KalturaLog::err("Illegal command. use IndexObjectsGenerator <indexFile>\n");
+		VidiunLog::err("Illegal command. use IndexObjectsGenerator <indexFile>\n");
 		exit(1);
 	}
 
@@ -286,7 +286,7 @@ function main($argv)
 	$args = array_slice($argv, 1);
 	foreach($args as $arg) {
 		$indexFile = $arg;
-		KalturaLog::info("Handling Index file $indexFile");
+		VidiunLog::info("Handling Index file $indexFile");
 		$keys = $generator->load($indexFile);
 		$generator->generateEnumFiles($keys);
 		$generator->generateSearchObjectFiles($keys);

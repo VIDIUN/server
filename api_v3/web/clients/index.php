@@ -1,11 +1,11 @@
 <?php
 require_once(__DIR__ . "/../../bootstrap.php");
-KalturaLog::setContext("CLIENTS");
-KalturaLog::debug(__FILE__ . " start");
+VidiunLog::setContext("CLIENTS");
+VidiunLog::debug(__FILE__ . " start");
 
-$generatorPath 			= KAutoloader::buildPath(KALTURA_ROOT_PATH, "generator");
-$generatorOutputPath 	= KAutoloader::buildPath(KALTURA_ROOT_PATH, "generator", "output");
-$generatorConfigPath 	= KAutoloader::buildPath(KALTURA_ROOT_PATH, "generator", "config.ini");
+$generatorPath 			= VAutoloader::buildPath(VIDIUN_ROOT_PATH, "generator");
+$generatorOutputPath 	= VAutoloader::buildPath(VIDIUN_ROOT_PATH, "generator", "output");
+$generatorConfigPath 	= VAutoloader::buildPath(VIDIUN_ROOT_PATH, "generator", "config.ini");
 $config = new Zend_Config_Ini($generatorConfigPath);
 ?>
 <ul>
@@ -15,7 +15,7 @@ foreach($config as $name => $item)
 	if (!$item->get("public-download"))
 		continue;
 		
-	$outputFilePath = KAutoloader::buildPath($generatorOutputPath, $name.".tar.gz");
+	$outputFilePath = VAutoloader::buildPath($generatorOutputPath, $name.".tar.gz");
 	$outputFileRealPath = realpath($outputFilePath);
 	if ($outputFileRealPath)
 	{
@@ -27,4 +27,4 @@ foreach($config as $name => $item)
 ?>
 </ul>
 <?php 
-KalturaLog::debug(__FILE__ . " end");
+VidiunLog::debug(__FILE__ . " end");

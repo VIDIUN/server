@@ -10,9 +10,9 @@ require_once(__DIR__ . "/../../bootstrap.php");
  * @package Scheduler
  * @subpackage Debug
  */
-class KAsyncExtractMediaTest extends PHPUnit_Framework_TestCase 
+class VAsyncExtractMediaTest extends PHPUnit_Framework_TestCase 
 {
-	const JOB_NAME = 'KAsyncExtractMedia';
+	const JOB_NAME = 'VAsyncExtractMedia';
 	
 	public function setUp() 
 	{
@@ -26,34 +26,34 @@ class KAsyncExtractMediaTest extends PHPUnit_Framework_TestCase
 	
 	public function testGoodFile()
 	{
-		$this->doTest(realpath(dirname( __FILE__ ) . '/../../../tests/files/example.avi'), KalturaBatchJobStatus::FINISHED);
+		$this->doTest(realpath(dirname( __FILE__ ) . '/../../../tests/files/example.avi'), VidiunBatchJobStatus::FINISHED);
 	}
 	
 	public function testSpacedFile()
 	{
 		$path = realpath(dirname( __FILE__ ) . '/../../../tests/files/example.avi');
-		$this->doTest(" $path", KalturaBatchJobStatus::FINISHED);
+		$this->doTest(" $path", VidiunBatchJobStatus::FINISHED);
 	}
 	
 	public function testMissingFile()
 	{
-		$this->doTest('aaa', KalturaBatchJobStatus::FAILED);
+		$this->doTest('aaa', VidiunBatchJobStatus::FAILED);
 	}
 	
 	public function testEmptyFile()
 	{
-		$this->doTest('aaa', KalturaBatchJobStatus::FAILED);
+		$this->doTest('aaa', VidiunBatchJobStatus::FAILED);
 	}
 	
 	public function testImageFile()
 	{
-		$this->doTest(realpath('../tests/files/thumb.jpg'), KalturaBatchJobStatus::FAILED);
+		$this->doTest(realpath('../tests/files/thumb.jpg'), VidiunBatchJobStatus::FAILED);
 	}
 	
 	public function doTest($value, $expectedStatus)
 	{
 		$iniFile = "batch_config.ini";
-		$schedulerConfig = new KSchedulerConfig($iniFile);
+		$schedulerConfig = new VSchedulerConfig($iniFile);
 	
 		$taskConfigs = $schedulerConfig->getTaskConfigList();
 		$config = null;
@@ -78,15 +78,15 @@ class KAsyncExtractMediaTest extends PHPUnit_Framework_TestCase
 	
 	private function prepareJobs($value)
 	{
-		$data = new KalturaExtractMediaJobData();
-		$srcFileSyncDescriptor = new KalturaSourceFileSyncDescriptor();
+		$data = new VidiunExtractMediaJobData();
+		$srcFileSyncDescriptor = new VidiunSourceFileSyncDescriptor();
 		$srcFileSyncDescriptor->fileSyncLocalPath = $value;
-		$data->srcFileSyncs = new KalturaSourceFileSyncDescriptorArray();
+		$data->srcFileSyncs = new VidiunSourceFileSyncDescriptorArray();
 		$data->srcFileSyncs[] = $srcFileSyncDescriptor;
 		
-		$job = new KalturaBatchJob();
+		$job = new VidiunBatchJob();
 		$job->id = 1;
-		$job->status = KalturaBatchJobStatus::PENDING;
+		$job->status = VidiunBatchJobStatus::PENDING;
 		$job->data = $data;
 		
 		return array($job);

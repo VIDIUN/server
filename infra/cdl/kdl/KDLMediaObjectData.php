@@ -1,11 +1,11 @@
 <?php
 
-//include_once("KDLCommon.php");
+//include_once("VDLCommon.php");
 
 	/* ---------------------------
-	 * KDLBaseMediaData
+	 * VDLBaseMediaData
 	 */
-	class KDLBaseMediaData {
+	class VDLBaseMediaData {
 		/* ---------------------
 		 * Data
 		 */
@@ -82,7 +82,7 @@
 			return $rvStr;
 		}
 		
-		public function GetSectionEnum() { return KDLConstants::ContainerIndex; }
+		public function GetSectionEnum() { return VDLConstants::ContainerIndex; }
 		
 		/* ------------------------------
 		 * IsDataSet
@@ -117,21 +117,21 @@
 		 */
 		protected function sanityCheck(array &$errors, array &$warnings, $section=null) {
 			if($section==null)
-				$section=KDLConstants::ContainerIndex;
-			if($this->_duration<KDLSanityLimits::MinDuration 
-			|| $this->_duration>KDLSanityLimits::MaxDuration) // Up to 10 hours
-				$warnings[$section][] = KDLWarnings::ToString(KDLWarnings::SanityInvalidDuration, $this->_duration);
+				$section=VDLConstants::ContainerIndex;
+			if($this->_duration<VDLSanityLimits::MinDuration 
+			|| $this->_duration>VDLSanityLimits::MaxDuration) // Up to 10 hours
+				$warnings[$section][] = VDLWarnings::ToString(VDLWarnings::SanityInvalidDuration, $this->_duration);
 
-			if($this->_bitRate<KDLSanityLimits::MinBitrate
-			|| $this->_bitRate>KDLSanityLimits::MaxBitrate)
-				$warnings[$section][] = KDLWarnings::ToString(KDLWarnings::SanityInvalidBitrate, $this->_bitRate);
+			if($this->_bitRate<VDLSanityLimits::MinBitrate
+			|| $this->_bitRate>VDLSanityLimits::MaxBitrate)
+				$warnings[$section][] = VDLWarnings::ToString(VDLWarnings::SanityInvalidBitrate, $this->_bitRate);
 		}
 	}
 
 	/* ---------------------------
-	 * KDLContainerData
+	 * VDLContainerData
 	 */
-	class KDLContainerData extends KDLBaseMediaData {
+	class VDLContainerData extends VDLBaseMediaData {
 
 		/* ---------------------
 		 * Data
@@ -140,13 +140,13 @@
 		public $_fileName=0;
 		public $_isFastStart=1;
 		
-		public function GetSectionEnum() { return KDLConstants::ContainerIndex; }
+		public function GetSectionEnum() { return VDLConstants::ContainerIndex; }
 		
 		/* ------------------------------
 		 * Validate
 		 */
 		public function Validate(array &$errors, array &$warnings, $section=null) {
-			parent::Validate($errors, $warnings, KDLConstants::ContainerIndex);
+			parent::Validate($errors, $warnings, VDLConstants::ContainerIndex);
 			self::sanityCheck($errors, $warnings);
 			if(count($errors)>0)
 				return false;
@@ -182,17 +182,17 @@
 		 * sanityCheck
 		 */
 		protected function sanityCheck(array &$errors, array &$warnings, $section=null) {
-			if($this->_fileSize<KDLSanityLimits::MinFileSize 
-			|| $this->_fileSize>KDLSanityLimits::MaxFileSize) // Up to 10 hours
+			if($this->_fileSize<VDLSanityLimits::MinFileSize 
+			|| $this->_fileSize>VDLSanityLimits::MaxFileSize) // Up to 10 hours
 				// "Invalid file size (" . $this->_fileSize . "kb)";
-			$errors[KDLConstants::ContainerIndex][] = KDLErrors::ToString(KDLErrors::SanityInvalidFileSize, $this->_fileSize);
+			$errors[VDLConstants::ContainerIndex][] = VDLErrors::ToString(VDLErrors::SanityInvalidFileSize, $this->_fileSize);
 		}
 	}
 	
 	/* ---------------------------
 	 * VideoData
 	 */
-	class KDLVideoData extends KDLBaseMediaData {
+	class VDLVideoData extends VDLBaseMediaData {
 
 		/* ---------------------
 		 * Data
@@ -201,7 +201,7 @@
 			   $_height,
 			   $_frameRate,
 			   $_dar,
-			   $_gop, //=KDLConstants::DefaultGOP;
+			   $_gop, //=VDLConstants::DefaultGOP;
 			   $_rotation,
 			   $_scanType=0; // 0:progressive, 1:interlaced
 		public $_arProcessingMode= 0;/*
@@ -229,13 +229,13 @@
 		public $_complexityValue = null;
 		public $_contentAwareness = null;
 		
-		public function GetSectionEnum() { return KDLConstants::VideoIndex; }
+		public function GetSectionEnum() { return VDLConstants::VideoIndex; }
 		
 		/* ------------------------------
 		 * Validate
 		 */
 		public function Validate(array &$errors, array &$warnings, $section=null) {
-			parent::Validate($errors, $warnings, KDLConstants::VideoIndex);
+			parent::Validate($errors, $warnings, VDLConstants::VideoIndex);
 			self::sanityCheck($errors, $warnings);
 			if(count($errors)>0)
 				return false;
@@ -301,34 +301,34 @@
 		protected function sanityCheck(array &$errors, array &$warnings, $section=null) {
 			if($this->_width==0){
 				$this->_width = 480;
-				$warnings[KDLConstants::VideoIndex][] = KDLWarnings::ToString(KDLWarnings::ZeroedFrameDim, $this->_width);
+				$warnings[VDLConstants::VideoIndex][] = VDLWarnings::ToString(VDLWarnings::ZeroedFrameDim, $this->_width);
 			}
 			if($this->_height==0){
 				$this->_height = 320;
-				$warnings[KDLConstants::VideoIndex][] = KDLWarnings::ToString(KDLWarnings::ZeroedFrameDim, $this->_height);
+				$warnings[VDLConstants::VideoIndex][] = VDLWarnings::ToString(VDLWarnings::ZeroedFrameDim, $this->_height);
 			}
 			
-			if($this->_width<KDLSanityLimits::MinDimension 
-			|| $this->_width>KDLSanityLimits::MaxDimension
-			|| $this->_height<KDLSanityLimits::MinDimension 
-			|| $this->_height>KDLSanityLimits::MaxDimension)
+			if($this->_width<VDLSanityLimits::MinDimension 
+			|| $this->_width>VDLSanityLimits::MaxDimension
+			|| $this->_height<VDLSanityLimits::MinDimension 
+			|| $this->_height>VDLSanityLimits::MaxDimension)
 					// "Invalid width (" . $this->_width . "px)";
-				$errors[KDLConstants::VideoIndex][] = KDLErrors::ToString(KDLErrors::SanityInvalidFrameDim, ($this->_width."x".$this->_height));
+				$errors[VDLConstants::VideoIndex][] = VDLErrors::ToString(VDLErrors::SanityInvalidFrameDim, ($this->_width."x".$this->_height));
 
-			if($this->_frameRate<KDLSanityLimits::MinFramerate 
-			|| $this->_frameRate>KDLSanityLimits::MaxFramerate) 
-				$warnings[KDLConstants::VideoIndex][] = KDLWarnings::ToString(KDLWarnings::SanityInvalidFarmerate, $this->_frameRate);
+			if($this->_frameRate<VDLSanityLimits::MinFramerate 
+			|| $this->_frameRate>VDLSanityLimits::MaxFramerate) 
+				$warnings[VDLConstants::VideoIndex][] = VDLWarnings::ToString(VDLWarnings::SanityInvalidFarmerate, $this->_frameRate);
 
-			if($this->_dar<KDLSanityLimits::MinDAR 
-			|| $this->_dar>KDLSanityLimits::MaxDAR) 
-				$warnings[KDLConstants::VideoIndex][] = KDLWarnings::ToString(KDLWarnings::SanityInvalidDAR, $this->_dar);
+			if($this->_dar<VDLSanityLimits::MinDAR 
+			|| $this->_dar>VDLSanityLimits::MaxDAR) 
+				$warnings[VDLConstants::VideoIndex][] = VDLWarnings::ToString(VDLWarnings::SanityInvalidDAR, $this->_dar);
 		}
 	}
 
 	/* ---------------------------
 	 * AudioData
 	 */
-	class KDLAudioData extends KDLBaseMediaData {
+	class VDLAudioData extends VDLBaseMediaData {
 
 		/* ---------------------
 		 * Data
@@ -338,13 +338,13 @@
 			$_resolution,
 			$_aac_adtstoasc_filter;
 
-		public function GetSectionEnum() { return KDLConstants::AudioIndex; }
+		public function GetSectionEnum() { return VDLConstants::AudioIndex; }
 		
 		/* ------------------------------
 		 * Validate
 		 */
 		public function Validate(array &$errors, array &$warnings, $section=null) {
-			parent::Validate($errors, $warnings, KDLConstants::AudioIndex);
+			parent::Validate($errors, $warnings, VDLConstants::AudioIndex);
 			self::sanityCheck($errors, $warnings);
 			
 			if(count($errors)>0)
@@ -399,7 +399,7 @@
 	/* ---------------------------
 	 * SwfData
 	 */
-	class KDLSwfData extends KDLBaseMediaData {
+	class VDLSwfData extends VDLBaseMediaData {
 
 		/* ---------------------
 		 * Data
@@ -415,13 +415,13 @@
 				$_flatten,
 				$_poly2Bitmap;
 
-		public function GetSectionEnum() { return KDLConstants::SwfIndex; }
+		public function GetSectionEnum() { return VDLConstants::SwfIndex; }
 		
 		/* ------------------------------
 		 * Validate
 		 */
 		public function Validate(array &$errors, array &$warnings, $section=null) {
-			parent::Validate($errors, $warnings, KDLConstants::SwfIndex);
+			parent::Validate($errors, $warnings, VDLConstants::SwfIndex);
 			self::sanityCheck($errors, $warnings);
 			
 			if(count($errors)>0)
@@ -503,7 +503,7 @@
 	/* ---------------------------
 	 * PdfData
 	 */
-	class KDLPdfData extends KDLBaseMediaData {
+	class VDLPdfData extends VDLBaseMediaData {
 
 		/* ---------------------
 		 * Data
@@ -514,13 +514,13 @@
 			   $_readonly;
 			   
 
-		public function GetSectionEnum() { return KDLConstants::PdfIndex; }
+		public function GetSectionEnum() { return VDLConstants::PdfIndex; }
 		
 		/* ------------------------------
 		 * Validate
 		 */
 		public function Validate(array &$errors, array &$warnings, $section=null) {
-			parent::Validate($errors, $warnings, KDLConstants::PdfIndex);
+			parent::Validate($errors, $warnings, VDLConstants::PdfIndex);
 			self::sanityCheck($errors, $warnings);
 			
 			if(count($errors)>0)
@@ -577,7 +577,7 @@
 	/* ---------------------------
 	 * ImageData
 	 */
-	class KDLImageData extends KDLBaseMediaData {
+	class VDLImageData extends VDLBaseMediaData {
 
 		/* ---------------------
 		 * Data
@@ -589,13 +589,13 @@
 			   $_depth;
 			   
 
-		public function GetSectionEnum() { return KDLConstants::ImageIndex; }
+		public function GetSectionEnum() { return VDLConstants::ImageIndex; }
 		
 		/* ------------------------------
 		 * Validate
 		 */
 		public function Validate(array &$errors, array &$warnings, $section=null) {
-			parent::Validate($errors, $warnings, KDLConstants::ImageIndex);
+			parent::Validate($errors, $warnings, VDLConstants::ImageIndex);
 			self::sanityCheck($errors, $warnings);
 			
 			if(count($errors)>0)

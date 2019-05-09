@@ -5,7 +5,7 @@
  * @package plugins.scheduleBulkUpload
  * @subpackage batch
  */
-class BulkUploadEngineICal extends KBulkUploadEngine
+class BulkUploadEngineICal extends VBulkUploadEngine
 {
     const OBJECT_TYPE_TITLE = 'schedule-event';
     const CHUNK_SIZE = 20;
@@ -24,7 +24,7 @@ class BulkUploadEngineICal extends KBulkUploadEngine
     
 	/**
 	 * The bulk upload items
-	 * @var array<kSchedulingICalEvent>
+	 * @var array<vSchedulingICalEvent>
 	 */
 	protected $items = array();
     
@@ -41,10 +41,10 @@ class BulkUploadEngineICal extends KBulkUploadEngine
 		$chunks = array_chunk($items, self::CHUNK_SIZE);
 		foreach($chunks as $chunk)
 		{
-			KBatchBase::$kClient->startMultiRequest();
+			VBatchBase::$vClient->startMultiRequest();
 			foreach($chunk as $item)
 			{
-				/* @var $item kSchedulingICalEvent */
+				/* @var $item vSchedulingICalEvent */
 				$bulkUploadResult = $this->createUploadResult($item);
 				if($bulkUploadResult)
 				{
@@ -55,11 +55,11 @@ class BulkUploadEngineICal extends KBulkUploadEngine
 					break;
 				}
 			}
-			KBatchBase::$kClient->doMultiRequest();
+			VBatchBase::$vClient->doMultiRequest();
 		}
     }
     
-    protected function createUploadResult(kSchedulingICalEvent $iCal)
+    protected function createUploadResult(vSchedulingICalEvent $iCal)
     {
     	if($this->handledRecordsThisRun > $this->maxRecordsEachRun)
     	{
@@ -68,19 +68,19 @@ class BulkUploadEngineICal extends KBulkUploadEngine
     	}
     	$this->handledRecordsThisRun++;
     
-    	$bulkUploadResult = new KalturaBulkUploadResultScheduleEvent();
+    	$bulkUploadResult = new VidiunBulkUploadResultScheduleEvent();
     	$bulkUploadResult->bulkUploadJobId = $this->job->id;
     	$bulkUploadResult->lineIndex = $this->itemIndex;
     	$bulkUploadResult->partnerId = $this->job->partnerId;
     	$bulkUploadResult->referenceId = $iCal->getUid();
-    	$bulkUploadResult->bulkUploadResultObjectType = KalturaBulkUploadObjectType::SCHEDULE_EVENT;
+    	$bulkUploadResult->bulkUploadResultObjectType = VidiunBulkUploadObjectType::SCHEDULE_EVENT;
     	$bulkUploadResult->rowData = $iCal->getRaw();
-		$bulkUploadResult->objectStatus = KalturaScheduleEventStatus::ACTIVE;
-		$bulkUploadResult->status = KalturaBulkUploadResultStatus::IN_PROGRESS;
+		$bulkUploadResult->objectStatus = VidiunScheduleEventStatus::ACTIVE;
+		$bulkUploadResult->status = VidiunBulkUploadResultStatus::IN_PROGRESS;
 
-    	if($iCal->getMethod() == kSchedulingICal::METHOD_CANCEL)
+    	if($iCal->getMethod() == vSchedulingICal::METHOD_CANCEL)
     	{
-    		$bulkUploadResult->action = KalturaBulkUploadAction::CANCEL;
+    		$bulkUploadResult->action = VidiunBulkUploadAction::CANCEL;
     	}
     
     	$this->itemIndex++;
@@ -90,17 +90,17 @@ class BulkUploadEngineICal extends KBulkUploadEngine
 
     protected function updateObjectsResults(array $requestResults, array $bulkUploadResults)
     {
-    	KBatchBase::$kClient->startMultiRequest();
+    	VBatchBase::$vClient->startMultiRequest();
     
     	// checking the created entries
     	foreach($requestResults as $index => $requestResult)
     	{
     		$bulkUploadResult = $bulkUploadResults[$index];
     			
-    		if(KBatchBase::$kClient->isError($requestResult))
+    		if(VBatchBase::$vClient->isError($requestResult))
     		{
-    			$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-    			$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::KALTURA_API;
+    			$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+    			$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::VIDIUN_API;
     			$bulkUploadResult->objectStatus = $requestResult['code'];
     			$bulkUploadResult->errorDescription = $requestResult['message'];
     			$this->addBulkUploadResult($bulkUploadResult);
@@ -109,8 +109,8 @@ class BulkUploadEngineICal extends KBulkUploadEngine
     			
     		if($requestResult instanceof Exception)
     		{
-    			$bulkUploadResult->status = KalturaBulkUploadResultStatus::ERROR;
-    			$bulkUploadResult->errorType = KalturaBatchJobErrorTypes::KALTURA_API;
+    			$bulkUploadResult->status = VidiunBulkUploadResultStatus::ERROR;
+    			$bulkUploadResult->errorType = VidiunBatchJobErrorTypes::VIDIUN_API;
     			$bulkUploadResult->errorDescription = $requestResult->getMessage();
     			$this->addBulkUploadResult($bulkUploadResult);
     			continue;
@@ -122,26 +122,26 @@ class BulkUploadEngineICal extends KBulkUploadEngine
     			$this->addBulkUploadResult($bulkUploadResult);
     	}
     
-    	KBatchBase::$kClient->doMultiRequest();
+    	VBatchBase::$vClient->doMultiRequest();
     }
     
     protected function getExistingEvents()
     {
-    	$schedulePlugin = KalturaScheduleClientPlugin::get(KBatchBase::$kClient);
+    	$schedulePlugin = VidiunScheduleClientPlugin::get(VBatchBase::$vClient);
 
-    	$pager = new KalturaFilterPager();
+    	$pager = new VidiunFilterPager();
     	$pager->pageSize = self::MAX_IN_FILTER;
     	
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		$referenceIds = array();
 		foreach($this->bulkUploadResults as $bulkUploadResult)
 		{
-			/* @var $bulkUploadResult KalturaBulkUploadResultScheduleEvent */
-		    if($bulkUploadResult->action == KalturaBulkUploadAction::CANCEL)
+			/* @var $bulkUploadResult VidiunBulkUploadResultScheduleEvent */
+		    if($bulkUploadResult->action == VidiunBulkUploadAction::CANCEL)
 		    	continue;
 		    
 		    $item = $this->items[$bulkUploadResult->lineIndex];
-		    /* @var $item kSchedulingICalEvent */
+		    /* @var $item vSchedulingICalEvent */
 		    
 		    if(!$item->getUid())
 		    	continue;
@@ -149,30 +149,30 @@ class BulkUploadEngineICal extends KBulkUploadEngine
 		    $referenceIds[] = $item->getUid();
 		    if(count($referenceIds) >= self::MAX_IN_FILTER)
 		    {
-		    	$filter = new KalturaScheduleEventFilter();
+		    	$filter = new VidiunScheduleEventFilter();
 		    	$filter->referenceIdIn = implode(',', $referenceIds);
 		    	$schedulePlugin->scheduleEvent->listAction($filter, $pager);
 		    }
 		}
 	    if(count($referenceIds))
 	    {
-	    	$filter = new KalturaScheduleEventFilter();
+	    	$filter = new VidiunScheduleEventFilter();
 	    	$filter->referenceIdIn = implode(',', $referenceIds);
 	    	$schedulePlugin->scheduleEvent->listAction($filter, $pager);
 	    	$referenceIds = array();
 	    }
-		$results = KBatchBase::$kClient->doMultiRequest();
+		$results = VBatchBase::$vClient->doMultiRequest();
 
 		$existingEvents = array();
 	    if (is_array($results) || is_object($results))
 	    {
 		    foreach($results as $result)
 		    {
-			    KBatchBase::$kClient->throwExceptionIfError($result);
-			    /* @var $result KalturaScheduleEventListResponse */
+			    VBatchBase::$vClient->throwExceptionIfError($result);
+			    /* @var $result VidiunScheduleEventListResponse */
 			    foreach($result->objects as $scheduleEvent)
 			    {
-				    /* @var $scheduleEvent KalturaScheduleEvent */
+				    /* @var $scheduleEvent VidiunScheduleEvent */
 				    $existingEvents[$scheduleEvent->referenceId] = $scheduleEvent->id;
 			    }
 		    }
@@ -182,23 +182,23 @@ class BulkUploadEngineICal extends KBulkUploadEngine
     
     protected function createObjects()
     {
-    	$schedulePlugin = KalturaScheduleClientPlugin::get(KBatchBase::$kClient);
+    	$schedulePlugin = VidiunScheduleClientPlugin::get(VBatchBase::$vClient);
 		
 		$existingEvents = $this->getExistingEvents();
 
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		
 		$bulkUploadResultChunk = array();
 		foreach($this->bulkUploadResults as $bulkUploadResult)
 		{
 		    $item = $this->items[$bulkUploadResult->lineIndex];
-		    /* @var $item kSchedulingICalEvent */
+		    /* @var $item vSchedulingICalEvent */
 		    
 			$bulkUploadResultChunk[] = $bulkUploadResult;
-			KBatchBase::impersonate($this->currentPartnerId);;
+			VBatchBase::impersonate($this->currentPartnerId);;
 			
-			/* @var $bulkUploadResult KalturaBulkUploadResultScheduleEvent */
-			if($bulkUploadResult->action == KalturaBulkUploadAction::CANCEL)
+			/* @var $bulkUploadResult VidiunBulkUploadResultScheduleEvent */
+			if($bulkUploadResult->action == VidiunBulkUploadAction::CANCEL)
 			{
 				$schedulePlugin->scheduleEvent->cancel($bulkUploadResult->referenceId);
 			}
@@ -212,36 +212,36 @@ class BulkUploadEngineICal extends KBulkUploadEngine
 				$schedulePlugin->scheduleEvent->add($item->toObject());
 			}
 			
-			KBatchBase::unimpersonate();
+			VBatchBase::unimpersonate();
 		
-			if(KBatchBase::$kClient->getMultiRequestQueueSize() >= $this->multiRequestSize)
+			if(VBatchBase::$vClient->getMultiRequestQueueSize() >= $this->multiRequestSize)
 			{
 				// make all the media->add as the partner
-				$requestResults = KBatchBase::$kClient->doMultiRequest();
+				$requestResults = VBatchBase::$vClient->doMultiRequest();
 		
 				$this->updateObjectsResults($requestResults, $bulkUploadResultChunk);
 				$this->checkAborted();
-				KBatchBase::$kClient->startMultiRequest();
+				VBatchBase::$vClient->startMultiRequest();
 				$bulkUploadResultChunk = array();
 			}
 		}
 		
 		// make all the category actions as the partner
-		$requestResults = KBatchBase::$kClient->doMultiRequest();
+		$requestResults = VBatchBase::$vClient->doMultiRequest();
 		
 		if(count($requestResults))
 			$this->updateObjectsResults($requestResults, $bulkUploadResultChunk);
 
-		KalturaLog::info("job[{$this->job->id}] finish modifying users");
+		VidiunLog::info("job[{$this->job->id}] finish modifying users");
     }
     
 	/**
 	 * {@inheritDoc}
-	 * @see KBulkUploadEngine::handleBulkUpload()
+	 * @see VBulkUploadEngine::handleBulkUpload()
 	 */
 	public function handleBulkUpload()
 	{
-		$calendar = kSchedulingICal::parse(file_get_contents($this->data->filePath), $this->data->eventsType);
+		$calendar = vSchedulingICal::parse(file_get_contents($this->data->filePath), $this->data->eventsType);
 		$this->items = $calendar->getComponents();
 		
 		$this->createUploadResults();
@@ -250,7 +250,7 @@ class BulkUploadEngineICal extends KBulkUploadEngine
 
 	/**
 	 * {@inheritDoc}
-	 * @see KBulkUploadEngine::getObjectTypeTitle()
+	 * @see VBulkUploadEngine::getObjectTypeTitle()
 	 */
 	public function getObjectTypeTitle()
 	{

@@ -13,7 +13,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"> 
 <head>  
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Kaltura Admin Console</title>
+	<title>Vidiun Admin Console</title>
 <?php echo $this->headLink()->toString().PHP_EOL; ?>
 <?php echo $this->headScript()->toString().PHP_EOL;?>
 
@@ -25,7 +25,7 @@ function addSubTitle(subTitle) {
 </script>
 </head> 
 <body id="<?php echo $this->cssId(); ?>">
-<div id="kmcHeader">
+<div id="vmcHeader">
 	<div id="logo"></div>
 	<?php if (Infra_AuthHelper::getAuthInstance()->hasIdentity()): ?>
 		<?php echo $this->navigation()->menu()->renderMenu(null, array('maxDepth' => 0)); ?>

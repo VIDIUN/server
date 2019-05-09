@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFlattenJobData extends KalturaJobData
+class VidiunFlattenJobData extends VidiunJobData
 {
 	private static $map_between_objects = array
 	(
@@ -17,7 +17,7 @@ class KalturaFlattenJobData extends KalturaJobData
 	public function toObject($dbData = null, $propsToSkip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kFlattenJobData();
+			$dbData = new vFlattenJobData();
 			
 		return parent::toObject($dbData);
 	}

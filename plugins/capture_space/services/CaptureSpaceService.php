@@ -4,7 +4,7 @@
  * @package plugins.captureSpace
  * @subpackage api.services
  */
-class CaptureSpaceService extends KalturaBaseService
+class CaptureSpaceService extends VidiunBaseService
 {
 	/**
 	 * Returns latest version and URL
@@ -12,30 +12,30 @@ class CaptureSpaceService extends KalturaBaseService
 	 * @action clientUpdates
 	 * @param string $os
 	 * @param string $version
-	 * @param KalturaCaptureSpaceHashAlgorithm $hashAlgorithm
-	 * @return KalturaCaptureSpaceUpdateResponse
-	 * @ksIgnored
+	 * @param VidiunCaptureSpaceHashAlgorithm $hashAlgorithm
+	 * @return VidiunCaptureSpaceUpdateResponse
+	 * @vsIgnored
 	 * 
 	 * @throws CaptureSpaceErrors::ALREADY_LATEST_VERSION
 	 * @throws CaptureSpaceErrors::NO_UPDATE_IS_AVAILABLE
 	 */
-	function clientUpdatesAction ($os, $version, $hashAlgorithm = KalturaCaptureSpaceHashAlgorithm::MD5)
+	function clientUpdatesAction ($os, $version, $hashAlgorithm = VidiunCaptureSpaceHashAlgorithm::MD5)
 	{
-		$hashValue = kCaptureSpaceVersionManager::getUpdateHash($os, $version, $hashAlgorithm);
+		$hashValue = vCaptureSpaceVersionManager::getUpdateHash($os, $version, $hashAlgorithm);
 		if (!$hashValue) {
-			throw new KalturaAPIException(CaptureSpaceErrors::NO_UPDATE_IS_AVAILABLE, $version, $os);
+			throw new VidiunAPIException(CaptureSpaceErrors::NO_UPDATE_IS_AVAILABLE, $version, $os);
 		}
 			
 		$path = "/api_v3/service/captureSpace_captureSpace/action/serveUpdate/os/$os/version/$version";
 		$downloadUrl = myPartnerUtils::getCdnHost(null) . $path;
 		
-		$info = new KalturaCaptureSpaceUpdateResponseInfo();
+		$info = new VidiunCaptureSpaceUpdateResponseInfo();
 		$info->url = $downloadUrl;
-		$info->hash = new KalturaCaptureSpaceUpdateResponseInfoHash();
+		$info->hash = new VidiunCaptureSpaceUpdateResponseInfoHash();
 		$info->hash->algorithm = $hashAlgorithm;
 		$info->hash->value = $hashValue;
 		
-		$response = new KalturaCaptureSpaceUpdateResponse();
+		$response = new VidiunCaptureSpaceUpdateResponse();
 		$response->info = $info;
 		
 		return $response;
@@ -47,21 +47,21 @@ class CaptureSpaceService extends KalturaBaseService
 	 * @action serveInstall
 	 * @param string $os
 	 * @return file
-	 * @ksIgnored
+	 * @vsIgnored
 	 * 
 	 * @throws CaptureSpaceErrors::NO_INSTALL_IS_AVAILABLE
 	 */
 	public function serveInstallAction($os)
 	{
-		$filename = kCaptureSpaceVersionManager::getInstallFile($os);
+		$filename = vCaptureSpaceVersionManager::getInstallFile($os);
 		if (!$filename) {
-			throw new KalturaAPIException(CaptureSpaceErrors::NO_INSTALL_IS_AVAILABLE, $os);
+			throw new VidiunAPIException(CaptureSpaceErrors::NO_INSTALL_IS_AVAILABLE, $os);
 		}
-		$actualFilePath = kCaptureSpaceVersionManager::getActualFilePath($filename);
+		$actualFilePath = vCaptureSpaceVersionManager::getActualFilePath($filename);
 		if (!$actualFilePath)
-			throw new KalturaAPIException(CaptureSpaceErrors::NO_INSTALL_IS_AVAILABLE, $os);
+			throw new VidiunAPIException(CaptureSpaceErrors::NO_INSTALL_IS_AVAILABLE, $os);
 
-		$mimeType = kFile::mimeType($actualFilePath);
+		$mimeType = vFile::mimeType($actualFilePath);
 		header("Content-Disposition: attachment; filename=\"$filename\"");
 		return $this->dumpFile($actualFilePath, $mimeType);
 	}
@@ -74,23 +74,23 @@ class CaptureSpaceService extends KalturaBaseService
 	 * @param string $os
 	 * @param string $version
 	 * @return file
-	 * @ksIgnored
+	 * @vsIgnored
 	 * 
 	 * @throws CaptureSpaceErrors::NO_UPDATE_IS_AVAILABLE
 	 */
 	public function serveUpdateAction($os, $version)
 	{
-		$filename = kCaptureSpaceVersionManager::getUpdateFile($os, $version);
+		$filename = vCaptureSpaceVersionManager::getUpdateFile($os, $version);
 		if (!$filename) {
-			throw new KalturaAPIException(CaptureSpaceErrors::NO_UPDATE_IS_AVAILABLE, $version, $os);
+			throw new VidiunAPIException(CaptureSpaceErrors::NO_UPDATE_IS_AVAILABLE, $version, $os);
 		}
 		
 		$actualFilePath = myContentStorage::getFSContentRootPath() . "/content/third_party/capturespace/$filename";
 		if (!file_exists($actualFilePath)) {
-			throw new KalturaAPIException(CaptureSpaceErrors::NO_UPDATE_IS_AVAILABLE, $version, $os);
+			throw new VidiunAPIException(CaptureSpaceErrors::NO_UPDATE_IS_AVAILABLE, $version, $os);
 		}
 		
-		$mimeType = kFile::mimeType($actualFilePath);
+		$mimeType = vFile::mimeType($actualFilePath);
 		header("Content-Disposition: attachment; filename=\"$filename\"");
 		return $this->dumpFile($actualFilePath, $mimeType);
 	}

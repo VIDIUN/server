@@ -3,22 +3,22 @@
  * @package plugins.tvinciDistribution
  * @subpackage api.objects
  */
-class KalturaTvinciDistributionTagArray extends KalturaTypedArray
+class VidiunTvinciDistributionTagArray extends VidiunTypedArray
 {
 	public function __construct()
 	{
-		parent::__construct("KalturaTvinciDistributionTag");
+		parent::__construct("VidiunTvinciDistributionTag");
 	}
 	
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaTvinciDistributionTagArray();
+		$newArr = new VidiunTvinciDistributionTagArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-			$nObj = new KalturaTvinciDistributionTag();
+			$nObj = new VidiunTvinciDistributionTag();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}

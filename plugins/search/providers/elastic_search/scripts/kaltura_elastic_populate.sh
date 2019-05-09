@@ -1,23 +1,23 @@
 #!/bin/bash
-. /etc/kaltura.d/system.ini
+. /etc/vidiun.d/system.ini
 
 echo `date`
 
 #
-# elasticPopulateMgr		This shell script takes care of starting and stopping a Kaltura Elasticsearch Populate Service
+# elasticPopulateMgr		This shell script takes care of starting and stopping a Vidiun Elasticsearch Populate Service
 #
 # chkconfig: 2345 13 87
-# description: Kaltura Elasticsearch Populate
+# description: Vidiun Elasticsearch Populate
 
 ### BEGIN INIT INFO
-# Provides:          kaltura-elastic-populate
+# Provides:          vidiun-elastic-populate
 # Required-Start:    $local_fs
 # Required-Stop:     $local_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # X-Interactive:     true
-# Short-Description: Start/stop Kaltura elastic  populate daemon
-# Description:       Control the Kaltura elastic populate daemon
+# Short-Description: Start/stop Vidiun elastic  populate daemon
+# Description:       Control the Vidiun elastic populate daemon
 ### END INIT INFO
 
 # Source function library.
@@ -90,9 +90,9 @@ start() {
 }
 
 start_scheduler() {
-	echo "$PHP_BIN $SCRIPTEXE >> $LOG_DIR/kaltura_elastic_populate.log 2>&1 &"
+	echo "$PHP_BIN $SCRIPTEXE >> $LOG_DIR/vidiun_elastic_populate.log 2>&1 &"
 	cd $SCRIPTDIR
-	su $OS_KALTURA_USER -c "$PHP_BIN $SCRIPTEXE >> $LOG_DIR/kaltura_elastic_populate.log 2>&1 &"
+	su $OS_VIDIUN_USER -c "$PHP_BIN $SCRIPTEXE >> $LOG_DIR/vidiun_elastic_populate.log 2>&1 &"
 	if [ "$?" -eq 0 ]; then
 		echo_success
 		echo

@@ -3,37 +3,37 @@
  * @package Scheduler
  * @subpackage Copy
  */
-class KCopyingCategoryUserEngine extends KCopyingEngine
+class VCopyingCategoryUserEngine extends VCopyingEngine
 {
 	/* (non-PHPdoc)
-	 * @see KCopyingEngine::copy()
+	 * @see VCopyingEngine::copy()
 	 */
-	protected function copy(KalturaFilter $filter, KalturaObjectBase $templateObject)
+	protected function copy(VidiunFilter $filter, VidiunObjectBase $templateObject)
 	{
 		return $this->copyCategoryUsers($filter, $templateObject);
 	}
 	
 	/**
-	 * @param KalturaCategoryUserFilter $filter The filter should return the list of category users that need to be copied
-	 * @param KalturaCategoryUser $templateObject Template object to overwrite attributes on the copied object
+	 * @param VidiunCategoryUserFilter $filter The filter should return the list of category users that need to be copied
+	 * @param VidiunCategoryUser $templateObject Template object to overwrite attributes on the copied object
 	 * @return int the number of copied category users
 	 */
-	protected function copyCategoryUsers(KalturaCategoryUserFilter $filter, KalturaCategoryUser $templateObject)
+	protected function copyCategoryUsers(VidiunCategoryUserFilter $filter, VidiunCategoryUser $templateObject)
 	{
-		$filter->orderBy = KalturaCategoryUserOrderBy::CREATED_AT_ASC;
+		$filter->orderBy = VidiunCategoryUserOrderBy::CREATED_AT_ASC;
 		
-		$categoryUsersList = KBatchBase::$kClient->categoryUser->listAction($filter, $this->pager);
+		$categoryUsersList = VBatchBase::$vClient->categoryUser->listAction($filter, $this->pager);
 		if(!$categoryUsersList->objects || !count($categoryUsersList->objects))
 			return 0;
 			
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($categoryUsersList->objects as $categoryUser)
 		{
 			$newCategoryUser = $this->getNewObject($categoryUser, $templateObject);
-			KBatchBase::$kClient->categoryUser->add($newCategoryUser);
+			VBatchBase::$vClient->categoryUser->add($newCategoryUser);
 		}
 		
-		$results = KBatchBase::$kClient->doMultiRequest();
+		$results = VBatchBase::$vClient->doMultiRequest();
 		foreach($results as $index => $result)
 			if(!is_int($result))
 				unset($results[$index]);
@@ -48,20 +48,20 @@ class KCopyingCategoryUserEngine extends KCopyingEngine
 	}
 	
 	/**
-	 * @see KCopyingEngine::getNewObject()
+	 * @see VCopyingEngine::getNewObject()
 	 * 
-	 * @param KalturaCategoryUser $sourceObject
-	 * @param KalturaCategoryUser $templateObject
-	 * @return KalturaCategoryUser
+	 * @param VidiunCategoryUser $sourceObject
+	 * @param VidiunCategoryUser $templateObject
+	 * @return VidiunCategoryUser
 	 */
-	protected function getNewObject(KalturaObjectBase $sourceObject, KalturaObjectBase $templateObject)
+	protected function getNewObject(VidiunObjectBase $sourceObject, VidiunObjectBase $templateObject)
 	{
 		$class = get_class($sourceObject);
 		$newObject = new $class();
 		
-		/* @var $newObject KalturaCategoryUser */
-		/* @var $sourceObject KalturaCategoryUser */
-		/* @var $templateObject KalturaCategoryUser */
+		/* @var $newObject VidiunCategoryUser */
+		/* @var $sourceObject VidiunCategoryUser */
+		/* @var $templateObject VidiunCategoryUser */
 		
 		$newObject->categoryId = $sourceObject->categoryId;
 		$newObject->userId = $sourceObject->userId;

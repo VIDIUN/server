@@ -1,12 +1,12 @@
 <?php
 $client = null;
-/* @var $client KalturaMonitorClientPs2 */
+/* @var $client VidiunMonitorClientPs2 */
 require_once __DIR__  . '/common.php';
 
 $config = parse_ini_file(__DIR__ . '/../config.ini', true);
 
 $start = microtime(true);
-$monitorResult = new KalturaMonitorResult();
+$monitorResult = new VidiunMonitorResult();
 try
 {
 	$response = $client->request('ping');
@@ -23,10 +23,10 @@ catch(Exception $e)
 {
 	$monitorResult->executionTime = microtime(true) - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $e->getCode();
 	$error->description = $e->getMessage();
-	$error->level = KalturaMonitorError::CRIT;
+	$error->level = VidiunMonitorError::CRIT;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = "Exception: " . get_class($e) . ", Code: " . $e->getCode() . ", Message: " . $e->getMessage();

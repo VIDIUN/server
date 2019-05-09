@@ -3,9 +3,9 @@
  * @package api
  * @subpackage enum
  */
-class KalturaPartnerType extends KalturaEnum
+class VidiunPartnerType extends VidiunEnum
 {
-	const KMC = 1;
+	const VMC = 1;
 	const WIKI = 100;
 	const WORDPRESS = 101;
 	const DRUPAL = 102;

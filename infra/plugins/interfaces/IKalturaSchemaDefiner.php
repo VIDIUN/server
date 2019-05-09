@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaSchemaDefiner extends IKalturaBase
+interface IVidiunSchemaDefiner extends IVidiunBase
 {
 	/**
 	 * @param SchemaType $type

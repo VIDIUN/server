@@ -17,8 +17,8 @@ class VodPackagerDeliveryUtils
 			return '/' . ltrim($baseUrl, '/');
 		}
 	
-		$prefix = kString::getCommonPrefix($urls);
-		$postfix = kString::getCommonPostfix($urls);
+		$prefix = vString::getCommonPrefix($urls);
+		$postfix = vString::getCommonPostfix($urls);
 		
 		if ( ($entry->getType() == entryType::PLAYLIST) || $params->getHasValidSequence() )
 		{

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBulkUploadResultEntry extends KalturaBulkUploadResult
+class VidiunBulkUploadResultEntry extends VidiunBulkUploadResult
 {
     
     /**
@@ -156,7 +156,7 @@ class KalturaBulkUploadResultEntry extends KalturaBulkUploadResult
 	}
 	
     /* (non-PHPdoc)
-     * @see KalturaBulkUploadResult::toInsertableObject()
+     * @see VidiunBulkUploadResult::toInsertableObject()
      */
     public function toInsertableObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
@@ -164,7 +164,7 @@ class KalturaBulkUploadResultEntry extends KalturaBulkUploadResult
 	}
 	
     /* (non-PHPdoc)
-     * @see KalturaObject::toObject()
+     * @see VidiunObject::toObject()
      */
     public function toObject($object_to_fill = null, $props_to_skip = array())
 	{

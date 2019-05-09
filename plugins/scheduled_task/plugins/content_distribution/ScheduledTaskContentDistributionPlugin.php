@@ -4,7 +4,7 @@
  *
  * @package plugins.scheduledTaskEventNotification
  */
-class ScheduledTaskContentDistributionPlugin extends KalturaPlugin implements IKalturaPending, IKalturaEnumerator, IKalturaObjectLoader
+class ScheduledTaskContentDistributionPlugin extends VidiunPlugin implements IVidiunPending, IVidiunEnumerator, IVidiunObjectLoader
 {
 	const PLUGIN_NAME = 'scheduledTaskContentDistribution';
 	
@@ -16,7 +16,7 @@ class ScheduledTaskContentDistributionPlugin extends KalturaPlugin implements IK
 	const CONTENT_DISTRIBUTION_PLUGIN_VERSION_BUILD = 0;
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -24,20 +24,20 @@ class ScheduledTaskContentDistributionPlugin extends KalturaPlugin implements IK
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$eventNotificationVersion = new KalturaVersion(self::CONTENT_DISTRIBUTION_PLUGIN_VERSION_MAJOR, self::CONTENT_DISTRIBUTION_PLUGIN_VERSION_MINOR, self::CONTENT_DISTRIBUTION_PLUGIN_VERSION_BUILD);
+		$eventNotificationVersion = new VidiunVersion(self::CONTENT_DISTRIBUTION_PLUGIN_VERSION_MAJOR, self::CONTENT_DISTRIBUTION_PLUGIN_VERSION_MINOR, self::CONTENT_DISTRIBUTION_PLUGIN_VERSION_BUILD);
 		
-		$scheduledTaskDependency = new KalturaDependency(self::SCHEDULED_TASK_PLUGIN_NAME);
-		$eventNotificationDependency = new KalturaDependency(self::CONTENT_DISTRIBUTION_PLUGIN_NAME, $eventNotificationVersion);
+		$scheduledTaskDependency = new VidiunDependency(self::SCHEDULED_TASK_PLUGIN_NAME);
+		$eventNotificationDependency = new VidiunDependency(self::CONTENT_DISTRIBUTION_PLUGIN_NAME, $eventNotificationVersion);
 		
 		return array($scheduledTaskDependency, $eventNotificationDependency);
 	}
 			
 	/* (non-PHPdoc)
-	 * @see IKalturaEnumerator::getEnums()
+	 * @see IVidiunEnumerator::getEnums()
 	 */
 	public static function getEnums($baseEnumName = null)
 	{
@@ -51,34 +51,34 @@ class ScheduledTaskContentDistributionPlugin extends KalturaPlugin implements IK
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if (class_exists('Kaltura_Client_Client'))
+		if (class_exists('Vidiun_Client_Client'))
 			return null;
 
-		if (class_exists('KalturaClient'))
+		if (class_exists('VidiunClient'))
 		{
-			if ($baseClass == 'KObjectTaskEntryEngineBase' && $enumValue == KalturaObjectTaskType::DISTRIBUTE)
-				return new KObjectTaskDistributeEngine();
+			if ($baseClass == 'VObjectTaskEntryEngineBase' && $enumValue == VidiunObjectTaskType::DISTRIBUTE)
+				return new VObjectTaskDistributeEngine();
 		}
 		else
 		{
 			$apiValue = self::getApiValue(DistributeObjectTaskType::DISTRIBUTE);
-			$distributeObjectTaskCoreValue = kPluginableEnumsManager::apiToCore('ObjectTaskType', $apiValue);
-			if($baseClass == 'KalturaObjectTask' && $enumValue == $distributeObjectTaskCoreValue)
-				return new KalturaDistributeObjectTask();
+			$distributeObjectTaskCoreValue = vPluginableEnumsManager::apiToCore('ObjectTaskType', $apiValue);
+			if($baseClass == 'VidiunObjectTask' && $enumValue == $distributeObjectTaskCoreValue)
+				return new VidiunDistributeObjectTask();
 
-			if ($baseClass == 'KObjectTaskEntryEngineBase' && $enumValue == $apiValue)
-				return new KObjectTaskDistributeEngine();
+			if ($baseClass == 'VObjectTaskEntryEngineBase' && $enumValue == $apiValue)
+				return new VObjectTaskDistributeEngine();
 		}
 
 		return null;
 	}
 		
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
@@ -90,6 +90,6 @@ class ScheduledTaskContentDistributionPlugin extends KalturaPlugin implements IK
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

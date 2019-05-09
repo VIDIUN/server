@@ -3,10 +3,10 @@
  * @package plugins.drm
  * @subpackage api.objects
  */
-class KalturaDrmProfileListResponse extends KalturaListResponse
+class VidiunDrmProfileListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaDrmProfileArray
+	 * @var VidiunDrmProfileArray
 	 * @readonly
 	 */
 	public $objects;

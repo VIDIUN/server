@@ -3,11 +3,11 @@
  * @package Scheduler
  * @subpackage ReportExport
  */
-class kReportExportTotalEngine extends kReportExportEngine
+class vReportExportTotalEngine extends vReportExportEngine
 {
 	public function createReport()
 	{
-		$result =  KBatchBase::$kClient->report->getTotal($this->reportItem->reportType, $this->reportItem->filter,
+		$result =  VBatchBase::$vClient->report->getTotal($this->reportItem->reportType, $this->reportItem->filter,
 			$this->reportItem->objectIds, $this->reportItem->responseOptions);
 		return $this->buildCsv($result);
 	}

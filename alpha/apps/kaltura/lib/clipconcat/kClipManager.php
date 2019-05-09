@@ -4,7 +4,7 @@
  * @subpackage clipconcat
  */
 
-class kClipManager implements kBatchJobStatusEventConsumer
+class vClipManager implements vBatchJobStatusEventConsumer
 {
 
 	const CLIP_NUMBER = 'clipNumber';
@@ -30,7 +30,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 		$trackEntry->setDescription("source entry id: [" .$sourceEntryId. "],  template entry id: [" .$clipEntry->getEntryId(). "].");
 		TrackEntry::addTrackEntry($trackEntry);
 
-		$jobData = new kClipConcatJobData($importUrl);
+		$jobData = new vClipConcatJobData($importUrl);
 		if(!$jobData->getImportNeeded())
 		{
 			$this->setDummyOriginalFlavorAssetReady($clipEntry->getId());
@@ -46,13 +46,13 @@ class kClipManager implements kBatchJobStatusEventConsumer
 		$jobData->setPriority($priority);
 
 		$jobData->setOperationAttributes($operationAttributes);
-		kJobsManager::addJob($parentJob, $jobData, BatchJobType::CLIP_CONCAT);
+		vJobsManager::addJob($parentJob, $jobData, BatchJobType::CLIP_CONCAT);
 	}
 
 	/**
 	 * @param BatchJob $batchJob
 	 * @return bool true if should continue to the next consumer
-	 * @throws KalturaErrors
+	 * @throws VidiunErrors
 	 */
 	public function updatedJob(BatchJob $batchJob)
 	{
@@ -77,7 +77,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 		}
 		catch (Exception $ex)
 		{
-			KalturaLog::err('Error During Concat Job' . $ex);
+			VidiunLog::err('Error During Concat Job' . $ex);
 			return false;
 		}
 		return true;
@@ -101,11 +101,11 @@ class kClipManager implements kBatchJobStatusEventConsumer
 
 	protected function handleImportFinished($rootJob)
 	{
-		/**@var kClipConcatJobData $jobData */
+		/**@var vClipConcatJobData $jobData */
 		$jobData = $rootJob->getData();
 		$jobData->setImportNeeded(false);
 		$rootJob->setData($jobData);
-		kEventsManager::raiseEventDeferred(new kBatchJobStatusEvent($rootJob));
+		vEventsManager::raiseEventDeferred(new vBatchJobStatusEvent($rootJob));
 	}
 
 	/**
@@ -143,7 +143,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	}
 
 	/**
-	 * @param kOperationResource $resource
+	 * @param vOperationResource $resource
 	 * @param entry $dbEntry
 	 * @param $operationAttributes
 	 * @param $clipEntry
@@ -163,15 +163,15 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	}
 
 	/***
-	 * @param kClipAttributes $singleAttribute
+	 * @param vClipAttributes $singleAttribute
 	 * @param string $originalConversionEnginesExtraParams
 	 * @param string $encryptionKey
 	 * @return int
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 */
 	private function cloneFlavorParam($singleAttribute, $originalConversionEnginesExtraParams, $encryptionKey = null)
 	{
-		$flavorParamsObj = assetParamsPeer::getTempAssetParamByPk(kClipAttributes::SYSTEM_DEFAULT_FLAVOR_PARAMS_ID);
+		$flavorParamsObj = assetParamsPeer::getTempAssetParamByPk(vClipAttributes::SYSTEM_DEFAULT_FLAVOR_PARAMS_ID);
 		$flavorParamsObj->setFormat(flavorParams::CONTAINER_FORMAT_MPEGTS);
 		$this->fixConversionParam($flavorParamsObj, $singleAttribute, $originalConversionEnginesExtraParams);
 		if ($encryptionKey)
@@ -209,7 +209,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 		$entry = entryPeer::retrieveByPK($entryId);
 		if(!$entry)
 		{
-			KalturaLog::err("Entry [$entryId] not found");
+			VidiunLog::err("Entry [$entryId] not found");
 			return null;
 		}
 
@@ -236,7 +236,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	 */
 	private function startConcat($batchJob)
 	{
-		KalturaLog::info('Going To Start Concat Job');
+		VidiunLog::info('Going To Start Concat Job');
 		if($batchJob->getJobType() != BatchJobType::CLIP_CONCAT)
 		{
 			return;
@@ -245,24 +245,24 @@ class kClipManager implements kBatchJobStatusEventConsumer
 		foreach ($batchJob->getChildJobs() as $job)
 		{
 			/** @var BatchJob $job */
-			KalturaLog::info('Child job id [' . $job->getId() . '] status [' . $job->getStatus() . ']' . '] type ['.$job->getJobType() .']' );
+			VidiunLog::info('Child job id [' . $job->getId() . '] status [' . $job->getStatus() . ']' . '] type ['.$job->getJobType() .']' );
 			if($job->getJobType() == BatchJobType::CONVERT)
 			{
-				KalturaLog::info('Flavor Param Ids:' . $job->getEntry()->getFlavorParamsIds());
+				VidiunLog::info('Flavor Param Ids:' . $job->getEntry()->getFlavorParamsIds());
 			}
 		}
-		/** @var kClipConcatJobData $jobData */
+		/** @var vClipConcatJobData $jobData */
 		$jobData = $batchJob->getData();
 
 		$tempEntry = entryPeer::retrieveByPK($jobData->getTempEntryId());
 		$assets = assetPeer::retrieveByEntryId($jobData->getTempEntryId(), array(assetType::FLAVOR));
-		usort($assets, array("kClipManager","cmpByOrder"));
+		usort($assets, array("vClipManager","cmpByOrder"));
 
 		$files = $this->getFilesPath($assets);
 
 		$flavorAsset = $this->addNewAssetToTargetEntry($tempEntry);
 
-		kJobsManager::addConcatJob($batchJob, $flavorAsset, $files,false);
+		vJobsManager::addConcatJob($batchJob, $flavorAsset, $files,false);
 
 	}
 
@@ -291,7 +291,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	/***
 	 * @param BatchJob $batchJob
 	 * @throws APIException
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 */
 	private function handleClipConcatParentJob($batchJob)
 	{
@@ -299,7 +299,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 		{
 			case BatchJob::BATCHJOB_STATUS_PENDING:
 
-				/**@var kClipConcatJobData $jobData */
+				/**@var vClipConcatJobData $jobData */
 				$jobData = $batchJob->getData();
 				if ($jobData->getImportNeeded())
 				{
@@ -307,8 +307,8 @@ class kClipManager implements kBatchJobStatusEventConsumer
 					$tempEntry = entryPeer::retrieveByPK($jobData->getTempEntryId());
 					$tempEntry->setFlowType(EntryFlowType::IMPORT_FOR_CLIP_CONCAT);
 					$tempEntry->save();
-					KalturaLog::info("Adding import job in clip manager for temp entry " . $jobData->getTempEntryId() . " to url: " . $jobData->getImportUrl());
-					kJobsManager::addImportJob($batchJob, $jobData->getTempEntryId(), $jobData->getPartnerId(), $jobData->getImportUrl(), null, null, null, true);
+					VidiunLog::info("Adding import job in clip manager for temp entry " . $jobData->getTempEntryId() . " to url: " . $jobData->getImportUrl());
+					vJobsManager::addImportJob($batchJob, $jobData->getTempEntryId(), $jobData->getPartnerId(), $jobData->getImportUrl(), null, null, null, true);
 				}
 				else
 				{
@@ -317,7 +317,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 					$this->addClipJobs($batchJob, $jobData->getTempEntryId(), $errDesc,
 						$jobData->getPartnerId(),
 						$jobData->getOperationAttributes(), $jobData->getPriority());
-					kJobsManager::updateBatchJob($batchJob, BatchJob::BATCHJOB_STATUS_PROCESSING);
+					vJobsManager::updateBatchJob($batchJob, BatchJob::BATCHJOB_STATUS_PROCESSING);
 				}
 				break;
 			default:
@@ -334,7 +334,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	 * @param int $priority
 	 * @return BatchJob[]
 	 * @throws APIException
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 */
 	private function addClipJobs($parentJob , $entryId, &$errDescription, $partnerId,
 	                             array $operationAttributes, $priority = 0)
@@ -342,7 +342,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 		$batchArray = array();
 		$order = 0;
 		$originalConversionEnginesExtraParams =
-			assetParamsPeer::retrieveByPK(kClipAttributes::SYSTEM_DEFAULT_FLAVOR_PARAMS_ID)->getConversionEnginesExtraParams();
+			assetParamsPeer::retrieveByPK(vClipAttributes::SYSTEM_DEFAULT_FLAVOR_PARAMS_ID)->getConversionEnginesExtraParams();
 
 		$originalFlavorAsset = assetPeer::retrieveOriginalByEntryId($entryId);
 		$encryptionKey = null;
@@ -351,24 +351,24 @@ class kClipManager implements kBatchJobStatusEventConsumer
 			$encryptionKey = $originalFlavorAsset->getEncryptionKey();
 		}
 
-		/* @var $singleAttribute kClipAttributes */
+		/* @var $singleAttribute vClipAttributes */
 		foreach($operationAttributes as $singleAttribute)
 		{
-			KalturaLog::info("Going To create Flavor for clip: " . print_r($singleAttribute, true));
+			VidiunLog::info("Going To create Flavor for clip: " . print_r($singleAttribute, true));
 			if($singleAttribute->getDuration()<=0)
 			{
-				KalturaLog::info("Ingnoring clip attribute with non-positive duration");
+				VidiunLog::info("Ingnoring clip attribute with non-positive duration");
 				continue;
 			}
 
 			$clonedID =	$this->cloneFlavorParam($singleAttribute, $originalConversionEnginesExtraParams, $encryptionKey);
 			$flavorAsst = $this->createTempClipFlavorAsset($partnerId,$entryId,$clonedID,$order);
-			$batchJob =	kBusinessPreConvertDL::decideAddEntryFlavor($parentJob, $entryId,
+			$batchJob =	vBusinessPreConvertDL::decideAddEntryFlavor($parentJob, $entryId,
 					$clonedID, $errDescription,$flavorAsst->getId()
 					, array($singleAttribute) , $priority);
 			if(!$batchJob)
 			{
-				throw new APIException(KalturaErrors::CANNOT_CREATE_CLIP_FLAVOR_JOB, $parentJob->getJobType(), $parentJob->getId());
+				throw new APIException(VidiunErrors::CANNOT_CREATE_CLIP_FLAVOR_JOB, $parentJob->getJobType(), $parentJob->getId());
 			}
 
 			$batchArray[] = $batchJob;
@@ -393,8 +393,8 @@ class kClipManager implements kBatchJobStatusEventConsumer
 			/** @var BatchJob $job */
 			foreach ($childJobs as $job)
 			{
-				KalturaLog::info("number of children:   ". count($childJobs));
-				KalturaLog::info('Child job id [' . $job->getId() . '] status [' . $job->getStatus() . ']');
+				VidiunLog::info("number of children:   ". count($childJobs));
+				VidiunLog::info('Child job id [' . $job->getId() . '] status [' . $job->getStatus() . ']');
 			}
 			return false;
 		}
@@ -409,7 +409,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	/**
 	 * @param $assets
 	 * @return array
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 * @throws Exception
 	 */
 	private function getFilesPath($assets)
@@ -423,11 +423,11 @@ class kClipManager implements kBatchJobStatusEventConsumer
 				continue;
 			}
 			$syncKey = $asset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-			$fileSync = kFileSyncUtils::getReadyFileSyncForKey($syncKey);
+			$fileSync = vFileSyncUtils::getReadyFileSyncForKey($syncKey);
 			//fileSync should be local
 			if (!$fileSync[1])
 			{
-				throw new kCoreException("Clip Does not exist locally operations stops, there will be no concat");
+				throw new vCoreException("Clip Does not exist locally operations stops, there will be no concat");
 			}
 			/*** @var array $fileSync */
 			if ($fileSync[0]->getFullPath())
@@ -441,7 +441,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	/**
 	 * @param entry $tempEntry
 	 * @return flavorAsset
-	 * @throws kCoreException
+	 * @throws vCoreException
 	 */
 	private function addNewAssetToTargetEntry($tempEntry)
 	{
@@ -452,7 +452,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 		$flavorAsset->setPartnerId($tempEntry->getPartnerId());
 		$flavorAsset->setEntryId($tempEntry->getId());
 		$flavorAsset->setStatus(asset::ASSET_STATUS_QUEUED);
-		$flavorAsset->setFlavorParamsId(kClipAttributes::SYSTEM_DEFAULT_FLAVOR_PARAMS_ID);
+		$flavorAsset->setFlavorParamsId(vClipAttributes::SYSTEM_DEFAULT_FLAVOR_PARAMS_ID);
 		$flavorAsset->setIsOriginal(false);
 		$flavorAsset->save();
 		return $flavorAsset;
@@ -474,10 +474,10 @@ class kClipManager implements kBatchJobStatusEventConsumer
 		$tempEntry->setStatus(entryStatus::NO_CONTENT);
 		$tempEntry->setDisplayInSearch(EntryDisplayInSearchType::SYSTEM);
 		$tempEntry->setSourceType(EntrySourceType::CLIP);
-		$tempEntry->setKuserId(kCurrentContext::getCurrentKsKuserId());
+		$tempEntry->setVuserId(vCurrentContext::getCurrentVsVuserId());
 		$tempEntry->setConversionProfileId(myPartnerUtils::getConversionProfile2ForPartner($partnerId)->getId());
 		$tempEntry->save();
-		KalturaLog::info('Temp ClipConcat Entry Created, Entry ID:  ' . $tempEntry->getId());
+		VidiunLog::info('Temp ClipConcat Entry Created, Entry ID:  ' . $tempEntry->getId());
 		return $tempEntry;
 	}
 
@@ -485,7 +485,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	 * @param string $entryId
 	 * @param asset $concatAsset
 	 * @throws Exception
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	private function addDestinationEntryAsset($entryId, $concatAsset)
 	{
@@ -495,19 +495,19 @@ class kClipManager implements kBatchJobStatusEventConsumer
 		$isNewAsset = false;
 		if(!$dbEntry)
 		{
-			KalturaLog::err("Flavor asset not created for entry [ $entryId ]");
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			VidiunLog::err("Flavor asset not created for entry [ $entryId ]");
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		}
 		if(!$dbAsset)
 		{
 			$isNewAsset = true;
-			$dbAsset = kFlowHelper::createOriginalFlavorAsset($dbEntry->getPartnerId(), $entryId, $concatAsset->getFileExt());
+			$dbAsset = vFlowHelper::createOriginalFlavorAsset($dbEntry->getPartnerId(), $entryId, $concatAsset->getFileExt());
 		}
 
 		if(!$dbAsset)
 		{
 			$this->updateAssetFailedToConvert($entryId, $dbEntry);
-			throw new KalturaAPIException(KalturaErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED);
+			throw new VidiunAPIException(VidiunErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED);
 		}
 
 		$this->updateAssetState($concatSyncKey, $dbAsset, $isNewAsset, $dbEntry);
@@ -516,32 +516,32 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	/**
 	 * @param BatchJob $batchJob
 	 * @throws Exception
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	private function concatDone(BatchJob $batchJob)
 	{
-		/** @var kConcatJobData $concatJobData */
+		/** @var vConcatJobData $concatJobData */
 		$concatJobData = $batchJob->getParentJob()->getData();
 		$concatAsset = assetPeer::retrieveById($concatJobData->getFlavorAssetId());
-		/** @var kClipConcatJobData $clipConcatJobData */
+		/** @var vClipConcatJobData $clipConcatJobData */
 		$clipConcatJobData = $batchJob->getRootJob()->getData();
 		$this->addDestinationEntryAsset($clipConcatJobData->getDestEntryId(), $concatAsset);
 		$this->deleteEntry($clipConcatJobData->getTempEntryId());
-		kJobsManager::updateBatchJob($batchJob->getRootJob(), BatchJob::BATCHJOB_STATUS_FINISHED);
+		vJobsManager::updateBatchJob($batchJob->getRootJob(), BatchJob::BATCHJOB_STATUS_FINISHED);
 	}
 
 	/**
 	 * @param $entryId
 	 * @param null $entryType
 	 * @throws Exception
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	private function deleteEntry($entryId, $entryType = null)
 	{
 		$entryToDelete = entryPeer::retrieveByPK($entryId);
 
 		if (!$entryToDelete || ($entryType !== null && $entryToDelete->getType() != $entryType))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		myEntryUtils::deleteEntry($entryToDelete);
 	}
@@ -578,7 +578,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	 */
 	private function updateAssetFailedToConvert($entryId, $dbEntry)
 	{
-		KalturaLog::err("Flavor asset not created for entry [" . $entryId . "]");
+		VidiunLog::err("Flavor asset not created for entry [" . $entryId . "]");
 
 		if ($dbEntry->getStatus() == entryStatus::NO_CONTENT) {
 			$dbEntry->setStatus(entryStatus::ERROR_CONVERTING);
@@ -596,11 +596,11 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	private function updateAssetState($concatSyncKey, $dbAsset, $isNewAsset, $dbEntry)
 	{
 		$newSyncKey = $dbAsset->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-		kFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $concatSyncKey);
+		vFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $concatSyncKey);
 
 		if ($isNewAsset)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($dbAsset));
-		kEventsManager::raiseEvent(new kObjectDataChangedEvent($dbAsset));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($dbAsset));
+		vEventsManager::raiseEvent(new vObjectDataChangedEvent($dbAsset));
 
 		$this->updateMediaFlowOnAsset($dbAsset);
 
@@ -627,7 +627,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	/**
 	 * @param array $conversionExtraParamsArray
 	 * @param array $conversionEngines
-	 * @param kClipAttributes $singleAttribute
+	 * @param vClipAttributes $singleAttribute
 	 * @return string
 	 */
 	private function editConversionEngineExtraParam($conversionEngines, $singleAttribute, $conversionExtraParamsArray = array())
@@ -647,7 +647,7 @@ class kClipManager implements kBatchJobStatusEventConsumer
 
 	/**
 	 * @param assetParams $flavorParamsObj
-	 * @param kClipAttributes $singleAttribute
+	 * @param vClipAttributes $singleAttribute
 	 * @param string $originalConversionEnginesExtraParams
 	 */
 	private function fixConversionParam($flavorParamsObj, $singleAttribute, $originalConversionEnginesExtraParams)
@@ -664,12 +664,12 @@ class kClipManager implements kBatchJobStatusEventConsumer
 	}
 
 	/**
-	 * @param kClipAttributes $singleAttribute
+	 * @param vClipAttributes $singleAttribute
 	 * @return string
 	 */
 	private function addEffects($singleAttribute)
 	{
-		$effects = new kEffectsManager();
+		$effects = new vEffectsManager();
 		return $effects->getFFMPEGEffects($singleAttribute);
 	}
 

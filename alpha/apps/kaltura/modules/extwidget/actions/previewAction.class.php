@@ -3,22 +3,22 @@
  * @package Core
  * @subpackage externalWidgets
  */
-class previewAction extends kalturaAction
+class previewAction extends vidiunAction
 {
 	public function execute ( ) 
 	{
 
 		$this->uiconf_id = intval($this->getRequestParameter('uiconf_id'));
 		if(!$this->uiconf_id)
-			KExternalErrors::dieError(KExternalErrors::MISSING_PARAMETER, 'uiconf_id');
+			VExternalErrors::dieError(VExternalErrors::MISSING_PARAMETER, 'uiconf_id');
 
 		$this->uiConf = uiConfPeer::retrieveByPK($this->uiconf_id);
 		if(!$this->uiConf)
-			KExternalErrors::dieError(KExternalErrors::UI_CONF_NOT_FOUND);
-        $this->isPlaykit = strpos($this->uiConf->getTags(), 'kalturaPlayerJs') !== false;
+			VExternalErrors::dieError(VExternalErrors::UI_CONF_NOT_FOUND);
+        $this->isPakhshkit = strpos($this->uiConf->getTags(), 'vidiunPlayerJs') !== false;
 		$this->partner_id = intval($this->getRequestParameter('partner_id', $this->uiConf->getPartnerId()));
 		if(!$this->partner_id)
-			KExternalErrors::dieError(KExternalErrors::MISSING_PARAMETER, 'partner_id');
+			VExternalErrors::dieError(VExternalErrors::MISSING_PARAMETER, 'partner_id');
 
 		// Single Player parameters
 		$this->entry_id = htmlspecialchars($this->getRequestParameter('entry_id'));
@@ -46,8 +46,8 @@ class previewAction extends kalturaAction
 
 		$playlist_name = null;
 		$playlist_description = null;
-		$embed_host = (kConf::hasParam('cdn_api_host')) ? kConf::get('cdn_api_host') : kConf::get('www_host');
-		$embed_host_https = (kConf::hasParam('cdn_api_host_https')) ? kConf::get('cdn_api_host_https') : kConf::get('www_host');
+		$embed_host = (vConf::hasParam('cdn_api_host')) ? vConf::get('cdn_api_host') : vConf::get('www_host');
+		$embed_host_https = (vConf::hasParam('cdn_api_host_https')) ? vConf::get('cdn_api_host_https') : vConf::get('www_host');
 
 		// Check if HTTPS enabled and set protocol
 		$https_enabled = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? true : false;
@@ -67,7 +67,7 @@ class previewAction extends kalturaAction
 			'uiConfId'				=>	$this->uiconf_id,
 			'width'					=>	$this->uiConf->getWidth(),
 			'height'				=>	$this->uiConf->getHeight(),
-			'includeKalturaLinks'	=>	true,
+			'includeVidiunLinks'	=>	true,
 			'cacheSt'				=>	$cacheSt,
 		);
 
@@ -93,22 +93,22 @@ class previewAction extends kalturaAction
 					}
 					try
 					{
-						$val = kHtmlPurifier::purify("previewAction", "flashvars", $val);
+						$val = vHtmlPurifier::purify("previewAction", "flashvars", $val);
 					}
 					catch (Exception $e)
 					{
-						KExternalErrors::dieError(KExternalErrors::NOT_ALLOWED_PARAMETER,$e->getMessage());
+						VExternalErrors::dieError(VExternalErrors::NOT_ALLOWED_PARAMETER,$e->getMessage());
 					}
 					$flashVars[$key] = $val;
 				}
 			}
 			//Check for playlist name
-			if( isset($_GET['flashvars']['playlistAPI.kpl0Name']) ) {
-				$playlist_name = htmlspecialchars($_GET['flashvars']['playlistAPI.kpl0Name']);
+			if( isset($_GET['flashvars']['playlistAPI.vpl0Name']) ) {
+				$playlist_name = htmlspecialchars($_GET['flashvars']['playlistAPI.vpl0Name']);
 			}
 			// Get playlist name from playlist id
-			if( isset($_GET['flashvars']['playlistAPI.kpl0Id']) ) {
-				$playlistId = htmlspecialchars($_GET['flashvars']['playlistAPI.kpl0Id']);
+			if( isset($_GET['flashvars']['playlistAPI.vpl0Id']) ) {
+				$playlistId = htmlspecialchars($_GET['flashvars']['playlistAPI.vpl0Id']);
 				$playlist = entryPeer::retrieveByPK($playlistId);
 				if( $playlist ) {
 					$playlist_name = $playlist->getName();
@@ -119,7 +119,7 @@ class previewAction extends kalturaAction
 			$this->partner_host = myPartnerUtils::getHost($this->partner_id);
 			$this->playlist_id = htmlspecialchars($this->getRequestParameter('playlist_id'));
 			// Get delivery types from player.ini
-			$map = kConf::getMap('players');
+			$map = vConf::getMap('players');
 			$deliveryTypes = $map['delivery_types'];
 
 			$flashVars = array();
@@ -131,13 +131,13 @@ class previewAction extends kalturaAction
 			if( $this->playlist_id && $this->playlist_id != 'multitab_playlist') {
 				// build playlist url
 				$playlist_url = $this->partner_host ."/index.php/partnerservices2/executeplaylist?";
-				$playlist_url .= "partner_id=" . $this->partner_id . "&subp_id=" . $this->partner_id . "00&format=8&ks={ks}&playlist_id=" . $this->playlist_id;
+				$playlist_url .= "partner_id=" . $this->partner_id . "&subp_id=" . $this->partner_id . "00&format=8&vs={vs}&playlist_id=" . $this->playlist_id;
 
 				$playlist_name = htmlspecialchars($this->getRequestParameter('playlist_name'));
 
 				// Add playlist flashVars
-				$flashVars["playlistAPI.kpl0Name"] = $playlist_name;
-				$flashVars["playlistAPI.kpl0Url"] = urlencode($playlist_url);
+				$flashVars["playlistAPI.vpl0Name"] = $playlist_name;
+				$flashVars["playlistAPI.vpl0Url"] = urlencode($playlist_url);
 			}
 		}
 		// Don't include flashvars if empty array
@@ -149,7 +149,7 @@ class previewAction extends kalturaAction
 		$this->embedParams = $embedParams;
 
 		// Build SWF Path
-		$swfPath = "/index.php/kwidget";
+		$swfPath = "/index.php/vwidget";
 		$swfPath .= "/cache_st/" . $cacheSt;
 		$swfPath .= "/wid/_" . $this->partner_id;
 		$swfPath .= "/uiconf_id/" . $this->uiconf_id;
@@ -170,8 +170,8 @@ class previewAction extends kalturaAction
 		}
 
         // set player url
-        if ($this->isPlaykit){
-            $this->playerUrl = 'https://' . $embed_host_https . '/p/'. $this->partner_id . '/embedPlaykitJs/uiconf_id/' . $this->uiconf_id .'/entry_id/'.$this->entry_id .'?iframeembed=true';
+        if ($this->isPakhshkit){
+            $this->playerUrl = 'https://' . $embed_host_https . '/p/'. $this->partner_id . '/embedPakhshkitJs/uiconf_id/' . $this->uiconf_id .'/entry_id/'.$this->entry_id .'?iframeembed=true';
         } else {
             $this->playerUrl = 'https://' . $embed_host_https . '/p/'. $this->partner_id .'/sp/' . $this->partner_id . '00/embedIframeJs/uiconf_id/' . $this->uiconf_id . '/partner_id/' . $this->partner_id . '?iframeembed=true&entry_id=' . $this->entry_id . '&flashvars[streamerType]=auto';
 
@@ -179,7 +179,7 @@ class previewAction extends kalturaAction
 
 		// Set Page name
 		if(!$this->entry_id) {
-			$this->entry_name = ($playlist_name) ? $playlist_name : 'Kaltura Player';
+			$this->entry_name = ($playlist_name) ? $playlist_name : 'Vidiun Player';
 			$this->entry_description = ($playlist_description) ? $playlist_description : '';
 		}
 

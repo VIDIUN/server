@@ -4,7 +4,7 @@
  * @subpackage api.objects
  *
  */
-class KalturaFacebookCaptionDistributionInfo extends KalturaObject{
+class VidiunFacebookCaptionDistributionInfo extends VidiunObject{
 
 	/**
 	 * @var string

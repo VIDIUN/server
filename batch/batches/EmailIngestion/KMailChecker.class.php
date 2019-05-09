@@ -7,7 +7,7 @@
  * @package Scheduler
  * @subpackage Email-Ingestion
  */
-class KMailChecker {
+class VMailChecker {
 
 	/**
 	 * @var <string>

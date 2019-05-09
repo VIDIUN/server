@@ -4,7 +4,7 @@ class DeliveryProfileSilverLight extends DeliveryProfileVod {
 	
 	function __construct() {
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kSilverLightManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vSilverLightManifestRenderer';
 	}
 	
 	public function buildServeFlavors()

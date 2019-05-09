@@ -7,7 +7,7 @@
  * @package api
  * @subpackage services
  */
-class FlavorParamsService extends KalturaBaseService
+class FlavorParamsService extends VidiunBaseService
 {
 	
 	const PROPERTY_MIN_LENGTH = 1; 
@@ -23,7 +23,7 @@ class FlavorParamsService extends KalturaBaseService
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::partnerGroup()
+	 * @see VidiunBaseService::partnerGroup()
 	 */
 	protected function partnerGroup($peer = null)
 	{
@@ -52,10 +52,10 @@ class FlavorParamsService extends KalturaBaseService
 	 * Add new Flavor Params
 	 * 
 	 * @action add
-	 * @param KalturaFlavorParams $flavorParams
-	 * @return KalturaFlavorParams
+	 * @param VidiunFlavorParams $flavorParams
+	 * @return VidiunFlavorParams
 	 */
-	public function addAction(KalturaFlavorParams $flavorParams)
+	public function addAction(VidiunFlavorParams $flavorParams)
 	{
 		$flavorParams->validatePropertyMinLength("name", self::PROPERTY_MIN_LENGTH);
 		
@@ -64,7 +64,7 @@ class FlavorParamsService extends KalturaBaseService
 		$flavorParamsDb->setPartnerId($this->getPartnerId());
 		$flavorParamsDb->save();
 		
-		$flavorParams = KalturaFlavorParamsFactory::getFlavorParamsInstance($flavorParamsDb->getType());
+		$flavorParams = VidiunFlavorParamsFactory::getFlavorParamsInstance($flavorParamsDb->getType());
 		$flavorParams->fromObject($flavorParamsDb, $this->getResponseProfile());
 		return $flavorParams;
 	}
@@ -74,16 +74,16 @@ class FlavorParamsService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id
-	 * @return KalturaFlavorParams
+	 * @return VidiunFlavorParams
 	 */
 	public function getAction($id)
 	{
 		$flavorParamsDb = assetParamsPeer::retrieveByPK($id);
 		
 		if (!$flavorParamsDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
 			
-		$flavorParams = KalturaFlavorParamsFactory::getFlavorParamsInstance($flavorParamsDb->getType());
+		$flavorParams = VidiunFlavorParamsFactory::getFlavorParamsInstance($flavorParamsDb->getType());
 		$flavorParams->fromObject($flavorParamsDb, $this->getResponseProfile());
 		
 		return $flavorParams;
@@ -94,22 +94,22 @@ class FlavorParamsService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id
-	 * @param KalturaFlavorParams $flavorParams
-	 * @return KalturaFlavorParams
+	 * @param VidiunFlavorParams $flavorParams
+	 * @return VidiunFlavorParams
 	 */
-	public function updateAction($id, KalturaFlavorParams $flavorParams)
+	public function updateAction($id, VidiunFlavorParams $flavorParams)
 	{
 		if ($flavorParams->name !== null)
 			$flavorParams->validatePropertyMinLength("name", self::PROPERTY_MIN_LENGTH);
 			
 		$flavorParamsDb = assetParamsPeer::retrieveByPK($id);
 		if (!$flavorParamsDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
 			
 		$flavorParams->toUpdatableObject($flavorParamsDb);
 		$flavorParamsDb->save();
 			
-		$flavorParams = KalturaFlavorParamsFactory::getFlavorParamsInstance($flavorParamsDb->getType());
+		$flavorParams = VidiunFlavorParamsFactory::getFlavorParamsInstance($flavorParamsDb->getType());
 		$flavorParams->fromObject($flavorParamsDb, $this->getResponseProfile());
 		return $flavorParams;
 	}
@@ -124,7 +124,7 @@ class FlavorParamsService extends KalturaBaseService
 	{
 		$flavorParamsDb = assetParamsPeer::retrieveByPK($id);
 		if (!$flavorParamsDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
 			
 		$flavorParamsDb->setDeletedAt(time());
 		$flavorParamsDb->save();
@@ -134,18 +134,18 @@ class FlavorParamsService extends KalturaBaseService
 	 * List Flavor Params by filter with paging support (By default - all system default params will be listed too)
 	 * 
 	 * @action list
-	 * @param KalturaFlavorParamsFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaFlavorParamsListResponse
+	 * @param VidiunFlavorParamsFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunFlavorParamsListResponse
 	 */
-	public function listAction(KalturaFlavorParamsFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunFlavorParamsFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaFlavorParamsFilter();
+			$filter = new VidiunFlavorParamsFilter();
 			
 		if(!$pager)
 		{
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		}
 			
 		$types = assetParamsPeer::retrieveAllFlavorParamsTypes();			
@@ -157,13 +157,13 @@ class FlavorParamsService extends KalturaBaseService
 	 * 
 	 * @action getByConversionProfileId
 	 * @param int $conversionProfileId
-	 * @return KalturaFlavorParamsArray
+	 * @return VidiunFlavorParamsArray
 	 */
 	public function getByConversionProfileIdAction($conversionProfileId)
 	{
 		$conversionProfileDb = conversionProfile2Peer::retrieveByPK($conversionProfileId);
 		if (!$conversionProfileDb)
-			throw new KalturaAPIException(KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $conversionProfileId);
+			throw new VidiunAPIException(VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $conversionProfileId);
 			
 		$flavorParamsConversionProfilesDb = $conversionProfileDb->getflavorParamsConversionProfilesJoinflavorParams();
 		$flavorParamsDb = array();
@@ -173,7 +173,7 @@ class FlavorParamsService extends KalturaBaseService
 			$flavorParamsDb[] = $item->getassetParams();
 		}
 		
-		$flavorParams = KalturaFlavorParamsArray::fromDbArray($flavorParamsDb, $this->getResponseProfile());
+		$flavorParams = VidiunFlavorParamsArray::fromDbArray($flavorParamsDb, $this->getResponseProfile());
 		
 		return $flavorParams; 
 	}

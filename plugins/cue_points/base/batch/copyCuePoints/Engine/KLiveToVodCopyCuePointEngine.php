@@ -3,7 +3,7 @@
  * @package plugins.cuePoints
  * @subpackage Scheduler
  */
-class KLiveToVodCopyCuePointEngine extends KCopyCuePointEngine
+class VLiveToVodCopyCuePointEngine extends VCopyCuePointEngine
 {
     const MAX_CHUNK_DURATION_IN_SEC = 6;
 
@@ -17,7 +17,7 @@ class KLiveToVodCopyCuePointEngine extends KCopyCuePointEngine
     }
 
     /**
-     * @param KalturaCuePoint $cuePoint
+     * @param VidiunCuePoint $cuePoint
      * @return bool
      */
     protected function shouldCopyCuePoint($cuePoint)
@@ -39,7 +39,7 @@ class KLiveToVodCopyCuePointEngine extends KCopyCuePointEngine
 
     public function validateJobData()
     {
-        if (!$this->data || !($this->data instanceof KalturaLiveToVodJobData))
+        if (!$this->data || !($this->data instanceof VidiunLiveToVodJobData))
             return false;
         return parent::validateJobData();
     }
@@ -68,17 +68,17 @@ class KLiveToVodCopyCuePointEngine extends KCopyCuePointEngine
     
     protected static function postProcessCuePoints($copiedCuePointIds)
     {
-        KBatchBase::$kClient->startMultiRequest();
+        VBatchBase::$vClient->startMultiRequest();
         foreach ($copiedCuePointIds as $copiedLiveCuePointId)
-            KBatchBase::tryExecuteApiCall(array('KCopyCuePointEngine','cuePointUpdateStatus'), array($copiedLiveCuePointId, KalturaCuePointStatus::HANDLED));
-        KBatchBase::$kClient->doMultiRequest();
+            VBatchBase::tryExecuteApiCall(array('VCopyCuePointEngine','cuePointUpdateStatus'), array($copiedLiveCuePointId, VidiunCuePointStatus::HANDLED));
+        VBatchBase::$vClient->doMultiRequest();
     }
 
     protected static function getSegmentStartTime($amfArray)
     {
         if (count($amfArray) == 0)
         {
-            KalturaLog::warning("getSegmentStartTime got an empty AMFs array - returning 0 as segment start time");
+            VidiunLog::warning("getSegmentStartTime got an empty AMFs array - returning 0 as segment start time");
             return 0;
         }
         return ($amfArray[0]->ts - $amfArray[0]->pts) / 1000;
@@ -100,7 +100,7 @@ class KLiveToVodCopyCuePointEngine extends KCopyCuePointEngine
         $minDistanceAmf = $this->getClosestAMF($timestamp);
         $ret = 0;
         if (is_null($minDistanceAmf))
-            KalturaLog::debug('minDistanceAmf is null - returning 0');
+            VidiunLog::debug('minDistanceAmf is null - returning 0');
         elseif ($minDistanceAmf->ts > $timestamp)
             $ret = $minDistanceAmf->pts - ($minDistanceAmf->ts - $timestamp);
         else
@@ -108,7 +108,7 @@ class KLiveToVodCopyCuePointEngine extends KCopyCuePointEngine
         // make sure we don't get a negative time
         if ($overrideNegative)
             $ret = max($ret,0);
-        KalturaLog::debug('Returning offset of ' . $ret);
+        VidiunLog::debug('Returning offset of ' . $ret);
         return $ret;
     }
 
@@ -140,7 +140,7 @@ class KLiveToVodCopyCuePointEngine extends KCopyCuePointEngine
             else
                 $ret = $amfArray[$hi];
         }
-        KalturaLog::debug('getClosestAMF returning ' . print_r($ret, true));
+        VidiunLog::debug('getClosestAMF returning ' . print_r($ret, true));
         return $ret;
     }
 }

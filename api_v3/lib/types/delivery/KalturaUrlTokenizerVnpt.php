@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlTokenizerVnpt extends KalturaUrlTokenizer {
+class VidiunUrlTokenizerVnpt extends VidiunUrlTokenizer {
 
 	/**
 	 * @var int
@@ -29,7 +29,7 @@ class KalturaUrlTokenizerVnpt extends KalturaUrlTokenizer {
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kVnptUrlTokenizer();
+			$dbObject = new vVnptUrlTokenizer();
 
 		parent::toObject($dbObject, $skip);
 	

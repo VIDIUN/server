@@ -24,9 +24,9 @@ abstract class EventNotificationTemplate extends BaseEventNotificationTemplate i
 
 	/**
 	 * Dispatch the event notification
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 */ 
-	abstract public function dispatch(kScope $scope);
+	abstract public function dispatch(vScope $scope);
 
 	public function getEventConditions()									{return $this->getFromCustomData(self::CUSTOM_DATA_EVENT_CONDITIONS);}
 	public function getContentParameters()									{return $this->getFromCustomData(self::CUSTOM_DATA_CONTENT_PARAMETERS, null, array());}
@@ -88,10 +88,10 @@ abstract class EventNotificationTemplate extends BaseEventNotificationTemplate i
 	
 	/**
 	 * @param EventNotificationTemplate $notificationTemplate
-	 * @param kEventScope $scope
+	 * @param vEventScope $scope
 	 * @return boolean
 	 */
-	public function fulfilled(kEventScope $scope)
+	public function fulfilled(vEventScope $scope)
 	{
 	    $eventConditions = $this->getEventConditions();
 	    if(!$eventConditions || !count($eventConditions))
@@ -99,7 +99,7 @@ abstract class EventNotificationTemplate extends BaseEventNotificationTemplate i
 	
 	    foreach($eventConditions as $eventCondition)
 	    {
-	        /* @var $eventCondition kCondition */
+	        /* @var $eventCondition vCondition */
 	        if(!$eventCondition->fulfilled($scope))
 	            return false;
 	    }
@@ -112,7 +112,7 @@ abstract class EventNotificationTemplate extends BaseEventNotificationTemplate i
 		$notificationParameters = $this->getContentParameters();
 		foreach($notificationParameters as $notificationParameter)
 		{
-			/* @var $notificationParameter kEventNotificationParameter */
+			/* @var $notificationParameter vEventNotificationParameter */
 			if(!is_null($notificationParameter->getValue()))
 				$scope->addDynamicValue($notificationParameter->getKey(), $notificationParameter->getValue());
 		}
@@ -120,7 +120,7 @@ abstract class EventNotificationTemplate extends BaseEventNotificationTemplate i
 		$notificationParameters = $this->getUserParameters();
 		foreach($notificationParameters as $notificationParameter)
 		{
-			/* @var $notificationParameter kEventNotificationParameter */
+			/* @var $notificationParameter vEventNotificationParameter */
 			if(!is_null($notificationParameter->getValue()))
 				$scope->addDynamicValue($notificationParameter->getKey(), $notificationParameter->getValue());
 		}

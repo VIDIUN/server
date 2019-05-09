@@ -1,5 +1,5 @@
 <?php
-class kBroadcastUrlManager
+class vBroadcastUrlManager
 {
 	const PRIMARY_MEDIA_SERVER_INDEX = 0;
 	const SECONDARY_MEDIA_SERVER_INDEX = 1;
@@ -36,27 +36,27 @@ class kBroadcastUrlManager
 				return new $broadcastUrlManager($partnerId);
 		}
 	
-		if(kConf::hasParam('broadcast_url_manager'))
+		if(vConf::hasParam('broadcast_url_manager'))
 		{
-			$broadcastUrlManager = kConf::get('broadcast_url_manager');
+			$broadcastUrlManager = vConf::get('broadcast_url_manager');
 			if(class_exists($broadcastUrlManager))
 				return new $broadcastUrlManager($partnerId);
 		}
 		
-		return new kBroadcastUrlManager($partnerId);
+		return new vBroadcastUrlManager($partnerId);
 	}
 
 	public function setEntryBroadcastingUrls (LiveStreamEntry $dbEntry)
 	{
 		//if we have broadcast urls on the custom data and we regenerate token - need to save the new url
 		if($dbEntry->getFromCustomData('primaryBroadcastingUrl'))
-			$dbEntry->setPrimaryBroadcastingUrl($this->getPrimaryBroadcastUrl($dbEntry, kBroadcastUrlManager::PROTOCOL_RTMP));
+			$dbEntry->setPrimaryBroadcastingUrl($this->getPrimaryBroadcastUrl($dbEntry, vBroadcastUrlManager::PROTOCOL_RTMP));
 		if($dbEntry->getFromCustomData('primaryRtspBroadcastingUrl'))
-			$dbEntry->setPrimaryRtspBroadcastingUrl($this->getPrimaryBroadcastUrl($dbEntry, kBroadcastUrlManager::PROTOCOL_RTSP));
+			$dbEntry->setPrimaryRtspBroadcastingUrl($this->getPrimaryBroadcastUrl($dbEntry, vBroadcastUrlManager::PROTOCOL_RTSP));
 		if($dbEntry->getFromCustomData('secondaryBroadcastingUrl'))
-			$dbEntry->setSecondaryBroadcastingUrl($this->getSecondaryBroadcastUrl($dbEntry, kBroadcastUrlManager::PROTOCOL_RTMP));
+			$dbEntry->setSecondaryBroadcastingUrl($this->getSecondaryBroadcastUrl($dbEntry, vBroadcastUrlManager::PROTOCOL_RTMP));
 		if($dbEntry->getFromCustomData('secondaryRtspBroadcastingUrl'))
-			$dbEntry->setSecondaryRtspBroadcastingUrl($this->getSecondaryBroadcastUrl($dbEntry, kBroadcastUrlManager::PROTOCOL_RTSP));
+			$dbEntry->setSecondaryRtspBroadcastingUrl($this->getSecondaryBroadcastUrl($dbEntry, vBroadcastUrlManager::PROTOCOL_RTSP));
 	}
 
 	protected function getPostfixValue ($sourceType)
@@ -92,7 +92,7 @@ class kBroadcastUrlManager
 		else
 		{
 			//return empty url
-			KalturaLog::log("The value for $applicationSuffix does not exist in the broadcast map.");
+			VidiunLog::log("The value for $applicationSuffix does not exist in the broadcast map.");
 			return null;
 		}
 		
@@ -101,9 +101,9 @@ class kBroadcastUrlManager
 	
 	protected function getPort($dc, $portParam, $protocol)
 	{
-		$port = kBroadcastUrlManager::DEFAULT_PORT_RTMP;
-		if($protocol == kBroadcastUrlManager::PROTOCOL_RTSP)
-			$port = kBroadcastUrlManager::DEFAULT_PORT_RTSP;
+		$port = vBroadcastUrlManager::DEFAULT_PORT_RTMP;
+		if($protocol == vBroadcastUrlManager::PROTOCOL_RTSP)
+			$port = vBroadcastUrlManager::DEFAULT_PORT_RTSP;
 	
 		$broadcastConfig = $this->getConfiguration();	
 		if(isset($broadcastConfig[$portParam]))
@@ -122,7 +122,7 @@ class kBroadcastUrlManager
 	protected function getExtraQueryParamsConfig(LiveStreamEntry $entry, $mediaServerIndex)
 	{
 		$extraQueryPrams = array();
-		$broadcastConfig = $this->getConfiguration(kDataCenterMgr::getCurrentDcId());
+		$broadcastConfig = $this->getConfiguration(vDataCenterMgr::getCurrentDcId());
 		$extarQueryParamsConfig =  isset($broadcastConfig['queryParams']) ? $broadcastConfig['queryParams'] : "";
 		$extarQueryParamsConfigArr = explode('.', $extarQueryParamsConfig);
 		
@@ -183,32 +183,32 @@ class kBroadcastUrlManager
 
 	public static function getUrlParamsByProtocol($protocol)
 	{
-		if($protocol == kBroadcastUrlManager::PROTOCOL_RTMP)
-			return array(kBroadcastUrlManager::RTMP_DOMAIN, kBroadcastUrlManager::RTMP_PORT);
-		if($protocol == kBroadcastUrlManager::PROTOCOL_RTSP)
-			return array(kBroadcastUrlManager::RTSP_DOMAIN, kBroadcastUrlManager::RTSP_PORT);
+		if($protocol == vBroadcastUrlManager::PROTOCOL_RTMP)
+			return array(vBroadcastUrlManager::RTMP_DOMAIN, vBroadcastUrlManager::RTMP_PORT);
+		if($protocol == vBroadcastUrlManager::PROTOCOL_RTSP)
+			return array(vBroadcastUrlManager::RTSP_DOMAIN, vBroadcastUrlManager::RTSP_PORT);
 	}
 
 	public function getPrimaryBroadcastUrl(LiveStreamEntry $entry, $protocol)
 	{
-		$currentDc = kDataCenterMgr::getCurrentDcId();
-		$concatStreamName = ($protocol == kBroadcastUrlManager::PROTOCOL_RTSP);
+		$currentDc = vDataCenterMgr::getCurrentDcId();
+		$concatStreamName = ($protocol == vBroadcastUrlManager::PROTOCOL_RTSP);
 		$hostname = $this->getHostName($currentDc, true, $entry, $protocol);
-		return $this->getBroadcastUrl($entry, $protocol, $hostname, kBroadcastUrlManager::PRIMARY_MEDIA_SERVER_INDEX, $concatStreamName);
+		return $this->getBroadcastUrl($entry, $protocol, $hostname, vBroadcastUrlManager::PRIMARY_MEDIA_SERVER_INDEX, $concatStreamName);
 	}
 
 	public function getSecondaryBroadcastUrl(LiveStreamEntry $entry, $protocol)
 	{
-		$currentDc = kDataCenterMgr::getCurrentDcId();
+		$currentDc = vDataCenterMgr::getCurrentDcId();
 		$configuration = $this->getConfiguration();
-		$concatStreamName = ($protocol == kBroadcastUrlManager::PROTOCOL_RTSP);
+		$concatStreamName = ($protocol == vBroadcastUrlManager::PROTOCOL_RTSP);
 		foreach($configuration as $dc => $config)
 		{
 			if(!is_numeric($dc) || $dc == $currentDc)
 				continue;
 
 			$hostname = $this->getHostName($dc, false, $entry, $protocol);
-			return $this->getBroadcastUrl($entry, $protocol, $hostname, kBroadcastUrlManager::SECONDARY_MEDIA_SERVER_INDEX, $concatStreamName);
+			return $this->getBroadcastUrl($entry, $protocol, $hostname, vBroadcastUrlManager::SECONDARY_MEDIA_SERVER_INDEX, $concatStreamName);
 		}
 	}
 }

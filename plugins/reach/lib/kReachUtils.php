@@ -2,7 +2,7 @@
 /**
  * @package plugins.reach
  */
-class kReachUtils
+class vReachUtils
 {
 	/**
 	 * @param $entryId
@@ -19,28 +19,28 @@ class kReachUtils
 
 		$partner = $entry->getPartner();
 
-		// Limit the KS to edit access a specific entry
-		$privileges = kSessionBase::PRIVILEGE_EDIT . ':' . $entryId;
+		// Limit the VS to edit access a specific entry
+		$privileges = vSessionBase::PRIVILEGE_EDIT . ':' . $entryId;
 
-		// Limit the KS to use only the Vendor Role
-		$privileges .= ',' . kSessionBase::PRIVILEGE_SET_ROLE . ':' . UserRoleId::REACH_VENDOR_ROLE;
+		// Limit the VS to use only the Vendor Role
+		$privileges .= ',' . vSessionBase::PRIVILEGE_SET_ROLE . ':' . UserRoleId::REACH_VENDOR_ROLE;
 
 		// Disable entitlement to avoid entitlement validation when accessing an entry
-		$privileges .= ',' . kSessionBase::PRIVILEGE_DISABLE_ENTITLEMENT_FOR_ENTRY. ':' . $entryId;
+		$privileges .= ',' . vSessionBase::PRIVILEGE_DISABLE_ENTITLEMENT_FOR_ENTRY. ':' . $entryId;
 		
-		$privileges .= ',' . kSessionBase::PRIVILEGE_VIEW . ':' . $entryId;
+		$privileges .= ',' . vSessionBase::PRIVILEGE_VIEW . ':' . $entryId;
 		
-		$privileges .= ',' . kSessionBase::PRIVILEGE_DOWNLOAD . ':' . $entryId;
+		$privileges .= ',' . vSessionBase::PRIVILEGE_DOWNLOAD . ':' . $entryId;
 
 		if($shouldModerateOutput)
 			$privileges .= ',' . kSessionBase::PRIVILEGE_ENABLE_CAPTION_MODERATION;
 
-		$limitedKs = '';
-		$result = kSessionUtils::startKSession($partner->getId(), $partner->getSecret(), '', $limitedKs, $turnaroundTime, kSessionBase::SESSION_TYPE_USER, '', $privileges, null, null, false);
+		$limitedVs = '';
+		$result = vSessionUtils::startVSession($partner->getId(), $partner->getSecret(), '', $limitedVs, $turnaroundTime, vSessionBase::SESSION_TYPE_USER, '', $privileges, null, null, false);
 		if ($result < 0)
 			throw new Exception('Failed to create REACH Vendor limited session for partner '.$partner->getId());
 
-		return $limitedKs;
+		return $limitedVs;
 	}
 	
 	public static function calcPricePerSecond(entry $entry, $pricePerUnit)
@@ -73,7 +73,7 @@ class kReachUtils
 
 		$entryTaskPrice = self::calculateTaskPrice($entry, $catalogItem);
 		
-		KalturaLog::debug("allowedCredit [$allowedCredit] creditUsed [$creditUsed] entryTaskPrice [$entryTaskPrice]");
+		VidiunLog::debug("allowedCredit [$allowedCredit] creditUsed [$creditUsed] entryTaskPrice [$entryTaskPrice]");
 		$remainingCredit = $allowedCredit - ($creditUsed  + $entryTaskPrice);
 		
 		return $remainingCredit >= 0 ? true : false;
@@ -112,7 +112,7 @@ class kReachUtils
 		$creditUsed = $reachProfile->getUsedCredit();
 		$entryTaskPrice = $entryVendorTask->getPrice();
 		
-		KalturaLog::debug("allowedCredit [$allowedCredit] creditUsed [$creditUsed] entryTaskPrice [$entryTaskPrice]");
+		VidiunLog::debug("allowedCredit [$allowedCredit] creditUsed [$creditUsed] entryTaskPrice [$entryTaskPrice]");
 		$remainingCredit = $allowedCredit - ($creditUsed  + $entryTaskPrice);
 		
 		return $remainingCredit >= 0 ? true : false;
@@ -128,7 +128,7 @@ class kReachUtils
 
 		$creditUsed = $reachProfile->getUsedCredit();
 
-		KalturaLog::debug("allowedCredit [$allowedCredit] creditUsed [$creditUsed] taskPriceDiff [$taskPriceDiff]");
+		VidiunLog::debug("allowedCredit [$allowedCredit] creditUsed [$creditUsed] taskPriceDiff [$taskPriceDiff]");
 		$remainingCredit = $allowedCredit - ($creditUsed  + $taskPriceDiff);
 		return $remainingCredit >= 0 ? true : false;
 	}
@@ -144,7 +144,7 @@ class kReachUtils
 	
 	public static function isEntryTypeSupported($type)
 	{
-		$supportedTypes = KalturaPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::MEDIA_CLIP);
+		$supportedTypes = VidiunPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::MEDIA_CLIP);
 		return in_array($type, $supportedTypes);
 	}
 

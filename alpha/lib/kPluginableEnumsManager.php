@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage enum
  */ 
-class kPluginableEnumsManager
+class vPluginableEnumsManager
 {
 	/**
 	 * All dynamic enums, mapped on the id as key
@@ -31,7 +31,7 @@ class kPluginableEnumsManager
 	
 	protected static function loadCoreMap($useCache = true)
 	{
-		$coreCachePath = kConf::get('cache_root_path') . '/CorePluginableEnums.cache';
+		$coreCachePath = vConf::get('cache_root_path') . '/CorePluginableEnums.cache';
 		if($useCache && file_exists($coreCachePath))
 		{
 			self::$coreMap = unserialize(file_get_contents($coreCachePath));
@@ -44,7 +44,7 @@ class kPluginableEnumsManager
 		{
 			$dynamicEnumId = $dynamicEnum->getId();
 			$dynamicEnumType = $dynamicEnum->getEnumName();
-			$dynamicEnumApiName = $dynamicEnum->getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $dynamicEnum->getValueName();
+			$dynamicEnumApiName = $dynamicEnum->getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $dynamicEnum->getValueName();
 			if(!isset(self::$coreMap[$dynamicEnumType]))
 				self::$coreMap[$dynamicEnumType] = array();
 				
@@ -55,7 +55,7 @@ class kPluginableEnumsManager
 	
 	protected static function loadApiMap($useCache = true)
 	{
-		$apiCachePath = kConf::get('cache_root_path') . '/ApiPluginableEnums.cache';
+		$apiCachePath = vConf::get('cache_root_path') . '/ApiPluginableEnums.cache';
 		if($useCache && file_exists($apiCachePath))
 		{
 			self::$apiMap = unserialize(file_get_contents($apiCachePath));
@@ -68,7 +68,7 @@ class kPluginableEnumsManager
 		{
 			$dynamicEnumId = $dynamicEnum->getId();
 			$dynamicEnumType = $dynamicEnum->getEnumName();
-			$dynamicEnumApiName = $dynamicEnum->getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $dynamicEnum->getValueName();
+			$dynamicEnumApiName = $dynamicEnum->getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $dynamicEnum->getValueName();
 			if(!isset(self::$apiMap[$dynamicEnumType]))
 				self::$apiMap[$dynamicEnumType] = array();
 				
@@ -132,7 +132,7 @@ class kPluginableEnumsManager
 	
 	public static function genericApiToCore($genericValue)
 	{
-	    list($type, $value) = explode(IKalturaEnumerator::PLUGIN_VALUE_DELIMITER, $genericValue, 2);
+	    list($type, $value) = explode(IVidiunEnumerator::PLUGIN_VALUE_DELIMITER, $genericValue, 2);
 	    
 	    return self::apiToCore($type, $value);
 	}
@@ -142,17 +142,17 @@ class kPluginableEnumsManager
 		if(is_null($value))
 			return null;
 			
-		$split = explode(IKalturaEnumerator::PLUGIN_VALUE_DELIMITER, $value);
+		$split = explode(IVidiunEnumerator::PLUGIN_VALUE_DELIMITER, $value);
 		if(count($split) == 1)
 		{
 			if(!preg_match('/[\w\d]+/', $value))
-				throw new kCoreException("Dynamic enum invalid format [$value] for type [$type]", kCoreException::INVALID_ENUM_FORMAT);
+				throw new vCoreException("Dynamic enum invalid format [$value] for type [$type]", vCoreException::INVALID_ENUM_FORMAT);
 				
 			return $value;
 		}
 	
 		if(!preg_match('/\w[\w\d]+\.[\w\d]+/', $value))
-			throw new kCoreException("Dynamic enum invalid format [$value] for type [$type]", kCoreException::INVALID_ENUM_FORMAT);
+			throw new vCoreException("Dynamic enum invalid format [$value] for type [$type]", vCoreException::INVALID_ENUM_FORMAT);
 			
 		$typeMap = self::getApiMap($type);
 		if($typeMap && isset($typeMap[$value]))
@@ -164,7 +164,7 @@ class kPluginableEnumsManager
 		if(!$dynamicEnum)
 		{
 			if(!self::$createNew)
-				throw new kCoreException("Dynamic enum not found [$value] for type [$type]", kCoreException::ENUM_NOT_FOUND);
+				throw new vCoreException("Dynamic enum not found [$value] for type [$type]", vCoreException::ENUM_NOT_FOUND);
 				
 			$dynamicEnum = new DynamicEnum();
 			$dynamicEnum->setEnumName($type);
@@ -179,17 +179,17 @@ class kPluginableEnumsManager
 
 	/**
 	 * @param string $value
-	 * @return IKalturaEnumerator
+	 * @return IVidiunEnumerator
 	 */
 	public static function getPlugin($value)
 	{
-		$split = explode(IKalturaEnumerator::PLUGIN_VALUE_DELIMITER, $value, 2);
+		$split = explode(IVidiunEnumerator::PLUGIN_VALUE_DELIMITER, $value, 2);
 		if(count($split) == 1)
 			return null;
 			
 		list($pluginName, $valueName) = $split;
-		$plugin = KalturaPluginManager::getPluginInstance($pluginName);
-		if($plugin && $plugin instanceof IKalturaEnumerator)
+		$plugin = VidiunPluginManager::getPluginInstance($pluginName);
+		if($plugin && $plugin instanceof IVidiunEnumerator)
 			return $plugin;
 			
 		return null;

@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaPartnerFilter extends KalturaPartnerBaseFilter
+class VidiunPartnerFilter extends VidiunPartnerBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

@@ -41,7 +41,7 @@ class reportentryAction extends addmoderationAction
 		$moderation->setObjectType( moderation::MODERATION_OBJECT_TYPE_ENTRY );
 
 		$entryPartner = $this->getPartner();
-		myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_REPORT, $moderation , $entryPartner->getId());
+		myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_REPORT, $moderation , $entryPartner->getId());
 	}
 
 }

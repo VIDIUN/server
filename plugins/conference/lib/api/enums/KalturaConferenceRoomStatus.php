@@ -4,7 +4,7 @@
  * @subpackage api.enum
  * @see ConferenceRoomStatus
  */
-class KalturaConferenceRoomStatus extends KalturaEnum implements ConferenceRoomStatus
+class VidiunConferenceRoomStatus extends VidiunEnum implements ConferenceRoomStatus
 {
 
 }

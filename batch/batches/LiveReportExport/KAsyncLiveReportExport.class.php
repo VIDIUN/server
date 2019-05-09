@@ -3,35 +3,35 @@
  * @package Scheduler
  * @subpackage LiveReportExport
  */
-class KAsyncLiveReportExport  extends KJobHandlerWorker
+class VAsyncLiveReportExport  extends VJobHandlerWorker
 {
 
 	public static function getType()
 	{
-		return KalturaBatchJobType::LIVE_REPORT_EXPORT;
+		return VidiunBatchJobType::LIVE_REPORT_EXPORT;
 	}
 
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
-		$this->updateJob($job, 'Creating CSV Export', KalturaBatchJobStatus::QUEUED);
+		$this->updateJob($job, 'Creating CSV Export', VidiunBatchJobStatus::QUEUED);
 		$job = $this->createCsv($job, $job->data);
 		return $job;
 	}
 
-	protected function createCsv(KalturaBatchJob $job, KalturaLiveReportExportJobData $data) {
+	protected function createCsv(VidiunBatchJob $job, VidiunLiveReportExportJobData $data) {
 		$partnerId =  $job->partnerId;
 		$type = $job->jobSubType;
 		
 		// Create local path for report generation
 		$data->outputPath = self::$taskConfig->params->localTempPath . DIRECTORY_SEPARATOR . $partnerId;
-		KBatchBase::createDir($data->outputPath);
+		VBatchBase::createDir($data->outputPath);
 		
 		// Generate report
-		KBatchBase::impersonate($job->partnerId);
+		VBatchBase::impersonate($job->partnerId);
 		$exporter = LiveReportFactory::getExporter($type, $data);
 		$reportFile = $exporter->run();
 		$this->setFilePermissions($reportFile);
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
 		// Copy the report to shared location.
 		$this->moveFile($job, $data, $partnerId);
@@ -39,21 +39,21 @@ class KAsyncLiveReportExport  extends KJobHandlerWorker
 		return $job;
 	}
 	
-	protected function moveFile(KalturaBatchJob $job, KalturaLiveReportExportJobData $data, $partnerId) {
+	protected function moveFile(VidiunBatchJob $job, VidiunLiveReportExportJobData $data, $partnerId) {
 		$fileName =  basename($data->outputPath);
 		$sharedLocation = self::$taskConfig->params->sharedPath . DIRECTORY_SEPARATOR . $partnerId . "_" . $fileName;
 		
-		$fileSize = kFile::fileSize($data->outputPath);
+		$fileSize = vFile::fileSize($data->outputPath);
 		rename($data->outputPath, $sharedLocation);
 		$data->outputPath = $sharedLocation;
 		
 		$this->setFilePermissions($sharedLocation);
 		if(!$this->checkFileExists($sharedLocation, $fileSize))
 		{
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'Failed to move report file', KalturaBatchJobStatus::RETRY);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'Failed to move report file', VidiunBatchJobStatus::RETRY);
 		}
 	
-		return $this->closeJob($job, null, null, 'CSV created successfully', KalturaBatchJobStatus::FINISHED, $data);
+		return $this->closeJob($job, null, null, 'CSV created successfully', VidiunBatchJobStatus::FINISHED, $data);
 	}
 	
 }

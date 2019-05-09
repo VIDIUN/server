@@ -3,7 +3,7 @@
  * @package plugins.playReady
  * @subpackage api.enum
  */
-class KalturaPlayReadyPlayEnablerType extends KalturaStringEnum implements PlayReadyPlayEnablerType
+class VidiunPlayReadyPlayEnablerType extends VidiunStringEnum implements PlayReadyPlayEnablerType
 {
 	// see PlayReadyPlayEnablerType interface
 }

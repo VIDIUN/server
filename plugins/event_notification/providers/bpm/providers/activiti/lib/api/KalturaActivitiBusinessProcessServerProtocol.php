@@ -3,7 +3,7 @@
  * @package plugins.activitiBusinessProcessNotification
  * @subpackage api.enum
  */
-class KalturaActivitiBusinessProcessServerProtocol extends KalturaStringEnum
+class VidiunActivitiBusinessProcessServerProtocol extends VidiunStringEnum
 {
 	const HTTP = 'http';
 	const HTTPS = 'https';

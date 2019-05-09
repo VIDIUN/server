@@ -3,7 +3,7 @@
  * @package plugins.dropFolder
  * @subpackage api.enum
  */
-class KalturaDropFolderErrorCode extends KalturaDynamicEnum implements DropFolderErrorCode
+class VidiunDropFolderErrorCode extends VidiunDynamicEnum implements DropFolderErrorCode
 {
 	// see DropFolderErrorCode interface
 	

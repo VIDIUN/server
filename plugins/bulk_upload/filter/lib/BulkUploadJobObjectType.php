@@ -3,7 +3,7 @@
  * @package plugins.bulkUploadFilter
  * @subpackage api.enum
  */
-class BulkUploadJobObjectType implements IKalturaPluginEnum, BulkUploadObjectType
+class BulkUploadJobObjectType implements IVidiunPluginEnum, BulkUploadObjectType
 {
 	
 	const JOB = 'JOB';

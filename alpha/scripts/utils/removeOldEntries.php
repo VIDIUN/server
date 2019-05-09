@@ -29,7 +29,7 @@ $typesToDelete = array(
 //	entryType::DVD,
 );
 
-$dbConf = kConf::getDB();
+$dbConf = vConf::getDB();
 DbManager::setConfig($dbConf);
 DbManager::initialize();
 
@@ -46,18 +46,18 @@ while($entries)
 	$count += count($entries);
 	foreach($entries as $entry)
 	{
-		kCurrentContext::$ks_partner_id = $entry->getPartnerId();
-		kCurrentContext::$partner_id = $entry->getPartnerId();
-		kCurrentContext::$master_partner_id = $entry->getPartnerId();
+		vCurrentContext::$vs_partner_id = $entry->getPartnerId();
+		vCurrentContext::$partner_id = $entry->getPartnerId();
+		vCurrentContext::$master_partner_id = $entry->getPartnerId();
 		
-		KalturaLog::debug("Deletes entry [" . $entry->getId() . "]");
-		KalturaStatement::setDryRun($dryRun);
+		VidiunLog::debug("Deletes entry [" . $entry->getId() . "]");
+		VidiunStatement::setDryRun($dryRun);
 		myEntryUtils::deleteEntry($entry, $entry->getPartnerId());
-		KalturaStatement::setDryRun(false);
+		VidiunStatement::setDryRun(false);
 	}
-	kEventsManager::flushEvents();
-	kMemoryManager::clearMemory();
+	vEventsManager::flushEvents();
+	vMemoryManager::clearMemory();
 	$entries = entryPeer::doSelect($c);
 }
-KalturaLog::debug("Deleted [$count] entries");
+VidiunLog::debug("Deleted [$count] entries");
 

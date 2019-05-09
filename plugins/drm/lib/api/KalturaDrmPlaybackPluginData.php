@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDrmPlaybackPluginData extends KalturaPluginData{
+class VidiunDrmPlaybackPluginData extends VidiunPluginData{
 
     /**
-     * @var KalturaDrmSchemeName
+     * @var VidiunDrmSchemeName
      */
     public $scheme;
 

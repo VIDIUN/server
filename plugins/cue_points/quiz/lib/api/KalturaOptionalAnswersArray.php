@@ -1,28 +1,28 @@
 <?php
 /**
  *
- * Associative array of KalturaOptionalAnswer
+ * Associative array of VidiunOptionalAnswer
  *
  * @package plugins.quiz
  * @subpackage api.objects
  */
 
-class KalturaOptionalAnswersArray extends KalturaTypedArray {
+class VidiunOptionalAnswersArray extends VidiunTypedArray {
 
 	public function __construct()
 	{
-		return parent::__construct("KalturaOptionalAnswer");
+		return parent::__construct("VidiunOptionalAnswer");
 	}
 
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaOptionalAnswersArray();
+		$newArr = new VidiunOptionalAnswersArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-			$answerObj = new KalturaOptionalAnswer();
+			$answerObj = new VidiunOptionalAnswer();
 			$answerObj->fromObject($obj, $responseProfile);
 			$newArr[] = $answerObj;
 		}

@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAssetParamsResourceContainer extends KalturaResource 
+class VidiunAssetParamsResourceContainer extends VidiunResource 
 {
 	/**
 	 * The content resource to associate with asset params
-	 * @var KalturaContentResource
+	 * @var VidiunContentResource
 	 */
 	public $resource;
 	
@@ -37,7 +37,7 @@ class KalturaAssetParamsResourceContainer extends KalturaResource
 	public function toObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kAssetParamsResourceContainer();
+			$object_to_fill = new vAssetParamsResourceContainer();
 			
 		if($this->resource)
 			$object_to_fill->setResource($this->resource->toObject());

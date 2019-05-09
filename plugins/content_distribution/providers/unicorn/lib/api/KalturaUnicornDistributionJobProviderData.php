@@ -3,7 +3,7 @@
  * @package plugins.unicornDistribution
  * @subpackage api.objects
  */
-class KalturaUnicornDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunUnicornDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 	/**
 	 * The Catalog GUID the video is in or will be ingested into.
@@ -34,22 +34,22 @@ class KalturaUnicornDistributionJobProviderData extends KalturaConfigurableDistr
 	public $flavorAssetVersion;
 	
 	/**
-	 * The schema and host name to the Kaltura server, e.g. http://www.kaltura.com
+	 * The schema and host name to the Vidiun server, e.g. http://www.vidiun.com
 	 * 
 	 * @var string
 	 */
 	public $notificationBaseUrl;
 	
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 		
-		$this->notificationBaseUrl = 'http://' . kConf::get('cdn_api_host');
+		$this->notificationBaseUrl = 'http://' . vConf::get('cdn_api_host');
 		
 		if(!$distributionJobData)
 			return;
 		
-		if(!($distributionJobData->distributionProfile instanceof KalturaUnicornDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunUnicornDistributionProfile))
 			return;
 		
 		$entryDistributionDb = EntryDistributionPeer::retrieveByPK($distributionJobData->entryDistributionId);
@@ -59,7 +59,7 @@ class KalturaUnicornDistributionJobProviderData extends KalturaConfigurableDistr
 		$flavorAssetIds = explode(',', $entryDistributionDb->getFlavorAssetIds());
 		$flavorAssetId = reset($flavorAssetIds);
 		$flavorAsset = assetPeer::retrieveById($flavorAssetId);
-		$flavorAssetOldVersion = $entryDistributionDb->getFromCustomData(kUnicornDistributionJobProviderData::CUSTOM_DATA_FLAVOR_ASSET_OLD_VERSION);
+		$flavorAssetOldVersion = $entryDistributionDb->getFromCustomData(vUnicornDistributionJobProviderData::CUSTOM_DATA_FLAVOR_ASSET_OLD_VERSION);
 		$flavorAssetNewVersion = null;
 		if($flavorAsset)
 		{
@@ -81,7 +81,7 @@ class KalturaUnicornDistributionJobProviderData extends KalturaConfigurableDistr
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{

@@ -13,4 +13,4 @@ if (!$dbDrmProfile)
 $newProfile = $dbDrmProfile->copy();
 $newProfile->setPartnerId($targetPartnerId);
 $newProfile->save();
-KalturaLog::debug('Done');
+VidiunLog::debug('Done');

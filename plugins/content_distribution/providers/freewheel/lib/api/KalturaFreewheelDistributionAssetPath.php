@@ -3,7 +3,7 @@
  * @package plugins.freewheelDistribution
  * @subpackage api.objects
  */
-class KalturaFreewheelDistributionAssetPath extends KalturaDistributionJobProviderData
+class VidiunFreewheelDistributionAssetPath extends VidiunDistributionJobProviderData
 {
 	/**
 	 * @var string

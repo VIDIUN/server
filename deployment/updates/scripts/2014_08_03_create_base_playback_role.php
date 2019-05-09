@@ -11,7 +11,7 @@ chdir(__DIR__);
 require_once (__DIR__ . '/../../bootstrap.php');
 
 $realRun = isset($argv[1]) && $argv[1] == 'realrun';
-KalturaStatement::setDryRun(!$realRun);
+VidiunStatement::setDryRun(!$realRun);
 
 $userRole = new UserRole();
 $userRole->setStrId('PLAYBACK_BASE_ROLE');

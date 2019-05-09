@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage cache
  */
-abstract class kInfraBaseCacheWrapper
+abstract class vInfraBaseCacheWrapper
 {
 	private $serializeData;
 	
@@ -244,7 +244,7 @@ abstract class kInfraBaseCacheWrapper
 	 */
 	protected static function safeLog($msg)
 	{
-		if (class_exists('KalturaLog') && KalturaLog::isInitialized())
-			KalturaLog::debug($msg);
+		if (class_exists('VidiunLog') && VidiunLog::isInitialized())
+			VidiunLog::debug($msg);
 	}
 }

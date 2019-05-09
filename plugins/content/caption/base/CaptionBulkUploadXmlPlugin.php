@@ -3,7 +3,7 @@
  * Enable entry caption asset ingestion from XML bulk upload
  * @package plugins.caption
  */
-class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPending, IKalturaSchemaContributor, IKalturaBulkUploadXmlHandler, IKalturaConfigurator
+class CaptionBulkUploadXmlPlugin extends VidiunPlugin implements IVidiunPending, IVidiunSchemaContributor, IVidiunBulkUploadXmlHandler, IVidiunConfigurator
 {
 	const PLUGIN_NAME = 'captionBulkUploadXml';
 	const BULK_UPLOAD_XML_PLUGIN_NAME = 'bulkUploadXml';
@@ -23,7 +23,7 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 	protected $currentCaptionAssets = null;
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	*/
 	public static function getPluginName()
 	{
@@ -31,28 +31,28 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	*/
 	public static function dependsOn()
 	{
-		$bulkUploadXmlVersion = new KalturaVersion(
+		$bulkUploadXmlVersion = new VidiunVersion(
 			self::BULK_UPLOAD_XML_VERSION_MAJOR,
 			self::BULK_UPLOAD_XML_VERSION_MINOR,
 			self::BULK_UPLOAD_XML_VERSION_BUILD
 		);
 
-		$captionDependency = new KalturaDependency(CaptionPlugin::getPluginName());
-		$bulkUploadXmlDependency = new KalturaDependency(self::BULK_UPLOAD_XML_PLUGIN_NAME, $bulkUploadXmlVersion);
+		$captionDependency = new VidiunDependency(CaptionPlugin::getPluginName());
+		$bulkUploadXmlDependency = new VidiunDependency(self::BULK_UPLOAD_XML_PLUGIN_NAME, $bulkUploadXmlVersion);
 
 		return array($bulkUploadXmlDependency, $captionDependency);
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	*/
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if(
 			$coreType != BulkUploadXmlPlugin::getSchemaTypeCoreValue(XmlSchemaType::BULK_UPLOAD_XML)
 			&&
@@ -97,7 +97,7 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 			<xs:choice minOccurs="1" maxOccurs="1">
 				<xs:element ref="serverFileContentResource" minOccurs="1" maxOccurs="1">
 					<xs:annotation>
-						<xs:documentation>Specifies that content ingestion location is on a Kaltura hosted server</xs:documentation>
+						<xs:documentation>Specifies that content ingestion location is on a Vidiun hosted server</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element ref="urlContentResource" minOccurs="1" maxOccurs="1">
@@ -107,22 +107,22 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 				</xs:element>
 				<xs:element ref="remoteStorageContentResource" minOccurs="1" maxOccurs="1">
 					<xs:annotation>
-						<xs:documentation>Specifies that content file location is a path within a Kaltura defined remote storage</xs:documentation>
+						<xs:documentation>Specifies that content file location is a path within a Vidiun defined remote storage</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element ref="remoteStorageContentResources" minOccurs="1" maxOccurs="1">
 					<xs:annotation>
-						<xs:documentation>Set of content files within several Kaltura defined remote storages</xs:documentation>
+						<xs:documentation>Set of content files within several Vidiun defined remote storages</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element ref="entryContentResource" minOccurs="1" maxOccurs="1">
 					<xs:annotation>
-						<xs:documentation>Specifies that content is a Kaltura entry</xs:documentation>
+						<xs:documentation>Specifies that content is a Vidiun entry</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element ref="assetContentResource" minOccurs="1" maxOccurs="1">
 					<xs:annotation>
-						<xs:documentation>Specifies that content is a Kaltura asset</xs:documentation>
+						<xs:documentation>Specifies that content is a Vidiun asset</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element ref="contentResource-extension" minOccurs="1" maxOccurs="1" />
@@ -154,12 +154,12 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 				<xs:documentation>Specifies if this asset is the default caption asset</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="format" type="KalturaCaptionType" use="optional">
+		<xs:attribute name="format" type="VidiunCaptionType" use="optional">
 			<xs:annotation>
 				<xs:documentation>Caption asset file format</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-		<xs:attribute name="lang" type="KalturaLanguage" use="optional">
+		<xs:attribute name="lang" type="VidiunLanguage" use="optional">
 			<xs:annotation>
 				<xs:documentation>Caption asset file language</xs:documentation>
 			</xs:annotation>
@@ -205,7 +205,7 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUploadXmlHandler::configureBulkUploadXmlHandler()
+	 * @see IVidiunBulkUploadXmlHandler::configureBulkUploadXmlHandler()
 	 */
 	public function configureBulkUploadXmlHandler(BulkUploadEngineXml $xmlBulkUploadEngine)
 	{
@@ -213,11 +213,11 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUploadXmlHandler::handleItemAdded()
+	 * @see IVidiunBulkUploadXmlHandler::handleItemAdded()
 	*/
-	public function handleItemAdded(KalturaObjectBase $object, SimpleXMLElement $item)
+	public function handleItemAdded(VidiunObjectBase $object, SimpleXMLElement $item)
 	{
-		if(!($object instanceof KalturaBaseEntry))
+		if(!($object instanceof VidiunBaseEntry))
 			return;
 		
 		if(!isset($item->subTitles))
@@ -226,7 +226,7 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 		if(empty($item->subTitles->subTitle))
 			return;
 		
-		KBatchBase::impersonate($this->xmlBulkUploadEngine->getCurrentPartnerId());
+		VBatchBase::impersonate($this->xmlBulkUploadEngine->getCurrentPartnerId());
 		$this->getCurrentCaptionAssets($object->id);
 		
 		$pluginsErrorResults = array();
@@ -237,7 +237,7 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 			}
 			catch (Exception $e)
 			{
-				KalturaLog::err($this->getContainerName() . ' failed: ' . $e->getMessage());
+				VidiunLog::err($this->getContainerName() . ' failed: ' . $e->getMessage());
 				$pluginsErrorResults[] = $e->getMessage();
 			}
 		}
@@ -245,14 +245,14 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 		if(count($pluginsErrorResults))
 			throw new Exception(implode(', ', $pluginsErrorResults));
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 	}
 
 	private function handleCaptionAsset($entryId, $conversionProfileId, SimpleXMLElement $caption)
 	{
-		$captionAssetPlugin = KalturaCaptionClientPlugin::get(KBatchBase::$kClient);
+		$captionAssetPlugin = VidiunCaptionClientPlugin::get(VBatchBase::$vClient);
 		
-		$captionAsset = new KalturaCaptionAsset();
+		$captionAsset = new VidiunCaptionAsset();
 		$captionAsset->tags = $this->xmlBulkUploadEngine->implodeChildElements($caption->tags);
 
 		if(isset($caption->captionAssetId))
@@ -263,9 +263,9 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 			
 		if(isset($caption['isDefault']))
 			if(strtolower($caption['isDefault']) == 'true'){
-				$captionAsset->isDefault = KalturaNullableBoolean::TRUE_VALUE;
+				$captionAsset->isDefault = VidiunNullableBoolean::TRUE_VALUE;
 			}else{
-				$captionAsset->isDefault = KalturaNullableBoolean::FALSE_VALUE;
+				$captionAsset->isDefault = VidiunNullableBoolean::FALSE_VALUE;
 			}
 		
 		if(isset($caption['label']))
@@ -303,9 +303,9 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUploadXmlHandler::handleItemUpdated()
+	 * @see IVidiunBulkUploadXmlHandler::handleItemUpdated()
 	*/
-	public function handleItemUpdated(KalturaObjectBase $object, SimpleXMLElement $item)
+	public function handleItemUpdated(VidiunObjectBase $object, SimpleXMLElement $item)
 	{
 		if(!$item->subTitles)
 			return;
@@ -313,28 +313,28 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 		if(empty($item->subTitles))
 			return;
 		
-		$action = KBulkUploadEngine::$actionsMap[KalturaBulkUploadAction::UPDATE];
+		$action = VBulkUploadEngine::$actionsMap[VidiunBulkUploadAction::UPDATE];
 		if(isset($item->subTitles->action))
 			$action = strtolower($item->subTitles->action);
 			
 		switch ($action)
 		{
-			case KBulkUploadEngine::$actionsMap[KalturaBulkUploadAction::UPDATE]:
+			case VBulkUploadEngine::$actionsMap[VidiunBulkUploadAction::UPDATE]:
 				$this->handleItemAdded($object, $item);
 				break;
 			default:
-				throw new KalturaBatchException("subTitles->action: $action is not supported", KalturaBatchJobAppErrors::BULK_ACTION_NOT_SUPPORTED);
+				throw new VidiunBatchException("subTitles->action: $action is not supported", VidiunBatchJobAppErrors::BULK_ACTION_NOT_SUPPORTED);
 		}
 	}
 
 	private function getCurrentCaptionAssets($entryId)
 	{
-		$filter = new KalturaCaptionAssetFilter();
+		$filter = new VidiunCaptionAssetFilter();
 		$filter->entryIdEqual = $entryId;
 		
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 500;
-		$captionAssetPlugin = KalturaCaptionClientPlugin::get(KBatchBase::$kClient);
+		$captionAssetPlugin = VidiunCaptionClientPlugin::get(VBatchBase::$vClient);
 		$captions = $captionAssetPlugin->captionAsset->listAction($filter, $pager);
 		
 		$this->currentCaptionAssets = array();
@@ -350,15 +350,15 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUploadXmlHandler::handleItemDeleted()
+	 * @see IVidiunBulkUploadXmlHandler::handleItemDeleted()
 	*/
-	public function handleItemDeleted(KalturaObjectBase $object, SimpleXMLElement $item)
+	public function handleItemDeleted(VidiunObjectBase $object, SimpleXMLElement $item)
 	{
 		// No handling required
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaConfigurator::getConfig()
+	 * @see IVidiunConfigurator::getConfig()
 	*/
 	public static function getConfig($configName)
 	{
@@ -369,7 +369,7 @@ class CaptionBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendin
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaConfigurator::getContainerName()
+	 * @see IVidiunConfigurator::getContainerName()
 	*/
 	public function getContainerName()
 	{

@@ -2,7 +2,7 @@
 /**
  * @package plugins.fastStart
  */
-class FastStartPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKalturaEnumerator
+class FastStartPlugin extends VidiunPlugin implements IVidiunObjectLoader, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'fastStart';
 	
@@ -19,18 +19,18 @@ class FastStartPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKa
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == KalturaConversionEngineType::FAST_START)
+		if($baseClass == 'VOperationEngine' && $enumValue == VidiunConversionEngineType::FAST_START)
 		{
 			if(!isset($constructorArgs['params']) || !isset($constructorArgs['outFilePath']))
 				return null;
 				
 			$params = $constructorArgs['params'];
-			return new KOperationEngineFastStart($params->fastStartCmd, $constructorArgs['outFilePath']);
+			return new VOperationEngineFastStart($params->fastStartCmd, $constructorArgs['outFilePath']);
 		}
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getApiValue(FastStartConversionEngineType::FAST_START))
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getApiValue(FastStartConversionEngineType::FAST_START))
 		{
-			return new KDLOperatorQTFastStart($enumValue);
+			return new VDLOperatorQTFastStart($enumValue);
 		}
 		
 		return null;
@@ -43,11 +43,11 @@ class FastStartPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKa
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
-		if($baseClass == 'KOperationEngine' && $enumValue == self::getApiValue(FastStartConversionEngineType::FAST_START))
-			return 'KOperationEngineFastStart';
+		if($baseClass == 'VOperationEngine' && $enumValue == self::getApiValue(FastStartConversionEngineType::FAST_START))
+			return 'VOperationEngineFastStart';
 	
-		if($baseClass == 'KDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(FastStartConversionEngineType::FAST_START))
-			return 'KDLOperatorQTFastStart';
+		if($baseClass == 'VDLOperatorBase' && $enumValue == self::getConversionEngineCoreValue(FastStartConversionEngineType::FAST_START))
+			return 'VDLOperatorQTFastStart';
 		
 		return null;
 	}
@@ -71,8 +71,8 @@ class FastStartPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKa
 	 */
 	public static function getConversionEngineCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('conversionEngineType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('conversionEngineType', $value);
 	}
 	
 	/**
@@ -80,6 +80,6 @@ class FastStartPlugin extends KalturaPlugin implements IKalturaObjectLoader, IKa
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

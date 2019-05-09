@@ -25,10 +25,10 @@ class ConferenceEntryServerNode extends EntryServerNode
 	{
 		$serverNode = ServerNodePeer::retrieveByPK($this->getServerNodeId());
 		$inUseUrl = $serverNode->getServiceBaseUrl() . "/inUse";
-		$content = KCurlWrapper::getContent($inUseUrl);
+		$content = VCurlWrapper::getContent($inUseUrl);
 		if (strtolower($content) === 'true')
 			return;
-		KalturaLog::debug("Deleting Conference entryServerNode" );
+		VidiunLog::debug("Deleting Conference entryServerNode" );
 		$this->delete();
 	}
 
@@ -37,14 +37,14 @@ class ConferenceEntryServerNode extends EntryServerNode
 		$conferenceServerNode = ServerNodePeer::retrieveByPK($this->getServerNodeId());
 		if (!$conferenceServerNode)
 		{
-			throw new kCoreException(KalturaErrors::SERVER_NODE_NOT_FOUND, $this->getServerNodeId());
+			throw new vCoreException(VidiunErrors::SERVER_NODE_NOT_FOUND, $this->getServerNodeId());
 		}
 		/**
 		 * @var ConferenceServerNode $conferenceServerNode
 		 */
 		if ($this->getConfRoomStatus() != ConferenceRoomStatus::READY)
 		{
-			throw new kCoreException(KalturaConferenceErrors::ROOM_NOT_READY, $this->getId());
+			throw new vCoreException(VidiunConferenceErrors::ROOM_NOT_READY, $this->getId());
 		}
 		return $conferenceServerNode->getServiceBaseUrl();
 	}
@@ -89,7 +89,7 @@ class ConferenceEntryServerNode extends EntryServerNode
 
 	public function isValid()
 	{
-		return (time() - kConf::get('conf_not_finished_timeout', 'local', 0)) <= $this->getLastAllocationTime();
+		return (time() - vConf::get('conf_not_finished_timeout', 'local', 0)) <= $this->getLastAllocationTime();
 	}
 
 }

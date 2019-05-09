@@ -3,14 +3,14 @@
  * @package Core
  * @subpackage storage
  */
-class kPathManager
+class vPathManager
 {
 	static $sessionCache = array();
 	
 	protected static function getStorageProfile($storageProfileId = null)
 	{
 		if(is_null($storageProfileId))
-			return kDataCenterMgr::getCurrentStorageProfile();
+			return vDataCenterMgr::getCurrentStorageProfile();
 			
 		return StorageProfilePeer::retrieveByPK($storageProfileId);
 	}
@@ -32,29 +32,29 @@ class kPathManager
 //			$line = $trace['line'];
 //			$class = $trace['class'];
 //			$function = $trace['function'];
-//			KalturaLog::debug("#$i Called from function [$class::$function] file[$file] line[$line]");
+//			VidiunLog::debug("#$i Called from function [$class::$function] file[$file] line[$line]");
 //		}
 			
 		list($root, $path) = $object->generateFilePathArr($subType, $version);
 		$root = str_replace('//', '/', $root);
 		$path = str_replace('//', '/', $path);
 		
-		if(!kConf::hasParam('volumes'))
+		if(!vConf::hasParam('volumes'))
 		{
-			KalturaLog::debug("Path [{$root}{$path}]");
+			VidiunLog::debug("Path [{$root}{$path}]");
 			return array($root, $path);
 		}
 		
 		if(isset(self::$sessionCache[$path]))
 			return array($root, self::$sessionCache[$path]);
 			
-		$volumes = kConf::get('volumes');
+		$volumes = vConf::get('volumes');
 		$volume = $volumes[rand(0, count($volumes) - 1)];
 		$newPath = str_replace('/content/', "/content/$volume/", $path);
 		self::$sessionCache[$path] = $newPath;
 		$path = $newPath;
 		
-		KalturaLog::debug("Path [{$root}{$path}]");
+		VidiunLog::debug("Path [{$root}{$path}]");
 		return array($root, $path);
 	}
 	
@@ -68,7 +68,7 @@ class kPathManager
 	 */
 	public static function getFilePathArr(FileSyncKey $key, $storageProfileId = null)
 	{
-		KalturaLog::log(__METHOD__." - key [$key], storageProfileId [$storageProfileId]");
+		VidiunLog::log(__METHOD__." - key [$key], storageProfileId [$storageProfileId]");
 		
 		$storageProfile = self::getStorageProfile($storageProfileId);
 		if(is_null($storageProfile))
@@ -76,7 +76,7 @@ class kPathManager
 
 		$pathManager = $storageProfile->getPathManager();
 		
-		$object = kFileSyncUtils::retrieveObjectForSyncKey($key);
+		$object = vFileSyncUtils::retrieveObjectForSyncKey($key);
 		
 		return $pathManager->generateFilePathArr($object, $key->object_sub_type, $key->version, $storageProfileId);
 	}

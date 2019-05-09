@@ -4,7 +4,7 @@
  * @package Core
  * @subpackage events
  */
-interface kBatchJobStatusEventConsumer extends KalturaEventConsumer
+interface vBatchJobStatusEventConsumer extends VidiunEventConsumer
 {
 	/**
 	 * @param BatchJob $dbBatchJob

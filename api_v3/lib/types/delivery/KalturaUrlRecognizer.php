@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlRecognizer extends KalturaObject {
+class VidiunUrlRecognizer extends VidiunObject {
 
 	/**
 	 * The hosts that are recognized
@@ -31,7 +31,7 @@ class KalturaUrlRecognizer extends KalturaObject {
 	
 	public function toObject($dbObject = null, $skip = array()) {
 		if (is_null ( $dbObject ))
-			$dbObject = new kUrlRecognizer ();
+			$dbObject = new vUrlRecognizer ();
 		
 		parent::toObject ( $dbObject, $skip );
 		

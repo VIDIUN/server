@@ -5,7 +5,7 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class kEmailNotificationGroupRecipientProvider extends kEmailNotificationRecipientProvider
+class vEmailNotificationGroupRecipientProvider extends vEmailNotificationRecipientProvider
 {
 	/**
 	 * @var string
@@ -27,11 +27,11 @@ class kEmailNotificationGroupRecipientProvider extends kEmailNotificationRecipie
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kEmailNotificationRecipientProvider::getScopedProviderJobData()
+	 * @see vEmailNotificationRecipientProvider::getScopedProviderJobData()
 	 */
-	public function getScopedProviderJobData(kScope $scope = null) 
+	public function getScopedProviderJobData(vScope $scope = null) 
 	{
-		$ret = new kEmailNotificationGroupRecipientJobData();
+		$ret = new vEmailNotificationGroupRecipientJobData();
 		$ret->setGroupId($this->groupId);
 		return $ret;
 	}

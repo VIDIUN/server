@@ -4,7 +4,7 @@
  * @subpackage api.objects
  * @relatedService VendorCatalogItemService
  */
-abstract class KalturaVendorCatalogItem extends KalturaObject implements IRelatedFilterable, IApiObjectFactory
+abstract class VidiunVendorCatalogItem extends VidiunObject implements IRelatedFilterable, IApiObjectFactory
 {
 	/**
 	 * @var int
@@ -44,33 +44,33 @@ abstract class KalturaVendorCatalogItem extends KalturaObject implements IRelate
 	public $updatedAt;
 
 	/**
-	 * @var KalturaVendorCatalogItemStatus
+	 * @var VidiunVendorCatalogItemStatus
 	 * @readonly
 	 * @filter eq,in
 	 */
 	public $status;
 
 	/**
-	 * @var KalturaVendorServiceType
+	 * @var VidiunVendorServiceType
 	 * @filter eq,in
 	 */
 	public $serviceType;
 
 	/**
-	 * @var KalturaVendorServiceFeature
+	 * @var VidiunVendorServiceFeature
 	 * @readonly
 	 * @filter eq,in
 	 */
 	public $serviceFeature;
 
 	/**
-	 * @var KalturaVendorServiceTurnAroundTime
+	 * @var VidiunVendorServiceTurnAroundTime
 	 * @filter eq,in
 	 */
 	public $turnAroundTime;
 
 	/**
-	 * @var KalturaVendorCatalogItemPricing
+	 * @var VidiunVendorCatalogItemPricing
 	 * @requiresPermission read
 	 */
 	public $pricing;
@@ -93,7 +93,7 @@ abstract class KalturaVendorCatalogItem extends KalturaObject implements IRelate
 	abstract protected function getServiceFeature();
 
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::getMapBetweenObjects()
+	 * @see VidiunCuePoint::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -101,7 +101,7 @@ abstract class KalturaVendorCatalogItem extends KalturaObject implements IRelate
 	}
 
 	/* (non-PHPdoc)
- 	 * @see KalturaObject::toInsertableObject()
+ 	 * @see VidiunObject::toInsertableObject()
  	 */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -150,10 +150,10 @@ abstract class KalturaVendorCatalogItem extends KalturaObject implements IRelate
 
 		$vendorPartner = PartnerPeer::retrieveByPK($this->vendorPartnerId);
 		if (!$vendorPartner)
-			throw new KalturaAPIException(KalturaReachErrors::VENDOR_PARTNER_ID_NOT_FOUND, $this->vendorPartnerId);
+			throw new VidiunAPIException(VidiunReachErrors::VENDOR_PARTNER_ID_NOT_FOUND, $this->vendorPartnerId);
 
 		if (!PermissionPeer::isValidForPartner(PermissionName::REACH_VENDOR_PARTNER_PERMISSION, $this->vendorPartnerId))
-			throw new KalturaAPIException(KalturaReachErrors::PARTNER_NOT_VENDOR, $this->vendorPartnerId);
+			throw new VidiunAPIException(VidiunReachErrors::PARTNER_NOT_VENDOR, $this->vendorPartnerId);
 	}
 
 	private function validateSystemName(VendorCatalogItem $sourceObject = null)
@@ -165,43 +165,43 @@ abstract class KalturaVendorCatalogItem extends KalturaObject implements IRelate
 		{
 			$systemNameTemplates = VendorCatalogItemPeer::retrieveBySystemName($this->systemName, $id);
 			if (count($systemNameTemplates))
-				throw new KalturaAPIException(KalturaReachErrors::VENDOR_CATALOG_ITEM_DUPLICATE_SYSTEM_NAME, $this->systemName);
+				throw new VidiunAPIException(VidiunReachErrors::VENDOR_CATALOG_ITEM_DUPLICATE_SYSTEM_NAME, $this->systemName);
 		}
 	}
 
 	/* (non-PHPdoc)
- 	 * @see IApiObjectFactory::getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile)
+ 	 * @see IApiObjectFactory::getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile)
  	 */
-	public static function getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$object = null;
 		switch ($sourceObject->getServiceFeature())
 		{
 			case VendorServiceFeature::CAPTIONS:
-				$object = new KalturaVendorCaptionsCatalogItem();
+				$object = new VidiunVendorCaptionsCatalogItem();
 				break;
 
 			case VendorServiceFeature::TRANSLATION:
-				$object = new KalturaVendorTranslationCatalogItem();
+				$object = new VidiunVendorTranslationCatalogItem();
 				break;
 				
 			case VendorServiceFeature::ALIGNMENT:
-				$object = new KalturaVendorAlignmentCatalogItem();
+				$object = new VidiunVendorAlignmentCatalogItem();
 				break;
 			
 			case VendorServiceFeature::AUDIO_DESCRIPTION:
-				$object = new KalturaVendorAudioDescriptionCatalogItem();
+				$object = new VidiunVendorAudioDescriptionCatalogItem();
 				break;
 
 			default:
-				$object = new KalturaVendorCaptionsCatalogItem();
+				$object = new VidiunVendorCaptionsCatalogItem();
 				break;
 		}
 		
 		if (!$object)
 			return null;
 		
-		/* @var $object KalturaVendorCatalogItem */
+		/* @var $object VidiunVendorCatalogItem */
 		$object->fromObject($sourceObject, $responseProfile);
 		return $object;
 	}

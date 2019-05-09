@@ -3,10 +3,10 @@
  * @package plugins.fileSync
  * @subpackage api.filters
  */
-class KalturaFileSyncFilter extends KalturaFileSyncBaseFilter
+class VidiunFileSyncFilter extends VidiunFileSyncBaseFilter
 {
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $currentDc;
 	
@@ -22,7 +22,7 @@ class KalturaFileSyncFilter extends KalturaFileSyncBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -30,14 +30,14 @@ class KalturaFileSyncFilter extends KalturaFileSyncBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::toObject()
+	 * @see VidiunFilter::toObject()
 	 */
 	public function toObject ( $object_to_fill = null, $props_to_skip = array() )
 	{
 		if(!$this->isNull('currentDc'))
 		{
-			if($this->currentDc == KalturaNullableBoolean::TRUE_VALUE)
-				$this->dcEqual = kDataCenterMgr::getCurrentDcId();
+			if($this->currentDc == VidiunNullableBoolean::TRUE_VALUE)
+				$this->dcEqual = vDataCenterMgr::getCurrentDcId();
 		}
 		
 		return parent::toObject($object_to_fill, $props_to_skip);

@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.enum
  */
-class KalturaMetadataProfileStatus extends KalturaEnum 
+class VidiunMetadataProfileStatus extends VidiunEnum 
 {
 	const ACTIVE = 1;
 	const DEPRECATED = 2;

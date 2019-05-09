@@ -1,4 +1,4 @@
-# Kaltura Server #
+# Vidiun Server #
 
 
 
@@ -10,8 +10,8 @@
 ## Admin Console: ##
 - Add admin.ini new permissions, see admin.template.ini:
  - FEATURE_LIVE_STREAM_RECORD
- - FEATURE_KALTURA_LIVE_STREAM
- - FEATURE_KALTURA_LIVE_STREAM_TRANSCODE
+ - FEATURE_VIDIUN_LIVE_STREAM
+ - FEATURE_VIDIUN_LIVE_STREAM_TRANSCODE
  - FEATURE_LIVE_STREAM_ENABLE_SEGMENT_DURATION_UPDATE
 
 
@@ -24,7 +24,7 @@
 ## Edge Servers: ##
 media_servers.ini is optional and needed only for custom configurations.
 
-- application - defaults to kLive
+- application - defaults to vLive
 - search_regex_pattern, replacement - the regular expression to be replaced in the machine name in order to get the external host name.
 - domain - overwrites the machine name and the regular expression replacement with a full domain name.
 - port - defaults to 1935.
@@ -41,7 +41,7 @@ media_servers.ini is optional and needed only for custom configurations.
 ## Prerequisites: ##
 - Wowza media server 4.0.1 or above.
 - Java jre 1.7.
-- kaltura group (gid = 613) or any other group that apache user is associated with.
+- vidiun group (gid = 613) or any other group that apache user is associated with.
 - Write access to @WEB_DIR@/content/recorded directory.
 - Read access to symbolic link of @WEB_DIR@/content under @WEB_DIR@/content/recorded:
   ln –s @WEB_DIR@/content @WEB_DIR@/content/recorded/content
@@ -57,21 +57,21 @@ media_servers.ini is optional and needed only for custom configurations.
 
 
 ## For all wowza machine: ##
-- Copy [KalturaWowzaServer.jar](https://github.com/kaltura/media-server/releases/download/rel-3.0.8.1/KalturaWowzaServer-3.0.8.1.jar "KalturaWowzaServer.jar") to @WOWZA_DIR@/lib/
-- Copy additional jar files (available in Kaltura Java client library) to @WOWZA_DIR@/lib/
- - [commons-codec-1.4.jar](https://github.com/kaltura/server-bin-linux-64bit/raw/master/wowza/commons-codec-1.4.jar "commons-codec-1.4.jar")
- - [commons-httpclient-3.1.jar](https://github.com/kaltura/server-bin-linux-64bit/raw/master/wowza/commons-httpclient-3.1.jar "commons-httpclient-3.1.jar")
- - [commons-logging-1.1.1.jar](https://github.com/kaltura/server-bin-linux-64bit/raw/master/wowza/commons-logging-1.1.1.jar "commons-logging-1.1.1.jar") 
- - [commons-lang-2.6.jar](https://github.com/kaltura/server-bin-linux-64bit/raw/master/wowza/commons-lang-2.6.jar "commons-lang-2.6.jar")
+- Copy [VidiunWowzaServer.jar](https://github.com/vidiun/media-server/releases/download/rel-3.0.8.1/VidiunWowzaServer-3.0.8.1.jar "VidiunWowzaServer.jar") to @WOWZA_DIR@/lib/
+- Copy additional jar files (available in Vidiun Java client library) to @WOWZA_DIR@/lib/
+ - [commons-codec-1.4.jar](https://github.com/vidiun/server-bin-linux-64bit/raw/master/wowza/commons-codec-1.4.jar "commons-codec-1.4.jar")
+ - [commons-httpclient-3.1.jar](https://github.com/vidiun/server-bin-linux-64bit/raw/master/wowza/commons-httpclient-3.1.jar "commons-httpclient-3.1.jar")
+ - [commons-logging-1.1.1.jar](https://github.com/vidiun/server-bin-linux-64bit/raw/master/wowza/commons-logging-1.1.1.jar "commons-logging-1.1.1.jar") 
+ - [commons-lang-2.6.jar](https://github.com/vidiun/server-bin-linux-64bit/raw/master/wowza/commons-lang-2.6.jar "commons-lang-2.6.jar")
 - Delete all directories under @WOWZA_DIR@/applications, but not the applications directory itself.
-- Create @WOWZA_DIR@/applications/kLive directory.
+- Create @WOWZA_DIR@/applications/vLive directory.
 - Delete all directories under @WOWZA_DIR@/conf, but not the conf directory itself.
-- Create @WOWZA_DIR@/conf/kLive directory.
-- Copy @WOWZA_DIR@/conf/Application.xml to @WOWZA_DIR@/conf/kLive/Application.xml
+- Create @WOWZA_DIR@/conf/vLive directory.
+- Copy @WOWZA_DIR@/conf/Application.xml to @WOWZA_DIR@/conf/vLive/Application.xml
 
-**Edit @WOWZA_DIR@/conf/kLive/Application.xml:**
+**Edit @WOWZA_DIR@/conf/vLive/Application.xml:**
 
- - /Root/Application/Name - kLive
+ - /Root/Application/Name - vLive
  - /Root/Application/AppType - Live
  - /Root/Application/Streams/StreamType - live
  - /Root/Application/Streams/StorageDir - @WEB_DIR@/content/recorded
@@ -228,7 +228,7 @@ media_servers.ini is optional and needed only for custom configurations.
 <Module>
 	<Name>LiveStreamEntry</Name>
 	<Description>LiveStreamEntry</Description>
-	<Class>com.kaltura.media.server.wowza.listeners.LiveStreamEntry</Class>
+	<Class>com.vidiun.media.server.wowza.listeners.LiveStreamEntry</Class>
 </Module>
 ```
  
@@ -253,75 +253,75 @@ media_servers.ini is optional and needed only for custom configurations.
  - /Root/Server/ServerListeners:
 ```xml
 <ServerListener>
-	<BaseClass>com.kaltura.media.server.wowza.listeners.ServerListener</BaseClass>
+	<BaseClass>com.vidiun.media.server.wowza.listeners.ServerListener</BaseClass>
 </ServerListener>
 ```
 
  - /Root/Server/Properties:
 ```xml
 <Property>
-	<Name>KalturaServerURL</Name>
+	<Name>VidiunServerURL</Name>
 	<Value>http://@WWW_DIR@</Value>
 </Property>
 <Property>
-	<!-- Kaltura media server partner (-5) admin secret -->
-	<Name>KalturaServerAdminSecret</Name>
+	<!-- Vidiun media server partner (-5) admin secret -->
+	<Name>VidiunServerAdminSecret</Name>
 	<Value>@MEDIA_PARTNER_ADMIN_SECRET@</Value>
 </Property>
 <Property>
-	<!-- Kaltura API http timeout -->
-	<Name>KalturaServerTimeout</Name>
+	<!-- Vidiun API http timeout -->
+	<Name>VidiunServerTimeout</Name>
 	<Value>30</Value>
 </Property>
 <Property>
-	<!-- Kaltura server managers to be loaded -->
-	<Name>KalturaServerManagers</Name>
-	<Value>com.kaltura.media.server.wowza.StatusManager, com.kaltura.media.server.wowza.LiveStreamManager</Value>
+	<!-- Vidiun server managers to be loaded -->
+	<Name>VidiunServerManagers</Name>
+	<Value>com.vidiun.media.server.wowza.StatusManager, com.vidiun.media.server.wowza.LiveStreamManager</Value>
 </Property>
 <Property>
-	<!-- Kaltura web services to be loaded -->
-	<Name>KalturaServerWebServices</Name>
-	<Value>com.kaltura.media.server.api.services.KalturaLiveService</Value>
+	<!-- Vidiun web services to be loaded -->
+	<Name>VidiunServerWebServices</Name>
+	<Value>com.vidiun.media.server.api.services.VidiunLiveService</Value>
 </Property>
 <Property>
-	<!-- Kaltura server status reporting interval, in seconds -->
-	<Name>KalturaServerStatusInterval</Name>
+	<!-- Vidiun server status reporting interval, in seconds -->
+	<Name>VidiunServerStatusInterval</Name>
 	<Value>300</Value>
 </Property>
 <Property>
-	<!-- Kaltura interval to update that live stream entry is still broadcasting, in seconds -->
-	<Name>KalturaLiveStreamKeepAliveInterval</Name>
+	<!-- Vidiun interval to update that live stream entry is still broadcasting, in seconds -->
+	<Name>VidiunLiveStreamKeepAliveInterval</Name>
 	<Value>60</Value>
 </Property>
 <Property>
-	<!-- Kaltura maximum DVR window, in seconds, should be 24 hours -->
-	<Name>KalturaLiveStreamMaxDvrWindow</Name>
+	<!-- Vidiun maximum DVR window, in seconds, should be 24 hours -->
+	<Name>VidiunLiveStreamMaxDvrWindow</Name>
 	<Value>7200</Value>
 </Property>
 <Property>
-	<!-- Kaltura maximum recorded chunk duration, in minutes, should be an hour -->
-	<Name>KalturaRecordedChunckMaxDuration</Name>
+	<!-- Vidiun maximum recorded chunk duration, in minutes, should be an hour -->
+	<Name>VidiunRecordedChunckMaxDuration</Name>
 	<Value>60</Value>
 </Property>
 <Property>
-	<!-- Kaltura web services http port -->
-	<Name>KalturaServerWebServicesPort</Name>
+	<!-- Vidiun web services http port -->
+	<Name>VidiunServerWebServicesPort</Name>
 	<Value>888</Value>
 </Property>
 <Property>
-	<!-- Kaltura web services binding host name -->
-	<Name>KalturaServerWebServicesHost</Name>
+	<!-- Vidiun web services binding host name -->
+	<Name>VidiunServerWebServicesHost</Name>
 	<Value>0.0.0.0</Value>
 </Property>
 <Property>
-	<!-- Kaltura recorded file group -->
-	<Name>KalturaRecordedFileGroup</Name>
-	<!-- kaltura (gid = 613) or any other group that apache user is associated with. -->
-	<Value>kaltura</Value>
+	<!-- Vidiun recorded file group -->
+	<Name>VidiunRecordedFileGroup</Name>
+	<!-- vidiun (gid = 613) or any other group that apache user is associated with. -->
+	<Value>vidiun</Value>
 </Property>
 <Property>
 	<!-- Minimum buffering time before registering entry as is-live (in seconds) -->
-	<Name>KalturaIsLiveRegistrationMinBufferTime</Name>
+	<Name>VidiunIsLiveRegistrationMinBufferTime</Name>
 	<Value>60</Value>
 </Property>
 ```
@@ -329,16 +329,16 @@ media_servers.ini is optional and needed only for custom configurations.
 
 **Edit @WOWZA_DIR@/conf/log4j.properties:**
 
- - Add `log4j.logger.com.kaltura` = `DEBUG`
+ - Add `log4j.logger.com.vidiun` = `DEBUG`
  - Comment out `log4j.appender.serverAccess.layout` and its sub values `log4j.appender.serverAccess.layout.*` 
  - Add `log4j.appender.serverAccess.layout` = `org.apache.log4j.PatternLayout`
  - Add `log4j.appender.serverAccess.layout.ConversionPattern` = `[%d{yyyy-MM-dd HH:mm:ss}][%t][%C:%M] %p - %m - (%F:%L) %n`
- - Change `log4j.appender.serverAccess.File` = `@LOG_DIR@/kaltura_mediaserver_access.log`
+ - Change `log4j.appender.serverAccess.File` = `@LOG_DIR@/vidiun_mediaserver_access.log`
  - Comment out `log4j.appender.serverError.layout` and its sub values `log4j.appender.serverError.layout.*` 
  - Add `log4j.appender.serverError.layout` = `org.apache.log4j.PatternLayout`
  - Add `log4j.appender.serverError.layout.ConversionPattern` = `[%d{yyyy-MM-dd HH:mm:ss}][%t][%C:%M] %p - %m - (%F:%L) %n` 
- - Change `log4j.appender.serverError.File` = `@LOG_DIR@/kaltura_mediaserver_error.log`
- - Change `log4j.appender.serverStats.File` = `@LOG_DIR@/kaltura_mediaserver_stats.log`
+ - Change `log4j.appender.serverError.File` = `@LOG_DIR@/vidiun_mediaserver_error.log`
+ - Change `log4j.appender.serverStats.File` = `@LOG_DIR@/vidiun_mediaserver_stats.log`
 
 
 
@@ -411,7 +411,7 @@ media_servers.ini is optional and needed only for custom configurations.
 
 **Configure file system**
 
- - Make sure that @WEB_DIR@/content/webcam group is kaltura or apache
+ - Make sure that @WEB_DIR@/content/webcam group is vidiun or apache
  - Define permissions stickiness on the group:
   - chmod +t @WEB_DIR@/content/webcam
   - chmod g+s @WEB_DIR@/content/webcam

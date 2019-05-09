@@ -3,7 +3,7 @@
  * @package api
  * @subpackage services
  */
-class KalturaBaseUserService extends KalturaBaseService 
+class VidiunBaseUserService extends VidiunBaseService 
 {
 	
 	protected function partnerRequired($actionName)
@@ -28,7 +28,7 @@ class KalturaBaseUserService extends KalturaBaseService
 	public function initService($serviceId, $serviceName, $actionName)
 	{
 		parent::initService ($serviceId, $serviceName, $actionName);
-		$this->applyPartnerFilterForClass('kuser');
+		$this->applyPartnerFilterForClass('vuser');
 	}	
 	
 	/**
@@ -39,54 +39,54 @@ class KalturaBaseUserService extends KalturaBaseService
 	 * @param string $newEmail Optional, provide only when you want to update the email
 	 * @param string $newPassword
 	 *
-	 * @throws KalturaErrors::INVALID_FIELD_VALUE
-	 * @throws KalturaErrors::LOGIN_DATA_NOT_FOUND
-	 * @throws KalturaErrors::WRONG_OLD_PASSWORD
-	 * @throws KalturaErrors::PASSWORD_STRUCTURE_INVALID
-	 * @throws KalturaErrors::PASSWORD_ALREADY_USED
-	 * @throws KalturaErrors::LOGIN_ID_ALREADY_USED
+	 * @throws VidiunErrors::INVALID_FIELD_VALUE
+	 * @throws VidiunErrors::LOGIN_DATA_NOT_FOUND
+	 * @throws VidiunErrors::WRONG_OLD_PASSWORD
+	 * @throws VidiunErrors::PASSWORD_STRUCTURE_INVALID
+	 * @throws VidiunErrors::PASSWORD_ALREADY_USED
+	 * @throws VidiunErrors::LOGIN_ID_ALREADY_USED
 	 */
 	protected function updateLoginDataImpl( $email , $password , $newEmail = "" , $newPassword = "", $newFirstName, $newLastName)
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 
 		$this->validateApiAccessControlByEmail($email);
 		
 		if ($newEmail != "")
 		{
-			if(!kString::isEmailString($newEmail))
-				throw new KalturaAPIException ( KalturaErrors::INVALID_FIELD_VALUE, "newEmail" );
+			if(!vString::isEmailString($newEmail))
+				throw new VidiunAPIException ( VidiunErrors::INVALID_FIELD_VALUE, "newEmail" );
 		}
 
 		try {
 			UserLoginDataPeer::updateLoginData ( $email , $password, $newEmail, $newPassword, $newFirstName, $newLastName);
 		}
-		catch (kUserException $e) {
+		catch (vUserException $e) {
 			$code = $e->getCode();
-			if ($code == kUserException::LOGIN_DATA_NOT_FOUND) {
-				throw new KalturaAPIException(KalturaErrors::LOGIN_DATA_NOT_FOUND);
+			if ($code == vUserException::LOGIN_DATA_NOT_FOUND) {
+				throw new VidiunAPIException(VidiunErrors::LOGIN_DATA_NOT_FOUND);
 			}
-			else if ($code == kUserException::WRONG_PASSWORD) {
+			else if ($code == vUserException::WRONG_PASSWORD) {
 				if($password == $newPassword)
-					throw new KalturaAPIException(KalturaErrors::USER_WRONG_PASSWORD);
+					throw new VidiunAPIException(VidiunErrors::USER_WRONG_PASSWORD);
 				else
-					throw new KalturaAPIException(KalturaErrors::WRONG_OLD_PASSWORD);
+					throw new VidiunAPIException(VidiunErrors::WRONG_OLD_PASSWORD);
 			}
-			else if ($code == kUserException::PASSWORD_STRUCTURE_INVALID) {
+			else if ($code == vUserException::PASSWORD_STRUCTURE_INVALID) {
 				$c = new Criteria(); 
 				$c->add(UserLoginDataPeer::LOGIN_EMAIL, $email ); 
 				$loginData = UserLoginDataPeer::doSelectOne($c);
 				$invalidPasswordStructureMessage = $loginData->getInvalidPasswordStructureMessage();
-				throw new KalturaAPIException(KalturaErrors::PASSWORD_STRUCTURE_INVALID,$invalidPasswordStructureMessage);
+				throw new VidiunAPIException(VidiunErrors::PASSWORD_STRUCTURE_INVALID,$invalidPasswordStructureMessage);
 			}
-			else if ($code == kUserException::PASSWORD_ALREADY_USED) {
-				throw new KalturaAPIException(KalturaErrors::PASSWORD_ALREADY_USED);
+			else if ($code == vUserException::PASSWORD_ALREADY_USED) {
+				throw new VidiunAPIException(VidiunErrors::PASSWORD_ALREADY_USED);
 			}
-			else if ($code == kUserException::INVALID_EMAIL) {
-				throw new KalturaAPIException(KalturaErrors::INVALID_FIELD_VALUE, 'email');
+			else if ($code == vUserException::INVALID_EMAIL) {
+				throw new VidiunAPIException(VidiunErrors::INVALID_FIELD_VALUE, 'email');
 			}
-			else if ($code == kUserException::LOGIN_ID_ALREADY_USED) {
-				throw new KalturaAPIException(KalturaErrors::LOGIN_ID_ALREADY_USED);
+			else if ($code == vUserException::LOGIN_ID_ALREADY_USED) {
+				throw new VidiunAPIException(VidiunErrors::LOGIN_ID_ALREADY_USED);
 			}
 			throw $e;			
 		}
@@ -98,15 +98,15 @@ class KalturaBaseUserService extends KalturaBaseService
 	 * 
 	 * @param string $email
 	 *
-	 * @throws KalturaErrors::LOGIN_DATA_NOT_FOUND
-	 * @throws KalturaErrors::PASSWORD_STRUCTURE_INVALID
-	 * @throws KalturaErrors::PASSWORD_ALREADY_USED
-	 * @throws KalturaErrors::INVALID_FIELD_VALUE
-	 * @throws KalturaErrors::LOGIN_ID_ALREADY_USED
+	 * @throws VidiunErrors::LOGIN_DATA_NOT_FOUND
+	 * @throws VidiunErrors::PASSWORD_STRUCTURE_INVALID
+	 * @throws VidiunErrors::PASSWORD_ALREADY_USED
+	 * @throws VidiunErrors::INVALID_FIELD_VALUE
+	 * @throws VidiunErrors::LOGIN_ID_ALREADY_USED
 	 */	
 	protected function resetPasswordImpl($email)
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		
 		$this->validateApiAccessControlByEmail($email);
 		$this->validateRequestsAmount($email);
@@ -114,28 +114,28 @@ class KalturaBaseUserService extends KalturaBaseService
 		try {
 			$new_password = UserLoginDataPeer::resetUserPassword($email);
 		}
-		catch (kUserException $e) {
+		catch (vUserException $e) {
 			$code = $e->getCode();
-			if ($code == kUserException::LOGIN_DATA_NOT_FOUND) {
-				throw new KalturaAPIException(KalturaErrors::LOGIN_DATA_NOT_FOUND, "user not found");
+			if ($code == vUserException::LOGIN_DATA_NOT_FOUND) {
+				throw new VidiunAPIException(VidiunErrors::LOGIN_DATA_NOT_FOUND, "user not found");
 			}
-			else if ($code == kUserException::PASSWORD_STRUCTURE_INVALID) {
-				throw new KalturaAPIException(KalturaErrors::PASSWORD_STRUCTURE_INVALID);
+			else if ($code == vUserException::PASSWORD_STRUCTURE_INVALID) {
+				throw new VidiunAPIException(VidiunErrors::PASSWORD_STRUCTURE_INVALID);
 			}
-			else if ($code == kUserException::PASSWORD_ALREADY_USED) {
-				throw new KalturaAPIException(KalturaErrors::PASSWORD_ALREADY_USED);
+			else if ($code == vUserException::PASSWORD_ALREADY_USED) {
+				throw new VidiunAPIException(VidiunErrors::PASSWORD_ALREADY_USED);
 			}
-			else if ($code == kUserException::INVALID_EMAIL) {
-				throw new KalturaAPIException(KalturaErrors::INVALID_FIELD_VALUE, 'email');
+			else if ($code == vUserException::INVALID_EMAIL) {
+				throw new VidiunAPIException(VidiunErrors::INVALID_FIELD_VALUE, 'email');
 			}
-			else if ($code == kUserException::LOGIN_ID_ALREADY_USED) {
-				throw new KalturaAPIException(KalturaErrors::LOGIN_ID_ALREADY_USED);
+			else if ($code == vUserException::LOGIN_ID_ALREADY_USED) {
+				throw new VidiunAPIException(VidiunErrors::LOGIN_ID_ALREADY_USED);
 			}
 			throw $e;			
 		}	
 		
 		if (!$new_password)
-			throw new KalturaAPIException(KalturaErrors::LOGIN_DATA_NOT_FOUND, "user not found" );
+			throw new VidiunAPIException(VidiunErrors::LOGIN_DATA_NOT_FOUND, "user not found" );
 	}
 
 	
@@ -150,25 +150,25 @@ class KalturaBaseUserService extends KalturaBaseService
 	 * @param string $privileges
 	 * @param string $otp
 	 * 
-	 * @return string KS
+	 * @return string VS
 	 *
-	 * @throws KalturaErrors::USER_NOT_FOUND
-	 * @thrown KalturaErrors::LOGIN_RETRIES_EXCEEDED
-	 * @thrown KalturaErrors::LOGIN_BLOCKED
-	 * @thrown KalturaErrors::PASSWORD_EXPIRED
-	 * @thrown KalturaErrors::INVALID_PARTNER_ID
-	 * @thrown KalturaErrors::INTERNAL_SERVERL_ERROR
-	 * @throws KalturaErrors::USER_IS_BLOCKED
+	 * @throws VidiunErrors::USER_NOT_FOUND
+	 * @thrown VidiunErrors::LOGIN_RETRIES_EXCEEDED
+	 * @thrown VidiunErrors::LOGIN_BLOCKED
+	 * @thrown VidiunErrors::PASSWORD_EXPIRED
+	 * @thrown VidiunErrors::INVALID_PARTNER_ID
+	 * @thrown VidiunErrors::INTERNAL_SERVERL_ERROR
+	 * @throws VidiunErrors::USER_IS_BLOCKED
 	 */		
 	protected function loginImpl($puserId, $loginEmail, $password, $partnerId = null, $expiry = 86400, $privileges = '*', $otp = null)
 	{
-		KalturaResponseCacher::disableCache();
-		myPartnerUtils::resetPartnerFilter('kuser');
-		kuserPeer::setUseCriteriaFilter(true);
+		VidiunResponseCacher::disableCache();
+		myPartnerUtils::resetPartnerFilter('vuser');
+		vuserPeer::setUseCriteriaFilter(true);
 		
-		// if a KS of a specific partner is used, don't allow logging in to a different partner
+		// if a VS of a specific partner is used, don't allow logging in to a different partner
 		if ($this->getPartnerId() && $partnerId && $this->getPartnerId() != $partnerId) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_PARTNER_ID, $partnerId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_PARTNER_ID, $partnerId);
 		}
 
 		if ($loginEmail && !$partnerId) {
@@ -180,59 +180,59 @@ class KalturaBaseUserService extends KalturaBaseService
 				$user = UserLoginDataPeer::userLoginByEmail($loginEmail, $password, $partnerId, $otp);
 			}
 			else {
-				$user = kuserPeer::userLogin($puserId, $password, $partnerId);
+				$user = vuserPeer::userLogin($puserId, $password, $partnerId);
 			}
 		}
-		catch (kUserException $e) {
+		catch (vUserException $e) {
 			$code = $e->getCode();
-			if ($code == kUserException::LOGIN_DATA_NOT_FOUND) {
-				throw new KalturaAPIException(KalturaErrors::USER_NOT_FOUND);
+			if ($code == vUserException::LOGIN_DATA_NOT_FOUND) {
+				throw new VidiunAPIException(VidiunErrors::USER_NOT_FOUND);
 			}
-			if ($code == kUserException::USER_NOT_FOUND) {
-				throw new KalturaAPIException(KalturaErrors::USER_NOT_FOUND);
+			if ($code == vUserException::USER_NOT_FOUND) {
+				throw new VidiunAPIException(VidiunErrors::USER_NOT_FOUND);
 			}
-			else if ($code == kUserException::LOGIN_RETRIES_EXCEEDED) {
-				throw new KalturaAPIException(KalturaErrors::LOGIN_RETRIES_EXCEEDED);
+			else if ($code == vUserException::LOGIN_RETRIES_EXCEEDED) {
+				throw new VidiunAPIException(VidiunErrors::LOGIN_RETRIES_EXCEEDED);
 			}
-			else if ($code == kUserException::LOGIN_BLOCKED) {
-				throw new KalturaAPIException(KalturaErrors::LOGIN_BLOCKED);
+			else if ($code == vUserException::LOGIN_BLOCKED) {
+				throw new VidiunAPIException(VidiunErrors::LOGIN_BLOCKED);
 			}
-			else if ($code == kUserException::PASSWORD_EXPIRED) {
-				throw new KalturaAPIException(KalturaErrors::PASSWORD_EXPIRED);
+			else if ($code == vUserException::PASSWORD_EXPIRED) {
+				throw new VidiunAPIException(VidiunErrors::PASSWORD_EXPIRED);
 			}
-			else if ($code == kUserException::WRONG_PASSWORD) {
-				throw new KalturaAPIException(KalturaErrors::USER_WRONG_PASSWORD);
+			else if ($code == vUserException::WRONG_PASSWORD) {
+				throw new VidiunAPIException(VidiunErrors::USER_WRONG_PASSWORD);
 			}
-			else if ($code == kUserException::USER_IS_BLOCKED) {
-				throw new KalturaAPIException(KalturaErrors::USER_IS_BLOCKED);
+			else if ($code == vUserException::USER_IS_BLOCKED) {
+				throw new VidiunAPIException(VidiunErrors::USER_IS_BLOCKED);
 			}
-			else if ($code == kUserException::INVALID_OTP) {
-				throw new KalturaAPIException(KalturaErrors::INVALID_OTP);
+			else if ($code == vUserException::INVALID_OTP) {
+				throw new VidiunAPIException(VidiunErrors::INVALID_OTP);
 			}
 									
 			throw new $e;
 		}
 		if (!$user) {
-			throw new KalturaAPIException(KalturaErrors::LOGIN_DATA_NOT_FOUND);
+			throw new VidiunAPIException(VidiunErrors::LOGIN_DATA_NOT_FOUND);
 		}		
 		
 		if ( ($partnerId && $user->getPartnerId() != $partnerId) ||
 		     ($this->getPartnerId() && !$partnerId && $user->getPartnerId() != $this->getPartnerId()) ) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_PARTNER_ID, $partnerId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_PARTNER_ID, $partnerId);
 		}			
 		
 		$partner = PartnerPeer::retrieveByPK($user->getPartnerId());
 		
 		if (!$partner || $partner->getStatus() == Partner::PARTNER_STATUS_FULL_BLOCK)
-			throw new KalturaAPIException(KalturaErrors::INVALID_PARTNER_ID, $user->getPartnerId());
+			throw new VidiunAPIException(VidiunErrors::INVALID_PARTNER_ID, $user->getPartnerId());
 		
-		$ks = null;
+		$vs = null;
 		
-		$admin = $user->getIsAdmin() ? KalturaSessionType::ADMIN : KalturaSessionType::USER;
-		// create a ks for this admin_kuser as if entered the admin_secret using the API
-		kSessionUtils::createKSessionNoValidations ( $partner->getId() ,  $user->getPuserId() , $ks , $expiry , $admin , "" , $privileges );
+		$admin = $user->getIsAdmin() ? VidiunSessionType::ADMIN : VidiunSessionType::USER;
+		// create a vs for this admin_vuser as if entered the admin_secret using the API
+		vSessionUtils::createVSessionNoValidations ( $partner->getId() ,  $user->getPuserId() , $vs , $expiry , $admin , "" , $privileges );
 		
-		return $ks;
+		return $vs;
 	}
 	
 	
@@ -242,16 +242,16 @@ class KalturaBaseUserService extends KalturaBaseService
 	 * @param string $hashKey
 	 * @param string $newPassword new password to set
 	 *
-	 * @throws KalturaErrors::LOGIN_DATA_NOT_FOUND
-	 * @throws KalturaErrors::PASSWORD_STRUCTURE_INVALID
-	 * @throws KalturaErrors::NEW_PASSWORD_HASH_KEY_EXPIRED
-	 * @throws KalturaErrors::NEW_PASSWORD_HASH_KEY_INVALID
-	 * @throws KalturaErrors::PASSWORD_ALREADY_USED
-	 * @throws KalturaErrors::INTERNAL_SERVERL_ERROR
+	 * @throws VidiunErrors::LOGIN_DATA_NOT_FOUND
+	 * @throws VidiunErrors::PASSWORD_STRUCTURE_INVALID
+	 * @throws VidiunErrors::NEW_PASSWORD_HASH_KEY_EXPIRED
+	 * @throws VidiunErrors::NEW_PASSWORD_HASH_KEY_INVALID
+	 * @throws VidiunErrors::PASSWORD_ALREADY_USED
+	 * @throws VidiunErrors::INTERNAL_SERVERL_ERROR
 	 */	
 	protected function setInitialPasswordImpl($hashKey, $newPassword)
 	{
-		KalturaResponseCacher::disableCache();
+		VidiunResponseCacher::disableCache();
 		
 		try {
 			$loginData = UserLoginDataPeer::isHashKeyValid($hashKey);
@@ -259,30 +259,30 @@ class KalturaBaseUserService extends KalturaBaseService
 				$this->validateApiAccessControl($loginData->getLastLoginPartnerId());
 			$result = UserLoginDataPeer::setInitialPassword($hashKey, $newPassword);
 		}
-		catch (kUserException $e) {
+		catch (vUserException $e) {
 			$code = $e->getCode();
-			if ($code == kUserException::LOGIN_DATA_NOT_FOUND) {
-				throw new KalturaAPIException(KalturaErrors::LOGIN_DATA_NOT_FOUND);
+			if ($code == vUserException::LOGIN_DATA_NOT_FOUND) {
+				throw new VidiunAPIException(VidiunErrors::LOGIN_DATA_NOT_FOUND);
 			}
-			if ($code == kUserException::PASSWORD_STRUCTURE_INVALID) {
+			if ($code == vUserException::PASSWORD_STRUCTURE_INVALID) {
 				$loginData = UserLoginDataPeer::isHashKeyValid($hashKey);
 				$invalidPasswordStructureMessage = $loginData->getInvalidPasswordStructureMessage();
-				throw new KalturaAPIException(KalturaErrors::PASSWORD_STRUCTURE_INVALID,$invalidPasswordStructureMessage);
+				throw new VidiunAPIException(VidiunErrors::PASSWORD_STRUCTURE_INVALID,$invalidPasswordStructureMessage);
 			}
-			if ($code == kUserException::NEW_PASSWORD_HASH_KEY_EXPIRED) {
-				throw new KalturaAPIException(KalturaErrors::NEW_PASSWORD_HASH_KEY_EXPIRED);
+			if ($code == vUserException::NEW_PASSWORD_HASH_KEY_EXPIRED) {
+				throw new VidiunAPIException(VidiunErrors::NEW_PASSWORD_HASH_KEY_EXPIRED);
 			}
-			if ($code == kUserException::NEW_PASSWORD_HASH_KEY_INVALID) {
-				throw new KalturaAPIException(KalturaErrors::NEW_PASSWORD_HASH_KEY_INVALID);
+			if ($code == vUserException::NEW_PASSWORD_HASH_KEY_INVALID) {
+				throw new VidiunAPIException(VidiunErrors::NEW_PASSWORD_HASH_KEY_INVALID);
 			}
-			if ($code == kUserException::PASSWORD_ALREADY_USED) {
-				throw new KalturaAPIException(KalturaErrors::PASSWORD_ALREADY_USED);
+			if ($code == vUserException::PASSWORD_ALREADY_USED) {
+				throw new VidiunAPIException(VidiunErrors::PASSWORD_ALREADY_USED);
 			}
 			
 			throw $e;
 		}
 		if (!$result) {
-			throw new KalturaAPIException(KalturaErrors::INTERNAL_SERVERL_ERROR);
+			throw new VidiunAPIException(VidiunErrors::INTERNAL_SERVERL_ERROR);
 		}
 	}
 	
@@ -298,14 +298,14 @@ class KalturaBaseUserService extends KalturaBaseService
 	/**
 	 * check if there were more than max_allowed calls for different resources
 	 * @param string $email
-	 * @throws KalturaErrors::FAILED_TO_INIT_OBJECT
+	 * @throws VidiunErrors::FAILED_TO_INIT_OBJECT
 	 */
 	protected function validateRequestsAmount($email)
 	{
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_RESOURCE_RESERVATION);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_RESOURCE_RESERVATION);
 		if (!$cache)
 		{
-			throw new KalturaAPIException(KalturaErrors::FAILED_TO_INIT_OBJECT);
+			throw new VidiunAPIException(VidiunErrors::FAILED_TO_INIT_OBJECT);
 		}
 		$this->validateRequestsAmountPerEmail($email, $cache);
 		$this->validateRequestsAmountPerIp($cache);
@@ -315,159 +315,159 @@ class KalturaBaseUserService extends KalturaBaseService
 	/**
 	 * check if there were more than max_allowed calls to reset password action per sepecific email in specific time frame
 	 * @param string $email
-	 * @param kBaseCacheWrapper $cache
-	 * @throws KalturaErrors::RESOURCE_IS_RESERVED
+	 * @param vBaseCacheWrapper $cache
+	 * @throws VidiunErrors::RESOURCE_IS_RESERVED
 	 */
 	protected function validateRequestsAmountPerEmail($email, $cache)
 	{
-		$resourceId = kCurrentContext::getCurrentPartnerId() . '_' . $email;
-		$maxRequestsNum = kConf::get('max_reset_requests_per_email', 'local', 10);
-		$reservationTime = kConf::get('reservation_time_per_email', 'local', 600);
+		$resourceId = vCurrentContext::getCurrentPartnerId() . '_' . $email;
+		$maxRequestsNum = vConf::get('max_reset_requests_per_email', 'local', 10);
+		$reservationTime = vConf::get('reservation_time_per_email', 'local', 600);
 		$resourceReservator = new CountingReservation($cache, $reservationTime, $maxRequestsNum);
 		if(!$resourceReservator->tryAcquire($resourceId))
 		{
-			throw new KalturaAPIException(KalturaErrors::RESOURCE_IS_RESERVED, $resourceId);
+			throw new VidiunAPIException(VidiunErrors::RESOURCE_IS_RESERVED, $resourceId);
 		}
 	}
 
 	/**
 	 * check if there were more than max_allowed calls to reset password action per sepecific ip in specific time frame
-	 * @param kBaseCacheWrapper $cache
-	 * @throws KalturaErrors::RESOURCE_IS_RESERVED
+	 * @param vBaseCacheWrapper $cache
+	 * @throws VidiunErrors::RESOURCE_IS_RESERVED
 	 */
 	protected function validateRequestsAmountPerIp($cache)
 	{
-		if (!kCurrentContext::$user_ip)
+		if (!vCurrentContext::$user_ip)
 			return;
-		$resourceId = 'ip_' . kCurrentContext::$user_ip;
-		$maxRequestsNum = kConf::get('max_reset_requests_per_ip', 'local', 100);
-		$reservationTime = kConf::get('reservation_time_per_ip', 'local', 600);
+		$resourceId = 'ip_' . vCurrentContext::$user_ip;
+		$maxRequestsNum = vConf::get('max_reset_requests_per_ip', 'local', 100);
+		$reservationTime = vConf::get('reservation_time_per_ip', 'local', 600);
 		$resourceReservator = new CountingReservation($cache, $reservationTime, $maxRequestsNum);
 		if(!$resourceReservator->tryAcquire($resourceId))
 		{
-			throw new KalturaAPIException(KalturaErrors::RESOURCE_IS_RESERVED, $resourceId);
+			throw new VidiunAPIException(VidiunErrors::RESOURCE_IS_RESERVED, $resourceId);
 		}
 	}
 	
-	public function loginByKsImpl($ks, $destPartnerId)
+	public function loginByVsImpl($vs, $destPartnerId)
 	{
-		$ksObj = kSessionUtils::crackKs($ks);
-		if($ksObj->partner_id == $destPartnerId)
-			return $ks;
+		$vsObj = vSessionUtils::crackVs($vs);
+		if($vsObj->partner_id == $destPartnerId)
+			return $vs;
 		
-		if(!$ksObj->user || $ksObj->user == '')
-			throw new KalturaAPIException(APIErrors::INVALID_USER_ID, $ksObj->user);
+		if(!$vsObj->user || $vsObj->user == '')
+			throw new VidiunAPIException(APIErrors::INVALID_USER_ID, $vsObj->user);
 
-		if($ksObj->hasPrivilege(kSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT) &&
-			!$ksObj->verifyPrivileges(kSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT, $destPartnerId))
-			throw new KalturaAPIException(APIErrors::PARTNER_CHANGE_ACCOUNT_DISABLED);
+		if($vsObj->hasPrivilege(vSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT) &&
+			!$vsObj->verifyPrivileges(vSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT, $destPartnerId))
+			throw new VidiunAPIException(APIErrors::PARTNER_CHANGE_ACCOUNT_DISABLED);
 		
 		try 
 		{
-			$adminKuser = UserLoginDataPeer::userLoginByKs($ks, $destPartnerId, true);
+			$adminVuser = UserLoginDataPeer::userLoginByVs($vs, $destPartnerId, true);
 		}
-		catch (kUserException $e) 
+		catch (vUserException $e) 
 		{
 			$code = $e->getCode();
-			if ($code == kUserException::USER_NOT_FOUND) 
+			if ($code == vUserException::USER_NOT_FOUND) 
 			{
-				throw new KalturaAPIException(APIErrors::ADMIN_KUSER_NOT_FOUND);
+				throw new VidiunAPIException(APIErrors::ADMIN_VUSER_NOT_FOUND);
 			}
-			if ($code == kUserException::LOGIN_DATA_NOT_FOUND) 
+			if ($code == vUserException::LOGIN_DATA_NOT_FOUND) 
 			{
-				throw new KalturaAPIException(APIErrors::LOGIN_DATA_NOT_FOUND);
+				throw new VidiunAPIException(APIErrors::LOGIN_DATA_NOT_FOUND);
 			}
-			else if ($code == kUserException::LOGIN_RETRIES_EXCEEDED) 
+			else if ($code == vUserException::LOGIN_RETRIES_EXCEEDED) 
 			{
-				throw new KalturaAPIException(APIErrors::LOGIN_RETRIES_EXCEEDED);
+				throw new VidiunAPIException(APIErrors::LOGIN_RETRIES_EXCEEDED);
 			}
-			else if ($code == kUserException::LOGIN_BLOCKED) 
+			else if ($code == vUserException::LOGIN_BLOCKED) 
 			{
-				throw new KalturaAPIException(APIErrors::LOGIN_BLOCKED);
+				throw new VidiunAPIException(APIErrors::LOGIN_BLOCKED);
 			}
-			else if ($code == kUserException::USER_IS_BLOCKED) 
+			else if ($code == vUserException::USER_IS_BLOCKED) 
 			{
-				throw new KalturaAPIException(APIErrors::USER_IS_BLOCKED);
+				throw new VidiunAPIException(APIErrors::USER_IS_BLOCKED);
 			}
-			throw new KalturaAPIException(APIErrors::INTERNAL_SERVERL_ERROR);
+			throw new VidiunAPIException(APIErrors::INTERNAL_SERVERL_ERROR);
 		}
 		
-		if (!$adminKuser || !$adminKuser->getIsAdmin()) 
+		if (!$adminVuser || !$adminVuser->getIsAdmin()) 
 		{
-			throw new KalturaAPIException(APIErrors::ADMIN_KUSER_NOT_FOUND);
+			throw new VidiunAPIException(APIErrors::ADMIN_VUSER_NOT_FOUND);
 		}
 		
-		if ($destPartnerId != $adminKuser->getPartnerId()) 
+		if ($destPartnerId != $adminVuser->getPartnerId()) 
 		{
-			throw new KalturaAPIException(APIErrors::UNKNOWN_PARTNER_ID, $destPartnerId);
+			throw new VidiunAPIException(APIErrors::UNKNOWN_PARTNER_ID, $destPartnerId);
 		}
 		
-		$partner = PartnerPeer::retrieveByPK($adminKuser->getPartnerId());
+		$partner = PartnerPeer::retrieveByPK($adminVuser->getPartnerId());
 		if (!$partner)
 		{
-			throw new KalturaAPIException(APIErrors::UNKNOWN_PARTNER_ID, $adminKuser->getPartnerId());
+			throw new VidiunAPIException(APIErrors::UNKNOWN_PARTNER_ID, $adminVuser->getPartnerId());
 		}
 		
 		if(!$partner->validateApiAccessControl())
 		{
-			throw new KalturaAPIException(APIErrors::SERVICE_ACCESS_CONTROL_RESTRICTED, $this->serviceName);
+			throw new VidiunAPIException(APIErrors::SERVICE_ACCESS_CONTROL_RESTRICTED, $this->serviceName);
 		}
 		
 		
-		kSessionUtils::createKSessionNoValidations ( $partner->getId() ,  $adminKuser->getPuserId() , $ks , dateUtils::DAY , SessionType::ADMIN , "" , $ksObj->getPrivileges() );
-		return $ks;
+		vSessionUtils::createVSessionNoValidations ( $partner->getId() ,  $adminVuser->getPuserId() , $vs , dateUtils::DAY , SessionType::ADMIN , "" , $vsObj->getPrivileges() );
+		return $vs;
 	}
 	
-	function addUserImpl(KalturaBaseUser $user)
+	function addUserImpl(VidiunBaseUser $user)
 	{
-		/* @var $dbUser kuser */
+		/* @var $dbUser vuser */
 		$dbUser = $user->toInsertableObject();
 		$dbUser->setPartnerId($this->getPartnerId());
 		try {
 			$checkPasswordStructure = isset($user->password) ? true : false;
-			$dbUser = kuserPeer::addUser($dbUser, $user->password, $checkPasswordStructure);
+			$dbUser = vuserPeer::addUser($dbUser, $user->password, $checkPasswordStructure);
 		}
 
-		catch (kUserException $e) {
+		catch (vUserException $e) {
 			$code = $e->getCode();
-			if ($code == kUserException::USER_ALREADY_EXISTS) {
-				throw new KalturaAPIException(KalturaErrors::DUPLICATE_USER_BY_ID, $user->id); //backward compatibility
+			if ($code == vUserException::USER_ALREADY_EXISTS) {
+				throw new VidiunAPIException(VidiunErrors::DUPLICATE_USER_BY_ID, $user->id); //backward compatibility
 			}
-			if ($code == kUserException::LOGIN_ID_ALREADY_USED) {
-				throw new KalturaAPIException(KalturaErrors::DUPLICATE_USER_BY_LOGIN_ID, $user->email); //backward compatibility
+			if ($code == vUserException::LOGIN_ID_ALREADY_USED) {
+				throw new VidiunAPIException(VidiunErrors::DUPLICATE_USER_BY_LOGIN_ID, $user->email); //backward compatibility
 			}
-			else if ($code == kUserException::USER_ID_MISSING) {
-				throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $user->getFormattedPropertyNameWithClassName('id'));
+			else if ($code == vUserException::USER_ID_MISSING) {
+				throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $user->getFormattedPropertyNameWithClassName('id'));
 			}
-			else if ($code == kUserException::INVALID_EMAIL) {
-				throw new KalturaAPIException(KalturaErrors::INVALID_FIELD_VALUE, 'email');
+			else if ($code == vUserException::INVALID_EMAIL) {
+				throw new VidiunAPIException(VidiunErrors::INVALID_FIELD_VALUE, 'email');
 			}
-			else if ($code == kUserException::INVALID_PARTNER) {
-				throw new KalturaAPIException(KalturaErrors::UNKNOWN_PARTNER_ID);
+			else if ($code == vUserException::INVALID_PARTNER) {
+				throw new VidiunAPIException(VidiunErrors::UNKNOWN_PARTNER_ID);
 			}
-			else if ($code == kUserException::ADMIN_LOGIN_USERS_QUOTA_EXCEEDED) {
-				throw new KalturaAPIException(KalturaErrors::ADMIN_LOGIN_USERS_QUOTA_EXCEEDED);
+			else if ($code == vUserException::ADMIN_LOGIN_USERS_QUOTA_EXCEEDED) {
+				throw new VidiunAPIException(VidiunErrors::ADMIN_LOGIN_USERS_QUOTA_EXCEEDED);
 			}
-			else if ($code == kUserException::PASSWORD_STRUCTURE_INVALID) {
+			else if ($code == vUserException::PASSWORD_STRUCTURE_INVALID) {
 				$partner = $dbUser->getPartner();
 				$invalidPasswordStructureMessage='';
 				if($partner && $partner->getInvalidPasswordStructureMessage())
 					$invalidPasswordStructureMessage = $partner->getInvalidPasswordStructureMessage();
-				throw new KalturaAPIException(KalturaErrors::PASSWORD_STRUCTURE_INVALID,$invalidPasswordStructureMessage);
+				throw new VidiunAPIException(VidiunErrors::PASSWORD_STRUCTURE_INVALID,$invalidPasswordStructureMessage);
 			}
 			throw $e;
 		}
-		catch (kPermissionException $e)
+		catch (vPermissionException $e)
 		{
 			$code = $e->getCode();
-			if ($code == kPermissionException::ROLE_ID_MISSING) {
-				throw new KalturaAPIException(KalturaErrors::ROLE_ID_MISSING);
+			if ($code == vPermissionException::ROLE_ID_MISSING) {
+				throw new VidiunAPIException(VidiunErrors::ROLE_ID_MISSING);
 			}
-			if ($code == kPermissionException::ONLY_ONE_ROLE_PER_USER_ALLOWED) {
-				throw new KalturaAPIException(KalturaErrors::ONLY_ONE_ROLE_PER_USER_ALLOWED);
+			if ($code == vPermissionException::ONLY_ONE_ROLE_PER_USER_ALLOWED) {
+				throw new VidiunAPIException(VidiunErrors::ONLY_ONE_ROLE_PER_USER_ALLOWED);
 			}
-			else if ($code == kPermissionException::USER_ROLE_NOT_FOUND) {
-				throw new KalturaAPIException(KalturaErrors::USER_ROLE_NOT_FOUND);
+			else if ($code == vPermissionException::USER_ROLE_NOT_FOUND) {
+				throw new VidiunAPIException(VidiunErrors::USER_ROLE_NOT_FOUND);
 			}
 			throw $e;
 		}

@@ -4,7 +4,7 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectTaskEngine
  */
-class KReachMailNotificationEngine extends KObjectTaskMailNotificationEngine
+class VReachMailNotificationEngine extends VObjectTaskMailNotificationEngine
 {
 	const VENDOR_SERVICE_TYPE = 'VendorServiceType';
 	const VENDOR_SERVICE_FEATURE = 'VendorServiceFeature';
@@ -12,7 +12,7 @@ class KReachMailNotificationEngine extends KObjectTaskMailNotificationEngine
 
 	private static function getAdminObjectsBody($objectsData, $sendToUsers, $link = null, $client = null)
 	{
-		$reachPlugin = KalturaReachClientPlugin::get($client);
+		$reachPlugin = VidiunReachClientPlugin::get($client);
 		$body = "Awaiting tasks for approval:".PHP_EOL;
 		$cnt = 0;
 		$constantsMap = self::loadConstantsNames();
@@ -20,23 +20,23 @@ class KReachMailNotificationEngine extends KObjectTaskMailNotificationEngine
 		{
 			$cnt++;
 			$entryVendorTaskId = $entryVendorTask->id;
-			/* @var KalturaEntryVendorTask $entryVendorTask */
+			/* @var VidiunEntryVendorTask $entryVendorTask */
 			$id = $entryVendorTask->entryId;
 			try{
 				$entry = $client->baseEntry->get($id);
 				$catalogItem = $reachPlugin->vendorCatalogItem->get($entryVendorTask->catalogItemId);
 			}
-			catch (KalturaException $e)
+			catch (VidiunException $e)
 			{
-				KalturaLog::err($e);
+				VidiunLog::err($e);
 				if ( $e->getCode() == 'ENTRY_ID_NOT_FOUND')
 				{
-					KalturaLog::err("Could not find entry [$id] for entryVendorTask [$entryVendorTaskId]");
+					VidiunLog::err("Could not find entry [$id] for entryVendorTask [$entryVendorTaskId]");
 					$body .= "\t Task Id: $entryVendorTaskId - entry with id $id doesn't exist for task. ";
 				}
 				elseif ( $e->getCode() == 'CATALOG_ITEM_NOT_FOUND')
 				{
-					KalturaLog::err("Could not find catalog item $entryVendorTask->catalogItemId for entryVendorTask $entryVendorTaskId");
+					VidiunLog::err("Could not find catalog item $entryVendorTask->catalogItemId for entryVendorTask $entryVendorTaskId");
 					$body .= "\t Task Id: $entryVendorTaskId - entry with catalog item id $entryVendorTask->catalogItemId doesn't exist for task. ";
 				}
 				continue;
@@ -46,7 +46,7 @@ class KReachMailNotificationEngine extends KObjectTaskMailNotificationEngine
 			$requester = $entryVendorTask->userId;
 			$requestDate = $entryVendorTask->createdAt;
 
-			/* @var KalturaVendorCatalogItem $catalogItem */
+			/* @var VidiunVendorCatalogItem $catalogItem */
 			$serviceType = array_search($catalogItem->serviceType, $constantsMap[self::VENDOR_SERVICE_TYPE]);
 			$turnAroundTime = array_search($catalogItem->turnAroundTime, $constantsMap[self::VENDOR_SERVICE_TURN_AROUND_TIME]);
 			$serviceFeature = array_search($catalogItem->serviceFeature, $constantsMap[self::VENDOR_SERVICE_FEATURE]);
@@ -91,6 +91,6 @@ class KReachMailNotificationEngine extends KObjectTaskMailNotificationEngine
 		$toArr = explode(",", $mailTask->mailTo);
 		$success = self::sendMail($toArr, $subject, $body, $sender);
 		if (!$success)
-			KalturaLog::info("Mail for Reach Profile [$reachProfileId] did not send successfully");
+			VidiunLog::info("Mail for Reach Profile [$reachProfileId] did not send successfully");
 	}
 }

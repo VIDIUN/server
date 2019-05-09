@@ -3,7 +3,7 @@
  * @package plugins.msnDistribution
  * @subpackage api.objects
  */
-class KalturaMsnDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunMsnDistributionProfile extends VidiunConfigurableDistributionProfile
 {
 /**
 	 * @var string

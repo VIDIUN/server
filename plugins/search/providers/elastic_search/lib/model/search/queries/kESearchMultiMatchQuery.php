@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchMultiMatchQuery extends kESearchBaseFieldQuery
+class vESearchMultiMatchQuery extends vESearchBaseFieldQuery
 {
 	const MULTI_MATCH_KEY = 'multi_match';
 	const QUERY_KEY = 'query';

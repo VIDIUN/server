@@ -3,6 +3,6 @@
  * @package plugins.synacorHboDistribution
  * @subpackage api.filters.enum
  */
-class KalturaSynacorHboDistributionProfileOrderBy extends KalturaConfigurableDistributionProfileOrderBy
+class VidiunSynacorHboDistributionProfileOrderBy extends VidiunConfigurableDistributionProfileOrderBy
 {
 }

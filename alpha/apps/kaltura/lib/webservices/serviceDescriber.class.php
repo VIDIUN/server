@@ -17,21 +17,21 @@ class serviceDescriber
 					"secret" => array("string", null, "field description") ,
 					) ,
 				"optional" => array (
-					"uid" => "The user id of the partner. Is exists, the ks will be generated for this user and " ,				
+					"uid" => "The user id of the partner. Is exists, the vs will be generated for this user and " ,				
 					)
 				),
 			"out" => array (
-				"ks" => "Kaltura Session - a token used as an input for the rest of the services" ,
+				"vs" => "Vidiun Session - a token used as an input for the rest of the services" ,
 				),
 			"errors" => array (
 			) 
 		) ,
 		
 		"addentry" => array (
-			"desc" => "Add entry to a kshow." ,
+			"desc" => "Add entry to a vshow." ,
 			"in" => array (
 				"mandatory" => array ( 
-					"kshow_id" => array("type" => "integer", "desc" => "Add the entry to thie kshow"),
+					"vshow_id" => array("type" => "integer", "desc" => "Add the entry to thie vshow"),
 					"entry" => array("type" => "entry", "desc" => "Description of entry object"), 
 					// TODO: HOW TO DESCRIBE MULTIPLE ENTRIES?
 		/*
@@ -49,11 +49,11 @@ class serviceDescriber
 	*/
 					) ,
 				"optional" => array (
-					"uid" => array("type" => "string", "desc" => "The uuser id of the partner. Is exists, the ks will be generated for this user and "),				
+					"uid" => array("type" => "string", "desc" => "The uuser id of the partner. Is exists, the vs will be generated for this user and "),				
 					)
 				),
 			"out" => array (
-				"ks" => array("type" => "string", "desc" => "Kaltura Session - a token used as an input for the rest of the services") ,
+				"vs" => array("type" => "string", "desc" => "Vidiun Session - a token used as an input for the rest of the services") ,
 				),
 			"errors" => array (
 			) 

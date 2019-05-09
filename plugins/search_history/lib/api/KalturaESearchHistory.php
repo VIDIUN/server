@@ -3,7 +3,7 @@
  * @package plugins.searchHistory
  * @subpackage api.objects
  */
-class KalturaESearchHistory extends KalturaObject
+class VidiunESearchHistory extends VidiunObject
 {
     /**
      * @readonly

@@ -1,9 +1,9 @@
 <?php
 /**
  * @package    Core
- * @subpackage KMC
+ * @subpackage VMC
  */
-class extloginAction extends kalturaAction
+class extloginAction extends vidiunAction
 {
 	
 	private function dieOnError($error_code)
@@ -23,71 +23,71 @@ class extloginAction extends kalturaAction
 		$error_code = $errorData['code'];
 		$formated_desc = $errorData['message'];
 		
-		header("X-Kaltura:error-$error_code");
-		header('X-Kaltura-App: exiting on error '.$error_code.' - '.$formated_desc);
+		header("X-Vidiun:error-$error_code");
+		header('X-Vidiun-App: exiting on error '.$error_code.' - '.$formated_desc);
 		
 		die();
 	}
 	
 	public function execute()
 	{
-		$ks = $this->getP ( "ks" );
-		if(!$ks)
-			$this->dieOnError  ( APIErrors::MISSING_KS );
+		$vs = $this->getP ( "vs" );
+		if(!$vs)
+			$this->dieOnError  ( APIErrors::MISSING_VS );
 			
 		$requestedPartnerId = $this->getP ( "partner_id" );
 		
 		$expired = $this->getP ( "exp" );
 
-		$ksObj = kSessionUtils::crackKs($ks);
-		$ksPartnerId = $ksObj->partner_id;
+		$vsObj = vSessionUtils::crackVs($vs);
+		$vsPartnerId = $vsObj->partner_id;
 
-		if($ksObj->hasPrivilege(kSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT) &&
-			!$ksObj->verifyPrivileges(kSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT, $requestedPartnerId))
+		if($vsObj->hasPrivilege(vSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT) &&
+			!$vsObj->verifyPrivileges(vSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT, $requestedPartnerId))
 			$this->dieOnError  ( APIErrors::PARTNER_CHANGE_ACCOUNT_DISABLED );
 
 		if (!$requestedPartnerId) {
-			$requestedPartnerId = $ksPartnerId;
+			$requestedPartnerId = $vsPartnerId;
 		}
 		
 		try {
-			$adminKuser = UserLoginDataPeer::userLoginByKs($ks, $requestedPartnerId, true);
+			$adminVuser = UserLoginDataPeer::userLoginByVs($vs, $requestedPartnerId, true);
 		}
-		catch (kUserException $e) {
+		catch (vUserException $e) {
 			$code = $e->getCode();
-			if ($code == kUserException::USER_NOT_FOUND) {
-				$this->dieOnError  ( APIErrors::ADMIN_KUSER_NOT_FOUND );
+			if ($code == vUserException::USER_NOT_FOUND) {
+				$this->dieOnError  ( APIErrors::ADMIN_VUSER_NOT_FOUND );
 			}
-			if ($code == kUserException::LOGIN_DATA_NOT_FOUND) {
-				$this->dieOnError  ( APIErrors::ADMIN_KUSER_NOT_FOUND );
+			if ($code == vUserException::LOGIN_DATA_NOT_FOUND) {
+				$this->dieOnError  ( APIErrors::ADMIN_VUSER_NOT_FOUND );
 			}
-			else if ($code == kUserException::LOGIN_RETRIES_EXCEEDED) {
+			else if ($code == vUserException::LOGIN_RETRIES_EXCEEDED) {
 				$this->dieOnError  ( APIErrors::LOGIN_RETRIES_EXCEEDED );
 			}
-			else if ($code == kUserException::LOGIN_BLOCKED) {
+			else if ($code == vUserException::LOGIN_BLOCKED) {
 				$this->dieOnError  ( APIErrors::LOGIN_BLOCKED );
 			}
-			else if ($code == kUserException::PASSWORD_EXPIRED) {
+			else if ($code == vUserException::PASSWORD_EXPIRED) {
 				$this->dieOnError  ( APIErrors::PASSWORD_EXPIRED );
 			}
-			else if ($code == kUserException::WRONG_PASSWORD) {
-				$this->dieOnError  (APIErrors::ADMIN_KUSER_NOT_FOUND);
+			else if ($code == vUserException::WRONG_PASSWORD) {
+				$this->dieOnError  (APIErrors::ADMIN_VUSER_NOT_FOUND);
 			}
-			else if ($code == kUserException::USER_IS_BLOCKED) {
+			else if ($code == vUserException::USER_IS_BLOCKED) {
 				$this->dieOnError  (APIErrors::USER_IS_BLOCKED);
 			}
 			$this->dieOnError  ( APIErrors::INTERNAL_SERVERL_ERROR );
 		}
-		if (!$adminKuser || !$adminKuser->getIsAdmin()) {
-			$this->dieOnError  ( APIErrors::ADMIN_KUSER_NOT_FOUND );
+		if (!$adminVuser || !$adminVuser->getIsAdmin()) {
+			$this->dieOnError  ( APIErrors::ADMIN_VUSER_NOT_FOUND );
 		}
 		
 		
-		if ($requestedPartnerId != $adminKuser->getPartnerId()) {
+		if ($requestedPartnerId != $adminVuser->getPartnerId()) {
 			$this->dieOnError  ( APIErrors::UNKNOWN_PARTNER_ID );
 		}
 		
-		$partner = PartnerPeer::retrieveByPK( $adminKuser->getPartnerId() );
+		$partner = PartnerPeer::retrieveByPK( $adminVuser->getPartnerId() );
 		
 		if (!$partner)
 		{
@@ -101,36 +101,36 @@ class extloginAction extends kalturaAction
 		
 		$partner_id = $partner->getId();
 		$subp_id = $partner->getSubpId() ;
-		$admin_puser_id = $adminKuser->getPuserId();
+		$admin_puser_id = $adminVuser->getPuserId();
 		
 		$exp = (isset($expired) && is_numeric($expired)) ? time() + $expired: 0;
 		
-		$noUserInKs = is_null($ksObj->user) || $ksObj->user === '';
-		if ( ($ksPartnerId != $partner_id) || ($partner->getKmcVersion() >= 4 && $noUserInKs) )
+		$noUserInVs = is_null($vsObj->user) || $vsObj->user === '';
+		if ( ($vsPartnerId != $partner_id) || ($partner->getVmcVersion() >= 4 && $noUserInVs) )
 		{
-			$ks = null;
-			$sessionType = $adminKuser->getIsAdmin() ? SessionType::ADMIN : SessionType::USER;
-			$privileges =  "*," . kSessionBase::PRIVILEGE_DISABLE_ENTITLEMENT;
-			if($ksObj->hasPrivilege(kSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT))
-				$privileges = $privileges.",".kSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT.":".
-					implode(kSessionBase::PRIVILEGES_DELIMITER, $ksObj->getPrivilegeValues(kSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT));
+			$vs = null;
+			$sessionType = $adminVuser->getIsAdmin() ? SessionType::ADMIN : SessionType::USER;
+			$privileges =  "*," . vSessionBase::PRIVILEGE_DISABLE_ENTITLEMENT;
+			if($vsObj->hasPrivilege(vSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT))
+				$privileges = $privileges.",".vSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT.":".
+					implode(vSessionBase::PRIVILEGES_DELIMITER, $vsObj->getPrivilegeValues(vSessionBase::PRIVILEGE_ENABLE_PARTNER_CHANGE_ACCOUNT));
 
-			kSessionUtils::createKSessionNoValidations ( $partner_id ,  $admin_puser_id , $ks , 30 * 86400 , $sessionType , "" , $privileges );
+			vSessionUtils::createVSessionNoValidations ( $partner_id ,  $admin_puser_id , $vs , 30 * 86400 , $sessionType , "" , $privileges );
 		}
 		
 		
 		$path = "/";
 		$domain = null;
-		$force_ssl = PermissionPeer::isValidForPartner(PermissionName::FEATURE_KMC_ENFORCE_HTTPS, $partner_id);
+		$force_ssl = PermissionPeer::isValidForPartner(PermissionName::FEATURE_VMC_ENFORCE_HTTPS, $partner_id);
 		$secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' && $force_ssl) ? true : false;
 		$http_only = true;
 		
 		$this->getResponse()->setCookie("pid", $partner_id, $exp, $path, $domain, $secure, $http_only);
 		$this->getResponse()->setCookie("subpid", $subp_id, $exp, $path, $domain, $secure, $http_only);
-		$this->getResponse()->setCookie("kmcks", $ks, $exp, $path, $domain, $secure, $http_only);
+		$this->getResponse()->setCookie("vmcvs", $vs, $exp, $path, $domain, $secure, $http_only);
 
 		$redirect_url =  ($force_ssl) ? 'https' : 'http';
-		$redirect_url .= '://' . $_SERVER["HTTP_HOST"] . '/index.php/kmc/kmc2';
+		$redirect_url .= '://' . $_SERVER["HTTP_HOST"] . '/index.php/vmc/vmc2';
 		$this->redirect($redirect_url);
 	}
 	

@@ -3,10 +3,10 @@
  * @package plugins.systemPartner
  * @subpackage api.objects
  */
-class KalturaSystemPartnerLimit extends KalturaObject
+class VidiunSystemPartnerLimit extends VidiunObject
 {
 	/**
-	 * @var KalturaSystemPartnerLimitType
+	 * @var VidiunSystemPartnerLimitType
 	 */
 	public $type;
 	
@@ -16,34 +16,34 @@ class KalturaSystemPartnerLimit extends KalturaObject
 	public $max;
 	
 	/**
-	 * @param KalturaSystemPartnerLimitType $type
+	 * @param VidiunSystemPartnerLimitType $type
 	 * @param Partner $partner
-	 * @return KalturaSystemPartnerLimit
+	 * @return VidiunSystemPartnerLimit
 	 */
 	public static function fromPartner($type, Partner $partner)
 	{
-		$limit = new KalturaSystemPartnerLimit();
+		$limit = new VidiunSystemPartnerLimit();
 		$limit->type = $type;
 		
 		switch($type)
 		{
-			case KalturaSystemPartnerLimitType::ACCESS_CONTROLS:
+			case VidiunSystemPartnerLimitType::ACCESS_CONTROLS:
 				$limit->max = $partner->getAccessControls();
 				break;
 				
-			case KalturaSystemPartnerLimitType::LIVE_STREAM_INPUTS:
+			case VidiunSystemPartnerLimitType::LIVE_STREAM_INPUTS:
 				$limit->max = $partner->getMaxLiveStreamInputs();
 				break;
 				
-			case KalturaSystemPartnerLimitType::LIVE_STREAM_OUTPUTS:
+			case VidiunSystemPartnerLimitType::LIVE_STREAM_OUTPUTS:
 				$limit->max = $partner->getMaxLiveStreamOutputs();
 				break;
 
-			case KalturaSystemPartnerLimitType::USER_LOGIN_ATTEMPTS:
+			case VidiunSystemPartnerLimitType::USER_LOGIN_ATTEMPTS:
 				$limit->max = $partner->getMaxLoginAttempts();
 				break;
 			
-			case KalturaSystemPartnerLimitType::LIVE_RTC_STREAM_INPUTS:
+			case VidiunSystemPartnerLimitType::LIVE_RTC_STREAM_INPUTS:
 				$limit->max = $partner->getMaxLiveRtcStreamInputs();
 				break;
 		}
@@ -55,23 +55,23 @@ class KalturaSystemPartnerLimit extends KalturaObject
 	{
 		switch($this->type)
 		{
-			case KalturaSystemPartnerLimitType::ACCESS_CONTROLS:
+			case VidiunSystemPartnerLimitType::ACCESS_CONTROLS:
 				$this->validatePropertyMinValue('max', 1, true);
 				break;
 				
-			case KalturaSystemPartnerLimitType::LIVE_STREAM_INPUTS:
+			case VidiunSystemPartnerLimitType::LIVE_STREAM_INPUTS:
 				$this->validatePropertyMinValue('max', 1, true);
 				break;
 				
-			case KalturaSystemPartnerLimitType::LIVE_STREAM_OUTPUTS:
+			case VidiunSystemPartnerLimitType::LIVE_STREAM_OUTPUTS:
 				$this->validatePropertyMinValue('max', 1, true);
 				break;
 				
-			case KalturaSystemPartnerLimitType::USER_LOGIN_ATTEMPTS:
+			case VidiunSystemPartnerLimitType::USER_LOGIN_ATTEMPTS:
 				$this->validatePropertyMinValue('max', 0, true);
 				break;
 				
-			case KalturaSystemPartnerLimitType::LIVE_RTC_STREAM_INPUTS:
+			case VidiunSystemPartnerLimitType::LIVE_RTC_STREAM_INPUTS:
 				$this->validatePropertyMinValue('max', 0, true);
 				break;
 		}
@@ -87,23 +87,23 @@ class KalturaSystemPartnerLimit extends KalturaObject
 			
 		switch($this->type)
 		{
-			case KalturaSystemPartnerLimitType::ACCESS_CONTROLS:
+			case VidiunSystemPartnerLimitType::ACCESS_CONTROLS:
 				$partner->setAccessControls($this->max);
 				break;
 				
-			case KalturaSystemPartnerLimitType::LIVE_STREAM_INPUTS:
+			case VidiunSystemPartnerLimitType::LIVE_STREAM_INPUTS:
 				$partner->setMaxLiveStreamInputs($this->max);
 				break;
 				
-			case KalturaSystemPartnerLimitType::LIVE_STREAM_OUTPUTS:
+			case VidiunSystemPartnerLimitType::LIVE_STREAM_OUTPUTS:
 				$partner->setMaxLiveStreamOutputs($this->max);
 				break;
 				
-			case KalturaSystemPartnerLimitType::USER_LOGIN_ATTEMPTS:
+			case VidiunSystemPartnerLimitType::USER_LOGIN_ATTEMPTS:
 				$partner->setMaxLoginAttempts($this->max);
 				break;
 			
-			case KalturaSystemPartnerLimitType::LIVE_RTC_STREAM_INPUTS:
+			case VidiunSystemPartnerLimitType::LIVE_RTC_STREAM_INPUTS:
 				$partner->setMaxLiveRtcStreamInputs($this->max);
 				break;
 		}

@@ -1,16 +1,16 @@
 <?php
 
-class KalturaICalSerializer extends KalturaSerializer
+class VidiunICalSerializer extends VidiunSerializer
 {
 	private $calendar;
 	
 	public function __construct()
 	{
-		$this->calendar = new kSchedulingICalCalendar();
+		$this->calendar = new vSchedulingICalCalendar();
 	}
 	/**
 	 * {@inheritDoc}
-	 * @see KalturaSerializer::setHttpHeaders()
+	 * @see VidiunSerializer::setHttpHeaders()
 	 */
 	public function setHttpHeaders()
 	{
@@ -19,7 +19,7 @@ class KalturaICalSerializer extends KalturaSerializer
 
 	/**
 	 * {@inheritDoc}
-	 * @see KalturaSerializer::getHeader()
+	 * @see VidiunSerializer::getHeader()
 	 */
 	public function getHeader() 
 	{
@@ -29,16 +29,16 @@ class KalturaICalSerializer extends KalturaSerializer
 
 	/**
 	 * {@inheritDoc}
-	 * @see KalturaSerializer::serialize()
+	 * @see VidiunSerializer::serialize()
 	 */
 	public function serialize($object)
 	{
-		if($object instanceof KalturaScheduleEvent)
+		if($object instanceof VidiunScheduleEvent)
 		{
-			$event = kSchedulingICalEvent::fromObject($object);
+			$event = vSchedulingICalEvent::fromObject($object);
 			return $event->write();
 		}
-		elseif($object instanceof KalturaScheduleEventArray)
+		elseif($object instanceof VidiunScheduleEventArray)
 		{
 			$ret = '';
 			foreach($object as $item)
@@ -47,18 +47,18 @@ class KalturaICalSerializer extends KalturaSerializer
 			}
 			return $ret;
 		}
-		elseif($object instanceof KalturaScheduleEventListResponse)
+		elseif($object instanceof VidiunScheduleEventListResponse)
 		{
 			$ret = $this->serialize($object->objects);
-			$ret .= $this->calendar->writeField('X-KALTURA-TOTAL-COUNT', $object->totalCount);
+			$ret .= $this->calendar->writeField('X-VIDIUN-TOTAL-COUNT', $object->totalCount);
 			return $ret;
 		}
-		elseif($object instanceof KalturaAPIException)
+		elseif($object instanceof VidiunAPIException)
 		{
 			$ret = $this->calendar->writeField('BEGIN', 'VERROR');
-			$ret .= $this->calendar->writeField('X-KALTURA-CODE', $object->getCode());
-			$ret .= $this->calendar->writeField('X-KALTURA-MESSAGE', $object->getMessage());
-			$ret .= $this->calendar->writeField('X-KALTURA-ARGUMENTS', implode(';', $object->getArgs()));
+			$ret .= $this->calendar->writeField('X-VIDIUN-CODE', $object->getCode());
+			$ret .= $this->calendar->writeField('X-VIDIUN-MESSAGE', $object->getMessage());
+			$ret .= $this->calendar->writeField('X-VIDIUN-ARGUMENTS', implode(';', $object->getArgs()));
 			$ret .= $this->calendar->writeField('END', 'VERROR');
 			return $ret;
 		}
@@ -73,12 +73,12 @@ class KalturaICalSerializer extends KalturaSerializer
 	
 	/**
 	 * {@inheritDoc}
-	 * @see KalturaSerializer::getFooter()
+	 * @see VidiunSerializer::getFooter()
 	 */
 	public function getFooter($execTime = null)
 	{
 		if($execTime)
-			$this->calendar->writeField('x-kaltura-execution-time', $execTime);
+			$this->calendar->writeField('x-vidiun-execution-time', $execTime);
 		
 		return $this->calendar->end();
 	}

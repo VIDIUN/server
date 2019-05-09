@@ -48,30 +48,30 @@
 			</tr>
 		</tfoot>
 		<tbody>
-			<?php foreach($this->paginator as /* Kaltura_Client_Type_StorageProfile */ $storage): ?>
+			<?php foreach($this->paginator as /* Vidiun_Client_Type_StorageProfile */ $storage): ?>
 			<tr class="<?php echo $this->cycle(array('odd', 'even'))->next(); ?>">
-				<td><?php echo $this->enumTranslate('Kaltura_Client_Enum_StorageProfileStatus', $storage->status); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_Enum_StorageProfileStatus', $storage->status); ?></td>
 				<td><?php echo $storage->id; ?></td>
 				<td><?php echo $storage->name; ?></td>
-				<td><?php echo $this->enumTranslate('Kaltura_Client_Enum_StorageProfileProtocol', $storage->protocol); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_Enum_StorageProfileProtocol', $storage->protocol); ?></td>
 				<td><?php echo $storage->storageUrl; ?></td>
 				<td><?php echo $storage->partnerId; ?></td>
 				<td><?php echo $this->translate($storage->pathManagerClass ? $storage->pathManagerClass : 'default_path_manager'); ?></td>
 				<td><?php echo $triggersNames[$storage->trigger]; ?></td>
-				<td><?php echo $this->enumTranslate('Kaltura_Client_Enum_StorageProfileReadyBehavior', $storage->readyBehavior); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_Enum_StorageProfileReadyBehavior', $storage->readyBehavior); ?></td>
 				<td><?php echo $this->dateFormat($storage->createdAt, Zend_Date::DATE_LONG); ?></td>
 				<td><?php echo $this->dateFormat($storage->updatedAt, Zend_Date::DATE_LONG); ?></td>
 				<td>
 					<select class="options" onchange="doAction(this.value, <?php echo $storage->partnerId; ?>, <?php echo $storage->id; ?>)">
 						<option value=""><?php echo $this->translate('Select Action'); ?></option>
 						<option value="configure"><?php echo $this->translate('Configure'); ?></option>
-						<?php if ($storage->status == Kaltura_Client_Enum_StorageProfileStatus::DISABLED): ?>
+						<?php if ($storage->status == Vidiun_Client_Enum_StorageProfileStatus::DISABLED): ?>
 							<option value="setManual"><?php echo $this->translate('Enable'); ?></option>
 							<option value="setAutomatic"><?php echo $this->translate('Export Automatically'); ?></option>
-						<?php elseif ($storage->status == Kaltura_Client_Enum_StorageProfileStatus::MANUAL): ?>
+						<?php elseif ($storage->status == Vidiun_Client_Enum_StorageProfileStatus::MANUAL): ?>
 							<option value="disable"><?php echo $this->translate('Disable'); ?></option>
 							<option value="setAutomatic"><?php echo $this->translate('Export Automatically'); ?></option>
-						<?php elseif ($storage->status == Kaltura_Client_Enum_StorageProfileStatus::AUTOMATIC): ?>
+						<?php elseif ($storage->status == Vidiun_Client_Enum_StorageProfileStatus::AUTOMATIC): ?>
 							<option value="disable"><?php echo $this->translate('Disable'); ?></option>
 							<option value="setManual"><?php echo $this->translate('Manual only'); ?></option>
 						<?php endif; ?>
@@ -217,7 +217,7 @@ function setManual(partnerId, storageId)
 		changeStatus(
 				partnerId, 
 				storageId, 
-			<?php echo Kaltura_Client_Enum_StorageProfileStatus::MANUAL; ?>, 
+			<?php echo Vidiun_Client_Enum_StorageProfileStatus::MANUAL; ?>, 
 			function() {
 				alert('<?php echo $this->translate('storage was manualed');?>');
 			}
@@ -233,7 +233,7 @@ function setAutomatic(partnerId, storageId)
 		changeStatus(
 				partnerId, 
 				storageId, 
-			<?php echo Kaltura_Client_Enum_StorageProfileStatus::AUTOMATIC; ?>, 
+			<?php echo Vidiun_Client_Enum_StorageProfileStatus::AUTOMATIC; ?>, 
 			function() {
 				alert('<?php echo $this->translate('storage was autoed');?>');
 			}
@@ -249,7 +249,7 @@ function disable(partnerId, storageId)
 		changeStatus(
 				partnerId, 
 				storageId, 
-			<?php echo Kaltura_Client_Enum_StorageProfileStatus::DISABLED; ?>, 
+			<?php echo Vidiun_Client_Enum_StorageProfileStatus::DISABLED; ?>, 
 			function() {
 				alert('<?php echo $this->translate('storage was disabled');?>');
 			}

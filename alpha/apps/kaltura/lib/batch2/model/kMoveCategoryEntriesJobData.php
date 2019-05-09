@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kMoveCategoryEntriesJobData extends kJobData
+class vMoveCategoryEntriesJobData extends vJobData
 {
 	/**
 	 * Source category id

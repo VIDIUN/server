@@ -116,10 +116,10 @@ abstract class BaseCuePoint extends BaseObject  implements Persistent {
 	protected $sub_type;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the custom_data field.
@@ -429,13 +429,13 @@ abstract class BaseCuePoint extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -929,27 +929,27 @@ abstract class BaseCuePoint extends BaseObject  implements Persistent {
 	} // setSubType()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     CuePoint The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[CuePointPeer::KUSER_ID]))
-			$this->oldColumnsValues[CuePointPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[CuePointPeer::VUSER_ID]))
+			$this->oldColumnsValues[CuePointPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = CuePointPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = CuePointPeer::VUSER_ID;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [custom_data] column.
@@ -1157,7 +1157,7 @@ abstract class BaseCuePoint extends BaseObject  implements Persistent {
 			$this->status = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
 			$this->type = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
 			$this->sub_type = ($row[$startcol + 15] !== null) ? (int) $row[$startcol + 15] : null;
-			$this->kuser_id = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
+			$this->vuser_id = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
 			$this->custom_data = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
 			$this->partner_data = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
 			$this->partner_sort_value = ($row[$startcol + 19] !== null) ? (int) $row[$startcol + 19] : null;
@@ -1427,7 +1427,7 @@ abstract class BaseCuePoint extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1453,16 +1453,16 @@ abstract class BaseCuePoint extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 
 		if ($this->shouldRaiseCreatedEvent())
 		{
-			kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+			vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		}
 
 		if ($this->copiedFrom)
 		{
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		}
 
 		parent::postInsert($con);
@@ -1486,8 +1486,8 @@ abstract class BaseCuePoint extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $this->tempModifiedColumns));
+			vQueryCache::invalidateQueryCache($this);
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $this->tempModifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1694,7 +1694,7 @@ abstract class BaseCuePoint extends BaseObject  implements Persistent {
 				return $this->getSubType();
 				break;
 			case 16:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 17:
 				return $this->getCustomData();
@@ -1754,7 +1754,7 @@ abstract class BaseCuePoint extends BaseObject  implements Persistent {
 			$keys[13] => $this->getStatus(),
 			$keys[14] => $this->getType(),
 			$keys[15] => $this->getSubType(),
-			$keys[16] => $this->getKuserId(),
+			$keys[16] => $this->getVuserId(),
 			$keys[17] => $this->getCustomData(),
 			$keys[18] => $this->getPartnerData(),
 			$keys[19] => $this->getPartnerSortValue(),
@@ -1791,7 +1791,7 @@ abstract class BaseCuePoint extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(CuePointPeer::STATUS)) $criteria->add(CuePointPeer::STATUS, $this->status);
 		if ($this->isColumnModified(CuePointPeer::TYPE)) $criteria->add(CuePointPeer::TYPE, $this->type);
 		if ($this->isColumnModified(CuePointPeer::SUB_TYPE)) $criteria->add(CuePointPeer::SUB_TYPE, $this->sub_type);
-		if ($this->isColumnModified(CuePointPeer::KUSER_ID)) $criteria->add(CuePointPeer::KUSER_ID, $this->kuser_id);
+		if ($this->isColumnModified(CuePointPeer::VUSER_ID)) $criteria->add(CuePointPeer::VUSER_ID, $this->vuser_id);
 		if ($this->isColumnModified(CuePointPeer::CUSTOM_DATA)) $criteria->add(CuePointPeer::CUSTOM_DATA, $this->custom_data);
 		if ($this->isColumnModified(CuePointPeer::PARTNER_DATA)) $criteria->add(CuePointPeer::PARTNER_DATA, $this->partner_data);
 		if ($this->isColumnModified(CuePointPeer::PARTNER_SORT_VALUE)) $criteria->add(CuePointPeer::PARTNER_SORT_VALUE, $this->partner_sort_value);
@@ -1895,7 +1895,7 @@ abstract class BaseCuePoint extends BaseObject  implements Persistent {
 
 		$copyObj->setSubType($this->sub_type);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setCustomData($this->custom_data);
 

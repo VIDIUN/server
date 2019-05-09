@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaWorkerQueueFilter extends KalturaObject
+class VidiunWorkerQueueFilter extends VidiunObject
 {
 	/**
 	 * @var int
@@ -18,13 +18,13 @@ class KalturaWorkerQueueFilter extends KalturaObject
 	
     
 	/**
-	 * @var KalturaBatchJobType
+	 * @var VidiunBatchJobType
 	 */
 	public $jobType;
 	
     
 	/**
-	 * @var KalturaBatchJobFilter
+	 * @var VidiunBatchJobFilter
 	 */
 	public $filter;
 	

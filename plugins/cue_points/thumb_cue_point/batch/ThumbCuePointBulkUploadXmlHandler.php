@@ -27,7 +27,7 @@ class ThumbCuePointBulkUploadXmlHandler extends CuePointBulkUploadXmlHandler
 	 */
 	protected function getNewInstance()
 	{
-		return new KalturaThumbCuePoint();
+		return new VidiunThumbCuePoint();
 	}
 	
 	/* (non-PHPdoc)
@@ -39,7 +39,7 @@ class ThumbCuePointBulkUploadXmlHandler extends CuePointBulkUploadXmlHandler
 			return null;
 			
 		$cuePoint = parent::parseCuePoint($scene);
-		if(!($cuePoint instanceof KalturaThumbCuePoint))
+		if(!($cuePoint instanceof VidiunThumbCuePoint))
 			return null;
 			
 		//If timedThumbAssetId is present in the XML assume an existing one is beeing updated (Action = Update)
@@ -52,7 +52,7 @@ class ThumbCuePointBulkUploadXmlHandler extends CuePointBulkUploadXmlHandler
 		if(isset($scene->subType))
 			$cuePoint->subType = $scene->subType;
 		else 
-			$cuePoint->subType = KalturaThumbCuePointSubType::SLIDE;
+			$cuePoint->subType = VidiunThumbCuePointSubType::SLIDE;
 		
 		return $cuePoint;
 	}
@@ -62,35 +62,35 @@ class ThumbCuePointBulkUploadXmlHandler extends CuePointBulkUploadXmlHandler
 		//Added to support cases where the resource is entry resource
 		$conversionProfileId = null;
 		try {
-			KBatchBase::impersonate($this->xmlBulkUploadEngine->getCurrentPartnerId());
-			$entry = KBatchBase::$kClient->baseEntry->get($this->entryId);
-			KBatchBase::unimpersonate();
+			VBatchBase::impersonate($this->xmlBulkUploadEngine->getCurrentPartnerId());
+			$entry = VBatchBase::$vClient->baseEntry->get($this->entryId);
+			VBatchBase::unimpersonate();
 			if($entry && $entry->conversionProfileId)
 				$conversionProfileId = $entry->conversionProfileId;
 		}
 		catch (Exception $ex)
 		{
-			KBatchBase::unimpersonate();
-			KalturaLog::info("Entry ID [" . $this->entryId . "] not found, continuing with no conversion profile");
+			VBatchBase::unimpersonate();
+			VidiunLog::info("Entry ID [" . $this->entryId . "] not found, continuing with no conversion profile");
 		}
 		
 		foreach($results as $index => $cuePoint)
 		{	
-			if($cuePoint instanceof KalturaThumbCuePoint)
+			if($cuePoint instanceof VidiunThumbCuePoint)
 			{
 				if(!isset($items[$index]->slide) || empty($items[$index]->slide))
 					continue;
 				
 				$timedThumbResource = $this->xmlBulkUploadEngine->getResource($items[$index]->slide, $conversionProfileId);
-				$thumbAsset = new KalturaTimedThumbAsset();
+				$thumbAsset = new VidiunTimedThumbAsset();
 				$thumbAsset->cuePointId = $cuePoint->id;
 
-				KBatchBase::impersonate($this->xmlBulkUploadEngine->getCurrentPartnerId());
-				KBatchBase::$kClient->startMultiRequest();
-				KBatchBase::$kClient->thumbAsset->add($cuePoint->entryId, $thumbAsset);
-				KBatchBase::$kClient->thumbAsset->setContent(KBatchBase::$kClient->getMultiRequestResult()->id, $timedThumbResource);
-				KBatchBase::$kClient->doMultiRequest();
-				KBatchBase::unimpersonate();
+				VBatchBase::impersonate($this->xmlBulkUploadEngine->getCurrentPartnerId());
+				VBatchBase::$vClient->startMultiRequest();
+				VBatchBase::$vClient->thumbAsset->add($cuePoint->entryId, $thumbAsset);
+				VBatchBase::$vClient->thumbAsset->setContent(VBatchBase::$vClient->getMultiRequestResult()->id, $timedThumbResource);
+				VBatchBase::$vClient->doMultiRequest();
+				VBatchBase::unimpersonate();
 			}
 				
 		}

@@ -6,7 +6,7 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KEncodingComData
+class VEncodingComData
 {
 	const ACTION_ADD_MEDIA = 'AddMedia';
 	const ACTION_GET_STATUS = 'GetStatus';

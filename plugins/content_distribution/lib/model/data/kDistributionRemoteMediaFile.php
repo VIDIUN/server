@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage model.data
  */
-class kDistributionRemoteMediaFile
+class vDistributionRemoteMediaFile
 {
 	/**
 	 * @var string

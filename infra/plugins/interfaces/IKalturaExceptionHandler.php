@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaExceptionHandler extends IKalturaBase
+interface IVidiunExceptionHandler extends IVidiunBase
 {
 
 	/**

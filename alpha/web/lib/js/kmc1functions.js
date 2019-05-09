@@ -55,18 +55,18 @@ function copyToClipboard(inElementId){
 
 function onTabChange()
 {
-	kalturaCloseModalBox();
-	loadModule(next_module, partner_id, subpid, user_id, ks, screen_name, email);
+	vidiunCloseModalBox();
+	loadModule(next_module, partner_id, subpid, user_id, vs, screen_name, email);
 }
     
 $(document).ready(function(){
     $("a#dashboard").addClass('active');
-    /* KMC tabs */
-    $("#kmcHeader ul li a").click(function(){
-    	$("#kmcHeader ul li a").removeClass('active');
+    /* VMC tabs */
+    $("#vmcHeader ul li a").click(function(){
+    	$("#vmcHeader ul li a").removeClass('active');
 //    	var bolds = $("#header ul.main_tabs li").find('b');
 //    	$(bolds).remove(); 
-		kalturaCloseModalBox();
+		vidiunCloseModalBox();
 		selected_uiconfId = null;
 		next_module = this.id;
     	$(this).addClass('active');
@@ -76,8 +76,8 @@ $(document).ready(function(){
 		{
 		  $('#server_wrap').hide();
 		  $('#flash_wrap').show();
-		  loadModule(this.id, partner_id, subpid, user_id, ks, screen_name, email);
-		  //document.getElementById("kcms").saveAndClose();
+		  loadModule(this.id, partner_id, subpid, user_id, vs, screen_name, email);
+		  //document.getElementById("vcms").saveAndClose();
 		  return false;
 		}
 	    	else
@@ -103,14 +103,14 @@ $(document).ready(function(){
     content_resize();
 /*	
 	var flashvars = {};
-	flashvars.name = "kmc";
+	flashvars.name = "vmc";
 	var params = {};
 	if (!jQuery.browser.msie)
 		params.wmode = "opaque";
 	params.bgcolor = "0d0c25";
 	params.allowfullscreen = "true";
 	var attributes = {};
-	swfobject.embedSWF("flash/background.swf", "kcms", "100%", "100%", "9.0.0", "flash/expressInstall.swf", flashvars, params, attributes);
+	swfobject.embedSWF("flash/background.swf", "vcms", "100%", "100%", "9.0.0", "flash/expressInstall.swf", flashvars, params, attributes);
 	*/
 	
 	$('#main div.content div.contwrap div.dataContent div.dataTitle a').click(function(){ $.scrollTo( '#main', 800 ); return false; });

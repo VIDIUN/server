@@ -84,19 +84,19 @@
 				<thumbnailSettings><width>640</width><height>480</height><quality>90</quality></thumbnailSettings></postPublishWindow></publishSettings></overrides><uIConfigList>
 		<uIConfig>
 			<cvf>
-				<pluginsDirectory>/flash/kae/v1.0.10.23657/swf/plugins/cvesdk</pluginsDirectory>
-				<mediaServerUrl>rtmp://kaltura.com/oflaDemo</mediaServerUrl>
-				<pluginsProvider>/flash/kae/v1.0.10.23657/swf/plugins/cvesdk/plugins.xml?rev=1</pluginsProvider></cvf>
-			<target>KalturaAdvancedVideoEditor.swf</target>
-			<cssUrl>/content/uiconf/kaltura/generic/kae_1.0.10/kae_generic_generic_styles.swf?r=23715</cssUrl>
-			<localeUrl>/content/uiconf/kaltura/generic/kae_1.0.10/kae_generic_en_US.swf?r=23715</localeUrl>
-			<baseLocaleUrl>/content/uiconf/kaltura/generic/kae_1.0.10/kae_generic_en_US_kaltura.swf?r=23714</baseLocaleUrl></uIConfig>
+				<pluginsDirectory>/flash/vae/v1.0.10.23657/swf/plugins/cvesdk</pluginsDirectory>
+				<mediaServerUrl>rtmp://vidiun.com/oflaDemo</mediaServerUrl>
+				<pluginsProvider>/flash/vae/v1.0.10.23657/swf/plugins/cvesdk/plugins.xml?rev=1</pluginsProvider></cvf>
+			<target>VidiunAdvancedVideoEditor.swf</target>
+			<cssUrl>/content/uiconf/vidiun/generic/vae_1.0.10/vae_generic_generic_styles.swf?r=23715</cssUrl>
+			<localeUrl>/content/uiconf/vidiun/generic/vae_1.0.10/vae_generic_en_US.swf?r=23715</localeUrl>
+			<baseLocaleUrl>/content/uiconf/vidiun/generic/vae_1.0.10/vae_generic_en_US_vidiun.swf?r=23714</baseLocaleUrl></uIConfig>
 	</uIConfigList><extraData>
 		<contributionWizard>
 			<uIConfigId>380</uIConfigId>
 		</contributionWizard>
 	</extraData><screens>
-		<helpWindowUrl>/content/uiconf/kaltura/generic/kae_1.0.10/Help.png</helpWindowUrl></screens><javaScript enableJSCallbacks="1" enableStatisticsCallbacks="0" enableErrorCallbacks="0" verbose="0"></javaScript>
+		<helpWindowUrl>/content/uiconf/vidiun/generic/vae_1.0.10/Help.png</helpWindowUrl></screens><javaScript enableJSCallbacks="1" enableStatisticsCallbacks="0" enableErrorCallbacks="0" verbose="0"></javaScript>
 	<notificationsAndRequests>
 		<enableStatisticsRequests>1</enableStatisticsRequests>
 		<enableReportErrorsRequests>1</enableReportErrorsRequests></notificationsAndRequests></uiConf>

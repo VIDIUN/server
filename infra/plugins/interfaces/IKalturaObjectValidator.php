@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaObjectValidator extends IKalturaBase
+interface IVidiunObjectValidator extends IVidiunBase
 {
     const OPERATION_COPY = 1;
     

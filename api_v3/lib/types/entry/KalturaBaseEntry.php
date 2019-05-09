@@ -4,7 +4,7 @@
  * @subpackage objects
  * @relatedService BaseEntryService
  */
-class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApiObjectFactory
+class VidiunBaseEntry extends VidiunObject implements IRelatedFilterable, IApiObjectFactory
 {
 	/**
 	 * Auto generated 10 characters alphanumeric string
@@ -97,7 +97,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 	
 	/**
 	 * 
-	 * @var KalturaEntryStatus
+	 * @var VidiunEntryStatus
 	 * @readonly
 	 * @filter eq,not,in,notin
 	 */
@@ -106,7 +106,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 	/**
 	 * Entry moderation status
 	 * 
-	 * @var KalturaEntryModerationStatus
+	 * @var VidiunEntryModerationStatus
 	 * @readonly
 	 * @filter eq,not,in,notin
 	 */
@@ -124,7 +124,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 	/**
 	 * The type of the entry, this is auto filled by the derived entry object
 	 * 
-	 * @var KalturaEntryType
+	 * @var VidiunEntryType
 	 * @filter eq,in
 	 */
 	public $type;
@@ -206,7 +206,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 	/**
 	 * License type used for this entry
 	 * 
-	 * @var KalturaLicenseType
+	 * @var VidiunLicenseType
 	 */
 	public $licenseType;
 	
@@ -283,7 +283,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 	/**
 	 * Status of the replacement readiness and approval
 	 * 
-	 * @var KalturaEntryReplacementStatus
+	 * @var VidiunEntryReplacementStatus
 	 * @filter eq,in
 	 * @readonly
 	 */
@@ -330,7 +330,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 	/**
 	 * clipping, skipping and cropping attributes that used to create this entry  
 	 * 
-	 * @var KalturaOperationAttributesArray
+	 * @var VidiunOperationAttributesArray
 	 */
 	public $operationAttributes;
 	
@@ -361,7 +361,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 	/**
 	 * Comma seperated string of the capabilities of the entry. Any capability needed can be added to this list.
 	 *
-	 * @dynamicType KalturaEntryCapability
+	 * @dynamicType VidiunEntryCapability
 	 * @var string
 	 * @readonly
 	 */
@@ -378,7 +378,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 	/**
 	 * should we display this entry in search
 	 *
-	 * @var KalturaEntryDisplayInSearchType
+	 * @var VidiunEntryDisplayInSearchType
 	 */
 	public $displayInSearch;
 
@@ -463,7 +463,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 			{ 
 				$catName = categoryPeer::retrieveByPK($cat);
 				if (is_null($catName))
-					throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $cat);
+					throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $cat);
 					
 				$catsNames[] = $catName->getFullName();
 			}
@@ -480,7 +480,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 		return $dbObject;
 	}
 	
-	public function doFromObject($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if(!$sourceObject)
 			return;
@@ -488,14 +488,14 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 		entryPeer::addValidatedEntry($sourceObject->getId());		
 		parent::doFromObject($sourceObject, $responseProfile);
 		
-		$partnerId = kCurrentContext::$ks_partner_id ? kCurrentContext::$ks_partner_id : kCurrentContext::$partner_id;
+		$partnerId = vCurrentContext::$vs_partner_id ? vCurrentContext::$vs_partner_id : vCurrentContext::$partner_id;
 		
-		if (implode(',', kEntitlementUtils::getKsPrivacyContext()) != kEntitlementUtils::getDefaultContextString($partnerId) )
+		if (implode(',', vEntitlementUtils::getVsPrivacyContext()) != vEntitlementUtils::getDefaultContextString($partnerId) )
 		{
 			$this->categories = null;
 			$this->categoriesIds = null;
 		}
-		if (!kConf::hasParam('protect_userid_in_api') || !in_array($sourceObject->getPartnerId(), kConf::get('protect_userid_in_api')) || !in_array(kCurrentContext::getCurrentSessionType(), array(kSessionBase::SESSION_TYPE_NONE,kSessionBase::SESSION_TYPE_WIDGET))){
+		if (!vConf::hasParam('protect_userid_in_api') || !in_array($sourceObject->getPartnerId(), vConf::get('protect_userid_in_api')) || !in_array(vCurrentContext::getCurrentSessionType(), array(vSessionBase::SESSION_TYPE_NONE,vSessionBase::SESSION_TYPE_WIDGET))){
 			if($this->shouldGet('userId', $responseProfile))
 				$this->userId = $sourceObject->getPuserId();
 			if($this->shouldGet('creatorId', $responseProfile))
@@ -511,7 +511,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 		{
 			$accessControlProfile = accessControlPeer::retrieveByPK($this->accessControlId);
 			if(!$accessControlProfile)
-				throw new KalturaAPIException(KalturaErrors::ACCESS_CONTROL_ID_NOT_FOUND, $this->accessControlId);
+				throw new VidiunAPIException(VidiunErrors::ACCESS_CONTROL_ID_NOT_FOUND, $this->accessControlId);
 		}
 	}
 	
@@ -521,18 +521,18 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 			return;
 			
 		if($sourceObject && $sourceObject->getStatus() != entryStatus::NO_CONTENT)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_ENTRY_STATUS, $this->getFormattedPropertyNameWithClassName('conversionProfileId'), $sourceObject->getStatus());
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_ENTRY_STATUS, $this->getFormattedPropertyNameWithClassName('conversionProfileId'), $sourceObject->getStatus());
 		
 		if($this->conversionProfileId != conversionProfile2::CONVERSION_PROFILE_NONE)
 		{
 			$conversionProfile = conversionProfile2Peer::retrieveByPK($this->conversionProfileId);
 			if(!$conversionProfile || $conversionProfile->getType() != ConversionProfileType::MEDIA)
-				throw new KalturaAPIException(KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $this->conversionProfileId);
+				throw new VidiunAPIException(VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $this->conversionProfileId);
 		}
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -544,11 +544,11 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 	
 //		if($this->referenceId)
 //		{
-//			$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+//			$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 //			$c->add('entry.REFERENCE_ID', $this->referenceId);
 //			$c->applyFilters();
 //			if(count($c->getFetchedIds()))
-//				throw new KalturaAPIException(KalturaErrors::REFERENCE_ID_ALREADY_EXISTS, $this->referenceId);
+//				throw new VidiunAPIException(VidiunErrors::REFERENCE_ID_ALREADY_EXISTS, $this->referenceId);
 //		}
 
 		$this->validateDisplayInSearch();
@@ -564,29 +564,29 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 	{
 		//An entry with a parent entry id cannot be assigned to categories nor have access control/scheduling
 		if ($this->parentEntryId && ($this->categories || $this->categoriesIds || $this->accessControlId || $this->startDate || $this->endDate))
-			throw new KalturaAPIException(KalturaErrors::ASSIGNING_INFO_TO_ENTRY_WITH_PARENT_IS_FORBIDDEN, $this->parentEntryId);
+			throw new VidiunAPIException(VidiunErrors::ASSIGNING_INFO_TO_ENTRY_WITH_PARENT_IS_FORBIDDEN, $this->parentEntryId);
 			
 		//Parent entry id must exists before assigning it to a child entry
 		if ($this->parentEntryId)
 		{
 			$entry = entryPeer::retrieveByPK($this->parentEntryId);
 			if(!$entry)
-				throw new KalturaAPIException(KalturaErrors::PARENT_ENTRY_ID_NOT_FOUND, $this->parentEntryId);
+				throw new VidiunAPIException(VidiunErrors::PARENT_ENTRY_ID_NOT_FOUND, $this->parentEntryId);
 		}
 	}
 		
 	/**
 	 * To validate if user is entitled to the category � all needed is to select from the db.
 	 * 
-	 * @throws KalturaErrors::ENTRY_CATEGORY_FIELD_IS_DEPRECATED
+	 * @throws VidiunErrors::ENTRY_CATEGORY_FIELD_IS_DEPRECATED
 	 */
 	public function validateCategories()
 	{
-		$partnerId = kCurrentContext::$ks_partner_id ? kCurrentContext::$ks_partner_id : kCurrentContext::$partner_id;
+		$partnerId = vCurrentContext::$vs_partner_id ? vCurrentContext::$vs_partner_id : vCurrentContext::$partner_id;
 		
-		if (implode(',', kEntitlementUtils::getKsPrivacyContext()) !=  kEntitlementUtils::getDefaultContextString($partnerId) &&
+		if (implode(',', vEntitlementUtils::getVsPrivacyContext()) !=  vEntitlementUtils::getDefaultContextString($partnerId) &&
 			($this->categoriesIds != null || $this->categories != null))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_CATEGORY_FIELD_IS_DEPRECATED);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_CATEGORY_FIELD_IS_DEPRECATED);
 			
 		if ($this->categoriesIds != null)
 		{
@@ -598,7 +598,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 			{ 
 				$catName = categoryPeer::retrieveByPK($cat);
 				if (is_null($catName))
-					throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_FOUND, $cat);
+					throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_FOUND, $cat);
 			}
 		}
 		
@@ -613,11 +613,11 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 				$catName = categoryPeer::getByFullNameExactMatch($cat);
 				if (is_null($catName))
 				{
-					KalturaCriterion::disableTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+					VidiunCriterion::disableTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 					$catName = categoryPeer::getByFullNameExactMatch($cat);
 					if ($catName)
-						throw new KalturaAPIException(KalturaErrors::CATEGORY_NOT_PERMITTED, $cat);
-					KalturaCriterion::restoreTag(KalturaCriterion::TAG_ENTITLEMENT_CATEGORY);
+						throw new VidiunAPIException(VidiunErrors::CATEGORY_NOT_PERMITTED, $cat);
+					VidiunCriterion::restoreTag(VidiunCriterion::TAG_ENTITLEMENT_CATEGORY);
 				}
 			}
 		}
@@ -625,7 +625,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 	
 	public function validateUsers()
 	{
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 		
 		if(!$this->isNull('entitledUsersEdit'))
 		{
@@ -634,7 +634,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 			foreach ($entitledUsersEdit as $puserId)
 			{
 				$puserId = trim($puserId);
-				kuserPeer::createKuserForPartner($partnerId, $puserId);
+				vuserPeer::createVuserForPartner($partnerId, $puserId);
 			}
 		}
 			
@@ -645,7 +645,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 			foreach ($entitledPusersPublish as $puserId)
 			{
 				$puserId = trim($puserId);
-				kuserPeer::createKuserForPartner($partnerId, $puserId);
+				vuserPeer::createVuserForPartner($partnerId, $puserId);
 			}
 		}
 		
@@ -656,7 +656,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 			foreach ($entitledPusersView as $puserId)
 			{
 				$puserId = trim($puserId);
-				kuserPeer::createKuserForPartner($partnerId, $puserId);
+				vuserPeer::createVuserForPartner($partnerId, $puserId);
 			}
 		}
 		
@@ -666,7 +666,7 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 	 * Validate that the new value is EntryDisplayInSearchType::SYSTEM or EntryDisplayInSearchType::PARTNER_ONLY
 	 * or that the value given is the one that exists in the DB
 	 *
-	 * @throws KalturaErrors::ENTRY_DISPLAY_IN_SEARCH_VALUE_NOT_ALLOWED
+	 * @throws VidiunErrors::ENTRY_DISPLAY_IN_SEARCH_VALUE_NOT_ALLOWED
 	 */
 	public function validateDisplayInSearch(entry $sourceObject = null)
 	{
@@ -681,11 +681,11 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 		if ($sourceObject && $this->displayInSearch === $sourceObject->getDisplayInSearch())
 			return;
 
-		throw new KalturaAPIException(KalturaErrors::ENTRY_DISPLAY_IN_SEARCH_VALUE_NOT_ALLOWED, $this->displayInSearch);
+		throw new VidiunAPIException(VidiunErrors::ENTRY_DISPLAY_IN_SEARCH_VALUE_NOT_ALLOWED, $this->displayInSearch);
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate($source_object)
+	 * @see VidiunObject::validateForUpdate($source_object)
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -697,12 +697,12 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 		
 //		if($this->referenceId)
 //		{
-//			$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+//			$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 //			$c->add('entry.ID', $sourceObject->getId(), Criteria::NOT_EQUAL);
 //			$c->add('entry.REFERENCE_ID', $this->referenceId);
 //			$c->applyFilters();
 //			if(count($c->getFetchedIds()))
-//				throw new KalturaAPIException(KalturaErrors::REFERENCE_ID_ALREADY_EXISTS, $this->referenceId);
+//				throw new VidiunAPIException(VidiunErrors::REFERENCE_ID_ALREADY_EXISTS, $this->referenceId);
 //		}
 				
 		$this->validateObjectsExist($sourceObject);
@@ -745,12 +745,12 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 			"idEqual" => "This filter should be in use for retrieving only a specific entry (identified by its entryId).",
 			"idIn" => "This filter should be in use for retrieving few specific entries (string should include comma separated list of entryId strings).",
 			"userIdEqual" => "This filter parameter should be in use for retrieving only entries, uploaded by/assigned to a specific user (identified by user Id).",
-			"typeIn" => "This filter should be in use for retrieving entries of few {@link ?object=KalturaEntryType KalturaEntryType} (string should include a comma separated list of {@link ?object=KalturaEntryType KalturaEntryType} enumerated parameters).",
+			"typeIn" => "This filter should be in use for retrieving entries of few {@link ?object=VidiunEntryType VidiunEntryType} (string should include a comma separated list of {@link ?object=VidiunEntryType VidiunEntryType} enumerated parameters).",
 			
-			"statusEqual" => "This filter should be in use for retrieving only entries, at a specific {@link ?object=KalturaEntryStatus KalturaEntryStatus}.",
-			"statusIn" => "This filter should be in use for retrieving only entries, at few specific {@link ?object=KalturaEntryStatus KalturaEntryStatus} (comma separated).",
-			"statusNotEqual" => "This filter should be in use for retrieving only entries, not at a specific {@link ?object=KalturaEntryStatus KalturaEntryStatus}.",
-			"statusNotIn" => "This filter should be in use for retrieving only entries, not at few specific {@link ?object=KalturaEntryStatus KalturaEntryStatus} (comma separated).",
+			"statusEqual" => "This filter should be in use for retrieving only entries, at a specific {@link ?object=VidiunEntryStatus VidiunEntryStatus}.",
+			"statusIn" => "This filter should be in use for retrieving only entries, at few specific {@link ?object=VidiunEntryStatus VidiunEntryStatus} (comma separated).",
+			"statusNotEqual" => "This filter should be in use for retrieving only entries, not at a specific {@link ?object=VidiunEntryStatus VidiunEntryStatus}.",
+			"statusNotIn" => "This filter should be in use for retrieving only entries, not at few specific {@link ?object=VidiunEntryStatus VidiunEntryStatus} (comma separated).",
 			
 			"nameLike" => "This filter should be in use for retrieving specific entries. It should include only one string to search for in entry names (no wildcards, spaces are treated as part of the string).",
 			"nameMultiLikeOr" => "This filter should be in use for retrieving specific entries. It could include few (comma separated) strings for searching in entry names, while applying an OR logic to retrieve entries that contain at least one input string (no wildcards, spaces are treated as part of the string).",
@@ -765,17 +765,17 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 			"adminTagsMultiLikeOr" => "This filter should be in use for retrieving specific entries. It could include few (comma separated) strings for searching in entry tags, set by an ADMIN user, while applying an OR logic to retrieve entries that contain at least one input string (no wildcards, spaces are treated as part of the string).",
 			"adminTagsMultiLikeAnd" => "This filter should be in use for retrieving specific entries. It could include few (comma separated) strings for searching in entry tags, set by an ADMIN user, while applying an AND logic to retrieve entries that contain all input strings (no wildcards, spaces are treated as part of the string).",
 			
-			"createdAtGreaterThanOrEqual" => "This filter parameter should be in use for retrieving only entries which were created at Kaltura system after a specific time/date (standard timestamp format).",
-			"createdAtLessThanOrEqual" => "This filter parameter should be in use for retrieving only entries which were created at Kaltura system before a specific time/date (standard timestamp format).",
+			"createdAtGreaterThanOrEqual" => "This filter parameter should be in use for retrieving only entries which were created at Vidiun system after a specific time/date (standard timestamp format).",
+			"createdAtLessThanOrEqual" => "This filter parameter should be in use for retrieving only entries which were created at Vidiun system before a specific time/date (standard timestamp format).",
 			
-			"updatedAtGreaterThanEqual" => "This filter parameter should be in use for retrieving only entries which were created at Kaltura system after or at an exact time/date (standard timestamp format).",
-			"updatedAtLessThenEqual" => "This filter parameter should be in use for retrieving only entries which were created at Kaltura system before or at an exact time/date (standard timestamp format).",
+			"updatedAtGreaterThanEqual" => "This filter parameter should be in use for retrieving only entries which were created at Vidiun system after or at an exact time/date (standard timestamp format).",
+			"updatedAtLessThenEqual" => "This filter parameter should be in use for retrieving only entries which were created at Vidiun system before or at an exact time/date (standard timestamp format).",
 			
-			"modifiedAtGreaterThanEqual" => "This filter parameter should be in use for retrieving only entries which were updated at Kaltura system after or at an exact time/date (standard timestamp format).",
-			"modifiedAtLessThenEqual" => "This filter parameter should be in use for retrieving only entries which were updated at Kaltura system before or at an exact time/date (standard timestamp format).",
+			"modifiedAtGreaterThanEqual" => "This filter parameter should be in use for retrieving only entries which were updated at Vidiun system after or at an exact time/date (standard timestamp format).",
+			"modifiedAtLessThenEqual" => "This filter parameter should be in use for retrieving only entries which were updated at Vidiun system before or at an exact time/date (standard timestamp format).",
 		
-			"partnerIdEqual" => "This filter should be in use for retrieving only entries which were uploaded by/assigned to users of a specific Kaltura Partner (identified by Partner ID).",
-			"partnerIdIn" => "This filter should be in use for retrieving only entries within Kaltura network which were uploaded by/assigned to users of few Kaltura Partners  (string should include comma separated list of PartnerIDs)",
+			"partnerIdEqual" => "This filter should be in use for retrieving only entries which were uploaded by/assigned to users of a specific Vidiun Partner (identified by Partner ID).",
+			"partnerIdIn" => "This filter should be in use for retrieving only entries within Vidiun network which were uploaded by/assigned to users of few Vidiun Partners  (string should include comma separated list of PartnerIDs)",
 			
 			"tagsAndNameMultiLikeOr" => "This filter should be in use for retrieving specific entries. It could include few (comma separated) strings for searching in entry tags and names, while applying an OR logic to retrieve entries that contain at least one input string (no wildcards, spaces are treated as part of the string).",
 			"tagsAndNameMultiLikeAnd" => "This filter should be in use for retrieving specific entries. It could include few (comma separated) strings for searching in entry tags and names, while applying an AND logic to retrieve entries that contain all input strings (no wildcards, spaces are treated as part of the string).",
@@ -794,9 +794,9 @@ class KalturaBaseEntry extends KalturaObject implements IRelatedFilterable, IApi
 		);
 	}
 	
-	public static function getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-	    $object = KalturaEntryFactory::getInstanceByType($sourceObject->getType());
+	    $object = VidiunEntryFactory::getInstanceByType($sourceObject->getType());
 	    if (!$object)
 	        return null;
 	    

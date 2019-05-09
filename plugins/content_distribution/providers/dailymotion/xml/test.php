@@ -1,34 +1,34 @@
 <?php
 
-define('KALTURA_ROOT_PATH', realpath(dirname(__FILE__) . '/../../../../..'));
-require_once(KALTURA_ROOT_PATH . '/infra/KAutoloader.php');
+define('VIDIUN_ROOT_PATH', realpath(dirname(__FILE__) . '/../../../../..'));
+require_once(VIDIUN_ROOT_PATH . '/infra/VAutoloader.php');
 
-define("KALTURA_API_PATH", KALTURA_ROOT_PATH . "/api_v3");
+define("VIDIUN_API_PATH", VIDIUN_ROOT_PATH . "/api_v3");
 
-require_once(KALTURA_ROOT_PATH . '/alpha/config/kConf.php');
+require_once(VIDIUN_ROOT_PATH . '/alpha/config/vConf.php');
 // Autoloader
-require_once(KALTURA_ROOT_PATH.DIRECTORY_SEPARATOR."infra".DIRECTORY_SEPARATOR."KAutoloader.php");
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "propel", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_API_PATH, "lib", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_API_PATH, "services", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "alpha", "plugins", "*")); // needed for testmeDoc
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "plugins", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "generator")); // needed for testmeDoc
-KAutoloader::setClassMapFilePath(kConf::get("cache_root_path") . '/plugins/' . basename(__FILE__) . '.cache');
-//KAutoloader::dumpExtra();
-KAutoloader::register();
+require_once(VIDIUN_ROOT_PATH.DIRECTORY_SEPARATOR."infra".DIRECTORY_SEPARATOR."VAutoloader.php");
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "propel", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_API_PATH, "lib", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_API_PATH, "services", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "alpha", "plugins", "*")); // needed for testmeDoc
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "plugins", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "generator")); // needed for testmeDoc
+VAutoloader::setClassMapFilePath(vConf::get("cache_root_path") . '/plugins/' . basename(__FILE__) . '.cache');
+//VAutoloader::dumpExtra();
+VAutoloader::register();
 
 // Timezone
-date_default_timezone_set(kConf::get("date_default_timezone")); // America/New_York
+date_default_timezone_set(vConf::get("date_default_timezone")); // America/New_York
 
 error_reporting(E_ALL);
-KalturaLog::setLogger(new KalturaStdoutLogger());
+VidiunLog::setLogger(new VidiunStdoutLogger());
 
-$dbConf = kConf::getDB();
+$dbConf = vConf::getDB();
 DbManager::setConfig($dbConf);
 DbManager::initialize();
 
-kCurrentContext::$ps_vesion = 'ps3';
+vCurrentContext::$ps_vesion = 'ps3';
 
 $entryId = '0_bs1fapzx';
 
@@ -56,7 +56,7 @@ foreach($argv as $arg)
 	}
 }
 
-		$fileTransferMgr = kFileTransferMgr::getInstance(kFileTransferMgrType::FTP);
+		$fileTransferMgr = vFileTransferMgr::getInstance(vFileTransferMgrType::FTP);
 		if(!$fileTransferMgr)
 			throw new Exception("SFTP manager not loaded");
 			
@@ -66,14 +66,14 @@ foreach($argv as $arg)
 
 		return;*/
 $entry = entryPeer::retrieveByPKNoFilter($entryId);
-$mrss = kMrssManager::getEntryMrss($entry);
+$mrss = vMrssManager::getEntryMrss($entry);
 file_put_contents('mrss.xml', $mrss);
-KalturaLog::debug("MRSS [$mrss]");
+VidiunLog::debug("MRSS [$mrss]");
 
-$distributionJobData = new KalturaDistributionSubmitJobData();
+$distributionJobData = new VidiunDistributionSubmitJobData();
 
 $dbDistributionProfile = DistributionProfilePeer::retrieveByPK(3);
-$distributionProfile = new KalturaDailymotionDistributionProfile();
+$distributionProfile = new VidiunDailymotionDistributionProfile();
 $distributionProfile->fromObject($dbDistributionProfile);
 $distributionJobData->distributionProfileId = $distributionProfile->id;
 
@@ -81,7 +81,7 @@ $distributionJobData->distributionProfileId = $distributionProfile->id;
 $distributionJobData->distributionProfile = $distributionProfile;
 
 $dbEntryDistribution = EntryDistributionPeer::retrieveByPK(24);
-$entryDistribution = new KalturaEntryDistribution();
+$entryDistribution = new VidiunEntryDistribution();
 $entryDistribution->fromObject($dbEntryDistribution);
 $distributionJobData->entryDistributionId = $entryDistribution->id;
 $distributionJobData->entryDistribution = $entryDistribution;
@@ -90,26 +90,26 @@ $myp = new DailymotionDistributionProfile();
 print_r($myp->validateForSubmission($dbEntryDistribution, "submit"));
 
 
-$providerData = new KalturaDailymotionDistributionJobProviderData($distributionJobData);
+$providerData = new VidiunDailymotionDistributionJobProviderData($distributionJobData);
 $distributionJobData->providerData = $providerData;
 
 //file_put_contents('out.xml', $providerData->xml);
-//KalturaLog::debug("XML [$providerData->xml]");
+//VidiunLog::debug("XML [$providerData->xml]");
 
 //return;
 $engine = new DailymotionDistributionEngine();
 $engine->submit($distributionJobData);
 
 
-//$xml = new KDOMDocument();
+//$xml = new VDOMDocument();
 //if(!$xml->loadXML($mrss))
 //{
-//	KalturaLog::err("MRSS not is not valid XML:\n$mrss\n");
+//	VidiunLog::err("MRSS not is not valid XML:\n$mrss\n");
 //	exit;
 //}
 //
 //$xslPath = 'submit.xsl';
-//$xsl = new KDOMDocument();
+//$xsl = new VDOMDocument();
 //$xsl->load($xslPath);
 //			
 //// set variables in the xsl
@@ -125,7 +125,7 @@ $engine->submit($distributionJobData);
 //	{
 //		$varNode->textContent = $distributionJobData->$name;
 //		$varNode->appendChild($xsl->createTextNode($distributionJobData->$name));
-//		KalturaLog::debug("Set variable [$name] to [{$distributionJobData->$name}]");
+//		VidiunLog::debug("Set variable [$name] to [{$distributionJobData->$name}]");
 //	}
 //}
 //
@@ -136,11 +136,11 @@ $engine->submit($distributionJobData);
 //$xml = $proc->transformToDoc($xml);
 //if(!$xml)
 //{
-//	KalturaLog::err("Transform returned false");
+//	VidiunLog::err("Transform returned false");
 //	exit;
 //}
 //
 //$xml = $xml->saveXML();
 //
 //file_put_contents('out.xml', $xml);
-//KalturaLog::debug("XML [$xml]");
+//VidiunLog::debug("XML [$xml]");

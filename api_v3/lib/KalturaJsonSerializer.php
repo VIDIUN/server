@@ -3,7 +3,7 @@
  * @package api
  * @subpackage v3
  */
-class KalturaJsonSerializer extends KalturaSerializer
+class VidiunJsonSerializer extends VidiunSerializer
 {	
 	public function setHttpHeaders()
 	{
@@ -44,7 +44,7 @@ class KalturaJsonSerializer extends KalturaSerializer
 			}
 		}
 		
-		if(is_object($object) && $object instanceof KalturaObject)
+		if(is_object($object) && $object instanceof VidiunObject)
 		{
 			$array['objectType'] = get_class($object);
 		}

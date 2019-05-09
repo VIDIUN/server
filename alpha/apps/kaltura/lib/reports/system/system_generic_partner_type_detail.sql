@@ -60,14 +60,14 @@ FROM
 			SUM(IF(date_id BETWEEN {FROM_DATE_ID} AND {TO_DATE_ID}, aggr_partner.count_bandwidth , NULL ) ) count_bandwidth,
 			SUM(IF(date_id BETWEEN {FROM_DATE_ID} AND {TO_DATE_ID}, aggr_partner.count_storage , NULL ) ) count_storage
 		FROM 
-			kalturadw.dwh_aggr_partner aggr_partner
+			vidiundw.dwh_aggr_partner aggr_partner
 		WHERE 
 			aggr_partner.date_id BETWEEN {TIME_SLOT_180} AND {TO_DATE_ID} 
 		GROUP BY 
 			aggr_partner.partner_id 
 	) aggr_single_partner
-		JOIN kalturadw.dwh_dim_partners dim_partner ON aggr_single_partner.partner_id=dim_partner.partner_id
-		JOIN kalturadw.dwh_dim_partner_type dim_partner_type ON dim_partner.partner_type_id=dim_partner_type.partner_type_id
+		JOIN vidiundw.dwh_dim_partners dim_partner ON aggr_single_partner.partner_id=dim_partner.partner_id
+		JOIN vidiundw.dwh_dim_partner_type dim_partner_type ON dim_partner.partner_type_id=dim_partner_type.partner_type_id
 	WHERE
 		dim_partner.created_date_id <= {TO_DATE_ID}
 	GROUP BY 
@@ -96,14 +96,14 @@ FROM
 				/* FLOOR(aggr_partner.date_id/100)=FLOOR({TO_DATE_ID}/100) - same calendary month as the TO-DATA*/
 				IF(SUM(IF(FLOOR(aggr_partner.date_id/100)=FLOOR({TO_DATE_ID}/100),aggr_partner.count_bandwidth,NULL))+SUM(aggr_partner.count_storage*1024)>10*1024*1024,1,NULL) billing_bandwidth_greater_10_gb /* compare all data in KB */
 			FROM 
-				kalturadw.dwh_aggr_partner aggr_partner
+				vidiundw.dwh_aggr_partner aggr_partner
 			WHERE 
 				aggr_partner.date_id <={TO_DATE_ID}
 			GROUP BY 
 				aggr_partner.partner_id
         ) aggr_single_partner
-				JOIN kalturadw.dwh_dim_partners dim_partner ON aggr_single_partner.partner_id=dim_partner.partner_id
-                JOIN kalturadw.dwh_dim_partner_type dim_partner_type ON dim_partner.partner_type_id=dim_partner_type.partner_type_id
+				JOIN vidiundw.dwh_dim_partners dim_partner ON aggr_single_partner.partner_id=dim_partner.partner_id
+                JOIN vidiundw.dwh_dim_partner_type dim_partner_type ON dim_partner.partner_type_id=dim_partner_type.partner_type_id
 		WHERE
 			dim_partner.created_date_id <= {TO_DATE_ID}                
         GROUP BY

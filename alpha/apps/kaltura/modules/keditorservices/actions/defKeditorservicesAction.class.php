@@ -1,31 +1,31 @@
 <?php
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-class defKeditorservicesAction extends kalturaAction
+class defVeditorservicesAction extends vidiunAction
 {
-	//	protected $kshow_id;
-	//	protected $kshow;
+	//	protected $vshow_id;
+	//	protected $vshow;
 	// the objects bellow are actually the user's session 
 	protected $partner_id;
 	protected $subp_id;
-	protected $ks_str;
+	protected $vs_str;
 	protected $uid; 
 	
-	protected function fetchKshow()
+	protected function fetchVshow()
 	{
 		return true;
 	}
 	/**
 	 * This function will be implemented in eash of the derived convrete classes which represent a service
-	 * for Keditor.
-	 * To simplifu work - it will be passed the $this->kshow which will never be null.
+	 * for Veditor.
+	 * To simplifu work - it will be passed the $this->vshow which will never be null.
 	 */
 /*
-	abstract protected function executeImpl( $kshow ); 
+	abstract protected function executeImpl( $vshow ); 
 
-	abstract protected function noSuchKshow ( $kshow_id );
+	abstract protected function noSuchVshow ( $vshow_id );
 	*/
 		
 	public function execute()
@@ -36,12 +36,12 @@ class defKeditorservicesAction extends kalturaAction
 		$entry_id = @$_REQUEST["entry_id"];
 		if ( $entry_id == NULL || !$entry_id || $entry_id < 0 )
 		{
-			$kshow_id = @$_REQUEST["kshow_id"];
-			if ($kshow_id)
+			$vshow_id = @$_REQUEST["vshow_id"];
+			if ($vshow_id)
 			{
-				$kshow = kshowPeer::retrieveByPK( $kshow_id );
-				if ( ! $kshow ) return; // request for non-existing kshow_id
-				$entry_id = $kshow->getShowEntryId();
+				$vshow = vshowPeer::retrieveByPK( $vshow_id );
+				if ( ! $vshow ) return; // request for non-existing vshow_id
+				$entry_id = $vshow->getShowEntryId();
 			}
 		}
 		
@@ -50,7 +50,7 @@ class defKeditorservicesAction extends kalturaAction
 		
 		$this->partner_id = $this->getRequestParameter( "partner_id" ); 
 		$this->subp_id = $this->getRequestParameter( "subp_id" );
-		$this->ks_str = $this->getRequestParameter( "ks" );
+		$this->vs_str = $this->getRequestParameter( "vs" );
 		$this->uid = $this->getRequestParameter( "uid" );
 		
 		$this->entry_id = $entry_id;
@@ -62,36 +62,36 @@ class defKeditorservicesAction extends kalturaAction
 			return;
 		}
 		
-		if ( $this->fetchKshow() )
+		if ( $this->fetchVshow() )
 		{
-			$kshow_id = $entry->getKshowId();
+			$vshow_id = $entry->getVshowId();
 			
-			//$kshow_id = @$_REQUEST["kshow_id"];
-			$this->kshow_id = $kshow_id;
+			//$vshow_id = @$_REQUEST["vshow_id"];
+			$this->vshow_id = $vshow_id;
 	
-			if ( $kshow_id == NULL || !$kshow_id ) return;
+			if ( $vshow_id == NULL || !$vshow_id ) return;
 	
-			$kshow = kshowPeer::retrieveByPK( $kshow_id );
+			$vshow = vshowPeer::retrieveByPK( $vshow_id );
 	// TODO - PRIVILEGES
-	/*		$user_ok = $this->forceEditPermissions( $kshow , $kshow_id , false);
+	/*		$user_ok = $this->forceEditPermissions( $vshow , $vshow_id , false);
 			
 			if ( ! $user_ok )
 			{
-				return $this->securityViolation( $kshow_id ); 
+				return $this->securityViolation( $vshow_id ); 
 			}
 	*/
-			if ( $kshow == NULL )
+			if ( $vshow == NULL )
 			{
-				$this->noSuchKshow ( $kshow_id );
+				$this->noSuchVshow ( $vshow_id );
 				return;
 			}
 		}
 		else
 		{
 			
-			$kshow = new kshow();
-			$kshow_id = $entry->getKshowId();
-			$this->kshow_id = $kshow_id;
+			$vshow = new vshow();
+			$vshow_id = $entry->getVshowId();
+			$this->vshow_id = $vshow_id;
 		}
 		
 		// TODO
@@ -99,12 +99,12 @@ class defKeditorservicesAction extends kalturaAction
 		//$this->forceAuthentication();
 
 		$this->entry = $entry;
-		$this->kshow = $kshow;
+		$this->vshow = $vshow;
 		$duration = 0;
 		
-//		$this->logMessage ( __CLASS__ . " 888 $kshow_id"  , "err");
+//		$this->logMessage ( __CLASS__ . " 888 $vshow_id"  , "err");
 		
-		$result = $this->executeImpl( $this->kshow, $this->entry );
+		$result = $this->executeImpl( $this->vshow, $this->entry );
 		
 		if ( $result != NULL )
 		{
@@ -118,7 +118,7 @@ class defKeditorservicesAction extends kalturaAction
 		$this->getController()->setRenderMode ( sfView::RENDER_CLIENT );
 	}
 	
-	protected function executeImpl( kshow $kshow, entry &$entry)
+	protected function executeImpl( vshow $vshow, entry &$entry)
 	{
 		return "text/html; charset=utf-8";
 	}
@@ -128,15 +128,15 @@ class defKeditorservicesAction extends kalturaAction
 		$this->xml_content = "No such entry [$entry_id]";
 	}
 	
-	protected function noSuchKshow ( $kshow_id )
+	protected function noSuchVshow ( $vshow_id )
 	{
-		$this->xml_content = "No such show [$kshow_id]";
+		$this->xml_content = "No such show [$vshow_id]";
 	}
 	
 	
-	protected function  securityViolation( $kshow_id )
+	protected function  securityViolation( $vshow_id )
 	{
-		$xml = "<xml><kshow id=\"$kshow_id\" securityViolation=\"true\"/></xml>";
+		$xml = "<xml><vshow id=\"$vshow_id\" securityViolation=\"true\"/></xml>";
 		$this->getResponse()->setHttpHeader ( "Content-Type" , "text/xml; charset=utf-8" );
 		$this->getController()->setRenderMode ( sfView::RENDER_NONE );
 		return $this->renderText( $xml );
@@ -145,18 +145,18 @@ class defKeditorservicesAction extends kalturaAction
 	
 	/**
 	 * Supports backward compatibility
-	 * returns all kusers of the puser
+	 * returns all vusers of the puser
 	 */
 	protected function getLoggedInUserIds ( )
 	{
 		$ret = array($this->getLoggedInPuserId());
 		
 		$c = new Criteria();
-		$c->add(kuserPeer::PUSER_ID, $this->uid);
-		$kusers = kuserPeer::doSelect($c);
+		$c->add(vuserPeer::PUSER_ID, $this->uid);
+		$vusers = vuserPeer::doSelect($c);
 		
-		foreach($kusers as $kuser)
-			$ret[] = $kuser->getId();
+		foreach($vusers as $vuser)
+			$ret[] = $vuser->getId();
 			
 		return $ret;
 	}
@@ -166,24 +166,24 @@ class defKeditorservicesAction extends kalturaAction
 		if ( $this->partner_id )
 		{
 			// this part overhere should be in a more generic place - part of the services
-			$ks = "";
+			$vs = "";
 			// TODO - for now ignore the session
-			$valid = true; // ( 0 >= kSessionUtils::validateKSession ( $this->partner_id , $this->uid , $this->ks_str ,&$ks ) );
+			$valid = true; // ( 0 >= vSessionUtils::validateVSession ( $this->partner_id , $this->uid , $this->vs_str ,&$vs ) );
 			if ( $valid )
 			{
 				$puser_id = $this->uid;
-				// actually the better user indicator will be placed in the ks - TODO - use it !! 
-				// $puser_id = $ks->user; 
+				// actually the better user indicator will be placed in the vs - TODO - use it !! 
+				// $puser_id = $vs->user; 
 				
-				$kuser_name = $puser_name = $this->getP ( "user_name" );
+				$vuser_name = $puser_name = $this->getP ( "user_name" );
 				if ( ! $puser_name )
 				{
-					$kuser_name = myPartnerUtils::getPrefix( $this->partner_id ) . $puser_id;
+					$vuser_name = myPartnerUtils::getPrefix( $this->partner_id ) . $puser_id;
 				}
 				// will return the existing one if any, will create is none
-				$puser_kuser = PuserKuserPeer::createPuserKuser ( $this->partner_id , $this->subp_id, $puser_id , $kuser_name , $puser_name, false  );
-				$likuser_id = $puser_kuser->getKuserId(); // from now on  - this will be considered the logged in user
-				return $likuser_id;
+				$puser_vuser = PuserVuserPeer::createPuserVuser ( $this->partner_id , $this->subp_id, $puser_id , $vuser_name , $puser_name, false  );
+				$livuser_id = $puser_vuser->getVuserId(); // from now on  - this will be considered the logged in user
+				return $livuser_id;
 			}
 
 		}

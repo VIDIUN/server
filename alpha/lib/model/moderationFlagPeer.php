@@ -31,12 +31,12 @@ class moderationFlagPeer extends BasemoderationFlagPeer
 		self::doUpdateAll($c, $update);
 	}
 	
-	public static function markAsModeratedByKUserId($partnerId, $kuserId)
+	public static function markAsModeratedByVUserId($partnerId, $vuserId)
 	{
 		$c = new Criteria();
 		$c->addAnd(moderationFlagPeer::PARTNER_ID, $partnerId);
 		$c->addAnd(moderationFlagPeer::OBJECT_TYPE, moderationObjectType::ENTRY);
-		$c->addAnd(moderationFlagPeer::FLAGGED_KUSER_ID, $kuserId);
+		$c->addAnd(moderationFlagPeer::FLAGGED_VUSER_ID, $vuserId);
 		$c->addAnd(moderationFlagPeer::STATUS, moderationFlagStatus::PENDING);
 		
 		$update = new Criteria();

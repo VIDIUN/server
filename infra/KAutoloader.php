@@ -1,12 +1,12 @@
 <?php
 
-defined('KALTURA_ROOT_PATH') ||  define('KALTURA_ROOT_PATH', realpath(__DIR__ . '/../'));
+defined('VIDIUN_ROOT_PATH') ||  define('VIDIUN_ROOT_PATH', realpath(__DIR__ . '/../'));
 
 /**
  * @package infra
  * @subpackage autoloader
  */
-class KAutoloader
+class VAutoloader
 {
 	static private $_oldIncludePath = "";
 	static private $_classPath = null;
@@ -23,7 +23,7 @@ class KAutoloader
 			self::setDefaultIncludePath();
 
 		// register the autoload
-		spl_autoload_register(array("KAutoloader", "autoload"));
+		spl_autoload_register(array("VAutoloader", "autoload"));
 
 		// set include path
 		self::$_oldIncludePath = get_include_path();
@@ -32,7 +32,7 @@ class KAutoloader
 
 	static function unregister()
 	{
-		spl_autoload_unregister(array("KAutoloader", "autoload"));
+		spl_autoload_unregister(array("VAutoloader", "autoload"));
 		set_include_path(self::$_oldIncludePath);
 	}
 
@@ -42,7 +42,7 @@ class KAutoloader
 		if (strpos($class, "Zend_") === 0)
 		{
 			$zendLoaderClass = "Zend_Loader.php";
-			require_once(self::buildPath(KALTURA_ROOT_PATH, "vendor", "ZendFramework", "library").DIRECTORY_SEPARATOR.str_replace("_", DIRECTORY_SEPARATOR, $zendLoaderClass));
+			require_once(self::buildPath(VIDIUN_ROOT_PATH, "vendor", "ZendFramework", "library").DIRECTORY_SEPARATOR.str_replace("_", DIRECTORY_SEPARATOR, $zendLoaderClass));
 			Zend_Loader::loadClass($class);
 			return;
 		}
@@ -147,7 +147,7 @@ class KAutoloader
 	static function setClassMapFilePath($path)
 	{
 		self::$_classMapFileLocation = $path;
-		self::$_classMapCacheKey = 'KAutoloader_'.substr(md5(self::$_classMapFileLocation), 0, 10).'_';
+		self::$_classMapCacheKey = 'VAutoloader_'.substr(md5(self::$_classMapFileLocation), 0, 10).'_';
 	}
 
 	/**
@@ -302,11 +302,11 @@ class KAutoloader
 	private static function setDefaultClassPath()
 	{
 		self::$_classPath = array(
-			self::buildPath(KALTURA_ROOT_PATH, 'infra', '*'),
-	   		self::buildPath(KALTURA_ROOT_PATH, 'vendor', 'symfony', '*'),
-	   		self::buildPath(KALTURA_ROOT_PATH, 'alpha', 'lib', '*'),
-	   		self::buildPath(KALTURA_ROOT_PATH, 'alpha', 'config'),
-	   		self::buildPath(KALTURA_ROOT_PATH, 'alpha', 'apps', 'kaltura', 'lib', '*'),
+			self::buildPath(VIDIUN_ROOT_PATH, 'infra', '*'),
+	   		self::buildPath(VIDIUN_ROOT_PATH, 'vendor', 'symfony', '*'),
+	   		self::buildPath(VIDIUN_ROOT_PATH, 'alpha', 'lib', '*'),
+	   		self::buildPath(VIDIUN_ROOT_PATH, 'alpha', 'config'),
+	   		self::buildPath(VIDIUN_ROOT_PATH, 'alpha', 'apps', 'vidiun', 'lib', '*'),
 		);
 	}
 
@@ -316,13 +316,13 @@ class KAutoloader
 	private static function setDefaultIncludePath()
 	{
 		self::$_includePath = array(
-			self::buildPath(KALTURA_ROOT_PATH),
-			self::buildPath(KALTURA_ROOT_PATH, 'vendor', 'symfony'),
-			self::buildPath(KALTURA_ROOT_PATH, 'vendor', 'symfony', 'vendor'),
-			self::buildPath(KALTURA_ROOT_PATH, 'vendor', 'ZendFramework', 'library'),
-			self::buildPath(KALTURA_ROOT_PATH, 'alpha'),
-			self::buildPath(KALTURA_ROOT_PATH, 'alpha', 'lib'),
-			self::buildPath(KALTURA_ROOT_PATH, 'alpha', 'apps', 'kaltura', 'lib'),
+			self::buildPath(VIDIUN_ROOT_PATH),
+			self::buildPath(VIDIUN_ROOT_PATH, 'vendor', 'symfony'),
+			self::buildPath(VIDIUN_ROOT_PATH, 'vendor', 'symfony', 'vendor'),
+			self::buildPath(VIDIUN_ROOT_PATH, 'vendor', 'ZendFramework', 'library'),
+			self::buildPath(VIDIUN_ROOT_PATH, 'alpha'),
+			self::buildPath(VIDIUN_ROOT_PATH, 'alpha', 'lib'),
+			self::buildPath(VIDIUN_ROOT_PATH, 'alpha', 'apps', 'vidiun', 'lib'),
 		);
 	}
 
@@ -348,9 +348,9 @@ class KAutoloader
 			return;
 		}
 
-		require_once(__DIR__ . '/general/kLockBase.php');
+		require_once(__DIR__ . '/general/vLockBase.php');
 		
-		$lock = kLockBase::grabLocalLock('KAutoloader');
+		$lock = vLockBase::grabLocalLock('VAutoloader');
 		
 		// try loading again - some other instance may have created the cache while we waited for the lock
 		if ($lock && self::loadClassMapFromCache())
@@ -423,7 +423,7 @@ class KAutoloader
 		return true;
 	}
 
-	// code copied from kFile, since we can't depend on other classes here
+	// code copied from vFile, since we can't depend on other classes here
 	public static function safeFilePutContents($filePath, $var)
 	{
 		// write to a temp file and then rename, so that the write will be atomic

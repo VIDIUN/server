@@ -37,7 +37,7 @@ class flickrTokenTableMap extends TableMap {
 		$this->setPackage('Core');
 		$this->setUseIdGenerator(false);
 		// columns
-		$this->addPrimaryKey('KALT_TOKEN', 'KaltToken', 'VARCHAR', true, 256, null);
+		$this->addPrimaryKey('VIDI_TOKEN', 'VidiToken', 'VARCHAR', true, 256, null);
 		$this->addColumn('FROB', 'Frob', 'VARCHAR', false, 64, null);
 		$this->addColumn('TOKEN', 'Token', 'VARCHAR', false, 64, null);
 		$this->addColumn('NSID', 'Nsid', 'VARCHAR', false, 64, null);

@@ -19,14 +19,14 @@ class AppToken extends BaseAppToken
 
 	private function calculateId()
 	{
-		$dc = kDataCenterMgr::getCurrentDc();
+		$dc = vDataCenterMgr::getCurrentDc();
 		for ($i = 0; $i < 10; $i++)
 		{
-			$id = $dc["id"] . '_' . kString::generateStringId();
+			$id = $dc["id"] . '_' . vString::generateStringId();
 			$existingObject = AppTokenPeer::retrieveByPkNoFilter($id);
 
 			if ($existingObject)
-				KalturaLog::log("ID [$id] already exists");
+				VidiunLog::log("ID [$id] already exists");
 			else
 				return $id;
 		}
@@ -70,7 +70,7 @@ class AppToken extends BaseAppToken
 	public function calcHash()
 	{
 		$hashFunction = $this->getHashType();
-		return hash($hashFunction, kCurrentContext::$ks . $this->getToken());
+		return hash($hashFunction, vCurrentContext::$vs . $this->getToken());
 	}
 
 	public function setDescription($description)

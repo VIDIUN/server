@@ -40,7 +40,7 @@ class myCCMixterServices extends myBaseMediaSource implements IMediaSource
 		}
 	}
 	
-	public function getAuthData( $kuserId, $userName, $password, $token)
+	public function getAuthData( $vuserId, $userName, $password, $token)
 	{
 		return array('status' => 'ok', 'message' => '', 'authData' => $userName);
 //		return ""; // empty value
@@ -85,7 +85,7 @@ class myCCMixterServices extends myBaseMediaSource implements IMediaSource
 		$images = array();
 		$message = '';
 		
-		$xmlStr = kFile::downloadUrlToString($url);
+		$xmlStr = vFile::downloadUrlToString($url);
 
 		$doc = new DOMDocument();
 		$doc->loadXML($xmlStr);

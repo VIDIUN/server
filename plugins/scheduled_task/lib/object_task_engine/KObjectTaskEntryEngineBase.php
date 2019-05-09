@@ -4,10 +4,10 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectTaskEngine
  */
-abstract class KObjectTaskEntryEngineBase extends KObjectTaskEngineBase
+abstract class VObjectTaskEntryEngineBase extends VObjectTaskEngineBase
 {
 	function getSupportedObjectTypes()
 	{
-		return array('KalturaBaseEntry');
+		return array('VidiunBaseEntry');
 	}
 } 

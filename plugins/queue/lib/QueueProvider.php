@@ -7,7 +7,7 @@ abstract class QueueProvider
 {
     public static function getInstance($objectType = null, $constructorArgs = null)
     {
-        return KalturaPluginManager::loadObject('QueueProvider', $objectType, $constructorArgs);
+        return VidiunPluginManager::loadObject('QueueProvider', $objectType, $constructorArgs);
     }
 
     abstract public function exists($queueName);

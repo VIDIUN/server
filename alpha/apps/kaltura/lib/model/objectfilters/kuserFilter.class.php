@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.filters
  */ 
-class kuserFilter extends baseObjectFilter
+class vuserFilter extends baseObjectFilter
 {
 	const PUSER_ID_OR_SCREEN_NAME = 'puser_id,screen_name';
 	const FIRST_NAME_OR_LAST_NAME = 'full_name,last_name';
@@ -12,7 +12,7 @@ class kuserFilter extends baseObjectFilter
 	{
 		// TODO - should separate the schema of the fields from the actual values
 		// or can use this to set default valuse
-		$this->fields = kArray::makeAssociativeDefaultValue (
+		$this->fields = vArray::makeAssociativeDefaultValue (
 			array (
 				"_likex_screen_name"   , 
 				"_like_screen_name"   ,
@@ -24,7 +24,7 @@ class kuserFilter extends baseObjectFilter
 				"_mlikeand_tags" ,
 				"_gte_created_at" ,
 				"_lte_created_at" ,
-				"_gte_produced_kshows" ,
+				"_gte_produced_vshows" ,
 				"_gte_entries" ,
 				"_eq_partner_id" , 
 				"_eq_puser_id",
@@ -70,13 +70,13 @@ class kuserFilter extends baseObjectFilter
 	// The base class should invoke $peek_class::translateFieldName( $field_name , BasePeer::TYPE_FIELDNAME , BasePeer::TYPE_COLNAME );
 	public function getFieldNameFromPeer ( $field_name )
 	{
-		$res = kuserPeer::translateFieldName( $field_name , $this->field_name_translation_type , BasePeer::TYPE_COLNAME );
+		$res = vuserPeer::translateFieldName( $field_name , $this->field_name_translation_type , BasePeer::TYPE_COLNAME );
 		return $res;
 	}
 
 	public function getIdFromPeer (  )
 	{
-		return kuserPeer::ID;
+		return vuserPeer::ID;
 	}
 }
 

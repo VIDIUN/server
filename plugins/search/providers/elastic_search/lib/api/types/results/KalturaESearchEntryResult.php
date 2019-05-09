@@ -3,10 +3,10 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchEntryResult extends KalturaESearchResult
+class VidiunESearchEntryResult extends VidiunESearchResult
 {
 	/**
-	 * @var KalturaBaseEntry
+	 * @var VidiunBaseEntry
 	 */
 	public $object;
 
@@ -19,10 +19,10 @@ class KalturaESearchEntryResult extends KalturaESearchResult
 		return array_merge(parent::getMapBetweenObjects(), self::$map_between_objects);
 	}
 
-	protected function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$isAdmin = kCurrentContext::$ks_object->isAdmin();
-		$object = KalturaEntryFactory::getInstanceByType($srcObj->getObject()->getType(), $isAdmin);
+		$isAdmin = vCurrentContext::$vs_object->isAdmin();
+		$object = VidiunEntryFactory::getInstanceByType($srcObj->getObject()->getType(), $isAdmin);
 		$object->fromObject($srcObj->getObject(), $responseProfile);
 		$this->object = $object;
 		return parent::doFromObject($srcObj, $responseProfile);

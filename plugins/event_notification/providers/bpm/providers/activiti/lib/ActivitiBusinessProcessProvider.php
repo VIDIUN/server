@@ -3,12 +3,12 @@
  * @package plugins.activitiBusinessProcessNotification
  * @subpackage model.enum
  */
-class ActivitiBusinessProcessProvider implements IKalturaPluginEnum, BusinessProcessProvider
+class ActivitiBusinessProcessProvider implements IVidiunPluginEnum, BusinessProcessProvider
 {
 	const ACTIVITI = 'Activiti';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalValues()
+	 * @see IVidiunPluginEnum::getAdditionalValues()
 	 */
 	public static function getAdditionalValues()
 	{
@@ -18,7 +18,7 @@ class ActivitiBusinessProcessProvider implements IKalturaPluginEnum, BusinessPro
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalDescriptions()
+	 * @see IVidiunPluginEnum::getAdditionalDescriptions()
 	 */
 	public static function getAdditionalDescriptions() 
 	{

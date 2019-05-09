@@ -5,10 +5,10 @@
  * @package infra
  * @subpackage utils
  */
-class kUTF8
+class vUTF8
 {
 	/* 
-	 * the following script creates the kUTF8Codes.php file which contains all of the UTF8 characters and their lexical order
+	 * the following script creates the vUTF8Codes.php file which contains all of the UTF8 characters and their lexical order
 	 * the file is used by the str2int64 function which creates a numeric representation of the first 4 UTF8 chars of a give string
 	 
 	#!/bin/bash
@@ -71,7 +71,7 @@ class kUTF8
 	
 	# create a php file where every character code is assigned its lexical order
 	# a char is either the same as its predecessor or next in order according to previous strcmp check
-	awk 'BEGIN {print "<?"} s[$1] != 1 {x=x+1-$2; print "$kUTF8Codes["$1"]="x";"} {s[$1]=1} ' tmp_charlike_space >kUTF8Codes.php
+	awk 'BEGIN {print "<?"} s[$1] != 1 {x=x+1-$2; print "$vUTF8Codes["$1"]="x";"} {s[$1]=1} ' tmp_charlike_space >vUTF8Codes.php
 
 	# remove temp files 
 	rm -f list.htm* chars tmp_*
@@ -88,8 +88,8 @@ class kUTF8
 	 */
 	public static function str2int64 ( $s )
 	{
-		global $kUTF8Codes;
-		require_once(__DIR__ . "/kUTF8Codes.php");
+		global $vUTF8Codes;
+		require_once(__DIR__ . "/vUTF8Codes.php");
 
 		// get 4 letters prefix (add trailing spaces chars in case we are missing characters)
 		$s = iconv_substr($s."    ", 0, 4, "UTF-8");
@@ -102,7 +102,7 @@ class kUTF8
 			$l = strlen($c);
 			$c = substr("\0\0\0\0", 0, 4 - $l).$c;
 			$o = unpack("N", $c);
-			$ords[$i] = $kUTF8Codes[$o[1]];
+			$ords[$i] = $vUTF8Codes[$o[1]];
 		}
 
 		if(function_exists('gmp_init'))

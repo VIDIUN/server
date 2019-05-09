@@ -5,10 +5,10 @@
  * 
  * Old session restriction for backward compatibility
  */
-class kAccessControlSessionRestriction extends kAccessControlRestriction
+class vAccessControlSessionRestriction extends vAccessControlRestriction
 {
 	/**
-	 * @var kAuthenticatedCondition
+	 * @var vAuthenticatedCondition
 	 */
 	private $condition;
 	
@@ -18,19 +18,19 @@ class kAccessControlSessionRestriction extends kAccessControlRestriction
 	public function __construct(accessControl $accessControl = null)
 	{
 		parent::__construct($accessControl);
-		$this->setActions(array(new kAccessControlAction(RuleActionType::BLOCK)));
+		$this->setActions(array(new vAccessControlAction(RuleActionType::BLOCK)));
 		
-		$this->condition = new kAuthenticatedCondition(true);
+		$this->condition = new vAuthenticatedCondition(true);
 		if($accessControl)
-			$this->condition->setPrivileges(array($accessControl->getKsRestrictPrivilege()));
+			$this->condition->setPrivileges(array($accessControl->getVsRestrictPrivilege()));
 		
 		$this->setConditions(array($this->getCondition()));
 	}
 
 	/* (non-PHPdoc)
-	 * @see kRule::applyContext()
+	 * @see vRule::applyContext()
 	 */
-	public function applyContext(kContextDataResult $context)
+	public function applyContext(vContextDataResult $context)
 	{
 		$fulfilled = parent::applyContext($context);
 		if($fulfilled)
@@ -40,7 +40,7 @@ class kAccessControlSessionRestriction extends kAccessControlRestriction
 	}
 
 	/**
-	 * @return kAuthenticatedCondition
+	 * @return vAuthenticatedCondition
 	 */
 	private function getCondition()
 	{

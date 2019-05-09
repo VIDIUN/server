@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaLanguage extends KalturaStringEnum
+class VidiunLanguage extends VidiunStringEnum
 {
 	const AB = 'Abkhazian';
 	const AA = 'Afar';

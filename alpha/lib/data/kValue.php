@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-abstract class kValue
+abstract class vValue
 {
 	/**
 	 * @var int|string|bool

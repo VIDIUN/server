@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaGroupUserStatus extends KalturaEnum implements KuserKgroupStatus
+class VidiunGroupUserStatus extends VidiunEnum implements VuserVgroupStatus
 {
-	// see KuserKgroupStatus interface
+	// see VuserVgroupStatus interface
 }

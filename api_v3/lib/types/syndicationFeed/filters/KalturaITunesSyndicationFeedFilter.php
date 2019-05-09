@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaITunesSyndicationFeedFilter extends KalturaITunesSyndicationFeedBaseFilter
+class VidiunITunesSyndicationFeedFilter extends VidiunITunesSyndicationFeedBaseFilter
 {
 }

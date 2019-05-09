@@ -3,7 +3,7 @@
  * @package plugins.scheduledTask
  * @subpackage Scheduler
  */
-class KScheduledTaskDryRunner extends KJobHandlerWorker
+class VScheduledTaskDryRunner extends VJobHandlerWorker
 {
 	const SHARED_TEMP_PATH = "sharedTempPath";
 	const PAGE_SIZE = 500;
@@ -30,17 +30,17 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 	private $maxResults;
 
 	/**
-	 * @var kalturaPager
+	 * @var vidiunPager
 	 */
 	private $pager;
 
 	/**
-	 * @var KalturaBaseEntryFilter
+	 * @var VidiunBaseEntryFilter
 	 */
 	private $filter;
 
 	/**
-	 * @var kalturaClient
+	 * @var vidiunClient
 	 */
 	private $client;
 
@@ -50,15 +50,15 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 	private $scheduledTaskProfile;
 
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::SCHEDULED_TASK;
+		return VidiunBatchJobType::SCHEDULED_TASK;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getJobType()
+	 * @see VBatchBase::getJobType()
 	 */
 	public function getJobType()
 	{
@@ -68,8 +68,8 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 	private function initClient($jobData, $partnerId)
 	{
 		$client = $this->getClient();
-		$ks = $this->createDryRunnerKs($client, $jobData);
-		$client->setKs($ks);
+		$vs = $this->createDryRunnerVs($client, $jobData);
+		$client->setVs($vs);
 		$this->impersonate($partnerId);
 		$this->client = $client;
 	}
@@ -77,10 +77,10 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 	private function initRunFiles()
 	{
 		$sharedPath = $this->getAdditionalParams(self::SHARED_TEMP_PATH);
-		KalturaLog::info('Temp shared path: '.$sharedPath);
+		VidiunLog::info('Temp shared path: '.$sharedPath);
 		if (!is_dir($sharedPath))
 		{
-			kFile::fullMkfileDir($sharedPath);
+			vFile::fullMkfileDir($sharedPath);
 			if (!is_dir($sharedPath))
 				throw new Exception('Shared path ['.$sharedPath.'] does not exist and could not be created');
 		}
@@ -89,24 +89,24 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 		$this->sharedFilePath = $sharedPath.DIRECTORY_SEPARATOR.$fileName;
 		$this->tempFilePath = sys_get_temp_dir().DIRECTORY_SEPARATOR.$fileName;
 		$this->handle = fopen($this->tempFilePath, "w");
-		KalturaLog::info('Temp file: '.$this->tempFilePath);
+		VidiunLog::info('Temp file: '.$this->tempFilePath);
 	}
 
 	/**
 	 * @param string $profileId
-	 * @return KalturaScheduledTaskProfile
+	 * @return VidiunScheduledTaskProfile
 	 */
 	private function getScheduledTaskProfile($profileId)
 	{
 		$client = $this->getClient();
-		$scheduledTaskClient = KalturaScheduledTaskClientPlugin::get($client);
+		$scheduledTaskClient = VidiunScheduledTaskClientPlugin::get($client);
 		return $scheduledTaskClient->scheduledTaskProfile->get($profileId);
 	}
 
-	protected function createDryRunnerKs(KalturaClient $client, KalturaScheduledTaskJobData $jobData)
+	protected function createDryRunnerVs(VidiunClient $client, VidiunScheduledTaskJobData $jobData)
 	{
 		$partnerId = self::$taskConfig->getPartnerId();
-		$sessionType = KalturaSessionType::ADMIN;
+		$sessionType = VidiunSessionType::ADMIN;
 		$puserId = 'batchUser';
 		$adminSecret = self::$taskConfig->getSecret();
 		$privileges = array('disableentitlement');
@@ -116,14 +116,14 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 		return $client->generateSession($adminSecret, $puserId, $sessionType, $partnerId, 86400, implode(',', $privileges));
 	}
 
-	private function initRunData(KalturaBatchJob $job, KalturaScheduledTaskJobData $jobData)
+	private function initRunData(VidiunBatchJob $job, VidiunScheduledTaskJobData $jobData)
 	{
 		$this->initRunFiles();
 		$profileId = $job->jobObjectId;
 		$this->maxResults = ($jobData->maxResults) ? $jobData->maxResults : self::PAGE_SIZE;
 		$this->scheduledTaskProfile = $this->getScheduledTaskProfile($profileId);
 		$this->initClient($jobData, $this->scheduledTaskProfile->partnerId);
-		$this->pager = new KalturaFilterPager();
+		$this->pager = new VidiunFilterPager();
 		$this->pager->pageSize = self::PAGE_SIZE;
 		$this->pager->pageIndex = 1;
 		$this->filter = $this->scheduledTaskProfile->objectFilter;
@@ -135,17 +135,17 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 		foreach ($entries as $entry)
 		{
 			$csvEntryData = $this->getCsvData($entry);
-			KCsvWrapper::sanitizedFputCsv($this->handle, $csvEntryData, ",");
+			VCsvWrapper::sanitizedFputCsv($this->handle, $csvEntryData, ",");
 		}
 	}
 
-	private function execDryRunInCSVMode($firstPage, KalturaScheduledTaskJobData $jobData)
+	private function execDryRunInCSVMode($firstPage, VidiunScheduledTaskJobData $jobData)
 	{
-		$jobData->fileFormat = KalturaDryRunFileType::CSV;
+		$jobData->fileFormat = VidiunDryRunFileType::CSV;
 		$resultsCount = count($firstPage->objects);
 		try
 		{
-			KCsvWrapper::sanitizedFputCsv($this->handle, $this->getCsvHeaders());
+			VCsvWrapper::sanitizedFputCsv($this->handle, $this->getCsvHeaders());
 			$this->writeEntriesToCsv($firstPage->objects);
 			$count = $resultsCount;
 			$this->updateFitler($firstPage->objects);
@@ -172,7 +172,7 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 	}
 
 	/**
-	 * @param KalturaMediaEntry $entry
+	 * @param VidiunMediaEntry $entry
 	 * @return array
 	 */
 	private function getCsvData($entry)
@@ -192,13 +192,13 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 
 
 	/**
-	 * @param KalturaBaseEntryListResponse $firstPage
-	 * @param KalturaScheduledTaskJobData $jobData
+	 * @param VidiunBaseEntryListResponse $firstPage
+	 * @param VidiunScheduledTaskJobData $jobData
 	 * @throws Exception
 	 */
-	private function execDryRunInListResponseMode($firstPage, KalturaScheduledTaskJobData $jobData)
+	private function execDryRunInListResponseMode($firstPage, VidiunScheduledTaskJobData $jobData)
 	{
-		$jobData->fileFormat = KalturaDryRunFileType::LIST_RESPONSE;
+		$jobData->fileFormat = VidiunDryRunFileType::LIST_RESPONSE;
 		$resultsCount = count($firstPage->objects);
 		$resultObjects = $firstPage->objects;
 		if($resultsCount)
@@ -220,7 +220,7 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 
 	private function saveResponseListResult($objects, $totalCount)
 	{
-		$response = new KalturaObjectListResponse();
+		$response = new VidiunObjectListResponse();
 		$response->totalCount = $totalCount;
 		$response->objects = $objects;
 		try
@@ -234,7 +234,7 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 		}
 	}
 
-	private function execDryRun(KalturaBatchJob $job, KalturaScheduledTaskJobData $jobData)
+	private function execDryRun(VidiunBatchJob $job, VidiunScheduledTaskJobData $jobData)
 	{
 		$this->initRunData($job, $jobData);
 		$firstPage = ScheduledTaskBatchHelper::query($this->client, $this->scheduledTaskProfile, $this->pager, $this->filter);
@@ -248,20 +248,20 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 		}
 
 		$this->closeDryRun($jobData);
-		return $this->closeJob($job, null, null, 'Dry run finished', KalturaBatchJobStatus::FINISHED, $jobData);
+		return $this->closeJob($job, null, null, 'Dry run finished', VidiunBatchJobStatus::FINISHED, $jobData);
 	}
 
 	private function closeDryRun($jobData)
 	{
 		$this->unimpersonate();
 		fclose($this->handle);
-		kFile::moveFile($this->tempFilePath, $this->sharedFilePath);
-		KalturaLog::info('Temp shared path: '.$this->sharedFilePath);
+		vFile::moveFile($this->tempFilePath, $this->sharedFilePath);
+		VidiunLog::info('Temp shared path: '.$this->sharedFilePath);
 		$jobData->resultsFilePath = $this->sharedFilePath;
 	}
 
 	/**
-	 * @param KalturaBaseEntryArray $entries
+	 * @param VidiunBaseEntryArray $entries
 	 */
 	private function updateFitler($entries)
 	{
@@ -272,9 +272,9 @@ class KScheduledTaskDryRunner extends KJobHandlerWorker
 	}
 
 	/* (non-PHPdoc)
-	 * @see KBatchBase::run()
+	 * @see VBatchBase::run()
 	*/
-	public function exec(KalturaBatchJob $job)
+	public function exec(VidiunBatchJob $job)
 	{
 		return $this->execDryRun($job, $job->data);
 	}

@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaLiveEntryServerNodeFilter extends KalturaLiveEntryServerNodeBaseFilter
+class VidiunLiveEntryServerNodeFilter extends VidiunLiveEntryServerNodeBaseFilter
 {
 	public function __construct()
 	{
-		$this->serverTypeIn = array(KalturaEntryServerNodeType::LIVE_PRIMARY, KalturaEntryServerNodeType::LIVE_BACKUP);
+		$this->serverTypeIn = array(VidiunEntryServerNodeType::LIVE_PRIMARY, VidiunEntryServerNodeType::LIVE_BACKUP);
 	}
 }

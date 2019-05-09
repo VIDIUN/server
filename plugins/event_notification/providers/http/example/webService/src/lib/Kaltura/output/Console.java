@@ -1,4 +1,4 @@
-package lib.Kaltura.output;
+package lib.Vidiun.output;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  *
  * The console logs stuf as well as outputting it to the stdOut (optional)
  * 
- * @package Kaltura
+ * @package Vidiun
  * @subpackage Output
  */
 public class Console

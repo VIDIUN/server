@@ -6,7 +6,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.services
  */
-class GenericDistributionProviderService extends KalturaBaseService
+class GenericDistributionProviderService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -15,18 +15,18 @@ class GenericDistributionProviderService extends KalturaBaseService
 		if($this->getPartnerId() != Partner::ADMIN_CONSOLE_PARTNER_ID)
 		$this->applyPartnerFilterForClass('GenericDistributionProvider');
 		
-		if(!ContentDistributionPlugin::isAllowedPartner(kCurrentContext::$master_partner_id))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, ContentDistributionPlugin::PLUGIN_NAME);
+		if(!ContentDistributionPlugin::isAllowedPartner(vCurrentContext::$master_partner_id))
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, ContentDistributionPlugin::PLUGIN_NAME);
 	}
 	
 	/**
 	 * Add new Generic Distribution Provider
 	 * 
 	 * @action add
-	 * @param KalturaGenericDistributionProvider $genericDistributionProvider
-	 * @return KalturaGenericDistributionProvider
+	 * @param VidiunGenericDistributionProvider $genericDistributionProvider
+	 * @return VidiunGenericDistributionProvider
 	 */
-	function addAction(KalturaGenericDistributionProvider $genericDistributionProvider)
+	function addAction(VidiunGenericDistributionProvider $genericDistributionProvider)
 	{
 		$genericDistributionProvider->validatePropertyMinLength("name", 1);
 		
@@ -36,7 +36,7 @@ class GenericDistributionProviderService extends KalturaBaseService
 		$dbGenericDistributionProvider->setStatus(GenericDistributionProviderStatus::ACTIVE);
 		$dbGenericDistributionProvider->save();
 		
-		$genericDistributionProvider = new KalturaGenericDistributionProvider();
+		$genericDistributionProvider = new VidiunGenericDistributionProvider();
 		$genericDistributionProvider->fromObject($dbGenericDistributionProvider, $this->getResponseProfile());
 		return $genericDistributionProvider;
 	}
@@ -46,16 +46,16 @@ class GenericDistributionProviderService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id
-	 * @return KalturaGenericDistributionProvider
+	 * @return VidiunGenericDistributionProvider
 	 * @throws ContentDistributionErrors::GENERIC_DISTRIBUTION_PROVIDER_NOT_FOUND
 	 */
 	function getAction($id)
 	{
 		$dbGenericDistributionProvider = GenericDistributionProviderPeer::retrieveByPK($id);
 		if (!$dbGenericDistributionProvider)
-			throw new KalturaAPIException(ContentDistributionErrors::GENERIC_DISTRIBUTION_PROVIDER_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::GENERIC_DISTRIBUTION_PROVIDER_NOT_FOUND, $id);
 			
-		$genericDistributionProvider = new KalturaGenericDistributionProvider();
+		$genericDistributionProvider = new VidiunGenericDistributionProvider();
 		$genericDistributionProvider->fromObject($dbGenericDistributionProvider, $this->getResponseProfile());
 		return $genericDistributionProvider;
 	}
@@ -65,15 +65,15 @@ class GenericDistributionProviderService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id
-	 * @param KalturaGenericDistributionProvider $genericDistributionProvider
-	 * @return KalturaGenericDistributionProvider
+	 * @param VidiunGenericDistributionProvider $genericDistributionProvider
+	 * @return VidiunGenericDistributionProvider
 	 * @throws ContentDistributionErrors::GENERIC_DISTRIBUTION_PROVIDER_NOT_FOUND
 	 */
-	function updateAction($id, KalturaGenericDistributionProvider $genericDistributionProvider)
+	function updateAction($id, VidiunGenericDistributionProvider $genericDistributionProvider)
 	{
 		$dbGenericDistributionProvider = GenericDistributionProviderPeer::retrieveByPK($id);
 		if (!$dbGenericDistributionProvider)
-			throw new KalturaAPIException(ContentDistributionErrors::GENERIC_DISTRIBUTION_PROVIDER_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::GENERIC_DISTRIBUTION_PROVIDER_NOT_FOUND, $id);
 		
 		if ($genericDistributionProvider->name !== null)
 			$genericDistributionProvider->validatePropertyMinLength("name", 1);
@@ -81,7 +81,7 @@ class GenericDistributionProviderService extends KalturaBaseService
 		$genericDistributionProvider->toUpdatableObject($dbGenericDistributionProvider);
 		$dbGenericDistributionProvider->save();
 		
-		$genericDistributionProvider = new KalturaGenericDistributionProvider();
+		$genericDistributionProvider = new VidiunGenericDistributionProvider();
 		$genericDistributionProvider->fromObject($dbGenericDistributionProvider, $this->getResponseProfile());
 		return $genericDistributionProvider;
 	}
@@ -98,10 +98,10 @@ class GenericDistributionProviderService extends KalturaBaseService
 	{
 		$dbGenericDistributionProvider = GenericDistributionProviderPeer::retrieveByPK($id);
 		if (!$dbGenericDistributionProvider)
-			throw new KalturaAPIException(ContentDistributionErrors::GENERIC_DISTRIBUTION_PROVIDER_NOT_FOUND, $id);
+			throw new VidiunAPIException(ContentDistributionErrors::GENERIC_DISTRIBUTION_PROVIDER_NOT_FOUND, $id);
 
 		if($this->getPartnerId() != Partner::ADMIN_CONSOLE_PARTNER_ID && $dbGenericDistributionProvider->getIsDefault())
-			throw new KalturaAPIException(ContentDistributionErrors::CANNOT_DELETE_DEFAULT_DISTRIBUTION_PROVIDER);
+			throw new VidiunAPIException(ContentDistributionErrors::CANNOT_DELETE_DEFAULT_DISTRIBUTION_PROVIDER);
 			
 		$dbGenericDistributionProvider->setStatus(GenericDistributionProviderStatus::DELETED);
 		$dbGenericDistributionProvider->save();
@@ -112,14 +112,14 @@ class GenericDistributionProviderService extends KalturaBaseService
 	 * List all distribution providers
 	 * 
 	 * @action list
-	 * @param KalturaGenericDistributionProviderFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaGenericDistributionProviderListResponse
+	 * @param VidiunGenericDistributionProviderFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunGenericDistributionProviderListResponse
 	 */
-	function listAction(KalturaGenericDistributionProviderFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunGenericDistributionProviderFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaGenericDistributionProviderFilter();
+			$filter = new VidiunGenericDistributionProviderFilter();
 			
 		$c = new Criteria();
 		$genericDistributionProviderFilter = new GenericDistributionProviderFilter();
@@ -129,12 +129,12 @@ class GenericDistributionProviderService extends KalturaBaseService
 		$count = GenericDistributionProviderPeer::doCount($c);
 		
 		if (! $pager)
-			$pager = new KalturaFilterPager ();
+			$pager = new VidiunFilterPager ();
 		$pager->attachToCriteria($c);
 		$list = GenericDistributionProviderPeer::doSelect($c);
 		
-		$response = new KalturaGenericDistributionProviderListResponse();
-		$response->objects = KalturaGenericDistributionProviderArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunGenericDistributionProviderListResponse();
+		$response->objects = VidiunGenericDistributionProviderArray::fromDbArray($list, $this->getResponseProfile());
 		$response->totalCount = $count;
 	
 		return $response;

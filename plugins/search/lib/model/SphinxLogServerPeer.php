@@ -15,7 +15,7 @@
  */
 class SphinxLogServerPeer extends BaseSphinxLogServerPeer {
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		return myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_SPHINX_LOG);
 	}
@@ -47,7 +47,7 @@ class SphinxLogServerPeer extends BaseSphinxLogServerPeer {
 	{
 		$criteria = new Criteria();
 		$criteria->add(SphinxLogServerPeer::SERVER, $server);
-		$criteria->add(SphinxLogServerPeer::DC, kDataCenterMgr::getCurrentDcId());
+		$criteria->add(SphinxLogServerPeer::DC, vDataCenterMgr::getCurrentDcId());
 
 		return SphinxLogServerPeer::doSelectOne($criteria, $con);
 	}

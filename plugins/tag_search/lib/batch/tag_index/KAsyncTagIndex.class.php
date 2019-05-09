@@ -3,29 +3,29 @@
  * @package plugins.tagSearch
  * @subpackage Scheduler
  */
-class KAsyncTagIndex extends KJobHandlerWorker
+class VAsyncTagIndex extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job) {
+	protected function exec(VidiunBatchJob $job) {
 		
 		$this->reIndexTags($job);
 		
 	}
 
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::INDEX_TAGS;
+		return VidiunBatchJobType::INDEX_TAGS;
 	}
 	
-	protected function reIndexTags (KalturaBatchJob $job)
+	protected function reIndexTags (VidiunBatchJob $job)
 	{
-		KalturaLog::info("Re-indexing tags according to privacy contexts");
-		$tagPlugin = KalturaTagSearchClientPlugin::get(self::$kClient);
+		VidiunLog::info("Re-indexing tags according to privacy contexts");
+		$tagPlugin = VidiunTagSearchClientPlugin::get(self::$vClient);
 		$this->impersonate($job->partnerId);
 		try 
 		{
@@ -34,10 +34,10 @@ class KAsyncTagIndex extends KJobHandlerWorker
 		catch (Exception $e)
 		{
 			$this->unimpersonate();
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::KALTURA_API, $e->getCode(), $e->getMessage(), KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::VIDIUN_API, $e->getCode(), $e->getMessage(), VidiunBatchJobStatus::FAILED);
 		}
 		$this->unimpersonate();
-		return $this->closeJob($job, null, null, "Re-index complete", KalturaBatchJobStatus::FINISHED);
+		return $this->closeJob($job, null, null, "Re-index complete", VidiunBatchJobStatus::FINISHED);
 		
 	}
 }

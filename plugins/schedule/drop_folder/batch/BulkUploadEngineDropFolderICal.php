@@ -7,31 +7,31 @@ class BulkUploadEngineDropFolderICal extends BulkUploadEngineICal
 {
 	/**
 	 *
-	 * @var KalturaDropFolder
+	 * @var VidiunDropFolder
 	 */
 	private $dropFolder = null;
 	
 	/**
 	 *
-	 * @var kFileTransferMgr
+	 * @var vFileTransferMgr
 	 */
 	private $fileTransferMgr = null;
 	
-	public function __construct(KalturaBatchJob $job)
+	public function __construct(VidiunBatchJob $job)
 	{
 		parent::__construct($job);
 		
-		KBatchBase::impersonate($this->currentPartnerId);
-		$dropFolderPlugin = KalturaDropFolderClientPlugin::get(KBatchBase::$kClient);
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::impersonate($this->currentPartnerId);
+		$dropFolderPlugin = VidiunDropFolderClientPlugin::get(VBatchBase::$vClient);
+		VBatchBase::$vClient->startMultiRequest();
 		$dropFolderFile = $dropFolderPlugin->dropFolderFile->get($this->job->jobObjectId);
 		$dropFolderPlugin->dropFolder->get($dropFolderFile->dropFolderId);
-		list($dropFolderFile, $this->dropFolder) = KBatchBase::$kClient->doMultiRequest();
+		list($dropFolderFile, $this->dropFolder) = VBatchBase::$vClient->doMultiRequest();
 		
-		$this->fileTransferMgr = KDropFolderFileTransferEngine::getFileTransferManager($this->dropFolder);
+		$this->fileTransferMgr = VDropFolderFileTransferEngine::getFileTransferManager($this->dropFolder);
 		$this->data->filePath = $this->getLocalFilePath($dropFolderFile->fileName, $dropFolderFile->id);
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 	}
 	
 	/**
@@ -47,7 +47,7 @@ class BulkUploadEngineDropFolderICal extends BulkUploadEngineICal
 		$dropFolderFilePath = $this->dropFolder->path . '/' . $fileName;
 		
 		// local drop folder
-		if($this->dropFolder->type == KalturaDropFolderType::LOCAL)
+		if($this->dropFolder->type == VidiunDropFolderType::LOCAL)
 		{
 			$dropFolderFilePath = realpath($dropFolderFilePath);
 			return $dropFolderFilePath;
@@ -55,7 +55,7 @@ class BulkUploadEngineDropFolderICal extends BulkUploadEngineICal
 		else
 		{
 			// remote drop folder
-			$tempFilePath = tempnam(KBatchBase::$taskConfig->params->sharedTempPath, 'parse_dropFolderFileId_' . $fileId . '_');
+			$tempFilePath = tempnam(VBatchBase::$taskConfig->params->sharedTempPath, 'parse_dropFolderFileId_' . $fileId . '_');
 			$this->fileTransferMgr->getFile($dropFolderFilePath, $tempFilePath);
 			$this->setFilePermissions($tempFilePath);
 			return $tempFilePath;
@@ -65,16 +65,16 @@ class BulkUploadEngineDropFolderICal extends BulkUploadEngineICal
 	protected function setFilePermissions($filepath)
 	{
 		$chmod = 0640;
-		if(KBatchBase::$taskConfig->getChmod())
-			$chmod = octdec(KBatchBase::$taskConfig->getChmod());
+		if(VBatchBase::$taskConfig->getChmod())
+			$chmod = octdec(VBatchBase::$taskConfig->getChmod());
 		
-		KalturaLog::info("chmod($filepath, $chmod)");
+		VidiunLog::info("chmod($filepath, $chmod)");
 		@chmod($filepath, $chmod);
 		
-		$chown_name = KBatchBase::$taskConfig->params->fileOwner;
+		$chown_name = VBatchBase::$taskConfig->params->fileOwner;
 		if($chown_name)
 		{
-			KalturaLog::info("Changing owner of file [$filepath] to [$chown_name]");
+			VidiunLog::info("Changing owner of file [$filepath] to [$chown_name]");
 			@chown($filepath, $chown_name);
 		}
 	}

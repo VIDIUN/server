@@ -1,5 +1,5 @@
 <?php
-class kAuditTrailChangeInfo extends kAuditTrailInfo
+class vAuditTrailChangeInfo extends vAuditTrailInfo
 {
 	/**
 	 * @var array

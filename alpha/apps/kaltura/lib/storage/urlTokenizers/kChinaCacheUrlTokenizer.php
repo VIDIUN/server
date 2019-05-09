@@ -1,5 +1,5 @@
 <?php
-class kChinaCacheUrlTokenizer extends kUrlTokenizer
+class vChinaCacheUrlTokenizer extends vUrlTokenizer
 {
 	const SHA1 = 1;
 	
@@ -46,7 +46,7 @@ class kChinaCacheUrlTokenizer extends kUrlTokenizer
 			$token = urlencode(base64_encode(hash_hmac("sha256", $hashData, $this->key, true)));
 		}
 		else {
-			KalturaLog::info("Illegal algorithm ID value!");
+			VidiunLog::info("Illegal algorithm ID value!");
 			return;
 		}
 		

@@ -6,7 +6,7 @@ class ResourceReservation
 	CONST DEFAULT_TIME_IN_CACHE_FOR_RESERVATION = 5;
 
 	/**
-	 * @var kBaseCacheWrapper $cache
+	 * @var vBaseCacheWrapper $cache
 	 */
 	private $cache;
 

@@ -5,7 +5,7 @@
  * @package plugins.businessProcessNotification
  * @subpackage api.services
  */
-class BusinessProcessServerService extends KalturaBaseService
+class BusinessProcessServerService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -13,7 +13,7 @@ class BusinessProcessServerService extends KalturaBaseService
 		
 		$partnerId = $this->getPartnerId();
 		if (!EventNotificationPlugin::isAllowedPartner($partnerId))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, EventNotificationPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, EventNotificationPlugin::PLUGIN_NAME);
 			
 		$this->applyPartnerFilterForClass('BusinessProcessServer');
 	}
@@ -32,10 +32,10 @@ class BusinessProcessServerService extends KalturaBaseService
 	 * Allows you to add a new Business-Process server object
 	 * 
 	 * @action add
-	 * @param KalturaBusinessProcessServer $businessProcessServer
-	 * @return KalturaBusinessProcessServer
+	 * @param VidiunBusinessProcessServer $businessProcessServer
+	 * @return VidiunBusinessProcessServer
 	 */
-	public function addAction(KalturaBusinessProcessServer $businessProcessServer)
+	public function addAction(VidiunBusinessProcessServer $businessProcessServer)
 	{
 		$dbBusinessProcessServer = $businessProcessServer->toInsertableObject();
 		/* @var $dbBusinessProcessServer BusinessProcessServer */
@@ -44,7 +44,7 @@ class BusinessProcessServerService extends KalturaBaseService
 		$dbBusinessProcessServer->save();
 		
 		// return the saved object
-		$businessProcessServer = KalturaBusinessProcessServer::getInstanceByType($dbBusinessProcessServer->getType());
+		$businessProcessServer = VidiunBusinessProcessServer::getInstanceByType($dbBusinessProcessServer->getType());
 		$businessProcessServer->fromObject($dbBusinessProcessServer);
 		return $businessProcessServer;
 		
@@ -55,19 +55,19 @@ class BusinessProcessServerService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id 
-	 * @return KalturaBusinessProcessServer
+	 * @return VidiunBusinessProcessServer
 	 * 
-	 * @throws KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
+	 * @throws VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
 	 */		
 	public function getAction($id)
 	{
 		// get the object
 		$dbBusinessProcessServer = BusinessProcessServerPeer::retrieveByPK($id);
 		if (!$dbBusinessProcessServer)
-			throw new KalturaAPIException(KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND, $id);
 			
 		// return the found object
-		$businessProcessServer = KalturaBusinessProcessServer::getInstanceByType($dbBusinessProcessServer->getType());
+		$businessProcessServer = VidiunBusinessProcessServer::getInstanceByType($dbBusinessProcessServer->getType());
 		$businessProcessServer->fromObject($dbBusinessProcessServer);
 		return $businessProcessServer;
 	}
@@ -78,24 +78,24 @@ class BusinessProcessServerService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id
-	 * @param KalturaBusinessProcessServer $businessProcessServer
-	 * @return KalturaBusinessProcessServer
+	 * @param VidiunBusinessProcessServer $businessProcessServer
+	 * @return VidiunBusinessProcessServer
 	 *
-	 * @throws KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
+	 * @throws VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
 	 */	
-	public function updateAction($id, KalturaBusinessProcessServer $businessProcessServer)
+	public function updateAction($id, VidiunBusinessProcessServer $businessProcessServer)
 	{
 		// get the object
 		$dbBusinessProcessServer = BusinessProcessServerPeer::retrieveByPK($id);
 		if (!$dbBusinessProcessServer)
-			throw new KalturaAPIException(KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND, $id);
 		
 		// save the object
 		$dbBusinessProcessServer = $businessProcessServer->toUpdatableObject($dbBusinessProcessServer);
 		$dbBusinessProcessServer->save();
 	
 		// return the saved object
-		$businessProcessServer = KalturaBusinessProcessServer::getInstanceByType($dbBusinessProcessServer->getType());
+		$businessProcessServer = VidiunBusinessProcessServer::getInstanceByType($dbBusinessProcessServer->getType());
 		$businessProcessServer->fromObject($dbBusinessProcessServer);
 		return $businessProcessServer;
 	}
@@ -105,24 +105,24 @@ class BusinessProcessServerService extends KalturaBaseService
 	 * 
 	 * @action updateStatus
 	 * @param int $id
-	 * @param KalturaBusinessProcessServerStatus $status
-	 * @return KalturaBusinessProcessServer
+	 * @param VidiunBusinessProcessServerStatus $status
+	 * @return VidiunBusinessProcessServer
 	 * 
-	 * @throws KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
+	 * @throws VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
 	 */
 	function updateStatusAction($id, $status)
 	{
 		// get the object
 		$dbBusinessProcessServer = BusinessProcessServerPeer::retrieveByPK($id);
 		if (!$dbBusinessProcessServer)
-			throw new KalturaAPIException(KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND, $id);
 
 		if($status == BusinessProcessServerStatus::ACTIVE)
 		{
 			//Check uniqueness of new object's system name
 			$systemNameServers = BusinessProcessServerPeer::retrieveBySystemName($dbBusinessProcessServer->getSystemName());
 			if (count($systemNameServers))
-				throw new KalturaAPIException(KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_DUPLICATE_SYSTEM_NAME, $dbBusinessProcessServer->getSystemName());
+				throw new VidiunAPIException(VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_DUPLICATE_SYSTEM_NAME, $dbBusinessProcessServer->getSystemName());
 		}	
 		
 		// save the object
@@ -130,7 +130,7 @@ class BusinessProcessServerService extends KalturaBaseService
 		$dbBusinessProcessServer->save();
 	
 		// return the saved object
-		$businessProcessServer = KalturaBusinessProcessServer::getInstanceByType($dbBusinessProcessServer->getType());
+		$businessProcessServer = VidiunBusinessProcessServer::getInstanceByType($dbBusinessProcessServer->getType());
 		$businessProcessServer->fromObject($dbBusinessProcessServer);
 		return $businessProcessServer;
 	}
@@ -141,14 +141,14 @@ class BusinessProcessServerService extends KalturaBaseService
 	 * @action delete
 	 * @param int $id 
 	 *
-	 * @throws KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
+	 * @throws VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND
 	 */		
 	public function deleteAction($id)
 	{
 		// get the object
 		$dbBusinessProcessServer = BusinessProcessServerPeer::retrieveByPK($id);
 		if (!$dbBusinessProcessServer)
-			throw new KalturaAPIException(KalturaBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunBusinessProcessNotificationErrors::BUSINESS_PROCESS_SERVER_NOT_FOUND, $id);
 
 		// set the object status to deleted
 		$dbBusinessProcessServer->setStatus(BusinessProcessServerStatus::DELETED);
@@ -159,17 +159,17 @@ class BusinessProcessServerService extends KalturaBaseService
 	 * list Business-Process server objects
 	 * 
 	 * @action list
-	 * @param KalturaBusinessProcessServerFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaBusinessProcessServerListResponse
+	 * @param VidiunBusinessProcessServerFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunBusinessProcessServerListResponse
 	 */
-	public function listAction(KalturaBusinessProcessServerFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunBusinessProcessServerFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaBusinessProcessServerFilter();
+			$filter = new VidiunBusinessProcessServerFilter();
 			
 		if (!$pager)
-			$pager = new KalturaFilterPager ();
+			$pager = new VidiunFilterPager ();
 
 		$businessProcessServerFilter = new BusinessProcessServerFilter();
 		$filter->toObject($businessProcessServerFilter);
@@ -181,8 +181,8 @@ class BusinessProcessServerService extends KalturaBaseService
 		$pager->attachToCriteria ( $c );
 		$list = BusinessProcessServerPeer::doSelect($c);
 		
-		$response = new KalturaBusinessProcessServerListResponse();
-		$response->objects = KalturaBusinessProcessServerArray::fromDbArray($list);
+		$response = new VidiunBusinessProcessServerListResponse();
+		$response->objects = VidiunBusinessProcessServerArray::fromDbArray($list);
 		$response->totalCount = $count;
 		
 		return $response;

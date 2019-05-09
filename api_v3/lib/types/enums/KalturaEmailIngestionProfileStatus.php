@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaEmailIngestionProfileStatus extends KalturaEnum
+class VidiunEmailIngestionProfileStatus extends VidiunEnum
 {
 	const INACTIVE = 0;
 	const ACTIVE = 1;

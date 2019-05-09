@@ -11,7 +11,7 @@ class Infra_PluginController extends Zend_Controller_Action
 
 	public function __call($method, $args)
 	{
-		KalturaLog::debug("Called method [$method] with args [" . print_r($args, true) . "]");
+		VidiunLog::debug("Called method [$method] with args [" . print_r($args, true) . "]");
 		
 		$arr = null;
 		if(!preg_match('/^(.+)Action$/', $method, $arr))
@@ -19,7 +19,7 @@ class Infra_PluginController extends Zend_Controller_Action
 			
 		$class = $arr[1];
 		$actionController = new $class();
-		if($actionController && $actionController instanceof KalturaApplicationPlugin)
+		if($actionController && $actionController instanceof VidiunApplicationPlugin)
 			$actionController->action($this);
 	}
 	
@@ -28,8 +28,8 @@ class Infra_PluginController extends Zend_Controller_Action
 		$pluginName = $this->_getParam('plugin');
 		$imgName = $this->_getParam('img');
 		
-		$plugin = KalturaPluginManager::getPluginInstance($pluginName);
-		if(!$plugin || !($plugin instanceof IKalturaApplicationImages))
+		$plugin = VidiunPluginManager::getPluginInstance($pluginName);
+		if(!$plugin || !($plugin instanceof IVidiunApplicationImages))
 		{
 			$message = "Plugin [$pluginName] is not an application images plugin";
 			throw new Infra_Exception($message, Infra_Exception::ERROR_CODE_MISSING_PLUGIN);

@@ -1,12 +1,12 @@
 <?php
-//include_once("KDLCommon.php");
-//include_once("KDLMediaDataSet.php");
+//include_once("VDLCommon.php");
+//include_once("VDLMediaDataSet.php");
 
 /* ===========================
- * KDLFlavor
+ * VDLFlavor
  */
 
-class KDLFlavor extends KDLMediaDataSet {
+class VDLFlavor extends VDLMediaDataSet {
 
 	const RedundantFlagBit = 1;
 	const BitrateNonComplyFlagBit = 2;
@@ -42,7 +42,7 @@ class KDLFlavor extends KDLMediaDataSet {
 				 */
 	public 	$_fastSeekTo = true;
 	
-	public $_optimizationPolicy = KDLOptimizationPolicy::BitrateFlagBit;
+	public $_optimizationPolicy = VDLOptimizationPolicy::BitrateFlagBit;
 	
 	public $_isEncrypted = 0;	// CENC encryption, 0:not encrypted, 1:encrypt >10sec, 2:encrypt all
 	
@@ -50,7 +50,7 @@ class KDLFlavor extends KDLMediaDataSet {
 
 		/* --------------------------
 		 * following fields are for flavorOutputParams
-		 * to be moved to the KDLWrap
+		 * to be moved to the VDLWrap
 		 */
 	public 	$_id = null;
 	public 	$_type = 1;
@@ -60,8 +60,8 @@ class KDLFlavor extends KDLMediaDataSet {
 	
 	public	$_cdlObject = null; /* To avoid duplicating of fields that are only used for transfer 
 									to flavorOutputParams objects, the original CDL object
-									is saved on the KDLFlavor object. The required fields are 
-									copied in the KDLWrap 
+									is saved on the VDLFlavor object. The required fields are 
+									copied in the VDLWrap 
 								*/ 
 	/* --------------------------- */
 	
@@ -83,7 +83,7 @@ class KDLFlavor extends KDLMediaDataSet {
 	/* ----------------------
 	 * ProcessRedundancy
 	 */
-	public function ProcessRedundancy(KDLFlavor $prevFlavor){
+	public function ProcessRedundancy(VDLFlavor $prevFlavor){
 		$rv = true;
 		/*
 		 * If no video => keep the flavor
@@ -95,11 +95,11 @@ class KDLFlavor extends KDLMediaDataSet {
 			 */
 			$redundRatio = $this->_video->_bitRate/$prevFlavor->_video->_bitRate;
 			if($redundRatio>1) $redundRatio = 1/$redundRatio;
-			if($redundRatio>KDLConstants::FlavorBitrateRedundencyFactor) {
-				$this->_flags = $this->_flags | KDLFlavor::RedundantFlagBit;
+			if($redundRatio>VDLConstants::FlavorBitrateRedundencyFactor) {
+				$this->_flags = $this->_flags | VDLFlavor::RedundantFlagBit;
 
-				$this->_warnings[KDLConstants::VideoIndex][]= //"Redundant bitrate";
-				KDLWarnings::ToString(KDLWarnings::RedundantBitrate);
+				$this->_warnings[VDLConstants::VideoIndex][]= //"Redundant bitrate";
+				VDLWarnings::ToString(VDLWarnings::RedundantBitrate);
 			}
 			else
 			$rv = false;
@@ -107,10 +107,10 @@ class KDLFlavor extends KDLMediaDataSet {
 
 		if($this->_audio!=null && $prevFlavor->_audio!=null) {
 			if($this->_audio->_bitRate==$prevFlavor->_audio->_bitRate) {
-				$this->_flags = $this->_flags | KDLFlavor::RedundantFlagBit;
+				$this->_flags = $this->_flags | VDLFlavor::RedundantFlagBit;
 
-				$this->_warnings[KDLConstants::AudioIndex][]= //"Redundant bitrate";
-				KDLWarnings::ToString(KDLWarnings::RedundantBitrate);
+				$this->_warnings[VDLConstants::AudioIndex][]= //"Redundant bitrate";
+				VDLWarnings::ToString(VDLWarnings::RedundantBitrate);
 			}
 			else
 			$rv = false;
@@ -140,13 +140,13 @@ class KDLFlavor extends KDLMediaDataSet {
 		}
 		$rvStr .= ",".parent::ToString();
 		if(count($this->_errors)){
-			$rvStr = $rvStr.",ERRS(".KDLUtils::arrayToString($this->_errors).")";
+			$rvStr = $rvStr.",ERRS(".VDLUtils::arrayToString($this->_errors).")";
 		}
 		if(count($this->_warnings)){
-			$rvStr = $rvStr.",WRNS(".KDLUtils::arrayToString($this->_warnings).")";
+			$rvStr = $rvStr.",WRNS(".VDLUtils::arrayToString($this->_warnings).")";
 		}
 		if(count($this->_transcoders)){
-			$rvStr = $rvStr.",TRNS(".KDLUtils::arrayToString($this->_transcoders).")";
+			$rvStr = $rvStr.",TRNS(".VDLUtils::arrayToString($this->_transcoders).")";
 		}
 		return $rvStr;
 	}
@@ -154,28 +154,28 @@ class KDLFlavor extends KDLMediaDataSet {
 	/* ---------------------------
 	 * GenerateTarget
 	 */
-	public function GenerateTarget(KDLMediaDataSet $source) {
+	public function GenerateTarget(VDLMediaDataSet $source) {
 		if($source==null || !$source->IsDataSet() || $this->_flags&self::ForceCommandLineFlagBit) {
-			KalturaLog::log("FORCE ". $this->_flags);
+			VidiunLog::log("FORCE ". $this->_flags);
 			$target = clone $this;
 			if($target->_video && ($target->_video->_gop===null || $target->_video->_gop==0))
-			$target->_video->_gop = KDLConstants::DefaultGOP;
+			$target->_video->_gop = VDLConstants::DefaultGOP;
 				
-			$target->_warnings[KDLConstants::ContainerIndex][] =
-				KDLWarnings::ToString(KDLWarnings::ForceCommandline);
+			$target->_warnings[VDLConstants::ContainerIndex][] =
+				VDLWarnings::ToString(VDLWarnings::ForceCommandline);
 		}
 		else {
 			$target = $this->generateTargetFlavor($source);
 			if($target->_video=="" && $target->_audio=="" && $target->_image==""){
 				// "Invalid File - No media content";
-				$target->_errors[KDLConstants::ContainerIndex][] = KDLErrors::ToString(KDLErrors::NoValidMediaStream);
+				$target->_errors[VDLConstants::ContainerIndex][] = VDLErrors::ToString(VDLErrors::NoValidMediaStream);
 			}
 
 			if($target->validateTranscoders($source, $target->_transcoders)==false){
 				// "No valid transcoder";
-				$target->_errors[KDLConstants::ContainerIndex][] = KDLErrors::ToString(KDLErrors::NoValidTranscoders);
+				$target->_errors[VDLConstants::ContainerIndex][] = VDLErrors::ToString(VDLErrors::NoValidTranscoders);
 			}
-//kLog::log("==>\n".print_r($target->_transcoders,true));
+//vLog::log("==>\n".print_r($target->_transcoders,true));
 		}
 		$this->generateCommandLines($target, $target->_transcoders);
 
@@ -185,7 +185,7 @@ class KDLFlavor extends KDLMediaDataSet {
 	/* ---------------------------
 	 * generateCommandLines
 	 */
-	private function generateCommandLines(KDLFlavor $target, $transcoders){
+	private function generateCommandLines(VDLFlavor $target, $transcoders){
 		foreach($transcoders as $key=>$trPrmObj) {
 
 			if(is_array($trPrmObj)){
@@ -200,13 +200,13 @@ class KDLFlavor extends KDLMediaDataSet {
 	/* ---------------------------
 	 * generateOperationSetCommandLines
 	 */
-	private function generateOperationSetCommandLines(KDLFlavor $target, $transcoders){
-KalturaLog::log("==>\n");
+	private function generateOperationSetCommandLines(VDLFlavor $target, $transcoders){
+VidiunLog::log("==>\n");
 		
 		$cnt = count($transcoders);
 		$i=1;
 		foreach($transcoders as $key=>$trPrmObj) {
-			$auxTrg = new KDLFlavor();
+			$auxTrg = new VDLFlavor();
 			$auxTrg = clone $target;
 			$transcoders[$key] = $trPrmObj->GenerateCommandAndConfig($this, $auxTrg);
 			$i++;
@@ -217,11 +217,11 @@ KalturaLog::log("==>\n");
 	/* ---------------------------
 	 * ValidateProduct
 	 */
-	public function ValidateProduct(KDLMediaDataSet $source, KDLFlavor $product)
+	public function ValidateProduct(VDLMediaDataSet $source, VDLFlavor $product)
 	{
-		KalturaLog::log( ".SRC-->".$source->ToString());
-		KalturaLog::log( ".TRG-->".$this->ToString());
-		KalturaLog::log( ".PRD-->".$product->ToString());
+		VidiunLog::log( ".SRC-->".$source->ToString());
+		VidiunLog::log( ".TRG-->".$this->ToString());
+		VidiunLog::log( ".PRD-->".$product->ToString());
 		
 		$rv = $product->ValidateFlavor();
 
@@ -245,7 +245,7 @@ KalturaLog::log("==>\n");
 		 */
 //		if(isset($srcCont) && $srcCont->GetIdOrFormat()=='arf') {
 		if((isset($srcCont) && $srcCont->GetIdOrFormat()=='arf') || strstr($product->ToString(),$source->ToString())!=false) {
-			KalturaLog::log("ARF (webex) sources don't have proper mediaInfo - thus can not validate the product");
+			VidiunLog::log("ARF (webex) sources don't have proper mediaInfo - thus can not validate the product");
 			return true;
 		}
 				
@@ -253,7 +253,7 @@ KalturaLog::log("==>\n");
 		 * WVM (DRM Widevine) sources don't have proper mediaInfo - thus can not validate the product, skip it
 		 */
 		if(isset($this->_container) && $this->_container->GetIdOrFormat()=='wvm') {
-			KalturaLog::log("WVM (DRM Widevine) sources don't have proper mediaInfo - thus can not validate the product");
+			VidiunLog::log("WVM (DRM Widevine) sources don't have proper mediaInfo - thus can not validate the product");
 			return true;
 		}
 		
@@ -286,15 +286,15 @@ $plannedDur = 0;
 		 *
 		if(isset($srcVid) && $srcVid->IsFormatOf(array("h.263","h263","sorenson spark","vp6")) 
 		&& isset($srcAud) && $srcAud->IsFormatOf(array('nellymoser')) && $cDur>0 && isset($srcCont->_fileSize)){
-			if($srcCont->_fileSize*8000/$cDur<KDLSanityLimits::MinBitrate) {
-				KalturaLog::log("Invalid WEB-CAM source file. Duration validation is un-applicable");
+			if($srcCont->_fileSize*8000/$cDur<VDLSanityLimits::MinBitrate) {
+				VidiunLog::log("Invalid WEB-CAM source file. Duration validation is un-applicable");
 				return true;
 			}
 		}
 		*/
 		if($this->_video!==null) {
 			if($product->_video===null){
-				$product->_errors[KDLConstants::VideoIndex][] = KDLErrors::ToString(KDLErrors::MissingMediaStream);
+				$product->_errors[VDLConstants::VideoIndex][] = VDLErrors::ToString(VDLErrors::MissingMediaStream);
 				$rv=false;
 			}
 			else {
@@ -306,8 +306,8 @@ $plannedDur = 0;
 					 *  Don't check for <2sec
 					 */
 				if($plannedDur>2000){
-					if($prdVid->_duration<$plannedDur*KDLSanityLimits::MinDurationFactor 
-					|| $prdVid->_duration>$plannedDur*KDLSanityLimits::MaxDurationFactor) 
+					if($prdVid->_duration<$plannedDur*VDLSanityLimits::MinDurationFactor 
+					|| $prdVid->_duration>$plannedDur*VDLSanityLimits::MaxDurationFactor) 
 					{
 						//This check was added to filter out files that have no duration set on their metadata and are of type ogg or ogv to avoid failure on product validation (SUP 546)
 						if($aDur==0 && in_array(strtolower($this->_container->GetIdOrFormat()), array("ogg", "ogv")))
@@ -316,27 +316,27 @@ $plannedDur = 0;
 						}
 						else 
 						{
-							$product->_errors[KDLConstants::VideoIndex][] = // Invalid product duration
-								KDLErrors::ToString(KDLErrors::InvalidDuration, $prdVid->_duration/1000, $plannedDur/1000);
+							$product->_errors[VDLConstants::VideoIndex][] = // Invalid product duration
+								VDLErrors::ToString(VDLErrors::InvalidDuration, $prdVid->_duration/1000, $plannedDur/1000);
 							$rv=false;
 						}
 					}
-					else if($prdVid->_duration<$plannedDur*KDLConstants::ProductDurationFactor) {
-						$product->_warnings[KDLConstants::VideoIndex][] =
-						KDLWarnings::ToString(KDLWarnings::ProductShortDuration, $prdVid->_duration, $plannedDur);
+					else if($prdVid->_duration<$plannedDur*VDLConstants::ProductDurationFactor) {
+						$product->_warnings[VDLConstants::VideoIndex][] =
+						VDLWarnings::ToString(VDLWarnings::ProductShortDuration, $prdVid->_duration, $plannedDur);
 					}
 				}
 				
-				if(isset($srcVid) && $prdVid->_bitRate<$trgVid->_bitRate*KDLConstants::ProductBitrateFactor) {
-					$product->_warnings[KDLConstants::VideoIndex][] = // "Product bitrate too low - ".$prdVid->_bitRate."kbps, required - ".$trgVid->_bitRate."kbps.";
-					KDLWarnings::ToString(KDLWarnings::ProductLowBitrate, $prdVid->_bitRate, $srcVid->_bitRate);
+				if(isset($srcVid) && $prdVid->_bitRate<$trgVid->_bitRate*VDLConstants::ProductBitrateFactor) {
+					$product->_warnings[VDLConstants::VideoIndex][] = // "Product bitrate too low - ".$prdVid->_bitRate."kbps, required - ".$trgVid->_bitRate."kbps.";
+					VDLWarnings::ToString(VDLWarnings::ProductLowBitrate, $prdVid->_bitRate, $srcVid->_bitRate);
 				}
 			}
 		}
 
 		if($this->_audio!==null) {
 			if($product->_audio===null){
-				$product->_errors[KDLConstants::AudioIndex][] = KDLErrors::ToString(KDLErrors::MissingMediaStream);
+				$product->_errors[VDLConstants::AudioIndex][] = VDLErrors::ToString(VDLErrors::MissingMediaStream);
 				$rv=false;
 			}
 			else {
@@ -348,29 +348,29 @@ $plannedDur = 0;
 					 * Don't check for <2sec
 					 */
 				if($plannedDur>2000){ 
-					if($prdAud->_duration<$plannedDur*KDLSanityLimits::MinDurationFactor 
-					|| $prdAud->_duration>$plannedDur*KDLSanityLimits::MaxDurationFactor) {
-						$product->_errors[KDLConstants::AudioIndex][] = // Invalid product duration 
-						KDLErrors::ToString(KDLErrors::InvalidDuration, $prdAud->_duration/1000, $plannedDur/1000);
+					if($prdAud->_duration<$plannedDur*VDLSanityLimits::MinDurationFactor 
+					|| $prdAud->_duration>$plannedDur*VDLSanityLimits::MaxDurationFactor) {
+						$product->_errors[VDLConstants::AudioIndex][] = // Invalid product duration 
+						VDLErrors::ToString(VDLErrors::InvalidDuration, $prdAud->_duration/1000, $plannedDur/1000);
 						$rv=false;
 					}
-					else if($prdAud->_duration<$plannedDur*KDLConstants::ProductDurationFactor) {
-						$product->_warnings[KDLConstants::AudioIndex][] = // "Product duration too short - ".($prdAud->_duration/1000)."sec, required - ".($srcAud->_duration/1000)."sec.";
-						KDLWarnings::ToString(KDLWarnings::ProductShortDuration, $prdAud->_duration, $plannedDur);
+					else if($prdAud->_duration<$plannedDur*VDLConstants::ProductDurationFactor) {
+						$product->_warnings[VDLConstants::AudioIndex][] = // "Product duration too short - ".($prdAud->_duration/1000)."sec, required - ".($srcAud->_duration/1000)."sec.";
+						VDLWarnings::ToString(VDLWarnings::ProductShortDuration, $prdAud->_duration, $plannedDur);
 					}
 				}
-				if(isset($srcAud) && $prdAud->_bitRate<$trgAud->_bitRate*KDLConstants::ProductBitrateFactor) {
-					$product->_warnings[KDLConstants::AudioIndex][] = // "Product bitrate too low - ".$prdAud->_bitRate."kbps, required - ".$trgAud->_bitRate."kbps.";
-					KDLWarnings::ToString(KDLWarnings::ProductLowBitrate, $prdAud->_bitRate, $srcAud->_bitRate);
+				if(isset($srcAud) && $prdAud->_bitRate<$trgAud->_bitRate*VDLConstants::ProductBitrateFactor) {
+					$product->_warnings[VDLConstants::AudioIndex][] = // "Product bitrate too low - ".$prdAud->_bitRate."kbps, required - ".$trgAud->_bitRate."kbps.";
+					VDLWarnings::ToString(VDLWarnings::ProductLowBitrate, $prdAud->_bitRate, $srcAud->_bitRate);
 				}
 			}
 		}
 
 		if($product->_video===null && $product->_audio===null) {
 			// "Invalid File - No media content.";
-			$product->_errors[KDLConstants::ContainerIndex][] = KDLErrors::ToString(KDLErrors::NoValidMediaStream);
+			$product->_errors[VDLConstants::ContainerIndex][] = VDLErrors::ToString(VDLErrors::NoValidMediaStream);
 		}
-		KalturaLog::log( ".PRD-->".$product->ToString());
+		VidiunLog::log( ".PRD-->".$product->ToString());
 
 		return $rv;
 	}
@@ -388,7 +388,7 @@ $plannedDur = 0;
 	 */
 	public function IsRedundant()
 	{
-		return ($this->_flags & KDLFlavor::RedundantFlagBit);
+		return ($this->_flags & VDLFlavor::RedundantFlagBit);
 	}
 
 	/* ------------------------------
@@ -396,9 +396,9 @@ $plannedDur = 0;
 	 */
 	public function IsNonComply()
 	{
-		return ( ($this->_flags & KDLFlavor::BitrateNonComplyFlagBit)
-			   ||($this->_flags & KDLFlavor::FrameSizeNonComplyFlagBit)
-			   ||($this->_flags & KDLFlavor::MissingContentNonComplyFlagBit));
+		return ( ($this->_flags & VDLFlavor::BitrateNonComplyFlagBit)
+			   ||($this->_flags & VDLFlavor::FrameSizeNonComplyFlagBit)
+			   ||($this->_flags & VDLFlavor::MissingContentNonComplyFlagBit));
 	}
 
 	/* ------------------------------
@@ -445,7 +445,7 @@ $plannedDur = 0;
 	/* ---------------------------
 	 * generateTarget
 	 */
-	private function generateTargetFlavor(KDLMediaDataSet $source) {
+	private function generateTargetFlavor(VDLMediaDataSet $source) {
 		$target = clone $this;
 		if($this->_name!=null)
 			$target->_name = $this->_name;
@@ -522,7 +522,7 @@ $plannedDur = 0;
 		}
 		
 		if(isset($source->_decryptionKey)) {
-			KalturaLog::log("decryptionKey:".$source->_decryptionKey);
+			VidiunLog::log("decryptionKey:".$source->_decryptionKey);
 			$target->_decryptionKey = $source->_decryptionKey;
 		}
 		
@@ -532,7 +532,7 @@ $plannedDur = 0;
 			 * Turn off this flag for 'COPY' cases ('cropping' needs transcoding, it does not work for 'copy'
 			 */
 		if(isset($this->_video)){
-			if($this->_video->_isCropIMX==true && $this->_video->_id!=KDLVideoTarget::COPY
+			if($this->_video->_isCropIMX==true && $this->_video->_id!=VDLVideoTarget::COPY
 			&& isset($source->_container) && $source->_container->IsFormatOf(array("mxf")) 
 			&& isset($source->_video) && $source->_video->IsFormatOf(array("mpeg video","mpeg2video")) 
 			&& isset($source->_video->_width) && $source->_video->_width==720
@@ -542,7 +542,7 @@ $plannedDur = 0;
 			else {
 				$this->_video->_isCropIMX=false;
 			}
-			KalturaLog::log('IsCropImx('.$this->_video->_isCropIMX.')');
+			VidiunLog::log('IsCropImx('.$this->_video->_isCropIMX.')');
 		}
 
 			/*
@@ -550,14 +550,14 @@ $plannedDur = 0;
 			 */
 			$target->_multiStream = self::evaluateTargetAudioMultiStream($source, $target);
 	
-		if($target->_container->_id==KDLContainerTarget::COPY){
+		if($target->_container->_id==VDLContainerTarget::COPY){
 			$target->_container->_id=self::EvaluateCopyContainer($source->_container);
 		}
 
 		$target->_container->_duration = $sourceDur;
 		$target->_video = null;
 		if($this->_video!="") {
-			if($source->_video!="" && ($target->_container && !($target->_container->_id==KDLContainerTarget::MP3 || $target->_container->_id==KDLContainerTarget::WMA))){
+			if($source->_video!="" && ($target->_container && !($target->_container->_id==VDLContainerTarget::MP3 || $target->_container->_id==VDLContainerTarget::WMA))){
 				/*
 				 * Evaluate target video params
 				 */
@@ -570,25 +570,25 @@ $plannedDur = 0;
 				if(isset($this->_optimizationPolicy))
 					$optimizationPolicy = $this->_optimizationPolicy;
 				else
-					$optimizationPolicy = KDLOptimizationPolicy::BitrateFlagBit;
-				KalturaLog::log('OptimizationPolicy('.$target->_optimizationPolicy.')');
+					$optimizationPolicy = VDLOptimizationPolicy::BitrateFlagBit;
+				VidiunLog::log('OptimizationPolicy('.$target->_optimizationPolicy.')');
 				
 					/*
 					 * Bitrate oriented optimization -
 					 * NonCompliant if the source bitrate significantly lower than the flavor bitrate
 					 */
-				if($optimizationPolicy & KDLOptimizationPolicy::BitrateFlagBit) {
-					if($target->_video->_bitRate<$this->_video->_bitRate*KDLConstants::FlavorBitrateComplianceFactor) {
+				if($optimizationPolicy & VDLOptimizationPolicy::BitrateFlagBit) {
+					if($target->_video->_bitRate<$this->_video->_bitRate*VDLConstants::FlavorBitrateComplianceFactor) {
 						$target->_flags = $this->_flags | self::BitrateNonComplyFlagBit;
-						$target->_warnings[KDLConstants::VideoIndex][] = 
-							KDLWarnings::ToString(KDLWarnings::TargetBitrateNotComply, $target->_video->_bitRate, $this->_video->_bitRate);
+						$target->_warnings[VDLConstants::VideoIndex][] = 
+							VDLWarnings::ToString(VDLWarnings::TargetBitrateNotComply, $target->_video->_bitRate, $this->_video->_bitRate);
 					}
 				}
 					/*
 					 * Frame size oriented optimization -
 					 * NonCompliant if the source frame size significantly smaller than the flavor frame size
 					 */
-				if($optimizationPolicy & KDLOptimizationPolicy::FrameSizeFlagBit){
+				if($optimizationPolicy & VDLOptimizationPolicy::FrameSizeFlagBit){
 					$srcVid = $source->_video;
 					$trgVid = $target->_video;
 					$flvrVid= $this->_video;
@@ -599,16 +599,16 @@ $plannedDur = 0;
 					 * Therefore it was removed.
 					 */
 		//			if(isset($flvrVid->_bitRate) && $flvrVid->_bitRate>0 && isset($srcVid->_bitRate) && $srcVid->_bitRate>0
-		//			&& $flvrVid->_bitRate/KDLConstants::FlavorBitrateComplianceFactor<$srcVid->_bitRate) 
+		//			&& $flvrVid->_bitRate/VDLConstants::FlavorBitrateComplianceFactor<$srcVid->_bitRate) 
 					{
 						if(isset($flvrVid->_width) && $flvrVid->_width>0 && isset($trgVid->_width) && $trgVid->_width 
-						&& $flvrVid->_width>$trgVid->_width/KDLConstants::FlavorFrameSizeComplianceFactor) {
+						&& $flvrVid->_width>$trgVid->_width/VDLConstants::FlavorFrameSizeComplianceFactor) {
 							$target->_flags = $this->_flags | self::FrameSizeNonComplyFlagBit;
 							$param1 = "w:$flvrVid->_width";
 							$param2 = "w:$trgVid->_width";
 						}
 						if(isset($flvrVid->_height) && $flvrVid->_height>0 && isset($trgVid->_height) && $trgVid->_height 
-						&& $flvrVid->_height>$trgVid->_height/KDLConstants::FlavorFrameSizeComplianceFactor) {
+						&& $flvrVid->_height>$trgVid->_height/VDLConstants::FlavorFrameSizeComplianceFactor) {
 							if(isset($param1)) { $param1.=","; $param2.=","; }
 							$param1.= "h:$flvrVid->_height";
 							$param2.= "h:$trgVid->_height";
@@ -616,21 +616,21 @@ $plannedDur = 0;
 					}
 					if(isset($param1)){
 						$target->_flags = $this->_flags | self::FrameSizeNonComplyFlagBit;
-						$target->_warnings[KDLConstants::VideoIndex][] = 
-							KDLWarnings::ToString(KDLWarnings::TargetFrameSizeNotComply, $param1, $param2);
+						$target->_warnings[VDLConstants::VideoIndex][] = 
+							VDLWarnings::ToString(VDLWarnings::TargetFrameSizeNotComply, $param1, $param2);
 					}
 				}
 			}
-			else if($target->_container && $target->_container->_id==KDLContainerTarget::ISMV) {
+			else if($target->_container && $target->_container->_id==VDLContainerTarget::ISMV) {
 					/*
 					 * EE cannot generate audio only ISMV, therefore switch to WMA
 					 */
 				foreach ($this->_transcoders as $trns){
 					$rv = strstr($trns->_id,"expressionEncoder.ExpressionEncoder");
 					if($rv!=false) {
-						$target->_warnings[KDLConstants::ContainerIndex][] = // "The target flavor bitrate {".$target->_video->_bitRate."} does not comply with the requested bitrate (".$this->_video->_bitRate.").";
-							KDLWarnings::ToString(KDLWarnings::ChangingFormt, $target->_container->_id, KDLContainerTarget::WMA);
-						$target->_container->_id=KDLContainerTarget::WMA;
+						$target->_warnings[VDLConstants::ContainerIndex][] = // "The target flavor bitrate {".$target->_video->_bitRate."} does not comply with the requested bitrate (".$this->_video->_bitRate.").";
+							VDLWarnings::ToString(VDLWarnings::ChangingFormt, $target->_container->_id, VDLContainerTarget::WMA);
+						$target->_container->_id=VDLContainerTarget::WMA;
 						break;
 					}
 				}
@@ -651,8 +651,8 @@ $plannedDur = 0;
 				 */
 				if(isset($source->_container) && $source->_container->IsFormatOf(array("mpeg-ts","mpegts","mts")) 
 					&& $source->_audio->IsFormatOf(array("aac")) 
-					&& isset($target->_audio) && $target->_audio->IsFormatOf(array(KDLAudioTarget::COPY))
-					&& $target->_container->IsFormatOf(array(KDLContainerTarget::MP4))){
+					&& isset($target->_audio) && $target->_audio->IsFormatOf(array(VDLAudioTarget::COPY))
+					&& $target->_container->IsFormatOf(array(VDLContainerTarget::MP4))){
 					$target->_audio->_aac_adtstoasc_filter = true;
 				}
 				
@@ -662,12 +662,12 @@ $plannedDur = 0;
 				 * Check both old and new formats of the this::multiStream
 				 */
 				if((isset($this->_multiStream->audio->languages) && count($this->_multiStream->audio->languages)>0)
-				|| KDLAudioMultiStreaming::IsStreamFieldSet($this->_multiStream, "lang")) {
+				|| VDLAudioMultiStreaming::IsStreamFieldSet($this->_multiStream, "lang")) {
 					
-					if(!KDLAudioMultiStreaming::IsStreamFieldSet($target->_multiStream,"lang")) {
+					if(!VDLAudioMultiStreaming::IsStreamFieldSet($target->_multiStream,"lang")) {
 					$target->_flags = $this->_flags | self::MissingContentNonComplyFlagBit;
-					$target->_warnings[KDLConstants::AudioIndex][] = 
-						KDLWarnings::ToString(KDLWarnings::MissingMediaStream);
+					$target->_warnings[VDLConstants::AudioIndex][] = 
+						VDLWarnings::ToString(VDLWarnings::MissingMediaStream);
 					}
 				}
 			}
@@ -679,57 +679,57 @@ $plannedDur = 0;
 	/* ---------------------------
 	 * EvaluateCopyContainer
 	 */
-	public static function EvaluateCopyContainer(KDLContainerData $source)
+	public static function EvaluateCopyContainer(VDLContainerData $source)
 	{
-		$format = KDLContainerTarget::MP4;
+		$format = VDLContainerTarget::MP4;
 //'mp3', 'flash video', 'mpeg audio', 'quicktime', 'mpeg-4','matroska','mpeg video', 'mpeg-ps',
 //'mpeg-ts','ogg','wave','webm','windows media','avi','bdav','dv','jpeg','png','mxf','realmedia','shockwave','aiff'
 		switch($source->_format){
 			case 'mpeg-4':
-				$format = KDLContainerTarget::MP4;
+				$format = VDLContainerTarget::MP4;
 				break;
 			case 'flash video':
-				$format = KDLContainerTarget::FLV;
+				$format = VDLContainerTarget::FLV;
 				break;
 			case 'mpeg audio':
 			case 'mp3':
-				$format = KDLContainerTarget::MP3;
+				$format = VDLContainerTarget::MP3;
 				break;			
 			case 'quicktime':
-				$format = KDLContainerTarget::MOV;
+				$format = VDLContainerTarget::MOV;
 				break;
 			case 'matroska':
-				$format = KDLContainerTarget::MKV;
+				$format = VDLContainerTarget::MKV;
 				break;
 			case 'mpeg video':
 			case 'mpeg-ps':
 			case 'mxf':
-				$format = KDLContainerTarget::MPEG;
+				$format = VDLContainerTarget::MPEG;
 				break;
 			case 'mpeg-ts':
 			case 'bdav':
-				$format = KDLContainerTarget::MPEGTS;
+				$format = VDLContainerTarget::MPEGTS;
 				break;
 			case 'ogg':
-				$format = KDLContainerTarget::OGG;
+				$format = VDLContainerTarget::OGG;
 				break;
 			case 'wave':
-				$format = KDLContainerTarget::WAV;
+				$format = VDLContainerTarget::WAV;
 				break;
 			case 'webm':
-				$format = KDLContainerTarget::WEBM;
+				$format = VDLContainerTarget::WEBM;
 				break;
 			case 'windows media':
-				$format = KDLContainerTarget::WMV;
+				$format = VDLContainerTarget::WMV;
 				break;
 			case 'mxf':
-				$format = KDLContainerTarget::MXF;
+				$format = VDLContainerTarget::MXF;
 				break;
 			case 'avi':
 			case 'dv':
 			case 'realmedia':
 			default:
-				$format = KDLContainerTarget::AVI;
+				$format = VDLContainerTarget::AVI;
 				break;
 		}
 		
@@ -739,7 +739,7 @@ $plannedDur = 0;
 	/* ---------------------------
 	 * evaluateTargetVideo
 	 */
-	public function evaluateTargetVideo(KDLVideoData $source)
+	public function evaluateTargetVideo(VDLVideoData $source)
 	{
 		$targetVid = clone $this->_video;
 		$flavorVid = $this->_video;
@@ -747,40 +747,40 @@ $plannedDur = 0;
 
 		if($this->_video->_id=="") {
 			switch($this->_container->_id){
-				case KDLContainerTarget::FLV:
-					$targetVid->_id = KDLVideoTarget::FLV;
+				case VDLContainerTarget::FLV:
+					$targetVid->_id = VDLVideoTarget::FLV;
 					break;
-				case KDLContainerTarget::AVI:
-					$targetVid->_id = KDLVideoTarget::H264;
+				case VDLContainerTarget::AVI:
+					$targetVid->_id = VDLVideoTarget::H264;
 					break;
-				case KDLContainerTarget::MP4:
-				case KDLContainerTarget::M4V:
-					$targetVid->_id = KDLVideoTarget::H264;
+				case VDLContainerTarget::MP4:
+				case VDLContainerTarget::M4V:
+					$targetVid->_id = VDLVideoTarget::H264;
 					break;
-				case KDLContainerTarget::MOV:
-					$targetVid->_id = KDLVideoTarget::H264;
+				case VDLContainerTarget::MOV:
+					$targetVid->_id = VDLVideoTarget::H264;
 					break;
-				case KDLContainerTarget::_3GP:
-					$targetVid->_id = KDLVideoTarget::H264;
+				case VDLContainerTarget::_3GP:
+					$targetVid->_id = VDLVideoTarget::H264;
 					break;
-				case KDLContainerTarget::OGG:
-				case KDLContainerTarget::OGV:
-					$targetVid->_id = KDLVideoTarget::THEORA;
+				case VDLContainerTarget::OGG:
+				case VDLContainerTarget::OGV:
+					$targetVid->_id = VDLVideoTarget::THEORA;
 					break;
-				case KDLContainerTarget::WMV:
-					$targetVid->_id = KDLVideoTarget::WMV2;
+				case VDLContainerTarget::WMV:
+					$targetVid->_id = VDLVideoTarget::WMV2;
 					break;
-				case KDLContainerTarget::ISMV:
-					$targetVid->_id = KDLVideoTarget::WVC1A;
+				case VDLContainerTarget::ISMV:
+					$targetVid->_id = VDLVideoTarget::WVC1A;
 					break;
-				case KDLContainerTarget::WEBM:
-					$targetVid->_id = KDLVideoTarget::VP8;
+				case VDLContainerTarget::WEBM:
+					$targetVid->_id = VDLVideoTarget::VP8;
 					break;
-				case KDLContainerTarget::MPEG:
-				case KDLContainerTarget::MPEGTS:
-				case KDLContainerTarget::M2TS:
-				case KDLContainerTarget::APPLEHTTP:
-					$targetVid->_id = KDLVideoTarget::H264;
+				case VDLContainerTarget::MPEG:
+				case VDLContainerTarget::MPEGTS:
+				case VDLContainerTarget::M2TS:
+				case VDLContainerTarget::APPLEHTTP:
+					$targetVid->_id = VDLVideoTarget::H264;
 					break;
 			}
 		}
@@ -815,7 +815,7 @@ $plannedDur = 0;
 		/*
 		 * COPY does not require following settings
 		 */
-		if($targetVid->_id==KDLVideoTarget::COPY) {
+		if($targetVid->_id==VDLVideoTarget::COPY) {
 			$targetVid->_watermarkData = null;
 			return $targetVid;
 		}
@@ -827,10 +827,10 @@ $plannedDur = 0;
 		 */
 		if($flavorVid->_gop===null || $flavorVid->_gop==0) {
 			if(isset($targetVid->_frameRate)){
-				$targetVid->_gop = round(KDLConstants::DefaultGOPinSec*$targetVid->_frameRate);
+				$targetVid->_gop = round(VDLConstants::DefaultGOPinSec*$targetVid->_frameRate);
 			}
 			else {
-				$targetVid->_gop = KDLConstants::DefaultGOP;
+				$targetVid->_gop = VDLConstants::DefaultGOP;
 			}
 		}
 		else if(isset($flavorVid->_isGopInSec) && $flavorVid->_isGopInSec>0) {
@@ -838,7 +838,7 @@ $plannedDur = 0;
 				$targetVid->_gop = round($targetVid->_gop*$targetVid->_frameRate);
 			}
 			else {
-				$targetVid->_gop = KDLConstants::DefaultGOP;
+				$targetVid->_gop = VDLConstants::DefaultGOP;
 			}
 		}
 
@@ -862,7 +862,7 @@ $plannedDur = 0;
 	 *	switch frame sizes & inverse display aspect ratio for a certain video.
 	 */
 	
-	private static function invertVideoDimensions(KDLVideoData $video)
+	private static function invertVideoDimensions(VDLVideoData $video)
 	{
 		$temp = $video->_height;
 		$video->_height = $video->_width;
@@ -874,7 +874,7 @@ $plannedDur = 0;
 	/* ---------------------------
 	 * evaluateTargetVideoFramesize
 	 */
-	private function evaluateTargetVideoFramesize(KDLVideoData $source, KDLVideoData $target) 
+	private function evaluateTargetVideoFramesize(VDLVideoData $source, VDLVideoData $target) 
 	{
 		$shrinkToSource = $target->_isShrinkFramesizeToSource;
 		$invertedVideo = false;
@@ -889,7 +889,7 @@ $plannedDur = 0;
 		if ((isset($source->_dar) && $source->_dar < 1) ||
 			(isset($source->_height) && isset($source->_width) && $source->_height > 0 && $source->_width > 0 && $source->_height > $source->_width))
 		{
-			KalturaLog::debug('inverting source');
+			VidiunLog::debug('inverting source');
 			self::invertVideoDimensions($source);
 			$invertedVideo = true;
 		}
@@ -1072,13 +1072,13 @@ $plannedDur = 0;
 				$target->_width = $w;
 				$target->_height = $h;
 				$target->_dar = $d;
-				KalturaLog::log("AR Match: FOUND ($widSrc $hgtSrc) ($flvrVid->_width, $flvrVid->_height) ==> ($w,$h,$d)");
+				VidiunLog::log("AR Match: FOUND ($widSrc $hgtSrc) ($flvrVid->_width, $flvrVid->_height) ==> ($w,$h,$d)");
 			}
 			else {
 				$w = round($target->_width);
 				$h = round($target->_height);
 				$d = $w/$h;
-				KalturaLog::log("AR Match: NOT FOUND ($widSrc $hgtSrc) ($flvrVid->_width, $flvrVid->_height) ==> ($w,$h,$d)");
+				VidiunLog::log("AR Match: NOT FOUND ($widSrc $hgtSrc) ($flvrVid->_width, $flvrVid->_height) ==> ($w,$h,$d)");
 			}
 		}
 
@@ -1107,7 +1107,7 @@ $plannedDur = 0;
 		$modVal = 16;
 		if((isset($target->_forceMult16) && $target->_forceMult16 == 0)
 		|| (($target->_width == 640 || $target->_width == 480) && $target->_height == 360) || ($target->_width == 1920 && $target->_height == 1080)){
-			$auxTargets = array(KDLVideoTarget::H264, KDLVideoTarget::H264B, KDLVideoTarget::H264M, KDLVideoTarget::H264H, KDLVideoTarget::H265);
+			$auxTargets = array(VDLVideoTarget::H264, VDLVideoTarget::H264B, VDLVideoTarget::H264M, VDLVideoTarget::H264H, VDLVideoTarget::H265);
 			if(in_array($target->_id, $auxTargets)) {
 				$modVal = 2;
 		}
@@ -1124,7 +1124,7 @@ $plannedDur = 0;
 		 */
 		if ($invertedVideo)
 		{
-			KalturaLog::debug('inverting back source & target');
+			VidiunLog::debug('inverting back source & target');
 			
 			self::invertVideoDimensions($source);
 			self::invertVideoDimensions($target);
@@ -1139,7 +1139,7 @@ $plannedDur = 0;
 	 *  - Compare each of them to the required AR
 	 *  - Find the setup that is closest 
 	 */
-	protected function matchBestModConstrainedVideoFramesize($darSrcFrame, $hgtSrc, $widSrc, $modVal, KDLVideoData $target) 
+	protected function matchBestModConstrainedVideoFramesize($darSrcFrame, $hgtSrc, $widSrc, $modVal, VDLVideoData $target) 
 	{ 
 			/*
 			 * Calculate hgt & wid 'mod down' value. If not set - assign 0 
@@ -1225,7 +1225,7 @@ $plannedDur = 0;
 	 */
 	protected static function matchBestAspectRatio($srcWid, $srcHgt, $assetWid, $assetHgt, $percision=4)
 	{
-		KalturaLog::log("Input - srcWid:$srcWid,srcHgt:$srcHgt,assetWid:$assetWid,assetHgt:$assetHgt,percision:$percision");
+		VidiunLog::log("Input - srcWid:$srcWid,srcHgt:$srcHgt,assetWid:$assetWid,assetHgt:$assetHgt,percision:$percision");
 
 		$dar = null;
 	/**/
@@ -1262,13 +1262,13 @@ $plannedDur = 0;
 		if($assetWid>$assetHgt*$dar) {
 			$assetWid = round($assetHgt*$dar/2)*2;
 		}
-		KalturaLog::log("Adjusted - srcWid:$srcWid,srcHgt:$srcHgt,assetWid:$assetWid,assetHgt:$assetHgt");
+		VidiunLog::log("Adjusted - srcWid:$srcWid,srcHgt:$srcHgt,assetWid:$assetWid,assetHgt:$assetHgt");
 		
 		for($w=round($assetWid/2)*2; $w>=0; $w-=2){
 			$h = round($w/$dar);
 			if($h==0) break;
 			$d = round($w/$h,$percision);
-//KalturaLog::log("$w $h $d\n");
+//VidiunLog::log("$w $h $d\n");
 			if($d==$dar && $h%2==0) {
 				break;
 			}
@@ -1282,12 +1282,12 @@ $plannedDur = 0;
 	 * evaluateTargetVideoBitrate
 	 * If flavor BR is higher than the source - keep the source BR
 	 */
-	private static function evaluateTargetVideoBitrate(KDLVideoData $source, KDLVideoData $target) 
+	private static function evaluateTargetVideoBitrate(VDLVideoData $source, VDLVideoData $target) 
 	{
 		if($target->_isShrinkBitrateToSource!=1) {
 			return $target->_bitRate;
 		}
-		$maxNormalizedBitrate = KDLVideoBitrateNormalize::NormalizeSourceToTarget($source->_id, $source->_bitRate, $target->_id);
+		$maxNormalizedBitrate = VDLVideoBitrateNormalize::NormalizeSourceToTarget($source->_id, $source->_bitRate, $target->_id);
 			/*
 			 * Optional 'contentAwareness' processing, for sources that have 'complexityValue'(bitrate)>500
 			 * and the flavor has 'contentAwareness' field set to positive value (maximal gain level),
@@ -1295,9 +1295,9 @@ $plannedDur = 0;
 			 */
 		if(isset($source->_complexityValue) && $source->_complexityValue>500 
 		&& isset($target->_contentAwareness) && $target->_contentAwareness>0 && $target->_contentAwareness<=1) {
-			KalturaLog::log("complexityValue($source->_complexityValue),contentAwareness($target->_contentAwareness),targetBR($target->_bitRate)");
-			$complexityNormalizedBitrate = KDLVideoBitrateNormalize::NormalizeSourceToTarget(KDLVideoTarget::H264, $source->_complexityValue, $target->_id,1);
-			KalturaLog::log("maxNormalizedBitrate($maxNormalizedBitrate),complexityNormalizedBitrate($complexityNormalizedBitrate)");
+			VidiunLog::log("complexityValue($source->_complexityValue),contentAwareness($target->_contentAwareness),targetBR($target->_bitRate)");
+			$complexityNormalizedBitrate = VDLVideoBitrateNormalize::NormalizeSourceToTarget(VDLVideoTarget::H264, $source->_complexityValue, $target->_id,1);
+			VidiunLog::log("maxNormalizedBitrate($maxNormalizedBitrate),complexityNormalizedBitrate($complexityNormalizedBitrate)");
 			/*
 			 * Limit the maximal gain (complexityValue vs. target flavor predifined bitrate), to the 'contentAwareness' limit
 			 */
@@ -1307,7 +1307,7 @@ $plannedDur = 0;
 					$maxNormalizedBitrate = $maxGainLimitedBitrate;
 				else
 					$maxNormalizedBitrate = $complexityNormalizedBitrate;
-				KalturaLog::log("maxGainLimitedBitrate($maxGainLimitedBitrate), adjsuted maxNormalizedBitrate($maxNormalizedBitrate)");
+				VidiunLog::log("maxGainLimitedBitrate($maxGainLimitedBitrate), adjsuted maxNormalizedBitrate($maxNormalizedBitrate)");
 			}
 		}
 		
@@ -1320,7 +1320,7 @@ $plannedDur = 0;
 	/* ---------------------------
 	 * evaluateTargetVideoFramerate
 	 */
-	private static function evaluateTargetVideoFramerate(KDLVideoData $source, KDLVideoData $target) 
+	private static function evaluateTargetVideoFramerate(VDLVideoData $source, VDLVideoData $target) 
 	{
 		/*
 		 * Frame Rate - If the flavor fps is zero, evaluate it from the source and
@@ -1331,10 +1331,10 @@ $plannedDur = 0;
 			if(isset($target->_maxFrameRate) && $target->_maxFrameRate>0)
 				$maxFrameRate = $target->_maxFrameRate;
 			else
-				$maxFrameRate = KDLConstants::MaxFramerate;
+				$maxFrameRate = VDLConstants::MaxFramerate;
 			if($target->_frameRate>$maxFrameRate) {
-				$target->_warnings[KDLConstants::VideoIndex][] =
-					KDLWarnings::ToString(KDLWarnings::TruncatingFramerate, $maxFrameRate, $target->_frameRate);
+				$target->_warnings[VDLConstants::VideoIndex][] =
+					VDLWarnings::ToString(VDLWarnings::TruncatingFramerate, $maxFrameRate, $target->_frameRate);
 				/*
 				 * On special HFR (High Frane Rate) cases, apply following truncating logic 
 				 */
@@ -1388,7 +1388,7 @@ $plannedDur = 0;
 		/*
 		 * MPEG2 constraint - target fps should be at least 20
 		 */
-		if($target->_id==KDLVideoTarget::MPEG2){
+		if($target->_id==VDLVideoTarget::MPEG2){
 			$target->_frameRate = max(20,$target->_frameRate);
 		}
 		
@@ -1406,10 +1406,10 @@ $plannedDur = 0;
 	 * Sample 'scale' value "x30%" stands for - 
 	 * make the height to be 30% of the source, calculate the width to match the height
 	 * 
-	 * @param KDLVideoData $target
-	 * @param KDLVideoData $target
+	 * @param VDLVideoData $target
+	 * @param VDLVideoData $target
 	 */
-	private static function evaluateTargetWaterMark(KDLVideoData $sourceVid, KDLVideoData $flavorVid, $watermarkData) 
+	private static function evaluateTargetWaterMark(VDLVideoData $sourceVid, VDLVideoData $flavorVid, $watermarkData) 
 	{
 		if(!isset($watermarkData)){
 			return null;
@@ -1443,10 +1443,10 @@ $plannedDur = 0;
 		else
 			$watermarkDataArr = array($watermarkData);
 
-		KalturaLog::log("WM objects:".count($watermarkDataArr));
+		VidiunLog::log("WM objects:".count($watermarkDataArr));
 
 		foreach($watermarkDataArr as $wmI=>$wmData){
-			KalturaLog::log("In WM($wmI):".json_encode($wmData));
+			VidiunLog::log("In WM($wmI):".json_encode($wmData));
 			if(isset($wmData->scale)){
 				$scaleArr = explode("x",$wmData->scale); 
 				$widScale = trim($scaleArr[0]); 
@@ -1533,7 +1533,7 @@ $plannedDur = 0;
 							$hgtMargin = $widMargin;
 				}
 				$wmData->margins = "$widMargin"."x$hgtMargin";
-				KalturaLog::log("srcWid($srcWid),srcHgt($srcHgt),widMargin($widMargin),hgtMargin($hgtMargin)");
+				VidiunLog::log("srcWid($srcWid),srcHgt($srcHgt),widMargin($widMargin),hgtMargin($hgtMargin)");
 			}
 
 /*
@@ -1549,7 +1549,7 @@ WM HGT related
 				 */
 			$wmData->fixImageDar = $fixImageDar;
 			$watermarkDataArr[$wmI] = $wmData;
-			KalturaLog::log("Final WM($wmI):".json_encode($wmData));
+			VidiunLog::log("Final WM($wmI):".json_encode($wmData));
 		}
 		return $watermarkDataArr;
 	}
@@ -1564,7 +1564,7 @@ WM HGT related
 	 */
 	private static function adjustFrameSizeToDarAndRotation($width, $height, $dar, $rotation)
 	{
-		KalturaLog::log("In: width($width), height($height), dar($dar), rotation($rotation)");
+		VidiunLog::log("In: width($width), height($height), dar($dar), rotation($rotation)");
 		/*
 		 * Evaluate source frame dims - dar adjustment and rotation
 		 */
@@ -1577,7 +1577,7 @@ WM HGT related
 		if(isset($dar)) {
 			$aux = round($adjustedHgt*$dar);
 			if(abs($aux-$adjustedWid)>10){
-				KalturaLog::log("Adjust width($adjustedWid) with dar($dar): $aux");
+				VidiunLog::log("Adjust width($adjustedWid) with dar($dar): $aux");
 				$adjustedWid = $aux;
 			}
 			
@@ -1592,7 +1592,7 @@ WM HGT related
 				if(abs(1-$fixImageDar)<0.1)
 					$fixImageDar = null;
 			}
-			KalturaLog::log("Adjusted for dar($dar) - ($adjustedWid), height($adjustedHgt),fixImageDar($fixImageDar) ");
+			VidiunLog::log("Adjusted for dar($dar) - ($adjustedWid), height($adjustedHgt),fixImageDar($fixImageDar) ");
 		}
 		// For 'portrait' sources (rotation -90,90,270) - switch the source dims
 		if(isset($rotation) && in_array($rotation, array(-90,90,270))){
@@ -1604,76 +1604,76 @@ WM HGT related
 				$aux = $adjustedHgt;
 				$adjustedHgt = $adjustedWid;
 				$adjustedWid = $aux;
-				KalturaLog::log("Adjust frame dims to rotation($rotation): width($adjustedWid),height($adjustedHgt)");
+				VidiunLog::log("Adjust frame dims to rotation($rotation): width($adjustedWid),height($adjustedHgt)");
 			}
 		}
-		KalturaLog::log("Final: width($adjustedWid),height($adjustedHgt),fixImageDar($fixImageDar)");
+		VidiunLog::log("Final: width($adjustedWid),height($adjustedHgt),fixImageDar($fixImageDar)");
 		return array($adjustedWid,$adjustedHgt,$fixImageDar);
 	}
 	
 	/* ---------------------------
 	 * evaluateTargetAudio
 	 */
-	public function evaluateTargetAudio(KDLAudioData $source, KDLMediaDataSet $target, $contentStreams=null)
+	public function evaluateTargetAudio(VDLAudioData $source, VDLMediaDataSet $target, $contentStreams=null)
 	{
 		$targetAud = clone $this->_audio;
 		if($targetAud->_id=="" || $targetAud->_id==null) {
 			if($target->_container!=null) {
 				switch($target->_container->_id){
-					case KDLContainerTarget::MP4:
-					case KDLContainerTarget::M4V:
-					case KDLContainerTarget::_3GP:
-						$targetAud->_id=KDLAudioTarget::AAC;
+					case VDLContainerTarget::MP4:
+					case VDLContainerTarget::M4V:
+					case VDLContainerTarget::_3GP:
+						$targetAud->_id=VDLAudioTarget::AAC;
 						break;
-					case KDLContainerTarget::MP3:
-						$targetAud->_id=KDLAudioTarget::MP3;
+					case VDLContainerTarget::MP3:
+						$targetAud->_id=VDLAudioTarget::MP3;
 						break;
-					case KDLContainerTarget::OGG:
-					case KDLContainerTarget::OGV:
-						$targetAud->_id=KDLAudioTarget::VORBIS;
+					case VDLContainerTarget::OGG:
+					case VDLContainerTarget::OGV:
+						$targetAud->_id=VDLAudioTarget::VORBIS;
 						break;
-					case KDLContainerTarget::FLV:
-						$targetAud->_id=KDLAudioTarget::MP3;
+					case VDLContainerTarget::FLV:
+						$targetAud->_id=VDLAudioTarget::MP3;
 						break;
-					case KDLContainerTarget::WMV:
-					case KDLContainerTarget::WMA:
-					case KDLContainerTarget::ISMV:
-						$targetAud->_id=KDLAudioTarget::WMA;
+					case VDLContainerTarget::WMV:
+					case VDLContainerTarget::WMA:
+					case VDLContainerTarget::ISMV:
+						$targetAud->_id=VDLAudioTarget::WMA;
 						break;
-					case KDLContainerTarget::WEBM:
-					case KDLContainerTarget::MPEGTS:
-					case KDLContainerTarget::M2TS:
-					case KDLContainerTarget::APPLEHTTP:
-						$targetAud->_id=KDLAudioTarget::AAC;
+					case VDLContainerTarget::WEBM:
+					case VDLContainerTarget::MPEGTS:
+					case VDLContainerTarget::M2TS:
+					case VDLContainerTarget::APPLEHTTP:
+						$targetAud->_id=VDLAudioTarget::AAC;
 						break;
 				};
 			}
 			else if($target->_video!=null) {
 				switch($target->_video->_id){
-					case KDLVideoTarget::H264:
-					case KDLVideoTarget::H264B:
-					case KDLVideoTarget::H264M:
-					case KDLVideoTarget::H264H:
-						$targetAud->_id=KDLAudioTarget::AAC;
+					case VDLVideoTarget::H264:
+					case VDLVideoTarget::H264B:
+					case VDLVideoTarget::H264M:
+					case VDLVideoTarget::H264H:
+						$targetAud->_id=VDLAudioTarget::AAC;
 						break;
-					case KDLVideoTarget::THEORA:
-						$targetAud->_id=KDLAudioTarget::VORBIS;
+					case VDLVideoTarget::THEORA:
+						$targetAud->_id=VDLAudioTarget::VORBIS;
 						break;
 					default:
-						$targetAud->_id=KDLAudioTarget::MP3;
+						$targetAud->_id=VDLAudioTarget::MP3;
 						break;
 				}
 			}
 			else {
-				$targetAud->_id=KDLAudioTarget::MP3;
+				$targetAud->_id=VDLAudioTarget::MP3;
 			}
 		}
-		elseif ($target->_container->_id==KDLContainerTarget::MP3) {
+		elseif ($target->_container->_id==VDLContainerTarget::MP3) {
 			switch($targetAud->_id) {
-				case KDLVideoTarget::COPY:
+				case VDLVideoTarget::COPY:
 					break;
 				default:
-					$targetAud->_id=KDLAudioTarget::MP3;
+					$targetAud->_id=VDLAudioTarget::MP3;
 					break;
 			}
 		}
@@ -1681,8 +1681,8 @@ WM HGT related
 			/*
 			 * For MP3 w/out target bitrate - use 64Kb as default
 			 */
-		if(isset($target->_container) && $target->_container->_id==KDLContainerTarget::MP3
-				&& $targetAud->_id==KDLAudioTarget::MP3 && $targetAud->_bitRate==0) {
+		if(isset($target->_container) && $target->_container->_id==VDLContainerTarget::MP3
+				&& $targetAud->_id==VDLAudioTarget::MP3 && $targetAud->_bitRate==0) {
 			$targetAud->_bitRate = 64;
 		}
 				/* -------------
@@ -1699,12 +1699,12 @@ WM HGT related
 				 * - else (ch defined): make it minimum between the source ch cnt 
 				 * and the required ch cnt
 				 */
-		if ($targetAud->_id==KDLAudioTarget::AMRNB){
+		if ($targetAud->_id==VDLAudioTarget::AMRNB){
 			$targetAud->_channels=1;
 		}
 		else if($targetAud->_channels==0 
-		&& !($targetAud->_id==KDLAudioTarget::AAC || $targetAud->_id==KDLAudioTarget::PCM || $targetAud->_id==KDLAudioTarget::MPEG2)){
-			$targetAud->_channels=KDLConstants::DefaultAudioChannels;
+		&& !($targetAud->_id==VDLAudioTarget::AAC || $targetAud->_id==VDLAudioTarget::PCM || $targetAud->_id==VDLAudioTarget::MPEG2)){
+			$targetAud->_channels=VDLConstants::DefaultAudioChannels;
 		}
 		else {
 			/*
@@ -1728,8 +1728,8 @@ WM HGT related
 				 * - AMRNB - br <=12.2, sr <= 8000
 				 * - AAC or MP3/non flv: on auto use source sr (if available). Truncate to valid range(11025-48000) 
 				 */
-		if(($target->_container!=null && $target->_container->_id==KDLContainerTarget::FLV) 
-		 && $targetAud->_id==KDLAudioTarget::MP3) {
+		if(($target->_container!=null && $target->_container->_id==VDLContainerTarget::FLV) 
+		 && $targetAud->_id==VDLAudioTarget::MP3) {
 			if($targetAud->_sampleRate==0 && $source->_sampleRate && $source->_sampleRate>0){
 				$targetAud->_sampleRate=$source->_sampleRate;
 			}
@@ -1742,7 +1742,7 @@ WM HGT related
 				$trgSr=11025;
 			$targetAud->_sampleRate = $trgSr;
 		}
-		else if($targetAud->_id==KDLAudioTarget::AMRNB) { 
+		else if($targetAud->_id==VDLAudioTarget::AMRNB) { 
 			if ($targetAud->_sampleRate==0 || $targetAud->_sampleRate>8000)
 				$targetAud->_sampleRate=8000;
 			if ($targetAud->_bitRate==0 || $targetAud->_bitRate>12.2)
@@ -1753,15 +1753,15 @@ WM HGT related
 				/*
 				 * AAC targets should get default 44.1, rather than source SR
 				 */
-				if($source->_sampleRate>0 && $targetAud->_id!=KDLAudioTarget::AAC) {
-					$targetAud->_sampleRate=max(KDLConstants::MinAudioSampleRate,min(KDLConstants::MaxAudioSampleRate,$source->_sampleRate));
+				if($source->_sampleRate>0 && $targetAud->_id!=VDLAudioTarget::AAC) {
+					$targetAud->_sampleRate=max(VDLConstants::MinAudioSampleRate,min(VDLConstants::MaxAudioSampleRate,$source->_sampleRate));
 				}
 				else {
-					$targetAud->_sampleRate=KDLConstants::DefaultAudioSampleRate;
+					$targetAud->_sampleRate=VDLConstants::DefaultAudioSampleRate;
 				}
 			}
 			else {
-				$targetAud->_sampleRate=max(KDLConstants::MinAudioSampleRate,min(KDLConstants::MaxAudioSampleRate,$targetAud->_sampleRate));
+				$targetAud->_sampleRate=max(VDLConstants::MinAudioSampleRate,min(VDLConstants::MaxAudioSampleRate,$targetAud->_sampleRate));
 			}
 		}
 		
@@ -1772,22 +1772,22 @@ WM HGT related
 			 * - target other than OGG/Vorbis
 			 * DO-NOT try to resample on 'copy' cases - it can not be done
 			 */
-		if(!$target->_container->IsFormatOf(array(KDLContainerTarget::OGG,KDLContainerTarget::OGV))
-		&& !$targetAud->IsFormatOf(array(KDLAudioTarget::COPY))
+		if(!$target->_container->IsFormatOf(array(VDLContainerTarget::OGG,VDLContainerTarget::OGV))
+		&& !$targetAud->IsFormatOf(array(VDLAudioTarget::COPY))
 		&& ($source->IsFormatOf(array('nellymoser'))||($source->_sampleRate && $source->_sampleRate>0 && $source->_sampleRate<16000))) {
 			$targetAud->_useResampleFilter = true;
 		}
 			/*
 			 * Check for 'downmix' audio, it requires special ffmpeg processing 
 			 */
-		if(!$targetAud->IsFormatOf(array(KDLAudioTarget::COPY))
+		if(!$targetAud->IsFormatOf(array(VDLAudioTarget::COPY))
 		&& isset($contentStreams) && isset($contentStreams->audio) && count($contentStreams->audio)==1 
 		&& isset($contentStreams->audio[0]->audioChannelLayout)
-		&& $contentStreams->audio[0]->audioChannelLayout==KDLAudioLayouts::DOWNMIX){
+		&& $contentStreams->audio[0]->audioChannelLayout==VDLAudioLayouts::DOWNMIX){
 			$target->_multiStream = new stdClass();
-			$target->_multiStream->audio = new KDLAudioMultiStreamingHelper(json_decode('{"streams":[{"mapping":[2]}]}'));
-			$stream = new KDLStreamDescriptor(array($contentStreams->audio[0]->id));
-			$target->_multiStream->audio = new KDLAudioMultiStreamingHelper();
+			$target->_multiStream->audio = new VDLAudioMultiStreamingHelper(json_decode('{"streams":[{"mapping":[2]}]}'));
+			$stream = new VDLStreamDescriptor(array($contentStreams->audio[0]->id));
+			$target->_multiStream->audio = new VDLAudioMultiStreamingHelper();
 			$target->_multiStream->audio->addStream($stream);
 			$target->_multiStream->audio->streams[0]->downmix = 1;
 		}
@@ -1877,7 +1877,7 @@ WM HGT related
 		/*
 		 * For audio COPY cases there should be no 'default' multiStream processing (when the setupMultiStream is not set)
 		 */
-		if(!isset($setupMultiStream) && isset($target->_audio) && $target->_audio->IsFormatOf(array(KDLAudioTarget::COPY))){
+		if(!isset($setupMultiStream) && isset($target->_audio) && $target->_audio->IsFormatOf(array(VDLAudioTarget::COPY))){
 			return null;
 		}
 		
@@ -1889,7 +1889,7 @@ WM HGT related
 			 * - 'languages - process them as multi-lingual
 			 * - otherwise remove the 'multiStream' object'
 			 */
-		$multiStreamHelper = new KDLAudioMultiStreamingHelper($setupMultiStream);
+		$multiStreamHelper = new VDLAudioMultiStreamingHelper($setupMultiStream);
 		$audioStreams = $multiStreamHelper->GetSettings($source->_contentStreams, $overrideStreams);
 		if(isset($audioStreams)){
 			$targetMultiStream = new stdClass();
@@ -1904,9 +1904,9 @@ WM HGT related
 	 * validateTranscoders
 	 * - Remove the engines that in the blacklist for that codec/format/etc
 	 */
-	private function validateTranscoders(KDLMediaDataSet $source, &$transcoders, $inSet=false)
+	private function validateTranscoders(VDLMediaDataSet $source, &$transcoders, $inSet=false)
 	{
-KalturaLog::log("==>\n");
+VidiunLog::log("==>\n");
 		$cnt = count($transcoders);
 		$i = 0;
 		foreach($transcoders as $key=>$trPrm) {
@@ -1915,19 +1915,19 @@ KalturaLog::log("==>\n");
 				$this->validateTranscoders($source, $trPrm, true);
 				if($cnt>count($trPrm)){
 					unset($transcoders[$key]);
-					$this->_warnings[KDLConstants::ContainerIndex][] = 
-						KDLWarnings::ToString(KDLWarnings::RemovingMultilineTranscoding);
+					$this->_warnings[VDLConstants::ContainerIndex][] = 
+						VDLWarnings::ToString(VDLWarnings::RemovingMultilineTranscoding);
 				}
 			}
 			else {
 				if(is_null($transcoders[$key]->_engine)){
-					$this->_warnings[KDLConstants::ContainerIndex][] = //"The transcoder (".$key.") can not process the (".$sourcePart->_id."/".$sourcePart->_format. ").";
-								KDLWarnings::ToString(KDLWarnings::MissingTranscoderEngine, $transcoders[$key]->_id);
+					$this->_warnings[VDLConstants::ContainerIndex][] = //"The transcoder (".$key.") can not process the (".$sourcePart->_id."/".$sourcePart->_format. ").";
+								VDLWarnings::ToString(VDLWarnings::MissingTranscoderEngine, $transcoders[$key]->_id);
 					unset($transcoders[$key]);
 				}
 				else {
 					if($inSet){		
-						KalturaLog::log(": inSet,cnt:$cnt,i:$i");
+						VidiunLog::log(": inSet,cnt:$cnt,i:$i");
 						if($i>0){
 							$transcoders[$key]->_engine->set_sourceBlacklist(null);
 						}
@@ -1958,13 +1958,13 @@ KalturaLog::log("==>\n");
 			foreach ($blackList[$transcoder] as $keyPart => $subBlackList){
 				$sourcePart = null;
 				switch($keyPart){
-				case KDLConstants::ContainerIndex;
+				case VDLConstants::ContainerIndex;
 					$sourcePart = $mediaSet->_container;
 					break;
-				case KDLConstants::VideoIndex;
+				case VDLConstants::VideoIndex;
 					$sourcePart = $mediaSet->_video;
 					break;
-				case KDLConstants::AudioIndex;
+				case VDLConstants::AudioIndex;
 					$sourcePart = $mediaSet->_audio;
 					break;
 				default:
@@ -1985,9 +1985,9 @@ KalturaLog::log("==>\n");
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 /* ===========================
- * KDLFlavor2Tags
+ * VDLFlavor2Tags
  */
-class KDLFlavor2Tags {
+class VDLFlavor2Tags {
 	static $ItunesFormats = array("mpeg-4","mpeg audio", "aiff", "wave");
 	static $FlashFormats = array("flash video", "flv", "f4v","flash","flashvideo");
 	static $FlashPlayableFormats = array("mpeg-4","mpeg audio");
@@ -1998,16 +1998,16 @@ class KDLFlavor2Tags {
 	 * ToTags
 	 */
 
-	public static function ToTags(KDLMediaDataSet $source, $tagsToCheck=null)
+	public static function ToTags(VDLMediaDataSet $source, $tagsToCheck=null)
 	{
-		//		$aaa=KDLFlavor2Tags::$ItunesFormats;
+		//		$aaa=VDLFlavor2Tags::$ItunesFormats;
 		$tagsIn = array();
 		$tagsOut = array();
 		$flavor=null;
 		if(is_array($tagsToCheck)) {
-			if($tagsToCheck[0] instanceof KDLFlavor) {
+			if($tagsToCheck[0] instanceof VDLFlavor) {
 				foreach($tagsToCheck as $tagToCheck) {
-					$tagsOut = $tagsOut + KDLFlavor2Tags::ToTags($source, $tagToCheck);
+					$tagsOut = $tagsOut + VDLFlavor2Tags::ToTags($source, $tagToCheck);
 					return $tagsOut;
 				}
 			}
@@ -2015,7 +2015,7 @@ class KDLFlavor2Tags {
 				$tagsIn = $tagsToCheck;
 			}
 		}
-		else if($tagsToCheck instanceof KDLFlavor) {
+		else if($tagsToCheck instanceof VDLFlavor) {
 			$flavor = $tagsToCheck;
 			if(is_array($tagsToCheck->_tags))
 			$tagsIn = $tagsToCheck->_tags;
@@ -2029,17 +2029,17 @@ class KDLFlavor2Tags {
 		foreach($tagsIn as $tag) {
 			switch($tag){
 				case "web":
-					if($source->_container->IsFormatOf(KDLFlavor2Tags::$FlashFormats))
+					if($source->_container->IsFormatOf(VDLFlavor2Tags::$FlashFormats))
 					$tagsOut[] = $tag;
-					else if(KDLFlavor2Tags::isMp4($source))
+					else if(VDLFlavor2Tags::isMp4($source))
 					$tagsOut[] = $tag;
-					else if(KDLFlavor2Tags::isMpegAudio($source))
+					else if(VDLFlavor2Tags::isMpegAudio($source))
 					$tagsOut[] = $tag;
 					/*
 					 else {
-						if($source->_container->IsFormatOf(KDLFlavor2Tags::$FlashPlayableFormats)) {
+						if($source->_container->IsFormatOf(VDLFlavor2Tags::$FlashPlayableFormats)) {
 						$audFormats = array("mpeg audio");
-						if(($source->_video && $source->_video->IsFormatOf(KDLFlavor2Tags::$H264Synonyms))
+						if(($source->_video && $source->_video->IsFormatOf(VDLFlavor2Tags::$H264Synonyms))
 						|| ($source->_audio && $source->_audio->IsFormatOf($audFormats))){
 						$tagsOut[] = $tag;
 						}
@@ -2049,11 +2049,11 @@ class KDLFlavor2Tags {
 					break;
 				case "itunes":
 					if($source->_container->_id=="qt"
-					|| $source->_container->IsFormatOf(KDLFlavor2Tags::$ItunesFormats))
+					|| $source->_container->IsFormatOf(VDLFlavor2Tags::$ItunesFormats))
 					$tagsOut[] = $tag;
 					break;
 				case "mbr":
-					if($flavor!=null && KDLFlavor2Tags::isMbr($source, $flavor))
+					if($flavor!=null && VDLFlavor2Tags::isMbr($source, $flavor))
 					$tagsOut[] = $tag;
 					break;
 				default:
@@ -2067,14 +2067,14 @@ class KDLFlavor2Tags {
 	/* ---------------------------
 	 * isMbr
 	 */
-	private static function isMbr(KDLMediaDataSet $source, KDLFlavor $flavor)
+	private static function isMbr(VDLMediaDataSet $source, VDLFlavor $flavor)
 	{
-		if($source->_container->IsFormatOf(KDLFlavor2Tags::$FlashFormats)
-		&& $flavor->_container->IsFormatOf(KDLFlavor2Tags::$FlashFormats)) {
+		if($source->_container->IsFormatOf(VDLFlavor2Tags::$FlashFormats)
+		&& $flavor->_container->IsFormatOf(VDLFlavor2Tags::$FlashFormats)) {
 			;
 		}
 		else
-		if(KDLFlavor2Tags::isMp4($source) && KDLFlavor2Tags::isMp4($flavor)) {
+		if(VDLFlavor2Tags::isMp4($source) && VDLFlavor2Tags::isMp4($flavor)) {
 			;
 		}
 		else {
@@ -2082,8 +2082,8 @@ class KDLFlavor2Tags {
 		}
 		/*
 
-		if(!(($source->_container->IsFormatOf(KDLFlavor2Tags::$FlashFormats) && $flavor->_container->IsFormatOf(KDLFlavor2Tags::$FlashFormats))
-		|| ($source->_container->IsFormatOf(array("mpeg-4")) && $source->_video->IsFormatOf(KDLFlavor2Tags::$H264Synonyms))
+		if(!(($source->_container->IsFormatOf(VDLFlavor2Tags::$FlashFormats) && $flavor->_container->IsFormatOf(VDLFlavor2Tags::$FlashFormats))
+		|| ($source->_container->IsFormatOf(array("mpeg-4")) && $source->_video->IsFormatOf(VDLFlavor2Tags::$H264Synonyms))
 		) ) )
 		return false;
 		*/
@@ -2094,10 +2094,10 @@ class KDLFlavor2Tags {
 	/* ---------------------------
 	 * isMp4
 	 */
-	private static function isMp4(KDLMediaDataSet $media, $doVideoCheck=true)
+	private static function isMp4(VDLMediaDataSet $media, $doVideoCheck=true)
 	{
-		if($media->_container->IsFormatOf(KDLFlavor2Tags::$MP4ContainerSynonyms)
-		&&($media->_video==null || $media->_video->IsFormatOf(KDLFlavor2Tags::$H264Synonyms))
+		if($media->_container->IsFormatOf(VDLFlavor2Tags::$MP4ContainerSynonyms)
+		&&($media->_video==null || $media->_video->IsFormatOf(VDLFlavor2Tags::$H264Synonyms))
 		&&($media->_audio==null || $media->_audio->IsFormatOf(array("mpeg audio", "mp3","aac")))
 		){
 			return true;
@@ -2108,7 +2108,7 @@ class KDLFlavor2Tags {
 	/* ---------------------------
 	 * isMpegAudio
 	 */
-	private static function isMpegAudio(KDLMediaDataSet $media)
+	private static function isMpegAudio(VDLMediaDataSet $media)
 	{
 		if($media->_container->IsFormatOf(array("mpeg audio", "mp3"))
 		&& $media->_video!=null

@@ -3,10 +3,10 @@
  * @package plugins
  * @subpackage api
  */
-class KalturaPluginReplacementOptionsArray extends KalturaTypedArray
+class VidiunPluginReplacementOptionsArray extends VidiunTypedArray
 {
 	public function __construct( )
 	{
-		return parent::__construct ("KalturaPluginReplacementOptionsItem");
+		return parent::__construct ("VidiunPluginReplacementOptionsItem");
 	}
 }

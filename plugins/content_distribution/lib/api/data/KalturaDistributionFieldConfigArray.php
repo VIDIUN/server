@@ -3,17 +3,17 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaDistributionFieldConfigArray extends KalturaTypedArray
+class VidiunDistributionFieldConfigArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaDistributionFieldConfigArray();
+		$newArr = new VidiunDistributionFieldConfigArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaDistributionFieldConfig();
+    		$nObj = new VidiunDistributionFieldConfig();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaDistributionFieldConfigArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct('KalturaDistributionFieldConfig');	
+		parent::__construct('VidiunDistributionFieldConfig');	
 	}
 }

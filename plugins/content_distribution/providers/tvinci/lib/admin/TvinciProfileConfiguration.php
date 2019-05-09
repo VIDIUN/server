@@ -20,14 +20,14 @@ class Form_TvinciProfileConfiguration extends Form_ConfigurableProfileConfigurat
 	{
 		$object = parent::getObject($objectType, $properties, $add_underscore, $include_empty_fields);
 		/**
-		 * @var Kaltura_Client_TvinciDistribution_Type_TvinciDistributionProfile $object
+		 * @var Vidiun_Client_TvinciDistribution_Type_TvinciDistributionProfile $object
 		 */
 		$tagsArr = array();
 		foreach($properties as $key => $value)
 		{
 			if (strpos($key, 'tvinci_distribution_tags_') === 0)
 			{
-				$tvinciDistributionTag = new Kaltura_Client_TvinciDistribution_Type_TvinciDistributionTag();
+				$tvinciDistributionTag = new Vidiun_Client_TvinciDistribution_Type_TvinciDistributionTag();
 				$tvinciDistributionTag->tagname = $value['tag_name'];
 				$tvinciDistributionTag->extension = $value['tag_extension'];
 				$tvinciDistributionTag->protocol = $value['tag_protocol'];
@@ -39,7 +39,7 @@ class Form_TvinciProfileConfiguration extends Form_ConfigurableProfileConfigurat
 		}
 		$object->tags = $tagsArr;
 		
-		if($object instanceof Kaltura_Client_TvinciDistribution_Type_TvinciDistributionProfile) {
+		if($object instanceof Vidiun_Client_TvinciDistribution_Type_TvinciDistributionProfile) {
 			$upload = new Zend_File_Transfer_Adapter_Http();
 			$files = $upload->getFileInfo();
 

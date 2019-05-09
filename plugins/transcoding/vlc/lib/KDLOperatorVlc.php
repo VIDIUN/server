@@ -3,7 +3,7 @@
  * @package plugins.vlc
  * @subpackage lib
  */
-class KDLOperatorVlc extends KDLOperatorBase {
+class VDLOperatorVlc extends VDLOperatorBase {
     public function __construct($id, $name=null, $sourceBlacklist=null, $targetBlacklist=null) {
     	parent::__construct($id,$name,$sourceBlacklist,$targetBlacklist);
     }
@@ -11,7 +11,7 @@ class KDLOperatorVlc extends KDLOperatorBase {
 	/* ---------------------------
 	 * GenerateCommandLine
 	 */
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 		
 /*
@@ -41,7 +41,7 @@ $acodec = "libmp3lam";
 			$cmdStr .= " ".$target->_inFileName;
 		}
 		else {
-			$cmdStr .= " ".KDLCmdlinePlaceholders::InFileName;
+			$cmdStr .= " ".VDLCmdlinePlaceholders::InFileName;
 		}
 		if(isset($target->_clipStart) && $target->_clipStart>0){
 			$cmdStr .= " --start-time=".$target->_clipStart/1000;
@@ -61,32 +61,32 @@ $vid = $target->_video;
 			}
 		
 			switch($vid->_id){
-				case KDLVideoTarget::FLV:
-				case KDLVideoTarget::H263:
-				case KDLVideoTarget::VP6:
+				case VDLVideoTarget::FLV:
+				case VDLVideoTarget::H263:
+				case VDLVideoTarget::VP6:
 					$transcodeStr .= "venc=ffmpeg,vcodec=flv";
 					break; 
-				case KDLVideoTarget::H264: //-qcomp 0.6 -qmin 10 -qmax 50 -qdiff 4
-				case KDLVideoTarget::H264B:
-				case KDLVideoTarget::H264M:
-				case KDLVideoTarget::H264H:
+				case VDLVideoTarget::H264: //-qcomp 0.6 -qmin 10 -qmax 50 -qdiff 4
+				case VDLVideoTarget::H264B:
+				case VDLVideoTarget::H264M:
+				case VDLVideoTarget::H264H:
 					$transcodeStr .= "venc=x264{".$this->generateH264params($vid)."},vcodec=h264";
 					break; 				
-				case KDLVideoTarget::MPEG4:
+				case VDLVideoTarget::MPEG4:
 					$transcodeStr .= "venc=ffmpeg,vcodec=mpeg4";
 					break;
-				case KDLVideoTarget::THEORA:
+				case VDLVideoTarget::THEORA:
 					$transcodeStr .= "venc=theora,vcodec=theora,quality=8";
 					break;
-				case KDLVideoTarget::WMV2:
-				case KDLVideoTarget::WMV3:
-				case KDLVideoTarget::WVC1A:
+				case VDLVideoTarget::WMV2:
+				case VDLVideoTarget::WMV3:
+				case VDLVideoTarget::WVC1A:
 					$transcodeStr .= "venc=ffmpeg,vcodec=wmv2";
 					break;
-				case KDLVideoTarget::VP8:
+				case VDLVideoTarget::VP8:
 					$transcodeStr .= "venc=ffmpeg,vcodec=VP80";
 					break; 
-//				case KDLVideoTarget::COPY:
+//				case VDLVideoTarget::COPY:
 //					$vcodecParams .= "copy";
 //					break; 
 			}
@@ -115,19 +115,19 @@ $vid = $target->_video;
 $aud = $target->_audio;
 		if(isset($aud) && $aud->_id!="none") {
 			switch($aud->_id){
-				case KDLAudioTarget::MP3:
+				case VDLAudioTarget::MP3:
 					$transcodeStr .= ",aenc=ffmpeg,acodec=mp3";
 					break;
-				case KDLAudioTarget::AAC:
+				case VDLAudioTarget::AAC:
 					$transcodeStr .= ",aenc=ffmpeg,acodec=aac";
 					break;
-				case KDLAudioTarget::VORBIS:
+				case VDLAudioTarget::VORBIS:
 					$transcodeStr .= ",acodec=vorb";
 					break;
-				case KDLAudioTarget::WMA:
+				case VDLAudioTarget::WMA:
 					$transcodeStr .= ",aenc=ffmpeg,acodec=wma";
 					break;
-//				case KDLAudioTarget::COPY:
+//				case VDLAudioTarget::COPY:
 //					$acodec = "copy";
 //					break;
 			}
@@ -151,33 +151,33 @@ $aud = $target->_audio;
 $con = $target->_container;
 		if(isset($con) && $con->_id!="none") {
 			switch($con->_id){
-				case KDLContainerTarget::FLV:
+				case VDLContainerTarget::FLV:
 					$format = ",mux=flv";
 					break;
-				case KDLContainerTarget::AVI:
-				case KDLContainerTarget::_3GP:
-				case KDLContainerTarget::MOV:
-				case KDLContainerTarget::MP3:
-				case KDLContainerTarget::OGG:
+				case VDLContainerTarget::AVI:
+				case VDLContainerTarget::_3GP:
+				case VDLContainerTarget::MOV:
+				case VDLContainerTarget::MP3:
+				case VDLContainerTarget::OGG:
 					$format = ",mux=".$con->_id;
 					break;
-				case KDLContainerTarget::MP4:
+				case VDLContainerTarget::MP4:
 					$format = ",mux=mp4{faststart}";
 					break;
-				case KDLContainerTarget::WMV:
+				case VDLContainerTarget::WMV:
 					$format = ",mux=asf";
 					break;
-				case KDLContainerTarget::MKV:
+				case VDLContainerTarget::MKV:
 					$format = ",mux=ffmpeg{mux=matroska}";
 					break;
-				case KDLContainerTarget::WEBM:
+				case VDLContainerTarget::WEBM:
 					$format = ",mux=ffmpeg{mux=webm}";
 					break;
-				case KDLContainerTarget::MPEGTS:
-				case KDLContainerTarget::APPLEHTTP:
+				case VDLContainerTarget::MPEGTS:
+				case VDLContainerTarget::APPLEHTTP:
 					$format = ",mux=mpegts";
 					break;
-				case KDLContainerTarget::MPEG:
+				case VDLContainerTarget::MPEG:
 					$format = ",mux=mpeg";
 					break;
 			}
@@ -188,7 +188,7 @@ $con = $target->_container;
 			$cmdStr .= ",dst=".$target->_outFileName."}";
 		}
 		else {
-			$cmdStr .= ",dst=".KDLCmdlinePlaceholders::OutFileName."}";
+			$cmdStr .= ",dst=".VDLCmdlinePlaceholders::OutFileName."}";
 		}
 		if($extra)
 			$cmdStr .= " ".$extra;
@@ -205,7 +205,7 @@ $con = $target->_container;
 	/* ---------------------------
 	 * CheckConstraints
 	 */
-	public function CheckConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+	public function CheckConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
 	    return parent::CheckConstraints($source, $target, $errors, $warnings);
 	}
@@ -215,16 +215,16 @@ $con = $target->_container;
 	 */
 	private function generateH264params($videoObject)
 	{
-	$h264 = new KDLCodecH264($videoObject);
+	$h264 = new VDLCodecH264($videoObject);
 		switch($videoObject->_id) {
-		case KDLVideoTarget::H264:
-		case KDLVideoTarget::H264B:
+		case VDLVideoTarget::H264:
+		case VDLVideoTarget::H264B:
 			$params="profile=baseline";;
 			break;
-		case KDLVideoTarget::H264M:
+		case VDLVideoTarget::H264M:
 			$params="profile=main";
 			break;
-		case KDLVideoTarget::H264H:				
+		case VDLVideoTarget::H264H:				
 			$params="profile=high";
 			break;
 		}

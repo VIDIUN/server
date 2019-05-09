@@ -1,6 +1,6 @@
 <?php
 
-class capCaptionsContentManager extends kCaptionsContentManager
+class capCaptionsContentManager extends vCaptionsContentManager
 {
 	const DATA_START_OFFSET = 0x80;
 	const START_TIME_OFFSET = 2;

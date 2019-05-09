@@ -24,7 +24,7 @@ all:
   storage:
     class: sfNoStorage
     param:
-      session_name: kalt
+      session_name: vidi
 #
 #  view_cache:
 #    class: sfFileCache

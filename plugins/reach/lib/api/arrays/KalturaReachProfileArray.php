@@ -3,17 +3,17 @@
  * @package plugins.reach
  * @subpackage api.objects
  */
-class KalturaReachProfileArray extends KalturaTypedArray
+class VidiunReachProfileArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaReachProfileArray();
+		$newArr = new VidiunReachProfileArray();
 		if ($arr == null)
 			return $newArr;
 		
 		foreach ($arr as $obj)
 		{
-			$object = new KalturaReachProfile();
+			$object = new VidiunReachProfile();
 			$object->fromObject($obj, $responseProfile);
 			$newArr[] = $object;
 		}
@@ -23,6 +23,6 @@ class KalturaReachProfileArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		parent::__construct("KalturaReachProfile");
+		parent::__construct("VidiunReachProfile");
 	}
 }

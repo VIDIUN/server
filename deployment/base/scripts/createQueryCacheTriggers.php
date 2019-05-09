@@ -5,11 +5,11 @@ $dryRun = true;
 // Invalidation keys table
 $INVALIDATION_KEYS = array(
 	array('table' => "flavor_asset", 					'keys' => array(array("'flavorAsset:id='", '@OBJ@.id'), array("'flavorAsset:entryId='", '@OBJ@.entry_id')), 							'class' => 'asset'),
-	array('table' => "kuser", 							'keys' => array(array("'kuser:id='", '@OBJ@.id'), array("'kuser:partnerId='", '@OBJ@.partner_id', "',puserid='", '@OBJ@.puser_id'), array("'kuser:loginDataId='", '@OBJ@.login_data_id'))),
+	array('table' => "vuser", 							'keys' => array(array("'vuser:id='", '@OBJ@.id'), array("'vuser:partnerId='", '@OBJ@.partner_id', "',puserid='", '@OBJ@.puser_id'), array("'vuser:loginDataId='", '@OBJ@.login_data_id'))),
 	array('table' => "entry", 							'keys' => array(array("'entry:id='", '@OBJ@.id'), array("'entry:partnerId='", '@OBJ@.partner_id'))),
 	array('table' => "access_control", 					'keys' => array(array("'accessControl:id='", '@OBJ@.id'))),
 	array('table' => "permission", 						'keys' => array(array("'permission:partnerId='", '@OBJ@.partner_id'))),
-	array('table' => "kuser_to_user_role",	 			'keys' => array(array("'kuserToUserRole:kuserId='", '@OBJ@.kuser_id'))),
+	array('table' => "vuser_to_user_role",	 			'keys' => array(array("'vuserToUserRole:vuserId='", '@OBJ@.vuser_id'))),
 	array('table' => "category", 						'keys' => array(array("'category:id='", '@OBJ@.id'), array("'category:partnerId='", '@OBJ@.partner_id'))),
 	array('table' => "file_sync", 						'keys' => array(array("'fileSync:id='", '@OBJ@.id'), array("'fileSync:objectId='", '@OBJ@.object_id'))),
 	array('table' => "media_info", 						'keys' => array(array("'mediaInfo:flavorAssetId='", '@OBJ@.flavor_asset_id'))),
@@ -27,7 +27,7 @@ $INVALIDATION_KEYS = array(
 	array('table' => "flavor_params", 					'keys' => array(array("'flavorParams:id='", '@OBJ@.id'), array("'flavorParams:partnerId='", '@OBJ@.partner_id')),						'class' => 'assetParams'),
 	array('table' => "flavor_params_conversion_profile",'keys' => array(array("'flavorParamsConversionProfile:flavorParamsId='", '@OBJ@.flavor_params_id', "',conversionProfileId='", '@OBJ@.conversion_profile_id'), array("'flavorParamsConversionProfile:conversionProfileId='", '@OBJ@.conversion_profile_id'))),
 	array('table' => "user_role", 						'keys' => array(array("'userRole:id='", '@OBJ@.id'), array("'userRole:systemName='", '@OBJ@.system_name'))),
-	array('table' => "invalid_session", 				'keys' => array(array("'invalidSession:ks='", '@OBJ@.ks'))),
+	array('table' => "invalid_session", 				'keys' => array(array("'invalidSession:vs='", '@OBJ@.vs'))),
 	array('table' => "upload_token", 					'keys' => array(array("'uploadToken:id='", '@OBJ@.id'))),
 	array('table' => "conversion_profile_2", 			'keys' => array(array("'conversionProfile2:id='", '@OBJ@.id'), array("'conversionProfile2:partnerId='", '@OBJ@.partner_id'))),
 	array('table' => "distribution_profile", 			'keys' => array(array("'distributionProfile:id='", '@OBJ@.id')),																		'plugin' => 'content_distribution'),
@@ -36,8 +36,8 @@ $INVALIDATION_KEYS = array(
 	array('table' => "permission_to_permission_item", 	'keys' => array(array("'permissionToPermissionItem:permissionId='", '@OBJ@.permission_id'))),
 	array('table' => "delivery_profile", 				'keys' => array(array("'deliveryProfile:id='", '@OBJ@.id'), array("'deliveryProfile:partnerId='", '@OBJ@.partner_id'))),
 	array('table' => "event_notification_template", 	'keys' => array(array("'eventNotificationTemplate:id='", '@OBJ@.id'), array("'eventNotificationTemplate:partnerId='", '@OBJ@.partner_id')), 'plugin' => 'event_notification'),
-	array('table' => "category_kuser", 					'keys' => array(array("'categoryKuser:id='", '@OBJ@.id'), array("'categoryKuser:categoryId='", '@OBJ@.category_id'))),
-	array('table' => "kuser_kgroup", 					'keys' => array(array("'kuserKgroup:kuserId='", '@OBJ@.kuser_id'), array("'kuserKgroup:kgroupId='", '@OBJ@.kgroup_id'))),
+	array('table' => "category_vuser", 					'keys' => array(array("'categoryVuser:id='", '@OBJ@.id'), array("'categoryVuser:categoryId='", '@OBJ@.category_id'))),
+	array('table' => "vuser_vgroup", 					'keys' => array(array("'vuserVgroup:vuserId='", '@OBJ@.vuser_id'), array("'vuserVgroup:vgroupId='", '@OBJ@.vgroup_id'))),
 	array('table' => "response_profile", 				'keys' => array(array("'responseProfile:systemName='", '@OBJ@.system_name'))),
 	array('table' => "entry_server_node", 				'keys' => array(array("'entryServerNode:id='", '@OBJ@.id'), array("'entryServerNode:entryId'", '@OBJ@.entry_id'))),
 	array('table' => "server_node", 					'keys' => array(array("'serverNode:id'", '@OBJ@.id'), array("'serverNode:hostName='", '@OBJ@.host_name'))),
@@ -49,7 +49,7 @@ $INVALIDATION_KEYS = array(
 	array('table' => "scheduler", 						'keys' => array(array("'scheduler:configuredId='", '@OBJ@.configured_id'))),
 	array('table' => "syndication_feed", 				'keys' => array(array("'syndicationFeed:id='", '@OBJ@.id'))),
 	array('table' => "app_token", 						'keys' => array(array("'appToken:id='", '@OBJ@.id'))),
-	array('table' => "user_entry", 						'keys' => array(array("'userEntry:kuserId='", '@OBJ@.kuser_id'))),
+	array('table' => "user_entry", 						'keys' => array(array("'userEntry:vuserId='", '@OBJ@.vuser_id'))),
 	array('table' => "drm_policy", 						'keys' => array(array("'drmPolicy:id='", '@OBJ@.id')),                                                                                   'plugin' => 'drm'),
 	
 	);
@@ -57,7 +57,7 @@ $INVALIDATION_KEYS = array(
 $TRIGGER_TYPES = array('INSERT', 'UPDATE', 'DELETE');
 
 $SPECIAL_TRIGGERS = array(
-	"invalid_session/INSERT" => "DO memc_set(concat('invalid_session_', IF(NEW.ks IS NULL, '', NEW.ks)), 1, IF(NEW.ks_valid_until IS NULL, 0, UNIX_TIMESTAMP(NEW.ks_valid_until) + 600));",
+	"invalid_session/INSERT" => "DO memc_set(concat('invalid_session_', IF(NEW.vs IS NULL, '', NEW.vs)), 1, IF(NEW.vs_valid_until IS NULL, 0, UNIX_TIMESTAMP(NEW.vs_valid_until) + 600));",
 	"file_sync/INSERT" => "IF (NEW.original) THEN DO memc_set(concat('fileSyncMaxId-dc', NEW.dc), NEW.id); END IF;",
 );
 
@@ -322,8 +322,8 @@ if (!mysqli_fetch_array($result, MYSQLI_ASSOC))
 
 mysqli_free_result($result);
 
-// Change database to kaltura
-mysqli_select_db($link,'kaltura') or die("Error: Could not select 'kaltura' database\n");
+// Change database to vidiun
+mysqli_select_db($link,'vidiun') or die("Error: Could not select 'vidiun' database\n");
 
 // Make sure the memcache server is configured
 $query = "SELECT memc_server_count()";

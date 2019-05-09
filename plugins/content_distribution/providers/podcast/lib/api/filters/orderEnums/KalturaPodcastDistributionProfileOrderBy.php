@@ -3,6 +3,6 @@
  * @package plugins.podcastDistribution
  * @subpackage api.filters.enum
  */
-class KalturaPodcastDistributionProfileOrderBy extends KalturaDistributionProfileOrderBy
+class VidiunPodcastDistributionProfileOrderBy extends VidiunDistributionProfileOrderBy
 {
 }

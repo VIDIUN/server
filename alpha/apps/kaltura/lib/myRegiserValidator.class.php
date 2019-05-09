@@ -20,8 +20,8 @@ class myRegisterValidator extends sfValidator
 		$login = $value; 
 		
 		$c = new Criteria(); 
-		$c->add(kuserPeer::SCREEN_NAME, $login); 
-		$user = kuserPeer::doSelectOne($c);
+		$c->add(vuserPeer::SCREEN_NAME, $login); 
+		$user = vuserPeer::doSelectOne($c);
 		// screen name already exists? 
 		if($user) 
 		{ 

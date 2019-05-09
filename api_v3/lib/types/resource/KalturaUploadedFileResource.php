@@ -5,7 +5,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUploadedFileResource extends KalturaGenericDataCenterContentResource
+class VidiunUploadedFileResource extends VidiunGenericDataCenterContentResource
 {
 	/**
 	 * Represents the $_FILE 
@@ -14,7 +14,7 @@ class KalturaUploadedFileResource extends KalturaGenericDataCenterContentResourc
 	public $fileData;
 	
 	/* (non-PHPdoc)
-	 * @see KalturaDataCenterContentResource::validateForUsage()
+	 * @see VidiunDataCenterContentResource::validateForUsage()
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -24,20 +24,20 @@ class KalturaUploadedFileResource extends KalturaGenericDataCenterContentResourc
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kLocalFileResource();
+			$object_to_fill = new vLocalFileResource();
 		
 		$ext = pathinfo($this->fileData['name'], PATHINFO_EXTENSION);
 		
 		$uploadPath = $this->fileData['tmp_name'];
 		$tempPath = myContentStorage::getFSUploadsPath() . '/' . uniqid(time()) . '.' . $ext;
-		$moved = kFile::moveFile($uploadPath, $tempPath, true);
+		$moved = vFile::moveFile($uploadPath, $tempPath, true);
 		if(!$moved)
-			throw new KalturaAPIException(KalturaErrors::UPLOAD_ERROR);
+			throw new VidiunAPIException(VidiunErrors::UPLOAD_ERROR);
 		
 		$object_to_fill->setLocalFilePath($tempPath);
 		return $object_to_fill;

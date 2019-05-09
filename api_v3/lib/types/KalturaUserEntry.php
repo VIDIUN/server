@@ -5,7 +5,7 @@
  * @abstract
  * @relatedService UserEntryService
  */
-abstract class KalturaUserEntry extends KalturaObject implements IRelatedFilterable
+abstract class VidiunUserEntry extends VidiunObject implements IRelatedFilterable
 {
 
 	/**
@@ -37,7 +37,7 @@ abstract class KalturaUserEntry extends KalturaObject implements IRelatedFiltera
 	public $partnerId;
 
 	/**
-	 * @var KalturaUserEntryStatus
+	 * @var VidiunUserEntryStatus
 	 * @readonly
 	 * @filter eq
 	 */
@@ -58,14 +58,14 @@ abstract class KalturaUserEntry extends KalturaObject implements IRelatedFiltera
 	public $updatedAt;
 
 	/**
-	 * @var KalturaUserEntryType
+	 * @var VidiunUserEntryType
 	 * @readonly
 	 * @filter eq
 	 */
 	public $type;
 	
 	/**
-	 * @var KalturaUserEntryExtendedStatus
+	 * @var VidiunUserEntryExtendedStatus
 	 * @filter eq,in,notin
 	 */
 	public $extendedStatus;
@@ -74,7 +74,7 @@ abstract class KalturaUserEntry extends KalturaObject implements IRelatedFiltera
 	(
 		"id",
 		"entryId",
-		"userId" => "KuserId",
+		"userId" => "VuserId",
 		"partnerId",
 		"type",
 		"status",
@@ -91,42 +91,42 @@ abstract class KalturaUserEntry extends KalturaObject implements IRelatedFiltera
 
 
 	/**
-	 * Function returns KalturaUserEntry sub-type according to protocol
+	 * Function returns VidiunUserEntry sub-type according to protocol
 	 * @var string $type
-	 * @return KalturaUserEntry
+	 * @return VidiunUserEntry
 	 *
 	 */
 	public static function getInstanceByType ($type)
 	{
-		$obj = KalturaPluginManager::loadObject("KalturaUserEntry",$type);
+		$obj = VidiunPluginManager::loadObject("VidiunUserEntry",$type);
 		if (is_null($obj))
 		{
-			KalturaLog::err("The type '$type' is unknown");
+			VidiunLog::err("The type '$type' is unknown");
 		}
 		return $obj;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject ( $object_to_fill = null , $props_to_skip = array() )
 	{
 		$object_to_fill = parent::toInsertableObject($object_to_fill, $props_to_skip);
 		if (empty($this->userId))
 		{
-			$currentKsKuser = kCurrentContext::getCurrentKsKuserId();
-			$object_to_fill->setKuserId($currentKsKuser);
+			$currentVsVuser = vCurrentContext::getCurrentVsVuserId();
+			$object_to_fill->setVuserId($currentVsVuser);
 		}
 		else
 		{
-			$kuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::$ks_partner_id, $this->userId);
-			if (!$kuser)
+			$vuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::$vs_partner_id, $this->userId);
+			if (!$vuser)
 			{
-				throw new KalturaAPIException(KalturaErrors::INVALID_USER_ID, $this->userId);
+				throw new VidiunAPIException(VidiunErrors::INVALID_USER_ID, $this->userId);
 			}
-			$object_to_fill->setKuserId($kuser->getKuserId());
+			$object_to_fill->setVuserId($vuser->getVuserId());
 		}
-		$object_to_fill->setPartnerId(kCurrentContext::getCurrentPartnerId());
+		$object_to_fill->setPartnerId(vCurrentContext::getCurrentPartnerId());
 		return $object_to_fill;
 	}
 
@@ -150,12 +150,12 @@ abstract class KalturaUserEntry extends KalturaObject implements IRelatedFiltera
 		return array();
 	}
 
-	protected function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$kuser = $srcObj->getkuser();
-		if ($kuser)
+		$vuser = $srcObj->getvuser();
+		if ($vuser)
 		{
-			$this->userId = $kuser->getPuserId();
+			$this->userId = $vuser->getPuserId();
 		}
 		parent::doFromObject($srcObj, $responseProfile);
 	}
@@ -170,23 +170,23 @@ abstract class KalturaUserEntry extends KalturaObject implements IRelatedFiltera
 	
 	/*
 	 * @param string $userEntryID
-	 * @throw KalturaAPIException
+	 * @throw VidiunAPIException
 	 */
 	protected function validateEntryId()
 	{
 		$dbEntry = entryPeer::retrieveByPK($this->entryId);
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $this->entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $this->entryId);
 	}
 	
 	/*
 	 * @param string $userEntryID
-	 * @throw KalturaAPIException
+	 * @throw VidiunAPIException
 	 */
 	protected function validateUserId()
 	{
-		$userId = $this->userId ? $this->userId : kCurrentContext::getCurrentKsKuserId();
+		$userId = $this->userId ? $this->userId : vCurrentContext::getCurrentVsVuserId();
 		if(!$userId || trim($userId) == '')
-			throw new KalturaAPIException(KalturaErrors::USER_ID_NOT_PROVIDED_OR_EMPTY);
+			throw new VidiunAPIException(VidiunErrors::USER_ID_NOT_PROVIDED_OR_EMPTY);
 	}
 }

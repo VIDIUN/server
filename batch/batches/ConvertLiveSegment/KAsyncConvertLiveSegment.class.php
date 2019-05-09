@@ -5,7 +5,7 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KAsyncConvertLiveSegment extends KJobHandlerWorker
+class VAsyncConvertLiveSegment extends VJobHandlerWorker
 {
 	/**
 	 * constants duplicated from assetParams.php
@@ -24,20 +24,20 @@ class KAsyncConvertLiveSegment extends KJobHandlerWorker
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see KBatchBase::getJobType()
+	 * @see VBatchBase::getJobType()
 	 */
 	protected function getJobType()
 	{
-		return KalturaBatchJobType::CONVERT_LIVE_SEGMENT;
+		return VidiunBatchJobType::CONVERT_LIVE_SEGMENT;
 	}
 	
 	public static function getType()
 	{
-		return KalturaBatchJobType::CONVERT_LIVE_SEGMENT;
+		return VidiunBatchJobType::CONVERT_LIVE_SEGMENT;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::run()
+	 * @see VJobHandlerWorker::run()
 	 */
 	public function run($jobs = null)
 	{
@@ -48,13 +48,13 @@ class KAsyncConvertLiveSegment extends KJobHandlerWorker
 		$res = self::createDir($this->localTempPath);
 		if(! $res)
 		{
-			KalturaLog::err("Cannot continue conversion without temp local directory");
+			VidiunLog::err("Cannot continue conversion without temp local directory");
 			return null;
 		}
 		$res = self::createDir($this->sharedTempPath);
 		if(! $res)
 		{
-			KalturaLog::err("Cannot continue conversion without temp shared directory");
+			VidiunLog::err("Cannot continue conversion without temp shared directory");
 			return null;
 		}
 		
@@ -63,20 +63,20 @@ class KAsyncConvertLiveSegment extends KJobHandlerWorker
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->convert($job, $job->data);
 	}
 	
-	protected function convert(KalturaBatchJob $job, KalturaConvertLiveSegmentJobData $data)
+	protected function convert(VidiunBatchJob $job, VidiunConvertLiveSegmentJobData $data)
 	{
-		$this->updateJob($job, "File conversion started", KalturaBatchJobStatus::PROCESSING);
+		$this->updateJob($job, "File conversion started", VidiunBatchJobStatus::PROCESSING);
 		$jobData = $job->data;
 
-		$ffmpegBin = KBatchBase::$taskConfig->params->ffmpegCmd;
-		$ffprobeBin = isset(KBatchBase::$taskConfig->params->ffprobeCmd)? KBatchBase::$taskConfig->params->ffprobeCmd: "ffprobe";
+		$ffmpegBin = VBatchBase::$taskConfig->params->ffmpegCmd;
+		$ffprobeBin = isset(VBatchBase::$taskConfig->params->ffprobeCmd)? VBatchBase::$taskConfig->params->ffprobeCmd: "ffprobe";
 
 		$fileName = "{$job->entryId}_{$jobData->assetId}_{$data->mediaServerIndex}.{$job->id}.ts";
 		$localTempFilePath = $this->localTempPath . DIRECTORY_SEPARATOR . $fileName;
@@ -84,7 +84,7 @@ class KAsyncConvertLiveSegment extends KJobHandlerWorker
 
 		$result = $this->convertRecordedToMPEGTS($ffmpegBin, $ffprobeBin, $data->srcFilePath, $localTempFilePath);
 		if(! $result)
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::RUNTIME, null, "Failed to convert file", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::RUNTIME, null, "Failed to convert file", VidiunBatchJobStatus::FAILED);
 
 		// write AMF data to a file in shared storage
 		self::generateAmfData($job, $data, $localTempFilePath);
@@ -92,29 +92,29 @@ class KAsyncConvertLiveSegment extends KJobHandlerWorker
 		return $this->moveFile($job, $data, $localTempFilePath, $sharedTempFilePath);
 	}
 
-	protected function generateAmfData(KalturaBatchJob $job, KalturaConvertLiveSegmentJobData $data, $localTempFilePath)
+	protected function generateAmfData(VidiunBatchJob $job, VidiunConvertLiveSegmentJobData $data, $localTempFilePath)
 	{
-		$mediaInfoBin = isset(KBatchBase::$taskConfig->params->mediaInfoCmd)? KBatchBase::$taskConfig->params->mediaInfoCmd: "mediainfo";
+		$mediaInfoBin = isset(VBatchBase::$taskConfig->params->mediaInfoCmd)? VBatchBase::$taskConfig->params->mediaInfoCmd: "mediainfo";
 
 		// only extract the data if it's the primary server since we don't use this data in the secondary
-		if ($data->mediaServerIndex == KalturaEntryServerNodeType::LIVE_PRIMARY) {
+		if ($data->mediaServerIndex == VidiunEntryServerNodeType::LIVE_PRIMARY) {
 			try {
 
 				// get the asset to check if it has a assetParams::TAG_RECORDING_ANCHOR tag.
 				// note that assetParams::TAG_RECORDING_ANCHOR is not exposed in the API so I use it's string value.
-				KBatchBase::impersonate($job->partnerId);
-				$asset = KBatchBase::$kClient->flavorAsset->get($data->assetId);
-				KBatchBase::unimpersonate();
+				VBatchBase::impersonate($job->partnerId);
+				$asset = VBatchBase::$vClient->flavorAsset->get($data->assetId);
+				VBatchBase::unimpersonate();
 				if (strpos($asset->tags,self::TAG_RECORDING_ANCHOR) == false) {
 					return;
 				}
 
 				// Extract AMF data from all data frames in the segment
-				$amfParser = new KAMFMediaInfoParser($data->srcFilePath);
+				$amfParser = new VAMFMediaInfoParser($data->srcFilePath);
 				$amfArray = $amfParser->getAMFInfo();
 
 				// run mediaInfo on $localTempFilePath to get it's duration, and store it in the job data
-				$mediaInfoParser = new KMediaInfoMediaParser($localTempFilePath, $mediaInfoBin);
+				$mediaInfoParser = new VMediaInfoMediaParser($localTempFilePath, $mediaInfoBin);
 				$duration = $mediaInfoParser->getMediaInfo()->videoDuration;
 
 				array_unshift($amfArray, $duration);
@@ -128,45 +128,45 @@ class KAsyncConvertLiveSegment extends KJobHandlerWorker
 				self::moveDataFile($data, $localTempAmfFilePath, $sharedTempAmfFilePath);
 			}
 			catch(Exception $ex) {
-				KBatchBase::unimpersonate();
-				KalturaLog::warning('failed to extract AMF data or duration data ' . print_r($ex));
+				VBatchBase::unimpersonate();
+				VidiunLog::warning('failed to extract AMF data or duration data ' . print_r($ex));
 			}
 		}
 	}
 
 	/**
-	 * @param KalturaBatchJob $job
-	 * @param KalturaConcatJobData $data
+	 * @param VidiunBatchJob $job
+	 * @param VidiunConcatJobData $data
 	 * @param string $localTempFilePath
 	 * @param string $sharedTempFilePath
-	 * @return KalturaBatchJob
+	 * @return VidiunBatchJob
 	 */
-	protected function moveFile(KalturaBatchJob $job, KalturaConvertLiveSegmentJobData $data, $localTempFilePath, $sharedTempFilePath)
+	protected function moveFile(VidiunBatchJob $job, VidiunConvertLiveSegmentJobData $data, $localTempFilePath, $sharedTempFilePath)
 	{
-		$this->updateJob($job, "Moving file from [$localTempFilePath] to [$sharedTempFilePath]", KalturaBatchJobStatus::MOVEFILE);
+		$this->updateJob($job, "Moving file from [$localTempFilePath] to [$sharedTempFilePath]", VidiunBatchJobStatus::MOVEFILE);
 		
-		kFile::moveFile($localTempFilePath, $sharedTempFilePath, true);
+		vFile::moveFile($localTempFilePath, $sharedTempFilePath, true);
 		clearstatcache();
-		$fileSize = kFile::fileSize($sharedTempFilePath);
+		$fileSize = vFile::fileSize($sharedTempFilePath);
 		
 		$this->setFilePermissions($sharedTempFilePath);
 		
 		if(! $this->checkFileExists($sharedTempFilePath, $fileSize))
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'File not moved correctly', KalturaBatchJobStatus::RETRY);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::NFS_FILE_DOESNT_EXIST, 'File not moved correctly', VidiunBatchJobStatus::RETRY);
 		
 		$data->destFilePath = $sharedTempFilePath;
-		return $this->closeJob($job, null, null, 'Succesfully moved file', KalturaBatchJobStatus::FINISHED, $data);
+		return $this->closeJob($job, null, null, 'Succesfully moved file', VidiunBatchJobStatus::FINISHED, $data);
 	}
 
-	protected function moveDataFile(KalturaConvertLiveSegmentJobData $data, $localTempAmfFilePath, $sharedTempAmfFilePath)
+	protected function moveDataFile(VidiunConvertLiveSegmentJobData $data, $localTempAmfFilePath, $sharedTempAmfFilePath)
 	{
-		KalturaLog::debug('moving file from ' . $localTempAmfFilePath . ' to ' . $sharedTempAmfFilePath);
-		kFile::moveFile($localTempAmfFilePath, $sharedTempAmfFilePath, true);
+		VidiunLog::debug('moving file from ' . $localTempAmfFilePath . ' to ' . $sharedTempAmfFilePath);
+		vFile::moveFile($localTempAmfFilePath, $sharedTempAmfFilePath, true);
 		clearstatcache();
-		$fileSize = kFile::fileSize($sharedTempAmfFilePath);
+		$fileSize = vFile::fileSize($sharedTempAmfFilePath);
 		$this->setFilePermissions($sharedTempAmfFilePath);
 		if(! $this->checkFileExists($sharedTempAmfFilePath, $fileSize))
-			KalturaLog::warning('failed to move file to ' . $sharedTempAmfFilePath);
+			VidiunLog::warning('failed to move file to ' . $sharedTempAmfFilePath);
 		else
 			$data->destDataFilePath = $sharedTempAmfFilePath;
 	}
@@ -175,7 +175,7 @@ class KAsyncConvertLiveSegment extends KJobHandlerWorker
 	{
 		$cmdStr = "$ffmpegBin -i $inFilename -c copy -bsf:v h264_mp4toannexb -f mpegts -y $outFilename 2>&1";
 		
-		KalturaLog::debug("Executing [$cmdStr]");
+		VidiunLog::debug("Executing [$cmdStr]");
 		$output = system($cmdStr, $rv);
 
 		/*
@@ -186,16 +186,16 @@ class KAsyncConvertLiveSegment extends KJobHandlerWorker
 		*/
 		$detectInterval = 10;		// sec
 		$maxKeyFrameTime = 0.200;	// sec
-		$kfArr=KFFMpegMediaParser::retrieveKeyFrames($ffprobeBin, $inFilename,0,$detectInterval);
-		KalturaLog::log("KeyFrames:".print_r($kfArr,1));
+		$kfArr=VFFMpegMediaParser::retrieveKeyFrames($ffprobeBin, $inFilename,0,$detectInterval);
+		VidiunLog::log("KeyFrames:".print_r($kfArr,1));
 		if(count($kfArr)==0){
-			KalturaLog::log("Anomaly detection: NO Keyframes in the detection interval ($detectInterval sec)");
+			VidiunLog::log("Anomaly detection: NO Keyframes in the detection interval ($detectInterval sec)");
 		}
 		else if($kfArr[0]>$maxKeyFrameTime){
-			KalturaLog::log("Anomaly detection: ERROR, first KF at ($kfArr[0] sec), max allowed ($maxKeyFrameTime sec)");
+			VidiunLog::log("Anomaly detection: ERROR, first KF at ($kfArr[0] sec), max allowed ($maxKeyFrameTime sec)");
 		}
 		else {
-			KalturaLog::log("Anomaly detection: OK, first KF at ($kfArr[0] sec), max allowed ($maxKeyFrameTime sec)");
+			VidiunLog::log("Anomaly detection: OK, first KF at ($kfArr[0] sec), max allowed ($maxKeyFrameTime sec)");
 		}
 		
 		return ($rv == 0) ? true : false;

@@ -20,7 +20,7 @@ class getuserAction extends defPartnerservices2Action
 						)
 					),
 				"out" => array (
-					"user" => array ("type" => "PuserKuser", "desc" => "")
+					"user" => array ("type" => "PuserVuser", "desc" => "")
 					),
 				"errors" => array (
 					APIErrors::INVALID_USER_ID ,
@@ -29,23 +29,23 @@ class getuserAction extends defPartnerservices2Action
 	}
 	
 	protected function ticketType()	{		return self::REQUIED_TICKET_ADMIN;	}
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER;	}
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER;	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		// the relevant puser_kuser is the one from the user_id NOT the uid (which is the logged in user investigationg
+		// the relevant puser_vuser is the one from the user_id NOT the uid (which is the logged in user investigationg
 		$user_id = $this->getPM ( "user_id" );
-		$target_puser_kuser = PuserKuserPeer::retrieveByPartnerAndUid($partner_id , null , $user_id , true ); 
+		$target_puser_vuser = PuserVuserPeer::retrieveByPartnerAndUid($partner_id , null , $user_id , true ); 
 		$detailed = $this->getP ( "detailed" , false );
 		
-		if ( ! $target_puser_kuser )
+		if ( ! $target_puser_vuser )
 		{
 			$this->addError ( APIErrors::INVALID_USER_ID , $user_id );
 		}
 		else
 		{
 			$level = ( $detailed ? objectWrapperBase::DETAIL_LEVEL_DETAILED : objectWrapperBase::DETAIL_LEVEL_DETAILED );
-			$this->addMsg ( "user" , objectWrapperBase::getWrapperClass( $target_puser_kuser , $level ) );
+			$this->addMsg ( "user" , objectWrapperBase::getWrapperClass( $target_puser_vuser , $level ) );
 		}
 	}
 }

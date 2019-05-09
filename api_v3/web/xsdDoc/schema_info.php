@@ -1,17 +1,17 @@
 <?php 
 
-$downloadUrl = 'http://' . kConf::get('www_host') . "/api_v3/index.php/service/schema/action/serve/type/$schemaType/name/$schemaType.xsd";
+$downloadUrl = 'http://' . vConf::get('www_host') . "/api_v3/index.php/service/schema/action/serve/type/$schemaType/name/$schemaType.xsd";
 
 $schemaPath = SchemaService::getSchemaPath($schemaType);
 $xslPath = dirname(__FILE__) . '/xsl/type.xsl';
 
 // Load the XML source
-$xml = new KDOMDocument;
+$xml = new VDOMDocument;
 $xml->load($schemaPath);
 
 
 
-$xsl = new KDOMDocument;
+$xsl = new VDOMDocument;
 $xsl->load($xslPath);
 
 // Configure the transformer

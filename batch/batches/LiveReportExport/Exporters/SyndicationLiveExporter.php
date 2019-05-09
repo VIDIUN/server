@@ -2,7 +2,7 @@
 
 class SyndicationLiveExporter extends LiveReportEntryExporter {
 
-	public function __construct(KalturaLiveReportExportJobData $data) {
+	public function __construct(VidiunLiveReportExportJobData $data) {
 		parent::__construct($data, "referrers-live-now-@ENTRY_ID@-%s-%s.csv", LiveReportConstants::SECONDS_36_HOURS);
 		$this->params[LiveReportConstants::IS_LIVE] = true;
 	}

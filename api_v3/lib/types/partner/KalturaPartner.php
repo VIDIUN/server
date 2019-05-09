@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPartner extends KalturaObject implements IFilterable
+class VidiunPartner extends VidiunObject implements IFilterable
 {
 	/**
 	 * @var int
@@ -60,7 +60,7 @@ class KalturaPartner extends KalturaObject implements IFilterable
 	public $description;
 	
 	/**
-	 * @var KalturaCommercialUseType
+	 * @var VidiunCommercialUseType
 	 */
 	public $commercialUse;
 	
@@ -80,7 +80,7 @@ class KalturaPartner extends KalturaObject implements IFilterable
 	public $contentCategories;
 	
 	/**
-	 * @var KalturaPartnerType
+	 * @var VidiunPartnerType
 	 */
 	public $type;
 	
@@ -110,7 +110,7 @@ class KalturaPartner extends KalturaObject implements IFilterable
 	public $notify;
 	
 	/**
-	 * @var KalturaPartnerStatus
+	 * @var VidiunPartnerStatus
 	 * @readonly
 	 * @filter eq,in,order
 	 */
@@ -205,7 +205,7 @@ class KalturaPartner extends KalturaObject implements IFilterable
 	public $state;
 	
 	/**
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 * @insertonly
 	 */
 	public $additionalParams;
@@ -217,7 +217,7 @@ class KalturaPartner extends KalturaObject implements IFilterable
 	public $publishersQuota;
 	
 	/**
-	 * @var KalturaPartnerGroupType
+	 * @var VidiunPartnerGroupType
 	 * @requiresPermission read
 	 * @filter eq
 	 * @readonly
@@ -244,13 +244,13 @@ class KalturaPartner extends KalturaObject implements IFilterable
 	public $defaultEmbedCodeType;
 	
 	/**
-	 * @var KalturaPlayerDeliveryTypesArray
+	 * @var VidiunPlayerDeliveryTypesArray
 	 * @readonly
 	 */
 	public $deliveryTypes;
 	
 	/**
-	 * @var KalturaPlayerEmbedCodeTypesArray
+	 * @var VidiunPlayerEmbedCodeTypesArray
 	 * @readonly
 	 */
 	public $embedCodeTypes;
@@ -333,7 +333,7 @@ class KalturaPartner extends KalturaObject implements IFilterable
 	public $ottEnvironmentUrl;
 
 	/**
-	 * @var KalturaESearchLanguageArray
+	 * @var VidiunESearchLanguageArray
 	 */
 	public $eSearchLanguages;
 
@@ -359,14 +359,14 @@ class KalturaPartner extends KalturaObject implements IFilterable
 		return $this;
 	}
 	
-	public function doFromObject($partner, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($partner, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($partner);
 		
-		$this->name = kString::stripUtf8InvalidChars($this->name);
-		$this->description = kString::stripUtf8InvalidChars($this->description);
-		$this->adminName = kString::stripUtf8InvalidChars($this->adminName);
-		$this->additionalParams = KalturaKeyValueArray::fromKeyValueArray($partner->getAdditionalParams());
+		$this->name = vString::stripUtf8InvalidChars($this->name);
+		$this->description = vString::stripUtf8InvalidChars($this->description);
+		$this->adminName = vString::stripUtf8InvalidChars($this->adminName);
+		$this->additionalParams = VidiunKeyValueArray::fromKeyValueArray($partner->getAdditionalParams());
 		if (!$this->host){
 			$this->host = null;
 		}
@@ -377,9 +377,9 @@ class KalturaPartner extends KalturaObject implements IFilterable
 	
 	
 	/**
-	 * Function runs required validations on the current KalturaPartner object and 
+	 * Function runs required validations on the current VidiunPartner object and 
 	 * if all validations are successful, creates a new DB object for it and returns it.
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 * @return Partner
 	 */
 	public function toPartner()
@@ -404,7 +404,7 @@ class KalturaPartner extends KalturaObject implements IFilterable
 		}
 		elseif(($this->firstName || $this->lastName) && $this->adminName)
 		{
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_DEPRECATED, "adminName");
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_DEPRECATED, "adminName");
 		}
 
 		$this->validatePropertyNotNull("name");
@@ -449,11 +449,11 @@ class KalturaPartner extends KalturaObject implements IFilterable
 	{
 		if (!$this->partnerPackage)
 			return true;
-		if (kCurrentContext::$ks_partner_id == Partner::ADMIN_CONSOLE_PARTNER_ID)
+		if (vCurrentContext::$vs_partner_id == Partner::ADMIN_CONSOLE_PARTNER_ID)
 			return true;
-		if (in_array($this->partnerPackage,kConf::get('allowed_partner_packages_for_all','local', array())))
+		if (in_array($this->partnerPackage,vConf::get('allowed_partner_packages_for_all','local', array())))
 			return true;
-		throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NO_INSERT_PERMISSION, 'partnerPackage');
+		throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NO_INSERT_PERMISSION, 'partnerPackage');
 	}
 	
 }

@@ -4,7 +4,7 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectTaskEngine
  */
-class KObjectTaskMailNotificationEngine
+class VObjectTaskMailNotificationEngine
 {
 	const ENTRY_ID_PLACE_HOLDER = '{entry_id}';
 	const PARTNER_ID_PLACE_HOLDER = '{partner_id}';
@@ -76,7 +76,7 @@ class KObjectTaskMailNotificationEngine
 		$toArr = explode(",", $mailTask->mailTo);
 		$success = self::sendMail($toArr, $subject, $body, $sender);
 		if (!$success)
-			KalturaLog::info("Mail for MRP [$mediaRepurposingId] did not send successfully");
+			VidiunLog::info("Mail for MRP [$mediaRepurposingId] did not send successfully");
 
 		if ($mailTask->sendToUsers)
 		{
@@ -89,10 +89,10 @@ class KObjectTaskMailNotificationEngine
 				{
 					$success = self::sendMail(array($data[self::EMAIL]), $subject, $body, $sender);
 					if (!$success)
-						KalturaLog::info("Mail for MRP [$mediaRepurposingId] did not send successfully");
+						VidiunLog::info("Mail for MRP [$mediaRepurposingId] did not send successfully");
 				}
 				else
-					KalturaLog::info("Mail for MRP [$mediaRepurposingId] did not send successfully for user [$user] missing valid email.");
+					VidiunLog::info("Mail for MRP [$mediaRepurposingId] did not send successfully for user [$user] missing valid email.");
 			}
 		}
 	}
@@ -112,18 +112,18 @@ class KObjectTaskMailNotificationEngine
 
 		$mailer->Subject = $subject;
 		$mailer->Body = $body;
-		$mailer->Sender = KAsyncMailer::MAILER_DEFAULT_SENDER_EMAIL;
-		$mailer->From = KAsyncMailer::MAILER_DEFAULT_SENDER_EMAIL;
+		$mailer->Sender = VAsyncMailer::MAILER_DEFAULT_SENDER_EMAIL;
+		$mailer->From = VAsyncMailer::MAILER_DEFAULT_SENDER_EMAIL;
 		$mailer->FromName = $sender;
 
-		KalturaLog::info("sending mail to " . implode(",",$toArray) . ", from: [$sender]. subject: [$subject] with body: [$body]");
+		VidiunLog::info("sending mail to " . implode(",",$toArray) . ", from: [$sender]. subject: [$subject] with body: [$body]");
 		try
 		{
 			return $mailer->Send();
 		}
 		catch ( Exception $e )
 		{
-			KalturaLog::err( $e );
+			VidiunLog::err( $e );
 			return false;
 		}
 	}

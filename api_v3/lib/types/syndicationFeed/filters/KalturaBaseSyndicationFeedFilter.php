@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaBaseSyndicationFeedFilter extends KalturaBaseSyndicationFeedBaseFilter
+class VidiunBaseSyndicationFeedFilter extends VidiunBaseSyndicationFeedBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

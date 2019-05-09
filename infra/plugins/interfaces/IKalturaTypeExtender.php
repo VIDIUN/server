@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaTypeExtender extends IKalturaBase
+interface IVidiunTypeExtender extends IVidiunBase
 {
 	/**
 	 * Return all enum values that extend the base enum value

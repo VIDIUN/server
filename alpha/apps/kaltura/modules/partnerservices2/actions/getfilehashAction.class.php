@@ -10,13 +10,13 @@ class getfilehashAction extends defPartnerservices2Action
 		return array();		
 	}
 	
-	protected function needKuserFromPuser ( )
+	protected function needVuserFromPuser ( )
 	{
-		// will use the $puser_id for the hashcode no need to feth the kuser_id
-		return self::KUSER_DATA_NO_KUSER;
+		// will use the $puser_id for the hashcode no need to feth the vuser_id
+		return self::VUSER_DATA_NO_VUSER;
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$count = $this->getP ( "count" , 1 );
 		if ( $count < 1 ) $count =1;

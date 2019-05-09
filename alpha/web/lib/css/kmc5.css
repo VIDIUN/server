@@ -2,39 +2,39 @@
 html { height: 100%;}
 * { margin:0; padding:0;}
 
-body { height:100%; background:#F7F7F7;} /* url(../images/kmc/kmc_sprite.png) repeat-x scroll 0 -29px;*/
+body { height:100%; background:#F7F7F7;} /* url(../images/vmc/vmc_sprite.png) repeat-x scroll 0 -29px;*/
 a { text-decoration:none;}
-#kmcHeader { min-width: 960px; height:29px; padding: 4px 7px 0; background: url(../images/kmc/kmc_sprite.png) repeat-x scroll 0 -32px;}
-#kmcHeader div#logo { width:115px; height:30px; margin-top:-3px; float:left; background: url(../images/kmc/kmc_sprite.png) no-repeat 1px 0;}
-#kmcHeader.whiteLabel div#logo { background: url(../images/kmc/whitelabel_logo.png) no-repeat 0 0;}
-#kmcHeader ul { height:29px; margin: -4px 0 0 50px; float:left;}
-#kmcHeader li { float:left;}
-#kmcHeader li a { _width:0; height:32px; padding:  0 24px 0 0 ; display:block; font: bold 11px arial,sans-serif; color:#c9c9c9;}
-#kmcHeader li a span { display:block; padding: 12px 8px 9px 25px;}
-#kmcHeader li a:hover { color:#A6E7F6;}
-#kmcHeader li a.active { padding-right:24px; background: url(../images/kmc/kmc_sprite.png) right -62px; color:#222;}
-#kmcHeader li a.active span { background: url(../images/kmc/kmc_sprite.png) 0 -62px;}
-#kmcHeader li a.active.menu { background: url(../images/kmc/kmc_sprite.png) repeat-x scroll -23px -292px transparent; }
-#kmcHeader li a.active.menu span { background: url(../images/kmc/kmc_sprite.png) repeat-x scroll -23px -292px transparent; }
-#kmcHeader li a.menu { background: url("../images/kmc/kmc_sprite.png") repeat-x scroll -23px -208px transparent; margin-right: 10px; color: #5fa9ba; }
-#kmcHeader li a.menu:hover { background: url("../images/kmc/kmc_sprite.png") repeat-x scroll -23px -249px transparent; color: #A6E7F6; }
-#kmcHeader li a.active.menu { color: #000; }
-#kmcHeader li a.active.menu:hover { background: url(../images/kmc/kmc_sprite.png) repeat-x scroll -23px -292px transparent; }
+#vmcHeader { min-width: 960px; height:29px; padding: 4px 7px 0; background: url(../images/vmc/vmc_sprite.png) repeat-x scroll 0 -32px;}
+#vmcHeader div#logo { width:115px; height:30px; margin-top:-3px; float:left; background: url(../images/vmc/vmc_sprite.png) no-repeat 1px 0;}
+#vmcHeader.whiteLabel div#logo { background: url(../images/vmc/whitelabel_logo.png) no-repeat 0 0;}
+#vmcHeader ul { height:29px; margin: -4px 0 0 50px; float:left;}
+#vmcHeader li { float:left;}
+#vmcHeader li a { _width:0; height:32px; padding:  0 24px 0 0 ; display:block; font: bold 11px arial,sans-serif; color:#c9c9c9;}
+#vmcHeader li a span { display:block; padding: 12px 8px 9px 25px;}
+#vmcHeader li a:hover { color:#A6E7F6;}
+#vmcHeader li a.active { padding-right:24px; background: url(../images/vmc/vmc_sprite.png) right -62px; color:#222;}
+#vmcHeader li a.active span { background: url(../images/vmc/vmc_sprite.png) 0 -62px;}
+#vmcHeader li a.active.menu { background: url(../images/vmc/vmc_sprite.png) repeat-x scroll -23px -292px transparent; }
+#vmcHeader li a.active.menu span { background: url(../images/vmc/vmc_sprite.png) repeat-x scroll -23px -292px transparent; }
+#vmcHeader li a.menu { background: url("../images/vmc/vmc_sprite.png") repeat-x scroll -23px -208px transparent; margin-right: 10px; color: #5fa9ba; }
+#vmcHeader li a.menu:hover { background: url("../images/vmc/vmc_sprite.png") repeat-x scroll -23px -249px transparent; color: #A6E7F6; }
+#vmcHeader li a.active.menu { color: #000; }
+#vmcHeader li a.active.menu:hover { background: url(../images/vmc/vmc_sprite.png) repeat-x scroll -23px -292px transparent; }
 #loading { color: #fff; font-weight: bold; font-size: 12px; padding: 0; margin: 0; }
 #loading img { margin: 11px 10px 0 0; border: 0; }
 #loading span { display: block; margin: -15px 0 0 25px; font: bold 11px arial,sans-serif; }
-#kmcHeader #user { cursor: pointer; float:right; margin-top: 2px; padding: 2px 10px 2px 5px; background: #2b2b2b; border: 1px solid #4d4d4d; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; color: #5fa9ba; font: bold 11px arial,sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#kmcHeader #user .left-arrow { background: url("../images/kmc/kmc_sprite.png") no-repeat -155px -176px; display: inline-block; width: 10px; height: 10px; margin-right: 9px; }
-#kmcHeader #user .left-arrow { margin-top: -12px\9 } /* IE Hack */
-#kmcHeader #user_links { position: absolute; right: 6px; top: 6px; z-index: 22; padding: 2px 10px; white-space: nowrap; background: #2b2b2b; border: 1px solid #4d4d4d; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; color: #c9c9c9; font: normal 11px arial,sans-serif; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none;}
-#kmcHeader #user_links #closeMenu { cursor: pointer; background: url("../images/kmc/kmc_sprite.png") no-repeat -182px -175px; display: inline-block; width: 10px; height: 10px; margin: auto -3px auto -2px }
-#kmcHeader #user_links #closeMenu { margin-top: -13px\9 } /* IE Hack */
-#kmcHeader #user_links .sep { color: #4d4d4d; }
-#kmcHeader #user_links a { color: #5fa9ba; }
-#kmcHeader #user_links a:hover { color: #76c5ee; }
-#kmcHeader #newKMC { cursor: pointer; float:right; margin-top: 2px; padding: 2px 10px 2px 5px; background: #2b2b2b; border: 1px solid #4d4d4d; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; color: #5fa9ba; font: bold 11px arial,sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 6px; }
+#vmcHeader #user { cursor: pointer; float:right; margin-top: 2px; padding: 2px 10px 2px 5px; background: #2b2b2b; border: 1px solid #4d4d4d; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; color: #5fa9ba; font: bold 11px arial,sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#vmcHeader #user .left-arrow { background: url("../images/vmc/vmc_sprite.png") no-repeat -155px -176px; display: inline-block; width: 10px; height: 10px; margin-right: 9px; }
+#vmcHeader #user .left-arrow { margin-top: -12px\9 } /* IE Hack */
+#vmcHeader #user_links { position: absolute; right: 6px; top: 6px; z-index: 22; padding: 2px 10px; white-space: nowrap; background: #2b2b2b; border: 1px solid #4d4d4d; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; color: #c9c9c9; font: normal 11px arial,sans-serif; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none;}
+#vmcHeader #user_links #closeMenu { cursor: pointer; background: url("../images/vmc/vmc_sprite.png") no-repeat -182px -175px; display: inline-block; width: 10px; height: 10px; margin: auto -3px auto -2px }
+#vmcHeader #user_links #closeMenu { margin-top: -13px\9 } /* IE Hack */
+#vmcHeader #user_links .sep { color: #4d4d4d; }
+#vmcHeader #user_links a { color: #5fa9ba; }
+#vmcHeader #user_links a:hover { color: #76c5ee; }
+#vmcHeader #newVMC { cursor: pointer; float:right; margin-top: 2px; padding: 2px 10px 2px 5px; background: #2b2b2b; border: 1px solid #4d4d4d; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; color: #5fa9ba; font: bold 11px arial,sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 6px; }
 
-div.login #kmcHeader div { margin-top:13px;}
+div.login #vmcHeader div { margin-top:13px;}
 /* div#user_links span { float:right; color:#fff;} */
 /*div#user_links a { color:#A6E7F6;}
  div#user_links a:hover { color:#A6E7F6; text-decoration:underline;}*/
@@ -86,15 +86,15 @@ form div.buttons button:hover{ color:#cdcdd0; }
 ---------------------------------*/
 #main{ min-height: 548px; z-index: 44; background-color:#F7F7F7;  margin: 0; position:relative; overflow:hidden; bottom:1px; clear:both; }
 #main.help_page { background-color:#f4f4f6; }
-#main ul { height:29px; background:url(../images/kmc/navbar.gif) 0 -29px repeat-x; overflow:hidden; }
-#main ul li { float:left; width:9em; height:29px; line-height:29px; text-align:center; display:inline; padding:0 5px 0 7px; background:url(../images/kmc/menu_sep.gif) 0 center no-repeat; }
+#main ul { height:29px; background:url(../images/vmc/navbar.gif) 0 -29px repeat-x; overflow:hidden; }
+#main ul li { float:left; width:9em; height:29px; line-height:29px; text-align:center; display:inline; padding:0 5px 0 7px; background:url(../images/vmc/menu_sep.gif) 0 center no-repeat; }
 #main ul li a { display:block; color:#00364a; margin:3px 0 0; }
 #main ul li a:hover { color:#78a3b2; }
-#main ul li.active a { color:#fff; background:url(../images/kmc/tab_over.gif) no-repeat right 3px; }
-#main ul li.active b { float:left; margin-right:-4px; position:relative; z-index:2; width:4px; height:100%; background:url(../images/kmc/tab_over.gif) 0 6px no-repeat; }
-#main .corner { position:absolute; width:5px; height:29px; z-index:2; top:0; left:0; background:url(../images/kmc/navbar.gif) 0 0 repeat-x; }
+#main ul li.active a { color:#fff; background:url(../images/vmc/tab_over.gif) no-repeat right 3px; }
+#main ul li.active b { float:left; margin-right:-4px; position:relative; z-index:2; width:4px; height:100%; background:url(../images/vmc/tab_over.gif) 0 6px no-repeat; }
+#main .corner { position:absolute; width:5px; height:29px; z-index:2; top:0; left:0; background:url(../images/vmc/navbar.gif) 0 0 repeat-x; }
 #main .corner.right { background-position:0 -58px; left:auto; right:0; }
-#main .bcorner { position:absolute; width:5px; height:5px; z-index:2; bottom:0; left:0; background:url(../images/kmc/bottom_corners.gif) -5px 0 repeat-x; }
+#main .bcorner { position:absolute; width:5px; height:5px; z-index:2; bottom:0; left:0; background:url(../images/vmc/bottom_corners.gif) -5px 0 repeat-x; }
 #main .bcorner.right { background-position:0 0; left:auto; right:0; }
 #main .flash_wrap { margin:0px; background-color:#f4f4f5; overflow: hidden; height:100%}
 #main .flash_wrap object { min-height: 100%; }
@@ -129,8 +129,8 @@ form div.buttons button:hover{ color:#cdcdd0; }
 #main .content .contwrap .toc{ width: 470px; margin-bottom:50px; }
 #main .content .contwrap .toc h3{ display:block; margin-bottom:5px; }
 #main .content .contwrap .toc dl{ margin:0 0 20px 15px; font-weight:bold; }
-#main .content .contwrap .toc dt{ display:block; background:url(../images/kmc/dots.gif) 0 90% repeat-x; }
-#main .content .contwrap .toc dd{ display:block; padding:1px 0; margin-left:15px; background:url(../images/kmc/dots.gif) 0 90% repeat-x; }
+#main .content .contwrap .toc dt{ display:block; background:url(../images/vmc/dots.gif) 0 90% repeat-x; }
+#main .content .contwrap .toc dd{ display:block; padding:1px 0; margin-left:15px; background:url(../images/vmc/dots.gif) 0 90% repeat-x; }
 #main .content .contwrap .toc dl a{ background-color:#F4F4F6; padding-right:4px; }
 #main .content .contwrap .toc dl span{ float:right; width:50px; color:#666; padding-left:4px; background-color:#F4F4F6; }
 
@@ -154,13 +154,13 @@ form div.buttons button:hover{ color:#cdcdd0; }
 
 #modalbox iframe{ overflow:hidden; }
 
-.kalturaCode{ font-size: 20px; padding: 5px; }
+.vidiunCode{ font-size: 20px; padding: 5px; }
 
-/* for KMC modal*/
+/* for VMC modal*/
 /* modal.css overide */
 #mbContent.new { padding:0; border:none; display:table; background:none;}
-#titlebar { height:19px; padding: 10px 16px 8px; font-weight:bold; color:#EEEEEE; font-size: 15px; -moz-border-radius-topleft:5px;; -moz-border-radius-topright:5px; -webkit-border-top-left-radius:5px; -webkit-border-top-right-radius:5px; background: url(../images/kmc/kmc_sprite.png) repeat-x 0 -115px;}
-#titlebar a { width:16px; height:16px; margin:-1px 0 0 5px; float:right; background: url(../images/kmc/kmc_sprite.png) no-repeat -155px -152px;}
+#titlebar { height:19px; padding: 10px 16px 8px; font-weight:bold; color:#EEEEEE; font-size: 15px; -moz-border-radius-topleft:5px;; -moz-border-radius-topright:5px; -webkit-border-top-left-radius:5px; -webkit-border-top-right-radius:5px; background: url(../images/vmc/vmc_sprite.png) repeat-x 0 -115px;}
+#titlebar a { width:16px; height:16px; margin:-1px 0 0 5px; float:right; background: url(../images/vmc/vmc_sprite.png) no-repeat -155px -152px;}
 #titlebar a#help { background-position: -177px -152px;}
 #titlebar span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; margin-right: 20px; }
 #modal span#entry_id { padding-left:3px; color:#555;}
@@ -169,11 +169,11 @@ form div.buttons button:hover{ color:#cdcdd0; }
 #modal #player_wrap { min-height:290px; min-width:400px; padding-bottom:0;  margin: 15px auto;}
 #modal textarea#embed_code { float: right; width:380px; height: 14px; border: solid 1px #B7BABC; color:#333; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius: 2px; }
 #modal button { font: normal 11px arial,sans-serif; color:#2B2B2B;}
-#modal button#select_code { height:25px; padding: 0 13px 0 0; border:none; margin: 11px auto 5px; line-height:normal; overflow:visible; background: url(../images/kmc/kmc_sprite.png) no-repeat -63px -152px; font: normal 11px arial,sans-serif; color:#2B2B2B; cursor:pointer;}
+#modal button#select_code { height:25px; padding: 0 13px 0 0; border:none; margin: 11px auto 5px; line-height:normal; overflow:visible; background: url(../images/vmc/vmc_sprite.png) no-repeat -63px -152px; font: normal 11px arial,sans-serif; color:#2B2B2B; cursor:pointer;}
 #modal button#select_code { #background-position: -66px -152px;}
 #modal button#select_code:hover { background-position: -63px -177px; color:#000;}
 #modal button#select_code:hover { #background-position: -66px -177px;}
-#modal button span { height:20px; padding: 4px 0 0 15px; margin: 1px 1px 0 0; float:left; white-space:nowrap; background:transparent url(../images/kmc/kmc_sprite.png) no-repeat scroll 0 -153px;}
+#modal button span { height:20px; padding: 4px 0 0 15px; margin: 1px 1px 0 0; float:left; white-space:nowrap; background:transparent url(../images/vmc/vmc_sprite.png) no-repeat scroll 0 -153px;}
 #modal button:hover span { background-position: 0 -178px;}
 @-moz-document url-prefix() {
 	#modal button span { margin-top: 0; margin-left: -3px; margin-bottom: 1px; }
@@ -212,7 +212,7 @@ form div.buttons button:hover{ color:#cdcdd0; }
 #modal .embedcode { min-width: 150px !important; }
 
 /* end jw */
-/* end KMC modal */
+/* end VMC modal */
 
 /* jw p&e */
 a, a:visited { }
@@ -252,7 +252,7 @@ div.description ul button { padding: 0 5px;} /* vertical-align:1px; */
 #change_account span { display: block; margin-bottom: 10px; }
 #change_account label { display: block; margin: 5px; }
 #change_account .container { overflow-y: auto; overflow-x: hidden; max-height: 110px; height: 110px; margin-bottom: 10px; }
-#change_account button { cursor: pointer; background: url("../images/kmc/kmc_sprite.png") no-repeat scroll -57px -153px transparent; border: 1px solid #B7BABC; color: #2B2B2B; cursor: pointer; height: 24px; margin: 0 auto 5px; padding: 0 13px 1px; }
+#change_account button { cursor: pointer; background: url("../images/vmc/vmc_sprite.png") no-repeat scroll -57px -153px transparent; border: 1px solid #B7BABC; color: #2B2B2B; cursor: pointer; height: 24px; margin: 0 auto 5px; padding: 0 13px 1px; }
 #change_account button { width /*\**/: 75px\9 }
 #change_account button span { background: none; padding: 3px 0 0 3px; }
 @-moz-document url-prefix() {
@@ -261,9 +261,9 @@ div.description ul button { padding: 0 5px;} /* vertical-align:1px; */
 
 .modal { -moz-box-shadow: 0 0 22px #000; -webkit-box-shadow: 0 0 22px #000; borderX: solid 3px #222; margin: 0 auto 15px; background: #f7f7f7; -moz-border-radius:8px; -webkit-border-radius:8px; border-radius: 8px; font-size:13px;}
 .modal { display: none; position: absolute; z-index: 100; margin: 0 0 20px; padding: 0; min-height: 200px; font-family: arial; background: #fff; }
-.modal .title { height:19px; padding: 10px 16px 8px;  -moz-border-radius-topleft:5px; -moz-border-radius-topright:5px; -webkit-border-top-left-radius:5px; -webkit-border-top-right-radius:5px; background: url(../images/kmc/kmc_sprite.png) repeat-x 0 -116px;}
+.modal .title { height:19px; padding: 10px 16px 8px;  -moz-border-radius-topleft:5px; -moz-border-radius-topright:5px; -webkit-border-top-left-radius:5px; -webkit-border-top-right-radius:5px; background: url(../images/vmc/vmc_sprite.png) repeat-x 0 -116px;}
 .modal .title h2 { float: left; font-weight:bold; color:#EEEEEE; font-size: 15px; margin: 0; padding: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; max-width: 450px; }
-.modal .title .icon { display: block; width:16px; height:16px; margin:-1px 0 0 5px; float:right; background: url(../images/kmc/kmc_sprite.png) no-repeat; cursor: pointer; }
+.modal .title .icon { display: block; width:16px; height:16px; margin:-1px 0 0 5px; float:right; background: url(../images/vmc/vmc_sprite.png) no-repeat; cursor: pointer; }
 .modal .title .close { background-position: -155px -152px; }
 .modal .title .help { background-position: -177px -152px;}
 .modal .content { /*padding: 6px;*/ }

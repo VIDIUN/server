@@ -78,7 +78,7 @@ class BatchJobFilter extends baseObjectFilter
 		
 		if($this->queryFromBatchJob) {
 			$fieldsArray = array_merge($this->BATCH_JOB_FIELDS, $this->BATCH_JOB_COMMON_FIELDS);
-			$this->fields = kArray::makeAssociativeDefaultValue ($fieldsArray , NULL );
+			$this->fields = vArray::makeAssociativeDefaultValue ($fieldsArray , NULL );
 			$this->allowed_order_fields = array (
 					"created_at",
 					"updated_at",
@@ -87,7 +87,7 @@ class BatchJobFilter extends baseObjectFilter
 					"finish_time");
 		} else {
 			$fieldsArray = array_merge($this->BATCH_JOB_LOCK_FIELDS, $this->BATCH_JOB_COMMON_FIELDS);
-			$this->fields = kArray::makeAssociativeDefaultValue ( $fieldsArray , NULL );
+			$this->fields = vArray::makeAssociativeDefaultValue ( $fieldsArray , NULL );
 			$this->allowed_order_fields = array (
 					"lock_expiration",
 					"execution_attempts",

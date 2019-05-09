@@ -2,7 +2,7 @@
 /**
  * @package plugins.contentDistributionBulkUploadXml
  */
-class ContentDistributionBulkUploadXmlEnginePlugin extends KalturaPlugin implements IKalturaPending, IKalturaBulkUploadXmlHandler, IKalturaConfigurator
+class ContentDistributionBulkUploadXmlEnginePlugin extends VidiunPlugin implements IVidiunPending, IVidiunBulkUploadXmlHandler, IVidiunConfigurator
 {
 	const PLUGIN_NAME = 'contentDistributionBulkUploadXmlEngine';
 	
@@ -38,22 +38,22 @@ class ContentDistributionBulkUploadXmlEnginePlugin extends KalturaPlugin impleme
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$bulkUploadXmlVersion = new KalturaVersion(
+		$bulkUploadXmlVersion = new VidiunVersion(
 			self::BULK_UPLOAD_XML_VERSION_MAJOR,
 			self::BULK_UPLOAD_XML_VERSION_MINOR,
 			self::BULK_UPLOAD_XML_VERSION_BUILD);
 			
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$bulkUploadXmlDependency = new KalturaDependency(BulkUploadXmlPlugin::getPluginName(), $bulkUploadXmlVersion);
-		$contentDistributionDependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$bulkUploadXmlDependency = new VidiunDependency(BulkUploadXmlPlugin::getPluginName(), $bulkUploadXmlVersion);
+		$contentDistributionDependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		
 		return array($bulkUploadXmlDependency, $contentDistributionDependency);
 	}
@@ -62,7 +62,7 @@ class ContentDistributionBulkUploadXmlEnginePlugin extends KalturaPlugin impleme
 	{
 		if(is_null($this->distributionProfilesNames))
 		{
-			$distributionPlugin = KalturaContentDistributionClientPlugin::get(KBatchBase::$kClient);
+			$distributionPlugin = VidiunContentDistributionClientPlugin::get(VBatchBase::$vClient);
 			$distributionProfileListResponse = $distributionPlugin->distributionProfile->listAction();
 			if(!is_array($distributionProfileListResponse->objects))
 				return null;
@@ -91,7 +91,7 @@ class ContentDistributionBulkUploadXmlEnginePlugin extends KalturaPlugin impleme
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUploadXmlHandler::configureBulkUploadXmlHandler()
+	 * @see IVidiunBulkUploadXmlHandler::configureBulkUploadXmlHandler()
 	 */
 	public function configureBulkUploadXmlHandler(BulkUploadEngineXml $xmlBulkUploadEngine)
 	{
@@ -99,20 +99,20 @@ class ContentDistributionBulkUploadXmlEnginePlugin extends KalturaPlugin impleme
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUploadXmlHandler::handleItemAdded()
+	 * @see IVidiunBulkUploadXmlHandler::handleItemAdded()
 	 */
-	public function handleItemAdded(KalturaObjectBase $object, SimpleXMLElement $item)
+	public function handleItemAdded(VidiunObjectBase $object, SimpleXMLElement $item)
 	{
-		if(!($object instanceof KalturaBaseEntry))
+		if(!($object instanceof VidiunBaseEntry))
 			return;
 			
 		if(empty($item->distributions))
 			return;
 			
-		KBatchBase::impersonate($this->xmlBulkUploadEngine->getCurrentPartnerId());
+		VBatchBase::impersonate($this->xmlBulkUploadEngine->getCurrentPartnerId());
 		foreach($item->distributions->distribution as $distribution)
 			$this->handleDistribution($object->id, $distribution);
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 	}
 	
 	protected function handleDistribution($entryId, SimpleXMLElement $distribution)
@@ -125,20 +125,20 @@ class ContentDistributionBulkUploadXmlEnginePlugin extends KalturaPlugin impleme
 			$distributionProfileId = $this->getDistributionProfileId($distribution->distributionProfile, $distribution->distributionProvider);
 				
 		if(!$distributionProfileId)
-			throw new KalturaBatchException("Unable to retrieve distributionProfileId value", KalturaBatchJobAppErrors::BULK_MISSING_MANDATORY_PARAMETER);
+			throw new VidiunBatchException("Unable to retrieve distributionProfileId value", VidiunBatchJobAppErrors::BULK_MISSING_MANDATORY_PARAMETER);
 		
-		$distributionPlugin = KalturaContentDistributionClientPlugin::get(KBatchBase::$kClient);
+		$distributionPlugin = VidiunContentDistributionClientPlugin::get(VBatchBase::$vClient);
 		
-		$entryDistributionFilter = new KalturaEntryDistributionFilter();
+		$entryDistributionFilter = new VidiunEntryDistributionFilter();
 		$entryDistributionFilter->distributionProfileIdEqual = $distributionProfileId;
 		$entryDistributionFilter->entryIdEqual = $entryId;
 		
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize = 1;
 		
 		$entryDistributionResponse = $distributionPlugin->entryDistribution->listAction($entryDistributionFilter, $pager);
 		
-		$entryDistribution = new KalturaEntryDistribution();
+		$entryDistribution = new VidiunEntryDistribution();
 		$entryDistributionId = null;
 		if(is_array($entryDistributionResponse->objects) && count($entryDistributionResponse->objects) > 0)
 		{
@@ -151,11 +151,11 @@ class ContentDistributionBulkUploadXmlEnginePlugin extends KalturaPlugin impleme
 			$entryDistribution->distributionProfileId = $distributionProfileId;
 		}
 		
-		if(!empty($distribution->sunrise) && KBulkUploadEngine::isFormatedDate($distribution->sunrise))
-			$entryDistribution->sunrise = KBulkUploadEngine::parseFormatedDate($distribution->sunrise);
+		if(!empty($distribution->sunrise) && VBulkUploadEngine::isFormatedDate($distribution->sunrise))
+			$entryDistribution->sunrise = VBulkUploadEngine::parseFormatedDate($distribution->sunrise);
 			
-		if(!empty($distribution->sunset) && KBulkUploadEngine::isFormatedDate($distribution->sunset))
-			$entryDistribution->sunset = KBulkUploadEngine::parseFormatedDate($distribution->sunset);
+		if(!empty($distribution->sunset) && VBulkUploadEngine::isFormatedDate($distribution->sunset))
+			$entryDistribution->sunset = VBulkUploadEngine::parseFormatedDate($distribution->sunset);
 		
 		if(!empty($distribution->flavorAssetIds))
 			$entryDistribution->flavorAssetIds = $distribution->flavorAssetIds;
@@ -170,7 +170,7 @@ class ContentDistributionBulkUploadXmlEnginePlugin extends KalturaPlugin impleme
 		if($entryDistributionId)
 		{
 			$updatedEntryDistribution = $distributionPlugin->entryDistribution->update($entryDistributionId, $entryDistribution);
-			if($submitWhenReady && $updatedEntryDistribution->dirtyStatus == KalturaEntryDistributionFlag::UPDATE_REQUIRED)
+			if($submitWhenReady && $updatedEntryDistribution->dirtyStatus == VidiunEntryDistributionFlag::UPDATE_REQUIRED)
 				$distributionPlugin->entryDistribution->submitUpdate($entryDistributionId);
 		}
 		else
@@ -181,23 +181,23 @@ class ContentDistributionBulkUploadXmlEnginePlugin extends KalturaPlugin impleme
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUploadXmlHandler::handleItemUpdated()
+	 * @see IVidiunBulkUploadXmlHandler::handleItemUpdated()
 	 */
-	public function handleItemUpdated(KalturaObjectBase $object, SimpleXMLElement $item)
+	public function handleItemUpdated(VidiunObjectBase $object, SimpleXMLElement $item)
 	{
 		$this->handleItemAdded($object, $item);
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaBulkUploadXmlHandler::handleItemDeleted()
+	 * @see IVidiunBulkUploadXmlHandler::handleItemDeleted()
 	 */
-	public function handleItemDeleted(KalturaObjectBase $object, SimpleXMLElement $item)
+	public function handleItemDeleted(VidiunObjectBase $object, SimpleXMLElement $item)
 	{
 		// No handling required
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaConfigurator::getConfig()
+	 * @see IVidiunConfigurator::getConfig()
 	 */
 	public static function getConfig($configName)
 	{
@@ -208,7 +208,7 @@ class ContentDistributionBulkUploadXmlEnginePlugin extends KalturaPlugin impleme
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaConfigurator::getContainerName()
+	 * @see IVidiunConfigurator::getContainerName()
 	*/
 	public function getContainerName()
 	{

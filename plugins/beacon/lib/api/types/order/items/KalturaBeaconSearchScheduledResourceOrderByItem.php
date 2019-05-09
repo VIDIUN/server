@@ -3,10 +3,10 @@
  * @package plugins.beacon
  * @subpackage api.objects
  */
-class KalturaBeaconSearchScheduledResourceOrderByItem extends KalturaESearchOrderByItem
+class VidiunBeaconSearchScheduledResourceOrderByItem extends VidiunESearchOrderByItem
 {
 	/**
-	 *  @var KalturaBeaconScheduledResourceOrderByFieldName
+	 *  @var VidiunBeaconScheduledResourceOrderByFieldName
 	 */
 	public $sortField;
 
@@ -15,10 +15,10 @@ class KalturaBeaconSearchScheduledResourceOrderByItem extends KalturaESearchOrde
 	);
 
 	private static $map_field_enum = array(
-		KalturaBeaconScheduledResourceOrderByFieldName::STATUS => BeaconScheduledResourceOrderByFieldName::STATUS,
-		KalturaBeaconScheduledResourceOrderByFieldName::RECORDING => BeaconScheduledResourceOrderByFieldName::RECORDING,
-		KalturaBeaconScheduledResourceOrderByFieldName::RESOURCE_NAME => BeaconScheduledResourceOrderByFieldName::RESOURCE_NAME,
-		KalturaBeaconScheduledResourceOrderByFieldName::UPDATED_AT => BeaconScheduledResourceOrderByFieldName::UPDATED_AT,
+		VidiunBeaconScheduledResourceOrderByFieldName::STATUS => BeaconScheduledResourceOrderByFieldName::STATUS,
+		VidiunBeaconScheduledResourceOrderByFieldName::RECORDING => BeaconScheduledResourceOrderByFieldName::RECORDING,
+		VidiunBeaconScheduledResourceOrderByFieldName::RESOURCE_NAME => BeaconScheduledResourceOrderByFieldName::RESOURCE_NAME,
+		VidiunBeaconScheduledResourceOrderByFieldName::UPDATED_AT => BeaconScheduledResourceOrderByFieldName::UPDATED_AT,
 	);
 
 	public function getMapBetweenObjects()
@@ -30,7 +30,7 @@ class KalturaBeaconSearchScheduledResourceOrderByItem extends KalturaESearchOrde
 	{
 		if (!$object_to_fill)
 		{
-			$object_to_fill = new kBeaconScheduledResourceOrderByItem();
+			$object_to_fill = new vBeaconScheduledResourceOrderByItem();
 		}
 
 		return parent::toObject($object_to_fill, $props_to_skip);

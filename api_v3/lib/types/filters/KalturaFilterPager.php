@@ -1,17 +1,17 @@
 <?php
 /**
- * The KalturaFilterPager object enables paging management to be applied upon service list actions. 
+ * The VidiunFilterPager object enables paging management to be applied upon service list actions. 
  * 
  * @package api
  * @subpackage filters
  */
-class KalturaFilterPager extends KalturaPager
+class VidiunFilterPager extends VidiunPager
 {
 	public function toObject($object = null, $skipProperties = array())
 	{
 		if(!$object)
 		{
-			$object = new kFilterPager();
+			$object = new vFilterPager();
 		}
 		
 		return parent::toObject($object, $skipProperties);

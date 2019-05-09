@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model.data
  */
-class kOrCondition extends kCondition
+class vOrCondition extends vCondition
 {
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -38,13 +38,13 @@ class kOrCondition extends kCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
 		foreach($this->conditions as $condition)
 		{
-			/* @var $condition kCondition */
+			/* @var $condition vCondition */
 			if($condition->fulfilled($scope))
 			{
 				return true;
@@ -55,13 +55,13 @@ class kOrCondition extends kCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kCondition::shouldDisableCache()
+	 * @see vCondition::shouldDisableCache()
 	 */
 	public function shouldDisableCache($scope)
 	{
 		foreach($this->conditions as $condition)
 		{
-			/* @var $condition kCondition */
+			/* @var $condition vCondition */
 			if($condition->shouldDisableCache($scope))
 			{
 				return true;

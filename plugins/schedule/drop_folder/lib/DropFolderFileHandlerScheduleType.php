@@ -3,7 +3,7 @@
  * @package plugins.scheduleDropFolder
  * @subpackage lib
  */
-class DropFolderFileHandlerScheduleType implements IKalturaPluginEnum, DropFolderFileHandlerType
+class DropFolderFileHandlerScheduleType implements IVidiunPluginEnum, DropFolderFileHandlerType
 {
 	const ICAL = 'ICAL';
 	

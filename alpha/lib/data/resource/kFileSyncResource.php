@@ -1,11 +1,11 @@
 <?php
 /**
- * Used to ingest media that is already ingested to Kaltura system as a different file in the past, the new created flavor asset will be ready immediately using a file sync of link type that will point to the existing file sync.
+ * Used to ingest media that is already ingested to Vidiun system as a different file in the past, the new created flavor asset will be ready immediately using a file sync of link type that will point to the existing file sync.
  *
  * @package Core
  * @subpackage model.data
  */
-class kFileSyncResource extends kContentResource 
+class vFileSyncResource extends vContentResource 
 {
 	/**
 	 * The object type of the file sync object 
@@ -61,7 +61,7 @@ class kFileSyncResource extends kContentResource
 		if($this->fileSyncObjectType == FileSyncObjectType::ENTRY)
 			return $this->objectId;
 			
-		$object = kFileSyncObjectManager::retrieveObject($this->fileSyncObjectType, $this->objectId);
+		$object = vFileSyncObjectManager::retrieveObject($this->fileSyncObjectType, $this->objectId);
 		if(method_exists($object, 'getEntryId'))
 			return $object->getEntryId();
 		 

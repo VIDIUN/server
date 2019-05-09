@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaUploadErrorCode extends KalturaEnum
+class VidiunUploadErrorCode extends VidiunEnum
 {
 	const NO_ERROR = 0;
 	const GENERAL_ERROR = 1;

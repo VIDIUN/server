@@ -10,7 +10,7 @@
 	public $content = NULL;
 	
  */
-function dumpLogData( kFileData $d )
+function dumpLogData( vFileData $d )
 {
 	$file_timestamp = $d->raw_timestamp;
 	$too_old = ( time() - $file_timestamp > 300000 ); // 5 minutes

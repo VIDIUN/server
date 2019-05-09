@@ -3,23 +3,23 @@
  * @package plugins.integration
  * @subpackage lib.events
  */
-class kIntegrationFlowManager implements kBatchJobStatusEventConsumer
+class vIntegrationFlowManager implements vBatchJobStatusEventConsumer
 {
 	const EXTERNAL_INTEGRATION_SERVICES_ROLE_NAME = "EXTERNAL_INTEGRATION_SERVICES_ROLE";
 	const THREE_DAYS_IN_SECONDS = 259200;
 
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
-		kEventsManager::raiseEvent(new kIntegrationJobClosedEvent($dbBatchJob));
+		vEventsManager::raiseEvent(new vIntegrationJobClosedEvent($dbBatchJob));
 		
 		return true;
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -39,16 +39,16 @@ class kIntegrationFlowManager implements kBatchJobStatusEventConsumer
 		return in_array($dbBatchJob->getStatus(), $closedStatusList);
 	}
 	
-	public static function addintegrationJob($objectType, $objectId, kIntegrationJobData $data) 
+	public static function addintegrationJob($objectType, $objectId, vIntegrationJobData $data) 
 	{
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 		
 		$providerType = $data->getProviderType();
-		$integrationProvider = KalturaPluginManager::loadObject('IIntegrationProvider', $providerType);
+		$integrationProvider = VidiunPluginManager::loadObject('IIntegrationProvider', $providerType);
 
 		if(!$integrationProvider || !$integrationProvider->validatePermissions($partnerId))
 		{
-			KalturaLog::err("partner $partnerId not permitted with provider type $providerType");
+			VidiunLog::err("partner $partnerId not permitted with provider type $providerType");
 			return false;
 		}
 		
@@ -71,47 +71,47 @@ class kIntegrationFlowManager implements kBatchJobStatusEventConsumer
 		$batchJob->setStatus(BatchJob::BATCHJOB_STATUS_DONT_PROCESS);
 		
 		$jobType = IntegrationPlugin::getBatchJobTypeCoreValue(IntegrationBatchJobType::INTEGRATION);
-		$batchJob = kJobsManager::addJob($batchJob, $data, $jobType, $providerType);
+		$batchJob = vJobsManager::addJob($batchJob, $data, $jobType, $providerType);
 		
 		if($integrationProvider->shouldSendCallBack())
 		{
 			$jobId = $batchJob->getId();
-			$ks = self::generateKs($partnerId, $jobId);
-			$dcParams = kDataCenterMgr::getCurrentDc();
+			$vs = self::generateVs($partnerId, $jobId);
+			$dcParams = vDataCenterMgr::getCurrentDc();
 			$dcUrl = $dcParams["url"];
 
 			$callBackUrl = $dcUrl;
 			$callBackUrl .= "/api_v3/index.php/service/integration_integration/action/notify";
-			$callBackUrl .= "/id/$jobId/ks/$ks";
+			$callBackUrl .= "/id/$jobId/vs/$vs";
 
 			$data = $batchJob->getData();
 			$data->setCallbackNotificationUrl($callBackUrl);
 			$batchJob->setData($data);
 		}
 		
-		return kJobsManager::updateBatchJob($batchJob, BatchJob::BATCHJOB_STATUS_PENDING);
+		return vJobsManager::updateBatchJob($batchJob, BatchJob::BATCHJOB_STATUS_PENDING);
 	}
 	
 	/**
 	 * @return string
 	 */
-	public static function generateKs($partnerId, $tokenPrefix)
+	public static function generateVs($partnerId, $tokenPrefix)
 	{
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		$userSecret = $partner->getSecret();
 		
 		//actionslimit:1
-		$privileges = kSessionBase::PRIVILEGE_SET_ROLE . ":" . self::EXTERNAL_INTEGRATION_SERVICES_ROLE_NAME;
-		$privileges .= "," . kSessionBase::PRIVILEGE_ACTIONS_LIMIT . ":1";
+		$privileges = vSessionBase::PRIVILEGE_SET_ROLE . ":" . self::EXTERNAL_INTEGRATION_SERVICES_ROLE_NAME;
+		$privileges .= "," . vSessionBase::PRIVILEGE_ACTIONS_LIMIT . ":1";
 		
-		$dcParams = kDataCenterMgr::getCurrentDc();
+		$dcParams = vDataCenterMgr::getCurrentDc();
 		$token = $dcParams["secret"];
 		$additionalData = md5($tokenPrefix . $token);
 		
-		$ks = "";
-		$creationSucces = kSessionUtils::startKSession ($partnerId, $userSecret, "", $ks, self::THREE_DAYS_IN_SECONDS, KalturaSessionType::USER, "", $privileges, null,$additionalData);
+		$vs = "";
+		$creationSucces = vSessionUtils::startVSession ($partnerId, $userSecret, "", $vs, self::THREE_DAYS_IN_SECONDS, VidiunSessionType::USER, "", $privileges, null,$additionalData);
 		if ($creationSucces >= 0 )
-				return $ks;
+				return $vs;
 		
 		return false;
 	}

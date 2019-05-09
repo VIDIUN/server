@@ -5,7 +5,7 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class kEmailNotificationStaticRecipientJobData extends kEmailNotificationRecipientJobData
+class vEmailNotificationStaticRecipientJobData extends vEmailNotificationRecipientJobData
 {
 	/**
 	 * Static list of email recipients in the form of key-value pairs

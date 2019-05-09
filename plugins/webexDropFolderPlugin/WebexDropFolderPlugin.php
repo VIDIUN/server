@@ -2,7 +2,7 @@
 /**
  * @package plugins.WebexDropFolder
  */
-class WebexDropFolderPlugin extends KalturaPlugin implements IKalturaPending, IKalturaPermissions, IKalturaObjectLoader, IKalturaEnumerator
+class WebexDropFolderPlugin extends VidiunPlugin implements IVidiunPending, IVidiunPermissions, IVidiunObjectLoader, IVidiunEnumerator
 {
 	const PLUGIN_NAME = 'WebexDropFolder';
 	const DROP_FOLDER_PLUGIN_NAME = 'dropFolder';
@@ -14,7 +14,7 @@ class WebexDropFolderPlugin extends KalturaPlugin implements IKalturaPending, IK
 	
 	public static function dependsOn()
 	{
-		$dropFolderDependency = new KalturaDependency(self::DROP_FOLDER_PLUGIN_NAME);
+		$dropFolderDependency = new VidiunDependency(self::DROP_FOLDER_PLUGIN_NAME);
 		
 		return array($dropFolderDependency);
 	}
@@ -32,48 +32,48 @@ class WebexDropFolderPlugin extends KalturaPlugin implements IKalturaPending, IK
 	{
 		switch ($baseClass)
 		{
-			case 'KDropFolderEngine':
-				if ($enumValue == KalturaDropFolderType::WEBEX)
+			case 'VDropFolderEngine':
+				if ($enumValue == VidiunDropFolderType::WEBEX)
 				{
-					return new KWebexDropFolderEngine();
+					return new VWebexDropFolderEngine();
 				}
 				break;
-			case ('KalturaDropFolder'):
+			case ('VidiunDropFolder'):
 				if ($enumValue == self::getDropFolderTypeCoreValue(WebexDropFolderType::WEBEX) )
 				{
-					return new KalturaWebexDropFolder();
+					return new VidiunWebexDropFolder();
 				}
 				break;
-			case ('KalturaDropFolderFile'):
+			case ('VidiunDropFolderFile'):
 				if ($enumValue == self::getDropFolderTypeCoreValue(WebexDropFolderType::WEBEX) )
 				{
-					return new KalturaWebexDropFolderFile();
+					return new VidiunWebexDropFolderFile();
 				}
 				break;
-			case 'kDropFolderContentProcessorJobData':
+			case 'vDropFolderContentProcessorJobData':
 				if ($enumValue == self::getDropFolderTypeCoreValue(WebexDropFolderType::WEBEX))
 				{
-					return new kWebexDropFolderContentProcessorJobData();
+					return new vWebexDropFolderContentProcessorJobData();
 				}
 				break;
-			case 'KalturaJobData':
+			case 'VidiunJobData':
 				$jobSubType = $constructorArgs["coreJobSubType"];
 			    if ($enumValue == DropFolderPlugin::getApiValue(DropFolderBatchType::DROP_FOLDER_CONTENT_PROCESSOR) &&
 					$jobSubType == self::getDropFolderTypeCoreValue(WebexDropFolderType::WEBEX) )
 				{
-					return new KalturaWebexDropFolderContentProcessorJobData();
+					return new VidiunWebexDropFolderContentProcessorJobData();
 				}
 				break;
 			case 'Form_DropFolderConfigureExtend_SubForm':
-				if ($enumValue == Kaltura_Client_DropFolder_Enum_DropFolderType::WEBEX)
+				if ($enumValue == Vidiun_Client_DropFolder_Enum_DropFolderType::WEBEX)
 				{
 					return new Form_WebexDropFolderConfigureExtend_SubForm();
 				}
 				break;
-			case 'Kaltura_Client_DropFolder_Type_DropFolder':
-				if ($enumValue == Kaltura_Client_DropFolder_Enum_DropFolderType::WEBEX)
+			case 'Vidiun_Client_DropFolder_Type_DropFolder':
+				if ($enumValue == Vidiun_Client_DropFolder_Enum_DropFolderType::WEBEX)
 				{
-					return new Kaltura_Client_WebexDropFolder_Type_WebexDropFolder();
+					return new Vidiun_Client_WebexDropFolder_Type_WebexDropFolder();
 				}
 				break;
 				break;
@@ -115,12 +115,12 @@ class WebexDropFolderPlugin extends KalturaPlugin implements IKalturaPending, IK
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 
 	public static function getDropFolderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DropFolderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DropFolderType', $value);
 	}
 }

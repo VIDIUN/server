@@ -15,35 +15,35 @@
 
     <multirequest>
         <request service="eventNotificationTemplate" action="listTemplates" plugin="eventNotification">
-            <filter objectType="KalturaEventNotificationTemplateFilter">
+            <filter objectType="VidiunEventNotificationTemplateFilter">
                 <partnerId>0</partnerId>
                 <systemNameEqual>Comment_Was_Added_To_Entry</systemNameEqual>
             </filter>
-            <pager objectType="KalturaFilterPager">
+            <pager objectType="VidiunFilterPager">
                 <pageSize>1</pageSize>
             </pager>
         </request>
         <request service="eventNotificationTemplate" action="update" plugin="eventNotification" partnerId="0">
             <id>{1:result:objects:0:id}</id>
-            <template objectType="KalturaEmailNotificationTemplate">
+            <template objectType="VidiunEmailNotificationTemplate">
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventFieldCondition">
+                    <item objectType="VidiunEventFieldCondition">
                         <description>An annotation object was created</description>
-                        <field objectType="KalturaEvalBooleanField">
+                        <field objectType="VidiunEvalBooleanField">
                             <code>$scope->getObject() instanceof Annotation</code>
                         </field>
                     </item>
-                    <item objectType="KalturaOrCondition">
+                    <item objectType="VidiunOrCondition">
                         <description>Annotation tags contains at least one of the comment tags</description>
                         <conditions objectType="array">
-                            <item objectType="KalturaEventFieldCondition">
-                                <field objectType="KalturaEvalBooleanField">
-                                    <code>(strpos($scope->getObject()->getTags(),"KMS_public_comment") !== false)</code>
+                            <item objectType="VidiunEventFieldCondition">
+                                <field objectType="VidiunEvalBooleanField">
+                                    <code>(strpos($scope->getObject()->getTags(),"VMS_public_comment") !== false)</code>
                                 </field>
                             </item>
-                            <item objectType="KalturaEventFieldCondition">
-                                <field objectType="KalturaEvalBooleanField">
-                                    <code>(strpos($scope->getObject()->getTags(),"KMS_comment_context_") !== false)</code>
+                            <item objectType="VidiunEventFieldCondition">
+                                <field objectType="VidiunEvalBooleanField">
+                                    <code>(strpos($scope->getObject()->getTags(),"VMS_comment_context_") !== false)</code>
                                 </field>
                             </item>
                         </conditions>

@@ -7,7 +7,7 @@ class blockMailAction extends sfAction
 		$combined_email = $this->getRequestParameter( "e" ) ;
 		$valid = myBlockedEmailUtils::blockEmail( $combined_email );
 		
-		$str = "You will no loger receive any mail from Kaltura.com. Have a good day !";
+		$str = "You will no loger receive any mail from Vidiun.com. Have a good day !";
 		return $this->renderText ( $str );
 		//return sfView::NONE;
 		

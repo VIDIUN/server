@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaHashCondition extends KalturaCondition
+class VidiunHashCondition extends VidiunCondition
 {
 	/**
 	 * hash name
@@ -39,12 +39,12 @@ class KalturaHashCondition extends KalturaCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kHashCondition();
+			$dbObject = new vHashCondition();
 			
 		return parent::toObject($dbObject, $skip);
 	}

@@ -9,7 +9,7 @@ define('PARTNER_SECRET', 's');
 define('PARTNER_CRM_ID', 'ci');
 define('PARTNER_VERTICAL', 'v');
 
-define('ENTRY_KUSER_ID', 'ku');
+define('ENTRY_VUSER_ID', 'vu');
 define('ENTRY_TYPE', 't');
 define('ENTRY_MEDIA_TYPE', 'mt');
 define('ENTRY_SOURCE_TYPE', 'st');
@@ -28,10 +28,10 @@ define('SOURCE_EXPRESS_RECORDER', -17);
 define('CREATED_DAY_TS', 'UNIX_TIMESTAMP(DATE(CREATED_AT))');
 
 $sourceFromAdminTag = array(
-	'kalturaclassroom' => SOURCE_CLASSROOM,
-	'kalturacapture' => SOURCE_CAPTURE,
+	'vidiunclassroom' => SOURCE_CLASSROOM,
+	'vidiuncapture' => SOURCE_CAPTURE,
 	'videomessage' => SOURCE_PITCH,
-	'kms-webcast-event' => SOURCE_WEBCAST,
+	'vms-webcast-event' => SOURCE_WEBCAST,
 	'raptentry' => SOURCE_RAPT,
 	'webexentry' => SOURCE_WEBEX,
 	'zoomentry' => SOURCE_ZOOM,
@@ -128,17 +128,17 @@ function getPartnerUpdates($updatedAt)
 function getUserUpdates($updatedAt)
 {
 	$c = new Criteria();
-	$c->addSelectColumn(kuserPeer::ID);
-	$c->addSelectColumn(kuserPeer::STATUS);
-	$c->addSelectColumn(kuserPeer::PUSER_ID);
-	$c->addSelectColumn(kuserPeer::PARTNER_ID);
-	$c->addSelectColumn(kuserPeer::UPDATED_AT);
-	$c->add(kuserPeer::UPDATED_AT, $updatedAt, Criteria::GREATER_EQUAL);
-	$c->addAscendingOrderByColumn(kuserPeer::UPDATED_AT);
+	$c->addSelectColumn(vuserPeer::ID);
+	$c->addSelectColumn(vuserPeer::STATUS);
+	$c->addSelectColumn(vuserPeer::PUSER_ID);
+	$c->addSelectColumn(vuserPeer::PARTNER_ID);
+	$c->addSelectColumn(vuserPeer::UPDATED_AT);
+	$c->add(vuserPeer::UPDATED_AT, $updatedAt, Criteria::GREATER_EQUAL);
+	$c->addAscendingOrderByColumn(vuserPeer::UPDATED_AT);
 	$c->setLimit(MAX_ITEMS);
-	kuserPeer::setUseCriteriaFilter(false);
-	$stmt = kuserPeer::doSelectStmt($c);
-	kuserPeer::setUseCriteriaFilter(true);
+	vuserPeer::setUseCriteriaFilter(false);
+	$stmt = vuserPeer::doSelectStmt($c);
+	vuserPeer::setUseCriteriaFilter(true);
 	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
 	$maxUpdatedAt = 0;
@@ -146,7 +146,7 @@ function getUserUpdates($updatedAt)
 	foreach ($rows as $row)
 	{
 		$status = $row['STATUS'];
-		if ($status != KuserStatus::ACTIVE)
+		if ($status != VuserStatus::ACTIVE)
 		{
 			continue;
 		}
@@ -170,7 +170,7 @@ function getEntryUpdates($updatedAt)
 	$c->addSelectColumn(entryPeer::ID);
 	$c->addSelectColumn(entryPeer::STATUS);
 	$c->addSelectColumn(entryPeer::LENGTH_IN_MSECS);
-	$c->addSelectColumn(entryPeer::KUSER_ID);
+	$c->addSelectColumn(entryPeer::VUSER_ID);
 	$c->addSelectColumn(entryPeer::TYPE);
 	$c->addSelectColumn(entryPeer::MEDIA_TYPE);
 	$c->addSelectColumn(entryPeer::SOURCE);
@@ -197,12 +197,12 @@ function getEntryUpdates($updatedAt)
 			$customData = unserialize($row['CUSTOM_DATA']);
 
 			$info = array(
-				ENTRY_KUSER_ID => $row['KUSER_ID'],
+				ENTRY_VUSER_ID => $row['VUSER_ID'],
 				ENTRY_TYPE => $row['TYPE'],
 				ENTRY_MEDIA_TYPE => $row['MEDIA_TYPE'],
 				ENTRY_SOURCE_TYPE => getEntrySourceTypeInt($row['SOURCE'], $row['ADMIN_TAGS']),
 				ENTRY_CREATED_AT => $row[CREATED_DAY_TS],
-				ENTRY_CREATOR_ID => isset($customData['creatorKuserId']) ? $customData['creatorKuserId'] : $row['KUSER_ID'],
+				ENTRY_CREATOR_ID => isset($customData['creatorVuserId']) ? $customData['creatorVuserId'] : $row['VUSER_ID'],
 			);
 			$duration = intval($row['LENGTH_IN_MSECS'] / 1000);
 			if ($duration > 0)
@@ -280,14 +280,14 @@ $params = infraRequestUtils::getRequestParams();
 $requestType = isset($params['type']) ? $params['type'] : null;
 $updatedAt = isset($params['updatedAt']) ? $params['updatedAt'] : 0;
 $token = isset($params['token']) ? $params['token'] : '';
-if (!kConf::hasParam('analytics_sync_secret') ||
-	$token !== md5(kConf::get('analytics_sync_secret') . $updatedAt))
+if (!vConf::hasParam('analytics_sync_secret') ||
+	$token !== md5(vConf::get('analytics_sync_secret') . $updatedAt))
 {
 	die;
 }
 
 // init database
-DbManager::setConfig(kConf::getDB());
+DbManager::setConfig(vConf::getDB());
 DbManager::initialize();
 
 myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;

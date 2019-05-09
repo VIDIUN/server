@@ -6,7 +6,7 @@
  * @subpackage Batch
  *
  */
-class kFlowHelper
+class vFlowHelper
 {
 	protected static $thumbUnSupportVideoCodecs = array(
 		flavorParams::VIDEO_CODEC_VP8,
@@ -19,7 +19,7 @@ class kFlowHelper
 
 	const REPORT_EXPIRY_TIME = 604800; // 7 * 60 * 60 * 24
 
-	const SERVE_OBJECT_CSV_PARTIAL_URL = "/api_v3/index.php/service/exportCsv/action/serveCsv/ks/";
+	const SERVE_OBJECT_CSV_PARTIAL_URL = "/api_v3/index.php/service/exportCsv/action/serveCsv/vs/";
 
 
 	/**
@@ -37,7 +37,7 @@ class kFlowHelper
 		$entry = entryPeer::retrieveByPK($entryId);
 		if (!$entry)
 		{
-			KalturaLog::err("Entry [$entryId] not found");
+			VidiunLog::err("Entry [$entryId] not found");
 			return null;
 		}
 
@@ -63,12 +63,12 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kImportJobData $data
+	 * @param vImportJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleImportFailed(BatchJob $dbBatchJob, kImportJobData $data)
+	public static function handleImportFailed(BatchJob $dbBatchJob, vImportJobData $data)
 	{
-		kBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_IMPORTING);
+		vBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_IMPORTING);
 
 		if($data->getFlavorAssetId())
 		{
@@ -85,10 +85,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kImportJobData $data
+	 * @param vImportJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleImportRetried(BatchJob $dbBatchJob, kImportJobData $data)
+	public static function handleImportRetried(BatchJob $dbBatchJob, vImportJobData $data)
 	{
 		if($dbBatchJob->getExecutionStatus() == BatchJobExecutionStatus::ABORTED)
 			return $dbBatchJob;
@@ -119,10 +119,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kImportJobData $data
+	 * @param vImportJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleImportFinished(BatchJob $dbBatchJob, kImportJobData $data)
+	public static function handleImportFinished(BatchJob $dbBatchJob, vImportJobData $data)
 	{
 		if($dbBatchJob->getExecutionStatus() == BatchJobExecutionStatus::ABORTED)
 			return $dbBatchJob;
@@ -139,8 +139,8 @@ class kFlowHelper
 		{
 			$url = $data->getSrcFileUrl();
 			$ext = pathinfo($url, PATHINFO_EXTENSION);
-			$allowedImageTypes = kConf::get("image_file_ext");
-			//setting the entry's data so it can be used for creating file-syncs' file-path version & extension - in kFileSyncUtils::moveFromFile
+			$allowedImageTypes = vConf::get("image_file_ext");
+			//setting the entry's data so it can be used for creating file-syncs' file-path version & extension - in vFileSyncUtils::moveFromFile
 			//without saving - the updated entry object exists in the instance pool
 			$dbEntry->setData(".jpg");
 			if (in_array($ext, $allowedImageTypes))
@@ -153,7 +153,7 @@ class kFlowHelper
 
 			try
 			{
-				kFileSyncUtils::moveFromFile($data->getDestFileLocalPath(), $syncKey, true, false, $data->getCacheOnly());
+				vFileSyncUtils::moveFromFile($data->getDestFileLocalPath(), $syncKey, true, false, $data->getCacheOnly());
 			}
 			catch (Exception $e) {
 				if($dbEntry->getStatus() == entryStatus::NO_CONTENT)
@@ -175,11 +175,11 @@ class kFlowHelper
 		$isNewFlavor = false;
 		if(!$flavorAsset)
 		{
-			$flavorAsset = kFlowHelper::createOriginalFlavorAsset($dbBatchJob->getPartnerId(), $dbBatchJob->getEntryId());
+			$flavorAsset = vFlowHelper::createOriginalFlavorAsset($dbBatchJob->getPartnerId(), $dbBatchJob->getEntryId());
 			if(!$flavorAsset)
 			{
-				KalturaLog::err("Flavor asset not created for entry [" . $dbBatchJob->getEntryId() . "]");
-				kBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
+				VidiunLog::err("Flavor asset not created for entry [" . $dbBatchJob->getEntryId() . "]");
+				vBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
 				$dbBatchJob->setDescription($dbBatchJob->getDescription());
 				return $dbBatchJob;
 			}
@@ -188,11 +188,11 @@ class kFlowHelper
 
 		$isNewContent = true;
 		$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		if(kFileSyncUtils::fileSync_exists($syncKey))
+		if(vFileSyncUtils::fileSync_exists($syncKey))
 			$isNewContent = false;
 
 		$ext = pathinfo($data->getDestFileLocalPath(), PATHINFO_EXTENSION);
-		KalturaLog::info("Imported file extension: $ext");
+		VidiunLog::info("Imported file extension: $ext");
 		if(!$flavorAsset->getVersion())
 			$flavorAsset->incrementVersion();
 
@@ -210,11 +210,11 @@ class kFlowHelper
 		$flavorAsset->save();
 		
 		$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		kFileSyncUtils::moveFromFile($data->getDestFileLocalPath(), $syncKey, true, false, $data->getCacheOnly());
+		vFileSyncUtils::moveFromFile($data->getDestFileLocalPath(), $syncKey, true, false, $data->getCacheOnly());
 
 
 		// set the path in the job data
-		$localFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
+		$localFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
 		$data->setDestFileLocalPath($localFilePath);
 		$data->setFlavorAssetId($flavorAsset->getId());
 		$dbBatchJob->setData($data);
@@ -224,7 +224,7 @@ class kFlowHelper
 
 		if (($isNewContent || $dbEntry->getStatus() == entryStatus::IMPORT) && !$convertProfileExist)
 			// check if status == import for importing file of type url (filesync exists, and we want to raise event for conversion profile to start)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($flavorAsset, $dbBatchJob));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($flavorAsset, $dbBatchJob));
 
 		
 		if(!$isNewFlavor)
@@ -237,7 +237,7 @@ class kFlowHelper
 				if($entryFlavor->getStatus() == flavorAsset::FLAVOR_ASSET_STATUS_WAIT_FOR_CONVERT && $entryFlavor->getFlavorParamsId())
 				{
 					$flavor = assetParamsOutputPeer::retrieveByAsset($entryFlavor);
-					kBusinessPreConvertDL::decideFlavorConvert($entryFlavor, $flavor, $originalFlavorAsset, null, null, $dbBatchJob);
+					vBusinessPreConvertDL::decideFlavorConvert($entryFlavor, $flavor, $originalFlavorAsset, null, null, $dbBatchJob);
 				}
 			}
 
@@ -255,7 +255,7 @@ class kFlowHelper
 
 				$srcSyncKey = $flavorAsset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
 				$srcAssetType = $flavorAsset->getType();
-				kJobsManager::addCapturaThumbJob($entryThumbnail->getPartnerId(), $entryThumbnail->getEntryId(), $entryThumbnail->getId(), $srcSyncKey, $flavorAsset->getId(), $srcAssetType, $thumbParamsOutput);
+				vJobsManager::addCapturaThumbJob($entryThumbnail->getPartnerId(), $entryThumbnail->getEntryId(), $entryThumbnail->getId(), $srcSyncKey, $flavorAsset->getId(), $srcAssetType, $thumbParamsOutput);
 			}
 		}
 		
@@ -264,23 +264,23 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConvertLiveSegmentJobData $data
+	 * @param vConvertLiveSegmentJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleConvertLiveSegmentFinished(BatchJob $dbBatchJob, kConvertLiveSegmentJobData $data)
+	public static function handleConvertLiveSegmentFinished(BatchJob $dbBatchJob, vConvertLiveSegmentJobData $data)
 	{
 		$liveEntry = entryPeer::retrieveByPKNoFilter($dbBatchJob->getEntryId());
 		/* @var $liveEntry LiveEntry */
 		if(!$liveEntry)
 		{
-			KalturaLog::err("Live entry [" . $dbBatchJob->getEntryId() . "] not found");
+			VidiunLog::err("Live entry [" . $dbBatchJob->getEntryId() . "] not found");
 			return $dbBatchJob;
 		}
 		
 		$recordedEntry = entryPeer::retrieveByPKNoFilter($liveEntry->getRecordedEntryId());
 		if(!$recordedEntry)
 		{
-			KalturaLog::err("Recorded entry [" . $liveEntry->getRecordedEntryId() . "] not found");
+			VidiunLog::err("Recorded entry [" . $liveEntry->getRecordedEntryId() . "] not found");
 			return $dbBatchJob;
 		}
 
@@ -288,7 +288,7 @@ class kFlowHelper
 		/* @var $asset liveAsset */
 		if(!$asset)
 		{
-			KalturaLog::err("Live asset [" . $data->getAssetId() . "] not found");
+			VidiunLog::err("Live asset [" . $data->getAssetId() . "] not found");
 			return $dbBatchJob;
 		}
 		
@@ -298,32 +298,32 @@ class kFlowHelper
 			
 		$key = $asset->getSyncKey($keyType);
 		$baseName = $asset->getEntryId() . '_' . $asset->getId() . '.ts';
-		kFileSyncUtils::moveFromFileToDirectory($key, $data->getDestFilePath(), $baseName);
+		vFileSyncUtils::moveFromFileToDirectory($key, $data->getDestFilePath(), $baseName);
 		
 		if($data->getMediaServerIndex() == EntryServerNodeType::LIVE_BACKUP)
 			return $dbBatchJob;
 			
-		$files = kFileSyncUtils::dir_get_files($key, false);
+		$files = vFileSyncUtils::dir_get_files($key, false);
 
 		if (self::hasFileDiscontinuity($files)) {
-			KalturaLog::warning('we have a discontinuity with ts files - not running the concat job for entry [ ' . $dbBatchJob->getEntryId() . ']' );
+			VidiunLog::warning('we have a discontinuity with ts files - not running the concat job for entry [ ' . $dbBatchJob->getEntryId() . ']' );
 			return $dbBatchJob;
 		}
 
 		if(count($files) > 1)
 		{
 			$lockKey = "create_replacing_entry_" . $recordedEntry->getId();
-			$replacingEntry = kLock::runLocked($lockKey, array('kFlowHelper', 'getReplacingEntry'), array($recordedEntry, $asset, count($files)));
+			$replacingEntry = vLock::runLocked($lockKey, array('vFlowHelper', 'getReplacingEntry'), array($recordedEntry, $asset, count($files)));
 			if(!$replacingEntry)
 			{
-				KalturaLog::err('Failed to allocate replacing entry');
-				kJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FAILED);
+				VidiunLog::err('Failed to allocate replacing entry');
+				vJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FAILED);
 				return $dbBatchJob;
 			}
 
 			$flavorParams = assetParamsPeer::retrieveByPKNoFilter($asset->getFlavorParamsId());
 			if(is_null($flavorParams)) { 
-				KalturaLog::err('Failed to retrieve asset params');
+				VidiunLog::err('Failed to retrieve asset params');
 				return $dbBatchJob;
 			}
 		
@@ -341,7 +341,7 @@ class kFlowHelper
 			}		
 			$replacingAsset->save();
 			
-			$job = kJobsManager::addConcatJob($dbBatchJob, $replacingAsset, $files);
+			$job = vJobsManager::addConcatJob($dbBatchJob, $replacingAsset, $files);
 		}
 
 		return $dbBatchJob;
@@ -360,7 +360,7 @@ class kFlowHelper
 
 		for ($i = 0 ; $i < count($files); $i++) {
 			if (!isset($filesArr[$i])) {
-				KalturaLog::info("got ts file discontinuity for " . $i);
+				VidiunLog::info("got ts file discontinuity for " . $i);
 				return true;
 			}
 		}
@@ -378,7 +378,7 @@ class kFlowHelper
 
 	private static function createReplacigEntry($recordedEntry, $liveSegmentCount)
 	{
-		$advancedOptions = new kEntryReplacementOptions();
+		$advancedOptions = new vEntryReplacementOptions();
 		$advancedOptions->setKeepManualThumbnails(true);
 		$advancedOptions->setKeepOldAssets(true);
 		$recordedEntry->setReplacementOptions($advancedOptions);
@@ -389,7 +389,7 @@ class kFlowHelper
 		$replacingEntry->setSourceType($recordedEntry->getSourceType());
 		$replacingEntry->setConversionProfileId($recordedEntry->getConversionProfileId());
 		$replacingEntry->setName($recordedEntry->getPartnerId().'_'.time());
-		$replacingEntry->setKuserId($recordedEntry->getKuserId());
+		$replacingEntry->setVuserId($recordedEntry->getVuserId());
 		$replacingEntry->setAccessControlId($recordedEntry->getAccessControlId());
 		$replacingEntry->setPartnerId($recordedEntry->getPartnerId());
 		$replacingEntry->setSubpId($recordedEntry->getPartnerId() * 100);
@@ -420,7 +420,7 @@ class kFlowHelper
 					$recordedEntrySegmentCount = $replacingEntry->getRecordedEntrySegmentCount();
 					if($recordedEntrySegmentCount > $liveSegmentCount)
 					{
-						KalturaLog::debug("Entry [{$recordedEntry->getId()}] in replacment with higher segment count [$recordedEntrySegmentCount] > [$liveSegmentCount]");
+						VidiunLog::debug("Entry [{$recordedEntry->getId()}] in replacment with higher segment count [$recordedEntrySegmentCount] > [$liveSegmentCount]");
 						return null;
 					}
 					else 
@@ -429,7 +429,7 @@ class kFlowHelper
 						$replacingAsset = assetPeer::retrieveByEntryIdAndParams($replacingEntryId, $flavorParamsId);
 						if($replacingAsset)
 						{
-							KalturaLog::debug("Entry in replacement, deleting - [".$replacingEntryId."]");
+							VidiunLog::debug("Entry in replacement, deleting - [".$replacingEntryId."]");
 							myEntryUtils::deleteReplacingEntry($recordedEntry, $replacingEntry);
 							$replacingEntry = null;
 						}
@@ -446,10 +446,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConvertLiveSegmentJobData $data
+	 * @param vConvertLiveSegmentJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleConvertLiveSegmentFailed(BatchJob $dbBatchJob, kConvertLiveSegmentJobData $data)
+	public static function handleConvertLiveSegmentFailed(BatchJob $dbBatchJob, vConvertLiveSegmentJobData $data)
 	{
 		$entry = entryPeer::retrieveByPKNoFilter($dbBatchJob->getEntryId());
 		/* @var $entry LiveEntry */
@@ -459,11 +459,11 @@ class kFlowHelper
 			$attachedPendingMediaEntries = $entry->getAttachedPendingMediaEntries();
 			foreach($attachedPendingMediaEntries as $attachedPendingMediaEntry)
 			{
-				/* @var $attachedPendingMediaEntry kPendingMediaEntry */
-				if($attachedPendingMediaEntry->getDc() != kDataCenterMgr::getCurrentDcId())
+				/* @var $attachedPendingMediaEntry vPendingMediaEntry */
+				if($attachedPendingMediaEntry->getDc() != vDataCenterMgr::getCurrentDcId())
 					continue;
 				
-				kBatchManager::updateEntry($attachedPendingMediaEntry->getEntryId(), entryStatus::ERROR_CONVERTING);
+				vBatchManager::updateEntry($attachedPendingMediaEntry->getEntryId(), entryStatus::ERROR_CONVERTING);
 				$entry->dettachPendingMediaEntry($attachedPendingMediaEntry->getEntryId());
 			}
 		}
@@ -474,10 +474,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConcatJobData $data
+	 * @param vConcatJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleConcatFailed(BatchJob $dbBatchJob, kConcatJobData $data)
+	public static function handleConcatFailed(BatchJob $dbBatchJob, vConcatJobData $data)
 	{
 		if($dbBatchJob->getExecutionStatus() == BatchJobExecutionStatus::ABORTED)
 			return $dbBatchJob;
@@ -489,7 +489,7 @@ class kFlowHelper
 		if($flavorAsset->getStatus() == asset::ASSET_STATUS_DELETED)
 			return $dbBatchJob;
 			
-		kBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
+		vBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
 
 		if(!$flavorAsset->isLocalReadyStatus())
 		{
@@ -503,10 +503,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConcatJobData $data
+	 * @param vConcatJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleConcatFinished(BatchJob $dbBatchJob, kConcatJobData $data)
+	public static function handleConcatFinished(BatchJob $dbBatchJob, vConcatJobData $data)
 	{
 		if($dbBatchJob->getExecutionStatus() == BatchJobExecutionStatus::ABORTED)
 			return $dbBatchJob;
@@ -530,19 +530,19 @@ class kFlowHelper
 		$flavorAsset->save();
 
 		$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		kFileSyncUtils::moveFromFile($data->getDestFilePath(), $syncKey);
+		vFileSyncUtils::moveFromFile($data->getDestFilePath(), $syncKey);
 
-		kEventsManager::raiseEvent(new kObjectAddedEvent($flavorAsset, $dbBatchJob));
+		vEventsManager::raiseEvent(new vObjectAddedEvent($flavorAsset, $dbBatchJob));
 
 		return $dbBatchJob;
 	}
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kExtractMediaJobData $data
+	 * @param vExtractMediaJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleExtractMediaClosed(BatchJob $dbBatchJob, kExtractMediaJobData $data)
+	public static function handleExtractMediaClosed(BatchJob $dbBatchJob, vExtractMediaJobData $data)
 	{
 		if($dbBatchJob->getExecutionStatus() == BatchJobExecutionStatus::ABORTED)
 			return $dbBatchJob;
@@ -562,34 +562,34 @@ class kFlowHelper
 		{
 			$entry = entryPeer::retrieveByPKNoFilter($dbBatchJob->getEntryId());
 			if($entry->getStatus() != entryStatus::READY && $entry->getStatus() != entryStatus::DELETED)
-				kBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::PRECONVERT);
+				vBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::PRECONVERT);
 		}
 
 		if($rootBatchJob->getJobType() == BatchJobType::CONVERT_PROFILE)
 		{
 			try {
-				kBusinessPreConvertDL::decideProfileConvert($dbBatchJob, $rootBatchJob, $data->getMediaInfoId());
+				vBusinessPreConvertDL::decideProfileConvert($dbBatchJob, $rootBatchJob, $data->getMediaInfoId());
 			}
 			catch (Exception $ex) {
 			$code = $ex->getCode();
 
-			if ($code == KDLErrors::SanityInvalidFrameDim || $code == KDLErrors::NoValidMediaStream)
+			if ($code == VDLErrors::SanityInvalidFrameDim || $code == VDLErrors::NoValidMediaStream)
 			{
-				kBusinessPostConvertDL::handleConvertFailed($dbBatchJob , null , $data->getFlavorAssetId() , null , null);
+				vBusinessPostConvertDL::handleConvertFailed($dbBatchJob , null , $data->getFlavorAssetId() , null , null);
 				return $dbBatchJob;
 			}	
 	
 			//This was added so the all the assets prior to reaching the limit would still be created
-			if ($code != kCoreException::MAX_ASSETS_PER_ENTRY)
+			if ($code != vCoreException::MAX_ASSETS_PER_ENTRY)
 				throw $ex;
 
-				KalturaLog::err("Max assets per entry was reached continuing with normal flow");
+				VidiunLog::err("Max assets per entry was reached continuing with normal flow");
 			}			
 
 			// handle the source flavor as if it was converted, makes the entry ready according to ready behavior rules
 			$currentFlavorAsset = assetPeer::retrieveById($data->getFlavorAssetId());
 			if($currentFlavorAsset && $currentFlavorAsset->getStatus() == asset::FLAVOR_ASSET_STATUS_READY)
-				$dbBatchJob = kBusinessPostConvertDL::handleConvertFinished($dbBatchJob, $currentFlavorAsset);
+				$dbBatchJob = vBusinessPostConvertDL::handleConvertFinished($dbBatchJob, $currentFlavorAsset);
 		}
 
 		return $dbBatchJob;
@@ -597,10 +597,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kExtractMediaJobData $data
+	 * @param vExtractMediaJobData $data
 	 * @return BatchJob/null
 	 */
-	protected static function fixWebCamSources(BatchJob &$rootBatchJob, BatchJob &$dbBatchJob, kExtractMediaJobData $data)
+	protected static function fixWebCamSources(BatchJob &$rootBatchJob, BatchJob &$dbBatchJob, vExtractMediaJobData $data)
 	{
 		$mediaInfo = mediaInfoPeer::retrieveById($data->getMediaInfoId());
 		
@@ -609,8 +609,8 @@ class kFlowHelper
 			 * - h263/sorenson video
 			 * - nellymoser audio
 			 * - and for following params:
-			 * -- Duration>100hrs (KDLSanityLimits::MaxDuration) or 
-			 * -- Bitrate<10Kbps (KDLSanityLimits::MinBitrate)
+			 * -- Duration>100hrs (VDLSanityLimits::MaxDuration) or 
+			 * -- Bitrate<10Kbps (VDLSanityLimits::MinBitrate)
 			 * then run the webcam-flv-fix procedure
 			 */
 		$webCamVideoCodecs = array("h.263","h263","sorenson spark","vp6");
@@ -640,11 +640,11 @@ class kFlowHelper
 			else
 				$brToTest = $calcBrToTest;
 			
-			KalturaLog::log("durToTest($durToTest),brToTest($brToTest),calcBrToTest($calcBrToTest)");
-			if(($durToTest>KDLSanityLimits::MaxDuration	// 360000000
-			 ||($calcBrToTest>0 && $calcBrToTest<KDLSanityLimits::MinBitrate) )
-			 ||($brToTest>0 && $brToTest<KDLSanityLimits::MinBitrate)) {
-				KalturaLog::err("invalid source, should be fixed");
+			VidiunLog::log("durToTest($durToTest),brToTest($brToTest),calcBrToTest($calcBrToTest)");
+			if(($durToTest>VDLSanityLimits::MaxDuration	// 360000000
+			 ||($calcBrToTest>0 && $calcBrToTest<VDLSanityLimits::MinBitrate) )
+			 ||($brToTest>0 && $brToTest<VDLSanityLimits::MinBitrate)) {
+				VidiunLog::err("invalid source, should be fixed");
 				$flavorAsset = assetPeer::retrieveById($data->getFlavorAssetId());
 				if($flavorAsset && $flavorAsset->getVersion()<40){
 					$flavorAsset->incrementVersion();
@@ -652,13 +652,13 @@ class kFlowHelper
 					$fixedFileName = $data->getSrcFileSyncLocalPath().".fixed";
 					myFlvHandler::fixFlvTimestamps($data->getSrcFileSyncLocalPath(),$fixedFileName);
 					$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-					kFileSyncUtils::moveFromFile($fixedFileName, $syncKey);
-					$syncPath=kFileSyncUtils::getLocalFilePathForKey($syncKey);
+					vFileSyncUtils::moveFromFile($fixedFileName, $syncKey);
+					$syncPath=vFileSyncUtils::getLocalFilePathForKey($syncKey);
 						/*
 						 * Finish the current extract medi job and start a new one
 						 */
-					kJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
-					kJobsManager::addExtractMediaJob($rootBatchJob, $syncPath, $data->getFlavorAssetId());
+					vJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
+					vJobsManager::addExtractMediaJob($rootBatchJob, $syncPath, $data->getFlavorAssetId());
 					return $dbBatchJob;
 				}
 			}
@@ -668,10 +668,10 @@ class kFlowHelper
 	
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConvertJobData $data
+	 * @param vConvertJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleConvertPending(BatchJob $dbBatchJob, kConvertJobData $data)
+	public static function handleConvertPending(BatchJob $dbBatchJob, vConvertJobData $data)
 	{
 		// save the data to the db
 		$dbBatchJob->setData($data);
@@ -682,7 +682,7 @@ class kFlowHelper
 		// verifies that flavor asset exists
 		if(!$flavorAsset)
 		{
-			KalturaLog::err("Error: Flavor asset not found [" . $data->getFlavorAssetId() . "]");
+			VidiunLog::err("Error: Flavor asset not found [" . $data->getFlavorAssetId() . "]");
 			throw new APIException(APIErrors::INVALID_FLAVOR_ASSET_ID, $data->getFlavorAssetId());
 		}
 
@@ -694,10 +694,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConvertCollectionJobData $data
+	 * @param vConvertCollectionJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleConvertCollectionPending(BatchJob $dbBatchJob, kConvertCollectionJobData $data)
+	public static function handleConvertCollectionPending(BatchJob $dbBatchJob, vConvertCollectionJobData $data)
 	{
 		$flavors = $data->getFlavors();
 		foreach($flavors as $flavor)
@@ -706,7 +706,7 @@ class kFlowHelper
 			// verifies that flavor asset exists
 			if(!$flavorAsset)
 			{
-				KalturaLog::err("Error: Flavor asset not found [" . $flavor->getFlavorAssetId() . "]");
+				VidiunLog::err("Error: Flavor asset not found [" . $flavor->getFlavorAssetId() . "]");
 				throw new APIException(APIErrors::INVALID_FLAVOR_ASSET_ID, $flavor->getFlavorAssetId());
 			}
 
@@ -719,10 +719,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConvertJobData $data
+	 * @param vConvertJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleConvertFinished(BatchJob $dbBatchJob, kConvertJobData $data)
+	public static function handleConvertFinished(BatchJob $dbBatchJob, vConvertJobData $data)
 	{
 		if($dbBatchJob->getExecutionStatus() == BatchJobExecutionStatus::ABORTED)
 			return $dbBatchJob;
@@ -780,7 +780,7 @@ class kFlowHelper
 		if(!$data->getDestFileSyncLocalPath() && $fileSync) 
 		{
 			//no flavors were created in the last conversion, updating the DestFileSyncLocalPath to the path of the last created flavor
-			KalturaLog::info('Setting destFileSyncLocalPath with: '.$fileSync->getFullPath());
+			VidiunLog::info('Setting destFileSyncLocalPath with: '.$fileSync->getFullPath());
 			$data->setDestFileSyncLocalPath($fileSync->getFullPath());		
 		}
 		$nextJob = self::createNextJob($flavorParamsOutput, $dbBatchJob, $data, $syncKey); //todo validate sync key
@@ -799,7 +799,7 @@ class kFlowHelper
 	protected static function validateSourceFileSync($sourceFileSyncDescriptors)
 	{
 		//validate that the source is still the same
-		/* @var  $sourceFileSyncDescriptor kSourceFileSyncDescriptor*/
+		/* @var  $sourceFileSyncDescriptor vSourceFileSyncDescriptor*/
 		foreach ($sourceFileSyncDescriptors as $sourceFileSyncDescriptor)
 		{
 			$srcAssetId = $sourceFileSyncDescriptor->getAssetId();
@@ -807,24 +807,24 @@ class kFlowHelper
 			if($originalFlavor)
 			{
 				$fileSyncKey = $originalFlavor->getSyncKey($sourceFileSyncDescriptor->getFileSyncObjectSubType());
-				$currentSourceFileSync = kFileSyncUtils::getResolveLocalFileSyncForKey($fileSyncKey);
+				$currentSourceFileSync = vFileSyncUtils::getResolveLocalFileSyncForKey($fileSyncKey);
 				$currentSourceFilePath = $currentSourceFileSync->getFilePath();
 				$originalSrcPath = $sourceFileSyncDescriptor->getFileSyncLocalPath();
 				if (!empty($currentSourceFilePath) && strcmp(basename($currentSourceFilePath), basename($originalSrcPath)))
 				{
-					throw new APIException(KalturaErrors::SOURCE_FLAVOR_CHANGED_DURING_CONVERSION, $currentSourceFilePath, $originalSrcPath, $srcAssetId);
+					throw new APIException(VidiunErrors::SOURCE_FLAVOR_CHANGED_DURING_CONVERSION, $currentSourceFilePath, $originalSrcPath, $srcAssetId);
 				}
 			}
 		}
 	}
 
-	private static function handleFlavorAssetConvertFinished(flavorAsset $flavorAsset, flavorParamsOutput $flavorParamsOutput, BatchJob $dbBatchJob, kConvertJobData $data)
+	private static function handleFlavorAssetConvertFinished(flavorAsset $flavorAsset, flavorParamsOutput $flavorParamsOutput, BatchJob $dbBatchJob, vConvertJobData $data)
 	{
 		$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 		$storageProfileId = $flavorParamsOutput->getSourceRemoteStorageProfileId();
-		if($storageProfileId == StorageProfile::STORAGE_KALTURA_DC)
+		if($storageProfileId == StorageProfile::STORAGE_VIDIUN_DC)
 		{
-			kFileSyncUtils::moveFromFile($data->getDestFileSyncLocalPath(), $syncKey);
+			vFileSyncUtils::moveFromFile($data->getDestFileSyncLocalPath(), $syncKey);
 		}
 		elseif($flavorParamsOutput->getRemoteStorageProfileIds())
 		{
@@ -832,7 +832,7 @@ class kFlowHelper
 			foreach($remoteStorageProfileIds as $remoteStorageProfileId)
 			{
 				$storageProfile = StorageProfilePeer::retrieveByPK($remoteStorageProfileId);
-				kFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $data->getDestFileSyncLocalPath(), $storageProfile);
+				vFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $data->getDestFileSyncLocalPath(), $storageProfile);
 			}
 		}
 		
@@ -841,29 +841,29 @@ class kFlowHelper
 		{
 			$logSyncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_CONVERT_LOG);
 			try{
-				kFileSyncUtils::moveFromFile($data->getLogFileSyncLocalPath(), $logSyncKey);
+				vFileSyncUtils::moveFromFile($data->getLogFileSyncLocalPath(), $logSyncKey);
 			}
 			catch(Exception $e){
 				$err = 'Saving conversion log: ' . $e->getMessage();
-				KalturaLog::err($err);
+				VidiunLog::err($err);
 
 				$desc = $dbBatchJob->getDescription() . "\n" . $err;
 				$dbBatchJob->getDescription($desc);
 			}
 		}
 		
-		if($storageProfileId == StorageProfile::STORAGE_KALTURA_DC)
+		if($storageProfileId == StorageProfile::STORAGE_VIDIUN_DC)
 		{
-			$data->setDestFileSyncLocalPath(kFileSyncUtils::getLocalFilePathForKey($syncKey));
+			$data->setDestFileSyncLocalPath(vFileSyncUtils::getLocalFilePathForKey($syncKey));
 
 			// save the data changes to the db
 			$dbBatchJob->setData($data);
 			$dbBatchJob->save();
 		}
 	}
-	private static function createNextJob(flavorParamsOutput $flavorParamsOutput, BatchJob $dbBatchJob, kConvertJobData $data, FileSyncKey $syncKey)
+	private static function createNextJob(flavorParamsOutput $flavorParamsOutput, BatchJob $dbBatchJob, vConvertJobData $data, FileSyncKey $syncKey)
 	{
-		$operatorSet = new kOperatorSets();
+		$operatorSet = new vOperatorSets();
 		$operatorSet->setSerialized(stripslashes($flavorParamsOutput->getOperators()));
 		$nextOperator = $operatorSet->getOperator($data->getCurrentOperationSet(), $data->getCurrentOperationIndex() + 1);
 
@@ -871,13 +871,13 @@ class kFlowHelper
 		if($nextOperator)
 		{
 			//Note: consequent operators doesn't support at the moment conversion based on outputs of multiple sources
-			$nextJob = kJobsManager::addFlavorConvertJob(array($syncKey), $flavorParamsOutput, $data->getFlavorAssetId(), null,
+			$nextJob = vJobsManager::addFlavorConvertJob(array($syncKey), $flavorParamsOutput, $data->getFlavorAssetId(), null,
 					$data->getMediaInfoId(), $dbBatchJob, $dbBatchJob->getJobSubType());
 		}
 
 		return $nextJob;
 	}
-	private static function handleOperatorsProcessingFinished(flavorAsset $flavorAsset, flavorParamsOutput $flavorParamsOutput, entry $entry, BatchJob $dbBatchJob, kConvertJobData $data, $rootBatchJob = null, $syncKey = null)
+	private static function handleOperatorsProcessingFinished(flavorAsset $flavorAsset, flavorParamsOutput $flavorParamsOutput, entry $entry, BatchJob $dbBatchJob, vConvertJobData $data, $rootBatchJob = null, $syncKey = null)
 	{
 		$offset = $entry->getThumbOffset(); // entry getThumbOffset now takes the partner DefThumbOffset into consideration
 
@@ -887,7 +887,7 @@ class kFlowHelper
 		if($entry->getType() != entryType::MEDIA_CLIP) // e.g. document
 			$extractMedia = false;				
 		
-		if(!kFileSyncUtils::fileSync_exists($flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET)))
+		if(!vFileSyncUtils::fileSync_exists($flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET)))
 		{
 			$extractMedia = false;
 			$createThumb = false;
@@ -898,7 +898,7 @@ class kFlowHelper
 		if($extractMedia && $rootBatchJob && $rootBatchJob->getJobType() == BatchJobType::CONVERT_PROFILE)
 		{
 			$rootBatchJobData = $rootBatchJob->getData();
-			if($rootBatchJobData instanceof kConvertProfileJobData)
+			if($rootBatchJobData instanceof vConvertProfileJobData)
 				$extractMedia = $rootBatchJobData->getExtractMedia();
 		}
 
@@ -923,15 +923,15 @@ class kFlowHelper
 			if($flavorAsset->getIsOriginal())
 				$postConvertAssetType = BatchJob::POSTCONVERT_ASSET_TYPE_SOURCE;
 
-			kJobsManager::addPostConvertJob($dbBatchJob, $postConvertAssetType, $syncKey, $data->getFlavorAssetId(), $flavorParamsOutput->getId(), $createThumb, $offset);
+			vJobsManager::addPostConvertJob($dbBatchJob, $postConvertAssetType, $syncKey, $data->getFlavorAssetId(), $flavorParamsOutput->getId(), $createThumb, $offset);
 		}
 		else // no need to run post convert
 		{
-			$flavorAsset = kBusinessPostConvertDL::handleFlavorReady($dbBatchJob, $data->getFlavorAssetId());
+			$flavorAsset = vBusinessPostConvertDL::handleFlavorReady($dbBatchJob, $data->getFlavorAssetId());
 			if($flavorAsset)
 			{
 				if($flavorAsset->hasTag(flavorParams::TAG_SOURCE))
-					kBusinessPreConvertDL::continueProfileConvert($dbBatchJob);
+					vBusinessPreConvertDL::continueProfileConvert($dbBatchJob);
 
 				if($flavorAsset->getType() == assetType::FLAVOR)
 				{
@@ -943,14 +943,14 @@ class kFlowHelper
 					$flavorAsset->save();
 				}
 
-				kBusinessPostConvertDL::handleConvertFinished($dbBatchJob, $flavorAsset);
+				vBusinessPostConvertDL::handleConvertFinished($dbBatchJob, $flavorAsset);
 			}
 		}
 	}
 		
 	private static function createNotificationBulkDownloadSucceeded(BatchJob $dbBatchJob, entry $entry, flavorAsset $flavorAsset, FileSyncKey $syncKey)
 	{
-		$localPath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
+		$localPath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
 		$downloadUrl = $flavorAsset->getDownloadUrl();
 
 		$notificationData = array(
@@ -990,7 +990,7 @@ class kFlowHelper
 			"debug" => __LINE__,
 		);
 
-		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_SUCCEEDED, $dbBatchJob , $dbBatchJob->getPartnerId() , null , null ,
+		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_SUCCEEDED, $dbBatchJob , $dbBatchJob->getPartnerId() , null , null ,
 		$extraData, $dbBatchJob->getEntryId() );
 	}
 	
@@ -998,9 +998,9 @@ class kFlowHelper
 	 * 
 	 * Allows to create additional files in the conversion process in addition to flavor asset 
 	 */
-	private static function handleAdditionalFilesConvertFinished(flavorAsset $flavorAsset, BatchJob $dbBatchJob, kConvertJobData $data)
+	private static function handleAdditionalFilesConvertFinished(flavorAsset $flavorAsset, BatchJob $dbBatchJob, vConvertJobData $data)
 	{
-		if(!$flavorAsset->getVersion() || !kFileSyncUtils::fileSync_exists($flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET)))
+		if(!$flavorAsset->getVersion() || !vFileSyncUtils::fileSync_exists($flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET)))
 		{
 			$flavorAsset->incrementVersion();
 			$flavorAsset->save();
@@ -1012,9 +1012,9 @@ class kFlowHelper
 
 			$flavorParamsOutput = $data->getFlavorParamsOutput();
 			$storageProfileId = $flavorParamsOutput->getSourceRemoteStorageProfileId();
-			if($storageProfileId == StorageProfile::STORAGE_KALTURA_DC)
+			if($storageProfileId == StorageProfile::STORAGE_VIDIUN_DC)
 			{
-				kFileSyncUtils::moveFromFile($destFileSyncDesc->getFileSyncLocalPath(), $syncKey, false);
+				vFileSyncUtils::moveFromFile($destFileSyncDesc->getFileSyncLocalPath(), $syncKey, false);
 			}
 			elseif($flavorParamsOutput->getRemoteStorageProfileIds())
 			{
@@ -1022,7 +1022,7 @@ class kFlowHelper
 				foreach($remoteStorageProfileIds as $remoteStorageProfileId)
 				{
 					$storageProfile = StorageProfilePeer::retrieveByPK($remoteStorageProfileId);
-					kFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $destFileSyncDesc->getFileSyncLocalPath(), $storageProfile);
+					vFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $destFileSyncDesc->getFileSyncLocalPath(), $storageProfile);
 				}
 			}			
 		}
@@ -1030,10 +1030,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kCaptureThumbJobData $data
+	 * @param vCaptureThumbJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleCaptureThumbFinished(BatchJob $dbBatchJob, kCaptureThumbJobData $data)
+	public static function handleCaptureThumbFinished(BatchJob $dbBatchJob, vCaptureThumbJobData $data)
 	{
 		if($dbBatchJob->getExecutionStatus() == BatchJobExecutionStatus::ABORTED)
 			return $dbBatchJob;
@@ -1058,7 +1058,7 @@ class kFlowHelper
 			$thumbAsset->setSize(filesize($data->getThumbPath()));
 
 			$thumbParamsOutput = assetParamsOutputPeer::retrieveByAssetId($data->getThumbAssetId());
-			if(KCsvWrapper::contains('bif', $thumbParamsOutput->getTags()))
+			if(VCsvWrapper::contains('bif', $thumbParamsOutput->getTags()))
 			{
 				$thumbAsset->setFileExt('bif');
 				$thumbAsset->setWidth($thumbParamsOutput->getWidth());
@@ -1075,11 +1075,11 @@ class kFlowHelper
 			// creats the file sync
 			$logSyncKey = $thumbAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_CONVERT_LOG);
 			try{
-				kFileSyncUtils::moveFromFile($logPath, $logSyncKey);
+				vFileSyncUtils::moveFromFile($logPath, $logSyncKey);
 			}
 			catch(Exception $e){
 				$err = 'Saving conversion log: ' . $e->getMessage();
-				KalturaLog::err($err);
+				VidiunLog::err($err);
 
 				$desc = $dbBatchJob->getDescription() . "\n" . $err;
 				$dbBatchJob->getDescription($desc);
@@ -1091,10 +1091,10 @@ class kFlowHelper
 		}
 
 		$syncKey = $thumbAsset->getSyncKey(thumbAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		kFileSyncUtils::moveFromFile($data->getThumbPath(), $syncKey);
+		vFileSyncUtils::moveFromFile($data->getThumbPath(), $syncKey);
 
-		$data->setThumbPath(kFileSyncUtils::getLocalFilePathForKey($syncKey));
-		KalturaLog::info("Thumbnail archived file to: " . $data->getThumbPath());
+		$data->setThumbPath(vFileSyncUtils::getLocalFilePathForKey($syncKey));
+		VidiunLog::info("Thumbnail archived file to: " . $data->getThumbPath());
 
 		// save the data changes to the db
 		$dbBatchJob->setData($data);
@@ -1112,7 +1112,7 @@ class kFlowHelper
 			$entry->setCreateThumb(false);
 			$entry->save();
 			$entrySyncKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB);
-			$syncFile = kFileSyncUtils::createSyncFileLinkForKey($entrySyncKey, $syncKey);
+			$syncFile = vFileSyncUtils::createSyncFileLinkForKey($entrySyncKey, $syncKey);
 
 			if($syncFile)
 			{
@@ -1122,7 +1122,7 @@ class kFlowHelper
 		}
 
 		if(!is_null($thumbAsset->getFlavorParamsId()))
-			kFlowHelper::generateThumbnailsFromFlavor($dbBatchJob->getEntryId(), $dbBatchJob, $thumbAsset->getFlavorParamsId());
+			vFlowHelper::generateThumbnailsFromFlavor($dbBatchJob->getEntryId(), $dbBatchJob, $thumbAsset->getFlavorParamsId());
 
 		self::handleLocalFileSyncDeletion($dbBatchJob->getEntryId(), $dbBatchJob->getPartner());
 		
@@ -1131,10 +1131,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConvertJobData $data
+	 * @param vConvertJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleConvertQueued(BatchJob $dbBatchJob, kConvertJobData $data)
+	public static function handleConvertQueued(BatchJob $dbBatchJob, vConvertJobData $data)
 	{
 		$rootBatchJob = $dbBatchJob->getRootJob();
 		if($rootBatchJob && $rootBatchJob->getJobType() == BatchJobType::BULKDOWNLOAD)
@@ -1171,7 +1171,7 @@ class kFlowHelper
 				"debug" => __LINE__,
 			);
 
-			myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_STARTED, $dbBatchJob , $dbBatchJob->getPartnerId() , null , null ,
+			myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_STARTED, $dbBatchJob , $dbBatchJob->getPartnerId() , null , null ,
 				$extraData, $dbBatchJob->getEntryId() );
 		}
 
@@ -1180,10 +1180,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConvertJobData $data
+	 * @param vConvertJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleConvertFailed(BatchJob $dbBatchJob, kConvertJobData $data)
+	public static function handleConvertFailed(BatchJob $dbBatchJob, vConvertJobData $data)
 	{
 		if($dbBatchJob->getExecutionStatus() == BatchJobExecutionStatus::ABORTED)
 			return $dbBatchJob;
@@ -1207,11 +1207,11 @@ class kFlowHelper
 		{
 			$logSyncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_CONVERT_LOG);
 			try{
-				kFileSyncUtils::moveFromFile($data->getLogFileSyncLocalPath(), $logSyncKey);
+				vFileSyncUtils::moveFromFile($data->getLogFileSyncLocalPath(), $logSyncKey);
 			}
 			catch(Exception $e){
 				$err = 'Saving conversion log: ' . $e->getMessage();
-				KalturaLog::err($err);
+				VidiunLog::err($err);
 
 				$desc = $dbBatchJob->getDescription() . "\n" . $err;
 				$dbBatchJob->getDescription($desc);
@@ -1221,7 +1221,7 @@ class kFlowHelper
 		//		$flavorAsset->incrementVersion();
 		//		$flavorAsset->save();
 
-		$fallbackCreated = kBusinessPostConvertDL::handleConvertFailed($dbBatchJob, $dbBatchJob->getJobSubType(), $data->getFlavorAssetId(), $data->getFlavorParamsOutputId(), $data->getMediaInfoId());
+		$fallbackCreated = vBusinessPostConvertDL::handleConvertFailed($dbBatchJob, $dbBatchJob->getJobSubType(), $data->getFlavorAssetId(), $data->getFlavorParamsOutputId(), $data->getMediaInfoId());
 
 		if(!$fallbackCreated)
 		{
@@ -1267,7 +1267,7 @@ class kFlowHelper
 					"debug" => __LINE__,
 				);
 
-				myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_FAILED, $dbBatchJob , $dbBatchJob->getPartnerId() , null , null ,
+				myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_FAILED, $dbBatchJob , $dbBatchJob->getPartnerId() , null , null ,
 					$extraData, $entryId );
 			}
 		}
@@ -1277,10 +1277,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kCaptureThumbJobData $data
+	 * @param vCaptureThumbJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleCaptureThumbFailed(BatchJob $dbBatchJob, kCaptureThumbJobData $data)
+	public static function handleCaptureThumbFailed(BatchJob $dbBatchJob, vCaptureThumbJobData $data)
 	{
 		if($dbBatchJob->getExecutionStatus() == BatchJobExecutionStatus::ABORTED)
 			return $dbBatchJob;
@@ -1305,10 +1305,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kPostConvertJobData $data
+	 * @param vPostConvertJobData $data
 	 * @return BatchJob
 	 */
-	public static function handlePostConvertFailed(BatchJob $dbBatchJob, kPostConvertJobData $data)
+	public static function handlePostConvertFailed(BatchJob $dbBatchJob, vPostConvertJobData $data)
 	{
 		// get additional info from the parent job
 		$engineType = null;
@@ -1318,21 +1318,21 @@ class kFlowHelper
 		{
 			$engineType = $parentJob->getJobSubType();
 			$convertJobData = $parentJob->getData();
-			if($convertJobData instanceof kConvertJobData)
+			if($convertJobData instanceof vConvertJobData)
 				$mediaInfoId = $convertJobData->getMediaInfoId();
 		}
 
-		kBusinessPostConvertDL::handleConvertFailed($dbBatchJob, $engineType, $data->getFlavorAssetId(), $data->getFlavorParamsOutputId(), $mediaInfoId);
+		vBusinessPostConvertDL::handleConvertFailed($dbBatchJob, $engineType, $data->getFlavorAssetId(), $data->getFlavorParamsOutputId(), $mediaInfoId);
 
 		return $dbBatchJob;
 	}
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConvertCollectionJobData $data
+	 * @param vConvertCollectionJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleDeleteFileFinished(BatchJob $dbBatchJob, kDeleteFileJobData $data)
+	public static function handleDeleteFileFinished(BatchJob $dbBatchJob, vDeleteFileJobData $data)
 	{
 		//Change status of the filesync to "purged"
 		FileSyncPeer::setUseCriteriaFilter(false);
@@ -1344,17 +1344,17 @@ class kFlowHelper
 		return $dbBatchJob;
 	}
 
-	public static function handleDeleteFileProcessing (kDeleteFileJobData $data)
+	public static function handleDeleteFileProcessing (vDeleteFileJobData $data)
 	{
-		KalturaLog::info("Delete started for file path " . $data->getLocalFileSyncPath());
+		VidiunLog::info("Delete started for file path " . $data->getLocalFileSyncPath());
 	}
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConvertCollectionJobData $data
+	 * @param vConvertCollectionJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleConvertCollectionFinished(BatchJob $dbBatchJob, kConvertCollectionJobData $data)
+	public static function handleConvertCollectionFinished(BatchJob $dbBatchJob, vConvertCollectionJobData $data)
 	{
 		if($dbBatchJob->getExecutionStatus() == BatchJobExecutionStatus::ABORTED)
 			return $dbBatchJob;
@@ -1395,19 +1395,19 @@ class kFlowHelper
 				continue;
 
 			$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			kFileSyncUtils::moveFromFile($destFileSyncLocalPath, $syncKey);
+			vFileSyncUtils::moveFromFile($destFileSyncLocalPath, $syncKey);
 
 			// replacing the file name in the ism file
 			$oldName = basename($flavor->getDestFileSyncLocalPath());
-			$flavor->setDestFileSyncLocalPath(kFileSyncUtils::getLocalFilePathForKey($syncKey));
-			KalturaLog::info("Convert archived file to: " . $flavor->getDestFileSyncLocalPath());
+			$flavor->setDestFileSyncLocalPath(vFileSyncUtils::getLocalFilePathForKey($syncKey));
+			VidiunLog::info("Convert archived file to: " . $flavor->getDestFileSyncLocalPath());
 			$newName = basename($flavor->getDestFileSyncLocalPath());
-			KalturaLog::info("Editing ISM [$oldName] to [$newName]");
+			VidiunLog::info("Editing ISM [$oldName] to [$newName]");
 			$ismContent = str_replace("src=\"$oldName\"", "src=\"$newName\"", $ismContent);
 
 			// creating post convert job (without thumb)
 			$postConvertAssetType = BatchJob::POSTCONVERT_ASSET_TYPE_FLAVOR;
-			kJobsManager::addPostConvertJob($dbBatchJob, $postConvertAssetType, $syncKey, $flavor->getFlavorAssetId(), $flavor->getFlavorParamsOutputId(), file_exists($thumbPath), $offset);
+			vJobsManager::addPostConvertJob($dbBatchJob, $postConvertAssetType, $syncKey, $flavor->getFlavorAssetId(), $flavor->getFlavorParamsOutputId(), file_exists($thumbPath), $offset);
 
 			$finalFlavors[] = $flavor;
 			$addedFlavorParamsOutputsIds[] = $flavor->getFlavorParamsOutputId();
@@ -1420,26 +1420,26 @@ class kFlowHelper
 		if(file_exists($ismcPath))
 		{
 			$syncKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_ISMC, $ismVersion);
-			kFileSyncUtils::moveFromFile($ismcPath,	$syncKey);
+			vFileSyncUtils::moveFromFile($ismcPath,	$syncKey);
 		}
 
 		// replacing the ismc file name in the ism file
 		$oldName = basename($ismcPath);
-		$newName = basename(kFileSyncUtils::getLocalFilePathForKey($syncKey));
-		KalturaLog::info("Editing ISM [$oldName] to [$newName]");
+		$newName = basename(vFileSyncUtils::getLocalFilePathForKey($syncKey));
+		VidiunLog::info("Editing ISM [$oldName] to [$newName]");
 		$ismContent = str_replace("content=\"$oldName\"", "content=\"$newName\"", $ismContent);
 
 		$ismPath .= '.tmp';
 		$bytesWritten = file_put_contents($ismPath, $ismContent);
 		if(!$bytesWritten)
-			KalturaLog::err("Failed to update file [$ismPath]");
+			VidiunLog::err("Failed to update file [$ismPath]");
 
 		// syncing ism and lig files
 		if(file_exists($ismPath))
-			kFileSyncUtils::moveFromFile($ismPath, $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_ISM, $ismVersion));
+			vFileSyncUtils::moveFromFile($ismPath, $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_ISM, $ismVersion));
 
 		if(file_exists($logPath))
-			kFileSyncUtils::moveFromFile($logPath, $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_CONVERSION_LOG, $ismVersion));
+			vFileSyncUtils::moveFromFile($logPath, $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_CONVERSION_LOG, $ismVersion));
 
 		// saving entry changes
 		$entry->save();
@@ -1454,7 +1454,7 @@ class kFlowHelper
 		$rootBatchJob = $dbBatchJob->getRootJob();
 		if($rootBatchJob && $rootBatchJob->getJobType() == BatchJobType::BULKDOWNLOAD)
 		{
-			$localPath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
+			$localPath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
 			$downloadUrl = $flavorAsset->getDownloadUrl();
 
 			$notificationData = array(
@@ -1494,7 +1494,7 @@ class kFlowHelper
 				"debug" => __LINE__,
 			);
 
-			myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_SUCCEEDED, $dbBatchJob , $dbBatchJob->getPartnerId() , null , null ,
+			myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_SUCCEEDED, $dbBatchJob , $dbBatchJob->getPartnerId() , null , null ,
 				$extraData, $dbBatchJob->getEntryId() );
 		}
 		return $dbBatchJob;
@@ -1502,12 +1502,12 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConvertCollectionJobData $data
+	 * @param vConvertCollectionJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleConvertCollectionFailed(BatchJob $dbBatchJob, kConvertCollectionJobData $data)
+	public static function handleConvertCollectionFailed(BatchJob $dbBatchJob, vConvertCollectionJobData $data)
 	{
-		kBusinessPostConvertDL::handleConvertCollectionFailed($dbBatchJob, $data, $dbBatchJob->getJobSubType());
+		vBusinessPostConvertDL::handleConvertCollectionFailed($dbBatchJob, $data, $dbBatchJob->getJobSubType());
 
 		return $dbBatchJob;
 	}
@@ -1521,13 +1521,13 @@ class kFlowHelper
 		$entry = entryPeer::retrieveByPK($entryId);
 		if(!$entry)
 		{
-			KalturaLog::notice("Entry id [$entryId] not found");
+			VidiunLog::notice("Entry id [$entryId] not found");
 			return;
 		}
 
 		if($entry->getType() != entryType::MEDIA_CLIP || $entry->getMediaType() != entry::ENTRY_MEDIA_TYPE_VIDEO)
 		{
-			KalturaLog::notice("Cupture thumbnail is not supported for entry [$entryId] of type [" . $entry->getType() . "] and media type [" . $entry->getMediaType() . "]");
+			VidiunLog::notice("Cupture thumbnail is not supported for entry [$entryId] of type [" . $entry->getType() . "] and media type [" . $entry->getMediaType() . "]");
 			return;
 		}
 
@@ -1538,19 +1538,19 @@ class kFlowHelper
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('getConversionProfile2ForEntry Error: ' . $e->getMessage());
+			VidiunLog::err('getConversionProfile2ForEntry Error: ' . $e->getMessage());
 		}
 
 		if(!$profile)
 		{
-			KalturaLog::notice("Profile not found for entry id [$entryId]");
+			VidiunLog::notice("Profile not found for entry id [$entryId]");
 			return;
 		}
 
 		$assetParamsIds = flavorParamsConversionProfilePeer::getFlavorIdsByProfileId($profile->getId());
 		if(!count($assetParamsIds))
 		{
-			KalturaLog::notice("No asset params objects found for profile id [" . $profile->getId() . "]");
+			VidiunLog::notice("No asset params objects found for profile id [" . $profile->getId() . "]");
 			return;
 		}
 
@@ -1572,7 +1572,7 @@ class kFlowHelper
 
 			if(is_null($alternateFlavorParamsId))
 			{
-				KalturaLog::notice("No source flavor params object found for entry id [$entryId]");
+				VidiunLog::notice("No source flavor params object found for entry id [$entryId]");
 				return;
 			}
 		}
@@ -1592,7 +1592,7 @@ class kFlowHelper
 		{
 			if(isset($thumbAssetsList[$thumbParams->getId()]))
 			{
-				KalturaLog::log("Thumbnail asset already created [" . $thumbAssetsList[$thumbParams->getId()]->getId() . "]");
+				VidiunLog::log("Thumbnail asset already created [" . $thumbAssetsList[$thumbParams->getId()]->getId() . "]");
 				continue;
 			}
 
@@ -1603,19 +1603,19 @@ class kFlowHelper
 			}
 			elseif($thumbParams->getSourceParamsId() != $srcParamsId)
 			{
-				KalturaLog::log("Only thumbnails that uses source params [$srcParamsId] should be generated for now");
+				VidiunLog::log("Only thumbnails that uses source params [$srcParamsId] should be generated for now");
 				continue;
 			}
 
-			kBusinessPreConvertDL::decideThumbGenerate($entry, $thumbParams, $parentJob);
+			vBusinessPreConvertDL::decideThumbGenerate($entry, $thumbParams, $parentJob);
 		}
 	}
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kPostConvertJobData $data
+	 * @param vPostConvertJobData $data
 	 */
-	protected static function createThumbnail(BatchJob $dbBatchJob, kPostConvertJobData $data)
+	protected static function createThumbnail(BatchJob $dbBatchJob, vPostConvertJobData $data)
 	{
 		$ignoreThumbnail = false;
 
@@ -1635,7 +1635,7 @@ class kFlowHelper
 		 * If there is already a thumb assigned to that entry, get the asset id that was used to grab the thumb.
 		 * For older entries (w/out grabbedFromAssetId), the original logic would be used.
 		 * For newer entries - retrieve mediaInfo's for th new and grabbed assest.
-		 * Use KDL logic to normalize the 'grabbed' and 'new' video bitrates.
+		 * Use VDL logic to normalize the 'grabbed' and 'new' video bitrates.
 		 * Set ignoreThumbnail if the new br is lower than the normalized.
 		 */
 		if($entry->getCreateThumb()) {
@@ -1644,7 +1644,7 @@ class kFlowHelper
 				$thisMediaInfo = mediaInfoPeer::retrieveByFlavorAssetId($thisFlavorId);
 				$grabMediaInfo = mediaInfoPeer::retrieveByFlavorAssetId($grabbedFromAssetId);
 				if(isset($thisMediaInfo) && isset($grabMediaInfo)){
-					$normalizedBr=KDLVideoBitrateNormalize::NormalizeSourceToTarget($grabMediaInfo->getVideoFormat(), $grabMediaInfo->getVideoBitrate(), $thisMediaInfo->getVideoFormat());
+					$normalizedBr=VDLVideoBitrateNormalize::NormalizeSourceToTarget($grabMediaInfo->getVideoFormat(), $grabMediaInfo->getVideoBitrate(), $thisMediaInfo->getVideoFormat());
 					$ignoreThumbnail = ($normalizedBr>=$thisMediaInfo->getVideoBitrate()? true: false);
 				}
 				else
@@ -1679,18 +1679,18 @@ class kFlowHelper
 			$entry = $dbBatchJob->getEntry(false, false);
 			if(!$entry)
 			{
-				KalturaLog::err("Entry not found [" . $dbBatchJob->getEntryId() . "]");
+				VidiunLog::err("Entry not found [" . $dbBatchJob->getEntryId() . "]");
 				return;
 			}
 
-			KalturaLog::info("Entry duration: " . $entry->getLengthInMsecs());
+			VidiunLog::info("Entry duration: " . $entry->getLengthInMsecs());
 			if(!$entry->getLengthInMsecs())
 			{
-				KalturaLog::info("Copy duration from flvor asset: " . $data->getFlavorAssetId());
+				VidiunLog::info("Copy duration from flvor asset: " . $data->getFlavorAssetId());
 				$mediaInfo = mediaInfoPeer::retrieveByFlavorAssetId($data->getFlavorAssetId());
 				if($mediaInfo)
 				{
-					KalturaLog::info("Set duration to: " . $mediaInfo->getContainerDuration());
+					VidiunLog::info("Set duration to: " . $mediaInfo->getContainerDuration());
 					$entry->setDimensionsIfBigger($mediaInfo->getVideoWidth(), $mediaInfo->getVideoHeight());
 					
 					if($entry->getCalculateDuration())
@@ -1702,16 +1702,16 @@ class kFlowHelper
 			$entry->setThumbnail(".jpg");
 			$entry->save();
 			$syncKey = $entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_THUMB);
-			kFileSyncUtils::moveFromFile($data->getThumbPath(), $syncKey);
+			vFileSyncUtils::moveFromFile($data->getThumbPath(), $syncKey);
 		}
 	}
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kPostConvertJobData $data
+	 * @param vPostConvertJobData $data
 	 * @return BatchJob|BatchJob
 	 */
-	public static function handlePostConvertFinished(BatchJob $dbBatchJob, kPostConvertJobData $data)
+	public static function handlePostConvertFinished(BatchJob $dbBatchJob, vPostConvertJobData $data)
 	{
 		if($dbBatchJob->getExecutionStatus() == BatchJobExecutionStatus::ABORTED)
 			return $dbBatchJob;
@@ -1724,18 +1724,18 @@ class kFlowHelper
 			}
 			catch (Exception $e)
 			{
-				KalturaLog::err($e->getMessage());
+				VidiunLog::err($e->getMessage());
 
 				// sometimes, because of disc IO load, it takes long time for the thumb to be moved.
 				// in such cases, the entry thumb version may be increased by other process.
 				// retry the job, it solves the issue.
-				kJobsManager::retryJob($dbBatchJob->getId(), $dbBatchJob->getJobType(), true);
+				vJobsManager::retryJob($dbBatchJob->getId(), $dbBatchJob->getJobType(), true);
 				$dbBatchJob->reload();
 				return $dbBatchJob;
 			}
 		}
 
-		$currentFlavorAsset = kBusinessPostConvertDL::handleFlavorReady($dbBatchJob, $data->getFlavorAssetId());
+		$currentFlavorAsset = vBusinessPostConvertDL::handleFlavorReady($dbBatchJob, $data->getFlavorAssetId());
 
 		if($data->getPostConvertAssetType() == BatchJob::POSTCONVERT_ASSET_TYPE_SOURCE)
 		{
@@ -1755,59 +1755,59 @@ class kFlowHelper
 						if($currentFlavorAsset && $currFlavorAsset->getInterFlowCount() < self::MAX_INTER_FLOW_ITERATIONS_ALLOWED_ON_SOURCE)
 						{
 							$mediaInfo = mediaInfoPeer::retrieveByFlavorAssetId($currentFlavorAsset->getId());
-							kBusinessPreConvertDL::decideProfileConvert($dbBatchJob, $convertProfileJob, $mediaInfo->getId());
+							vBusinessPreConvertDL::decideProfileConvert($dbBatchJob, $convertProfileJob, $mediaInfo->getId());
 						}
 						else 
-							kBusinessPreConvertDL::continueProfileConvert($dbBatchJob);
+							vBusinessPreConvertDL::continueProfileConvert($dbBatchJob);
 					}
 					else 
-						kBusinessPreConvertDL::continueProfileConvert($dbBatchJob);
+						vBusinessPreConvertDL::continueProfileConvert($dbBatchJob);
 				}
 				catch(Exception $e)
 				{
-					KalturaLog::err($e->getMessage());
-					kBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
+					VidiunLog::err($e->getMessage());
+					vBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
 					return $dbBatchJob;
 				}
 			}
 			elseif($currentFlavorAsset)
 			{
-				KalturaLog::log("Root job [" . $convertProfileJob->getId() . "] is not profile conversion");
+				VidiunLog::log("Root job [" . $convertProfileJob->getId() . "] is not profile conversion");
 
 				$syncKey = $currentFlavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-				if(kFileSyncUtils::fileSync_exists($syncKey))
+				if(vFileSyncUtils::fileSync_exists($syncKey))
 				{
-					$fileSync = kFileSyncUtils::getLocalFileSyncForKey($syncKey, false);
+					$fileSync = vFileSyncUtils::getLocalFileSyncForKey($syncKey, false);
 					$entry = $dbBatchJob->getEntry();
 					if($entry)
-						kJobsManager::addConvertProfileJob(null, $entry, $currentFlavorAsset->getId(), $fileSync);
+						vJobsManager::addConvertProfileJob(null, $entry, $currentFlavorAsset->getId(), $fileSync);
 				}
 				$currentFlavorAsset = null;
 			}
 		}
 
 		if($currentFlavorAsset)
-			kBusinessPostConvertDL::handleConvertFinished($dbBatchJob, $currentFlavorAsset);
+			vBusinessPostConvertDL::handleConvertFinished($dbBatchJob, $currentFlavorAsset);
 
 		return $dbBatchJob;
 	}
 
 	public static function createBulkUploadLogUrl(BatchJob $dbBatchJob)
 	{
-		$ks = new ks();
-		$ks->valid_until = time() + 86400 ;
-		$ks->type = ks::TYPE_KS;
-		$ks->partner_id = $dbBatchJob->getPartnerId();
-		$ks->master_partner_id = null;
-		$ks->partner_pattern = $dbBatchJob->getPartnerId();
-		$ks->error = 0;
-		$ks->rand = microtime(true);
-		$ks->user = '';
-		$ks->privileges = 'setrole:BULK_LOG_VIEWER';
-		$ks->additional_data = null;
-		$ks_str = $ks->toSecureString();
+		$vs = new vs();
+		$vs->valid_until = time() + 86400 ;
+		$vs->type = vs::TYPE_VS;
+		$vs->partner_id = $dbBatchJob->getPartnerId();
+		$vs->master_partner_id = null;
+		$vs->partner_pattern = $dbBatchJob->getPartnerId();
+		$vs->error = 0;
+		$vs->rand = microtime(true);
+		$vs->user = '';
+		$vs->privileges = 'setrole:BULK_LOG_VIEWER';
+		$vs->additional_data = null;
+		$vs_str = $vs->toSecureString();
 
-		$logFileUrl = kConf::get("apphome_url") . "/api_v3/service/bulkUpload/action/serveLog/id/{$dbBatchJob->getId()}/ks/" . $ks_str;
+		$logFileUrl = vConf::get("apphome_url") . "/api_v3/service/bulkUpload/action/serveLog/id/{$dbBatchJob->getId()}/vs/" . $vs_str;
 		return $logFileUrl;
 	}
 
@@ -1817,21 +1817,21 @@ class kFlowHelper
         	$emailRecipients = $dbBatchJob->getPartner()->getBulkUploadNotificationsEmail();
         	$batchJobData = $dbBatchJob->getData();
 
-        	if($batchJobData instanceof kBulkUploadJobData){
+        	if($batchJobData instanceof vBulkUploadJobData){
             		$jobRecipients = $batchJobData->getEmailRecipients();
             		if(isset($jobRecipients)) {
                 		$emailRecipients = $jobRecipients;
             		}
         	}
 
-        	kJobsManager::addMailJob(
+        	vJobsManager::addMailJob(
             		null,
             		0,
             		$dbBatchJob->getPartnerId(),
             		$email_id,
-            		kMailJobData::MAIL_PRIORITY_NORMAL,
-            		kConf::get( "batch_alert_email" ),
-            		kConf::get( "batch_alert_name" ),
+            		vMailJobData::MAIL_PRIORITY_NORMAL,
+            		vConf::get( "batch_alert_email" ),
+            		vConf::get( "batch_alert_name" ),
             		$emailRecipients,
             		$params
         	);
@@ -1840,10 +1840,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kBulkUploadJobData $data
+	 * @param vBulkUploadJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleBulkUploadFinished(BatchJob $dbBatchJob, kBulkUploadJobData $data)
+	public static function handleBulkUploadFinished(BatchJob $dbBatchJob, vBulkUploadJobData $data)
 	{
 		if ($dbBatchJob->getPartner()->getEnableBulkUploadNotificationsEmails())
 			self::sendBulkUploadNotificationEmail($dbBatchJob, MailType::MAIL_TYPE_BULKUPLOAD_FINISHED, array($dbBatchJob->getPartner()->getAdminName(), $dbBatchJob->getId(), self::createBulkUploadLogUrl($dbBatchJob)));
@@ -1852,10 +1852,10 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kBulkUploadJobData $data
+	 * @param vBulkUploadJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleBulkUploadFailed(BatchJob $dbBatchJob, kBulkUploadJobData $data)
+	public static function handleBulkUploadFailed(BatchJob $dbBatchJob, vBulkUploadJobData $data)
 	{
 		if ($dbBatchJob->getPartner()->getEnableBulkUploadNotificationsEmails())
 				self::sendBulkUploadNotificationEmail($dbBatchJob, MailType::MAIL_TYPE_BULKUPLOAD_FAILED, array($dbBatchJob->getPartner()->getAdminName(),$dbBatchJob->getId(), $dbBatchJob->getErrType(), $dbBatchJob->getErrNumber(), $dbBatchJob->getMessage(), self::createBulkUploadLogUrl($dbBatchJob)));
@@ -1864,15 +1864,15 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kStorageExportJobData $data
+	 * @param vStorageExportJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleStorageExportFinished(BatchJob $dbBatchJob, kStorageExportJobData $data)
+	public static function handleStorageExportFinished(BatchJob $dbBatchJob, vStorageExportJobData $data)
 	{
 		$fileSync = FileSyncPeer::retrieveByPK($data->getSrcFileSyncId());
 		if(!$fileSync)
 		{
-			KalturaLog::err("FileSync [" . $data->getSrcFileSyncId() . "] not found");
+			VidiunLog::err("FileSync [" . $data->getSrcFileSyncId() . "] not found");
 			return $dbBatchJob;
 		}
 
@@ -1891,14 +1891,14 @@ class kFlowHelper
 
 			if ( ($asset instanceof flavorAsset) && ($asset->getStatus() == asset::ASSET_STATUS_READY) )
 			{
-				kBusinessPostConvertDL::handleConvertFinished($dbBatchJob, $asset);
+				vBusinessPostConvertDL::handleConvertFinished($dbBatchJob, $asset);
 			}
 		}		
 		// check if all exports finished and delete local file sync according to configuration
-		if($asset && $asset->getStatus() == asset::ASSET_STATUS_READY && $dbBatchJob->getJobSubType() != StorageProfile::STORAGE_KALTURA_DC)
+		if($asset && $asset->getStatus() == asset::ASSET_STATUS_READY && $dbBatchJob->getJobSubType() != StorageProfile::STORAGE_VIDIUN_DC)
 		{
 			$partner = $dbBatchJob->getPartner();
-			if($partner && $partner->getStorageDeleteFromKaltura())
+			if($partner && $partner->getStorageDeleteFromVidiun())
 			{
 				if(self::isAssetExportFinished($fileSync, $asset))
 				{
@@ -1931,7 +1931,7 @@ class kFlowHelper
 		$originalEntryFileSync = FileSyncPeer::doSelectOne($c);
 		if(!$originalEntryFileSync)
 		{
-			KalturaLog::info("Origianl entry file sync not found with the following details: [object_type, object_sub_type, Partner_id, Linked_id] [" . $fileSync->getObjectType() 
+			VidiunLog::info("Origianl entry file sync not found with the following details: [object_type, object_sub_type, Partner_id, Linked_id] [" . $fileSync->getObjectType() 
 							. ", " . $fileSync->getObjectSubType() . ", " . $fileSync->getPartnerId() . ", " . $fileSync->getId() . "]");
 			return;
 		}
@@ -1939,14 +1939,14 @@ class kFlowHelper
 		$originalAssetToDeleteFileSyncFor = assetPeer::retrieveById($originalEntryFileSync->getObjectId());
 		if(!$originalAssetToDeleteFileSyncFor)
 		{
-			KalturaLog::info("Could not find asset matching file sync object id " . $originalEntryFileSync->getObjectId());
+			VidiunLog::info("Could not find asset matching file sync object id " . $originalEntryFileSync->getObjectId());
 			return;
 		}
 		
 		foreach ($fileSyncSubTypesToHandle as $fileSyncSubType)
 		{		
 			$syncKeyToDelete = $originalAssetToDeleteFileSyncFor->getSyncKey($fileSyncSubType);
-			kFileSyncUtils::deleteSyncFileForKey($syncKeyToDelete, false, true);
+			vFileSyncUtils::deleteSyncFileForKey($syncKeyToDelete, false, true);
 		}
 	}
 	
@@ -1997,7 +1997,7 @@ class kFlowHelper
 		{
 			/* @var $assetToDelete asset */
 			$versionsToDelete =  $assetToDelete->getFileSyncVersionsToDelete();
-			KalturaLog::info("file sync versions to delete are " . print_r($versionsToDelete, true));
+			VidiunLog::info("file sync versions to delete are " . print_r($versionsToDelete, true));
 			if($versionsToDelete)
 			{
 				foreach ($versionsToDelete as $version)
@@ -2012,30 +2012,30 @@ class kFlowHelper
 	private static function deleteAssetLocalFileSyncs($fileSyncVersion, asset $asset)
 	{
 		$syncKey = $asset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET, $fileSyncVersion);
-		kFileSyncUtils::deleteSyncFileForKey($syncKey, false, true);
+		vFileSyncUtils::deleteSyncFileForKey($syncKey, false, true);
 			
 		$syncKey = $asset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ISM, $fileSyncVersion);
-		kFileSyncUtils::deleteSyncFileForKey($syncKey, false, true);
+		vFileSyncUtils::deleteSyncFileForKey($syncKey, false, true);
 			
 		$syncKey = $asset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ISMC, $fileSyncVersion);
-		kFileSyncUtils::deleteSyncFileForKey($syncKey, false, true);		
+		vFileSyncUtils::deleteSyncFileForKey($syncKey, false, true);		
 	}
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kStorageExportJobData $data
+	 * @param vStorageExportJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleStorageExportFailed(BatchJob $dbBatchJob, kStorageExportJobData $data)
+	public static function handleStorageExportFailed(BatchJob $dbBatchJob, vStorageExportJobData $data)
 	{
 		if ($dbBatchJob->getErrType() == BatchJobErrorTypes::APP && $dbBatchJob->getErrNumber() == BatchJobAppErrors::FILE_ALREADY_EXISTS){
-			KalturaLog::notice("remote file already exists");
+			VidiunLog::notice("remote file already exists");
 			return $dbBatchJob;
 		}
 		$fileSync = FileSyncPeer::retrieveByPK($data->getSrcFileSyncId());
 		if(!$fileSync)
 		{
-			KalturaLog::err("FileSync [" . $data->getSrcFileSyncId() . "] not found");
+			VidiunLog::err("FileSync [" . $data->getSrcFileSyncId() . "] not found");
 			return $dbBatchJob;
 		}
 
@@ -2055,7 +2055,7 @@ class kFlowHelper
                 $flavorParamsOutputId = $flavorParamsOutput ? $flavorParamsOutput->getId() : null;
                 $mediaInfo = mediaInfoPeer::retrieveByFlavorAssetId($asset->getId());
                 $mediaInfoId = $mediaInfo ? $mediaInfo->getId() : null;
-                kBusinessPostConvertDL::handleConvertFailed($dbBatchJob, null, $asset->getId(), $flavorParamsOutputId, $mediaInfoId);
+                vBusinessPostConvertDL::handleConvertFailed($dbBatchJob, null, $asset->getId(), $flavorParamsOutputId, $mediaInfoId);
             }
 		}
 
@@ -2063,12 +2063,12 @@ class kFlowHelper
 		return $dbBatchJob;
 	}
 
-    public static function handleStorageDeleteFinished (BatchJob $dbBatchJob, kStorageDeleteJobData $data)
+    public static function handleStorageDeleteFinished (BatchJob $dbBatchJob, vStorageDeleteJobData $data)
 	{
 	    $fileSync = FileSyncPeer::retrieveByPK($data->getSrcFileSyncId());
 		if(!$fileSync)
 		{
-			KalturaLog::err("FileSync [" . $data->getSrcFileSyncId() . "] not found");
+			VidiunLog::err("FileSync [" . $data->getSrcFileSyncId() . "] not found");
 			return $dbBatchJob;
 		}
 
@@ -2080,27 +2080,27 @@ class kFlowHelper
 
 	/**
 	 * @param BatchJob $dbBatchJob
-	 * @param kConvertProfileJobData $data
+	 * @param vConvertProfileJobData $data
 	 * @return BatchJob
 	 */
-	public static function handleConvertProfilePending(BatchJob $dbBatchJob, kConvertProfileJobData $data)
+	public static function handleConvertProfilePending(BatchJob $dbBatchJob, vConvertProfileJobData $data)
 	{
 		if($data->getExtractMedia()) // check if extract media required
 		{
 			// creates extract media job
-			kJobsManager::addExtractMediaJob($dbBatchJob, $data->getInputFileSyncLocalPath(), $data->getFlavorAssetId());
+			vJobsManager::addExtractMediaJob($dbBatchJob, $data->getInputFileSyncLocalPath(), $data->getFlavorAssetId());
 		}
 		else
 		{
 			try {
-				$conversionsCreated = kBusinessPreConvertDL::decideProfileConvert($dbBatchJob, $dbBatchJob);
+				$conversionsCreated = vBusinessPreConvertDL::decideProfileConvert($dbBatchJob, $dbBatchJob);
 			}
-			catch (kCoreException $ex) {
+			catch (vCoreException $ex) {
 				//This was added so the all the assets prior to reaching the limit would still be created
-				if ($ex->getCode() != kCoreException::MAX_ASSETS_PER_ENTRY)
+				if ($ex->getCode() != vCoreException::MAX_ASSETS_PER_ENTRY)
 					throw $ex;
 				
-				KalturaLog::err("Max assets per entry was reached continuing with normal flow");
+				VidiunLog::err("Max assets per entry was reached continuing with normal flow");
 			}
 
 			if($conversionsCreated)
@@ -2108,19 +2108,19 @@ class kFlowHelper
 				// handle the source flavor as if it was converted, makes the entry ready according to ready behavior rules
 				$currentFlavorAsset = assetPeer::retrieveById($data->getFlavorAssetId());
 				if($currentFlavorAsset)
-					$dbBatchJob = kBusinessPostConvertDL::handleConvertFinished($dbBatchJob, $currentFlavorAsset);
+					$dbBatchJob = vBusinessPostConvertDL::handleConvertFinished($dbBatchJob, $currentFlavorAsset);
 			}
 		}
 
 		// mark the job as almost done
-		$dbBatchJob = kJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_ALMOST_DONE);
+		$dbBatchJob = vJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_ALMOST_DONE);
 
 		return $dbBatchJob;
 	}
 
-	public static function handleConvertProfileFailed(BatchJob $dbBatchJob, kConvertProfileJobData $data)
+	public static function handleConvertProfileFailed(BatchJob $dbBatchJob, vConvertProfileJobData $data)
 	{
-		kBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
+		vBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
 
 		self::deleteTemporaryFlavors($dbBatchJob->getEntryId());
 		
@@ -2129,18 +2129,18 @@ class kFlowHelper
 		return $dbBatchJob;
 	}
 
-	public static function handleConvertProfileFinished(BatchJob $dbBatchJob, kConvertProfileJobData $data)
+	public static function handleConvertProfileFinished(BatchJob $dbBatchJob, vConvertProfileJobData $data)
 	{
 		self::deleteTemporaryFlavors($dbBatchJob->getEntryId());
 		
 		self::handleLocalFileSyncDeletion($dbBatchJob->getEntryId(), $dbBatchJob->getPartner());
 
-		kFlowHelper::generateThumbnailsFromFlavor($dbBatchJob->getEntryId(), $dbBatchJob);
+		vFlowHelper::generateThumbnailsFromFlavor($dbBatchJob->getEntryId(), $dbBatchJob);
 
 		$entry = $dbBatchJob->getEntry();
 		if($entry)
 		{
-			kBusinessConvertDL::checkForPendingLiveClips($entry);
+			vBusinessConvertDL::checkForPendingLiveClips($entry);
 
 			$clonePendingEntriesArray = $entry->getClonePendingEntries();
 			foreach ($clonePendingEntriesArray as $pendingEntryId)
@@ -2161,7 +2161,7 @@ class kFlowHelper
 		return $dbBatchJob;
 	}
 
-	public static function handleBulkDownloadPending(BatchJob $dbBatchJob, kBulkDownloadJobData $data)
+	public static function handleBulkDownloadPending(BatchJob $dbBatchJob, vBulkDownloadJobData $data)
 	{
 		$entryIds = explode(',', $data->getEntryIds());
 		$flavorParamsId = $data->getFlavorParamsId();
@@ -2176,7 +2176,7 @@ class kFlowHelper
 			
 			if (is_null($entry))
 			{
-				KalturaLog::err("Entry id [$entryId] not found.");
+				VidiunLog::err("Entry id [$entryId] not found.");
 			}
 			else
 			{
@@ -2191,7 +2191,7 @@ class kFlowHelper
 						$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 						$downloadUrl = $flavorAsset->getDownloadUrl();
 
-						$localPath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
+						$localPath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
 						$downloadUrl = $flavorAsset->getDownloadUrl();
 
 						$notificationData = array(
@@ -2231,7 +2231,7 @@ class kFlowHelper
 							"debug" => __LINE__,
 						);
 
-						myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_SUCCEEDED, $dbBatchJob , $dbBatchJob->getPartnerId() , null , null ,
+						myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_SUCCEEDED, $dbBatchJob , $dbBatchJob->getPartnerId() , null , null ,
 							$extraData, $entryId );
 					}
 				}
@@ -2247,21 +2247,21 @@ class kFlowHelper
 		if ($jobIsFinished)
 		{
 			// mark the job as finished
-			$dbBatchJob = kJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
+			$dbBatchJob = vJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
 		}
 		else
 		{
 			// mark the job as almost done
-			$dbBatchJob = kJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_ALMOST_DONE);
+			$dbBatchJob = vJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_ALMOST_DONE);
 		}
 
 		return $dbBatchJob;
 	}
 
 
-	public static function handleProvisionProvideFinished(BatchJob $dbBatchJob, kProvisionJobData $data)
+	public static function handleProvisionProvideFinished(BatchJob $dbBatchJob, vProvisionJobData $data)
 	{
-		kBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::READY);
+		vBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::READY);
 		$entry = $dbBatchJob->getEntry();
 		if(!$entry)
 			return $dbBatchJob;
@@ -2277,13 +2277,13 @@ class kFlowHelper
 		return $dbBatchJob;
 	}
 
-	public static function handleProvisionProvideFailed(BatchJob $dbBatchJob, kProvisionJobData $data)
+	public static function handleProvisionProvideFailed(BatchJob $dbBatchJob, vProvisionJobData $data)
 	{
-		kBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
+		vBatchManager::updateEntry($dbBatchJob->getEntryId(), entryStatus::ERROR_CONVERTING);
 		return $dbBatchJob;
 	}
 
-	public static function handleBulkDownloadFinished(BatchJob $dbBatchJob, kBulkDownloadJobData $data)
+	public static function handleBulkDownloadFinished(BatchJob $dbBatchJob, vBulkDownloadJobData $data)
 	{
 		if($dbBatchJob->getExecutionStatus() == BatchJobExecutionStatus::ABORTED)
 			return $dbBatchJob;
@@ -2291,7 +2291,7 @@ class kFlowHelper
 		$partner = PartnerPeer::retrieveByPK($dbBatchJob->getPartnerId());
 		if (!$partner)
 		{
-			KalturaLog::err("Partner id [".$dbBatchJob->getPartnerId()."] not found, not sending mail");
+			VidiunLog::err("Partner id [".$dbBatchJob->getPartnerId()."] not found, not sending mail");
 			return $dbBatchJob;
 		}
 
@@ -2305,7 +2305,7 @@ class kFlowHelper
 				continue;
 			if ($entry->getType() != entryType::MEDIA_CLIP)
 			{
-				KalturaLog::info("This entry cannot be downloaded $entryId");
+				VidiunLog::info("This entry cannot be downloaded $entryId");
 				continue;
 			}
 			
@@ -2321,26 +2321,26 @@ class kFlowHelper
 		$linksHtml = implode("<br />", $links);
 
 		// add mail job
-		$jobData = new kMailJobData();
+		$jobData = new vMailJobData();
 		$jobData->setIsHtml(true);
-		$jobData->setMailPriority(kMailJobData::MAIL_PRIORITY_NORMAL);
-		$jobData->setStatus(kMailJobData::MAIL_STATUS_PENDING);
+		$jobData->setMailPriority(vMailJobData::MAIL_PRIORITY_NORMAL);
+		$jobData->setStatus(vMailJobData::MAIL_STATUS_PENDING);
 		if (count($links) <= 1)
 			$jobData->setMailType(62);
 		else
 			$jobData->setMailType(63);
 
-		$jobData->setFromEmail(kConf::get("batch_download_video_sender_email"));
-		$jobData->setFromName(kConf::get("batch_download_video_sender_name"));
+		$jobData->setFromEmail(vConf::get("batch_download_video_sender_email"));
+		$jobData->setFromName(vConf::get("batch_download_video_sender_name"));
 
 		$adminName = $partner->getAdminName();
 		$recipientEmail = $partner->getAdminEmail();
 
-		$kuser = kuserPeer::getKuserByPartnerAndUid($dbBatchJob->getPartnerId(), $data->getPuserId());
-		if ($kuser)
+		$vuser = vuserPeer::getVuserByPartnerAndUid($dbBatchJob->getPartnerId(), $data->getPuserId());
+		if ($vuser)
 		{
-			$recipientEmail = $kuser->getEmail();
-			$adminName = $kuser->getFullName();
+			$recipientEmail = $vuser->getEmail();
+			$adminName = $vuser->getFullName();
 		}
 
 		if(!$adminName)
@@ -2351,7 +2351,7 @@ class kFlowHelper
 		$jobData->setRecipientEmail($recipientEmail);
 		$jobData->setSubjectParamsArray(array());
 
-		kJobsManager::addJob($dbBatchJob->createChild(BatchJobType::MAIL, $jobData->getMailType()), $jobData, BatchJobType::MAIL, $jobData->getMailType());
+		vJobsManager::addJob($dbBatchJob->createChild(BatchJobType::MAIL, $jobData->getMailType()), $jobData, BatchJobType::MAIL, $jobData->getMailType());
 
 		return $dbBatchJob;
 	}
@@ -2369,7 +2369,7 @@ class kFlowHelper
 			$dbFileAsset = FileAssetPeer::retrieveByPK($uploadToken->getObjectId());
 			if(!$dbFileAsset)
 			{
-				KalturaLog::err("File asset id [" . $uploadToken->getObjectId() . "] not found");
+				VidiunLog::err("File asset id [" . $uploadToken->getObjectId() . "] not found");
 				return;
 			}
 
@@ -2387,7 +2387,7 @@ class kFlowHelper
 			$dbAsset = assetPeer::retrieveById($uploadToken->getObjectId());
 			if(!$dbAsset)
 			{
-				KalturaLog::err("Asset id [" . $uploadToken->getObjectId() . "] not found");
+				VidiunLog::err("Asset id [" . $uploadToken->getObjectId() . "] not found");
 				return;
 			}
 
@@ -2403,13 +2403,13 @@ class kFlowHelper
 			}
 			catch(Exception $e)
 			{
-				KalturaLog::err($e->getMessage());
+				VidiunLog::err($e->getMessage());
 				return;
 			}
 
-			$currentReadyBehavior = kBusinessPostConvertDL::getReadyBehavior($dbAsset, $profile);
+			$currentReadyBehavior = vBusinessPostConvertDL::getReadyBehavior($dbAsset, $profile);
 			if($currentReadyBehavior == flavorParamsConversionProfile::READY_BEHAVIOR_REQUIRED)
-				kBatchManager::updateEntry($dbAsset->getEntryId(), entryStatus::ERROR_IMPORTING);
+				vBatchManager::updateEntry($dbAsset->getEntryId(), entryStatus::ERROR_IMPORTING);
 
 			return;
 		}
@@ -2418,7 +2418,7 @@ class kFlowHelper
 		{
 			$dbEntry = entryPeer::retrieveByPK($uploadToken->getObjectId());
 			if($dbEntry && $dbEntry->getStatus() == entryStatus::IMPORT)
-				kBatchManager::updateEntry($dbEntry->getId(), entryStatus::ERROR_IMPORTING);
+				vBatchManager::updateEntry($dbEntry->getId(), entryStatus::ERROR_IMPORTING);
 		}
 	}
 
@@ -2437,7 +2437,7 @@ class kFlowHelper
 			$dbFileAsset = FileAssetPeer::retrieveByPK($uploadToken->getObjectId());
 			if(!$dbFileAsset)
 			{
-				KalturaLog::err("File asset id [" . $uploadToken->getObjectId() . "] not found");
+				VidiunLog::err("File asset id [" . $uploadToken->getObjectId() . "] not found");
 				return;
 			}
 
@@ -2454,7 +2454,7 @@ class kFlowHelper
 			$dbAsset = assetPeer::retrieveById($uploadToken->getObjectId());
 			if(!$dbAsset)
 			{
-				KalturaLog::err("Asset id [" . $uploadToken->getObjectId() . "] not found");
+				VidiunLog::err("Asset id [" . $uploadToken->getObjectId() . "] not found");
 				return;
 			}
 
@@ -2497,23 +2497,23 @@ class kFlowHelper
 	{
 		if(!is_subclass_of($uploadToken->getObjectType(), assetPeer::OM_CLASS) && $uploadToken->getObjectType() != FileAssetPeer::OM_CLASS && $uploadToken->getObjectType() != entryPeer::OM_CLASS)
 		{
-			KalturaLog::info("Class [" . $uploadToken->getObjectType() . "] not supported");
+			VidiunLog::info("Class [" . $uploadToken->getObjectType() . "] not supported");
 			return;
 		}
 
-		$fullPath = kUploadTokenMgr::getFullPathByUploadTokenId($uploadToken->getId());
+		$fullPath = vUploadTokenMgr::getFullPathByUploadTokenId($uploadToken->getId());
 
 		if(!file_exists($fullPath))
 		{
-			KalturaLog::info("File path [$fullPath] not found");
-			$remoteDCHost = kUploadTokenMgr::getRemoteHostForUploadToken($uploadToken->getId(), kDataCenterMgr::getCurrentDcId());
+			VidiunLog::info("File path [$fullPath] not found");
+			$remoteDCHost = vUploadTokenMgr::getRemoteHostForUploadToken($uploadToken->getId(), vDataCenterMgr::getCurrentDcId());
 			if(!$remoteDCHost)
 			{
-				KalturaLog::err("File path [$fullPath] could not be redirected");
+				VidiunLog::err("File path [$fullPath] could not be redirected");
 				return;
 			}
 
-			kFileUtils::dumpApiRequest($remoteDCHost);
+			vFileUtils::dumpApiRequest($remoteDCHost);
 		}
 	
 		if($uploadToken->getObjectType() == FileAssetPeer::OM_CLASS)
@@ -2521,7 +2521,7 @@ class kFlowHelper
 			$dbFileAsset = FileAssetPeer::retrieveByPK($uploadToken->getObjectId());
 			if(!$dbFileAsset)
 			{
-				KalturaLog::err("File asset id [" . $uploadToken->getObjectId() . "] not found");
+				VidiunLog::err("File asset id [" . $uploadToken->getObjectId() . "] not found");
 				return;
 			}
 
@@ -2534,7 +2534,7 @@ class kFlowHelper
 			$syncKey = $dbFileAsset->getSyncKey(FileAsset::FILE_SYNC_ASSET);
 
 			try {
-				kFileSyncUtils::moveFromFile($fullPath, $syncKey, true);
+				vFileSyncUtils::moveFromFile($fullPath, $syncKey, true);
 			}
 			catch (Exception $e) {
 				$dbFileAsset->setStatus(FileAssetStatus::ERROR);
@@ -2544,8 +2544,8 @@ class kFlowHelper
 
 			if($dbFileAsset->getStatus() == FileAssetStatus::UPLOADING)
 			{
-				$finalPath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
-				$dbFileAsset->setSize(kFile::fileSize($finalPath));
+				$finalPath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
+				$dbFileAsset->setSize(vFile::fileSize($finalPath));
 				$dbFileAsset->setStatus(FileAssetStatus::READY);
 				$dbFileAsset->save();
 			}
@@ -2553,7 +2553,7 @@ class kFlowHelper
 			$uploadToken->setStatus(UploadToken::UPLOAD_TOKEN_CLOSED);
 			$uploadToken->save();
 			
-			KalturaLog::info("File asset [" . $dbFileAsset->getId() . "] handled");
+			VidiunLog::info("File asset [" . $dbFileAsset->getId() . "] handled");
 			return;
 		}
 		
@@ -2562,7 +2562,7 @@ class kFlowHelper
 			$dbAsset = assetPeer::retrieveById($uploadToken->getObjectId());
 			if(!$dbAsset)
 			{
-				KalturaLog::err("Asset id [" . $uploadToken->getObjectId() . "] not found");
+				VidiunLog::err("Asset id [" . $uploadToken->getObjectId() . "] not found");
 				return;
 			}
 
@@ -2574,11 +2574,11 @@ class kFlowHelper
 			$syncKey = $dbAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 
 			try {
-				kFileSyncUtils::moveFromFile($fullPath, $syncKey, true);
+				vFileSyncUtils::moveFromFile($fullPath, $syncKey, true);
 			}
 			catch (Exception $e) {
 				if($dbAsset instanceof flavorAsset)
-					kBatchManager::updateEntry($dbAsset->getEntryId(), entryStatus::ERROR_IMPORTING);
+					vBatchManager::updateEntry($dbAsset->getEntryId(), entryStatus::ERROR_IMPORTING);
 
 				$dbAsset->setStatus(flavorAsset::FLAVOR_ASSET_STATUS_ERROR);
 				$dbAsset->save();
@@ -2588,7 +2588,7 @@ class kFlowHelper
 			if($dbAsset->getStatus() == flavorAsset::FLAVOR_ASSET_STATUS_IMPORTING)
 			{
 				/* @var $fileSync FileSync */
-				$fileSync = kFileSyncUtils::getLocalFileSyncForKey($syncKey, false);
+				$fileSync = vFileSyncUtils::getLocalFileSyncForKey($syncKey, false);
 				$dbAsset->setSize($fileSync->getFileSize());
 
 				if($dbAsset instanceof flavorAsset)
@@ -2616,13 +2616,13 @@ class kFlowHelper
 						throw $e;
 					}
 					
-					list($width, $height, $type, $attr) = kImageUtils::getImageSize($fileSync);
+					list($width, $height, $type, $attr) = vImageUtils::getImageSize($fileSync);
 					$dbAsset->setWidth($width);
 					$dbAsset->setHeight($height);
 				}
 
 				$dbAsset->save();
-				kEventsManager::raiseEvent(new kObjectAddedEvent($dbAsset));
+				vEventsManager::raiseEvent(new vObjectAddedEvent($dbAsset));
 			}
 
 			$uploadToken->setStatus(UploadToken::UPLOAD_TOKEN_CLOSED);
@@ -2634,7 +2634,7 @@ class kFlowHelper
 			$dbEntry = entryPeer::retrieveByPK($uploadToken->getObjectId());
 			if(!$dbEntry)
 			{
-				KalturaLog::err("Entry id [" . $uploadToken->getObjectId() . "] not found");
+				VidiunLog::err("Entry id [" . $uploadToken->getObjectId() . "] not found");
 				return;
 			}
 			
@@ -2647,12 +2647,12 @@ class kFlowHelper
 			$syncKey = $dbEntry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
 			try
 			{
-				kFileSyncUtils::moveFromFile($fullPath, $syncKey, true);
+				vFileSyncUtils::moveFromFile($fullPath, $syncKey, true);
 				myEntryUtils::validateObjectContent($dbEntry);
 			}
 			catch (Exception $e)
 			{
-				kBatchManager::updateEntry($dbEntry->getId(), entryStatus::ERROR_IMPORTING);
+				vBatchManager::updateEntry($dbEntry->getId(), entryStatus::ERROR_IMPORTING);
 				throw $e;
 			}
 			$dbEntry->setStatus(entryStatus::READY);
@@ -2671,7 +2671,7 @@ class kFlowHelper
 		$entry = entryPeer::retrieveByPK($tempEntry->getReplacedEntryId());
 		if(!$entry)
 		{
-			KalturaLog::err("Real entry id [" . $tempEntry->getReplacedEntryId() . "] not found");
+			VidiunLog::err("Real entry id [" . $tempEntry->getReplacedEntryId() . "] not found");
 			myEntryUtils::deleteEntry($tempEntry,null,true);
 			return;
 		}
@@ -2681,7 +2681,7 @@ class kFlowHelper
 			$entry->setReplacementStatus(entryReplacementStatus::FAILED);
 			$entry->save();
 
-			// NOTE: KalturaEntryService::cancelReplace() must be used to reset this status and delete the temp entry
+			// NOTE: VidiunEntryService::cancelReplace() must be used to reset this status and delete the temp entry
 
 			return;
 		}
@@ -2689,8 +2689,8 @@ class kFlowHelper
 		switch($entry->getReplacementStatus())
 		{
 			case entryReplacementStatus::APPROVED_BUT_NOT_READY:
-				KalturaLog::log("status changed to ready");
-				kEventsManager::raiseEventDeferred(new kObjectReadyForReplacmentEvent($tempEntry));
+				VidiunLog::log("status changed to ready");
+				vEventsManager::raiseEventDeferred(new vObjectReadyForReplacmentEvent($tempEntry));
 				break;
 
 			case entryReplacementStatus::READY_BUT_NOT_APPROVED:
@@ -2702,12 +2702,12 @@ class kFlowHelper
 				break;
 
 			case entryReplacementStatus::FAILED:
-				// Do nothing. KalturaEntryService::cancelReplace() will be used to delete the entry.
+				// Do nothing. VidiunEntryService::cancelReplace() will be used to delete the entry.
 				break;
 
 			case entryReplacementStatus::NONE:
 			default:
-				KalturaLog::err("Real entry id [" . $tempEntry->getReplacedEntryId() . "] replacement canceled");
+				VidiunLog::err("Real entry id [" . $tempEntry->getReplacedEntryId() . "] replacement canceled");
 				myEntryUtils::deleteEntry($tempEntry,null,true);
 				break;
 		}
@@ -2719,7 +2719,7 @@ class kFlowHelper
 
 		foreach($featureStatusesToRemove as $featureStatusToRemove)
 		{
-			if(!($featureStatusToRemove instanceof kFeatureStatus))
+			if(!($featureStatusToRemove instanceof vFeatureStatus))
 				continue;
 
 			$dbBatchJob->getPartner()->resetFeaturesStatusByType($featureStatusToRemove->getType());
@@ -2732,7 +2732,7 @@ class kFlowHelper
 		$featureStatusesToRemove = $data->getFeatureStatusesToRemove();
 		foreach($featureStatusesToRemove as $featureStatusToRemove)
 		{
-			if(!($featureStatusToRemove instanceof kFeatureStatus))
+			if(!($featureStatusToRemove instanceof vFeatureStatus))
 				continue;
 
 			$dbBatchJob->getPartner()->resetFeaturesStatusByType($featureStatusToRemove->getType());
@@ -2746,7 +2746,7 @@ class kFlowHelper
 		$featureStatusesToRemove = $data->getFeatureStatusesToRemove();
 		foreach($featureStatusesToRemove as $featureStatusToRemove)
 		{
-			if(!($featureStatusToRemove instanceof kFeatureStatus))
+			if(!($featureStatusToRemove instanceof vFeatureStatus))
 				continue;
 
 			$dbBatchJob->getPartner()->resetFeaturesStatusByType($featureStatusToRemove->getType());
@@ -2760,56 +2760,56 @@ class kFlowHelper
 		// Extract simple download name
 		$regex = "/^{$partner_id}_Export_[a-zA-Z0-9]+_(?<fileName>[\w\-]+.csv)$/";
 		if(!preg_match($regex, $file_name, $matches)) {
-			KalturaLog::err("File name doesn't match expected format");
+			VidiunLog::err("File name doesn't match expected format");
 			return null;
 		}
 		$downloadName = $matches['fileName'];
 		
 		// Add dc to enable redirection
-		$dc = kDataCenterMgr::getCurrentDc();
+		$dc = vDataCenterMgr::getCurrentDc();
 		$file_name = $dc['id'] . "_" . $file_name;
 		
-		$ksStr = "";
+		$vsStr = "";
 		$partner = PartnerPeer::retrieveByPK ( $partner_id );
 		$secret = $partner->getSecret ();
-		$privilege = ks::PRIVILEGE_DOWNLOAD . ":" . $file_name;
+		$privilege = vs::PRIVILEGE_DOWNLOAD . ":" . $file_name;
 
-		$ksStr = kSessionBase::generateSession($partner->getKSVersion(), $partner->getAdminSecret(), null, ks::TYPE_KS, $partner_id, $expiry, $privilege);
+		$vsStr = vSessionBase::generateSession($partner->getVSVersion(), $partner->getAdminSecret(), null, vs::TYPE_VS, $partner_id, $expiry, $privilege);
 
 		if ($applicationUrlTemplate) {
-			$url = str_replace("[ks]", $ksStr, $applicationUrlTemplate);
+			$url = str_replace("[vs]", $vsStr, $applicationUrlTemplate);
 			$url = str_replace("[id]", $file_name, $url);
 		}
 		else {
 			//url is built with DC url in order to be directed to the same DC of the saved file
-			$url = kDataCenterMgr::getCurrentDcUrl() . "/api_v3/index.php/service/liveReports/action/serveReport/ks/$ksStr/id/$file_name/$downloadName";
+			$url = vDataCenterMgr::getCurrentDcUrl() . "/api_v3/index.php/service/liveReports/action/serveReport/vs/$vsStr/id/$file_name/$downloadName";
 		}
 		return $url;
 	}
 	
-	public static function handleLiveReportExportFinished(BatchJob $dbBatchJob, kLiveReportExportJobData $data) {
+	public static function handleLiveReportExportFinished(BatchJob $dbBatchJob, vLiveReportExportJobData $data) {
 		
 		// Move file from shared temp to it's final location
 		$fileName =  basename($data->outputPath);
 		$directory =  myContentStorage::getFSContentRootPath() . "/content/reports/live/" . $dbBatchJob->getPartnerId() ;
 		$filePath = $directory . DIRECTORY_SEPARATOR . $fileName;
 		
-		$moveFile = kFile::moveFile($data->outputPath, $filePath);
+		$moveFile = vFile::moveFile($data->outputPath, $filePath);
 		if(!$moveFile) {
-			KalturaLog::err("Failed to move report file from: " . $data->outputPath . " to: " . $filePath);
-			return kFlowHelper::handleLiveReportExportFailed($dbBatchJob, $data);
+			VidiunLog::err("Failed to move report file from: " . $data->outputPath . " to: " . $filePath);
+			return vFlowHelper::handleLiveReportExportFailed($dbBatchJob, $data);
 		} 
 		
 		$data->outputPath = $filePath;
 		$dbBatchJob->setData($data);
 		$dbBatchJob->save();
 
-		$expiry = kConf::get("live_report_export_expiry", 'local', self::LIVE_REPORT_EXPIRY_TIME);
+		$expiry = vConf::get("live_report_export_expiry", 'local', self::LIVE_REPORT_EXPIRY_TIME);
 		// Create download URL
 		$url = self::createLiveReportExportDownloadUrl($dbBatchJob->getPartnerId(), $fileName, $expiry, $data->applicationUrlTemplate);
 		if(!$url) {
-			KalturaLog::err("Failed to create download URL");
-			return kFlowHelper::handleLiveReportExportFailed($dbBatchJob, $data);
+			VidiunLog::err("Failed to create download URL");
+			return vFlowHelper::handleLiveReportExportFailed($dbBatchJob, $data);
 		}
 		
 		// Create email params
@@ -2822,14 +2822,14 @@ class kFlowHelper
 		
 		
 		// Email it all
-		kJobsManager::addMailJob(
+		vJobsManager::addMailJob(
 				null,
 				0,
 				$dbBatchJob->getPartnerId(),
 				$email_id,
-				kMailJobData::MAIL_PRIORITY_NORMAL,
-				kConf::get( "live_report_sender_email" ),
-				kConf::get( "live_report_sender_name" ),
+				vMailJobData::MAIL_PRIORITY_NORMAL,
+				vConf::get( "live_report_sender_email" ),
+				vConf::get( "live_report_sender_name" ),
 				$data->recipientEmail,
 				$params,
 				$titleParams
@@ -2838,7 +2838,7 @@ class kFlowHelper
 		return $dbBatchJob;
 	}
 	
-	public static function handleLiveReportExportFailed(BatchJob $dbBatchJob, kLiveReportExportJobData $data) {
+	public static function handleLiveReportExportFailed(BatchJob $dbBatchJob, vLiveReportExportJobData $data) {
 	
 		$time = date("m-d-y H:i", $data->timeReference + $data->timeZoneOffset);
 		$email_id = MailType::MAIL_TYPE_LIVE_REPORT_EXPORT_FAILURE;
@@ -2846,14 +2846,14 @@ class kFlowHelper
 				$dbBatchJob->getErrType(), $dbBatchJob->getErrNumber());
 		$titleParams = array($time);
 	
-		kJobsManager::addMailJob(
+		vJobsManager::addMailJob(
 				null,
 				0,
 				$dbBatchJob->getPartnerId(),
 				$email_id,
-				kMailJobData::MAIL_PRIORITY_NORMAL,
-				kConf::get( "live_report_sender_email" ),
-				kConf::get( "live_report_sender_name" ),
+				vMailJobData::MAIL_PRIORITY_NORMAL,
+				vConf::get( "live_report_sender_email" ),
+				vConf::get( "live_report_sender_name" ),
 				$data->recipientEmail,
 				$params,
 				$titleParams
@@ -2861,21 +2861,21 @@ class kFlowHelper
 		return $dbBatchJob;
 	}
 	
-	public static function handleLiveReportExportAborted(BatchJob $dbBatchJob, kLiveReportExportJobData $data) {
+	public static function handleLiveReportExportAborted(BatchJob $dbBatchJob, vLiveReportExportJobData $data) {
 	
 		$time = date("m-d-y H:i", $data->timeReference + $data->timeZoneOffset);
 		$email_id = MailType::MAIL_TYPE_LIVE_REPORT_EXPORT_ABORT;
 		$params = array($dbBatchJob->getPartner()->getName(), $time, $dbBatchJob->getId());
 		$titleParams = array($time);
 	
-		kJobsManager::addMailJob(
+		vJobsManager::addMailJob(
 				null,
 				0,
 				$dbBatchJob->getPartnerId(),
 				$email_id,
-				kMailJobData::MAIL_PRIORITY_NORMAL,
-				kConf::get( "live_report_sender_email" ),
-				kConf::get( "live_report_sender_name" ),
+				vMailJobData::MAIL_PRIORITY_NORMAL,
+				vConf::get( "live_report_sender_email" ),
+				vConf::get( "live_report_sender_name" ),
 				$data->recipientEmail,
 				$params,
 				$titleParams
@@ -2888,20 +2888,20 @@ class kFlowHelper
 		$regex = "/^{$partner_id}_Report_export_[a-zA-Z0-9]+$/";
 		if (!preg_match($regex, $file_name, $matches))
 		{
-			KalturaLog::err("File name doesn't match expected format");
+			VidiunLog::err("File name doesn't match expected format");
 			return null;
 		}
 
 		$partner = PartnerPeer::retrieveByPK($partner_id);
-		$privilege = ks::PRIVILEGE_DOWNLOAD . ":" . $file_name;
+		$privilege = vs::PRIVILEGE_DOWNLOAD . ":" . $file_name;
 
-		$ksStr = kSessionBase::generateSession($partner->getKSVersion(), $partner->getAdminSecret(), null, ks::TYPE_KS, $partner_id, $expiry, $privilege);
-		$url = kDataCenterMgr::getCurrentDcUrl() . "/api_v3/index.php/service/report/action/serve/ks/$ksStr/id/$file_name/name/$file_name.csv";
+		$vsStr = vSessionBase::generateSession($partner->getVSVersion(), $partner->getAdminSecret(), null, vs::TYPE_VS, $partner_id, $expiry, $privilege);
+		$url = vDataCenterMgr::getCurrentDcUrl() . "/api_v3/index.php/service/report/action/serve/vs/$vsStr/id/$file_name/name/$file_name.csv";
 
 		return $url;
 	}
 
-	public static function handleReportExportFinished(BatchJob $dbBatchJob, kReportExportJobData $data)
+	public static function handleReportExportFinished(BatchJob $dbBatchJob, vReportExportJobData $data)
 	{
 		$finalPaths = array();
 		$filePaths = explode(',', $data->getFilePaths());
@@ -2911,11 +2911,11 @@ class kFlowHelper
 			$directory = myContentStorage::getFSContentRootPath() . "/content/reports/" . $dbBatchJob->getPartnerId();
 			$finalPath = $directory . DIRECTORY_SEPARATOR . $fileName;
 			$finalPaths[] = $filePath;
-			$moveFile = kFile::moveFile($filePath, $finalPath);
+			$moveFile = vFile::moveFile($filePath, $finalPath);
 			if (!$moveFile)
 			{
-				KalturaLog::err("Failed to move report file from: " . $filePath . " to: " . $finalPath);
-				return kFlowHelper::handleReportExportFailed($dbBatchJob, $data);
+				VidiunLog::err("Failed to move report file from: " . $filePath . " to: " . $finalPath);
+				return vFlowHelper::handleReportExportFailed($dbBatchJob, $data);
 			}
 		}
 
@@ -2923,7 +2923,7 @@ class kFlowHelper
 		$dbBatchJob->setData($data);
 		$dbBatchJob->save();
 
-		$expiry = kConf::get("report_export_expiry", 'local', self::REPORT_EXPIRY_TIME);
+		$expiry = vConf::get("report_export_expiry", 'local', self::REPORT_EXPIRY_TIME);
 
 		$links = array();
 		// Create download URL's
@@ -2933,8 +2933,8 @@ class kFlowHelper
 			$url = self::createReportExportDownloadUrl($dbBatchJob->getPartnerId(), $fileName, $expiry);
 			if (!$url)
 			{
-				KalturaLog::err("Failed to create download URL for file - $finalPath");
-				return kFlowHelper::handleReportExportFailed($dbBatchJob, $data);
+				VidiunLog::err("Failed to create download URL for file - $finalPath");
+				return vFlowHelper::handleReportExportFailed($dbBatchJob, $data);
 			}
 			$links[] = '<a href="' . $url .'" target="_blank" >' . $fileName . '</a>';
 		}
@@ -2946,14 +2946,14 @@ class kFlowHelper
 		$params = array($dbBatchJob->getPartner()->getName(), $time, $dbBatchJob->getId(), implode('<BR>', $links), $expiryInDays, $validUntil);
 		$titleParams = array($time);
 
-		kJobsManager::addMailJob(
+		vJobsManager::addMailJob(
 			null,
 			0,
 			$dbBatchJob->getPartnerId(),
 			$email_id,
-			kMailJobData::MAIL_PRIORITY_NORMAL,
-			kConf::get("report_sender_email"),
-			kConf::get("report_sender_name"),
+			vMailJobData::MAIL_PRIORITY_NORMAL,
+			vConf::get("report_sender_email"),
+			vConf::get("report_sender_name"),
 			$data->getRecipientEmail(),
 			$params,
 			$titleParams
@@ -2961,7 +2961,7 @@ class kFlowHelper
 		return $dbBatchJob;
 	}
 
-	public static function handleReportExportFailed(BatchJob $dbBatchJob, kReportExportJobData $data)
+	public static function handleReportExportFailed(BatchJob $dbBatchJob, vReportExportJobData $data)
 	{
 		$time = date("m-d-y H:i", $data->getTimeReference() + $data->getTimeZoneOffset());
 		$email_id = MailType::MAIL_TYPE_REPORT_EXPORT_FAILURE;
@@ -2969,14 +2969,14 @@ class kFlowHelper
 			$dbBatchJob->getErrType(), $dbBatchJob->getErrNumber());
 		$titleParams = array($time);
 
-		kJobsManager::addMailJob(
+		vJobsManager::addMailJob(
 			null,
 			0,
 			$dbBatchJob->getPartnerId(),
 			$email_id,
-			kMailJobData::MAIL_PRIORITY_NORMAL,
-			kConf::get("report_sender_email"),
-			kConf::get("report_sender_name"),
+			vMailJobData::MAIL_PRIORITY_NORMAL,
+			vConf::get("report_sender_email"),
+			vConf::get("report_sender_name"),
 			$data->getRecipientEmail(),
 			$params,
 			$titleParams
@@ -2984,21 +2984,21 @@ class kFlowHelper
 		return $dbBatchJob;
 	}
 
-	public static function handleReportExportAborted(BatchJob $dbBatchJob, kReportExportJobData $data)
+	public static function handleReportExportAborted(BatchJob $dbBatchJob, vReportExportJobData $data)
 	{
 		$time = date("m-d-y H:i", $data->getTimeReference() + $data->getTimeZoneOffset());
 		$email_id = MailType::MAIL_TYPE_REPORT_EXPORT_ABORT;
 		$params = array($dbBatchJob->getPartner()->getName(), $time, $dbBatchJob->getId());
 		$titleParams = array($time);
 
-		kJobsManager::addMailJob(
+		vJobsManager::addMailJob(
 			null,
 			0,
 			$dbBatchJob->getPartnerId(),
 			$email_id,
-			kMailJobData::MAIL_PRIORITY_NORMAL,
-			kConf::get("report_sender_email"),
-			kConf::get("report_sender_name"),
+			vMailJobData::MAIL_PRIORITY_NORMAL,
+			vConf::get("report_sender_email"),
+			vConf::get("report_sender_name"),
 			$data->getRecipientEmail(),
 			$params,
 			$titleParams
@@ -3034,7 +3034,7 @@ class kFlowHelper
 	
 	private static function handleLocalFileSyncDeletion($entryId, Partner $partner)
 	{
-		if($partner && $partner->getStorageDeleteFromKaltura())
+		if($partner && $partner->getStorageDeleteFromVidiun())
 		{
 			$readyAssets = assetPeer::retrieveReadyFlavorsByEntryId($entryId);
 			self::deleteAssetLocalFileSyncsByAssetArray($readyAssets);
@@ -3054,7 +3054,7 @@ class kFlowHelper
 			$data = $batchJob->getData();
 			$data->setInputFileSyncLocalPath($localFilePath);
 			$batchJob->setData($data);
-			kJobsManager::updateBatchJob($batchJob, BatchJob::BATCHJOB_STATUS_PENDING);
+			vJobsManager::updateBatchJob($batchJob, BatchJob::BATCHJOB_STATUS_PENDING);
 			return true;
 		}
 		else 
@@ -3062,7 +3062,7 @@ class kFlowHelper
 	}
 
 	
-	public static function handleExportCsvFinished(BatchJob $dbBatchJob, kExportCsvJobData $data)
+	public static function handleExportCsvFinished(BatchJob $dbBatchJob, vExportCsvJobData $data)
 	{
 		// Move file from shared temp to it's final location
 		$fileName =  basename($data->getOutputPath());
@@ -3074,10 +3074,10 @@ class kFlowHelper
 		if(!$data->getOutputPath())
 			throw new APIException(APIErrors::FILE_CREATION_FAILED, "file path not found");
 		
-		KalturaLog::info("Trying to move exported csv file from: " . $data->getOutputPath() . " to: " . $filePath);
+		VidiunLog::info("Trying to move exported csv file from: " . $data->getOutputPath() . " to: " . $filePath);
 		try
 		{
-			kFile::moveFile($data->getOutputPath(), $filePath);
+			vFile::moveFile($data->getOutputPath(), $filePath);
 		}
 		catch (Exception $e)
 		{
@@ -3089,21 +3089,21 @@ class kFlowHelper
 		$dbBatchJob->setData($data);
 		$dbBatchJob->save();
 		
-		KalturaLog::info("file path: [$filePath]");
+		VidiunLog::info("file path: [$filePath]");
 		
 		$downloadUrl = self::createCsvDownloadUrl($dbBatchJob->getPartnerId(), $fileName);
 		$userName = $data->getUserName();
 		$bodyParams = array($userName, $downloadUrl);
 		
 		//send the created csv by mail
-		kJobsManager::addMailJob(
+		vJobsManager::addMailJob(
 			null,
 			0,
 			$dbBatchJob->getPartnerId(),
 			MailType::MAIL_TYPE_OBJECTS_CSV,
-			kMailJobData::MAIL_PRIORITY_NORMAL,
-			kConf::get("partner_notification_email"),
-			kConf::get("partner_notification_name"),
+			vMailJobData::MAIL_PRIORITY_NORMAL,
+			vConf::get("partner_notification_email"),
+			vConf::get("partner_notification_name"),
 			$data->getUserMail(),
 			$bodyParams
 		);
@@ -3114,19 +3114,19 @@ class kFlowHelper
 
 	protected static function createCsvDownloadUrl ($partner_id, $file_name)
 	{
-		$ksStr = "";
+		$vsStr = "";
 		$partner = PartnerPeer::retrieveByPK ($partner_id);
 		$secret = $partner->getSecret ();
-		$privilege = ks::PRIVILEGE_DOWNLOAD . ":" . $file_name;
-		//ks will expire after 3 hours
+		$privilege = vs::PRIVILEGE_DOWNLOAD . ":" . $file_name;
+		//vs will expire after 3 hours
 		$expiry = 10800;
-		$result = kSessionUtils::startKSession($partner_id, $secret, null, $ksStr, $expiry, false, "", $privilege);
+		$result = vSessionUtils::startVSession($partner_id, $secret, null, $vsStr, $expiry, false, "", $privilege);
 
 		if ($result < 0)
 			throw new APIException(APIErrors::START_SESSION_ERROR, $partner);
 
 		//url is built with DC url in order to be directed to the same DC of the saved file
-		$url = kDataCenterMgr::getCurrentDcUrl() . self::SERVE_OBJECT_CSV_PARTIAL_URL ."$ksStr/id/$file_name";
+		$url = vDataCenterMgr::getCurrentDcUrl() . self::SERVE_OBJECT_CSV_PARTIAL_URL ."$vsStr/id/$file_name";
 
 		return $url;
 	}
@@ -3144,18 +3144,18 @@ class kFlowHelper
 
 				if (!$entry)
 				{
-					KalturaLog::err(KalturaErrors::ENTRY_ID_NOT_FOUND);
+					VidiunLog::err(VidiunErrors::ENTRY_ID_NOT_FOUND);
 					return;
 				}
-				$entry->setStatus(KalturaEntryStatus::READY);
+				$entry->setStatus(VidiunEntryStatus::READY);
 				$clipAttr = $task->getClipAttributes();
 				if ($clipAttr)
 					$entry->setRecordedLengthInMsecs($clipAttr->getDuration());
 				$entry->save();
 				break;
 			case EntryServerNodeStatus::ERROR:
-				KalturaLog::err("ClippingTask with ID [" . $task->getId(). "] got Error");
-				$entry->setStatus(KalturaEntryStatus::ERROR_CONVERTING);
+				VidiunLog::err("ClippingTask with ID [" . $task->getId(). "] got Error");
+				$entry->setStatus(VidiunEntryStatus::ERROR_CONVERTING);
 				$entry->save();
 				$task->deleteOrMarkForDeletion();
 				break;

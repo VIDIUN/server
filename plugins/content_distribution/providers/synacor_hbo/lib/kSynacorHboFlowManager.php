@@ -3,10 +3,10 @@
  * @package plugins.synacorHboDistribution
  * @subpackage lib
  */
-class kSynacorHboFlowManager implements kBatchJobStatusEventConsumer
+class vSynacorHboFlowManager implements vBatchJobStatusEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -34,10 +34,10 @@ class kSynacorHboFlowManager implements kBatchJobStatusEventConsumer
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
 		$data = $dbBatchJob->getData();
-		if (!$data instanceof kDistributionJobData)
+		if (!$data instanceof vDistributionJobData)
 			return true;
 			
-		$synacorHboCoreValueType = kPluginableEnumsManager::apiToCore('DistributionProviderType', SynacorHboDistributionPlugin::getApiValue(SynacorHboDistributionProviderType::SYNACOR_HBO));
+		$synacorHboCoreValueType = vPluginableEnumsManager::apiToCore('DistributionProviderType', SynacorHboDistributionPlugin::getApiValue(SynacorHboDistributionProviderType::SYNACOR_HBO));
 		if ($data->getProviderType() != $synacorHboCoreValueType)
 			return true;
 			
@@ -54,7 +54,7 @@ class kSynacorHboFlowManager implements kBatchJobStatusEventConsumer
 		);
 		
 		if (in_array($dbBatchJob->getJobType(), $jobTypesToFinish))
-			kJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
+			vJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
 		
 		return true;
 	}

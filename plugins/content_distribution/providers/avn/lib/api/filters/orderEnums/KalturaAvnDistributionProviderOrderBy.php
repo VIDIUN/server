@@ -3,6 +3,6 @@
  * @package plugins.avnDistribution
  * @subpackage api.filters.enum
  */
-class KalturaAvnDistributionProviderOrderBy extends KalturaDistributionProviderOrderBy
+class VidiunAvnDistributionProviderOrderBy extends VidiunDistributionProviderOrderBy
 {
 }

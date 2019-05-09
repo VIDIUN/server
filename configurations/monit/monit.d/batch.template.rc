@@ -1,17 +1,17 @@
 check process batch 
     with pidfile "@BASE_DIR@/var/run/batch.pid"
-    start program = "/sbin/service kaltura-batch start" with timeout 60 seconds
-    stop program = "/sbin/service kaltura-batch stop"
+    start program = "/sbin/service vidiun-batch start" with timeout 60 seconds
+    stop program = "/sbin/service vidiun-batch stop"
 
 
-    group kaltura
+    group vidiun
     depends on batchbin, batch.ini
 
 check file batch.ini
     with path "@APP_DIR@/configurations/batch/batch.ini"
-    # Reload Batch if the kaltura.conf file was changed
+    # Reload Batch if the vidiun.conf file was changed
     if changed checksum
-        then exec "/sbin/service kaltura-batch restart"
+        then exec "/sbin/service vidiun-batch restart"
 
 check file batchbin
-    with path "@APP_DIR@/batch/KGenericBatchMgr.class.php"
+    with path "@APP_DIR@/batch/VGenericBatchMgr.class.php"

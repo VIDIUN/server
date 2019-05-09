@@ -3,7 +3,7 @@
  * @package plugins.verizonVcastDistribution
  * @subpackage lib
  */
-class VerizonVcastDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class VerizonVcastDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const VERIZON_VCAST = 'VERIZON_VCAST';
 	

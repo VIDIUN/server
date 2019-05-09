@@ -3,6 +3,6 @@
  * @package plugins.kontiki
  * @subpackage api.filters.enum
  */
-class KalturaKontikiStorageProfileOrderBy extends KalturaStorageProfileOrderBy
+class VidiunKontikiStorageProfileOrderBy extends VidiunStorageProfileOrderBy
 {
 }

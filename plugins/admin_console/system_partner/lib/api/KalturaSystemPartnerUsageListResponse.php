@@ -3,10 +3,10 @@
  * @package plugins.systemPartner
  * @subpackage api.objects
  */
-class KalturaSystemPartnerUsageListResponse extends KalturaListResponse
+class VidiunSystemPartnerUsageListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaSystemPartnerUsageArray
+	 * @var VidiunSystemPartnerUsageArray
 	 */
 	public $objects;
 }

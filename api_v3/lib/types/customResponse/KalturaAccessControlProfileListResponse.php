@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAccessControlProfileListResponse extends KalturaListResponse
+class VidiunAccessControlProfileListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaAccessControlProfileArray
+	 * @var VidiunAccessControlProfileArray
 	 * @readonly
 	 */
 	public $objects;

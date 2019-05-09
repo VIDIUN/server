@@ -33,7 +33,7 @@
  * @package server-infra
  * @subpackage config
  */
-class kConfigTable
+class vConfigTable
 {
 	const LINE_SEPARATOR = "\n";
 	const SEPARATOR_LINE_PREFIX = "-----";
@@ -69,7 +69,7 @@ class kConfigTable
 		if ( ! self::$should_use_cache )
 		{
 			// if places in the code need to skip hte cahce - better to create the object fro mthe file
-			return new kConfigTable ( $file_name , $ignore_non_existing_columns );
+			return new vConfigTable ( $file_name , $ignore_non_existing_columns );
 		}
 		
 		// see if we want to use memcache for the config tables
@@ -78,10 +78,10 @@ class kConfigTable
 			self::$cache = new myObjectCache ( self::EXPIRY );
 		}
 		
-		$ct = self::$cache->get ( "kConfigTable" , $file_name );
+		$ct = self::$cache->get ( "vConfigTable" , $file_name );
 		if ( ! $ct )
 		{
-			$ct = new kConfigTable ( $file_name , $ignore_non_existing_columns );
+			$ct = new vConfigTable ( $file_name , $ignore_non_existing_columns );
 			self::$cache->put ( $ct );
 		}
 
@@ -127,7 +127,7 @@ class kConfigTable
 				}
 				else
 				{
-					throw new kConfigTableException( "Unknown column name [$column_name]" );
+					throw new vConfigTableException( "Unknown column name [$column_name]" );
 				}
 			}
 		}
@@ -136,7 +136,7 @@ class kConfigTable
 		if ( ! $row )
 		{
 			if ( $this->nopk )
-				throw new kConfigTableException( "No such pk [$pk]" );
+				throw new vConfigTableException( "No such pk [$pk]" );
 			else
 				return null;
 		}
@@ -157,7 +157,7 @@ class kConfigTable
 		if ( ! $row )
 		{
 			if ( $this->nopk )
-				throw new kConfigTableException( "No such pk [$pk]" );
+				throw new vConfigTableException( "No such pk [$pk]" );
 			else
 				return null;
 		}
@@ -197,12 +197,12 @@ class kConfigTable
 	private function initFromFile ( $file_name )
 	{
 		if(!file_exists($file_name))
-			throw new kConfigTableException ( "Cannot init from file [$file_name]" );
+			throw new vConfigTableException ( "Cannot init from file [$file_name]" );
 		
 		$content = file_get_contents ( $file_name );
 		
 		if ( ! $content )
-			throw new kConfigTableException ( "Cannot init from file [$file_name]" );
+			throw new vConfigTableException ( "Cannot init from file [$file_name]" );
 		
 		$lines = explode ( self::LINE_SEPARATOR , $content );
 		$part = 1;
@@ -256,7 +256,7 @@ class kConfigTable
 				}
 				else
 				{
-					throw new kConfigTableException ( "Unknown parser rule [$key]=[$value] in line [$line]" );
+					throw new vConfigTableException ( "Unknown parser rule [$key]=[$value] in line [$line]" );
 				}
 			}
 		}
@@ -272,7 +272,7 @@ class kConfigTable
 	private function defineTableStruct ( $line )
 	{
 		if ( $this->structure_defined )
-			throw new kConfigTableException( "Only one definition line is allowed" );
+			throw new vConfigTableException( "Only one definition line is allowed" );
 
 		 $this->structure_defined = true;
 		
@@ -291,7 +291,7 @@ class kConfigTable
 		
 		if( $this->pk > $i )
 		{
-			throw new kConfigTableException( "pk [{$this->pk} is too big. There are only [$i] columns defined for this table" );
+			throw new vConfigTableException( "pk [{$this->pk} is too big. There are only [$i] columns defined for this table" );
 		}
 	}
 	
@@ -313,7 +313,7 @@ class kConfigTable
 		if ( isset ( $this->rows[$pk] ) )
 		{
 			// TODO - should throw exception ??
-			throw new kConfigTableException( "Duplicate pk [$pk]" );
+			throw new vConfigTableException( "Duplicate pk [$pk]" );
 		}
 		
 		$this->rows[$pk] = $values;
@@ -333,9 +333,9 @@ class kConfigTable
 }
 
 /**
- * Will allow chaining several kConfigTable objects in a given order and handle fallback searchs in specific cases
+ * Will allow chaining several vConfigTable objects in a given order and handle fallback searchs in specific cases
  */
-class kConfigTableChain
+class vConfigTableChain
 {
 	private $file_names;
 	private $config_chain = null;
@@ -346,7 +346,7 @@ class kConfigTableChain
 	 * the FIRST file in the array is the most impornat one and is the first to search.
 	 * the LAST file should always be set NOT to ignore non-existing columns
 	 */
- 	public function  kConfigTableChain ( array $file_names , $path = null)
+ 	public function  vConfigTableChain ( array $file_names , $path = null)
 	{
 		$this->file_names = $file_names;
 		$this->config_chain = array();
@@ -358,7 +358,7 @@ class kConfigTableChain
 			$ignore = $i < $count; // set $ignore to be true unless it's the last file
 			if ( $file_name == null ) continue;
 			if ( $path ) $file_name = $path . $file_name ;
-			$this->config_chain[] = kConfigTable::getInstance ( $file_name , $ignore );
+			$this->config_chain[] = vConfigTable::getInstance ( $file_name , $ignore );
 		}
 	}
 	
@@ -398,7 +398,7 @@ class kConfigTableChain
 				if ( ! $config->isSetPk ( $pk ) )
 				{
 					$err = "Cannot find [$pk] in any of the files " . print_r ( $this->file_names , true );
-					throw new kConfigTableException ( $err );
+					throw new vConfigTableException ( $err );
 				}
 				// in case of the last in the chain - get wihtou questioms
 				return $config->get ( $pk , $column_name );
@@ -413,5 +413,5 @@ class kConfigTableChain
 	}
 }
 
-class kConfigTableException extends Exception {}
+class vConfigTableException extends Exception {}
 ?>

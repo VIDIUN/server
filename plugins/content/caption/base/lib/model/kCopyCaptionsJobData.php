@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage model.data
  */
-class kCopyCaptionsJobData extends kJobData
+class vCopyCaptionsJobData extends vJobData
 {
 
 	/** entry Id

@@ -1,16 +1,16 @@
 <?php
-require_once __DIR__ . '/kBaseConfCache.php';
-require_once __DIR__ . '/kMapCacheInterface.php';
-require_once __DIR__ . '/kKeyCacheInterface.php';
+require_once __DIR__ . '/vBaseConfCache.php';
+require_once __DIR__ . '/vMapCacheInterface.php';
+require_once __DIR__ . '/vKeyCacheInterface.php';
 
-class kApcConf extends kBaseConfCache implements kMapCacheInterface , kKeyCacheInterface
+class vApcConf extends vBaseConfCache implements vMapCacheInterface , vKeyCacheInterface
 {
 	protected $reloadFileExist;
 	protected $apcFunctionsExist;
 
 	public function __construct()
 	{
-		$reloadFile = kEnvironment::get('cache_root_path').'base.reload';
+		$reloadFile = vEnvironment::get('cache_root_path').'base.reload';
 		$this->apcFunctionsExist = function_exists('apc_fetch');
 		$this->reloadFileExist = file_exists($reloadFile);
 		if($this->reloadFileExist)
@@ -59,7 +59,7 @@ class kApcConf extends kBaseConfCache implements kMapCacheInterface , kKeyCacheI
 	public function loadKey()
 	{
 		if($this->apcFunctionsExist && !$this->reloadFileExist)
-			return apc_fetch(kBaseConfCache::CONF_CACHE_VERSION_KEY);
+			return apc_fetch(vBaseConfCache::CONF_CACHE_VERSION_KEY);
 
 		return null;
 	}
@@ -68,10 +68,10 @@ class kApcConf extends kBaseConfCache implements kMapCacheInterface , kKeyCacheI
 	{
 		if($this->apcFunctionsExist && PHP_SAPI != 'cli')
 		{
-			$existingKey = apc_fetch(kBaseConfCache::CONF_CACHE_VERSION_KEY);
+			$existingKey = apc_fetch(vBaseConfCache::CONF_CACHE_VERSION_KEY);
 			if(!$existingKey || strcmp($existingKey, $key))
 			{
-				return apc_store(kBaseConfCache::CONF_CACHE_VERSION_KEY, $key, $ttl);
+				return apc_store(vBaseConfCache::CONF_CACHE_VERSION_KEY, $key, $ttl);
 			}
 		}
 		return null;

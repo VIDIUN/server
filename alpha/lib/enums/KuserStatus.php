@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.enum
  */ 
-interface KuserStatus extends BaseEnum
+interface VuserStatus extends BaseEnum
 {
 	const BLOCKED = 0;
 	const ACTIVE = 1;

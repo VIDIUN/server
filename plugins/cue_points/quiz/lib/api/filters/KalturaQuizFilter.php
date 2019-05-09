@@ -4,7 +4,7 @@
  * @subpackage api.filters
  */
 
-class KalturaQuizFilter extends KalturaRelatedFilter {
+class VidiunQuizFilter extends VidiunRelatedFilter {
 
 	static private $map_between_objects = array
 	(
@@ -32,29 +32,29 @@ class KalturaQuizFilter extends KalturaRelatedFilter {
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null) {
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null) {
 		$entryFilter = new QuizEntryFilter();
-		$entryFilter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);
+		$entryFilter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);
 		$this->toObject($entryFilter);
 
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 		if($pager)
 			$pager->attachToCriteria($c);
 
 		$entryFilter->attachToCriteria($c);
 		$list = entryPeer::doSelect($c);
 
-		$response = new KalturaQuizListResponse();
-		$response->objects = KalturaQuizArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunQuizListResponse();
+		$response->objects = VidiunQuizArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $c->getRecordsCount();
 
 		return $response;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter() {
 		return new QuizEntryFilter();

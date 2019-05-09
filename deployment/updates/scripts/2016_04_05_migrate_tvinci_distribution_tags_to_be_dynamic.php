@@ -53,7 +53,7 @@ foreach ($distributionProfiles as $distributionProfile)
 		$tags[] = $tag;
 
 	$distributionProfile->putInCustomData('tags',$tags);
-	KalturaLog::debug("noam [".print_r($distributionProfile,true)."]");
+	VidiunLog::debug("noam [".print_r($distributionProfile,true)."]");
 	if ($realrun)
 	{
 		$distributionProfile->save();

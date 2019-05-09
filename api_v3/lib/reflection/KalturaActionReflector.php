@@ -1,12 +1,12 @@
 <?php
 /**
  * Class is used for reflecting actions in a service class whether or not it is currently generated into the 
- * KalturaServiceMap.cache, so long as the service class can be found. Internal use only.
+ * VidiunServiceMap.cache, so long as the service class can be found. Internal use only.
  * 
  * @package api
  * @subpackage v3
  */
-class KalturaActionReflector extends KalturaReflector
+class VidiunActionReflector extends VidiunReflector
 {
 	/**
 	 * @var string
@@ -39,17 +39,17 @@ class KalturaActionReflector extends KalturaReflector
 	protected $_actionName;
 	
 	/**
-	 * @var KalturaDocCommentParser
+	 * @var VidiunDocCommentParser
 	 */
 	protected $_actionInfo;
 	
 	/**
-	 * @var KalturaDocCommentParser
+	 * @var VidiunDocCommentParser
 	 */
 	protected $_actionClassInfo;
 	
 	/**
-	 * @var KalturaBaseService
+	 * @var VidiunBaseService
 	 */
 	protected $_actionClassInstance;
 	
@@ -75,7 +75,7 @@ class KalturaActionReflector extends KalturaReflector
 		if(function_exists('apc_fetch'))
 		{
 			$actionFromCache = apc_fetch("{$this->_serviceId}_{$this->_actionId}", $fetchFromAPCSuccess);
-			if($fetchFromAPCSuccess && $actionFromCache[KalturaServicesMap::SERVICES_MAP_MODIFICATION_TIME] == KalturaServicesMap::getServiceMapModificationTime())
+			if($fetchFromAPCSuccess && $actionFromCache[VidiunServicesMap::SERVICES_MAP_MODIFICATION_TIME] == VidiunServicesMap::getServiceMapModificationTime())
 			{
 				$this->_actionInfo = $actionFromCache["actionInfo"];
 				$this->_actionParams = $actionFromCache["actionParams"];
@@ -90,7 +90,7 @@ class KalturaActionReflector extends KalturaReflector
 	
 	/**
 	 * Function returns the parsed doccomment of the action method.
-	 * @return KalturaDocCommentParser
+	 * @return VidiunDocCommentParser
 	 */
 	public function getActionInfo ( )
 	{
@@ -98,14 +98,14 @@ class KalturaActionReflector extends KalturaReflector
 		{
 			$reflectionClass = new ReflectionClass($this->_actionClass);
 			$reflectionMethod = $reflectionClass->getMethod($this->_actionMethodName);
-			$this->_actionInfo = new KalturaDocCommentParser($reflectionMethod->getDocComment());
+			$this->_actionInfo = new VidiunDocCommentParser($reflectionMethod->getDocComment());
 		}
 		return $this->_actionInfo;
 	}
 	
 	/**
 	 * Action returns array of the parameters the action method expects
-	 * @return array<KalturaParamInfo>
+	 * @return array<VidiunParamInfo>
 	 */
 	public function getActionParams ( )
 	{
@@ -124,8 +124,8 @@ class KalturaActionReflector extends KalturaReflector
 				if (in_array($name, $this->_reservedKeys))
 					throw new Exception("Param [$name] in action [$this->_actionMethodName] is a reserved key");
 					
-				$parsedDocComment = new KalturaDocCommentParser( $docComment, array(
-					KalturaDocCommentParser::DOCCOMMENT_REPLACENET_PARAM_NAME => $name , ) );
+				$parsedDocComment = new VidiunDocCommentParser( $docComment, array(
+					VidiunDocCommentParser::DOCCOMMENT_REPLACENET_PARAM_NAME => $name , ) );
 				$paramClass = $reflectionParam->getClass(); // type hinting for objects
 				if ($paramClass)
 				{
@@ -142,7 +142,7 @@ class KalturaActionReflector extends KalturaReflector
 					}
 				}
 				
-				$paramInfo = new KalturaParamInfo($type, $name);
+				$paramInfo = new VidiunParamInfo($type, $name);
 				$paramInfo->setDescription($parsedDocComment->paramDescription);
 				
 				if ($reflectionParam->isOptional()) // for normal parameters
@@ -170,7 +170,7 @@ class KalturaActionReflector extends KalturaReflector
 	
 	/**
 	 * @param string $actionName
-	 * @return KalturaParamInfo
+	 * @return VidiunParamInfo
 	 */
 	public function getActionOutputType()
 	{
@@ -179,9 +179,9 @@ class KalturaActionReflector extends KalturaReflector
 		$reflectionMethod = $reflectionClass->getMethod($this->_actionMethodName);
 		
 		$docComment = $reflectionMethod->getDocComment();
-		$parsedDocComment = new KalturaDocCommentParser($docComment);
+		$parsedDocComment = new VidiunDocCommentParser($docComment);
 		if ($parsedDocComment->returnType)
-			return new KalturaParamInfo($parsedDocComment->returnType, "output");
+			return new VidiunParamInfo($parsedDocComment->returnType, "output");
 		
 		return null;
 	}
@@ -193,14 +193,14 @@ class KalturaActionReflector extends KalturaReflector
 		return $this->_serviceId;
 	}
 	/**
-	 * @return KalturaDocCommentParser
+	 * @return VidiunDocCommentParser
 	 */
 	public function getActionClassInfo ()
 	{
 		if (is_null($this->_actionClassInfo))
 		{
 			$reflectionClass = new ReflectionClass($this->_actionClass);
-			$this->_actionClassInfo = new KalturaDocCommentParser($reflectionClass->getDocComment());
+			$this->_actionClassInfo = new VidiunDocCommentParser($reflectionClass->getDocComment());
 		}
 		return $this->_actionClassInfo;
 	}
@@ -243,7 +243,7 @@ class KalturaActionReflector extends KalturaReflector
 	/**
 	 * Transparently call the initService() of the real service class.
 	 */
-	public function initService(KalturaDetachedResponseProfile $responseProfile = null)
+	public function initService(VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$instance = $this->getServiceInstance();
 		
@@ -271,10 +271,10 @@ class KalturaActionReflector extends KalturaReflector
 		if (!function_exists('apc_store'))
 			return;
 			
-		$servicesMapLastModTime = KalturaServicesMap::getServiceMapModificationTime();
+		$servicesMapLastModTime = VidiunServicesMap::getServiceMapModificationTime();
 		
 		$cacheValue = array(
-			KalturaServicesMap::SERVICES_MAP_MODIFICATION_TIME => $servicesMapLastModTime, 
+			VidiunServicesMap::SERVICES_MAP_MODIFICATION_TIME => $servicesMapLastModTime, 
 			"actionInfo" => $this->getActionInfo(), 
 			"actionParams" => $this->getActionParams(),
 			"actionClassInfo" => $this->getActionClassInfo(),

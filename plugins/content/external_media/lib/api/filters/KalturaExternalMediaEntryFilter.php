@@ -3,7 +3,7 @@
  * @package plugins.externalMedia
  * @subpackage api.filters
  */
-class KalturaExternalMediaEntryFilter extends KalturaExternalMediaEntryBaseFilter
+class VidiunExternalMediaEntryFilter extends VidiunExternalMediaEntryBaseFilter
 {
 	public function __construct()
 	{
@@ -11,7 +11,7 @@ class KalturaExternalMediaEntryFilter extends KalturaExternalMediaEntryBaseFilte
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::toObject()
+	 * @see VidiunFilter::toObject()
 	 */
 	public function toObject($coreFilter = null, $skip = array())
 	{
@@ -29,7 +29,7 @@ class KalturaExternalMediaEntryFilter extends KalturaExternalMediaEntryBaseFilte
 			$apiExternalSourceTypes = explode(',', $this->externalSourceTypeIn);
 			foreach($apiExternalSourceTypes as $apiExternalSourceType)
 			{
-				$coreExternalSourceType = kPluginableEnumsManager::apiToCore('ExternalMediaSourceType', $apiExternalSourceType);
+				$coreExternalSourceType = vPluginableEnumsManager::apiToCore('ExternalMediaSourceType', $apiExternalSourceType);
 				$coreExternalSourceTypes[] = ExternalMediaPlugin::getExternalSourceSearchData($coreExternalSourceType);
 			}
 			$externalSourceTypeIn = implode(',', $coreExternalSourceTypes);
@@ -42,14 +42,14 @@ class KalturaExternalMediaEntryFilter extends KalturaExternalMediaEntryBaseFilte
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntryFilter::getListResponse()
+	 * @see VidiunBaseEntryFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager);
 		
-	    $newList = KalturaExternalMediaEntryArray::fromDbArray($list, $responseProfile);
-		$response = new KalturaExternalMediaEntryListResponse();
+	    $newList = VidiunExternalMediaEntryArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunExternalMediaEntryListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		

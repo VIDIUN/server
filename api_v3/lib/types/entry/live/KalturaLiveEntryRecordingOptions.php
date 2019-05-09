@@ -5,26 +5,26 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveEntryRecordingOptions extends KalturaObject
+class VidiunLiveEntryRecordingOptions extends VidiunObject
 {
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $shouldCopyEntitlement;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $shouldCopyScheduling;
 	
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $shouldCopyThumbnail;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $shouldMakeHidden;
 
@@ -37,7 +37,7 @@ class KalturaLiveEntryRecordingOptions extends KalturaObject
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -45,13 +45,13 @@ class KalturaLiveEntryRecordingOptions extends KalturaObject
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
 		{
-			$dbObject = new kLiveEntryRecordingOptions();
+			$dbObject = new vLiveEntryRecordingOptions();
 		}
 		
 		return parent::toObject($dbObject, $propsToSkip);

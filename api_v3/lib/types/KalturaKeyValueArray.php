@@ -1,11 +1,11 @@
 <?php
 /**
- * An array of KalturaKeyValue
+ * An array of VidiunKeyValue
  * 
  * @package api
  * @subpackage objects
  */
-class KalturaKeyValueArray extends KalturaTypedArray
+class VidiunKeyValueArray extends VidiunTypedArray
 {
 	public static function fromDbArray(array $pairs = null)
 	{
@@ -22,7 +22,7 @@ class KalturaKeyValueArray extends KalturaTypedArray
 				continue;
 			}
 			
-			$pairObject = new KalturaKeyValue();
+			$pairObject = new VidiunKeyValue();
 			$pairObject->key = $prefix . $key;
 			$pairObject->value = $value;
 			$this[] = $pairObject;
@@ -31,7 +31,7 @@ class KalturaKeyValueArray extends KalturaTypedArray
 	
 	public static function fromKeyValueArray(array $pairs = null)
 	{
-		$pairsArray = new KalturaKeyValueArray();
+		$pairsArray = new VidiunKeyValueArray();
 		if($pairs && is_array($pairs))
 		{
 			foreach($pairs as $key => $value)
@@ -42,7 +42,7 @@ class KalturaKeyValueArray extends KalturaTypedArray
 					continue;
 				}
 				
-				$pairObject = new KalturaKeyValue();
+				$pairObject = new VidiunKeyValue();
 				$pairObject->key = $key;
 				$pairObject->value = $value;
 				$pairsArray[] = $pairObject;
@@ -53,7 +53,7 @@ class KalturaKeyValueArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaKeyValue");
+		return parent::__construct("VidiunKeyValue");
 	}
 	
 	public function toObjectsArray()
@@ -61,7 +61,7 @@ class KalturaKeyValueArray extends KalturaTypedArray
 		$ret = array();
 		foreach ($this->toArray() as $keyValueObject)
 		{
-			/* @var $keyValueObject KalturaKeyValue */
+			/* @var $keyValueObject VidiunKeyValue */
 			$ret[$keyValueObject->key] = $keyValueObject->value;
 		}
 		

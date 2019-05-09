@@ -47,7 +47,7 @@ class AvnFeed
 	public function __construct($templateName)
 	{
 		$xmlTemplate = realpath(dirname(__FILE__) . '/../') . '/xml/' . $templateName;
-		$this->doc = new KDOMDocument();
+		$this->doc = new VDOMDocument();
 		$this->doc->load($xmlTemplate);
 		
 		$this->xpath = new DOMXPath($this->doc);
@@ -99,7 +99,7 @@ class AvnFeed
 	{
 		$this->distributionProfile = $profile;
 		
-		kXml::setNodeValue($this->xpath,'/rss/channel/title', $profile->getFeedTitle());
+		vXml::setNodeValue($this->xpath,'/rss/channel/title', $profile->getFeedTitle());
 		
 		$this->loadAvnCategories($profile->getPartnerId());
 	}
@@ -115,7 +115,7 @@ class AvnFeed
 		foreach($metadataProfiles as $metadataProfile)
 		{
 			$key = $metadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_DEFINITION);
-			$xsd = kFileSyncUtils::file_get_contents($key, true, false);
+			$xsd = vFileSyncUtils::file_get_contents($key, true, false);
 			$this->avnCategories = array_merge($this->avnCategories, $this->getAvnCategoriesFromXsd($xsd));
 		}
 	} 
@@ -143,31 +143,31 @@ class AvnFeed
 	{
 		$item = $this->item->cloneNode(true);
 		
-		kXml::setNodeValue($this->xpath,'guid', $values[AvnDistributionField::GUID], $item);
-		kXml::setNodeValue($this->xpath,'pubDate', $values[AvnDistributionField::PUB_DATE], $item);
-		kXml::setNodeValue($this->xpath,'title', $values[AvnDistributionField::TITLE], $item);
-		kXml::setNodeValue($this->xpath,'description', $values[AvnDistributionField::DESCRIPTION], $item);
-		kXml::setNodeValue($this->xpath,'link', $values[AvnDistributionField::LINK], $item);
-		kXml::setNodeValue($this->xpath,'category', $values[AvnDistributionField::CATEGORY], $item);
+		vXml::setNodeValue($this->xpath,'guid', $values[AvnDistributionField::GUID], $item);
+		vXml::setNodeValue($this->xpath,'pubDate', $values[AvnDistributionField::PUB_DATE], $item);
+		vXml::setNodeValue($this->xpath,'title', $values[AvnDistributionField::TITLE], $item);
+		vXml::setNodeValue($this->xpath,'description', $values[AvnDistributionField::DESCRIPTION], $item);
+		vXml::setNodeValue($this->xpath,'link', $values[AvnDistributionField::LINK], $item);
+		vXml::setNodeValue($this->xpath,'category', $values[AvnDistributionField::CATEGORY], $item);
 		
-		kXml::setNodeValue($this->xpath,'amg:passthru', $this->getPassthruJsonObj($values), $item);
+		vXml::setNodeValue($this->xpath,'amg:passthru', $this->getPassthruJsonObj($values), $item);
 		
 		if ($flavorAsset)
 		{
 			$url = $this->getAssetUrl($flavorAsset);
 			$type = $this->getContentTypeFromUrl($url);
 			
-			kXml::setNodeValue($this->xpath,'media:content/@url', $url, $item);
-			kXml::setNodeValue($this->xpath,'media:content/@type', $type, $item);
+			vXml::setNodeValue($this->xpath,'media:content/@url', $url, $item);
+			vXml::setNodeValue($this->xpath,'media:content/@type', $type, $item);
 			if ($values[AvnDistributionField::ORDER_SUB] == '1')
-				kXml::setNodeValue($this->xpath,'media:content/@isDefault', 'true', $item);
+				vXml::setNodeValue($this->xpath,'media:content/@isDefault', 'true', $item);
 			else
-				kXml::setNodeValue($this->xpath,'media:content/@isDefault', 'false', $item);
+				vXml::setNodeValue($this->xpath,'media:content/@isDefault', 'false', $item);
 		}
 		
 		if ($thumbAsset)
 		{
-			kXml::setNodeValue($this->xpath,'media:thumbnail/@url', $this->getAssetUrl($thumbAsset), $item);
+			vXml::setNodeValue($this->xpath,'media:thumbnail/@url', $this->getAssetUrl($thumbAsset), $item);
 		}
 		
 		return $item;
@@ -214,7 +214,7 @@ class AvnFeed
 		}
 		else
 		{
-			KalturaLog::alert('"Content-Type" header was not found for the following URL: '. $url);
+			VidiunLog::alert('"Content-Type" header was not found for the following URL: '. $url);
 			return null;
 		}
 	}
@@ -273,7 +273,7 @@ class AvnFeed
 	protected function getAvnCategoriesFromXsd($xsd)
 	{
 		$categories = array();
-		$doc = new KDOMDocument();
+		$doc = new VDOMDocument();
 		$doc->loadXML($xsd);
 		$xpath = new DOMXPath($doc);
 		$xpath->registerNamespace('xsd', 'http://www.w3.org/2001/XMLSchema');

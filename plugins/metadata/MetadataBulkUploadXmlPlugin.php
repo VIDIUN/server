@@ -3,13 +3,13 @@
  * Enable custom metadata ingestion from XML bulk upload
  * @package plugins.metadata
  */
-class MetadataBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPending, IKalturaSchemaContributor
+class MetadataBulkUploadXmlPlugin extends VidiunPlugin implements IVidiunPending, IVidiunSchemaContributor
 {
 	const PLUGIN_NAME = 'metadataBulkUploadXml';
 	const BULK_UPLOAD_XML_PLUGIN_NAME = 'bulkUploadXml';
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -17,22 +17,22 @@ class MetadataBulkUploadXmlPlugin extends KalturaPlugin implements IKalturaPendi
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$bulkUploadXmlDependency = new KalturaDependency(self::BULK_UPLOAD_XML_PLUGIN_NAME);
-		$metadataDependency = new KalturaDependency(MetadataPlugin::getPluginName());
+		$bulkUploadXmlDependency = new VidiunDependency(self::BULK_UPLOAD_XML_PLUGIN_NAME);
+		$metadataDependency = new VidiunDependency(MetadataPlugin::getPluginName());
 		
 		return array($bulkUploadXmlDependency, $metadataDependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		if(
 			$coreType != BulkUploadXmlPlugin::getSchemaTypeCoreValue(XmlSchemaType::BULK_UPLOAD_XML)
 			&&

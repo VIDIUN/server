@@ -3,12 +3,12 @@
  * @package plugins.freewheelGenericDistribution
  * @subpackage api.objects
  */
-class KalturaFreewheelGenericDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunFreewheelGenericDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 	/**
 	 * Demonstrate passing array of paths to the job
 	 * 
-	 * @var KalturaStringArray
+	 * @var VidiunStringArray
 	 */
 	public $videoAssetFilePaths;
 	
@@ -20,7 +20,7 @@ class KalturaFreewheelGenericDistributionJobProviderData extends KalturaConfigur
 	public $thumbAssetFilePath;
 	
 	/**
-	 * @var KalturaCuePointArray
+	 * @var VidiunCuePointArray
 	 */
 	public $cuePoints;
 	
@@ -28,27 +28,27 @@ class KalturaFreewheelGenericDistributionJobProviderData extends KalturaConfigur
 	/**
 	 * Called on the server side and enables you to populate the object with any data from the DB
 	 * 
-	 * @param KalturaDistributionJobData $distributionJobData
+	 * @param VidiunDistributionJobData $distributionJobData
 	 */
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 		
 		if(!$distributionJobData)
 			return;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaFreewheelGenericDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunFreewheelGenericDistributionProfile))
 			return;
 			
-		$this->videoAssetFilePaths = new KalturaStringArray();
+		$this->videoAssetFilePaths = new VidiunStringArray();
 		
 		// loads all the flavor assets that should be submitted to the remote destination site
 		$flavorAssets = assetPeer::retrieveByIds(explode(',', $distributionJobData->entryDistribution->flavorAssetIds));
 		foreach($flavorAssets as $flavorAsset)
 		{
-			$videoAssetFilePath = new KalturaString();
+			$videoAssetFilePath = new VidiunString();
 			$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			$videoAssetFilePath->value = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			$videoAssetFilePath->value = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 			$this->videoAssetFilePaths[] = $videoAssetFilePath;
 		}
 		
@@ -57,17 +57,17 @@ class KalturaFreewheelGenericDistributionJobProviderData extends KalturaConfigur
 		{
 			$thumbAsset = reset($thumbAssets);
 			$syncKey = $thumbAssets->getSyncKey(thumbAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			$this->thumbAssetFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			$this->thumbAssetFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 		}
 		
 		// entry cue points
-		$c = KalturaCriteria::create(CuePointPeer::OM_CLASS);
+		$c = VidiunCriteria::create(CuePointPeer::OM_CLASS);
 		$c->add(CuePointPeer::PARTNER_ID, $distributionJobData->entryDistribution->partnerId);
 		$c->add(CuePointPeer::ENTRY_ID, $distributionJobData->entryDistribution->entryId);
 		$c->add(CuePointPeer::TYPE, AdCuePointPlugin::getCuePointTypeCoreValue(AdCuePointType::AD));
 		$c->addAscendingOrderByColumn(CuePointPeer::START_TIME);
 		$cuePointsDb = CuePointPeer::doSelect($c);
-		$this->cuePoints = KalturaCuePointArray::fromDbArray($cuePointsDb);
+		$this->cuePoints = VidiunCuePointArray::fromDbArray($cuePointsDb);
 	}
 		
 	/**
@@ -81,7 +81,7 @@ class KalturaFreewheelGenericDistributionJobProviderData extends KalturaConfigur
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -89,7 +89,7 @@ class KalturaFreewheelGenericDistributionJobProviderData extends KalturaConfigur
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($object = null, $skip = array())
 	{
@@ -100,7 +100,7 @@ class KalturaFreewheelGenericDistributionJobProviderData extends KalturaConfigur
 			$videoAssetFilePaths = array();
 			foreach($this->videoAssetFilePaths as $videoAssetFilePath)
 			{
-				/* @var $videoAssetFilePath KalturaString */
+				/* @var $videoAssetFilePath VidiunString */
 				$videoAssetFilePaths[] = $videoAssetFilePath->value;
 			}
 				
@@ -111,18 +111,18 @@ class KalturaFreewheelGenericDistributionJobProviderData extends KalturaConfigur
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($object, $responseProfile);
 		$videoAssetFilePaths = $object->getVideoAssetFilePaths();
 		if($videoAssetFilePaths && is_array($videoAssetFilePaths))
 		{
-			$this->videoAssetFilePaths = new KalturaStringArray();
+			$this->videoAssetFilePaths = new VidiunStringArray();
 			foreach($videoAssetFilePaths as $assetFilePath)
 			{
-				$videoAssetFilePath = new KalturaString();
+				$videoAssetFilePath = new VidiunString();
 				$videoAssetFilePath->value = $assetFilePath;
 				$this->videoAssetFilePaths[] = $videoAssetFilePath;
 			}

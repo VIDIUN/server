@@ -3,7 +3,7 @@
  * @package plugins.dropFolderXmlBulkUpload
  * @subpackage model.data
  */
-class kDropFolderBulkUploadXmlJobData extends kBulkUploadXmlJobData
+class vDropFolderBulkUploadXmlJobData extends vBulkUploadXmlJobData
 {
 	/**
 	 * The bulk upload drop folder id

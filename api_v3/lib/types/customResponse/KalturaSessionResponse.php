@@ -3,6 +3,6 @@
  * @package api
  * @subpackage objects
  */
-class KalturaSessionResponse extends KalturaStartWidgetSessionResponse
+class VidiunSessionResponse extends VidiunStartWidgetSessionResponse
 {
 }

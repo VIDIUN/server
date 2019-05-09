@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class VirusScanEntryStatus implements IKalturaPluginEnum, entryStatus
+class VirusScanEntryStatus implements IVidiunPluginEnum, entryStatus
 {
 	const INFECTED = 'Infected';
 	const SCAN_FAILURE = 'ScanFailure';

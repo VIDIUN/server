@@ -3,10 +3,10 @@
  * @package plugins.schedule
  * @subpackage api.filters
  */
-class KalturaLiveStreamScheduleEventFilter extends KalturaLiveStreamScheduleEventBaseFilter
+class VidiunLiveStreamScheduleEventFilter extends VidiunLiveStreamScheduleEventBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaScheduleEventFilter::getListResponseType()
+	 * @see VidiunScheduleEventFilter::getListResponseType()
 	 */
 	protected function getListResponseType()
 	{

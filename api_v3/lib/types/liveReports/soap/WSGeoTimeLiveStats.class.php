@@ -3,8 +3,8 @@
 
 class WSGeoTimeLiveStats extends WSEntryLiveStats
 {	
-	function getKalturaObject() {
-		return new KalturaGeoTimeLiveStats();
+	function getVidiunObject() {
+		return new VidiunGeoTimeLiveStats();
 	}
 				
 	protected function getAttributeType($attributeName)

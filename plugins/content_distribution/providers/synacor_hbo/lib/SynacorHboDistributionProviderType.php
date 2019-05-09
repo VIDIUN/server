@@ -3,7 +3,7 @@
  * @package plugins.synacorHboDistribution
  * @subpackage lib
  */
-class SynacorHboDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class SynacorHboDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const SYNACOR_HBO = 'SYNACOR_HBO';
 	

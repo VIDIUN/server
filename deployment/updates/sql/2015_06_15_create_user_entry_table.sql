@@ -2,7 +2,7 @@ CREATE TABLE `user_entry`
 (
         `id` INTEGER  NOT NULL AUTO_INCREMENT,
         `entry_id` VARCHAR(20),
-        `kuser_id` INTEGER  NOT NULL,
+        `vuser_id` INTEGER  NOT NULL,
         `partner_id` INTEGER,
         `created_at` DATETIME,
         `updated_at` DATETIME,
@@ -10,5 +10,5 @@ CREATE TABLE `user_entry`
         `type` INTEGER,
         `custom_data` TEXT,
         PRIMARY KEY (`id`),
-       	KEY (`entry_id`, `kuser_id`)
+       	KEY (`entry_id`, `vuser_id`)
 )ENGINE=InnoDB COMMENT='Describes the relationship between a specific user and a specific entry';

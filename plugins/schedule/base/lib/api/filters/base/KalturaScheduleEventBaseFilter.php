@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaScheduleEventBaseFilter extends KalturaRelatedFilter
+abstract class VidiunScheduleEventBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -97,7 +97,7 @@ abstract class KalturaScheduleEventBaseFilter extends KalturaRelatedFilter
 	public $parentIdNotIn;
 
 	/**
-	 * @var KalturaScheduleEventStatus
+	 * @var VidiunScheduleEventStatus
 	 */
 	public $statusEqual;
 
@@ -167,7 +167,7 @@ abstract class KalturaScheduleEventBaseFilter extends KalturaRelatedFilter
 	public $priorityLessThanOrEqual;
 
 	/**
-	 * @var KalturaScheduleEventRecurrenceType
+	 * @var VidiunScheduleEventRecurrenceType
 	 */
 	public $recurrenceTypeEqual;
 

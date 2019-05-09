@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage api.enum
  */
-class KalturaCaptionType extends KalturaDynamicEnum implements CaptionType
+class VidiunCaptionType extends VidiunDynamicEnum implements CaptionType
 {
 	public static function getEnumClass()
 	{

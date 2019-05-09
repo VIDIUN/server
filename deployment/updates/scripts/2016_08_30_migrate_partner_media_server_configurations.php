@@ -42,12 +42,12 @@ function getValueByField($config, $filedValue)
 	return $value;
 }
 
-KalturaLog::debug("Starting partner media server config migration");
+VidiunLog::debug("Starting partner media server config migration");
 
 $partnerToWorkOn = getPartnersToWorkOn();
 if(!count($partnerToWorkOn))
 {
-	KalturaLog::debug("No partners found to work on, Done!!!");
+	VidiunLog::debug("No partners found to work on, Done!!!");
 	return;	
 }
 
@@ -62,7 +62,7 @@ foreach ($partnerToWorkOn as $partner)
 	$hdsDomain = getValueByField($mediaServerConfig, "domain");
 	if($hdsDomain)
 	{
-		KalturaLog::debug("Found hds domain config for partner [{$partner->getId()}] value [$hdsDomain]");
+		VidiunLog::debug("Found hds domain config for partner [{$partner->getId()}] value [$hdsDomain]");
 		$hdsDeliveryProfile = getDeliveryProfileByHostNameAndStreamType($partner->getId(), $hdsDomain, 'hds');
 		if($hdsDeliveryProfile)
 			$hdsDeliveryProfileId = $hdsDeliveryProfile->getId();
@@ -71,7 +71,7 @@ foreach ($partnerToWorkOn as $partner)
 	$hlsDomain = getValueByField($mediaServerConfig, "domain-hls");
 	if($hlsDomain)
 	{
-		KalturaLog::debug("Found hls domain config for partner [{$partner->getId()}] value [$hlsDomain]");
+		VidiunLog::debug("Found hls domain config for partner [{$partner->getId()}] value [$hlsDomain]");
 		$hlsDeliveryProfile = getDeliveryProfileByHostNameAndStreamType($partner->getId(), $hlsDomain, 'applehttp');
 		if($hlsDeliveryProfile)
 			$hlsDeliveryProfileId = $hlsDeliveryProfile->getId();
@@ -79,7 +79,7 @@ foreach ($partnerToWorkOn as $partner)
 	
 	if(!$hdsDeliveryProfileId && !$hlsDeliveryProfileId)
 	{
-		KalturaLog::debug("Could not locate both HLS & HDS delivery profile ids continue to next partner");
+		VidiunLog::debug("Could not locate both HLS & HDS delivery profile ids continue to next partner");
 		continue;
 	}
 	
@@ -89,11 +89,11 @@ foreach ($partnerToWorkOn as $partner)
 	if($hlsDeliveryProfileId)
 		$liveDeliveryProfileConfig["applehttp"] =  array($hlsDeliveryProfileId);
 	
-	KalturaLog::debug("Setting live delivery profile config: " . print_r($liveDeliveryProfileConfig, true) . " for partnerId [{$partner->getId()}]");
+	VidiunLog::debug("Setting live delivery profile config: " . print_r($liveDeliveryProfileConfig, true) . " for partnerId [{$partner->getId()}]");
 	
 	if($executionMode === "debug")
 	{
-		KalturaLog::debug("Debug mode is enabled skipping Save");
+		VidiunLog::debug("Debug mode is enabled skipping Save");
 		continue;
 	}
 	
@@ -101,4 +101,4 @@ foreach ($partnerToWorkOn as $partner)
 	$partner->save();
 }
 
-KalturaLog::debug("Done partner media server config migration");
+VidiunLog::debug("Done partner media server config migration");

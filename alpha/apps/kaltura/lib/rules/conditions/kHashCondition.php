@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model.data
  */
-class kHashCondition extends kCondition
+class vHashCondition extends vCondition
 {
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -57,29 +57,29 @@ class kHashCondition extends kCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
 		$hashes = $scope->getHashes();
 		if (is_array($hashes) && isset($hashes[$this->hashName]))
 		{
 			$sentHash = $hashes[$this->hashName];
-			$compareHash = md5($this->hashSecret. kCurrentContext::$ks);
+			$compareHash = md5($this->hashSecret. vCurrentContext::$vs);
 			if ($sentHash === $compareHash)
 			{
-				KalturaLog::info("Correct hash sent");
+				VidiunLog::info("Correct hash sent");
 				return false;
 			}
 			
 		}
 		
-		KalturaLog::info("Incorrect hash sent");
+		VidiunLog::info("Incorrect hash sent");
 		return true;
     }
 
 	/* (non-PHPdoc)
-	 * @see kCondition::shouldDisableCache()
+	 * @see vCondition::shouldDisableCache()
 	 */
 	public function shouldDisableCache($scope)
 	{

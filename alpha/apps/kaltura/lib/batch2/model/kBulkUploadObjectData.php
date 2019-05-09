@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kBulkUploadObjectData
+class vBulkUploadObjectData
 {
     
 }

@@ -3,10 +3,10 @@
  * @package plugins.drm
  * @subpackage api.objects
  */
-class KalturaDrmPolicyListResponse extends KalturaListResponse
+class VidiunDrmPolicyListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaDrmPolicyArray
+	 * @var VidiunDrmPolicyArray
 	 * @readonly
 	 */
 	public $objects;

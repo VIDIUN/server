@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaSearchComparableCondition extends KalturaSearchCondition
+class VidiunSearchComparableCondition extends VidiunSearchCondition
 {
 	/**
-	 * @var KalturaSearchConditionComparison
+	 * @var VidiunSearchConditionComparison
 	 */
 	public $comparison;
 	

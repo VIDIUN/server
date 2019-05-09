@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaIndexJobData extends KalturaJobData
+class VidiunIndexJobData extends VidiunJobData
 {
 	/**
 	 * The filter should return the list of objects that need to be reindexed.
-	 * @var KalturaFilter
+	 * @var VidiunFilter
 	 */
 	public $filter;
 	
@@ -47,7 +47,7 @@ class KalturaIndexJobData extends KalturaJobData
 	 */
 	public function toSubType($subType)
 	{
-		return kPluginableEnumsManager::apiToCore('IndexObjectType', $subType);
+		return vPluginableEnumsManager::apiToCore('IndexObjectType', $subType);
 	}
 
 	/**
@@ -56,7 +56,7 @@ class KalturaIndexJobData extends KalturaJobData
 	 */
 	public function fromSubType($subType)
 	{
-		return kPluginableEnumsManager::coreToApi('IndexObjectType', $subType);
+		return vPluginableEnumsManager::coreToApi('IndexObjectType', $subType);
 	}
 	
 	public function toObject($dbData = null, $props_to_skip = array()) 
@@ -67,7 +67,7 @@ class KalturaIndexJobData extends KalturaJobData
 		return parent::toObject($dbData, $props_to_skip);
 	}
 	
-	public function doFromObject($dbData, KalturaDetachedResponseProfile $responseProfile = null) 
+	public function doFromObject($dbData, VidiunDetachedResponseProfile $responseProfile = null) 
 	{
 		/* @var $dbData kIndexJobData */
 		$filter = $dbData->getFilter();
@@ -75,27 +75,27 @@ class KalturaIndexJobData extends KalturaJobData
 		switch($filterType)
 		{
 			case 'entryFilter':
-				$this->filter = new KalturaBaseEntryFilter();
+				$this->filter = new VidiunBaseEntryFilter();
 				break;
 				
 			case 'categoryFilter':
-				$this->filter = new KalturaCategoryFilter();
+				$this->filter = new VidiunCategoryFilter();
 				break;
 			
 			case 'categoryEntryFilter':
-				$this->filter = new KalturaCategoryEntryFilter();
+				$this->filter = new VidiunCategoryEntryFilter();
 				break;
 				
-			case 'categoryKuserFilter':
-				$this->filter = new KalturaCategoryUserFilter();
+			case 'categoryVuserFilter':
+				$this->filter = new VidiunCategoryUserFilter();
 				break;
 			
-			case 'kuserFilter':
-				$this->filter = new KalturaUserFilter();
+			case 'vuserFilter':
+				$this->filter = new VidiunUserFilter();
 				break;
 				
 			default:
-				$this->filter = KalturaPluginManager::loadObject('KalturaFilter', $filterType);
+				$this->filter = VidiunPluginManager::loadObject('VidiunFilter', $filterType);
 		}
 		if($this->filter)
 			$this->filter->fromObject($filter);

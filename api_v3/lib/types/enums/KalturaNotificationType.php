@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaNotificationType extends KalturaEnum 
+class VidiunNotificationType extends VidiunEnum 
 {
     const ENTRY_ADD = 1;
 	const ENTR_UPDATE_PERMISSIONS = 2;
@@ -26,7 +26,7 @@ class KalturaNotificationType extends KalturaEnum
 			self::ENTRY_UPDATE => "The <i>entry_update</i> notification is being sent to notify that an entry has been updated.",
 			self::ENTRY_UPDATE_THUMBNAIL => "The <i>entry_update_thumbnail</i> notification is being sent to notify that thumbnail of an entry has been updated.",
 			self::ENTRY_UPDATE_MODERATION => "The <i>entry_update_moderation</i> notification is being sent to notify that the moderation status of an entry has been updated.",
-			self::USER_ADD => "The <i>user_add</i> notification is being sent to notify that a specific user was added to the Kaltura DB.",
+			self::USER_ADD => "The <i>user_add</i> notification is being sent to notify that a specific user was added to the Vidiun DB.",
 			self::USER_BANNED => "The <i>user_banned</i> notification is being sent to notify that a specific user was banned.",
 		);
 	}

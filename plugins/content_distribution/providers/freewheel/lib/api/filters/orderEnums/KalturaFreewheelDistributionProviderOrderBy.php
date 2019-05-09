@@ -3,6 +3,6 @@
  * @package plugins.freewheelDistribution
  * @subpackage api.filters.enum
  */
-class KalturaFreewheelDistributionProviderOrderBy extends KalturaDistributionProviderOrderBy
+class VidiunFreewheelDistributionProviderOrderBy extends VidiunDistributionProviderOrderBy
 {
 }

@@ -30,7 +30,7 @@ class UserController extends Zend_Controller_Action
 		// init filter
 		$userFilter = $this->getUserFilterFromRequest($request);
 		$userFilter->partnerIdEqual = $config->settings->partnerId;
-		$userFilter->orderBy = Kaltura_Client_Enum_UserOrderBy::CREATED_AT_DESC;
+		$userFilter->orderBy = Vidiun_Client_Enum_UserOrderBy::CREATED_AT_DESC;
 		
 		$paginatorAdapter = new Infra_FilterPaginator($client->user, "listAction", null, $userFilter);
 		$paginator = new Infra_Paginator($paginatorAdapter);
@@ -58,7 +58,7 @@ class UserController extends Zend_Controller_Action
 		{
 			$loginForm->isValid($request->getPost());
 			
-			$adapter = new Kaltura_VarAuthAdapter();
+			$adapter = new Vidiun_VarAuthAdapter();
 			$adapter->setCredentials($request->getPost('email'), $request->getPost('password'));
 			$adapter->setTimezoneOffset($request->getPost('timezone_offset'));
 			//$adapter = new Zend_Auth_Adapter_DbTable($zendDb);
@@ -152,16 +152,16 @@ class UserController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * This action can only be accessed from the admin console, and passes a KS with which it is possible to access the VAR console
+	 * This action can only be accessed from the admin console, and passes a VS with which it is possible to access the VAR console
 	 */
 	public function adminLoginAction ()
 	{
 	    $form = new Form_AdminLogin();
 	    $this->view->form = $form;
 	    
-	    $adapter = new Kaltura_VarAuthAdapter();
+	    $adapter = new Vidiun_VarAuthAdapter();
 	    $adapter->setTimezoneOffset($this->_getParam('timezone_offset'));
-	    $adapter->setKS($this->_getParam('ks'));
+	    $adapter->setVS($this->_getParam('vs'));
 		//$adapter = new Zend_Auth_Adapter_DbTable($zendDb);
 	    $auth = Infra_AuthHelper::getAuthInstance();
 		$result = $auth->authenticate($adapter);

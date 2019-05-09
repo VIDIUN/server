@@ -6,7 +6,7 @@
  * 
  */
 
-class KAsyncNotifierSender
+class VAsyncNotifierSender
 {
 	const OK = 0; 
 	const ERROR_RETRY = -1;
@@ -24,7 +24,7 @@ class KAsyncNotifierSender
 		foreach($params as $param => $value)
 			$inputs .= "<input name=\"$param\" value=\"$value\"/>";
 		
-//		KalturaLog::debug('
+//		VidiunLog::debug('
 //		<html>
 //			<body>
 //				<form method="post" action="' . $url . '">
@@ -91,7 +91,7 @@ class KAsyncNotifierSender
 		catch(Exception $ex)
 		{
 			self::closeConnection();
-			KalturaLog::err('Sending notification failed with message: '.$ex->getMessage());
+			VidiunLog::err('Sending notification failed with message: '.$ex->getMessage());
 			throw $ex;
 		}
 		

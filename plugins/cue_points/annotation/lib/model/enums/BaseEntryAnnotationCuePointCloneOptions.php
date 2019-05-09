@@ -3,7 +3,7 @@
  * @package plugins.cuePoint
  * @subpackage model.enum
  */
-class BaseEntryAnnotationCuePointCloneOptions implements IKalturaPluginEnum, BaseEntryCloneOptions
+class BaseEntryAnnotationCuePointCloneOptions implements IVidiunPluginEnum, BaseEntryCloneOptions
 {
 	const ANNOTATION_CUE_POINTS = "ANNOTATION_CUE_POINTS";
 

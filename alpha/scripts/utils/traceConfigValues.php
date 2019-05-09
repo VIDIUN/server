@@ -15,15 +15,15 @@ $mapName = $argv[1];
 $valueName = $argv[2];
 if(isset($argv[3]))
 	$_SERVER["HOSTNAME"] = $argv[3];
-$usageBefore = kConfCacheManager::getUsage();
+$usageBefore = vConfCacheManager::getUsage();
 print_r($usageBefore);
 if($valueName=='*')
-	$map = kConf::getMap($mapName);
+	$map = vConf::getMap($mapName);
 else
-	$map = kConf::get($valueName,$mapName);
+	$map = vConf::get($valueName,$mapName);
 if($map)
 {
-	$usageAfter = kConfCacheManager::getUsage();
+	$usageAfter = vConfCacheManager::getUsage();
 	print_r($usageAfter);
 	foreach ($usageAfter['usage'] as $key => $value)
 	{

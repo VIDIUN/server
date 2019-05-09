@@ -27,19 +27,19 @@ else
 
 chdir(dirname(__FILE__));
 define('ROOT_DIR', realpath(dirname(__FILE__) . '/../../../'));
-require_once(ROOT_DIR . '/infra/KAutoloader.php');
-require_once(ROOT_DIR . '/alpha/config/kConf.php');
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "plugins", "*"));
-KAutoloader::setClassMapFilePath(kConf::get("cache_root_path") . '/elastic/' . basename(__FILE__) . '.cache');
-KAutoloader::register();
+require_once(ROOT_DIR . '/infra/VAutoloader.php');
+require_once(ROOT_DIR . '/alpha/config/vConf.php');
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "plugins", "*"));
+VAutoloader::setClassMapFilePath(vConf::get("cache_root_path") . '/elastic/' . basename(__FILE__) . '.cache');
+VAutoloader::register();
 error_reporting(E_ALL);
-KalturaLog::setLogger(new KalturaStdoutLogger());
+VidiunLog::setLogger(new VidiunStdoutLogger());
 
-$beaconElasticConfig = kConf::getMap('beacon_rotation');
+$beaconElasticConfig = vConf::getMap('beacon_rotation');
 foreach ($beaconElasticConfig as $configSection)
 {
 	$rotationWorker = new BeaconsIndexesRotationWorker($configSection, $dryRun, $handleUnusedIndices);
 	$rotationWorker->rotate();
 }
 
-KalturaLog::log("Done!");
+VidiunLog::log("Done!");

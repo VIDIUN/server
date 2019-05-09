@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Storage
  */
-class asperaMgr extends kFileTransferMgr
+class asperaMgr extends vFileTransferMgr
 {
 	
 	private $privKeyFile;
@@ -17,13 +17,13 @@ class asperaMgr extends kFileTransferMgr
 	private $ascpCmd = 'ascp';
 	private $asperaTempFolder = null; 
 	
-	// instances of this class should be created usign the 'getInstance' of the 'kFileTransferMgr' class
+	// instances of this class should be created usign the 'getInstance' of the 'vFileTransferMgr' class
 	protected function __construct(array $options = null)
 	{
 		parent::__construct($options);
 		
 		if(!$options || !isset($options['asperaTempFolder']))
-			throw new kFileTransferMgrException("Option attribute [asperaTempFolder] is missing.", kFileTransferMgrException::attributeMissing);
+			throw new vFileTransferMgrException("Option attribute [asperaTempFolder] is missing.", vFileTransferMgrException::attributeMissing);
 		$this->asperaTempFolder = $options['asperaTempFolder'];
 		
 		if(isset($options['ascpCmd']))
@@ -81,7 +81,7 @@ class asperaMgr extends kFileTransferMgr
 		$validInput &= (strpos($remote_file, "'") === FALSE); // $remote_file : can't contain '
 	
 		if(!$validInput)
-			throw new kFileTransferMgrException("Can't put file, Illegal parameters");
+			throw new vFileTransferMgrException("Can't put file, Illegal parameters");
 	} 
 	
 	private function getCmdPrefix(){
@@ -106,12 +106,12 @@ class asperaMgr extends kFileTransferMgr
 	}
 	
 	private function executeCmd($cmd){
-		KalturaLog::info('Executing command: '.$cmd);
+		VidiunLog::info('Executing command: '.$cmd);
 		$return_value = null;
 		$beginTime = time();
 		system($cmd, $return_value);
 		$duration = (time() - $beginTime)/1000;
-		KalturaLog::debug("Execution took [$duration]sec with value [$return_value]");
+		VidiunLog::debug("Execution took [$duration]sec with value [$return_value]");
 		if ($return_value == 0)
 			return true;
 		return false;
@@ -134,14 +134,14 @@ class asperaMgr extends kFileTransferMgr
 	}
 	
 /* (non-PHPdoc)
-	 * @see kFileTransferMgr::doConnect()
+	 * @see vFileTransferMgr::doConnect()
 	 */
 	protected function doConnect($server, &$port) {
 		
 	}
 
 /* (non-PHPdoc)
-	 * @see kFileTransferMgr::doLogin()
+	 * @see vFileTransferMgr::doLogin()
 	 */
 	protected function doLogin($user, $pass) {
 		// TODO Auto-generated method stub
@@ -149,7 +149,7 @@ class asperaMgr extends kFileTransferMgr
 	}
 
 /* (non-PHPdoc)
-	 * @see kFileTransferMgr::doLoginPubKey()
+	 * @see vFileTransferMgr::doLoginPubKey()
 	 */
 	protected function doLoginPubKey($user, $pubKeyFile, $privKeyFile, $passphrase = null) {
 		// TODO Auto-generated method stub
@@ -157,7 +157,7 @@ class asperaMgr extends kFileTransferMgr
 	}
 
 /* (non-PHPdoc)
-	 * @see kFileTransferMgr::doMkDir()
+	 * @see vFileTransferMgr::doMkDir()
 	 */
 	protected function doMkDir($remote_path) {
 		// TODO Auto-generated method stub
@@ -165,7 +165,7 @@ class asperaMgr extends kFileTransferMgr
 	}
 
 /* (non-PHPdoc)
-	 * @see kFileTransferMgr::doDelFile()
+	 * @see vFileTransferMgr::doDelFile()
 	 */
 	protected function doDelFile($remote_file) {
 		// TODO Auto-generated method stub
@@ -173,7 +173,7 @@ class asperaMgr extends kFileTransferMgr
 	}
 
 /* (non-PHPdoc)
-	 * @see kFileTransferMgr::doDelDir()
+	 * @see vFileTransferMgr::doDelDir()
 	 */
 	protected function doDelDir($remote_path) {
 		// TODO Auto-generated method stub
@@ -181,7 +181,7 @@ class asperaMgr extends kFileTransferMgr
 	}
 
 /* (non-PHPdoc)
-	 * @see kFileTransferMgr::doChmod()
+	 * @see vFileTransferMgr::doChmod()
 	 */
 	protected function doChmod($remote_file, $chmod_code) {
 		// TODO Auto-generated method stub
@@ -189,7 +189,7 @@ class asperaMgr extends kFileTransferMgr
 	}
 
 /* (non-PHPdoc)
-	 * @see kFileTransferMgr::doFileExists()
+	 * @see vFileTransferMgr::doFileExists()
 	 */
 	protected function doFileExists($remote_file) {
 		// TODO Auto-generated method stub
@@ -197,7 +197,7 @@ class asperaMgr extends kFileTransferMgr
 	}
 
 /* (non-PHPdoc)
-	 * @see kFileTransferMgr::doPwd()
+	 * @see vFileTransferMgr::doPwd()
 	 */
 	protected function doPwd() {
 		// TODO Auto-generated method stub
@@ -205,7 +205,7 @@ class asperaMgr extends kFileTransferMgr
 	}
 
 /* (non-PHPdoc)
-	 * @see kFileTransferMgr::doList()
+	 * @see vFileTransferMgr::doList()
 	 */
 	protected function doList($remote_path) {
 		// TODO Auto-generated method stub
@@ -218,14 +218,14 @@ class asperaMgr extends kFileTransferMgr
 	}
 
 /* (non-PHPdoc)
-	 * @see kFileTransferMgr::doFileSize()
+	 * @see vFileTransferMgr::doFileSize()
 	 */
 	protected function doFileSize($remote_file) {
 		// TODO Auto-generated method stub
 		
 	}
 /* (non-PHPdoc)
-	 * @see kFileTransferMgr::doGetFile()
+	 * @see vFileTransferMgr::doGetFile()
 	 */
 	protected function doGetFile($remote_file, $local_file = null) {
 		// TODO Auto-generated method stub

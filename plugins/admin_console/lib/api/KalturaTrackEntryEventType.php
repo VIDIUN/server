@@ -3,7 +3,7 @@
  * @package plugins.adminConsole
  * @subpackage api.enums
  */
-class KalturaTrackEntryEventType extends KalturaEnum
+class VidiunTrackEntryEventType extends VidiunEnum
 {
 	const UPLOADED_FILE = 1;
 	const WEBCAM_COMPLETED = 2;

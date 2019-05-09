@@ -3,7 +3,7 @@
  * @package plugins.quickTimeTools
  * @subpackage lib
  */
-class QuickTimeToolsConversionEngineType implements IKalturaPluginEnum, conversionEngineType
+class QuickTimeToolsConversionEngineType implements IVidiunPluginEnum, conversionEngineType
 {
 	const QUICK_TIME_PLAYER_TOOLS = 'QuickTimeTools';
 	

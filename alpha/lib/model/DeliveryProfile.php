@@ -9,7 +9,7 @@ abstract class DeliveryProfile extends BaseDeliveryProfile implements IBaseObjec
 {
 	abstract protected function buildServeFlavors();
 	
-	protected $DEFAULT_RENDERER_CLASS = 'kF4MManifestRenderer';
+	protected $DEFAULT_RENDERER_CLASS = 'vF4MManifestRenderer';
 	
 	const DYNAMIC_ATTRIBUTES_FULL_SUPPORT = 0;		// the profile fully supports the required attirbutes
 	const DYNAMIC_ATTRIBUTES_PARTIAL_SUPPORT = 1;	// the profile may support the required attirbutes however its better to try and find a more suitable profile
@@ -135,7 +135,7 @@ abstract class DeliveryProfile extends BaseDeliveryProfile implements IBaseObjec
 	
 	/**
 	 * This function returns the recognizer this delivery profile is working with
-	 * @return kUrlRecognizer
+	 * @return vUrlRecognizer
 	 */
 	public function getRecognizer()
 	{
@@ -144,31 +144,31 @@ abstract class DeliveryProfile extends BaseDeliveryProfile implements IBaseObjec
 			$object = unserialize($serializedObject);
 		}
 		catch (Exception $e) {
-			KalturaLog::err('Error unserializing recognizer for delivery id ['.$this->getId().']');
+			VidiunLog::err('Error unserializing recognizer for delivery id ['.$this->getId().']');
 			$object = null;
 		}
-		if ($object instanceof kUrlRecognizer) {
+		if ($object instanceof vUrlRecognizer) {
 			return $object;
 		}
 		return null;
 	}
 	
 	/**
-	 * @param kUrlRecognizer $newObject
+	 * @param vUrlRecognizer $newObject
 	 */
 	public function setRecognizer($newObject)
 	{
 		if(is_null($newObject)) {
 			parent::setRecognizer(null);
 		} 
-		else if ($newObject instanceof kUrlRecognizer)
+		else if ($newObject instanceof vUrlRecognizer)
 		{
 			$serializedObject = serialize($newObject);
 			parent::setRecognizer($serializedObject);
 		}
 		else
 		{
-			KalturaLog::err('Given input is not an instance of kUrlRecognizer - ignoring');
+			VidiunLog::err('Given input is not an instance of vUrlRecognizer - ignoring');
 		}
 	}
 
@@ -184,7 +184,7 @@ abstract class DeliveryProfile extends BaseDeliveryProfile implements IBaseObjec
 
 	/**
 	 * This function returns the tokenizer this delivery profile is working with
-	 * @return kUrlRecognizer
+	 * @return vUrlRecognizer
 	 */
 	public function getTokenizer()
 	{
@@ -194,32 +194,32 @@ abstract class DeliveryProfile extends BaseDeliveryProfile implements IBaseObjec
 			$object = unserialize($serializedObject);
 		}
 		catch (Exception $e) {
-			KalturaLog::err('Error unserializing tokenizer for delivery id ['.$this->getId().']');
+			VidiunLog::err('Error unserializing tokenizer for delivery id ['.$this->getId().']');
 			$object = null;
 		}
 		
-		if ($object instanceof kUrlTokenizer) {
+		if ($object instanceof vUrlTokenizer) {
 			return $object;
 		}
 		return null;
 	}
 	
 	/**
-	 * @param kUrlTokenizer $newObject
+	 * @param vUrlTokenizer $newObject
 	 */
 	public function setTokenizer($newObject)
 	{
 		if(is_null($newObject)) {
 			parent::setTokenizer(null);
 		}
-		else if ($newObject instanceof kUrlTokenizer)
+		else if ($newObject instanceof vUrlTokenizer)
 		{
 			$serializedObject = serialize($newObject);
 			parent::setTokenizer($serializedObject);
 		}
 		else
 		{
-			KalturaLog::err('Given input is not an instance of kUrlTokenizer - ignoring');
+			VidiunLog::err('Given input is not an instance of vUrlTokenizer - ignoring');
 		}
 	}
 	
@@ -268,13 +268,13 @@ abstract class DeliveryProfile extends BaseDeliveryProfile implements IBaseObjec
 		if ($this->params->getResponseFormat())
 		{
 			$formatMapping = array(
-					'f4m' => 	'kF4MManifestRenderer',
-					'f4mv2' => 	'kF4Mv2ManifestRenderer',
-					'smil' => 	'kSmilManifestRenderer',
-					'm3u8' => 	'kM3U8ManifestRenderer',
-					'jsonp' => 	'kJSONPManifestRenderer',
-					'json' => 	'kJSONManifestRenderer',
-					'redirect' => 'kRedirectManifestRenderer',
+					'f4m' => 	'vF4MManifestRenderer',
+					'f4mv2' => 	'vF4Mv2ManifestRenderer',
+					'smil' => 	'vSmilManifestRenderer',
+					'm3u8' => 	'vM3U8ManifestRenderer',
+					'jsonp' => 	'vJSONPManifestRenderer',
+					'json' => 	'vJSONManifestRenderer',
+					'redirect' => 'vRedirectManifestRenderer',
 			);
 	
 			if (isset($formatMapping[$this->params->getResponseFormat()]))
@@ -305,8 +305,8 @@ abstract class DeliveryProfile extends BaseDeliveryProfile implements IBaseObjec
 		$audioLanguageName = null;
 
 		$useTwoCodeLang = true;
-		if (kConf::hasParam('three_code_language_partners') &&
-			in_array($flavor->getPartnerId(), kConf::get('three_code_language_partners')))
+		if (vConf::hasParam('three_code_language_partners') &&
+			in_array($flavor->getPartnerId(), vConf::get('three_code_language_partners')))
 			$useTwoCodeLang = false;
 
 		if(!isset($lang)) { //for backward compatibility
@@ -330,7 +330,7 @@ abstract class DeliveryProfile extends BaseDeliveryProfile implements IBaseObjec
 		else
 		{
 			$audioLanguage = $lang;
-			$obj = languageCodeManager::getObjectFromKalturaName($lang);
+			$obj = languageCodeManager::getObjectFromVidiunName($lang);
 			if (is_null($obj))
 				$obj = languageCodeManager::getObjectFromThreeCode($lang);
 			
@@ -351,11 +351,11 @@ abstract class DeliveryProfile extends BaseDeliveryProfile implements IBaseObjec
 	{
 		if (is_null($languageObject))
 		{
-			KalturaLog::info("Language object was not found. Setting [$audioLanguage] instead");
+			VidiunLog::info("Language object was not found. Setting [$audioLanguage] instead");
 			return $audioLanguage;
 		}
 
-		return $languageObject[languageCodeManager::KALTURA_NAME];
+		return $languageObject[languageCodeManager::VIDIUN_NAME];
 	}
 	
 	/**
@@ -484,11 +484,11 @@ abstract class DeliveryProfile extends BaseDeliveryProfile implements IBaseObjec
 	
 		if(!count($deliveryNodes))
 		{
-			KalturaLog::debug("No active delivery nodes found among the requested edge list: " . print_r($deliveryNodeIds, true));
+			VidiunLog::debug("No active delivery nodes found among the requested edge list: " . print_r($deliveryNodeIds, true));
 			return null;
 		}
 	
-	        /* Shuffle the array to randomize the assigned KES, if more than one in the same rule */
+	        /* Shuffle the array to randomize the assigned VES, if more than one in the same rule */
 		shuffle($deliveryNodes);
 	
 		$deliveryNode = null;
@@ -504,7 +504,7 @@ abstract class DeliveryProfile extends BaseDeliveryProfile implements IBaseObjec
 		
 		if(!$deliveryNode)
 		{
-			KalturaLog::debug("Active edges were found but non of them is active, Failed to build valid serving route");
+			VidiunLog::debug("Active edges were found but non of them is active, Failed to build valid serving route");
 			return null;
 		}
 		
@@ -553,7 +553,7 @@ abstract class DeliveryProfile extends BaseDeliveryProfile implements IBaseObjec
 		if (!$pricingProfile)
 			return false;
 		
-		$pricingProfiles = kConf::getMap('cdn_pricing_profiles');
+		$pricingProfiles = vConf::getMap('cdn_pricing_profiles');
 		if (!$pricingProfiles)
 			return false;
 		

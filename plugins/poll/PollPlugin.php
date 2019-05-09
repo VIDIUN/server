@@ -2,19 +2,19 @@
 /**
  * @package plugins.poll
  */
-class PollPlugin extends KalturaPlugin implements IKalturaServices {
+class PollPlugin extends VidiunPlugin implements IVidiunServices {
 
 	const PLUGIN_NAME = 'poll';
 
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getPluginName()
+	 * @see IVidiunServices::getPluginName()
 	 */
 	public static function getPluginName() {
 		return self::PLUGIN_NAME;
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{
@@ -25,7 +25,7 @@ class PollPlugin extends KalturaPlugin implements IKalturaServices {
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPermissions::isAllowedPartner()
+	 * @see IVidiunPermissions::isAllowedPartner()
 	 */
 	public static function isAllowedPartner($partnerId)
 	{

@@ -2,11 +2,11 @@
 /**
  * @package plugins.searchHistory
  */
-class SearchHistoryPlugin extends KalturaPlugin implements IKalturaPending, IKalturaServices, IKalturaEventConsumers
+class SearchHistoryPlugin extends VidiunPlugin implements IVidiunPending, IVidiunServices, IVidiunEventConsumers
 {
 
     const PLUGIN_NAME = 'searchHistory';
-    const SEARCH_HISTORY_MANAGER = 'kESearchHistoryManager';
+    const SEARCH_HISTORY_MANAGER = 'vESearchHistoryManager';
 
     /**
      * @return string the name of the plugin
@@ -27,12 +27,12 @@ class SearchHistoryPlugin extends KalturaPlugin implements IKalturaPending, IKal
     }
 
     /* (non-PHPdoc)
-    * @see IKalturaPending::dependsOn()
+    * @see IVidiunPending::dependsOn()
     */
     public static function dependsOn()
     {
-        $rabbitMqDependency = new KalturaDependency(RabbitMQPlugin::getPluginName());
-        $elasticSearchDependency = new KalturaDependency(ElasticSearchPlugin::getPluginName());
+        $rabbitMqDependency = new VidiunDependency(RabbitMQPlugin::getPluginName());
+        $elasticSearchDependency = new VidiunDependency(ElasticSearchPlugin::getPluginName());
         return array($rabbitMqDependency, $elasticSearchDependency);
     }
 

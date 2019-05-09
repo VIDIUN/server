@@ -2,7 +2,7 @@
 /**
  * @package plugins.scheduleBulkUpload
  */
-class BulkUploadSchedulePlugin extends KalturaPlugin implements IKalturaBulkUpload, IKalturaPending, IKalturaServices
+class BulkUploadSchedulePlugin extends VidiunPlugin implements IVidiunBulkUpload, IVidiunPending, IVidiunServices
 {
 	const PLUGIN_NAME = 'scheduleBulkUpload';
 	
@@ -16,12 +16,12 @@ class BulkUploadSchedulePlugin extends KalturaPlugin implements IKalturaBulkUplo
 	
 	/*
 	 * (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$bulkUploadCsvDependency = new KalturaDependency(BulkUploadCsvPlugin::PLUGIN_NAME);
-		$scheduleDependency = new KalturaDependency(SchedulePlugin::PLUGIN_NAME);
+		$bulkUploadCsvDependency = new VidiunDependency(BulkUploadCsvPlugin::PLUGIN_NAME);
+		$scheduleDependency = new VidiunDependency(SchedulePlugin::PLUGIN_NAME);
 		
 		return array($bulkUploadCsvDependency, $scheduleDependency);
 	}
@@ -56,21 +56,21 @@ class BulkUploadSchedulePlugin extends KalturaPlugin implements IKalturaBulkUplo
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
-		if($baseClass == 'kBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadScheduleType::ICAL))
-			return new kBulkUploadICalJobData();
+		if($baseClass == 'vBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadScheduleType::ICAL))
+			return new vBulkUploadICalJobData();
 		
-		if($baseClass == 'KalturaBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadScheduleType::ICAL))
-			return new KalturaBulkUploadICalJobData();
+		if($baseClass == 'VidiunBulkUploadJobData' && $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadScheduleType::ICAL))
+			return new VidiunBulkUploadICalJobData();
 			
 			// Gets the engine (only for clients)
-		if($baseClass == 'KBulkUploadEngine' && class_exists('KalturaClient'))
+		if($baseClass == 'VBulkUploadEngine' && class_exists('VidiunClient'))
 		{	
 			list($job) = $constructorArgs;
-			if($enumValue == KalturaBulkUploadType::ICAL)
+			if($enumValue == VidiunBulkUploadType::ICAL)
 			{
 				return new BulkUploadEngineICal($job);
 			}
-			elseif((!$enumValue || $enumValue == KalturaBulkUploadType::CSV) && $job->data->bulkUploadObjectType == KalturaBulkUploadObjectType::SCHEDULE_RESOURCE)
+			elseif((!$enumValue || $enumValue == VidiunBulkUploadType::CSV) && $job->data->bulkUploadObjectType == VidiunBulkUploadObjectType::SCHEDULE_RESOURCE)
 			{
 				return new BulkUploadScheduleResourceEngineCsv($job);
 			}
@@ -141,8 +141,8 @@ class BulkUploadSchedulePlugin extends KalturaPlugin implements IKalturaBulkUplo
 		if(!count($bulkUploadResults))
 			die("Log file is not ready");
 		
-		kSchedulingICalComponent::setWriteToStdout(true);
-		$calendar = new kSchedulingICalCalendar();
+		vSchedulingICalComponent::setWriteToStdout(true);
+		$calendar = new vSchedulingICalCalendar();
 		$calendar->begin();
 		
 		$handledResults = 0;
@@ -170,28 +170,28 @@ class BulkUploadSchedulePlugin extends KalturaPlugin implements IKalturaBulkUplo
 					
 				if($scheduleEvent)
 				{
-					$scheduleEventObject = KalturaScheduleEvent::getInstance($scheduleEvent);
-					/* @var $scheduleEventObject KalturaScheduleEvent */
-					$event = kSchedulingICalEvent::fromObject($scheduleEventObject);
+					$scheduleEventObject = VidiunScheduleEvent::getInstance($scheduleEvent);
+					/* @var $scheduleEventObject VidiunScheduleEvent */
+					$event = vSchedulingICalEvent::fromObject($scheduleEventObject);
 				}
 				else
 				{
-					$event = new kSchedulingICalEvent($bulkUploadResult->getRowData());
+					$event = new vSchedulingICalEvent($bulkUploadResult->getRowData());
 				}
-				$event->addFields($extraAttributes, 'x-kaltura');
+				$event->addFields($extraAttributes, 'x-vidiun');
 				$event->write();
 			}
 			
 			if(count($bulkUploadResults) < $criteria->getLimit())
 				break;
 			
-			kMemoryManager::clearMemory();
+			vMemoryManager::clearMemory();
 			$criteria->setOffset($handledResults);
 			$bulkUploadResults = BulkUploadResultPeer::doSelect($criteria);
 		}
 		$calendar->end();
 		
-		kFile::closeDbConnections();
+		vFile::closeDbConnections();
 		exit();
 	}
 	
@@ -213,8 +213,8 @@ class BulkUploadSchedulePlugin extends KalturaPlugin implements IKalturaBulkUplo
 	 */
 	public static function getBulkUploadTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BulkUploadType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BulkUploadType', $value);
 	}
 	
 	/**
@@ -223,8 +223,8 @@ class BulkUploadSchedulePlugin extends KalturaPlugin implements IKalturaBulkUplo
 	 */
 	public static function getBulkUploadActionCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BulkUploadAction', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BulkUploadAction', $value);
 	}
 	
 	/**
@@ -233,8 +233,8 @@ class BulkUploadSchedulePlugin extends KalturaPlugin implements IKalturaBulkUplo
 	 */
 	public static function getBulkUploadObjectTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BulkUploadObjectType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BulkUploadObjectType', $value);
 	}
 	
 	/**
@@ -243,6 +243,6 @@ class BulkUploadSchedulePlugin extends KalturaPlugin implements IKalturaBulkUplo
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

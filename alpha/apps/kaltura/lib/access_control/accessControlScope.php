@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class accessControlScope extends kScope
+class accessControlScope extends vScope
 {
 	/**
 	 * Key-value pairs of hashes  passed to the access control as part of the scope

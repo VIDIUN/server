@@ -3,13 +3,13 @@
  * @package Core
  * @subpackage model.filters.advanced
  */ 
-class AdvancedSearchFilterOperator extends AdvancedSearchFilterItem implements IKalturaIndexQuery
+class AdvancedSearchFilterOperator extends AdvancedSearchFilterItem implements IVidiunIndexQuery
 {
 	const SEARCH_AND = 1;
 	const SEARCH_OR = 2;
 	
 	/**
-	 * @var IKalturaIndexQuery
+	 * @var IVidiunIndexQuery
 	 */
 	protected $parentQuery;
 	
@@ -77,7 +77,7 @@ class AdvancedSearchFilterOperator extends AdvancedSearchFilterItem implements I
 	/* (non-PHPdoc)
 	 * @see AdvancedSearchFilterItem::applyCondition()
 	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
 		$this->parentQuery = $query;
 		
@@ -91,7 +91,7 @@ class AdvancedSearchFilterOperator extends AdvancedSearchFilterItem implements I
 					
 				foreach($this->items as $item)
 				{
-					KalturaLog::debug("item type: " . get_class($item));
+					VidiunLog::debug("item type: " . get_class($item));
 					if($item instanceof AdvancedSearchFilterItem)
 					{
 						$item->applyCondition($queryDestination);
@@ -106,7 +106,7 @@ class AdvancedSearchFilterOperator extends AdvancedSearchFilterItem implements I
 			}
 		}
 	
-		if($this->condition && $query instanceof IKalturaIndexQuery)
+		if($this->condition && $query instanceof IVidiunIndexQuery)
 			$query->addMatch($this->condition);
 	}
 	
@@ -122,7 +122,7 @@ class AdvancedSearchFilterOperator extends AdvancedSearchFilterItem implements I
 					$itemAdditionalConditions = $item->getFreeTextConditions($partnerScope, $freeTexts);
 					foreach($itemAdditionalConditions as $itemAdditionalCondition)
 					{
-						KalturaLog::debug("Append free text item [" . get_class($item) . "] condition [$itemAdditionalCondition]");
+						VidiunLog::debug("Append free text item [" . get_class($item) . "] condition [$itemAdditionalCondition]");
 						$additionalConditions[] = "$itemAdditionalCondition";
 					}
 				}
@@ -172,7 +172,7 @@ class AdvancedSearchFilterOperator extends AdvancedSearchFilterItem implements I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaDbQuery::addColumnWhere()
+	 * @see IVidiunDbQuery::addColumnWhere()
 	 */
 	public function addColumnWhere($column, $value, $comparison)
 	{
@@ -181,7 +181,7 @@ class AdvancedSearchFilterOperator extends AdvancedSearchFilterItem implements I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaIndexQuery::addWhere()
+	 * @see IVidiunIndexQuery::addWhere()
 	 */
 	public function addWhere($statement)
 	{
@@ -189,7 +189,7 @@ class AdvancedSearchFilterOperator extends AdvancedSearchFilterItem implements I
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaIndexQuery::addMatch()
+	 * @see IVidiunIndexQuery::addMatch()
 	 */
 	public function addMatch($match)
 	{
@@ -197,16 +197,16 @@ class AdvancedSearchFilterOperator extends AdvancedSearchFilterItem implements I
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaIndexQuery::addCondition()
+	 * @see IVidiunIndexQuery::addCondition()
 	 */
 	public function addCondition($condition)
 	{
-		if($this->parentQuery && $this->parentQuery instanceof IKalturaIndexQuery)
+		if($this->parentQuery && $this->parentQuery instanceof IVidiunIndexQuery)
 			$this->parentQuery->addCondition($condition);
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaIndexQuery::addOrderBy()
+	 * @see IVidiunIndexQuery::addOrderBy()
 	 */
 	public function addOrderBy($column, $orderByType = Criteria::ASC)
 	{

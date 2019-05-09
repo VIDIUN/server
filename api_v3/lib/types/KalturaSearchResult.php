@@ -4,7 +4,7 @@
  * @subpackage objects
  * @deprecated
  */
-class KalturaSearchResult extends KalturaSearch
+class VidiunSearchResult extends VidiunSearch
 {
 	
 	/**
@@ -48,7 +48,7 @@ class KalturaSearchResult extends KalturaSearch
 	public $credit;
 	
 	/**
-	 * @var KalturaLicenseType
+	 * @var VidiunLicenseType
 	 */
 	public $licenseType;
 	
@@ -81,7 +81,7 @@ class KalturaSearchResult extends KalturaSearch
 		return array_merge ( parent::getMapBetweenObjects() , self::$map_between_objects );
 	}
 	
-	public function fromSearchResult( $search_result , KalturaSearch $search )
+	public function fromSearchResult( $search_result , VidiunSearch $search )
 	{
 		parent::fromArray( $search_result );
 		$this->mediaType = $search->mediaType;

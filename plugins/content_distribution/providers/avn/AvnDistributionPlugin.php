@@ -2,10 +2,10 @@
 /**
  * @package plugins.avnDistribution
  */
-class AvnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider, IKalturaEventConsumers, IKalturaServices
+class AvnDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider, IVidiunEventConsumers, IVidiunServices
 {
 	const PLUGIN_NAME = 'avnDistribution';
-	const AVN_EVENT_CONSUMER = "kAvnFlowManager";
+	const AVN_EVENT_CONSUMER = "vAvnFlowManager";
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 1;
 	const CONTENT_DSTRIBUTION_VERSION_MINOR = 0;
 	const CONTENT_DSTRIBUTION_VERSION_BUILD = 0;
@@ -17,12 +17,12 @@ class AvnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -58,13 +58,13 @@ class AvnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::AVN)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::AVN)
 		{
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaAvnDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunAvnDistributionProfile();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::AVN)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::AVN)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -73,8 +73,8 @@ class AvnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 			}
 		}
 		
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(AvnDistributionProviderType::AVN))
-			return new KalturaAvnDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(AvnDistributionProviderType::AVN))
+			return new VidiunAvnDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(AvnDistributionProviderType::AVN))
 			return new AvnDistributionProfile();
@@ -90,23 +90,23 @@ class AvnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::AVN)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::AVN)
 		{
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaAvnDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunAvnDistributionProfile';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::AVN)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::AVN)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_AvnProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_AvnDistribution_Type_AvnDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_AvnDistribution_Type_AvnDistributionProfile';
 		}
 		
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(AvnDistributionProviderType::AVN))
-			return 'KalturaAvnDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(AvnDistributionProviderType::AVN))
+			return 'VidiunAvnDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(AvnDistributionProviderType::AVN))
 			return 'AvnDistributionProfile';
@@ -127,11 +127,11 @@ class AvnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaAvnDistributionProvider();
+		$distributionProvider = new VidiunAvnDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -151,8 +151,8 @@ class AvnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -160,11 +160,11 @@ class AvnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
@@ -174,7 +174,7 @@ class AvnDistributionPlugin extends KalturaPlugin implements IKalturaPermissions
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaServices::getServicesMap()
+	 * @see IVidiunServices::getServicesMap()
 	 */
 	public static function getServicesMap()
 	{

@@ -4,13 +4,13 @@
  * @subpackage clipconcat
  */
 
-class kEffectsManager
+class vEffectsManager
 {
 
 	const MILLISECONDS_TO_SECONDS= 1000;
 
 	/**
-	 * @param kClipAttributes $singleAttribute
+	 * @param vClipAttributes $singleAttribute
 	 * @return string
 	 */
 	public function getFFMPEGEffects($singleAttribute)
@@ -28,7 +28,7 @@ class kEffectsManager
 	}
 
 	/**
-	 * @param kClipAttributes $singleAttribute
+	 * @param vClipAttributes $singleAttribute
 	 * @return string
 	 */
 	private function addVideoEffects($singleAttribute)
@@ -38,11 +38,11 @@ class kEffectsManager
 		foreach ($singleAttribute->getEffectArray() as $effect)
 		{
 			switch ($effect->getEffectType()) {
-				case kEffectType::VIDEO_FADE_IN:
+				case vEffectType::VIDEO_FADE_IN:
 					$d = min(intval($effect->getValue()) / self::MILLISECONDS_TO_SECONDS, $singleAttribute->getDuration() / self::MILLISECONDS_TO_SECONDS);
 					$fadeIn = "fade=t=in:st=0:d=$d";
 					break;
-				case kEffectType::VIDEO_FADE_OUT:
+				case vEffectType::VIDEO_FADE_OUT:
 					$d = min(intval($effect->getValue()) / self::MILLISECONDS_TO_SECONDS, $singleAttribute->getDuration() / self::MILLISECONDS_TO_SECONDS);
 					$st = $singleAttribute->getDuration() / self::MILLISECONDS_TO_SECONDS  - intval($effect->getValue()) / self::MILLISECONDS_TO_SECONDS;
 					if ($st  > 0)
@@ -66,11 +66,11 @@ class kEffectsManager
 		foreach ($singleAttribute->getEffectArray() as $effect)
 		{
 			switch ($effect->getEffectType()) {
-				case kEffectType::AUDIO_FADE_IN:
+				case vEffectType::AUDIO_FADE_IN:
 					$d = min(intval($effect->getValue()) / self::MILLISECONDS_TO_SECONDS, $singleAttribute->getDuration() / self::MILLISECONDS_TO_SECONDS);
 					$aFadeIn = "afade=t=in:ss=0:d=$d";
 					break;
-				case kEffectType::AUDIO_FADE_OUT:
+				case vEffectType::AUDIO_FADE_OUT:
 					$d = min(intval($effect->getValue()) / self::MILLISECONDS_TO_SECONDS, $singleAttribute->getDuration() / self::MILLISECONDS_TO_SECONDS);
 					$st = $singleAttribute->getDuration() / self::MILLISECONDS_TO_SECONDS - intval($effect->getValue()) / self::MILLISECONDS_TO_SECONDS;
 					if ($st  > 0)

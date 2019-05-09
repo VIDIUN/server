@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaCsvAdditionalFieldInfo extends KalturaObject
+class VidiunCsvAdditionalFieldInfo extends VidiunObject
 
 {
 	/**
@@ -29,12 +29,12 @@ class KalturaCsvAdditionalFieldInfo extends KalturaObject
 	}
 
 	/* (non-PHPdoc)
- 	* @see KalturaObject::toObject()
+ 	* @see VidiunObject::toObject()
  	*/
 	public function toObject($dbAdditionalField = null, $skip = array())
 	{
 		if(!$dbAdditionalField)
-			$dbAdditionalField = new kCsvAdditionalFieldInfo();
+			$dbAdditionalField = new vCsvAdditionalFieldInfo();
 
 		return parent::toObject($dbAdditionalField, $skip);
 	}

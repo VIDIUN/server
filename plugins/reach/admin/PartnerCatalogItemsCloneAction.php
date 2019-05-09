@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage Admin
  */
-class PartnerCatalogItemsCloneAction extends KalturaApplicationPlugin
+class PartnerCatalogItemsCloneAction extends VidiunApplicationPlugin
 {
 
 	/**
@@ -26,7 +26,7 @@ class PartnerCatalogItemsCloneAction extends KalturaApplicationPlugin
 		{
 			$partnerCatalogItems = $this->getPartnerCatalogItems($fromPartnerId);
 			Infra_ClientHelper::impersonate($toPartnerId);
-			$reachPluginClient = Kaltura_Client_Reach_Plugin::get($client);
+			$reachPluginClient = Vidiun_Client_Reach_Plugin::get($client);
 			$client->startMultiRequest();
 			foreach ($partnerCatalogItems as $partnerCatalogItem)
 			{
@@ -37,7 +37,7 @@ class PartnerCatalogItemsCloneAction extends KalturaApplicationPlugin
 			$resultMessage = null;
 			foreach ($result as $resultItem)
 			{
-				if ($resultItem instanceof Kaltura_Client_Exception)
+				if ($resultItem instanceof Vidiun_Client_Exception)
 				{
 					$resultMessage .= $resultItem->getMessage(). '. ';
 					if (in_array($resultItem->getCode() ,array('SERVICE_FORBIDDEN_CONTENT_BLOCKED', 'FEATURE_FORBIDDEN')))
@@ -57,7 +57,7 @@ class PartnerCatalogItemsCloneAction extends KalturaApplicationPlugin
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			echo $action->getHelper('json')->sendJson($e->getMessage(), false);
 		}
 		Infra_ClientHelper::unimpersonate();
@@ -67,15 +67,15 @@ class PartnerCatalogItemsCloneAction extends KalturaApplicationPlugin
 	{
 		Infra_ClientHelper::unimpersonate();// to get all catalog items from partner 0
 
-		$catalogItemProfileFilter = new Kaltura_Client_Reach_Type_VendorCatalogItemFilter();
+		$catalogItemProfileFilter = new Vidiun_Client_Reach_Type_VendorCatalogItemFilter();
 		$catalogItemProfileFilter->orderBy = '-createdAt';
 		$catalogItemProfileFilter->partnerIdEqual = $partnerId;
 
 		$client = Infra_ClientHelper::getClient();
-		$reachPluginClient = Kaltura_Client_Reach_Plugin::get($client);
+		$reachPluginClient = Vidiun_Client_Reach_Plugin::get($client);
 		Infra_ClientHelper::impersonate($partnerId);
 
-		$pager = new Kaltura_Client_Type_FilterPager();
+		$pager = new Vidiun_Client_Type_FilterPager();
 		$pager->pageIndex = 1;
 		$pager->pageSize = 500;
 
@@ -85,7 +85,7 @@ class PartnerCatalogItemsCloneAction extends KalturaApplicationPlugin
 			$result = $reachPluginClient->vendorCatalogItem->listAction($catalogItemProfileFilter, $pager);
 			foreach ($result->objects as $partnerCatalogItem)
 			{
-				/* @var $partnerCatalogItem Kaltura_Client_Reach_Type_VendorCatalogItem */
+				/* @var $partnerCatalogItem Vidiun_Client_Reach_Type_VendorCatalogItem */
 				$partnerCatalogItems[] = $partnerCatalogItem;
 			}
 			$pager->pageIndex++;

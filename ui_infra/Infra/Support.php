@@ -25,7 +25,7 @@ class Infra_Support
 	
 	public static function addIssue($summary, $description, $file_content = null, $customFields = array())
 	{
-		KalturaLog::debug("addIssue(summary = [$summary], description = [$description], file_content = [$file_content])");
+		VidiunLog::debug("addIssue(summary = [$summary], description = [$description], file_content = [$file_content])");
 		
 		$version = null;
 		$productConfig = Zend_Registry::get('config')->product;
@@ -81,7 +81,7 @@ class Infra_Support
 		
 		if ($file_content) 
 		{
-			$result = $client->addAttachmentToIssue($issueId, 'entry.ked', 'text/plain', base64_encode($file_content));
+			$result = $client->addAttachmentToIssue($issueId, 'entry.ved', 'text/plain', base64_encode($file_content));
 			$attchId = $result;
 //			if ($client->getError())
 //				return false;
@@ -90,41 +90,41 @@ class Infra_Support
 		if ($email) 
 		{
 			// send the mail
-			$subject = "Kaltura Support: Ticket #$issueId";
+			$subject = "Vidiun Support: Ticket #$issueId";
 			$body = "Hello,<br />
 				<br />
-				Thank you for contacting Kaltura.  Ticket #$issueId has been issued for your support inquiry.<br />  
+				Thank you for contacting Vidiun.  Ticket #$issueId has been issued for your support inquiry.<br />  
 				<br />
 				Someone from our support team will review your message and get back to you as soon as possible. If you reply to this message, please include the string \"Ticket #$issueId\" in the subject line of all future correspondence about this issue.<br />
 				<br />
-				You can find additional information about Kaltura's solutions in our Forums:  <a href=\"http://kaltura.org/community/index.php\">http://kaltura.org/community/index.php</a><br />
+				You can find additional information about Vidiun's solutions in our Forums:  <a href=\"http://vidiun.org/community/index.php\">http://vidiun.org/community/index.php</a><br />
 				<br />
 				<br />
 				Regards,<br />
-				Kaltura Support Team<br />
-				<a href=\"mailto:support@kaltura.com\">support@kaltura.com</a><br />
+				Vidiun Support Team<br />
+				<a href=\"mailto:support@vidiun.com\">support@vidiun.com</a><br />
 			";
 			
 			$headers  = 'MIME-Version: 1.0' . "\r\n";
 			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-			$headers .= 'From: Kaltura Support <support@kaltura.com>';
+			$headers .= 'From: Vidiun Support <support@vidiun.com>';
 			
 			try{
 				$result = mail($email, $subject, $body, $headers);
 			}
 			catch (Exception $e){
 				$result = null;
-				KalturaLog::err("Failed to send mail to [".$email."]: " . $e->getMessage());
+				VidiunLog::err("Failed to send mail to [".$email."]: " . $e->getMessage());
 			}
 			
 			if ($result)
-				KalturaLog::info("Mail was send successfully to [".$email."]");
+				VidiunLog::info("Mail was send successfully to [".$email."]");
 			else
-				KalturaLog::err("Failed to send mail to [".$email."]");
+				VidiunLog::err("Failed to send mail to [".$email."]");
 		}
 		else
 		{
-			KalturaLog::err("Email was not specified!");
+			VidiunLog::err("Email was not specified!");
 		}
 
 		

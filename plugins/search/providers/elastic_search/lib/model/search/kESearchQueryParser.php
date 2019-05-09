@@ -17,7 +17,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchQueryParser
+class vESearchQueryParser
 {
 	const NOT_OPERAND = "NOT";
 	const AND_OPERAND = "AND";
@@ -38,10 +38,10 @@ class kESearchQueryParser
 
 	/**
 	 * @param $eSearchQuery
-	 * @return KalturaESearchParams
-	 * @throws kESearchException
+	 * @return VidiunESearchParams
+	 * @throws vESearchException
 	 */
-	public static function buildKESearchParamsFromKESearchQuery($eSearchQuery)
+	public static function buildVESearchParamsFromVESearchQuery($eSearchQuery)
 	{
 		// in case of a free text query (wihtout fields or brackets or special commands - a simple unified search object will be created
 		$searchItem = null;
@@ -49,8 +49,8 @@ class kESearchQueryParser
 			$searchItem = self::createSimpleUnifiedSearchParam($eSearchQuery);
 		else
 		{
-			$parsedQuery = self::parseKESearchQuery($eSearchQuery);
-			$searchItem = self::createKESearchParams($parsedQuery);
+			$parsedQuery = self::parseVESearchQuery($eSearchQuery);
+			$searchItem = self::createVESearchParams($parsedQuery);
 		}
 		return $searchItem;
 	}
@@ -69,30 +69,30 @@ class kESearchQueryParser
 
 	/**
 	 * @param $eSearchQuery
-	 * @return KalturaESearchOperator
+	 * @return VidiunESearchOperator
 	 */
 	private static function createSimpleUnifiedSearchParam($eSearchQuery)
 	{
-		$kSearchItem = new KalturaESearchUnifiedItem();
-		$kSearchItem->itemType =  KalturaESearchItemType::EXACT_MATCH;
-		$kSearchItem->searchTerm = $eSearchQuery;
+		$vSearchItem = new VidiunESearchUnifiedItem();
+		$vSearchItem->itemType =  VidiunESearchItemType::EXACT_MATCH;
+		$vSearchItem->searchTerm = $eSearchQuery;
 
-		return $kSearchItem;
+		return $vSearchItem;
 	}
 
 	/**
-	 * parseKESearchQuery Flow - recursive method to create an tree-like array by levels for the string query.
+	 * parseVESearchQuery Flow - recursive method to create an tree-like array by levels for the string query.
 	 * 1. locate 1st level brackets ( ) example: id and ( tags and ( day and year ))) - will find the outer brackets only
 	 * 2. accumulate tokens to string in order to handle the different parts without the inner brackets parts.
 	 * 3. handle the accumulated part (before / in the middle / after the brackets)
 	 *
 	 * @param string $query
 	 * @return array
-	 * @throws kESearchException
+	 * @throws vESearchException
 	 */
-	public static function parseKESearchQuery($query)
+	public static function parseVESearchQuery($query)
 	{
-		KalturaLog::debug("Parsing $query");
+		VidiunLog::debug("Parsing $query");
 		//remove starting and trailing whitespaces
 		$currentQuery = trim($query);
 		// find next level inner queries within ( ) brackets - TODO add informative Example and description
@@ -120,13 +120,13 @@ class kESearchQueryParser
 					$partialQuery = null;
 				}
 				if (empty($innerQueries[0]))
-					throw new kESearchException('Un-matching brackets', kESearchException::UNMATCHING_BRACKETS);
+					throw new vESearchException('Un-matching brackets', vESearchException::UNMATCHING_BRACKETS);
 
 				//get next inner query between ( ) brackets and parse it.
 				$innerQuery = preg_replace('/(^\s*\()|(\)\s*$)/', '', $innerQueries[0][$innerQueriesCounter]);
 				$innerQuery = trim($innerQuery);
 				if ($innerQuery)
-					$eSearchQueryResult[] = self::parseKESearchQuery($innerQuery);
+					$eSearchQueryResult[] = self::parseVESearchQuery($innerQuery);
 
 				//move cursor location to end of inner query
 				$cursorLocation = $cursorLocation + strlen($innerQueries[0][$innerQueriesCounter]);
@@ -155,7 +155,7 @@ class kESearchQueryParser
 	 * @param $shouldBeOperand
 	 * @param $eSearchQueryResult
 	 * @param $levelOperand
-	 * @throws kESearchException
+	 * @throws vESearchException
 	 */
 	private static function handlePartialQueryAndAddToResult($partialQuery, &$shouldBeOperand, &$eSearchQueryResult, $levelOperand)
 	{
@@ -171,7 +171,7 @@ class kESearchQueryParser
 			if (!in_array(strtoupper($match), array(self::AND_OPERAND, self::OR_OPERAND, self::NOT_OPERAND)))
 			{
 				if ($shouldBeOperand)
-					throw new kESearchException('Missing operand', kESearchException::MISSING_QUERY_OPERAND);
+					throw new vESearchException('Missing operand', vESearchException::MISSING_QUERY_OPERAND);
 
 				$currentQuery = str_getcsv($match, ":", "\"");
 				$eSearchQueryResult[] = $currentQuery;
@@ -183,9 +183,9 @@ class kESearchQueryParser
 				{
 					$levelOperand = in_array($match, array(self::AND_OPERAND, self::OR_OPERAND)) ? $match : null;
 				} elseif ($levelOperand != $match && $match != self::NOT_OPERAND)
-					throw new kESearchException('Un-matching query operand', kESearchException::UNMATCHING_QUERY_OPERAND);
+					throw new vESearchException('Un-matching query operand', vESearchException::UNMATCHING_QUERY_OPERAND);
 				elseif (!$shouldBeOperand && $match != self::NOT_OPERAND)
-					throw new kESearchException('Illegal consecutive operands', kESearchException::CONSECUTIVE_OPERANDS_MISMATCH);
+					throw new vESearchException('Illegal consecutive operands', vESearchException::CONSECUTIVE_OPERANDS_MISMATCH);
 				$eSearchQueryResult[] = $match;
 				$shouldBeOperand = false;
 			}
@@ -193,56 +193,56 @@ class kESearchQueryParser
 	}
 
 	/**
-	 * build KalturaESearchParams tree from a tree-like array representing a query by traversing the array in recursive way we will be able to build the result correctly
+	 * build VidiunESearchParams tree from a tree-like array representing a query by traversing the array in recursive way we will be able to build the result correctly
 	 * 1. in case we a single item ( e.g. fieldName without any value - we will create a searchQueryItem with type EXIST
 	 * 2. in case we have 2 items ( e.g. fieldName:value) we will create a searchQueryItem with types accordingly (PARTIAL/RANGE/EXACT_MATCH/STARTS_WITH) to the identifiers
 	 *      ~fieldNamme = PARTIAL , ~fieldNamme = STARTS_WITH , fieldName:"[ $rangeType$ $rangeValue$]" = RANGE , default = EXACT_MATCH
 	 * 3. in case we have more than 2 items we need to go deeper and create and eSearchOperator object to hold more than 1 eSearchObject so we will recurse.
 	 *
 	 * @param $queryItemArray
-	 * @return KalturaESearchCaptionItem|KalturaESearchCategoryItem|KalturaESearchCuePointItem|KalturaESearchEntryItem|KalturaESearchMetadataItem|KalturaESearchOperator|KalturaESearchUserItem|null
-	 * @throws kESearchException
+	 * @return VidiunESearchCaptionItem|VidiunESearchCategoryItem|VidiunESearchCuePointItem|VidiunESearchEntryItem|VidiunESearchMetadataItem|VidiunESearchOperator|VidiunESearchUserItem|null
+	 * @throws vESearchException
 	 */
-	public static function createKESearchParams($queryItemArray)
+	public static function createVESearchParams($queryItemArray)
 	{
 		//no query item to handle
 		if (!$queryItemArray || count($queryItemArray) == 0)
-			$kSearchItem = null;
+			$vSearchItem = null;
 		//Single item to handle - an inner query part or non-value search item
 		elseif (count($queryItemArray) == 1)
-			$kSearchItem = self::handleAndCreateSearchQueryItem($queryItemArray[0]);
+			$vSearchItem = self::handleAndCreateSearchQueryItem($queryItemArray[0]);
 		//double item to handle - meaning handling fieldName:fieldValue item
 		elseif (count($queryItemArray) == 2 && $queryItemArray[0] != self::NOT_OPERAND && !(is_array($queryItemArray[0]) && is_array($queryItemArray[1])))
-			$kSearchItem = self::handleAndCreateSearchQueryItem($queryItemArray[0], $queryItemArray[1]);
+			$vSearchItem = self::handleAndCreateSearchQueryItem($queryItemArray[0], $queryItemArray[1]);
 		else
-			$kSearchItem = self::handleAndCreateOperatorQueryItem($queryItemArray);
+			$vSearchItem = self::handleAndCreateOperatorQueryItem($queryItemArray);
 
-		return $kSearchItem;
+		return $vSearchItem;
 	}
 
 	/**
 	 * create a simple eSearchItem according to the different types and setting the type (EXACT_MATCH/PARTIAL/STARTS_WITH/RANGE) and term value accordingly.
 	 * @param $fieldName
 	 * @param null $fieldValue
-	 * @return KalturaESearchCaptionItem|KalturaESearchCategoryItem|KalturaESearchCuePointItem|KalturaESearchEntryItem|KalturaESearchMetadataItem|KalturaESearchUserItem|null
+	 * @return VidiunESearchCaptionItem|VidiunESearchCategoryItem|VidiunESearchCuePointItem|VidiunESearchEntryItem|VidiunESearchMetadataItem|VidiunESearchUserItem|null
 	 */
-	private static function CreateKESearchItem($fieldName, $fieldValue = null)
+	private static function CreateVESearchItem($fieldName, $fieldValue = null)
 	{
-		KalturaLog::debug("Creating Search Item for field [$fieldName] and value [$fieldValue]");
+		VidiunLog::debug("Creating Search Item for field [$fieldName] and value [$fieldValue]");
 
 		$isPartial = self::isPartial($fieldName);
 		$isStartsWith = self::isStartsWith($fieldName);
 
-		$kSearchItem = self::getClassFromFieldName($fieldName);
+		$vSearchItem = self::getClassFromFieldName($fieldName);
 
-		if ($kSearchItem)
+		if ($vSearchItem)
 		{
 			if (is_null($fieldValue))
-				$kSearchItem->itemType = KalturaESearchItemType::EXISTS;
+				$vSearchItem->itemType = VidiunESearchItemType::EXISTS;
 			else
-				self::handleAndSetTypeAndValue($kSearchItem, $fieldName, $fieldValue, $isPartial, $isStartsWith);
+				self::handleAndSetTypeAndValue($vSearchItem, $fieldName, $fieldValue, $isPartial, $isStartsWith);
 		}
-		return $kSearchItem;
+		return $vSearchItem;
 	}
 
 	private static function isPartial(&$fieldName)
@@ -268,56 +268,56 @@ class kESearchQueryParser
 	/**
 	 * Handle setting the type and value - in case we create a metaData item we need to parse the value as json and handle the different fields
 	 *
-	 * @param $kSearchItem
+	 * @param $vSearchItem
 	 * @param $fieldName
 	 * @param $fieldValue
 	 * @param $isPartial
 	 * @param $isStartsWith
-	 * @throws kESearchException
+	 * @throws vESearchException
 	 */
-	private static function handleAndSetTypeAndValue($kSearchItem, $fieldName, $fieldValue, $isPartial, $isStartsWith)
+	private static function handleAndSetTypeAndValue($vSearchItem, $fieldName, $fieldValue, $isPartial, $isStartsWith)
 	{
-		if ($kSearchItem instanceof KalturaESearchMetadataItem)
-			self::handleMetaDataItem($kSearchItem, $fieldName, $fieldValue, $isPartial, $isStartsWith);
+		if ($vSearchItem instanceof VidiunESearchMetadataItem)
+			self::handleMetaDataItem($vSearchItem, $fieldName, $fieldValue, $isPartial, $isStartsWith);
 		else
-			self::validateAndSetTypeAndValue($kSearchItem, $fieldName, $fieldValue, $isPartial, $isStartsWith);
+			self::validateAndSetTypeAndValue($vSearchItem, $fieldName, $fieldValue, $isPartial, $isStartsWith);
 	}
 
 	/**
-	 * @param KalturaESearchMetadataItem $kSearchItem
+	 * @param VidiunESearchMetadataItem $vSearchItem
 	 * @param $fieldName
 	 * @param $fieldValue
-	 * @throws kESearchException
+	 * @throws vESearchException
 	 */
-	private static function handleMetaDataItem(KalturaESearchMetadataItem $kSearchItem, $fieldName, $fieldValue, $isPartial, $isStartsWith)
+	private static function handleMetaDataItem(VidiunESearchMetadataItem $vSearchItem, $fieldName, $fieldValue, $isPartial, $isStartsWith)
 	{
 		$fieldValue = preg_replace('/(?<!")(?<!\w)(\w+)(?!")(?!\w)/', '"$1"', $fieldValue); //fix to json format.
 		$valueItems = json_decode($fieldValue);
 		if (!$valueItems)
-			throw new kESearchException('Illegal metadata format [use json format - {xpath:value, metadata_profile_id:value, term:value}]', kESearchException::INVALID_METADATA_FORMAT);
+			throw new vESearchException('Illegal metadata format [use json format - {xpath:value, metadata_profile_id:value, term:value}]', vESearchException::INVALID_METADATA_FORMAT);
 		foreach ($valueItems as $key => $value)
 		{
 			if (!in_array(strtoupper($key), array(self::XPATH, self::METADATA_PROFILE_ID, self::TERM, self::METADATA_FIELD_ID)))
 			{
 				$data = array();
 				$data['fieldName'] = $key;
-				throw new kESearchException('Illegal metadata field name', kESearchException::INVALID_METADATA_FIELD, $data);
+				throw new vESearchException('Illegal metadata field name', vESearchException::INVALID_METADATA_FIELD, $data);
 			}
 
 			switch (strtoupper($key))
 			{
 				case self::XPATH:
-					$kSearchItem->xpath = $value;
+					$vSearchItem->xpath = $value;
 					break;
 				case self::METADATA_PROFILE_ID:
-					$kSearchItem->metadataProfileId = $value;
+					$vSearchItem->metadataProfileId = $value;
 					break;
 				case self::METADATA_FIELD_ID:
-					$kSearchItem->metadataFieldId = $value;
+					$vSearchItem->metadataFieldId = $value;
 					break;
 				case self::TERM:
 				{
-					self::validateAndSetTypeAndValue($kSearchItem, $fieldName, $value, $isPartial, $isStartsWith);
+					self::validateAndSetTypeAndValue($vSearchItem, $fieldName, $value, $isPartial, $isStartsWith);
 					break;
 				}
 			}
@@ -325,14 +325,14 @@ class kESearchQueryParser
 	}
 
 	/**
-	 * @param $kSearchItem
+	 * @param $vSearchItem
 	 * @param $fieldName
 	 * @param $fieldValue
 	 * @param $isPartial
 	 * @param $isStartsWith
-	 * @throws kESearchException
+	 * @throws vESearchException
 	 */
-	private static function validateAndSetTypeAndValue($kSearchItem, $fieldName, $fieldValue, $isPartial, $isStartsWith)
+	private static function validateAndSetTypeAndValue($vSearchItem, $fieldName, $fieldValue, $isPartial, $isStartsWith)
 	{
 		$rangeObject = self::createRangeObject($fieldValue);
 		if (($isStartsWith || $isPartial) && $rangeObject)
@@ -340,28 +340,28 @@ class kESearchQueryParser
 			$data = array();
 			$data['fieldName'] = $fieldName;
 			$data['fieldValue'] = $fieldValue;
-			throw new kESearchException("Illegal mixed search item types [$fieldName:$fieldValue]", kESearchException::INVALID_MIXED_SEARCH_TYPES, $data);
+			throw new vESearchException("Illegal mixed search item types [$fieldName:$fieldValue]", vESearchException::INVALID_MIXED_SEARCH_TYPES, $data);
 		}
 
 		if ($rangeObject)
 		{
-			$kSearchItem->range = $rangeObject;
-			$kSearchItem->itemType = KalturaESearchItemType::RANGE;
+			$vSearchItem->range = $rangeObject;
+			$vSearchItem->itemType = VidiunESearchItemType::RANGE;
 		} else
 		{
 			if ($isPartial)
-				$kSearchItem->itemType = KalturaESearchItemType::PARTIAL;
+				$vSearchItem->itemType = VidiunESearchItemType::PARTIAL;
 			if ($isStartsWith)
-				$kSearchItem->itemType = KalturaESearchItemType::STARTS_WITH;
+				$vSearchItem->itemType = VidiunESearchItemType::STARTS_WITH;
 
-			$kSearchItem->searchTerm = $fieldValue;
+			$vSearchItem->searchTerm = $fieldValue;
 		}
 	}
 
 
 	/**
 	 * @param $fieldValue
-	 * @return KalturaESearchRange|null
+	 * @return VidiunESearchRange|null
 	 */
 	private static function createRangeObject($fieldValue)
 	{
@@ -371,73 +371,73 @@ class kESearchQueryParser
 		if (!$rangeItems)
 			return null;
 
-		$kESearchRangeObject = new KalturaESearchRange();
+		$vESearchRangeObject = new VidiunESearchRange();
 		foreach ($rangeItems as $rangeItem)
 		{
-			if (!self::validateAndSetRangeItem($rangeItem, $kESearchRangeObject))
+			if (!self::validateAndSetRangeItem($rangeItem, $vESearchRangeObject))
 				return null;
 		}
-		return $kESearchRangeObject;
+		return $vESearchRangeObject;
 	}
 
 	/**
 	 * @param $fieldName
-	 * @return KalturaESearchCaptionItem|KalturaESearchCategoryItem|KalturaESearchCuePointItem|KalturaESearchEntryItem|KalturaESearchMetadataItem|KalturaESearchUserItem|null
+	 * @return VidiunESearchCaptionItem|VidiunESearchCategoryItem|VidiunESearchCuePointItem|VidiunESearchEntryItem|VidiunESearchMetadataItem|VidiunESearchUserItem|null
 	 */
 	private static function getClassFromFieldName($fieldName)
 	{
-		$kSearchItem = null;
+		$vSearchItem = null;
 		$fieldName = strtoupper($fieldName);
-		if (defined('KalturaESearchEntryFieldName::' . $fieldName))
+		if (defined('VidiunESearchEntryFieldName::' . $fieldName))
 		{
-			$kSearchItem = new KalturaESearchEntryItem();
-			$kSearchItem->fieldName = constant("KalturaESearchEntryFieldName::$fieldName");
+			$vSearchItem = new VidiunESearchEntryItem();
+			$vSearchItem->fieldName = constant("VidiunESearchEntryFieldName::$fieldName");
 		}
-		if (defined('KalturaESearchCaptionFieldName::' . $fieldName))
+		if (defined('VidiunESearchCaptionFieldName::' . $fieldName))
 		{
-			$kSearchItem = new KalturaESearchCaptionItem();
-			$kSearchItem->fieldName = constant("KalturaESearchCaptionFieldName::$fieldName");
+			$vSearchItem = new VidiunESearchCaptionItem();
+			$vSearchItem->fieldName = constant("VidiunESearchCaptionFieldName::$fieldName");
 		}
-		if (defined('KalturaESearchCategoryFieldName::' . $fieldName))
+		if (defined('VidiunESearchCategoryFieldName::' . $fieldName))
 		{
-			$kSearchItem = new KalturaESearchCategoryItem();
-			$kSearchItem->fieldName = constant("KalturaESearchCategoryFieldName::$fieldName");
+			$vSearchItem = new VidiunESearchCategoryItem();
+			$vSearchItem->fieldName = constant("VidiunESearchCategoryFieldName::$fieldName");
 		}
-		if (defined('KalturaESearchCuePointFieldName::' . $fieldName))
+		if (defined('VidiunESearchCuePointFieldName::' . $fieldName))
 		{
-			$kSearchItem = new KalturaESearchCuePointItem();
-			$kSearchItem->fieldName = constant("KalturaESearchCuePointFieldName::$fieldName");
+			$vSearchItem = new VidiunESearchCuePointItem();
+			$vSearchItem->fieldName = constant("VidiunESearchCuePointFieldName::$fieldName");
 		}
-		if (defined('KalturaESearchUserFieldName::' . $fieldName))
+		if (defined('VidiunESearchUserFieldName::' . $fieldName))
 		{
-			$kSearchItem = new KalturaESearchUserItem();
-			$kSearchItem->fieldName = constant("KalturaESearchUserFieldName::$fieldName");
+			$vSearchItem = new VidiunESearchUserItem();
+			$vSearchItem->fieldName = constant("VidiunESearchUserFieldName::$fieldName");
 		}
 		if ($fieldName == '_METADATA')
-			$kSearchItem = new KalturaESearchMetadataItem();
+			$vSearchItem = new VidiunESearchMetadataItem();
 		if ($fieldName == '_ALL')
-			$kSearchItem = new KalturaESearchUnifiedItem();
+			$vSearchItem = new VidiunESearchUnifiedItem();
 
 		//default search item type
-		if ($kSearchItem)
-			$kSearchItem->itemType = KalturaESearchItemType::EXACT_MATCH;
+		if ($vSearchItem)
+			$vSearchItem->itemType = VidiunESearchItemType::EXACT_MATCH;
 
-		return $kSearchItem;
+		return $vSearchItem;
 	}
 
 	/**
 	 * @param $arr
-	 * @return KalturaESearchOperatorType|null
+	 * @return VidiunESearchOperatorType|null
 	 */
 	private static function getLevelOperator($arr)
 	{
 		foreach ($arr as $part)
 		{
 			if ($part == self::AND_OPERAND)
-				return KalturaESearchOperatorType::AND_OP;
+				return VidiunESearchOperatorType::AND_OP;
 
 			if ($part == self::OR_OPERAND)
-				return KalturaESearchOperatorType::OR_OP;
+				return VidiunESearchOperatorType::OR_OP;
 		}
 		return null;
 	}
@@ -445,10 +445,10 @@ class kESearchQueryParser
 
 	/**
 	 * @param string $rangeItem
-	 * @param KalturaESearchRange $rangeESearchObject
+	 * @param VidiunESearchRange $rangeESearchObject
 	 * @return int|null
 	 */
-	private static function validateAndSetRangeItem($rangeItem, KalturaESearchRange $rangeObject)
+	private static function validateAndSetRangeItem($rangeItem, VidiunESearchRange $rangeObject)
 	{
 		$rangeItem = trim($rangeItem);
 
@@ -544,71 +544,71 @@ class kESearchQueryParser
 	/**
 	 * @param $queryItem
 	 * @param  $queryItemValue
-	 * @return KalturaESearchCaptionItem|KalturaESearchCategoryItem|KalturaESearchCuePointItem|KalturaESearchEntryItem|KalturaESearchMetadataItem|KalturaESearchOperator|KalturaESearchUserItem|null
-	 * @throws kESearchException
+	 * @return VidiunESearchCaptionItem|VidiunESearchCategoryItem|VidiunESearchCuePointItem|VidiunESearchEntryItem|VidiunESearchMetadataItem|VidiunESearchOperator|VidiunESearchUserItem|null
+	 * @throws vESearchException
 	 */
 	private static function handleAndCreateSearchQueryItem($queryItem, $queryItemValue = null)
 	{
-		$kSearchItem = null;
+		$vSearchItem = null;
 		//If query item is array create inner query search items
 		if (is_array($queryItem))
 		{
-			$kSearchItem = self::createKSearchOperatorObject();
-			$innerObject = self::createKESearchParams($queryItem);
+			$vSearchItem = self::createVSearchOperatorObject();
+			$innerObject = self::createVESearchParams($queryItem);
 			if ($innerObject)
 			{
-				$innerObjectArray = new KalturaESearchBaseItemArray();
+				$innerObjectArray = new VidiunESearchBaseItemArray();
 				$innerObjectArray[] = $innerObject;
-				$kSearchItem->searchItems = $innerObjectArray;
+				$vSearchItem->searchItems = $innerObjectArray;
 			}
 		} else
 		{
 			//create a single search item only with field name existance
-			$kSearchItem = self::CreateKESearchItem($queryItem, $queryItemValue);
-			if (!isset($kSearchItem))
+			$vSearchItem = self::CreateVESearchItem($queryItem, $queryItemValue);
+			if (!isset($vSearchItem))
 			{
 				$data = array();
 				$data['fieldName'] = $queryItem;
-				throw new kESearchException('Illegal query field name', kESearchException::INVALID_FIELD_NAME, $data);
+				throw new vESearchException('Illegal query field name', vESearchException::INVALID_FIELD_NAME, $data);
 			}
 		}
-		return $kSearchItem;
+		return $vSearchItem;
 	}
 
 	/**
 	 * Create an eSearchOperator object to hold all the items of the same level ( allowed is the same AND/OR OperatorType for all item on the same level but NOT operator is allowed)
-	 * 1. get the level operator and create the KSearchOperatorObject container
+	 * 1. get the level operator and create the VSearchOperatorObject container
 	 * 2. iterate through the level queryItemsArray and create the objects:
-	 *  a. in case we create a not operator we will recurse to the createKESearchParams method since we need to create a deeper level in the tree
+	 *  a. in case we create a not operator we will recurse to the createVESearchParams method since we need to create a deeper level in the tree
 	 *  b. we will ignore the other operands in the same level (since they were already verified)
-	 *     and we will call createKESearchParams for the items (which can be simple types or hold a deeper level for query commmands.
+	 *     and we will call createVESearchParams for the items (which can be simple types or hold a deeper level for query commmands.
 	 * @param $queryItemArray
-	 * @return KalturaESearchOperator
+	 * @return VidiunESearchOperator
 	 */
 	private static function handleAndCreateOperatorQueryItem($queryItemArray)
 	{
-		$kSearchItem = self::createKSearchOperatorObject(self::getLevelOperator($queryItemArray));
+		$vSearchItem = self::createVSearchOperatorObject(self::getLevelOperator($queryItemArray));
 		$queryArrayIndex = 0;
-		$innerObjects = new KalturaESearchBaseItemArray();
+		$innerObjects = new VidiunESearchBaseItemArray();
 		while ($queryArrayIndex < count($queryItemArray))
 		{
 			if ($queryItemArray[$queryArrayIndex] == self::NOT_OPERAND)
 			{
-				$kNotItem = self::createKSearchOperatorObject(KalturaESearchOperatorType::NOT_OP);
-				$innerObject = self::createKESearchParams($queryItemArray[$queryArrayIndex + 1]);
+				$vNotItem = self::createVSearchOperatorObject(VidiunESearchOperatorType::NOT_OP);
+				$innerObject = self::createVESearchParams($queryItemArray[$queryArrayIndex + 1]);
 				if ($innerObject)
 				{
-					$kNotItemInnerObject = new KalturaESearchBaseItemArray();
-					$kNotItemInnerObject[] = $innerObject;
-					$kNotItem->searchItems = $kNotItemInnerObject;
+					$vNotItemInnerObject = new VidiunESearchBaseItemArray();
+					$vNotItemInnerObject[] = $innerObject;
+					$vNotItem->searchItems = $vNotItemInnerObject;
 				}
-				$innerObjects[] = $kNotItem;
+				$innerObjects[] = $vNotItem;
 				$queryArrayIndex = $queryArrayIndex + 2;
 			} else
 			{
 				if ($queryItemArray[$queryArrayIndex] != self::OR_OPERAND && $queryItemArray[$queryArrayIndex] != self::AND_OPERAND)
 				{
-					$innerObject = self::createKESearchParams($queryItemArray[$queryArrayIndex]);
+					$innerObject = self::createVESearchParams($queryItemArray[$queryArrayIndex]);
 					if ($innerObject)
 						$innerObjects[] = $innerObject;
 				}
@@ -616,20 +616,20 @@ class kESearchQueryParser
 			}
 		}
 
-		$kSearchItem->searchItems = $innerObjects;
-		return $kSearchItem;
+		$vSearchItem->searchItems = $innerObjects;
+		return $vSearchItem;
 	}
 
 	/**
 	 * @param $operator
-	 * @return KalturaESearchOperator
+	 * @return VidiunESearchOperator
 	 */
-	private static function createKSearchOperatorObject($operator = null)
+	private static function createVSearchOperatorObject($operator = null)
 	{
-		$kSearchItem = new KalturaESearchOperator();
+		$vSearchItem = new VidiunESearchOperator();
 		if (!$operator)
-			$operator = KalturaESearchOperatorType::AND_OP;
-		$kSearchItem->operator = $operator;
-		return $kSearchItem;
+			$operator = VidiunESearchOperatorType::AND_OP;
+		$vSearchItem->operator = $operator;
+		return $vSearchItem;
 	}
 }

@@ -6,7 +6,7 @@
  * @package api
  * @subpackage services
  */
-class ServerNodeService extends KalturaBaseService
+class ServerNodeService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -14,23 +14,23 @@ class ServerNodeService extends KalturaBaseService
 		
 		$partnerId = $this->getPartnerId();
 		if(!$this->getPartner()->getEnabledService(PermissionName::FEATURE_SERVER_NODE) && $partnerId != PARTNER::BATCH_PARTNER_ID)
-			throw new KalturaAPIException(KalturaErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
+			throw new VidiunAPIException(VidiunErrors::SERVICE_FORBIDDEN, $this->serviceName.'->'.$this->actionName);
 			
 		$this->applyPartnerFilterForClass('serverNode');
 	}
 	
 	/**
-	 * Adds a server node to the Kaltura DB.
+	 * Adds a server node to the Vidiun DB.
 	 *
 	 * @action add
-	 * @param KalturaServerNode $serverNode
-	 * @return KalturaServerNode
+	 * @param VidiunServerNode $serverNode
+	 * @return VidiunServerNode
 	 */
-	function addAction(KalturaServerNode $serverNode)
+	function addAction(VidiunServerNode $serverNode)
 	{	
 		$dbServerNode = $this->addNewServerNode($serverNode);
 		
-		$serverNode = KalturaServerNode::getInstance($dbServerNode, $this->getResponseProfile());
+		$serverNode = VidiunServerNode::getInstance($dbServerNode, $this->getResponseProfile());
 		return $serverNode;
 	}
 	
@@ -39,16 +39,16 @@ class ServerNodeService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $serverNodeId
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
-	 * @return KalturaServerNode
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
+	 * @return VidiunServerNode
 	 */
 	function getAction($serverNodeId)
 	{
 		$dbServerNode = ServerNodePeer::retrieveByPK($serverNodeId);
 		if (!$dbServerNode)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $serverNodeId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $serverNodeId);
 		
-		$serverNode = KalturaServerNode::getInstance($dbServerNode, $this->getResponseProfile());
+		$serverNode = VidiunServerNode::getInstance($dbServerNode, $this->getResponseProfile());
 		return $serverNode;
 	}
 	
@@ -57,19 +57,19 @@ class ServerNodeService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $serverNodeId
-	 * @param KalturaServerNode $serverNode
-	 * @return KalturaServerNode
+	 * @param VidiunServerNode $serverNode
+	 * @return VidiunServerNode
 	 */
-	function updateAction($serverNodeId, KalturaServerNode $serverNode)
+	function updateAction($serverNodeId, VidiunServerNode $serverNode)
 	{
 		$dbServerNode = ServerNodePeer::retrieveByPK($serverNodeId);
 		if (!$dbServerNode)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $serverNodeId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $serverNodeId);
 			
 		$dbServerNode = $serverNode->toUpdatableObject($dbServerNode);
 		$dbServerNode->save();
 		
-		$serverNode = KalturaServerNode::getInstance($dbServerNode, $this->getResponseProfile());
+		$serverNode = VidiunServerNode::getInstance($dbServerNode, $this->getResponseProfile());
 		return $serverNode;
 	}
 	
@@ -78,13 +78,13 @@ class ServerNodeService extends KalturaBaseService
 	 *
 	 * @action delete
 	 * @param string $serverNodeId
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */
 	function deleteAction($serverNodeId)
 	{
 		$dbServerNode = ServerNodePeer::retrieveByPK($serverNodeId);
 		if(!$dbServerNode)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $serverNodeId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $serverNodeId);
 	
 		$dbServerNode->setStatus(ServerNodeStatus::DELETED);
 		$dbServerNode->save();
@@ -95,19 +95,19 @@ class ServerNodeService extends KalturaBaseService
 	 *
 	 * @action disable
 	 * @param string $serverNodeId
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
-	 * @return KalturaServerNode
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
+	 * @return VidiunServerNode
 	 */
 	function disableAction($serverNodeId)
 	{
 		$dbServerNode = ServerNodePeer::retrieveByPK($serverNodeId);
 		if(!$dbServerNode)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $serverNodeId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $serverNodeId);
 	
 		$dbServerNode->setStatus(ServerNodeStatus::DISABLED);
 		$dbServerNode->save();
 		
-		$serverNode = KalturaServerNode::getInstance($dbServerNode, $this->getResponseProfile());
+		$serverNode = VidiunServerNode::getInstance($dbServerNode, $this->getResponseProfile());
 		return $serverNode;
 	}
 	
@@ -116,35 +116,35 @@ class ServerNodeService extends KalturaBaseService
 	 *
 	 * @action enable
 	 * @param string $serverNodeId
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
-	 * @return KalturaServerNode
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
+	 * @return VidiunServerNode
 	 */
 	function enableAction($serverNodeId)
 	{
 		$dbServerNode = ServerNodePeer::retrieveByPK($serverNodeId);
 		if(!$dbServerNode)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $serverNodeId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $serverNodeId);
 	
 		$dbServerNode->setStatus(ServerNodeStatus::ACTIVE);
 		$dbServerNode->save();
 		
-		$serverNode = KalturaServerNode::getInstance($dbServerNode, $this->getResponseProfile());
+		$serverNode = VidiunServerNode::getInstance($dbServerNode, $this->getResponseProfile());
 		return $serverNode;
 	}
 	
 	/**	
 	 * @action list
-	 * @param KalturaServerNodeFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaServerNodeListResponse
+	 * @param VidiunServerNodeFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunServerNodeListResponse
 	 */
-	public function listAction(KalturaServerNodeFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunServerNodeFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if(!$filter)
-			$filter = new KalturaServerNodeFilter();
+			$filter = new VidiunServerNodeFilter();
 			
 		if(!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		
 		return $filter->getTypeListResponse($pager, $this->getResponseProfile(), null);
 	}
@@ -154,11 +154,11 @@ class ServerNodeService extends KalturaBaseService
 	 *
 	 * @action reportStatus
 	 * @param string $hostName
-	 * @param KalturaServerNode $serverNode
-	 * @param KalturaServerNodeStatus $serverNodeStatus
-	 * @return KalturaServerNode
+	 * @param VidiunServerNode $serverNode
+	 * @param VidiunServerNodeStatus $serverNodeStatus
+	 * @return VidiunServerNode
 	 */
-	function reportStatusAction($hostName, KalturaServerNode $serverNode = null, $serverNodeStatus = ServerNodeStatus::ACTIVE)
+	function reportStatusAction($hostName, VidiunServerNode $serverNode = null, $serverNodeStatus = ServerNodeStatus::ACTIVE)
 	{
 		$dbType = null;
 		if ($serverNode)
@@ -179,7 +179,7 @@ class ServerNodeService extends KalturaBaseService
 				$dbServerNode = $this->addNewServerNode($serverNode);
 			}
 			else 
-				throw new KalturaAPIException(KalturaErrors::SERVER_NODE_NOT_FOUND, $hostName);
+				throw new VidiunAPIException(VidiunErrors::SERVER_NODE_NOT_FOUND, $hostName);
 		}
 
 
@@ -187,11 +187,11 @@ class ServerNodeService extends KalturaBaseService
 		$dbServerNode->setStatus($serverNodeStatus);
 		$dbServerNode->save();
 	
-		$serverNode = KalturaServerNode::getInstance($dbServerNode, $this->getResponseProfile());
+		$serverNode = VidiunServerNode::getInstance($dbServerNode, $this->getResponseProfile());
 		return $serverNode;
 	}
 	
-	private function addNewServerNode(KalturaServerNode $serverNode)
+	private function addNewServerNode(VidiunServerNode $serverNode)
 	{
 		$dbServerNode = $serverNode->toInsertableObject();
 		/* @var $dbServerNode ServerNode */
@@ -207,9 +207,9 @@ class ServerNodeService extends KalturaBaseService
 	 *
 	 * @action markOffline
 	 * @param string $serverNodeId
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
-	 * @return KalturaServerNode
-	 * @throws KalturaAPIException
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
+	 * @return VidiunServerNode
+	 * @throws VidiunAPIException
 	 */
 	function markOfflineAction($serverNodeId)
 	{
@@ -219,12 +219,12 @@ class ServerNodeService extends KalturaBaseService
 		$dbServerNode = ServerNodePeer::doSelectOne($criteria);
 
 		if(!$dbServerNode)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $serverNodeId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $serverNodeId);
 
 		$dbServerNode->setStatus(ServerNodeStatus::NOT_REGISTERED);
 		$dbServerNode->save();
 
-		$serverNode = KalturaServerNode::getInstance($dbServerNode, $this->getResponseProfile());
+		$serverNode = VidiunServerNode::getInstance($dbServerNode, $this->getResponseProfile());
 		return $serverNode;
 	}
 
@@ -240,10 +240,10 @@ class ServerNodeService extends KalturaBaseService
 	 */
 	function getFullPathAction($hostName, $protocol = 'http', $deliveryFormat = null, $deliveryType = null)
 	{
-		$dbServerNode = ServerNodePeer::retrieveActiveServerNode($hostName, $this->getPartnerId(), KalturaServerNodeType::EDGE);
+		$dbServerNode = ServerNodePeer::retrieveActiveServerNode($hostName, $this->getPartnerId(), VidiunServerNodeType::EDGE);
 		if (!$dbServerNode)
 		{
-			throw new KalturaAPIException(KalturaErrors::SERVER_NODE_NOT_FOUND, $hostName);
+			throw new VidiunAPIException(VidiunErrors::SERVER_NODE_NOT_FOUND, $hostName);
 		}
 		/** @var EdgeServerNode $dbServerNode */
 		return $dbServerNode->buildEdgeFullPath($protocol, $deliveryFormat, $deliveryType);

@@ -5,22 +5,22 @@
  * @package plugins.emailNotification
  * @subpackage Scheduler
  */
-class KEmailNotificationUserRecipientEngine extends  KEmailNotificationRecipientEngine
+class VEmailNotificationUserRecipientEngine extends  VEmailNotificationRecipientEngine
 {
 	/* (non-PHPdoc)
-	 * @see KEmailNotificationRecipientEngine::getRecipients()
+	 * @see VEmailNotificationRecipientEngine::getRecipients()
 	 */
 	function getRecipients(array $contentParameters) {
 	    
-               $pager = new KalturaFilterPager();
+               $pager = new VidiunFilterPager();
                $pager->pageSize = 500;
 		//list users
-		$userList = KBatchBase::$kClient->user->listAction($this->recipientJobData->filter, $pager);
+		$userList = VBatchBase::$vClient->user->listAction($this->recipientJobData->filter, $pager);
 		
 		$recipients = array();
 		foreach ($userList->objects as $user)
 		{
-			/* @var $user KalturaUser */
+			/* @var $user VidiunUser */
 			$recipients[$user->email] = $user->firstName. ' ' . $user->lastName;
 		}
 		

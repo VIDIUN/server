@@ -5,7 +5,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaClientNotification extends KalturaObject 
+class VidiunClientNotification extends VidiunObject 
 {
     /**
      * The URL where the notification should be sent to 

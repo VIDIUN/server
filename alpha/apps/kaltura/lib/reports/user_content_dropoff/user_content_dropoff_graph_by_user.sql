@@ -6,7 +6,7 @@ SELECT
 	IFNULL(SUM(count_plays_100),0) count_plays_100,
 	IFNULL(( SUM(count_plays_100) / SUM(count_plays) ),0) play_through_ratio
 FROM 
-	dwh_hourly_events_context_entry_user_app ev, kalturadw.dwh_dim_pusers us
+	dwh_hourly_events_context_entry_user_app ev, vidiundw.dwh_dim_pusers us
 WHERE 	
 	{OBJ_ID_CLAUSE} # ev.entry_id in 
 	AND {CAT_ID_CLAUSE}

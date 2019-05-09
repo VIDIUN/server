@@ -6,38 +6,38 @@
 class AdvancedSearchFilterComparableCondition extends AdvancedSearchFilterCondition
 {
 	/**
-	 * @var KalturaSearchConditionComparison
+	 * @var VidiunSearchConditionComparison
 	 */
 	public $comparison;
 
 	/**
 	 * Adds conditions, matches and where clauses to the query
-	 * @param IKalturaIndexQuery $query
+	 * @param IVidiunIndexQuery $query
 	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
 		switch ($this->getComparison())
 		{
-			case KalturaSearchConditionComparison::EQUAL:
+			case VidiunSearchConditionComparison::EQUAL:
 				$comparison = ' = ';
 				break;
-			case KalturaSearchConditionComparison::GREATER_THAN:
+			case VidiunSearchConditionComparison::GREATER_THAN:
 				$comparison = ' > ';
 				break;
-			case KalturaSearchConditionComparison::GREATER_THAN_OR_EQUAL:
+			case VidiunSearchConditionComparison::GREATER_THAN_OR_EQUAL:
 				$comparison = ' >= ';
 				break;
-			case KalturaSearchConditionComparison::LESS_THAN:
+			case VidiunSearchConditionComparison::LESS_THAN:
 				$comparison = " < ";
 				break;
-			case KalturaSearchConditionComparison::LESS_THAN_OR_EQUAL:
+			case VidiunSearchConditionComparison::LESS_THAN_OR_EQUAL:
 				$comparison = " <= ";
 				break;
-			case KalturaSearchConditionComparison::NOT_EQUAL:
+			case VidiunSearchConditionComparison::NOT_EQUAL:
 				$comparison = " <> ";
 				break;
 			default:
-				KalturaLog::err("Missing comparison type");
+				VidiunLog::err("Missing comparison type");
 				return;
 		}
 
@@ -46,11 +46,11 @@ class AdvancedSearchFilterComparableCondition extends AdvancedSearchFilterCondit
 		$fieldValue = $this->getFieldValue($field);
 		if (is_null($fieldValue))
 		{
-			KalturaLog::err('Unknown field [' . $field . ']');
+			VidiunLog::err('Unknown field [' . $field . ']');
 			return;
 		}
 
-		$newCondition = $fieldValue . $comparison . KalturaCriteria::escapeString($value);
+		$newCondition = $fieldValue . $comparison . VidiunCriteria::escapeString($value);
 
 		$query->addCondition($newCondition);
 	}
@@ -90,14 +90,14 @@ class AdvancedSearchFilterComparableCondition extends AdvancedSearchFilterCondit
 	}
 	
 	/**
-	 * @return KalturaSearchConditionComparison $comparison
+	 * @return VidiunSearchConditionComparison $comparison
 	 */
 	public function getComparison() {
 		return $this->comparison;
 	}
 
 	/**
-	 * @param KalturaSearchConditionComparison $comparison the $comparison to set
+	 * @param VidiunSearchConditionComparison $comparison the $comparison to set
 	 */
 	public function setComparison($comparison) {
 		$this->comparison = $comparison;

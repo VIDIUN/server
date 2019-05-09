@@ -3,17 +3,17 @@
  * @package plugins.quiz
  * @subpackage api.filters
  */
-class KalturaQuestionCuePointFilter extends KalturaQuestionCuePointBaseFilter
+class VidiunQuestionCuePointFilter extends VidiunQuestionCuePointBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::validateForResponseProfile()
+	 * @see VidiunRelatedFilter::validateForResponseProfile()
 	 */
 	public function validateForResponseProfile()
 	{
-		// override KalturaCuePointFilter::validateForResponseProfile because all question cue-points are public
+		// override VidiunCuePointFilter::validateForResponseProfile because all question cue-points are public
 	}
 
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, $type = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, $type = null)
 	{
 		return parent::getTypeListResponse($pager, $responseProfile, QuizPlugin::getCoreValue('CuePointType',QuizCuePointType::QUIZ_QUESTION));
 	}

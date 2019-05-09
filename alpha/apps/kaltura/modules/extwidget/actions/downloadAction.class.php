@@ -15,7 +15,7 @@ class downloadAction extends sfAction
 		$flavorId = $this->getRequestParameter("flavor");
 		$fileName = $this->getRequestParameter("file_name");
 		$fileName = basename($fileName);
-		$ksStr = $this->getRequestParameter("ks");
+		$vsStr = $this->getRequestParameter("vs");
 		$referrer = $this->getRequestParameter("referrer");
 		$referrer = base64_decode($referrer);
 		if (!is_string($referrer)) // base64_decode can return binary data
@@ -23,44 +23,44 @@ class downloadAction extends sfAction
 			
 		$entry = null;
 		
-		if($ksStr)
+		if($vsStr)
 		{
 			try {
-				kCurrentContext::initKsPartnerUser($ksStr);
+				vCurrentContext::initVsPartnerUser($vsStr);
 			}
 			catch (Exception $ex)
 			{
-				KExternalErrors::dieError(KExternalErrors::INVALID_KS);	
+				VExternalErrors::dieError(VExternalErrors::INVALID_VS);	
 			}
 		}
 		else
 		{
-			$entry = kCurrentContext::initPartnerByEntryId($entryId);
+			$entry = vCurrentContext::initPartnerByEntryId($entryId);
 			if(!$entry)
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 		
-		kEntitlementUtils::initEntitlementEnforcement();
+		vEntitlementUtils::initEntitlementEnforcement();
 		
 		if (!$entry)
 		{
 			$entry = entryPeer::retrieveByPK($entryId);
 			
 			if(!$entry)
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 		else
 		{
-			if(!kEntitlementUtils::isEntryEntitled($entry))
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+			if(!vEntitlementUtils::isEntryEntitled($entry))
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 		}
 		
-		KalturaMonitorClient::initApiMonitor(false, 'extwidget.download', $entry->getPartnerId());
+		VidiunMonitorClient::initApiMonitor(false, 'extwidget.download', $entry->getPartnerId());
 		
 		myPartnerUtils::blockInactivePartner($entry->getPartnerId());
 		
 		$shouldPreview = false;
-		$securyEntryHelper = new KSecureEntryHelper($entry, $ksStr, $referrer, ContextType::DOWNLOAD);
+		$securyEntryHelper = new VSecureEntryHelper($entry, $vsStr, $referrer, ContextType::DOWNLOAD);
 		if ($securyEntryHelper->shouldPreview()) { 
 			$shouldPreview = true;
 		} else { 
@@ -74,14 +74,14 @@ class downloadAction extends sfAction
 			// get flavor asset
 			$flavorAsset = assetPeer::retrieveById($flavorId);
 			if (is_null($flavorAsset) || !$flavorAsset->isLocalReadyStatus())
-				KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 			
 			// the request flavor should belong to the requested entry
 			if ($flavorAsset->getEntryId() != $entryId)
-				KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 				
 			if(!$securyEntryHelper->isAssetAllowed($flavorAsset))
-				KExternalErrors::dieError(KExternalErrors::FLAVOR_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::FLAVOR_NOT_FOUND);
 		}
 		else // try to find some flavor
 		{
@@ -116,17 +116,17 @@ class downloadAction extends sfAction
 		}
 		
 		if (is_null($syncKey))
-			KExternalErrors::dieError(KExternalErrors::FILE_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FILE_NOT_FOUND);
 			
 		$this->handleFileSyncRedirection($syncKey);
 
-		list ($fileSync,$local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, false, false);
+		list ($fileSync,$local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, false, false);
 		if (!$fileSync)
-			KExternalErrors::dieError(KExternalErrors::FILE_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FILE_NOT_FOUND);
 		/**@var $fileSync FileSync */
 		$filePath = $fileSync->getFullPath();
 
-		list($fileBaseName, $fileExt) = kAssetUtils::getFileName($entry, $flavorAsset);
+		list($fileBaseName, $fileExt) = vAssetUtils::getFileName($entry, $flavorAsset);
 
 		if (!$fileName)
 			$fileName = $fileBaseName;
@@ -137,8 +137,8 @@ class downloadAction extends sfAction
 		$preview = 0;
 		if($shouldPreview && $flavorAsset) {
 			$preview = $flavorAsset->estimateFileSize($entry, $securyEntryHelper->getPreviewLength());
-		} else if(kCurrentContext::$ks_object) {
-			$preview = kCurrentContext::$ks_object->getPrivilegeValue(kSessionBase::PRIVILEGE_PREVIEW, 0);
+		} else if(vCurrentContext::$vs_object) {
+			$preview = vCurrentContext::$vs_object->getPrivilegeValue(vSessionBase::PRIVILEGE_PREVIEW, 0);
 		}
 		
                //enable downloading file_name which inside the flavor asset directory
@@ -153,7 +153,7 @@ class downloadAction extends sfAction
                 }
                 $this->dumpFile($filePath, $fileName, $preview, $fileSync->getEncryptionKey(), $fileSync->getIv(), $fileSize);
 	
-		KExternalErrors::dieGracefully(); // no view
+		VExternalErrors::dieGracefully(); // no view
 	}
 	
 	private function getSyncKeyAndForFlavorAsset(entry $entry, flavorAsset $flavorAsset)
@@ -200,34 +200,34 @@ class downloadAction extends sfAction
 				$url .= "/relocate/";
 			}
 				
-			$url .= kString::stripInvalidUrlChars($file_name);
+			$url .= vString::stripInvalidUrlChars($file_name);
 
-			kFile::cacheRedirect($url);
+			vFile::cacheRedirect($url);
 
 			header("Location: {$url}");
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 		else
 		{
 			if(!$directServe)
 				header("Content-Disposition: attachment; filename=\"$file_name\"");
 				
-			$mime_type = kFile::mimeType($file_path);
-			kFileUtils::dumpFile($file_path, $mime_type, null, $limit_file_size, $key, $iv, $fileSize);
+			$mime_type = vFile::mimeType($file_path);
+			vFileUtils::dumpFile($file_path, $mime_type, null, $limit_file_size, $key, $iv, $fileSize);
 		}
 	}
 	
 	private function handleFileSyncRedirection(FileSyncKey $syncKey)
 	{
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($syncKey, true, false);
 		
 		if (is_null($fileSync))
-			KExternalErrors::dieError(KExternalErrors::FILE_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::FILE_NOT_FOUND);
 			
 		if (!$local)
 		{
-			$url = kDataCenterMgr::getRedirectExternalUrl($fileSync);
-			KExternalErrors::terminateDispatch();
+			$url = vDataCenterMgr::getRedirectExternalUrl($fileSync);
+			VExternalErrors::terminateDispatch();
 			$this->redirect($url);
 		}
 	}

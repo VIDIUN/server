@@ -1,6 +1,6 @@
 <?php
-require_once realpath(__DIR__ . '/../../') . '/lib/KalturaEnums.php';
-require_once realpath(__DIR__ . '/../') . '/KalturaMonitorResult.php';
+require_once realpath(__DIR__ . '/../../') . '/lib/VidiunEnums.php';
+require_once realpath(__DIR__ . '/../') . '/VidiunMonitorResult.php';
 
 $options = getopt('', array(
 	'debug',
@@ -35,7 +35,7 @@ $etlProcLock = $options['etl-processes-lock'];
 
 // start
 $start = microtime(true);
-$monitorResult = new KalturaMonitorResult();
+$monitorResult = new VidiunMonitorResult();
 
 $config = parse_ini_file(__DIR__ . '/../config.ini', true);
 try
@@ -45,7 +45,7 @@ try
 	
 	// insert or update sphinx log
 	$query = "
-	SELECT lock_name FROM kalturadw_ds.LOCKS
+	SELECT lock_name FROM vidiundw_ds.LOCKS
 	WHERE TIME_TO_SEC(TIMEDIFF(NOW(), lock_time)) > IF (lock_name = 'daily_lock', $dailyLock, IF(lock_name LIKE 'hourly_%', $hourlyLock, $etlProcLock))
 	AND lock_state = 1";
 	
@@ -58,9 +58,9 @@ try
 	
 	foreach($locks as $lock)
 	{
-		$error = new KalturaMonitorError();
+		$error = new VidiunMonitorError();
 		$error->description = "$lock is locked";
-		$error->level = KalturaMonitorError::CRIT;
+		$error->level = VidiunMonitorError::CRIT;
 		$monitorResult->errors[] = $error;
 	}
 	
@@ -79,10 +79,10 @@ catch(PDOException $pdoe)
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $pdoe->getCode();
 	$error->description = $pdoe->getMessage();
-	$error->level = KalturaMonitorError::CRIT;
+	$error->level = VidiunMonitorError::CRIT;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = get_class($pdoe) . ": " . $pdoe->getMessage();
@@ -95,10 +95,10 @@ catch(Exception $e)
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $e->getCode();
 	$error->description = $e->getMessage();
-	$error->level = KalturaMonitorError::ERR;
+	$error->level = VidiunMonitorError::ERR;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = $e->getMessage();

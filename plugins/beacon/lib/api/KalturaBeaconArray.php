@@ -4,17 +4,17 @@
  * @package plugins.beacon
  * @subpackage api.objects
  */
-class KalturaBeaconArray extends KalturaTypedArray
+class VidiunBeaconArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaBeaconArray();
+		$newArr = new VidiunBeaconArray();
 		if ($arr == null)
 			return $newArr;
 		
 		foreach ($arr as $obj) 
 		{
-			$nObj = new KalturaBeacon();
+			$nObj = new VidiunBeacon();
 			$nObj->fromArray($obj);
 			$newArr[] = $nObj;
 		}
@@ -24,6 +24,6 @@ class KalturaBeaconArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		parent::__construct("KalturaBeacon");
+		parent::__construct("VidiunBeacon");
 	}
 }

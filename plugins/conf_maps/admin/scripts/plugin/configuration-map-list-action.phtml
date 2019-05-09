@@ -27,12 +27,12 @@
         </tfoot>
         <tbody>
 				<?php if($this->paginator)
-				foreach ($this->paginator as /* Kaltura_Client_ConfMaps_Type_ConfMaps*/$configurationMap):?>
+				foreach ($this->paginator as /* Vidiun_Client_ConfMaps_Type_ConfMaps*/$configurationMap):?>
                 <tr class="<?php echo $this->cycle(array('odd', 'even'))->next(); ?>">
                 <td><?php echo $configurationMap->name; ?></td>
 	            <td><?php echo $configurationMap->relatedHost; ?></td>
 	            <td><?php echo $configurationMap->version; ?></td>
-	            <td><?php echo $this->enumTranslate('Kaltura_Client_Enum_ConfMapSourceLocation', $configurationMap->sourceLocation);?></td>
+	            <td><?php echo $this->enumTranslate('Vidiun_Client_Enum_ConfMapSourceLocation', $configurationMap->sourceLocation);?></td>
 	            <td><?php echo date($this->translate('time format'), $configurationMap->lastUpdate); ?></td>
                 <td>
 		            <select class="options" onchange="doAction(this.value,'<?php echo $configurationMap->name; ?>', '<?php echo $configurationMap->relatedHost; ?>')">

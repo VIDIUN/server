@@ -3,7 +3,7 @@
  * @package plugins.codeCuePoint
  * @subpackage lib.enum
  */
-class CodeCuePointType implements IKalturaPluginEnum, CuePointType
+class CodeCuePointType implements IVidiunPluginEnum, CuePointType
 {
 	const CODE = 'Code';
 	

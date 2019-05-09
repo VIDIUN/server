@@ -4,7 +4,7 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectTaskEngine
  */
-abstract class KObjectTaskEngineBase
+abstract class VObjectTaskEngineBase
 {
 	/**
 	 * @var int
@@ -12,12 +12,12 @@ abstract class KObjectTaskEngineBase
 	private $_originalPartnerId;
 
 	/**
-	 * @var KalturaClient
+	 * @var VidiunClient
 	 */
 	private $_client;
 
 	/**
-	 * @var KalturaObjectTask
+	 * @var VidiunObjectTask
 	 */
 	private $_objectTask;
 
@@ -31,7 +31,7 @@ abstract class KObjectTaskEngineBase
 	 */
 	public function execute($object)
 	{
-		KalturaLog::info('Executing object task '.get_class($this).' for object '.get_class($object));
+		VidiunLog::info('Executing object task '.get_class($this).' for object '.get_class($object));
 
 		if (is_null($this->_client))
 			throw new Exception('Client must be set before execution');
@@ -45,15 +45,15 @@ abstract class KObjectTaskEngineBase
 	
 
 	/**
-	 * @param KalturaClient $client
+	 * @param VidiunClient $client
 	 */
-	public function setClient(KalturaClient $client)
+	public function setClient(VidiunClient $client)
 	{
 		$this->_client = $client;
 	}
 
 	/**
-	 * @return KalturaClient
+	 * @return VidiunClient
 	 */
 	public function getClient()
 	{
@@ -61,7 +61,7 @@ abstract class KObjectTaskEngineBase
 	}
 
 	/**
-	 * @param KalturaObjectTask $objectTask
+	 * @param VidiunObjectTask $objectTask
 	 */
 	public function setObjectTask($objectTask)
 	{
@@ -69,7 +69,7 @@ abstract class KObjectTaskEngineBase
 	}
 
 	/**
-	 * @return KalturaObjectTask
+	 * @return VidiunObjectTask
 	 */
 	public function getObjectTask()
 	{

@@ -3,10 +3,10 @@
  * @package plugins.quiz
  * @subpackage api.objects
  */
-class KalturaQuizListResponse extends KalturaListResponse
+class VidiunQuizListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaQuizArray
+	 * @var VidiunQuizArray
 	 * @readonly
 	 */
 	public $objects;

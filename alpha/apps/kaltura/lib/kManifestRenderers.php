@@ -1,6 +1,6 @@
 <?php
 
-abstract class kManifestRenderer
+abstract class vManifestRenderer
 {
 	const PLAY_STREAM_TYPE_LIVE = 'live';
 	const PLAY_STREAM_TYPE_RECORDED = 'recorded';
@@ -20,7 +20,7 @@ abstract class kManifestRenderer
 	public $duration = null;
 	
 	/**
-	 * @var kUrlTokenizer
+	 * @var vUrlTokenizer
 	 */
 	public $tokenizer = null;
 	
@@ -50,9 +50,9 @@ abstract class kManifestRenderer
 	public $defaultDeliveryCode = '';
 	
 	/**
-	 * @var kSessionBase
+	 * @var vSessionBase
 	 */
-	protected $ksObject = null;
+	protected $vsObject = null;
 	
 	/**
 	 * Array of classes required for load into the renderer scope in order to expand the manifest
@@ -124,14 +124,14 @@ abstract class kManifestRenderer
 	abstract protected function replacePlayServerSessionId();
 
 	/**
-	 * @param kSessionBase $ksObject
+	 * @param vSessionBase $vsObject
 	 */
-	public function setKsObject($ksObject)
+	public function setVsObject($vsObject)
 	{
-		$this->ksObject = $ksObject;
+		$this->vsObject = $vsObject;
 		if ($this->tokenizer)
 		{
-			$this->tokenizer->setKsObject($ksObject);
+			$this->tokenizer->setVsObject($vsObject);
 		}
 	}
 	
@@ -203,7 +203,7 @@ abstract class kManifestRenderer
 
 		$params = infraRequestUtils::getRequestParams();
 		$mapping = array(
-			'ks' => 'ks',
+			'vs' => 'vs',
 			'format' => 'deliveryType',
 			'uiConfId' => 'uiConfId',
 			'playSessionId' => 'sessionId',
@@ -226,9 +226,9 @@ abstract class kManifestRenderer
 
 			// strip version prefixes
 			$prefixes = array(
-				'kdp:v',
+				'vdp:v',
 				'html5:v',
-				'kwidget:v',
+				'vwidget:v',
 			);
 			foreach ($prefixes as $prefix)
 			{
@@ -312,7 +312,7 @@ abstract class kManifestRenderer
 			header($header);
 		}
 		
-		if (kApiCache::hasExtraFields() && !$this->forceCachingHeaders)
+		if (vApiCache::hasExtraFields() && !$this->forceCachingHeaders)
 			$this->cachingHeadersAge = 0;
 		
 		infraRequestUtils::sendCachingHeaders($this->cachingHeadersAge, true, $this->lastModified);
@@ -347,9 +347,9 @@ abstract class kManifestRenderer
 		
 		echo $content;
 		
-		if (kConf::hasParam('internal_analytics_host'))
+		if (vConf::hasParam('internal_analytics_host'))
 		{
-			$statsHost = explode(':', kConf::get('internal_analytics_host'));
+			$statsHost = explode(':', vConf::get('internal_analytics_host'));
 			$this->sendAnalyticsBeacon(
 				$statsHost[0], 
 				isset($statsHost[1]) ? $statsHost[1] : 80);
@@ -365,7 +365,7 @@ abstract class kManifestRenderer
 		$result[] = $thisClass->getFileName();
 		if ($this->tokenizer)
 		{
-			$result[] = dirname(__file__) . '/storage/urlTokenizers/kUrlTokenizer.php';
+			$result[] = dirname(__file__) . '/storage/urlTokenizers/vUrlTokenizer.php';
 			$tokenizerClass = new ReflectionClass(get_class($this->tokenizer));
 			$result[] = $tokenizerClass->getFileName();
 		}
@@ -417,7 +417,7 @@ abstract class kManifestRenderer
 	}
 }
 
-class kSingleUrlManifestRenderer extends kManifestRenderer
+class vSingleUrlManifestRenderer extends vManifestRenderer
 {
 	/**
 	 * @var array
@@ -468,7 +468,7 @@ class kSingleUrlManifestRenderer extends kManifestRenderer
 	}
 }
 
-class kMultiFlavorManifestRenderer extends kManifestRenderer
+class vMultiFlavorManifestRenderer extends vManifestRenderer
 {
 	/**
 	 * @var array
@@ -572,7 +572,7 @@ class kMultiFlavorManifestRenderer extends kManifestRenderer
 	}
 }
 
-class kF4MManifestRenderer extends kMultiFlavorManifestRenderer
+class vF4MManifestRenderer extends vMultiFlavorManifestRenderer
 {
 	/**
 	 * @var string
@@ -684,7 +684,7 @@ class kF4MManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestFlavors()
+	 * @see vManifestRenderer::getManifestFlavors()
 	 */
 	protected function getManifestFlavors()
 	{
@@ -716,7 +716,7 @@ class kF4MManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 }
 	
-class kF4Mv2ManifestRenderer extends kMultiFlavorManifestRenderer
+class vF4Mv2ManifestRenderer extends vMultiFlavorManifestRenderer
 {
 	/**
 	 * @return array<string>
@@ -730,7 +730,7 @@ class kF4Mv2ManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestFlavors()
+	 * @see vManifestRenderer::getManifestFlavors()
 	 */
 	protected function getManifestFlavors()
 	{
@@ -738,7 +738,7 @@ class kF4Mv2ManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestFooter()
+	 * @see vManifestRenderer::getManifestFooter()
 	 */
 	protected function getManifestFooter()
 	{
@@ -746,7 +746,7 @@ class kF4Mv2ManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestHeader()
+	 * @see vManifestRenderer::getManifestHeader()
 	 */
 	protected function getManifestHeader()
 	{
@@ -780,7 +780,7 @@ class kF4Mv2ManifestRenderer extends kMultiFlavorManifestRenderer
 
 }
 	
-class kSilverLightManifestRenderer extends kSingleUrlManifestRenderer
+class vSilverLightManifestRenderer extends vSingleUrlManifestRenderer
 {
 	/**
 	 * @var string
@@ -799,7 +799,7 @@ class kSilverLightManifestRenderer extends kSingleUrlManifestRenderer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestHeader()
+	 * @see vManifestRenderer::getManifestHeader()
 	 */
 	protected function getManifestHeader()
 	{
@@ -816,7 +816,7 @@ class kSilverLightManifestRenderer extends kSingleUrlManifestRenderer
 	}
 }
 
-class kSmilManifestRenderer extends kMultiFlavorManifestRenderer
+class vSmilManifestRenderer extends vMultiFlavorManifestRenderer
 {
 	/**
 	 * @return array<string>
@@ -830,7 +830,7 @@ class kSmilManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestFlavors()
+	 * @see vManifestRenderer::getManifestFlavors()
 	 */
 	protected function getManifestFlavors()
 	{
@@ -849,7 +849,7 @@ class kSmilManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestHeader()
+	 * @see vManifestRenderer::getManifestHeader()
 	 */
 	protected function getManifestHeader()
 	{
@@ -873,7 +873,7 @@ class kSmilManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestFooter()
+	 * @see vManifestRenderer::getManifestFooter()
 	 */
 	protected function getManifestFooter()
 	{
@@ -884,7 +884,7 @@ class kSmilManifestRenderer extends kMultiFlavorManifestRenderer
 
 }
 
-class kM3U8ManifestRenderer extends kMultiFlavorManifestRenderer
+class vM3U8ManifestRenderer extends vMultiFlavorManifestRenderer
 {
 	/**
 	* @var bool
@@ -913,7 +913,7 @@ class kM3U8ManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestFlavors()
+	 * @see vManifestRenderer::getManifestFlavors()
 	 */
 	protected function getManifestFlavors()
 	{
@@ -988,7 +988,7 @@ class kM3U8ManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestHeader()
+	 * @see vManifestRenderer::getManifestHeader()
 	 */
 	protected function getManifestHeader()
 	{
@@ -997,7 +997,7 @@ class kM3U8ManifestRenderer extends kMultiFlavorManifestRenderer
 
 }
 
-class kRtspManifestRenderer extends kSingleUrlManifestRenderer
+class vRtspManifestRenderer extends vSingleUrlManifestRenderer
 {
 	/**
 	 * @return array<string>
@@ -1008,7 +1008,7 @@ class kRtspManifestRenderer extends kSingleUrlManifestRenderer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestHeader()
+	 * @see vManifestRenderer::getManifestHeader()
 	 */
 	protected function getManifestHeader()
 	{
@@ -1017,10 +1017,10 @@ class kRtspManifestRenderer extends kSingleUrlManifestRenderer
 	
 }
 
-class kDashBaseManifestRenderer extends kMultiFlavorManifestRenderer
+class vDashBaseManifestRenderer extends vMultiFlavorManifestRenderer
 {
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getHeaders()
+	 * @see vManifestRenderer::getHeaders()
 	 */
 	protected function getHeaders()
 	{
@@ -1030,7 +1030,7 @@ class kDashBaseManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestHeader()
+	 * @see vManifestRenderer::getManifestHeader()
 	 */
 	protected function getManifestHeader ()
 	{
@@ -1043,7 +1043,7 @@ class kDashBaseManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestFooter()
+	 * @see vManifestRenderer::getManifestFooter()
 	 */
 	protected function getManifestFooter()
 	{
@@ -1051,10 +1051,10 @@ class kDashBaseManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 }
 
-class kDashRedirectManifestRenderer extends kDashBaseManifestRenderer
+class vDashRedirectManifestRenderer extends vDashBaseManifestRenderer
 {
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestFlavors()
+	 * @see vManifestRenderer::getManifestFlavors()
 	 */
 	protected function getManifestFlavors()
 	{
@@ -1066,7 +1066,7 @@ class kDashRedirectManifestRenderer extends kDashBaseManifestRenderer
 	}
 }
 
-class kRedirectManifestRenderer extends kSingleUrlManifestRenderer
+class vRedirectManifestRenderer extends vSingleUrlManifestRenderer
 {
 	/**
 	 * @return array<string>
@@ -1079,7 +1079,7 @@ class kRedirectManifestRenderer extends kSingleUrlManifestRenderer
 	}
 }
 
-class kJSONManifestRenderer extends kMultiFlavorManifestRenderer
+class vJSONManifestRenderer extends vMultiFlavorManifestRenderer
 {
 	/**
 	 * @return array<string>
@@ -1103,7 +1103,7 @@ class kJSONManifestRenderer extends kMultiFlavorManifestRenderer
 
 
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestFlavors()
+	 * @see vManifestRenderer::getManifestFlavors()
 	 */
 	protected function getManifestFlavors()
 	{
@@ -1112,10 +1112,10 @@ class kJSONManifestRenderer extends kMultiFlavorManifestRenderer
 	}
 }
 
-class kJSONPManifestRenderer extends kJSONManifestRenderer
+class vJSONPManifestRenderer extends vJSONManifestRenderer
 {
 	/* (non-PHPdoc)
-	 * @see kManifestRenderer::getManifestFlavors()
+	 * @see vManifestRenderer::getManifestFlavors()
 	 */
 	protected function getManifestFlavors()
 	{

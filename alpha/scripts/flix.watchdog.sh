@@ -1,5 +1,5 @@
 #!/bin/bash
-. /etc/kaltura.d/system.ini
+. /etc/vidiun.d/system.ini
 
 if [ `ps -ef | grep -c [f]lixd` -lt 1 ]
    then

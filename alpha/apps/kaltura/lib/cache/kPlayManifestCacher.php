@@ -1,8 +1,8 @@
 <?php
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'kApiCache.php');
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'vApiCache.php');
 
-class kPlayManifestCacher extends kApiCache
+class vPlayManifestCacher extends vApiCache
 {
 	protected $_deliveryCode = null;
 	
@@ -17,7 +17,7 @@ class kPlayManifestCacher extends kApiCache
 	{		
 		$this->_cacheKeyPrefix = 'playManifest-';
 		
-		parent::__construct(kCacheManager::CACHE_TYPE_PLAY_MANIFEST);
+		parent::__construct(vCacheManager::CACHE_TYPE_PLAY_MANIFEST);
 	}
 	
 	protected function init()
@@ -26,9 +26,9 @@ class kPlayManifestCacher extends kApiCache
 			return false;
 
 		// ignore params which may hurt caching such as callback, playSessionId
-		if (kConf::hasParam('playmanifest_ignore_params'))
+		if (vConf::hasParam('playmanifest_ignore_params'))
 		{
-			$ignoreParams = kConf::get('playmanifest_ignore_params');
+			$ignoreParams = vConf::get('playmanifest_ignore_params');
 			foreach($ignoreParams as $paramName)
 			{
 				unset($this->_params[$paramName]);
@@ -63,7 +63,7 @@ class kPlayManifestCacher extends kApiCache
 	static public function getInstance()
 	{
 		if (!self::$_instance)
-			self::$_instance = new kPlayManifestCacher();
+			self::$_instance = new vPlayManifestCacher();
 		return self::$_instance;
 	}
 	
@@ -86,7 +86,7 @@ class kPlayManifestCacher extends kApiCache
 		}
 		$renderer = unserialize($serializedRenderer);
 		
-		$renderer->setKsObject($this->_ksObj);
+		$renderer->setVsObject($this->_vsObj);
 		$renderer->setPlaybackContext($this->_playbackContext);
 		$renderer->setDeliveryCode($this->_deliveryCode);
 		

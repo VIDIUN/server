@@ -34,7 +34,7 @@ class RabbitMQProvider extends QueueProvider
 		$this->curlPort = $rabbitConfig['curl_port'];
 		$this->timeout = $rabbitConfig['timeout'];
 		
-		$exchangeName = kConf::get("push_server_exchange");
+		$exchangeName = vConf::get("push_server_exchange");
 		if(isset($constructorArgs['exchangeName']))
 			$exchangeName = $constructorArgs['exchangeName'];
 		
@@ -80,7 +80,7 @@ class RabbitMQProvider extends QueueProvider
 			new PhpAmqpLib\Wire\AMQPTable(array("x-expires"  => (int) $this->timeout ))
 		);
 		// close used resources 
-		KalturaLog::info("Queue [$queueName] created.");
+		VidiunLog::info("Queue [$queueName] created.");
 		$channel->close();
 		$connection->close();		
 	}
@@ -102,8 +102,8 @@ class RabbitMQProvider extends QueueProvider
 
 		$channel->basic_publish($msg, $this->exchangeName, $queueName);
 
-		if(class_exists('KalturaLog'))
-			KalturaLog::info("Message [$data] was sent to [$queueName].");
+		if(class_exists('VidiunLog'))
+			VidiunLog::info("Message [$data] was sent to [$queueName].");
 		$channel->close();
 		$connection->close();
 	}

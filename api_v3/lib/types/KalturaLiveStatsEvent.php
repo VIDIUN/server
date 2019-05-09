@@ -1,10 +1,10 @@
 <?php
 /**
- * Will hold data from the Kaltura Player components to be passed on to the live analytics system
+ * Will hold data from the Vidiun Player components to be passed on to the live analytics system
  * @package api
  * @subpackage objects
  */
-class KalturaLiveStatsEvent extends KalturaObject 
+class VidiunLiveStatsEvent extends VidiunObject 
 {
 	
 	/**
@@ -19,7 +19,7 @@ class KalturaLiveStatsEvent extends KalturaObject
 	
 	/**
 	 * an integer representing the type of event being sent from the player
-	 * @var KalturaLiveStatsEventType
+	 * @var VidiunLiveStatsEventType
 	 */
 	public $eventType;
 	
@@ -66,7 +66,7 @@ class KalturaLiveStatsEvent extends KalturaObject
 
 	/**
 	 * delivery type used for this stream
-	 * @var KalturaPlaybackProtocol 
+	 * @var VidiunPlaybackProtocol 
 	 */
 	public $deliveryType;
 		

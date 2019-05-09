@@ -3,18 +3,18 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchUserBaseItemArray extends KalturaTypedArray
+class VidiunESearchUserBaseItemArray extends VidiunTypedArray
 {
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaESearchUserBaseItem");
+		return parent::__construct("VidiunESearchUserBaseItem");
 	}
 	
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		KalturaLog::debug(print_r($arr, true));
-		$newArr = new KalturaESearchUserBaseItemArray();
+		VidiunLog::debug(print_r($arr, true));
+		$newArr = new VidiunESearchUserBaseItemArray();
 		if ($arr == null)
 			return $newArr;
 		
@@ -23,11 +23,11 @@ class KalturaESearchUserBaseItemArray extends KalturaTypedArray
 			switch (get_class($obj))
 			{
 				case 'ESearchUserItem':
-					$nObj = new KalturaESearchUserItem();
+					$nObj = new VidiunESearchUserItem();
 					break;
 				
 				default:
-					$nObj = KalturaPluginManager::loadObject('KalturaESearchUserBaseItem', get_class($obj));
+					$nObj = VidiunPluginManager::loadObject('VidiunESearchUserBaseItem', get_class($obj));
 					break;
 			}
 			

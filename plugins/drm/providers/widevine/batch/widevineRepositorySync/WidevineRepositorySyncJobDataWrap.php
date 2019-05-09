@@ -4,7 +4,7 @@ class WidevineRepositorySyncJobDataWrap
 {
 	private $data;
 	
-	public function __construct(KalturaWidevineRepositorySyncJobData $data)
+	public function __construct(VidiunWidevineRepositorySyncJobData $data)
 	{
 		$this->data = $data;
 	}

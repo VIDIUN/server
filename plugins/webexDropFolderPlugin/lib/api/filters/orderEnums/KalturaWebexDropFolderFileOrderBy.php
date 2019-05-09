@@ -3,6 +3,6 @@
  * @package plugins.WebexDropFolder
  * @subpackage api.filters.enum
  */
-class KalturaWebexDropFolderFileOrderBy extends KalturaDropFolderFileOrderBy
+class VidiunWebexDropFolderFileOrderBy extends VidiunDropFolderFileOrderBy
 {
 }

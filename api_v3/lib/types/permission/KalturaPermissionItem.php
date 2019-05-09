@@ -5,7 +5,7 @@
  * @abstract
  * @relatedService PermissionItemService
  */
-abstract class KalturaPermissionItem extends KalturaObject implements IRelatedFilterable
+abstract class VidiunPermissionItem extends VidiunObject implements IRelatedFilterable
 {
 
 	/**
@@ -17,7 +17,7 @@ abstract class KalturaPermissionItem extends KalturaObject implements IRelatedFi
 		
 
 	/**
-	 * @var KalturaPermissionItemType
+	 * @var VidiunPermissionItemType
 	 * @filter eq,in
 	 * @readonly
 	 */

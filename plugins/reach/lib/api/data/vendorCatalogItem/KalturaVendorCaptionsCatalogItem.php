@@ -3,22 +3,22 @@
  * @package plugins.reach
  * @subpackage api.objects
  */
-class KalturaVendorCaptionsCatalogItem extends KalturaVendorCatalogItem
+class VidiunVendorCaptionsCatalogItem extends VidiunVendorCatalogItem
 {
 	/**
-	 * @var KalturaCatalogItemLanguage
+	 * @var VidiunCatalogItemLanguage
 	 * @filter eq,in
 	 */
 	public $sourceLanguage;
 	
 	/**
-	 * @var KalturaVendorCatalogItemOutputFormat
+	 * @var VidiunVendorCatalogItemOutputFormat
 	 * @filter eq,in
 	 */
 	public $outputFormat;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $enableSpeakerId;
 	
@@ -38,11 +38,11 @@ class KalturaVendorCaptionsCatalogItem extends KalturaVendorCatalogItem
 	
 	protected function getServiceFeature()
 	{
-		return KalturaVendorServiceFeature::CAPTIONS;
+		return VidiunVendorServiceFeature::CAPTIONS;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::getMapBetweenObjects()
+	 * @see VidiunCuePoint::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -50,7 +50,7 @@ class KalturaVendorCaptionsCatalogItem extends KalturaVendorCatalogItem
 	}
 	
 	/* (non-PHPdoc)
- * @see KalturaObject::toInsertableObject()
+ * @see VidiunObject::toInsertableObject()
  */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -67,7 +67,7 @@ class KalturaVendorCaptionsCatalogItem extends KalturaVendorCatalogItem
 	}
 	
 	/* (non-PHPdoc)
- 	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+ 	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
  	 */
 	public function toObject($sourceObject = null, $propertiesToSkip = array())
 	{

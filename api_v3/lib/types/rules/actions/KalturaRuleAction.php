@@ -4,13 +4,13 @@
  * @subpackage objects
  * @abstract
  */
-abstract class KalturaRuleAction extends KalturaObject
+abstract class VidiunRuleAction extends VidiunObject
 {
 	/**
 	 * The type of the action
 	 * 
 	 * @readonly
-	 * @var KalturaRuleActionType
+	 * @var VidiunRuleActionType
 	 */
 	public $type;
 }

@@ -3,6 +3,6 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KOperationEngineQuickTimePlayerTools  extends KSingleOutputOperationEngine
+class VOperationEngineQuickTimePlayerTools  extends VSingleOutputOperationEngine
 {
 }

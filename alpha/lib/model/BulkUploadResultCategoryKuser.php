@@ -7,7 +7,7 @@
  * @package Core
  * @subpackage model
  */ 
-class BulkUploadResultCategoryKuser extends BulkUploadResult
+class BulkUploadResultCategoryVuser extends BulkUploadResult
 {
     //categoryUser property names
     const CATEGORY_ID = "category_id";
@@ -24,11 +24,11 @@ class BulkUploadResultCategoryKuser extends BulkUploadResult
      */
     public function handleRelatedObjects()
     {
-        $categoryKuser = $this->getObject();
-        if ($categoryKuser)
+        $categoryVuser = $this->getObject();
+        if ($categoryVuser)
         {
-            $categoryKuser->setBulkUploadId($this->getBulkUploadJobId());
-            $categoryKuser->save();
+            $categoryVuser->setBulkUploadId($this->getBulkUploadJobId());
+            $categoryVuser->save();
         }
     }
     
@@ -37,7 +37,7 @@ class BulkUploadResultCategoryKuser extends BulkUploadResult
      */
     public function getObject()
     {
-        return categoryKuserPeer::retrieveByPK($this->getObjectId());
+        return categoryVuserPeer::retrieveByPK($this->getObjectId());
     }
     
     //Set properties for category users

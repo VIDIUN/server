@@ -3,7 +3,7 @@
  * @package plugins.thumbCuePoint
  * @subpackage api.filters
  */
-class KalturaThumbCuePointFilter extends KalturaThumbCuePointBaseFilter
+class VidiunThumbCuePointFilter extends VidiunThumbCuePointBaseFilter
 {
 	static private $map_between_objects = array
 	(
@@ -21,14 +21,14 @@ class KalturaThumbCuePointFilter extends KalturaThumbCuePointBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::validateForResponseProfile()
+	 * @see VidiunRelatedFilter::validateForResponseProfile()
 	 */
 	public function validateForResponseProfile()
 	{
-		// override KalturaCuePointFilter::validateForResponseProfile because all thumb cue-points are public
+		// override VidiunCuePointFilter::validateForResponseProfile because all thumb cue-points are public
 	}
 
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, $type = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, $type = null)
 	{
 		return parent::getTypeListResponse($pager, $responseProfile, ThumbCuePointPlugin::getCuePointTypeCoreValue(ThumbCuePointType::THUMB));
 	}

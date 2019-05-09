@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaDeliveryProfileAkamaiAppleHttpManifestFilter extends KalturaDeliveryProfileAkamaiAppleHttpManifestBaseFilter
+class VidiunDeliveryProfileAkamaiAppleHttpManifestFilter extends VidiunDeliveryProfileAkamaiAppleHttpManifestBaseFilter
 {
 }

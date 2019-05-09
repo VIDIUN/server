@@ -1,6 +1,6 @@
 <?php
 
-class kThumbnailParameters
+class vThumbnailParameters
 {
     /**
      * @var bool

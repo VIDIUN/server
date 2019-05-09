@@ -3,10 +3,10 @@
  * @package plugins.reach
  * @subpackage api.objects
  */
-class KalturaVendorTranslationCatalogItem extends KalturaVendorCaptionsCatalogItem
+class VidiunVendorTranslationCatalogItem extends VidiunVendorCaptionsCatalogItem
 {
 	/**
-	 * @var KalturaCatalogItemLanguage
+	 * @var VidiunCatalogItemLanguage
 	 * @filter eq,in
 	 */
 	public $targetLanguage;
@@ -18,11 +18,11 @@ class KalturaVendorTranslationCatalogItem extends KalturaVendorCaptionsCatalogIt
 	
 	protected function getServiceFeature()
 	{
-		return KalturaVendorServiceFeature::TRANSLATION;
+		return VidiunVendorServiceFeature::TRANSLATION;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::getMapBetweenObjects()
+	 * @see VidiunCuePoint::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -30,7 +30,7 @@ class KalturaVendorTranslationCatalogItem extends KalturaVendorCaptionsCatalogIt
 	}
 	
 	/* (non-PHPdoc)
- * @see KalturaObject::toInsertableObject()
+ * @see VidiunObject::toInsertableObject()
  */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -47,7 +47,7 @@ class KalturaVendorTranslationCatalogItem extends KalturaVendorCaptionsCatalogIt
 	}
 	
 	/* (non-PHPdoc)
-  	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+  	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
   	 */
 	public function toObject($sourceObject = null, $propertiesToSkip = array())
 	{

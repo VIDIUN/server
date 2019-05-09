@@ -1,23 +1,23 @@
-package lib.Kaltura.notification.handlers;
+package lib.Vidiun.notification.handlers;
 
-import lib.Kaltura.notification.BaseNotificationHandler;
-import lib.Kaltura.notification.NotificationHandlerException;
-import lib.Kaltura.output.Console;
+import lib.Vidiun.notification.BaseNotificationHandler;
+import lib.Vidiun.notification.NotificationHandlerException;
+import lib.Vidiun.output.Console;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.kaltura.client.KalturaApiException;
-import com.kaltura.client.enums.KalturaEventNotificationEventObjectType;
-import com.kaltura.client.enums.KalturaEventNotificationEventType;
-import com.kaltura.client.enums.KalturaMetadataObjectType;
-import com.kaltura.client.types.KalturaHttpNotification;
-import com.kaltura.client.types.KalturaMediaEntry;
-import com.kaltura.client.types.KalturaMetadata;
-import com.kaltura.client.types.KalturaMetadataFilter;
-import com.kaltura.client.types.KalturaMetadataListResponse;
-import com.kaltura.client.utils.XmlUtils;
+import com.vidiun.client.VidiunApiException;
+import com.vidiun.client.enums.VidiunEventNotificationEventObjectType;
+import com.vidiun.client.enums.VidiunEventNotificationEventType;
+import com.vidiun.client.enums.VidiunMetadataObjectType;
+import com.vidiun.client.types.VidiunHttpNotification;
+import com.vidiun.client.types.VidiunMediaEntry;
+import com.vidiun.client.types.VidiunMetadata;
+import com.vidiun.client.types.VidiunMetadataFilter;
+import com.vidiun.client.types.VidiunMetadataListResponse;
+import com.vidiun.client.utils.XmlUtils;
 
 public class SyncSampleHandler extends BaseNotificationHandler {
 
@@ -34,42 +34,42 @@ public class SyncSampleHandler extends BaseNotificationHandler {
 		super(console);
 	}
 	
-	public boolean shouldHandle(KalturaHttpNotification httpNotification) {
+	public boolean shouldHandle(VidiunHttpNotification httpNotification) {
 		// Only handles if the event type is custom-metadata field changed.
-		if(!((httpNotification.eventType.equals(KalturaEventNotificationEventType.OBJECT_DATA_CHANGED)) &&
-				(httpNotification.eventObjectType.equals(KalturaEventNotificationEventObjectType.METADATA)))) 
+		if(!((httpNotification.eventType.equals(VidiunEventNotificationEventType.OBJECT_DATA_CHANGED)) &&
+				(httpNotification.eventObjectType.equals(VidiunEventNotificationEventObjectType.METADATA)))) 
 			return false;
 		
 		// Only handle metadata of entries
-		KalturaMetadata object = (KalturaMetadata)httpNotification.object;
+		VidiunMetadata object = (VidiunMetadata)httpNotification.object;
 		
 		// Test that the metadata profile is the one we test
 		if(object.metadataProfileId != METADATA_PROFILE_ID)
 			return false;
 		
-		return (object.metadataObjectType == KalturaMetadataObjectType.ENTRY);
+		return (object.metadataObjectType == VidiunMetadataObjectType.ENTRY);
 	}
 	
 	/**
 	 * The handling function. 
 	 * @param httpNotification The notification that should be handled
-	 * @throws KalturaApiException In case something bad happened
+	 * @throws VidiunApiException In case something bad happened
 	 */
-	public void handle(KalturaHttpNotification httpNotification) {
+	public void handle(VidiunHttpNotification httpNotification) {
 	
 		try {
 			// Since the custom-metadata is the returned object, there is no need in querying it.
-			KalturaMetadata metadata = (KalturaMetadata)httpNotification.object;
+			VidiunMetadata metadata = (VidiunMetadata)httpNotification.object;
 			
 			// If the custom metadata in within another custom-metadata profile, retrieve it by executing
-			// KalturaMetadata extraMetadata = fetchMetadata(metadata.objectId, OTHER METADATA PROFILE ID)
+			// VidiunMetadata extraMetadata = fetchMetadata(metadata.objectId, OTHER METADATA PROFILE ID)
 			
 			String approvalStatus = getValue(metadata.xml, APPROVAL_FIELD_NAME);
 			if(approvalStatus == null)
 				return;
 			
 			// Entry retrieval for basic and common attributes.
-			KalturaMediaEntry entry = fetchEntry(metadata.objectId);
+			VidiunMediaEntry entry = fetchEntry(metadata.objectId);
 			
 			if(approvalStatus.equals("Ready For Website")) {
 				handleReadyForSite(entry, metadata);
@@ -78,7 +78,7 @@ public class SyncSampleHandler extends BaseNotificationHandler {
 			} 
 			// TODO - Add other cases here, in this code sample we're only monitoring these values. 
 			
-		} catch (KalturaApiException e) {
+		} catch (VidiunApiException e) {
 			console.write("Failed while handling notification");
 			console.write(e.getMessage());
 			throw new NotificationHandlerException("Failed while handling notification" + e.getMessage(), NotificationHandlerException.ERROR_PROCESSING);
@@ -90,11 +90,11 @@ public class SyncSampleHandler extends BaseNotificationHandler {
      *
      * @param String, entryId: id of the entry you want to fetch
      * @return 
-     * @throws KalturaApiException 
+     * @throws VidiunApiException 
      * @throws Exception 
      *
      */
-	protected KalturaMediaEntry fetchEntry(String entryId) throws KalturaApiException{
+	protected VidiunMediaEntry fetchEntry(String entryId) throws VidiunApiException{
 		 return getClient().getMediaService().get(entryId);
 	}
 	
@@ -103,20 +103,20 @@ public class SyncSampleHandler extends BaseNotificationHandler {
 	 * @param entryId The entry for which we fetch the metadata
 	 * @param metadataProfileId The metadata profile id
 	 * @return The matching metadata
-	 * @throws KalturaApiException
+	 * @throws VidiunApiException
 	 */
-	protected KalturaMetadata fetchMetadata(String entryId, int metadataProfileId)
-			throws KalturaApiException {
-		KalturaMetadataFilter filter = new KalturaMetadataFilter();
+	protected VidiunMetadata fetchMetadata(String entryId, int metadataProfileId)
+			throws VidiunApiException {
+		VidiunMetadataFilter filter = new VidiunMetadataFilter();
 		filter.objectIdEqual = entryId;
 		filter.metadataProfileIdEqual = metadataProfileId;
-		KalturaMetadataListResponse metadatas = getClient().getMetadataService().list(filter);
+		VidiunMetadataListResponse metadatas = getClient().getMetadataService().list(filter);
 		if(metadatas.totalCount == 0) {
 			console.write("Failed to retrieve metadata for entry " + entryId + " and profile " + metadataProfileId);
 			return null;
 		}
 		
-		KalturaMetadata metadata = metadatas.objects.get(0);
+		VidiunMetadata metadata = metadatas.objects.get(0);
 		console.write("Successfully retrieved metadata. ID " + metadata.id);
 		return metadata;
 	}
@@ -125,15 +125,15 @@ public class SyncSampleHandler extends BaseNotificationHandler {
 	 * This function handles the case in which an entry was marked as deleted
 	 * @param entry The entry.
 	 * @param syncMetadata The SyncMetadataObject
-	 * @throws KalturaApiException
+	 * @throws VidiunApiException
 	 */
-	protected void handleDelete(KalturaMediaEntry entry, KalturaMetadata syncMetadata) throws KalturaApiException {
+	protected void handleDelete(VidiunMediaEntry entry, VidiunMetadata syncMetadata) throws VidiunApiException {
 		if(!SYNC_DONE.equals(getValue(syncMetadata.xml, SYNC_FIELD_NAME))) {
 			console.write("Entry is not marked as synched with the CMS, do nothing");
 			return;
 		}
 		
-		console.write("The entry " + entry.name + " has been marked as deleted on Kaltura. Sync this delete with customer's website CMS");
+		console.write("The entry " + entry.name + " has been marked as deleted on Vidiun. Sync this delete with customer's website CMS");
 		deleteReference(entry, syncMetadata);
 		// Mark the entry again as sync needed as we removed it from the CMS
 		updateSyncStatus(syncMetadata, SYNC_NEEDED);
@@ -143,9 +143,9 @@ public class SyncSampleHandler extends BaseNotificationHandler {
 	 * This function handles the case in which an entry is ready for site
 	 * @param entry The entry.
 	 * @param syncMetadata The SyncMetadataObject
-	 * @throws KalturaApiException
+	 * @throws VidiunApiException
 	 */
-	protected void handleReadyForSite(KalturaMediaEntry entry, KalturaMetadata syncMetadata) throws KalturaApiException {
+	protected void handleReadyForSite(VidiunMediaEntry entry, VidiunMetadata syncMetadata) throws VidiunApiException {
 		if(!SYNC_NEEDED.equals(getValue(syncMetadata.xml, SYNC_FIELD_NAME))) {
 			console.write("No sync is needed");
 			return;
@@ -160,9 +160,9 @@ public class SyncSampleHandler extends BaseNotificationHandler {
 	 * This function updates the sync field value
 	 * @param object The metadata object we'd like to update
 	 * @param newValue The new value for the sync field
-	 * @throws KalturaApiException
+	 * @throws VidiunApiException
 	 */
-	protected void updateSyncStatus(KalturaMetadata object, String newValue) throws KalturaApiException {
+	protected void updateSyncStatus(VidiunMetadata object, String newValue) throws VidiunApiException {
 		String xml = object.xml;
 		String oldValue = getValue(xml, SYNC_FIELD_NAME);
 		String oldStr = "<" + SYNC_FIELD_NAME +">" + oldValue + "</" + SYNC_FIELD_NAME +">";
@@ -177,9 +177,9 @@ public class SyncSampleHandler extends BaseNotificationHandler {
 	 * @param xml The parsed XML
 	 * @param fieldName The field name we want to retrieve
 	 * @return The field avtual value
-	 * @throws KalturaApiException
+	 * @throws VidiunApiException
 	 */
-	protected static String getValue(String xml, String fieldName) throws KalturaApiException {
+	protected static String getValue(String xml, String fieldName) throws VidiunApiException {
 		Element xmlElement = XmlUtils.parseXml(xml);
 		NodeList childNodes = xmlElement.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
@@ -198,7 +198,7 @@ public class SyncSampleHandler extends BaseNotificationHandler {
 	 * @param entry The entry that has to be deleted
 	 * @param object The metadata object describing the object
 	 */
-	protected void deleteReference(KalturaMediaEntry entry, KalturaMetadata object) {
+	protected void deleteReference(VidiunMediaEntry entry, VidiunMetadata object) {
 		console.write("Delete this entry's reference from your external system");
 		// TODO - Add your code here
 	}
@@ -208,7 +208,7 @@ public class SyncSampleHandler extends BaseNotificationHandler {
 	 * @param entry The entry that has to be synced
 	 * @param object The metadata object describing the object
 	 */
-	protected void syncReference(KalturaMediaEntry entry, KalturaMetadata object) {
+	protected void syncReference(VidiunMediaEntry entry, VidiunMetadata object) {
 		console.write("Sync the entry to your external system");
 		// TODO - Add your code here
 	}

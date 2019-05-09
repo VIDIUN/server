@@ -1,18 +1,18 @@
 check process nginx
     with pidfile "/var/run/nginx.pid"
-    start program = "/sbin/service kaltura-nginx start" with timeout 60 seconds
-    stop program = "/sbin/service kaltura-nginx stop"
+    start program = "/sbin/service vidiun-nginx start" with timeout 60 seconds
+    stop program = "/sbin/service vidiun-nginx stop"
 
     if failed host localhost port @VOD_PACKAGER_PORT@ protocol http then restart
 
-    group kaltura
+    group vidiun
     depends on nginxbin, nginx.conf
 
 check file nginx.conf
     with path "/etc/nginx/nginx.conf"
-    # Reload Nginx if the kaltura.conf file was changed
+    # Reload Nginx if the vidiun.conf file was changed
     if changed checksum
-        then exec "/sbin/service kaltura-nginx restart"
+        then exec "/sbin/service vidiun-nginx restart"
     if does not exist then alert
    
 check file nginxbin

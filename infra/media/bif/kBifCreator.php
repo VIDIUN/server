@@ -3,7 +3,7 @@
  * @package infra
  * @subpackage Media
  */
-class kBifCreator
+class vBifCreator
 {
 	/*
 	FORMAT:
@@ -55,7 +55,7 @@ class kBifCreator
 		$images = $this->imagesPaths;
 		$imagesLen = pack('V', sizeof($images));
 		$intervalInMs = pack('V', 1000 * $this->interval);
-		KalturaLog::debug("Number of images: [". sizeof($images) . "] with interval in sec:[$this->interval]");
+		VidiunLog::debug("Number of images: [". sizeof($images) . "] with interval in sec:[$this->interval]");
 
 		fwrite($targetFile, $magicNumber);
 		fwrite($targetFile, $version);
@@ -74,7 +74,7 @@ class kBifCreator
 		{
 			if(!file_exists($image))
 			{
-				KalturaLog::debug("Failed to get file [$image]");
+				VidiunLog::debug("Failed to get file [$image]");
 				throw new Exception("BIF frame [$image] is missing", -1);
 			}
 			$currentFileSize = filesize($image);

@@ -5,10 +5,10 @@
  * 
  * Old site restriction for backward compatibility
  */
-class kAccessControlSiteRestriction extends kAccessControlRestriction
+class vAccessControlSiteRestriction extends vAccessControlRestriction
 {
 	/**
-	 * @var kSiteCondition
+	 * @var vSiteCondition
 	 */
 	private $condition;
 	
@@ -18,9 +18,9 @@ class kAccessControlSiteRestriction extends kAccessControlRestriction
 	public function __construct(accessControl $accessControl = null)
 	{
 		parent::__construct($accessControl);
-		$this->setActions(array(new kAccessControlAction(RuleActionType::BLOCK)));
+		$this->setActions(array(new vAccessControlAction(RuleActionType::BLOCK)));
 		
-		$this->condition = new kSiteCondition(true);
+		$this->condition = new vSiteCondition(true);
 		if($accessControl)
 		{
 			$this->setSiteList($accessControl->getSiteRestrictList());
@@ -31,9 +31,9 @@ class kAccessControlSiteRestriction extends kAccessControlRestriction
 	}
 
 	/* (non-PHPdoc)
-	 * @see kRule::applyContext()
+	 * @see vRule::applyContext()
 	 */
-	public function applyContext(kContextDataResult $context)
+	public function applyContext(vContextDataResult $context)
 	{
 		$fulfilled = parent::applyContext($context);
 		if($fulfilled)
@@ -43,7 +43,7 @@ class kAccessControlSiteRestriction extends kAccessControlRestriction
 	}
 
 	/**
-	 * @return kSiteCondition
+	 * @return vSiteCondition
 	 */
 	private function getCondition()
 	{
@@ -59,7 +59,7 @@ class kAccessControlSiteRestriction extends kAccessControlRestriction
 	 */
 	public function setSiteRestrictionType($type)
 	{
-		$this->getCondition()->setNot($type == kAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST);
+		$this->getCondition()->setNot($type == vAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ class kAccessControlSiteRestriction extends kAccessControlRestriction
 		$values = explode(',', $values);
 		$stringValues = array();
 		foreach($values as $value)
-			$stringValues[] = new kStringValue($value);
+			$stringValues[] = new vStringValue($value);
 			
 		$this->getCondition()->setValues($stringValues);
 	}
@@ -80,7 +80,7 @@ class kAccessControlSiteRestriction extends kAccessControlRestriction
 	 */
 	public function getSiteRestrictionType()
 	{
-		return $this->getCondition()->getNot() ? kAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST : kAccessControlRestriction::RESTRICTION_TYPE_RESTRICT_LIST;	
+		return $this->getCondition()->getNot() ? vAccessControlRestriction::RESTRICTION_TYPE_ALLOW_LIST : vAccessControlRestriction::RESTRICTION_TYPE_RESTRICT_LIST;	
 	}
 	
 	/**

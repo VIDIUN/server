@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class partnersAction extends kalturaSystemAction
+class partnersAction extends vidiunSystemAction
 {
 	public function execute()
 	{
@@ -34,12 +34,12 @@ class partnersAction extends kalturaSystemAction
 		{
 			$partner = new Partner();
 			$pw = objectWrapperBase::getWrapperClass( $partner , 0 );
-			$extra_fields  = array ( "partnerName" , "description" , "adminName" , "adminEmail" , "useDefaultKshow" , "conversionString" , "flvConversionString" , "allowQuickEdit" , 
-				"shouldForceUniqueKshow" , "returnDuplicateKshow" , "notificationsConfig" , "notify" , "allowMultiNotification" , "appearInSearch" ,
+			$extra_fields  = array ( "partnerName" , "description" , "adminName" , "adminEmail" , "useDefaultVshow" , "conversionString" , "flvConversionString" , "allowQuickEdit" , 
+				"shouldForceUniqueVshow" , "returnDuplicateVshow" , "notificationsConfig" , "notify" , "allowMultiNotification" , "appearInSearch" ,
 				"mergeEntryLists" , "allowLks" , "allowAnonymousRanking", "isFirstLogin", "matchIp", "host", "defThumbOffset" , "defThumbDensity" ,
 				"landingPage" , "userLandingPage", "status" , "serviceConfigId", "moderateContent" , "currentConversionProfileType" , "monitorUsage",
 				"templatePartnerId", "addEntryMaxFiles" , "defaultConversionProfileId", "partnerGroupType", "partnerParentId", "enableAnalyticsTab",
-				"liveStreamEnabled", "storageServePriority", "storageDeleteFromKaltura", "enableSilverLight", "partnerSpecificServices", "partnerSpecificServices",
+				"liveStreamEnabled", "storageServePriority", "storageDeleteFromVidiun", "enableSilverLight", "partnerSpecificServices", "partnerSpecificServices",
 				"enable508Players", "enableVast", "appStudioExampleEntry", "appStudioExamplePlayList0", "appStudioExamplePlayList1", "delivryBlockCountries",
 				"maxLoginAttempts", "loginBlockPeriod", "numPrevPassToKeep", "passReplaceFreq", 
 //				"partnerPackage", 

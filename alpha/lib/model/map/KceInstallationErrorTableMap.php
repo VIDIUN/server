@@ -2,7 +2,7 @@
 
 
 /**
- * This class defines the structure of the 'kce_installation_error' table.
+ * This class defines the structure of the 'vce_installation_error' table.
  *
  *
  *
@@ -14,12 +14,12 @@
  * @package Core
  * @subpackage model.map
  */
-class KceInstallationErrorTableMap extends TableMap {
+class VceInstallationErrorTableMap extends TableMap {
 
 	/**
 	 * The (dot-path) name of this class
 	 */
-	const CLASS_NAME = 'Core.KceInstallationErrorTableMap';
+	const CLASS_NAME = 'Core.VceInstallationErrorTableMap';
 
 	/**
 	 * Initialize the table attributes, columns and validators
@@ -31,9 +31,9 @@ class KceInstallationErrorTableMap extends TableMap {
 	public function initialize()
 	{
 	  // attributes
-		$this->setName('kce_installation_error');
-		$this->setPhpName('KceInstallationError');
-		$this->setClassname('KceInstallationError');
+		$this->setName('vce_installation_error');
+		$this->setPhpName('VceInstallationError');
+		$this->setClassname('VceInstallationError');
 		$this->setPackage('Core');
 		$this->setUseIdGenerator(true);
 		// columns
@@ -57,4 +57,4 @@ class KceInstallationErrorTableMap extends TableMap {
 	{
 	} // buildRelations()
 
-} // KceInstallationErrorTableMap
+} // VceInstallationErrorTableMap

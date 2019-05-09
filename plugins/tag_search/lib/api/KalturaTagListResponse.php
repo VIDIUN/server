@@ -3,10 +3,10 @@
  * @package plugins.tagSearch
  * @subpackage api.objects
  */
-class KalturaTagListResponse extends KalturaListResponse
+class VidiunTagListResponse extends VidiunListResponse
 {
     /**
-	 * @var KalturaTagArray
+	 * @var VidiunTagArray
 	 * @readonly
 	 */
 	public $objects;

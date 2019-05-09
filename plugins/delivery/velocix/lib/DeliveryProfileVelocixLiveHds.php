@@ -17,7 +17,7 @@ class DeliveryProfileVelocixLiveHds extends DeliveryProfileLiveHds
 	}
 	
 	/**
-	 * @return kUrlTokenizer
+	 * @return vUrlTokenizer
 	 */
 	public function getTokenizer()
 	{
@@ -39,29 +39,29 @@ class DeliveryProfileVelocixLiveHds extends DeliveryProfileLiveHds
 	
 	protected function getParamName() {
 		$tokenizer = $this->getTokenizer();
-		if($tokenizer && ($tokenizer instanceof kVelocixUrlTokenizer)) 
+		if($tokenizer && ($tokenizer instanceof vVelocixUrlTokenizer)) 
 			return $tokenizer->getParamName();
 		return '';
 	}
 	
 	public function checkIsLive($url){
 		
-		KalturaLog::info('url to check:'.$url);
+		VidiunLog::info('url to check:'.$url);
 		$parts = parse_url($url);
 		parse_str($parts['query'], $query);
 		$token = $query[$this->getParamName()];
 		$data = $this->urlExists($url, array($this->getHdsManifestContentType()));
 		if(!$data)
 		{
-			KalturaLog::Info("URL [$url] returned no valid data. Exiting.");
+			VidiunLog::Info("URL [$url] returned no valid data. Exiting.");
 			return false;
 		}
-		KalturaLog::info('Velocix HDS manifest data:'.$data);
-		$dom = new KDOMDocument();
+		VidiunLog::info('Velocix HDS manifest data:'.$data);
+		$dom = new VDOMDocument();
 		$dom->loadXML($data);
 		$element = $dom->getElementsByTagName('baseURL')->item(0);
 		if(!$element){
-			KalturaLog::Info("No base url was given");
+			VidiunLog::Info("No base url was given");
 			return false;
 		}
 		$baseUrl = $element->nodeValue;
@@ -70,7 +70,7 @@ class DeliveryProfileVelocixLiveHds extends DeliveryProfileLiveHds
 			$streamUrl = $baseUrl.$href;
 			$streamUrl .= $token ? '?'.$this->getParamName()."=$token" : '' ;
 			if($this->urlExists($streamUrl, array(),'0-0')  !== false){
-				KalturaLog::info('is live:'.$streamUrl);
+				VidiunLog::info('is live:'.$streamUrl);
 				return true;
 			}
 		}

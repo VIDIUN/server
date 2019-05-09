@@ -1,32 +1,32 @@
 <?php
 /**
- * Distributes kaltura entries to remote destination  
+ * Distributes vidiun entries to remote destination  
  *
  * @package plugins.contentDistribution 
  * @subpackage Scheduler.Distribute
  */
-class KAsyncDistributeDelete extends KAsyncDistribute
+class VAsyncDistributeDelete extends VAsyncDistribute
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::DISTRIBUTION_DELETE;
+		return VidiunBatchJobType::DISTRIBUTION_DELETE;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KAsyncDistribute::getDistributionEngine()
+	 * @see VAsyncDistribute::getDistributionEngine()
 	 */
-	protected function getDistributionEngine($providerType, KalturaDistributionJobData $data)
+	protected function getDistributionEngine($providerType, VidiunDistributionJobData $data)
 	{
 		return DistributionEngine::getEngine('IDistributionEngineDelete', $providerType, $data);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KAsyncDistribute::execute()
+	 * @see VAsyncDistribute::execute()
 	 */
-	protected function execute(KalturaDistributionJobData $data)
+	protected function execute(VidiunDistributionJobData $data)
 	{
 		return $this->engine->delete($data);
 	}

@@ -3,7 +3,7 @@
  * @package plugins.ftpDistribution
  * @subpackage api.objects
  */
-class KalturaFtpScheduledDistributionProvider extends KalturaFtpDistributionProvider
+class VidiunFtpScheduledDistributionProvider extends VidiunFtpDistributionProvider
 {
 	
 }

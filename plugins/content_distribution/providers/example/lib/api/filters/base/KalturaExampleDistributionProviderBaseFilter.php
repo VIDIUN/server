@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaExampleDistributionProviderBaseFilter extends KalturaDistributionProviderFilter
+abstract class VidiunExampleDistributionProviderBaseFilter extends VidiunDistributionProviderFilter
 {
 	static private $map_between_objects = array
 	(
@@ -16,11 +16,11 @@ abstract class KalturaExampleDistributionProviderBaseFilter extends KalturaDistr
 
 	public function getMapBetweenObjects()
 	{
-		return array_merge(parent::getMapBetweenObjects(), KalturaExampleDistributionProviderBaseFilter::$map_between_objects);
+		return array_merge(parent::getMapBetweenObjects(), VidiunExampleDistributionProviderBaseFilter::$map_between_objects);
 	}
 
 	public function getOrderByMap()
 	{
-		return array_merge(parent::getOrderByMap(), KalturaExampleDistributionProviderBaseFilter::$order_by_map);
+		return array_merge(parent::getOrderByMap(), VidiunExampleDistributionProviderBaseFilter::$order_by_map);
 	}
 }

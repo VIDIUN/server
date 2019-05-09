@@ -3,7 +3,7 @@
  * @package server-infra
  * @subpackage content
  */
-class KStringTokenizer 
+class VStringTokenizer 
 {
 	/**
 	 * @var string

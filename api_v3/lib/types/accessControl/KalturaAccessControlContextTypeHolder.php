@@ -2,9 +2,9 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaContextTypeHolder
+ * @deprecated use VidiunContextTypeHolder
  */
-class KalturaAccessControlContextTypeHolder extends KalturaContextTypeHolder
+class VidiunAccessControlContextTypeHolder extends VidiunContextTypeHolder
 {
 
 }

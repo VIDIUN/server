@@ -1,5 +1,5 @@
 ---
-HTTP notification - Kaltura server plugin
+HTTP notification - Vidiun server plugin
 ---
 
 ## Setup
@@ -12,12 +12,12 @@ HTTP notification template configuration:
  - **Fields** - Sends all content parameters as POST fields. 
  The text may contain place holders to the content parameter.
  For example, to use content parameter `entry_id` use `{entry_id}` in the text.  
- - **API Object** - Sends a single field called `data` with serialized [KalturaHttpNotification](http://www.kaltura.com/api_v3/testmeDoc/?object=KalturaHttpNotification) object.
+ - **API Object** - Sends a single field called `data` with serialized [VidiunHttpNotification](http://www.vidiun.com/api_v3/testmeDoc/?object=VidiunHttpNotification) object.
  Make sure that you choose the object type that matches the object that triggers the event.
  The serialized data could be formatted to the following formats:
      - PHP - compatible with PHP5 client library only.
      - JSON -compatible with javascript. 
-     - XML - compatible with all Kaltura client libraries except for PHP5.
+     - XML - compatible with all Vidiun client libraries except for PHP5.
  
  **Note:** *PHP 5.3* and *PHP Zend Framework* client libraries use the XML format. 
 
@@ -27,10 +27,10 @@ HTTP notification template configuration:
 In case your server already support accepting notifications using defined format, use the free text option to send the POST data as expected by your server.
 
 ### Working without client library
-You might want to implement simple reaction to Kaltura events by fetching only the event content parameters as POST fields. This option assumes that the defined content parameters already supplies all the information you need.
+You might want to implement simple reaction to Vidiun events by fetching only the event content parameters as POST fields. This option assumes that the defined content parameters already supplies all the information you need.
 
-### Working with Kaltura objects
-In order to use Kaltura object you should use [Kaltura client libraries](http://www.kaltura.com/api_v3/testme/client-libs.php). The accepting end point should translate the serialized object that sent as POST field called `data` using the client library.
+### Working with Vidiun objects
+In order to use Vidiun object you should use [Vidiun client libraries](http://www.vidiun.com/api_v3/testme/client-libs.php). The accepting end point should translate the serialized object that sent as POST field called `data` using the client library.
  
 ## Code samples
 
@@ -51,8 +51,8 @@ Make sure to include the relevant client library and unserialize the the posted 
 The notification template must be defined to send API Object using PHP format.
  
 
-    require_once('lib/KalturaClient.php');
-    require_once('lib/KalturaPlugins/KalturaHttpNotificationClientPlugin.php');
+    require_once('lib/VidiunClient.php');
+    require_once('lib/VidiunPlugins/VidiunHttpNotificationClientPlugin.php');
     
     $object = unserialize($_POST['data']);
 
@@ -98,13 +98,13 @@ The notification template must be defined to send API Object using XML format.
 	<%@ page import = "java.util.Map.Entry" %>
 	<%@ page import = "java.util.HashMap" %>
 	<%@ page import = "org.w3c.dom.Element" %>
-	<%@ page import = "com.kaltura.client.utils.ParseUtils" %>
-	<%@ page import = "com.kaltura.client.utils.XmlUtils" %>
-	<%@ page import = "com.kaltura.client.types.KalturaHttpNotification" %>
+	<%@ page import = "com.vidiun.client.utils.ParseUtils" %>
+	<%@ page import = "com.vidiun.client.utils.XmlUtils" %>
+	<%@ page import = "com.vidiun.client.types.VidiunHttpNotification" %>
 	<%
 	String xmlData = request.getParameter("data");
 	Element xmlElement = XmlUtils.parseXml(xmlData);
-	KalturaHttpNotification httpNotification = ParseUtils.parseObject(KalturaHttpNotification.class, xmlElement);
+	VidiunHttpNotification httpNotification = ParseUtils.parseObject(VidiunHttpNotification.class, xmlElement);
 	HashMap<String, String> params = httpNotification.toParams();
 	for (Entry<String, String> itr : params.entrySet()) {
 		out.println(itr.getKey() + " => " + itr.getValue());

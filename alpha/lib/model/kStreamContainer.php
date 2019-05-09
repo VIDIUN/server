@@ -1,6 +1,6 @@
 <?php
 
-class kStreamContainer
+class vStreamContainer
 {
 	/**
 	 * @var string

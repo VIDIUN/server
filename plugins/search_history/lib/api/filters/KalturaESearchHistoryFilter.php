@@ -3,7 +3,7 @@
  * @package plugins.searchHistory
  * @subpackage api.filters
  */
-class KalturaESearchHistoryFilter extends KalturaESearchBaseFilter
+class VidiunESearchHistoryFilter extends VidiunESearchBaseFilter
 {
 
 	/**
@@ -37,8 +37,8 @@ class KalturaESearchHistoryFilter extends KalturaESearchBaseFilter
 	{
 		$coreFilter = $this->toObject();
 		list($coreObjects, $totalCount) = $coreFilter->execQueryFromFilter();
-		$response = new KalturaESearchHistoryListResponse();
-		$response->objects = KalturaESearchHistoryArray::fromDbArray($coreObjects);
+		$response = new VidiunESearchHistoryListResponse();
+		$response->objects = VidiunESearchHistoryArray::fromDbArray($coreObjects);
 		$response->totalCount = $totalCount;
 		return $response;
 	}

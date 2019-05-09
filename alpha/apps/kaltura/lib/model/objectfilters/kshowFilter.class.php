@@ -3,13 +3,13 @@
  * @package Core
  * @subpackage model.filters
  */ 
-class kshowFilter extends baseObjectFilter
+class vshowFilter extends baseObjectFilter
 {
 	public function init ()
 	{
 		// TODO - should separate the schema of the fields from the actual values
 		// or can use this to set default valuse
-		$this->fields = kArray::makeAssociativeDefaultValue ( array (
+		$this->fields = vArray::makeAssociativeDefaultValue ( array (
 			"_like_name" ,
 //			"_like_description" ,
 			"_like_tags" ,
@@ -33,7 +33,7 @@ class kshowFilter extends baseObjectFilter
 	{
 		return
 			array (
-				"display_name" => "KShowFilter",
+				"display_name" => "VShowFilter",
 				"desc" => ""
 			);
 	}
@@ -42,12 +42,12 @@ class kshowFilter extends baseObjectFilter
 	// The base class should invoke $peek_class::translateFieldName( $field_name , BasePeer::TYPE_FIELDNAME , BasePeer::TYPE_COLNAME );
 	public function getFieldNameFromPeer ( $field_name )
 	{
-		return kshowPeer::translateFieldName( $field_name , BasePeer::TYPE_FIELDNAME , BasePeer::TYPE_COLNAME );
+		return vshowPeer::translateFieldName( $field_name , BasePeer::TYPE_FIELDNAME , BasePeer::TYPE_COLNAME );
 	}
 
 	public function getIdFromPeer (  )
 	{
-		return kshowPeer::ID;
+		return vshowPeer::ID;
 	}
 }
 ?>

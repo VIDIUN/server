@@ -3,7 +3,7 @@
  * @package server-infra
  * @subpackage Exceptions
  */
-class kXsdException extends kException
+class vXsdException extends vException
 {
 	public function __construct($messageCode)
 	{

@@ -58,7 +58,7 @@ class DropFolderPeer extends BaseDropFolderPeer
 		if ($tag != '*')
 			$c->addAnd(DropFolderPeer::TAGS, $tag, Criteria::EQUAL);
 		if ($currentDC)
-			$c->addAnd(DropFolderPeer::DC, kDataCenterMgr::getCurrentDcId(), Criteria::EQUAL);
+			$c->addAnd(DropFolderPeer::DC, vDataCenterMgr::getCurrentDcId(), Criteria::EQUAL);
 		$dropFolders = DropFolderPeer::doSelect($c);
 		return $dropFolders;
 	}
@@ -75,7 +75,7 @@ class DropFolderPeer extends BaseDropFolderPeer
 			if(isset(self::$class_types_cache[$assetType]))
 				return self::$class_types_cache[$assetType];
 				
-			$extendedCls = KalturaPluginManager::getObjectClass(self::OM_CLASS, $assetType);
+			$extendedCls = VidiunPluginManager::getObjectClass(self::OM_CLASS, $assetType);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$assetType] = $extendedCls;

@@ -40,7 +40,7 @@ class UploadTokenTableMap extends TableMap {
 		$this->addPrimaryKey('ID', 'Id', 'VARCHAR', true, 35, null);
 		$this->addColumn('INT_ID', 'IntId', 'INTEGER', true, null, null);
 		$this->addColumn('PARTNER_ID', 'PartnerId', 'INTEGER', false, null, 0);
-		$this->addForeignKey('KUSER_ID', 'KuserId', 'INTEGER', 'kuser', 'ID', false, null, null);
+		$this->addForeignKey('VUSER_ID', 'VuserId', 'INTEGER', 'vuser', 'ID', false, null, null);
 		$this->addColumn('STATUS', 'Status', 'INTEGER', false, null, null);
 		$this->addColumn('FILE_NAME', 'FileName', 'VARCHAR', false, 256, null);
 		$this->addColumn('FILE_SIZE', 'FileSize', 'BIGINT', false, null, null);
@@ -60,7 +60,7 @@ class UploadTokenTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('kuser', 'kuser', RelationMap::MANY_TO_ONE, array('kuser_id' => 'id', ), null, null);
+    $this->addRelation('vuser', 'vuser', RelationMap::MANY_TO_ONE, array('vuser_id' => 'id', ), null, null);
 	} // buildRelations()
 
 } // UploadTokenTableMap

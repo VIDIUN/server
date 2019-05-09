@@ -1,11 +1,11 @@
 <?php
 require_once(dirname(__file__) . '/../request/infraRequestUtils.class.php');
-require_once(dirname(__file__) . '/kRendererBase.php');
+require_once(dirname(__file__) . '/vRendererBase.php');
 /*
  * @package server-infra
 * @subpackage renderers
 */
-class kRendererDieError implements kRendererBase
+class vRendererDieError implements vRendererBase
 {
 	/**
 	 * 
@@ -32,10 +32,10 @@ class kRendererDieError implements kRendererBase
 	
 	public function output()
 	{
-		header('X-Kaltura:error- ' . $this->code);
-		header("X-Kaltura-App: exiting on error {$this->code} - {$this->message}");
+		header('X-Vidiun:error- ' . $this->code);
+		header("X-Vidiun-App: exiting on error {$this->code} - {$this->message}");
 		
-		if (class_exists('KalturaLog') && isset($GLOBALS["start"])) 
-			KalturaLog::debug("Dispatch took - " . (microtime(true) - $GLOBALS["start"]) . " seconds, memory: ".memory_get_peak_usage(true));
+		if (class_exists('VidiunLog') && isset($GLOBALS["start"])) 
+			VidiunLog::debug("Dispatch took - " . (microtime(true) - $GLOBALS["start"]) . " seconds, memory: ".memory_get_peak_usage(true));
 	}
 }

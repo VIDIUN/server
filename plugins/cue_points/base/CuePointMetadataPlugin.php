@@ -3,7 +3,7 @@
  * Enable custom metadata on ad cue point objects
  * @package plugins.cuePoint
  */
-class CuePointMetadataPlugin extends KalturaPlugin implements IKalturaPending, IKalturaSchemaContributor, IKalturaSearchDataContributor, IKalturaElasticSearchDataContributor
+class CuePointMetadataPlugin extends VidiunPlugin implements IVidiunPending, IVidiunSchemaContributor, IVidiunSearchDataContributor, IVidiunElasticSearchDataContributor
 {
 	const PLUGIN_NAME = 'cuePointMetadata';
 	const METADATA_PLUGIN_NAME = 'metadata';
@@ -12,7 +12,7 @@ class CuePointMetadataPlugin extends KalturaPlugin implements IKalturaPending, I
 	const METADATA_PLUGIN_VERSION_BUILD = 0;
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -20,24 +20,24 @@ class CuePointMetadataPlugin extends KalturaPlugin implements IKalturaPending, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$metadataVersion = new KalturaVersion(self::METADATA_PLUGIN_VERSION_MAJOR, self::METADATA_PLUGIN_VERSION_MINOR, self::METADATA_PLUGIN_VERSION_BUILD);
+		$metadataVersion = new VidiunVersion(self::METADATA_PLUGIN_VERSION_MAJOR, self::METADATA_PLUGIN_VERSION_MINOR, self::METADATA_PLUGIN_VERSION_BUILD);
 		
-		$metadataDependency = new KalturaDependency(self::METADATA_PLUGIN_NAME, $metadataVersion);
-		$cuePointDependency = new KalturaDependency(CuePointPlugin::getPluginName());
+		$metadataDependency = new VidiunDependency(self::METADATA_PLUGIN_NAME, $metadataVersion);
+		$cuePointDependency = new VidiunDependency(CuePointPlugin::getPluginName());
 		
 		return array($metadataDependency, $cuePointDependency);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSchemaContributor::contributeToSchema()
+	 * @see IVidiunSchemaContributor::contributeToSchema()
 	 */
 	public static function contributeToSchema($type)
 	{
-		$coreType = kPluginableEnumsManager::apiToCore('SchemaType', $type);
+		$coreType = vPluginableEnumsManager::apiToCore('SchemaType', $type);
 		
 		if(
 			$coreType == SchemaType::SYNDICATION 
@@ -247,20 +247,20 @@ class CuePointMetadataPlugin extends KalturaPlugin implements IKalturaPending, I
 				$metadata->setMetadataProfileVersion($metadataProfile->getVersion());
 				$metadata->setObjectType($objectType);
 				$metadata->setObjectId($cuePoint->getId());
-				$metadata->setStatus(KalturaMetadataStatus::VALID);
+				$metadata->setStatus(VidiunMetadataStatus::VALID);
 				
 				foreach($metadataElement->children() as $metadataContent)
 				{
 					$xmlData = $metadataContent->asXML();
 					$errorMessage = '';
-					if(kMetadataManager::validateMetadata($metadataProfile->getId(), $xmlData, $errorMessage))
+					if(vMetadataManager::validateMetadata($metadataProfile->getId(), $xmlData, $errorMessage))
 					{
 						$metadata->save();
 						
 						$key = $metadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-						kFileSyncUtils::file_put_contents($key, $xmlData);
+						vFileSyncUtils::file_put_contents($key, $xmlData);
 						
-						kEventsManager::raiseEvent(new kObjectDataChangedEvent($metadata));
+						vEventsManager::raiseEvent(new vObjectDataChangedEvent($metadata));
 					}
 					
 					break;
@@ -313,7 +313,7 @@ class CuePointMetadataPlugin extends KalturaPlugin implements IKalturaPending, I
 			$metadataElement->addAttribute('metadataProfileVersion', $metadata->getMetadataProfileVersion());
 			
 			$key = $metadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-			$xml = kFileSyncUtils::file_get_contents($key, true, false);
+			$xml = vFileSyncUtils::file_get_contents($key, true, false);
 			if($xml)
 			{
 				$xmlElement = new SimpleXMLElement($xml);
@@ -334,7 +334,7 @@ class CuePointMetadataPlugin extends KalturaPlugin implements IKalturaPending, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSearchDataContributor::getSearchData()
+	 * @see IVidiunSearchDataContributor::getSearchData()
 	 */
 	public static function getSearchData(BaseObject $object)
 	{
@@ -342,7 +342,7 @@ class CuePointMetadataPlugin extends KalturaPlugin implements IKalturaPending, I
 		{
 			if($object instanceof IMetadataObject && MetadataPlugin::isAllowedPartner($object->getPartnerId()))
 			{
-				return kMetadataManager::getSearchValuesByObject($object->getMetadataObjectType(), $object->getId());
+				return vMetadataManager::getSearchValuesByObject($object->getMetadataObjectType(), $object->getId());
 			}
 		}
 					
@@ -355,7 +355,7 @@ class CuePointMetadataPlugin extends KalturaPlugin implements IKalturaPending, I
 		{
 			if($object instanceof IMetadataObject && MetadataPlugin::isAllowedPartner($object->getPartnerId()))
 			{
-				return kMetadataManager::getElasticSearchValuesByObject($object->getMetadataObjectType(), $object->getId());
+				return vMetadataManager::getElasticSearchValuesByObject($object->getMetadataObjectType(), $object->getId());
 			}
 		}
 

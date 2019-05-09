@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaSearchConditionComparison extends KalturaDynamicEnum implements searchConditionComparison
+class VidiunSearchConditionComparison extends VidiunDynamicEnum implements searchConditionComparison
 {
 	public static function getEnumClass()
 	{

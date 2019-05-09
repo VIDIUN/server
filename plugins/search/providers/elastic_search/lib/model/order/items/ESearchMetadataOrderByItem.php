@@ -62,13 +62,13 @@ class ESearchMetadataOrderByItem extends ESearchOrderByItem
 	public function getSortConditions()
 	{
 		if(!$this->getXpath() || !$this->getMetadataProfileId())
-			throw new kESearchException('empty search items are not allowed', kESearchException::MISSING_MANDATORY_PARAMETERS_IN_ORDER_ITEM);
+			throw new vESearchException('empty search items are not allowed', vESearchException::MISSING_MANDATORY_PARAMETERS_IN_ORDER_ITEM);
 
-		$bool = new kESearchBoolQuery();
+		$bool = new vESearchBoolQuery();
 		$xpath = elasticSearchUtils::formatSearchTerm($this->getXpath());
-		$xpathQuery = new kESearchTermQuery(ESearchMetadataFieldName::XPATH, $xpath);
+		$xpathQuery = new vESearchTermQuery(ESearchMetadataFieldName::XPATH, $xpath);
 		$bool->addToFilter($xpathQuery);
-		$profileIdQuery = new kESearchTermQuery(ESearchMetadataFieldName::PROFILE_ID, $this->getMetadataProfileId());
+		$profileIdQuery = new vESearchTermQuery(ESearchMetadataFieldName::PROFILE_ID, $this->getMetadataProfileId());
 		$bool->addToFilter($profileIdQuery);
 
 		$nestedFilter = $bool->getFinalQuery();

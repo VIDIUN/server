@@ -3,7 +3,7 @@
  * @package plugins.codeCuePointEventNotifications
  * @subpackage lib
  */
-class CodeCuePointEventNotificationEventObjectType implements IKalturaPluginEnum, EventNotificationEventObjectType
+class CodeCuePointEventNotificationEventObjectType implements IVidiunPluginEnum, EventNotificationEventObjectType
 {
 	const CODE_CUE_POINT = 'CodeCuePoint';
 	

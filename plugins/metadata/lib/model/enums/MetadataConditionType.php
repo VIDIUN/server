@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage model.enum
  */
-class MetadataConditionType implements IKalturaPluginEnum, ConditionType
+class MetadataConditionType implements IVidiunPluginEnum, ConditionType
 {
 	const METADATA_FIELD_MATCH = 'FieldMatch';
 	const METADATA_FIELD_COMPARE = 'FieldCompare';

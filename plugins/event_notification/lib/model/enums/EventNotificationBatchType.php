@@ -3,12 +3,12 @@
  * @package plugins.eventNotification
  * @subpackage model.enum
  */ 
-class EventNotificationBatchType implements IKalturaPluginEnum, BatchJobType
+class EventNotificationBatchType implements IVidiunPluginEnum, BatchJobType
 {
 	const EVENT_NOTIFICATION_HANDLER = 'EventNotificationHandler';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalValues()
+	 * @see IVidiunPluginEnum::getAdditionalValues()
 	 */
 	public static function getAdditionalValues()
 	{
@@ -18,7 +18,7 @@ class EventNotificationBatchType implements IKalturaPluginEnum, BatchJobType
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalDescriptions()
+	 * @see IVidiunPluginEnum::getAdditionalDescriptions()
 	 */
 	public static function getAdditionalDescriptions() 
 	{

@@ -3,10 +3,10 @@
  * @package plugins.eventNotification
  * @subpackage model.data
  */
-class kEventFieldCondition extends kCondition
+class vEventFieldCondition extends vCondition
 {
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -15,7 +15,7 @@ class kEventFieldCondition extends kCondition
 	}
 
 	/**
-	 * Needed in order to migrate old kEventFieldCondition that serialized before kCondition defined as parent class
+	 * Needed in order to migrate old vEventFieldCondition that serialized before vCondition defined as parent class
 	 */
 	public function __wakeup()
 	{
@@ -24,21 +24,21 @@ class kEventFieldCondition extends kCondition
 	
 	/**
 	 * The field to evaluate against the values
-	 * @var kBooleanField
+	 * @var vBooleanField
 	 */
 	private $field;
 
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
 		$this->field->setScope($scope);
 		return $this->field->getValue();
 	}
 	
 	/**
-	 * @return kBooleanField
+	 * @return vBooleanField
 	 */
 	public function getField() 
 	{
@@ -46,9 +46,9 @@ class kEventFieldCondition extends kCondition
 	}
 
 	/**
-	 * @param kBooleanField $field
+	 * @param vBooleanField $field
 	 */
-	public function setField(kBooleanField $field) 
+	public function setField(vBooleanField $field) 
 	{
 		$this->field = $field;
 	}

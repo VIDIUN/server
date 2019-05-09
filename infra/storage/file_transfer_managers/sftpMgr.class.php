@@ -1,12 +1,12 @@
 <?php
 /**
- * Extends the 'kFileTransferMgr' class & implements a file transfer manager using the SFTP protocol.
- * For additional comments please look at the 'kFileTransferMgr' class.
+ * Extends the 'vFileTransferMgr' class & implements a file transfer manager using the SFTP protocol.
+ * For additional comments please look at the 'vFileTransferMgr' class.
  * 
  * @package infra
  * @subpackage Storage
  */
-class sftpMgr extends kFileTransferMgr
+class sftpMgr extends vFileTransferMgr
 {
 	/**
 	 * @var resource
@@ -74,7 +74,7 @@ class sftpMgr extends kFileTransferMgr
 	private $tmpDir = null;
 	
 	/**
-	 * Instances of this class should be created usign the 'getInstance' of the 'kFileTransferMgr' class
+	 * Instances of this class should be created usign the 'getInstance' of the 'vFileTransferMgr' class
 	 * Supported options:
 	 * - useCmd - indicates that sftp CLI should be used for GET and PUT actions.
 	 * - cmdPutMinimumFileSize - CLI will be used for PUT aactions on files larger than this option.
@@ -84,10 +84,10 @@ class sftpMgr extends kFileTransferMgr
 	protected function __construct(array $options = null)
 	{
 		if(!function_exists('ssh2_connect'))
-			throw new kFileTransferMgrException("SSH2 extension is not installed.", kFileTransferMgrException::extensionMissing);
+			throw new vFileTransferMgrException("SSH2 extension is not installed.", vFileTransferMgrException::extensionMissing);
 			
 		if(!function_exists('ssh2_sftp'))
-			throw new kFileTransferMgrException("SSH2 SFTP extension is not installed.", kFileTransferMgrException::extensionMissing);
+			throw new vFileTransferMgrException("SSH2 SFTP extension is not installed.", vFileTransferMgrException::extensionMissing);
 		
 		parent::__construct($options);
 		
@@ -116,7 +116,7 @@ class sftpMgr extends kFileTransferMgr
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kFileTransferMgr::getConnection()
+	 * @see vFileTransferMgr::getConnection()
 	 */
 	public function getConnection()
 	{
@@ -147,7 +147,7 @@ class sftpMgr extends kFileTransferMgr
 	}
 	
 	/**********************************************************************/
-	/* Implementation of abstract functions from class 'kFileTransferMgr' */
+	/* Implementation of abstract functions from class 'vFileTransferMgr' */
 	/**********************************************************************/
 	
 	/**
@@ -155,7 +155,7 @@ class sftpMgr extends kFileTransferMgr
 	 * Wrapping ssh2_connect
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doConnect()
+	 * @see vFileTransferMgr::doConnect()
 	 */
 	protected function doConnect($host, &$port)
 	{
@@ -173,7 +173,7 @@ class sftpMgr extends kFileTransferMgr
 	 * Wrapping ssh2_auth_password
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doLogin()
+	 * @see vFileTransferMgr::doLogin()
 	 */
 	protected function doLogin($username, $password)
 	{
@@ -182,7 +182,7 @@ class sftpMgr extends kFileTransferMgr
 			return true;
 		
 		if(!in_array('password', $methods))
-			throw new kFileTransferMgrException("Password authentication is not supported by the server.", kFileTransferMgrException::cantAuthenticate);
+			throw new vFileTransferMgrException("Password authentication is not supported by the server.", vFileTransferMgrException::cantAuthenticate);
 			
 		$this->username = $username;
 		$this->password = $password;
@@ -203,7 +203,7 @@ class sftpMgr extends kFileTransferMgr
 	 * Wrapping ssh2_auth_pubkey_file and ssh2_sftp
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doLoginPubKey()
+	 * @see vFileTransferMgr::doLoginPubKey()
 	 */
 	protected function doLoginPubKey($username, $pubKeyFile, $privKeyFile, $passphrase = null)
 	{
@@ -212,7 +212,7 @@ class sftpMgr extends kFileTransferMgr
 			return true;
 		
 		if(!in_array('publickey', $methods))
-			throw new kFileTransferMgrException("Public key authentication is not supported by the server.", kFileTransferMgrException::cantAuthenticate);
+			throw new vFileTransferMgrException("Public key authentication is not supported by the server.", vFileTransferMgrException::cantAuthenticate);
 			
 		$this->username = $username;
 		$this->privKeyFile = $privKeyFile;
@@ -234,13 +234,13 @@ class sftpMgr extends kFileTransferMgr
 	 * Uses fopen and fwrite or sftp CLI, according to config and file size
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doPutFile()
+	 * @see vFileTransferMgr::doPutFile()
 	 */
 	protected function doPutFile($remoteFile, $localFile)
 	{
 		$sftp = $this->getSftpConnection();
 		
-		if($this->passphrase || !$this->useCmd || kFile::fileSize($localFile) < $this->cmdPutMinimumFileSize)
+		if($this->passphrase || !$this->useCmd || vFile::fileSize($localFile) < $this->cmdPutMinimumFileSize)
 		{
 			$absolutePath = trim($remoteFile, '/');
 			$stream = @fopen("ssh2.sftp://" . intval($sftp) . "/$absolutePath", 'w');
@@ -266,7 +266,7 @@ class sftpMgr extends kFileTransferMgr
 	 * Uses fopen and fread or sftp CLI, according to config
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doGetFile()
+	 * @see vFileTransferMgr::doGetFile()
 	 */
 	protected function doGetFile($remoteFile, $localFile = null)
 	{
@@ -292,7 +292,7 @@ class sftpMgr extends kFileTransferMgr
 			fclose($stream);
 			
 			if($content === false)
-				throw new kFileTransferMgrException("Failed to read file from [$remoteFile]");
+				throw new vFileTransferMgrException("Failed to read file from [$remoteFile]");
 			
 			return $content;
 		}
@@ -311,7 +311,7 @@ class sftpMgr extends kFileTransferMgr
 	 * Wrapping ssh2_sftp_mkdir
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doMkDir()
+	 * @see vFileTransferMgr::doMkDir()
 	 */
 	protected function doMkDir($remotePath)
 	{
@@ -323,7 +323,7 @@ class sftpMgr extends kFileTransferMgr
 	 * Wrapping ssh2_exec.
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doChmod()
+	 * @see vFileTransferMgr::doChmod()
 	 */
 	protected function doChmod($remoteFile, $mode)
 	{
@@ -340,7 +340,7 @@ class sftpMgr extends kFileTransferMgr
 	 * Wrapping ssh2_sftp_stat
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doFileExists()
+	 * @see vFileTransferMgr::doFileExists()
 	 */
 	protected function doFileExists($remoteFile)
 	{
@@ -354,7 +354,7 @@ class sftpMgr extends kFileTransferMgr
 	 * Wrapping ssh2_exec
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doPwd()
+	 * @see vFileTransferMgr::doPwd()
 	 */
 	protected function doPwd()
 	{
@@ -366,7 +366,7 @@ class sftpMgr extends kFileTransferMgr
 	 * Wrapping ssh2_sftp_unlink;
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doDelFile()
+	 * @see vFileTransferMgr::doDelFile()
 	 */
 	protected function doDelFile($remoteFile)
 	{
@@ -378,7 +378,7 @@ class sftpMgr extends kFileTransferMgr
 	 * Wrapping ssh2_exec
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doDelDir()
+	 * @see vFileTransferMgr::doDelDir()
 	 */
 	protected function doDelDir($remotePath)
 	{
@@ -390,7 +390,7 @@ class sftpMgr extends kFileTransferMgr
 	 * Wrapping ssh2_exec
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doList()
+	 * @see vFileTransferMgr::doList()
 	 */
 	protected function doList($remotePath)
 	{
@@ -413,7 +413,7 @@ class sftpMgr extends kFileTransferMgr
         	
 		$lsDirCmd = "ls $remotePath";
 		$execOutput = $this->execSftpCommand($lsDirCmd);
-		KalturaLog::info("sftp rawlist [$execOutput]");
+		VidiunLog::info("sftp rawlist [$execOutput]");
 		return array_filter(array_map('trim', explode("\n", $execOutput)), 'strlen');
 	}
 	
@@ -440,7 +440,7 @@ class sftpMgr extends kFileTransferMgr
 	 * 
 	 * @param string $remoteFile
 	 * @param string $contents
-	 * @throws kFileTransferMgrException
+	 * @throws vFileTransferMgrException
 	 */
 	public function filePutContents($remoteFile, $contents)
 	{
@@ -451,12 +451,12 @@ class sftpMgr extends kFileTransferMgr
 		$absolutePath = trim($remoteFile, '/');
 		$stream = @fopen("ssh2.sftp://" . intval($sftp) . "/$absolutePath", 'w');
 		if(!$stream)
-			throw new kFileTransferMgrException("Failed to open stream [" . $uri . "]");
+			throw new vFileTransferMgrException("Failed to open stream [" . $uri . "]");
 		
 		if(@fwrite($stream, $contents) === false)
 		{
 			@fclose($stream);
-			throw new kFileTransferMgrException("Failed to upload file to [" . $uri . "]");
+			throw new vFileTransferMgrException("Failed to upload file to [" . $uri . "]");
 		}
 		return @fclose($stream);
 	}
@@ -465,7 +465,7 @@ class sftpMgr extends kFileTransferMgr
 	 * Return the size of a given remote file
 	 * 
 	 * (non-PHPdoc)
-	 * @see kFileTransferMgr::doFileSize()
+	 * @see vFileTransferMgr::doFileSize()
 	 */
 	protected function doFileSize($remoteFile)
 	{
@@ -480,11 +480,11 @@ class sftpMgr extends kFileTransferMgr
 		$lsdirCmd = "ls -l $remoteFolder/*";
 		$filesInfo = $this->execSftpCommand($lsdirCmd);
 		
-		KalturaLog::info('sftp rawlist ['. print_r($execOutput, true) .']');
+		VidiunLog::info('sftp rawlist ['. print_r($execOutput, true) .']');
 		
 		$escapedRemoteFolder = str_replace('/', '\/', $remoteFolder);
 		// drwxrwxrwx 10 root root 4096 2010-11-24 23:45 file.ext
-		// -rw-r--r--+ 1 mikew Domain Users 7270248766 Feb  9 11:16 Kaltura/LegislativeBriefing2012.mov
+		// -rw-r--r--+ 1 mikew Domain Users 7270248766 Feb  9 11:16 Vidiun/LegislativeBriefing2012.mov
 		$regexUnix = "^(?P<permissions>[-drwx]{10})\+?\s+(?P<number>\d{1,2})\s+(?P<owner>[\d\w]+)\s+(?P<group>[\d\w\s]+)\s+(?P<fileSize>\d*)\s+((?P<year1>\w{4})-(?P<month1>\d{2})-(?P<day1>\d{2})\s+(?P<hour1>\d{2}):(?P<minute1>\d{2})|(?P<month2>\w{3})\s+(?P<day2>\d{1,2})\s+((?P<hour2>\d{2}):(?P<minute2>\d{2})|(?P<year2>\d{4})))\s+$escapedRemoteFolder\/(?P<file>.+)\s*$";
 		
 		foreach($filesInfo as $fileInfo)
@@ -492,7 +492,7 @@ class sftpMgr extends kFileTransferMgr
 			$matches = null;
 			if(!preg_match("/$regexUnix/", $fileInfo, $matches))
 			{
-				KalturaLog::err("Unix regex does not match ftp rawlist output [$fileInfo]");
+				VidiunLog::err("Unix regex does not match ftp rawlist output [$fileInfo]");
 				continue;
 			}
 			
@@ -540,13 +540,13 @@ class sftpMgr extends kFileTransferMgr
 		$cliCommand .= " {$this->username}@{$this->host}";
 		
 		$cmd = "(echo '$command' && echo 'quit') | $cliCommand 2>&1";
-		KalturaLog::info("Command [$cmd]");
+		VidiunLog::info("Command [$cmd]");
 		$returnValue = null;
 		
 		exec($cmd, $output, $returnValue);
 		if ($returnValue){ //any non-zero return value is an error
-			KalturaLog::err("An error while running exec - " . print_r($output, true));
-			@trigger_error($output[count($output)-2] ."; ". $output[count($output)-1]); //in order to populate the correct error to error_get_last() in kFileTransferMgr
+			VidiunLog::err("An error while running exec - " . print_r($output, true));
+			@trigger_error($output[count($output)-2] ."; ". $output[count($output)-1]); //in order to populate the correct error to error_get_last() in vFileTransferMgr
 			return false; 
 		}
 		
@@ -561,7 +561,7 @@ class sftpMgr extends kFileTransferMgr
 	 */
 	private function execCommand($command)
 	{
-		KalturaLog::info($command);
+		VidiunLog::info($command);
 		
 		$stream = ssh2_exec($this->getSsh2Connection(), $command);
 		if(!$stream || !is_resource($stream))

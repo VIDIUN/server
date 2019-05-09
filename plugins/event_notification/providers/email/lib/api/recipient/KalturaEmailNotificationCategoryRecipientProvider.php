@@ -5,23 +5,23 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class KalturaEmailNotificationCategoryRecipientProvider extends KalturaEmailNotificationRecipientProvider
+class VidiunEmailNotificationCategoryRecipientProvider extends VidiunEmailNotificationRecipientProvider
 {
 	/**
 	 * The ID of the category whose subscribers should receive the email notification.
-	 * @var KalturaStringValue
+	 * @var VidiunStringValue
 	 */
 	public $categoryId;
 
 	/**
 	 * The IDs of the categories whose subscribers should receive the email notification.
-	 * @var KalturaStringValue
+	 * @var VidiunStringValue
 	 */
 	public $categoryIds;
 	
 	/**
 	 *
-	 * @var KalturaCategoryUserProviderFilter
+	 * @var VidiunCategoryUserProviderFilter
 	 */
 	public $categoryUserFilter;
 
@@ -32,7 +32,7 @@ class KalturaEmailNotificationCategoryRecipientProvider extends KalturaEmailNoti
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -40,20 +40,20 @@ class KalturaEmailNotificationCategoryRecipientProvider extends KalturaEmailNoti
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
 		$this->validate();
 		if (is_null($dbObject))
-			$dbObject = new kEmailNotificationCategoryRecipientProvider();
+			$dbObject = new vEmailNotificationCategoryRecipientProvider();
 			
 		return parent::toObject($dbObject, $propertiesToSkip);
 	}	
 	
 	/**
 	 * Validation function
-	 * @throws KalturaEmailNotificationErrors::INVALID_FILTER_PROPERTY
+	 * @throws VidiunEmailNotificationErrors::INVALID_FILTER_PROPERTY
 	 */
 	protected function validate ()
 	{
@@ -61,33 +61,33 @@ class KalturaEmailNotificationCategoryRecipientProvider extends KalturaEmailNoti
 		{
 			if (isset ($this->categoryUserFilter->categoryIdEqual))
 			{
-				throw new KalturaAPIException(KalturaEmailNotificationErrors::INVALID_FILTER_PROPERTY, 'categoryIdEqual');
+				throw new VidiunAPIException(VidiunEmailNotificationErrors::INVALID_FILTER_PROPERTY, 'categoryIdEqual');
 			}
 		}
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject($source_object)
+	 * @see VidiunObject::fromObject($source_object)
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($dbObject, $responseProfile);
-		/* @var $dbObject kEmailNotificationCategoryRecipientProvider */
+		/* @var $dbObject vEmailNotificationCategoryRecipientProvider */
 		$categoryIdFieldType = get_class($dbObject->getCategoryId());
-		KalturaLog::info("Retrieving API object for categoryId field of type [$categoryIdFieldType]");
+		VidiunLog::info("Retrieving API object for categoryId field of type [$categoryIdFieldType]");
 		switch ($categoryIdFieldType)
 		{
-			case 'kObjectIdField':
-				$this->categoryId = new KalturaObjectIdField();
+			case 'vObjectIdField':
+				$this->categoryId = new VidiunObjectIdField();
 				break;
-			case 'kEvalStringField':
-				$this->categoryId = new KalturaEvalStringField();
+			case 'vEvalStringField':
+				$this->categoryId = new VidiunEvalStringField();
 				break;
-			case 'kStringValue':
-				$this->categoryId = new KalturaStringValue();
+			case 'vStringValue':
+				$this->categoryId = new VidiunStringValue();
 				break;
 			default:
-				$this->categoryId = KalturaPluginManager::loadObject('KalturaStringValue', $categoryIdFieldType);
+				$this->categoryId = VidiunPluginManager::loadObject('VidiunStringValue', $categoryIdFieldType);
 				break;
 		}
 		
@@ -97,17 +97,17 @@ class KalturaEmailNotificationCategoryRecipientProvider extends KalturaEmailNoti
 		}
 
 		$categoryIdsFieldType = get_class($dbObject->getCategoryIds());
-		KalturaLog::info("Retrieving API object for categoryIds field of type [$categoryIdsFieldType]");
+		VidiunLog::info("Retrieving API object for categoryIds field of type [$categoryIdsFieldType]");
 		switch ($categoryIdsFieldType)
 		{
-			case 'kEvalStringField':
-				$this->categoryIds = new KalturaEvalStringField();
+			case 'vEvalStringField':
+				$this->categoryIds = new VidiunEvalStringField();
 				break;
-			case 'kStringValue':
-				$this->categoryIds = new KalturaStringValue();
+			case 'vStringValue':
+				$this->categoryIds = new VidiunStringValue();
 				break;
 			default:
-				$this->categoryIds = KalturaPluginManager::loadObject('KalturaStringValue', $categoryIdFieldType);
+				$this->categoryIds = VidiunPluginManager::loadObject('VidiunStringValue', $categoryIdFieldType);
 				break;
 		}
 
@@ -118,7 +118,7 @@ class KalturaEmailNotificationCategoryRecipientProvider extends KalturaEmailNoti
 
 		if ($dbObject->getCategoryUserFilter())
 		{
-			$this->categoryUserFilter = new KalturaCategoryUserProviderFilter();
+			$this->categoryUserFilter = new VidiunCategoryUserProviderFilter();
 			$this->categoryUserFilter->fromObject($dbObject->getCategoryUserFilter());
 		}
 

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaDeliveryProfileAkamaiHttp extends KalturaDeliveryProfile {
+class VidiunDeliveryProfileAkamaiHttp extends VidiunDeliveryProfile {
 	
 	/**
 	 * Should we use intelliseek

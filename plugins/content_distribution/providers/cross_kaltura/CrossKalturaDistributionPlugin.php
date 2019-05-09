@@ -1,12 +1,12 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  */
-class CrossKalturaDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider, IKalturaEventConsumers
+class CrossVidiunDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider, IVidiunEventConsumers
 {
     
-	const PLUGIN_NAME = 'crossKalturaDistribution';
-	const CROSS_KALTURA_EVENT_CONSUMER = 'kCrossKalturaDistributionEventsConsumer';
+	const PLUGIN_NAME = 'crossVidiunDistribution';
+	const CROSS_VIDIUN_EVENT_CONSUMER = 'kCrossVidiunDistributionEventsConsumer';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
 	const CONTENT_DSTRIBUTION_VERSION_MINOR = 0;
 	const CONTENT_DSTRIBUTION_VERSION_BUILD = 0;
@@ -18,12 +18,12 @@ class CrossKalturaDistributionPlugin extends KalturaPlugin implements IKalturaPe
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -42,16 +42,16 @@ class CrossKalturaDistributionPlugin extends KalturaPlugin implements IKalturaPe
 	public static function getEnums($baseEnumName = null)
 	{
 		if(is_null($baseEnumName))
-			return array('CrossKalturaDistributionProviderType');
+			return array('CrossVidiunDistributionProviderType');
 			
 		if($baseEnumName == 'DistributionProviderType')
-			return array('CrossKalturaDistributionProviderType');
+			return array('CrossVidiunDistributionProviderType');
 			
 		return array();
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::loadObject()
+	 * @see IVidiunObjectLoader::loadObject()
 	 */
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{			
@@ -73,53 +73,53 @@ class CrossKalturaDistributionPlugin extends KalturaPlugin implements IKalturaPe
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaObjectLoader::getObjectClass()
+	 * @see IVidiunObjectLoader::getObjectClass()
 	 */
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::CROSS_KALTURA)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::CROSS_VIDIUN)
 		{
 			if($baseClass == 'IDistributionEngineDelete')
-				return 'CrossKalturaDistributionEngine';
+				return 'CrossVidiunDistributionEngine';
 					
 			if($baseClass == 'IDistributionEngineSubmit')
-				return 'CrossKalturaDistributionEngine';
+				return 'CrossVidiunDistributionEngine';
 					
 			if($baseClass == 'IDistributionEngineUpdate')
-				return 'CrossKalturaDistributionEngine';
+				return 'CrossVidiunDistributionEngine';
 
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaCrossKalturaDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunCrossVidiunDistributionJobProviderData';
 								
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaCrossKalturaDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunCrossVidiunDistributionProfile';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::CROSS_KALTURA)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::CROSS_VIDIUN)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
-				return 'Form_CrossKalturaProfileConfiguration';
+				return 'Form_CrossVidiunProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_CrossKalturaDistribution_Type_CrossKalturaDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_CrossVidiunDistribution_Type_CrossVidiunDistributionProfile';
 		}
 		
 		// content distribution does not work in partner services 2 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || kCurrentContext::$ps_vesion != 'ps3')
+		if (!class_exists('vCurrentContext') || vCurrentContext::$ps_vesion != 'ps3')
 			return null;
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(CrossKalturaDistributionProviderType::CROSS_KALTURA))
-			return 'KalturaCrossKalturaDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(CrossVidiunDistributionProviderType::CROSS_VIDIUN))
+			return 'VidiunCrossVidiunDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(CrossKalturaDistributionProviderType::CROSS_KALTURA))
-			return 'kCrossKalturaDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(CrossVidiunDistributionProviderType::CROSS_VIDIUN))
+			return 'kCrossVidiunDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(CrossKalturaDistributionProviderType::CROSS_KALTURA))
-			return 'KalturaCrossKalturaDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(CrossVidiunDistributionProviderType::CROSS_VIDIUN))
+			return 'VidiunCrossVidiunDistributionProfile';
 			
-		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(CrossKalturaDistributionProviderType::CROSS_KALTURA))
-			return 'CrossKalturaDistributionProfile';
+		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(CrossVidiunDistributionProviderType::CROSS_VIDIUN))
+			return 'CrossVidiunDistributionProfile';
 			
 		return null;
 	}
@@ -131,17 +131,17 @@ class CrossKalturaDistributionPlugin extends KalturaPlugin implements IKalturaPe
 	 */
 	public static function getProvider()
 	{
-		return CrossKalturaDistributionProvider::get();
+		return CrossVidiunDistributionProvider::get();
 	}
 	
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaCrossKalturaDistributionProvider();
+		$distributionProvider = new VidiunCrossVidiunDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -162,8 +162,8 @@ class CrossKalturaDistributionPlugin extends KalturaPlugin implements IKalturaPe
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -171,16 +171,16 @@ class CrossKalturaDistributionPlugin extends KalturaPlugin implements IKalturaPe
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaEventConsumers::getEventConsumers()
+	 * @see IVidiunEventConsumers::getEventConsumers()
 	 */
 	public static function getEventConsumers()
 	{
 		return array(
-			self::CROSS_KALTURA_EVENT_CONSUMER,
+			self::CROSS_VIDIUN_EVENT_CONSUMER,
 		);
 	}
 }

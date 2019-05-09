@@ -3,7 +3,7 @@
  * @package infra
  * @subpackage Storage
  */
-class kFile extends kFileBase
+class vFile extends vFileBase
 {
 	const MO_PATTERN = "GNU message catalog";
 	const TEXT = "text";
@@ -56,7 +56,7 @@ class kFile extends kFileBase
 		// create a handler for the directory
 		$handler = @opendir($directory);
 		if(! $handler)
-			KalturaLog::info("dirList $directory does not exist");
+			VidiunLog::info("dirList $directory does not exist");
 		
 		// keep going until all files in directory have been read
 		while($file = readdir($handler))
@@ -129,7 +129,7 @@ class kFile extends kFileBase
 					$child_dir_results = self::recursiveDirList($current_path . $file, $return_directory_as_prefix, $should_recurse, $file_pattern, $depth);
 					if($child_dir_results)
 					{
-						$results = kArray::append($results, $child_dir_results);
+						$results = vArray::append($results, $child_dir_results);
 					}
 				}
 			}
@@ -202,7 +202,7 @@ class kFile extends kFileBase
 					$child_dir_results = self::dirListExtended($current_path . $file, $return_directory_as_prefix, $should_recurse, $file_pattern, ++ $depth);
 					if($child_dir_results)
 					{
-						$results = kArray::append($results, $child_dir_results);
+						$results = vArray::append($results, $child_dir_results);
 					}
 				}
 			}
@@ -226,12 +226,12 @@ class kFile extends kFileBase
 			// Generate target directory
 			if (file_exists ($dest)) {
 				if (! is_dir($dest)) {
-					KalturaLog::err("Can't override a file with a directory [$dest]");
+					VidiunLog::err("Can't override a file with a directory [$dest]");
 					return false;
 				}
 			} else {
 				if (! mkdir($dest)) {
-					KalturaLog::err("Failed to create directory [$dest]");
+					VidiunLog::err("Failed to create directory [$dest]");
 					return false;
 				}
 			}
@@ -245,7 +245,7 @@ class kFile extends kFileBase
 				
 				$newSrc = $src . DIRECTORY_SEPARATOR . $entry;
 				if(is_dir($newSrc)) {
-					KalturaLog::err("Copying of non-flat directroeis is illegal");
+					VidiunLog::err("Copying of non-flat directroeis is illegal");
 					return false;
 				}
 				
@@ -256,7 +256,7 @@ class kFile extends kFileBase
 			
 			// Delete source
 			if ($deleteSrc && (! rmdir($src))) {
-				KalturaLog::err("Failed to delete source directory : [$src]");
+				VidiunLog::err("Failed to delete source directory : [$src]");
 				return false;
 			}
 		} else {
@@ -271,19 +271,19 @@ class kFile extends kFileBase
 			$startTime = microtime(true);
 			if(rename($src, $dest))
 			{
-				KalturaLog::log("rename took : ".(microtime(true) - $startTime)." [$src] to [$dest] size: ".filesize($dest));
+				VidiunLog::log("rename took : ".(microtime(true) - $startTime)." [$src] to [$dest] size: ".filesize($dest));
 				return true;
 			}
 			
-			KalturaLog::err("Failed to rename file : [$src] to [$dest]");
+			VidiunLog::err("Failed to rename file : [$src] to [$dest]");
 		}
 		
 		if (!copy($src,$dest)) {
-			KalturaLog::err("Failed to copy file : [$src] to [$dest]");
+			VidiunLog::err("Failed to copy file : [$src] to [$dest]");
 			return false;
 		}
 		if ($deleteSrc && (!unlink($src))) {
-			KalturaLog::err("Failed to delete source file : [$src]");
+			VidiunLog::err("Failed to delete source file : [$src]");
 			return false;
 		}
 		return true;
@@ -297,13 +297,13 @@ class kFile extends kFileBase
 		// Validation
 		if(!file_exists($from))
 		{
-			KalturaLog::err("Source doesn't exist [$from]");
+			VidiunLog::err("Source doesn't exist [$from]");
 			return false;
 		}
 		
 		if(strpos($to,'\"') !== false)
 		{
-			KalturaLog::err("Illegal destination file [$to]");
+			VidiunLog::err("Illegal destination file [$to]");
 			return false;
 		}
 		
@@ -339,13 +339,13 @@ class kFile extends kFileBase
 		
 		if(!file_exists($from))
 		{
-			KalturaLog::err("Source file doesn't exist [$from]");
+			VidiunLog::err("Source file doesn't exist [$from]");
 			return false;
 		}
 		
 		if(strpos($to,'\"') !== false)
 		{
-			KalturaLog::err("Illegal destination file [$to]");
+			VidiunLog::err("Illegal destination file [$to]");
 			return false;
 		}
 			
@@ -406,14 +406,14 @@ class kFile extends kFileBase
 	
 	public static function getFileData($file_full_path)
 	{
-		return new kFileData($file_full_path);
+		return new vFileData($file_full_path);
 	}
 	
 	public static function getFileDataWithContent($file_full_path)
 	{
 		$add_content = (strpos($file_full_path, ".txt") !== false || strpos($file_full_path, ".log") !== false);
 		
-		return new kFileData($file_full_path, $add_content);
+		return new vFileData($file_full_path, $add_content);
 	
 	}
 	
@@ -474,7 +474,7 @@ class kFile extends kFileBase
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err("closeDbConnections: error closing db $e");
+			VidiunLog::err("closeDbConnections: error closing db $e");
 		}
 	}
 
@@ -486,7 +486,7 @@ class kFile extends kFileBase
 	 */
 	public static function getMediaInfoFormat($path)
 	{
-		$mediaInfoParser = new KMediaInfoMediaParser($path);
+		$mediaInfoParser = new VMediaInfoMediaParser($path);
 		$mediaInfo = $mediaInfoParser->getMediaInfo();
 		return $mediaInfo->containerFormat;
 	}
@@ -502,7 +502,7 @@ class kFile extends kFileBase
 		if($realPath)
 		{
 			$fileBrief = shell_exec('file -b ' . $realPath);
-			if(kString::beginsWith($fileBrief,self::MO_PATTERN))
+			if(vString::beginsWith($fileBrief,self::MO_PATTERN))
 				$fileType = 'application/mo';
 		}
 		return $fileType;
@@ -520,7 +520,7 @@ class kFile extends kFileBase
  * @package infra
  * @subpackage Storage
  */
-class kFileData
+class vFileData
 {
 	public $exists;
 	public $full_path = NULL;

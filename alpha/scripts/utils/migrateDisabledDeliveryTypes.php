@@ -24,11 +24,11 @@ foreach($partnerIds as $partnerId)
 	$disabledDeliverTypes = $partner->getFromCustomData('disabledDeliveryTypes');
 	if (!$disabledDeliverTypes)
 	{
-		KalturaLog::info('No disabled delivery types for partner '.$partnerId);
+		VidiunLog::info('No disabled delivery types for partner '.$partnerId);
 		continue;
 	}
 
-	KalturaLog::info('Disabled delivery types for partner id '.$partnerId.': '.implode(', ',$disabledDeliverTypes));
+	VidiunLog::info('Disabled delivery types for partner id '.$partnerId.': '.implode(', ',$disabledDeliverTypes));
 
 	$customDeliveryTypes = $partner->getCustomDeliveryTypes();
 	// will clear the old field and save to the new field

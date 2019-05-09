@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.objects
  */
-class KalturaMetadataProfile extends KalturaObject implements IFilterable 
+class VidiunMetadataProfile extends VidiunObject implements IFilterable 
 {
 	/**
 	 * @var int
@@ -20,7 +20,7 @@ class KalturaMetadataProfile extends KalturaObject implements IFilterable
 	public $partnerId;
 	
 	/**
-	 * @var KalturaMetadataObjectType
+	 * @var VidiunMetadataObjectType
 	 * @filter eq,in
 	 */
 	public $metadataObjectType;
@@ -64,7 +64,7 @@ class KalturaMetadataProfile extends KalturaObject implements IFilterable
 	public $updatedAt;
 	
 	/**
-	 * @var KalturaMetadataProfileStatus
+	 * @var VidiunMetadataProfileStatus
 	 * @filter eq,in
 	 * @readonly
 	 */
@@ -89,7 +89,7 @@ class KalturaMetadataProfile extends KalturaObject implements IFilterable
 	public $xslt;
 
 	/**
-	 * @var KalturaMetadataProfileCreateMode
+	 * @var VidiunMetadataProfileCreateMode
 	 * @filter eq,not,in,notin
 	 */
 	public $createMode;
@@ -131,7 +131,7 @@ class KalturaMetadataProfile extends KalturaObject implements IFilterable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbMetadataProfile = null, $propsToSkip = array())
 	{
@@ -143,33 +143,33 @@ class KalturaMetadataProfile extends KalturaObject implements IFilterable
 	
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 
 		if($this->shouldGet('xsd', $responseProfile))
 		{
 			$key = $source_object->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_DEFINITION);
-			$this->xsd = kFileSyncUtils::file_get_contents($key, true, false);
+			$this->xsd = vFileSyncUtils::file_get_contents($key, true, false);
 		}
 		
 		if($this->shouldGet('views', $responseProfile))
 		{	
 			$key = $source_object->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_VIEWS);
-			$this->views = kFileSyncUtils::file_get_contents($key, true, false);
+			$this->views = vFileSyncUtils::file_get_contents($key, true, false);
 		}
 		
 		if($this->shouldGet('xslt', $responseProfile))
 		{
 			$key = $source_object->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_XSLT);
-			$this->xslt = kFileSyncUtils::file_get_contents($key, true, false);
+			$this->xslt = vFileSyncUtils::file_get_contents($key, true, false);
 		}
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -177,17 +177,17 @@ class KalturaMetadataProfile extends KalturaObject implements IFilterable
 		
 		if($this->systemName)
 		{
-			$c = KalturaCriteria::create(MetadataProfilePeer::OM_CLASS);
+			$c = VidiunCriteria::create(MetadataProfilePeer::OM_CLASS);
 			$c->add(MetadataProfilePeer::SYSTEM_NAME, $this->systemName);
 			if(MetadataProfilePeer::doCount($c))
-				throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+				throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 		}
 		
 		return parent::validateForInsert($propertiesToSkip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate()
+	 * @see VidiunObject::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
@@ -196,11 +196,11 @@ class KalturaMetadataProfile extends KalturaObject implements IFilterable
 				    
 	    if ($this->systemName)
 	    {
-	        $c = KalturaCriteria::create(MetadataProfilePeer::OM_CLASS);
+	        $c = VidiunCriteria::create(MetadataProfilePeer::OM_CLASS);
 	        $c->add(MetadataProfilePeer::ID, $sourceObject->getId(), Criteria::NOT_EQUAL);
 			$c->add(MetadataProfilePeer::SYSTEM_NAME, $this->systemName);
 			if(MetadataProfilePeer::doCount($c))
-				throw new KalturaAPIException(KalturaErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
+				throw new VidiunAPIException(VidiunErrors::SYSTEM_NAME_ALREADY_EXISTS, $this->systemName);
 	    }
 	    
 	    return parent::validateForUpdate($sourceObject);

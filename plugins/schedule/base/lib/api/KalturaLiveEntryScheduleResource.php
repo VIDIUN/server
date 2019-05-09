@@ -3,7 +3,7 @@
  * @package plugins.schedule
  * @subpackage api.objects
  */
-class KalturaLiveEntryScheduleResource extends KalturaScheduleResource
+class VidiunLiveEntryScheduleResource extends VidiunScheduleResource
 {
 	/**
 	 * @var string
@@ -21,7 +21,7 @@ class KalturaLiveEntryScheduleResource extends KalturaScheduleResource
 	);
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -30,7 +30,7 @@ class KalturaLiveEntryScheduleResource extends KalturaScheduleResource
 	
 	/**
 	 * {@inheritDoc}
-	 * @see KalturaScheduleResource::getScheduleResourceType()
+	 * @see VidiunScheduleResource::getScheduleResourceType()
 	 */
 	protected function getScheduleResourceType()
 	{
@@ -38,7 +38,7 @@ class KalturaLiveEntryScheduleResource extends KalturaScheduleResource
 	}
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert($propertiesToSkip)
+	 * @see VidiunObject::validateForInsert($propertiesToSkip)
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -47,19 +47,19 @@ class KalturaLiveEntryScheduleResource extends KalturaScheduleResource
 	}
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUpdate($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUpdate($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{
-		if($this->entryId instanceof KalturaNullField)
+		if($this->entryId instanceof VidiunNullField)
 		{
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $this->getFormattedPropertyNameWithClassName('entryId'));
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $this->getFormattedPropertyNameWithClassName('entryId'));
 		}
 		return parent::validateForUpdate($sourceObject, $propertiesToSkip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($sourceObject = null, $propertiesToSkip = array())
 	{

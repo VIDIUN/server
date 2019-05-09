@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage lib
  */
-class kMetadataManager
+class vMetadataManager
 {
 	const APP_INFO_SEARCH = 'searchable';
 	const APP_INFO_KEY = 'key';
@@ -15,18 +15,18 @@ class kMetadataManager
 	protected static $objectTypeNames = array(
 		MetadataObjectType::ENTRY => 'entry',
 		MetadataObjectType::CATEGORY => 'category',
-		MetadataObjectType::USER => 'kuser',
+		MetadataObjectType::USER => 'vuser',
 		MetadataObjectType::PARTNER => 'Partner',
 	);
 	
 	protected static $metadataFieldTypesToValidate = array(
-	    MetadataSearchFilter::KMC_FIELD_TYPE_OBJECT,
-	    MetadataSearchFilter::KMC_FIELD_TYPE_USER,
-	    MetadataSearchFilter::KMC_FIELD_TYPE_METADATA_OBJECT,
+	    MetadataSearchFilter::VMC_FIELD_TYPE_OBJECT,
+	    MetadataSearchFilter::VMC_FIELD_TYPE_USER,
+	    MetadataSearchFilter::VMC_FIELD_TYPE_METADATA_OBJECT,
 	);
 	
 	/**
-	 * @param KalturaMetadataObjectType $objectType
+	 * @param VidiunMetadataObjectType $objectType
 	 *
 	 * @return IMetadataPeer
 	 */
@@ -44,10 +44,10 @@ class kMetadataManager
 		        return new MetadataPartnerPeer();
 		        
 		    case MetadataObjectType::USER:
-		        return new MetadataKuserPeer();
+		        return new MetadataVuserPeer();
 		        
 			default:
-				return KalturaPluginManager::loadObject('IMetadataPeer', $objectType);
+				return VidiunPluginManager::loadObject('IMetadataPeer', $objectType);
 		}
 	}
 	
@@ -55,13 +55,13 @@ class kMetadataManager
 	{
 	    switch ($fieldType)
 	    {
-	        case MetadataSearchFilter::KMC_FIELD_TYPE_OBJECT:
+	        case MetadataSearchFilter::VMC_FIELD_TYPE_OBJECT:
 	            return new MetadataEntryPeer();
 	             
-	        case MetadataSearchFilter::KMC_FIELD_TYPE_USER:
-	            return new MetadataKuserPeer();
+	        case MetadataSearchFilter::VMC_FIELD_TYPE_USER:
+	            return new MetadataVuserPeer();
 
-	        case MetadataSearchFilter::KMC_FIELD_TYPE_METADATA_OBJECT:
+	        case MetadataSearchFilter::VMC_FIELD_TYPE_METADATA_OBJECT:
 	            return new MetadataDynamicObjectPeer();
 	             
 	        default:
@@ -93,14 +93,14 @@ class kMetadataManager
 	public static function parseMetadataValues(Metadata $metadata, $xPathPattern, $version = null)
 	{
 		$key = $metadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA, $version);
-		$source = kFileSyncUtils::file_get_contents($key, true, false);
+		$source = vFileSyncUtils::file_get_contents($key, true, false);
 		if(!$source)
 		{
-			KalturaLog::notice("Metadata key $key not found.");
+			VidiunLog::notice("Metadata key $key not found.");
 			return null;
 		}
 		
-		$xml = new KDOMDocument();
+		$xml = new VDOMDocument();
 		$xml->loadXML($source);
 		
 		if(preg_match('/^\w[\w\d]*$/', $xPathPattern))
@@ -116,7 +116,7 @@ class kMetadataManager
 					$xPathPattern .= "/*[local-name()='$match']";
 			}
 		}
-		KalturaLog::info("Metadata xpath [$xPathPattern]");
+		VidiunLog::info("Metadata xpath [$xPathPattern]");
 		
 		$xPath = new DOMXPath($xml);
 		$elementsList = $xPath->query($xPathPattern);
@@ -141,7 +141,7 @@ class kMetadataManager
 	public static function getMetadataValueForField (Metadata $object, $fieldSystemName)
 	{
 		/* @var $result Metadata */
-		$metadataXML = new SimpleXMLElement (kFileSyncUtils::file_get_contents($object->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA)));
+		$metadataXML = new SimpleXMLElement (vFileSyncUtils::file_get_contents($object->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA)));
 		$values = $metadataXML->xpath("//$fieldSystemName");
 		$strvals = array();
 		foreach ($values as $value)
@@ -163,8 +163,8 @@ class kMetadataManager
 	public static function parseProfileSearchFields($partnerId, MetadataProfile $metadataProfile)
 	{
 		$key = $metadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_DEFINITION);
-		$xmlString = kFileSyncUtils::file_get_contents($key);
-		$xPaths = kXsd::findXpathsByAppInfo($xmlString, self::APP_INFO_SEARCH, 'true', false);
+		$xmlString = vFileSyncUtils::file_get_contents($key);
+		$xPaths = vXsd::findXpathsByAppInfo($xmlString, self::APP_INFO_SEARCH, 'true', false);
 		
 		MetadataProfileFieldPeer::setUseCriteriaFilter(false);
 		$profileFields = MetadataProfileFieldPeer::retrieveByMetadataProfileId($metadataProfile->getId());
@@ -239,7 +239,7 @@ class kMetadataManager
 		}
 	
 		// set none searchable existing fields
-		$xPaths = kXsd::findXpathsByAppInfo($xmlString, self::APP_INFO_SEARCH, 'false', false);
+		$xPaths = vXsd::findXpathsByAppInfo($xmlString, self::APP_INFO_SEARCH, 'false', false);
 		foreach($profileFields as $profileField)
 		{
 			$xPath = $profileField->getXpath();
@@ -289,11 +289,11 @@ class kMetadataManager
 
 	public static function setAdditionalProfileFieldData(MetadataProfile $metadataProfile, MetadataProfileField $profileField, $xPathData)
 	{
-		if($profileField->getType() === MetadataSearchFilter::KMC_FIELD_TYPE_METADATA_OBJECT &&
+		if($profileField->getType() === MetadataSearchFilter::VMC_FIELD_TYPE_METADATA_OBJECT &&
 			isset($xPathData['metadataProfileId']))
 		{
 			if ($xPathData['metadataProfileId'] == $metadataProfile->getId())
-				throw new kCoreException('Self metadata reference is not allowed');
+				throw new vCoreException('Self metadata reference is not allowed');
 			$relatedMetadataProfileId = $xPathData['metadataProfileId'];
 			$profileField->setRelatedMetadataProfileId($relatedMetadataProfileId);
 		}
@@ -310,7 +310,7 @@ class kMetadataManager
 	public static function getSearchValuesByObject($objectType, $objectId)
 	{
 		$metadatas = MetadataPeer::retrieveAllByObject($objectType, $objectId);
-		KalturaLog::info("Found " . count($metadatas) . " metadata object");
+		VidiunLog::info("Found " . count($metadatas) . " metadata object");
 
 		return self::getMetadataValuesByMetadataObjects($metadatas);
 	}
@@ -347,16 +347,16 @@ class kMetadataManager
 		}
 		
 		$key = $metadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-		$xmlString = kFileSyncUtils::file_get_contents($key);
+		$xmlString = vFileSyncUtils::file_get_contents($key);
 		
 		try{
-			$xml = new KDOMDocument();
+			$xml = new VDOMDocument();
 			$xml->loadXML($xmlString);
 			$xPath = new DOMXPath($xml);
 		}
 		catch (Exception $ex)
 		{
-			KalturaLog::err('Could not load metadata xml [' . kFileSyncUtils::getLocalFilePathForKey($key) . '] - ' . $ex->getMessage());
+			VidiunLog::err('Could not load metadata xml [' . vFileSyncUtils::getLocalFilePathForKey($key) . '] - ' . $ex->getMessage());
 			return '';
 		}
 					
@@ -371,8 +371,8 @@ class kMetadataManager
 			if(!$nodes->length)
 				continue;
 
-			if($profileField->getType() == MetadataSearchFilter::KMC_FIELD_TYPE_DATE ||
-			   	$profileField->getType() == MetadataSearchFilter::KMC_FIELD_TYPE_INT){
+			if($profileField->getType() == MetadataSearchFilter::VMC_FIELD_TYPE_DATE ||
+			   	$profileField->getType() == MetadataSearchFilter::VMC_FIELD_TYPE_INT){
 				$node = $nodes->item(0);
 				if(!isset($searchValues[MetadataPlugin::SPHINX_DYNAMIC_ATTRIBUTES])) 
 					$searchValues[MetadataPlugin::SPHINX_DYNAMIC_ATTRIBUTES] = array();
@@ -390,8 +390,8 @@ class kMetadataManager
 			if(!count($searchItemValues))
 				continue;
 
-			if($profileField->getType() == MetadataSearchFilter::KMC_FIELD_TYPE_TEXT ||
-				$profileField->getType() == MetadataSearchFilter::KMC_FIELD_TYPE_METADATA_OBJECT)
+			if($profileField->getType() == MetadataSearchFilter::VMC_FIELD_TYPE_TEXT ||
+				$profileField->getType() == MetadataSearchFilter::VMC_FIELD_TYPE_METADATA_OBJECT)
 			{
 				$textItems[] = implode(' ', $searchItemValues);
 
@@ -412,21 +412,21 @@ class kMetadataManager
 					}
 				}
 
-				if ($profileField->getType() == MetadataSearchFilter::KMC_FIELD_TYPE_METADATA_OBJECT &&
+				if ($profileField->getType() == MetadataSearchFilter::VMC_FIELD_TYPE_METADATA_OBJECT &&
 					$profileField->getRelatedMetadataProfileId())
 				{
 					$subMetadataProfileId = $profileField->getRelatedMetadataProfileId();
 					$subMetadataProfile = MetadataProfilePeer::retrieveByPK($subMetadataProfileId);
 					if (!$subMetadataProfile)
 					{
-						KalturaLog::err('Sub metadata profile '.$subMetadataProfileId .' was not found');
+						VidiunLog::err('Sub metadata profile '.$subMetadataProfileId .' was not found');
 						continue;
 					}
 					$subMetadataObjects = MetadataPeer::retrieveByObjects($subMetadataProfileId, $subMetadataProfile->getObjectType(), $searchItemValues);
 					foreach($subMetadataObjects as $subMetadataObject)
 					{
 						/** @var Metadata $subMetadataObject */
-						KalturaLog::info("Found metadata object for profile $subMetadataProfileId and id {$subMetadataObject->getObjectId()}, extracting search data");
+						VidiunLog::info("Found metadata object for profile $subMetadataProfileId and id {$subMetadataObject->getObjectId()}, extracting search data");
 						$subSearchTextsResult = self::getDataSearchValues($subMetadataObject);
 						$subSearchTexts = $subSearchTextsResult[MetadataPlugin::getSphinxFieldName(MetadataPlugin::SPHINX_EXPANDER_FIELD_DATA)];
 						foreach($subSearchTexts as $subSearchText)
@@ -444,7 +444,7 @@ class kMetadataManager
 		
 		foreach($searchItems as $key => $searchItem)
 			foreach($searchItem as $searchPhrase)
-				$searchTexts[] = MetadataPlugin::PLUGIN_NAME . '_' . "$key $searchPhrase " . kMetadataManager::SEARCH_TEXT_SUFFIX . '_' . $key;
+				$searchTexts[] = MetadataPlugin::PLUGIN_NAME . '_' . "$key $searchPhrase " . vMetadataManager::SEARCH_TEXT_SUFFIX . '_' . $key;
 				
 	 	if(count($textItems))
 	 		$searchTexts['text'] = MetadataSearchFilter::createSphinxSearchCondition($metadata->getPartnerId(), implode(' ', $textItems) , true);
@@ -474,14 +474,14 @@ class kMetadataManager
 		$xsl = true;
 		if(!PermissionPeer::isValidForPartner(MetadataPermissionName::FEATURE_METADATA_NO_VALIDATION, $metadataProfile->getPartnerId()))
 		{
-			$xsl = kXsd::compareXsd($prevXsd, $newXsd);
+			$xsl = vXsd::compareXsd($prevXsd, $newXsd);
 		}
 			
 		if($xsl === true)
 			return;
 
 		if(PermissionPeer::isValidForPartner(MetadataPermissionName::FEATURE_METADATA_NO_TRANSFORMATION, $metadataProfile->getPartnerId()))
-			throw new kXsdException(kXsdException::TRANSFORMATION_REQUIRED);
+			throw new vXsdException(vXsdException::TRANSFORMATION_REQUIRED);
 
 		$prevVersion = $metadataProfile->getVersion();
 		$metadataProfile->incrementVersion();
@@ -507,7 +507,7 @@ class kMetadataManager
 		if(!$metadataProfile)
 		{
 			$errorMessage = "Metadata profile [$metadataProfileId] not found";
-			KalturaLog::err($errorMessage);
+			VidiunLog::err($errorMessage);
 			return false;
 		}
 		
@@ -517,35 +517,35 @@ class kMetadataManager
 		}
 		
 		$metadataProfileKey = $metadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_DEFINITION, $metadataProfileFSVersion);
-		$xsdData = kFileSyncUtils::file_get_contents($metadataProfileKey, true, false);
+		$xsdData = vFileSyncUtils::file_get_contents($metadataProfileKey, true, false);
 		if(!$xsdData)
 		{
 			$errorMessage = "Metadata profile xsd not found";
-			KalturaLog::err($errorMessage);
+			VidiunLog::err($errorMessage);
 			return false;
 		}
 			
 		libxml_use_internal_errors(true);
 		libxml_clear_errors();
-		$xml = new KDOMDocument();
+		$xml = new VDOMDocument();
 		$xml->loadXML($metadata);
 		if($xml->schemaValidateSource($xsdData))
 		{
 		    if(!self::validateMetadataObjects($metadataProfileId, $xml, $errorMessage))
 		    {
-				KalturaLog::err($errorMessage);
+				VidiunLog::err($errorMessage);
 				return false;
 			}
 			
 			return true;
 		}
 		
-		$errorMessage = kXml::getLibXmlErrorDescription($metadata);
-		KalturaLog::err("Metadata is invalid:\n$errorMessage");
+		$errorMessage = vXml::getLibXmlErrorDescription($metadata);
+		VidiunLog::err("Metadata is invalid:\n$errorMessage");
 		return false;
 	}
 	
-	protected static function validateMetadataObjects($metadataProfileId, KDOMDocument $xml, &$errorMessage)
+	protected static function validateMetadataObjects($metadataProfileId, VDOMDocument $xml, &$errorMessage)
 	{
 	    $profileFields = MetadataProfileFieldPeer::retrieveByMetadataProfileId($metadataProfileId);
 	    $xPath = new DOMXPath($xml);
@@ -582,25 +582,25 @@ class kMetadataManager
 	public static function validateProfileFields($partnerId, $xsd)
 	{
 		$xPaths = array_merge(
-			kXsd::findXpathsByAppInfo($xsd, self::APP_INFO_SEARCH, 'true', false),
-			kXsd::findXpathsByAppInfo($xsd, self::APP_INFO_SEARCH, 'false', false)
+			vXsd::findXpathsByAppInfo($xsd, self::APP_INFO_SEARCH, 'true', false),
+			vXsd::findXpathsByAppInfo($xsd, self::APP_INFO_SEARCH, 'false', false)
 		);
 		foreach($xPaths as $xPath => $xPathData)
 		{
-			if($xPathData['type'] === MetadataSearchFilter::KMC_FIELD_TYPE_METADATA_OBJECT &&
+			if($xPathData['type'] === MetadataSearchFilter::VMC_FIELD_TYPE_METADATA_OBJECT &&
 				isset($xPathData['metadataProfileId']))
 			{
 				$relatedMetadataProfileId = $xPathData['metadataProfileId'];
 				$relatedMetadataProfile = MetadataProfilePeer::retrieveByPK($relatedMetadataProfileId);
 				if (!$relatedMetadataProfile)
-					throw new kCoreException('Metadata profile id ['.$relatedMetadataProfileId.' was not found', kCoreException::ID_NOT_FOUND, $relatedMetadataProfileId);
+					throw new vCoreException('Metadata profile id ['.$relatedMetadataProfileId.' was not found', vCoreException::ID_NOT_FOUND, $relatedMetadataProfileId);
 			}
 		}
 	}
 	
 	/**
 	 * @param Metadata $metadata
-	 * @param KalturaMetadataStatus $status
+	 * @param VidiunMetadataStatus $status
 	 *
 	 * returns metadata status
 	 */
@@ -616,7 +616,7 @@ class kMetadataManager
 	}
 	
 	/**
-	 * @param KalturaMetadataObjectType $objectType
+	 * @param VidiunMetadataObjectType $objectType
 	 *
 	 * @return string
 	 */
@@ -625,7 +625,7 @@ class kMetadataManager
 		if(isset(self::$objectTypeNames[$objectType]))
 			return self::$objectTypeNames[$objectType];
 			
-		return KalturaPluginManager::getObjectClass('IMetadataObject', $objectType);
+		return VidiunPluginManager::getObjectClass('IMetadataObject', $objectType);
 	}
 	
 	/**
@@ -634,7 +634,7 @@ class kMetadataManager
 	 */
 	public static function isMetadataObject(BaseObject $object)
 	{
-		if($object instanceof IMetadataObject || $object instanceof entry || $object instanceof category || $object instanceof kuser || $object instanceof Partner)
+		if($object instanceof IMetadataObject || $object instanceof entry || $object instanceof category || $object instanceof vuser || $object instanceof Partner)
 			return true;
 			
 		return false;
@@ -670,14 +670,14 @@ class kMetadataManager
 	{
 		$job = new BatchJob();
 		$job->setPartnerId($partnerId);
-		$job->setObjectType(kPluginableEnumsManager::apiToCore('BatchJobObjectType', MetadataBatchJobObjectType::METADATA));
+		$job->setObjectType(vPluginableEnumsManager::apiToCore('BatchJobObjectType', MetadataBatchJobObjectType::METADATA));
 		$job->setObjectId($metadataId);
 		
-		$data = new kImportMetadataJobData();
+		$data = new vImportMetadataJobData();
 		$data->setMetadataId($metadataId);
 		$data->setSrcFileUrl($url);
 		
-		return kJobsManager::addJob($job, $data, BatchJobType::METADATA_IMPORT);
+		return vJobsManager::addJob($job, $data, BatchJobType::METADATA_IMPORT);
 	}
 	
 	/**
@@ -703,22 +703,22 @@ class kMetadataManager
 		$job->setJobType(BatchJobType::METADATA_TRANSFORM);
 		$job->setPartnerId($partnerId);
 		$job->setObjectId($metadataProfileId);
-		$job->setObjectType(kPluginableEnumsManager::apiToCore('BatchJobObjectType', MetadataBatchJobObjectType::METADATA_PROFILE));
-		$data = new kTransformMetadataJobData();
+		$job->setObjectType(vPluginableEnumsManager::apiToCore('BatchJobObjectType', MetadataBatchJobObjectType::METADATA_PROFILE));
+		$data = new vTransformMetadataJobData();
 		
 		if($xsl)
 		{
 			$job->save();
 			$key = $job->getSyncKey(BatchJob::FILE_SYNC_BATCHJOB_SUB_TYPE_CONFIG);
-			kFileSyncUtils::file_put_contents($key, $xsl);
-			$data->setSrcXsl(kJobsManager::getFileContainer($key));
+			vFileSyncUtils::file_put_contents($key, $xsl);
+			$data->setSrcXsl(vJobsManager::getFileContainer($key));
 		}
 		
 		$data->setMetadataProfileId($metadataProfileId);
 		$data->setSrcVersion($srcVersion);
 		$data->setDestVersion($destVersion);
 		
-		return kJobsManager::addJob($job, $data, BatchJobType::METADATA_TRANSFORM);
+		return vJobsManager::addJob($job, $data, BatchJobType::METADATA_TRANSFORM);
 	}
 	
 	/**
@@ -734,15 +734,15 @@ class kMetadataManager
 		if (!$previousVersion)
 		{
 			//On creation of the metadata object, the previous version would be null, and therefore function should exit here.
-			KalturaLog::info("No previous version - exiting.");
+			VidiunLog::info("No previous version - exiting.");
 			return;
 		}
 		
 		$metadataObject = MetadataPeer::retrieveByPK($metadataObjectId);
-		$metadataCurrentData = kFileSyncUtils::file_get_contents($metadataObject->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA));
-		$metadataPreviousData = kFileSyncUtils::file_get_contents($metadataObject->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA, $previousVersion));	
+		$metadataCurrentData = vFileSyncUtils::file_get_contents($metadataObject->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA));
+		$metadataPreviousData = vFileSyncUtils::file_get_contents($metadataObject->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA, $previousVersion));	
 		
-		$diff = kXml::getDiff ($metadataCurrentData, $metadataPreviousData);
+		$diff = vXml::getDiff ($metadataCurrentData, $metadataPreviousData);
 		return $diff;
 		
 	}
@@ -758,7 +758,7 @@ class kMetadataManager
 	public static function getElasticSearchValuesByObject($objectType, $objectId)
 	{
 		$metadatas = MetadataPeer::retrieveAllByObject($objectType, $objectId);
-		KalturaLog::info("Found " . count($metadatas) . " metadata object");
+		VidiunLog::info("Found " . count($metadatas) . " metadata object");
 
 		return self::getElasticMetadataValuesByMetadataObjects($metadatas, $objectType);
 	}
@@ -790,16 +790,16 @@ class kMetadataManager
 	public static function getDataElasticSearchValues(Metadata $metadata, array &$metaDataSearchValues)
 	{
 		$key = $metadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-		$xmlString = kFileSyncUtils::file_get_contents($key);
+		$xmlString = vFileSyncUtils::file_get_contents($key);
 
 		try{
-			$xml = new KDOMDocument();
+			$xml = new VDOMDocument();
 			$xml->loadXML($xmlString);
 			$xPath = new DOMXPath($xml);
 		}
 		catch (Exception $ex)
 		{
-			KalturaLog::err('Could not load metadata xml [' . $xmlString . '] - ' . $ex->getMessage());
+			VidiunLog::err('Could not load metadata xml [' . $xmlString . '] - ' . $ex->getMessage());
 			return;
 		}
 
@@ -828,8 +828,8 @@ class kMetadataManager
 			if(!$nodes->length)
 				continue;
 
-			if($profileField->getType() == MetadataSearchFilter::KMC_FIELD_TYPE_DATE ||
-				$profileField->getType() == MetadataSearchFilter::KMC_FIELD_TYPE_INT){
+			if($profileField->getType() == MetadataSearchFilter::VMC_FIELD_TYPE_DATE ||
+				$profileField->getType() == MetadataSearchFilter::VMC_FIELD_TYPE_INT){
 				$node = $nodes->item(0);
 				$profileFieldData['value_int'] = intval($node->nodeValue);
 				$metaDataSearchValues[] = $profileFieldData;
@@ -843,32 +843,32 @@ class kMetadataManager
 			if(!count($searchItemValues))
 				continue;
 
-			if($profileField->getType() == MetadataSearchFilter::KMC_FIELD_TYPE_TEXT ||
-				$profileField->getType() == MetadataSearchFilter::KMC_FIELD_TYPE_METADATA_OBJECT)
+			if($profileField->getType() == MetadataSearchFilter::VMC_FIELD_TYPE_TEXT ||
+				$profileField->getType() == MetadataSearchFilter::VMC_FIELD_TYPE_METADATA_OBJECT)
 			{
 				$profileFieldData['value_text'] = array();
 				foreach ($searchItemValues as $searchItemValue)
 				{
-					if(strlen($searchItemValue) > kElasticSearchManager::METADATA_MAX_LENGTH)
-						$searchItemValue = substr($searchItemValue, 0, kElasticSearchManager::METADATA_MAX_LENGTH);
+					if(strlen($searchItemValue) > vElasticSearchManager::METADATA_MAX_LENGTH)
+						$searchItemValue = substr($searchItemValue, 0, vElasticSearchManager::METADATA_MAX_LENGTH);
 
 					$profileFieldData['value_text'][] = $searchItemValue;
 				}
-				if ($profileField->getType() == MetadataSearchFilter::KMC_FIELD_TYPE_METADATA_OBJECT &&
+				if ($profileField->getType() == MetadataSearchFilter::VMC_FIELD_TYPE_METADATA_OBJECT &&
 					$profileField->getRelatedMetadataProfileId())
 				{
 					$subMetadataProfileId = $profileField->getRelatedMetadataProfileId();
 					$subMetadataProfile = MetadataProfilePeer::retrieveByPK($subMetadataProfileId);
 					if (!$subMetadataProfile)
 					{
-						KalturaLog::err('Sub metadata profile '.$subMetadataProfileId .' was not found');
+						VidiunLog::err('Sub metadata profile '.$subMetadataProfileId .' was not found');
 						continue;
 					}
 					$subMetadataObjects = MetadataPeer::retrieveByObjects($subMetadataProfileId, $subMetadataProfile->getObjectType(), $searchItemValues);
 					foreach($subMetadataObjects as $subMetadataObject)
 					{
 						/** @var Metadata $subMetadataObject */
-						KalturaLog::info("Found metadata object for profile $subMetadataProfileId and id {$subMetadataObject->getObjectId()}, extracting elasticsearch data");
+						VidiunLog::info("Found metadata object for profile $subMetadataProfileId and id {$subMetadataObject->getObjectId()}, extracting elasticsearch data");
 						self::getDataElasticSearchValues($subMetadataObject, $metaDataSearchValues);
 					}
 				}
@@ -877,9 +877,9 @@ class kMetadataManager
 			{
 				foreach ($searchItemValues as &$searchValue)
 				{
-					if (strlen($searchValue) > kElasticSearchManager::METADATA_MAX_LENGTH)
+					if (strlen($searchValue) > vElasticSearchManager::METADATA_MAX_LENGTH)
 					{
-						$searchValue = substr($searchValue, 0, kElasticSearchManager::METADATA_MAX_LENGTH);
+						$searchValue = substr($searchValue, 0, vElasticSearchManager::METADATA_MAX_LENGTH);
 					}
 				}
 				$profileFieldData['value_text'] = $searchItemValues;

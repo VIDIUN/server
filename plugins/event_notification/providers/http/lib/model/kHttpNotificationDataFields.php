@@ -3,7 +3,7 @@
  * @package plugins.httpNotification
  * @subpackage model.data
  */
-class kHttpNotificationDataFields extends kHttpNotificationData
+class vHttpNotificationDataFields extends vHttpNotificationData
 {
 	/**
 	 * Contains the calculated data to be sent
@@ -12,9 +12,9 @@ class kHttpNotificationDataFields extends kHttpNotificationData
 	protected $data;
 	
 	/* (non-PHPdoc)
-	 * @see kHttpNotificationData::setScope()
+	 * @see vHttpNotificationData::setScope()
 	 */
-	public function setScope(kScope $scope)
+	public function setScope(vScope $scope)
 	{
 		$this->data = http_build_query($scope->getDynamicValues());
 	}

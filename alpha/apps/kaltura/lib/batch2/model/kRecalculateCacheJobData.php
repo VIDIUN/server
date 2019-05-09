@@ -3,6 +3,6 @@
  * @package Core
  * @subpackage model.data
  */
-class kRecalculateCacheJobData extends kJobData
+class vRecalculateCacheJobData extends vJobData
 {
 }

@@ -4,7 +4,7 @@
  * @subpackage api.objects
  * @abstract
  */
-abstract class KalturaEntryScheduleEvent extends KalturaScheduleEvent
+abstract class VidiunEntryScheduleEvent extends VidiunScheduleEvent
 {
 	/**
 	 * Entry to be used as template during content ingestion
@@ -30,7 +30,7 @@ abstract class KalturaEntryScheduleEvent extends KalturaScheduleEvent
 	/**
 	 * Blackout schedule events the conflict with this event
 	 * @readonly
-	 * @var KalturaScheduleEventArray
+	 * @var VidiunScheduleEventArray
 	 */
 	public $blackoutConflicts;
 
@@ -46,7 +46,7 @@ abstract class KalturaEntryScheduleEvent extends KalturaScheduleEvent
 	 );
 		 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{

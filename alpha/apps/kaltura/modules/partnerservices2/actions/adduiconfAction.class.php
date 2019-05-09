@@ -23,7 +23,7 @@ class adduiconfAction extends defPartnerservices2Action
 					),
 				"errors" => array (
 					APIErrors::NO_FIELDS_SET_FOR_GENERIC_ENTRY ,
-					APIErrors::INVALID_KSHOW_ID
+					APIErrors::INVALID_VSHOW_ID
 				)
 			); 
 	}
@@ -38,14 +38,14 @@ class adduiconfAction extends defPartnerservices2Action
 	protected function setObjType ( $ui_conf ) {}
 	
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$this->applyPartnerFilterForClass('uiConf', $partner_id );
 		
 		$detailed = $this->getDetailed() ; //$this->getP ( "detailed" , false );
 		$level = ( $detailed ? objectWrapperBase::DETAIL_LEVEL_DETAILED : objectWrapperBase::DETAIL_LEVEL_REGULAR );
 		
-		// get the new properties for the kuser from the request
+		// get the new properties for the vuser from the request
 		$ui_conf = new uiConf();
 		$ui_conf->setPartnerId( $partner_id );  // set this once before filling the object and once after 
 		

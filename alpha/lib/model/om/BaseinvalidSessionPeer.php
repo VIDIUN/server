@@ -34,11 +34,11 @@ abstract class BaseinvalidSessionPeer {
 	/** the column name for the ID field */
 	const ID = 'invalid_session.ID';
 
-	/** the column name for the KS field */
-	const KS = 'invalid_session.KS';
+	/** the column name for the VS field */
+	const VS = 'invalid_session.VS';
 
-	/** the column name for the KS_VALID_UNTIL field */
-	const KS_VALID_UNTIL = 'invalid_session.KS_VALID_UNTIL';
+	/** the column name for the VS_VALID_UNTIL field */
+	const VS_VALID_UNTIL = 'invalid_session.VS_VALID_UNTIL';
 
 	/** the column name for the CREATED_AT field */
 	const CREATED_AT = 'invalid_session.CREATED_AT';
@@ -65,10 +65,10 @@ abstract class BaseinvalidSessionPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'Ks', 'KsValidUntil', 'CreatedAt', 'ActionsLimit', 'Type', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'ks', 'ksValidUntil', 'createdAt', 'actionsLimit', 'type', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::KS, self::KS_VALID_UNTIL, self::CREATED_AT, self::ACTIONS_LIMIT, self::TYPE, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'ks', 'ks_valid_until', 'created_at', 'actions_limit', 'type', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'Vs', 'VsValidUntil', 'CreatedAt', 'ActionsLimit', 'Type', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'vs', 'vsValidUntil', 'createdAt', 'actionsLimit', 'type', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::VS, self::VS_VALID_UNTIL, self::CREATED_AT, self::ACTIONS_LIMIT, self::TYPE, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'vs', 'vs_valid_until', 'created_at', 'actions_limit', 'type', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
 	);
 
@@ -79,10 +79,10 @@ abstract class BaseinvalidSessionPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Ks' => 1, 'KsValidUntil' => 2, 'CreatedAt' => 3, 'ActionsLimit' => 4, 'Type' => 5, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'ks' => 1, 'ksValidUntil' => 2, 'createdAt' => 3, 'actionsLimit' => 4, 'type' => 5, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::KS => 1, self::KS_VALID_UNTIL => 2, self::CREATED_AT => 3, self::ACTIONS_LIMIT => 4, self::TYPE => 5, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'ks' => 1, 'ks_valid_until' => 2, 'created_at' => 3, 'actions_limit' => 4, 'type' => 5, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Vs' => 1, 'VsValidUntil' => 2, 'CreatedAt' => 3, 'ActionsLimit' => 4, 'Type' => 5, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'vs' => 1, 'vsValidUntil' => 2, 'createdAt' => 3, 'actionsLimit' => 4, 'type' => 5, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::VS => 1, self::VS_VALID_UNTIL => 2, self::CREATED_AT => 3, self::ACTIONS_LIMIT => 4, self::TYPE => 5, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'vs' => 1, 'vs_valid_until' => 2, 'created_at' => 3, 'actions_limit' => 4, 'type' => 5, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
 	);
 
@@ -154,8 +154,8 @@ abstract class BaseinvalidSessionPeer {
 	public static function addSelectColumns(Criteria $criteria)
 	{
 		$criteria->addSelectColumn(invalidSessionPeer::ID);
-		$criteria->addSelectColumn(invalidSessionPeer::KS);
-		$criteria->addSelectColumn(invalidSessionPeer::KS_VALID_UNTIL);
+		$criteria->addSelectColumn(invalidSessionPeer::VS);
+		$criteria->addSelectColumn(invalidSessionPeer::VS_VALID_UNTIL);
 		$criteria->addSelectColumn(invalidSessionPeer::CREATED_AT);
 		$criteria->addSelectColumn(invalidSessionPeer::ACTIONS_LIMIT);
 		$criteria->addSelectColumn(invalidSessionPeer::TYPE);
@@ -192,11 +192,11 @@ abstract class BaseinvalidSessionPeer {
 		
 		invalidSessionPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'invalidSessionPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -220,7 +220,7 @@ abstract class BaseinvalidSessionPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -301,7 +301,7 @@ abstract class BaseinvalidSessionPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -324,11 +324,11 @@ abstract class BaseinvalidSessionPeer {
 	{		
 		$criteriaForSelect = invalidSessionPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'invalidSessionPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -344,12 +344,12 @@ abstract class BaseinvalidSessionPeer {
 		
 		$queryResult = invalidSessionPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -359,17 +359,17 @@ abstract class BaseinvalidSessionPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -440,7 +440,7 @@ abstract class BaseinvalidSessionPeer {
 		invalidSessionPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 	}
 	
@@ -539,11 +539,11 @@ abstract class BaseinvalidSessionPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('invalidSessionPeer');
+				vMemoryManager::registerPeer('invalidSessionPeer');
 			}
 		}
 	}

@@ -16,17 +16,17 @@
 	<session />
 	<!-- 30 Days Delete Flavors -->
 	<request service="scheduledTaskProfile" action="add" plugin="scheduledTask" partnerId="{variable:partnerId}">
-		<scheduledTaskProfile objectType="KalturaScheduledTaskProfile">
+		<scheduledTaskProfile objectType="VidiunScheduledTaskProfile">
 			<name>30 Days Delete Flavors</name>
 			<objectFilterEngineType>1</objectFilterEngineType>
 			<maxTotalCountAllowed>{variable:maxTotalCountAllowed}</maxTotalCountAllowed>
-			<objectFilter objectType="KalturaMediaEntryFilter">
+			<objectFilter objectType="VidiunMediaEntryFilter">
 				<createdAtGreaterThanOrEqual>{variable:fromTime}</createdAtGreaterThanOrEqual>
 				<createdAtLessThanOrEqual>{php:return -30*24*60*60;}</createdAtLessThanOrEqual>
 				<flavorParamsIdsMatchOr>{variable:flavorParamsIds}</flavorParamsIdsMatchOr>
 			</objectFilter>
 			<objectTasks objectType="array">
-				<item objectType="KalturaDeleteEntryFlavorsObjectTask">
+				<item objectType="VidiunDeleteEntryFlavorsObjectTask">
 					<flavorParamsIds>{variable:flavorParamsIds}</flavorParamsIds>
 					<deleteType>2</deleteType><!-- DELETE_LIST -->
 				</item>

@@ -3,7 +3,7 @@
  * @package plugins.metroPcsDistribution
  * @subpackage api.objects
  */
-class KalturaMetroPcsDistributionJobProviderData extends KalturaConfigurableDistributionJobProviderData
+class VidiunMetroPcsDistributionJobProviderData extends VidiunConfigurableDistributionJobProviderData
 {
 		
 	/**
@@ -18,14 +18,14 @@ class KalturaMetroPcsDistributionJobProviderData extends KalturaConfigurableDist
 	public $thumbUrls;
 	
 	
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{			   
 		parent::__construct($distributionJobData);
 	    
 		if(!$distributionJobData)
 			return;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaMetroPcsDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunMetroPcsDistributionProfile))
 			return;
 			
 		$distributedFlavorIds = null;
@@ -41,9 +41,9 @@ class KalturaMetroPcsDistributionJobProviderData extends KalturaConfigurableDist
 				{
 					/* @var $flavorAsset flavorAsset */
 					$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-					if(kFileSyncUtils::fileSync_exists($syncKey)){
+					if(vFileSyncUtils::fileSync_exists($syncKey)){
 						$id = $flavorAsset->getId();
-						$videoAssetFilePathArray[$id] = kFileSyncUtils::getLocalFilePathForKey($syncKey, true);
+						$videoAssetFilePathArray[$id] = vFileSyncUtils::getLocalFilePathForKey($syncKey, true);
 					}
 				}
 			}						

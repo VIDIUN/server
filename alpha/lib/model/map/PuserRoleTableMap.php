@@ -38,9 +38,9 @@ class PuserRoleTableMap extends TableMap {
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
-		$this->addForeignKey('KSHOW_ID', 'KshowId', 'VARCHAR', 'kshow', 'ID', false, 20, null);
-		$this->addForeignKey('PARTNER_ID', 'PartnerId', 'INTEGER', 'puser_kuser', 'PARTNER_ID', false, null, null);
-		$this->addForeignKey('PUSER_ID', 'PuserId', 'VARCHAR', 'puser_kuser', 'PUSER_ID', false, 64, null);
+		$this->addForeignKey('VSHOW_ID', 'VshowId', 'VARCHAR', 'vshow', 'ID', false, 20, null);
+		$this->addForeignKey('PARTNER_ID', 'PartnerId', 'INTEGER', 'puser_vuser', 'PARTNER_ID', false, null, null);
+		$this->addForeignKey('PUSER_ID', 'PuserId', 'VARCHAR', 'puser_vuser', 'PUSER_ID', false, 64, null);
 		$this->addColumn('ROLE', 'Role', 'INTEGER', false, null, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -53,9 +53,9 @@ class PuserRoleTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('kshow', 'kshow', RelationMap::MANY_TO_ONE, array('kshow_id' => 'id', ), null, null);
-    $this->addRelation('PuserKuserRelatedByPartnerId', 'PuserKuser', RelationMap::MANY_TO_ONE, array('partner_id' => 'partner_id', ), null, null);
-    $this->addRelation('PuserKuserRelatedByPuserId', 'PuserKuser', RelationMap::MANY_TO_ONE, array('puser_id' => 'puser_id', ), null, null);
+    $this->addRelation('vshow', 'vshow', RelationMap::MANY_TO_ONE, array('vshow_id' => 'id', ), null, null);
+    $this->addRelation('PuserVuserRelatedByPartnerId', 'PuserVuser', RelationMap::MANY_TO_ONE, array('partner_id' => 'partner_id', ), null, null);
+    $this->addRelation('PuserVuserRelatedByPuserId', 'PuserVuser', RelationMap::MANY_TO_ONE, array('puser_id' => 'puser_id', ), null, null);
 	} // buildRelations()
 
 } // PuserRoleTableMap

@@ -27,8 +27,8 @@ class WidevineLicenseProxyUtils
 	/**
 	* Signs the input and forwards license request to Widevine license server
 	* @param $requestParams - original parameters
-	* @param $overrideParamsStr - additional parameters passed on KS
-	* @param $isAdmin - true/false, identifies if called with admin KS
+	* @param $overrideParamsStr - additional parameters passed on VS
+	* @param $isAdmin - true/false, identifies if called with admin VS
 	* @return byte sequence
 	*/
 	public static function sendLicenseRequest($requestParams, $overrideParamsStr = null, $isAdmin = false)
@@ -57,7 +57,7 @@ class WidevineLicenseProxyUtils
 			$baseUrl = WidevinePlugin::getWidevineConfigParam('license_server_url');
 			$portal = WidevinePlugin::getWidevineConfigParam('portal');
 		}
-		KalturaLog::info("sign input: ".$signInput);
+		VidiunLog::info("sign input: ".$signInput);
 		
 		$sign = self::createRequestSignature($signInput, $key, $iv);		
 		$requestParams[self::PTIME] = $ptime;
@@ -68,10 +68,10 @@ class WidevineLicenseProxyUtils
 		$requestParams = array_merge($requestParams, $overrideParams);
 		
 		if(!$baseUrl)
-			throw new KalturaWidevineLicenseProxyException(KalturaWidevineErrorCodes::LICENSE_SERVER_URL_NOT_SET);
+			throw new VidiunWidevineLicenseProxyException(VidiunWidevineErrorCodes::LICENSE_SERVER_URL_NOT_SET);
 					
 		if(!$portal)
-			$portal = WidevinePlugin::KALTURA_PROVIDER;
+			$portal = WidevinePlugin::VIDIUN_PROVIDER;
 			
 		$requestParams[self::PORTAL] = $portal;
 		$baseUrl .= '/'.$portal;
@@ -88,7 +88,7 @@ class WidevineLicenseProxyUtils
 	
 	public static function printLicenseResponseStatus($response)
 	{
-		KalturaLog::info("Encoded license response: ". $response);
+		VidiunLog::info("Encoded license response: ". $response);
 		$decoded_response = base64_decode($response);
 
 		// bytes 0 through 3 contain response status code
@@ -101,9 +101,9 @@ class WidevineLicenseProxyUtils
 		}
 		$response_status_dec = hexdec($response_status);
 		if($response_status == 1)
-			KalturaLog::info("License response status OK");
+			VidiunLog::info("License response status OK");
 		else
-			KalturaLog::info("License response status Error with code: ".$response_status_dec);
+			VidiunLog::info("License response status Error with code: ".$response_status_dec);
 	}
 
 	//this utility function used by both batch and API
@@ -112,7 +112,7 @@ class WidevineLicenseProxyUtils
 		$digest = openssl_digest($data, "sha1", true);
 		$key_bytes = self::getKeyBytes($key, $iv);
 		if(!$key_bytes)
-			throw new KalturaWidevineLicenseProxyException(KalturaWidevineErrorCodes::LICENSE_KEY_NOT_SET);
+			throw new VidiunWidevineLicenseProxyException(VidiunWidevineErrorCodes::LICENSE_KEY_NOT_SET);
 		$iv = pack("H*", substr($key_bytes, 0, 32));
     	$key = pack("H*", substr($key_bytes, 32));
 	   	return openssl_encrypt($digest,'aes-256-cbc',$key, false, $iv);
@@ -143,9 +143,9 @@ class WidevineLicenseProxyUtils
 		}	
 		if($isAdmin)
 		{
-			$kmcPolicy = WidevinePlugin::getWidevineConfigParam('kmc_policy');
-			if($kmcPolicy)
-				$overrideParams[self::SETPOLICY] = $kmcPolicy;
+			$vmcPolicy = WidevinePlugin::getWidevineConfigParam('vmc_policy');
+			if($vmcPolicy)
+				$overrideParams[self::SETPOLICY] = $vmcPolicy;
 		}	
 		return $overrideParams;
 	}
@@ -157,15 +157,15 @@ class WidevineLicenseProxyUtils
 			!array_key_exists(self::MD, $requestParams) ||
 			!array_key_exists(self::ASSETID, $requestParams) 
 			)
-			throw new KalturaWidevineLicenseProxyException(KalturaWidevineErrorCodes::MISSING_MANDATORY_SIGN_PARAMETER);		
+			throw new VidiunWidevineLicenseProxyException(VidiunWidevineErrorCodes::MISSING_MANDATORY_SIGN_PARAMETER);		
 	}
 	
 	protected static function doCurl($baseUrl, $requestParams)
 	{
 		$requestParamsStr = http_build_query($requestParams, '', '&');
 		
-		KalturaLog::info("License request URL: ".$baseUrl);
-		KalturaLog::info("License request params: ".$requestParamsStr);
+		VidiunLog::info("License request URL: ".$baseUrl);
+		VidiunLog::info("License request params: ".$requestParamsStr);
 		
 		$ch = curl_init();		
 		curl_setopt($ch, CURLOPT_URL, $baseUrl);

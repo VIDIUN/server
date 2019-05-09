@@ -4,7 +4,7 @@
  * @subpackage objects
  * @abstract
  */
-abstract class KalturaBaseSyndicationFeed extends KalturaObject implements IFilterable
+abstract class VidiunBaseSyndicationFeed extends VidiunObject implements IFilterable
 {
 	/**
 	 * 
@@ -46,7 +46,7 @@ abstract class KalturaBaseSyndicationFeed extends KalturaObject implements IFilt
 	/**
 	 * feed status
 	 * 
-	 * @var KalturaSyndicationFeedStatus
+	 * @var VidiunSyndicationFeedStatus
 	 * @readonly
 	 */
 	public $status;
@@ -54,7 +54,7 @@ abstract class KalturaBaseSyndicationFeed extends KalturaObject implements IFilt
 	/**
 	 * feed type
 	 * 
-	 * @var KalturaSyndicationFeedType
+	 * @var VidiunSyndicationFeedType
 	 * @insertonly
 	 * @filter order
 	 */
@@ -88,7 +88,7 @@ abstract class KalturaBaseSyndicationFeed extends KalturaObject implements IFilt
 	public $allowEmbed;
 	
 	/**
-	 * Select a uiconf ID as player skin to include in the kwidget url
+	 * Select a uiconf ID as player skin to include in the vwidget url
 	 *
 	 * @var int
 	 */
@@ -125,7 +125,7 @@ abstract class KalturaBaseSyndicationFeed extends KalturaObject implements IFilt
 	public $storageId;
 
 	/**
-	 * @var KalturaSyndicationFeedEntriesOrderBy
+	 * @var VidiunSyndicationFeedEntriesOrderBy
 	 */
 	public $entriesOrderBy;
 	
@@ -189,35 +189,35 @@ abstract class KalturaBaseSyndicationFeed extends KalturaObject implements IFilt
 		
 		$playlistEntry = entryPeer::retrieveByPK($this->playlistId);
 		if(! $playlistEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $this->playlistId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $this->playlistId);
 	}
 	
 	public function validateStorageId($partnerId)
 	{
-		if (is_null($this->storageId) || $this->storageId instanceof KalturaNullField)
+		if (is_null($this->storageId) || $this->storageId instanceof VidiunNullField)
 			return;
 			
 		$storage = StorageProfilePeer::retrieveByPK($this->storageId);
 		if(!$storage)
-			throw new KalturaAPIException(KalturaErrors::SYNDICATION_FEED_INVALID_STORAGE_ID);
+			throw new VidiunAPIException(VidiunErrors::SYNDICATION_FEED_INVALID_STORAGE_ID);
 
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		
 		// storage doesn't belong to the partner
 		if($storage->getPartnerId() != $partner->getId())
-			throw new KalturaAPIException(KalturaErrors::SYNDICATION_FEED_INVALID_STORAGE_ID);
+			throw new VidiunAPIException(VidiunErrors::SYNDICATION_FEED_INVALID_STORAGE_ID);
 			
-		// partner configured to use kaltura data centers only
-		if($partner->getStorageServePriority() ==  StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY)
-			throw new KalturaAPIException(KalturaErrors::SYNDICATION_FEED_KALTURA_DC_ONLY);
+		// partner configured to use vidiun data centers only
+		if($partner->getStorageServePriority() ==  StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY)
+			throw new VidiunAPIException(VidiunErrors::SYNDICATION_FEED_VIDIUN_DC_ONLY);
 	}
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($source_object, $responseProfile);
 		if($this->shouldGet('feedUrl', $responseProfile) && isset($this->id) && $this->id)
 		{
-			$this->feedUrl = kConf::get('apphome_url') . '/api_v3/getFeed.php';
+			$this->feedUrl = vConf::get('apphome_url') . '/api_v3/getFeed.php';
 			
 			if($this->partnerId)
 				$this->feedUrl .= '?partnerId=' . $this->partnerId . '&';

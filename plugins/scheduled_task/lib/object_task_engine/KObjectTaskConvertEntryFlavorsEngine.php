@@ -4,14 +4,14 @@
  * @package plugins.scheduledTask
  * @subpackage lib.objectTaskEngine
  */
-class KObjectTaskConvertEntryFlavorsEngine extends KObjectTaskEntryEngineBase
+class VObjectTaskConvertEntryFlavorsEngine extends VObjectTaskEntryEngineBase
 {
 	/**
-	 * @param KalturaBaseEntry $object
+	 * @param VidiunBaseEntry $object
 	 */
 	function processObject($object)
 	{
-		/** @var KalturaConvertEntryFlavorsObjectTask $objectTask */
+		/** @var VidiunConvertEntryFlavorsObjectTask $objectTask */
 		$objectTask = $this->getObjectTask();
 		$entryId = $object->id;
 		$reconvert = $objectTask->reconvert;
@@ -22,10 +22,10 @@ class KObjectTaskConvertEntryFlavorsEngine extends KObjectTaskEntryEngineBase
 		{
 			try
 			{
-				$flavorAssetFilter = new KalturaFlavorAssetFilter();
+				$flavorAssetFilter = new VidiunFlavorAssetFilter();
 				$flavorAssetFilter->entryIdEqual = $entryId;
 				$flavorAssetFilter->flavorParamsIdEqual = $flavorParamsId;
-				$flavorAssetFilter->statusEqual = KalturaFlavorAssetStatus::READY;
+				$flavorAssetFilter->statusEqual = VidiunFlavorAssetStatus::READY;
 				$flavorAssetResponse = $client->flavorAsset->listAction($flavorAssetFilter);
 				if (!count($flavorAssetResponse->objects) || $reconvert)
 					$client->flavorAsset->convert($entryId, $flavorParamsId);
@@ -33,8 +33,8 @@ class KObjectTaskConvertEntryFlavorsEngine extends KObjectTaskEntryEngineBase
 			}
 			catch(Exception $ex)
 			{
-				KalturaLog::err(sprintf('Failed to convert entry id %s with flavor params id %s', $entryId, $flavorParamsId));
-				KalturaLog::err($ex);
+				VidiunLog::err(sprintf('Failed to convert entry id %s with flavor params id %s', $entryId, $flavorParamsId));
+				VidiunLog::err($ex);
 			}
 		}
 	}

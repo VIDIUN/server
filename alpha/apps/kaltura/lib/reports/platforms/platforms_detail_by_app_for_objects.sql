@@ -30,7 +30,7 @@ FROM
 		  count_plays > 0 OR
 		  count_loads > 0 OR
 		  sum_time_viewed > 0 )
-GROUP BY ev.os_id) stats, kalturadw.dwh_dim_os os
+GROUP BY ev.os_id) stats, vidiundw.dwh_dim_os os
 WHERE os.id=stats.object_id
 AND {OBJ_ID_CLAUSE} /*device = */
 ORDER BY {SORT_FIELD}

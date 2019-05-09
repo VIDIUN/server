@@ -4,7 +4,7 @@
  * @subpackage utils
  *
  */
-class kContextDataHelper
+class vContextDataHelper
 {
 	const ALL_TAGS = 'all';
 	const DEFAULT_SERVE_VOD_FROM_LIVE_DURATION = 300000;
@@ -47,7 +47,7 @@ class kContextDataHelper
 	
 	/**
 	 * the result of applyContext
-	 * @var kEntryContextDataResult
+	 * @var vEntryContextDataResult
 	 */
 	private $contextDataResult;
 	
@@ -117,7 +117,7 @@ class kContextDataHelper
 	}
 
 	/**
-	 * @return kEntryContextDataResult $contextDataResult
+	 * @return vEntryContextDataResult $contextDataResult
 	 */
 	public function getContextDataResult() {
 		return $this->contextDataResult;
@@ -156,8 +156,8 @@ class kContextDataHelper
 	{
 		$this->streamerType = $streamerType;
 		$this->mediaProtocol = $mediaProtocol;
-		$this->isAdmin = $scope->getKs() ? $scope->getKs()->isAdmin() : false;
-		$this->contextDataResult = new kEntryContextDataResult();
+		$this->isAdmin = $scope->getVs() ? $scope->getVs()->isAdmin() : false;
+		$this->contextDataResult = new vEntryContextDataResult();
 
 		$this->contextDataResult->setShouldHandleRuleCodes($shouldHandleRuleCodes);
 		
@@ -175,15 +175,15 @@ class kContextDataHelper
 		if ($accessControl && $accessControl->hasRules())
 		{
 			$this->isSecured = true;
-			if (kConf::hasMap("optimized_playback"))
+			if (vConf::hasMap("optimized_playback"))
 			{
 				$partnerId = $accessControl->getPartnerId();
-				$optimizedPlayback = kConf::getMap("optimized_playback");
+				$optimizedPlayback = vConf::getMap("optimized_playback");
 				if (array_key_exists($partnerId, $optimizedPlayback))
 				{
 					$params = $optimizedPlayback[$partnerId];
-					if (array_key_exists('cache_kdp_access_control', $params) && $params['cache_kdp_access_control'] &&
-					 	(strpos(strtolower(kCurrentContext::$client_lang), "kdp") !== false || strpos(strtolower(kCurrentContext::$client_lang), "html") !== false ))
+					if (array_key_exists('cache_vdp_access_control', $params) && $params['cache_vdp_access_control'] &&
+					 	(strpos(strtolower(vCurrentContext::$client_lang), "vdp") !== false || strpos(strtolower(vCurrentContext::$client_lang), "html") !== false ))
 						return;
 				}
 			}		
@@ -238,7 +238,7 @@ class kContextDataHelper
 			}
 			if($action->getType() == RuleActionType::LIMIT_FLAVORS)
 			{
-				/* @var $action kAccessControlLimitFlavorsAction */
+				/* @var $action vAccessControlLimitFlavorsAction */
 				$flavorParamsIds = explode(',', $action->getFlavorParamsIds());
 				$flavorParamsNotIn = $action->getIsBlockedList();
 			}
@@ -322,13 +322,13 @@ class kContextDataHelper
 	private function setContextDataStorageProfilesXml()
 	{
 		if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_REMOTE_STORAGE_DELIVERY_PRIORITY, $this->entry->getPartnerId()) &&
-			$this->partner->getStorageServePriority() != StorageProfile::STORAGE_SERVE_PRIORITY_KALTURA_ONLY)
+			$this->partner->getStorageServePriority() != StorageProfile::STORAGE_SERVE_PRIORITY_VIDIUN_ONLY)
 		{
 			$asset = reset($this->allowedFlavorAssets);		
 			if(!$asset)
 				return;			
 			$assetSyncKey = $asset->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
-			$fileSyncs = kFileSyncUtils::getAllReadyExternalFileSyncsForKey($assetSyncKey);
+			$fileSyncs = vFileSyncUtils::getAllReadyExternalFileSyncsForKey($assetSyncKey);
 					
 			$storageProfilesXML = new SimpleXMLElement("<StorageProfiles/>");
 			foreach ($fileSyncs as $fileSync)
@@ -366,7 +366,7 @@ class kContextDataHelper
 		{
 			$protocols = array();
 			
-			if(!in_array($this->entry->getSource(), LiveEntry::$kalturaLiveSourceTypes))
+			if(!in_array($this->entry->getSource(), LiveEntry::$vidiunLiveSourceTypes))
 				$protocols[] = PlaybackProtocol::AKAMAI_HDS;
 				
 			$protocols[] = PlaybackProtocol::HDS;
@@ -399,7 +399,7 @@ class kContextDataHelper
 		else
 		{
 			$this->isSecured = $this->isSecured || PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENTITLEMENT_USED, $this->entry->getPartnerId());
-			$forcedDeliveryTypeKey = kDeliveryUtils::getForcedDeliveryTypeKey($this->selectedTag);
+			$forcedDeliveryTypeKey = vDeliveryUtils::getForcedDeliveryTypeKey($this->selectedTag);
 			
 			if($forcedDeliveryTypeKey)
 				$defaultDeliveryTypeKey = $forcedDeliveryTypeKey;
@@ -409,13 +409,13 @@ class kContextDataHelper
 			if (!$defaultDeliveryTypeKey || $defaultDeliveryTypeKey == PlaybackProtocol::AUTO)
 				$deliveryType = $this->selectDeliveryTypeForAuto();
 			else 
-				$deliveryType = kDeliveryUtils::getDeliveryTypeFromConfig($defaultDeliveryTypeKey);
+				$deliveryType = vDeliveryUtils::getDeliveryTypeFromConfig($defaultDeliveryTypeKey);
 			
 			if(!$deliveryType)
 				$deliveryType = array();
 				
-			$this->streamerType = kDeliveryUtils::getStreamerType($deliveryType);
-			$this->mediaProtocol = kDeliveryUtils::getMediaProtocol($deliveryType);
+			$this->streamerType = vDeliveryUtils::getStreamerType($deliveryType);
+			$this->mediaProtocol = vDeliveryUtils::getMediaProtocol($deliveryType);
 		}
 		
 		$httpStreamerTypes = array(
@@ -433,10 +433,10 @@ class kContextDataHelper
 			$this->mediaProtocol = PlaybackProtocol::HTTP;
 		
 		//If a plugin can determine the streamerType and mediaProtocol, prefer plugin result
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaContextDataHelper');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunContextDataHelper');
 		foreach ($pluginInstances as $pluginInstance)
 		{
-			/* @var $pluginInstance IKalturaContextDataHelper */
+			/* @var $pluginInstance IVidiunContextDataHelper */
 			$this->streamerType = $pluginInstance->getContextDataStreamerType($scope, $flavorTags, $this->streamerType);
 			$this->mediaProtocol = $pluginInstance->getContextDataMediaProtocol($scope, $flavorTags, $this->streamerType, $this->mediaProtocol);
 		}
@@ -455,7 +455,7 @@ class kContextDataHelper
 				
 		if (!count($enabledDeliveryTypes))
 		{
-			KalturaLog::err('At least one non auto delivery type must be specified');
+			VidiunLog::err('At least one non auto delivery type must be specified');
 			return array();
 		}
 
@@ -464,7 +464,7 @@ class kContextDataHelper
 			$deliveryTypeName = null; 
 			if($this->isSecured)
 				$deliveryTypeKeys[] = 'secured_default_delivery_type';
-			if($this->entry->getDuration() <= kConf::get('short_entries_max_duration'))
+			if($this->entry->getDuration() <= vConf::get('short_entries_max_duration'))
 				$deliveryTypeKeys[] = 'short_entries_default_delivery_type';
 			$deliveryTypeKeys[] = 'default_delivery_type';
 	
@@ -472,7 +472,7 @@ class kContextDataHelper
 			$deliveryTypeName = key($enabledDeliveryTypes);
 			foreach ($deliveryTypeKeys as $deliveryTypeKey)
 			{
-				$deliveryTypesToValidate = kConf::get($deliveryTypeKey);
+				$deliveryTypesToValidate = vConf::get($deliveryTypeKey);
 				$deliveryTypesToValidate = explode(',', $deliveryTypesToValidate);
 				foreach ($deliveryTypesToValidate as $deliveryTypeToValidate)
 				{

@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class loginAction extends kalturaSystemAction
+class loginAction extends vidiunSystemAction
 {
 	private static $PASSWORD = "30d390fb24c8e80a880e4f8bfce7a3a06757f1c7";
 
@@ -43,7 +43,7 @@ class loginAction extends kalturaSystemAction
 		}
 		else
 		{
-			if ( kConf::hasParam ( "system_pages_login_password" ) && sha1($password) == kConf::get ( "system_pages_login_password" ) ) //self::$PASSWORD )
+			if ( vConf::hasParam ( "system_pages_login_password" ) && sha1($password) == vConf::get ( "system_pages_login_password" ) ) //self::$PASSWORD )
 			{
 				$this->systemAuthenticated();
 				

@@ -1,6 +1,6 @@
 <?php
 
-class kCloudFrontUrlTokenizer extends kUrlTokenizer
+class vCloudFrontUrlTokenizer extends vUrlTokenizer
 {
 	/**
 	 * @var string
@@ -32,7 +32,7 @@ class kCloudFrontUrlTokenizer extends kUrlTokenizer
 	
 	protected function getAcl($baseUrl, array $urls)
 	{
-		require_once( dirname(__FILE__). '/../../../../../../infra/general/kString.class.php');
+		require_once( dirname(__FILE__). '/../../../../../../infra/general/vString.class.php');
 	
 		// strip the filenames of all urls
 		foreach ($urls as &$url)
@@ -44,7 +44,7 @@ class kCloudFrontUrlTokenizer extends kUrlTokenizer
 			}
 		}
 		
-		$acl = kString::getCommonPrefix($urls);
+		$acl = vString::getCommonPrefix($urls);
 	
 		// the first comma in csmil denotes the beginning of the non-common URL part
 		$commaPos = strpos($acl, ',');

@@ -6,7 +6,7 @@
  * @package plugins.metadata
  * @subpackage api.services
  */
-class MetadataService extends KalturaBaseService
+class MetadataService extends VidiunBaseService
 {
 
 	public function initService($serviceId, $serviceName, $actionName)
@@ -18,11 +18,11 @@ class MetadataService extends KalturaBaseService
 			$this->applyPartnerFilterForClass('Metadata');
 		
 		if(!MetadataPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, MetadataPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, MetadataPlugin::PLUGIN_NAME);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::partnerGroup()
+	 * @see VidiunBaseService::partnerGroup()
 	 */
 	protected function partnerGroup($peer = null)
 	{
@@ -36,7 +36,7 @@ class MetadataService extends KalturaBaseService
 	    return $this->partnerGroup;
 	}
 	
-	protected function kalturaNetworkAllowed($actionName)
+	protected function vidiunNetworkAllowed($actionName)
 	{
 		if ($actionName == 'list')
 		{
@@ -44,18 +44,18 @@ class MetadataService extends KalturaBaseService
 			return true;
 		}
 			
-		return parent::kalturaNetworkAllowed($actionName);
+		return parent::vidiunNetworkAllowed($actionName);
 	}
 
 	/**
-	 * Allows you to add a metadata object and metadata content associated with Kaltura object
+	 * Allows you to add a metadata object and metadata content associated with Vidiun object
 	 * 
 	 * @action add
 	 * @param int $metadataProfileId
-	 * @param KalturaMetadataObjectType $objectType
+	 * @param VidiunMetadataObjectType $objectType
 	 * @param string $objectId
 	 * @param string $xmlData XML metadata
-	 * @return KalturaMetadata
+	 * @return VidiunMetadata
 	 * @throws MetadataErrors::METADATA_PROFILE_NOT_FOUND
 	 * @throws MetadataErrors::INCOMPATIBLE_METADATA_PROFILE_OBJECT_TYPE
 	 * @throws MetadataErrors::METADATA_ALREADY_EXISTS
@@ -65,27 +65,27 @@ class MetadataService extends KalturaBaseService
 	{
 	    $metadataProfile = MetadataProfilePeer::retrieveByPK($metadataProfileId);
 		if(!$metadataProfile)
-		    throw new KalturaAPIException(MetadataErrors::METADATA_PROFILE_NOT_FOUND, $metadataProfileId);
+		    throw new VidiunAPIException(MetadataErrors::METADATA_PROFILE_NOT_FOUND, $metadataProfileId);
 		    
-		if($metadataProfile->getObjectType() != kPluginableEnumsManager::apiToCore('MetadataObjectType', $objectType))
-		    throw new KalturaAPIException(MetadataErrors::INCOMPATIBLE_METADATA_PROFILE_OBJECT_TYPE, $metadataProfile->getObjectType() , $objectType);
+		if($metadataProfile->getObjectType() != vPluginableEnumsManager::apiToCore('MetadataObjectType', $objectType))
+		    throw new VidiunAPIException(MetadataErrors::INCOMPATIBLE_METADATA_PROFILE_OBJECT_TYPE, $metadataProfile->getObjectType() , $objectType);
 		
-		if($objectType == KalturaMetadataObjectType::USER)
+		if($objectType == VidiunMetadataObjectType::USER)
 		{
-			$kuser = kuserPeer::createKuserForPartner($this->getPartnerId(), $objectId);
-			if($kuser)				
-				$objectId = $kuser->getId();
+			$vuser = vuserPeer::createVuserForPartner($this->getPartnerId(), $objectId);
+			if($vuser)				
+				$objectId = $vuser->getId();
 		}
 		
-		$objectType = kPluginableEnumsManager::apiToCore('MetadataObjectType', $objectType);
+		$objectType = vPluginableEnumsManager::apiToCore('MetadataObjectType', $objectType);
 
-		$limitEntry = $this->getKs()->getLimitEntry();
+		$limitEntry = $this->getVs()->getLimitEntry();
 		if ($limitEntry) {
-			$peer = kMetadataManager::getObjectPeer($objectType);
+			$peer = vMetadataManager::getObjectPeer($objectType);
 			if ($peer) {
 				$entry = $peer->getEntry($objectId);
 				if (!$entry || $entry->getId() != $limitEntry) {
-					throw new KalturaAPIException(MetadataErrors::METADATA_NO_PERMISSION_ON_ENTRY, $objectId);
+					throw new VidiunAPIException(MetadataErrors::METADATA_NO_PERMISSION_ON_ENTRY, $objectId);
 				}
 			}
 		}
@@ -93,7 +93,7 @@ class MetadataService extends KalturaBaseService
 		$this->validateObjectId($objectId, $objectType);
 		$check = MetadataPeer::retrieveByObject($metadataProfileId, $objectType, $objectId);
 		if($check)
-			throw new KalturaAPIException(MetadataErrors::METADATA_ALREADY_EXISTS, $check->getId());
+			throw new VidiunAPIException(MetadataErrors::METADATA_ALREADY_EXISTS, $check->getId());
 			
 		// if a metadata xslt is defined on the metadata profile - transform the given metadata
 		$xmlDataTransformed = $this->transformMetadata($metadataProfileId, $xmlData);
@@ -101,18 +101,18 @@ class MetadataService extends KalturaBaseService
             $xmlData = $xmlDataTransformed;
 		
 		$errorMessage = '';
-		if(!kMetadataManager::validateMetadata($metadataProfileId, $xmlData, $errorMessage))
-			throw new KalturaAPIException(MetadataErrors::INVALID_METADATA_DATA, $errorMessage);
+		if(!vMetadataManager::validateMetadata($metadataProfileId, $xmlData, $errorMessage))
+			throw new VidiunAPIException(MetadataErrors::INVALID_METADATA_DATA, $errorMessage);
 		
 		$dbMetadata = $this->addMetadata($metadataProfileId, $objectType, $objectId);
 		
 		$key = $dbMetadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-		kFileSyncUtils::file_put_contents($key, $xmlData);
+		vFileSyncUtils::file_put_contents($key, $xmlData);
 		
 		$this->deleteOldVersions($dbMetadata);
-		kEventsManager::raiseEvent(new kObjectDataChangedEvent($dbMetadata));
+		vEventsManager::raiseEvent(new vObjectDataChangedEvent($dbMetadata));
 				
-		$metadata = new KalturaMetadata();
+		$metadata = new VidiunMetadata();
 		$metadata->fromObject($dbMetadata, $this->getResponseProfile());
 		
 		return $metadata;
@@ -120,10 +120,10 @@ class MetadataService extends KalturaBaseService
 
 	
 	/**
-	 * Adds a metadata object associated with Kaltura object
+	 * Adds a metadata object associated with Vidiun object
 	 * 
 	 * @param int $metadataProfileId
-	 * @param KalturaMetadataObjectType $objectType
+	 * @param VidiunMetadataObjectType $objectType
 	 * @param string $objectId
 	 * @return Metadata
 	 * @throws MetadataErrors::METADATA_ALREADY_EXISTS
@@ -133,18 +133,18 @@ class MetadataService extends KalturaBaseService
 	 */
 	protected function addMetadata($metadataProfileId, $objectType, $objectId)
 	{
-		$objectType = kPluginableEnumsManager::apiToCore('MetadataObjectType', $objectType);
+		$objectType = vPluginableEnumsManager::apiToCore('MetadataObjectType', $objectType);
 		
 		$check = MetadataPeer::retrieveByObject($metadataProfileId, $objectType, $objectId);
 		if($check)
-			throw new KalturaAPIException(MetadataErrors::METADATA_ALREADY_EXISTS, $check->getId());
+			throw new VidiunAPIException(MetadataErrors::METADATA_ALREADY_EXISTS, $check->getId());
 			
 		$dbMetadataProfile = MetadataProfilePeer::retrieveByPK($metadataProfileId);
 		if(!$dbMetadataProfile)
-			throw new KalturaAPIException(MetadataErrors::INVALID_METADATA_PROFILE, $metadataProfileId);
+			throw new VidiunAPIException(MetadataErrors::INVALID_METADATA_PROFILE, $metadataProfileId);
 			
 		if($dbMetadataProfile->getObjectType() != $objectType)
-			throw new KalturaAPIException(MetadataErrors::INVALID_METADATA_PROFILE_TYPE, $dbMetadataProfile->getObjectType());
+			throw new VidiunAPIException(MetadataErrors::INVALID_METADATA_PROFILE_TYPE, $dbMetadataProfile->getObjectType());
 		
 		$dbMetadata = new Metadata();
 		
@@ -153,16 +153,16 @@ class MetadataService extends KalturaBaseService
 		$dbMetadata->setMetadataProfileVersion($dbMetadataProfile->getVersion());
 		$dbMetadata->setObjectType($objectType);
 		$dbMetadata->setObjectId($objectId);
-		$dbMetadata->setStatus(KalturaMetadataStatus::VALID);
+		$dbMetadata->setStatus(VidiunMetadataStatus::VALID);
 		$dbMetadata->setLikeNew(true);
 
 		// dynamic objects are metadata only, skip validating object id
-		if ($objectType != KalturaMetadataObjectType::DYNAMIC_OBJECT)
+		if ($objectType != VidiunMetadataObjectType::DYNAMIC_OBJECT)
 		{
 			// validate object exists
-			$object = kMetadataManager::getObjectFromPeer($dbMetadata);
+			$object = vMetadataManager::getObjectFromPeer($dbMetadata);
 			if (!$object)
-				throw new KalturaAPIException(MetadataErrors::INVALID_METADATA_OBJECT, $objectId);
+				throw new VidiunAPIException(MetadataErrors::INVALID_METADATA_OBJECT, $objectId);
 		}
 
 		$dbMetadata->save();
@@ -173,14 +173,14 @@ class MetadataService extends KalturaBaseService
 	}
 
 	/**
-	 * Allows you to add a metadata object and metadata file associated with Kaltura object
+	 * Allows you to add a metadata object and metadata file associated with Vidiun object
 	 * 
 	 * @action addFromFile
 	 * @param int $metadataProfileId
-	 * @param KalturaMetadataObjectType $objectType
+	 * @param VidiunMetadataObjectType $objectType
 	 * @param string $objectId
 	 * @param file $xmlFile XML metadata
-	 * @return KalturaMetadata
+	 * @return VidiunMetadata
 	 * @throws MetadataErrors::METADATA_ALREADY_EXISTS
 	 * @throws MetadataErrors::METADATA_FILE_NOT_FOUND
 	 * @throws MetadataErrors::INVALID_METADATA_DATA
@@ -189,7 +189,7 @@ class MetadataService extends KalturaBaseService
 	{
 		$filePath = $xmlFile['tmp_name'];
 		if(!file_exists($filePath))
-			throw new KalturaAPIException(MetadataErrors::METADATA_FILE_NOT_FOUND, $xmlFile['name']);
+			throw new VidiunAPIException(MetadataErrors::METADATA_FILE_NOT_FOUND, $xmlFile['name']);
 		
 		$xmlData = file_get_contents($filePath);
 		@unlink($filePath);
@@ -203,11 +203,11 @@ class MetadataService extends KalturaBaseService
 
 	 * @action addFromUrl
 	 * @param int $metadataProfileId
-	 * @param KalturaMetadataObjectType $objectType
+	 * @param VidiunMetadataObjectType $objectType
 	 * @param string $objectId
 	 * @param string $url XML metadata remote URL
 
-	 * @return KalturaMetadata
+	 * @return VidiunMetadata
 	 */
 	function addFromUrlAction($metadataProfileId, $objectType, $objectId, $url)
 	{
@@ -222,10 +222,10 @@ class MetadataService extends KalturaBaseService
 	 * 
 	 * @action addFromBulk
 	 * @param int $metadataProfileId
-	 * @param KalturaMetadataObjectType $objectType
+	 * @param VidiunMetadataObjectType $objectType
 	 * @param string $objectId
 	 * @param string $url XML metadata remote URL
-	 * @return KalturaMetadata
+	 * @return VidiunMetadata
 	 */
 	function addFromBulkAction($metadataProfileId, $objectType, $objectId, $url)
 	{
@@ -238,7 +238,7 @@ class MetadataService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id 
-	 * @return KalturaMetadata
+	 * @return VidiunMetadata
 	 * @throws MetadataErrors::METADATA_NOT_FOUND
 	 */		
 	function getAction($id)
@@ -246,9 +246,9 @@ class MetadataService extends KalturaBaseService
 		$dbMetadata = MetadataPeer::retrieveByPK( $id );
 		
 		if(!$dbMetadata)
-			throw new KalturaAPIException(MetadataErrors::METADATA_NOT_FOUND, $id);
+			throw new VidiunAPIException(MetadataErrors::METADATA_NOT_FOUND, $id);
 			
-		$metadata = new KalturaMetadata();
+		$metadata = new VidiunMetadata();
 		$metadata->fromObject($dbMetadata, $this->getResponseProfile());
 		
 		return $metadata;
@@ -261,7 +261,7 @@ class MetadataService extends KalturaBaseService
 	 * @param int $id 
 	 * @param string $xmlData XML metadata
 	 * @param int $version Enable update only if the metadata object version did not change by other process
-	 * @return KalturaMetadata
+	 * @return VidiunMetadata
 	 * @throws MetadataErrors::METADATA_NOT_FOUND
 	 * @throws MetadataErrors::INVALID_METADATA_DATA
 	 * @throws MetadataErrors::INVALID_METADATA_VERSION
@@ -269,21 +269,21 @@ class MetadataService extends KalturaBaseService
 	 */	
 	function updateAction ($id, $xmlData = null, $version = null)
 	{
-		return kLock::runLocked("metadata_update_xsl_{$id}", array($this, 'updateImpl'), array($id, $xmlData, $version));
+		return vLock::runLocked("metadata_update_xsl_{$id}", array($this, 'updateImpl'), array($id, $xmlData, $version));
 	}
 
 	function updateImpl($id, $xmlData = null, $version = null)
 	{
 		$dbMetadata = MetadataPeer::retrieveByPK($id);
 		if(!$dbMetadata)
-			throw new KalturaAPIException(MetadataErrors::METADATA_NOT_FOUND, $id);
+			throw new VidiunAPIException(MetadataErrors::METADATA_NOT_FOUND, $id);
 			
 		if($version && $dbMetadata->getVersion() != $version)
-			throw new KalturaAPIException(MetadataErrors::INVALID_METADATA_VERSION, $dbMetadata->getVersion());
+			throw new VidiunAPIException(MetadataErrors::INVALID_METADATA_VERSION, $dbMetadata->getVersion());
 		
 		$dbMetadataProfile = MetadataProfilePeer::retrieveByPK($dbMetadata->getMetadataProfileId());
 		if(!$dbMetadataProfile)
-			throw new KalturaAPIException(MetadataErrors::INVALID_METADATA_PROFILE, $dbMetadata->getMetadataProfileId());
+			throw new VidiunAPIException(MetadataErrors::INVALID_METADATA_PROFILE, $dbMetadata->getMetadataProfileId());
 		
 		$this->validateObjectId($dbMetadata->getObjectId(), $dbMetadata->getObjectType());
 		if($xmlData)
@@ -294,20 +294,20 @@ class MetadataService extends KalturaBaseService
 	            $xmlData = $xmlDataTransformed;
 			
 			$errorMessage = '';
-			if(!kMetadataManager::validateMetadata($dbMetadata->getMetadataProfileId(), $xmlData, $errorMessage))
+			if(!vMetadataManager::validateMetadata($dbMetadata->getMetadataProfileId(), $xmlData, $errorMessage))
 			{
 				// if metadata profile is transforming, and metadata profile version is not the latest, try to validate againts previous version
 				if($dbMetadataProfile->getStatus() != MetadataProfile::STATUS_TRANSFORMING || $dbMetadata->getMetadataProfileVersion() >= $dbMetadataProfile->getVersion())
-					throw new KalturaAPIException(MetadataErrors::INVALID_METADATA_DATA, $errorMessage);
+					throw new VidiunAPIException(MetadataErrors::INVALID_METADATA_DATA, $errorMessage);
 					
 				// validates against previous version
 				$errorMessagePrevVersion = '';
-				if(!kMetadataManager::validateMetadata($dbMetadata->getMetadataProfileId(), $xmlData, $errorMessagePrevVersion, true))
+				if(!vMetadataManager::validateMetadata($dbMetadata->getMetadataProfileId(), $xmlData, $errorMessagePrevVersion, true))
 				{
-					KalturaLog::err("Failed to validate metadata object [$id] against metadata profile previous version [" . $dbMetadata->getMetadataProfileVersion() . "] error: $errorMessagePrevVersion");
+					VidiunLog::err("Failed to validate metadata object [$id] against metadata profile previous version [" . $dbMetadata->getMetadataProfileVersion() . "] error: $errorMessagePrevVersion");
 
 					// throw the error with the original error message
-					throw new KalturaAPIException(MetadataErrors::INVALID_METADATA_DATA, $errorMessage);
+					throw new VidiunAPIException(MetadataErrors::INVALID_METADATA_DATA, $errorMessage);
 				}
 			}
 			else
@@ -316,19 +316,19 @@ class MetadataService extends KalturaBaseService
 			}
 			
 			$key = $dbMetadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-			if (!kFileSyncUtils::compareContent($key, $xmlData))
+			if (!vFileSyncUtils::compareContent($key, $xmlData))
 			{
 				MetadataPlugin::updateMetadataFileSync($dbMetadata, $xmlData);
 			}
 			else 
 			{
-				KalturaLog::info("XML data MD5 matches current filesync content MD5. Update is not necessary.");
+				VidiunLog::info("XML data MD5 matches current filesync content MD5. Update is not necessary.");
 				//adding this save() in order to save the metadata profile version field in case there are no diffrences
 				$dbMetadata->save();
 			}
 		}
 		
-		$metadata = new KalturaMetadata();
+		$metadata = new VidiunMetadata();
 		$metadata->fromObject($dbMetadata, $this->getResponseProfile());
 			
 		return $metadata;
@@ -341,7 +341,7 @@ class MetadataService extends KalturaBaseService
 	 * @action updateFromFile
 	 * @param int $id 
 	 * @param file $xmlFile XML metadata
-	 * @return KalturaMetadata
+	 * @return VidiunMetadata
 	 * @throws MetadataErrors::METADATA_NOT_FOUND
 	 * @throws MetadataErrors::METADATA_FILE_NOT_FOUND
 	 * @throws MetadataErrors::INVALID_METADATA_DATA
@@ -350,7 +350,7 @@ class MetadataService extends KalturaBaseService
 	{
 		$filePath = $xmlFile['tmp_name'];
 		if(!file_exists($filePath))
-			throw new KalturaAPIException(MetadataErrors::METADATA_FILE_NOT_FOUND, $xmlFile['name']);
+			throw new VidiunAPIException(MetadataErrors::METADATA_FILE_NOT_FOUND, $xmlFile['name']);
 		
 		$xmlData = file_get_contents($filePath);
 		@unlink($filePath);
@@ -361,17 +361,17 @@ class MetadataService extends KalturaBaseService
 	 * List metadata objects by filter and pager
 	 * 
 	 * @action list
-	 * @param KalturaMetadataFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaMetadataListResponse
+	 * @param VidiunMetadataFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunMetadataListResponse
 	 */
-	function listAction(KalturaMetadataFilter $filter = null, KalturaFilterPager $pager = null)
+	function listAction(VidiunMetadataFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaMetadataFilter();
+			$filter = new VidiunMetadataFilter();
 			
 		if (! $pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		
 		$applyPartnerFilter = true;
 		if($filter->metadataObjectTypeEqual == MetadataObjectType::ENTRY)
@@ -379,7 +379,7 @@ class MetadataService extends KalturaBaseService
 			$objectIds = $filter->getObjectIdsFiltered();
 			if(!empty($objectIds))
 			{
-				$objectIds = entryPeer::filterEntriesByPartnerOrKalturaNetwork($objectIds, kCurrentContext::getCurrentPartnerId());
+				$objectIds = entryPeer::filterEntriesByPartnerOrVidiunNetwork($objectIds, vCurrentContext::getCurrentPartnerId());
 				
 				if(!count($objectIds))
 					return $filter->getEmptyListResponse();
@@ -406,17 +406,17 @@ class MetadataService extends KalturaBaseService
 		$c->add(MetadataPeer::OBJECT_TYPE, $metadata->getObjectType());
 		$c->add(MetadataPeer::METADATA_PROFILE_ID, $metadata->getMetadataProfileId());
 		$c->add(MetadataPeer::METADATA_PROFILE_VERSION, $metadata->getMetadataProfileVersion(), Criteria::LESS_THAN);
-		$c->add(MetadataPeer::STATUS, KalturaMetadataStatus::DELETED, Criteria::NOT_EQUAL);
+		$c->add(MetadataPeer::STATUS, VidiunMetadataStatus::DELETED, Criteria::NOT_EQUAL);
 		
 		MetadataPeer::setUseCriteriaFilter(false);
 		$metadatas = MetadataPeer::doSelect($c);
 		MetadataPeer::setUseCriteriaFilter(true);
 		
 		foreach($metadatas as $metadata)
-			kEventsManager::raiseEvent(new kObjectDeletedEvent($metadata));
+			vEventsManager::raiseEvent(new vObjectDeletedEvent($metadata));
 		
 		$update = new Criteria();
-		$update->add(MetadataPeer::STATUS, KalturaMetadataStatus::DELETED);
+		$update->add(MetadataPeer::STATUS, VidiunMetadataStatus::DELETED);
 			
 		$con = Propel::getConnection(MetadataPeer::DATABASE_NAME);
 		$count = BasePeer::doUpdate($c, $update, $con);
@@ -436,13 +436,13 @@ class MetadataService extends KalturaBaseService
 	{
 		$dbMetadata = MetadataPeer::retrieveByPK($id);
 		if(!$dbMetadata)
-			throw new KalturaAPIException(MetadataErrors::METADATA_NOT_FOUND, $id);
+			throw new VidiunAPIException(MetadataErrors::METADATA_NOT_FOUND, $id);
 		
 		$this->validateObjectId($dbMetadata->getObjectId(), $dbMetadata->getObjectType());
 		
-		$dbMetadata->setStatus(KalturaMetadataStatus::DELETED);
+		$dbMetadata->setStatus(VidiunMetadataStatus::DELETED);
 		$dbMetadata->save();
-		kEventsManager::raiseEvent(new kObjectDataChangedEvent($dbMetadata));
+		vEventsManager::raiseEvent(new vObjectDataChangedEvent($dbMetadata));
 	}
 
 	
@@ -460,12 +460,12 @@ class MetadataService extends KalturaBaseService
 	{
 		$dbMetadata = MetadataPeer::retrieveByPK($id);
 		if(!$dbMetadata)
-			throw new KalturaAPIException(MetadataErrors::METADATA_NOT_FOUND, $id);
+			throw new VidiunAPIException(MetadataErrors::METADATA_NOT_FOUND, $id);
 
 		if($version && $dbMetadata->getVersion() != $version)
-			throw new KalturaAPIException(MetadataErrors::INVALID_METADATA_VERSION, $dbMetadata->getVersion());
+			throw new VidiunAPIException(MetadataErrors::INVALID_METADATA_VERSION, $dbMetadata->getVersion());
 
-		$dbMetadata->setStatus(KalturaMetadataStatus::INVALID);
+		$dbMetadata->setStatus(VidiunMetadataStatus::INVALID);
 		$dbMetadata->save();
 	}
 
@@ -479,15 +479,15 @@ class MetadataService extends KalturaBaseService
 	 */
 	function indexAction($id, $shouldUpdate)
 	{
-		if(kEntitlementUtils::getEntitlementEnforcement())
-			throw new KalturaAPIException(KalturaErrors::CANNOT_INDEX_OBJECT_WHEN_ENTITLEMENT_IS_ENABLE);
+		if(vEntitlementUtils::getEntitlementEnforcement())
+			throw new VidiunAPIException(VidiunErrors::CANNOT_INDEX_OBJECT_WHEN_ENTITLEMENT_IS_ENABLE);
 
 		$dbMetadata = MetadataPeer::retrieveByPK($id);
 		if(!$dbMetadata)
-			throw new KalturaAPIException(MetadataErrors::METADATA_NOT_FOUND, $id);
+			throw new VidiunAPIException(MetadataErrors::METADATA_NOT_FOUND, $id);
 
 		$dbMetadata->indexToSearchIndex();
-		$relatedObject = kMetadataManager::getObjectFromPeer($dbMetadata);
+		$relatedObject = vMetadataManager::getObjectFromPeer($dbMetadata);
 		if($relatedObject && $relatedObject instanceof IIndexable)
 			$relatedObject->indexToSearchIndex();
 
@@ -503,14 +503,14 @@ class MetadataService extends KalturaBaseService
 	 * @return file
 	 *  
 	 * @throws MetadataErrors::METADATA_NOT_FOUND
-	 * @throws KalturaErrors::FILE_DOESNT_EXIST
+	 * @throws VidiunErrors::FILE_DOESNT_EXIST
 	 */
 	public function serveAction($id)
 	{
 		$dbMetadata = MetadataPeer::retrieveByPK( $id );
 		
 		if(!$dbMetadata)
-			throw new KalturaAPIException(MetadataErrors::METADATA_NOT_FOUND, $id);
+			throw new VidiunAPIException(MetadataErrors::METADATA_NOT_FOUND, $id);
 		
 		$fileName = $dbMetadata->getObjectId() . '.xml';
 		$fileSubType = Metadata::FILE_SYNC_METADATA_DATA;
@@ -524,34 +524,34 @@ class MetadataService extends KalturaBaseService
         $result = null;
 	    $metadataProfile = MetadataProfilePeer::retrieveByPK($metadataProfileId); 
 	    if (!$metadataProfile) {
-	        KalturaLog::err('Cannot find metadata profile id ['.$metadataProfileId.']');
+	        VidiunLog::err('Cannot find metadata profile id ['.$metadataProfileId.']');
 	        return null;
 	    }
 	    
 	    $metadataXsltKey = $metadataProfile->getSyncKey(MetadataProfile::FILE_SYNC_METADATA_XSLT);
-	    if (!kFileSyncUtils::file_exists($metadataXsltKey, true))
+	    if (!vFileSyncUtils::file_exists($metadataXsltKey, true))
 	    	return null;
 	    
-	    $xsltString = kFileSyncUtils::file_get_contents($metadataXsltKey, true, false);
+	    $xsltString = vFileSyncUtils::file_get_contents($metadataXsltKey, true, false);
 	    if (!$xsltString)
 	    	return null;
 	    
         $xsltParams = array(
-        	XsltParameterName::KALTURA_CURRENT_TIMESTAMP => time(),
+        	XsltParameterName::VIDIUN_CURRENT_TIMESTAMP => time(),
         );
         
         $xsltErrors = array();
-        $xmlDataTransformed = kXml::transformXmlUsingXslt($xmlData, $xsltString, $xsltParams, $xsltErrors);
+        $xmlDataTransformed = vXml::transformXmlUsingXslt($xmlData, $xsltString, $xsltParams, $xsltErrors);
         
         if (!empty($xsltErrors))
         {
-        	throw new KalturaAPIException(MetadataErrors::XSLT_VALIDATION_ERROR, implode(',', $xsltErrors));
+        	throw new VidiunAPIException(MetadataErrors::XSLT_VALIDATION_ERROR, implode(',', $xsltErrors));
         }
         
         if ($xmlDataTransformed)
             return $xmlDataTransformed;
         
-        KalturaLog::err('Failed XML [$xmlData] transformation for metadata with XSL [$xsltString]');
+        VidiunLog::err('Failed XML [$xmlData] transformation for metadata with XSL [$xsltString]');
 	    return null;
 	}
 	
@@ -561,7 +561,7 @@ class MetadataService extends KalturaBaseService
 	 * 
 	 * @param int $id
 	 * @param file $xslFile
-	 * @return KalturaMetadata
+	 * @return VidiunMetadata
 	 * @throws MetadataErrors::XSLT_VALIDATION_ERROR
 	 * @throws MetadataErrors::METADATA_FILE_NOT_FOUND
 	 * @throws MetadataErrors::METADATA_NOT_FOUND
@@ -570,29 +570,29 @@ class MetadataService extends KalturaBaseService
 	{
 		$xslFilePath = $xslFile['tmp_name'];
 		if(!file_exists($xslFilePath))
-			throw new KalturaAPIException(MetadataErrors::METADATA_FILE_NOT_FOUND, $xslFile['name']);
+			throw new VidiunAPIException(MetadataErrors::METADATA_FILE_NOT_FOUND, $xslFile['name']);
 
 		$xslData = file_get_contents($xslFilePath);
 		@unlink($xslFilePath);
 
-		return kLock::runLocked("metadata_update_xsl_{$id}", array($this, 'updateFromXSLImpl'), array($id, $xslData));
+		return vLock::runLocked("metadata_update_xsl_{$id}", array($this, 'updateFromXSLImpl'), array($id, $xslData));
 	}
 
 	public function updateFromXSLImpl ($id, $xslData)
 	{
 		$dbMetadataObject = MetadataPeer::retrieveByPK($id);
 		if (!$dbMetadataObject)
-			throw new KalturaAPIException(MetadataErrors::METADATA_NOT_FOUND);
+			throw new VidiunAPIException(MetadataErrors::METADATA_NOT_FOUND);
 		
 		$this->validateObjectId($dbMetadataObject->getObjectId(), $dbMetadataObject->getObjectType());
 		$dbMetadataObjectFileSyncKey = $dbMetadataObject->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
 
 		$xsltErrors = array();
-		$transformMetadataObjectData = kXml::transformXmlUsingXslt(kFileSyncUtils::file_get_contents($dbMetadataObjectFileSyncKey), $xslData, array(), $xsltErrors);
+		$transformMetadataObjectData = vXml::transformXmlUsingXslt(vFileSyncUtils::file_get_contents($dbMetadataObjectFileSyncKey), $xslData, array(), $xsltErrors);
 
 		if ( count($xsltErrors))
 		{
-			throw new KalturaAPIException(MetadataErrors::XSLT_VALIDATION_ERROR, implode(',', $xsltErrors));
+			throw new VidiunAPIException(MetadataErrors::XSLT_VALIDATION_ERROR, implode(',', $xsltErrors));
 		}
 
 		return $this->updateImpl($id, $transformMetadataObjectData);
@@ -600,19 +600,19 @@ class MetadataService extends KalturaBaseService
 	
 	private function validateObjectId($objectId, $objectType)
 	{
-		$metadataObjectClassName = kMetadataManager::getObjectTypeName($objectType);
+		$metadataObjectClassName = vMetadataManager::getObjectTypeName($objectType);
 		$this->applyPartnerFilterForClass($metadataObjectClassName);
-		$objectPeer = kMetadataManager::getObjectPeer($objectType);
+		$objectPeer = vMetadataManager::getObjectPeer($objectType);
 		
-		if(!$objectPeer && !kCurrentContext::$is_admin_session)
+		if(!$objectPeer && !vCurrentContext::$is_admin_session)
 		{
-			KalturaLog::debug("Failed to validate metadata object access for dynamic object id [$objectId]");
+			VidiunLog::debug("Failed to validate metadata object access for dynamic object id [$objectId]");
 		}
 		
 		if($objectPeer && !$objectPeer::validateMetadataObjectAccess($objectId))
 		{
-			//KalturaLog::debug("Failed to validate metadata object access for object id [$objectId] using peer [" .get_class($objectPeer) . "]");
-			throw new KalturaAPIException(MetadataErrors::METADATA_OBJECT_ID_NOT_FOUND, $objectId);
+			//VidiunLog::debug("Failed to validate metadata object access for object id [$objectId] using peer [" .get_class($objectPeer) . "]");
+			throw new VidiunAPIException(MetadataErrors::METADATA_OBJECT_ID_NOT_FOUND, $objectId);
 		}
 	}
 }

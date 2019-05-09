@@ -3,6 +3,6 @@
  * @package External
  * @subpackage WSDL
  */
-class KalturaMediaServerClientException extends Exception
+class VidiunMediaServerClientException extends Exception
 {
 }

@@ -3,12 +3,12 @@
 /**
  * Auto-generated class.
  * 
- * Used to search KalturaMediaEntry attributes. Use KalturaMediaEntryMatchAttribute enum to provide attribute name.
+ * Used to search VidiunMediaEntry attributes. Use VidiunMediaEntryMatchAttribute enum to provide attribute name.
 */
-class KalturaMediaEntryMatchAttributeCondition extends KalturaSearchMatchAttributeCondition
+class VidiunMediaEntryMatchAttributeCondition extends VidiunSearchMatchAttributeCondition
 {
 	/**
-	 * @var KalturaMediaEntryMatchAttribute
+	 * @var VidiunMediaEntryMatchAttribute
 	 */
 	public $attribute;
 

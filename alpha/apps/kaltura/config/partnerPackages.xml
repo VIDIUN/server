@@ -2,7 +2,7 @@
 <packages>
 	<package>
 		<id>1</id>
-		<name>Kaltura Free</name>
+		<name>Vidiun Free</name>
 		<cycle_type>0</cycle_type>
 		<cycle_bw>10</cycle_bw>
 		<cycle_fee>0</cycle_fee>
@@ -14,7 +14,7 @@
 	</package>
 	<package>
 		<id>2</id>
-		<name>Kaltura 20</name>
+		<name>Vidiun 20</name>
 		<cycle_type>1</cycle_type>
 		<cycle_bw>20</cycle_bw>
 		<cycle_fee>50</cycle_fee>
@@ -23,7 +23,7 @@
 	</package>
 	<package>
 		<id>3</id>
-		<name>Kaltura 50</name>
+		<name>Vidiun 50</name>
 		<cycle_type>1</cycle_type>
 		<cycle_bw>50</cycle_bw>
 		<cycle_fee>100</cycle_fee>
@@ -32,7 +32,7 @@
 	</package>
 	<package>
 		<id>4</id>
-		<name>Kaltura 100</name>
+		<name>Vidiun 100</name>
 		<cycle_type>1</cycle_type>
 		<cycle_bw>100</cycle_bw>
 		<cycle_fee>150</cycle_fee>
@@ -41,7 +41,7 @@
 	</package>	
 	<package>
 		<id>5</id>
-		<name>Kaltura 250</name>
+		<name>Vidiun 250</name>
 		<cycle_type>1</cycle_type>
 		<cycle_bw>250</cycle_bw>
 		<cycle_fee>325</cycle_fee>
@@ -50,7 +50,7 @@
 	</package>	
 	<package>
 		<id>6</id>
-		<name>Kaltura 500</name>
+		<name>Vidiun 500</name>
 		<cycle_type>1</cycle_type>
 		<cycle_bw>500</cycle_bw>
 		<cycle_fee>600</cycle_fee>
@@ -59,7 +59,7 @@
 	</package>
 	<package>
 		<id>100</id>
-		<name>Kaltura Developer Trial</name>
+		<name>Vidiun Developer Trial</name>
 		<cycle_type>1</cycle_type>
 		<cycle_bw>25</cycle_bw>
 		<cycle_storage>5</cycle_storage>
@@ -76,7 +76,7 @@
 
 	<package>
 		<id>101</id>
-		<name>Kaltura Developer PAYG</name>
+		<name>Vidiun Developer PAYG</name>
 		<cycle_type>1</cycle_type>
 		<cycle_bw>20</cycle_bw>
 		<cycle_fee>50</cycle_fee>
@@ -86,7 +86,7 @@
 
 	<package>
 		<id>102</id>
-		<name>Kaltura Developer Commit</name>
+		<name>Vidiun Developer Commit</name>
 		<cycle_type>1</cycle_type>
 		<cycle_bw>20</cycle_bw>
 		<cycle_fee>50</cycle_fee>
@@ -96,7 +96,7 @@
 
 	<package>
 		<id>103</id>
-		<name>Kaltura Internal Trial</name>
+		<name>Vidiun Internal Trial</name>
 		<cycle_type>0</cycle_type>
 		<cycle_bw>30</cycle_bw>
 		<cycle_fee>0</cycle_fee>

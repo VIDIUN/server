@@ -4,7 +4,7 @@
  * @subpackage api.objects
  */
 
-class KalturaTimeRangeVendorCredit extends KalturaVendorCredit
+class VidiunTimeRangeVendorCredit extends VidiunVendorCredit
 {
 	/**
 	 *  @var time
@@ -21,20 +21,20 @@ class KalturaTimeRangeVendorCredit extends KalturaVendorCredit
 	}
 	
 	/* (non-PHPdoc)
- 	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+ 	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
  	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
 		{
-			$dbObject = new kTimeRangeVendorCredit();
+			$dbObject = new vTimeRangeVendorCredit();
 		}
 		
 		return parent::toObject($dbObject, $propsToSkip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForInsert()
+	 * @see VidiunObject::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -43,7 +43,7 @@ class KalturaTimeRangeVendorCredit extends KalturaVendorCredit
 		parent::validateForInsert($propertiesToSkip);
 
 		if ($this->fromDate > $this->toDate)
-			throw new KalturaAPIException(KalturaReachErrors::INVALID_CREDIT_DATES , $this->fromDate, $this->toDate);
+			throw new VidiunAPIException(VidiunReachErrors::INVALID_CREDIT_DATES , $this->fromDate, $this->toDate);
 	}
 	
 	public function hasObjectChanged($sourceObject)
@@ -51,7 +51,7 @@ class KalturaTimeRangeVendorCredit extends KalturaVendorCredit
 		if(parent::hasObjectChanged($sourceObject))
 			return true;
 		
-		/* @var $sourceObject kTimeRangeVendorCredit */
+		/* @var $sourceObject vTimeRangeVendorCredit */
 		if($this->toDate && $this->toDate != $sourceObject->getToDate())
 			return true;
 		

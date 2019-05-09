@@ -30,7 +30,7 @@
 # Source networking configuration.
 . /etc/sysconfig/network
 
-SYSTEM_INI_FILE=/etc/kaltura.d/system.ini
+SYSTEM_INI_FILE=/etc/vidiun.d/system.ini
 if [ -r "$SYSTEM_INI_FILE" ];then
     . $SYSTEM_INI_FILE
 else
@@ -41,7 +41,7 @@ fi
 # Source function library.
 . $APP_DIR/infra/scripts/functions.rc
 
-MONIT="$BASE_DIR/bin/monit -c $APP_DIR/configurations/monit/monit.rc -l $LOG_DIR/kaltura_monit.log"
+MONIT="$BASE_DIR/bin/monit -c $APP_DIR/configurations/monit/monit.rc -l $LOG_DIR/vidiun_monit.log"
 
 # Source monit configuration.
 if [ -f /etc/sysconfig/monit ] ; then

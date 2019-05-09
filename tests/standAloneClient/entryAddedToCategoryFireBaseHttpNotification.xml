@@ -12,7 +12,7 @@
     </session>
     <multirequest>
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaHttpNotificationTemplate">
+            <template objectType="VidiunHttpNotificationTemplate">
                 <name>EntryCategory added Firebase</name>
                 <systemName>ENTRYCATEGORY_ADDED_FIREBASE</systemName>
                 <description>HTTP notification template to be sent to firebase when a new entry is created</description>
@@ -20,44 +20,44 @@
                 <eventObjectType>37</eventObjectType> <!-- EventNotificationEventObjectType::CATEGORYENTRY -->
                 <automaticDispatchEnabled>1</automaticDispatchEnabled>
                 <contentParameters objectType="array">
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>entry_id</key>
                         <description>Entry ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getEntryId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>partner_id</key>
                         <description>Partner ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getPartnerId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>category_id</key>
                         <description>Category ID</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>$scope->getObject()->getCategoryId()</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>entry_name</key>
                         <description>Entry Name</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($entry = entryPeer::retrieveByPk($scope->getObject()->getEntryId())) ? $entry->getName() : ''</code>
                         </value>
                     </item>
-                    <item objectType="KalturaEventNotificationParameter">
+                    <item objectType="VidiunEventNotificationParameter">
                         <key>category_name</key>
                         <description>Category Name</description>
-                        <value objectType="KalturaEvalStringField">
+                        <value objectType="VidiunEvalStringField">
                             <code>!is_null($category = categoryPeer::retrieveByPK($scope->getObject()->getCategoryId())) ? $category->getName() : ''</code>
                         </value>
                     </item>
                 </contentParameters>
-                <data objectType = "KalturaHttpNotificationDataText">
-                    <content objectType = "KalturaStringValue">
+                <data objectType = "VidiunHttpNotificationDataText">
+                    <content objectType = "VidiunStringValue">
                         <description>The notification content</description>
                         <value>
                             {
@@ -79,14 +79,14 @@
                         </value>
                     </content>
                 </data>
-                <method>2</method> <!-- KalturaHttpNotificationMethod::POST -->
+                <method>2</method> <!-- VidiunHttpNotificationMethod::POST -->
                 <url>https://fcm.googleapis.com/fcm/send</url>
                 <customHeaders objectType="array">
-                    <item objectType="KalturaKeyValue">
+                    <item objectType="VidiunKeyValue">
                         <key>Content-Type</key>>
                         <value>application/json</value>
                     </item>
-                    <item objectType="KalturaKeyValue">
+                    <item objectType="VidiunKeyValue">
                         <key>Authorization</key>>
                         <value>key=AAAAqX04KSI:APA91bHLJ3dOMmLM5hwvRvpjkY26TeVcxn3oWHLM_koKw-PL56VYdUd5KIpMXWAI9uk-Ctups0saUxYTl8EbRiaQ7vMfW_EoFmQWR_PgTe5ANeQyt1wLj03LQhirkmqLn7hVFAAZISlx</value>
                     </item>

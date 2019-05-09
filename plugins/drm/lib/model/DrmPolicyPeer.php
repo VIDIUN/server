@@ -43,7 +43,7 @@ class DrmPolicyPeer extends BaseDrmPolicyPeer
 		{
 			$typeField = self::translateFieldName(DrmPolicyPeer::PROVIDER, BasePeer::TYPE_COLNAME, BasePeer::TYPE_NUM);
 			$drmPolicyType = $row[$typeField];				
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $drmPolicyType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $drmPolicyType);
 			if($extendedCls)
 			{
 				return $extendedCls;

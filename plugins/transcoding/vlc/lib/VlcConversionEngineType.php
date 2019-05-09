@@ -3,7 +3,7 @@
  * @package plugins.vlc
  * @subpackage lib
  */
-class VlcConversionEngineType implements IKalturaPluginEnum, conversionEngineType
+class VlcConversionEngineType implements IVidiunPluginEnum, conversionEngineType
 {
 	const VLC = 'Vlc';
 	

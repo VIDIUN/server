@@ -7,7 +7,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaEventConsumers extends IKalturaBase
+interface IVidiunEventConsumers extends IVidiunBase
 {
 	/**
 	 * Retrieves the event consumers used by the plugin.

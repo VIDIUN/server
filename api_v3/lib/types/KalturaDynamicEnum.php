@@ -3,11 +3,11 @@
  * @package api
  * @subpackage enum
  */
-abstract class KalturaDynamicEnum extends KalturaStringEnum implements IKalturaDynamicEnum
+abstract class VidiunDynamicEnum extends VidiunStringEnum implements IVidiunDynamicEnum
 {
 	public static function mergeDescriptions($baseEnumName, array $descriptions)
 	{
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaEnumerator');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunEnumerator');
 		foreach($pluginInstances as $pluginInstance)
 		{
 			$pluginName = $pluginInstance->getPluginName();

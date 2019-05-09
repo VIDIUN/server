@@ -3,14 +3,14 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBulkUploadResultArray extends KalturaTypedArray
+class VidiunBulkUploadResultArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaBulkUploadResultArray();
+		$newArr = new VidiunBulkUploadResultArray();
 		foreach ( $arr as $obj )
 		{
-			$nObj = new KalturaBulkUploadResult();
+			$nObj = new VidiunBulkUploadResult();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -20,6 +20,6 @@ class KalturaBulkUploadResultArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaBulkUploadResult" );
+		return parent::__construct ( "VidiunBulkUploadResult" );
 	}
 }

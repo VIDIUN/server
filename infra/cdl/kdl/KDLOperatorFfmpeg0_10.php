@@ -3,12 +3,12 @@
  * @package plugins.ffmpeg
  * @subpackage lib
  */
-class KDLOperatorFfmpeg0_10 extends KDLOperatorFfmpeg {
+class VDLOperatorFfmpeg0_10 extends VDLOperatorFfmpeg {
 
 	/* ---------------------------
 	 * GenerateCommandLine
 	 */
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 		$cmdStr = $this->generateSinglePassCommandLine($design, $target, $extra);
 		$cmdStr = $this->processTwoPass($target, $cmdStr);
@@ -18,7 +18,7 @@ class KDLOperatorFfmpeg0_10 extends KDLOperatorFfmpeg {
 	/* ---------------------------
 	 * generateSinglePassCommandLine
 	 */
-	protected function generateSinglePassCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+	protected function generateSinglePassCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 		return parent::GenerateCommandLine($design, $target, $extra);
 	}
@@ -31,9 +31,9 @@ class KDLOperatorFfmpeg0_10 extends KDLOperatorFfmpeg {
 		$h264params=null;
 		$ffQsettings = " -qcomp 0.6 -qmin 10 -qmax 50 -qdiff 4";
 		switch($videoObject->_id) {
-		case KDLVideoTarget::H264H:
+		case VDLVideoTarget::H264H:
 			$h264params=" -subq 7".$ffQsettings." -bf 16 -coder 1 -refs 6 -x264opts b-pyramid:weightb:mixed-refs:8x8dct:no-fast-pskip=0";
-			if($videoObject->_bitRate<KDLConstants::LowBitrateThresHold) {
+			if($videoObject->_bitRate<VDLConstants::LowBitrateThresHold) {
 				$h264params .= " -crf 30";
 			}
 			break;
@@ -47,7 +47,7 @@ class KDLOperatorFfmpeg0_10 extends KDLOperatorFfmpeg {
 	/* ---------------------------
 	 * generateVideoParams
 	 */
-    protected function generateVideoParams(KDLFlavor $design, KDLFlavor $target)
+    protected function generateVideoParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		$cmdStr = parent::generateVideoParams($design, $target);
 		if(!isset($target->_video))
@@ -57,7 +57,7 @@ class KDLOperatorFfmpeg0_10 extends KDLOperatorFfmpeg {
 			 * On COPY the filters are unrequried/unapplicable - 
 			 * therefore - skip it.
 			 */
-		if($target->_video->IsFormatOf(array(KDLVideoTarget::COPY))){
+		if($target->_video->IsFormatOf(array(VDLVideoTarget::COPY))){
 			return $cmdStr;
 		}
 		
@@ -83,7 +83,7 @@ $fltStr = null;
 	/* ---------------------------
 	 * generateContainerParams
 	 */
-    protected function generateContainerParams(KDLFlavor $design, KDLFlavor $target)
+    protected function generateContainerParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		$cmdStr = parent::generateContainerParams($design, $target);
 		if(!isset($cmdStr)) 
@@ -92,7 +92,7 @@ $fltStr = null;
 			 * Remove menu and chapter meta data that harms RTMP streaming 
 			 * This is not relevant for FLV targets (just MP4 derivatives)
 			 */
-		if($target->ToTags(array("mbr")) && $target->_container->_id!=KDLContainerTarget::FLV) {
+		if($target->ToTags(array("mbr")) && $target->_container->_id!=VDLContainerTarget::FLV) {
 			$cmdStr = " -map_chapters -1 -map_metadata -1 $cmdStr";
 		}
 		
@@ -151,7 +151,7 @@ $fltStr = null;
 	/* ---------------------------
 	 * calcForcedKeyFrames
 	 */
-    protected function calcForcedKeyFrames($vidObj, KDLFlavor $target)
+    protected function calcForcedKeyFrames($vidObj, VDLFlavor $target)
     {
     	if($vidObj->_forcedKeyFramesMode==0
     	|| !($vidObj->_forcedKeyFramesMode==1 && isset($vidObj->_gop) && isset($vidObj->_frameRate) && $vidObj->_frameRate>0)){
@@ -180,7 +180,7 @@ $fltStr = null;
 			$forcedKF = "expr:'gte(t,n_forced*".round($gopInSecs).")'";
 		}
 		else {
-			$forcedKF = KDLCmdlinePlaceholders::ForceKeyframes.$duration."_$gopInSecs";
+			$forcedKF = VDLCmdlinePlaceholders::ForceKeyframes.$duration."_$gopInSecs";
 		}
 */
 		$forcedKF = "expr:'gte(t,n_forced*".round($gopInSecs).")'";
@@ -190,33 +190,33 @@ $fltStr = null;
 	/* ---------------------------
 	 * getVideoCodecName
 	 */
-    protected function getVideoCodecSpecificParams(KDLFlavor $design, KDLFlavor $target)
+    protected function getVideoCodecSpecificParams(VDLFlavor $design, VDLFlavor $target)
 	{
 $vidObj = $target->_video;
 $paramsStr = null;
 		switch($vidObj->_id){
-		case KDLVideoTarget::H264:
-		case KDLVideoTarget::H264B:
+		case VDLVideoTarget::H264:
+		case VDLVideoTarget::H264B:
 			return parent::getVideoCodecSpecificParams($design, $target)
 					." -vprofile baseline".$this->calcForcedKeyFrames($vidObj,$target)
 					." -pix_fmt yuv420p";
-		case KDLVideoTarget::H264M:
+		case VDLVideoTarget::H264M:
 			return parent::getVideoCodecSpecificParams($design, $target)
 					." -vprofile main".$this->calcForcedKeyFrames($vidObj,$target)
 					." -pix_fmt yuv420p"					;
-		case KDLVideoTarget::H264H:
+		case VDLVideoTarget::H264H:
 			return parent::getVideoCodecSpecificParams($design, $target)
 					." -vprofile high".$this->calcForcedKeyFrames($vidObj,$target)
 					." -pix_fmt yuv420p";
-		case KDLVideoTarget::APCO:
+		case VDLVideoTarget::APCO:
 			return "prores -profile 0 -pix_fmt yuv422p10le";
-		case KDLVideoTarget::APCS:
+		case VDLVideoTarget::APCS:
 			return "prores -profile 1 -pix_fmt yuv422p10le";
-		case KDLVideoTarget::APCN:
+		case VDLVideoTarget::APCN:
 			return "prores -profile 2 -pix_fmt yuv422p10le";
-		case KDLVideoTarget::APCH:
+		case VDLVideoTarget::APCH:
 			return "prores -profile 3 -pix_fmt yuv422p10le";
-		case KDLVideoTarget::DNXHD:
+		case VDLVideoTarget::DNXHD:
 			return "dnxhd -mbd rd -pix_fmt yuv422p";
 		default:
 			return parent::getVideoCodecSpecificParams($design, $target)." -pix_fmt yuv420p";
@@ -226,18 +226,18 @@ $paramsStr = null;
 	/* ---------------------------
 	 * processTwoPass
 	 */
-    protected function processTwoPass(KDLFlavor $target, $cmdStr)
+    protected function processTwoPass(VDLFlavor $target, $cmdStr)
 	{
 		if(!isset($target->_isTwoPass) || $target->_isTwoPass==0)
 			return $cmdStr;
 
-		$pass2params = "-passlogfile ".KDLCmdlinePlaceholders::OutFileName.".2pass.log -pass";
+		$pass2params = "-passlogfile ".VDLCmdlinePlaceholders::OutFileName.".2pass.log -pass";
 
 $nullDev = "NUL";
 $nullDev ="/dev/null";
 		$pass1cmdLine =
 			str_replace ( 
-				array(KDLCmdlinePlaceholders::OutFileName, " -y"), 
+				array(VDLCmdlinePlaceholders::OutFileName, " -y"), 
 				array($nullDev, " -an $pass2params 1 -fastfirstpass 1 -y"),
 				$cmdStr);
 
@@ -246,7 +246,7 @@ $nullDev ="/dev/null";
 				array(" -y"), 
 				array(" $pass2params 2 -y"),
 				$cmdStr);
-		$cmdStr = "$pass1cmdLine && ".KDLCmdlinePlaceholders::BinaryName." $pass2cmdLine ";
+		$cmdStr = "$pass1cmdLine && ".VDLCmdlinePlaceholders::BinaryName." $pass2cmdLine ";
 			
 		return $cmdStr;
 	}
@@ -254,9 +254,9 @@ $nullDev ="/dev/null";
 	/* ---------------------------
 	 * CheckConstraints
 	 */
-	public function CheckConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+	public function CheckConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
-	    if(KDLOperatorBase::CheckConstraints($source, $target, $errors, $warnings)==true)
+	    if(VDLOperatorBase::CheckConstraints($source, $target, $errors, $warnings)==true)
 			return true;
 
 		if(!isset($target->_video))
@@ -265,12 +265,12 @@ $nullDev ="/dev/null";
 			/*
 			 * HD codecs (prores & dnxhd) can be packaged only in MOV/MXF
 			 */
-$hdCodecsArr = array(KDLVideoTarget::APCO,KDLVideoTarget::APCS,KDLVideoTarget::APCN,KDLVideoTarget::APCH,KDLVideoTarget::DNXHD);
+$hdCodecsArr = array(VDLVideoTarget::APCO,VDLVideoTarget::APCS,VDLVideoTarget::APCN,VDLVideoTarget::APCH,VDLVideoTarget::DNXHD);
 		if(isset($target->_container))
 		{
-			if(!$target->_container->IsFormatOf(array(KDLContainerTarget::MOV,KDLContainerTarget::MXF)) && in_array($target->_video->_id, $hdCodecsArr)){
-				$target->_errors[KDLConstants::ContainerIndex][] = 
-					KDLErrors::ToString(KDLErrors::PackageMovOnly, $target->_video->_id);
+			if(!$target->_container->IsFormatOf(array(VDLContainerTarget::MOV,VDLContainerTarget::MXF)) && in_array($target->_video->_id, $hdCodecsArr)){
+				$target->_errors[VDLConstants::ContainerIndex][] = 
+					VDLErrors::ToString(VDLErrors::PackageMovOnly, $target->_video->_id);
 				return true;
 			}
 		}
@@ -303,7 +303,7 @@ Project Format	Resolution	Frame Size	Bits	FPS		<bitrate>
 720p  / 23.976	DNxHD 60	1280 x 720	8		23.976	60M
  */
 		
-		if($target->_video->_id==KDLVideoTarget::DNXHD) {
+		if($target->_video->_id==VDLVideoTarget::DNXHD) {
 			if(!isset($target->_video->_width) || $target->_video->_width==0)
 				$width = 0;
 			else
@@ -319,18 +319,18 @@ $dnxhd1080BitratesArr = array(220000,145000,185000,120000,36000,175000,115000,45
 			&& (
 				($width==1280 && $height==720) || ($width==1280 && $height==0) || ($width==0	&& $height==720)
 			)){
-KalturaLog::log("Supported DNXHD - br:".$this->_video->_bitRate.",w:$width,h:$height");
+VidiunLog::log("Supported DNXHD - br:".$this->_video->_bitRate.",w:$width,h:$height");
 			}
 			else if(in_array($target->_video->_bitRate,$dnxhd1080BitratesArr)
 			&& (
 				($width==1920 && $height==1080) || ($width==1920 && $height==0) || ($width==0	&& $height==1080)
 			)){
-KalturaLog::log("Supported DNXHD - br:".$target->_video->_bitRate.",w:$width,h:$height");
+VidiunLog::log("Supported DNXHD - br:".$target->_video->_bitRate.",w:$width,h:$height");
 			}
 			else {
 				$str = "br:".$target->_video->_bitRate.",w:$width,h:$height";
-				$target->_errors[KDLConstants::VideoIndex][] = 
-					KDLErrors::ToString(KDLErrors::DnxhdUnsupportedParams, $str);
+				$target->_errors[VDLConstants::VideoIndex][] = 
+					VDLErrors::ToString(VDLErrors::DnxhdUnsupportedParams, $str);
 				return true;
 			}
 				
@@ -338,8 +338,8 @@ KalturaLog::log("Supported DNXHD - br:".$target->_video->_bitRate.",w:$width,h:$
 		
 			// Encryption unsupported by ffmpeg < 2.7.2
 		if($target->_isEncrypted==true){
-			$warnings[KDLConstants::ContainerIndex][] = 
-				KDLWarnings::ToString(KDLWarnings::TranscoderLimitation, $this->_id)."(encryption)";
+			$warnings[VDLConstants::ContainerIndex][] = 
+				VDLWarnings::ToString(VDLWarnings::TranscoderLimitation, $this->_id)."(encryption)";
 			return true;
 		}
 		return $this->checkBasicFFmpegConstraints($source, $target, $errors, $warnings);

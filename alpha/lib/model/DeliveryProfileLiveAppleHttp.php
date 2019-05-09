@@ -29,7 +29,7 @@ class DeliveryProfileLiveAppleHttp extends DeliveryProfileLive {
 	
 	public function checkIsLive( $url )
 	{
-		$urlContent = $this->urlExists($url, kConf::get(self::HLS_LIVE_STREAM_CONTENT_TYPE));
+		$urlContent = $this->urlExists($url, vConf::get(self::HLS_LIVE_STREAM_CONTENT_TYPE));
 		if( ! $urlContent )
 		{
 			return false;
@@ -55,13 +55,13 @@ class DeliveryProfileLiveAppleHttp extends DeliveryProfileLive {
 	 */
 	protected function checkIsLiveMasterPlaylist( $url, $urlContent )
 	{
-		$lines = kDeliveryUtils::getM3U8Urls( $urlContent );
+		$lines = vDeliveryUtils::getM3U8Urls( $urlContent );
 
 		foreach ($lines as $urlLine)
 		{
 			$mediaUrl = $this->checkIfValidUrl($urlLine, $url);
 	
-			$urlContent = $this->urlExists($mediaUrl, kConf::get(self::HLS_LIVE_STREAM_CONTENT_TYPE));
+			$urlContent = $this->urlExists($mediaUrl, vConf::get(self::HLS_LIVE_STREAM_CONTENT_TYPE));
 
 			if (!$urlContent)
 			{
@@ -89,15 +89,15 @@ class DeliveryProfileLiveAppleHttp extends DeliveryProfileLive {
 		if($this->isDvrContent($urlContent))
 			return false;
 		
-		$lines = kDeliveryUtils::getM3U8Urls( $urlContent );
+		$lines = vDeliveryUtils::getM3U8Urls( $urlContent );
 
 		$lines = array_slice($lines, -self::MAX_IS_LIVE_ATTEMPTS, self::MAX_IS_LIVE_ATTEMPTS, true);
 		foreach ($lines as $urlLine)
 		{
 			$tsUrl = $this->checkIfValidUrl($urlLine, $url);
-			if ($this->urlExists($tsUrl ,kConf::get(self::HLS_LIVE_STREAM_CONTENT_TYPE),'0-1') !== false)
+			if ($this->urlExists($tsUrl ,vConf::get(self::HLS_LIVE_STREAM_CONTENT_TYPE),'0-1') !== false)
 			{
-				KalturaLog::log("Live ts url: $tsUrl");
+				VidiunLog::log("Live ts url: $tsUrl");
 				return true;
 			}
 		}
@@ -118,43 +118,43 @@ class DeliveryProfileLiveAppleHttp extends DeliveryProfileLive {
 	 * Build all streaming flavors array
 	 * @param string $url
 	 */
-	protected function buildM3u8Flavors($url, array &$flavors, array $kLiveStreamParamsArray, $flavorBitrateInfo = array())
+	protected function buildM3u8Flavors($url, array &$flavors, array $vLiveStreamParamsArray, $flavorBitrateInfo = array())
 	{
 		$domainPrefix = $this->getDeliveryServerNodeUrl(true);
 		
-		foreach ($kLiveStreamParamsArray as $kLiveStreamParams)
+		foreach ($vLiveStreamParamsArray as $vLiveStreamParams)
 		{
-			if(!$this->isFlavorAllowed($kLiveStreamParams->getFlavorId()))
+			if(!$this->isFlavorAllowed($vLiveStreamParams->getFlavorId()))
 				continue;
 			
-			/* @var $kLiveStreamParams kLiveStreamParams */
-			/* @var $stream kLiveStreamParams */
+			/* @var $vLiveStreamParams vLiveStreamParams */
+			/* @var $stream vLiveStreamParams */
 			$flavor = array(
 					'url' => '',
-					'urlPrefix' => $this->getUrlPrefix($url, $kLiveStreamParams),
+					'urlPrefix' => $this->getUrlPrefix($url, $vLiveStreamParams),
 					'domainPrefix' => $domainPrefix,
 					'ext' => 'm3u8',
 			);
 		
-			$flavor['bitrate'] = isset($flavorBitrateInfo[$kLiveStreamParams->getFlavorId()]) ? $flavorBitrateInfo[$kLiveStreamParams->getFlavorId()] : $kLiveStreamParams->getBitrate();
+			$flavor['bitrate'] = isset($flavorBitrateInfo[$vLiveStreamParams->getFlavorId()]) ? $flavorBitrateInfo[$vLiveStreamParams->getFlavorId()] : $vLiveStreamParams->getBitrate();
 			$flavor['bitrate'] = $flavor['bitrate'] / 1024;
-			$flavor['width'] = $kLiveStreamParams->getWidth();
-			$flavor['height'] = $kLiveStreamParams->getHeight();
+			$flavor['width'] = $vLiveStreamParams->getWidth();
+			$flavor['height'] = $vLiveStreamParams->getHeight();
 			
-			$this->addLanguageInfo($flavor, $kLiveStreamParams);
+			$this->addLanguageInfo($flavor, $vLiveStreamParams);
 				
 			$flavors[] = $flavor;
 		}
 	}
 	
-	protected function getUrlPrefix($url, $kLiveStreamParams)
+	protected function getUrlPrefix($url, $vLiveStreamParams)
 	{
-		return requestUtils::resolve($kLiveStreamParams->getFlavorId() . "/chunklist.m3u8" , $url);
+		return requestUtils::resolve($vLiveStreamParams->getFlavorId() . "/chunklist.m3u8" , $url);
 	}
 	
-	protected function addLanguageInfo(&$flavor, $kLiveStreamParams)
+	protected function addLanguageInfo(&$flavor, $vLiveStreamParams)
 	{
-		$audioLanguageData = $this->getLanguageInfo($kLiveStreamParams);
+		$audioLanguageData = $this->getLanguageInfo($vLiveStreamParams);
 		if($audioLanguageData)
 		{
 			list($audioLanguage, $audioLanguageName) = $audioLanguageData;
@@ -164,9 +164,9 @@ class DeliveryProfileLiveAppleHttp extends DeliveryProfileLive {
 		}
 	}
 	
-	protected function getLanguageInfo($kLiveStreamParams)
+	protected function getLanguageInfo($vLiveStreamParams)
 	{
-		$language = $kLiveStreamParams->getLanguage();
+		$language = $vLiveStreamParams->getLanguage();
 		if(!$language)
 			return null;
 		
@@ -182,7 +182,7 @@ class DeliveryProfileLiveAppleHttp extends DeliveryProfileLive {
 		$entry = entryPeer::retrieveByPK($entryId);
 		if(!$entry)
 		{
-			KalturaLog::err("Entry [$entryId] not found");
+			VidiunLog::err("Entry [$entryId] not found");
 			return $manifestUrl;
 		}
 		
@@ -292,7 +292,7 @@ class DeliveryProfileLiveAppleHttp extends DeliveryProfileLive {
 
 	public function getRenderer($flavors)
 	{
-		$this->DEFAULT_RENDERER_CLASS = 'kM3U8ManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vM3U8ManifestRenderer';
 		$renderer = parent::getRenderer($flavors);
 		return $renderer;
 	}

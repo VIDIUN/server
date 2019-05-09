@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . '/../../../alpha/config/kConf.php');
+require_once(dirname(__FILE__) . '/../../../alpha/config/vConf.php');
 
 if($argc != 2)
 {
@@ -93,9 +93,9 @@ function cUrl($url, $localFilePath, &$headers, $followLocation = true)
 	return $errCode;
 }
 
-require_once realpath(__DIR__ . '/../../') . '/lib/KalturaClient.php';
+require_once realpath(__DIR__ . '/../../') . '/lib/VidiunClient.php';
 
-class SanityTestLogger implements IKalturaLogger
+class SanityTestLogger implements IVidiunLogger
 {
 	function log($msg)
 	{
@@ -103,9 +103,9 @@ class SanityTestLogger implements IKalturaLogger
 	}
 }
 
-$clientConfig = new KalturaConfiguration();
+$clientConfig = new VidiunConfiguration();
 $clientConfig->setLogger(new SanityTestLogger());
 foreach($config['client'] as $field => $value)
 	$clientConfig->$field = $value;
 
-$client = new KalturaClient($clientConfig);
+$client = new VidiunClient($clientConfig);

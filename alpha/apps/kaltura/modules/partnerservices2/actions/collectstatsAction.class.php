@@ -22,7 +22,7 @@ class collectstatsAction extends defPartnerservices2Action
 						"extra_info" => array ("type" => "string", "desc" => ""),
 						),
 					"optional" => array (
-						"kshow_id" => array ("type" => "string", "desc" => "")
+						"vshow_id" => array ("type" => "string", "desc" => "")
 						)
 					),
 				"out" => array (
@@ -40,13 +40,13 @@ class collectstatsAction extends defPartnerservices2Action
 		return self::REQUIED_TICKET_REGULAR;
 	}
 
-	// ask to fetch the kuser from puser_kuser - so we can tel the difference between a
-	public function needKuserFromPuser ( )
+	// ask to fetch the vuser from puser_vuser - so we can tel the difference between a
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_NO_KUSER;
+		return self::VUSER_DATA_NO_VUSER;
 	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$obj_type = $this->getPM ( "obj_type" );
 		$obj_id = $this->getPM ( "obj_id" );
@@ -59,27 +59,27 @@ class collectstatsAction extends defPartnerservices2Action
 			$entry = entryPeer::retrieveByPK( $obj_id );
 			if ( $command == "view" )
 			{
-				PartnerActivity::incrementActivity($partner_id, PartnerActivity::PARTNER_ACTIVITY_KDP, PartnerActivity::PARTNER_SUB_ACTIVITY_KDP_VIEWS);
+				PartnerActivity::incrementActivity($partner_id, PartnerActivity::PARTNER_ACTIVITY_VDP, PartnerActivity::PARTNER_SUB_ACTIVITY_VDP_VIEWS);
 				myStatisticsMgr::incEntryViews( $entry );
 			}
 			elseif ( $command == "play" )
 			{
-				PartnerActivity::incrementActivity($partner_id, PartnerActivity::PARTNER_ACTIVITY_KDP, PartnerActivity::PARTNER_SUB_ACTIVITY_KDP_PLAYS);
+				PartnerActivity::incrementActivity($partner_id, PartnerActivity::PARTNER_ACTIVITY_VDP, PartnerActivity::PARTNER_SUB_ACTIVITY_VDP_PLAYS);
 				myStatisticsMgr::incEntryPlays( $entry );
 			}
 		}
-		elseif ( $obj_type == "kshow" )
+		elseif ( $obj_type == "vshow" )
 		{
-			$kshow = kshowPeer::retrieveByPK( $obj_id );
+			$vshow = vshowPeer::retrieveByPK( $obj_id );
 			if ( $command == "view" )
 			{
-				PartnerActivity::incrementActivity($partner_id, PartnerActivity::PARTNER_ACTIVITY_KDP, PartnerActivity::PARTNER_SUB_ACTIVITY_KDP_VIEWS);
-				myStatisticsMgr::incKshowViews( $kshow );
+				PartnerActivity::incrementActivity($partner_id, PartnerActivity::PARTNER_ACTIVITY_VDP, PartnerActivity::PARTNER_SUB_ACTIVITY_VDP_VIEWS);
+				myStatisticsMgr::incVshowViews( $vshow );
 			}
 			elseif ( $command == "play" )
 			{
-				PartnerActivity::incrementActivity($partner_id, PartnerActivity::PARTNER_ACTIVITY_KDP, PartnerActivity::PARTNER_SUB_ACTIVITY_KDP_PLAYS);
-				myStatisticsMgr::incKshowPlays( $kshow );
+				PartnerActivity::incrementActivity($partner_id, PartnerActivity::PARTNER_ACTIVITY_VDP, PartnerActivity::PARTNER_SUB_ACTIVITY_VDP_PLAYS);
+				myStatisticsMgr::incVshowPlays( $vshow );
 			}
 		}	
 

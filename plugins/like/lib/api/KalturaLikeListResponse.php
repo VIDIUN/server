@@ -3,10 +3,10 @@
  * @package plugins.like
  * @subpackage api.objects
  */
-class KalturaLikeListResponse extends KalturaListResponse
+class VidiunLikeListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaLikeArray
+	 * @var VidiunLikeArray
 	 * @readonly
 	 */
 	public $objects;

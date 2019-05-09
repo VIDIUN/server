@@ -3,7 +3,7 @@
  * @package infra
  * @subpackage Plugins
  */
-class KalturaPluginManager
+class VidiunPluginManager
 {
 	/**
 	 * Array of all installed plugin classes
@@ -13,7 +13,7 @@ class KalturaPluginManager
 	
 	/**
 	 * Array of all installed plugin instantiated classes
-	 * @var array<KalturaPlugin>
+	 * @var array<VidiunPlugin>
 	 */
 	protected static $pluginInstances = array();
 	
@@ -69,7 +69,7 @@ class KalturaPluginManager
 		}
 		else
 		{
-			$configDir = kEnvironment::getConfigDir();
+			$configDir = vEnvironment::getConfigDir();
 			self::$configFile = "$configDir/plugins.ini";
 		}
 			
@@ -94,7 +94,7 @@ class KalturaPluginManager
 			$pluginClassName = apc_fetch($cacheKey);
 		}
 		
-		$pluginInstances = self::getPluginInstances('IKalturaObjectLoader', $pluginClassName);
+		$pluginInstances = self::getPluginInstances('IVidiunObjectLoader', $pluginClassName);
 		
 		foreach($pluginInstances as $pluginName => $pluginInstance)
 		{
@@ -110,7 +110,7 @@ class KalturaPluginManager
 			}
 		}
 		
-		KalturaLog::info("Object [$baseClass] not found, enum value [$enumValue], constructor arguments [" . print_r($constructorArgs, true) . "], plugins [" . print_r(array_keys($pluginInstances), true) . "]");
+		VidiunLog::info("Object [$baseClass] not found, enum value [$enumValue], constructor arguments [" . print_r($constructorArgs, true) . "], plugins [" . print_r(array_keys($pluginInstances), true) . "]");
 		return null;
 	}
 	
@@ -123,7 +123,7 @@ class KalturaPluginManager
 	public static function getExtendedTypes($baseClass, $enumValue)
 	{
 		$values = array($enumValue);
-		$pluginInstances = self::getPluginInstances('IKalturaTypeExtender');
+		$pluginInstances = self::getPluginInstances('IVidiunTypeExtender');
 		foreach($pluginInstances as $pluginName => $pluginInstance)
 		{
 			$pluginValues = $pluginInstance->getExtendedTypes($baseClass, $enumValue);
@@ -189,7 +189,7 @@ class KalturaPluginManager
 	 */
 	public static function mergeConfigs(Iterator $config, $configName, $valuesOnly = true)
 	{
-		$pluginInstances = self::getPluginInstances('IKalturaConfigurator');
+		$pluginInstances = self::getPluginInstances('IVidiunConfigurator');
 		foreach($pluginInstances as $pluginName => $pluginInstance)
 		{
 			$pluginConfig = $pluginInstance->getConfig($configName);
@@ -219,7 +219,7 @@ class KalturaPluginManager
 			}
 		}
 		
-		$pluginInstances = self::getPluginInstances('IKalturaObjectLoader');
+		$pluginInstances = self::getPluginInstances('IVidiunObjectLoader');
 		foreach($pluginInstances as $pluginName => $pluginInstance)
 		{
 			$cls = $pluginInstance->getObjectClass($baseClass, $enumValue);
@@ -229,7 +229,7 @@ class KalturaPluginManager
 				{
 					apc_store($cacheKey, $cls);
 				}
-//				KalturaLog::debug("Found class[$cls] in plugin[$pluginName] for object type[$objectType] and enum value[$enumValue]");
+//				VidiunLog::debug("Found class[$cls] in plugin[$pluginName] for object type[$objectType] and enum value[$enumValue]");
 				return $cls;
 			}
 		}
@@ -257,20 +257,20 @@ class KalturaPluginManager
 	protected static function isValid($pluginClass, array $validatedPlugins = null)
 	{
 		// check if object has requirements
-		if (is_subclass_of($pluginClass, 'IKalturaRequire'))
+		if (is_subclass_of($pluginClass, 'IVidiunRequire'))
 		{
 		    $requiredPlugins = $pluginClass::requires(); // returns the requiredPluginsName(s)
 		    foreach($requiredPlugins as $requiredPlugin)
 		    {
 		        if (!self::hasInstanceOf($requiredPlugin))
 		        {
-		            KalturaLog::err("Required plugin name [$requiredPlugin] is not available, plugin [$pluginClass] could not be loaded.");
+		            VidiunLog::err("Required plugin name [$requiredPlugin] is not available, plugin [$pluginClass] could not be loaded.");
 		            return false;
 		        }
 		    }
 		}
 		
-		if(!is_subclass_of($pluginClass, 'IKalturaPending'))
+		if(!is_subclass_of($pluginClass, 'IVidiunPending'))
 			return true;
 			
 		$pendingPlugins = $pluginClass::dependsOn();
@@ -285,7 +285,7 @@ class KalturaPluginManager
 			// check if the required plugin is configured to be loaded
 			if(!isset($availablePlugins[$pendingPluginName]))
 			{
-				KalturaLog::err("Pending plugin name [$pendingPluginName] is not available, plugin [$pluginClass] could not be loaded.");
+				VidiunLog::err("Pending plugin name [$pendingPluginName] is not available, plugin [$pluginClass] could not be loaded.");
 				return false;
 			}
 				
@@ -298,12 +298,12 @@ class KalturaPluginManager
 			
 			// check if the version compatible
 			$pendingPluginMinVersion = $pendingPlugin->getMinimumVersion();
-			if($pendingPluginMinVersion && $pendingPluginReplection->implementsInterface('IKalturaVersion'))
+			if($pendingPluginMinVersion && $pendingPluginReplection->implementsInterface('IVidiunVersion'))
 			{
 				$pendingPluginVersion = $pendingPluginClass::getVersion();
 				if(!$pendingPluginVersion->isCompatible($pendingPluginMinVersion))
 				{
-					KalturaLog::err("Pending plugin name [$pendingPluginName] version [$pendingPluginVersion] is not compatible with required version [$pendingPluginMinVersion], plugin [$pluginClass] could not be loaded.");
+					VidiunLog::err("Pending plugin name [$pendingPluginName] version [$pendingPluginVersion] is not compatible with required version [$pendingPluginMinVersion], plugin [$pluginClass] could not be loaded.");
 					return false;
 				}
 			}
@@ -313,7 +313,7 @@ class KalturaPluginManager
 			$tempValidatedPlugins[] = $pluginClass::getPluginName();
 			if(!self::isValid($pendingPluginClass, $tempValidatedPlugins))
 			{
-				KalturaLog::err("Plugin [$pluginClass] could not be loaded.");
+				VidiunLog::err("Plugin [$pluginClass] could not be loaded.");
 				return false;
 			}
 				
@@ -347,7 +347,7 @@ class KalturaPluginManager
 					continue;		// missing dependencies
 				
 			$pluginObject = new $pluginClass();
-			if (!($pluginObject instanceof IKalturaPlugin))
+			if (!($pluginObject instanceof IVidiunPlugin))
 				continue;		// the plugin does not implement the base interface 
 				
 			self::$pluginInstances[$pluginName] = $pluginObject;
@@ -389,7 +389,7 @@ class KalturaPluginManager
 	/**
 	 * Returns all instances that implement the requested interface or all of them in not supplied
 	 * @param string $interface
-	 * @return array<KalturaPlugin>
+	 * @return array<VidiunPlugin>
 	 */
 	public static function getPluginInstances($interface = null, $className = null)
 	{
@@ -446,7 +446,7 @@ class KalturaPluginManager
 	/**
 	 * Returns a single plugin instance by its name
 	 * @param string pluginName
-	 * @return KalturaPlugin
+	 * @return VidiunPlugin
 	 */
 	public static function getPluginInstance($pluginName)
 	{
@@ -495,7 +495,7 @@ class KalturaPluginManager
 			$pluginClass = $pluginName . 'Plugin';
 			if(!class_exists($pluginClass))
 			{
-				KalturaLog::err("Plugin [$pluginName] not found with class [$pluginClass].");
+				VidiunLog::err("Plugin [$pluginName] not found with class [$pluginClass].");
 				continue;
 			}
 			

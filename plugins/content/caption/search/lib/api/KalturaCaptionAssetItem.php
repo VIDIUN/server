@@ -3,19 +3,19 @@
  * @package plugins.captionSearch
  * @subpackage api.objects
  */
-class KalturaCaptionAssetItem extends KalturaObject
+class VidiunCaptionAssetItem extends VidiunObject
 {
 	/**
 	 * The Caption Asset object
 	 * 
-	 * @var KalturaCaptionAsset
+	 * @var VidiunCaptionAsset
 	 */
 	public $asset;
 	
 	/**
 	 * The entry object
 	 * 
-	 * @var KalturaBaseEntry
+	 * @var VidiunBaseEntry
 	 */
 	public $entry;
 	
@@ -46,7 +46,7 @@ class KalturaCaptionAssetItem extends KalturaObject
 		return array_merge ( parent::getMapBetweenObjects() , self::$map_between_objects );
 	}
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		/* @var $source_object CaptionAssetItem */
 		
@@ -54,7 +54,7 @@ class KalturaCaptionAssetItem extends KalturaObject
 		
 		if($this->shouldGet('asset', $responseProfile))
 		{
-			$this->asset = new KalturaCaptionAsset();
+			$this->asset = new VidiunCaptionAsset();
 			$this->asset->fromObject($source_object->getAsset());
 		}
 		
@@ -63,7 +63,7 @@ class KalturaCaptionAssetItem extends KalturaObject
 			$entry = $source_object->getEntry();
 			if ($entry)
 			{
-				$this->entry = KalturaEntryFactory::getInstanceByType($entry->getType());
+				$this->entry = VidiunEntryFactory::getInstanceByType($entry->getType());
 				$this->entry->fromObject($entry);
 			}
 		}

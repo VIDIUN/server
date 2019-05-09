@@ -3,16 +3,16 @@
 class ScheduledTaskBatchHelper
 {
 	/**
-	 * @param KalturaClient $client
-	 * @param KalturaScheduledTaskProfile $scheduledTaskProfile
-	 * @param KalturaFilterPager $pager
-	 * @param KalturaFilter $filter
-	 * @return KalturaObjectListResponse
+	 * @param VidiunClient $client
+	 * @param VidiunScheduledTaskProfile $scheduledTaskProfile
+	 * @param VidiunFilterPager $pager
+	 * @param VidiunFilter $filter
+	 * @return VidiunObjectListResponse
 	 */
-	public static function query(KalturaClient $client, KalturaScheduledTaskProfile $scheduledTaskProfile, KalturaFilterPager $pager, $filter = null)
+	public static function query(VidiunClient $client, VidiunScheduledTaskProfile $scheduledTaskProfile, VidiunFilterPager $pager, $filter = null)
 	{
 		$objectFilterEngineType = $scheduledTaskProfile->objectFilterEngineType;
-		$objectFilterEngine = KObjectFilterEngineFactory::getInstanceByType($objectFilterEngineType, $client);
+		$objectFilterEngine = VObjectFilterEngineFactory::getInstanceByType($objectFilterEngineType, $client);
 		$objectFilterEngine->setPageSize($pager->pageSize);
 		$objectFilterEngine->setPageIndex($pager->pageIndex);
 		if(!$filter)
@@ -22,7 +22,7 @@ class ScheduledTaskBatchHelper
 	}
 
 	/**
-	 * @param KalturaBaseEntryArray $entries
+	 * @param VidiunBaseEntryArray $entries
 	 * @param $createAtTime
 	 * @return array
 	 */
@@ -39,12 +39,12 @@ class ScheduledTaskBatchHelper
 	}
 
 	/**
-	 * @param  KalturaMediaType $mediaType
+	 * @param  VidiunMediaType $mediaType
 	 * @return string
 	 */
 	public static function getMediaTypeString($mediaType)
 	{
-		$relectionClass =  new ReflectionClass ('KalturaMediaType');
+		$relectionClass =  new ReflectionClass ('VidiunMediaType');
 		$mapping = $relectionClass->getConstants();
 		return array_search($mediaType, $mapping);
 	}

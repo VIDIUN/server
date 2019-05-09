@@ -4,7 +4,7 @@
  * @package plugins.kontiki
  * @subpackage model
  * */
-class kKontikiStorageExportJobData extends kStorageExportJobData
+class vKontikiStorageExportJobData extends vStorageExportJobData
 {
 	/**
 	 * Holds the id of the exported asset
@@ -61,7 +61,7 @@ class kKontikiStorageExportJobData extends kStorageExportJobData
         $this->setServiceToken($externalStorage->getServiceToken()); 
         $this->setSrcFileSyncId($fileSync->getId());
         if ($fileSync->getObjectType() != FileSyncObjectType::ASSET)
-            throw new kCoreException("Incompatible filesync type", kCoreException::INTERNAL_SERVER_ERROR);
+            throw new vCoreException("Incompatible filesync type", vCoreException::INTERNAL_SERVER_ERROR);
         
         $this->setFlavorAssetId($fileSync->getObjectId());
     }

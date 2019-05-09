@@ -6,10 +6,10 @@
  compress
  dateext
  notifempty
- su root kaltura
+ su root vidiun
 }
 
-@LOG_DIR@/kaltura_monit.log {
+@LOG_DIR@/vidiun_monit.log {
  rotate 5
  daily
  missingok
@@ -18,27 +18,27 @@
  notifempty
  sharedscripts
  postrotate
- service kaltura-monit restart
+ service vidiun-monit restart
  endscript
- su root kaltura
+ su root vidiun
 }
 
-@LOG_DIR@/kaltura_deploy.log {
+@LOG_DIR@/vidiun_deploy.log {
  rotate 5
  daily
  missingok
  compress
  dateext
  notifempty
- su root kaltura
+ su root vidiun
 }
 
-@LOG_DIR@/kaltura_scripts.log {
+@LOG_DIR@/vidiun_scripts.log {
  rotate 5
  daily
  missingok
  compress
  dateext
  notifempty
- su root kaltura
+ su root vidiun
 }

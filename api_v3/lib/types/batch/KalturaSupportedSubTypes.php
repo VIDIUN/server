@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaSupportedSubTypes extends KalturaObject 
+class VidiunSupportedSubTypes extends VidiunObject 
 {
 	/**
 	 * list of comma separated supported sub types

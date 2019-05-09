@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage model.data
  */
-class kImportMetadataJobData extends kJobData
+class vImportMetadataJobData extends vJobData
 {
 	/**
 	 * @var string

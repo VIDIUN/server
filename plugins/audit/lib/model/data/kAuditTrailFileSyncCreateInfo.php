@@ -1,5 +1,5 @@
 <?php
-class kAuditTrailFileSyncCreateInfo extends kAuditTrailInfo
+class vAuditTrailFileSyncCreateInfo extends vAuditTrailInfo
 {
 	/**
 	 * @var string

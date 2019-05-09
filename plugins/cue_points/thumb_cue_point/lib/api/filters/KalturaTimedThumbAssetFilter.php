@@ -3,6 +3,6 @@
  * @package plugins.thumbCuePoint
  * @subpackage api.filters
  */
-class KalturaTimedThumbAssetFilter extends KalturaTimedThumbAssetBaseFilter
+class VidiunTimedThumbAssetFilter extends VidiunTimedThumbAssetBaseFilter
 {
 }

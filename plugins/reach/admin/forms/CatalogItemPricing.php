@@ -14,10 +14,10 @@ class Form_VendorCatalogItemPricing extends ConfigureSubForm
 			'validators'	=> array('Float'),
 		));
 		
-		$priceFunction = new Kaltura_Form_Element_EnumSelect('priceFunction', array('enum' => 'Kaltura_Client_Reach_Enum_VendorCatalogItemPriceFunction'));
+		$priceFunction = new Vidiun_Form_Element_EnumSelect('priceFunction', array('enum' => 'Vidiun_Client_Reach_Enum_VendorCatalogItemPriceFunction'));
 		$priceFunction->setRequired(true);
 		$priceFunction->setLabel("Price Function*:");
-		$priceFunction->setValue(Kaltura_Client_Reach_Enum_VendorCatalogItemPriceFunction::PRICE_PER_MINUTE);
+		$priceFunction->setValue(Vidiun_Client_Reach_Enum_VendorCatalogItemPriceFunction::PRICE_PER_MINUTE);
 		$this->addElement($priceFunction);
 	}
 	
@@ -38,7 +38,7 @@ class Form_VendorCatalogItemPricing extends ConfigureSubForm
 	
 	public function getObject($properties) 
 	{
-		$pricingObject = new Kaltura_Client_Reach_Type_VendorCatalogItemPricing();
+		$pricingObject = new Vidiun_Client_Reach_Type_VendorCatalogItemPricing();
 		$pricingObject->pricePerUnit = $properties['pricePerUnit'];
 		$pricingObject->priceFunction = $properties['priceFunction'];
 		return $pricingObject;

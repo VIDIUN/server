@@ -5,7 +5,7 @@
  * @package plugins.emailNotification
  * @subpackage api.enums
  */
-class KalturaEmailNotificationRecipientProviderType extends KalturaDynamicEnum implements EmailNotificationRecipientProviderType 
+class VidiunEmailNotificationRecipientProviderType extends VidiunDynamicEnum implements EmailNotificationRecipientProviderType 
 {
 	public static function getEnumClass()
 	{

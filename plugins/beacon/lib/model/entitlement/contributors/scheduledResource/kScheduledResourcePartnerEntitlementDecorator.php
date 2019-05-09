@@ -3,10 +3,10 @@
  * @package plugins.beacon
  * @subpackage model.entitlement
  */
-class kScheduledResourcePartnerEntitlementDecorator extends kScheduledResourceSearchEntitlementDecorator
+class vScheduledResourcePartnerEntitlementDecorator extends vScheduledResourceSearchEntitlementDecorator
 {
 	public static function getEntitlementCondition(array $params = array(), $fieldPrefix = '')
 	{
-		return new kESearchTermQuery(BeaconScheduledResourceFieldName::PARTNER_ID, kBaseElasticEntitlement::$partnerId);
+		return new vESearchTermQuery(BeaconScheduledResourceFieldName::PARTNER_ID, vBaseElasticEntitlement::$partnerId);
 	}
 }

@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kAccessControlLimitDeliveryProfilesAction extends kRuleAction 
+class vAccessControlLimitDeliveryProfilesAction extends vRuleAction 
 {
 	/**
 	 * @var array

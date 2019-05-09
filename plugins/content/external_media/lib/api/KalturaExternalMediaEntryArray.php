@@ -3,17 +3,17 @@
  * @package plugins.externalMedia
  * @subpackage api.objects
  */
-class KalturaExternalMediaEntryArray extends KalturaTypedArray
+class VidiunExternalMediaEntryArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaExternalMediaEntryArray();
+		$newArr = new VidiunExternalMediaEntryArray();
 		if($arr == null)
 			return $newArr;
 		
 		foreach($arr as $obj)
 		{
-    		$nObj = KalturaEntryFactory::getInstanceByType($obj->getType());
+    		$nObj = VidiunEntryFactory::getInstanceByType($obj->getType());
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaExternalMediaEntryArray extends KalturaTypedArray
 	
 	public function __construct()
 	{
-		parent::__construct("KalturaExternalMediaEntry");	
+		parent::__construct("VidiunExternalMediaEntry");	
 	}
 }

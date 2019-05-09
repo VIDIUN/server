@@ -3,39 +3,39 @@
  * @package api
  * @subpackage services
  */
-class KalturaEntryService extends KalturaBaseService 
+class VidiunEntryService extends VidiunBaseService 
 {
 	
-	  //amount of time for attempting to grab kLock
-	  const KLOCK_MEDIA_UPDATECONTENT_GRAB_TIMEOUT = 0.1;
+	  //amount of time for attempting to grab vLock
+	  const VLOCK_MEDIA_UPDATECONTENT_GRAB_TIMEOUT = 0.1;
 	
-	  //amount of time for holding kLock
-	  const KLOCK_MEDIA_UPDATECONTENT_HOLD_TIMEOUT = 7;
+	  //amount of time for holding vLock
+	  const VLOCK_MEDIA_UPDATECONTENT_HOLD_TIMEOUT = 7;
 
 	public function initService($serviceId, $serviceName, $actionName)
 	{
-		$ks = kCurrentContext::$ks_object ? kCurrentContext::$ks_object : null;
+		$vs = vCurrentContext::$vs_object ? vCurrentContext::$vs_object : null;
 		
 		if (($actionName == 'list' || $actionName == 'count' || $actionName == 'listByReferenceId') &&
-		  (!$ks || (!$ks->isAdmin() && !$ks->verifyPrivileges(ks::PRIVILEGE_LIST, ks::PRIVILEGE_WILDCARD))))
+		  (!$vs || (!$vs->isAdmin() && !$vs->verifyPrivileges(vs::PRIVILEGE_LIST, vs::PRIVILEGE_WILDCARD))))
 		{			
-			KalturaCriterion::enableTag(KalturaCriterion::TAG_WIDGET_SESSION);
+			VidiunCriterion::enableTag(VidiunCriterion::TAG_WIDGET_SESSION);
 			entryPeer::setUserContentOnly(true);
 		}
 		
 		
 /*		//to support list categories with entitlmenet for user that is a member of more then 100 large categories
  		//large category is a category with > 10 members or > 100 entries. 				
-  		if ($actionName == 'list' && kEntitlementUtils::getEntitlementEnforcement())
+  		if ($actionName == 'list' && vEntitlementUtils::getEntitlementEnforcement())
 		{
-			$dispatcher = KalturaDispatcher::getInstance();
+			$dispatcher = VidiunDispatcher::getInstance();
 			$arguments = $dispatcher->getArguments();
 			
 			$categoriesIds = array();
 			$categories = array();
 			foreach($arguments as $argument)
 			{
-				if ($argument instanceof KalturaBaseEntryFilter)
+				if ($argument instanceof VidiunBaseEntryFilter)
 				{
 					if(isset($argument->categoriesMatchAnd))
 						$categories = array_merge($categories, explode(',', $argument->categoriesMatchAnd));
@@ -83,59 +83,59 @@ class KalturaEntryService extends KalturaBaseService
 	}
 	
 	/**
-	 * @param kResource $resource
+	 * @param vResource $resource
 	 * @param entry $dbEntry
 	 * @param asset $asset
 	 * @return asset
-	 * @throws KalturaErrors::ENTRY_TYPE_NOT_SUPPORTED
+	 * @throws VidiunErrors::ENTRY_TYPE_NOT_SUPPORTED
 	 */
-	protected function attachResource(kResource $resource, entry $dbEntry, asset $asset = null)
+	protected function attachResource(vResource $resource, entry $dbEntry, asset $asset = null)
 	{
-		throw new KalturaAPIException(KalturaErrors::ENTRY_TYPE_NOT_SUPPORTED, $dbEntry->getType());
+		throw new VidiunAPIException(VidiunErrors::ENTRY_TYPE_NOT_SUPPORTED, $dbEntry->getType());
 	}
 	
 	/**
-	 * @param KalturaResource $resource
+	 * @param VidiunResource $resource
 	 * @param entry $dbEntry
 	 */
-	protected function replaceResource(KalturaResource $resource, entry $dbEntry)
+	protected function replaceResource(VidiunResource $resource, entry $dbEntry)
 	{
-		throw new KalturaAPIException(KalturaErrors::ENTRY_TYPE_NOT_SUPPORTED, $dbEntry->getType());
+		throw new VidiunAPIException(VidiunErrors::ENTRY_TYPE_NOT_SUPPORTED, $dbEntry->getType());
 	}
 	
 	/**
 	 * General code that replaces given entry resource with a given resource, and mark the original
 	 * entry as replaced
-	 * @param KalturaEntry $dbEntry The original entry we'd like to replace
-	 * @param KalturaResource $resource The resource we'd like to attach
-	 * @param KalturaEntry $tempMediaEntry The replacing entry
-	 * @throws KalturaAPIException
+	 * @param VidiunEntry $dbEntry The original entry we'd like to replace
+	 * @param VidiunResource $resource The resource we'd like to attach
+	 * @param VidiunEntry $tempMediaEntry The replacing entry
+	 * @throws VidiunAPIException
 	 */
 	protected function replaceResourceByEntry($dbEntry, $resource, $tempMediaEntry) 
 	{
 		$partner = $this->getPartner();
 		if(!$partner->getEnabledService(PermissionName::FEATURE_ENTRY_REPLACEMENT))
 		{
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, PermissionName::FEATURE_ENTRY_REPLACEMENT);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, PermissionName::FEATURE_ENTRY_REPLACEMENT);
 		}
 		
 		if($dbEntry->getReplacingEntryId())
-			throw new KalturaAPIException(KalturaErrors::ENTRY_REPLACEMENT_ALREADY_EXISTS);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_REPLACEMENT_ALREADY_EXISTS);
 		
 		$resource->validateEntry($dbEntry);
 		
 		// create the temp db entry first and mark it as isTemporary == true
-		$entryType = kPluginableEnumsManager::apiToCore('entryType', $tempMediaEntry->type);
+		$entryType = vPluginableEnumsManager::apiToCore('entryType', $tempMediaEntry->type);
 		$class = entryPeer::getEntryClassByType($entryType);
 			
-		KalturaLog::debug("Creating new entry of API type [{$tempMediaEntry->type}] core type [$entryType] class [$class]");
+		VidiunLog::debug("Creating new entry of API type [{$tempMediaEntry->type}] core type [$entryType] class [$class]");
 		$tempDbEntry = new $class();
 		$tempDbEntry->setIsTemporary(true);
 		$tempDbEntry->setDisplayInSearch(mySearchUtils::DISPLAY_IN_SEARCH_SYSTEM);
 		$tempDbEntry->setReplacedEntryId($dbEntry->getId());
 
-		$kResource = $resource->toObject();
-		if ($kResource->getType() == 'kOperationResource')
+		$vResource = $resource->toObject();
+		if ($vResource->getType() == 'vOperationResource')
 			$tempDbEntry->setTempTrimEntry(true);
 
 		$tempDbEntry = $this->prepareEntryForInsert($tempMediaEntry, $tempDbEntry);
@@ -144,23 +144,23 @@ class KalturaEntryService extends KalturaBaseService
 		
 		$dbEntry->setReplacingEntryId($tempDbEntry->getId());
 		$dbEntry->setReplacementStatus(entryReplacementStatus::NOT_READY_AND_NOT_APPROVED);
-		if(!$partner->getEnabledService(PermissionName::FEATURE_ENTRY_REPLACEMENT_APPROVAL) || $dbEntry->getSourceType() == EntrySourceType::KALTURA_RECORDED_LIVE)
+		if(!$partner->getEnabledService(PermissionName::FEATURE_ENTRY_REPLACEMENT_APPROVAL) || $dbEntry->getSourceType() == EntrySourceType::VIDIUN_RECORDED_LIVE)
 			$dbEntry->setReplacementStatus(entryReplacementStatus::APPROVED_BUT_NOT_READY);
 		$dbEntry->save();
 
-		$this->attachResource($kResource, $tempDbEntry);
+		$this->attachResource($vResource, $tempDbEntry);
 	}
 
 	protected function validateEntryForReplace($entryId, $dbEntry, $entryType = null)
 	{
 		if (!$dbEntry)
 		{
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		}
 
 		if ($entryType && $dbEntry->getType() != $entryType)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_TYPE, $entryId, $dbEntry->getType(), $entryType);
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_TYPE, $entryId, $dbEntry->getType(), $entryType);
 		}
 	}
 
@@ -177,7 +177,7 @@ class KalturaEntryService extends KalturaBaseService
 	 * Approves entry replacement
 	 *
 	 * @param $dbEntry
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	protected function approveReplace($dbEntry)
 	{
@@ -192,7 +192,7 @@ class KalturaEntryService extends KalturaBaseService
 				break;
 
 			case entryReplacementStatus::READY_BUT_NOT_APPROVED:
-				kBusinessConvertDL::replaceEntry($dbEntry);
+				vBusinessConvertDL::replaceEntry($dbEntry);
 				break;
 
 			case entryReplacementStatus::NOT_READY_AND_NOT_APPROVED:
@@ -202,13 +202,13 @@ class KalturaEntryService extends KalturaBaseService
 				//preventing race conditions of temp entry being ready just as you approve the replacement
 				$dbReplacingEntry = entryPeer::retrieveByPK($dbEntry->getReplacingEntryId());
 				if ($dbReplacingEntry && $dbReplacingEntry->getStatus() == entryStatus::READY)
-					kBusinessConvertDL::replaceEntry($dbEntry);
+					vBusinessConvertDL::replaceEntry($dbEntry);
 				break;
 
 			case entryReplacementStatus::NONE:
 			case entryReplacementStatus::FAILED:
 			default:
-				throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_REPLACED, $dbEntry->getId());
+				throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_REPLACED, $dbEntry->getId());
 				break;
 		}
 	}
@@ -217,7 +217,7 @@ class KalturaEntryService extends KalturaBaseService
 	 * Cancels media replacement
 	 * 
 	 * @param $dbEntry
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	protected function cancelReplace($dbEntry)
 	{
@@ -236,23 +236,23 @@ class KalturaEntryService extends KalturaBaseService
 	}
 
 	/**
-	 * @param kFileSyncResource $resource
+	 * @param vFileSyncResource $resource
 	 * @param entry $dbEntry
 	 * @param asset $dbAsset
 	 * @return asset | NULL in case of IMAGE entry
-	 * @throws KalturaErrors::UPLOAD_ERROR
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::UPLOAD_ERROR
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */
-	protected function attachFileSyncResource(kFileSyncResource $resource, entry $dbEntry, asset $dbAsset = null)
+	protected function attachFileSyncResource(vFileSyncResource $resource, entry $dbEntry, asset $dbAsset = null)
 	{
-		$dbEntry->setSource(entry::ENTRY_MEDIA_SOURCE_KALTURA);
+		$dbEntry->setSource(entry::ENTRY_MEDIA_SOURCE_VIDIUN);
 		$dbEntry->save();
 		
 		try{
-			$syncable = kFileSyncObjectManager::retrieveObject($resource->getFileSyncObjectType(), $resource->getObjectId());
+			$syncable = vFileSyncObjectManager::retrieveObject($resource->getFileSyncObjectType(), $resource->getObjectId());
 		}
-		catch(kFileSyncException $e){
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $resource->getObjectId());
+		catch(vFileSyncException $e){
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $resource->getObjectId());
 		}
 		
 		$srcSyncKey = $syncable->getSyncKey($resource->getObjectSubType(), $resource->getVersion());
@@ -260,7 +260,7 @@ class KalturaEntryService extends KalturaBaseService
 		$dbAsset = $this->attachFileSync($srcSyncKey, $dbEntry, $dbAsset, $encryptionKey);
 		
 		//In case the target entry's media type is image no asset is created and the image is set on a entry level file sync
-		if(!$dbAsset && $dbEntry->getMediaType() == KalturaMediaType::IMAGE)
+		if(!$dbAsset && $dbEntry->getMediaType() == VidiunMediaType::IMAGE)
 			return null;
 		
 		// Copy the media info from the old asset to the new one
@@ -285,13 +285,13 @@ class KalturaEntryService extends KalturaBaseService
 	}
 
 	/**
-	 * @param kLiveEntryResource $resource
+	 * @param vLiveEntryResource $resource
 	 * @param entry $dbEntry
 	 * @param asset $dbAsset
 	 * @return array $operationAttributes
 	 * @return asset
 	 */
-	protected function attachLiveEntryResource(kLiveEntryResource $resource, entry $dbEntry, asset $dbAsset = null, array $operationAttributes = null)
+	protected function attachLiveEntryResource(vLiveEntryResource $resource, entry $dbEntry, asset $dbAsset = null, array $operationAttributes = null)
 	{
 		$dbEntry->setRootEntryId($resource->getEntry()->getId());
 		$dbEntry->setSource(EntrySourceType::RECORDED_LIVE);
@@ -301,7 +301,7 @@ class KalturaEntryService extends KalturaBaseService
 	
 		if(!$dbAsset)
 		{
-			$dbAsset = kFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
+			$dbAsset = vFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
 		}
 		
 		$offset = null;
@@ -312,7 +312,7 @@ class KalturaEntryService extends KalturaBaseService
 		{
 			foreach($operationAttributes as $operationAttributesItem)
 			{
-				if($operationAttributesItem instanceof kClipAttributes)
+				if($operationAttributesItem instanceof vClipAttributes)
 				{
 					$clipAttributes = $operationAttributesItem;
 					
@@ -331,10 +331,10 @@ class KalturaEntryService extends KalturaBaseService
 		{
 			$mediaServer = $dbLiveEntry->getMediaServer(true);
 			if(!$mediaServer)
-				throw new KalturaAPIException(KalturaErrors::NO_MEDIA_SERVER_FOUND, $dbLiveEntry->getId());
+				throw new VidiunAPIException(VidiunErrors::NO_MEDIA_SERVER_FOUND, $dbLiveEntry->getId());
 				
 			$mediaServerLiveService = $mediaServer->getWebService($mediaServer->getLiveWebServiceName());
-			if($mediaServerLiveService && $mediaServerLiveService instanceof KalturaMediaServerLiveService)
+			if($mediaServerLiveService && $mediaServerLiveService instanceof VidiunMediaServerLiveService)
 			{
 				$mediaServerLiveService->splitRecordingNow($dbLiveEntry->getId());
 				$dbLiveEntry->attachPendingMediaEntry($dbEntry, $requiredDuration, $offset, $duration);
@@ -342,7 +342,7 @@ class KalturaEntryService extends KalturaBaseService
 			}
 			else 
 			{
-				throw new KalturaAPIException(KalturaErrors::MEDIA_SERVER_SERVICE_NOT_FOUND, $mediaServer->getId(), $mediaServer->getLiveWebServiceName());
+				throw new VidiunAPIException(VidiunErrors::MEDIA_SERVER_SERVICE_NOT_FOUND, $mediaServer->getId(), $mediaServer->getLiveWebServiceName());
 			}
 			return $dbAsset;
 		}
@@ -359,7 +359,7 @@ class KalturaEntryService extends KalturaBaseService
 		if(!$dbAsset)
 		{
 			$isNewAsset = true;
-			$dbAsset = kFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
+			$dbAsset = vFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
 		}
 		
 		if(!$dbAsset && $dbEntry->getStatus() == entryStatus::NO_CONTENT)
@@ -376,7 +376,7 @@ class KalturaEntryService extends KalturaBaseService
 		$syncKey = $dbAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 		
 		try {
-			kFileSyncUtils::createSyncFileLinkForKey($syncKey, $sourceSyncKey);
+			vFileSyncUtils::createSyncFileLinkForKey($syncKey, $sourceSyncKey);
 		}
 		catch (Exception $e) {
 			
@@ -395,25 +395,25 @@ class KalturaEntryService extends KalturaBaseService
 		if($requiredDuration)
 		{
 			$errDescription = '';
- 			kBusinessPreConvertDL::decideAddEntryFlavor(null, $dbEntry->getId(), $clipAttributes->getAssetParamsId(), $errDescription, $dbAsset->getId(), array($clipAttributes));
+ 			vBusinessPreConvertDL::decideAddEntryFlavor(null, $dbEntry->getId(), $clipAttributes->getAssetParamsId(), $errDescription, $dbAsset->getId(), array($clipAttributes));
 		}
 		else
 		{
 			if($isNewAsset)
-				kEventsManager::raiseEvent(new kObjectAddedEvent($dbAsset));
+				vEventsManager::raiseEvent(new vObjectAddedEvent($dbAsset));
 		}
-		kEventsManager::raiseEvent(new kObjectDataChangedEvent($dbAsset));
+		vEventsManager::raiseEvent(new vObjectDataChangedEvent($dbAsset));
 			
 		return $dbAsset;
 	}
 	
 	/**
-	 * @param kLocalFileResource $resource
+	 * @param vLocalFileResource $resource
 	 * @param entry $dbEntry
 	 * @param asset $dbAsset
 	 * @return asset
 	 */
-	protected function attachLocalFileResource(kLocalFileResource $resource, entry $dbEntry, asset $dbAsset = null)
+	protected function attachLocalFileResource(vLocalFileResource $resource, entry $dbEntry, asset $dbAsset = null)
 	{
 		$dbEntry->setSource($resource->getSourceType());
 		$dbEntry->save();
@@ -451,7 +451,7 @@ class KalturaEntryService extends KalturaBaseService
 			$dbEntry->save();
 		
 		// TODO - move image handling to media service
-		if($dbEntry->getMediaType() == KalturaMediaType::IMAGE)
+		if($dbEntry->getMediaType() == VidiunMediaType::IMAGE)
 		{
 			$resource->attachCreatedObject($dbEntry);
 			return null;
@@ -461,7 +461,7 @@ class KalturaEntryService extends KalturaBaseService
 		if(!$dbAsset)
 		{
 			$isNewAsset = true;
-			$dbAsset = kFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
+			$dbAsset = vFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
 		}
 		
 		if(!$dbAsset)
@@ -488,14 +488,14 @@ class KalturaEntryService extends KalturaBaseService
 	 * @param entry $dbEntry
 	 * @param asset $dbAsset
 	 * @return asset
-	 * @throws KalturaErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
-	 * @throws KalturaErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
+	 * @throws VidiunErrors::UPLOAD_TOKEN_INVALID_STATUS_FOR_ADD_ENTRY
+	 * @throws VidiunErrors::UPLOADED_FILE_NOT_FOUND_BY_TOKEN
 	 */
 	protected function attachFile($entryFullPath, entry $dbEntry, asset $dbAsset = null, $copyOnly = false)
 	{
 		$ext = pathinfo($entryFullPath, PATHINFO_EXTENSION);
 		// TODO - move image handling to media service
-		if($dbEntry->getMediaType() == KalturaMediaType::IMAGE)
+		if($dbEntry->getMediaType() == VidiunMediaType::IMAGE)
 		{
 			$exifImageType = @exif_imagetype($entryFullPath);
 			$validTypes = array(
@@ -521,7 +521,7 @@ class KalturaEntryService extends KalturaBaseService
 				}
 			}
 
-			$allowedImageTypes = kConf::get("image_file_ext");
+			$allowedImageTypes = vConf::get("image_file_ext");
 			if (in_array($ext, $allowedImageTypes))
 				$dbEntry->setData("." . $ext);		
  			else		
@@ -534,7 +534,7 @@ class KalturaEntryService extends KalturaBaseService
 			$syncKey = $dbEntry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
 			try
 			{
-				kFileSyncUtils::moveFromFile($entryFullPath, $syncKey, true, $copyOnly);
+				vFileSyncUtils::moveFromFile($entryFullPath, $syncKey, true, $copyOnly);
 			}
 			catch (Exception $e) {
 				if($dbEntry->getStatus() == entryStatus::NO_CONTENT)
@@ -555,7 +555,7 @@ class KalturaEntryService extends KalturaBaseService
 		if(!$dbAsset)
 		{
 			$isNewAsset = true;
-			$dbAsset = kFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
+			$dbAsset = vFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
 		}
 		
 		if(!$dbAsset && $dbEntry->getStatus() == entryStatus::NO_CONTENT)
@@ -578,8 +578,8 @@ class KalturaEntryService extends KalturaBaseService
 		
 		try
 		{
-			kFileSyncUtils::moveFromFile($entryFullPath, $syncKey, true, $copyOnly);
-			$fileSync = kFileSyncUtils::getLocalFileSyncForKey($syncKey);
+			vFileSyncUtils::moveFromFile($entryFullPath, $syncKey, true, $copyOnly);
+			$fileSync = vFileSyncUtils::getLocalFileSyncForKey($syncKey);
 			$dbAsset->setSize($fileSync->getFileSize());
 			$dbAsset->save();
 		}
@@ -610,8 +610,8 @@ class KalturaEntryService extends KalturaBaseService
 		}
 		
 		if($isNewAsset)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($dbAsset));
-		kEventsManager::raiseEvent(new kObjectDataChangedEvent($dbAsset));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($dbAsset));
+		vEventsManager::raiseEvent(new vObjectDataChangedEvent($dbAsset));
 			
 		return $dbAsset;
 	}
@@ -622,15 +622,15 @@ class KalturaEntryService extends KalturaBaseService
 	 * @param asset $dbAsset
 	 * @param string $encryptionKey
 	 * @return asset
-	 * @throws KalturaErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED
+	 * @throws VidiunErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED
 	 */
 	protected function attachFileSync(FileSyncKey $srcSyncKey, entry $dbEntry, asset $dbAsset = null, $encryptionKey = null)
 	{
 		// TODO - move image handling to media service
-		if($dbEntry->getMediaType() == KalturaMediaType::IMAGE)
+		if($dbEntry->getMediaType() == VidiunMediaType::IMAGE)
 		{
 			$syncKey = $dbEntry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
-	   		kFileSyncUtils::createSyncFileLinkForKey($syncKey, $srcSyncKey);
+	   		vFileSyncUtils::createSyncFileLinkForKey($syncKey, $srcSyncKey);
 	   		
 			$dbEntry->setStatus(entryStatus::READY);
 			$dbEntry->save();	
@@ -642,13 +642,13 @@ class KalturaEntryService extends KalturaBaseService
 	  	if(!$dbAsset)
 	  	{
 	  		$isNewAsset = true;
-			$dbAsset = kFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
+			$dbAsset = vFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
 
 	  	}
 	  	
 		if(!$dbAsset)
 		{
-			KalturaLog::err("Flavor asset not created for entry [" . $dbEntry->getId() . "]");
+			VidiunLog::err("Flavor asset not created for entry [" . $dbEntry->getId() . "]");
 			
 			if($dbEntry->getStatus() == entryStatus::NO_CONTENT)
 			{
@@ -656,11 +656,11 @@ class KalturaEntryService extends KalturaBaseService
 				$dbEntry->save();
 			}
 			
-			throw new KalturaAPIException(KalturaErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED);
+			throw new VidiunAPIException(VidiunErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED);
 		}
 
 		$newSyncKey = $dbAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		kFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $srcSyncKey);
+		vFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $srcSyncKey);
 
 		if ($encryptionKey)
 		{
@@ -668,19 +668,19 @@ class KalturaEntryService extends KalturaBaseService
 		}
 
 		if($isNewAsset)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($dbAsset));
-		kEventsManager::raiseEvent(new kObjectDataChangedEvent($dbAsset));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($dbAsset));
+		vEventsManager::raiseEvent(new vObjectDataChangedEvent($dbAsset));
 			
 		return $dbAsset;
 	}
 	
 	/**
-	 * @param kOperationResource $resource
+	 * @param vOperationResource $resource
 	 * @param entry $dbEntry
 	 * @param asset $dbAsset
 	 * @return asset
 	 */
-	protected function attachOperationResource(kOperationResource $resource, entry $dbEntry, asset $dbAsset = null)
+	protected function attachOperationResource(vOperationResource $resource, entry $dbEntry, asset $dbAsset = null)
 	{
 		$operationAttributes = $resource->getOperationAttributes();
 		$internalResource = $resource->getResource();
@@ -690,13 +690,13 @@ class KalturaEntryService extends KalturaBaseService
 		{
 			$this->handleLiveClippingFlow($srcEntry, $dbEntry, $operationAttributes);
 		}
-		elseif($internalResource instanceof kLiveEntryResource)
+		elseif($internalResource instanceof vLiveEntryResource)
 		{
 			$dbAsset = $this->attachLiveEntryResource($internalResource, $dbEntry, $dbAsset, $operationAttributes);
 		}
 		else
 		{
-			$clipManager = new kClipManager();
+			$clipManager = new vClipManager();
 			$this->handleMultiClipRequest($resource, $dbEntry, $clipManager, $operationAttributes);
 		}
 		return $dbAsset;
@@ -705,9 +705,9 @@ class KalturaEntryService extends KalturaBaseService
 	protected function handleLiveClippingFlow($recordedEntry, $clippedEntry, $operationAttributes)
 	{
 		if (($recordedEntry->getId() == $clippedEntry->getId()) || ($recordedEntry->getId() == $clippedEntry->getReplacedEntryId()))
-			throw new KalturaAPIException(KalturaErrors::LIVE_CLIPPING_UNSUPPORTED_OPERATION, "Trimming");
+			throw new VidiunAPIException(VidiunErrors::LIVE_CLIPPING_UNSUPPORTED_OPERATION, "Trimming");
 		$clippedTask = $this->createRecordedClippingTask($recordedEntry, $clippedEntry, $operationAttributes);
-		$clippedEntry->setSource(EntrySourceType::KALTURA_RECORDED_LIVE);
+		$clippedEntry->setSource(EntrySourceType::VIDIUN_RECORDED_LIVE);
 		$clippedEntry->setConversionProfileId($recordedEntry->getConversionProfileId());
 		$clippedEntry->setRootEntryId($recordedEntry->getRootEntryId());
 		$clippedEntry->setIsRecordedEntry(true);
@@ -723,15 +723,15 @@ class KalturaEntryService extends KalturaBaseService
 		$entryServerNode = EntryServerNodePeer::retrieveByEntryIdAndServerType($liveEntryId, EntryServerNodeType::LIVE_PRIMARY);
 		if (!$entryServerNode)
 		{
-			KalturaLog::debug("Can't create clipping task for SrcEntry: ". $srcEntry->getId() . " to entry:" . $targetEntry->getId() . " with: " . print_r($operationAttributes ,true));
-			throw new KalturaAPIException(KalturaErrors::ENTRY_SERVER_NODE_NOT_FOUND, $liveEntryId, EntryServerNodeType::LIVE_PRIMARY);
+			VidiunLog::debug("Can't create clipping task for SrcEntry: ". $srcEntry->getId() . " to entry:" . $targetEntry->getId() . " with: " . print_r($operationAttributes ,true));
+			throw new VidiunAPIException(VidiunErrors::ENTRY_SERVER_NODE_NOT_FOUND, $liveEntryId, EntryServerNodeType::LIVE_PRIMARY);
 		}
 		$serverNode = ServerNodePeer::retrieveByPK($entryServerNode->getServerNodeId());
 
 		$clippingTask = new ClippingTaskEntryServerNode();
 		$clippingTask->setClippedEntryId($targetEntry->getId());
 		$clippingTask->setLiveEntryId($liveEntryId);
-		$clippingTask->setClipAttributes(self::getKClipAttributesForLiveClippingTask($operationAttributes));
+		$clippingTask->setClipAttributes(self::getVClipAttributesForLiveClippingTask($operationAttributes));
 		$clippingTask->setServerType(EntryServerNodeType::LIVE_CLIPPING_TASK);
 		$clippingTask->setStatus(EntryServerNodeStatus::TASK_PENDING);
 		$clippingTask->setEntryId($srcEntry->getId()); //recorded entry
@@ -742,12 +742,12 @@ class KalturaEntryService extends KalturaBaseService
 	}
 
 	/**
-	 * @param kContentResource $internalResource
+	 * @param vContentResource $internalResource
 	 * @return entry|null
 	 */
 	private static function getEntryFromContentResource($internalResource)
 	{
-		if ($internalResource && $internalResource instanceof kFileSyncResource)
+		if ($internalResource && $internalResource instanceof vFileSyncResource)
 		{
 			$entryId = $internalResource->getOriginEntryId();
 			if ($entryId)
@@ -757,13 +757,13 @@ class KalturaEntryService extends KalturaBaseService
 	}
 
 	/**
-	 * @return kClipAttributes
+	 * @return vClipAttributes
 	 */
-	protected static function getKClipAttributesForLiveClippingTask($operationAttributes)
+	protected static function getVClipAttributesForLiveClippingTask($operationAttributes)
 	{
-		if ($operationAttributes && count($operationAttributes) == 1 && $operationAttributes[0] instanceof kClipAttributes)
+		if ($operationAttributes && count($operationAttributes) == 1 && $operationAttributes[0] instanceof vClipAttributes)
 			return $operationAttributes[0];
-		throw new KalturaAPIException(KalturaErrors::LIVE_CLIPPING_UNSUPPORTED_OPERATION, "Concat");
+		throw new VidiunAPIException(VidiunErrors::LIVE_CLIPPING_UNSUPPORTED_OPERATION, "Concat");
 	}
 
 	/**
@@ -771,23 +771,23 @@ class KalturaEntryService extends KalturaBaseService
 	 * @param entry $dbEntry
 	 * @param asset $dbAsset
 	 * @return asset
-	 * @throws KalturaErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED
-	 * @throws KalturaErrors::STORAGE_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED
+	 * @throws VidiunErrors::STORAGE_PROFILE_ID_NOT_FOUND
 	 */
 	protected function attachRemoteStorageResource(IRemoteStorageResource $resource, entry $dbEntry, asset $dbAsset = null)
 	{
 		$resources = $resource->getResources();
 		$fileExt = $resource->getFileExt();
-		$dbEntry->setSource(KalturaSourceType::URL);
+		$dbEntry->setSource(VidiunSourceType::URL);
 	
 		// TODO - move image handling to media service
-		if($dbEntry->getMediaType() == KalturaMediaType::IMAGE)
+		if($dbEntry->getMediaType() == VidiunMediaType::IMAGE)
 		{
 			$syncKey = $dbEntry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
 			foreach($resources as $currentResource)
 			{
 				$storageProfile = StorageProfilePeer::retrieveByPK($currentResource->getStorageProfileId());
-				$fileSync = kFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $currentResource->getUrl(), $storageProfile);
+				$fileSync = vFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $currentResource->getUrl(), $storageProfile);
 			}
 			
 			$dbEntry->setStatus(entryStatus::READY);
@@ -801,12 +801,12 @@ class KalturaEntryService extends KalturaBaseService
 	  	if(!$dbAsset)
 	  	{
 	  		$isNewAsset = true;
-			$dbAsset = kFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
+			$dbAsset = vFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
 	  	}
 	  	
 		if(!$dbAsset)
 		{
-			KalturaLog::err("Flavor asset not created for entry [" . $dbEntry->getId() . "]");
+			VidiunLog::err("Flavor asset not created for entry [" . $dbEntry->getId() . "]");
 			
 			if($dbEntry->getStatus() == entryStatus::NO_CONTENT)
 			{
@@ -814,7 +814,7 @@ class KalturaEntryService extends KalturaBaseService
 				$dbEntry->save();
 			}
 			
-			throw new KalturaAPIException(KalturaErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED);
+			throw new VidiunAPIException(VidiunErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED);
 		}
 				
 		$syncKey = $dbAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
@@ -822,7 +822,7 @@ class KalturaEntryService extends KalturaBaseService
 		foreach($resources as $currentResource)
 		{
 			$storageProfile = StorageProfilePeer::retrieveByPK($currentResource->getStorageProfileId());
-			$fileSync = kFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $currentResource->getUrl(), $storageProfile);
+			$fileSync = vFileSyncUtils::createReadyExternalSyncFileForKey($syncKey, $currentResource->getUrl(), $storageProfile);
 		}
 
 		$dbAsset->setFileExt($fileExt);
@@ -833,22 +833,22 @@ class KalturaEntryService extends KalturaBaseService
 		$dbAsset->save();
 		
 		if($isNewAsset)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($dbAsset));
-		kEventsManager::raiseEvent(new kObjectDataChangedEvent($dbAsset));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($dbAsset));
+		vEventsManager::raiseEvent(new vObjectDataChangedEvent($dbAsset));
 			
 		if($dbAsset instanceof flavorAsset && !$dbAsset->getIsOriginal())
-			kBusinessPostConvertDL::handleConvertFinished(null, $dbAsset);
+			vBusinessPostConvertDL::handleConvertFinished(null, $dbAsset);
 		
 		return $dbAsset;
 	}
 
 	/**
-	 * @param kUrlResource $resource
+	 * @param vUrlResource $resource
 	 * @param entry $dbEntry
 	 * @param asset $dbAsset
 	 * @return asset
 	 */
-	protected function attachUrlResource(kUrlResource $resource, entry $dbEntry, asset $dbAsset = null)
+	protected function attachUrlResource(vUrlResource $resource, entry $dbEntry, asset $dbAsset = null)
 	{
 		$dbEntry->setSource(entry::ENTRY_MEDIA_SOURCE_URL);
 		$dbEntry->save();
@@ -859,13 +859,13 @@ class KalturaEntryService extends KalturaBaseService
 		{
 			$ext = pathinfo($url, PATHINFO_EXTENSION);
 			// TODO - move image handling to media service
-    		if($dbEntry->getMediaType() == KalturaMediaType::IMAGE)
+    		if($dbEntry->getMediaType() == VidiunMediaType::IMAGE)
     		{
 			    $entryFullPath = myContentStorage::getFSUploadsPath() . '/' . $dbEntry->getId() . '.' . $ext;
-    			if (KCurlWrapper::getDataFromFile($url, $entryFullPath))
+    			if (VCurlWrapper::getDataFromFile($url, $entryFullPath))
     				return $this->attachFile($entryFullPath, $dbEntry, $dbAsset);
 
-    			KalturaLog::err("Failed downloading file[$url]");
+    			VidiunLog::err("Failed downloading file[$url]");
     			$dbEntry->setStatus(entryStatus::ERROR_IMPORTING);
     			$dbEntry->save();
 
@@ -875,13 +875,13 @@ class KalturaEntryService extends KalturaBaseService
     		if($dbAsset && !($dbAsset instanceof flavorAsset))
     		{
     			$entryFullPath = myContentStorage::getFSUploadsPath() . '/' . $dbEntry->getId() . '.' . $ext;
-    			if (KCurlWrapper::getDataFromFile($url, $entryFullPath))
+    			if (VCurlWrapper::getDataFromFile($url, $entryFullPath))
     			{
     				$dbAsset = $this->attachFile($entryFullPath, $dbEntry, $dbAsset);
     				return $dbAsset;
     			}
 
-    			KalturaLog::err("Failed downloading file[$url]");
+    			VidiunLog::err("Failed downloading file[$url]");
     			$dbAsset->setStatus(asset::FLAVOR_ASSET_STATUS_ERROR);
     			$dbAsset->save();
 
@@ -889,27 +889,27 @@ class KalturaEntryService extends KalturaBaseService
     		}
 		}
 
-		kJobsManager::addImportJob(null, $dbEntry->getId(), $this->getPartnerId(), $url, $dbAsset, null, $resource->getImportJobData());
+		vJobsManager::addImportJob(null, $dbEntry->getId(), $this->getPartnerId(), $url, $dbAsset, null, $resource->getImportJobData());
 
 		return $dbAsset;
 	}
 
 	/**
-	 * @param kAssetsParamsResourceContainers $resource
+	 * @param vAssetsParamsResourceContainers $resource
 	 * @param entry $dbEntry
 	 * @return asset
 	 */
-	protected function attachAssetsParamsResourceContainers(kAssetsParamsResourceContainers $resource, entry $dbEntry)
+	protected function attachAssetsParamsResourceContainers(vAssetsParamsResourceContainers $resource, entry $dbEntry)
 	{
 		$ret = null;
 		foreach($resource->getResources() as $assetParamsResourceContainer)
 		{
-			KalturaLog::debug("Resource asset params id [" . $assetParamsResourceContainer->getAssetParamsId() . "]");
+			VidiunLog::debug("Resource asset params id [" . $assetParamsResourceContainer->getAssetParamsId() . "]");
 			$dbAsset = $this->attachAssetParamsResourceContainer($assetParamsResourceContainer, $dbEntry);
 			if(!$dbAsset)
 				continue;
 
-			KalturaLog::debug("Resource asset id [" . $dbAsset->getId() . "]");
+			VidiunLog::debug("Resource asset id [" . $dbAsset->getId() . "]");
 
 			if($dbAsset->getIsOriginal())
 				$ret = $dbAsset;
@@ -920,17 +920,17 @@ class KalturaEntryService extends KalturaBaseService
 	}
 
 	/**
-	 * @param kAssetParamsResourceContainer $resource
+	 * @param vAssetParamsResourceContainer $resource
 	 * @param entry $dbEntry
 	 * @param asset $dbAsset
 	 * @return asset
-	 * @throws KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND
+	 * @throws VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND
 	 */
-	protected function attachAssetParamsResourceContainer(kAssetParamsResourceContainer $resource, entry $dbEntry, asset $dbAsset = null)
+	protected function attachAssetParamsResourceContainer(vAssetParamsResourceContainer $resource, entry $dbEntry, asset $dbAsset = null)
 	{
 		$assetParams = assetParamsPeer::retrieveByPK($resource->getAssetParamsId());
 		if(!$assetParams)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $resource->getAssetParamsId());
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $resource->getAssetParamsId());
 			
 		if(!$dbAsset)
 			$dbAsset = assetPeer::retrieveByEntryIdAndParams($dbEntry->getId(), $resource->getAssetParamsId());
@@ -955,32 +955,32 @@ class KalturaEntryService extends KalturaBaseService
 		$dbAsset = $this->attachResource($resource->getResource(), $dbEntry, $dbAsset);
 		
 		if($dbAsset && $isNewAsset && $dbAsset->getStatus() != asset::FLAVOR_ASSET_STATUS_IMPORTING)
-			kEventsManager::raiseEvent(new kObjectAddedEvent($dbAsset));
+			vEventsManager::raiseEvent(new vObjectAddedEvent($dbAsset));
 		
 		return $dbAsset;
 	}
 	
 	/**
-	 * @param KalturaBaseEntry $entry
+	 * @param VidiunBaseEntry $entry
 	 * @param entry $dbEntry
 	 * @return entry
 	 */
-	protected function prepareEntryForInsert(KalturaBaseEntry $entry, entry $dbEntry = null)
+	protected function prepareEntryForInsert(VidiunBaseEntry $entry, entry $dbEntry = null)
 	{
 		// create a default name if none was given
 		if (!$entry->name && !($dbEntry && $dbEntry->getName()))
 			$entry->name = $this->getPartnerId().'_'.time();
 			
 		if ($entry->licenseType === null)
-			$entry->licenseType = KalturaLicenseType::UNKNOWN;
+			$entry->licenseType = VidiunLicenseType::UNKNOWN;
 		
 		// first copy all the properties to the db entry, then we'll check for security stuff
 		if(!$dbEntry)
 		{
-			$entryType = kPluginableEnumsManager::apiToCore('entryType', $entry->type);
+			$entryType = vPluginableEnumsManager::apiToCore('entryType', $entry->type);
 			$class = entryPeer::getEntryClassByType($entryType);
 				
-			KalturaLog::debug("Creating new entry of API type [$entry->type] core type [$entryType] class [$class]");
+			VidiunLog::debug("Creating new entry of API type [$entry->type] core type [$entryType] class [$class]");
 			$dbEntry = new $class();
 		}
 			
@@ -1001,10 +1001,10 @@ class KalturaEntryService extends KalturaBaseService
 	/**
 	 * Adds entry
 	 * 
-	 * @param KalturaBaseEntry $entry
+	 * @param VidiunBaseEntry $entry
 	 * @return entry
 	 */
-	protected function add(KalturaBaseEntry $entry, $conversionProfileId = null)
+	protected function add(VidiunBaseEntry $entry, $conversionProfileId = null)
 	{
 		$dbEntry = $this->duplicateTemplateEntry($conversionProfileId, $entry->templateEntryId);
 		if ($dbEntry)
@@ -1044,28 +1044,28 @@ class KalturaEntryService extends KalturaBaseService
 	 * 
 	 * @param string $entryId Media entry id
 	 * @param int $conversionProfileId
-	 * @param KalturaConversionAttributeArray $dynamicConversionAttributes
+	 * @param VidiunConversionAttributeArray $dynamicConversionAttributes
 	 * @return bigint job id
-	 * @throws KalturaErrors::ENTRY_ID_NOT_FOUND
-	 * @throws KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::FLAVOR_PARAMS_NOT_FOUND
+	 * @throws VidiunErrors::ENTRY_ID_NOT_FOUND
+	 * @throws VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::FLAVOR_PARAMS_NOT_FOUND
 	 */
-	protected function convert($entryId, $conversionProfileId = null, KalturaConversionAttributeArray $dynamicConversionAttributes = null)
+	protected function convert($entryId, $conversionProfileId = null, VidiunConversionAttributeArray $dynamicConversionAttributes = null)
 	{
 		$entry = entryPeer::retrieveByPK($entryId);
 
 		if (!$entry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		
 		$srcFlavorAsset = assetPeer::retrieveOriginalByEntryId($entryId);
 		if(!$srcFlavorAsset)
-			throw new KalturaAPIException(KalturaErrors::ORIGINAL_FLAVOR_ASSET_IS_MISSING);
+			throw new VidiunAPIException(VidiunErrors::ORIGINAL_FLAVOR_ASSET_IS_MISSING);
 		
 		if(is_null($conversionProfileId) || $conversionProfileId <= 0)
 		{
 			$conversionProfile = myPartnerUtils::getConversionProfile2ForEntry($entryId);
 			if(!$conversionProfile)
-				throw new KalturaAPIException(KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $conversionProfileId);
+				throw new VidiunAPIException(VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $conversionProfileId);
 			
 			$conversionProfileId = $conversionProfile->getId();
 		} 
@@ -1075,21 +1075,21 @@ class KalturaEntryService extends KalturaBaseService
 			//conversionId is not exist or the conversion profileId does'nt belong to this partner.
 			$conversionProfile = conversionProfile2Peer::retrieveByPK ( $conversionProfileId );
 			if (is_null ( $conversionProfile )) {
-				throw new KalturaAPIException ( KalturaErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $conversionProfileId );
+				throw new VidiunAPIException ( VidiunErrors::CONVERSION_PROFILE_ID_NOT_FOUND, $conversionProfileId );
 			}
 		}
 		
 		$srcSyncKey = $srcFlavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 		
 		// if the file sync isn't local (wasn't synced yet) proxy request to other datacenter
-		list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
+		list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
 		if(!$fileSync)
 		{
-			throw new KalturaAPIException(KalturaErrors::FILE_DOESNT_EXIST);
+			throw new VidiunAPIException(VidiunErrors::FILE_DOESNT_EXIST);
 		}
 		else if(!$local)
 		{
-			kFileUtils::dumpApiRequest(kDataCenterMgr::getRemoteDcExternalUrl($fileSync));
+			vFileUtils::dumpApiRequest(vDataCenterMgr::getRemoteDcExternalUrl($fileSync));
 		}
 		
 		// even if it null
@@ -1100,7 +1100,7 @@ class KalturaEntryService extends KalturaBaseService
 		{
 			$flavors = assetParamsPeer::retrieveByProfile($conversionProfileId);
 			if(!count($flavors))
-				throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_NOT_FOUND);
+				throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_NOT_FOUND);
 		
 			$srcFlavorParamsId = null;
 			$flavorParams = $entry->getDynamicFlavorAttributes();
@@ -1131,14 +1131,14 @@ class KalturaEntryService extends KalturaBaseService
 			}
 		}
 		
-		$job = kJobsManager::addConvertProfileJob(null, $entry, $srcFlavorAsset->getId(), $fileSync);
+		$job = vJobsManager::addConvertProfileJob(null, $entry, $srcFlavorAsset->getId(), $fileSync);
 		if(!$job)
 			return null;
 			
 		return $job->getId();
 	}
 	
-	protected function addEntryFromFlavorAsset(KalturaBaseEntry $newEntry, entry $srcEntry, flavorAsset $srcFlavorAsset)
+	protected function addEntryFromFlavorAsset(VidiunBaseEntry $newEntry, entry $srcEntry, flavorAsset $srcFlavorAsset)
 	{
 	  	$newEntry->type = $srcEntry->getType();
 	  		
@@ -1157,19 +1157,19 @@ class KalturaEntryService extends KalturaBaseService
 	 	if ($newEntry->tags === null)
 	  		$newEntry->tags = $srcEntry->getTags();
 	   		
-		$newEntry->sourceType = KalturaSourceType::SEARCH_PROVIDER;
-	 	$newEntry->searchProviderType = KalturaSearchProviderType::KALTURA;
+		$newEntry->sourceType = VidiunSourceType::SEARCH_PROVIDER;
+	 	$newEntry->searchProviderType = VidiunSearchProviderType::VIDIUN;
 	 	
 		$dbEntry = $this->prepareEntryForInsert($newEntry);
 	  	$dbEntry->setSourceId( $srcEntry->getId() );
 	  	
-	 	$kshow = $this->createDummyKShow();
-		$kshowId = $kshow->getId();
+	 	$vshow = $this->createDummyVShow();
+		$vshowId = $vshow->getId();
 		
-		$flavorAsset = kFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
+		$flavorAsset = vFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $dbEntry->getId());
 		if(!$flavorAsset)
 		{
-			KalturaLog::err("Flavor asset not created for entry [" . $dbEntry->getId() . "]");
+			VidiunLog::err("Flavor asset not created for entry [" . $dbEntry->getId() . "]");
 			
 			if($dbEntry->getStatus() == entryStatus::NO_CONTENT)
 			{
@@ -1177,16 +1177,16 @@ class KalturaEntryService extends KalturaBaseService
 				$dbEntry->save();
 			}
 			
-			throw new KalturaAPIException(KalturaErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED);
+			throw new VidiunAPIException(VidiunErrors::ORIGINAL_FLAVOR_ASSET_NOT_CREATED);
 		}
 				
 		$srcSyncKey = $srcFlavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
 		$newSyncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		kFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $srcSyncKey);
+		vFileSyncUtils::createSyncFileLinkForKey($newSyncKey, $srcSyncKey);
 
-		kEventsManager::raiseEvent(new kObjectAddedEvent($flavorAsset));
+		vEventsManager::raiseEvent(new vObjectAddedEvent($flavorAsset));
 				
-		myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry);
+		myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD, $dbEntry);
 
 		$newEntry->fromObject($dbEntry, $this->getResponseProfile());
 		return $newEntry;
@@ -1197,17 +1197,17 @@ class KalturaEntryService extends KalturaBaseService
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
 		if (!$dbEntry || ($entryType !== null && $dbEntry->getType() != $entryType))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		if ($version !== -1)
 			$dbEntry->setDesiredVersion($version);
 
-		$ks = $this->getKs();
+		$vs = $this->getVs();
 		$isAdmin = false;
-		if($ks)
-			$isAdmin = $ks->isAdmin();
+		if($vs)
+			$isAdmin = $vs->isAdmin();
 		
-		$entry = KalturaEntryFactory::getInstanceByType($dbEntry->getType(), $isAdmin);
+		$entry = VidiunEntryFactory::getInstanceByType($dbEntry->getType(), $isAdmin);
 		
 		$entry->fromObject($dbEntry, $this->getResponseProfile());
 
@@ -1219,10 +1219,10 @@ class KalturaEntryService extends KalturaBaseService
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
 		if (!$dbEntry || ($entryType !== null && $dbEntry->getType() != $entryType))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		if ($dbEntry->getStatus() != entryStatus::READY)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_NOT_READY, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_NOT_READY, $entryId);
 
 		$c = new Criteria();
 		$c->add(FileSyncPeer::OBJECT_TYPE, FileSyncObjectType::ENTRY);
@@ -1234,13 +1234,13 @@ class KalturaEntryService extends KalturaBaseService
 		$c->add(FileSyncPeer::FILE_TYPE, FileSync::FILE_SYNC_FILE_TYPE_URL);
 		$fileSyncs = FileSyncPeer::doSelect($c);
 
-		$listResponse = new KalturaRemotePathListResponse();
-		$listResponse->objects = KalturaRemotePathArray::fromDbArray($fileSyncs, $this->getResponseProfile());
+		$listResponse = new VidiunRemotePathListResponse();
+		$listResponse->objects = VidiunRemotePathArray::fromDbArray($fileSyncs, $this->getResponseProfile());
 		$listResponse->totalCount = count($listResponse->objects);
 		return $listResponse;
 	}
 	
-	protected function listEntriesByFilter(KalturaBaseEntryFilter $filter = null, KalturaFilterPager $pager = null)
+	protected function listEntriesByFilter(VidiunBaseEntryFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 
@@ -1255,33 +1255,33 @@ class KalturaEntryService extends KalturaBaseService
 			$disableWidgetSessionFilters = true;
 			
 		if (!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		
 		$c = $filter->prepareEntriesCriteriaFilter($pager);
 		
 		if ($disableWidgetSessionFilters)
 		{
-			if (kEntitlementUtils::getEntitlementEnforcement() && !kCurrentContext::$is_admin_session && entryPeer::getUserContentOnly())
+			if (vEntitlementUtils::getEntitlementEnforcement() && !vCurrentContext::$is_admin_session && entryPeer::getUserContentOnly())
 				entryPeer::setFilterResults(true);
 
-			KalturaCriterion::disableTag(KalturaCriterion::TAG_WIDGET_SESSION);
+			VidiunCriterion::disableTag(VidiunCriterion::TAG_WIDGET_SESSION);
 		}
 		$list = entryPeer::doSelect($c);
 		entryPeer::fetchPlaysViewsData($list);
 		$totalCount = $c->getRecordsCount();
 		
 		if ($disableWidgetSessionFilters)
-			KalturaCriterion::restoreTag(KalturaCriterion::TAG_WIDGET_SESSION);
+			VidiunCriterion::restoreTag(VidiunCriterion::TAG_WIDGET_SESSION);
 
 		return array($list, $totalCount);		
 	}
 	
-	protected function countEntriesByFilter(KalturaBaseEntryFilter $filter = null)
+	protected function countEntriesByFilter(VidiunBaseEntryFilter $filter = null)
 	{
 		myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 
 		if(!$filter)
-			$filter = new KalturaBaseEntryFilter();
+			$filter = new VidiunBaseEntryFilter();
 			
 		$c = $filter->prepareEntriesCriteriaFilter();
 		$c->applyFilters();
@@ -1293,16 +1293,16 @@ class KalturaEntryService extends KalturaBaseService
 	/*
 	 	The following table shows the behavior of the checkAndSetValidUser functions:
 	 	
-	 	 otheruser - any user that is not the user specified in the ks
+	 	 otheruser - any user that is not the user specified in the vs
 	  
 	 	Input	 	 											Result	 
-		Action			API entry user		DB entry user		Admin KS			User KS
+		Action			API entry user		DB entry user		Admin VS			User VS
 		----------------------------------------------------------------------------------------
-		entry.add		null / ksuser		N/A					ksuser				ksuser
+		entry.add		null / vsuser		N/A					vsuser				vsuser
  						otheruser			N/A					otheruser			exception
-		entry.update	null / ksuser		ksuser				stays ksuser		stays ksuser
- 						otheruser			ksuser				otheruser			exception
- 						ksuser				otheruser			ksuser				exception
+		entry.update	null / vsuser		vsuser				stays vsuser		stays vsuser
+ 						otheruser			vsuser				otheruser			exception
+ 						vsuser				otheruser			vsuser				exception
  						null / otheruser	otheruser			stays otheruser		if has edit privilege on entry => stays otheruser (checked by checkIfUserAllowedToUpdateEntry), 
  																					otherwise exception
 	 */
@@ -1311,42 +1311,42 @@ class KalturaEntryService extends KalturaBaseService
    	 * Sets the valid user for the entry 
    	 * Throws an error if the session user is trying to add entry to another user and not using an admin session 
    	 *
-   	 * @param KalturaBaseEntry $entry
+   	 * @param VidiunBaseEntry $entry
    	 * @param entry $dbEntry
    	 */
-	protected function checkAndSetValidUserInsert(KalturaBaseEntry $entry, entry $dbEntry)
+	protected function checkAndSetValidUserInsert(VidiunBaseEntry $entry, entry $dbEntry)
 	{	
 		// for new entry, puser ID is null - set it from service scope
 		if ($entry->userId === null)
 		{
-			KalturaLog::debug("Set creator id [" . $this->getKuser()->getId() . "] line [" . __LINE__ . "]");
-			$dbEntry->setCreatorKuserId($this->getKuser()->getId());
-			$dbEntry->setCreatorPuserId($this->getKuser()->getPuserId());
+			VidiunLog::debug("Set creator id [" . $this->getVuser()->getId() . "] line [" . __LINE__ . "]");
+			$dbEntry->setCreatorVuserId($this->getVuser()->getId());
+			$dbEntry->setCreatorPuserId($this->getVuser()->getPuserId());
 			
-			$dbEntry->setPuserId($this->getKuser()->getPuserId());
-			$dbEntry->setKuserId($this->getKuser()->getId());
+			$dbEntry->setPuserId($this->getVuser()->getPuserId());
+			$dbEntry->setVuserId($this->getVuser()->getId());
 			return;
 		}
 		
-		if ((!$this->getKs() || !$this->getKs()->isAdmin()))
+		if ((!$this->getVs() || !$this->getVs()->isAdmin()))
 		{
 			// non admin cannot specify a different user on the entry other than himself
-			$ksPuser = $this->getKuser()->getPuserId();
-			if (strtolower($entry->userId) != strtolower($ksPuser))
+			$vsPuser = $this->getVuser()->getPuserId();
+			if (strtolower($entry->userId) != strtolower($vsPuser))
 			{
-				throw new KalturaAPIException(KalturaErrors::INVALID_KS, "", ks::INVALID_TYPE, ks::getErrorStr(ks::INVALID_TYPE));
+				throw new VidiunAPIException(VidiunErrors::INVALID_VS, "", vs::INVALID_TYPE, vs::getErrorStr(vs::INVALID_TYPE));
 			}
 		}
 
 
-		// need to create kuser if this is an admin creating the entry on a different user
-		$kuser = kuserPeer::createKuserForPartner($this->getPartnerId(), trim($entry->userId));
+		// need to create vuser if this is an admin creating the entry on a different user
+		$vuser = vuserPeer::createVuserForPartner($this->getPartnerId(), trim($entry->userId));
 		$creatorId = is_null($entry->creatorId) ? $entry->creatorId : trim($entry->creatorId);
-		$creator = kuserPeer::createKuserForPartner($this->getPartnerId(), $creatorId);
+		$creator = vuserPeer::createVuserForPartner($this->getPartnerId(), $creatorId);
 
-		KalturaLog::debug("Set kuser id [" . $kuser->getId() . "] line [" . __LINE__ . "]");
-		$dbEntry->setKuserId($kuser->getId());
-		$dbEntry->setCreatorKuserId($creator->getId());
+		VidiunLog::debug("Set vuser id [" . $vuser->getId() . "] line [" . __LINE__ . "]");
+		$dbEntry->setVuserId($vuser->getId());
+		$dbEntry->setCreatorVuserId($creator->getId());
 		$dbEntry->setCreatorPuserId($creator->getPuserId());
 	}
 	
@@ -1354,60 +1354,60 @@ class KalturaEntryService extends KalturaBaseService
    	 * Sets the valid user for the entry 
    	 * Throws an error if the session user is trying to update entry to another user and not using an admin session 
    	 *
-   	 * @param KalturaBaseEntry $entry
+   	 * @param VidiunBaseEntry $entry
    	 * @param entry $dbEntry
    	 */
-	protected function checkAndSetValidUserUpdate(KalturaBaseEntry $entry, entry $dbEntry)
+	protected function checkAndSetValidUserUpdate(VidiunBaseEntry $entry, entry $dbEntry)
 	{
-		KalturaLog::debug("DB puser id [" . $dbEntry->getPuserId() . "] kuser id [" . $dbEntry->getKuserId() . "]");
+		VidiunLog::debug("DB puser id [" . $dbEntry->getPuserId() . "] vuser id [" . $dbEntry->getVuserId() . "]");
 
 		// user id not being changed
 		if ($entry->userId === null)
 		{
-			KalturaLog::log("entry->userId is null, not changing user");
+			VidiunLog::log("entry->userId is null, not changing user");
 			return;
 		}
 
-		$ks = $this->getKs();
-		if (!$ks ||(!$this->getKs()->isAdmin() && !$ks->verifyPrivileges(ks::PRIVILEGE_EDIT_USER, $entry->userId)))
+		$vs = $this->getVs();
+		if (!$vs ||(!$this->getVs()->isAdmin() && !$vs->verifyPrivileges(vs::PRIVILEGE_EDIT_USER, $entry->userId)))
 		{
 			$entryPuserId = $dbEntry->getPuserId();
 			
 			// non admin cannot change the owner of an existing entry
 			if (strtolower($entry->userId) != strtolower($entryPuserId))
 			{
-				KalturaLog::debug('API entry userId ['.$entry->userId.'], DB entry userId ['.$entryPuserId.'] - change required but KS is not admin');
-				throw new KalturaAPIException(KalturaErrors::INVALID_KS, "", ks::INVALID_TYPE, ks::getErrorStr(ks::INVALID_TYPE));
+				VidiunLog::debug('API entry userId ['.$entry->userId.'], DB entry userId ['.$entryPuserId.'] - change required but VS is not admin');
+				throw new VidiunAPIException(VidiunErrors::INVALID_VS, "", vs::INVALID_TYPE, vs::getErrorStr(vs::INVALID_TYPE));
 			}
 		}
 		
-		// need to create kuser if this is an admin changing the owner of the entry to a different user
-		$kuser = kuserPeer::createKuserForPartner($dbEntry->getPartnerId(), $entry->userId); 
+		// need to create vuser if this is an admin changing the owner of the entry to a different user
+		$vuser = vuserPeer::createVuserForPartner($dbEntry->getPartnerId(), $entry->userId); 
 
-		KalturaLog::debug("Set kuser id [" . $kuser->getId() . "] line [" . __LINE__ . "]");
-		$dbEntry->setKuserId($kuser->getId());
+		VidiunLog::debug("Set vuser id [" . $vuser->getId() . "] line [" . __LINE__ . "]");
+		$dbEntry->setVuserId($vuser->getId());
 	}
 	
    	/**
    	 * Throws an error if the non-onwer session user is trying to update entitledPusersEdit or entitledPusersPublish 
    	 *
-   	 * @param KalturaBaseEntry $entry
+   	 * @param VidiunBaseEntry $entry
    	 * @param entry $dbEntry
    	 */
-	protected function validateEntitledUsersUpdate(KalturaBaseEntry $entry, entry $dbEntry)
+	protected function validateEntitledUsersUpdate(VidiunBaseEntry $entry, entry $dbEntry)
 	{	
-		if ((!$this->getKs() || !$this->getKs()->isAdmin()))
+		if ((!$this->getVs() || !$this->getVs()->isAdmin()))
 		{
 			//non owner cannot change entitledUsersEdit and entitledUsersPublish
-			if(!$dbEntry->isOwnerActionsAllowed($this->getKuser()->getId()))
+			if(!$dbEntry->isOwnerActionsAllowed($this->getVuser()->getId()))
 			{
 				if($entry->entitledUsersEdit !== null && strtolower($entry->entitledUsersEdit) != strtolower($dbEntry->getEntitledPusersEdit())){
-					throw new KalturaAPIException(KalturaErrors::INVALID_KS, "", ks::INVALID_TYPE, ks::getErrorStr(ks::INVALID_TYPE));					
+					throw new VidiunAPIException(VidiunErrors::INVALID_VS, "", vs::INVALID_TYPE, vs::getErrorStr(vs::INVALID_TYPE));					
 					
 				}
 				
 				if($entry->entitledUsersPublish !== null && strtolower($entry->entitledUsersPublish) != strtolower($dbEntry->getEntitledPusersPublish())){
-					throw new KalturaAPIException(KalturaErrors::INVALID_KS, "", ks::INVALID_TYPE, ks::getErrorStr(ks::INVALID_TYPE));					
+					throw new VidiunAPIException(VidiunErrors::INVALID_VS, "", vs::INVALID_TYPE, vs::getErrorStr(vs::INVALID_TYPE));					
 					
 				}
 			}
@@ -1417,14 +1417,14 @@ class KalturaEntryService extends KalturaBaseService
 	/**
 	 * Throws an error if trying to update admin only properties with normal user session
 	 *
-	 * @param KalturaBaseEntry $entry
+	 * @param VidiunBaseEntry $entry
 	 */
-	protected function checkAdminOnlyUpdateProperties(KalturaBaseEntry $entry)
+	protected function checkAdminOnlyUpdateProperties(VidiunBaseEntry $entry)
 	{
 		if ($entry->adminTags !== null)
 		{
-			$ks = $this->getKs();
-			if (!$ks || !$ks->verifyPrivileges(ks::PRIVILEGE_EDIT_ADMIN_TAGS, ks::PRIVILEGE_WILDCARD ))
+			$vs = $this->getVs();
+			if (!$vs || !$vs->verifyPrivileges(vs::PRIVILEGE_EDIT_ADMIN_TAGS, vs::PRIVILEGE_WILDCARD ))
 				$this->validateAdminSession("adminTags");
 		}
 
@@ -1448,14 +1448,14 @@ class KalturaEntryService extends KalturaBaseService
 	/**
 	 * Throws an error if trying to update admin only properties with normal user session
 	 *
-	 * @param KalturaBaseEntry $entry
+	 * @param VidiunBaseEntry $entry
 	 */
-	protected function checkAdminOnlyInsertProperties(KalturaBaseEntry $entry)
+	protected function checkAdminOnlyInsertProperties(VidiunBaseEntry $entry)
 	{
 		if ($entry->adminTags !== null)
 		{
-			$ks = $this->getKs();
-			if (!$ks || !$ks->verifyPrivileges(ks::PRIVILEGE_EDIT_ADMIN_TAGS, ks::PRIVILEGE_WILDCARD ))
+			$vs = $this->getVs();
+			if (!$vs || !$vs->verifyPrivileges(vs::PRIVILEGE_EDIT_ADMIN_TAGS, vs::PRIVILEGE_WILDCARD ))
 				$this->validateAdminSession("adminTags");
 		}
 
@@ -1481,39 +1481,39 @@ class KalturaEntryService extends KalturaBaseService
 	 */
 	protected function validateAdminSession($property)
 	{
-		if (!$this->getKs() || !$this->getKs()->isAdmin())
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_ADMIN_PROPERTY, $property);	
+		if (!$this->getVs() || !$this->getVs()->isAdmin())
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_ADMIN_PROPERTY, $property);	
 	}
 	
 	/**
 	 * Throws an error if trying to set invalid Access Control Profile
 	 * 
-	 * @param KalturaBaseEntry $entry
+	 * @param VidiunBaseEntry $entry
 	 */
-	protected function validateAccessControlId(KalturaBaseEntry $entry)
+	protected function validateAccessControlId(VidiunBaseEntry $entry)
 	{
 		if ($entry->accessControlId !== null) // trying to update
 		{
 			$this->applyPartnerFilterForClass('accessControl'); 
 			$accessControl = accessControlPeer::retrieveByPK($entry->accessControlId);
 			if (!$accessControl)
-				throw new KalturaAPIException(KalturaErrors::ACCESS_CONTROL_ID_NOT_FOUND, $entry->accessControlId);
+				throw new VidiunAPIException(VidiunErrors::ACCESS_CONTROL_ID_NOT_FOUND, $entry->accessControlId);
 		}
 	}
 	
 	/**
 	 * Throws an error if trying to set invalid entry schedule date
 	 * 
-	 * @param KalturaBaseEntry $entry
+	 * @param VidiunBaseEntry $entry
 	 */
-	protected function validateEntryScheduleDates(KalturaBaseEntry $entry, entry $dbEntry)
+	protected function validateEntryScheduleDates(VidiunBaseEntry $entry, entry $dbEntry)
 	{
 		if(is_null($entry->startDate) && is_null($entry->endDate))
 			return; // no update
 
-		if($entry->startDate instanceof KalturaNullField)
+		if($entry->startDate instanceof VidiunNullField)
 			$entry->startDate = -1;
-		if($entry->endDate instanceof KalturaNullField)
+		if($entry->endDate instanceof VidiunNullField)
 			$entry->endDate = -1;
 			
 		// if input is null and this is an update pick the current db value 
@@ -1529,34 +1529,34 @@ class KalturaEntryService extends KalturaBaseService
 		
 		if ($startDate && $endDate && $startDate >= $endDate)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENTRY_SCHEDULE_DATES);
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENTRY_SCHEDULE_DATES);
 		}
 	}
 	
 
-	protected function createDummyKShow()
+	protected function createDummyVShow()
 	{
-		$kshow = new kshow();
-		$kshow->setName(kshow::DUMMY_KSHOW_NAME);
-		$kshow->setProducerId($this->getKuser()->getId());
-		$kshow->setPartnerId($this->getPartnerId());
-		$kshow->setSubpId($this->getPartnerId() * 100);
-		$kshow->setViewPermissions(kshow::KSHOW_PERMISSION_EVERYONE);
-		$kshow->setPermissions(kshow::PERMISSIONS_PUBLIC);
-		$kshow->setAllowQuickEdit(true);
-		$kshow->save();
+		$vshow = new vshow();
+		$vshow->setName(vshow::DUMMY_VSHOW_NAME);
+		$vshow->setProducerId($this->getVuser()->getId());
+		$vshow->setPartnerId($this->getPartnerId());
+		$vshow->setSubpId($this->getPartnerId() * 100);
+		$vshow->setViewPermissions(vshow::VSHOW_PERMISSION_EVERYONE);
+		$vshow->setPermissions(vshow::PERMISSIONS_PUBLIC);
+		$vshow->setAllowQuickEdit(true);
+		$vshow->save();
 		
-		return $kshow;
+		return $vshow;
 	}
 	
-	protected function updateEntry($entryId, KalturaBaseEntry $entry, $entryType = null)
+	protected function updateEntry($entryId, VidiunBaseEntry $entry, $entryType = null)
 	{
 		$entry->type = null; // because it was set in the constructor, but cannot be updated
 		
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
 		if (!$dbEntry || ($entryType !== null && $dbEntry->getType() != $entryType))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		
 		
 		$this->checkAndSetValidUserUpdate($entry, $dbEntry);
@@ -1578,12 +1578,12 @@ class KalturaEntryService extends KalturaBaseService
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e);
+			VidiunLog::err($e);
 		}
 		
 		if ($updatedOccurred)
 		{
-			myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $dbEntry);
+			myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE, $dbEntry);
 		}
 		
 		return $entry;
@@ -1594,7 +1594,7 @@ class KalturaEntryService extends KalturaBaseService
 		$entryToDelete = entryPeer::retrieveByPK($entryId);
 
 		if (!$entryToDelete || ($entryType !== null && $entryToDelete->getType() != $entryType))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		
 		myEntryUtils::deleteEntry($entryToDelete);
 		
@@ -1605,7 +1605,7 @@ class KalturaEntryService extends KalturaBaseService
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e);
+			VidiunLog::err($e);
 		}
 	}
 	
@@ -1614,26 +1614,26 @@ class KalturaEntryService extends KalturaBaseService
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
 		if (!$dbEntry || ($entryType !== null && $dbEntry->getType() != $entryType))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 			
 		// if session is not admin, we should check that the user that is updating the thumbnail is the one created the entry
-		// FIXME: Temporary disabled because update thumbnail feature (in app studio) is working with anonymous ks
-		/*if (!$this->getKs()->isAdmin())
+		// FIXME: Temporary disabled because update thumbnail feature (in app studio) is working with anonymous vs
+		/*if (!$this->getVs()->isAdmin())
 		{
-			if ($dbEntry->getPuserId() !== $this->getKs()->user)
+			if ($dbEntry->getPuserId() !== $this->getVs()->user)
 			{
-				throw new KalturaAPIException(KalturaErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY);
+				throw new VidiunAPIException(VidiunErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY);
 			}
 		}*/
 
-		$content = KCurlWrapper::getContent($url);
+		$content = VCurlWrapper::getContent($url);
 		if (!$content)
 		{
-			throw new KalturaAPIException(KalturaErrors::THUMB_ASSET_DOWNLOAD_FAILED, $url);
+			throw new VidiunAPIException(VidiunErrors::THUMB_ASSET_DOWNLOAD_FAILED, $url);
 		}
 		myEntryUtils::updateThumbnailFromContent($dbEntry, $content, $fileSyncType);
 		
-		$entry = KalturaEntryFactory::getInstanceByType($dbEntry->getType());
+		$entry = VidiunEntryFactory::getInstanceByType($dbEntry->getType());
 		$entry->fromObject($dbEntry, $this->getResponseProfile());
 		
 		return $entry;
@@ -1644,20 +1644,20 @@ class KalturaEntryService extends KalturaBaseService
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
 		if (!$dbEntry || ($entryType !== null && $dbEntry->getType() != $entryType))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 			
 		// if session is not admin, we should check that the user that is updating the thumbnail is the one created the entry
-		// FIXME: Temporary disabled because update thumbnail feature (in app studio) is working with anonymous ks
-		/*if (!$this->getKs()->isAdmin())
+		// FIXME: Temporary disabled because update thumbnail feature (in app studio) is working with anonymous vs
+		/*if (!$this->getVs()->isAdmin())
 		{
-			if ($dbEntry->getPuserId() !== $this->getKs()->user)
+			if ($dbEntry->getPuserId() !== $this->getVs()->user)
 			{
-				throw new KalturaAPIException(KalturaErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY);
+				throw new VidiunAPIException(VidiunErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY);
 			}
 		}*/
 		myEntryUtils::updateThumbnailFromContent($dbEntry, file_get_contents($fileData["tmp_name"]), $fileSyncType);
 		
-		$entry = KalturaEntryFactory::getInstanceByType($dbEntry->getType());
+		$entry = VidiunEntryFactory::getInstanceByType($dbEntry->getType());
 		$entry->fromObject($dbEntry, $this->getResponseProfile());
 		
 		return $entry;
@@ -1668,18 +1668,18 @@ class KalturaEntryService extends KalturaBaseService
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 
 		if (!$dbEntry || ($entryType !== null && $dbEntry->getType() != $entryType))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 			
 		$sourceDbEntry = entryPeer::retrieveByPK($sourceEntryId);
-		if (!$sourceDbEntry || $sourceDbEntry->getType() != KalturaEntryType::MEDIA_CLIP)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $sourceDbEntry);
+		if (!$sourceDbEntry || $sourceDbEntry->getType() != VidiunEntryType::MEDIA_CLIP)
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $sourceDbEntry);
 			
 		// if session is not admin, we should check that the user that is updating the thumbnail is the one created the entry
-		if (!$this->getKs() || !$this->getKs()->isAdmin())
+		if (!$this->getVs() || !$this->getVs()->isAdmin())
 		{
-			if (strtolower($dbEntry->getPuserId()) !== strtolower($this->getKs()->user))
+			if (strtolower($dbEntry->getPuserId()) !== strtolower($this->getVs()->user))
 			{
-				throw new KalturaAPIException(KalturaErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY);
+				throw new VidiunAPIException(VidiunErrors::PERMISSION_DENIED_TO_UPDATE_ENTRY);
 			}
 		}
 		
@@ -1687,7 +1687,7 @@ class KalturaEntryService extends KalturaBaseService
 		
 		if (!$updateThumbnailResult)
 		{
-			throw new KalturaAPIException(KalturaErrors::INTERNAL_SERVERL_ERROR);
+			throw new VidiunAPIException(VidiunErrors::INTERNAL_SERVERL_ERROR);
 		}
 		
 		try
@@ -1697,58 +1697,58 @@ class KalturaEntryService extends KalturaBaseService
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e);
+			VidiunLog::err($e);
 		}
 		
-		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL, $dbEntry, $dbEntry->getPartnerId(), $dbEntry->getPuserId(), null, null, $entryId);
+		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL, $dbEntry, $dbEntry->getPartnerId(), $dbEntry->getPuserId(), null, null, $entryId);
 
-		$ks = $this->getKs();
+		$vs = $this->getVs();
 		$isAdmin = false;
-		if($ks)
-			$isAdmin = $ks->isAdmin();
+		if($vs)
+			$isAdmin = $vs->isAdmin();
 			
-		$mediaEntry = KalturaEntryFactory::getInstanceByType($dbEntry->getType(), $isAdmin);
+		$mediaEntry = VidiunEntryFactory::getInstanceByType($dbEntry->getType(), $isAdmin);
 		$mediaEntry->fromObject($dbEntry, $this->getResponseProfile());
 		
 		return $mediaEntry;
 	}
 	
-	protected function flagEntry(KalturaModerationFlag $moderationFlag, $entryType = null)
+	protected function flagEntry(VidiunModerationFlag $moderationFlag, $entryType = null)
 	{
 		$moderationFlag->validatePropertyNotNull("flaggedEntryId");
 
 		$entryId = $moderationFlag->flaggedEntryId;
-		$dbEntry = kCurrentContext::initPartnerByEntryId($entryId);
+		$dbEntry = vCurrentContext::initPartnerByEntryId($entryId);
 
 		// before returning any error, let's validate partner's access control
 		if ($dbEntry)
 			$this->validateApiAccessControl($dbEntry->getPartnerId());
 
 		if (!$dbEntry || ($entryType !== null && $dbEntry->getType() != $entryType))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		$validModerationStatuses = array(
-			KalturaEntryModerationStatus::APPROVED,
-			KalturaEntryModerationStatus::AUTO_APPROVED,
-			KalturaEntryModerationStatus::FLAGGED_FOR_REVIEW,
+			VidiunEntryModerationStatus::APPROVED,
+			VidiunEntryModerationStatus::AUTO_APPROVED,
+			VidiunEntryModerationStatus::FLAGGED_FOR_REVIEW,
 		);
 		if (!in_array($dbEntry->getModerationStatus(), $validModerationStatuses))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_CANNOT_BE_FLAGGED);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_CANNOT_BE_FLAGGED);
 			
 		$dbModerationFlag = new moderationFlag();
 		$dbModerationFlag->setPartnerId($dbEntry->getPartnerId());
-		$dbModerationFlag->setKuserId($this->getKuser()->getId());
+		$dbModerationFlag->setVuserId($this->getVuser()->getId());
 		$dbModerationFlag->setFlaggedEntryId($dbEntry->getId());
-		$dbModerationFlag->setObjectType(KalturaModerationObjectType::ENTRY);
-		$dbModerationFlag->setStatus(KalturaModerationFlagStatus::PENDING);
+		$dbModerationFlag->setObjectType(VidiunModerationObjectType::ENTRY);
+		$dbModerationFlag->setStatus(VidiunModerationFlagStatus::PENDING);
 		$dbModerationFlag->setFlagType($moderationFlag->flagType);
 		$dbModerationFlag->setComments($moderationFlag->comments);
 		$dbModerationFlag->save();
 		
-		$dbEntry->setModerationStatus(KalturaEntryModerationStatus::FLAGGED_FOR_REVIEW);
+		$dbEntry->setModerationStatus(VidiunEntryModerationStatus::FLAGGED_FOR_REVIEW);
 		$updateOccurred = $dbEntry->save();
 		
-		$moderationFlag = new KalturaModerationFlag();
+		$moderationFlag = new VidiunModerationFlag();
 		$moderationFlag->fromObject($dbModerationFlag, $this->getResponseProfile());
 		
 		// need to notify the partner that an entry was flagged - use the OLD moderation onject that is required for the 
@@ -1762,7 +1762,7 @@ class KalturaEntryService extends KalturaBaseService
 		$oldModerationObj->setObjectType( moderation::MODERATION_OBJECT_TYPE_ENTRY );
 		$oldModerationObj->setReportCode( "" );
 		if ($updateOccurred)
-			myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_REPORT, $oldModerationObj ,$dbEntry->getPartnerId());
+			myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_REPORT, $oldModerationObj ,$dbEntry->getPartnerId());
 				
 		return $moderationFlag;
 	}
@@ -1771,15 +1771,15 @@ class KalturaEntryService extends KalturaBaseService
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbEntry || ($entryType !== null && $dbEntry->getType() != $entryType))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 			
-		$dbEntry->setModerationStatus(KalturaEntryModerationStatus::REJECTED);
+		$dbEntry->setModerationStatus(VidiunEntryModerationStatus::REJECTED);
 		$dbEntry->setModerationCount(0);
 		$updateOccurred = $dbEntry->save();
 		
 		if ($updateOccurred)
-			myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE , $dbEntry, null, null, null, null, $dbEntry->getId() );
-//		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_BLOCK , $dbEntry->getId());
+			myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE , $dbEntry, null, null, null, null, $dbEntry->getId() );
+//		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_BLOCK , $dbEntry->getId());
 		
 		moderationFlagPeer::markAsModeratedByEntryId($this->getPartnerId(), $dbEntry->getId());
 	}
@@ -1788,36 +1788,36 @@ class KalturaEntryService extends KalturaBaseService
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbEntry || ($entryType !== null && $dbEntry->getType() != $entryType))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 			
-		$dbEntry->setModerationStatus(KalturaEntryModerationStatus::APPROVED);
+		$dbEntry->setModerationStatus(VidiunEntryModerationStatus::APPROVED);
 		$dbEntry->setModerationCount(0);
 		$updateOccurred = $dbEntry->save();
 		
 		if ($updateOccurred)
-			myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE , $dbEntry, null, null, null, null, $dbEntry->getId() );
-//		myNotificationMgr::createNotification(kNotificationJobData::NOTIFICATION_TYPE_ENTRY_BLOCK , $dbEntry->getId());
+			myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE , $dbEntry, null, null, null, null, $dbEntry->getId() );
+//		myNotificationMgr::createNotification(vNotificationJobData::NOTIFICATION_TYPE_ENTRY_BLOCK , $dbEntry->getId());
 		
 		moderationFlagPeer::markAsModeratedByEntryId($this->getPartnerId(), $dbEntry->getId());
 	}
 	
-	protected function listFlagsForEntry($entryId, KalturaFilterPager $pager = null)
+	protected function listFlagsForEntry($entryId, VidiunFilterPager $pager = null)
 	{
 		if (!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		$c = new Criteria();
 		$c->addAnd(moderationFlagPeer::PARTNER_ID, $this->getPartnerId());
 		$c->addAnd(moderationFlagPeer::FLAGGED_ENTRY_ID, $entryId);
-		$c->addAnd(moderationFlagPeer::OBJECT_TYPE, KalturaModerationObjectType::ENTRY);
-		$c->addAnd(moderationFlagPeer::STATUS, KalturaModerationFlagStatus::PENDING);
+		$c->addAnd(moderationFlagPeer::OBJECT_TYPE, VidiunModerationObjectType::ENTRY);
+		$c->addAnd(moderationFlagPeer::STATUS, VidiunModerationFlagStatus::PENDING);
 		
 		$totalCount = moderationFlagPeer::doCount($c);
 		$pager->attachToCriteria($c);
 		$list = moderationFlagPeer::doSelect($c);
 		
-		$newList = KalturaModerationFlagArray::fromDbArray($list, $this->getResponseProfile());
-		$response = new KalturaModerationFlagListResponse();
+		$newList = VidiunModerationFlagArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunModerationFlagListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		return $response;
@@ -1827,18 +1827,18 @@ class KalturaEntryService extends KalturaBaseService
 	{
 		$dbEntry = entryPeer::retrieveByPK($entryId);
 		if (!$dbEntry || ($entryType !== null && $dbEntry->getType() != $entryType))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 			
 		if ($rank <= 0 || $rank > 5)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_RANK_VALUE);
+			throw new VidiunAPIException(VidiunErrors::INVALID_RANK_VALUE);
 		}
 
-		$kvote = new kvote();
-		$kvote->setEntryId($entryId);
-		$kvote->setKuserId($this->getKuser()->getId());
-		$kvote->setRank($rank);
-		$kvote->save();
+		$vvote = new vvote();
+		$vvote->setEntryId($entryId);
+		$vvote->setVuserId($this->getVuser()->getId());
+		$vvote->setRank($rank);
+		$vvote->save();
 	}
 
 	/**
@@ -1847,21 +1847,21 @@ class KalturaEntryService extends KalturaBaseService
 	 * @param $clipManager
 	 * @param $operationAttributes
 	 * @return asset
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	protected function handleMultiClipRequest($resource, entry $dbEntry, $clipManager, $operationAttributes)
 	{
-		KalturaLog::info("clipping service detected start to create sub flavors;");
+		VidiunLog::info("clipping service detected start to create sub flavors;");
 		$clipEntry = $clipManager->createTempEntryForClip($this->getPartnerId());
 		$shouldimport = false;
 		$url = null;
-		if ($resource->getResource() instanceof kFileSyncResource && $resource->getResource()->getOriginEntryId())
+		if ($resource->getResource() instanceof vFileSyncResource && $resource->getResource()->getOriginEntryId())
 		{
 			$url = $this->getImportUrl($resource->getResource()->getOriginEntryId());
 		}
 		if (!$url)
 		{
-			$clipDummySourceAsset = kFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $clipEntry->getId());
+			$clipDummySourceAsset = vFlowHelper::createOriginalFlavorAsset($this->getPartnerId(), $clipEntry->getId());
 			$this->attachResource($resource->getResource(), $clipEntry, $clipDummySourceAsset);
 		}
 		$clipManager->startBatchJob($resource, $dbEntry, $operationAttributes, $clipEntry , $url);
@@ -1880,7 +1880,7 @@ class KalturaEntryService extends KalturaBaseService
 			if ($originalFlavorAsset)
 			{
 				$srcSyncKey = $originalFlavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-				list($fileSync, $local) = kFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
+				list($fileSync, $local) = vFileSyncUtils::getReadyFileSyncForKey($srcSyncKey, true, false);
 				/* @var $fileSync FileSync */
 				if ($fileSync && !$local)
 				{
@@ -1894,25 +1894,25 @@ class KalturaEntryService extends KalturaBaseService
 	/**
 	 * Set the default status to ready if other status filters are not specified
 	 * 
-	 * @param KalturaBaseEntryFilter $filter
+	 * @param VidiunBaseEntryFilter $filter
 	 */
-	private function setDefaultStatus(KalturaBaseEntryFilter $filter)
+	private function setDefaultStatus(VidiunBaseEntryFilter $filter)
 	{
 		if ($filter->statusEqual === null && 
 			$filter->statusIn === null &&
 			$filter->statusNotEqual === null &&
 			$filter->statusNotIn === null)
 		{
-			$filter->statusEqual = KalturaEntryStatus::READY;
+			$filter->statusEqual = VidiunEntryStatus::READY;
 		}
 	}
 	
 	/**
 	 * Set the default moderation status to ready if other moderation status filters are not specified
 	 * 
-	 * @param KalturaBaseEntryFilter $filter
+	 * @param VidiunBaseEntryFilter $filter
 	 */
-	private function setDefaultModerationStatus(KalturaBaseEntryFilter $filter)
+	private function setDefaultModerationStatus(VidiunBaseEntryFilter $filter)
 	{
 		if ($filter->moderationStatusEqual === null && 
 			$filter->moderationStatusIn === null && 
@@ -1920,8 +1920,8 @@ class KalturaEntryService extends KalturaBaseService
 			$filter->moderationStatusNotIn === null)
 		{
 			$moderationStatusesNotIn = array(
-				KalturaEntryModerationStatus::PENDING_MODERATION, 
-				KalturaEntryModerationStatus::REJECTED);
+				VidiunEntryModerationStatus::PENDING_MODERATION, 
+				VidiunEntryModerationStatus::REJECTED);
 			$filter->moderationStatusNotIn = implode(",", $moderationStatusesNotIn); 
 		}
 	}
@@ -1929,11 +1929,11 @@ class KalturaEntryService extends KalturaBaseService
 	/**
 	 * Convert duration in seconds to msecs (because the duration field is mapped to length_in_msec)
 	 * 
-	 * @param KalturaBaseEntryFilter $filter
+	 * @param VidiunBaseEntryFilter $filter
 	 */
-	private function fixFilterDuration(KalturaBaseEntryFilter $filter)
+	private function fixFilterDuration(VidiunBaseEntryFilter $filter)
 	{
-		if ($filter instanceof KalturaPlayableEntryFilter) // because duration filter should be supported in baseEntryService
+		if ($filter instanceof VidiunPlayableEntryFilter) // because duration filter should be supported in baseEntryService
 		{
 			if ($filter->durationGreaterThan !== null)
 				$filter->durationGreaterThan = $filter->durationGreaterThan * 1000;
@@ -1951,7 +1951,7 @@ class KalturaEntryService extends KalturaBaseService
 		}
 	}
 	
-	// hack due to KCW of version  from KMC
+	// hack due to VCW of version  from VMC
 	protected function getConversionQualityFromRequest () 
 	{
 		if(isset($_REQUEST["conversionquality"]))
@@ -1969,7 +1969,7 @@ class KalturaEntryService extends KalturaBaseService
 		{
 			$dbEntry->setStatus(entryStatus::ERROR_IMPORTING);
 			$dbEntry->save();
-			throw new KalturaAPIException(KalturaErrors::IMAGE_CONTENT_NOT_SECURE);
+			throw new VidiunAPIException(VidiunErrors::IMAGE_CONTENT_NOT_SECURE);
 		}
 	}
 

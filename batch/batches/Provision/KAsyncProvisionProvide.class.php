@@ -6,51 +6,51 @@
  * @package Scheduler
  * @subpackage Provision
  */
-class KAsyncProvisionProvide extends KJobHandlerWorker
+class VAsyncProvisionProvide extends VJobHandlerWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::PROVISION_PROVIDE;
+		return VidiunBatchJobType::PROVISION_PROVIDE;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::exec()
+	 * @see VJobHandlerWorker::exec()
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
 		return $this->provision($job, $job->data);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KJobHandlerWorker::getMaxJobsEachRun()
+	 * @see VJobHandlerWorker::getMaxJobsEachRun()
 	 */
 	protected function getMaxJobsEachRun()
 	{
 		return 1;
 	}
 	
-	protected function provision(KalturaBatchJob $job, KalturaProvisionJobData $data)
+	protected function provision(VidiunBatchJob $job, VidiunProvisionJobData $data)
 	{
-		$job = $this->updateJob($job, null, KalturaBatchJobStatus::QUEUED);
+		$job = $this->updateJob($job, null, VidiunBatchJobStatus::QUEUED);
 		
-		$engine = KProvisionEngine::getInstance( $job->jobSubType , $data);
+		$engine = VProvisionEngine::getInstance( $job->jobSubType , $data);
 		
 		if ( $engine == null )
 		{
 			$err = "Cannot find provision engine [{$job->jobSubType}] for job id [{$job->id}]";
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::ENGINE_NOT_FOUND, $err, KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::ENGINE_NOT_FOUND, $err, VidiunBatchJobStatus::FAILED);
 		}
 		
-		KalturaLog::info( "Using engine: " . $engine->getName() );
+		VidiunLog::info( "Using engine: " . $engine->getName() );
 	
 		$results = $engine->provide($job, $data);
 
-		if($results->status == KalturaBatchJobStatus::FINISHED)
-			return $this->closeJob($job, null, null, null, KalturaBatchJobStatus::ALMOST_DONE, $results->data);
+		if($results->status == VidiunBatchJobStatus::FINISHED)
+			return $this->closeJob($job, null, null, null, VidiunBatchJobStatus::ALMOST_DONE, $results->data);
 			
-		return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, null, $results->errMessage, $results->status, $results->data);
+		return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, null, $results->errMessage, $results->status, $results->data);
 	}
 }

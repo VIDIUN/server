@@ -3,6 +3,6 @@
  * @package plugins.emailNotification
  * @subpackage api.enum
  */
-class KalturaEmailNotificationTemplatePriority extends KalturaEnum implements EmailNotificationTemplatePriority
+class VidiunEmailNotificationTemplatePriority extends VidiunEnum implements EmailNotificationTemplatePriority
 {
 }

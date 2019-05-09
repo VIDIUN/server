@@ -1,6 +1,6 @@
 <?php
 /**
- * Will help find the policy for features deppending on the partner, kshow, entry , kuser and other dynamic parameters 
+ * Will help find the policy for features deppending on the partner, vshow, entry , vuser and other dynamic parameters 
  */
 class myPolicyMgr
 {
@@ -28,7 +28,7 @@ class myPolicyMgr
 			}
 			if ( $result !== null && $result !== "" )	
 			{	
-				KalturaLog::log ( __METHOD__ . " property [$property] found for arg [$i]" );
+				VidiunLog::log ( __METHOD__ . " property [$property] found for arg [$i]" );
 				return $result;
 			}
 			++$i;

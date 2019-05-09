@@ -3,7 +3,7 @@
  * @package plugins.scheduleBulkUpload
  * @subpackage lib
  */
-class BulkUploadScheduleAction implements IKalturaPluginEnum, BulkUploadAction
+class BulkUploadScheduleAction implements IVidiunPluginEnum, BulkUploadAction
 {
 	const CANCEL = 'CANCEL';
 	

@@ -4,7 +4,7 @@
  * @package plugins.metadata
  * @subpackage lib
  */
-class kMetadataKavaUtils
+class vMetadataKavaUtils
 {
 	const FILE_SYNC_CHUNK_SIZE = 100;
 	
@@ -31,7 +31,7 @@ class kMetadataKavaUtils
 		$criteria->add(MetadataPeer::PARTNER_ID, $partnerId);
 		$criteria->add(MetadataPeer::STATUS, Metadata::STATUS_VALID);
 		
-		$criteria->add(FileSyncPeer::DC, kDataCenterMgr::getCurrentDcId());
+		$criteria->add(FileSyncPeer::DC, vDataCenterMgr::getCurrentDcId());
 		$criteria->add(FileSyncPeer::STATUS, FileSync::FILE_SYNC_STATUS_READY);
 		$criteria->add(FileSyncPeer::FILE_TYPE, FileSync::FILE_SYNC_FILE_TYPE_FILE);
 		$criteria->add(FileSyncPeer::OBJECT_TYPE, FileSyncObjectType::METADATA);
@@ -51,7 +51,7 @@ class kMetadataKavaUtils
 	{
 		$fileSyncs = self::getMetadataReadyFileSyncs($objectIds, $partnerId, $metadataProfileId);
 
-		$cacheStore = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_FILE_SYNC);
+		$cacheStore = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_FILE_SYNC);
 		
 		$result = array();
 		for ($i = 0; $i < count($fileSyncs); $i += self::FILE_SYNC_CHUNK_SIZE)
@@ -60,7 +60,7 @@ class kMetadataKavaUtils
 			$curFileSyncs = array();
 			foreach (array_slice($fileSyncs, $i, self::FILE_SYNC_CHUNK_SIZE) as $fileSync)
 			{
-				$cacheKey = kFileSyncUtils::CACHE_KEY_PREFIX . implode('_', array(
+				$cacheKey = vFileSyncUtils::CACHE_KEY_PREFIX . implode('_', array(
 					$fileSync['ID'],
 					FileSyncObjectType::METADATA,
 					Metadata::FILE_SYNC_METADATA_DATA,
@@ -99,7 +99,7 @@ class kMetadataKavaUtils
 				}
 				
 				// parse the xml
-				$xml = new KDOMDocument();
+				$xml = new VDOMDocument();
 				if (!$xml->loadXML($source))
 				{
 					continue;
@@ -123,7 +123,7 @@ class kMetadataKavaUtils
 				// update the cache
 				if ($cacheStore && !isset($cacheItems[$cacheKey]))
 				{
-					$cacheStore->set($cacheKey, $source, kFileSyncUtils::FILE_SYNC_CACHE_EXPIRY);
+					$cacheStore->set($cacheKey, $source, vFileSyncUtils::FILE_SYNC_CACHE_EXPIRY);
 				}
 				
 				$result[$fileSync['OBJECT_ID']] = $fields;

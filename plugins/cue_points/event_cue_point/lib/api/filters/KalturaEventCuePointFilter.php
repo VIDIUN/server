@@ -3,7 +3,7 @@
  * @package plugins.eventCuePoint
  * @subpackage api.filters
  */
-class KalturaEventCuePointFilter extends KalturaEventCuePointBaseFilter
+class VidiunEventCuePointFilter extends VidiunEventCuePointBaseFilter
 {
 	static private $map_between_objects = array
 	(
@@ -16,7 +16,7 @@ class KalturaEventCuePointFilter extends KalturaEventCuePointBaseFilter
 		return array_merge(parent::getMapBetweenObjects(), self::$map_between_objects);
 	}
 
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, $type = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, $type = null)
 	{
 		return parent::getTypeListResponse($pager, $responseProfile, EventCuePointPlugin::getCuePointTypeCoreValue(EventCuePointType::EVENT));
 	}

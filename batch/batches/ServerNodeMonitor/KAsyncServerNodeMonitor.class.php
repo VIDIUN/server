@@ -10,49 +10,49 @@
  * @package Scheduler
  * @subpackage ServerNodeMonitor
  */
-class KAsyncServerNodeMonitor extends KPeriodicWorker
+class VAsyncServerNodeMonitor extends VPeriodicWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::SERVER_NODE_MONITOR;
+		return VidiunBatchJobType::SERVER_NODE_MONITOR;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::run()
+	 * @see VBatchBase::run()
 	*/
 	public function run($jobs = null)
 	{
-		$filter = new KalturaServerNodeFilter();
+		$filter = new VidiunServerNodeFilter();
 		$filter->typeIn=self::$taskConfig->params->typesToMonitor;
-		$filter->statusIn=KalturaServerNodeStatus::ACTIVE;
+		$filter->statusIn=VidiunServerNodeStatus::ACTIVE;
 		$filter->heartbeatTimeLessThanOrEqual = (time() - self::$taskConfig->params->serverNodeTTL);
-		$pager = new KalturaFilterPager();
+		$pager = new VidiunFilterPager();
 		$pager->pageSize=500;
 		$pager->pageIndex = 1;
-		$serverNodes = self::$kClient->serverNode->listAction($filter, $pager);
+		$serverNodes = self::$vClient->serverNode->listAction($filter, $pager);
 		
 		while ($serverNodes->objects && count($serverNodes->objects))
 		{
 			foreach ($serverNodes->objects as $serverNode)
 			{
 				/**
-				 * @var KalturaEdgeServerNode $serverNode
+				 * @var VidiunEdgeServerNode $serverNode
 				 */
-				KalturaLog::info("ServerNode [" . $serverNode->id . "] is offline, last heartbeat [" . $serverNode->heartbeatTime . "]");
+				VidiunLog::info("ServerNode [" . $serverNode->id . "] is offline, last heartbeat [" . $serverNode->heartbeatTime . "]");
 				try
 				{
-					self::$kClient->serverNode->markOffline($serverNode->id);
+					self::$vClient->serverNode->markOffline($serverNode->id);
 				}
 				catch (Exception $e)
 				{
-					KalturaLog::info("Could not mark servernode offline, continuing [". $serverNode->id . "]");
+					VidiunLog::info("Could not mark servernode offline, continuing [". $serverNode->id . "]");
 				}
 			}
 			//No need to move the pager index since we change all the server-nodes we found from active to unregistered.
-			$serverNodes = self::$kClient->serverNode->listAction($filter, $pager);
+			$serverNodes = self::$vClient->serverNode->listAction($filter, $pager);
 		}
 	}
 }

@@ -4,7 +4,7 @@
     <!-- load the Subversion details we defined earlier -->
     <property file="subversion.properties" />
  
-    <property name="rootdir" value="/opt/dev/kaltura"/>
+    <property name="rootdir" value="/opt/dev/vidiun"/>
 	<property name="architecture" value="64bit"/>
 	<property name="adminPassword" value="admin"/>
 	

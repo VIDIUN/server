@@ -1,7 +1,7 @@
 <?php
-class kAkamaiUniversalProvisionJobData extends kProvisionJobData
+class vAkamaiUniversalProvisionJobData extends vProvisionJobData
 {
-	const DEFAULT_DOMAIN_NAME = 'urtmpkal-f.akamaihd.net';
+	const DEFAULT_DOMAIN_NAME = 'urtmpvid-f.akamaihd.net';
 	/**
 	 * @var string
 	 */
@@ -179,7 +179,7 @@ class kAkamaiUniversalProvisionJobData extends kProvisionJobData
 	}
 
 	/* (non-PHPdoc)
-	 * @see kProvisionJobData::populateFromPartner()
+	 * @see vProvisionJobData::populateFromPartner()
 	 */
 	public function populateFromPartner(Partner $partner)
 	{
@@ -213,7 +213,7 @@ class kAkamaiUniversalProvisionJobData extends kProvisionJobData
 		$entry->setHlsStreamUrl($baseHlsUrl.$this->getStreamName()."_1@".$this->getStreamID()."/master.m3u8");
 		
 		$configs = $entry->getLiveStreamConfigurations();
-		$config = new kLiveStreamConfiguration();
+		$config = new vLiveStreamConfiguration();
 		$config->setProtocol(PlaybackProtocol::AKAMAI_HDS);
 
 		if (isset($this->basePlaybackUrls[PlaybackProtocol::AKAMAI_HDS]))
@@ -226,7 +226,7 @@ class kAkamaiUniversalProvisionJobData extends kProvisionJobData
 		$entry->setLiveStreamConfigurations($configs);
 	}
 	/* (non-PHPdoc)
-	 * @see kProvisionJobData::populateFromEntry()
+	 * @see vProvisionJobData::populateFromEntry()
 	 */
 	public function populateFromEntry(LiveStreamEntry $entry) 
 	{

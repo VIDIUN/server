@@ -2,7 +2,7 @@
 /**
  * @package plugins.dailymotionDistribution
  */
-class DailymotionDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider
+class DailymotionDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider
 {
 	const PLUGIN_NAME = 'dailymotionDistribution';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
@@ -16,12 +16,12 @@ class DailymotionDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -57,7 +57,7 @@ class DailymotionDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::DAILYMOTION)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::DAILYMOTION)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return new DailymotionDistributionEngine();
@@ -86,14 +86,14 @@ class DailymotionDistributionPlugin extends KalturaPlugin implements IKalturaPer
 			if($baseClass == 'IDistributionEngineDisable')
 				return new DailymotionDistributionEngine();
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaDailymotionDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunDailymotionDistributionProfile();
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return new KalturaDailymotionDistributionJobProviderData();
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return new VidiunDailymotionDistributionJobProviderData();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::DAILYMOTION)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::DAILYMOTION)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -102,20 +102,20 @@ class DailymotionDistributionPlugin extends KalturaPlugin implements IKalturaPer
 			}
 		}
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(DailymotionDistributionProviderType::DAILYMOTION))
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(DailymotionDistributionProviderType::DAILYMOTION))
 		{
-			$reflect = new ReflectionClass('KalturaDailymotionDistributionJobProviderData');
+			$reflect = new ReflectionClass('VidiunDailymotionDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(DailymotionDistributionProviderType::DAILYMOTION))
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(DailymotionDistributionProviderType::DAILYMOTION))
 		{
-			$reflect = new ReflectionClass('kDailymotionDistributionJobProviderData');
+			$reflect = new ReflectionClass('vDailymotionDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(DailymotionDistributionProviderType::DAILYMOTION))
-			return new KalturaDailymotionDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(DailymotionDistributionProviderType::DAILYMOTION))
+			return new VidiunDailymotionDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(DailymotionDistributionProviderType::DAILYMOTION))
 			return new DailymotionDistributionProfile();
@@ -131,7 +131,7 @@ class DailymotionDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::DAILYMOTION)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::DAILYMOTION)
 		{
 			if($baseClass == 'IDistributionEngineCloseDelete')
 				return 'DailymotionDistributionEngine';
@@ -160,30 +160,30 @@ class DailymotionDistributionPlugin extends KalturaPlugin implements IKalturaPer
 			if($baseClass == 'IDistributionEngineDisable')
 				return 'DailymotionDistributionEngine';
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaDailymotionDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunDailymotionDistributionProfile';
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaDailymotionDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunDailymotionDistributionJobProviderData';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::DAILYMOTION)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::DAILYMOTION)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_DailymotionProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_DailymotionDistribution_Type_DailymotionDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_DailymotionDistribution_Type_DailymotionDistributionProfile';
 		}
 		
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(DailymotionDistributionProviderType::DAILYMOTION))
-			return 'KalturaDailymotionDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(DailymotionDistributionProviderType::DAILYMOTION))
+			return 'VidiunDailymotionDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(DailymotionDistributionProviderType::DAILYMOTION))
-			return 'kDailymotionDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(DailymotionDistributionProviderType::DAILYMOTION))
+			return 'vDailymotionDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(DailymotionDistributionProviderType::DAILYMOTION))
-			return 'KalturaDailymotionDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(DailymotionDistributionProviderType::DAILYMOTION))
+			return 'VidiunDailymotionDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(DailymotionDistributionProviderType::DAILYMOTION))
 			return 'DailymotionDistributionProfile';
@@ -204,11 +204,11 @@ class DailymotionDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaDailymotionDistributionProvider();
+		$distributionProvider = new VidiunDailymotionDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -229,8 +229,8 @@ class DailymotionDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -238,6 +238,6 @@ class DailymotionDistributionPlugin extends KalturaPlugin implements IKalturaPer
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

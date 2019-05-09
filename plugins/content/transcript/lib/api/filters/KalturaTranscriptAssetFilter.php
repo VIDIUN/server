@@ -3,28 +3,28 @@
  * @package plugins.transcript
  * @subpackage api.filters
  */
-class KalturaTranscriptAssetFilter extends KalturaTranscriptAssetBaseFilter
+class VidiunTranscriptAssetFilter extends VidiunTranscriptAssetBaseFilter
 {	
 	/* (non-PHPdoc)
-	 * @see KalturaAssetFilter::getTypeListResponse()
+	 * @see VidiunAssetFilter::getTypeListResponse()
 	 */
-	public function getTypeListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null, array $types = null)
+	public function getTypeListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null, array $types = null)
 	{
-		$types = KalturaPluginManager::getExtendedTypes(assetPeer::OM_CLASS, TranscriptPlugin::getAssetTypeCoreValue(TranscriptAssetType::TRANSCRIPT));
+		$types = VidiunPluginManager::getExtendedTypes(assetPeer::OM_CLASS, TranscriptPlugin::getAssetTypeCoreValue(TranscriptAssetType::TRANSCRIPT));
 		list($list, $totalCount) = $this->doGetListResponse($pager, $types);
 
-		$response = new KalturaTranscriptAssetListResponse();
-		$response->objects = KalturaTranscriptAssetArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunTranscriptAssetListResponse();
+		$response->objects = VidiunTranscriptAssetArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 		return $response;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaAssetFilter::getListResponse()
+	 * @see VidiunAssetFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$types = KalturaPluginManager::getExtendedTypes(assetPeer::OM_CLASS, TranscriptPlugin::getAssetTypeCoreValue(TranscriptAssetType::TRANSCRIPT));
+		$types = VidiunPluginManager::getExtendedTypes(assetPeer::OM_CLASS, TranscriptPlugin::getAssetTypeCoreValue(TranscriptAssetType::TRANSCRIPT));
 		return $this->getTypeListResponse($pager, $responseProfile, $types);
 	}
 }

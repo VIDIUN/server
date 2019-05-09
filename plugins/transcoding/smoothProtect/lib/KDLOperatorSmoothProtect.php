@@ -5,7 +5,7 @@
  * 
  * SmoothProtect plugin 
  */
-class KDLOperatorSmoothProtect extends KDLOperatorBase {
+class VDLOperatorSmoothProtect extends VDLOperatorBase {
     public function __construct($id="smoothProtect.SmoothProtect", $name=null, $sourceBlacklist=null, $targetBlacklist=null) {
     	parent::__construct($id,$name,$sourceBlacklist,$targetBlacklist);
     }
@@ -13,7 +13,7 @@ class KDLOperatorSmoothProtect extends KDLOperatorBase {
 	/* ---------------------------
 	 * GenerateCommandLine
 	 */
-    public function GenerateCommandLine(KDLFlavor $design, KDLFlavor $target, $extra=null)
+    public function GenerateCommandLine(VDLFlavor $design, VDLFlavor $target, $extra=null)
 	{
 		$cmdStr = " ".SmoothProtectPlugin::PARAMS_STUB;
 		return $cmdStr;
@@ -22,7 +22,7 @@ class KDLOperatorSmoothProtect extends KDLOperatorBase {
 	/* ---------------------------
 	 * CheckConstraints
 	 */
-	public function CheckConstraints(KDLMediaDataSet $source, KDLFlavor $target, array &$errors=null, array &$warnings=null)
+	public function CheckConstraints(VDLMediaDataSet $source, VDLFlavor $target, array &$errors=null, array &$warnings=null)
 	{
 	    return parent::CheckConstraints($source, $target, $errors, $warnings);
 	}

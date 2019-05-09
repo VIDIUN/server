@@ -1,6 +1,6 @@
 <?php
 
-class KSyncPointsMediaInfoParser
+class VSyncPointsMediaInfoParser
 {
 	const MIN_DIFF_BETWEEN_SYNC_POINTS_IN_MSEC = 60000;
 	const DATA_TRACK_IDENTIFIER = "data";
@@ -8,7 +8,7 @@ class KSyncPointsMediaInfoParser
 	const MAX_DISCONTINUANCE_ALLOWED = 1000;
 	const TS_PTS_DELIMITER = ";";
 	
-	protected $ffprobeBin = 'ffprobeKAMFMediaInfoParser';
+	protected $ffprobeBin = 'ffprobeVAMFMediaInfoParser';
 	protected $filePath;
 	private static $dataStreamCodecs = array(self::DATA_TRACK_IDENTIFIER, self::SUBTITLE_TRACK_IDENTIFIER);
 	
@@ -16,9 +16,9 @@ class KSyncPointsMediaInfoParser
 	{
 		if (is_null($ffprobeBin))
 		{
-			if (kConf::hasParam('bin_path_ffprobeKAMFMediaInfoParser'))
+			if (vConf::hasParam('bin_path_ffprobeVAMFMediaInfoParser'))
 			{
-				$this->ffprobeBin = kConf::get('bin_path_ffprobeKAMFMediaInfoParser');
+				$this->ffprobeBin = vConf::get('bin_path_ffprobeVAMFMediaInfoParser');
 			}
 		}
 		else
@@ -26,7 +26,7 @@ class KSyncPointsMediaInfoParser
 			$this->ffprobeBin = $ffprobeBin;
 		}
 		if (!file_exists($filePath))
-			throw new kApplicativeException(KBaseMediaParser::ERROR_NFS_FILE_DOESNT_EXIST, "File not found at [$filePath]");
+			throw new vApplicativeException(VBaseMediaParser::ERROR_NFS_FILE_DOESNT_EXIST, "File not found at [$filePath]");
 		
 		$this->filePath = $filePath;
 	}
@@ -56,10 +56,10 @@ class KSyncPointsMediaInfoParser
 		$dataStreamIndex = $this->getDataStreamIndex();
 		
 		$cmd = $this->getExtrackStreamInfoCommand($dataStreamIndex);
-		KalturaLog::debug("Executing [$cmd] for extarckting id3 tags info");
+		VidiunLog::debug("Executing [$cmd] for extarckting id3 tags info");
 		$output = shell_exec($cmd);
 		if (trim($output) === "")
-			throw new kApplicativeException(KBaseMediaParser::ERROR_EXTRACT_MEDIA_FAILED, "Failed to parse media using " . get_class($this));
+			throw new vApplicativeException(VBaseMediaParser::ERROR_EXTRACT_MEDIA_FAILED, "Failed to parse media using " . get_class($this));
 		
 		return $output;
 	}
@@ -79,7 +79,7 @@ class KSyncPointsMediaInfoParser
 		}
 		
 		if(!$dataStreamIndex)
-			throw new kApplicativeException(KBaseMediaParser::ERROR_EXTRACT_MEDIA_FAILED, "Failed to locate data stream index " . get_class($this));
+			throw new vApplicativeException(VBaseMediaParser::ERROR_EXTRACT_MEDIA_FAILED, "Failed to locate data stream index " . get_class($this));
 		
 		return $dataStreamIndex;
 	}
@@ -87,11 +87,11 @@ class KSyncPointsMediaInfoParser
 	private function getStreams()
 	{
 		$cmd = $this->getLocateDataStreamIndexCommand();
-		KalturaLog::debug("Executing [$cmd] to locate data track index");
+		VidiunLog::debug("Executing [$cmd] to locate data track index");
 		$streams = shell_exec($cmd);
 		
 		if (trim($streams) === "")
-			throw new kApplicativeException(KBaseMediaParser::ERROR_EXTRACT_MEDIA_FAILED, "Failed to locate data stream index " . get_class($this));
+			throw new vApplicativeException(VBaseMediaParser::ERROR_EXTRACT_MEDIA_FAILED, "Failed to locate data stream index " . get_class($this));
 		
 		$streams = strtolower($streams);
 		return json_decode($streams)->streams;
@@ -119,21 +119,21 @@ class KSyncPointsMediaInfoParser
 				
 				if(!isset($streamPtsTime) || !isset($streamId3tagTimeStamp))
 				{
-					KalturaLog::debug("Could not locate streamPtsTime [$streamPtsTime] or streamId3tagTimeStamp [$streamId3tagTimeStamp] skipping validation");
+					VidiunLog::debug("Could not locate streamPtsTime [$streamPtsTime] or streamId3tagTimeStamp [$streamId3tagTimeStamp] skipping validation");
 					continue;
 				}
 				
-				KalturaLog::debug("Testing:: time stamps to check are: streamId3tagTimeStamp [$streamId3tagTimeStamp] streamPts [$streamPtsTime]");
+				VidiunLog::debug("Testing:: time stamps to check are: streamId3tagTimeStamp [$streamId3tagTimeStamp] streamPts [$streamPtsTime]");
 				if ($streamId3tagTimeStamp >= 0 && $this->shouldSaveSyncPoint(end($syncPoints), $streamId3tagTimeStamp, $streamPtsTime))
 				{
 					$syncPoints[] = $streamPtsTime . self::TS_PTS_DELIMITER . $streamId3tagTimeStamp;
 				}
 			}
-			KalturaLog::debug("Returning syncPoints array: " . print_r($syncPoints, true));
+			VidiunLog::debug("Returning syncPoints array: " . print_r($syncPoints, true));
 		}
 		else
 		{
-			KalturaLog::warning('Failed to json_decode. returning an empty syncPoints array');
+			VidiunLog::warning('Failed to json_decode. returning an empty syncPoints array');
 		}
 		
 		return $syncPoints;
@@ -201,7 +201,7 @@ class KSyncPointsMediaInfoParser
 	{
 		if (!$lastSyncPoint)
 		{
-			KalturaLog::debug("First syncPoint, ts = [$streamId3tagTimeStamp] pts = [$streamPts]");
+			VidiunLog::debug("First syncPoint, ts = [$streamId3tagTimeStamp] pts = [$streamPts]");
 			return true;
 		}
 		
@@ -215,18 +215,18 @@ class KSyncPointsMediaInfoParser
 		{
 			if ($tsDelta > self::MIN_DIFF_BETWEEN_SYNC_POINTS_IN_MSEC)
 			{
-				KalturaLog::debug("Discontinuance found, adding syncPoint tsDelta = [$tsDelta] ptsDelta = [$ptsDelta]");
+				VidiunLog::debug("Discontinuance found, adding syncPoint tsDelta = [$tsDelta] ptsDelta = [$ptsDelta]");
 				return true;
 			}
 			else
 			{
-				KalturaLog::debug("Discontinuance found, but not adding syncPoint since time from last syncPoint is less than ["
+				VidiunLog::debug("Discontinuance found, but not adding syncPoint since time from last syncPoint is less than ["
 					. self::MIN_DIFF_BETWEEN_SYNC_POINTS_IN_MSEC . "] tsDelta = [$tsDelta] ptsDelta [$ptsDelta]");
 			}
 		}
 		else
 		{
-			KalturaLog::debug("NOT adding syncPoint, tsDelta = [$tsDelta] ptsDelta = [$ptsDelta]");
+			VidiunLog::debug("NOT adding syncPoint, tsDelta = [$tsDelta] ptsDelta = [$ptsDelta]");
 		}
 		
 		return false;

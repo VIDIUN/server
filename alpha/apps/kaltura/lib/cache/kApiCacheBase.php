@@ -4,7 +4,7 @@
  * @package server-infra
  * @subpackage cache
  */
-class kApiCacheBase
+class vApiCacheBase
 {
 	// extra cache fields
 	const ECF_REFERRER = 'referrer';
@@ -88,7 +88,7 @@ class kApiCacheBase
 		if (!$this->init())
 		{
 			if (self::$_debugMode)
-				$this->debugLog('kApiCacheBase::init returned false');
+				$this->debugLog('vApiCacheBase::init returned false');
 			self::disableCache();
 			return;
 		}
@@ -368,6 +368,6 @@ class kApiCacheBase
 
 	protected function debugLog($msg)
 	{
-		error_log("kApiCache [$this->_instanceId] ".$msg);
+		error_log("vApiCache [$this->_instanceId] ".$msg);
 	}
 }

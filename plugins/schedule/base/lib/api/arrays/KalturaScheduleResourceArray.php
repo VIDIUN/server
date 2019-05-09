@@ -3,17 +3,17 @@
  * @package plugins.schedule
  * @subpackage api.objects
  */
-class KalturaScheduleResourceArray extends KalturaTypedArray
+class VidiunScheduleResourceArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaScheduleResourceArray();
+		$newArr = new VidiunScheduleResourceArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-			$newArr[] = KalturaScheduleResource::getInstance($obj, $responseProfile);
+			$newArr[] = VidiunScheduleResource::getInstance($obj, $responseProfile);
 		}
 		
 		return $newArr;
@@ -21,6 +21,6 @@ class KalturaScheduleResourceArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaScheduleResource");	
+		parent::__construct("VidiunScheduleResource");	
 	}
 }

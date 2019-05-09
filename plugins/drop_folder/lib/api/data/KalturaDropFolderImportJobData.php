@@ -4,7 +4,7 @@
  * @package plugins.dropFolder
  * @subpackage api.objects
  */
-class KalturaDropFolderImportJobData extends KalturaSshImportJobData
+class VidiunDropFolderImportJobData extends VidiunSshImportJobData
 {
 	/**
 	 * @var int
@@ -26,7 +26,7 @@ class KalturaDropFolderImportJobData extends KalturaSshImportJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kDropFolderImportJobData();
+			$dbData = new vDropFolderImportJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

@@ -19,7 +19,7 @@ class TvinciDistributionFeedEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
 		return $this->handleAction($data, $data->distributionProfile, $data->providerData, "Submit");
 	}
@@ -27,7 +27,7 @@ class TvinciDistributionFeedEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
 		return $this->handleAction($data, $data->distributionProfile, $data->providerData, "Update");
 	}
@@ -35,46 +35,46 @@ class TvinciDistributionFeedEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	*/
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
 		return $this->handleAction($data, $data->distributionProfile, $data->providerData, "Delete");
 	}
 
-	private function validateProviderDataAndDistributionProfile(KalturaDistributionJobData $data){
-		if (!$data->distributionProfile || !($data->distributionProfile instanceof KalturaTvinciDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaTvinciDistributionProfile");
-		if (!$data->providerData || !($data->providerData instanceof KalturaTvinciDistributionJobProviderData))
-			throw new Exception("Provider data must be of type KalturaTvinciDistributionJobProviderData");
+	private function validateProviderDataAndDistributionProfile(VidiunDistributionJobData $data){
+		if (!$data->distributionProfile || !($data->distributionProfile instanceof VidiunTvinciDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunTvinciDistributionProfile");
+		if (!$data->providerData || !($data->providerData instanceof VidiunTvinciDistributionJobProviderData))
+			throw new Exception("Provider data must be of type VidiunTvinciDistributionJobProviderData");
 	}
 
 
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineReport::fetchReport()
 	 */
-	public function fetchReport(KalturaDistributionFetchReportJobData $data)
+	public function fetchReport(VidiunDistributionFetchReportJobData $data)
 	{
 		return false;
 	}
 
 	/**
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaTvinciDistributionProfile $distributionProfile
-	 * @param KalturaTvinciDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunTvinciDistributionProfile $distributionProfile
+	 * @param VidiunTvinciDistributionJobProviderData $providerData
 	 * @param $actionType
 	 * @return bool
 	 * @throws Exception
 	 */
-	private function handleAction(KalturaDistributionJobData $data, KalturaTvinciDistributionProfile $distributionProfile,
-								  KalturaTvinciDistributionJobProviderData $providerData, $actionType){
+	private function handleAction(VidiunDistributionJobData $data, VidiunTvinciDistributionProfile $distributionProfile,
+								  VidiunTvinciDistributionJobProviderData $providerData, $actionType){
 		$this->validateProviderDataAndDistributionProfile($data);
 		$url = $distributionProfile->ingestUrl;
-		KalturaLog::info("Tvinci Distribution action {$actionType}".
+		VidiunLog::info("Tvinci Distribution action {$actionType}".
 						 ",entry {$data->entryDistribution->entryId}, url: {$url}\nXML data:\n{$providerData->xml}");
 
 		$result = $this->postXml($url, $providerData->xml, $distributionProfile->innerType);
 		$success = ($result->status == 'OK' && $result->tvmID != '');
 		if (!$success) {
-			KalturaLog::err("Tvinci distribution action {$actionType} has failed with description: {$result->description} ".
+			VidiunLog::err("Tvinci distribution action {$actionType} has failed with description: {$result->description} ".
 							"and status: {$result->status}");
 			throw new Exception("{$actionType} failed - reason {$result->description}");
 		}
@@ -93,7 +93,7 @@ class TvinciDistributionFeedEngine extends DistributionEngine implements
 		$response = self::curlPost($url, $xml, $innerType);
 		KalturaLog::info("Post XML Full response: " . print_r($response,true));
 
-		if ( $response['http_code'] == KCurlHeaderResponse::HTTP_STATUS_OK )
+		if ( $response['http_code'] == VCurlHeaderResponse::HTTP_STATUS_OK )
 		{
 			try
 			{

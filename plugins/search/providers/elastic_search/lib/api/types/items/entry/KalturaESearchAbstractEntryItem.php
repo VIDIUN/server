@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-abstract class KalturaESearchAbstractEntryItem extends KalturaESearchEntryBaseItem
+abstract class VidiunESearchAbstractEntryItem extends VidiunESearchEntryBaseItem
 {
 
 	/**
@@ -12,12 +12,12 @@ abstract class KalturaESearchAbstractEntryItem extends KalturaESearchEntryBaseIt
 	public $searchTerm;
 	
 	/**
-	 * @var KalturaESearchItemType
+	 * @var VidiunESearchItemType
 	 */
 	public $itemType;
 	
 	/**
-	 * @var KalturaESearchRange
+	 * @var VidiunESearchRange
 	 */
 	public $range;
 
@@ -47,7 +47,7 @@ abstract class KalturaESearchAbstractEntryItem extends KalturaESearchEntryBaseIt
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		list($object_to_fill, $props_to_skip) =
-			KalturaESearchItemImpl::eSearchItemToObjectImpl($this, $this->getDynamicEnumMap(), $this->getItemFieldName(), $this->getFieldEnumMap(), $object_to_fill, $props_to_skip);
+			VidiunESearchItemImpl::eSearchItemToObjectImpl($this, $this->getDynamicEnumMap(), $this->getItemFieldName(), $this->getFieldEnumMap(), $object_to_fill, $props_to_skip);
 		
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

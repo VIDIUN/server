@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaSchemaType extends KalturaDynamicEnum implements SchemaType
+class VidiunSchemaType extends VidiunDynamicEnum implements SchemaType
 {
 	public static function getDescriptions()
 	{

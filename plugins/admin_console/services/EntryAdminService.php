@@ -6,7 +6,7 @@
  * @package plugins.adminConsole
  * @subpackage api.services
  */
-class EntryAdminService extends KalturaBaseService
+class EntryAdminService extends VidiunBaseService
 {
 	const GET_TRACKS_LIMIT = 30;
 	
@@ -27,7 +27,7 @@ class EntryAdminService extends KalturaBaseService
 		parent::initService($serviceId, $serviceName, $actionName);
 
 		if(!AdminConsolePlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, AdminConsolePlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, AdminConsolePlugin::PLUGIN_NAME);
 	}
 
 	/**
@@ -36,22 +36,22 @@ class EntryAdminService extends KalturaBaseService
 	 * @action get
 	 * @param string $entryId Entry id
 	 * @param int $version Desired version of the data
-	 * @return KalturaBaseEntry The requested entry
+	 * @return VidiunBaseEntry The requested entry
 	 */
 	function getAction($entryId, $version = -1)
 	{
 		$dbEntries = entryPeer::retrieveByPKsNoFilter(array($entryId));
 		if (!count($dbEntries))
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 		
 		$dbEntry = reset($dbEntries);
 		if (!$dbEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		if ($version !== -1)
 			$dbEntry->setDesiredVersion($version);
 			
-	    $entry = KalturaEntryFactory::getInstanceByType($dbEntry->getType(), true);
+	    $entry = VidiunEntryFactory::getInstanceByType($dbEntry->getType(), true);
 	    
 		$entry->fromObject($dbEntry, $this->getResponseProfile());
 
@@ -64,13 +64,13 @@ class EntryAdminService extends KalturaBaseService
 	 * @action getByFlavorId
 	 * @param string $flavorId
 	 * @param int $version Desired version of the data
-	 * @return KalturaBaseEntry The requested entry
+	 * @return VidiunBaseEntry The requested entry
 	 */
 	public function getByFlavorIdAction($flavorId, $version = -1)
 	{
 		$flavorAssetDb = assetPeer::retrieveById($flavorId);
 		if (!$flavorAssetDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_ASSET_ID_NOT_FOUND, $flavorId);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_ASSET_ID_NOT_FOUND, $flavorId);
 			
 		return $this->getAction($flavorAssetDb->getEntryId(), $version);
 	}
@@ -80,7 +80,7 @@ class EntryAdminService extends KalturaBaseService
 	 * 
 	 * @action getTracks
 	 * @param string $entryId Entry id
-	 * @return KalturaTrackEntryListResponse
+	 * @return VidiunTrackEntryListResponse
 	 */
 	function getTracksAction($entryId)
 	{
@@ -91,8 +91,8 @@ class EntryAdminService extends KalturaBaseService
 		
 		$dbList = TrackEntryPeer::doSelect($c);
 		
-		$list = KalturaTrackEntryArray::fromDbArray($dbList, $this->getResponseProfile());
-		$response = new KalturaTrackEntryListResponse();
+		$list = VidiunTrackEntryArray::fromDbArray($dbList, $this->getResponseProfile());
+		$response = new VidiunTrackEntryListResponse();
 		$response->objects = $list;
 		$response->totalCount = count($dbList);
 		return $response;
@@ -103,13 +103,13 @@ class EntryAdminService extends KalturaBaseService
 	 *
 	 * @action restoreDeletedEntry
 	 * @param string $entryId
-	 * @return KalturaBaseEntry The restored entry
+	 * @return VidiunBaseEntry The restored entry
 	 */
 	public function restoreDeletedEntryAction($entryId)
 	{
 		$deletedEntry = entryPeer::retrieveByPKNoFilter($entryId);
 		if (!$deletedEntry)
-			throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $entryId);
+			throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $entryId);
 
 		$fileSyncKeys = array();
 		foreach (self::$fileSyncKeysToRestore as $key) {
@@ -136,7 +136,7 @@ class EntryAdminService extends KalturaBaseService
 		FileSyncPeer::setUseCriteriaFilter(true);
 
 		if (!$this->validateEntryForRestoreDelete($deletedEntry, $fileSyncs, $deletedAssets))
-			throw new KalturaAPIException(KalturaAdminConsoleErrors::ENTRY_ASSETS_WRONG_STATUS_FOR_RESTORE, $entryId);
+			throw new VidiunAPIException(VidiunAdminConsoleErrors::ENTRY_ASSETS_WRONG_STATUS_FOR_RESTORE, $entryId);
 
 		$this->restoreFileSyncs($fileSyncs);
 
@@ -153,10 +153,10 @@ class EntryAdminService extends KalturaBaseService
 		$deletedEntry->setData($deletedEntry->getFromCustomData("deleted_original_data"),true); //data should be resotred even if it's NULL
 		$deletedEntry->save();
 
-		kEventsManager::flushEvents();
-		kMemoryManager::clearMemory();
+		vEventsManager::flushEvents();
+		vMemoryManager::clearMemory();
 
-		$entry = KalturaEntryFactory::getInstanceByType($deletedEntry->getType(), true);
+		$entry = VidiunEntryFactory::getInstanceByType($deletedEntry->getType(), true);
 		$entry->fromObject($deletedEntry, $this->getResponseProfile());
 		return $entry;
 	}
@@ -178,7 +178,7 @@ class EntryAdminService extends KalturaBaseService
 				FileSyncPeer::setUseCriteriaFilter(true);
 				if ($linkedFileSync->getStatus() == FileSync::FILE_SYNC_STATUS_READY) {
 					$shouldUnDelete = true;
-					kFileSyncUtils::incrementLinkCountForFileSync($linkedFileSync);
+					vFileSyncUtils::incrementLinkCountForFileSync($linkedFileSync);
 				}
 			}
 

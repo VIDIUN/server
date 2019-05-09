@@ -3,7 +3,7 @@
 /**
  * @package plugins.queue
  */
-interface IKalturaQueuePlugin
+interface IVidiunQueuePlugin
 {
     // marker interface
 }

@@ -28,7 +28,7 @@ CREATE TABLE `cue_point`
 	`status` INTEGER  NOT NULL,
 	`type` INTEGER  NOT NULL,
 	`sub_type` INTEGER  NOT NULL,
-	`kuser_id` INTEGER  NOT NULL,
+	`vuser_id` INTEGER  NOT NULL,
 	`custom_data` TEXT,
 	`partner_data` TEXT,
 	`partner_sort_value` INTEGER,

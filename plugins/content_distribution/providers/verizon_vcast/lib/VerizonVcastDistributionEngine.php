@@ -17,7 +17,7 @@ class VerizonVcastDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineSubmit::submit()
 	 */
-	public function submit(KalturaDistributionSubmitJobData $data)
+	public function submit(VidiunDistributionSubmitJobData $data)
 	{
 		$this->validateJobDataObjectTypes($data);
 		
@@ -29,7 +29,7 @@ class VerizonVcastDistributionEngine extends DistributionEngine implements
 	/* (non-PHPdoc)
 	 * @see IDistributionEngineCloseSubmit::closeSubmit()
 	 */
-	public function closeSubmit(KalturaDistributionSubmitJobData $data)
+	public function closeSubmit(VidiunDistributionSubmitJobData $data)
 	{
 		$this->validateJobDataObjectTypes($data);
 		
@@ -52,7 +52,7 @@ class VerizonVcastDistributionEngine extends DistributionEngine implements
 	 * (non-PHPdoc)
 	 * @see IDistributionEngineUpdate::update()
 	 */
-	public function update(KalturaDistributionUpdateJobData $data)
+	public function update(VidiunDistributionUpdateJobData $data)
 	{
 		$this->validateJobDataObjectTypes($data);
 		
@@ -65,7 +65,7 @@ class VerizonVcastDistributionEngine extends DistributionEngine implements
 	 * (non-PHPdoc)
 	 * @see IDistributionEngineCloseUpdate::closeUpdate()
 	 */
-	public function closeUpdate(KalturaDistributionUpdateJobData $data)
+	public function closeUpdate(VidiunDistributionUpdateJobData $data)
 	{
 		$this->validateJobDataObjectTypes($data);
 	}
@@ -74,7 +74,7 @@ class VerizonVcastDistributionEngine extends DistributionEngine implements
 	 * (non-PHPdoc)
 	 * @see IDistributionEngineDelete::delete()
 	 */
-	public function delete(KalturaDistributionDeleteJobData $data)
+	public function delete(VidiunDistributionDeleteJobData $data)
 	{
 		$this->validateJobDataObjectTypes($data);
 		return true;
@@ -84,34 +84,34 @@ class VerizonVcastDistributionEngine extends DistributionEngine implements
 	 * (non-PHPdoc)
 	 * @see IDistributionEngineCloseDelete::closeDelete()
 	 */
-	public function closeDelete(KalturaDistributionDeleteJobData $data)
+	public function closeDelete(VidiunDistributionDeleteJobData $data)
 	{
 		$this->validateJobDataObjectTypes($data);
 	}
 	
 	/**
-	 * @param KalturaDistributionJobData $data
+	 * @param VidiunDistributionJobData $data
 	 * @throws Exception
 	 */
-	protected function validateJobDataObjectTypes(KalturaDistributionJobData $data)
+	protected function validateJobDataObjectTypes(VidiunDistributionJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaVerizonVcastDistributionProfile))
-			throw new Exception("Distribution profile must be of type KalturaVerizonVcastDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunVerizonVcastDistributionProfile))
+			throw new Exception("Distribution profile must be of type VidiunVerizonVcastDistributionProfile");
 	
-		if(!$data->providerData || !($data->providerData instanceof KalturaVerizonVcastDistributionJobProviderData))
-			throw new Exception("Provider data must be of type KalturaVerizonVcastDistributionJobProviderData");
+		if(!$data->providerData || !($data->providerData instanceof VidiunVerizonVcastDistributionJobProviderData))
+			throw new Exception("Provider data must be of type VidiunVerizonVcastDistributionJobProviderData");
 	}
 	
 	/**
 	 * @param string $path
-	 * @param KalturaDistributionJobData $data
-	 * @param KalturaVerizonDistributionProfile $distributionProfile
-	 * @param KalturaVerizonDistributionJobProviderData $providerData
+	 * @param VidiunDistributionJobData $data
+	 * @param VidiunVerizonDistributionProfile $distributionProfile
+	 * @param VidiunVerizonDistributionJobProviderData $providerData
 	 */
-	public function handleSubmit(KalturaDistributionJobData $data, KalturaVerizonVcastDistributionProfile $distributionProfile, KalturaVerizonVcastDistributionJobProviderData $providerData)
+	public function handleSubmit(VidiunDistributionJobData $data, VidiunVerizonVcastDistributionProfile $distributionProfile, VidiunVerizonVcastDistributionJobProviderData $providerData)
 	{
 		$fileName = $data->entryDistribution->entryId . '_' . date('Y-m-d_H-i-s') . '.xml';
-		KalturaLog::info('Sending file '. $fileName);
+		VidiunLog::info('Sending file '. $fileName);
 		
 		$ftpManager = $this->getFTPManager($distributionProfile);
 		$tmpFile = tmpfile();
@@ -131,28 +131,28 @@ class VerizonVcastDistributionEngine extends DistributionEngine implements
 	
 	/**
 	 * 
-	 * @param KalturaVerizonVcastDistributionProfile $distributionProfile
+	 * @param VidiunVerizonVcastDistributionProfile $distributionProfile
 	 * @return ftpMgr
 	 */
-	protected function getFTPManager(KalturaVerizonVcastDistributionProfile $distributionProfile)
+	protected function getFTPManager(VidiunVerizonVcastDistributionProfile $distributionProfile)
 	{
 		$host = $distributionProfile->ftpHost;
 		$login = $distributionProfile->ftpLogin;
 		$pass = $distributionProfile->ftpPass;
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$ftpManager = kFileTransferMgr::getInstance(kFileTransferMgrType::FTP, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$ftpManager = vFileTransferMgr::getInstance(vFileTransferMgrType::FTP, $engineOptions);
 		$ftpManager->login($host, $login, $pass);
 		return $ftpManager;
 	}
 	
 	/**
-	 * @param KalturaDistributionSubmitJobData $data
+	 * @param VidiunDistributionSubmitJobData $data
 	 * @return string status
 	 */
-	protected function fetchStatus(KalturaDistributionJobData $data)
+	protected function fetchStatus(VidiunDistributionJobData $data)
 	{
-		if(!$data->distributionProfile || !($data->distributionProfile instanceof KalturaVerizonVcastDistributionProfile))
-			return KalturaLog::err("Distribution profile must be of type KalturaVerizonVcastDistributionProfile");
+		if(!$data->distributionProfile || !($data->distributionProfile instanceof VidiunVerizonVcastDistributionProfile))
+			return VidiunLog::err("Distribution profile must be of type VidiunVerizonVcastDistributionProfile");
 	
 		$fileArray = $this->fetchFilesList($data->distributionProfile);
 		
@@ -173,16 +173,16 @@ class VerizonVcastDistributionEngine extends DistributionEngine implements
 	}
 
 	/**
-	 * @param KalturaVerizonDistributionProfile $distributionProfile
+	 * @param VidiunVerizonDistributionProfile $distributionProfile
 	 */
-	protected function fetchFilesList(KalturaVerizonVcastDistributionProfile $distributionProfile)
+	protected function fetchFilesList(VidiunVerizonVcastDistributionProfile $distributionProfile)
 	{
 		$host = $distributionProfile->ftpHost;
 		$login = $distributionProfile->ftpLogin;
 		$pass = $distributionProfile->ftpPass;
 		
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-		$fileTransferMgr = kFileTransferMgr::getInstance(kFileTransferMgrType::FTP, $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+		$fileTransferMgr = vFileTransferMgr::getInstance(vFileTransferMgrType::FTP, $engineOptions);
 		if(!$fileTransferMgr)
 			throw new Exception("FTP manager not loaded");
 			

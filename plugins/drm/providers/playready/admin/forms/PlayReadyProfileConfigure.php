@@ -3,10 +3,10 @@
  * @package plugins.playReady
  * @subpackage admin
  */ 
-class Kaltura_View_Helper_PlayReadyProfileConfigure extends Kaltura_View_Helper_PartialViewPlugin
+class Vidiun_View_Helper_PlayReadyProfileConfigure extends Vidiun_View_Helper_PartialViewPlugin
 {
 	/* (non-PHPdoc)
-	 * @see Kaltura_View_Helper_PartialViewPlugin::getDataArray()
+	 * @see Vidiun_View_Helper_PartialViewPlugin::getDataArray()
 	 */
 	protected function getDataArray()
 	{
@@ -14,7 +14,7 @@ class Kaltura_View_Helper_PlayReadyProfileConfigure extends Kaltura_View_Helper_
 	}
 	
 	/* (non-PHPdoc)
-	 * @see Kaltura_View_Helper_PartialViewPlugin::getTemplatePath()
+	 * @see Vidiun_View_Helper_PartialViewPlugin::getTemplatePath()
 	 */
 	protected function getTemplatePath()
 	{
@@ -22,7 +22,7 @@ class Kaltura_View_Helper_PlayReadyProfileConfigure extends Kaltura_View_Helper_
 	}
 	
 	/* (non-PHPdoc)
-	 * @see Kaltura_View_Helper_PartialViewPlugin::getPHTML()
+	 * @see Vidiun_View_Helper_PartialViewPlugin::getPHTML()
 	 */
 	protected function getPHTML()
 	{

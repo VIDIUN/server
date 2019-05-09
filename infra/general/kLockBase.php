@@ -3,13 +3,13 @@
  * @package Core
  * @subpackage utils
  */
-class kLockBase
+class vLockBase
 {
 	const LOCK_KEY_PREFIX = '__LOCK';
 	const LOCK_GRAB_TRY_INTERVAL = 20000;
 	
 	/**
-	 * @var kBaseCacheWrapper
+	 * @var vBaseCacheWrapper
 	 */
 	protected $store;
 	
@@ -19,7 +19,7 @@ class kLockBase
 	protected $key;
 
 	/**
-	 * @param kBaseCacheWrapper $store
+	 * @param vBaseCacheWrapper $store
 	 * @param string $key
 	 */
 	public function __construct($store, $key)
@@ -74,22 +74,22 @@ class kLockBase
 	 */
 	protected static function safeLog($msg)
 	{
-		if (class_exists('KalturaLog'))
-			KalturaLog::log($msg);
+		if (class_exists('VidiunLog'))
+			VidiunLog::log($msg);
 	}
 
 	/**
 	 * @param string $key
-	 * @return kLockBase
+	 * @return vLockBase
 	 */
 	static public function grabLocalLock($key)
 	{ 
 		if (!function_exists('apc_add'))
 			return null;
 		
-		require_once(__DIR__ . '/../cache/kApcCacheWrapper.php');		// can be called before autoloader
+		require_once(__DIR__ . '/../cache/vApcCacheWrapper.php');		// can be called before autoloader
 		
-		$lock = new kLockBase(new kApcCacheWrapper(), $key);
+		$lock = new vLockBase(new vApcCacheWrapper(), $key);
 		if (!$lock->lock())
 			return null;
 		

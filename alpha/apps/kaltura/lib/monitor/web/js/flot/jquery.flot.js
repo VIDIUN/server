@@ -960,7 +960,7 @@ Licensed under the MIT license.
             var topSentry = Number.POSITIVE_INFINITY,
                 bottomSentry = Number.NEGATIVE_INFINITY,
                 fakeInfinity = Number.MAX_VALUE,
-                i, j, k, m, length,
+                i, j, v, m, length,
                 s, points, ps, x, y, axis, val, f, p,
                 data, format;
 
@@ -1021,7 +1021,7 @@ Licensed under the MIT license.
                 var insertSteps = s.lines.show && s.lines.steps;
                 s.xaxis.used = s.yaxis.used = true;
 
-                for (j = k = 0; j < data.length; ++j, k += ps) {
+                for (j = v = 0; j < data.length; ++j, v += ps) {
                     p = data[j];
 
                     var nullify = p == null;
@@ -1050,13 +1050,13 @@ Licensed under the MIT license.
                                 }
                             }
 
-                            points[k + m] = val;
+                            points[v + m] = val;
                         }
                     }
 
                     if (nullify) {
                         for (m = 0; m < ps; ++m) {
-                            val = points[k + m];
+                            val = points[v + m];
                             if (val != null) {
                                 f = format[m];
                                 // extract min/max info
@@ -1065,26 +1065,26 @@ Licensed under the MIT license.
                                 if (f.y)
                                     updateAxis(s.yaxis, val, val);
                             }
-                            points[k + m] = null;
+                            points[v + m] = null;
                         }
                     }
                     else {
                         // a little bit of line specific stuff that
                         // perhaps shouldn't be here, but lacking
                         // better means...
-                        if (insertSteps && k > 0
-                            && points[k - ps] != null
-                            && points[k - ps] != points[k]
-                            && points[k - ps + 1] != points[k + 1]) {
+                        if (insertSteps && v > 0
+                            && points[v - ps] != null
+                            && points[v - ps] != points[v]
+                            && points[v - ps + 1] != points[v + 1]) {
                             // copy the point to make room for a middle point
                             for (m = 0; m < ps; ++m)
-                                points[k + ps + m] = points[k + m];
+                                points[v + ps + m] = points[v + m];
 
                             // middle point has same y
-                            points[k + 1] = points[k - ps + 1];
+                            points[v + 1] = points[v - ps + 1];
 
                             // we've added a point, better reflect that
-                            k += ps;
+                            v += ps;
                         }
                     }
                 }

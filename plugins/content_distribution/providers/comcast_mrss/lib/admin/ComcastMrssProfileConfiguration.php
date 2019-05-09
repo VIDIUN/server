@@ -21,7 +21,7 @@ class Form_ComcastMrssProfileConfiguration extends Form_ConfigurableProfileConfi
 			{
 				$keyNode = $itemNode->getElementsByTagName('key')->item(0);
 				$valueNode = $itemNode->getElementsByTagName('value')->item(0);
-				$keyVal = new Kaltura_Client_Type_KeyValue();
+				$keyVal = new Vidiun_Client_Type_KeyValue();
 				$keyVal->key = $keyNode->nodeValue;
 				$filter = new Zend_Filter_Alnum(true);
 				$keyVal->value = $filter->filter($valueNode->nodeValue);
@@ -54,9 +54,9 @@ class Form_ComcastMrssProfileConfiguration extends Form_ConfigurableProfileConfi
 		$this->setDefault('cplatform_xml', $xml);
 	}
 	
-	public function saveProviderAdditionalObjects(Kaltura_Client_ContentDistribution_Type_DistributionProfile $distributionProfile)
+	public function saveProviderAdditionalObjects(Vidiun_Client_ContentDistribution_Type_DistributionProfile $distributionProfile)
 	{
-		if ($distributionProfile instanceof Kaltura_Client_ComcastMrssDistribution_Type_ComcastMrssDistributionProfile)
+		if ($distributionProfile instanceof Vidiun_Client_ComcastMrssDistribution_Type_ComcastMrssDistributionProfile)
 		{
 			if ($this->getValue('c_platform_tv_series_field'))
 			{
@@ -64,7 +64,7 @@ class Form_ComcastMrssProfileConfiguration extends Form_ConfigurableProfileConfi
 				$profileId = $profileIdFieldName[0];
 				$fieldName = $profileIdFieldName[1];
 				$client = Infra_ClientHelper::getClient();
-				$metadataPlugin = Kaltura_Client_Metadata_Plugin::get($client);
+				$metadataPlugin = Vidiun_Client_Metadata_Plugin::get($client);
 				$profile = $metadataPlugin->metadataProfile->get($profileId);
 				$doc = new DOMDocument();
 				$doc->loadXML($profile->xsd);
@@ -92,7 +92,7 @@ class Form_ComcastMrssProfileConfiguration extends Form_ConfigurableProfileConfi
 						// compare it
 						if ($existingValues !== $newValues)
 						{
-							KalturaLog::info('Updating metadata profile ['.$profileId.'] field ['.$fieldName.'] with new list of values');
+							VidiunLog::info('Updating metadata profile ['.$profileId.'] field ['.$fieldName.'] with new list of values');
 							
 							// clear existing values
 							foreach($enumerationNodes as $enum)
@@ -105,11 +105,11 @@ class Form_ComcastMrssProfileConfiguration extends Form_ConfigurableProfileConfi
 								$enumNode->setAttribute('value', htmlentities($val));
 								$restrictionNode->appendChild($enumNode);
 							}
-							$metadataPlugin->metadataProfile->update($profileId, new Kaltura_Client_Metadata_Type_MetadataProfile(), $doc->saveXML());
+							$metadataPlugin->metadataProfile->update($profileId, new Vidiun_Client_Metadata_Type_MetadataProfile(), $doc->saveXML());
 						}
 						else
 						{
-							KalturaLog::info('No fields update is required for metadata ['.$profileId.'] field ['.$fieldName.']');
+							VidiunLog::info('No fields update is required for metadata ['.$profileId.'] field ['.$fieldName.']');
 						}
 					}
 				}
@@ -203,7 +203,7 @@ class Form_ComcastMrssProfileConfiguration extends Form_ConfigurableProfileConfi
 		$this->getElement($elementName)->clearMultiOptions();
 		Infra_ClientHelper::impersonate($this->partnerId);
 		$client = Infra_ClientHelper::getClient();
-		$metadataPlugin = Kaltura_Client_Metadata_Plugin::get($client);
+		$metadataPlugin = Vidiun_Client_Metadata_Plugin::get($client);
 		$profileListResponse = $metadataPlugin->metadataProfile->listAction();
 		$metadataFields = array();
 		foreach($profileListResponse->objects as $profile)

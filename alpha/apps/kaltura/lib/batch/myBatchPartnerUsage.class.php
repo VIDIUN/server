@@ -37,12 +37,12 @@ class myBatchPartnerUsage extends myBatchBase
 
 			if (!$partners)
 			{
-				KalturaLog::debug( "No more partners." );
+				VidiunLog::debug( "No more partners." );
 				$partners_exists = false;
 			} 
 			else
 			{
-				KalturaLog::debug( "Looping ". count($partners) ." partners" );
+				VidiunLog::debug( "Looping ". count($partners) ." partners" );
 				foreach($partners as $partner)
 				{
 					if(in_array($partnerPackage, $freeTrialTypes) && myPartnerUtils::isPartnerCreatedAsMonitoredFreeTrial($partner))

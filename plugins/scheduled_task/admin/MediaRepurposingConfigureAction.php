@@ -3,7 +3,7 @@
  * @package plugins.schedule_task
  * @subpackage Admin
  */
-class MediaRepurposingConfigureAction extends KalturaApplicationPlugin
+class MediaRepurposingConfigureAction extends VidiunApplicationPlugin
 {	
 	/**
 	 * @return string - absolute file path of the phtml template
@@ -61,7 +61,7 @@ class MediaRepurposingConfigureAction extends KalturaApplicationPlugin
 		catch(Exception $e)
 		{
 		    $action->view->formValid = false;
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			$action->view->errMessage = $e->getMessage();
 		}
 		
@@ -82,7 +82,7 @@ class MediaRepurposingConfigureAction extends KalturaApplicationPlugin
 
 	private function buildTask($taskObj)
 	{
-		$typeInt = constant("Kaltura_Client_ScheduledTask_Enum_ObjectTaskType::". $taskObj->type);
+		$typeInt = constant("Vidiun_Client_ScheduledTask_Enum_ObjectTaskType::". $taskObj->type);
 		$objectTask = MediaRepurposingUtils::objectTaskFactory($typeInt);
 		$objectTask->relatedObjects = $taskObj->id; //as the scheduleTask Id of this task
 		$objectTask->stopProcessingOnError = 0; //as default value
@@ -99,8 +99,8 @@ class MediaRepurposingConfigureAction extends KalturaApplicationPlugin
 		$filter = $form->getFilterFromData($formData);
 		$taskArray = $this->buildTasksArray($formData['TasksData']);
 
-		KalturaLog::debug("Got the following Data from the Configure Form:");
-		KalturaLog::debug(print_r($formData, true));
+		VidiunLog::debug("Got the following Data from the Configure Form:");
+		VidiunLog::debug(print_r($formData, true));
 
 		if ($form->isValid($formData))
 		{
@@ -113,7 +113,7 @@ class MediaRepurposingConfigureAction extends KalturaApplicationPlugin
 		}
 		else
 		{
-			KalturaLog::info('Form was not valid - keep the form open for changing');
+			VidiunLog::info('Form was not valid - keep the form open for changing');
 			$formData['generalTitle'] = 1; // mark as return from error
 			$form->populate($formData);
 			return false;

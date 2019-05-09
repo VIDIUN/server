@@ -1,5 +1,5 @@
 <?php
-class kWebexDropFolderContentProcessorJobData extends kDropFolderContentProcessorJobData
+class vWebexDropFolderContentProcessorJobData extends vDropFolderContentProcessorJobData
 {
 	/**
 	 * @var string

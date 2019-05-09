@@ -3,10 +3,10 @@
  * @package plugins.schedule
  * @subpackage api.filters
  */
-class KalturaScheduleResourceFilter extends KalturaScheduleResourceBaseFilter
+class VidiunScheduleResourceFilter extends VidiunScheduleResourceBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -19,9 +19,9 @@ class KalturaScheduleResourceFilter extends KalturaScheduleResourceBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$type = $this->getListResponseType();
 
@@ -47,12 +47,12 @@ class KalturaScheduleResourceFilter extends KalturaScheduleResourceBaseFilter
 			$totalCount = ($pager->pageIndex - 1) * $pager->pageSize + $resultCount;
 		else
 		{
-			KalturaFilterPager::detachFromCriteria($c);
+			VidiunFilterPager::detachFromCriteria($c);
 			$totalCount = ScheduleResourcePeer::doCount($c);
 		}
 		
-		$response = new KalturaScheduleResourceListResponse();
-		$response->objects = KalturaScheduleResourceArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunScheduleResourceListResponse();
+		$response->objects = VidiunScheduleResourceArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 		return $response;
 	}

@@ -5,11 +5,11 @@
  * @package Core
  * @subpackage model.data
  */
-class kRemoteStorageResources extends kUrlResource implements IRemoteStorageResource
+class vRemoteStorageResources extends vUrlResource implements IRemoteStorageResource
 {
 	/**
 	 * Array of remote stoage resources 
-	 * @var array<kRemoteStorageResource>
+	 * @var array<vRemoteStorageResource>
 	 */
 	private $resources;
 	
@@ -22,7 +22,7 @@ class kRemoteStorageResources extends kUrlResource implements IRemoteStorageReso
 	}
 
 	/**
-	 * @param array<kRemoteStorageResource> $resources
+	 * @param array<vRemoteStorageResource> $resources
 	 */
 	public function setResources(array $resources)
 	{

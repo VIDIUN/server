@@ -1,9 +1,9 @@
 <?php
 
-class kObjectDeleteHandler extends kObjectDeleteHandlerBase implements kObjectDeletedEventConsumer
+class vObjectDeleteHandler extends vObjectDeleteHandlerBase implements vObjectDeletedEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
+	 * @see vObjectDeletedEventConsumer::shouldConsumeDeletedEvent()
 	 */
 	public function shouldConsumeDeletedEvent(BaseObject $object)
 	{
@@ -31,7 +31,7 @@ class kObjectDeleteHandler extends kObjectDeleteHandlerBase implements kObjectDe
 		if($object instanceof conversionProfile2)
 			return true;
 			
-		if($object instanceof kuser)
+		if($object instanceof vuser)
 			return true;
 
 		if($object instanceof FileSync)
@@ -41,7 +41,7 @@ class kObjectDeleteHandler extends kObjectDeleteHandlerBase implements kObjectDe
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectDeletedEventConsumer::objectDeleted()
+	 * @see vObjectDeletedEventConsumer::objectDeleted()
 	 */
 	public function objectDeleted(BaseObject $object, BatchJob $raisedJob = null) 
 	{
@@ -69,8 +69,8 @@ class kObjectDeleteHandler extends kObjectDeleteHandlerBase implements kObjectDe
 		if($object instanceof conversionProfile2)
 			$this->conversionProfileDeleted($object);
 			
-		if($object instanceof kuser)
-			$this->kuserDelete($object);
+		if($object instanceof vuser)
+			$this->vuserDelete($object);
 
 		if($object instanceof FileSync)
 			$this->fileSyncDelete($object, $raisedJob);
@@ -122,7 +122,7 @@ class kObjectDeleteHandler extends kObjectDeleteHandlerBase implements kObjectDe
 		$c = new Criteria();
 		$c->add(categoryEntryPeer::ENTRY_ID, $entry->getId());
 		if(categoryEntryPeer::doSelectOne($c)) {
-			kJobsManager::addDeleteJob($entry->getPartnerId(), DeleteObjectType::CATEGORY_ENTRY, $filter);
+			vJobsManager::addDeleteJob($entry->getPartnerId(), DeleteObjectType::CATEGORY_ENTRY, $filter);
 		}
 		
 		$userEntryFilter = new UserEntryFilter();
@@ -134,47 +134,47 @@ class kObjectDeleteHandler extends kObjectDeleteHandlerBase implements kObjectDe
 			return;
 		}
 		
-		kJobsManager::addDeleteJob($entry->getPartnerId(), DeleteObjectType::USER_ENTRY, $userEntryFilter);
+		vJobsManager::addDeleteJob($entry->getPartnerId(), DeleteObjectType::USER_ENTRY, $userEntryFilter);
 	}
 	
-	protected function kuserDelete(kuser $kuser)
+	protected function vuserDelete(vuser $vuser)
 	{
-		$filter = new categoryKuserFilter();
-		$filter->setUserIdEqual($kuser->getPuserId());
+		$filter = new categoryVuserFilter();
+		$filter->setUserIdEqual($vuser->getPuserId());
 		
 		$c = new Criteria();
-		$c->add(categoryKuserPeer::PARTNER_ID, $kuser->getPartnerId());
-		$c->add(categoryKuserPeer::KUSER_ID, $kuser->getId());
-		if(categoryKuserPeer::doSelectOne($c)) {
-			kJobsManager::addDeleteJob($kuser->getPartnerId(), DeleteObjectType::CATEGORY_USER, $filter);
+		$c->add(categoryVuserPeer::PARTNER_ID, $vuser->getPartnerId());
+		$c->add(categoryVuserPeer::VUSER_ID, $vuser->getId());
+		if(categoryVuserPeer::doSelectOne($c)) {
+			vJobsManager::addDeleteJob($vuser->getPartnerId(), DeleteObjectType::CATEGORY_USER, $filter);
 		}
 
-		if ($kuser->getType() == KuserType::USER){
+		if ($vuser->getType() == VuserType::USER){
 			// remove user from groups
-			KuserKgroupPeer::deleteByKuserId($kuser->getId());
+			VuserVgroupPeer::deleteByVuserId($vuser->getId());
 		}
-		elseif 	($kuser->getType() == KuserType::GROUP){
+		elseif 	($vuser->getType() == VuserType::GROUP){
 			// remove users from group
-			$filter = new KuserKgroupFilter();
-			$filter->setGroupIdEqual($kuser->getPuserId());
+			$filter = new VuserVgroupFilter();
+			$filter->setGroupIdEqual($vuser->getPuserId());
 
 			$c = new Criteria();
-			$c->add(KuserKgroupPeer::PGROUP_ID, $kuser->getPuserId());
-			if(KuserKgroupPeer::doSelectOne($c)) {
-				kJobsManager::addDeleteJob($kuser->getPartnerId(), DeleteObjectType::GROUP_USER, $filter);
+			$c->add(VuserVgroupPeer::PGROUP_ID, $vuser->getPuserId());
+			if(VuserVgroupPeer::doSelectOne($c)) {
+				vJobsManager::addDeleteJob($vuser->getPartnerId(), DeleteObjectType::GROUP_USER, $filter);
 			}
 		}
 		
 		$userEntryFilter = new UserEntryFilter();
-		$userEntryFilter->set("_eq_user_id", $kuser->getId());
+		$userEntryFilter->set("_eq_user_id", $vuser->getId());
 		
 		$c = new Criteria();
-		$c->add(UserEntryPeer::KUSER_ID, $kuser->getId());
+		$c->add(UserEntryPeer::VUSER_ID, $vuser->getId());
 		if(!UserEntryPeer::doSelectOne($c)) {
 			return;
 		}
 		
-		kJobsManager::addDeleteJob($kuser->getPartnerId(), DeleteObjectType::USER_ENTRY, $userEntryFilter);
+		vJobsManager::addDeleteJob($vuser->getPartnerId(), DeleteObjectType::USER_ENTRY, $userEntryFilter);
 	}
 	
 	/**
@@ -182,7 +182,7 @@ class kObjectDeleteHandler extends kObjectDeleteHandlerBase implements kObjectDe
 	 */
 	protected function categoryDeleted(category $category)
 	{
-		//TODO - ADD JOB TO DELETE ALL CategoryKusers.
+		//TODO - ADD JOB TO DELETE ALL CategoryVusers.
 	}
 	
 	/**
@@ -217,7 +217,7 @@ class kObjectDeleteHandler extends kObjectDeleteHandlerBase implements kObjectDe
 		//In Case Flavor Deleted Belongs To Partner 0 Exit Without Deleteing
 		if($assetParam->getPartnerId() == 0) 
 		{
-			KalturaLog::log("Deleting Flavor Param Of Partner 0 Is Restricted");
+			VidiunLog::log("Deleting Flavor Param Of Partner 0 Is Restricted");
 			return;
 		}
 		
@@ -241,7 +241,7 @@ class kObjectDeleteHandler extends kObjectDeleteHandlerBase implements kObjectDe
 			flavorParamsConversionProfilePeer::clearInstancePool();
 		}
 		
-		KalturaLog::info("Flavor Params Conversion Profile Relations were deleted for flavor param id [" . $assetParam->getId() . "]");
+		VidiunLog::info("Flavor Params Conversion Profile Relations were deleted for flavor param id [" . $assetParam->getId() . "]");
 	}
 	
 	/**
@@ -249,7 +249,7 @@ class kObjectDeleteHandler extends kObjectDeleteHandlerBase implements kObjectDe
 	 */
 	protected function syndicationFeedDeleted(syndicationFeed $syndicationFeed)
 	{
-		if($syndicationFeed->getType() == syndicationFeedType::KALTURA_XSLT)
+		if($syndicationFeed->getType() == syndicationFeedType::VIDIUN_XSLT)
 			$this->syncableDeleted($syndicationFeed->getId(), FileSyncObjectType::SYNDICATION_FEED);
 	}
 	
@@ -270,8 +270,8 @@ class kObjectDeleteHandler extends kObjectDeleteHandlerBase implements kObjectDe
 		$purgePermission = PermissionPeer::isValidForPartner('PURGE_FILES_ON_DELETE', $partnerId);
 		if ($purgePermission)
 		{
-			$syncKey = kFileSyncUtils::getKeyForFileSync($fileSync);
-			kJobsManager::addDeleteFileJob($raisedJob, null, $partnerId, $syncKey, $fileSync->getFullPath(), $fileSync->getDc());
+			$syncKey = vFileSyncUtils::getKeyForFileSync($fileSync);
+			vJobsManager::addDeleteFileJob($raisedJob, null, $partnerId, $syncKey, $fileSync->getFullPath(), $fileSync->getDc());
 		}
 	}
 

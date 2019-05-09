@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage model.data
  */
-class kTransformMetadataJobData extends kJobData
+class vTransformMetadataJobData extends vJobData
 {
 	/**
 	 * @var FileContainer

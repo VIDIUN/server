@@ -5,7 +5,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaVendorTranslationCatalogItemBaseFilter extends KalturaVendorCaptionsCatalogItemFilter
+abstract class VidiunVendorTranslationCatalogItemBaseFilter extends VidiunVendorCaptionsCatalogItemFilter
 {
 	static private $map_between_objects = array
 	(
@@ -28,7 +28,7 @@ abstract class KalturaVendorTranslationCatalogItemBaseFilter extends KalturaVend
 	}
 
 	/**
-	 * @var KalturaCatalogItemLanguage
+	 * @var VidiunCatalogItemLanguage
 	 */
 	public $targetLanguageEqual;
 

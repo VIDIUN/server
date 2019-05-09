@@ -46,25 +46,25 @@ function handlerTypeChanged()
 	curValue = jQuery('#frmDropFolderConfigure #fileHandlerType').val();
 	patterns = jQuery('#fileNamePatterns');
 	patternsLbl = jQuery('#fileNamePatterns-label');
-	validateKS = jQuery('#shouldValidateKS');
-	validateKSLbl = jQuery("[for='shouldValidateKS']");
+	validateVS = jQuery('#shouldValidateVS');
+	validateVSLbl = jQuery("[for='shouldValidateVS']");
 	allFileHandlers = jQuery(".contentFileHandler");
 	currentFileHandler = jQuery("#frmContentFileHandlerConfig" + curValue.replace('.', '_'));
 
 	allFileHandlers.css("display","none");
 	currentFileHandler.css("display","inline");
 	
-	if (curValue == <?php echo Kaltura_Client_DropFolder_Enum_DropFolderFileHandlerType::CONTENT; ?>) {
+	if (curValue == <?php echo Vidiun_Client_DropFolder_Enum_DropFolderFileHandlerType::CONTENT; ?>) {
 		patterns.hide();
 		patternsLbl.hide();
-		validateKS.hide();
-		validateKSLbl.hide();
+		validateVS.hide();
+		validateVSLbl.hide();
 	}
 	else {
 		patterns.show();
 		patternsLbl.show();
-		validateKS.show();
-		validateKSLbl.show();
+		validateVS.show();
+		validateVSLbl.show();
 	}	
 }
 

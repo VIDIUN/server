@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaConversionProfileFilter extends KalturaConversionProfileBaseFilter
+class VidiunConversionProfileFilter extends VidiunConversionProfileBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -14,9 +14,9 @@ class KalturaConversionProfileFilter extends KalturaConversionProfileBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$conversionProfile2Filter = $this->toObject();
 
@@ -28,9 +28,9 @@ class KalturaConversionProfileFilter extends KalturaConversionProfileBaseFilter
 		$pager->attachToCriteria($c);
 		$dbList = conversionProfile2Peer::doSelect($c);
 		
-		$list = KalturaConversionProfileArray::fromDbArray($dbList, $responseProfile);
+		$list = VidiunConversionProfileArray::fromDbArray($dbList, $responseProfile);
 		$list->loadFlavorParamsIds();
-		$response = new KalturaConversionProfileListResponse();
+		$response = new VidiunConversionProfileListResponse();
 		$response->objects = $list;
 		$response->totalCount = $totalCount;
 		return $response;  

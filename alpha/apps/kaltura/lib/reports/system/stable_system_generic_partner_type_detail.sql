@@ -53,8 +53,8 @@ FROM
 		SUM(IF(date_id BETWEEN {FROM_DATE_ID} AND {TO_DATE_ID}, aggr_partner.count_storage , NULL ) ) count_storage,
 		SUM(IF(dim_partner.created_date_id BETWEEN {FROM_DATE_ID} AND {TO_DATE_ID}, 1 , NULL ) ) new_partners
 	FROM 
-		kalturadw.dwh_aggr_partner aggr_partner RIGHT OUTER JOIN kalturadw.dwh_dim_partners dim_partner ON aggr_partner.partner_id=dim_partner.partner_id
-		LEFT OUTER JOIN kalturadw.dwh_dim_partner_type dim_partner_type ON dim_partner.partner_type_id=dim_partner_type.partner_type_id
+		vidiundw.dwh_aggr_partner aggr_partner RIGHT OUTER JOIN vidiundw.dwh_dim_partners dim_partner ON aggr_partner.partner_id=dim_partner.partner_id
+		LEFT OUTER JOIN vidiundw.dwh_dim_partner_type dim_partner_type ON dim_partner.partner_type_id=dim_partner_type.partner_type_id
 	WHERE 
 		aggr_partner.date_id BETWEEN {TIME_SLOT_180} AND {TO_DATE_ID} 
 	GROUP BY 
@@ -73,8 +73,8 @@ FROM
 				SUM(aggr_partner.count_image ) count_image_all_time,
 				SUM(aggr_partner.count_audio ) count_audio_all_time
         FROM
-                kalturadw.dwh_aggr_partner aggr_partner RIGHT OUTER JOIN kalturadw.dwh_dim_partners dim_partner ON aggr_partner.partner_id=dim_partner.partner_id
-                LEFT OUTER JOIN kalturadw.dwh_dim_partner_type dim_partner_type ON dim_partner.partner_type_id=dim_partner_type.partner_type_id
+                vidiundw.dwh_aggr_partner aggr_partner RIGHT OUTER JOIN vidiundw.dwh_dim_partners dim_partner ON aggr_partner.partner_id=dim_partner.partner_id
+                LEFT OUTER JOIN vidiundw.dwh_dim_partner_type dim_partner_type ON dim_partner.partner_type_id=dim_partner_type.partner_type_id
         WHERE
                 /*aggr_partner.partner_id<400  AND */aggr_partner.date_id <={TO_DATE_ID} 
         GROUP BY

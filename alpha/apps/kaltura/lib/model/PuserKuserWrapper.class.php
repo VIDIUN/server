@@ -3,18 +3,18 @@
  * @package Core
  * @subpackage model.wrappers
  */
-class PuserKuserWrapper extends objectWrapperBase
+class PuserVuserWrapper extends objectWrapperBase
 {
-	// the PuserKuser id make more harm than good - 
+	// the PuserVuser id make more harm than good - 
 	protected $basic_fields = array ( /*"id", */ "puserName" , "partnerId" , "subpId" );
 	
-	protected $regular_fields_ext = array ( "puserId" , "kuserId" , "customData" ,  "context" ,  "createdAt" );
+	protected $regular_fields_ext = array ( "puserId" , "vuserId" , "customData" ,  "context" ,  "createdAt" );
 	
 	protected $detailed_fields_ext = array (  ) ;
 	
-	protected $detailed_objs_ext = array ( "kuser" );
+	protected $detailed_objs_ext = array ( "vuser" );
 	
-	protected $objs_cache = array ( "kuser" => "kuser,kuserId" , );
+	protected $objs_cache = array ( "vuser" => "vuser,vuserId" , );
 
 	public function getUpdateableFields()
 	{

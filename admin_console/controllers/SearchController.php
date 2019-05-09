@@ -22,7 +22,7 @@ class SearchController extends Zend_Controller_Action
 	
 	protected function getESearchLanguages($client, $partnerId, $currentLanguages = null) {
 
-		$partnerService = new Kaltura_Client_SystemPartner_SystemPartnerService($client);
+		$partnerService = new Vidiun_Client_SystemPartner_SystemPartnerService($client);
 
 		Infra_ClientHelper::impersonate($partnerId);
 		$partnerConfiguration = $partnerService->getConfiguration($partnerId);

@@ -68,7 +68,7 @@ abstract class baseObjectFilter extends myBaseObject
 	 const LIKE_BOTH = 2;
 	 */
 
-	const MATCH_KALTURA_NETWORK_AND_PRIVATE = "-1"; 
+	const MATCH_VIDIUN_NETWORK_AND_PRIVATE = "-1"; 
 		
 	protected $partner_search_scope = null;
 		 
@@ -354,7 +354,7 @@ abstract class baseObjectFilter extends myBaseObject
 
 
 	/**
-	 * Will be used for the KCW's search - this is slightly different  
+	 * Will be used for the VCW's search - this is slightly different  
 	 *
 	 * @param Criteria $criteria
 	 * @param array $keys_to_search
@@ -382,15 +382,15 @@ abstract class baseObjectFilter extends myBaseObject
 		$against_str  = self::formatMySqlAgainst ( $keys_to_search , $operator , "," , self::MATCH_AND );
 
 		// depending on the partner_search_scope - alter the against_str 
-		if ( self::MATCH_KALTURA_NETWORK_AND_PRIVATE == $this->partner_search_scope )
+		if ( self::MATCH_VIDIUN_NETWORK_AND_PRIVATE == $this->partner_search_scope )
 		{
 			// add nothing the the match
 		}
 		elseif ( $this->partner_search_scope == null  )
 		{
-			// the kaltura_netrowk keyword is mandatory !
+			// the vidiun_netrowk keyword is mandatory !
 			// - find all the NOT partner only
-			//$against_str = "+" . mySearchUtils::getKalturaNetworkKeyword() . " " . $against_str;
+			//$against_str = "+" . mySearchUtils::getVidiunNetworkKeyword() . " " . $against_str;
 			$against_str = "-" . mySearchUtils::getPartnerOnlyKeyword() . " " . "-" . mySearchUtils::getPartnerNoneKeyword() . " " . $against_str;
 		}
 		else
@@ -539,20 +539,20 @@ abstract class baseObjectFilter extends myBaseObject
 		$against_str = ( $external_operator == self::MATCH_AND ? " +(" : "(" );
 		
 		$is_empty = true;
-		foreach ( $keyword_arr as $k )
+		foreach ( $keyword_arr as $v )
 		{
 			// clear invalid characters from the text:
-			$k = preg_replace ( "/[\\\"\'\?\*\;]/" , " " , trim($k) );
+			$v = preg_replace ( "/[\\\"\'\?\*\;]/" , " " , trim($v) );
 			// the operator (internal one) will indicate whether to force each keyword separatly
-			if ( empty ( $k ) ) continue;
+			if ( empty ( $v ) ) continue;
 			$is_empty = false; // once we have a real value - the whole state is non-empty
 			if ( $operator == self::MATCH_AND )
 			{
-				$against_str .= "+\\\"$k\\\" ";
+				$against_str .= "+\\\"$v\\\" ";
 			}
 			else
 			{
-				$against_str .= "\\\"$k\\\" ";
+				$against_str .= "\\\"$v\\\" ";
 			}
 		}
 		
@@ -572,7 +572,7 @@ abstract class baseObjectFilter extends myBaseObject
 	public final function attachToCriteria ( Criteria $criteria )
 	{
 		// later will call all filters attachToFinalCriteria before the doSelect
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			return $criteria->attachFilter($this);
 			
 		return $this->attachToFinalCriteria($criteria);
@@ -589,7 +589,7 @@ abstract class baseObjectFilter extends myBaseObject
 		{
 			$pos = strpos ( $field , baseObjectFilter::FILTER_PREFIX );
 
-//			KalturaLog::debug( "field [$field] prefix [" . baseObjectFilter::FILTER_PREFIX . "] name[$name]" );
+//			VidiunLog::debug( "field [$field] prefix [" . baseObjectFilter::FILTER_PREFIX . "] name[$name]" );
 
 			if ( $pos === 0 )
 			{
@@ -664,7 +664,7 @@ abstract class baseObjectFilter extends myBaseObject
 	//				echo ( "<br>Adding to criteria [" . $colname . "] = [" . $value . "] , " . $criteria_operator . "<br>");
 
 		// TODO - is this huristics OK ? can we really say for sure that fields that end with _date are time objects ?
-		if ( kString::endsWith( $colname , "_date" ) )
+		if ( vString::endsWith( $colname , "_date" ) )
 		{
 			$value_to_set = strtotime ( $value );
 		}
@@ -1002,7 +1002,7 @@ abstract class baseObjectFilter extends myBaseObject
 	}
 
 	/* (non-PHPdoc)
-	 * @see apps/kaltura/lib/myBaseObject#fillObjectFromXml()
+	 * @see apps/vidiun/lib/myBaseObject#fillObjectFromXml()
 	 */
 	public function fillObjectFromXml ( SimpleXMLElement $simple_xml_node , $prefix_to_add , $exclude_params=null )
 	{
@@ -1018,7 +1018,7 @@ abstract class baseObjectFilter extends myBaseObject
 			if(isset($attr['type']) && class_exists($attr['type']) && is_subclass_of((string)$attr['type'], 'AdvancedSearchFilterItem'))
 			{
 				$type = (string) $attr['type'];
-				KalturaLog::debug("Advanced Search type[$type] and value[" . $simple_xml_node->advancedSearch->asXML() . "]");
+				VidiunLog::debug("Advanced Search type[$type] and value[" . $simple_xml_node->advancedSearch->asXML() . "]");
 				$this->advancedSearch = new $type();
 				$this->advancedSearch->fillObjectFromXml($simple_xml_node->advancedSearch);
 			}

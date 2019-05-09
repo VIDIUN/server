@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaNotificationResult  extends KalturaEnum 
+class VidiunNotificationResult  extends VidiunEnum 
 {
 	const OK = 0; 
 	const ERROR_RETRY = -1;

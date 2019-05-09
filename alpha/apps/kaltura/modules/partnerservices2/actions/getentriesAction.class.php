@@ -29,14 +29,14 @@ class getentriesAction extends defPartnerservices2Action
 			); 
 	}
 	
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER;	}
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER;	}
 	
 	protected function getExtraFields ()
 	{
 		return null;
 	}
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 		

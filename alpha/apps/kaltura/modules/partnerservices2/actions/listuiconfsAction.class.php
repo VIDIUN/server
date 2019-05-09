@@ -38,7 +38,7 @@ class listuiconfsAction extends defPartnerservices2Action
 	
 	protected function getObjectPrefix () { return "uiconf"; } 
 
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$this->applyPartnerFilterForClass('uiConf', $partner_id );
 		

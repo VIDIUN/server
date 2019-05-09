@@ -20,7 +20,7 @@ class myWebcamRecordService extends myBaseMediaSource implements IMediaSource
 
 	public function searchMedia( $media_type , $searchText, $page, $pageSize, $authData = null, $extraData = null) {}
 	
-	public function getAuthData( $kuserId, $userName, $password, $token) {}
+	public function getAuthData( $vuserId, $userName, $password, $token) {}
 	
 	public function getConfigCustomData()
 	{

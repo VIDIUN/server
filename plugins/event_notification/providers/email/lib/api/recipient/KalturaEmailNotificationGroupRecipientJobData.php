@@ -5,7 +5,7 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class KalturaEmailNotificationGroupRecipientJobData extends KalturaEmailNotificationRecipientJobData
+class VidiunEmailNotificationGroupRecipientJobData extends VidiunEmailNotificationRecipientJobData
 {
 	/**
 	 * @var string
@@ -17,7 +17,7 @@ class KalturaEmailNotificationGroupRecipientJobData extends KalturaEmailNotifica
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -25,30 +25,30 @@ class KalturaEmailNotificationGroupRecipientJobData extends KalturaEmailNotifica
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaEmailNotificationRecipientJobData::setProviderType()
+	 * @see VidiunEmailNotificationRecipientJobData::setProviderType()
 	 */
 	protected function setProviderType() {
-		$this->providerType = KalturaEmailNotificationRecipientProviderType::GROUP;	
+		$this->providerType = VidiunEmailNotificationRecipientProviderType::GROUP;	
 		
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject($source_object)
+	 * @see VidiunObject::fromObject($source_object)
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $dbObject kEmailNotificationStaticRecipientJobData */
+		/* @var $dbObject vEmailNotificationStaticRecipientJobData */
 		parent::doFromObject($dbObject, $responseProfile);
 		$this->setProviderType();
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kEmailNotificationGroupRecipientJobData();
+			$dbObject = new vEmailNotificationGroupRecipientJobData();
 		
 		return parent::toObject($dbObject, $propertiesToSkip);
 	}

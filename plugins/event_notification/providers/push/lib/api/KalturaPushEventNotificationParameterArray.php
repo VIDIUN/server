@@ -3,17 +3,17 @@
  * @package plugins.eventNotification
  * @subpackage api.objects
  */
-class KalturaPushEventNotificationParameterArray extends KalturaTypedArray
+class VidiunPushEventNotificationParameterArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaPushEventNotificationParameterArray();
+		$newArr = new VidiunPushEventNotificationParameterArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaPushEventNotificationParameter();
+    		$nObj = new VidiunPushEventNotificationParameter();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaPushEventNotificationParameterArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaPushEventNotificationParameter");	
+		parent::__construct("VidiunPushEventNotificationParameter");	
 	}
 }

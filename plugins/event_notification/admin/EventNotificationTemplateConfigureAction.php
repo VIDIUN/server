@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage admin
  */
-class EventNotificationTemplateConfigureAction extends KalturaApplicationPlugin
+class EventNotificationTemplateConfigureAction extends VidiunApplicationPlugin
 {
 	protected $client;
 	
@@ -22,14 +22,14 @@ class EventNotificationTemplateConfigureAction extends KalturaApplicationPlugin
 	
 	public function getRequiredPermissions()
 	{
-		return array(Kaltura_Client_Enum_PermissionName::SYSTEM_ADMIN_CONTENT_DISTRIBUTION_MODIFY);
+		return array(Vidiun_Client_Enum_PermissionName::SYSTEM_ADMIN_CONTENT_DISTRIBUTION_MODIFY);
 	}
 	
 	public function doAction(Zend_Controller_Action $action)
 	{
 		$action->getHelper('layout')->disableLayout();
 		$this->client = Infra_ClientHelper::getClient();
-		$eventNotificationPlugin = Kaltura_Client_EventNotification_Plugin::get($this->client);
+		$eventNotificationPlugin = Vidiun_Client_EventNotification_Plugin::get($this->client);
 		$request = $action->getRequest();
 		
 		$partnerId = $this->_getParam('partner_id');
@@ -76,9 +76,9 @@ class EventNotificationTemplateConfigureAction extends KalturaApplicationPlugin
 				$type = $this->_getParam('type');
 			}
 			
-			$form = KalturaPluginManager::loadObject('Form_EventNotificationTemplateConfiguration', $type, array($partnerId, $type));
+			$form = VidiunPluginManager::loadObject('Form_EventNotificationTemplateConfiguration', $type, array($partnerId, $type));
 			/* @var $form Form_EventNotificationTemplateConfiguration */
-			$templateClass = KalturaPluginManager::getObjectClass('Kaltura_Client_EventNotification_Type_EventNotificationTemplate', $type);
+			$templateClass = VidiunPluginManager::getObjectClass('Vidiun_Client_EventNotification_Type_EventNotificationTemplate', $type);
 			
 			if(!$form || !($form instanceof Form_EventNotificationTemplateConfiguration))
 			{
@@ -142,7 +142,7 @@ class EventNotificationTemplateConfigureAction extends KalturaApplicationPlugin
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			$action->view->errMessage = $e->getMessage();
 			
 			if($form)
@@ -156,7 +156,7 @@ class EventNotificationTemplateConfigureAction extends KalturaApplicationPlugin
 		$action->view->form = $form;
 		$action->view->templateId = $templateId;
 		
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaApplicationPartialView');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunApplicationPartialView');
 		foreach($pluginInstances as $pluginInstance)
 		{
 			$entryInvestigatePlugins = $pluginInstance->getApplicationPartialViews('plugin', get_class($this));
@@ -165,7 +165,7 @@ class EventNotificationTemplateConfigureAction extends KalturaApplicationPlugin
 			
 			foreach($entryInvestigatePlugins as $plugin)
 			{
-				/* @var $plugin Kaltura_View_Helper_PartialViewPlugin */
+				/* @var $plugin Vidiun_View_Helper_PartialViewPlugin */
 	    		$plugin->plug($action->view);
 			}
 		}

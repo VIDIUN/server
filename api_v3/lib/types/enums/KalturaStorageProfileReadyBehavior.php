@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaStorageProfileReadyBehavior extends KalturaEnum implements StorageProfileReadyBehavior
+class VidiunStorageProfileReadyBehavior extends VidiunEnum implements StorageProfileReadyBehavior
 {
     // see StorageProfileReadyBehavior for values
 }

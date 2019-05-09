@@ -3,11 +3,11 @@
  * @package plugins.eventNotification
  * @subpackage api.objects
  */
-class KalturaEventNotificationParameterArray extends KalturaTypedArray
+class VidiunEventNotificationParameterArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaEventNotificationParameterArray();
+		$newArr = new VidiunEventNotificationParameterArray();
 		if ($arr == null)
 			return $newArr;
 
@@ -16,16 +16,16 @@ class KalturaEventNotificationParameterArray extends KalturaTypedArray
 			$parameterType = get_class($obj);
 			switch ($parameterType)
 			{
-				case 'kEventNotificationParameter':
-    				$nObj = new KalturaEventNotificationParameter();
+				case 'vEventNotificationParameter':
+    				$nObj = new VidiunEventNotificationParameter();
 					break;
 					
-				case 'kEventNotificationArrayParameter':
-    				$nObj = new KalturaEventNotificationArrayParameter();
+				case 'vEventNotificationArrayParameter':
+    				$nObj = new VidiunEventNotificationArrayParameter();
 					break;
 					
 				default:
-    				$nObj = KalturaPluginManager::loadObject('KalturaEventNotificationParameter', $parameterType);
+    				$nObj = VidiunPluginManager::loadObject('VidiunEventNotificationParameter', $parameterType);
 			}
 			
 			if($nObj)
@@ -40,6 +40,6 @@ class KalturaEventNotificationParameterArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaEventNotificationParameter");	
+		parent::__construct("VidiunEventNotificationParameter");	
 	}
 }

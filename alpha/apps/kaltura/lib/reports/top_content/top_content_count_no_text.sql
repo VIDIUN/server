@@ -1,5 +1,5 @@
 SELECT COUNT(DISTINCT ev.entry_id) count_all
-	FROM kalturadw.dwh_hourly_events_entry  ev
+	FROM vidiundw.dwh_hourly_events_entry  ev
 WHERE
 {OBJ_ID_CLAUSE}
 AND ev.partner_id = {PARTNER_ID} /* PARTNER_ID*/

@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaWorkerQueueFilterArray extends KalturaTypedArray
+class VidiunWorkerQueueFilterArray extends VidiunTypedArray
 {
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaWorkerQueueFilter" );
+		return parent::__construct ( "VidiunWorkerQueueFilter" );
 	}
 }
 ?>

@@ -1,12 +1,12 @@
 <?php
 /**
- * Will run the KAsyncBalancer 
+ * Will run the VAsyncBalancer 
  *
  * @package Scheduler
  * @subpackage Cleanup
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncJobSuspender();
+$instance = new VAsyncJobSuspender();
 $instance->run(); 
 $instance->done();

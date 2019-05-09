@@ -3,6 +3,6 @@
  * @package plugins.ndnDistribution
  * @subpackage api.filters.enum
  */
-class KalturaNdnDistributionProfileOrderBy extends KalturaConfigurableDistributionProfileOrderBy
+class VidiunNdnDistributionProfileOrderBy extends VidiunConfigurableDistributionProfileOrderBy
 {
 }

@@ -3,7 +3,7 @@
  * @package plugins.uplynk
  * @subpackage model.enum
  */
-class EdgeCastDeliveryProfileType implements IKalturaPluginEnum, DeliveryProfileType
+class EdgeCastDeliveryProfileType implements IVidiunPluginEnum, DeliveryProfileType
 {
 	const EDGE_CAST_HTTP = 'EDGE_CAST_HTTP';
 	const EDGE_CAST_RTMP = 'EDGE_CAST_RTMP';

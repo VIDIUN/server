@@ -3,15 +3,15 @@
  * @package plugins.pushNotification
  * @subpackage model
  */
-class kPushNotificationParams extends KalturaObject
+class vPushNotificationParams extends VidiunObject
 {
 	/**
-	 * @var array<kPushEventNotificationParameter>
+	 * @var array<vPushEventNotificationParameter>
 	 */
 	public $userParams;
 
 	/**
-	 * @return array<kPushEventNotificationParameter>
+	 * @return array<vPushEventNotificationParameter>
 	 */
 	public function getUserParams()
 	{
@@ -19,7 +19,7 @@ class kPushNotificationParams extends KalturaObject
 	}
 
 	/**
-	 * @param array <kPushEventNotificationParameter> $userParams
+	 * @param array <vPushEventNotificationParameter> $userParams
 	 */
 	public function setUserParams($userParams)
 	{

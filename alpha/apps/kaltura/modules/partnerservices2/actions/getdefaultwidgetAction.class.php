@@ -27,7 +27,7 @@ class getdefaultwidgetAction extends defPartnerservices2Action
 			); 
 	}
 	
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_NO_KUSER;	}
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_NO_VUSER;	}
 	
 	protected function ticketType ()	{		return self::REQUIED_TICKET_ADMIN;	}		// should be done only frombackoffice
 
@@ -37,7 +37,7 @@ class getdefaultwidgetAction extends defPartnerservices2Action
 	protected function allowEmptyPuser()	{		return true;	}
 	
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		self::$escape_text = true;
 		$detailed = 1;

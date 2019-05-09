@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-abstract class KalturaRecalculateCacheJobData extends KalturaJobData
+abstract class VidiunRecalculateCacheJobData extends VidiunJobData
 {
 	/**
 	 * @param string $subType
@@ -11,7 +11,7 @@ abstract class KalturaRecalculateCacheJobData extends KalturaJobData
 	 */
 	public function toSubType($subType)
 	{
-		return kPluginableEnumsManager::apiToCore('RecalculateCacheType', $subType);
+		return vPluginableEnumsManager::apiToCore('RecalculateCacheType', $subType);
 	}
 	
 	/**
@@ -20,6 +20,6 @@ abstract class KalturaRecalculateCacheJobData extends KalturaJobData
 	 */
 	public function fromSubType($subType)
 	{
-		return kPluginableEnumsManager::coreToApi('RecalculateCacheType', $subType);
+		return vPluginableEnumsManager::coreToApi('RecalculateCacheType', $subType);
 	}
 }

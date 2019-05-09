@@ -17,7 +17,7 @@ class Form_SyndicationProviderProfileConfiguration extends Form_ProviderProfileC
 		return $object;
 	}
 	
-	public function resetUnUpdatebleAttributes(Kaltura_Client_ContentDistribution_Type_DistributionProfile $distributionProfile)
+	public function resetUnUpdatebleAttributes(Vidiun_Client_ContentDistribution_Type_DistributionProfile $distributionProfile)
 	{
 		parent::resetUnUpdatebleAttributes($distributionProfile);
 		

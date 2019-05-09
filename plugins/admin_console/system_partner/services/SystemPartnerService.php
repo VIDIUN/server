@@ -6,16 +6,16 @@
  * @package plugins.systemPartner
  * @subpackage api.services
  */
-class SystemPartnerService extends KalturaBaseService
+class SystemPartnerService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
 		parent::initService($serviceId, $serviceName, $actionName);
 		
-		// since plugin might be using KS impersonation, we need to validate the requesting
-		// partnerId from the KS and not with the $_POST one
-		if(!SystemPartnerPlugin::isAllowedPartner(kCurrentContext::$master_partner_id))
-			throw new KalturaAPIException(SystemPartnerErrors::FEATURE_FORBIDDEN, SystemPartnerPlugin::PLUGIN_NAME);
+		// since plugin might be using VS impersonation, we need to validate the requesting
+		// partnerId from the VS and not with the $_POST one
+		if(!SystemPartnerPlugin::isAllowedPartner(vCurrentContext::$master_partner_id))
+			throw new VidiunAPIException(SystemPartnerErrors::FEATURE_FORBIDDEN, SystemPartnerPlugin::PLUGIN_NAME);
 	}
 
 	
@@ -25,7 +25,7 @@ class SystemPartnerService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $pId
-	 * @return KalturaPartner
+	 * @return VidiunPartner
 	 *
 	 * @throws APIErrors::UNKNOWN_PARTNER_ID
 	 */		
@@ -34,9 +34,9 @@ class SystemPartnerService extends KalturaBaseService
 		$dbPartner = PartnerPeer::retrieveByPK( $pId );
 		
 		if ( ! $dbPartner )
-			throw new KalturaAPIException ( APIErrors::UNKNOWN_PARTNER_ID , $pId );
+			throw new VidiunAPIException ( APIErrors::UNKNOWN_PARTNER_ID , $pId );
 			
-		$partner = new KalturaPartner();
+		$partner = new VidiunPartner();
 		$partner->fromPartner( $dbPartner );
 		
 		return $partner;
@@ -44,25 +44,25 @@ class SystemPartnerService extends KalturaBaseService
 	
 	/**
 	 * @action getUsage
-	 * @param KalturaSystemPartnerUsageFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaSystemPartnerUsageListResponse
+	 * @param VidiunSystemPartnerUsageFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunSystemPartnerUsageListResponse
 	 */
-	public function getUsageAction(KalturaPartnerFilter $partnerFilter = null, KalturaSystemPartnerUsageFilter $usageFilter = null, KalturaFilterPager $pager = null)
+	public function getUsageAction(VidiunPartnerFilter $partnerFilter = null, VidiunSystemPartnerUsageFilter $usageFilter = null, VidiunFilterPager $pager = null)
 	{
 		if (is_null($partnerFilter))
-			$partnerFilter = new KalturaPartnerFilter();
+			$partnerFilter = new VidiunPartnerFilter();
 		
 		if (is_null($usageFilter))
 		{
-			$usageFilter = new KalturaSystemPartnerUsageFilter();
+			$usageFilter = new VidiunSystemPartnerUsageFilter();
 			$usageFilter->fromDate = time() - 60*60*24*30; // last 30 days
 			$usageFilter->toDate = time();
 			$usageFilter->timezoneOffset = 0;
 		}
 		
 		if (is_null($pager))
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 
 		$partnerFilterDb = new partnerFilter();
 		$partnerFilter->toObject($partnerFilterDb);
@@ -88,7 +88,7 @@ class SystemPartnerService extends KalturaBaseService
 		{
 			// no partners fit the filter - don't fetch data	
 			$totalCount = 0;
-			// the items are set to an empty KalturaSystemPartnerUsageArray
+			// the items are set to an empty VidiunSystemPartnerUsageArray
 		}
 		else
 		{
@@ -100,7 +100,7 @@ class SystemPartnerService extends KalturaBaseService
 		
 			$inputFilter->timeZoneOffset = $usageFilter->timezoneOffset;
 	
-			list ( $reportHeader, $reportData, $totalCountNoNeeded) = kKavaReportsMgr::getTable(
+			list ( $reportHeader, $reportData, $totalCountNoNeeded) = vKavaReportsMgr::getTable(
 			    null ,
 			    myReportsMgr::REPORT_TYPE_ADMIN_CONSOLE ,
 			    $inputFilter ,
@@ -112,7 +112,7 @@ class SystemPartnerService extends KalturaBaseService
 			$unsortedItems = array();
 			foreach ( $reportData as $line )
 			{
-				$item = KalturaSystemPartnerUsageItem::fromString( $reportHeader , $line );
+				$item = VidiunSystemPartnerUsageItem::fromString( $reportHeader , $line );
 				if ( $item )	
 					$unsortedItems[$item->partnerId] = $item;	
 			}
@@ -125,11 +125,11 @@ class SystemPartnerService extends KalturaBaseService
 				else
 				{
 					// if no item for partner - get its details from the db
-					$items[] = KalturaSystemPartnerUsageItem::fromPartner(PartnerPeer::retrieveByPK($partnerId));
+					$items[] = VidiunSystemPartnerUsageItem::fromPartner(PartnerPeer::retrieveByPK($partnerId));
 				}  
 			}
 		}
-		$response = new KalturaSystemPartnerUsageListResponse();
+		$response = new VidiunSystemPartnerUsageListResponse();
 		$response->totalCount = $totalCount;
 		$response->objects = $items;
 		return $response;
@@ -139,19 +139,19 @@ class SystemPartnerService extends KalturaBaseService
 	
 	/**
 	 * @action list
-	 * @param KalturaPartnerFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaPartnerListResponse
+	 * @param VidiunPartnerFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunPartnerListResponse
 	 */
-	public function listAction(KalturaPartnerFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunPartnerFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 	    myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL2;
 		
 		if (is_null($filter))
-			$filter = new KalturaPartnerFilter();
+			$filter = new VidiunPartnerFilter();
 			
 		if (is_null($pager))
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 
 		$partnerFilter = new partnerFilter();
 		$filter->toObject($partnerFilter);
@@ -163,9 +163,9 @@ class SystemPartnerService extends KalturaBaseService
 		$totalCount = PartnerPeer::doCount($c);
 		$pager->attachToCriteria($c);
 		$list = PartnerPeer::doSelect($c);
-		$newList = KalturaPartnerArray::fromPartnerArray($list);
+		$newList = VidiunPartnerArray::fromPartnerArray($list);
 		
-		$response = new KalturaPartnerListResponse();
+		$response = new VidiunPartnerListResponse();
 		$response->totalCount = $totalCount;
 		$response->objects = $newList;
 		return $response;
@@ -174,14 +174,14 @@ class SystemPartnerService extends KalturaBaseService
 	/**
 	 * @action updateStatus
 	 * @param int $id
-	 * @param KalturaPartnerStatus $status
+	 * @param VidiunPartnerStatus $status
 	 * @param string $reason
 	 */
 	public function updateStatusAction($id, $status, $reason)
 	{
 		$dbPartner = PartnerPeer::retrieveByPK($id);
 		if (!$dbPartner)
-			throw new KalturaAPIException(KalturaErrors::UNKNOWN_PARTNER_ID, $id);
+			throw new VidiunAPIException(VidiunErrors::UNKNOWN_PARTNER_ID, $id);
 			
 		$dbPartner->setStatus($status);
 		$dbPartner->setStatusChangeReason( $reason );
@@ -199,35 +199,35 @@ class SystemPartnerService extends KalturaBaseService
 	{
 		$dbPartner = PartnerPeer::retrieveByPK($pId);
 		if (!$dbPartner)
-			throw new KalturaAPIException(KalturaErrors::UNKNOWN_PARTNER_ID, $pId);
+			throw new VidiunAPIException(VidiunErrors::UNKNOWN_PARTNER_ID, $pId);
 		
 		if (!$userId) {
 			$userId = $dbPartner->getAdminUserId();
 		}
 		
-		$kuser = kuserPeer::getKuserByPartnerAndUid($pId, $userId);
-		if (!$kuser) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_USER_ID, $userId);
+		$vuser = vuserPeer::getVuserByPartnerAndUid($pId, $userId);
+		if (!$vuser) {
+			throw new VidiunAPIException(VidiunErrors::INVALID_USER_ID, $userId);
 		}
-		if (!$kuser->getIsAdmin()) {
-			throw new KalturaAPIException(KalturaErrors::USER_NOT_ADMIN, $userId);
+		if (!$vuser->getIsAdmin()) {
+			throw new VidiunAPIException(VidiunErrors::USER_NOT_ADMIN, $userId);
 		}
 			
-		$ks = "";
-		kSessionUtils::createKSessionNoValidations($dbPartner->getId(), $userId, $ks, 86400, 2, "", '*,' . ks::PRIVILEGE_DISABLE_ENTITLEMENT);
-		return $ks;
+		$vs = "";
+		vSessionUtils::createVSessionNoValidations($dbPartner->getId(), $userId, $vs, 86400, 2, "", '*,' . vs::PRIVILEGE_DISABLE_ENTITLEMENT);
+		return $vs;
 	}
 	
 	/**
 	 * @action updateConfiguration
 	 * @param int $pId
-	 * @param KalturaSystemPartnerConfiguration $configuration
+	 * @param VidiunSystemPartnerConfiguration $configuration
 	 */
-	public function updateConfigurationAction($pId, KalturaSystemPartnerConfiguration $configuration)
+	public function updateConfigurationAction($pId, VidiunSystemPartnerConfiguration $configuration)
 	{
 		$dbPartner = PartnerPeer::retrieveByPK($pId);
 		if (!$dbPartner)
-			throw new KalturaAPIException(KalturaErrors::UNKNOWN_PARTNER_ID, $pId);
+			throw new VidiunAPIException(VidiunErrors::UNKNOWN_PARTNER_ID, $pId);
 		$configuration->toUpdatableObject($dbPartner);
 		$dbPartner->save();
 		PartnerPeer::removePartnerFromCache($pId);
@@ -236,76 +236,76 @@ class SystemPartnerService extends KalturaBaseService
 	/**
 	 * @action getConfiguration
 	 * @param int $pId
-	 * @return KalturaSystemPartnerConfiguration
+	 * @return VidiunSystemPartnerConfiguration
 	 */
 	public function getConfigurationAction($pId)
 	{
 		$dbPartner = PartnerPeer::retrieveByPK($pId);
 		if (!$dbPartner)
-			throw new KalturaAPIException(KalturaErrors::UNKNOWN_PARTNER_ID, $pId);
+			throw new VidiunAPIException(VidiunErrors::UNKNOWN_PARTNER_ID, $pId);
 			
-		$configuration = new KalturaSystemPartnerConfiguration();
+		$configuration = new VidiunSystemPartnerConfiguration();
 		$configuration->fromObject($dbPartner, $this->getResponseProfile());
 		return $configuration;
 	}
 	
 	/**
 	 * @action getPackages
-	 * @return KalturaSystemPartnerPackageArray
+	 * @return VidiunSystemPartnerPackageArray
 	 */
 	public function getPackagesAction()
 	{
 		$partnerPackages = new PartnerPackages();
 		$packages = $partnerPackages->listPackages();
-		$partnerPackages = new KalturaSystemPartnerPackageArray();
+		$partnerPackages = new VidiunSystemPartnerPackageArray();
 		$partnerPackages->fromArray($packages);
 		return $partnerPackages;
 	}
 	
 	/**
 	 * @action getPackagesClassOfService
-	 * @return KalturaSystemPartnerPackageArray
+	 * @return VidiunSystemPartnerPackageArray
 	 */
 	public function getPackagesClassOfServiceAction()
 	{
 		$partnerPackages = new PartnerPackages();
 		$packages = $partnerPackages->listPackagesClassOfService();
-		$partnerPackages = new KalturaSystemPartnerPackageArray();
+		$partnerPackages = new VidiunSystemPartnerPackageArray();
 		$partnerPackages->fromArray($packages);
 		return $partnerPackages;
 	}
 	
 	/**
 	 * @action getPackagesVertical
-	 * @return KalturaSystemPartnerPackageArray
+	 * @return VidiunSystemPartnerPackageArray
 	 */
 	public function getPackagesVerticalAction()
 	{
 		$partnerPackages = new PartnerPackages();
 		$packages = $partnerPackages->listPackagesVertical();
-		$partnerPackages = new KalturaSystemPartnerPackageArray();
+		$partnerPackages = new VidiunSystemPartnerPackageArray();
 		$partnerPackages->fromArray($packages);
 		return $partnerPackages;
 	}
 	
 	/**
 	 * @action getPlayerEmbedCodeTypes
-	 * @return KalturaPlayerEmbedCodeTypesArray
+	 * @return VidiunPlayerEmbedCodeTypesArray
 	 */
 	public function getPlayerEmbedCodeTypesAction()
 	{
-		$map = kConf::getMap('players');
-		return KalturaPlayerEmbedCodeTypesArray::fromDbArray($map['embed_code_types'], $this->getResponseProfile());
+		$map = vConf::getMap('players');
+		return VidiunPlayerEmbedCodeTypesArray::fromDbArray($map['embed_code_types'], $this->getResponseProfile());
 	}
 	
 	/**
 	 * @action getPlayerDeliveryTypes
-	 * @return KalturaPlayerDeliveryTypesArray
+	 * @return VidiunPlayerDeliveryTypesArray
 	 */
 	public function getPlayerDeliveryTypesAction()
 	{
-		$map = kConf::getMap('players');
-		return KalturaPlayerDeliveryTypesArray::fromDbArray($map['delivery_types'], $this->getResponseProfile());
+		$map = vConf::getMap('players');
+		return VidiunPlayerDeliveryTypesArray::fromDbArray($map['delivery_types'], $this->getResponseProfile());
 	}
 
 	/**
@@ -314,41 +314,41 @@ class SystemPartnerService extends KalturaBaseService
 	 * @param string $userId
 	 * @param int $pId
 	 * @param string $newPassword
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
 	public function resetUserPasswordAction($userId, $pId, $newPassword)
 	{
 		if ($pId == Partner::ADMIN_CONSOLE_PARTNER_ID || $pId == Partner::BATCH_PARTNER_ID)
 		{
-			throw new KalturaAPIException(KalturaErrors::CANNOT_RESET_PASSWORD_FOR_SYSTEM_PARTNER);
+			throw new VidiunAPIException(VidiunErrors::CANNOT_RESET_PASSWORD_FOR_SYSTEM_PARTNER);
 		}				
 		//get loginData using userId and PartnerId 
-		$kuser = kuserPeer::getKuserByPartnerAndUid ($pId, $userId);
-		if (!$kuser){
-			throw new KalturaAPIException(KalturaErrors::USER_NOT_FOUND);
+		$vuser = vuserPeer::getVuserByPartnerAndUid ($pId, $userId);
+		if (!$vuser){
+			throw new VidiunAPIException(VidiunErrors::USER_NOT_FOUND);
 		}
-		$userLoginDataId = $kuser->getLoginDataId();
+		$userLoginDataId = $vuser->getLoginDataId();
 		$userLoginData = UserLoginDataPeer::retrieveByPK($userLoginDataId);
 		
 		// check if login data exists
 		if (!$userLoginData) {
-			throw new KalturaAPIException(KalturaErrors::LOGIN_DATA_NOT_FOUND);
+			throw new VidiunAPIException(VidiunErrors::LOGIN_DATA_NOT_FOUND);
 		}
 		try {
 			UserLoginDataPeer::checkPasswordValidation($newPassword, $userLoginData);
 		}
-		catch (kUserException $e) {
+		catch (vUserException $e) {
 			$code = $e->getCode();
-			if ($code == kUserException::PASSWORD_STRUCTURE_INVALID) {
+			if ($code == vUserException::PASSWORD_STRUCTURE_INVALID) {
 				$passwordRules = $userLoginData->getInvalidPasswordStructureMessage();
 				$passwordRules = str_replace( "\\n", "<br>", $passwordRules );
 				$passwordRules = "<br>" . $passwordRules; // Add a newline prefix
-				throw new KalturaAPIException(KalturaErrors::PASSWORD_STRUCTURE_INVALID, $passwordRules);
+				throw new VidiunAPIException(VidiunErrors::PASSWORD_STRUCTURE_INVALID, $passwordRules);
 			}
-			else if ($code == kUserException::PASSWORD_ALREADY_USED) {
-				throw new KalturaAPIException(KalturaErrors::PASSWORD_ALREADY_USED);
+			else if ($code == vUserException::PASSWORD_ALREADY_USED) {
+				throw new VidiunAPIException(VidiunErrors::PASSWORD_ALREADY_USED);
 			}			
-			throw new KalturaAPIException(KalturaErrors::INTERNAL_SERVERL_ERROR);						
+			throw new VidiunAPIException(VidiunErrors::INTERNAL_SERVERL_ERROR);						
 		}
 		// update password if requested
 		if ($newPassword) {
@@ -360,17 +360,17 @@ class SystemPartnerService extends KalturaBaseService
 	
 	/**
 	 * @action listUserLoginData
-	 * @param KalturaUserLoginDataFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaUserLoginDataListResponse
+	 * @param VidiunUserLoginDataFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunUserLoginDataListResponse
 	 */
-	public function listUserLoginDataAction(KalturaUserLoginDataFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listUserLoginDataAction(VidiunUserLoginDataFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (is_null($filter))
-			$filter = new KalturaUserLoginDataFilter();
+			$filter = new VidiunUserLoginDataFilter();
 			
 		if (is_null($pager))
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		return $filter->getListResponse($pager, $this->getResponseProfile());
 	}

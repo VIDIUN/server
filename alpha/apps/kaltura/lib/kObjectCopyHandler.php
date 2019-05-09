@@ -1,6 +1,6 @@
 <?php
 
-class kObjectCopyHandler implements kObjectCopiedEventConsumer
+class vObjectCopyHandler implements vObjectCopiedEventConsumer
 {
 	protected static $idsMap = array();
 
@@ -21,7 +21,7 @@ class kObjectCopyHandler implements kObjectCopiedEventConsumer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCopiedEventConsumer::shouldConsumeCopiedEvent()
+	 * @see vObjectCopiedEventConsumer::shouldConsumeCopiedEvent()
 	 */
 	public function shouldConsumeCopiedEvent(BaseObject $fromObject, BaseObject $toObject)
 	{
@@ -47,13 +47,13 @@ class kObjectCopyHandler implements kObjectCopiedEventConsumer
 			$syncKey = $fileAsset->getSyncKey(FileAsset::FILE_SYNC_ASSET);
 			$newSyncKey = $newFileAssets->getSyncKey(FileAsset::FILE_SYNC_ASSET);
 			
-			if(kFileSyncUtils::fileSync_exists($syncKey))
-				kFileSyncUtils::softCopy($syncKey, $newSyncKey);
+			if(vFileSyncUtils::fileSync_exists($syncKey))
+				vFileSyncUtils::softCopy($syncKey, $newSyncKey);
 		}
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kObjectCopiedEventConsumer::objectCopied()
+	 * @see vObjectCopiedEventConsumer::objectCopied()
 	 */
 	public function objectCopied(BaseObject $fromObject, BaseObject $toObject)
 	{

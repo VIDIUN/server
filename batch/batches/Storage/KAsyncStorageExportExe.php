@@ -1,6 +1,6 @@
 <?php
 /**
- * Will run KAsyncStorageExport.class.php 
+ * Will run VAsyncStorageExport.class.php 
  * 
  *
  * @package Scheduler
@@ -8,6 +8,6 @@
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncStorageExport();
+$instance = new VAsyncStorageExport();
 $instance->run(); 
 $instance->done();

@@ -6,10 +6,10 @@
  * @package plugins.schedule
  * @subpackage api.services
  */
-class ScheduleResourceService extends KalturaBaseService
+class ScheduleResourceService extends VidiunBaseService
 {
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::initService()
+	 * @see VidiunBaseService::initService()
 	 */
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -21,116 +21,116 @@ class ScheduleResourceService extends KalturaBaseService
 	}
 	
 	/**
-	 * Allows you to add a new KalturaScheduleResource object
+	 * Allows you to add a new VidiunScheduleResource object
 	 * 
 	 * @action add
-	 * @param KalturaScheduleResource $scheduleResource
-	 * @return KalturaScheduleResource
+	 * @param VidiunScheduleResource $scheduleResource
+	 * @return VidiunScheduleResource
 	 */
-	public function addAction(KalturaScheduleResource $scheduleResource)
+	public function addAction(VidiunScheduleResource $scheduleResource)
 	{
 		// save in database
 		$dbScheduleResource = $scheduleResource->toInsertableObject();
 		$dbScheduleResource->save();
 		
 		// return the saved object
-		$scheduleResource = KalturaScheduleResource::getInstance($dbScheduleResource, $this->getResponseProfile());
+		$scheduleResource = VidiunScheduleResource::getInstance($dbScheduleResource, $this->getResponseProfile());
 		$scheduleResource->fromObject($dbScheduleResource, $this->getResponseProfile());
 		return $scheduleResource;
 	
 	}
 	
 	/**
-	 * Retrieve a KalturaScheduleResource object by ID
+	 * Retrieve a VidiunScheduleResource object by ID
 	 * 
 	 * @action get
 	 * @param int $scheduleResourceId 
-	 * @return KalturaScheduleResource
+	 * @return VidiunScheduleResource
 	 * 
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */
 	public function getAction($scheduleResourceId)
 	{
 		$dbScheduleResource = ScheduleResourcePeer::retrieveByPK($scheduleResourceId);
 		if(!$dbScheduleResource)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $scheduleResourceId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $scheduleResourceId);
 		}
 		
-		$scheduleResource = KalturaScheduleResource::getInstance($dbScheduleResource, $this->getResponseProfile());
+		$scheduleResource = VidiunScheduleResource::getInstance($dbScheduleResource, $this->getResponseProfile());
 		$scheduleResource->fromObject($dbScheduleResource, $this->getResponseProfile());
 		
 		return $scheduleResource;
 	}
 	
 	/**
-	 * Update an existing KalturaScheduleResource object
+	 * Update an existing VidiunScheduleResource object
 	 * 
 	 * @action update
 	 * @param int $scheduleResourceId
-	 * @param KalturaScheduleResource $scheduleResource
-	 * @return KalturaScheduleResource
+	 * @param VidiunScheduleResource $scheduleResource
+	 * @return VidiunScheduleResource
 	 *
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */
-	public function updateAction($scheduleResourceId, KalturaScheduleResource $scheduleResource)
+	public function updateAction($scheduleResourceId, VidiunScheduleResource $scheduleResource)
 	{
 		$dbScheduleResource = ScheduleResourcePeer::retrieveByPK($scheduleResourceId);
 		if(!$dbScheduleResource)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $scheduleResourceId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $scheduleResourceId);
 		}
 		
 		$dbScheduleResource = $scheduleResource->toUpdatableObject($dbScheduleResource);
 		$dbScheduleResource->save();
 		
-		$scheduleResource = KalturaScheduleResource::getInstance($dbScheduleResource, $this->getResponseProfile());
+		$scheduleResource = VidiunScheduleResource::getInstance($dbScheduleResource, $this->getResponseProfile());
 		$scheduleResource->fromObject($dbScheduleResource, $this->getResponseProfile());
 		
 		return $scheduleResource;
 	}
 	
 	/**
-	 * Mark the KalturaScheduleResource object as deleted
+	 * Mark the VidiunScheduleResource object as deleted
 	 * 
 	 * @action delete
 	 * @param int $scheduleResourceId 
-	 * @return KalturaScheduleResource
+	 * @return VidiunScheduleResource
 	 *
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */
 	public function deleteAction($scheduleResourceId)
 	{
 		$dbScheduleResource = ScheduleResourcePeer::retrieveByPK($scheduleResourceId);
 		if(!$dbScheduleResource)
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $scheduleResourceId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $scheduleResourceId);
 		}
 		
 		$dbScheduleResource->setStatus(ScheduleResourceStatus::DELETED);
 		$dbScheduleResource->save();
 		
-		$scheduleResource = KalturaScheduleResource::getInstance($dbScheduleResource, $this->getResponseProfile());
+		$scheduleResource = VidiunScheduleResource::getInstance($dbScheduleResource, $this->getResponseProfile());
 		$scheduleResource->fromObject($dbScheduleResource, $this->getResponseProfile());
 		
 		return $scheduleResource;
 	}
 	
 	/**
-	 * List KalturaScheduleResource objects
+	 * List VidiunScheduleResource objects
 	 * 
 	 * @action list
-	 * @param KalturaScheduleResourceFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaScheduleResourceListResponse
+	 * @param VidiunScheduleResourceFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunScheduleResourceListResponse
 	 */
-	public function listAction(KalturaScheduleResourceFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunScheduleResourceFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaScheduleResourceFilter();
+			$filter = new VidiunScheduleResourceFilter();
 			
 		if(!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 			
 		return $filter->getListResponse($pager, $this->getResponseProfile());
 	}

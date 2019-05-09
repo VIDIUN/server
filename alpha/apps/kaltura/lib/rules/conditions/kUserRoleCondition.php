@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model.data
  */
-class kUserRoleCondition extends kCondition
+class vUserRoleCondition extends vCondition
 {
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -36,12 +36,12 @@ class kUserRoleCondition extends kCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kCondition::internalFulfilled()
+	 * @see vCondition::internalFulfilled()
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
-		$partner = PartnerPeer::retrieveByPK(kCurrentContext::$ks_partner_id);
-		$roleIds = kPermissionManager::getRoleIds($partner, kCurrentContext::getCurrentKsKuser());
+		$partner = PartnerPeer::retrieveByPK(vCurrentContext::$vs_partner_id);
+		$roleIds = vPermissionManager::getRoleIds($partner, vCurrentContext::getCurrentVsVuser());
 		$conditionRoleIds = array_map('trim', explode(',', $this->roleIds));
 
 		if (!is_array($roleIds))
@@ -58,7 +58,7 @@ class kUserRoleCondition extends kCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kCondition::shouldDisableCache()
+	 * @see vCondition::shouldDisableCache()
 	 */
 	public function shouldDisableCache($scope)
 	{

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaCategoryUserAdvancedFilter extends KalturaSearchItem
+class VidiunCategoryUserAdvancedFilter extends VidiunSearchItem
 {
 	/**
 	 * @var string
@@ -39,51 +39,51 @@ class KalturaCategoryUserAdvancedFilter extends KalturaSearchItem
 	public function toObject ( $obj = null , $props_to_skip = array() )
 	{
 		if(!$obj)
-			$obj = new kCategoryKuserAdvancedFilter();
+			$obj = new vCategoryVuserAdvancedFilter();
 		
 		if (!$this->memberIdEq && !$this->memberIdIn)
 		{
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'memberIdEq,memberIdIn');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'memberIdEq,memberIdIn');
 		}
 		
 		if (!$this->memberPermissionsMatchOr && !$this->memberPermissionsMatchAnd)
 		{
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'memberIdEq,memberIdIn');
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, 'memberIdEq,memberIdIn');
 		}
 		
 		if ($this->memberIdEq)
 		{
-			$kuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::getCurrentPartnerId(), $this->memberIdEq);
-			if (!$kuser)
+			$vuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::getCurrentPartnerId(), $this->memberIdEq);
+			if (!$vuser)
 			{
-				throw new KalturaAPIException (KalturaErrors::USER_NOT_FOUND);
+				throw new VidiunAPIException (VidiunErrors::USER_NOT_FOUND);
 			}
 
-			$kuserIds = array($kuser->getId());
+			$vuserIds = array($vuser->getId());
 			// retrieve categories that the user is a member by a group.
-			$kgroupIds = KuserKgroupPeer::retrieveKgroupIdsByKuserId($kuser->getId());
-			if (!is_null($kgroupIds) && is_array($kgroupIds))
-				$kuserIds = array_merge($kgroupIds, $kuserIds);
-			$obj->setMemberIdIn($kuserIds);
+			$vgroupIds = VuserVgroupPeer::retrieveVgroupIdsByVuserId($vuser->getId());
+			if (!is_null($vgroupIds) && is_array($vgroupIds))
+				$vuserIds = array_merge($vgroupIds, $vuserIds);
+			$obj->setMemberIdIn($vuserIds);
 		}
 		
 		if ($this->memberIdIn)
 		{
-			$kusers = kuserPeer::getKuserByPartnerAndUids(kCurrentContext::getCurrentPartnerId(), explode(',', $this->memberIdIn));
-			$kuserIds = array();
-			if (!$kusers || !count($kusers))
-				throw new KalturaAPIException (KalturaErrors::USER_NOT_FOUND);
+			$vusers = vuserPeer::getVuserByPartnerAndUids(vCurrentContext::getCurrentPartnerId(), explode(',', $this->memberIdIn));
+			$vuserIds = array();
+			if (!$vusers || !count($vusers))
+				throw new VidiunAPIException (VidiunErrors::USER_NOT_FOUND);
 			
-			foreach($kusers as $kuser)
+			foreach($vusers as $vuser)
 			{
-				$kuserIds[] = $kuser->getId();
+				$vuserIds[] = $vuser->getId();
 			}
 			// retrieve categories that the users are members by a group.
-			$kgroupIds = KuserKgroupPeer::retrieveKgroupIdsByKuserIds($kuserIds);
-			if (!is_null($kgroupIds) && is_array($kgroupIds))
-				$kuserIds = array_merge($kgroupIds, $kuserIds);
+			$vgroupIds = VuserVgroupPeer::retrieveVgroupIdsByVuserIds($vuserIds);
+			if (!is_null($vgroupIds) && is_array($vgroupIds))
+				$vuserIds = array_merge($vgroupIds, $vuserIds);
 
-			$obj->setMemberIdIn($kuserIds);
+			$obj->setMemberIdIn($vuserIds);
 		}
 			
 		return parent::toObject($obj, $props_to_skip);

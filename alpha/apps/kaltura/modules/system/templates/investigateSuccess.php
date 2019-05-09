@@ -125,14 +125,14 @@ function showElem ( elem )
 <button onclick="closeText()">X</button>
 </span>
 
-<a href="/index.php/system/login?exit=true">logout</a> DC id: [<?php echo kDataCenterMgr::getCurrentDcId()  ?>] Machine: [<?php echo $_SERVER["SERVER_NAME"] ?>]  Time on Machine: <?php echo date ( "Y-m-d H:i:s." , time() ) ?>
+<a href="/index.php/system/login?exit=true">logout</a> DC id: [<?php echo vDataCenterMgr::getCurrentDcId()  ?>] Machine: [<?php echo $_SERVER["SERVER_NAME"] ?>]  Time on Machine: <?php echo date ( "Y-m-d H:i:s." , time() ) ?>
 <br>
 <form action="./investigate">
 	Entry Id: <input type="text" name="entry_id" value="<?php echo $entry_id ?>">
 	
-	Kshow Id: <input type="text" name="kshow_id" value="<?php echo $kshow_id ?>">
+	Vshow Id: <input type="text" name="vshow_id" value="<?php echo $vshow_id ?>">
 	
-	<a href="./editPending?kshow_id=<?php echo $kshow_id ?>&entry_id=<?php echo $entry_id ?>">editPending</a>
+	<a href="./editPending?vshow_id=<?php echo $vshow_id ?>&entry_id=<?php echo $entry_id ?>">editPending</a>
 <br>	
 <input type="submit" id="Go" name="Go" value="Go"/>
 Fast <input type="checkbox" name="fast" <?php echo  $fast ? "checked='checked'" : "" ?>>
@@ -140,27 +140,27 @@ Fast <input type="checkbox" name="fast" <?php echo  $fast ? "checked='checked'" 
 
 
 <?php 
-if ( $kshow ) { ?>
-Kshow:
+if ( $vshow ) { ?>
+Vshow:
 <br>
 
-<table border=1 cellspacing=0	<?php echo investigate::printKshowHeader() . " " . investigate::printKshow( $kshow ) ?>></table>
+<table border=1 cellspacing=0	<?php echo investigate::printVshowHeader() . " " . investigate::printVshow( $vshow ) ?>></table>
 
 <br>
 <table border=1 cellspacing=0	>
 	<?php echo investigate::printEntryHeader() . " " 
-		 . investigate::printEntry ( $kshow_original->getShowEntry() , true  , $kshow_original , "RC") 
-		 . investigate::printEntry ( $kshow_original->getIntro() , true  , $kshow_original  , "INTRO") 
-		 . investigate::printEntry ( $bg_entry , true  , $kshow_original , "BG" ) ;
+		 . investigate::printEntry ( $vshow_original->getShowEntry() , true  , $vshow_original , "RC") 
+		 . investigate::printEntry ( $vshow_original->getIntro() , true  , $vshow_original  , "INTRO") 
+		 . investigate::printEntry ( $bg_entry , true  , $vshow_original , "BG" ) ;
 	?>
 
 <?php
 
-if ( $kshow_entries )
+if ( $vshow_entries )
 {
-	foreach ( $kshow_entries as $entry )
+	foreach ( $vshow_entries as $entry )
 	{
-		echo ( investigate::printEntry ( $entry , true , $kshow_original ) );
+		echo ( investigate::printEntry ( $entry , true , $vshow_original ) );
 	}
 }	
 ?>

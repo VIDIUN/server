@@ -26,10 +26,10 @@
 			<?php foreach($this->paginator as $drmProfile): ?>
 			<tr class="<?php echo $this->cycle(array('odd', 'even'))->next(); ?>">
 				<td><?php echo $drmProfile->id; ?></td>
-				<td><?php echo $this->enumTranslate('Kaltura_Client_Drm_Enum_DrmProfileStatus', $drmProfile->status); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_Drm_Enum_DrmProfileStatus', $drmProfile->status); ?></td>
 				<td><?php echo $drmProfile->name; ?></td>
 				<td><?php echo $drmProfile->partnerId; ?></td>
-				<td><?php echo $this->enumTranslate('Kaltura_Client_Drm_Enum_DrmProfileProvider', $drmProfile->provider); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_Drm_Enum_DrmProfileProvider', $drmProfile->provider); ?></td>
 				<td><?php echo date($this->translate('time format'), $drmProfile->createdAt); ?></td>
 				<td>
 					<select class="options" onchange="doAction(this.value, <?php echo $drmProfile->id; ?>)">

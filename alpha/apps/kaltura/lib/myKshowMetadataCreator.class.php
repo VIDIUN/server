@@ -15,7 +15,7 @@ class urlName
 }
 
 
-class myKshowMetadataCreator
+class myVshowMetadataCreator
 {
 	
 	private static $IMAGE_EXT = array ( "jpg" , "gif" , "bmp" , "png" );
@@ -49,18 +49,18 @@ class myKshowMetadataCreator
 	private $m_voice_seq_play_time = 0;
 	private $m_object_seq_play_time = 0;
 	
-	public function createMetadata ( $kshow_id )
+	public function createMetadata ( $vshow_id )
 	{
-//		echo ( "createMetadata for [$kshow_id]\n" );
-		$kshow = kshowPeer::retrieveByPK( $kshow_id );
-		$show_entry_id = $kshow->getShowEntryId();
-		$intro_id = $kshow->getIntroId();
-		// fetch all entries for a kshow without the kshow entry or the intro
+//		echo ( "createMetadata for [$vshow_id]\n" );
+		$vshow = vshowPeer::retrieveByPK( $vshow_id );
+		$show_entry_id = $vshow->getShowEntryId();
+		$intro_id = $vshow->getIntroId();
+		// fetch all entries for a vshow without the vshow entry or the intro
 		// the order is ascending by creation date of the entry
 
 		// if ordering by ascending ID - the intro will always be first
 		$c = new Criteria ();
-		$c->add ( entryPeer::KSHOW_ID , $kshow_id );
+		$c->add ( entryPeer::VSHOW_ID , $vshow_id );
 		$c->add ( entryPeer::ID , array ( $show_entry_id , $intro_id ) , Criteria::NOT_IN );
 //		$c->addDescendingOrderByColumn('(' . entryPeer::ID . '=' . $intro_id . ')');
 		$c->addAscendingOrderByColumn( entryPeer::ID );
@@ -69,7 +69,7 @@ class myKshowMetadataCreator
 //		$c->addAscendingOrderByColumn( entryPeer::CREATED_AT );
 		$entry_list = entryPeer::doSelect( $c );
 		
-//		echo ( "kshow [$kshow_id] has " . count ( $entry_list ) . " entries\n" );
+//		echo ( "vshow [$vshow_id] has " . count ( $entry_list ) . " entries\n" );
 		
 		return $this->createMetadataForList ( $entry_list );
 	}
@@ -128,18 +128,18 @@ class myKshowMetadataCreator
 		
 /*
  * OLD:		
-		<vidAsset seqPlayTime="0" type="RTMP" name="dugag" url="rtmp://8.6.95.164:1935/kplayer/_definst_">
+		<vidAsset seqPlayTime="0" type="RTMP" name="dugag" url="rtmp://8.6.95.164:1935/vplayer/_definst_">
 		<StreamInfo file_name="dugag" posX="0" posY="0" start_byte="0" end_byte="0" start_time="3.5" len_time="3.5" volume="0" pan="0" />
 		<EndTransition property="alpha" type="smoothEaseOut" length="1" />
 		<!--<Effect type="" length="" specialElements="" />-->
 		</vidAsset>
 
 
-    <vidAsset k_id="3" type="IMAGE" name="Deanna Wilkinson entry" url="http://localhost/images/templates/entry/data/13.jpg">
+    <vidAsset v_id="3" type="IMAGE" name="Deanna Wilkinson entry" url="http://localhost/images/templates/entry/data/13.jpg">
       <StreamInfo file_name="http://localhost/images/templates/entry/data/13.jpg" posX="0" posY="0" start_byte="-1" end_byte="-1" start_time="0" len_time="1" volume="0" pan="0" isSingleFrame="0"/>
       <EndTransition type="None" StartTime="1" length="0"/>
     </vidAsset>
-    <vidAsset k_id="1402" type="VIDEO" name="Gina Mattila entry" url="http://localhost/images/templates/entry/data/9.flv" fix_status="Missing file or invalid FLV structure">
+    <vidAsset v_id="1402" type="VIDEO" name="Gina Mattila entry" url="http://localhost/images/templates/entry/data/9.flv" fix_status="Missing file or invalid FLV structure">
       <StreamInfo file_name="http://localhost/images/templates/entry/data/9.flv" posX="0" posY="0" start_byte="-1" end_byte="-1" start_time="103.24" len_time="45.97000000000001" volume="1" pan="0" isSingleFrame="0"/>
       <EndTransition type="None" StartTime="45.97000000000001" length="0"/>
     </vidAsset>
@@ -168,7 +168,7 @@ class myKshowMetadataCreator
 		{
 			$asset .= "<!-- faild to convert. see conversion log for entry_id " . $entry->getId() . "\n" ;
 		}
-		$asset  .= '<vidAsset k_id="' . $entry->getId()  . '" seqPlayTime="' . $this->m_seq_play_time . '" type="' . $extended_type->type . '" name="' . $url_name->name . '" url="' . $url_name->url . '">' . "\n" .
+		$asset  .= '<vidAsset v_id="' . $entry->getId()  . '" seqPlayTime="' . $this->m_seq_play_time . '" type="' . $extended_type->type . '" name="' . $url_name->name . '" url="' . $url_name->url . '">' . "\n" .
 		'<StreamInfo file_name="' . $name . '" posX="0" posY="0" start_byte="-1" end_byte="-1" start_time="' .$start_time . '" len_time="'. $len_time. '" volume="'. $volume .'" pan="0" />' . "\n" .
 		'<EndTransition type="none" StartTime="' . $start_time . '" length="' . $length . '" />' . "\n" .
 		'</vidAsset>' . "\n";
@@ -200,7 +200,7 @@ class myKshowMetadataCreator
 	{
 		
 		/*
-		 <AudAsset seqPlayTime="0" type="FLV" name="savage" url="rtmp://8.6.95.164:1935/kplayer/_definst_">
+		 <AudAsset seqPlayTime="0" type="FLV" name="savage" url="rtmp://8.6.95.164:1935/vplayer/_definst_">
 			<StreamInfo file_name="savage" start_time="5" len_time="4" volume="0.3" pan="0" />
 		</AudAsset>
 
@@ -317,7 +317,7 @@ class myKshowMetadataCreator
 		$extended_entry_type = new extendedEntryMediaType();
 		$entry_type = $entry->getMediaType(); // this is assumed to be correct 
 
-		$data = kFileSyncUtils::getReadyLocalFilePathForKey($entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA)); // replaced__getDataPath
+		$data = vFileSyncUtils::getReadyLocalFilePathForKey($entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA)); // replaced__getDataPath
 		
 		$ext = pathinfo($data, PATHINFO_EXTENSION );
 
@@ -327,7 +327,7 @@ class myKshowMetadataCreator
 
 			// if tehre is no extensio - ASSUME : entry::ENTRY_MEDIA_TYPE_VIDEO
 			$extended_entry_type->asset_type = self::VIDEO_ASSET;
-			if ( kString::beginsWith( $data , self::$RTMP_PREFIX ) )
+			if ( vString::beginsWith( $data , self::$RTMP_PREFIX ) )
 			{
 				$extended_entry_type->type = self::TYPE_RTMP;
 			}
@@ -377,7 +377,7 @@ class myKshowMetadataCreator
 	
 	private static function getUrlAndName ( $entry )
 	{
-		$data = kFileSyncUtils::getReadyLocalFilePathForKey($entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA)); // replaced__getDataPath
+		$data = vFileSyncUtils::getReadyLocalFilePathForKey($entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA)); // replaced__getDataPath
 		$entry_type = self::getEntryType ( $entry );
 		if ( $entry_type->type == self::TYPE_RTMP )
 		{
@@ -385,7 +385,7 @@ class myKshowMetadataCreator
 			$url = self::getRTMPPath ();
 			// the name should start with the content directory
 			// and should not include the file extension !
-			$name = pathinfo($data, PATHINFO_DIRNAME) . "/" . kFile::getFileNameNoExtension( $data );
+			$name = pathinfo($data, PATHINFO_DIRNAME) . "/" . vFile::getFileNameNoExtension( $data );
 		}
 		else
 		{
@@ -426,8 +426,8 @@ class myKshowMetadataCreator
 		$url = "rtmp://";
 		$url .= $_SERVER['HTTP_HOST'];
 
-		// add herd-coded the kplayer service
-		$url .= ":1935/kplayer/_definst_";
+		// add herd-coded the vplayer service
+		$url .= ":1935/vplayer/_definst_";
 		
 		return $url;
 	}

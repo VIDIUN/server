@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage events
  */
-interface IKalturaBatchJobRelatedEvent
+interface IVidiunBatchJobRelatedEvent
 {
 	/**
 	 * Method returns the batch job object in the context of which the event occurred.

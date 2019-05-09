@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaPlaylistType extends KalturaEnum
+class VidiunPlaylistType extends VidiunEnum
 {
 	const DYNAMIC = 10;//entry::ENTRY_MEDIA_TYPE_XML;
 	const STATIC_LIST = 3;//entry::ENTRY_MEDIA_TYPE_TEXT;

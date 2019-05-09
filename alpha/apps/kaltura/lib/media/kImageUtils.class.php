@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Media
  */
-class kImageUtils
+class vImageUtils
 {
 	public static function getImageSize(FileSync $fileSync = null)
 	{
@@ -17,8 +17,8 @@ class kImageUtils
 		
 		if(!$fileSync->getEncryptionKey())
 		{
-			$key = kFileSyncUtils::getKeyForFileSync($fileSync);
-			$filePath = kFileSyncUtils::getLocalFilePathForKey($key);
+			$key = vFileSyncUtils::getKeyForFileSync($fileSync);
+			$filePath = vFileSyncUtils::getLocalFilePathForKey($key);
 			list($width, $height, $type, $attr) = getimagesize($filePath);
 		}
 		else

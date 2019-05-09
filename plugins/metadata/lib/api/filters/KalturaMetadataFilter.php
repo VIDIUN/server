@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.filters
  */
-class KalturaMetadataFilter extends KalturaMetadataBaseFilter
+class VidiunMetadataFilter extends VidiunMetadataBaseFilter
 {	
 	static private $map_between_objects = array
 	(
@@ -11,7 +11,7 @@ class KalturaMetadataFilter extends KalturaMetadataBaseFilter
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaMetadataBaseFilter::getMapBetweenObjects()
+	 * @see VidiunMetadataBaseFilter::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -28,7 +28,7 @@ class KalturaMetadataFilter extends KalturaMetadataBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -36,12 +36,12 @@ class KalturaMetadataFilter extends KalturaMetadataBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if (!$this->metadataObjectTypeEqual)
-			throw new KalturaAPIException(MetadataErrors::MUST_FILTER_ON_OBJECT_TYPE);
+			throw new VidiunAPIException(MetadataErrors::MUST_FILTER_ON_OBJECT_TYPE);
 		
 		$objectIds = $this->validateObjectIdFiltered();
 		if(!count($objectIds) && $this->metadataObjectTypeEqual != MetadataObjectType::DYNAMIC_OBJECT && $this->shouldBlockEmptyObjectIdsFiltering())
@@ -54,14 +54,14 @@ class KalturaMetadataFilter extends KalturaMetadataBaseFilter
 		
 		$metadataFilter = $this->toObject();
 
-		$c = KalturaCriteria::create(MetadataPeer::OM_CLASS);
+		$c = VidiunCriteria::create(MetadataPeer::OM_CLASS);
 		$metadataFilter->attachToCriteria($c);
 
 		$pager->attachToCriteria($c);
 		$list = MetadataPeer::doSelect($c);
 		
-		$response = new KalturaMetadataListResponse();
-		$response->objects = KalturaMetadataArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunMetadataListResponse();
+		$response->objects = VidiunMetadataArray::fromDbArray($list, $responseProfile);
 		
 		if($c instanceof SphinxMetadataCriteria)
 		{
@@ -84,21 +84,21 @@ class KalturaMetadataFilter extends KalturaMetadataBaseFilter
 	{
 		$objectIds = $this->getObjectIdsFiltered();
 		
-		if(($this->metadataObjectTypeEqual == MetadataObjectType::ENTRY || kEntitlementUtils::getEntitlementEnforcement()) && 
+		if(($this->metadataObjectTypeEqual == MetadataObjectType::ENTRY || vEntitlementUtils::getEntitlementEnforcement()) && 
 			empty($objectIds) && $this->shouldBlockEmptyObjectIdsFiltering())
-			throw new KalturaAPIException(MetadataErrors::MUST_FILTER_ON_OBJECT_ID);
+			throw new VidiunAPIException(MetadataErrors::MUST_FILTER_ON_OBJECT_ID);
 		
 		if ($this->metadataObjectTypeEqual == MetadataObjectType::ENTRY)
 		{
 			$objectIds = array_map('strtolower', $objectIds);
-			$objectIds = !empty($objectIds) ? entryPeer::filterEntriesByPartnerOrKalturaNetwork($objectIds, kCurrentContext::getCurrentPartnerId()) : array();
+			$objectIds = !empty($objectIds) ? entryPeer::filterEntriesByPartnerOrVidiunNetwork($objectIds, vCurrentContext::getCurrentPartnerId()) : array();
 		}
-		elseif($this->metadataObjectTypeEqual == KalturaMetadataObjectType::USER)
+		elseif($this->metadataObjectTypeEqual == VidiunMetadataObjectType::USER)
 		{
-			$kusers = !empty($objectIds) ? kuserPeer::getKuserByPartnerAndUids(kCurrentContext::getCurrentPartnerId(), $objectIds) : array();
+			$vusers = !empty($objectIds) ? vuserPeer::getVuserByPartnerAndUids(vCurrentContext::getCurrentPartnerId(), $objectIds) : array();
 			$objectIds = array();
-			foreach($kusers as $kuser)
-				$objectIds[] = $kuser->getId();
+			foreach($vusers as $vuser)
+				$objectIds[] = $vuser->getId();
 		}
 		elseif($this->metadataObjectTypeEqual == MetadataObjectType::CATEGORY)
 		{
@@ -113,14 +113,14 @@ class KalturaMetadataFilter extends KalturaMetadataBaseFilter
 	
 	private function shouldBlockEmptyObjectIdsFiltering()
 	{
-		if(kCurrentContext::$ks_partner_id == Partner::BATCH_PARTNER_ID)
+		if(vCurrentContext::$vs_partner_id == Partner::BATCH_PARTNER_ID)
 			return false;
 		
-		$metadataListNoFilterExcludePartners = kConf::get('metadata_list_without_object_filtering_partners', 'local', array());
-		if(!array_key_exists(kCurrentContext::getCurrentPartnerId(), $metadataListNoFilterExcludePartners))
+		$metadataListNoFilterExcludePartners = vConf::get('metadata_list_without_object_filtering_partners', 'local', array());
+		if(!array_key_exists(vCurrentContext::getCurrentPartnerId(), $metadataListNoFilterExcludePartners))
 			return true;
 		
-		$allowedFilterTypes = $metadataListNoFilterExcludePartners[kCurrentContext::getCurrentPartnerId()];
+		$allowedFilterTypes = $metadataListNoFilterExcludePartners[vCurrentContext::getCurrentPartnerId()];
 		if($allowedFilterTypes == "")
 			return false;
 		
@@ -148,8 +148,8 @@ class KalturaMetadataFilter extends KalturaMetadataBaseFilter
 	
 	public function getEmptyListResponse()
 	{
-		$response = new KalturaMetadataListResponse();
-		$response->objects = new KalturaMetadataArray();
+		$response = new VidiunMetadataListResponse();
+		$response->objects = new VidiunMetadataArray();
 		$response->totalCount = 0;
 		return $response;
 	}

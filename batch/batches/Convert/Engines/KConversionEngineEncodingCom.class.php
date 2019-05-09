@@ -5,7 +5,7 @@
  * @package Scheduler
  * @subpackage Conversion.engines
  */
-class KConversionEngineEncodingCom  extends KJobConversionEngine
+class VConversionEngineEncodingCom  extends VJobConversionEngine
 {
 	const ENCODING_COM = "encoding_com";
 	
@@ -18,7 +18,7 @@ class KConversionEngineEncodingCom  extends KJobConversionEngine
 	
 	public function getType()
 	{
-		return KalturaConversionEngineType::ENCODING_COM;
+		return VidiunConversionEngineType::ENCODING_COM;
 	}
 	
 	public function getLogData()
@@ -33,59 +33,59 @@ class KConversionEngineEncodingCom  extends KJobConversionEngine
 
 	protected function getUserId()
 	{
-		return KBatchBase::$taskConfig->params->EncodingComUserId;
+		return VBatchBase::$taskConfig->params->EncodingComUserId;
 	}
 
 	protected function getUserKey()
 	{
-		return KBatchBase::$taskConfig->params->EncodingComUserKey;
+		return VBatchBase::$taskConfig->params->EncodingComUserKey;
 	}
 
 	protected function getUrl()
 	{
-		return KBatchBase::$taskConfig->params->EncodingComUrl;
+		return VBatchBase::$taskConfig->params->EncodingComUrl;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see batches/Convert/Engines/KConversionEngine#convertJob()
+	 * @see batches/Convert/Engines/VConversionEngine#convertJob()
 	 */
-	public function convertJob ( KalturaConvertJobData &$data )
+	public function convertJob ( VidiunConvertJobData &$data )
 	{
-		$sendData = new KEncodingComData();
+		$sendData = new VEncodingComData();
 		
 		$sendData->setFormatTurbo('yes');
 		
 		$sendData->setUserId($this->getUserId());
 		$sendData->setUserKey($this->getUserKey());
 		
-		$sendData->setAction(KEncodingComData::ACTION_ADD_MEDIA);
+		$sendData->setAction(VEncodingComData::ACTION_ADD_MEDIA);
 		$sendData->setSource($this->getSrcRemoteUrlFromData($data));
 		
 		switch($data->flavorParamsOutput->videoCodec)
 		{
-			case KalturaVideoCodec::NONE:
+			case VidiunVideoCodec::NONE:
 				$sendData->setFormatOutput('mp3');
 				//$sendData->setFormatVideoCodec('none');
 				break;
 				
-			case KalturaVideoCodec::VP6:
+			case VidiunVideoCodec::VP6:
 				$sendData->setFormatOutput('flv');
 				$sendData->setFormatVideoCodec('vp6');
 				break;
 				
-			case KalturaVideoCodec::FLV:
+			case VidiunVideoCodec::FLV:
 				$sendData->setFormatOutput('flv');
 				$sendData->setFormatVideoCodec('vp6');
 				break;
 				
-			case KalturaVideoCodec::H263:
+			case VidiunVideoCodec::H263:
 				return array(false, "Do not support H263");
 				
 				$sendData->setFormatOutput('3gp');
 				$sendData->setFormatVideoCodec('h263');
 				break;
 				
-			case KalturaVideoCodec::H264:
+			case VidiunVideoCodec::H264:
 				$sendData->setFormatOutput('mp4');
 				$sendData->setFormatVideoCodec('libx264');
 				break;
@@ -147,7 +147,7 @@ class KConversionEngineEncodingCom  extends KJobConversionEngine
 	 */
 	private function sendRequest($requestXml, &$err)
 	{
-		KalturaLog::info("sendRequest($requestXml)");
+		VidiunLog::info("sendRequest($requestXml)");
 
 		$url = $this->getUrl();
 		
@@ -175,7 +175,7 @@ class KConversionEngineEncodingCom  extends KJobConversionEngine
 		
 		curl_close($ch);
 		
-		KalturaLog::info("request results: ($result)");
+		VidiunLog::info("request results: ($result)");
 		return $result;
 	}
 	

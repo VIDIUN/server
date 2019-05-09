@@ -3,7 +3,7 @@
  * @package plugins.sphinxSearch
  * @subpackage model.filters
  */
-class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
+class SphinxCriterion extends VidiunCriterion implements IVidiunIndexQuery
 {
 	const MAX_IN_VALUES = 150;
 	const MAX_UINT_VAL = 4294967296;
@@ -31,7 +31,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 	protected $selfMatchOperator = '';
 	
 	/**
-	 * @var IKalturaIndexQuery
+	 * @var IVidiunIndexQuery
 	 */
 	protected $currentQuery;
 	
@@ -41,7 +41,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 		if(!$parentCriterion)
 			return false;
 			
-		if($parentCriterion instanceof KalturaCriterion)
+		if($parentCriterion instanceof VidiunCriterion)
 			return ($parentCriterion->getConjunction() == Criterion::ODER);
 			
 		return false;
@@ -70,8 +70,8 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 		$obejctClass = $this->criteria->getIndexObjectName();
 		$fieldsEscapeType = $obejctClass::getSearchFieldsEscapeType($sphinxField);
 		
-		$partnerId = kCurrentContext::getCurrentPartnerId();
-		$notEmpty = kSphinxSearchManager::HAS_VALUE . $partnerId;
+		$partnerId = vCurrentContext::getCurrentPartnerId();
+		$notEmpty = vSphinxSearchManager::HAS_VALUE . $partnerId;
 		
 		switch($comparison)
 		{
@@ -83,7 +83,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 					return "@$sphinxField \\\"^$value$\\\"";
 				
 			case Criteria::ISNULL:
-				$isEmpty = kSphinxSearchManager::HAS_NO_VALUE . $partnerId;
+				$isEmpty = vSphinxSearchManager::HAS_NO_VALUE . $partnerId;
 				return "@$sphinxField $isEmpty";
 				
 			case Criteria::ISNOTNULL:
@@ -131,7 +131,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 				}
 				break;
 				
-			case KalturaCriteria::IN_LIKE:
+			case VidiunCriteria::IN_LIKE:
 				$vals = is_array($value) ? $value : explode(',', $value);
 					
 				foreach($vals as $valIndex => $valValue)
@@ -150,7 +150,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 				}
 				break;
 				
-			case KalturaCriteria::IN_LIKE_ORDER:
+			case VidiunCriteria::IN_LIKE_ORDER:
 				$vals = is_array($value) ? $value : explode(',', $value);
 					
 				foreach($vals as $valIndex => $valValue)
@@ -308,9 +308,9 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaCriterion::apply()
+	 * @see VidiunCriterion::apply()
 	 */
-	public function apply(IKalturaIndexQuery $query)
+	public function apply(IVidiunIndexQuery $query)
 	{
 		$objectClass = $this->criteria->getIndexObjectName();
 		$this->currentQuery = $query;
@@ -318,11 +318,11 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 		list($field, $comparison, $value) = $this->criteria->translateSphinxCriterion($this);
 		
 		// Can apply criterion
-		KalturaLog::info("Applies criterion [$field]");
+		VidiunLog::info("Applies criterion [$field]");
 	
 		if(!$objectClass::hasIndexFieldName($field))
 		{
-			KalturaLog::debug("Skip criterion[$field] has no sphinx field");
+			VidiunLog::debug("Skip criterion[$field] has no sphinx field");
 			return false;
 		}
 				
@@ -332,7 +332,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 		if($comparison == Criteria::CUSTOM || $comparison == Criteria::CUSTOM_EQUAL || 
 				($comparison == Criteria::ISNOTNULL && $type != IIndexable::FIELD_TYPE_STRING))
 		{
-			KalturaLog::debug("Skip criterion[$field] unhandled comparison [$comparison]");
+			VidiunLog::debug("Skip criterion[$field] unhandled comparison [$comparison]");
 			return false;
 		}
 		
@@ -387,7 +387,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 		}
 	
 		$valStr = print_r($value, true);
-		KalturaLog::debug("Attach criterion[$field] as sphinx field[$sphinxField] of type [$type] and comparison[$comparison] for value[$valStr]");
+		VidiunLog::debug("Attach criterion[$field] as sphinx field[$sphinxField] of type [$type] and comparison[$comparison] for value[$valStr]");
 		
 		// update comparison in case of null
 		if (is_null($value)){
@@ -416,13 +416,13 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 		if($type == IIndexable::FIELD_TYPE_STRING)
 		{
 			$match = $this->getStringMatchClause($sphinxField, $comparison, $value);
-			KalturaLog::debug("Add match criterion[$field] as sphinx field[$sphinxField] of type [$type] match [$match] line [" . __LINE__ . "]");
+			VidiunLog::debug("Add match criterion[$field] as sphinx field[$sphinxField] of type [$type] match [$match] line [" . __LINE__ . "]");
 			$this->addMatch($match);
 		}
 		else
 		{
 			$condition = $this->getNonStringClause($sphinxField, $type, $comparison, $value);
-			KalturaLog::debug("Add condition criterion[$field] as sphinx field[$sphinxField] of type [$type] condition [$condition] line [" . __LINE__ . "]");
+			VidiunLog::debug("Add condition criterion[$field] as sphinx field[$sphinxField] of type [$type] condition [$condition] line [" . __LINE__ . "]");
 			$this->addCondition($condition);
 		}
 		
@@ -431,13 +431,13 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 		{
 			if(!($clause instanceof SphinxCriterion))
 			{
-				KalturaLog::debug("Clause [" . $clause->getColumn() . "] is not Sphinx criterion");
+				VidiunLog::debug("Clause [" . $clause->getColumn() . "] is not Sphinx criterion");
 				return false;
 			}
 			
 			if(!$clause->apply($this))
 			{
-				KalturaLog::debug("Failed to apply clause [" . $clause->getColumn() . "]");
+				VidiunLog::debug("Failed to apply clause [" . $clause->getColumn() . "]");
 				return false;
 			}
 		}
@@ -449,7 +449,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 				$matchesClause = "($matchesClause)";
 			
 			$match = $this->getSelfMatchOperator() . $matchesClause;
-			KalturaLog::debug("Add match criterion[$field] as sphinx field[$sphinxField] of type [$type] match [$match] line [" . __LINE__ . "]");
+			VidiunLog::debug("Add match criterion[$field] as sphinx field[$sphinxField] of type [$type] match [$match] line [" . __LINE__ . "]");
 			$query->addMatch($match);
 		}
 		
@@ -462,7 +462,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 			if (!$this->hasOr())
 			{
 				$where = $attributesClause;
-				KalturaLog::debug("Add where criterion[$field] as sphinx field[$sphinxField] of type [$type] where [$where] line [" . __LINE__ . "]");
+				VidiunLog::debug("Add where criterion[$field] as sphinx field[$sphinxField] of type [$type] where [$where] line [" . __LINE__ . "]");
 				$query->addWhere($where);
 				return true;
 			}
@@ -475,11 +475,11 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 
 			if (isset($expSimplifications[$attributesClause]))
 			{
-				KalturaLog::debug("Simplifying expression [$attributesClause] => [{$expSimplifications[$attributesClause]}]");
+				VidiunLog::debug("Simplifying expression [$attributesClause] => [{$expSimplifications[$attributesClause]}]");
 				
 				// We move it to the 'where' since where is allegedly faster than in the condition.
 				$where = $this->getConjunction() . $expSimplifications[$attributesClause];
-				KalturaLog::debug("Add where criterion[$field] as sphinx field[$sphinxField] of type [$type] where [$where] line [" . __LINE__ . "]");
+				VidiunLog::debug("Add where criterion[$field] as sphinx field[$sphinxField] of type [$type] where [$where] line [" . __LINE__ . "]");
 				$query->addWhere($where);
 			}
 			else
@@ -488,7 +488,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 					$attributesClause = "($attributesClause)";
 					
 				$condition = $this->getConjunction() . $attributesClause;
-				KalturaLog::debug("Add condition criterion[$field] as sphinx field[$sphinxField] of type [$type] condition [$condition] line [" . __LINE__ . "]");
+				VidiunLog::debug("Add condition criterion[$field] as sphinx field[$sphinxField] of type [$type] condition [$condition] line [" . __LINE__ . "]");
 				$query->addCondition($condition);
 			}
 		}
@@ -531,7 +531,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 		$objectClass = $this->criteria->getIndexObjectName();
 		$currentField = $this->getTable() . '.' . $this->getColumn();
 		$addedField = $this->getTable() . '.' . $this->getColumn();
-		KalturaLog::debug("Add OR criterion field [$addedField] to current field [$currentField]");
+		VidiunLog::debug("Add OR criterion field [$addedField] to current field [$currentField]");
 	
 		// Validate that the added criterion and the current criterios are both attributes or both matches
 		if($objectClass::hasIndexFieldName($addedField))
@@ -541,16 +541,16 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 			
 			if($currentSphinxField != $addedSphinxField)
 			{
-				KalturaLog::debug("Current sphinx field [$currentSphinxField] and added sphinx field [$addedField]");
+				VidiunLog::debug("Current sphinx field [$currentSphinxField] and added sphinx field [$addedField]");
 				
 				$currentType	= $objectClass::getFieldType($currentSphinxField);
 				$addedType		= $objectClass::getFieldType($addedField);
 				
 				if($currentType != $addedType)
 				{
-					KalturaLog::debug("Current type [$currentType] and added type [$addedType]");
+					VidiunLog::debug("Current type [$currentType] and added type [$addedType]");
 					if($currentType == IIndexable::FIELD_TYPE_STRING || $addedType == IIndexable::FIELD_TYPE_STRING)
-						throw new kCoreException("Cannot mix OR operator on attributes and matches", kCoreException::INVALID_QUERY);
+						throw new vCoreException("Cannot mix OR operator on attributes and matches", vCoreException::INVALID_QUERY);
 				}
 			}
 		}
@@ -562,7 +562,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaIndexQuery::addWhere()
+	 * @see IVidiunIndexQuery::addWhere()
 	 */
 	public function addWhere($statement)
 	{
@@ -571,7 +571,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaIndexQuery::addMatch()
+	 * @see IVidiunIndexQuery::addMatch()
 	 */
 	public function addMatch($match)
 	{
@@ -580,7 +580,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaIndexQuery::addCondition()
+	 * @see IVidiunIndexQuery::addCondition()
 	 */
 	public function addCondition($condition)
 	{
@@ -589,7 +589,7 @@ class SphinxCriterion extends KalturaCriterion implements IKalturaIndexQuery
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaIndexQuery::addOrderBy()
+	 * @see IVidiunIndexQuery::addOrderBy()
 	 */
 	public function addOrderBy($column, $orderByType = Criteria::ASC)
 	{

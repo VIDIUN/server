@@ -4,12 +4,12 @@
  * @package plugins.reach
  * @subpackage model.enum
  */
-class SyncReachCreditTaskBatchType implements IKalturaPluginEnum, BatchJobType
+class SyncReachCreditTaskBatchType implements IVidiunPluginEnum, BatchJobType
 {
 	const SYNC_REACH_CREDIT_TASK = 'SyncReachCreditTask';
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalValues()
+	 * @see IVidiunPluginEnum::getAdditionalValues()
 	 */
 	public static function getAdditionalValues()
 	{
@@ -19,7 +19,7 @@ class SyncReachCreditTaskBatchType implements IKalturaPluginEnum, BatchJobType
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalDescriptions()
+	 * @see IVidiunPluginEnum::getAdditionalDescriptions()
 	 */
 	public static function getAdditionalDescriptions()
 	{

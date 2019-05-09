@@ -59,26 +59,26 @@ class YouTubeDistributionPlaylistsSync
 		{
 			try
 			{
-				KalturaLog::debug('Trying to load all playlists, attempt '.$i);
+				VidiunLog::debug('Trying to load all playlists, attempt '.$i);
 				$this->loadPlaylistsForChannel($youtubeUsername);
 				$playlistsLoaded = true;
 				break;
 			}
 			catch(Exception $ex)
 			{
-				KalturaLog::err('Failed to load all playlists on attempt '.$i);
-				KalturaLog::debug($ex);
+				VidiunLog::err('Failed to load all playlists on attempt '.$i);
+				VidiunLog::debug($ex);
 			}
 		}
 
 		if (!$playlistsLoaded)
 		{
-			KalturaLog::err('An error occurred while loading playlists, sync playlists proccess cannot proceed');
+			VidiunLog::err('An error occurred while loading playlists, sync playlists proccess cannot proceed');
 			return $currentVideoPlaylists;
 		}
 
-		KalturaLog::info('Current playlists: ' . $currentVideoPlaylists);
-		KalturaLog::info('New playlists: ' . $newVideoPlaylists);
+		VidiunLog::info('Current playlists: ' . $currentVideoPlaylists);
+		VidiunLog::info('New playlists: ' . $newVideoPlaylists);
 		$currentPlaylistsArray = explode(',', $currentVideoPlaylists);
 		$newPlaylistsArray = explode(',', $newVideoPlaylists);
 		sort($currentPlaylistsArray);
@@ -124,8 +124,8 @@ class YouTubeDistributionPlaylistsSync
 					}
 					catch(Exception $ex)
 					{
-						KalturaLog::err('Failed to create new playlist '.$playlist);
-						KalturaLog::debug($ex);
+						VidiunLog::err('Failed to create new playlist '.$playlist);
+						VidiunLog::debug($ex);
 						continue;
 					}
 					$playlistId = $playlistResponse['id'];
@@ -148,8 +148,8 @@ class YouTubeDistributionPlaylistsSync
 				}
 				catch(Exception $ex)
 				{
-					KalturaLog::err('Failed to insert playlist item for playlist '.$playlist);
-					KalturaLog::debug($ex);
+					VidiunLog::err('Failed to insert playlist item for playlist '.$playlist);
+					VidiunLog::debug($ex);
 					continue;
 				}
 
@@ -183,8 +183,8 @@ class YouTubeDistributionPlaylistsSync
 				{
 					// failed to list playlists items, we need to keep that playlist in our records
 					$currentPlaylistsReal[] = $playlist;
-					KalturaLog::err('Failed to list playlist items for playlist '.$playlist);
-					KalturaLog::debug($ex);
+					VidiunLog::err('Failed to list playlist items for playlist '.$playlist);
+					VidiunLog::debug($ex);
 					continue;
 				}
 
@@ -207,8 +207,8 @@ class YouTubeDistributionPlaylistsSync
 						{
 							// playlist item could not be deleted, we need to keep that playlist in our records as well
 							$currentPlaylistsReal[] = $playlist;
-							KalturaLog::err('Failed to delete playlist item for playlist '.$playlist);
-							KalturaLog::debug($ex);
+							VidiunLog::err('Failed to delete playlist item for playlist '.$playlist);
+							VidiunLog::debug($ex);
 						}
 					}
 				}
@@ -237,7 +237,7 @@ class YouTubeDistributionPlaylistsSync
 		$channels = $this->_youtubeService->channels->listChannels('snippet', array('forUsername' => $youtubeUsername));
 		if (!isset($channels['items'][0]['id']))
 		{
-			KalturaLog::err('Channel id could not be found for username '.$youtubeUsername);
+			VidiunLog::err('Channel id could not be found for username '.$youtubeUsername);
 			return;
 		}
 		$this->_channelId = $channels['items'][0]['id'];

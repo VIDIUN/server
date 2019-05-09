@@ -3,12 +3,12 @@
  * @package plugins.pushNotification
  * @subpackage model.enum
  */
-class PushNotificationTemplateType implements IKalturaPluginEnum, EventNotificationTemplateType
+class PushNotificationTemplateType implements IVidiunPluginEnum, EventNotificationTemplateType
 {
 	const PUSH = 'Push';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalValues()
+	 * @see IVidiunPluginEnum::getAdditionalValues()
 	 */
 	public static function getAdditionalValues()
 	{
@@ -18,7 +18,7 @@ class PushNotificationTemplateType implements IKalturaPluginEnum, EventNotificat
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalDescriptions()
+	 * @see IVidiunPluginEnum::getAdditionalDescriptions()
 	 */
 	public static function getAdditionalDescriptions() 
 	{

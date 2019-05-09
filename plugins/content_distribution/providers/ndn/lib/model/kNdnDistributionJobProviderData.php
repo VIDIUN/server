@@ -3,7 +3,7 @@
  * @package plugins.ndnDistribution
  * @subpackage model.data
  */
-class kNdnDistributionJobProviderData extends kDistributionJobProviderData
+class vNdnDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var string
@@ -16,7 +16,7 @@ class kNdnDistributionJobProviderData extends kDistributionJobProviderData
 	 */
 	private $distributionProfileId;
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

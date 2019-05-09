@@ -800,13 +800,13 @@ abstract class BaseBusinessProcessServer extends BaseObject  implements Persiste
 				return 0;
 			}
 			
-			for ($retries = 1; $retries < KalturaPDO::SAVE_MAX_RETRIES; $retries++)
+			for ($retries = 1; $retries < VidiunPDO::SAVE_MAX_RETRIES; $retries++)
 			{
                $affectedRows = $this->doSave($con);
                 if ($affectedRows || !$this->isColumnModified(BusinessProcessServerPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug("was unable to save! retrying for the $retries time");
+                VidiunLog::debug("was unable to save! retrying for the $retries time");
                 $criteria = $this->buildPkeyCriteria();
 				$criteria->addSelectColumn(BusinessProcessServerPeer::CUSTOM_DATA);
                 $stmt = BasePeer::doSelect($criteria, $con);
@@ -968,7 +968,7 @@ abstract class BaseBusinessProcessServer extends BaseObject  implements Persiste
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -993,12 +993,12 @@ abstract class BaseBusinessProcessServer extends BaseObject  implements Persiste
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1016,10 +1016,10 @@ abstract class BaseBusinessProcessServer extends BaseObject  implements Persiste
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();

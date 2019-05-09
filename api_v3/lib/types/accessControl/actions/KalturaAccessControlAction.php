@@ -3,15 +3,15 @@
  * @package api
  * @subpackage objects
  * @abstract
- * @deprecated use KalturaRuleAction
+ * @deprecated use VidiunRuleAction
  */
-abstract class KalturaAccessControlAction extends KalturaObject
+abstract class VidiunAccessControlAction extends VidiunObject
 {
 	/**
 	 * The type of the access control action
 	 * 
 	 * @readonly
-	 * @var KalturaAccessControlActionType
+	 * @var VidiunAccessControlActionType
 	 */
 	public $type;
 }

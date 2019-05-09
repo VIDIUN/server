@@ -1,5 +1,5 @@
 <?php
-class kAuditTrailTextInfo extends kAuditTrailInfo
+class vAuditTrailTextInfo extends vAuditTrailInfo
 {
 	/**
 	 * @var string

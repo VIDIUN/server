@@ -57,7 +57,7 @@ class SystemUser extends BaseSystemUser
 	
 	public static function generateRandomPassword()
 	{
-		return kString::generateRandomString(5, 10, true, false, true);
+		return vString::generateRandomString(5, 10, true, false, true);
 	} 
 	
 	private function sendEmail($password)
@@ -65,18 +65,18 @@ class SystemUser extends BaseSystemUser
 		$batchJob = new BatchJob();
 		$batchJob->setPartnerId(Partner::ADMIN_CONSOLE_PARTNER_ID);
 		
-		$jobData = new kMailJobData();
-		$jobData->setMailPriority(kMailJobData::MAIL_PRIORITY_NORMAL);
-		$jobData->setStatus(kMailJobData::MAIL_STATUS_PENDING);
+		$jobData = new vMailJobData();
+		$jobData->setMailPriority(vMailJobData::MAIL_PRIORITY_NORMAL);
+		$jobData->setStatus(vMailJobData::MAIL_STATUS_PENDING);
 		
 		$jobData->setBodyParamsArray(array($password));
 		$jobData->setMailType(112);
 		
-		$jobData->setFromEmail(kConf::get("default_email"));
-		$jobData->setFromName(kConf::get("default_email_name"));
+		$jobData->setFromEmail(vConf::get("default_email"));
+		$jobData->setFromName(vConf::get("default_email_name"));
 		$jobData->setRecipientEmail($this->getEmail());
 		$jobData->setSubjectParamsArray(array());
 		
-		kJobsManager::addJob($batchJob, $jobData, BatchJobType::MAIL, $jobData->getMailType());
+		vJobsManager::addJob($batchJob, $jobData, BatchJobType::MAIL, $jobData->getMailType());
 	}
 }

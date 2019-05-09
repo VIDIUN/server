@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
  <log>
-  <ident>kaltura</ident>
+  <ident>vidiun</ident>
   <level>7</level>
  </log>
  <propel>
-  <datasources default="kaltura">
-   <datasource id="kaltura">
+  <datasources default="vidiun">
+   <datasource id="vidiun">
     <adapter>mysql</adapter>
     <connection>
      <phptype>mysql</phptype>
-     <database>kaltura</database>
+     <database>vidiun</database>
      <hostspec>localhost</hostspec>
      <username>root</username>
      <password>root</password>

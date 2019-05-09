@@ -1,6 +1,6 @@
 <?php
 
-class kSchedulingICalRule extends kSchedulingICalComponent
+class vSchedulingICalRule extends vSchedulingICalComponent
 {
 	private static $stringFields = array(
 		'name',
@@ -20,7 +20,7 @@ class kSchedulingICalRule extends kSchedulingICalComponent
 	
 	/**
 	 * {@inheritDoc}
-	 * @see kSchedulingICalComponent::getLineDelimiter()
+	 * @see vSchedulingICalComponent::getLineDelimiter()
 	 */
 	protected function getLineDelimiter()
 	{
@@ -29,7 +29,7 @@ class kSchedulingICalRule extends kSchedulingICalComponent
 	
 	/**
 	 * {@inheritDoc}
-	 * @see kSchedulingICalComponent::getFieldDelimiter()
+	 * @see vSchedulingICalComponent::getFieldDelimiter()
 	 */
 	protected function getFieldDelimiter()
 	{
@@ -38,7 +38,7 @@ class kSchedulingICalRule extends kSchedulingICalComponent
 	
 	/**
 	 * {@inheritDoc}
-	 * @see kSchedulingICalComponent::getType()
+	 * @see vSchedulingICalComponent::getType()
 	 */
 	protected function getType()
 	{
@@ -47,13 +47,13 @@ class kSchedulingICalRule extends kSchedulingICalComponent
 
 	/**
 	 * {@inheritDoc}
-	 * @see kSchedulingICalComponent::toObject()
+	 * @see vSchedulingICalComponent::toObject()
 	 */
 	public function toObject()
 	{
-		$rule = new KalturaScheduleEventRecurrence();
-		$rule->frequency = constant('KalturaScheduleEventRecurrenceFrequency::' . $this->getField('freq'));
-		$rule->until = kSchedulingICal::parseDate($this->getField('until'));
+		$rule = new VidiunScheduleEventRecurrence();
+		$rule->frequency = constant('VidiunScheduleEventRecurrenceFrequency::' . $this->getField('freq'));
+		$rule->until = vSchedulingICal::parseDate($this->getField('until'));
 
 		$strings = array(
 			'name',
@@ -82,28 +82,28 @@ class kSchedulingICalRule extends kSchedulingICalComponent
 	}
 	
 	/**
-	 * @param KalturaScheduleEventRecurrence $rule
-	 * @return kSchedulingICalRule
+	 * @param VidiunScheduleEventRecurrence $rule
+	 * @return vSchedulingICalRule
 	 */
-	public static function fromObject(KalturaScheduleEventRecurrence $rule)
+	public static function fromObject(VidiunScheduleEventRecurrence $rule)
 	{
-		$object = new kSchedulingICalRule();
+		$object = new vSchedulingICalRule();
 
 		$frequencyTypes = array(
-			KalturaScheduleEventRecurrenceFrequency::SECONDLY => 'SECONDLY',
-			KalturaScheduleEventRecurrenceFrequency::MINUTELY => 'MINUTELY',
-			KalturaScheduleEventRecurrenceFrequency::HOURLY => 'HOURLY',
-			KalturaScheduleEventRecurrenceFrequency::DAILY => 'DAILY',
-			KalturaScheduleEventRecurrenceFrequency::WEEKLY => 'WEEKLY',
-			KalturaScheduleEventRecurrenceFrequency::MONTHLY => 'MONTHLY',
-			KalturaScheduleEventRecurrenceFrequency::YEARLY => 'YEARLY',
+			VidiunScheduleEventRecurrenceFrequency::SECONDLY => 'SECONDLY',
+			VidiunScheduleEventRecurrenceFrequency::MINUTELY => 'MINUTELY',
+			VidiunScheduleEventRecurrenceFrequency::HOURLY => 'HOURLY',
+			VidiunScheduleEventRecurrenceFrequency::DAILY => 'DAILY',
+			VidiunScheduleEventRecurrenceFrequency::WEEKLY => 'WEEKLY',
+			VidiunScheduleEventRecurrenceFrequency::MONTHLY => 'MONTHLY',
+			VidiunScheduleEventRecurrenceFrequency::YEARLY => 'YEARLY',
 		);
 		
 		if($rule->frequency && isset($frequencyTypes[$rule->frequency]))
 			$object->setField('freq', $frequencyTypes[$rule->frequency]);
 
 		if($rule->until)
-			$object->setField('until', kSchedulingICal::formatDate($rule->until));
+			$object->setField('until', vSchedulingICal::formatDate($rule->until));
 
 		foreach(self::$stringFields as $attribute => $field)
 		{
@@ -128,7 +128,7 @@ class kSchedulingICalRule extends kSchedulingICalComponent
 	
 	/**
 	 * {@inheritDoc}
-	 * @see kSchedulingICalComponent::write()
+	 * @see vSchedulingICalComponent::write()
 	 */
 	public function write()
 	{

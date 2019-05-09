@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaBaseEntryFilter extends KalturaBaseEntryBaseFilter
+class VidiunBaseEntryFilter extends VidiunBaseEntryBaseFilter
 {
 	static private $map_between_objects = array
 	(
@@ -12,12 +12,12 @@ class KalturaBaseEntryFilter extends KalturaBaseEntryBaseFilter
 		"categoriesFullNameIn" => "_in_categories_full_name", 
 		"categoryAncestorIdIn" => "_in_category_ancestor_id",
 		"redirectFromEntryId" => "_eq_redirect_from_entry_id",
-		"entitledUsersEditMatchAnd" => "_matchand_entitled_kusers_edit",
-		"entitledUsersPublishMatchAnd" => "_matchand_entitled_kusers_publish",
-		"entitledUsersEditMatchOr" => "_matchor_entitled_kusers_edit",
-		"entitledUsersPublishMatchOr" => "_matchor_entitled_kusers_publish",
-		"entitledUsersViewMatchAnd" => "_matchand_entitled_kusers_view",
-		"entitledUsersViewMatchOr" => "_matchor_entitled_kusers_view",
+		"entitledUsersEditMatchAnd" => "_matchand_entitled_vusers_edit",
+		"entitledUsersPublishMatchAnd" => "_matchand_entitled_vusers_publish",
+		"entitledUsersEditMatchOr" => "_matchor_entitled_vusers_edit",
+		"entitledUsersPublishMatchOr" => "_matchor_entitled_vusers_publish",
+		"entitledUsersViewMatchAnd" => "_matchand_entitled_vusers_view",
+		"entitledUsersViewMatchOr" => "_matchor_entitled_vusers_view",
 	);
 	
 	static private $order_by_map = array
@@ -41,7 +41,7 @@ class KalturaBaseEntryFilter extends KalturaBaseEntryBaseFilter
 	public $freeText;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isRoot;
 	
@@ -63,7 +63,7 @@ class KalturaBaseEntryFilter extends KalturaBaseEntryBaseFilter
 	public $redirectFromEntryId;
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -80,7 +80,7 @@ class KalturaBaseEntryFilter extends KalturaBaseEntryBaseFilter
 			$this->statusNotEqual === null &&
 			$this->statusNotIn === null)
 		{
-			$this->statusEqual = KalturaEntryStatus::READY;
+			$this->statusEqual = VidiunEntryStatus::READY;
 		}
 	}
 	
@@ -95,77 +95,77 @@ class KalturaBaseEntryFilter extends KalturaBaseEntryBaseFilter
 			$this->moderationStatusNotIn === null)
 		{
 			$moderationStatusesNotIn = array(
-				KalturaEntryModerationStatus::PENDING_MODERATION, 
-				KalturaEntryModerationStatus::REJECTED);
+				VidiunEntryModerationStatus::PENDING_MODERATION, 
+				VidiunEntryModerationStatus::REJECTED);
 			$this->moderationStatusNotIn = implode(",", $moderationStatusesNotIn); 
 		}
 	}
 
 	/**
-	 * The user_id is infact a puser_id and the kuser_id should be retrieved
+	 * The user_id is infact a puser_id and the vuser_id should be retrieved
 	 */
 	private function fixFilterUserId()
 	{
 		if ($this->userIdEqual !== null)
 		{
-			$kuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::getCurrentPartnerId(), $this->userIdEqual);
-			if ($kuser)
-				$this->userIdEqual = $kuser->getId();
+			$vuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::getCurrentPartnerId(), $this->userIdEqual);
+			if ($vuser)
+				$this->userIdEqual = $vuser->getId();
 			else 
 				$this->userIdEqual = -1; // no result will be returned when the user is missing
 		}
 
 		if(!empty($this->userIdIn))
 		{
-			$this->userIdIn = $this->preparePusersToKusersFilter( $this->userIdIn );
+			$this->userIdIn = $this->preparePusersToVusersFilter( $this->userIdIn );
 		}
 
 		if(!empty($this->userIdNotIn))
 		{
-			$this->userIdNotIn = $this->preparePusersToKusersFilter($this->userIdNotIn);
+			$this->userIdNotIn = $this->preparePusersToVusersFilter($this->userIdNotIn);
 		}
 		
 		if(!empty($this->entitledUsersEditMatchAnd))
 		{
-			$this->entitledUsersEditMatchAnd = $this->preparePusersToKusersFilter( $this->entitledUsersEditMatchAnd );
+			$this->entitledUsersEditMatchAnd = $this->preparePusersToVusersFilter( $this->entitledUsersEditMatchAnd );
 		}
 
 		if(!empty($this->entitledUsersPublishMatchAnd))
 		{
-			$this->entitledUsersPublishMatchAnd = $this->preparePusersToKusersFilter( $this->entitledUsersPublishMatchAnd );
+			$this->entitledUsersPublishMatchAnd = $this->preparePusersToVusersFilter( $this->entitledUsersPublishMatchAnd );
 		}
 		
 		if(!empty($this->entitledUsersEditMatchOr))
 		{
-			$this->entitledUsersEditMatchOr = $this->preparePusersToKusersFilter( $this->entitledUsersEditMatchOr );
+			$this->entitledUsersEditMatchOr = $this->preparePusersToVusersFilter( $this->entitledUsersEditMatchOr );
 		}
 
 		if(!empty($this->entitledUsersPublishMatchOr))
 		{
-			$this->entitledUsersPublishMatchOr = $this->preparePusersToKusersFilter( $this->entitledUsersPublishMatchOr );
+			$this->entitledUsersPublishMatchOr = $this->preparePusersToVusersFilter( $this->entitledUsersPublishMatchOr );
 		}
 		
 		if(!empty($this->entitledUsersViewMatchOr))
 		{
-			$this->entitledUsersViewMatchOr = $this->preparePusersToKusersFilter( $this->entitledUsersViewMatchOr );
+			$this->entitledUsersViewMatchOr = $this->preparePusersToVusersFilter( $this->entitledUsersViewMatchOr );
 		}
 
 		if(!empty($this->entitledUsersViewMatchAnd))
 		{
-			$this->entitledUsersViewMatchAnd = $this->preparePusersToKusersFilter( $this->entitledUsersViewMatchAnd );
+			$this->entitledUsersViewMatchAnd = $this->preparePusersToVusersFilter( $this->entitledUsersViewMatchAnd );
 		}
 	}
 	
 	/**
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaCriteria
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunCriteria
 	 */
-	public function prepareEntriesCriteriaFilter(KalturaFilterPager $pager = null)
+	public function prepareEntriesCriteriaFilter(VidiunFilterPager $pager = null)
 	{
 		// because by default we will display only READY entries, and when deleted status is requested, we don't want this to disturb
 		entryPeer::allowDeletedInCriteriaFilter(); 
 		
-		$c = KalturaCriteria::create(entryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(entryPeer::OM_CLASS);
 	
 		if( $this->idEqual == null && $this->redirectFromEntryId == null )
 		{
@@ -178,7 +178,7 @@ class KalturaBaseEntryFilter extends KalturaBaseEntryBaseFilter
 		$this->fixFilterUserId($this);
 		
 		$entryFilter = new entryFilter();
-		$entryFilter->setPartnerSearchScope(baseObjectFilter::MATCH_KALTURA_NETWORK_AND_PRIVATE);
+		$entryFilter->setPartnerSearchScope(baseObjectFilter::MATCH_VIDIUN_NETWORK_AND_PRIVATE);
 		
 		$this->toObject($entryFilter);
 		
@@ -190,7 +190,7 @@ class KalturaBaseEntryFilter extends KalturaBaseEntryBaseFilter
 		return $c;
 	}
 	
-	protected function doGetListResponse(KalturaFilterPager $pager)
+	protected function doGetListResponse(VidiunFilterPager $pager)
 	{
 		myDbHelper::$use_alternative_con = myDbHelper::DB_HELPER_CONN_PROPEL3;
 
@@ -208,17 +208,17 @@ class KalturaBaseEntryFilter extends KalturaBaseEntryBaseFilter
 		
 		if ($disableWidgetSessionFilters)
 		{
-			if (kEntitlementUtils::getEntitlementEnforcement() && !kCurrentContext::$is_admin_session && entryPeer::getUserContentOnly())
+			if (vEntitlementUtils::getEntitlementEnforcement() && !vCurrentContext::$is_admin_session && entryPeer::getUserContentOnly())
 					entryPeer::setFilterResults(true);
 
-			KalturaCriterion::disableTag(KalturaCriterion::TAG_WIDGET_SESSION);
+			VidiunCriterion::disableTag(VidiunCriterion::TAG_WIDGET_SESSION);
 		}
 		$list = entryPeer::doSelect($c);
 		entryPeer::fetchPlaysViewsData($list);
 		$totalCount = $c->getRecordsCount();
 		
 		if ($disableWidgetSessionFilters)
-			KalturaCriterion::restoreTag(KalturaCriterion::TAG_WIDGET_SESSION);
+			VidiunCriterion::restoreTag(VidiunCriterion::TAG_WIDGET_SESSION);
 
 		myDbHelper::$use_alternative_con = null;
 			
@@ -226,14 +226,14 @@ class KalturaBaseEntryFilter extends KalturaBaseEntryBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getListResponse()
+	 * @see VidiunFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager);
 		
-	    $newList = KalturaBaseEntryArray::fromDbArray($list, $responseProfile);
-		$response = new KalturaBaseEntryListResponse();
+	    $newList = VidiunBaseEntryArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunBaseEntryListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		
@@ -241,22 +241,22 @@ class KalturaBaseEntryFilter extends KalturaBaseEntryBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::validateForResponseProfile()
+	 * @see VidiunRelatedFilter::validateForResponseProfile()
 	 */
 	public function validateForResponseProfile()
 	{		
-		if(kEntitlementUtils::getEntitlementEnforcement())
+		if(vEntitlementUtils::getEntitlementEnforcement())
 		{
-			if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENABLE_RESPONSE_PROFILE_USER_CACHE, kCurrentContext::getCurrentPartnerId()))
+			if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENABLE_RESPONSE_PROFILE_USER_CACHE, vCurrentContext::getCurrentPartnerId()))
 			{
-				KalturaResponseProfileCacher::useUserCache();
+				VidiunResponseProfileCacher::useUserCache();
 				return;
 			}
 			
-			throw new KalturaAPIException(KalturaErrors::CANNOT_LIST_RELATED_ENTITLED_WHEN_ENTITLEMENT_IS_ENABLE, get_class($this));
+			throw new VidiunAPIException(VidiunErrors::CANNOT_LIST_RELATED_ENTITLED_WHEN_ENTITLEMENT_IS_ENABLE, get_class($this));
 		}
 		
-		if(		!kCurrentContext::$is_admin_session
+		if(		!vCurrentContext::$is_admin_session
 			&&	!$this->idEqual 
 			&&	!$this->idIn
 			&&	!$this->referenceIdEqual
@@ -264,18 +264,18 @@ class KalturaBaseEntryFilter extends KalturaBaseEntryBaseFilter
 			&&	!$this->referenceIdIn 
 			&&	!$this->parentEntryIdEqual)
 		{
-			if(kCurrentContext::$ks_object->privileges === ks::PATTERN_WILDCARD || kCurrentContext::$ks_object->getPrivilegeValue(ks::PRIVILEGE_LIST) === ks::PATTERN_WILDCARD)
+			if(vCurrentContext::$vs_object->privileges === vs::PATTERN_WILDCARD || vCurrentContext::$vs_object->getPrivilegeValue(vs::PRIVILEGE_LIST) === vs::PATTERN_WILDCARD)
 			{
 				return;
 			}
 			
-			if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENABLE_RESPONSE_PROFILE_USER_CACHE, kCurrentContext::getCurrentPartnerId()))
+			if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENABLE_RESPONSE_PROFILE_USER_CACHE, vCurrentContext::getCurrentPartnerId()))
 			{
-				KalturaResponseProfileCacher::useUserCache();
+				VidiunResponseProfileCacher::useUserCache();
 				return;
 			}
 			
-			throw new KalturaAPIException(KalturaErrors::USER_KS_CANNOT_LIST_RELATED_ENTRIES, get_class($this));
+			throw new VidiunAPIException(VidiunErrors::USER_VS_CANNOT_LIST_RELATED_ENTRIES, get_class($this));
 		}
 	}
 }

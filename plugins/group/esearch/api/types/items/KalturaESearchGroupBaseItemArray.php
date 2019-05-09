@@ -3,12 +3,12 @@
  * @package plugins.group
  * @subpackage api.objects
  */
-class KalturaESearchGroupBaseItemArray extends KalturaTypedArray
+class VidiunESearchGroupBaseItemArray extends VidiunTypedArray
 {
 
 	public function __construct()
 	{
-		return parent::__construct("KalturaESearchGroupBaseItem");
+		return parent::__construct("VidiunESearchGroupBaseItem");
 	}
 
 }

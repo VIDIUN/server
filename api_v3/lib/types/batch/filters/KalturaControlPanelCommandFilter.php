@@ -3,10 +3,10 @@
  * @package api
  * @subpackage filters
  */
-class KalturaControlPanelCommandFilter extends KalturaControlPanelCommandBaseFilter
+class VidiunControlPanelCommandFilter extends VidiunControlPanelCommandBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{

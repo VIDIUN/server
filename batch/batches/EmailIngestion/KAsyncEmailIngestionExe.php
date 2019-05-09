@@ -1,12 +1,12 @@
 <?php
 /**
- * Will run the KAsyncEmailIngestion
+ * Will run the VAsyncEmailIngestion
  *
  * @package Scheduler
  * @subpackage Email-Ingestion
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncEmailIngestion();
+$instance = new VAsyncEmailIngestion();
 $instance->run();
 $instance->done();

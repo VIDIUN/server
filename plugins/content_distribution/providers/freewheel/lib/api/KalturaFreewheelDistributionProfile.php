@@ -3,7 +3,7 @@
  * @package plugins.freewheelDistribution
  * @subpackage api.objects
  */
-class KalturaFreewheelDistributionProfile extends KalturaDistributionProfile
+class VidiunFreewheelDistributionProfile extends VidiunDistributionProfile
 {
 	/**
 	 * @var string

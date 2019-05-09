@@ -3,7 +3,7 @@
  * @package plugins.FeedDropFolder
  * @subpackage api.objects
  */
-class KalturaFeedDropFolderFile extends KalturaDropFolderFile
+class VidiunFeedDropFolderFile extends VidiunDropFolderFile
 {
 	/**
 	 * MD5 or Sha1 encrypted string

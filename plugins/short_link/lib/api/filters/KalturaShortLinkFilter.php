@@ -3,10 +3,10 @@
  * @package plugins.shortLink
  * @subpackage api.filters
  */
-class KalturaShortLinkFilter extends KalturaShortLinkBaseFilter
+class VidiunShortLinkFilter extends VidiunShortLinkBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -17,9 +17,9 @@ class KalturaShortLinkFilter extends KalturaShortLinkBaseFilter
 	{
 		if(!is_null($this->userIdEqual))
 		{
-			$kuser = kuserPeer::getKuserByPartnerAndUid($partnerId, $this->userIdEqual);
-			if ($kuser)
-				$this->userIdEqual = $kuser->getId();
+			$vuser = vuserPeer::getVuserByPartnerAndUid($partnerId, $this->userIdEqual);
+			if ($vuser)
+				$this->userIdEqual = $vuser->getId();
 			else 
 				$this->userIdEqual = -1; // no result will be returned when the user is missing
 		}
@@ -27,14 +27,14 @@ class KalturaShortLinkFilter extends KalturaShortLinkBaseFilter
 		if(!is_null($this->userIdIn))
 		{
 			$puserIds = explode(',', $this->userIdIn);
-			$kusers = kuserPeer::getKuserByPartnerAndUids($partnerId, $puserIds);
-			if(count($kusers))
+			$vusers = vuserPeer::getVuserByPartnerAndUids($partnerId, $puserIds);
+			if(count($vusers))
 			{
-				$kuserIds = array();
-				foreach($kusers as $kuser)
-					$kuserIds[] = $kuser->getId();
+				$vuserIds = array();
+				foreach($vusers as $vuser)
+					$vuserIds[] = $vuser->getId();
 					
-				$this->userIdIn = implode(',', $kuserIds);
+				$this->userIdIn = implode(',', $vuserIds);
 			}
 			else
 			{

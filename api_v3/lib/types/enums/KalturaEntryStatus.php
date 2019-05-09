@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaEntryStatus extends KalturaDynamicEnum implements entryStatus
+class VidiunEntryStatus extends VidiunDynamicEnum implements entryStatus
 {
 	public static function getEnumClass()
 	{

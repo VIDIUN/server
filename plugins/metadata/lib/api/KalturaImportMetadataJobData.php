@@ -3,7 +3,7 @@
  * @package plugins.metadata
  * @subpackage api.objects
  */
-class KalturaImportMetadataJobData extends KalturaJobData
+class VidiunImportMetadataJobData extends VidiunJobData
 {
 	/**
 	 * @var string
@@ -36,7 +36,7 @@ class KalturaImportMetadataJobData extends KalturaJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kImportMetadataJobData();
+			$dbData = new vImportMetadataJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}

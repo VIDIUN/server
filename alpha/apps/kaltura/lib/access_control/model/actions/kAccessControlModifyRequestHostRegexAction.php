@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kAccessControlModifyRequestHostRegexAction extends kRuleAction 
+class vAccessControlModifyRequestHostRegexAction extends vRuleAction 
 {
 	const REPLACMENT_HOST_NAME_TOKEN = "{hostname}";
 	
@@ -99,6 +99,6 @@ class kAccessControlModifyRequestHostRegexAction extends kRuleAction
 	
 	private function buildDefaultReplacmentString($hostname)
 	{
-		return "$1://" . $hostname . "/" . EdgeServerNode::EDGE_SERVER_DEFAULT_KAPI_APPLICATION_NAME ."/$2";
+		return "$1://" . $hostname . "/" . EdgeServerNode::EDGE_SERVER_DEFAULT_VAPI_APPLICATION_NAME ."/$2";
 	}
 }

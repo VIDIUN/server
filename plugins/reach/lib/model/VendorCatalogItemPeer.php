@@ -33,7 +33,7 @@ class VendorCatalogItemPeer extends BaseVendorCatalogItemPeer
 		if ( self::$s_criteria_filter == null )
 			self::$s_criteria_filter = new criteriaFilter ();
 		
-		$c = KalturaCriteria::create(VendorCatalogItemPeer::OM_CLASS);
+		$c = VidiunCriteria::create(VendorCatalogItemPeer::OM_CLASS);
 		$c->addAnd ( VendorCatalogItemPeer::STATUS, VendorCatalogItemStatus::DELETED, Criteria::NOT_EQUAL);
 		
 		self::$s_criteria_filter->setFilter($c);
@@ -57,7 +57,7 @@ class VendorCatalogItemPeer extends BaseVendorCatalogItemPeer
 			if(isset(self::$class_types_cache[$catalogItemType]))
 				return self::$class_types_cache[$catalogItemType];
 			
-			$extendedCls = KalturaPluginManager::getObjectClass(parent::OM_CLASS, $catalogItemType);
+			$extendedCls = VidiunPluginManager::getObjectClass(parent::OM_CLASS, $catalogItemType);
 			if($extendedCls)
 			{
 				self::$class_types_cache[$catalogItemType] = $extendedCls;

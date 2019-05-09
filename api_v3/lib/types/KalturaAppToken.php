@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAppToken extends KalturaObject implements IFilterable 
+class VidiunAppToken extends VidiunObject implements IFilterable 
 {
 	/**
 	 * The id of the application token
@@ -49,7 +49,7 @@ class KalturaAppToken extends KalturaObject implements IFilterable
 	/**
 	 * Application token status 
 	 * 
-	 * @var KalturaAppTokenStatus
+	 * @var VidiunAppTokenStatus
 	 * @readonly
 	 * @filter eq,in
 	 */
@@ -63,14 +63,14 @@ class KalturaAppToken extends KalturaObject implements IFilterable
 	public $expiry;
 
 	/**
-	 * Type of KS (Kaltura Session) that created using the current token
+	 * Type of VS (Vidiun Session) that created using the current token
 	 * 
-	 * @var KalturaSessionType
+	 * @var VidiunSessionType
 	 */
 	public $sessionType;
 
 	/**
-	 * User id of KS (Kaltura Session) that created using the current token
+	 * User id of VS (Vidiun Session) that created using the current token
 	 * 
 	 * @var string
 	 * @filter eq
@@ -78,20 +78,20 @@ class KalturaAppToken extends KalturaObject implements IFilterable
 	public $sessionUserId;
 
 	/**
-	 * Expiry duration of KS (Kaltura Session) that created using the current token (in seconds)
+	 * Expiry duration of VS (Vidiun Session) that created using the current token (in seconds)
 	 * 
 	 * @var int
 	 */
 	public $sessionDuration;
 
 	/**
-	 * Comma separated privileges to be applied on KS (Kaltura Session) that created using the current token
+	 * Comma separated privileges to be applied on VS (Vidiun Session) that created using the current token
 	 * @var string
 	 */
 	public $sessionPrivileges;
 
 	/**
-	 * @var KalturaAppTokenHashType
+	 * @var VidiunAppTokenHashType
 	 */
 	public $hashType;
 
@@ -119,7 +119,7 @@ class KalturaAppToken extends KalturaObject implements IFilterable
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -127,7 +127,7 @@ class KalturaAppToken extends KalturaObject implements IFilterable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbAppToken = null, $skip = array())
 	{
@@ -138,25 +138,25 @@ class KalturaAppToken extends KalturaObject implements IFilterable
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject($dbAppToken = null, $skip = array())
 	{
-		$partnerId = kCurrentContext::getCurrentPartnerId();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
 		$partner = PartnerPeer::retrieveByPK($partnerId);
 		if($this->isNull('sessionDuration'))
 		{
-			$this->sessionDuration = $partner->getKsMaxExpiryInSeconds();
+			$this->sessionDuration = $partner->getVsMaxExpiryInSeconds();
 		}
 
 		//if user doesn't exists - create it
-		$kuser = kuserPeer::getKuserByPartnerAndUid ($partnerId , $this->sessionUserId );
-		if(!$kuser)
+		$vuser = vuserPeer::getVuserByPartnerAndUid ($partnerId , $this->sessionUserId );
+		if(!$vuser)
 		{
-			if(!preg_match(kuser::PUSER_ID_REGEXP, $this->sessionUserId))
-				throw new KalturaAPIException(KalturaErrors::INVALID_FIELD_VALUE, 'sessionUserId');
+			if(!preg_match(vuser::PUSER_ID_REGEXP, $this->sessionUserId))
+				throw new VidiunAPIException(VidiunErrors::INVALID_FIELD_VALUE, 'sessionUserId');
 
-			$kuser = kuserPeer::createKuserForPartner($partnerId, $this->sessionUserId);
+			$vuser = vuserPeer::createVuserForPartner($partnerId, $this->sessionUserId);
 		}
 
 		$dbAppToken = parent::toInsertableObject($dbAppToken, $skip);
@@ -165,7 +165,7 @@ class KalturaAppToken extends KalturaObject implements IFilterable
 		$dbAppToken->setPartnerId($partnerId);
 		$dbAppToken->setToken(bin2hex(openssl_random_pseudo_bytes(16)));
 		$dbAppToken->setStatus(AppTokenStatus::ACTIVE);
-		$dbAppToken->setKuserId($kuser->getId());
+		$dbAppToken->setVuserId($vuser->getId());
 
 		return $dbAppToken;
 	}

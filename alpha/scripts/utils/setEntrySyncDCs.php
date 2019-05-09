@@ -11,7 +11,7 @@ $dryRun = ($argv[2] != 'realrun');
 
 require_once(__DIR__ . '/../bootstrap.php');
 
-KalturaStatement::setDryRun($dryRun);
+VidiunStatement::setDryRun($dryRun);
 
 $entry = entryPeer::retrieveByPK($entryId);
 if(!$entry)
@@ -31,4 +31,4 @@ if(!($entry instanceof LiveEntry))
 $entry->setSyncDCs(true);
 $entry->save();
 
-KalturaLog::debug('Done');
+VidiunLog::debug('Done');

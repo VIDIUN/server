@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaUserEntryBaseFilter extends KalturaRelatedFilter
+abstract class VidiunUserEntryBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -93,7 +93,7 @@ abstract class KalturaUserEntryBaseFilter extends KalturaRelatedFilter
 	public $userIdNotIn;
 
 	/**
-	 * @var KalturaUserEntryStatus
+	 * @var VidiunUserEntryStatus
 	 */
 	public $statusEqual;
 
@@ -118,23 +118,23 @@ abstract class KalturaUserEntryBaseFilter extends KalturaRelatedFilter
 	public $updatedAtGreaterThanOrEqual;
 
 	/**
-	 * @var KalturaUserEntryType
+	 * @var VidiunUserEntryType
 	 */
 	public $typeEqual;
 
 	/**
-	 * @var KalturaUserEntryExtendedStatus
+	 * @var VidiunUserEntryExtendedStatus
 	 */
 	public $extendedStatusEqual;
 
 	/**
-	 * @dynamicType KalturaUserEntryExtendedStatus
+	 * @dynamicType VidiunUserEntryExtendedStatus
 	 * @var string
 	 */
 	public $extendedStatusIn;
 
 	/**
-	 * @dynamicType KalturaUserEntryExtendedStatus
+	 * @dynamicType VidiunUserEntryExtendedStatus
 	 * @var string
 	 */
 	public $extendedStatusNotIn;

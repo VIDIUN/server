@@ -3,7 +3,7 @@
  * @package plugins.caption
  * @subpackage api.errors
  */
-class KalturaCaptionErrors extends KalturaErrors
+class VidiunCaptionErrors extends VidiunErrors
 {
 	const CAPTION_ASSET_ALREADY_EXISTS = "CAPTION_ASSET_ALREADY_EXISTS;ASSET_ID,PARAM_ID;Caption asset \"@ASSET_ID@\" already exists for params id \"@PARAM_ID@\"";
 	const CAPTION_ASSET_PARAMS_ID_NOT_FOUND = "CAPTION_ASSET_PARAMS_ID_NOT_FOUND;PARAM_ID;Caption params id \"@PARAM_ID@\" not found";

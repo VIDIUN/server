@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBaseSyndicationFeedListResponse extends KalturaListResponse
+class VidiunBaseSyndicationFeedListResponse extends VidiunListResponse
 {
 	/**
-	 * @var KalturaBaseSyndicationFeedArray
+	 * @var VidiunBaseSyndicationFeedArray
 	 * @readonly
 	 */
 	public $objects;

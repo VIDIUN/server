@@ -2,10 +2,10 @@
 /**
  * @package plugins.shortLink
  */
-class ShortLinkPlugin extends KalturaPlugin implements IKalturaServices, IKalturaEventConsumers
+class ShortLinkPlugin extends VidiunPlugin implements IVidiunServices, IVidiunEventConsumers
 {
 	const PLUGIN_NAME = 'shortLink';
-	const SHORT_LINK_FLOW_MANAGER_CLASS = 'kShortLinkFlowManager';
+	const SHORT_LINK_FLOW_MANAGER_CLASS = 'vShortLinkFlowManager';
 	
 	public static function getPluginName()
 	{

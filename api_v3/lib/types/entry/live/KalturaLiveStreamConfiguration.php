@@ -5,10 +5,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveStreamConfiguration extends KalturaObject
+class VidiunLiveStreamConfiguration extends VidiunObject
 {
 	/**
-	 * @var KalturaPlaybackProtocol
+	 * @var VidiunPlaybackProtocol
 	 */
 	public $protocol;
 	
@@ -40,7 +40,7 @@ class KalturaLiveStreamConfiguration extends KalturaObject
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -48,13 +48,13 @@ class KalturaLiveStreamConfiguration extends KalturaObject
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propsToSkip = array())
 	{
 		if (!$dbObject)
 		{
-			$dbObject = new kLiveStreamConfiguration();
+			$dbObject = new vLiveStreamConfiguration();
 		}
 		
 		return parent::toObject($dbObject, $propsToSkip);

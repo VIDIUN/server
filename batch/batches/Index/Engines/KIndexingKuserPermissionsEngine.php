@@ -8,25 +8,25 @@ class KIndexingKuserPermissionsEngine extends KIndexingEngine
 	/* (non-PHPdoc)
 	 * @see KIndexingEngine::index()
 	 */
-	protected function index(KalturaFilter $filter, $shouldUpdate) 
+	protected function index(VidiunFilter $filter, $shouldUpdate) 
 	{
 		$this->indexPermissionsForUsers ($filter, $shouldUpdate);
 	}
 
-	protected function indexPermissionsForUsers (KalturaFilter $filter, $shouldUpdate)
+	protected function indexPermissionsForUsers (VidiunFilter $filter, $shouldUpdate)
 	{
-		$filter->orderBy = KalturaBaseEntryOrderBy::CREATED_AT_ASC;
+		$filter->orderBy = VidiunBaseEntryOrderBy::CREATED_AT_ASC;
 		
-		$usersList = KBatchBase::$kClient->user->listAction($filter, $this->pager);
+		$usersList = VBatchBase::$vClient->user->listAction($filter, $this->pager);
 		if(!$usersList->objects || !count($usersList->objects))
 			return 0;
 			
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		foreach($usersList->objects as $user)
 		{
-			KBatchBase::$kClient->user->index($user->id, $shouldUpdate);
+			VBatchBase::$vClient->user->index($user->id, $shouldUpdate);
 		}
-		$results = KBatchBase::$kClient->doMultiRequest();
+		$results = VBatchBase::$vClient->doMultiRequest();
 		foreach($results as $index => $result)
 			if(!is_int($result))
 				unset($results[$index]);

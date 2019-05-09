@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaSyncCategoryPrivacyContextJobData extends KalturaJobData
+class VidiunSyncCategoryPrivacyContextJobData extends VidiunJobData
 {
 	/**
 	 * category id
@@ -41,7 +41,7 @@ class KalturaSyncCategoryPrivacyContextJobData extends KalturaJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kSyncCategoryPrivacyContextJobData();
+			$dbData = new vSyncCategoryPrivacyContextJobData();
 			
 		return parent::toObject($dbData);
 	}

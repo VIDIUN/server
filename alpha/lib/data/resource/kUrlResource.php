@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kUrlResource extends kContentResource 
+class vUrlResource extends vContentResource 
 {
 	/**
 	 * Remote URL, FTP, HTTP or HTTPS 
@@ -37,7 +37,7 @@ class kUrlResource extends kContentResource
 	
 	/**
 	 * Return import job data to use to import the file from the url
-	 * @return kImportJobData
+	 * @return vImportJobData
 	 */
 	public function getImportJobData()
 	{

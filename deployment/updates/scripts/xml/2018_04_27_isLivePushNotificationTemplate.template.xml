@@ -13,7 +13,7 @@
         <sessionType>2</sessionType>
     </session>
     <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">	
-        <template objectType="KalturaPushNotificationTemplate">
+        <template objectType="VidiunPushNotificationTemplate">
             <name>Push Live-Stream-Entry is live Changed</name>
             <systemName>Push_isLive_Changed</systemName>
             <description>Push notification template to be sent when the is-live value changes.</description>
@@ -23,37 +23,37 @@
             <eventObjectType>1</eventObjectType>
             <!-- EventNotificationEventObjectType::ENTRY -->
             <eventConditions objectType="array">
-                <item objectType="KalturaFieldMatchCondition">
+                <item objectType="VidiunFieldMatchCondition">
                     <description>Object type is LiveEntry</description>
-                    <field objectType="KalturaEvalStringField">
+                    <field objectType="VidiunEvalStringField">
                         <code>$scope->getObject()->getType()</code>
                     </field>
                     <values>
-                        <value objectType="KalturaIntegerValue">
+                        <value objectType="VidiunIntegerValue">
                             <value>7</value>
                             <!-- LIVE_STREAM -->
                         </value>
                     </values>
                 </item>
-                <item objectType="KalturaEventFieldCondition">
+                <item objectType="VidiunEventFieldCondition">
                     <description>is-live status changed</description>
-                    <field objectType="KalturaEvalBooleanField">
+                    <field objectType="VidiunEvalBooleanField">
                         <code>$scope->getEvent()->isCustomDataModified('live_status')</code>
                     </field>
                 </item>
             </eventConditions>
             <contentParameters objectType="array">
-                <item objectType="KalturaEventNotificationParameter">
+                <item objectType="VidiunEventNotificationParameter">
                     <key>entryId</key>
                     <description/>
-                    <value objectType="KalturaEvalStringField">
+                    <value objectType="VidiunEvalStringField">
                         <code>$scope->getObject()->getEntryId()</code>
                     </value>
                 </item>
             </contentParameters>
-            <apiObjectType>KalturaLiveStreamEntry</apiObjectType>
+            <apiObjectType>VidiunLiveStreamEntry</apiObjectType>
             <objectFormat>1</objectFormat>
-            <!-- KalturaResponseType::RESPONSE_TYPE_JSON -->
+            <!-- VidiunResponseType::RESPONSE_TYPE_JSON -->
         </template>
     </request>
 </xml>

@@ -5,9 +5,9 @@
  * @package Core
  * @subpackage model
  */ 
-class BulkUploadResultKuser extends BulkUploadResult
+class BulkUploadResultVuser extends BulkUploadResult
 {
-    //kuser property names
+    //vuser property names
     const PUSER_ID = "puser_id";
     const SCREEN_NAME = "screen_name"; 
     const EMAIL = "email";
@@ -27,11 +27,11 @@ class BulkUploadResultKuser extends BulkUploadResult
      */
     public function handleRelatedObjects()
     {
-        $kuser = $this->getObject();
-        if ($kuser)
+        $vuser = $this->getObject();
+        if ($vuser)
         {
-            $kuser->setBulkUploadId($this->getBulkUploadJobId());       
-            $kuser->save();
+            $vuser->setBulkUploadId($this->getBulkUploadJobId());       
+            $vuser->save();
         }
     }
     
@@ -41,8 +41,8 @@ class BulkUploadResultKuser extends BulkUploadResult
      */
     public function getObject()
     {
-        //The object Id received through the API is not the actual kuser ID, but the puser ID.
-        return kuserPeer::retrieveByPK($this->getObjectId());
+        //The object Id received through the API is not the actual vuser ID, but the puser ID.
+        return vuserPeer::retrieveByPK($this->getObjectId());
     }
     
     //Set properties for users

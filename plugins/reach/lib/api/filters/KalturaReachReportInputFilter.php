@@ -5,7 +5,7 @@
  * @subpackage api.filters
  */
 
-class KalturaReachReportInputFilter extends KalturaReportInputFilter
+class VidiunReachReportInputFilter extends VidiunReportInputFilter
 {
 
 	private static $map_between_objects = array
@@ -16,17 +16,17 @@ class KalturaReachReportInputFilter extends KalturaReportInputFilter
 	);
 
 	/**
-	 * @var KalturaVendorServiceType
+	 * @var VidiunVendorServiceType
 	 */
 	public $serviceType;
 	
 	/**
-	 * @var KalturaVendorServiceFeature
+	 * @var VidiunVendorServiceFeature
 	 */
 	public $serviceFeature;
 	
 	/**
-	 * @var KalturaVendorServiceTurnAroundTime
+	 * @var VidiunVendorServiceTurnAroundTime
 	 */
 	public $turnAroundTime;
 

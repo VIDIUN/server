@@ -16,14 +16,14 @@ $criteria->add(entryPeer::PARTNER_ID, 99);
 $templateEntries = entryPeer::doCount($criteria);
 if($templateEntries)
 {
-	KalturaLog::info("Content already ingested.");
+	VidiunLog::info("Content already ingested.");
 	exit(0);
 }
 
 $dirPath = __DIR__ . '/init_content';
 $scriptPath = realpath(__DIR__ . '/../../../') . '/tests/standAloneClient/exec.php';
 
-KalturaLog::info("Adding content from directory [$dirPath]");
+VidiunLog::info("Adding content from directory [$dirPath]");
 $dir = dir($dirPath);
 /* @var $dir Directory */
 
@@ -40,14 +40,14 @@ while (false !== ($fileName = $dir->read()))
 $dir->close();
 
 sort($fileNames);
-KalturaLog::info("Handling files [" . print_r($fileNames, true) . "]");
+VidiunLog::info("Handling files [" . print_r($fileNames, true) . "]");
 
 
 $returnValue = null;
 foreach($fileNames as $fileName)
 {
 	$filePath = realpath("$dirPath/$fileName");
-	KalturaLog::info("Adding content from file [$filePath]");
+	VidiunLog::info("Adding content from file [$filePath]");
 	passthru("php $scriptPath $filePath", $returnValue);
 	if($returnValue !== 0)
 		exit(-1);

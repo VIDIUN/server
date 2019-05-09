@@ -4,16 +4,16 @@
  * @package Core
  * @subpackage model.data
  */
-class kFieldCompareCondition extends kCompareCondition
+class vFieldCompareCondition extends vCompareCondition
 {
 	/**
 	 * The field to evaluate against the values
-	 * @var kIntegerField
+	 * @var vIntegerField
 	 */
 	private $field;
 
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -22,16 +22,16 @@ class kFieldCompareCondition extends kCompareCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::getFieldValue()
+	 * @see vMatchCondition::getFieldValue()
 	 */
-	public function getFieldValue(kScope $scope)
+	public function getFieldValue(vScope $scope)
 	{
 		$this->field->setScope($scope);
 		return $this->field->getValue();
 	}
 	
 	/**
-	 * @return kIntegerField
+	 * @return vIntegerField
 	 */
 	public function getField() 
 	{
@@ -39,15 +39,15 @@ class kFieldCompareCondition extends kCompareCondition
 	}
 
 	/**
-	 * @param kIntegerField $field
+	 * @param vIntegerField $field
 	 */
-	public function setField(kIntegerField $field) 
+	public function setField(vIntegerField $field) 
 	{
 		$this->field = $field;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCompareCondition::shouldFieldDisableCache()
+	 * @see vCompareCondition::shouldFieldDisableCache()
 	 */
 	public function shouldFieldDisableCache($scope)
 	{

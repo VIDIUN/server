@@ -23,7 +23,7 @@ class myFileUploadService extends myBaseMediaSource implements IMediaSource
 
 	public function searchMedia( $media_type , $searchText, $page, $pageSize, $authData = null, $extraData = null) {}
 	
-	public function getAuthData( $kuserId, $userName, $password, $token) {}
+	public function getAuthData( $vuserId, $userName, $password, $token) {}
 	
 	public function getConfigCustomData() 
 	{
@@ -32,17 +32,17 @@ class myFileUploadService extends myBaseMediaSource implements IMediaSource
 
 	public static function getExtensionByContentType($url)
 	{
-		$curlWrapper = new KCurlWrapper();
+		$curlWrapper = new VCurlWrapper();
 		$curlHeaderResponse = $curlWrapper->getHeader($url, false);
 		$curlWrapper->close();
 
 		$headerContentType = $curlHeaderResponse && isset($curlHeaderResponse->headers["content-type"]) ? strtolower($curlHeaderResponse->headers["content-type"]) : null;
-		$contentTypes = kConf::get("video_curl_content_type", 'base', array());
+		$contentTypes = vConf::get("video_curl_content_type", 'base', array());
 
 		if($headerContentType && isset($contentTypes[$headerContentType]))
 		{
 			$ext = $contentTypes[$headerContentType];
-			KalturaLog::debug("extension - $ext");
+			VidiunLog::debug("extension - $ext");
 			return $ext;
 		}
 
@@ -53,15 +53,15 @@ class myFileUploadService extends myBaseMediaSource implements IMediaSource
 	{
 		// notice that video is checked first since it has precedence over audio (both may have the same ext.)
 		$ext = strtolower($ext);
-	    if (in_array($ext, kConf::get("video_file_ext")))
+	    if (in_array($ext, vConf::get("video_file_ext")))
 	    {
 			return entry::ENTRY_MEDIA_TYPE_VIDEO;
 	    }
-		elseif (in_array($ext, kConf::get("image_file_ext")))
+		elseif (in_array($ext, vConf::get("image_file_ext")))
 		{
 			return entry::ENTRY_MEDIA_TYPE_IMAGE;
 		}
-		elseif (in_array($ext, kConf::get("audio_file_ext")))
+		elseif (in_array($ext, vConf::get("audio_file_ext")))
 		{
 			return entry::ENTRY_MEDIA_TYPE_AUDIO;
 		}
@@ -73,15 +73,15 @@ class myFileUploadService extends myBaseMediaSource implements IMediaSource
 	{
 		if ( $type == self::SUPPORT_MEDIA_TYPE_VIDEO )
 		{
-			return kConf::get("video_file_ext");
+			return vConf::get("video_file_ext");
 		}
 		if ( $type == self::SUPPORT_MEDIA_TYPE_IMAGE )
 		{
-			return kConf::get("image_file_ext");
+			return vConf::get("image_file_ext");
 		}
 		if( $type == self::SUPPORT_MEDIA_TYPE_AUDIO )
 		{
-			return kConf::get("audio_file_ext");
+			return vConf::get("audio_file_ext");
 		}
 	}
 }

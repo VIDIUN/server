@@ -5,7 +5,7 @@
  * @subpackage filters.base
  * @abstract
  */
-abstract class KalturaAssetParamsBaseFilter extends KalturaRelatedFilter
+abstract class VidiunAssetParamsBaseFilter extends VidiunRelatedFilter
 {
 	static private $map_between_objects = array
 	(
@@ -52,7 +52,7 @@ abstract class KalturaAssetParamsBaseFilter extends KalturaRelatedFilter
 	public $systemNameIn;
 
 	/**
-	 * @var KalturaNullableBoolean
+	 * @var VidiunNullableBoolean
 	 */
 	public $isSystemDefaultEqual;
 

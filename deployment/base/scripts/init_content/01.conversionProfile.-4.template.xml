@@ -17,7 +17,7 @@
 		<privileges></privileges> 
 	</session>
 	<request service="conversionProfile" action="add">
-		<conversionProfile objectType="KalturaConversionProfile">
+		<conversionProfile objectType="VidiunConversionProfile">
 			<name>Default</name>
 			<systemName>Default</systemName>
 			<description>The default set of flavors. If not specified otherwise all media uploaded will be converted based on the definition in this profile</description>
@@ -28,7 +28,7 @@
 	
 	<multirequest>
 		<request service="conversionProfile" action="add">
-			<conversionProfile objectType="KalturaConversionProfile">
+			<conversionProfile objectType="VidiunConversionProfile">
 				<name>Ingested Falvors</name>
 				<systemName>INGESTED_FALVORS</systemName>
 				<description>Light set of flavors to be ingested</description>
@@ -38,7 +38,7 @@
 		<request service="conversionProfileAssetParams" action="update">
 			<conversionProfileId>{1:result:id}</conversionProfileId>
 			<assetParamsId>1</assetParamsId>
-			<conversionProfileAssetParams objectType="KalturaConversionProfileAssetParams">
+			<conversionProfileAssetParams objectType="VidiunConversionProfileAssetParams">
 				<origin>1</origin>
 				<readyBehavior>1</readyBehavior>
 			</conversionProfileAssetParams>
@@ -46,7 +46,7 @@
 		<request service="conversionProfileAssetParams" action="update">
 			<conversionProfileId>{1:result:id}</conversionProfileId>
 			<assetParamsId>2</assetParamsId>
-			<conversionProfileAssetParams objectType="KalturaConversionProfileAssetParams">
+			<conversionProfileAssetParams objectType="VidiunConversionProfileAssetParams">
 				<origin>1</origin>
 				<readyBehavior>1</readyBehavior>
 			</conversionProfileAssetParams>
@@ -54,7 +54,7 @@
 		<request service="conversionProfileAssetParams" action="update">
 			<conversionProfileId>{1:result:id}</conversionProfileId>
 			<assetParamsId>3</assetParamsId>
-			<conversionProfileAssetParams objectType="KalturaConversionProfileAssetParams">
+			<conversionProfileAssetParams objectType="VidiunConversionProfileAssetParams">
 				<origin>1</origin>
 				<readyBehavior>1</readyBehavior>
 			</conversionProfileAssetParams>

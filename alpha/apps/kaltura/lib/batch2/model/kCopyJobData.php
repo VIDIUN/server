@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kCopyJobData extends kJobData
+class vCopyJobData extends vJobData
 {
 	/**
 	 * The filter should return the list of objects that need to be copied.

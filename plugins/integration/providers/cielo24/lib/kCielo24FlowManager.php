@@ -1,5 +1,5 @@
 <?php
-class kCielo24FlowManager implements kBatchJobStatusEventConsumer 
+class vCielo24FlowManager implements vBatchJobStatusEventConsumer 
 {
 	private $baseEndpointUrl = null;
 	const FILE_NAME_PATTERN = "{entryId}-Transcript-{language}.{ext}";
@@ -8,7 +8,7 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 	const PROFESSIONAL_TRANSCRIPTION_ACCURACY_VALUE = 0.99;
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -22,7 +22,7 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{	
@@ -32,7 +32,7 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 		$partnerId = $dbBatchJob->getPartnerId();
 		$spokenLanguage = $providerData->getSpokenLanguage();
 	
-		$transcripts = kTranscriptHelper::getAssetsByLanguage($entryId, array(TranscriptPlugin::getAssetTypeCoreValue(TranscriptAssetType::TRANSCRIPT)), $spokenLanguage, array (asset::FLAVOR_ASSET_STATUS_ERROR));
+		$transcripts = vTranscriptHelper::getAssetsByLanguage($entryId, array(TranscriptPlugin::getAssetTypeCoreValue(TranscriptAssetType::TRANSCRIPT)), $spokenLanguage, array (asset::FLAVOR_ASSET_STATUS_ERROR));
 		
 		if($dbBatchJob->getStatus() == BatchJob::BATCHJOB_STATUS_FAILED)
 		{
@@ -52,7 +52,7 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 			{
 				if (!isset ($transcripts[$containerFormat]))
 				{
-					$transcript = kTranscriptHelper::createTranscript($entryId, $partnerId, $spokenLanguage, $containerFormat);
+					$transcript = vTranscriptHelper::createTranscript($entryId, $partnerId, $spokenLanguage, $containerFormat);
 				}
 				else {
 					$transcript = $transcripts[$containerFormat];
@@ -95,7 +95,7 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 			$remoteJobId = $clientHelper->getRemoteJobIdByName($entryId, $jobNameForSearch);
 			if (!$remoteJobId)
 			{
-				KalturaLog::err('remote content does not exist');
+				VidiunLog::err('remote content does not exist');
 				foreach($transcripts as $transcript)
 				{
 					$transcript->setStatus(AttachmentAsset::FLAVOR_ASSET_STATUS_ERROR);
@@ -108,14 +108,14 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 			$humanVerified = null;
 			switch ($providerData->getFidelity())
 			{
-				case KalturaCielo24Fidelity::MECHANICAL:
+				case VidiunCielo24Fidelity::MECHANICAL:
 					$accuracyRate = self::MECHNICAL_TRANSCRIPTION_ACCURACY_VALUE;
 					break;
-				case KalturaCielo24Fidelity::PREMIUM:
+				case VidiunCielo24Fidelity::PREMIUM:
 					$accuracyRate = self::PREMIUM_TRANSCRIPTION_ACCURACY_VALUE;
 					$humanVerified = true;
 					break;
-				case KalturaCielo24Fidelity::PROFESSIONAL:
+				case VidiunCielo24Fidelity::PROFESSIONAL:
 					$accuracyRate = self::PROFESSIONAL_TRANSCRIPTION_ACCURACY_VALUE;
 					$humanVerified = true;
 					break;
@@ -139,7 +139,7 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 							$this->setObjectContent($transcript, $transcriptContent, $accuracyRate, "JSON", true, $humanVerified);
 						}
 							
-						KalturaLog::debug("transcript content - $transcriptContent");
+						VidiunLog::debug("transcript content - $transcriptContent");
 					}
 					catch (Exception $e)
 					{
@@ -156,11 +156,11 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 			try
 			{
 				$captionsContentArray = $clientHelper->getRemoteCaptions($remoteJobId, $formatsArray);
-				KalturaLog::debug("captions content - " . print_r($captionsContentArray, true));
+				VidiunLog::debug("captions content - " . print_r($captionsContentArray, true));
 				
-				$captions = kTranscriptHelper::getAssetsByLanguage($entryId, array(CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION)), $spokenLanguage, array(asset::FLAVOR_ASSET_STATUS_ERROR));
+				$captions = vTranscriptHelper::getAssetsByLanguage($entryId, array(CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION)), $spokenLanguage, array(asset::FLAVOR_ASSET_STATUS_ERROR));
 				foreach ($captionsContentArray as $format => $content) {
-					$captionFormatConst = constant("KalturaCaptionType::" . $format);
+					$captionFormatConst = constant("VidiunCaptionType::" . $format);
 					if (isset($captions[$captionFormatConst]))
 						$caption = $captions[$captionFormatConst];
 					else {
@@ -172,7 +172,7 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 						$caption->setStatus(CaptionAsset::ASSET_STATUS_QUEUED);
 						$caption->save();
 					}
-					if ($captionFormatConst == KalturaCaptionType::DFXP) {
+					if ($captionFormatConst == VidiunCaptionType::DFXP) {
 						$cielo24Options = Cielo24Plugin::getPartnerCielo24Options($partnerId);
 						if ($cielo24Options->transformDfxp)
 							$content = $this->transformDfxp($content);
@@ -228,12 +228,12 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 		$assetObject->save();
 		$syncKey = $assetObject->getSyncKey(asset::FILE_SYNC_ASSET_SUB_TYPE_ASSET);
 	
-		kFileSyncUtils::file_put_contents($syncKey, $content);
+		vFileSyncUtils::file_put_contents($syncKey, $content);
 
-		kEventsManager::raiseEvent(new kObjectDataChangedEvent($assetObject));
+		vEventsManager::raiseEvent(new vObjectDataChangedEvent($assetObject));
 	
-		$finalPath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
-		$assetObject->setSize(kFile::fileSize($finalPath));
+		$finalPath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
+		$assetObject->setSize(vFile::fileSize($finalPath));
 	
 		if ($shouldSetTranscriptFileName && !$assetObject->getFileName())
 		{
@@ -271,7 +271,7 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 		$content = preg_replace('/&(?!(?:#x?[0-9a-f]+|[a-z]+);)/i', '&amp;', $content);
 	
 		if (!$doc->loadXML($content)) {
-			KalturaLog::err('Failed to load XML');
+			VidiunLog::err('Failed to load XML');
 			return $content;
 		}
 
@@ -330,8 +330,8 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 				$beginValue = trim($pElement->getAttribute('begin'));
 				$durationValue = trim($pElement->getAttribute('dur'));
 				$endValue = trim($pElement->getAttribute('end'));
-				$beginTime = kXml::timeToInteger($beginValue);
-				$endTime = kXml::timeToInteger($endValue);
+				$beginTime = vXml::timeToInteger($beginValue);
+				$endTime = vXml::timeToInteger($endValue);
 				// reformat "begin" attribute, transforms "00:00:29.73" to "00:00:29.730"
 				if ($beginValue) {
 					$pElement->removeAttribute('begin'); // remove to change order of attributes
@@ -376,7 +376,7 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 	}
 	
 	/**
-	 * Wraps kXml::integerToTime to force milliseconds and pad it
+	 * Wraps vXml::integerToTime to force milliseconds and pad it
 	 *
 	 * @param $int
 	 * @return string
@@ -384,7 +384,7 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
   	private function integerToTime($int)
   	{
 		$milliseconds = $int % 1000;
-		$stringTime = kXml::integerToTime($int - $milliseconds);
+		$stringTime = vXml::integerToTime($int - $milliseconds);
 		$stringTime .= '.' . str_pad($milliseconds, 3, 0, STR_PAD_LEFT);
 		return $stringTime;
 	}
@@ -417,13 +417,13 @@ class kCielo24FlowManager implements kBatchJobStatusEventConsumer
 							switch ($token['type'])
 							{
 								case 'word':
-									$normalizedToken['t'] = kTranscriptHelper::TOKEN_TYPE_WORD;
+									$normalizedToken['t'] = vTranscriptHelper::TOKEN_TYPE_WORD;
 									break;
 								case 'punctuation':
-									$normalizedToken['t'] = kTranscriptHelper::TOKEN_TYPE_PUNC;
+									$normalizedToken['t'] = vTranscriptHelper::TOKEN_TYPE_PUNC;
 									break;
 								default:
-									KalturaLog::info ('Unrecognized token type!');
+									VidiunLog::info ('Unrecognized token type!');
 									break;
 									
 							}

@@ -17,7 +17,7 @@ class WowzaMediaServerNode extends MediaServerNode {
 	const WEB_SERVICE_LIVE = 'live';
 	
 	static protected $webServices = array(
-		self::WEB_SERVICE_LIVE => 'KalturaMediaServerLiveService',
+		self::WEB_SERVICE_LIVE => 'VidiunMediaServerLiveService',
 	);
 	
 	/**
@@ -34,7 +34,7 @@ class WowzaMediaServerNode extends MediaServerNode {
 	
 	/**
 	 * @param string $serviceName
-	 * @return KalturaMediaServerClient
+	 * @return VidiunMediaServerClient
 	 */
 	public function getWebService($serviceName)
 	{
@@ -48,7 +48,7 @@ class WowzaMediaServerNode extends MediaServerNode {
 		$protocol = $this->getLiveServiceProtocol();
 		
 		$url = "$protocol://$domain:$port/$serviceName?wsdl";
-		KalturaLog::debug("Service URL: $url");
+		VidiunLog::debug("Service URL: $url");
 		return new $serviceClass($url);
 	}
 	
@@ -76,7 +76,7 @@ class WowzaMediaServerNode extends MediaServerNode {
 		if(!$this->getIsExternalMediaServer())
 			$hostname = preg_replace('/\..*$/', '', $hostname);
 		
-		$mediaServerConfig = kConf::getMap('media_servers');
+		$mediaServerConfig = vConf::getMap('media_servers');
 		if($baseUrl && $baseUrl !== '')
 		{
 			$domain = preg_replace("(https?://)", "", $baseUrl);
@@ -102,7 +102,7 @@ class WowzaMediaServerNode extends MediaServerNode {
 		if(!$this->getIsExternalMediaServer())
 			$hostname = preg_replace('/\..*$/', '', $hostname);
 		
-		$mediaServerConfig = kConf::getMap('media_servers');
+		$mediaServerConfig = vConf::getMap('media_servers');
 		$appPrefix = $this->getApplicationPrefix($mediaServerConfig);
 		$applicationName = $this->getApplicationName();
 		

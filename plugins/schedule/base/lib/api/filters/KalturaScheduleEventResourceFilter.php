@@ -3,7 +3,7 @@
  * @package plugins.schedule
  * @subpackage api.filters
  */
-class KalturaScheduleEventResourceFilter extends KalturaScheduleEventResourceBaseFilter
+class VidiunScheduleEventResourceFilter extends VidiunScheduleEventResourceBaseFilter
 {
 	/**
 	 * Find event-resource objects that associated with the event, if none found, find by its parent event
@@ -24,7 +24,7 @@ class KalturaScheduleEventResourceFilter extends KalturaScheduleEventResourceBas
 	
 	
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -32,9 +32,9 @@ class KalturaScheduleEventResourceFilter extends KalturaScheduleEventResourceBas
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null,
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null,
 									$filterBlackoutConflicts = true)
 	{
 		$c = new Criteria();
@@ -50,7 +50,7 @@ class KalturaScheduleEventResourceFilter extends KalturaScheduleEventResourceBas
 		}
 		else
 		{
-			KalturaFilterPager::detachFromCriteria($c);
+			VidiunFilterPager::detachFromCriteria($c);
 			$totalCount = ScheduleEventResourcePeer::doCount($c);
 		}
 
@@ -59,8 +59,8 @@ class KalturaScheduleEventResourceFilter extends KalturaScheduleEventResourceBas
 			$list = array_filter($list, array($this, "checkNoBlackoutConflict"));
 		}
 
-		$response = new KalturaScheduleEventResourceListResponse();
-		$response->objects = KalturaScheduleEventResourceArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunScheduleEventResourceListResponse();
+		$response->objects = VidiunScheduleEventResourceArray::fromDbArray($list, $responseProfile);
 		$response->totalCount = $totalCount;
 		return $response;
 	}

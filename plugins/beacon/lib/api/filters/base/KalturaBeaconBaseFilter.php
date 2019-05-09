@@ -4,7 +4,7 @@
  * @subpackage api.filters.base
  * @abstract
  */
-abstract class KalturaBeaconBaseFilter extends KalturaFilter
+abstract class VidiunBeaconBaseFilter extends VidiunFilter
 {
 	static private $map_between_objects = array
 	(
@@ -45,13 +45,13 @@ abstract class KalturaBeaconBaseFilter extends KalturaFilter
 	public $updatedAtLessThanOrEqual;
 
 	/**
-	 * @dynamicType KalturaBeaconObjectTypes
+	 * @dynamicType VidiunBeaconObjectTypes
 	 * @var string
 	 */
 	public $relatedObjectTypeIn;
 	
 	/**
-	 * @var KalturaBeaconObjectTypes
+	 * @var VidiunBeaconObjectTypes
 	 */
 	public $relatedObjectTypeEqual;
 

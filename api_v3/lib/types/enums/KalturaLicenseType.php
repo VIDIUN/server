@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaLicenseType extends KalturaEnum
+class VidiunLicenseType extends VidiunEnum
 {
 	const UNKNOWN = -1;
 	const NONE = 0;

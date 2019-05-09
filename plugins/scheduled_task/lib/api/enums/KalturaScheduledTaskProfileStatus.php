@@ -5,6 +5,6 @@
  * @subpackage api.enum
  * @see ScheduledTaskProfileStatus
  */
-class KalturaScheduledTaskProfileStatus extends KalturaEnum implements ScheduledTaskProfileStatus
+class VidiunScheduledTaskProfileStatus extends VidiunEnum implements ScheduledTaskProfileStatus
 {
 }

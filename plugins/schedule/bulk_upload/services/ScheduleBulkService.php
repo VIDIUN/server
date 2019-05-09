@@ -6,7 +6,7 @@
  * @package plugins.scheduleBulkUpload
  * @subpackage services
  */
-class ScheduleBulkService extends KalturaBaseService
+class ScheduleBulkService extends VidiunBaseService
 {
 	/**
 	 * Add new bulk upload batch job
@@ -14,40 +14,40 @@ class ScheduleBulkService extends KalturaBaseService
 	 * @action addScheduleEvents
 	 * @actionAlias schedule_scheduleEvent.addFromBulkUpload
 	 * @param file $fileData
-	 * @param KalturaBulkUploadICalJobData $bulkUploadData
-	 * @return KalturaBulkUpload
+	 * @param VidiunBulkUploadICalJobData $bulkUploadData
+	 * @return VidiunBulkUpload
 	 */
-	function addScheduleEventsAction($fileData, KalturaBulkUploadICalJobData $bulkUploadData = null)
+	function addScheduleEventsAction($fileData, VidiunBulkUploadICalJobData $bulkUploadData = null)
 	{
 		$bulkUploadCoreType = BulkUploadSchedulePlugin::getBulkUploadTypeCoreValue(BulkUploadScheduleType::ICAL);
 		$bulkUploadObjectCoreType = BulkUploadSchedulePlugin::getBulkUploadObjectTypeCoreValue(BulkUploadObjectScheduleType::SCHEDULE_EVENT);
 
 		if (!$bulkUploadData)
 		{
-			throw new KalturaAPIException(KalturaErrors::MISSING_MANDATORY_PARAMETER, 'bulkUploadData');
+			throw new VidiunAPIException(VidiunErrors::MISSING_MANDATORY_PARAMETER, 'bulkUploadData');
 		}
 
 		if (!$bulkUploadData->eventsType)
 		{
-			throw new KalturaAPIException(KalturaErrors::MISSING_MANDATORY_PARAMETER, 'eventsType');
+			throw new VidiunAPIException(VidiunErrors::MISSING_MANDATORY_PARAMETER, 'eventsType');
 		}
 
 		if(!$bulkUploadData->fileName)
 			$bulkUploadData->fileName = $fileData["name"];
 		
 		$dbBulkUploadJobData = $bulkUploadData->toInsertableObject();
-		/* @var $dbBulkUploadJobData kBulkUploadJobData */
+		/* @var $dbBulkUploadJobData vBulkUploadJobData */
 		
 		$dbBulkUploadJobData->setBulkUploadObjectType($bulkUploadObjectCoreType);
-		$dbBulkUploadJobData->setUserId($this->getKuser()->getPuserId());
+		$dbBulkUploadJobData->setUserId($this->getVuser()->getPuserId());
 		$dbBulkUploadJobData->setFilePath($fileData["tmp_name"]);
 		
-		$dbJob = kJobsManager::addBulkUploadJob($this->getPartner(), $dbBulkUploadJobData, $bulkUploadCoreType);
+		$dbJob = vJobsManager::addBulkUploadJob($this->getPartner(), $dbBulkUploadJobData, $bulkUploadCoreType);
 		$dbJobLog = BatchJobLogPeer::retrieveByBatchJobId($dbJob->getId());
 		if(!$dbJobLog)
 			return null;
 			
-		$bulkUpload = new KalturaBulkUpload();
+		$bulkUpload = new VidiunBulkUpload();
 		$bulkUpload->fromObject($dbJobLog, $this->getResponseProfile());
 		
 		return $bulkUpload;
@@ -59,14 +59,14 @@ class ScheduleBulkService extends KalturaBaseService
 	 * @action addScheduleResources
 	 * @actionAlias schedule_scheduleResource.addFromBulkUpload
 	 * @param file $fileData
-	 * @param KalturaBulkUploadCsvJobData $bulkUploadData
-	 * @return KalturaBulkUpload
+	 * @param VidiunBulkUploadCsvJobData $bulkUploadData
+	 * @return VidiunBulkUpload
 	 */
-	function addScheduleResourcesAction($fileData, KalturaBulkUploadCsvJobData $bulkUploadData = null)
+	function addScheduleResourcesAction($fileData, VidiunBulkUploadCsvJobData $bulkUploadData = null)
 	{	    
 	    if (!$bulkUploadData)
 	    {
-	       $bulkUploadData = KalturaPluginManager::loadObject('KalturaBulkUploadJobData', null);
+	       $bulkUploadData = VidiunPluginManager::loadObject('VidiunBulkUploadJobData', null);
 	    }
 	    
 		$bulkUploadObjectCoreType = BulkUploadSchedulePlugin::getBulkUploadObjectTypeCoreValue(BulkUploadObjectScheduleType::SCHEDULE_RESOURCE);
@@ -75,20 +75,20 @@ class ScheduleBulkService extends KalturaBaseService
 			$bulkUploadData->fileName = $fileData["name"];
 		
 		$dbBulkUploadJobData = $bulkUploadData->toInsertableObject();
-		/* @var $dbBulkUploadJobData kBulkUploadJobData */
+		/* @var $dbBulkUploadJobData vBulkUploadJobData */
 
-		$bulkUploadCoreType = kPluginableEnumsManager::apiToCore("BulkUploadType", $bulkUploadData->type);
+		$bulkUploadCoreType = vPluginableEnumsManager::apiToCore("BulkUploadType", $bulkUploadData->type);
 		
 		$dbBulkUploadJobData->setBulkUploadObjectType($bulkUploadObjectCoreType);
-		$dbBulkUploadJobData->setUserId($this->getKuser()->getPuserId());
+		$dbBulkUploadJobData->setUserId($this->getVuser()->getPuserId());
 		$dbBulkUploadJobData->setFilePath($fileData["tmp_name"]);
 		
-		$dbJob = kJobsManager::addBulkUploadJob($this->getPartner(), $dbBulkUploadJobData, $bulkUploadCoreType);
+		$dbJob = vJobsManager::addBulkUploadJob($this->getPartner(), $dbBulkUploadJobData, $bulkUploadCoreType);
 		$dbJobLog = BatchJobLogPeer::retrieveByBatchJobId($dbJob->getId());
 		if(!$dbJobLog)
 			return null;
 			
-		$bulkUpload = new KalturaBulkUpload();
+		$bulkUpload = new VidiunBulkUpload();
 		$bulkUpload->fromObject($dbJobLog, $this->getResponseProfile());
 		
 		return $bulkUpload;

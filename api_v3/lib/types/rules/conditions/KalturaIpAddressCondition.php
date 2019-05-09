@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaIpAddressCondition extends KalturaMatchCondition
+class VidiunIpAddressCondition extends VidiunMatchCondition
 {
 	/**
 	 * allow internal ips
@@ -39,12 +39,12 @@ class KalturaIpAddressCondition extends KalturaMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kIpAddressCondition();
+			$dbObject = new vIpAddressCondition();
 			
 		return parent::toObject($dbObject, $skip);
 	}

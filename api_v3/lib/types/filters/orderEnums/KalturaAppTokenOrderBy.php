@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaAppTokenOrderBy extends KalturaStringEnum
+class VidiunAppTokenOrderBy extends VidiunStringEnum
 {
 	const CREATED_AT_ASC = "+createdAt";
 	const CREATED_AT_DESC = "-createdAt";

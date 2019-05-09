@@ -4,7 +4,7 @@
  * @package plugins.velocix
  * @subpackage model.enum
  */ 
-class VelocixLiveEntrySourceType implements IKalturaPluginEnum, EntrySourceType
+class VelocixLiveEntrySourceType implements IVidiunPluginEnum, EntrySourceType
 {
 	const VELOCIX_LIVE = 'VELOCIX_LIVE';
 	

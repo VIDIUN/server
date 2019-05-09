@@ -3,17 +3,17 @@
  * @package api
  * @subpackage filters
  */
-class KalturaGroupUserFilter extends KalturaGroupUserBaseFilter
+class VidiunGroupUserFilter extends VidiunGroupUserBaseFilter
 {
 
 	static private $map_between_objects = array	();
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
-		return new KuserKgroupFilter();
+		return new VuserVgroupFilter();
 	}
 	
 	public function getMapBetweenObjects()
@@ -25,92 +25,92 @@ class KalturaGroupUserFilter extends KalturaGroupUserBaseFilter
 	protected function validateUserIdOrGroupIdFiltered()
 	{
 		if(!$this->userIdEqual && !$this->userIdIn && !$this->groupIdEqual && !$this->groupIdIn)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $this->getFormattedPropertyNameWithClassName('userIdEqual') . '/' . $this->getFormattedPropertyNameWithClassName('userIdIn') . '/' . $this->getFormattedPropertyNameWithClassName('groupIdEqual') . '/' . $this->getFormattedPropertyNameWithClassName('groupIdIn'));
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $this->getFormattedPropertyNameWithClassName('userIdEqual') . '/' . $this->getFormattedPropertyNameWithClassName('userIdIn') . '/' . $this->getFormattedPropertyNameWithClassName('groupIdEqual') . '/' . $this->getFormattedPropertyNameWithClassName('groupIdIn'));
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$this->validateUserIdOrGroupIdFiltered();
 		
 		if($this->groupIdEqual)
 		{
-			$partnerId = kCurrentContext::getCurrentPartnerId();
+			$partnerId = vCurrentContext::getCurrentPartnerId();
 
 			$c = new Criteria();
-			$c->add(kuserPeer::PARTNER_ID, $partnerId);
-			$c->add(kuserPeer::PUSER_ID, $this->groupIdEqual);
-			$c->add(kuserPeer::TYPE, KuserType::GROUP);
-			if (kCurrentContext::$ks_partner_id == Partner::BATCH_PARTNER_ID) //batch should be able to get categoryUser of deleted users.
-				kuserPeer::setUseCriteriaFilter(false);
+			$c->add(vuserPeer::PARTNER_ID, $partnerId);
+			$c->add(vuserPeer::PUSER_ID, $this->groupIdEqual);
+			$c->add(vuserPeer::TYPE, VuserType::GROUP);
+			if (vCurrentContext::$vs_partner_id == Partner::BATCH_PARTNER_ID) //batch should be able to get categoryUser of deleted users.
+				vuserPeer::setUseCriteriaFilter(false);
 
-			// in case of more than one deleted kusers - get the last one
-			$c->addDescendingOrderByColumn(kuserPeer::UPDATED_AT);
+			// in case of more than one deleted vusers - get the last one
+			$c->addDescendingOrderByColumn(vuserPeer::UPDATED_AT);
 
-			$kuser = kuserPeer::doSelectOne($c);
-			kuserPeer::setUseCriteriaFilter(true);
+			$vuser = vuserPeer::doSelectOne($c);
+			vuserPeer::setUseCriteriaFilter(true);
 
-			if (!$kuser)
+			if (!$vuser)
 			{
-				$response = new KalturaGroupUserListResponse();
-				$response->objects = new KalturaGroupUserArray();
+				$response = new VidiunGroupUserListResponse();
+				$response->objects = new VidiunGroupUserArray();
 				$response->totalCount = 0;
 
 				return $response;
 			}
 
-			$this->groupIdEqual = $kuser->getId();
+			$this->groupIdEqual = $vuser->getId();
 		}
 
 		if($this->userIdEqual)
 		{
-			$partnerId = kCurrentContext::getCurrentPartnerId();
+			$partnerId = vCurrentContext::getCurrentPartnerId();
 
 			$c = new Criteria();
-			$c->add(kuserPeer::PARTNER_ID, $partnerId);
-			$c->add(kuserPeer::PUSER_ID, $this->userIdEqual);
-			$c->add(kuserPeer::TYPE, KuserType::USER);
-			$kuser = kuserPeer::doSelectOne($c);
+			$c->add(vuserPeer::PARTNER_ID, $partnerId);
+			$c->add(vuserPeer::PUSER_ID, $this->userIdEqual);
+			$c->add(vuserPeer::TYPE, VuserType::USER);
+			$vuser = vuserPeer::doSelectOne($c);
 
-			if (!$kuser)
+			if (!$vuser)
 			{
-				$response = new KalturaGroupUserListResponse();
-				$response->objects = new KalturaGroupUserArray();
+				$response = new VidiunGroupUserListResponse();
+				$response->objects = new VidiunGroupUserArray();
 				$response->totalCount = 0;
 
 				return $response;
 			}
 
-			$this->userIdEqual = $kuser->getId();
+			$this->userIdEqual = $vuser->getId();
 		}
 
 		if($this->userIdIn)
 		{
 			$usersIds = explode(',', $this->userIdIn);
-			$partnerId = kCurrentContext::getCurrentPartnerId();
+			$partnerId = vCurrentContext::getCurrentPartnerId();
 
 			$c = new Criteria();
-			$c->add(kuserPeer::PARTNER_ID, $partnerId, Criteria::EQUAL);
-			$c->add(kuserPeer::PUSER_ID, $usersIds, Criteria::IN);
-			$c->add(kuserPeer::TYPE, KuserType::USER);
-			$kusers = kuserPeer::doSelect($c);
+			$c->add(vuserPeer::PARTNER_ID, $partnerId, Criteria::EQUAL);
+			$c->add(vuserPeer::PUSER_ID, $usersIds, Criteria::IN);
+			$c->add(vuserPeer::TYPE, VuserType::USER);
+			$vusers = vuserPeer::doSelect($c);
 
-			if (!$kusers)
+			if (!$vusers)
 			{
-				$response = new KalturaGroupUserListResponse();
-				$response->objects = new KalturaGroupUserArray();
+				$response = new VidiunGroupUserListResponse();
+				$response->objects = new VidiunGroupUserArray();
 				$response->totalCount = 0;
 
 				return $response;
 			}
 
 			$usersIds = array();
-			foreach($kusers as $kuser)
+			foreach($vusers as $vuser)
 			{
-				/* @var $kuser kuser */
-				$usersIds[] = $kuser->getId();
+				/* @var $vuser vuser */
+				$usersIds[] = $vuser->getId();
 			}
 
 			$this->userIdIn = implode(',', $usersIds);
@@ -119,53 +119,53 @@ class KalturaGroupUserFilter extends KalturaGroupUserBaseFilter
 		if($this->groupIdIn)
 		{
 			$groupIdIn = explode(',', $this->groupIdIn);
-			$partnerId = kCurrentContext::getCurrentPartnerId();
+			$partnerId = vCurrentContext::getCurrentPartnerId();
 
 			$c = new Criteria();
-			$c->add(kuserPeer::PARTNER_ID, $partnerId, Criteria::EQUAL);
-			$c->add(kuserPeer::PUSER_ID, $groupIdIn, Criteria::IN);
-			$c->add(kuserPeer::TYPE, KuserType::GROUP);
-			$kusers = kuserPeer::doSelect($c);
+			$c->add(vuserPeer::PARTNER_ID, $partnerId, Criteria::EQUAL);
+			$c->add(vuserPeer::PUSER_ID, $groupIdIn, Criteria::IN);
+			$c->add(vuserPeer::TYPE, VuserType::GROUP);
+			$vusers = vuserPeer::doSelect($c);
 
-			if (!$kusers)
+			if (!$vusers)
 			{
-				$response = new KalturaGroupUserListResponse();
-				$response->objects = new KalturaGroupUserArray();
+				$response = new VidiunGroupUserListResponse();
+				$response->objects = new VidiunGroupUserArray();
 				$response->totalCount = 0;
 
 				return $response;
 			}
 
 			$groupIdIn = array();
-			foreach($kusers as $kuser)
+			foreach($vusers as $vuser)
 			{
-				/* @var $kuser kuser */
-				$groupIdIn[] = $kuser->getId();
+				/* @var $vuser vuser */
+				$groupIdIn[] = $vuser->getId();
 			}
 
 			$this->groupIdIn = implode(',', $groupIdIn);
 		}
 
-		$kuserKgroupFilter = $this->toObject();
+		$vuserVgroupFilter = $this->toObject();
 		
-		$c = KalturaCriteria::create(KuserKgroupPeer::OM_CLASS);
-		$kuserKgroupFilter->attachToCriteria($c);
+		$c = VidiunCriteria::create(VuserVgroupPeer::OM_CLASS);
+		$vuserVgroupFilter->attachToCriteria($c);
 		$pager->attachToCriteria($c);
 		$c->applyFilters();
 		
-		$list = KuserKgroupPeer::doSelect($c);
+		$list = VuserVgroupPeer::doSelect($c);
 
-		$newList = KalturaGroupUserArray::fromDbArray($list, $responseProfile);
+		$newList = VidiunGroupUserArray::fromDbArray($list, $responseProfile);
 		
-		$response = new KalturaGroupUserListResponse();
+		$response = new VidiunGroupUserListResponse();
 		$response->objects = $newList;
 		$resultCount = count($newList);
 		if ($resultCount && $resultCount < $pager->pageSize)
 			$totalCount = ($pager->pageIndex - 1) * $pager->pageSize + $resultCount;
 		else
 		{
-			KalturaFilterPager::detachFromCriteria($c);
-			$totalCount = KuserKgroupPeer::doCount($c);
+			VidiunFilterPager::detachFromCriteria($c);
+			$totalCount = VuserVgroupPeer::doCount($c);
 		}
 		$response->totalCount = $totalCount;
 		return $response;

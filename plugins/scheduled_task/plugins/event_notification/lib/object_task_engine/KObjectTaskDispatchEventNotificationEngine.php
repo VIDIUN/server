@@ -4,24 +4,24 @@
  * @package plugins.scheduledTaskEventNotification
  * @subpackage lib.objectTaskEngine
  */
-class KObjectTaskDispatchEventNotificationEngine extends KObjectTaskEntryEngineBase
+class VObjectTaskDispatchEventNotificationEngine extends VObjectTaskEntryEngineBase
 {
 	/**
-	 * @param KalturaBaseEntry $object
+	 * @param VidiunBaseEntry $object
 	 */
 	function processObject($object)
 	{
-		/** @var KalturaDispatchEventNotificationObjectTask $objectTask */
+		/** @var VidiunDispatchEventNotificationObjectTask $objectTask */
 		$objectTask = $this->getObjectTask();
 		if (is_null($objectTask))
 			return;
 
 		$client = $this->getClient();
 		$templateId = $objectTask->eventNotificationTemplateId;
-		$eventNotificationPlugin = KalturaEventNotificationClientPlugin::get($client);
-		$scope = new KalturaEventNotificationScope();
+		$eventNotificationPlugin = VidiunEventNotificationClientPlugin::get($client);
+		$scope = new VidiunEventNotificationScope();
 		$scope->objectId =$object->id;
-		$scope->scopeObjectType = KalturaEventNotificationEventObjectType::ENTRY;
+		$scope->scopeObjectType = VidiunEventNotificationEventObjectType::ENTRY;
 		$eventNotificationPlugin->eventNotificationTemplate->dispatch($templateId, $scope);
 	}
 }

@@ -3,7 +3,7 @@
  * @package plugins.playReady
  * @subpackage api.errors
  */
-class KalturaPlayReadyErrors
+class VidiunPlayReadyErrors
 {
 	const ENTRY_NOT_FOUND_BY_KEY_ID = "ENTRY_NOT_FOUND_BY_KEY_ID;KEY_ID;Entry not found by PlayReady key id [@KEY_ID@].";
 	const PLAYREADY_POLICY_NOT_FOUND = "PLAYREADY_POLICY_NOT_FOUND;ENTRY_ID;PlayReady policy not found for entry [@ENTRY_ID@].";

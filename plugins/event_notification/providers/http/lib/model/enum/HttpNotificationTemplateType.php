@@ -3,12 +3,12 @@
  * @package plugins.httpNotification
  * @subpackage model.enum
  */
-class HttpNotificationTemplateType implements IKalturaPluginEnum, EventNotificationTemplateType
+class HttpNotificationTemplateType implements IVidiunPluginEnum, EventNotificationTemplateType
 {
 	const HTTP = 'Http';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalValues()
+	 * @see IVidiunPluginEnum::getAdditionalValues()
 	 */
 	public static function getAdditionalValues()
 	{
@@ -18,7 +18,7 @@ class HttpNotificationTemplateType implements IKalturaPluginEnum, EventNotificat
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalDescriptions()
+	 * @see IVidiunPluginEnum::getAdditionalDescriptions()
 	 */
 	public static function getAdditionalDescriptions() 
 	{

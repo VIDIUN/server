@@ -3,7 +3,7 @@
  * @package plugins.eventNotification
  * @subpackage model.data
  */
-class kEventNotificationParameter
+class vEventNotificationParameter
 {
 	/**
 	 * The key to be replaced in the content
@@ -18,7 +18,7 @@ class kEventNotificationParameter
 	
 	/**
 	 * The value that replace the key 
-	 * @var kStringValue
+	 * @var vStringValue
 	 */
 	protected $value;
 	
@@ -31,7 +31,7 @@ class kEventNotificationParameter
 	}
 
 	/**
-	 * @return kStringValue $value
+	 * @return vStringValue $value
 	 */
 	public function getValue()
 	{
@@ -63,9 +63,9 @@ class kEventNotificationParameter
 	}
 
 	/**
-	 * @param kStringValue $value
+	 * @param vStringValue $value
 	 */
-	public function setValue(kStringValue $value)
+	public function setValue(vStringValue $value)
 	{
 		$this->value = $value;
 	}

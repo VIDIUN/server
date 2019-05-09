@@ -1,6 +1,6 @@
 <?php
-require_once realpath(__DIR__ . '/../../') . '/lib/KalturaEnums.php';
-require_once realpath(__DIR__ . '/../') . '/KalturaMonitorResult.php';
+require_once realpath(__DIR__ . '/../../') . '/lib/VidiunEnums.php';
+require_once realpath(__DIR__ . '/../') . '/VidiunMonitorResult.php';
 
 $options = getopt('', array(
 	'debug',
@@ -38,7 +38,7 @@ $statuses = implode(', ', $statuses);
 
 // start
 $start = microtime(true);
-$monitorResult = new KalturaMonitorResult();
+$monitorResult = new VidiunMonitorResult();
 
 $config = parse_ini_file(__DIR__ . '/../config.ini', true);
 try
@@ -51,9 +51,9 @@ try
 	SELECT f.file_name, c.status
 	FROM (
 			SELECT *
-			FROM kalturadw_ds.cycles c
+			FROM vidiundw_ds.cycles c
 			WHERE (status IN ($statuses) AND c.$timeColumn < NOW() - INTERVAL $hours HOUR)) c,
-		kalturadw_ds.files f
+		vidiundw_ds.files f
 	WHERE c.cycle_id = f.cycle_id";
 	
 	$selectStatement = $dwhPdo->query($query);
@@ -65,9 +65,9 @@ try
 	
 	foreach($failedFiles as $failedFile)
 	{
-		$error = new KalturaMonitorError();
+		$error = new VidiunMonitorError();
 		$error->description = $failedFile['file_name'] . " cycle failed with status " . $failedFile['status'];
-		$error->level = KalturaMonitorError::CRIT;
+		$error->level = VidiunMonitorError::CRIT;
 		$monitorResult->errors[] = $error;
 	}
 	
@@ -86,10 +86,10 @@ catch(PDOException $pdoe)
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $pdoe->getCode();
 	$error->description = $pdoe->getMessage();
-	$error->level = KalturaMonitorError::CRIT;
+	$error->level = VidiunMonitorError::CRIT;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = get_class($pdoe) . ": " . $pdoe->getMessage();
@@ -102,10 +102,10 @@ catch(Exception $e)
 	$end = microtime(true);
 	$monitorResult->executionTime = $end - $start;
 	
-	$error = new KalturaMonitorError();
+	$error = new VidiunMonitorError();
 	$error->code = $e->getCode();
 	$error->description = $e->getMessage();
-	$error->level = KalturaMonitorError::ERR;
+	$error->level = VidiunMonitorError::ERR;
 	
 	$monitorResult->errors[] = $error;
 	$monitorResult->description = $e->getMessage();

@@ -3,15 +3,15 @@
  * @package api
  * @subpackage objects
  */
-class KalturaStorageProfileArray extends KalturaTypedArray
+class VidiunStorageProfileArray extends VidiunTypedArray
 {
-	public static function fromDbArray(array $arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray(array $arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaStorageProfileArray();
+		$newArr = new VidiunStorageProfileArray();
 		foreach($arr as $obj)
 		{
 		    /* @var $obj StorageProfile */
-			$nObj = KalturaStorageProfile::getInstanceByType($obj->getProtocol());
+			$nObj = VidiunStorageProfile::getInstanceByType($obj->getProtocol());
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -21,6 +21,6 @@ class KalturaStorageProfileArray extends KalturaTypedArray
 	
 	public function __construct( )
 	{
-		return parent::__construct ( "KalturaStorageProfile" );
+		return parent::__construct ( "VidiunStorageProfile" );
 	}
 }

@@ -4,49 +4,49 @@
  * @subpackage copyCuePoints
  */
 
-class KAsyncCopyCuePoints extends KJobHandlerWorker
+class VAsyncCopyCuePoints extends VJobHandlerWorker
 {
 	const MAX_CUE_POINTS_TO_COPY_TO_VOD = 500;
 
 	/*
 	 * (non-PHPdoc)
-	 *  @see KBatchBase::getJobType();
+	 *  @see VBatchBase::getJobType();
 	 */
 	const ATTEMPT_ALLOWED = 3;
 
 	public static function getType()
 	{
-		return KalturaBatchJobType::COPY_CUE_POINTS;
+		return VidiunBatchJobType::COPY_CUE_POINTS;
 	}
 
 	/*
 	 * (non-PHPdoc)
-	 *  @see KBatchBase::getJobType();
+	 *  @see VBatchBase::getJobType();
 	 */
 	public static function getJobType()
 	{
-		return KalturaBatchJobType::COPY_CUE_POINTS;
+		return VidiunBatchJobType::COPY_CUE_POINTS;
 	}
 
 
 	/**
-	 * @param KalturaBatchJob $job
-	 * @return KalturaBatchJob
+	 * @param VidiunBatchJob $job
+	 * @return VidiunBatchJob
 	 */
-	protected function exec(KalturaBatchJob $job)
+	protected function exec(VidiunBatchJob $job)
 	{
-		$engine = KCopyCuePointEngine::initEngine($job->jobSubType, $job->data, $job->partnerId);
+		$engine = VCopyCuePointEngine::initEngine($job->jobSubType, $job->data, $job->partnerId);
 		if (!$engine)
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::ENGINE_NOT_FOUND,
-							"Cannot find copy engine [{$job->jobSubType}]", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::ENGINE_NOT_FOUND,
+							"Cannot find copy engine [{$job->jobSubType}]", VidiunBatchJobStatus::FAILED);
 		if (!$engine->validateJobData())
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, KalturaBatchJobAppErrors::MISSING_PARAMETERS,
-				"Job subType [{$job->jobSubType}] has missing job data", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, VidiunBatchJobAppErrors::MISSING_PARAMETERS,
+				"Job subType [{$job->jobSubType}] has missing job data", VidiunBatchJobStatus::FAILED);
 		if (!$engine->copyCuePoints())
-			return $this->closeJob($job, KalturaBatchJobErrorTypes::APP, null,
-				"Job has failed in copy the cue points", KalturaBatchJobStatus::FAILED);
+			return $this->closeJob($job, VidiunBatchJobErrorTypes::APP, null,
+				"Job has failed in copy the cue points", VidiunBatchJobStatus::FAILED);
 
-		return $this->closeJob($job, null, null, "All Cue Point Copied ", KalturaBatchJobStatus::FINISHED);
+		return $this->closeJob($job, null, null, "All Cue Point Copied ", VidiunBatchJobStatus::FINISHED);
 	}
 
 }

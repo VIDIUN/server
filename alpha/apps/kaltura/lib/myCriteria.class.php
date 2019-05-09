@@ -20,13 +20,13 @@ class myCriteria extends Criteria
 		$param_map = array();
 		
 		$keys = $c->keys();
-		foreach ( $keys as $k ) 
+		foreach ( $keys as $v ) 
 		{
-			$val =  $c->getCriterion( $k );
+			$val =  $c->getCriterion( $v );
 
 			if ( $val )
 			{
-				$param_map[$k] = $val->hashCode();
+				$param_map[$v] = $val->hashCode();
 			}
 		}
 		

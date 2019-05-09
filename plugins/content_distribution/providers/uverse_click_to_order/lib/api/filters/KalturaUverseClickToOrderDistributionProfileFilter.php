@@ -3,6 +3,6 @@
  * @package plugins.uverseClickToOrderDistribution
  * @subpackage api.filters
  */
-class KalturaUverseClickToOrderDistributionProfileFilter extends KalturaUverseClickToOrderDistributionProfileBaseFilter
+class VidiunUverseClickToOrderDistributionProfileFilter extends VidiunUverseClickToOrderDistributionProfileBaseFilter
 {
 }

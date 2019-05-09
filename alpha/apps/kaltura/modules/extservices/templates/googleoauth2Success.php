@@ -19,19 +19,19 @@
 		</script>
 	<?php endif; ?>
 <?php elseif ($subAction == googleoauth2Action::SUB_ACTION_REDIRECT_SCREEN): ?>
-	<?php if ($ksError): ?>
+	<?php if ($vsError): ?>
 		Invalid parameter(s)
 	<?php else: ?>
 		<a href="<?php echo $oauth2Url; ?>">Proceed to Google for authorization</a>
 	<?php endif; ?>
 <?php elseif ($subAction == googleoauth2Action::SUB_ACTION_PROCESS_OAUTH2_RESPONSE): ?>
-	<?php if ($ksError): ?>
+	<?php if ($vsError): ?>
 		Invalid parameter(s)
 	<?php elseif ($tokenError): ?>
 		Invalid token
 	<?php endif; ?>
 <?php elseif ($subAction == googleoauth2Action::SUB_ACTION_STATUS): ?>
-	<?php if ($paramsError || $ksError): ?>
+	<?php if ($paramsError || $vsError): ?>
 		Invalid parameter(s)
 	<?php elseif ($tokenError): ?>
 		Failed to verify access token

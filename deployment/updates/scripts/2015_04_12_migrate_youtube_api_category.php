@@ -4,7 +4,7 @@
  */
 
 require_once (__DIR__ . '/../../bootstrap.php');
-require_once KALTURA_ROOT_PATH.'/vendor/google-api-php-client-1.1.2/src/Google/autoload.php'; 
+require_once VIDIUN_ROOT_PATH.'/vendor/google-api-php-client-1.1.2/src/Google/autoload.php'; 
 
 $partnerId = null;
 if(isset($argv[1]) && is_numeric($argv[1]))
@@ -32,7 +32,7 @@ $oldCategories = array(
 );
 
 $appId = YoutubeApiDistributionPlugin::GOOGLE_APP_ID;
-$authConfig = kConf::get($appId, 'google_auth', null);
+$authConfig = vConf::get($appId, 'google_auth', null);
 
 $googleClientId = isset($authConfig['clientId']) ? $authConfig['clientId'] : null;
 $googleClientSecret = isset($authConfig['clientSecret']) ? $authConfig['clientSecret'] : null;
@@ -74,13 +74,13 @@ while($distributionProfiles){
 		$url = $distributionProfile->getApiAuthorizeUrl();
 		if($url)
 		{
-			KalturaLog::warning("Partner [" . $distributionProfile->getPartnerId() . "] Distribution-Profile [$lastId] not authorized");
+			VidiunLog::warning("Partner [" . $distributionProfile->getPartnerId() . "] Distribution-Profile [$lastId] not authorized");
 			continue;
 		}
 		
 		if(!isset($oldCategories[$distributionProfile->getDefaultCategory()]))
 		{
-			KalturaLog::warning("Partner [" . $distributionProfile->getPartnerId() . "] Distribution-Profile [$lastId] has no match to the category [" . $distributionProfile->getDefaultCategory() . "]");
+			VidiunLog::warning("Partner [" . $distributionProfile->getPartnerId() . "] Distribution-Profile [$lastId] has no match to the category [" . $distributionProfile->getDefaultCategory() . "]");
 			continue;
 		}
 		$oldCategory = $oldCategories[$distributionProfile->getDefaultCategory()];
@@ -108,14 +108,14 @@ while($distributionProfiles){
 			}
 			catch (Exception $e)
 			{
-				KalturaLog::err($e);
+				VidiunLog::err($e);
 				continue;
 			}
 		}
 	
 		if(!isset($categories[$oldCategory]))
 		{
-			KalturaLog::warning("Partner [" . $distributionProfile->getPartnerId() . "] Distribution-Profile [$lastId] old category [$oldCategory] not found");
+			VidiunLog::warning("Partner [" . $distributionProfile->getPartnerId() . "] Distribution-Profile [$lastId] old category [$oldCategory] not found");
 			continue;
 		}
 		

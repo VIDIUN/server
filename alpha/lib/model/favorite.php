@@ -22,7 +22,7 @@ class favorite extends Basefavorite
 	}	
 
 	// We're using the same table to store favorites of different types, use this integer constant to differentiate
-	const SUBJECT_TYPE_KSHOW = '1';
+	const SUBJECT_TYPE_VSHOW = '1';
 	const SUBJECT_TYPE_ENTRY = '2';
 	const SUBJECT_TYPE_USER = '3';
 
@@ -40,23 +40,23 @@ class favorite extends Basefavorite
 			$this->modifiedColumns[] = favoritePeer::SUBJECT_ID;
 		}
 		
-		if ($this->subject_type == self::SUBJECT_TYPE_KSHOW)
+		if ($this->subject_type == self::SUBJECT_TYPE_VSHOW)
 		{
-			$this->setSubjectKshowId($v);
+			$this->setSubjectVshowId($v);
 			$this->setSubjectEntryId(null);
-			$this->setSubjectKuserId(null);
+			$this->setSubjectVuserId(null);
 		}
 		else if ($this->subject_type == self::SUBJECT_TYPE_ENTRY)
 		{
-			$this->setSubjectKshowId(null);
+			$this->setSubjectVshowId(null);
 			$this->setSubjectEntryId($v);
-			$this->setSubjectKuserId(null);
+			$this->setSubjectVuserId(null);
 		}
 		else if ($this->subject_type == self::SUBJECT_TYPE_USER)
 		{
-			$this->setSubjectKshowId(null);
+			$this->setSubjectVshowId(null);
 			$this->setSubjectEntryId(null);
-			$this->setSubjectKuserId($v);
+			$this->setSubjectVuserId($v);
 		}
 		else
 			throw new Exception("Unable to set favorite subject_id because of missing subject_type");

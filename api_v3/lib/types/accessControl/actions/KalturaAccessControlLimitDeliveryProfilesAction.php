@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAccessControlLimitDeliveryProfilesAction extends KalturaRuleAction
+class VidiunAccessControlLimitDeliveryProfilesAction extends VidiunRuleAction
 {
 	/**
 	 * Comma separated list of delivery profile ids 
@@ -37,12 +37,12 @@ class KalturaAccessControlLimitDeliveryProfilesAction extends KalturaRuleAction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kAccessControlLimitDeliveryProfilesAction();
+			$dbObject = new vAccessControlLimitDeliveryProfilesAction();
 			
 		return parent::toObject($dbObject, $skip);
 	}

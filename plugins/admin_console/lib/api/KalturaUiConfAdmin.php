@@ -3,18 +3,18 @@
  * @package plugins.adminConsole
  * @subpackage api.objects
  */
-class KalturaUiConfAdmin extends KalturaUiConf
+class VidiunUiConfAdmin extends VidiunUiConf
 {
 	/**
 	 * @var bool
 	 */
 	public $isPublic;
 	
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if ($source_object instanceof uiConf)
 		{
-			if ($source_object->getDisplayInSearch() == mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK)
+			if ($source_object->getDisplayInSearch() == mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK)
 				$this->isPublic = true;
 			else
 				$this->isPublic = false;
@@ -28,7 +28,7 @@ class KalturaUiConfAdmin extends KalturaUiConf
 		if ($object_to_fill instanceof uiConf)
 		{
 			if ($this->isPublic === true)
-				$object_to_fill->setDisplayInSearch(mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+				$object_to_fill->setDisplayInSearch(mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 			else
 				$object_to_fill->setDisplayInSearch(mySearchUtils::DISPLAY_IN_SEARCH_NONE);
 		}

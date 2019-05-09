@@ -7,8 +7,8 @@ interface IDistributionEngineDisable extends IDistributionEngineUpdate
 {
 	/**
 	 * disables the package.
-	 * @param KalturaDistributionDisableJobData $data
+	 * @param VidiunDistributionDisableJobData $data
 	 * @return bool true if finished, false if will be finished asynchronously
 	 */
-	public function disable(KalturaDistributionDisableJobData $data);
+	public function disable(VidiunDistributionDisableJobData $data);
 }

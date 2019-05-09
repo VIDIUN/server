@@ -3,7 +3,7 @@
  * @package plugins.codeCuePoint
  * @subpackage api.objects
  */
-class KalturaCodeCuePoint extends KalturaCuePoint
+class VidiunCodeCuePoint extends VidiunCuePoint
 {
 	/**
 	 * @var string
@@ -46,7 +46,7 @@ class KalturaCodeCuePoint extends KalturaCuePoint
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::getMapBetweenObjects()
+	 * @see VidiunCuePoint::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -54,7 +54,7 @@ class KalturaCodeCuePoint extends KalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toInsertableObject()
+	 * @see VidiunObject::toInsertableObject()
 	 */
 	public function toInsertableObject($object_to_fill = null, $props_to_skip = array())
 	{
@@ -65,7 +65,7 @@ class KalturaCodeCuePoint extends KalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::validateForInsert()
+	 * @see VidiunCuePoint::validateForInsert()
 	 */
 	public function validateForInsert($propertiesToSkip = array())
 	{
@@ -77,7 +77,7 @@ class KalturaCodeCuePoint extends KalturaCuePoint
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaCuePoint::validateForUpdate()
+	 * @see VidiunCuePoint::validateForUpdate()
 	 */
 	public function validateForUpdate($sourceObject, $propertiesToSkip = array())
 	{

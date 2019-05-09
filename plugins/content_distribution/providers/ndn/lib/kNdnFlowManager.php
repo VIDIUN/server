@@ -3,10 +3,10 @@
  * @package plugins.ndnDistribution
  * @subpackage lib
  */
-class kNdnFlowManager implements kBatchJobStatusEventConsumer
+class vNdnFlowManager implements vBatchJobStatusEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -34,10 +34,10 @@ class kNdnFlowManager implements kBatchJobStatusEventConsumer
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
 		$data = $dbBatchJob->getData();
-		if (!$data instanceof kDistributionJobData)
+		if (!$data instanceof vDistributionJobData)
 			return true;
 			
-		$ndnCoreValueType = kPluginableEnumsManager::apiToCore('DistributionProviderType', NdnDistributionPlugin::getApiValue(NdnDistributionProviderType::NDN));
+		$ndnCoreValueType = vPluginableEnumsManager::apiToCore('DistributionProviderType', NdnDistributionPlugin::getApiValue(NdnDistributionProviderType::NDN));
 		if ($data->getProviderType() != $ndnCoreValueType)
 			return true;
 			
@@ -54,7 +54,7 @@ class kNdnFlowManager implements kBatchJobStatusEventConsumer
 		);
 		
 		if (in_array($dbBatchJob->getJobType(), $jobTypesToFinish))
-			kJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
+			vJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
 		
 		return true;
 	}

@@ -7,7 +7,7 @@
  * @package api
  * @subpackage services
  */
-class WidgetService extends KalturaBaseService 
+class WidgetService extends VidiunBaseService 
 {
 	// use initService to add a peer to the partner filter
 	/**
@@ -20,25 +20,25 @@ class WidgetService extends KalturaBaseService
 	}
 
 	/**
-	 * Add new widget, can be attached to entry or kshow
+	 * Add new widget, can be attached to entry or vshow
 	 * SourceWidget is ignored.
 	 * 
 	 * @action add
-	 * @param KalturaWidget $widget
-	 * @return KalturaWidget
+	 * @param VidiunWidget $widget
+	 * @return VidiunWidget
 	 */
-	function addAction(KalturaWidget $widget)
+	function addAction(VidiunWidget $widget)
 	{
 		if ($widget->sourceWidgetId === null && $widget->uiConfId === null)
 		{
-			throw new KalturaAPIException(KalturaErrors::SOURCE_WIDGET_OR_UICONF_REQUIRED);
+			throw new VidiunAPIException(VidiunErrors::SOURCE_WIDGET_OR_UICONF_REQUIRED);
 		}
 		
 		if ($widget->sourceWidgetId !== null)
 		{
 			$sourceWidget = widgetPeer::retrieveByPK($widget->sourceWidgetId);
 			if (!$sourceWidget) 
-				throw new KalturaAPIException(KalturaErrors::SOURCE_WIDGET_NOT_FOUND, $widget->sourceWidgetId);
+				throw new VidiunAPIException(VidiunErrors::SOURCE_WIDGET_NOT_FOUND, $widget->sourceWidgetId);
 				
 			if ($widget->uiConfId === null)
 				$widget->uiConfId = $sourceWidget->getUiConfId();
@@ -48,21 +48,21 @@ class WidgetService extends KalturaBaseService
 		{
 			$uiConf = uiConfPeer::retrieveByPK($widget->uiConfId);
 			if (!$uiConf)
-				throw new KalturaAPIException(KalturaErrors::UICONF_ID_NOT_FOUND, $widget->uiConfId);
+				throw new VidiunAPIException(VidiunErrors::UICONF_ID_NOT_FOUND, $widget->uiConfId);
 		}
 		
-		if(!is_null($widget->enforceEntitlement) && $widget->enforceEntitlement == false && kEntitlementUtils::getEntitlementEnforcement())
-			throw new KalturaAPIException(KalturaErrors::CANNOT_DISABLE_ENTITLEMENT_FOR_WIDGET_WHEN_ENTITLEMENT_ENFORCEMENT_ENABLE);
+		if(!is_null($widget->enforceEntitlement) && $widget->enforceEntitlement == false && vEntitlementUtils::getEntitlementEnforcement())
+			throw new VidiunAPIException(VidiunErrors::CANNOT_DISABLE_ENTITLEMENT_FOR_WIDGET_WHEN_ENTITLEMENT_ENFORCEMENT_ENABLE);
 		
 		if ($widget->entryId !== null)
 		{
 			$entry = entryPeer::retrieveByPK($widget->entryId);
 			if (!$entry)
-				throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $widget->entryId);
+				throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $widget->entryId);
 		}
 		elseif ($widget->enforceEntitlement != null && $widget->enforceEntitlement == false)
 		{
-			throw new KalturaAPIException(KalturaErrors::CANNOT_DISABLE_ENTITLEMENT_WITH_NO_ENTRY_ID);
+			throw new VidiunAPIException(VidiunErrors::CANNOT_DISABLE_ENTITLEMENT_WITH_NO_ENTRY_ID);
 		}
 		
 		$dbWidget = $widget->toInsertableWidget();
@@ -78,7 +78,7 @@ class WidgetService extends KalturaBaseService
 		$dbWidget->save();
 		$savedWidget = widgetPeer::retrieveByPK($widgetId);
 		
-		$widget = new KalturaWidget(); // start from blank
+		$widget = new VidiunWidget(); // start from blank
 		$widget->fromObject($savedWidget, $this->getResponseProfile());
 		
 		return $widget;
@@ -89,28 +89,28 @@ class WidgetService extends KalturaBaseService
  	 * 
 	 * @action update
 	 * @param string $id 
-	 * @param KalturaWidget $widget
-	 * @return KalturaWidget
+	 * @param VidiunWidget $widget
+	 * @return VidiunWidget
 	 */	
-	function updateAction( $id , KalturaWidget $widget )
+	function updateAction( $id , VidiunWidget $widget )
 	{
 		$dbWidget = widgetPeer::retrieveByPK( $id );
 		
 		if ( ! $dbWidget )
-			throw new KalturaAPIException ( APIErrors::INVALID_WIDGET_ID , $id );
+			throw new VidiunAPIException ( APIErrors::INVALID_WIDGET_ID , $id );
 		
-		if(!is_null($widget->enforceEntitlement) && $widget->enforceEntitlement == false && kEntitlementUtils::getEntitlementEnforcement())
-			throw new KalturaAPIException(KalturaErrors::CANNOT_DISABLE_ENTITLEMENT_FOR_WIDGET_WHEN_ENTITLEMENT_ENFORCEMENT_ENABLE);
+		if(!is_null($widget->enforceEntitlement) && $widget->enforceEntitlement == false && vEntitlementUtils::getEntitlementEnforcement())
+			throw new VidiunAPIException(VidiunErrors::CANNOT_DISABLE_ENTITLEMENT_FOR_WIDGET_WHEN_ENTITLEMENT_ENFORCEMENT_ENABLE);
 		
 		if ($widget->entryId !== null)
 		{
 			$entry = entryPeer::retrieveByPK($widget->entryId);
 			if (!$entry)
-				throw new KalturaAPIException(KalturaErrors::ENTRY_ID_NOT_FOUND, $widget->entryId);
+				throw new VidiunAPIException(VidiunErrors::ENTRY_ID_NOT_FOUND, $widget->entryId);
 		}
 		elseif ($widget->enforceEntitlement != null && $widget->enforceEntitlement == false)
 		{
-			throw new KalturaAPIException(KalturaErrors::CANNOT_DISABLE_ENTITLEMENT_WITH_NO_ENTRY_ID);
+			throw new VidiunAPIException(VidiunErrors::CANNOT_DISABLE_ENTITLEMENT_WITH_NO_ENTRY_ID);
 		}
 			
 		$widgetUpdate = $widget->toUpdatableWidget();
@@ -140,16 +140,16 @@ class WidgetService extends KalturaBaseService
 	 *  
 	 * @action get
 	 * @param string $id 
-	 * @return KalturaWidget
-	 * @ksOptional
+	 * @return VidiunWidget
+	 * @vsOptional
 	 */		
 	function getAction( $id )
 	{
 		$dbWidget = widgetPeer::retrieveByPK( $id );
 
 		if ( ! $dbWidget )
-			throw new KalturaAPIException ( APIErrors::INVALID_WIDGET_ID , $id );
-		$widget = new KalturaWidget();
+			throw new VidiunAPIException ( APIErrors::INVALID_WIDGET_ID , $id );
+		$widget = new VidiunWidget();
 		$widget->fromObject($dbWidget, $this->getResponseProfile());
 		
 		return $widget;
@@ -160,22 +160,22 @@ class WidgetService extends KalturaBaseService
 	 * Must provide valid sourceWidgetId
 	 * 
 	 * @action clone
-	 * @param KalturaWidget $widget
-	 * @return KalturaWidget
+	 * @param VidiunWidget $widget
+	 * @return VidiunWidget
 	 */		
-	function cloneAction( KalturaWidget $widget )
+	function cloneAction( VidiunWidget $widget )
 	{
 		$dbWidget = widgetPeer::retrieveByPK( $widget->sourceWidgetId );
 		
 		if ( ! $dbWidget )
-			throw new KalturaAPIException ( APIErrors::INVALID_WIDGET_ID , $widget->sourceWidgetId );
+			throw new VidiunAPIException ( APIErrors::INVALID_WIDGET_ID , $widget->sourceWidgetId );
 
-		$newWidget = widget::createWidgetFromWidget( $dbWidget , $widget->kshowId, $widget->entryId, $widget->uiConfId ,
+		$newWidget = widget::createWidgetFromWidget( $dbWidget , $widget->vshowId, $widget->entryId, $widget->uiConfId ,
 			null , $widget->partnerData , $widget->securityType );
 		if ( !$newWidget )
-			throw new KalturaAPIException ( APIErrors::INVALID_KSHOW_AND_ENTRY_PAIR , $widget->kshowId, $widget->entryId );
+			throw new VidiunAPIException ( APIErrors::INVALID_VSHOW_AND_ENTRY_PAIR , $widget->vshowId, $widget->entryId );
 
-		$widget = new KalturaWidget;
+		$widget = new VidiunWidget;
 		$widget->fromObject($newWidget, $this->getResponseProfile());
 		return $widget;
 	}
@@ -184,14 +184,14 @@ class WidgetService extends KalturaBaseService
 	 * Retrieve a list of available widget depends on the filter given
 	 * 
 	 * @action list
-	 * @param KalturaWidgetFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaWidgetListResponse
+	 * @param VidiunWidgetFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunWidgetListResponse
 	 */		
-	function listAction( KalturaWidgetFilter $filter=null , KalturaFilterPager $pager=null)
+	function listAction( VidiunWidgetFilter $filter=null , VidiunFilterPager $pager=null)
 	{
 		if (!$filter)
-			$filter = new KalturaWidgetFilter;
+			$filter = new VidiunWidgetFilter;
 			
 		$widgetFilter = new widgetFilter ();
 		$filter->toObject( $widgetFilter );
@@ -201,13 +201,13 @@ class WidgetService extends KalturaBaseService
 		
 		$totalCount = widgetPeer::doCount( $c );
 		if (! $pager)
-			$pager = new KalturaFilterPager ();
+			$pager = new VidiunFilterPager ();
 		$pager->attachToCriteria ( $c );
 		$list = widgetPeer::doSelect( $c );
 		
-		$newList = KalturaWidgetArray::fromDbArray($list, $this->getResponseProfile());
+		$newList = VidiunWidgetArray::fromDbArray($list, $this->getResponseProfile());
 		
-		$response = new KalturaWidgetListResponse();
+		$response = new VidiunWidgetListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		

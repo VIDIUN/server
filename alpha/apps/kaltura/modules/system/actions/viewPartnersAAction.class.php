@@ -4,14 +4,14 @@
  * @subpackage system
  * @deprecated
  */
-require_once ( __DIR__ . "/kalturaSystemAction.class.php" );
+require_once ( __DIR__ . "/vidiunSystemAction.class.php" );
 
 /**
  * @package    Core
  * @subpackage system
  * @deprecated
  */
-class viewPartnersAAction extends kalturaSystemAction
+class viewPartnersAAction extends vidiunSystemAction
 {
 	const MAX_PAGE_SIZE = 20000;
 	
@@ -47,14 +47,14 @@ class viewPartnersAAction extends kalturaSystemAction
 		(
 			"all" => "1=1",
 			"paying" => "dim_partner.partner_package>1",
-			"kaltura_signup" => "dim_partner.partner_type_id=1 AND dim_partner.partner_package=1",
+			"vidiun_signup" => "dim_partner.partner_type_id=1 AND dim_partner.partner_package=1",
 			"other" => "dim_partner.partner_type_id=1 AND dim_partner.partner_package=2",
 			"wiki" => "dim_partner.partner_type_id=1 AND dim_partner.partner_package=100",
 			"wordpress" => "dim_partner.partner_type_id=1 AND dim_partner.partner_package=101",
 			"drupal" => "dim_partner.partner_type_id=1 AND dim_partner.partner_package=102",
 			"mind_touch" => "dim_partner.partner_type_id=1 AND dim_partner.partner_package=103",
 			"moodle" => "dim_partner.partner_type_id=1 AND dim_partner.partner_package=104",
-			"kaltura_ce" => "dim_partner.partner_type_id=1 AND dim_partner.partner_package=105",
+			"vidiun_ce" => "dim_partner.partner_type_id=1 AND dim_partner.partner_package=105",
 		);
 		
 
@@ -74,7 +74,7 @@ class viewPartnersAAction extends kalturaSystemAction
 		$this->go = $this->getP ( "go" );
 		if ( $this->go )
 		{		
-			list ( $header , $data , $totalCount ) = kKavaReportsMgr::getTable( 
+			list ( $header , $data , $totalCount ) = vKavaReportsMgr::getTable( 
 				null , 
 				myReportsMgr::REPORT_TYPE_SYSTEM_GENERIC_PARTNER , 
 				$input_filter ,

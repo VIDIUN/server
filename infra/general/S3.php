@@ -434,7 +434,7 @@ class S3
 			self::__triggerError('S3::inputFile(): Unable to open input file: '.$file, __FILE__, __LINE__);
 			return false;
 		}
-		return array('file' => $file, 'size' => kFile::fileSize($file), 'md5sum' => $md5sum !== false ?
+		return array('file' => $file, 'size' => vFile::fileSize($file), 'md5sum' => $md5sum !== false ?
 		(is_string($md5sum) ? $md5sum : base64_encode(md5_file($file, true))) : '');
 	}
 
@@ -495,7 +495,7 @@ class S3
 			$rest->size = $input['size'];
 		else {
 			if (isset($input['file']))
-				$rest->size = kFile::fileSize($input['file']);
+				$rest->size = vFile::fileSize($input['file']);
 			elseif (isset($input['data']))
 				$rest->size = strlen($input['data']);
 		}
@@ -1751,7 +1751,7 @@ final class S3Request
 		if (S3::$useSSL)
 		{
 			// SSL Validation can now be optional for those with broken OpenSSL installations
-			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, S3::$useSSLValidation ? KCurlWrapper::getSslVerifyHostValue() : 0);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, S3::$useSSLValidation ? VCurlWrapper::getSslVerifyHostValue() : 0);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, S3::$useSSLValidation ? 1 : 0);
 
 			if (S3::$sslKey !== null) curl_setopt($curl, CURLOPT_SSLKEY, S3::$sslKey);

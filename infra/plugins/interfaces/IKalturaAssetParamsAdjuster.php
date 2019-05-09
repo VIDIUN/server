@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaAssetParamsAdjuster extends IKalturaBase
+interface IVidiunAssetParamsAdjuster extends IVidiunBase
 {
 	/**
 	 * @param string $entryId

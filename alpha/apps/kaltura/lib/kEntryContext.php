@@ -1,5 +1,5 @@
 <?php
-class kEntryContext extends kContext
+class vEntryContext extends vContext
 {
     /**
      * Entry in the context of which the playlist is constructed

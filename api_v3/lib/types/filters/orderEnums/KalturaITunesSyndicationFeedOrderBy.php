@@ -3,6 +3,6 @@
  * @package api
  * @subpackage enum
  */
-class KalturaITunesSyndicationFeedOrderBy extends KalturaBaseSyndicationFeedOrderBy
+class VidiunITunesSyndicationFeedOrderBy extends VidiunBaseSyndicationFeedOrderBy
 {
 }

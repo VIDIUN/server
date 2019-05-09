@@ -8,7 +8,7 @@
  * @subpackage model
  *
  */
-class kVendorCredit
+class vVendorCredit
 {
 	/**
 	 * @var int
@@ -93,7 +93,7 @@ class kVendorCredit
 	 */
 	public function setFromDate($fromDate)
 	{
-		$beginOfDay = kReachUtils::reachStrToTime("today", $fromDate);
+		$beginOfDay = vReachUtils::reachStrToTime("today", $fromDate);
 		$this->fromDate = $beginOfDay;
 	}
 
@@ -178,7 +178,7 @@ class kVendorCredit
 		$now = time();
 		if ( $now < $this->fromDate)
 		{
-				KalturaLog::debug("Current date [$now] is not in credit time Range [ from - $this->fromDate ] ");
+				VidiunLog::debug("Current date [$now] is not in credit time Range [ from - $this->fromDate ] ");
 				return 0;
 		}
 		
@@ -201,7 +201,7 @@ class kVendorCredit
 		$now = $time != null ? $time : time();
 		if ( $now < $this->fromDate)
 		{
-			KalturaLog::debug("Current date [$now] is not in credit time Range [ from - $this->fromDate ] ");
+			VidiunLog::debug("Current date [$now] is not in credit time Range [ from - $this->fromDate ] ");
 			return false;
 		}
 		return true;

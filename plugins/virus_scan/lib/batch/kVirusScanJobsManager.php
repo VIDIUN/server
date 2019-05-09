@@ -1,5 +1,5 @@
 <?php
-class kVirusScanJobsManager extends kJobsManager
+class vVirusScanJobsManager extends vJobsManager
 {
 	/**
 	 * @param BatchJob $parentJob
@@ -15,7 +15,7 @@ class kVirusScanJobsManager extends kJobsManager
 	{
 		$jobType = VirusScanPlugin::getBatchJobTypeCoreValue(VirusScanBatchJobType::VIRUS_SCAN);
 		
- 		$jobData = new kVirusScanJobData();
+ 		$jobData = new vVirusScanJobData();
  		$jobData->setFileContainer(self::getFileContainer($syncKey));
  		$jobData->setFlavorAssetId($flavorAssetId);
  		$jobData->setVirusFoundAction($virusFoundAction);

@@ -3,7 +3,7 @@
  * @package plugins.schedule
  * @subpackage api.filters
  */
-class KalturaScheduleEventFilter extends KalturaScheduleEventBaseFilter
+class VidiunScheduleEventFilter extends VidiunScheduleEventBaseFilter
 {
 	static private $map_between_objects = array
 	(
@@ -94,7 +94,7 @@ class KalturaScheduleEventFilter extends KalturaScheduleEventBaseFilter
 	public $resourceIdEqual;
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -107,39 +107,39 @@ class KalturaScheduleEventFilter extends KalturaScheduleEventBaseFilter
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$type = $this->getListResponseType();
 
 		if ($this->ownerIdEqual)
 		{
-			$dbKuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::$ks_partner_id, $this->ownerIdEqual);
-			if (!$dbKuser)
+			$dbVuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::$vs_partner_id, $this->ownerIdEqual);
+			if (!$dbVuser)
 			{
-				throw new KalturaAPIException (KalturaErrors::INVALID_USER_ID);
+				throw new VidiunAPIException (VidiunErrors::INVALID_USER_ID);
 			}
-			$this->ownerIdEqual = $dbKuser->getId();
+			$this->ownerIdEqual = $dbVuser->getId();
 		}
 		if ($this->ownerIdIn)
 		{
 			$userIds = explode(",", $this->ownerIdIn);
-			$dbKusers = kuserPeer::getKuserByPartnerAndUids(kCurrentContext::$ks_partner_id, $userIds);
-			if (count($dbKusers) < count($userIds))
+			$dbVusers = vuserPeer::getVuserByPartnerAndUids(vCurrentContext::$vs_partner_id, $userIds);
+			if (count($dbVusers) < count($userIds))
 			{
-				throw new KalturaAPIException (KalturaErrors::INVALID_USER_ID);
+				throw new VidiunAPIException (VidiunErrors::INVALID_USER_ID);
 			}
-			$kuserIds = array();
-			foreach ($dbKusers as $dbKuser)
+			$vuserIds = array();
+			foreach ($dbVusers as $dbVuser)
 			{
-				$kuserIds[] = $dbKuser->getId();
+				$vuserIds[] = $dbVuser->getId();
 			}
 
-			$this->ownerIdIn = implode(',', $kuserIds);
+			$this->ownerIdIn = implode(',', $vuserIds);
 		}
 
-		$c = KalturaCriteria::create(ScheduleEventPeer::OM_CLASS);
+		$c = VidiunCriteria::create(ScheduleEventPeer::OM_CLASS);
 		if ($type)
 		{
 			$c->add(ScheduleEventPeer::TYPE, $type);
@@ -155,8 +155,8 @@ class KalturaScheduleEventFilter extends KalturaScheduleEventBaseFilter
 			$this->loadSessionBlackoutEvents($eventsList);
 		}
 
-		$response = new KalturaScheduleEventListResponse();
-		$response->objects = KalturaScheduleEventArray::fromDbArray($eventsList, $responseProfile);
+		$response = new VidiunScheduleEventListResponse();
+		$response->objects = VidiunScheduleEventArray::fromDbArray($eventsList, $responseProfile);
 		$response->totalCount = $c->getRecordsCount();
 		return $response;
 	}

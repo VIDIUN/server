@@ -16,15 +16,15 @@ jQuery(document).ready(function() {
 
 		switch ( protocol )
 		{
-		case "<?php echo Kaltura_Client_Enum_StorageProfileProtocol::S3?>":				
+		case "<?php echo Vidiun_Client_Enum_StorageProfileProtocol::S3?>":				
 			jQuery('#filesPermissionInS3-label').css('visibility', 'visible');
 			jQuery('#filesPermissionInS3').css('visibility', 'visible');
 			jQuery('#s3Region-label').css('visibility', 'visible');
 			jQuery('#s3Region').css('visibility', 'visible');
 			jQuery('#sseType-label').css('visibility', 'visible');
 			jQuery('#sseType').css('visibility', 'visible');
-			jQuery('#sseKmsKeyId-label').css('visibility', 'visible');
-			jQuery('#sseKmsKeyId').css('visibility', 'visible');
+			jQuery('#sseVmsKeyId-label').css('visibility', 'visible');
+			jQuery('#sseVmsKeyId').css('visibility', 'visible');
 			jQuery('#signatureType-label').css('visibility', 'visible');
 			jQuery('#signatureType').css('visibility', 'visible');
 			jQuery('#endPoint-label').css('visibility', 'visible');
@@ -32,7 +32,7 @@ jQuery(document).ready(function() {
 			jQuery('#storageFtpPassiveMode').css('visibility', 'hidden');
 			jQuery('#storageFtpPassiveMode-label').css('visibility', 'hidden');
 			break;
-		case "<?php echo Kaltura_Client_Enum_StorageProfileProtocol::FTP?>":
+		case "<?php echo Vidiun_Client_Enum_StorageProfileProtocol::FTP?>":
 			jQuery('#storageFtpPassiveMode').css('visibility', 'visible');
 			jQuery('#storageFtpPassiveMode-label').css('visibility', 'visible');
 			jQuery('#filesPermissionInS3-label').css('visibility', 'hidden');
@@ -41,14 +41,14 @@ jQuery(document).ready(function() {
 			jQuery('#s3Region').css('visibility', 'hidden');
 			jQuery('#sseType-label').css('visibility', 'hidden');
 			jQuery('#sseType').css('visibility', 'hidden');
-			jQuery('#sseKmsKeyId-label').css('visibility', 'hidden');
-			jQuery('#sseKmsKeyId').css('visibility', 'hidden');
+			jQuery('#sseVmsKeyId-label').css('visibility', 'hidden');
+			jQuery('#sseVmsKeyId').css('visibility', 'hidden');
 			jQuery('#signatureType-label').css('visibility', 'hidden');
 			jQuery('#signatureType').css('visibility', 'hidden');
 			jQuery('#endPoint-label').css('visibility', 'hidden');
 			jQuery('#endPoint').css('visibility', 'hidden');
 			break;
-		case "<?php echo Kaltura_Client_Enum_StorageProfileProtocol::SFTP?>":
+		case "<?php echo Vidiun_Client_Enum_StorageProfileProtocol::SFTP?>":
 			setKeyPairSettings(true);
 			// No break, the rest of the settings should be as default
 		default:
@@ -58,8 +58,8 @@ jQuery(document).ready(function() {
 			jQuery('#s3Region').css('visibility', 'hidden');
 			jQuery('#sseType-label').css('visibility', 'hidden');
 			jQuery('#sseType').css('visibility', 'hidden');
-			jQuery('#sseKmsKeyId-label').css('visibility', 'hidden');
-			jQuery('#sseKmsKeyId').css('visibility', 'hidden');
+			jQuery('#sseVmsKeyId-label').css('visibility', 'hidden');
+			jQuery('#sseVmsKeyId').css('visibility', 'hidden');
 			jQuery('#signatureType-label').css('visibility', 'hidden');
 			jQuery('#signatureType').css('visibility', 'hidden');
 			jQuery('#endPoint-label').css('visibility', 'hidden');

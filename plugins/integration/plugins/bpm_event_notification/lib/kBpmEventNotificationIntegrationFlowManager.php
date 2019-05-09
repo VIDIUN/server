@@ -3,25 +3,25 @@
  * @package plugins.bpmEventNotificationIntegration
  * @subpackage lib.events
  */
-class kBpmEventNotificationIntegrationFlowManager implements kBatchJobStatusEventConsumer
+class vBpmEventNotificationIntegrationFlowManager implements vBatchJobStatusEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
 		$data = $dbBatchJob->getData();
-		/* @var $data kIntegrationJobData */
+		/* @var $data vIntegrationJobData */
 		
 		$triggerData = $data->getTriggerData();
-		/* @var $triggerData kBpmEventNotificationIntegrationJobTriggerData */
+		/* @var $triggerData vBpmEventNotificationIntegrationJobTriggerData */
 		
 		$template = EventNotificationTemplatePeer::retrieveByPK($triggerData->getTemplateId());
 		/* @var $template BusinessProcessNotificationTemplate */
 		
 		if(!$template)
 		{
-			KalturaLog::err("Template id [" . $triggerData->getTemplateId() . "] not found");
+			VidiunLog::err("Template id [" . $triggerData->getTemplateId() . "] not found");
 			return true;
 		}
 		
@@ -35,7 +35,7 @@ class kBpmEventNotificationIntegrationFlowManager implements kBatchJobStatusEven
 	}
 
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{

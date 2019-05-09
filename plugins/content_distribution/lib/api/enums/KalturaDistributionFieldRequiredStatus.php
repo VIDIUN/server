@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage api.enum
  */
-class KalturaDistributionFieldRequiredStatus extends KalturaEnum implements DistributionFieldRequiredStatus
+class VidiunDistributionFieldRequiredStatus extends VidiunEnum implements DistributionFieldRequiredStatus
 {
 	// see DistributionFieldRequiredStatus interface
 }

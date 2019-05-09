@@ -9,34 +9,34 @@ require_once ( MODULES . "/partnerservices2/actions/startsessionAction.class.php
  * @package Core
  * @subpackage externalWidgets
  */
-class contributionWidgetJSAction extends kalturaAction
+class contributionWidgetJSAction extends vidiunAction
 {
 	public function execute()
 	{
 		$this->getResponse()->setHttpHeader("Content-Type", "application/x-javascript");
 		
-		$kshow_id = $this->getRequestParameter('kshow_id', 0);
-		$uid = kuser::ANONYMOUS_PUSER_ID;
-		$kshow = kshowPeer::retrieveByPK($kshow_id);
+		$vshow_id = $this->getRequestParameter('vshow_id', 0);
+		$uid = vuser::ANONYMOUS_PUSER_ID;
+		$vshow = vshowPeer::retrieveByPK($vshow_id);
 	
-		if (!$kshow)
+		if (!$vshow)
 			return sfView::ERROR;
 		
-		// kshow_id might be a string (something like "15483str") but it will be returned using retriveByPK anyways
+		// vshow_id might be a string (something like "15483str") but it will be returned using retriveByPK anyways
 		// lets make sure we pass just the id to the contribution wizard
-		$kshow_id = $kshow->getId();
+		$vshow_id = $vshow->getId();
 		
-		$partner_id = $kshow->getPartnerId();
+		$partner_id = $vshow->getPartnerId();
 		
 		$partner = PartnerPeer::retrieveByPK($partner_id);
-		$subp_id = $kshow->getSubpId();
+		$subp_id = $vshow->getSubpId();
 		$partner_secret = $partner->getSecret();
 		$partner_name = $partner->getPartnerName();
 				
-		$kaltura_services = new startsessionAction();
-		$kaltura_services->setInputParams( 
+		$vidiun_services = new startsessionAction();
+		$vidiun_services->setInputParams( 
 			array (
-				"format" => kalturaWebserviceRenderer::RESPONSE_TYPE_PHP_ARRAY, 
+				"format" => vidiunWebserviceRenderer::RESPONSE_TYPE_PHP_ARRAY, 
 				"partner_id" => $partner_id, 
 				"subp_id" => $subp_id, 
 				"uid" => $uid, 
@@ -44,11 +44,11 @@ class contributionWidgetJSAction extends kalturaAction
 			)
 		);
 		
-		$result = $kaltura_services->internalExecute() ;
+		$result = $vidiun_services->internalExecute() ;
 		
-		$this->ks = @$result["result"]["ks"];
+		$this->vs = @$result["result"]["vs"];
 		$this->widget_host = requestUtils::getHost();
-		$this->kshow_id = $kshow_id;
+		$this->vshow_id = $vshow_id;
 		$this->uid = $uid;
 		$this->partner_id = $partner_id;
 		$this->subp_id = $subp_id;

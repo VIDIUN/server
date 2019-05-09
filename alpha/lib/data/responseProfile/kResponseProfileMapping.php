@@ -4,7 +4,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kResponseProfileMapping
+class vResponseProfileMapping
 {
 	/**
 	 * @var string

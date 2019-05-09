@@ -19,7 +19,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 	/**
 	 * @var array
 	 */
-	private $_errorClasses = array('KalturaErrors');
+	private $_errorClasses = array('VidiunErrors');
 	
 	public function __construct()
 	{
@@ -52,7 +52,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 			$apiV3Path = realpath(dirname(__FILE__) . '/../api_v3');
 			$svnVersion = shell_exec("svnversion $apiV3Path");
 			if ($svnVersion === null)
-				KalturaLog::warning("Failed to get svn revision number");
+				VidiunLog::warning("Failed to get svn revision number");
 			else
 				$this->_xmlElement->setAttribute('revision', trim($svnVersion));
 		}
@@ -80,7 +80,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 		$servicesElement = $this->_doc->createElement("services");
 		foreach($this->_services as $serviceId => $serviceActionItem)
 		{
-			/* @var $serviceActionItem KalturaServiceActionItem */
+			/* @var $serviceActionItem VidiunServiceActionItem */
 				
 			$serviceElement = $this->_doc->createElement("service");
 			$serviceElement->setAttribute("id", $serviceId);
@@ -100,7 +100,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 			ksort($serviceActionItem->actionMap);
 			foreach($serviceActionItem->actionMap as $actionId => $actionReflector)
 			{
-				/* @var $actionReflector KalturaActionReflector */
+				/* @var $actionReflector VidiunActionReflector */
 				$actionInfo = $actionReflector->getActionInfo();
 				
 				if($actionInfo->serverOnly)
@@ -132,12 +132,12 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 		$this->_xmlElement->appendChild($errorsElement);
 		$this->_xmlElement->appendChild($configurationsElement);
 		
-		$this->addFile("KalturaClient.xml", $this->_doc->saveXML());
+		$this->addFile("VidiunClient.xml", $this->_doc->saveXML());
 	}
 	
 	private function pluginHasServices($pluginInstance)
 	{
-		$servicesInterface = $pluginInstance->getInstance('IKalturaServices');
+		$servicesInterface = $pluginInstance->getInstance('IVidiunServices');
 		if (!$servicesInterface)
 			return false;
 			
@@ -190,7 +190,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 	private function appendPlugins(DOMElement $pluginsElement)
 	{
 		// Add all the plugins that offer services to the list of required plugins
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaPlugin');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunPlugin');
 		foreach($pluginInstances as $pluginInstance)
 		{
 			if (!$this->pluginHasServices($pluginInstance))
@@ -202,7 +202,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 		}
 		
 		// Add plugin tags to the XML
-		$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaPlugin');
+		$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunPlugin');
 		foreach($pluginInstances as $pluginInstance)
 		{
 			if (!in_array($pluginInstance->getPluginName(), $this->_requiredPlugins))
@@ -223,7 +223,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 		{
 			if ($property->getDeclaringClass() == $reflectClass) // only properties defined in the current class, ignore the inherited
 			{
-				$parsedDocComment = new KalturaDocCommentParser($property->getDocComment());
+				$parsedDocComment = new VidiunDocCommentParser($property->getDocComment());
 				$paramElement = $this->_doc->createElement($property->name);
 				$paramElement->setAttribute('type', $parsedDocComment->varType);
 			
@@ -251,16 +251,16 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 	
 	private function appendConfigurations(DOMElement $configurationsElement)
 	{
-		$this->appendConfiguration($configurationsElement, 'client', 'KalturaClientConfiguration');
-		$this->appendConfiguration($configurationsElement, 'request', 'KalturaRequestConfiguration');
+		$this->appendConfiguration($configurationsElement, 'client', 'VidiunClientConfiguration');
+		$this->appendConfiguration($configurationsElement, 'request', 'VidiunRequestConfiguration');
 	}
 	
-	private function appendPlugin(DOMElement $pluginsElement, IKalturaPlugin $pluginInstance)
+	private function appendPlugin(DOMElement $pluginsElement, IVidiunPlugin $pluginInstance)
 	{  
 		$pluginElement = $this->_doc->createElement("plugin");
 		$pluginElement->setAttribute('name', $pluginInstance->getPluginName());
 		
-		$dependencyInterface = $pluginInstance->getInstance('IKalturaPending');
+		$dependencyInterface = $pluginInstance->getInstance('IVidiunPending');
 		if ($dependencyInterface)
 		{
 			$dependencyList = $dependencyInterface->dependsOn();
@@ -277,7 +277,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 			}
 		}
 
-		$pluginServices = $pluginInstance->getInstance('IKalturaServices');
+		$pluginServices = $pluginInstance->getInstance('IVidiunServices');
 		if ($pluginServices)
 		{
 			$this->appendPluginServices($pluginInstance->getPluginName(), $pluginElement, $pluginServices);
@@ -286,7 +286,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 		$pluginsElement->appendChild($pluginElement);
 	}
 	
-	private function appendPluginServices($pluginName, DOMElement &$pluginElement, IKalturaServices $pluginInstance)
+	private function appendPluginServices($pluginName, DOMElement &$pluginElement, IVidiunServices $pluginInstance)
 	{
 		$servicesMap = $pluginInstance->getServicesMap();
 		foreach($servicesMap as $service => $serviceClass)
@@ -313,7 +313,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 		return $pluginName;
 	}
 	
-	private function getEnumElement(KalturaTypeReflector $typeReflector)
+	private function getEnumElement(VidiunTypeReflector $typeReflector)
 	{
 		$enumElement = $this->_doc->createElement("enum");
 		$enumElement->setAttribute("name", $typeReflector->getType());
@@ -353,7 +353,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 		return $enumElement;
 	}
 	
-	private function getClassElement(KalturaTypeReflector $typeReflector)
+	private function getClassElement(VidiunTypeReflector $typeReflector)
 	{
 		$properties = $typeReflector->getProperties();
 				
@@ -392,7 +392,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 		$properties = $typeReflector->getCurrentProperties();
 		foreach($properties as $property)
 		{
-			/* @var $property KalturaPropertyInfo */
+			/* @var $property VidiunPropertyInfo */
 			if ($property->isServerOnly())
 			{
 				continue;
@@ -424,9 +424,9 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 				$propertyElement->setAttribute("type", "string");
 				$propertyElement->setAttribute("enumType", $property->getType());
 			}
-			else if ($propType == 'KalturaObject')
+			else if ($propType == 'VidiunObject')
 			{
-				$propertyElement->setAttribute("type", 'KalturaObjectBase');
+				$propertyElement->setAttribute("type", 'VidiunObjectBase');
 			}
 			else
 			{
@@ -461,7 +461,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 		return $classElement;
 	}
 	
-	private function getServiceActionElement(KalturaActionReflector $actionReflector)
+	private function getServiceActionElement(VidiunActionReflector $actionReflector)
 	{
 		$outputTypeReflector = $actionReflector->getActionOutputType();
 		$actionInfo = $actionReflector->getActionInfo();
@@ -479,7 +479,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 		
 		foreach($actionParams as $actionParam)
 		{
-			/* @var $actionParam KalturaParamInfo */
+			/* @var $actionParam VidiunParamInfo */
 			$actionParamElement = $this->_doc->createElement("param");
 			$actionParamElement->setAttribute("name", $actionParam->getName());
 			
@@ -572,7 +572,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 
 		$description = $actionInfo->description;
 		$description = $this->fixDescription($description);
-		$actionElement->setAttribute("description", kString::stripUtf8InvalidChars($description));
+		$actionElement->setAttribute("description", vString::stripUtf8InvalidChars($description));
 		$actionElement->setAttribute("enableInMultiRequest", ($outputType === 'file' ? "0" : "1"));
 
 		$actionElement->appendChild($resultElement);
@@ -605,7 +605,7 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 			$actionElement->appendChild($throws);
 		}
 
-		$actionElement->setAttribute('sessionRequired', ($actionInfo->ksNeeded ? 'always' : (is_null($actionInfo->ksNeeded) ? 'optional' : 'none')));
+		$actionElement->setAttribute('sessionRequired', ($actionInfo->vsNeeded ? 'always' : (is_null($actionInfo->vsNeeded) ? 'optional' : 'none')));
 		
 		return $actionElement;
 	}
@@ -623,17 +623,17 @@ class XmlClientGenerator extends ClientGeneratorFromPhp
 	
 	protected function writeBeforeServices() { }
 	
-	protected function writeBeforeService(KalturaServiceActionItem $serviceReflector) { }
+	protected function writeBeforeService(VidiunServiceActionItem $serviceReflector) { }
 	
 	protected function writeServiceAction($serviceId, $serviceName, $action, $actionParams, $outputTypeReflector) { }
 	
-	protected function writeAfterService(KalturaServiceActionItem $serviceReflector) { }
+	protected function writeAfterService(VidiunServiceActionItem $serviceReflector) { }
 	
 	protected function writeAfterServices() { }
 	
 	protected function writeBeforeTypes() { }
 	
-	protected function writeType(KalturaTypeReflector $type) { }
+	protected function writeType(VidiunTypeReflector $type) { }
 	
 	protected function writeAfterTypes() { }
 }

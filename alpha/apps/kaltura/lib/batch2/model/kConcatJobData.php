@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kConcatJobData extends kJobData
+class vConcatJobData extends vJobData
 {
 	/**
 	 * @var array

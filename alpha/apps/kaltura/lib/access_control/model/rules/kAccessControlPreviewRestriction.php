@@ -5,15 +5,15 @@
  * 
  * Old preview restriction for backward compatibility
  */
-class kAccessControlPreviewRestriction extends kAccessControlRestriction
+class vAccessControlPreviewRestriction extends vAccessControlRestriction
 {
 	/**
-	 * @var kAuthenticatedCondition
+	 * @var vAuthenticatedCondition
 	 */
 	private $condition;
 	
 	/**
-	 * @var kAccessControlPreviewAction
+	 * @var vAccessControlPreviewAction
 	 */
 	private $action;
 	
@@ -24,8 +24,8 @@ class kAccessControlPreviewRestriction extends kAccessControlRestriction
 	{
 		parent::__construct($accessControl);
 		
-		$this->action = new kAccessControlPreviewAction();
-		$this->condition = new kAuthenticatedCondition(true);
+		$this->action = new vAccessControlPreviewAction();
+		$this->condition = new vAuthenticatedCondition(true);
 		if($accessControl)
 		{
 			$this->getCondition()->setPrivileges(array($accessControl->getPrvRestrictPrivilege()));
@@ -37,9 +37,9 @@ class kAccessControlPreviewRestriction extends kAccessControlRestriction
 	}
 
 	/* (non-PHPdoc)
-	 * @see kRule::applyContext()
+	 * @see vRule::applyContext()
 	 */
-	public function applyContext(kContextDataResult $context)
+	public function applyContext(vContextDataResult $context)
 	{
 		$fulfilled = parent::applyContext($context);
 		if($fulfilled)
@@ -52,7 +52,7 @@ class kAccessControlPreviewRestriction extends kAccessControlRestriction
 	}
 
 	/**
-	 * @return kSiteCondition
+	 * @return vSiteCondition
 	 */
 	private function getCondition()
 	{
@@ -64,7 +64,7 @@ class kAccessControlPreviewRestriction extends kAccessControlRestriction
 	}
 
 	/**
-	 * @return kAccessControlPreviewAction
+	 * @return vAccessControlPreviewAction
 	 */
 	private function getAction()
 	{

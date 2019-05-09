@@ -1,30 +1,30 @@
 <?php
-define('KALTURA_ROOT_PATH', '/opt/kaltura/app');
-require_once(KALTURA_ROOT_PATH . '/infra/KAutoloader.php');
-define("KALTURA_API_PATH", KALTURA_ROOT_PATH . "/api_v3");
-require_once(KALTURA_ROOT_PATH . '/alpha/config/kConf.php');
+define('VIDIUN_ROOT_PATH', '/opt/vidiun/app');
+require_once(VIDIUN_ROOT_PATH . '/infra/VAutoloader.php');
+define("VIDIUN_API_PATH", VIDIUN_ROOT_PATH . "/api_v3");
+require_once(VIDIUN_ROOT_PATH . '/alpha/config/vConf.php');
 // Autoloader
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "propel", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_API_PATH, "lib", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_API_PATH, "services", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "alpha", "plugins", "*")); // needed for testmeDoc
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "plugins", "*"));
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "generator")); // needed for testmeDoc
-KAutoloader::setClassMapFilePath(kConf::get("cache_root_path") . '/plugins/' . basename(__FILE__) . '.cache');
-KAutoloader::register();
-require_once(KALTURA_ROOT_PATH . '/vendor/google-api-php-client-1.1.2/src/Google/autoload.php');
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "propel", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_API_PATH, "lib", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_API_PATH, "services", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "alpha", "plugins", "*")); // needed for testmeDoc
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "plugins", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "generator")); // needed for testmeDoc
+VAutoloader::setClassMapFilePath(vConf::get("cache_root_path") . '/plugins/' . basename(__FILE__) . '.cache');
+VAutoloader::register();
+require_once(VIDIUN_ROOT_PATH . '/vendor/google-api-php-client-1.1.2/src/Google/autoload.php');
 
 // Timezone
-date_default_timezone_set(kConf::get("date_default_timezone")); // America/New_York
+date_default_timezone_set(vConf::get("date_default_timezone")); // America/New_York
 
 error_reporting(E_ALL);
-KalturaLog::setLogger(new KalturaStdoutLogger());
+VidiunLog::setLogger(new VidiunStdoutLogger());
 
-$dbConf = kConf::getDB();
+$dbConf = vConf::getDB();
 DbManager::setConfig($dbConf);
 DbManager::initialize();
 
-function initClient(KalturaYoutubeApiDistributionProfile $distributionProfile)
+function initClient(VidiunYoutubeApiDistributionProfile $distributionProfile)
 {
 	$options = array(
 		CURLOPT_VERBOSE => true,
@@ -58,7 +58,7 @@ if(!$dbDistributionProfile instanceof YoutubeApiDistributionProfile)
 	die($dbDistributionProfile . " is not a YoutubeApiDistributionProfile" . "\n");
 }
 
-$distributionProfile = new KalturaYoutubeApiDistributionProfile();
+$distributionProfile = new VidiunYoutubeApiDistributionProfile();
 $distributionProfile->fromObject($dbDistributionProfile);
 
 $googleClient = initClient($distributionProfile);

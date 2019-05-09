@@ -260,11 +260,11 @@ abstract class BaseuiConfPeer {
 		
 		uiConfPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'uiConfPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -288,7 +288,7 @@ abstract class BaseuiConfPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -369,7 +369,7 @@ abstract class BaseuiConfPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -392,11 +392,11 @@ abstract class BaseuiConfPeer {
 	{		
 		$criteriaForSelect = uiConfPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'uiConfPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -412,12 +412,12 @@ abstract class BaseuiConfPeer {
 		
 		$queryResult = uiConfPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -427,17 +427,17 @@ abstract class BaseuiConfPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -508,7 +508,7 @@ abstract class BaseuiConfPeer {
 		uiConfPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -516,21 +516,21 @@ abstract class BaseuiConfPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
-				$criteria->addAnd(self::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+				// allow only the vidiun netword stuff
+				$criteria->addAnd(self::DISPLAY_IN_SEARCH , mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 				
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -549,7 +549,7 @@ abstract class BaseuiConfPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -565,9 +565,9 @@ abstract class BaseuiConfPeer {
 				else 
 				{
 					$criterion = $criteria->getNewCriterion(self::PARTNER_ID, $partners, Criteria::IN);
-					if($kalturaNetwork)
+					if($vidiunNetwork)
 					{
-						$criterionNetwork = $criteria->getNewCriterion(self::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_KALTURA_NETWORK);
+						$criterionNetwork = $criteria->getNewCriterion(self::DISPLAY_IN_SEARCH, mySearchUtils::DISPLAY_IN_SEARCH_VIDIUN_NETWORK);
 						$criterion->addOr($criterionNetwork);
 					}
 					$criteria->addAnd($criterion);
@@ -673,11 +673,11 @@ abstract class BaseuiConfPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('uiConfPeer');
+				vMemoryManager::registerPeer('uiConfPeer');
 			}
 		}
 	}

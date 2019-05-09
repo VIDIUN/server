@@ -10,21 +10,21 @@
  * @package Scheduler
  * @subpackage Cleanup
  */
-class KAsyncPartnerLoadCleanup extends KPeriodicWorker
+class VAsyncPartnerLoadCleanup extends VPeriodicWorker
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::CLEANUP;
+		return VidiunBatchJobType::CLEANUP;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::run()
+	 * @see VBatchBase::run()
 	*/
 	public function run($jobs = null)
 	{
-		self::$kClient->batch->updatePartnerLoadTable();
+		self::$vClient->batch->updatePartnerLoadTable();
 	}
 }

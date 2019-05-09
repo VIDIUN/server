@@ -3,12 +3,12 @@
  * Enable indexing and searching answers cue point objects in sphinx
  * @package plugins.cuePoint
  */
-class QuizSphinxPlugin extends KalturaPlugin implements IKalturaCriteriaFactory, IKalturaPending
+class QuizSphinxPlugin extends VidiunPlugin implements IVidiunCriteriaFactory, IVidiunPending
 {
 	const PLUGIN_NAME = 'quizSphinx';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -16,20 +16,20 @@ class QuizSphinxPlugin extends KalturaPlugin implements IKalturaCriteriaFactory,
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-	    $cuePointDependency = new KalturaDependency(CuePointPlugin::getPluginName());
-	    $quizDependency = new KalturaDependency(QuizPlugin::getPluginName());
+	    $cuePointDependency = new VidiunDependency(CuePointPlugin::getPluginName());
+	    $quizDependency = new VidiunDependency(QuizPlugin::getPluginName());
 	
 	    return array($cuePointDependency , $quizDependency);
 	}	
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCriteriaFactory::getKalturaCriteria()
+	 * @see IVidiunCriteriaFactory::getVidiunCriteria()
 	 */
-	public static function getKalturaCriteria($objectType)
+	public static function getVidiunCriteria($objectType)
 	{
 		if ($objectType == 'AnswerCuePoint')
 			return new SphinxAnswerCuePointCriteria();

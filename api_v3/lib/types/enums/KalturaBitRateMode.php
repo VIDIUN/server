@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaBitRateMode extends KalturaEnum
+class VidiunBitRateMode extends VidiunEnum
 {
 	const CBR = 1;
 	const VBR = 2;

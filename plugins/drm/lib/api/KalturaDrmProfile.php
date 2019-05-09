@@ -3,7 +3,7 @@
  * @package plugins.drm
  * @subpackage api.objects
  */
-class KalturaDrmProfile extends KalturaObject implements IFilterable
+class VidiunDrmProfile extends VidiunObject implements IFilterable
 {	
 	/**
 	 * @var int
@@ -31,13 +31,13 @@ class KalturaDrmProfile extends KalturaObject implements IFilterable
 	public $description;
 	
 	/**
-	 * @var KalturaDrmProviderType
+	 * @var VidiunDrmProviderType
 	 * @filter eq,in
 	 */
 	public $provider;
 	
 	/**
-	 * @var KalturaDrmProfileStatus
+	 * @var VidiunDrmProfileStatus
 	 * @filter eq,in
 	 */
 	public $status;
@@ -101,15 +101,15 @@ class KalturaDrmProfile extends KalturaObject implements IFilterable
 		
 	/**
 	 * @param int $type
-	 * @return KalturaDrmProfile
+	 * @return VidiunDrmProfile
 	 */
 	static function getInstanceByType ($provider)
 	{
-		if ($provider == KalturaDrmProviderType::CENC)
+		if ($provider == VidiunDrmProviderType::CENC)
         {
-            return new KalturaDrmProfile();
+            return new VidiunDrmProfile();
         }
-        $obj = KalturaPluginManager::loadObject('KalturaDrmProfile', $provider);
+        $obj = VidiunPluginManager::loadObject('VidiunDrmProfile', $provider);
 		return $obj;
 	}
 

@@ -163,19 +163,19 @@ class GenericDistributionProviderAction extends BaseGenericDistributionProviderA
 	
 	public function incrementMrssTransformerVersion()
 	{
-		$version = kDataCenterMgr::incrementVersion($this->getMrssTransformerVersion());
+		$version = vDataCenterMgr::incrementVersion($this->getMrssTransformerVersion());
 		return $this->putInCustomData(self::CUSTOM_DATA_FIELD_MRSS_TRANSFORMER_VERSION, $version);
 	}
 	
 	public function incrementMrssValidatorVersion()
 	{
-		$version = kDataCenterMgr::incrementVersion($this->getMrssValidatorVersion());
+		$version = vDataCenterMgr::incrementVersion($this->getMrssValidatorVersion());
 		return $this->putInCustomData(self::CUSTOM_DATA_FIELD_MRSS_VALIDATOR_VERSION, $version);
 	}
 	
 	public function incrementResultsTransformerVersion()
 	{
-		$version = kDataCenterMgr::incrementVersion($this->getResultsTransformerVersion());
+		$version = vDataCenterMgr::incrementVersion($this->getResultsTransformerVersion());
 		return $this->putInCustomData(self::CUSTOM_DATA_FIELD_RESULTS_TRANSFORMER_VERSION, $version);
 	}
 }

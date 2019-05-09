@@ -1,17 +1,17 @@
 <?php
 class mySearchUtils
 {
-	const MODE_KUSER = "KUSER";
+	const MODE_VUSER = "VUSER";
 	const MODE_ENTRY = "ENTRY";
-	const MODE_KSHOW = "KSHOW";
+	const MODE_VSHOW = "VSHOW";
 	const MODE_ALL = "ALL";
 
 	const DISPLAY_IN_SEARCH_SYSTEM = EntryDisplayInSearchType::SYSTEM;
 	const DISPLAY_IN_SEARCH_NONE = EntryDisplayInSearchType::NONE;
 	const DISPLAY_IN_SEARCH_PARTNER_ONLY = EntryDisplayInSearchType::PARTNER_ONLY;
-	const DISPLAY_IN_SEARCH_KALTURA_NETWORK = EntryDisplayInSearchType::KALTURA_NETWORK;
+	const DISPLAY_IN_SEARCH_VIDIUN_NETWORK = EntryDisplayInSearchType::VIDIUN_NETWORK;
 	
-	const KALTURA_NETWORK = "kn";
+	const VIDIUN_NETWORK = "vn";
 	
 	const SEARCH_ENTRY_TYPE_RC= "_RC_";
 	
@@ -31,11 +31,11 @@ class mySearchUtils
 			$act = new AJAX_getEntriesAction();
 			$pager_name = "entry";
 		}	
-		elseif ( $mode == self::MODE_KSHOW )
+		elseif ( $mode == self::MODE_VSHOW )
 		{
-			$filter = new kshowFilter ();
-			$act = new AJAX_getKshowsAction();
-			$pager_name = "kshow";
+			$filter = new vshowFilter ();
+			$act = new AJAX_getVshowsAction();
+			$pager_name = "vshow";
 		}	
 		else
 		{
@@ -57,10 +57,10 @@ class mySearchUtils
 		$act->setIdList( NULL );
 		$act->setSortAlias( "ids" );
 		
-//		$kaltura_media_type = self::getKalturaMediaType ( $media_type );
+//		$vidiun_media_type = self::getVidiunMediaType ( $media_type );
 
 //		$act->setMediaType ( $media_type );
-//		$act->setOnlyForKuser ( $kuser_id );
+//		$act->setOnlyForVuser ( $vuser_id );
 //		$act->setPublicOnly( true );
 		$results = $act->fetchPage( $generic_container , $filter , $pager , $base_criteria );
 		
@@ -138,16 +138,16 @@ class mySearchUtils
 		}
 		
 
-		if ( $featured == "kalturas" )
+		if ( $featured == "vidiuns" )
 		{
-			// in this case it's only about kshows
-			$mode = mySearchUtils::MODE_KSHOW;
+			// in this case it's only about vshows
+			$mode = mySearchUtils::MODE_VSHOW;
 			$id_list = myFeatureUtils::getFeaturedShowsIdList();
 		}
 		elseif( $featured == "teams" )
 		{
-			// in this case it's only about kshows
-			$mode = mySearchUtils::MODE_KSHOW;
+			// in this case it's only about vshows
+			$mode = mySearchUtils::MODE_VSHOW;
 			$id_list = myFeatureUtils::getFeaturedTeamsIdList();
 		}
 		else
@@ -161,7 +161,7 @@ class mySearchUtils
 	
 	/**
 		Will set the 'display_in_search' field according to business-logic per object type
-		// kuser | kshow | entry
+		// vuser | vshow | entry
 		// for objects that are search worthy - search_text will hold text from relevant columns depending on the object type 
 	*/
 	public  static function setDisplayInSearch ( BaseObject $obj , $parent_obj = null )
@@ -180,17 +180,17 @@ class mySearchUtils
 	
 			if ( $res )
 			{
-				if ( $obj instanceof kuser )
+				if ( $obj instanceof vuser )
 				{
 					// if the status is not
-					self::setRes ( $res , $obj->getStatus() == KuserStatus::ACTIVE );
+					self::setRes ( $res , $obj->getStatus() == VuserStatus::ACTIVE );
 				}
-				elseif ( $obj instanceof kshow )
+				elseif ( $obj instanceof vshow )
 				{
-					self::setRes ( $res ,  $obj->getViewPermissions() == kshow::KSHOW_PERMISSION_EVERYONE || $obj->getViewPermissions() == null  );
-					// if the viewPermission changed from kshow::KSHOW_PERMISSION_EVERYONE to something else 
+					self::setRes ( $res ,  $obj->getViewPermissions() == vshow::VSHOW_PERMISSION_EVERYONE || $obj->getViewPermissions() == null  );
+					// if the viewPermission changed from vshow::VSHOW_PERMISSION_EVERYONE to something else 
 					// update all entries
-					if ( $res && $obj->isColumnModified( kshowPeer::VIEW_PERMISSIONS  ) )
+					if ( $res && $obj->isColumnModified( vshowPeer::VIEW_PERMISSIONS  ) )
 					{
 						$entries = $obj->getentrys( ) ;
 						foreach ( $entries as $entry )
@@ -244,13 +244,13 @@ class mySearchUtils
 		return $words;
 	}
 	
-	// add to the kaltura network or only to the partner's search text
+	// add to the vidiun network or only to the partner's search text
 	public static function addPartner ( $partner_id , $text , $res , $extra_invisible_data = null )
 	{
 		switch ( $res )
 		{
 			case 2:
-				$prefix = "_KAL_NET_";
+				$prefix = "_VID_NET_";
 				break;
 			case 1: 
 				$prefix = "_PAR_ONLY_";
@@ -275,9 +275,9 @@ class mySearchUtils
 		return "_{$partner_id}_";
 	}
 
-	public static function getKalturaNetworkKeyword ( )
+	public static function getVidiunNetworkKeyword ( )
 	{
-		return "_KAL_NET_";
+		return "_VID_NET_";
 	}
 
 	public static function getPartnerOnlyKeyword ( )

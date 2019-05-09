@@ -31,12 +31,12 @@
 			<?php foreach($this->paginator as $dropFolder): ?>
 			<tr class="<?php echo $this->cycle(array('odd', 'even'))->next(); ?>">
 				<td><?php echo $dropFolder->id; ?></td>
-				<td><?php echo $this->enumTranslate('Kaltura_Client_DropFolder_Enum_DropFolderStatus', $dropFolder->status); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_DropFolder_Enum_DropFolderStatus', $dropFolder->status); ?></td>
 				<td><?php echo $dropFolder->name; ?></td>
 				<td><?php echo $dropFolder->partnerId; ?></td>
-				<td><?php echo $this->enumTranslate('Kaltura_Client_DropFolder_Enum_DropFolderType', $dropFolder->type); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_DropFolder_Enum_DropFolderType', $dropFolder->type); ?></td>
 				<td><?php echo $dropFolder->conversionProfileId ? $dropFolder->conversionProfileId : 'None defined'; ?></td>
-				<td><?php echo $this->enumTranslate('Kaltura_Client_DropFolder_Enum_DropFolderFileHandlerType', $dropFolder->fileHandlerType); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_DropFolder_Enum_DropFolderFileHandlerType', $dropFolder->fileHandlerType); ?></td>
 				<td><?php echo $dropFolder->tags; ?></td>
 				<td><?php echo date($this->translate('time format'), $dropFolder->createdAt); ?></td>
 				<td><?php echo $dropFolder->errorDescription; ?></td>
@@ -45,9 +45,9 @@
 					<select class="options" onchange="doAction(this.value, <?php echo $dropFolder->id; ?>)">
 						<option value=""><?php echo $this->translate('Select Action'); ?></option>
 						<option value="configureDropFolder" ><?php echo $this->translate('Configure'); ?></option>
-						<?php if ($dropFolder->status === Kaltura_Client_DropFolder_Enum_DropFolderStatus::DISABLED): ?>
+						<?php if ($dropFolder->status === Vidiun_Client_DropFolder_Enum_DropFolderStatus::DISABLED): ?>
 							<option value="enable" ><?php echo $this->translate('Enable'); ?></option>
-						<?php elseif ($dropFolder->status === Kaltura_Client_DropFolder_Enum_DropFolderStatus::ENABLED || $dropFolder->status === Kaltura_Client_DropFolder_Enum_DropFolderStatus::ERROR): ?>
+						<?php elseif ($dropFolder->status === Vidiun_Client_DropFolder_Enum_DropFolderStatus::ENABLED || $dropFolder->status === Vidiun_Client_DropFolder_Enum_DropFolderStatus::ERROR): ?>
 							<option value="disable" ><?php echo $this->translate('Disable'); ?></option>
 						<?php endif; ?>
 						<option value="remove" ><?php echo $this->translate('Remove'); ?></option>
@@ -91,7 +91,7 @@ function enable(folderId)
 {
 	changeStatus(
 		folderId,
-		<?php echo Kaltura_Client_DropFolder_Enum_DropFolderStatus::ENABLED; ?>,
+		<?php echo Vidiun_Client_DropFolder_Enum_DropFolderStatus::ENABLED; ?>,
 		function() {
 			alert('<?php echo $this->translate('Drop folder enabled');?>');
 		}
@@ -102,7 +102,7 @@ function disable(folderId)
 {
 	changeStatus(
 		folderId,
-		<?php echo Kaltura_Client_DropFolder_Enum_DropFolderStatus::DISABLED; ?>,
+		<?php echo Vidiun_Client_DropFolder_Enum_DropFolderStatus::DISABLED; ?>,
 		function() {
 			alert('<?php echo $this->translate('Drop folder disabled');?>');
 		}
@@ -116,7 +116,7 @@ function remove(folderId)
 	{
 		changeStatus(
 			folderId,
-			<?php echo Kaltura_Client_DropFolder_Enum_DropFolderStatus::DELETED; ?>,
+			<?php echo Vidiun_Client_DropFolder_Enum_DropFolderStatus::DELETED; ?>,
 			function() {
 				alert('<?php echo $this->translate('Drop folder removed');?>');
 			}

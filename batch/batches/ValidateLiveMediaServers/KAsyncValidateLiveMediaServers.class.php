@@ -10,20 +10,20 @@
  * @package Scheduler
  * @subpackage ValidateLiveMediaServers
  */
-class KAsyncValidateLiveMediaServers extends KPeriodicWorker
+class VAsyncValidateLiveMediaServers extends VPeriodicWorker
 {
 	const ENTRY_SERVER_NODE_MIN_CREATION_TIMEE = 120;
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::CLEANUP;
+		return VidiunBatchJobType::CLEANUP;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KBatchBase::run()
+	 * @see VBatchBase::run()
 	*/
 	public function run($jobs = null)
 	{
@@ -31,15 +31,15 @@ class KAsyncValidateLiveMediaServers extends KPeriodicWorker
 		if(!$entryServerNodeMinCreationTime)
 			$entryServerNodeMinCreationTime = self::ENTRY_SERVER_NODE_MIN_CREATION_TIMEE;
 		
-		$entryServerNodeFilter = new KalturaEntryServerNodeFilter();
-		$entryServerNodeFilter->orderBy = KalturaEntryServerNodeOrderBy::CREATED_AT_ASC;
+		$entryServerNodeFilter = new VidiunEntryServerNodeFilter();
+		$entryServerNodeFilter->orderBy = VidiunEntryServerNodeOrderBy::CREATED_AT_ASC;
 		$entryServerNodeFilter->createdAtLessThanOrEqual = time() - $entryServerNodeMinCreationTime;
 		
-		$entryServerNodePager = new KalturaFilterPager();
+		$entryServerNodePager = new VidiunFilterPager();
 		$entryServerNodePager->pageSize = 500;
 		$entryServerNodePager->pageIndex = 1;
 		
-		$entryServerNodes = self::$kClient->entryServerNode->listAction($entryServerNodeFilter, $entryServerNodePager);
+		$entryServerNodes = self::$vClient->entryServerNode->listAction($entryServerNodeFilter, $entryServerNodePager);
 		
 		while($entryServerNodes->objects && count($entryServerNodes->objects))
 		{
@@ -47,20 +47,20 @@ class KAsyncValidateLiveMediaServers extends KPeriodicWorker
 			{
 				try
 				{
-					/* @var $entryServerNode KalturaEntryServerNode */
+					/* @var $entryServerNode VidiunEntryServerNode */
 					self::impersonate($entryServerNode->partnerId);
-					self::$kClient->entryServerNode->validateRegisteredEntryServerNode($entryServerNode->id);
+					self::$vClient->entryServerNode->validateRegisteredEntryServerNode($entryServerNode->id);
 					self::unimpersonate();
 				}
-				catch (KalturaException $e)
+				catch (VidiunException $e)
 				{
 					self::unimpersonate();
-					KalturaLog::err("Caught exception with message [" . $e->getMessage()."]");
+					VidiunLog::err("Caught exception with message [" . $e->getMessage()."]");
 				}
 			}
 			
 			$entryServerNodePager->pageIndex++;
-			$entryServerNodes = self::$kClient->entryServerNode->listAction($entryServerNodeFilter, $entryServerNodePager);
+			$entryServerNodes = self::$vClient->entryServerNode->listAction($entryServerNodeFilter, $entryServerNodePager);
 		}
 	}
 }

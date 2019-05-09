@@ -5,17 +5,17 @@
  * @package plugins.bulkUploadFilter
  * @subpackage api.objects
  */
-class KalturaBulkUploadFilterJobData extends KalturaBulkUploadJobData
+class VidiunBulkUploadFilterJobData extends VidiunBulkUploadJobData
 {	
 	/**
 	 * Filter for extracting the objects list to upload 
-	 * @var KalturaFilter
+	 * @var VidiunFilter
 	 */
 	public $filter;
 
 	/**
 	 * Template object for new object creation
-	 * @var KalturaObject
+	 * @var VidiunObject
 	 */
 	public $templateObject;
 	
@@ -38,11 +38,11 @@ class KalturaBulkUploadFilterJobData extends KalturaBulkUploadJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kBulkUploadFilterJobData();
+			$dbData = new vBulkUploadFilterJobData();
 		
 		switch (get_class($this->templateObject))
 	    {
-	        case 'KalturaCategoryEntry':
+	        case 'VidiunCategoryEntry':
 	           	$dbData->setTemplateObject(new categoryEntry());
 	           	$this->templateObject->toObject($dbData->getTemplateObject());
 	            break;
@@ -54,24 +54,24 @@ class KalturaBulkUploadFilterJobData extends KalturaBulkUploadJobData
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($source_object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($source_object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 	    parent::doFromObject($source_object, $responseProfile);
 	    
-	    /* @var $source_object kBulkUploadFilterJobData */
+	    /* @var $source_object vBulkUploadFilterJobData */
 	    $this->filter = null;
 	    switch (get_class($source_object->getFilter()))
 	    {
 	        case 'categoryEntryFilter':
-	            $this->filter = new KalturaCategoryEntryFilter();
+	            $this->filter = new VidiunCategoryEntryFilter();
 	            break;
 	        case 'entryFilter':
-	            $this->filter = new KalturaBaseEntryFilter();
+	            $this->filter = new VidiunBaseEntryFilter();
 	            break;
 		case 'UserEntryFilter':
-	  	    $this->filter = new KalturaUserEntryFilter();
+	  	    $this->filter = new VidiunUserEntryFilter();
 		    break;
 	        default:
 	            break;
@@ -87,7 +87,7 @@ class KalturaBulkUploadFilterJobData extends KalturaBulkUploadJobData
 	    switch (get_class($source_object->getTemplateObject()))
 	    {
 	        case 'categoryEntry':
-	            $this->templateObject = new KalturaCategoryEntry();
+	            $this->templateObject = new VidiunCategoryEntry();
 	            break;
 	        default:
 	            break;
@@ -110,6 +110,6 @@ class KalturaBulkUploadFilterJobData extends KalturaBulkUploadJobData
 	
 	public function setType ()
 	{
-	    $this->type = kPluginableEnumsManager::coreToApi("KalturaBulkUploadType", BulkUploadFilterPlugin::getApiValue(BulkUploadFilterType::FILTER));
+	    $this->type = vPluginableEnumsManager::coreToApi("VidiunBulkUploadType", BulkUploadFilterPlugin::getApiValue(BulkUploadFilterType::FILTER));
 	}
 }

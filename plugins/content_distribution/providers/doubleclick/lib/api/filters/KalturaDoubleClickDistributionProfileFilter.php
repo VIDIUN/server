@@ -3,6 +3,6 @@
  * @package plugins.doubleClickDistribution
  * @subpackage api.filters
  */
-class KalturaDoubleClickDistributionProfileFilter extends KalturaDoubleClickDistributionProfileBaseFilter
+class VidiunDoubleClickDistributionProfileFilter extends VidiunDoubleClickDistributionProfileBaseFilter
 {
 }

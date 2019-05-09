@@ -19,7 +19,7 @@ class embedIframeAction extends sfAction
 		{
 			$entry = entryPeer::retrieveByPK($entry_id);
 			if(!$entry)
-				KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+				VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 				
 			$partner_id = $entry->getPartnerId();
 			$widget_id = '_' . $partner_id;
@@ -29,7 +29,7 @@ class embedIframeAction extends sfAction
 		$widget_id = $this->getRequestParameter("widget_id", $widget_id);
 		$widget = widgetPeer::retrieveByPK($widget_id);
 		if(!$widget)
-			KExternalErrors::dieError(KExternalErrors::WIDGET_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::WIDGET_NOT_FOUND);
 
 		$subp_id = $widget->getSubpId();
 		if (!$subp_id)
@@ -43,7 +43,7 @@ class embedIframeAction extends sfAction
 			{		
 				$entry = entryPeer::retrieveByPK($entry_id);
 				if(!$entry)
-					KExternalErrors::dieError(KExternalErrors::ENTRY_NOT_FOUND);
+					VExternalErrors::dieError(VExternalErrors::ENTRY_NOT_FOUND);
 			}
 		}
 			
@@ -69,31 +69,31 @@ class embedIframeAction extends sfAction
 					$arr = explode ( ";" , $custom_data );
 					$countries_str = $arr[0]; 
 					$fallback_entry_id = (isset($arr[1]) ? $arr[1] : null);
-					$fallback_kshow_id = (isset($arr[2]) ? $arr[2] : null);
+					$fallback_vshow_id = (isset($arr[2]) ? $arr[2] : null);
 					$current_country = "";
 	
 					$valid_country = requestUtils::matchIpCountry( $countries_str , $current_country );
 					if ( ! $valid_country )
 					{
-						KalturaLog::log("Attempting to access widget [$widget_id] and entry [$entry_id] from country [$current_country]. Retrning entry_id: [$fallback_entry_id] kshow_id [$fallback_kshow_id]" );
+						VidiunLog::log("Attempting to access widget [$widget_id] and entry [$entry_id] from country [$current_country]. Retrning entry_id: [$fallback_entry_id] vshow_id [$fallback_vshow_id]" );
 						$entry_id = $fallback_entry_id;
 					}
 				}
 				break;
 			
-			case widget::WIDGET_SECURITY_TYPE_FORCE_KS:
-				$ks_str = $this->getRequestParameter('ks');
+			case widget::WIDGET_SECURITY_TYPE_FORCE_VS:
+				$vs_str = $this->getRequestParameter('vs');
 				try
 				{
-					$ks = kSessionUtils::crackKs($ks_str);
+					$vs = vSessionUtils::crackVs($vs_str);
 				}
 				catch (Exception $e)
 				{
-					KExternalErrors::dieError(KExternalErrors::INVALID_KS);
+					VExternalErrors::dieError(VExternalErrors::INVALID_VS);
 				}
-				$res = kSessionUtils::validateKSession2(1, $partner_id, 0, $ks_str, $ks);
+				$res = vSessionUtils::validateVSession2(1, $partner_id, 0, $vs_str, $vs);
 				if ($res <= 0)
-					KExternalErrors::dieError(KExternalErrors::INVALID_KS);
+					VExternalErrors::dieError(VExternalErrors::INVALID_VS);
 					
 				break;
 			
@@ -108,32 +108,32 @@ class embedIframeAction extends sfAction
 		$cachedResponse  = $cache->get($requestKey);
 		if ($allowCache && $cachedResponse) // dont use cache if we want to force no caching
 		{
-			header("X-Kaltura: cached-action");
+			header("X-Vidiun: cached-action");
 			header("Expires: Sun, 19 Nov 2000 08:52:00 GMT");
 			header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
 			header("Pragma: no-cache");
 			header("Location:$cachedResponse");
 				
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 
 		$uiconf_id = $this->getRequestParameter('uiconf_id');
 		if(!$uiconf_id)
 			$uiconf_id = $widget->getUiConfId();
 		if(!$uiconf_id)
-			KExternalErrors::dieError(KExternalErrors::MISSING_PARAMETER, 'uiconf_id');
+			VExternalErrors::dieError(VExternalErrors::MISSING_PARAMETER, 'uiconf_id');
 			
 		$partner_host = myPartnerUtils::getHost($partner_id);
 		$partner_cdnHost = myPartnerUtils::getCdnHost($partner_id);
 
 		$uiConf = uiConfPeer::retrieveByPK($uiconf_id);
 		if(!$uiConf)
-			KExternalErrors::dieError(KExternalErrors::UI_CONF_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::UI_CONF_NOT_FOUND);
 			
 		$partner_host = myPartnerUtils::getHost($partner_id);
 		$partner_cdnHost = myPartnerUtils::getCdnHost($partner_id);
 		
-		$html5_version = kConf::get('html5_version');
+		$html5_version = vConf::get('html5_version');
 
 		$use_cdn = $uiConf->getUseCdn();
 		$host = $use_cdn ?  $partner_cdnHost : $partner_host;
@@ -142,7 +142,7 @@ class embedIframeAction extends sfAction
 		if($ui_conf_html5_url)
 		{
 			$url = str_replace(array('mwEmbedLoader.php', '{latest}'), array('mwEmbedFrame.php', $html5_version), $ui_conf_html5_url);
-			if (!kString::beginsWith($ui_conf_html5_url , "http")) // absolute URL
+			if (!vString::beginsWith($ui_conf_html5_url , "http")) // absolute URL
 				$url = $host . $url;
 		}
 		else
@@ -159,7 +159,7 @@ class embedIframeAction extends sfAction
 		if ($allowCache)
 			$cache->put($requestKey, $url);
 
-		KExternalErrors::terminateDispatch();
+		VExternalErrors::terminateDispatch();
 		$this->redirect($url);
 	}
 }

@@ -21,7 +21,7 @@
 		<tbody>
 			<?php foreach($this->paginator as $user): ?>
 			<tr class="<?php echo $this->cycle(array('odd', 'even'))->next(); ?>">
-				<td><?php echo $this->enumTranslate('Kaltura_Client_Enum_UserRoleStatus', $user->status); ?></td>
+				<td><?php echo $this->enumTranslate('Vidiun_Client_Enum_UserRoleStatus', $user->status); ?></td>
 				<td><?php echo $user->id; ?></td>
 				<td><?php echo $user->name; ?></td>
 				<td><?php echo $user->description; ?></td>

@@ -24,7 +24,7 @@ class cloneroughcutAction extends defPartnerservices2Action
 					),
 				"errors" => array (
 					APIErrors::INVALID_ENTRY_ID,
-					APIErrors::KSHOW_CLONE_FAILED ,
+					APIErrors::VSHOW_CLONE_FAILED ,
 				)
 			); 
 	}
@@ -34,11 +34,11 @@ class cloneroughcutAction extends defPartnerservices2Action
 		return self::REQUIED_TICKET_ADMIN;
 	}
 
-	// check to see if already exists in the system = ask to fetch the puser & the kuser
-	// don't ask for  KUSER_DATA_KUSER_DATA - because then we won't tell the difference between a missing kuser and a missing puser_kuser
-	public function needKuserFromPuser ( )
+	// check to see if already exists in the system = ask to fetch the puser & the vuser
+	// don't ask for  VUSER_DATA_VUSER_DATA - because then we won't tell the difference between a missing vuser and a missing puser_vuser
+	public function needVuserFromPuser ( )
 	{
-		return self::KUSER_DATA_KUSER_ID_ONLY;
+		return self::VUSER_DATA_VUSER_ID_ONLY;
 	}
 
 	protected function addUserOnDemand ( )
@@ -46,7 +46,7 @@ class cloneroughcutAction extends defPartnerservices2Action
 		return self::CREATE_USER_FROM_PARTNER_SETTINGS;
 	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
 		$entry_id = $this->getPM ( "entry_id" );
 		$detailed = $this->getP ( "detailed" , false );
@@ -63,24 +63,24 @@ class cloneroughcutAction extends defPartnerservices2Action
 		}
 		else
 		{
-			$kshow_id = $entry->getKshowId();
-			$kshow = $entry->getKshow();
+			$vshow_id = $entry->getVshowId();
+			$vshow = $entry->getVshow();
 		
-			if ( ! $kshow )
+			if ( ! $vshow )
 			{
-				$this->addError ( APIErrors::INVALID_KSHOW_ID , $kshow_id );
+				$this->addError ( APIErrors::INVALID_VSHOW_ID , $vshow_id );
 			}
 			else
 			{
-				$newKshow = myKshowUtils::shalowCloneById( $kshow_id , $puser_kuser->getKuserId() );
+				$newVshow = myVshowUtils::shalowCloneById( $vshow_id , $puser_vuser->getVuserId() );
 				
-				if (!$newKshow)
+				if (!$newVshow)
 				{
-					$this->addError ( APIErrors::KSHOW_CLONE_FAILED , $kshow_id );
+					$this->addError ( APIErrors::VSHOW_CLONE_FAILED , $vshow_id );
 				}
 				else
 				{
-					$newEntry = $newKshow->getShowEntry();
+					$newEntry = $newVshow->getShowEntry();
 					
 					$level = ( $detailed ? objectWrapperBase::DETAIL_LEVEL_DETAILED : objectWrapperBase::DETAIL_LEVEL_REGULAR );
 					$wrapper = objectWrapperBase::getWrapperClass( $newEntry , $level );

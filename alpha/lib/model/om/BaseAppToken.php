@@ -104,10 +104,10 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 	protected $custom_data;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -385,13 +385,13 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -795,27 +795,27 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 	} // setCustomData()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     AppToken The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[AppTokenPeer::KUSER_ID]))
-			$this->oldColumnsValues[AppTokenPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[AppTokenPeer::VUSER_ID]))
+			$this->oldColumnsValues[AppTokenPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = AppTokenPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = AppTokenPeer::VUSER_ID;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
@@ -866,7 +866,7 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 			$this->session_privileges = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
 			$this->token = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
 			$this->custom_data = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
-			$this->kuser_id = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
+			$this->vuser_id = ($row[$startcol + 14] !== null) ? (int) $row[$startcol + 14] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -1019,13 +1019,13 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 				return 0;
 			}
 			
-			for ($retries = 1; $retries < KalturaPDO::SAVE_MAX_RETRIES; $retries++)
+			for ($retries = 1; $retries < VidiunPDO::SAVE_MAX_RETRIES; $retries++)
 			{
                $affectedRows = $this->doSave($con);
                 if ($affectedRows || !$this->isColumnModified(AppTokenPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug("was unable to save! retrying for the $retries time");
+                VidiunLog::debug("was unable to save! retrying for the $retries time");
                 $criteria = $this->buildPkeyCriteria();
 				$criteria->addSelectColumn(AppTokenPeer::CUSTOM_DATA);
                 $stmt = BasePeer::doSelect($criteria, $con);
@@ -1182,7 +1182,7 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1207,12 +1207,12 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1230,10 +1230,10 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1434,7 +1434,7 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 				return $this->getCustomData();
 				break;
 			case 14:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			default:
 				return null;
@@ -1471,7 +1471,7 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 			$keys[11] => $this->getSessionPrivileges(),
 			$keys[12] => $this->getToken(),
 			$keys[13] => $this->getCustomData(),
-			$keys[14] => $this->getKuserId(),
+			$keys[14] => $this->getVuserId(),
 		);
 		return $result;
 	}
@@ -1546,7 +1546,7 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 				$this->setCustomData($value);
 				break;
 			case 14:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 		} // switch()
 	}
@@ -1586,7 +1586,7 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[11], $arr)) $this->setSessionPrivileges($arr[$keys[11]]);
 		if (array_key_exists($keys[12], $arr)) $this->setToken($arr[$keys[12]]);
 		if (array_key_exists($keys[13], $arr)) $this->setCustomData($arr[$keys[13]]);
-		if (array_key_exists($keys[14], $arr)) $this->setKuserId($arr[$keys[14]]);
+		if (array_key_exists($keys[14], $arr)) $this->setVuserId($arr[$keys[14]]);
 	}
 
 	/**
@@ -1612,7 +1612,7 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(AppTokenPeer::SESSION_PRIVILEGES)) $criteria->add(AppTokenPeer::SESSION_PRIVILEGES, $this->session_privileges);
 		if ($this->isColumnModified(AppTokenPeer::TOKEN)) $criteria->add(AppTokenPeer::TOKEN, $this->token);
 		if ($this->isColumnModified(AppTokenPeer::CUSTOM_DATA)) $criteria->add(AppTokenPeer::CUSTOM_DATA, $this->custom_data);
-		if ($this->isColumnModified(AppTokenPeer::KUSER_ID)) $criteria->add(AppTokenPeer::KUSER_ID, $this->kuser_id);
+		if ($this->isColumnModified(AppTokenPeer::VUSER_ID)) $criteria->add(AppTokenPeer::VUSER_ID, $this->vuser_id);
 
 		return $criteria;
 	}
@@ -1717,7 +1717,7 @@ abstract class BaseAppToken extends BaseObject  implements Persistent {
 
 		$copyObj->setCustomData($this->custom_data);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 
 		$copyObj->setNew(true);

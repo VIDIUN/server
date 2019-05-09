@@ -3,10 +3,10 @@
  * @package plugins.uverseClickToOrderDistribution
  * @subpackage lib
  */
-class kUverseClickToOrderEventConsumer implements kBatchJobStatusEventConsumer
+class vUverseClickToOrderEventConsumer implements vBatchJobStatusEventConsumer
 {
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -34,10 +34,10 @@ class kUverseClickToOrderEventConsumer implements kBatchJobStatusEventConsumer
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
 		$data = $dbBatchJob->getData();
-		if (!$data instanceof kDistributionJobData)
+		if (!$data instanceof vDistributionJobData)
 			return true;
 			
-		$uverseClickToOrderCoreValueType = kPluginableEnumsManager::apiToCore('DistributionProviderType', UverseClickToOrderDistributionPlugin::getApiValue(UverseClickToOrderDistributionProviderType::UVERSE_CLICK_TO_ORDER));																																								
+		$uverseClickToOrderCoreValueType = vPluginableEnumsManager::apiToCore('DistributionProviderType', UverseClickToOrderDistributionPlugin::getApiValue(UverseClickToOrderDistributionProviderType::UVERSE_CLICK_TO_ORDER));																																								
 		if ($data->getProviderType() != $uverseClickToOrderCoreValueType)
 			return true;
 			
@@ -54,7 +54,7 @@ class kUverseClickToOrderEventConsumer implements kBatchJobStatusEventConsumer
 		);
 		
 		if (in_array($dbBatchJob->getJobType(), $jobTypesToFinish))
-			kJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
+			vJobsManager::updateBatchJob($dbBatchJob, BatchJob::BATCHJOB_STATUS_FINISHED);
 		
 		return true;
 	}

@@ -1,12 +1,12 @@
 <?php
 
-require_once(dirname(__FILE__) . '/kInfraBaseCacheWrapper.php');
+require_once(dirname(__FILE__) . '/vInfraBaseCacheWrapper.php');
 
 /**
  * @package infra
  * @subpackage cache
  */
-class kInfraFileSystemCacheWrapper extends kInfraBaseCacheWrapper
+class vInfraFileSystemCacheWrapper extends vInfraBaseCacheWrapper
 {
 	const EXPIRY_SUFFIX = '__expiry';
 
@@ -16,7 +16,7 @@ class kInfraFileSystemCacheWrapper extends kInfraBaseCacheWrapper
 	protected $supportExpiry;
 
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::init()
+	 * @see vBaseCacheWrapper::init()
 	 */
 	protected function doInit($config)
 	{		
@@ -68,7 +68,7 @@ class kInfraFileSystemCacheWrapper extends kInfraBaseCacheWrapper
 	}
 		
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::get()
+	 * @see vBaseCacheWrapper::get()
 	 */
 	protected function doGet($key)
 	{
@@ -98,7 +98,7 @@ class kInfraFileSystemCacheWrapper extends kInfraBaseCacheWrapper
 	}
 		
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::set()
+	 * @see vBaseCacheWrapper::set()
 	 */
 	protected function doSet($key, $var, $expiry = 0)
 	{
@@ -117,7 +117,7 @@ class kInfraFileSystemCacheWrapper extends kInfraBaseCacheWrapper
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::add()
+	 * @see vBaseCacheWrapper::add()
 	 */
 	protected function doAdd($key, $var, $expiry = 0)
 	{
@@ -125,7 +125,7 @@ class kInfraFileSystemCacheWrapper extends kInfraBaseCacheWrapper
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBaseCacheWrapper::delete()
+	 * @see vBaseCacheWrapper::delete()
 	 */
 	protected function doDelete($key)
 	{

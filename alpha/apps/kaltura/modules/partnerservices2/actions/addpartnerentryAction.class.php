@@ -16,10 +16,10 @@ class addpartnerentryAction extends addentryAction
         return
             array(
                 "display_name" => "addPartnerEntry",
-                "desc" => "Add entry to a kshow - the entry will belong to the partner NOT a user" ,
+                "desc" => "Add entry to a vshow - the entry will belong to the partner NOT a user" ,
                 "in" => array(
                     "mandatory" => array(
-                        "kshow_id" => array("type" => "string", "desc" => "Add the entry to thie kshow"),
+                        "vshow_id" => array("type" => "string", "desc" => "Add the entry to thie vshow"),
                         "entry" => array("type" => "entry", "desc" => "Description of entry object"),
                         // TODO: HOW TO DESCRIBE MULTIPLE ENTRIES?
             /*
@@ -37,14 +37,14 @@ class addpartnerentryAction extends addentryAction
         */
                         ) ,
                     "optional" => array (
-                        "uid" => array("type" => "string", "desc" => "The user id of the partner. Is exists, the ks will be generated for this user and "),
+                        "uid" => array("type" => "string", "desc" => "The user id of the partner. Is exists, the vs will be generated for this user and "),
                         )
                     ),
                 "out" => array (
-                    "ks" => array("type" => "string", "desc" => "Kaltura Session - a token used as an input for the rest of the services") ,
+                    "vs" => array("type" => "string", "desc" => "Vidiun Session - a token used as an input for the rest of the services") ,
                     ),
                 "errors" => array (
-                    APIErrors::INVALID_KSHOW_ID,
+                    APIErrors::INVALID_VSHOW_ID,
                     APIErrors::INVALID_ENTRY_ID,
                     APIErrors::NO_ENTRIES_ADDED,
                     APIErrors::UNKNOWN_MEDIA_SOURCE,

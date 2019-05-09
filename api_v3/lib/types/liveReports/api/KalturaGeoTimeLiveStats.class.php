@@ -4,21 +4,21 @@
  * @package api
  * @subpackage objects
  */
-class KalturaGeoTimeLiveStats extends KalturaEntryLiveStats
+class VidiunGeoTimeLiveStats extends VidiunEntryLiveStats
 {	
 	/**
-	 * @var KalturaCoordinate
+	 * @var VidiunCoordinate
 	 **/
 	public $city;
 	
 	/**
-	 * @var KalturaCoordinate
+	 * @var VidiunCoordinate
 	 **/
 	public $country;
 	
 	public function getWSObject() {
 		$obj = new WSGeoTimeLiveStats();
-		$obj->fromKalturaObject($this);
+		$obj->fromVidiunObject($this);
 		return $obj;
 	}
 }

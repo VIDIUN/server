@@ -2,14 +2,14 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaRule instead
+ * @deprecated use VidiunRule instead
  */
-class KalturaIpAddressRestriction extends KalturaBaseRestriction 
+class VidiunIpAddressRestriction extends VidiunBaseRestriction 
 {
 	/**
 	 * Ip address restriction type (Allow or deny)
 	 * 
-	 * @var KalturaIpAddressRestrictionType
+	 * @var VidiunIpAddressRestrictionType
 	 */
 	public $ipAddressRestrictionType; 
 	
@@ -32,10 +32,10 @@ class KalturaIpAddressRestriction extends KalturaBaseRestriction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseRestriction::toRule()
+	 * @see VidiunBaseRestriction::toRule()
 	 */
-	public function toRule(KalturaRestrictionArray $restrictions)
+	public function toRule(VidiunRestrictionArray $restrictions)
 	{
-		return $this->toObject(new kAccessControlIpAddressRestriction());
+		return $this->toObject(new vAccessControlIpAddressRestriction());
 	}
 }

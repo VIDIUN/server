@@ -3,7 +3,7 @@
  * @package plugins.transcript
  * @subpackage lib.enum
  */
-class TranscriptAssetType implements IKalturaPluginEnum, assetType
+class TranscriptAssetType implements IVidiunPluginEnum, assetType
 {
 	const TRANSCRIPT = 'Transcript';
 	

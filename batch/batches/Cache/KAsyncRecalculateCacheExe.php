@@ -1,12 +1,12 @@
 <?php
 /**
- * Executes the KAsyncRecalculateCache
+ * Executes the VAsyncRecalculateCache
  * 
  * @package Scheduler
  * @subpackage RecalculateCache
  */
 require_once(__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncRecalculateCache();
+$instance = new VAsyncRecalculateCache();
 $instance->run(); 
 $instance->done();

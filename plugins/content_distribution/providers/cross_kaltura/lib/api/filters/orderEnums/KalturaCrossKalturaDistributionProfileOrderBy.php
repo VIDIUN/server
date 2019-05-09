@@ -1,8 +1,8 @@
 <?php
 /**
- * @package plugins.crossKalturaDistribution
+ * @package plugins.crossVidiunDistribution
  * @subpackage api.filters.enum
  */
-class KalturaCrossKalturaDistributionProfileOrderBy extends KalturaConfigurableDistributionProfileOrderBy
+class VidiunCrossVidiunDistributionProfileOrderBy extends VidiunConfigurableDistributionProfileOrderBy
 {
 }

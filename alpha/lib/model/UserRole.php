@@ -58,9 +58,9 @@ class UserRole extends BaseUserRole implements IRelatedObject
 		$permissionNames = parent::getPermissionNames();
 		$permissionNames = array_map('trim', explode(',', $permissionNames));
 		
-		$currentPartnerId = kCurrentContext::$ks_partner_id;
+		$currentPartnerId = vCurrentContext::$vs_partner_id;
 		if (is_null($currentPartnerId) || $currentPartnerId === '') {
-			$currentPartnerId = kCurrentContext::$partner_id;
+			$currentPartnerId = vCurrentContext::$partner_id;
 		}
 		
 		// translate * to permission names of all permissions valid for partner
@@ -85,10 +85,10 @@ class UserRole extends BaseUserRole implements IRelatedObject
 	public function setAsDeleted()
 	{
 		// check if role is being used by some user
-		$lookups = $this->getKuserToUserRolesJoinkuser();
+		$lookups = $this->getVuserToUserRolesJoinvuser();
 		foreach ($lookups as $lookup) {
-			if ($lookup->getKuser()->getStatus() != KuserStatus::DELETED) {
-				throw new kPermissionException('Cannot delete role id ['.$this->getId().'] used by user id ['.$lookup->getKuser()->getPuserId().']', kPermissionException::ROLE_IS_BEING_USED);
+			if ($lookup->getVuser()->getStatus() != VuserStatus::DELETED) {
+				throw new vPermissionException('Cannot delete role id ['.$this->getId().'] used by user id ['.$lookup->getVuser()->getPuserId().']', vPermissionException::ROLE_IS_BEING_USED);
 			}
 		}
 				

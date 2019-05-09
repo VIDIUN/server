@@ -3,7 +3,7 @@
  * @package plugins.attUverseDistribution
  * @subpackage lib
  */
-class AttUverseDistributionProviderType implements IKalturaPluginEnum, DistributionProviderType
+class AttUverseDistributionProviderType implements IVidiunPluginEnum, DistributionProviderType
 {
 	const ATT_UVERSE = 'ATT_UVERSE';
 	

@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage Admin
  */
-class ReachProfileConfigureAction extends KalturaApplicationPlugin
+class ReachProfileConfigureAction extends VidiunApplicationPlugin
 {
 	/**
 	 * @return string - absolute file path of the phtml template
@@ -33,13 +33,13 @@ class ReachProfileConfigureAction extends KalturaApplicationPlugin
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			$action->view->errMessage = $e->getMessage();
 			if ($form)
 			{
 				$formData = $action->getRequest()->getPost();
 				$form->populate($formData);
-				$reachProfile = $form->getObject('Kaltura_Client_Reach_Type_ReachProfile', $formData, false, true);
+				$reachProfile = $form->getObject('Vidiun_Client_Reach_Type_ReachProfile', $formData, false, true);
 			}
 		}
 
@@ -56,7 +56,7 @@ class ReachProfileConfigureAction extends KalturaApplicationPlugin
 	 */
 	protected function handleExistingReachProfile(Zend_Controller_Action $action, $reachProfileId, $partnerId)
 	{
-		$reachPluginClient = Kaltura_Client_Reach_Plugin::get($this->client);
+		$reachPluginClient = Vidiun_Client_Reach_Plugin::get($this->client);
 		$reachProfile = $reachPluginClient->reachProfile->get($reachProfileId);
 		$creditHandlerClass = get_class($reachProfile->credit);
 		$form = $this->initForm($action, $partnerId, $reachProfileId, $creditHandlerClass);
@@ -101,10 +101,10 @@ class ReachProfileConfigureAction extends KalturaApplicationPlugin
 	 */
 	protected function handlePost(Zend_Controller_Action $action, $form, $formData, $reachProfileId = null)
 	{
-		$reachProfile = $form->getObject('Kaltura_Client_Reach_Type_ReachProfile', $formData, false, true);
+		$reachProfile = $form->getObject('Vidiun_Client_Reach_Type_ReachProfile', $formData, false, true);
 		$form->populate($formData);
 		$form->resetUnUpdatebleAttributes($reachProfile);
-		$reachPluginClient = Kaltura_Client_Reach_Plugin::get($this->client);
+		$reachPluginClient = Vidiun_Client_Reach_Plugin::get($this->client);
 		if ($reachProfileId)
 			$reachProfile = $reachPluginClient->reachProfile->update($reachProfileId, $reachProfile);
 		else
@@ -121,10 +121,10 @@ class ReachProfileConfigureAction extends KalturaApplicationPlugin
 	 */
 	protected function handleExistingPost(Zend_Controller_Action $action, $form, $formData, $originalReachProfile = null)
 	{
-		$reachProfile = $form->getObject('Kaltura_Client_Reach_Type_ReachProfile', $formData, false, true);
+		$reachProfile = $form->getObject('Vidiun_Client_Reach_Type_ReachProfile', $formData, false, true);
 		$form->populate($formData);
 		$form->resetUnUpdatebleAttributes($reachProfile);
-		$reachPluginClient = Kaltura_Client_Reach_Plugin::get($this->client);
+		$reachPluginClient = Vidiun_Client_Reach_Plugin::get($this->client);
 		if ($originalReachProfile)
 		{
 			$this->filterRules($originalReachProfile, $reachProfile);
@@ -223,13 +223,13 @@ class ReachProfileConfigureAction extends KalturaApplicationPlugin
 		{
 			case 'Null':
 				return new Form_ReachProfileNullCredit();
-			case 'Kaltura_Client_Reach_Type_VendorCredit':
+			case 'Vidiun_Client_Reach_Type_VendorCredit':
 				return new Form_ReachProfileCredit();
-			case 'Kaltura_Client_Reach_Type_UnlimitedVendorCredit':
+			case 'Vidiun_Client_Reach_Type_UnlimitedVendorCredit':
 				return new Form_ReachProfileUnlimitedCredit();
-			case 'Kaltura_Client_Reach_Type_ReoccurringVendorCredit':
+			case 'Vidiun_Client_Reach_Type_ReoccurringVendorCredit':
 				return new Form_ReachProfileRecurringCredit();
-			case 'Kaltura_Client_Reach_Type_TimeRangeVendorCredit':
+			case 'Vidiun_Client_Reach_Type_TimeRangeVendorCredit':
 				return new Form_ReachProfileTimeFramedCredit();
 			default:
 				return new Form_ReachProfileNullCredit();
@@ -253,10 +253,10 @@ class ReachProfileConfigureAction extends KalturaApplicationPlugin
 	{
 		$credits = array();
 		$credits['Null'] = $action->view->translate('Choose Credit Type');
-		$credits['Kaltura_Client_Reach_Type_VendorCredit'] = $action->view->translate('Kaltura_Client_Reach_Type_VendorCredit');
-		$credits['Kaltura_Client_Reach_Type_UnlimitedVendorCredit'] = $action->view->translate('Kaltura_Client_Reach_Type_UnlimitedVendorCredit');
-		$credits['Kaltura_Client_Reach_Type_ReoccurringVendorCredit'] = $action->view->translate('Kaltura_Client_Reach_Type_ReoccurringVendorCredit');
-		$credits['Kaltura_Client_Reach_Type_TimeRangeVendorCredit'] = $action->view->translate('Kaltura_Client_Reach_Type_TimeRangeVendorCredit');
+		$credits['Vidiun_Client_Reach_Type_VendorCredit'] = $action->view->translate('Vidiun_Client_Reach_Type_VendorCredit');
+		$credits['Vidiun_Client_Reach_Type_UnlimitedVendorCredit'] = $action->view->translate('Vidiun_Client_Reach_Type_UnlimitedVendorCredit');
+		$credits['Vidiun_Client_Reach_Type_ReoccurringVendorCredit'] = $action->view->translate('Vidiun_Client_Reach_Type_ReoccurringVendorCredit');
+		$credits['Vidiun_Client_Reach_Type_TimeRangeVendorCredit'] = $action->view->translate('Vidiun_Client_Reach_Type_TimeRangeVendorCredit');
 
 		return $credits;
 	}

@@ -4,7 +4,7 @@
  * @package plugins.fairplay
  * @subpackage api.objects
  */
-class KalturaFairplayEntryContextPluginData extends KalturaPluginData{
+class VidiunFairplayEntryContextPluginData extends VidiunPluginData{
 
 	/**
 	 * For fairplay (and maybe in the future other drm providers) we need to return a public certificate to encrypt

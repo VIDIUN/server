@@ -1,16 +1,16 @@
 <?php
 /**
  * Will be incharge of 
- * 1. envoking one of the kConversionServers by setting kConversionCommand in the correct place 
+ * 1. envoking one of the vConversionServers by setting vConversionCommand in the correct place 
  * 	on disk in a specific directory or in the DB to be fetched by a direct query or dedicated service (phase 2).
- * 2. fetching the kConversionResult from the server (depending on the server's command-result mechanism).
+ * 2. fetching the vConversionResult from the server (depending on the server's command-result mechanism).
  * Each Client can be triggered by different events in the system and update status of objects accordingly.
  * 
  * @package Core
  * @subpackage Conversion
  * @deprecated
  */
-class kConversionClientBase extends myBatchBase
+class vConversionClientBase extends myBatchBase
 {
 	public $in_path ;//, $out_path;
 	protected $server_cmd_path , $server_res_path ;
@@ -20,7 +20,7 @@ class kConversionClientBase extends myBatchBase
 	protected $mode ; 
 	
 	/**
-	 * @var kConversionCommand
+	 * @var vConversionCommand
 	 */
 	protected $conv_cmd;
 
@@ -35,11 +35,11 @@ class kConversionClientBase extends myBatchBase
 		$this->server_cmd_path = realpath($server_cmd_path);	
 		$this->server_res_path = realpath($server_res_path);
 		$this->commercial_server_cmd_path = realpath ( $commercial_server_cmd_path );
-		KalturaLog::debug ( "------------------- kConversionClient [$mode]----------------------");
-		KalturaLog::debug ( "--- in_path: [" . $this->in_path . "] ---" );
-		KalturaLog::debug ( "--- server_cmd_path: [" . $this->server_cmd_path . "] ---" );
-		KalturaLog::debug ( "--- server_res_path: [" . $this->server_res_path . "] ---" );
-		KalturaLog::debug ( "--- commercial_server_cmd_path: [" . $this->commercial_server_cmd_path . "] ---" );
+		VidiunLog::debug ( "------------------- vConversionClient [$mode]----------------------");
+		VidiunLog::debug ( "--- in_path: [" . $this->in_path . "] ---" );
+		VidiunLog::debug ( "--- server_cmd_path: [" . $this->server_cmd_path . "] ---" );
+		VidiunLog::debug ( "--- server_res_path: [" . $this->server_res_path . "] ---" );
+		VidiunLog::debug ( "--- commercial_server_cmd_path: [" . $this->commercial_server_cmd_path . "] ---" );
 		
 		$this->mode = $mode;
 //echo "<br>".__METHOD__ .":[$in_path][$server_cmd_path][$server_res_path]<br>"; 		
@@ -49,7 +49,7 @@ class kConversionClientBase extends myBatchBase
 	// TODO - this will determine if flv + bypass transcoding...
 	public function createConversionCommandFromConverionProfile ( $source_file , $target_file , $conv_profile , $entry = null  )
 	{
-		$conv_cmd = new kConversionCommand();
+		$conv_cmd = new vConversionCommand();
 		$conv_cmd->source_file = $source_file;
 		$conv_cmd->target_file = $target_file ;
 		$conv_cmd->result_path = $this->server_res_path; // in the command itself - set the result path
@@ -57,19 +57,19 @@ class kConversionClientBase extends myBatchBase
 
 		if ( $conv_profile == null )
 		{
-			throw new kConversionException ( "Cannot convert [$source_file] using a null ConversionProfile" );
+			throw new vConversionException ( "Cannot convert [$source_file] using a null ConversionProfile" );
 		}
 		
-		KalturaLog::debug ( "ConversionProfile: " . print_r ( $conv_profile , true ));
+		VidiunLog::debug ( "ConversionProfile: " . print_r ( $conv_profile , true ));
 		
 		$fallback_mode = array();
 		$conv_params_list_from_db = $conv_profile->getConversionParams( $fallback_mode );
 		
-		KalturaLog::debug ( "ConversionParams chosen by fallback_mode [" . print_r ( $fallback_mode, true ) . "]" );
+		VidiunLog::debug ( "ConversionParams chosen by fallback_mode [" . print_r ( $fallback_mode, true ) . "]" );
 		
 		if ( ! $conv_params_list_from_db || count ( $conv_params_list_from_db ) == 0 )
 		{
-			throw new kConversionException( "ConversionProfile [" .$conv_profile->getId() . "] has no ConversionParams");
+			throw new vConversionException( "ConversionProfile [" .$conv_profile->getId() . "] has no ConversionParams");
 		}
 		
 		$conv_cmd->commercial_transcoder = $conv_profile->getCommercialTranscoder();
@@ -85,9 +85,9 @@ class kConversionClientBase extends myBatchBase
 			// TODO - for now override properties from the ConvProf over the ConvParams...
 			// width , height & aspect ratio.
 			// wherever we'll have more properties to override, we should use a ConvParams object for the profile and merge the 2 objects 
-			// copy the relevan parameters to the kConversionParams from the ConversioParams 
+			// copy the relevan parameters to the vConversionParams from the ConversioParams 
 //			$conv_param_from_db  = new ConversionParams; 
-			$conv_params = new kConversionParams();
+			$conv_params = new vConversionParams();
 			$conv_params->enable = $conv_param_from_db->getEnabled();
 			if ( $entry )
 			{
@@ -118,7 +118,7 @@ class kConversionClientBase extends myBatchBase
 			$conv_params->audio_channels = $conv_param_from_db->getAudioChannels();			
 			// TODO - move this to the server, fillConversionParams requires ffmpeg to determine the dimensions of the video 
 			// for ascpet ration 
-//			kConversionHelper::fillConversionParams ( $source_file , $conv_params );
+//			vConversionHelper::fillConversionParams ( $source_file , $conv_params );
 			$conv_params_list[] = $conv_params;
 		}
 		if($conv_profile->getPartnerId() == 38050 || $conv_profile->getPartnerId() == 27121)

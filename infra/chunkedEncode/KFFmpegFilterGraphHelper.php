@@ -6,9 +6,9 @@
 ini_set("memory_limit","512M");
 	
 	/********************
-	 * KBaseFFmpegFilterObject
+	 * VBaseFFmpegFilterObject
 	 */
-	abstract class KBaseFFmpegFilterObject {
+	abstract class VBaseFFmpegFilterObject {
 		public $id = 0;
 		public $name = null;
 		public $labelIn = array();
@@ -24,9 +24,9 @@ ini_set("memory_limit","512M");
 	}
 
 	/********************
-	 * KBaseFFmpegFilterObject
+	 * VBaseFFmpegFilterObject
 	 */
-	class KFFmpegFilter extends KBaseFFmpegFilterObject{
+	class VFFmpegFilter extends VBaseFFmpegFilterObject{
 		public $delim 	= null;
 		
 		public $_chain = null;
@@ -44,7 +44,7 @@ ini_set("memory_limit","512M");
 		 */
 		public function Parse($filterStr)
 		{
-			KalturaLog::log("Filter:$filterStr");
+			VidiunLog::log("Filter:$filterStr");
 			$this->_string = $filterStr;
 
 			$paramStr = $filterStr;
@@ -54,7 +54,7 @@ ini_set("memory_limit","512M");
 			while($paramStr[0]=='[' && preg_match('~\[(.*?)]~', $paramStr, $matched)==1) {
 				$this->labelIn[] = $matched[1];
 				$paramStr = substr($paramStr, strlen($matched[0]));
-				KalturaLog::log("cleaned labelIn:$paramStr");
+				VidiunLog::log("cleaned labelIn:$paramStr");
 			}
 				/*
 				 * Retrieve leading labelout
@@ -62,14 +62,14 @@ ini_set("memory_limit","512M");
 			if(preg_match('~\[(.*?)]~', $paramStr, $matched)==1){
 				$this->labelOut = $matched[1];
 				$paramStr = str_replace($matched[0], "", $paramStr);
-				KalturaLog::log("cleaned labelOut:$paramStr");
+				VidiunLog::log("cleaned labelOut:$paramStr");
 			}		
 				/*
 				 * Retrieve filter name
 				 */
 			preg_match('/^([\w]+)/i', $paramStr, $matched); // get name
 			$paramStr = substr($paramStr, strlen($matched[0]));
-			KalturaLog::log("cleaned name:$paramStr");
+			VidiunLog::log("cleaned name:$paramStr");
 			if(!isset($this->name)){
 				$this->name = $matched[1];
 			}
@@ -77,14 +77,14 @@ ini_set("memory_limit","512M");
 				 * If no other data - get out
 				 */
 			if($paramStr[0]!='=') {
-				KalturaLog::log(print_r($this,1));
+				VidiunLog::log(print_r($this,1));
 				return true;
 			}
 				/*
 				 * Handle params's fileds
 				 */
 			$paramStr = substr($paramStr, 1);
-			KalturaLog::log("fields:$paramStr");
+			VidiunLog::log("fields:$paramStr");
 			$this->_paramStr = $paramStr;
 				/*
 				 * Scan through additional param field
@@ -94,7 +94,7 @@ ini_set("memory_limit","512M");
 				$fieldArr = explode($this->delim, $paramStr);
 				foreach($fieldArr as $fieldStr) {
 					$auxArr = explode('=',$fieldStr);
-					KalturaLog::log("Field:$fieldStr");
+					VidiunLog::log("Field:$fieldStr");
 						/*
 						 * Single filter param means that it is a 'compact'/non-named syntax,
 						 * therefore no need to scan further
@@ -118,9 +118,9 @@ ini_set("memory_limit","512M");
 	}
 	
 	/********************
-	 * KFFmpegFilterChain
+	 * VFFmpegFilterChain
 	 */
-	class KFFmpegFilterChain extends KBaseFFmpegFilterObject{
+	class VFFmpegFilterChain extends VBaseFFmpegFilterObject{
 		public $entities  = array();
 		
 		/********************
@@ -128,7 +128,7 @@ ini_set("memory_limit","512M");
 		 */
 		public function Parse($filterChainStr)
 		{
-			KalturaLog::log("FilterChain:$filterChainStr");
+			VidiunLog::log("FilterChain:$filterChainStr");
 			$filterArr = explode(',',$filterChainStr);
 			$this->_string = $filterChainStr;
 			$filters = array();
@@ -143,10 +143,10 @@ ini_set("memory_limit","512M");
 				else if(isset($auxFilterStr)){
 					$filterStr = $auxFilterStr.$filterStr;
 					$auxFilterStr = null;
-					$filter = new KFFmpegFilter("");
+					$filter = new VFFmpegFilter("");
 				}
 				else {
-					$filter = new KFFmpegFilter();
+					$filter = new VFFmpegFilter();
 				}
 				$filter->Parse($filterStr);
 				$filter->_chain = $this;
@@ -164,7 +164,7 @@ ini_set("memory_limit","512M");
 		 */
 		public function FindEntityByLabelIn($labelIn)
 		{
-			KalturaLog::log("labelIn:$labelIn");
+			VidiunLog::log("labelIn:$labelIn");
 			return $this->LoopEntities($this,'iterFuncLabelIn', $labelIn);
 		}
 		
@@ -173,7 +173,7 @@ ini_set("memory_limit","512M");
 		 */
 		protected function iterFuncLabelIn($entity, $labelIn)
 		{
-			KalturaLog::log("labelIn:$labelIn ".$this->_string);
+			VidiunLog::log("labelIn:$labelIn ".$this->_string);
 			foreach($entity->labelIn as $lbl) {
 				if($lbl==$labelIn) {
 					return $entity;
@@ -187,7 +187,7 @@ ini_set("memory_limit","512M");
 		 */
 		public function LoopEntities($obj, $funcName, $var)
 		{
-			KalturaLog::log("funcName:$funcName");
+			VidiunLog::log("funcName:$funcName");
 			foreach($this->entities as $entity) {
 				if(isset($obj))
 					$found = $obj->$funcName($entity, $var);
@@ -204,18 +204,18 @@ ini_set("memory_limit","512M");
 	/********************
 	 * 
 	 */
-	class KFFmpegFilterGraph extends KFFmpegFilterChain{
+	class VFFmpegFilterGraph extends VFFmpegFilterChain{
 		
 		/********************
 		 * Parse
 		 */
 		public function Parse($filterGraphStr)
 		{
-			KalturaLog::log("Graph:$filterGraphStr");
+			VidiunLog::log("Graph:$filterGraphStr");
 			$filterChainArr = explode(';',$filterGraphStr);
 			$this->_string = $filterGraphStr;
 			foreach($filterChainArr as $filterChainStr) {
-				$filterChain = new KFFmpegFilterChain();
+				$filterChain = new VFFmpegFilterChain();
 				$filterChain->Parse($filterChainStr);
 				$filterChain->id = count($this->entities);
 				$this->entities[] = $filterChain;
@@ -268,7 +268,7 @@ ini_set("memory_limit","512M");
 				$chainArr[] = $chainStr;
 			}
 			$str = implode(';',$chainArr);
-			KalturaLog::log("filterGraph string:$str");
+			VidiunLog::log("filterGraph string:$str");
 			return $str;
 		}
 		
@@ -353,7 +353,7 @@ ini_set("memory_limit","512M");
 		 */
 		public function LoopFilters($obj, $funcName, $var)
 		{
-			KalturaLog::log("funcName:$funcName");
+			VidiunLog::log("funcName:$funcName");
 			foreach($this->entities as $entity) {
 				$found = $entity->LoopEntities($obj, $funcName, $var);
 				if($found===null)
@@ -374,7 +374,7 @@ ini_set("memory_limit","512M");
 				$chn->entities[$idx] = clone $entity;
 			}
 			$obj->entities[] = $chn;
-			KalturaLog::log("Name:".$entity->name);
+			VidiunLog::log("Name:".$entity->name);
 			return null;
 		}
 

@@ -3,7 +3,7 @@
  * @package plugins.widevine
  * @subpackage api.objects
  */
-class KalturaWidevineFlavorParams extends KalturaFlavorParams 
+class VidiunWidevineFlavorParams extends VidiunFlavorParams 
 {
 	public function toObject($object = null, $skip = array())
 	{

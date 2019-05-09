@@ -2,12 +2,12 @@
 require_once(__DIR__ . "/../../../../batch/bootstrap.php");
 
 /**
- * Executes the KAsyncDistributeDelete
+ * Executes the VAsyncDistributeDelete
  * 
  * @package plugins.contentDistribution 
  * @subpackage Scheduler.Distribute
  */
 
-$instance = new KAsyncDistributeDelete();
+$instance = new VAsyncDistributeDelete();
 $instance->run(); 
 $instance->done();

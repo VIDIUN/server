@@ -38,7 +38,7 @@ class ScheduleResource extends BaseScheduleResource implements IRelatedObject {
 	public function preInsert(PropelPDO $con = null)
 	{
 		$this->setStatus(ScheduleResourceStatus::ACTIVE);
-		$this->setPartnerId(kCurrentContext::getCurrentPartnerId());
+		$this->setPartnerId(vCurrentContext::getCurrentPartnerId());
     	
 		return parent::preInsert($con);
 	}

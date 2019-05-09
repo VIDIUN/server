@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters.enum
  */
-class KalturaUserOrderBy extends KalturaStringEnum
+class VidiunUserOrderBy extends VidiunStringEnum
 {
 	const ID_ASC = "+id";
 	const ID_DESC = "-id";

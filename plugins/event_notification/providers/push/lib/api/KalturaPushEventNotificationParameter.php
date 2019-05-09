@@ -3,7 +3,7 @@
  * @package plugins.pushNotification
  * @subpackage api.objects
  */
-class KalturaPushEventNotificationParameter extends KalturaEventNotificationParameter
+class VidiunPushEventNotificationParameter extends VidiunEventNotificationParameter
 {
 	/**
 	 * @var string
@@ -13,7 +13,7 @@ class KalturaPushEventNotificationParameter extends KalturaEventNotificationPara
 	private static $map_between_objects = array('queueKeyToken');
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -21,12 +21,12 @@ class KalturaPushEventNotificationParameter extends KalturaEventNotificationPara
 	}
 
 	/* (non-PHPdoc)
-   * @see KalturaObject::toObject()
+   * @see VidiunObject::toObject()
    */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
 		if(is_null($dbObject))
-			$dbObject = new kPushEventNotificationParameter();
+			$dbObject = new vPushEventNotificationParameter();
 
 		return parent::toObject($dbObject, $propertiesToSkip);
 	}

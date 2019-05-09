@@ -1,47 +1,47 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../apps/kaltura/lib/request/kSessionBase.class.php');
+require_once(dirname(__FILE__) . '/../apps/vidiun/lib/request/vSessionBase.class.php');
 
 ini_set("memory_limit", "2048M");
 
 define('PS2_START_MARKER', '[sfWebRequest->loadParameters] INFO: {sfRequest} request parameters ');
-define('APIV3_START_MARKER', '[KalturaFrontController->run] DEBUG: Params [');
+define('APIV3_START_MARKER', '[VidiunFrontController->run] DEBUG: Params [');
 define('APIV3_GETFEED_MARKER', '[syndicationFeedRenderer] [global] DEBUG: getFeed Params [');
 
 define('DB_HOST_NAME', 'dbgoeshere');
 define('DB_USER_NAME', 'root');
 define('DB_PASSWORD', 'root');
 define('DB_PORT', 3306);
-define('DB_NAME','kaltura');
+define('DB_NAME','vidiun');
 
 define('IP_ADDRESS_SALT', '');
 
 $PS2_TESTED_XML_ACTIONS = array(
 		'extwidget.playmanifest',
-		'keditorservices.getmetadata',
-		'keditorservices.getentryinfo',
+		'veditorservices.getmetadata',
+		'veditorservices.getentryinfo',
 		'partnerservices2.executeplaylist',
 		'partnerservices2.getentries',
 		'partnerservices2.getallentries',
 		'partnerservices2.getentry',
 		'partnerservices2.getentryroughcuts',
-		'partnerservices2.getkshow',
+		'partnerservices2.getvshow',
 		'partnerservices2.getuiconf',
 		'partnerservices2.getwidget',
 		'partnerservices2.listentries',
-		'partnerservices2.listkshows',
+		'partnerservices2.listvshows',
 		'partnerservices2.listplaylists'
 		);
 
 $PS2_TESTED_BIN_ACTIONS = array(
 		'extwidget.serveflavor',
-		'extwidget.kwidget',
+		'extwidget.vwidget',
 		'extwidget.thumbnail',
 		'extwidget.download',
-		'keditorservices.flvclipper',
+		'veditorservices.flvclipper',
 		'extwidget.raw',
 		'extwidget.embediframejs',
-		'extwidget.embedplaykitjs'
+		'extwidget.embedpakhshkitjs'
 		);
 
 $APIV3_TESTED_SERVICES = array(
@@ -79,7 +79,7 @@ $APIV3_BLOCKED_ACTIONS = array(
 		'widevine_widevinedrm.getlicense',		// contains random
 		);
 
-$KS_PATTERNS = array('/\/ks\/([a-zA-Z0-9+_\-]+=*)/', '/&ks=([a-zA-Z0-9+\/_\-]+=*)/', '/\?ks=([a-zA-Z0-9+\/_\-]+=*)/', '/<ks>([a-zA-Z0-9+\/_\-]+=*)<\/ks>/');
+$VS_PATTERNS = array('/\/vs\/([a-zA-Z0-9+_\-]+=*)/', '/&vs=([a-zA-Z0-9+\/_\-]+=*)/', '/\?vs=([a-zA-Z0-9+\/_\-]+=*)/', '/<vs>([a-zA-Z0-9+\/_\-]+=*)<\/vs>/');
 
 // compare modes
 define('CM_XML', 0);
@@ -103,7 +103,7 @@ class PartnerSecretPool
 	{
 	    $this->link = mysqli_connect(DB_HOST_NAME, DB_USER_NAME, DB_PASSWORD, DB_NAME, DB_PORT)
 		or die('Error: Could not connect: ' . mysqli_connect_error() . "\n");
-		mysqli_select_db($this->link,DB_NAME) or die("Error: Could not select 'kaltura' database\n");
+		mysqli_select_db($this->link,DB_NAME) or die("Error: Could not select 'vidiun' database\n");
 	}
 
 	public function __destruct()
@@ -128,9 +128,9 @@ class PartnerSecretPool
 	}
 }
 
-class ks extends kSessionBase
+class vs extends vSessionBase
 {
-	protected function getKSVersionAndSecret($partnerId)
+	protected function getVSVersionAndSecret($partnerId)
 	{
 		global $partnerSecretPool;
 		/* @var $partnerSecretPool PartnerSecretPool */
@@ -142,20 +142,20 @@ class ks extends kSessionBase
 	}
 }
 
-function extendKsExpiry($ks)
+function extendVsExpiry($vs)
 {
 	global $partnerSecretPool;
 	/* @var $partnerSecretPool PartnerSecretPool */
 
-	$ksObj = new ks();
-	if (!$ksObj->parseKS($ks))
+	$vsObj = new vs();
+	if (!$vsObj->parseVS($vs))
 		return null;
 
-	$adminSecret = $partnerSecretPool->getPartnerSecret($ksObj->partner_id);
+	$adminSecret = $partnerSecretPool->getPartnerSecret($vsObj->partner_id);
 	if (!$adminSecret)
 		return null;
 
-	return kSessionBase::generateKsV1($adminSecret, $ksObj->user, $ksObj->type, $ksObj->partner_id, 86400, $ksObj->privileges, $ksObj->master_partner_id, $ksObj->additional_data);
+	return vSessionBase::generateVsV1($adminSecret, $vsObj->user, $vsObj->type, $vsObj->partner_id, 86400, $vsObj->privileges, $vsObj->master_partner_id, $vsObj->additional_data);
 }
 
 function print_r_reverse($in) {
@@ -219,7 +219,7 @@ function getSignedIpHeader($ipAddress)
 	$baseHeader = array($ipAddress, $curTime, $uniqId);
 	$headerHash = md5(implode(',', $baseHeader) . ',' . $salt);
 	$ipHeader = implode(',', $baseHeader) . ',' . $headerHash;
-	return array("X-KALTURA-REMOTE-ADDR: $ipHeader");
+	return array("X-VIDIUN-REMOTE-ADDR: $ipHeader");
 }
 
 function doCurl($url, $params = array(), $files = array(), $range = null, $requestHeaders = array())
@@ -360,26 +360,26 @@ function xmlToArray($xmlstring)
 	return $array;
 }
 
-function normalizeKS($value, $ks)
+function normalizeVS($value, $vs)
 {
-	$ksObj = new ks();
-	if (!$ksObj->parseKS($ks))
+	$vsObj = new vs();
+	if (!$vsObj->parseVS($vs))
 		return $value;
 
-	$ksFields = array(
-		$ksObj->partner_id,
-		$ksObj->partner_id,
+	$vsFields = array(
+		$vsObj->partner_id,
+		$vsObj->partner_id,
 		0,		// expiry
-		$ksObj->type,
+		$vsObj->type,
 		0,		// rand
-		$ksObj->user,
-		$ksObj->privileges,
-		$ksObj->master_partner_id,
-		$ksObj->additional_data,
+		$vsObj->user,
+		$vsObj->privileges,
+		$vsObj->master_partner_id,
+		$vsObj->additional_data,
 	);
 
-	$ksFields = implode(';', $ksFields);
-	return str_replace($ks, $ksFields, $value);
+	$vsFields = implode(';', $vsFields);
+	return str_replace($vs, $vsFields, $value);
 }
 
 function compareValues($newValue, $oldValue)
@@ -535,7 +535,7 @@ function compareArrays($resultNew, $resultOld, $path)
 
 function normalizeResultBuffer($result)
 {
-	global $serviceUrlNew, $serviceUrlOld, $KS_PATTERNS;
+	global $serviceUrlNew, $serviceUrlOld, $VS_PATTERNS;
 
 	$result = preg_replace('/<executionTime>[0-9\.]+<\/executionTime>/', '', $result);
 	$result = preg_replace('/<serverTime>[0-9\.]+<\/serverTime>/', '', $result);
@@ -544,7 +544,7 @@ function normalizeResultBuffer($result)
 	$result = preg_replace('/<total_time>[0-9\.]+<\/total_time>/', '', $result);
 	$result = preg_replace('/<server_time>[0-9\.]+<\/server_time>/', '', $result);
 	$result = preg_replace('/server_time="[0-9\.]+"/', '', $result);
-	$result = preg_replace('/kaltura_player_\d+/', 'KP', $result);
+	$result = preg_replace('/vidiun_player_\d+/', 'KP', $result);
 	$result = preg_replace('/&ts=[0-9\.]+&/', '&ts=0&', $result);
 
 	if (strlen($serviceUrlOld) < strlen($serviceUrlNew))		// this if is for case where one of the url is a prefix of the other
@@ -552,13 +552,13 @@ function normalizeResultBuffer($result)
 	else
 		$result = str_replace($serviceUrlOld, $serviceUrlNew, $result);
 
-	$patterns = $KS_PATTERNS;
+	$patterns = $VS_PATTERNS;
 	foreach ($patterns as $pattern)
 	{
 		preg_match_all($pattern, $result, $matches);
 		foreach ($matches[1] as $match)
 		{
-			$result = normalizeKS($result, $match);
+			$result = normalizeVS($result, $match);
 		}
 	}
 	return $result;
@@ -577,24 +577,24 @@ function countDifferences($buffer1, $buffer2)
 }
 
 
-define('KWIDGET_API_START', '<xml><result>');
-define('KWIDGET_API_END', '</result></xml>');
-define('KWIDGET_PARAMS_START', 'widgetId=');
+define('VWIDGET_API_START', '<xml><result>');
+define('VWIDGET_API_END', '</result></xml>');
+define('VWIDGET_PARAMS_START', 'widgetId=');
 
 function parseWidget($buffer)
 {
 	$uncomp = gzuncompress(substr($buffer, 8));
 
-	$apiResponseStart = strpos($uncomp, KWIDGET_API_START);
-	$apiResponseEnd = strrpos($uncomp, KWIDGET_API_END);
+	$apiResponseStart = strpos($uncomp, VWIDGET_API_START);
+	$apiResponseEnd = strrpos($uncomp, VWIDGET_API_END);
 	$apiResponse = null;
 	if ($apiResponseStart !== false && $apiResponseEnd !== false)
 	{
-		$apiResponse = substr($uncomp, $apiResponseStart, $apiResponseEnd + strlen(KWIDGET_API_END) - $apiResponseStart);
+		$apiResponse = substr($uncomp, $apiResponseStart, $apiResponseEnd + strlen(VWIDGET_API_END) - $apiResponseStart);
 		$uncomp = str_replace($apiResponse, '', $uncomp);
 	}
 
-	$paramsStart = strpos($uncomp, KWIDGET_PARAMS_START);
+	$paramsStart = strpos($uncomp, VWIDGET_PARAMS_START);
 	$params = null;
 	if ($paramsStart !== false)
 	{
@@ -649,7 +649,7 @@ function getRequestHash($fullActionName, $paramsForHash)
 {
 	foreach ($paramsForHash as $paramName => $paramValue)
 	{
-		preg_match('/^\d+\:ks$/', $paramName, $matches);
+		preg_match('/^\d+\:vs$/', $paramName, $matches);
 		if ($matches)
 		{
 			unset($paramsForHash[$paramName]);
@@ -658,8 +658,8 @@ function getRequestHash($fullActionName, $paramsForHash)
 	}
 
 	$paramsToUnset = array(
-		"ks",
-		"kalsig",
+		"vs",
+		"vidsig",
 		"clientTag",
 		"callback",
 		"sig",
@@ -720,7 +720,7 @@ function shouldProcessRequest($fullActionName, $parsedParams)
 	return 'yes';
 }
 
-function testAction($ipAddress, $fullActionName, $parsedParams, $uri, $postParams = array(), $compareMode = CM_XML, $kalcliCmd = '')
+function testAction($ipAddress, $fullActionName, $parsedParams, $uri, $postParams = array(), $compareMode = CM_XML, $vidcliCmd = '')
 {
 	global $serviceUrlOld, $serviceUrlNew;
 
@@ -810,14 +810,14 @@ function testAction($ipAddress, $fullActionName, $parsedParams, $uri, $postParam
 			if ($newTime > $oldTime * 3 && $newTime > 0.5)
 			{
 				$sig = '';
-				if (isset($parsedParams['kalsig']))
-					$sig = $parsedParams['kalsig'];
+				if (isset($parsedParams['vidsig']))
+					$sig = $parsedParams['vidsig'];
 				else if (isset($parsedParams['sig']))
 					$sig = $parsedParams['sig'];
-				else if (isset($parsedParams['ks']))
-					$sig = substr($parsedParams['ks'], 0, 20);
-				else if (isset($parsedParams['1:ks']))
-					$sig = substr($parsedParams['1:ks'], 0, 20);
+				else if (isset($parsedParams['vs']))
+					$sig = substr($parsedParams['vs'], 0, 20);
+				else if (isset($parsedParams['1:vs']))
+					$sig = substr($parsedParams['1:vs'], 0, 20);
 				else
 					$sig = print_r($parsedParams, true);
 
@@ -866,24 +866,24 @@ function testAction($ipAddress, $fullActionName, $parsedParams, $uri, $postParam
 	print "\tPostParams = ".var_export($postParams, true)."\n";
 	print "\tTestUrl = $serviceUrlNew$uri&".http_build_query($postParams)."\n";
 
-	if ($kalcliCmd)
+	if ($vidcliCmd)
 	{
-		if (is_array($kalcliCmd))
+		if (is_array($vidcliCmd))
 		{
 			if (is_array($badRequests))
 			{
 				// leave only the bad requests
 				$newCommands = array();
-				foreach ($kalcliCmd as $index => $curCommand)
+				foreach ($vidcliCmd as $index => $curCommand)
 				{
 					if (in_array($index, $badRequests))
 						$newCommands[] = $curCommand;
 				}
-				$kalcliCmd = $newCommands;
+				$vidcliCmd = $newCommands;
 			}
-			$kalcliCmd = implode("\n\t", $kalcliCmd);
+			$vidcliCmd = implode("\n\t", $vidcliCmd);
 		}
-		print "\tkalcli = {$kalcliCmd}\n";
+		print "\tvidcli = {$vidcliCmd}\n";
 	}
 
 	foreach ($errors as $path => $error)
@@ -912,28 +912,28 @@ function testAction($ipAddress, $fullActionName, $parsedParams, $uri, $postParam
 	}
 }
 
-function extendRequestKss(&$parsedParams)
+function extendRequestVss(&$parsedParams)
 {
-	if (array_key_exists('ks', $parsedParams))
+	if (array_key_exists('vs', $parsedParams))
 	{
-		$ks = $parsedParams['ks'];
-		$ks = extendKsExpiry($ks);
-		if (is_null($ks))
+		$vs = $parsedParams['vs'];
+		$vs = extendVsExpiry($vs);
+		if (is_null($vs))
 			return false;
-		$parsedParams['ks'] = $ks;
+		$parsedParams['vs'] = $vs;
 	}
 
 	for ($i = 1; ; $i++)
 	{
-		$ksKey = "{$i}:ks";
-		if (!array_key_exists($ksKey, $parsedParams))
+		$vsKey = "{$i}:vs";
+		if (!array_key_exists($vsKey, $parsedParams))
 			break;
 
-		$ks = $parsedParams[$ksKey];
-		$ks = extendKsExpiry($ks);
-		if (is_null($ks))
+		$vs = $parsedParams[$vsKey];
+		$vs = extendVsExpiry($vs);
+		if (is_null($vs))
 			return false;
-		$parsedParams[$ksKey] = $ks;
+		$parsedParams[$vsKey] = $vs;
 	}
 
 	return true;
@@ -990,9 +990,9 @@ function isActionApproved($fullActionName, $action)
 	return false;
 }
 
-function generateKalcliCommand($ipAddress, $service, $action, $parsedParams)
+function generateVidcliCommand($ipAddress, $service, $action, $parsedParams)
 {
-	$kalcliCmd = "kalcli -x -H`genipheader {$ipAddress}` {$service} {$action}";
+	$vidcliCmd = "vidcli -x -H`genipheader {$ipAddress}` {$service} {$action}";
 	foreach ($parsedParams as $key => $value)
 	{
 		if (in_array($key, array('action', 'service')))
@@ -1001,13 +1001,13 @@ function generateKalcliCommand($ipAddress, $service, $action, $parsedParams)
 		$curParam = "{$key}={$value}";
 		if (!preg_match('/^[a-zA-Z0-9\:_\-,=\.\/]+$/', $curParam))
 			if (strpos($curParam, "'") === false)
-				$kalcliCmd .= " '{$curParam}'";
+				$vidcliCmd .= " '{$curParam}'";
 			else
-				$kalcliCmd .= " \"{$curParam}\"";
+				$vidcliCmd .= " \"{$curParam}\"";
 		else
-			$kalcliCmd .= " {$curParam}";
+			$vidcliCmd .= " {$curParam}";
 	}
-	return $kalcliCmd;
+	return $vidcliCmd;
 }
 
 function processMultiRequest($ipAddress, $parsedParams)
@@ -1061,7 +1061,7 @@ function processMultiRequest($ipAddress, $parsedParams)
 		$fullActionName .= '/'.$curFullActionName;
 	}
 
-	if (!extendRequestKss($parsedParams))
+	if (!extendRequestVss($parsedParams))
 	{
 		return;
 	}
@@ -1080,16 +1080,16 @@ function processMultiRequest($ipAddress, $parsedParams)
 
 	$uri = "/api_v3/index.php?service=multirequest";
 
-	$kalcliCmds = array();
+	$vidcliCmds = array();
 	for ($reqIndex = 1; $reqIndex <= $maxIndex; $reqIndex++)
 	{
 		$curParams = $paramsByRequest[$reqIndex];
 		$service = $curParams['service'];
 		$action = $curParams['action'];
-		$kalcliCmds[] = generateKalcliCommand($ipAddress, $service, $action, array_merge($curParams, $commonParams));
+		$vidcliCmds[] = generateVidcliCommand($ipAddress, $service, $action, array_merge($curParams, $commonParams));
 	}
 
-	testAction($ipAddress, $fullActionName, $parsedParams, $uri, $parsedParams, CM_XML, $kalcliCmds);
+	testAction($ipAddress, $fullActionName, $parsedParams, $uri, $parsedParams, CM_XML, $vidcliCmds);
 }
 
 function processRequest($ipAddress, $parsedParams)
@@ -1126,7 +1126,7 @@ function processRequest($ipAddress, $parsedParams)
 
 	if (!isServiceApproved($service) ||
 		!isActionApproved($fullActionName, $action) ||
-		!extendRequestKss($parsedParams))
+		!extendRequestVss($parsedParams))
 	{
 		return;
 	}
@@ -1142,11 +1142,11 @@ function processRequest($ipAddress, $parsedParams)
 
 	ksort($parsedParams);
 
-	$kalcliCmd = generateKalcliCommand($ipAddress, $service, $action, $parsedParams);
+	$vidcliCmd = generateVidcliCommand($ipAddress, $service, $action, $parsedParams);
 
 	$uri = "/api_v3/index.php?service=$service&action=$action";
 	$compareMode = (beginsWith($action, 'serve') ? CM_BINARY : CM_XML);
-	testAction($ipAddress, $fullActionName, $parsedParams, $uri, $parsedParams, $compareMode, $kalcliCmd);
+	testAction($ipAddress, $fullActionName, $parsedParams, $uri, $parsedParams, $compareMode, $vidcliCmd);
 }
 
 function processFeedRequest($ipAddress, $parsedParams)
@@ -1155,7 +1155,7 @@ function processFeedRequest($ipAddress, $parsedParams)
 
 	if (!isServiceApproved('syndicationFeed') ||
 		!isActionApproved('syndicationFeed.execute', 'execute') ||
-		!extendRequestKss($parsedParams))
+		!extendRequestVss($parsedParams))
 	{
 		return;
 	}
@@ -1285,7 +1285,7 @@ function processPS2Request($ipAddress, $parsedParams)
 		return;
 	}
 
-	if (!extendRequestKss($parsedParams))
+	if (!extendRequestVss($parsedParams))
 	{
 		return;
 	}
@@ -1304,7 +1304,7 @@ function processPS2Request($ipAddress, $parsedParams)
 
 	if (in_array($fullActionName, $PS2_TESTED_XML_ACTIONS))
 		$compareMode = CM_XML;
-	else if ($fullActionName == 'extwidget.kwidget')
+	else if ($fullActionName == 'extwidget.vwidget')
 		$compareMode = CM_WIDGET;
 	else
 		$compareMode = CM_BINARY;
@@ -1351,7 +1351,7 @@ class LogProcessorUriList implements LogProcessor
 	{
 		$uri = trim($buffer);
 
-		// TODO: call extendRequestKss
+		// TODO: call extendRequestVss
 
 		$service = '';
 		if (preg_match('/service=([\w_]+)/', $uri, $matches))

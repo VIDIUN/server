@@ -24,10 +24,10 @@ class VendorAlignmentCatalogItem extends VendorCatalogItem
 	{
 		$taskVersion = parent::getTaskVersion($entryId, $jobData);
 		
-		if(!$jobData || !($jobData instanceof kAlignmentVendorTaskData))
+		if(!$jobData || !($jobData instanceof vIdignmentVendorTaskData))
 			return $taskVersion;
 		
-		/* @var $jobData kAlignmentVendorTaskData */
+		/* @var $jobData vIdignmentVendorTaskData */
 		$attachmentAsset = assetPeer::retrieveById($jobData->getTextTranscriptAssetId());
 		if(!$attachmentAsset)
 			return $taskVersion;

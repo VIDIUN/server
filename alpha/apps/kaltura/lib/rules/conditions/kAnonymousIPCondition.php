@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage model.data
  */
-class kAnonymousIPCondition extends kMatchCondition
+class vAnonymousIPCondition extends vMatchCondition
 {
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -18,9 +18,9 @@ class kAnonymousIPCondition extends kMatchCondition
 	 * The ip geo coder engine to be used
 	 * 
 	 * @var int of enum geoCoderType
-	 * TODO take the default from kConf for on-prem
+	 * TODO take the default from vConf for on-prem
 	 */
-	protected $geoCoderType = geoCoderType::KALTURA;
+	protected $geoCoderType = geoCoderType::VIDIUN;
 	
 	/**
 	 * @param int $geoCoderType of enum geoCoderType
@@ -39,21 +39,21 @@ class kAnonymousIPCondition extends kMatchCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::getFieldValue()
+	 * @see vCondition::getFieldValue()
 	 */
-	public function getFieldValue(kScope $scope)
+	public function getFieldValue(vScope $scope)
 	{
-		kApiCache::addExtraField(array("type" => kApiCache::ECF_ANONYMOUS_IP,
-			kApiCache::ECFD_GEO_CODER_TYPE => $this->getGeoCoderType()),
-			$this->getMatchType() == MatchConditionType::MATCH_ALL ? kApiCache::COND_MATCH_ALL : kApiCache::COND_MATCH, $this->getStringValues($scope));
+		vApiCache::addExtraField(array("type" => vApiCache::ECF_ANONYMOUS_IP,
+			vApiCache::ECFD_GEO_CODER_TYPE => $this->getGeoCoderType()),
+			$this->getMatchType() == MatchConditionType::MATCH_ALL ? vApiCache::COND_MATCH_ALL : vApiCache::COND_MATCH, $this->getStringValues($scope));
 		
 		$ip = $scope->getIp();
-		$ipGeo = kGeoCoderManager::getGeoCoder($this->getGeoCoderType());
+		$ipGeo = vGeoCoderManager::getGeoCoder($this->getGeoCoderType());
 		return $ipGeo->getAnonymousInfo($ip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::matches()
+	 * @see vMatchCondition::matches()
 	 */
 	protected function matches($field, $value)
 	{
@@ -61,7 +61,7 @@ class kAnonymousIPCondition extends kMatchCondition
 	}
 
 	/* (non-PHPdoc)
-	 * @see kMatchCondition::shouldFieldDisableCache()
+	 * @see vMatchCondition::shouldFieldDisableCache()
 	 */
 	public function shouldFieldDisableCache($scope)
 	{

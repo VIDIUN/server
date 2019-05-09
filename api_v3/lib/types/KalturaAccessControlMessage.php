@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAccessControlMessage extends KalturaObject{
+class VidiunAccessControlMessage extends VidiunObject{
 
 	/**
 	 * @var string

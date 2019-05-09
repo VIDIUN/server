@@ -16,16 +16,16 @@
 class ShortLinkPeer extends BaseShortLinkPeer {
 
 	/**
-	 * Retrieve all objects by kuser id
+	 * Retrieve all objects by vuser id
 	 *
-	 * @param      int $kuserId the kuser id.
+	 * @param      int $vuserId the vuser id.
 	 * @param      PropelPDO $con the connection to use
 	 * @return     array<ShortLink>
 	 */
-	public static function retrieveByKuserId($kuserId, $partnerId = null, PropelPDO $con = null)
+	public static function retrieveByVuserId($vuserId, $partnerId = null, PropelPDO $con = null)
 	{
 		$criteria = new Criteria();
-		$criteria->add(ShortLinkPeer::KUSER_ID, $kuserId);
+		$criteria->add(ShortLinkPeer::VUSER_ID, $vuserId);
 		if ($partnerId)
 			$criteria->add(ShortLinkPeer::PARTNER_ID, $partnerId);
 

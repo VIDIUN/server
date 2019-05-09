@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kLockInfoData 
+class vLockInfoData 
 {
 	protected $lockVersion = 0;
 	

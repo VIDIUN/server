@@ -3,6 +3,6 @@
  * @package plugins.document
  * @subpackage api.filters
  */
-class KalturaPdfFlavorParamsFilter extends KalturaPdfFlavorParamsBaseFilter
+class VidiunPdfFlavorParamsFilter extends VidiunPdfFlavorParamsBaseFilter
 {
 }

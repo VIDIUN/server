@@ -73,8 +73,8 @@ abstract class BaseAppTokenPeer {
 	/** the column name for the CUSTOM_DATA field */
 	const CUSTOM_DATA = 'app_token.CUSTOM_DATA';
 
-	/** the column name for the KUSER_ID field */
-	const KUSER_ID = 'app_token.KUSER_ID';
+	/** the column name for the VUSER_ID field */
+	const VUSER_ID = 'app_token.VUSER_ID';
 
 	/**
 	 * An identiy map to hold any loaded instances of AppToken objects.
@@ -92,10 +92,10 @@ abstract class BaseAppTokenPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'IntId', 'PartnerId', 'CreatedAt', 'UpdatedAt', 'DeletedAt', 'Status', 'Expiry', 'SessionType', 'SessionUserId', 'SessionDuration', 'SessionPrivileges', 'Token', 'CustomData', 'KuserId', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'intId', 'partnerId', 'createdAt', 'updatedAt', 'deletedAt', 'status', 'expiry', 'sessionType', 'sessionUserId', 'sessionDuration', 'sessionPrivileges', 'token', 'customData', 'kuserId', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::INT_ID, self::PARTNER_ID, self::CREATED_AT, self::UPDATED_AT, self::DELETED_AT, self::STATUS, self::EXPIRY, self::SESSION_TYPE, self::SESSION_USER_ID, self::SESSION_DURATION, self::SESSION_PRIVILEGES, self::TOKEN, self::CUSTOM_DATA, self::KUSER_ID, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'int_id', 'partner_id', 'created_at', 'updated_at', 'deleted_at', 'status', 'expiry', 'session_type', 'session_user_id', 'session_duration', 'session_privileges', 'token', 'custom_data', 'kuser_id', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'IntId', 'PartnerId', 'CreatedAt', 'UpdatedAt', 'DeletedAt', 'Status', 'Expiry', 'SessionType', 'SessionUserId', 'SessionDuration', 'SessionPrivileges', 'Token', 'CustomData', 'VuserId', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'intId', 'partnerId', 'createdAt', 'updatedAt', 'deletedAt', 'status', 'expiry', 'sessionType', 'sessionUserId', 'sessionDuration', 'sessionPrivileges', 'token', 'customData', 'vuserId', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::INT_ID, self::PARTNER_ID, self::CREATED_AT, self::UPDATED_AT, self::DELETED_AT, self::STATUS, self::EXPIRY, self::SESSION_TYPE, self::SESSION_USER_ID, self::SESSION_DURATION, self::SESSION_PRIVILEGES, self::TOKEN, self::CUSTOM_DATA, self::VUSER_ID, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'int_id', 'partner_id', 'created_at', 'updated_at', 'deleted_at', 'status', 'expiry', 'session_type', 'session_user_id', 'session_duration', 'session_privileges', 'token', 'custom_data', 'vuser_id', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
 	);
 
@@ -106,10 +106,10 @@ abstract class BaseAppTokenPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'IntId' => 1, 'PartnerId' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, 'DeletedAt' => 5, 'Status' => 6, 'Expiry' => 7, 'SessionType' => 8, 'SessionUserId' => 9, 'SessionDuration' => 10, 'SessionPrivileges' => 11, 'Token' => 12, 'CustomData' => 13, 'KuserId' => 14, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'intId' => 1, 'partnerId' => 2, 'createdAt' => 3, 'updatedAt' => 4, 'deletedAt' => 5, 'status' => 6, 'expiry' => 7, 'sessionType' => 8, 'sessionUserId' => 9, 'sessionDuration' => 10, 'sessionPrivileges' => 11, 'token' => 12, 'customData' => 13, 'kuserId' => 14, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::INT_ID => 1, self::PARTNER_ID => 2, self::CREATED_AT => 3, self::UPDATED_AT => 4, self::DELETED_AT => 5, self::STATUS => 6, self::EXPIRY => 7, self::SESSION_TYPE => 8, self::SESSION_USER_ID => 9, self::SESSION_DURATION => 10, self::SESSION_PRIVILEGES => 11, self::TOKEN => 12, self::CUSTOM_DATA => 13, self::KUSER_ID => 14, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'int_id' => 1, 'partner_id' => 2, 'created_at' => 3, 'updated_at' => 4, 'deleted_at' => 5, 'status' => 6, 'expiry' => 7, 'session_type' => 8, 'session_user_id' => 9, 'session_duration' => 10, 'session_privileges' => 11, 'token' => 12, 'custom_data' => 13, 'kuser_id' => 14, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'IntId' => 1, 'PartnerId' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, 'DeletedAt' => 5, 'Status' => 6, 'Expiry' => 7, 'SessionType' => 8, 'SessionUserId' => 9, 'SessionDuration' => 10, 'SessionPrivileges' => 11, 'Token' => 12, 'CustomData' => 13, 'VuserId' => 14, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'intId' => 1, 'partnerId' => 2, 'createdAt' => 3, 'updatedAt' => 4, 'deletedAt' => 5, 'status' => 6, 'expiry' => 7, 'sessionType' => 8, 'sessionUserId' => 9, 'sessionDuration' => 10, 'sessionPrivileges' => 11, 'token' => 12, 'customData' => 13, 'vuserId' => 14, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::INT_ID => 1, self::PARTNER_ID => 2, self::CREATED_AT => 3, self::UPDATED_AT => 4, self::DELETED_AT => 5, self::STATUS => 6, self::EXPIRY => 7, self::SESSION_TYPE => 8, self::SESSION_USER_ID => 9, self::SESSION_DURATION => 10, self::SESSION_PRIVILEGES => 11, self::TOKEN => 12, self::CUSTOM_DATA => 13, self::VUSER_ID => 14, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'int_id' => 1, 'partner_id' => 2, 'created_at' => 3, 'updated_at' => 4, 'deleted_at' => 5, 'status' => 6, 'expiry' => 7, 'session_type' => 8, 'session_user_id' => 9, 'session_duration' => 10, 'session_privileges' => 11, 'token' => 12, 'custom_data' => 13, 'vuser_id' => 14, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
 	);
 
@@ -194,7 +194,7 @@ abstract class BaseAppTokenPeer {
 		$criteria->addSelectColumn(AppTokenPeer::SESSION_PRIVILEGES);
 		$criteria->addSelectColumn(AppTokenPeer::TOKEN);
 		$criteria->addSelectColumn(AppTokenPeer::CUSTOM_DATA);
-		$criteria->addSelectColumn(AppTokenPeer::KUSER_ID);
+		$criteria->addSelectColumn(AppTokenPeer::VUSER_ID);
 	}
 
 	/**
@@ -228,11 +228,11 @@ abstract class BaseAppTokenPeer {
 		
 		AppTokenPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
+			vQueryCache::QUERY_TYPE_COUNT,
 			'AppTokenPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -256,7 +256,7 @@ abstract class BaseAppTokenPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -337,7 +337,7 @@ abstract class BaseAppTokenPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
@@ -360,11 +360,11 @@ abstract class BaseAppTokenPeer {
 	{		
 		$criteriaForSelect = AppTokenPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
+			vQueryCache::QUERY_TYPE_SELECT,
 			'AppTokenPeer', 
 			$cacheKey, 
 			$queryDB);
@@ -380,12 +380,12 @@ abstract class BaseAppTokenPeer {
 		
 		$queryResult = AppTokenPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
@@ -395,17 +395,17 @@ abstract class BaseAppTokenPeer {
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -476,7 +476,7 @@ abstract class BaseAppTokenPeer {
 		AppTokenPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -484,19 +484,19 @@ abstract class BaseAppTokenPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -515,7 +515,7 @@ abstract class BaseAppTokenPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -634,11 +634,11 @@ abstract class BaseAppTokenPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('AppTokenPeer');
+				vMemoryManager::registerPeer('AppTokenPeer');
 			}
 		}
 	}

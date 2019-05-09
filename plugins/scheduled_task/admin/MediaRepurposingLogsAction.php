@@ -3,7 +3,7 @@
  * @package plugins.schedule_task
  * @subpackage Admin
  */
-class MediaRepurposingLogsAction extends KalturaApplicationPlugin
+class MediaRepurposingLogsAction extends VidiunApplicationPlugin
 {	
 	/**
 	 * @return string - absolute file path of the phtml template
@@ -26,7 +26,7 @@ class MediaRepurposingLogsAction extends KalturaApplicationPlugin
 		{
 			if ($dryRunId) {
 				$results = MediaRepurposingUtils::getDryRunResult($dryRunId);
-				$adapter = new Kaltura_FilterPaginatorList($results->objects);
+				$adapter = new Vidiun_FilterPaginatorList($results->objects);
 				$action->view->paginator = new Infra_Paginator($adapter, $request);
 				$action->view->scheme = $this->getScheme($results->objects);
 				$form->populateDryRun($dryRunId, $adapter->count());
@@ -35,7 +35,7 @@ class MediaRepurposingLogsAction extends KalturaApplicationPlugin
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
+			VidiunLog::err($e->getMessage() . "\n" . $e->getTraceAsString());
 			$action->view->errMessage = $e->getMessage();
 		}
 		$action->view->form = $form;

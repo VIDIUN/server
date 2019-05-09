@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchSuggestContext
+class vESearchSuggestContext
 {
 
 	const CONTEXT_KEY = 'context';

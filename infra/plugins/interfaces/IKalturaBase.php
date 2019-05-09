@@ -3,12 +3,12 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaBase
+interface IVidiunBase
 {
 	/**
 	 * Return an instance implementing the interface
 	 * @param string $interface
-	 * @return IKalturaBase
+	 * @return IVidiunBase
 	 */
 	public function getInstance($interface);
 }

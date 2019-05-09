@@ -6,24 +6,24 @@
  * @subpackage Notifier
  *
  */
-class KAsyncNotifierParamsUtils
+class VAsyncNotifierParamsUtils
 {
-	public static function prepareNotificationData($url, $signature_key, KalturaBatchJob $job, KalturaNotificationJobData $data, $prefix = null)
+	public static function prepareNotificationData($url, $signature_key, VidiunBatchJob $job, VidiunNotificationJobData $data, $prefix = null)
 	{
 		$params = array("notification_id" => $job->id, "notification_type" => $data->typeAsString, "puser_id" => $data->userId, "partner_id" => $job->partnerId);
 		
 		switch($data->objType)
 		{
-			case KalturaNotificationObjectType::USER:
+			case VidiunNotificationObjectType::USER:
 				$params["user_id"] = $data->objectId;
 				break;
-			case KalturaNotificationObjectType::ENTRY:
+			case VidiunNotificationObjectType::ENTRY:
 				$params["entry_id"] = $data->objectId;
 				break;
-			case KalturaNotificationObjectType::KSHOW:
-				$params["kshow_id"] = $data->objectId;
+			case VidiunNotificationObjectType::VSHOW:
+				$params["vshow_id"] = $data->objectId;
 				break;
-			case KalturaNotificationObjectType::BATCH_JOB:
+			case VidiunNotificationObjectType::BATCH_JOB:
 				$params["job_id"] = $data->objectId;
 				break;
 			default:

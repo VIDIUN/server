@@ -1,5 +1,5 @@
 <?php
-class kWidevineRepositorySyncJobData extends kJobData
+class vWidevineRepositorySyncJobData extends vJobData
 {    
      /**
      * @var string

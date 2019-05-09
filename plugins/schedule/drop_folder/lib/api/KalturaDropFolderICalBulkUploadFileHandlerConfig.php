@@ -3,11 +3,11 @@
  * @package plugins.scheduleDropFolder
  * @subpackage api.objects
  */
-class KalturaDropFolderICalBulkUploadFileHandlerConfig extends KalturaDropFolderFileHandlerConfig
+class VidiunDropFolderICalBulkUploadFileHandlerConfig extends VidiunDropFolderFileHandlerConfig
 {
 	/**
 	 * The type of the events that ill be created by this upload
-	 * @var KalturaScheduleEventType
+	 * @var VidiunScheduleEventType
 	 */
 	public $eventsType = null;
 	

@@ -1,15 +1,15 @@
 <?php
 /**
- * An array of KalturaUiConfTypeInfo
+ * An array of VidiunUiConfTypeInfo
  * 
  * @package api
  * @subpackage objects
  */
-class KalturaUiConfTypeInfoArray extends KalturaTypedArray
+class VidiunUiConfTypeInfoArray extends VidiunTypedArray
 {
 	public function __construct()
 	{
-		return parent::__construct("KalturaUiConfTypeInfo");
+		return parent::__construct("VidiunUiConfTypeInfo");
 	}
 }
 ?>

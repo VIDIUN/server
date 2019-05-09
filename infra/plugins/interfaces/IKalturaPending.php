@@ -4,12 +4,12 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaPending extends IKalturaBase
+interface IVidiunPending extends IVidiunBase
 {
 	/**
-	 * Returns a Kaltura dependency object that defines the relationship between two plugins.
+	 * Returns a Vidiun dependency object that defines the relationship between two plugins.
 	 * 
-	 * @return array<KalturaDependency> The Kaltura dependency object
+	 * @return array<VidiunDependency> The Vidiun dependency object
 	 */
 	public static function dependsOn();
 }

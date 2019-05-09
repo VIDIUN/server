@@ -3,16 +3,16 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveStreamParamsArray extends KalturaTypedArray {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+class VidiunLiveStreamParamsArray extends VidiunTypedArray {
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaLiveStreamParamsArray();
+		$newArr = new VidiunLiveStreamParamsArray();
 		if ($arr == null)
 			return $newArr;
 	
 		foreach ($arr as $obj)
 		{
-			$nObj = new KalturaLiveStreamParams();
+			$nObj = new VidiunLiveStreamParams();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -22,6 +22,6 @@ class KalturaLiveStreamParamsArray extends KalturaTypedArray {
 	
 	public function __construct()
 	{
-		return parent::__construct("KalturaLiveStreamParams");
+		return parent::__construct("VidiunLiveStreamParams");
 	}
 }

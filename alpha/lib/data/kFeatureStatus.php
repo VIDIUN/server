@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model
  */ 
-class kFeatureStatus
+class vFeatureStatus
 {
 	/**
 	 * @var IndexObjectType

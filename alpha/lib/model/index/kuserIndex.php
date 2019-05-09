@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Auto-generated index class for kuser
+ * Auto-generated index class for vuser
 */
-class kuserIndex extends BaseIndexObject
+class vuserIndex extends BaseIndexObject
 {
 	const DYNAMIC_ATTRIBUTES = "dynamic_attributes";
 
@@ -15,12 +15,12 @@ class kuserIndex extends BaseIndexObject
 
 	public static function getObjectName()
 	{
-		return 'kuser';
+		return 'vuser';
 	}
 
 	public static function getObjectIndexName()
 	{
-		return 'kuser';
+		return 'vuser';
 	}
 
 	public static function getSphinxIdField()
@@ -30,7 +30,7 @@ class kuserIndex extends BaseIndexObject
 
 	public static function getPropelIdField()
 	{
-		return kuserPeer::ID;
+		return vuserPeer::ID;
 	}
 
 	public static function getIdField()
@@ -40,7 +40,7 @@ class kuserIndex extends BaseIndexObject
 
 	public static function getDefaultCriteriaFilter()
 	{
-		return kuserPeer::getCriteriaFilter();
+		return vuserPeer::getCriteriaFilter();
 	}
 
 	protected static $fieldsMap;
@@ -61,7 +61,7 @@ class kuserIndex extends BaseIndexObject
 				'tags' => 'tags',
 				'entries' => 'entries',
 				'storage_size' => 'storageSize',
-				'kuser_status' => 'status',
+				'vuser_status' => 'status',
 				'created_at' => 'createdAt',
 				'updated_at' => 'updatedAt',
 				'partner_id' => 'partnerId',
@@ -96,7 +96,7 @@ class kuserIndex extends BaseIndexObject
 				'tags' => IIndexable::FIELD_TYPE_STRING,
 				'entries' => IIndexable::FIELD_TYPE_UINT,
 				'storage_size' => IIndexable::FIELD_TYPE_UINT,
-				'kuser_status' => IIndexable::FIELD_TYPE_UINT,
+				'vuser_status' => IIndexable::FIELD_TYPE_UINT,
 				'created_at' => IIndexable::FIELD_TYPE_DATETIME,
 				'updated_at' => IIndexable::FIELD_TYPE_DATETIME,
 				'partner_id' => IIndexable::FIELD_TYPE_INTEGER,
@@ -135,33 +135,33 @@ class kuserIndex extends BaseIndexObject
 		if (!self::$searchableFieldsMap)
 		{
 			self::$searchableFieldsMap = array(
-				'kuser.LOGIN_DATA_ID' => 'login_data_id',
-				'kuser.IS_ADMIN' => 'is_admin',
-				'kuser.SCREEN_NAME' => 'screen_name',
-				'kuser.FULL_NAME' => 'full_name',
-				'kuser.FIRST_NAME' => 'first_name',
-				'kuser.LAST_NAME' => 'last_name',
-				'kuser.EMAIL' => 'email',
-				'kuser.ABOUT_ME' => 'about_me',
-				'kuser.TAGS' => 'tags',
-				'kuser.ENTRIES' => 'entries',
-				'kuser.STORAGE_SIZE' => 'storage_size',
-				'kuser.STATUS' => 'kuser_status',
-				'kuser.CREATED_AT' => 'created_at',
-				'kuser.UPDATED_AT' => 'updated_at',
-				'kuser.PARTNER_ID' => 'partner_id',
-				'kuser.DISPLAY_IN_SEARCH' => 'display_in_search',
-				'kuser.PARTNER_DATA' => 'partner_data',
-				'kuser.PUSER_ID' => 'puser_id',
-				'kuser.INDEXED_PARTNER_DATA_INT' => 'indexed_partner_data_int',
-				'kuser.INDEXED_PARTNER_DATA_STRING' => 'indexed_partner_data_string',
-				'kuser.PERMISSION_NAMES' => 'permission_names',
-				'kuser.ROLE_IDS' => 'role_ids',
-				'kuser.DYNAMIC_ATTRIBUTES' => 'dynamic_attributes',
-				'kuser.FIRST_NAME_OR_LAST_NAME' => '(full_name,last_name)',
-				'kuser.PUSER_ID_OR_SCREEN_NAME' => '(puser_id,screen_name)',
-				'kuser.PLUGINS_DATA' => 'plugins_data',
-				'kuser.TYPE' => 'type',
+				'vuser.LOGIN_DATA_ID' => 'login_data_id',
+				'vuser.IS_ADMIN' => 'is_admin',
+				'vuser.SCREEN_NAME' => 'screen_name',
+				'vuser.FULL_NAME' => 'full_name',
+				'vuser.FIRST_NAME' => 'first_name',
+				'vuser.LAST_NAME' => 'last_name',
+				'vuser.EMAIL' => 'email',
+				'vuser.ABOUT_ME' => 'about_me',
+				'vuser.TAGS' => 'tags',
+				'vuser.ENTRIES' => 'entries',
+				'vuser.STORAGE_SIZE' => 'storage_size',
+				'vuser.STATUS' => 'vuser_status',
+				'vuser.CREATED_AT' => 'created_at',
+				'vuser.UPDATED_AT' => 'updated_at',
+				'vuser.PARTNER_ID' => 'partner_id',
+				'vuser.DISPLAY_IN_SEARCH' => 'display_in_search',
+				'vuser.PARTNER_DATA' => 'partner_data',
+				'vuser.PUSER_ID' => 'puser_id',
+				'vuser.INDEXED_PARTNER_DATA_INT' => 'indexed_partner_data_int',
+				'vuser.INDEXED_PARTNER_DATA_STRING' => 'indexed_partner_data_string',
+				'vuser.PERMISSION_NAMES' => 'permission_names',
+				'vuser.ROLE_IDS' => 'role_ids',
+				'vuser.DYNAMIC_ATTRIBUTES' => 'dynamic_attributes',
+				'vuser.FIRST_NAME_OR_LAST_NAME' => '(full_name,last_name)',
+				'vuser.PUSER_ID_OR_SCREEN_NAME' => '(puser_id,screen_name)',
+				'vuser.PLUGINS_DATA' => 'plugins_data',
+				'vuser.TYPE' => 'type',
 			);
 		}
 		return self::$searchableFieldsMap;
@@ -222,12 +222,12 @@ class kuserIndex extends BaseIndexObject
 		if (!self::$orderFields)
 		{
 			self::$orderFields = array(
-				'kuser.LOGIN_DATA_ID' => 'login_data_id',
-				'kuser.IS_ADMIN' => 'is_admin',
-				'kuser.CREATED_AT' => 'created_at',
-				'kuser.UPDATED_AT' => 'updated_at',
-				'kuser.DISPLAY_IN_SEARCH' => 'display_in_search',
-				'kuser.INDEXED_PARTNER_DATA_INT' => 'indexed_partner_data_int',
+				'vuser.LOGIN_DATA_ID' => 'login_data_id',
+				'vuser.IS_ADMIN' => 'is_admin',
+				'vuser.CREATED_AT' => 'created_at',
+				'vuser.UPDATED_AT' => 'updated_at',
+				'vuser.DISPLAY_IN_SEARCH' => 'display_in_search',
+				'vuser.INDEXED_PARTNER_DATA_INT' => 'indexed_partner_data_int',
 			);
 		}
 		return self::$orderFields;
@@ -297,16 +297,16 @@ class kuserIndex extends BaseIndexObject
 
 	public static function doCountOnPeer(Criteria $c)
 	{
-		return kuserPeer::doCount($c);
+		return vuserPeer::doCount($c);
 	}
 
 	//This function is generated based on cacheInvalidationKey elements in the relevant IndexSchema.xml
 	public static function getCacheInvalidationKeys($object = null)
 	{
 		if (is_null($object))
-			return array(array("kuser:id=%s", kuserPeer::ID), array("kuser:partnerId=%s", kuserPeer::PARTNER_ID));
+			return array(array("vuser:id=%s", vuserPeer::ID), array("vuser:partnerId=%s", vuserPeer::PARTNER_ID));
 		else
-			return array("kuser:id=".strtolower($object->getId()), "kuser:partnerId=".strtolower($object->getPartnerId()));
+			return array("vuser:id=".strtolower($object->getId()), "vuser:partnerId=".strtolower($object->getPartnerId()));
 	}
 
 }

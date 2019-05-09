@@ -3,7 +3,7 @@
  * @package plugins.freewheelGenericDistribution
  * @subpackage model.data
  */
-class kFreewheelGenericDistributionJobProviderData extends kDistributionJobProviderData
+class vFreewheelGenericDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * Demonstrate storing array of paths in the job data
@@ -19,7 +19,7 @@ class kFreewheelGenericDistributionJobProviderData extends kDistributionJobProvi
 	 */
 	public $thumbAssetFilePath;
 
-	public function __construct(kDistributionJobData $distributionJobData = null)
+	public function __construct(vDistributionJobData $distributionJobData = null)
 	{
 		parent::__construct($distributionJobData);
 	}

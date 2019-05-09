@@ -19,11 +19,11 @@ class UniqueId
 			self::$_uniqueId = (string)rand();
 			if (php_sapi_name() !== 'cli')
 			{
-				header('X-Kaltura-Session:'.self::$_uniqueId, false);
+				header('X-Vidiun-Session:'.self::$_uniqueId, false);
 
 				if (function_exists('apache_note'))
 				{
-					apache_note('Kaltura_SessionId', self::$_uniqueId);
+					apache_note('Vidiun_SessionId', self::$_uniqueId);
 				}
 			}
 		}

@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kRemoteStorageResource extends kUrlResource implements IRemoteStorageResource
+class vRemoteStorageResource extends vUrlResource implements IRemoteStorageResource
 {
 	/**
 	 * ID of storage profile to be associated with the created file sync, used for file serving URL composing, keep null to use the default. 

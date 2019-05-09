@@ -16,7 +16,7 @@
     <multirequest>
         <!-- Attachemnt Asset Added -->
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaHttpNotificationTemplate">
+            <template objectType="VidiunHttpNotificationTemplate">
                 <name>Attachment Asset Added</name>
                 <systemName>HTTP_Attachemnt_Asset_Added</systemName>
                 <description>HTTP notification template to be sent when a new Attachemnt asset is added to an entry.</description>
@@ -25,7 +25,7 @@
                 <!-- EventNotificationEventType::OBJECT_ADDED -->
                 <eventObjectType>attachmentAssetEventNotifications.AttachmentAsset</eventObjectType>
                 <method>2</method>
-                <!-- KalturaHttpNotificationMethod::POST -->
+                <!-- VidiunHttpNotificationMethod::POST -->
             </template>
         </request>
         <request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -38,7 +38,7 @@
     <multirequest>
         <!-- Attachemnt Asset Changed -->
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaHttpNotificationTemplate">
+            <template objectType="VidiunHttpNotificationTemplate">
                 <name>Attachment Asset Changed</name>
                 <systemName>HTTP_Attachemnt_Asset_Changed</systemName>
                 <description>HTTP notification template to be sent when a new Attachemnt asset changed.</description>
@@ -47,54 +47,54 @@
                 <!-- EventNotificationEventType::OBJECT_CHANGED -->
                 <eventObjectType>attachmentAssetEventNotifications.AttachmentAsset</eventObjectType>
                 <eventConditions objectType="array">
-                    <item objectType="KalturaEventObjectChangedCondition">
+                    <item objectType="VidiunEventObjectChangedCondition">
                         <description>Attachemnt Asset metadata changed, columns defined in modified_columns parameter</description>
                         <modifiedColumns>{modified_columns}</modifiedColumns>
                     </item>
                 </eventConditions>		
                 <userParameters objectType="array">
-                    <item objectType="KalturaEventNotificationArrayParameter">
+                    <item objectType="VidiunEventNotificationArrayParameter">
                         <key>modified_columns</key>
                         <description>Caption-asset metadata columns that will trigger the event</description>
                         <allowedValues objectType="array">
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>flavor_asset.TAGS</value>
                                 <description>tags</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>flavor_asset.STATUS</value>
                                 <description>status</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>flavor_asset.VERSION</value>
                                 <description>version</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>flavor_asset.DESCRIPTION</value>
                                 <description>description</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>flavor_asset.SIZE</value>
                                 <description>size</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>filename</value>
                                 <description>filename</description>
                             </item>
-                            <item objectType="KalturaStringValue">
+                            <item objectType="VidiunStringValue">
                                 <value>title</value>
                                 <description>title</description>
                             </item>
                         </allowedValues>
                         <values objectType="array">
-                            <item objectType="KalturaString">
+                            <item objectType="VidiunString">
                                 <value>flavor_asset.VERSION</value>
                             </item>
                         </values>
                     </item>
                 </userParameters>		
                 <method>2</method>
-                <!-- KalturaHttpNotificationMethod::POST -->
+                <!-- VidiunHttpNotificationMethod::POST -->
             </template>
         </request>
         <request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">
@@ -107,7 +107,7 @@
     <multirequest>
         <!-- Attachemnt Asset Deleted -->
         <request service="eventNotificationTemplate" action="add" plugin="eventNotification" partnerId="0">
-            <template objectType="KalturaHttpNotificationTemplate">
+            <template objectType="VidiunHttpNotificationTemplate">
                 <name>Attachment Asset Deleted</name>
                 <systemName>HTTP_Attachemnt_Asset_Deleted</systemName>
                 <description>HTTP notification template to be sent when a new Attachemnt asset is deleted.</description>
@@ -116,7 +116,7 @@
                 <!-- EventNotificationEventType::OBJECT_DELETED -->
                 <eventObjectType>attachmentAssetEventNotifications.AttachmentAsset</eventObjectType>
                 <method>2</method>
-                <!-- KalturaHttpNotificationMethod::POST -->
+                <!-- VidiunHttpNotificationMethod::POST -->
             </template>
         </request>
         <request service="eventNotificationTemplate" action="updateStatus" plugin="eventNotification" partnerId="0">

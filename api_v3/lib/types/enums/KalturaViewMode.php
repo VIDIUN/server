@@ -1,5 +1,5 @@
 <?php
-class KalturaViewMode extends KalturaEnum implements ViewMode
+class VidiunViewMode extends VidiunEnum implements ViewMode
 {
     
 }

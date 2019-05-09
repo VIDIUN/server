@@ -3,6 +3,6 @@
  * @package plugins.dailymotionDistribution
  * @subpackage api.filters
  */
-class KalturaDailymotionDistributionProfileFilter extends KalturaDailymotionDistributionProfileBaseFilter
+class VidiunDailymotionDistributionProfileFilter extends VidiunDailymotionDistributionProfileBaseFilter
 {
 }

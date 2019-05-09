@@ -30,7 +30,7 @@ FROM
 		  count_plays > 0 OR
 		  count_loads > 0 OR
 		  sum_time_viewed > 0 )
-	GROUP BY browser_id) stats, kalturadw.dwh_dim_browser b
+	GROUP BY browser_id) stats, vidiundw.dwh_dim_browser b
 WHERE b.id=stats.object_id
 ORDER BY {SORT_FIELD}
 LIMIT {PAGINATION_FIRST},{PAGINATION_SIZE}  /* pagination  */

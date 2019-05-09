@@ -7,7 +7,7 @@
  * @subpackage api.objects
  *
  */
-class KalturaBulkUploadXmlJobData extends KalturaBulkUploadJobData
+class VidiunBulkUploadXmlJobData extends VidiunBulkUploadJobData
 {
 	/**
 	 * 
@@ -26,7 +26,7 @@ class KalturaBulkUploadXmlJobData extends KalturaBulkUploadJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kBulkUploadXmlJobData();
+			$dbData = new vBulkUploadXmlJobData();
 			
 		return parent::toObject($dbData);
 	}
@@ -42,6 +42,6 @@ class KalturaBulkUploadXmlJobData extends KalturaBulkUploadJobData
 	
 	public function setType ()
 	{
-	    $this->type = kPluginableEnumsManager::coreToApi("KalturaBulkUploadType", BulkUploadXmlPlugin::getApiValue(BulkUploadXmlType::XML));
+	    $this->type = vPluginableEnumsManager::coreToApi("VidiunBulkUploadType", BulkUploadXmlPlugin::getApiValue(BulkUploadXmlType::XML));
 	}
 }

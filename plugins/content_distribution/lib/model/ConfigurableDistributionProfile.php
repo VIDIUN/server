@@ -244,7 +244,7 @@ abstract class ConfigurableDistributionProfile extends DistributionProfile
         </xsl:stylesheet>
         ';
       
-        KalturaLog::debug('Result XSL: '. $xsl);
+        VidiunLog::debug('Result XSL: '. $xsl);
         return $xsl;
     }
 		
@@ -253,12 +253,12 @@ abstract class ConfigurableDistributionProfile extends DistributionProfile
 	{
 		$entry = entryPeer::retrieveByPKNoFilter($entryDistribution->getEntryId());
         if (!$entry) {
-            KalturaLog::err('Entry not found with ID ['. $entryDistribution->getEntryId() .']');
+            VidiunLog::err('Entry not found with ID ['. $entryDistribution->getEntryId() .']');
             return null;
         }
 		
 		// set the default criteria to use the current entry distribution partner id (it is restored later)
-		// this is needed for related entries under kMetadataMrssManager which is using retrieveByPK without the correct partner id filter
+		// this is needed for related entries under vMetadataMrssManager which is using retrieveByPK without the correct partner id filter
 		$oldEntryCriteria = entryPeer::getCriteriaFilter()->getFilter();
 		myPartnerUtils::resetPartnerFilter('entry');
 		myPartnerUtils::addPartnerToCriteria('entry', $entryDistribution->getPartnerId(), true);
@@ -266,10 +266,10 @@ abstract class ConfigurableDistributionProfile extends DistributionProfile
 		try
 		{
     		$mrss = null;
-    		$mrssParams = new kMrssParameters();
+    		$mrssParams = new vMrssParameters();
     		if ($this->getItemXpathsToExtend())
     			$mrssParams->setItemXpathsToExtend($this->getItemXpathsToExtend());
-    		$mrss = kMrssManager::getEntryMrssXml($entry, $mrss, $mrssParams, $this->getExtendedFeatures());
+    		$mrss = vMrssManager::getEntryMrssXml($entry, $mrss, $mrssParams, $this->getExtendedFeatures());
     		$mrssStr = $mrss->asXML();
 		}
 		catch (Exception $e)
@@ -284,14 +284,14 @@ abstract class ConfigurableDistributionProfile extends DistributionProfile
 		
 		if(!$mrssStr)
 		{
-			KalturaLog::err('No MRSS returned for entry ['.$entry->getId().']');
+			VidiunLog::err('No MRSS returned for entry ['.$entry->getId().']');
 			return null;
 		}
 		
 		$mrssObj = new DOMDocument();
 		if(!$mrssObj->loadXML($mrssStr))
 		{
-		    KalturaLog::err('Error loading MRSS XML object for entry ['.$entry->getId().']');
+		    VidiunLog::err('Error loading MRSS XML object for entry ['.$entry->getId().']');
 			return null;
 		}
 		
@@ -301,12 +301,12 @@ abstract class ConfigurableDistributionProfile extends DistributionProfile
 		
 		if(!$xslObj->loadXML($xslStr))
 		{
-		    KalturaLog::err('Error loading distribution profile XSLT for profile ID ['.$this->getId().']');
+		    VidiunLog::err('Error loading distribution profile XSLT for profile ID ['.$this->getId().']');
 			return null;
 		}
 		
 		$proc = new XSLTProcessor;
-		$proc->registerPHPFunctions(kXml::getXslEnabledPhpFunctions());
+		$proc->registerPHPFunctions(vXml::getXslEnabledPhpFunctions());
 		$proc->importStyleSheet($xslObj);
 		
 		$resultXml = $proc->transformToXml($mrssObj); //in order to keep the UTF-8 encoding we transformToXml http://www.php.net/manual/en/xsltprocessor.transformtodoc.php#69305 
@@ -314,16 +314,16 @@ abstract class ConfigurableDistributionProfile extends DistributionProfile
 		$resultXmlObj->loadXML($resultXml);
 		
 		if (!$resultXmlObj) {
-		    KalturaLog::err('Error transforming XML for distribution profile ['.$this->getId().'] and entry id ['.$entry->getId().']');
+		    VidiunLog::err('Error transforming XML for distribution profile ['.$this->getId().'] and entry id ['.$entry->getId().']');
 		    return null;
 		}
 		
         /* DEBUG logs
-		KalturaLog::log('entry mrss = '.$mrssStr);
-		KalturaLog::log('profile xslt = '.$xslStr);
+		VidiunLog::log('entry mrss = '.$mrssStr);
+		VidiunLog::log('profile xslt = '.$xslStr);
 		*/
 		
-		KalturaLog::debug('Result XML: '.$resultXmlObj->saveXML());		
+		VidiunLog::debug('Result XML: '.$resultXmlObj->saveXML());		
 		return $resultXmlObj;
 	}
 	
@@ -333,7 +333,7 @@ abstract class ConfigurableDistributionProfile extends DistributionProfile
         $fieldElement = $xpath->query("//*[@id='$fieldName']")->item(0);
 	    
 	    if (!$fieldElement) {
-	        KalturaLog::err('Cannot find element with ID ['.$fieldName.'] in XML');
+	        VidiunLog::err('Cannot find element with ID ['.$fieldName.'] in XML');
 	        return null;
 	    }
 	    $fieldValue = $fieldElement->nodeValue;
@@ -347,12 +347,12 @@ abstract class ConfigurableDistributionProfile extends DistributionProfile
 		{
 		    $valuesXmlObj = $this->getFieldValuesXml($entryDistribution);
 		    if (!$valuesXmlObj) {
-		        KalturaLog::err('Error transforming XML for distribution profile ['.$this->getId().'] and entry distribution id ['.$entryDistribution->getId().']');
+		        VidiunLog::err('Error transforming XML for distribution profile ['.$this->getId().'] and entry distribution id ['.$entryDistribution->getId().']');
 		        return null;
 		    }
 		    
 		    $valuesXmlStr = $valuesXmlObj->saveXML();
-		    KalturaLog::info('All field values result XML: '.$valuesXmlStr);
+		    VidiunLog::info('All field values result XML: '.$valuesXmlStr);
 		    
 		    $fieldValues = array();
 		    $fieldConfigArray = $this->getFieldConfigArray();
@@ -371,7 +371,7 @@ abstract class ConfigurableDistributionProfile extends DistributionProfile
 	{
 	    $valuesXmlObj = $this->getFieldValuesXml($entryDistribution, $fieldName);
 	    if (!$valuesXmlObj) {
-	        KalturaLog::err('Error transforming XML for distribution profile ['.$this->getId().'] and entry distribution id ['.$entryDistribution->getId().'] field name ['.$fieldName.']');
+	        VidiunLog::err('Error transforming XML for distribution profile ['.$this->getId().'] and entry distribution id ['.$entryDistribution->getId().'] field name ['.$fieldName.']');
 	        return null;
 	    }
 	    
@@ -447,7 +447,7 @@ abstract class ConfigurableDistributionProfile extends DistributionProfile
 		$entry = entryPeer::retrieveByPK($entryDistribution->getEntryId());
 		if(!$entry)
 		{
-			KalturaLog::err("Entry [" . $entryDistribution->getEntryId() . "] not found");
+			VidiunLog::err("Entry [" . $entryDistribution->getEntryId() . "] not found");
 			$validationErrors[] = $this->createValidationError($action, DistributionErrorType::INVALID_DATA, 'entry', 'entry not found');
 			return $validationErrors;
 		}
@@ -464,7 +464,7 @@ abstract class ConfigurableDistributionProfile extends DistributionProfile
 		
 		$allFieldValues = $this->getAllFieldValues($entryDistribution);
 		if (!$allFieldValues || !is_array($allFieldValues)) {
-		    KalturaLog::err('Error getting field values from entry distribution id ['.$entryDistribution->getId().'] profile id ['.$this->getId().']');
+		    VidiunLog::err('Error getting field values from entry distribution id ['.$entryDistribution->getId().'] profile id ['.$this->getId().']');
 		    return $validationErrors;
 		}
 		

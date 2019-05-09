@@ -8,13 +8,13 @@ class AdvancedSearchFilterItem
 	/**
 	 * @var string
 	 */
-	protected $kalturaClass;
+	protected $vidiunClass;
 	
 	public $filterLimit;
 	
 	public $overrideFilterLimit;
 
-	final public function apply(baseObjectFilter $filter, IKalturaDbQuery $query)
+	final public function apply(baseObjectFilter $filter, IVidiunDbQuery $query)
 	{
 		if($this->overrideFilterLimit)
 		{
@@ -31,35 +31,35 @@ class AdvancedSearchFilterItem
 	
 	/**
 	 * Adds conditions, matches and where clauses to the query
-	 * @param IKalturaIndexQuery $query
+	 * @param IVidiunIndexQuery $query
 	 */
-	public function applyCondition(IKalturaDbQuery $query)
+	public function applyCondition(IVidiunDbQuery $query)
 	{
 	}
 	
 	public function addToXml(SimpleXMLElement &$xmlElement)
 	{
-		$xmlElement->addAttribute('kalturaClass', $this->kalturaClass);
+		$xmlElement->addAttribute('vidiunClass', $this->vidiunClass);
 	}
 	
 	public function fillObjectFromXml(SimpleXMLElement $xmlElement)
 	{
 		$attr = $xmlElement->attributes();
-		if(isset($attr['kalturaClass']))
-			$this->kalturaClass = (string) $attr['kalturaClass'];
+		if(isset($attr['vidiunClass']))
+			$this->vidiunClass = (string) $attr['vidiunClass'];
 	}
 	
 	/**
-	 * @return the $kalturaClass
+	 * @return the $vidiunClass
 	 */
-	public function getKalturaClass() {
-		return $this->kalturaClass;
+	public function getVidiunClass() {
+		return $this->vidiunClass;
 	}
 
 	/**
-	 * @param $kalturaClass the $kalturaClass to set
+	 * @param $vidiunClass the $vidiunClass to set
 	 */
-	public function setKalturaClass($kalturaClass) {
-		$this->kalturaClass = $kalturaClass;
+	public function setVidiunClass($vidiunClass) {
+		$this->vidiunClass = $vidiunClass;
 	}
 }

@@ -3,7 +3,7 @@
  * @package plugins.scheduleBulkUpload
  * @subpackage lib
  */
-class BulkUploadScheduleType implements IKalturaPluginEnum, BulkUploadType
+class BulkUploadScheduleType implements IVidiunPluginEnum, BulkUploadType
 {
 	const ICAL = 'ICAL';
 	

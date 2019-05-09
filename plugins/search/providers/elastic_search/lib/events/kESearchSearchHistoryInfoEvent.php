@@ -3,10 +3,10 @@
  * @package plugins.elasticSearch
  * @subpackage lib.events
  */
-class kESearchSearchHistoryInfoEvent extends kApplicativeEvent
+class vESearchSearchHistoryInfoEvent extends vApplicativeEvent
 {
 
-	const EVENT_CONSUMER = 'kESearchSearchHistoryInfoEventConsumer';
+	const EVENT_CONSUMER = 'vESearchSearchHistoryInfoEventConsumer';
 
 	public function __construct($object)
 	{
@@ -16,7 +16,7 @@ class kESearchSearchHistoryInfoEvent extends kApplicativeEvent
 		if (method_exists($object, 'getId'))
 			$additionalLog .= ' id [' . $object->getId() . ']';
 
-		KalturaLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "]" . $additionalLog);
+		VidiunLog::debug("Event [" . get_class($this) . "] object type [" . get_class($object) . "]" . $additionalLog);
 	}
 
 	/**
@@ -29,10 +29,10 @@ class kESearchSearchHistoryInfoEvent extends kApplicativeEvent
 
 	/**
 	 * Executes the consumer
-	 * @param KalturaEventConsumer $consumer
+	 * @param VidiunEventConsumer $consumer
 	 * @return bool true if should continue to the next consumer
 	 */
-	protected function doConsume(KalturaEventConsumer $consumer)
+	protected function doConsume(VidiunEventConsumer $consumer)
 	{
 		if (!$consumer->shouldConsumeESearchSearchHistoryInfoEvent($this->object))
 			return true;
@@ -41,9 +41,9 @@ class kESearchSearchHistoryInfoEvent extends kApplicativeEvent
 		if (method_exists($this->object, 'getId'))
 			$additionalLog .= 'id [' . $this->object->getId() . ']';
 
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] started handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		$result = $consumer->consumeESearchSearchHistoryInfoEvent($this->object);
-		KalturaLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
+		VidiunLog::debug('consumer [' . get_class($consumer) . '] finished handling [' . get_class($this) . '] object type [' . get_class($this->object) . '] ' . $additionalLog);
 		return $result;
 	}
 

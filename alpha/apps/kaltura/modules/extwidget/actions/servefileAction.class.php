@@ -22,15 +22,15 @@ class servefileAction extends sfAction
 		$file_sync = FileSyncPeer::retrieveByPk ( $file_sync_id );
 		if ( ! $file_sync )
 		{
-			$current_dc_id = kDataCenterMgr::getCurrentDcId();
+			$current_dc_id = vDataCenterMgr::getCurrentDcId();
 			$error = "DC[$current_dc_id]: Cannot find FileSync with id [$file_sync_id]";
-			KalturaLog::err($error);
-			KExternalErrors::dieError(KExternalErrors::FILE_NOT_FOUND);
+			VidiunLog::err($error);
+			VExternalErrors::dieError(VExternalErrors::FILE_NOT_FOUND);
 		}
 		
-		KalturaMonitorClient::initApiMonitor(false, 'extwidget.serveFile', $file_sync->getPartnerId());
+		VidiunMonitorClient::initApiMonitor(false, 'extwidget.serveFile', $file_sync->getPartnerId());
 		
-		kDataCenterMgr::serveFileToRemoteDataCenter ( $file_sync , $hash, $file_name ); 
+		vDataCenterMgr::serveFileToRemoteDataCenter ( $file_sync , $hash, $file_name ); 
 		die();
 	}
 }

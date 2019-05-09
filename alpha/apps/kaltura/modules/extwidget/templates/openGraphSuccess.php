@@ -22,8 +22,8 @@
 	<meta property="og:video:height" content="<?php echo $uiConf->getHeight();?>">
 
 	<meta name="twitter:card" content="player"/>
-    <meta name="twitter:site" content="@kaltura"/>
-    <meta name="twitter:creator" content="@kaltura"/>
+    <meta name="twitter:site" content="@vidiun"/>
+    <meta name="twitter:creator" content="@vidiun"/>
     <meta name="twitter:title" content="<?php echo htmlspecialchars($entry_name); ?>" />
     <meta name="twitter:description" content="<?php echo htmlspecialchars($entry_description); ?>" />
     <meta name="twitter:image" content="<?php echo $entry_thumbnail_secure_url; ?>/width/<?php echo $uiConf->getWidth();?>" />
@@ -35,16 +35,16 @@
     <meta name="twitter:player:height" content="<?php echo $uiConf->getHeight();?>" />
     <meta name="twitter:player:width" content="<?php echo $uiConf->getWidth();?>" />
 
-	<meta property="og:site_name" content="Kaltura" />
+	<meta property="og:site_name" content="Vidiun" />
 	<title><?php echo htmlspecialchars($entry_name); ?></title>
 </head>
 <body>
 
 <script src="<?php echo $html5Url; ?>"></script>
-<div id="kaltura_player" style="width: <?php echo $uiConf->getWidth(); ?>px; height: <?php echo $uiConf->getHeight(); ?>px;"></div>
+<div id="vidiun_player" style="width: <?php echo $uiConf->getWidth(); ?>px; height: <?php echo $uiConf->getHeight(); ?>px;"></div>
 <script>
-kWidget.embed({
-  "targetId": "kaltura_player",
+vWidget.embed({
+  "targetId": "vidiun_player",
   "wid": "<?php echo $widget->getId(); ?>",
   "uiconf_id": <?php echo $uiConf->getId(); ?>,
   "entry_id": "<?php echo $entry->getId(); ?>"

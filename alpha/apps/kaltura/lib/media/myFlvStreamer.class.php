@@ -20,7 +20,7 @@ class myFlvStreamer
 	public function __construct ( $dataKey, $timeline, $streamNum, $addPadding = false)
 	{
 		$this->addPadding = $addPadding;
-		$this->filePath = self::addRootPath(kFileSyncUtils::getReadyLocalFilePathForKey($dataKey));
+		$this->filePath = self::addRootPath(vFileSyncUtils::getReadyLocalFilePathForKey($dataKey));
 		list ( $this->totalLength , $this->assetList  , $this->streamInfo, $this->pendingEntries ) = @self::getAssets( $dataKey, $timeline, $streamNum, $addPadding);
 	}
 
@@ -59,7 +59,7 @@ class myFlvStreamer
 	public static function getAllAssetsIds ( $entry )
 	{
 		$filePath = self::addRootPath($entry->getDataPath());
-		$xmlStr = kFile::getFileContent($filePath);
+		$xmlStr = vFile::getFileContent($filePath);
 		list ( $xml_doc , $xpath ) = self::getDomAndXpath ( $xmlStr );
 
 		$asset_ids = self::getElementsList( $xpath , "*" );
@@ -68,7 +68,7 @@ class myFlvStreamer
 		$arr = array();
 		foreach ( $asset_ids as $asset_id )
 		{
-			$arr[] = $asset_id->getAttribute ( "k_id" ) ;
+			$arr[] = $asset_id->getAttribute ( "v_id" ) ;
 			//start_time="0" len_time=
 
 		}
@@ -78,7 +78,7 @@ class myFlvStreamer
 
 	public static function getAllAssetsData ( $sync_key )
 	{
-		$xmlStr = kFileSyncUtils::file_get_contents($sync_key);
+		$xmlStr = vFileSyncUtils::file_get_contents($sync_key);
 		list ( $xml_doc , $xpath ) = self::getDomAndXpath ( $xmlStr );
 
 		$asset_ids = self::getElementsList( $xpath , "*" );
@@ -88,8 +88,8 @@ class myFlvStreamer
 		foreach ( $asset_ids as $asset_id )
 		{
 			$node = array();
-			$node["id"] = $asset_id->getAttribute ( "k_id" ) ;
-			$stream_info_elem = kXml::getFirstElement ( $asset_id , "StreamInfo" );
+			$node["id"] = $asset_id->getAttribute ( "v_id" ) ;
+			$stream_info_elem = vXml::getFirstElement ( $asset_id , "StreamInfo" );
 			$node["start_time"] = $stream_info_elem->getAttribute ( "start_time" );
 			$node["len_time"] = $stream_info_elem->getAttribute ( "len_time" );
 
@@ -125,17 +125,17 @@ class myFlvStreamer
 		*/
 	private static function getAssets($dataKey, $timeline, $streamNum, $addPadding)
 	{
-		$filePath = kFileSyncUtils::getReadyLocalFilePathForKey($dataKey);
+		$filePath = vFileSyncUtils::getReadyLocalFilePathForKey($dataKey);
 		$fullPath = self::addRootPath($filePath);
 		
 		$xml_doc = new DOMDocument();
 		try
 		{
-			@$xml_doc->loadXML( kFileSyncUtils::file_get_contents($dataKey));
+			@$xml_doc->loadXML( vFileSyncUtils::file_get_contents($dataKey));
 		}
 		catch ( Exception $ex )
 		{
-			KalturaLog::log ( "Cannot find XML file at [" . $fullPath . "],  timeline:$timeline, streamNum:$streamNum"  );
+			VidiunLog::log ( "Cannot find XML file at [" . $fullPath . "],  timeline:$timeline, streamNum:$streamNum"  );
 			return null;
 		}
 
@@ -172,26 +172,26 @@ class myFlvStreamer
 				$end_byte_play = $stream_info->getAttribute ( "end_byte_play" );
 				if ( $file_name == NULL || ($start_byte == NULL || $end_byte == NULL) && ($start_byte_play == NULL || $end_byte_play == NULL))
 				{
-					KalturaLog::log ("qqq INVALID ENTRY $file_name");
+					VidiunLog::log ("qqq INVALID ENTRY $file_name");
 					echo "qqq INVALID ENTRY $file_name";
 					return; //TODO handle invalid entries???
 				}
 
 				if ($streamNum == 3 || $num == $streamNum)
 				{
-					$asset_entry = entryPeer::retrieveByPK($asset->getAttribute( "k_id" ));
+					$asset_entry = entryPeer::retrieveByPK($asset->getAttribute( "v_id" ));
 					$flavor_asset_edit = assetPeer::retrieveBestEditByEntryId($asset_entry->getId());
 					$flavor_asset_play = assetPeer::retrieveBestPlayByEntryId($asset_entry->getId());
 					
 					// make sure asset exists before trying to get key or file path
 					if($flavor_asset_edit)
 					{
-						$asset_file_name_edit = kFileSyncUtils::getReadyLocalFilePathForKey($flavor_asset_edit->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET), false);
+						$asset_file_name_edit = vFileSyncUtils::getReadyLocalFilePathForKey($flavor_asset_edit->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET), false);
 					}
 					// make sure asset exists before trying to get key or file path
 					if($flavor_asset_play)
 					{
-						$asset_file_name_data = kFileSyncUtils::getReadyLocalFilePathForKey($flavor_asset_play->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET), false);
+						$asset_file_name_data = vFileSyncUtils::getReadyLocalFilePathForKey($flavor_asset_play->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET), false);
 					}
 					
 					// make sure  both variable are set
@@ -326,7 +326,7 @@ class myFlvStreamer
 						$end_byte = $asset['end_byte_play'];
 					}
 
-					KalturaLog::log( "myFlvStreamer:: ($i) using $file_name ($start_byte - $end_byte)" );
+					VidiunLog::log( "myFlvStreamer:: ($i) using $file_name ($start_byte - $end_byte)" );
 
 				}
 				else
@@ -340,7 +340,7 @@ class myFlvStreamer
 					continue;
 				$first_frame = true;
 				
-				KalturaLog::log("playing file [$file_name] from [$start_byte] to [$end_byte]");
+				VidiunLog::log("playing file [$file_name] from [$start_byte] to [$end_byte]");
 				// if should echo - don't optimize (we need the actual data
 				// if should not echo - use optimization
 				$flv_wrapper = new myFlvHandler ( $file_name );
@@ -350,7 +350,7 @@ class myFlvStreamer
 
 				if ($flv_tag_prev == NULL) continue;
 
-				KalturaLog::log("file [$file_name]: flv_tag_prev is not null");
+				VidiunLog::log("file [$file_name]: flv_tag_prev is not null");
 				$videoTimeline = ($timeline == "video");
 
 				while ($flv_tag_prev[myFlvHandler::TAG_FIELD_POS] < $end_byte)
@@ -443,26 +443,26 @@ class myFlvStreamer
 	}
 
 
-	public static function modifiedByKeditor ( $content )
+	public static function modifiedByVeditor ( $content )
 	{
-		$xml_doc = new KDOMDocument();
+		$xml_doc = new VDOMDocument();
 		$xml_doc->loadXML( $content );
 
 		$xpath = new DOMXPath($xml_doc);
 
 		$metadata_elem = $xpath->query("//Metadata" );
 
-		$modified_by_keditor_list = $metadata_elem->getElementsByTagName( "Modified" );
-		if ( $modified_by_keditor_list != null && $modified_by_keditor_list->length > 0 )
+		$modified_by_veditor_list = $metadata_elem->getElementsByTagName( "Modified" );
+		if ( $modified_by_veditor_list != null && $modified_by_veditor_list->length > 0 )
 		{
-			$modified_by_keditor = $modified_by_keditor_list->item(0)->nodeValue;
+			$modified_by_veditor = $modified_by_veditor_list->item(0)->nodeValue;
 			return $content;
-			//$modified_by_keditor->setValue
+			//$modified_by_veditor->setValue
 		}
 		else
 		{
-			$newTextNode = $xml_doc ->createTextNode("keditor");
-			$modified = $xml_doc->createElement( "Modified" ) ;//, "keditor" );
+			$newTextNode = $xml_doc ->createTextNode("veditor");
+			$modified = $xml_doc->createElement( "Modified" ) ;//, "veditor" );
 			$modified->appendChild ( $newTextNode );
 			$metadata_elem->appendChild ( $modified );
 		}
@@ -604,7 +604,7 @@ self::log ( __METHOD__ , "Before assets");
   			if ( $type != "VIDEO" && $type != "AUDIO") continue;
 
   			// fetch the file name from the DB
-  			$asset_id =  $asset->getAttribute ( "k_id" );
+  			$asset_id =  $asset->getAttribute ( "v_id" );
   			$id_list[] = $asset_id;
 		}
 		
@@ -624,7 +624,7 @@ self::log ( __METHOD__ , "After assets" , count($id_list ) , $id_list  );
   			if ( $type != "VIDEO" && $type != "AUDIO") continue;
 
   			// fetch the file name from the DB
-  			$asset_id =  $asset->getAttribute ( "k_id" );
+  			$asset_id =  $asset->getAttribute ( "v_id" );
   			
 self::log ( __METHOD__ , "in loop" , $asset_id );
   			//$entry = entryPeer::retrieveByPKNoFilter( $asset_id );
@@ -633,14 +633,14 @@ self::log ( __METHOD__ , "in loop" , $asset_id );
 			if ( $entry == NULL )
   			{
   				// set an error on the asset element
-  				$asset->setAttribute ( "fix_status" , "error in k_id [$asset_id]" );
+  				$asset->setAttribute ( "fix_status" , "error in v_id [$asset_id]" );
 				$was_modified = true;
   				continue;
   			}
   			elseif ( $entry->getStatus() == entryStatus::DELETED )
   			{
   				// set an error on the asset element
-  				$asset->setAttribute ( "fix_status" , "error in k_id [$asset_id] - asset was deleted" );
+  				$asset->setAttribute ( "fix_status" , "error in v_id [$asset_id] - asset was deleted" );
 				$was_modified = true;
   				continue;
   			}
@@ -650,11 +650,11 @@ self::log ( __METHOD__ , "in loop" , $asset_id );
 			$flavor_asset_play = assetPeer::retrieveBestPlayByEntryId($entry->getId());
 			if(!$flavor_asset_play)
 			{
-				KalturaLog::log(__METHOD__.' '.__LINE__.' no play flavor asset for entry '.$entry->getId());
+				VidiunLog::log(__METHOD__.' '.__LINE__.' no play flavor asset for entry '.$entry->getId());
 			}
 			else
 			{
-				$file_name = kFileSyncUtils::getReadyLocalFilePathForKey($flavor_asset_play->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET));
+				$file_name = vFileSyncUtils::getReadyLocalFilePathForKey($flavor_asset_play->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET));
 			}
 			
 			$use_multi_flavor = false;
@@ -662,21 +662,21 @@ self::log ( __METHOD__ , "in loop" , $asset_id );
 			$flavor_asset_edit = assetPeer::retrieveBestEditByEntryId($entry->getId());
 			if(!$flavor_asset_edit)
 			{
-				KalturaLog::log(__METHOD__.' '.__LINE__.' no edit flavor asset for entry '.$entry->getId());
+				VidiunLog::log(__METHOD__.' '.__LINE__.' no edit flavor asset for entry '.$entry->getId());
 			}
 			else
 			{
-				$flv_file_name_edit = kFileSyncUtils::getReadyLocalFilePathForKey($flavor_asset_edit->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET));
+				$flv_file_name_edit = vFileSyncUtils::getReadyLocalFilePathForKey($flavor_asset_edit->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET));
 				$use_multi_flavor = $flv_file_name_edit && file_exists($flv_file_name_edit) && $timeline == "video";
 			}
 			
 			if(!$flv_file_name_edit && !$file_name)
 			{
-				KalturaLog::log(__METHOD__.' '.__LINE__.' no edit & play flavor assets for entry '.$entry->getId());
+				VidiunLog::log(__METHOD__.' '.__LINE__.' no edit & play flavor assets for entry '.$entry->getId());
 				continue;
 			}
 
- 			$flv_file_name = kFile::fixPath( $file_name );
+ 			$flv_file_name = vFile::fixPath( $file_name );
 
   			$stream_info_list = ($asset->getElementsByTagName ( "StreamInfo"));
 
@@ -685,7 +685,7 @@ self::log ( __METHOD__ , "in loop" , $asset_id );
   				$file_name = "?";
   				try
   				{
-  					$stream_info->setAttribute ( "file_name",  kFileSyncUtils::getReadyLocalFilePathForKey($flavor_asset_play->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET))); // replaced__getDataPath
+  					$stream_info->setAttribute ( "file_name",  vFileSyncUtils::getReadyLocalFilePathForKey($flavor_asset_play->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET))); // replaced__getDataPath
 		  			$start_byte = $stream_info->getAttribute ( "start_byte" );
 		  			$end_byte = $stream_info->getAttribute ( "end_byte" );
 		  			$total_bytes = $stream_info->getAttribute ( "total_bytes" );
@@ -711,7 +711,7 @@ self::log ( __METHOD__ , "in loop" , $asset_id );
 						$calculated_total_bytes_play = 0;
 
 /*		  				$file_name = $stream_info->getAttribute ( "file_name" );
-						$flv_file_name = kFile::fixPath( myContentStorage::getFSContentRootPath() . $file_name );
+						$flv_file_name = vFile::fixPath( myContentStorage::getFSContentRootPath() . $file_name );
 						$ext = pathinfo ($flv_file_name, PATHINFO_EXTENSION);
 						if ( $ext == NULL  )
 							$flv_file_name .= ".flv";
@@ -735,7 +735,7 @@ self::log ( __METHOD__ , "before findBytesFromTimestamps" , $flv_file_name );
 								$result = myFlvStaticHandler::findBytesFromTimestamps( $flv_file_name , $start_time_play , $end_time ,
 									$calculated_start_byte_play , $calculated_end_byte_play , $calculated_total_bytes_play, $lastTimestamp, $timeline != "video" , 1 );
 
-								KalturaLog::log(__METHOD__.' '.__LINE__." play $result = findBytesFromTimestamps($flv_file_name , $start_time_play , $end_time , $calculated_start_byte_play , $calculated_end_byte_play , $calculated_total_bytes_play, $lastTimestamp, $timeline)");
+								VidiunLog::log(__METHOD__.' '.__LINE__." play $result = findBytesFromTimestamps($flv_file_name , $start_time_play , $end_time , $calculated_start_byte_play , $calculated_end_byte_play , $calculated_total_bytes_play, $lastTimestamp, $timeline)");
 									
 								if( $result )
 								{
@@ -745,7 +745,7 @@ self::log ( __METHOD__ , "before findBytesFromTimestamps" , $flv_file_name );
 										// 	edit - more keyfrmaes !
 										$result = myFlvStaticHandler::findBytesFromTimestamps ( $flv_file_name_edit , $start_time , $start_time_play ,
 											$calculated_start_byte , $calculated_end_byte, $calculated_total_bytes, $lastTimestamp, $timeline != "video" , 2 );
-										KalturaLog::log(__METHOD__.' '.__LINE__." edit $result = findBytesFromTimestamps($flv_file_name , $start_time_play , $end_time , $calculated_start_byte_play , $calculated_end_byte_play , $calculated_total_bytes_play, $lastTimestamp, $timeline)");
+										VidiunLog::log(__METHOD__.' '.__LINE__." edit $result = findBytesFromTimestamps($flv_file_name , $start_time_play , $end_time , $calculated_start_byte_play , $calculated_end_byte_play , $calculated_total_bytes_play, $lastTimestamp, $timeline)");
 									}
 								}
 							}
@@ -755,7 +755,7 @@ self::log ( __METHOD__ , "before findBytesFromTimestamps" , $flv_file_name );
 								// either because NOT video or because the edit flavor does not exist
 								$result = myFlvStaticHandler::findBytesFromTimestamps ( $flv_file_name , $start_time , $end_time ,
 									$calculated_start_byte , $calculated_end_byte, $calculated_total_bytes, $lastTimestamp, $timeline != "video" , 0 );
-								KalturaLog::log(__METHOD__.' '.__LINE__." only play $result = findBytesFromTimestamps($flv_file_name , $start_time_play , $end_time , $calculated_start_byte_play , $calculated_end_byte_play , $calculated_total_bytes_play, $lastTimestamp, $timeline)");
+								VidiunLog::log(__METHOD__.' '.__LINE__." only play $result = findBytesFromTimestamps($flv_file_name , $start_time_play , $end_time , $calculated_start_byte_play , $calculated_end_byte_play , $calculated_total_bytes_play, $lastTimestamp, $timeline)");
 							}
 self::log ( __METHOD__ , "after findBytesFromTimestamps" , $flv_file_name );							
 						}
@@ -861,6 +861,6 @@ self::log ( __METHOD__ , "after findBytesFromTimestamps" , $flv_file_name );
 		else
 			$mem_usage = ""; 
 		$s = strftime( "%d/%m %H:%M:%S." , time() ) . $milliseconds . " " . $mem_usage . " " . $s ;	
-		KalturaLog::log ( $s ); 
+		VidiunLog::log ( $s ); 
 	}
 }

@@ -20,7 +20,7 @@
                         <xsl:value-of select="string($var1_channel/title)" />
                     </title>
                     <description>This is a dummy description which is manually set in XSLT file. The playlist can't retain a description so each channel must have a manually added description of their content.</description>
-                    <link>http://corp.kaltura.com/</link>
+                    <link>http://corp.vidiun.com/</link>
                     <xsl:apply-templates name="item" select="channel/items/item" />
                 </channel>
             </xsl:for-each>
@@ -51,7 +51,7 @@
             <!--<xsl:for-each select="$var1_content">-->
             <media:content>
                 <xsl:attribute name="url">
-                    <xsl:value-of select="concat ('http://cdnapi.kaltura.com/p/', $partnerId, '/sp/', $partnerId, '00/playManifest/entryId/', $entryId, '/format/applehttp/protocol/http/a/a.m3u8')" />
+                    <xsl:value-of select="concat ('http://cdnapi.vidiun.com/p/', $partnerId, '/sp/', $partnerId, '00/playManifest/entryId/', $entryId, '/format/applehttp/protocol/http/a/a.m3u8')" />
                 </xsl:attribute>
                 <xsl:attribute name="duration">
                     <xsl:value-of select="string($var1_media/duration) div 1000" />

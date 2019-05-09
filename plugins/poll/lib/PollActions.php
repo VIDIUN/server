@@ -3,7 +3,7 @@
  * Class PollActions
  *
  * Package and location is not indicated
- * Should not include any kaltura dependency in this class - to enable it to run in cache only mode
+ * Should not include any vidiun dependency in this class - to enable it to run in cache only mode
  */
 class PollActions
 {
@@ -28,7 +28,7 @@ class PollActions
 	/**
 	 * @var string
 	 */
-	private $kalturaPollSecret;
+	private $vidiunPollSecret;
 	/**
 	 * @var int
 	 */
@@ -40,18 +40,18 @@ class PollActions
 	public function __construct()
 	{
 		$this->pollsCacheHandler = null;
-		$this->kalturaPollSecret = null;
+		$this->vidiunPollSecret = null;
 		$this->pollCacheTTL      = 0;
 
-		$pollConf = kConf::get(PollActions::CONF_POLL_REF);
+		$pollConf = vConf::get(PollActions::CONF_POLL_REF);
 		if (array_key_exists(PollActions::CONF_SECRET_REF ,$pollConf))
-			$this->kalturaPollSecret = $pollConf[PollActions::CONF_SECRET_REF];
-		if (!$this->kalturaPollSecret)
+			$this->vidiunPollSecret = $pollConf[PollActions::CONF_SECRET_REF];
+		if (!$this->vidiunPollSecret)
 			throw new Exception("Could not find polls_secret in the configuration");
 
 		if (array_key_exists(PollActions::CONF_CACHE_TTL_REF, $pollConf))
 			$this->pollCacheTTL = $pollConf[PollActions::CONF_CACHE_TTL_REF];
-		$cache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_CACHE_ONLY_ACTIONS);
+		$cache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_CACHE_ONLY_ACTIONS);
 		if (!$cache)
 			throw new Exception("Could not initiate cache instance (needed for polls)");
 
@@ -64,7 +64,7 @@ class PollActions
 		if (!PollType::isValidPollType($type))
 			throw new Exception("Poll type provided is invalid");
 		$randKey = rand();
-		$hash = hash_hmac(PollActions::HASH_TYPE, $this->kalturaPollSecret, $randKey);
+		$hash = hash_hmac(PollActions::HASH_TYPE, $this->vidiunPollSecret, $randKey);
 		return $type.self::ID_SEPARATOR_CHAR.$hash.self::ID_SEPARATOR_CHAR.$randKey;
 	}
 
@@ -76,7 +76,7 @@ class PollActions
 			$pollType = $idElements[0];
 			$hash = $idElements[1];
 			$key = $idElements[2];
-			$simulatedHash = hash_hmac(PollActions::HASH_TYPE, $this->kalturaPollSecret, $key);
+			$simulatedHash = hash_hmac(PollActions::HASH_TYPE, $this->vidiunPollSecret, $key);
 			$isHashOk = strcmp($hash, $simulatedHash) === 0;
 			$validPollType = PollType::isValidPollType($pollType);
 			return $isHashOk && $validPollType;
@@ -97,31 +97,31 @@ class PollActions
 		$pollId     = $params[PollActions::POLL_ID_ARG];
 		$ansIds     = $params[PollActions::ANSWER_IDS_ARG];
 		$userId     = $params[PollActions::USER_ID_ARG];
-		$ksUserId   = empty($params['___cache___userId']) ?  null : $params['___cache___userId'];
+		$vsUserId   = empty($params['___cache___userId']) ?  null : $params['___cache___userId'];
 		$instance = new PollActions();
-		$ret = $instance->setVote($pollId, $userId, $ksUserId ,$ansIds);
+		$ret = $instance->setVote($pollId, $userId, $vsUserId ,$ansIds);
 		return $ret;
 	}
 
-	private static function getValidUserId($pollType,$userId,$ksUserId)
+	private static function getValidUserId($pollType,$userId,$vsUserId)
 	{
-		$validUserId = $ksUserId;
+		$validUserId = $vsUserId;
 
-		if(PollType::isAnonymous($pollType) and !$ksUserId)
+		if(PollType::isAnonymous($pollType) and !$vsUserId)
 				$validUserId = $userId;
 
 		return $validUserId;
 	}
 
-	public function setVote($pollId, $userId, $ksUserId, $ansIds)
+	public function setVote($pollId, $userId, $vsUserId, $ansIds)
 	{
 		if ($this->isValidPollIdStructure($pollId))
 		{
 			$pollType = $this->getPollType($pollId);
 			//validate User ID
-			$userId = self::getValidUserId($pollType,$userId,$ksUserId);
+			$userId = self::getValidUserId($pollType,$userId,$vsUserId);
 			if (is_null($userId))
-				return "User ID is invalid -  $ksUserId ";
+				return "User ID is invalid -  $vsUserId ";
 
 			//validate answers
 			$answers = explode(self::ANSWER_SEPARATOR_CHAR, $ansIds);
@@ -163,19 +163,19 @@ class PollActions
 
 		$pollId     = $params[PollActions::POLL_ID_ARG];
 		$userId     = $params[PollActions::USER_ID_ARG];
-		$ksUserId   = empty($params['___cache___userId']) ?  null : $params['___cache___userId'];
+		$vsUserId   = empty($params['___cache___userId']) ?  null : $params['___cache___userId'];
 
 		$instance   = new PollActions();
-		return $instance->doGetVote($pollId,$userId,$ksUserId);
+		return $instance->doGetVote($pollId,$userId,$vsUserId);
 	}
 
 	/* get Vote Actions */
-	public function doGetVote($pollId,$userId,$ksUserId)
+	public function doGetVote($pollId,$userId,$vsUserId)
 	{
 		if ($this->isValidPollIdStructure($pollId))
 		{
 			$pollType = $this->getPollType($pollId);
-			$userId = self::getValidUserId($pollType,$userId,$ksUserId);
+			$userId = self::getValidUserId($pollType,$userId,$vsUserId);
 			$vote = $this->pollsCacheHandler->getCacheVote($userId, $pollId);
 			if ($vote)
 				return json_encode($vote);

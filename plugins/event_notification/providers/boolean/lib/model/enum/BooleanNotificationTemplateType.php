@@ -3,12 +3,12 @@
  * @package plugins.booleanNotification
  * @subpackage model.enum
  */
-class BooleanNotificationTemplateType implements IKalturaPluginEnum, EventNotificationTemplateType
+class BooleanNotificationTemplateType implements IVidiunPluginEnum, EventNotificationTemplateType
 {
 	const BOOLEAN = 'Boolean';
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalValues()
+	 * @see IVidiunPluginEnum::getAdditionalValues()
 	 */
 	public static function getAdditionalValues()
 	{
@@ -18,7 +18,7 @@ class BooleanNotificationTemplateType implements IKalturaPluginEnum, EventNotifi
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalDescriptions()
+	 * @see IVidiunPluginEnum::getAdditionalDescriptions()
 	 */
 	public static function getAdditionalDescriptions()
 	{

@@ -15,7 +15,7 @@ class TimeWarnerService extends ContentDistributionServiceBase
 	 * @param int $distributionProfileId
 	 * @param string $hash
 	 * @return file
-	 * @ksOptional
+	 * @vsOptional
 	 */
 	public function getFeedAction($distributionProfileId, $hash)
 	{

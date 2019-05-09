@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaDynamicAttributesContributer extends IKalturaBase
+interface IVidiunDynamicAttributesContributer extends IVidiunBase
 {
 	/**
 	 * Return dynamicAttributes to be added to entry's dynamic attributes

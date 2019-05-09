@@ -2,7 +2,7 @@
 /**
  * @package plugins.tvinciDistribution
  */
-class TvinciDistributionPlugin extends KalturaParentContributedPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider
+class TvinciDistributionPlugin extends VidiunParentContributedPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider
 {
 	const PLUGIN_NAME = 'tvinciDistribution';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 1;
@@ -16,12 +16,12 @@ class TvinciDistributionPlugin extends KalturaParentContributedPlugin implements
 
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 
@@ -60,7 +60,7 @@ class TvinciDistributionPlugin extends KalturaParentContributedPlugin implements
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::TVINCI)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::TVINCI)
 		{
 			if($baseClass == 'IDistributionEngineDelete')
 				return new TvinciDistributionFeedEngine();
@@ -74,14 +74,14 @@ class TvinciDistributionPlugin extends KalturaParentContributedPlugin implements
 			if($baseClass == 'IDistributionEngineUpdate')
 				return new TvinciDistributionFeedEngine();
 
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaTvinciDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunTvinciDistributionProfile();
 
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return new KalturaTvinciDistributionJobProviderData();
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return new VidiunTvinciDistributionJobProviderData();
 		}
 
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::TVINCI)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::TVINCI)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -90,20 +90,20 @@ class TvinciDistributionPlugin extends KalturaParentContributedPlugin implements
 			}
 		}
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(TvinciDistributionProviderType::TVINCI))
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(TvinciDistributionProviderType::TVINCI))
 		{
-			$reflect = new ReflectionClass('KalturaTvinciDistributionJobProviderData');
+			$reflect = new ReflectionClass('VidiunTvinciDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(TvinciDistributionProviderType::TVINCI))
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(TvinciDistributionProviderType::TVINCI))
 		{
-			$reflect = new ReflectionClass('kTvinciDistributionJobProviderData');
+			$reflect = new ReflectionClass('vTvinciDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TvinciDistributionProviderType::TVINCI))
-			return new KalturaTvinciDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TvinciDistributionProviderType::TVINCI))
+			return new VidiunTvinciDistributionProfile();
 
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TvinciDistributionProviderType::TVINCI))
 			return new TvinciDistributionProfile();
@@ -119,7 +119,7 @@ class TvinciDistributionPlugin extends KalturaParentContributedPlugin implements
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::TVINCI)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::TVINCI)
 		{
 			if($baseClass == 'IDistributionEngineDelete')
 				return 'TvinciDistributionFeedEngine';
@@ -133,30 +133,30 @@ class TvinciDistributionPlugin extends KalturaParentContributedPlugin implements
 			if($baseClass == 'IDistributionEngineUpdate')
 				return 'TvinciDistributionFeedEngine';
 
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaTvinciDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunTvinciDistributionProfile';
 
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaTvinciDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunTvinciDistributionJobProviderData';
 		}
 
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::TVINCI)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::TVINCI)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_TvinciProfileConfiguration';
 
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_TvinciDistribution_Type_TvinciDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_TvinciDistribution_Type_TvinciDistributionProfile';
 		}
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(TvinciDistributionProviderType::TVINCI))
-			return 'KalturaTvinciDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(TvinciDistributionProviderType::TVINCI))
+			return 'VidiunTvinciDistributionJobProviderData';
 
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(TvinciDistributionProviderType::TVINCI))
-			return 'kTvinciDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(TvinciDistributionProviderType::TVINCI))
+			return 'vTvinciDistributionJobProviderData';
 
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TvinciDistributionProviderType::TVINCI))
-			return 'KalturaTvinciDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TvinciDistributionProviderType::TVINCI))
+			return 'VidiunTvinciDistributionProfile';
 
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(TvinciDistributionProviderType::TVINCI))
 			return 'TvinciDistributionProfile';
@@ -177,11 +177,11 @@ class TvinciDistributionPlugin extends KalturaParentContributedPlugin implements
 	/**
 	 * Return an API distribution provider instance
 	 *
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaTvinciDistributionProvider();
+		$distributionProvider = new VidiunTvinciDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -203,8 +203,8 @@ class TvinciDistributionPlugin extends KalturaParentContributedPlugin implements
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 
 	/**
@@ -212,6 +212,6 @@ class TvinciDistributionPlugin extends KalturaParentContributedPlugin implements
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

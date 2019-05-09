@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage errors
  */
-class APIException extends kException
+class APIException extends vException
 {
 	public $api_code = null;
 	public $extra_data = null;

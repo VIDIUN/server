@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kScope
+class vScope
 {
 	/**
 	 * @var string
@@ -16,9 +16,9 @@ class kScope
 	protected $ip;
 	
 	/**
-	 * @var ks
+	 * @var vs
 	 */
-	protected $ks;
+	protected $vs;
 	
 	/**
 	 * @var string
@@ -33,7 +33,7 @@ class kScope
 	
 	/**
 	 * Unix timestamp (In seconds) to be used to test entry scheduling, keep null to use now.
-	 * @var array<kValue>
+	 * @var array<vValue>
 	 */
 	protected $dynamicValues = array();
 	
@@ -56,7 +56,7 @@ class kScope
 		$this->setIp(requestUtils::getRemoteAddress());
 		$this->setReferrer(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : null);
 		$this->setUserAgent(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null);	
-		$this->setKs(kCurrentContext::$ks_object ? kCurrentContext::$ks_object : null);
+		$this->setVs(vCurrentContext::$vs_object ? vCurrentContext::$vs_object : null);
 	}
 	
 	/**
@@ -76,14 +76,14 @@ class kScope
 	}
 	
 	/**
-	 * @param ks $v
+	 * @param vs $v
 	 */
-	public function setKs($v)
+	public function setVs($v)
 	{
 		if(is_string($v))
-			$v = ks::fromSecureString($v);
+			$v = vs::fromSecureString($v);
 			
-		$this->ks = $v;
+		$this->vs = $v;
 	}
 	
 	/**
@@ -111,11 +111,11 @@ class kScope
 	}
 	
 	/**
-	 * @return ks
+	 * @return vs
 	 */
-	public function getKs()
+	public function getVs()
 	{
-		return $this->ks;
+		return $this->vs;
 	}
 	
 	/**
@@ -133,7 +133,7 @@ class kScope
 	{
 		if(is_null($this->time))
 		{
-			return kApiCache::getTime();
+			return vApiCache::getTime();
 		}
 			
 		return $this->time;
@@ -154,9 +154,9 @@ class kScope
 
 	/**
 	 * @param string $key
-	 * @param kValue $value
+	 * @param vValue $value
 	 */
-	public function addDynamicValue($key, kValue $value) 
+	public function addDynamicValue($key, vValue $value) 
 	{
 		$this->dynamicValues[$key] = $value;
 	}
@@ -213,9 +213,9 @@ class kScope
 	}
 
 	/**
-	 * Calculate dynamic field value by kValue object
+	 * Calculate dynamic field value by vValue object
 	 *
-	 * @param kValue $value
+	 * @param vValue $value
 	 * @return string
 	 */
 	protected function calculateDynamicValue($value)

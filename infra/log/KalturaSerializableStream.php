@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage log
  */
-class KalturaSerializableStream extends Zend_Log_Writer_Stream
+class VidiunSerializableStream extends Zend_Log_Writer_Stream
 {
 	/**
 	 * @var string
@@ -23,7 +23,7 @@ class KalturaSerializableStream extends Zend_Log_Writer_Stream
 	public function __construct($streamOrUrl, $mode = 'a')
 	{
 		if (is_resource($streamOrUrl))
-			throw new Zend_Log_Exception("Cannot use KalturaSerializableStream with a resource");
+			throw new Zend_Log_Exception("Cannot use VidiunSerializableStream with a resource");
 		
 		$this->_url = $streamOrUrl;
 		$this->_mode = $mode;

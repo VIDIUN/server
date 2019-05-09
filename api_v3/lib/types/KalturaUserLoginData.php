@@ -4,7 +4,7 @@
  * @subpackage objects
  * @relatedService SystemPartnerService
  */
-class KalturaUserLoginData extends KalturaObject implements IRelatedFilterable
+class VidiunUserLoginData extends VidiunObject implements IRelatedFilterable
 
 {
 	/**

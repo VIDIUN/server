@@ -13,7 +13,7 @@ class Infra_AuthAdapter implements Zend_Auth_Adapter_Interface
     
     const USER_NOT_FOUND = 'USER_NOT_FOUND';
 	
-	const X_KALTURA_REMOTE_ADDR = 'X-KALTURA-REMOTE-ADDR';
+	const X_VIDIUN_REMOTE_ADDR = 'X-VIDIUN-REMOTE-ADDR';
     
 	/**
 	 * @var string
@@ -48,7 +48,7 @@ class Infra_AuthAdapter implements Zend_Auth_Adapter_Interface
 	/**
 	 * @var string
 	 */
-	protected $ks;
+	protected $vs;
 	
 	/**
 	 * Sets username and password for authentication
@@ -61,7 +61,7 @@ class Infra_AuthAdapter implements Zend_Auth_Adapter_Interface
 	}
 	
 	/**
-	 * Sets ks privileges for authentication
+	 * Sets vs privileges for authentication
 	 */
 	public function setPrivileges($privileges)
 	{
@@ -78,21 +78,21 @@ class Infra_AuthAdapter implements Zend_Auth_Adapter_Interface
 		$this->timezoneOffset = $timezoneOffset;
 	}
 
-	public function setKS($ks)
+	public function setVS($vs)
 	{
-		$this->ks = $ks;
+		$this->vs = $vs;
 	}
 	
 	/**
-	 * @param Kaltura_Client_Type_User $user
-	 * @param string $ks
+	 * @param Vidiun_Client_Type_User $user
+	 * @param string $vs
 	 * @param int $partnerId
 	 *
 	 * @return Infra_UserIdentity
 	 */
-	protected function getUserIdentity(Kaltura_Client_Type_User $user = null, $ks = null, $partnerId = null)
+	protected function getUserIdentity(Vidiun_Client_Type_User $user = null, $vs = null, $partnerId = null)
 	{
-		return new Infra_UserIdentity($user, $ks, $this->timezoneOffset, $partnerId);
+		return new Infra_UserIdentity($user, $vs, $this->timezoneOffset, $partnerId);
 	}
 	
 	/**
@@ -108,14 +108,14 @@ class Infra_AuthAdapter implements Zend_Auth_Adapter_Interface
 		// This will also apply session options and cookie updates (e.g. cookie_secure)
 		Zend_Session::regenerateId();
 
-		if($this->ks)
+		if($this->vs)
 		{
 			$client = Infra_ClientHelper::getClient();
-			$client->setKs($this->ks);
+			$client->setVs($this->vs);
 			
     		$user = $client->user->get();
-    		/* @var $user Kaltura_Client_Type_User */
-    		$identity = $this->getUserIdentity($user, $this->ks, $user->partnerId);
+    		/* @var $user Vidiun_Client_Type_User */
+    		$identity = $this->getUserIdentity($user, $this->vs, $user->partnerId);
     		return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $identity);
 		}
 		
@@ -128,7 +128,7 @@ class Infra_AuthAdapter implements Zend_Auth_Adapter_Interface
 			$partnerId = $settings->partnerId;
 		
 		$client = Infra_ClientHelper::getClient();
-		$client->setKs(null);
+		$client->setVs(null);
 		$config = $client->getConfig();
 		$config->requestHeaders[] = $this->constructXRemoteAddrHeader($_SERVER['REMOTE_ADDR'], time(), 'admin_console', $settings->remoteAddrHeaderSalt);
 		$client->setConfig($config);
@@ -137,18 +137,18 @@ class Infra_AuthAdapter implements Zend_Auth_Adapter_Interface
 		{
 			if ($this->partnerId)
 			{
-			    $ks = $client->user->loginByLoginId($this->username, $this->password, $this->partnerId, null, $this->privileges, $this->otp);
-	    		$client->setKs($ks);
+			    $vs = $client->user->loginByLoginId($this->username, $this->password, $this->partnerId, null, $this->privileges, $this->otp);
+	    		$client->setVs($vs);
 	    		$user = $client->user->getByLoginId($this->username, $this->partnerId);
-	    		$identity = $this->getUserIdentity($user, $ks, $this->partnerId);
+	    		$identity = $this->getUserIdentity($user, $vs, $this->partnerId);
 	    		return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $identity);
 			}
 			
-		    if (!$this->ks)
-    		    $this->ks = $client->user->loginByLoginId($this->username, $this->password, $partnerId, null, $this->privileges, $this->otp);
-    		$client->setKs($this->ks);
+		    if (!$this->vs)
+    		    $this->vs = $client->user->loginByLoginId($this->username, $this->password, $partnerId, null, $this->privileges, $this->otp);
+    		$client->setVs($this->vs);
     		$user = $client->user->getByLoginId($this->username, $partnerId);
-    		$identity = $this->getUserIdentity($user, $this->ks, $user->partnerId);
+    		$identity = $this->getUserIdentity($user, $this->vs, $user->partnerId);
 			
 			if ($partnerId && $user->partnerId != $partnerId) {
 				return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, null);
@@ -167,7 +167,7 @@ class Infra_AuthAdapter implements Zend_Auth_Adapter_Interface
 
 	protected function constructXRemoteAddrHeader ($remoteIp, $time, $uniqueId, $salt)
 	{
-		return self::X_KALTURA_REMOTE_ADDR . ":$remoteIp,$time,$uniqueId," . md5("$remoteIp,$time,$uniqueId,$salt");	
+		return self::X_VIDIUN_REMOTE_ADDR . ":$remoteIp,$time,$uniqueId," . md5("$remoteIp,$time,$uniqueId,$salt");	
 	}
 
 }

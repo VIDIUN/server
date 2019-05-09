@@ -4,12 +4,12 @@
  * @package plugins.reach
  * @subpackage model.enum
  */
-class ReachEntryVendorTasksCsvBatchType implements IKalturaPluginEnum, BatchJobType
+class ReachEntryVendorTasksCsvBatchType implements IVidiunPluginEnum, BatchJobType
 {
 	const ENTRY_VENDOR_TASK_CSV = 'EntryVendorTasksCsv';
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalValues()
+	 * @see IVidiunPluginEnum::getAdditionalValues()
 	 */
 	public static function getAdditionalValues()
 	{
@@ -19,7 +19,7 @@ class ReachEntryVendorTasksCsvBatchType implements IKalturaPluginEnum, BatchJobT
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalDescriptions()
+	 * @see IVidiunPluginEnum::getAdditionalDescriptions()
 	 */
 	public static function getAdditionalDescriptions()
 	{

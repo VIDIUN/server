@@ -1,6 +1,6 @@
 <?php
 
-class kCaptionPlaybackPluginData {
+class vCaptionPlaybackPluginData {
 
 	/**
 	 * @var string

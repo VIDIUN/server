@@ -7,7 +7,7 @@
  * @subpackage model
  *
  */
-class kLiveStreamParams
+class vLiveStreamParams
 {
 	/**
 	 * @var int

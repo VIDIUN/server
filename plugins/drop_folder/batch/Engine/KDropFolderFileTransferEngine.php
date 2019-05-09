@@ -2,21 +2,21 @@
 /**
  * This engine handles the basiC use-cases of drop folders- local, and remote FTP, SFTP.
  */
-class KDropFolderFileTransferEngine extends KDropFolderEngine
+class VDropFolderFileTransferEngine extends VDropFolderEngine
 {
 	const IGNORE_PATTERNS_DEFAULT_VALUE  = '*.cache,*.aspx';
 	
 	/**
-	 * @var kFileTransferMgr
+	 * @var vFileTransferMgr
 	 */	
 	protected $fileTransferMgr;
 
 	
-	public function watchFolder (KalturaDropFolder $folder)
+	public function watchFolder (VidiunDropFolder $folder)
 	{
 		$this->dropFolder = $folder;
 		$this->fileTransferMgr =  self::getFileTransferManager($this->dropFolder);
-		KalturaLog::info('Watching folder ['.$this->dropFolder->id.']');
+		VidiunLog::info('Watching folder ['.$this->dropFolder->id.']');
 						    										
 		$physicalFiles = $this->getDropFolderFilesFromPhysicalFolder();
 		if(count($physicalFiles) > 0)
@@ -29,23 +29,23 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 		{
 			/* @var $physicalFile FileObject */	
 			$physicalFileName = $physicalFile->filename;
-			$utfFileName = kString::stripUtf8InvalidChars($physicalFileName);
+			$utfFileName = vString::stripUtf8InvalidChars($physicalFileName);
 			
 			if($physicalFileName != $utfFileName)
 			{
-				KalturaLog::info("File name [$physicalFileName] is not utf-8 compatible, Skipping file...");
+				VidiunLog::info("File name [$physicalFileName] is not utf-8 compatible, Skipping file...");
 				continue;
 			}
 			
-			if(!kXml::isXMLValidContent($utfFileName))
+			if(!vXml::isXMLValidContent($utfFileName))
 			{
-				KalturaLog::info("File name [$physicalFileName] contains invalid XML characters, Skipping file...");
+				VidiunLog::info("File name [$physicalFileName] contains invalid XML characters, Skipping file...");
 				continue;
 			}
 			
 			if ($this->dropFolder->incremental && $physicalFile->modificationTime < $this->dropFolder->lastFileTimestamp)
 			{
-				KalturaLog::info("File modification time [" . $physicalFile->modificationTime ."] predates drop folder last timestamp [". $this->dropFolder->lastFileTimestamp ."]. Skipping.");
+				VidiunLog::info("File modification time [" . $physicalFile->modificationTime ."] predates drop folder last timestamp [". $this->dropFolder->lastFileTimestamp ."]. Skipping.");
 				if (isset ($dropFolderFilesMap[$physicalFileName]))
 					unset($dropFolderFilesMap[$physicalFileName]);
 				continue;
@@ -54,7 +54,7 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 			if($this->validatePhysicalFile($physicalFileName))
 			{
 				$maxModificationTime = ($physicalFile->modificationTime > $maxModificationTime) ? $physicalFile->modificationTime : $maxModificationTime;
-				KalturaLog::info('Watch file ['.$physicalFileName.']');
+				VidiunLog::info('Watch file ['.$physicalFileName.']');
 				if(!array_key_exists($physicalFileName, $dropFolderFilesMap))
 				{
 					try 
@@ -66,7 +66,7 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 					}
 					catch (Exception $e)
 					{
-						KalturaLog::err("Error handling drop folder file [$physicalFileName] " . $e->getMessage());
+						VidiunLog::err("Error handling drop folder file [$physicalFileName] " . $e->getMessage());
 					}											
 				}
 				else //drop folder file entry found
@@ -86,7 +86,7 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 		
 		if ($this->dropFolder->incremental && $maxModificationTime > $this->dropFolder->lastFileTimestamp)
 		{
-			$updateDropFolder = new KalturaDropFolder();
+			$updateDropFolder = new VidiunDropFolder();
 			$updateDropFolder->lastFileTimestamp = $maxModificationTime;
 			$this->dropFolderPlugin->dropFolder->update($this->dropFolder->id, $updateDropFolder);
 		}
@@ -97,7 +97,7 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 		return $this->fileTransferMgr->fileExists($this->dropFolder->path);
 	}
 	
-	protected function handleExistingDropFolderFile (KalturaDropFolderFile $dropFolderFile)
+	protected function handleExistingDropFolderFile (VidiunDropFolderFile $dropFolderFile)
 	{
 		try 
 		{
@@ -108,9 +108,9 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 		catch (Exception $e)
 		{
 			$closedStatuses = array(
-				KalturaDropFolderFileStatus::HANDLED, 
-				KalturaDropFolderFileStatus::PURGED, 
-				KalturaDropFolderFileStatus::DELETED
+				VidiunDropFolderFileStatus::HANDLED, 
+				VidiunDropFolderFileStatus::PURGED, 
+				VidiunDropFolderFileStatus::DELETED
 			);
 			
 			//In cases drop folder is not configured with auto delete we want to verify that the status file is not in one of the closed statuses so 
@@ -118,20 +118,20 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 			if(!in_array($dropFolderFile->status, $closedStatuses))
 			{
 				//Currently "modificationTime" does not throw Exception since from php documentation not all servers support the ftp_mdtm feature
-				KalturaLog::err('Failed to get modification time or file size for file ['.$fullPath.']');
-				$this->handleFileError($dropFolderFile->id, KalturaDropFolderFileStatus::ERROR_HANDLING, KalturaDropFolderFileErrorCode::ERROR_READING_FILE, 
+				VidiunLog::err('Failed to get modification time or file size for file ['.$fullPath.']');
+				$this->handleFileError($dropFolderFile->id, VidiunDropFolderFileStatus::ERROR_HANDLING, VidiunDropFolderFileErrorCode::ERROR_READING_FILE, 
 															DropFolderPlugin::ERROR_READING_FILE_MESSAGE. '['.$fullPath.']', $e);
 			}
 			return false;		
 		}				 
 				
-		if($dropFolderFile->status == KalturaDropFolderFileStatus::UPLOADING)
+		if($dropFolderFile->status == VidiunDropFolderFileStatus::UPLOADING)
 		{
 			$this->handleUploadingDropFolderFile($dropFolderFile, $fileSize, $lastModificationTime);
 		}
 		else
 		{
-			KalturaLog::info('Last modification time ['.$lastModificationTime.'] known last modification time ['.$dropFolderFile->lastModificationTime.']');
+			VidiunLog::info('Last modification time ['.$lastModificationTime.'] known last modification time ['.$dropFolderFile->lastModificationTime.']');
 			$isLastModificationTimeUpdated = $dropFolderFile->lastModificationTime && $dropFolderFile->lastModificationTime != '' && ($lastModificationTime > $dropFolderFile->lastModificationTime);
 			
 			if($isLastModificationTimeUpdated) //file is replaced, add new entry
@@ -141,8 +141,8 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 		 	else
 		 	{
 		 		$deleteTime = $dropFolderFile->updatedAt + $this->dropFolder->autoFileDeleteDays*86400;
-		 		if(($dropFolderFile->status == KalturaDropFolderFileStatus::HANDLED && $this->dropFolder->fileDeletePolicy != KalturaDropFolderFileDeletePolicy::MANUAL_DELETE && time() > $deleteTime) ||
-		 			$dropFolderFile->status == KalturaDropFolderFileStatus::DELETED)
+		 		if(($dropFolderFile->status == VidiunDropFolderFileStatus::HANDLED && $this->dropFolder->fileDeletePolicy != VidiunDropFolderFileDeletePolicy::MANUAL_DELETE && time() > $deleteTime) ||
+		 			$dropFolderFile->status == VidiunDropFolderFileStatus::DELETED)
 		 		{
 		 			$this->purgeFile($dropFolderFile);
 		 		}
@@ -150,11 +150,11 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 		}
 	}
 	
-	protected function handleUploadingDropFolderFile (KalturaDropFolderFile $dropFolderFile, $currentFileSize, $lastModificationTime)
+	protected function handleUploadingDropFolderFile (VidiunDropFolderFile $dropFolderFile, $currentFileSize, $lastModificationTime)
 	{
 		if (!$currentFileSize) 
 		{
-			$this->handleFileError($dropFolderFile->id, KalturaDropFolderFileStatus::ERROR_HANDLING, KalturaDropFolderFileErrorCode::ERROR_READING_FILE, 
+			$this->handleFileError($dropFolderFile->id, VidiunDropFolderFileStatus::ERROR_HANDLING, VidiunDropFolderFileErrorCode::ERROR_READING_FILE, 
 															DropFolderPlugin::ERROR_READING_FILE_MESSAGE.'['.$this->dropFolder->path.'/'.$dropFolderFile->fileName);
 		}		
 		else if ($currentFileSize != $dropFolderFile->fileSize)
@@ -166,7 +166,7 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 			$time = time();
 			$fileSizeLastSetAt = $this->dropFolder->fileSizeCheckInterval + $dropFolderFile->fileSizeLastSetAt;
 			
-			KalturaLog::info("time [$time] fileSizeLastSetAt [$fileSizeLastSetAt]");
+			VidiunLog::info("time [$time] fileSizeLastSetAt [$fileSizeLastSetAt]");
 			
 			// check if fileSizeCheckInterval time has passed since the last file size update	
 			if ($time > $fileSizeLastSetAt)
@@ -180,7 +180,7 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 	{
 		try 
 		{
-			$newDropFolderFile = new KalturaDropFolderFile();
+			$newDropFolderFile = new VidiunDropFolderFile();
 	    	$newDropFolderFile->dropFolderId = $this->dropFolder->id;
 	    	$newDropFolderFile->fileName = $fileName;
 	    	$newDropFolderFile->fileSize = $fileSize;
@@ -191,14 +191,14 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err('Cannot add new drop folder file with name ['.$fileName.'] - '.$e->getMessage());
+			VidiunLog::err('Cannot add new drop folder file with name ['.$fileName.'] - '.$e->getMessage());
 			return null;
 		}
 	}
 	
 	protected function validatePhysicalFile ($physicalFile)
 	{
-		KalturaLog::log('Validating physical file ['.$physicalFile.']');
+		VidiunLog::log('Validating physical file ['.$physicalFile.']');
 		
 		$ignorePatterns = $this->dropFolder->ignoreFileNamePatterns;	
 		if($ignorePatterns)
@@ -213,17 +213,17 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 			$fullPath = $this->dropFolder->path.'/'.$physicalFile;
 			if ($physicalFile === '.' || $physicalFile === '..')
 			{
-				KalturaLog::info("Skipping linux current and parent folder indicators");
+				VidiunLog::info("Skipping linux current and parent folder indicators");
 				$isValid = false;
 			}
 			else if (empty($physicalFile)) 
 			{
-				KalturaLog::err("File name is not set");
+				VidiunLog::err("File name is not set");
 				$isValid = false;
 			}
 			else if(!$fullPath || !$this->fileTransferMgr->fileExists($fullPath))
 			{
-				KalturaLog::err("Cannot access physical file in path [$fullPath]");
+				VidiunLog::err("Cannot access physical file in path [$fullPath]");
 				$isValid = false;				
 			}
 			else
@@ -232,7 +232,7 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 				{
 					if (!is_null($ignorePattern) && ($ignorePattern != '') && fnmatch($ignorePattern, $physicalFile)) 
 					{
-						KalturaLog::err("Ignoring file [$physicalFile] matching ignore pattern [$ignorePattern]");
+						VidiunLog::err("Ignoring file [$physicalFile] matching ignore pattern [$ignorePattern]");
 						$isValid = false;
 					}
 				}
@@ -240,34 +240,34 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 		}
 		catch(Exception $e)
 		{
-			KalturaLog::err("Failure validating physical file [$physicalFile] - ". $e->getMessage());
+			VidiunLog::err("Failure validating physical file [$physicalFile] - ". $e->getMessage());
 			$isValid = false;
 		}
 		return $isValid;
 	}
 	
 	/** 
-     * Init a kFileTransferManager acccording to folder type and login to the server
+     * Init a vFileTransferManager acccording to folder type and login to the server
      * @throws Exception
      * 
-     * @return kFileTransferMgr
+     * @return vFileTransferMgr
      */
-	public static function getFileTransferManager(KalturaDropFolder $dropFolder)
+	public static function getFileTransferManager(VidiunDropFolder $dropFolder)
 	{
-		$engineOptions = isset(KBatchBase::$taskConfig->engineOptions) ? KBatchBase::$taskConfig->engineOptions->toArray() : array();
-	    $fileTransferMgr = kFileTransferMgr::getInstance(self::getFileTransferMgrType($dropFolder->type), $engineOptions);
+		$engineOptions = isset(VBatchBase::$taskConfig->engineOptions) ? VBatchBase::$taskConfig->engineOptions->toArray() : array();
+	    $fileTransferMgr = vFileTransferMgr::getInstance(self::getFileTransferMgrType($dropFolder->type), $engineOptions);
 	    
 	    $host =null; $username=null; $password=null; $port=null;
 	    $privateKey = null; $publicKey = null;
 	    
-	    if($dropFolder instanceof KalturaRemoteDropFolder)
+	    if($dropFolder instanceof VidiunRemoteDropFolder)
 	    {
 	   		$host = $dropFolder->host;
 	    	$port = $dropFolder->port;
 	    	$username = $dropFolder->username;
 	    	$password = $dropFolder->password;
 	    }  
-	    if($dropFolder instanceof KalturaSshDropFolder)
+	    if($dropFolder instanceof VidiunSshDropFolder)
 	    {
 	    	$privateKey = $dropFolder->privateKey;
 	    	$publicKey = $dropFolder->publicKey;
@@ -277,8 +277,8 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
         // login to server
         if ($privateKey || $publicKey) 
         {
-	       	$privateKeyFile = $privateKey ? kFile::createTempFile($privateKey, 'privateKey') : null;
-        	$publicKeyFile = $publicKey ? kFile::createTempFile($publicKey, 'publicKey'): null;
+	       	$privateKeyFile = $privateKey ? vFile::createTempFile($privateKey, 'privateKey') : null;
+        	$publicKeyFile = $publicKey ? vFile::createTempFile($publicKey, 'publicKey'): null;
         	$fileTransferMgr->loginPubKey($host, $username, $publicKeyFile, $privateKeyFile, $passPhrase, $port);        	
         }
         else 
@@ -297,16 +297,16 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 	{
 		switch ($dropFolderType)
 		{
-			case KalturaDropFolderType::LOCAL:
-				return kFileTransferMgrType::LOCAL;
-			case KalturaDropFolderType::FTP:
-				return kFileTransferMgrType::FTP;
-			case KalturaDropFolderType::SCP:
-				return kFileTransferMgrType::SCP;
-			case KalturaDropFolderType::SFTP:
-				return kFileTransferMgrType::SFTP;
-			case KalturaDropFolderType::S3:
-				return kFileTransferMgrType::S3;
+			case VidiunDropFolderType::LOCAL:
+				return vFileTransferMgrType::LOCAL;
+			case VidiunDropFolderType::FTP:
+				return vFileTransferMgrType::FTP;
+			case VidiunDropFolderType::SCP:
+				return vFileTransferMgrType::SCP;
+			case VidiunDropFolderType::SFTP:
+				return vFileTransferMgrType::SFTP;
+			case VidiunDropFolderType::S3:
+				return vFileTransferMgrType::S3;
 			default:
 				return $dropFolderType;				
 		}
@@ -325,7 +325,7 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 	{
 		try 
 		{
-			$updateDropFolderFile = new KalturaDropFolderFile();
+			$updateDropFolderFile = new VidiunDropFolderFile();
 			$updateDropFolderFile->fileSize = $fileSize;
 			$updateDropFolderFile->lastModificationTime = $lastModificationTime;
 			if($uploadStartDetectedAt)
@@ -336,7 +336,7 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 		}
 		catch (Exception $e) 
 		{
-			$this->handleFileError($dropFolderFileId, KalturaDropFolderFileStatus::ERROR_HANDLING, KalturaDropFolderFileErrorCode::ERROR_UPDATE_FILE, 
+			$this->handleFileError($dropFolderFileId, VidiunDropFolderFileStatus::ERROR_HANDLING, VidiunDropFolderFileErrorCode::ERROR_UPDATE_FILE, 
 									DropFolderPlugin::ERROR_UPDATE_FILE_MESSAGE, $e);
 			return null;
 		}						
@@ -351,21 +351,21 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 	{
 		try 
 		{
-			$updateDropFolderFile = new KalturaDropFolderFile();
+			$updateDropFolderFile = new VidiunDropFolderFile();
 			$updateDropFolderFile->lastModificationTime = $lastModificationTime;
 			$updateDropFolderFile->uploadEndDetectedAt = time();
 			$this->dropFolderFileService->update($dropFolderFileId, $updateDropFolderFile);
-			return $this->dropFolderFileService->updateStatus($dropFolderFileId, KalturaDropFolderFileStatus::PENDING);			
+			return $this->dropFolderFileService->updateStatus($dropFolderFileId, VidiunDropFolderFileStatus::PENDING);			
 		}
-		catch(KalturaException $e)
+		catch(VidiunException $e)
 		{
-			$this->handleFileError($dropFolderFileId, KalturaDropFolderFileStatus::ERROR_HANDLING, KalturaDropFolderFileErrorCode::ERROR_UPDATE_FILE, 
+			$this->handleFileError($dropFolderFileId, VidiunDropFolderFileStatus::ERROR_HANDLING, VidiunDropFolderFileErrorCode::ERROR_UPDATE_FILE, 
 									DropFolderPlugin::ERROR_UPDATE_FILE_MESSAGE, $e);
 			return null;
 		}
 	}
 	
-	protected function purgeFile(KalturaDropFolderFile $dropFolderFile)
+	protected function purgeFile(VidiunDropFolderFile $dropFolderFile)
 	{
 		$fullPath = $this->dropFolder->path.'/'.$dropFolderFile->fileName;
 		// physicaly delete the file
@@ -376,11 +376,11 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 		}
 		catch (Exception $e) 
 		{
-			KalturaLog::err("Error when deleting drop folder file - ".$e->getMessage());
+			VidiunLog::err("Error when deleting drop folder file - ".$e->getMessage());
 		    $delResult = null;
 		}
 		if (!$delResult) 
-			$this->handleFileError($dropFolderFile->id, KalturaDropFolderFileStatus::ERROR_DELETING, KalturaDropFolderFileErrorCode::ERROR_DELETING_FILE, 
+			$this->handleFileError($dropFolderFile->id, VidiunDropFolderFileStatus::ERROR_DELETING, VidiunDropFolderFileErrorCode::ERROR_DELETING_FILE, 
 														 DropFolderPlugin::ERROR_DELETING_FILE_MESSAGE. '['.$fullPath.']');
 		else
 		 	$this->handleFilePurged($dropFolderFile->id);
@@ -393,46 +393,46 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 			$physicalFiles = $this->fileTransferMgr->listFileObjects($this->dropFolder->path);
 			if ($physicalFiles) 
 			{
-				KalturaLog::log('Found ['.count($physicalFiles).'] in the folder');			
+				VidiunLog::log('Found ['.count($physicalFiles).'] in the folder');			
 			}		
 			else
 			{
-				KalturaLog::info('No physical files found for drop folder id ['.$this->dropFolder->id.'] with path ['.$this->dropFolder->path.']');
+				VidiunLog::info('No physical files found for drop folder id ['.$this->dropFolder->id.'] with path ['.$this->dropFolder->path.']');
 				$physicalFiles = array();
 			}
 		}
 		else 
 		{
-			throw new kFileTransferMgrException('Drop folder path not valid ['.$this->dropFolder->path.']', kFileTransferMgrException::remotePathNotValid);
+			throw new vFileTransferMgrException('Drop folder path not valid ['.$this->dropFolder->path.']', vFileTransferMgrException::remotePathNotValid);
 		}
 
-		KalturaLog::info("physical files: ");
+		VidiunLog::info("physical files: ");
 		foreach ($physicalFiles as &$currlFile)
 		{
-			KalturaLog::info(print_r($currlFile, true));
+			VidiunLog::info(print_r($currlFile, true));
 		}
 		
 		return $physicalFiles;
 	}
 	
-	public function processFolder (KalturaBatchJob $job, KalturaDropFolderContentProcessorJobData $data)
+	public function processFolder (VidiunBatchJob $job, VidiunDropFolderContentProcessorJobData $data)
 	{
-		KBatchBase::impersonate($job->partnerId);
+		VBatchBase::impersonate($job->partnerId);
 		
-		/* @var $data KalturaWebexDropFolderContentProcessorJobData */
+		/* @var $data VidiunWebexDropFolderContentProcessorJobData */
 		$dropFolder = $this->dropFolderPlugin->dropFolder->get ($data->dropFolderId);
 		
 		switch ($data->contentMatchPolicy)
 		{
-			case KalturaDropFolderContentFileHandlerMatchPolicy::ADD_AS_NEW:
+			case VidiunDropFolderContentFileHandlerMatchPolicy::ADD_AS_NEW:
 				$this->addAsNewContent($job, $data, $dropFolder);
 				break;
 			
-			case KalturaDropFolderContentFileHandlerMatchPolicy::MATCH_EXISTING_OR_KEEP_IN_FOLDER:
+			case VidiunDropFolderContentFileHandlerMatchPolicy::MATCH_EXISTING_OR_KEEP_IN_FOLDER:
 				$this->addAsExistingContent($job, $data, null, $dropFolder);
 				break;
 				
-			case KalturaDropFolderContentFileHandlerMatchPolicy::MATCH_EXISTING_OR_ADD_AS_NEW:
+			case VidiunDropFolderContentFileHandlerMatchPolicy::MATCH_EXISTING_OR_ADD_AS_NEW:
 				$matchedEntry = $this->isEntryMatch($data);
 				if($matchedEntry)
 					$this->addAsExistingContent($job, $data, $matchedEntry, $dropFolder);
@@ -440,45 +440,45 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 					 $this->addAsNewContent($job, $data, $dropFolder);	
 				break;			
 			default:
-				throw new kApplicativeException(KalturaDropFolderErrorCode::CONTENT_MATCH_POLICY_UNDEFINED, 'No content match policy is defined for drop folder'); 
+				throw new vApplicativeException(VidiunDropFolderErrorCode::CONTENT_MATCH_POLICY_UNDEFINED, 'No content match policy is defined for drop folder'); 
 				break;
 		}
 		
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 	}
 	
-	private function addAsNewContent(KalturaBatchJob $job, KalturaDropFolderContentProcessorJobData $data, KalturaDropFolder $dropFolder)
+	private function addAsNewContent(VidiunBatchJob $job, VidiunDropFolderContentProcessorJobData $data, VidiunDropFolder $dropFolder)
 	{ 		
 		$resource = $this->getIngestionResource($job, $data);
-		$newEntry = new KalturaBaseEntry();
+		$newEntry = new VidiunBaseEntry();
 		$newEntry->conversionProfileId = $data->conversionProfileId;
 		$newEntry->name = $data->parsedSlug;
 		$newEntry->referenceId = $data->parsedSlug;
 		$newEntry->userId = $data->parsedUserId;
-		KBatchBase::$kClient->startMultiRequest();
-		$addedEntry = KBatchBase::$kClient->baseEntry->add($newEntry, null);
-		KBatchBase::$kClient->baseEntry->addContent($addedEntry->id, $resource);
-		$result = KBatchBase::$kClient->doMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
+		$addedEntry = VBatchBase::$vClient->baseEntry->add($newEntry, null);
+		VBatchBase::$vClient->baseEntry->addContent($addedEntry->id, $resource);
+		$result = VBatchBase::$vClient->doMultiRequest();
 		
-		if ($result [1] && $result[1] instanceof KalturaBaseEntry)
+		if ($result [1] && $result[1] instanceof VidiunBaseEntry)
 		{
 			$entry = $result [1];
 			$this->createCategoryAssociations ($dropFolder, $entry->userId, $entry->id);
 		}	
 	}
 
-	private function isEntryMatch(KalturaDropFolderContentProcessorJobData $data)
+	private function isEntryMatch(VidiunDropFolderContentProcessorJobData $data)
 	{
 		try 
 		{
-			$entryFilter = new KalturaBaseEntryFilter();
+			$entryFilter = new VidiunBaseEntryFilter();
 			$entryFilter->referenceIdEqual = $data->parsedSlug;
-			$entryFilter->statusIn = KalturaEntryStatus::IMPORT.','.KalturaEntryStatus::PRECONVERT.','.KalturaEntryStatus::READY.','.KalturaEntryStatus::PENDING.','.KalturaEntryStatus::NO_CONTENT;		
+			$entryFilter->statusIn = VidiunEntryStatus::IMPORT.','.VidiunEntryStatus::PRECONVERT.','.VidiunEntryStatus::READY.','.VidiunEntryStatus::PENDING.','.VidiunEntryStatus::NO_CONTENT;		
 			
-			$entryPager = new KalturaFilterPager();
+			$entryPager = new VidiunFilterPager();
 			$entryPager->pageSize = 1;
 			$entryPager->pageIndex = 1;
-			$entryList = KBatchBase::$kClient->baseEntry->listAction($entryFilter, $entryPager);
+			$entryList = VBatchBase::$vClient->baseEntry->listAction($entryFilter, $entryPager);
 			
 			if (is_array($entryList->objects) && isset($entryList->objects[0]) ) 
 			{
@@ -491,7 +491,7 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 		}
 		catch (Exception $e)
 		{
-			KalturaLog::err('Failed to get entry by reference id: [$data->parsedSlug] - '. $e->getMessage() );
+			VidiunLog::err('Failed to get entry by reference id: [$data->parsedSlug] - '. $e->getMessage() );
 			return false;
 		}
 	}
@@ -501,7 +501,7 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 	 * Update the matched entry with the new file and all other relevant files from the drop folder, according to the ingestion profile.
 	 *
 	 */
-	private function addAsExistingContent(KalturaBatchJob $job, KalturaDropFolderContentProcessorJobData $data, $matchedEntry = null, KalturaDropFolder $dropFolder)
+	private function addAsExistingContent(VidiunBatchJob $job, VidiunDropFolderContentProcessorJobData $data, $matchedEntry = null, VidiunDropFolder $dropFolder)
 	{	    
 		// check for matching entry and flavor
 		if(!$matchedEntry)
@@ -509,8 +509,8 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 			$matchedEntry = $this->isEntryMatch($data);
 			if(!$matchedEntry)
 			{
-				$e = new kTemporaryException('No matching entry found', KalturaDropFolderFileErrorCode::FILE_NO_MATCH);
-				if(($job->createdAt + KBatchBase::$taskConfig->params->maxTimeBeforeFail) >= time())
+				$e = new vTemporaryException('No matching entry found', VidiunDropFolderFileErrorCode::FILE_NO_MATCH);
+				if(($job->createdAt + VBatchBase::$taskConfig->params->maxTimeBeforeFail) >= time())
 				{
 					$e->setResetJobExecutionAttempts(true);
 				}	
@@ -521,18 +521,18 @@ class KDropFolderFileTransferEngine extends KDropFolderEngine
 		$resource = $this->getIngestionResource($job, $data);
 		
 		//If entry user ID differs from the parsed user ID on the job data - update the entry
-		KBatchBase::$kClient->startMultiRequest();
+		VBatchBase::$vClient->startMultiRequest();
 		if ($data->parsedUserId != $matchedEntry->userId)
 		{
-			$updateEntry = new KalturaMediaEntry();
+			$updateEntry = new VidiunMediaEntry();
 			$updateEntry->userId = $data->parsedUserId;
-			KBatchBase::$kClient->baseEntry->update ($matchedEntry->id, $updateEntry);
+			VBatchBase::$vClient->baseEntry->update ($matchedEntry->id, $updateEntry);
 		}
-		KBatchBase::$kClient->media->cancelReplace($matchedEntry->id);
-		$updatedEntry = KBatchBase::$kClient->baseEntry->updateContent($matchedEntry->id, $resource, $data->conversionProfileId);
-		$result = KBatchBase::$kClient->doMultiRequest();
+		VBatchBase::$vClient->media->cancelReplace($matchedEntry->id);
+		$updatedEntry = VBatchBase::$vClient->baseEntry->updateContent($matchedEntry->id, $resource, $data->conversionProfileId);
+		$result = VBatchBase::$vClient->doMultiRequest();
 		
-		if ($updatedEntry && $updatedEntry instanceof KalturaBaseEntry)
+		if ($updatedEntry && $updatedEntry instanceof VidiunBaseEntry)
 		{
 			$this->createCategoryAssociations ($dropFolder, $updatedEntry->userId, $updatedEntry->id);
 		}

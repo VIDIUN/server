@@ -5,7 +5,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kEvalBooleanField extends kBooleanField
+class vEvalBooleanField extends vBooleanField
 {
 	/**
 	 * PHP code
@@ -14,18 +14,18 @@ class kEvalBooleanField extends kBooleanField
 	protected $code;
 	
 	/* (non-PHPdoc)
-	 * @see kBooleanField::getFieldValue()
+	 * @see vBooleanField::getFieldValue()
 	 */
-	protected function getFieldValue(kScope $scope = null) 
+	protected function getFieldValue(vScope $scope = null) 
 	{
 		if(!$scope)
 			return null;
 			
-		/* @var $scope kEventScope */
+		/* @var $scope vEventScope */
 		if(strpos($this->code, ';') !== false)
-			throw new kCoreException("Evaluated code may be simple value only");
+			throw new vCoreException("Evaluated code may be simple value only");
 		
-		KalturaLog::debug("Evaluating code [$this->code]" . ($this->description ? " for description [$this->description]" : ''));
+		VidiunLog::debug("Evaluating code [$this->code]" . ($this->description ? " for description [$this->description]" : ''));
 		return eval("return (bool)({$this->code});");
 	}
 	

@@ -3,17 +3,17 @@
  * @package plugins.quickTimeTools
  * @subpackage lib
  */
-class KOperationEngineQtTools  extends KSingleOutputOperationEngine
+class VOperationEngineQtTools  extends VSingleOutputOperationEngine
 {
 	protected $tmpFolder;
 	
-	public function configure(KalturaConvartableJobData $data, KalturaBatchJob $job)
+	public function configure(VidiunConvartableJobData $data, VidiunBatchJob $job)
 	{
 		parent::configure($data, $job);
-		$this->tmpFolder = KBatchBase::$taskConfig->params->localTempPath;
+		$this->tmpFolder = VBatchBase::$taskConfig->params->localTempPath;
 	}
 	
-	public function operate(kOperator $operator = null, $inFilePath, $configFilePath = null)
+	public function operate(vOperator $operator = null, $inFilePath, $configFilePath = null)
 	{
 		$qtInFilePath = "$this->tmpFolder/$inFilePath.stb";
 

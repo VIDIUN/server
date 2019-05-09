@@ -6,14 +6,14 @@
  * @package plugins.dropFolder
  * @subpackage api.services
  */
-class DropFolderService extends KalturaBaseService
+class DropFolderService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
 		parent::initService($serviceId, $serviceName, $actionName);
 		
 		if (!DropFolderPlugin::isAllowedPartner($this->getPartnerId()))
-			throw new KalturaAPIException(KalturaErrors::FEATURE_FORBIDDEN, DropFolderPlugin::PLUGIN_NAME);
+			throw new VidiunAPIException(VidiunErrors::FEATURE_FORBIDDEN, DropFolderPlugin::PLUGIN_NAME);
 			
 		$this->applyPartnerFilterForClass('DropFolder');
 		$this->applyPartnerFilterForClass('DropFolderFile');
@@ -22,18 +22,18 @@ class DropFolderService extends KalturaBaseService
 	
 	
 	/**
-	 * Allows you to add a new KalturaDropFolder object
+	 * Allows you to add a new VidiunDropFolder object
 	 * 
 	 * @action add
-	 * @param KalturaDropFolder $dropFolder
-	 * @return KalturaDropFolder
+	 * @param VidiunDropFolder $dropFolder
+	 * @return VidiunDropFolder
 	 * 
-	 * @throws KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
-	 * @throws KalturaErrors::INGESTION_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaDropFolderErrors::DROP_FOLDER_ALREADY_EXISTS
-	 * @throws KalturaErrors::DATA_CENTER_ID_NOT_FOUND
+	 * @throws VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL
+	 * @throws VidiunErrors::INGESTION_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunDropFolderErrors::DROP_FOLDER_ALREADY_EXISTS
+	 * @throws VidiunErrors::DATA_CENTER_ID_NOT_FOUND
 	 */
-	public function addAction(KalturaDropFolder $dropFolder)
+	public function addAction(VidiunDropFolder $dropFolder)
 	{
 		// check for required parameters
 		$dropFolder->validatePropertyNotNull('name');
@@ -57,31 +57,31 @@ class DropFolderService extends KalturaBaseService
 			$dropFolder->fileNamePatterns = DropFolder::FILE_NAME_PATTERNS_DEFAULT_VALUE;
 		}
 		
-		if (!kDataCenterMgr::dcExists($dropFolder->dc)) {
-			throw new KalturaAPIException(KalturaErrors::DATA_CENTER_ID_NOT_FOUND, $dropFolder->dc);
+		if (!vDataCenterMgr::dcExists($dropFolder->dc)) {
+			throw new VidiunAPIException(VidiunErrors::DATA_CENTER_ID_NOT_FOUND, $dropFolder->dc);
 		}
 		
 		if (!PartnerPeer::retrieveByPK($dropFolder->partnerId)) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_PARTNER_ID, $dropFolder->partnerId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_PARTNER_ID, $dropFolder->partnerId);
 		}
 		
 		if (!DropFolderPlugin::isAllowedPartner($dropFolder->partnerId))
 		{
-			throw new KalturaAPIException(KalturaErrors::PLUGIN_NOT_AVAILABLE_FOR_PARTNER, DropFolderPlugin::getPluginName(), $dropFolder->partnerId);
+			throw new VidiunAPIException(VidiunErrors::PLUGIN_NOT_AVAILABLE_FOR_PARTNER, DropFolderPlugin::getPluginName(), $dropFolder->partnerId);
 		}
 
-		if($dropFolder->type == KalturaDropFolderType::LOCAL)
+		if($dropFolder->type == VidiunDropFolderType::LOCAL)
 		{
 			$existingDropFolder = DropFolderPeer::retrieveByPathDefaultFilter($dropFolder->path);
 			if ($existingDropFolder) {
-				throw new KalturaAPIException(KalturaDropFolderErrors::DROP_FOLDER_ALREADY_EXISTS, $dropFolder->path);
+				throw new VidiunAPIException(VidiunDropFolderErrors::DROP_FOLDER_ALREADY_EXISTS, $dropFolder->path);
 			}
 		}
 		
 		if (!is_null($dropFolder->conversionProfileId)) {
 			$conversionProfileDb = conversionProfile2Peer::retrieveByPK($dropFolder->conversionProfileId);
 			if (!$conversionProfileDb) {
-				throw new KalturaAPIException(KalturaErrors::INGESTION_PROFILE_ID_NOT_FOUND, $dropFolder->conversionProfileId);
+				throw new VidiunAPIException(VidiunErrors::INGESTION_PROFILE_ID_NOT_FOUND, $dropFolder->conversionProfileId);
 			}
 		}
 		
@@ -90,30 +90,30 @@ class DropFolderService extends KalturaBaseService
 		$dbDropFolder->save();
 		
 		// return the saved object
-		$dropFolder = KalturaDropFolder::getInstanceByType($dbDropFolder->getType());
+		$dropFolder = VidiunDropFolder::getInstanceByType($dbDropFolder->getType());
 		$dropFolder->fromObject($dbDropFolder, $this->getResponseProfile());
 		return $dropFolder;
 		
 	}
 	
 	/**
-	 * Retrieve a KalturaDropFolder object by ID
+	 * Retrieve a VidiunDropFolder object by ID
 	 * 
 	 * @action get
 	 * @param int $dropFolderId 
-	 * @return KalturaDropFolder
+	 * @return VidiunDropFolder
 	 * 
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */		
 	public function getAction($dropFolderId)
 	{
 		$dbDropFolder = DropFolderPeer::retrieveByPK($dropFolderId);
 		
 		if (!$dbDropFolder) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $dropFolderId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $dropFolderId);
 		}
 			
-		$dropFolder = KalturaDropFolder::getInstanceByType($dbDropFolder->getType());
+		$dropFolder = VidiunDropFolder::getInstanceByType($dbDropFolder->getType());
 		$dropFolder->fromObject($dbDropFolder, $this->getResponseProfile());
 		
 		return $dropFolder;
@@ -121,96 +121,96 @@ class DropFolderService extends KalturaBaseService
 	
 
 	/**
-	 * Update an existing KalturaDropFolder object
+	 * Update an existing VidiunDropFolder object
 	 * 
 	 * @action update
 	 * @param int $dropFolderId
-	 * @param KalturaDropFolder $dropFolder
-	 * @return KalturaDropFolder
+	 * @param VidiunDropFolder $dropFolder
+	 * @return VidiunDropFolder
 	 *
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
-	 * @throws KalturaErrors::INGESTION_PROFILE_ID_NOT_FOUND
-	 * @throws KalturaErrors::DATA_CENTER_ID_NOT_FOUND
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INGESTION_PROFILE_ID_NOT_FOUND
+	 * @throws VidiunErrors::DATA_CENTER_ID_NOT_FOUND
 	 */	
-	public function updateAction($dropFolderId, KalturaDropFolder $dropFolder)
+	public function updateAction($dropFolderId, VidiunDropFolder $dropFolder)
 	{
 		$dbDropFolder = DropFolderPeer::retrieveByPK($dropFolderId);
 		
 		if (!$dbDropFolder) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $dropFolderId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $dropFolderId);
 		}
 		
 		$dropFolder->validatePropertyMinValue('fileSizeCheckInterval', 0, true);
 		$dropFolder->validatePropertyMinValue('autoFileDeleteDays', 0, true);
 		
-		if (!is_null($dropFolder->path) && $dropFolder->path != $dbDropFolder->getPath() && $dropFolder->type == KalturaDropFolderType::LOCAL) 
+		if (!is_null($dropFolder->path) && $dropFolder->path != $dbDropFolder->getPath() && $dropFolder->type == VidiunDropFolderType::LOCAL) 
 		{
 			$existingDropFolder = DropFolderPeer::retrieveByPathDefaultFilter($dropFolder->path);
 			if ($existingDropFolder) {
-				throw new KalturaAPIException(KalturaDropFolderErrors::DROP_FOLDER_ALREADY_EXISTS, $dropFolder->path);
+				throw new VidiunAPIException(VidiunDropFolderErrors::DROP_FOLDER_ALREADY_EXISTS, $dropFolder->path);
 			}
 		}
 		
 		if (!is_null($dropFolder->dc)) {
-			if (!kDataCenterMgr::dcExists($dropFolder->dc)) {
-				throw new KalturaAPIException(KalturaErrors::DATA_CENTER_ID_NOT_FOUND, $dropFolder->dc);
+			if (!vDataCenterMgr::dcExists($dropFolder->dc)) {
+				throw new VidiunAPIException(VidiunErrors::DATA_CENTER_ID_NOT_FOUND, $dropFolder->dc);
 			}
 		}
 		
 		if (!is_null($dropFolder->conversionProfileId)) {
 			$conversionProfileDb = conversionProfile2Peer::retrieveByPK($dropFolder->conversionProfileId);
 			if (!$conversionProfileDb) {
-				throw new KalturaAPIException(KalturaErrors::INGESTION_PROFILE_ID_NOT_FOUND, $dropFolder->conversionProfileId);
+				throw new VidiunAPIException(VidiunErrors::INGESTION_PROFILE_ID_NOT_FOUND, $dropFolder->conversionProfileId);
 			}
 		}
 
 		$dbDropFolder = $dropFolder->toUpdatableObject($dbDropFolder);
 		$dbDropFolder->save();
 	
-		$dropFolder = KalturaDropFolder::getInstanceByType($dbDropFolder->getType());
+		$dropFolder = VidiunDropFolder::getInstanceByType($dbDropFolder->getType());
 		$dropFolder->fromObject($dbDropFolder, $this->getResponseProfile());
 		
 		return $dropFolder;
 	}
 
 	/**
-	 * Mark the KalturaDropFolder object as deleted
+	 * Mark the VidiunDropFolder object as deleted
 	 * 
 	 * @action delete
 	 * @param int $dropFolderId 
-	 * @return KalturaDropFolder
+	 * @return VidiunDropFolder
 	 *
-	 * @throws KalturaErrors::INVALID_OBJECT_ID
+	 * @throws VidiunErrors::INVALID_OBJECT_ID
 	 */		
 	public function deleteAction($dropFolderId)
 	{
 		$dbDropFolder = DropFolderPeer::retrieveByPK($dropFolderId);
 		
 		if (!$dbDropFolder) {
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $dropFolderId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $dropFolderId);
 		}
 
 		$dbDropFolder->setStatus(DropFolderStatus::DELETED);
 		$dbDropFolder->save();
 			
-		$dropFolder = KalturaDropFolder::getInstanceByType($dbDropFolder->getType());
+		$dropFolder = VidiunDropFolder::getInstanceByType($dbDropFolder->getType());
 		$dropFolder->fromObject($dbDropFolder, $this->getResponseProfile());
 		
 		return $dropFolder;
 	}
 	
 	/**
-	 * List KalturaDropFolder objects
+	 * List VidiunDropFolder objects
 	 * 
 	 * @action list
-	 * @param KalturaDropFolderFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaDropFolderListResponse
+	 * @param VidiunDropFolderFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunDropFolderListResponse
 	 */
-	public function listAction(KalturaDropFolderFilter  $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunDropFolderFilter  $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaDropFolderFilter();
+			$filter = new VidiunDropFolderFilter();
 			
 		$dropFolderFilter = $filter->toObject();
 
@@ -219,60 +219,60 @@ class DropFolderService extends KalturaBaseService
 		$count = DropFolderPeer::doCount($c);
 		
 		if (! $pager)
-			$pager = new KalturaFilterPager ();
+			$pager = new VidiunFilterPager ();
 		$pager->attachToCriteria ( $c );
 		$list = DropFolderPeer::doSelect($c);
 		
-		$response = new KalturaDropFolderListResponse();
-		$response->objects = KalturaDropFolderArray::fromDbArray($list, $this->getResponseProfile());
+		$response = new VidiunDropFolderListResponse();
+		$response->objects = VidiunDropFolderArray::fromDbArray($list, $this->getResponseProfile());
 		$response->totalCount = $count;
 		
 		return $response;
 	}
 
 	/**
-	 * getExclusive KalturaDropFolder object
+	 * getExclusive VidiunDropFolder object
 	 *
 	 * @action getExclusiveDropFolder
 	 * @param string $tag
 	 * @param int $maxTime
-	 * @return KalturaDropFolder
+	 * @return VidiunDropFolder
 	 */
 	public function getExclusiveDropFolderAction($tag, $maxTime)
 	{
-		$allocateDropFolder = kDropFolderAllocator::getDropFolder($tag, $maxTime);
+		$allocateDropFolder = vDropFolderAllocator::getDropFolder($tag, $maxTime);
 		if ($allocateDropFolder && self::isValidForWatch($allocateDropFolder))
 		{
-			$dropFolder = KalturaDropFolder::getInstanceByType($allocateDropFolder->getType());
+			$dropFolder = VidiunDropFolder::getInstanceByType($allocateDropFolder->getType());
 			$dropFolder->fromObject($allocateDropFolder, $this->getResponseProfile());
 			return $dropFolder;
 		}
 	}
  	
 	/**
-	 * freeExclusive KalturaDropFolder object
+	 * freeExclusive VidiunDropFolder object
 	 *
 	 * @action freeExclusiveDropFolder
 	 * @param int $dropFolderId
 	 * @param string $errorCode
 	 * @param string $errorDescription
-	 * @throws KalturaAPIException
-	 * @return KalturaDropFolder
+	 * @throws VidiunAPIException
+	 * @return VidiunDropFolder
 	 */
 	public function freeExclusiveDropFolderAction($dropFolderId, $errorCode = null, $errorDescription = null)
 	{
-		kDropFolderAllocator::freeDropFolder($dropFolderId);
+		vDropFolderAllocator::freeDropFolder($dropFolderId);
 
 		$dbDropFolder = DropFolderPeer::retrieveByPK($dropFolderId);
 		if (!$dbDropFolder)
-			throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_ID, $dropFolderId);
+			throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_ID, $dropFolderId);
 
 		$dbDropFolder->setLastAccessedAt(time());
 		$dbDropFolder->setErrorCode($errorCode);
 		$dbDropFolder->setErrorDescription($errorDescription);
 		$dbDropFolder->save();
 
-		$dropFolder = KalturaDropFolder::getInstanceByType($dbDropFolder->getType());
+		$dropFolder = VidiunDropFolder::getInstanceByType($dbDropFolder->getType());
 		$dropFolder->fromObject($dbDropFolder, $this->getResponseProfile());
 
 		return $dropFolder;

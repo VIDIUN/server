@@ -108,20 +108,20 @@ abstract class ESearchBaseCategoryEntryItem extends ESearchItem
 				$categoryEntryQuery[] = $this->getCategoryEntryExistsQuery($allowedSearchTypes, $queryAttributes);
 				break;
 			default:
-				KalturaLog::log("Undefined item type[".$this->getItemType()."]");
+				VidiunLog::log("Undefined item type[".$this->getItemType()."]");
 		}
 	}
 
 	protected function getCategoryEntryExactMatchQuery($allowedSearchTypes, &$queryAttributes)
 	{
 		$this->transformData();
-		return kESearchQueryManager::getExactMatchQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+		return vESearchQueryManager::getExactMatchQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 	}
 
 	protected function getCategoryEntryPrefixQuery($allowedSearchTypes, &$queryAttributes)
 	{
 		$this->transformData();
-		return kESearchQueryManager::getPrefixQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
+		return vESearchQueryManager::getPrefixQuery($this, $this->getFieldName(), $allowedSearchTypes, $queryAttributes);
 	}
 
 	protected function getCategoryEntryExistsQuery($allowedSearchTypes, &$queryAttributes)

@@ -5,14 +5,14 @@
  * @package api
  * @subpackage objects
  */
-class KalturaCoordinatesContextField extends KalturaStringField
+class VidiunCoordinatesContextField extends VidiunStringField
 {
 	/**
 	 * The ip geo coder engine to be used
 	 * 
-	 * @var KalturaGeoCoderType
+	 * @var VidiunGeoCoderType
 	 */
-	public $geoCoderType = geoCoderType::KALTURA;
+	public $geoCoderType = geoCoderType::VIDIUN;
 	
 	static private $map_between_objects = array
 	(
@@ -25,12 +25,12 @@ class KalturaCoordinatesContextField extends KalturaStringField
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kCoordinatesContextField();
+			$dbObject = new vCoordinatesContextField();
 			
 		return parent::toObject($dbObject, $skip);
 	}

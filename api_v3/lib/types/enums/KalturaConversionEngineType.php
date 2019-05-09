@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaConversionEngineType extends KalturaDynamicEnum implements conversionEngineType
+class VidiunConversionEngineType extends VidiunDynamicEnum implements conversionEngineType
 {
 	public static function getEnumClass()
 	{

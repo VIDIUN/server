@@ -3,7 +3,7 @@
  * @package plugins.edgeCast
  * @subpackage lib
  */
-class kEdgeCastFlowManager implements kObjectDeletedEventConsumer
+class vEdgeCastFlowManager implements vObjectDeletedEventConsumer
 {
     const EDGE_SERVICE_HTTP_LARGE_OBJECT_MEDIA_TYPE = '3';
     const EDGE_SERVICE_HTTP_SMALL_OBJECT_MEDIA_TYPE = '8';
@@ -60,7 +60,7 @@ class kEdgeCastFlowManager implements kObjectDeletedEventConsumer
 	    $partnerId = $entry->getPartnerId();
         $partner = PartnerPeer::retrieveByPK($partnerId);
         if (!$partner) {
-            KalturaLog::err('Cannot find partner with id ['.$partnerId.']');
+            VidiunLog::err('Cannot find partner with id ['.$partnerId.']');
             return false;
         }
 	    
@@ -79,7 +79,7 @@ class kEdgeCastFlowManager implements kObjectDeletedEventConsumer
 	    $partnerId = $asset->getPartnerId();
         $partner = PartnerPeer::retrieveByPK($partnerId);
         if (!$partner) {
-            KalturaLog::err('Cannot find partner with id ['.$partnerId.']');
+            VidiunLog::err('Cannot find partner with id ['.$partnerId.']');
             return false;
         }
 	    
@@ -89,7 +89,7 @@ class kEdgeCastFlowManager implements kObjectDeletedEventConsumer
 	        $mediaTypePathList[] = array('MediaType' => $mediaType, 'MediaPath' => $asset->getDownloadUrl());  // asset download url   
 	    }
 	    catch (Exception $e) {
-	        KalturaLog::err('Cannot get asset URL for asset id ['.$asset->getId().'] - '.$e->getMessage());
+	        VidiunLog::err('Cannot get asset URL for asset id ['.$asset->getId().'] - '.$e->getMessage());
 	    }
 	    
 	    if ($asset instanceof flavorAsset)
@@ -132,7 +132,7 @@ class kEdgeCastFlowManager implements kObjectDeletedEventConsumer
         // get EdgeCast parameters
         $edgeCastParams = EdgeCastPlugin::getEdgeCastParams($partner);
         if (!$edgeCastParams) {
-            KalturaLog::err('Partner ['.$partner->getId().'] does not have any edge cast parameters configured');
+            VidiunLog::err('Partner ['.$partner->getId().'] does not have any edge cast parameters configured');
             return false;
         }
         $edgeAccountNumber = $edgeCastParams->getAccountNumber();
@@ -145,7 +145,7 @@ class kEdgeCastFlowManager implements kObjectDeletedEventConsumer
         $curlResults = self::doJsonCurl($edgeApiUrl, $mediaPaths, $edgeApiTokenHeader);
         
         // just output the results to the log since there is nothing we can do if this failed
-        KalturaLog::info('Curl results: '.print_r($curlResults, true));
+        VidiunLog::info('Curl results: '.print_r($curlResults, true));
 	}
 	
 	

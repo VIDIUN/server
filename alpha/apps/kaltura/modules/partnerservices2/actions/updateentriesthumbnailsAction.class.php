@@ -31,12 +31,12 @@ class updateentriesthumbnailsAction extends defPartnerservices2Action
 	
 	protected function ticketType ()	{		return self::REQUIED_TICKET_ADMIN;	}
 	
-	// ask to fetch the kuser from puser_kuser 
-	public function needKuserFromPuser ( )	{		return self::KUSER_DATA_KUSER_DATA;	}
+	// ask to fetch the vuser from puser_vuser 
+	public function needVuserFromPuser ( )	{		return self::VUSER_DATA_VUSER_DATA;	}
 	
-	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_kuser )
+	public function executeImpl ( $partner_id , $subp_id , $puser_id , $partner_prefix , $puser_vuser )
 	{
-		if ( ! $puser_kuser )
+		if ( ! $puser_vuser )
 		{
 			$this->addError ( APIErrors::INVALID_USER_ID ,$puser_id );
 			return;
@@ -69,7 +69,7 @@ class updateentriesthumbnailsAction extends defPartnerservices2Action
 				}
 		
 				$updated_entries[] =$entry ;
-				myNotificationMgr::createNotification( kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL , $entry );
+				myNotificationMgr::createNotification( vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL , $entry );
 				
 				$wrapper = objectWrapperBase::getWrapperClass( $entry , objectWrapperBase::DETAIL_LEVEL_DETAILED );
 				$wrapper->removeFromCache( "entry" , $entry->getId() );	

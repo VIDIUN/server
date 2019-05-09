@@ -3,15 +3,15 @@
  * @package Scheduler
  * @subpackage Delete
  */
-abstract class KDeletingEngine
+abstract class VDeletingEngine
 {
 	/**
-	 * @var KalturaClient
+	 * @var VidiunClient
 	 */
 	protected $client;
 	
 	/**
-	 * @var KalturaFilterPager
+	 * @var VidiunFilterPager
 	 */
 	protected $pager;
 	
@@ -28,68 +28,68 @@ abstract class KDeletingEngine
 	private $batchPartnerId;
 	
 	/**
-	 * @param int $objectType of enum KalturaDeleteObjectType
-	 * @return KDeletingEngine
+	 * @param int $objectType of enum VidiunDeleteObjectType
+	 * @return VDeletingEngine
 	 */
 	public static function getInstance($objectType)
 	{
 		switch($objectType)
 		{
-			case KalturaDeleteObjectType::CATEGORY_ENTRY:
-				return new KDeletingCategoryEntryEngine();
+			case VidiunDeleteObjectType::CATEGORY_ENTRY:
+				return new VDeletingCategoryEntryEngine();
 				
-			case KalturaDeleteObjectType::CATEGORY_USER:
-				return new KDeletingCategoryUserEngine();
+			case VidiunDeleteObjectType::CATEGORY_USER:
+				return new VDeletingCategoryUserEngine();
 
-			case KalturaDeleteObjectType::GROUP_USER:
-				return new KDeletingGroupUserEngine();
+			case VidiunDeleteObjectType::GROUP_USER:
+				return new VDeletingGroupUserEngine();
 
-			case KalturaDeleteObjectType::CATEGORY_ENTRY_AGGREGATION:
- 				return new KDeletingAggregationChannelEngine();
+			case VidiunDeleteObjectType::CATEGORY_ENTRY_AGGREGATION:
+ 				return new VDeletingAggregationChannelEngine();
 				
-			case KalturaDeleteObjectType::USER_ENTRY :
- 				return new KDeletingUserEntryEngine();
+			case VidiunDeleteObjectType::USER_ENTRY :
+ 				return new VDeletingUserEntryEngine();
 			
 			default:
-				return KalturaPluginManager::loadObject('KDeletingEngine', $objectType);
+				return VidiunPluginManager::loadObject('VDeletingEngine', $objectType);
 		}
 	}
 	
 	/**
 	 * @param int $partnerId
-	 * @param KalturaDeleteJobData $jobData
-  	 * @param KalturaClient $client
+	 * @param VidiunDeleteJobData $jobData
+  	 * @param VidiunClient $client
   	 */
 	public function configure($partnerId, $jobData)
 	{
 		$this->partnerId = $partnerId;
-		$this->batchPartnerId = KBatchBase::$taskConfig->getPartnerId();
+		$this->batchPartnerId = VBatchBase::$taskConfig->getPartnerId();
 
-		$this->pager = new KalturaFilterPager();
+		$this->pager = new VidiunFilterPager();
 		$this->pager->pageSize = 100;
 		
-		if(KBatchBase::$taskConfig->params && KBatchBase::$taskConfig->params->pageSize)
-			$this->pager->pageSize = KBatchBase::$taskConfig->params->pageSize;
+		if(VBatchBase::$taskConfig->params && VBatchBase::$taskConfig->params->pageSize)
+			$this->pager->pageSize = VBatchBase::$taskConfig->params->pageSize;
 	}
 
 	
 	/**
-	 * @param KalturaFilter $filter The filter should return the list of objects that need to be reindexed
+	 * @param VidiunFilter $filter The filter should return the list of objects that need to be reindexed
 	 * @param bool $shouldUpdate Indicates that the object columns and attributes values should be recalculated before reindexed
 	 * @return int the number of indexed objects
 	 */
-	public function run(KalturaFilter $filter)
+	public function run(VidiunFilter $filter)
 	{
-		KBatchBase::impersonate($this->partnerId);
+		VBatchBase::impersonate($this->partnerId);
 		$ret = $this->delete($filter);
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		
 		return $ret;
 	}
 	
 	/**
-	 * @param KalturaFilter $filter The filter should return the list of objects that need to be deleted
+	 * @param VidiunFilter $filter The filter should return the list of objects that need to be deleted
 	 * @return int the number of deleted objects
 	 */
-	abstract protected function delete(KalturaFilter $filter);
+	abstract protected function delete(VidiunFilter $filter);
 }

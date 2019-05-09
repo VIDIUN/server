@@ -3,10 +3,10 @@
  * @package api
  * @subpackage object
  */
-class KalturaESearchLanguageItem extends KalturaObject
+class VidiunESearchLanguageItem extends VidiunObject
 {
 	/**
-	 *  @var KalturaESearchLanguage
+	 *  @var VidiunESearchLanguage
 	 */
 	public $eSerachLanguage;
 

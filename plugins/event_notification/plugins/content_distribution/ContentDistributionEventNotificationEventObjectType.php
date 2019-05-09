@@ -3,7 +3,7 @@
  * @package plugins.contentDistributionEventNotifications
  * @subpackage lib
  */
-class ContentDistributionEventNotificationEventObjectType implements IKalturaPluginEnum, EventNotificationEventObjectType
+class ContentDistributionEventNotificationEventObjectType implements IVidiunPluginEnum, EventNotificationEventObjectType
 {
 	const DISTRIBUTION_PROFILE = 'DistributionProfile';
 	const ENTRY_DISTRIBUTION = 'EntryDistribution';

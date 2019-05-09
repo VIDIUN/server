@@ -13,14 +13,14 @@ abstract class BusinessProcessNotificationTemplate extends BatchEventNotificatio
 	/* (non-PHPdoc)
 	 * @see BatchEventNotificationTemplate::getJobData()
 	 */
-	public function getJobData(kScope $scope = null)
+	public function getJobData(vScope $scope = null)
 	{
-		$jobData = new kBusinessProcessNotificationDispatchJobData();
+		$jobData = new vBusinessProcessNotificationDispatchJobData();
 		$jobData->setTemplateId($this->getId());
 		$jobData->setServerId($this->getServerId());
 		$jobData->setContentParameters($this->getParameters($scope));
 		
-		if($scope instanceof kEventScope)
+		if($scope instanceof vEventScope)
 		{
 			$object = $scope->getObject();
 			$jobData->setObject($object);
@@ -29,15 +29,15 @@ abstract class BusinessProcessNotificationTemplate extends BatchEventNotificatio
 		return $jobData;
 	}
 
-	protected function getParameters(kScope $scope)
+	protected function getParameters(vScope $scope)
 	{
 		$parametersValues = array();
 		$contentParameters = $this->getContentParameters();
 		foreach($contentParameters as $contentParameter)
 		{
-			/* @var $contentParameter kEventNotificationParameter */
+			/* @var $contentParameter vEventNotificationParameter */
 			$value = $contentParameter->getValue();
-			if($scope && $value instanceof kStringField)
+			if($scope && $value instanceof vStringField)
 				$value->setScope($scope);
 				
 			$parametersValues[$contentParameter->getKey()] = $value->getValue();
@@ -45,9 +45,9 @@ abstract class BusinessProcessNotificationTemplate extends BatchEventNotificatio
 		$userParameters = $this->getUserParameters();
 		foreach($userParameters as $userParameter)
 		{
-			/* @var $userParameter kEventNotificationParameter */
+			/* @var $userParameter vEventNotificationParameter */
 			$value = $userParameter->getValue();
-			if($scope && $value instanceof kStringField)
+			if($scope && $value instanceof vStringField)
 				$value->setScope($scope);
 				
 			$parametersValues[$userParameter->getKey()] = $value->getValue();
@@ -56,10 +56,10 @@ abstract class BusinessProcessNotificationTemplate extends BatchEventNotificatio
 		return $parametersValues;
 	}
 
-	protected function dispatchPerCase(kScope $scope, $eventNotificationType = null)
+	protected function dispatchPerCase(vScope $scope, $eventNotificationType = null)
 	{
 		$jobData = $this->getJobData($scope);
-		/* @var $jobData kBusinessProcessNotificationDispatchJobData */
+		/* @var $jobData vBusinessProcessNotificationDispatchJobData */
 		if(!$jobData->getObject())
 		{
 			return null;
@@ -81,7 +81,7 @@ abstract class BusinessProcessNotificationTemplate extends BatchEventNotificatio
 		//Dtermine object type
 		//Get all templates
 		$criteria = new Criteria();
-		$criteria->add(EventNotificationTemplatePeer::PARTNER_ID, kCurrentContext::getCurrentPartnerId());
+		$criteria->add(EventNotificationTemplatePeer::PARTNER_ID, vCurrentContext::getCurrentPartnerId());
 		
 		$bpmProcessTypes = array ();
 		$bpmProcessTypes[] = BusinessProcessNotificationPlugin::getBusinessProcessNotificationTemplateTypeCoreValue (BusinessProcessNotificationTemplateType::BPM_START);
@@ -94,7 +94,7 @@ abstract class BusinessProcessNotificationTemplate extends BatchEventNotificatio
 		$eventObjectType = null;
 		foreach ($templates as $template)
 		{
-			$templateObjectClassName = KalturaPluginManager::getObjectClass('EventNotificationEventObjectType', $template->getObjectType());
+			$templateObjectClassName = VidiunPluginManager::getObjectClass('EventNotificationEventObjectType', $template->getObjectType());
 			if(!strcmp(get_class($object), $templateObjectClassName) || is_subclass_of(get_class ($object), $templateObjectClassName))
 			{
 				$eventObjectType = $template->getObjectType ();
@@ -104,11 +104,11 @@ abstract class BusinessProcessNotificationTemplate extends BatchEventNotificatio
 		
 		if (!$eventObjectType)
 		{
-			KalturaLog::info ("There are currently no Business Process Templates for objects of type [" . get_class($object) . "]");
+			VidiunLog::info ("There are currently no Business Process Templates for objects of type [" . get_class($object) . "]");
 			return array ();
 		}
 		
-		$cases = BusinessProcessCasePeer::retrieveCasesByObjectIdObjecType($object->getId(), $eventObjectType, kCurrentContext::getCurrentPartnerId());
+		$cases = BusinessProcessCasePeer::retrieveCasesByObjectIdObjecType($object->getId(), $eventObjectType, vCurrentContext::getCurrentPartnerId());
 		
 		$templatesIds = array();
 		foreach ($cases as $case)
@@ -135,11 +135,11 @@ abstract class BusinessProcessNotificationTemplate extends BatchEventNotificatio
 		$results = BusinessProcessCasePeer::retrieveCasesByObjectIdObjectTypeProcessIdServerId($object->getId(), $this->getObjectType(), $this->getServerId(), $processId, $this->getPartnerId());
 		if(!$results || !count($results))
 		{
-			KalturaLog::info('Object [' . get_class($object) . '][' . $object->getPrimaryKey() . '] case id not found in custom-data');
+			VidiunLog::info('Object [' . get_class($object) . '][' . $object->getPrimaryKey() . '] case id not found in custom-data');
 		}
 		else
 		{
-			KalturaLog::debug('Case values for [' . $this->getServerId() . '_' . $processId . ']: ' . print_r($results, true));
+			VidiunLog::debug('Case values for [' . $this->getServerId() . '_' . $processId . ']: ' . print_r($results, true));
 		}
 
 		return $results;

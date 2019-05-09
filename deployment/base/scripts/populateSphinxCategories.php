@@ -22,27 +22,27 @@ $con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 //$sphinxCon = DbManager::getSphinxConnection();
 
 $categories = categoryPeer::doSelect($c, $con);
-$sphinx = new kSphinxSearchManager();
+$sphinx = new vSphinxSearchManager();
 while(count($categories))
 {
 	foreach($categories as $category)
 	{
 	    /* @var $category Category */
-		KalturaLog::log('category id ' . $category->getId() . ' int id[' . $category->getIntId() . '] crc id[' . $sphinx->getSphinxId($category) . '] last updated at ['. $category->getUpdatedAt(null) .']');
+		VidiunLog::log('category id ' . $category->getId() . ' int id[' . $category->getIntId() . '] crc id[' . $sphinx->getSphinxId($category) . '] last updated at ['. $category->getUpdatedAt(null) .']');
 		
 		try {
 			$ret = $sphinx->saveToSphinx($category, true);
 		}
 		catch(Exception $e){
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			exit -1;
 		}
 	}
 	
 	$c->setOffset($c->getOffset() + count($categories));
-	kMemoryManager::clearMemory();
+	vMemoryManager::clearMemory();
 	$categories = categoryPeer::doSelect($c, $con);
 }
 
-KalturaLog::log('Done. Cureent time: ' . time());
+VidiunLog::log('Done. Cureent time: ' . time());
 exit(0);

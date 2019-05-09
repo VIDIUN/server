@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFlavorAssetUrlOptions extends KalturaObject
+class VidiunFlavorAssetUrlOptions extends VidiunObject
 {
 	/**
 	 * The name of the downloaded file

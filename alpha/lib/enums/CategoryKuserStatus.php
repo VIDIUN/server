@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.enum
  */ 
-interface CategoryKuserStatus extends BaseEnum
+interface CategoryVuserStatus extends BaseEnum
 {
 	const ACTIVE = 1;
 	const PENDING = 2;

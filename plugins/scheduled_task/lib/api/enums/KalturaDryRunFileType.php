@@ -5,6 +5,6 @@
  * @subpackage api.enum
  * @see DryRunFileType
  */
-class KalturaDryRunFileType extends KalturaEnum implements DryRunFileType
+class VidiunDryRunFileType extends VidiunEnum implements DryRunFileType
 {
 }

@@ -3,7 +3,7 @@
  * @package plugins.bulkUploadCsv
  * @subpackage lib.model
  */
-class kBulkGroupUsersToGroupCsv
+class vBulkGroupUsersToGroupCsv
 {
 	const NAME = 'name';
 	const TMP_NAME = 'tmp_name';
@@ -12,12 +12,12 @@ class kBulkGroupUsersToGroupCsv
 	const GROUP_ID = 'group';
 	const USER_ROLE = 'userRole';
 
-	protected $kusers;
+	protected $vusers;
 	protected $groupId;
 
-	public function __construct($kusers, $groupId)
+	public function __construct($vusers, $groupId)
 	{
-		$this->kusers = $kusers;
+		$this->vusers = $vusers;
 		$this->groupId = $groupId;
 	}
 
@@ -40,7 +40,7 @@ class kBulkGroupUsersToGroupCsv
 		$csvData = array();
 		foreach ($groupUserIdsToAdd as $addGroupUserId)
 		{
-			$originalGroupUser = KuserKgroupPeer::retrieveByKuserIdAndKgroupId($addGroupUserId->getId(),$originalGroupId);
+			$originalGroupUser = VuserVgroupPeer::retrieveByVuserIdAndVgroupId($addGroupUserId->getId(),$originalGroupId);
 
 			$csvData[] = array(
 				self::ACTION => BulkUploadAction::UPDATE,

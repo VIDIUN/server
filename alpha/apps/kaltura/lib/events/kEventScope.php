@@ -3,10 +3,10 @@
  * @package Core
  * @subpackage events
  */
-class kEventScope extends kScope
+class vEventScope extends vScope
 {
 	/**
-	 * @var KalturaEvent
+	 * @var VidiunEvent
 	 */
 	protected $event;
 	
@@ -21,16 +21,16 @@ class kEventScope extends kScope
 	protected $parentRaisedJob;
 	
 	/**
-	 * @param KalturaEvent $v
+	 * @param VidiunEvent $v
 	 */
-	public function __construct(KalturaEvent $v = null)
+	public function __construct(VidiunEvent $v = null)
 	{
 		parent::__construct();
 		$this->event = $v;
 	}
 	
 	/**
-	 * @return KalturaEvent
+	 * @return VidiunEvent
 	 */
 	public function getEvent()
 	{
@@ -42,7 +42,7 @@ class kEventScope extends kScope
 	 */
 	public function getObject()
 	{
-		if ($this->event instanceof IKalturaObjectRelatedEvent)
+		if ($this->event instanceof IVidiunObjectRelatedEvent)
 			return $this->event->getObject();
 		else
 			return null;
@@ -55,7 +55,7 @@ class kEventScope extends kScope
 	{
 	    if (! $this->partnerId)
 	    {
-	        return kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+	        return vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 	    }
 		
 	    return $this->partnerId;

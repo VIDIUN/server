@@ -3,11 +3,11 @@
  * @package plugins.eventNotification
  * @subpackage api.objects
  */
-class KalturaEventFieldCondition extends KalturaCondition
+class VidiunEventFieldCondition extends VidiunCondition
 {	
 	/**
 	 * The field to be evaluated at runtime
-	 * @var KalturaBooleanField
+	 * @var VidiunBooleanField
 	 */
 	public $field;
 
@@ -30,34 +30,34 @@ class KalturaEventFieldCondition extends KalturaCondition
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kEventFieldCondition();
+			$dbObject = new vEventFieldCondition();
 	
 		return parent::toObject($dbObject, $skip);
 	}
 	 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $dbObject kEventFieldCondition */
+		/* @var $dbObject vEventFieldCondition */
 		parent::doFromObject($dbObject, $responseProfile);
 		
 		$fieldType = get_class($dbObject->getField());
-		KalturaLog::debug("Loading KalturaBooleanField from type [$fieldType]");
+		VidiunLog::debug("Loading VidiunBooleanField from type [$fieldType]");
 		switch ($fieldType)
 		{
-			case 'kEvalBooleanField':
-				$this->field = new KalturaEvalBooleanField();
+			case 'vEvalBooleanField':
+				$this->field = new VidiunEvalBooleanField();
 				break;
 				
 			default:
-				$this->field = KalturaPluginManager::loadObject('KalturaBooleanField', $fieldType);
+				$this->field = VidiunPluginManager::loadObject('VidiunBooleanField', $fieldType);
 				break;
 		}
 		

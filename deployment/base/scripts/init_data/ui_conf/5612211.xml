@@ -1,9 +1,9 @@
-<kcw>
+<vcw>
   <UIConfigList>
     <UIConfig>
       <target>ContributionWizard.swf</target>
-      <cssUrl> /content/uiconf/kaltura/kmc/kcw/v2.1.4/styles.swf</cssUrl>
-      <localeUrl>/content/uiconf/kaltura/kmc/kcw/v2.1.4/en_US_ContributionWizard_kaltura.swf</localeUrl>
+      <cssUrl> /content/uiconf/vidiun/vmc/vcw/v2.1.4/styles.swf</cssUrl>
+      <localeUrl>/content/uiconf/vidiun/vmc/vcw/v2.1.4/en_US_ContributionWizard_vidiun.swf</localeUrl>
     </UIConfig>
   </UIConfigList>
   <ImportTypesConfig>
@@ -157,4 +157,4 @@
       <mediaProviderName>upload</mediaProviderName>
     </gotoScreen>
   </StartupDefaults>
-</kcw>
+</vcw>

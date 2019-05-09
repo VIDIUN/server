@@ -3,7 +3,7 @@
 /**
  * Auto-generated enum class
 */
-class KalturaLiveStreamAdminEntryMatchAttribute extends KalturaLiveStreamEntryMatchAttribute
+class VidiunLiveStreamAdminEntryMatchAttribute extends VidiunLiveStreamEntryMatchAttribute
 {
 }
 

@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage api.enum
  */
-class KalturaVendorCatalogItemStatus extends KalturaEnum implements VendorCatalogItemStatus
+class VidiunVendorCatalogItemStatus extends VidiunEnum implements VendorCatalogItemStatus
 {
 
 }

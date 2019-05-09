@@ -3,7 +3,7 @@
  * @package plugins.captureSpace
  * @subpackage errors
  */
-class CaptureSpaceErrors extends KalturaErrors
+class CaptureSpaceErrors extends VidiunErrors
 {
 	const ALREADY_LATEST_VERSION = "ALREADY_LATEST_VERSION;VERSION,OS;Version [@VERSION@] is already the latest version for [@OS@]";
 	

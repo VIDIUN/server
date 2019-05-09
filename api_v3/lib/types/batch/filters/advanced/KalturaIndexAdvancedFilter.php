@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaIndexAdvancedFilter extends KalturaSearchItem
+class VidiunIndexAdvancedFilter extends VidiunSearchItem
 {
 	/**
 	 * @var int

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaResponseProfileMapping extends KalturaObject
+class VidiunResponseProfileMapping extends VidiunObject
 {
 	/**
 	 * @var string
@@ -27,7 +27,7 @@ class KalturaResponseProfileMapping extends KalturaObject
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -35,7 +35,7 @@ class KalturaResponseProfileMapping extends KalturaObject
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -46,44 +46,44 @@ class KalturaResponseProfileMapping extends KalturaObject
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object = null, $propertiesToSkip = array())
 	{
 		if(is_null($object))
 		{
-			$object = new kResponseProfileMapping();
+			$object = new vResponseProfileMapping();
 		}
 		
 		return parent::toObject($object, $propertiesToSkip);
 	}
 	
 	/**
-	 * @param KalturaRelatedFilter $filter
-	 * @param KalturaObject $parentObject
+	 * @param VidiunRelatedFilter $filter
+	 * @param VidiunObject $parentObject
 	 * @return boolean
-	 * @throws KalturaAPIException
+	 * @throws VidiunAPIException
 	 */
-	public function apply(KalturaRelatedFilter $filter, KalturaObject $parentObject)
+	public function apply(VidiunRelatedFilter $filter, VidiunObject $parentObject)
 	{
 		$filterProperty = $this->filterProperty;
 		$parentProperty = $this->parentProperty;
 	
-		KalturaLog::debug("Mapping " . get_class($parentObject) . "::{$parentProperty}[{$parentObject->$parentProperty}] to " . get_class($filter) . "::$filterProperty");
+		VidiunLog::debug("Mapping " . get_class($parentObject) . "::{$parentProperty}[{$parentObject->$parentProperty}] to " . get_class($filter) . "::$filterProperty");
 	
 		if(!property_exists($parentObject, $parentProperty))
 		{
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_IS_NOT_DEFINED, $parentProperty, get_class($parentObject));
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_IS_NOT_DEFINED, $parentProperty, get_class($parentObject));
 		}
 		
 		if(!property_exists($filter, $filterProperty))
 		{
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_IS_NOT_DEFINED, $filterProperty, get_class($filter));
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_IS_NOT_DEFINED, $filterProperty, get_class($filter));
 		}
 		
 		if(is_null($parentObject->$parentProperty) && !$this->allowNull)
 		{
-			KalturaLog::warning("Parent property [" . get_class($parentObject) . "::{$parentProperty}] is null");
+			VidiunLog::warning("Parent property [" . get_class($parentObject) . "::{$parentProperty}] is null");
 			return false;
 		}
 		

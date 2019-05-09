@@ -2,9 +2,9 @@
 /**
  * @package api
  * @subpackage enum
- * @deprecated use KalturaRule instead
+ * @deprecated use VidiunRule instead
  */
-class KalturaLimitFlavorsRestrictionType extends KalturaEnum implements accessControlListRestrictionType
+class VidiunLimitFlavorsRestrictionType extends VidiunEnum implements accessControlListRestrictionType
 {
 	// see interface "accessControlListRestrictionType" for values
 }

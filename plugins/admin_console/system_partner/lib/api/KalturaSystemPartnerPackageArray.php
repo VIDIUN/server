@@ -3,18 +3,18 @@
  * @package plugins.systemPartner
  * @subpackage api.objects
  */
-class KalturaSystemPartnerPackageArray extends KalturaTypedArray
+class VidiunSystemPartnerPackageArray extends VidiunTypedArray
 {
 	public function __construct()
 	{
-		return parent::__construct("KalturaSystemPartnerPackage");
+		return parent::__construct("VidiunSystemPartnerPackage");
 	}
 	
 	public function fromArray($arr)
 	{
 		foreach($arr as $item)
 		{
-			$obj = new KalturaSystemPartnerPackage();
+			$obj = new VidiunSystemPartnerPackage();
 			$obj->fromArray($item);
 			$this[] = $obj;
 		}

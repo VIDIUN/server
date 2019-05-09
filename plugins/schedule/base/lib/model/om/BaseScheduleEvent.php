@@ -116,10 +116,10 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 	protected $organizer;
 
 	/**
-	 * The value for the owner_kuser_id field.
+	 * The value for the owner_vuser_id field.
 	 * @var        int
 	 */
-	protected $owner_kuser_id;
+	protected $owner_vuser_id;
 
 	/**
 	 * The value for the priority field.
@@ -477,13 +477,13 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [owner_kuser_id] column value.
+	 * Get the [owner_vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getOwnerKuserId()
+	public function getOwnerVuserId()
 	{
-		return $this->owner_kuser_id;
+		return $this->owner_vuser_id;
 	}
 
 	/**
@@ -1102,27 +1102,27 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 	} // setOrganizer()
 
 	/**
-	 * Set the value of [owner_kuser_id] column.
+	 * Set the value of [owner_vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     ScheduleEvent The current object (for fluent API support)
 	 */
-	public function setOwnerKuserId($v)
+	public function setOwnerVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[ScheduleEventPeer::OWNER_KUSER_ID]))
-			$this->oldColumnsValues[ScheduleEventPeer::OWNER_KUSER_ID] = $this->owner_kuser_id;
+		if(!isset($this->oldColumnsValues[ScheduleEventPeer::OWNER_VUSER_ID]))
+			$this->oldColumnsValues[ScheduleEventPeer::OWNER_VUSER_ID] = $this->owner_vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->owner_kuser_id !== $v) {
-			$this->owner_kuser_id = $v;
-			$this->modifiedColumns[] = ScheduleEventPeer::OWNER_KUSER_ID;
+		if ($this->owner_vuser_id !== $v) {
+			$this->owner_vuser_id = $v;
+			$this->modifiedColumns[] = ScheduleEventPeer::OWNER_VUSER_ID;
 		}
 
 		return $this;
-	} // setOwnerKuserId()
+	} // setOwnerVuserId()
 
 	/**
 	 * Set the value of [priority] column.
@@ -1454,7 +1454,7 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 			$this->geo_long = ($row[$startcol + 13] !== null) ? (double) $row[$startcol + 13] : null;
 			$this->location = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
 			$this->organizer = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
-			$this->owner_kuser_id = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
+			$this->owner_vuser_id = ($row[$startcol + 16] !== null) ? (int) $row[$startcol + 16] : null;
 			$this->priority = ($row[$startcol + 17] !== null) ? (int) $row[$startcol + 17] : null;
 			$this->sequence = ($row[$startcol + 18] !== null) ? (int) $row[$startcol + 18] : null;
 			$this->recurrence_type = ($row[$startcol + 19] !== null) ? (int) $row[$startcol + 19] : null;
@@ -1617,13 +1617,13 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 				return 0;
 			}
 			
-			for ($retries = 1; $retries < KalturaPDO::SAVE_MAX_RETRIES; $retries++)
+			for ($retries = 1; $retries < VidiunPDO::SAVE_MAX_RETRIES; $retries++)
 			{
                $affectedRows = $this->doSave($con);
                 if ($affectedRows || !$this->isColumnModified(ScheduleEventPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug("was unable to save! retrying for the $retries time");
+                VidiunLog::debug("was unable to save! retrying for the $retries time");
                 $criteria = $this->buildPkeyCriteria();
 				$criteria->addSelectColumn(ScheduleEventPeer::CUSTOM_DATA);
                 $stmt = BasePeer::doSelect($criteria, $con);
@@ -1785,7 +1785,7 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1810,12 +1810,12 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1833,10 +1833,10 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -2043,7 +2043,7 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 				return $this->getOrganizer();
 				break;
 			case 16:
-				return $this->getOwnerKuserId();
+				return $this->getOwnerVuserId();
 				break;
 			case 17:
 				return $this->getPriority();
@@ -2112,7 +2112,7 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 			$keys[13] => $this->getGeoLong(),
 			$keys[14] => $this->getLocation(),
 			$keys[15] => $this->getOrganizer(),
-			$keys[16] => $this->getOwnerKuserId(),
+			$keys[16] => $this->getOwnerVuserId(),
 			$keys[17] => $this->getPriority(),
 			$keys[18] => $this->getSequence(),
 			$keys[19] => $this->getRecurrenceType(),
@@ -2203,7 +2203,7 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 				$this->setOrganizer($value);
 				break;
 			case 16:
-				$this->setOwnerKuserId($value);
+				$this->setOwnerVuserId($value);
 				break;
 			case 17:
 				$this->setPriority($value);
@@ -2275,7 +2275,7 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[13], $arr)) $this->setGeoLong($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setLocation($arr[$keys[14]]);
 		if (array_key_exists($keys[15], $arr)) $this->setOrganizer($arr[$keys[15]]);
-		if (array_key_exists($keys[16], $arr)) $this->setOwnerKuserId($arr[$keys[16]]);
+		if (array_key_exists($keys[16], $arr)) $this->setOwnerVuserId($arr[$keys[16]]);
 		if (array_key_exists($keys[17], $arr)) $this->setPriority($arr[$keys[17]]);
 		if (array_key_exists($keys[18], $arr)) $this->setSequence($arr[$keys[18]]);
 		if (array_key_exists($keys[19], $arr)) $this->setRecurrenceType($arr[$keys[19]]);
@@ -2313,7 +2313,7 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(ScheduleEventPeer::GEO_LONG)) $criteria->add(ScheduleEventPeer::GEO_LONG, $this->geo_long);
 		if ($this->isColumnModified(ScheduleEventPeer::LOCATION)) $criteria->add(ScheduleEventPeer::LOCATION, $this->location);
 		if ($this->isColumnModified(ScheduleEventPeer::ORGANIZER)) $criteria->add(ScheduleEventPeer::ORGANIZER, $this->organizer);
-		if ($this->isColumnModified(ScheduleEventPeer::OWNER_KUSER_ID)) $criteria->add(ScheduleEventPeer::OWNER_KUSER_ID, $this->owner_kuser_id);
+		if ($this->isColumnModified(ScheduleEventPeer::OWNER_VUSER_ID)) $criteria->add(ScheduleEventPeer::OWNER_VUSER_ID, $this->owner_vuser_id);
 		if ($this->isColumnModified(ScheduleEventPeer::PRIORITY)) $criteria->add(ScheduleEventPeer::PRIORITY, $this->priority);
 		if ($this->isColumnModified(ScheduleEventPeer::SEQUENCE)) $criteria->add(ScheduleEventPeer::SEQUENCE, $this->sequence);
 		if ($this->isColumnModified(ScheduleEventPeer::RECURRENCE_TYPE)) $criteria->add(ScheduleEventPeer::RECURRENCE_TYPE, $this->recurrence_type);
@@ -2432,7 +2432,7 @@ abstract class BaseScheduleEvent extends BaseObject  implements Persistent {
 
 		$copyObj->setOrganizer($this->organizer);
 
-		$copyObj->setOwnerKuserId($this->owner_kuser_id);
+		$copyObj->setOwnerVuserId($this->owner_vuser_id);
 
 		$copyObj->setPriority($this->priority);
 

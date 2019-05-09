@@ -3,7 +3,7 @@
  * @package plugins.metroPcsDistribution
  * @subpackage api.objects
  */
-class KalturaMetroPcsDistributionProfile extends KalturaConfigurableDistributionProfile
+class VidiunMetroPcsDistributionProfile extends VidiunConfigurableDistributionProfile
 {
 	/**
 	 * @var string

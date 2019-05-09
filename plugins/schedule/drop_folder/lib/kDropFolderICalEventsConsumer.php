@@ -1,10 +1,10 @@
 <?php
-class kDropFolderICalEventsConsumer implements kBatchJobStatusEventConsumer, kObjectChangedEventConsumer
+class vDropFolderICalEventsConsumer implements vBatchJobStatusEventConsumer, vObjectChangedEventConsumer
 {
 	const UPLOADED_BY = 'Drop Folder';
 	
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::objectChanged()
+	 * @see vObjectChangedEventConsumer::objectChanged()
 	 */
 	public function objectChanged(BaseObject $object, array $modifiedColumns) 
 	{
@@ -14,7 +14,7 @@ class kDropFolderICalEventsConsumer implements kBatchJobStatusEventConsumer, kOb
 	}
 
 	/* (non-PHPdoc)
-	 * @see kObjectChangedEventConsumer::shouldConsumeChangedEvent()
+	 * @see vObjectChangedEventConsumer::shouldConsumeChangedEvent()
 	 */
 	public function shouldConsumeChangedEvent(BaseObject $object, array $modifiedColumns) 
 	{
@@ -25,7 +25,7 @@ class kDropFolderICalEventsConsumer implements kBatchJobStatusEventConsumer, kOb
 			$folder = DropFolderPeer::retrieveByPK($object->getDropFolderId());
 			if(!$folder)
 			{
-				KalturaLog::err('Failed to process ChangedEvent - Failed to retrieve drop-folder [' . $object->getDropFolderId() . ']');
+				VidiunLog::err('Failed to process ChangedEvent - Failed to retrieve drop-folder [' . $object->getDropFolderId() . ']');
 				return false;
 			}
 			
@@ -37,7 +37,7 @@ class kDropFolderICalEventsConsumer implements kBatchJobStatusEventConsumer, kOb
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
+	 * @see vBatchJobStatusEventConsumer::shouldConsumeJobStatusEvent()
 	 */
 	public function shouldConsumeJobStatusEvent(BatchJob $dbBatchJob)
 	{
@@ -57,7 +57,7 @@ class kDropFolderICalEventsConsumer implements kBatchJobStatusEventConsumer, kOb
 					in_array($dbBatchJob->getStatus(), $jobStatuses))
 		{
 			$data = $dbBatchJob->getData();
-			if($data instanceof kBulkUploadJobData && $data->getBulkUploadObjectType() == $bulkUploadObjectType)
+			if($data instanceof vBulkUploadJobData && $data->getBulkUploadObjectType() == $bulkUploadObjectType)
 				return true;
 		}
 		
@@ -65,7 +65,7 @@ class kDropFolderICalEventsConsumer implements kBatchJobStatusEventConsumer, kOb
 	}
 	
 	/* (non-PHPdoc)
-	 * @see kBatchJobStatusEventConsumer::updatedJob()
+	 * @see vBatchJobStatusEventConsumer::updatedJob()
 	 */
 	public function updatedJob(BatchJob $dbBatchJob)
 	{
@@ -87,15 +87,15 @@ class kDropFolderICalEventsConsumer implements kBatchJobStatusEventConsumer, kOb
 				$filePath = $dropFolder->getPath() . '/' . $dropFolderFile->getFileName();
 				$syncKey = $dbBatchJob->getSyncKey(BatchJob::FILE_SYNC_BATCHJOB_SUB_TYPE_BULKUPLOAD);
 				try{
-					kFileSyncUtils::moveFromFile($filePath, $syncKey, true, true);
+					vFileSyncUtils::moveFromFile($filePath, $syncKey, true, true);
 				}
 				catch(Exception $e)
 				{
-					KalturaLog::err($e);
+					VidiunLog::err($e);
 					throw new APIException(APIErrors::BULK_UPLOAD_CREATE_CSV_FILE_SYNC_ERROR);
 				}
 				
-				$filePath = kFileSyncUtils::getLocalFilePathForKey($syncKey);
+				$filePath = vFileSyncUtils::getLocalFilePathForKey($syncKey);
 				
 				$jobData->setFilePath($filePath);
 				
@@ -114,7 +114,7 @@ class kDropFolderICalEventsConsumer implements kBatchJobStatusEventConsumer, kOb
 			case BatchJob::BATCHJOB_STATUS_FATAL:
 				$dropFolderFile->setStatus(DropFolderFileStatus::ERROR_HANDLING);
 				$dropFolderFile->setErrorCode($dbBatchJob->getErrNumber());
-				$dropFolderFile->setErrorDescription('Failed  to execute the bulk upload job in Kaltura');
+				$dropFolderFile->setErrorDescription('Failed  to execute the bulk upload job in Vidiun');
 				$dropFolderFile->save();				
 				break;				
 		}		
@@ -124,7 +124,7 @@ class kDropFolderICalEventsConsumer implements kBatchJobStatusEventConsumer, kOb
 			
 	private function setFileError(DropFolderFile $file, $status, $errorCode, $errorDescription)
 	{
-		KalturaLog::err('Error with file ['.$file->getId().'] -'.$errorDescription);
+		VidiunLog::err('Error with file ['.$file->getId().'] -'.$errorDescription);
 		
 		$file->setStatus($status);
 		$file->setErrorCode($errorCode);
@@ -157,14 +157,14 @@ class kDropFolderICalEventsConsumer implements kBatchJobStatusEventConsumer, kOb
 		$objectId = $file->getId();
 		$partner = PartnerPeer::retrieveByPK($file->getPartnerId());
 		
-		$data = KalturaPluginManager::loadObject('kBulkUploadJobData', $coreBulkUploadType);
-		/* @var $data kBulkUploadICalJobData */
-		$data->setUploadedBy(kDropFolderXmlEventsConsumer::UPLOADED_BY);
+		$data = VidiunPluginManager::loadObject('vBulkUploadJobData', $coreBulkUploadType);
+		/* @var $data vBulkUploadICalJobData */
+		$data->setUploadedBy(vDropFolderXmlEventsConsumer::UPLOADED_BY);
 		$data->setFileName($file->getFileName());
 		$data->setBulkUploadObjectType($bulkUploadObjectType);
 		$data->setEventsType($fileHandlerConfig->getEventsType());
 					
-		$job = kJobsManager::addBulkUploadJob($partner, $data, $coreBulkUploadType, $objectId, $objectType);
+		$job = vJobsManager::addBulkUploadJob($partner, $data, $coreBulkUploadType, $objectId, $objectType);
 
 		$file->setBatchJobId($job->getId());
 		$file->save();

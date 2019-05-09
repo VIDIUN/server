@@ -4,7 +4,7 @@ class DeliveryProfileHttp extends DeliveryProfileVod {
 	
 	function __construct() {
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kF4MManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vF4MManifestRenderer';
 	}
 	
 	protected function doGetFlavorAssetUrl(asset $flavorAsset)

@@ -15,13 +15,13 @@ class AmazonS3StorageProfile extends StorageProfile
 	const CUSTOM_DATA_FILES_PERMISSION_IN_S3 = 'files_permission_in_s3';
 	const CUSTOM_DATA_S3_REGION = 's3Region';
 	const CUSTOM_DATA_SSE_TYPE = 'sseType';
-	const CUSTOM_DATA_SSE_KMS_KEY_ID = 'sseKmsKeyId';
+	const CUSTOM_DATA_SSE_VMS_KEY_ID = 'sseVmsKeyId';
 	const CUSTOM_DATA_SIGNATURE_TYPE = 'signatureType';
 	const CUSTOM_DATA_END_POINT = 'endPoint';
 	
-	public function getKalturaObjectType()
+	public function getVidiunObjectType()
 	{
-		return 'KalturaAmazonS3StorageProfile';
+		return 'VidiunAmazonS3StorageProfile';
 	}
 	
 	/* Files Permission Public */
@@ -68,17 +68,17 @@ class AmazonS3StorageProfile extends StorageProfile
 	    return $v;
 	}
 	
-	public function setSseKmsKeyId($v)
+	public function setSseVmsKeyId($v)
 	{
 		if (!is_null($v))
 		{
-	    	$this->putInCustomData(self::CUSTOM_DATA_SSE_KMS_KEY_ID, $v);
+	    	$this->putInCustomData(self::CUSTOM_DATA_SSE_VMS_KEY_ID, $v);
 		}
 	}
 	
-	public function getSseKmsKeyId()
+	public function getSseVmsKeyId()
 	{
-	    $v = $this->getFromCustomData(self::CUSTOM_DATA_SSE_KMS_KEY_ID);
+	    $v = $this->getFromCustomData(self::CUSTOM_DATA_SSE_VMS_KEY_ID);
 	    return $v;
 	}
 	

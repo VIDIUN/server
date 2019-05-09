@@ -1,5 +1,5 @@
 <?php
-class KalturaResponseProfileCacher extends kResponseProfileCacher
+class VidiunResponseProfileCacher extends vResponseProfileCacher
 {
 	/**
 	 * @var IRelatedObject
@@ -21,7 +21,7 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 	 */
 	private static $storedObjectTypeKeys = array();
 	
-	private static function getObjectSpecificCacheValue(KalturaObject $apiObject, IRelatedObject $object, $responseProfileKey)
+	private static function getObjectSpecificCacheValue(VidiunObject $apiObject, IRelatedObject $object, $responseProfileKey)
 	{
 		return array(
 			'type' => 'primaryObject',
@@ -39,7 +39,7 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 	
 	private static function getObjectSpecificCacheKey(IRelatedObject $object, $responseProfileKey)
 	{
-		$userRoles = kPermissionManager::getCurrentRoleIds();
+		$userRoles = vPermissionManager::getCurrentRoleIds();
 		sort($userRoles);
 		
 		$objectType = get_class($object);
@@ -47,19 +47,19 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 		$partnerId = $object->getPartnerId();
 		$profileKey = $responseProfileKey;
 		$protocol = infraRequestUtils::getProtocol();
-		$ksType = kCurrentContext::getCurrentSessionType();
+		$vsType = vCurrentContext::getCurrentSessionType();
 		$userRoles = implode('-', $userRoles);
 		$host = (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
-		$entitlement = (int) kEntitlementUtils::getEntitlementEnforcement();
+		$entitlement = (int) vEntitlementUtils::getEntitlementEnforcement();
 		
 		if(self::$cachePerUser)
 		{
-			$user = kCurrentContext::getCurrentKsKuserId();
-			return "obj_rp{$profileKey}_p{$partnerId}_o{$objectType}_i{$objectId}_h{$protocol}_k{$ksType}_u{$userRoles}_w{$host}_e{$entitlement}_us{$user}";
+			$user = vCurrentContext::getCurrentVsVuserId();
+			return "obj_rp{$profileKey}_p{$partnerId}_o{$objectType}_i{$objectId}_h{$protocol}_v{$vsType}_u{$userRoles}_w{$host}_e{$entitlement}_us{$user}";
 		}
 		else
 		{
-			return "obj_rp{$profileKey}_p{$partnerId}_o{$objectType}_i{$objectId}_h{$protocol}_k{$ksType}_u{$userRoles}_w{$host}_e{$entitlement}";
+			return "obj_rp{$profileKey}_p{$partnerId}_o{$objectType}_i{$objectId}_h{$protocol}_v{$vsType}_u{$userRoles}_w{$host}_e{$entitlement}";
 		}
 	}
 	
@@ -79,18 +79,18 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 	
 	private static function getObjectTypeCacheKey(IRelatedObject $object)
 	{
-		$userRoles = kPermissionManager::getCurrentRoleIds();
+		$userRoles = vPermissionManager::getCurrentRoleIds();
 		sort($userRoles);
 		
 		$objectType = get_class($object);
 		$partnerId = self::$cachedObject->getPartnerId();
 		$profileKey = self::$responseProfileKey;
 		$protocol = infraRequestUtils::getProtocol();
-		$ksType = kCurrentContext::getCurrentSessionType();
+		$vsType = vCurrentContext::getCurrentSessionType();
 		$userRoles = implode('-', $userRoles);
 		$host = (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
 		
-		return "relate_rp{$profileKey}_p{$partnerId}_o{$objectType}_h{$protocol}_k{$ksType}_u{$userRoles}_w{$host}";
+		return "relate_rp{$profileKey}_p{$partnerId}_o{$objectType}_h{$protocol}_v{$vsType}_u{$userRoles}_w{$host}";
 	}
 	
 	public static function onPersistentObjectLoaded(IRelatedObject $object)
@@ -98,7 +98,7 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 		if(!self::$cachedObject)
 			return;
 			
-		KalturaLog::debug("Loaded " . get_class($object) . " [" . $object->getId() . "]");
+		VidiunLog::debug("Loaded " . get_class($object) . " [" . $object->getId() . "]");
 		
 		$peer = $object->getPeer();
 		if($peer instanceof IRelatedObjectPeer)
@@ -110,7 +110,7 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 			}
 			self::$storedObjectTypeKeys[$key] = true;
 			$value = self::getObjectTypeCacheValue($object);
-			KalturaLog::debug("Set [$key]");
+			VidiunLog::debug("Set [$key]");
 			
 			self::set($key, $value);
 		}
@@ -122,16 +122,16 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 	}
 	
 	/**
-	 * @param KalturaObject $apiObject
+	 * @param VidiunObject $apiObject
 	 * @param IRelatedObject $object
-	 * @param KalturaDetachedResponseProfile $responseProfile
+	 * @param VidiunDetachedResponseProfile $responseProfile
 	 * @return boolean
 	 */
-	public static function start(KalturaObject $apiObject, IRelatedObject $object, KalturaDetachedResponseProfile $responseProfile)
+	public static function start(VidiunObject $apiObject, IRelatedObject $object, VidiunDetachedResponseProfile $responseProfile)
 	{
 		if(self::$cachedObject)
 		{
-			KalturaLog::debug("Object [" . get_class(self::$cachedObject) . "][" . self::$cachedObject->getId() . "] still caching");
+			VidiunLog::debug("Object [" . get_class(self::$cachedObject) . "][" . self::$cachedObject->getId() . "] still caching");
 			return false;
 		}
 			
@@ -149,7 +149,7 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 		if($value && self::areKeysValid($invalidationKeys, $value->{self::CACHE_VALUE_TIME}))
 		{
 			$cachedApiObject = unserialize($value->apiObject);
-			if($cachedApiObject instanceof KalturaObject)
+			if($cachedApiObject instanceof VidiunObject)
 			{
 				$properties = get_object_vars($cachedApiObject);
 				foreach ($properties as $propertyName => $propertyValue)
@@ -158,9 +158,9 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 				}
 				return true;
 			}
-			KalturaLog::err("Object [" . get_class($object) . "][" . $object->getId() . "] - invalid object cached");
+			VidiunLog::err("Object [" . get_class($object) . "][" . $object->getId() . "] - invalid object cached");
 		}
-		KalturaLog::debug("Start " . get_class($object) . " [" . $object->getId() . "]");
+		VidiunLog::debug("Start " . get_class($object) . " [" . $object->getId() . "]");
 		
 		if(self::$responseProfileKey != $responseProfileKey && !$responseProfileCache)
 		{
@@ -173,17 +173,17 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 		return false;
 	}
 	
-	public static function stop(IRelatedObject $object, KalturaObject $apiObject)
+	public static function stop(IRelatedObject $object, VidiunObject $apiObject)
 	{
 		if($object !== self::$cachedObject)
 		{
-			KalturaLog::debug("Object [" . get_class(self::$cachedObject) . "][" . self::$cachedObject->getId() . "] still caching");
+			VidiunLog::debug("Object [" . get_class(self::$cachedObject) . "][" . self::$cachedObject->getId() . "] still caching");
 			return;
 		}
 
 		if($apiObject->relatedObjects)
 		{
-			KalturaLog::debug("Stop " . get_class($apiObject));
+			VidiunLog::debug("Stop " . get_class($apiObject));
 			
 			$key = self::getObjectSpecificCacheKey(self::$cachedObject, self::$responseProfileKey);
 			$value = self::getObjectSpecificCacheValue($apiObject, self::$cachedObject, self::$responseProfileKey);
@@ -192,20 +192,20 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 		}
 		else
 		{
-			KalturaLog::debug("API Object [" . get_class($apiObject) . "] has no related objects");
+			VidiunLog::debug("API Object [" . get_class($apiObject) . "] has no related objects");
 		}
 		
 		self::$cachedObject = null;
 		self::$cachePerUser = false;
 	}
 	
-	protected static function recalculateCache(kCouchbaseCacheListItem $cache, KalturaDetachedResponseProfile $responseProfile = null)
+	protected static function recalculateCache(vCouchbaseCacheListItem $cache, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		KalturaLog::debug("Cache object id [" . $cache->getId() . "]");
+		VidiunLog::debug("Cache object id [" . $cache->getId() . "]");
 		$data = $cache->getData();
 		if(!$data)
 		{
-			KalturaLog::err("Cache object contains no data for id [" . $cache->getId() . "]");
+			VidiunLog::err("Cache object contains no data for id [" . $cache->getId() . "]");
 			self::delete($cache->getId());
 			return;
 		}
@@ -217,7 +217,7 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 			$responseProfile = unserialize($value['responseProfile']);
 			if(!$responseProfile)
 			{
-				KalturaLog::err("Response-Profile key [$responseProfileCacheKey] not found in cache");
+				VidiunLog::err("Response-Profile key [$responseProfileCacheKey] not found in cache");
 				self::delete($cache->getId());
 				return;
 			}
@@ -227,7 +227,7 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 		$object = $peer::retrieveByPK($data['objectId']);
 		if(!$object)
 		{
-			KalturaLog::err("Object $peer [" . $data['objectId'] . "] not found");
+			VidiunLog::err("Object $peer [" . $data['objectId'] . "] not found");
 			self::delete($cache->getId());
 			return;
 		}
@@ -243,10 +243,10 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 	}
 	
 	/**
-	 * @param KalturaResponseProfileCacheRecalculateOptions $options
-	 * @return KalturaResponseProfileCacheRecalculateResults
+	 * @param VidiunResponseProfileCacheRecalculateOptions $options
+	 * @return VidiunResponseProfileCacheRecalculateResults
 	 */
-	public static function recalculateCacheBySessionType(KalturaResponseProfileCacheRecalculateOptions $options)
+	public static function recalculateCacheBySessionType(VidiunResponseProfileCacheRecalculateOptions $options)
 	{
 		$sessionKey = self::getSessionKey();
 		
@@ -259,26 +259,26 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 		if($options->isFirstLoop)
 		{
 			if($lastRecalculateTime >= $options->jobCreatedAt)
-				throw new KalturaAPIException(KalturaErrors::RESPONSE_PROFILE_CACHE_ALREADY_RECALCULATED);
+				throw new VidiunAPIException(VidiunErrors::RESPONSE_PROFILE_CACHE_ALREADY_RECALCULATED);
 				
 			$lastRecalculateTime = time();
 			self::set($uniqueKey);
 		}
 		
-		$partnerId = kCurrentContext::getCurrentPartnerId();
-		$results = new KalturaResponseProfileCacheRecalculateResults();
+		$partnerId = vCurrentContext::getCurrentPartnerId();
+		$results = new VidiunResponseProfileCacheRecalculateResults();
 		
 		/* @var $object IRelatedObject */
 		$responseProfile = null;
 		$cacheStores = self::getStores();
 		foreach ($cacheStores as $cacheStore)
 		{
-			if(!($cacheStore instanceof kCouchbaseCacheWrapper))
+			if(!($cacheStore instanceof vCouchbaseCacheWrapper))
 			{
 				continue;
 			}
 			
-			$query = $cacheStore->getNewQuery(kResponseProfileCacher::VIEW_RESPONSE_PROFILE_SESSION_TYPE);
+			$query = $cacheStore->getNewQuery(vResponseProfileCacher::VIEW_RESPONSE_PROFILE_SESSION_TYPE);
 			if(!$query)
 			{
 				continue;
@@ -288,9 +288,9 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 			if($options->objectId)
 			{
 				$objectKey = "{$partnerId}_{$options->cachedObjectType}_{$options->objectId}";
-				KalturaLog::debug("Serach for key [$sessionKey, $objectKey]");
-				$query->addKey(kResponseProfileCacher::VIEW_KEY_SESSION_KEY, $sessionKey);
-				$query->addKey(kResponseProfileCacher::VIEW_KEY_OBJECT_KEY, $objectKey);
+				VidiunLog::debug("Serach for key [$sessionKey, $objectKey]");
+				$query->addKey(vResponseProfileCacher::VIEW_KEY_SESSION_KEY, $sessionKey);
+				$query->addKey(vResponseProfileCacher::VIEW_KEY_OBJECT_KEY, $objectKey);
 			}
 			else 
 			{
@@ -298,14 +298,14 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 				if($options->startObjectKey)
 					$objectKey = $options->startObjectKey;
 					
-				KalturaLog::debug("Serach for start key [$sessionKey, $objectKey]");
-				$query->addStartKey(kResponseProfileCacher::VIEW_KEY_SESSION_KEY, $sessionKey);
-				$query->addStartKey(kResponseProfileCacher::VIEW_KEY_OBJECT_KEY, $objectKey);
+				VidiunLog::debug("Serach for start key [$sessionKey, $objectKey]");
+				$query->addStartKey(vResponseProfileCacher::VIEW_KEY_SESSION_KEY, $sessionKey);
+				$query->addStartKey(vResponseProfileCacher::VIEW_KEY_OBJECT_KEY, $objectKey);
 				
 				if($options->endObjectKey)
 				{
-					$query->addEndKey(kResponseProfileCacher::VIEW_KEY_SESSION_KEY, $sessionKey);
-					$query->addEndKey(kResponseProfileCacher::VIEW_KEY_OBJECT_KEY, $options->endObjectKey);
+					$query->addEndKey(vResponseProfileCacher::VIEW_KEY_SESSION_KEY, $sessionKey);
+					$query->addEndKey(vResponseProfileCacher::VIEW_KEY_OBJECT_KEY, $options->endObjectKey);
 				}
 			}
 
@@ -328,14 +328,14 @@ class KalturaResponseProfileCacher extends kResponseProfileCacher
 			}
 			
 			$cache = reset($cachedObjects);
-			/* @var $cache kCouchbaseCacheListItem */
+			/* @var $cache vCouchbaseCacheListItem */
 			list($cachedSessionKey, $cachedObjectKey) = $cache->getKey();
 			$results->lastObjectKey = $cachedObjectKey;
 			
 			$newRecalculateCache = self::get($uniqueKey, false);
 			$newRecalculateTime = $lastRecalculateCache->{self::CACHE_VALUE_TIME};
 			if($newRecalculateTime > $lastRecalculateTime)
-				throw new KalturaAPIException(KalturaErrors::RESPONSE_PROFILE_CACHE_RECALCULATE_RESTARTED);
+				throw new VidiunAPIException(VidiunErrors::RESPONSE_PROFILE_CACHE_RECALCULATE_RESTARTED);
 		}
 		return $results;
 	}

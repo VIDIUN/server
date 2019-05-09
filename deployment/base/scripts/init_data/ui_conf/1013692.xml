@@ -1,9 +1,9 @@
-<kcw>
+<vcw>
   <UIConfigList>
     <UIConfig>
       <target>ContributionWizard.swf</target>
-      <cssUrl id="light" name="Default Light">/content/uiconf/kcweditor/styles/light/default.swf?R=13838.332821317974</cssUrl>
-      <localeUrl id="en_US_mysite" name="English US MySite">/content/uiconf/kcweditor/locales/en_US/en_US_locales_mysite.swf?R=13838.332821317974</localeUrl>
+      <cssUrl id="light" name="Default Light">/content/uiconf/vcweditor/styles/light/default.swf?R=13838.332821317974</cssUrl>
+      <localeUrl id="en_US_mysite" name="English US MySite">/content/uiconf/vcweditor/locales/en_US/en_US_locales_mysite.swf?R=13838.332821317974</localeUrl>
     </UIConfig>
   </UIConfigList>
   <ImportTypesConfig>
@@ -131,4 +131,4 @@
       <mediaProviderName>upload</mediaProviderName>
     </gotoScreen>
   </StartupDefaults>
-</kcw>
+</vcw>

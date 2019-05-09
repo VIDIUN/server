@@ -2,15 +2,15 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaRule instead
+ * @deprecated use VidiunRule instead
  * @abstract
  */
-abstract class KalturaBaseRestriction extends KalturaObject
+abstract class VidiunBaseRestriction extends VidiunObject
 {
 	/**
-	 * @param KalturaRestrictionArray $restrictions enable one restriction to be affected by other restrictions
-	 * @return kAccessControlRestriction
+	 * @param VidiunRestrictionArray $restrictions enable one restriction to be affected by other restrictions
+	 * @return vAccessControlRestriction
 	 * @abstract must be implemented
 	 */
-	abstract public function toRule(KalturaRestrictionArray $restrictions);
+	abstract public function toRule(VidiunRestrictionArray $restrictions);
 }

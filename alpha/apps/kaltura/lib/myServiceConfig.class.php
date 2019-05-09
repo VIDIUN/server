@@ -87,7 +87,7 @@ class myServiceConfig
 		
 	protected function getDefaultPath ()
 	{
-		return SF_ROOT_DIR."/apps/kaltura/modules/partnerservices2/service_config/";
+		return SF_ROOT_DIR."/apps/vidiun/modules/partnerservices2/service_config/";
 	}
 		
 	protected function getPath ()
@@ -102,7 +102,7 @@ class myServiceConfig
 	public function __construct ( $file_name , $service_name = null, $useDefualt = true )
 	{
 		$path = $this->getPath();
-		KalturaLog::debug("Path [$path] File [$file_name] Service [$service_name]");
+		VidiunLog::debug("Path [$path] File [$file_name] Service [$service_name]");
 		
 		$config_table_list = array ( );
 		
@@ -127,7 +127,7 @@ class myServiceConfig
 		}
 
 		 // don't use the common path feature - add it to each config file separatly
-		$this->config_chain = new kConfigTableChain( $config_table_list , null );  
+		$this->config_chain = new vConfigTableChain( $config_table_list , null );  
 		$tables =  $this->config_chain->getTables();
 		self::$default_config_table = end ( $tables );
 
@@ -151,12 +151,12 @@ class myServiceConfig
 	
 	public function getTicketType() 		{	return $this->get ( "ticket" ); 	}
 	public function getRequirePartner()		{	return $this->get ( "rp" );			}	
-	public function getNeedKuserFromPuser()	{	return $this->get ( "nkfp" ); 		}
+	public function getNeedVuserFromPuser()	{	return $this->get ( "nvfp" ); 		}
 	public function getCreateUserOnDemand()	{	return $this->get ( "cuod" );		}
 	public function getAllowEmptyPuser()	{	return $this->get ( "aep" );		}
 	//public function getReadWrite()			{	return $this->get ( "wr" );			}
 	public function getPartnerGroup()		{	return $this->get ( "pg" );			}
-	public function getKalturaNetwork()		{	return $this->get ( "kn" );			}
+	public function getVidiunNetwork()		{	return $this->get ( "vn" );			}
 	public function getMatchIp()			{	return $this->get ( "mip" );		}
 	public function getTags()				{	return $this->get ( "tags" );		}
 

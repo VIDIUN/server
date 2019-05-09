@@ -3,17 +3,17 @@
  * @package api
  * @subpackage filters
  */
-class KalturaPlaylistFilter extends KalturaPlaylistBaseFilter
+class VidiunPlaylistFilter extends VidiunPlaylistBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntryFilter::getListResponse()
+	 * @see VidiunBaseEntryFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		list($list, $totalCount) = $this->doGetListResponse($pager);
 		
-	    $newList = KalturaPlaylistArray::fromDbArray($list, $responseProfile);
-		$response = new KalturaPlaylistListResponse();
+	    $newList = VidiunPlaylistArray::fromDbArray($list, $responseProfile);
+		$response = new VidiunPlaylistListResponse();
 		$response->objects = $newList;
 		$response->totalCount = $totalCount;
 		

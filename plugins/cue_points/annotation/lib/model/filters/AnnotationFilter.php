@@ -9,7 +9,7 @@ class AnnotationFilter extends CuePointFilter
 	{
 	    parent::init();
 	    
-	    $extendedFields = kArray::makeAssociativeDefaultValue ( array (
+	    $extendedFields = vArray::makeAssociativeDefaultValue ( array (
 				"_eq_parent_id",
 				"_in_parent_id",
 				"_like_text",

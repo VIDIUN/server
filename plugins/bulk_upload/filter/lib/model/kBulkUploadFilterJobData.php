@@ -3,7 +3,7 @@
  * @package plugins.bulkUploadFilter
  * @subpackage model.data
  */
-class kBulkUploadFilterJobData extends kBulkUploadJobData
+class vBulkUploadFilterJobData extends vBulkUploadJobData
 {
 	/**
 	 * Filter for extracting the objects list to upload

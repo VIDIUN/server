@@ -95,7 +95,7 @@ $debug .= "property: $not_property = [$value]\n";
 
 	/**
 	 * $notification_type -
-	 * $puser_id - the puser_id of the kuser that caused the modification
+	 * $puser_id - the puser_id of the vuser that caused the modification
 	 * $object_data - can be either an object or an object id (if the object no longer exists
 	 * $partner_id - if exists, use this (usually in case of $object_data is an id), if not - use the partner_id from the object
 	 * $entry_id is optional
@@ -114,7 +114,7 @@ $debug .= "property: $not_property = [$value]\n";
 			}
 			else
 			{
-				KalturaLog::log ( "Cannot create notification [$notification_type] [$object_data] [$partner_id]" );
+				VidiunLog::log ( "Cannot create notification [$notification_type] [$object_data] [$partner_id]" );
 				return false;
 			}
 		}
@@ -157,7 +157,7 @@ $debug .= "property: $not_property = [$value]\n";
 //		
 //		$not->setPartnerId( $partner_id );
 //		$not->setPuserId( $puser_id );
-//		$not->setDc ( kDataCenterMgr::getCurrentDcId() );
+//		$not->setDc ( vDataCenterMgr::getCurrentDcId() );
 //		if ( $object_data instanceof BaseObject )
 //		{
 //			$not->setObjectId($object_data->getId() );
@@ -165,10 +165,10 @@ $debug .= "property: $not_property = [$value]\n";
 //				
 //			if ( $object_data instanceof entry )
 //			{
-//				if (defined("KALTURA_API_V3"))
-//					$puser_id = $object_data->getKuser()->getPuserId();
+//				if (defined("VIDIUN_API_V3"))
+//					$puser_id = $object_data->getVuser()->getPuserId();
 //				else
-//					$puser_id = PuserKuserPeer::getByKuserId( $object_data->getKuserId() , 1 );
+//					$puser_id = PuserVuserPeer::getByVuserId( $object_data->getVuserId() , 1 );
 //					
 //				$not->setPuserId( $puser_id );
 //				
@@ -212,39 +212,39 @@ $debug .= "property: $not_property = [$value]\n";
 				
 			if ( $object_data instanceof entry )
 			{
-				if (kCurrentContext::isApiV3Context())
+				if (vCurrentContext::isApiV3Context())
 				{
-					$kuser = $object_data->getKuser();
+					$vuser = $object_data->getVuser();
 					
-					if ( $kuser )
-						$puser_id = $kuser->getPuserId();
+					if ( $vuser )
+						$puser_id = $vuser->getPuserId();
 					else
 					{
 						$puser_id = null;
-						KalturaLog::log ( __CLASS__.'::'.__METHOD__.' [line: '.__LINE__.'] could not find kuser ['.$object_data->getKuserId().'] from object ['.$object_data->getId().']');
+						VidiunLog::log ( __CLASS__.'::'.__METHOD__.' [line: '.__LINE__.'] could not find vuser ['.$object_data->getVuserId().'] from object ['.$object_data->getId().']');
 					}
 				}
 				else
 				{
-					$puser_id = PuserKuserPeer::getByKuserId( $object_data->getKuserId() , 1 );
-					// in flatten (or maybe other old batches), KALTURA_API_V3 is not defined, but entry user could have
-					// been created through api v3, in that case there will not be a record in puser_kuser table
+					$puser_id = PuserVuserPeer::getByVuserId( $object_data->getVuserId() , 1 );
+					// in flatten (or maybe other old batches), VIDIUN_API_V3 is not defined, but entry user could have
+					// been created through api v3, in that case there will not be a record in puser_vuser table
 					if(is_null($puser_id))
 					{
 						$puser_id = $object_data->getPuserId();
 						// if entry was created on PS2 and from some reason puserId is still missing
 						if(is_null($puser_id))
 						{
-							$kuser = kuserPeer::retrieveByPK($object_data->getKuserId());
-							if($kuser)
+							$vuser = vuserPeer::retrieveByPK($object_data->getVuserId());
+							if($vuser)
 							{
-								$puser_id = $kuser->getPuserId();
+								$puser_id = $vuser->getPuserId();
 							}
 						}
 					}
 					if(is_null($puser_id))
 					{
-						KalturaLog::log ( __CLASS__.'::'.__METHOD__.' [line: '.__LINE__.'] could not get puser_id out of api_v3 context puserId from entry:['.$object_data->getPuserId().'] kuser ID:['.$object_data->getKuserId().'] entry:['.$object_data->getId().']');
+						VidiunLog::log ( __CLASS__.'::'.__METHOD__.' [line: '.__LINE__.'] could not get puser_id out of api_v3 context puserId from entry:['.$object_data->getPuserId().'] vuser ID:['.$object_data->getVuserId().'] entry:['.$object_data->getId().']');
 					}
 				}
 			}
@@ -255,7 +255,7 @@ $debug .= "property: $not_property = [$value]\n";
 			// this is probably the case of some delete and we mifght not have the object in hand but only the id
 			$objectId = $object_data;
 		}
-		$job = kJobsManager::addNotificationJob(null, $entry_id, $partner_id, $notification_type, $nofity_send_type, $puser_id, $objectId, $notificationData);
+		$job = vJobsManager::addNotificationJob(null, $entry_id, $partner_id, $notification_type, $nofity_send_type, $puser_id, $objectId, $notificationData);
 		
 		
 		if ( $retrun_notification )
@@ -289,59 +289,59 @@ $debug .= "property: $not_property = [$value]\n";
 		$param_names = null;
 		switch ( $notification_type )
 		{
-			case kNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD:
-				$param_names = array ( "name" , "tags" , "search_text" , "media_type" , "length_in_msecs" , "permissions", "thumbnail_url" , "kshow_id" , "roughcut_id",  
+			case vNotificationJobData::NOTIFICATION_TYPE_ENTRY_ADD:
+				$param_names = array ( "name" , "tags" , "search_text" , "media_type" , "length_in_msecs" , "permissions", "thumbnail_url" , "vshow_id" , "roughcut_id",  
 					"group_id" , "partner_data", "status", "width", "height", "data_url", "download_url", "download_size", "media_date");
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE:
-				$param_names = array ( "name" , "tags" , "search_text" , "media_type" , "length_in_msecs" , "permissions", "thumbnail_url" , "kshow_id" , 
+			case vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE:
+				$param_names = array ( "name" , "tags" , "search_text" , "media_type" , "length_in_msecs" , "permissions", "thumbnail_url" , "vshow_id" , 
 					"group_id" , "partner_data", "status", "width", "height", "data_url", "download_url", "download_size", "media_date" , "moderation_status" );
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_PERMISSIONS:
+			case vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_PERMISSIONS:
 				$param_names = array ( "permissions" );
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_ENTRY_DELETE:
+			case vNotificationJobData::NOTIFICATION_TYPE_ENTRY_DELETE:
 				$param_names = null;
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_ENTRY_BLOCK:
+			case vNotificationJobData::NOTIFICATION_TYPE_ENTRY_BLOCK:
 				$param_names = null;
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL:
-				$param_names = array ( "thumbnail_url", "kshow_id" );
+			case vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_THUMBNAIL:
+				$param_names = array ( "thumbnail_url", "vshow_id" );
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_ENTRY_REPORT:
+			case vNotificationJobData::NOTIFICATION_TYPE_ENTRY_REPORT:
 				$param_names = array ( "objectId", "comments" , "reportCode" );
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_MODERATION:
+			case vNotificationJobData::NOTIFICATION_TYPE_ENTRY_UPDATE_MODERATION:
 				$param_names = array ( "moderation_status", "moderation_count" );
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_KSHOW_ADD:
+			case vNotificationJobData::NOTIFICATION_TYPE_VSHOW_ADD:
 				//$param_names = array ( "name" , "description" , "searchText" , "permissions" ,"groupId");
 				$param_names = array ( "name" , "description" , "tags" , "search_text" , "permissions" , "group_id" , "partner_data" , "show_entry_id" );
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_KSHOW_DELETE:
+			case vNotificationJobData::NOTIFICATION_TYPE_VSHOW_DELETE:
 				$param_names = null;
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_KSHOW_UPDATE_INFO:
+			case vNotificationJobData::NOTIFICATION_TYPE_VSHOW_UPDATE_INFO:
 				//$param_names = array ( "name" , "description" , "searchText" ,"groupId" );
 				$param_names = array ( "name" , "description" , "tags" , "search_text" , "group_id" , "partner_data"  );
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_KSHOW_UPDATE_PERMISSIONS:
+			case vNotificationJobData::NOTIFICATION_TYPE_VSHOW_UPDATE_PERMISSIONS:
 				$param_names = array ( "permissions" );
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_KSHOW_RANK:
+			case vNotificationJobData::NOTIFICATION_TYPE_VSHOW_RANK:
 				$param_names = array ( "rank" , "votes" );
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_KSHOW_BLOCK:
+			case vNotificationJobData::NOTIFICATION_TYPE_VSHOW_BLOCK:
 				$param_namesmes = null;
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_USER_BANNED:
+			case vNotificationJobData::NOTIFICATION_TYPE_USER_BANNED:
 				$param_names = array ( "screen_name" , "email" );
 				break;
-			case kNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_STARTED:
-			case kNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_SUCCEEDED:
-			case kNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_FAILED:
-			case kNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_SIMILAR_EXISTS:
+			case vNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_STARTED:
+			case vNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_SUCCEEDED:
+			case vNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_FAILED:
+			case vNotificationJobData::NOTIFICATION_TYPE_BATCH_JOB_SIMILAR_EXISTS:
 				$param_names = array ( "id" , "job_sub_type" , "abort" , "message", "description" ,  
 					"updates_count" , "created_at" , "updated_at" );
 				break;
@@ -373,13 +373,13 @@ $debug .= "property: $not_property = [$value]\n";
 		}
 		
 		try{
-			$ksObj = kSessionUtils::crackKs(kCurrentContext::$ks);
-			if($ksObj)
-				$params['ks_data'] = $ksObj->additional_data;
+			$vsObj = vSessionUtils::crackVs(vCurrentContext::$vs);
+			if($vsObj)
+				$params['vs_data'] = $vsObj->additional_data;
 		}
 		catch(Exception $ex)
 		{
-			KalturaLog::log('could not crack KS ['.kCurrentContext::$ks.'] for adding to notification param');
+			VidiunLog::log('could not crack VS ['.vCurrentContext::$vs.'] for adding to notification param');
 		}
 
 		return serialize( $params );
@@ -418,10 +418,10 @@ $debug .= "property: $not_property = [$value]\n";
 			
 		);
 		
-		if ( kNotificationJobData::isEntryNotification($type )) $params["entry_id"] = $job->getData()->getObjectId();
+		if ( vNotificationJobData::isEntryNotification($type )) $params["entry_id"] = $job->getData()->getObjectId();
 			//$params["entryId"] = $not->getObjectId();
-		if ( kNotificationJobData::isKshowNotification($type )) $params["kshow_id"] = $job->getData()->getObjectId();
-//			$params["kshowId"] = $not->getObjectId();
+		if ( vNotificationJobData::isVshowNotification($type )) $params["vshow_id"] = $job->getData()->getObjectId();
+//			$params["vshowId"] = $not->getObjectId();
 
 		$object_data_params = myNotificationMgr::getDataAsArray( $job->getData()->getData() ) ;
 		
@@ -452,10 +452,10 @@ $debug .= "property: $not_property = [$value]\n";
 	{
 		ksort($params);
 		$str = "";
-		foreach ($params as $k => $v)
+		foreach ($params as $v => $v)
 		{
-			if ( $k == "sig" ) continue;
-			$str .= $k.$v;
+			if ( $v == "sig" ) continue;
+			$str .= $v.$v;
 		}
 		
 		return  array ( md5($signature_key . $str) , $str );
@@ -464,12 +464,12 @@ $debug .= "property: $not_property = [$value]\n";
 	private static function fixParams ( &$params , $prefix = null )
 	{
 		$new_params = array();
-		foreach ( $params as $k => $v )
+		foreach ( $params as $v => $v )
 		{
 			if ( $prefix )
-				$new_params[$prefix . trim($k)] = trim($v);
+				$new_params[$prefix . trim($v)] = trim($v);
 			else
-				$new_params[trim($k)] = trim($v); 
+				$new_params[trim($v)] = trim($v); 
 		}
 		return $new_params		;
 	}

@@ -30,7 +30,7 @@ class Form_DistributionConfiguration extends Infra_Form
 			{
 				$thumbIndex = $matches[1];
 				
-				$dimensions = new Kaltura_Client_ContentDistribution_Type_DistributionThumbDimensions();
+				$dimensions = new Vidiun_Client_ContentDistribution_Type_DistributionThumbDimensions();
 				$dimensions->width = $value;
 				$dimensions->height = $properties["dimensionsHeight_{$thumbIndex}"];
 				
@@ -50,7 +50,7 @@ class Form_DistributionConfiguration extends Infra_Form
 				$dimensionsHeight = $properties['dimensionsHeight'][$index];
 				$dimensionsRequired = $properties['dimensionsRequired'][$index];
 				
-				$dimensions = new Kaltura_Client_ContentDistribution_Type_DistributionThumbDimensions();
+				$dimensions = new Vidiun_Client_ContentDistribution_Type_DistributionThumbDimensions();
 				$dimensions->width = $dimensionsWidth;
 				$dimensions->height = $dimensionsHeight;
 				
@@ -67,14 +67,14 @@ class Form_DistributionConfiguration extends Infra_Form
 		{
 			if (strpos($key, 'asset_distribution_rule_') === 0)
 			{
-				$assetDistributionRule = new Kaltura_Client_ContentDistribution_Type_AssetDistributionRule();
+				$assetDistributionRule = new Vidiun_Client_ContentDistribution_Type_AssetDistributionRule();
 				$assetDistributionRule->validationError = $value['validation_error'];
 				$assetDistributionRule->assetDistributionConditions = array();
 				foreach($value as $subKey => $subValue)
 				{
 					if (strpos($subKey, 'asset_distribution_property_condition_') === 0)
 					{
-						$assetDistributionPropertyCondition = new Kaltura_Client_ContentDistribution_Type_AssetDistributionPropertyCondition();
+						$assetDistributionPropertyCondition = new Vidiun_Client_ContentDistribution_Type_AssetDistributionPropertyCondition();
 						$assetDistributionPropertyCondition->propertyName = $subValue['property_name'];
 						$assetDistributionPropertyCondition->propertyValue = $subValue['property_value'];
 						$assetDistributionRule->assetDistributionConditions[] = $assetDistributionPropertyCondition;
@@ -94,7 +94,7 @@ class Form_DistributionConfiguration extends Infra_Form
 		return $object;
 	}
 	
-	public function addFlavorParamsFields(Kaltura_Client_Type_FlavorParamsListResponse $flavorParams, array $optionalFlavorParamsIds = array(), array $requiredFlavorParamsIds = array())
+	public function addFlavorParamsFields(Vidiun_Client_Type_FlavorParamsListResponse $flavorParams, array $optionalFlavorParamsIds = array(), array $requiredFlavorParamsIds = array())
 	{
 		$this->addElement('hidden', 'crossLine2', array(
 			'lable'			=> 'line',
@@ -140,7 +140,7 @@ class Form_DistributionConfiguration extends Infra_Form
 	}
 	
 	private $dimensionsCounter = 0;
-	public function addThumbDimensions(Kaltura_Client_ContentDistribution_Type_DistributionThumbDimensions $dimensions, $isRequired)
+	public function addThumbDimensions(Vidiun_Client_ContentDistribution_Type_DistributionThumbDimensions $dimensions, $isRequired)
 	{
 		if(!$this->dimensionsCounter)
 		{

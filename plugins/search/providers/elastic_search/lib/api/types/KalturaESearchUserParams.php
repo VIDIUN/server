@@ -3,10 +3,10 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchUserParams extends KalturaESearchParams
+class VidiunESearchUserParams extends VidiunESearchParams
 {
 	/**
-	 * @var KalturaESearchUserOperator
+	 * @var VidiunESearchUserOperator
 	 */
 	public $searchOperator;
 	

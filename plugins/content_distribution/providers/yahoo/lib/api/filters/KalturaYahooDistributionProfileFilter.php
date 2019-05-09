@@ -3,6 +3,6 @@
  * @package plugins.yahooDistribution
  * @subpackage api.filters
  */
-class KalturaYahooDistributionProfileFilter extends KalturaYahooDistributionProfileBaseFilter
+class VidiunYahooDistributionProfileFilter extends VidiunYahooDistributionProfileBaseFilter
 {
 }

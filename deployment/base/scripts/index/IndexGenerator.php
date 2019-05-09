@@ -25,8 +25,8 @@ foreach($indexSchemas as $schemaPath => $dirPath) {
 }
 
 $exe = __DIR__ . "/IndexObjectsGenerator.php";
-$template = __DIR__ . "/../../../../configurations/sphinx/kaltura.conf.source";
-$generatedConf = __DIR__ . "/../../../../configurations/sphinx/kaltura.conf.template";
+$template = __DIR__ . "/../../../../configurations/sphinx/vidiun.conf.source";
+$generatedConf = __DIR__ . "/../../../../configurations/sphinx/vidiun.conf.template";
 
 $exeApiSearchObjects = __DIR__ . "/ApiSearchObjectsGenerator.php";
 
@@ -38,8 +38,8 @@ if ($returnVar > 0)
 $args = implode(array_keys($indexSchemas), ' ');
 
 $exe = __DIR__ . "/IndexObjectsGenerator.php";
-$template = __DIR__ . "/../../../../configurations/sphinx/kaltura.conf.source";
-$generatedConf = __DIR__ . "/../../../../configurations/sphinx/kaltura.conf.template";
+$template = __DIR__ . "/../../../../configurations/sphinx/vidiun.conf.source";
+$generatedConf = __DIR__ . "/../../../../configurations/sphinx/vidiun.conf.template";
 
 $exeApiSearchObjects = __DIR__ . "/ApiSearchObjectsGenerator.php";
 

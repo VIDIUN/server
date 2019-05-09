@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kAssetPropertiesCompareCondition extends kCondition
+class vAssetPropertiesCompareCondition extends vCondition
 {
 	/**
 	 * @var array
@@ -11,7 +11,7 @@ class kAssetPropertiesCompareCondition extends kCondition
 	private $properties;
 	
 	/* (non-PHPdoc)
-	 * @see kCondition::__construct()
+	 * @see vCondition::__construct()
 	 */
 	public function __construct($not = false)
 	{
@@ -20,10 +20,10 @@ class kAssetPropertiesCompareCondition extends kCondition
 	}
 
 	/**
-	 * @param kScope $scope
+	 * @param vScope $scope
 	 * @return bool
 	 */
-	protected function internalFulfilled(kScope $scope)
+	protected function internalFulfilled(vScope $scope)
 	{
 		// no properties defined, the condition is fulfilled
 		if (count($this->getProperties()) == 0)
@@ -59,25 +59,25 @@ class kAssetPropertiesCompareCondition extends kCondition
 
 	protected function assetFulfilled(asset $asset)
 	{
-		KalturaLog::info('Checking asset id '.$asset->getId());
+		VidiunLog::info('Checking asset id '.$asset->getId());
 		foreach($this->getProperties() as $propName => $propValue)
 		{
-			KalturaLog::info('Comparing property ' . $propName .' with value '. $propValue);
+			VidiunLog::info('Comparing property ' . $propName .' with value '. $propValue);
 
 			$getterCallback = array($asset, "get".$propName);
 			if (!is_callable($getterCallback))
 			{
-				KalturaLog::info('Property not found on asset');
+				VidiunLog::info('Property not found on asset');
 				return false;
 			}
 
 			if ($propValue != call_user_func($getterCallback))
 			{
-				KalturaLog::info('Property value does not match');
+				VidiunLog::info('Property value does not match');
 				return false;
 			}
 
-			KalturaLog::info('Property value was matched');
+			VidiunLog::info('Property value was matched');
 		}
 
 		return true;

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlTokenizerAkamaiRtmp extends KalturaUrlTokenizer {
+class VidiunUrlTokenizerAkamaiRtmp extends VidiunUrlTokenizer {
 
 	/**
 	 * profile
@@ -45,7 +45,7 @@ class KalturaUrlTokenizerAkamaiRtmp extends KalturaUrlTokenizer {
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kAkamaiRtmpUrlTokenizer();
+			$dbObject = new vAkamaiRtmpUrlTokenizer();
 			
 		parent::toObject($dbObject, $skip);
 	

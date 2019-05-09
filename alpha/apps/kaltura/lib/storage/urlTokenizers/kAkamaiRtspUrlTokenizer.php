@@ -440,7 +440,7 @@ class Akamaizer
 	}
 }
 
-class kAkamaiRtspUrlTokenizer extends kUrlTokenizer
+class vAkamaiRtspUrlTokenizer extends vUrlTokenizer
 {
 	/**
 	 * @var string

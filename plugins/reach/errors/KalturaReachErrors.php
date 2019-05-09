@@ -5,7 +5,7 @@
  * @subpackage api.errors
  */
 
-class KalturaReachErrors implements kReachErrors
+class VidiunReachErrors implements vReachErrors
 {
 	/* Vendor Catalog Item*/
 	

@@ -135,25 +135,25 @@ abstract class SshDropFolder extends RemoteDropFolder
 	// ------------------------------------------
 	
 	/**
-	 * @return kDropFolderImportJobData
+	 * @return vDropFolderImportJobData
 	 */
 	public function getImportJobData()
 	{
-	    $jobData = new kDropFolderImportJobData();
+	    $jobData = new vDropFolderImportJobData();
 	    $jobData->setPrivateKey($this->getSshPrivateKey());
 	    $jobData->setPublicKey($this->getSshPublicKey());
 	    $jobData->setPassPhrase($this->getSshPassPhrase());
 	    return $jobData;	    
 	}	
     
-	public function loginByCredentialsType(kFileTransferMgr $fileTransferMgr)
+	public function loginByCredentialsType(vFileTransferMgr $fileTransferMgr)
 	{
 		if ($this->getSshPrivateKey() || $this->getSshPublicKey()) 
         {
 			$privateKey = $this->getSshPrivateKey();
 			$publicKey = $this->getSshPublicKey();
-        	$privateKeyFile = $privateKey ? kFile::createTempFile($privateKey, 'privateKey') : null;
-        	$publicKeyFile = $publicKey ? kFile::createTempFile($publicKey, 'publicKey') : null;
+        	$privateKeyFile = $privateKey ? vFile::createTempFile($privateKey, 'privateKey') : null;
+        	$publicKeyFile = $publicKey ? vFile::createTempFile($publicKey, 'publicKey') : null;
         	return $fileTransferMgr->loginPubKey($this->getSshHost(), $this->getSshUsername(), $publicKeyFile, $privateKeyFile, $this->getSshPassPhrase(), $this->getSshPort());
         }
         else

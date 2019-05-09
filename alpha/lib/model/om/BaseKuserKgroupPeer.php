@@ -1,29 +1,29 @@
 <?php
 
 /**
- * Base static class for performing query and update operations on the 'kuser_kgroup' table.
+ * Base static class for performing query and update operations on the 'vuser_vgroup' table.
  *
  * 
  *
  * @package Core
  * @subpackage model.om
  */
-abstract class BaseKuserKgroupPeer {
+abstract class BaseVuserVgroupPeer {
 
 	/** the default database name for this class */
 	const DATABASE_NAME = 'propel';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'kuser_kgroup';
+	const TABLE_NAME = 'vuser_vgroup';
 
 	/** the related Propel class for this table */
-	const OM_CLASS = 'KuserKgroup';
+	const OM_CLASS = 'VuserVgroup';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'Core.KuserKgroup';
+	const CLASS_DEFAULT = 'Core.VuserVgroup';
 
 	/** the related TableMap class for this table */
-	const TM_CLASS = 'KuserKgroupTableMap';
+	const TM_CLASS = 'VuserVgroupTableMap';
 	
 	/** The total number of columns. */
 	const NUM_COLUMNS = 10;
@@ -32,40 +32,40 @@ abstract class BaseKuserKgroupPeer {
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** the column name for the ID field */
-	const ID = 'kuser_kgroup.ID';
+	const ID = 'vuser_vgroup.ID';
 
-	/** the column name for the KUSER_ID field */
-	const KUSER_ID = 'kuser_kgroup.KUSER_ID';
+	/** the column name for the VUSER_ID field */
+	const VUSER_ID = 'vuser_vgroup.VUSER_ID';
 
 	/** the column name for the PUSER_ID field */
-	const PUSER_ID = 'kuser_kgroup.PUSER_ID';
+	const PUSER_ID = 'vuser_vgroup.PUSER_ID';
 
-	/** the column name for the KGROUP_ID field */
-	const KGROUP_ID = 'kuser_kgroup.KGROUP_ID';
+	/** the column name for the VGROUP_ID field */
+	const VGROUP_ID = 'vuser_vgroup.VGROUP_ID';
 
 	/** the column name for the PGROUP_ID field */
-	const PGROUP_ID = 'kuser_kgroup.PGROUP_ID';
+	const PGROUP_ID = 'vuser_vgroup.PGROUP_ID';
 
 	/** the column name for the STATUS field */
-	const STATUS = 'kuser_kgroup.STATUS';
+	const STATUS = 'vuser_vgroup.STATUS';
 
 	/** the column name for the PARTNER_ID field */
-	const PARTNER_ID = 'kuser_kgroup.PARTNER_ID';
+	const PARTNER_ID = 'vuser_vgroup.PARTNER_ID';
 
 	/** the column name for the CREATED_AT field */
-	const CREATED_AT = 'kuser_kgroup.CREATED_AT';
+	const CREATED_AT = 'vuser_vgroup.CREATED_AT';
 
 	/** the column name for the UPDATED_AT field */
-	const UPDATED_AT = 'kuser_kgroup.UPDATED_AT';
+	const UPDATED_AT = 'vuser_vgroup.UPDATED_AT';
 
 	/** the column name for the CUSTOM_DATA field */
-	const CUSTOM_DATA = 'kuser_kgroup.CUSTOM_DATA';
+	const CUSTOM_DATA = 'vuser_vgroup.CUSTOM_DATA';
 
 	/**
-	 * An identiy map to hold any loaded instances of KuserKgroup objects.
+	 * An identiy map to hold any loaded instances of VuserVgroup objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
 	 * queries.
-	 * @var        array KuserKgroup[]
+	 * @var        array VuserVgroup[]
 	 */
 	public static $instances = array();
 
@@ -77,10 +77,10 @@ abstract class BaseKuserKgroupPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'KuserId', 'PuserId', 'KgroupId', 'PgroupId', 'Status', 'PartnerId', 'CreatedAt', 'UpdatedAt', 'CustomData', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'kuserId', 'puserId', 'kgroupId', 'pgroupId', 'status', 'partnerId', 'createdAt', 'updatedAt', 'customData', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::KUSER_ID, self::PUSER_ID, self::KGROUP_ID, self::PGROUP_ID, self::STATUS, self::PARTNER_ID, self::CREATED_AT, self::UPDATED_AT, self::CUSTOM_DATA, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'kuser_id', 'puser_id', 'kgroup_id', 'pgroup_id', 'status', 'partner_id', 'created_at', 'updated_at', 'custom_data', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'VuserId', 'PuserId', 'VgroupId', 'PgroupId', 'Status', 'PartnerId', 'CreatedAt', 'UpdatedAt', 'CustomData', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'vuserId', 'puserId', 'vgroupId', 'pgroupId', 'status', 'partnerId', 'createdAt', 'updatedAt', 'customData', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::VUSER_ID, self::PUSER_ID, self::VGROUP_ID, self::PGROUP_ID, self::STATUS, self::PARTNER_ID, self::CREATED_AT, self::UPDATED_AT, self::CUSTOM_DATA, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'vuser_id', 'puser_id', 'vgroup_id', 'pgroup_id', 'status', 'partner_id', 'created_at', 'updated_at', 'custom_data', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
 	);
 
@@ -91,10 +91,10 @@ abstract class BaseKuserKgroupPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'KuserId' => 1, 'PuserId' => 2, 'KgroupId' => 3, 'PgroupId' => 4, 'Status' => 5, 'PartnerId' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, 'CustomData' => 9, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'kuserId' => 1, 'puserId' => 2, 'kgroupId' => 3, 'pgroupId' => 4, 'status' => 5, 'partnerId' => 6, 'createdAt' => 7, 'updatedAt' => 8, 'customData' => 9, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::KUSER_ID => 1, self::PUSER_ID => 2, self::KGROUP_ID => 3, self::PGROUP_ID => 4, self::STATUS => 5, self::PARTNER_ID => 6, self::CREATED_AT => 7, self::UPDATED_AT => 8, self::CUSTOM_DATA => 9, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'kuser_id' => 1, 'puser_id' => 2, 'kgroup_id' => 3, 'pgroup_id' => 4, 'status' => 5, 'partner_id' => 6, 'created_at' => 7, 'updated_at' => 8, 'custom_data' => 9, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'VuserId' => 1, 'PuserId' => 2, 'VgroupId' => 3, 'PgroupId' => 4, 'Status' => 5, 'PartnerId' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, 'CustomData' => 9, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'vuserId' => 1, 'puserId' => 2, 'vgroupId' => 3, 'pgroupId' => 4, 'status' => 5, 'partnerId' => 6, 'createdAt' => 7, 'updatedAt' => 8, 'customData' => 9, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::VUSER_ID => 1, self::PUSER_ID => 2, self::VGROUP_ID => 3, self::PGROUP_ID => 4, self::STATUS => 5, self::PARTNER_ID => 6, self::CREATED_AT => 7, self::UPDATED_AT => 8, self::CUSTOM_DATA => 9, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'vuser_id' => 1, 'puser_id' => 2, 'vgroup_id' => 3, 'pgroup_id' => 4, 'status' => 5, 'partner_id' => 6, 'created_at' => 7, 'updated_at' => 8, 'custom_data' => 9, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
 	);
 
@@ -144,12 +144,12 @@ abstract class BaseKuserKgroupPeer {
 	 *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
 	 * </code>
 	 * @param      string $alias The alias for the current table.
-	 * @param      string $column The column name for current table. (i.e. KuserKgroupPeer::COLUMN_NAME).
+	 * @param      string $column The column name for current table. (i.e. VuserVgroupPeer::COLUMN_NAME).
 	 * @return     string
 	 */
 	public static function alias($alias, $column)
 	{
-		return str_replace(KuserKgroupPeer::TABLE_NAME.'.', $alias.'.', $column);
+		return str_replace(VuserVgroupPeer::TABLE_NAME.'.', $alias.'.', $column);
 	}
 
 	/**
@@ -165,16 +165,16 @@ abstract class BaseKuserKgroupPeer {
 	 */
 	public static function addSelectColumns(Criteria $criteria)
 	{
-		$criteria->addSelectColumn(KuserKgroupPeer::ID);
-		$criteria->addSelectColumn(KuserKgroupPeer::KUSER_ID);
-		$criteria->addSelectColumn(KuserKgroupPeer::PUSER_ID);
-		$criteria->addSelectColumn(KuserKgroupPeer::KGROUP_ID);
-		$criteria->addSelectColumn(KuserKgroupPeer::PGROUP_ID);
-		$criteria->addSelectColumn(KuserKgroupPeer::STATUS);
-		$criteria->addSelectColumn(KuserKgroupPeer::PARTNER_ID);
-		$criteria->addSelectColumn(KuserKgroupPeer::CREATED_AT);
-		$criteria->addSelectColumn(KuserKgroupPeer::UPDATED_AT);
-		$criteria->addSelectColumn(KuserKgroupPeer::CUSTOM_DATA);
+		$criteria->addSelectColumn(VuserVgroupPeer::ID);
+		$criteria->addSelectColumn(VuserVgroupPeer::VUSER_ID);
+		$criteria->addSelectColumn(VuserVgroupPeer::PUSER_ID);
+		$criteria->addSelectColumn(VuserVgroupPeer::VGROUP_ID);
+		$criteria->addSelectColumn(VuserVgroupPeer::PGROUP_ID);
+		$criteria->addSelectColumn(VuserVgroupPeer::STATUS);
+		$criteria->addSelectColumn(VuserVgroupPeer::PARTNER_ID);
+		$criteria->addSelectColumn(VuserVgroupPeer::CREATED_AT);
+		$criteria->addSelectColumn(VuserVgroupPeer::UPDATED_AT);
+		$criteria->addSelectColumn(VuserVgroupPeer::CUSTOM_DATA);
 	}
 
 	/**
@@ -193,27 +193,27 @@ abstract class BaseKuserKgroupPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(KuserKgroupPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(VuserVgroupPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			KuserKgroupPeer::addSelectColumns($criteria);
+			VuserVgroupPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 		$criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
 		
-		KuserKgroupPeer::attachCriteriaFilter($criteria);
+		VuserVgroupPeer::attachCriteriaFilter($criteria);
 
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteria, 
-			kQueryCache::QUERY_TYPE_COUNT,
-			'KuserKgroupPeer', 
+			vQueryCache::QUERY_TYPE_COUNT,
+			'VuserVgroupPeer', 
 			$cacheKey, 
 			$queryDB);
 		if ($cachedResult !== null)
@@ -222,7 +222,7 @@ abstract class BaseKuserKgroupPeer {
 		}
 		
 		// select the connection for the query
-		$con = KuserKgroupPeer::alternativeCon ($con, $queryDB);
+		$con = VuserVgroupPeer::alternativeCon ($con, $queryDB);
 		
 		// BasePeer returns a PDOStatement
 		$stmt = BasePeer::doCount($criteria, $con);
@@ -236,7 +236,7 @@ abstract class BaseKuserKgroupPeer {
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $count);
+			vQueryCache::cacheQueryResults($cacheKey, $count);
 		}
 		
 		return $count;
@@ -246,7 +246,7 @@ abstract class BaseKuserKgroupPeer {
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
-	 * @return     KuserKgroup
+	 * @return     VuserVgroup
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -254,7 +254,7 @@ abstract class BaseKuserKgroupPeer {
 	{
 		$critcopy = clone $criteria;
 		$critcopy->setLimit(1);
-		$objects = KuserKgroupPeer::doSelect($critcopy, $con);
+		$objects = VuserVgroupPeer::doSelect($critcopy, $con);
 		if ($objects) {
 			return $objects[0];
 		}
@@ -296,10 +296,10 @@ abstract class BaseKuserKgroupPeer {
 	{
 		foreach ($queryResult as $curIndex => $curObject)
 		{
-			$objFromPool = KuserKgroupPeer::getInstanceFromPool($curObject->getPrimaryKey());
+			$objFromPool = VuserVgroupPeer::getInstanceFromPool($curObject->getPrimaryKey());
 			if ($objFromPool === null)
 			{
-				KuserKgroupPeer::addInstanceToPool($curObject);
+				VuserVgroupPeer::addInstanceToPool($curObject);
 			}
 			else
 			{
@@ -317,11 +317,11 @@ abstract class BaseKuserKgroupPeer {
 	{
 		if (Propel::isInstancePoolingEnabled())
 		{
-			if ( count( self::$instances ) + count( $queryResult ) <= kConf::get('max_num_instances_in_pool') )
+			if ( count( self::$instances ) + count( $queryResult ) <= vConf::get('max_num_instances_in_pool') )
 			{  
 				foreach ($queryResult as $curResult)
 				{
-					KuserKgroupPeer::addInstanceToPool($curResult);
+					VuserVgroupPeer::addInstanceToPool($curResult);
 				}
 			}
 		}
@@ -338,54 +338,54 @@ abstract class BaseKuserKgroupPeer {
 	 */
 	public static function doSelect(Criteria $criteria, PropelPDO $con = null)
 	{		
-		$criteriaForSelect = KuserKgroupPeer::prepareCriteriaForSelect($criteria);
+		$criteriaForSelect = VuserVgroupPeer::prepareCriteriaForSelect($criteria);
 		
-		$queryDB = kQueryCache::QUERY_DB_UNDEFINED;
+		$queryDB = vQueryCache::QUERY_DB_UNDEFINED;
 		$cacheKey = null;
-		$cachedResult = kQueryCache::getCachedQueryResults(
+		$cachedResult = vQueryCache::getCachedQueryResults(
 			$criteriaForSelect, 
-			kQueryCache::QUERY_TYPE_SELECT,
-			'KuserKgroupPeer', 
+			vQueryCache::QUERY_TYPE_SELECT,
+			'VuserVgroupPeer', 
 			$cacheKey, 
 			$queryDB);
 		if ($cachedResult !== null)
 		{
 			$cacheKey = null;
-			KuserKgroupPeer::filterSelectResults($cachedResult, $criteriaForSelect);
-			KuserKgroupPeer::updateInstancePool($cachedResult);
+			VuserVgroupPeer::filterSelectResults($cachedResult, $criteriaForSelect);
+			VuserVgroupPeer::updateInstancePool($cachedResult);
 			return $cachedResult;
 		}
 		
-		$con = KuserKgroupPeer::alternativeCon($con, $queryDB);
+		$con = VuserVgroupPeer::alternativeCon($con, $queryDB);
 		
-		$queryResult = KuserKgroupPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
+		$queryResult = VuserVgroupPeer::populateObjects(BasePeer::doSelect($criteriaForSelect, $con));
 		
-		if($criteriaForSelect instanceof KalturaCriteria)
+		if($criteriaForSelect instanceof VidiunCriteria)
 			$criteriaForSelect->applyResultsSort($queryResult);
 		
 		if ($cacheKey !== null)
 		{
-			kQueryCache::cacheQueryResults($cacheKey, $queryResult);
+			vQueryCache::cacheQueryResults($cacheKey, $queryResult);
 			$cacheKey = null;
 		}
 		
-		KuserKgroupPeer::filterSelectResults($queryResult, $criteria);
+		VuserVgroupPeer::filterSelectResults($queryResult, $criteria);
 		
-		KuserKgroupPeer::addInstancesToPool($queryResult);
+		VuserVgroupPeer::addInstancesToPool($queryResult);
 		return $queryResult;
 	}
 
-	public static function alternativeCon($con, $queryDB = kQueryCache::QUERY_DB_UNDEFINED)
+	public static function alternativeCon($con, $queryDB = vQueryCache::QUERY_DB_UNDEFINED)
 	{
 		if ($con === null)
 		{
 			switch ($queryDB)
 			{
-			case kQueryCache::QUERY_DB_MASTER:
+			case vQueryCache::QUERY_DB_MASTER:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_MASTER);
 				break;
 
-			case kQueryCache::QUERY_DB_SLAVE:
+			case vQueryCache::QUERY_DB_SLAVE:
 				$con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 				break;
 			}
@@ -395,7 +395,7 @@ abstract class BaseKuserKgroupPeer {
 			$con = myDbHelper::alternativeCon($con);
 			
 		if($con === null)
-			$con = Propel::getConnection(KuserKgroupPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(VuserVgroupPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		
 		return $con;
 	}
@@ -407,7 +407,7 @@ abstract class BaseKuserKgroupPeer {
 	
 	public static function  setUseCriteriaFilter ( $use )
 	{
-		$criteria_filter = KuserKgroupPeer::getCriteriaFilter();
+		$criteria_filter = VuserVgroupPeer::getCriteriaFilter();
 		
 		if ( $use )  $criteria_filter->enable(); 
 		else $criteria_filter->disable();
@@ -421,12 +421,12 @@ abstract class BaseKuserKgroupPeer {
 	public static function &getCriteriaFilter()
 	{
 		if(self::$s_criteria_filter == null)
-			KuserKgroupPeer::setDefaultCriteriaFilter();
+			VuserVgroupPeer::setDefaultCriteriaFilter();
 		
-		$partnerCriteria = myPartnerUtils::getPartnerCriteriaParams('KuserKgroup');
+		$partnerCriteria = myPartnerUtils::getPartnerCriteriaParams('VuserVgroup');
 		if ($partnerCriteria)
 		{
-			call_user_func_array(array('KuserKgroupPeer','addPartnerToCriteria'), $partnerCriteria);
+			call_user_func_array(array('VuserVgroupPeer','addPartnerToCriteria'), $partnerCriteria);
 		}
 		
 		return self::$s_criteria_filter;
@@ -453,10 +453,10 @@ abstract class BaseKuserKgroupPeer {
 	 */
 	protected static function attachCriteriaFilter(Criteria $criteria)
 	{
-		KuserKgroupPeer::getCriteriaFilter()->applyFilter($criteria);
+		VuserVgroupPeer::getCriteriaFilter()->applyFilter($criteria);
 	}
 	
-	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $kalturaNetwork = null)
+	public static function addPartnerToCriteria($partnerId, $privatePartnerData = false, $partnerGroup = null, $vidiunNetwork = null)
 	{
 		$criteriaFilter = self::getCriteriaFilter();
 		$criteria = $criteriaFilter->getFilter();
@@ -464,19 +464,19 @@ abstract class BaseKuserKgroupPeer {
 		if(!$privatePartnerData)
 		{
 			// the private partner data is not allowed - 
-			if($kalturaNetwork)
+			if($vidiunNetwork)
 			{
-				// allow only the kaltura netword stuff
+				// allow only the vidiun netword stuff
 				if($partnerId)
 				{
 					$orderBy = "(" . self::PARTNER_ID . "<>{$partnerId})";  // first take the pattner_id and then the rest
-					myCriteria::addComment($criteria , "Only Kaltura Network");
+					myCriteria::addComment($criteria , "Only Vidiun Network");
 					$criteria->addAscendingOrderByColumn($orderBy);//, Criteria::CUSTOM );
 				}
 			}
 			else
 			{
-				// no private data and no kaltura_network - 
+				// no private data and no vidiun_network - 
 				// add a criteria that will return nothing
 				$criteria->addAnd(self::PARTNER_ID, Partner::PARTNER_THAT_DOWS_NOT_EXIST);
 			}
@@ -495,7 +495,7 @@ abstract class BaseKuserKgroupPeer {
 			}
 			else 
 			{
-				// $partnerGroup hold a list of partners separated by ',' or $kalturaNetwork is not empty (should be mySearchUtils::KALTURA_NETWORK = 'kn')
+				// $partnerGroup hold a list of partners separated by ',' or $vidiunNetwork is not empty (should be mySearchUtils::VIDIUN_NETWORK = 'vn')
 				$partners = explode(',', trim($partnerGroup));
 				foreach($partners as &$p)
 					trim($p); // make sure there are not leading or trailing spaces
@@ -535,10 +535,10 @@ abstract class BaseKuserKgroupPeer {
 	public static function doCountStmt(Criteria $criteria, PropelPDO $con = null)
 	{
 		// attach default criteria
-		KuserKgroupPeer::attachCriteriaFilter($criteria);
+		VuserVgroupPeer::attachCriteriaFilter($criteria);
 		
 		// select the connection for the query
-		$con = KuserKgroupPeer::alternativeCon ( $con );
+		$con = VuserVgroupPeer::alternativeCon ( $con );
 		
 		// BasePeer returns a PDOStatement
 		return BasePeer::doCount($criteria, $con);
@@ -552,20 +552,20 @@ abstract class BaseKuserKgroupPeer {
 			if(count($asColumns) == 1 && isset($asColumns['_score']))
 			{
 				$criteria = clone $criteria;
-				KuserKgroupPeer::addSelectColumns($criteria);
+				VuserVgroupPeer::addSelectColumns($criteria);
 			}
 		}
 		else
 		{
 			$criteria = clone $criteria;
-			KuserKgroupPeer::addSelectColumns($criteria);
+			VuserVgroupPeer::addSelectColumns($criteria);
 		}
 		
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		// attach default criteria
-		KuserKgroupPeer::attachCriteriaFilter($criteria);
+		VuserVgroupPeer::attachCriteriaFilter($criteria);
 
 		return $criteria;
 	}
@@ -585,9 +585,9 @@ abstract class BaseKuserKgroupPeer {
 	 */
 	public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
 	{
-		$con = KuserKgroupPeer::alternativeCon($con);
+		$con = VuserVgroupPeer::alternativeCon($con);
 		
-		$criteria = KuserKgroupPeer::prepareCriteriaForSelect($criteria);
+		$criteria = VuserVgroupPeer::prepareCriteriaForSelect($criteria);
 		
 		// BasePeer returns a PDOStatement
 		return BasePeer::doSelect($criteria, $con);
@@ -601,10 +601,10 @@ abstract class BaseKuserKgroupPeer {
 	 * to the cache in order to ensure that the same objects are always returned by doSelect*()
 	 * and retrieveByPK*() calls.
 	 *
-	 * @param      KuserKgroup $value A KuserKgroup object.
+	 * @param      VuserVgroup $value A VuserVgroup object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(KuserKgroup $obj, $key = null)
+	public static function addInstanceToPool(VuserVgroup $obj, $key = null)
 	{
 		if ( Propel::isInstancePoolingEnabled() )
 		{
@@ -614,11 +614,11 @@ abstract class BaseKuserKgroupPeer {
 			}
 				
 			if ( isset( self::$instances[$key] )											// Instance is already mapped?
-					|| count( self::$instances ) < kConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
+					|| count( self::$instances ) < vConf::get('max_num_instances_in_pool')	// Not mapped, but max. inst. not yet reached?
 				)
 			{
 				self::$instances[$key] = $obj;
-				kMemoryManager::registerPeer('KuserKgroupPeer');
+				vMemoryManager::registerPeer('VuserVgroupPeer');
 			}
 		}
 	}
@@ -631,18 +631,18 @@ abstract class BaseKuserKgroupPeer {
 	 * methods in your stub classes -- you may need to explicitly remove objects
 	 * from the cache in order to prevent returning objects that no longer exist.
 	 *
-	 * @param      mixed $value A KuserKgroup object or a primary key value.
+	 * @param      mixed $value A VuserVgroup object or a primary key value.
 	 */
 	public static function removeInstanceFromPool($value)
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
-			if (is_object($value) && $value instanceof KuserKgroup) {
+			if (is_object($value) && $value instanceof VuserVgroup) {
 				$key = (string) $value->getId();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
 			} else {
-				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or KuserKgroup object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or VuserVgroup object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
 			}
 
@@ -657,7 +657,7 @@ abstract class BaseKuserKgroupPeer {
 	 * a multi-column primary key, a serialize()d version of the primary key will be returned.
 	 *
 	 * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-	 * @return     KuserKgroup Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+	 * @return     VuserVgroup Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
 	 * @see        getPrimaryKeyHash()
 	 */
 	public static function getInstanceFromPool($key)
@@ -685,7 +685,7 @@ abstract class BaseKuserKgroupPeer {
 	}
 	
 	/**
-	 * Method to invalidate the instance pool of all tables related to kuser_kgroup
+	 * Method to invalidate the instance pool of all tables related to vuser_vgroup
 	 * by a foreign key with ON DELETE CASCADE
 	 */
 	public static function clearRelatedInstancePool()
@@ -723,11 +723,11 @@ abstract class BaseKuserKgroupPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = KuserKgroupPeer::getOMClass(false);
+		$cls = VuserVgroupPeer::getOMClass(false);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key = KuserKgroupPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj = KuserKgroupPeer::getInstanceFromPool($key))) {
+			$key = VuserVgroupPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj = VuserVgroupPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
@@ -743,7 +743,7 @@ abstract class BaseKuserKgroupPeer {
 	}
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuserRelatedByKgroupId table
+	 * Returns the number of rows matching criteria, joining the related vuserRelatedByVgroupId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -751,7 +751,7 @@ abstract class BaseKuserKgroupPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinkuserRelatedByKgroupId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinvuserRelatedByVgroupId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -759,14 +759,14 @@ abstract class BaseKuserKgroupPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(KuserKgroupPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(VuserVgroupPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			KuserKgroupPeer::addSelectColumns($criteria);
+			VuserVgroupPeer::addSelectColumns($criteria);
 		}
 		
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -775,9 +775,9 @@ abstract class BaseKuserKgroupPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(KuserKgroupPeer::KGROUP_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(VuserVgroupPeer::VGROUP_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = KuserKgroupPeer::doCountStmt($criteria, $con);
+		$stmt = VuserVgroupPeer::doCountStmt($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$count = (int) $row[0];
@@ -790,7 +790,7 @@ abstract class BaseKuserKgroupPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuserRelatedByKuserId table
+	 * Returns the number of rows matching criteria, joining the related vuserRelatedByVuserId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -798,7 +798,7 @@ abstract class BaseKuserKgroupPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinkuserRelatedByKuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinvuserRelatedByVuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -806,14 +806,14 @@ abstract class BaseKuserKgroupPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(KuserKgroupPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(VuserVgroupPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			KuserKgroupPeer::addSelectColumns($criteria);
+			VuserVgroupPeer::addSelectColumns($criteria);
 		}
 		
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -822,9 +822,9 @@ abstract class BaseKuserKgroupPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(KuserKgroupPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(VuserVgroupPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = KuserKgroupPeer::doCountStmt($criteria, $con);
+		$stmt = VuserVgroupPeer::doCountStmt($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$count = (int) $row[0];
@@ -837,15 +837,15 @@ abstract class BaseKuserKgroupPeer {
 
 
 	/**
-	 * Selects a collection of KuserKgroup objects pre-filled with their kuser objects.
+	 * Selects a collection of VuserVgroup objects pre-filled with their vuser objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of KuserKgroup objects.
+	 * @return     array Array of VuserVgroup objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinkuserRelatedByKgroupId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvuserRelatedByVgroupId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -854,44 +854,44 @@ abstract class BaseKuserKgroupPeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		KuserKgroupPeer::addSelectColumns($criteria);
-		$startcol = (KuserKgroupPeer::NUM_COLUMNS - KuserKgroupPeer::NUM_LAZY_LOAD_COLUMNS);
-		kuserPeer::addSelectColumns($criteria);
+		VuserVgroupPeer::addSelectColumns($criteria);
+		$startcol = (VuserVgroupPeer::NUM_COLUMNS - VuserVgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(KuserKgroupPeer::KGROUP_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(VuserVgroupPeer::VGROUP_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = KuserKgroupPeer::doSelectStmt($criteria, $con);
+		$stmt = VuserVgroupPeer::doSelectStmt($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = KuserKgroupPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = KuserKgroupPeer::getInstanceFromPool($key1))) {
+			$key1 = VuserVgroupPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = VuserVgroupPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$cls = KuserKgroupPeer::getOMClass(false);
+				$cls = VuserVgroupPeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				KuserKgroupPeer::addInstanceToPool($obj1, $key1);
+				VuserVgroupPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (KuserKgroup) to $obj2 (kuser)
-				$obj2->addKuserKgroupRelatedByKgroupId($obj1);
+				// Add the $obj1 (VuserVgroup) to $obj2 (vuser)
+				$obj2->addVuserVgroupRelatedByVgroupId($obj1);
 
 			} // if joined row was not null
 
@@ -899,7 +899,7 @@ abstract class BaseKuserKgroupPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -907,15 +907,15 @@ abstract class BaseKuserKgroupPeer {
 
 
 	/**
-	 * Selects a collection of KuserKgroup objects pre-filled with their kuser objects.
+	 * Selects a collection of VuserVgroup objects pre-filled with their vuser objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of KuserKgroup objects.
+	 * @return     array Array of VuserVgroup objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinkuserRelatedByKuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinvuserRelatedByVuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -924,44 +924,44 @@ abstract class BaseKuserKgroupPeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		KuserKgroupPeer::addSelectColumns($criteria);
-		$startcol = (KuserKgroupPeer::NUM_COLUMNS - KuserKgroupPeer::NUM_LAZY_LOAD_COLUMNS);
-		kuserPeer::addSelectColumns($criteria);
+		VuserVgroupPeer::addSelectColumns($criteria);
+		$startcol = (VuserVgroupPeer::NUM_COLUMNS - VuserVgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(KuserKgroupPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(VuserVgroupPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = KuserKgroupPeer::doSelectStmt($criteria, $con);
+		$stmt = VuserVgroupPeer::doSelectStmt($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = KuserKgroupPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = KuserKgroupPeer::getInstanceFromPool($key1))) {
+			$key1 = VuserVgroupPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = VuserVgroupPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$cls = KuserKgroupPeer::getOMClass(false);
+				$cls = VuserVgroupPeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				KuserKgroupPeer::addInstanceToPool($obj1, $key1);
+				VuserVgroupPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 				
-				// Add the $obj1 (KuserKgroup) to $obj2 (kuser)
-				$obj2->addKuserKgroupRelatedByKuserId($obj1);
+				// Add the $obj1 (VuserVgroup) to $obj2 (vuser)
+				$obj2->addVuserVgroupRelatedByVuserId($obj1);
 
 			} // if joined row was not null
 
@@ -969,7 +969,7 @@ abstract class BaseKuserKgroupPeer {
 		}
 		$stmt->closeCursor();
 		
-		if($criteria instanceof KalturaCriteria)
+		if($criteria instanceof VidiunCriteria)
 			$criteria->applyResultsSort($results);
 		
 		return $results;
@@ -993,14 +993,14 @@ abstract class BaseKuserKgroupPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(KuserKgroupPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(VuserVgroupPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			KuserKgroupPeer::addSelectColumns($criteria);
+			VuserVgroupPeer::addSelectColumns($criteria);
 		}
 		
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -1009,11 +1009,11 @@ abstract class BaseKuserKgroupPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$criteria->addJoin(KuserKgroupPeer::KGROUP_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(VuserVgroupPeer::VGROUP_ID, vuserPeer::ID, $join_behavior);
 
-		$criteria->addJoin(KuserKgroupPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(VuserVgroupPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = KuserKgroupPeer::doCountStmt($criteria, $con);
+		$stmt = VuserVgroupPeer::doCountStmt($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$count = (int) $row[0];
@@ -1025,12 +1025,12 @@ abstract class BaseKuserKgroupPeer {
 	}
 
 	/**
-	 * Selects a collection of KuserKgroup objects pre-filled with all related objects.
+	 * Selects a collection of VuserVgroup objects pre-filled with all related objects.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of KuserKgroup objects.
+	 * @return     array Array of VuserVgroup objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -1043,70 +1043,70 @@ abstract class BaseKuserKgroupPeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		KuserKgroupPeer::addSelectColumns($criteria);
-		$startcol2 = (KuserKgroupPeer::NUM_COLUMNS - KuserKgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		VuserVgroupPeer::addSelectColumns($criteria);
+		$startcol2 = (VuserVgroupPeer::NUM_COLUMNS - VuserVgroupPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kuserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (kuserPeer::NUM_COLUMNS - kuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (vuserPeer::NUM_COLUMNS - vuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		kuserPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (kuserPeer::NUM_COLUMNS - kuserPeer::NUM_LAZY_LOAD_COLUMNS);
+		vuserPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (vuserPeer::NUM_COLUMNS - vuserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		$criteria->addJoin(KuserKgroupPeer::KGROUP_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(VuserVgroupPeer::VGROUP_ID, vuserPeer::ID, $join_behavior);
 
-		$criteria->addJoin(KuserKgroupPeer::KUSER_ID, kuserPeer::ID, $join_behavior);
+		$criteria->addJoin(VuserVgroupPeer::VUSER_ID, vuserPeer::ID, $join_behavior);
 
-		$stmt = KuserKgroupPeer::doSelectStmt($criteria, $con);
+		$stmt = VuserVgroupPeer::doSelectStmt($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = KuserKgroupPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = KuserKgroupPeer::getInstanceFromPool($key1))) {
+			$key1 = VuserVgroupPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = VuserVgroupPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$cls = KuserKgroupPeer::getOMClass(false);
+				$cls = VuserVgroupPeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				KuserKgroupPeer::addInstanceToPool($obj1, $key1);
+				VuserVgroupPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined kuser rows
+			// Add objects for joined vuser rows
 
-			$key2 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = kuserPeer::getInstanceFromPool($key2);
+				$obj2 = vuserPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					kuserPeer::addInstanceToPool($obj2, $key2);
+					vuserPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (KuserKgroup) to the collection in $obj2 (kuser)
-				$obj2->addKuserKgroupRelatedByKgroupId($obj1);
+				// Add the $obj1 (VuserVgroup) to the collection in $obj2 (vuser)
+				$obj2->addVuserVgroupRelatedByVgroupId($obj1);
 			} // if joined row not null
 
-			// Add objects for joined kuser rows
+			// Add objects for joined vuser rows
 
-			$key3 = kuserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+			$key3 = vuserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
 			if ($key3 !== null) {
-				$obj3 = kuserPeer::getInstanceFromPool($key3);
+				$obj3 = vuserPeer::getInstanceFromPool($key3);
 				if (!$obj3) {
 
-					$cls = kuserPeer::getOMClass(false);
+					$cls = vuserPeer::getOMClass(false);
 
 					$obj3 = new $cls();
 					$obj3->hydrate($row, $startcol3);
-					kuserPeer::addInstanceToPool($obj3, $key3);
+					vuserPeer::addInstanceToPool($obj3, $key3);
 				} // if obj3 loaded
 
-				// Add the $obj1 (KuserKgroup) to the collection in $obj3 (kuser)
-				$obj3->addKuserKgroupRelatedByKuserId($obj1);
+				// Add the $obj1 (VuserVgroup) to the collection in $obj3 (vuser)
+				$obj3->addVuserVgroupRelatedByVuserId($obj1);
 			} // if joined row not null
 
 			$results[] = $obj1;
@@ -1117,7 +1117,7 @@ abstract class BaseKuserKgroupPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuserRelatedByKgroupId table
+	 * Returns the number of rows matching criteria, joining the related vuserRelatedByVgroupId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1125,7 +1125,7 @@ abstract class BaseKuserKgroupPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptkuserRelatedByKgroupId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptvuserRelatedByVgroupId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1133,14 +1133,14 @@ abstract class BaseKuserKgroupPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(KuserKgroupPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(VuserVgroupPeer::TABLE_NAME);
 		
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			KuserKgroupPeer::addSelectColumns($criteria);
+			VuserVgroupPeer::addSelectColumns($criteria);
 		}
 		
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
@@ -1149,7 +1149,7 @@ abstract class BaseKuserKgroupPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$stmt = KuserKgroupPeer::doCountStmt($criteria, $con);
+		$stmt = VuserVgroupPeer::doCountStmt($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$count = (int) $row[0];
@@ -1162,7 +1162,7 @@ abstract class BaseKuserKgroupPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related kuserRelatedByKuserId table
+	 * Returns the number of rows matching criteria, joining the related vuserRelatedByVuserId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1170,7 +1170,7 @@ abstract class BaseKuserKgroupPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptkuserRelatedByKuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptvuserRelatedByVuserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1178,14 +1178,14 @@ abstract class BaseKuserKgroupPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(KuserKgroupPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(VuserVgroupPeer::TABLE_NAME);
 		
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			KuserKgroupPeer::addSelectColumns($criteria);
+			VuserVgroupPeer::addSelectColumns($criteria);
 		}
 		
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
@@ -1194,7 +1194,7 @@ abstract class BaseKuserKgroupPeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 		
 		
-		$stmt = KuserKgroupPeer::doCountStmt($criteria, $con);
+		$stmt = VuserVgroupPeer::doCountStmt($criteria, $con);
 
 		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
 			$count = (int) $row[0];
@@ -1207,16 +1207,16 @@ abstract class BaseKuserKgroupPeer {
 
 
 	/**
-	 * Selects a collection of KuserKgroup objects pre-filled with all related objects except kuserRelatedByKgroupId.
+	 * Selects a collection of VuserVgroup objects pre-filled with all related objects except vuserRelatedByVgroupId.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of KuserKgroup objects.
+	 * @return     array Array of VuserVgroup objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptkuserRelatedByKgroupId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptvuserRelatedByVgroupId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1227,25 +1227,25 @@ abstract class BaseKuserKgroupPeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		KuserKgroupPeer::addSelectColumns($criteria);
-		$startcol2 = (KuserKgroupPeer::NUM_COLUMNS - KuserKgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		VuserVgroupPeer::addSelectColumns($criteria);
+		$startcol2 = (VuserVgroupPeer::NUM_COLUMNS - VuserVgroupPeer::NUM_LAZY_LOAD_COLUMNS);
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = KuserKgroupPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = KuserKgroupPeer::getInstanceFromPool($key1))) {
+			$key1 = VuserVgroupPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = VuserVgroupPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$cls = KuserKgroupPeer::getOMClass(false);
+				$cls = VuserVgroupPeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				KuserKgroupPeer::addInstanceToPool($obj1, $key1);
+				VuserVgroupPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
 			$results[] = $obj1;
@@ -1256,16 +1256,16 @@ abstract class BaseKuserKgroupPeer {
 
 
 	/**
-	 * Selects a collection of KuserKgroup objects pre-filled with all related objects except kuserRelatedByKuserId.
+	 * Selects a collection of VuserVgroup objects pre-filled with all related objects except vuserRelatedByVuserId.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of KuserKgroup objects.
+	 * @return     array Array of VuserVgroup objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptkuserRelatedByKuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptvuserRelatedByVuserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1276,25 +1276,25 @@ abstract class BaseKuserKgroupPeer {
 			$criteria->setDbName(self::DATABASE_NAME);
 		}
 
-		KuserKgroupPeer::addSelectColumns($criteria);
-		$startcol2 = (KuserKgroupPeer::NUM_COLUMNS - KuserKgroupPeer::NUM_LAZY_LOAD_COLUMNS);
+		VuserVgroupPeer::addSelectColumns($criteria);
+		$startcol2 = (VuserVgroupPeer::NUM_COLUMNS - VuserVgroupPeer::NUM_LAZY_LOAD_COLUMNS);
 
 
 		$stmt = BasePeer::doSelect($criteria, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = KuserKgroupPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = KuserKgroupPeer::getInstanceFromPool($key1))) {
+			$key1 = VuserVgroupPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = VuserVgroupPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$cls = KuserKgroupPeer::getOMClass(false);
+				$cls = VuserVgroupPeer::getOMClass(false);
 
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				KuserKgroupPeer::addInstanceToPool($obj1, $key1);
+				VuserVgroupPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
 			$results[] = $obj1;
@@ -1320,10 +1320,10 @@ abstract class BaseKuserKgroupPeer {
 	 */
 	public static function buildTableMap()
 	{
-	  $dbMap = Propel::getDatabaseMap(BaseKuserKgroupPeer::DATABASE_NAME);
-	  if (!$dbMap->hasTable(BaseKuserKgroupPeer::TABLE_NAME))
+	  $dbMap = Propel::getDatabaseMap(BaseVuserVgroupPeer::DATABASE_NAME);
+	  if (!$dbMap->hasTable(BaseVuserVgroupPeer::TABLE_NAME))
 	  {
-	    $dbMap->addTableObject(new KuserKgroupTableMap());
+	    $dbMap->addTableObject(new VuserVgroupTableMap());
 	  }
 	}
 
@@ -1340,13 +1340,13 @@ abstract class BaseKuserKgroupPeer {
 	 */
 	public static function getOMClass($withPrefix = true)
 	{
-		return $withPrefix ? KuserKgroupPeer::CLASS_DEFAULT : KuserKgroupPeer::OM_CLASS;
+		return $withPrefix ? VuserVgroupPeer::CLASS_DEFAULT : VuserVgroupPeer::OM_CLASS;
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a KuserKgroup or Criteria object.
+	 * Method perform an INSERT on the database, given a VuserVgroup or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or KuserKgroup object containing data that is used to create the INSERT statement.
+	 * @param      mixed $values Criteria or VuserVgroup object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
 	 * @return     mixed The new primary key.
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -1355,17 +1355,17 @@ abstract class BaseKuserKgroupPeer {
 	public static function doInsert($values, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(KuserKgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VuserVgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 		} else {
-			$criteria = $values->buildCriteria(); // build Criteria from KuserKgroup object
+			$criteria = $values->buildCriteria(); // build Criteria from VuserVgroup object
 		}
 
-		if ($criteria->containsKey(KuserKgroupPeer::ID) && $criteria->keyContainsValue(KuserKgroupPeer::ID) ) {
-			throw new PropelException('Cannot insert a value for auto-increment primary key ('.KuserKgroupPeer::ID.')');
+		if ($criteria->containsKey(VuserVgroupPeer::ID) && $criteria->keyContainsValue(VuserVgroupPeer::ID) ) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key ('.VuserVgroupPeer::ID.')');
 		}
 
 
@@ -1387,9 +1387,9 @@ abstract class BaseKuserKgroupPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a KuserKgroup or Criteria object.
+	 * Method perform an UPDATE on the database, given a VuserVgroup or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or KuserKgroup object containing data that is used to create the UPDATE statement.
+	 * @param      mixed $values Criteria or VuserVgroup object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -1398,7 +1398,7 @@ abstract class BaseKuserKgroupPeer {
 	public static function doUpdate($values, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(KuserKgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VuserVgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$selectCriteria = new Criteria(self::DATABASE_NAME);
@@ -1406,10 +1406,10 @@ abstract class BaseKuserKgroupPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(KuserKgroupPeer::ID);
-			$selectCriteria->add(KuserKgroupPeer::ID, $criteria->remove(KuserKgroupPeer::ID), $comparison);
+			$comparison = $criteria->getComparison(VuserVgroupPeer::ID);
+			$selectCriteria->add(VuserVgroupPeer::ID, $criteria->remove(VuserVgroupPeer::ID), $comparison);
 
-		} else { // $values is KuserKgroup object
+		} else { // $values is VuserVgroup object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
 		}
@@ -1439,26 +1439,26 @@ abstract class BaseKuserKgroupPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the kuser_kgroup table.
+	 * Method to DELETE all rows from the vuser_vgroup table.
 	 *
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
 	public static function doDeleteAll($con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(KuserKgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VuserVgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		$affectedRows = 0; // initialize var to track total num of affected rows
 		try {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(KuserKgroupPeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(VuserVgroupPeer::TABLE_NAME, $con);
 			// Because this db requires some delete cascade/set null emulation, we have to
 			// clear the cached instance *after* the emulation has happened (since
 			// instances get re-added by the select statement contained therein).
-			KuserKgroupPeer::clearInstancePool();
-			KuserKgroupPeer::clearRelatedInstancePool();
+			VuserVgroupPeer::clearInstancePool();
+			VuserVgroupPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1468,9 +1468,9 @@ abstract class BaseKuserKgroupPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a KuserKgroup or Criteria object OR a primary key value.
+	 * Method perform a DELETE on the database, given a VuserVgroup or Criteria object OR a primary key value.
 	 *
-	 * @param      mixed $values Criteria or KuserKgroup object or primary key or array of primary keys
+	 * @param      mixed $values Criteria or VuserVgroup object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
 	 * @param      PropelPDO $con the connection to use
 	 * @return     int 	The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -1481,27 +1481,27 @@ abstract class BaseKuserKgroupPeer {
 	 public static function doDelete($values, PropelPDO $con = null)
 	 {
 		if ($con === null) {
-			$con = Propel::getConnection(KuserKgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(VuserVgroupPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			// invalidate the cache for all objects of this type, since we have no
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
-			KuserKgroupPeer::clearInstancePool();
+			VuserVgroupPeer::clearInstancePool();
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof KuserKgroup) { // it's a model object
+		} elseif ($values instanceof VuserVgroup) { // it's a model object
 			// invalidate the cache for this single object
-			KuserKgroupPeer::removeInstanceFromPool($values);
+			VuserVgroupPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else { // it's a primary key, or an array of pks
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(KuserKgroupPeer::ID, (array) $values, Criteria::IN);
+			$criteria->add(VuserVgroupPeer::ID, (array) $values, Criteria::IN);
 			// invalidate the cache for this object(s)
 			foreach ((array) $values as $singleval) {
-				KuserKgroupPeer::removeInstanceFromPool($singleval);
+				VuserVgroupPeer::removeInstanceFromPool($singleval);
 			}
 		}
 
@@ -1516,7 +1516,7 @@ abstract class BaseKuserKgroupPeer {
 			$con->beginTransaction();
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-			KuserKgroupPeer::clearRelatedInstancePool();
+			VuserVgroupPeer::clearRelatedInstancePool();
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -1526,24 +1526,24 @@ abstract class BaseKuserKgroupPeer {
 	}
 
 	/**
-	 * Validates all modified columns of given KuserKgroup object.
+	 * Validates all modified columns of given VuserVgroup object.
 	 * If parameter $columns is either a single column name or an array of column names
 	 * than only those columns are validated.
 	 *
 	 * NOTICE: This does not apply to primary or foreign keys for now.
 	 *
-	 * @param      KuserKgroup $obj The object to validate.
+	 * @param      VuserVgroup $obj The object to validate.
 	 * @param      mixed $cols Column name or array of column names.
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(KuserKgroup $obj, $cols = null)
+	public static function doValidate(VuserVgroup $obj, $cols = null)
 	{
 		$columns = array();
 
 		if ($cols) {
-			$dbMap = Propel::getDatabaseMap(KuserKgroupPeer::DATABASE_NAME);
-			$tableMap = $dbMap->getTable(KuserKgroupPeer::TABLE_NAME);
+			$dbMap = Propel::getDatabaseMap(VuserVgroupPeer::DATABASE_NAME);
+			$tableMap = $dbMap->getTable(VuserVgroupPeer::TABLE_NAME);
 
 			if (! is_array($cols)) {
 				$cols = array($cols);
@@ -1559,7 +1559,7 @@ abstract class BaseKuserKgroupPeer {
 
 		}
 
-		return BasePeer::doValidate(KuserKgroupPeer::DATABASE_NAME, KuserKgroupPeer::TABLE_NAME, $columns);
+		return BasePeer::doValidate(VuserVgroupPeer::DATABASE_NAME, VuserVgroupPeer::TABLE_NAME, $columns);
 	}
 
 	/**
@@ -1567,19 +1567,19 @@ abstract class BaseKuserKgroupPeer {
 	 *
 	 * @param      string $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
-	 * @return     KuserKgroup
+	 * @return     VuserVgroup
 	 */
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
 
-		if (null !== ($obj = KuserKgroupPeer::getInstanceFromPool((string) $pk))) {
+		if (null !== ($obj = VuserVgroupPeer::getInstanceFromPool((string) $pk))) {
 			return $obj;
 		}
 
-		$criteria = new Criteria(KuserKgroupPeer::DATABASE_NAME);
-		$criteria->add(KuserKgroupPeer::ID, $pk);
+		$criteria = new Criteria(VuserVgroupPeer::DATABASE_NAME);
+		$criteria->add(VuserVgroupPeer::ID, $pk);
 
-		$v = KuserKgroupPeer::doSelect($criteria, $con);
+		$v = VuserVgroupPeer::doSelect($criteria, $con);
 
 		return !empty($v) > 0 ? $v[0] : null;
 	}
@@ -1598,16 +1598,16 @@ abstract class BaseKuserKgroupPeer {
 		if (empty($pks)) {
 			$objs = array();
 		} else {
-			$criteria = new Criteria(KuserKgroupPeer::DATABASE_NAME);
-			$criteria->add(KuserKgroupPeer::ID, $pks, Criteria::IN);
-			$objs = KuserKgroupPeer::doSelect($criteria, $con);
+			$criteria = new Criteria(VuserVgroupPeer::DATABASE_NAME);
+			$criteria->add(VuserVgroupPeer::ID, $pks, Criteria::IN);
+			$objs = VuserVgroupPeer::doSelect($criteria, $con);
 		}
 		return $objs;
 	}
 
-} // BaseKuserKgroupPeer
+} // BaseVuserVgroupPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseKuserKgroupPeer::buildTableMap();
+BaseVuserVgroupPeer::buildTableMap();
 

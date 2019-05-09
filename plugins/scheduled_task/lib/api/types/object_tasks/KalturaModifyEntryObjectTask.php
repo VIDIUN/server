@@ -4,7 +4,7 @@
  * @package plugins.scheduledTask
  * @subpackage api.objects.objectTasks
  */
-class KalturaModifyEntryObjectTask extends KalturaObjectTask
+class VidiunModifyEntryObjectTask extends VidiunObjectTask
 {
 	/**
 	 * The input metadata profile id
@@ -16,7 +16,7 @@ class KalturaModifyEntryObjectTask extends KalturaObjectTask
 	/**
 	 * array of {input metadata xpath location,entry field} objects
 	 *
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $inputMetadata;
 
@@ -30,7 +30,7 @@ class KalturaModifyEntryObjectTask extends KalturaObjectTask
 	/**
 	 * array of {output metadata xpath location,entry field} objects
 	 *
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $outputMetadata;
 
@@ -62,7 +62,7 @@ class KalturaModifyEntryObjectTask extends KalturaObjectTask
 
 	public function toObject($dbObject = null, $skip = array())
 	{
-		/** @var kObjectTask $dbObject */
+		/** @var vObjectTask $dbObject */
 		$dbObject = parent::toObject($dbObject, $skip);
 		$dbObject->setDataValue('inputMetadataProfileId', $this->inputMetadataProfileId);
 		$dbObject->setDataValue('inputMetadata', $this->inputMetadata);
@@ -74,11 +74,11 @@ class KalturaModifyEntryObjectTask extends KalturaObjectTask
 		return $dbObject;
 	}
 
-	public function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($srcObj, $responseProfile);
 
-		/** @var kObjectTask $srcObj */
+		/** @var vObjectTask $srcObj */
 		$this->inputMetadataProfileId = $srcObj->getDataValue('inputMetadataProfileId');
 		$this->inputMetadata = $srcObj->getDataValue('inputMetadata');
 		$this->outputMetadataProfileId = $srcObj->getDataValue('outputMetadataProfileId');

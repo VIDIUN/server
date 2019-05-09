@@ -1,11 +1,11 @@
 <?php
 /**
- * @FIXME - refactor the current error codes to another exception class which will inherit from kCoreException
+ * @FIXME - refactor the current error codes to another exception class which will inherit from vCoreException
  * 
  * @package Core
  * @subpackage errors
  */
-class kCoreException extends Exception
+class vCoreException extends Exception
 {
 	/**
 	 * Exception additional data
@@ -18,7 +18,7 @@ class kCoreException extends Exception
 		$this->message = $message;
 		$this->code = $code;
 		$this->data = $data;
-		KalturaLog::err($this);
+		VidiunLog::err($this);
 	}
 	
 	/**
@@ -76,7 +76,7 @@ class kCoreException extends Exception
 	
 	const INVALID_ENTRY_TYPE = "INVALID_ENTRY_TYPE";
 	
-	const INVALID_KS = 'INVALID_KS';
+	const INVALID_VS = 'INVALID_VS';
 	
 	const TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED = 'TEMPLATE_PARTNER_COPY_LIMIT_EXCEEDED';
 	

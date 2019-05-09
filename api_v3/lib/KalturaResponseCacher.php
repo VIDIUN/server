@@ -3,15 +3,15 @@
  * @package api
  * @subpackage cache
  */
-require_once(dirname(__FILE__) . '/../../alpha/apps/kaltura/lib/cache/kApiCache.php');
+require_once(dirname(__FILE__) . '/../../alpha/apps/vidiun/lib/cache/vApiCache.php');
 
 /**
  * @package api
  * @subpackage cache
  */
-class KalturaResponseCacher extends kApiCache
+class VidiunResponseCacher extends vApiCache
 {
-	// copied from KalturaResponseType
+	// copied from VidiunResponseType
 	const RESPONSE_TYPE_JSON = 1;
 	const RESPONSE_TYPE_XML = 2;
 	const RESPONSE_TYPE_PHP = 3;
@@ -19,9 +19,9 @@ class KalturaResponseCacher extends kApiCache
 	static protected $cachedContentHeaders = array('content-type', 'content-disposition', 'content-length', 'content-transfer-encoding');
 	
 	protected $_defaultExpiry = 0;
-	protected $_cacheHeadersExpiry = 60; // cache headers for CDN & browser - used  for GET request with kalsig param
+	protected $_cacheHeadersExpiry = 60; // cache headers for CDN & browser - used  for GET request with vidsig param
 			
-	public function __construct($params = null, $cacheType = kCacheManager::CACHE_TYPE_API_V3, $expiry = 0)
+	public function __construct($params = null, $cacheType = vCacheManager::CACHE_TYPE_API_V3, $expiry = 0)
 	{
 		if ($expiry)
 			$this->_defaultExpiry = $this->_expiry = $expiry;
@@ -39,10 +39,10 @@ class KalturaResponseCacher extends kApiCache
 		self::handleCacheBasedServiceActions($this->_params);
 		
 		// remove parameters that do not affect the api result
-		foreach(kConf::get('v3cache_ignore_params') as $name)
+		foreach(vConf::get('v3cache_ignore_params') as $name)
 			unset($this->_params[$name]);
 		
-		unset($this->_params['kalsig']);		
+		unset($this->_params['vidsig']);		
 		unset($this->_params['clientTag']);
 		unset($this->_params['callback']);
 		
@@ -85,59 +85,59 @@ class KalturaResponseCacher extends kApiCache
 		return true;
 	}
 
-	protected function getKs()
+	protected function getVs()
 	{
-		$ks = parent::getKs();
+		$vs = parent::getVs();
 		
 		foreach($this->_params as $key => $value)
 		{
-			if (is_numeric($key) && is_array($value) && array_key_exists('ks', $value))
+			if (is_numeric($key) && is_array($value) && array_key_exists('vs', $value))
 			{
-				$curKs = $value['ks'];
-				if (strpos($curKs, ':result') !== false)
-					continue;				// the ks is the result of some sub request
+				$curVs = $value['vs'];
+				if (strpos($curVs, ':result') !== false)
+					continue;				// the vs is the result of some sub request
 				
-				if ($ks && $ks != $curKs)
-					return false;			// several different ks's in a multirequest - don't use cache
+				if ($vs && $vs != $curVs)
+					return false;			// several different vs's in a multirequest - don't use cache
 				
-				$ks = $curKs;
-				unset($this->_params[$key]['ks']);
+				$vs = $curVs;
+				unset($this->_params[$key]['vs']);
 				continue;
 			}
 			
-			if(!preg_match('/[\d]+:ks/', $key))
-				continue;				// not a ks
+			if(!preg_match('/[\d]+:vs/', $key))
+				continue;				// not a vs
 
 			if (strpos($value, ':result') !== false)
-				continue;				// the ks is the result of some sub request
+				continue;				// the vs is the result of some sub request
 
-			if ($ks && $ks != $value)
-				return false;			// several different ks's in a multirequest - don't use cache
+			if ($vs && $vs != $value)
+				return false;			// several different vs's in a multirequest - don't use cache
 
-			$ks = $value;
+			$vs = $value;
 			unset($this->_params[$key]);
 		}
 		
-		return $ks;
+		return $vs;
 	}
 
 	protected function sendCachingHeaders($usingCache, $lastModified = null)
 	{
 		header("Access-Control-Allow-Origin:*"); // avoid html5 xss issues
 
-		// we should never return caching headers for non widget sessions since the KS can be ended and the CDN won't know
-		$isAnonymous = $this->isAnonymous($this->_ksObj);
-		$partnerId = $this->_ksObj ? $this->_ksObj->partner_id : 0;
+		// we should never return caching headers for non widget sessions since the VS can be ended and the CDN won't know
+		$isAnonymous = $this->isAnonymous($this->_vsObj);
+		$partnerId = $this->_vsObj ? $this->_vsObj->partner_id : 0;
 		
 		$forceCachingHeaders = false;
-		if ($this->_ksObj && kConf::hasParam("force_caching_headers") && in_array($partnerId, kConf::get("force_caching_headers")))
+		if ($this->_vsObj && vConf::hasParam("force_caching_headers") && in_array($partnerId, vConf::get("force_caching_headers")))
 			$forceCachingHeaders = true;
 
-		// for GET requests with kalsig (signature of call params) return cdn/browser caching headers
-		if ($usingCache && $isAnonymous && $_SERVER["REQUEST_METHOD"] == "GET" && isset($_REQUEST["kalsig"]) &&  
+		// for GET requests with vidsig (signature of call params) return cdn/browser caching headers
+		if ($usingCache && $isAnonymous && $_SERVER["REQUEST_METHOD"] == "GET" && isset($_REQUEST["vidsig"]) &&  
 			(!self::hasExtraFields() || $forceCachingHeaders)) 
 		{
-			$v3cacheHeadersExpiry = kConf::get('v3cache_headers_expiry', 'local', array());
+			$v3cacheHeadersExpiry = vConf::get('v3cache_headers_expiry', 'local', array());
 			if(isset($v3cacheHeadersExpiry[$partnerId]))
 				$this->_cacheHeadersExpiry = $v3cacheHeadersExpiry[$partnerId];
 		    		    
@@ -167,7 +167,7 @@ class KalturaResponseCacher extends kApiCache
 		
 		if ($responseMetadata['class'])
 		{
-			require_once(dirname(__FILE__) . "/../../alpha/apps/kaltura/lib/renderers/{$responseMetadata['class']}.php");
+			require_once(dirname(__FILE__) . "/../../alpha/apps/vidiun/lib/renderers/{$responseMetadata['class']}.php");
 			
 			$response = unserialize($response);
 			if (!$response->validate())
@@ -231,7 +231,7 @@ class KalturaResponseCacher extends kApiCache
 		{
 			$responseClass = '';
 			$serializeResponse = false;
-			if ($response instanceof kRendererBase)
+			if ($response instanceof vRendererBase)
 			{
 				$responseClass = get_class($response);
 				$serializeResponse = true;
@@ -248,7 +248,7 @@ class KalturaResponseCacher extends kApiCache
 			$this->storeCache($response, $responseMetadata, $serializeResponse);
 		}
 		
-		if ($response instanceof kRendererBase)
+		if ($response instanceof vRendererBase)
 		{
 			$response->output();
 			die;
@@ -267,36 +267,36 @@ class KalturaResponseCacher extends kApiCache
 	{
 		if ($this->_expiry == $this->_defaultExpiry)
 		{
-			if (kConf::hasParam("v3cache_expiry"))
+			if (vConf::hasParam("v3cache_expiry"))
 			{
-				$expiryArr = kConf::get("v3cache_expiry");
-				if (array_key_exists($this->_ksPartnerId, $expiryArr))
-					return $expiryArr[$this->_ksPartnerId];
+				$expiryArr = vConf::get("v3cache_expiry");
+				if (array_key_exists($this->_vsPartnerId, $expiryArr))
+					return $expiryArr[$this->_vsPartnerId];
 			}
 		}
 		
 		return $this->_expiry;
 	}
 	
-	protected function isAnonymous($ks)
+	protected function isAnonymous($vs)
 	{
-		if (parent::isAnonymous($ks))
+		if (parent::isAnonymous($vs))
 			return true;
-		else if(!$ks)
+		else if(!$vs)
 			return false;
 			
-		if($this->clientTag && strpos($this->clientTag, 'kmc') === 0)
+		if($this->clientTag && strpos($this->clientTag, 'vmc') === 0)
 			return false;
         
-		// force caching of actions listed in kConf even if admin ks is used
-		if(!kConf::hasParam('v3cache_ignore_admin_ks'))
+		// force caching of actions listed in vConf even if admin vs is used
+		if(!vConf::hasParam('v3cache_ignore_admin_vs'))
 			return false;
 			
-		$v3cacheIgnoreAdminKS = kConf::get('v3cache_ignore_admin_ks');
-		if(!isset($v3cacheIgnoreAdminKS[$ks->partner_id]))
+		$v3cacheIgnoreAdminVS = vConf::get('v3cache_ignore_admin_vs');
+		if(!isset($v3cacheIgnoreAdminVS[$vs->partner_id]))
 			return false;
 			
-		$actions = explode(',', $v3cacheIgnoreAdminKS[$ks->partner_id]);
+		$actions = explode(',', $v3cacheIgnoreAdminVS[$vs->partner_id]);
 		foreach($actions as $action)
 		{
 			list($serviceId, $actionId) = explode('.', $action);
@@ -329,7 +329,7 @@ class KalturaResponseCacher extends kApiCache
 				$format = isset($params['format']) ? $params['format'] : self::RESPONSE_TYPE_XML;
 				if (!self::isSupportedFormat($format))
 					return;			// the format is unsupported at this level
-				$confActions = $path = kConf::get('cache_based_service_actions');;
+				$confActions = $path = vConf::get('cache_based_service_actions');;
 				if (is_array($confActions))
 				{
 					$actionKey = $service . '_' . $action;
@@ -392,12 +392,12 @@ class KalturaResponseCacher extends kApiCache
 		$type = (int)$type;
 		
 		$partnerId = $params['partnerId'];
-		$secrets = kSessionBase::getSecretsFromCache($partnerId);
+		$secrets = vSessionBase::getSecretsFromCache($partnerId);
 		if (!$secrets)
 		{
 			return;			// can't find the secrets of the partner in the cache
 		}
-		list($adminSecrets, $userSecret, $ksVersion) = $secrets;
+		list($adminSecrets, $userSecret, $vsVersion) = $secrets;
 		$paramSecret = $params['secret'];
 		$adminSecretArray = explode(',', $adminSecrets);
 		if(!self::matchParamSecret($paramSecret, $adminSecretArray, $userSecret, $type))
@@ -409,7 +409,7 @@ class KalturaResponseCacher extends kApiCache
 		$expiry = isset($params['expiry']) ? $params['expiry'] : 86400;
 		$privileges = isset($params['privileges']) ? $params['privileges'] : null;
 		
-		$result = kSessionBase::generateSession($ksVersion, $adminSecret, $userId, $type, $partnerId, $expiry, $privileges);
+		$result = vSessionBase::generateSession($vsVersion, $adminSecret, $userId, $type, $partnerId, $expiry, $privileges);
 		
 		$processingTime = microtime(true) - $startTime;
 		$cacheKey = md5("{$partnerId}_{$userId}_{$type}_{$expiry}_{$privileges}");
@@ -425,7 +425,7 @@ class KalturaResponseCacher extends kApiCache
 	 */
 	private static function matchParamSecret($paramSecret, $adminSecretArray, $userSecret, $type)
 	{
-		if (!$type && $paramSecret === $userSecret) // userKS match
+		if (!$type && $paramSecret === $userSecret) // userVS match
 			return true;
 
 		foreach ($adminSecretArray as $adminSecret)
@@ -438,7 +438,7 @@ class KalturaResponseCacher extends kApiCache
 
 	private static function returnCacheResponseStructure($processingTime, $format, $result ,$cacheKey='noCacheKey')
 	{
-		header("X-Kaltura:cached-dispatcher,$cacheKey,$processingTime", false);
+		header("X-Vidiun:cached-dispatcher,$cacheKey,$processingTime", false);
 		header("Access-Control-Allow-Origin:*"); // avoid html5 xss issues
 		header("Expires: Sun, 19 Nov 2000 08:52:00 GMT", true);
 		header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0", true);
@@ -468,9 +468,9 @@ class KalturaResponseCacher extends kApiCache
 		self::setExpiry(120);
 		
 		$cacheConditionally = false;
-		if ($ex instanceof KalturaAPIException && kConf::hasParam("v3cache_conditional_cached_errors"))
+		if ($ex instanceof VidiunAPIException && vConf::hasParam("v3cache_conditional_cached_errors"))
 		{
-			$cacheConditionally = in_array($ex->getCode(), kConf::get("v3cache_conditional_cached_errors"));
+			$cacheConditionally = in_array($ex->getCode(), vConf::get("v3cache_conditional_cached_errors"));
 		}
 		if (!$cacheConditionally)
 		{
@@ -490,7 +490,7 @@ class KalturaResponseCacher extends kApiCache
 		}
 	}
 	
-	public function checkCache($cacheHeaderName = 'X-Kaltura', $cacheHeader = 'cached-dispatcher')
+	public function checkCache($cacheHeaderName = 'X-Vidiun', $cacheHeader = 'cached-dispatcher')
 	{
 		$result = parent::checkCache($cacheHeaderName, $cacheHeader);
 		if(!$result)

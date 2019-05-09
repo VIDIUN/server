@@ -10,14 +10,14 @@ require_once(__DIR__ . "/../../bootstrap.php");
  * @package Scheduler
  * @subpackage Debug
  */
-class KAsyncCopyPartnerTest extends PHPUnit_Framework_TestCase
+class VAsyncCopyPartnerTest extends PHPUnit_Framework_TestCase
 {
-	const JOB_NAME = 'KAsyncCopyPartner';
+	const JOB_NAME = 'VAsyncCopyPartner';
 
 	public function testCopyPartner()
 	{
 		$iniFile = realpath(__DIR__ . "/../../../configurations/batch" );
-		$schedulerConfig = new KSchedulerConfig($iniFile);
+		$schedulerConfig = new VSchedulerConfig($iniFile);
 	
 		$taskConfigs = $schedulerConfig->getTaskConfigList();
 		$config = null;
@@ -44,20 +44,20 @@ class KAsyncCopyPartnerTest extends PHPUnit_Framework_TestCase
 		foreach($jobs as $job)
 		{
 			echo "Asserting job status is FINISHED...\n";				
-			$this->assertEquals(KalturaBatchJobStatus::FINISHED, $job->status);
+			$this->assertEquals(VidiunBatchJobStatus::FINISHED, $job->status);
 		}
 	}
 
 	
 	private function prepareJobs()
 	{
-		$data = new KalturaCopyPartnerJobData();
+		$data = new VidiunCopyPartnerJobData();
 		$data->fromPartnerId = 101;
 		$data->toPartnerId = 104;
 		
-		$job = new KalturaBatchJob();
+		$job = new VidiunBatchJob();
 		$job->id = 1;
-		$job->status = KalturaBatchJobStatus::PENDING;
+		$job->status = VidiunBatchJobStatus::PENDING;
 		$job->data = $data;
 		
 		return array($job);

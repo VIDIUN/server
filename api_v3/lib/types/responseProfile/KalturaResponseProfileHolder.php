@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaResponseProfileHolder extends KalturaBaseResponseProfile
+class VidiunResponseProfileHolder extends VidiunBaseResponseProfile
 {
 	/**
 	 * Auto generated numeric identifier
@@ -25,7 +25,7 @@ class KalturaResponseProfileHolder extends KalturaBaseResponseProfile
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -33,24 +33,24 @@ class KalturaResponseProfileHolder extends KalturaBaseResponseProfile
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
 		if($this->isNull('id') && $this->isNull('systemName'))
-    		throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $this->getFormattedPropertyNameWithClassName('id') . ' and ' . $this->getFormattedPropertyNameWithClassName('systemName'));
+    		throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $this->getFormattedPropertyNameWithClassName('id') . ' and ' . $this->getFormattedPropertyNameWithClassName('systemName'));
     		
 		parent::validateForUsage($sourceObject, $propertiesToSkip);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject
+	 * @see VidiunObject::toObject
 	 */
 	public function toObject($object = null, $propertiesToSkip = array())
 	{
 		if(is_null($object))
 		{
-			$object = new kResponseProfileHolder();
+			$object = new vResponseProfileHolder();
 		}
 		
 		return parent::toObject($object, $propertiesToSkip);

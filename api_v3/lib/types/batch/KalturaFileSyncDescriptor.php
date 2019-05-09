@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaFileSyncDescriptor extends KalturaObject
+class VidiunFileSyncDescriptor extends VidiunObject
 {
 	/**
 	 * @var string
@@ -43,7 +43,7 @@ class KalturaFileSyncDescriptor extends KalturaObject
 	public function toObject($dbObject = null, $skip = array())
 	{
 		if(!$dbObject)
-			$dbObject = new kFileSyncDescriptor();
+			$dbObject = new vFileSyncDescriptor();
 			
 		return parent::toObject($dbObject, $skip);
 	}

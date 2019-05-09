@@ -2,12 +2,12 @@
 require_once(__DIR__ . "/../../../../batch/bootstrap.php");
 
 /**
- * Executes the KAsyncIntegrateCloser
+ * Executes the VAsyncIntegrateCloser
  * 
  * @package plugins.integration
  * @subpackage Scheduler
  */
 
-$instance = new KAsyncIntegrateCloser();
+$instance = new VAsyncIntegrateCloser();
 $instance->run(); 
 $instance->done();

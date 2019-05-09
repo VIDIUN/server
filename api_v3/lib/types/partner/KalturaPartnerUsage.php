@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaPartnerUsage extends KalturaObject
+class VidiunPartnerUsage extends VidiunObject
 {
 	/**
 	 * Partner total hosting in GB on the disk

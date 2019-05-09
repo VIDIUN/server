@@ -1,13 +1,13 @@
 <?php
 /**
- * Will hold data from the Kaltura UI components to be passed on to the reports and analytics system
+ * Will hold data from the Vidiun UI components to be passed on to the reports and analytics system
  * @package api
  * @subpackage objects
  */
-class KalturaStatsEvent extends KalturaObject 
+class VidiunStatsEvent extends VidiunObject 
 {
 /*
- * Bellow the definition of the event log line. The KalturaStatsEvent structure will strongly resemle this line but might differenciate slightly,
+ * Bellow the definition of the event log line. The VidiunStatsEvent structure will strongly resemle this line but might differenciate slightly,
  * due to data that will come from other resources such as the suser's IP (coming from the HTTP header)
  * 
 client version - will help interprete the line structure. different client versions might have slightly different data/data formats in the line
@@ -36,7 +36,7 @@ referrer
 	public $clientVer;
 
 	/**
-	 * @var KalturaStatsEventType
+	 * @var VidiunStatsEventType
 	 */
 	public $eventType;
 	
@@ -141,7 +141,7 @@ referrer
 	public $isFirstInSession;
 	
 	/**
-	 * kaltura application name 
+	 * vidiun application name 
 	 * @var string 
 	 */
 	public $applicationId;
@@ -152,7 +152,7 @@ referrer
 	public $contextId;
 	
 	/**
-	 * @var KalturaStatsFeatureType
+	 * @var VidiunStatsFeatureType
 	 */
 	public $featureType;
 		

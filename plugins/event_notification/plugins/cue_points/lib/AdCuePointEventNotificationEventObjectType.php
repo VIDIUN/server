@@ -3,7 +3,7 @@
  * @package plugins.adCuePointEventNotifications
  * @subpackage lib
  */
-class AdCuePointEventNotificationEventObjectType implements IKalturaPluginEnum, EventNotificationEventObjectType
+class AdCuePointEventNotificationEventObjectType implements IVidiunPluginEnum, EventNotificationEventObjectType
 {
 	const AD_CUE_POINT = 'AdCuePoint';
 	

@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaBaseEntryCloneOptionsArray extends KalturaTypedArray
+class VidiunBaseEntryCloneOptionsArray extends VidiunTypedArray
 {
     public function __construct()
     {
-        parent::__construct("KalturaBaseEntryCloneOptionItem");
+        parent::__construct("VidiunBaseEntryCloneOptionItem");
     }
 }

@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaSearchConditionType extends KalturaEnum
+class VidiunSearchConditionType extends VidiunEnum
 {
 	const GREATER = 1;
 	const EQUAL_OR_GREATER = 2;

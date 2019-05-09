@@ -3,7 +3,7 @@
  * @package plugins.dropFolder
  * @subpackage api.enum
  */
-class KalturaDropFolderContentFileHandlerMatchPolicy extends KalturaEnum implements DropFolderContentFileHandlerMatchPolicy
+class VidiunDropFolderContentFileHandlerMatchPolicy extends VidiunEnum implements DropFolderContentFileHandlerMatchPolicy
 {
 	// see DropFolderFileContentMatchPolicy interface
 }

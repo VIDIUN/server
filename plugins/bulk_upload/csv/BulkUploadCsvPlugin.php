@@ -2,7 +2,7 @@
 /**
  * @package plugins.bulkUploadCsv
  */
-class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, IKalturaPending
+class BulkUploadCsvPlugin extends VidiunPlugin implements IVidiunBulkUpload, IVidiunPending
 {
 	const PLUGIN_NAME = 'bulkUploadCsv';
 
@@ -17,11 +17,11 @@ class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPending::dependsOn()
+	 * @see IVidiunPending::dependsOn()
 	 */
 	public static function dependsOn()
 	{
-		$drmDependency = new KalturaDependency(BulkUploadPlugin::PLUGIN_NAME);
+		$drmDependency = new VidiunDependency(BulkUploadPlugin::PLUGIN_NAME);
 		
 		return array($drmDependency);
 	}
@@ -49,29 +49,29 @@ class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		 //Gets the right job for the engine
-		if($baseClass == 'kBulkUploadJobData' && (!$enumValue || $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)))
-			return new kBulkUploadCsvJobData();
+		if($baseClass == 'vBulkUploadJobData' && (!$enumValue || $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)))
+			return new vBulkUploadCsvJobData();
 		
 		 //Gets the right job for the engine
-		if($baseClass == 'KalturaBulkUploadJobData' && (!$enumValue || $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)))
-			return new KalturaBulkUploadCsvJobData();
+		if($baseClass == 'VidiunBulkUploadJobData' && (!$enumValue || $enumValue == self::getBulkUploadTypeCoreValue(BulkUploadCsvType::CSV)))
+			return new VidiunBulkUploadCsvJobData();
 		
 		//Gets the engine (only for clients)
-		if($baseClass == 'KBulkUploadEngine' && class_exists('KalturaClient') && (!$enumValue || $enumValue == KalturaBulkUploadType::CSV))
+		if($baseClass == 'VBulkUploadEngine' && class_exists('VidiunClient') && (!$enumValue || $enumValue == VidiunBulkUploadType::CSV))
 		{
 			list($job) = $constructorArgs;
-			/* @var $job KalturaBatchJob */
+			/* @var $job VidiunBatchJob */
 			switch ($job->data->bulkUploadObjectType)
 			{
-			    case KalturaBulkUploadObjectType::ENTRY:
+			    case VidiunBulkUploadObjectType::ENTRY:
 			        return new BulkUploadEntryEngineCsv($job);
-			    case KalturaBulkUploadObjectType::CATEGORY:
+			    case VidiunBulkUploadObjectType::CATEGORY:
 			        return new BulkUploadCategoryEngineCsv($job);
-			    case KalturaBulkUploadObjectType::USER:
+			    case VidiunBulkUploadObjectType::USER:
 			        return new BulkUploadUserEngineCsv($job);
-			    case KalturaBulkUploadObjectType::CATEGORY_USER:
+			    case VidiunBulkUploadObjectType::CATEGORY_USER:
 			        return new BulkUploadCategoryUserEngineCsv($job);
-			    case KalturaBulkUploadObjectType::CATEGORY_ENTRY:
+			    case VidiunBulkUploadObjectType::CATEGORY_ENTRY:
 			        return new BulkUploadCategoryEntryEngineCsv($job);
 			}
 			
@@ -124,10 +124,10 @@ class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 			
 		$STDOUT = fopen('php://output', 'w');
 		$data = $batchJob->getData();
-        /* @var $data kBulkUploadJobData */
+        /* @var $data vBulkUploadJobData */
 		
 		//Add header row to the output CSV only if partner level permission for it exists
-		$partnerId = kCurrentContext::$partner_id ? kCurrentContext::$partner_id : kCurrentContext::$ks_partner_id;
+		$partnerId = vCurrentContext::$partner_id ? vCurrentContext::$partner_id : vCurrentContext::$vs_partner_id;
 		if (PermissionPeer::isValidForPartner(self::FEATURE_CSV_HEADER_ROW, $partnerId))
 		{
     		$headerRow = $data->getColumns();
@@ -135,7 +135,7 @@ class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
     		$headerRow[] = "objectId";
     		$headerRow[] = "objectStatus";
     		$headerRow[] = "errorDescription";
-    		KCsvWrapper::sanitizedFputCsv($STDOUT, $headerRow);
+    		VCsvWrapper::sanitizedFputCsv($STDOUT, $headerRow);
 		}
 		
 		$handledResults = 0;
@@ -171,19 +171,19 @@ class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 				$values[] = preg_replace('/[\n\r\t]/', ' ', $bulkUploadResult->getErrorDescription());
 
 
-				KCsvWrapper::sanitizedFputCsv($STDOUT, $values);
+				VCsvWrapper::sanitizedFputCsv($STDOUT, $values);
 			}
 			
     		if(count($bulkUploadResults) < $criteria->getLimit())
     			break;
 	    		
-    		kMemoryManager::clearMemory();
+    		vMemoryManager::clearMemory();
     		$criteria->setOffset($handledResults);
 			$bulkUploadResults = BulkUploadResultPeer::doSelect($criteria);
 		}
 		fclose($STDOUT);
 		
-		kFile::closeDbConnections();
+		vFile::closeDbConnections();
 		exit;
 	}
 	
@@ -218,10 +218,10 @@ class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	/**
 	 * Function constructs an array of the return values of the bulk upload result and returns it
 	 * @param BulkUploadResultCategory $bulkUploadResult
-	 * @param kJobData $data
+	 * @param vJobData $data
 	 * @return array
 	 */
-	protected static function writeCategoryBulkUploadResults(BulkUploadResultCategory $bulkUploadResult, kJobData $data)
+	protected static function writeCategoryBulkUploadResults(BulkUploadResultCategory $bulkUploadResult, vJobData $data)
 	{
 	    /* @var $bulkUploadResult BulkUploadResultCategory */
 	    $values = array();
@@ -247,10 +247,10 @@ class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
     /**
      * Function constructs an array of the return values of the bulk upload result and returns it
      * @param BulkUploadResult $bulkUploadResult
-     * @param kJobData $data
+     * @param vJobData $data
      * @return array
      */
-    protected static function writeEntryBulkUploadResults(BulkUploadResult $bulkUploadResult, kJobData $data)
+    protected static function writeEntryBulkUploadResults(BulkUploadResult $bulkUploadResult, vJobData $data)
 	{
         $values = array(
 			$bulkUploadResult->getTitle(),
@@ -281,12 +281,12 @@ class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
     /**
      * Function constructs an array of the return values of the bulk upload result and returns it
      * @param BulkUploadResult $bulkUploadResult
-     * @param kJobData $data
+     * @param vJobData $data
      * @return array
      */
-    protected static function writeCategoryUserBulkUploadResults(BulkUploadResult $bulkUploadResult, kJobData $data)
+    protected static function writeCategoryUserBulkUploadResults(BulkUploadResult $bulkUploadResult, vJobData $data)
 	{
-	    /* @var $bulkUploadResult BulkUploadResultCategoryKuser */
+	    /* @var $bulkUploadResult BulkUploadResultCategoryVuser */
 	    $values = array();
 	    $values[] = $bulkUploadResult->getCategoryId();
 	    $values[] = $bulkUploadResult->getUserId();
@@ -301,12 +301,12 @@ class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
     /**
      * Function constructs an array of the return values of the bulk upload result and returns it
      * @param BulkUploadResult $bulkUploadResult
-     * @param kJobData $data
+     * @param vJobData $data
      * @return array
      */
-    protected static function writeUserBulkUploadResults(BulkUploadResult $bulkUploadResult, kJobData $data)
+    protected static function writeUserBulkUploadResults(BulkUploadResult $bulkUploadResult, vJobData $data)
 	{
-	    /* @var $bulkUploadResult BulkUploadResultKuser */
+	    /* @var $bulkUploadResult BulkUploadResultVuser */
 	    $values = array();
 	    $values[] = $bulkUploadResult->getPuserId();
 	    $values[] = $bulkUploadResult->getScreenName();
@@ -332,7 +332,7 @@ class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	private static function stringToSafeXml($string)
 	{
 		$string = @iconv('utf-8', 'utf-8', $string);
-		$safe = kString::xmlEncode($string);
+		$safe = vString::xmlEncode($string);
 		return $safe;
 	}
 	
@@ -341,8 +341,8 @@ class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	 */
 	public static function getBulkUploadTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('BulkUploadType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('BulkUploadType', $value);
 	}
 	
 	/**
@@ -350,6 +350,6 @@ class BulkUploadCsvPlugin extends KalturaPlugin implements IKalturaBulkUpload, I
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

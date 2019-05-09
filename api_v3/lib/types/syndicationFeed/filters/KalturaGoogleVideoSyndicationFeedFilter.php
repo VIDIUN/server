@@ -3,6 +3,6 @@
  * @package api
  * @subpackage filters
  */
-class KalturaGoogleVideoSyndicationFeedFilter extends KalturaGoogleVideoSyndicationFeedBaseFilter
+class VidiunGoogleVideoSyndicationFeedFilter extends VidiunGoogleVideoSyndicationFeedBaseFilter
 {
 }

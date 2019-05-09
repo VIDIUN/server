@@ -3,7 +3,7 @@
  * @package plugins.cielo24
  * @subpackage lib.enum
  */
-class Cielo24TranscriptProviderType implements IKalturaPluginEnum, TranscriptProviderType
+class Cielo24TranscriptProviderType implements IVidiunPluginEnum, TranscriptProviderType
 {
 	const CIELO24 = 'Cielo24';
 	

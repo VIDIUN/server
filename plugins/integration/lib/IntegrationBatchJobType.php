@@ -3,7 +3,7 @@
  * @package plugins.integration
  * @subpackage lib.enum
  */
-class IntegrationBatchJobType implements IKalturaPluginEnum, BatchJobType
+class IntegrationBatchJobType implements IVidiunPluginEnum, BatchJobType
 {
 	const INTEGRATION = 'Integration';
 	

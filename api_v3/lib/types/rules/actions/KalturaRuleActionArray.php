@@ -3,11 +3,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaRuleActionArray extends KalturaTypedArray
+class VidiunRuleActionArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaRuleActionArray();
+		$newArr = new VidiunRuleActionArray();
 		if ($arr == null)
 			return $newArr;
 
@@ -15,7 +15,7 @@ class KalturaRuleActionArray extends KalturaTypedArray
 		{
 			$nObj = self::getInstanceByDbObject($obj);
 			if(!$nObj)
-				throw new kCoreException("No API object found for core object [" . get_class($obj) . "] with type [" . $obj->getType() . "]", kCoreException::OBJECT_API_TYPE_NOT_FOUND);
+				throw new vCoreException("No API object found for core object [" . get_class($obj) . "] with type [" . $obj->getType() . "]", vCoreException::OBJECT_API_TYPE_NOT_FOUND);
 				
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
@@ -24,33 +24,33 @@ class KalturaRuleActionArray extends KalturaTypedArray
 		return $newArr;
 	}
 
-	static function getInstanceByDbObject(kRuleAction $dbObject)
+	static function getInstanceByDbObject(vRuleAction $dbObject)
 	{
 		switch($dbObject->getType())
 		{
 			case RuleActionType::BLOCK:
-				return new KalturaAccessControlBlockAction();
+				return new VidiunAccessControlBlockAction();
 			case RuleActionType::PREVIEW:
-				return new KalturaAccessControlPreviewAction();
+				return new VidiunAccessControlPreviewAction();
 			case RuleActionType::LIMIT_FLAVORS:
-				return new KalturaAccessControlLimitFlavorsAction();
+				return new VidiunAccessControlLimitFlavorsAction();
 			case RuleActionType::ADD_TO_STORAGE:
-				return new KalturaStorageAddAction();	
+				return new VidiunStorageAddAction();	
 			case RuleActionType::LIMIT_DELIVERY_PROFILES:
-				return new KalturaAccessControlLimitDeliveryProfilesAction();
+				return new VidiunAccessControlLimitDeliveryProfilesAction();
 			case RuleActionType::SERVE_FROM_REMOTE_SERVER:
-				return new KalturaAccessControlServeRemoteEdgeServerAction();
+				return new VidiunAccessControlServeRemoteEdgeServerAction();
 			case RuleActionType::REQUEST_HOST_REGEX:
-				return new KalturaAccessControlModifyRequestHostRegexAction();
+				return new VidiunAccessControlModifyRequestHostRegexAction();
 			case RuleActionType::LIMIT_THUMBNAIL_CAPTURE:
-				return new KalturaAccessControlLimitThumbnailCaptureAction();
+				return new VidiunAccessControlLimitThumbnailCaptureAction();
 			default:
-				return KalturaPluginManager::loadObject('KalturaRuleAction', $dbObject->getType());
+				return VidiunPluginManager::loadObject('VidiunRuleAction', $dbObject->getType());
 		}		
 	}
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaRuleAction");	
+		parent::__construct("VidiunRuleAction");	
 	}
 }

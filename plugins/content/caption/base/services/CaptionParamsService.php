@@ -7,7 +7,7 @@
  * @package plugins.caption
  * @subpackage api.services
  */
-class CaptionParamsService extends KalturaBaseService
+class CaptionParamsService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
@@ -20,7 +20,7 @@ class CaptionParamsService extends KalturaBaseService
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::partnerGroup()
+	 * @see VidiunBaseService::partnerGroup()
 	 */
 	protected function partnerGroup($peer = null)
 	{
@@ -48,10 +48,10 @@ class CaptionParamsService extends KalturaBaseService
 	 * Add new Caption Params
 	 * 
 	 * @action add
-	 * @param KalturaCaptionParams $captionParams
-	 * @return KalturaCaptionParams
+	 * @param VidiunCaptionParams $captionParams
+	 * @return VidiunCaptionParams
 	 */
-	public function addAction(KalturaCaptionParams $captionParams)
+	public function addAction(VidiunCaptionParams $captionParams)
 	{
 		$captionParams->validatePropertyMinLength("name", 1);
 		
@@ -70,16 +70,16 @@ class CaptionParamsService extends KalturaBaseService
 	 * 
 	 * @action get
 	 * @param int $id
-	 * @return KalturaCaptionParams
+	 * @return VidiunCaptionParams
 	 */
 	public function getAction($id)
 	{
 		$captionParamsDb = assetParamsPeer::retrieveByPK($id);
 		
 		if (!$captionParamsDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
 			
-		$captionParams = KalturaFlavorParamsFactory::getFlavorParamsInstance($captionParamsDb->getType());
+		$captionParams = VidiunFlavorParamsFactory::getFlavorParamsInstance($captionParamsDb->getType());
 		$captionParams->fromObject($captionParamsDb, $this->getResponseProfile());
 		
 		return $captionParams;
@@ -90,17 +90,17 @@ class CaptionParamsService extends KalturaBaseService
 	 * 
 	 * @action update
 	 * @param int $id
-	 * @param KalturaCaptionParams $captionParams
-	 * @return KalturaCaptionParams
+	 * @param VidiunCaptionParams $captionParams
+	 * @return VidiunCaptionParams
 	 */
-	public function updateAction($id, KalturaCaptionParams $captionParams)
+	public function updateAction($id, VidiunCaptionParams $captionParams)
 	{
 		if ($captionParams->name !== null)
 			$captionParams->validatePropertyMinLength("name", 1);
 			
 		$captionParamsDb = assetParamsPeer::retrieveByPK($id);
 		if (!$captionParamsDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
 			
 		$captionParams->toUpdatableObject($captionParamsDb);
 		$captionParamsDb->save();
@@ -119,7 +119,7 @@ class CaptionParamsService extends KalturaBaseService
 	{
 		$captionParamsDb = assetParamsPeer::retrieveByPK($id);
 		if (!$captionParamsDb)
-			throw new KalturaAPIException(KalturaErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::FLAVOR_PARAMS_ID_NOT_FOUND, $id);
 			
 		$captionParamsDb->setDeletedAt(time());
 		$captionParamsDb->save();
@@ -129,21 +129,21 @@ class CaptionParamsService extends KalturaBaseService
 	 * List Caption Params by filter with paging support (By default - all system default params will be listed too)
 	 * 
 	 * @action list
-	 * @param KalturaCaptionParamsFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaCaptionParamsListResponse
+	 * @param VidiunCaptionParamsFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunCaptionParamsListResponse
 	 */
-	public function listAction(KalturaCaptionParamsFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunCaptionParamsFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaCaptionParamsFilter();
+			$filter = new VidiunCaptionParamsFilter();
 			
 		if(!$pager)
 		{
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		}
 
-		$types = KalturaPluginManager::getExtendedTypes(assetParamsPeer::OM_CLASS, CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION));			
+		$types = VidiunPluginManager::getExtendedTypes(assetParamsPeer::OM_CLASS, CaptionPlugin::getAssetTypeCoreValue(CaptionAssetType::CAPTION));			
 		return $filter->getTypeListResponse($pager, $this->getResponseProfile(), $types);
 	}
 }

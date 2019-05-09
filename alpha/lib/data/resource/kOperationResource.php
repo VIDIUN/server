@@ -5,15 +5,15 @@
  * @package Core
  * @subpackage model.data
  */
-class kOperationResource extends kContentResource 
+class vOperationResource extends vContentResource 
 {
 	/**
-	 * @var kContentResource
+	 * @var vContentResource
 	 */
 	private $resource;
 	
 	/**
-	 * @var array<kOperationAttributes>
+	 * @var array<vOperationAttributes>
 	 */
 	private $operationAttributes;
 	
@@ -24,7 +24,7 @@ class kOperationResource extends kContentResource
 	private $assetParamsId;
 	
 	/**
-	 * @return kContentResource $resource
+	 * @return vContentResource $resource
 	 */
 	public function getResource()
 	{
@@ -46,7 +46,7 @@ class kOperationResource extends kContentResource
 	{
 		foreach($this->operationAttributes as $operationAttributes)
 		{
-			/* @var $operationAttributes kOperationAttributes */
+			/* @var $operationAttributes vOperationAttributes */
 			$sourceType = $operationAttributes->getSourceType();
 			if($sourceType)
 				return $sourceType;
@@ -65,7 +65,7 @@ class kOperationResource extends kContentResource
 	
 		foreach($this->operationAttributes as $operationAttributes)
 		{
-			/* @var $operationAttributes kOperationAttributes */
+			/* @var $operationAttributes vOperationAttributes */
 			$assetParamsId = $operationAttributes->getAssetParamsId();
 			if($assetParamsId)
 				return $assetParamsId;
@@ -75,9 +75,9 @@ class kOperationResource extends kContentResource
 	}
 
 	/**
-	 * @param kContentResource $resource
+	 * @param vContentResource $resource
 	 */
-	public function setResource(kContentResource $resource)
+	public function setResource(vContentResource $resource)
 	{
 		$this->resource = $resource;
 	}

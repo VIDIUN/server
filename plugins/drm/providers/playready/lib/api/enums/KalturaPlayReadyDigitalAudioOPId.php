@@ -3,7 +3,7 @@
  * @package plugins.playReady
  * @subpackage api.enum
  */
-class KalturaPlayReadyDigitalAudioOPId extends KalturaStringEnum implements PlayReadyDigitalAudioOPId
+class VidiunPlayReadyDigitalAudioOPId extends VidiunStringEnum implements PlayReadyDigitalAudioOPId
 {
 	// see PlayReadyDigitalAudioOPId interface
 }

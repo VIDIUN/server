@@ -9,7 +9,7 @@ class myYouTubeServices extends myBaseMediaSource implements IMediaSource
 	protected $source_name = "YouTube";
 	protected $auth_method = array ( self::AUTH_METHOD_PUBLIC , self::AUTH_METHOD_USER );
 	protected $search_in_user = false; 
-	protected $logo = "http://www.kaltura.com/images/wizard/logo_youtube.png";
+	protected $logo = "http://www.vidiun.com/images/wizard/logo_youtube.png";
 	protected $id = entry::ENTRY_MEDIA_SOURCE_YOUTUBE;
 	
 	private static $NEED_MEDIA_INFO = "1";
@@ -42,7 +42,7 @@ class myYouTubeServices extends myBaseMediaSource implements IMediaSource
 		}
 	}
 		
-	public  function getAuthData($kuserId, $userName, $password, $token)
+	public  function getAuthData($vuserId, $userName, $password, $token)
 	{
 		return array('status' => 'ok', 'message' => '', 'authData' => $userName);
 	}
@@ -56,7 +56,7 @@ class myYouTubeServices extends myBaseMediaSource implements IMediaSource
 
 	private static function getXPathResponse($url)
 	{
-		$xmlStr = kFile::downloadUrlToString($url);
+		$xmlStr = vFile::downloadUrlToString($url);
 
 		$doc = new DOMDocument();
 		$doc->loadXML($xmlStr);
@@ -159,7 +159,7 @@ class myYouTubeServices extends myBaseMediaSource implements IMediaSource
 		}
 		
 		$source_link = "http://www.youtube.com/watch?v=".$objectId;
-		$htmlPage = kFile::downloadUrlToString($source_link, 3);
+		$htmlPage = vFile::downloadUrlToString($source_link, 3);
 
 		$status = 'error';
 		$message = '';

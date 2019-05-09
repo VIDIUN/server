@@ -3,12 +3,12 @@
  * @package plugins.freewheelDistribution
  * @subpackage api.objects
  */
-class KalturaFreewheelDistributionJobProviderData extends KalturaDistributionJobProviderData
+class VidiunFreewheelDistributionJobProviderData extends VidiunDistributionJobProviderData
 {
 	/**
 	 * Demonstrate passing array of paths to the job
 	 * 
-	 * @var KalturaFreewheelDistributionAssetPathArray
+	 * @var VidiunFreewheelDistributionAssetPathArray
 	 */
 	public $videoAssetFilePaths;
 	
@@ -23,25 +23,25 @@ class KalturaFreewheelDistributionJobProviderData extends KalturaDistributionJob
 	/**
 	 * Called on the server side and enables you to populate the object with any data from the DB
 	 * 
-	 * @param KalturaDistributionJobData $distributionJobData
+	 * @param VidiunDistributionJobData $distributionJobData
 	 */
-	public function __construct(KalturaDistributionJobData $distributionJobData = null)
+	public function __construct(VidiunDistributionJobData $distributionJobData = null)
 	{
 		if(!$distributionJobData)
 			return;
 			
-		if(!($distributionJobData->distributionProfile instanceof KalturaFreewheelDistributionProfile))
+		if(!($distributionJobData->distributionProfile instanceof VidiunFreewheelDistributionProfile))
 			return;
 			
-		$this->videoAssetFilePaths = new KalturaFreewheelDistributionAssetPathArray();
+		$this->videoAssetFilePaths = new VidiunFreewheelDistributionAssetPathArray();
 		
 		// loads all the flavor assets that should be submitted to the remote destination site
 		$flavorAssets = assetPeer::retrieveByIds(explode(',', $distributionJobData->entryDistribution->flavorAssetIds));
 		foreach($flavorAssets as $flavorAsset)
 		{
-			$videoAssetFilePath = new KalturaFreewheelDistributionAssetPath();
+			$videoAssetFilePath = new VidiunFreewheelDistributionAssetPath();
 			$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			$videoAssetFilePath->path = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			$videoAssetFilePath->path = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 			$this->videoAssetFilePaths[] = $videoAssetFilePath;
 		}
 		
@@ -50,7 +50,7 @@ class KalturaFreewheelDistributionJobProviderData extends KalturaDistributionJob
 		{
 			$thumbAsset = reset($thumbAssets);
 			$syncKey = $thumbAssets->getSyncKey(thumbAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-			$this->thumbAssetFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			$this->thumbAssetFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 		}
 	}
 		
@@ -65,7 +65,7 @@ class KalturaFreewheelDistributionJobProviderData extends KalturaDistributionJob
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -73,7 +73,7 @@ class KalturaFreewheelDistributionJobProviderData extends KalturaDistributionJob
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject()
+	 * @see VidiunObject::toObject()
 	 */
 	public function toObject($object = null, $skip = array())
 	{
@@ -92,18 +92,18 @@ class KalturaFreewheelDistributionJobProviderData extends KalturaDistributionJob
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject()
+	 * @see VidiunObject::fromObject()
 	 */
-	public function doFromObject($object, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($object, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		parent::doFromObject($object, $responseProfile);
 		$videoAssetFilePaths = $object->getVideoAssetFilePaths();
 		if($videoAssetFilePaths && is_array($videoAssetFilePaths))
 		{
-			$this->videoAssetFilePaths = new KalturaFreewheelDistributionAssetPathArray();
+			$this->videoAssetFilePaths = new VidiunFreewheelDistributionAssetPathArray();
 			foreach($videoAssetFilePaths as $assetFilePath)
 			{
-				$videoAssetFilePath = new KalturaFreewheelDistributionAssetPath();
+				$videoAssetFilePath = new VidiunFreewheelDistributionAssetPath();
 				$videoAssetFilePath->path = $assetFilePath;
 				$this->videoAssetFilePaths[] = $videoAssetFilePath;
 			}

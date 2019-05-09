@@ -1,32 +1,32 @@
 <?php
 /**
- * Distributes kaltura entries to remote destination  
+ * Distributes vidiun entries to remote destination  
  *
  * @package plugins.contentDistribution 
  * @subpackage Scheduler.Distribute
  */
-class KAsyncDistributeUpdate extends KAsyncDistribute
+class VAsyncDistributeUpdate extends VAsyncDistribute
 {
 	/* (non-PHPdoc)
-	 * @see KBatchBase::getType()
+	 * @see VBatchBase::getType()
 	 */
 	public static function getType()
 	{
-		return KalturaBatchJobType::DISTRIBUTION_UPDATE;
+		return VidiunBatchJobType::DISTRIBUTION_UPDATE;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KAsyncDistribute::getDistributionEngine()
+	 * @see VAsyncDistribute::getDistributionEngine()
 	 */
-	protected function getDistributionEngine($providerType, KalturaDistributionJobData $data)
+	protected function getDistributionEngine($providerType, VidiunDistributionJobData $data)
 	{
 		return DistributionEngine::getEngine('IDistributionEngineUpdate', $providerType, $data);
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KAsyncDistribute::execute()
+	 * @see VAsyncDistribute::execute()
 	 */
-	protected function execute(KalturaDistributionJobData $data)
+	protected function execute(VidiunDistributionJobData $data)
 	{
 		return $this->engine->update($data);
 	}

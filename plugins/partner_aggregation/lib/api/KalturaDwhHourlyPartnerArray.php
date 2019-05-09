@@ -3,17 +3,17 @@
  * @package plugins.partnerAggregation
  * @subpackage api.objects
  */
-class KalturaDwhHourlyPartnerArray extends KalturaTypedArray
+class VidiunDwhHourlyPartnerArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaDwhHourlyPartnerArray();
+		$newArr = new VidiunDwhHourlyPartnerArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = new KalturaDwhHourlyPartner();
+    		$nObj = new VidiunDwhHourlyPartner();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaDwhHourlyPartnerArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaDwhHourlyPartner");	
+		parent::__construct("VidiunDwhHourlyPartner");	
 	}
 }

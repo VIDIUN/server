@@ -3,7 +3,7 @@
  * @package plugins.annotationEventNotifications
  * @subpackage lib
  */
-class AnnotationEventNotificationEventObjectType implements IKalturaPluginEnum, EventNotificationEventObjectType
+class AnnotationEventNotificationEventObjectType implements IVidiunPluginEnum, EventNotificationEventObjectType
 {
 	const ANNOTATION = 'Annotation';
 	

@@ -3,20 +3,20 @@
  * @package plugins.eventNotification
  * @subpackage api.objects
  */
-class KalturaEventNotificationTemplateArray extends KalturaTypedArray
+class VidiunEventNotificationTemplateArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaEventNotificationTemplateArray();
+		$newArr = new VidiunEventNotificationTemplateArray();
 		if ($arr == null)
 			return $newArr;
 
 		foreach ($arr as $obj)
 		{
-    		$nObj = KalturaEventNotificationTemplate::getInstanceByType($obj->getType());
+    		$nObj = VidiunEventNotificationTemplate::getInstanceByType($obj->getType());
     		if(!$nObj)
     		{
-    			KalturaLog::err("Event notification template could not find matching type for [" . $obj->getType() . "]");
+    			VidiunLog::err("Event notification template could not find matching type for [" . $obj->getType() . "]");
     			continue;
     		}
 			$nObj->fromObject($obj, $responseProfile);
@@ -28,6 +28,6 @@ class KalturaEventNotificationTemplateArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaEventNotificationTemplate");	
+		parent::__construct("VidiunEventNotificationTemplate");	
 	}
 }

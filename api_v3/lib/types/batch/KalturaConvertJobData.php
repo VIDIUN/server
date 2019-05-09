@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaConvertJobData extends KalturaConvartableJobData
+class VidiunConvertJobData extends VidiunConvartableJobData
 {
 	/**
 	 * @var string
@@ -43,7 +43,7 @@ class KalturaConvertJobData extends KalturaConvartableJobData
 	
 	/**
 	 * 
-	 * @var KalturaDestFileSyncDescriptorArray
+	 * @var VidiunDestFileSyncDescriptorArray
 	 */
 	public $extraDestFileSyncs;
 	
@@ -74,7 +74,7 @@ class KalturaConvertJobData extends KalturaConvartableJobData
 	public function toObject($dbData = null, $props_to_skip = array()) 
 	{
 		if(is_null($dbData))
-			$dbData = new kConvertJobData();
+			$dbData = new vConvertJobData();
 			
 		return parent::toObject($dbData, $props_to_skip);
 	}
@@ -85,7 +85,7 @@ class KalturaConvertJobData extends KalturaConvartableJobData
 	 */
 	public function toSubType($subType)
 	{
-		return kPluginableEnumsManager::apiToCore('conversionEngineType', $subType);
+		return vPluginableEnumsManager::apiToCore('conversionEngineType', $subType);
 	}
 	
 	/**
@@ -94,6 +94,6 @@ class KalturaConvertJobData extends KalturaConvartableJobData
 	 */
 	public function fromSubType($subType)
 	{
-		return kPluginableEnumsManager::coreToApi('conversionEngineType', $subType);
+		return vPluginableEnumsManager::coreToApi('conversionEngineType', $subType);
 	}
 }

@@ -3,7 +3,7 @@
  * @package plugins.reach
  * @subpackage model.data
  */
-class kAddEntryVendorTaskAction extends kRuleAction
+class vAddEntryVendorTaskAction extends vRuleAction
 {
 	/**
 	 * @var string

@@ -10,7 +10,7 @@
  * @package Scheduler
  * @subpackage DWH
  */
-class KDwhClient
+class VDwhClient
 {
 	private static $s_file_name;
 	
@@ -26,7 +26,7 @@ class KDwhClient
 	protected $_stream = null;
 
 	/**
-	 * @var KDwhClient
+	 * @var VDwhClient
 	 */
 	private static $s_dwh_client = null;
 
@@ -49,9 +49,9 @@ class KDwhClient
 	}
 
 	/**
-	 * @param KDwhEventBase $event
+	 * @param VDwhEventBase $event
 	 */
-	public static function send ( KDwhEventBase $event )
+	public static function send ( VDwhEventBase $event )
 	{
 		if(!self::$enabled)
 			return;
@@ -66,7 +66,7 @@ class KDwhClient
 	public static function getInstance ( )
 	{
 		if(is_null(self::$s_dwh_client))
-			self::$s_dwh_client = new KDwhClient( self::$s_file_name );
+			self::$s_dwh_client = new VDwhClient( self::$s_file_name );
 
 		return self::$s_dwh_client;
 	}
@@ -82,18 +82,18 @@ class KDwhClient
 	{
 		if (is_resource($streamOrUrl)) {
 			if (get_resource_type($streamOrUrl) != 'stream') {
-				throw new KDwhClientException('Resource is not a stream');
+				throw new VDwhClientException('Resource is not a stream');
 			}
 
 			if ($mode != 'a') {
-				throw new KDwhClientException('Mode cannot be changed on existing streams');
+				throw new VDwhClientException('Mode cannot be changed on existing streams');
 			}
 
 			$this->_stream = $streamOrUrl;
 		} else {
 			if (! $this->_stream = @fopen($streamOrUrl, $mode, false)) {
 				$msg = "\"$streamOrUrl\" cannot be opened with mode \"$mode\"";
-				throw new KDwhClientException($msg);
+				throw new VDwhClientException($msg);
 			}
 		}
 	}
@@ -114,7 +114,7 @@ class KDwhClient
 	{
 		if (false === @fwrite($this->_stream, $event_line)) 
 		{
-			throw new KDwhClientException("Unable to write to stream");
+			throw new VDwhClientException("Unable to write to stream");
 		}
 	}
 	

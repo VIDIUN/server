@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kDeleteFileJobData extends kJobData
+class vDeleteFileJobData extends vJobData
 {
 	/**
 	 * @var string

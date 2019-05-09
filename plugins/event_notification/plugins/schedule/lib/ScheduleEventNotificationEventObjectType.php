@@ -3,7 +3,7 @@
  * @package plugins.scheduleEventNotifications
  * @subpackage lib
  */
-class ScheduleEventNotificationEventObjectType implements IKalturaPluginEnum, EventNotificationEventObjectType
+class ScheduleEventNotificationEventObjectType implements IVidiunPluginEnum, EventNotificationEventObjectType
 {
 	const SCHEDULE_EVENT = 'ScheduleEvent';
 	const SCHEDULE_RESOURCE = 'ScheduleResource';

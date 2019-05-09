@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaChinaCacheAlgorithmType extends KalturaEnum
+class VidiunChinaCacheAlgorithmType extends VidiunEnum
 {
 	const SHA1 = 1;
 	const SHA256 = 2;

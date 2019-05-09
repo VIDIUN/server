@@ -3,7 +3,7 @@
  * @package api
  * @subpackage filters
  */
-class KalturaCategoryFilter extends KalturaCategoryBaseFilter
+class VidiunCategoryFilter extends VidiunCategoryBaseFilter
 {
 	static private $map_between_objects = array
 	(
@@ -65,7 +65,7 @@ class KalturaCategoryFilter extends KalturaCategoryBaseFilter
 	public $idOrInheritedParentIdIn;
 
 	/* (non-PHPdoc)
-	 * @see KalturaFilter::getCoreFilter()
+	 * @see VidiunFilter::getCoreFilter()
 	 */
 	protected function getCoreFilter()
 	{
@@ -73,43 +73,43 @@ class KalturaCategoryFilter extends KalturaCategoryBaseFilter
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::getListResponse()
+	 * @see VidiunRelatedFilter::getListResponse()
 	 */
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if ($this->orderBy === null)
-			$this->orderBy = KalturaCategoryOrderBy::DEPTH_ASC;
+			$this->orderBy = VidiunCategoryOrderBy::DEPTH_ASC;
 			
 		$categoryFilter = $this->toObject();
 		
-		$c = KalturaCriteria::create(categoryPeer::OM_CLASS);
+		$c = VidiunCriteria::create(categoryPeer::OM_CLASS);
 		$categoryFilter->attachToCriteria($c);
 		$pager->attachToCriteria($c);
 		$dbList = categoryPeer::doSelect($c);
 		$totalCount = $c->getRecordsCount();
 		
-		$list = KalturaCategoryArray::fromDbArray($dbList, $responseProfile);
+		$list = VidiunCategoryArray::fromDbArray($dbList, $responseProfile);
 		
-		$response = new KalturaCategoryListResponse();
+		$response = new VidiunCategoryListResponse();
 		$response->objects = $list;
 		$response->totalCount = $totalCount;
 		return $response;
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaRelatedFilter::validateForResponseProfile()
+	 * @see VidiunRelatedFilter::validateForResponseProfile()
 	 */
 	public function validateForResponseProfile()
 	{
-		if(kEntitlementUtils::getEntitlementEnforcement())
+		if(vEntitlementUtils::getEntitlementEnforcement())
 		{
-			if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENABLE_RESPONSE_PROFILE_USER_CACHE, kCurrentContext::getCurrentPartnerId()))
+			if(PermissionPeer::isValidForPartner(PermissionName::FEATURE_ENABLE_RESPONSE_PROFILE_USER_CACHE, vCurrentContext::getCurrentPartnerId()))
 			{
-				KalturaResponseProfileCacher::useUserCache();
+				VidiunResponseProfileCacher::useUserCache();
 				return;
 			}
 			
-			throw new KalturaAPIException(KalturaErrors::CANNOT_LIST_RELATED_ENTITLED_WHEN_ENTITLEMENT_IS_ENABLE, get_class($this));
+			throw new VidiunAPIException(VidiunErrors::CANNOT_LIST_RELATED_ENTITLED_WHEN_ENTITLEMENT_IS_ENABLE, get_class($this));
 		}
 	}
 }

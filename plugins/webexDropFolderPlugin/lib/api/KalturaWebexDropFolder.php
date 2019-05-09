@@ -3,7 +3,7 @@
  * @package plugins.WebexDropFolder
  * @subpackage api.objects
  */
-class KalturaWebexDropFolder extends KalturaDropFolder
+class VidiunWebexDropFolder extends VidiunDropFolder
 {
 	/**
 	 * @var string
@@ -93,17 +93,17 @@ class KalturaWebexDropFolder extends KalturaDropFolder
 	
 	public function validateForInsert($propertiesToSkip = array())
 	{
-		if (!WebexDropFolderPlugin::isAllowedPartner(kCurrentContext::getCurrentPartnerId()) || !WebexDropFolderPlugin::isAllowedPartner($this->partnerId))
+		if (!WebexDropFolderPlugin::isAllowedPartner(vCurrentContext::getCurrentPartnerId()) || !WebexDropFolderPlugin::isAllowedPartner($this->partnerId))
 		{
-			throw new KalturaAPIException (KalturaErrors::PERMISSION_NOT_FOUND, 'Permission not found to use the WebexDropFolder feature.');
+			throw new VidiunAPIException (VidiunErrors::PERMISSION_NOT_FOUND, 'Permission not found to use the WebexDropFolder feature.');
 		}
 	}
 	
 	public function validateForUpdate ($sourceObject, $propertiesToSkip = array())
 	{
-		if (!WebexDropFolderPlugin::isAllowedPartner(kCurrentContext::getCurrentPartnerId()) || !WebexDropFolderPlugin::isAllowedPartner($sourceObject->getPartnerId()))
+		if (!WebexDropFolderPlugin::isAllowedPartner(vCurrentContext::getCurrentPartnerId()) || !WebexDropFolderPlugin::isAllowedPartner($sourceObject->getPartnerId()))
 		{
-			throw new KalturaAPIException (KalturaErrors::PERMISSION_NOT_FOUND, 'Permission not found to use the WebexDropFolder feature.');
+			throw new VidiunAPIException (VidiunErrors::PERMISSION_NOT_FOUND, 'Permission not found to use the WebexDropFolder feature.');
 		}
 	}
 	
@@ -112,19 +112,19 @@ class KalturaWebexDropFolder extends KalturaDropFolder
 		
 		if (isset($this->fileHandlerType) && $this->fileHandlerType != DropFolderFileHandlerType::CONTENT) 
 		{
-			throw new KalturaAPIException(KalturaErrors::INVALID_ENUM_VALUE, $this->fileHandlerType, 'fileHandlerType', DropFolderFileHandlerType::CONTENT);		
+			throw new VidiunAPIException(VidiunErrors::INVALID_ENUM_VALUE, $this->fileHandlerType, 'fileHandlerType', DropFolderFileHandlerType::CONTENT);		
 		}
 		
-		if (isset ($this->fileHandlerConfig) && !($this->fileHandlerConfig instanceof KalturaDropFolderContentFileHandlerConfig))
+		if (isset ($this->fileHandlerConfig) && !($this->fileHandlerConfig instanceof VidiunDropFolderContentFileHandlerConfig))
 		{
-			throw new KalturaAPIException (KalturaErrors::INVALID_OBJECT_TYPE, get_class($this->fileHandlerConfig));
+			throw new VidiunAPIException (VidiunErrors::INVALID_OBJECT_TYPE, get_class($this->fileHandlerConfig));
 		}
 		
 		if (isset ($this->fileHandlerConfig->contentMatchPolicy) )
 		{
 			if ($this->fileHandlerConfig->contentMatchPolicy != DropFolderContentFileHandlerMatchPolicy::ADD_AS_NEW)
 			{
-				throw new KalturaAPIException(KalturaErrors::INVALID_ENUM_VALUE, $this->fileHandlerConfig->contentMatchPolicy, 'contentMatchPolicy', DropFolderContentFileHandlerMatchPolicy::ADD_AS_NEW);
+				throw new VidiunAPIException(VidiunErrors::INVALID_ENUM_VALUE, $this->fileHandlerConfig->contentMatchPolicy, 'contentMatchPolicy', DropFolderContentFileHandlerMatchPolicy::ADD_AS_NEW);
 			}
 		}
 	}

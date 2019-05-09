@@ -12,10 +12,10 @@ class PuserRolePeer extends BasePuserRolePeer
 {
 	const LIST_SEPARATOR = ";";
 	 
-	public static function retrieveByKshowPartnerAndUid ( $kshow_id , $partner_id , $subp_id, $puser_id, $role = null )
+	public static function retrieveByVshowPartnerAndUid ( $vshow_id , $partner_id , $subp_id, $puser_id, $role = null )
 	{
 		$c = new Criteria();
-		$c->add ( self::KSHOW_ID , $kshow_id );
+		$c->add ( self::VSHOW_ID , $vshow_id );
 		$c->add ( self::PARTNER_ID , $partner_id );
 		$c->add ( self::SUBP_ID , $subp_id );
 		$c->add ( self::PUSER_ID , $puser_id );
@@ -27,14 +27,14 @@ class PuserRolePeer extends BasePuserRolePeer
 		return $puser_role;
 	}
 	
-	public static function addPuserRole ( $kshow_id , $partner_id , $subp_id, $puser_id , $role )
+	public static function addPuserRole ( $vshow_id , $partner_id , $subp_id, $puser_id , $role )
 	{
 		$puser_id = trim ( $puser_id );
 		if ( empty ( $puser_id ) )			return null;
 			
-		// TODO - first check if already exist $kshow_id , $partner_id , $puser_id
+		// TODO - first check if already exist $vshow_id , $partner_id , $puser_id
 		$puser_role = new  PuserRole();
-		$puser_role->setKshowId( $kshow_id );
+		$puser_role->setVshowId( $vshow_id );
 		$puser_role->setPartnerId( $partner_id );
 		$puser_role->setSubpId( $subp_id );
 		$puser_role->setPuserId( $puser_id );
@@ -44,13 +44,13 @@ class PuserRolePeer extends BasePuserRolePeer
 		return $puser_role->getId();
 	}
 	
-	public static function addPusersRole ( $kshow_id , $partner_id , $subp_id, $puser_id_list , $role )
+	public static function addPusersRole ( $vshow_id , $partner_id , $subp_id, $puser_id_list , $role )
 	{
 		$id_list = array();
 		
 		foreach ( $puser_id_list as $puser_id => $puser)
 		{
-			$id_list[] = self::addPuserRole ( $kshow_id , $partner_id , $subp_id, $puser_id , $role );
+			$id_list[] = self::addPuserRole ( $vshow_id , $partner_id , $subp_id, $puser_id , $role );
 		}
 		
 		return $id_list;

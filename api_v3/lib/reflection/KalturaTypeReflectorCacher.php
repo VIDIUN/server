@@ -3,7 +3,7 @@
  * @package api
  * @subpackage v3
  */
-class KalturaTypeReflectorCacher
+class VidiunTypeReflectorCacher
 {
 	protected static $_loadedTypeReflectors = array();
 	protected static $_enabled = true;
@@ -20,16 +20,16 @@ class KalturaTypeReflectorCacher
 	
 	/**
 	 * @param string $type
-	 * @return KalturaTypeReflector
+	 * @return VidiunTypeReflector
 	 */
 	static function get($type)
 	{
 		if (!self::$_enabled)
-			return new KalturaTypeReflector($type);
+			return new VidiunTypeReflector($type);
 			
 		if (!array_key_exists($type, self::$_loadedTypeReflectors))
 		{
-			$cachedDir = KAutoloader::buildPath(kConf::get("cache_root_path"), "api_v3", "typeReflector");
+			$cachedDir = VAutoloader::buildPath(vConf::get("cache_root_path"), "api_v3", "typeReflector");
 			if (!is_dir($cachedDir))
 			{
 				mkdir($cachedDir);
@@ -47,13 +47,13 @@ class KalturaTypeReflectorCacher
 			
 			if (!$typeReflector)
 			{
-				$typeReflector = new KalturaTypeReflector($type);
+				$typeReflector = new VidiunTypeReflector($type);
 				$cachedData = serialize($typeReflector);
-				$bytesWritten = kFile::safeFilePutContents($cachedFilePath, $cachedData,0644);
+				$bytesWritten = vFile::safeFilePutContents($cachedFilePath, $cachedData,0644);
 				if(!$bytesWritten)
 				{
 					$folderPermission = substr(decoct(fileperms(dirname($cachedFilePath))), 2);
-					error_log("Kaltura type reflector could not be saved to path [$cachedFilePath] type [$type] folder permisisons [$folderPermission]");
+					error_log("Vidiun type reflector could not be saved to path [$cachedFilePath] type [$type] folder permisisons [$folderPermission]");
 				}
 			}
 			

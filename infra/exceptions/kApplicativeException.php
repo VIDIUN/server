@@ -3,6 +3,6 @@
  * @package infra
  * @subpackage Exceptions
  */
-class kApplicativeException extends kException
+class vApplicativeException extends vException
 {
 }

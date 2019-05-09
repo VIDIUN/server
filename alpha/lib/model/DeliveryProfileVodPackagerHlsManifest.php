@@ -5,7 +5,7 @@ class DeliveryProfileVodPackagerHlsManifest extends DeliveryProfileVodPackagerHl
 	function __construct() 
 	{
 		parent::__construct();
-		$this->DEFAULT_RENDERER_CLASS = 'kRedirectManifestRenderer';
+		$this->DEFAULT_RENDERER_CLASS = 'vRedirectManifestRenderer';
 	}
 	
 	public function buildServeFlavors()

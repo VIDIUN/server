@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-class KalturaAssetParamsResourceContainerArray extends KalturaTypedArray
+class VidiunAssetParamsResourceContainerArray extends VidiunTypedArray
 {
 	public function __construct()
 	{
-		parent::__construct("KalturaAssetParamsResourceContainer");	
+		parent::__construct("VidiunAssetParamsResourceContainer");	
 	}
 }

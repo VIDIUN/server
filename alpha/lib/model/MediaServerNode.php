@@ -7,7 +7,7 @@ abstract class MediaServerNode extends DeliveryServerNode {
 	const CUSTOM_DATA_PROTOCOL_PORT_CONFIG_ARRAY = 'media_server_port_config';
 	const CUSTOM_DATA_PLAYBACK_DOMAIN_CONFIG_ARRAY = 'media_server_playback_domain_config';
 	const CUSTOM_DATA_APPLICATION_NAME = 'application_name';
-	const DEFAULT_APPLICATION = 'kLive';
+	const DEFAULT_APPLICATION = 'vLive';
 	
 	abstract public function getWebService($serviceName);
 	abstract public function getLiveWebServiceName();
@@ -18,7 +18,7 @@ abstract class MediaServerNode extends DeliveryServerNode {
 	public function preInsert(PropelPDO $con = null)
 	{
 		if($this->getPartnerId() === Partner::MEDIA_SERVER_PARTNER_ID)
-			$this->setDc(kDataCenterMgr::getCurrentDcId());
+			$this->setDc(vDataCenterMgr::getCurrentDcId());
 		
 		return parent::preInsert($con);
 	}

@@ -3,7 +3,7 @@
  * @package plugins.exampleDistribution
  * @subpackage api.objects
  */
-class KalturaExampleDistributionAssetPath extends KalturaDistributionJobProviderData
+class VidiunExampleDistributionAssetPath extends VidiunDistributionJobProviderData
 {
 	/**
 	 * @var string

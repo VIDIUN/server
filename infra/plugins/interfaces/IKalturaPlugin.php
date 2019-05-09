@@ -4,7 +4,7 @@
  * @package infra
  * @subpackage Plugins
  */
-interface IKalturaPlugin extends IKalturaBase
+interface IVidiunPlugin extends IVidiunBase
 {
 	/**
 	 * @return string the name of the plugin

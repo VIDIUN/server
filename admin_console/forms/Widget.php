@@ -50,8 +50,8 @@ class Form_Widget extends Infra_Form
 			'filters'		=> array('StringTrim'),
 			'required'		=> true,
 			'multiOptions' 		=> array(
-				Kaltura_Client_Enum_UiConfCreationMode::ADVANCED => 'Advanced',
-				Kaltura_Client_Enum_UiConfCreationMode::WIZARD => 'AppStudio Wizard',
+				Vidiun_Client_Enum_UiConfCreationMode::ADVANCED => 'Advanced',
+				Vidiun_Client_Enum_UiConfCreationMode::WIZARD => 'AppStudio Wizard',
 			)
 		));
 
@@ -192,8 +192,8 @@ class Form_Widget extends Infra_Form
 		
 		$confFileButtons = array();
 		$confFileButtons[] = $openEditorButton;
-		$enableVisualEditor = Zend_Registry::get('config')->settings->enableKCWVisualEditor;
-		if (($this->getValue('obj_type') == Kaltura_Client_Enum_UiConfObjType::CONTRIBUTION_WIZARD) && ( is_null($enableVisualEditor) || $enableVisualEditor)) 
+		$enableVisualEditor = Zend_Registry::get('config')->settings->enableVCWVisualEditor;
+		if (($this->getValue('obj_type') == Vidiun_Client_Enum_UiConfObjType::CONTRIBUTION_WIZARD) && ( is_null($enableVisualEditor) || $enableVisualEditor)) 
 			$confFileButtons[] = $openVisualEditorButton;
 		$confFileFeaturesButtons = array();
 		$confFileFeaturesButtons[] = $openEditorButton;

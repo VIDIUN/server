@@ -33,7 +33,7 @@
 			<ul class="details">
 				<li><label><?php echo $this->translate('entry-history info entry id label'); ?></label> <?php echo $this->entry->id; ?></li>
 				<li><label><?php echo $this->translate('entry-history info entry name label'); ?></label> <a title="<?php echo $this->translate('entry-history info entry name tooltip'); ?>" href="<?php echo $this->url(array('controller' => 'batch', 'action' => 'entry-investigation', 'entryId' => $this->entry->id)); ?>"><?php echo $this->entry->name; ?></a></li>
-				<li><label><?php echo $this->translate('entry-history info account label'); ?></label> <a title="<?php echo $this->translate('entry-history info account tooltip'); ?>" href="<?php echo $this->url(array('controller' => 'partner', 'action' => 'kmc-redirect', 'partner_id' => $this->partner->id)); ?>"><?php echo $this->partner->name; ?></a></li>
+				<li><label><?php echo $this->translate('entry-history info account label'); ?></label> <a title="<?php echo $this->translate('entry-history info account tooltip'); ?>" href="<?php echo $this->url(array('controller' => 'partner', 'action' => 'vmc-redirect', 'partner_id' => $this->partner->id)); ?>"><?php echo $this->partner->name; ?></a></li>
 			</ul>
 			<br />
 			<h2><?php echo $this->translate('entry-history history title'); ?> <span>(<?php echo $this->translate('entry-history history update label'); ?> <?php echo date($this->translate('date format')); ?>)</span></h2>
@@ -75,19 +75,19 @@
 								$color = 'black';
 								switch($job->status)
 								{
-									case Kaltura_Client_Enum_BatchJobStatus::FINISHED:
-									case Kaltura_Client_Enum_BatchJobStatus::DONT_PROCESS:
+									case Vidiun_Client_Enum_BatchJobStatus::FINISHED:
+									case Vidiun_Client_Enum_BatchJobStatus::DONT_PROCESS:
 										$color = 'green';
 										break;
 										
-									case Kaltura_Client_Enum_BatchJobStatus::ABORTED:
-									case Kaltura_Client_Enum_BatchJobStatus::FAILED:										
-									case Kaltura_Client_Enum_BatchJobStatus::FATAL:
+									case Vidiun_Client_Enum_BatchJobStatus::ABORTED:
+									case Vidiun_Client_Enum_BatchJobStatus::FAILED:										
+									case Vidiun_Client_Enum_BatchJobStatus::FATAL:
 										$color = 'red';
 										break;
 								}
 								
-								$status = $this->enumTranslate('Kaltura_Client_Enum_BatchJobStatus', $job->status);
+								$status = $this->enumTranslate('Vidiun_Client_Enum_BatchJobStatus', $job->status);
 								echo "<font color=\"$color\">$status</font>";
 								
 								if($job->deletedAt)

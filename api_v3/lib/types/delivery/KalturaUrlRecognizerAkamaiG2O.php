@@ -3,7 +3,7 @@
  * @package api
  * @subpackage objects
  */
-class KalturaUrlRecognizerAkamaiG2O extends KalturaUrlRecognizer {
+class VidiunUrlRecognizerAkamaiG2O extends VidiunUrlRecognizer {
 	
 	/**
 	 * headerData
@@ -50,7 +50,7 @@ class KalturaUrlRecognizerAkamaiG2O extends KalturaUrlRecognizer {
 	 public function toObject($dbObject = null, $skip = array())
 	 {
 	 	if (is_null($dbObject))
-	 		$dbObject = new kUrlRecognizerAkamaiG2O();
+	 		$dbObject = new vUrlRecognizerAkamaiG2O();
 	 		
 	 	parent::toObject($dbObject, $skip);
 	 

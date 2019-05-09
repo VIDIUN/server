@@ -4,9 +4,9 @@
 	<xs:complexType name="T_mrss">
 		<xs:sequence>
 		
-			<xs:element maxOccurs="1" minOccurs="0" name="ks" type="xs:string">
+			<xs:element maxOccurs="1" minOccurs="0" name="vs" type="xs:string">
 				<xs:annotation>
-					<xs:documentation>KS of the user ingesting the content</xs:documentation>
+					<xs:documentation>VS of the user ingesting the content</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			
@@ -63,7 +63,7 @@
 			<xs:choice maxOccurs="2" minOccurs="1">
 				<xs:choice maxOccurs="1" minOccurs="1">
 					<xs:sequence>
-						<xs:element maxOccurs="1" minOccurs="1" name="type" type="KalturaEntryType">
+						<xs:element maxOccurs="1" minOccurs="1" name="type" type="VidiunEntryType">
 							<xs:annotation>
 								<xs:documentation>
 									The type of the new entry.<br/>
@@ -72,7 +72,7 @@
 								</xs:documentation>
 							</xs:annotation>
 						</xs:element>
-						<xs:element maxOccurs="1" minOccurs="0" name="licenseType" type="KalturaLicenseType">
+						<xs:element maxOccurs="1" minOccurs="0" name="licenseType" type="VidiunLicenseType">
 							<xs:annotation>
 								<xs:documentation>
 									The license type of the new entry.<br/>
@@ -195,7 +195,7 @@
 				</xs:element>
 				<xs:element maxOccurs="1" minOccurs="1" name="accessControl">
 					<xs:annotation>
-						<xs:documentation>The access control profile system name of the entry. If not specified, the account's default access control profile is used. You can use the Kaltura API to set a specific access control system name.</xs:documentation>
+						<xs:documentation>The access control profile system name of the entry. If not specified, the account's default access control profile is used. You can use the Vidiun API to set a specific access control system name.</xs:documentation>
 					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
@@ -220,7 +220,7 @@
 							The transcoding profile system name of the entry.<br/>
 							If the transcoding profile is not specified, the transcoding profile set to the bulk upload API action is used.<br/>
 							If the bulk upload API action's transcoding profile is not specified or is set to (-1), the account's default transcoding profile is used.<br/>
-							You can use the Kaltura API to set a specific transcoding profile system name.
+							You can use the Vidiun API to set a specific transcoding profile system name.
 						</xs:documentation>
 					</xs:annotation>
 					<xs:simpleType>
@@ -319,7 +319,7 @@
 
 	<xs:complexType name="T_media">
 		<xs:sequence>
-			<xs:element maxOccurs="1" minOccurs="1" name="mediaType" type="KalturaMediaType">
+			<xs:element maxOccurs="1" minOccurs="1" name="mediaType" type="VidiunMediaType">
 				<xs:annotation>
 					<xs:documentation>
 						Specifies the entry media type.<br/>
@@ -345,7 +345,7 @@
 	Not supported yet
 	<xs:complexType name="T_mix">
 		<xs:sequence>
-			<xs:element name="editorType" minOccurs="1" maxOccurs="1" type="KalturaEditorType"/>
+			<xs:element name="editorType" minOccurs="1" maxOccurs="1" type="VidiunEditorType"/>
 			<xs:element name="dataContent" minOccurs="0" maxOccurs="1">
 				<xs:annotation>
 					<xs:documentation>
@@ -371,7 +371,7 @@
 
 	<xs:complexType name="T_playlist">
 		<xs:sequence>
-			<xs:element name="playlistType" minOccurs="1" maxOccurs="1" type="KalturaPlaylistType"/>
+			<xs:element name="playlistType" minOccurs="1" maxOccurs="1" type="VidiunPlaylistType"/>
 			<xs:element name="playlistContent" minOccurs="0" maxOccurs="1">
 				<xs:annotation>
 					<xs:documentation>
@@ -491,7 +491,7 @@
 		</xs:choice>
 		<xs:attribute name="filePath" type="xs:string" use="required">
 			<xs:annotation>
-				<xs:documentation>The full path of the file on the Kaltura-hosted server</xs:documentation>
+				<xs:documentation>The full path of the file on the Vidiun-hosted server</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -548,14 +548,14 @@
 			<xs:element maxOccurs="1" minOccurs="1" name="storageProfileId" type="xs:int">
 				<xs:annotation>
 					<xs:documentation>
-						The identifier of the remote storage profile used as the source of content ingestion. Only links to the files on this remote storage are set from the entry, without actually uploading content to Kaltura. (The remote storage must be defined in Kaltura.)
+						The identifier of the remote storage profile used as the source of content ingestion. Only links to the files on this remote storage are set from the entry, without actually uploading content to Vidiun. (The remote storage must be defined in Vidiun.)
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element maxOccurs="1" minOccurs="1" name="storageProfile">
 				<xs:annotation>
 					<xs:documentation>
-						The system name of the remote storage profile used as the source of content ingestion. Only links to the files on this remote storage are set from the entry, without actually uploading content to Kaltura. (The remote storage must be defined in Kaltura.)
+						The system name of the remote storage profile used as the source of content ingestion. Only links to the files on this remote storage are set from the entry, without actually uploading content to Vidiun. (The remote storage must be defined in Vidiun.)
 					</xs:documentation>
 				</xs:annotation>
 				<xs:simpleType>
@@ -577,8 +577,8 @@
 			<xs:element maxOccurs="unbounded" minOccurs="1" ref="remoteStorageContentResource">
 				<xs:annotation>
 					<xs:documentation>
-						Specifies that the content location is a path within a single remote storage defined in Kaltura.<br/> 
-						Using this option, only a link to the content location is set from the entry, without actually uploading content to Kaltura.
+						Specifies that the content location is a path within a single remote storage defined in Vidiun.<br/> 
+						Using this option, only a link to the content location is set from the entry, without actually uploading content to Vidiun.
 					</xs:documentation>
 				</xs:annotation>
 			</xs:element>
@@ -692,8 +692,8 @@
 				<xs:element maxOccurs="1" minOccurs="1" ref="serverFileContentResource">
 					<xs:annotation>
 						<xs:documentation>
-							Specifies that the content location is on a Kaltura-hosted server.<br/>
-							By default, this option is not available to Kaltura partners.
+							Specifies that the content location is on a Vidiun-hosted server.<br/>
+							By default, this option is not available to Vidiun partners.
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
@@ -714,30 +714,30 @@
 				<xs:element maxOccurs="1" minOccurs="1" ref="remoteStorageContentResource">
 					<xs:annotation>
 						<xs:documentation>
-							Specifies that the content location is a path within a remote storage defined in Kaltura.<br/> 
-							Using this option, only a link to the content location is set from the entry, without actually uploading content to Kaltura.
+							Specifies that the content location is a path within a remote storage defined in Vidiun.<br/> 
+							Using this option, only a link to the content location is set from the entry, without actually uploading content to Vidiun.
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element maxOccurs="1" minOccurs="1" ref="remoteStorageContentResources">
 					<xs:annotation>
 						<xs:documentation>
-							Specifies that content is located within several remote storages defined in Kaltura.<br/> 
-							Using this option, only links to the content locations are set from the entry, without actually uploading content to Kaltura.
+							Specifies that content is located within several remote storages defined in Vidiun.<br/> 
+							Using this option, only links to the content locations are set from the entry, without actually uploading content to Vidiun.
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element maxOccurs="1" minOccurs="1" ref="entryContentResource">
 					<xs:annotation>
 						<xs:documentation>
-							Specifies that the source of content ingestion is the content of an existing Kaltura entry
+							Specifies that the source of content ingestion is the content of an existing Vidiun entry
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element maxOccurs="1" minOccurs="1" ref="assetContentResource">
 					<xs:annotation>
 						<xs:documentation>
-							Specifies that the source of content ingestion is a specific asset of an existing Kaltura entry
+							Specifies that the source of content ingestion is a specific asset of an existing Vidiun entry
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
@@ -827,8 +827,8 @@
 				<xs:element maxOccurs="1" minOccurs="1" ref="serverFileContentResource">
 					<xs:annotation>
 						<xs:documentation>
-							Specifies that the thumbnail location is on a Kaltura-hosted server.<br/>
-							By default, this option is not available to Kaltura partners.
+							Specifies that the thumbnail location is on a Vidiun-hosted server.<br/>
+							By default, this option is not available to Vidiun partners.
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
@@ -849,30 +849,30 @@
 				<xs:element maxOccurs="1" minOccurs="1" ref="remoteStorageContentResource">
 					<xs:annotation>
 						<xs:documentation>
-							Specifies that the thumbnail location is a path within a remote storage defined in Kaltura.<br/>
-							Using this option, only a link to the thumbnail location is set from the entry, without actually uploading thumbnails to Kaltura.
+							Specifies that the thumbnail location is a path within a remote storage defined in Vidiun.<br/>
+							Using this option, only a link to the thumbnail location is set from the entry, without actually uploading thumbnails to Vidiun.
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element maxOccurs="1" minOccurs="1" ref="remoteStorageContentResources">
 					<xs:annotation>
 						<xs:documentation>
-							Specifies that the thumbnail is located within several remote storages defined in Kaltura.<br/> 
-							Using this option, only links to the thumbnail locations are set from the entry, without actually uploading thumbnails to Kaltura.
+							Specifies that the thumbnail is located within several remote storages defined in Vidiun.<br/> 
+							Using this option, only links to the thumbnail locations are set from the entry, without actually uploading thumbnails to Vidiun.
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element maxOccurs="1" minOccurs="1" ref="entryContentResource">
 					<xs:annotation>
 						<xs:documentation>
-							Specifies that the source of thumbnail ingestion is an existing Kaltura entry
+							Specifies that the source of thumbnail ingestion is an existing Vidiun entry
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element maxOccurs="1" minOccurs="1" ref="assetContentResource">
 					<xs:annotation>
 						<xs:documentation>
-							Specifies that the source of thumbnail ingestion is a specific asset of an existing Kaltura entry
+							Specifies that the source of thumbnail ingestion is a specific asset of an existing Vidiun entry
 						</xs:documentation>
 					</xs:annotation>
 				</xs:element>
@@ -1293,9 +1293,9 @@
 	<xs:element name="contentResource-extension"/>
 	<xs:element name="serverFileContentResource" type="T_serverFileContentResource">
 		<xs:annotation>
-			<xs:documentation>Specifies that the location of content ingestion is on a Kaltura-hosted server. By default, this option is not available to Kaltura partners.</xs:documentation>
+			<xs:documentation>Specifies that the location of content ingestion is on a Vidiun-hosted server. By default, this option is not available to Vidiun partners.</xs:documentation>
 			<xs:appinfo>
-				<example title="XML Example 1: Adding content from a Kaltura server: Using file size validation">
+				<example title="XML Example 1: Adding content from a Vidiun server: Using file size validation">
 					<item>
 						<action>add</action>
 						<type>1</type>
@@ -1310,7 +1310,7 @@
 						<thumbnails>...</thumbnails>
 					</item>
 				</example>
-				<example title="XML Example 2: Adding content from a Kaltura server: Using checksum validation">
+				<example title="XML Example 2: Adding content from a Vidiun server: Using checksum validation">
 					<item>
 						<action>add</action>
 						<type>1</type>
@@ -1392,7 +1392,7 @@ tK1yWx3LOnxokoJUtNRSdEi</privateKey>
 	</xs:element>
 	<xs:element name="remoteStorageContentResource" type="T_remoteStorageContentResource">
 		<xs:annotation>
-			<xs:documentation>Specifies that the location of content ingestion is a path within a remote storage defined in Kaltura. Using this option, only a link to the content location is set from the entry, without actually uploading content to Kaltura.</xs:documentation>
+			<xs:documentation>Specifies that the location of content ingestion is a path within a remote storage defined in Vidiun. Using this option, only a link to the content location is set from the entry, without actually uploading content to Vidiun.</xs:documentation>
 			<xs:appinfo>
 				<example>
 					<item>
@@ -1420,7 +1420,7 @@ tK1yWx3LOnxokoJUtNRSdEi</privateKey>
 	</xs:element>
 	<xs:element name="remoteStorageContentResources" type="T_remoteStorageContentResources">
 		<xs:annotation>
-			<xs:documentation>Sets the location of content ingestion within several remote storages defined in Kaltura. Using this option, only links to the content location are set from the entry, without actually uploading content to Kaltura.</xs:documentation>
+			<xs:documentation>Sets the location of content ingestion within several remote storages defined in Vidiun. Using this option, only links to the content location are set from the entry, without actually uploading content to Vidiun.</xs:documentation>
 			<xs:appinfo>
 				<example>
 					<item>
@@ -1446,7 +1446,7 @@ tK1yWx3LOnxokoJUtNRSdEi</privateKey>
 	</xs:element>
 	<xs:element name="entryContentResource" type="T_entryContentResource">
 		<xs:annotation>
-			<xs:documentation>Specifies that the source of content ingestion is the content of an existing Kaltura entry</xs:documentation>
+			<xs:documentation>Specifies that the source of content ingestion is the content of an existing Vidiun entry</xs:documentation>
 			<xs:appinfo>
 				<example title="XML Example: Adding flavor asset from an existing entry and associating it with a specific flavor params in a target entry">
 					<item>
@@ -1467,7 +1467,7 @@ tK1yWx3LOnxokoJUtNRSdEi</privateKey>
 	</xs:element>
 	<xs:element name="assetContentResource" type="T_assetContentResource">
 		<xs:annotation>
-			<xs:documentation>Specifies that the source of content ingestion is a specific asset of an existing Kaltura entry</xs:documentation>
+			<xs:documentation>Specifies that the source of content ingestion is a specific asset of an existing Vidiun entry</xs:documentation>
 			<xs:appinfo>
 				<example>
 					<item>

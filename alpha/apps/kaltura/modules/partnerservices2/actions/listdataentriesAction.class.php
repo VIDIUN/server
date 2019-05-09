@@ -34,7 +34,7 @@ class listdataentriesAction extends listentriesAction
 					"page_size" => array ("type" => "integer", "desc" => ""),
 					"page" => array ("type" => "integer", "desc" => ""),
 					"entrys" => array ("type" => "*entry", "desc" => ""),
-					"user" => array ("type" => "kuser", "desc" => ""),
+					"user" => array ("type" => "vuser", "desc" => ""),
 					),
 				"errors" => array (
 				)
@@ -43,13 +43,13 @@ class listdataentriesAction extends listentriesAction
 	
 	protected function joinOnDetailed () { return true;}
 		
-	// for this specific kshow list - the ticket is regular and the filter is for all
-	// kshows for the current user only 
+	// for this specific vshow list - the ticket is regular and the filter is for all
+	// vshows for the current user only 
 	protected function setExtraFilters ( entryFilter &$fields_set )
 	{
 		$fields_set->set( "_eq_type" , entryType::DATA );		
 		$fields_set->set( "_eq_status" , entryStatus::READY );  		// make sure will display only 
-		$this->setP ( "use_filter_puser_id" , "false" ); // don't mind filtering according to the puser/kuser
+		$this->setP ( "use_filter_puser_id" , "false" ); // don't mind filtering according to the puser/vuser
 		
 	}
 	

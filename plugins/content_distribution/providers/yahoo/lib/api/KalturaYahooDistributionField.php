@@ -3,7 +3,7 @@
  * @package plugins.yahooDistribution
  * @subpackage api.enum
  */
-class KalturaYahooDistributionField extends KalturaStringEnum implements YahooDistributionField
+class VidiunYahooDistributionField extends VidiunStringEnum implements YahooDistributionField
 {
 	// see YahooDistributionField interface
 }

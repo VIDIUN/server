@@ -2,7 +2,7 @@
 /**
  * @package plugins.quickPlayDistribution
  */
-class QuickPlayDistributionPlugin extends KalturaPlugin implements IKalturaPermissions, IKalturaEnumerator, IKalturaPending, IKalturaObjectLoader, IKalturaContentDistributionProvider
+class QuickPlayDistributionPlugin extends VidiunPlugin implements IVidiunPermissions, IVidiunEnumerator, IVidiunPending, IVidiunObjectLoader, IVidiunContentDistributionProvider
 {
 	const PLUGIN_NAME = 'quickPlayDistribution';
 	const CONTENT_DSTRIBUTION_VERSION_MAJOR = 2;
@@ -16,12 +16,12 @@ class QuickPlayDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 	
 	public static function dependsOn()
 	{
-		$contentDistributionVersion = new KalturaVersion(
+		$contentDistributionVersion = new VidiunVersion(
 			self::CONTENT_DSTRIBUTION_VERSION_MAJOR,
 			self::CONTENT_DSTRIBUTION_VERSION_MINOR,
 			self::CONTENT_DSTRIBUTION_VERSION_BUILD);
 			
-		$dependency = new KalturaDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
+		$dependency = new VidiunDependency(ContentDistributionPlugin::getPluginName(), $contentDistributionVersion);
 		return array($dependency);
 	}
 	
@@ -57,7 +57,7 @@ class QuickPlayDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 	public static function loadObject($baseClass, $enumValue, array $constructorArgs = null)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::QUICKPLAY)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::QUICKPLAY)
 		{
 			if($baseClass == 'IDistributionEngineSubmit')
 				return new QuickPlayDistributionEngine();
@@ -65,14 +65,14 @@ class QuickPlayDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 			if($baseClass == 'IDistributionEngineUpdate')
 				return new QuickPlayDistributionEngine();
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return new KalturaQuickPlayDistributionProfile();
+			if($baseClass == 'VidiunDistributionProfile')
+				return new VidiunQuickPlayDistributionProfile();
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return new KalturaQuickPlayDistributionJobProviderData();
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return new VidiunQuickPlayDistributionJobProviderData();
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::QUICKPLAY)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::QUICKPLAY)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 			{
@@ -82,23 +82,23 @@ class QuickPlayDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 		}
 		
 		// content distribution does not work in partner services 2 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || kCurrentContext::$ps_vesion != 'ps3')
+		if (!class_exists('vCurrentContext') || vCurrentContext::$ps_vesion != 'ps3')
 			return null;
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(QuickPlayDistributionProviderType::QUICKPLAY))
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(QuickPlayDistributionProviderType::QUICKPLAY))
 		{
-			$reflect = new ReflectionClass('KalturaQuickPlayDistributionJobProviderData');
+			$reflect = new ReflectionClass('VidiunQuickPlayDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(QuickPlayDistributionProviderType::QUICKPLAY))
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(QuickPlayDistributionProviderType::QUICKPLAY))
 		{
-			$reflect = new ReflectionClass('kQuickPlayDistributionJobProviderData');
+			$reflect = new ReflectionClass('vQuickPlayDistributionJobProviderData');
 			return $reflect->newInstanceArgs($constructorArgs);
 		}
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(QuickPlayDistributionProviderType::QUICKPLAY))
-			return new KalturaQuickPlayDistributionProfile();
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(QuickPlayDistributionProviderType::QUICKPLAY))
+			return new VidiunQuickPlayDistributionProfile();
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(QuickPlayDistributionProviderType::QUICKPLAY))
 			return new QuickPlayDistributionProfile();
@@ -114,7 +114,7 @@ class QuickPlayDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 	public static function getObjectClass($baseClass, $enumValue)
 	{
 		// client side apps like batch and admin console
-		if (class_exists('KalturaClient') && $enumValue == KalturaDistributionProviderType::QUICKPLAY)
+		if (class_exists('VidiunClient') && $enumValue == VidiunDistributionProviderType::QUICKPLAY)
 		{
 			if($baseClass == 'IDistributionEngineSubmit')
 				return 'QuickPlayDistributionEngine';
@@ -122,34 +122,34 @@ class QuickPlayDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 			if($baseClass == 'IDistributionEngineUpdate')
 				return 'QuickPlayDistributionEngine';
 		
-			if($baseClass == 'KalturaDistributionProfile')
-				return 'KalturaQuickPlayDistributionProfile';
+			if($baseClass == 'VidiunDistributionProfile')
+				return 'VidiunQuickPlayDistributionProfile';
 		
-			if($baseClass == 'KalturaDistributionJobProviderData')
-				return 'KalturaQuickPlayDistributionJobProviderData';
+			if($baseClass == 'VidiunDistributionJobProviderData')
+				return 'VidiunQuickPlayDistributionJobProviderData';
 		}
 		
-		if (class_exists('Kaltura_Client_Client') && $enumValue == Kaltura_Client_ContentDistribution_Enum_DistributionProviderType::QUICKPLAY)
+		if (class_exists('Vidiun_Client_Client') && $enumValue == Vidiun_Client_ContentDistribution_Enum_DistributionProviderType::QUICKPLAY)
 		{
 			if($baseClass == 'Form_ProviderProfileConfiguration')
 				return 'Form_QuickPlayProfileConfiguration';
 				
-			if($baseClass == 'Kaltura_Client_ContentDistribution_Type_DistributionProfile')
-				return 'Kaltura_Client_QuickPlayDistribution_Type_QuickPlayDistributionProfile';
+			if($baseClass == 'Vidiun_Client_ContentDistribution_Type_DistributionProfile')
+				return 'Vidiun_Client_QuickPlayDistribution_Type_QuickPlayDistributionProfile';
 		}
 		
 		// content distribution does not work in partner services 2 context because it uses dynamic enums
-		if (!class_exists('kCurrentContext') || kCurrentContext::$ps_vesion != 'ps3')
+		if (!class_exists('vCurrentContext') || vCurrentContext::$ps_vesion != 'ps3')
 			return null;
 
-		if($baseClass == 'KalturaDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(QuickPlayDistributionProviderType::QUICKPLAY))
-			return 'KalturaQuickPlayDistributionJobProviderData';
+		if($baseClass == 'VidiunDistributionJobProviderData' && $enumValue == self::getDistributionProviderTypeCoreValue(QuickPlayDistributionProviderType::QUICKPLAY))
+			return 'VidiunQuickPlayDistributionJobProviderData';
 	
-		if($baseClass == 'kDistributionJobProviderData' && $enumValue == self::getApiValue(QuickPlayDistributionProviderType::QUICKPLAY))
-			return 'kQuickPlayDistributionJobProviderData';
+		if($baseClass == 'vDistributionJobProviderData' && $enumValue == self::getApiValue(QuickPlayDistributionProviderType::QUICKPLAY))
+			return 'vQuickPlayDistributionJobProviderData';
 	
-		if($baseClass == 'KalturaDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(QuickPlayDistributionProviderType::QUICKPLAY))
-			return 'KalturaQuickPlayDistributionProfile';
+		if($baseClass == 'VidiunDistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(QuickPlayDistributionProviderType::QUICKPLAY))
+			return 'VidiunQuickPlayDistributionProfile';
 			
 		if($baseClass == 'DistributionProfile' && $enumValue == self::getDistributionProviderTypeCoreValue(QuickPlayDistributionProviderType::QUICKPLAY))
 			return 'QuickPlayDistributionProfile';
@@ -170,11 +170,11 @@ class QuickPlayDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 	/**
 	 * Return an API distribution provider instance
 	 * 
-	 * @return KalturaDistributionProvider
+	 * @return VidiunDistributionProvider
 	 */
-	public static function getKalturaProvider()
+	public static function getVidiunProvider()
 	{
-		$distributionProvider = new KalturaQuickPlayDistributionProvider();
+		$distributionProvider = new VidiunQuickPlayDistributionProvider();
 		$distributionProvider->fromObject(self::getProvider());
 		return $distributionProvider;
 	}
@@ -194,8 +194,8 @@ class QuickPlayDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 	 */
 	public static function getDistributionProviderTypeCoreValue($valueName)
 	{
-		$value = self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
-		return kPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
+		$value = self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return vPluginableEnumsManager::apiToCore('DistributionProviderType', $value);
 	}
 	
 	/**
@@ -203,6 +203,6 @@ class QuickPlayDistributionPlugin extends KalturaPlugin implements IKalturaPermi
 	 */
 	public static function getApiValue($valueName)
 	{
-		return self::getPluginName() . IKalturaEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
+		return self::getPluginName() . IVidiunEnumerator::PLUGIN_VALUE_DELIMITER . $valueName;
 	}
 }

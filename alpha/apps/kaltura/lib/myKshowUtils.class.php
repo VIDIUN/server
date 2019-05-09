@@ -2,19 +2,19 @@
 
 require_once ( __DIR__ . "/myEntryUtils.class.php");
 
-class myKshowUtils
+class myVshowUtils
 {
-	public static function getWidgetCmdUrl($kdata, $cmd = "") //add, kshow, edit
+	public static function getWidgetCmdUrl($vdata, $cmd = "") //add, vshow, edit
 	{
 		$domain = requestUtils::getRequestHost();
 
-		$baseCmd = "$domain/index.php/keditorservices/redirectWidgetCmd?kdata=$kdata&cmd=$cmd";
+		$baseCmd = "$domain/index.php/veditorservices/redirectWidgetCmd?vdata=$vdata&cmd=$cmd";
 
 		return $baseCmd;
 	}
 
 
-	public static function createGenericWidgetHtml ( $partner_id, $subp_id, $partner_name ,  $widget_host  , $kshow_id , $user_id , $size='l' , $align='l', $version=null , $version_kshow_name=null , $version_kshow_description=null)
+	public static function createGenericWidgetHtml ( $partner_id, $subp_id, $partner_name ,  $widget_host  , $vshow_id , $user_id , $size='l' , $align='l', $version=null , $version_vshow_name=null , $version_vshow_description=null)
 	{
 /*		global $partner_id, $subp_id, $partner_name;
 		global $WIDGET_HOST;
@@ -25,21 +25,21 @@ class myKshowUtils
 
 	     // add the version as an additional parameter
 		$domain = $widget_host; 
-		$swf_url = "/index.php/widget/$kshow_id/" .
+		$swf_url = "/index.php/widget/$vshow_id/" .
 			( $entry_id ? $entry_id : "-1" ) . "/" .
 			( $media_type ? $media_type : "-1" ) . "/" .
 			( $widget_type ? $widget_type : "3" ) . "/" . // widget_type=3 -> WIKIA
 			( $version ? "$version" : "-1" );
 
-		$current_widget_kshow_id_list[] = $kshow_id;
+		$current_widget_vshow_id_list[] = $vshow_id;
 
-		$kshowCallUrl = "$domain/index.php/browse?kshow_id=$kshow_id";
-		$widgetCallUrl = "$kshowCallUrl&browseCmd=";
-		$editCallUrl = "$domain/index.php/edit?kshow_id=$kshow_id";
+		$vshowCallUrl = "$domain/index.php/browse?vshow_id=$vshow_id";
+		$widgetCallUrl = "$vshowCallUrl&browseCmd=";
+		$editCallUrl = "$domain/index.php/edit?vshow_id=$vshow_id";
 
 	/*
 	  widget3:
-	  url:  /widget/:kshow_id/:entry_id/:kmedia_type/:widget_type/:version
+	  url:  /widget/:vshow_id/:entry_id/:vmedia_type/:widget_type/:version
 	  param: { module: browse , action: widget }
 	 */
 	    if ( $size == "m")
@@ -63,46 +63,46 @@ class myKshowUtils
 
 		$share = "TODO" ; //$titleObj->getFullUrl ();
 
-		// this is a shorthand version of the kdata
+		// this is a shorthand version of the vdata
 	    $links_arr = array (
 	    		"base" => "$external_url/" ,
-	    		"add" =>  "Special:KalturaContributionWizard?kshow_id=$kshow_id" ,
-	    		"edit" => "Special:KalturaVideoEditor?kshow_id=$kshow_id" ,
+	    		"add" =>  "Special:VidiunContributionWizard?vshow_id=$vshow_id" ,
+	    		"edit" => "Special:VidiunVideoEditor?vshow_id=$vshow_id" ,
 	    		"share" => $share ,
 	    	);
 
 	    $links_str = str_replace ( array ( "|" , "/") , array ( "|01" , "|02" ) , base64_encode ( serialize ( $links_arr ) ) ) ;
 
-		$kaltura_link = "<a href='http://www.kaltura.com' style='color:#bcff63; text-decoration:none; '>Kaltura</a>";
-		$kaltura_link_str = "A $partner_name collaborative video powered by  "  . $kaltura_link;
+		$vidiun_link = "<a href='http://www.vidiun.com' style='color:#bcff63; text-decoration:none; '>Vidiun</a>";
+		$vidiun_link_str = "A $partner_name collaborative video powered by  "  . $vidiun_link;
 
 		$flash_vars = array (  "CW" => "gotoCW" ,
 	    						"Edit" => "gotoEdit" ,
 	    						"Editor" => "gotoEditor" ,
-								"Kaltura" => "",//gotoKalturaArticle" ,
+								"Vidiun" => "",//gotoVidiunArticle" ,
 								"Generate" => "" , //gotoGenerate" ,
 								"share" => "" , //$share ,
 								"WidgetSize" => $size );
 
 		// add only if not null
-		if ( $version_kshow_name ) $flash_vars["Title"] = $version_kshow_name;
-		if ( $version_kshow_description ) $flash_vars["Description"] = $version_kshow_description;
+		if ( $version_vshow_name ) $flash_vars["Title"] = $version_vshow_name;
+		if ( $version_vshow_description ) $flash_vars["Description"] = $version_vshow_description;
 
 		$swf_url .= "/" . $links_str;
 	   	$flash_vars_str = http_build_query( $flash_vars , "" , "&" )		;
 
 	    $widget = /*$extra_links .*/
-			 '<object id="kaltura_player_' . (int)microtime(true) . '" type="application/x-shockwave-flash" allowScriptAccess="always" allowNetworking="all" height="' . $height . '" width="' . $width . '" data="'.$domain. $swf_url . '">'.
+			 '<object id="vidiun_player_' . (int)microtime(true) . '" type="application/x-shockwave-flash" allowScriptAccess="always" allowNetworking="all" height="' . $height . '" width="' . $width . '" data="'.$domain. $swf_url . '">'.
 				'<param name="allowScriptAccess" value="always" />'.
 				'<param name="allowNetworking" value="all" />'.
 				'<param name="bgcolor" value=#000000 />'.
 				'<param name="movie" value="'.$domain. $swf_url . '"/>'.
 				'<param name="flashVars" value="' . $flash_vars_str . '"/>'.
 				'<param name="wmode" value="opaque"/>'.
-				$kaltura_link .
+				$vidiun_link .
 				'</object>' ;
 
-			"</td></tr><tr><td style='background-color:black; color:white; font-size: 11px; padding:5px 10px; '>$kaltura_link</td></tr></table>";
+			"</td></tr><tr><td style='background-color:black; color:white; font-size: 11px; padding:5px 10px; '>$vidiun_link</td></tr></table>";
 
 		if ( $align == 'r' )
 		{
@@ -124,17 +124,17 @@ class myKshowUtils
 		return $str ;
 	}
 	/**
-	 * Will create the URL for the embedded player for this kshow_id assuming is placed on the current server with the same http protocol.
-	 * @param string $kshow_id
+	 * Will create the URL for the embedded player for this vshow_id assuming is placed on the current server with the same http protocol.
+	 * @param string $vshow_id
 	 * @return string URL
 	 */
-	public static function getEmbedPlayerUrl ( $kshow_id , $entry_id , $is_roughcut = false, $kdata = "")
+	public static function getEmbedPlayerUrl ( $vshow_id , $entry_id , $is_roughcut = false, $vdata = "")
 	{
-		// TODO - PERFORMANCE - cache the versions per kshow_id
-		// - if an entry_id exists - don't fetch the version for the kshow
+		// TODO - PERFORMANCE - cache the versions per vshow_id
+		// - if an entry_id exists - don't fetch the version for the vshow
 
-		$kshow = kshowPeer::retrieveByPK( $kshow_id );
-		if ( !$kshow )
+		$vshow = vshowPeer::retrieveByPK( $vshow_id );
+		if ( !$vshow )
 		return array("", "");
 
 		$media_type = entry::ENTRY_MEDIA_TYPE_SHOW;
@@ -145,14 +145,14 @@ class myKshowUtils
 			if ($entry)
 			$media_type = $entry->getMediaType();
 
-			// if the entry is one of the kshow roughcuts we want to share the latest roughcut
+			// if the entry is one of the vshow roughcuts we want to share the latest roughcut
 			if ($entry->getType() == entryType::MIX)
 			$entry_id = -1;
 		}
 
 		if ( $is_roughcut )
 		{
-			$show_entry_id = $kshow->getShowEntryId();
+			$show_entry_id = $vshow->getShowEntryId();
 			$show_entry = entryPeer::retrieveByPK( $show_entry_id );
 			if ( !$show_entry ) return null;
 			$media_type = $show_entry->getMediaType();
@@ -166,58 +166,58 @@ class myKshowUtils
 			$show_version = -1;
 		}
 
-		$partnerId = $kshow->getPartnerId();
+		$partnerId = $vshow->getPartnerId();
 
-		$swf_url = "/index.php/widget/$kshow_id/" . ( $entry_id ? $entry_id : "-1" ) . "/" . ( $media_type ? $media_type : "-1" ) ;
+		$swf_url = "/index.php/widget/$vshow_id/" . ( $entry_id ? $entry_id : "-1" ) . "/" . ( $media_type ? $media_type : "-1" ) ;
 
 		$domain = requestUtils::getRequestHost();
 
-		$kshowName = $kshow->getName();
+		$vshowName = $vshow->getName();
 
 		if ($entry_id >= 0)
 			$headerImage = $domain.'/index.php/browse/getWidgetImage/entry_id/'.$entry_id;
 		else
-			$headerImage = $domain.'/index.php/browse/getWidgetImage/kshow_id/'.$kshow_id;
+			$headerImage = $domain.'/index.php/browse/getWidgetImage/vshow_id/'.$vshow_id;
 
 
 		if (in_array($partnerId, array(1 , 8, 18, 200))) // we're sharing a wiki widget
 		{
 			$footerImage = $domain.'/index.php/browse/getWidgetImage/partner_id/'.$partnerId;
 
-			$baseCmd = self::getWidgetCmdUrl($kdata);
+			$baseCmd = self::getWidgetCmdUrl($vdata);
 
 			$widgetCallUrl = $baseCmd."add";
-			$kshowCallUrl = $baseCmd."kshow";
+			$vshowCallUrl = $baseCmd."vshow";
 			$editCallUrl = $baseCmd."edit";
 
 			$genericWidget =
-			'<object type="application/x-shockwave-flash" allowScriptAccess="always" allowNetworking="all" height="405" width="400" data="'.$domain. $swf_url . '/4/-1/'.$kdata.'"/>'.
+			'<object type="application/x-shockwave-flash" allowScriptAccess="always" allowNetworking="all" height="405" width="400" data="'.$domain. $swf_url . '/4/-1/'.$vdata.'"/>'.
 			'<param name="allowScriptAccess" value="always" />'.
 			'<param name="allowNetworking" value="all" />'.
 			'<param name="bgcolor" value="#000000" />'.
-			'<param name="movie" value="'.$domain. $swf_url . '/4/-1/'.$kdata.'"/>'.
+			'<param name="movie" value="'.$domain. $swf_url . '/4/-1/'.$vdata.'"/>'.
 			'</object>';
 
 			$myspaceWidget = <<<EOT
 <table cellpadding="0" cellspacing="0" style="width:400px; margin:0 auto;">
 	<tr style="background-color:black;">
 		<th colspan="2" style="background-color:black; background: url($headerImage) 0 0 no-repeat;">
-			<a href="$kshowCallUrl" style="display:block; height:30px; overflow:hidden;"></a>
+			<a href="$vshowCallUrl" style="display:block; height:30px; overflow:hidden;"></a>
 		</th>
 	</tr>
 	<tr style="background-color:black;">
 		<td colspan="2">
-			<object type="application/x-shockwave-flash" allowScriptAccess="never" allowNetworking="internal" height="320" width="400" data="{$domain}{$swf_url}/1/-1/{$kdata}">
+			<object type="application/x-shockwave-flash" allowScriptAccess="never" allowNetworking="internal" height="320" width="400" data="{$domain}{$swf_url}/1/-1/{$vdata}">
 				<param name="allowScriptAccess" value="never" />
 				<param name="allowNetworking" value="internal" />
 				<param name="bgcolor" value="#000000" />
-				<param name="movie" value="{$domain}{$swf_url}/1/-1/{$kdata}" />
+				<param name="movie" value="{$domain}{$swf_url}/1/-1/{$vdata}" />
 			</object>
 		</td>
 	</tr>
 	<tr style="background-color:black;">
-		<td style="height:33px;"><a href="$widgetCallUrl" style="display:block; width:199px; height:33px; background:black url(http://www.kaltura.com/images/widget/wgt_btns2.gif) center 0 no-repeat; border-right:1px solid #000; overflow:hidden;"></a></td>
-		<td style="height:33px;"><a href="$editCallUrl" style="display:block; width:199px; height:33px; background:black url(http://www.kaltura.com/images/widget/wgt_btns2.gif) center -33px no-repeat; border-left:1px solid #555; overflow:hidden;"></a></td>
+		<td style="height:33px;"><a href="$widgetCallUrl" style="display:block; width:199px; height:33px; background:black url(http://www.vidiun.com/images/widget/wgt_btns2.gif) center 0 no-repeat; border-right:1px solid #000; overflow:hidden;"></a></td>
+		<td style="height:33px;"><a href="$editCallUrl" style="display:block; width:199px; height:33px; background:black url(http://www.vidiun.com/images/widget/wgt_btns2.gif) center -33px no-repeat; border-left:1px solid #555; overflow:hidden;"></a></td>
 	</tr>
 	<tr>
 		<td colspan="2" style="background-color:black; border-top:1px solid #222; background: url($footerImage) 0 0 no-repeat;">
@@ -229,13 +229,13 @@ EOT;
 return array($genericWidget, $myspaceWidget);
 		}
 
-		$kshowCallUrl = "$domain/index.php/browse?kshow_id=$kshow_id";
+		$vshowCallUrl = "$domain/index.php/browse?vshow_id=$vshow_id";
 		if ($entry_id >= 0)
-		$kshowCallUrl .= "&entry_id=$entry_id";
+		$vshowCallUrl .= "&entry_id=$entry_id";
 
-		$widgetCallUrl = "$kshowCallUrl&browseCmd=";
+		$widgetCallUrl = "$vshowCallUrl&browseCmd=";
 
-		$editCallUrl = "$domain/index.php/edit?kshow_id=$kshow_id";
+		$editCallUrl = "$domain/index.php/edit?vshow_id=$vshow_id";
 		if ($entry_id >= 0)
 		$editCallUrl .= "&entry_id=$entry_id";
 
@@ -286,7 +286,7 @@ return array($genericWidget, $myspaceWidget);
 		$myspaceWidget =
 		'<table cellpadding="0" cellspacing="0" style="width:400px; margin:6px auto; padding:0; background-color:black; border:1px solid black;">'.
 		'<tr>'.
-		'<th colspan="2" style="background-color:black; background: url('.$headerImage.') 0 0 no-repeat;"><a href="'.$kshowCallUrl.'" style="display:block; height:30px; overflow:hidden;"></a></th>'.
+		'<th colspan="2" style="background-color:black; background: url('.$headerImage.') 0 0 no-repeat;"><a href="'.$vshowCallUrl.'" style="display:block; height:30px; overflow:hidden;"></a></th>'.
 		'</tr>'.
 		'<tr>'.
 		'<td colspan="2">'.
@@ -308,43 +308,43 @@ return array($genericWidget, $myspaceWidget);
 	}
 
 	/**
-	 * Will create the URL for the kshow_id to be used as an HTML link
+	 * Will create the URL for the vshow_id to be used as an HTML link
 	 *
-	 * @param string $kshow_id
+	 * @param string $vshow_id
 	 * @return string URL link
 	 */
-	public static function getUrl ( $kshow_id )
+	public static function getUrl ( $vshow_id )
 	{
-		return requestUtils::getWebRootUrl() . "browse?kshow_id=$kshow_id";
+		return requestUtils::getWebRootUrl() . "browse?vshow_id=$vshow_id";
 	}
 
 	/**
-	 * Will return an array of kshows that are 'related' to a given show
+	 * Will return an array of vshows that are 'related' to a given show
 	 *
-	 * @param string $kshow_id
+	 * @param string $vshow_id
 	 * @return array of
 	 */
-	public static function getRelatedShows( $kshow_id, $kuser_id, $amount )
+	public static function getRelatedShows( $vshow_id, $vuser_id, $amount )
 	{
 		$c = new Criteria();
-		$c->addJoin( kshowPeer::PRODUCER_ID, kuserPeer::ID, Criteria::INNER_JOIN);
-		$c->add( kshowPeer::ID, 10000, Criteria::GREATER_EQUAL);
+		$c->addJoin( vshowPeer::PRODUCER_ID, vuserPeer::ID, Criteria::INNER_JOIN);
+		$c->add( vshowPeer::ID, 10000, Criteria::GREATER_EQUAL);
 
-		//$c->add( kshowPeer::PRODUCER_ID, $kuser_id );
+		//$c->add( vshowPeer::PRODUCER_ID, $vuser_id );
 
 		// our related algorithm is based on finding shows that have similar 'heavy' tags
-		if( $kshow_id )
+		if( $vshow_id )
 		{
-			$kshow = kshowPeer::retrieveByPK( $kshow_id );
-			if( $kshow )
+			$vshow = vshowPeer::retrieveByPK( $vshow_id );
+			if( $vshow )
 			{
-				$tags_string = $kshow->getTags();
+				$tags_string = $vshow->getTags();
 				if( $tags_string )
 				{
 					$tagsweight = array();
-					foreach( ktagword::getTagsArray( $tags_string ) as $tag )
+					foreach( vtagword::getTagsArray( $tags_string ) as $tag )
 					{
-						$tagsweight[$tag] = ktagword::getWeight( $tag );
+						$tagsweight[$tag] = vtagword::getWeight( $tag );
 					}
 					arsort( $tagsweight );
 					$counter = 0;
@@ -354,20 +354,20 @@ return array($genericWidget, $myspaceWidget);
 						else
 						{
 							//we'll be looking for shows that have similar top tags (3 in this case)
-							$c->addOr( kshowPeer::TAGS, '%'.$tag.'%', Criteria::LIKE );
+							$c->addOr( vshowPeer::TAGS, '%'.$tag.'%', Criteria::LIKE );
 						}
 					}
 				}
 
 				// and of course, we don't want the show itself
-				$c->addAnd( kshowPeer::ID, $kshow_id, Criteria::NOT_IN);
+				$c->addAnd( vshowPeer::ID, $vshow_id, Criteria::NOT_IN);
 			}
 		}
 		// we want recent ones
-		$c->addDescendingOrderByColumn( kshowPeer::UPDATED_AT );
+		$c->addDescendingOrderByColumn( vshowPeer::UPDATED_AT );
 		$c->setLimit( $amount );
 
-		$shows = kshowPeer::doSelectJoinKuser( $c );
+		$shows = vshowPeer::doSelectJoinVuser( $c );
 
 		//did we get enough?
 		$amount_related = count ($shows);
@@ -375,10 +375,10 @@ return array($genericWidget, $myspaceWidget);
 		{
 			// let's get some more, which are not really related, but recent
 			$c = new Criteria();
-			$c->addJoin( kshowPeer::PRODUCER_ID, kuserPeer::ID, Criteria::INNER_JOIN);
-			$c->addDescendingOrderByColumn( kshowPeer::UPDATED_AT );
+			$c->addJoin( vshowPeer::PRODUCER_ID, vuserPeer::ID, Criteria::INNER_JOIN);
+			$c->addDescendingOrderByColumn( vshowPeer::UPDATED_AT );
 			$c->setLimit( $amount - $amount_related );
-			$moreshows = kshowPeer::doSelectJoinKuser( $c );
+			$moreshows = vshowPeer::doSelectJoinVuser( $c );
 			return array_merge( $shows, $moreshows );
 		}
 
@@ -387,58 +387,58 @@ return array($genericWidget, $myspaceWidget);
 	}
 
 	/**
-	 * Will return formatted array of kshows data for shows that are 'related' to a given show
+	 * Will return formatted array of vshows data for shows that are 'related' to a given show
 	 *
-	 * @param string $kshow_id
+	 * @param string $vshow_id
 	 * @return array of
 	 */
-	public static function getRelatedShowsData ( $kshow_id, $kuser_id = null, $amount = 50 )
+	public static function getRelatedShowsData ( $vshow_id, $vuser_id = null, $amount = 50 )
 	{
-		$kshow_list = self::getRelatedShows ( $kshow_id, $kuser_id, $amount );
+		$vshow_list = self::getRelatedShows ( $vshow_id, $vuser_id, $amount );
 
-		$kshowdataarray = array();
+		$vshowdataarray = array();
 
-		foreach( $kshow_list as $kshow )
+		foreach( $vshow_list as $vshow )
 		{
 
-			$data = array ( 'id' => $kshow->getId(),
-			'thumbnail_path' => $kshow->getThumbnailPath(),
-			'show_entry_id' => $kshow->getShowEntryId(),
-			'name' => $kshow->getName(),
-			'producer_name' => $kshow->getkuser()->getScreenName(),
-			'views' => $kshow->getViews()
+			$data = array ( 'id' => $vshow->getId(),
+			'thumbnail_path' => $vshow->getThumbnailPath(),
+			'show_entry_id' => $vshow->getShowEntryId(),
+			'name' => $vshow->getName(),
+			'producer_name' => $vshow->getvuser()->getScreenName(),
+			'views' => $vshow->getViews()
 			);
-			$kshowdataarray[] = $data;
+			$vshowdataarray[] = $data;
 		}
-		return $kshowdataarray;
+		return $vshowdataarray;
 	}
 
-	public static function createTeamImage ( $kshow_id )
+	public static function createTeamImage ( $vshow_id )
 	{
-		self::createTeam1Image($kshow_id);
-		self::createTeam2Image($kshow_id);
+		self::createTeam1Image($vshow_id);
+		self::createTeam2Image($vshow_id);
 	}
 
 	/**
 	 * Creates an combined image of the producer and some of the contributors
 	 *
-	 * @param int $kshow_id
+	 * @param int $vshow_id
 	 */
 	const DIM_X = 26;
 	const DIM_Y = 23;
-	public static function createTeam1Image ( $kshow_id )
+	public static function createTeam1Image ( $vshow_id )
 	{
 		try
 		{
 			$contentPath = myContentStorage::getFSContentRootPath() ;
 
-			$kshow = kshowPeer::retrieveByPK( $kshow_id );
-			if ( ! $kshow ) return NULL;
+			$vshow = vshowPeer::retrieveByPK( $vshow_id );
+			if ( ! $vshow ) return NULL;
 
 			// the canvas for the output -
 			$im = imagecreatetruecolor(120 , 90 );
 
-			$logo_path = kFile::fixPath( SF_ROOT_DIR.DIRECTORY_SEPARATOR.'web'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'main'.DIRECTORY_SEPARATOR.'kLogoBig.gif' );
+			$logo_path = vFile::fixPath( SF_ROOT_DIR.DIRECTORY_SEPARATOR.'web'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'main'.DIRECTORY_SEPARATOR.'vLogoBig.gif' );
 			$logoIm = imagecreatefromgif( $logo_path );
 			$logoIm_x = imagesx($logoIm);
 			$logoIm_y = imagesy($logoIm);
@@ -446,8 +446,8 @@ return array($genericWidget, $myspaceWidget);
 			imagedestroy($logoIm);
 
 			// get producer's image
-			$producer = kuser::getKuserById( $kshow->getProducerId() );
-			$producer_image_path = kFile::fixPath(  $contentPath . $producer->getPicturePath () );
+			$producer = vuser::getVuserById( $vshow->getProducerId() );
+			$producer_image_path = vFile::fixPath(  $contentPath . $producer->getPicturePath () );
 			if (file_exists($producer_image_path))
 			{
 				list($sourcewidth, $sourceheight, $type, $attr, $srcIm ) = myFileConverter::createImageByFile( $producer_image_path );
@@ -459,16 +459,16 @@ return array($genericWidget, $myspaceWidget);
 				imagedestroy($srcIm);
 			}
 
-			// fetch as many different kusers as possible who contributed to the kshow
+			// fetch as many different vusers as possible who contributed to the vshow
 			// first entries willcome up first
 			$c = new Criteria();
-			$c->add ( entryPeer::KSHOW_ID , $kshow_id );
+			$c->add ( entryPeer::VSHOW_ID , $vshow_id );
 			$c->add ( entryPeer::TYPE , entryType::MEDIA_CLIP, Criteria::EQUAL );
 			//$c->add ( entryPeer::PICTURE, null, Criteria::NOT_EQUAL );
 			$c->setLimit( 16 ); // we'll need 16 images of contributers
-			$c->addGroupByColumn(entryPeer::KUSER_ID);
+			$c->addGroupByColumn(entryPeer::VUSER_ID);
 			$c->addDescendingOrderByColumn ( entryPeer::CREATED_AT );
-			$entries = entryPeer::doSelectJoinkuser( $c );
+			$entries = entryPeer::doSelectJoinvuser( $c );
 
 			if ( $entries == NULL || count ( $entries ) == 0 )
 			{
@@ -500,20 +500,20 @@ return array($genericWidget, $myspaceWidget);
 					$x = current($pos) % 5;
 					$y = floor(current($pos) / 5);
 					next($pos);
-					self::addKuserPictureFromEntry ( $contentPath , $im ,$entries , $x , $y );
+					self::addVuserPictureFromEntry ( $contentPath , $im ,$entries , $x , $y );
 					}
 					*/
 
 				for ( $y = 0 ; $y <= 1 ; ++$y )
 				for ( $x = 2 ; $x <= 4 ; ++ $x  )
 				{
-					self::addKuserPictureFromEntry ( $contentPath , $im ,$entries , $x , $y );
+					self::addVuserPictureFromEntry ( $contentPath , $im ,$entries , $x , $y );
 				}
 
 				for ( $y = 2 ; $y <= 3 ; ++$y )
 				for ( $x = 0 ; $x <= 4 ; ++ $x  )
 				{
-					self::addKuserPictureFromEntry ( $contentPath , $im ,$entries , $x , $y );
+					self::addVuserPictureFromEntry ( $contentPath , $im ,$entries , $x , $y );
 				}
 			}
 			else
@@ -525,20 +525,20 @@ return array($genericWidget, $myspaceWidget);
 			// add the clapper image on top
 
 
-			$clapper_path = kFile::fixPath( SF_ROOT_DIR.DIRECTORY_SEPARATOR.'web'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'mykaltura'.DIRECTORY_SEPARATOR.'productionicon.png' );
+			$clapper_path = vFile::fixPath( SF_ROOT_DIR.DIRECTORY_SEPARATOR.'web'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'myvidiun'.DIRECTORY_SEPARATOR.'productionicon.png' );
 			$clapperIm = imagecreatefrompng( $clapper_path );
 			imagecopyresampled($im, $clapperIm, ( 1.2 * self::DIM_X ) , (1.2 * self::DIM_Y), 0, 0, self::DIM_X ,self::DIM_Y , imagesx($clapperIm) , imagesy($clapperIm) );
 			imagedestroy($clapperIm);
 
-			$path = kFile::fixPath( $contentPath.$kshow->getTeamPicturePath() );
+			$path = vFile::fixPath( $contentPath.$vshow->getTeamPicturePath() );
 
-			kFile::fullMkdir($path);
+			vFile::fullMkdir($path);
 
 			imagepng($im, $path);
 			imagedestroy($im);
 
-			$kshow->setHasTeamImage ( true );
-			$kshow->save();
+			$vshow->setHasTeamImage ( true );
+			$vshow->save();
 		}
 		catch ( Exception $ex )
 		{
@@ -547,31 +547,31 @@ return array($genericWidget, $myspaceWidget);
 		}
 	}
 
-	public static function createTeam2Image ( $kshow_id )
+	public static function createTeam2Image ( $vshow_id )
 	{
 		try
 		{
-			$kshow = kshowPeer::retrieveByPK( $kshow_id );
-			if ( ! $kshow ) return NULL;
+			$vshow = vshowPeer::retrieveByPK( $vshow_id );
+			if ( ! $vshow ) return NULL;
 
 			$contentPath = myContentStorage::getFSContentRootPath() ;
 
-			// TODO - maybe start from some kaltura background - so if image is not full - still interesting
+			// TODO - maybe start from some vidiun background - so if image is not full - still interesting
 			$im = imagecreatetruecolor(24 * 7 - 1, 24  * 2 - 1);
 
-			$logo_path = kFile::fixPath( SF_ROOT_DIR.'/web/images/browse/contributorsBG.gif');
+			$logo_path = vFile::fixPath( SF_ROOT_DIR.'/web/images/browse/contributorsBG.gif');
 			$im = imagecreatefromgif( $logo_path );
 
-			// fetch as many different kusers as possible who contributed to the kshow
+			// fetch as many different vusers as possible who contributed to the vshow
 			// first entries will come up first
 			$c = new Criteria();
-			$c->add ( entryPeer::KSHOW_ID , $kshow_id );
+			$c->add ( entryPeer::VSHOW_ID , $vshow_id );
 			$c->add ( entryPeer::TYPE , entryType::MEDIA_CLIP, Criteria::EQUAL );
 			//$c->add ( entryPeer::PICTURE, null, Criteria::NOT_EQUAL );
 			$c->setLimit( 14 ); // we'll need 14 images of contributers
-			$c->addGroupByColumn(entryPeer::KUSER_ID);
+			$c->addGroupByColumn(entryPeer::VUSER_ID);
 			$c->addDescendingOrderByColumn ( entryPeer::CREATED_AT );
-			$entries = BaseentryPeer::doSelectJoinkuser( $c );
+			$entries = BaseentryPeer::doSelectJoinvuser( $c );
 
 			if ( $entries == NULL || count ( $entries ) == 0 )
 			{
@@ -587,7 +587,7 @@ return array($genericWidget, $myspaceWidget);
 				for ( $y = 0 ; $y <= 1 ; ++$y )
 				for ( $x = 0 ; $x <= 6 ; ++ $x  )
 				{
-					self::addKuserPictureFromEntry ( $contentPath , $im ,$entries , $x , $y, 1, 24, 24 );
+					self::addVuserPictureFromEntry ( $contentPath , $im ,$entries , $x , $y, 1, 24, 24 );
 				}
 			}
 			else
@@ -596,15 +596,15 @@ return array($genericWidget, $myspaceWidget);
 			}
 
 
-			$path = kFile::fixPath( $contentPath.$kshow->getTeam2PicturePath() );
+			$path = vFile::fixPath( $contentPath.$vshow->getTeam2PicturePath() );
 
-			kFile::fullMkdir($path);
+			vFile::fullMkdir($path);
 
 			imagepng($im, $path);
 			imagedestroy($im);
 
-			$kshow->setHasTeamImage ( true );
-			$kshow->save();
+			$vshow->setHasTeamImage ( true );
+			$vshow->save();
 		}
 		catch ( Exception $ex )
 		{
@@ -613,7 +613,7 @@ return array($genericWidget, $myspaceWidget);
 		}
 	}
 
-	private static function addKuserPictureFromEntry ( $contentPath , $im , &$entries , $x , $y , $border = 1, $width = self::DIM_X, $height = self::DIM_Y)
+	private static function addVuserPictureFromEntry ( $contentPath , $im , &$entries , $x , $y , $border = 1, $width = self::DIM_X, $height = self::DIM_Y)
 	{
 		$entry = current ($entries );
 
@@ -626,117 +626,117 @@ return array($genericWidget, $myspaceWidget);
 			reset ( $entries );
 			$entry = current ($entries );
 		}
-		$kuser =  $entry->getKuser();
-		$kuser_image_path = kFile::fixPath(  $contentPath . $kuser->getPicturePath () );
+		$vuser =  $entry->getVuser();
+		$vuser_image_path = vFile::fixPath(  $contentPath . $vuser->getPicturePath () );
 
-		if (file_exists($kuser_image_path))
+		if (file_exists($vuser_image_path))
 		{
-			list($sourcewidth, $sourceheight, $type, $attr, $kuserIm ) = myFileConverter::createImageByFile( $kuser_image_path );
+			list($sourcewidth, $sourceheight, $type, $attr, $vuserIm ) = myFileConverter::createImageByFile( $vuser_image_path );
 
-			if ($kuserIm)
+			if ($vuserIm)
 			{
-				$kuserIm_x = imagesx($kuserIm);
-				$kuserIm_y = imagesy($kuserIm);
+				$vuserIm_x = imagesx($vuserIm);
+				$vuserIm_y = imagesy($vuserIm);
 				// focus on the ceter of the image - ignore 10% from each side to make the center bigger
-				imagecopyresampled($im, $kuserIm, $width * $x , $height * $y, $kuserIm_x * 0.1 , $kuserIm_y * 0.1 , $width - $border  ,$height - $border, $kuserIm_x * 0.9  , $kuserIm_y * 0.9 );
-				imagedestroy($kuserIm);
+				imagecopyresampled($im, $vuserIm, $width * $x , $height * $y, $vuserIm_x * 0.1 , $vuserIm_y * 0.1 , $width - $border  ,$height - $border, $vuserIm_x * 0.9  , $vuserIm_y * 0.9 );
+				imagedestroy($vuserIm);
 			}
 		}
 		next ( $entries );
 	}
 
-	public static function isSubscribed($kshow_id, $kuser_id, $subscription_type = null)
+	public static function isSubscribed($vshow_id, $vuser_id, $subscription_type = null)
 	{
 		$c = new Criteria ();
-		$c->add ( KshowKuserPeer::KSHOW_ID , $kshow_id);
-		$c->add ( KshowKuserPeer::KUSER_ID , $kuser_id);
+		$c->add ( VshowVuserPeer::VSHOW_ID , $vshow_id);
+		$c->add ( VshowVuserPeer::VUSER_ID , $vuser_id);
 
 		if ($subscription_type !== null)
-		$c->add ( KshowKuserPeer::SUBSCRIPTION_TYPE, $subscription_type );
+		$c->add ( VshowVuserPeer::SUBSCRIPTION_TYPE, $subscription_type );
 
-		return KshowKuserPeer::doSelectOne( $c );
+		return VshowVuserPeer::doSelectOne( $c );
 	}
 
-	public static function subscribe($kshow_id, $kuser_id, &$message)
+	public static function subscribe($vshow_id, $vuser_id, &$message)
 	{
 		// first check if user already subscribed to this show
-		$kshowKuser = self::isSubscribed($kshow_id, $kuser_id);
-		if ( $kshowKuser != NULL )
+		$vshowVuser = self::isSubscribed($vshow_id, $vuser_id);
+		if ( $vshowVuser != NULL )
 		{
-			$message = "You are already subscribed to this Kaltura";
+			$message = "You are already subscribed to this Vidiun";
 			return false;
 		}
 
-		$kshow = kshowPeer::retrieveByPK($kshow_id);
-		if (!$kshow)
+		$vshow = vshowPeer::retrieveByPK($vshow_id);
+		if (!$vshow)
 		{
-			$message = "Kaltura $kshow_id doesn't exist";
+			$message = "Vidiun $vshow_id doesn't exist";
 			return false;
 		}
 
-		$kuser = kuserPeer::retrieveByPK($kuser_id);
-		if (!$kuser)
+		$vuser = vuserPeer::retrieveByPK($vuser_id);
+		if (!$vuser)
 		{
-			$message = "User $kuser_id doesn't exist";
+			$message = "User $vuser_id doesn't exist";
 			return false;
 		}
 
-		$showname = $kshow->getName();
-		$subscriberscreenname = $kuser->getScreenName();
+		$showname = $vshow->getName();
+		$subscriberscreenname = $vuser->getScreenName();
 
 		// subscribe
-		$kshowKuser = new KshowKuser();
-		$kshowKuser->setKshowId($kshow_id);
-		$kshowKuser->setKuserId($kuser_id);
-		$kshowKuser->setSubscriptionType(KshowKuser::KSHOW_SUBSCRIPTION_NORMAL);
-		// alert:: KALTURAS_PRODUCED_ALERT_TYPE_SUBSCRIBER_ADDED
-		$kshowKuser->setAlertType(21);
-		$kshowKuser->save();
+		$vshowVuser = new VshowVuser();
+		$vshowVuser->setVshowId($vshow_id);
+		$vshowVuser->setVuserId($vuser_id);
+		$vshowVuser->setSubscriptionType(VshowVuser::VSHOW_SUBSCRIPTION_NORMAL);
+		// alert:: VIDIUNS_PRODUCED_ALERT_TYPE_SUBSCRIBER_ADDED
+		$vshowVuser->setAlertType(21);
+		$vshowVuser->save();
 
 		$message = "You are now subscribed to $showname. You can receive updates and join the discussion.";
 		return true;
 	}
 
-	public static function unsubscribe( $kshow_id, $kuser_id, &$message )
+	public static function unsubscribe( $vshow_id, $vuser_id, &$message )
 	{
 		// first check if user already subscribed to this show
-		$kshowKuser = self::isSubscribed($kshow_id, $kuser_id, KshowKuser::KSHOW_SUBSCRIPTION_NORMAL);
+		$vshowVuser = self::isSubscribed($vshow_id, $vuser_id, VshowVuser::VSHOW_SUBSCRIPTION_NORMAL);
 
-		if ( !$kshowKuser )
+		if ( !$vshowVuser )
 		{
-			$kshow = kshowPeer::retrieveByPK($kshow_id);
-			if (!$kshow)
+			$vshow = vshowPeer::retrieveByPK($vshow_id);
+			if (!$vshow)
 			{
-				$message = "Kaltura $kshow_id doesn't exist.";
+				$message = "Vidiun $vshow_id doesn't exist.";
 			}
 			else
 			{
-				$kuser = kuserPeer::retrieveByPK($kuser_id);
-				if (!$kuser)
+				$vuser = vuserPeer::retrieveByPK($vuser_id);
+				if (!$vuser)
 				{
-					$message = "User $kuser_id doesn't exist.";
+					$message = "User $vuser_id doesn't exist.";
 				}
 				else
-				$message = "Error - You are not subscribed to this Kaltura.";
+				$message = "Error - You are not subscribed to this Vidiun.";
 			}
 
 			return false;
 		}
 
 		// ok, we found he entry, so delete it.
-		$kshowKuser->delete();
-		$message = "You have unsubscribed from this Kaltura.";
+		$vshowVuser->delete();
+		$message = "You have unsubscribed from this Vidiun.";
 		return true;
 	}
 
-	public static function canEditKshow ( $kshow_id , $existing_kshow , $likuser_id )
+	public static function canEditVshow ( $vshow_id , $existing_vshow , $livuser_id )
 	{
-		if ( $existing_kshow == NULL )
+		if ( $existing_vshow == NULL )
 		{
 			// TODO - some good error -
 			// TODO - let's make a list of all errors we encounter and see how we use the I18N and built-in configuration mechanism to maintain the list
 			// and later on translate the errors.
-			// ERROR::fatal ( 12345 , "Kshow with id [" .  $kshow_id . "] does not exist in the system. This is either an innocent mistake or you are a wicked bastard" );
+			// ERROR::fatal ( 12345 , "Vshow with id [" .  $vshow_id . "] does not exist in the system. This is either an innocent mistake or you are a wicked bastard" );
 			// TODO - think of our policy - what do we do if we notice what looks like an attemp to harm the system ?
 			// because the system is not stable, mistakes like this one might very possibly be innocent, but later on - what should happen in XSS / SQL injection /
 			// attemp to insert malformed data ?
@@ -744,11 +744,11 @@ return array($genericWidget, $myspaceWidget);
 			return false;
 		}
 
-		// make sure the logged-in user is allowed to access this kshow in 2 aspects:
+		// make sure the logged-in user is allowed to access this vshow in 2 aspects:
 		// 1. - it is produced by him or a template
-		if ( $existing_kshow->getProducerId() != $likuser_id )
+		if ( $existing_vshow->getProducerId() != $livuser_id )
 		{
-			//ERROR::fatal ( 10101 , "User (with id [" . $likuser_id . "] is attempting to modify a kshow with id [$kshow_id] that does not belong to him (producer_id [" . $existing_kshow->getProducerId() . "] !!" );
+			//ERROR::fatal ( 10101 , "User (with id [" . $livuser_id . "] is attempting to modify a vshow with id [$vshow_id] that does not belong to him (producer_id [" . $existing_vshow->getProducerId() . "] !!" );
 
 			return false;
 		}
@@ -756,108 +756,108 @@ return array($genericWidget, $myspaceWidget);
 		return true;
 	}
 
-	public static function fromatPermissionText ( $kshow_id , $kshow = null )
+	public static function fromatPermissionText ( $vshow_id , $vshow = null )
 	{
-		if ( $kshow == NULL )
+		if ( $vshow == NULL )
 		{
-			$kshow = kshowPeer::retrieveByPK ( $kshow_id );
+			$vshow = vshowPeer::retrieveByPK ( $vshow_id );
 		}
 
-		if ( !$kshow )
+		if ( !$vshow )
 		{
 			// ERROR !
 			return "";
 		}
 
-		$pwd_permissions = $kshow->getViewPermissions() == kshow::KSHOW_PERMISSION_INVITE_ONLY ||
-		$kshow->getEditPermissions() == kshow::KSHOW_PERMISSION_INVITE_ONLY ||
-		$kshow->getContribPermissions() == kshow::KSHOW_PERMISSION_INVITE_ONLY;
+		$pwd_permissions = $vshow->getViewPermissions() == vshow::VSHOW_PERMISSION_INVITE_ONLY ||
+		$vshow->getEditPermissions() == vshow::VSHOW_PERMISSION_INVITE_ONLY ||
+		$vshow->getContribPermissions() == vshow::VSHOW_PERMISSION_INVITE_ONLY;
 
 		// no password protection
 		if ( ! $pwd_permissions ) return "";
 
 
 		$str =
-		( $kshow->getViewPermissions() == kshow::KSHOW_PERMISSION_INVITE_ONLY ? "View password " . $kshow->getViewPassword() . " " : "") .
-		( $kshow->getContribPermissions() == kshow::KSHOW_PERMISSION_INVITE_ONLY ? "Contribute password " . $kshow->getContribPassword() . " " : "") .
-		( $kshow->getEditPermissions() == kshow::KSHOW_PERMISSION_INVITE_ONLY ? "Edit password " . $kshow->getEditPassword() . " " : "") ;
+		( $vshow->getViewPermissions() == vshow::VSHOW_PERMISSION_INVITE_ONLY ? "View password " . $vshow->getViewPassword() . " " : "") .
+		( $vshow->getContribPermissions() == vshow::VSHOW_PERMISSION_INVITE_ONLY ? "Contribute password " . $vshow->getContribPassword() . " " : "") .
+		( $vshow->getEditPermissions() == vshow::VSHOW_PERMISSION_INVITE_ONLY ? "Edit password " . $vshow->getEditPassword() . " " : "") ;
 
 		return $str;
 	}
 
-	public static function getViewerType($kshow, $kuserId)
+	public static function getViewerType($vshow, $vuserId)
 	{
-		$viewerType = KshowKuser::KSHOWKUSER_VIEWER_USER; // viewer
-		if ($kuserId)
+		$viewerType = VshowVuser::VSHOWVUSER_VIEWER_USER; // viewer
+		if ($vuserId)
 		{
-			if ($kshow->getProducerId() == $kuserId) {
-				$viewerType = KshowKuser::KSHOWKUSER_VIEWER_PRODUCER; // producer
+			if ($vshow->getProducerId() == $vuserId) {
+				$viewerType = VshowVuser::VSHOWVUSER_VIEWER_PRODUCER; // producer
 			}
 			else
 			{
-				if (myKshowUtils::isSubscribed($kshow->getId(), $kuserId))
-				$viewerType = KshowKuser::KSHOWKUSER_VIEWER_SUBSCRIBER; // subscriber;
+				if (myVshowUtils::isSubscribed($vshow->getId(), $vuserId))
+				$viewerType = VshowVuser::VSHOWVUSER_VIEWER_SUBSCRIBER; // subscriber;
 			}
 		}
 
 		return $viewerType;
 	}
 
-	private static function resetKshowStats ( $target_kshow , $reset_entry_stats = false )
+	private static function resetVshowStats ( $target_vshow , $reset_entry_stats = false )
 	{
 		// set all statistics to 0
-		$target_kshow->setComments ( 0 );
-		$target_kshow->setRank ( 0 );
-		$target_kshow->setViews ( 0 );
-		$target_kshow->setVotes ( 0 );
-		$target_kshow->setFavorites ( 0 );
+		$target_vshow->setComments ( 0 );
+		$target_vshow->setRank ( 0 );
+		$target_vshow->setViews ( 0 );
+		$target_vshow->setVotes ( 0 );
+		$target_vshow->setFavorites ( 0 );
 		if ( $reset_entry_stats )
 		{
-			$target_kshow->setEntries ( 0 );
-			$target_kshow->setContributors ( 0 );
+			$target_vshow->setEntries ( 0 );
+			$target_vshow->setContributors ( 0 );
 		}
-		$target_kshow->setSubscribers ( 0 );
-		$target_kshow->setNumberOfUpdates ( 0 );
+		$target_vshow->setSubscribers ( 0 );
+		$target_vshow->setNumberOfUpdates ( 0 );
 
-		$target_kshow->setCreatedAt( time() );
-		$target_kshow->setUpdatedAt( time() );
+		$target_vshow->setCreatedAt( time() );
+		$target_vshow->setUpdatedAt( time() );
 
 	}
 
-	public static function shalowCloneById ( $source_kshow_id , $new_prodcuer_id )
+	public static function shalowCloneById ( $source_vshow_id , $new_prodcuer_id )
 	{
-		$kshow = kshowPeer::retrieveByPK( $source_kshow_id );
-		if ( $kshow ) return self::shalowClone( $kshow , $new_prodcuer_id );
+		$vshow = vshowPeer::retrieveByPK( $source_vshow_id );
+		if ( $vshow ) return self::shalowClone( $vshow , $new_prodcuer_id );
 		else NULL;
 	}
 
-	public static function shalowClone ( kshow $source_kshow , $new_prodcuer_id )
+	public static function shalowClone ( vshow $source_vshow , $new_prodcuer_id )
 	{
-		$target_kshow = $source_kshow->copy();
+		$target_vshow = $source_vshow->copy();
 
-		$target_kshow->setProducerId( $new_prodcuer_id ) ;
+		$target_vshow->setProducerId( $new_prodcuer_id ) ;
 
-		$target_kshow->save();
+		$target_vshow->save();
 
-		self::resetKshowStats( $target_kshow , true );
-		if (!$source_kshow->getEpisodeId())
-			$target_kshow->setEpisodeId( $source_kshow->getId());
-		//$target_kshow->setHasRoughcut($source_kshow->getHasRoughcut());
+		self::resetVshowStats( $target_vshow , true );
+		if (!$source_vshow->getEpisodeId())
+			$target_vshow->setEpisodeId( $source_vshow->getId());
+		//$target_vshow->setHasRoughcut($source_vshow->getHasRoughcut());
 
-		$target_show_entry = $target_kshow->createEntry ( entry::ENTRY_MEDIA_TYPE_SHOW , $new_prodcuer_id );
+		$target_show_entry = $target_vshow->createEntry ( entry::ENTRY_MEDIA_TYPE_SHOW , $new_prodcuer_id );
 
 		$content = myContentStorage::getFSContentRootPath();
-		$source_thumbnail_path = $source_kshow->getThumbnailPath();
-		$target_kshow->setThumbnail ( null );
-		$target_kshow->setThumbnail ( $source_kshow->getThumbnail() );
-		$target_thumbnail_path = $target_kshow->getThumbnailPath();
+		$source_thumbnail_path = $source_vshow->getThumbnailPath();
+		$target_vshow->setThumbnail ( null );
+		$target_vshow->setThumbnail ( $source_vshow->getThumbnail() );
+		$target_thumbnail_path = $target_vshow->getThumbnailPath();
 
 //		myContentStorage::moveFile( $content . $source_thumbnail_path , $content . $target_thumbnail_path , false , true );
 
-		$target_kshow->save();
+		$target_vshow->save();
 
 		// copy the show_entry file content
-		$source_show_entry = entryPeer::retrieveByPK( $source_kshow->getShowEntryId() );
+		$source_show_entry = entryPeer::retrieveByPK( $source_vshow->getShowEntryId() );
 
 		$source_show_entry_data_key = $source_show_entry->getSyncKey(entry::FILE_SYNC_ENTRY_SUB_TYPE_DATA);
 		$target_show_entry->setData ( null );
@@ -867,53 +867,53 @@ return array($genericWidget, $myspaceWidget);
 		$target_show_entry->setName ( $source_show_entry->getName() );
 		$target_show_entry->setLengthInMsecs( $source_show_entry->getLengthInMsecs() );
 		
-		kFileSyncUtils::softCopy($source_show_entry_data_key, $target_show_entry_data_key);
+		vFileSyncUtils::softCopy($source_show_entry_data_key, $target_show_entry_data_key);
 		//myContentStorage::moveFile( $content . $source_show_entry_path , $content . $target_show_entry_path , false , true );
 
 		myEntryUtils::createThumbnail($target_show_entry, $source_show_entry, true);
 		
-//		$target_kshow->setHasRoughcut(true);
-//		$target_kshow->save();
+//		$target_vshow->setHasRoughcut(true);
+//		$target_vshow->save();
 		
 		$target_show_entry->save();
 
-		return $target_kshow;
+		return $target_vshow;
 	}
 
 
-	// use the entry's thumbnail as this kshow's thumbnail
-	public static function updateThumbnail ( $kshow , entry $entry , $should_force = false )
+	// use the entry's thumbnail as this vshow's thumbnail
+	public static function updateThumbnail ( $vshow , entry $entry , $should_force = false )
 	{
 		// We don't want to copy thumbnails of entries that are not ready - they are bad and will later be replaced anyway
 		if ( $entry->getThumbnail() != null && $entry->isReady() )
 		{
-			$show_entry = $kshow->getShowEntry();
+			$show_entry = $vshow->getShowEntry();
 			return myEntryUtils::createThumbnail ( $show_entry , $entry , $should_force );
 		}
 		return false;
 	}
 
 
-	public static function getKshowAndEntry ( &$kshow_id , &$entry_id )
+	public static function getVshowAndEntry ( &$vshow_id , &$entry_id )
 	{
 		$error = null;
-		$kshow = null;
+		$vshow = null;
 		$entry = null;
 		$error_obj = null;
 		if ( $entry_id == NULL || $entry_id == "-1" )
 		{
-			if ($kshow_id)
+			if ($vshow_id)
 			{
-				$kshow = kshowPeer::retrieveByPK( $kshow_id );
-				if ( ! $kshow )
+				$vshow = vshowPeer::retrieveByPK( $vshow_id );
+				if ( ! $vshow )
 				{
-					$error =  APIErrors::INVALID_KSHOW_ID; // "kshow [$kshow_id] does not exist";
-					$error_obj = array ( $error , $kshow_id  );
+					$error =  APIErrors::INVALID_VSHOW_ID; // "vshow [$vshow_id] does not exist";
+					$error_obj = array ( $error , $vshow_id  );
 				}
 				else
 				{
-					$entry_id = $kshow->getShowEntryId();
-					$entry = $kshow->getShowEntry();
+					$entry_id = $vshow->getShowEntryId();
+					$entry = $vshow->getShowEntry();
 				}
 			}
 		}
@@ -922,8 +922,8 @@ return array($genericWidget, $myspaceWidget);
 			$entry = entryPeer::retrieveByPK($entry_id);
 			if ( $entry )
 			{
-				$kshow = @$entry->getKshow();
-				$kshow_id = $entry->getKshowId();
+				$vshow = @$entry->getVshow();
+				$vshow_id = $entry->getVshowId();
 			}
 		}
 
@@ -933,19 +933,19 @@ return array($genericWidget, $myspaceWidget);
 			$error_obj = array ( $error , "entry" , $entry_id  );
 		}
 
-		return array ( $kshow , $entry , $error , $error_obj );
+		return array ( $vshow , $entry , $error , $error_obj );
 	}
 
 	/*
 	 * @param unknown_type $generic_id
-	 * A generic_id is a strgin starting with w- or k- or e-
+	 * A generic_id is a strgin starting with w- or v- or e-
 	 * then comes the real id -
 	 * 	w- a widget id which is a 32 character md5 string
-	 *  k- a kshow id which is an integer
+	 *  v- a vshow id which is an integer
 	 *  e- an entry id which is an integer
 	 */
 // TODO - cache the ids !!!
-	public static function getWidgetKshowEntryFromGenericId( $generic_id )
+	public static function getWidgetVshowEntryFromGenericId( $generic_id )
 	{
 		if ( $generic_id == null )
 			return null;
@@ -953,29 +953,29 @@ return array($genericWidget, $myspaceWidget);
 		if ( $prefix == "w-" )
 		{
 			$id = substr ( $generic_id , 2 ); // the rest of the string
-			$widget = widgetPeer::retrieveByPK( $id , null , widgetPeer::WIDGET_PEER_JOIN_ENTRY +  widgetPeer::WIDGET_PEER_JOIN_KSHOW ) ;
+			$widget = widgetPeer::retrieveByPK( $id , null , widgetPeer::WIDGET_PEER_JOIN_ENTRY +  widgetPeer::WIDGET_PEER_JOIN_VSHOW ) ;
 			if ( ! $widget )
 				return null;
-			$kshow = $widget->getKshow();
+			$vshow = $widget->getVshow();
 			$entry = $widget->getEntry();
 
-			return array ( $widget , $kshow , $entry );
+			return array ( $widget , $vshow , $entry );
 		}
-		elseif ( $prefix == "k-" )
+		elseif ( $prefix == "v-" )
 		{
 			$entryId = -1;
 			$id = substr ( $generic_id , 2 ); // the rest of the string
-			list ( $kshow , $entry , $error ) = self::getKshowAndEntry ( $id , $entryId );
+			list ( $vshow , $entry , $error ) = self::getVshowAndEntry ( $id , $entryId );
 			if ( $error )	return null;
-			return array ( null , $kshow , $entry );
+			return array ( null , $vshow , $entry );
 		}
 		elseif ( $prefix == "e-" )
 		{
-			$kShowId = -1;
+			$vShowId = -1;
 			$id = substr ( $generic_id , 2 ); // the rest of the string
-			list ( $kshow , $entry , $error ) = self::getKshowAndEntry ( $kShowId , $id );
+			list ( $vshow , $entry , $error ) = self::getVshowAndEntry ( $vShowId , $id );
 			if ( $error )	return null;
-			return array ( null , $kshow , $entry );
+			return array ( null , $vshow , $entry );
 		}
 		else
 		{
@@ -985,28 +985,28 @@ return array($genericWidget, $myspaceWidget);
 	}
 
 	/**
-	 * Will search for a kshow for the specific partner & key.
-	 * The key can be combined from the kuser_id and the group_id
+	 * Will search for a vshow for the specific partner & key.
+	 * The key can be combined from the vuser_id and the group_id
 	 * If not found - will create one
-	 * If both the kuser_id & group_id are null - always create one
+	 * If both the vuser_id & group_id are null - always create one
 	 */
-	public static function getDefaultKshow ( $partner_id , $subp_id, $puser_kuser , $group_id = null , $allow_quick_edit = null , $create_anyway = false , $default_name = null )
+	public static function getDefaultVshow ( $partner_id , $subp_id, $puser_vuser , $group_id = null , $allow_quick_edit = null , $create_anyway = false , $default_name = null )
 	{
-		$kuser_id = null;
-		// make sure puser_kuser object exists so function will not exit with FATAL
-		if($puser_kuser)
+		$vuser_id = null;
+		// make sure puser_vuser object exists so function will not exit with FATAL
+		if($puser_vuser)
 		{
-			$kuser_id = $puser_kuser->getKuserId();
+			$vuser_id = $puser_vuser->getVuserId();
 		}
-		$key = $group_id != null ? $group_id : $kuser_id;
+		$key = $group_id != null ? $group_id : $vuser_id;
 		if ( !$create_anyway )
 		{
 			$c = new Criteria();
-			myCriteria::addComment( $c , "myKshowUtils::getDefaultKshow");
-			$c->add ( kshowPeer::GROUP_ID , $key );
-			$kshow = kshowPeer::doSelectOne( $c );
-			if ( $kshow ) return $kshow;
-					// no kshow - create using the service
+			myCriteria::addComment( $c , "myVshowUtils::getDefaultVshow");
+			$c->add ( vshowPeer::GROUP_ID , $key );
+			$vshow = vshowPeer::doSelectOne( $c );
+			if ( $vshow ) return $vshow;
+					// no vshow - create using the service
 			$name = "{$key}'s generated show'";
 		}
 		else
@@ -1017,38 +1017,38 @@ return array($genericWidget, $myspaceWidget);
 		if	( $default_name ) 
 			$name = $default_name;
 		
-		$extra_params = array ( "kshow_groupId" => $key , "kshow_allowQuickEdit" => $allow_quick_edit ); // set the groupId with the key so we'll find it next time round
-		$kshow = myPartnerServicesClient::createKshow ( "" , $puser_kuser->getPuserId() , $name , $partner_id , $subp_id , $extra_params );
+		$extra_params = array ( "vshow_groupId" => $key , "vshow_allowQuickEdit" => $allow_quick_edit ); // set the groupId with the key so we'll find it next time round
+		$vshow = myPartnerServicesClient::createVshow ( "" , $puser_vuser->getPuserId() , $name , $partner_id , $subp_id , $extra_params );
 		
-		return $kshow;
+		return $vshow;
 	}
 	
-	public static function getKshowFromPartnerPolicy ( $partner_id, $subp_id , $puser_kuser , $kshow_id , $entry )
+	public static function getVshowFromPartnerPolicy ( $partner_id, $subp_id , $puser_vuser , $vshow_id , $entry )
 	{
-	    if ( $kshow_id == kshow::KSHOW_ID_USE_DEFAULT )
+	    if ( $vshow_id == vshow::VSHOW_ID_USE_DEFAULT )
         {
-            // see if the partner has some default kshow to add to
-            $kshow = myPartnerUtils::getDefaultKshow ( $partner_id, $subp_id , $puser_kuser  );
-            if ( $kshow ) $kshow_id = $kshow->getId();
+            // see if the partner has some default vshow to add to
+            $vshow = myPartnerUtils::getDefaultVshow ( $partner_id, $subp_id , $puser_vuser  );
+            if ( $vshow ) $vshow_id = $vshow->getId();
         }
-		elseif ( $kshow_id == kshow::KSHOW_ID_CREATE_NEW )
+		elseif ( $vshow_id == vshow::VSHOW_ID_CREATE_NEW )
         {
-            // if the partner allows - create a new kshow 
-            $kshow = myPartnerUtils::getDefaultKshow ( $partner_id, $subp_id , $puser_kuser , null , true );
-            if ( $kshow ) $kshow_id = $kshow->getId();
+            // if the partner allows - create a new vshow 
+            $vshow = myPartnerUtils::getDefaultVshow ( $partner_id, $subp_id , $puser_vuser , null , true );
+            if ( $vshow ) $vshow_id = $vshow->getId();
         }   
 		else
         {
-            $kshow = kshowPeer::retrieveByPK( $kshow_id );
+            $vshow = vshowPeer::retrieveByPK( $vshow_id );
         }
 
-        if ( ! $kshow )
+        if ( ! $vshow )
         {
-            // the partner is attempting to add an entry to some invalid or non-existing kwho
-            $this->addError( APIErrors::INVALID_KSHOW_ID, $kshow_id );
+            // the partner is attempting to add an entry to some invalid or non-existing vwho
+            $this->addError( APIErrors::INVALID_VSHOW_ID, $vshow_id );
             return;
         }	
-        return $kshow;	
+        return $vshow;	
 	}	
 }
 ?>

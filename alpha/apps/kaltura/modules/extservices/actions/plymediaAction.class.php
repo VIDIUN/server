@@ -3,7 +3,7 @@
  * @package    Core
  * @subpackage externalServices
  */
-class plymediaAction extends kalturaAction
+class plymediaAction extends vidiunAction
 {
 	public function execute()
 	{
@@ -24,10 +24,10 @@ class plymediaAction extends kalturaAction
 			}
 			else
 			{
-				$kshow = kshowPeer::retrieveByPK( $id );
-				if ( $kshow )
+				$vshow = vshowPeer::retrieveByPK( $id );
+				if ( $vshow )
 				{
-					return $this->renderText( self::renderEntry ( $kshow->getShowEntryId() ) );
+					return $this->renderText( self::renderEntry ( $vshow->getShowEntryId() ) );
 				}
 			}
 		}

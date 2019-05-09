@@ -3,81 +3,81 @@
  * @package plugins.businessProcessNotification
  * @subpackage Scheduler
  */
-class KDispatchBusinessProcessNotificationEngine extends KDispatchEventNotificationEngine
+class VDispatchBusinessProcessNotificationEngine extends VDispatchEventNotificationEngine
 {
 	/**
-	 * @param KalturaBusinessProcessServer $server
-	 * @return kBusinessProcessProvider
+	 * @param VidiunBusinessProcessServer $server
+	 * @return vBusinessProcessProvider
 	 */
-	public function getBusinessProcessProvider(KalturaBusinessProcessServer $server)
+	public function getBusinessProcessProvider(VidiunBusinessProcessServer $server)
 	{
-		$provider = kBusinessProcessProvider::get($server);
+		$provider = vBusinessProcessProvider::get($server);
 		$provider->enableDebug(true);
 		
 		return $provider;
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KDispatchEventNotificationEngine::dispatch()
+	 * @see VDispatchEventNotificationEngine::dispatch()
 	 */
-	public function dispatch(KalturaEventNotificationTemplate $eventNotificationTemplate, KalturaEventNotificationDispatchJobData &$data)
+	public function dispatch(VidiunEventNotificationTemplate $eventNotificationTemplate, VidiunEventNotificationDispatchJobData &$data)
 	{
-		$job = KJobHandlerWorker::getCurrentJob();
+		$job = VJobHandlerWorker::getCurrentJob();
 	
 		$variables = array();
 		if(is_array($data->contentParameters) && count($data->contentParameters))
 		{
 			foreach($data->contentParameters as $contentParameter)
 			{
-				/* @var $contentParameter KalturaKeyValue */
+				/* @var $contentParameter VidiunKeyValue */
 				$variables[$contentParameter->key] = $contentParameter->value;
 			}		
 		}
 		
 		switch ($job->jobSubType)
 		{
-			case KalturaEventNotificationTemplateType::BPM_START:
+			case VidiunEventNotificationTemplateType::BPM_START:
 				return $this->startBusinessProcess($eventNotificationTemplate, $data, $variables);
 				
-			case KalturaEventNotificationTemplateType::BPM_SIGNAL:
+			case VidiunEventNotificationTemplateType::BPM_SIGNAL:
 				return $this->signalCase($eventNotificationTemplate, $data, $variables);
 				
-			case KalturaEventNotificationTemplateType::BPM_ABORT:
+			case VidiunEventNotificationTemplateType::BPM_ABORT:
 				return $this->abortCase($eventNotificationTemplate, $data);
 		}
 	}
 
 	/**
-	 * @param KalturaBusinessProcessStartNotificationTemplate $template
-	 * @param KalturaBusinessProcessNotificationDispatchJobData $data
+	 * @param VidiunBusinessProcessStartNotificationTemplate $template
+	 * @param VidiunBusinessProcessNotificationDispatchJobData $data
 	 */
-	public function startBusinessProcess(KalturaBusinessProcessStartNotificationTemplate $template, KalturaBusinessProcessNotificationDispatchJobData &$data, $variables)
+	public function startBusinessProcess(VidiunBusinessProcessStartNotificationTemplate $template, VidiunBusinessProcessNotificationDispatchJobData &$data, $variables)
 	{	
 		$provider = $this->getBusinessProcessProvider($data->server);
-		KalturaLog::info("Starting business-process [{$template->processId}] with variables [" . print_r($variables, true) . "]");
+		VidiunLog::info("Starting business-process [{$template->processId}] with variables [" . print_r($variables, true) . "]");
 		$data->caseId = $provider->startBusinessProcess($template->processId, $variables);
-		KalturaLog::info("Started business-process case [{$data->caseId}]");
+		VidiunLog::info("Started business-process case [{$data->caseId}]");
 	}
 
 	/**
-	 * @param KalturaBusinessProcessSignalNotificationTemplate $template
-	 * @param KalturaBusinessProcessNotificationDispatchJobData $data
+	 * @param VidiunBusinessProcessSignalNotificationTemplate $template
+	 * @param VidiunBusinessProcessNotificationDispatchJobData $data
 	 */
-	public function signalCase(KalturaBusinessProcessSignalNotificationTemplate $template, KalturaBusinessProcessNotificationDispatchJobData &$data, $variables)
+	public function signalCase(VidiunBusinessProcessSignalNotificationTemplate $template, VidiunBusinessProcessNotificationDispatchJobData &$data, $variables)
 	{
 		$provider = $this->getBusinessProcessProvider($data->server);
-		KalturaLog::info("Signaling business-process [{$template->processId}] case [{$data->caseId}] with message [{$template->message}] on blocking event [{$template->eventId}]");
+		VidiunLog::info("Signaling business-process [{$template->processId}] case [{$data->caseId}] with message [{$template->message}] on blocking event [{$template->eventId}]");
 		$provider->signalCase($data->caseId, $template->eventId, $template->message, $variables);
 	}
 
 	/**
-	 * @param KalturaBusinessProcessStartNotificationTemplate $template
-	 * @param KalturaBusinessProcessNotificationDispatchJobData $data
+	 * @param VidiunBusinessProcessStartNotificationTemplate $template
+	 * @param VidiunBusinessProcessNotificationDispatchJobData $data
 	 */
-	public function abortCase(KalturaBusinessProcessAbortNotificationTemplate $template, KalturaBusinessProcessNotificationDispatchJobData &$data)
+	public function abortCase(VidiunBusinessProcessAbortNotificationTemplate $template, VidiunBusinessProcessNotificationDispatchJobData &$data)
 	{
 		$provider = $this->getBusinessProcessProvider($data->server);
-		KalturaLog::info("Aborting business-process [{$template->processId}] case [{$data->caseId}]");
+		VidiunLog::info("Aborting business-process [{$template->processId}] case [{$data->caseId}]");
 		$provider->abortCase($data->caseId);
 	}
 }

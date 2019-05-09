@@ -3,7 +3,7 @@
  * @package plugins.elasticSearch
  * @subpackage model.search
  */
-class kESearchBoolQuery extends kESearchCompoundQuery
+class vESearchBoolQuery extends vESearchCompoundQuery
 {
 
 	const BOOL_KEY = 'bool';
@@ -144,7 +144,7 @@ class kESearchBoolQuery extends kESearchCompoundQuery
 				$this->addToShould($query);
 				break;
 			default:
-				KalturaLog::log("Undefined bool operator in kESearchBoolQuery[".$boolOperator."]");
+				VidiunLog::log("Undefined bool operator in vESearchBoolQuery[".$boolOperator."]");
 		}
 	}
 

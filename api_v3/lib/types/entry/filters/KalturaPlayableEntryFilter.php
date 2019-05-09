@@ -3,14 +3,14 @@
  * @package api
  * @subpackage filters
  */
-class KalturaPlayableEntryFilter extends KalturaPlayableEntryBaseFilter
+class VidiunPlayableEntryFilter extends VidiunPlayableEntryBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaBaseEntryFilter::prepareEntriesCriteriaFilter()
+	 * @see VidiunBaseEntryFilter::prepareEntriesCriteriaFilter()
 	 * 
 	 * Convert duration in seconds to msecs (because the duration field is mapped to length_in_msec)
 	 */
-	public function prepareEntriesCriteriaFilter(KalturaFilterPager $pager = null)
+	public function prepareEntriesCriteriaFilter(VidiunFilterPager $pager = null)
 	{
 		if ($this->durationGreaterThan !== null)
 			$this->durationGreaterThan = $this->durationGreaterThan * 1000;
@@ -32,8 +32,8 @@ class KalturaPlayableEntryFilter extends KalturaPlayableEntryBaseFilter
 	public function __construct()
 	{
 		$typeArray = array (entryType::MEDIA_CLIP, entryType::MIX, entryType::LIVE_STREAM);
-		$typeArray = array_merge($typeArray, KalturaPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::MEDIA_CLIP));
-		$typeArray = array_merge($typeArray, KalturaPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::LIVE_STREAM));
+		$typeArray = array_merge($typeArray, VidiunPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::MEDIA_CLIP));
+		$typeArray = array_merge($typeArray, VidiunPluginManager::getExtendedTypes(entryPeer::OM_CLASS, entryType::LIVE_STREAM));
 		
 		$this->typeIn = implode(',', array_unique($typeArray));
 	}

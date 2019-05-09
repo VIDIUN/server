@@ -6,7 +6,7 @@
  * Date: 9/3/2015
  * Time: 10:49 AM
  */
-class kQuizPdf
+class vQuizPdf
 {
 	const ASIAN_FONT = 'AsianFont';
 	const NOTO_SANS_FONT = 'notoSansFont';
@@ -99,7 +99,7 @@ class kQuizPdf
 		$dbEntry = entryPeer::retrieveByPK($this->entryId);
 		$entryName = $dbEntry->getName();
 		$title = "Here are the questions from  [$entryName]";
-		KalturaLog::debug("Questions from  [$entryName]");
+		VidiunLog::debug("Questions from  [$entryName]");
 		$stylePrefix = $this->getStylePrefix($title);
 		$this->pdf->addTitle($title, $this->styles[$stylePrefix.self::TITLE_STYLE]);
 		$this->pdf->setOutFileName($dbEntry->getName());

@@ -3,6 +3,6 @@
  * @package plugins.dropFolder
  * @subpackage api.filters.enum
  */
-class KalturaScpDropFolderOrderBy extends KalturaSshDropFolderOrderBy
+class VidiunScpDropFolderOrderBy extends VidiunSshDropFolderOrderBy
 {
 }

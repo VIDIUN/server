@@ -5,11 +5,11 @@
  * @package api
  * @subpackage objects
  */
-class KalturaRemoteStorageResources extends KalturaContentResource
+class VidiunRemoteStorageResources extends VidiunContentResource
 {
 	/**
 	 * Array of remote stoage resources 
-	 * @var KalturaRemoteStorageResourceArray
+	 * @var VidiunRemoteStorageResourceArray
 	 */
 	public $resources;
 
@@ -19,7 +19,7 @@ class KalturaRemoteStorageResources extends KalturaContentResource
 	);
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects ( )
 	{
@@ -27,7 +27,7 @@ class KalturaRemoteStorageResources extends KalturaContentResource
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::validateForUsage($sourceObject, $propertiesToSkip)
+	 * @see VidiunObject::validateForUsage($sourceObject, $propertiesToSkip)
 	 */
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
@@ -37,19 +37,19 @@ class KalturaRemoteStorageResources extends KalturaContentResource
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($object_to_fill = null, $props_to_skip = array())
 	{
 		if(!$object_to_fill)
-			$object_to_fill = new kRemoteStorageResources();
+			$object_to_fill = new vRemoteStorageResources();
 		
 		$resources = array();
 		if($this->resources)
 		{
 			foreach($this->resources as $resource)
 			{
-				/* @var $resource KalturaRemoteStorageResource */
+				/* @var $resource VidiunRemoteStorageResource */
 				$resources[] = $resource->toObject();
 			}
 		}

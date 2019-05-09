@@ -92,13 +92,13 @@ class FacebookDistributionProfile extends ConfigurableDistributionProfile
 
 		if(!$validVideo)
 		{
-			KalturaLog::err("No valid video found for entry [" . $entryDistribution->getEntryId() . "]");
+			VidiunLog::err("No valid video found for entry [" . $entryDistribution->getEntryId() . "]");
 			$validationErrors[] = $this->createCustomValidationError($action, DistributionErrorType::INVALID_DATA, 'flavorAsset', ' No valid flavor found');
 		}
 
 		$allFieldValues = $this->getAllFieldValues($entryDistribution);
 		if (!$allFieldValues || !is_array($allFieldValues)) {
-			KalturaLog::err('Error getting field values from entry distribution id ['.$entryDistribution->getId().'] profile id ['.$this->getId().']');
+			VidiunLog::err('Error getting field values from entry distribution id ['.$entryDistribution->getId().'] profile id ['.$this->getId().']');
 			return $validationErrors;
 		}
 		if ($allFieldValues[FacebookDistributionField::SCHEDULE_PUBLISHING_TIME] &&
@@ -107,7 +107,7 @@ class FacebookDistributionProfile extends ConfigurableDistributionProfile
 				FacebookConstants::FACEBOOK_MIN_POSTPONE_POST_IN_SECONDS,
 				FacebookConstants::FACEBOOK_MAX_POSTPONE_POST_IN_SECONDS))
 		{
-			KalturaLog::err("Scheduled time to publish defies the facebook restriction of six minute to six months from now got".$allFieldValues[FacebookDistributionField::SCHEDULE_PUBLISHING_TIME]);
+			VidiunLog::err("Scheduled time to publish defies the facebook restriction of six minute to six months from now got".$allFieldValues[FacebookDistributionField::SCHEDULE_PUBLISHING_TIME]);
 			$validationErrors[] = $this->createCustomValidationError($action, DistributionErrorType::INVALID_DATA, 'sunrise', 'Distribution sunrise is invalid (should be 10 minutes to 6 months from now)');
 		}
 		$validationErrors = array_merge($validationErrors, $this->validateInListOrNull($inListOrNullFields, $allFieldValues, $action));
@@ -419,7 +419,7 @@ class FacebookDistributionProfile extends ConfigurableDistributionProfile
 		if ($this->getPageId())
 		{
 			$permissions = $this->getFacebookPermissions();
-			$url = kConf::get('apphome_url');
+			$url = vConf::get('apphome_url');
 			$url .= "/index.php/extservices/facebookoauth2".
 				"/".FacebookConstants::FACEBOOK_PARTNER_ID_REQUEST_PARAM."/".base64_encode($this->getPartnerId()).
 				"/".FacebookConstants::FACEBOOK_PROVIDER_ID_REQUEST_PARAM."/".base64_encode($this->getId()).
@@ -436,9 +436,9 @@ class FacebookDistributionProfile extends ConfigurableDistributionProfile
 	private function validateVideo(flavorAsset $flavorAsset)
 	{
 		$syncKey = $flavorAsset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-		if(kFileSyncUtils::fileSync_exists($syncKey))
+		if(vFileSyncUtils::fileSync_exists($syncKey))
 		{
-			$videoAssetFilePath = kFileSyncUtils::getLocalFilePathForKey($syncKey, false);
+			$videoAssetFilePath = vFileSyncUtils::getLocalFilePathForKey($syncKey, false);
 			$mediaInfo = mediaInfoPeer::retrieveByFlavorAssetId($flavorAsset->getId());
 			if(!$mediaInfo)
 				return false;
@@ -449,7 +449,7 @@ class FacebookDistributionProfile extends ConfigurableDistributionProfile
 			}
 			catch(Exception $e)
 			{
-				KalturaLog::debug('Asset ['.$flavorAsset->getId().'] not valid for distribution: '.$e->getMessage());
+				VidiunLog::debug('Asset ['.$flavorAsset->getId().'] not valid for distribution: '.$e->getMessage());
 			}
 		}
 		return false;

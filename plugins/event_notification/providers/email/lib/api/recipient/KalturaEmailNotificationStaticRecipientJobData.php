@@ -5,11 +5,11 @@
  * @package plugins.emailNotification
  * @subpackage model.data
  */
-class KalturaEmailNotificationStaticRecipientJobData extends KalturaEmailNotificationRecipientJobData
+class VidiunEmailNotificationStaticRecipientJobData extends VidiunEmailNotificationRecipientJobData
 {
 	/**
 	 * Email to emails and names
-	 * @var KalturaKeyValueArray
+	 * @var VidiunKeyValueArray
 	 */
 	public $emailRecipients;
 	
@@ -18,7 +18,7 @@ class KalturaEmailNotificationStaticRecipientJobData extends KalturaEmailNotific
 	);
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::getMapBetweenObjects()
+	 * @see VidiunObject::getMapBetweenObjects()
 	 */
 	public function getMapBetweenObjects()
 	{
@@ -26,32 +26,32 @@ class KalturaEmailNotificationStaticRecipientJobData extends KalturaEmailNotific
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaEmailNotificationRecipientJobData::setProviderType()
+	 * @see VidiunEmailNotificationRecipientJobData::setProviderType()
 	 */
 	protected function setProviderType() 
 	{
-		$this->providerType = KalturaEmailNotificationRecipientProviderType::STATIC_LIST;	
+		$this->providerType = VidiunEmailNotificationRecipientProviderType::STATIC_LIST;	
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaObject::fromObject($source_object)
+	 * @see VidiunObject::fromObject($source_object)
 	 */
-	public function doFromObject($dbObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public function doFromObject($dbObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		/* @var $dbObject kEmailNotificationStaticRecipientJobData */
+		/* @var $dbObject vEmailNotificationStaticRecipientJobData */
 		parent::doFromObject($dbObject, $responseProfile);
 		$this->setProviderType();
 		
-		$this->emailRecipients = KalturaKeyValueArray::fromKeyValueArray($dbObject->getEmailRecipients());
+		$this->emailRecipients = VidiunKeyValueArray::fromKeyValueArray($dbObject->getEmailRecipients());
 	}
 
 	/* (non-PHPdoc)
-	 * @see KalturaObject::toObject($object_to_fill, $props_to_skip)
+	 * @see VidiunObject::toObject($object_to_fill, $props_to_skip)
 	 */
 	public function toObject($dbObject = null, $propertiesToSkip = array())
 	{
 		if (is_null($dbObject))
-			$dbObject = new kEmailNotificationStaticRecipientJobData();
+			$dbObject = new vEmailNotificationStaticRecipientJobData();
 		
 		return parent::toObject($dbObject, $propertiesToSkip);
 	}

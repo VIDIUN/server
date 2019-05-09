@@ -3,7 +3,7 @@
  * @package infra
  * @subpackage log
  */
-class KalturaLog
+class VidiunLog
 {
 	private static $_logger;
 	private static $_initialized = false;
@@ -30,7 +30,7 @@ class KalturaLog
 	public static function getInstance ()
 	{
 		 if (!self::$_instance) 
-		 	self::$_instance = new KalturaLog();
+		 	self::$_instance = new VidiunLog();
 		 	
 		 return self::$_instance;
 	}
@@ -42,7 +42,7 @@ class KalturaLog
 		
 		self::$_enableTests = isset($config->enableTests) ? $config->enableTests : false;
 		
-		self::$_logger = KalturaLogFactory::getLogger($config);
+		self::$_logger = VidiunLogFactory::getLogger($config);
 		self::$_initialized = true;
 	}
 	
@@ -160,9 +160,9 @@ class KalturaLog
  * @package infra
  * @subpackage log
  */
-class KalturaStdoutLogger
+class VidiunStdoutLogger
 {
-	public function log($message, $priority = KalturaLog::NOTICE)
+	public function log($message, $priority = VidiunLog::NOTICE)
 	{
 		echo "[" . date('Y-m-d H:i:s') . "]$message\n";
 	}
@@ -172,9 +172,9 @@ class KalturaStdoutLogger
  * @package infra
  * @subpackage log
  */
-class KalturaNullLogger
+class VidiunNullLogger
 {
-        public function log($message, $priority = KalturaLog::NOTICE)
+        public function log($message, $priority = VidiunLog::NOTICE)
         {
         }
 }

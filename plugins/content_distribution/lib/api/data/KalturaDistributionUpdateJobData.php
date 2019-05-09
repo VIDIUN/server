@@ -3,6 +3,6 @@
  * @package plugins.contentDistribution
  * @subpackage api.objects
  */
-class KalturaDistributionUpdateJobData extends KalturaDistributionJobData
+class VidiunDistributionUpdateJobData extends VidiunDistributionJobData
 {
 }

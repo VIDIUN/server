@@ -3,15 +3,15 @@
  * @package Core
  * @subpackage model.data
  */
-class kPlaybackContext {
+class vPlaybackContext {
 
 	/**
-	 * @var array<kPlaybackSource>
+	 * @var array<vPlaybackSource>
 	 */
 	protected $sources;
 
 	/**
-	 * @var array<kPlaybackCaption>
+	 * @var array<vPlaybackCaption>
 	 */
 	protected $playbackCaptions;
 
@@ -22,19 +22,19 @@ class kPlaybackContext {
 
 	/**
 	 * Array of actions as received from the invalidated rules
-	 * @var array<kRuleAction>
+	 * @var array<vRuleAction>
 	 */
 	protected $actions;
 
 	/**
 	 * Array of actions as received from the invalidated rules
-	 * @var array<kAccessControlMessage>
+	 * @var array<vAccessControlMessage>
 	 */
 	protected $messages;
 
 
 	/**
-	 * @return array<kPlaybackSource>
+	 * @return array<vPlaybackSource>
 	 */
 	public function getSources()
 	{
@@ -98,7 +98,7 @@ class kPlaybackContext {
 	}
 
 	/**
-	 * @return array<kRuleAction>
+	 * @return array<vRuleAction>
 	 */
 	public function getActions()
 	{

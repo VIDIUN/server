@@ -3,17 +3,17 @@
  * @package api
  * @subpackage objects
  */
-class KalturaLiveChannelSegmentArray extends KalturaTypedArray
+class VidiunLiveChannelSegmentArray extends VidiunTypedArray
 {
-	public static function fromDbArray($arr, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function fromDbArray($arr, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$newArr = new KalturaLiveChannelSegmentArray();
+		$newArr = new VidiunLiveChannelSegmentArray();
 		if ($arr == null)
 			return $newArr;
 			
 		foreach ($arr as $obj)
 		{
-			$nObj = new KalturaLiveChannelSegment();
+			$nObj = new VidiunLiveChannelSegment();
 			$nObj->fromObject($obj, $responseProfile);
 			$newArr[] = $nObj;
 		}
@@ -23,6 +23,6 @@ class KalturaLiveChannelSegmentArray extends KalturaTypedArray
 		
 	public function __construct()
 	{
-		parent::__construct("KalturaLiveChannelSegment");	
+		parent::__construct("VidiunLiveChannelSegment");	
 	}
 }

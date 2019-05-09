@@ -4,15 +4,15 @@
  * @subpackage objects
  * @abstract
  */
-abstract class KalturaMatchCondition extends KalturaCondition
+abstract class VidiunMatchCondition extends VidiunCondition
 {
 	/**
-	 * @var KalturaStringValueArray
+	 * @var VidiunStringValueArray
 	 */
 	public $values;
 	
 	/**
-	 * @var KalturaMatchConditionType
+	 * @var VidiunMatchConditionType
 	 */
 	public $matchType;
 	

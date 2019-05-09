@@ -1,5 +1,5 @@
 <?php
-class kSoapClient extends SoapClient 
+class vSoapClient extends SoapClient 
 {
 
 	public function __construct($wsdl,$options=array())

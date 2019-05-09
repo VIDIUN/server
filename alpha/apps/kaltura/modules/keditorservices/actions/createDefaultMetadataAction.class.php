@@ -1,44 +1,44 @@
 <?php
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-require_once ( __DIR__ . "/defKeditorservicesAction.class.php");
+require_once ( __DIR__ . "/defVeditorservicesAction.class.php");
 
 /**
  * @package    Core
- * @subpackage kEditorServices
+ * @subpackage vEditorServices
  */
-class createDefaultMetadataAction extends defKeditorservicesAction
+class createDefaultMetadataAction extends defVeditorservicesAction
 {
 	/**
 	 * Executes index action
 	 */
-	protected function executeImpl( kshow $kshow, entry &$entry)
+	protected function executeImpl( vshow $vshow, entry &$entry)
 	{
 		$this->xml_content = ""; 
 
-		$kshow_id = $this->kshow_id;
-		if ( $kshow_id == NULL || $kshow_id == 0 )		return sfView::SUCCESS;
-		$metadata_creator = new myKshowMetadataCreator ();
+		$vshow_id = $this->vshow_id;
+		if ( $vshow_id == NULL || $vshow_id == 0 )		return sfView::SUCCESS;
+		$metadata_creator = new myVshowMetadataCreator ();
 
-		$this->show_metadata = $metadata_creator->createMetadata ( $kshow_id );
+		$this->show_metadata = $metadata_creator->createMetadata ( $vshow_id );
 
-//		$kshow = kshowPeer:retrieveByPK( $kshow_id );
-		$entry = entryPeer::retrieveByPK( $kshow->getShowEntryId() );
+//		$vshow = vshowPeer:retrieveByPK( $vshow_id );
+		$entry = entryPeer::retrieveByPK( $vshow->getShowEntryId() );
 
 
 		// TODO - this should never happen
 		if ( $entry == NULL )
 		{
 			// there is no show entry for this show !
-			$entry = $kshow->createEntry ( entry::ENTRY_MEDIA_TYPE_SHOW , $kshow->getProducerId() );
+			$entry = $vshow->createEntry ( entry::ENTRY_MEDIA_TYPE_SHOW , $vshow->getProducerId() );
 		}
 		
 		$file_path = $entry->getFullDataPath();
 
 		// check to see if the content of the file changed
-		$current_metadata = kFile::getFileContent( $file_path );
+		$current_metadata = vFile::getFileContent( $file_path );
 
 		$comp_result = strcmp ( $this->show_metadata , $current_metadata  );
 		if ( $comp_result != 0 )
@@ -48,7 +48,7 @@ class createDefaultMetadataAction extends defKeditorservicesAction
 			{
 				// this is for the first time - override the template path by setting the data to NULL
 				$entry->setData ( NULL );
-				$file_path = pathinfo($file_path, PATHINFO_DIRNAME) . "/" . kFile::getFileNameNoExtension ( $file_path ) . ".xml";
+				$file_path = pathinfo($file_path, PATHINFO_DIRNAME) . "/" . vFile::getFileNameNoExtension ( $file_path ) . ".xml";
 			}
 
 			// this will increment the name if needed
@@ -57,8 +57,8 @@ class createDefaultMetadataAction extends defKeditorservicesAction
 
 			$entry->save();
 
-			kFile::fullMkdir($file_path);
-			kFile::setFileContent( $file_path , $this->show_metadata );
+			vFile::fullMkdir($file_path);
+			vFile::setFileContent( $file_path , $this->show_metadata );
 			
 			$this->xml_content = $this->show_metadata;
 			
@@ -67,7 +67,7 @@ class createDefaultMetadataAction extends defKeditorservicesAction
 
 	}
 
-	protected function noSuchKshow ( $kshow_id )
+	protected function noSuchVshow ( $vshow_id )
 	{
 		$this->xml_content = "";
 	}

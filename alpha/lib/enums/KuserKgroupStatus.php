@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.enum
  */ 
-interface KuserKgroupStatus extends BaseEnum
+interface VuserVgroupStatus extends BaseEnum
 {
 	const ACTIVE = 0;
 	const DELETED = 1;

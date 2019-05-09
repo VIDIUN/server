@@ -3,13 +3,13 @@
  * @package plugins.elasticSearch
  * @subpackage api.objects
  */
-class KalturaESearchUserItem extends KalturaESearchAbstractUserItem
+class VidiunESearchUserItem extends VidiunESearchAbstractUserItem
 {
 
-	const KUSER_ID_THAT_DOESNT_EXIST = -1;
+	const VUSER_ID_THAT_DOESNT_EXIST = -1;
 
 	/**
-	 * @var KalturaESearchUserFieldName
+	 * @var VidiunESearchUserFieldName
 	 */
 	public $fieldName;
 
@@ -20,18 +20,18 @@ class KalturaESearchUserItem extends KalturaESearchAbstractUserItem
 	private static $map_dynamic_enum = array();
 
 	private static $map_field_enum = array(
-		KalturaESearchUserFieldName::SCREEN_NAME => ESearchUserFieldName::SCREEN_NAME,
-		KalturaESearchUserFieldName::EMAIL => ESearchUserFieldName::EMAIL,
-		KalturaESearchUserFieldName::TYPE => ESearchUserFieldName::TYPE,
-		KalturaESearchUserFieldName::TAGS => ESearchUserFieldName::TAGS,
-		KalturaESearchUserFieldName::UPDATED_AT => ESearchUserFieldName::UPDATED_AT,
-		KalturaESearchUserFieldName::CREATED_AT => ESearchUserFieldName::CREATED_AT,
-		KalturaESearchUserFieldName::LAST_NAME => ESearchUserFieldName::LAST_NAME,
-		KalturaESearchUserFieldName::FIRST_NAME => ESearchUserFieldName::FIRST_NAME,
-		KalturaESearchUserFieldName::PERMISSION_NAMES => ESearchUserFieldName::PERMISSION_NAMES,
-		KalturaESearchUserFieldName::GROUP_IDS => ESearchUserFieldName::GROUP_IDS,
-		KalturaESearchUserFieldName::ROLE_IDS => ESearchUserFieldName::ROLE_IDS,
-		KalturaESearchUserFieldName::USER_ID => ESearchUserFieldName::PUSER_ID,
+		VidiunESearchUserFieldName::SCREEN_NAME => ESearchUserFieldName::SCREEN_NAME,
+		VidiunESearchUserFieldName::EMAIL => ESearchUserFieldName::EMAIL,
+		VidiunESearchUserFieldName::TYPE => ESearchUserFieldName::TYPE,
+		VidiunESearchUserFieldName::TAGS => ESearchUserFieldName::TAGS,
+		VidiunESearchUserFieldName::UPDATED_AT => ESearchUserFieldName::UPDATED_AT,
+		VidiunESearchUserFieldName::CREATED_AT => ESearchUserFieldName::CREATED_AT,
+		VidiunESearchUserFieldName::LAST_NAME => ESearchUserFieldName::LAST_NAME,
+		VidiunESearchUserFieldName::FIRST_NAME => ESearchUserFieldName::FIRST_NAME,
+		VidiunESearchUserFieldName::PERMISSION_NAMES => ESearchUserFieldName::PERMISSION_NAMES,
+		VidiunESearchUserFieldName::GROUP_IDS => ESearchUserFieldName::GROUP_IDS,
+		VidiunESearchUserFieldName::ROLE_IDS => ESearchUserFieldName::ROLE_IDS,
+		VidiunESearchUserFieldName::USER_ID => ESearchUserFieldName::PUSER_ID,
 	);
 
 	protected function getMapBetweenObjects()
@@ -44,16 +44,16 @@ class KalturaESearchUserItem extends KalturaESearchAbstractUserItem
 		if (!$object_to_fill)
 			$object_to_fill = new ESearchUserItem();
 
-		if (in_array($this->fieldName, array(KalturaESearchUserFieldName::GROUP_IDS)))
+		if (in_array($this->fieldName, array(VidiunESearchUserFieldName::GROUP_IDS)))
 		{
-			$kuserId = self::KUSER_ID_THAT_DOESNT_EXIST;
-			$kuser = kuserPeer::getKuserByPartnerAndUid(kCurrentContext::getCurrentPartnerId(), $this->searchTerm, true);
-			if ($kuser)
+			$vuserId = self::VUSER_ID_THAT_DOESNT_EXIST;
+			$vuser = vuserPeer::getVuserByPartnerAndUid(vCurrentContext::getCurrentPartnerId(), $this->searchTerm, true);
+			if ($vuser)
 			{
-				$kuserId = $kuser->getId();
+				$vuserId = $vuser->getId();
 			}
 
-			$this->searchTerm = $kuserId;
+			$this->searchTerm = $vuserId;
 		}
 		return parent::toObject($object_to_fill, $props_to_skip);
 	}

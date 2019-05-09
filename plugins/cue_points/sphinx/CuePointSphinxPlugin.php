@@ -3,12 +3,12 @@
  * Enable indexing and searching cue point objects in sphinx
  * @package plugins.cuePoint
  */
-class CuePointSphinxPlugin extends KalturaPlugin implements IKalturaCriteriaFactory, IKalturaSphinxConfiguration
+class CuePointSphinxPlugin extends VidiunPlugin implements IVidiunCriteriaFactory, IVidiunSphinxConfiguration
 {
 	const PLUGIN_NAME = 'cuePointSphinx';
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPlugin::getPluginName()
+	 * @see IVidiunPlugin::getPluginName()
 	 */
 	public static function getPluginName()
 	{
@@ -16,9 +16,9 @@ class CuePointSphinxPlugin extends KalturaPlugin implements IKalturaCriteriaFact
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaCriteriaFactory::getKalturaCriteria()
+	 * @see IVidiunCriteriaFactory::getVidiunCriteria()
 	 */
-	public static function getKalturaCriteria($objectType)
+	public static function getVidiunCriteria($objectType)
 	{
 		if ($objectType == "CuePoint")
 			return new SphinxCuePointCriteria();
@@ -27,13 +27,13 @@ class CuePointSphinxPlugin extends KalturaPlugin implements IKalturaCriteriaFact
 	}
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaSphinxConfiguration::getSphinxSchema()
+	 * @see IVidiunSphinxConfiguration::getSphinxSchema()
 	 */
 	public static function getSphinxSchema()
 	{
 		return array(
-			kSphinxSearchManager::getSphinxIndexName('cue_point') => array (	
-				'path'		=> '/sphinx/kaltura_cue_point_rt',
+			vSphinxSearchManager::getSphinxIndexName('cue_point') => array (	
+				'path'		=> '/sphinx/vidiun_cue_point_rt',
 				'fields'	=> array (
 					'parent_id' => SphinxFieldType::RT_FIELD,
 					'entry_id' => SphinxFieldType::RT_FIELD,
@@ -52,7 +52,7 @@ class CuePointSphinxPlugin extends KalturaPlugin implements IKalturaCriteriaFact
 					'cue_point_status' => SphinxFieldType::RT_ATTR_BIGINT,
 					'cue_point_type' => SphinxFieldType::RT_FIELD,
 					'sub_type' => SphinxFieldType::RT_ATTR_BIGINT,
-					'kuser_id' => SphinxFieldType::RT_FIELD,
+					'vuser_id' => SphinxFieldType::RT_FIELD,
 					'partner_sort_value' => SphinxFieldType::RT_ATTR_BIGINT,
 					'force_stop' => SphinxFieldType::RT_ATTR_UINT,
 					

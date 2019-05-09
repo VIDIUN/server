@@ -3,6 +3,6 @@
  * @package Scheduler
  * @subpackage Conversion
  */
-class KOperationEngineFlix extends KSingleOutputOperationEngine
+class VOperationEngineFlix extends VSingleOutputOperationEngine
 {
 }

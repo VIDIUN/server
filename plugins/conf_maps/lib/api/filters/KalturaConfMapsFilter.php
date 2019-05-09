@@ -3,41 +3,41 @@
  * @package plugins.confMaps
  * @subpackage api.filters
  */
-class KalturaConfMapsFilter extends KalturaConfMapsBaseFilter
+class VidiunConfMapsFilter extends VidiunConfMapsBaseFilter
 {
-	public function getListResponse(KalturaFilterPager $pager, KalturaDetachedResponseProfile $responseProfile = null)
+	public function getListResponse(VidiunFilterPager $pager, VidiunDetachedResponseProfile $responseProfile = null)
 	{
-		$response = new KalturaConfMapsListResponse();
+		$response = new VidiunConfMapsListResponse();
 		if(!$this->nameEqual || $this->nameEqual=='')
 		{
 			return $response;
 		}
-		$items = new KalturaConfMapsArray();
+		$items = new VidiunConfMapsArray();
 
 		//Check if map exist in file system or in remote cache
-		$remoteCache = kCacheConfFactory::getInstance(kCacheConfFactory::REMOTE_MEM_CACHE);
+		$remoteCache = vCacheConfFactory::getInstance(vCacheConfFactory::REMOTE_MEM_CACHE);
 		$hostList =$remoteCache->getHostList($this->nameEqual ,$this->relatedHostEqual );
 		if($hostList)
 		{
 			foreach ($hostList as $host)
 			{
 				$dbMapObject = ConfMapsPeer::getMapByVersion($this->nameEqual, $host);
-				$apiMapObject = new KalturaConfMaps();
+				$apiMapObject = new VidiunConfMaps();
 				$apiMapObject->fromObject($dbMapObject);
-				$apiMapObject->sourceLocation = KalturaConfMapsSourceLocation::DB;
+				$apiMapObject->sourceLocation = VidiunConfMapsSourceLocation::DB;
 				$apiMapObject->isEditable = true;
 				$items->insert($apiMapObject);
 			}
 		}
 		else		//Check in file system
 		{
-			$fileSystemCache = kCacheConfFactory::getInstance(kCacheConfFactory::FILE_SYSTEM);
+			$fileSystemCache = vCacheConfFactory::getInstance(vCacheConfFactory::FILE_SYSTEM);
 			$fileNames = $fileSystemCache->getIniFilesList($this->nameEqual ,$this->relatedHostEqual);
 			foreach ($fileNames as $fileName)
 			{
-				$mapObject = new KalturaConfMaps();
+				$mapObject = new VidiunConfMaps();
 				list($mapObject->name , $mapObject->relatedHost ,$mapObject->content )  = $fileSystemCache->getMapInfo($fileName);
-				$mapObject->sourceLocation = KalturaConfMapsSourceLocation::FS;
+				$mapObject->sourceLocation = VidiunConfMapsSourceLocation::FS;
 				$items->insert($mapObject);
 				$mapObject->version = 1;
 				$mapObject->isEditable = false;
@@ -53,14 +53,14 @@ class KalturaConfMapsFilter extends KalturaConfMapsBaseFilter
 	}
 
 	/**
-	 * @return KalturaConfMaps
+	 * @return VidiunConfMaps
 	 */
 	public function getMap()
 	{
-		$confMap = new KalturaConfMaps();
+		$confMap = new VidiunConfMaps();
 		$hostPatern = str_replace('*','#', $this->relatedHostEqual);
-		/*  @var kRemoteMemCacheConf $remoteCache  */
-		$remoteCache = kCacheConfFactory::getInstance(kCacheConfFactory::REMOTE_MEM_CACHE);
+		/*  @var vRemoteMemCacheConf $remoteCache  */
+		$remoteCache = vCacheConfFactory::getInstance(vCacheConfFactory::REMOTE_MEM_CACHE);
 		$map = null;
 		if (!is_null($this->versionEqual))
 		{
@@ -68,7 +68,7 @@ class KalturaConfMapsFilter extends KalturaConfMapsBaseFilter
 			if ($dbMap)
 			{
 				$confMap->fromObject($dbMap);
-				$confMap->sourceLocation = KalturaConfMapsSourceLocation::DB;
+				$confMap->sourceLocation = VidiunConfMapsSourceLocation::DB;
 				$confMap->isEditable = true;
 				return $confMap;
 			}
@@ -79,15 +79,15 @@ class KalturaConfMapsFilter extends KalturaConfMapsBaseFilter
 		}
 		if(!empty($map))
 		{
-			$confMap->sourceLocation = KalturaConfMapsSourceLocation::DB;
+			$confMap->sourceLocation = VidiunConfMapsSourceLocation::DB;
 			$confMap->isEditable = true;
 		}
 		else
 		{
-			/*  @var kFileSystemConf $confFs  */
-			$confFs = kCacheConfFactory::getInstance(kCacheConfFactory::FILE_SYSTEM);
+			/*  @var vFileSystemConf $confFs  */
+			$confFs = vCacheConfFactory::getInstance(vCacheConfFactory::FILE_SYSTEM);
 			$map = $confFs->loadByHostName($this->nameEqual, $hostPatern);
-			$confMap->sourceLocation = KalturaConfMapsSourceLocation::FS;
+			$confMap->sourceLocation = VidiunConfMapsSourceLocation::FS;
 			$confMap->isEditable = false;
 		}
 		if(empty($map))

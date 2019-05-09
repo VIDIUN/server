@@ -5,6 +5,6 @@
  * @abstract
  * @deprecated
  */
-abstract class KalturaEventCondition extends KalturaObject
+abstract class VidiunEventCondition extends VidiunObject
 {	
 }

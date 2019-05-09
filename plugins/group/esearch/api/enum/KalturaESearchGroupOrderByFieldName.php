@@ -3,7 +3,7 @@
  * @package plugins.group
  * @subpackage api.enum
  */
-class KalturaESearchGroupOrderByFieldName extends KalturaESearchUserOrderByFieldName
+class VidiunESearchGroupOrderByFieldName extends VidiunESearchUserOrderByFieldName
 {
 	const MEMBERS_COUNT = 'members_count';
 }

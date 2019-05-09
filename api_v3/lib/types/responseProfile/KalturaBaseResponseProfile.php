@@ -3,19 +3,19 @@
  * @package api
  * @subpackage objects
  */
-abstract class KalturaBaseResponseProfile extends KalturaObject implements IApiObjectFactory
+abstract class VidiunBaseResponseProfile extends VidiunObject implements IApiObjectFactory
 {
-	public static function getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$object = null;
 		
 		if($sourceObject instanceof ResponseProfile)
 		{
-			$object = new KalturaResponseProfile();
+			$object = new VidiunResponseProfile();
 		}
-		elseif($sourceObject instanceof kResponseProfile)
+		elseif($sourceObject instanceof vResponseProfile)
 		{
-			$object = new KalturaDetachedResponseProfile();
+			$object = new VidiunDetachedResponseProfile();
 		}
 		
 		if($object)

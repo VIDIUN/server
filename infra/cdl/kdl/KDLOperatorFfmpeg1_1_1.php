@@ -3,13 +3,13 @@
  * @package plugins.ffmpeg
  * @subpackage lib
  */
-class KDLOperatorFfmpeg1_1_1 extends KDLOperatorFfmpeg0_10 {
+class VDLOperatorFfmpeg1_1_1 extends VDLOperatorFfmpeg0_10 {
 
 	/* ---------------------------
 	 * generateContainerParams
 	 * 
 	 */
-	protected function generateContainerParams(KDLFlavor $design, KDLFlavor $target)
+	protected function generateContainerParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		if(!isset($target->_container))
 			return null;
@@ -17,12 +17,12 @@ class KDLOperatorFfmpeg1_1_1 extends KDLOperatorFfmpeg0_10 {
 $con = $target->_container;
 		switch($con->_id){
 	/*
-		case KDLContainerTarget::APPLEHTTP:
+		case VDLContainerTarget::APPLEHTTP:
 			$cmdStr = " -hls_list_size 100000 -f hls";
 			break;
 	 */
-		case KDLContainerTarget::ISMV:
-		case KDLContainerTarget::ISMA:
+		case VDLContainerTarget::ISMV:
+		case VDLContainerTarget::ISMA:
 				/*
 				 * ISMV/SmoothStreaming needs following in order to support adptive-bitrate management
 				 * - frag_keyframe - the media control meta data is written for each chunk/packet, 
@@ -46,7 +46,7 @@ $con = $target->_container;
 		}
 	/*		
 	 * Right now the fastart option don't act properly, the resultant files are not complianr with QTP
-		if($target->_container->_id==KDLContainerTarget::MP4){
+		if($target->_container->_id==VDLContainerTarget::MP4){
 			$cmdStr.= " -movflags +faststart";
 		}
 	*/
@@ -56,7 +56,7 @@ $con = $target->_container;
 	/* ---------------------------
 	 * generateAudioParams
 	 */
-	protected function generateAudioParams(KDLFlavor $design, KDLFlavor $target)
+	protected function generateAudioParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		if(!isset($target->_audio)) {
 			return " -an";
@@ -64,11 +64,11 @@ $con = $target->_container;
 	
 		$aud = $target->_audio;
 		switch($aud->_id){
-		case KDLAudioTarget::AACHE:
+		case VDLAudioTarget::AACHE:
 			$cmdStr = " -c:a libfdk_aac -profile:a aac_he_v2";
 			break;
-		case KDLAudioTarget::AC3:
-		case KDLAudioTarget::EAC3:
+		case VDLAudioTarget::AC3:
+		case VDLAudioTarget::EAC3:
 			$cmdStr = " -c:a ".$aud->_id;
 			break;
 		}
@@ -117,7 +117,7 @@ $con = $target->_container;
 	/* ---------------------------
 	 * generateVideoParams
 	 */
-	protected function generateVideoParams(KDLFlavor $design, KDLFlavor $target)
+	protected function generateVideoParams(VDLFlavor $design, VDLFlavor $target)
 	{
 		$cmdStr = parent::generateVideoParams($design, $target);
 		if(!isset($target->_video))
@@ -169,7 +169,7 @@ $con = $target->_container;
 	/* ---------------------------
 	 * calcForcedKeyFrames
 	 */
-	protected function calcForcedKeyFrames($vidObj, KDLFlavor $target)
+	protected function calcForcedKeyFrames($vidObj, VDLFlavor $target)
 	{
 		/*
 		 * On 'follow source KF's' mode

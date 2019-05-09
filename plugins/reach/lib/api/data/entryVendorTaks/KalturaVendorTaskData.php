@@ -4,24 +4,24 @@
  * @subpackage api.objects
  * @relatedService EntryVendorTaskService
  */
-abstract class KalturaVendorTaskData extends KalturaObject implements IApiObjectFactory
+abstract class VidiunVendorTaskData extends VidiunObject implements IApiObjectFactory
 {
 	/* (non-PHPdoc)
- 	 * @see IApiObjectFactory::getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile)
+ 	 * @see IApiObjectFactory::getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile)
  	 */
-	public static function getInstance($sourceObject, KalturaDetachedResponseProfile $responseProfile = null)
+	public static function getInstance($sourceObject, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		$taskDataType = get_class($sourceObject);
 		$taskData = null;
 		switch ($taskDataType)
 		{
-			case 'kAlignmentVendorTaskData':
-				$taskData = new KalturaAlignmentVendorTaskData();
+			case 'vIdignmentVendorTaskData':
+				$taskData = new VidiunAlignmentVendorTaskData();
 				break;
 		}
 		
 		if ($taskData)
-			/* @var $object KalturaVendorTaskData */
+			/* @var $object VidiunVendorTaskData */
 			$taskData->fromObject($sourceObject, $responseProfile);
 		
 		return $taskData;

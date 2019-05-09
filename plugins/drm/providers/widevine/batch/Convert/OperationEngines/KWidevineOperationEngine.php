@@ -1,6 +1,6 @@
 <?php
 
-class KWidevineOperationEngine extends KOperationEngine
+class VWidevineOperationEngine extends VOperationEngine
 {
 	const PACKAGE_FILE_EXT = '.wvm';
 	
@@ -26,32 +26,32 @@ class KWidevineOperationEngine extends KOperationEngine
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KOperationEngine::getCmdLine()
+	 * @see VOperationEngine::getCmdLine()
 	 */
 	protected function getCmdLine() {}
 
 	/*
 	 * (non-PHPdoc)
-	 * @see KOperationEngine::doOperation()
+	 * @see VOperationEngine::doOperation()
 	 * 
 	 * prepare PackageNotify request and send it to Widevine VOD Packager for encryption
 	 */
 	protected function doOperation()
 	{
-		KBatchBase::impersonate($this->job->partnerId);
+		VBatchBase::impersonate($this->job->partnerId);
 		
-		$entry = KBatchBase::$kClient->baseEntry->get($this->job->entryId);
+		$entry = VBatchBase::$vClient->baseEntry->get($this->job->entryId);
 		$this->buildPackageName($entry);
 		
-		KalturaLog::info('start Widevine packaging: '.$this->packageName);
+		VidiunLog::info('start Widevine packaging: '.$this->packageName);
 		
-		$drmPlugin = KalturaDrmClientPlugin::get(KBatchBase::$kClient);
-		$profile = $drmPlugin->drmProfile->getByProvider(KalturaDrmProviderType::WIDEVINE);
+		$drmPlugin = VidiunDrmClientPlugin::get(VBatchBase::$vClient);
+		$profile = $drmPlugin->drmProfile->getByProvider(VidiunDrmProviderType::WIDEVINE);
 		$wvAssetId = $this->registerAsset($profile);
 		$this->encryptPackage($profile);		
 		$this->updateFlavorAsset($wvAssetId);
 		
-		KBatchBase::unimpersonate();	
+		VBatchBase::unimpersonate();	
 		
 		return true;
 	}
@@ -75,7 +75,7 @@ class KWidevineOperationEngine extends KOperationEngine
 			}
 		}
 		
-		$wvAssetId = KWidevineBatchHelper::sendRegisterAssetRequest(
+		$wvAssetId = VWidevineBatchHelper::sendRegisterAssetRequest(
 										$profile->regServerHost,
 										$this->packageName,
 										null,
@@ -89,13 +89,13 @@ class KWidevineOperationEngine extends KOperationEngine
 
 		if(!$wvAssetId)
 		{
-			KBatchBase::unimpersonate();
+			VBatchBase::unimpersonate();
 			$logMessage = 'Asset registration failed, asset name: '.$this->packageName.' error: '.$errorMessage;
-			KalturaLog::err($logMessage);
-			throw new KOperationEngineException($logMessage);
+			VidiunLog::err($logMessage);
+			throw new VOperationEngineException($logMessage);
 		}
 										
-		KalturaLog::info('Widevine asset id: '.$wvAssetId);
+		VidiunLog::info('Widevine asset id: '.$wvAssetId);
 		
 		return $wvAssetId;
 	}
@@ -108,9 +108,9 @@ class KWidevineOperationEngine extends KOperationEngine
 		$returnValue = $this->executeEncryptPackageCmd($profile, $inputFiles);
 		
 		//try to fix source assets sync and re-try encryption
-		if($returnValue == KWidevineBatchHelper::FIX_ASSET_ERROR_RETURN_CODE)
+		if($returnValue == VWidevineBatchHelper::FIX_ASSET_ERROR_RETURN_CODE)
 		{
-			KalturaLog::info("Trying to fix input files due to mismatch error ...");
+			VidiunLog::info("Trying to fix input files due to mismatch error ...");
 			$fixedInputFiles = $this->fixInputAssets($inputFiles);
 			$returnValue = $this->executeEncryptPackageCmd($profile, $fixedInputFiles);
 			if($returnValue != 0)
@@ -129,7 +129,7 @@ class KWidevineOperationEngine extends KOperationEngine
 		$returnValue = 0;
 		$output = array();
 		
-		$cmd = KWidevineBatchHelper::getEncryptPackageCmdLine(
+		$cmd = VWidevineBatchHelper::getEncryptPackageCmdLine(
 										$this->params->widevineExe, 
 										$profile->regServerHost, 
 										$profile->iv, 
@@ -141,13 +141,13 @@ class KWidevineOperationEngine extends KOperationEngine
 										$profile->portal);
 										
 		exec($cmd, $output, $returnValue);
-		KalturaLog::info('Command execution output: '.print_r($output, true));	
+		VidiunLog::info('Command execution output: '.print_r($output, true));	
 
 		if($returnValue != 0)
 		{
-			if(strstr(implode(" ", $output), KWidevineBatchHelper::FIX_ASSET_ERROR))
+			if(strstr(implode(" ", $output), VWidevineBatchHelper::FIX_ASSET_ERROR))
 			{
-				return KWidevineBatchHelper::FIX_ASSET_ERROR_RETURN_CODE;
+				return VWidevineBatchHelper::FIX_ASSET_ERROR_RETURN_CODE;
 			}
 		}
 		return $returnValue;
@@ -155,12 +155,12 @@ class KWidevineOperationEngine extends KOperationEngine
 	
 	private function handleEncryptPackageError($returnValue)
 	{
-		KBatchBase::unimpersonate();
+		VBatchBase::unimpersonate();
 		$errorMessage = '';
-		$errorMessage = KWidevineBatchHelper::getEncryptPackageErrorMessage($returnValue);
+		$errorMessage = VWidevineBatchHelper::getEncryptPackageErrorMessage($returnValue);
 		$logMessage = 'Package encryption failed, asset name: '.$this->packageName.' error: '.$errorMessage . ' error code: ' .$returnValue;
-		KalturaLog::err($logMessage);
-		throw new kTemporaryException ($logMessage);
+		VidiunLog::err($logMessage);
+		throw new vTemporaryException ($logMessage);
 	}
 	
 	private function getAssetIdsWithRedundantBitrates()
@@ -172,10 +172,10 @@ class KWidevineOperationEngine extends KOperationEngine
 		}		
 		$srcAssetIds = implode(',', $srcAssetIds);
 		
-		$filter = new KalturaAssetFilter();
+		$filter = new VidiunAssetFilter();
 		$filter->entryIdEqual = $this->job->entryId;
 		$filter->idIn = $srcAssetIds;
-		$flavorAssetList = KBatchBase::$kClient->flavorAsset->listAction($filter);	
+		$flavorAssetList = VBatchBase::$vClient->flavorAsset->listAction($filter);	
 
 		$redundantAssets = array();
 		if(count($flavorAssetList->objects) > 0)
@@ -183,7 +183,7 @@ class KWidevineOperationEngine extends KOperationEngine
 			$bitrates = array();			
 			foreach ($flavorAssetList->objects as $flavorAsset) 
 			{
-				/* @var $flavorAsset KalturaFlavorAsset */
+				/* @var $flavorAsset VidiunFlavorAsset */
 				if(in_array($flavorAsset->bitrate, $bitrates))
 					$redundantAssets[] = $flavorAsset->id;
 				else 
@@ -202,7 +202,7 @@ class KWidevineOperationEngine extends KOperationEngine
 		{
 			if(in_array($srcFileSyncDescriptor->assetId, $redundantAssets))
 			{
-				KalturaLog::info('Skipping flavor asset due to redundant bitrate: '.$srcFileSyncDescriptor->assetId);
+				VidiunLog::info('Skipping flavor asset due to redundant bitrate: '.$srcFileSyncDescriptor->assetId);
 			}
 			else 
 			{
@@ -221,17 +221,17 @@ class KWidevineOperationEngine extends KOperationEngine
 		if($entry->replacedEntryId)
 		{
 			$this->originalEntryId = $entry->replacedEntryId;
-			$filter = new KalturaAssetFilter();
+			$filter = new VidiunAssetFilter();
 			$filter->entryIdEqual = $entry->replacedEntryId;
 			$filter->tagsLike = 'widevine'; 
-			$flavorAssetList = KBatchBase::$kClient->flavorAsset->listAction($filter);
+			$flavorAssetList = VBatchBase::$vClient->flavorAsset->listAction($filter);
 			
 			if(count($flavorAssetList->objects) > 0)
 			{
 				$replacedFlavorParamsId = $this->data->flavorParamsOutput->flavorParamsId;
 				foreach ($flavorAssetList->objects as $flavorAsset) 
 				{
-					/* @var $flavorAsset KalturaFlavorAsset */
+					/* @var $flavorAsset VidiunFlavorAsset */
 					if($flavorAsset->flavorParamsId == $replacedFlavorParamsId)
 					{
 						$flavorAssetId = $flavorAsset->id;
@@ -246,7 +246,7 @@ class KWidevineOperationEngine extends KOperationEngine
 	
 	private function updateFlavorAsset($wvAssetId = null)
 	{
-		$updatedFlavorAsset = new KalturaWidevineFlavorAsset();
+		$updatedFlavorAsset = new VidiunWidevineFlavorAsset();
 		if($wvAssetId)
 			$updatedFlavorAsset->widevineAssetId = $wvAssetId;
 		$updatedFlavorAsset->actualSourceAssetParamsIds = implode(',', $this->actualSrcAssetParams);		
@@ -254,7 +254,7 @@ class KWidevineOperationEngine extends KOperationEngine
 		$wvDistributionEndDate = $this->data->flavorParamsOutput->widevineDistributionEndDate;
 		$updatedFlavorAsset->widevineDistributionStartDate = $wvDistributionStartDate;
 		$updatedFlavorAsset->widevineDistributionEndDate = $wvDistributionEndDate;
-		KBatchBase::$kClient->flavorAsset->update($this->data->flavorAssetId, $updatedFlavorAsset);		
+		VBatchBase::$vClient->flavorAsset->update($this->data->flavorAssetId, $updatedFlavorAsset);		
 	}
 	
 	private function fixInputAssets($inputFiles)
@@ -267,17 +267,17 @@ class KWidevineOperationEngine extends KOperationEngine
 		foreach ($inputFiles as $inputFile) 
 		{
 			$fixedInputFile = $localTmpPath.'/'.basename($inputFile);
-			$cmd = KWidevineBatchHelper::getFixAssetCmdLine($this->params->ffmpegCmd, $inputFile, $fixedInputFile);
+			$cmd = VWidevineBatchHelper::getFixAssetCmdLine($this->params->ffmpegCmd, $inputFile, $fixedInputFile);
 			$lastLine = exec($cmd, $output, $returnValue);
 			
-			KalturaLog::info('Command execution output: '.print_r($output, true));
+			VidiunLog::info('Command execution output: '.print_r($output, true));
 		
 			if($returnValue != 0)
 			{
-				KBatchBase::unimpersonate();
+				VBatchBase::unimpersonate();
 				$logMessage = 'Asset fix failed: '.$inputFile.' error: '.$lastLine;
-				KalturaLog::err($logMessage);
-				throw new KOperationEngineException($logMessage);
+				VidiunLog::err($logMessage);
+				throw new VOperationEngineException($logMessage);
 			}										
 			$fixedInputFiles[] = $fixedInputFile;
 		}

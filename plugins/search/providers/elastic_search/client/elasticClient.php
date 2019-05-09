@@ -51,11 +51,11 @@ class elasticClient
 	public function __construct($host = null, $port = null, $curlTimeout = null)
 	{
 		if (!$host)
-			$host = kConf::get('elasticHost', 'elastic', null);
+			$host = vConf::get('elasticHost', 'elastic', null);
 		$this->elasticHost = $host;
 		
 		if (!$port)
-			$port = kConf::get('elasticPort', 'elastic', null);;
+			$port = vConf::get('elasticPort', 'elastic', null);;
 		$this->elasticPort = $port;
 		
 		$this->ch = curl_init();
@@ -64,7 +64,7 @@ class elasticClient
 		curl_setopt($this->ch, CURLOPT_PORT, $this->elasticPort);
 		
 		if (!$curlTimeout)
-			$curlTimeout = kConf::get('elasticClientCurlTimeout', 'elastic', 10);
+			$curlTimeout = vConf::get('elasticClientCurlTimeout', 'elastic', 10);
 		$this->setTimeout($curlTimeout);
 	}
 	
@@ -80,11 +80,11 @@ class elasticClient
 
 	protected function getPreferenceStickySessionKey()
 	{
-		$ksObject = kCurrentContext::$ks_object;
+		$vsObject = vCurrentContext::$vs_object;
 
-		if ($ksObject && $ksObject->hasPrivilege(kSessionBase::PRIVILEGE_SESSION_KEY))
+		if ($vsObject && $vsObject->hasPrivilege(vSessionBase::PRIVILEGE_SESSION_KEY))
 		{
-			return self::ELASTIC_STICKY_SESSION_PREFIX . kCurrentContext::getCurrentPartnerId() . '_' . $ksObject->getPrivilegeValue(kSessionBase::PRIVILEGE_SESSION_KEY);
+			return self::ELASTIC_STICKY_SESSION_PREFIX . vCurrentContext::getCurrentPartnerId() . '_' . $vsObject->getPrivilegeValue(vSessionBase::PRIVILEGE_SESSION_KEY);
 		}
 		return self::ELASTIC_STICKY_SESSION_PREFIX . infraRequestUtils::getRemoteAddress();
 	}
@@ -131,7 +131,7 @@ class elasticClient
 	 * @param $monitorActionName string
 	 * @param $monitorIndexName string
 	 * @return mixed
-	 * @throws kESearchException
+	 * @throws vESearchException
 	 */
 	protected function sendRequest($cmd, $method, $body = null, $logQuery = false, $monitorActionName, $monitorIndexName)
 	{
@@ -145,25 +145,25 @@ class elasticClient
 			$jsonEncodedBody = json_encode($body);
 			curl_setopt($this->ch, CURLOPT_POSTFIELDS, $jsonEncodedBody);
 			if ($logQuery)
-				KalturaLog::debug("Elastic client request: ".$jsonEncodedBody);
+				VidiunLog::debug("Elastic client request: ".$jsonEncodedBody);
 		}
 
 		$requestStart = microtime(true);
 		$response = curl_exec($this->ch);
 		$requestTook = microtime(true) - $requestStart;
-		KalturaLog::debug("Elastic took - " . $requestTook . " seconds");
+		VidiunLog::debug("Elastic took - " . $requestTook . " seconds");
 
-		KalturaMonitorClient::monitorElasticAccess($monitorActionName, $monitorIndexName, $jsonEncodedBody, $requestTook, $this->elasticHost);
+		VidiunMonitorClient::monitorElasticAccess($monitorActionName, $monitorIndexName, $jsonEncodedBody, $requestTook, $this->elasticHost);
 
 		if (!$response)
 		{
 			$code = $this->getErrorNumber();
 			$message = $this->getError();
-			KalturaLog::err("Elastic client curl error code[" . $code . "] message[" . $message . "]");
+			VidiunLog::err("Elastic client curl error code[" . $code . "] message[" . $message . "]");
 		}
 		else
 		{
-			KalturaLog::debug("Elastic client response " .$response);
+			VidiunLog::debug("Elastic client response " .$response);
 			//return the response as associative array
 			$response = json_decode($response, true);
 			if (isset($response['error']))
@@ -171,7 +171,7 @@ class elasticClient
 				$data = array();
 				$data['errorMsg'] = $response['error'];
 				$data['status'] = $response['status'];
-				throw new kESearchException('Elastic search engine error [' . print_r($response, true) . ']', kESearchException::ELASTIC_SEARCH_ENGINE_ERROR, $data);
+				throw new vESearchException('Elastic search engine error [' . print_r($response, true) . ']', vESearchException::ELASTIC_SEARCH_ENGINE_ERROR, $data);
 			}
 		}
 		
@@ -207,7 +207,7 @@ class elasticClient
 	 */
 	public function search(array $params, $logQuery = false, $shouldAddPreference = false)
 	{
-		kApiCache::disableConditionalCache();
+		vApiCache::disableConditionalCache();
 		if ($shouldAddPreference)
 		{
 			//add preference so that requests from the same session will hit the same shards
@@ -262,13 +262,13 @@ class elasticClient
 	 * delete API
 	 * @param array $params
 	 * @return mixed
-	 * @throws kESearchException
+	 * @throws vESearchException
 	 */
 	public function delete(array $params)
 	{
 		$validate = $this->validateParamsForDelete($params);
 		if (!$validate)
-			throw new kESearchException('Missing mandatory params for delete in elastic client', kESearchException::MISSING_PARAMS_FOR_DELETE);
+			throw new vESearchException('Missing mandatory params for delete in elastic client', vESearchException::MISSING_PARAMS_FOR_DELETE);
 		
 		$queryParams = $this->getQueryParams($params);
 		$cmd = $this->buildElasticCommandUrl($params, $queryParams);
@@ -333,7 +333,7 @@ class elasticClient
 	 * return the aliases for index name
 	 * @param $indexName
 	 * @return mixed
-	 * @throws kESearchException
+	 * @throws vESearchException
 	 */
 	public function getAliasesForIndicesByIndexName($indexName)
 	{
@@ -360,7 +360,7 @@ class elasticClient
 	 * @param $indexName
 	 * @param $body - index mapping in json format
 	 * @return mixed
-	 * @throws kESearchException
+	 * @throws vESearchException
 	 */
 	public function createIndex($indexName, $body)
 	{
@@ -386,7 +386,7 @@ class elasticClient
 	 * removes/add aliases from indices
 	 * @param $body
 	 * @return mixed
-	 * @throws kESearchException
+	 * @throws vESearchException
 	 */
 	public function changeAliases($body)
 	{

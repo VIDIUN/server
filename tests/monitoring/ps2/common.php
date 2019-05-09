@@ -1,7 +1,7 @@
 <?php
-require_once realpath(__DIR__ . '/../') . '/KalturaMonitorResult.php';
+require_once realpath(__DIR__ . '/../') . '/VidiunMonitorResult.php';
 
-class KalturaMonitorClientPs2
+class VidiunMonitorClientPs2
 {
 	const RESPONSE_TYPE_JSON = 1;
 	const RESPONSE_TYPE_XML = 2;
@@ -124,4 +124,4 @@ if(!isset($options['service-url']))
 
 $config = parse_ini_file(__DIR__ . '/../config.ini', true);
 
-$client = new KalturaMonitorClientPs2($config, $options);
+$client = new VidiunMonitorClientPs2($config, $options);

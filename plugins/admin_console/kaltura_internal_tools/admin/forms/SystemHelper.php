@@ -1,6 +1,6 @@
 <?php 
 /**
- * @package plugins.KalturaInternalTools
+ * @package plugins.VidiunInternalTools
  * @subpackage admin
  */
 class Form_SystemHelper extends Infra_Form
@@ -17,8 +17,8 @@ class Form_SystemHelper extends Infra_Form
 				'base64_decode' => 'Base64 Decode',
 				'base64_3des_encode' => 'Base64 3des Encode key',
 				'base64_3des_decode' => 'Base64 3des Decode ',
-				'ks' => 'KS',
-				'kwid' =>	'kwid (wiki) secret:',
+				'vs' => 'VS',
+				'vwid' =>	'vwid (wiki) secret:',
 				'ip' =>  'ip to country'				
 			),
 			'separator' => '<br>'
@@ -32,7 +32,7 @@ class Form_SystemHelper extends Infra_Form
 		
 		 
 		$this->addElement('text', 'secret', array(
-			'label'			=> 'kwid (wiki) secret:',
+			'label'			=> 'vwid (wiki) secret:',
 			'filters'		=> array('StringTrim'),
 		));
 

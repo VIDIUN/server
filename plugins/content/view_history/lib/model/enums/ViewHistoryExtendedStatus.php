@@ -3,14 +3,14 @@
  * @package plugins.viewHistory
  * @subpackage model.enum
  */
-class ViewHistoryExtendedStatus implements IKalturaPluginEnum, UserEntryExtendedStatus
+class ViewHistoryExtendedStatus implements IVidiunPluginEnum, UserEntryExtendedStatus
 {
 	const PLAYBACK_COMPLETE = "PLAYBACK_COMPLETE";
 	const PLAYBACK_STARTED = "PLAYBACK_STARTED";
 	const VIEWED = "VIEWED";
 	
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalValues()
+	 * @see IVidiunPluginEnum::getAdditionalValues()
 	 */
 	public static function getAdditionalValues()
 	{
@@ -22,7 +22,7 @@ class ViewHistoryExtendedStatus implements IKalturaPluginEnum, UserEntryExtended
 	}
 
 	/* (non-PHPdoc)
-	 * @see IKalturaPluginEnum::getAdditionalDescriptions()
+	 * @see IVidiunPluginEnum::getAdditionalDescriptions()
 	 */
 	public static function getAdditionalDescriptions()
 	{

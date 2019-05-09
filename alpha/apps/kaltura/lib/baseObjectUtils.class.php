@@ -460,7 +460,7 @@ class baseObjectUtils
 				$raw_value = $obj->getByName( $name , BasePeer::TYPE_FIELDNAME ) ;
 			}
 			// escape the value of the attribute
-			$value = kString::xmlEncode( $raw_value );
+			$value = vString::xmlEncode( $raw_value );
 			$res .= ' ' . $param_alias . '="' . $value . '"';
 		}
 		
@@ -468,7 +468,7 @@ class baseObjectUtils
 		{
 			foreach ( $map_to_add as $attr => $val )
 			{
-				$res .= ' ' . $attr . '="' . kString::xmlEncode($val) . '"';
+				$res .= ' ' . $attr . '="' . vString::xmlEncode($val) . '"';
 			}
 		}
 		$res .= $xml_element_name == NULL ? "" :

@@ -7,23 +7,23 @@
  * @package plugins.beacon
  * @subpackage api.services
  */
-class BeaconService extends KalturaBaseService
+class BeaconService extends VidiunBaseService
 {
 	public function initService($serviceId, $serviceName, $actionName)
 	{
-		if (($actionName == 'getLast' || $actionName == 'enhanceSearch') && !kCurrentContext::$is_admin_session)
-			throw new KalturaAPIException(KalturaErrors::SERVICE_FORBIDDEN, $this->serviceName . '->' . $this->actionName);
+		if (($actionName == 'getLast' || $actionName == 'enhanceSearch') && !vCurrentContext::$is_admin_session)
+			throw new VidiunAPIException(VidiunErrors::SERVICE_FORBIDDEN, $this->serviceName . '->' . $this->actionName);
 		
 		parent::initService($serviceId, $serviceName, $actionName);
 	}
 	
 	/**
 	 * @action add
-	 * @param KalturaBeacon $beacon
-	 * @param KalturaNullableBoolean $shouldLog
+	 * @param VidiunBeacon $beacon
+	 * @param VidiunNullableBoolean $shouldLog
 	 * @return bool
 	 */
-	public function addAction(KalturaBeacon $beacon, $shouldLog = KalturaNullableBoolean::FALSE_VALUE)
+	public function addAction(VidiunBeacon $beacon, $shouldLog = VidiunNullableBoolean::FALSE_VALUE)
 	{
 		$beaconObj = $beacon->toInsertableObject();
 		$beaconObj->index($shouldLog);
@@ -33,85 +33,85 @@ class BeaconService extends KalturaBaseService
 	
 	/**
 	 * @action list
-	 * @param KalturaBeaconFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaBeaconListResponse
-	 * @throws KalturaAPIException
+	 * @param VidiunBeaconFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunBeaconListResponse
+	 * @throws VidiunAPIException
 	 */
-	public function listAction(KalturaBeaconFilter $filter = null, KalturaFilterPager $pager = null)
+	public function listAction(VidiunBeaconFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaBeaconFilter();
+			$filter = new VidiunBeaconFilter();
 		
 		if (!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		
 		return $filter->getListResponse($pager);
 	}
 	
 	/**
 	 * @action enhanceSearch
-	 * @param KalturaBeaconEnhanceFilter $filter
-	 * @param KalturaFilterPager $pager
-	 * @return KalturaBeaconListResponse
-	 * @throws KalturaAPIException
+	 * @param VidiunBeaconEnhanceFilter $filter
+	 * @param VidiunFilterPager $pager
+	 * @return VidiunBeaconListResponse
+	 * @throws VidiunAPIException
 	 */
 	
-	public function enhanceSearchAction(KalturaBeaconEnhanceFilter $filter = null, KalturaFilterPager $pager = null)
+	public function enhanceSearchAction(VidiunBeaconEnhanceFilter $filter = null, VidiunFilterPager $pager = null)
 	{
 		if (!$filter)
-			$filter = new KalturaBeaconEnhanceFilter();
+			$filter = new VidiunBeaconEnhanceFilter();
 		
 		if(!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 		
 		return $filter->enhanceSearch($pager);
 	}
 
 	/**
 	 * @action searchScheduledResource
-	 * @param KalturaBeaconSearchParams $searchParams
-	 * @param KalturaPager $pager
-	 * @return KalturaBeaconListResponse
-	 * @throws KalturaAPIException
+	 * @param VidiunBeaconSearchParams $searchParams
+	 * @param VidiunPager $pager
+	 * @return VidiunBeaconListResponse
+	 * @throws VidiunAPIException
 	 */
 
-	public function searchScheduledResourceAction(KalturaBeaconSearchParams $searchParams, KalturaPager $pager = null)
+	public function searchScheduledResourceAction(VidiunBeaconSearchParams $searchParams, VidiunPager $pager = null)
 	{
-		$scheduledResourceSearch = new kScheduledResourceSearch();
-		$searchMgr = new kBeaconSearchQueryManger();
+		$scheduledResourceSearch = new vScheduledResourceSearch();
+		$searchMgr = new vBeaconSearchQueryManger();
 		$elasticResponse = $this->initAndSearch($scheduledResourceSearch, $searchParams, $pager);
 		$totalCount = $searchMgr->getTotalCount($elasticResponse);
 		$responseArray = $searchMgr->getHitsFromElasticResponse($elasticResponse);
-		$response = new KalturaBeaconListResponse();
-		$response->objects = KalturaBeaconArray::fromDbArray($responseArray);
+		$response = new VidiunBeaconListResponse();
+		$response->objects = VidiunBeaconArray::fromDbArray($responseArray);
 		$response->totalCount = $totalCount;
 		return $response;
 	}
 
 	/**
-	 * @param kBaseSearch $coreSearchObject
+	 * @param vBaseSearch $coreSearchObject
 	 * @param $searchParams
 	 * @param $pager
 	 * @return array
 	 */
 	private function initAndSearch($coreSearchObject, $searchParams, $pager)
 	{
-		list($coreParams, $kPager) = self::initSearchActionParams($searchParams, $pager);
-		$elasticResults = $coreSearchObject->doSearch($coreParams->getSearchOperator(), $kPager, array(), $coreParams->getObjectId(), $coreParams->getOrderBy());
+		list($coreParams, $vPager) = self::initSearchActionParams($searchParams, $pager);
+		$elasticResults = $coreSearchObject->doSearch($coreParams->getSearchOperator(), $vPager, array(), $coreParams->getObjectId(), $coreParams->getOrderBy());
 		return $elasticResults;
 	}
 
-	protected static function initSearchActionParams($searchParams, KalturaPager $pager = null)
+	protected static function initSearchActionParams($searchParams, VidiunPager $pager = null)
 	{
 		$coreParams = $searchParams->toObject();
-		$kPager = null;
+		$vPager = null;
 		if ($pager)
 		{
-			$kPager = $pager->toObject();
+			$vPager = $pager->toObject();
 		}
 
-		return array($coreParams, $kPager);
+		return array($coreParams, $vPager);
 	}
 
 }

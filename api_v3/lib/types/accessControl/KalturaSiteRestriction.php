@@ -2,14 +2,14 @@
 /**
  * @package api
  * @subpackage objects
- * @deprecated use KalturaRule instead
+ * @deprecated use VidiunRule instead
  */
-class KalturaSiteRestriction extends KalturaBaseRestriction 
+class VidiunSiteRestriction extends VidiunBaseRestriction 
 {
 	/**
 	 * The site restriction type (allow or deny)
 	 * 
-	 * @var KalturaSiteRestrictionType
+	 * @var VidiunSiteRestrictionType
 	 */
 	public $siteRestrictionType;
 	
@@ -32,10 +32,10 @@ class KalturaSiteRestriction extends KalturaBaseRestriction
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseRestriction::toRule()
+	 * @see VidiunBaseRestriction::toRule()
 	 */
-	public function toRule(KalturaRestrictionArray $restrictions)
+	public function toRule(VidiunRestrictionArray $restrictions)
 	{
-		return $this->toObject(new kAccessControlSiteRestriction());
+		return $this->toObject(new vAccessControlSiteRestriction());
 	}
 }

@@ -140,7 +140,7 @@ class BatchJob extends BaseBatchJob implements ISyncableFile
 			// in the DC where the file sync of the entry exists. Since the batch job doesnt refer to a flavor (we only have an entry id member)
 			// we check the file sync of the source flavor asset (if one exists)
 	
-			$dc = kDataCenterMgr::getCurrentDcId();
+			$dc = vDataCenterMgr::getCurrentDcId();
 			$this->setDc ( $dc );
 		}
 			
@@ -304,21 +304,21 @@ class BatchJob extends BaseBatchJob implements ISyncableFile
 		
 			default:
 				// TODO implement IBatchable in relevant plugins
-				return KalturaPluginManager::loadObject('IBatchable', $this->getObjectId());
+				return VidiunPluginManager::loadObject('IBatchable', $this->getObjectId());
 		}
 		
 		return $this->aRootJob;
 	}
 	
 	
-	public function getFormattedCreatedAt( $format = dateUtils::KALTURA_FORMAT )
+	public function getFormattedCreatedAt( $format = dateUtils::VIDIUN_FORMAT )
 	{
-		return dateUtils::formatKalturaDate( $this , 'getCreatedAt' , $format );
+		return dateUtils::formatVidiunDate( $this , 'getCreatedAt' , $format );
 	}
 
-	public function getFormattedUpdatedAt( $format = dateUtils::KALTURA_FORMAT )
+	public function getFormattedUpdatedAt( $format = dateUtils::VIDIUN_FORMAT )
 	{
-		return dateUtils::formatKalturaDate( $this , 'getUpdatedAt' , $format );
+		return dateUtils::formatVidiunDate( $this , 'getUpdatedAt' , $format );
 	}
 	
 	/**
@@ -352,7 +352,7 @@ class BatchJob extends BaseBatchJob implements ISyncableFile
 		{
 			case self::FILE_SYNC_BATCHJOB_SUB_TYPE_BULKUPLOAD:
 				$ext = 'csv';
-				$pluginInstances = KalturaPluginManager::getPluginInstances('IKalturaBulkUpload');
+				$pluginInstances = VidiunPluginManager::getPluginInstances('IVidiunBulkUpload');
 				foreach($pluginInstances as $pluginInstance)
 				{
 					$pluginExt = $pluginInstance->getFileExtension($this->getJobSubType());
@@ -489,7 +489,7 @@ class BatchJob extends BaseBatchJob implements ISyncableFile
 
 	/**
 	 * @param boolean  $bypassSerialization enables PS2 support
-	 * @return kJobData
+	 * @return vJobData
 	 */
 	public function getData($bypassSerialization = false)
 	{
@@ -516,7 +516,7 @@ class BatchJob extends BaseBatchJob implements ISyncableFile
 	} 
 	
 	/**
-	 * @return kLockInfoData
+	 * @return vLockInfoData
 	 */
 	public function getLockInfo()
 	{
@@ -528,7 +528,7 @@ class BatchJob extends BaseBatchJob implements ISyncableFile
 	
 	/**
 	 * (non-PHPdoc)
-	 * @param kLockInfoData
+	 * @param vLockInfoData
 	 * @see BaseBatchJob::setLockInfo()
 	 */
 	public function setLockInfo($v) {
@@ -541,7 +541,7 @@ class BatchJob extends BaseBatchJob implements ISyncableFile
 	/**
 	 * (non-PHPdoc)
 	 * @see BaseBatchJob::getHistory()
-	 * @return KalturaBatchHistoryDataArray
+	 * @return VidiunBatchHistoryDataArray
 	 */
 	public function getHistory()
 	{
@@ -553,7 +553,7 @@ class BatchJob extends BaseBatchJob implements ISyncableFile
 	
 	/**
 	 * (non-PHPdoc)
-	 * @param KalturaBatchHistoryDataArray
+	 * @param VidiunBatchHistoryDataArray
 	 * @see BaseBatchJob::setHistory()
 	 */
 	public function setHistory($v) {
@@ -563,7 +563,7 @@ class BatchJob extends BaseBatchJob implements ISyncableFile
 			parent::setHistory ( null );
 	}
 	
-	public function addHistoryRecord(kBatchHistoryData $v) {
+	public function addHistoryRecord(vBatchHistoryData $v) {
 		$historyArr = $this->getHistory();
 		if($historyArr === null)
 			$historyArr = array();

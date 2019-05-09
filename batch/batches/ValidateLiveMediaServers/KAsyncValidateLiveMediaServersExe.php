@@ -1,12 +1,12 @@
 <?php
 /**
- * Will run the KAsyncValidateLiveMediaServers 
+ * Will run the VAsyncValidateLiveMediaServers 
  *
  * @package Scheduler
  * @subpackage ValidateLiveMediaServers
  */
 require_once (__DIR__ . "/../../bootstrap.php");
 
-$instance = new KAsyncValidateLiveMediaServers();
+$instance = new VAsyncValidateLiveMediaServers();
 $instance->run();
 $instance->done();

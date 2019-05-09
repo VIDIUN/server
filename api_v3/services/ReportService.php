@@ -5,7 +5,7 @@
  * @package api
  * @subpackage services
  */
-class ReportService extends KalturaBaseService
+class ReportService extends VidiunBaseService
 {
 	protected static $crossPartnerReports = array(
 		ReportType::PARTNER_USAGE,
@@ -24,7 +24,7 @@ class ReportService extends KalturaBaseService
 	}
 	
 	/* (non-PHPdoc)
-	 * @see KalturaBaseService::partnerGroup()
+	 * @see VidiunBaseService::partnerGroup()
 	 */
 	protected function partnerGroup($peer = null)
 	{
@@ -70,31 +70,31 @@ class ReportService extends KalturaBaseService
 	 * report getGraphs action allows to get a graph data for a specific report. 
 	 * 
 	 * @action getGraphs
-	 * @param KalturaReportType $reportType  
-	 * @param KalturaReportInputFilter $reportInputFilter
+	 * @param VidiunReportType $reportType  
+	 * @param VidiunReportInputFilter $reportInputFilter
 	 * @param string $dimension
 	 * @param string $objectIds - one ID or more (separated by ',') of specific objects to query
-	 * @return KalturaReportGraphArray 
+	 * @return VidiunReportGraphArray 
 	 */
-	public function getGraphsAction( $reportType , KalturaReportInputFilter $reportInputFilter , $dimension = null , $objectIds = null, KalturaReportResponseOptions $responseOptions = null  )
+	public function getGraphsAction( $reportType , VidiunReportInputFilter $reportInputFilter , $dimension = null , $objectIds = null, VidiunReportResponseOptions $responseOptions = null  )
 	{
 		if (!$responseOptions)
 		{
-			$responseOptions = new KalturaReportResponseOptions();
+			$responseOptions = new VidiunReportResponseOptions();
 		}
-		$kResponseOptions = $responseOptions->toObject();
+		$vResponseOptions = $responseOptions->toObject();
 
 		if(in_array($reportType, self::$crossPartnerReports))
-			$objectIds = $this->validateObjectsAreAllowedPartners($reportType, $objectIds, $kResponseOptions->getDelimiter());
+			$objectIds = $this->validateObjectsAreAllowedPartners($reportType, $objectIds, $vResponseOptions->getDelimiter());
 	
-		$reportGraphs =  KalturaReportGraphArray::fromReportDataArray(kKavaReportsMgr::getGraph(
+		$reportGraphs =  VidiunReportGraphArray::fromReportDataArray(vKavaReportsMgr::getGraph(
 		    $this->getPartnerId(),
 		    $reportType,
 		    $reportInputFilter->toReportsInputFilter(),
 		    $dimension,
 		    $objectIds,
-			$kResponseOptions),
-			$kResponseOptions->getDelimiter());
+			$vResponseOptions),
+			$vResponseOptions->getDelimiter());
 
 		return $reportGraphs;
 	}
@@ -103,30 +103,30 @@ class ReportService extends KalturaBaseService
 	 * report getTotal action allows to get a graph data for a specific report. 
 	 * 
 	 * @action getTotal
-	 * @param KalturaReportType $reportType  
-	 * @param KalturaReportInputFilter $reportInputFilter
+	 * @param VidiunReportType $reportType  
+	 * @param VidiunReportInputFilter $reportInputFilter
 	 * @param string $objectIds - one ID or more (separated by ',') of specific objects to query
-	 * @return KalturaReportTotal 
+	 * @return VidiunReportTotal 
 	 */
-	public function getTotalAction( $reportType , KalturaReportInputFilter $reportInputFilter , $objectIds = null, KalturaReportResponseOptions $responseOptions = null)
+	public function getTotalAction( $reportType , VidiunReportInputFilter $reportInputFilter , $objectIds = null, VidiunReportResponseOptions $responseOptions = null)
 	{
 		if (!$responseOptions)
 		{
-			$responseOptions = new KalturaReportResponseOptions();
+			$responseOptions = new VidiunReportResponseOptions();
 		}
-		$kResponseOptions = $responseOptions->toObject();
+		$vResponseOptions = $responseOptions->toObject();
 
 		if(in_array($reportType, self::$crossPartnerReports))
-			$objectIds = $this->validateObjectsAreAllowedPartners($reportType, $objectIds, $kResponseOptions->getDelimiter());
+			$objectIds = $this->validateObjectsAreAllowedPartners($reportType, $objectIds, $vResponseOptions->getDelimiter());
 
-		$reportTotal = new KalturaReportTotal();
+		$reportTotal = new VidiunReportTotal();
 		
-		list ( $header , $data ) = kKavaReportsMgr::getTotal(
+		list ( $header , $data ) = vKavaReportsMgr::getTotal(
 		    $this->getPartnerId() ,
 		    $reportType ,
-		    $reportInputFilter->toReportsInputFilter() , $objectIds, $kResponseOptions);
+		    $reportInputFilter->toReportsInputFilter() , $objectIds, $vResponseOptions);
 		
-		$reportTotal->fromReportTotal ( $header , $data, $kResponseOptions->getDelimiter() );
+		$reportTotal->fromReportTotal ( $header , $data, $vResponseOptions->getDelimiter() );
 			
 		return $reportTotal;
 	}
@@ -135,20 +135,20 @@ class ReportService extends KalturaBaseService
 	 * report getBaseTotal action allows to get the total base for storage reports  
 	 * 
 	 * @action getBaseTotal
-	 * @param KalturaReportType $reportType  
-	 * @param KalturaReportInputFilter $reportInputFilter
+	 * @param VidiunReportType $reportType  
+	 * @param VidiunReportInputFilter $reportInputFilter
 	 * @param string $objectIds - one ID or more (separated by ',') of specific objects to query
-	 * @return KalturaReportBaseTotalArray 
+	 * @return VidiunReportBaseTotalArray 
 	 */
-	public function getBaseTotalAction( $reportType , KalturaReportInputFilter $reportInputFilter , $objectIds = null , KalturaReportResponseOptions $responseOptions = null)
+	public function getBaseTotalAction( $reportType , VidiunReportInputFilter $reportInputFilter , $objectIds = null , VidiunReportResponseOptions $responseOptions = null)
 	{
 		if (!$responseOptions)
 		{
-			$responseOptions = new KalturaReportResponseOptions();
+			$responseOptions = new VidiunReportResponseOptions();
 		}
 
-		$reportSubTotals =  KalturaReportBaseTotalArray::fromReportDataArray(  
-			kKavaReportsMgr::getBaseTotal( 
+		$reportSubTotals =  VidiunReportBaseTotalArray::fromReportDataArray(  
+			vKavaReportsMgr::getBaseTotal( 
 				$this->getPartnerId() , 
 				$reportType , 
 				$reportInputFilter->toReportsInputFilter() ,
@@ -162,32 +162,32 @@ class ReportService extends KalturaBaseService
 	 * report getTable action allows to get a graph data for a specific report. 
 	 * 
 	 * @action getTable
-	 * @param KalturaReportType $reportType  
-	 * @param KalturaReportInputFilter $reportInputFilter
-	 * @param KalturaFilterPager $pager
-	 * @param KalturaReportType $reportType 
+	 * @param VidiunReportType $reportType  
+	 * @param VidiunReportInputFilter $reportInputFilter
+	 * @param VidiunFilterPager $pager
+	 * @param VidiunReportType $reportType 
 	 * @param string $order
 	 * @param string $objectIds - one ID or more (separated by ',') of specific objects to query
-	 * @return KalturaReportTable 
+	 * @return VidiunReportTable 
 	 */
-	public function getTableAction($reportType, KalturaReportInputFilter $reportInputFilter, KalturaFilterPager $pager, $order = null, $objectIds = null, KalturaReportResponseOptions $responseOptions = null)
+	public function getTableAction($reportType, VidiunReportInputFilter $reportInputFilter, VidiunFilterPager $pager, $order = null, $objectIds = null, VidiunReportResponseOptions $responseOptions = null)
 	{
 		if (!$responseOptions)
 		{
-			$responseOptions = new KalturaReportResponseOptions();
+			$responseOptions = new VidiunReportResponseOptions();
 		}
-		$kResponseOptions = $responseOptions->toObject();
+		$vResponseOptions = $responseOptions->toObject();
 
 		$isCsv = false;
-		if (kCurrentContext::$ks_partner_id == Partner::BATCH_PARTNER_ID)
+		if (vCurrentContext::$vs_partner_id == Partner::BATCH_PARTNER_ID)
 		{
 			$isCsv = true;
 		}
 
 		if(in_array($reportType, self::$crossPartnerReports))
-			$objectIds = $this->validateObjectsAreAllowedPartners($reportType, $objectIds, $kResponseOptions->getDelimiter());
+			$objectIds = $this->validateObjectsAreAllowedPartners($reportType, $objectIds, $vResponseOptions->getDelimiter());
 
-		$reportTable = new KalturaReportTable();
+		$reportTable = new VidiunReportTable();
 
 		// Temporary hack to allow admin console to request a report for any partner
 		//	can remove once moving to Kava
@@ -195,10 +195,10 @@ class ReportService extends KalturaBaseService
 		if ($partnerId == Partner::ADMIN_CONSOLE_PARTNER_ID && $objectIds && ctype_digit($objectIds))
 		{
 			$partnerReports = array(
-				KalturaReportType::VAR_USAGE,
-				KalturaReportType::VPAAS_USAGE,
-				KalturaReportType::ENTRY_USAGE,
-				KalturaReportType::PARTNER_USAGE,
+				VidiunReportType::VAR_USAGE,
+				VidiunReportType::VPAAS_USAGE,
+				VidiunReportType::ENTRY_USAGE,
+				VidiunReportType::PARTNER_USAGE,
 			);
 
 			if (in_array($reportType, $partnerReports))
@@ -207,14 +207,14 @@ class ReportService extends KalturaBaseService
 			}
 		}
 		
-		list ( $header , $data , $totalCount ) = kKavaReportsMgr::getTable(
+		list ( $header , $data , $totalCount ) = vKavaReportsMgr::getTable(
 		    $partnerId ,
 		    $reportType ,
 		    $reportInputFilter->toReportsInputFilter() ,
 		    $pager->pageSize , $pager->pageIndex ,
-		    $order , $objectIds, null , $isCsv , $kResponseOptions);
+		    $order , $objectIds, null , $isCsv , $vResponseOptions);
 
-		$reportTable->fromReportTable ( $header , $data , $totalCount, $kResponseOptions->getDelimiter() );
+		$reportTable->fromReportTable ( $header , $data , $totalCount, $vResponseOptions->getDelimiter() );
 			
 		return $reportTable;
 	}	
@@ -227,37 +227,37 @@ class ReportService extends KalturaBaseService
 	 * @param string $reportTitle The title of the report to display at top of CSV 
 	 * @param string $reportText The text of the filter of the report
 	 * @param string $headers The headers of the columns - a map between the enumerations on the server side and the their display text  
-	 * @param KalturaReportType $reportType  
-	 * @param KalturaReportInputFilter $reportInputFilter
+	 * @param VidiunReportType $reportType  
+	 * @param VidiunReportInputFilter $reportInputFilter
 	 * @param string $dimension	  
-	 * @param KalturaFilterPager $pager
-	 * @param KalturaReportType $reportType 
+	 * @param VidiunFilterPager $pager
+	 * @param VidiunReportType $reportType 
 	 * @param string $order
 	 * @param string $objectIds - one ID or more (separated by ',') of specific objects to query
 	 * @return string 
 	 */
-	public function getUrlForReportAsCsvAction ( $reportTitle , $reportText , $headers , $reportType , KalturaReportInputFilter $reportInputFilter , 
+	public function getUrlForReportAsCsvAction ( $reportTitle , $reportText , $headers , $reportType , VidiunReportInputFilter $reportInputFilter , 
 		$dimension = null , 
-		KalturaFilterPager $pager = null , 
+		VidiunFilterPager $pager = null , 
 		$order = null , $objectIds = null,
-		KalturaReportResponseOptions $responseOptions = null)
+		VidiunReportResponseOptions $responseOptions = null)
 	{
 		ini_set( "memory_limit","512M" );
 		
 		if(!$pager)
-			$pager = new KalturaFilterPager();
+			$pager = new VidiunFilterPager();
 
 		if (!$responseOptions)
 		{
-			$responseOptions = new KalturaReportResponseOptions();
+			$responseOptions = new VidiunReportResponseOptions();
 		}
-		$kResponseOptions = $responseOptions->toObject();
+		$vResponseOptions = $responseOptions->toObject();
 
 		if(in_array($reportType, self::$crossPartnerReports))
-			$objectIds = $this->validateObjectsAreAllowedPartners($reportType, $objectIds, $kResponseOptions->getDelimiter());
+			$objectIds = $this->validateObjectsAreAllowedPartners($reportType, $objectIds, $vResponseOptions->getDelimiter());
 
 		try {
-			$report = kKavaReportsMgr::getUrlForReportAsCsv(
+			$report = vKavaReportsMgr::getUrlForReportAsCsv(
 				$this->getPartnerId(),
 				$reportTitle,
 				$reportText,
@@ -269,12 +269,12 @@ class ReportService extends KalturaBaseService
 				$pager->pageSize,
 				$pager->pageIndex,
 				$order,
-				$kResponseOptions);
+				$vResponseOptions);
 		}
 		catch(Exception $e){
 			$code = $e->getCode();
-			if ($code == kCoreException::SEARCH_TOO_GENERAL)
-					throw new KalturaAPIException(KalturaErrors::SEARCH_TOO_GENERAL);
+			if ($code == vCoreException::SEARCH_TOO_GENERAL)
+					throw new VidiunAPIException(VidiunErrors::SEARCH_TOO_GENERAL);
 		}
 
 		if ((infraRequestUtils::getProtocol() == infraRequestUtils::PROTOCOL_HTTPS))
@@ -290,16 +290,16 @@ class ReportService extends KalturaBaseService
 	 * 
 	 * @param string $id - the requested id
 	 * @return string
-	 * @ksOptional 
+	 * @vsOptional 
 	 */
 	public function serveAction($id) {
-		// KS verification - we accept either admin session or download privilege of the file
-		$ks = $this->getKs();
-		if(!$ks || !($ks->isAdmin() || $ks->verifyPrivileges(ks::PRIVILEGE_DOWNLOAD, $id)))
-			KExternalErrors::dieError(KExternalErrors::ACCESS_CONTROL_RESTRICTED);
+		// VS verification - we accept either admin session or download privilege of the file
+		$vs = $this->getVs();
+		if(!$vs || !($vs->isAdmin() || $vs->verifyPrivileges(vs::PRIVILEGE_DOWNLOAD, $id)))
+			VExternalErrors::dieError(VExternalErrors::ACCESS_CONTROL_RESTRICTED);
 
 		if(!preg_match('/^[\w-_]*$/', $id))
-			throw new KalturaAPIException(KalturaErrors::REPORT_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::REPORT_NOT_FOUND, $id);
 
 		$partner_id = $this->getPartnerId();
 		$folderPath = "/content/reports/$partner_id";
@@ -312,23 +312,23 @@ class ReportService extends KalturaBaseService
 	/**
 	 * @action execute
 	 * @param int $id
-	 * @param KalturaKeyValueArray $params
-	 * @return KalturaReportResponse
+	 * @param VidiunKeyValueArray $params
+	 * @return VidiunReportResponse
 	 */
-	public function executeAction($id, KalturaKeyValueArray $params = null)
+	public function executeAction($id, VidiunKeyValueArray $params = null)
 	{
 		$dbReport = ReportPeer::retrieveByPK($id);
 		if (is_null($dbReport))
-			throw new KalturaAPIException(KalturaErrors::REPORT_NOT_FOUND, $id);
+			throw new VidiunAPIException(VidiunErrors::REPORT_NOT_FOUND, $id);
 			
 		$this->addPartnerIdToParams($params);
 		
-		$execParams = KalturaReportHelper::getValidateExecutionParameters($dbReport, $params);
+		$execParams = VidiunReportHelper::getValidateExecutionParameters($dbReport, $params);
 		
-		$kReportsManager = new kReportManager($dbReport);
-		list($columns, $rows) = $kReportsManager->execute($execParams);
+		$vReportsManager = new vReportManager($dbReport);
+		list($columns, $rows) = $vReportsManager->execute($execParams);
 		
-		$reportResponse = KalturaReportResponse::fromColumnsAndRows($columns, $rows);
+		$reportResponse = VidiunReportResponse::fromColumnsAndRows($columns, $rows);
 		
 		return $reportResponse;
 	}
@@ -336,33 +336,33 @@ class ReportService extends KalturaBaseService
 	/**
 	 * @action getCsv
 	 * @param int $id
-	 * @param KalturaKeyValueArray $params
+	 * @param VidiunKeyValueArray $params
 	 * @return file
 	 */
-	public function getCsvAction($id, KalturaKeyValueArray $params = null)
+	public function getCsvAction($id, VidiunKeyValueArray $params = null)
 	{
 		$this->addPartnerIdToParams($params);
 		
 		ini_set( "memory_limit","512M" );
 		
-		if (kKavaBase::isPartnerAllowed($this->getPartnerId(), kKavaBase::VOD_DISABLED_PARTNERS))
+		if (vKavaBase::isPartnerAllowed($this->getPartnerId(), vKavaBase::VOD_DISABLED_PARTNERS))
 		{
-			$customReports = kConf::getMap('custom_reports');
+			$customReports = vConf::getMap('custom_reports');
 			if (!isset($customReports[$id]))
-				throw new KalturaAPIException(KalturaErrors::REPORT_NOT_FOUND, $id);
+				throw new VidiunAPIException(VidiunErrors::REPORT_NOT_FOUND, $id);
 			
-			list($columns, $rows) = kKavaReportsMgr::customReport($id, $params->toObjectsArray());
+			list($columns, $rows) = vKavaReportsMgr::customReport($id, $params->toObjectsArray());
 		}
 		else 
 		{
 			$dbReport = ReportPeer::retrieveByPK($id);
 			if (is_null($dbReport))
-				throw new KalturaAPIException(KalturaErrors::REPORT_NOT_FOUND, $id);
+				throw new VidiunAPIException(VidiunErrors::REPORT_NOT_FOUND, $id);
 				
-			$execParams = KalturaReportHelper::getValidateExecutionParameters($dbReport, $params);
+			$execParams = VidiunReportHelper::getValidateExecutionParameters($dbReport, $params);
 			
-			$kReportsManager = new kReportManager($dbReport);
-			list($columns, $rows) = $kReportsManager->execute($execParams);
+			$vReportsManager = new vReportManager($dbReport);
+			list($columns, $rows) = $vReportsManager->execute($execParams);
 		}
 		
 		$fileName = array('Report', $id, $this->getPartnerId());
@@ -400,52 +400,52 @@ class ReportService extends KalturaBaseService
 
 	/**
 	 * @action exportToCsv
-	 * @param KalturaReportExportParams $params
-	 * @return KalturaReportExportResponse
-	 * @throws KalturaAPIException
+	 * @param VidiunReportExportParams $params
+	 * @return VidiunReportExportResponse
+	 * @throws VidiunAPIException
 	 */
-	public function exportToCsvAction(KalturaReportExportParams $params)
+	public function exportToCsvAction(VidiunReportExportParams $params)
 	{
 		$this->validateReportExportParams($params);
 
 		if (!$params->recipientEmail)
 		{
-			$kuser = kCurrentContext::getCurrentKsKuser();
-			if ($kuser)
+			$vuser = vCurrentContext::getCurrentVsVuser();
+			if ($vuser)
 			{
-				$params->recipientEmail = $kuser->getEmail();
+				$params->recipientEmail = $vuser->getEmail();
 			}
 			else
 			{
-				$partnerId = kCurrentContext::getCurrentPartnerId();
+				$partnerId = vCurrentContext::getCurrentPartnerId();
 				$partner = PartnerPeer::retrieveByPK($partnerId);
 				$params->recipientEmail = $partner->getAdminEmail();
 			}
 		}
 
-		$dbBatchJob = kJobsManager::addExportReportJob($params);
+		$dbBatchJob = vJobsManager::addExportReportJob($params);
 
-		$response = new KalturaReportExportResponse();
+		$response = new VidiunReportExportResponse();
 		$response->referenceJobId = $dbBatchJob->getId();
 		$response->reportEmail = $params->recipientEmail;
 
 		return $response;
 	}
 
-	protected function validateReportExportParams(KalturaReportExportParams $params)
+	protected function validateReportExportParams(VidiunReportExportParams $params)
 	{
 		if (!$params->reportItems)
 		{
-			throw new KalturaAPIException(KalturaErrors::MISSING_MANDATORY_PARAMETER);
+			throw new VidiunAPIException(VidiunErrors::MISSING_MANDATORY_PARAMETER);
 		}
 		foreach ($params->reportItems as $reportItem)
 		{
 			/**
-			 * @var KalturaReportExportItem $reportItem
+			 * @var VidiunReportExportItem $reportItem
 			 */
 			if (!$reportItem->action || !$reportItem->reportType || !$reportItem->filter)
 			{
-				throw new KalturaAPIException(KalturaErrors::MISSING_MANDATORY_PARAMETER);
+				throw new VidiunAPIException(VidiunErrors::MISSING_MANDATORY_PARAMETER);
 			}
 		}
 	}
@@ -453,12 +453,12 @@ class ReportService extends KalturaBaseService
 	protected function parseParamsStr($paramsStr)
 	{
 		$paramsStrArray = explode(';', $paramsStr);
-		$paramsKeyValueArray = new KalturaKeyValueArray();
+		$paramsKeyValueArray = new VidiunKeyValueArray();
 		foreach($paramsStrArray as $paramStr)
 		{
 			$paramStr = trim($paramStr);
 			$paramArray = explode('=', $paramStr);
-			$paramKeyValue = new KalturaKeyValue();
+			$paramKeyValue = new VidiunKeyValue();
 			$paramKeyValue->key = isset($paramArray[0]) ? $paramArray[0] : null;
 			$paramKeyValue->value = isset($paramArray[1]) ? $paramArray[1] : null;
 			$paramsKeyValueArray[] = $paramKeyValue;
@@ -478,7 +478,7 @@ class ReportService extends KalturaBaseService
 			}
 		}
 		// force partner id parameter
-		$partnerIdParam = new KalturaKeyValue();
+		$partnerIdParam = new VidiunKeyValue();
 		$partnerIdParam->key = 'partner_id';
 		$partnerIdParam->value = $this->getPartnerId();
 		$params[] = $partnerIdParam;

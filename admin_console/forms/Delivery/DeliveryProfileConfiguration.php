@@ -41,7 +41,7 @@ class Form_Delivery_DeliveryProfileConfiguration extends Infra_Form
 				'filters'		=> array('StringTrim'),
 		));
 		
-		$deliveryStatus = new Kaltura_Form_Element_EnumSelect('status', array('enum' => 'Kaltura_Client_Enum_DeliveryStatus'));
+		$deliveryStatus = new Vidiun_Form_Element_EnumSelect('status', array('enum' => 'Vidiun_Client_Enum_DeliveryStatus'));
 		$deliveryStatus->setLabel('Delivery Status:');
 		$this->addElements(array($deliveryStatus));
 		
@@ -54,11 +54,11 @@ class Form_Delivery_DeliveryProfileConfiguration extends Infra_Form
 				'decorators' => array('ViewHelper', array('Label', array('placement' => 'append')), array('HtmlTag',  array('tag' => 'hr', 'class' => 'crossLine')))
 		));
 		
-		$type = new Kaltura_Form_Element_EnumSelect('type', array('enum' => 'Kaltura_Client_Enum_DeliveryProfileType'));
+		$type = new Vidiun_Form_Element_EnumSelect('type', array('enum' => 'Vidiun_Client_Enum_DeliveryProfileType'));
 		$type->setLabel('Delivery profile Type*:');
 		$this->addElements(array($type));
 		
-		$streamerType = new Kaltura_Form_Element_EnumSelect('streamerType', array('enum' => 'Kaltura_Client_Enum_PlaybackProtocol'));
+		$streamerType = new Vidiun_Form_Element_EnumSelect('streamerType', array('enum' => 'Vidiun_Client_Enum_PlaybackProtocol'));
 		$streamerType->setLabel('Streamer Type*:');
 		$this->addElements(array($streamerType));
 		

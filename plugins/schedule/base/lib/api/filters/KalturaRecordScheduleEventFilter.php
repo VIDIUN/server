@@ -3,10 +3,10 @@
  * @package plugins.schedule
  * @subpackage api.filters
  */
-class KalturaRecordScheduleEventFilter extends KalturaRecordScheduleEventBaseFilter
+class VidiunRecordScheduleEventFilter extends VidiunRecordScheduleEventBaseFilter
 {
 	/* (non-PHPdoc)
-	 * @see KalturaScheduleEventFilter::getListResponseType()
+	 * @see VidiunScheduleEventFilter::getListResponseType()
 	 */
 	protected function getListResponseType()
 	{

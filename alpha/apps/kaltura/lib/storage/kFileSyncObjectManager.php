@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage storage
  */
-class kFileSyncObjectManager
+class vFileSyncObjectManager
 {
 	/**
 	 * 
@@ -55,13 +55,13 @@ class kFileSyncObjectManager
 		}
 		
 		if ( $object == null )
-			$object = KalturaPluginManager::loadObject('ISyncableFile', $objectType, array('objectId' => $objectId));
+			$object = VidiunPluginManager::loadObject('ISyncableFile', $objectType, array('objectId' => $objectId));
 		
 		if ( $object == null )
 		{
 			$error = __METHOD__. " Cannot find object type [" . $objectType . "] with object_id [" . $objectId . "]";
-			KalturaLog::err($error);
-			throw new kFileSyncException($error);
+			VidiunLog::err($error);
+			throw new vFileSyncException($error);
 		}
 		return $object;
 	}

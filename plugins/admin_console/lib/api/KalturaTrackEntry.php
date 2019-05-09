@@ -3,7 +3,7 @@
  * @package plugins.adminConsole
  * @subpackage api.objects
  */
-class KalturaTrackEntry extends KalturaObject
+class VidiunTrackEntry extends VidiunObject
 {
 	/**
 	 * @var int
@@ -11,7 +11,7 @@ class KalturaTrackEntry extends KalturaObject
 	public $id;
 
 	/**
-	 * @var KalturaTrackEntryEventType
+	 * @var VidiunTrackEntryEventType
 	 */
 	public $trackEventType;
 
@@ -68,7 +68,7 @@ class KalturaTrackEntry extends KalturaObject
 	/**
 	 * @var string
 	 */
-	public $ks;
+	public $vs;
 
 	/**
 	 * @var string
@@ -109,7 +109,7 @@ class KalturaTrackEntry extends KalturaObject
 		"paramStr1" => "param1Str",
 		"paramStr2" => "param2Str",
 		"paramStr3" => "param3Str",
-		"ks",
+		"vs",
 		"description",
 		"createdAt",
 		"updatedAt",

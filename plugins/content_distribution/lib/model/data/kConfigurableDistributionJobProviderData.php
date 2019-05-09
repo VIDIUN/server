@@ -3,7 +3,7 @@
  * @package plugins.contentDistribution
  * @subpackage model.data
  */
-abstract class kConfigurableDistributionJobProviderData extends kDistributionJobProviderData
+abstract class vConfigurableDistributionJobProviderData extends vDistributionJobProviderData
 {
 	/**
 	 * @var array

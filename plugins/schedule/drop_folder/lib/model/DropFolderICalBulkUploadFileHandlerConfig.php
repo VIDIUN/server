@@ -13,7 +13,7 @@ class DropFolderICalBulkUploadFileHandlerConfig extends DropFolderFileHandlerCon
 	
 
 	public function getHandlerType() {
-		return kPluginableEnumsManager::coreToApi("KalturaBulkUploadType", BulkUploadSchedulePlugin::getApiValue(BulkUploadScheduleType::ICAL));
+		return vPluginableEnumsManager::coreToApi("VidiunBulkUploadType", BulkUploadSchedulePlugin::getApiValue(BulkUploadScheduleType::ICAL));
 	}
 	
 	/**

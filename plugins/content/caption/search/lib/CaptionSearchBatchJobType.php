@@ -3,7 +3,7 @@
  * @package plugins.captionSearch
  * @subpackage api.enum
  */
-class CaptionSearchBatchJobType implements IKalturaPluginEnum, BatchJobType
+class CaptionSearchBatchJobType implements IVidiunPluginEnum, BatchJobType
 {
 	const PARSE_CAPTION_ASSET = 'parseCaptionAsset';
 	

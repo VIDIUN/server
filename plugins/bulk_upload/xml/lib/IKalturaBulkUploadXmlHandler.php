@@ -4,7 +4,7 @@
  * @package plugins.bulkUploadXml
  * @subpackage lib
  */
-interface IKalturaBulkUploadXmlHandler
+interface IVidiunBulkUploadXmlHandler
 {
 	/**
 	 * Configures the handler by passing all the required configuration 
@@ -14,29 +14,29 @@ interface IKalturaBulkUploadXmlHandler
 	
 	/**
 	 * Handles plugin data for new created object 
-	 * @param KalturaObjectBase $object
+	 * @param VidiunObjectBase $object
 	 * @param SimpleXMLElement $item
-	 * @throws KalturaBulkUploadXmlException  
+	 * @throws VidiunBulkUploadXmlException  
 	 */
-	public function handleItemAdded(KalturaObjectBase $object, SimpleXMLElement $item);
+	public function handleItemAdded(VidiunObjectBase $object, SimpleXMLElement $item);
 
 	/**
 	 * 
 	 * Handles plugin data for updated object  
-	 * @param KalturaObjectBase $object
+	 * @param VidiunObjectBase $object
 	 * @param SimpleXMLElement $item
-	 * @throws KalturaBulkUploadXmlException  
+	 * @throws VidiunBulkUploadXmlException  
 	 */
-	public function handleItemUpdated(KalturaObjectBase $object, SimpleXMLElement $item);
+	public function handleItemUpdated(VidiunObjectBase $object, SimpleXMLElement $item);
 
 	/**
 	 * 
 	 * Handles plugin data for deleted object  
-	 * @param KalturaObjectBase $object
+	 * @param VidiunObjectBase $object
 	 * @param SimpleXMLElement $item
-	 * @throws KalturaBulkUploadXmlException  
+	 * @throws VidiunBulkUploadXmlException  
 	 */
-	public function handleItemDeleted(KalturaObjectBase $object, SimpleXMLElement $item);
+	public function handleItemDeleted(VidiunObjectBase $object, SimpleXMLElement $item);
 	
 	/**
 	 * Return the container name to be handeled

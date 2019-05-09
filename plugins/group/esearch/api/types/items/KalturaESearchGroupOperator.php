@@ -3,15 +3,15 @@
  * @package plugins.group
  * @subpackage api.objects
  */
-class KalturaESearchGroupOperator extends KalturaESearchGroupBaseItem
+class VidiunESearchGroupOperator extends VidiunESearchGroupBaseItem
 {
 	/**
-	 * @var KalturaESearchOperatorType
+	 * @var VidiunESearchOperatorType
 	 */
 	public $operator;
 
 	/**
-	 *  @var KalturaESearchGroupBaseItemArray
+	 *  @var VidiunESearchGroupBaseItemArray
 	 */
 	public $searchItems;
 

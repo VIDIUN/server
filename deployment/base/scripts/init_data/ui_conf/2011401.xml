@@ -1,9 +1,9 @@
-<kcw>
+<vcw>
   <UIConfigList>
     <UIConfig>
       <target>ContributionWizard.swf</target>
-      <cssUrl id="light_new_2.1.5" name="New Light(version 2.1.5 and up)">/content/uiconf/kaltura/kmc/kcw/v2.1.5/style.swf?R=14241.278457173445</cssUrl>
-      <localeUrl id="partnerLocale" name="Current Locale">/content/uiconf/kaltura/kmc/kcw/v2.1.6/en_US_ContributionWizard_kaltura.swf?R=14241.278457173445</localeUrl>
+      <cssUrl id="light_new_2.1.5" name="New Light(version 2.1.5 and up)">/content/uiconf/vidiun/vmc/vcw/v2.1.5/style.swf?R=14241.278457173445</cssUrl>
+      <localeUrl id="partnerLocale" name="Current Locale">/content/uiconf/vidiun/vmc/vcw/v2.1.6/en_US_ContributionWizard_vidiun.swf?R=14241.278457173445</localeUrl>
     </UIConfig>
   </UIConfigList>
   <ImportTypesConfig>
@@ -156,4 +156,4 @@
       <mediaProviderName>upload</mediaProviderName>
     </gotoScreen>
   </StartupDefaults>
-</kcw>
+</vcw>

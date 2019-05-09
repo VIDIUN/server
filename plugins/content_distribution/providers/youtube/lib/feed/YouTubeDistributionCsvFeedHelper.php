@@ -23,7 +23,7 @@ class YouTubeDistributionCsvFeedHelper
 	 */
 	protected $_metadataTempFileName;
 
-	public function __construct(KalturaYouTubeDistributionProfile $distributionProfile)
+	public function __construct(VidiunYouTubeDistributionProfile $distributionProfile)
 	{
 		$timestampName = date('Ymd-His') . '_' . time();
 		$this->_directoryName = '/' . $timestampName;
@@ -33,7 +33,7 @@ class YouTubeDistributionCsvFeedHelper
 		$this->_metadataTempFileName = 'youtube_csv20_' . $timestampName . '.csv';
 	}
 
-	public static function initializeDefaultSubmitFeed(KalturaYouTubeDistributionProfile $distributionProfile, $fieldValues, $videoFilePath, $thumbnailFilePath, $captionAssetIds, $entryId = null)
+	public static function initializeDefaultSubmitFeed(VidiunYouTubeDistributionProfile $distributionProfile, $fieldValues, $videoFilePath, $thumbnailFilePath, $captionAssetIds, $entryId = null)
 	{
 		$feed = new YouTubeDistributionCsvFeedHelper($distributionProfile);
 		$feed->genericHandling($distributionProfile, $fieldValues, $videoFilePath, $thumbnailFilePath, null, $entryId);
@@ -42,7 +42,7 @@ class YouTubeDistributionCsvFeedHelper
 		return $feed;
 	}
 
-	public static function initializeDefaultUpdateFeed(KalturaYouTubeDistributionProfile $distributionProfile, $fieldValues, $videoFilePath, $thumbnailFilePath, YouTubeDistributionRemoteIdHandler $remoteIdHandler, $entryId = null)
+	public static function initializeDefaultUpdateFeed(VidiunYouTubeDistributionProfile $distributionProfile, $fieldValues, $videoFilePath, $thumbnailFilePath, YouTubeDistributionRemoteIdHandler $remoteIdHandler, $entryId = null)
 	{
 		$feed = new YouTubeDistributionCsvFeedHelper($distributionProfile);
 		$feed->genericHandling($distributionProfile, $fieldValues, $videoFilePath, $thumbnailFilePath, $remoteIdHandler->getVideoId(), $entryId);
@@ -66,7 +66,7 @@ class YouTubeDistributionCsvFeedHelper
 		}
 	}
 
-	public function genericHandling(KalturaYouTubeDistributionProfile $distributionProfile, $fieldValues, $videoFilePath, $thumbnailFilePath, $videoId = null, $entryId)
+	public function genericHandling(VidiunYouTubeDistributionProfile $distributionProfile, $fieldValues, $videoFilePath, $thumbnailFilePath, $videoId = null, $entryId)
 	{
 		// thumbnail file
 		if (file_exists($thumbnailFilePath))
@@ -77,7 +77,7 @@ class YouTubeDistributionCsvFeedHelper
 
 	}
 
-	public static function initializeDefaultDeleteFeed(KalturaYouTubeDistributionProfile $distributionProfile, $fieldValues, $videoFilePath, $thumbnailFilePath, YouTubeDistributionRemoteIdHandler $remoteIdHandler)
+	public static function initializeDefaultDeleteFeed(VidiunYouTubeDistributionProfile $distributionProfile, $fieldValues, $videoFilePath, $thumbnailFilePath, YouTubeDistributionRemoteIdHandler $remoteIdHandler)
 	{
 		$feed = new YouTubeDistributionCsvFeedHelper($distributionProfile);
 		$feed->setVideoToDelete($remoteIdHandler->getVideoId());
@@ -85,14 +85,14 @@ class YouTubeDistributionCsvFeedHelper
 		return $feed;
 	}
 
-	public function setDataByFieldValues(array $fieldValues, KalturaYouTubeDistributionProfile $distributionProfile, $videoId = null, $videoFilePath = null, $entryId)
+	public function setDataByFieldValues(array $fieldValues, VidiunYouTubeDistributionProfile $distributionProfile, $videoId = null, $videoFilePath = null, $entryId)
 	{
 		if ($videoId) // in case of update
 			$this->setCsvFieldValue('video_id',$videoId);
 		else if (file_exists($videoFilePath)) // in case of upload
 		{
 			$this->setCsvFieldValue("filename", pathinfo($videoFilePath, PATHINFO_BASENAME));
-			$this->setCsvFieldValueIfHasValue('channel', $fieldValues, KalturaYouTubeDistributionField::VIDEO_CHANNEL);
+			$this->setCsvFieldValueIfHasValue('channel', $fieldValues, VidiunYouTubeDistributionField::VIDEO_CHANNEL);
 
 			if ($this->isAllowedValue($distributionProfile->enableContentId))
 			{
@@ -112,18 +112,18 @@ class YouTubeDistributionCsvFeedHelper
 		$this->setDefaultCategory($fieldValues,$distributionProfile);
 		$this->setNotifySubscribers($fieldValues,$distributionProfile);
 
-		$this->setCsvFieldValueIfHasValue('custom_id', $fieldValues, KalturaYouTubeDistributionField::ASSET_CUSTOM_ID);
-		$this->setCsvFieldValueIfHasValue('title', $fieldValues, KalturaYouTubeDistributionField::ASSET_TITLE);
-		$this->setCsvFieldValueIfHasValue('spoken_language', $fieldValues, KalturaYouTubeDistributionField::ASSET_SPOKEN_LANGUAGE);
-		$this->setCsvFieldValueIfHasValue('description', $fieldValues, KalturaYouTubeDistributionField::MEDIA_DESCRIPTION); //make this like privacy context
-		$this->setCsvFieldValueIfHasValue('require_paid_subscription', $fieldValues, KalturaYouTubeDistributionField::REQUIRE_PAID_SUBSCRIPTION_TO_VIEW);
+		$this->setCsvFieldValueIfHasValue('custom_id', $fieldValues, VidiunYouTubeDistributionField::ASSET_CUSTOM_ID);
+		$this->setCsvFieldValueIfHasValue('title', $fieldValues, VidiunYouTubeDistributionField::ASSET_TITLE);
+		$this->setCsvFieldValueIfHasValue('spoken_language', $fieldValues, VidiunYouTubeDistributionField::ASSET_SPOKEN_LANGUAGE);
+		$this->setCsvFieldValueIfHasValue('description', $fieldValues, VidiunYouTubeDistributionField::MEDIA_DESCRIPTION); //make this like privacy context
+		$this->setCsvFieldValueIfHasValue('require_paid_subscription', $fieldValues, VidiunYouTubeDistributionField::REQUIRE_PAID_SUBSCRIPTION_TO_VIEW);
 
-		$this->setTime('start_time', $fieldValues, KalturaYouTubeDistributionField::START_TIME);
-		$this->setTime('end_time', $fieldValues, KalturaYouTubeDistributionField::END_TIME);
+		$this->setTime('start_time', $fieldValues, VidiunYouTubeDistributionField::START_TIME);
+		$this->setTime('end_time', $fieldValues, VidiunYouTubeDistributionField::END_TIME);
 
-		$this->appendDelimitedValues('keywords', $fieldValues, KalturaYouTubeDistributionField::MEDIA_KEYWORDS, '|');
-		$this->appendDelimitedValues('domain_whitelist', $fieldValues, KalturaYouTubeDistributionField::VIDEO_DOMAIN_WHITE_LIST, '|');
-		$this->appendDelimitedValues('add_asset_labels', $fieldValues, KalturaYouTubeDistributionField::ASSET_LABLES, '|');
+		$this->appendDelimitedValues('keywords', $fieldValues, VidiunYouTubeDistributionField::MEDIA_KEYWORDS, '|');
+		$this->appendDelimitedValues('domain_whitelist', $fieldValues, VidiunYouTubeDistributionField::VIDEO_DOMAIN_WHITE_LIST, '|');
+		$this->appendDelimitedValues('add_asset_labels', $fieldValues, VidiunYouTubeDistributionField::ASSET_LABLES, '|');
 	}
 
 	public function setVideoToDelete($videoId)
@@ -160,12 +160,12 @@ class YouTubeDistributionCsvFeedHelper
 	}
 
 	/**
-	 * @param KalturaYoutubeDistributionProfile $distributionProfile
+	 * @param VidiunYoutubeDistributionProfile $distributionProfile
 	 * @return null|string
 	 */
-	protected function setNotifySubscribers(array $fieldValues , KalturaYoutubeDistributionProfile $distributionProfile)
+	protected function setNotifySubscribers(array $fieldValues , VidiunYoutubeDistributionProfile $distributionProfile)
 	{
-		$notifySubscribers = $this->getValueForField($fieldValues, KalturaYouTubeDistributionField::VIDEO_NOTIFY_SUBSCRIBERS);
+		$notifySubscribers = $this->getValueForField($fieldValues, VidiunYouTubeDistributionField::VIDEO_NOTIFY_SUBSCRIBERS);
 		if ($notifySubscribers == "" || is_null($notifySubscribers))
 			$notifySubscribers = $distributionProfile->notifySubscribers;
 
@@ -176,12 +176,12 @@ class YouTubeDistributionCsvFeedHelper
 	}
 
 	/**
-	 * @param KalturaYoutubeDistributionProfile $distributionProfile
+	 * @param VidiunYoutubeDistributionProfile $distributionProfile
 	 * @return null|string
 	 */
-	protected function setPrivacyStatus(array $fieldValues , KalturaYoutubeDistributionProfile $distributionProfile)
+	protected function setPrivacyStatus(array $fieldValues , VidiunYoutubeDistributionProfile $distributionProfile)
 	{
-		$privacyStatus = $this->getValueForField($fieldValues, KalturaYouTubeDistributionField::ENTRY_PRIVACY_STATUS);
+		$privacyStatus = $this->getValueForField($fieldValues, VidiunYouTubeDistributionField::ENTRY_PRIVACY_STATUS);
 		if ($privacyStatus == "" || is_null($privacyStatus))
 			$privacyStatus = $distributionProfile->privacyStatus;
 
@@ -192,11 +192,11 @@ class YouTubeDistributionCsvFeedHelper
 		}
 	}
 	/**
-	 * @param KalturaYoutubeDistributionProfile $distributionProfile
+	 * @param VidiunYoutubeDistributionProfile $distributionProfile
 	 */
-	protected function setDefaultCategory(array $fieldValues , KalturaYoutubeDistributionProfile $distributionProfile)
+	protected function setDefaultCategory(array $fieldValues , VidiunYoutubeDistributionProfile $distributionProfile)
 	{
-		$category = $this->getValueForField($fieldValues, KalturaYouTubeApiDistributionField::MEDIA_CATEGORY);
+		$category = $this->getValueForField($fieldValues, VidiunYouTubeApiDistributionField::MEDIA_CATEGORY);
 		if ($category == "" || is_null($category))
 			$category = $distributionProfile->defaultCategory;
 
@@ -256,12 +256,12 @@ class YouTubeDistributionCsvFeedHelper
 			{
 				/* @var $asset CaptionAsset */
 				$syncKey = $asset->getSyncKey(flavorAsset::FILE_SYNC_FLAVOR_ASSET_SUB_TYPE_ASSET);
-				if(kFileSyncUtils::fileSync_exists($syncKey))
+				if(vFileSyncUtils::fileSync_exists($syncKey))
 				{
 					$captionInfo = array();
-					$captionInfo['fileUrl'] = kFileSyncUtils::getLocalFilePathForKey ( $syncKey, false );
+					$captionInfo['fileUrl'] = vFileSyncUtils::getLocalFilePathForKey ( $syncKey, false );
 					$captionInfo['fileExt'] = $asset->getFileExt();
-					$twoCodeLanguage = languageCodeManager::getTwoCodeFromKalturaName($asset->getLanguage());
+					$twoCodeLanguage = languageCodeManager::getTwoCodeFromVidiunName($asset->getLanguage());
 					if (!$twoCodeLanguage)
 						continue;
 					$captionInfo['language'] = $twoCodeLanguage;
@@ -274,7 +274,7 @@ class YouTubeDistributionCsvFeedHelper
 
 	public function getCaptionLanguage($language)
 	{
-		$languageReflector = KalturaTypeReflectorCacher::get('KalturaLanguage');
+		$languageReflector = VidiunTypeReflectorCacher::get('VidiunLanguage');
 		return $languageReflector->getConstantName($language);
 	}
 
@@ -286,48 +286,48 @@ class YouTubeDistributionCsvFeedHelper
 			$this->_csvMap["$csvFieldKey"] = $values ;
 	}
 
-	public function setAdParamsByFieldValues(array $fieldValues, KalturaYouTubeDistributionProfile $distributionProfile)
+	public function setAdParamsByFieldValues(array $fieldValues, VidiunYouTubeDistributionProfile $distributionProfile)
 	{
 		if (!$distributionProfile->enableAdServer)
 			return;
 
 		$adTypes = '';
 		$delimiter = '|';
-		$adValue = $this->getAdvertisingValue($fieldValues,KalturaYouTubeDistributionField::ADVERTISING_INSTREAM_STANDARD,$distributionProfile->instreamStandard);
+		$adValue = $this->getAdvertisingValue($fieldValues,VidiunYouTubeDistributionField::ADVERTISING_INSTREAM_STANDARD,$distributionProfile->instreamStandard);
 		if ($this->isAllowedValue($adValue))
 			$adTypes = "instream_standard";
 		elseif($this->isNotAllowedValue($adValue))
 			$adTypes = "!instream_standard";
 
-		$adValue = $this->getAdvertisingValue($fieldValues,KalturaYouTubeDistributionField::ADVERTISING_INSTREAM_TRUEVIEW,$distributionProfile->instreamTrueview);
+		$adValue = $this->getAdvertisingValue($fieldValues,VidiunYouTubeDistributionField::ADVERTISING_INSTREAM_TRUEVIEW,$distributionProfile->instreamTrueview);
 		if ($this->isAllowedValue($adValue))
 			$adTypes .= $delimiter."instream_trueview";
 		elseif($this->isNotAllowedValue($adValue))
 			$adTypes .= $delimiter."!instream_trueview";
 
-		$adValue = $this->getAdvertisingValue($fieldValues,KalturaYouTubeDistributionField::ADVERTISING_ALLOW_INVIDEO,$distributionProfile->allowInvideo);
+		$adValue = $this->getAdvertisingValue($fieldValues,VidiunYouTubeDistributionField::ADVERTISING_ALLOW_INVIDEO,$distributionProfile->allowInvideo);
 		if ($this->isAllowedValue($adValue))
 			$adTypes .= $delimiter."invideo_overlay";
 		elseif($this->isNotAllowedValue($adValue))
 			$adTypes .= $delimiter."!invideo_overlay";
 
-		$adValue = $this->getAdvertisingValue($fieldValues,KalturaYouTubeDistributionField::PRODUCT_LISTING_ADS,$distributionProfile->productListingAds);
+		$adValue = $this->getAdvertisingValue($fieldValues,VidiunYouTubeDistributionField::PRODUCT_LISTING_ADS,$distributionProfile->productListingAds);
 		if ($this->isAllowedValue($adValue))
 			$adTypes .= $delimiter."product_listing";
 		elseif($this->isNotAllowedValue($adValue))
 			$adTypes .= $delimiter."!product_listing";
 
-		$adValue = $this->getAdvertisingValue($fieldValues,KalturaYouTubeDistributionField::ADVERTISING_ALLOW_ADSENSE_FOR_VIDEO,$distributionProfile->allowAdsenseForVideo);
+		$adValue = $this->getAdvertisingValue($fieldValues,VidiunYouTubeDistributionField::ADVERTISING_ALLOW_ADSENSE_FOR_VIDEO,$distributionProfile->allowAdsenseForVideo);
 		if ($this->isAllowedValue($adValue))
 			$adTypes .= $delimiter."display";
 		elseif($this->isNotAllowedValue($adValue))
 			$adTypes .= $delimiter."!display";
 
-		$adValue = $this->getAdvertisingValue($fieldValues,KalturaYouTubeDistributionField::THIRD_PARTY_ADS,$distributionProfile->thirdPartyAds);
+		$adValue = $this->getAdvertisingValue($fieldValues,VidiunYouTubeDistributionField::THIRD_PARTY_ADS,$distributionProfile->thirdPartyAds);
 		if ($this->isAllowedValue($adValue))
 		{
 			$adTypes .= $delimiter."third_party_ads";
-			$this->setCsvFieldValueIfHasValue('ad_server_video_id', $fieldValues, KalturaYouTubeDistributionField::THIRD_PARTY_AD_SERVER_VIDEO_ID);
+			$this->setCsvFieldValueIfHasValue('ad_server_video_id', $fieldValues, VidiunYouTubeDistributionField::THIRD_PARTY_AD_SERVER_VIDEO_ID);
 		}
 		elseif($this->isNotAllowedValue($adValue))
 			$adTypes .= $delimiter."!third_party_ads";
@@ -346,22 +346,22 @@ class YouTubeDistributionCsvFeedHelper
 			return null;
 
 		$key = $metadata->getSyncKey(Metadata::FILE_SYNC_METADATA_DATA);
-		$xml = kFileSyncUtils::file_get_contents($key, true, false);
+		$xml = vFileSyncUtils::file_get_contents($key, true, false);
 		$xmlObj = simplexml_load_string($xml);
 		if (isset($xmlObj->$fieldName))
 			return (string)$xmlObj->$fieldName;
 		return null;
 	}
 
-	public function appendRightsAdminByFieldValues(array $fieldValues, KalturaYouTubeDistributionProfile $distributionProfile, $entryId)
+	public function appendRightsAdminByFieldValues(array $fieldValues, VidiunYouTubeDistributionProfile $distributionProfile, $entryId)
 	{
-		$usagePolicy = $this->getPolicyValue($fieldValues, KalturaYouTubeDistributionField::POLICY_COMMERCIAL, $distributionProfile->commercialPolicy);
+		$usagePolicy = $this->getPolicyValue($fieldValues, VidiunYouTubeDistributionField::POLICY_COMMERCIAL, $distributionProfile->commercialPolicy);
 		if ($usagePolicy == self::METADATA_CUSTOME_USAGE_POLICY_FIELD)
 			$usagePolicy = $this->getYouTubePolicyMetadataCustomValue(self::METADATA_PROFILE_YOUTUBE_CUSTOM_USAGE_POLICY_SYSTEM_NAME, self::METADATA_CUSTOME_USAGE_POLICY_FIELD, $distributionProfile->partnerId, $entryId);
 		if ($usagePolicy)
 			$this->setCsvFieldValue('usage_policy', $usagePolicy);
 
-		$matchPolicy = $this->getPolicyValue($fieldValues, KalturaYouTubeDistributionField::POLICY_UGC, $distributionProfile->ugcPolicy);
+		$matchPolicy = $this->getPolicyValue($fieldValues, VidiunYouTubeDistributionField::POLICY_UGC, $distributionProfile->ugcPolicy);
 		if ($matchPolicy == self::METADATA_CUSTOME_MATCH_POLICY_FIELD)
 			$matchPolicy = $this->getYouTubePolicyMetadataCustomValue(self::METADATA_PROFILE_YOUTUBE_CUSTOM_MATCH_POLICY_SYSTEM_NAME, self::METADATA_CUSTOME_MATCH_POLICY_FIELD, $distributionProfile->partnerId, $entryId);
 		if ($matchPolicy)

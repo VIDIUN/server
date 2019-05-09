@@ -38,8 +38,8 @@ class invalidSessionTableMap extends TableMap {
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
-		$this->addColumn('KS', 'Ks', 'VARCHAR', false, 300, null);
-		$this->addColumn('KS_VALID_UNTIL', 'KsValidUntil', 'TIMESTAMP', false, null, null);
+		$this->addColumn('VS', 'Vs', 'VARCHAR', false, 300, null);
+		$this->addColumn('VS_VALID_UNTIL', 'VsValidUntil', 'TIMESTAMP', false, null, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('ACTIONS_LIMIT', 'ActionsLimit', 'INTEGER', false, null, null);
 		$this->addColumn('TYPE', 'Type', 'INTEGER', false, null, null);

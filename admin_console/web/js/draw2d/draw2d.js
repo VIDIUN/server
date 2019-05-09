@@ -7863,15 +7863,15 @@ _59b3=true;
 var left=0;
 var right=0;
 var i=0;
-var k=0;
+var v=0;
 if(_59b2==true){
 while((i<_59b1.length)&&(whitespace.indexOf(_59b1.charAt(i++))!=-1)){
 left++;
 }
 }
 if(_59b3==true){
-k=_59b1.length-1;
-while((k>=left)&&(whitespace.indexOf(_59b1.charAt(k--))!=-1)){
+v=_59b1.length-1;
+while((v>=left)&&(whitespace.indexOf(_59b1.charAt(v--))!=-1)){
 right++;
 }
 }

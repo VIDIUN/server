@@ -3,7 +3,7 @@
  * @package Core
  * @subpackage model.data
  */
-class kBulkDownloadJobData extends kJobData
+class vBulkDownloadJobData extends vJobData
 {
 	/**
 	 * Comma separated list of entry ids

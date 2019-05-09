@@ -11,7 +11,7 @@ function createSphinxConnection($sphinxServer, $port = 9312)
 	}
 	catch(PropelException $pex)
 	{
-		KalturaLog::alert($pex->getMessage());
+		VidiunLog::alert($pex->getMessage());
 		throw new PropelException("Database error");
 	}
 }

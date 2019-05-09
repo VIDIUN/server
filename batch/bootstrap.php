@@ -5,38 +5,38 @@
  */
 
 chdir(__DIR__);
-define('KALTURA_ROOT_PATH', realpath(__DIR__ . '/../'));
-require_once(KALTURA_ROOT_PATH . '/alpha/config/kConf.php');
+define('VIDIUN_ROOT_PATH', realpath(__DIR__ . '/../'));
+require_once(VIDIUN_ROOT_PATH . '/alpha/config/vConf.php');
 
-define("KALTURA_BATCH_PATH", KALTURA_ROOT_PATH . "/batch");
+define("VIDIUN_BATCH_PATH", VIDIUN_ROOT_PATH . "/batch");
 
 // Autoloader - override the autoloader defaults
-require_once(KALTURA_ROOT_PATH . "/infra/KAutoloader.php");
-KAutoloader::setClassPath(array(
-	KAutoloader::buildPath(KALTURA_ROOT_PATH, "infra", "*"),
-	KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "*"),
-	KAutoloader::buildPath(KALTURA_ROOT_PATH, "plugins", "*"),
-	KAutoloader::buildPath(KALTURA_BATCH_PATH, "*"),
+require_once(VIDIUN_ROOT_PATH . "/infra/VAutoloader.php");
+VAutoloader::setClassPath(array(
+	VAutoloader::buildPath(VIDIUN_ROOT_PATH, "infra", "*"),
+	VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "*"),
+	VAutoloader::buildPath(VIDIUN_ROOT_PATH, "plugins", "*"),
+	VAutoloader::buildPath(VIDIUN_BATCH_PATH, "*"),
 ));
 
-KAutoloader::addClassPath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "plugins", "*", "batch", "*"));
+VAutoloader::addClassPath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "plugins", "*", "batch", "*"));
 
-KAutoloader::setIncludePath(array(
-	KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "ZendFramework", "library"),
+VAutoloader::setIncludePath(array(
+	VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "ZendFramework", "library"),
 ));
-KAutoloader::setClassMapFilePath(kEnvironment::get("cache_root_path") . '/batch/classMap.cache');
-KAutoloader::addExcludePath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "aws", "*")); // Do not load AWS files
-KAutoloader::addExcludePath(KAutoloader::buildPath(KALTURA_ROOT_PATH, "vendor", "HTMLPurifier", "*")); // Do not load HTMLPurifier files
-KAutoloader::register();
+VAutoloader::setClassMapFilePath(vEnvironment::get("cache_root_path") . '/batch/classMap.cache');
+VAutoloader::addExcludePath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "aws", "*")); // Do not load AWS files
+VAutoloader::addExcludePath(VAutoloader::buildPath(VIDIUN_ROOT_PATH, "vendor", "HTMLPurifier", "*")); // Do not load HTMLPurifier files
+VAutoloader::register();
 
 // Logger
-$loggerConfigPath = KALTURA_ROOT_PATH . "/configurations/logger.ini";
+$loggerConfigPath = VIDIUN_ROOT_PATH . "/configurations/logger.ini";
 
 try // we don't want to fail when logger is not configured right
 {
 	$config = new Zend_Config_Ini($loggerConfigPath);
-	KalturaLog::initLog($config->batch);
-	KalturaLog::setContext("BATCH");
+	VidiunLog::initLog($config->batch);
+	VidiunLog::setContext("BATCH");
 }
 catch(Zend_Config_Exception $ex)
 {

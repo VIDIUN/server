@@ -37,7 +37,7 @@ class Form_Partner_BaseStorageConfiguration extends Infra_Form
 		));
 		
 		 
-		$deliveryStatus = new Kaltura_Form_Element_EnumSelect('deliveryStatus', array('enum' => 'Kaltura_Client_Enum_StorageProfileDeliveryStatus'));
+		$deliveryStatus = new Vidiun_Form_Element_EnumSelect('deliveryStatus', array('enum' => 'Vidiun_Client_Enum_StorageProfileDeliveryStatus'));
 		$deliveryStatus->setLabel('Delivery Status:');
 		$this->addElements(array($deliveryStatus));	
 		
@@ -85,7 +85,7 @@ class Form_Partner_BaseStorageConfiguration extends Infra_Form
 							  ),	
 		));
 		
-		$readyBehavior = new Kaltura_Form_Element_EnumSelect('readyBehavior', array('enum' => 'Kaltura_Client_Enum_StorageProfileReadyBehavior'));
+		$readyBehavior = new Vidiun_Form_Element_EnumSelect('readyBehavior', array('enum' => 'Vidiun_Client_Enum_StorageProfileReadyBehavior'));
 		$readyBehavior->setLabel('Ready Behavior:');
 		$this->addElements(array($readyBehavior));
 		
@@ -171,7 +171,7 @@ class Form_Partner_BaseStorageConfiguration extends Infra_Form
     	
 	}
 
-	public function addFlavorParamsFields(Kaltura_Client_Type_FlavorParamsListResponse $flavorParams, array $selectedFlavorParams = array())
+	public function addFlavorParamsFields(Vidiun_Client_Type_FlavorParamsListResponse $flavorParams, array $selectedFlavorParams = array())
 	{
 		$flavorParamsElementNames = array();
 		foreach($flavorParams->objects as $index => $flavorParamsItem)
@@ -228,7 +228,7 @@ class Form_Partner_BaseStorageConfiguration extends Infra_Form
 				continue;
 			}
 				
-			$pairObject = new Kaltura_Client_Type_KeyValue();
+			$pairObject = new Vidiun_Client_Type_KeyValue();
 			$pairObject->key = $prefix . $key;
 			$pairObject->value = $value;
 			$res[] = $pairObject;
@@ -236,7 +236,7 @@ class Form_Partner_BaseStorageConfiguration extends Infra_Form
 		return $res;
 	}
 	
-	// Creates the KalturaStorageProfile
+	// Creates the VidiunStorageProfile
 	public function loadObject($object, array $properties, $add_underscore = true, $include_empty_fields = false) {
 		$object = parent::loadObject($object, $properties, $add_underscore, $include_empty_fields);
 		

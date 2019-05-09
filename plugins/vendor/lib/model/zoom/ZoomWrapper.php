@@ -16,9 +16,9 @@ class ZoomWrapper
 	 */
 	public static function retrieveZoomDataAsArray($apiPath, $forceNewToken = false, $tokens = null, $accountId = null)
 	{
-		KalturaLog::info("Calling zoom api: " . $apiPath);
-		$zoomAuth = new kZoomOauth();
-		$zoomConfiguration = kConf::get('ZoomAccount', 'vendor');
+		VidiunLog::info("Calling zoom api: " . $apiPath);
+		$zoomAuth = new vZoomOauth();
+		$zoomConfiguration = vConf::get('ZoomAccount', 'vendor');
 		$zoomBaseURL = $zoomConfiguration['ZoomBaseUrl'];
 		if (!$tokens || $forceNewToken)
 		{
@@ -39,8 +39,8 @@ class ZoomWrapper
 	 */
 	private static function executeZoomCall($apiPath, $tokens, $accountId, $zoomBaseURL)
 	{
-		$accessToken = $tokens[kZoomOauth::ACCESS_TOKEN];
-		$curlWrapper = new KCurlWrapper();
+		$accessToken = $tokens[vZoomOauth::ACCESS_TOKEN];
+		$curlWrapper = new VCurlWrapper();
 		$url = $zoomBaseURL . $apiPath . '?' . 'access_token=' . $accessToken;
 		$response = $curlWrapper->exec($url);
 		$httpCode = $curlWrapper->getHttpCode();
@@ -51,7 +51,7 @@ class ZoomWrapper
 	/**
 	 * @param $response
 	 * @param int $httpCode
-	 * @param KCurlWrapper $curlWrapper
+	 * @param VCurlWrapper $curlWrapper
 	 * @param $accountId
 	 * @param $tokens
 	 * @param $apiPath
@@ -63,37 +63,37 @@ class ZoomWrapper
 		//access token invalid and need to be refreshed
 		if ($httpCode === 401 && $accountId)
 		{
-			KalturaLog::warning("Zoom Curl returned  $httpCode, with massage: {$response} " . $curlWrapper->getError());
+			VidiunLog::warning("Zoom Curl returned  $httpCode, with massage: {$response} " . $curlWrapper->getError());
 			/** @var ZoomVendorIntegration $zoomClientData */
 			$zoomClientData = VendorIntegrationPeer::retrieveSingleVendorPerPartner($accountId, VendorTypeEnum::ZOOM_ACCOUNT);
 			if (!$zoomClientData)
 			{
-				throw new KalturaAPIException('Zoom Integration data Does Not Exist for current Partner');
+				throw new VidiunAPIException('Zoom Integration data Does Not Exist for current Partner');
 			}
-			$zoomAuth = new kZoomOauth();
+			$zoomAuth = new vZoomOauth();
 			return array($zoomAuth->refreshTokens($zoomClientData->getRefreshToken(), $zoomClientData), true);
 		}
 		// Sometimes we get  response 400, with massage: {"code":1010,"message":"User not belong to this account}
 		//in this case do not refresh tokens, they are valid --> return null
 		if ($httpCode === 400 && strpos($response, '1010') !== false)
 		{
-			KalturaLog::warning("Zoom Curl returned  $httpCode, with massage: {$response} " . $curlWrapper->getError());
+			VidiunLog::warning("Zoom Curl returned  $httpCode, with massage: {$response} " . $curlWrapper->getError());
 			$response = null;
 			return array($tokens, false);
 		}
 		//could Not find meeting -> zoom bug
 		if ($httpCode === 404 && (strpos($apiPath, 'participants') !== false))
 		{
-			KalturaLog::info('participants api returned 404');
-			KalturaLog::info(print_r($response, true));
+			VidiunLog::info('participants api returned 404');
+			VidiunLog::info(print_r($response, true));
 			$response = null;
 			return array($tokens, false);
 		}
 		//other error -> dieGracefully
 		if (!$response || $httpCode !== 200 || $curlWrapper->getError())
 		{
-			KalturaLog::err("Zoom Curl returned error, Error code : $httpCode, Error: {$curlWrapper->getError()} ");
-			KExternalErrors::dieGracefully();
+			VidiunLog::err("Zoom Curl returned error, Error code : $httpCode, Error: {$curlWrapper->getError()} ");
+			VExternalErrors::dieGracefully();
 		}
 		return array($tokens, false);
 	}

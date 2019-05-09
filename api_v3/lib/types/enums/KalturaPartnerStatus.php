@@ -3,7 +3,7 @@
  * @package api
  * @subpackage enum
  */
-class KalturaPartnerStatus extends KalturaEnum
+class VidiunPartnerStatus extends VidiunEnum
 {
 	const DELETED = 0;
 	const ACTIVE = 1;

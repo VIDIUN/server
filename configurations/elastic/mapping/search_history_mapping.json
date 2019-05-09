@@ -4,17 +4,17 @@
     "number_of_replicas" : 0,
     "analysis": {
       "char_filter": {
-        "kaltura_whitespace_filter": {
+        "vidiun_whitespace_filter": {
           "type": "pattern_replace",
           "pattern": "(\\s+)",
           "replacement": " "
         }
       },
       "normalizer": {
-        "kaltura_keyword_normalizer": {
+        "vidiun_keyword_normalizer": {
           "type": "custom",
           "char_filter": [
-            "kaltura_whitespace_filter"
+            "vidiun_whitespace_filter"
           ],
           "filter": [
             "lowercase",
@@ -32,27 +32,27 @@
       "properties": {
         "partner_id": {
           "type": "keyword",
-          "normalizer": "kaltura_keyword_normalizer"
+          "normalizer": "vidiun_keyword_normalizer"
         },
         "search_context": {
           "type": "keyword",
-          "normalizer": "kaltura_keyword_normalizer"
+          "normalizer": "vidiun_keyword_normalizer"
         },
         "searched_object": {
           "type": "keyword",
-          "normalizer": "kaltura_keyword_normalizer"
+          "normalizer": "vidiun_keyword_normalizer"
         },
         "search_term": {
           "type": "keyword",
-          "normalizer": "kaltura_keyword_normalizer"
+          "normalizer": "vidiun_keyword_normalizer"
         },
-        "kuser_id": {
+        "vuser_id": {
           "type": "keyword",
-          "normalizer": "kaltura_keyword_normalizer"
+          "normalizer": "vidiun_keyword_normalizer"
         },
         "pid_uid_context": {
           "type": "keyword",
-          "normalizer": "kaltura_keyword_normalizer"
+          "normalizer": "vidiun_keyword_normalizer"
         },
         "timestamp": {
           "type" : "date",

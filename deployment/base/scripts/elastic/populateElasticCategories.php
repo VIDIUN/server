@@ -21,27 +21,27 @@ $c->setLimit(1000);
 $con = myDbHelper::getConnection(myDbHelper::DB_HELPER_CONN_PROPEL2);
 
 $categories = categoryPeer::doSelect($c, $con);
-$elasticManager = new kElasticSearchManager();
+$elasticManager = new vElasticSearchManager();
 while(count($categories))
 {
 	foreach($categories as $category)
 	{
-		KalturaLog::log('category id ' . $category->getId() . ' int id[' . $category->getIntId() . '] last updated at ['. $category->getUpdatedAt(null) .']');
+		VidiunLog::log('category id ' . $category->getId() . ' int id[' . $category->getIntId() . '] last updated at ['. $category->getUpdatedAt(null) .']');
 		
 		try
 		{
 			$elasticManager->saveToElastic($category);
 		}
 		catch(Exception $e){
-			KalturaLog::err($e->getMessage());
+			VidiunLog::err($e->getMessage());
 			exit -1;
 		}
 	}
 	
 	$c->setOffset($c->getOffset() + count($categories));
-	kMemoryManager::clearMemory();
+	vMemoryManager::clearMemory();
 	$categories = categoryPeer::doSelect($c, $con);
 }
 
-KalturaLog::log('Done. Current time: ' . time());
+VidiunLog::log('Done. Current time: ' . time());
 exit(0);

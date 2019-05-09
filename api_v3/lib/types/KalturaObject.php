@@ -3,10 +3,10 @@
  * @package api
  * @subpackage objects
  */
-abstract class KalturaObject implements IApiObject
+abstract class VidiunObject implements IApiObject
 {
 	/**
-	 * @var KalturaListResponseArray
+	 * @var VidiunListResponseArray
 	 * @readonly
 	 */
 	public $relatedObjects;
@@ -41,13 +41,13 @@ abstract class KalturaObject implements IApiObject
 	
 	/**
 	 * Function tests whether a property on the object is null.
-	 * This can occur in case the property is actually null or if it is instance of type KalturaNullField
+	 * This can occur in case the property is actually null or if it is instance of type VidiunNullField
 	 * @param string $propertyName
 	 * @return bool
 	 */
 	protected function isNull ($propertyName)
 	{
-	    if (!property_exists(get_class($this), $propertyName) || is_null($this->$propertyName) || $this->$propertyName instanceof KalturaNullField)
+	    if (!property_exists(get_class($this), $propertyName) || is_null($this->$propertyName) || $this->$propertyName instanceof VidiunNullField)
 	    {
 	        return true;
 	    }
@@ -114,17 +114,17 @@ abstract class KalturaObject implements IApiObject
 		$srcObjClass = get_class($srcObj);
 		$srcObjRef = new ReflectionClass($srcObj);
 		$thisClass = get_class($this);
-		$thisRef = KalturaTypeReflectorCacher::get($thisClass);
+		$thisRef = VidiunTypeReflectorCacher::get($thisClass);
 		if(!$thisRef)
 			return false;
 		$thisProps = $thisRef->getProperties();
 	
 		// generate file header
-		$result = "<?php\nclass {$fromObjectClass} extends {$srcObjClass}\n{\n\tstatic function fromObject(\$apiObj, \$srcObj, KalturaDetachedResponseProfile \$responseProfile = null)\n\t{\n";
+		$result = "<?php\nclass {$fromObjectClass} extends {$srcObjClass}\n{\n\tstatic function fromObject(\$apiObj, \$srcObj, VidiunDetachedResponseProfile \$responseProfile = null)\n\t{\n";
 	
 		if ($thisRef->requiresReadPermission())
 		{
-			$result .= "\t\tif (!kPermissionManager::getReadPermitted('{$thisClass}', kApiParameterPermissionItem::ALL_VALUES_IDENTIFIER))\n";
+			$result .= "\t\tif (!vPermissionManager::getReadPermitted('{$thisClass}', vApiParameterPermissionItem::ALL_VALUES_IDENTIFIER))\n";
 			$result .= "\t\t\treturn;\n";
 		}
 	
@@ -139,7 +139,7 @@ abstract class KalturaObject implements IApiObject
 				
 			if(!isset($thisProps[$apiPropName]))
 			{
-				KalturaLog::alert("property {$apiPropName} defined in map, does not exist on object {$thisClass}");
+				VidiunLog::alert("property {$apiPropName} defined in map, does not exist on object {$thisClass}");
 				continue;
 			}
 			
@@ -150,7 +150,7 @@ abstract class KalturaObject implements IApiObject
 			$getterName = "get{$dbPropName}";
 			if (!is_callable(array($srcObj, $getterName)))
 			{
-				KalturaLog::alert("getter for property {$dbPropName} was not found on object {$srcObjClass}");
+				VidiunLog::alert("getter for property {$dbPropName} was not found on object {$srcObjClass}");
 				continue;
 			}
 			
@@ -191,7 +191,7 @@ abstract class KalturaObject implements IApiObject
 				{
 					if (in_array(strtolower($curProperty), $privates))
 					{
-						KalturaLog::log("{$curGetter->class}::{$curGetter->name} uses private property/method {$curProperty}");
+						VidiunLog::log("{$curGetter->class}::{$curGetter->name} uses private property/method {$curProperty}");
 						$fieldValue = null;		// we have to use the getter since it uses a private property
 					}
 				}
@@ -199,7 +199,7 @@ abstract class KalturaObject implements IApiObject
 				// check for use of parent::
 				if (strpos($fieldValue, 'parent::') !== false)
 				{
-					KalturaLog::log("{$curGetter->class}::{$curGetter->name} uses parent");
+					VidiunLog::log("{$curGetter->class}::{$curGetter->name} uses parent");
 					$fieldValue = null;		// we have to use the getter since it uses a private property
 				}
 			}
@@ -253,7 +253,7 @@ abstract class KalturaObject implements IApiObject
 				$enumClass = call_user_func(array($propertyType, 'getEnumClass'));
 				if ($enumClass)
 				{
-					$fieldValue = "kPluginableEnumsManager::coreToApi('{$enumClass}', {$fieldValue})";
+					$fieldValue = "vPluginableEnumsManager::coreToApi('{$enumClass}', {$fieldValue})";
 				}
 			}
 //			Commented out since this affects internal apps behavior, will need to re-add once those apps code is fixed
@@ -273,7 +273,7 @@ abstract class KalturaObject implements IApiObject
 								"\$values = explode(',', \$value);\n\t\t\t" . 
 								"\$finalValues = array();\n\t\t\t" . 
 								"foreach(\$values as \$val)\n\t\t\t\t" .
-									"\$finalValues[] = kPluginableEnumsManager::coreToApi('{$enumClass}', \$val);\n\t\t\t" .
+									"\$finalValues[] = vPluginableEnumsManager::coreToApi('{$enumClass}', \$val);\n\t\t\t" .
 								"\$value = implode(',', \$finalValues);\n\t\t" .
 							"}\n\t\t";
 					$fieldValue = '$value';
@@ -298,7 +298,7 @@ abstract class KalturaObject implements IApiObject
 			if ($thisProps[$apiPropName]->requiresReadPermission())
 			{
 				$declaringClass = $this->getDeclaringClassName($apiPropName);
-				$curCode = "if (kPermissionManager::getReadPermitted('{$declaringClass}', '{$apiPropName}'))\n\t\t{\n\t\t\t" . implode("\n\t\t\t", explode("\n", $curCode)) . "\n\t\t}";
+				$curCode = "if (vPermissionManager::getReadPermitted('{$declaringClass}', '{$apiPropName}'))\n\t\t{\n\t\t\t" . implode("\n\t\t\t", explode("\n", $curCode)) . "\n\t\t}";
 			}
 	
 			$curCode = "if (isset(\$get['{$apiPropName}']))\n\t\t{\n\t\t\t" . implode("\n\t\t\t", explode("\n", $curCode)) . "\n\t\t}";
@@ -331,7 +331,7 @@ abstract class KalturaObject implements IApiObject
 		return $result;
 	}
 	
-	public function shouldGet($propertyName, KalturaDetachedResponseProfile $responseProfile = null)
+	public function shouldGet($propertyName, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if($responseProfile)
 		{
@@ -349,16 +349,16 @@ abstract class KalturaObject implements IApiObject
 		return true;
 	}
 	
-	protected function doFromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	protected function doFromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		
 	}
 	
-	final public function fromObject($srcObj, KalturaDetachedResponseProfile $responseProfile = null)
+	final public function fromObject($srcObj, VidiunDetachedResponseProfile $responseProfile = null)
 	{
 		if (!is_object($srcObj))
 		{
-			KalturaLog::err("expected an object, got " . print_r($srcObj, true));
+			VidiunLog::err("expected an object, got " . print_r($srcObj, true));
 			return;
 		}
 	
@@ -366,7 +366,7 @@ abstract class KalturaObject implements IApiObject
 		{
 			$responseProfile->validateNestedObjects();
 
-			if(KalturaResponseProfileCacher::start($this, $srcObj, $responseProfile))
+			if(VidiunResponseProfileCacher::start($this, $srcObj, $responseProfile))
 			{
 				return;
 			}
@@ -377,7 +377,7 @@ abstract class KalturaObject implements IApiObject
 		$fromObjectClass = "Map_{$thisClass}_{$srcObjClass}";
 		if (!class_exists($fromObjectClass))
 		{
-			$cacheFileName = kConf::get("cache_root_path") . "/api_v3/fromObject/{$fromObjectClass}.php";
+			$cacheFileName = vConf::get("cache_root_path") . "/api_v3/fromObject/{$fromObjectClass}.php";
 			$max_include_retries=10;
 			$fromObjectClassCode=null;
 			while((!@include_once($cacheFileName)) and $max_include_retries--)
@@ -395,7 +395,7 @@ abstract class KalturaObject implements IApiObject
 					mkdir($cacheDir);
 					chmod($cacheDir, 0775);
 				}
-				kFile::safeFilePutContents($cacheFileName, $fromObjectClassCode,0644);
+				vFile::safeFilePutContents($cacheFileName, $fromObjectClassCode,0644);
 			}
 			if (!class_exists($fromObjectClass))
 			{
@@ -408,37 +408,37 @@ abstract class KalturaObject implements IApiObject
 		
 		if($srcObj instanceof IRelatedObject)
 		{
-			KalturaResponseProfileCacher::onPersistentObjectLoaded($srcObj);
+			VidiunResponseProfileCacher::onPersistentObjectLoaded($srcObj);
 			if($responseProfile && $responseProfile->relatedProfiles)
 			{
 				$responseProfile->validateNestedObjects();
 				$this->loadRelatedObjects($responseProfile);
-				KalturaResponseProfileCacher::stop($srcObj, $this);
+				VidiunResponseProfileCacher::stop($srcObj, $this);
 			}
 		}
 	}
 	
-	public function loadRelatedObjects(KalturaDetachedResponseProfile $responseProfile)
+	public function loadRelatedObjects(VidiunDetachedResponseProfile $responseProfile)
 	{	
-		$this->relatedObjects = new KalturaListResponseArray();
+		$this->relatedObjects = new VidiunListResponseArray();
 		foreach($responseProfile->relatedProfiles as $relatedProfile)
 		{
-			/* @var $relatedProfile KalturaDetachedResponseProfile */
+			/* @var $relatedProfile VidiunDetachedResponseProfile */
 			if(!$relatedProfile->filter)
 			{
-				KalturaLog::notice("Related response-profile [$relatedProfile->name] has no filter and should not be used as nested profile");
+				VidiunLog::notice("Related response-profile [$relatedProfile->name] has no filter and should not be used as nested profile");
 				continue;
 			}
 
 			$filter = clone $relatedProfile->filter;
-			/* @var $filter KalturaRelatedFilter */
+			/* @var $filter VidiunRelatedFilter */
 			
 			if($relatedProfile->mappings)
 			{
 				$applied = true;
 				foreach($relatedProfile->mappings as $mapping)
 				{
-					/* @var $mapping KalturaResponseProfileMapping */
+					/* @var $mapping VidiunResponseProfileMapping */
 					if(!$mapping->apply($filter, $this))
 					{
 						$applied = false;
@@ -447,7 +447,7 @@ abstract class KalturaObject implements IApiObject
 				}
 				if(!$applied)
 				{
-					KalturaLog::warning("Mappings could not be applied for response-profile [$relatedProfile->name]");
+					VidiunLog::warning("Mappings could not be applied for response-profile [$relatedProfile->name]");
 					continue;
 				}
 			}
@@ -455,7 +455,7 @@ abstract class KalturaObject implements IApiObject
 			$pager = $relatedProfile->pager;
 			if(!$pager)
 			{
-				$pager = new KalturaFilterPager();
+				$pager = new VidiunFilterPager();
 			}
 			
 			$this->relatedObjects[$relatedProfile->name] = $filter->validateAndGetListResponse($pager, $relatedProfile);
@@ -481,11 +481,11 @@ abstract class KalturaObject implements IApiObject
 		// enables extension with default empty object
 		if(is_null($object_to_fill))
 		{
-			KalturaLog::err("No object supplied for type [$class]");
+			VidiunLog::err("No object supplied for type [$class]");
 			return null;
 		}
 			
-		$typeReflector = KalturaTypeReflectorCacher::get($class);
+		$typeReflector = VidiunTypeReflectorCacher::get($class);
 		
 		foreach ( $this->getMapBetweenObjects() as $this_prop => $object_prop )
 		{
@@ -502,19 +502,19 @@ abstract class KalturaObject implements IApiObject
 			$propertyInfo = $typeReflector->getProperty($this_prop);
 			if (!$propertyInfo)
 			{
-	            KalturaLog::alert("property [$this_prop] was not found on object class [$class]");
+	            VidiunLog::alert("property [$this_prop] was not found on object class [$class]");
 	            continue;
 			}
 			
-			if ($value instanceof KalturaNullField)
+			if ($value instanceof VidiunNullField)
 			{
 				$value = null;
 			}
-			elseif ($value instanceof KalturaTypedArray)
+			elseif ($value instanceof VidiunTypedArray)
 			{
 				$value = $value->toObjectsArray();
 			}
-			elseif ($propertyInfo->isComplexType() && $value instanceof KalturaObject)
+			elseif ($propertyInfo->isComplexType() && $value instanceof VidiunObject)
 			{
 				$value = $value->toObject();
 			}
@@ -522,7 +522,7 @@ abstract class KalturaObject implements IApiObject
 			{
 				$propertyType = $propertyInfo->getType();
 				$enumType = call_user_func(array($propertyType, 'getEnumClass'));
-				$value = kPluginableEnumsManager::apiToCore($enumType, $value);
+				$value = vPluginableEnumsManager::apiToCore($enumType, $value);
 			}
 			elseif ($propertyInfo->getDynamicType()&& strlen($value))
 			{
@@ -532,22 +532,22 @@ abstract class KalturaObject implements IApiObject
 				$values = explode(',', $value);
 				$finalValues = array();
 				foreach($values as $val)
-					$finalValues[] = kPluginableEnumsManager::apiToCore($enumType, $val);
+					$finalValues[] = vPluginableEnumsManager::apiToCore($enumType, $val);
 				$value = implode(',', $finalValues);
 			}
 			elseif (is_string($value))
 			{
-				if (! kXml::isXMLValidContent($value))
-					throw new KalturaAPIException ( KalturaErrors::INVALID_PARAMETER_CHAR, $this_prop );
+				if (! vXml::isXMLValidContent($value))
+					throw new VidiunAPIException ( VidiunErrors::INVALID_PARAMETER_CHAR, $this_prop );
 				else if($this->shouldPurify())
 				{
 					try
 					{
-						$value = kHtmlPurifier::purify(get_class($object_to_fill), $object_prop, $value);
+						$value = vHtmlPurifier::purify(get_class($object_to_fill), $object_prop, $value);
 					}
 					catch (Exception $e)
 					{
-						throw new KalturaAPIException(KalturaErrors::UNSAFE_HTML_TAGS, get_class($object_to_fill), $object_prop);
+						throw new VidiunAPIException(VidiunErrors::UNSAFE_HTML_TAGS, get_class($object_to_fill), $object_prop);
 					}
 				}
 			}
@@ -556,7 +556,7 @@ abstract class KalturaObject implements IApiObject
 			if (is_callable($setter_callback))
 		 	    call_user_func_array( $setter_callback , array ($value ) );
 	 	    else 
-            	KalturaLog::alert("setter for property [$object_prop] was not found on object class [" . get_class($object_to_fill) . "] defined as property [$this_prop] on api class [$class]");
+            	VidiunLog::alert("setter for property [$object_prop] was not found on object class [" . get_class($object_to_fill) . "] defined as property [$this_prop] on api class [$class]");
 		}
 		return $object_to_fill;		
 	}
@@ -587,7 +587,7 @@ abstract class KalturaObject implements IApiObject
             $propertyName = $propertiesNames;
     		if ($this->isNull($propertyName))
     		{
-    			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $this->getFormattedPropertyNameWithClassName($propertyName));
+    			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, $this->getFormattedPropertyNameWithClassName($propertyName));
     		}
         }
         else 
@@ -608,12 +608,12 @@ abstract class KalturaObject implements IApiObject
                     else
                     {
                         if ($xor)
-                            throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_ALL_MUST_BE_NULL_BUT_ONE, implode("/", $propertiesNames)); 
+                            throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_ALL_MUST_BE_NULL_BUT_ONE, implode("/", $propertiesNames)); 
                     }
                 }
             }
             if (!$isValidated)
-                throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, implode("/", $propertiesNames));
+                throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_CANNOT_BE_NULL, implode("/", $propertiesNames));
         }
 	}
 	
@@ -624,11 +624,11 @@ abstract class KalturaObject implements IApiObject
 		elseif(is_null($this->$propertyName))
 			return;
 		
-		if ($this->$propertyName instanceof KalturaNullField) 
+		if ($this->$propertyName instanceof VidiunNullField) 
 			return;
 		
 		if (strlen($this->$propertyName) < $minLength)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_MIN_LENGTH, $this->getFormattedPropertyNameWithClassName($propertyName), $minLength);
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_MIN_LENGTH, $this->getFormattedPropertyNameWithClassName($propertyName), $minLength);
 	
 	    if ($validateEachWord)
 	    {
@@ -637,7 +637,7 @@ abstract class KalturaObject implements IApiObject
 	        {
 	            if (strlen($word) < $minLength)
 	            {
-	                throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_MIN_LENGTH, $this->getFormattedPropertyNameWithClassName($propertyName), $minLength);
+	                throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_MIN_LENGTH, $this->getFormattedPropertyNameWithClassName($propertyName), $minLength);
 	            }
 	        }
 	    }
@@ -651,11 +651,11 @@ abstract class KalturaObject implements IApiObject
 			
 		$this->validatePropertyNotNull($propertyName);
 		
-		if ($this->$propertyName instanceof KalturaNullField)
+		if ($this->$propertyName instanceof VidiunNullField)
 			return;
 		
 		if (!is_numeric($this->$propertyName))
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NUMERIC_VALUE, $this->getFormattedPropertyNameWithClassName($propertyName));
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NUMERIC_VALUE, $this->getFormattedPropertyNameWithClassName($propertyName));
 	}
 	
 	public function validatePropertyMinValue($propertyName, $minValue, $allowNull = false)
@@ -665,11 +665,11 @@ abstract class KalturaObject implements IApiObject
 			
 		$this->validatePropertyNumeric($propertyName, $allowNull);
 		
-		if ($this->$propertyName instanceof KalturaNullField)
+		if ($this->$propertyName instanceof VidiunNullField)
 			return;
 		
 		if ($this->$propertyName < $minValue)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_MIN_VALUE, $this->getFormattedPropertyNameWithClassName($propertyName), $minValue);
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_MIN_VALUE, $this->getFormattedPropertyNameWithClassName($propertyName), $minValue);
 	}
 	
 	public function validatePropertyMaxValue($propertyName, $maxValue, $allowNull = false)
@@ -679,11 +679,11 @@ abstract class KalturaObject implements IApiObject
 			
 		$this->validatePropertyNumeric($propertyName, $allowNull);
 		
-		if ($this->$propertyName instanceof KalturaNullField)
+		if ($this->$propertyName instanceof VidiunNullField)
 			return;
 		
 		if ($this->$propertyName > $maxValue)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_MAX_VALUE, $this->getFormattedPropertyNameWithClassName($propertyName), $maxValue);
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_MAX_VALUE, $this->getFormattedPropertyNameWithClassName($propertyName), $maxValue);
 	}
 	
 	public function validatePropertyMinMaxValue($propertyName, $minValue, $maxValue, $allowNull = false)
@@ -696,11 +696,11 @@ abstract class KalturaObject implements IApiObject
 	{
 		if(!$allowNull) $this->validatePropertyNotNull($propertyName);
                 
-		if ($this->$propertyName instanceof KalturaNullField)
+		if ($this->$propertyName instanceof VidiunNullField)
 			return;
 		                                          
 		if (strlen($this->$propertyName) > $maxLength)
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_MAX_LENGTH, $this->getFormattedPropertyNameWithClassName($propertyName), $maxLength);
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_MAX_LENGTH, $this->getFormattedPropertyNameWithClassName($propertyName), $maxLength);
 	}
 	
 	public function validatePropertyMinMaxLength($propertyName, $minLength, $maxLength, $allowNull = false)
@@ -717,11 +717,11 @@ abstract class KalturaObject implements IApiObject
 	public function validateForInsert($propertiesToSkip = array())
 	{
 		$className = get_class($this);
-		$reflector = KalturaTypeReflectorCacher::get($className);
+		$reflector = VidiunTypeReflectorCacher::get($className);
 		$properties = $reflector->getProperties();
 		
-		if ($reflector->requiresInsertPermission()&& !kPermissionManager::getInsertPermitted($className, kApiParameterPermissionItem::ALL_VALUES_IDENTIFIER)) {
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NO_INSERT_PERMISSION, $className);
+		if ($reflector->requiresInsertPermission()&& !vPermissionManager::getInsertPermitted($className, vApiParameterPermissionItem::ALL_VALUES_IDENTIFIER)) {
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NO_INSERT_PERMISSION, $className);
 		}
 		
 		foreach($properties as $property)
@@ -735,16 +735,16 @@ abstract class KalturaObject implements IApiObject
 			{
 				if ($property->isReadOnly())
 				{
-					throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NOT_UPDATABLE, $this->getFormattedPropertyNameWithClassName($propertyName));
+					throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NOT_UPDATABLE, $this->getFormattedPropertyNameWithClassName($propertyName));
 				}
 				// property requires insert permissions, verify that the current user has it
 				if ($property->requiresInsertPermission())
 				{
-					if (!kPermissionManager::getInsertPermitted($this->getDeclaringClassName($propertyName), $propertyName)) {
-						//throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NO_INSERT_PERMISSION, $this->getFormattedPropertyNameWithClassName($propertyName));
+					if (!vPermissionManager::getInsertPermitted($this->getDeclaringClassName($propertyName), $propertyName)) {
+						//throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NO_INSERT_PERMISSION, $this->getFormattedPropertyNameWithClassName($propertyName));
 						//TODO: not throwing exception to not break clients that sends -1 as null for integer values (etc...)
-						$e = new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NO_INSERT_PERMISSION, $this->getFormattedPropertyNameWithClassName($propertyName));
-						KalturaLog::err($e->getMessage());
+						$e = new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NO_INSERT_PERMISSION, $this->getFormattedPropertyNameWithClassName($propertyName));
+						VidiunLog::err($e->getMessage());
 						$this->$propertyName = null;
 						header($this->getDeclaringClassName($propertyName).'-'.$propertyName.'-error: '.$e->getMessage());
 					}
@@ -758,11 +758,11 @@ abstract class KalturaObject implements IApiObject
 	{
 		$updatableProperties = array();
 		$className = get_class($this);
-		$reflector = KalturaTypeReflectorCacher::get($className);
+		$reflector = VidiunTypeReflectorCacher::get($className);
 		$properties = $reflector->getProperties();
 		
-		if ($reflector->requiresUpdatePermission()&& !kPermissionManager::getUpdatePermitted($className, kApiParameterPermissionItem::ALL_VALUES_IDENTIFIER)) {
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NO_UPDATE_PERMISSION, $className);
+		if ($reflector->requiresUpdatePermission()&& !vPermissionManager::getUpdatePermitted($className, vApiParameterPermissionItem::ALL_VALUES_IDENTIFIER)) {
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NO_UPDATE_PERMISSION, $className);
 		}
 		
 		foreach($properties as $property)
@@ -790,16 +790,16 @@ abstract class KalturaObject implements IApiObject
 				
 				if ($property->isReadOnly() || $property->isInsertOnly())
 				{
-					throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NOT_UPDATABLE, $this->getFormattedPropertyNameWithClassName($propertyName));
+					throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NOT_UPDATABLE, $this->getFormattedPropertyNameWithClassName($propertyName));
 				}
 				// property requires update permissions, verify that the current user has it
 				if ($property->requiresUpdatePermission())
 				{				
-					if (!kPermissionManager::getUpdatePermitted($this->getDeclaringClassName($propertyName), $propertyName)) {
-						//throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NO_UPDATE_PERMISSION, $this->getFormattedPropertyNameWithClassName($propertyName));
+					if (!vPermissionManager::getUpdatePermitted($this->getDeclaringClassName($propertyName), $propertyName)) {
+						//throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NO_UPDATE_PERMISSION, $this->getFormattedPropertyNameWithClassName($propertyName));
 						//TODO: not throwing exception to not break clients that sends -1 as null for integer values (etc...)
-						KalturaLog::err('Current user has not update permission for property ' . $this->getFormattedPropertyNameWithClassName($propertyName));
-						$e = new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NO_UPDATE_PERMISSION, $this->getFormattedPropertyNameWithClassName($propertyName));
+						VidiunLog::err('Current user has not update permission for property ' . $this->getFormattedPropertyNameWithClassName($propertyName));
+						$e = new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NO_UPDATE_PERMISSION, $this->getFormattedPropertyNameWithClassName($propertyName));
 						$this->$propertyName = null;
 						header($this->getDeclaringClassName($propertyName).'-'.$propertyName.'-error: '.$e->getMessage());
 					}
@@ -813,22 +813,22 @@ abstract class KalturaObject implements IApiObject
 	public function validateForUsage($sourceObject, $propertiesToSkip = array())
 	{
 		$useableProperties = array();
-		$reflector = KalturaTypeReflectorCacher::get(get_class($this));
+		$reflector = VidiunTypeReflectorCacher::get(get_class($this));
 		if(!$reflector)
 		{
-			KalturaLog::err("Unable to validate usage for attribute object type [" . get_class($this) . "], type reflector not found");
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NO_USAGE_PERMISSION, get_class($this));
+			VidiunLog::err("Unable to validate usage for attribute object type [" . get_class($this) . "], type reflector not found");
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NO_USAGE_PERMISSION, get_class($this));
 		}
 			
 		$properties = $reflector->getProperties();
 		
-		if ($reflector->requiresUsagePermission() && !kPermissionManager::getUsagePermitted(get_class($this), kApiParameterPermissionItem::ALL_VALUES_IDENTIFIER)) {
-			throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NO_USAGE_PERMISSION, get_class($this));
+		if ($reflector->requiresUsagePermission() && !vPermissionManager::getUsagePermitted(get_class($this), vApiParameterPermissionItem::ALL_VALUES_IDENTIFIER)) {
+			throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NO_USAGE_PERMISSION, get_class($this));
 		}
 		
 		foreach($properties as $property)
 		{
-			/* @var $property KalturaPropertyInfo */
+			/* @var $property VidiunPropertyInfo */
 			$propertyName = $property->getName();
 			
 			if ($propertiesToSkip && is_array($propertiesToSkip) && in_array($propertyName, $propertiesToSkip)) 
@@ -853,12 +853,12 @@ abstract class KalturaObject implements IApiObject
 				// property requires update permissions, verify that the current user has it
 				if ($property->requiresUsagePermission())
 				{				
-					if (!kPermissionManager::getUsagePermitted($this->getDeclaringClassName($propertyName), $propertyName)) {
-						//throw new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NO_UPDATE_PERMISSION, $this->getFormattedPropertyNameWithClassName($propertyName));
+					if (!vPermissionManager::getUsagePermitted($this->getDeclaringClassName($propertyName), $propertyName)) {
+						//throw new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NO_UPDATE_PERMISSION, $this->getFormattedPropertyNameWithClassName($propertyName));
 						//TODO: not throwing exception to not break clients that sends -1 as null for integer values (etc...)
-						$e = new KalturaAPIException(KalturaErrors::PROPERTY_VALIDATION_NO_USAGE_PERMISSION, $this->getFormattedPropertyNameWithClassName($propertyName));
+						$e = new VidiunAPIException(VidiunErrors::PROPERTY_VALIDATION_NO_USAGE_PERMISSION, $this->getFormattedPropertyNameWithClassName($propertyName));
 						$this->$propertyName = null;
-						KalturaLog::err($this->getDeclaringClassName($propertyName).'-'.$propertyName.'-error:: '.$e->getMessage());
+						VidiunLog::err($this->getDeclaringClassName($propertyName).'-'.$propertyName.'-error:: '.$e->getMessage());
 						header($this->getDeclaringClassName($propertyName).'-'.$propertyName.'-error: '.$e->getMessage());
 					}
 				}
@@ -896,7 +896,7 @@ abstract class KalturaObject implements IApiObject
 	public function cast($className) 
 	{
             if(!is_subclass_of($className, get_class($this)) && !is_subclass_of($this,$className))
-                throw new KalturaAPIException(KalturaErrors::INVALID_OBJECT_TYPE, get_class($this));
+                throw new VidiunAPIException(VidiunErrors::INVALID_OBJECT_TYPE, get_class($this));
 			
 	    return unserialize(sprintf(
 	        'O:%d:"%s"%s',
@@ -922,7 +922,7 @@ abstract class KalturaObject implements IApiObject
 
 	protected function enablePurify()
 	{
-		if (!isset(kCurrentContext::$HTMLPurifierBehaviour) || kCurrentContext::$HTMLPurifierBehaviour == HTMLPurifierBehaviourType::IGNORE)
+		if (!isset(vCurrentContext::$HTMLPurifierBehaviour) || vCurrentContext::$HTMLPurifierBehaviour == HTMLPurifierBehaviourType::IGNORE)
 			$this->purifyHtml = false;
 		else
 			$this->purifyHtml = true;

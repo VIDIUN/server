@@ -92,10 +92,10 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 	protected $reach_profile_id;
 
 	/**
-	 * The value for the kuser_id field.
+	 * The value for the vuser_id field.
 	 * @var        int
 	 */
-	protected $kuser_id;
+	protected $vuser_id;
 
 	/**
 	 * The value for the version field.
@@ -401,13 +401,13 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 	}
 
 	/**
-	 * Get the [kuser_id] column value.
+	 * Get the [vuser_id] column value.
 	 * 
 	 * @return     int
 	 */
-	public function getKuserId()
+	public function getVuserId()
 	{
-		return $this->kuser_id;
+		return $this->vuser_id;
 	}
 
 	/**
@@ -827,27 +827,27 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 	} // setReachProfileId()
 
 	/**
-	 * Set the value of [kuser_id] column.
+	 * Set the value of [vuser_id] column.
 	 * 
 	 * @param      int $v new value
 	 * @return     EntryVendorTask The current object (for fluent API support)
 	 */
-	public function setKuserId($v)
+	public function setVuserId($v)
 	{
-		if(!isset($this->oldColumnsValues[EntryVendorTaskPeer::KUSER_ID]))
-			$this->oldColumnsValues[EntryVendorTaskPeer::KUSER_ID] = $this->kuser_id;
+		if(!isset($this->oldColumnsValues[EntryVendorTaskPeer::VUSER_ID]))
+			$this->oldColumnsValues[EntryVendorTaskPeer::VUSER_ID] = $this->vuser_id;
 
 		if ($v !== null) {
 			$v = (int) $v;
 		}
 
-		if ($this->kuser_id !== $v) {
-			$this->kuser_id = $v;
-			$this->modifiedColumns[] = EntryVendorTaskPeer::KUSER_ID;
+		if ($this->vuser_id !== $v) {
+			$this->vuser_id = $v;
+			$this->modifiedColumns[] = EntryVendorTaskPeer::VUSER_ID;
 		}
 
 		return $this;
-	} // setKuserId()
+	} // setVuserId()
 
 	/**
 	 * Set the value of [version] column.
@@ -962,7 +962,7 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 			$this->price = ($row[$startcol + 9] !== null) ? (double) $row[$startcol + 9] : null;
 			$this->catalog_item_id = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
 			$this->reach_profile_id = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
-			$this->kuser_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
+			$this->vuser_id = ($row[$startcol + 12] !== null) ? (int) $row[$startcol + 12] : null;
 			$this->version = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
 			$this->context = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
 			$this->custom_data = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
@@ -1118,13 +1118,13 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 				return 0;
 			}
 			
-			for ($retries = 1; $retries < KalturaPDO::SAVE_MAX_RETRIES; $retries++)
+			for ($retries = 1; $retries < VidiunPDO::SAVE_MAX_RETRIES; $retries++)
 			{
                $affectedRows = $this->doSave($con);
                 if ($affectedRows || !$this->isColumnModified(EntryVendorTaskPeer::CUSTOM_DATA)) //ask if custom_data wasn't modified to avoid retry with atomic column 
                 	break;
 
-                KalturaLog::debug("was unable to save! retrying for the $retries time");
+                VidiunLog::debug("was unable to save! retrying for the $retries time");
                 $criteria = $this->buildPkeyCriteria();
 				$criteria->addSelectColumn(EntryVendorTaskPeer::CUSTOM_DATA);
                 $stmt = BasePeer::doSelect($criteria, $con);
@@ -1286,7 +1286,7 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 	 */
 	public function postSave(PropelPDO $con = null) 
 	{
-		kEventsManager::raiseEvent(new kObjectSavedEvent($this));
+		vEventsManager::raiseEvent(new vObjectSavedEvent($this));
 		$this->oldColumnsValues = array();
 		$this->oldCustomDataValues = array();
     	 
@@ -1311,12 +1311,12 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 	 */
 	public function postInsert(PropelPDO $con = null)
 	{
-		kQueryCache::invalidateQueryCache($this);
+		vQueryCache::invalidateQueryCache($this);
 		
-		kEventsManager::raiseEvent(new kObjectCreatedEvent($this));
+		vEventsManager::raiseEvent(new vObjectCreatedEvent($this));
 		
 		if($this->copiedFrom)
-			kEventsManager::raiseEvent(new kObjectCopiedEvent($this->copiedFrom, $this));
+			vEventsManager::raiseEvent(new vObjectCopiedEvent($this->copiedFrom, $this));
 		
 		parent::postInsert($con);
 	}
@@ -1334,10 +1334,10 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 	
 		if($this->isModified())
 		{
-			kQueryCache::invalidateQueryCache($this);
+			vQueryCache::invalidateQueryCache($this);
 			$modifiedColumns = $this->tempModifiedColumns;
-			$modifiedColumns[kObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
-			kEventsManager::raiseEvent(new kObjectChangedEvent($this, $modifiedColumns));
+			$modifiedColumns[vObjectChangedEvent::CUSTOM_DATA_OLD_VALUES] = $this->oldCustomDataValues;
+			vEventsManager::raiseEvent(new vObjectChangedEvent($this, $modifiedColumns));
 		}
 			
 		$this->tempModifiedColumns = array();
@@ -1532,7 +1532,7 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 				return $this->getReachProfileId();
 				break;
 			case 12:
-				return $this->getKuserId();
+				return $this->getVuserId();
 				break;
 			case 13:
 				return $this->getVersion();
@@ -1576,7 +1576,7 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 			$keys[9] => $this->getPrice(),
 			$keys[10] => $this->getCatalogItemId(),
 			$keys[11] => $this->getReachProfileId(),
-			$keys[12] => $this->getKuserId(),
+			$keys[12] => $this->getVuserId(),
 			$keys[13] => $this->getVersion(),
 			$keys[14] => $this->getContext(),
 			$keys[15] => $this->getCustomData(),
@@ -1648,7 +1648,7 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 				$this->setReachProfileId($value);
 				break;
 			case 12:
-				$this->setKuserId($value);
+				$this->setVuserId($value);
 				break;
 			case 13:
 				$this->setVersion($value);
@@ -1695,7 +1695,7 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 		if (array_key_exists($keys[9], $arr)) $this->setPrice($arr[$keys[9]]);
 		if (array_key_exists($keys[10], $arr)) $this->setCatalogItemId($arr[$keys[10]]);
 		if (array_key_exists($keys[11], $arr)) $this->setReachProfileId($arr[$keys[11]]);
-		if (array_key_exists($keys[12], $arr)) $this->setKuserId($arr[$keys[12]]);
+		if (array_key_exists($keys[12], $arr)) $this->setVuserId($arr[$keys[12]]);
 		if (array_key_exists($keys[13], $arr)) $this->setVersion($arr[$keys[13]]);
 		if (array_key_exists($keys[14], $arr)) $this->setContext($arr[$keys[14]]);
 		if (array_key_exists($keys[15], $arr)) $this->setCustomData($arr[$keys[15]]);
@@ -1722,7 +1722,7 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 		if ($this->isColumnModified(EntryVendorTaskPeer::PRICE)) $criteria->add(EntryVendorTaskPeer::PRICE, $this->price);
 		if ($this->isColumnModified(EntryVendorTaskPeer::CATALOG_ITEM_ID)) $criteria->add(EntryVendorTaskPeer::CATALOG_ITEM_ID, $this->catalog_item_id);
 		if ($this->isColumnModified(EntryVendorTaskPeer::REACH_PROFILE_ID)) $criteria->add(EntryVendorTaskPeer::REACH_PROFILE_ID, $this->reach_profile_id);
-		if ($this->isColumnModified(EntryVendorTaskPeer::KUSER_ID)) $criteria->add(EntryVendorTaskPeer::KUSER_ID, $this->kuser_id);
+		if ($this->isColumnModified(EntryVendorTaskPeer::VUSER_ID)) $criteria->add(EntryVendorTaskPeer::VUSER_ID, $this->vuser_id);
 		if ($this->isColumnModified(EntryVendorTaskPeer::VERSION)) $criteria->add(EntryVendorTaskPeer::VERSION, $this->version);
 		if ($this->isColumnModified(EntryVendorTaskPeer::CONTEXT)) $criteria->add(EntryVendorTaskPeer::CONTEXT, $this->context);
 		if ($this->isColumnModified(EntryVendorTaskPeer::CUSTOM_DATA)) $criteria->add(EntryVendorTaskPeer::CUSTOM_DATA, $this->custom_data);
@@ -1826,7 +1826,7 @@ abstract class BaseEntryVendorTask extends BaseObject  implements Persistent {
 
 		$copyObj->setReachProfileId($this->reach_profile_id);
 
-		$copyObj->setKuserId($this->kuser_id);
+		$copyObj->setVuserId($this->vuser_id);
 
 		$copyObj->setVersion($this->version);
 

@@ -6,46 +6,46 @@
  * @subpackage model.data
  *
  */
-class kObjectIdField extends kStringField
+class vObjectIdField extends vStringField
 {
 	/* (non-PHPdoc)
-	 * @see kStringField::getFieldValue()
+	 * @see vStringField::getFieldValue()
 	 */
-	protected function getFieldValue(kScope $scope = null)
+	protected function getFieldValue(vScope $scope = null)
 	{
 		if(!$scope)
 		{
-			KalturaLog::info('No scope specified');
+			VidiunLog::info('No scope specified');
 			return null;
 		}
 		
-		if (!($scope instanceof kEventScope))
+		if (!($scope instanceof vEventScope))
 		{
-			KalturaLog::info('Scope must be of type kEventScope, [' . get_class($scope) . '] given');
+			VidiunLog::info('Scope must be of type vEventScope, [' . get_class($scope) . '] given');
 			return;
 		}
 		
 		if (!($scope->getEvent()))
 		{
-			KalturaLog::info('$scope->getEvent() must return a value');
+			VidiunLog::info('$scope->getEvent() must return a value');
 			return;
 		}
 		
-		if ($scope->getEvent() && !($scope->getEvent() instanceof  IKalturaObjectRelatedEvent))
+		if ($scope->getEvent() && !($scope->getEvent() instanceof  IVidiunObjectRelatedEvent))
 		{
-			KalturaLog::info('Scope event must realize interface IKalturaObjectRelatedEvent');
+			VidiunLog::info('Scope event must realize interface IVidiunObjectRelatedEvent');
 			return;
 		}
 		
 		if ($scope->getEvent() && !($scope->getEvent()->getObject()))
 		{
-			KalturaLog::info('Object not found on scope event');
+			VidiunLog::info('Object not found on scope event');
 			return;
 		}
 		
 		if (!method_exists($scope->getEvent()->getObject(), 'getId'))
 		{
-			KalturaLog::info('Getter method for object id not found');
+			VidiunLog::info('Getter method for object id not found');
 			return;
 		}
 		

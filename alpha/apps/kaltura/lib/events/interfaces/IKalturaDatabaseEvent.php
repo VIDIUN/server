@@ -4,7 +4,7 @@
  * @package Core
  * @subpackage events
  */
-interface IKalturaDatabaseEvent
+interface IVidiunDatabaseEvent
 {
 	
 }

@@ -1,5 +1,5 @@
 SELECT
-	raw_data.kuser_id,
+	raw_data.vuser_id,
 	users.puser_id NAME,
 	raw_data.added_entries added_entries,
 	raw_data.deleted_entries deleted_entries,
@@ -12,7 +12,7 @@ SELECT
 	total.total_msecs total_msecs
 FROM	
 	(SELECT
-		kuser_id, date_id,
+		vuser_id, date_id,
 		IFNULL(SUM(added_storage_kb),0)/1024 added_storage_mb,
 		IFNULL(SUM(deleted_storage_kb),0)/1024 deleted_storage_mb,
 		IFNULL(SUM(added_entries),0) added_entries,
@@ -20,25 +20,25 @@ FROM
 		IFNULL(SUM(added_msecs),0) added_msecs,
 		IFNULL(SUM(deleted_msecs),0) deleted_msecs
 	FROM
-		kalturadw.dwh_hourly_user_usage u
+		vidiundw.dwh_hourly_user_usage u
         WHERE
 		{OBJ_ID_CLAUSE} AND
 		partner_id = {PARTNER_ID}
 		AND
 		date_id BETWEEN {FROM_DATE_ID} AND {TO_DATE_ID}
-	GROUP BY kuser_id	
+	GROUP BY vuser_id	
     ) raw_data,
 	(SELECT
-		u.kuser_id,
+		u.vuser_id,
 		total_storage_kb/1024 total_storage_mb,
 		total_entries,
 		total_msecs
 	FROM
-		kalturadw.dwh_hourly_user_usage u JOIN (SELECT kuser_id, MAX(date_id) date_id FROM dwh_hourly_user_usage u WHERE {OBJ_ID_CLAUSE} AND partner_id = {PARTNER_ID} AND date_id <= {TO_DATE_ID} GROUP BY kuser_id) MAX
-	    ON u.kuser_id = max.kuser_id AND u.date_id = max.date_id WHERE {OBJ_ID_CLAUSE}) total,
-	dwh_dim_kusers users
-WHERE raw_data.kuser_id = total.kuser_id
-AND raw_data.kuser_id = users.kuser_id
+		vidiundw.dwh_hourly_user_usage u JOIN (SELECT vuser_id, MAX(date_id) date_id FROM dwh_hourly_user_usage u WHERE {OBJ_ID_CLAUSE} AND partner_id = {PARTNER_ID} AND date_id <= {TO_DATE_ID} GROUP BY vuser_id) MAX
+	    ON u.vuser_id = max.vuser_id AND u.date_id = max.date_id WHERE {OBJ_ID_CLAUSE}) total,
+	dwh_dim_vusers users
+WHERE raw_data.vuser_id = total.vuser_id
+AND raw_data.vuser_id = users.vuser_id
 ORDER BY {SORT_FIELD}
 LIMIT {PAGINATION_FIRST},{PAGINATION_SIZE}		
 

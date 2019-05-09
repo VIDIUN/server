@@ -4,7 +4,7 @@
  * @package Core
  * @subpackage externalWidgets
  */
-class embedPlaykitJsAction extends sfAction
+class embedPakhshkitJsAction extends sfAction
 {
 	const UI_CONF_ID_PARAM_NAME = "uiconf_id";
 	const PARTNER_ID_PARAM_NAME = "partner_id";
@@ -33,7 +33,7 @@ class embedPlaykitJsAction extends sfAction
 	private $bundleConfig = null;
 	private $sourceMapLoader = null;
 	private $cacheVersion = null;
-	private $playKitVersion = null;
+	private $pakhshKitVersion = null;
 	private $playerConfig = null;
 	private $uiConfUpdatedAt = null;
 	private $regenerate = false;
@@ -46,7 +46,7 @@ class embedPlaykitJsAction extends sfAction
 		$bundleContent = $this->bundleCache->get($this->bundle_name);
 		if (!$bundleContent || $this->regenerate) 
 		{
-			$bundleContent = kLock::runLocked($this->bundle_name, array("embedPlaykitJsAction", "buildBundleLocked"), array($this));
+			$bundleContent = vLock::runLocked($this->bundle_name, array("embedPakhshkitJsAction", "buildBundleLocked"), array($this));
 		}
 
 		$lastModified = $this->getLastModified($bundleContent);
@@ -59,7 +59,7 @@ class embedPlaykitJsAction extends sfAction
 		
 		echo($bundleContent);
 		
-		KExternalErrors::dieGracefully();
+		VExternalErrors::dieGracefully();
 	}
 	
 	public static function buildBundleLocked($context)
@@ -78,21 +78,21 @@ class embedPlaykitJsAction extends sfAction
 		$config = str_replace("\"", "'", json_encode($context->bundleConfig));
 		if(!$config)
 		{
-			KExternalErrors::dieError(KExternalErrors::BUNDLE_CREATION_FAILED, $config . " wrong config object");
+			VExternalErrors::dieError(VExternalErrors::BUNDLE_CREATION_FAILED, $config . " wrong config object");
 		}
 
 		$url = $context->bundlerUrl . "/build?config=" . base64_encode($config) . "&name=" . $context->bundle_name . "&source=" . base64_encode($context->sourcesPath);
-		$content = KCurlWrapper::getContent($url, array('Content-Type: application/json'), true);
+		$content = VCurlWrapper::getContent($url, array('Content-Type: application/json'), true);
 
 		if (!$content) 
 		{
-			KExternalErrors::dieError(KExternalErrors::BUNDLE_CREATION_FAILED, $config . " failed to get content from bundle builder");
+			VExternalErrors::dieError(VExternalErrors::BUNDLE_CREATION_FAILED, $config . " failed to get content from bundle builder");
 		}
 
 		$content = json_decode($content, true);
 		if(!$content || !$content['bundle'])
 		{
-			KExternalErrors::dieError(KExternalErrors::BUNDLE_CREATION_FAILED, $config . " bundle created with wrong content");
+			VExternalErrors::dieError(VExternalErrors::BUNDLE_CREATION_FAILED, $config . " bundle created with wrong content");
 		}
 
 		$sourceMapContent = base64_decode($content['sourceMap']);
@@ -101,7 +101,7 @@ class embedPlaykitJsAction extends sfAction
 		$context->sourceMapsCache->set($context->bundle_name, $sourceMapContent);
 		if(!$bundleSaved)
 		{
-			KalturaLog::log("Error - failed to save bundle content in cache for config [".$config."]");
+			VidiunLog::log("Error - failed to save bundle content in cache for config [".$config."]");
 		}
 
 		return $bundleContent;
@@ -141,9 +141,9 @@ class embedPlaykitJsAction extends sfAction
 
 		if ($uiConfJson === false)
 		{
-			KExternalErrors::dieError(KExternalErrors::INVALID_PARAMETER, "Invalid config object");
+			VExternalErrors::dieError(VExternalErrors::INVALID_PARAMETER, "Invalid config object");
 		}
-		$confNS = "window.__kalturaplayerdata";
+		$confNS = "window.__vidiunplayerdata";
 		$content .= "
 		$confNS = ($confNS || {});
 		$confNS.UIConf = ($confNS.UIConf||{});$confNS.UIConf[\"" . $this->uiconfId . "\"]=$uiConfJson;
@@ -202,17 +202,17 @@ class embedPlaykitJsAction extends sfAction
 	{
 		$protocol = infraRequestUtils::getProtocol();
 
-		// The default Kaltura service url:
+		// The default Vidiun service url:
 		$serviceUrl = requestUtils::getApiCdnHost().'/api_v3';
-		// Default Kaltura CDN url:
+		// Default Vidiun CDN url:
 		$cdnUrl = requestUtils::getCdnHost($protocol);
 		// Default Stats URL
 		$statsServiceUrl = $this->buildUrl($protocol,"stats_host");
 		// Default Live Stats URL
 		$liveStatsServiceUrl = $this->buildUrl($protocol,"live_stats_host");
-		// Default Kaltura Analytics URL
+		// Default Vidiun Analytics URL
 		$analyticsServiceUrl = $this->buildUrl($protocol,"analytics_host");
-		// Get Kaltura Supported API Features
+		// Get Vidiun Supported API Features
 		$apiFeatures = $this->getFromConfig('features');
 
 		$envConfig = array(
@@ -228,8 +228,8 @@ class embedPlaykitJsAction extends sfAction
 
 	private function getFromConfig($key)
 	{
-		if( kConf::hasParam($key) ) {
-			return kConf::get($key);
+		if( vConf::hasParam($key) ) {
+			return vConf::get($key);
 		}
 		return '';
 	}
@@ -261,7 +261,7 @@ class embedPlaykitJsAction extends sfAction
 		) {
 			infraRequestUtils::sendCachingHeaders($max_age, false, $lastModified);
 			header("HTTP/1.1 304 Not Modified");
-			KExternalErrors::dieGracefully();
+			VExternalErrors::dieGracefully();
 		}
 		
 		$iframeEmbed = $this->getRequestParameter('iframeembed');
@@ -305,13 +305,13 @@ class embedPlaykitJsAction extends sfAction
 		$targetId = $targetId ? $targetId : $this->getRequestParameter('targetId');
 		if (is_null($targetId) && $targetId == "")
 		{
-			KExternalErrors::dieError(KExternalErrors::MISSING_PARAMETER, "Player target ID not defined");
+			VExternalErrors::dieError(VExternalErrors::MISSING_PARAMETER, "Player target ID not defined");
 		}
 		
 		$entry_id = $this->getRequestParameter(self::ENTRY_ID_PARAM_NAME);		
 		if (!$entry_id)
 		{
-			KExternalErrors::dieError(KExternalErrors::MISSING_PARAMETER, "Entry ID not defined");
+			VExternalErrors::dieError(VExternalErrors::MISSING_PARAMETER, "Entry ID not defined");
 		}
 		
 		$config = $this->getRequestParameter(self::CONFIG_PARAM_NAME, array());
@@ -341,13 +341,13 @@ class embedPlaykitJsAction extends sfAction
 		$config = json_encode($config);		
 		if ($config === false)
 		{
-			KExternalErrors::dieError(KExternalErrors::INVALID_PARAMETER, "Invalid config object");
+			VExternalErrors::dieError(VExternalErrors::INVALID_PARAMETER, "Invalid config object");
 		}
 
 		$autoEmbedCode = "
 		try {
-			var kalturaPlayer = KalturaPlayer.setup($config);
-			kalturaPlayer.loadMedia({entryId: \"" . $entry_id . "\"});
+			var vidiunPlayer = VidiunPlayer.setup($config);
+			vidiunPlayer.loadMedia({entryId: \"" . $entry_id . "\"});
 		} catch (e) {
 			console.error(e.message);
 		}
@@ -463,23 +463,23 @@ class embedPlaykitJsAction extends sfAction
 	{
 		$this->eTagHash = null;
 		
-		$this->bundleCache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_PLAYKIT_JS);
+		$this->bundleCache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_PAKHSHKIT_JS);
 		if (!$this->bundleCache)
-			KExternalErrors::dieError(KExternalErrors::BUNDLE_CREATION_FAILED, "Bundle cache not defined");
+			VExternalErrors::dieError(VExternalErrors::BUNDLE_CREATION_FAILED, "Bundle cache not defined");
 		
-		$this->sourceMapsCache = kCacheManager::getSingleLayerCache(kCacheManager::CACHE_TYPE_PLAYKIT_JS_SOURCE_MAP);
+		$this->sourceMapsCache = vCacheManager::getSingleLayerCache(vCacheManager::CACHE_TYPE_PAKHSHKIT_JS_SOURCE_MAP);
 		if (!$this->sourceMapsCache)
-			KExternalErrors::dieError(KExternalErrors::BUNDLE_CREATION_FAILED, "PlayKit source maps cache not defined");
+			VExternalErrors::dieError(VExternalErrors::BUNDLE_CREATION_FAILED, "PakhshKit source maps cache not defined");
 		
 		//Get uiConf ID from QS
 		$this->uiconfId = $this->getRequestParameter(self::UI_CONF_ID_PARAM_NAME);
 		if (!$this->uiconfId)
-			KExternalErrors::dieError(KExternalErrors::MISSING_PARAMETER, self::UI_CONF_ID_PARAM_NAME);
+			VExternalErrors::dieError(VExternalErrors::MISSING_PARAMETER, self::UI_CONF_ID_PARAM_NAME);
 		
 		// retrieve uiCong Obj
 		$this->uiConf = uiConfPeer::retrieveByPK($this->uiconfId);
 		if (!$this->uiConf)
-			KExternalErrors::dieError(KExternalErrors::UI_CONF_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::UI_CONF_NOT_FOUND);
 		$this->playerConfig = json_decode($this->uiConf->getConfig());
 		if (!$this->playerConfig) {
 			$this->playerConfig = new stdClass();
@@ -489,14 +489,14 @@ class embedPlaykitJsAction extends sfAction
 		//Get bundle configuration stored in conf_vars
 		$confVars = $this->uiConf->getConfVars();
 		if (!$confVars) {
-			KExternalErrors::dieGracefully("Missing bundle configuration in uiConf, uiConfID: $this->uiconfId");
+			VExternalErrors::dieGracefully("Missing bundle configuration in uiConf, uiConfID: $this->uiconfId");
 		}
 		
 		//Get partner ID from QS or from UI conf
 		$this->partnerId = $this->getRequestParameter(self::PARTNER_ID_PARAM_NAME, $this->uiConf->getPartnerId());
 		$this->partner = PartnerPeer::retrieveByPK($this->partnerId);
 		if (!$this->partner)
-			KExternalErrors::dieError(KExternalErrors::PARTNER_NOT_FOUND);
+			VExternalErrors::dieError(VExternalErrors::PARTNER_NOT_FOUND);
 
 		//Get should force regenration
 		$this->regenerate = $this->getRequestParameter(self::REGENERATE_PARAM_NAME);
@@ -511,30 +511,30 @@ class embedPlaykitJsAction extends sfAction
 		//Get config params
 		try 
 		{
-			$playkitConfig = kConf::get('playkit-js');
-			if (array_key_exists('internal_bundler_url', $playkitConfig))
-				$this->bundlerUrl = rtrim($playkitConfig['internal_bundler_url']);
+			$pakhshkitConfig = vConf::get('pakhshkit-js');
+			if (array_key_exists('internal_bundler_url', $pakhshkitConfig))
+				$this->bundlerUrl = rtrim($pakhshkitConfig['internal_bundler_url']);
 			
-			if (array_key_exists('playkit_js_sources_path', $playkitConfig))
-				$this->sourcesPath = rtrim($playkitConfig['playkit_js_sources_path']);
+			if (array_key_exists('pakhshkit_js_sources_path', $pakhshkitConfig))
+				$this->sourcesPath = rtrim($pakhshkitConfig['pakhshkit_js_sources_path']);
 			
-			if (array_key_exists('play_kit_js_cache_version', $playkitConfig))
-				$this->cacheVersion = rtrim($playkitConfig['play_kit_js_cache_version']);
+			if (array_key_exists('play_kit_js_cache_version', $pakhshkitConfig))
+				$this->cacheVersion = rtrim($pakhshkitConfig['play_kit_js_cache_version']);
 			
-			if (array_key_exists('play_kit_js_cache_version', $playkitConfig))
-				$this->sourceMapLoader = rtrim($playkitConfig['playkit_js_source_map_loader']);
+			if (array_key_exists('play_kit_js_cache_version', $pakhshkitConfig))
+				$this->sourceMapLoader = rtrim($pakhshkitConfig['pakhshkit_js_source_map_loader']);
 			
 			
 		} 
 		catch (Exception $ex) 
 		{
-			KExternalErrors::dieError(KExternalErrors::INTERNAL_SERVER_ERROR);
+			VExternalErrors::dieError(VExternalErrors::INTERNAL_SERVER_ERROR);
 		}
 		
 		$this->bundleConfig = json_decode($confVars, true);
 		$this->mergeVersionsParamIntoConfig();
 		if (!$this->bundleConfig) {
-			KExternalErrors::dieError(KExternalErrors::MISSING_PARAMETER, "unable to resolve bundle config");
+			VExternalErrors::dieError(VExternalErrors::MISSING_PARAMETER, "unable to resolve bundle config");
 		}
 		$this->setLatestOrBetaVersionNumber();
 		
